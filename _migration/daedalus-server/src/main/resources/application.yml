@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: daedalus-server
+  profiles:
+    active: ${DAEDALUS_PROFILE:dev}
+  banner:
+    location: classpath:banner.txt
+
+server:
+  port: ${SERVER_PORT:8080}
+
+logging:
+  level:
+    com.daedalus: INFO
+    org.springframework: INFO
+
+# Daedalus-specific config. Bind these with @ConfigurationProperties("daedalus") in the server module.
+daedalus:
+  plugins:
+    directory: ${DAEDALUS_PLUGIN_DIR:${user.home}/.daedalus/plugins}
+    scan-on-startup: true
+  cache:
+    maze-cache-size: 256
+    maze-cache-ttl-minutes: 30

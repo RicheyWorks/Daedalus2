@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+
+<!--
+    Main desktop layout. Three regions:
+
+      - top:    toolbar (generator picker + grid dimensions + seed + Generate)
+      - center: a Pane that holds a Canvas; canvas is sized to fill the pane
+      - bottom: status bar (last action + timing)
+
+    Controller is wired by Spring (DaedalusPrimaryStage's controller factory).
+    The canvas itself doesn't auto-resize — MainController binds it to
+    canvasParent's width/height and redraws on change.
+-->
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.daedalus.desktop.ui.MainController"
+            styleClass="root">
+
+    <top>
+        <HBox spacing="8" alignment="CENTER_LEFT" styleClass="toolbar">
+            <padding>
+                <Insets top="10" right="12" bottom="10" left="12"/>
+            </padding>
+
+            <Label text="Generator:"/>
+            <ComboBox fx:id="generatorChoice" prefWidth="240"/>
+
+            <Separator orientation="VERTICAL"/>
+
+            <Label text="Rows:"/>
+            <Spinner fx:id="rowsSpinner" prefWidth="80" editable="true"/>
+            <Label text="Cols:"/>
+            <Spinner fx:id="colsSpinner" prefWidth="80" editable="true"/>
+
+            <Separator orientation="VERTICAL"/>
+
+            <Label text="Seed:"/>
+            <TextField fx:id="seedField" prefWidth="140" promptText="auto"/>
+
+            <Separator orientation="VERTICAL"/>
+
+            <Button fx:id="generateButton"
+                    text="Generate"
+                    defaultButton="true"
+                    onAction="#onGenerate"/>
+
+            <Separator orientation="VERTICAL"/>
+
+            <Label text="Solver:"/>
+            <ComboBox fx:id="solverChoice" prefWidth="180"/>
+            <Button fx:id="solveButton" text="Solve" onAction="#onSolve"/>
+            <Button fx:id="resetButton" text="Reset" onAction="#onReset"/>
+        </HBox>
+    </top>
+
+    <center>
+        <Pane fx:id="canvasParent" styleClass="canvas-pane">
+            <Canvas fx:id="canvas"/>
+        </Pane>
+    </center>
+
+    <bottom>
+        <HBox spacing="8" alignment="CENTER_LEFT" styleClass="status-bar">
+            <padding>
+                <Insets top="6" right="12" bottom="6" left="12"/>
+            </padding>
+            <Label fx:id="statusLabel" text="Ready — pick a generator and click Generate."/>
+        </HBox>
+    </bottom>
+</BorderPane>

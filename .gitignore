@@ -1,0 +1,13 @@
+# Maven
+target/
+*/target/
+*.jar
+ECHO is on.
+# IDE
+.idea/
+*.iml
+.vscode/
+ECHO is on.
+# OS
+.DS_Store
+Thumbs.db

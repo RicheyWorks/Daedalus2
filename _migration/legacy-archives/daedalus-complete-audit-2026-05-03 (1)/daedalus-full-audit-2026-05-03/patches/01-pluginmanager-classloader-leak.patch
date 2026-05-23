@@ -1,0 +1,65 @@
+diff --git a/src/main/java/com/daedalus/plugin/runtime/PluginManager.java b/src/main/java/com/daedalus/plugin/runtime/PluginManager.java
+index 7e4f2c1..c3a9d7e 100644
+--- a/src/main/java/com/daedalus/plugin/runtime/PluginManager.java
++++ b/src/main/java/com/daedalus/plugin/runtime/PluginManager.java
+@@ -13,7 +13,9 @@ import org.springframework.context.ApplicationContext;
+ import java.io.File;
+ import java.net.URL;
+ import java.net.URLClassLoader;
+ import java.nio.file.Files;
+ import java.nio.file.Path;
+ import java.nio.file.Paths;
+-import java.util.ServiceLoader;
++import java.util.ArrayList;
++import java.util.List;
++import java.util.ServiceLoader;
+ 
+ public class PluginManager {
+ 
+     private final PluginRegistry registry;
+     private final ApplicationContext spring;
+     private final String pluginDir;
+     private PluginContext context;
++    private final List<URLClassLoader> externalLoaders = new ArrayList<>();
+ 
+     public PluginManager(PluginRegistry registry, ApplicationContext spring, String pluginDir) {
+         this.registry = registry;
+         this.spring = spring;
+         this.pluginDir = pluginDir;
+     }
+ 
+     private void loadJar(Path jar) {
+         try {
+             URL url = jar.toUri().toURL();
+             URLClassLoader cl = new URLClassLoader(new URL[]{url}, getClass().getClassLoader());
++            externalLoaders.add(cl);
+             ServiceLoader<MazePlugin> sl = ServiceLoader.load(MazePlugin.class, cl);
+             for (MazePlugin p : sl) {
+                 register(p, jar.getFileName().toString());
+             }
+         } catch (Exception e) {
+             log.warn("Failed to load plugin JAR {}: {}", jar, e.toString());
+         }
+     }
+ 
+     public void shutdownAll() {
+         for (PluginRegistry.Entry e : registry.all()) {
+             if (e.state() != PluginLifecycle.STARTED) continue;
+             try {
+                 e.plugin().stop(context);
+                 registry.advance(e.manifest().id(), PluginLifecycle.STOPPED);
+             } catch (Throwable t) {
+                 log.warn("Plugin '{}' threw on stop: {}", e.manifest().id(), t.toString());
+             }
+         }
++        // Close external classloaders to release JAR file handles (prevents leaks on reload/shutdown)
++        for (URLClassLoader cl : externalLoaders) {
++            try { cl.close(); } catch (Exception ignored) {}
++        }
++        externalLoaders.clear();
+     }
+ 
+     /** For tests / scripted loads. */
+-    public boolean exists(File f) { return f.exists() && f.isFile(); }
++    boolean exists(File f) { return f.exists() && f.isFile(); }
+ }

@@ -1,0 +1,57 @@
+spring:
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 5s
+
+logging:
+  level:
+    com.daedalus: INFO
+    org.springframework: WARN
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+
+daedalus:
+  plugins:
+    directory: ${DAEDALUS_PLUGIN_DIR:/var/daedalus/plugins}
+    scan-on-startup: true
+  redis:
+    # Prod uses Redis-backed leaderboard / replay store. Override via DAEDALUS_REDIS_ENABLED.
+    enabled: ${DAEDALUS_REDIS_ENABLED:true}
+  security:
+    # Prod must supply both env vars or boot fails (no defaults overridden here).
+    # See application.yml for the full schema.
+    jwt:
+      secret: ${DAEDALUS_JWT_SECRET}
+    admin:
+      password-bcrypt: ${DAEDALUS_ADMIN_PASSWORD_BCRYPT}
+
+# Tighter limits than the application.yml defaults: this is the production-traffic surface.
+# Tune via env vars without touching the YAML.
+resilience4j:
+  ratelimiter:
+    instances:
+      mazeGenerate:
+        limit-for-period: ${DAEDALUS_RL_GENERATE_PER_MIN:60}
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: true
+      mazeSolve:
+        limit-for-period: ${DAEDALUS_RL_SOLVE_PER_MIN:120}
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: true
+      authLogin:
+        limit-for-period: ${DAEDALUS_RL_LOGIN_PER_MIN:5}
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: true

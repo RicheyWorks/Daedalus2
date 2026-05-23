@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    examples/biome-plugin — worked example of writing a Daedalus plugin.
+
+    Deliberately NOT a reactor child. The parent pom only lists production
+    modules so `mvn clean verify` at the repo root stays focused. Build this
+    plugin separately with:
+
+        mvn -f examples/biome-plugin/pom.xml clean package
+
+    The resulting JAR drops into the host's plugin directory (see
+    examples/run-with-biome.sh).
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.daedalus.examples</groupId>
+    <artifactId>daedalus-biome-plugin</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>Daedalus :: Example Plugin :: Biome Generators</name>
+    <description>
+        Reference plugin demonstrating the Daedalus SPI: registers two
+        biome-flavored generators (forest-biome, desert-biome) and
+        subscribes to MazeGeneratedEvent to log a one-line summary per
+        generation.
+    </description>
+
+    <properties>
+        <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <daedalus.version>1.0.0-SNAPSHOT</daedalus.version>
+        <spring.version>6.1.10</spring.version>
+        <slf4j.version>2.0.13</slf4j.version>
+    </properties>
+
+    <dependencies>
+        <!--
+            Plugin-api transitively pulls daedalus-core. Both are 'provided' because
+            the host already has them on the classpath — the plugin JAR must not
+            re-bundle engine types or it'll fight the host's classloader.
+        -->
+        <dependency>
+            <groupId>com.daedalus</groupId>
+            <artifactId>daedalus-plugin-api</artifactId>
+            <version>${daedalus.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--
+            Spring is on the host classpath at runtime (the host IS a Spring Boot
+            app). We need ApplicationEventMulticaster to register an
+            ApplicationListener programmatically — a plain ServiceLoader plugin
+            instance is NOT a Spring bean, so @EventListener annotations on its
+            methods would never be processed. Programmatic registration is the
+            correct path. Provided scope keeps the plugin JAR small.
+        -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Test only -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.25.3</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,70 @@
+# SPDX-License-Identifier: MIT
+#
+# Continuous integration for Daedalus.
+#
+# Runs the full Maven reactor (`mvn -B verify`) on every push / PR against
+# main, then builds the reference biome-plugin so the worked example doesn't
+# silently rot.
+#
+# The reference plugin builds AFTER the reactor on purpose — its pom resolves
+# daedalus-plugin-api from the local Maven repo, which `verify` populates via
+# the install phase.
+
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Cancel in-flight runs on the same ref when a new push lands — saves CI
+# minutes on rapid pushes / rebases.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build & test
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          # setup-java's built-in cache covers ~/.m2/repository keyed on the
+          # pom set — equivalent to a manual actions/cache step but maintained
+          # upstream.
+          cache: maven
+
+      # Force English locale + UTC so any test that asserts on formatted text
+      # or timestamps behaves identically on every runner. Cheap insurance.
+      - name: Set deterministic locale
+        run: |
+          echo "LANG=en_US.UTF-8"  >> "$GITHUB_ENV"
+          echo "LC_ALL=en_US.UTF-8" >> "$GITHUB_ENV"
+          echo "TZ=UTC"             >> "$GITHUB_ENV"
+
+      - name: Build & test the reactor
+        run: mvn -B -ntp clean verify
+
+      - name: Build the reference biome-plugin
+        # Runs after the reactor so daedalus-plugin-api is in ~/.m2. Tests in
+        # the example pom run via the default surefire binding.
+        run: mvn -B -ntp -f examples/biome-plugin/pom.xml clean package
+
+      - name: Upload server JAR (for inspection on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daedalus-server-jar
+          path: daedalus-server/target/*.jar
+          if-no-files-found: ignore
+          retention-days: 7

@@ -1,0 +1,36 @@
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6370 # offset to avoid colliding with a running dev redis
+
+logging:
+  level:
+    com.daedalus: DEBUG
+    org.springframework: WARN
+
+daedalus:
+  plugins:
+    scan-on-startup: false
+
+# Tests run with very generous limits so happy-path MockMvc tests don't accidentally trip
+# the breakers. The dedicated rate-limit test overrides one instance to a tiny budget at
+# runtime via @TestPropertySource.
+resilience4j:
+  ratelimiter:
+    instances:
+      mazeGenerate:
+        limit-for-period: 100000
+        limit-refresh-period: 1s
+        timeout-duration: 0
+        register-health-indicator: false
+      mazeSolve:
+        limit-for-period: 100000
+        limit-refresh-period: 1s
+        timeout-duration: 0
+        register-health-indicator: false
+      authLogin:
+        limit-for-period: 100000
+        limit-refresh-period: 1s
+        timeout-duration: 0
+        register-health-indicator: false

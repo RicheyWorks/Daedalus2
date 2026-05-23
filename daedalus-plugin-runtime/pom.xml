@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.daedalus</groupId>
+        <artifactId>daedalus-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>daedalus-plugin-runtime</artifactId>
+    <name>Daedalus :: Plugin Runtime</name>
+    <description>
+        Plugin lifecycle, registry, classloader isolation, Spring auto-config,
+        and event-bus bridging. Embeddable in any Spring host (incl.
+        LoadBalancerPro) WITHOUT the Daedalus web layer — depends on
+        spring-boot-autoconfigure + spring-context only, never
+        spring-boot-starter-web.
+    </description>
+
+    <dependencies>
+        <!-- Plugin SPI -->
+        <dependency>
+            <groupId>com.daedalus</groupId>
+            <artifactId>daedalus-plugin-api</artifactId>
+        </dependency>
+
+        <!-- Engine — BuiltinPlugin wraps the 14 generators + 9 solvers -->
+        <dependency>
+            <groupId>com.daedalus</groupId>
+            <artifactId>daedalus-core</artifactId>
+        </dependency>
+
+        <!-- Spring core + auto-config. Deliberately NOT pulling spring-boot-starter-web. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
+        <!-- SLF4J — Slf4jPluginLogger binding -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <!-- Test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

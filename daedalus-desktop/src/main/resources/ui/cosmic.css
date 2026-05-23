@@ -1,0 +1,92 @@
+/* Cosmic theme — dark navy + cyan accents. Pairs with CosmicTheme.java's
+   color palette so the canvas renderer (which reads tokens off the Theme bean)
+   harmonizes with the JavaFX controls (which read this stylesheet). */
+
+.root {
+    -fx-background-color: #0a0e27;
+    -fx-font-family: "Segoe UI", "SF Pro Display", "Helvetica Neue", sans-serif;
+    -fx-font-size: 13px;
+}
+
+/* ---------- toolbar ---------- */
+
+.toolbar {
+    -fx-background-color: #14193e;
+    -fx-border-color: transparent transparent #2a3270 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+.toolbar .label {
+    -fx-text-fill: #c0d0ff;
+}
+.toolbar .separator .line {
+    -fx-border-color: #2a3270;
+    -fx-border-width: 0 0 0 1;
+}
+
+/* ---------- inputs ---------- */
+
+.combo-box,
+.text-field,
+.spinner,
+.spinner .text-field {
+    -fx-background-color: #1d2456;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: #6e7ab8;
+    -fx-background-radius: 4;
+    -fx-border-color: #2a3270;
+    -fx-border-radius: 4;
+}
+.combo-box:focused,
+.text-field:focused,
+.spinner:focused,
+.spinner .text-field:focused {
+    -fx-border-color: #5a8cff;
+}
+.combo-box .list-cell,
+.combo-box-popup .list-view {
+    -fx-background-color: #1d2456;
+    -fx-text-fill: #ffffff;
+}
+.combo-box-popup .list-view .list-cell:hover,
+.combo-box-popup .list-view .list-cell:filled:selected {
+    -fx-background-color: #3d4a99;
+    -fx-text-fill: #ffffff;
+}
+
+/* ---------- buttons ---------- */
+
+.button {
+    -fx-background-color: #2a3270;
+    -fx-text-fill: #ffffff;
+    -fx-background-radius: 4;
+    -fx-padding: 6 14 6 14;
+    -fx-cursor: hand;
+}
+.button:hover {
+    -fx-background-color: #3d4a99;
+}
+.button:default {
+    -fx-background-color: #5a8cff;
+    -fx-text-fill: #0a0e27;
+    -fx-font-weight: bold;
+}
+.button:default:hover {
+    -fx-background-color: #7ba6ff;
+}
+
+/* ---------- canvas pane + status bar ---------- */
+
+.canvas-pane {
+    -fx-background-color: #0a0e27;
+}
+
+.status-bar {
+    -fx-background-color: #14193e;
+    -fx-border-color: #2a3270 transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+}
+.status-bar .label {
+    -fx-text-fill: #c0d0ff;
+    -fx-font-family: "Cascadia Code", "Consolas", "Menlo", monospace;
+    -fx-font-size: 12px;
+}

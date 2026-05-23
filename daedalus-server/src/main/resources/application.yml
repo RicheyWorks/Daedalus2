@@ -1,0 +1,68 @@
+spring:
+  application:
+    name: daedalus-server
+  profiles:
+    active: ${DAEDALUS_PROFILE:dev}
+  banner:
+    location: classpath:banner.txt
+
+server:
+  port: ${SERVER_PORT:8080}
+
+logging:
+  level:
+    com.daedalus: INFO
+    org.springframework: INFO
+
+# Daedalus-specific config. Bind these with @ConfigurationProperties("daedalus") in the server module.
+daedalus:
+  plugins:
+    directory: ${DAEDALUS_PLUGIN_DIR:${user.home}/.daedalus/plugins}
+    scan-on-startup: true
+  cache:
+    maze-cache-size: 256
+    maze-cache-ttl-minutes: 30
+  security:
+    # JWT signing key. Required in every profile because AuthController is registered
+    # everywhere (so dev and desktop builds can issue tokens for testing too). The default
+    # below is for dev / test only — prod must override via DAEDALUS_JWT_SECRET. The value
+    # is base64-decoded; a literal string >= 32 chars also works (UTF-8 fallback).
+    jwt:
+      secret: ${DAEDALUS_JWT_SECRET:dev-only-secret-change-me-please-32bytes!}
+      issuer: ${DAEDALUS_JWT_ISSUER:daedalus-server}
+      ttl-minutes: ${DAEDALUS_JWT_TTL_MINUTES:60}
+    # Single ops user. Password is a bcrypt hash, never plaintext. Generate with:
+    #   System.out.println(new BCryptPasswordEncoder().encode("your-password"));
+    # In dev, the default below is the bcrypt of "admin" so login works out of the box.
+    # In prod, override DAEDALUS_ADMIN_PASSWORD_BCRYPT or auth will refuse all attempts.
+    admin:
+      username: ${DAEDALUS_ADMIN_USER:admin}
+      password-bcrypt: ${DAEDALUS_ADMIN_PASSWORD_BCRYPT:$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy}
+
+# ----- Resilience4j rate limiters -----
+# Method-level @RateLimiter(name = "...") consults these instances. Defaults below are sane
+# for a single-process dev / portfolio deploy. Profile-specific overrides:
+#   application-test.yml  -> very generous (don't trip MockMvc tests)
+#   application-prod.yml  -> tighter (real traffic, brute-force protection on /auth/login)
+# Limits are global (one bucket shared across all clients). Per-IP / per-username throttling
+# is on the backlog — Resilience4j's @RateLimiter annotation is method-scoped, not key-scoped,
+# so per-key buckets need a RateLimiterRegistry plus a HandlerInterceptor pulling the key off
+# the request. See BACKLOG.md "Rate limiting on write endpoints".
+resilience4j:
+  ratelimiter:
+    instances:
+      mazeGenerate:
+        limit-for-period: 30          # 30 generations
+        limit-refresh-period: 1m      # per minute
+        timeout-duration: 0           # don't queue — fail fast with RequestNotPermitted
+        register-health-indicator: false
+      mazeSolve:
+        limit-for-period: 60          # solving is cheaper than generating; allow more headroom
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
+      authLogin:
+        limit-for-period: 10          # brute-force guard. Tighten in prod.
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false

@@ -1,0 +1,104 @@
+# SPDX-License-Identifier: MIT
+#
+# Tag-driven release pipeline.
+#
+# Triggered on tags matching `v*` (e.g. `v1.0.0`). Builds the reactor, then
+# attaches the server's executable JAR and the reference biome-plugin JAR to
+# a GitHub Release. The release body is the relevant slice of CHANGELOG.md
+# (extracted by the embedded script below), keeping a single source of
+# truth for what changed.
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write   # creating / updating Releases
+
+jobs:
+  release:
+    name: Build & publish release artifacts
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          # Full history is helpful for release notes that reference earlier
+          # tags; otherwise GitHub clones with depth=1.
+          fetch-depth: 0
+
+      - name: Set up Java 21 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Build reactor (no tests — already validated by CI on push)
+        run: mvn -B -ntp -DskipTests clean install
+
+      - name: Build reference biome-plugin
+        run: mvn -B -ntp -f examples/biome-plugin/pom.xml -DskipTests clean package
+
+      - name: Locate release artifacts
+        id: artifacts
+        run: |
+          set -euo pipefail
+          SERVER_JAR="$(ls daedalus-server/target/daedalus-server-*-exec.jar 2>/dev/null | head -n 1 || true)"
+          PLUGIN_JAR="$(ls examples/biome-plugin/target/daedalus-biome-plugin-*.jar 2>/dev/null | head -n 1 || true)"
+
+          if [[ -z "$SERVER_JAR" ]]; then
+            echo "::error::No server exec JAR found under daedalus-server/target/."
+            exit 1
+          fi
+
+          echo "server_jar=$SERVER_JAR" >> "$GITHUB_OUTPUT"
+          if [[ -n "$PLUGIN_JAR" ]]; then
+            echo "plugin_jar=$PLUGIN_JAR" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Found server jar: $SERVER_JAR"
+          echo "Found plugin jar: ${PLUGIN_JAR:-<none>}"
+
+      - name: Extract release notes from CHANGELOG.md
+        id: notes
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#v}"   # strip leading "v" if present
+
+          # Pull the section under `## [<version>]` (or `## [Unreleased]` as
+          # a fallback) up to but not including the next `## [` heading.
+          awk -v ver="$VERSION" '
+            /^## \[/ {
+              if (in_section) exit
+              if ($0 ~ "## \\[" ver "\\]" || $0 ~ /^## \[Unreleased\]/) {
+                in_section = 1; print; next
+              }
+            }
+            in_section { print }
+          ' CHANGELOG.md > release-notes.md
+
+          if [[ ! -s release-notes.md ]]; then
+            echo "No matching CHANGELOG section for $VERSION — using a stub." >&2
+            printf '## %s\n\nSee CHANGELOG.md for details.\n' "$TAG" > release-notes.md
+          fi
+
+          echo "notes_path=release-notes.md" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body_path: ${{ steps.notes.outputs.notes_path }}
+          # Tags ending in -rc / -beta / -alpha are flagged as prereleases.
+          prerelease: ${{ contains(github.ref_name, '-rc') || contains(github.ref_name, '-beta') || contains(github.ref_name, '-alpha') }}
+          files: |
+            ${{ steps.artifacts.outputs.server_jar }}
+            ${{ steps.artifacts.outputs.plugin_jar }}
+          fail_on_unmatched_files: false

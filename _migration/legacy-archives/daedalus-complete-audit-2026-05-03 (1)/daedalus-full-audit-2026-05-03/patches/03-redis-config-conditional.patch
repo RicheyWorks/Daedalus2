@@ -1,0 +1,26 @@
+diff --git a/src/main/java/com/daedalus/server/config/RedisConfig.java b/src/main/java/com/daedalus/server/config/RedisConfig.java
+index 2f3a1b9..9e8c4d2 100644
+--- a/src/main/java/com/daedalus/server/config/RedisConfig.java
++++ b/src/main/java/com/daedalus/server/config/RedisConfig.java
+@@ -5,8 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
+ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+ import org.springframework.context.annotation.Bean;
+ import org.springframework.context.annotation.Configuration;
++import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+ import org.springframework.data.redis.connection.RedisConnectionFactory;
+ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+ import org.springframework.data.redis.core.RedisTemplate;
+ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+ import org.springframework.data.redis.serializer.StringRedisSerializer;
+ 
+ /**
+@@ -18,7 +19,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
+  * and services will fall back to in-memory caches.
+  */
+ @Configuration
++@ConditionalOnProperty(prefix = "daedalus.redis", name = "enabled", havingValue = "true")
+ public class RedisConfig {
+ 
+     @Bean
+     public RedisConnectionFactory redisConnectionFactory() {
+         // Pulls from spring.data.redis.* in application.yml

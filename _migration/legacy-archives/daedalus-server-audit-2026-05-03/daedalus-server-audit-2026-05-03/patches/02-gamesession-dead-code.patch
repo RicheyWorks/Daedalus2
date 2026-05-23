@@ -1,0 +1,17 @@
+diff --git a/src/main/java/com/daedalus/server/service/GameSessionService.java b/src/main/java/com/daedalus/server/service/GameSessionService.java
+index 4b2e9f3..7d1c8a2 100644
+--- a/src/main/java/com/daedalus/server/service/GameSessionService.java
++++ b/src/main/java/com/daedalus/server/service/GameSessionService.java
+@@ -50,10 +50,8 @@ public class GameSessionService {
+         long elapsed = Duration.between(s.startedAt(), Instant.now()).toMillis();
+         long ideal = grid.rows() + grid.cols();
+         long score = Math.max(0, 100_000 - s.moveCount() * 10 - elapsed / 100);
+         s.complete(score);
+         leaderboard.submit(new LeaderboardEntry(
+                 s.id(), s.playerName(), score, s.moveCount(), elapsed,
+                 /* mazeGeneratorId */ "unknown", Instant.now()));
+-        // ideal kept for future score-tuning telemetry
+-        if (ideal < 0) throw new IllegalStateException("unreachable");
++        // ideal kept for future score-tuning telemetry (rows + cols)
+     }
+ }

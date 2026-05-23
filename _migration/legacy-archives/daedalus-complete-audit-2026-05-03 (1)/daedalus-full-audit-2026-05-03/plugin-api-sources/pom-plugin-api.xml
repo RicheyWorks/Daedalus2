@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.daedalus</groupId>
+        <artifactId>daedalus-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>daedalus-plugin-api</artifactId>
+    <name>Daedalus :: Plugin API</name>
+    <description>
+        SPI for Daedalus plugins. Depends on daedalus-core only — no Spring,
+        no web, no UI. Plugin authors compile against this artifact (which
+        transitively brings in daedalus-core + slf4j-api) and a Spring-backed
+        runtime is provided separately by daedalus-plugin-runtime.
+    </description>
+
+    <dependencies>
+        <!-- Pure-Java engine — needed for MazeGenerator, MazeSolver, registries, model types -->
+        <dependency>
+            <groupId>com.daedalus</groupId>
+            <artifactId>daedalus-core</artifactId>
+        </dependency>
+
+        <!-- Test only -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

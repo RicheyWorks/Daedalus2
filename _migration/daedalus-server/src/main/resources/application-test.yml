@@ -1,0 +1,14 @@
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6370 # offset to avoid colliding with a running dev redis
+
+logging:
+  level:
+    com.daedalus: DEBUG
+    org.springframework: WARN
+
+daedalus:
+  plugins:
+    scan-on-startup: false

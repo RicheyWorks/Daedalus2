@@ -1,0 +1,29 @@
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2s
+  websocket:
+    # STOMP topics, etc. — wire to whatever your config classes expect
+    enabled: true
+
+logging:
+  level:
+    com.daedalus: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: DEBUG
+    org.springframework.messaging: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+daedalus:
+  plugins:
+    scan-on-startup: true

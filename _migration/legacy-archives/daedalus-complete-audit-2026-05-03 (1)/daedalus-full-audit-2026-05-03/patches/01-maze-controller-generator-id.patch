@@ -1,0 +1,15 @@
+diff --git a/src/main/java/com/daedalus/server/controller/MazeController.java b/src/main/java/com/daedalus/server/controller/MazeController.java
+index 8e4f2c1..c3a9d7e 100644
+--- a/src/main/java/com/daedalus/server/controller/MazeController.java
++++ b/src/main/java/com/daedalus/server/controller/MazeController.java
+@@ -67,8 +67,9 @@ public class MazeController {
+     @PostMapping("/maze/generate")
+     public GenerateResponse generate(@RequestBody GenerateRequest req) {
+         long seed = req.seed() != null ? req.seed() : System.nanoTime();
+-        var cached = gen.generate(req.generatorId(), req.rows(), req.cols(), seed);
+-        return toResponse(cached.metadata().id(), req.generatorId(),
++        var cached = gen.generate(req.generatorId(), req.rows(), req.cols(), seed);
++        String actualGeneratorId = cached.metadata().generatorId();
++        return toResponse(cached.metadata().id(), actualGeneratorId,
+                 req.rows(), req.cols(), seed, cached.grid());
+     }
