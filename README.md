@@ -1,6 +1,6 @@
 # Daedalus
 
-[![CI](https://github.com/730richey730/Daedalus2/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/730richey730/Daedalus2/actions/workflows/ci.yml)
+[![CI](https://github.com/RicheyWorks/Daedalus2/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/RicheyWorks/Daedalus2/actions/workflows/ci.yml)
 
 A multi-module Java engine for procedural maze and graph generation, with a
 plugin runtime, a Spring Boot server (REST + WebSocket), and an optional

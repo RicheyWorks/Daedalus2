@@ -2,13 +2,14 @@
 #
 # Continuous integration for Daedalus.
 #
-# Runs the full Maven reactor (`mvn -B verify`) on every push / PR against
+# Runs the full Maven reactor (`mvn -B install`) on every push / PR against
 # main, then builds the reference biome-plugin so the worked example doesn't
 # silently rot.
 #
 # The reference plugin builds AFTER the reactor on purpose — its pom resolves
-# daedalus-plugin-api from the local Maven repo, which `verify` populates via
-# the install phase.
+# daedalus-plugin-api from the local Maven repo (~/.m2), which only the
+# `install` phase populates. (`verify` runs all tests but installs nothing,
+# which is why the reactor step must run `install`, not `verify`.)
 
 name: CI
 
@@ -32,10 +33,10 @@ jobs:
 
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Java 21 (Temurin)
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
@@ -53,7 +54,7 @@ jobs:
           echo "TZ=UTC"             >> "$GITHUB_ENV"
 
       - name: Build & test the reactor
-        run: mvn -B -ntp clean verify
+        run: mvn -B -ntp clean install
 
       - name: Build the reference biome-plugin
         # Runs after the reactor so daedalus-plugin-api is in ~/.m2. Tests in
@@ -62,7 +63,7 @@ jobs:
 
       - name: Upload server JAR (for inspection on failure)
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: daedalus-server-jar
           path: daedalus-server/target/*.jar

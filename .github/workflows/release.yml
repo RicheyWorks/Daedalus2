@@ -26,14 +26,14 @@ jobs:
 
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           # Full history is helpful for release notes that reference earlier
           # tags; otherwise GitHub clones with depth=1.
           fetch-depth: 0
 
       - name: Set up Java 21 (Temurin)
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
