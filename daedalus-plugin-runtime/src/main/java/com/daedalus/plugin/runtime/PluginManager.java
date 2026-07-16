@@ -75,13 +75,16 @@ public class PluginManager {
     }
 
     private void loadJar(Path jar) {
+        // Path.getFileName() is @Nullable (null for root paths); valueOf keeps
+        // this total even though scanned jar paths always have a filename.
+        String jarName = String.valueOf(jar.getFileName());
         try {
             URL url = jar.toUri().toURL();
             URLClassLoader cl = new URLClassLoader(new URL[]{url}, getClass().getClassLoader());
             externalLoaders.add(cl);
             ServiceLoader<MazePlugin> sl = ServiceLoader.load(MazePlugin.class, cl);
             for (MazePlugin p : sl) {
-                register(p, jar.getFileName().toString());
+                register(p, jarName);
             }
         } catch (Throwable t) {
             // Catch Throwable rather than Exception: the most common discovery failures —
@@ -92,7 +95,7 @@ public class PluginManager {
             // INIT/REGISTER/START/STOP failures use) instead of grepping logs.
             log.warn("Failed to load plugin JAR {}: {}", jar, t.toString());
             spring.publishEvent(new PluginFailedEvent(
-                    this, jar.getFileName().toString(), null,
+                    this, jarName, null,
                     PluginFailedEvent.Phase.DISCOVER, t));
         }
     }
