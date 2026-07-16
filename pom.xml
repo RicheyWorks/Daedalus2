@@ -32,7 +32,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <resilience4j.version>2.2.0</resilience4j.version>
-        <springdoc.version>2.6.0</springdoc.version>
+        <springdoc.version>3.0.3</springdoc.version>
 
         <!-- Build hygiene plugins -->
         <jacoco.version>0.8.12</jacoco.version>
