@@ -1,0 +1,20 @@
+# Line-ending policy: LF in the repository, converted on checkout as declared.
+# Added 2026-07-15 to stop CRLF churn showing up as phantom diffs on Windows.
+* text=auto
+
+# Windows batch scripts must stay CRLF or cmd.exe mangles multi-line parsing.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Shell scripts must stay LF or the shebang line breaks.
+*.sh text eol=lf
+
+# Binary formats — never normalize.
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.jar binary
+*.zip binary

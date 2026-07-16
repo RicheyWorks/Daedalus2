@@ -6,6 +6,34 @@ All notable changes to Daedalus are documented in this file. Format follows
 `1.0.0` (the multi-module split + first audit pass) live in git history
 under the `_migration/` portfolios.
 
+## [Unreleased] — 2026-07-15
+
+**Infrastructure.** Repo is live at `RicheyWorks/Daedalus2` and CI is green.
+Housekeeping pass on the things that make the repo behave, not the code.
+
+### Infrastructure
+
+- **CI fixed and verified green.** Run #1 failed because `ci.yml` ran
+  `mvn clean verify`, which never installs reactor artifacts into `~/.m2`,
+  so the standalone `examples/biome-plugin` build couldn't resolve
+  `daedalus-plugin-api:1.0.0-SNAPSHOT`. Switched the reactor step to
+  `clean install` (commit `2519a1f`, 2026-07-02); also bumped actions for
+  the Node 24 cutover (`checkout@v6`, `setup-java@v5`, `upload-artifact@v7`)
+  and fixed the README badge URL. Run #2 (2026-07-03) passed — 56s total,
+  reactor + biome-plugin both green.
+- **`.gitattributes` added.** `* text=auto` with explicit `eol=crlf` for
+  `*.bat`/`*.cmd`, `eol=lf` for `*.sh`, and `binary` for PDFs, images, and
+  archives. Ends the CRLF churn that made untouched files (`.gitignore`,
+  `_migration/migrate.bat`) show up as fully-rewritten phantom diffs on
+  Windows. Tree renormalized with `git add --renormalize .`.
+- **`.gitignore` cleaned.** Removed two literal `ECHO is on.` lines — an
+  artifact of the batch script that originally generated the file (`echo`
+  with no argument prints its own status instead of a blank line).
+- **CHANGELOG de-binarified.** The 2026-05-05 entry documenting OneDrive
+  null-byte corruption contained a literal `\0` character, which made grep
+  and diff tools treat this whole file as binary. Replaced with the escaped
+  text form.
+
 ## [Unreleased] — 2026-05-11
 
 **Reference plugin + CI + core consolidation.** Four BACKLOG items closed
@@ -394,7 +422,7 @@ through `getURLs()` instead.
 - **OneDrive sync corruption — 10 server-module files repaired.**
   A reactor build surfaced compile errors in six files with the
   unmistakable pattern of an interrupted OneDrive sync: trailing null
-  bytes (` `) on some, mid-method truncation on others. A full
+  bytes (`\0`) on some, mid-method truncation on others. A full
   sweep then found four more in the same state that the compiler
   hadn't reached yet because the build aborted early.
 
@@ -578,37 +606,4 @@ and the login contract.
 
 ### Verified (no changes needed)
 
-- All four audit patches (`MazeController` generator-id, `GameSessionService`
-  dead branch, `RedisConfig` `@ConditionalOnProperty`, `PluginManager`
-  classloader leak) confirmed already applied to the live source tree.
-- `daedalus.redis.enabled` already set in `application-dev.yml` (`false`) and
-  `application-prod.yml` (`${DAEDALUS_REDIS_ENABLED:true}`).
-- `PluginFailedEvent` already wired end-to-end: `PluginManager` publishes for
-  five lifecycle phases (`DISCOVER`, `INIT`, `REGISTER_ALGORITHMS`, `START`,
-  `STOP`); `MazeWebSocketController.onPluginFailed` re-emits to
-  `/topic/plugins/failures`.
-- SPI polish on `daedalus-plugin-api` (null guards in `PluginManifest`,
-  `@since 1.0` tags, default `version()` accessor, `contributedAlgorithms()`
-  Javadoc example) all already present.
-- `daedalus-core` is 100 % pure: zero Spring / JPA / Jackson / Hibernate
-  imports, only `@Override` annotations, pom dependencies are
-  `slf4j-api` + JUnit + AssertJ.
-
-### Test inventory after this release
-
-| Module | Test files | Lines |
-|---|---|---|
-| daedalus-core | 1 | 115 |
-| daedalus-plugin-api | 1 | 91 |
-| daedalus-plugin-runtime | 3 | 587 |
-| daedalus-server | 7 | 524 |
-| daedalus-desktop | 2 | 109 |
-| **Total** | **14** | **1,378** |
-
-### Open follow-up
-
-Only one item from the audit's recommendations list is still outstanding:
-**`SecurityConfig` hardening.** Every endpoint currently uses `permitAll()`,
-which is intentional for the dev / JavaFX desktop client. Worth revisiting
-before any non-localhost deployment. Not actionable until that deployment
-decision is made.
+- All four audit patches (`M
