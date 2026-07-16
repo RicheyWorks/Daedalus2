@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SpotBugs exclusion filter. Add targeted <Match> blocks with a comment
+  justifying each, rather than lowering the global threshold.
+-->
+<FindBugsFilter>
+    <!--
+      CT_CONSTRUCTOR_THROW warns that a throwing constructor on a non-final
+      class enables a "finalizer attack" (subclass overrides finalize() to
+      resurrect a partially-constructed object). Daedalus is not a security
+      boundary, constructors validating their arguments is exactly what we
+      want, and finalization itself has been deprecated for removal since
+      Java 18. Excluded project-wide.
+    -->
+    <Match>
+        <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+    </Match>
+
+    <!--
+      The plugin API intentionally shares live engine objects with plugins:
+      events hand listeners the actual MazeGrid / solution path (defensive
+      copies per event would be both expensive and wrong — plugins are meant
+      to observe the real object), and AbstractPlugin.context is a protected
+      convenience field consumed by plugin subclasses that live outside this
+      repository.
+    -->
+    <Match>
+        <Package name="~com\.daedalus\.plugin.*"/>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2,URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"/>
+    </Match>
+
+    <!--
+      EI_EXPOSE_REP/REP2 across the server: constructor-injected Spring beans
+      and DTO/record components holding references are flagged as "exposing
+      internal representation". Sharing live engine objects across layers is
+      this codebase's deliberate design (same rationale as the plugin API
+      above), and defensive-copying injected singletons is meaningless.
+      Excluded project-wide rather than annotating every service.
+    -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+    </Match>
+
+    <!--
+      DaedalusApp and DaedalusLauncher keep a static
+      ConfigurableApplicationContext so the desktop client can boot the server
+      headless in-process and reach the context. MS_EXPOSE_REP flags the
+      static accessors; the shared context is the feature, not an accident.
+    -->
+    <Match>
+        <Or>
+            <Class name="com.daedalus.server.DaedalusApp"/>
+            <Class name="com.daedalus.desktop.DaedalusLauncher"/>
+        </Or>
+        <Bug pattern="MS_EXPOSE_REP"/>
+    </Match>
+</FindBugsFilter>

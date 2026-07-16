@@ -25,6 +25,10 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# contents: write is needed only by the coverage-badge commit step on main.
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Build & test
@@ -61,11 +65,7 @@ jobs:
         # the example pom run via the default surefire binding.
         run: mvn -B -ntp -f examples/biome-plugin/pom.xml clean package
 
-      - name: Upload server JAR (for inspection on failure)
-        if: failure()
-        uses: actions/upload-artifact@v7
-        with:
-          name: daedalus-server-jar
-          path: daedalus-server/target/*.jar
-          if-no-files-found: ignore
-          retention-days: 7
+      # Coverage badge: only on pushes to main (not PRs — no commit rights
+      # there, and the badge should reflect main anyway).
+      - name: Collect JaCoCo reports
+  

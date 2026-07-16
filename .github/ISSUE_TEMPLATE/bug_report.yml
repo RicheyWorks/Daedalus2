@@ -1,0 +1,38 @@
+name: Bug report
+description: Something in Daedalus behaves incorrectly
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: module
+    attributes:
+      label: Module
+      options:
+        - daedalus-core
+        - daedalus-server
+        - daedalus-desktop
+        - daedalus-plugin-api
+        - daedalus-plugin-runtime
+        - examples/biome-plugin
+        - build / CI
+        - not sure
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, what happened instead?
+      placeholder: Steps to reproduce, expected vs actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output or stack trace
+      render: shell
+  - type: input
+    id: version
+    attributes:
+      label: Version / commit
+      placeholder: e.g. 1.0.0-SNAPSHOT @ 4d4c800

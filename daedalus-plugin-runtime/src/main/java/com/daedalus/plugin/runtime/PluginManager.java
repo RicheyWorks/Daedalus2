@@ -151,7 +151,11 @@ public class PluginManager {
         }
         // Close external classloaders to release JAR file handles (prevents leaks on reload/shutdown)
         for (URLClassLoader cl : externalLoaders) {
-            try { cl.close(); } catch (Exception ignored) {}
+            try {
+                cl.close();
+            } catch (Exception ex) {
+                log.debug("Ignoring classloader close failure during shutdown", ex);
+            }
         }
         externalLoaders.clear();
     }

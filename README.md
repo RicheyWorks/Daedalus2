@@ -1,6 +1,7 @@
 # Daedalus
 
 [![CI](https://github.com/RicheyWorks/Daedalus2/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/RicheyWorks/Daedalus2/actions/workflows/ci.yml)
+![Coverage](.github/badges/jacoco.svg)
 
 A multi-module Java engine for procedural maze and graph generation, with a
 plugin runtime, a Spring Boot server (REST + WebSocket), and an optional
@@ -232,5 +233,4 @@ working tree.
 
 MIT — see [`LICENSE`](./LICENSE) for the full text. Permissive: anyone can
 use, modify, distribute, or sell the software, including in proprietary work,
-provided the copyright notice and license terms travel with copies. No
-warranty.
+provided the copyright notice and license 

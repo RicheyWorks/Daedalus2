@@ -47,6 +47,11 @@ public class MazeGenerationService {
         Timer timer = meters.timer("daedalus.generate", "algo", generatorId);
         MazeStats stats = new MazeStats();
         MazeGrid grid = timer.record(() -> gen.generate(rows, cols, seed, stats));
+        if (grid == null) {
+            // Timer.record(Supplier) is @Nullable; a generator returning null
+            // is a contract violation worth failing loudly on.
+            throw new IllegalStateException("generator returned null grid: " + generatorId);
+        }
 
         MazeMetadata meta = MazeMetadata.of(rows, cols, seed, generatorId,
                 new Point(0, 0), new Point(rows - 1, cols - 1));

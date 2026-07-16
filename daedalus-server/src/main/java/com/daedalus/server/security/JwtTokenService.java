@@ -3,7 +3,6 @@
 package com.daedalus.server.security;
 
 import com.daedalus.server.config.JwtAuthProperties;
-import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;

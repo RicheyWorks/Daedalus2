@@ -29,6 +29,30 @@ Housekeeping pass on the things that make the repo behave, not the code.
 - **`.gitignore` cleaned.** Removed two literal `ECHO is on.` lines — an
   artifact of the batch script that originally generated the file (`echo`
   with no argument prints its own status instead of a blank line).
+- **Coverage.** JaCoCo agent + per-module report wired into the reactor at
+  `verify`. CI regenerates `.github/badges/jacoco.svg` on pushes to main
+  (cicirello/jacoco-badge-generator) and commits it back `[skip ci]`; README
+  shows the badge next to CI status.
+- **Static analysis gates.** Checkstyle (minimal hygiene ruleset,
+  `config/checkstyle.xml`, runs at `validate`) and SpotBugs (medium threshold,
+  runs at `verify`) now fail the build. First run over the codebase surfaced
+  and fixed four real issues: an unused import in `JwtTokenService`, a dead
+  local (`ideal`) in `GameSessionService.complete`, a swallowed exception on
+  classloader close in `PluginManager.shutdownAll` (now debug-logged), and a
+  missing null guard on Micrometer’s `@Nullable Timer.record` return in
+  `MazeGenerationService.generate`. Intentional-design findings
+  (EI_EXPOSE_REP on events/DTOs/DI, CT_CONSTRUCTOR_THROW, MS_EXPOSE_REP on
+  the static context accessors) are excluded with per-block justifications
+  in `config/spotbugs-exclude.xml`.
+- **Dependabot.** Weekly update PRs for the Maven reactor, the standalone
+  biome-plugin pom, and the GitHub Actions used by the workflows; minor/patch
+  bumps grouped into a single PR.
+- **Issue & PR templates.** Bug report and feature request forms
+  (`.github/ISSUE_TEMPLATE/`) plus a PR checklist template.
+- **Container image.** Multi-stage `Dockerfile` (Maven build layer → slim
+  Temurin 21 JRE, non-root user) for `daedalus-server`; the release workflow
+  gained a job that publishes `ghcr.io/richeyworks/daedalus2:{version,latest}`
+  on every `v*` tag.
 - **CHANGELOG de-binarified.** The 2026-05-05 entry documenting OneDrive
   null-byte corruption contained a literal `\0` character, which made grep
   and diff tools treat this whole file as binary. Replaced with the escaped

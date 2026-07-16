@@ -51,12 +51,12 @@ public class GameSessionService {
 
     private void complete(GameSession s, MazeGrid grid) {
         long elapsed = Duration.between(s.startedAt(), Instant.now()).toMillis();
-        long ideal = grid.rows() + grid.cols();
+        // Score formula ignores maze size for now; if size-normalized scoring
+        // lands, the ideal-path baseline is grid.rows() + grid.cols().
         long score = Math.max(0, 100_000 - s.moveCount() * 10 - elapsed / 100);
         s.complete(score);
         leaderboard.submit(new LeaderboardEntry(
                 s.id(), s.playerName(), score, s.moveCount(), elapsed,
                 /* mazeGeneratorId */ "unknown", Instant.now()));
-        // ideal kept for future score-tuning telemetry (rows + cols)
     }
 }
