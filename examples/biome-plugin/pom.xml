@@ -36,7 +36,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <daedalus.version>1.0.0-SNAPSHOT</daedalus.version>
-        <spring.version>6.1.10</spring.version>
+        <spring.version>7.0.8</spring.version>
         <slf4j.version>2.0.13</slf4j.version>
     </properties>
 
