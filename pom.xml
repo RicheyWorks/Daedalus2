@@ -31,14 +31,14 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <resilience4j.version>2.2.0</resilience4j.version>
+        <resilience4j.version>2.4.0</resilience4j.version>
         <springdoc.version>2.6.0</springdoc.version>
 
         <!-- Build hygiene plugins -->
-        <jacoco.version>0.8.12</jacoco.version>
-        <checkstyle-plugin.version>3.5.0</checkstyle-plugin.version>
+        <jacoco.version>0.8.15</jacoco.version>
+        <checkstyle-plugin.version>3.6.0</checkstyle-plugin.version>
         <checkstyle.version>10.18.2</checkstyle.version>
-        <spotbugs-plugin.version>4.8.6.4</spotbugs-plugin.version>
+        <spotbugs-plugin.version>4.10.3.0</spotbugs-plugin.version>
     </properties>
 
     <modules>
