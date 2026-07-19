@@ -571,6 +571,16 @@ housekeeping on the things that make the repo behave.
   the same `Direction` order and the old sort was *stable*, so "first minimum
   wins" reproduces the previous choice exactly.
 
+- **`MazeGrid.weightOf(Point)` is now `final`** — closing a silent-failure hazard
+  the coordinate-indexed accessor introduced. Once the graph seam started asking
+  for weights by `(row, col)`, a subclass overriding the older `Point` form
+  would still compile but be **bypassed entirely**: its costs would vanish and
+  A\* would quietly optimise the wrong thing. Sealing the delegate turns that
+  into a compile error naming the method to override instead. Nothing in the
+  repo was affected — only `WeightedMazeGrid` overrode it, and that had already
+  moved — but `daedalus-plugin-runtime` loads third-party jars that may subclass
+  `MazeGrid`, so the failure mode was reachable from outside.
+
 - **`MazeGrid.weightOf(int row, int col)` — coordinate-indexed entry cost.**
   The graph seam addresses nodes by dense integer id, so
   `MazeGraph.edgeWeight(int, int)` was building a `Point` on every edge

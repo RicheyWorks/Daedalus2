@@ -150,11 +150,19 @@ public class MazeGrid {
      * scale the heuristic by {@code wMin} (or pass a custom heuristic to the solver) to
      * keep it admissible.
      *
+     * <p><b>{@code final} on purpose.</b> This used to be the extension point, and it is now a
+     * thin delegate to {@link #weightOf(int, int)}. A subclass that overrode <em>this</em>
+     * method would still compile but would be bypassed entirely by the graph seam, which asks
+     * for weights by coordinate — the subclass's costs would vanish silently and A* would
+     * quietly optimise the wrong thing. Sealing it turns that into a compile error naming the
+     * method to override instead. This matters beyond the repo: {@code daedalus-plugin-runtime}
+     * loads third-party jars that may subclass {@code MazeGrid}.
+     *
      * @param p cell whose entry-cost is requested; must be {@link #inBounds(Point)}
      * @return the cost of entering {@code p}; always {@code 1.0} for plain {@code MazeGrid}
      * @since 1.0
      */
-    public double weightOf(Point p) {
+    public final double weightOf(Point p) {
         return weightOf(p.row(), p.col());
     }
 
