@@ -163,6 +163,42 @@ Combine:
 | Gauss          | Very Good| Low               | Crystalline, balanced networks   |
 | Kraken         | Variable | High              | Organic, fault-tolerant networks |
 
+> ### ⚠️ Measured correction (2026-07-19) — the table above is wrong
+>
+> The ranking above describes the *curves*. It does not describe the *mazes these generators
+> produce*, and for topology selection only the latter matters. Measured stretch — the ratio
+> of actual maze distance to straight-line distance, sampled over 20,000 random cell pairs at
+> 32×32 — puts Hilbert near the **bottom**:
+>
+> | generator | mean stretch | p95 | max | diameter |
+> |---|---|---|---|---|
+> | **prims** | **2.48** | 5.50 | 57 | 110 |
+> | archimedes-spiral | 2.50 | 5.60 | 59 | 95 |
+> | gauss | 2.60 | 6.33 | 69 | 123 |
+> | binary-tree | 2.90 | 6.83 | 65 | 112 |
+> | wilsons | 2.98 | 6.64 | 95 | 140 |
+> | morton-curve | 3.06 | 7.50 | 77 | 123 |
+> | kruskals | 3.14 | 6.60 | 119 | 149 |
+> | **hilbert-curve** | **4.62** | 11.00 | 115 | **235** |
+> | recursive-backtracker | 9.31 | 25.40 | 289 | 436 |
+>
+> **Hilbert scores worse than Morton — the reverse of the claim above — and its diameter is
+> more than double Prim's**, meaning routes across it are twice as long.
+>
+> **Why:** the Hilbert curve genuinely has excellent locality, but that is a property of the
+> *traversal order*. `HilbertCurveGenerator` walks the grid in curve order and then attaches
+> each new cell to a **random already-visited neighbour**. The resulting spanning tree is not
+> the curve, so it does not inherit the curve's locality. The reasoning conflated "the Hilbert
+> curve preserves locality" (true) with "a maze generated in Hilbert order preserves locality"
+> (false).
+>
+> **Recommendation for topology work: use `prims`** (best measured locality, moderate diameter)
+> or `archimedes-spiral` (essentially tied, smallest diameter at 95). Avoid
+> `recursive-backtracker` for meshes — its long winding corridors are exactly the wrong bias.
+>
+> A generator that carves *along* the curve rather than attaching randomly would likely justify
+> the original claim, and is the obvious follow-up if Hilbert's properties are wanted.
+
 ---
 
 ## Technical Roadmap (2026–2028)

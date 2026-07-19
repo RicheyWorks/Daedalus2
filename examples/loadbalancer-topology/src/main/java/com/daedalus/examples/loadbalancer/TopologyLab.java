@@ -97,8 +97,10 @@ public final class TopologyLab {
         return "nodes=" + (topology.rows() * topology.cols())
                 + "  links=" + links / 2
                 + "  deadEnds=" + Braider.deadEnds(topology).size()
-                + "\n   Hilbert ordering keeps 1-D neighbours close in 2-D, which is why it models"
-                + "\n   rack/AZ locality better than a random topology."
+                + "\n   NOTE: measured stretch says Hilbert is NOT the best choice here — mean 4.62"
+                + "\n   vs 2.48 for plain prims, with double the diameter. The curve has great"
+                + "\n   locality; the tree built by attaching to a random visited neighbour does"
+                + "\n   not inherit it. Prefer 'prims' or 'archimedes-spiral' for real topologies."
                 + "\n   The generator yields a spanning tree (one route everywhere); braiding is"
                 + "\n   what adds the redundancy that makes capacity analysis meaningful.";
     }

@@ -286,6 +286,28 @@ housekeeping on the things that make the repo behave.
   aesthetics: both vision documents name Hilbert as *the* topology generator for
   LoadBalancer work, so anyone following that advice was routing over a disconnected graph
   and getting empty paths back with no error.
+- **The "Hilbert has the best locality" recommendation is measurably false.** Having fixed
+  Hilbert's connectivity, the obvious next question was whether it is actually the curve it
+  claims to be — connectivity and fidelity are different properties. Measuring **stretch**
+  (maze distance ÷ straight-line distance, 20,000 random pairs at 32²) inverts the vision
+  document's comparison table:
+
+  | generator | mean stretch | p95 | max | diameter |
+  |---|---|---|---|---|
+  | **prims** | **2.48** | 5.50 | 57 | 110 |
+  | archimedes-spiral | 2.50 | 5.60 | 59 | 95 |
+  | gauss | 2.60 | 6.33 | 69 | 123 |
+  | morton-curve | 3.06 | 7.50 | 77 | 123 |
+  | **hilbert-curve** | **4.62** | 11.00 | 115 | **235** |
+  | recursive-backtracker | 9.31 | 25.40 | 289 | 436 |
+
+  Hilbert scores **worse than Morton**, the reverse of the documented ranking, with more than
+  double Prim's diameter. The cause is a conflation: the Hilbert *curve* does have excellent
+  locality, but `HilbertCurveGenerator` walks the grid in curve order and then attaches each
+  cell to a **random visited neighbour** — so the spanning tree is not the curve and inherits
+  none of its locality. The vision document and the example now carry the measured table and
+  recommend `prims` or `archimedes-spiral` for topology work. A generator that carved *along*
+  the curve would likely vindicate the original claim and is the natural follow-up.
 - **Connectivity is now verified for every generator.** `PerfectMazePropertyTest` covered
   8 of 22, which is how the above hid. `GeneratorConnectivityTest` asserts the full
   spanning-tree contract (reachable everywhere, exactly `V-1` edges) across all 21
