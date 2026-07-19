@@ -196,8 +196,31 @@ Combine:
 > or `archimedes-spiral` (essentially tied, smallest diameter at 95). Avoid
 > `recursive-backtracker` for meshes — its long winding corridors are exactly the wrong bias.
 >
-> A generator that carves *along* the curve rather than attaching randomly would likely justify
-> the original claim, and is the obvious follow-up if Hilbert's properties are wanted.
+> **The obvious fix was tested and is worse.** It is tempting to conclude that the generator
+> should carve *along* the curve rather than attaching randomly, making it maximally
+> curve-faithful. Measured:
+>
+> | variant | mean stretch | p95 | diameter |
+> |---|---|---|---|
+> | Hilbert snake (carve strictly along the curve) | **16.69** | 43.19 | **1023** |
+> | hilbert-curve (attach to random visited neighbour) | 4.62 | 11.00 | 235 |
+> | prims | 2.48 | 5.50 | 110 |
+>
+> Perfect curve fidelity is **3.6× worse** than today's generator and **6.7× worse** than
+> Prim's, with a diameter of 1023 — the entire grid. The reason is structural: carving along a
+> space-filling curve produces a Hamiltonian *path*, and a path is the spanning tree with the
+> worst possible diameter. Two cells touching in 2-D can sit a thousand steps apart along the
+> snake.
+>
+> **So the relationship is inverted from the intuition:** the more faithfully a generator
+> follows the curve, the worse the resulting maze's locality. Curve locality is about the
+> *ordering*; maze locality is about the *tree's diameter*.
+>
+> **The property that actually predicts good topology locality is bushiness** — many short
+> branches, low diameter. The codebase already records this in the generator descriptors:
+> Prim's says "bushy texture; many short branches", and recursive backtracker's long winding
+> corridors make it the worst measured performer at 9.31. Select generators for topology work
+> on that axis, not on mathematical pedigree.
 
 ---
 

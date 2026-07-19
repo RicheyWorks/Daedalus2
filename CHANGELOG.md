@@ -306,8 +306,18 @@ housekeeping on the things that make the repo behave.
   locality, but `HilbertCurveGenerator` walks the grid in curve order and then attaches each
   cell to a **random visited neighbour** — so the spanning tree is not the curve and inherits
   none of its locality. The vision document and the example now carry the measured table and
-  recommend `prims` or `archimedes-spiral` for topology work. A generator that carved *along*
-  the curve would likely vindicate the original claim and is the natural follow-up.
+  recommend `prims` or `archimedes-spiral` for topology work.
+  **The obvious fix was then tested and is worse.** Carving strictly *along* the curve — the
+  maximally curve-faithful generator — measures **16.69** mean stretch with a diameter of
+  1023, i.e. **3.6× worse than today's version and 6.7× worse than Prim's**. A space-filling
+  curve carved end to end is a Hamiltonian *path*, and a path is the spanning tree with the
+  worst possible diameter: two cells touching in 2-D can be a thousand steps apart along the
+  snake. The relationship is therefore inverted from the intuition — greater curve fidelity
+  makes maze locality *worse*, because curve locality is about ordering while maze locality is
+  about tree diameter. What actually predicts it is **bushiness**, which the generator
+  descriptors already record ("bushy texture; many short branches" for Prim's; long winding
+  corridors for the worst performer). Topology generators should be chosen on that axis rather
+  than on mathematical pedigree.
 - **Connectivity is now verified for every generator.** `PerfectMazePropertyTest` covered
   8 of 22, which is how the above hid. `GeneratorConnectivityTest` asserts the full
   spanning-tree contract (reachable everywhere, exactly `V-1` edges) across all 21
