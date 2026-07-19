@@ -7,6 +7,7 @@ import com.daedalus.model.AlgorithmDescriptor;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
 import com.daedalus.solver.AbstractMazeSolver;
+import com.daedalus.solver.GridIndex;
 import com.daedalus.solver.Heuristics;
 
 import java.util.*;
@@ -49,32 +50,40 @@ public class AStarSolver extends AbstractMazeSolver {
 
     @Override
     public List<Point> solve(MazeGrid grid, Point start, Point goal, MazeStats stats) {
-        Map<Point, Point> parent = new HashMap<>();
-        Map<Point, Double> gScore = new HashMap<>();
-        gScore.put(start, 0.0);
-        parent.put(start, null);
+        // Cell-id-indexed arrays instead of Point-keyed hash collections — see GridIndex.
+        GridIndex index = new GridIndex(grid);
+        int startId = index.idOf(start);
+        int goalId = index.idOf(goal);
+
+        double[] gScore = new double[index.size()];
+        Arrays.fill(gScore, Double.POSITIVE_INFINITY);
+        int[] parent = new int[index.size()];
+        Arrays.fill(parent, -1);
+        boolean[] closed = new boolean[index.size()];
+        gScore[startId] = 0.0;
 
         PriorityQueue<Node> open = new PriorityQueue<>(Comparator.comparingDouble(Node::f));
-        open.add(new Node(start, 0.0, h.applyAsDouble(start, goal)));
-        Set<Point> closed = new HashSet<>();
+        open.add(new Node(startId, 0.0, h.applyAsDouble(start, goal)));
 
         while (!open.isEmpty()) {
             stats.recordFrontier(open.size());
             Node cur = open.poll();
-            if (!closed.add(cur.p)) continue;
+            if (closed[cur.id()]) continue;
+            closed[cur.id()] = true;
             stats.incExplored();
-            if (cur.p.equals(goal)) {
-                List<Point> path = reconstruct(parent, start, goal);
+            if (cur.id() == goalId) {
+                List<Point> path = reconstruct(parent, startId, goalId, index);
                 stats.setPathLength(path.size());
                 stats.finish(true);
                 return path;
             }
-            for (Point n : grid.openNeighbors(cur.p)) {
-                double tentative = cur.g + grid.weightOf(n); // 1.0 on plain grids, per-cell on WeightedMazeGrid
-                if (tentative < gScore.getOrDefault(n, Double.POSITIVE_INFINITY)) {
-                    parent.put(n, cur.p);
-                    gScore.put(n, tentative);
-                    open.add(new Node(n, tentative, tentative + h.applyAsDouble(n, goal)));
+            for (Point n : grid.openNeighbors(index.pointOf(cur.id()))) {
+                int nextId = index.idOf(n);
+                double tentative = cur.g() + grid.weightOf(n); // 1.0 on plain grids, per-cell on WeightedMazeGrid
+                if (tentative < gScore[nextId]) {
+                    parent[nextId] = cur.id();
+                    gScore[nextId] = tentative;
+                    open.add(new Node(nextId, tentative, tentative + h.applyAsDouble(n, goal)));
                     stats.incVisited();
                 }
             }
@@ -83,5 +92,5 @@ public class AStarSolver extends AbstractMazeSolver {
         return Collections.emptyList();
     }
 
-    private record Node(Point p, double g, double f) {}
+    private record Node(int id, double g, double f) {}
 }

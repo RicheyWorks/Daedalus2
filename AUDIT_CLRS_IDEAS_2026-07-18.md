@@ -104,11 +104,14 @@ path-halving) and add the inverse-Ackermann note. Both Kruskal and Borůvka
 ride on it, so this is a load-bearing few lines with an outsized story.
 
 **D2 · Bitset maze grid** — `Ch. 11 flavor + bit tricks · Impact` **High** `(upgraded) · Effort Med`
-**Backed by measurement 2026-07-18:** replacing the solvers' `HashMap<Point,…>`
-and `HashSet<Point>` with flat arrays indexed by `row * cols + col` ran
-**1.47–2.00× faster** (32–50% less time) on the same 12×80² Dijkstra workload
-where the d-ary heap (D3) showed nothing. Cell-id indexing is the highest-value
-performance item left in this audit — do this one before any other micro-tuning.
+**Solver half shipped 2026-07-18 as `solver.GridIndex`** + refactored
+`DijkstraSolver` / `AStarSolver`: distance, parent and closed state now live in
+flat arrays indexed by `row * cols + col` instead of `HashMap<Point,…>` /
+`HashSet<Point>`. Measured **1.42–1.72× faster** in the real solvers (a prototype
+predicted 1.47–2.00×), on the same 12×80² workload where the d-ary heap (D3)
+showed nothing — behaviour identical, all 124 tests untouched. The *other* half
+of this idea, packing wall bits into a `long[]` inside `MazeGrid` itself, is
+still open.
 Pack the four wall bits per cell into a `long[]`; neighbor scans and flood-fill
 become word-parallel and cache-friendly, a measurable gen/solve win at 128²+.
 Enables SWAR tricks (population counts for dead-end detection, etc.).

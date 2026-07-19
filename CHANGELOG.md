@@ -113,6 +113,20 @@ housekeeping on the things that make the repo behave.
   property, determinism, differs from random-frontier Prim's on the same seed,
   the bias measurably increases east–west passages, stats populated).
 
+### Changed
+
+- **Solvers index state by cell id instead of hashing `Point` (D2).**
+  `DijkstraSolver` and `AStarSolver` now hold distance / parent / closed state in
+  flat arrays addressed through the new `solver.GridIndex` (`row * cols + col`),
+  replacing `HashMap<Point,…>` / `HashSet<Point>`. **Measured 1.42–1.72× faster**
+  (29–42% less time) over 12 mazes at 80², A/B'd against a faithful copy of the
+  previous implementation with identical stats bookkeeping. Behaviour is
+  unchanged by construction — queue ordering, neighbour iteration and
+  tie-breaking are all identical — and the full suite passes untouched, including
+  the assertions that `dial` equals `dijkstra`, that weighted routing picks exact
+  known paths, and that A\* matches BFS. This is the item the D3 benchmark
+  redirected effort toward.
+
 ### Verified
 
 - **DSU certified near-constant amortized (D1).** `util/DSU` already carried both
