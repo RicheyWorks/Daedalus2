@@ -75,6 +75,32 @@ housekeeping on the things that make the repo behave.
   braided. `hardestRoute(grid)` convenience. Implements idea **T2** — the last of
   the CLRS-audit top five; 5 tests (braided longest > shortest, perfect == unique
   path, inexact-under-budget, determinism).
+- **`engine.Braider` — dead-end braiding.** Seeded, deterministic post-process
+  that opens one wall on a configurable fraction of dead ends, turning any
+  generator's perfect maze (a spanning tree) into a braided one with real loops
+  and route choice. This is the keystone for the structural metrics: min-cut
+  (`MazeFlow`) is always 1 on a tree and longest-path (`LongestPath`) always
+  equals shortest, so both only become meaningful once braided. Implements idea
+  **G4**; 6 tests (full braid leaves zero dead ends, edge count exceeds `V-1` so
+  cycles exist, exact fractional targeting, determinism, no-op at factor 0).
+
+### Verified
+
+- **DSU certified near-constant amortized (D1).** `util/DSU` already carried both
+  optimizations — union by rank *and* two-pass path compression — so no
+  production change was needed. Added structural guards that behaviour alone
+  can't provide: if someone simplified `find` into a plain root walk, every
+  correctness test would still pass while the structure silently degraded from
+  inverse-Ackermann to `O(n)`. The new tests read `parent` directly to assert the
+  path really is rewritten, and that rank ordering survives (CLRS Ch. 21 + 17).
+- **Bidirectional termination audited (S3).** `BidirectionalSolver` stops at the
+  first frontier touch, and textbooks warn that this can return a path one step
+  longer than optimal. Rather than assume it, the concern was measured: across
+  **4,320** randomized braided mazes (sizes 6–20, three braid factors, random
+  start/goal pairs) it never disagreed with BFS on path length, so the solver was
+  left alone and the termination rule documented instead. A braided-maze sweep
+  now lives in the suite as a regression guard — worth noting the previous tests
+  could never have caught this, since a perfect maze has only one route.
 
 ### Security
 

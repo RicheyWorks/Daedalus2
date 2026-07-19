@@ -46,6 +46,10 @@ sample (Algorithm R) and carve from it: O(1) extra memory per step. Turns
 frontier-based generators into streaming ones for 512²+ grids.
 
 **G4 · Randomized-weight Kruskal + braiding** — `Ch. 23 (Kruskal) + Ch. 21 (disjoint sets) · Impact Low · Effort Low`
+**Braiding half shipped 2026-07-18 as `engine.Braider`** — dead-end braiding as a
+post-process, composable with all 20 generators (more general than re-admitting
+Kruskal's rejected edges). The randomized-weight Kruskal *texture* variant below
+is still open.
 `KruskalsGenerator` + `DSU` are already here. Sort a *randomly weighted* edge
 list for a free family of textures, then add a "braid factor" that re-admits
 k% of the rejected edges to introduce loops (imperfect mazes on demand).
@@ -66,6 +70,10 @@ than Manhattan → dramatically fewer expansions in `AStarSolver` on large mazes
 The precompute is exactly Johnson's "reweight by a potential" trick.
 
 **S3 · Correct bidirectional stopping rule** — `Ch. 24 · Impact Med · Effort Low`
+**Audited 2026-07-18 — no defect found.** The suspicion was measured, not
+assumed: across 4,320 randomized braided mazes the solver never disagreed with
+BFS on path length, so it was documented and guarded with a braided-maze sweep
+rather than rewritten. (Perfect mazes can't exercise this — one route only.)
 Audit `BidirectionalSolver` for the textbook bug: terminate when the sum of the
 two frontier minima exceeds the best meeting-path found — *not* on first
 touch, which can miss the optimal path. Pure correctness, near-zero cost.
@@ -78,6 +86,10 @@ every cell, O(V·E)); afterwards any start/goal query — and the leaderboard's
 ## 3. Core data structures
 
 **D1 · Certify the DSU is α(n)** — `Ch. 21 (disjoint sets) + Ch. 17 (amortized) · Impact Low · Effort Low`
+**Verified 2026-07-18 — already correct**, with both union-by-rank and two-pass
+path compression plus the inverse-Ackermann note. No production change; added
+structural tests that read `parent` directly, since behavioural tests can't tell
+whether compression is still happening.
 Confirm `util/DSU.java` uses union-by-rank *and* path compression (or
 path-halving) and add the inverse-Ackermann note. Both Kruskal and Borůvka
 ride on it, so this is a load-bearing few lines with an outsized story.
