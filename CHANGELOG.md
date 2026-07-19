@@ -96,6 +96,22 @@ housekeeping on the things that make the repo behave.
   `WeightedMazeGrid` and break optimality, which the javadoc states plainly.
   Implements idea **S2**; 5 tests (admissibility checked on *every* cell,
   optimality vs BFS, the aggregate expansion win, deterministic landmark choice).
+- **`engine.generators.WeightedPrimsGenerator` — Prim's as an actual MST.**
+  Weights every wall up front and always carves the cheapest frontier wall via a
+  priority queue (CLRS Ch. 23), where the existing `PrimsGenerator` pulls a
+  *uniformly random* frontier wall — a different algorithm with a different bias,
+  so the two yield different mazes from the same seed. Registered as generator id
+  `weighted-prims` (the built-in roster is now 21).
+  **Correction to the original idea:** it proposed weight *variance* as a texture
+  knob, but that cannot work — an MST depends only on the relative *order* of edge
+  weights, and any strictly monotone reweighting (scaling, powers, variance
+  changes) leaves the order, and hence the tree, identical. i.i.d. weights from
+  any continuous distribution give the same family of mazes. What genuinely
+  changes texture is breaking isotropy, so the knob shipped is a
+  `horizontalBias` subtracted from east–west walls, which stretches the maze into
+  long horizontal corridors. Implements idea **G1**; 5 tests (spanning-tree
+  property, determinism, differs from random-frontier Prim's on the same seed,
+  the bias measurably increases east–west passages, stats populated).
 
 ### Verified
 

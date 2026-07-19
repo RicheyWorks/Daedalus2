@@ -29,6 +29,13 @@ hook, the code it touches, and the payoff.
 ## 1. Generators
 
 **G1 · Weighted Prim with a real priority queue** — `Ch. 23 (MST/Prim) + Ch. 6/19 (heaps) · Impact Med · Effort Med`
+**Shipped 2026-07-18 as `WeightedPrimsGenerator` (id `weighted-prims`).**
+⚠️ **The texture premise below was wrong** and is corrected in the shipped class:
+an MST depends only on the relative *order* of edge weights, so any monotone
+reweighting — including any change of variance — produces an identical tree.
+Low- vs high-variance weights give the same family of mazes. Breaking *isotropy*
+is what actually changes texture, so the knob shipped is a `horizontalBias` on
+east–west walls.
 `PrimsGenerator` grows an *unweighted* frontier today. Give the grid edges
 random weights and pull the minimum with a d-ary heap: Prim's now produces a
 tunable texture (low-variance weights → lattice-like; high-variance → long

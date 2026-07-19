@@ -33,6 +33,7 @@ public class AlgorithmConfig {
         return List.of(
                 new RecursiveBacktrackerGenerator(),
                 new PrimsGenerator(),
+                new WeightedPrimsGenerator(),
                 new KruskalsGenerator(),
                 new BoruvkasGenerator(),
                 new WilsonsGenerator(),

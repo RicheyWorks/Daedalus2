@@ -24,6 +24,7 @@ import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
 import com.daedalus.engine.generators.RecursiveDivisionGenerator;
 import com.daedalus.engine.generators.SidewinderGenerator;
 import com.daedalus.engine.generators.TuringGenerator;
+import com.daedalus.engine.generators.WeightedPrimsGenerator;
 import com.daedalus.engine.generators.WilsonsGenerator;
 import com.daedalus.model.AlgorithmDescriptor;
 import com.daedalus.model.MazeStats;
@@ -151,17 +152,17 @@ class ComplexityAnalyzerTest {
         // Mirrors AlgorithmConfig#builtInGenerators — guards that no generator blows up when
         // driven through the analyzer at a real (power-of-two) size.
         GeneratorRegistry registry = new GeneratorRegistry(List.of(
-                new RecursiveBacktrackerGenerator(), new PrimsGenerator(), new KruskalsGenerator(),
-                new BoruvkasGenerator(), new WilsonsGenerator(), new HuntAndKillGenerator(),
-                new RecursiveDivisionGenerator(), new BinaryTreeGenerator(), new SidewinderGenerator(),
-                new GrowingTreeGenerator(), new OldestPickGenerator(), new AldousBroderGenerator(),
-                new EllersGenerator(), new KrakenGenerator(), new MortonCurveGenerator(),
-                new HilbertCurveGenerator(), new LightningGenerator(), new TuringGenerator(),
-                new GaussGenerator(), new ArchimedesGenerator()));
+                new RecursiveBacktrackerGenerator(), new PrimsGenerator(), new WeightedPrimsGenerator(),
+                new KruskalsGenerator(), new BoruvkasGenerator(), new WilsonsGenerator(),
+                new HuntAndKillGenerator(), new RecursiveDivisionGenerator(), new BinaryTreeGenerator(),
+                new SidewinderGenerator(), new GrowingTreeGenerator(), new OldestPickGenerator(),
+                new AldousBroderGenerator(), new EllersGenerator(), new KrakenGenerator(),
+                new MortonCurveGenerator(), new HilbertCurveGenerator(), new LightningGenerator(),
+                new TuringGenerator(), new GaussGenerator(), new ArchimedesGenerator()));
 
         Report report = new ComplexityAnalyzer(registry).analyzeAll(SEED, 32);
 
-        assertThat(report.measurements()).hasSize(20);
+        assertThat(report.measurements()).hasSize(21);
         assertThat(report.measurements()).allMatch(Measurement::success);
     }
 
