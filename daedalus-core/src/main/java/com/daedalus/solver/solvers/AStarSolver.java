@@ -3,6 +3,7 @@
 package com.daedalus.solver.solvers;
 
 import com.daedalus.engine.MazeGrid;
+import com.daedalus.graph.MazeGraph;
 import com.daedalus.model.AlgorithmDescriptor;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
@@ -51,6 +52,9 @@ public class AStarSolver extends AbstractMazeSolver {
     @Override
     public List<Point> solve(MazeGrid grid, Point start, Point goal, MazeStats stats) {
         // Cell-id-indexed arrays instead of Point-keyed hash collections — see GridIndex.
+        // Adjacency arrives through the Graph seam (ADR-001) in a reused buffer.
+        MazeGraph graph = new MazeGraph(grid);
+        int[] adjacency = new int[graph.maxDegree()];
         GridIndex index = new GridIndex(grid);
         int startId = index.idOf(start);
         int goalId = index.idOf(goal);
@@ -77,13 +81,16 @@ public class AStarSolver extends AbstractMazeSolver {
                 stats.finish(true);
                 return path;
             }
-            for (Point n : grid.openNeighbors(index.pointOf(cur.id()))) {
-                int nextId = index.idOf(n);
-                double tentative = cur.g() + grid.weightOf(n); // 1.0 on plain grids, per-cell on WeightedMazeGrid
+            int degree = graph.neighbors(cur.id(), adjacency);
+            for (int i = 0; i < degree; i++) {
+                int nextId = adjacency[i];
+                double tentative = cur.g() + graph.edgeWeight(cur.id(), nextId); // per-cell on WeightedMazeGrid
                 if (tentative < gScore[nextId]) {
                     parent[nextId] = cur.id();
                     gScore[nextId] = tentative;
-                    open.add(new Node(nextId, tentative, tentative + h.applyAsDouble(n, goal)));
+                    // The heuristic is a Point-based contract, so materialise the cell only here.
+                    Point next = index.pointOf(nextId);
+                    open.add(new Node(nextId, tentative, tentative + h.applyAsDouble(next, goal)));
                     stats.incVisited();
                 }
             }

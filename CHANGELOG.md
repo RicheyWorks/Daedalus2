@@ -167,6 +167,16 @@ housekeeping on the things that make the repo behave.
   the hashing. Every existing test passed **unchanged**, including the cross-solver
   agreement checks that compare bidirectional and A\* against BFS — which is the
   evidence the retarget is behaviour-preserving.
+  **Phase 2** moved `DijkstraSolver` and `AStarSolver` onto the same seam, removing the
+  last per-expansion `List` from their loops. Benchmarking that change was
+  **inconclusive** — 1.44×, 1.21×, then 0.86× across reps, i.e. inside the noise — and it
+  is recorded as such rather than dressed up. The reason is that D2 already took the big
+  win here by removing the hash collections; what remains is priority-queue work plus the
+  `Point` that `MazeGraph.edgeWeight` still allocates, so the list was a small share of
+  the total. **This phase is justified by architecture, not performance**: one adjacency
+  contract across every solver, and the ability to run them on a topology that was never a
+  maze. A node-indexed weight accessor would remove the last allocation and is the obvious
+  next measurement.
 - **`engine.generators.DungeonGenerator` — rooms and corridors (C3).** Binary
   space partitioning: split the grid recursively, carve a room in every leaf,
   then join sibling regions with L-shaped corridors on the way back up. The

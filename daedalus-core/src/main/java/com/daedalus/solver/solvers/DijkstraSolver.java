@@ -3,6 +3,7 @@
 package com.daedalus.solver.solvers;
 
 import com.daedalus.engine.MazeGrid;
+import com.daedalus.graph.MazeGraph;
 import com.daedalus.model.AlgorithmDescriptor;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
@@ -41,6 +42,10 @@ public class DijkstraSolver extends AbstractMazeSolver {
     public List<Point> solve(MazeGrid grid, Point start, Point goal, MazeStats stats) {
         // State lives in cell-id-indexed arrays rather than Point-keyed hash collections —
         // measured 1.47-2.00x faster on an 80^2 workload. See GridIndex.
+        // Adjacency comes through the Graph seam (ADR-001) into a reused buffer, so the
+        // expansion loop no longer allocates a list per node either.
+        MazeGraph graph = new MazeGraph(grid);
+        int[] adjacency = new int[graph.maxDegree()];
         GridIndex index = new GridIndex(grid);
         int startId = index.idOf(start);
         int goalId = index.idOf(goal);
@@ -67,9 +72,10 @@ public class DijkstraSolver extends AbstractMazeSolver {
                 stats.finish(true);
                 return path;
             }
-            for (Point n : grid.openNeighbors(index.pointOf(cur.id()))) {
-                int nextId = index.idOf(n);
-                double tentative = cur.d() + grid.weightOf(n); // 1.0 on plain grids, per-cell on WeightedMazeGrid
+            int degree = graph.neighbors(cur.id(), adjacency);
+            for (int i = 0; i < degree; i++) {
+                int nextId = adjacency[i];
+                double tentative = cur.d() + graph.edgeWeight(cur.id(), nextId); // per-cell on WeightedMazeGrid
                 if (tentative < dist[nextId]) {
                     parent[nextId] = cur.id();
                     dist[nextId] = tentative;

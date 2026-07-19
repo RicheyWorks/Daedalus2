@@ -257,7 +257,14 @@ valuable, and unblocked — that is where the first release should land.
        retargeted. **Measured 2.39–2.75× faster** than the previous implementation, and
        the whole suite passed unchanged. The spike settles the design question: the seam
        is not an abstraction tax, it is faster than what it replaced.
-3. [ ] Retarget remaining solvers and `theory` classes; delete the maze-specific paths.
+3. [~] Retarget remaining solvers and `theory` classes; delete the maze-specific paths.
+       `DijkstraSolver` and `AStarSolver` moved onto the seam 2026-07-19 (all tests
+       unchanged). Measured effect was **inconclusive** (1.44× / 1.21× / 0.86× — noise),
+       because D2 had already taken the win here; recorded honestly, and the phase stands
+       on the architectural argument instead. Still to move: `DialSolver` (the last
+       `HashMap<Point,…>` solver, so likely a real win like BFS), the remaining six
+       solvers, and the `theory` classes. Follow-up: give `Graph` a node-indexed weight
+       accessor so `edgeWeight` stops allocating a `Point`.
 4. [ ] Add `EdgeWeightedGraph` and move `LandmarkHeuristic` precompute to Dijkstra.
 5. [ ] Ship the three offline LoadBalancerPro integrations (topology, min-cut capacity,
        placement) as an `examples/loadbalancer-topology` module.
