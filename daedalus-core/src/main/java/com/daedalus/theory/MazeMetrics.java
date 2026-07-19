@@ -3,32 +3,34 @@
 package com.daedalus.theory;
 
 import com.daedalus.engine.MazeGrid;
+import com.daedalus.graph.MazeGraph;
 import com.daedalus.model.Point;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Deque;
 import java.util.List;
 
 /**
  * Structural graph metrics over a maze — CLRS Ch. 22 (breadth-first search) applied to the
- * passage graph ({@link MazeGrid#openNeighbors(Point)} is the adjacency, every edge unit length).
+ * passage graph, now running on the {@link com.daedalus.graph.Graph} seam (ADR-001) with dense
+ * node ids and an allocation-free traversal.
  *
  * <p>The headline is {@link #diameter(MazeGrid)}: the longest shortest-path in the maze, found by
  * the classic <em>double BFS</em> — BFS from any cell to its farthest cell {@code u}, then BFS
  * from {@code u} to its farthest cell {@code v}; {@code dist(u, v)} is the diameter. This is
  * <b>exact for perfect mazes</b> (a perfect maze is a spanning tree, and double-BFS is exact on
- * trees). On braided / imperfect mazes with cycles it is a fast lower-bound heuristic, not a
- * guarantee.
+ * trees). On braided / imperfect mazes with cycles it is a fast lower-bound heuristic.
  *
  * <p>{@link #placeStartAndGoalAtExtremes(MazeGrid)} uses that to drop the start and goal on the
  * two farthest-apart cells, giving a generated maze its maximum possible challenge for free.
  *
- * <p>All results are deterministic: BFS explores {@code openNeighbors} in a fixed order, and the
- * "farthest" cell is disambiguated by a row-major scan (smallest {@code (row, col)} among ties),
- * so the same maze always yields the same endpoints and path.
+ * <p>This class is on the hot path for {@link DistanceOracle} (one BFS per cell) and
+ * {@code solver.LandmarkHeuristic}, so the traversal keeps its state in flat arrays and reuses a
+ * single adjacency buffer rather than building a neighbour list per cell.
+ *
+ * <p>All results are deterministic: BFS explores neighbours in a fixed order, and the "farthest"
+ * cell is disambiguated by a row-major scan (smallest {@code (row, col)} among ties).
  */
 public final class MazeMetrics {
 
@@ -61,7 +63,7 @@ public final class MazeMetrics {
         Bfs second = bfs(grid, u);
         Point v = second.farthest;
         int distance = second.distance[v.row()][v.col()];
-        List<Point> path = reconstruct(second.parent, u, v);
+        List<Point> path = reconstruct(second.parent, u, v, grid.cols());
         return new Diameter(u, v, distance, path);
     }
 
@@ -83,15 +85,14 @@ public final class MazeMetrics {
 
     /**
      * One shortest passage route from {@code from} to {@code to}, inclusive of both ends. Empty if
-     * {@code to} is unreachable. Deterministic — BFS explores {@code openNeighbors} in a fixed
-     * order.
+     * {@code to} is unreachable. Deterministic — BFS explores neighbours in a fixed order.
      */
     public static List<Point> shortestPath(MazeGrid grid, Point from, Point to) {
         Bfs search = bfs(grid, from);
         if (search.distance[to.row()][to.col()] < 0) {
             return List.of();
         }
-        return reconstruct(search.parent, from, to);
+        return reconstruct(search.parent, from, to, grid.cols());
     }
 
     /**
@@ -108,25 +109,38 @@ public final class MazeMetrics {
     }
 
     private static Bfs bfs(MazeGrid grid, Point source) {
+        MazeGraph graph = new MazeGraph(grid);
         int rows = grid.rows();
         int cols = grid.cols();
+        int nodes = rows * cols;
+
         int[][] distance = new int[rows][cols];
         for (int[] row : distance) {
             Arrays.fill(row, -1);
         }
-        Point[][] parent = new Point[rows][cols];
+        int[] parent = new int[nodes];
+        Arrays.fill(parent, -1);
 
-        Deque<Point> queue = new ArrayDeque<>();
+        // BFS enqueues each cell at most once, so the cell count is an exact capacity bound.
+        int[] queue = new int[nodes];
+        int head = 0;
+        int tail = 0;
+        int[] adjacency = new int[graph.maxDegree()];
+
         distance[source.row()][source.col()] = 0;
-        queue.add(source);
-        while (!queue.isEmpty()) {
-            Point current = queue.poll();
-            int d = distance[current.row()][current.col()];
-            for (Point next : grid.openNeighbors(current)) {
-                if (distance[next.row()][next.col()] == -1) {
-                    distance[next.row()][next.col()] = d + 1;
-                    parent[next.row()][next.col()] = current;
-                    queue.add(next);
+        queue[tail++] = source.row() * cols + source.col();
+        while (head < tail) {
+            int current = queue[head++];
+            int d = distance[current / cols][current % cols];
+            int degree = graph.neighbors(current, adjacency);
+            for (int i = 0; i < degree; i++) {
+                int next = adjacency[i];
+                int nextRow = next / cols;
+                int nextCol = next % cols;
+                if (distance[nextRow][nextCol] == -1) {
+                    distance[nextRow][nextCol] = d + 1;
+                    parent[next] = current;
+                    queue[tail++] = next;
                 }
             }
         }
@@ -145,20 +159,21 @@ public final class MazeMetrics {
         return new Bfs(distance, parent, farthest, maxDistance);
     }
 
-    private static List<Point> reconstruct(Point[][] parent, Point source, Point target) {
+    private static List<Point> reconstruct(int[] parent, Point source, Point target, int cols) {
         List<Point> reversed = new ArrayList<>();
-        Point current = target;
-        while (current != null) {
-            reversed.add(current);
-            if (current.equals(source)) {
+        int sourceId = source.row() * cols + source.col();
+        int current = target.row() * cols + target.col();
+        while (current != -1) {
+            reversed.add(new Point(current / cols, current % cols));
+            if (current == sourceId) {
                 break;
             }
-            current = parent[current.row()][current.col()];
+            current = parent[current];
         }
         Collections.reverse(reversed);
         return reversed;
     }
 
-    private record Bfs(int[][] distance, Point[][] parent, Point farthest, int maxDistance) {
+    private record Bfs(int[][] distance, int[] parent, Point farthest, int maxDistance) {
     }
 }

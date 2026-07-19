@@ -187,6 +187,15 @@ housekeeping on the things that make the repo behave.
   **1.94× / 2.36× / 1.99×**, the win originally predicted. Behaviour is unchanged
   throughout: `dial` still returns paths identical to `dijkstra`, and still rejects
   fractional weights.
+  **`theory.MazeMetrics`** moved onto the seam last, chosen by measurement rather than by
+  working down the solver list: it is the one class on everything's hot path, because
+  `DistanceOracle.precompute` runs a BFS *per cell* and `LandmarkHeuristic` and
+  `WaypointTour` sit on it too. Removing the per-cell neighbour list there compounds
+  across all of them — `DistanceOracle.precompute` on a 48² maze (2,304 BFS runs) went
+  from ~239 ms to ~146 ms, a steady **1.59–1.73×**. The remaining six solvers all still
+  use `HashMap`/`HashSet` and are candidates on the same evidence, but each should be
+  measured rather than assumed, since Dijkstra and A\* showed the seam pays nothing where
+  hashing was already gone.
 - **`engine.generators.DungeonGenerator` — rooms and corridors (C3).** Binary
   space partitioning: split the grid recursively, carve a room in every leaf,
   then join sibling regions with L-shaped corridors on the way back up. The
