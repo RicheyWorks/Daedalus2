@@ -177,6 +177,16 @@ housekeeping on the things that make the repo behave.
   contract across every solver, and the ability to run them on a topology that was never a
   maze. A node-indexed weight accessor would remove the last allocation and is the obvious
   next measurement.
+  **`DialSolver`** followed, and is worth recording as a worked example of predicting
+  wrong. It was the last `HashMap<Point,…>` solver, so a BFS-sized win was predicted. The
+  first retarget delivered **1.14× / 1.28× / 1.00×** — barely anything. The cause was in
+  the new code, not the old: buckets were still a `Map<Integer, IntBucket>`, so every
+  relaxation did a `computeIfAbsent` on a **boxed distance key** and put hashing straight
+  back on the hottest path — the exact cost the seam exists to remove. Indexing buckets by
+  distance directly (a plain `IntBucket[]`, grown on demand) delivered
+  **1.94× / 2.36× / 1.99×**, the win originally predicted. Behaviour is unchanged
+  throughout: `dial` still returns paths identical to `dijkstra`, and still rejects
+  fractional weights.
 - **`engine.generators.DungeonGenerator` — rooms and corridors (C3).** Binary
   space partitioning: split the grid recursively, carve a room in every leaf,
   then join sibling regions with L-shaped corridors on the way back up. The
