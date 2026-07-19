@@ -942,6 +942,36 @@ housekeeping on the things that make the repo behave.
 
 ### Security (2026-07-19)
 
+- **STOMP `CONNECT` frames are now authenticated.** HTTP security guarded the
+  `/ws/**` upgrade under `prod`, but nothing inspected STOMP frames, so the
+  messaging layer had **no notion of who was connected**. Two consequences: a
+  deployment exposing the endpoint without that HTTP rule — a misconfigured
+  profile, or a proxy terminating the upgrade — had no second line of defence,
+  and there was no principal on which any per-destination rule could ever be
+  built. `StompAuthChannelInterceptor` validates the bearer token from the
+  `CONNECT` frame's native headers and attaches a `Principal` carrying the JWT
+  subject, sharing `JwtTokenService`'s decoder so issuance and verification
+  cannot drift.
+
+  Required under `prod`, advisory elsewhere — matching how `SecurityConfig` and
+  `ProdSecurityConfig` already split the HTTP surface, so a dev or embedded
+  desktop client still connects without minting a token. **A token that is
+  present but invalid is refused in every profile**, including the permissive
+  ones: "no credentials" and "bad credentials" are different situations, and
+  only the first is something a relaxed profile should wave through.
+
+  **Scope, stated plainly: this is authentication, not authorization.** A client
+  can still subscribe to another user's frames. The broker's destinations are
+  not scoped to an owner, and nothing in the domain records which subject owns a
+  session, so "may this principal subscribe here?" is not yet answerable —
+  closing that needs session ownership modelled first. The BACKLOG entry has
+  been rewritten to say so rather than marked done.
+
+  Per-frame validation was deliberately omitted: the principal is established
+  once at `CONNECT` and carried on the session, so re-decoding the token on
+  every `SEND` would cost thousands of verifications for no extra guarantee.
+  The trade-off is that a connection outlives its token's expiry.
+
 - **Per-key rate-limiter buckets are now bounded — and bounding them carefully.**
   The interceptor created a Resilience4j instance per distinct caller key and
   never evicted it, so anyone able to mint keys — forged subjects, or forged

@@ -35,12 +35,27 @@ Last consolidated: 2026-05-07
   `spring-boot-starter-parent` 4.1.0 re-pins most managed dependency versions,
   so any open PR bumping a Boot-managed 3.x artifact is now either obsolete or
   actively conflicting. Close the superseded ones rather than merging them.
-- **WebSocket / STOMP authentication.** HTTP JWT auth is wired in
-  `ProdSecurityConfig` (2026-05-06), but the STOMP topics under
-  `/topic/maze/**` and the `/ws/**` upgrade are not yet authenticated at
-  the message level. Add a `ChannelInterceptor` that validates the JWT on
-  `CONNECT` and per-message `SEND` so a client can't subscribe to another
-  user's session frames.
+- **WebSocket / STOMP authorization — *authentication* done 2026-07-19,
+  per-destination rules still open.** `StompAuthChannelInterceptor` validates the
+  bearer token on `CONNECT` and attaches a `Principal`; required under `prod`,
+  advisory elsewhere. A token that is *present but invalid* is refused in every
+  profile — "no credentials" and "bad credentials" are different, and only the
+  first should be waved through by a permissive profile.
+
+  **What remains is the part the original note actually asked for.** A client can
+  still subscribe to another user's frames, because the broker's destinations
+  (`/topic/maze/{id}/state`, `/topic/session/{id}/player`) are not scoped to an
+  owner and **nothing in the domain records which subject owns a session** — so
+  "may this principal subscribe here?" is not a question the server can answer
+  yet. Closing it needs session ownership modelled first, then a `SUBSCRIBE`
+  rule matching destination against principal. Authenticating `CONNECT` is the
+  prerequisite for that work, not a substitute for it.
+
+  Per-frame validation was deliberately *not* added: the principal is
+  established once and carried on the session, so re-decoding the token on every
+  `SEND` would cost thousands of verifications for no additional guarantee. The
+  consequence is that a connection outlives its token's expiry — disconnecting
+  on expiry is its own feature.
 
 ## New surfaces
 
