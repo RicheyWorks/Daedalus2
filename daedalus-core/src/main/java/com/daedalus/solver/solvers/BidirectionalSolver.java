@@ -3,12 +3,16 @@
 package com.daedalus.solver.solvers;
 
 import com.daedalus.engine.MazeGrid;
+import com.daedalus.graph.MazeGraph;
 import com.daedalus.model.AlgorithmDescriptor;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
 import com.daedalus.solver.AbstractMazeSolver;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Bidirectional BFS — runs two BFS frontiers simultaneously, one from {@code start}
@@ -46,6 +50,35 @@ public class BidirectionalSolver extends AbstractMazeSolver {
                 "Two BFS frontiers — start-side and goal-side — meet in the middle.");
     }
 
+    /** Ring-buffer BFS frontier over dense node ids — replaces {@code ArrayDeque<Point>}. */
+    private static final class Frontier {
+        private final int[] queue;
+        private int head;
+        private int tail;
+
+        Frontier(int capacity, int seed) {
+            // BFS enqueues each node at most once, so the node count is an exact bound.
+            queue = new int[capacity];
+            queue[tail++] = seed;
+        }
+
+        int size() {
+            return tail - head;
+        }
+
+        boolean isEmpty() {
+            return head == tail;
+        }
+
+        int poll() {
+            return queue[head++];
+        }
+
+        void add(int node) {
+            queue[tail++] = node;
+        }
+    }
+
     @Override
     public List<Point> solve(MazeGrid grid, Point start, Point goal, MazeStats stats) {
         if (start.equals(goal)) {
@@ -54,27 +87,35 @@ public class BidirectionalSolver extends AbstractMazeSolver {
             return List.of(start);
         }
 
-        Map<Point, Point> parentS = new HashMap<>();
-        Map<Point, Point> parentG = new HashMap<>();
-        parentS.put(start, null);
-        parentG.put(goal, null);
+        MazeGraph graph = new MazeGraph(grid);
+        int cols = grid.cols();
+        int nodes = grid.rows() * cols;
+        int startId = start.row() * cols + start.col();
+        int goalId = goal.row() * cols + goal.col();
 
-        Deque<Point> qS = new ArrayDeque<>();
-        Deque<Point> qG = new ArrayDeque<>();
-        qS.add(start);
-        qG.add(goal);
+        // -1 doubles as "root of this side's tree", which is what terminates the parent walks.
+        int[] parentS = new int[nodes];
+        int[] parentG = new int[nodes];
+        Arrays.fill(parentS, -1);
+        Arrays.fill(parentG, -1);
 
-        Set<Point> seenS = new HashSet<>();
-        Set<Point> seenG = new HashSet<>();
-        seenS.add(start);
-        seenG.add(goal);
+        boolean[] seenS = new boolean[nodes];
+        boolean[] seenG = new boolean[nodes];
+        seenS[startId] = true;
+        seenG[goalId] = true;
 
-        while (!qS.isEmpty() && !qG.isEmpty()) {
+        Frontier qs = new Frontier(nodes, startId);
+        Frontier qg = new Frontier(nodes, goalId);
+        int[] adjacency = new int[graph.maxDegree()];
+
+        while (!qs.isEmpty() && !qg.isEmpty()) {
             // Always expand the smaller frontier — preserves the b^(d/2) advantage.
-            Point meet = (qS.size() <= qG.size())
-                    ? expand(grid, qS, seenS, parentS, seenG, stats)
-                    : expand(grid, qG, seenG, parentG, seenS, stats);
-            if (meet != null) return mergePath(parentS, parentG, meet, stats);
+            int meet = (qs.size() <= qg.size())
+                    ? expand(graph, qs, seenS, parentS, seenG, adjacency, stats)
+                    : expand(graph, qg, seenG, parentG, seenS, adjacency, stats);
+            if (meet >= 0) {
+                return mergePath(parentS, parentG, meet, cols, stats);
+            }
         }
 
         stats.finish(false);
@@ -82,41 +123,46 @@ public class BidirectionalSolver extends AbstractMazeSolver {
     }
 
     /**
-     * Pop one node from {@code q}, expand its neighbors into the matching parent map.
-     * @return the meeting point if a neighbor is already in the opposite frontier; null otherwise.
+     * Pop one node from {@code frontier}, expand its neighbours into the matching parent array.
+     *
+     * @return the meeting node if a neighbour is already in the opposite frontier, else -1
      */
-    private Point expand(MazeGrid grid, Deque<Point> q, Set<Point> ownSeen,
-                         Map<Point, Point> ownParent, Set<Point> otherSeen, MazeStats stats) {
-        stats.recordFrontier(q.size());
-        Point cur = q.poll();
+    private int expand(MazeGraph graph, Frontier frontier, boolean[] ownSeen, int[] ownParent,
+                       boolean[] otherSeen, int[] adjacency, MazeStats stats) {
+        stats.recordFrontier(frontier.size());
+        int cur = frontier.poll();
         stats.incExplored();
-        for (Point n : grid.openNeighbors(cur)) {
-            if (!ownSeen.add(n)) continue;
-            ownParent.put(n, cur);
+        int degree = graph.neighbors(cur, adjacency);
+        for (int i = 0; i < degree; i++) {
+            int next = adjacency[i];
+            if (ownSeen[next]) {
+                continue;
+            }
+            ownSeen[next] = true;
+            ownParent[next] = cur;
             stats.incVisited();
-            if (otherSeen.contains(n)) return n;
-            q.add(n);
+            if (otherSeen[next]) {
+                return next;
+            }
+            frontier.add(next);
         }
-        return null;
+        return -1;
     }
 
     /** Stitch the start-side and goal-side parent chains together at the meeting point. */
-    private List<Point> mergePath(Map<Point, Point> parentS, Map<Point, Point> parentG,
-                                   Point meet, MazeStats stats) {
-        // Walk parentS from meet back to start, then reverse → [start, ..., meet]
-        LinkedList<Point> fromStart = new LinkedList<>();
-        for (Point cur = meet; cur != null; cur = parentS.get(cur)) {
-            fromStart.addFirst(cur);
+    private List<Point> mergePath(int[] parentS, int[] parentG, int meet, int cols,
+                                  MazeStats stats) {
+        // Walk parentS from meet back to start, collecting forwards, then reverse once — the
+        // old version used LinkedList.addFirst, which allocates a node per step.
+        List<Point> full = new ArrayList<>();
+        for (int cur = meet; cur != -1; cur = parentS[cur]) {
+            full.add(new Point(cur / cols, cur % cols));
         }
-        // Walk parentG from meet's predecessor in goal-side to goal → [x1, ..., goal]
-        List<Point> fromGoal = new ArrayList<>();
-        for (Point cur = parentG.get(meet); cur != null; cur = parentG.get(cur)) {
-            fromGoal.add(cur);
+        Collections.reverse(full);
+        // Then walk parentG from meet's goal-side predecessor out to the goal.
+        for (int cur = parentG[meet]; cur != -1; cur = parentG[cur]) {
+            full.add(new Point(cur / cols, cur % cols));
         }
-
-        List<Point> full = new ArrayList<>(fromStart.size() + fromGoal.size());
-        full.addAll(fromStart);
-        full.addAll(fromGoal);
 
         stats.setPathLength(full.size());
         stats.finish(true);

@@ -278,9 +278,26 @@ valuable, and unblocked — that is where the first release should land.
        loops, failing 19/40, 20/40 and 10/40 mazes at braid factors 0.25, 0.5 and 1.0. Fixed,
        and `TremauxSolverTest` now exists — it did not before, which is why nothing caught it.
 
-       Still to move: `BidirectionalSolver` (7 hashed-`Point` collections, the largest
-       remaining target), `DeadEndFillingSolver` (3), `DfsSolver` (2), `IDAStarSolver` (2),
-       `WallFollowerSolver` (1), and the `theory` classes.
+       `BidirectionalSolver` (7 hashed collections) and `DfsSolver` (3) followed on the same
+       day: **2.12–2.69×** and **3.09–3.19×** respectively, both landing in BFS's band. Each
+       was proved equivalent over 1024 A/B cases — four generators × eight seeds × four braid
+       factors × two sizes × four random start/goal pairs, comparing path *and* stats against
+       a verbatim copy of the old code. Random endpoints matter for bidirectional: its
+       smaller-frontier balancing rule only engages when the two searches are unbalanced,
+       which corner-to-corner fixtures never make happen.
+
+       **Four consecutive confirmations now** that the seam pays exactly where hashing
+       survived and nowhere else — BFS 2.39–2.75×, Dial, bidirectional 2.12–2.69×, DFS
+       3.09–3.19×, against no measurable gain for the solvers D2 had already put on cell-id
+       arrays. That is a strong enough regularity to plan against rather than re-measure each
+       time.
+
+       Still to move: `DeadEndFillingSolver` (3 hashed collections), `IDAStarSolver` (2),
+       `WallFollowerSolver` (1), and the `theory` classes. Note `IDAStarSolver` is the
+       expensive one in absolute terms but the seam is not its lever — its cost is
+       re-expansion inherent to iterative deepening, which a tighter heuristic addresses
+       (ALT measured 41× there) and data structures do not. `WallFollowerSolver`'s single
+       hash set is stats-only bookkeeping, not algorithm state.
 4. [x] Add `EdgeWeightedGraph` and move `LandmarkHeuristic` precompute to Dijkstra — done
        2026-07-19, and it turned out to be a **correctness** item, not the performance
        item it was filed as. No `EdgeWeightedGraph` type was needed: `Graph.edgeWeight`

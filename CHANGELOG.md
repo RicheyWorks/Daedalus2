@@ -371,6 +371,34 @@ housekeeping on the things that make the repo behave.
   `RoutingStrategy` an optional stateful form, since the current signature
   obliges every strategy to be stateless and O(n) per decision.
 
+- **`BidirectionalSolver` and `DfsSolver` moved onto the graph seam (ADR-001
+  item 3).** These were the two largest remaining holdouts — bidirectional
+  carried **seven** hashed-`Point` collections (two parent maps, two seen sets,
+  two `ArrayDeque` frontiers, plus a `LinkedList` for reconstruction), DFS
+  carried three. Both now run on `MazeGraph` adjacency into a reused buffer,
+  with `int[]` parent arrays, `boolean[]` seen flags and `int[]` frontier
+  storage sized at exactly V (each node is enqueued at most once, so that bound
+  is exact rather than a guess).
+
+  | | before | after | speedup |
+  |---|---|---|---|
+  | `bidirectional` | 11.97–13.14 ms | 4.88–5.86 ms | **2.12–2.69×** |
+  | `dfs` | 10.71–11.20 ms | 3.46–3.51 ms | **3.09–3.19×** |
+
+  Measured over 12 mazes at 80², mean of 5 reps after warm-up. Both land in the
+  band BFS got (2.39–2.75×), which is the fourth consecutive confirmation of the
+  rule this phase established: **the seam pays exactly where hashing survived,
+  and nowhere else.** Every solver that had already been moved onto cell-id
+  arrays showed no further gain; every one still hashing `Point` gained 2–3×.
+
+  Equivalence was verified rather than argued: **1024 A/B cases each**, across
+  four generators × eight seeds × four braid factors × two sizes × four random
+  start/goal pairs, comparing path *and* stats (`cellsExplored`, `cellsVisited`)
+  against a verbatim copy of the previous implementation. All 2048 identical.
+  Random start/goal pairs matter for bidirectional specifically — its
+  smaller-frontier balancing rule is only exercised when the two searches are
+  unbalanced, which corner-to-corner runs never do.
+
 - **`TremauxSolver` moved onto the graph seam; edge marks are a flat `byte[]`
   (ADR-001 item 3).** Diagnosed before being touched, which changed the fix.
   Trémaux was among the slowest solvers, and the intuitive read — "it's a walk,

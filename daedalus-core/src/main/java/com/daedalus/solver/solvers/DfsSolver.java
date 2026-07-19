@@ -3,12 +3,16 @@
 package com.daedalus.solver.solvers;
 
 import com.daedalus.engine.MazeGrid;
+import com.daedalus.graph.MazeGraph;
 import com.daedalus.model.AlgorithmDescriptor;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
 import com.daedalus.solver.AbstractMazeSolver;
+import com.daedalus.solver.GridIndex;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class DfsSolver extends AbstractMazeSolver {
 
@@ -26,28 +30,44 @@ public class DfsSolver extends AbstractMazeSolver {
 
     @Override
     public List<Point> solve(MazeGrid grid, Point start, Point goal, MazeStats stats) {
-        Map<Point, Point> parent = new HashMap<>();
-        Deque<Point> stack = new ArrayDeque<>();
-        Set<Point> seen = new HashSet<>();
+        MazeGraph graph = new MazeGraph(grid);
+        GridIndex index = new GridIndex(grid);
+        int nodes = index.size();
+        int startId = index.idOf(start);
+        int goalId = index.idOf(goal);
 
-        stack.push(start);
-        seen.add(start);
-        parent.put(start, null);
+        // -1 is "no parent", which is also what terminates the reconstruct walk at the start.
+        int[] parent = new int[nodes];
+        Arrays.fill(parent, -1);
+        boolean[] seen = new boolean[nodes];
 
-        while (!stack.isEmpty()) {
-            stats.recordFrontier(stack.size());
-            Point cur = stack.pop();
+        // A node is pushed at most once (the `seen` guard), so V slots is an exact bound.
+        int[] stack = new int[nodes];
+        int top = 0;
+        int[] adjacency = new int[graph.maxDegree()];
+
+        stack[top++] = startId;
+        seen[startId] = true;
+
+        while (top > 0) {
+            stats.recordFrontier(top);
+            int cur = stack[--top];
             stats.incExplored();
-            if (cur.equals(goal)) {
-                List<Point> path = reconstruct(parent, start, goal);
+            if (cur == goalId) {
+                List<Point> path = reconstruct(parent, startId, goalId, index);
                 stats.setPathLength(path.size());
                 stats.finish(true);
                 return path;
             }
-            for (Point n : grid.openNeighbors(cur)) {
-                if (seen.add(n)) {
-                    parent.put(n, cur);
-                    stack.push(n);
+            // Neighbours are pushed in Direction order, so the last one is popped first —
+            // identical to what ArrayDeque.push/pop did, and the traversal order depends on it.
+            int degree = graph.neighbors(cur, adjacency);
+            for (int i = 0; i < degree; i++) {
+                int next = adjacency[i];
+                if (!seen[next]) {
+                    seen[next] = true;
+                    parent[next] = cur;
+                    stack[top++] = next;
                     stats.incVisited();
                 }
             }
