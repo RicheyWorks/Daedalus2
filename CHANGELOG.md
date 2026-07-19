@@ -16,6 +16,36 @@ housekeeping on the things that make the repo behave.
 
 ### Added
 
+- **`SolverBraidedMazePropertyTest` — every solver, over mazes with loops.**
+  Closes the gap that let two separate correctness bugs ship behind a green
+  suite this month: **every solver fixture in the repository was a perfect
+  maze**. A perfect maze is a spanning tree, which makes it a uniquely
+  forgiving subject — exactly one route exists between any pair of cells, so a
+  solver can be badly wrong and still look right. `LandmarkHeuristic` was
+  inadmissible yet A* still returned the optimal path (there was only one to
+  return); `TremauxSolver` could not solve a looped maze at all and no fixture
+  contained a loop.
+
+  The test sweeps 10 solvers × 4 generators × 5 seeds × 4 braid factors and
+  asserts three properties: every returned path is a legal traversal (starts at
+  the start, ends at the goal, never crosses a wall), every *complete* solver
+  finds a route wherever BFS does, and every *optimal* solver still returns a
+  shortest one once route choice actually exists. Runs in ~1.2 s.
+
+  **The audit behind it found no further defects** — nine of ten solvers are
+  correct at every braid factor, and the tenth, `wall-follower`, fails only
+  where its own javadoc says it will (wall following is provably complete only
+  on simply-connected mazes; it gives up via an iteration cap rather than
+  hanging, and never returns a wrong path). Its exclusion is scoped to
+  completeness alone — it is still held to the legality contract, and a separate
+  case pins the guarantee it *does* make. Asserting that it fails on loops would
+  forbid anyone from later improving it.
+
+  Verified to have teeth rather than assumed: replaying the pre-fix
+  `TremauxSolver` against this exact matrix fails **21 of 80** cases. There is
+  also a tripwire asserting the solver list is complete, since silently omitting
+  a new solver is precisely how Trémaux went untested.
+
 - **`ApplicationSmokeTest` — the first test that boots the whole application.**
   Until now every server test was a slice (`@WebMvcTest` for controllers,
   `ApplicationContextRunner` for `RedisConfig`), which left a blind spot: no
