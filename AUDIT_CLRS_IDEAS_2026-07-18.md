@@ -93,6 +93,10 @@ two frontier minima exceeds the best meeting-path found — *not* on first
 touch, which can miss the optimal path. Pure correctness, near-zero cost.
 
 **S4 · Distance oracle for stored mazes** — `Ch. 25 (all-pairs shortest paths) · Impact Med · Effort Med`
+**Shipped 2026-07-18 as `theory.DistanceOracle`** — O(1) queries, plus
+eccentricity and diameter. The `O(V²)` memory warning below turned out to be the
+whole story: 32² costs 2 MB, 64² costs 32 MB, 128² would cost 512 MB, so it hard-
+caps at 4,096 cells and throws with a pointer to the single-source alternative.
 Precompute all-pairs distances once per stored maze (unweighted ⇒ BFS from
 every cell, O(V·E)); afterwards any start/goal query — and the leaderboard's
 "optimal time" baseline — is O(1). Johnson's makes the weighted version cheap.

@@ -151,6 +151,19 @@ housekeeping on the things that make the repo behave.
   side by side at 64² and 128², sending cell bits is **~16× smaller** than the
   rendered glyph grid. This codec is the drop-in that needs no API change; the
   16× needs a client-side renderer.
+- **`theory.DistanceOracle` — all-pairs distances, O(1) queries.** BFS from every
+  cell tabulated into a flat `short[]`, so any later "how far is A from B" — a
+  leaderboard scoring against the optimal route, arbitrary start/goal queries,
+  ranking cells by eccentricity — is a single array read (CLRS Ch. 25, unweighted
+  special case). Also exposes `eccentricity` and `diameter`.
+  The binding constraint is memory, not time: the table is `V²`, and `V` is
+  itself quadratic in the maze's edge length, so 32² needs 2 MB, 64² needs 32 MB
+  and 128² would need 512 MB. Rather than quietly exhaust the heap it caps at
+  4,096 cells and throws with a pointer to `MazeMetrics.distancesFrom` (one BFS,
+  one row of this table) for larger mazes. Implements idea **S4**; 8 tests,
+  including an exhaustive every-pair check against BFS and a diameter
+  cross-validation against `MazeMetrics`, which derives the same number by
+  double-BFS instead of exhaustive scan.
 
 ### Changed
 
