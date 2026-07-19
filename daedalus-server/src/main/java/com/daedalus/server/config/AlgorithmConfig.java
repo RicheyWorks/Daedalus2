@@ -61,6 +61,7 @@ public class AlgorithmConfig {
                 new DfsSolver(),
                 new AStarSolver(),
                 new DijkstraSolver(),
+                new DialSolver(),
                 new BidirectionalSolver(),
                 new IDAStarSolver(),
                 new WallFollowerSolver(),

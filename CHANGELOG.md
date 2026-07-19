@@ -57,6 +57,24 @@ housekeeping on the things that make the repo behave.
   `minCutStartToGoal` / `edgeConnectivity` convenience; deterministic.
   Implements idea **X1** from the CLRS audit; 6 tests (perfect vs. braided,
   cut-edges-actually-disconnect, determinism).
+- **`solver.solvers.DialSolver` — bucket-queue (Dial's) shortest path.** Dijkstra
+  with a bucket priority queue keyed by integer distance (CLRS Ch. 24, and the
+  bounded-key idea of Ch. 20): `O(C·V + E)` instead of `O((V + E) log V)`,
+  near-linear on a grid. Reads the same `weightOf` hook as `DijkstraSolver` and
+  returns an identical optimal path on uniform and integer-weighted mazes; it
+  refuses fractional weights (bucketing is ill-defined — use Dijkstra there).
+  Registered in `AlgorithmConfig` as solver id `dial`. Implements idea **S1**
+  from the CLRS audit; 7 tests (matches Dijkstra on uniform + integer-weighted
+  grids, detours around costly cells, rejects fractional weights, determinism).
+- **`theory.LongestPath` — hardest route (longest simple path).** Budget-bounded
+  DFS backtracking for the longest simple start→goal path: exact for small mazes,
+  an honest lower bound (`exact=false`) when the budget is hit — never a wrong or
+  non-simple path. The class javadoc documents why this is NP-hard (Hamiltonian
+  path reduces to it, CLRS Ch. 34) and why no polynomial exact algorithm is
+  attempted (Ch. 35). Trivial on perfect mazes (unique path), interesting once
+  braided. `hardestRoute(grid)` convenience. Implements idea **T2** — the last of
+  the CLRS-audit top five; 5 tests (braided longest > shortest, perfect == unique
+  path, inexact-under-budget, determinism).
 
 ### Security
 

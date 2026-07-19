@@ -53,8 +53,9 @@ k% of the rejected edges to introduce loops (imperfect mazes on demand).
 ## 2. Solvers
 
 **S1 · Dial's algorithm (bucket-queue Dijkstra)** — `Ch. 24 (SSSP) + Ch. 20 (bounded-key structures) · Impact Med · Effort Med`
-Maze edge weights are small bounded integers, so a bucket/radix priority queue
-(Dial) beats a comparison heap: near-linear shortest paths. Drop-in behind
+**Shipped 2026-07-18 as `solver.solvers.DialSolver` (id `dial`).** Maze edge
+weights are small bounded integers, so a bucket/radix priority queue (Dial)
+beats a comparison heap: near-linear shortest paths. Drop-in behind
 `DijkstraSolver` for `WeightedMazeGrid`, and a clean before/after for the
 analyzer to quantify.
 
@@ -115,8 +116,8 @@ deterministic `visited(n)` per size; the estimator fits those points against
 each generator's empirical growth class plus a log-log exponent.
 
 **T2 · "Hardest maze" = longest simple path is NP-hard** — `Ch. 34 (NP-completeness) + Ch. 35 (approximation) · Impact Med · Effort Med`
-Finding the longest simple path (the "hardest" route) reduces from
-Hamiltonian path — genuinely NP-hard. Document it honestly, then ship a
+**Shipped 2026-07-18 as `theory.LongestPath`.** Finding the longest simple path
+(the "hardest" route) reduces from Hamiltonian path — genuinely NP-hard. Document it honestly, then ship a
 heuristic "make this harder" mode. Portfolio-grade: shows you know where the
 tractability cliff is.
 
@@ -163,15 +164,16 @@ join or leave. Standard, but the right tool if scale-out ever happens.
 
 ## Top 5 to build first
 
-Ranked by payoff-to-effort, biased toward what the current code makes cheap:
+Ranked by payoff-to-effort, biased toward what the current code makes cheap.
+**All five shipped 2026-07-18** — see the per-idea "Shipped" notes above.
 
 | # | Idea | Why now | CLRS |
 |---|------|---------|------|
 | 1 | **T1 — auto Big-O labelling** *(shipped)* | done — `theory.GrowthEstimator` turns raw counts into an at-a-glance growth class | Ch. 3 |
 | 2 | **T3 — diameter start/goal** *(shipped)* | done — `theory.MazeMetrics`, one double-BFS; immediate, visible gameplay/UX win | Ch. 22 |
 | 3 | **X1 — min-cut difficulty metric** *(shipped)* | done — `theory.MazeFlow`, novel feature + flagship theorem; reuses the grid graph you already build | Ch. 26 |
-| 4 | **S1 — Dial's bucket-queue Dijkstra** | classic optimization on `WeightedMazeGrid`; clean before/after for the analyzer | Ch. 24 |
-| 5 | **T2 — longest-path/NP-hardness writeup** | portfolio-grade narrative; a heuristic mode is a small follow-on | Ch. 34/35 |
+| 4 | **S1 — Dial's bucket-queue Dijkstra** *(shipped)* | done — `solver.solvers.DialSolver` (id `dial`); classic optimization on `WeightedMazeGrid` | Ch. 24 |
+| 5 | **T2 — longest-path/NP-hardness writeup** *(shipped)* | done — `theory.LongestPath`, budget-bounded exact/heuristic longest simple path | Ch. 34/35 |
 
 ## Traps & non-starters
 
