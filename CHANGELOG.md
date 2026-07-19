@@ -83,6 +83,19 @@ housekeeping on the things that make the repo behave.
   equals shortest, so both only become meaningful once braided. Implements idea
   **G4**; 6 tests (full braid leaves zero dead ends, edge count exceeds `V-1` so
   cycles exist, exact fractional targeting, determinism, no-op at factor 0).
+- **`solver.LandmarkHeuristic` — ALT (A\*, landmarks, triangle inequality).** BFS
+  distance fields from a few greedily-spread landmarks give the bound
+  `h(a,b) = max_L |d(L,b) - d(L,a)|`, admissible by the triangle inequality (the
+  same potential-function reasoning as Johnson's reweighting, CLRS Ch. 25).
+  Unlike Manhattan — which measures straight-line distance and is oblivious to
+  walls — these distances are measured through the actual passages, so the bound
+  reflects the detours a solver really has to make. Plugs straight into
+  `AStarSolver`'s existing heuristic constructor. **Measured: ~55% fewer A\*
+  expansions than Manhattan** (58,799 → 26,167 cells across 45 mazes at 25², 40²
+  and 60²). Unit-cost grids only — hop counts would over-estimate on a
+  `WeightedMazeGrid` and break optimality, which the javadoc states plainly.
+  Implements idea **S2**; 5 tests (admissibility checked on *every* cell,
+  optimality vs BFS, the aggregate expansion win, deterministic landmark choice).
 
 ### Verified
 

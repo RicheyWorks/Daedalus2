@@ -64,6 +64,8 @@ beats a comparison heap: near-linear shortest paths. Drop-in behind
 analyzer to quantify.
 
 **S2 · Landmark (ALT) heuristic for A\*** — `Ch. 25 (Johnson reweighting — same triangle-inequality idea) · Impact High · Effort Med`
+**Shipped 2026-07-18 as `solver.LandmarkHeuristic`** — measured at ~55% fewer A\*
+expansions than Manhattan (58,799 → 26,167 across 45 mazes at 25²/40²/60²).
 Precompute BFS distance trees from a handful of "landmark" cells (corners);
 at query time, max over landmarks gives an admissible lower bound far tighter
 than Manhattan → dramatically fewer expansions in `AStarSolver` on large mazes.
