@@ -299,6 +299,48 @@ housekeeping on the things that make the repo behave.
 
 ### Changed
 
+- **ADR-002 — CSRBT `RankedSet` behind `TailLatencyPowerOfTwoStrategy`:
+  evaluated and declined** (ADR-001 item 7). Measured against the real classes
+  from both sibling projects — `ServerStateVector` / `ServerScoreCalculator`
+  from LoadBalancerPro 2.4.2, `OrderedSet` / `RedBlackStrategy` from csrbt-core
+  0.1.0 — over a simulated 64-server fleet. Harness committed at
+  `docs/evaluations/CsrbtRoutingEval.java`.
+
+  Reading the strategy first changed the question. It samples exactly **two**
+  servers at random and takes the better one; its only O(n) step is a boolean
+  health filter, and `ServerStateVector` already carries per-server `p95`/`p99`.
+  **There is no order statistic in it to accelerate**, so adopting a ranked
+  structure necessarily means changing the *policy* — to "gate to the best q%
+  of the fleet, then power-of-two inside that pool".
+
+  The decisive variable turned out to be **how stale the balancer's view is**,
+  which is also the entire reason power-of-two-choices exists. Benchmarking
+  against a perfectly fresh view measures a system nobody runs:
+
+  | view refreshed every 25 requests | mean ms | p99 ms | max in-flight | ns/decision |
+  |---|---|---|---|---|
+  | **uniform po2 (shipped)** | **6.03** | **19.13** | **5** | **48** |
+  | greedy least-score | 33.77 | 52.77 | 19 | 200 |
+  | RankedSet-gated po2 | 7.86 | 22.32 | 13 | 5 870 |
+  | quickselect-gated po2 | 7.78 | 21.52 | 10 | 417 |
+
+  Three findings, any one sufficient to decline. The gating policy **herds** —
+  29% worse mean, 17% worse p99, double the peak in-flight — because
+  concentrating the sample pool on whatever looked best in the last snapshot
+  sends every request to the same place; greedy, the limiting case, is 9× worse.
+  Where gating *did* win (fresh view only), an O(n) quickselect matched the tree
+  at **1/9th the cost**, so the gain came from the policy, not the structure.
+  And `RoutingStrategy.choose(List<ServerStateVector>)` hands over a **fresh
+  list per call**, so an order-statistic tree — whose whole advantage is
+  incremental maintenance — must be rebuilt every time: **5.8–9.1 µs per
+  decision against 46–185 ns**, 30–125× more expensive, on the per-request hot
+  path.
+
+  That last point is a fact about the call shape rather than about CSRBT, and it
+  produced a concrete upstream request (ADR-001 item 6, request 3): give
+  `RoutingStrategy` an optional stateful form, since the current signature
+  obliges every strategy to be stateless and O(n) per decision.
+
 - **`MazeGrid.weightOf(int row, int col)` — coordinate-indexed entry cost.**
   The graph seam addresses nodes by dense integer id, so
   `MazeGraph.edgeWeight(int, int)` was building a `Point` on every edge

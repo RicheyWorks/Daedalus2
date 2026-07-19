@@ -300,10 +300,43 @@ valuable, and unblocked — that is where the first release should land.
        corner-to-corner at 32², 396 dead ends), which invalidates the "generate a Hilbert
        topology and route across it" advice in both vision documents unless the output is
        braided first.
-6. [ ] Raise two requests against LoadBalancerPro: open `RoutingStrategyId`, add
-       `topologyNodeId` to `ServerStateVector`.
-7. [ ] Evaluate CSRBT `RankedSet` behind `TailLatencyPowerOfTwoStrategy` — measure before
-       adopting, per this ecosystem's habit.
+6. [~] Raise **three** requests against LoadBalancerPro (was two; the third came out of
+       item 7's measurements):
+       1. Open `RoutingStrategyId` — it is a closed enum
+          (`TAIL_LATENCY_POWER_OF_TWO`, `WEIGHTED_LEAST_LOAD`, `WEIGHTED_LEAST_CONNECTIONS`,
+          `WEIGHTED_ROUND_ROBIN`, `ROUND_ROBIN`), so no external project can contribute a
+          strategy without patching the enum.
+       2. Add `topologyNodeId` to `ServerStateVector` — without it there is no join key
+          between a server and the graph node representing it, so Daedalus cannot route
+          over a topology whose nodes are LoadBalancerPro servers.
+       3. **New:** give `RoutingStrategy` an optional stateful form.
+          `choose(List<ServerStateVector>)` hands over a fresh list per call, which obliges
+          every strategy to be stateless and O(n) per decision and makes incremental data
+          structures impossible to amortise. See ADR-002 for the measurement that produced
+          this.
+
+       Still to do: actually file these upstream.
+7. [x] Evaluate CSRBT `RankedSet` behind `TailLatencyPowerOfTwoStrategy` — done 2026-07-19,
+       **declined**. Full write-up in
+       [ADR-002](ADR-002-csrbt-rankedset-for-routing.md); measured with the real classes
+       from both projects (LoadBalancerPro 2.4.2, csrbt-core 0.1.0), harness committed at
+       `docs/evaluations/CsrbtRoutingEval.java`.
+
+       Reading the strategy first changed the question: it samples exactly two servers at
+       random and takes the better one, so **there is no order statistic in it to
+       accelerate** — its only O(n) step is a boolean health filter, and per-server
+       percentiles already ship on `ServerStateVector`. Adopting `RankedSet` therefore
+       requires changing the *policy*, to "gate to the best q% then power-of-two inside".
+
+       That policy is worse. It wins only against a perfectly fresh view of the fleet;
+       at realistic staleness it is **29% worse on mean latency, 17% worse at p99, with
+       double the peak in-flight count** — it herds, which is the exact failure uniform
+       sampling exists to prevent. And where it did win, the tree was not the cause: an
+       O(n) quickselect matched it at **1/9th–1/16th the cost**. Finally the interface
+       forecloses the tree's real advantage — a fresh `List` per call means rebuilding
+       every time, costing **5.8–9.1 µs per decision against 46–185 ns** for the shipped
+       strategy. That last point is a fact about the call shape, not about CSRBT, and it
+       is what produced request 3 above.
 
 ---
 
