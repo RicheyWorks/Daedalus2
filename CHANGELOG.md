@@ -134,6 +134,23 @@ housekeeping on the things that make the repo behave.
   chosen order is stitched back into a real cell path. Also adds
   `MazeMetrics.shortestPath`. Implements idea **T5**; 7 tests, the key one
   cross-checking the DP against brute-force enumeration of every visiting order.
+- **`util.TileGridCodec` — run-length wire encoding for tile grids.** Encodes the
+  rendered `char[][]` the REST/STOMP surfaces ship as `<rows>x<cols>:` plus
+  row-major runs. Since no `TileType` glyph is a digit, a count-prefixed run
+  parses with no separators or escapes, and a run of one is written as the bare
+  glyph so the encoding can never expand the payload. Runs cross row boundaries,
+  which is where the border and corridor stretches collapse.
+  **Measured saving: 36–38%** (encoded is 62–64% of raw, stable from 16² to
+  128²). Implements idea **X3**; 7 tests covering round-trip on real mazes, every
+  glyph, malformed input and ragged grids.
+  **Worth knowing before using it:** a rendered maze alternates cell/wall at
+  nearly every column, which is close to the worst case for run-length coding, so
+  36% is about all it can give. The far bigger win is not compressing this grid
+  but *not sending it* — the rendered grid is `(2r+1) x (2c+1)`, roughly four
+  times the cell count, while the maze itself is two wall bits per cell. Measured
+  side by side at 64² and 128², sending cell bits is **~16× smaller** than the
+  rendered glyph grid. This codec is the drop-in that needs no API change; the
+  16× needs a client-side renderer.
 
 ### Changed
 

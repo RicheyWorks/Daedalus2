@@ -201,6 +201,12 @@ non-colliding multiplayer routing (a backlog stretch goal). Same max-flow
 machinery as X1, split-vertex trick for the vertex version.
 
 **X3 · Compact maze wire-encoding** — `Ch. 32 (string algorithms / RLE) · Impact Low · Effort Low`
+**Shipped 2026-07-18 as `util.TileGridCodec`** — measured **36–38% saving**,
+steady from 16² to 128², and it can never expand the payload. But the measurement
+also showed RLE is the wrong lever here: a rendered maze alternates cell/wall
+almost every column. Sending the underlying **two wall bits per cell** instead of
+the `(2r+1)²` glyph grid is **~16× smaller** — that's the real fix, and it needs a
+client-side renderer rather than a codec.
 Run-length + delta encode the `char[][]` tile grid for REST/STOMP payloads,
 and you get maze "diffs" for frame streaming almost for free. Shrinks the
 generation/solve frame traffic the WebSocket layer pushes.
