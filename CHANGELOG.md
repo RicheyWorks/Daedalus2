@@ -406,6 +406,19 @@ housekeeping on the things that make the repo behave.
   rooms-and-corridors dungeon layouts get built, and that's a real gap — every
   current generator makes uniform perfect mazes. It belongs in the backlog as a
   single-threaded feature, judged on the layouts it produces.
+- **`DeadEndFillingSolver`: a `Stream` removed from the cascade's inner loop.** Profiling put
+  this solver second-worst at 14.66 ms, and the cause was not hashing. Its cascade counted a
+  neighbour's surviving exits with
+  `openNeighbors(n).stream().filter(...).count()` — a full stream pipeline built once per
+  neighbour of every filled cell, which on a recursive-backtracker maze (almost entirely dead
+  ends) is the hottest line in the solver. Replaced with a plain counting loop.
+  Measured on the cascade phase in isolation, with both variants asserted to fill an identical
+  set of cells: **1.13× / 1.24× / 2.77×**. The spread is wide because stream pipelines are
+  exactly the shape JIT behaviour varies most on, so the honest reading is "consistently
+  faster, magnitude unstable" rather than a headline multiple. Worth recording that the first
+  attempt at this benchmark was **invalid** — it compared the legacy cascade alone against the
+  full new solver including its BFS phase, which measures nothing; the numbers above come from
+  the corrected like-for-like version.
 - **Solver costs profiled before optimising, which redirected the work entirely (ADR-001).**
   With six solvers still using `HashMap`/`HashSet`, the plan was to move them onto the graph
   seam. Timing them first over 12 mazes at 80² changed the answer:

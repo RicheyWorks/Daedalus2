@@ -64,9 +64,16 @@ public class DeadEndFillingSolver extends AbstractMazeSolver {
             // unfilled exit and isn't start/goal, it becomes a new dead-end.
             for (Point n : grid.openNeighbors(d)) {
                 if (filled.contains(n) || n.equals(start) || n.equals(goal)) continue;
-                long survivingExits = grid.openNeighbors(n).stream()
-                        .filter(x -> !filled.contains(x))
-                        .count();
+                // A plain count, not a Stream. This sits in the cascade's inner loop and runs
+                // once per neighbour of every filled cell — on a maze that is mostly dead ends
+                // that is the hottest line in the solver, and building a stream pipeline there
+                // costs far more than the counting does.
+                int survivingExits = 0;
+                for (Point exit : grid.openNeighbors(n)) {
+                    if (!filled.contains(exit)) {
+                        survivingExits++;
+                    }
+                }
                 if (survivingExits <= 1) deadEnds.add(n);
             }
         }
