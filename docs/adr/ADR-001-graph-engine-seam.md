@@ -261,10 +261,26 @@ valuable, and unblocked — that is where the first release should land.
        `DijkstraSolver` and `AStarSolver` moved onto the seam 2026-07-19 (all tests
        unchanged). Measured effect was **inconclusive** (1.44× / 1.21× / 0.86× — noise),
        because D2 had already taken the win here; recorded honestly, and the phase stands
-       on the architectural argument instead. Still to move: `DialSolver` (the last
-       `HashMap<Point,…>` solver, so likely a real win like BFS), the remaining six
-       solvers, and the `theory` classes. Follow-up: give `Graph` a node-indexed weight
-       accessor so `edgeWeight` stops allocating a `Point`.
+       on the architectural argument instead. `DialSolver` followed. The follow-up — give
+       `Graph` a node-indexed weight accessor so `edgeWeight` stops allocating a `Point` —
+       **was done as part of item 4**.
+
+       `TremauxSolver` moved 2026-07-19, and "the seam pays exactly where hashing survived"
+       held again — but the diagnosis mattered more than the move. Measuring first showed
+       Trémaux takes **1.04 × V steps to BFS's 1.00 × V**, so the gap was entirely per-step
+       cost, not walk length: marks lived in a `Map<Edge, Integer>` whose key was a record
+       wrapping two `Point` records, looked up once per neighbour *and again inside a
+       comparator during a per-step sort*. Flat `byte[V * 4]` marks plus a linear min-scan
+       gave **3.3–6.8× faster**, landing Trémaux at roughly BFS's cost.
+
+       The rewrite also surfaced a **correctness bug older than this seam work**: the solver
+       implemented only two of Trémaux's three rules and so could not solve mazes containing
+       loops, failing 19/40, 20/40 and 10/40 mazes at braid factors 0.25, 0.5 and 1.0. Fixed,
+       and `TremauxSolverTest` now exists — it did not before, which is why nothing caught it.
+
+       Still to move: `BidirectionalSolver` (7 hashed-`Point` collections, the largest
+       remaining target), `DeadEndFillingSolver` (3), `DfsSolver` (2), `IDAStarSolver` (2),
+       `WallFollowerSolver` (1), and the `theory` classes.
 4. [x] Add `EdgeWeightedGraph` and move `LandmarkHeuristic` precompute to Dijkstra — done
        2026-07-19, and it turned out to be a **correctness** item, not the performance
        item it was filed as. No `EdgeWeightedGraph` type was needed: `Graph.edgeWeight`

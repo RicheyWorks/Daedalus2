@@ -341,6 +341,29 @@ housekeeping on the things that make the repo behave.
   `RoutingStrategy` an optional stateful form, since the current signature
   obliges every strategy to be stateless and O(n) per decision.
 
+- **`TremauxSolver` moved onto the graph seam; edge marks are a flat `byte[]`
+  (ADR-001 item 3).** Diagnosed before being touched, which changed the fix.
+  Trémaux was among the slowest solvers, and the intuitive read — "it's a walk,
+  walks are long" — is wrong: it takes **1.04 × V steps against BFS's
+  1.00 × V**, essentially identical work. The whole gap was **cost per step**,
+  so no algorithmic tuning would have moved it.
+
+  The culprit was the mark table. Marks lived in a `Map<Edge, Integer>` where
+  `Edge` was a record wrapping two `Point` records, so every lookup allocated a
+  composite key — and lookups ran once per neighbour **and again inside a
+  `Comparator` during a per-step `sort`**, so each step allocated edge keys
+  O(d log d) times plus a comparator, a neighbour `List`, and boxed `Integer`
+  values, all to choose between at most four options.
+
+  Marks are now `byte[V * 4]` addressed by `cell * 4 + direction`, with both
+  halves of a passage incremented together so the pair acts as one undirected
+  mark. Neighbours come from `MazeGraph` into a reused buffer, and the sort is
+  replaced by a linear min-scan. **Measured 3.3–6.8× faster** over 12 mazes at
+  80², which puts Trémaux at roughly BFS's cost (0.8–1.45×) instead of several
+  times it. Selection is provably equivalent — `MazeGraph` yields neighbours in
+  the same `Direction` order and the old sort was *stable*, so "first minimum
+  wins" reproduces the previous choice exactly.
+
 - **`MazeGrid.weightOf(int row, int col)` — coordinate-indexed entry cost.**
   The graph seam addresses nodes by dense integer id, so
   `MazeGraph.edgeWeight(int, int)` was building a `Point` on every edge
@@ -412,6 +435,38 @@ housekeeping on the things that make the repo behave.
   redirected effort toward.
 
 ### Fixed
+
+- **`TremauxSolver` was missing Trémaux's third rule and could not solve mazes
+  with loops.** The implementation carried only "never enter a twice-marked
+  passage" and "prefer the least-marked passage". The rule it lacked — **on
+  re-entering a junction you have already stood on, having arrived along a
+  previously unmarked passage, turn straight back** — is the one that retires
+  that passage and guarantees a retreat route stays open. Without it the walk
+  strands itself: it reaches a cell whose every passage is already twice-marked
+  while the goal sits unvisited elsewhere. The old code read that state as
+  "unreachable" and returned an empty path, under a comment asserting it was
+  *"impossible on connected maze"*.
+
+  It was not impossible. Measured at 20² over 40 seeds per setting:
+
+  | braid factor | mazes failed (old) | mazes failed (fixed) |
+  |---|---|---|
+  | 0.0 (perfect) | 0 / 40 | 0 / 40 |
+  | 0.25 | **19 / 40** | 0 / 40 |
+  | 0.5 | **20 / 40** | 0 / 40 |
+  | 1.0 | **10 / 40** | 0 / 40 |
+
+  BFS finds a path on every one of those grids, so the mazes were plainly
+  solvable. Only perfect mazes were ever safe — a spanning tree has no loop to
+  strand you — and **every fixture in the suite was a perfect maze**, which is
+  why 183 passing tests never saw it. `TremauxSolver` had no test of its own at
+  all until now; the new `TremauxSolverTest` braids deliberately and asserts the
+  walk is a legal traversal (starts at start, ends at goal, never crosses a
+  wall) across four generators and four braid factors.
+
+  Perfect-maze behaviour is unchanged: 64/64 A/B fixtures produce a walk
+  identical to the previous implementation's, since a tree never triggers the
+  restored rule.
 
 - **`LandmarkHeuristic` was inadmissible on weighted grids, so A* returned
   suboptimal routes (ADR-001 item 4).** The heuristic stored BFS **hop counts**
