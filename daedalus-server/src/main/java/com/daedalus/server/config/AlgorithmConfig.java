@@ -51,7 +51,8 @@ public class AlgorithmConfig {
                 new LightningGenerator(),
                 new TuringGenerator(),
                 new GaussGenerator(),
-                new ArchimedesGenerator()
+                new ArchimedesGenerator(),
+                new DungeonGenerator()
         );
     }
 

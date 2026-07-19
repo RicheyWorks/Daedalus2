@@ -151,6 +151,23 @@ housekeeping on the things that make the repo behave.
   side by side at 64² and 128², sending cell bits is **~16× smaller** than the
   rendered glyph grid. This codec is the drop-in that needs no API change; the
   16× needs a client-side renderer.
+- **`engine.generators.DungeonGenerator` — rooms and corridors (C3).** Binary
+  space partitioning: split the grid recursively, carve a room in every leaf,
+  then join sibling regions with L-shaped corridors on the way back up. The
+  recursion order is what guarantees connectivity — each subtree is joined to its
+  sibling exactly once. Registered as generator id `dungeon` (the roster is now
+  22).
+  This is the first generator here that is **deliberately not a perfect maze**,
+  and it inverts all three of the usual properties: rooms are open areas (interior
+  cells open on all four sides), rooms are dense blocks of cycles so routes are
+  never unique, and the rock between rooms is never carved and stays unreachable.
+  Callers that assume full reachability must not use it — the `MazeGenerator`
+  contract allows this explicitly ("unless their theoretical contract says
+  otherwise"). A pleasant side effect: the structural metrics that need `Braider`
+  to become interesting on a maze — `MazeFlow`'s min-cut, `LongestPath` — are
+  non-trivial here for free. 8 tests covering room openness (measured against a
+  perfect maze of the same size), loop presence, unreachable rock, connectivity
+  of everything carved, and statelessness across reuse.
 - **`theory.DistanceOracle` — all-pairs distances, O(1) queries.** BFS from every
   cell tabulated into a flat `short[]`, so any later "how far is A from B" — a
   leaderboard scoring against the optimal route, arbitrary start/goal queries,

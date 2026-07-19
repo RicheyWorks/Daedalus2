@@ -8,6 +8,7 @@ import com.daedalus.engine.generators.AldousBroderGenerator;
 import com.daedalus.engine.generators.ArchimedesGenerator;
 import com.daedalus.engine.generators.BinaryTreeGenerator;
 import com.daedalus.engine.generators.BoruvkasGenerator;
+import com.daedalus.engine.generators.DungeonGenerator;
 import com.daedalus.engine.generators.EllersGenerator;
 import com.daedalus.engine.generators.GaussGenerator;
 import com.daedalus.engine.generators.GeneratorRegistry;
@@ -158,11 +159,12 @@ class ComplexityAnalyzerTest {
                 new SidewinderGenerator(), new GrowingTreeGenerator(), new OldestPickGenerator(),
                 new AldousBroderGenerator(), new EllersGenerator(), new KrakenGenerator(),
                 new MortonCurveGenerator(), new HilbertCurveGenerator(), new LightningGenerator(),
-                new TuringGenerator(), new GaussGenerator(), new ArchimedesGenerator()));
+                new TuringGenerator(), new GaussGenerator(), new ArchimedesGenerator(),
+                new DungeonGenerator()));
 
         Report report = new ComplexityAnalyzer(registry).analyzeAll(SEED, 32);
 
-        assertThat(report.measurements()).hasSize(21);
+        assertThat(report.measurements()).hasSize(22);
         assertThat(report.measurements()).allMatch(Measurement::success);
     }
 

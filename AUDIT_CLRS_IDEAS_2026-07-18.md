@@ -210,6 +210,9 @@ Expand each BFS layer in parallel for solving huge mazes; stays deterministic
 if the next frontier is sorted before dedup. Pairs naturally with D2's bitsets.
 
 **C3 · Divide-and-conquer tiled generation** — `Ch. 4 flavor + Ch. 27 · Impact Med · Effort High`
+**Shipped 2026-07-18 as `DungeonGenerator` (id `dungeon`)** — single-threaded, as
+argued below. Reframed first, then built.
+
 **Reframed 2026-07-18 — worth building, but not for the parallelism.** The speed
 argument dies with C1 (generation is milliseconds at realistic sizes). The
 *feature* argument stands on its own: quadrant generation with doorways punched
