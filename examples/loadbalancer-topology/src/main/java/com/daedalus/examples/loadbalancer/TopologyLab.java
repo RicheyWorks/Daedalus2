@@ -62,22 +62,24 @@ public final class TopologyLab {
     /**
      * A Hilbert topology, then <b>fully</b> braided.
      *
-     * <p>Braiding is not cosmetic here, and measuring it turned up something the vision documents
-     * do not mention: the raw {@code HilbertCurveGenerator} output at 32x32 is
-     * <b>not connected</b> — edge connectivity from {@code (0,0)} to {@code (31,31)} measures
-     * {@code 0}, meaning no route exists at all, and it leaves 396 dead ends. Route across it with
-     * A* and you get an empty path back, silently, for the same reason the old heuristic bug was
-     * silent: the call succeeds and returns something plausible-looking.
+     * <p>Writing this example is what exposed a real defect: {@code HilbertCurveGenerator} used to
+     * emit a <b>forest</b> — at 32x32, edge connectivity from {@code (0,0)} to {@code (31,31)}
+     * measured {@code 0} (no route at all) with 953 edges for 1024 cells and 396 dead ends. Routing
+     * across it returned an empty path, silently. That is fixed; the generator now produces a
+     * proper spanning tree.
      *
-     * <p>Measured across braid factors at this size:
-     * <pre>
-     *   braid 0.0 -> edge connectivity 0   (disconnected!)   396 dead ends
-     *   braid 0.6 -> edge connectivity 1   (single route)     61 dead ends
-     *   braid 1.0 -> edge connectivity 2   (redundant)         1 dead end
-     * </pre>
+     * <p>Braiding is still required, for a different reason: a spanning tree connects everything by
+     * <em>exactly one</em> route, so every link is a single point of failure. A full braid removes
+     * every dead end, taking minimum degree from 1 to 2.
      *
-     * <p>So a full braid is the minimum for a topology worth analysing: it is what makes the
-     * network connected <em>and</em> gives it more than one route to lose.
+     * <p>But note what that does <b>not</b> buy, because it is easy to assume otherwise: minimum
+     * degree 2 does not imply two edge-disjoint routes. A "barbell" — two cycles joined by a single
+     * link — has no dead ends and still has a bridge. Measured here, the fully braided topology
+     * still reports edge connectivity 1 corner-to-corner, because a bridge survives on every path
+     * between those particular nodes.
+     *
+     * <p>That is exactly why capacity is worth <em>measuring</em> rather than assuming from a
+     * topology's construction — which is the entire argument for section 2.
      */
     static MazeGrid buildTopology() {
         MazeGrid grid = new HilbertCurveGenerator().generate(SIZE, SIZE, SEED, new MazeStats());
@@ -97,8 +99,8 @@ public final class TopologyLab {
                 + "  deadEnds=" + Braider.deadEnds(topology).size()
                 + "\n   Hilbert ordering keeps 1-D neighbours close in 2-D, which is why it models"
                 + "\n   rack/AZ locality better than a random topology."
-                + "\n   NOTE: the raw generator output is disconnected (edge connectivity 0 corner"
-                + "\n   to corner, 396 dead ends). Braiding is mandatory, not decorative.";
+                + "\n   The generator yields a spanning tree (one route everywhere); braiding is"
+                + "\n   what adds the redundancy that makes capacity analysis meaningful.";
     }
 
     /**

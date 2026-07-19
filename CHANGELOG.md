@@ -271,6 +271,28 @@ housekeeping on the things that make the repo behave.
   known paths, and that A\* matches BFS. This is the item the D3 benchmark
   redirected effort toward.
 
+### Fixed
+
+- **`HilbertCurveGenerator` emitted a forest, not a maze.** Found by auditing all 22
+  generators for the spanning-tree contract after the LoadBalancer example produced an
+  impossible result. At 32² it yielded **953 edges for 1024 cells — 71 disconnected
+  components — with only 66 cells reachable from the origin**. Two causes, both silent: the
+  hand-rolled recursive quadrant split did not compose into a real Hilbert curve, so
+  consecutive cells were sometimes not adjacent; and when a cell arrived with no visited
+  neighbour the code did `if (!candidates.isEmpty())` and simply **skipped carving it**,
+  orphaning the cell without any error. The traversal is now the canonical `d2xy` Hilbert
+  mapping (guaranteeing adjacency on power-of-two grids), and cells that cannot attach
+  immediately are deferred to a repair pass instead of dropped. This mattered beyond
+  aesthetics: both vision documents name Hilbert as *the* topology generator for
+  LoadBalancer work, so anyone following that advice was routing over a disconnected graph
+  and getting empty paths back with no error.
+- **Connectivity is now verified for every generator.** `PerfectMazePropertyTest` covered
+  8 of 22, which is how the above hid. `GeneratorConnectivityTest` asserts the full
+  spanning-tree contract (reachable everywhere, exactly `V-1` edges) across all 21
+  generators that claim it, plus Hilbert specifically on non-power-of-two and rectangular
+  grids where the enclosing-square filter can break curve adjacency. `DungeonGenerator` is
+  excluded by contract and keeps its own connectivity test.
+
 ### Verified
 
 - **Uniform-spanning-tree cover times measured (G2 + T4).** Aldous-Broder and

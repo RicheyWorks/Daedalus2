@@ -21,27 +21,46 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TopologyLabTest {
 
     @Test
-    void rawHilbertTopologyIsDisconnected_whichIsWhyBraidingIsMandatory() {
-        // Pins the finding that motivated the example's design: the generator's raw output has
-        // no route between the corners at all, so routing over it would silently return nothing.
+    void rawHilbertTopologyIsConnectedButHasNoRedundancy() {
+        // Writing this example is what exposed HilbertCurveGenerator emitting a forest — corner
+        // to corner measured edge connectivity 0, i.e. no route at all. That is now fixed, so the
+        // raw output is a proper spanning tree: connected, but with exactly one route between any
+        // two nodes, which is why a topology still has to be braided before capacity analysis
+        // means anything.
         MazeGrid raw = new HilbertCurveGenerator().generate(32, 32, 42L, new MazeStats());
 
         assertThat(MazeFlow.edgeConnectivity(raw, new Point(0, 0), new Point(31, 31)))
-                .as("raw Hilbert output is not a connected topology")
-                .isZero();
-        assertThat(Braider.deadEnds(raw)).hasSizeGreaterThan(300);
+                .as("a spanning tree connects everything by exactly one route")
+                .isEqualTo(1);
+        assertThat(Braider.deadEnds(raw)).as("a tree is full of dead ends").isNotEmpty();
     }
 
     @Test
-    void braidedTopologyHasRedundancy_whichIsThePointOfBraiding() {
-        MazeGrid topology = TopologyLab.buildTopology();
+    void braidingRemovesDeadEndsAndAddsLinks_butDoesNotGuaranteeTwoRoutes() {
+        MazeGrid raw = new HilbertCurveGenerator().generate(32, 32, 42L, new MazeStats());
+        MazeGrid braided = TopologyLab.buildTopology();
 
-        // After a full braid the corners are not just connected but redundantly so — more than
-        // one link must fail to sever them, which is what makes capacity analysis meaningful.
-        int connectivity = MazeFlow.edgeConnectivity(topology, new Point(0, 0),
-                new Point(topology.rows() - 1, topology.cols() - 1));
+        // What braiding does guarantee: no cell is left with a single link.
+        assertThat(Braider.deadEnds(raw)).isNotEmpty();
+        assertThat(Braider.deadEnds(braided)).isEmpty();
+        assertThat(linkCount(braided)).isGreaterThan(linkCount(raw));
 
-        assertThat(connectivity).isGreaterThan(1);
+        // What it does NOT guarantee, which is worth stating because it is easy to assume:
+        // minimum degree 2 does not imply two edge-disjoint routes. A "barbell" — two cycles
+        // joined by one link — has no dead ends and still has a bridge. So connectivity between
+        // two given nodes may remain 1 even after a full braid.
+        int connectivity = MazeFlow.edgeConnectivity(braided, new Point(0, 0), new Point(31, 31));
+        assertThat(connectivity).as("still connected").isGreaterThanOrEqualTo(1);
+    }
+
+    private static int linkCount(MazeGrid grid) {
+        int halfEdges = 0;
+        for (int r = 0; r < grid.rows(); r++) {
+            for (int c = 0; c < grid.cols(); c++) {
+                halfEdges += grid.openNeighbors(new Point(r, c)).size();
+            }
+        }
+        return halfEdges / 2;
     }
 
     @Test

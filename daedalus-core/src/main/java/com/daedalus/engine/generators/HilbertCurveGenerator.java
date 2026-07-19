@@ -49,74 +49,112 @@ public class HilbertCurveGenerator extends AbstractMazeGenerator {
         visited.add(first);
         stats.incVisited();
 
+        // Cells that arrive with no visited neighbour yet. On a power-of-two grid this stays
+        // empty, because a true Hilbert order is contiguous; on other sizes the order is the
+        // enclosing square's curve with out-of-range cells filtered out, which can leave gaps.
+        List<Point> deferred = new ArrayList<>();
+
         for (int i = 1; i < curve.size(); i++) {
             Point p = curve.get(i);
             stats.recordFrontier(curve.size() - i);
+            if (!attach(grid, p, visited, rng, stats)) {
+                deferred.add(p); // deliberately NOT marked visited — it is not in the tree yet
+            }
+        }
 
-            List<Point> candidates = new ArrayList<>();
-            for (Point n : grid.neighbors(p)) {
-                if (visited.contains(n)) {
-                    candidates.add(n);
+        // Repair pass. Previously a cell with no visited neighbour was silently skipped and
+        // left orphaned, which made this generator emit a *forest*: at 32x32 it produced 953
+        // edges for 1024 cells (71 components) and only 66 cells were reachable from (0,0).
+        // Every cell borders the grid's 4-connected lattice, so repeating until no progress
+        // attaches all of them and restores the spanning-tree contract.
+        boolean progress = true;
+        while (!deferred.isEmpty() && progress) {
+            progress = false;
+            Iterator<Point> pending = deferred.iterator();
+            while (pending.hasNext()) {
+                if (attach(grid, pending.next(), visited, rng, stats)) {
+                    pending.remove();
+                    progress = true;
                 }
             }
-
-            if (!candidates.isEmpty()) {
-                Point from = candidates.get(rng.nextInt(candidates.size()));
-                grid.carve(from, p);
-                stats.incVisited();
-            }
-
-            grid.cell(p).markVisited();
-            visited.add(p);
         }
 
         grid.clearVisited();
-        stats.finish(true);
+        stats.finish(deferred.isEmpty());
         return grid;
     }
 
+    /** Carve {@code p} onto a random already-visited neighbour. False if it has none yet. */
+    private boolean attach(MazeGrid grid, Point p, Set<Point> visited, Random rng, MazeStats stats) {
+        List<Point> candidates = new ArrayList<>();
+        for (Point n : grid.neighbors(p)) {
+            if (visited.contains(n)) {
+                candidates.add(n);
+            }
+        }
+        if (candidates.isEmpty()) {
+            return false;
+        }
+        grid.carve(candidates.get(rng.nextInt(candidates.size())), p);
+        grid.cell(p).markVisited();
+        visited.add(p);
+        stats.incVisited();
+        return true;
+    }
+
     /**
-     * Generates all cells in true Hilbert-curve order using the classic recursive quadrant algorithm.
-     * Works perfectly on any rectangular grid (no power-of-2 restriction).
+     * Cells in true Hilbert order.
+     *
+     * <p>Walks the curve of the smallest enclosing power-of-two square and keeps the cells that
+     * fall inside the grid. On a power-of-two grid the result is the exact Hilbert curve, so
+     * consecutive cells are always 4-adjacent; on other sizes filtering can break that adjacency,
+     * which the generator's repair pass handles.
+     *
+     * <p>The previous implementation used a hand-rolled recursive quadrant split whose rotation
+     * cases did not compose into a real Hilbert curve — consecutive cells were sometimes not
+     * adjacent, which is what orphaned cells and produced a forest.
      */
     private List<Point> hilbertOrder(int height, int width) {
+        int side = 1;
+        while (side < Math.max(height, width)) {
+            side <<= 1;
+        }
         List<Point> order = new ArrayList<>(height * width);
-        hilbert(0, 0, width, height, 0, 0, order, height, width);
+        long cells = (long) side * side;
+        for (long d = 0; d < cells; d++) {
+            int[] xy = curveToPoint(side, d);
+            if (xy[1] < height && xy[0] < width) {
+                order.add(new Point(xy[1], xy[0])); // Point(row, col)
+            }
+        }
         return order;
     }
 
-    private void hilbert(int x, int y, int dx, int dy, int rx, int ry,
-                         List<Point> order, int h, int w) {
-        if (dx * dy <= 1) {
-            if (x >= 0 && x < w && y >= 0 && y < h) {
-                order.add(new Point(y, x));   // Point(row, col)
+    /**
+     * Standard Hilbert {@code d2xy}: map a distance along the curve to its {@code (x, y)} cell,
+     * un-rotating each quadrant as it descends. This is the canonical formulation and is what
+     * guarantees successive distances land on adjacent cells.
+     */
+    private static int[] curveToPoint(int side, long distance) {
+        int x = 0;
+        int y = 0;
+        long remaining = distance;
+        for (int span = 1; span < side; span <<= 1) {
+            int rx = (int) (1 & (remaining / 2));
+            int ry = (int) (1 & (remaining ^ rx));
+            if (ry == 0) {
+                if (rx == 1) {
+                    x = span - 1 - x;
+                    y = span - 1 - y;
+                }
+                int swap = x;
+                x = y;
+                y = swap;
             }
-            return;
+            x += span * rx;
+            y += span * ry;
+            remaining /= 4;
         }
-
-        int dx2 = dx / 2;
-        int dy2 = dy / 2;
-
-        if (rx == 0 && ry == 0) {
-            hilbert(x, y, dx2, dy2, 0, 0, order, h, w);
-            hilbert(x, y + dy2, dx2, dy2, 1, 0, order, h, w);
-            hilbert(x + dx2, y + dy2, dx2, dy2, 1, 1, order, h, w);
-            hilbert(x + dx2, y, dx2, dy2, 0, 1, order, h, w);
-        } else if (rx == 1 && ry == 0) {
-            hilbert(x + dx2, y, dx2, dy2, 0, 1, order, h, w);
-            hilbert(x, y, dx2, dy2, 0, 0, order, h, w);
-            hilbert(x, y + dy2, dx2, dy2, 1, 0, order, h, w);
-            hilbert(x + dx2, y + dy2, dx2, dy2, 1, 1, order, h, w);
-        } else if (rx == 1 && ry == 1) {
-            hilbert(x + dx2, y + dy2, dx2, dy2, 1, 1, order, h, w);
-            hilbert(x + dx2, y, dx2, dy2, 0, 1, order, h, w);
-            hilbert(x, y, dx2, dy2, 0, 0, order, h, w);
-            hilbert(x, y + dy2, dx2, dy2, 1, 0, order, h, w);
-        } else { // rx==0, ry==1
-            hilbert(x, y + dy2, dx2, dy2, 1, 0, order, h, w);
-            hilbert(x + dx2, y + dy2, dx2, dy2, 1, 1, order, h, w);
-            hilbert(x + dx2, y, dx2, dy2, 0, 1, order, h, w);
-            hilbert(x, y, dx2, dy2, 0, 0, order, h, w);
-        }
+        return new int[] {x, y};
     }
 }
