@@ -122,6 +122,18 @@ housekeeping on the things that make the repo behave.
   exactly `1` on any perfect maze, since a tree has one route; `Braider` is what
   creates genuine alternatives. Implements idea **X2**; 8 tests, including the
   vertex `<=` edge invariant checked across 15 braided mazes.
+- **`theory.WaypointTour` — optimal "collect all the coins" routes.** Shortest
+  route from a start cell visiting every waypoint, solved exactly by the
+  Held–Karp dynamic program (CLRS Ch. 15's subset DP applied to the TSP-path
+  variant of Ch. 34). Visiting waypoints nearest-first is *not* optimal — picking
+  the order is the hard part — so the DP keys on *(set already collected, cell
+  you're standing on)* instead of the full ordering, trading factorial time for
+  `O(2^k · k²)`. That's exponential in the waypoint count but independent of maze
+  size, which is exactly the right shape for a game mode: a handful of coins in a
+  large maze. Waypoints are capped at 16 with a clear error beyond that, and the
+  chosen order is stitched back into a real cell path. Also adds
+  `MazeMetrics.shortestPath`. Implements idea **T5**; 7 tests, the key one
+  cross-checking the DP against brute-force enumeration of every visiting order.
 
 ### Changed
 

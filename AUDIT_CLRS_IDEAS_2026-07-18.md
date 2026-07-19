@@ -168,6 +168,8 @@ cover time; the expected-step formulas explain the very curves T1 will plot.
 Theory that pays for itself in narrative.
 
 **T5 · Held–Karp for "collect all the coins"** — `Ch. 15 (DP) + Ch. 34 (TSP) · Impact Med · Effort Med`
+**Shipped 2026-07-18 as `theory.WaypointTour`** — exact optimal order, capped at
+16 waypoints, cross-checked against brute-force permutation enumeration.
 Shortest tour visiting k waypoints via the O(2^k·k²) DP → a game mode with an
 optimal-score oracle. Bounded k keeps it tractable and shows off DP over
 subsets.

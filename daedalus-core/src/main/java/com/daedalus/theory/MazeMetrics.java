@@ -82,6 +82,19 @@ public final class MazeMetrics {
     }
 
     /**
+     * One shortest passage route from {@code from} to {@code to}, inclusive of both ends. Empty if
+     * {@code to} is unreachable. Deterministic — BFS explores {@code openNeighbors} in a fixed
+     * order.
+     */
+    public static List<Point> shortestPath(MazeGrid grid, Point from, Point to) {
+        Bfs search = bfs(grid, from);
+        if (search.distance[to.row()][to.col()] < 0) {
+            return List.of();
+        }
+        return reconstruct(search.parent, from, to);
+    }
+
+    /**
      * BFS step-distances from {@code source} to every cell as a fresh {@code rows × cols} grid;
      * unreachable cells (a different component) are {@code -1}. Useful for distance heat-maps.
      */
