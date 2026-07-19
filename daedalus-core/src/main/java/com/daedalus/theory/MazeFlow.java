@@ -3,6 +3,7 @@
 package com.daedalus.theory;
 
 import com.daedalus.engine.MazeGrid;
+import com.daedalus.graph.MazeGraph;
 import com.daedalus.model.Point;
 
 import java.util.ArrayDeque;
@@ -173,53 +174,33 @@ public final class MazeFlow {
      * Minimum {@code source}→{@code sink} cut via Edmonds-Karp on unit-capacity passages.
      */
     public static MinCut minCut(MazeGrid grid, Point source, Point sink) {
-        int rows = grid.rows();
         int cols = grid.cols();
-        int n = rows * cols;
         int s = id(source, cols);
         int t = id(sink, cols);
-
         if (s == t) {
             return new MinCut(source, sink, 0, List.of());
         }
 
-        // Residual capacities keyed by directed (u -> v); each undirected passage seeds both ways.
-        Map<Long, Integer> residual = new HashMap<>();
-        List<int[]> passages = new ArrayList<>();
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                int u = r * cols + c;
-                for (Point q : grid.openNeighbors(new Point(r, c))) {
-                    int v = id(q, cols);
-                    if (u < v) {
-                        passages.add(new int[] {u, v});
-                        residual.merge(key(u, v, n), 1, Integer::sum);
-                        residual.merge(key(v, u, n), 1, Integer::sum);
-                    }
-                }
-            }
-        }
-
+        Residual net = Residual.of(grid);
         int maxFlow = 0;
-        int[] parent = new int[n];
-        while (augment(grid, cols, n, s, t, residual, parent)) {
-            int bottleneck = Integer.MAX_VALUE;
-            for (int v = t; v != s; v = parent[v]) {
-                bottleneck = Math.min(bottleneck, residual.get(key(parent[v], v, n)));
+        int[] parentEdge = new int[net.nodeCount()];
+        while (net.augmentingPath(s, t, parentEdge)) {
+            for (int v = t; v != s; ) {
+                int edge = parentEdge[v];
+                net.push(edge);
+                v = net.from(edge);
             }
-            for (int v = t; v != s; v = parent[v]) {
-                int u = parent[v];
-                residual.merge(key(u, v, n), -bottleneck, Integer::sum);
-                residual.merge(key(v, u, n), bottleneck, Integer::sum);
-            }
-            maxFlow += bottleneck;
+            maxFlow++; // unit capacities, so every augmenting path carries exactly 1
         }
 
-        boolean[] sourceSide = reachable(grid, cols, n, s, residual);
+        boolean[] sourceSide = net.reachableFrom(s);
         List<Passage> cut = new ArrayList<>();
-        for (int[] edge : passages) {
-            if (sourceSide[edge[0]] ^ sourceSide[edge[1]]) {
-                cut.add(new Passage(pointOf(edge[0], cols), pointOf(edge[1], cols)));
+        for (int u = 0; u < net.nodeCount(); u++) {
+            for (int e = net.edgeStart(u); e < net.edgeEnd(u); e++) {
+                int v = net.target(e);
+                if (u < v && (sourceSide[u] ^ sourceSide[v])) {
+                    cut.add(new Passage(pointOf(u, cols), pointOf(v, cols)));
+                }
             }
         }
         cut.sort(Comparator.comparingInt((Passage p) -> p.a().row())
@@ -229,46 +210,141 @@ public final class MazeFlow {
         return new MinCut(source, sink, maxFlow, cut);
     }
 
-    /** One BFS for an augmenting path in the residual graph; fills {@code parent}, returns whether sink was reached. */
-    private static boolean augment(MazeGrid grid, int cols, int n, int s, int t,
-                                   Map<Long, Integer> residual, int[] parent) {
-        Arrays.fill(parent, -1);
-        parent[s] = s;
-        Deque<Integer> queue = new ArrayDeque<>();
-        queue.add(s);
-        while (!queue.isEmpty()) {
-            int u = queue.poll();
-            for (Point q : grid.openNeighbors(pointOf(u, cols))) {
-                int v = id(q, cols);
-                if (parent[v] == -1 && residual.getOrDefault(key(u, v, n), 0) > 0) {
-                    parent[v] = u;
-                    if (v == t) {
-                        return true;
-                    }
-                    queue.add(v);
-                }
-            }
-        }
-        return false;
-    }
+    /**
+     * Unit-capacity residual network in compressed-sparse-row form, built from the
+     * {@link com.daedalus.graph.Graph} seam.
+     *
+     * <p>Replaces a {@code Map<Long, Integer>} keyed by packed {@code (from, to)} pairs. That map
+     * boxed a {@code Long} on every residual lookup, and max-flow does one per edge per BFS — the
+     * single hottest operation in the algorithm.
+     */
+    private static final class Residual {
+        private final int[] offsets;
+        private final int[] targets;
+        private final int[] owner;    // tail of each directed edge
+        private final int[] twin;     // index of the opposing directed edge
+        private final int[] capacity;
+        private final int[] queue;
+        private final int nodes;
 
-    /** Cells reachable from {@code s} in the residual graph — the source side of the min cut. */
-    private static boolean[] reachable(MazeGrid grid, int cols, int n, int s, Map<Long, Integer> residual) {
-        boolean[] seen = new boolean[n];
-        seen[s] = true;
-        Deque<Integer> queue = new ArrayDeque<>();
-        queue.add(s);
-        while (!queue.isEmpty()) {
-            int u = queue.poll();
-            for (Point q : grid.openNeighbors(pointOf(u, cols))) {
-                int v = id(q, cols);
-                if (!seen[v] && residual.getOrDefault(key(u, v, n), 0) > 0) {
-                    seen[v] = true;
-                    queue.add(v);
+        private Residual(int[] offsets, int[] targets, int[] owner, int[] twin, int[] capacity, int nodes) {
+            this.offsets = offsets;
+            this.targets = targets;
+            this.owner = owner;
+            this.twin = twin;
+            this.capacity = capacity;
+            this.queue = new int[nodes];
+            this.nodes = nodes;
+        }
+
+        static Residual of(MazeGrid grid) {
+            MazeGraph graph = new MazeGraph(grid);
+            int nodes = graph.nodeCount();
+            int[] adjacency = new int[graph.maxDegree()];
+
+            int[] offsets = new int[nodes + 1];
+            for (int v = 0; v < nodes; v++) {
+                offsets[v + 1] = offsets[v] + graph.neighbors(v, adjacency);
+            }
+            int edges = offsets[nodes];
+            int[] targets = new int[edges];
+            int[] owner = new int[edges];
+            int[] capacity = new int[edges];
+            int[] cursor = offsets.clone();
+            for (int v = 0; v < nodes; v++) {
+                int degree = graph.neighbors(v, adjacency);
+                for (int i = 0; i < degree; i++) {
+                    int e = cursor[v]++;
+                    targets[e] = adjacency[i];
+                    owner[e] = v;
+                    capacity[e] = 1;
                 }
             }
+            int[] twin = new int[edges];
+            for (int u = 0; u < nodes; u++) {
+                for (int e = offsets[u]; e < offsets[u + 1]; e++) {
+                    int v = targets[e];
+                    for (int f = offsets[v]; f < offsets[v + 1]; f++) {
+                        if (targets[f] == u) {
+                            twin[e] = f;
+                            break;
+                        }
+                    }
+                }
+            }
+            return new Residual(offsets, targets, owner, twin, capacity, nodes);
         }
-        return seen;
+
+        int nodeCount() {
+            return nodes;
+        }
+
+        int edgeStart(int node) {
+            return offsets[node];
+        }
+
+        int edgeEnd(int node) {
+            return offsets[node + 1];
+        }
+
+        int target(int edge) {
+            return targets[edge];
+        }
+
+        int from(int edge) {
+            return owner[edge];
+        }
+
+        /** Send one unit along {@code edge}, crediting its twin. */
+        void push(int edge) {
+            capacity[edge]--;
+            capacity[twin[edge]]++;
+        }
+
+        /** BFS for an augmenting path; records the incoming edge per node. */
+        boolean augmentingPath(int source, int sink, int[] parentEdge) {
+            Arrays.fill(parentEdge, -1);
+            boolean[] seen = new boolean[nodes];
+            seen[source] = true;
+            int head = 0;
+            int tail = 0;
+            queue[tail++] = source;
+            while (head < tail) {
+                int u = queue[head++];
+                for (int e = offsets[u]; e < offsets[u + 1]; e++) {
+                    int v = targets[e];
+                    if (!seen[v] && capacity[e] > 0) {
+                        seen[v] = true;
+                        parentEdge[v] = e;
+                        if (v == sink) {
+                            return true;
+                        }
+                        queue[tail++] = v;
+                    }
+                }
+            }
+            return false;
+        }
+
+        /** Nodes still reachable through residual capacity — the source side of the cut. */
+        boolean[] reachableFrom(int source) {
+            boolean[] seen = new boolean[nodes];
+            seen[source] = true;
+            int head = 0;
+            int tail = 0;
+            queue[tail++] = source;
+            while (head < tail) {
+                int u = queue[head++];
+                for (int e = offsets[u]; e < offsets[u + 1]; e++) {
+                    int v = targets[e];
+                    if (!seen[v] && capacity[e] > 0) {
+                        seen[v] = true;
+                        queue[tail++] = v;
+                    }
+                }
+            }
+            return seen;
+        }
     }
 
     private static int id(Point p, int cols) {

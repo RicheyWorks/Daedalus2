@@ -226,6 +226,16 @@ housekeeping on the things that make the repo behave.
   use `HashMap`/`HashSet` and are candidates on the same evidence, but each should be
   measured rather than assumed, since Dijkstra and A\* showed the seam pays nothing where
   hashing was already gone.
+  **`theory.MazeFlow`** followed, picked by the same rule and giving the largest win yet:
+  **2.46× / 3.21× / 5.59×** on eight braided 64² mazes. It was the heaviest hasher left — a
+  `Map<Long, Integer>` residual table keyed by packed `(from, to)` pairs, boxing a `Long` on
+  every residual lookup, and max-flow performs one per edge per BFS. That is now a
+  compressed-sparse-row residual network (`offsets` / `targets` / `twin` / `capacity` arrays)
+  with an `int[]` BFS queue, so the inner loop boxes nothing. Cut sizes and cut edges are
+  unchanged — both `MazeFlow` suites pass untouched, including the test that verifies removing
+  the reported edges genuinely severs source from sink. This matters beyond microbenchmarks:
+  min-cut is what capacity analysis calls in the LoadBalancer example, so it is on the
+  ecosystem's hot path rather than the maze game's.
 - **`engine.generators.DungeonGenerator` — rooms and corridors (C3).** Binary
   space partitioning: split the grid recursively, carve a room in every leaf,
   then join sibling regions with L-shaped corridors on the way back up. The
