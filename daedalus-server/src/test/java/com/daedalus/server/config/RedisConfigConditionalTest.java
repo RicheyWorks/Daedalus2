@@ -4,7 +4,7 @@ package com.daedalus.server.config;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
-import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
+import org.springframework.boot.data.redis.autoconfigure.DataRedisAutoConfiguration;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -23,10 +23,16 @@ class RedisConfigConditionalTest {
 
     /**
      * Runner pulls in only the user-supplied {@link RedisConfig} plus Spring Boot's stock
-     * {@link RedisAutoConfiguration}. We toggle the flag and assert what gets wired.
+     * {@link DataRedisAutoConfiguration}. We toggle the flag and assert what gets wired.
+     *
+     * <p>Spring Boot 4 split the monolithic {@code spring-boot-autoconfigure} jar into
+     * per-technology modules, which both moved and renamed this class:
+     * {@code org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration} became
+     * {@code org.springframework.boot.data.redis.autoconfigure.DataRedisAutoConfiguration}.
+     * This import was the <em>only</em> source change the whole Boot 3 → 4 migration required.
      */
     private final ApplicationContextRunner runner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(RedisAutoConfiguration.class))
+            .withConfiguration(AutoConfigurations.of(DataRedisAutoConfiguration.class))
             .withUserConfiguration(RedisConfig.class);
 
     @Test
@@ -36,7 +42,7 @@ class RedisConfigConditionalTest {
                     // The conditional should suppress the @Configuration class entirely.
                     assertThat(ctx).doesNotHaveBean(RedisConfig.class);
 
-                    // Spring Boot's RedisAutoConfiguration may still register a default
+                    // Spring Boot's DataRedisAutoConfiguration may still register a default
                     // RedisConnectionFactory bean — that's fine and unrelated to our fix. The
                     // contract we lock in here is "RedisConfig itself is gated".
                 });

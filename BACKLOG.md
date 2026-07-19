@@ -28,6 +28,22 @@ Last consolidated: 2026-05-07
   any untrusted-network deploy, back the per-key buckets with a bounded /
   idle-evicting store (a Caffeine cache of `RateLimiter`s, or a scheduled
   purge of instances whose permits are full and untouched for N minutes).
+- **Full-context smoke test (`@SpringBootTest`) — coverage gap found during the
+  Boot 4 migration.** Every server test today is a slice: `@WebMvcTest`
+  controllers plus `ApplicationContextRunner` for `RedisConfig`. Nothing boots
+  the whole application context, and nothing exercises `/v3/api-docs` or
+  `/swagger-ui/**`. That means the springdoc **2.6.0 → 3.0.3** major bump —
+  which changed the emitted document from OpenAPI 3.0.x to **3.1.0** — was
+  invisible to a fully green suite; it had to be checked by packaging the jar
+  and curling the endpoints by hand. Add one
+  `@SpringBootTest(webEnvironment = RANDOM_PORT)` that asserts the context
+  loads, `/actuator/health` is `UP`, and `/v3/api-docs` returns 200 with the
+  expected path count. Cheap, and it converts "I remembered to check" into
+  something CI enforces.
+- **Re-triage the open Dependabot PRs against Boot 4.** The parent bump to
+  `spring-boot-starter-parent` 4.1.0 re-pins most managed dependency versions,
+  so any open PR bumping a Boot-managed 3.x artifact is now either obsolete or
+  actively conflicting. Close the superseded ones rather than merging them.
 - **WebSocket / STOMP authentication.** HTTP JWT auth is wired in
   `ProdSecurityConfig` (2026-05-06), but the STOMP topics under
   `/topic/maze/**` and the `/ws/**` upgrade are not yet authenticated at

@@ -276,6 +276,53 @@ housekeeping on the things that make the repo behave.
 
 ### Changed
 
+- **Spring Boot 3.3.1 → 4.1.0 (with Framework 7).** The server, plugin runtime
+  and desktop modules now build on the Boot 4 line. Four coordinate changes and
+  a single import were the entire migration:
+
+  | | before | after |
+  |---|---|---|
+  | `spring-boot-starter-parent` | 3.3.1 | **4.1.0** |
+  | `resilience4j.version` | 2.2.0 | **2.4.0** |
+  | resilience4j artifact | `resilience4j-spring-boot3` | **`resilience4j-spring-boot4`** |
+  | `springdoc.version` | 2.6.0 | **3.0.3** |
+
+  The lone source change is in `RedisConfigConditionalTest`: Boot 4 split the
+  monolithic `spring-boot-autoconfigure` jar into per-technology modules, which
+  both moved *and* renamed the class —
+  `org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration`
+  became `org.springframework.boot.data.redis.autoconfigure.DataRedisAutoConfiguration`
+  (now in `spring-boot-data-redis`). Nothing in `src/main` needed touching in
+  any module.
+
+  **Verified, not assumed.** The migration was first run in a throwaway copy of
+  the tree. The initial `mvn test` reported **28 errors** — a mix of
+  `NoSuchMethodError` on `MockHttpServletRequestBuilder.contentType(String)` and
+  `IncompatibleClassChangeError: HttpHeaders does not implement MultiValueMap`.
+  Every one of those was an artifact of Maven's *incremental* compilation
+  leaving Boot 3 test bytecode on disk to run against Boot 4 jars; return types
+  and interface sets are part of a JVM method signature, so stale classes fail
+  exactly this way. A `clean` rebuild reduced 28 errors to **one** — the Redis
+  import above. The lesson generalises: when a dependency bump produces
+  `NoSuchMethodError` for a method that plainly still exists in source, rebuild
+  clean before reading it as an API break.
+
+  After the fix, the full reactor is green on Boot 4: **267 tests, 0 failures,
+  0 errors, 0 Checkstyle violations, 0 SpotBugs findings** (core 183,
+  plugin-api 7, plugin-runtime 16, server 57, desktop 4). The per-key rate
+  limiter and its 429 path pass unchanged, so `RequestNotPermitted` handling
+  survived both the Boot and the Resilience4j bump.
+
+  **springdoc's major bump was checked at runtime, not by test.** Nothing in
+  the suite exercises `/v3/api-docs`, so the packaged jar was booted and probed
+  directly: it starts clean, `/v3/api-docs` returns **HTTP 200** with all **10**
+  paths documented, and `/swagger-ui/index.html` returns 200. One behavioural
+  change worth knowing about downstream: springdoc 3 emits **OpenAPI 3.1.0**
+  where 2.x emitted 3.0.x. Nothing in this repo consumes the spec —
+  `Code/daedalus-api-dtos.ts` is hand-written against the Java records rather
+  than generated — but external clients running codegen against the published
+  document will see the version change.
+
 - **Solvers index state by cell id instead of hashing `Point` (D2).**
   `DijkstraSolver` and `AStarSolver` now hold distance / parent / closed state in
   flat arrays addressed through the new `solver.GridIndex` (`row * cols + col`),
