@@ -371,6 +371,25 @@ housekeeping on the things that make the repo behave.
   `RoutingStrategy` an optional stateful form, since the current signature
   obliges every strategy to be stateless and O(n) per decision.
 
+- **`DeadEndFillingSolver` moved onto the graph seam — the last solver where it
+  pays (ADR-001 item 3).** Both phases retargeted: the cascade's `HashSet` of
+  filled cells and `ArrayDeque` frontier, and phase two's BFS maps.
+  **Measured 1.60–2.75× faster** over 12 mazes at 80².
+
+  One deliberate simplification. The old cascade could enqueue the same cell
+  several times and discarded the duplicates at poll time, which meant no exact
+  capacity bound existed. Enqueueing each cell at most once is equivalent — a
+  cell is filled the first time it is polled and never unfilled, so later
+  enqueues were always no-ops — and it makes V an exact bound rather than a
+  guess. That is the kind of "obviously equivalent" reasoning worth distrusting,
+  so it was checked: **1024 A/B cases identical** on path, `cellsVisited` and
+  `cellsExplored`.
+
+  The nested neighbour scan needs **two** adjacency buffers, not one — the inner
+  loop counting a neighbour's surviving exits would otherwise clobber the outer
+  loop's contents mid-scan. Sharing one buffer compiles and passes casually
+  written tests; it silently corrupts the cascade.
+
 - **`BidirectionalSolver` and `DfsSolver` moved onto the graph seam (ADR-001
   item 3).** These were the two largest remaining holdouts — bidirectional
   carried **seven** hashed-`Point` collections (two parent maps, two seen sets,

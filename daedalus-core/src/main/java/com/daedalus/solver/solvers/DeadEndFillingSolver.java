@@ -3,12 +3,16 @@
 package com.daedalus.solver.solvers;
 
 import com.daedalus.engine.MazeGrid;
+import com.daedalus.graph.MazeGraph;
 import com.daedalus.model.AlgorithmDescriptor;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
 import com.daedalus.solver.AbstractMazeSolver;
+import com.daedalus.solver.GridIndex;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Dead-end filling.
@@ -42,66 +46,101 @@ public class DeadEndFillingSolver extends AbstractMazeSolver {
 
     @Override
     public List<Point> solve(MazeGrid grid, Point start, Point goal, MazeStats stats) {
-        Set<Point> filled = new HashSet<>();
+        MazeGraph graph = new MazeGraph(grid);
+        GridIndex index = new GridIndex(grid);
+        int nodes = index.size();
+        int startId = index.idOf(start);
+        int goalId = index.idOf(goal);
 
-        // Initial sweep: every cell with degree ≤ 1 (and not start/goal) is a dead-end.
-        Deque<Point> deadEnds = new ArrayDeque<>();
-        for (int r = 0; r < grid.rows(); r++) {
-            for (int c = 0; c < grid.cols(); c++) {
-                Point p = new Point(r, c);
-                if (p.equals(start) || p.equals(goal)) continue;
-                if (grid.openNeighbors(p).size() <= 1) {
-                    deadEnds.add(p);
-                }
+        boolean[] filled = new boolean[nodes];
+        // Nested neighbour iteration needs two buffers — the inner loop would otherwise
+        // clobber the outer one's contents mid-scan.
+        int[] outer = new int[graph.maxDegree()];
+        int[] inner = new int[graph.maxDegree()];
+
+        // Cascade queue. The old version could enqueue the same cell several times and threw
+        // the duplicates away at poll time; enqueueing each cell at most once is equivalent —
+        // a cell is filled the first time it is polled and never unfilled — and it makes V an
+        // exact capacity bound instead of a guess.
+        int[] deadEnds = new int[nodes];
+        boolean[] queued = new boolean[nodes];
+        int head = 0;
+        int tail = 0;
+
+        // Initial sweep: every cell with degree <= 1 (and not start/goal) is a dead-end.
+        for (int id = 0; id < nodes; id++) {
+            if (id == startId || id == goalId) {
+                continue;
+            }
+            if (graph.neighbors(id, outer) <= 1) {
+                deadEnds[tail++] = id;
+                queued[id] = true;
             }
         }
 
-        while (!deadEnds.isEmpty()) {
-            Point d = deadEnds.poll();
-            if (!filled.add(d)) continue;
+        while (head < tail) {
+            int d = deadEnds[head++];
+            if (filled[d]) {
+                continue;
+            }
+            filled[d] = true;
             stats.incVisited();
-            // Filling d may cascade: if d's surviving neighbor now has only one
-            // unfilled exit and isn't start/goal, it becomes a new dead-end.
-            for (Point n : grid.openNeighbors(d)) {
-                if (filled.contains(n) || n.equals(start) || n.equals(goal)) continue;
+            // Filling d may cascade: if d's surviving neighbour now has only one unfilled
+            // exit and isn't start/goal, it becomes a new dead-end.
+            int degree = graph.neighbors(d, outer);
+            for (int i = 0; i < degree; i++) {
+                int n = outer[i];
+                if (filled[n] || queued[n] || n == startId || n == goalId) {
+                    continue;
+                }
                 // A plain count, not a Stream. This sits in the cascade's inner loop and runs
                 // once per neighbour of every filled cell — on a maze that is mostly dead ends
                 // that is the hottest line in the solver, and building a stream pipeline there
                 // costs far more than the counting does.
                 int survivingExits = 0;
-                for (Point exit : grid.openNeighbors(n)) {
-                    if (!filled.contains(exit)) {
+                int innerDegree = graph.neighbors(n, inner);
+                for (int j = 0; j < innerDegree; j++) {
+                    if (!filled[inner[j]]) {
                         survivingExits++;
                     }
                 }
-                if (survivingExits <= 1) deadEnds.add(n);
+                if (survivingExits <= 1) {
+                    deadEnds[tail++] = n;
+                    queued[n] = true;
+                }
             }
         }
 
         // Phase 2: BFS through surviving (unfilled) cells.
-        Map<Point, Point> parent = new HashMap<>();
-        Queue<Point> queue = new ArrayDeque<>();
-        Set<Point> seen = new HashSet<>();
-        queue.add(start);
-        seen.add(start);
-        parent.put(start, null);
+        int[] parent = new int[nodes];
+        Arrays.fill(parent, -1);
+        boolean[] seen = new boolean[nodes];
+        int[] queue = new int[nodes];
+        int qHead = 0;
+        int qTail = 0;
 
-        while (!queue.isEmpty()) {
-            stats.recordFrontier(queue.size());
-            Point cur = queue.poll();
+        queue[qTail++] = startId;
+        seen[startId] = true;
+
+        while (qHead < qTail) {
+            stats.recordFrontier(qTail - qHead);
+            int cur = queue[qHead++];
             stats.incExplored();
-            if (cur.equals(goal)) {
-                List<Point> path = reconstruct(parent, start, goal);
+            if (cur == goalId) {
+                List<Point> path = reconstruct(parent, startId, goalId, index);
                 stats.setPathLength(path.size());
                 stats.finish(true);
                 return path;
             }
-            for (Point n : grid.openNeighbors(cur)) {
-                if (filled.contains(n)) continue;
-                if (seen.add(n)) {
-                    parent.put(n, cur);
-                    queue.add(n);
+            int degree = graph.neighbors(cur, outer);
+            for (int i = 0; i < degree; i++) {
+                int n = outer[i];
+                if (filled[n] || seen[n]) {
+                    continue;
                 }
+                seen[n] = true;
+                parent[n] = cur;
+                queue[qTail++] = n;
             }
         }
         stats.finish(false);

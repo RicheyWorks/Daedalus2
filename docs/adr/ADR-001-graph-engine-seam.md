@@ -292,12 +292,20 @@ valuable, and unblocked — that is where the first release should land.
        arrays. That is a strong enough regularity to plan against rather than re-measure each
        time.
 
-       Still to move: `DeadEndFillingSolver` (3 hashed collections), `IDAStarSolver` (2),
-       `WallFollowerSolver` (1), and the `theory` classes. Note `IDAStarSolver` is the
-       expensive one in absolute terms but the seam is not its lever — its cost is
-       re-expansion inherent to iterative deepening, which a tighter heuristic addresses
-       (ALT measured 41× there) and data structures do not. `WallFollowerSolver`'s single
-       hash set is stats-only bookkeeping, not algorithm state.
+       `DeadEndFillingSolver` followed (**1.60–2.75×**, 1024 A/B cases identical), which
+       **completes the solver retarget wherever the seam can pay**. Two solvers still hold
+       hashed collections and are deliberately left alone:
+
+       - `IDAStarSolver` is the most expensive solver in absolute terms, but the seam is not
+         its lever. Its cost is re-expansion inherent to iterative deepening — each pass
+         re-searches under a slightly larger f-bound — which a tighter heuristic addresses
+         (ALT measured **41×** there) and data structures do not. Retargeting it would buy a
+         constant factor on a quantity that is multiplied by the wrong thing.
+       - `WallFollowerSolver`'s single hash set is stats bookkeeping, not algorithm state.
+         The algorithm is O(1) memory by design; replacing the set with a `boolean[]` would
+         add O(V) allocation to make the *reporting* marginally cheaper.
+
+       Remaining seam work is therefore the `theory` classes, not the solvers.
 4. [x] Add `EdgeWeightedGraph` and move `LandmarkHeuristic` precompute to Dijkstra — done
        2026-07-19, and it turned out to be a **correctness** item, not the performance
        item it was filed as. No `EdgeWeightedGraph` type was needed: `Graph.edgeWeight`
