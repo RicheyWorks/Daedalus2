@@ -112,7 +112,7 @@ public final class LandmarkHeuristic {
 
         List<Point> chosen = new ArrayList<>();
         List<int[][]> fields = new ArrayList<>();
-        Point first = MazeMetrics.farthestFrom(grid, new Point(0, 0));
+        Point first = MazeMetrics.farthestFrom(grid, MazeMetrics.largestComponentCell(grid));
         chosen.add(first);
         fields.add(MazeMetrics.distancesFrom(grid, first));
 
@@ -164,7 +164,7 @@ public final class LandmarkHeuristic {
     private static List<Point> chooseLandmarks(MazeGrid grid, int count) {
         List<Point> chosen = new ArrayList<>();
         List<int[][]> fields = new ArrayList<>();
-        Point first = MazeMetrics.farthestFrom(grid, new Point(0, 0));
+        Point first = MazeMetrics.farthestFrom(grid, MazeMetrics.largestComponentCell(grid));
         chosen.add(first);
         fields.add(MazeMetrics.distancesFrom(grid, first));
         while (chosen.size() < count) {

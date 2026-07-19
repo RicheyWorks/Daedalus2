@@ -72,13 +72,20 @@ class FacilityPlacementDisconnectedTest {
         assertThat(componentsTouched(grid, placement))
                 .as("kCenter never leaves the component it started in")
                 .isEqualTo(1);
-        // The trap worth naming: the radius looks excellent while coverage is tiny.
         assertThat(placement.servedCells())
-                .as("most of a severed grid goes unserved")
-                .isLessThan(SIZE * SIZE / 4);
-        assertThat(placement.coveringRadius())
-                .as("...yet the reported radius is small, so radius alone must not be trusted")
-                .isLessThan(SIZE);
+                .as("a severed grid leaves the other components unserved")
+                .isLessThan(SIZE * SIZE);
+
+        // The trap worth naming: adding facilities improves the reported radius while
+        // coverage does not move at all, because every extra facility refines service inside
+        // the one component the greedy can see.
+        FacilityPlacement.Placement richer = FacilityPlacement.kCenter(grid, 12);
+        assertThat(richer.coveringRadius())
+                .as("radius improves with more facilities...")
+                .isLessThan(placement.coveringRadius());
+        assertThat(richer.servedCells())
+                .as("...while coverage is completely unchanged — radius alone must not be trusted")
+                .isEqualTo(placement.servedCells());
     }
 
     @Test

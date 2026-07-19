@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    examples/dungeon-layout — worked example of using Daedalus as the spatial layer
+    behind a narrative game engine (ai-dungeon-master).
+
+    Deliberately NOT a reactor child, matching examples/loadbalancer-topology and
+    examples/biome-plugin: the parent pom lists production modules only. Build and
+    run it separately with:
+
+        mvn -f examples/dungeon-layout/pom.xml clean test
+        mvn -f examples/dungeon-layout/pom.xml exec:java
+
+    Why this exists: ai-dungeon-master generates *narrative* content — its own
+    DungeonGenerator produces loot, allies, enemies and quests, and its WorldMap is a
+    List<String> of discovered locations with no geometry at all. Daedalus supplies the
+    geometry those names hang off. The two are complementary despite both having a
+    class called DungeonGenerator.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.daedalus.examples</groupId>
+    <artifactId>daedalus-dungeon-layout</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>Daedalus :: Example :: Dungeon Layout</name>
+    <description>
+        Demonstrates the ai-dungeon-master integrations that need no changes to either
+        project: generate a level with BSP rooms and corridors, measure its depth,
+        find the hardest route through it, and place treasure, save points and a boss
+        room with k-center — then hand the result out as named locations a narrative
+        engine can attach content to.
+    </description>
+
+    <properties>
+        <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <daedalus.version>1.0.0-SNAPSHOT</daedalus.version>
+        <junit.version>5.10.2</junit.version>
+        <assertj.version>3.25.3</assertj.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.daedalus</groupId>
+            <artifactId>daedalus-core</artifactId>
+            <version>${daedalus.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <mainClass>com.daedalus.examples.dungeon.DungeonLayoutLab</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

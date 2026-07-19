@@ -43,27 +43,29 @@ import java.util.List;
  * reading.
  *
  * <p>It is wrong when the graph is a fragmented <em>network</em>, where every component holds
- * real nodes that still need serving. Measured on a 16×16 tree severed along one column — a
- * spanning tree cut at 16 edges falls into 17 components, so this shatters the grid rather
- * than halving it:
+ * real nodes that still need serving. Measured on a 16×16 tree severed along one column —
+ * cutting a spanning tree at 16 edges shatters it into 14 components of sizes
+ * {@code [114, 43, 30, 22, 14, 12, 5, 5, 3, 3, 2, 1, 1, 1]} rather than halving it:
  *
  * <pre>
  *   k     kCenter                    kCenterAcrossComponents
  *         radius / cells served      radius / cells served
- *    1      10 /  12 of 256             10 /  12 of 256
- *    2       5 /  12                    72 / 126
- *    3       3 /  12                    72 / 169
- *    5       2 /  12                    72 / 192
- *    8       1 /  12                    72 / 212
- *   12       0 /  12                    72 / 254
+ *    1      82 / 114 of 256             82 / 114 of 256
+ *    2      44 / 114                    82 / 126
+ *    3      25 / 114                    82 / 169
+ *    5      18 / 114                    82 / 192
+ *    8      12 / 114                    82 / 212
+ *   12       7 / 114                    82 / 254
  * </pre>
  *
- * <p>Read the left column carefully: adding facilities drives the covering radius to
- * <b>zero</b> while coverage never moves off <b>12 of 256 cells</b>. At {@code k = 12} every
- * served cell is itself a facility, so the placement scores perfectly while reaching 4.7% of
- * the graph. Nothing is lying — {@code servedCells} is right there in the result — but a
- * quality metric that <em>improves</em> as the answer gets more absurd is a trap worth naming.
- * The right column pays radius (72, since it now spans components) to buy coverage.
+ * <p>Read the left column carefully: adding facilities drives the covering radius steadily
+ * down — 82 to 7, a placement that looks better and better — while coverage never moves off
+ * <b>114 of 256 cells</b>. Every one of those extra facilities is refining service inside the
+ * one component the greedy can see, and the other 142 cells are no closer to anything.
+ * Nothing is lying; {@code servedCells} is right there in the result. But a quality metric
+ * that <em>improves</em> while more than half the graph stays unreachable is a trap worth
+ * naming. The right column pays radius (a flat 82, since it now spans components) to buy
+ * coverage.
  *
  * <p>{@link #kCenterAcrossComponents} is the variant for that case: it ranks unreachable cells
  * as infinitely badly served, which is what the k-center objective actually says, so the greedy
@@ -103,7 +105,7 @@ public final class FacilityPlacement {
         int cols = grid.cols();
 
         // Any starting point preserves the 2-approximation; an extreme one tends to do better.
-        Point first = MazeMetrics.farthestFrom(grid, new Point(0, 0));
+        Point first = MazeMetrics.farthestFrom(grid, MazeMetrics.largestComponentCell(grid));
         List<Point> facilities = new ArrayList<>();
         facilities.add(first);
 
@@ -153,8 +155,9 @@ public final class FacilityPlacement {
      * early picks <em>reaching</em> new components, and only refines within components once every
      * component holds a facility.
      *
-     * <p>On the severed 16×16 grid described in the class javadoc, this turns {@code (radius 3,
-     * 12 of 256 cells served)} into a placement that reaches three separate components.
+     * <p>On the severed 16×16 grid described in the class javadoc, at {@code k = 3} this turns
+     * {@code (radius 25, 114 of 256 cells served)} into {@code (radius 82, 169 served)} — it
+     * trades a worse worst-case walk for reaching two further components.
      *
      * <p>The 2-approximation guarantee is per-component: within each component the selection is
      * still Gonzalez's greedy. Across components no ratio is claimed, because with fewer
@@ -174,7 +177,7 @@ public final class FacilityPlacement {
         int rows = grid.rows();
         int cols = grid.cols();
 
-        Point first = MazeMetrics.farthestFrom(grid, new Point(0, 0));
+        Point first = MazeMetrics.farthestFrom(grid, MazeMetrics.largestComponentCell(grid));
         List<Point> facilities = new ArrayList<>();
         facilities.add(first);
         int[][] nearest = MazeMetrics.distancesFrom(grid, first);

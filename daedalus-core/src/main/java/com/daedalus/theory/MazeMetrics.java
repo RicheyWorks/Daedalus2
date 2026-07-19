@@ -55,8 +55,18 @@ public final class MazeMetrics {
 
     /**
      * Longest shortest-path in the maze via double BFS — O(V + E). Exact for perfect (tree)
-     * mazes; a lower-bound heuristic if the maze has cycles. Operates on the connected
-     * component of the top-left cell {@code (0, 0)}.
+     * mazes; a lower-bound heuristic if the maze has cycles. Operates on the maze's
+     * <b>largest</b> connected component.
+     *
+     * <p>It used to start unconditionally from the top-left cell {@code (0, 0)}. That is safe
+     * for a maze generator — every cell is carved, so {@code (0, 0)} is always in the single
+     * component — and silently wrong for anything sparser. A BSP dungeon has solid rock in its
+     * corners, so {@code (0, 0)} is typically isolated, and the old code measured that
+     * <b>one-cell component and returned a diameter of 0</b>. Because
+     * {@link #placeStartAndGoalAtExtremes(MazeGrid)} builds on this, a generated dungeon came
+     * out with its entrance and its exit on the same square of rock. Seeding from the largest
+     * component instead costs one extra linear pass and removes the assumption; on a fully
+     * carved maze it is the same component as before, so nothing changes there.
      *
      * <p><b>How loose is the bound?</b> Measured over 15 mazes at 20² per setting, against the
      * true diameter from {@link #exactDiameter(MazeGrid)}:
@@ -80,7 +90,7 @@ public final class MazeMetrics {
      * @see #exactDiameter(MazeGrid)
      */
     public static Diameter diameter(MazeGrid grid) {
-        Point origin = new Point(0, 0);
+        Point origin = largestComponentCell(grid);
         Point u = bfs(grid, origin).farthest;
         Bfs second = bfs(grid, u);
         Point v = second.farthest;
@@ -269,6 +279,62 @@ public final class MazeMetrics {
             }
         }
         return distance;
+    }
+
+    /**
+     * A cell in the maze's <b>largest</b> connected component — the row-major smallest such
+     * cell, so the choice is deterministic. One flood-fill pass, O(V + E).
+     *
+     * <p>Use this instead of hardcoding {@code new Point(0, 0)} as a starting corner. Any
+     * algorithm that seeds itself at the top-left is assuming the top-left is <em>part of the
+     * maze</em>, which every maze generator guarantees and no sparse generator does. A BSP
+     * dungeon has solid rock in its corners, so {@code (0, 0)} is usually an isolated cell, and
+     * an algorithm seeded there quietly answers a question about a one-cell graph:
+     * {@code diameter} returned 0, and {@code FacilityPlacement.kCenter} reported a covering
+     * radius of 0 while serving 1 of 529 floor cells.
+     *
+     * <p>On a fully carved maze this returns {@code (0, 0)}, so substituting it changes
+     * nothing there.
+     */
+    public static Point largestComponentCell(MazeGrid grid) {
+        MazeGraph graph = new MazeGraph(grid);
+        int cols = grid.cols();
+        int nodes = grid.rows() * cols;
+
+        boolean[] seen = new boolean[nodes];
+        int[] queue = new int[nodes];
+        int[] adjacency = new int[graph.maxDegree()];
+        int bestSeed = 0;
+        int bestSize = -1;
+
+        for (int start = 0; start < nodes; start++) {
+            if (seen[start]) {
+                continue;
+            }
+            int head = 0;
+            int tail = 0;
+            queue[tail++] = start;
+            seen[start] = true;
+            int size = 0;
+            while (head < tail) {
+                int current = queue[head++];
+                size++;
+                int degree = graph.neighbors(current, adjacency);
+                for (int i = 0; i < degree; i++) {
+                    int next = adjacency[i];
+                    if (!seen[next]) {
+                        seen[next] = true;
+                        queue[tail++] = next;
+                    }
+                }
+            }
+            // Strict > keeps the earliest component among equal-sized ties.
+            if (size > bestSize) {
+                bestSize = size;
+                bestSeed = start;
+            }
+        }
+        return new Point(bestSeed / cols, bestSeed % cols);
     }
 
     private static Bfs bfs(MazeGrid grid, Point source) {

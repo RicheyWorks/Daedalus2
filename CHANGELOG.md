@@ -16,6 +16,36 @@ housekeeping on the things that make the repo behave.
 
 ### Added
 
+- **`MazeMetrics.largestComponentCell`, and the corner assumption it removes —
+  found by building the ai-dungeon-master example.** Four call sites seeded
+  themselves at `new Point(0, 0)`: `MazeMetrics.diameter`,
+  `FacilityPlacement.kCenter` / `kCenterAcrossComponents`, and
+  `LandmarkHeuristic.precompute` (twice). That is safe for a maze generator —
+  every cell is carved, so the top-left is always in the single component — and
+  silently wrong for anything sparser.
+
+  A BSP dungeon has **solid rock in its corners**. Running the new
+  `examples/dungeon-layout` against a 33² dungeon, the first output was:
+
+  ```
+  exact diameter   99 steps
+  fast estimate     0 steps        <- measured a one-cell component
+  rooms served      1 of 529 floor cells
+  entrance (0,0)   boss (0,0)      <- same square of rock
+  ```
+
+  `diameter` seeded at an isolated rock cell, returned 0, and
+  `placeStartAndGoalAtExtremes` therefore put the entrance and the boss room in
+  the same place. `FacilityPlacement` collapsed the same way. After seeding from
+  the largest connected component instead — one extra O(V + E) flood fill, so
+  `diameter` stays linear — the same level reports diameter 99 (agreeing with
+  `exactDiameter`), a hardest route 2.5× the direct one, and **529 of 529 floor
+  cells served**.
+
+  On a fully carved maze `largestComponentCell` returns `(0, 0)`, so nothing
+  changes for existing callers. This is the same defect class as the Trémaux and
+  ALT bugs: an assumption about graph shape that every maze fixture satisfies.
+
 - **`FacilityPlacement.kCenterAcrossComponents` — k-center that survives a
   partitioned graph.** Found by auditing `theory` for a second shape assumption:
   not loops this time but **disconnection**, which the vision docs' own
@@ -30,17 +60,19 @@ housekeeping on the things that make the repo behave.
 
   | k | `kCenter` radius / served | `kCenterAcrossComponents` radius / served |
   |---|---|---|
-  | 1 | 10 / 12 of 256 | 10 / 12 of 256 |
-  | 2 | 5 / 12 | 72 / 126 |
-  | 3 | 3 / 12 | 72 / 169 |
-  | 8 | 1 / 12 | 72 / 212 |
-  | 12 | **0** / 12 | 72 / 254 |
+  | 1 | 82 / 114 of 256 | 82 / 114 of 256 |
+  | 2 | 44 / 114 | 82 / 126 |
+  | 3 | 25 / 114 | 82 / 169 |
+  | 8 | 12 / 114 | 82 / 212 |
+  | 12 | **7** / 114 | 82 / 254 |
 
-  Adding facilities drives the covering radius to **zero** while coverage never
-  moves off **12 of 256 cells** — at k=12 every served cell is itself a
-  facility, so the placement scores perfectly while reaching 4.7% of the graph.
+  Adding facilities drives the covering radius steadily down — 82 to 7, a
+  placement that looks better and better — while coverage never moves off
+  **114 of 256 cells**. Every extra facility refines service inside the one
+  component the greedy can see; the other 142 cells are no closer to anything.
   Nothing lies; `servedCells` is in the result. But a quality metric that
-  *improves* as the answer gets more absurd is worth naming explicitly.
+  *improves* while more than half the graph stays unreachable is worth naming
+  explicitly.
 
   **Both behaviours are kept, because both have a real consumer.** For a dungeon
   — placing treasure, save points or boss rooms — unreachable cells are solid
