@@ -29,6 +29,14 @@ import java.util.function.ToLongFunction;
  *       quadratic, …).</li>
  * </ol>
  *
+ * <p><b>Caveat — high-variance randomized algorithms.</b> A class label fitted to a
+ * <em>single-seed</em> series can be unreliable when the algorithm itself is highly variable. Fitting
+ * the random-walk generators this way produced labels that swung between {@code O(n)} and
+ * {@code O(n^2)} from one seed to the next (and occasionally {@code UNKNOWN}), even though their
+ * true behaviour is stable and clearly separated once averaged. The exponent is steadier than the
+ * label, but neither is trustworthy from one sample. Average the metric over several seeds before
+ * fitting when the algorithm is randomized — see {@code RandomWalkCoverTimeTest}.
+ *
  * <p>Deterministic: the inputs are the seed-stable counters from {@link ComplexityAnalyzer}, and
  * the arithmetic is ordinary floating point, so a given sweep always yields the same labels.
  * Metrics that stay at zero (generators that never touch {@code MazeStats}) or fewer than two

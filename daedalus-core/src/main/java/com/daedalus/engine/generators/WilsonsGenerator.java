@@ -67,6 +67,7 @@ public class WilsonsGenerator extends AbstractMazeGenerator {
                     walk.add(next);
                 }
                 cur = next;
+                stats.incExplored(); // one random-walk step — this is what cover time counts
                 stats.recordFrontier(walk.size());
             }
 

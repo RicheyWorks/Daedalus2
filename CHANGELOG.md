@@ -151,6 +151,30 @@ housekeeping on the things that make the repo behave.
 
 ### Verified
 
+- **Uniform-spanning-tree cover times measured (G2 + T4).** Aldous-Broder and
+  Wilson's sample the *same* distribution — a uniform spanning tree — so they
+  differ only in cost, and the audit wanted that shown empirically. At first it
+  couldn't be: both generators counted only cells *added to the maze*, which is
+  exactly `n` for both, so `MazeStats` was blind to the random walking that
+  actually dominates them. Both now count walk steps into `cellsExplored`, and
+  the picture is stark (averaged over 7 seeds):
+
+  | cells | Aldous-Broder steps | Wilson's steps | ratio | AB per cell | W per cell |
+  |------:|--------------------:|---------------:|------:|------------:|-----------:|
+  | 256   | 4,938   | 1,204  | 4.1x | 19.3 | 4.7 |
+  | 1,024 | 27,492  | 6,925  | 4.0x | 26.8 | 6.8 |
+  | 4,096 | 144,699 | 27,671 | 5.2x | 35.3 | 6.8 |
+
+  Wilson's cost *per cell* stays flat (~5–7) while Aldous-Broder's climbs
+  steadily (19 → 35) — the signature of blind cover-time walking versus
+  loop-erased hitting-time walking — and the gap widens with size, as theory
+  predicts. Locked in `RandomWalkCoverTimeTest`.
+- **`GrowthEstimator` caveat found and documented.** Classifying those same
+  random-walk series exposed a real limitation in the T1 tool: fitted from a
+  *single seed*, Aldous-Broder's label swung between `O(n)` and `O(n^2)` across
+  seeds and Wilson's once came back `UNKNOWN`, despite their true behaviour being
+  stable and clearly separated once averaged. The javadoc now warns to average a
+  randomized metric over several seeds before fitting.
 - **DSU certified near-constant amortized (D1).** `util/DSU` already carried both
   optimizations — union by rank *and* two-pass path compression — so no
   production change was needed. Added structural guards that behaviour alone

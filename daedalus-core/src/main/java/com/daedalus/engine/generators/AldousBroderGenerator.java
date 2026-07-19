@@ -41,6 +41,7 @@ public class AldousBroderGenerator extends AbstractMazeGenerator {
         stats.incVisited();
 
         while (unvisited > 0) {
+            stats.incExplored(); // one random-walk step — this is what cover time counts
             stats.recordFrontier(unvisited);
             List<Point> nbrs = grid.neighbors(cur);
             Point next = nbrs.get(rng.nextInt(nbrs.size()));

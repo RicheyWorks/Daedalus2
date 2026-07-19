@@ -42,6 +42,11 @@ tunable texture (low-variance weights → lattice-like; high-variance → long
 winding rivers). The weight store already exists in `WeightedMazeGrid`.
 
 **G2 · Uniform spanning trees, measured** — `Ch. 5 (randomized analysis) · Impact Med · Effort Low`
+**Shipped 2026-07-18** (with **T4**) — required instrumenting both generators
+first: they counted only cells *added*, which is `n` for both, so `MazeStats`
+couldn't see the walking at all. With walk steps now counted, Aldous-Broder runs
+4–5× more steps than Wilson's and its cost *per cell* climbs 19 → 35 as Wilson's
+stays flat at ~5–7. Locked in `RandomWalkCoverTimeTest`.
 Wilson's (loop-erased random walk) and Aldous-Broder both sample a *uniform*
 spanning tree, but Wilson's is asymptotically faster. Run both through the new
 `ComplexityAnalyzer` and let the CSV show Aldous-Broder's cover-time blow-up
@@ -163,6 +168,11 @@ farthest-apart cells (the maze's diameter — exact for perfect mazes);
 guaranteed-maximal challenge.
 
 **T4 · Random-walk cover/mixing time** — `Ch. 5 (probabilistic analysis) · Impact Low · Effort Low`
+**Shipped 2026-07-18 alongside G2** — see the cover-time table in `CHANGELOG.md`.
+Also surfaced a limitation of T1's `GrowthEstimator`: single-seed fits of a
+high-variance randomized algorithm give unstable class labels (Aldous-Broder
+swung `O(n)` ↔ `O(n^2)` across seeds), so randomized metrics must be averaged
+over seeds before fitting. Now documented on the estimator.
 Frame a pure random-walk solver and Aldous-Broder generation as Markov-chain
 cover time; the expected-step formulas explain the very curves T1 will plot.
 Theory that pays for itself in narrative.
