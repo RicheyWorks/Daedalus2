@@ -146,6 +146,33 @@ housekeeping on the things that make the repo behave.
   enforced property, and a generator that quietly dropped the last column of a
   lopsided grid, or divided by zero on a single row, would now fail loudly.
 
+- **`examples/benchmark-harness` — timings for all 22 generators and 10
+  solvers.** Standalone `main`, configurable sizes and seeds, writing
+  `docs/benchmarks/benchmark-<date>.csv` alongside a console summary with a
+  "vs fastest" column.
+
+  The design decisions are mostly about **not producing misleading numbers**.
+  Every CSV carries its JVM, OS, CPU count and heap in the header, because a
+  timing without its machine is an anecdote rather than a measurement — during
+  this project's own optimisation work, repeated runs of identical code varied
+  by more than 2× on a loaded host. So the column worth acting on is relative
+  cost within a single run. Timings are **medians**, not means, so one GC pause
+  cannot move a published figure. And an algorithm that exceeds a 2-second
+  budget is measured once and flagged `single-sample` instead of being warmed up
+  and repeated five times — IDA\* costs roughly 300× BFS, and without that rule
+  the sweep simply never finishes. It is deliberately outside the reactor and
+  outside CI: a timing assertion on a shared runner fails for reasons that have
+  nothing to do with the code. Its own tests assert structure — full algorithm
+  coverage, well-formed rows, median-over-mean behaviour — and never a duration.
+
+  Two self-inflicted bugs fixed during the build, both worth noting because both
+  were silent. `exec:java` runs with the *module* as its working directory, so
+  the original relative output path created a second, invisible
+  `examples/benchmark-harness/docs/benchmarks/`; results now resolve to the
+  repository root. And an XML comment cannot contain a double hyphen, so
+  documenting the `--sizes` flag inside the pom's comment block made the pom
+  unparseable.
+
 - **`PluginSubsystemHealthIndicator` — plugin state as actuator detail, never
   as a verdict.** Reports `loadedPlugins`, `failedPlugins` and a `lastFailure`
   description, listening for `PluginFailedEvent` to keep the count.

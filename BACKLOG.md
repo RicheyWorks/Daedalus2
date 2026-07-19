@@ -59,10 +59,24 @@ Last consolidated: 2026-05-07
 
 ## New surfaces
 
-- **Performance benchmark harness.** Standalone `main` (or JMH module)
-  that times all 20+ generators and 9 solvers on 50×50 / 100×100 / 200×200
-  grids, multiple seeds, prints CSV + a small chart. Ship the latest run
-  in `docs/benchmarks/` so README can link to it.
+- ~~**Performance benchmark harness.**~~ **Done 2026-07-19** —
+  `examples/benchmark-harness`, a standalone `main` timing all 22 generators and
+  10 solvers at configurable sizes (default 50/100/200) and seed counts, writing
+  `docs/benchmarks/benchmark-<date>.csv` plus a console summary with a
+  "vs fastest" column.
+
+  Three decisions worth knowing. Every run records its JVM, OS, CPU count and
+  heap into the CSV header, because a timing without its machine is an anecdote
+  — the useful column is *relative* cost within a run, not absolute
+  milliseconds. Timings are **medians**, so one GC pause cannot move a published
+  number. And an algorithm exceeding a 2 s budget is measured once and flagged
+  `single-sample` rather than warmed up and repeated five times: IDA\* is roughly
+  300× BFS, and without that rule a full sweep never finishes.
+
+  Deliberately **not** a reactor module and **not** run in CI — a timing
+  assertion on a shared runner fails for reasons unrelated to the code. Its own
+  tests assert structure (full algorithm coverage, well-formed rows, median
+  behaviour), never durations.
 - **Custom Spring Boot `HealthIndicator`s.** ~~Two~~ one remaining:
   1. ~~`RedisHealthIndicator`~~ — **done 2026-07-19, and no custom code was
      needed.** Boot's stock indicator already does a real `PING`; the actual
