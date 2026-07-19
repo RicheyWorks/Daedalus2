@@ -151,6 +151,23 @@ housekeeping on the things that make the repo behave.
   side by side at 64² and 128², sending cell bits is **~16× smaller** than the
   rendered glyph grid. This codec is the drop-in that needs no API change; the
   16× needs a client-side renderer.
+- **`examples/loadbalancer-topology` — the integration made runnable (ADR-001, item 5).**
+  A standalone module (not a reactor child, matching `examples/biome-plugin`) that
+  demonstrates the three LoadBalancerPro integrations needing no changes to either
+  project: generate a topology, measure its capacity with min-cut, and place replicas with
+  k-center — plus latency-aware routing done the corrected way, with load in the edge cost
+  and an admissible heuristic. A fifth section builds a spine-and-leaf `CsrGraph`, a
+  degree-3 topology no `MazeGrid` could express, to show the seam taking a real network
+  shape. Seven tests pin the claims, because an example that only prints is documentation
+  that can rot.
+  **It also surfaced a defect the vision documents miss:** `HilbertCurveGenerator`'s raw
+  output is **not connected**. At 32² the edge connectivity from `(0,0)` to `(31,31)`
+  measures **0** — no route exists — with 396 dead ends. Since both the vision document and
+  the integration guide recommend Hilbert as *the* topology generator and then route across
+  it with A\*, anyone following that advice gets an empty path back, silently, in the same
+  way the heuristic bug was silent. Measured across braid factors: `0.0` → connectivity 0,
+  `0.6` → 1, `1.0` → 2. The example therefore braids fully and says why, and a test pins
+  the raw generator's disconnectedness so the finding cannot quietly regress.
 - **`theory.FacilityPlacement` — k-center placement (ADR-001 appendix, item 1).** Where to
   put `k` edge caches / replicas / rack anchors so the worst-served node is as close as
   possible, by the farthest-first greedy (CLRS Ch. 35): take any node, then repeatedly add

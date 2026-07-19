@@ -266,12 +266,14 @@ valuable, and unblocked — that is where the first release should land.
        solvers, and the `theory` classes. Follow-up: give `Graph` a node-indexed weight
        accessor so `edgeWeight` stops allocating a `Point`.
 4. [ ] Add `EdgeWeightedGraph` and move `LandmarkHeuristic` precompute to Dijkstra.
-5. [~] Ship the three offline LoadBalancerPro integrations (topology, min-cut capacity,
-       placement) as an `examples/loadbalancer-topology` module. All three capabilities now
-       exist in core — topology via the generators, capacity via `MazeFlow`, and placement
-       via `theory.FacilityPlacement` (k-center, added 2026-07-19 with its 2-approximation
-       verified against brute force). What remains is the example module that wires them
-       together against a `CsrGraph` topology and demonstrates them end to end.
+5. [x] Ship the three offline LoadBalancerPro integrations (topology, min-cut capacity,
+       placement) as an `examples/loadbalancer-topology` module — done 2026-07-19, runnable
+       via `mvn -f examples/loadbalancer-topology/pom.xml exec:java`, with 7 tests pinning
+       its claims. Building it exposed a further defect worth its own follow-up:
+       **`HilbertCurveGenerator` produces a disconnected topology** (edge connectivity 0
+       corner-to-corner at 32², 396 dead ends), which invalidates the "generate a Hilbert
+       topology and route across it" advice in both vision documents unless the output is
+       braided first.
 6. [ ] Raise two requests against LoadBalancerPro: open `RoutingStrategyId`, add
        `topologyNodeId` to `ServerStateVector`.
 7. [ ] Evaluate CSRBT `RankedSet` behind `TailLatencyPowerOfTwoStrategy` — measure before

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    examples/loadbalancer-topology — worked example of using Daedalus as the topology
+    and analysis engine behind a load balancer (ADR-001, action item 5).
+
+    Deliberately NOT a reactor child, matching examples/biome-plugin: the parent pom
+    lists production modules only. Build and run it separately with:
+
+        mvn -f examples/loadbalancer-topology/pom.xml clean test
+        mvn -f examples/loadbalancer-topology/pom.xml exec:java
+
+    Unlike the plugin example, daedalus-core is a normal compile dependency here —
+    this is a consumer embedding the engine, not a plugin loaded by the host.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.daedalus.examples</groupId>
+    <artifactId>daedalus-loadbalancer-topology</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>Daedalus :: Example :: LoadBalancer Topology</name>
+    <description>
+        Demonstrates the three LoadBalancerPro integrations that need no changes to
+        either project: generate a topology, measure its capacity with min-cut, and
+        place facilities with k-center — plus latency-aware routing done correctly
+        (cost in g, not in h).
+    </description>
+
+    <properties>
+        <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <daedalus.version>1.0.0-SNAPSHOT</daedalus.version>
+        <junit.version>5.10.2</junit.version>
+        <assertj.version>3.25.3</assertj.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.daedalus</groupId>
+            <artifactId>daedalus-core</artifactId>
+            <version>${daedalus.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <mainClass>com.daedalus.examples.loadbalancer.TopologyLab</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
