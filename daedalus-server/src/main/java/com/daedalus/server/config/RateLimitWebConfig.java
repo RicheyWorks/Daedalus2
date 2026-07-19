@@ -22,8 +22,10 @@ public class RateLimitWebConfig implements WebMvcConfigurer {
 
     private final PerKeyRateLimitInterceptor interceptor;
 
-    public RateLimitWebConfig(RateLimiterRegistry rateLimiterRegistry, RateLimitKeyResolver keyResolver) {
-        this.interceptor = new PerKeyRateLimitInterceptor(rateLimiterRegistry, keyResolver);
+    public RateLimitWebConfig(RateLimiterRegistry rateLimiterRegistry, RateLimitKeyResolver keyResolver,
+                              RateLimitProperties properties) {
+        this.interceptor = new PerKeyRateLimitInterceptor(rateLimiterRegistry, keyResolver,
+                properties.maxKeys(), properties.idleTtl());
     }
 
     @Override

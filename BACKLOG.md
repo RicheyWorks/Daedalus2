@@ -16,18 +16,21 @@ Last consolidated: 2026-05-07
 
 ## Hardening (server)
 
-- **Per-key rate-limiter bucket eviction.** Per-key limiting shipped
-  2026-07-18 (`com.daedalus.server.ratelimit` — `@PerKeyRateLimit` +
-  `PerKeyRateLimitInterceptor`, replacing the old global `@RateLimiter`
-  annotations). The one open thread: the interceptor creates a Resilience4j
-  instance per distinct caller key and never evicts them, so a
-  high-cardinality attacker (many forged subjects, or many IPs when
-  `daedalus.ratelimit.trust-forwarded-header` is on) could grow the
-  `RateLimiterRegistry` unbounded. Live key cardinality is tiny today (a
-  handful of subjects; login is IP-keyed), so this is deferred — but before
-  any untrusted-network deploy, back the per-key buckets with a bounded /
-  idle-evicting store (a Caffeine cache of `RateLimiter`s, or a scheduled
-  purge of instances whose permits are full and untouched for N minutes).
+- ~~**Per-key rate-limiter bucket eviction.**~~ **Done 2026-07-19.** Buckets now
+  live in a Caffeine cache bounded by `daedalus.ratelimit.max-keys` (default
+  10 000) and expiring on `daedalus.ratelimit.idle-ttl` (default 10 minutes),
+  instead of accumulating in the `RateLimiterRegistry` forever.
+
+  The non-obvious part is that bounding the store can itself *defeat* the
+  limit: discard a bucket a caller has already drained and they get a full
+  budget back, so cycling keys fast enough to force eviction would bypass
+  throttling entirely. Each bucket's effective TTL is therefore raised to at
+  least its own `limitRefreshPeriod` — past that it would have refilled anyway,
+  so dropping it is unobservable. That needs a per-entry Caffeine `Expiry`
+  rather than a cache-wide `expireAfterAccess`, because different base limiters
+  configure different refresh periods. `PerKeyRateLimitEvictionTest` pins both
+  directions, driving a fake `Ticker` so the assertions are exact rather than
+  slept for.
 - **Re-triage the open Dependabot PRs against Boot 4.** The parent bump to
   `spring-boot-starter-parent` 4.1.0 re-pins most managed dependency versions,
   so any open PR bumping a Boot-managed 3.x artifact is now either obsolete or

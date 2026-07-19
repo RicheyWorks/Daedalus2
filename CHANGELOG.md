@@ -940,6 +940,42 @@ housekeeping on the things that make the repo behave.
   now lives in the suite as a regression guard — worth noting the previous tests
   could never have caught this, since a perfect maze has only one route.
 
+### Security (2026-07-19)
+
+- **Per-key rate-limiter buckets are now bounded — and bounding them carefully.**
+  The interceptor created a Resilience4j instance per distinct caller key and
+  never evicted it, so anyone able to mint keys — forged subjects, or forged
+  source IPs when `daedalus.ratelimit.trust-forwarded-header` is on — could grow
+  the `RateLimiterRegistry` without limit. Buckets now live in a Caffeine cache
+  capped by `daedalus.ratelimit.max-keys` (default 10 000) and expiring on
+  `daedalus.ratelimit.idle-ttl` (default 10 minutes).
+
+  **The obvious implementation would have been a bypass.** Evicting a bucket a
+  caller has already drained hands them a full budget the moment they return, so
+  a naive LRU turns "cycle keys fast" into "no rate limit at all" — trading a
+  memory-exhaustion bug for an authentication-adjacent one. Each bucket's
+  effective TTL is therefore raised to at least its own `limitRefreshPeriod`:
+  past that point it would have refilled anyway, so discarding it is
+  unobservable. That requires a per-entry Caffeine `Expiry` rather than a
+  cache-wide `expireAfterAccess`, since base limiters configure different refresh
+  periods (`mazeGenerate` and `authLogin` do not agree). Size-based eviction
+  keeps the property too — Caffeine evicts approximately LRU, so a key flood
+  discards the attacker's own idle entries rather than an active caller's
+  drained bucket.
+
+  Bucket creation also moved off `RateLimiterRegistry.rateLimiter(name, config)`
+  to standalone `RateLimiter.of(...)`, because the registry retains every
+  instance it creates — which is the leak being closed.
+
+  Two things caught during the work, both by tests that already existed for
+  other reasons. Widening `RateLimitProperties` broke four call sites at compile
+  time (good — loud). Adding a convenience constructor then gave the record two
+  constructors, and Spring's binder will not choose between them: it looks for a
+  no-arg constructor, fails, and **the entire application context stops
+  starting**. `ApplicationSmokeTest` — added earlier the same day precisely
+  because no test booted the real context — turned that into a clear failure
+  instead of a broken deployment. Fixed with an explicit `@ConstructorBinding`.
+
 ### Security
 
 - **Per-key rate limiting on the throttled endpoints.** The three limiters
