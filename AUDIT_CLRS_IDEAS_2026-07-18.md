@@ -181,6 +181,9 @@ edges; the minimum start→goal cut is the fewest walls that would seal the exit
 Novel, visual, and a direct application of the chapter's headline theorem.
 
 **X2 · Vertex-disjoint paths = robustness** — `Ch. 26 (Menger via max-flow) · Impact Med · Effort Med`
+**Shipped 2026-07-18 as `MazeFlow.vertexDisjointPaths`** — vertex-splitting
+reduction (`v_in → v_out`, capacity 1) on the same max-flow machinery as X1;
+always `<=` edge connectivity, and exactly 1 on a perfect maze.
 The count of vertex-disjoint start→goal routes measures redundancy and powers
 non-colliding multiplayer routing (a backlog stretch goal). Same max-flow
 machinery as X1, split-vertex trick for the vertex version.

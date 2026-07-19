@@ -112,6 +112,16 @@ housekeeping on the things that make the repo behave.
   long horizontal corridors. Implements idea **G1**; 5 tests (spanning-tree
   property, determinism, differs from random-frontier Prim's on the same seed,
   the bias measurably increases east–west passages, stats populated).
+- **`theory.MazeFlow.vertexDisjointPaths` — route redundancy via Menger.** Counts
+  the routes between two cells that share no intermediate cell, using the
+  vertex-splitting reduction to max flow (CLRS Ch. 26): every cell becomes
+  `v_in → v_out` joined by a capacity-1 arc, so no single cell can carry two
+  routes. By Menger's theorem that count is also the fewest intermediate cells
+  you'd have to block to sever the two. It is always `<=` the edge connectivity
+  from X1 — blocking cells is at least as powerful as blocking passages — and is
+  exactly `1` on any perfect maze, since a tree has one route; `Braider` is what
+  creates genuine alternatives. Implements idea **X2**; 8 tests, including the
+  vertex `<=` edge invariant checked across 15 braided mazes.
 
 ### Changed
 

@@ -77,6 +77,99 @@ public final class MazeFlow {
     }
 
     /**
+     * Number of <b>internally vertex-disjoint</b> routes from {@code source} to {@code sink} —
+     * routes that share no cell except the two endpoints. By Menger's theorem this also equals the
+     * fewest intermediate cells you'd have to block to sever them, making it a route-redundancy
+     * measure: how many independent ways through the maze exist, and how fragile they are.
+     *
+     * <p>Computed with the standard vertex-splitting reduction to max flow (CLRS Ch. 26): every
+     * cell {@code v} becomes a pair {@code v_in → v_out} joined by a capacity-1 arc, so no cell can
+     * carry two routes, and each passage {@code (u,v)} becomes {@code u_out → v_in} and
+     * {@code v_out → u_in}. Flowing from {@code source_out} to {@code sink_in} then counts exactly
+     * the vertex-disjoint routes.
+     *
+     * <p>Always {@code <=} {@link #edgeConnectivity} — blocking cells is at least as powerful as
+     * blocking passages. On a perfect maze it is {@code 1} (a tree has a single route); braiding
+     * (see {@code engine.Braider}) is what pushes it higher.
+     */
+    public static int vertexDisjointPaths(MazeGrid grid, Point source, Point sink) {
+        if (source.equals(sink)) {
+            return 0;
+        }
+        int cols = grid.cols();
+        int cells = grid.rows() * cols;
+        int nodes = 2 * cells;
+
+        List<List<Integer>> adjacency = new ArrayList<>(nodes);
+        for (int i = 0; i < nodes; i++) {
+            adjacency.add(new ArrayList<>(4));
+        }
+        Map<Long, Integer> residual = new HashMap<>();
+
+        for (int r = 0; r < grid.rows(); r++) {
+            for (int c = 0; c < cols; c++) {
+                int v = r * cols + c;
+                addArc(adjacency, residual, in(v), out(v), nodes); // the cell's own capacity: 1
+                for (Point q : grid.openNeighbors(new Point(r, c))) {
+                    int u = id(q, cols);
+                    addArc(adjacency, residual, out(v), in(u), nodes);
+                }
+            }
+        }
+
+        int src = out(id(source, cols));
+        int sink0 = in(id(sink, cols));
+        int flow = 0;
+        int[] parent = new int[nodes];
+        while (findAugmentingPath(adjacency, residual, nodes, src, sink0, parent)) {
+            for (int v = sink0; v != src; v = parent[v]) {
+                residual.merge(key(parent[v], v, nodes), -1, Integer::sum);
+                residual.merge(key(v, parent[v], nodes), 1, Integer::sum);
+            }
+            flow++;
+        }
+        return flow;
+    }
+
+    private static int in(int cell) {
+        return 2 * cell;
+    }
+
+    private static int out(int cell) {
+        return 2 * cell + 1;
+    }
+
+    /** Register a unit-capacity arc plus its residual counterpart. */
+    private static void addArc(List<List<Integer>> adjacency, Map<Long, Integer> residual,
+                               int from, int to, int nodes) {
+        adjacency.get(from).add(to);
+        adjacency.get(to).add(from);
+        residual.merge(key(from, to, nodes), 1, Integer::sum);
+    }
+
+    /** BFS for an augmenting path in the split graph. */
+    private static boolean findAugmentingPath(List<List<Integer>> adjacency, Map<Long, Integer> residual,
+                                              int nodes, int src, int sink, int[] parent) {
+        Arrays.fill(parent, -1);
+        parent[src] = src;
+        Deque<Integer> queue = new ArrayDeque<>();
+        queue.add(src);
+        while (!queue.isEmpty()) {
+            int u = queue.poll();
+            for (int v : adjacency.get(u)) {
+                if (parent[v] == -1 && residual.getOrDefault(key(u, v, nodes), 0) > 0) {
+                    parent[v] = u;
+                    if (v == sink) {
+                        return true;
+                    }
+                    queue.add(v);
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Minimum {@code source}→{@code sink} cut via Edmonds-Karp on unit-capacity passages.
      */
     public static MinCut minCut(MazeGrid grid, Point source, Point sink) {
