@@ -16,6 +16,29 @@ housekeeping on the things that make the repo behave.
 
 ### Added
 
+- **`ApplicationSmokeTest` — the first test that boots the whole application.**
+  Until now every server test was a slice (`@WebMvcTest` for controllers,
+  `ApplicationContextRunner` for `RedisConfig`), which left a blind spot: no
+  test ever assembled the full context, and nothing whatsoever exercised what
+  the starters contribute for free. The springdoc **2.6.0 → 3.0.3** major bump
+  went through a fully green 267-test suite without a single assertion touching
+  `/v3/api-docs`. This adds one `@SpringBootTest(webEnvironment = RANDOM_PORT)`
+  covering the joins: the context loads with the engine registries wired across
+  the module boundary, `/actuator/health` is `UP`, `/v3/api-docs` serves a
+  document whose `paths` cover the contract endpoints, and `/swagger-ui` is
+  served. Path coverage is asserted as a *subset* (`containsAll`), not an exact
+  count — adding an endpoint shouldn't fail the test, but silently losing one
+  should.
+
+  It paid for itself on the first run by failing on the 503 health bug recorded
+  under **Fixed** below — a defect no slice test could have observed, and one
+  that had been latent in the default profile.
+
+  Implementation note for anyone extending it: this uses Spring Framework 7's
+  `RestTestClient`, because **Boot 4 removed `TestRestTemplate`** from
+  `spring-boot-test`. `WebTestClient` is the usual alternative but pulls in
+  `spring-webflux`, which this module deliberately does not depend on.
+
 - **`theory.ComplexityAnalyzer` — empirical complexity harness.** Revives the
   long-stubbed `com.daedalus.theory.ComplexityAnalyzer` (last seen in the v1.x
   portfolio) against the current engine API. Runs every registered generator
@@ -336,6 +359,47 @@ housekeeping on the things that make the repo behave.
   redirected effort toward.
 
 ### Fixed
+
+- **The server reported itself unhealthy (`/actuator/health` → 503) whenever
+  Redis was disabled — which is the default.** `spring-boot-starter-data-redis`
+  is unconditionally on the classpath, so Boot's `DataRedisAutoConfiguration`
+  contributes a `RedisConnectionFactory` even when `daedalus.redis.enabled` is
+  `false` and `RedisConfig` is correctly gated off. The health
+  auto-configuration then registered an indicator against that factory, its
+  `PING` failed, and the failure propagated to the **aggregate** status:
+
+  ```
+  "redis": { "status": "DOWN",
+             "details": { "error": "...Unable to connect to Redis" } }
+  ```
+
+  Everything else — `diskSpace`, `ping`, `livenessState`, `readinessState`,
+  `ssl` — was `UP`, and `LeaderboardService` was logging *"in-memory backend
+  (Redis disabled or unavailable)"*, i.e. the application was working exactly
+  as designed. But `dev` is the default profile and sets
+  `daedalus.redis.enabled: false`, so **anyone who cloned the repo and ran it
+  had an app that answered its own health check with 503** — precisely the
+  signal a load balancer or Kubernetes readiness probe uses to pull an instance
+  out of rotation.
+
+  Fixed in `application.yml` by binding the stock indicator to the same flag
+  that gates the config:
+
+  ```yaml
+  management:
+    health:
+      redis:
+        enabled: ${daedalus.redis.enabled:false}
+  ```
+
+  Note this is a *binding*, not a blanket disable — with
+  `daedalus.redis.enabled=true` (the prod default) the indicator returns and
+  Redis is monitored as before. `RedisHealthBindingTest` pins that direction
+  specifically, because the tempting "simplification" to a literal `false`
+  would silently blind production monitoring. It also closes the first half of
+  the standing BACKLOG item for custom `HealthIndicator`s, with no custom code:
+  Boot's indicator was already correct, it was merely registered
+  unconditionally.
 
 - **`HilbertCurveGenerator` emitted a forest, not a maze.** Found by auditing all 22
   generators for the spanning-tree contract after the LoadBalancer example produced an

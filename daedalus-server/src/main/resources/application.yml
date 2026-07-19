@@ -14,6 +14,26 @@ logging:
     com.daedalus: INFO
     org.springframework: INFO
 
+# ----- Health -----
+# Tie Spring Boot's stock Redis health check to the same flag that gates RedisConfig.
+#
+# Why this is needed: spring-boot-starter-data-redis is always on the classpath, so Boot's
+# DataRedisAutoConfiguration contributes a RedisConnectionFactory even when
+# daedalus.redis.enabled is false — and the health auto-configuration then registers a Redis
+# indicator for it, which fails to PING and drags the *aggregate* status to DOWN. The result
+# was that a perfectly healthy instance running its in-memory LeaderboardService backend
+# answered /actuator/health with 503, which is exactly what a load balancer or Kubernetes
+# readiness probe interprets as "take this pod out of rotation". The dev profile (the default)
+# sets enabled: false, so this hit anyone who cloned the repo and ran it.
+#
+# Binding the indicator to daedalus.redis.enabled keeps the check where it is meaningful —
+# prod, where Redis really is required — and drops it where Redis is deliberately off.
+# Caught by ApplicationSmokeTest, which is the only test that boots the full context.
+management:
+  health:
+    redis:
+      enabled: ${daedalus.redis.enabled:false}
+
 # Daedalus-specific config. Bind these with @ConfigurationProperties("daedalus") in the server module.
 daedalus:
   plugins:

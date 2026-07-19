@@ -28,18 +28,6 @@ Last consolidated: 2026-05-07
   any untrusted-network deploy, back the per-key buckets with a bounded /
   idle-evicting store (a Caffeine cache of `RateLimiter`s, or a scheduled
   purge of instances whose permits are full and untouched for N minutes).
-- **Full-context smoke test (`@SpringBootTest`) — coverage gap found during the
-  Boot 4 migration.** Every server test today is a slice: `@WebMvcTest`
-  controllers plus `ApplicationContextRunner` for `RedisConfig`. Nothing boots
-  the whole application context, and nothing exercises `/v3/api-docs` or
-  `/swagger-ui/**`. That means the springdoc **2.6.0 → 3.0.3** major bump —
-  which changed the emitted document from OpenAPI 3.0.x to **3.1.0** — was
-  invisible to a fully green suite; it had to be checked by packaging the jar
-  and curling the endpoints by hand. Add one
-  `@SpringBootTest(webEnvironment = RANDOM_PORT)` that asserts the context
-  loads, `/actuator/health` is `UP`, and `/v3/api-docs` returns 200 with the
-  expected path count. Cheap, and it converts "I remembered to check" into
-  something CI enforces.
 - **Re-triage the open Dependabot PRs against Boot 4.** The parent bump to
   `spring-boot-starter-parent` 4.1.0 re-pins most managed dependency versions,
   so any open PR bumping a Boot-managed 3.x artifact is now either obsolete or
@@ -57,9 +45,15 @@ Last consolidated: 2026-05-07
   that times all 20+ generators and 9 solvers on 50×50 / 100×100 / 200×200
   grids, multiple seeds, prints CSV + a small chart. Ship the latest run
   in `docs/benchmarks/` so README can link to it.
-- **Custom Spring Boot `HealthIndicator`s.** Two:
-  1. `RedisHealthIndicator` — only registered when `daedalus.redis.enabled`
-     is `true`; reports OK / degraded / down based on an actual `PING`.
+- **Custom Spring Boot `HealthIndicator`s.** ~~Two~~ one remaining:
+  1. ~~`RedisHealthIndicator`~~ — **done 2026-07-19, and no custom code was
+     needed.** Boot's stock indicator already does a real `PING`; the actual
+     defect was that it registered *unconditionally*, so an instance with
+     `daedalus.redis.enabled=false` answered `/actuator/health` with **503**
+     while running perfectly on its in-memory backend. Fixed by binding
+     `management.health.redis.enabled` to `${daedalus.redis.enabled:false}` in
+     `application.yml`. Both directions are pinned by tests
+     (`ApplicationSmokeTest`, `RedisHealthBindingTest`).
   2. `PluginSubsystemHealthIndicator` — reports the count of loaded
      plugins, count of failed plugins (since last `bootAll`), and the most
      recent `PluginFailedEvent` (if any). Wire both into
