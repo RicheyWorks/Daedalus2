@@ -266,8 +266,12 @@ valuable, and unblocked — that is where the first release should land.
        solvers, and the `theory` classes. Follow-up: give `Graph` a node-indexed weight
        accessor so `edgeWeight` stops allocating a `Point`.
 4. [ ] Add `EdgeWeightedGraph` and move `LandmarkHeuristic` precompute to Dijkstra.
-5. [ ] Ship the three offline LoadBalancerPro integrations (topology, min-cut capacity,
-       placement) as an `examples/loadbalancer-topology` module.
+5. [~] Ship the three offline LoadBalancerPro integrations (topology, min-cut capacity,
+       placement) as an `examples/loadbalancer-topology` module. All three capabilities now
+       exist in core — topology via the generators, capacity via `MazeFlow`, and placement
+       via `theory.FacilityPlacement` (k-center, added 2026-07-19 with its 2-approximation
+       verified against brute force). What remains is the example module that wires them
+       together against a `CsrGraph` topology and demonstrates them end to end.
 6. [ ] Raise two requests against LoadBalancerPro: open `RoutingStrategyId`, add
        `topologyNodeId` to `ServerStateVector`.
 7. [ ] Evaluate CSRBT `RankedSet` behind `TailLatencyPowerOfTwoStrategy` — measure before

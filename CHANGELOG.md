@@ -151,6 +151,19 @@ housekeeping on the things that make the repo behave.
   side by side at 64² and 128², sending cell bits is **~16× smaller** than the
   rendered glyph grid. This codec is the drop-in that needs no API change; the
   16× needs a client-side renderer.
+- **`theory.FacilityPlacement` — k-center placement (ADR-001 appendix, item 1).** Where to
+  put `k` edge caches / replicas / rack anchors so the worst-served node is as close as
+  possible, by the farthest-first greedy (CLRS Ch. 35): take any node, then repeatedly add
+  the node currently worst served. That is a **2-approximation**, and since no polynomial
+  algorithm can guarantee better than 2 unless P = NP (Ch. 34), the simple algorithm also
+  carries the best available guarantee. The greedy step turns out to be
+  `MazeMetrics.farthestFrom` generalised to a set — the same rule `LandmarkHeuristic`
+  already uses to spread landmarks, which is not a coincidence: both want points far from
+  each other and from everything else.
+  Also exposes `coveringRadius(grid, facilities)` for scoring a placement you already have.
+  Unreachable cells (a dungeon's solid rock) are simply unserved rather than distorting the
+  radius. 8 tests, the load-bearing one **verifying the 2-approximation against brute-force
+  enumeration of every k-subset** on small mazes — the guarantee is checked, not asserted.
 - **`com.daedalus.graph` — the graph seam (ADR-001, phase 1).** `Graph` is the abstraction
   that lets Daedalus route over any topology rather than only a rectangular maze:
   dense integer node ids, and adjacency delivered into a **caller-owned buffer**
