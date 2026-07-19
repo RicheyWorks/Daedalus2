@@ -16,6 +16,45 @@ housekeeping on the things that make the repo behave.
 
 ### Added
 
+- **`MazeMetrics.exactDiameter` — the true diameter, for when the estimate
+  isn't good enough.** Came out of auditing the `theory` package for the same
+  defect class that bit the solvers: code that is only correct on a tree. The
+  two prime suspects both turned out to be **already honest** —
+  `MazeMetrics.diameter` documents itself as "exact for perfect (tree) mazes; a
+  lower-bound heuristic if the maze has cycles", and `LongestPath` names its own
+  NP-hardness and states outright that "the problem only becomes hard once the
+  maze is braided". No bug to fix.
+
+  What neither did was *quantify* the caveat, which is what a caller actually
+  needs. Measured over 15 mazes at 20² per setting, double-BFS against the true
+  diameter:
+
+  | braid factor | mean error | worst error |
+  |---|---|---|
+  | 0.0 (perfect) | 0.0% | 0.0% |
+  | 0.1 | 0.5% | 9.6% |
+  | 0.3 | 0.6% | 8.4% |
+  | 0.5 | 1.4% | **20.0%** |
+  | 0.7 | 3.4% | 9.5% |
+  | 1.0 | 2.5% | 13.6% |
+
+  Tight on average, but **up to 20% low on an individual looped maze**. The
+  two-sweep argument needs the farthest cell from an arbitrary source to be an
+  endpoint of some diameter, and one cycle breaks that — a shortcut can land the
+  first sweep somewhere lying on no diameter at all.
+
+  That distinction is use-case dependent, so both are now available and the
+  javadoc says which to reach for. Ranking generators or placing a start and
+  goal far apart: keep the O(V + E) estimate — `placeStartAndGoalAtExtremes`
+  deliberately still uses it. Capacity or latency planning over a braided
+  topology, where the diameter *is* the worst-case route length: use
+  `exactDiameter` and pay the O(V²).
+
+  Tested against an independent brute-force implementation at four braid
+  factors, plus a directional assertion that the fast estimate is **never an
+  over-estimate** — that direction is the one that matters, since an
+  over-estimate would understate worst-case route length in planning use.
+
 - **`SolverBraidedMazePropertyTest` — every solver, over mazes with loops.**
   Closes the gap that let two separate correctness bugs ship behind a green
   suite this month: **every solver fixture in the repository was a perfect

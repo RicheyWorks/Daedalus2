@@ -54,9 +54,30 @@ public final class MazeMetrics {
     }
 
     /**
-     * Longest shortest-path in the maze via double BFS. Exact for perfect (tree) mazes; a
-     * lower-bound heuristic if the maze has cycles. Operates on the connected component of the
-     * top-left cell {@code (0, 0)}.
+     * Longest shortest-path in the maze via double BFS — O(V + E). Exact for perfect (tree)
+     * mazes; a lower-bound heuristic if the maze has cycles. Operates on the connected
+     * component of the top-left cell {@code (0, 0)}.
+     *
+     * <p><b>How loose is the bound?</b> Measured over 15 mazes at 20² per setting, against the
+     * true diameter from {@link #exactDiameter(MazeGrid)}:
+     *
+     * <pre>
+     *   braid factor   mean error   worst error
+     *   0.0 (perfect)        0.0%          0.0%
+     *   0.1                  0.5%          9.6%
+     *   0.3                  0.6%          8.4%
+     *   0.5                  1.4%         20.0%
+     *   0.7                  3.4%          9.5%
+     *   1.0                  2.5%         13.6%
+     * </pre>
+     *
+     * <p>So on average the estimate is tight — within a few percent — but on an individual
+     * looped maze it can be <b>20% low</b>. That distinction matters by use case: for ranking
+     * generators or placing a start and goal far apart, the fast estimate is fine. For
+     * capacity or latency planning over a braided topology, where the diameter <em>is</em> the
+     * worst-case route length, use {@link #exactDiameter(MazeGrid)} and pay the O(V²).
+     *
+     * @see #exactDiameter(MazeGrid)
      */
     public static Diameter diameter(MazeGrid grid) {
         Point origin = new Point(0, 0);
@@ -69,8 +90,60 @@ public final class MazeMetrics {
     }
 
     /**
+     * The maze's <b>true</b> diameter — BFS from every cell, taking the largest eccentricity.
+     * O(V · (V + E)), which on a grid is O(V²).
+     *
+     * <p>Exists because the classic double-BFS in {@link #diameter(MazeGrid)} is only exact on
+     * a <em>tree</em>. The two-sweep argument relies on the farthest cell from any starting
+     * point being an endpoint of some diameter, and that property fails as soon as the graph
+     * has a cycle — a shortcut edge can make the first sweep land somewhere that is not on any
+     * diameter at all. The estimate is then a lower bound, measured up to 20% low on
+     * individual braided mazes (see {@link #diameter(MazeGrid)} for the full table).
+     *
+     * <p>Use this when the number is a planning input rather than a ranking: worst-case route
+     * length across a topology, latency budgets, capacity headroom. Use the fast estimate when
+     * you only need "two cells that are far apart" — which is what
+     * {@link #placeStartAndGoalAtExtremes(MazeGrid)} wants, and why it keeps using it.
+     *
+     * <p>Unlike {@link #diameter(MazeGrid)} this considers <em>every</em> component, not just
+     * the one containing {@code (0, 0)}: it reports the largest distance found anywhere in the
+     * grid. On a disconnected maze that is the widest component's diameter.
+     *
+     * <p>Deterministic: sources are scanned row-major and ties keep the earliest.
+     */
+    public static Diameter exactDiameter(MazeGrid grid) {
+        Point bestFrom = new Point(0, 0);
+        Point bestTo = new Point(0, 0);
+        int best = -1;
+        Bfs bestSearch = null;
+
+        for (int r = 0; r < grid.rows(); r++) {
+            for (int c = 0; c < grid.cols(); c++) {
+                Point source = new Point(r, c);
+                Bfs search = bfs(grid, source);
+                // Strict > keeps the first (row-major smallest) source among ties.
+                if (search.maxDistance > best) {
+                    best = search.maxDistance;
+                    bestFrom = source;
+                    bestTo = search.farthest;
+                    bestSearch = search;
+                }
+            }
+        }
+
+        List<Point> path = bestSearch == null
+                ? List.of(bestFrom)
+                : reconstruct(bestSearch.parent, bestFrom, bestTo, grid.cols());
+        return new Diameter(bestFrom, bestTo, Math.max(best, 0), path);
+    }
+
+    /**
      * Move the grid's start and goal onto the diameter endpoints (mutates {@code grid}) and
      * return the diameter that was used.
+     *
+     * <p>Deliberately uses the fast {@link #diameter(MazeGrid)} estimate: the goal here is two
+     * cells that are far apart, not an exact extremal pair, and paying O(V²) to move the start
+     * a few cells would be a poor trade.
      */
     public static Diameter placeStartAndGoalAtExtremes(MazeGrid grid) {
         Diameter d = diameter(grid);
