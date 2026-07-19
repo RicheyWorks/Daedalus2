@@ -6,13 +6,18 @@ import com.daedalus.engine.MazeGenerator;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
+import com.daedalus.theory.MazeMetrics;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -61,6 +66,77 @@ class GeneratorConnectivityTest {
                         .isEqualTo(SIZE * SIZE - 1);
             }
         }
+    }
+
+    /**
+     * Grid shapes that are not a comfortable square. Several generators carry an implicit shape
+     * assumption — the space-filling curves want a power of two, {@code DungeonGenerator} wants
+     * room to split BSP leaves, {@code EllersGenerator} works a row at a time — and a degenerate
+     * or lopsided grid is where such an assumption surfaces.
+     */
+    static Stream<Arguments> awkwardShapes() {
+        return Stream.of(
+                Arguments.of(1, 1, "single cell"),
+                Arguments.of(1, 10, "single row"),
+                Arguments.of(10, 1, "single column"),
+                Arguments.of(2, 3, "smallest non-square"),
+                Arguments.of(7, 13, "both prime"),
+                Arguments.of(33, 17, "odd and lopsided"),
+                Arguments.of(5, 64, "extreme aspect ratio"),
+                Arguments.of(20, 20, "square, not a power of two"));
+    }
+
+    @ParameterizedTest(name = "{2} ({0}x{1})")
+    @MethodSource("awkwardShapes")
+    void everyGeneratorSpansAnyGridShape(int rows, int cols, String description) {
+        // The square-grid test above would not catch a generator that quietly drops the last
+        // column of a lopsided grid, or that divides by zero on a single row.
+        for (MazeGenerator generator : spanningTreeGenerators()) {
+            MazeGrid grid = generator.generate(rows, cols, 7L, new MazeStats());
+
+            assertThat(reachableFromOrigin(grid))
+                    .as("%s at %dx%d (%s): every cell must be reachable",
+                            generator.id(), rows, cols, description)
+                    .isEqualTo(rows * cols);
+            assertThat(edgeCount(grid))
+                    .as("%s at %dx%d (%s): a spanning tree has exactly V-1 edges",
+                            generator.id(), rows, cols, description)
+                    .isEqualTo(rows * cols - 1);
+        }
+    }
+
+    @ParameterizedTest(name = "{2} ({0}x{1})")
+    @MethodSource("awkwardShapes")
+    void dungeonKeepsItsCarvedSpaceConnectedAtAnyShape(int rows, int cols, String description) {
+        // DungeonGenerator is excluded from the spanning-tree roster because rock is meant to be
+        // unreachable — but the *carved* space must still be one connected level, or the layout
+        // has rooms the player can never enter. That is the property that survives its contract.
+        MazeGrid grid = new DungeonGenerator().generate(rows, cols, 7L, new MazeStats());
+
+        int carved = 0;
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (!grid.openNeighbors(new Point(r, c)).isEmpty()) {
+                    carved++;
+                }
+            }
+        }
+        if (carved == 0) {
+            return; // too small to hold a room; nothing carved is a legitimate outcome
+        }
+
+        int reachable = 0;
+        for (int[] row : MazeMetrics.distancesFrom(grid, MazeMetrics.largestComponentCell(grid))) {
+            for (int distance : row) {
+                if (distance >= 0) {
+                    reachable++;
+                }
+            }
+        }
+        assertThat(reachable)
+                .as("dungeon at %dx%d (%s): floor area must be a single connected level",
+                        rows, cols, description)
+                .isEqualTo(carved);
     }
 
     @Test

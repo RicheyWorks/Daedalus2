@@ -125,6 +125,27 @@ housekeeping on the things that make the repo behave.
   over-estimate** — that direction is the one that matters, since an
   over-estimate would understate worst-case route length in planning use.
 
+- **Generator shape sweep — every generator against awkward grid shapes.**
+  Third shape assumption audited today, after loops and disconnection: **grid
+  shape itself**. Every generator fixture in the repo used a square grid, yet
+  several generators carry an implicit assumption about dimensions — the
+  space-filling curves want a power of two, `EllersGenerator` works a row at a
+  time, `DungeonGenerator` needs room to split BSP leaves.
+
+  `GeneratorConnectivityTest` already covered this for `HilbertCurveGenerator`
+  specifically, since that is where the forest bug was found. It now sweeps all
+  21 spanning-tree generators across eight shapes: `1×1`, `1×10`, `10×1`, `2×3`,
+  `7×13` (both prime), `33×17`, `5×64` (extreme aspect ratio) and `20×20`
+  (square but not a power of two). `DungeonGenerator` gets its own case at the
+  same shapes, asserting the property that survives its contract — rock is meant
+  to be unreachable, but the **carved** space must be a single connected level,
+  or the layout contains rooms the player can never enter.
+
+  **The audit found nothing**: 22 generators × 9 shapes, zero violations. Worth
+  having anyway — it converts "the square-grid tests happen to pass" into an
+  enforced property, and a generator that quietly dropped the last column of a
+  lopsided grid, or divided by zero on a single row, would now fail loudly.
+
 - **`SolverBraidedMazePropertyTest` — every solver, over mazes with loops.**
   Closes the gap that let two separate correctness bugs ship behind a green
   suite this month: **every solver fixture in the repository was a perfect
