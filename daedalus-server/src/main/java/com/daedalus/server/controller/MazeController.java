@@ -12,12 +12,12 @@ import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.AlgorithmDescriptor;
 import com.daedalus.model.LeaderboardEntry;
 import com.daedalus.model.TileType;
+import com.daedalus.server.ratelimit.PerKeyRateLimit;
 import com.daedalus.server.service.AlgorithmCatalogService;
 import com.daedalus.server.service.GameSessionService;
 import com.daedalus.server.service.LeaderboardService;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -84,9 +84,10 @@ public class MazeController {
     @Operation(summary = "Generate a maze.",
             description = "If the named generator is unavailable or the circuit breaker is open, "
                     + "the response's generatorId reflects the actual fallback algorithm used. "
-                    + "Rate-limited per the 'mazeGenerate' Resilience4j instance; bursts past the "
-                    + "configured limit return 429 with a Retry-After header.")
-    @RateLimiter(name = "mazeGenerate")
+                    + "Rate-limited per caller (authenticated subject, else client IP) against the "
+                    + "'mazeGenerate' budget; bursts past the configured limit return 429 with a "
+                    + "Retry-After header.")
+    @PerKeyRateLimit("mazeGenerate")
     public GenerateResponse generate(@Valid @RequestBody GenerateRequest req) {
         long seed = req.seed() != null ? req.seed() : System.nanoTime();
         var cached = gen.generate(req.generatorId(), req.rows(), req.cols(), seed);
@@ -107,8 +108,9 @@ public class MazeController {
 
     @PostMapping("/maze/{id}/solve/{solverId}")
     @Operation(summary = "Run a registered solver against a stored maze.",
-            description = "Rate-limited per the 'mazeSolve' Resilience4j instance.")
-    @RateLimiter(name = "mazeSolve")
+            description = "Rate-limited per caller (authenticated subject, else client IP) against "
+                    + "the 'mazeSolve' budget.")
+    @PerKeyRateLimit("mazeSolve")
     public ResponseEntity<SolveResponse> solve(
             @PathVariable UUID id,
             @PathVariable

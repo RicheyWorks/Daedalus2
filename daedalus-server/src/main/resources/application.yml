@@ -38,16 +38,25 @@ daedalus:
     admin:
       username: ${DAEDALUS_ADMIN_USER:admin}
       password-bcrypt: ${DAEDALUS_ADMIN_PASSWORD_BCRYPT:$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy}
+  # ----- Per-key rate limiting -----
+  # The Resilience4j instances below are treated as *templates*: PerKeyRateLimitInterceptor
+  # clones each into an independent bucket per caller (authenticated subject, else client IP),
+  # so one noisy client can't spend everyone else's quota.
+  ratelimit:
+    # Trust X-Forwarded-For when deriving the client IP? Enable ONLY behind a proxy / load
+    # balancer that overwrites the header — otherwise a caller can spoof it to mint a fresh
+    # bucket per forged IP and defeat the limit. Off by default (use the socket remoteAddr);
+    # application-prod.yml turns it on because that surface sits behind an ingress.
+    trust-forwarded-header: ${DAEDALUS_RL_TRUST_XFF:false}
 
 # ----- Resilience4j rate limiters -----
-# Method-level @RateLimiter(name = "...") consults these instances. Defaults below are sane
-# for a single-process dev / portfolio deploy. Profile-specific overrides:
+# These named instances are the per-caller *templates* consulted by @PerKeyRateLimit(...) on
+# the controller methods (mazeGenerate / mazeSolve / authLogin). The interceptor clones each
+# into a bucket keyed on the caller (see daedalus.ratelimit above); the values here set the
+# limit / refresh-period / timeout of every such bucket. Defaults below are sane for a
+# single-process dev / portfolio deploy. Profile-specific overrides:
 #   application-test.yml  -> very generous (don't trip MockMvc tests)
 #   application-prod.yml  -> tighter (real traffic, brute-force protection on /auth/login)
-# Limits are global (one bucket shared across all clients). Per-IP / per-username throttling
-# is on the backlog — Resilience4j's @RateLimiter annotation is method-scoped, not key-scoped,
-# so per-key buckets need a RateLimiterRegistry plus a HandlerInterceptor pulling the key off
-# the request. See BACKLOG.md "Rate limiting on write endpoints".
 resilience4j:
   ratelimiter:
     instances:

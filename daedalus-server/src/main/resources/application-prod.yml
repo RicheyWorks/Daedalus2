@@ -34,6 +34,11 @@ daedalus:
       secret: ${DAEDALUS_JWT_SECRET}
     admin:
       password-bcrypt: ${DAEDALUS_ADMIN_PASSWORD_BCRYPT}
+  ratelimit:
+    # Prod sits behind an ingress / load balancer that sets X-Forwarded-For, so trust it to
+    # recover the real client IP for per-IP buckets (login throttling). Set DAEDALUS_RL_TRUST_XFF
+    # to false only if the deployment has no such proxy.
+    trust-forwarded-header: ${DAEDALUS_RL_TRUST_XFF:true}
 
 # Tighter limits than the application.yml defaults: this is the production-traffic surface.
 # Tune via env vars without touching the YAML.

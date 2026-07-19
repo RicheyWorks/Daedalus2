@@ -2,6 +2,7 @@
 
 package com.daedalus.server.web;
 
+import com.daedalus.server.ratelimit.RateLimitNaming;
 import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.ratelimiter.RateLimiterRegistry;
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
@@ -178,7 +179,10 @@ public class ApiExceptionHandler {
     @ExceptionHandler(RequestNotPermitted.class)
     public ResponseEntity<ProblemDetail> onRateLimited(RequestNotPermitted ex) {
         // The exception's getMessage() embeds the limiter name as "RateLimiter '<name>' does not permit further calls".
-        String limiterName = extractLimiterName(ex.getMessage());
+        // Per-key limiters are named "<base>::<callerKey>" (see RateLimitNaming); collapse back to the base so the
+        // body reports a stable "mazeGenerate" and never leaks the caller's IP or subject. Plain (global) names,
+        // which carry no separator, pass through unchanged.
+        String limiterName = RateLimitNaming.baseOf(extractLimiterName(ex.getMessage()));
         long retryAfterSeconds = computeRetryAfterSeconds(limiterName);
 
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(

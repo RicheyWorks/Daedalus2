@@ -16,17 +16,18 @@ Last consolidated: 2026-05-07
 
 ## Hardening (server)
 
-- **Per-key rate limiting.** The three rate limiters added on 2026-05-07
-  (`mazeGenerate`, `mazeSolve`, `authLogin`) are global — a single bucket
-  shared across all clients. Resilience4j's `@RateLimiter` annotation is
-  method-scoped, not key-scoped, so per-IP / per-subject buckets need a
-  `RateLimiterRegistry` plus a `HandlerInterceptor` (or a Spring AOP
-  advice) that pulls the key off `HttpServletRequest`
-  (`X-Forwarded-For` → IP, or `Authentication.getName()` → subject) and
-  resolves the appropriate bucket. The 429 translation in
-  `ApiExceptionHandler` already carries a `limiter` property in the body,
-  so once per-key buckets exist, the response shape doesn't need to
-  change.
+- **Per-key rate-limiter bucket eviction.** Per-key limiting shipped
+  2026-07-18 (`com.daedalus.server.ratelimit` — `@PerKeyRateLimit` +
+  `PerKeyRateLimitInterceptor`, replacing the old global `@RateLimiter`
+  annotations). The one open thread: the interceptor creates a Resilience4j
+  instance per distinct caller key and never evicts them, so a
+  high-cardinality attacker (many forged subjects, or many IPs when
+  `daedalus.ratelimit.trust-forwarded-header` is on) could grow the
+  `RateLimiterRegistry` unbounded. Live key cardinality is tiny today (a
+  handful of subjects; login is IP-keyed), so this is deferred — but before
+  any untrusted-network deploy, back the per-key buckets with a bounded /
+  idle-evicting store (a Caffeine cache of `RateLimiter`s, or a scheduled
+  purge of instances whose permits are full and untouched for N minutes).
 - **WebSocket / STOMP authentication.** HTTP JWT auth is wired in
   `ProdSecurityConfig` (2026-05-06), but the STOMP topics under
   `/topic/maze/**` and the `/ws/**` upgrade are not yet authenticated at
@@ -36,11 +37,6 @@ Last consolidated: 2026-05-07
 
 ## New surfaces
 
-- **`com.daedalus.theory.ComplexityAnalyzer`.** Empirical time/space
-  measurements for each generator, driven by `MazeStats`. Output a small
-  CSV / JSON the tests can lock in (regression-detection rather than exact
-  numbers), plus an `analyzeAll()` convenience that runs every registered
-  generator at 32², 64², 128² and writes a report.
 - **Performance benchmark harness.** Standalone `main` (or JMH module)
   that times all 20+ generators and 9 solvers on 50×50 / 100×100 / 200×200
   grids, multiple seeds, prints CSV + a small chart. Ship the latest run

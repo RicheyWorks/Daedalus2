@@ -154,4 +154,33 @@ class ApiExceptionHandlerRateLimitTest {
                 .containsEntry("limiter", "ghost")     // name still surfaces from the message
                 .containsEntry("retryAfterSeconds", 1L);
     }
+
+    // ---------- per-key limiter names ----------
+
+    @Test
+    void onRateLimited_perKeyInstanceName_collapsesToBaseInBody_andResolvesRetryAfterFromBase() {
+        // Per-key buckets are named "<base>::<callerKey>". The handler must report the base name
+        // (stable, non-identifying) in the body — never the caller's IP — and still find the
+        // Retry-After by looking the base instance up in the registry.
+        RateLimiterConfig oneMinute = RateLimiterConfig.custom()
+                .limitForPeriod(1)
+                .limitRefreshPeriod(Duration.ofMinutes(1))
+                .timeoutDuration(Duration.ZERO)
+                .build();
+        RateLimiterRegistry registry = RateLimiterRegistry.ofDefaults();
+        registry.rateLimiter("mazeGenerate", oneMinute); // base instance, as YAML would provision it
+
+        ApiExceptionHandler registryAware = new ApiExceptionHandler(registry);
+        RateLimiter perKey = registry.rateLimiter("mazeGenerate::ip:203.0.113.7", oneMinute);
+        RequestNotPermitted ex = RequestNotPermitted.createRequestNotPermitted(perKey);
+
+        ResponseEntity<ProblemDetail> response = registryAware.onRateLimited(ex);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.TOO_MANY_REQUESTS);
+        assertThat(response.getHeaders().getFirst(HttpHeaders.RETRY_AFTER)).isEqualTo("60");
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getProperties())
+                .containsEntry("limiter", "mazeGenerate")   // NOT "mazeGenerate::ip:203.0.113.7"
+                .containsEntry("retryAfterSeconds", 60L);
+    }
 }

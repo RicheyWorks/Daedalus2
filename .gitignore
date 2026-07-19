@@ -3,6 +3,12 @@ target/
 */target/
 *.jar
 
+# JVM runtime artifacts (JaCoCo/agent attach files, crash logs)
+.attach_pid*
+*.attach_pid*
+hs_err_pid*
+replay_pid*
+
 # IDE
 .idea/
 *.iml

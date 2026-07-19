@@ -6,10 +6,84 @@ All notable changes to Daedalus are documented in this file. Format follows
 `1.0.0` (the multi-module split + first audit pass) live in git history
 under the `_migration/` portfolios.
 
-## [Unreleased] — 2026-07-15
+## [Unreleased] — 2026-07-18
 
-**Infrastructure.** Repo is live at `RicheyWorks/Daedalus2` and CI is green.
-Housekeeping pass on the things that make the repo behave, not the code.
+**Features, security + infrastructure.** Repo is live at `RicheyWorks/Daedalus2`
+and CI is green. The `ComplexityAnalyzer` surface lands empirical,
+regression-friendly complexity tracking for the generators; per-key rate
+limiting closes the shared-bucket gap on the write endpoints; the rest is
+housekeeping on the things that make the repo behave.
+
+### Added
+
+- **`theory.ComplexityAnalyzer` — empirical complexity harness.** Revives the
+  long-stubbed `com.daedalus.theory.ComplexityAnalyzer` (last seen in the v1.x
+  portfolio) against the current engine API. Runs every registered generator
+  at a fixed seed across configurable square sizes (default 32²/64²/128²),
+  capturing the work each reports through `MazeStats` (cells visited, peak
+  frontier, backtracks, path length) plus a wall-clock timing. `analyzeAll()`
+  sweeps a `GeneratorRegistry` and returns a stably-sorted `Report` (a
+  generator that throws is recorded as `success=false` rather than sinking the
+  sweep). `Report.toCsv()` / `toJson()` emit only the deterministic,
+  seed-stable columns — no wall-clock — so the report is a committable golden
+  file for regression detection; timing stays on each `Measurement` for live
+  inspection. Hand-rolled CSV/JSON, so daedalus-core gains no new dependency.
+  Covered by 10 tests (determinism, no-stats and throwing-generator paths,
+  a sweep over all 20 built-in generators, and the serialized shape). Clears
+  the item from `BACKLOG.md` "New surfaces".
+- **`theory.GrowthEstimator` — empirical Big-O labelling.** Turns a
+  `ComplexityAnalyzer` sweep into a growth verdict per generator: fits each
+  `metric(n)` against candidate classes (`O(1)` … `O(n^2)`) by
+  least-squares-through-origin plus R² model selection, and reports the
+  log-log power-law exponent alongside. Deterministic (rides the seed-stable
+  counters); metrics that stay at zero or fewer than two distinct sizes return
+  `UNKNOWN` rather than a fabricated class. Covered by 8 tests over synthetic
+  known-growth data plus a live sweep. Implements idea **T1** from
+  `AUDIT_CLRS_IDEAS_2026-07-18.md`.
+- **`theory.MazeMetrics` — diameter & auto start/goal placement.** Double-BFS
+  over the passage graph (CLRS Ch. 22) finds the maze's two farthest-apart
+  cells — exact for perfect (tree) mazes, a lower-bound heuristic when the maze
+  has cycles — and `placeStartAndGoalAtExtremes` drops the start and goal there
+  for a maximal-challenge layout. Also exposes `farthestFrom` and
+  `distancesFrom` (BFS distance field, `-1` for unreachable) for heat-maps.
+  Deterministic (row-major tie-break on the farthest cell). Implements idea
+  **T3** from the CLRS audit; 6 tests over hand-built mazes and a real
+  perfect maze.
+- **`theory.MazeFlow` — min-cut chokepoints & edge connectivity.** Edmonds-Karp
+  max-flow (CLRS Ch. 26) over unit-capacity passages: the minimum start→goal
+  cut is the fewest passages that would seal the goal off, and the cut edge set
+  is exactly those bottleneck passages. Equivalently the start↔goal edge
+  connectivity — `1` for a perfect maze (single route), `≥2` once braided.
+  `minCutStartToGoal` / `edgeConnectivity` convenience; deterministic.
+  Implements idea **X1** from the CLRS audit; 6 tests (perfect vs. braided,
+  cut-edges-actually-disconnect, determinism).
+
+### Security
+
+- **Per-key rate limiting on the throttled endpoints.** The three limiters
+  (`mazeGenerate`, `mazeSolve`, `authLogin`) were global — a single
+  Resilience4j bucket shared across every caller, so one noisy client could
+  spend everyone else's quota (and one IP could burn the whole `authLogin`
+  brute-force budget). Replaced the method-scoped `@RateLimiter` annotations
+  with `@PerKeyRateLimit(...)` plus a `PerKeyRateLimitInterceptor` that
+  resolves a caller key — authenticated subject (`Authentication.getName()`),
+  else client IP — and throttles each key against its own bucket, cloned from
+  the named instance's config in the `RateLimiterRegistry`. The YAML
+  instances now serve as per-caller *templates*. `X-Forwarded-For` is trusted
+  only when `daedalus.ratelimit.trust-forwarded-header` is set (off by
+  default; on in `application-prod.yml`, which runs behind an ingress) so a
+  direct client can't spoof the header to mint a fresh bucket per forged IP.
+  The `429` wire contract is unchanged: `ApiExceptionHandler` collapses the
+  composite instance name (`mazeGenerate::ip:…`) back to the base
+  `mazeGenerate` for the body's `limiter` property, so no caller IP or subject
+  leaks into the response, and `Retry-After` still resolves from the base
+  instance's refresh period. New code lives under
+  `com.daedalus.server.ratelimit` (`PerKeyRateLimit`, `RateLimitNaming`,
+  `RateLimitKeyResolver`, `PerKeyRateLimitInterceptor`) plus
+  `RateLimitProperties` / `RateLimitWebConfig` in `…server.config`; covered by
+  18 new tests (naming round-trip, key resolution, per-key bucket isolation,
+  and an end-to-end MockMvc 429 path). Clears the "per-key rate limiting" item
+  from `BACKLOG.md`.
 
 ### Infrastructure
 

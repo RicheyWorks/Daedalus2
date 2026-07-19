@@ -5,8 +5,8 @@ package com.daedalus.server.controller;
 import com.daedalus.api.dto.LoginRequest;
 import com.daedalus.api.dto.LoginResponse;
 import com.daedalus.server.config.AdminCredentialsProperties;
+import com.daedalus.server.ratelimit.PerKeyRateLimit;
 import com.daedalus.server.security.JwtTokenService;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -28,9 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
  * doesn't match" so external probes can't enumerate the difference.
  *
  * <p>This endpoint is mounted in every profile so dev / desktop deploys can issue tokens
- * for testing too. Production-grade lockout (rate limiting, account lockout after N failed
- * attempts) is intentionally out of scope for this portfolio iteration; add it before any
- * deployment that's reachable from untrusted networks.
+ * for testing too. Per-IP rate limiting is applied (see {@link PerKeyRateLimit}) so a single
+ * source can't brute-force credentials unthrottled; stateful account lockout after N failed
+ * attempts is still out of scope for this portfolio iteration.
  */
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -55,10 +55,11 @@ public class AuthController {
                     + "about which check failed). The token is valid for "
                     + "daedalus.security.jwt.ttl-minutes (default 60). Use it as "
                     + "Authorization: Bearer <token> on subsequent requests. "
-                    + "Rate-limited per the 'authLogin' Resilience4j instance — bursts past the "
-                    + "configured limit return 429 with a Retry-After header. Note this is a "
-                    + "global limiter; per-IP / per-username throttling is on the backlog.")
-    @RateLimiter(name = "authLogin")
+                    + "Rate-limited per client IP against the 'authLogin' budget — bursts past the "
+                    + "configured limit return 429 with a Retry-After header. Because login is "
+                    + "unauthenticated, the bucket is keyed on the caller's IP, so one source can't "
+                    + "spend the whole surface's brute-force budget.")
+    @PerKeyRateLimit("authLogin")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest req) {
         if (!adminCreds.isConfigured()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
