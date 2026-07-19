@@ -212,6 +212,20 @@ housekeeping on the things that make the repo behave.
   correctness test would still pass while the structure silently degraded from
   inverse-Ackermann to `O(n)`. The new tests read `parent` directly to assert the
   path really is rewritten, and that rank ordering survives (CLRS Ch. 21 + 17).
+- **Parallelism trio measured; C1 and C2 declined, C3 reframed.** Generation was
+  timed before any thread pool was written: 1.96 ms at 64², 5.01 ms at 128²,
+  18.3 ms at 256², 106 ms at 512² (Borůvka). At the sizes this project actually
+  serves — ≤128² — generation is **2–5 ms**, which fork/join setup would simply
+  consume. The decisive objection is not speed but the contract: `MazeGenerator`
+  promises *"same seed ⇒ same maze"*, and `ComplexityAnalyzer`, `GrowthEstimator`
+  and much of the suite depend on that determinism; parallel rounds would put it
+  at risk to save milliseconds. **C2** falls harder still — after D2 a full
+  Dijkstra over an 80² maze runs in under a millisecond, so there is nothing to
+  parallelise. **C3** was reframed rather than dropped: its speed rationale dies
+  with C1, but quadrant generation with doorways punched through the seams is how
+  rooms-and-corridors dungeon layouts get built, and that's a real gap — every
+  current generator makes uniform perfect mazes. It belongs in the backlog as a
+  single-threaded feature, judged on the layouts it produces.
 - **d-ary heap benchmarked and declined (D3).** A 4-ary heap was measured against
   `java.util.PriorityQueue` inside a real Dijkstra loop (12 mazes at 80², warmed
   up, three reps) and came in at −1.5% / −8.5% / −1.8% — inside the noise, with a

@@ -139,15 +139,46 @@ with the analyzer.
 ## 4. Concurrency & parallelism
 
 **C1 · Parallel Borůvka** — `Ch. 23 (MST) + Ch. 27 (multithreaded) · Impact Med · Effort Med`
+**Measured 2026-07-18 — declined.** Generation timings (this box reports 2
+cores):
+
+| maze | cells | Borůvka | Kruskal | RecBacktracker |
+|---|---:|---:|---:|---:|
+| 64² | 4,096 | 1.96 ms | 1.23 ms | 1.76 ms |
+| 128² | 16,384 | 5.01 ms | 3.32 ms | 7.44 ms |
+| 256² | 65,536 | 18.3 ms | 26.3 ms | 18.7 ms |
+| 512² | 262,144 | 106 ms | 155 ms | 60.7 ms |
+
+At the sizes this project actually uses (≤128², what `ComplexityAnalyzer` sweeps
+and the API serves) generation is **2–5 ms**. Fork/join setup would eat that,
+and the ceiling is the core count anyway. The decisive objection isn't speed
+though: `MazeGenerator`'s contract promises *"same seed ⇒ same maze"*, and the
+analyzer, the growth estimator and a large share of the test suite are built on
+that determinism. Parallel rounds would put it at risk for a few milliseconds.
+Revisit only if ≥512² mazes become a real use case **and** a design preserves
+seed-stable output.
 Borůvka's rounds are embarrassingly parallel — each component finds its
 cheapest outgoing edge independently. Parallelize `BoruvkasGenerator` with
 fork/join for the flagship "parallel MST" demo the audits keep gesturing at.
 
 **C2 · Parallel BFS frontier** — `Ch. 27 · Impact Med · Effort Med`
+**Declined 2026-07-18 — the target is too small to be worth it.** A full Dijkstra
+over an 80² maze now runs in **under a millisecond** (the D2 benchmark solved 12
+of them in 9.5 ms). Parallelising a sub-millisecond traversal is pure overhead,
+and layer-synchronised BFS would need a sort per layer to stay deterministic —
+paying to preserve a property the serial version gets for free. D2's array
+indexing already took 29–42% off this path with none of that risk.
 Expand each BFS layer in parallel for solving huge mazes; stays deterministic
 if the next frontier is sorted before dedup. Pairs naturally with D2's bitsets.
 
 **C3 · Divide-and-conquer tiled generation** — `Ch. 4 flavor + Ch. 27 · Impact Med · Effort High`
+**Reframed 2026-07-18 — worth building, but not for the parallelism.** The speed
+argument dies with C1 (generation is milliseconds at realistic sizes). The
+*feature* argument stands on its own: quadrant generation with doorways punched
+through the seams is how you get rooms-and-corridors dungeon layouts, which is a
+genuine gap — every current generator produces uniform perfect mazes. Build it as
+the "procedural dungeon mode" backlog item, single-threaded, and judge it on the
+layouts it produces rather than on wall-clock.
 Generate quadrants concurrently, then carve doorways on the seams. Doubles as
 the "procedural dungeon" backlog item and scales generation across cores.
 
