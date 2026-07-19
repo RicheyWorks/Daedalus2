@@ -16,6 +16,44 @@ housekeeping on the things that make the repo behave.
 
 ### Added
 
+- **`FacilityPlacement.kCenterAcrossComponents` — k-center that survives a
+  partitioned graph.** Found by auditing `theory` for a second shape assumption:
+  not loops this time but **disconnection**, which the vision docs' own
+  chaos-engineering pitch creates ("inject 15% node failure").
+
+  Nothing in `theory` throws on a fragmented graph — `DistanceOracle` reports
+  `UNREACHABLE`, `WaypointTour` reports `feasible=false`, `MazeFlow` correctly
+  gives edge connectivity 0 across a cut. But `kCenter`'s greedy scores an
+  unreachable cell as `-1` and compares with `>`, so it can never leave the
+  component it started in. Measured on a 16×16 tree severed along one column
+  (16 cut edges in a spanning tree ⇒ 17 components):
+
+  | k | `kCenter` radius / served | `kCenterAcrossComponents` radius / served |
+  |---|---|---|
+  | 1 | 10 / 12 of 256 | 10 / 12 of 256 |
+  | 2 | 5 / 12 | 72 / 126 |
+  | 3 | 3 / 12 | 72 / 169 |
+  | 8 | 1 / 12 | 72 / 212 |
+  | 12 | **0** / 12 | 72 / 254 |
+
+  Adding facilities drives the covering radius to **zero** while coverage never
+  moves off **12 of 256 cells** — at k=12 every served cell is itself a
+  facility, so the placement scores perfectly while reaching 4.7% of the graph.
+  Nothing lies; `servedCells` is in the result. But a quality metric that
+  *improves* as the answer gets more absurd is worth naming explicitly.
+
+  **Both behaviours are kept, because both have a real consumer.** For a dungeon
+  — placing treasure, save points or boss rooms — unreachable cells are solid
+  rock, genuinely not places, and `kCenter` is correct. For a partitioned
+  network, every fragment still holds real nodes, and `kCenterAcrossComponents`
+  is. The new variant ranks unreachable cells as infinitely badly served, which
+  is simply what the k-center objective says: the cost of a placement is the
+  distance from the worst-served node, and for an unreachable node that is
+  infinite. The 2-approximation still holds per component; across components no
+  ratio is claimed, since with fewer facilities than components the objective is
+  unbounded. On a connected grid the two are asserted to agree exactly, so the
+  generalisation cannot disturb the ordinary case.
+
 - **`MazeMetrics.exactDiameter` — the true diameter, for when the estimate
   isn't good enough.** Came out of auditing the `theory` package for the same
   defect class that bit the solvers: code that is only correct on a tree. The

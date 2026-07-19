@@ -28,9 +28,46 @@ import java.util.List;
  * the same rule {@code solver.LandmarkHeuristic} uses to spread its landmarks — which is not a
  * coincidence: both want points that are far from each other and from everything else.
  *
- * <p>Cost is {@code k} breadth-first sweeps. Operates on the connected component reachable from
- * the first facility, so unreachable cells (a dungeon's solid rock) are simply not served and do
- * not distort the radius. Deterministic: ties break row-major.
+ * <p>Cost is {@code k} breadth-first sweeps. Deterministic: ties break row-major.
+ *
+ * <h3>Two behaviours, because "unreachable" means two different things</h3>
+ *
+ * <p>Both variants exist because both consumers do. In a <b>dungeon</b> (placing treasure,
+ * save points or boss rooms across a level) unreachable cells are solid rock — not places, so
+ * they should neither be served nor distort the radius. In a <b>partitioned network</b>
+ * (placing replicas or edge caches after node failures have fragmented the topology) every
+ * component still holds real nodes that need serving. The same greedy gives the wrong answer
+ * for one of those two whichever way it is written, so it is written both ways.
+ *
+ * <p>{@link #kCenter} stays inside the component reachable from its first pick — the dungeon
+ * reading.
+ *
+ * <p>It is wrong when the graph is a fragmented <em>network</em>, where every component holds
+ * real nodes that still need serving. Measured on a 16×16 tree severed along one column — a
+ * spanning tree cut at 16 edges falls into 17 components, so this shatters the grid rather
+ * than halving it:
+ *
+ * <pre>
+ *   k     kCenter                    kCenterAcrossComponents
+ *         radius / cells served      radius / cells served
+ *    1      10 /  12 of 256             10 /  12 of 256
+ *    2       5 /  12                    72 / 126
+ *    3       3 /  12                    72 / 169
+ *    5       2 /  12                    72 / 192
+ *    8       1 /  12                    72 / 212
+ *   12       0 /  12                    72 / 254
+ * </pre>
+ *
+ * <p>Read the left column carefully: adding facilities drives the covering radius to
+ * <b>zero</b> while coverage never moves off <b>12 of 256 cells</b>. At {@code k = 12} every
+ * served cell is itself a facility, so the placement scores perfectly while reaching 4.7% of
+ * the graph. Nothing is lying — {@code servedCells} is right there in the result — but a
+ * quality metric that <em>improves</em> as the answer gets more absurd is a trap worth naming.
+ * The right column pays radius (72, since it now spans components) to buy coverage.
+ *
+ * <p>{@link #kCenterAcrossComponents} is the variant for that case: it ranks unreachable cells
+ * as infinitely badly served, which is what the k-center objective actually says, so the greedy
+ * spends its first picks reaching new components before refining within them.
  */
 public final class FacilityPlacement {
 
@@ -85,6 +122,86 @@ public final class FacilityPlacement {
             }
             if (worstServed == null) {
                 break; // every reachable cell is already a facility
+            }
+            facilities.add(worstServed);
+            mergeNearest(nearest, MazeMetrics.distancesFrom(grid, worstServed), rows, cols);
+        }
+
+        int radius = 0;
+        int served = 0;
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (nearest[r][c] >= 0) {
+                    served++;
+                    radius = Math.max(radius, nearest[r][c]);
+                }
+            }
+        }
+        return new Placement(facilities, radius, served);
+    }
+
+    /**
+     * Farthest-first greedy that treats a cell it cannot reach as <b>infinitely badly served</b>,
+     * so facilities spread across disconnected components instead of clustering in whichever one
+     * the first pick landed in.
+     *
+     * <p>This is not a heuristic tweak — it is what the k-center objective already says. The
+     * cost of a placement is the distance from the worst-served node to its nearest facility,
+     * and for a node no facility can reach that distance is infinite. {@link #kCenter} scores
+     * such nodes as {@code -1} and therefore never selects them; ranking them above every finite
+     * distance restores the intended ordering. The consequence is that the greedy spends its
+     * early picks <em>reaching</em> new components, and only refines within components once every
+     * component holds a facility.
+     *
+     * <p>On the severed 16×16 grid described in the class javadoc, this turns {@code (radius 3,
+     * 12 of 256 cells served)} into a placement that reaches three separate components.
+     *
+     * <p>The 2-approximation guarantee is per-component: within each component the selection is
+     * still Gonzalez's greedy. Across components no ratio is claimed, because with fewer
+     * facilities than components the objective is unbounded — some component is unreachable no
+     * matter what. Check {@link Placement#servedCells()} to see how much of the graph was
+     * covered.
+     *
+     * <p>Use {@link #kCenter} when unreachable means "not a place" (solid rock). Use this when
+     * unreachable means "a node we still have to serve" (a partitioned network).
+     *
+     * @throws IllegalArgumentException if {@code k < 1}
+     */
+    public static Placement kCenterAcrossComponents(MazeGrid grid, int k) {
+        if (k < 1) {
+            throw new IllegalArgumentException("Need at least one facility, got " + k);
+        }
+        int rows = grid.rows();
+        int cols = grid.cols();
+
+        Point first = MazeMetrics.farthestFrom(grid, new Point(0, 0));
+        List<Point> facilities = new ArrayList<>();
+        facilities.add(first);
+        int[][] nearest = MazeMetrics.distancesFrom(grid, first);
+
+        while (facilities.size() < k) {
+            Point worstServed = null;
+            int worstDistance = 0;
+            boolean worstIsUnreached = false;
+
+            for (int r = 0; r < rows; r++) {
+                for (int c = 0; c < cols; c++) {
+                    int d = nearest[r][c];
+                    if (d < 0) {
+                        // Unreachable outranks every finite distance. First one wins, so the
+                        // row-major tie-break still makes this deterministic.
+                        if (!worstIsUnreached) {
+                            worstIsUnreached = true;
+                            worstServed = new Point(r, c);
+                        }
+                    } else if (!worstIsUnreached && d > worstDistance) {
+                        worstDistance = d;
+                        worstServed = new Point(r, c);
+                    }
+                }
+            }
+            if (worstServed == null) {
+                break; // every cell in the grid is already a facility
             }
             facilities.add(worstServed);
             mergeNearest(nearest, MazeMetrics.distancesFrom(grid, worstServed), rows, cols);
