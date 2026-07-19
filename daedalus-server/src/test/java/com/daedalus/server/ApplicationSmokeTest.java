@@ -3,6 +3,7 @@
 package com.daedalus.server;
 
 import com.daedalus.engine.generators.GeneratorRegistry;
+import com.daedalus.server.health.PluginSubsystemHealthIndicator;
 import com.daedalus.solver.solvers.SolverRegistry;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -96,6 +97,21 @@ class ApplicationSmokeTest {
 
     @Test
     void actuatorHealth_reportsUp() {
+        assertThat(readTree(getBody("/actuator/health")).path("status").asText()).isEqualTo("UP");
+    }
+
+    @Test
+    void pluginHealthIndicatorIsRegistered_andDoesNotDragTheAggregateDown() {
+        // A unit test can prove the indicator returns UP; only a booted context proves Spring
+        // ever built one. Asserted through the context rather than the endpoint payload,
+        // because component detail is hidden by default and a test that tolerates its absence
+        // would assert nothing.
+        assertThat(context.getBeansOfType(PluginSubsystemHealthIndicator.class))
+                .as("the indicator must actually be contributed to actuator health")
+                .isNotEmpty();
+
+        // And with it contributing, the aggregate is still UP — the property that keeps a
+        // broken optional plugin from pulling the instance out of rotation.
         assertThat(readTree(getBody("/actuator/health")).path("status").asText()).isEqualTo("UP");
     }
 

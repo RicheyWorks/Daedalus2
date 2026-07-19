@@ -72,12 +72,22 @@ Last consolidated: 2026-05-07
      `management.health.redis.enabled` to `${daedalus.redis.enabled:false}` in
      `application.yml`. Both directions are pinned by tests
      (`ApplicationSmokeTest`, `RedisHealthBindingTest`).
-  2. `PluginSubsystemHealthIndicator` — reports the count of loaded
-     plugins, count of failed plugins (since last `bootAll`), and the most
-     recent `PluginFailedEvent` (if any). Wire both into
-     `/actuator/health` as components, not as the top-level status
-     (so a degraded plugin doesn't take the app out of the load
-     balancer's rotation).
+  2. ~~`PluginSubsystemHealthIndicator`~~ — **done 2026-07-19.** Reports
+     `loadedPlugins`, `failedPlugins` and a `lastFailure` description as
+     actuator health details, and is **deliberately never DOWN**: Boot folds
+     component statuses into the aggregate, and the aggregate is what a load
+     balancer or readiness probe acts on, so condemning the instance over a
+     broken *optional* plugin would be the same defect the stock Redis
+     indicator caused earlier the same day. Failures are surfaced as detail for
+     a human to act on. The original note below already called for exactly this
+     ("components, not as the top-level status") — reproduced for the record:
+
+     > reports the count of loaded plugins, count of failed plugins (since last
+     > `bootAll`), and the most recent `PluginFailedEvent` (if any). Wire both
+     > into `/actuator/health` as components, not as the top-level status (so a
+     > degraded plugin doesn't take the app out of the load balancer's
+     > rotation).
+
 ## Stretch goals (no commitment, capture only)
 
 - **Procedural dungeon mode.** Rooms + corridors over `RecursiveDivision`

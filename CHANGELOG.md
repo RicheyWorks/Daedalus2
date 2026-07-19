@@ -146,6 +146,30 @@ housekeeping on the things that make the repo behave.
   enforced property, and a generator that quietly dropped the last column of a
   lopsided grid, or divided by zero on a single row, would now fail loudly.
 
+- **`PluginSubsystemHealthIndicator` — plugin state as actuator detail, never
+  as a verdict.** Reports `loadedPlugins`, `failedPlugins` and a `lastFailure`
+  description, listening for `PluginFailedEvent` to keep the count.
+
+  It is **deliberately incapable of reporting DOWN**, and that is the whole
+  design. Boot folds component statuses into the aggregate, and the aggregate
+  is what a load balancer or Kubernetes readiness probe acts on — so an
+  indicator that condemned the instance because an *optional* plugin failed to
+  boot would pull a healthy server out of rotation. That is not hypothetical:
+  the stock Redis indicator did exactly that earlier the same day, dragging
+  `/actuator/health` to 503 on an application working fine on its in-memory
+  backend. The fix there was to stop it contributing; the lesson applied here
+  is to not contribute a failure status at all. Failures surface as details for
+  a human or dashboard, and the engine, REST API and solver registry keep
+  serving — which is the point of loading plugins in isolation.
+
+  Tested twice over, deliberately. A unit test hammers 250 failures across every
+  `Phase` and asserts the status never budges; the smoke test then asserts the
+  bean is actually **registered in the booted context**, because a unit test can
+  only prove the indicator would answer UP if asked, not that Spring ever asks.
+  That second assertion goes through the `ApplicationContext` rather than the
+  health payload — component detail is hidden by default, and a test that
+  tolerated its absence would have asserted nothing at all.
+
 - **`SolverBraidedMazePropertyTest` — every solver, over mazes with loops.**
   Closes the gap that let two separate correctness bugs ship behind a green
   suite this month: **every solver fixture in the repository was a perfect
