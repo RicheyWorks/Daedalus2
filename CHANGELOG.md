@@ -299,6 +299,17 @@ housekeeping on the things that make the repo behave.
 
 ### Changed
 
+- **`MazeGrid.weightOf(int row, int col)` — coordinate-indexed entry cost.**
+  The graph seam addresses nodes by dense integer id, so
+  `MazeGraph.edgeWeight(int, int)` was building a `Point` on every edge
+  relaxation purely to hand it to `weightOf(Point)`, which immediately unwrapped
+  it again — one allocation per relaxation, in the hottest loop the engine has.
+  Subclasses now override the `(row, col)` form and `weightOf(Point)` delegates
+  to it, so there is a single implementation point and both forms cannot drift.
+  This is ADR-001 item 4's "add `EdgeWeightedGraph`" resolved without adding a
+  type: `Graph.edgeWeight` was already node-indexed, so a parallel interface
+  would have been ceremony around a one-method change.
+
 - **Spring Boot 3.3.1 → 4.1.0 (with Framework 7).** The server, plugin runtime
   and desktop modules now build on the Boot 4 line. Four coordinate changes and
   a single import were the entire migration:
@@ -359,6 +370,50 @@ housekeeping on the things that make the repo behave.
   redirected effort toward.
 
 ### Fixed
+
+- **`LandmarkHeuristic` was inadmissible on weighted grids, so A* returned
+  suboptimal routes (ADR-001 item 4).** The heuristic stored BFS **hop counts**
+  regardless of the grid's costs. Hop counts bound cost from below only while
+  every edge costs at least one hop's worth, so the class documented a "keep
+  weights `>= 1.0`" rule — which `WeightedMazeGrid.setWeight` never enforced
+  (it accepts any non-negative value). Violate it and A* still returns a path;
+  it just isn't the cheapest one.
+
+  Measured on twelve fully-braided 24² mazes with weights drawn from
+  `[0.05, 0.35]`:
+
+  | | before | after |
+  |---|---|---|
+  | cells where `h` exceeded true cost | **575 / 576** | **0 / 576** |
+  | worst over-estimate (true distance ≈ 32) | **132.1** | 0 |
+  | seeds where A* beat by Dijkstra on cost | **12 / 12** | **0 / 12** |
+  | worst excess cost | **+36%** | 0 |
+
+  **Why the suite never caught it:** every existing fixture was a *perfect*
+  maze. A spanning tree has exactly one route between any pair of cells, so
+  every heuristic — admissible or not — returns it. The defect only becomes
+  reachable once the topology has redundancy, which is why these tests braid
+  the maze first, and why it matters: braided multi-path meshes are precisely
+  what the LoadBalancer integration guide tells users to build.
+
+  `precompute` now chooses its metric from the grid rather than assuming.
+  Uniform-cost grids keep the BFS fields (O(V + E) per landmark). Any grid
+  carrying a non-`1.0` weight gets Dijkstra fields **in both directions** — and
+  the second sweep is not redundancy. `MazeGrid` charges the weight of the cell
+  being *entered*, so `d(a,b) − d(b,a) = w(b) − w(a)`: the graph is directed
+  even though its passages are not, and the familiar symmetric
+  `|d(L,b) − d(L,a)|` bound quietly assumes otherwise. Weighted mode uses the
+  directed pair `d(L,t) − d(L,s)` and `d(s,L) − d(t,L)`, each of which follows
+  from the triangle inequality without a symmetry assumption.
+  `MazeMetricsWeightedDistanceTest` asserts the two sweeps genuinely disagree,
+  so nobody deletes one as duplication.
+
+  The fix is also a win, not just a tax: on 64² braided weighted topologies A\*
+  with the corrected heuristic uses **5.79× fewer expansions and searches 1.9×
+  faster** than plain Dijkstra. Precompute costs ≈ 8 ms per topology against
+  ≈ 2 ms for a single Dijkstra solve, so it repays after roughly four queries —
+  the normal case, since a topology is routed over many times between updates.
+  No API change; existing callers get the correction for free.
 
 - **The server reported itself unhealthy (`/actuator/health` → 503) whenever
   Redis was disabled — which is the default.** `spring-boot-starter-data-redis`

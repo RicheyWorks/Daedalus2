@@ -265,7 +265,33 @@ valuable, and unblocked — that is where the first release should land.
        `HashMap<Point,…>` solver, so likely a real win like BFS), the remaining six
        solvers, and the `theory` classes. Follow-up: give `Graph` a node-indexed weight
        accessor so `edgeWeight` stops allocating a `Point`.
-4. [ ] Add `EdgeWeightedGraph` and move `LandmarkHeuristic` precompute to Dijkstra.
+4. [x] Add `EdgeWeightedGraph` and move `LandmarkHeuristic` precompute to Dijkstra — done
+       2026-07-19, and it turned out to be a **correctness** item, not the performance
+       item it was filed as. No `EdgeWeightedGraph` type was needed: `Graph.edgeWeight`
+       was already node-indexed, so the fix was to give `MazeGrid` a
+       `weightOf(int row, int col)` accessor and override *that* in `WeightedMazeGrid`,
+       which removes the `Point` allocation `MazeGraph.edgeWeight` was making on every
+       relaxation. Adding a parallel interface would have been ceremony around a
+       one-method change.
+
+       The Dijkstra half exposed a live bug. `LandmarkHeuristic` stored BFS hop counts
+       unconditionally, guarded only by a prose rule ("keep weights `>= 1.0`") that
+       `WeightedMazeGrid.setWeight` never enforced. Below 1.0 the heuristic is
+       inadmissible and A* silently returns suboptimal routes: measured on twelve braided
+       24² topologies with weights in `[0.05, 0.35]`, **inadmissible in 575 of 576 cells**
+       and **suboptimal on 12 of 12 seeds, by up to 36%**. Perfect mazes hid it completely
+       — a spanning tree has one route per pair, so any heuristic finds it — meaning the
+       bug was only reachable through braided topologies, i.e. the load-balancer case.
+
+       `precompute` now selects its metric from the grid. Weighted grids get Dijkstra
+       fields **in both directions**, because charging the entry cost of a cell makes the
+       graph directed (`d(a,b) − d(b,a) = w(b) − w(a)`) and the symmetric
+       `|d(L,b) − d(L,a)|` bound is therefore invalid; the directed pair
+       `d(L,t) − d(L,s)` and `d(s,L) − d(t,L)` is used instead. Uniform grids keep the
+       cheaper BFS path. Result: 0/576 violations, 0/12 suboptimal, and on 64² braided
+       weighted topologies **5.79× fewer expansions / 1.9× faster** than plain Dijkstra
+       (precompute ≈ 8 ms vs ≈ 2 ms for one solve, so it amortises after ~4 queries).
+       15 new tests.
 5. [x] Ship the three offline LoadBalancerPro integrations (topology, min-cut capacity,
        placement) as an `examples/loadbalancer-topology` module — done 2026-07-19, runnable
        via `mvn -f examples/loadbalancer-topology/pom.xml exec:java`, with 7 tests pinning

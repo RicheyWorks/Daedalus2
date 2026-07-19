@@ -101,13 +101,17 @@ public class WeightedMazeGrid extends MazeGrid {
     }
 
     /**
-     * Entry cost for cell {@code p}. Overrides {@link MazeGrid#weightOf(Point)} so any
-     * solver that consults the hook (Dijkstra, A*) sees the per-cell weight instead of
-     * the uniform {@code 1.0} default.
+     * Entry cost for a cell. Overrides {@link MazeGrid#weightOf(int, int)} — the
+     * coordinate-indexed form — so any solver that consults the hook (Dijkstra, A*) sees the
+     * per-cell weight instead of the uniform {@code 1.0} default.
+     *
+     * <p>Overriding the {@code (row, col)} form rather than {@link MazeGrid#weightOf(Point)}
+     * is deliberate: the {@code Point} overload delegates here, so both stay consistent, and
+     * the graph seam can ask for a weight by node id without allocating a {@code Point}.
      */
     @Override
-    public double weightOf(Point p) {
-        return weights[p.row()][p.col()];
+    public double weightOf(int row, int col) {
+        return weights[row][col];
     }
 
     /**

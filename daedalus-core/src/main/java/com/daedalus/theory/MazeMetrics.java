@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * Structural graph metrics over a maze — CLRS Ch. 22 (breadth-first search) applied to the
@@ -106,6 +107,95 @@ public final class MazeMetrics {
             copy[r] = distance[r].clone();
         }
         return copy;
+    }
+
+    /**
+     * Dijkstra cost-distances <em>from</em> {@code source} to every cell — {@code d(source, x)} —
+     * as a fresh {@code rows × cols} grid. Unreachable cells are
+     * {@link Double#POSITIVE_INFINITY}.
+     *
+     * <p>This is the weighted counterpart of {@link #distancesFrom(MazeGrid, Point)}. On a plain
+     * {@link MazeGrid} every edge costs {@code 1.0} and the result equals the BFS field, but
+     * BFS gets there in O(V + E) against Dijkstra's O((V + E) log V) — so prefer the BFS form
+     * when the grid is uniform-cost.
+     *
+     * <p><b>Direction matters.</b> {@code MazeGrid}'s cost model charges the weight of the cell
+     * being <em>entered</em>, so {@code d(a, b) != d(b, a)} in general (they differ by
+     * {@code w(b) - w(a)}). This method answers "outbound from source". For the other
+     * direction use {@link #weightedDistancesTo(MazeGrid, Point)}; do not assume one can be
+     * read backwards for the other.
+     */
+    public static double[][] weightedDistancesFrom(MazeGrid grid, Point source) {
+        return dijkstra(grid, source, true);
+    }
+
+    /**
+     * Dijkstra cost-distances <em>to</em> {@code target} from every cell — {@code d(x, target)} —
+     * as a fresh {@code rows × cols} grid. Unreachable cells are
+     * {@link Double#POSITIVE_INFINITY}.
+     *
+     * <p>Computed by running Dijkstra over the reverse graph: passages are undirected, so the
+     * reverse graph has the same adjacency, but the cost of the reversed arc {@code v -> u} is
+     * the weight of {@code v} (the cell a forward traveller would be entering). That single
+     * change is the whole difference between the two sweeps.
+     */
+    public static double[][] weightedDistancesTo(MazeGrid grid, Point target) {
+        return dijkstra(grid, target, false);
+    }
+
+    /**
+     * Shared Dijkstra over the {@link MazeGraph} seam.
+     *
+     * @param forward {@code true} for {@code d(origin, x)} — relax into a neighbour at the
+     *                neighbour's weight; {@code false} for {@code d(x, origin)} — relax at the
+     *                weight of the node being left, which is what the reversed arc costs.
+     */
+    private static double[][] dijkstra(MazeGrid grid, Point origin, boolean forward) {
+        MazeGraph graph = new MazeGraph(grid);
+        int rows = grid.rows();
+        int cols = grid.cols();
+
+        double[][] distance = new double[rows][cols];
+        for (double[] row : distance) {
+            Arrays.fill(row, Double.POSITIVE_INFINITY);
+        }
+        boolean[] settled = new boolean[rows * cols];
+        int[] adjacency = new int[graph.maxDegree()];
+
+        int start = origin.row() * cols + origin.col();
+        distance[origin.row()][origin.col()] = 0.0;
+
+        // Lazy-deletion queue: push on improvement, discard stale pops. Avoids needing
+        // decrease-key, at the cost of at most E entries.
+        PriorityQueue<long[]> queue = new PriorityQueue<>(
+                (x, y) -> Double.compare(Double.longBitsToDouble(x[0]), Double.longBitsToDouble(y[0])));
+        queue.add(new long[] {Double.doubleToRawLongBits(0.0), start});
+
+        while (!queue.isEmpty()) {
+            long[] top = queue.poll();
+            int current = (int) top[1];
+            if (settled[current]) {
+                continue;
+            }
+            settled[current] = true;
+            int curRow = current / cols;
+            int curCol = current % cols;
+            double d = distance[curRow][curCol];
+
+            int degree = graph.neighbors(current, adjacency);
+            for (int i = 0; i < degree; i++) {
+                int next = adjacency[i];
+                int nextRow = next / cols;
+                int nextCol = next % cols;
+                double step = forward ? grid.weightOf(nextRow, nextCol) : grid.weightOf(curRow, curCol);
+                double candidate = d + step;
+                if (candidate < distance[nextRow][nextCol]) {
+                    distance[nextRow][nextCol] = candidate;
+                    queue.add(new long[] {Double.doubleToRawLongBits(candidate), next});
+                }
+            }
+        }
+        return distance;
     }
 
     private static Bfs bfs(MazeGrid grid, Point source) {

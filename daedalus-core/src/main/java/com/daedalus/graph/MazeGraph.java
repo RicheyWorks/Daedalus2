@@ -65,7 +65,16 @@ public final class MazeGraph implements Graph {
     @Override
     public double edgeWeight(int from, int to) {
         // Matches MazeGrid semantics: cost is a property of the cell being entered.
-        return grid.weightOf(pointOf(to));
+        //
+        // Note this reads the (row, col) accessor rather than pointOf(to): this method sits in
+        // the innermost loop of every weighted search, and the Point it used to build was
+        // allocated purely to be unwrapped again by the grid.
+        //
+        // The asymmetry is deliberate and load-bearing — cost(u -> v) is w(v), so
+        // edgeWeight(a, b) != edgeWeight(b, a) whenever w(a) != w(b). Anything reasoning about
+        // distances over this graph must treat it as directed; see LandmarkHeuristic, which
+        // needs both forward and backward sweeps for exactly this reason.
+        return grid.weightOf(to / cols, to % cols);
     }
 
     /** Dense id for a cell. */

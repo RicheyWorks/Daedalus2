@@ -155,6 +155,27 @@ public class MazeGrid {
      * @since 1.0
      */
     public double weightOf(Point p) {
+        return weightOf(p.row(), p.col());
+    }
+
+    /**
+     * Coordinate-indexed form of {@link #weightOf(Point)} — the one subclasses should override.
+     *
+     * <p>This exists because the graph seam addresses nodes by dense integer id, so
+     * {@link com.daedalus.graph.MazeGraph#edgeWeight(int, int)} previously had to materialise a
+     * {@link Point} on every edge relaxation just to ask for its cost. On a weighted Dijkstra
+     * sweep that is one allocation per relaxation, in the hottest loop the engine has. Taking
+     * {@code (row, col)} directly removes it.
+     *
+     * <p>{@link #weightOf(Point)} delegates here, so there is a single implementation point:
+     * override this, and both forms stay consistent.
+     *
+     * @param row cell row
+     * @param col cell column
+     * @return the cost of entering {@code (row, col)}; always {@code 1.0} for plain
+     *         {@code MazeGrid}
+     */
+    public double weightOf(int row, int col) {
         return 1.0;
     }
 
