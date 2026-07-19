@@ -236,6 +236,13 @@ housekeeping on the things that make the repo behave.
   the reported edges genuinely severs source from sink. This matters beyond microbenchmarks:
   min-cut is what capacity analysis calls in the LoadBalancer example, so it is on the
   ecosystem's hot path rather than the maze game's.
+  `vertexDisjointPaths` followed in the same file, replacing its
+  `List<List<Integer>>` adjacency and `Map<Long, Integer>` residual with an arc-indexed
+  split graph — every arc paired with a zero-capacity reverse twin, grouped by tail, which
+  is the textbook max-flow representation in flat arrays. **2.02× / 3.04× / 3.74×**, with
+  the vertex `<=` edge invariant and every other assertion unchanged. `MazeFlow` now holds
+  no hash structures at all, and the dead `key()`, list-based `addArc` and
+  `findAugmentingPath` helpers are gone with their imports.
 - **`engine.generators.DungeonGenerator` — rooms and corridors (C3).** Binary
   space partitioning: split the grid recursively, carve a room in every leaf,
   then join sibling regions with L-shaped corridors on the way back up. The

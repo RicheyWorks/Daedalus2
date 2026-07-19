@@ -6,14 +6,10 @@ import com.daedalus.engine.MazeGrid;
 import com.daedalus.graph.MazeGraph;
 import com.daedalus.model.Point;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Deque;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Max-flow / min-cut over the maze passage graph — CLRS Ch. 26, applied to level analysis.
@@ -97,39 +93,103 @@ public final class MazeFlow {
         if (source.equals(sink)) {
             return 0;
         }
+        MazeGraph graph = new MazeGraph(grid);
         int cols = grid.cols();
-        int cells = grid.rows() * cols;
+        int cells = graph.nodeCount();
         int nodes = 2 * cells;
+        int[] adjacency = new int[graph.maxDegree()];
 
-        List<List<Integer>> adjacency = new ArrayList<>(nodes);
-        for (int i = 0; i < nodes; i++) {
-            adjacency.add(new ArrayList<>(4));
+        // Arc budget: each cell contributes its in->out arc, plus one arc per outgoing passage.
+        // Every arc is stored with a zero-capacity reverse twin, which is what carries residual
+        // flow back — the standard max-flow representation, in flat arrays rather than a map.
+        int arcs = 0;
+        for (int v = 0; v < cells; v++) {
+            arcs += 2 + 2 * graph.neighbors(v, adjacency);
         }
-        Map<Long, Integer> residual = new HashMap<>();
+        int[] tail = new int[arcs];
+        int[] target = new int[arcs];
+        int[] capacity = new int[arcs];
+        int[] twin = new int[arcs];
 
-        for (int r = 0; r < grid.rows(); r++) {
-            for (int c = 0; c < cols; c++) {
-                int v = r * cols + c;
-                addArc(adjacency, residual, in(v), out(v), nodes); // the cell's own capacity: 1
-                for (Point q : grid.openNeighbors(new Point(r, c))) {
-                    int u = id(q, cols);
-                    addArc(adjacency, residual, out(v), in(u), nodes);
-                }
+        int next = 0;
+        for (int v = 0; v < cells; v++) {
+            next = addArc(tail, target, capacity, twin, next, in(v), out(v)); // the cell's own capacity: 1
+            int degree = graph.neighbors(v, adjacency);
+            for (int i = 0; i < degree; i++) {
+                next = addArc(tail, target, capacity, twin, next, out(v), in(adjacency[i]));
             }
         }
 
+        // Group arc ids by their tail so BFS can sweep a node's arcs contiguously.
+        int[] offsets = new int[nodes + 1];
+        for (int e = 0; e < arcs; e++) {
+            offsets[tail[e] + 1]++;
+        }
+        for (int v = 0; v < nodes; v++) {
+            offsets[v + 1] += offsets[v];
+        }
+        int[] arcsOf = new int[arcs];
+        int[] cursor = offsets.clone();
+        for (int e = 0; e < arcs; e++) {
+            arcsOf[cursor[tail[e]]++] = e;
+        }
+
         int src = out(id(source, cols));
-        int sink0 = in(id(sink, cols));
+        int destination = in(id(sink, cols));
+        int[] parentArc = new int[nodes];
+        int[] queue = new int[nodes];
         int flow = 0;
-        int[] parent = new int[nodes];
-        while (findAugmentingPath(adjacency, residual, nodes, src, sink0, parent)) {
-            for (int v = sink0; v != src; v = parent[v]) {
-                residual.merge(key(parent[v], v, nodes), -1, Integer::sum);
-                residual.merge(key(v, parent[v], nodes), 1, Integer::sum);
+        while (augment(offsets, arcsOf, target, capacity, parentArc, queue, src, destination)) {
+            for (int v = destination; v != src; ) {
+                int arc = parentArc[v];
+                capacity[arc]--;
+                capacity[twin[arc]]++;
+                v = tail[arc];
             }
             flow++;
         }
         return flow;
+    }
+
+    /** Append a unit-capacity arc plus its zero-capacity residual twin. */
+    private static int addArc(int[] tail, int[] target, int[] capacity, int[] twin,
+                              int next, int from, int to) {
+        tail[next] = from;
+        target[next] = to;
+        capacity[next] = 1;
+        twin[next] = next + 1;
+        tail[next + 1] = to;
+        target[next + 1] = from;
+        capacity[next + 1] = 0;
+        twin[next + 1] = next;
+        return next + 2;
+    }
+
+    /** BFS for an augmenting path over the arc-indexed split graph. */
+    private static boolean augment(int[] offsets, int[] arcsOf, int[] target, int[] capacity,
+                                   int[] parentArc, int[] queue, int src, int destination) {
+        Arrays.fill(parentArc, -1);
+        boolean[] seen = new boolean[offsets.length - 1];
+        seen[src] = true;
+        int head = 0;
+        int tail = 0;
+        queue[tail++] = src;
+        while (head < tail) {
+            int u = queue[head++];
+            for (int i = offsets[u]; i < offsets[u + 1]; i++) {
+                int arc = arcsOf[i];
+                int v = target[arc];
+                if (!seen[v] && capacity[arc] > 0) {
+                    seen[v] = true;
+                    parentArc[v] = arc;
+                    if (v == destination) {
+                        return true;
+                    }
+                    queue[tail++] = v;
+                }
+            }
+        }
+        return false;
     }
 
     private static int in(int cell) {
@@ -138,36 +198,6 @@ public final class MazeFlow {
 
     private static int out(int cell) {
         return 2 * cell + 1;
-    }
-
-    /** Register a unit-capacity arc plus its residual counterpart. */
-    private static void addArc(List<List<Integer>> adjacency, Map<Long, Integer> residual,
-                               int from, int to, int nodes) {
-        adjacency.get(from).add(to);
-        adjacency.get(to).add(from);
-        residual.merge(key(from, to, nodes), 1, Integer::sum);
-    }
-
-    /** BFS for an augmenting path in the split graph. */
-    private static boolean findAugmentingPath(List<List<Integer>> adjacency, Map<Long, Integer> residual,
-                                              int nodes, int src, int sink, int[] parent) {
-        Arrays.fill(parent, -1);
-        parent[src] = src;
-        Deque<Integer> queue = new ArrayDeque<>();
-        queue.add(src);
-        while (!queue.isEmpty()) {
-            int u = queue.poll();
-            for (int v : adjacency.get(u)) {
-                if (parent[v] == -1 && residual.getOrDefault(key(u, v, nodes), 0) > 0) {
-                    parent[v] = u;
-                    if (v == sink) {
-                        return true;
-                    }
-                    queue.add(v);
-                }
-            }
-        }
-        return false;
     }
 
     /**
@@ -355,7 +385,4 @@ public final class MazeFlow {
         return new Point(id / cols, id % cols);
     }
 
-    private static long key(int u, int v, int n) {
-        return (long) u * n + v;
-    }
 }
