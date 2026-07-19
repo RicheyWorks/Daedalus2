@@ -212,6 +212,23 @@ housekeeping on the things that make the repo behave.
   correctness test would still pass while the structure silently degraded from
   inverse-Ackermann to `O(n)`. The new tests read `parent` directly to assert the
   path really is rewritten, and that rank ordering survives (CLRS Ch. 21 + 17).
+- **Reservoir-sampled frontier declined (G3).** The idea was to cut frontier
+  memory, so the frontier was measured first — using the `maxFrontierSize` the
+  generators already record. Randomized Prim's peaks at 561 walls on a 64² maze
+  and only 4,866 on a 512² one: **1.9% of cells, about 0.22 MB**, and the share
+  *falls* as mazes grow, because the frontier tracks the perimeter of the grown
+  region rather than its area. There is no pressure to relieve. Independently,
+  the technique doesn't fit: Algorithm R samples one pass over a stream, whereas
+  Prim's frontier is live mutable state that must persist across steps, so using
+  a reservoir would mean rescanning the grid every step — O(n²) instead of the
+  current O(frontier). Noted the real lever if it ever matters: encode each wall
+  as one `int` rather than a two-`Point` object, ~10× smaller, no algorithm change.
+- **Consistent hashing declined (X4).** The maze cache is a single-process
+  bounded map; Redis is wired for the leaderboard, not for sharding mazes. A hash
+  ring would be distribution infrastructure for a system that isn't distributed —
+  and if it ever becomes one, Redis Cluster already shards by hash slot with
+  minimal reshuffling, so doing it in the application would duplicate the
+  datastore's mechanism and add a second thing to get wrong.
 - **Parallelism trio measured; C1 and C2 declined, C3 reframed.** Generation was
   timed before any thread pool was written: 1.96 ms at 64², 5.01 ms at 128²,
   18.3 ms at 256², 106 ms at 512² (Borůvka). At the sizes this project actually

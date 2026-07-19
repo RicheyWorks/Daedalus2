@@ -13,6 +13,20 @@ maze cache, and the `theory.ComplexityAnalyzer` that landed 2026-07-18.
 
 ---
 
+## Status — all ideas resolved 2026-07-18
+
+Every idea below has been worked to a conclusion. **13 shipped**, **2 verified as
+already correct** (D1, S3), **5 measured and declined** (D3, G3, X4, C1, C2), and
+**1 reframed** (C3 — worth building as a dungeon-layout feature, not for speed).
+
+Five of the declines came from measuring first, and three of them inverted the
+audit's own guess: D3 was ranked an easy win and turned out to be noise, while D2
+— ranked merely Medium — proved to be the single biggest performance lever at
+1.42–1.72×. Two premises were simply wrong and are corrected in place: G1's
+weight-variance texture knob (an MST is invariant under monotone reweighting) and
+G3's reservoir frontier (Algorithm R doesn't apply to persistent mutable state).
+Each entry carries its own measurements.
+
 ## TL;DR
 
 Twenty ideas, each anchored to a CLRS chapter and mapped to a real file.
@@ -53,6 +67,30 @@ spanning tree, but Wilson's is asymptotically faster. Run both through the new
 against Wilson's as n grows — theory you can now demonstrate empirically.
 
 **G3 · Reservoir-sampled frontier** — `Ch. 5 (reservoir sampling) · Impact Med · Effort Med`
+**Measured 2026-07-18 — declined on two independent grounds.**
+
+*It solves a non-problem.* Peak frontier for randomized Prim's, from the
+`maxFrontierSize` the generator already records:
+
+| maze | cells | peak frontier | % of cells | approx memory |
+|---|---:|---:|---:|---:|
+| 64² | 4,096 | 561 | 13.7% | 0.03 MB |
+| 128² | 16,384 | 1,210 | 7.4% | 0.06 MB |
+| 256² | 65,536 | 2,525 | 3.9% | 0.12 MB |
+| 512² | 262,144 | 4,866 | **1.9%** | **0.22 MB** |
+
+The frontier tracks the perimeter of the grown region, not its area, so it grows
+far slower than the maze and its *share* shrinks as mazes get bigger. There is no
+memory pressure to relieve.
+
+*And the technique doesn't fit anyway.* Algorithm R draws a uniform sample from a
+single pass over a stream. Prim's frontier isn't a stream — it's live mutable
+state that must survive across steps, since each carve removes one wall and adds
+others. Sampling it with a reservoir would mean re-enumerating the frontier every
+step by scanning the grid: O(n) per step over n steps, i.e. O(n²), catastrophically
+worse than the O(frontier) set it replaces. If frontier memory ever did matter,
+the fix is encoding each wall as a single `int` (cell id × 4 + direction) instead
+of a two-`Point` object — roughly 10× smaller with no algorithmic change.
 For mazes too large to hold the whole frontier set, keep a running uniform
 sample (Algorithm R) and carve from it: O(1) extra memory per step. Turns
 frontier-based generators into streaming ones for 512²+ grids.
@@ -247,6 +285,15 @@ and you get maze "diffs" for frame streaming almost for free. Shrinks the
 generation/solve frame traffic the WebSocket layer pushes.
 
 **X4 · Consistent hashing for the maze cache** — `Ch. 11 (hashing) · Impact Low · Effort Med`
+**Declined 2026-07-18 — it's the datastore's job, and there's no second node.**
+The maze cache is a single-process bounded map (`daedalus.cache.maze-cache-size`);
+Redis is wired for the leaderboard, not for sharding mazes. Hand-rolling a hash
+ring would be building distribution infrastructure for a system that isn't
+distributed. And if it ever is, Redis Cluster already shards by hash slot with
+minimal reshuffling on topology change — reimplementing that in the application
+would duplicate the datastore's own mechanism and add a second thing to get
+wrong. Revisit only if the cache genuinely becomes multi-node *and* the store in
+front of it can't shard.
 If the cache goes multi-node (Redis is already wired for the leaderboard),
 consistent hashing spreads stored mazes with minimal reshuffling when nodes
 join or leave. Standard, but the right tool if scale-out ever happens.
