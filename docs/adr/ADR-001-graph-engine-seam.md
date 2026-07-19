@@ -246,11 +246,17 @@ valuable, and unblocked — that is where the first release should land.
 
 ## Action Items
 
-1. [ ] **Correct `Vision/02-LoadBalancer-Integration-Guide.md`** — the `dynamicHeuristic`
-       admissibility bug. Highest priority: it is published guidance that silently produces
-       wrong routes.
-2. [ ] Define `com.daedalus.graph.Graph` + `MazeGrid` adapter; retarget one solver
-       (`BfsSolver`) as a spike and confirm the cross-agreement tests still pass.
+1. [x] **Correct `Vision/02-LoadBalancer-Integration-Guide.md`** — done 2026-07-19. The
+       `dynamicHeuristic` example is replaced with load-in-`g` via `WeightedMazeGrid` plus
+       an admissible `LandmarkHeuristic`, and the section carries an explicit correction
+       notice. Note the two compose only because costs are kept `>= 1.0`, which keeps the
+       unit-cost landmark bound a valid lower bound.
+2. [x] Define `com.daedalus.graph.Graph` + `MazeGrid` adapter; retarget one solver
+       (`BfsSolver`) as a spike — done 2026-07-19. `Graph`, `MazeGraph` (live view) and
+       `CsrGraph` (CSR snapshot, updatable weights) shipped with 7 tests; `BfsSolver`
+       retargeted. **Measured 2.39–2.75× faster** than the previous implementation, and
+       the whole suite passed unchanged. The spike settles the design question: the seam
+       is not an abstraction tax, it is faster than what it replaced.
 3. [ ] Retarget remaining solvers and `theory` classes; delete the maze-specific paths.
 4. [ ] Add `EdgeWeightedGraph` and move `LandmarkHeuristic` precompute to Dijkstra.
 5. [ ] Ship the three offline LoadBalancerPro integrations (topology, min-cut capacity,

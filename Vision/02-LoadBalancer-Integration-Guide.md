@@ -55,6 +55,29 @@ public class SimpleTopologyExample {
 
 This is the **killer integration** — generate a Hilbert topology once, then use A* with **real-time weights** (latency, load, etc.).
 
+> ### ⚠️ Correction (2026-07-19) — read before copying this section
+>
+> **An earlier version of the code below folded node load into A\*'s _heuristic_
+> (`return distance + (load * 2.0)`). That is a correctness bug and it has been replaced.**
+>
+> A\* only returns optimal paths while its heuristic `h` never over-estimates the true
+> remaining cost (it must be *admissible*). Adding load to `h` breaks that guarantee
+> immediately — and the failure is silent, because A\* still returns *a* path, just not the
+> cheapest one. You would get plausible-looking routes with no error and no way to notice.
+>
+> Load is a property of **traversing** a node, so it belongs in the edge **cost** (`g`), not
+> in the estimate of what remains (`h`). `WeightedMazeGrid` already models exactly this:
+> `weightOf(cell)` is the cost of entering a cell, and both `DijkstraSolver` and
+> `AStarSolver` read it. Push load in there and optimality is preserved by construction.
+>
+> If you want A\* to be *faster* rather than *wrong*, make `h` **tighter but still
+> admissible** — that is what `solver.LandmarkHeuristic` (ALT) is for; it measured **55%
+> fewer node expansions** than Manhattan on this engine. Note it is unit-cost only: on a
+> weighted topology its precompute must use Dijkstra rather than BFS, or it stops being
+> admissible too.
+>
+> Rule of thumb: **live conditions go in `g`; only distance lower bounds go in `h`.**
+
 ```java
 import com.daedalus.engine.generators.HilbertCurveGenerator;
 import com.daedalus.engine.MazeGrid;
@@ -67,45 +90,30 @@ import java.util.function.ToDoubleBiFunction;
 
 public class HilbertLoadBalancer {
 
-    private final MazeGrid topology;
-    private final Map<Point, Double> currentLoad = new ConcurrentHashMap<>();
-    private final AStarSolver solver = new AStarSolver(this::dynamicHeuristic);
+    /** Load lives in the grid's per-cell entry cost, which the solvers already consult. */
+    private final WeightedMazeGrid topology;
+
+    /** Admissible, load-independent heuristic. Precomputed once against the topology. */
+    private final LandmarkHeuristic landmarks;
 
     public HilbertLoadBalancer(int size, long seed) {
-        HilbertCurveGenerator gen = new HilbertCurveGenerator();
-        this.topology = gen.generate(size, size, seed, new MazeStats());
-        
-        // Initialize all nodes with zero load
-        for (int r = 0; r < size; r++) {
-            for (int c = 0; c < size; c++) {
-                currentLoad.put(new Point(r, c), 0.0);
-            }
-        }
+        MazeGrid base = new HilbertCurveGenerator().generate(size, size, seed, new MazeStats());
+        this.topology = new WeightedMazeGrid(base);   // every cell starts at cost 1.0
+        this.landmarks = LandmarkHeuristic.precompute(base, 4);
     }
 
     /**
-     * Dynamic heuristic that considers both distance AND current load
+     * Feed real metrics in here. Cost must stay >= 1.0 so the heuristic remains admissible:
+     * an idle node costs 1, a saturated one costs more, and A* still returns optimal routes.
      */
-    private double dynamicHeuristic(Point current, Point goal) {
-        double distance = current.manhattan(goal);
-        double load = currentLoad.getOrDefault(current, 0.0);
-        
-        // Penalize heavily loaded nodes
-        return distance + (load * 2.0);
+    public void updateNodeLoad(Point node, double loadFactor) {
+        topology.setWeight(node, 1.0 + Math.max(0.0, loadFactor));
     }
 
-    /**
-     * Update load on a node (call this from your load balancer metrics)
-     */
-    public void updateNodeLoad(Point node, double load) {
-        currentLoad.put(node, load);
-    }
-
-    /**
-     * Find best route from start to goal, respecting current load
-     */
+    /** Least-cost route under current load — provably optimal, because load is in g not h. */
     public List<Point> findBestRoute(Point start, Point goal) {
-        return solver.solve(topology, start, goal, new MazeStats());
+        return new AStarSolver(landmarks.asHeuristic())
+                .solve(topology, start, goal, new MazeStats());
     }
 
     public MazeGrid getTopology() {

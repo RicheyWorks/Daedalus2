@@ -151,6 +151,22 @@ housekeeping on the things that make the repo behave.
   side by side at 64² and 128², sending cell bits is **~16× smaller** than the
   rendered glyph grid. This codec is the drop-in that needs no API change; the
   16× needs a client-side renderer.
+- **`com.daedalus.graph` — the graph seam (ADR-001, phase 1).** `Graph` is the abstraction
+  that lets Daedalus route over any topology rather than only a rectangular maze:
+  dense integer node ids, and adjacency delivered into a **caller-owned buffer**
+  (`neighbors(node, int[] out)`) so a search loop allocates nothing. Two
+  implementations ship: `MazeGraph`, a zero-cost **live view** over `MazeGrid` that
+  reads wall flags directly, and `CsrGraph`, a compressed-sparse-row snapshot built
+  from caller-supplied edges — the entry point for a service mesh or rack layout that
+  was never a maze, with in-place `setEdgeWeight` so live latency/load can move
+  without rebuilding the structure.
+  `BfsSolver` is retargeted onto it as the proving spike, and the seam paid for
+  itself immediately: **2.39–2.75× faster** (58–64% less time over 12 mazes at 80²)
+  against a faithful copy of the previous implementation. That beats even D2's
+  1.42–1.72×, because BFS shed the per-node `ArrayList` from `openNeighbors` on top of
+  the hashing. Every existing test passed **unchanged**, including the cross-solver
+  agreement checks that compare bidirectional and A\* against BFS — which is the
+  evidence the retarget is behaviour-preserving.
 - **`engine.generators.DungeonGenerator` — rooms and corridors (C3).** Binary
   space partitioning: split the grid recursively, carve a room in every leaf,
   then join sibling regions with L-shaped corridors on the way back up. The
