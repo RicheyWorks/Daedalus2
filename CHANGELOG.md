@@ -122,6 +122,15 @@ housekeeping on the things that make the repo behave.
   correctness test would still pass while the structure silently degraded from
   inverse-Ackermann to `O(n)`. The new tests read `parent` directly to assert the
   path really is rewritten, and that rank ordering survives (CLRS Ch. 21 + 17).
+- **d-ary heap benchmarked and declined (D3).** A 4-ary heap was measured against
+  `java.util.PriorityQueue` inside a real Dijkstra loop (12 mazes at 80², warmed
+  up, three reps) and came in at −1.5% / −8.5% / −1.8% — inside the noise, with a
+  d=2 control swinging 11.8ms→22.7ms across reps. The heap simply isn't the
+  bottleneck: the loop is dominated by `HashMap`/`HashSet` lookups on `Point`
+  keys. No code was shipped rather than add a placebo optimization. The follow-up
+  measurement is the useful part — swapping those maps for flat arrays indexed by
+  `row * cols + col` ran **1.47–2.00× faster** on the identical workload, so idea
+  **D2** was upgraded to High impact and is now the top performance item.
 - **Bidirectional termination audited (S3).** `BidirectionalSolver` stops at the
   first frontier touch, and textbooks warn that this can return a path one step
   longer than optimal. Rather than assume it, the concern was measured: across

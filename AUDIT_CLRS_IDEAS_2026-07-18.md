@@ -103,14 +103,25 @@ Confirm `util/DSU.java` uses union-by-rank *and* path compression (or
 path-halving) and add the inverse-Ackermann note. Both Kruskal and Borůvka
 ride on it, so this is a load-bearing few lines with an outsized story.
 
-**D2 · Bitset maze grid** — `Ch. 11 flavor + bit tricks · Impact Med · Effort Med`
+**D2 · Bitset maze grid** — `Ch. 11 flavor + bit tricks · Impact` **High** `(upgraded) · Effort Med`
+**Backed by measurement 2026-07-18:** replacing the solvers' `HashMap<Point,…>`
+and `HashSet<Point>` with flat arrays indexed by `row * cols + col` ran
+**1.47–2.00× faster** (32–50% less time) on the same 12×80² Dijkstra workload
+where the d-ary heap (D3) showed nothing. Cell-id indexing is the highest-value
+performance item left in this audit — do this one before any other micro-tuning.
 Pack the four wall bits per cell into a `long[]`; neighbor scans and flood-fill
 become word-parallel and cache-friendly, a measurable gen/solve win at 128²+.
 Enables SWAR tricks (population counts for dead-end detection, etc.).
 
 **D3 · d-ary heap tuned to grid degree** — `Ch. 6 (heaps) · Impact Low · Effort Low`
-A 4-ary heap matches the grid's branching factor and shortens sift-down chains
-versus a binary heap in Dijkstra/A*. Small, self-contained, and easy to A/B
+**Measured 2026-07-18 — declined, no code shipped.** A 4-ary heap was
+benchmarked against `java.util.PriorityQueue` in a real Dijkstra workload
+(12 mazes at 80², warmed up, three reps): the difference was −1.5%, −8.5%,
+−1.8% — inside the noise band, and a d=2 variant swung from 11.8ms to 22.7ms
+across reps. The reason is that **the heap isn't the bottleneck**: at ~13ms the
+loop is dominated by `HashMap`/`HashSet` operations on `Point` keys, not by
+sift-down comparisons. Shipping it would have been a placebo optimization. The
+measurement redirected the effort to **D2**, which is where the real win is. Small, self-contained, and easy to A/B
 with the analyzer.
 
 ## 4. Concurrency & parallelism
