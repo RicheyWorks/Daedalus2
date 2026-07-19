@@ -406,6 +406,29 @@ housekeeping on the things that make the repo behave.
   rooms-and-corridors dungeon layouts get built, and that's a real gap — every
   current generator makes uniform perfect mazes. It belongs in the backlog as a
   single-threaded feature, judged on the layouts it produces.
+- **Solver costs profiled before optimising, which redirected the work entirely (ADR-001).**
+  With six solvers still using `HashMap`/`HashSet`, the plan was to move them onto the graph
+  seam. Timing them first over 12 mazes at 80² changed the answer:
+
+  | solver | time | | solver | time |
+  |---|---:|---|---|---:|
+  | wall-follower | 2.55 ms | | bidirectional | 6.94 ms |
+  | bfs | 2.70 ms | | dead-end-filling | 14.66 ms |
+  | dial | 4.83 ms | | tremaux | 20.01 ms |
+  | dfs | 5.26 ms | | **ida-star** | **875.91 ms** |
+
+  **IDA\* costs ~300× BFS and 44× the next-worst solver.** De-hashing it would have been
+  rearranging deck chairs: the cost is inherent to iterative deepening, which re-searches from
+  scratch each pass under a slightly larger f-bound — with unit costs the bound rises by 1 per
+  pass, so a maze with a path hundreds of steps long is re-explored hundreds of times.
+  The fix turned out to be a heuristic already built for another purpose. Swapping Manhattan
+  for `LandmarkHeuristic` (ALT): **342.7 ms → 8.4 ms, a 41× speedup**. The same swap saves A\*
+  only ~55% of expansions; IDA\* gains far more because re-expansion multiplies every saving.
+  No code changed — `IDAStarSolver` already accepts a heuristic. Its javadoc now carries the
+  measurements and says plainly when to use it: ALT when a maze is solved repeatedly, A\*/BFS
+  for one-shot queries (ALT's precompute costs about as much as just solving the maze), and
+  IDA\* itself only when `O(d)` memory is the actual constraint. It is a memory-optimised
+  algorithm, not a time-optimised one, and the default heuristic makes that trade steeply.
 - **d-ary heap benchmarked and declined (D3).** A 4-ary heap was measured against
   `java.util.PriorityQueue` inside a real Dijkstra loop (12 mazes at 80², warmed
   up, three reps) and came in at −1.5% / −8.5% / −1.8% — inside the noise, with a
