@@ -367,7 +367,14 @@ valuable, and unblocked — that is where the first release should land.
           structures impossible to amortise. See ADR-002 for the measurement that produced
           this.
 
-       Still to do: actually file these upstream.
+       All three are now written out as ready-to-file issue text in
+       [`docs/upstream-requests-loadbalancerpro.md`](../upstream-requests-loadbalancerpro.md),
+       each stating the problem, a suggested change that keeps existing callers compiling, and
+       what happens if it is declined. Request 3 carries the ADR-002 measurement and an explicit
+       caveat that Daedalus is **not** asking for the policy that evaluation rejected — only for
+       the architectural ceiling to be removed.
+
+       Still to do: paste them into the LoadBalancerPro tracker.
 7. [x] Evaluate CSRBT `RankedSet` behind `TailLatencyPowerOfTwoStrategy` — done 2026-07-19,
        **declined**. Full write-up in
        [ADR-002](ADR-002-csrbt-rankedset-for-routing.md); measured with the real classes
