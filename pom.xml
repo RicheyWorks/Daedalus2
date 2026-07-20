@@ -37,7 +37,7 @@
         <!-- Build hygiene plugins -->
         <jacoco.version>0.8.12</jacoco.version>
         <checkstyle-plugin.version>3.5.0</checkstyle-plugin.version>
-        <checkstyle.version>10.18.2</checkstyle.version>
+        <checkstyle.version>13.8.0</checkstyle.version>
         <spotbugs-plugin.version>4.8.6.4</spotbugs-plugin.version>
     </properties>
 
