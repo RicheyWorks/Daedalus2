@@ -305,7 +305,18 @@ valuable, and unblocked — that is where the first release should land.
          The algorithm is O(1) memory by design; replacing the set with a `boolean[]` would
          add O(V) allocation to make the *reporting* marginally cheaper.
 
-       Remaining seam work is therefore the `theory` classes, not the solvers.
+       `LongestPath` followed — the last hot hashed structure anywhere in the engine. Its
+       backtracking DFS probed a `HashSet<Point>` once per neighbour of every visited node,
+       up to the two-million-visit budget per call; flat `boolean[]` membership and an `int[]`
+       path stack gave **3.56–3.76×** on braided 14² mazes, with 192 A/B cases identical.
+
+       **Item 3 is now complete.** Six consecutive confirmations of the rule, and no
+       counter-example: BFS 2.39–2.75×, bidirectional 2.12–2.69×, DFS 3.09–3.19×, Trémaux
+       3.3–6.8×, dead-end filling 1.60–2.75×, longest-path 3.56–3.76× — against no measurable
+       gain anywhere D2 had already moved to cell-id arrays. What remains hashed is
+       deliberate: `IDAStarSolver` (its cost is re-expansion, which a tighter heuristic fixes
+       and data structures do not), `WallFollowerSolver` (stats bookkeeping on an O(1)-memory
+       algorithm) and `WaypointTour` (a one-off dedupe of at most 16 waypoints).
 4. [x] Add `EdgeWeightedGraph` and move `LandmarkHeuristic` precompute to Dijkstra — done
        2026-07-19, and it turned out to be a **correctness** item, not the performance
        item it was filed as. No `EdgeWeightedGraph` type was needed: `Graph.edgeWeight`
