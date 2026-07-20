@@ -3,14 +3,16 @@
 package com.daedalus.theory;
 
 import com.daedalus.engine.MazeGrid;
+import com.daedalus.graph.MazeGraph;
 import com.daedalus.model.Point;
+import com.daedalus.solver.GridIndex;
 
-import java.util.ArrayDeque;
+
 import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashSet;
+
+
 import java.util.List;
-import java.util.Set;
+
 
 /**
  * The "hardest route" through a maze: the <em>longest simple path</em> from start to goal — and
@@ -90,54 +92,89 @@ public final class LongestPath {
         return new LongPath(start, goal, length, best, !search.budgetExhausted);
     }
 
-    /** Mutable backtracking search — kept off the public surface. */
+    /**
+     * Mutable backtracking search — kept off the public surface.
+     *
+     * <p>Runs on the {@link MazeGraph} seam with dense node ids: the path is an {@code int[]}
+     * stack and membership a {@code boolean[]}, rather than an {@code ArrayDeque<Point>} and a
+     * {@code HashSet<Point>}. This is the hottest hashed structure that remained in the engine
+     * — the {@code onPath} set was probed and mutated once per neighbour of every visited node,
+     * up to {@link #DEFAULT_BUDGET} (two million) times per call — so the usual rule applies:
+     * the seam pays exactly where hashing survived.
+     *
+     * <p>Depth is bounded by the number of cells, since a <em>simple</em> path cannot revisit
+     * one, so {@code V} is an exact stack bound rather than a guess.
+     */
     private static final class Search {
-        private final MazeGrid grid;
-        private final Point goal;
-        private final Deque<Point> path = new ArrayDeque<>();
-        private final Set<Point> onPath = new HashSet<>();
+        private final MazeGraph graph;
+        private final GridIndex index;
+        private final int goalId;
+        private final int[] path;
+        private final boolean[] onPath;
+        private final int[][] adjacency;
+        private int depth;
         private long budget;
         private boolean budgetExhausted;
         private List<Point> bestPath;
         private int bestLength = -1;
 
         Search(MazeGrid grid, Point goal, long budget) {
-            this.grid = grid;
-            this.goal = goal;
+            this.graph = new MazeGraph(grid);
+            this.index = new GridIndex(grid);
+            this.goalId = index.idOf(goal);
             this.budget = budget;
+            int nodes = index.size();
+            this.path = new int[nodes];
+            this.onPath = new boolean[nodes];
+            // One adjacency buffer per depth level: the recursion holds a live iteration at
+            // every frame, so a single shared buffer would be clobbered by the child call.
+            this.adjacency = new int[nodes + 1][graph.maxDegree()];
         }
 
         void run(Point start) {
-            path.addLast(start);
-            onPath.add(start);
-            dfs(start);
+            int startId = index.idOf(start);
+            path[depth++] = startId;
+            onPath[startId] = true;
+            dfs(startId);
         }
 
-        private void dfs(Point current) {
+        private void dfs(int current) {
             if (budget <= 0) {
                 budgetExhausted = true;
                 return;
             }
             budget--;
 
-            if (current.equals(goal)) {
-                int length = path.size() - 1;
+            if (current == goalId) {
+                int length = depth - 1;
                 if (length > bestLength) {
                     bestLength = length;
-                    bestPath = new ArrayList<>(path);
+                    bestPath = snapshot();
                 }
                 return; // a simple path must END at the goal — don't extend past it
             }
 
-            for (Point next : grid.openNeighbors(current)) {
-                if (!onPath.contains(next)) {
-                    onPath.add(next);
-                    path.addLast(next);
+            int[] buffer = adjacency[depth];
+            int degree = graph.neighbors(current, buffer);
+            for (int i = 0; i < degree; i++) {
+                int next = buffer[i];
+                if (!onPath[next]) {
+                    onPath[next] = true;
+                    path[depth++] = next;
                     dfs(next);
-                    path.removeLast();
-                    onPath.remove(next);
+                    depth--;
+                    onPath[next] = false;
                 }
             }
+        }
+
+        /** Materialise the current stack as Points — only when a new best is found. */
+        private List<Point> snapshot() {
+            List<Point> out = new ArrayList<>(depth);
+            for (int i = 0; i < depth; i++) {
+                out.add(index.pointOf(path[i]));
+            }
+            return out;
         }
     }
 }
