@@ -14,20 +14,27 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
 
 ## At a glance
 
-- **19 generator algorithms** — Aldous-Broder, Archimedes (spiral), Binary
-  Tree, Borůvka's, Eller's, Gauss, Growing Tree, Hilbert Curve, Hunt-and-Kill,
-  Kraken (Eden growth), Kruskal's (randomised), Lightning, Morton Curve
-  (Z-order), Prim's (randomised), Recursive Backtracker, Recursive Division,
-  Sidewinder, Turing (state machine), Wilson's.
-- **9 solver algorithms** — A\*, BFS, Bidirectional BFS, Dead-End Filling,
-  DFS, Dijkstra, IDA\*, Trémaux, Wall Follower.
+- **22 generator algorithms** — Aldous-Broder, Archimedes (spiral), Binary
+  Tree, Borůvka's, Dungeon (BSP rooms + corridors), Eller's, Gauss, Growing
+  Tree, Hilbert Curve, Hunt-and-Kill, Kraken (Eden growth), Kruskal's
+  (randomised), Lightning, Morton Curve (Z-order), Oldest-Pick, Prim's
+  (randomised), Weighted Prim's (true MST), Recursive Backtracker, Recursive
+  Division, Sidewinder, Turing (state machine), Wilson's.
+- **10 solver algorithms** — A\*, BFS, Bidirectional BFS, Dead-End Filling,
+  DFS, Dial (bucket-queue Dijkstra), Dijkstra, IDA\*, Trémaux, Wall Follower.
+- **A graph seam, not just a grid** — solvers and analysis run against a
+  `Graph` interface with dense integer node ids and allocation-free adjacency,
+  so the engine routes over any topology rather than only a rectangular maze.
+  See [`docs/adr/ADR-001`](./docs/adr/ADR-001-graph-engine-seam.md).
 - **Pluggable** — third-party JARs can contribute generators, solvers, themes,
   and event listeners through a Spring-free SPI; loaders are tracked and
   closed cleanly on shutdown (no Windows file-locks, no metaspace bloat).
-- **Java 21**, **Spring Boot 3.3**, **JavaFX 21**.
-- **Audit-clean** — see [`AUDIT_RECOMMENDATIONS_2026-05-05.md`](./AUDIT_RECOMMENDATIONS_2026-05-05.md)
-  for the verification record. `mvn clean verify` passes 25 / 25 tests across
-  all modules.
+- **Java 21**, **Spring Boot 4.1**, **JavaFX 21**.
+- **Verified** — `mvn clean verify` passes **347 tests** across the five
+  modules (core 242, server 78, plugin-runtime 16, plugin-api 7, desktop 4)
+  with zero Checkstyle violations and zero SpotBugs findings.
+  [`CHANGELOG.md`](./CHANGELOG.md) records what changed and, where a decision
+  was measured rather than assumed, the numbers behind it.
 
 ## Modules
 
@@ -87,8 +94,6 @@ SPRING_PROFILES_ACTIVE=prod DAEDALUS_REDIS_ENABLED=true \
 All endpoints are mounted under `/api/v1` (versioned 2026-05-05 ahead of any
 public consumers).
 
-| Method | Path | Description |
-|---|---|---|
 | Method | Path | Auth (prod) | Description |
 |---|---|---|---|
 | `POST` | `/api/v1/auth/login` | public | Exchange admin credentials for a JWT |
@@ -177,6 +182,23 @@ plus a programmatic `MazeGeneratedEvent` subscriber. Build it with
 `mvn -f examples/biome-plugin/pom.xml clean package`, or run it against a
 live server in one command with `./examples/run-with-biome.sh`.
 
+## Worked examples
+
+Four standalone modules, none of them reactor children — the parent pom lists
+production modules only, so each is built and run on its own.
+
+| module | what it shows |
+|---|---|
+| [`examples/biome-plugin`](./examples/biome-plugin/) | Writing a plugin: two themed generators plus an event subscriber, loaded from a JAR. |
+| [`examples/loadbalancer-topology`](./examples/loadbalancer-topology/) | Daedalus as the topology and analysis engine behind a load balancer — generate a topology, measure its capacity with min-cut, place facilities with k-center, and route with cost in `g` rather than in the heuristic. |
+| [`examples/dungeon-layout`](./examples/dungeon-layout/) | Daedalus as the spatial layer under a narrative game engine — BSP rooms, level depth, the hardest route, and treasure placement, emitted as named locations. |
+| [`examples/benchmark-harness`](./examples/benchmark-harness/) | Times every generator and solver and writes `docs/benchmarks/benchmark-<date>.csv`. Run it by hand on a machine whose numbers you trust; timings are machine-specific and are deliberately not asserted in CI. |
+
+```bash
+mvn -f examples/loadbalancer-topology/pom.xml clean test
+mvn -f examples/dungeon-layout/pom.xml exec:java
+```
+
 ## Testing
 
 ```bash
@@ -201,7 +223,9 @@ Beyond the five Maven modules:
 ```
 Audit/       Vision-style audit + integration ideas (Grok, May 6)
 Code/        Sample integrations: HilbertLoadBalancer.java, daedalus-api-dtos.ts
-examples/    Worked example plugins (biome-plugin + run-with-biome.sh)
+docs/adr/    Architecture decision records (graph seam; CSRBT evaluation)
+docs/        benchmarks/ (harness output), evaluations/ (standalone measurement code)
+examples/    Four worked examples — see "Worked examples" above
 PDFs/        Auto-generated reference docs (server, runtime, desktop, core, generators, overview)
 Vision/      Forward-looking direction docs
 _migration/  Historical artefacts from the multi-module split + earlier audits
@@ -213,10 +237,37 @@ working tree.
 
 ## Operational notes
 
-- **Redis is optional.** `daedalus.redis.enabled=false` (the dev default)
-  uses an in-memory leaderboard. Set `daedalus.redis.enabled=true` for the
-  Redis-backed implementation. The `RedisConfig` Spring config is
-  `@ConditionalOnProperty` so the app boots cleanly either way.
+- **Redis is optional — and disabling it no longer reports the app as
+  unhealthy.** `daedalus.redis.enabled=false` (the dev default) uses an
+  in-memory leaderboard; set it `true` for the Redis-backed implementation.
+  `RedisConfig` is `@ConditionalOnProperty` so the app boots cleanly either
+  way. **Note if you deployed before 2026-07-19:** Boot's stock Redis health
+  indicator registered regardless of that flag, so `/actuator/health` answered
+  **503** on a perfectly healthy instance running the in-memory backend —
+  which a load balancer or Kubernetes readiness probe reads as "take this pod
+  out of rotation". `management.health.redis.enabled` is now bound to
+  `${daedalus.redis.enabled:false}`, so the check applies exactly where Redis
+  is actually required.
+- **Health is a report, not a veto.** `/actuator/health` carries a
+  `pluginSubsystem` component with `loadedPlugins`, `failedPlugins` and a
+  `lastFailure` description. It never reports DOWN by design: a broken
+  *optional* plugin must not pull a serving instance out of rotation, since
+  the engine, REST API and solver registry all keep working without it.
+- **Rate limiting is per-caller and bounded.** Each caller (authenticated
+  subject, else client IP) gets its own bucket. The bucket store is capped by
+  `daedalus.ratelimit.max-keys` (default 10 000) and expires on
+  `daedalus.ratelimit.idle-ttl` (default 10 min), so a caller minting many
+  keys costs bounded memory. Eviction can never refund permits early — each
+  bucket's effective TTL is raised to at least its own limit-refresh period.
+  Set `daedalus.ratelimit.trust-forwarded-header=true` **only** behind a proxy
+  that overwrites `X-Forwarded-For`; otherwise a client can spoof it and mint
+  a fresh bucket per forged IP.
+- **WebSocket connections are authenticated in prod.** The STOMP `CONNECT`
+  frame must carry `Authorization: Bearer <token>`; the JWT subject becomes
+  the session principal. Outside `prod` a token is optional, but an *invalid*
+  token is rejected in every profile. Note this is authentication only —
+  destinations are not yet scoped per user, so any authenticated client can
+  subscribe to any topic (see BACKLOG.md).
 - **The generation service is wrapped in a Resilience4j circuit breaker.**
   When it trips, a cached binary-tree maze is returned and the response
   reports the actual generator id (not the requested one) so clients,

@@ -6,13 +6,30 @@ All notable changes to Daedalus are documented in this file. Format follows
 `1.0.0` (the multi-module split + first audit pass) live in git history
 under the `_migration/` portfolios.
 
-## [Unreleased] — 2026-07-18
+## [Unreleased] — 2026-07-18 → 2026-07-19
 
-**Features, security + infrastructure.** Repo is live at `RicheyWorks/Daedalus2`
-and CI is green. The `ComplexityAnalyzer` surface lands empirical,
-regression-friendly complexity tracking for the generators; per-key rate
-limiting closes the shared-bucket gap on the write endpoints; the rest is
-housekeeping on the things that make the repo behave.
+**Framework migration, three correctness fixes, and the test gaps that hid
+them.** Repo is live at `RicheyWorks/Daedalus2`. Spring Boot moved 3.3.1 → 4.1.0
+for four coordinates and one import; the graph seam finished absorbing the
+solvers; and `theory` grew the pieces the ecosystem work needs.
+
+The through-line of 07-19 is worth stating once, because three separate bugs
+shared it: **the test fixtures were all the easy shape.** Every solver fixture
+was a *perfect* maze — a spanning tree, where exactly one route exists between
+any pair of cells, so a solver can be badly wrong and still look right. That hid
+an inadmissible `LandmarkHeuristic` (A\* still returned the only path there was)
+and a `TremauxSolver` missing one of Trémaux's three rules (it could not solve a
+looped maze at all). Every generator fixture was a *square* grid, and every
+`theory` caller assumed `(0, 0)` was part of the maze — false for a BSP dungeon,
+whose corners are solid rock, which made `diameter` return 0 and put a generated
+level's entrance and exit on the same square. Separately, every server test was
+a *slice*, so a springdoc major version bump sailed through 267 green tests
+without anything ever requesting `/v3/api-docs`.
+
+Each fix therefore ships with the property test that would have caught it:
+braided mazes across every solver, awkward grid shapes across every generator,
+and one full-context smoke test that boots the real application. Where a
+decision was measured rather than argued, the numbers are in the entry.
 
 ### Added
 
@@ -551,6 +568,26 @@ housekeeping on the things that make the repo behave.
   produced a concrete upstream request (ADR-001 item 6, request 3): give
   `RoutingStrategy` an optional stateful form, since the current signature
   obliges every strategy to be stateless and O(n) per decision.
+
+- **`LongestPath` moved onto the graph seam — the last hot hashed structure in
+  the engine (ADR-001 item 3).** Its backtracking DFS held membership in a
+  `HashSet<Point>` and the path in an `ArrayDeque<Point>`, probed and mutated
+  once per neighbour of every visited node, up to the two-million-visit default
+  budget per call. Now a `boolean[]` and an `int[]` stack over dense node ids.
+  **Measured 3.56–3.76× faster** on braided 14² mazes — the case that is
+  actually hard, since a perfect maze has exactly one simple path and no search
+  to do. Equivalence checked over **192 A/B cases** across four generators, four
+  braid factors and two sizes: identical paths throughout.
+
+  One detail that would have been a silent corruption: the recursion needs **one
+  adjacency buffer per depth level**, not a shared one. Every frame holds a live
+  neighbour iteration, so a child call reusing the parent's buffer would
+  overwrite the list the parent is still walking. Depth is bounded by the cell
+  count — a *simple* path cannot revisit a cell — so `V` buffers is an exact
+  bound rather than a guess.
+
+  `WaypointTour`'s remaining `Set<Point>` was deliberately left alone: it
+  de-duplicates at most 16 waypoints once, and is not on any hot path.
 
 - **`DeadEndFillingSolver` moved onto the graph seam — the last solver where it
   pays (ADR-001 item 3).** Both phases retargeted: the cascade's `HashSet` of

@@ -26,6 +26,14 @@ The same algorithms that generate beautiful, mathematically perfect mazes can ge
 
 ### What We Have Today (A+ Foundation)
 
+> **Counts updated 2026-07-19** — this section is a May 2026 snapshot and is left otherwise
+> intact. The engine now ships **22 generators** (adding Dungeon, Oldest-Pick and Weighted
+> Prim's) and **10 solvers** (adding Dial's bucket-queue Dijkstra). The "property-based
+> verification that every generator produces perfect spanning trees" claim below was, when
+> written, true of only 8 of them — the gap hid a real defect, `HilbertCurveGenerator` emitting
+> a disconnected forest. It is now genuinely true of all of them, and extended to awkward grid
+> shapes. See `CHANGELOG.md`.
+
 - **17+ generators** with genuine mathematical heritage:
   - Hilbert Curve, Morton (Z-order), Gauss (Quadratic), Turing (State Machine), Kraken (Eden Growth), Borůvka’s, Wilson’s, Kruskal’s, Prim’s, Recursive Backtracker, etc.
 - **9 high-quality solvers** (A*, IDA*, Bidirectional BFS, Trémaux, Dead-End Filling, Wall Follower, etc.)
