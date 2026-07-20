@@ -15,14 +15,26 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 /**
  * WebSocket / STOMP wiring.
  *
- * <p>Topic conventions:
+ * <p>Destinations the server actually publishes to, verified against
+ * {@code MazeWebSocketController}'s {@code convertAndSend} calls:
  * <ul>
- *   <li>{@code /topic/maze/{id}/state}      — full maze grid snapshots</li>
- *   <li>{@code /topic/maze/{id}/player}     — player movement events</li>
- *   <li>{@code /topic/maze/{id}/solver}     — live solver step-by-step trace</li>
- *   <li>{@code /topic/leaderboard}          — leaderboard deltas</li>
- *   <li>{@code /app/maze/{id}/move}         — client → server move commands</li>
+ *   <li>{@code /topic/maze/{mazeId}/state}        — maze finished generating</li>
+ *   <li>{@code /topic/maze/{mazeId}/solver}       — solver finished a run</li>
+ *   <li>{@code /topic/session/{sessionId}/player} — player moved</li>
+ *   <li>{@code /topic/plugins/failures}           — a plugin threw in any lifecycle phase</li>
  * </ul>
+ *
+ * <p>This list previously named {@code /topic/maze/{id}/player} (the player topic is keyed by
+ * <em>session</em>, not maze), {@code /topic/leaderboard} (no such destination exists) and
+ * {@code /app/maze/{id}/move} (no {@code @MessageMapping} handler exists). Corrected
+ * 2026-07-19 against the source; a wrong topic name here costs an integrator a debugging
+ * session, because subscribing to a destination nobody publishes to fails silently.
+ *
+ * <p>Traffic is currently <b>server → client only</b>. The {@code /app} application prefix and
+ * the {@code /user} destination prefix are configured below but unused: there are no
+ * {@code @MessageMapping} handlers, and nothing calls {@code convertAndSendToUser}. They are
+ * left in place because inbound commands are a planned direction and removing them would be
+ * churn — but do not read their presence as evidence that a client can send frames today.
  *
  * <p>{@link StompAuthChannelInterceptor} authenticates the {@code CONNECT} frame, so the
  * messaging layer has a {@link java.security.Principal} rather than relying solely on the
