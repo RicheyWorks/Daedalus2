@@ -3,13 +3,13 @@
 # Continuous integration for Daedalus.
 #
 # Runs the full Maven reactor (`mvn -B install`) on every push / PR against
-# main, then builds the reference biome-plugin so the worked example doesn't
+# main, then builds every example module so the worked examples don't
 # silently rot.
 #
-# The reference plugin builds AFTER the reactor on purpose — its pom resolves
-# daedalus-plugin-api from the local Maven repo (~/.m2), which only the
-# `install` phase populates. (`verify` runs all tests but installs nothing,
-# which is why the reactor step must run `install`, not `verify`.)
+# The examples build AFTER the reactor on purpose — their poms resolve
+# daedalus-plugin-api (and friends) from the local Maven repo (~/.m2), which
+# only the `install` phase populates. (`verify` runs all tests but installs
+# nothing, which is why the reactor step must run `install`, not `verify`.)
 
 name: CI
 
@@ -64,6 +64,18 @@ jobs:
         # Runs after the reactor so daedalus-plugin-api is in ~/.m2. Tests in
         # the example pom run via the default surefire binding.
         run: mvn -B -ntp -f examples/biome-plugin/pom.xml clean package
+
+      - name: Build the remaining examples
+        # Same ordering constraint as biome-plugin: these poms resolve the
+        # reactor's artifacts from ~/.m2, so they must run after `install`.
+        # Their tests pin the claims the examples' narratives make — without
+        # this step, 17 test methods across these three modules never execute
+        # on any push, and a core API change that breaks an example ships
+        # green (TESTING.md, gap P1).
+        run: |
+          mvn -B -ntp -f examples/loadbalancer-topology/pom.xml clean package
+          mvn -B -ntp -f examples/dungeon-layout/pom.xml clean package
+          mvn -B -ntp -f examples/benchmark-harness/pom.xml clean package
 
       # Coverage badge: only on pushes to main (not PRs — no commit rights
       # there, and the badge should reflect main anyway).
