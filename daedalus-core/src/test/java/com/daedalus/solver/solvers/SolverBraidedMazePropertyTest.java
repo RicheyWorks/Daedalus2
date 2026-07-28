@@ -12,6 +12,7 @@ import com.daedalus.engine.generators.WilsonsGenerator;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
 import com.daedalus.solver.MazeSolver;
+import com.daedalus.testsupport.PackageScan;
 import com.daedalus.theory.MazeMetrics;
 import org.junit.jupiter.api.Test;
 
@@ -78,9 +79,9 @@ class SolverBraidedMazePropertyTest {
      * Every solver in {@code com.daedalus.solver.solvers}.
      *
      * <p>Kept explicit rather than discovered, because core has no classpath scanner and no
-     * {@code ServiceLoader} registration. {@link #everySolverIsCoveredByThisTest()} guards the
-     * obvious hazard — a solver added later and silently left out, which is precisely how
-     * Trémaux went untested for so long.
+     * {@code ServiceLoader} registration. {@link #everyConcreteSolverInThePackageIsOnTheRoster()}
+     * guards the obvious hazard — a solver added later and silently left out, which is precisely
+     * how Trémaux went untested for so long.
      */
     private static List<MazeSolver> solvers() {
         return List.of(new BfsSolver(), new DfsSolver(), new DijkstraSolver(), new AStarSolver(),
@@ -119,12 +120,17 @@ class SolverBraidedMazePropertyTest {
     }
 
     @Test
-    void everySolverIsCoveredByThisTest() {
-        // A tripwire, not a proof. If you add a solver, add it to solvers() above and bump
-        // this — the point is that leaving it out has to be a deliberate act.
+    void everyConcreteSolverInThePackageIsOnTheRoster() {
+        // Structural, not a tripwire: this used to be hasSize(10), which only fired if someone
+        // remembered to bump the count — a politer version of the same silent-omission hazard
+        // it guarded against. Now any concrete MazeSolver present in the package but missing
+        // from solvers() fails the build; an exclusion has to be written here as visible code.
+        Set<Class<?>> concrete = PackageScan.concreteImplementationsIn(
+                "com.daedalus.solver.solvers", MazeSolver.class);
         assertThat(solvers())
-                .as("every solver in the package must be exercised by the braid properties")
-                .hasSize(10);
+                .as("every concrete solver in the package must be exercised by the braid properties")
+                .extracting(solver -> solver.getClass().getName())
+                .containsExactlyInAnyOrderElementsOf(concrete.stream().map(Class::getName).toList());
         assertThat(solvers()).extracting(MazeSolver::id).doesNotHaveDuplicates();
     }
 

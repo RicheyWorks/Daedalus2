@@ -21,6 +21,13 @@
         runtime is provided separately by daedalus-plugin-runtime.
     </description>
 
+    <properties>
+        <!-- Coverage ratchet exemption: contracts module — interfaces, events, records.
+             Its behavior is exercised through core/runtime/server; an instruction ratio
+             here measures little. Visible 0.00, not a missing property. -->
+        <jacoco.check.minimum>0.00</jacoco.check.minimum>
+    </properties>
+
     <dependencies>
         <!-- Pure-Java engine — needed for MazeGenerator, MazeSolver, registries, model types -->
         <dependency>

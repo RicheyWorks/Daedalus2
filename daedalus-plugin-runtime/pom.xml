@@ -22,6 +22,12 @@
         spring-boot-starter-web.
     </description>
 
+    <properties>
+        <!-- Coverage ratchet: measured 87.0% instruction on 2026-07-28; pinned ~3 below.
+             Raise as coverage rises; never lower to make a PR pass. -->
+        <jacoco.check.minimum>0.84</jacoco.check.minimum>
+    </properties>
+
     <dependencies>
         <!-- Plugin SPI -->
         <dependency>

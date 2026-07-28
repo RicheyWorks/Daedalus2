@@ -36,6 +36,13 @@
 
         <!-- Build hygiene plugins -->
         <jacoco.version>0.8.12</jacoco.version>
+        <!-- Coverage ratchet (TESTING.md, gap P2): jacoco:check fails the build below this
+             instruction-coverage ratio. Each module pins its own value 2-3 points below its
+             measured coverage and raises it as coverage rises — never lower it to make a PR
+             pass. This default is only the floor a brand-new module starts from; exempt
+             modules (desktop, plugin-api) set 0.00 explicitly so the exemption is visible
+             code, not invisible absence. -->
+        <jacoco.check.minimum>0.60</jacoco.check.minimum>
         <checkstyle-plugin.version>3.5.0</checkstyle-plugin.version>
         <checkstyle.version>10.18.2</checkstyle.version>
         <spotbugs-plugin.version>4.8.6.4</spotbugs-plugin.version>
@@ -150,6 +157,29 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                    </execution>
+                    <!-- The ratchet: report alone enforces nothing — before this, a PR that
+                         deleted tests passed CI with a quietly shrinking badge. -->
+                    <execution>
+                        <id>check</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>INSTRUCTION</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${jacoco.check.minimum}</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

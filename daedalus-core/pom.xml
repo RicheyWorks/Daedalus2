@@ -20,6 +20,12 @@
         SLF4J facade only. Embeddable in any JVM host (incl. LoadBalancerPro).
     </description>
 
+    <properties>
+        <!-- Coverage ratchet: measured 90.1% instruction on 2026-07-28; pinned ~3 below.
+             Raise as coverage rises; never lower to make a PR pass. -->
+        <jacoco.check.minimum>0.87</jacoco.check.minimum>
+    </properties>
+
     <dependencies>
         <!-- SLF4J facade only — no binding. Hosts choose their own logger. -->
         <dependency>

@@ -20,6 +20,13 @@
         the engine, plugin runtime, and web server work without this.
     </description>
 
+    <properties>
+        <!-- Coverage ratchet exemption: near-zero UI coverage is the module's documented
+             posture (TESTING.md P3 — needs a deliberate policy, not necessarily more tests).
+             Visible 0.00, not a missing property. -->
+        <jacoco.check.minimum>0.00</jacoco.check.minimum>
+    </properties>
+
     <dependencies>
         <!-- Server (boots Spring; transitively pulls runtime + core + plugin-api) -->
         <dependency>

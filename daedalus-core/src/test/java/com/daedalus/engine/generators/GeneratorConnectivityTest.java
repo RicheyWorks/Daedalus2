@@ -6,6 +6,7 @@ import com.daedalus.engine.MazeGenerator;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
+import com.daedalus.testsupport.PackageScan;
 import com.daedalus.theory.MazeMetrics;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -50,6 +51,25 @@ class GeneratorConnectivityTest {
                 new AldousBroderGenerator(), new EllersGenerator(), new KrakenGenerator(),
                 new MortonCurveGenerator(), new HilbertCurveGenerator(), new LightningGenerator(),
                 new TuringGenerator(), new GaussGenerator(), new ArchimedesGenerator());
+    }
+
+    @Test
+    void everyConcreteGeneratorInThePackageIsOnTheRoster() {
+        // This roster previously had no completeness guard at all: a 22nd generator added to
+        // the package would be registered in production and never braided, never shape-swept —
+        // silent omission is exactly how Trémaux went untested on the solver side. The guard is
+        // structural: any concrete MazeGenerator in the package but missing from
+        // spanningTreeGenerators() fails the build. DungeonGenerator is the one documented
+        // exclusion (see class javadoc); removing it here is a visible act, not an oversight.
+        Set<Class<?>> concrete = new HashSet<>(PackageScan.concreteImplementationsIn(
+                "com.daedalus.engine.generators", MazeGenerator.class));
+        concrete.remove(DungeonGenerator.class);
+        assertThat(spanningTreeGenerators())
+                .as("every concrete generator in the package must be on the spanning-tree roster")
+                .extracting(generator -> generator.getClass().getName())
+                .containsExactlyInAnyOrderElementsOf(concrete.stream().map(Class::getName).toList());
+        assertThat(spanningTreeGenerators())
+                .extracting(MazeGenerator::id).doesNotHaveDuplicates();
     }
 
     @Test

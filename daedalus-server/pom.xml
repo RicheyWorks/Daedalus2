@@ -20,6 +20,12 @@
         runtime are usable without this layer.
     </description>
 
+    <properties>
+        <!-- Coverage ratchet: measured 70.3% instruction on 2026-07-28; pinned ~3 below.
+             Raise as coverage rises; never lower to make a PR pass. -->
+        <jacoco.check.minimum>0.67</jacoco.check.minimum>
+    </properties>
+
     <dependencies>
         <!-- Daedalus stack — api + core + plugin-runtime are transitively pulled -->
         <dependency>
