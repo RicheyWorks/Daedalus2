@@ -4,6 +4,8 @@ package com.daedalus.server.config;
 
 import com.daedalus.server.security.JwtTokenService;
 import com.daedalus.server.security.StompAuthChannelInterceptor;
+import com.daedalus.server.security.StompSubscriptionAuthorizationInterceptor;
+import com.daedalus.server.service.GameSessionService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -41,6 +43,9 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
  * HTTP rule guarding the {@code /ws/**} upgrade. It is <em>required</em> under the {@code prod}
  * profile and advisory elsewhere, matching how {@code SecurityConfig} and
  * {@code ProdSecurityConfig} already split the HTTP surface.
+ * {@link StompSubscriptionAuthorizationInterceptor} then enforces the per-destination rule
+ * that principal exists for: {@code SUBSCRIBE} to an owned session's
+ * {@code /topic/session/{id}/player} is refused unless the principal is the owner.
  */
 @Configuration
 @EnableWebSocketMessageBroker
@@ -48,10 +53,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final JwtTokenService tokenService;
     private final Environment environment;
+    private final GameSessionService sessions;
 
-    public WebSocketConfig(JwtTokenService tokenService, Environment environment) {
+    public WebSocketConfig(JwtTokenService tokenService,
+                           Environment environment,
+                           GameSessionService sessions) {
         this.tokenService = tokenService;
         this.environment = environment;
+        this.sessions = sessions;
     }
 
     @Override
@@ -69,7 +78,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         boolean required = environment.matchesProfiles("prod");
+        // Order matters: authentication first (attaches the Principal at CONNECT), then the
+        // per-destination rule that reads that Principal on SUBSCRIBE.
         registration.interceptors(
-                new StompAuthChannelInterceptor(tokenService.decoder(), required));
+                new StompAuthChannelInterceptor(tokenService.decoder(), required),
+                new StompSubscriptionAuthorizationInterceptor(sessions::find));
     }
 }

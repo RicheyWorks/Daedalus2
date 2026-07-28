@@ -26,6 +26,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -127,17 +129,36 @@ public class MazeController {
 
     @PostMapping("/maze/{id}/session")
     @Operation(summary = "Open a play session for the given maze.",
-            description = "The returned session id is required for /api/v1/session/{id}/move.")
+            description = "The returned session id is required for /api/v1/session/{id}/move. "
+                    + "When the request is authenticated, the session is owned by the token's "
+                    + "subject and its /topic/session/{id}/player STOMP topic is restricted "
+                    + "to that subject.")
     public ResponseEntity<SessionResponse> openSession(
             @PathVariable UUID id,
             @RequestParam(defaultValue = "anon")
             @NotBlank
             @Size(max = 64, message = "player name must be at most 64 chars")
-            String player) {
+            String player,
+            Authentication authentication) {
         var c = gen.find(id);
         if (c == null) return ResponseEntity.notFound().build();
-        var s = sessions.open(id, player, c.grid().start());
+        var s = sessions.open(id, player, c.grid().start(), ownerOf(authentication));
         return ResponseEntity.ok(new SessionResponse(s.id(), id, s.currentPosition()));
+    }
+
+    /**
+     * The verified subject a new session should be owned by, or {@code null} for anonymous
+     * callers. Anonymous includes Spring's {@code AnonymousAuthenticationToken} (the dev
+     * profile's permitAll posture), so a dev session stays unowned and its topics stay open —
+     * mirroring how {@code StompAuthChannelInterceptor} treats missing-vs-forged credentials.
+     */
+    static String ownerOf(Authentication authentication) {
+        if (authentication == null
+                || !authentication.isAuthenticated()
+                || authentication instanceof AnonymousAuthenticationToken) {
+            return null;
+        }
+        return authentication.getName();
     }
 
     @PostMapping("/session/{id}/move")

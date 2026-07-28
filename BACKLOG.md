@@ -35,21 +35,25 @@ Last consolidated: 2026-05-07
   `spring-boot-starter-parent` 4.1.0 re-pins most managed dependency versions,
   so any open PR bumping a Boot-managed 3.x artifact is now either obsolete or
   actively conflicting. Close the superseded ones rather than merging them.
-- **WebSocket / STOMP authorization — *authentication* done 2026-07-19,
-  per-destination rules still open.** `StompAuthChannelInterceptor` validates the
+- ~~**WebSocket / STOMP authorization.**~~ **Done — authentication 2026-07-19,
+  per-destination rules 2026-07-28.** `StompAuthChannelInterceptor` validates the
   bearer token on `CONNECT` and attaches a `Principal`; required under `prod`,
   advisory elsewhere. A token that is *present but invalid* is refused in every
   profile — "no credentials" and "bad credentials" are different, and only the
   first should be waved through by a permissive profile.
 
-  **What remains is the part the original note actually asked for.** A client can
-  still subscribe to another user's frames, because the broker's destinations
-  (`/topic/maze/{id}/state`, `/topic/session/{id}/player`) are not scoped to an
-  owner and **nothing in the domain records which subject owns a session** — so
-  "may this principal subscribe here?" is not a question the server can answer
-  yet. Closing it needs session ownership modelled first, then a `SUBSCRIBE`
-  rule matching destination against principal. Authenticating `CONNECT` is the
-  prerequisite for that work, not a substitute for it.
+  The per-destination half: sessions opened by an authenticated request record
+  the token's subject as **owner** (`GameSession.owner()`, null for anonymous
+  opens), and `StompSubscriptionAuthorizationInterceptor` refuses `SUBSCRIBE`
+  to an owned session's `/topic/session/{id}/player` unless the connection's
+  principal is that owner. Deliberately open: unowned sessions (dev/desktop
+  posture — no claim to enforce), unknown session ids (refusing would make the
+  rule an existence oracle), and the shared `/topic/maze/**` +
+  `/topic/plugins/**` surfaces, which carry no per-user data. Pinned by
+  `StompSubscriptionAuthorizationInterceptorTest` (every branch) and
+  `WebSocketOwnershipSmokeTest` (interceptor installed; refusal reaches a real
+  client as a STOMP ERROR) — the latter replayed against a build without the
+  interceptor registered, per the house teeth rule.
 
   Per-frame validation was deliberately *not* added: the principal is
   established once and carried on the session, so re-decoding the token on every

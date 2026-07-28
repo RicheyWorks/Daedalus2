@@ -29,8 +29,18 @@ public class GameSessionService {
         this.leaderboard = leaderboard;
     }
 
+    /** Opens an anonymous (unowned) session; see {@link #open(UUID, String, Point, String)}. */
     public GameSession open(UUID mazeId, String playerName, Point start) {
-        GameSession session = new GameSession(mazeId, playerName, start);
+        return open(mazeId, playerName, start, null);
+    }
+
+    /**
+     * @param owner verified subject from the caller's token, or {@code null} when the request
+     *              carried no credentials. Recorded at open and immutable — this is what STOMP
+     *              subscription authorization keys on (BACKLOG: per-destination rules).
+     */
+    public GameSession open(UUID mazeId, String playerName, Point start, String owner) {
+        GameSession session = new GameSession(mazeId, playerName, start, owner);
         sessions.put(session.id(), session);
         return session;
     }
