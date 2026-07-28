@@ -37,16 +37,35 @@ public class GameSessionService {
 
     public GameSession find(UUID id) { return sessions.get(id); }
 
+    /**
+     * Attempt a move; returns {@code false} for unknown/completed sessions and illegal steps.
+     *
+     * <p>The check-then-act sequence (read position, validate against the grid, write position)
+     * is guarded by a per-session lock: {@code ConcurrentHashMap} protects the <em>map</em>, not
+     * compound operations on one {@link GameSession}, and concurrent access to a single session
+     * is realistic — two tabs, a reconnect race. Without the lock, two racing moves could both
+     * validate against the same stale position and produce an illegal transition, a lost
+     * {@code moveCount} increment, or a double completion (two leaderboard entries for one win).
+     * The lock is per session, so distinct sessions never contend. Pinned by
+     * {@code GameSessionServiceConcurrencyTest}; this guard becomes ownership-critical the
+     * moment session-ownership modelling lands (TESTING.md, gap P3).
+     */
     public boolean tryMove(UUID sessionId, MazeGrid grid, Point to) {
         GameSession s = sessions.get(sessionId);
-        if (s == null || s.completed()) return false;
-        Point from = s.currentPosition();
-        // Only allow moves into open neighbors.
-        if (!grid.openNeighbors(from).contains(to)) return false;
-        s.move(to);
-        events.publishEvent(new PlayerMovedEvent(this, sessionId, from, to));
-        if (to.equals(grid.goal())) complete(s, grid);
-        return true;
+        if (s == null) return false;
+        synchronized (s) {
+            if (s.completed()) return false;
+            Point from = s.currentPosition();
+            // Only allow moves into open neighbors.
+            if (!grid.openNeighbors(from).contains(to)) return false;
+            s.move(to);
+            // Published inside the lock so events observe the same order the moves were
+            // applied in — listeners were already invoked inline by publishEvent before
+            // this lock existed, so no new reentrancy is introduced.
+            events.publishEvent(new PlayerMovedEvent(this, sessionId, from, to));
+            if (to.equals(grid.goal())) complete(s, grid);
+            return true;
+        }
     }
 
     private void complete(GameSession s, MazeGrid grid) {
