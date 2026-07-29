@@ -47,12 +47,19 @@ ADR-002 set the precedent that a reasoned "no" with evidence beats a silent "som
   contract the whole test suite and the replay/leaderboard story lean on). The honest trigger
   for revisiting: a consumer generating mazes at a scale where generation is the measured
   bottleneck — none of the three integration examples is close.
-- **§2.2 `MazeReplay` — deferred, design note recorded.** Step-by-step replay requires
-  solvers to emit visit sequences, which none do — they return a path and fold everything
-  else into `MazeStats`. Retrofitting visit-event capture into ten solvers touches every hot
-  loop the ADR-001 work just flattened, so it should be done as an opt-in observer at the
-  `Graph` seam (one interception point) rather than per solver — and only when something
-  (the web UI is the plausible customer) actually wants to animate solves.
+- **§2.2 `MazeReplay` — ~~deferred~~ built 2026-07-29, exactly as this note sketched.**
+  The web UI wanted to animate solves, which was the named trigger. `SearchRecorder` is the
+  one interception point (a thread-confined observer decorating the `Graph` that
+  `AbstractMazeSolver.graphOf` hands out); solvers run their real implementations, so replay
+  is observation, never simulation. Off-seam solvers (IDA\*, wall follower) return empty
+  expansions rather than a fake. `?replay=true` on the solve endpoint; omitted otherwise, so
+  pre-replay clients see byte-identical JSON. 15 tests.
+- **Weighted-floor shading in the web UI — examined 2026-07-29, trigger genuinely unfired.**
+  The condition was "if `GenerateResponse` ever carries weights". It cannot yet:
+  `WeightedPrimsGenerator` consumes *wall* weights during MST construction and returns a
+  uniform grid, and `WeightedMazeGrid` is a programmatic embedding tool (hot-spot costs set
+  by code, LoadBalancerPro-style) that no REST-served maze ever is. Shading would render a
+  constant. Re-fires the day the API can create or serve genuinely weighted mazes.
 - **§2.3 `@Generated` / JaCoCo exclusions — not applicable.** The build generates no code;
   there is nothing to exclude. The ratchet's existing `api/dto`-style exclusion question was
   settled when thresholds were pinned (ADR-era TESTING.md work).

@@ -36,8 +36,12 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   per-destination `SUBSCRIBE` authorization on owned sessions, a one-file
   vanilla-JS web UI served at `/` that plays mazes against it, and an opt-in
   multiplayer flag (`daedalus.session.multiplayer`).
-- **Verified** — `mvn clean verify` passes **398 tests** across the five
-  modules (core 251, server 116, plugin-runtime 20, plugin-api 7, desktop 4)
+- **Watch the algorithms think** — `?replay=true` on the solve endpoint ships
+  the search's real recorded expansion order (observation via the `Graph`
+  seam, never simulation); the web UI animates it and can race all ten
+  solvers on one maze in a compare table with per-route previews.
+- **Verified** — `mvn clean verify` passes **416 tests** across the five
+  modules (core 263, server 122, plugin-runtime 20, plugin-api 7, desktop 4)
   with zero Checkstyle violations, zero SpotBugs findings, and a per-module
   JaCoCo coverage ratchet that fails the build on regression.
   [`CHANGELOG.md`](./CHANGELOG.md) records what changed and, where a decision

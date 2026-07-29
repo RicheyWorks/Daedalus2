@@ -6,9 +6,59 @@ All notable changes to Daedalus are documented in this file. Format follows
 `1.0.0` (the multi-module split + first audit pass) live in git history
 under the `_migration/` portfolios.
 
-## [Unreleased]
+## [1.1.0] — 2026-07-29
 
-Nothing yet — development reopened after `v1.0.0`.
+**The web UI grew up, and it caught a released bug on day one.** A visual audit
+(headless-browser screenshots of all 23 generators through the real UI) drove
+five rounds of front-end work — and the deepest find wasn't cosmetic.
+Suite: 398 → **416 tests**.
+
+### Fixed
+
+- **Every REST-served dungeon was unsolvable (shipped in 1.0.0).**
+  `MazeGenerationService` pinned start at `(0,0)` and goal at the far corner —
+  carved cells for every spanning-tree generator, solid rock for a BSP dungeon.
+  Every solver returned `success=false` and a play session opened inside a
+  wall. Found by looking at the rendered output; the same corner assumption the
+  07-19 audit removed from `theory`, one layer up. Fixed with
+  `MazeMetrics.placeStartAndGoalAtExtremes` (largest-component-seeded,
+  deterministic) — dungeons work, and every maze now gets the maximum-challenge
+  diameter-endpoint placement the core recommends. `MazeGenerationStartGoalTest`
+  fails against the pre-fix service.
+- **Player names reached `innerHTML` unescaped** in the UI's log (and would
+  have in the leaderboard) — stored XSS via a 64-char player name. Untrusted
+  text now renders via `textContent`/escaping everywhere.
+
+### Added
+
+- **`MazeReplay` (ADR-004's deferred item, its trigger now fired).**
+  `SearchRecorder` is the single interception point the design note called
+  for: a thread-confined observer decorating the `Graph` that
+  `AbstractMazeSolver.graphOf` hands out. Solvers run untouched — replay is
+  observation, never simulation. `?replay=true` on the solve endpoint ships
+  the expansion order (omitted otherwise: pre-replay clients see byte-identical
+  JSON); off-seam solvers (IDA\*, wall follower) return empty expansions
+  rather than a fake. The UI plays it in two acts: the real exploration front
+  spreads cell by cell, then the route draws over it — BFS visibly floods,
+  A\* visibly leans.
+- **Web UI, five rounds.** Renderer rewrite (wide light corridors on thin dark
+  walls; rock and interior wall-posts detected so dungeons read as rooms, not
+  polka-dot noise); algorithm descriptor cards from the live catalog; solve
+  stats readout; **compare-all-solvers** table (best path / fewest visits
+  highlighted, hover previews each route, honest "gave up" rows); leaderboard
+  panel over the existing API; click-to-move; illegal-move feedback; victory
+  ring + session-complete banner; breadcrumb trails; maze permalinks
+  (`#maze=<id>`); PNG export; `prefers-reduced-motion` support; graceful
+  degradation when the STOMP CDN is unreachable (play still works via local
+  position fallback).
+
+### Decided
+
+- **Weighted-floor shading stays unbuilt** — examined and the trigger has
+  genuinely not fired: no REST-served maze carries cell weights (wall weights
+  are consumed during Weighted-Prim's construction; `WeightedMazeGrid` is an
+  embedding-only tool). Recorded in ADR-004; re-fires when the API can serve
+  genuinely weighted mazes.
 
 ## [1.0.0] — 2026-07-28
 
