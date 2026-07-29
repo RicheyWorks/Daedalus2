@@ -6,6 +6,10 @@ All notable changes to Daedalus are documented in this file. Format follows
 `1.0.0` (the multi-module split + first audit pass) live in git history
 under the `_migration/` portfolios.
 
+## [Unreleased]
+
+Nothing yet — development reopened after `v1.0.0`.
+
 ## [1.0.0] — 2026-07-28
 
 **The audit's to-do lists are now empty.** One day, nine pushes: TESTING.md's
