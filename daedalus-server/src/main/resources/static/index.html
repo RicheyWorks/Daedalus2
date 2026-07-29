@@ -254,6 +254,7 @@ async function generate() {
 function adoptMaze(maze, roundTripMs) {
   state.maze = maze; state.path = null; state.session = null;
   state.joined = null; state.trails = {}; state.won = null;
+  state.expansions = []; state.searchProgress = 1; state.pathProgress = 1;
   $("solve").disabled = false; $("play").disabled = false; $("join").disabled = true;
   $("compare").disabled = false;
   $("compareBox").innerHTML = "";
@@ -288,31 +289,53 @@ async function loadFromHash() {
 }
 
 async function solve() {
-  const r = await api(`/maze/${state.maze.id}/solve/${$("solver").value}`, {method: "POST"});
+  const r = await api(`/maze/${state.maze.id}/solve/${$("solver").value}?replay=true`,
+      {method: "POST"});
   state.path = r.path;
+  state.expansions = r.expansions || [];
   log("solver", `${r.solverId}: path ${r.path.length}, visited ${r.visited}, `
       + `${r.elapsedMs}ms, success=${r.success}`);
   $("stats").innerHTML +=
       `<span>${r.solverId}</span> path ${r.path.length} &middot; visited ${r.visited} `
       + `&middot; explored ${r.explored} &middot; ${r.elapsedMs} ms`
       + (r.success ? "" : " &middot; <b>no route</b>") + "<br>";
-  animatePath();
+  animateSearch();
 }
 
-/** Progressive reveal of the solver path — watching the route unfold beats a pop-in. */
-function animatePath() {
+/**
+ * Two-act animation of a REAL recorded search (the server replays the solver's actual
+ * expansion order — this is observation, never a client-side reenactment): first the
+ * exploration front spreads cell by cell exactly as the algorithm expanded, then the found
+ * route draws over it. BFS visibly floods, A* visibly beelines, Trémaux visibly wanders.
+ * Solvers with no recorded expansions (off the graph seam) skip straight to the path.
+ */
+function animateSearch() {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    state.searchProgress = 1;
     state.pathProgress = 1;
     draw();
     return;
   }
-  const started = performance.now(), duration = 700;
+  const n = (state.expansions || []).length;
+  const searchMs = n ? Math.min(2200, Math.max(600, n * 6)) : 0;
+  const pathMs = 700;
+  const started = performance.now();
   const step = now => {
-    state.pathProgress = Math.min(1, (now - started) / duration);
+    const t = now - started;
+    state.searchProgress = n ? Math.min(1, t / searchMs) : 1;
+    state.pathProgress = Math.max(0, Math.min(1, (t - searchMs) / pathMs));
     draw();
     if (state.pathProgress < 1) requestAnimationFrame(step);
   };
+  state.searchProgress = 0;
+  state.pathProgress = 0;
   requestAnimationFrame(step);
+}
+
+/** Kept for callers that only have a path (compare hover) — no exploration act. */
+function animatePath() {
+  state.expansions = [];
+  animateSearch();
 }
 
 /**
@@ -356,7 +379,11 @@ async function compareSolvers() {
   const byId = Object.fromEntries(results.map(r => [r.solverId, r]));
   let pinned = null;
   $("compareBox").querySelectorAll("tr.solver-row").forEach(tr => {
-    const show = () => { state.path = byId[tr.dataset.id].path; state.pathProgress = 1; draw(); };
+    const show = () => {
+      state.path = byId[tr.dataset.id].path;
+      state.expansions = []; state.searchProgress = 1; state.pathProgress = 1;
+      draw();
+    };
     tr.addEventListener("mouseenter", show);
     tr.addEventListener("mouseleave", () => {
       if (pinned) { state.path = byId[pinned].path; } else { state.path = null; }
@@ -583,7 +610,24 @@ function draw() {
     }
   }
 
-  if (state.path && state.path.length > 1) {
+  // Act one: the exploration front, in the algorithm's true expansion order.
+  if (state.expansions && state.expansions.length && (state.searchProgress ?? 1) > 0) {
+    const shown = Math.ceil(state.expansions.length * state.searchProgress);
+    g.fillStyle = COLORS.path;
+    g.globalAlpha = 0.16;
+    for (let i = 0; i < shown; i++) {
+      const p = state.expansions[i];
+      g.fillRect(geom.offX[2 * p.col + 1], geom.offY[2 * p.row + 1], geom.cell, geom.cell);
+    }
+    // The freshest few expansions glow brighter — the moving front itself.
+    g.globalAlpha = 0.45;
+    for (let i = Math.max(0, shown - 6); i < shown; i++) {
+      const p = state.expansions[i];
+      g.fillRect(geom.offX[2 * p.col + 1], geom.offY[2 * p.row + 1], geom.cell, geom.cell);
+    }
+    g.globalAlpha = 1;
+  }
+  if (state.path && state.path.length > 1 && state.pathProgress > 0) {
     const visible = Math.max(2, Math.ceil(state.path.length * state.pathProgress));
     g.strokeStyle = COLORS.path;
     g.lineWidth = Math.max(2, geom.cell * 0.4);

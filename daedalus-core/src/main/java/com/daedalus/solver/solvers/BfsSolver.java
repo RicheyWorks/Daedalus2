@@ -3,7 +3,7 @@
 package com.daedalus.solver.solvers;
 
 import com.daedalus.engine.MazeGrid;
-import com.daedalus.graph.MazeGraph;
+import com.daedalus.graph.Graph;
 import com.daedalus.model.AlgorithmDescriptor;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
@@ -40,7 +40,7 @@ public class BfsSolver extends AbstractMazeSolver {
 
     @Override
     public List<Point> solve(MazeGrid grid, Point start, Point goal, MazeStats stats) {
-        MazeGraph graph = new MazeGraph(grid);
+        Graph graph = graphOf(grid);
         GridIndex index = new GridIndex(grid);
         int startId = index.idOf(start);
         int goalId = index.idOf(goal);

@@ -113,20 +113,24 @@ public class MazeController {
     @PostMapping("/maze/{id}/solve/{solverId}")
     @Operation(summary = "Run a registered solver against a stored maze.",
             description = "Rate-limited per caller (authenticated subject, else client IP) against "
-                    + "the 'mazeSolve' budget.")
+                    + "the 'mazeSolve' budget. Pass replay=true to also receive the search's "
+                    + "expansion order for step-by-step animation.")
     @PerKeyRateLimit("mazeSolve")
     public ResponseEntity<SolveResponse> solve(
             @PathVariable UUID id,
             @PathVariable
             @AlgorithmId
-            String solverId) {
+            String solverId,
+            @RequestParam(defaultValue = "false") boolean replay) {
         var c = gen.find(id);
         if (c == null) return ResponseEntity.notFound().build();
-        var r = solverSvc.solve(solverId, c.grid(), id);
+        var grid = c.grid();
+        var r = solverSvc.solve(solverId, grid, grid.start(), grid.goal(), id, replay);
         return ResponseEntity.ok(new SolveResponse(
                 solverId, r.path(),
                 r.stats().cellsVisited(), r.stats().cellsExplored(),
-                r.stats().elapsed().toMillis(), r.stats().success()));
+                r.stats().elapsed().toMillis(), r.stats().success(),
+                r.expansions()));
     }
 
     @PostMapping("/maze/{id}/session")

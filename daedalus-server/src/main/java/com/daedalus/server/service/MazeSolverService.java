@@ -8,6 +8,7 @@ import com.daedalus.model.Point;
 import com.daedalus.plugin.events.MazeSolvedEvent;
 import com.daedalus.solver.MazeSolver;
 import com.daedalus.solver.solvers.SolverRegistry;
+import com.daedalus.visualize.MazeReplay;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import org.springframework.context.ApplicationEventPublisher;
@@ -32,16 +33,37 @@ public class MazeSolverService {
         this.meters = meters;
     }
 
-    public record Result(List<Point> path, MazeStats stats, String solverId) {}
+    /**
+     * @param expansions the recorded search-expansion order when replay was requested;
+     *                   {@code null} when it was not, empty when the solver is off the graph
+     *                   seam and honestly has nothing to replay (see {@code MazeReplay})
+     */
+    public record Result(List<Point> path, MazeStats stats, String solverId,
+                         List<Point> expansions) {
+        public Result(List<Point> path, MazeStats stats, String solverId) {
+            this(path, stats, solverId, null);
+        }
+    }
 
     public Result solve(String solverId, MazeGrid grid, UUID mazeId) {
-        return solve(solverId, grid, grid.start(), grid.goal(), mazeId);
+        return solve(solverId, grid, grid.start(), grid.goal(), mazeId, false);
     }
 
     public Result solve(String solverId, MazeGrid grid, Point start, Point goal, UUID mazeId) {
+        return solve(solverId, grid, start, goal, mazeId, false);
+    }
+
+    public Result solve(String solverId, MazeGrid grid, Point start, Point goal,
+                        UUID mazeId, boolean replay) {
         MazeSolver solver = solvers.require(solverId);
         Timer timer = meters.timer("daedalus.solve", "algo", solverId);
         MazeStats stats = new MazeStats();
+        if (replay) {
+            MazeReplay.Replay recorded = timer.record(
+                    () -> MazeReplay.record(solver, grid, start, goal, stats));
+            events.publishEvent(new MazeSolvedEvent(this, mazeId, solverId, recorded.path(), stats));
+            return new Result(recorded.path(), stats, solverId, recorded.expansions());
+        }
         List<Point> path = timer.record(() -> solver.solve(grid, start, goal, stats));
         events.publishEvent(new MazeSolvedEvent(this, mazeId, solverId, path, stats));
         return new Result(path, stats, solverId);

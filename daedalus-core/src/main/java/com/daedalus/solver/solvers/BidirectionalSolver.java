@@ -3,7 +3,7 @@
 package com.daedalus.solver.solvers;
 
 import com.daedalus.engine.MazeGrid;
-import com.daedalus.graph.MazeGraph;
+import com.daedalus.graph.Graph;
 import com.daedalus.model.AlgorithmDescriptor;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
@@ -87,7 +87,7 @@ public class BidirectionalSolver extends AbstractMazeSolver {
             return List.of(start);
         }
 
-        MazeGraph graph = new MazeGraph(grid);
+        Graph graph = graphOf(grid);
         int cols = grid.cols();
         int nodes = grid.rows() * cols;
         int startId = start.row() * cols + start.col();
@@ -127,7 +127,7 @@ public class BidirectionalSolver extends AbstractMazeSolver {
      *
      * @return the meeting node if a neighbour is already in the opposite frontier, else -1
      */
-    private int expand(MazeGraph graph, Frontier frontier, boolean[] ownSeen, int[] ownParent,
+    private int expand(Graph graph, Frontier frontier, boolean[] ownSeen, int[] ownParent,
                        boolean[] otherSeen, int[] adjacency, MazeStats stats) {
         stats.recordFrontier(frontier.size());
         int cur = frontier.poll();

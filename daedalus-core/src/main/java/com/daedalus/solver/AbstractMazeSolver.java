@@ -2,12 +2,26 @@
 
 package com.daedalus.solver;
 
+import com.daedalus.engine.MazeGrid;
+import com.daedalus.graph.Graph;
+import com.daedalus.graph.MazeGraph;
 import com.daedalus.model.Point;
 
 import java.util.*;
 
 /** Common helpers for solver implementations. */
 public abstract class AbstractMazeSolver implements MazeSolver {
+
+    /**
+     * The graph a solver should search. Always a live {@link MazeGraph} view of the grid —
+     * plus, when a {@link SearchRecorder} recording is active on this thread, a decorating
+     * observer that reports expansion order for replay/animation. Solvers call this instead
+     * of {@code new MazeGraph(grid)} so replay has exactly one interception point; the
+     * non-recording cost is one thread-local read per <em>solve</em>, not per step.
+     */
+    protected Graph graphOf(MazeGrid grid) {
+        return SearchRecorder.observe(new MazeGraph(grid));
+    }
 
     /**
      * Walk an id-indexed parent array back from goal to start, then reverse — the array-based

@@ -3,7 +3,7 @@
 package com.daedalus.solver.solvers;
 
 import com.daedalus.engine.MazeGrid;
-import com.daedalus.graph.MazeGraph;
+import com.daedalus.graph.Graph;
 import com.daedalus.model.AlgorithmDescriptor;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
@@ -59,7 +59,7 @@ public class DialSolver extends AbstractMazeSolver {
 
     @Override
     public List<Point> solve(MazeGrid grid, Point start, Point goal, MazeStats stats) {
-        MazeGraph graph = new MazeGraph(grid);
+        Graph graph = graphOf(grid);
         GridIndex index = new GridIndex(grid);
         int startId = index.idOf(start);
         int goalId = index.idOf(goal);
@@ -136,7 +136,7 @@ public class DialSolver extends AbstractMazeSolver {
     }
 
     /** Edge cost as a non-negative int, or throw if the weight isn't integral. */
-    private static int integerWeight(MazeGraph graph, int from, int to) {
+    private static int integerWeight(Graph graph, int from, int to) {
         double w = graph.edgeWeight(from, to);
         long rounded = Math.round(w);
         if (w < 0.0 || Double.isNaN(w) || Double.isInfinite(w)

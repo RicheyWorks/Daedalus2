@@ -3,7 +3,7 @@
 package com.daedalus.solver.solvers;
 
 import com.daedalus.engine.MazeGrid;
-import com.daedalus.graph.MazeGraph;
+import com.daedalus.graph.Graph;
 import com.daedalus.model.AlgorithmDescriptor;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
@@ -53,7 +53,7 @@ public class AStarSolver extends AbstractMazeSolver {
     public List<Point> solve(MazeGrid grid, Point start, Point goal, MazeStats stats) {
         // Cell-id-indexed arrays instead of Point-keyed hash collections — see GridIndex.
         // Adjacency arrives through the Graph seam (ADR-001) in a reused buffer.
-        MazeGraph graph = new MazeGraph(grid);
+        Graph graph = graphOf(grid);
         int[] adjacency = new int[graph.maxDegree()];
         GridIndex index = new GridIndex(grid);
         int startId = index.idOf(start);

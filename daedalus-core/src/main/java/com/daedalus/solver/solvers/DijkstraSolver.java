@@ -3,7 +3,7 @@
 package com.daedalus.solver.solvers;
 
 import com.daedalus.engine.MazeGrid;
-import com.daedalus.graph.MazeGraph;
+import com.daedalus.graph.Graph;
 import com.daedalus.model.AlgorithmDescriptor;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
@@ -44,7 +44,7 @@ public class DijkstraSolver extends AbstractMazeSolver {
         // measured 1.47-2.00x faster on an 80^2 workload. See GridIndex.
         // Adjacency comes through the Graph seam (ADR-001) into a reused buffer, so the
         // expansion loop no longer allocates a list per node either.
-        MazeGraph graph = new MazeGraph(grid);
+        Graph graph = graphOf(grid);
         int[] adjacency = new int[graph.maxDegree()];
         GridIndex index = new GridIndex(grid);
         int startId = index.idOf(start);
