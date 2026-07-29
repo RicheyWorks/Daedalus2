@@ -6,6 +6,101 @@ All notable changes to Daedalus are documented in this file. Format follows
 `1.0.0` (the multi-module split + first audit pass) live in git history
 under the `_migration/` portfolios.
 
+## [Unreleased] — 2026-07-28
+
+**The audit's to-do lists are now empty.** One day, nine pushes: TESTING.md's
+gap audit written and then fully executed (P1 through P3), the BACKLOG's last
+hardening item and all four stretch goals shipped, and the engine audit's §2
+recommendations either implemented or declined with reasons (ADR-004). The
+suite grew 347 → **398 tests**, and — keeping the 07-19 through-line honest —
+one of the new tests surfaced a live production bug (a check-then-act race in
+`tryMove`) that was fixed before it shipped anywhere.
+
+### Added
+
+- **Example modules now build in CI.** `ci.yml` builds `loadbalancer-topology`,
+  `dungeon-layout`, and `benchmark-harness` after the reactor `install` —
+  before this, 17 test methods across those modules (including the one that
+  caught the Hilbert forest) never executed on any push. (TESTING.md P1.)
+- **`WebSocketSmokeTest`** — the realtime counterpart of `ApplicationSmokeTest`
+  and the first test to construct a real `WebSocketStompClient`: connect
+  without credentials in the advisory profile, valid-token accept, forged-token
+  reject (proving the interceptor is *installed*, which the unit test cannot),
+  and one broker frame round-trip per topic family. The simple broker sends no
+  RECEIPTs, so tests republish their idempotent event until the first frame
+  arrives — never `Thread.sleep`. (TESTING.md P1.)
+- **Structural roster guards.** `PackageScan` (test-only, ~30 lines over
+  `ClassLoader.getResources`) makes the solver and generator rosters
+  completeness-checked against the package contents: a new concrete
+  implementation left off the sweep now fails the build instead of silently
+  shipping untested — the exact hazard that hid Trémaux. `DungeonGenerator`'s
+  exclusion became visible code. (TESTING.md P2.)
+- **JaCoCo ratchet.** `jacoco:check` fails `verify` below per-module
+  instruction thresholds pinned 2–3 points under measured coverage — core
+  0.87 (was 90.1%), plugin-runtime 0.84 (87.0%), server 0.67 (70.3%) — with
+  desktop and plugin-api exempted as explicit `0.00` properties. Before this,
+  a PR that deleted tests passed CI with a quietly shrinking badge.
+  (TESTING.md P2.)
+- **`PluginControllerTest` + `SpringPluginContextTest`** — the two zero-
+  reference classes from the audit. The context test pins fail-fast
+  `NoSuchBeanDefinitionException` for unavailable beans as plugin contract.
+  (TESTING.md P2.)
+- **Session ownership + STOMP per-destination authorization** — the second
+  half of the BACKLOG auth item. Sessions opened by an authenticated request
+  record the token's subject (`GameSession.owner()`, null for anonymous);
+  `StompSubscriptionAuthorizationInterceptor` refuses SUBSCRIBE to an owned
+  session's `/topic/session/{id}/player` unless the principal is the owner.
+  Deliberately open: unowned sessions, unknown ids (no existence oracle), and
+  the shared maze/plugin topics. Integration tests replayed against a build
+  without the interceptor registered: exactly the two refusal tests fail.
+- **Multiplayer sessions** behind `daedalus.session.multiplayer` (default off
+  — off is byte-for-byte the pre-flag behavior). Per-player positions,
+  `POST /session/{id}/join` (404 with the flag off; rejoin keeps position),
+  `MoveRequest.player`, additive `player` on `PlayerMovedEvent`/`MoveFrame`.
+  Any player reaching the goal completes the session exactly once.
+- **Web UI** — one file of vanilla JS at `static/index.html`, served at `/`:
+  generate/solve/play over REST, live frames over STOMP via SockJS, canvas
+  rendering with path overlay and per-player markers. No build step, no npm;
+  it exercises the public surfaces exactly as an external integrator would.
+- **`ChaosGenerator`** (`id: chaos`, generator #23): splits the grid into 2–3
+  bands, delegates each to a seeded random pick from four algorithms, joins
+  bands with single doors — trees joined by single edges are a tree, so the
+  spanning-tree contract holds and the roster guard forced it into the full
+  connectivity/awkward-shape sweep automatically. Band doors are guaranteed
+  chokepoints: deliberate stress texture for routing policies. (Audit §2.1.3.)
+- **`MazeVisualizer` + `AsciiMazeVisualizer`** in `com.daedalus.visualize`,
+  with `MazeGrid.toString()` now rendering ASCII art through the same
+  `TileType` projection the REST surface ships. (Audit §2.1.1 + §2.3.)
+- **`/actuator/algorithms`** — live registry observability (counts +
+  descriptors, plugin contributions included); visible in dev, absent from
+  prod's include list, JMX for free via actuator. (Audit §2.1.2.)
+- **Codecov upload** in CI, guarded on the `CODECOV_TOKEN` secret — absent
+  the secret, CI is unchanged. (BACKLOG, last piece of the original CI item.)
+- **`TESTING.md`**, **ADR-003** (desktop testing policy: thin shell, logic
+  moves to core, no TestFX, ratchet exemption as visible code), **ADR-004**
+  (disposition of audit §2: Octile declined — the grid is 4-connected;
+  parallel generation and `MazeReplay` deferred with named triggers).
+
+### Fixed
+
+- **`GameSessionService.tryMove` had a check-then-act race.** `ConcurrentHashMap`
+  protects the map, not compound operations on one session: two racing moves
+  could both validate against the same stale position (illegal transition),
+  lose `moveCount` increments (`long++`), or double-complete a session — two
+  leaderboard rows for one win. Now guarded by a per-session lock; the
+  4-thread × 500-round hammer in `GameSessionServiceConcurrencyTest` fails
+  against the pre-fix code on every run tried and passes deterministically
+  after. Found because TESTING.md P3 said "test only if inspection finds
+  check-then-act" — it did. This guard becomes ownership-critical now that
+  sessions have owners.
+
+### Changed
+
+- **ADR-001 is Accepted** — items 1–5 and 7 done with measurements inline;
+  item 6's remaining step (pasting the prepared LoadBalancerPro issues into
+  their tracker) is a GitHub-side action, as are the Dependabot re-triage
+  pass (commands recorded in BACKLOG.md) and the Codecov token.
+
 ## [Unreleased] — 2026-07-18 → 2026-07-19
 
 **Framework migration, three correctness fixes, and the test gaps that hid

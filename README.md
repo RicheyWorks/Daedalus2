@@ -14,12 +14,13 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
 
 ## At a glance
 
-- **22 generator algorithms** — Aldous-Broder, Archimedes (spiral), Binary
-  Tree, Borůvka's, Dungeon (BSP rooms + corridors), Eller's, Gauss, Growing
-  Tree, Hilbert Curve, Hunt-and-Kill, Kraken (Eden growth), Kruskal's
-  (randomised), Lightning, Morton Curve (Z-order), Oldest-Pick, Prim's
-  (randomised), Weighted Prim's (true MST), Recursive Backtracker, Recursive
-  Division, Sidewinder, Turing (state machine), Wilson's.
+- **23 generator algorithms** — Aldous-Broder, Archimedes (spiral), Binary
+  Tree, Borůvka's, Chaos Mode (multi-generator bands), Dungeon (BSP rooms +
+  corridors), Eller's, Gauss, Growing Tree, Hilbert Curve, Hunt-and-Kill,
+  Kraken (Eden growth), Kruskal's (randomised), Lightning, Morton Curve
+  (Z-order), Oldest-Pick, Prim's (randomised), Weighted Prim's (true MST),
+  Recursive Backtracker, Recursive Division, Sidewinder, Turing (state
+  machine), Wilson's.
 - **10 solver algorithms** — A\*, BFS, Bidirectional BFS, Dead-End Filling,
   DFS, Dial (bucket-queue Dijkstra), Dijkstra, IDA\*, Trémaux, Wall Follower.
 - **A graph seam, not just a grid** — solvers and analysis run against a
@@ -30,11 +31,18 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   and event listeners through a Spring-free SPI; loaders are tracked and
   closed cleanly on shutdown (no Windows file-locks, no metaspace bloat).
 - **Java 21**, **Spring Boot 4.1**, **JavaFX 21**.
-- **Verified** — `mvn clean verify` passes **347 tests** across the five
-  modules (core 242, server 78, plugin-runtime 16, plugin-api 7, desktop 4)
-  with zero Checkstyle violations and zero SpotBugs findings.
+- **Live over the wire** — a session-scoped STOMP surface (maze state, solver
+  runs, player moves, plugin failures) with `CONNECT` authentication and
+  per-destination `SUBSCRIBE` authorization on owned sessions, a one-file
+  vanilla-JS web UI served at `/` that plays mazes against it, and an opt-in
+  multiplayer flag (`daedalus.session.multiplayer`).
+- **Verified** — `mvn clean verify` passes **398 tests** across the five
+  modules (core 251, server 116, plugin-runtime 20, plugin-api 7, desktop 4)
+  with zero Checkstyle violations, zero SpotBugs findings, and a per-module
+  JaCoCo coverage ratchet that fails the build on regression.
   [`CHANGELOG.md`](./CHANGELOG.md) records what changed and, where a decision
-  was measured rather than assumed, the numbers behind it.
+  was measured rather than assumed, the numbers behind it;
+  [`TESTING.md`](./TESTING.md) is the strategy those tests follow.
 
 ## Modules
 
@@ -49,7 +57,7 @@ daedalus/
 
 | Module | Depends on | What lives here |
 |---|---|---|
-| `daedalus-core` | SLF4J only | `MazeGrid`, `MazeGenerator`/`MazeSolver` interfaces, all 19 + 9 algorithms, `Point`/`MazeMetadata`/`MazeStats` model. No Spring, no Jackson, no JPA. |
+| `daedalus-core` | SLF4J only | `MazeGrid`, `MazeGenerator`/`MazeSolver` interfaces, all 23 + 10 algorithms, `Point`/`MazeMetadata`/`MazeStats` model. No Spring, no Jackson, no JPA. |
 | `daedalus-plugin-api` | core | `MazePlugin`, `PluginManifest`, `PluginLifecycle`, `PluginContext`, lifecycle events (`MazeGeneratedEvent`, `MazeSolvedEvent`, `PlayerMovedEvent`, `PluginFailedEvent`). What plugin authors implement against. |
 | `daedalus-plugin-runtime` | core, plugin-api, Spring | `PluginManager` (discovery, lifecycle), `PluginRegistry`, JAR `URLClassLoader` isolation. Spring is allowed here so events can be published into a Spring `ApplicationContext`. |
 | `daedalus-server` | plugin-runtime, Spring Boot, Redis (optional) | Controllers (`MazeController`, `MazeWebSocketController`, `PluginController`), DTOs in `com.daedalus.api.dto`, services (`MazeGenerationService` with Resilience4j circuit breaker, `LeaderboardService` with optional Redis backing, `GameSessionService`). |
