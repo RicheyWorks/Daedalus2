@@ -47,8 +47,11 @@
   #board { display: flex; justify-content: center; }
   canvas { border: 1px solid var(--line); border-radius: 6px; background: #161c24;
            max-width: 100%; }
-  #log { height: 560px; overflow-y: auto; font: 12px/1.6 ui-monospace, monospace;
+  #log { height: 380px; overflow-y: auto; font: 12px/1.6 ui-monospace, monospace;
          scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+  #lb { font: 12px/1.9 ui-monospace, monospace; }
+  #lb .rank { display: inline-block; width: 18px; color: var(--dim); }
+  #lb .score { color: var(--accent); font-weight: 700; }
   .info { font-size: 11px; color: var(--dim); line-height: 1.45; margin-top: 4px;
           border-left: 2px solid var(--line); padding-left: 8px; }
   .info b { color: var(--text); font-weight: 600; }
@@ -121,10 +124,16 @@
     </div>
   </section>
 
-  <section class="panel">
-    <h2>Live frames</h2>
-    <div id="log"></div>
-  </section>
+  <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+    <section class="panel">
+      <h2>Leaderboard</h2>
+      <div id="lb" class="hint">loading…</div>
+    </section>
+    <section class="panel">
+      <h2>Live frames</h2>
+      <div id="log"></div>
+    </section>
+  </div>
 </main>
 <script>
 "use strict";
@@ -142,13 +151,38 @@ const state = {
   subs: [],
 };
 
+/** Escape untrusted text (player names arrive from other clients) before it meets innerHTML. */
+function esc(s) {
+  return String(s).replace(/[&<>"']/g,
+      ch => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[ch]));
+}
+
 function log(kind, text) {
   const line = document.createElement("div");
   const t = new Date().toLocaleTimeString();
-  line.innerHTML = `<span class="t">${t}</span><span class="${kind}">${text}</span>`;
+  line.innerHTML = `<span class="t">${t}</span>`;
+  const span = document.createElement("span");
+  span.className = kind;
+  span.textContent = text; // never innerHTML: frame contents include other users' names
+  line.appendChild(span);
   const box = $("log");
   box.prepend(line);
   while (box.childElementCount > 200) box.lastChild.remove();
+}
+
+async function refreshLeaderboard() {
+  try {
+    const rows = await api("/leaderboard?n=10");
+    $("lb").innerHTML = rows.length === 0
+        ? `<span class="hint">no completed runs yet — reach a goal</span>`
+        : rows.map((e, i) =>
+            `<div><span class="rank">${i + 1}</span><b>${esc(e.playerName)}</b> `
+            + `<span class="score">${e.score}</span> `
+            + `<span>&middot; ${e.moveCount} moves &middot; ${(e.elapsedMs / 1000).toFixed(1)}s</span></div>`
+          ).join("");
+  } catch (e) {
+    $("lb").textContent = "leaderboard unavailable";
+  }
 }
 
 // ---------- REST ----------
@@ -198,7 +232,7 @@ async function generate() {
     method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body),
   });
   state.maze = maze; state.path = null; state.session = null;
-  state.joined = null; state.trails = {};
+  state.joined = null; state.trails = {}; state.won = null;
   $("solve").disabled = false; $("play").disabled = false; $("join").disabled = true;
   $("status").textContent = "arrow keys move once a session is open";
   $("stats").innerHTML =
@@ -238,7 +272,7 @@ async function play() {
   const s = await api(`/maze/${state.maze.id}/session?player=${encodeURIComponent(name)}`,
       {method: "POST"});
   state.session = {id: s.sessionId, positions: {[name]: s.position}, primary: name};
-  state.joined = null;
+  state.joined = null; state.won = null;
   state.trails = {[name]: [s.position]};
   $("join").disabled = false;
   $("status").textContent = `session ${s.sessionId.slice(0, 8)}… — arrow keys to move`;
@@ -262,17 +296,48 @@ async function join() {
 }
 
 async function move(name, dr, dc) {
-  if (!state.session) return;
+  if (!state.session || state.won) return;
   const at = state.session.positions[name];
   if (!at) return;
   const to = {row: at.row + dr, col: at.col + dc};
   const body = name === state.session.primary ? {to} : {to, player: name};
   try {
-    await api(`/session/${state.session.id}/move`, {
+    const ok = await api(`/session/${state.session.id}/move`, {
       method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body),
     });
-    // Position updates arrive via the STOMP frame, keeping every viewer consistent.
+    if (ok === false) {
+      flashStatus("blocked — that way is a wall");
+      return;
+    }
+    // With STOMP connected, the frame is the source of truth (keeps every viewer
+    // consistent, including other tabs). Without it, apply locally so play still works.
+    if (!state.stomp) applyMove(name, to);
   } catch (e) { log("err", e.message); }
+}
+
+/** Shared position update: called from the STOMP frame handler or the local fallback. */
+function applyMove(who, to) {
+  state.session.positions[who] = to;
+  (state.trails[who] = state.trails[who] || []).push(to);
+  if (state.maze.tiles[2 * to.row + 1][2 * to.col + 1] === "G") {
+    state.won = who;
+    log("state", `${who} reached the goal — session complete`);
+    $("status").textContent = `${who} reached the goal — session complete`;
+    refreshLeaderboard();
+  } else {
+    const moves = (state.trails[who] || []).length - 1;
+    $("status").textContent =
+        `session ${state.session.id.slice(0, 8)}… — ${who}: ${moves} moves`;
+  }
+  draw();
+}
+
+let statusFlashTimer = null;
+function flashStatus(text) {
+  const el = $("status"), prev = el.textContent;
+  el.textContent = text;
+  clearTimeout(statusFlashTimer);
+  statusFlashTimer = setTimeout(() => { el.textContent = prev; }, 900);
 }
 
 // ---------- STOMP ----------
@@ -320,15 +385,8 @@ function resubscribe() {
     state.subs.push(state.stomp.subscribe(`/topic/session/${state.session.id}/player`, f => {
       const m = JSON.parse(f.body);
       const who = m.player || state.session.primary;
-      state.session.positions[who] = m.to;
-      (state.trails[who] = state.trails[who] || []).push(m.to);
       log("player", `${who}: (${m.from.row},${m.from.col}) → (${m.to.row},${m.to.col})`);
-      const t = state.maze.tiles;
-      if (t[2 * m.to.row + 1][2 * m.to.col + 1] === "G") {
-        log("state", `${who} reached the goal — session complete`);
-        $("status").textContent = `${who} reached the goal — session complete`;
-      }
-      draw();
+      applyMove(who, m.to);
     }));
   }
   state.subs.push(state.stomp.subscribe("/topic/plugins/failures", f => {
@@ -452,7 +510,33 @@ function draw() {
       marker(g, p, PLAYER_COLORS[i % PLAYER_COLORS.length], 0.42);
     });
   }
+  if (state.won && goal) {
+    // Victory ring around the goal.
+    const [x, y] = cellCenter(goal);
+    g.strokeStyle = "#f0b429";
+    g.lineWidth = Math.max(2, geom.wall);
+    g.beginPath();
+    g.arc(x, y, geom.cell * 0.7, 0, 2 * Math.PI);
+    g.stroke();
+  }
 }
+
+// Click (or tap) an adjacent cell to move the primary player — arrows aren't the only way in.
+$("maze").addEventListener("click", ev => {
+  if (!state.session || !geom || state.won) return;
+  const rect = $("maze").getBoundingClientRect();
+  const scale = $("maze").width / rect.width; // canvas may be CSS-shrunk by max-width
+  const x = (ev.clientX - rect.left) * scale, y = (ev.clientY - rect.top) * scale;
+  const track = (off, v) => {
+    for (let i = 1; i < off.length; i += 2) if (v >= off[i] && v < off[i + 1]) return (i - 1) / 2;
+    return -1;
+  };
+  const col = track(geom.offX, x), row = track(geom.offY, y);
+  if (row < 0 || col < 0) return;
+  const at = state.session.positions[state.session.primary];
+  const dr = row - at.row, dc = col - at.col;
+  if (Math.abs(dr) + Math.abs(dc) === 1) move(state.session.primary, dr, dc);
+});
 
 /** Empty-state canvas: an invitation, not a void. */
 function drawEmpty() {
@@ -487,6 +571,7 @@ document.addEventListener("keydown", e => {
 });
 
 drawEmpty();
+refreshLeaderboard();
 loadAlgorithms().then(connectStomp).catch(e => log("err", e.message));
 </script>
 </body>
