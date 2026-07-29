@@ -8,6 +8,12 @@ under the `_migration/` portfolios.
 
 ## [Unreleased] — 2026-07-29
 
+### Changed
+
+- **Server coverage ratchet raised 0.67 → 0.79** — measured 82.2% instruction (up from
+  70.3% when pinned; the UI-sprint and audit tests), re-pinned ~3 below per the ratchet's
+  own rule. Core (90.3%) and plugin-runtime (87.0%) barely moved; their pins stand.
+
 ### Fixed
 
 - **Back-end audit: every in-memory store the server accumulates into is now bounded.**
@@ -24,6 +30,16 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **ADR-005: single-instance posture.** The audit's design-level observation, written down:
+  sessions, the maze cache, and the leaderboard's serving path are process-local on purpose,
+  a second instance today would misbehave in specific enumerated ways, and the
+  externalization path (Redis sessions with a distributed replacement for the tryMove lock,
+  recipe-based maze regeneration, STOMP broker relay) is recorded now with the existing
+  concurrency test named as its acceptance bar. Trigger: a real deployment wanting a second
+  instance.
+- **`docs/handoff/`** — the three LoadBalancerPro issues as paste-ready files, the Dependabot
+  re-triage as a dry-run-first PowerShell script over `gh`, and Codecov activation steps:
+  the full GitHub-side chore list reduced to a fifteen-minute pass.
 - **`sessionOpen` rate-limit budget** on `POST /maze/{id}/session` and
   `POST /session/{id}/join` (60/minute/caller at the base config) — session creation feeds
   every bounded store downstream, so the inflow gets the same per-caller budget the other

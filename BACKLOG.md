@@ -36,6 +36,10 @@ Last consolidated: 2026-05-07
   so any open PR bumping a Boot-managed 3.x artifact is now either obsolete or
   actively conflicting. Close the superseded ones rather than merging them.
 
+  *2026-07-29: fully scripted —* `docs/handoff/triage-dependabot.ps1` *(dry-run by
+  default,* `-Close` *to execute); see* `docs/handoff/README.md` *for the whole
+  fifteen-minute GitHub-chores pass. Original manual commands kept below for reference.*
+
   *2026-07-28: this is a GitHub-side action, not a code change. One pass:*
   `gh pr list --author "app/dependabot" --json number,title` *then, for each PR
   bumping an artifact that `mvn dependency:tree` shows Boot 4.1 already manages
