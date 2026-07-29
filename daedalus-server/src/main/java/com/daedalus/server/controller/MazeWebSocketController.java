@@ -43,7 +43,7 @@ public class MazeWebSocketController {
     @EventListener
     public void onMove(PlayerMovedEvent e) {
         stomp.convertAndSend("/topic/session/" + e.sessionId() + "/player",
-                new MoveFrame(e.sessionId(), e.from(), e.to()));
+                new MoveFrame(e.sessionId(), e.player(), e.from(), e.to()));
     }
 
     /**

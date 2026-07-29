@@ -3,7 +3,10 @@
 package com.daedalus.model;
 
 import java.time.Instant;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * One playable session of a maze. Mutable — player position changes as the game progresses.
@@ -15,6 +18,7 @@ public class GameSession {
     private final UUID mazeId;
     private final String playerName;
     private final String owner;
+    private final ConcurrentMap<String, Point> players = new ConcurrentHashMap<>();
     private Point currentPosition;
     private long moveCount;
     private long score;
@@ -40,11 +44,36 @@ public class GameSession {
         this.owner = owner;
         this.currentPosition = start;
         this.startedAt = Instant.now();
+        this.players.put(playerName, start);
     }
 
+    /** Moves the opening player; see {@link #move(String, Point)}. */
     public void move(Point next) {
-        this.currentPosition = next;
+        move(playerName, next);
+    }
+
+    /**
+     * Moves the named player. The opening player's position is mirrored into
+     * {@link #currentPosition()} so pre-multiplayer callers observe identical behavior.
+     * Compound check-then-move sequences are the caller's job to make atomic
+     * ({@code GameSessionService} holds a per-session lock); this map is concurrent only so
+     * un-locked readers (health details, future spectator views) never see corruption.
+     */
+    public void move(String player, Point next) {
+        players.put(player, next);
+        if (player.equals(playerName)) {
+            this.currentPosition = next;
+        }
         this.moveCount++;
+    }
+
+    /**
+     * Adds a player to this session at the given start, keeping the existing position if the
+     * name is already present. Multiplayer is a server-side feature flag; the model itself is
+     * indifferent to how many players a session tracks.
+     */
+    public void join(String player, Point start) {
+        players.putIfAbsent(player, start);
     }
 
     public void complete(long finalScore) {
@@ -58,6 +87,10 @@ public class GameSession {
     public String playerName() { return playerName; }
     /** Verified owner subject, or {@code null} — an unowned session carries no access claim. */
     public String owner() { return owner; }
+    /** The named player's position, or {@code null} if they never joined this session. */
+    public Point playerPosition(String player) { return players.get(player); }
+    /** Snapshot of every player's position, opening player included. */
+    public Map<String, Point> players() { return Map.copyOf(players); }
     public Point currentPosition() { return currentPosition; }
     public long moveCount() { return moveCount; }
     public long score() { return score; }

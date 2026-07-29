@@ -5,6 +5,7 @@ package com.daedalus.api.dto;
 import com.daedalus.api.validation.NonNegativeCoordinate;
 import com.daedalus.model.Point;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 /**
  * Request body for {@code POST /api/v1/session/{id}/move}.
@@ -26,10 +27,19 @@ import jakarta.validation.constraints.NotNull;
  * defined in the server module and reaches into {@code Point} via its public accessors,
  * preserving the dependency boundary.
  *
- * @param to grid coordinate the player wants to move to (must be adjacent to the current position)
+ * @param to     grid coordinate the player wants to move to (must be adjacent to the current position)
+ * @param player which player is moving (multiplayer flag only); {@code null} or absent means
+ *               the session's opening player, which is the entire pre-multiplayer contract
  */
 public record MoveRequest(
         @NotNull(message = "target coordinate is required")
         @NonNegativeCoordinate
-        Point to
-) {}
+        Point to,
+        @Size(max = 64, message = "player name must be at most 64 chars")
+        String player
+) {
+    /** Single-player form — moves the session's opening player. */
+    public MoveRequest(Point to) {
+        this(to, null);
+    }
+}

@@ -35,6 +35,13 @@ Last consolidated: 2026-05-07
   `spring-boot-starter-parent` 4.1.0 re-pins most managed dependency versions,
   so any open PR bumping a Boot-managed 3.x artifact is now either obsolete or
   actively conflicting. Close the superseded ones rather than merging them.
+
+  *2026-07-28: this is a GitHub-side action, not a code change. One pass:*
+  `gh pr list --author "app/dependabot" --json number,title` *then, for each PR
+  bumping an artifact that `mvn dependency:tree` shows Boot 4.1 already manages
+  at an equal-or-newer version,* `gh pr close <n> --comment "superseded by the
+  Boot 4.1.0 parent bump"`. *Anything Boot does not manage (JavaFX, resilience4j,
+  springdoc, build plugins) gets judged on its own.*
 - ~~**WebSocket / STOMP authorization.**~~ **Done — authentication 2026-07-19,
   per-destination rules 2026-07-28.** `StompAuthChannelInterceptor` validates the
   bearer token on `CONNECT` and attaches a `Principal`; required under `prod`,
@@ -108,20 +115,41 @@ Last consolidated: 2026-05-07
 
 ## Stretch goals (no commitment, capture only)
 
-- **Procedural dungeon mode.** Rooms + corridors over `RecursiveDivision`
-  with a post-process that punches doorways. New `MazeGenerator`
-  implementation, not a refactor of an existing one.
-- **Multiplayer sessions.** Multiple players in the same maze via per-
-  session WebSocket scopes. Existing `GameSessionService` already tracks
-  one player per session; lift that constraint behind a feature flag.
-- **Web UI.** Lightweight React or Vue frontend that subscribes to the
-  STOMP topics and renders generation/solve frames in real time.
-- **Coverage upload to a free service.** The CI workflow added on
-  2026-05-11 covers `mvn -B verify` + example-plugin build, and the
-  release workflow attaches the exec JAR on `v*` tags — the only piece
-  of the original "GitHub Actions CI" backlog item still outstanding is
-  uploading test coverage to Codecov / Coveralls. Punted until someone
-  wants the badge.
+- ~~**Procedural dungeon mode.**~~ **Done (predates this note's cleanup) —**
+  `DungeonGenerator` in daedalus-core is rooms + corridors as a new
+  `MazeGenerator` implementation, via BSP splitting rather than the
+  `RecursiveDivision` post-process this note sketched: recursive splits, a room
+  per leaf, L-shaped sibling corridors, connectivity guaranteed by recursion
+  order. Deliberately not a perfect maze (open rooms, loops, unreachable rock);
+  `DungeonGeneratorTest` pins its own connectivity property, and the
+  spanning-tree roster guard excludes it as visible code.
+- ~~**Multiplayer sessions.**~~ **Done 2026-07-28** — behind
+  `daedalus.session.multiplayer` (default `false`; off is byte-for-byte the
+  pre-flag behavior). `GameSession` tracks per-player positions (opening
+  player mirrored into `currentPosition()` for compatibility);
+  `POST /api/v1/session/{id}/join?player=` admits extra players (404 with the
+  flag off, as if the endpoint did not exist; rejoin keeps the player's
+  position); `MoveRequest.player` names who moves; `PlayerMovedEvent` and
+  `MoveFrame` gained an additive nullable `player` field so existing listeners
+  and clients keep working. Any player reaching the goal completes the session
+  exactly once. Pinned by `GameSessionMultiplayerTest` +
+  `MazeControllerJoinTest`; ownership note: joining does not grant STOMP
+  subscription rights on owned sessions — multiplayer+auth interplay is future
+  work if anyone needs it.
+- ~~**Web UI.**~~ **Done 2026-07-28** — one file of vanilla JS
+  (`daedalus-server/src/main/resources/static/index.html`, served at `/` by
+  Boot convention; `WebUiSmokeTest` pins that convention). Generate/solve/play
+  over the REST API, live frames over the STOMP topics via SockJS, canvas
+  renderer with solver-path overlay and per-player markers; arrow keys move
+  the opening player, WASD the joined one when the multiplayer flag is on.
+  Deliberately framework-free — no build step, no npm; it exercises the public
+  surfaces exactly as an external integrator would, so it doubles as living
+  documentation of the API.
+- ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`
+  uploads every module's JaCoCo XML to Codecov via `codecov-action@v5`,
+  guarded on the `CODECOV_TOKEN` Actions secret: without the secret the step
+  skips and CI behaves exactly as before. To activate, add the repo on
+  codecov.io and set its upload token as `CODECOV_TOKEN`.
 
 ---
 

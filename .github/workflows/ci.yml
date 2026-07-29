@@ -77,6 +77,20 @@ jobs:
           mvn -B -ntp -f examples/dungeon-layout/pom.xml clean package
           mvn -B -ntp -f examples/benchmark-harness/pom.xml clean package
 
+      # Coverage upload (BACKLOG: the last outstanding piece of the original
+      # "GitHub Actions CI" item). Guarded on the CODECOV_TOKEN secret —
+      # tokenless uploads are unreliable for private repos, so without the
+      # secret configured this step is skipped and CI behaves exactly as
+      # before. To activate: create the repo on codecov.io and add its upload
+      # token as the CODECOV_TOKEN Actions secret.
+      - name: Upload coverage to Codecov
+        if: ${{ secrets.CODECOV_TOKEN != '' }}
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: daedalus-core/target/site/jacoco/jacoco.xml,daedalus-plugin-api/target/site/jacoco/jacoco.xml,daedalus-plugin-runtime/target/site/jacoco/jacoco.xml,daedalus-server/target/site/jacoco/jacoco.xml,daedalus-desktop/target/site/jacoco/jacoco.xml
+          fail_ci_if_error: false
+
       # Coverage badge: only on pushes to main (not PRs — no commit rights
       # there, and the badge should reflect main anyway).
       - name: Collect JaCoCo reports

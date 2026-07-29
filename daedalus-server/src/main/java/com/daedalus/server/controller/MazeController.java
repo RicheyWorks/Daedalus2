@@ -45,7 +45,9 @@ import java.util.UUID;
  *   <li>{@code GET    /api/v1/maze/{id}}                       — fetch metadata + tile grid</li>
  *   <li>{@code POST   /api/v1/maze/{id}/solve/{solverId}}      — run a solver against the maze</li>
  *   <li>{@code POST   /api/v1/maze/{id}/session?player=...}    — open a play session</li>
- *   <li>{@code POST   /api/v1/session/{id}/move}               — move the player</li>
+ *   <li>{@code POST   /api/v1/session/{id}/move}               — move a player</li>
+ *   <li>{@code POST   /api/v1/session/{id}/join?player=...}    — join as an extra player
+ *       (multiplayer flag)</li>
  *   <li>{@code GET    /api/v1/leaderboard?n=20}                — leaderboard snapshot</li>
  * </ul>
  */
@@ -162,14 +164,38 @@ public class MazeController {
     }
 
     @PostMapping("/session/{id}/move")
-    @Operation(summary = "Move the player to an adjacent cell.",
-            description = "Returns true if the move was legal (target cell is open and adjacent).")
+    @Operation(summary = "Move a player to an adjacent cell.",
+            description = "Returns true if the move was legal (target cell is open and adjacent). "
+                    + "Omit 'player' to move the session's opening player; name one to move a "
+                    + "joined player (multiplayer flag only).")
     public ResponseEntity<Boolean> move(@PathVariable UUID id, @Valid @RequestBody MoveRequest req) {
         var s = sessions.find(id);
         if (s == null) return ResponseEntity.notFound().build();
         var c = gen.find(s.mazeId());
         if (c == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(sessions.tryMove(id, c.grid(), req.to()));
+        return ResponseEntity.ok(sessions.tryMove(id, req.player(), c.grid(), req.to()));
+    }
+
+    @PostMapping("/session/{id}/join")
+    @Operation(summary = "Join an existing session as an additional named player.",
+            description = "Requires the daedalus.session.multiplayer flag; without it this "
+                    + "endpoint answers 404 as if it did not exist. Joining a name already in "
+                    + "the session keeps that player's position (reconnect must not teleport).")
+    public ResponseEntity<SessionResponse> join(
+            @PathVariable UUID id,
+            @RequestParam
+            @NotBlank
+            @Size(max = 64, message = "player name must be at most 64 chars")
+            String player) {
+        if (!sessions.multiplayerEnabled()) return ResponseEntity.notFound().build();
+        var s = sessions.find(id);
+        if (s == null) return ResponseEntity.notFound().build();
+        var c = gen.find(s.mazeId());
+        if (c == null) return ResponseEntity.notFound().build();
+        var joined = sessions.join(id, player, c.grid().start());
+        if (joined == null) return ResponseEntity.status(409).build(); // completed session
+        return ResponseEntity.ok(new SessionResponse(
+                joined.id(), joined.mazeId(), joined.playerPosition(player)));
     }
 
     @GetMapping("/leaderboard")
