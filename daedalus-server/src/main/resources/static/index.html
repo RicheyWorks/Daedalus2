@@ -62,6 +62,15 @@
             margin-top: 10px; font-size: 11px; color: var(--dim); }
   #legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px;
               margin-right: 5px; vertical-align: -1px; }
+  #compareBox table { width: 100%; margin-top: 12px; border-collapse: collapse;
+                      font: 12px/1.7 ui-monospace, monospace; }
+  #compareBox th { text-align: left; color: var(--dim); font-weight: 600;
+                   border-bottom: 1px solid var(--line); padding: 2px 8px; }
+  #compareBox td { padding: 2px 8px; border-bottom: 1px solid var(--line); }
+  #compareBox tr.solver-row { cursor: pointer; }
+  #compareBox tr.solver-row:hover, #compareBox tr.pinned { background: #232b33; }
+  #compareBox .best { color: var(--accent); font-weight: 700; }
+  #compareBox .gave-up { color: var(--warn); }
   #log div { border-bottom: 1px solid var(--line); padding: 2px 0; }
   #log .t { color: var(--dim); margin-right: 6px; }
   #log .state  { color: var(--accent); }
@@ -99,6 +108,8 @@
     <select id="solver"></select>
     <div id="solInfo" class="info"></div>
     <button id="solve" disabled>Solve</button>
+    <button id="compare" disabled title="Run every registered solver against this maze">
+      Compare all solvers</button>
 
     <label for="player">Player name</label>
     <input id="player" value="web">
@@ -121,6 +132,11 @@
       <span><i style="background:#e5484d;border-radius:50%"></i>goal</span>
       <span><i style="background:#82b1ff"></i>solver path</span>
       <span><i style="background:#f0b429;border-radius:50%"></i>players</span>
+    </div>
+    <div id="compareBox"></div>
+    <div style="text-align:center;margin-top:8px">
+      <a id="pngExport" class="hint" href="#" download="maze.png"
+         style="display:none;color:var(--accent2)">download as PNG</a>
     </div>
   </section>
 
@@ -231,17 +247,44 @@ async function generate() {
   const maze = await api("/maze/generate", {
     method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body),
   });
+  adoptMaze(maze, performance.now() - t0);
+}
+
+/** Install a maze into the UI — from a fresh generate or a #maze=<id> permalink. */
+function adoptMaze(maze, roundTripMs) {
   state.maze = maze; state.path = null; state.session = null;
   state.joined = null; state.trails = {}; state.won = null;
   $("solve").disabled = false; $("play").disabled = false; $("join").disabled = true;
+  $("compare").disabled = false;
+  $("compareBox").innerHTML = "";
+  location.hash = "maze=" + maze.id; // shareable — anyone on this server can open it
   $("status").textContent = "arrow keys move once a session is open";
   $("stats").innerHTML =
       `<span>maze</span> ${maze.id.slice(0, 8)}&hellip;<br>`
       + `<span>by</span> ${maze.generatorId} &middot; ${maze.rows}&times;${maze.cols} `
       + `&middot; <span>seed</span> ${maze.seed}<br>`
-      + `<span>round-trip</span> ${(performance.now() - t0).toFixed(0)} ms<br>`;
+      + (roundTripMs != null
+          ? `<span>round-trip</span> ${roundTripMs.toFixed(0)} ms<br>`
+          : `<span>loaded from</span> permalink<br>`);
   resubscribe();
   draw();
+  $("pngExport").style.display = "inline";
+}
+// Snapshot whatever is on the canvas at click time — path overlays and players included.
+$("pngExport").addEventListener("click", function refresh() {
+  this.href = $("maze").toDataURL("image/png");
+});
+
+/** #maze=<id> permalink: load an existing maze from this server on page open. */
+async function loadFromHash() {
+  const m = location.hash.match(/#maze=([0-9a-f-]{36})/);
+  if (!m) return;
+  try {
+    adoptMaze(await api(`/maze/${m[1]}`), null);
+    log("state", "loaded maze from permalink");
+  } catch (e) {
+    log("err", `permalink maze not found on this server (${e.message})`);
+  }
 }
 
 async function solve() {
@@ -258,6 +301,11 @@ async function solve() {
 
 /** Progressive reveal of the solver path — watching the route unfold beats a pop-in. */
 function animatePath() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    state.pathProgress = 1;
+    draw();
+    return;
+  }
   const started = performance.now(), duration = 700;
   const step = now => {
     state.pathProgress = Math.min(1, (now - started) / duration);
@@ -265,6 +313,64 @@ function animatePath() {
     if (state.pathProgress < 1) requestAnimationFrame(step);
   };
   requestAnimationFrame(step);
+}
+
+/**
+ * Race every registered solver against the current maze and table the results — ten
+ * algorithms, one topology, hover a row to see how that solver actually went. Best path
+ * length and fewest visits are highlighted; a solver that legitimately gives up (wall
+ * follower on a braided maze) shows as such rather than as an error.
+ */
+async function compareSolvers() {
+  const ids = [...$("solver").options].map(o => o.value);
+  $("compare").disabled = true;
+  const results = [];
+  for (const id of ids) {
+    try {
+      const r = await api(`/maze/${state.maze.id}/solve/${id}`, {method: "POST"});
+      results.push(r);
+    } catch (e) {
+      log("err", `${id}: ${e.message}`);
+    }
+  }
+  $("compare").disabled = false;
+  const ok = results.filter(r => r.success);
+  const bestPath = Math.min(...ok.map(r => r.path.length));
+  const bestVisited = Math.min(...ok.map(r => r.visited));
+  results.sort((a, b) => (a.success !== b.success) ? (a.success ? -1 : 1) : a.visited - b.visited);
+
+  $("compareBox").innerHTML = `<table><tr>
+      <th>solver</th><th>path</th><th>visited</th><th>ms</th></tr>` +
+    results.map(r => r.success
+        ? `<tr class="solver-row" data-id="${esc(r.solverId)}">
+             <td>${esc((state.algos[r.solverId] || {}).displayName || r.solverId)}</td>
+             <td class="${r.path.length === bestPath ? "best" : ""}">${r.path.length}</td>
+             <td class="${r.visited === bestVisited ? "best" : ""}">${r.visited}</td>
+             <td>${r.elapsedMs}</td></tr>`
+        : `<tr><td>${esc((state.algos[r.solverId] || {}).displayName || r.solverId)}</td>
+             <td class="gave-up" colspan="3">gave up (documented limitation)</td></tr>`
+    ).join("") + `</table>
+    <div class="hint" style="text-align:center;margin-top:6px">
+      hover a row to preview that solver's route &middot; click to pin</div>`;
+
+  const byId = Object.fromEntries(results.map(r => [r.solverId, r]));
+  let pinned = null;
+  $("compareBox").querySelectorAll("tr.solver-row").forEach(tr => {
+    const show = () => { state.path = byId[tr.dataset.id].path; state.pathProgress = 1; draw(); };
+    tr.addEventListener("mouseenter", show);
+    tr.addEventListener("mouseleave", () => {
+      if (pinned) { state.path = byId[pinned].path; } else { state.path = null; }
+      draw();
+    });
+    tr.addEventListener("click", () => {
+      pinned = tr.dataset.id;
+      $("compareBox").querySelectorAll("tr").forEach(x => x.classList.remove("pinned"));
+      tr.classList.add("pinned");
+      show();
+    });
+  });
+  log("solver", `compared ${ok.length}/${results.length} solvers — `
+      + `best path ${bestPath}, fewest visits ${bestVisited}`);
 }
 
 async function play() {
@@ -555,6 +661,7 @@ function drawEmpty() {
 // ---------- wiring ----------
 $("generate").onclick = () => generate().catch(e => log("err", e.message));
 $("solve").onclick = () => solve().catch(e => log("err", e.message));
+$("compare").onclick = () => compareSolvers().catch(e => log("err", e.message));
 $("play").onclick = () => play().catch(e => log("err", e.message));
 $("join").onclick = () => join();
 document.addEventListener("keydown", e => {
@@ -572,7 +679,7 @@ document.addEventListener("keydown", e => {
 
 drawEmpty();
 refreshLeaderboard();
-loadAlgorithms().then(connectStomp).catch(e => log("err", e.message));
+loadAlgorithms().then(connectStomp).then(loadFromHash).catch(e => log("err", e.message));
 </script>
 </body>
 </html>
