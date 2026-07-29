@@ -52,6 +52,7 @@ public class AlgorithmConfig {
                 new TuringGenerator(),
                 new GaussGenerator(),
                 new ArchimedesGenerator(),
+                new ChaosGenerator(),
                 new DungeonGenerator()
         );
     }

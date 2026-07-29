@@ -106,6 +106,16 @@ public class MazeGrid {
         carve(cell(a), d);
     }
 
+    /**
+     * ASCII art of the maze (audit recommendation §2.3) — same glyphs the REST surface ships,
+     * rendered via {@code AsciiMazeVisualizer}. Debugger- and log-friendly; a 20×20 grid is
+     * ~1.7 KB, so this stays cheap at the sizes logs actually see.
+     */
+    @Override
+    public String toString() {
+        return com.daedalus.visualize.AsciiMazeVisualizer.renderToString(this, java.util.List.of());
+    }
+
     public static Direction directionBetween(Point a, Point b) {
         int dr = b.row() - a.row();
         int dc = b.col() - a.col();

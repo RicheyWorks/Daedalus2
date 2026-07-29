@@ -1,6 +1,8 @@
 # ADR-001: Make Daedalus a Graph Engine, Not a Maze Engine
 
-**Status:** Proposed
+**Status:** Accepted — implemented (items 1–5 and 7 done with measurements recorded inline;
+item 6's remaining step is pasting the prepared issue text into the LoadBalancerPro tracker,
+a GitHub-side action)
 **Date:** 2026-07-19
 **Deciders:** Richmond (RicheyWorks)
 **Consumers in scope:** CSRBT, LoadBalancerPro, future embedders

@@ -50,7 +50,8 @@ class GeneratorConnectivityTest {
                 new SidewinderGenerator(), new GrowingTreeGenerator(), new OldestPickGenerator(),
                 new AldousBroderGenerator(), new EllersGenerator(), new KrakenGenerator(),
                 new MortonCurveGenerator(), new HilbertCurveGenerator(), new LightningGenerator(),
-                new TuringGenerator(), new GaussGenerator(), new ArchimedesGenerator());
+                new TuringGenerator(), new GaussGenerator(), new ArchimedesGenerator(),
+                new ChaosGenerator());
     }
 
     @Test

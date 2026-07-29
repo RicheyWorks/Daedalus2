@@ -9,6 +9,14 @@ logging:
     com.daedalus: DEBUG
     org.springframework: WARN
 
+# Match the dev posture so actuator surfaces (including the custom algorithms endpoint) are
+# testable; prod's restricted include-list is its own explicit choice in application-prod.yml.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
 daedalus:
   plugins:
     scan-on-startup: false
