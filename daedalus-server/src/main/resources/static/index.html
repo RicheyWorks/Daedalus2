@@ -45,9 +45,20 @@
   button.primary { background: var(--accent); border-color: var(--accent); color: #08130d; }
   button:disabled { opacity: .4; cursor: default; }
   #board { display: flex; justify-content: center; }
-  canvas { border: 1px solid var(--line); border-radius: 6px; background: #0b0e11;
-           image-rendering: pixelated; max-width: 100%; }
-  #log { height: 420px; overflow-y: auto; font: 12px/1.6 ui-monospace, monospace; }
+  canvas { border: 1px solid var(--line); border-radius: 6px; background: #161c24;
+           max-width: 100%; }
+  #log { height: 560px; overflow-y: auto; font: 12px/1.6 ui-monospace, monospace;
+         scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+  .info { font-size: 11px; color: var(--dim); line-height: 1.45; margin-top: 4px;
+          border-left: 2px solid var(--line); padding-left: 8px; }
+  .info b { color: var(--text); font-weight: 600; }
+  #stats { font: 12px/1.7 ui-monospace, monospace; color: var(--text);
+           border-top: 1px solid var(--line); margin-top: 12px; padding-top: 8px; }
+  #stats span { color: var(--dim); }
+  #legend { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+            margin-top: 10px; font-size: 11px; color: var(--dim); }
+  #legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px;
+              margin-right: 5px; vertical-align: -1px; }
   #log div { border-bottom: 1px solid var(--line); padding: 2px 0; }
   #log .t { color: var(--dim); margin-right: 6px; }
   #log .state  { color: var(--accent); }
@@ -70,6 +81,7 @@
     <h2>Controls</h2>
     <label for="generator">Generator</label>
     <select id="generator"></select>
+    <div id="genInfo" class="info"></div>
     <div class="row">
       <div style="flex:1"><label for="rows">Rows</label>
         <input id="rows" type="number" value="21" min="3" max="99"></div>
@@ -82,6 +94,7 @@
 
     <label for="solver">Solver</label>
     <select id="solver"></select>
+    <div id="solInfo" class="info"></div>
     <button id="solve" disabled>Solve</button>
 
     <label for="player">Player name</label>
@@ -92,10 +105,21 @@
     <div class="hint">After opening a session: <kbd>&uarr;</kbd><kbd>&darr;</kbd>
       <kbd>&larr;</kbd><kbd>&rarr;</kbd> move the player. With the multiplayer flag on,
       <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move the joined player.</div>
+    <div id="stats"></div>
     <div id="status">no maze yet</div>
   </section>
 
-  <section class="panel" id="board"><canvas id="maze" width="640" height="480"></canvas></section>
+  <section class="panel" id="board" style="display:block">
+    <div style="display:flex;justify-content:center"><canvas id="maze" width="640" height="480"></canvas></div>
+    <div id="legend">
+      <span><i style="background:#465362"></i>floor</span>
+      <span><i style="background:#161c24;border:1px solid #2a323b"></i>wall / rock</span>
+      <span><i style="background:#4cc38a;border-radius:50%"></i>start</span>
+      <span><i style="background:#e5484d;border-radius:50%"></i>goal</span>
+      <span><i style="background:#82b1ff"></i>solver path</span>
+      <span><i style="background:#f0b429;border-radius:50%"></i>players</span>
+    </div>
+  </section>
 
   <section class="panel">
     <h2>Live frames</h2>
@@ -109,8 +133,11 @@ const API = "/api/v1";
 const state = {
   maze: null,            // GenerateResponse (tiles as array of strings, thanks to Jackson char[])
   path: null,            // SolveResponse.path (cell coords)
-  session: null,         // { id, positions: {playerName: {row,col}} }
+  pathProgress: 1,       // 0..1 — animated reveal of the solver path
+  session: null,         // { id, positions: {playerName: {row,col}}, primary, goal }
   joined: null,          // second player's name, when joined
+  trails: {},            // playerName -> [Point] breadcrumbs during play
+  algos: {},             // id -> AlgorithmDescriptor, for the info cards
   stomp: null,
   subs: [],
 };
@@ -137,15 +164,28 @@ async function loadAlgorithms() {
   for (const [selId, list] of [["generator", all.generators], ["solver", all.solvers]]) {
     const sel = $(selId);
     sel.innerHTML = "";
-    list.forEach(a => {
+    list.sort((a, b) => a.id.localeCompare(b.id)).forEach(a => {
+      state.algos[a.id] = a;
       const o = document.createElement("option");
-      o.value = a.id; o.textContent = a.id;
+      o.value = a.id; o.textContent = a.displayName || a.id;
       sel.appendChild(o);
     });
   }
   $("generator").value = "recursive-backtracker";
   $("solver").value = "bfs";
+  updateInfo();
 }
+
+/** The catalog ships bias notes and complexity for every algorithm — show them off. */
+function updateInfo() {
+  for (const [selId, infoId] of [["generator", "genInfo"], ["solver", "solInfo"]]) {
+    const a = state.algos[$(selId).value];
+    $(infoId).innerHTML = !a ? "" :
+        `<b>${a.displayName}</b> &middot; ${a.complexity || ""}<br>${a.biasNote || a.description || ""}`;
+  }
+}
+$("generator").addEventListener("change", updateInfo);
+$("solver").addEventListener("change", updateInfo);
 
 async function generate() {
   const body = {
@@ -153,13 +193,19 @@ async function generate() {
     rows: +$("rows").value, cols: +$("cols").value,
     seed: $("seed").value === "" ? null : +$("seed").value,
   };
+  const t0 = performance.now();
   const maze = await api("/maze/generate", {
     method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body),
   });
-  state.maze = maze; state.path = null; state.session = null; state.joined = null;
+  state.maze = maze; state.path = null; state.session = null;
+  state.joined = null; state.trails = {};
   $("solve").disabled = false; $("play").disabled = false; $("join").disabled = true;
-  $("status").textContent =
-    `maze ${maze.id.slice(0, 8)}… by ${maze.generatorId} (${maze.rows}×${maze.cols})`;
+  $("status").textContent = "arrow keys move once a session is open";
+  $("stats").innerHTML =
+      `<span>maze</span> ${maze.id.slice(0, 8)}&hellip;<br>`
+      + `<span>by</span> ${maze.generatorId} &middot; ${maze.rows}&times;${maze.cols} `
+      + `&middot; <span>seed</span> ${maze.seed}<br>`
+      + `<span>round-trip</span> ${(performance.now() - t0).toFixed(0)} ms<br>`;
   resubscribe();
   draw();
 }
@@ -169,7 +215,22 @@ async function solve() {
   state.path = r.path;
   log("solver", `${r.solverId}: path ${r.path.length}, visited ${r.visited}, `
       + `${r.elapsedMs}ms, success=${r.success}`);
-  draw();
+  $("stats").innerHTML +=
+      `<span>${r.solverId}</span> path ${r.path.length} &middot; visited ${r.visited} `
+      + `&middot; explored ${r.explored} &middot; ${r.elapsedMs} ms`
+      + (r.success ? "" : " &middot; <b>no route</b>") + "<br>";
+  animatePath();
+}
+
+/** Progressive reveal of the solver path — watching the route unfold beats a pop-in. */
+function animatePath() {
+  const started = performance.now(), duration = 700;
+  const step = now => {
+    state.pathProgress = Math.min(1, (now - started) / duration);
+    draw();
+    if (state.pathProgress < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
 }
 
 async function play() {
@@ -178,6 +239,7 @@ async function play() {
       {method: "POST"});
   state.session = {id: s.sessionId, positions: {[name]: s.position}, primary: name};
   state.joined = null;
+  state.trails = {[name]: [s.position]};
   $("join").disabled = false;
   $("status").textContent = `session ${s.sessionId.slice(0, 8)}… — arrow keys to move`;
   resubscribe();
@@ -191,6 +253,7 @@ async function join() {
         {method: "POST"});
     state.joined = name;
     state.session.positions[name] = s.position;
+    state.trails[name] = [s.position];
     log("player", `${name} joined (multiplayer flag is on)`);
     draw();
   } catch (e) {
@@ -213,7 +276,19 @@ async function move(name, dr, dc) {
 }
 
 // ---------- STOMP ----------
+let stompWarned = false;
 function connectStomp() {
+  if (typeof Stomp === "undefined" || typeof SockJS === "undefined") {
+    // CDN unreachable (offline / blocked network). Everything REST-driven still works;
+    // only the live-frames panel degrades. Say so once, quietly, instead of leaking a
+    // ReferenceError into the log.
+    if (!stompWarned) {
+      stompWarned = true;
+      log("state", "live frames unavailable (STOMP libraries did not load) — "
+          + "generate, solve, and play still work");
+    }
+    return;
+  }
   const client = Stomp.over(new SockJS("/ws"));
   client.debug = null;
   client.connect({}, () => {
@@ -246,7 +321,13 @@ function resubscribe() {
       const m = JSON.parse(f.body);
       const who = m.player || state.session.primary;
       state.session.positions[who] = m.to;
+      (state.trails[who] = state.trails[who] || []).push(m.to);
       log("player", `${who}: (${m.from.row},${m.from.col}) → (${m.to.row},${m.to.col})`);
+      const t = state.maze.tiles;
+      if (t[2 * m.to.row + 1][2 * m.to.col + 1] === "G") {
+        log("state", `${who} reached the goal — session complete`);
+        $("status").textContent = `${who} reached the goal — session complete`;
+      }
       draw();
     }));
   }
@@ -257,43 +338,134 @@ function resubscribe() {
 }
 
 // ---------- rendering ----------
-const PLAYER_COLORS = ["#f0b429", "#e5484d", "#6ca0f6", "#4cc38a"];
+// Corridors render wide and light on thin dark walls (a maze is open space between walls,
+// not a grid of blocks), and a cell whose four sides are all closed is ROCK — uncarved
+// space, drawn as solid wall. Without that rule the BSP dungeon's rock renders as a
+// polka-dot field of floating floor specks, because the tile projection marks every cell
+// position as passage whether or not anything ever carved it.
+const COLORS = {
+  wall: "#161c24", floor: "#465362", start: "#4cc38a", goal: "#e5484d", path: "#82b1ff",
+};
+const PLAYER_COLORS = ["#f0b429", "#ff8fa3", "#9ecbff", "#7ce2b3"];
+let geom = null; // {offX, offY, cell, wall} — track offsets for the current maze
+
+function computeGeometry(tiles) {
+  const th = tiles.length, tw = tiles[0].length;
+  const cols = (tw - 1) / 2;
+  const cell = Math.max(6, Math.min(26, Math.floor(880 / (cols * 1.25 + 0.25))));
+  const wall = Math.max(2, Math.round(cell / 4));
+  const track = n => {
+    const off = new Array(n + 1);
+    off[0] = 0;
+    for (let i = 0; i < n; i++) off[i + 1] = off[i] + (i % 2 === 0 ? wall : cell);
+    return off;
+  };
+  return { offX: track(tw), offY: track(th), cell, wall };
+}
+
+function isRock(tiles, r, c) {
+  return tiles[r - 1][c] === "#" && tiles[r + 1][c] === "#"
+      && tiles[r][c - 1] === "#" && tiles[r][c + 1] === "#"
+      && tiles[r][c] !== "S" && tiles[r][c] !== "G";
+}
+
+// A wall corner post (even,even tile) whose four surrounding wall segments are all open is
+// interior to an open area — a dungeon room — and renders as floor. In a perfect maze this
+// never fires (a 2x2 of mutually open cells is a cycle); in rooms it removes the grid of
+// specks the posts would otherwise leave.
+function isInteriorPost(tiles, r, c) {
+  return r > 0 && c > 0 && r < tiles.length - 1 && c < tiles[0].length - 1
+      && tiles[r - 1][c] !== "#" && tiles[r + 1][c] !== "#"
+      && tiles[r][c - 1] !== "#" && tiles[r][c + 1] !== "#";
+}
+
+function cellCenter(p) {
+  return [geom.offX[2 * p.col + 1] + geom.cell / 2,
+          geom.offY[2 * p.row + 1] + geom.cell / 2];
+}
+
+function marker(g, p, color, radius) {
+  const [x, y] = cellCenter(p);
+  g.fillStyle = color;
+  g.beginPath();
+  g.arc(x, y, geom.cell * radius, 0, 2 * Math.PI);
+  g.fill();
+}
+
 function draw() {
   if (!state.maze) return;
   const tiles = state.maze.tiles; // array of strings (Jackson renders char[] rows as strings)
-  const h = tiles.length, w = tiles[0].length;
-  const c = $("maze"), px = Math.max(4, Math.min(18, Math.floor(900 / w)));
-  c.width = w * px; c.height = h * px;
+  const th = tiles.length, tw = tiles[0].length;
+  geom = computeGeometry(tiles);
+  const c = $("maze");
+  c.width = geom.offX[tw]; c.height = geom.offY[th];
   const g = c.getContext("2d");
-  for (let r = 0; r < h; r++) {
-    for (let col = 0; col < w; col++) {
+
+  g.fillStyle = COLORS.wall;
+  g.fillRect(0, 0, c.width, c.height);
+  let start = null, goal = null;
+  for (let r = 0; r < th; r++) {
+    for (let col = 0; col < tw; col++) {
       const t = tiles[r][col];
-      g.fillStyle = t === "#" ? "#242c34"
-                  : t === "S" ? "#1d5c3f"
-                  : t === "G" ? "#6b2126"
-                  : "#0b0e11";
-      g.fillRect(col * px, r * px, px, px);
+      if (t === "#" && !(r % 2 === 0 && col % 2 === 0 && isInteriorPost(tiles, r, col))) {
+        continue;                                                  // wall stays wall
+      }
+      if (r % 2 === 1 && col % 2 === 1 && isRock(tiles, r, col)) continue; // rock stays wall
+      g.fillStyle = COLORS.floor;
+      g.fillRect(geom.offX[col], geom.offY[r],
+                 geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
+      if (t === "S") start = { row: (r - 1) / 2, col: (col - 1) / 2 };
+      if (t === "G") goal  = { row: (r - 1) / 2, col: (col - 1) / 2 };
     }
   }
-  if (state.path) {
-    g.strokeStyle = "#6ca0f6"; g.lineWidth = Math.max(1, px / 3);
+
+  if (state.path && state.path.length > 1) {
+    const visible = Math.max(2, Math.ceil(state.path.length * state.pathProgress));
+    g.strokeStyle = COLORS.path;
+    g.lineWidth = Math.max(2, geom.cell * 0.4);
     g.lineCap = "round"; g.lineJoin = "round";
+    g.globalAlpha = 0.9;
     g.beginPath();
-    state.path.forEach((p, i) => {
-      const x = (2 * p.col + 1) * px + px / 2, y = (2 * p.row + 1) * px + px / 2;
+    state.path.slice(0, visible).forEach((p, i) => {
+      const [x, y] = cellCenter(p);
       i === 0 ? g.moveTo(x, y) : g.lineTo(x, y);
     });
     g.stroke();
+    g.globalAlpha = 1;
   }
-  if (state.session) {
-    Object.entries(state.session.positions).forEach(([name, p], i) => {
-      g.fillStyle = PLAYER_COLORS[i % PLAYER_COLORS.length];
+  // Breadcrumb trails: where each player has actually walked.
+  Object.entries(state.trails).forEach(([name, points], i) => {
+    g.fillStyle = PLAYER_COLORS[i % PLAYER_COLORS.length];
+    g.globalAlpha = 0.28;
+    points.forEach(p => {
+      const [x, y] = cellCenter(p);
       g.beginPath();
-      g.arc((2 * p.col + 1) * px + px / 2, (2 * p.row + 1) * px + px / 2,
-            px * 0.42, 0, 2 * Math.PI);
+      g.arc(x, y, geom.cell * 0.16, 0, 2 * Math.PI);
       g.fill();
     });
+    g.globalAlpha = 1;
+  });
+  if (start) marker(g, start, COLORS.start, 0.34);
+  if (goal)  marker(g, goal,  COLORS.goal,  0.34);
+  if (state.session) {
+    Object.entries(state.session.positions).forEach(([name, p], i) => {
+      marker(g, p, PLAYER_COLORS[i % PLAYER_COLORS.length], 0.42);
+    });
   }
+}
+
+/** Empty-state canvas: an invitation, not a void. */
+function drawEmpty() {
+  const c = $("maze"), g = c.getContext("2d");
+  g.fillStyle = COLORS.wall;
+  g.fillRect(0, 0, c.width, c.height);
+  g.fillStyle = "#8a949e";
+  g.font = "14px system-ui, sans-serif";
+  g.textAlign = "center";
+  g.fillText("Pick a generator and press Generate", c.width / 2, c.height / 2 - 8);
+  g.fillStyle = "#5c6771";
+  g.fillText("then Solve to watch a route unfold, or open a session and play",
+      c.width / 2, c.height / 2 + 16);
 }
 
 // ---------- wiring ----------
@@ -314,6 +486,7 @@ document.addEventListener("keydown", e => {
   }
 });
 
+drawEmpty();
 loadAlgorithms().then(connectStomp).catch(e => log("err", e.message));
 </script>
 </body>
