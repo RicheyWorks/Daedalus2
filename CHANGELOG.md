@@ -6,9 +6,28 @@ All notable changes to Daedalus are documented in this file. Format follows
 `1.0.0` (the multi-module split + first audit pass) live in git history
 under the `_migration/` portfolios.
 
-## [Unreleased]
+## [Unreleased] — 2026-07-29
 
-Nothing yet — development reopened after `v1.1.0`.
+### Fixed
+
+- **Back-end audit: every in-memory store the server accumulates into is now bounded.**
+  Three had the same slow leak the rate-limiter buckets had before their Caffeine bound
+  (BACKLOG, 2026-07-19): the **maze cache** (one full grid per generation, up to 43k/day
+  inside the base rate limit, kept forever), the **session store** (never evicted, not even
+  after completion), and the **in-memory leaderboard** (one entry per completed session,
+  forever). Maze cache and sessions now sit in Caffeine caches (size + idle-TTL bounds,
+  `daedalus.maze.cache.*` / `daedalus.session.*`); the leaderboard trims from the worst end
+  past `daedalus.leaderboard.max-entries` (default 100 — `top(n)` caps at 100, so deeper
+  retention was pure growth; the Redis backend keeps full history independently). Eviction
+  rides the APIs' existing "unknown id" 404 paths, and the idle TTLs (2h) far outlive any
+  game actually being played. `BoundedStoresTest` pins all three bounds.
+
+### Added
+
+- **`sessionOpen` rate-limit budget** on `POST /maze/{id}/session` and
+  `POST /session/{id}/join` (60/minute/caller at the base config) — session creation feeds
+  every bounded store downstream, so the inflow gets the same per-caller budget the other
+  write endpoints already had.
 
 ## [1.1.0] — 2026-07-29
 

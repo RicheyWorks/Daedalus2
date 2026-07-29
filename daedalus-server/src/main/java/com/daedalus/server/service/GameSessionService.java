@@ -7,6 +7,8 @@ import com.daedalus.model.GameSession;
 import com.daedalus.model.LeaderboardEntry;
 import com.daedalus.model.Point;
 import com.daedalus.plugin.events.PlayerMovedEvent;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -15,8 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+
 
 /** Active game sessions: open, move, complete. */
 @Service
@@ -25,26 +26,47 @@ public class GameSessionService {
     private final ApplicationEventPublisher events;
     private final LeaderboardService leaderboard;
     private final boolean multiplayer;
-    private final ConcurrentMap<UUID, GameSession> sessions = new ConcurrentHashMap<>();
+    private final Cache<UUID, GameSession> sessions;
 
     /** Single-player service (multiplayer flag off) — the pre-flag behavior, kept for tests. */
     public GameSessionService(ApplicationEventPublisher events, LeaderboardService leaderboard) {
         this(events, leaderboard, false);
     }
 
+    /** Default session-store bounds — see the five-arg constructor. */
+    public GameSessionService(ApplicationEventPublisher events,
+                              LeaderboardService leaderboard,
+                              boolean multiplayer) {
+        this(events, leaderboard, multiplayer, 10_000, Duration.ofHours(2));
+    }
+
     /**
      * @param multiplayer the {@code daedalus.session.multiplayer} feature flag (BACKLOG stretch
      *                    goal, default {@code false}): when on, {@link #join} admits additional
-     *                    named players into an existing session. Off, sessions behave exactly as
-     *                    before the flag existed.
+     *                    named players into an existing session. Off, sessions behave exactly
+     *                    as before the flag existed.
+     * @param maxSessions bound on live sessions
+     * @param idleTtl     eviction after inactivity. Sessions previously lived in an unbounded
+     *                    {@code ConcurrentHashMap} and were never removed — not even after
+     *                    completion — so every session ever opened stayed resident for the
+     *                    life of the process. An evicted session simply answers 404 on its
+     *                    next move, which is the API's existing "unknown session" path; the
+     *                    idle TTL far outlives any game actually being played. Configurable
+     *                    via {@code daedalus.session.*}.
      */
     @Autowired
     public GameSessionService(ApplicationEventPublisher events,
                               LeaderboardService leaderboard,
-                              @Value("${daedalus.session.multiplayer:false}") boolean multiplayer) {
+                              @Value("${daedalus.session.multiplayer:false}") boolean multiplayer,
+                              @Value("${daedalus.session.max-sessions:10000}") long maxSessions,
+                              @Value("${daedalus.session.idle-ttl:2h}") Duration idleTtl) {
         this.events = events;
         this.leaderboard = leaderboard;
         this.multiplayer = multiplayer;
+        this.sessions = Caffeine.newBuilder()
+                .maximumSize(maxSessions)
+                .expireAfterAccess(idleTtl)
+                .build();
     }
 
     /** Whether the {@code daedalus.session.multiplayer} flag is on. */
@@ -66,7 +88,7 @@ public class GameSessionService {
         return session;
     }
 
-    public GameSession find(UUID id) { return sessions.get(id); }
+    public GameSession find(UUID id) { return sessions.getIfPresent(id); }
 
     /**
      * Adds a named player to an existing session (multiplayer flag only).
@@ -78,7 +100,7 @@ public class GameSessionService {
      */
     public GameSession join(UUID sessionId, String player, Point start) {
         if (!multiplayer) return null;
-        GameSession s = sessions.get(sessionId);
+        GameSession s = sessions.getIfPresent(sessionId);
         if (s == null) return null;
         synchronized (s) {
             if (s.completed()) return null;
@@ -110,7 +132,7 @@ public class GameSessionService {
      * cannot conjure a player into a session by moving them.
      */
     public boolean tryMove(UUID sessionId, String player, MazeGrid grid, Point to) {
-        GameSession s = sessions.get(sessionId);
+        GameSession s = sessions.getIfPresent(sessionId);
         if (s == null) return false;
         synchronized (s) {
             if (s.completed()) return false;

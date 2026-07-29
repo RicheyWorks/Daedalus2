@@ -85,6 +85,11 @@ resilience4j:
         limit-refresh-period: 1m      # per minute
         timeout-duration: 0           # don't queue — fail fast with RequestNotPermitted
         register-health-indicator: false
+      sessionOpen:
+        limit-for-period: 60          # opening/joining sessions is cheap but feeds the
+        limit-refresh-period: 1m      # session store and leaderboard; bound the inflow
+        timeout-duration: 0
+        register-health-indicator: false
       mazeSolve:
         limit-for-period: 60          # solving is cheaper than generating; allow more headroom
         limit-refresh-period: 1m

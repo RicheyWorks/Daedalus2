@@ -32,6 +32,11 @@ resilience4j:
         limit-refresh-period: 1s
         timeout-duration: 0
         register-health-indicator: false
+      sessionOpen:
+        limit-for-period: 100000
+        limit-refresh-period: 1s
+        timeout-duration: 0
+        register-health-indicator: false
       mazeSolve:
         limit-for-period: 100000
         limit-refresh-period: 1s

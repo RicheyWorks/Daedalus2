@@ -9,15 +9,19 @@ import com.daedalus.model.MazeMetadata;
 import com.daedalus.model.MazeStats;
 import com.daedalus.plugin.events.MazeGeneratedEvent;
 import com.daedalus.theory.MazeMetrics;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+
 
 /**
  * Orchestrates maze generation. Looks up the generator from the registry, runs it,
@@ -29,14 +33,38 @@ public class MazeGenerationService {
     private final GeneratorRegistry registry;
     private final ApplicationEventPublisher events;
     private final MeterRegistry meters;
-    private final ConcurrentMap<UUID, Cached> cache = new ConcurrentHashMap<>();
+    private final Cache<UUID, Cached> cache;
 
+    /** Default bounds — see the four-arg constructor. */
     public MazeGenerationService(GeneratorRegistry registry,
                                   ApplicationEventPublisher events,
                                   MeterRegistry meters) {
+        this(registry, events, meters, 5000, Duration.ofHours(2));
+    }
+
+    /**
+     * @param cacheMaxSize maximum cached mazes; @param cacheTtl idle TTL per maze. The cache
+     *        was previously an unbounded {@code ConcurrentHashMap} — at the base rate limit
+     *        (30 generations/minute/caller) a long-running instance accumulated grids without
+     *        end, the same slow-leak shape the rate-limiter buckets had before their Caffeine
+     *        bound (BACKLOG, 2026-07-19). Eviction is safe by construction: {@code find}
+     *        answering {@code null} is already the API's "unknown maze" path (404), and the
+     *        idle TTL comfortably outlives any session actually being played. Bounds are
+     *        configurable via {@code daedalus.maze.cache.*}.
+     */
+    @Autowired
+    public MazeGenerationService(GeneratorRegistry registry,
+                                  ApplicationEventPublisher events,
+                                  MeterRegistry meters,
+                                  @Value("${daedalus.maze.cache.max-size:5000}") long cacheMaxSize,
+                                  @Value("${daedalus.maze.cache.idle-ttl:2h}") Duration cacheTtl) {
         this.registry = registry;
         this.events = events;
         this.meters = meters;
+        this.cache = Caffeine.newBuilder()
+                .maximumSize(cacheMaxSize)
+                .expireAfterAccess(cacheTtl)
+                .build();
     }
 
     public record Cached(MazeMetadata metadata, MazeGrid grid, MazeStats stats) {}
@@ -71,7 +99,7 @@ public class MazeGenerationService {
         return cached;
     }
 
-    public Cached find(UUID id) { return cache.get(id); }
+    public Cached find(UUID id) { return cache.getIfPresent(id); }
 
     @SuppressWarnings("unused")
     private Cached fallback(String generatorId, int rows, int cols, long seed, Throwable t) {

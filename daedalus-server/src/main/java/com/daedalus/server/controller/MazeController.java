@@ -138,7 +138,9 @@ public class MazeController {
             description = "The returned session id is required for /api/v1/session/{id}/move. "
                     + "When the request is authenticated, the session is owned by the token's "
                     + "subject and its /topic/session/{id}/player STOMP topic is restricted "
-                    + "to that subject.")
+                    + "to that subject. Rate-limited per caller against the 'sessionOpen' "
+                    + "budget — session creation feeds every bounded store downstream.")
+    @PerKeyRateLimit("sessionOpen")
     public ResponseEntity<SessionResponse> openSession(
             @PathVariable UUID id,
             @RequestParam(defaultValue = "anon")
@@ -184,7 +186,9 @@ public class MazeController {
     @Operation(summary = "Join an existing session as an additional named player.",
             description = "Requires the daedalus.session.multiplayer flag; without it this "
                     + "endpoint answers 404 as if it did not exist. Joining a name already in "
-                    + "the session keeps that player's position (reconnect must not teleport).")
+                    + "the session keeps that player's position (reconnect must not teleport). "
+                    + "Rate-limited per caller against the 'sessionOpen' budget.")
+    @PerKeyRateLimit("sessionOpen")
     public ResponseEntity<SessionResponse> join(
             @PathVariable UUID id,
             @RequestParam

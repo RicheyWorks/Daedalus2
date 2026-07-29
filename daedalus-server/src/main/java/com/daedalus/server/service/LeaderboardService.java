@@ -34,11 +34,26 @@ public class LeaderboardService {
 
     private final RedisTemplate<String, Object> redis;
     private final boolean redisEnabled;
+    private final int maxEntries;
     private final ConcurrentSkipListSet<LeaderboardEntry> memory = new ConcurrentSkipListSet<>();
 
+    /** Default retention — see the three-arg constructor. */
+    public LeaderboardService(RedisTemplate<String, Object> redis, boolean redisEnabled) {
+        this(redis, redisEnabled, 100);
+    }
+
+    /**
+     * @param maxEntries in-memory retention cap. The set previously kept every entry ever
+     *        submitted — one per completed session, forever. A leaderboard's whole point is
+     *        the top of the ordering, so retention past the deepest page anyone can request
+     *        ({@code top(n)} caps n at 100) is pure growth. Trimmed from the worst end on
+     *        every submit; the Redis backend keeps full history independently.
+     */
     @Autowired
     public LeaderboardService(@Autowired(required = false) RedisTemplate<String, Object> redis,
-                              @Value("${daedalus.redis.enabled:false}") boolean redisEnabled) {
+                              @Value("${daedalus.redis.enabled:false}") boolean redisEnabled,
+                              @Value("${daedalus.leaderboard.max-entries:100}") int maxEntries) {
+        this.maxEntries = Math.max(1, maxEntries);
         this.redis = redis;
         this.redisEnabled = redisEnabled && redis != null;
         if (this.redisEnabled) {
@@ -50,6 +65,11 @@ public class LeaderboardService {
 
     public void submit(LeaderboardEntry entry) {
         memory.add(entry);
+        // Natural order is best-first, so pollLast() drops the worst. Approximate under
+        // concurrent submits, exact at rest — fine for a cap whose only job is boundedness.
+        while (memory.size() > maxEntries) {
+            memory.pollLast();
+        }
         if (!redisEnabled) return;
         try {
             ZSetOperations<String, Object> zset = redis.opsForZSet();
