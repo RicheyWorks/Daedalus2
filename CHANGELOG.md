@@ -6,7 +6,7 @@ All notable changes to Daedalus are documented in this file. Format follows
 `1.0.0` (the multi-module split + first audit pass) live in git history
 under the `_migration/` portfolios.
 
-## [Unreleased] — 2026-07-28
+## [1.0.0] — 2026-07-28
 
 **The audit's to-do lists are now empty.** One day, nine pushes: TESTING.md's
 gap audit written and then fully executed (P1 through P3), the BACKLOG's last
@@ -101,7 +101,7 @@ one of the new tests surfaced a live production bug (a check-then-act race in
   their tracker) is a GitHub-side action, as are the Dependabot re-triage
   pass (commands recorded in BACKLOG.md) and the Codecov token.
 
-## [Unreleased] — 2026-07-18 → 2026-07-19
+## [1.0.0] — 2026-07-18 → 2026-07-19 (released with 1.0.0)
 
 **Framework migration, three correctness fixes, and the test gaps that hid
 them.** Repo is live at `RicheyWorks/Daedalus2`. Spring Boot moved 3.3.1 → 4.1.0
@@ -1263,7 +1263,7 @@ decision was measured rather than argued, the numbers are in the entry.
   and diff tools treat this whole file as binary. Replaced with the escaped
   text form.
 
-## [Unreleased] — 2026-05-11
+## [1.0.0] — 2026-05-11 (released with 1.0.0)
 
 **Reference plugin + CI + core consolidation.** Four BACKLOG items closed
 in this pass: the worked example plugin (`BiomeGeneratorPlugin`), GitHub
@@ -1407,7 +1407,7 @@ left in the catalog.
 
 ---
 
-## [Unreleased] — 2026-05-07
+## [1.0.0] — 2026-05-07 (released with 1.0.0)
 
 **Four BACKLOG items closed in one pass:** DSU extraction, Growing-Tree policy
 unification, REST input validation, and per-method rate limiting on write
@@ -1587,7 +1587,7 @@ something else is bound to that port.
   limiting") to track the upgrade to a `RateLimiterRegistry` plus
   `HandlerInterceptor` keyed off the request principal / IP.
 
-## [Unreleased] — 2026-05-06
+## [1.0.0] — 2026-05-06 (released with 1.0.0)
 
 **Cost-aware routing landed.** New `WeightedMazeGrid` adds per-cell entry
 costs, and `DijkstraSolver` / `AStarSolver` now read those costs through
@@ -1710,7 +1710,7 @@ through `getURLs()` instead.
   folder ("Always keep on this device") or moving the working copy
   off OneDrive entirely.
 
-## [Unreleased] — 2026-05-05
+## [1.0.0] — 2026-05-05 (released with 1.0.0)
 
 Reactor green: `mvn clean verify` passes 25 / 25 tests across all six modules
 in 16 s. The four findings from the May 3 audit are confirmed applied; the
