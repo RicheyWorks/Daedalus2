@@ -1,6 +1,12 @@
-# Line-ending policy: LF in the repository, converted on checkout as declared.
-# Added 2026-07-15 to stop CRLF churn showing up as phantom diffs on Windows.
-* text=auto
+# Line-ending policy: LF in the repository AND in the working copy, on every platform.
+# Added 2026-07-15 to stop CRLF churn showing up as phantom diffs on Windows; eol=lf added
+# 2026-07-29 because text=auto alone still let core.autocrlf ask for CRLF working copies,
+# producing a wall of "LF will be replaced by CRLF" warnings on every Windows commit that
+# touched LF files. Modern Windows tooling (VS Code, IntelliJ, PowerShell 5+) is fine with
+# LF working copies; cmd.exe scripts keep their CRLF override below.
+#
+# After pulling this change, normalize once:  git add --renormalize .  and commit.
+* text=auto eol=lf
 
 # Windows batch scripts must stay CRLF or cmd.exe mangles multi-line parsing.
 *.bat text eol=crlf
