@@ -10,6 +10,23 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Chokepoint analytics (ADR-006 idea #9).** `GET /api/v1/maze/{id}/analysis` finally
+  surfaces the `theory` module on the product surface: start↔goal min-cut (the actual
+  chokepoint passages from `MazeFlow` — exactly 1 on every perfect maze, pinned at the
+  HTTP seam), dead ends, and shortest-route length, computed on the maze's *current*
+  snapshot. The web UI's **Analyze structure** button draws the cut passages as glowing
+  violet gaps and dead ends as quiet dots, with a metrics banner — and re-analyzes on
+  every living-maze tick, so you can watch a chokepoint dissolve as erosion braids it
+  away. Shares the `mazeSolve` budget (comparable cost).
+- **Ghost runs (ADR-006 idea #8).** Sessions now record the opening player's timed trail
+  (`GameSession.TimedMove`, capped at `MAX_TRAIL`); on completion a new
+  `SessionCompletedEvent` fires and `GhostService` keeps the best-scoring run per maze
+  (bounded Caffeine store, `daedalus.ghost.*`) — the seat only changes hands on a
+  strictly better score (teeth-proven: last-write-wins fails exactly the incumbent
+  test). `GET /api/v1/maze/{id}/ghost` serves the recording; opening a session in the
+  web UI summons it as a translucent racer replaying with its original pacing,
+  hesitations included, and the finish line announces whether you beat it. Second
+  players never pollute the recording.
 - **Traffic simulation (ADR-006 idea #3).** `POST /api/v1/maze/{id}/traffic` closes the
   loop between play and routing: every cell a player or fog-of-war agent enters
   accumulates occupancy, a scheduled pulse applies it as cost (clamped at

@@ -160,5 +160,7 @@ public class GameSessionService {
         leaderboard.submit(new LeaderboardEntry(
                 s.id(), s.mazeId(), s.playerName(), score, s.moveCount(), elapsed,
                 /* mazeGeneratorId */ "unknown", Instant.now()));
+        // Inline like PlayerMovedEvent — listeners observe completion in move order.
+        events.publishEvent(new com.daedalus.plugin.events.SessionCompletedEvent(this, s));
     }
 }

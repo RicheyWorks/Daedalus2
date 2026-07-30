@@ -131,6 +131,9 @@
     <button id="race" disabled
             title="Both algorithms' REAL recorded searches replay at the same expansions-per-second — the one that found the route with less work finishes first">
       Race solvers</button>
+    <button id="analyze" disabled
+            title="Graph theory on the current snapshot: min-cut chokepoints (sever these and start/goal split apart), dead ends, route length">
+      Analyze structure</button>
 
     <label for="player">Player name</label>
     <input id="player" value="web">
@@ -154,6 +157,8 @@
       <span><i style="background:#82b1ff"></i>solver path</span>
       <span><i style="background:rgba(229,72,77,.5)"></i>hot spot (cost-shaded)</span>
       <span><i style="background:#f0b429;border-radius:50%"></i>players</span>
+      <span><i style="background:#c084fc"></i>chokepoint</span>
+      <span><i style="background:#e6edf3;border-radius:50%;opacity:.6"></i>ghost</span>
     </div>
     <div id="compareBox"></div>
     <div style="text-align:center;margin-top:8px">
@@ -191,6 +196,10 @@ const state = {
   trafficPoll: null,     // interval id — STOMP-less fallback while traffic is tracked
   race: null,            // {lanes: [{id, color, expansions, path, front, pathProg}]} during a race
   dailyId: null,         // set when the current maze is today's daily → scoped leaderboard
+  analysis: null,        // AnalysisResponse — chokepoint/dead-end overlay when set
+  ghost: null,           // {moves, name, score, elapsedMs, started, pos, done} during play
+  ghostTimer: null,      // interval advancing the ghost
+  sessionStart: null,    // performance.now() at session open — for the ghost verdict
 };
 
 /** Escape untrusted text (player names arrive from other clients) before it meets innerHTML. */
@@ -317,9 +326,11 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   $("solve").disabled = false; $("play").disabled = false; $("join").disabled = true;
   $("compare").disabled = false;
   $("live").disabled = false; $("traffic").disabled = false; $("race").disabled = false;
+  $("analyze").disabled = false;
   clearInterval(state.livePoll); state.livePoll = null;
   clearInterval(state.trafficPoll); state.trafficPoll = null;
-  state.race = null; state.dailyId = null;
+  clearInterval(state.ghostTimer); state.ghostTimer = null;
+  state.race = null; state.dailyId = null; state.analysis = null; state.ghost = null;
   $("compareBox").innerHTML = "";
   location.hash = "maze=" + maze.id; // shareable — anyone on this server can open it
   $("status").textContent = "arrow keys move once a session is open";
@@ -394,6 +405,57 @@ async function onMutation(m) {
   if (m.settled) $("live").disabled = false;
 }
 
+// ---------- structural analysis (ADR-006 idea #9) ----------
+/** Min-cut chokepoints + dead ends from the theory module, drawn over the maze. */
+async function analyzeStructure() {
+  const a = await api(`/maze/${state.maze.id}/analysis`);
+  state.analysis = a;
+  const cp = a.cutSize === 1 ? "1 chokepoint" : `${a.cutSize} chokepoints`;
+  log("state", `analysis: ${cp}, ${a.deadEndCount} dead ends, route length ${a.routeLength}`);
+  $("compareBox").innerHTML = `<div style="margin-top:8px">`
+      + `<b style="color:#c084fc">${cp}</b> — sever ${a.cutSize === 1 ? "it" : "them"} and `
+      + `start and goal split into different worlds &middot; `
+      + `${a.deadEndCount} dead ends &middot; shortest route ${a.routeLength} cells`
+      + (a.cutSize === 1
+          ? ` &middot; <span class="hint">every perfect maze has exactly one cut — braid or `
+            + `erode it (Bring to life) and re-analyze</span>` : "")
+      + `</div>`;
+  draw();
+}
+
+// ---------- ghost runs (ADR-006 idea #8) ----------
+/** If this maze has a recorded best run, race it: same pacing, hesitations and all. */
+async function summonGhost() {
+  let run;
+  try { run = await api(`/maze/${state.maze.id}/ghost`); }
+  catch (ignored) { return; } // 404 — nobody has finished this maze yet
+  state.ghost = {
+    moves: run.moves, name: run.playerName, score: run.score, elapsedMs: run.elapsedMs,
+    started: performance.now(), pos: state.session.positions[state.session.primary],
+    done: false,
+  };
+  log("player", `ghost summoned: ${run.playerName}'s best run `
+      + `(${(run.elapsedMs / 1000).toFixed(1)}s, score ${run.score}) — beat it`);
+  clearInterval(state.ghostTimer);
+  state.ghostTimer = setInterval(() => {
+    const g = state.ghost;
+    if (!g || !state.session) { clearInterval(state.ghostTimer); return; }
+    const e = performance.now() - g.started;
+    let pos = g.pos, done = true;
+    for (const m of g.moves) {
+      if (m.tMs <= e) pos = m.to;
+      else { done = false; break; }
+    }
+    g.pos = pos;
+    if (done && !g.done) {
+      g.done = true;
+      log("player", `the ghost finished its run (${(g.elapsedMs / 1000).toFixed(1)}s)`);
+      clearInterval(state.ghostTimer);
+    }
+    draw();
+  }, 100);
+}
+
 // ---------- traffic simulation (ADR-006 idea #3) ----------
 /** Track congestion: everywhere you (or agents) walk gets expensive, then cools off. */
 async function simulateTraffic() {
@@ -430,6 +492,10 @@ async function refreshLivingMaze() {
   try {
     const maze = await api(`/maze/${state.maze.id}`);
     state.maze = maze;
+    if (state.analysis) {
+      // Re-analyze the new snapshot — watch chokepoints dissolve as erosion braids them.
+      try { state.analysis = await api(`/maze/${maze.id}/analysis`); } catch (ignored) {}
+    }
     if (state.path) {
       // The drawn route may now cross freshly-opened walls or stale costs — re-solve
       // quietly (no replay animation; the mutation itself is the show).
@@ -642,9 +708,11 @@ async function play() {
   state.session = {id: s.sessionId, positions: {[name]: s.position}, primary: name};
   state.joined = null; state.won = null;
   state.trails = {[name]: [s.position]};
+  state.sessionStart = performance.now();
   $("join").disabled = false;
   $("status").textContent = `session ${s.sessionId.slice(0, 8)}… — arrow keys to move`;
   resubscribe();
+  summonGhost(); // race the maze's best recorded run, if one exists
   draw();
 }
 
@@ -689,8 +757,16 @@ function applyMove(who, to) {
   (state.trails[who] = state.trails[who] || []).push(to);
   if (state.maze.tiles[2 * to.row + 1][2 * to.col + 1] === "G") {
     state.won = who;
-    log("state", `${who} reached the goal — session complete`);
-    $("status").textContent = `${who} reached the goal — session complete`;
+    let verdict = "";
+    if (state.ghost && who === state.session.primary) {
+      const myMs = performance.now() - state.sessionStart;
+      verdict = myMs < state.ghost.elapsedMs
+          ? ` — you BEAT the ghost by ${((state.ghost.elapsedMs - myMs) / 1000).toFixed(1)}s!`
+          : ` — the ghost was ${((myMs - state.ghost.elapsedMs) / 1000).toFixed(1)}s faster`;
+      clearInterval(state.ghostTimer);
+    }
+    log("state", `${who} reached the goal — session complete${verdict}`);
+    $("status").textContent = `${who} reached the goal — session complete${verdict}`;
     refreshLeaderboard();
   } else {
     const moves = (state.trails[who] || []).length - 1;
@@ -890,6 +966,32 @@ function draw() {
     g.stroke();
     g.globalAlpha = 1;
   }
+  // Structural overlay: min-cut chokepoints glow on the passage between their two cells
+  // (sever these and the maze splits); dead ends get quiet dots.
+  if (state.analysis) {
+    (state.analysis.deadEnds || []).forEach(p => {
+      const [x, y] = cellCenter(p);
+      g.fillStyle = "#9ecbff";
+      g.globalAlpha = 0.5;
+      g.beginPath();
+      g.arc(x, y, geom.cell * 0.12, 0, 2 * Math.PI);
+      g.fill();
+      g.globalAlpha = 1;
+    });
+    (state.analysis.chokepoints || []).forEach(cp => {
+      // The wall-gap tile between adjacent cells a and b.
+      const tr = cp.a.row + cp.b.row + 1, tc = cp.a.col + cp.b.col + 1;
+      g.fillStyle = "#c084fc";
+      g.globalAlpha = 0.35; // halo
+      g.fillRect(geom.offX[tc] - geom.wall, geom.offY[tr] - geom.wall,
+                 (geom.offX[tc + 1] - geom.offX[tc]) + 2 * geom.wall,
+                 (geom.offY[tr + 1] - geom.offY[tr]) + 2 * geom.wall);
+      g.globalAlpha = 0.95; // the passage itself
+      g.fillRect(geom.offX[tc], geom.offY[tr],
+                 geom.offX[tc + 1] - geom.offX[tc], geom.offY[tr + 1] - geom.offY[tr]);
+      g.globalAlpha = 1;
+    });
+  }
   // Arena lanes: two real searches racing at equal speed, then their routes.
   if (state.race) {
     state.race.lanes.forEach((lane, li) => {
@@ -942,6 +1044,21 @@ function draw() {
       marker(g, p, PLAYER_COLORS[i % PLAYER_COLORS.length], 0.42);
     });
   }
+  // The ghost: the maze's best recorded run, translucent, racing in real time.
+  if (state.session && state.ghost && state.ghost.pos) {
+    const [x, y] = cellCenter(state.ghost.pos);
+    g.globalAlpha = 0.55;
+    g.fillStyle = "#e6edf3";
+    g.beginPath();
+    g.arc(x, y, geom.cell * 0.3, 0, 2 * Math.PI);
+    g.fill();
+    g.globalAlpha = 1;
+    g.strokeStyle = "#e6edf3";
+    g.lineWidth = 1;
+    g.beginPath();
+    g.arc(x, y, geom.cell * 0.3, 0, 2 * Math.PI);
+    g.stroke();
+  }
   if (state.won && goal) {
     // Victory ring around the goal.
     const [x, y] = cellCenter(goal);
@@ -992,6 +1109,7 @@ $("compare").onclick = () => compareSolvers().catch(e => log("err", e.message));
 $("live").onclick = () => bringToLife().catch(e => log("err", e.message));
 $("traffic").onclick = () => simulateTraffic().catch(e => log("err", e.message));
 $("race").onclick = () => raceSolvers().catch(e => log("err", e.message));
+$("analyze").onclick = () => analyzeStructure().catch(e => log("err", e.message));
 $("play").onclick = () => play().catch(e => log("err", e.message));
 $("join").onclick = () => join();
 document.addEventListener("keydown", e => {

@@ -14,11 +14,24 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class GameSession {
 
+    /**
+     * One recorded step of the opening player, stamped relative to session start — the raw
+     * material of ghost runs (ADR-006 idea #8). Millis-since-start rather than wall clock so
+     * a replay needs no clock math and survives serialization trivially.
+     */
+    public record TimedMove(Point to, long tMs) {}
+
+    /** Trail recording stops here — a run this long is not ghost material, and the bound
+     *  keeps a pathological client from growing a session without limit. */
+    public static final int MAX_TRAIL = 5_000;
+
     private final UUID id;
     private final UUID mazeId;
     private final String playerName;
     private final String owner;
     private final ConcurrentMap<String, Point> players = new ConcurrentHashMap<>();
+    private final java.util.List<TimedMove> trail =
+            java.util.Collections.synchronizedList(new java.util.ArrayList<>());
     private Point currentPosition;
     private long moveCount;
     private long score;
@@ -63,8 +76,20 @@ public class GameSession {
         players.put(player, next);
         if (player.equals(playerName)) {
             this.currentPosition = next;
+            // Only the opening player's run is ghost material; bounded by MAX_TRAIL.
+            if (trail.size() < MAX_TRAIL) {
+                trail.add(new TimedMove(next,
+                        java.time.Duration.between(startedAt, Instant.now()).toMillis()));
+            }
         }
         this.moveCount++;
+    }
+
+    /** Snapshot of the opening player's timed trail — the ghost recording. */
+    public java.util.List<TimedMove> trail() {
+        synchronized (trail) {
+            return java.util.List.copyOf(trail);
+        }
     }
 
     /**

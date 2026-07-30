@@ -93,6 +93,12 @@ daedalus:
     max-agents: ${DAEDALUS_AGENT_MAX:10000}
     idle-ttl: ${DAEDALUS_AGENT_IDLE_TTL:1h}
     max-steps: ${DAEDALUS_AGENT_MAX_STEPS:100000}
+  # ----- Ghost runs (ADR-006 idea #8) -----
+  # The best completed run per maze, replayed as a translucent racer. One recording per
+  # maze, trail length capped in the model (GameSession.MAX_TRAIL).
+  ghost:
+    max-mazes: ${DAEDALUS_GHOST_MAX:1000}
+    idle-ttl: ${DAEDALUS_GHOST_IDLE_TTL:24h}
   # ----- Per-key rate limiting -----
   # The Resilience4j instances below are treated as *templates*: PerKeyRateLimitInterceptor
   # clones each into an independent bucket per caller (authenticated subject, else client IP),

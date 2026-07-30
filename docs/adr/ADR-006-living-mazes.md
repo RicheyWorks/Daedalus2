@@ -166,5 +166,7 @@ become dramatically better once mazes can already change under a walker's feet.
        the mutation plumbing (occupancy → cost → routing, decaying); solver arena (2)
        shipped client-side over the replay seam; daily leaderboard partition completed
        idea 4 (per-maze boards)
-9. [ ] Roadmap remainder: spectator mode (6), session ghosts (8), chokepoint analytics
-       overlay (9), maze crossbreeding (5), campaign mode (10)
+9. [x] Roadmap follow-ups, third batch (2026-07-30): chokepoint analytics (9) shipped —
+       the theory module's min-cut on the product surface, re-analyzed per erosion tick;
+       session ghosts (8) shipped — best run per maze replayed as a timed racer
+10. [ ] Roadmap remainder: spectator mode (6), maze crossbreeding (5), campaign mode (10)
