@@ -1,6 +1,6 @@
 # ADR-007: Surfacing the theory module as product
 
-**Status:** Accepted (ideas 1–6 and 9 implemented; 7, 8 and 10 queued)
+**Status:** Accepted (ideas 1–7, 9 and 10 implemented; only idea 8 queued)
 **Date:** 2026-07-30
 **Deciders:** Richmond
 **Supersedes / extends:** ADR-006 (living mazes roadmap, complete)
@@ -162,7 +162,11 @@ rather than a suggestion.
     payload-capped; **does not use `DistanceOracle`**, for the measured reason below
 11. [x] Idea 5 (**Sanctuary placement**) — `GET /api/v1/maze/{id}/sanctuaries?k=`, k-center via
     `FacilityPlacement`, reporting covering radius, served cells and the worst-served cell
-12. [ ] Ideas 7, 8 and 10, in the priority order above — **note:** the first probe toward idea
+12. [x] Idea 10 (**Solver tournament**) and idea 7 (**Adversarial seed search**) —
+    `GET /api/v1/tournament`, with `SampleStats` in core carrying the interval arithmetic.
+    Reframed by measurement: it reports how much a ranking can be trusted, not who wins
+13. [ ] Idea 8 (**Heuristic misleadingness**) — the last one outstanding
+14. [x] Cost guard found on the way to idea 10 — **note:** the first probe toward idea
     10 (running every solver over many mazes) found an unbounded request rather than a
     statistic: IDA\* took 16 s on a 21×21 dungeon and over 300 s on a 25×25. That is fixed
     (node budget, 422) before the tournament is built on top of it. Two early findings about

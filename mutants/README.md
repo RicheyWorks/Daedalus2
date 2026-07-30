@@ -9,6 +9,7 @@ by any test.
     python3 mutants/coreteeth.py  # core-only checks for guarantees that live in core
     python3 mutants/fuzzteeth.py  # six breaks aimed at GeneratorInvariantFuzzTest
     python3 mutants/idateeth.py   # four breaks aimed at IDA*'s node budget
+    python3 mutants/tourteeth.py  # eight breaks aimed at the tournament + its statistics
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module
@@ -47,3 +48,11 @@ early return inside IDA*'s neighbour loop that no test could distinguish, becaus
 call hit the identical check one frame up. The right response was to delete the line from the
 solver — it cost a comparison per neighbour and bought nothing — and leave the mutation in the
 list as the evidence for why the code is not there.
+
+**A survivor is usually a message about the test, not the code.** `tourteeth.py` produced two,
+and neither meant the implementation was wrong. One test ran 21×21 dungeons, where IDA* refuses
+from the first maze, so "excluded" and "collected no data" were the same state and a mutation
+distinguishing them was invisible; moving to 19×19, where it finishes five mazes first, made the
+case real. The other asserted `worstGap >= bestGap`, which a mutation satisfied by collapsing
+both extremes onto one maze — `min >= min` is true. Both tests were strengthened rather than the
+mutations dropped.

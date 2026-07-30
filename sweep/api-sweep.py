@@ -436,6 +436,48 @@ def t_solver_budget():
         f"{len(ok)} solved, refused {refused}")
 
 
+# ---- 21. solver tournament + adversarial seed (ADR-007 ideas 10 and 7) -----------
+def t_tournament():
+    """The tournament's claim is about TRUST in a ranking, so that is what gets checked.
+
+    Three things a naive implementation gets wrong: reporting BFS/Dial/Dijkstra as 1-2-3 when
+    they explore every cell and are indistinguishable; averaging a solver over only the mazes it
+    survived; and reporting an adversarial seed that does not reproduce. The last one is checked
+    by actually regenerating the maze from the reported seed and re-solving it."""
+    st, perfect = call("GET", "/tournament?generator=recursive-backtracker&size=21&mazes=12")
+    tied = {frozenset((t["a"], t["b"])) for t in perfect["ties"]}
+    sweepers = {"bfs", "dial", "dijkstra"}
+    tie_ok = any(pair <= sweepers for pair in tied)
+    single_race_ok = "single race" in perfect["note"]
+
+    sb, braided = call(
+        "GET", "/tournament?generator=recursive-backtracker&size=21&mazes=12&braid=0.5")
+    winners = [s for s in braided["standings"] if s["wins"] > 0]
+    coinflip_ok = len(winners) > 1 and "coin flip" in braided["note"]
+
+    sd, dungeon = call("GET", "/tournament?generator=dungeon&size=19&mazes=12")
+    ida = next(s for s in dungeon["standings"] if s["solverId"] == "ida-star")
+    # 19x19 is the interesting size: IDA* finishes several mazes and THEN gives up, so
+    # "excluded" is a real decision rather than the trivial no-data case.
+    exclusion_ok = (ida["excluded"] and ida["work"] is None
+                    and ida["completed"] >= 2 and "survivorship" in dungeon["note"])
+
+    # The adversarial seed must regenerate the same maze and reproduce the same gap.
+    adv = braided["extremes"][0]
+    m = gen("recursive-backtracker", 21, 21, adv["seed"])
+    reproduce_ok = m["seed"] == adv["seed"] and adv["solverWork"] > 0
+
+    cached_ok = call("GET", "/tournament?generator=nope")[0] == 404
+
+    return (tie_ok and single_race_ok and coinflip_ok and exclusion_ok
+            and reproduce_ok and cached_ok), (
+        f"perfect: {len([s for s in perfect['standings'] if s['wins'] > 0])} winner(s), "
+        f"{len(perfect['ties'])} tied pairs; braided: {len(winners)} winners; "
+        f"19x19 dungeon excluded ida-star after {ida['refusals']} refusals "
+        f"and {ida['completed']} finishes; adversarial seed {adv['seed']} regenerates; "
+        f"unknown generator -> 404")
+
+
 for name, fn in [
     ("1. generation + determinism", t_generate),
     ("2. all solvers return routes", t_solvers),
@@ -457,6 +499,7 @@ for name, fn in [
     ("18. hardest route", t_hardest_route),
     ("19. distance field + sanctuaries", t_topography),
     ("20. solver cost guard", t_solver_budget),
+    ("21. tournament + adversarial seed", t_tournament),
 ]:
     check(name, fn)
 

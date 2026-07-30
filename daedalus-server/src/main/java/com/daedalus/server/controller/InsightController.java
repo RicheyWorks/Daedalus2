@@ -8,6 +8,7 @@ import com.daedalus.server.ratelimit.PerKeyRateLimit;
 import com.daedalus.server.service.GhostService;
 import com.daedalus.server.service.HardestRouteService;
 import com.daedalus.server.service.TopographyService;
+import com.daedalus.server.service.TournamentService;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.theory.MazeFlow;
 import com.daedalus.theory.MazeMetrics;
@@ -50,12 +51,14 @@ public class InsightController {
     private final FingerprintService fingerprints;
     private final HardestRouteService hardestRoutes;
     private final TopographyService topography;
+    private final TournamentService tournaments;
 
     public InsightController(MazeGenerationService gen, GhostService ghosts,
                              WaypointService waypoints, ComplexityLabService complexity,
                              FingerprintService fingerprints,
                              HardestRouteService hardestRoutes,
-                             TopographyService topography) {
+                             TopographyService topography,
+                             TournamentService tournaments) {
         this.gen = gen;
         this.ghosts = ghosts;
         this.waypoints = waypoints;
@@ -63,6 +66,7 @@ public class InsightController {
         this.fingerprints = fingerprints;
         this.hardestRoutes = hardestRoutes;
         this.topography = topography;
+        this.tournaments = tournaments;
     }
 
     /**
@@ -240,6 +244,35 @@ public class InsightController {
             @RequestParam(required = false) Integer k) {
         var placement = topography.sanctuariesFor(id, k);
         return placement == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(placement);
+    }
+
+    /**
+     * ADR-007 ideas 10 and 7 — the tournament, and the adversarial seed that falls out of it.
+     * Cost is mazes x solvers, both capped, and cached per request shape; shares the
+     * {@code mazeGenerate} budget because a run generates every maze in the sample.
+     */
+    @GetMapping("/tournament")
+    @Operation(summary = "Rank every solver over a sample of mazes, with intervals rather than one race.",
+            description = "Reports each solver's mean work with a Student-t 95% interval, its "
+                    + "median and spread, how many mazes it won, how often it found a shortest "
+                    + "route, and which adjacent pairs are statistically INDISTINGUISHABLE. The "
+                    + "last one is the point: measured, BFS, Dial and Dijkstra tie because all "
+                    + "three explore essentially every cell, and reporting them as 1st, 2nd and "
+                    + "3rd would be inventing a ranking out of noise. Whether a tournament beats "
+                    + "a single race depends on the maze — on perfect mazes one solver won 30 of "
+                    + "30, while on braided mazes the winner split five ways — so the response "
+                    + "says which situation you are in. A solver that spends its node budget is "
+                    + "excluded after three refusals and reported, rather than being averaged "
+                    + "over the mazes it happened to survive. Rate-limited against 'mazeGenerate'.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<TournamentService.Tournament> tournament(
+            @RequestParam(required = false, defaultValue = "recursive-backtracker") String generator,
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) Integer mazes,
+            @RequestParam(required = false) Double braid,
+            @RequestParam(required = false) Long seed) {
+        var result = tournaments.run(generator, size, mazes, braid, seed);
+        return result == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(result);
     }
 
     @GetMapping("/maze/{id}/ghost")

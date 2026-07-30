@@ -40,8 +40,8 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   the search's real recorded expansion order (observation via the `Graph`
   seam, never simulation); the web UI animates it and can race all ten
   solvers on one maze in a compare table with per-route previews.
-- **Verified** — `mvn clean verify` passes **557 tests** across the five
-  modules (core 308, server 218, plugin-runtime 20, plugin-api 7, desktop 4)
+- **Verified** — `mvn clean verify` passes **575 tests** across the five
+  modules (core 316, server 228, plugin-runtime 20, plugin-api 7, desktop 4)
   with zero Checkstyle violations, zero SpotBugs findings, and a per-module
   JaCoCo coverage ratchet that fails the build on regression.
   [`CHANGELOG.md`](./CHANGELOG.md) records what changed and, where a decision
@@ -130,6 +130,7 @@ public consumers).
 | `GET` | `/api/v1/session/{id}` | public | Read-only session snapshot — the spectator entry point (`#session=` permalink) |
 | `GET` | `/api/v1/maze/{id}/analysis` | required | Structural analysis: min-cut chokepoints, dead ends, route length (ADR-006) |
 | `GET` | `/api/v1/maze/{id}/distance-field` | required | Every cell's walking distance from the goal (or start), for a heat map. Unreachable cells report -1; payload-capped (ADR-007) |
+| `GET` | `/api/v1/tournament?generator=&size=&mazes=&braid=` | required | Rank every solver over a sample with Student-t intervals, report which pairs are statistically indistinguishable, and name the adversarial seed where the leader does worst (ADR-007) |
 | `GET` | `/api/v1/maze/{id}/sanctuaries` | required | k-center safe points, the covering radius, and the cell served worst (ADR-007) |
 | `GET` | `/api/v1/maze/{id}/hardest-route` | required | Longest simple route vs shortest, the detour between them, and the maze's loop count. On a perfect maze the two are equal by mathematics and the response says so (ADR-007) |
 | `GET` | `/api/v1/maze/{id}/ghost` | public | The maze's best completed run as a timed recording — the UI replays it as a ghost racer |
@@ -236,8 +237,8 @@ mvn clean verify              # all five modules
 mvn -pl daedalus-server test  # one module
 ```
 
-Test inventory — **557 tests across 114 files, all green** (308 core, 7 plugin-api, 20
-plugin-runtime, 218 server, 4 desktop) as of 2026-07-30:
+Test inventory — **575 tests across 116 files, all green** (316 core, 7 plugin-api, 20
+plugin-runtime, 228 server, 4 desktop) as of 2026-07-30:
 
 | Module | Highlights |
 |---|---|

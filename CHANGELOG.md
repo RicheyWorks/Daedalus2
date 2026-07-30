@@ -32,6 +32,40 @@ under the `_migration/` portfolios.
   third of their cells on dead ends), and the original label bands put nearly every maze this
   project generates into "hard" or "brutal".
 
+### Added
+
+- **Solver tournament with confidence intervals (ADR-007 idea 10) and adversarial seed search
+  (idea 7).** `GET /api/v1/tournament?generator=&size=&mazes=&braid=&seed=` runs every registered
+  solver over a deterministic sample of mazes and reports, per solver, mean work with a
+  **Student-t** 95% interval, the median, the spread as a coefficient of variation, mazes won,
+  and how often it found a shortest route. The UI adds a **Solver tournament** panel.
+  **The headline is not the ranking — it is how much the ranking can be trusted.** ADR-007 sold
+  this as "a tournament says which solver is *actually* better"; measurement says that depends
+  entirely on the maze. On perfect mazes dead-end filling won 30 of 30, so one race already gave
+  the right answer, and the response says so. On braided mazes the winner split four ways out of
+  16 and wall-follower's spread reached **94% of its own mean** — a single race there is close to
+  a coin flip, and no single race would reveal the instability. So the report leads with spread
+  and with **statistically indistinguishable pairs**: BFS, Dial and Dijkstra come out tied because
+  all three explore essentially every cell, and printing them as 1st, 2nd and 3rd would be a
+  ranking invented out of rounding error.
+  Idea 7 falls out of the same sample: the maze where the leader does worst against the runner-up
+  is reported by **seed**, and because the sample is deterministic that seed regenerates exactly
+  that maze — the UI offers a link to load it. Verified in the sweep by regenerating it.
+  A solver that spends its node budget is excluded after three refusals and its statistics are
+  **withheld rather than averaged**: measured on 19×19 dungeons IDA\* finishes five mazes before
+  its third refusal, and a mean over those five would be survivorship bias with an error bar on
+  it. The count of finished mazes is reported so a reader can see what was discarded.
+- **`SampleStats` in `daedalus-core`** — mean, median, sample standard deviation, coefficient of
+  variation, Student-t intervals and paired differences, with the statistics kept out of the
+  Spring layer so they can be tested in a pure JVM against hand-computed values. Three decisions
+  worth naming: the interval uses **t, not 1.96** (at n = 8 the normal quantile is 21% too
+  narrow, which is exactly the error that manufactures a difference); comparisons are **paired**,
+  though the docs record that pairing bought nothing on this project's own A\*-versus-BFS data
+  because BFS is nearly constant; and skew is flagged by the standard **nonparametric skew**
+  coefficient rather than a threshold picked to look strict — the first version demanded half a
+  standard deviation and failed to notice `{10, 11, 12, 13, 900}`, because an outlier inflates
+  the standard deviation faster than it moves the mean off the median.
+
 ### Fixed
 
 - **IDA\* could run for minutes on a maze the API happily accepts — it now gives up in about a

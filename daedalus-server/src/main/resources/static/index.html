@@ -198,6 +198,21 @@
     </section>
 
     <section class="panel">
+      <h2>Solver tournament</h2>
+      <label for="tourBraid">Braid the sample by</label>
+      <select id="tourBraid">
+        <option value="0">0 — unbraided</option>
+        <option value="0.4">0.4 — some loops</option>
+        <option value="0.8">0.8 — heavily braided</option>
+      </select>
+      <button id="tournament"
+              title="Rank every solver over a sample of mazes with confidence intervals — and report which pairs are statistically indistinguishable rather than inventing a 1-2-3">
+        Run tournament</button>
+      <div id="tourBox" class="hint">one race is one maze; this runs a sample and reports how
+        much the ranking can be trusted</div>
+    </section>
+
+    <section class="panel">
       <h2>Campaign</h2>
       <button id="campaign"
               title="A deterministic ladder of six stages, each picked by MEASURED difficulty — same seed anywhere plays the same campaign">
@@ -917,6 +932,68 @@ async function placeSanctuaries() {
       + `<div class="hint" style="margin-top:4px">The ring marks the worst-served cell — the `
       + `loneliest place in this maze. ${s.note}</div></div>`;
   draw();
+}
+
+// ---------- solver tournament (ADR-007 ideas 10 and 7) ----------
+/**
+ * Rank every solver over a sample, with intervals.
+ *
+ * The table deliberately leads with spread and ties rather than position. Measured, a single
+ * race is already correct on perfect mazes (one solver won 30 of 30) and close to a coin flip on
+ * braided ones (the winner split five ways) — so the number worth showing is not "who is first"
+ * but "how much does first mean here".
+ */
+async function runTournament() {
+  const generator = $("generator").value;
+  const braid = $("tourBraid").value;
+  $("tournament").disabled = true;
+  $("tourBox").innerHTML = "running the sample…";
+  let t;
+  try {
+    t = await api(`/tournament?generator=${encodeURIComponent(generator)}&size=21&mazes=16`
+        + `&braid=${braid}`);
+  } finally {
+    $("tournament").disabled = false;
+  }
+  const tied = new Set();
+  t.ties.forEach(x => { tied.add(x.a); tied.add(x.b); });
+  const rows = t.standings.map(s => {
+    if (s.excluded) {
+      return `<tr><td>${s.solverId}</td><td colspan="4" class="hint">excluded — gave up on `
+          + `${s.refusals} mazes${s.completed ? `, after finishing ${s.completed}` : ""}</td></tr>`;
+    }
+    const w = s.work;
+    return `<tr><td>${s.solverId}${tied.has(s.solverId) ? " <span title='statistically tied "
+        + "with a neighbour'>=</span>" : ""}</td>`
+        + `<td style="text-align:right">${w.mean.toFixed(0)}</td>`
+        + `<td style="text-align:right" class="hint">${w.low.toFixed(0)}–${w.high.toFixed(0)}</td>`
+        + `<td style="text-align:right">${w.cv.toFixed(0)}%</td>`
+        + `<td style="text-align:right">${s.wins}</td></tr>`;
+  }).join("");
+  const ties = t.ties.length
+      ? t.ties.map(x => `${x.a} = ${x.b}`).join(" &middot; ")
+      : "none — every neighbouring pair is separated by more than its error bars";
+  const adv = (t.extremes || [])[0];
+  $("tourBox").innerHTML = `<table style="width:100%"><tr><th style="text-align:left">solver</th>`
+      + `<th>mean work</th><th>95% CI</th><th>spread</th><th>wins</th></tr>${rows}</table>`
+      + `<div class="hint" style="margin-top:4px">= marks a solver whose gap to the one below `
+      + `it is smaller than the error bars, so the order between them is not a result.</div>`
+      + `<div style="margin-top:8px"><b>Statistically tied:</b> ${ties}</div>`
+      + (adv ? `<div style="margin-top:6px">Hardest maze for <b>${adv.solver}</b> against `
+          + `${adv.rival}: seed <b>${adv.seed}</b> (${adv.solverWork} vs ${adv.rivalWork} cells) — `
+          + `<a href="#" id="loadAdversarial">load it</a></div>` : "")
+      + `<div class="hint" style="margin-top:6px">${t.note}</div>`;
+  const link = $("loadAdversarial");
+  if (link && adv) {
+    link.onclick = async (e) => {
+      e.preventDefault();
+      $("seed").value = adv.seed;
+      $("rows").value = t.size; $("cols").value = t.size;
+      await generate();
+    };
+  }
+  log("state", `tournament: ${t.standings.filter(s => !s.excluded).length} solvers over `
+      + `${t.mazes} mazes, ${t.ties.length} tied pairs`);
 }
 
 // ---------- ghost runs (ADR-006 idea #8) ----------
@@ -1723,6 +1800,7 @@ $("analyze").onclick = () => analyzeStructure().catch(e => log("err", e.message)
 $("hardest").onclick = () => hardestRoute().catch(e => log("err", e.message));
 $("heatmap").onclick = () => distanceHeatMap().catch(e => log("err", e.message));
 $("sanctuaries").onclick = () => placeSanctuaries().catch(e => log("err", e.message));
+$("tournament").onclick = () => runTournament().catch(e => log("err", e.message));
 $("tour").onclick = () => startTour().catch(e => log("err", e.message));
 $("fingerprint").onclick = () => identifyGenerator().catch(e => log("err", e.message));
 $("measure").onclick = () => measureGrowth().catch(e => {
