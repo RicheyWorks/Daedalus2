@@ -106,6 +106,11 @@ daedalus:
     base-size: ${DAEDALUS_CAMPAIGN_BASE_SIZE:9}
     size-step: ${DAEDALUS_CAMPAIGN_SIZE_STEP:4}
     max-campaigns: ${DAEDALUS_CAMPAIGN_MAX:50}
+  # ----- Maze fingerprint / generator classifier (ADR-007 idea 4) -----
+  # Nearest-centroid over scale-invariant structural signatures. Training samples each
+  # registered generator at 3 sizes x train-seeds seeds, once, on first use.
+  fingerprint:
+    train-seeds: ${DAEDALUS_FINGERPRINT_TRAIN_SEEDS:4}
   # ----- Complexity Lab (ADR-007 idea 2) -----
   # Measures a generator's real growth across a capped size sweep and fits the curve. One
   # request runs `max-points` generations (cached afterwards), so raising these raises the

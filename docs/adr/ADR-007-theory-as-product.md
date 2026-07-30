@@ -139,7 +139,11 @@ rather than a suggestion.
 6. [x] Idea 2 (**Complexity Lab**) — `GET /api/v1/complexity`, log-log plot in the UI, fits
    pinned against known algorithm behaviour (Prim's perimeter frontier, Aldous-Broder's
    cover-time overdraw) rather than merely asserting the endpoint responds
-7. [ ] Ideas 3–10, in the priority order above
+7. [x] Idea 4 (**Maze fingerprint + generator classifier**) — `MazeFingerprint` +
+   `GeneratorClassifier` in core, `GET /api/v1/maze/{id}/fingerprint`, accuracy measured on
+   held-out seeds (58.9% exact vs 4.3% chance; 87.4% by algorithm family) with calibrated
+   confidence (~89% accurate above 0.25, ~45% below)
+8. [ ] Ideas 3, 5–10, in the priority order above
 
 ## Postscript: what building idea 2 taught
 
@@ -151,3 +155,20 @@ metrics turned out to be `cellsExplored` and `maxFrontierSize`, and only once th
 plotted did the feature justify itself — Prim's frontier is a perimeter, Aldous-Broder pays
 cover time. **Measuring the wrong quantity produces perfect-looking numbers**, which is a more
 dangerous failure than noisy ones.
+
+## Postscript: what building idea 4 taught
+
+Two things, both about how to read a number.
+
+**A "wrong" answer can be the correct one.** The classifier's exact accuracy is 58.9%, which
+sounds mediocre until you look at what it gets wrong: Aldous-Broder confused with Wilson's,
+Kruskal's with weighted Prim's, the backtracker with hunt-and-kill. Those are not near-misses,
+they are algorithms that produce the same texture — and in the first case provably so, since
+both sample the uniform spanning tree distribution. Scoring by algorithm *family* gives 87.4%.
+The honest report is both numbers plus the reason for the gap, not the flattering one.
+
+**A feature that does not help is not free.** A row-scan-bias component was added on the
+reasonable theory that row-sweeping generators leave a signature in row-to-row variance. It
+moved exact accuracy by nothing and family accuracy by 0.8 points — about three samples out of
+414, indistinguishable from noise — so it was removed. Keeping it would have meant carrying
+code and a docstring justifying a benefit that was never measured.

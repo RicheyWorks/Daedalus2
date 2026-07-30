@@ -23,8 +23,14 @@ def call(method, path, body=None, expect=200, retries=4):
                 return r.status, (json.loads(txt) if txt else None)
         except urllib.error.HTTPError as e:
             if e.code == 429 and attempt < retries - 1:
-                time.sleep(1.5 * (attempt + 1))
+                time.sleep(2.0 * (attempt + 1))
                 continue
+            if e.code == 429:
+                # The default mazeGenerate budget is 30/minute; a full sweep exercises far more
+                # than that, so sustained throttling here is the limiter working, not a defect.
+                raise AssertionError(
+                    "rate limited after retries — run the server with generous limits for a "
+                    "full sweep:  SPRING_PROFILES_ACTIVE=test java -jar ...-exec.jar")
             return e.code, e.read().decode()[:200]
     return 429, "rate limited after retries"
 
@@ -37,8 +43,16 @@ def check(name, fn):
     print(f"{'PASS' if ok else '**FAIL**':10} {name:38} {evidence}", flush=True)
 
 def gen(g="recursive-backtracker", r=15, c=15, seed=7):
-    s, m = call("POST", "/maze/generate",
-                {"generatorId": g, "rows": r, "cols": c, "seed": seed})
+    """Generate a maze, failing loudly if the server refused.
+
+    Returning the raw body on error made every downstream check die with
+    `TypeError: string indices must be integers` — a message that says nothing about the
+    actual cause (a 429, a validation error). A helper that hides the real failure behind a
+    confusing one costs more time than the failure itself."""
+    st, m = call("POST", "/maze/generate",
+                 {"generatorId": g, "rows": r, "cols": c, "seed": seed})
+    if st != 200 or not isinstance(m, dict):
+        raise AssertionError(f"generate({g},{r}x{c},seed={seed}) -> {st}: {m}")
     return m
 
 # ---- 1. generation + determinism -------------------------------------------------
@@ -271,6 +285,30 @@ def t_complexity():
          f"{biggest['value']} to carve {biggest['cells']}; unmeasured metric -> "
          f"'{bt['claimed']}'; unknown generator/metric -> {unknown}/{badmetric}")
 
+# ---- 17. maze fingerprint (ADR-007 idea 4) ---------------------------------------
+def t_fingerprint():
+    hits, notes = 0, []
+    for g in ["ellers", "prims", "dungeon", "binary-tree"]:
+        m = gen(g, 31, 31, 4242)
+        s, f = call("GET", f"/maze/{m['id']}/fingerprint")
+        if s != 200:
+            return False, f"fingerprint {s}: {f}"
+        if f["agrees"]:
+            hits += 1
+        notes.append(f"{g}->{f['predictedGeneratorId']}({f['confidence']:.2f})")
+    # Signature components must be ratios in range, or the classifier is reading size.
+    m = gen("recursive-backtracker", 21, 21, 9)
+    st, small = call("GET", f"/maze/{m['id']}/fingerprint")
+    if st != 200:
+        return False, f"signature fetch {st}: {small}"
+    sig = small["signature"]
+    ratios_ok = all(0.0 <= sig[k] <= 1.0 for k in
+                    ["deadEndRatio", "corridorRatio", "junctionRatio", "crossroadRatio",
+                     "horizontalBias", "straightRatio", "edgeDensity"])
+    unknown = call("GET", f"/maze/{'0'*8}-0000-4000-8000-{'0'*12}/fingerprint")[0]
+    return hits >= 3 and ratios_ok and unknown == 404, \
+        f"{hits}/4 distinctive generators identified exactly [{', '.join(notes)}]; unknown -> {unknown}"
+
 # ---- 14. ascii + png export ------------------------------------------------------
 def t_exports():
     # ASCII is a content-negotiated representation of the same URL, not a separate path.
@@ -299,6 +337,7 @@ for name, fn in [
     ("14. ascii export", t_exports),
     ("15. waypoint tour + optimum", t_tour),
     ("16. complexity lab", t_complexity),
+    ("17. maze fingerprint", t_fingerprint),
 ]:
     check(name, fn)
 

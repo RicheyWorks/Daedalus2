@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import com.daedalus.server.service.ComplexityLabService;
+import com.daedalus.server.service.FingerprintService;
 import com.daedalus.server.service.WaypointService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,13 +45,40 @@ public class InsightController {
     private final GhostService ghosts;
     private final WaypointService waypoints;
     private final ComplexityLabService complexity;
+    private final FingerprintService fingerprints;
 
     public InsightController(MazeGenerationService gen, GhostService ghosts,
-                             WaypointService waypoints, ComplexityLabService complexity) {
+                             WaypointService waypoints, ComplexityLabService complexity,
+                             FingerprintService fingerprints) {
         this.gen = gen;
         this.ghosts = ghosts;
         this.waypoints = waypoints;
         this.complexity = complexity;
+        this.fingerprints = fingerprints;
+    }
+
+    /**
+     * ADR-007 idea 4 — identify the algorithm from the maze's shape. One O(cells) sweep plus a
+     * nearest-centroid lookup, so it shares the {@code mazeSolve} budget; the classifier trains
+     * once on first use.
+     */
+    @GetMapping("/maze/{id}/fingerprint")
+    @Operation(summary = "Structural signature of a maze, and which generator most likely made it.",
+            description = "Every feature is a ratio rather than a count, so the signature "
+                    + "describes texture and not size. The verdict is nearest-centroid over "
+                    + "signatures learned from the registered generators: measured on held-out "
+                    + "mazes it names the exact generator ~59% of the time against ~4.5% chance, "
+                    + "and the right family of algorithm ~87% of the time. The gap is not "
+                    + "sloppiness — Aldous-Broder and Wilson's both sample uniform spanning "
+                    + "trees, so no statistic of a single maze can separate them. Disagreement "
+                    + "with the recorded generator is reported, not hidden: an eroded or "
+                    + "crossbred maze legitimately no longer looks like its author. "
+                    + "Rate-limited against the 'mazeSolve' budget.")
+    @PerKeyRateLimit("mazeSolve")
+    public ResponseEntity<FingerprintService.Identification> fingerprint(@PathVariable UUID id) {
+        var identification = fingerprints.identify(id);
+        return identification == null
+                ? ResponseEntity.notFound().build() : ResponseEntity.ok(identification);
     }
 
     /**

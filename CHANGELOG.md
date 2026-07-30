@@ -34,6 +34,22 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Maze fingerprint + generator classifier (ADR-007 idea 4) — name the algorithm from the
+  shape alone.** `MazeFingerprint` reduces a maze to eight scale-invariant structural ratios
+  (degree shares, directional bias, straight-run length, edge density), and
+  `GeneratorClassifier` does nearest-centroid over signatures learned from the registered
+  generators. `GET /api/v1/maze/{id}/fingerprint` returns the signature and the verdict; the UI
+  adds **Identify generator**. Measured on held-out seeds it names the exact generator **58.9%
+  of the time against 4.3% chance**, and the right *family* of algorithm **87.4%** of the time.
+  The gap is the interesting part rather than a shortfall: the residual error is concentrated in
+  algorithms that are equivalent by construction — Aldous-Broder and Wilson's both sample
+  uniform spanning trees, so no statistic of a single maze can separate them, and counting that
+  as an error would be scoring the classifier against mathematics. Most usefully, **confidence
+  is calibrated**: verdicts at ≥0.25 confidence are ~89% accurate against ~45% below it, so a
+  caller can trust the confident answers and read the unsure ones as "one of these two
+  families". Disagreement with the recorded generator is surfaced rather than hidden — an eroded
+  maze legitimately stops looking like its author (measured: dead-end ratio 0.106 → 0.042 after
+  30 erosion ticks, and the verdict changes with it).
 - **Complexity Lab (ADR-007 idea 2) — measure the algorithms instead of asserting them.**
   `GET /api/v1/complexity?generator=&metric=` runs a generator across a capped size sweep, fits
   the recorded work against candidate growth curves, and returns the winner with its exponent,
@@ -63,6 +79,13 @@ under the `_migration/` portfolios.
   (a comparison against "optimal" is meaningless if the client picks the instance).
 
 ### Fixed
+
+- **The regression sweep hid rate-limit failures behind a `TypeError`.** Its maze-generating
+  helper returned the error body on a non-200, so a 429 surfaced downstream as
+  `TypeError: string indices must be integers` — a message that says nothing about the cause.
+  It now raises with the status and body, and a sustained 429 explains that a full sweep exceeds
+  the default 30-generations-per-minute budget and should run against the generous `test`
+  profile. A helper that hides the real failure costs more than the failure.
 
 - **The Complexity Lab's default metric was degenerate, and said so.** Measuring `cellsVisited`
   reports O(n) at R²=1.000 for all 23 generators — a spanning-tree generator carves every cell

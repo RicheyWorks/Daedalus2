@@ -3,7 +3,9 @@
 Exercises every ADR-006 feature against a **running server**, reporting a pass/fail matrix
 with evidence. Each check continues past failures so one break cannot hide the rest.
 
-    java -jar daedalus-server/target/daedalus-server-*-exec.jar &
+    # The sweep generates well over the default 30-mazes-per-minute budget, so run the
+    # server with the generous test-profile limits or it will throttle itself mid-run.
+    SPRING_PROFILES_ACTIVE=test java -jar daedalus-server/target/daedalus-server-*-exec.jar &
     python3 sweep/api-sweep.py      # 14 checks, API level
     node    sweep/ui-sweep.js       # 16 checks, real browser (needs playwright)
 
@@ -25,6 +27,11 @@ Three rules, each learned by getting it wrong here:
 3. **Never wait on a condition that may already be true.** Waiting for `state.ghost` to be
    set passed instantly on the previous stage's ghost, then raced the reload that cleared
    it. Clear the state first, then wait for it to become true.
+
+**A helper that hides the real failure is worse than the failure.** The maze-generating helper
+used to return the error body on a non-200, so every downstream check died with
+`TypeError: string indices must be integers` — a message that says nothing about the 429 that
+actually caused it. It now raises with the status and body.
 
 A flaky sweep is worse than no sweep. When a check flakes, chase it: the one flake here was
 a real race in the client — an in-flight poll response reinstating the maze the player had

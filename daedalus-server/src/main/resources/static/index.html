@@ -137,6 +137,9 @@
     <button id="tour" disabled
             title="Collect every waypoint, then reach the goal — the server knows the provably optimal collection order and scores your route against it">
       Waypoint hunt</button>
+    <button id="fingerprint" disabled
+            title="Guess which algorithm made this maze from its shape alone — works even on crossbred or eroded mazes whose recorded author no longer matches">
+      Identify generator</button>
     <button id="analyze" disabled
             title="Graph theory on the current snapshot: min-cut chokepoints (sever these and start/goal split apart), dead ends, route length">
       Analyze structure</button>
@@ -387,6 +390,7 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   $("compare").disabled = false;
   $("live").disabled = false; $("traffic").disabled = false; $("race").disabled = false;
   $("analyze").disabled = false; $("tour").disabled = false;
+  $("fingerprint").disabled = false;
   clearInterval(state.livePoll); state.livePoll = null;
   clearInterval(state.trafficPoll); state.trafficPoll = null;
   clearInterval(state.ghostTimer); state.ghostTimer = null;
@@ -612,6 +616,28 @@ async function onMutation(m) {
       + `${m.deadEndsRemaining} dead ends left${m.settled ? " — maze has settled" : ""}`);
   await refreshLivingMaze();
   if (m.settled) $("live").disabled = false;
+}
+
+// ---------- maze fingerprint (ADR-007 idea 4) ----------
+/** Name the algorithm from the shape alone, and say how sure the structure allows us to be. */
+async function identifyGenerator() {
+  const f = await api(`/maze/${state.maze.id}/fingerprint`);
+  const pct = Math.round(f.confidence * 100);
+  const verdict = f.agrees
+      ? `<b style="color:#4cc38a">${esc(f.predictedGeneratorId)}</b> — matches the record`
+      : `<b style="color:#f0b429">${esc(f.predictedGeneratorId)}</b> — record says `
+        + `${esc(f.recordedGeneratorId)}`;
+  const sig = f.signature;
+  $("compareBox").innerHTML =
+      `<div style="margin-top:8px">Structure says ${verdict} `
+    + `<span class="hint">(margin over ${esc(f.runnerUp)}: ${pct}%)</span></div>`
+    + `<div class="hint" style="margin-top:4px">${esc(f.note)}</div>`
+    + `<div class="hint" style="margin-top:4px">dead ends ${(sig.deadEndRatio*100).toFixed(0)}% · `
+    + `corridors ${(sig.corridorRatio*100).toFixed(0)}% · junctions ${(sig.junctionRatio*100).toFixed(0)}% · `
+    + `horizontal bias ${(sig.horizontalBias*100).toFixed(0)}% · straight-through `
+    + `${(sig.straightRatio*100).toFixed(0)}% · mean run ${sig.meanStraightRun.toFixed(2)}</div>`;
+  log("state", `fingerprint: structure says ${f.predictedGeneratorId}`
+      + (f.agrees ? " (matches record)" : `, record says ${f.recordedGeneratorId}`));
 }
 
 // ---------- complexity lab (ADR-007 idea 2) ----------
@@ -1556,6 +1582,7 @@ $("traffic").onclick = () => simulateTraffic().catch(e => log("err", e.message))
 $("race").onclick = () => raceSolvers().catch(e => log("err", e.message));
 $("analyze").onclick = () => analyzeStructure().catch(e => log("err", e.message));
 $("tour").onclick = () => startTour().catch(e => log("err", e.message));
+$("fingerprint").onclick = () => identifyGenerator().catch(e => log("err", e.message));
 $("measure").onclick = () => measureGrowth().catch(e => {
   log("err", e.message); $("labOut").textContent = "measurement failed — see the log";
 });
