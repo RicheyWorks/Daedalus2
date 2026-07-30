@@ -233,14 +233,15 @@ mvn clean verify              # all five modules
 mvn -pl daedalus-server test  # one module
 ```
 
-Test inventory (1,194 lines across 12 files, all green as of 2026-05-05):
+Test inventory — **534 tests across 111 files, all green** (299 core, 7 plugin-api, 20
+plugin-runtime, 204 server, 4 desktop) as of 2026-07-30:
 
 | Module | Highlights |
 |---|---|
 | `daedalus-core` | `PerfectMazePropertyTest` — every generator output is a spanning tree (perfect-maze contract) |
 | `daedalus-plugin-api` | `PluginManifestNullGuardTest` — manifest required-field guards |
 | `daedalus-plugin-runtime` | `PluginManagerLifecycleTest`, `PluginManagerJarDiscoveryTest` — boot/shutdown ordering, classloader cleanup, `PluginFailedEvent` publication |
-| `daedalus-server` | `MazeGenerationServiceFallbackTest` (Resilience4j circuit breaker), `RedisConfigConditionalTest` (on/off toggle), `SecurityConfigProfileTest` (profile-aware filter chain), `MazeControllerGeneratorIdTest`, `MazeWebSocketControllerPluginFailedTest` |
+| `daedalus-server` | `GeneratorInvariantFuzzTest` — **every registered generator**, taken from the live registry rather than a list, held to the universal invariants across 11 shapes × 2 seeds (506 generations, zero violations); `MazeGenerationServiceFallbackTest` (Resilience4j circuit breaker), `RedisConfigConditionalTest` (on/off toggle), `SecurityConfigProfileTest` (profile-aware filter chain), `MazeControllerGeneratorIdTest`, `MazeWebSocketControllerPluginFailedTest` |
 | `daedalus-desktop` | `ThemeManagerTest`, `DaedalusLauncherTest` |
 
 ## Workspace layout

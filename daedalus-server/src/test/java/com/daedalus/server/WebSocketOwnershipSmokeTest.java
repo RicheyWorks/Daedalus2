@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -30,6 +31,8 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -45,14 +48,16 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * <p>The unit test ({@code StompSubscriptionAuthorizationInterceptorTest}) pins every branch of
  * the decision; this class proves the two things a unit test cannot: the interceptor is
- * actually installed in the inbound channel, and its refusal reaches a real client as a STOMP
- * ERROR frame rather than vanishing server-side. One positive path (the owner receives frames)
+ * actually installed in the inbound channel, and its refusal reaches a real client rather than
+ * vanishing server-side. One positive path (the owner receives frames)
  * guards against the failure mode where the rule is installed but refuses everyone.
  *
  * <p>Same async discipline as {@code WebSocketSmokeTest}: no receipts exist on the simple
- * broker, so the positive tests republish their idempotent event until the first frame
- * arrives; refusals are awaited via an ERROR-frame latch ({@code StompSessionHandler#handleFrame
- * receives ERROR frames after CONNECTED}). Never {@code Thread.sleep}.
+ * broker, so the positive tests republish their idempotent event until the first frame arrives.
+ * Refusals are awaited via {@link ErrorFrameLatch}, which trips on any of the ways the client
+ * can observe one — see its Javadoc for why waiting on the ERROR frame alone was flaky — and are
+ * then confirmed by the stronger property that no frame ever reaches the refused subscriber.
+ * Never {@code Thread.sleep}.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -101,13 +106,48 @@ class WebSocketOwnershipSmokeTest {
         return "http://localhost:" + port + "/ws";
     }
 
-    /** Handler that latches any post-CONNECT ERROR frame the broker sends us. */
+    /**
+     * Latches the refusal of a subscription, however the client learns of it.
+     *
+     * <p><b>Why "however".</b> The server refuses by sending a STOMP ERROR frame and then
+     * closing the socket, and those two are racing: the earlier version of this test awaited the
+     * ERROR frame alone and failed roughly one run in three with
+     * {@code ConnectionLostException: Connection closed} — the close had overtaken the frame.
+     * That is not a flaky server, it is a test asserting on one of two legitimate outcomes. Both
+     * mean refused; only one is polite about it. So this latch trips on the ERROR frame, on a
+     * conversion failure while reading it, or on the transport dying, and records which happened
+     * so a failure says what was observed instead of {@code expected true but was false}.
+     *
+     * <p>Accepting a bare close would weaken the assertion on its own, so the refusal tests pair
+     * it with a stronger one: the refused subscriber must receive <em>no frames</em> while the
+     * owner's events are being published. Removing the interceptor breaks both — the subscription
+     * would be accepted, the socket would stay open, and the frames would arrive.
+     */
     private static final class ErrorFrameLatch extends StompSessionHandlerAdapter {
         private final CountDownLatch errored = new CountDownLatch(1);
+        private final List<String> observed = Collections.synchronizedList(new ArrayList<>());
 
         @Override
         public void handleFrame(StompHeaders headers, Object payload) {
+            observed.add("ERROR frame: " + headers.getFirst("message"));
             errored.countDown();
+        }
+
+        @Override
+        public void handleException(StompSession s, StompCommand command, StompHeaders headers,
+                                    byte[] payload, Throwable ex) {
+            observed.add("handleException on " + command + ": " + ex);
+            errored.countDown();
+        }
+
+        @Override
+        public void handleTransportError(StompSession s, Throwable ex) {
+            observed.add("transport error: " + ex);
+            errored.countDown();
+        }
+
+        String diagnosis() {
+            return observed.isEmpty() ? "nothing at all was observed" : observed.toString();
         }
     }
 
@@ -155,6 +195,24 @@ class WebSocketOwnershipSmokeTest {
         return null;
     }
 
+    /**
+     * Publish the owner's move repeatedly and report that the refused subscriber saw none of it.
+     * The positive tests need up to {@code TIMEOUT_S} of republishing to catch a frame, so this
+     * is the same broker being hammered the same way — with the queue required to stay empty.
+     */
+    private boolean nothingLeaksTo(BlockingQueue<MoveFrame> received, GameSession game)
+            throws InterruptedException {
+        PlayerMovedEvent move =
+                new PlayerMovedEvent(this, game.id(), new Point(0, 0), new Point(1, 0));
+        for (int i = 0; i < 8; i++) {
+            events.publishEvent(move);
+            if (received.poll(125, TimeUnit.MILLISECONDS) != null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Test
     void theOwnerReceivesTheirSessionsFrames() throws Exception {
         GameSession game = sessions.open(UUID.randomUUID(), "Alice", new Point(0, 0), "alice");
@@ -173,10 +231,14 @@ class WebSocketOwnershipSmokeTest {
         GameSession game = sessions.open(UUID.randomUUID(), "Alice", new Point(0, 0), "alice");
         ErrorFrameLatch mallory = new ErrorFrameLatch();
         StompSession s = connectAs("mallory", mallory);
-        subscribeToPlayerTopic(s, game);
+        BlockingQueue<MoveFrame> received = subscribeToPlayerTopic(s, game);
 
         assertThat(mallory.errored.await(TIMEOUT_S, TimeUnit.SECONDS))
-                .as("a valid but non-owner token must be refused with a STOMP ERROR")
+                .as("a valid but non-owner token must be refused; observed: %s",
+                        mallory.diagnosis())
+                .isTrue();
+        assertThat(nothingLeaksTo(received, game))
+                .as("Mallory was refused but still received a frame from Alice's session")
                 .isTrue();
     }
 
@@ -188,10 +250,14 @@ class WebSocketOwnershipSmokeTest {
         GameSession game = sessions.open(UUID.randomUUID(), "Alice", new Point(0, 0), "alice");
         ErrorFrameLatch anon = new ErrorFrameLatch();
         StompSession s = connectAs(null, anon);
-        subscribeToPlayerTopic(s, game);
+        BlockingQueue<MoveFrame> received = subscribeToPlayerTopic(s, game);
 
         assertThat(anon.errored.await(TIMEOUT_S, TimeUnit.SECONDS))
-                .as("an anonymous connection must be refused on an owned session's topic")
+                .as("an anonymous connection must be refused on an owned session's topic; "
+                        + "observed: %s", anon.diagnosis())
+                .isTrue();
+        assertThat(nothingLeaksTo(received, game))
+                .as("the anonymous subscriber was refused but still received a frame")
                 .isTrue();
     }
 

@@ -1,6 +1,6 @@
 # ADR-007: Surfacing the theory module as product
 
-**Status:** Accepted (idea 1 implemented; 2–10 queued)
+**Status:** Accepted (ideas 1, 2, 4, 9 implemented; 3, 5–8, 10 queued)
 **Date:** 2026-07-30
 **Deciders:** Richmond
 **Supersedes / extends:** ADR-006 (living mazes roadmap, complete)
@@ -143,7 +143,10 @@ rather than a suggestion.
    `GeneratorClassifier` in core, `GET /api/v1/maze/{id}/fingerprint`, accuracy measured on
    held-out seeds (58.9% exact vs 4.3% chance; 87.4% by algorithm family) with calibrated
    confidence (~89% accurate above 0.25, ~45% below)
-8. [ ] Ideas 3, 5–10, in the priority order above
+8. [x] Idea 9 (**Generator invariant fuzzing**) — `GeneratorInvariantFuzzTest`, registry-driven
+   so new generators are covered automatically; 506 generations across 11 shapes and 2 seeds
+   found **zero** violations, and six deliberate breaks confirm the properties have teeth
+9. [ ] Ideas 3, 5–8, 10, in the priority order above
 
 ## Postscript: what building idea 2 taught
 
@@ -172,3 +175,24 @@ reasonable theory that row-sweeping generators leave a signature in row-to-row v
 moved exact accuracy by nothing and family accuracy by 0.8 points — about three samples out of
 414, indistinguishable from noise — so it was removed. Keeping it would have meant carrying
 code and a docstring justifying a benefit that was never measured.
+
+## Postscript: what building idea 9 taught
+
+**A green property test is evidence of nothing until it has been seen to fail.** The fuzz swept
+506 generations — every registered generator across 11 shapes including 1×1, single rows and
+columns, and 16×24 — and reported zero violations. That is the same output a test with an
+inverted assertion or an empty loop produces. So the properties were re-verified from the other
+side: `mutants/fuzzteeth.py` breaks Binary Tree six ways, one per property, and all six are
+caught by the property they were aimed at. Only *then* is "zero violations" a finding rather
+than a hope. Recording the negative result plainly is the point — the 23 generators were
+previously "presumably fine", and now they are measured.
+
+**The harness taught its own lesson.** The first run was launched under a wrapper that hit a
+timeout; the wrapper died, the Python process was orphaned and kept mutating the same source
+file, and a second copy started against it. The two interleaved runs printed a confident
+"6/6 caught" that was worthless, and left a sabotaged generator in the working tree — which
+only surfaced because `git status` was checked afterwards. **A tool that edits source in a loop
+needs a lock and a crash-safe restore, not just a `finally`.** The rewritten harness holds a
+lock file, keeps a pristine sidecar that the next run restores from, reverts after each
+mutation rather than at the end, and reverts on SIGTERM. The result was then re-measured from
+a verified-clean tree, which is where the 6/6 in this document comes from.

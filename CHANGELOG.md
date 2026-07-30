@@ -34,6 +34,55 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Generator invariant fuzzing (ADR-007 idea 9) — 23 generators go from "presumably fine" to
+  measured.** `GeneratorInvariantFuzzTest` property-tests every registered generator against the
+  invariants that hold whatever the algorithm — dimensions honoured, walls agreed on from both
+  sides, no opening leading off the grid, every carved cell mutually reachable, identical output
+  for an identical seed, different output for a different seed, and *if* a generator fills the
+  grid then it must be a spanning tree. 506 generations across 11 shapes (1×1, 1×7, 7×1, 2×9,
+  9×2, 16×24 and friends — the degenerate and lopsided inputs where generators actually break)
+  and 2 seeds. **Result: zero violations.** Driven by the injected `GeneratorRegistry` rather
+  than a hardcoded roster, so a newly wired generator is covered the moment it is registered;
+  the spanning-tree rule is likewise stated as a conditional, so the Dungeon generator opts out
+  by being half rock rather than by being named in an exclusion list. That is the difference
+  from core's existing `PerfectMazePropertyTest`, which checks the same tree contract over a
+  hand-listed **8** generators at one size and one seed — it stays (pure-JVM, no Spring, faster
+  signal), and this is the wider net over the other 15.
+- **`mutants/fuzzteeth.py` — six deliberate breaks proving the fuzz can fail.** Zero violations
+  is exactly what a vacuous test reports, so the harness sabotages Binary Tree six ways (a
+  one-sided opening, an opening off the grid edge, the seed mixed with the clock, the seed
+  ignored entirely, cycles from carving both directions, a walled-off two-cell island) and
+  checks the fuzz names the *specific* property each one violates. All six caught. One is
+  informative beyond passing: carving both directions unconditionally also makes output
+  seed-independent, so it trips two properties — the net overlaps rather than partitions.
+
+### Fixed
+
+- **`WebSocketOwnershipSmokeTest` was flaky — and the flake was in the assertion, not the
+  server.** `anotherSubjectsSubscriptionIsRefusedWithAStompError` failed about one run in three
+  (measured: 1 of 3, then 1 of 4 in isolation) during the full `verify`. Rather than re-running
+  until green, the latch was instrumented to record what happened when it timed out; the answer
+  was `ConnectionLostException: Connection closed`. The server refuses a non-owner by sending a
+  STOMP ERROR frame **and then closing the socket**, and those two race — the test was waiting on
+  one of two legitimate outcomes. Both mean refused. The latch now trips on the ERROR frame, a
+  conversion failure reading it, or the transport dying, and reports which. Because accepting a
+  bare close would weaken the check, both refusal tests now also assert the stronger property:
+  the refused subscriber receives **no frames** while the owner's events are republished at it.
+  Teeth confirmed by disabling the interceptor — both tests fail, and the new diagnostic reads
+  "nothing at all was observed", which is the message the old assertion could not produce.
+  Stable 5 of 5 afterwards.
+- **The first `fuzzteeth.py` result was contaminated and is not the one reported above.** The
+  harness was launched under a wrapper that hit a timeout; the wrapper was killed, the Python
+  process survived orphaned and kept mutating, and a second copy started against the same file.
+  Two interleaved runs printed a confident "6/6 caught" and left a sabotaged generator in the
+  working tree — caught only because `git status` was checked before committing. The harness now
+  holds a lock file, writes a pristine sidecar that the next run restores from, reverts after
+  every mutation instead of once at the end, and reverts on SIGTERM; the 6/6 above was
+  re-measured from a verified-clean tree. `mutants/README.md` records the trap and notes that
+  the three older harnesses restore per mutation in a `finally` but still have no lock.
+
+### Added
+
 - **Maze fingerprint + generator classifier (ADR-007 idea 4) — name the algorithm from the
   shape alone.** `MazeFingerprint` reduces a maze to eight scale-invariant structural ratios
   (degree shares, directional bias, straight-run length, edge density), and
