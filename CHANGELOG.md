@@ -32,8 +32,42 @@ under the `_migration/` portfolios.
   third of their cells on dead ends), and the original label bands put nearly every maze this
   project generates into "hard" or "brutal".
 
+### Fixed
+
+- **A stale poll response could reinstate the maze you just navigated away from.** With STOMP
+  unavailable, living and traffic mazes refresh by polling, and `refreshLivingMaze` assigned the
+  fetched maze to `state.maze` *after* an await without re-checking that the maze was still
+  current. Switch mazes during that window — click Daily, load a campaign stage, hit Generate —
+  and the in-flight response put the old maze back: reproduced deterministically by delaying the
+  old maze's fetch, leaving `state.maze` on the previous maze under a "Daily leaderboard"
+  heading, where a session opened next would play a different maze than the one being scored.
+  Every await in that function now drops its result if the player has moved on. Found by chasing
+  a one-in-three flake in the new sweep rather than re-running until green.
+
 ### Changed
 
+- **Added an end-to-end regression sweep (`sweep/`).** Every ADR-006 feature exercised against a
+  running server — 14 API checks and 16 browser checks, each reporting evidence and continuing
+  past failures. It exists because features were verified individually in the batch that built
+  them, while later consolidation modified services those earlier features depend on
+  (`LivingMazeService`, `TrafficService`, `MazeBreeder`); nothing had ever exercised all ten
+  together. Current state: **14/14 and 16/16**, stable across repeated runs and with the
+  multiplayer flag both on and off.
+- **The per-session lock's isolation is now a tested guarantee.** A move's event listeners run
+  while its session lock is held — deliberately, so listeners see moves in the order they were
+  applied — and the listener chain has grown over this roadmap to include a STOMP send, traffic
+  occupancy, the ghost recorder, and any installed plugin. That is only tolerable because the
+  lock is *per session*, so a blocked listener can delay nobody but the player who triggered it.
+  Changing `tryMove`'s `synchronized (s)` to `synchronized (this)` — one word, queueing every
+  player in the server behind a single lock — broke exactly **one test out of 186**, and only
+  after that test was written. New `SessionLockIsolationTest` pins both halves: a listener
+  blocked on one session cannot stop another session moving, and moves on the *same* session
+  still serialise. `GameSessionService` now records what the design costs, measured rather than
+  asserted: a move is ~1.4µs with no listeners and ~1.3µs with traffic tracking (in-tree
+  listeners are free within noise), while a listener that blocks for 60ms serialises that
+  session's next ten moves into 579ms — so a listener needing slow or I/O-bound work should hand
+  off to its own executor rather than borrowing the request thread. Added to the mutation
+  harness, with a note on the anchoring trap below.
 - **Mutation-tested the headline guarantees.** Six semantic breaks were injected one at a time
   — players able to walk through walls, BFS made LIFO so its paths stop being shortest,
   generators ignoring their seed, the leaderboard comparator inverted, rate limiting disabled,

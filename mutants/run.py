@@ -53,6 +53,18 @@ MUTANTS = [
      "if (node % 2 == 0) observer.accept(node); // MUTANT: drops half the expansions",
      "daedalus-core",
      "recorded expansions are the real search order"),
+
+    # NOTE the anchor. GameSessionService has two `synchronized (s) {` blocks and join()'s
+    # comes first, so a naive first-match replace patches join() and leaves tryMove's lock
+    # untouched — which reports a false CAUGHT. Anchored on the preceding line instead.
+    ("session-lock-scope",
+     "daedalus-server/src/main/java/com/daedalus/server/service/GameSessionService.java",
+     "        synchronized (s) {\n            if (s.completed()) return false;\n"
+     "            String actor",
+     "        synchronized (this) { // MUTANT: global lock, not per-session\n"
+     "            if (s.completed()) return false;\n            String actor",
+     "daedalus-server",
+     "one session's slow listener cannot stall another session"),
 ]
 
 

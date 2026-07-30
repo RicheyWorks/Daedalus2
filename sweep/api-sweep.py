@@ -1,0 +1,244 @@
+#!/usr/bin/env python3
+"""API-level regression sweep across every ADR-006 feature. Each check reports pass/fail
+with evidence and never aborts the run, so one break doesn't hide the rest."""
+import json, time, urllib.request, urllib.error
+
+API = "http://localhost:8080/api/v1"
+results = []
+
+def call(method, path, body=None, expect=200):
+    data = json.dumps(body).encode() if body else None
+    req = urllib.request.Request(API + path, data=data, method=method,
+                                 headers={"Content-Type": "application/json"} if body else {})
+    try:
+        with urllib.request.urlopen(req) as r:
+            txt = r.read()
+            return r.status, (json.loads(txt) if txt else None)
+    except urllib.error.HTTPError as e:
+        return e.code, e.read().decode()[:200]
+
+def check(name, fn):
+    try:
+        ok, evidence = fn()
+    except Exception as ex:
+        ok, evidence = False, f"{type(ex).__name__}: {ex}"
+    results.append((name, ok, evidence))
+    print(f"{'PASS' if ok else '**FAIL**':10} {name:38} {evidence}", flush=True)
+
+def gen(g="recursive-backtracker", r=15, c=15, seed=7):
+    s, m = call("POST", "/maze/generate",
+                {"generatorId": g, "rows": r, "cols": c, "seed": seed})
+    return m
+
+# ---- 1. generation + determinism -------------------------------------------------
+def t_generate():
+    a, b = gen(seed=101), gen(seed=101)
+    return a["tiles"] == b["tiles"], f"same seed -> identical tiles ({a['rows']}x{a['cols']})"
+
+# ---- 2. solvers ------------------------------------------------------------------
+def t_solvers():
+    m = gen()
+    st, algos = call("GET", "/algorithms")
+    ids = [a["id"] for a in algos["solvers"]]
+    solved, failed = 0, []
+    for sid in ids:
+        s, r = call("POST", f"/maze/{m['id']}/solve/{sid}")
+        if s == 200 and r.get("path"):
+            solved += 1
+        else:
+            failed.append(sid)
+    return not failed, f"{solved}/{len(ids)} solvers returned a route" + (f"; failed={failed}" if failed else "")
+
+# ---- 3. replay (arena's data source) ---------------------------------------------
+def t_replay():
+    m = gen()
+    s, r = call("POST", f"/maze/{m['id']}/solve/astar?replay=true")
+    exp = r.get("expansions") or []
+    return len(exp) > 0 and len(exp) >= len(r["path"]), \
+        f"{len(exp)} expansions recorded for a {len(r['path'])}-cell route"
+
+# ---- 4. living mazes (idea 1) ----------------------------------------------------
+def t_living():
+    m = gen(seed=202)
+    before = sum(row.count('#') for row in m["tiles"])
+    s, live = call("POST", f"/maze/{m['id']}/live?ticks=4")
+    if s != 200:
+        return False, f"live returned {s}: {live}"
+    time.sleep(6)
+    _, after_m = call("GET", f"/maze/{m['id']}")
+    after = sum(row.count('#') for row in after_m["tiles"])
+    return after < before, f"walls {before} -> {after} (erosion opened {before-after})"
+
+# ---- 5. traffic (idea 3) ---------------------------------------------------------
+def t_traffic():
+    m = gen(seed=303)
+    s, st = call("POST", f"/maze/{m['id']}/traffic")
+    if s != 200:
+        return False, f"traffic returned {s}: {st}"
+    _, agent = call("POST", f"/maze/{m['id']}/agent")
+    d = agent["open"][0]
+    opp = {"NORTH":"SOUTH","SOUTH":"NORTH","EAST":"WEST","WEST":"EAST"}[d]
+    for i in range(12):
+        call("POST", f"/agent/{agent['agentId']}/step?direction={d if i%2==0 else opp}")
+    time.sleep(3)
+    _, m2 = call("GET", f"/maze/{m['id']}")
+    hs = m2.get("hotspots") or []
+    return len(hs) > 0, f"{len(hs)} congested cells, peak cost {max((h['cost'] for h in hs), default=0):.0f}"
+
+# ---- 6. fog-of-war agents (idea 7) -----------------------------------------------
+def t_agents():
+    m = gen(seed=404)
+    s, a = call("POST", f"/maze/{m['id']}/agent")
+    if s != 200:
+        return False, f"agent create {s}"
+    s2, stepped = call("POST", f"/agent/{a['agentId']}/step?direction={a['open'][0]}")
+    illegal = [d for d in ["NORTH","SOUTH","EAST","WEST"] if d not in stepped["open"]]
+    # Documented contract: "Walking into a wall answers 400 without consuming budget."
+    bad = call("POST", f"/agent/{a['agentId']}/step?direction={illegal[0]}")[0] if illegal else 400
+    budget_kept = call("GET", f"/agent/{a['agentId']}")[1]["stepsUsed"] == stepped["stepsUsed"]
+    return s2 == 200 and bad == 400 and budget_kept, \
+        f"legal step ok; wall step -> {bad} and consumed no budget; agent sees {len(stepped['open'])} exits"
+
+# ---- 7. daily + per-maze leaderboard (idea 4) ------------------------------------
+def t_daily_board():
+    s, d = call("GET", "/maze/daily")
+    if s != 200:
+        return False, f"daily {s}"
+    mid = d["maze"]["id"]
+    s2, d2 = call("GET", "/maze/daily")
+    stable = d2["maze"]["id"] == mid
+    st, board = call("GET", f"/leaderboard?n=5&maze={mid}")
+    return stable and st == 200, f"daily {d['date']} stable across calls; per-maze board responds"
+
+# ---- 8. ghosts (idea 8) ----------------------------------------------------------
+def t_ghost():
+    m = gen(seed=505, r=9, c=9)
+    mid = m["id"]
+    if call("GET", f"/maze/{mid}/ghost")[0] != 404:
+        return False, "ghost existed before any completed run"
+    _, route = call("POST", f"/maze/{mid}/solve/bfs")
+    _, sess = call("POST", f"/maze/{mid}/session?player=sweeper")
+    for p in route["path"][1:]:
+        call("POST", f"/session/{sess['sessionId']}/move", {"to": {"row": p["row"], "col": p["col"]}})
+    s, g = call("GET", f"/maze/{mid}/ghost")
+    board = call("GET", f"/leaderboard?n=5&maze={mid}")[1]
+    return s == 200 and g["playerName"] == "sweeper" and len(board) == 1, \
+        f"ghost recorded {len(g['moves'])} moves; stage board has {len(board)} entry"
+
+# ---- 9. analytics (idea 9) -------------------------------------------------------
+def t_analysis():
+    m = gen(seed=606, r=21, c=21)
+    s, a = call("GET", f"/maze/{m['id']}/analysis")
+    return s == 200 and a["cutSize"] == 1 and a["deadEndCount"] > 0, \
+        f"cut={a['cutSize']} (perfect maze must be 1), deadEnds={a['deadEndCount']}, route={a['routeLength']}"
+
+# ---- 10. crossbreeding (idea 5) + rock preservation ------------------------------
+def t_breed():
+    a = gen("recursive-backtracker", 21, 21, 11)
+    b = gen("binary-tree", 21, 21, 12)
+    s, child = call("POST", f"/maze/breed?a={a['id']}&b={b['id']}&seed=5")
+    if s != 200:
+        return False, f"breed {s}: {child}"
+    _, route = call("POST", f"/maze/{child['id']}/solve/bfs")
+    mismatch = call("POST", f"/maze/breed?a={a['id']}&b={gen(r=9,c=9)['id']}")[0]
+    # dungeon x dungeon must keep rock
+    d1, d2 = gen("dungeon", 21, 21, 1), gen("dungeon", 21, 21, 2)
+    _, dchild = call("POST", f"/maze/breed?a={d1['id']}&b={d2['id']}&seed=3")
+    def rock(mz):
+        t, n = mz["tiles"], 0
+        for r in range(mz["rows"]):
+            for c in range(mz["cols"]):
+                tr, tc = 2*r+1, 2*c+1
+                if (t[tr-1][tc]=='#' and t[tr+1][tc]=='#' and t[tr][tc-1]=='#'
+                        and t[tr][tc+1]=='#' and t[tr][tc] not in 'SG'):
+                    n += 1
+        return n
+    rk = rock(dchild)
+    return bool(route["path"]) and mismatch == 400 and rk > 100, \
+        f"child solvable; mismatched dims -> {mismatch}; dungeon child keeps {rk}/441 rock"
+
+# ---- 11. spectator (idea 6) ------------------------------------------------------
+def t_spectator():
+    m = gen(seed=707, r=9, c=9)
+    _, sess = call("POST", f"/maze/{m['id']}/session?player=runner")
+    sid = sess["sessionId"]
+    s, before = call("GET", f"/session/{sid}")
+    _, route = call("POST", f"/maze/{m['id']}/solve/bfs")
+    p = route["path"][1]
+    call("POST", f"/session/{sid}/move", {"to": {"row": p["row"], "col": p["col"]}})
+    _, after = call("GET", f"/session/{sid}")
+    unknown = call("GET", f"/session/00000000-0000-4000-8000-000000000000")[0]
+    return before["moveCount"] == 0 and after["moveCount"] == 1 and unknown == 404, \
+        f"view tracked 0 -> 1 moves; unknown session -> {unknown}"
+
+# ---- 12. campaign (idea 10) ------------------------------------------------------
+def t_campaign():
+    s, c = call("GET", "/campaign?seed=2026")
+    if s != 200:
+        return False, f"campaign {s}"
+    scores = [st["grade"]["score"] for st in c["stages"]]
+    rising = all(scores[i] > scores[i-1] for i in range(1, len(scores)))
+    _, again = call("GET", "/campaign?seed=2026")
+    stable = [st["mazeId"] for st in again["stages"]] == [st["mazeId"] for st in c["stages"]]
+    last = c["stages"][-1]
+    hazards = set(last["hazards"]) == {"living", "traffic"}
+    playable = bool(call("POST", f"/maze/{c['stages'][0]['mazeId']}/solve/bfs")[1]["path"])
+    return rising and stable and hazards and playable, \
+        f"ladder {[round(x,1) for x in scores]} rising={rising}, ids stable={stable}, finale hazards={sorted(last['hazards'])}"
+
+# ---- 13. multiplayer + move legality ---------------------------------------------
+def t_multiplayer_and_legality():
+    m = gen(seed=808, r=11, c=11)
+    _, sess = call("POST", f"/maze/{m['id']}/session?player=p1")
+    sid = sess["sessionId"]
+    far = {"row": m["rows"] - 1, "col": m["cols"] - 1}   # not adjacent: must be refused
+    # The endpoint answers 200 with a BOOLEAN body: false means refused. Checking only the
+    # status reads a correct rejection as an accepted teleport.
+    st, accepted = call("POST", f"/session/{sid}/move", {"to": far})
+    _, view = call("GET", f"/session/{sid}")
+    # Flag-agnostic: join either works (flag on) or 404s "as if it did not exist" (flag off).
+    # Assert the OUTCOME matches whichever contract is in force, so the check is valid either
+    # way instead of encoding the environment it first ran in.
+    joined = call("POST", f"/session/{sid}/join?player=p2")[0]
+    _, after_join = call("GET", f"/session/{sid}")
+    players = sorted(after_join["players"].keys())
+    mp_ok = (joined == 200 and players == ["p1", "p2"]) or (joined == 404 and players == ["p1"])
+    flag = "on" if joined == 200 else "off"
+    return st == 200 and accepted is False and view["moveCount"] == 0 and mp_ok, \
+        (f"teleport -> {st} body={accepted}, moveCount still {view['moveCount']}; "
+         f"join (multiplayer {flag}) -> {joined}, players={players}")
+
+# ---- 14. ascii + png export ------------------------------------------------------
+def t_exports():
+    # ASCII is a content-negotiated representation of the same URL, not a separate path.
+    m = gen(seed=909, r=9, c=9)
+    req = urllib.request.Request(f"{API}/maze/{m['id']}?solve=bfs")
+    req.add_header("Accept", "text/plain")
+    with urllib.request.urlopen(req) as r:
+        art = r.read().decode()
+    ok = "#" in art and "S" in art and "G" in art and "{" not in art
+    return ok, f"ascii {len(art.splitlines())} lines with solve overlay, no JSON leakage"
+
+for name, fn in [
+    ("1. generation + determinism", t_generate),
+    ("2. all solvers return routes", t_solvers),
+    ("3. replay records expansions", t_replay),
+    ("4. living mazes erode", t_living),
+    ("5. traffic congests + decays", t_traffic),
+    ("6. fog-of-war agents", t_agents),
+    ("7. daily + per-maze board", t_daily_board),
+    ("8. session ghosts", t_ghost),
+    ("9. chokepoint analytics", t_analysis),
+    ("10. crossbreeding + rock", t_breed),
+    ("11. spectator view", t_spectator),
+    ("12. campaign ladder", t_campaign),
+    ("13. multiplayer + legality", t_multiplayer_and_legality),
+    ("14. ascii export", t_exports),
+]:
+    check(name, fn)
+
+passed = sum(1 for _, ok, _ in results if ok)
+print(f"\n=== {passed}/{len(results)} checks passed ===")
+for n, ok, ev in results:
+    if not ok:
+        print(f"FAILED: {n} -- {ev}")

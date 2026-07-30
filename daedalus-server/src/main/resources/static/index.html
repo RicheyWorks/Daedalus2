@@ -683,7 +683,18 @@ async function onTrafficPulse(m) {
 async function refreshLivingMaze() {
   try {
     const before = state.maze;
-    const maze = await api(`/maze/${state.maze.id}`);
+    // Which maze this refresh is FOR. Every await below is a window in which the player can
+    // switch mazes (Daily, a campaign stage, Generate), and a response that lands after that
+    // must be dropped rather than applied. Without this the poll's in-flight response
+    // reinstates the maze the player just left: reproduced deterministically by delaying the
+    // old maze's fetch and loading the daily challenge during it, which left state.maze on
+    // the old maze under a "Daily leaderboard" heading — a session opened then would play a
+    // different maze than the one being scored.
+    const forMaze = state.maze.id;
+    const stale = () => !state.maze || state.maze.id !== forMaze;
+
+    const maze = await api(`/maze/${forMaze}`);
+    if (stale()) return;
     state.maze = maze;
     // Narrate on the polling path too. Tick/pulse messages normally come from STOMP frames,
     // so with the broker unreachable a living or congested maze changed under the player in
@@ -702,12 +713,17 @@ async function refreshLivingMaze() {
     }
     if (state.analysis) {
       // Re-analyze the new snapshot — watch chokepoints dissolve as erosion braids them.
-      try { state.analysis = await api(`/maze/${maze.id}/analysis`); } catch (ignored) {}
+      try {
+        const a = await api(`/maze/${forMaze}/analysis`);
+        if (stale()) return;
+        state.analysis = a;
+      } catch (ignored) { /* analysis is an overlay; losing one refresh is harmless */ }
     }
     if (state.path) {
       // The drawn route may now cross freshly-opened walls or stale costs — re-solve
       // quietly (no replay animation; the mutation itself is the show).
-      const r = await api(`/maze/${maze.id}/solve/${$("solver").value}`, {method: "POST"});
+      const r = await api(`/maze/${forMaze}/solve/${$("solver").value}`, {method: "POST"});
+      if (stale()) return;
       state.path = r.path;
       state.expansions = [];
       state.searchProgress = 1;

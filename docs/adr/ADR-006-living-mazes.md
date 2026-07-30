@@ -250,3 +250,53 @@ become dramatically better once mazes can already change under a walker's feet.
         same volatile-increment shape in the service SpotBugs hadn't flagged. Defect classes
         travel in packs; when one is found, the honest move is to grep for its siblings rather
         than fix the reported instance and move on.
+
+14. [x] Session-lock audit (2026-07-30). The one loose end from the audit above: this roadmap
+        added two listeners (traffic occupancy, ghost recording) to a publish path that runs
+        while the per-session lock is held, so the question "what does that cost now?" was one
+        this work had made worse and never answered.
+
+        Measured, the concern mostly dissolves. A move is ~1.4µs with no listeners and ~1.3µs
+        with traffic tracking — the added listeners are free within noise. The ghost recorder's
+        trail copy is the only real cost (876µs at the 5,000-move cap) and it runs once, on the
+        winning move, blocking nothing after it. Lock ordering is always session→trail with no
+        reverse path, so there is no deadlock. **No code change was warranted**, which is a
+        legitimate outcome and worth recording as one rather than manufacturing a fix.
+
+        What the measuring did turn up is that the property making this design safe at all —
+        per-session scope, so a blocked listener delays only its own player — was defended by
+        nothing. Widening the lock to `synchronized (this)` broke a single test out of 186, and
+        only after that test existed. It exists now.
+
+        Two methodology notes, both earned by getting it wrong first:
+
+        - **Anchor concurrency mutations precisely.** `GameSessionService` has two
+          `synchronized (s)` blocks and `join()`'s comes first, so a first-match replace patched
+          the wrong method and produced a confident, meaningless "nothing catches this" result.
+        - **A concurrency test you have never watched fail is not yet a test.** The first version
+          gave the blocked listener a safety valve equal to the bystander's patience; the valve
+          released the lock just as the bystander was still waiting, so the move succeeded and
+          the test passed against a genuine global lock. Deliberately breaking the code to watch
+          the test go red is the only thing that distinguishes a guarantee from a decoration.
+
+15. [x] End-to-end sweep (2026-07-30). Every feature here was verified in the batch that built
+        it, and the later consolidation work then modified services the earlier features depend
+        on — `LivingMazeService`, `TrafficService`, `MazeBreeder`. Nothing had ever exercised all
+        ten at once, so `sweep/` now does: 14 API checks and 16 browser checks against a running
+        server. Both are green, including the flag-off and flag-on multiplayer paths.
+
+        The interesting part was the failures, none of which were where they appeared to be.
+        Four first-run "failures" were the sweep asserting contracts I had invented rather than
+        read — an illegal agent step answers 400 by documentation, ASCII is content-negotiated
+        rather than a `/ascii` path, `join` 404s by design with the flag off, and `move` answers
+        `200` with a boolean body, so status-only checking read a correctly-refused wall-teleport
+        as an accepted one. **A test that fails against correct behaviour is a bug in the test,
+        and writing it teaches you the contract you did not actually know.**
+
+        Then one check flaked: passed, failed, passed. The tempting read is "CI noise". Chased
+        instead, it was a real client race — with STOMP unavailable the maze polls, and the poll
+        assigned its fetched maze after an await without re-checking currency, so switching maze
+        mid-flight reinstated the one you had just left. Forced deterministically by delaying the
+        old maze's response, it leaves the player on the previous maze under the new maze's
+        leaderboard heading. **Every flake is a race until proven otherwise**; this roadmap's
+        last real defect was found by refusing to re-run until green.
