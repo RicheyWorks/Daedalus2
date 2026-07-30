@@ -32,8 +32,31 @@ under the `_migration/` portfolios.
   third of their cells on dead ends), and the original label bands put nearly every maze this
   project generates into "hard" or "brutal".
 
+### Added
+
+- **Waypoint Tour mode (ADR-007 idea 1) — the exact TSP solver, made playable.** `GET
+  /api/v1/maze/{id}/tour` places waypoints and returns the *provably optimal* order collecting
+  them all: Held-Karp over the waypoint set plus the goal as a compulsory final stop. Collect
+  them in the UI ("Waypoint hunt") and the finish line scores your walk against a number that is
+  not an estimate — *"tour complete in 360 steps; the optimal route is 264 (136% of optimal)"*.
+  Placement uses k-center farthest-first, so waypoints spread instead of clumping, which means
+  the mode revives **two** dormant theory classes rather than one. Everything derives from the
+  maze alone, so the daily challenge, per-maze leaderboards, ghosts and campaign stages all work
+  in this mode without a line of change in any of them. Progress is observed server-side from
+  real moves (the same event seam traffic uses) rather than accepted from the client, so the
+  count that scores cannot be claimed.
+- **ADR-007** (`docs/adr/ADR-007-theory-as-product.md`), from an audit with an uncomfortable
+  finding: **six of nine `theory` classes had zero references from any user-facing module** —
+  exact TSP, k-center placement, longest-simple-path, all-pairs distance oracles, and empirical
+  complexity fitting, all built and tested and invisible. The ADR proposes ten ideas that close
+  that gap, weighs three designs for the first, and records why waypoints must be server-owned
+  (a comparison against "optimal" is meaningless if the client picks the instance).
+
 ### Fixed
 
+- **An over-large waypoint count answered 500 instead of capping.** The count was clamped to
+  `WaypointTour.MAX_WAYPOINTS` and *then* the goal was appended as the compulsory final stop,
+  handing Held-Karp one stop more than it accepts. Caught by the mode's own bounds test.
 - **A stale poll response could reinstate the maze you just navigated away from.** With STOMP
   unavailable, living and traffic mazes refresh by polling, and `refreshLivingMaze` assigned the
   fetched maze to `state.maze` *after* an await without re-checking that the maze was still

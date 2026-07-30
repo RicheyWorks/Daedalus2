@@ -106,6 +106,14 @@ daedalus:
     base-size: ${DAEDALUS_CAMPAIGN_BASE_SIZE:9}
     size-step: ${DAEDALUS_CAMPAIGN_SIZE_STEP:4}
     max-campaigns: ${DAEDALUS_CAMPAIGN_MAX:50}
+  # ----- Waypoint Tour mode (ADR-007 idea 1) -----
+  # Collect every waypoint, then reach the goal. Waypoints are placed by k-center so they
+  # spread, and the optimal collection order is exact (Held-Karp). `count` is hard-capped at
+  # WaypointTour.MAX_WAYPOINTS because the solver is O(2^k * k^2).
+  waypoint:
+    count: ${DAEDALUS_WAYPOINT_COUNT:5}
+    max-tours: ${DAEDALUS_WAYPOINT_MAX_TOURS:500}
+    idle-ttl: ${DAEDALUS_WAYPOINT_IDLE_TTL:2h}
   # ----- Ghost runs (ADR-006 idea #8) -----
   # The best completed run per maze, replayed as a translucent racer. One recording per
   # maze, trail length capped in the model (GameSession.MAX_TRAIL).

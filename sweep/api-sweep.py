@@ -208,6 +208,37 @@ def t_multiplayer_and_legality():
         (f"teleport -> {st} body={accepted}, moveCount still {view['moveCount']}; "
          f"join (multiplayer {flag}) -> {joined}, players={players}")
 
+# ---- 15. waypoint tour (ADR-007 idea 1) ------------------------------------------
+def t_tour():
+    m = gen(seed=1212, r=13, c=13)
+    mid = m["id"]
+    s, t = call("GET", f"/maze/{mid}/tour?count=4")
+    if s != 200:
+        return False, f"tour {s}: {t}"
+    if not t["feasible"] or len(t["waypoints"]) != 4:
+        return False, f"infeasible or wrong count: {t}"
+    # Deterministic: the same maze must yield the same instance and the same optimum.
+    _, again = call("GET", f"/maze/{mid}/tour?count=4")
+    if again != t:
+        return False, "tour is not deterministic for the same maze"
+    # An over-large count caps rather than exploding (Held-Karp is exponential).
+    capped, big = call("GET", f"/maze/{mid}/tour?count=9999")
+    # Progress is observed from real moves, not claimed by the client.
+    _, sess = call("POST", f"/maze/{mid}/session?player=hunter")
+    sid = sess["sessionId"]
+    _, p0 = call("GET", f"/session/{sid}/tour")
+    _, route = call("POST", f"/maze/{mid}/solve/bfs")
+    for p in route["path"][1:]:
+        call("POST", f"/session/{sid}/move", {"to": {"row": p["row"], "col": p["col"]}})
+    _, p1 = call("GET", f"/session/{sid}/tour")
+    straight_to_goal_misses = not p1["complete"]
+    return (p0["collected"] == 0 and p0["optimal"] == t["optimalCost"]
+            and capped == 200 and len(big["waypoints"]) <= 15
+            and straight_to_goal_misses), \
+        (f"{len(t['waypoints'])} waypoints, optimal {t['optimalCost']} steps, deterministic; "
+         f"count=9999 capped to {len(big['waypoints'])}; walking straight to the goal "
+         f"collected {p1['collected']}/{p1['total']} so the tour is correctly incomplete")
+
 # ---- 14. ascii + png export ------------------------------------------------------
 def t_exports():
     # ASCII is a content-negotiated representation of the same URL, not a separate path.
@@ -234,6 +265,7 @@ for name, fn in [
     ("12. campaign ladder", t_campaign),
     ("13. multiplayer + legality", t_multiplayer_and_legality),
     ("14. ascii export", t_exports),
+    ("15. waypoint tour + optimum", t_tour),
 ]:
     check(name, fn)
 

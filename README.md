@@ -121,6 +121,8 @@ public consumers).
 | `POST` | `/api/v1/agent/{id}/step?direction=NORTH` | required | Take one blind step — validated against the maze's *live* grid |
 | `GET` | `/api/v1/agent/{id}` | public | Re-poll the agent's view without spending a step |
 | `POST` | `/api/v1/maze/{id}/traffic` | required | Track traffic: occupancy raises cell costs, which decay each pulse (ADR-006) |
+| `GET` | `/api/v1/maze/{id}/tour?count=` | required | Waypoints plus the provably optimal route collecting them all (ADR-007) |
+| `GET` | `/api/v1/session/{id}/tour` | public | Server-observed progress against that optimum |
 | `GET` | `/api/v1/campaign?seed=` | required | A deterministic, difficulty-graded ladder of stages; omit the seed for today's (ADR-006) |
 | `POST` | `/api/v1/maze/breed?a=&b=&seed=` | required | Crossbreed two equal-sized mazes into a connected child (ADR-006) |
 | `GET` | `/api/v1/session/{id}` | public | Read-only session snapshot — the spectator entry point (`#session=` permalink) |

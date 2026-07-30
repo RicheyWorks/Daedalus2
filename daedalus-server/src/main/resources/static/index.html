@@ -134,6 +134,9 @@
     <button id="race" disabled
             title="Both algorithms' REAL recorded searches replay at the same expansions-per-second — the one that found the route with less work finishes first">
       Race solvers</button>
+    <button id="tour" disabled
+            title="Collect every waypoint, then reach the goal — the server knows the provably optimal collection order and scores your route against it">
+      Waypoint hunt</button>
     <button id="analyze" disabled
             title="Graph theory on the current snapshot: min-cut chokepoints (sever these and start/goal split apart), dead ends, route length">
       Analyze structure</button>
@@ -161,6 +164,7 @@
       <span><i style="background:rgba(229,72,77,.5)"></i>hot spot (cost-shaded)</span>
       <span><i style="background:#f0b429;border-radius:50%"></i>players</span>
       <span><i style="background:#c084fc"></i>chokepoint</span>
+      <span><i style="background:#f2c94c;transform:rotate(45deg)"></i>waypoint</span>
       <span><i style="background:#e6edf3;border-radius:50%;opacity:.6"></i>ghost</span>
     </div>
     <div id="compareBox"></div>
@@ -214,6 +218,8 @@ const state = {
   prevMazeId: null,      // last maze before this one — crossbreeding's other parent
   readOnly: false,       // spectating: render everything, control nothing
   spectatePoll: null,    // interval id — STOMP-less spectator fallback
+  tour: null,            // {waypoints, optimalOrder, optimalCost} in waypoint-hunt mode
+  tourGot: [],           // waypoints collected this session (display only; server scores)
   campaign: null,        // {seed, stages} once a campaign is loaded
   stageIndex: null,      // which stage is on screen
   cleared: {},           // stageIndex → true once its goal is reached
@@ -370,11 +376,12 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   $("solve").disabled = false; $("play").disabled = false; $("join").disabled = true;
   $("compare").disabled = false;
   $("live").disabled = false; $("traffic").disabled = false; $("race").disabled = false;
-  $("analyze").disabled = false;
+  $("analyze").disabled = false; $("tour").disabled = false;
   clearInterval(state.livePoll); state.livePoll = null;
   clearInterval(state.trafficPoll); state.trafficPoll = null;
   clearInterval(state.ghostTimer); state.ghostTimer = null;
   state.race = null; state.dailyId = null; state.analysis = null; state.ghost = null;
+  state.tour = null; state.tourGot = [];
   state.stageIndex = null; // playStage re-sets this after adopting the stage's maze
   $("compareBox").innerHTML = "";
   location.hash = "maze=" + maze.id; // shareable — anyone on this server can open it
@@ -595,6 +602,66 @@ async function onMutation(m) {
       + `${m.deadEndsRemaining} dead ends left${m.settled ? " — maze has settled" : ""}`);
   await refreshLivingMaze();
   if (m.settled) $("live").disabled = false;
+}
+
+// ---------- waypoint tour mode (ADR-007 idea 1) ----------
+/**
+ * Collect every waypoint, then reach the goal. The optimal collection order is computed
+ * server-side by exact Held-Karp, so the score at the end compares your walk against a proven
+ * best — not an estimate. Collection is also counted server-side; what we track here is only
+ * for drawing.
+ */
+async function startTour() {
+  const t = await api(`/maze/${state.maze.id}/tour`);
+  state.tour = t;
+  state.tourGot = [];
+  if (!t.feasible) {
+    log("err", "this maze has unreachable waypoints — tour not possible");
+    return;
+  }
+  log("state", `waypoint hunt: collect ${t.waypoints.length} waypoints then reach the goal — `
+      + `the optimal route is ${t.optimalCost} steps`);
+  if (!state.session) await play();
+  draw();
+  refreshTourStatus();
+}
+
+function sameCell(a, b) { return a && b && a.row === b.row && a.col === b.col; }
+
+/** Ask the server how we are doing; it counts pickups from real moves, not our word for it. */
+async function refreshTourStatus() {
+  if (!state.tour || !state.session) return;
+  try {
+    const p = await api(`/session/${state.session.id}/tour`);
+    state.tourGot = state.tour.waypoints.filter(w => !p.remaining.some(r => sameCell(r, w)));
+    const left = p.total - p.collected;
+    $("status").textContent = p.complete
+        ? `all ${p.total} waypoints collected — reach the goal (${p.walked} steps so far, `
+          + `optimal tour ${p.optimal})`
+        : `waypoint hunt — ${p.collected}/${p.total} collected, ${left} to go `
+          + `(${p.walked} steps, optimal tour ${p.optimal})`;
+    draw();
+    return p;
+  } catch (e) {
+    log("err", `tour status failed: ${e.message}`);
+  }
+}
+
+/** Final verdict, once the goal is reached. */
+async function tourVerdict() {
+  const p = await refreshTourStatus();
+  if (!p) return "";
+  if (!p.complete) {
+    const missed = p.total - p.collected;
+    return ` — but ${missed} waypoint${missed === 1 ? "" : "s"} left uncollected, so that is `
+        + `not a completed tour`;
+  }
+  const over = p.walked - p.optimal;
+  return over <= 0
+      ? ` — PERFECT TOUR: ${p.walked} steps, matching the optimal route exactly`
+      : ` — tour complete in ${p.walked} steps; the optimal route is ${p.optimal} `
+        + `(${over} step${over === 1 ? "" : "s"} over, `
+        + `${(100 * p.walked / p.optimal).toFixed(0)}% of optimal)`;
 }
 
 // ---------- structural analysis (ADR-006 idea #9) ----------
@@ -990,14 +1057,25 @@ function applyMove(who, to) {
           : ` — the ghost was ${((myMs - state.ghost.elapsedMs) / 1000).toFixed(1)}s faster`;
       clearInterval(state.ghostTimer);
     }
-    log("state", `${who} reached the goal — session complete${verdict}`);
-    $("status").textContent = `${who} reached the goal — session complete${verdict}`;
+    if (state.tour) {
+      tourVerdict().then(tv => {
+        log("state", `${who} reached the goal — session complete${verdict}${tv}`);
+        $("status").textContent = `${who} reached the goal${verdict}${tv}`;
+      });
+    } else {
+      log("state", `${who} reached the goal — session complete${verdict}`);
+      $("status").textContent = `${who} reached the goal — session complete${verdict}`;
+    }
     refreshLeaderboard();
     if (state.campaign && state.stageIndex != null) onStageCleared();
   } else {
     const moves = (state.trails[who] || []).length - 1;
-    $("status").textContent =
-        `session ${state.session.id.slice(0, 8)}… — ${who}: ${moves} moves`;
+    if (state.tour) {
+      refreshTourStatus();
+    } else {
+      $("status").textContent =
+          `session ${state.session.id.slice(0, 8)}… — ${who}: ${moves} moves`;
+    }
   }
   draw();
 }
@@ -1218,6 +1296,22 @@ function draw() {
       g.globalAlpha = 1;
     });
   }
+  // Waypoint hunt: uncollected waypoints are solid, collected ones hollow.
+  if (state.tour && state.tour.waypoints) {
+    state.tour.waypoints.forEach(w => {
+      const got = state.tourGot.some(g => g.row === w.row && g.col === w.col);
+      const [x, y] = cellCenter(w);
+      const rad = geom.cell * 0.3;
+      g.beginPath();
+      g.moveTo(x, y - rad); g.lineTo(x + rad, y); g.lineTo(x, y + rad); g.lineTo(x - rad, y);
+      g.closePath();
+      if (got) {
+        g.strokeStyle = "#4cc38a"; g.lineWidth = Math.max(1.5, geom.cell * 0.09); g.stroke();
+      } else {
+        g.fillStyle = "#f2c94c"; g.fill();
+      }
+    });
+  }
   // Arena lanes: two real searches racing at equal speed, then their routes.
   if (state.race) {
     state.race.lanes.forEach((lane, li) => {
@@ -1338,6 +1432,7 @@ $("live").onclick = () => bringToLife().catch(e => log("err", e.message));
 $("traffic").onclick = () => simulateTraffic().catch(e => log("err", e.message));
 $("race").onclick = () => raceSolvers().catch(e => log("err", e.message));
 $("analyze").onclick = () => analyzeStructure().catch(e => log("err", e.message));
+$("tour").onclick = () => startTour().catch(e => log("err", e.message));
 $("play").onclick = () => play().catch(e => log("err", e.message));
 $("join").onclick = () => join();
 document.addEventListener("keydown", e => {

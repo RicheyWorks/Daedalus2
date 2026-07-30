@@ -12,9 +12,11 @@ import com.daedalus.theory.MazeMetrics;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import com.daedalus.server.service.WaypointService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -38,10 +40,42 @@ public class InsightController {
 
     private final MazeGenerationService gen;
     private final GhostService ghosts;
+    private final WaypointService waypoints;
 
-    public InsightController(MazeGenerationService gen, GhostService ghosts) {
+    public InsightController(MazeGenerationService gen, GhostService ghosts,
+                             WaypointService waypoints) {
         this.gen = gen;
         this.ghosts = ghosts;
+        this.waypoints = waypoints;
+    }
+
+    /**
+     * ADR-007 idea 1 — Waypoint Tour mode. Held-Karp is {@code O(2^k · k²)}, so this shares
+     * the {@code mazeSolve} budget and the waypoint count is hard-capped by the service.
+     */
+    @GetMapping("/maze/{id}/tour")
+    @Operation(summary = "The maze's waypoints and the provably optimal route collecting them all.",
+            description = "Waypoints are placed by k-center (farthest-first), so they spread "
+                    + "rather than clump, and they derive from the maze alone — every player on "
+                    + "a maze solves the same instance, which is what makes scoring against the "
+                    + "optimum comparable between players. The order is exact, not heuristic: "
+                    + "Held-Karp over the waypoint set plus the goal as the compulsory last "
+                    + "stop. Rate-limited against the 'mazeSolve' budget.")
+    @PerKeyRateLimit("mazeSolve")
+    public ResponseEntity<WaypointService.Tour> tour(
+            @PathVariable UUID id,
+            @RequestParam(required = false) Integer count) {
+        var tour = waypoints.tourFor(id, count);
+        return tour == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(tour);
+    }
+
+    @GetMapping("/session/{id}/tour")
+    @Operation(summary = "How a session is doing against the optimal tour.",
+            description = "Collection is observed server-side from the session's own moves, not "
+                    + "reported by the client, so the count that scores cannot be claimed.")
+    public ResponseEntity<WaypointService.Progress> tourProgress(@PathVariable UUID id) {
+        var progress = waypoints.progressFor(id);
+        return progress == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(progress);
     }
 
     /**
