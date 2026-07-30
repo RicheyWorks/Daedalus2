@@ -16,17 +16,29 @@ import org.springframework.context.event.EventListener;
 /**
  * Plugin subsystem wiring.
  *
- * <p>On {@link ApplicationReadyEvent}, scans {@code daedalus.plugin.dir} (default {@code ./plugins})
- * for plugin JARs and any built-in plugins registered via {@code META-INF/services/com.daedalus.plugin.MazePlugin}.
- * All discovered plugins are initialized through {@link PluginManager#bootAll}.
+ * <p>On {@link ApplicationReadyEvent}, when {@code daedalus.plugins.scan-on-startup} is true,
+ * scans {@code daedalus.plugins.directory} for plugin JARs and any built-in plugins registered
+ * via {@code META-INF/services/com.daedalus.plugin.MazePlugin}. All discovered plugins are
+ * initialized through {@link PluginManager#bootAll}.
+ *
+ * <p><b>Config-audit note (2026-07-29):</b> this class used to read {@code daedalus.plugin.dir}
+ * while every profile configured {@code daedalus.plugins.directory} — the configured directory
+ * (and the {@code DAEDALUS_PLUGIN_DIR} env var) was silently ignored, and plugins loaded from
+ * {@code ./plugins} relative to the working directory. Worse, {@code scan-on-startup} was set
+ * in every profile ({@code false} under test) and read by <em>nothing</em>: startup scanning
+ * ran unconditionally, and the test profile only appeared to disable it. Both are wired now
+ * and pinned by {@code PluginSpiEndToEndTest}.
  */
 @Configuration
 public class PluginConfig {
 
     private static final Logger log = LoggerFactory.getLogger(PluginConfig.class);
 
-    @Value("${daedalus.plugin.dir:./plugins}")
+    @Value("${daedalus.plugins.directory:${user.home}/.daedalus/plugins}")
     private String pluginDir;
+
+    @Value("${daedalus.plugins.scan-on-startup:true}")
+    private boolean scanOnStartup;
 
     @Bean
     public PluginRegistry pluginRegistry() {
@@ -40,6 +52,10 @@ public class PluginConfig {
 
     @EventListener(ApplicationReadyEvent.class)
     public void bootPlugins(ApplicationReadyEvent event) {
+        if (!scanOnStartup) {
+            log.info("Plugin startup scan disabled (daedalus.plugins.scan-on-startup=false)");
+            return;
+        }
         PluginManager mgr = event.getApplicationContext().getBean(PluginManager.class);
         mgr.discover();
         mgr.bootAll();

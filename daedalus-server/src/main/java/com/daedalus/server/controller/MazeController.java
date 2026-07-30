@@ -25,6 +25,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -94,10 +95,10 @@ public class MazeController {
     @PerKeyRateLimit("mazeGenerate")
     public GenerateResponse generate(@Valid @RequestBody GenerateRequest req) {
         long seed = req.seed() != null ? req.seed() : System.nanoTime();
-        var cached = gen.generate(req.generatorId(), req.rows(), req.cols(), seed);
+        var cached = gen.generate(req.generatorId(), req.rows(), req.cols(), seed, req.hotspots());
         String actualGeneratorId = cached.metadata().generatorId();
         return toResponse(cached.metadata().id(), actualGeneratorId,
-                req.rows(), req.cols(), seed, cached.grid());
+                req.rows(), req.cols(), seed, cached.grid(), cached.hotspots());
     }
 
     @GetMapping("/maze/{id}")
@@ -107,7 +108,31 @@ public class MazeController {
         if (c == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(toResponse(
                 c.metadata().id(), c.metadata().generatorId(),
-                c.metadata().rows(), c.metadata().cols(), c.metadata().seed(), c.grid()));
+                c.metadata().rows(), c.metadata().cols(), c.metadata().seed(), c.grid(),
+                c.hotspots()));
+    }
+
+    /**
+     * The same maze, negotiated as terminal-ready ASCII art — the core
+     * {@code AsciiMazeVisualizer} wired to the product surface. {@code curl} it:
+     * <pre>curl -H "Accept: text/plain" localhost:8080/api/v1/maze/{id}?solve=bfs</pre>
+     * The optional {@code solve} runs that solver and overlays the route as {@code .} glyphs.
+     * Dungeons render honestly (rock is {@code #}) thanks to the projection's honesty rules.
+     */
+    @GetMapping(value = "/maze/{id}", produces = MediaType.TEXT_PLAIN_VALUE)
+    @Operation(summary = "The maze as ASCII art (Accept: text/plain); optional ?solve=<solverId> overlays a route.")
+    public ResponseEntity<String> getAscii(
+            @PathVariable UUID id,
+            @RequestParam(required = false) @AlgorithmId String solve) {
+        var c = gen.find(id);
+        if (c == null) return ResponseEntity.notFound().build();
+        List<com.daedalus.model.Point> path = List.of();
+        if (solve != null) {
+            var grid = c.grid();
+            path = solverSvc.solve(solve, grid, grid.start(), grid.goal(), id).path();
+        }
+        return ResponseEntity.ok(
+                com.daedalus.visualize.AsciiMazeVisualizer.renderToString(c.grid(), path));
     }
 
     @PostMapping("/maze/{id}/solve/{solverId}")
@@ -224,7 +249,8 @@ public class MazeController {
      * desktop, terminal) can consume directly without importing the {@code TileType} enum.
      */
     private static GenerateResponse toResponse(UUID id, String generatorId, int rows, int cols,
-                                                long seed, MazeGrid grid) {
+                                                long seed, MazeGrid grid,
+                                                List<com.daedalus.api.dto.Hotspot> hotspots) {
         TileType[][] tiles = grid.toTileGrid();
         char[][] glyphs = new char[tiles.length][];
         for (int r = 0; r < tiles.length; r++) {
@@ -233,6 +259,6 @@ public class MazeController {
                 glyphs[r][c] = tiles[r][c].glyph();
             }
         }
-        return new GenerateResponse(id, generatorId, rows, cols, seed, glyphs);
+        return new GenerateResponse(id, generatorId, rows, cols, seed, glyphs, hotspots);
     }
 }

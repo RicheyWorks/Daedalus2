@@ -61,7 +61,7 @@ class MazeControllerGeneratorIdTest {
         MazeGenerationService.Cached cached =
                 new MazeGenerationService.Cached(fallbackMeta, grid, new MazeStats());
 
-        when(gen.generate(anyString(), anyInt(), anyInt(), anyLong())).thenReturn(cached);
+        when(gen.generate(anyString(), anyInt(), anyInt(), anyLong(), org.mockito.ArgumentMatchers.any())).thenReturn(cached);
 
         String body = new ObjectMapper().writeValueAsString(
                 new GenerateRequest("astar", 5, 5, 42L));

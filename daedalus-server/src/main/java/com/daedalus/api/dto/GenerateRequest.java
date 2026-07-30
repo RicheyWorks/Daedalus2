@@ -3,8 +3,12 @@
 package com.daedalus.api.dto;
 
 import com.daedalus.api.validation.AlgorithmId;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
+
+import java.util.List;
 
 /**
  * Request body for {@code POST /api/v1/maze/generate}.
@@ -39,5 +43,14 @@ public record GenerateRequest(
         @Max(value = 512, message = "cols must be at most 512")
         int cols,
 
-        Long seed
-) {}
+        Long seed,
+
+        @Size(max = 64, message = "at most 64 hotspots per maze")
+        @Valid
+        List<Hotspot> hotspots
+) {
+    /** Pre-hotspot shape — uniform-cost maze, kept for source compatibility. */
+    public GenerateRequest(String generatorId, int rows, int cols, Long seed) {
+        this(generatorId, rows, cols, seed, null);
+    }
+}

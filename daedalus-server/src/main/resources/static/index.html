@@ -102,6 +102,12 @@
     </div>
     <label for="seed">Seed (blank = random)</label>
     <input id="seed" type="number" placeholder="random">
+    <div class="row">
+      <div style="flex:1"><label for="hotspots" title="Random cells with raised traversal cost — weight-aware solvers (Dijkstra, A*, Dial) route around them">Hot spots</label>
+        <input id="hotspots" type="number" value="0" min="0" max="64"></div>
+      <div style="flex:1"><label for="hotspotCost">Spot cost</label>
+        <input id="hotspotCost" type="number" value="25" min="1" max="1000"></div>
+    </div>
     <button id="generate" class="primary">Generate</button>
 
     <label for="solver">Solver</label>
@@ -131,6 +137,7 @@
       <span><i style="background:#4cc38a;border-radius:50%"></i>start</span>
       <span><i style="background:#e5484d;border-radius:50%"></i>goal</span>
       <span><i style="background:#82b1ff"></i>solver path</span>
+      <span><i style="background:rgba(229,72,77,.5)"></i>hot spot (cost-shaded)</span>
       <span><i style="background:#f0b429;border-radius:50%"></i>players</span>
     </div>
     <div id="compareBox"></div>
@@ -243,6 +250,21 @@ async function generate() {
     rows: +$("rows").value, cols: +$("cols").value,
     seed: $("seed").value === "" ? null : +$("seed").value,
   };
+  const spotCount = Math.min(64, Math.max(0, +$("hotspots").value || 0));
+  if (spotCount > 0) {
+    // Random distinct cells; the server echoes what it applied, so the permalink and the
+    // renderer both work from the authoritative list, not this draft.
+    const cost = Math.min(1000, Math.max(1, +$("hotspotCost").value || 25));
+    const seen = new Set();
+    body.hotspots = [];
+    while (body.hotspots.length < Math.min(spotCount, body.rows * body.cols)) {
+      const r = Math.floor(Math.random() * body.rows), c = Math.floor(Math.random() * body.cols);
+      if (!seen.has(r + "," + c)) {
+        seen.add(r + "," + c);
+        body.hotspots.push({row: r, col: c, cost});
+      }
+    }
+  }
   const t0 = performance.now();
   const maze = await api("/maze/generate", {
     method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body),
@@ -610,6 +632,16 @@ function draw() {
     }
   }
 
+  // Weighted cells: shaded by cost so the detour the weight-aware solvers take has a
+  // visible reason. Rock hotspots stay rock — a cost on an unreachable cell is moot.
+  (state.maze.hotspots || []).forEach(h => {
+    const tr = 2 * h.row + 1, tc = 2 * h.col + 1;
+    if (tiles[tr][tc] === "#" || isRock(tiles, tr, tc)) return;
+    g.fillStyle = "#e5484d";
+    g.globalAlpha = Math.min(0.7, 0.2 + h.cost / 200);
+    g.fillRect(geom.offX[tc], geom.offY[tr], geom.cell, geom.cell);
+    g.globalAlpha = 1;
+  });
   // Act one: the exploration front, in the algorithm's true expansion order.
   if (state.expansions && state.expansions.length && (state.searchProgress ?? 1) > 0) {
     const shown = Math.ceil(state.expansions.length * state.searchProgress);

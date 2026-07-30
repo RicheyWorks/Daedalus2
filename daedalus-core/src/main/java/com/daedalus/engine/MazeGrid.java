@@ -197,6 +197,25 @@ public class MazeGrid {
         return 1.0;
     }
 
+    /**
+     * Project the maze into the {@code (2r+1) x (2c+1)} glyph grid every renderer consumes.
+     *
+     * <p>Two honesty rules, both added 2026-07-29 after the same misrendering surfaced in
+     * three consumers (web canvas, JavaFX desktop, ASCII art):
+     * <ul>
+     *   <li><b>Uncarved cells are rock, and rock renders as WALL.</b> The old projection
+     *       marked every cell PASSAGE unconditionally, so a BSP dungeon's solid rock came
+     *       out as a polka-dot field of isolated floor specks. A cell with no open side is
+     *       not floor; only 1x1 grids (a single cell that IS the maze) keep the cell open.</li>
+     *   <li><b>A wall post surrounded by four open segments is room interior.</b> Corner
+     *       tiles (even, even) stay WALL in every spanning tree — a 2x2 of mutually open
+     *       cells is a cycle — but inside a dungeon room they are open floor, not a grid of
+     *       specks.</li>
+     * </ul>
+     * For every perfect maze the output is byte-identical to the old projection (each cell
+     * has an open side; no post ever has four open neighbours), so spanning-tree consumers
+     * see no change — pinned by {@code TileGridProjectionTest}.
+     */
     public TileType[][] toTileGrid() {
         int tr = 2 * rows + 1;
         int tc = 2 * cols + 1;
@@ -208,12 +227,27 @@ public class MazeGrid {
         }
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
-                tiles[2 * r + 1][2 * c + 1] = TileType.PASSAGE;
                 Cell cell = cells[r][c];
+                boolean carved = cell.isOpen(Direction.NORTH) || cell.isOpen(Direction.SOUTH)
+                        || cell.isOpen(Direction.EAST) || cell.isOpen(Direction.WEST)
+                        || (rows == 1 && cols == 1);
+                if (carved) {
+                    tiles[2 * r + 1][2 * c + 1] = TileType.PASSAGE;
+                }
                 if (cell.isOpen(Direction.NORTH)) tiles[2 * r][2 * c + 1] = TileType.PASSAGE;
                 if (cell.isOpen(Direction.SOUTH)) tiles[2 * r + 2][2 * c + 1] = TileType.PASSAGE;
                 if (cell.isOpen(Direction.EAST)) tiles[2 * r + 1][2 * c + 2] = TileType.PASSAGE;
                 if (cell.isOpen(Direction.WEST)) tiles[2 * r + 1][2 * c] = TileType.PASSAGE;
+            }
+        }
+        // Interior posts: a corner tile whose four orthogonal wall segments are all open sits
+        // inside an open area (a room) and is floor.
+        for (int r = 2; r < tr - 1; r += 2) {
+            for (int c = 2; c < tc - 1; c += 2) {
+                if (tiles[r - 1][c] == TileType.PASSAGE && tiles[r + 1][c] == TileType.PASSAGE
+                        && tiles[r][c - 1] == TileType.PASSAGE && tiles[r][c + 1] == TileType.PASSAGE) {
+                    tiles[r][c] = TileType.PASSAGE;
+                }
             }
         }
         if (start != null) tiles[2 * start.row() + 1][2 * start.col() + 1] = TileType.START;

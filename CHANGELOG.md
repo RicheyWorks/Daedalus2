@@ -16,6 +16,27 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Wiring audit (2026-07-29): the plugin subsystem's configuration was wired to nothing.**
+  `PluginConfig` read `daedalus.plugin.dir` while every profile configured
+  `daedalus.plugins.directory` — the configured plugin directory and the
+  `DAEDALUS_PLUGIN_DIR` env var were silently ignored (plugins loaded from `./plugins`
+  relative to the working directory). And `daedalus.plugins.scan-on-startup`, set in every
+  profile and `false` under test, was read by nothing: startup scanning ran unconditionally,
+  and the test profile only *appeared* to disable it. Both properties are wired now, pinned
+  by `PluginSpiEndToEndTest` — the suite's first true SPI proof: a JAR packaged at test time,
+  discovered from the configured directory by a booting server, its generator listed in the
+  catalog, generating over HTTP, visible on the ops endpoint, and reported STARTED by
+  `/api/v1/plugins`. Fails against the old property name.
+- **The glyph projection lied about dungeons — at the source.** `toTileGrid()` marked every
+  cell PASSAGE whether or not anything carved it, so rock rendered as floating floor specks
+  in every JVM consumer (JavaFX desktop, ASCII art) — the web UI had patched it client-side,
+  which was the tell the fix belonged in core (ADR-003 rule 1). Two honesty rules now:
+  uncarved cells project as WALL, and a wall post surrounded by four open segments is room
+  interior. Perfect-maze output is byte-identical (pinned), so spanning-tree consumers see
+  no change; dungeons render honestly everywhere at once. `TileGridProjectionTest`.
+
+### Fixed (earlier this day)
+
 - **Back-end audit: every in-memory store the server accumulates into is now bounded.**
   Three had the same slow leak the rate-limiter buckets had before their Caffeine bound
   (BACKLOG, 2026-07-19): the **maze cache** (one full grid per generation, up to 43k/day
@@ -30,6 +51,25 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Weighted mazes over the API** — the load-balancer thesis made demonstrable.
+  `GenerateRequest.hotspots` raises per-cell traversal costs (validated `[1.0, 1000.0]`,
+  ≤64 spots, out-of-bounds → 400 via a new `IllegalArgumentException` handler); the served
+  grid becomes a `WeightedMazeGrid` and the response echoes the applied spots. Dijkstra,
+  A\*, and Dial route around expensive cells wherever the topology offers a choice —
+  `WeightedMazeApiTest` proves the detour by pricing Dijkstra off its own best route on a
+  dungeon. The web UI grew hotspot controls and cost-shaded floors; combined with search
+  replay, the detour happens on screen. This fires the last dormant ADR-004 trigger
+  (weighted-floor shading), and honestly: the API creates the data now, not a constant.
+  The circuit-breaker fallback preserves hotspots and rethrows caller errors instead of
+  swallowing them into a silently different maze.
+- **The prod profile boots under test for the first time.** `ProdProfileBootTest`
+  assembles the full application under `prod` (env contract satisfied with test values,
+  Redis off) — a prod-only wiring break now fails CI instead of the first production start.
+  It also pins the prod actuator posture: health open, unexposed endpoints answer 401.
+  `RateLimiterTemplatesTest` pins that every `@PerKeyRateLimit` budget has its yml instance.
+- **Mazes over `curl`** — `GET /maze/{id}` content-negotiates `text/plain` into terminal
+  ASCII art (core `AsciiMazeVisualizer` on the product surface), with `?solve=<solverId>`
+  overlaying a route. Dungeons render honestly thanks to the projection fix.
 - **ADR-005: single-instance posture.** The audit's design-level observation, written down:
   sessions, the maze cache, and the leaderboard's serving path are process-local on purpose,
   a second instance today would misbehave in specific enumerated ways, and the

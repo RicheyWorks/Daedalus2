@@ -138,6 +138,21 @@ public class ApiExceptionHandler {
     }
 
     /** Body wasn't valid JSON (or couldn't be deserialized into the target type at all). */
+    /**
+     * Caller errors that surface as {@link IllegalArgumentException} from the service layer —
+     * e.g. a hotspot outside the requested maze's bounds. These are 400s, not 500s: the
+     * request was well-formed but semantically wrong, and the message is written for the
+     * caller (services must keep them free of internals).
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ProblemDetail onIllegalArgument(IllegalArgumentException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST, ex.getMessage() == null ? "invalid request" : ex.getMessage());
+        pd.setTitle("Invalid request");
+        pd.setType(VALIDATION_TYPE);
+        return pd;
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ProblemDetail onMalformedBody(HttpMessageNotReadableException ex) {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(

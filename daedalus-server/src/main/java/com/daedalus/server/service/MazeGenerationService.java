@@ -2,11 +2,14 @@
 
 package com.daedalus.server.service;
 
+import com.daedalus.api.dto.Hotspot;
 import com.daedalus.engine.MazeGrid;
+import com.daedalus.engine.WeightedMazeGrid;
 import com.daedalus.engine.MazeGenerator;
 import com.daedalus.engine.generators.GeneratorRegistry;
 import com.daedalus.model.MazeMetadata;
 import com.daedalus.model.MazeStats;
+import com.daedalus.model.Point;
 import com.daedalus.plugin.events.MazeGeneratedEvent;
 import com.daedalus.theory.MazeMetrics;
 import com.github.benmanes.caffeine.cache.Cache;
@@ -67,10 +70,33 @@ public class MazeGenerationService {
                 .build();
     }
 
-    public record Cached(MazeMetadata metadata, MazeGrid grid, MazeStats stats) {}
+    /** @param hotspots the weighted cells applied to this maze, or {@code null} for uniform cost */
+    public record Cached(MazeMetadata metadata, MazeGrid grid, MazeStats stats,
+                         java.util.List<Hotspot> hotspots) {
+        /** Uniform-cost shape, kept for source compatibility. */
+        public Cached(MazeMetadata metadata, MazeGrid grid, MazeStats stats) {
+            this(metadata, grid, stats, null);
+        }
+    }
 
-    @CircuitBreaker(name = "generation", fallbackMethod = "fallback")
+    /** Uniform-cost generation — the pre-hotspot contract. */
     public Cached generate(String generatorId, int rows, int cols, long seed) {
+        return generate(generatorId, rows, cols, seed, null);
+    }
+
+    /**
+     * @param hotspots cells whose traversal cost is raised (validated for range upstream;
+     *                 bounds against this maze checked here — an out-of-range hotspot is a
+     *                 caller error, answered 400 by {@code ApiExceptionHandler}). A non-empty
+     *                 list makes the cached grid a {@link WeightedMazeGrid}, which the
+     *                 weight-aware solvers (Dijkstra, A*, Dial) consult on every relaxation —
+     *                 the routing visibly detours around expensive cells wherever the topology
+     *                 offers a choice. This is what fired the weighted-shading trigger
+     *                 recorded in ADR-004.
+     */
+    @CircuitBreaker(name = "generation", fallbackMethod = "fallback")
+    public Cached generate(String generatorId, int rows, int cols, long seed,
+                           java.util.List<Hotspot> hotspots) {
         MazeGenerator gen = registry.require(generatorId);
         Timer timer = meters.timer("daedalus.generate", "algo", generatorId);
         MazeStats stats = new MazeStats();
@@ -89,11 +115,24 @@ public class MazeGenerationService {
         // perfect mazes their maximum-challenge route for free. Same corner assumption the
         // 07-19 audit removed from `theory`, one layer up; pinned by
         // MazeGenerationStartGoalTest.
+        java.util.List<Hotspot> applied = null;
+        if (hotspots != null && !hotspots.isEmpty()) {
+            WeightedMazeGrid weighted = new WeightedMazeGrid(grid);
+            for (Hotspot h : hotspots) {
+                if (h.row() >= rows || h.col() >= cols) {
+                    throw new IllegalArgumentException("hotspot (" + h.row() + "," + h.col()
+                            + ") is outside a " + rows + "x" + cols + " maze");
+                }
+                weighted.setWeight(new Point(h.row(), h.col()), h.cost());
+            }
+            grid = weighted;
+            applied = java.util.List.copyOf(hotspots);
+        }
         MazeMetrics.placeStartAndGoalAtExtremes(grid);
         MazeMetadata meta = MazeMetadata.of(rows, cols, seed, generatorId,
                 grid.start(), grid.goal());
 
-        Cached cached = new Cached(meta, grid, stats);
+        Cached cached = new Cached(meta, grid, stats, applied);
         cache.put(meta.id(), cached);
         events.publishEvent(new MazeGeneratedEvent(this, meta, grid, stats));
         return cached;
@@ -102,8 +141,14 @@ public class MazeGenerationService {
     public Cached find(UUID id) { return cache.getIfPresent(id); }
 
     @SuppressWarnings("unused")
-    private Cached fallback(String generatorId, int rows, int cols, long seed, Throwable t) {
+    private Cached fallback(String generatorId, int rows, int cols, long seed,
+                            java.util.List<Hotspot> hotspots, Throwable t) {
+        // A caller error is not a generator failure — rethrow so it answers 400, not a
+        // silently different maze.
+        if (t instanceof IllegalArgumentException iae) {
+            throw iae;
+        }
         // Minimal recovery: deterministic baseline using BinaryTree (always succeeds).
-        return generate("binary-tree", rows, cols, seed);
+        return generate("binary-tree", rows, cols, seed, hotspots);
     }
 }

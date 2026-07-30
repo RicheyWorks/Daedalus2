@@ -54,12 +54,16 @@ ADR-002 set the precedent that a reasoned "no" with evidence beats a silent "som
   is observation, never simulation. Off-seam solvers (IDA\*, wall follower) return empty
   expansions rather than a fake. `?replay=true` on the solve endpoint; omitted otherwise, so
   pre-replay clients see byte-identical JSON. 15 tests.
-- **Weighted-floor shading in the web UI — examined 2026-07-29, trigger genuinely unfired.**
-  The condition was "if `GenerateResponse` ever carries weights". It cannot yet:
-  `WeightedPrimsGenerator` consumes *wall* weights during MST construction and returns a
-  uniform grid, and `WeightedMazeGrid` is a programmatic embedding tool (hot-spot costs set
-  by code, LoadBalancerPro-style) that no REST-served maze ever is. Shading would render a
-  constant. Re-fires the day the API can create or serve genuinely weighted mazes.
+- **Weighted-floor shading — ~~trigger unfired~~ fired and built 2026-07-29.** The
+  condition was "if `GenerateResponse` ever carries weights"; rather than shade a constant,
+  the API learned to create weighted mazes: `GenerateRequest.hotspots` (validated
+  `[1.0, 1000.0]`, ≤64, in-bounds checked server-side → 400) wraps the generated grid in
+  `WeightedMazeGrid`, the response echoes the applied list, and the weight-aware solvers
+  route around expensive cells wherever the topology offers a choice — proven by
+  `WeightedMazeApiTest`, which places a prohibitive hotspot on Dijkstra's own best route
+  through a dungeon and watches it detour. The UI shades hotspots by cost and the detour
+  is visible in the search replay. This is the load-balancer thesis (route around
+  overloaded nodes) made demonstrable over REST.
 - **§2.3 `@Generated` / JaCoCo exclusions — not applicable.** The build generates no code;
   there is nothing to exclude. The ratchet's existing `api/dto`-style exclusion question was
   settled when thresholds were pinned (ADR-era TESTING.md work).
