@@ -106,6 +106,15 @@ daedalus:
     base-size: ${DAEDALUS_CAMPAIGN_BASE_SIZE:9}
     size-step: ${DAEDALUS_CAMPAIGN_SIZE_STEP:4}
     max-campaigns: ${DAEDALUS_CAMPAIGN_MAX:50}
+  # ----- Complexity Lab (ADR-007 idea 2) -----
+  # Measures a generator's real growth across a capped size sweep and fits the curve. One
+  # request runs `max-points` generations (cached afterwards), so raising these raises the
+  # work a single rate-limit token buys.
+  complexity:
+    max-size: ${DAEDALUS_COMPLEXITY_MAX_SIZE:96}
+    max-points: ${DAEDALUS_COMPLEXITY_MAX_POINTS:6}
+    max-cached: ${DAEDALUS_COMPLEXITY_MAX_CACHED:200}
+    idle-ttl: ${DAEDALUS_COMPLEXITY_IDLE_TTL:6h}
   # ----- Waypoint Tour mode (ADR-007 idea 1) -----
   # Collect every waypoint, then reach the goal. Waypoints are placed by k-center so they
   # spread, and the optimal collection order is exact (Held-Karp). `count` is hard-capped at

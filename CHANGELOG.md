@@ -34,6 +34,16 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Complexity Lab (ADR-007 idea 2) — measure the algorithms instead of asserting them.**
+  `GET /api/v1/complexity?generator=&metric=` runs a generator across a capped size sweep, fits
+  the recorded work against candidate growth curves, and returns the winner with its exponent,
+  R², and the measured points. The web UI plots it log-log, where a power law is a straight line
+  whose slope *is* the exponent. Counters are fitted and wall-clock deliberately is not — timing
+  measures the machine, while cell counters are deterministic per `(generator, size, seed)`, so
+  any fit reproduces exactly. Two results worth the price of admission: **Prim's peak frontier
+  measures O(√n)** (the frontier of a growing blob is its perimeter) while Kruskal's is linear,
+  and **Aldous-Broder explores 266,830 cells to carve 9,216** — 29× overdraw, the cover-time
+  cost of a uniform spanning tree. Sweeps never touch the maze cache or fire generation events.
 - **Waypoint Tour mode (ADR-007 idea 1) — the exact TSP solver, made playable.** `GET
   /api/v1/maze/{id}/tour` places waypoints and returns the *provably optimal* order collecting
   them all: Held-Karp over the waypoint set plus the goal as a compulsory final stop. Collect
@@ -54,6 +64,15 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **The Complexity Lab's default metric was degenerate, and said so.** Measuring `cellsVisited`
+  reports O(n) at R²=1.000 for all 23 generators — a spanning-tree generator carves every cell
+  exactly once, so the metric *is* the cell count and the chart would have said the same thing
+  about everyone. It is kept as a real invariant check (it catches a generator that skips or
+  double-counts cells) and now labels itself as one, steering to `cellsExplored` and
+  `maxFrontierSize` where generators actually differ.
+- **A metric a generator never increments no longer poses as zero growth.** Fitting a curve
+  through all zeros yields a NaN exponent that rounded to a confident-looking `0.0`; those cases
+  now report `not reported` with an explanation instead of inventing a growth class.
 - **An over-large waypoint count answered 500 instead of capping.** The count was clamped to
   `WaypointTour.MAX_WAYPOINTS` and *then* the goal was appended as the compulsory final stop,
   handing Held-Karp one stop more than it accepts. Caught by the mode's own bounds test.

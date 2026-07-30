@@ -6,16 +6,27 @@ import json, time, urllib.request, urllib.error
 API = "http://localhost:8080/api/v1"
 results = []
 
-def call(method, path, body=None, expect=200):
+def call(method, path, body=None, expect=200, retries=4):
+    """Call the API, backing off on 429.
+
+    The sweep exercises every feature back to back, which is exactly the traffic the per-key
+    rate limiter exists to throttle — the heavier endpoints (generate, campaign planning, the
+    complexity lab) share one budget. A 429 here is the server behaving correctly, so the
+    client backs off and retries rather than reporting a feature as broken."""
     data = json.dumps(body).encode() if body else None
-    req = urllib.request.Request(API + path, data=data, method=method,
-                                 headers={"Content-Type": "application/json"} if body else {})
-    try:
-        with urllib.request.urlopen(req) as r:
-            txt = r.read()
-            return r.status, (json.loads(txt) if txt else None)
-    except urllib.error.HTTPError as e:
-        return e.code, e.read().decode()[:200]
+    for attempt in range(retries):
+        req = urllib.request.Request(API + path, data=data, method=method,
+                                     headers={"Content-Type": "application/json"} if body else {})
+        try:
+            with urllib.request.urlopen(req) as r:
+                txt = r.read()
+                return r.status, (json.loads(txt) if txt else None)
+        except urllib.error.HTTPError as e:
+            if e.code == 429 and attempt < retries - 1:
+                time.sleep(1.5 * (attempt + 1))
+                continue
+            return e.code, e.read().decode()[:200]
+    return 429, "rate limited after retries"
 
 def check(name, fn):
     try:
@@ -239,6 +250,27 @@ def t_tour():
          f"count=9999 capped to {len(big['waypoints'])}; walking straight to the goal "
          f"collected {p1['collected']}/{p1['total']} so the tour is correctly incomplete")
 
+# ---- 16. complexity lab (ADR-007 idea 2) -----------------------------------------
+def t_complexity():
+    # The lab must report facts about the algorithms, not just respond.
+    s1, prims = call("GET", "/complexity?generator=prims&metric=maxFrontierSize")
+    s2, ab = call("GET", "/complexity?generator=aldous-broder&metric=cellsExplored")
+    s3, bt = call("GET", "/complexity?generator=binary-tree&metric=backtrackCount")
+    if s1 != 200 or s2 != 200 or s3 != 200:
+        return False, f"statuses {s1}/{s2}/{s3}"
+    # Prim's frontier is a perimeter -> sub-linear; Aldous-Broder pays cover time -> overdraw.
+    sublinear = prims["instrumented"] and prims["exponent"] < 0.85
+    biggest = ab["measured"][-1]
+    overdraw = biggest["value"] > biggest["cells"] * 5
+    # A metric the generator never increments is reported as such, not as zero growth.
+    honest = (not bt["instrumented"]) and bt["claimed"] == "not reported"
+    unknown = call("GET", "/complexity?generator=nope&metric=cellsVisited")[0]
+    badmetric = call("GET", "/complexity?generator=prims&metric=nope")[0]
+    return (sublinear and overdraw and honest and unknown == 404 and badmetric == 404), \
+        (f"prims frontier {prims['claimed']} exp={prims['exponent']}; aldous-broder explored "
+         f"{biggest['value']} to carve {biggest['cells']}; unmeasured metric -> "
+         f"'{bt['claimed']}'; unknown generator/metric -> {unknown}/{badmetric}")
+
 # ---- 14. ascii + png export ------------------------------------------------------
 def t_exports():
     # ASCII is a content-negotiated representation of the same URL, not a separate path.
@@ -266,6 +298,7 @@ for name, fn in [
     ("13. multiplayer + legality", t_multiplayer_and_legality),
     ("14. ascii export", t_exports),
     ("15. waypoint tour + optimum", t_tour),
+    ("16. complexity lab", t_complexity),
 ]:
     check(name, fn)
 

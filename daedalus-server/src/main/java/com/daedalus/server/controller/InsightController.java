@@ -12,6 +12,7 @@ import com.daedalus.theory.MazeMetrics;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import com.daedalus.server.service.ComplexityLabService;
 import com.daedalus.server.service.WaypointService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -41,12 +43,43 @@ public class InsightController {
     private final MazeGenerationService gen;
     private final GhostService ghosts;
     private final WaypointService waypoints;
+    private final ComplexityLabService complexity;
 
     public InsightController(MazeGenerationService gen, GhostService ghosts,
-                             WaypointService waypoints) {
+                             WaypointService waypoints, ComplexityLabService complexity) {
         this.gen = gen;
         this.ghosts = ghosts;
         this.waypoints = waypoints;
+        this.complexity = complexity;
+    }
+
+    /**
+     * ADR-007 idea 2 — the Complexity Lab. A sweep generates several mazes to count their
+     * construction work, so it shares the {@code mazeGenerate} budget; sizes and point count
+     * are capped by the service and results are cached per input.
+     */
+    @GetMapping("/complexity")
+    @Operation(summary = "Measure a generator's empirical growth curve and report its big-O with an R².",
+            description = "Runs the generator across a capped sweep of sizes, fits the recorded "
+                    + "work against candidate growth curves, and returns the winner with the "
+                    + "measured points behind it. Counters are fitted, never wall-clock: timings "
+                    + "measure the machine, whereas cell counts are deterministic for a given "
+                    + "(generator, size, seed) so any fit reproduces exactly. A low R² is "
+                    + "reported rather than hidden — it means the label is not trustworthy. "
+                    + "Rate-limited against the 'mazeGenerate' budget.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<ComplexityLabService.Fit> complexity(
+            @RequestParam String generator,
+            @RequestParam(required = false) String metric,
+            @RequestParam(required = false) Long seed) {
+        var fit = complexity.fit(generator, metric, seed);
+        return fit == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(fit);
+    }
+
+    @GetMapping("/complexity/metrics")
+    @Operation(summary = "Which metrics the Complexity Lab can fit.")
+    public List<String> complexityMetrics() {
+        return complexity.metrics();
     }
 
     /**

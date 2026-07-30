@@ -136,4 +136,18 @@ rather than a suggestion.
 3. [x] Session tracking of collected waypoints; completion requires all of them
 4. [x] UI: waypoints drawn, collection feedback, score against optimal on completion
 5. [x] Tests with demonstrated teeth, plus end-to-end sweep coverage
-6. [ ] Ideas 2–10, in the priority order above
+6. [x] Idea 2 (**Complexity Lab**) — `GET /api/v1/complexity`, log-log plot in the UI, fits
+   pinned against known algorithm behaviour (Prim's perimeter frontier, Aldous-Broder's
+   cover-time overdraw) rather than merely asserting the endpoint responds
+7. [ ] Ideas 3–10, in the priority order above
+
+## Postscript: what building idea 2 taught
+
+The first version fitted `cellsVisited`, the obvious "work done" metric, and reported O(n) at
+R² = 1.000 for every one of the 23 generators. That is not a finding, it is an identity: a
+spanning-tree generator carves each cell exactly once, so the metric *is* `n`. A lab whose
+headline chart says the same thing about every subject is decoration. The discriminating
+metrics turned out to be `cellsExplored` and `maxFrontierSize`, and only once those were
+plotted did the feature justify itself — Prim's frontier is a perimeter, Aldous-Broder pays
+cover time. **Measuring the wrong quantity produces perfect-looking numbers**, which is a more
+dangerous failure than noisy ones.
