@@ -143,6 +143,9 @@
     <button id="analyze" disabled
             title="Graph theory on the current snapshot: min-cut chokepoints (sever these and start/goal split apart), dead ends, route length">
       Analyze structure</button>
+    <button id="hardest" disabled
+            title="The longest walk from start to goal that never revisits a cell. On a perfect maze this is the ONLY walk — braid or erode the maze first and watch the detour open up">
+      Hardest route</button>
 
     <label for="player">Player name</label>
     <input id="player" value="web">
@@ -390,11 +393,12 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   $("compare").disabled = false;
   $("live").disabled = false; $("traffic").disabled = false; $("race").disabled = false;
   $("analyze").disabled = false; $("tour").disabled = false;
-  $("fingerprint").disabled = false;
+  $("fingerprint").disabled = false; $("hardest").disabled = false;
   clearInterval(state.livePoll); state.livePoll = null;
   clearInterval(state.trafficPoll); state.trafficPoll = null;
   clearInterval(state.ghostTimer); state.ghostTimer = null;
   state.race = null; state.dailyId = null; state.analysis = null; state.ghost = null;
+  state.hardest = null;
   state.tour = null; state.tourGot = [];
   state.stageIndex = null; // playStage re-sets this after adopting the stage's maze
   $("compareBox").innerHTML = "";
@@ -828,6 +832,32 @@ async function analyzeStructure() {
           ? ` &middot; <span class="hint">every perfect maze has exactly one cut — braid or `
             + `erode it (Bring to life) and re-analyze</span>` : "")
       + `</div>`;
+  draw();
+}
+
+// ---------- hardest route (ADR-007 idea 3) ----------
+/**
+ * The longest simple route from start to goal, drawn over the maze.
+ *
+ * The honest bit of this feature is the perfect-maze case. A tree has exactly one simple path
+ * between two cells, so on 22 of the 23 generators the "hardest" route is the only route and the
+ * detour is 1.00 by mathematics, not by a bug. Rather than hide that, the panel says it and
+ * points at the operations that make the question interesting — braiding, erosion, dungeons.
+ */
+async function hardestRoute() {
+  const h = await api(`/maze/${state.maze.id}/hardest-route`);
+  state.hardest = h;
+  const flat = h.loops === 0 || h.hardestLength === h.shortestLength;
+  log("state", `hardest route: ${h.hardestLength} steps vs ${h.shortestLength} shortest `
+      + `(x${h.detour.toFixed(2)}), ${h.loops} loops, ${h.exact ? "proven optimal" : "lower bound"}`);
+  $("compareBox").innerHTML = `<div style="margin-top:8px">`
+      + (flat
+          ? `<b style="color:#f2c94c">One route only</b> — ${h.hardestLength} steps. `
+          : `<b style="color:#f2c94c">${h.hardestLength} steps</b> the cruel way against `
+            + `<b>${h.shortestLength}</b> direct — a <b>&times;${h.detour.toFixed(2)}</b> detour. `)
+      + `${h.loops} independent loop${h.loops === 1 ? "" : "s"} &middot; `
+      + (h.exact ? `proven optimal` : `lower bound (search budget spent)`)
+      + `<div class="hint" style="margin-top:4px">${h.note}</div></div>`;
   draw();
 }
 
@@ -1445,6 +1475,20 @@ function draw() {
       g.globalAlpha = 1;
     });
   }
+  // Hardest route: the longest simple walk, drawn under the waypoints so both stay readable.
+  if (state.hardest && state.hardest.path && state.hardest.path.length > 1) {
+    g.strokeStyle = "#f2c94c";
+    g.lineWidth = Math.max(1.5, geom.cell * 0.22);
+    g.lineCap = "round"; g.lineJoin = "round";
+    g.globalAlpha = 0.75;
+    g.beginPath();
+    state.hardest.path.forEach((p, i) => {
+      const [x, y] = cellCenter(p);
+      i === 0 ? g.moveTo(x, y) : g.lineTo(x, y);
+    });
+    g.stroke();
+    g.globalAlpha = 1;
+  }
   // Waypoint hunt: uncollected waypoints are solid, collected ones hollow.
   if (state.tour && state.tour.waypoints) {
     state.tour.waypoints.forEach(w => {
@@ -1581,6 +1625,7 @@ $("live").onclick = () => bringToLife().catch(e => log("err", e.message));
 $("traffic").onclick = () => simulateTraffic().catch(e => log("err", e.message));
 $("race").onclick = () => raceSolvers().catch(e => log("err", e.message));
 $("analyze").onclick = () => analyzeStructure().catch(e => log("err", e.message));
+$("hardest").onclick = () => hardestRoute().catch(e => log("err", e.message));
 $("tour").onclick = () => startTour().catch(e => log("err", e.message));
 $("fingerprint").onclick = () => identifyGenerator().catch(e => log("err", e.message));
 $("measure").onclick = () => measureGrowth().catch(e => {

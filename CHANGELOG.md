@@ -34,6 +34,43 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Hardest-route mode (ADR-007 idea 3) — and the roadmap entry for it was wrong.**
+  `GET /api/v1/maze/{id}/hardest-route` returns the longest simple route from start to goal
+  alongside the shortest, the ratio between them, the maze's independent loop count, and whether
+  the answer is a proven optimum or a lower bound (longest-simple-path is NP-hard, so the search
+  is budget-bounded and says which it gave you). The UI adds **Hardest route**, drawing the walk
+  in gold. ADR-007 proposed this as a start/goal *placement* mode — "put them on the longest
+  simple path instead of the extremes" — and ten minutes of measurement killed that: a perfect
+  maze is a tree, a tree has exactly one simple path between any two cells, so on 22 of the 23
+  generators the proposed mode changes nothing (measured: 145 and 145 steps on a 15×15). What
+  is worth shipping is the *measurement*, which is zero on a tree and large once loops exist —
+  the same 21×21 braided at 0.5 goes 203/203 → 56/260 (**×4.6**), a dungeon measures 40 against
+  122, and thirty erosion ticks took a living maze from ×1.00 to ×2.69 while opening 31 loops.
+  On a tree the response says so outright and names the operations that open loops, because a
+  feature that is honest about being inert beats one hiding it behind a number.
+
+### Fixed
+
+- **`LongestPath` threw `StackOverflowError` on every perfect maze from 200×200 up.** The search
+  recursed, and a 512×512 tree — a size `GenerateRequest` explicitly permits — has a unique
+  start-to-goal route tens of thousands of cells deep. That is an `Error`, not an exception,
+  escaping a public core API and surfacing as a 500. Braided mazes hid it completely, because
+  the visit budget ran out at shallow depth long before the stack did, which is how this
+  survived a green suite for so long. The frames now live in arrays sized from the grid, with
+  identical traversal order and identical results; a 512×512 perfect maze returns a
+  proven-optimal 74,268-step route in 74 ms. Pinned by a 300×300 regression test that fails with
+  `StackOverflowError` against the previous implementation.
+- **`LongestPath` answered "there is no route" about mazes anyone can walk.** On a 41×41 at
+  braid 0.5 (and a 61×61 at braid 1.0) the DFS spent its entire two-million-visit budget in the
+  cycle-rich middle of the maze without once reaching the goal, and returned `length = -1` with
+  an empty path. The incumbent is now seeded with the BFS shortest path, so the result is a real
+  route at worst and the budget is spent improving rather than hunting for a first success;
+  `exact` is untouched, so a seeded-but-unimproved answer is still correctly labelled a lower
+  bound. This changed a documented contract — the old test asserting `-1` for a starved search
+  was rewritten rather than deleted, and it explains why.
+
+### Added
+
 - **Generator invariant fuzzing (ADR-007 idea 9) — 23 generators go from "presumably fine" to
   measured.** `GeneratorInvariantFuzzTest` property-tests every registered generator against the
   invariants that hold whatever the algorithm — dimensions honoured, walls agreed on from both

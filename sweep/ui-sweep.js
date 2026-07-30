@@ -50,6 +50,47 @@ async function check(name, fn) {
     return [a.cutSize === 1 && a.deadEndCount > 0, `cut=${a.cutSize}, deadEnds=${a.deadEndCount}, route=${a.routeLength}`];
   });
 
+  await check('D2. hardest route: tree says one route, eroded says detour', async () => {
+    // Both halves matter. On the perfect maze the button must report a detour of exactly 1.00
+    // and say why; after erosion opens loops the same button must report a real gap. A check
+    // that only looked at the eroded case would pass against a service that always claims a
+    // detour, which is the failure this feature is most likely to have.
+    // This check erodes a maze, so it works on its own instance and hands the sequence back
+    // the maze it was given. The first version skipped that and left the shared maze alive,
+    // which made the later 'living maze' and 'traffic' checks fail on a disabled #live button
+    // — a sweep step that breaks the steps after it is worse than no step at all.
+    await page.fill('#seed','909'); await page.click('#generate');
+    await page.waitForFunction(() => state.maze && state.maze.seed === 909, null, {timeout:15000});
+    await page.click('#hardest');
+    await page.waitForFunction(() => state.hardest != null, null, {timeout:20000});
+    const tree = await page.evaluate(() => state.hardest);
+    const saysTree = await page.evaluate(() =>
+        document.getElementById('compareBox').innerText.includes('tree'));
+
+    await page.click('#live');
+    await page.waitForTimeout(14000);
+    await page.evaluate(() => { state.hardest = null; });
+    await page.click('#hardest');
+    await page.waitForFunction(() => state.hardest != null, null, {timeout:20000});
+    const eroded = await page.evaluate(() => state.hardest);
+    const gold = await page.evaluate(() => {
+      const c = document.getElementById('maze');
+      const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+      let n = 0;
+      for (let i = 0; i < d.length; i += 4) {
+        if (d[i] > 150 && d[i+1] > 120 && d[i] - d[i+2] > 60) n++;
+      }
+      return n;
+    });
+    const ok = tree.loops === 0 && tree.detour === 1.0 && saysTree
+        && eroded.loops > 0 && eroded.detour > 1.0 && gold > 500;
+
+    await page.fill('#seed','3'); await page.click('#generate');   // restore B's maze
+    await page.waitForFunction(() => state.maze && state.maze.seed === 3, null, {timeout:15000});
+    return [ok, `tree x${tree.detour} loops=${tree.loops}; eroded x${eroded.detour} `
+        + `loops=${eroded.loops}; ${gold} route pixels drawn`];
+  });
+
   await check('E. solver arena race', async () => {
     await page.selectOption('#solver','bfs'); await page.selectOption('#rival','astar');
     await page.click('#race');

@@ -1,6 +1,6 @@
 # ADR-007: Surfacing the theory module as product
 
-**Status:** Accepted (ideas 1, 2, 4, 9 implemented; 3, 5–8, 10 queued)
+**Status:** Accepted (ideas 1–4 and 9 implemented; 5–8 and 10 queued)
 **Date:** 2026-07-30
 **Deciders:** Richmond
 **Supersedes / extends:** ADR-006 (living mazes roadmap, complete)
@@ -51,6 +51,8 @@ same way ADR-006 was executed batch by batch.
 | 1 | **Waypoint Tour mode** — collect scattered waypoints then reach the goal; the server knows the provably optimal collection order and scores you against it | `WaypointTour` | Turns an exact exponential algorithm into a game mechanic. "You walked 87 steps; optimal is 64" is a hook no maze app has | M |
 | 2 | **Complexity Lab** — run a generator across sizes live, fit the growth curve, report empirical `O(·)` with R² | `ComplexityAnalyzer`, `GrowthEstimator` | Measuring algorithmic complexity *as a product feature*, live, rather than asserting it in a comment | M |
 | 3 | **Hardest-route mode** — place start/goal on the longest simple path instead of the extremes | `LongestPath` | The extremes are the farthest apart; the longest *simple path* is the cruellest walk. Different, and provably so | S |
+
+> **Idea 3 as written above is wrong** — on a tree the longest simple path between two cells *is* the only path, so this changes nothing on 22 of 23 generators. It shipped reframed as a measurement of the current maze. The row is left as first written because the postscript at the end of this document is about that mistake.
 | 4 | **Maze fingerprint + generator classifier** — a structural signature (degree histogram, dead-end density, branchiness, cut profile) that identifies which generator produced an unlabelled maze | — | "Guess the algorithm from the shape alone", with measured accuracy. Also gives dedup and find-similar for free | M |
 | 5 | **Sanctuary placement** — k-center safe points minimising worst-case distance from anywhere | `FacilityPlacement` | Optimal checkpoint placement is a real optimisation problem with an obvious game reading | S |
 | 6 | **Distance heat-map overlay** — shade every cell by its distance from the goal | `DistanceOracle` | Makes the BFS field visible; instantly explains why a maze feels hard | S |
@@ -146,7 +148,11 @@ rather than a suggestion.
 8. [x] Idea 9 (**Generator invariant fuzzing**) — `GeneratorInvariantFuzzTest`, registry-driven
    so new generators are covered automatically; 506 generations across 11 shapes and 2 seeds
    found **zero** violations, and six deliberate breaks confirm the properties have teeth
-9. [ ] Ideas 3, 5–8, 10, in the priority order above
+9. [x] Idea 3 (**Hardest route**) — `GET /api/v1/maze/{id}/hardest-route`, reporting the
+   shortest and longest simple routes, their ratio and the maze's loop count. Reframed after
+   measurement (see the postscript): shipped as a *measurement of the current maze*, not as a
+   start/goal placement mode, because on a tree those are the same thing
+10. [ ] Ideas 5–8, 10, in the priority order above
 
 ## Postscript: what building idea 2 taught
 
@@ -196,3 +202,41 @@ needs a lock and a crash-safe restore, not just a `finally`.** The rewritten har
 lock file, keeps a pristine sidecar that the next run restores from, reverts after each
 mutation rather than at the end, and reverts on SIGTERM. The result was then re-measured from
 a verified-clean tree, which is where the 6/6 in this document comes from.
+
+## Postscript: what building idea 3 taught
+
+**The idea as written in this document was wrong, and measuring it took ten minutes.** Idea 3
+proposed placing start and goal "on the longest simple path instead of the extremes". A perfect
+maze is a tree; a tree has exactly one simple path between any two cells; so on 22 of the 23
+registered generators the longest route between two cells is the *only* route between them, and
+the proposed mode would have been a button that changes nothing. Measured on a 15×15
+recursive-backtracker maze, extremes placement and "hardest-route placement" agree to the step:
+145 and 145.
+
+What survives is the measurement rather than the mode. The gap between shortest and longest is
+zero on a tree and large the moment the maze has loops — the same 21×21 maze braided at 0.5
+goes from 203/203 to 56/260, a ×4.6 detour; a dungeon measures 40 against 122; and thirty
+erosion ticks on a living maze took one instance from ×1.00 to ×2.69 while opening 31 loops.
+So the endpoint reports both routes, the ratio, the loop count, and — on a tree — says plainly
+that there is only one route and which operations open more. **A feature that is honest about
+being inert is better than one that hides it behind a number.**
+
+**Two real defects fell out of building it**, both in `LongestPath`, both invisible until
+something asked for large or braided inputs:
+
+1. *It returned "no route" for mazes anyone can walk.* On a 41×41 at braid 0.5 the DFS spent
+   its entire two-million-visit budget in the cycle-rich middle and never once reached the goal,
+   so the result was `length = -1` and an empty path. The incumbent is now seeded with the BFS
+   shortest path: the answer is a real route at worst, and the search spends its budget
+   improving rather than hunting for a first success.
+2. *It threw `StackOverflowError` on every perfect maze from 200×200 up.* The search recursed,
+   and a 512×512 tree — a size the REST surface explicitly accepts — has a unique route tens of
+   thousands of cells deep. An `Error`, not an exception, out of a public core API. Braided
+   mazes hid it perfectly, because the visit budget ran out at shallow depth before the stack
+   did, which is exactly how a bug like this survives a green test suite. The frames now live in
+   arrays sized from the grid; a 512×512 perfect maze returns a proven-optimal 74,268-step route
+   in 74 ms.
+
+The pattern worth keeping: **the roadmap entry is a hypothesis, not a specification.** Both of
+these were found by writing a throwaway probe that printed a table before any feature code
+existed.

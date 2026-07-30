@@ -320,6 +320,37 @@ def t_exports():
     ok = "#" in art and "S" in art and "G" in art and "{" not in art
     return ok, f"ascii {len(art.splitlines())} lines with solve overlay, no JSON leakage"
 
+# ---- 18. hardest route (ADR-007 idea 3) ------------------------------------------
+def t_hardest_route():
+    """Both sides of the feature, because only one of them is interesting.
+
+    A perfect maze is a tree, so its hardest route must EQUAL its shortest and report zero
+    loops — if that ever comes back as a detour, something is inventing a route. A dungeon has
+    cycles, so its hardest route must be strictly longer. Checking only the dungeon would miss
+    a fabricated path; checking only the tree would miss a search that never searches."""
+    tree = gen("recursive-backtracker", 21, 21, 606)
+    st, t = call("GET", f"/maze/{tree['id']}/hardest-route")
+    tree_ok = (st == 200 and t["loops"] == 0
+               and t["hardestLength"] == t["shortestLength"] and t["detour"] == 1.0
+               and len(t["path"]) == t["hardestLength"] + 1)
+
+    dung = gen("dungeon", 21, 21, 7)
+    sd, d = call("GET", f"/maze/{dung['id']}/hardest-route")
+    loop_ok = (sd == 200 and d["loops"] > 0
+               and d["hardestLength"] > d["shortestLength"] and d["detour"] > 1.0
+               and len(d["path"]) == d["hardestLength"] + 1)
+
+    # A size that used to throw StackOverflowError inside the recursive search -> 500.
+    big = gen("recursive-backtracker", 301, 301, 5)
+    sb, b = call("GET", f"/maze/{big['id']}/hardest-route")
+    big_ok = sb == 200 and b["hardestLength"] > 10_000
+
+    return tree_ok and loop_ok and big_ok, (
+        f"tree {t['shortestLength']}=={t['hardestLength']} loops={t['loops']}; "
+        f"dungeon {d['shortestLength']}->{d['hardestLength']} x{d['detour']} "
+        f"loops={d['loops']}; 301x301 -> {sb} len={b.get('hardestLength')}")
+
+
 for name, fn in [
     ("1. generation + determinism", t_generate),
     ("2. all solvers return routes", t_solvers),
@@ -338,6 +369,7 @@ for name, fn in [
     ("15. waypoint tour + optimum", t_tour),
     ("16. complexity lab", t_complexity),
     ("17. maze fingerprint", t_fingerprint),
+    ("18. hardest route", t_hardest_route),
 ]:
     check(name, fn)
 

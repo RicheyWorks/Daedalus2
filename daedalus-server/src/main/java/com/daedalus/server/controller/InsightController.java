@@ -6,6 +6,7 @@ import com.daedalus.api.dto.AnalysisResponse;
 import com.daedalus.engine.Braider;
 import com.daedalus.server.ratelimit.PerKeyRateLimit;
 import com.daedalus.server.service.GhostService;
+import com.daedalus.server.service.HardestRouteService;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.theory.MazeFlow;
 import com.daedalus.theory.MazeMetrics;
@@ -46,15 +47,18 @@ public class InsightController {
     private final WaypointService waypoints;
     private final ComplexityLabService complexity;
     private final FingerprintService fingerprints;
+    private final HardestRouteService hardestRoutes;
 
     public InsightController(MazeGenerationService gen, GhostService ghosts,
                              WaypointService waypoints, ComplexityLabService complexity,
-                             FingerprintService fingerprints) {
+                             FingerprintService fingerprints,
+                             HardestRouteService hardestRoutes) {
         this.gen = gen;
         this.ghosts = ghosts;
         this.waypoints = waypoints;
         this.complexity = complexity;
         this.fingerprints = fingerprints;
+        this.hardestRoutes = hardestRoutes;
     }
 
     /**
@@ -164,6 +168,29 @@ public class InsightController {
                 id, grid.rows(), grid.cols(),
                 route.size(), cut.cutSize(), cut.cutEdges(),
                 deadEnds.size(), deadEnds));
+    }
+
+    /**
+     * ADR-007 idea 3 — the hardest route. Longest-simple-path is NP-hard, so the search is
+     * bounded by a visit budget rather than by maze size (measured 40-105 ms from 15x15 to
+     * 512x512) and shares the {@code mazeSolve} budget.
+     */
+    @GetMapping("/maze/{id}/hardest-route")
+    @Operation(summary = "The longest route from start to goal that never revisits a cell.",
+            description = "Reports the shortest route, the hardest route and the detour between "
+                    + "them. On a perfect maze those are the SAME number and the response says "
+                    + "so: a tree has exactly one simple path between two cells, so there is "
+                    + "nothing to choose. The gap only opens once the maze has loops — braid it, "
+                    + "erode it with Bring to life, or use the dungeon generator, and the "
+                    + "hardest route runs several times the shortest. Finding the true longest "
+                    + "simple path is NP-hard, so a result may be a proven optimum or an "
+                    + "honestly-labelled lower bound; it is a real walk either way. Computed on "
+                    + "the maze's current snapshot, so a living maze answers differently as it "
+                    + "erodes. Rate-limited against the 'mazeSolve' budget.")
+    @PerKeyRateLimit("mazeSolve")
+    public ResponseEntity<HardestRouteService.HardestRoute> hardestRoute(@PathVariable UUID id) {
+        var route = hardestRoutes.forMaze(id);
+        return route == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(route);
     }
 
     @GetMapping("/maze/{id}/ghost")
