@@ -169,4 +169,11 @@ become dramatically better once mazes can already change under a walker's feet.
 9. [x] Roadmap follow-ups, third batch (2026-07-30): chokepoint analytics (9) shipped —
        the theory module's min-cut on the product surface, re-analyzed per erosion tick;
        session ghosts (8) shipped — best run per maze replayed as a timed racer
-10. [ ] Roadmap remainder: spectator mode (6), maze crossbreeding (5), campaign mode (10)
+10. [x] Roadmap follow-ups, fourth batch (2026-07-30): maze crossbreeding (5) shipped —
+        patch-inheritance genome plus Kruskal connectivity repair (the repair is
+        load-bearing, teeth-proven); spectator mode (6) shipped — read-only session
+        snapshot endpoint behind a `#session=` permalink, live over the existing STOMP
+        player frames
+11. [ ] Roadmap remainder: campaign mode (10) — the natural finale, since it can string
+        together daily seeds, living mazes, traffic, ghosts, and analytics-steered
+        difficulty

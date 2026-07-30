@@ -240,6 +240,47 @@ public class MazeController {
                 r.expansions()));
     }
 
+    /**
+     * ADR-006 idea #5 — crossbreeding. Deterministic per (a, b, seed); the default seed
+     * mixes both parents' ids so the same pair breeds the same child by default.
+     */
+    @PostMapping("/maze/breed")
+    @Operation(summary = "Breed two mazes: the child inherits patches of both and is repaired to full connectivity.",
+            description = "Parents must share dimensions (400 otherwise). The child is a "
+                    + "first-class maze — solve it, play it, bring it to life, breed it "
+                    + "again. Rate-limited against the 'mazeGenerate' budget.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<GenerateResponse> breed(
+            @RequestParam UUID a,
+            @RequestParam UUID b,
+            @RequestParam(required = false) Long seed) {
+        var pa = gen.find(a);
+        var pb = gen.find(b);
+        if (pa == null || pb == null) return ResponseEntity.notFound().build();
+        long s = seed != null ? seed
+                : a.getLeastSignificantBits() ^ Long.rotateLeft(b.getLeastSignificantBits(), 17);
+        MazeGrid child = com.daedalus.engine.MazeBreeder.breed(pa.grid(), pb.grid(), s);
+        var cached = gen.adopt(child, "crossbreed", s);
+        return ResponseEntity.ok(toResponse(cached.metadata().id(), "crossbreed",
+                child.rows(), child.cols(), s, child, null));
+    }
+
+    /**
+     * ADR-006 idea #6 — the spectator seam: a read-only snapshot of a live session. The
+     * web UI's {@code #session=<id>} permalink loads this once and then follows the same
+     * STOMP frames the players produce.
+     */
+    @GetMapping("/session/{id}")
+    @Operation(summary = "Read-only session snapshot — the spectator entry point.",
+            description = "Pair with /topic/session/{id}/player for live moves; owned "
+                    + "sessions keep their existing per-destination STOMP authorization.")
+    public ResponseEntity<com.daedalus.api.dto.SessionViewResponse> session(@PathVariable UUID id) {
+        var s = sessions.find(id);
+        if (s == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(new com.daedalus.api.dto.SessionViewResponse(
+                s.id(), s.mazeId(), s.players(), s.completed(), s.moveCount(), s.score()));
+    }
+
     @PostMapping("/maze/{id}/session")
     @Operation(summary = "Open a play session for the given maze.",
             description = "The returned session id is required for /api/v1/session/{id}/move. "

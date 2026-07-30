@@ -121,6 +121,8 @@ public consumers).
 | `POST` | `/api/v1/agent/{id}/step?direction=NORTH` | required | Take one blind step — validated against the maze's *live* grid |
 | `GET` | `/api/v1/agent/{id}` | public | Re-poll the agent's view without spending a step |
 | `POST` | `/api/v1/maze/{id}/traffic` | required | Track traffic: occupancy raises cell costs, which decay each pulse (ADR-006) |
+| `POST` | `/api/v1/maze/breed?a=&b=&seed=` | required | Crossbreed two equal-sized mazes into a connected child (ADR-006) |
+| `GET` | `/api/v1/session/{id}` | public | Read-only session snapshot — the spectator entry point (`#session=` permalink) |
 | `GET` | `/api/v1/maze/{id}/analysis` | required | Structural analysis: min-cut chokepoints, dead ends, route length (ADR-006) |
 | `GET` | `/api/v1/maze/{id}/ghost` | public | The maze's best completed run as a timed recording — the UI replays it as a ghost racer |
 | `GET` | `/api/v1/leaderboard?n=20&maze={id}` | public | Top-N leaderboard — `maze=` scopes to one maze's board (the daily's partition) |

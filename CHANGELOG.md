@@ -10,6 +10,23 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Maze crossbreeding (ADR-006 idea #5).** `MazeBreeder` in core: two equal-sized parents
+  produce a child by a patch-inheritance genome (3×3 blocks assigned to a parent by seeded
+  coin flip, so offspring visibly wear both lineages — a Hilbert curve's discipline melting
+  into a backtracker's rivers at the seams), then a seeded Kruskal pass carves the minimum
+  set of openings that restores full connectivity. That repair is load-bearing and proven
+  so: disabling it leaves cells unreachable and fails the connectivity test immediately.
+  `POST /api/v1/maze/breed?a=&b=&seed=` adopts the child as a first-class maze via the new
+  `MazeGenerationService.adopt` (same metadata, cache entry, and `MazeGeneratedEvent` as a
+  generated maze) — so a child can be solved, played, analyzed, brought to life, and bred
+  again. Mismatched parents answer 400 with the dimensions. UI: **Crossbreed with previous**.
+- **Spectator mode (ADR-006 idea #6).** `GET /api/v1/session/{id}` returns a read-only
+  session snapshot, and the web UI gained a `#session=<id>` permalink: it loads the maze
+  plus live positions and follows the same `/topic/session/{id}/player` frames the players
+  produce (polling fallback when STOMP is unavailable). Spectators are genuinely read-only
+  — keyboard and click input are refused client-side, verified in-browser (a spectator
+  mashing arrow keys leaves `moveCount` at 0) — and owned sessions keep their existing
+  per-destination STOMP authorization. Opening a session now logs its shareable link.
 - **Chokepoint analytics (ADR-006 idea #9).** `GET /api/v1/maze/{id}/analysis` finally
   surfaces the `theory` module on the product surface: start↔goal min-cut (the actual
   chokepoint passages from `MazeFlow` — exactly 1 on every perfect maze, pinned at the
@@ -52,6 +69,10 @@ under the `_migration/` portfolios.
   challenge's board is now its own partition: the UI shows **Daily leaderboard** when
   today's maze is on screen, so a run on an easy 5×5 can never outrank daily runs.
   Redis backend keeps true per-maze sorted sets with a 48h TTL (time bounds key growth).
+- **API errors now explain themselves in the web UI.** The server has always answered with
+  RFC 7807 `ProblemDetail`, but the client's `api()` helper logged only the status line, so
+  every failure looked identical. It now surfaces the server's `detail` — "400 … — parents
+  must share dimensions: 15x15 vs 7x7" instead of a bare "400".
 - **Fog-of-war agent API (ADR-006 idea #7).** The maze as a benchmark anything that
   speaks HTTP can compete on. `POST /api/v1/maze/{id}/agent` opens a *blind* walk: the
   agent sees only its position, the goal's coordinates, and which of the four directions

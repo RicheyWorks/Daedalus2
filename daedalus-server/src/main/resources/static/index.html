@@ -112,6 +112,9 @@
     <button id="daily"
             title="Everyone in the world gets the same maze today — the seed derives from the UTC date">
       Daily challenge</button>
+    <button id="breed" disabled
+            title="Cross this maze with the previous one: the child inherits patches of both parents, repaired to full connectivity (parents must share dimensions)">
+      Crossbreed with previous</button>
 
     <label for="solver">Solver</label>
     <select id="solver"></select>
@@ -200,6 +203,9 @@ const state = {
   ghost: null,           // {moves, name, score, elapsedMs, started, pos, done} during play
   ghostTimer: null,      // interval advancing the ghost
   sessionStart: null,    // performance.now() at session open — for the ghost verdict
+  prevMazeId: null,      // last maze before this one — crossbreeding's other parent
+  readOnly: false,       // spectating: render everything, control nothing
+  spectatePoll: null,    // interval id — STOMP-less spectator fallback
 };
 
 /** Escape untrusted text (player names arrive from other clients) before it meets innerHTML. */
@@ -248,7 +254,17 @@ async function refreshLeaderboard() {
 // ---------- REST ----------
 async function api(path, opts) {
   const res = await fetch(API + path, opts);
-  if (!res.ok) throw new Error(`${res.status} ${res.statusText} on ${path}`);
+  if (!res.ok) {
+    // The server answers errors as RFC 7807 ProblemDetail; its `detail` says WHY
+    // ("parents must share dimensions: 15x15 vs 7x7"). Surfacing only the status code
+    // throws that away and makes every failure look the same, so prefer the detail.
+    let why = "";
+    try {
+      const body = await res.json();
+      why = body && (body.detail || body.title) ? ` — ${body.detail || body.title}` : "";
+    } catch (notProblemJson) { /* empty or non-JSON body: status alone is all we have */ }
+    throw new Error(`${res.status} ${res.statusText} on ${path}${why}`);
+  }
   const text = await res.text();
   return text ? JSON.parse(text) : null;
 }
@@ -320,6 +336,16 @@ async function generate() {
 
 /** Install a maze into the UI — from a fresh generate, a #maze=<id> permalink, or the daily. */
 function adoptMaze(maze, roundTripMs, sourceLabel) {
+  if (state.maze && state.maze.id !== maze.id) {
+    state.prevMazeId = state.maze.id; // remember the other parent for crossbreeding
+  }
+  $("breed").disabled = !state.prevMazeId;
+  // Mirror the adopted maze's size into the inputs. A permalink (#maze= or #session=)
+  // can be a user's first view of the app; leaving the defaults there means their next
+  // Generate silently produces a different-sized maze than the one on screen.
+  $("rows").value = maze.rows; $("cols").value = maze.cols;
+  state.readOnly = false;
+  clearInterval(state.spectatePoll); state.spectatePoll = null;
   state.maze = maze; state.path = null; state.session = null;
   state.joined = null; state.trails = {}; state.won = null;
   state.expansions = []; state.searchProgress = 1; state.pathProgress = 1;
@@ -360,8 +386,19 @@ async function loadDaily() {
   log("state", `daily challenge ${d.date} — the whole world plays this maze today`);
 }
 
-/** #maze=<id> permalink: load an existing maze from this server on page open. */
+/** Cross the current maze with the previous one — the child replaces the current maze. */
+async function crossbreed() {
+  const child = await api(`/maze/breed?a=${state.prevMazeId}&b=${state.maze.id}`,
+      {method: "POST"});
+  adoptMaze(child, null, "crossbreeding");
+  log("state", "bred a child of the last two mazes — patches of both, repaired to one "
+      + "connected maze (breed again to keep the lineage going)");
+}
+
+/** #maze=<id> or #session=<id> permalink: load a maze, or spectate a live session. */
 async function loadFromHash() {
+  const s = location.hash.match(/#session=([0-9a-f-]{36})/);
+  if (s) { await spectate(s[1]); return; }
   const m = location.hash.match(/#maze=([0-9a-f-]{36})/);
   if (!m) return;
   try {
@@ -370,6 +407,46 @@ async function loadFromHash() {
   } catch (e) {
     log("err", `permalink maze not found on this server (${e.message})`);
   }
+}
+
+// ---------- spectator mode (ADR-006 idea #6) ----------
+/**
+ * Watch someone else's session, read-only: load the snapshot, then follow the same
+ * /topic/session/{id}/player frames the players produce (or poll when STOMP is absent).
+ * Owned sessions keep their per-destination STOMP authorization — a spectator can only
+ * follow what the broker lets them subscribe to.
+ */
+async function spectate(sessionId) {
+  let view;
+  try { view = await api(`/session/${sessionId}`); }
+  catch (e) { log("err", `session not found on this server (${e.message})`); return; }
+  adoptMaze(await api(`/maze/${view.mazeId}`), null, "spectated session");
+  const names = Object.keys(view.players);
+  state.session = {id: view.sessionId, positions: view.players, primary: names[0]};
+  state.readOnly = true;
+  if (view.completed) state.won = names[0];
+  $("status").textContent = `spectating session ${view.sessionId.slice(0, 8)}… — read-only`;
+  log("state", `spectating ${names.join(", ")} — moves arrive live`);
+  resubscribe();
+  if (!state.stomp) {
+    clearInterval(state.spectatePoll);
+    state.spectatePoll = setInterval(async () => {
+      if (!state.readOnly || !state.session) {
+        clearInterval(state.spectatePoll); state.spectatePoll = null;
+        return;
+      }
+      try {
+        const v = await api(`/session/${state.session.id}`);
+        state.session.positions = v.players;
+        if (v.completed && !state.won) state.won = Object.keys(v.players)[0];
+        draw();
+      } catch (gone) {
+        clearInterval(state.spectatePoll); state.spectatePoll = null;
+        log("err", "spectated session ended (evicted)");
+      }
+    }, 1000);
+  }
+  draw();
 }
 
 // ---------- living mazes (ADR-006) ----------
@@ -711,6 +788,7 @@ async function play() {
   state.sessionStart = performance.now();
   $("join").disabled = false;
   $("status").textContent = `session ${s.sessionId.slice(0, 8)}… — arrow keys to move`;
+  log("state", `spectate link: ${location.origin}${location.pathname}#session=${s.sessionId}`);
   resubscribe();
   summonGhost(); // race the maze's best recorded run, if one exists
   draw();
@@ -1072,7 +1150,7 @@ function draw() {
 
 // Click (or tap) an adjacent cell to move the primary player — arrows aren't the only way in.
 $("maze").addEventListener("click", ev => {
-  if (!state.session || !geom || state.won) return;
+  if (!state.session || !geom || state.won || state.readOnly) return;
   const rect = $("maze").getBoundingClientRect();
   const scale = $("maze").width / rect.width; // canvas may be CSS-shrunk by max-width
   const x = (ev.clientX - rect.left) * scale, y = (ev.clientY - rect.top) * scale;
@@ -1104,6 +1182,7 @@ function drawEmpty() {
 // ---------- wiring ----------
 $("generate").onclick = () => generate().catch(e => log("err", e.message));
 $("daily").onclick = () => loadDaily().catch(e => log("err", e.message));
+$("breed").onclick = () => crossbreed().catch(e => log("err", e.message));
 $("solve").onclick = () => solve().catch(e => log("err", e.message));
 $("compare").onclick = () => compareSolvers().catch(e => log("err", e.message));
 $("live").onclick = () => bringToLife().catch(e => log("err", e.message));
@@ -1113,7 +1192,7 @@ $("analyze").onclick = () => analyzeStructure().catch(e => log("err", e.message)
 $("play").onclick = () => play().catch(e => log("err", e.message));
 $("join").onclick = () => join();
 document.addEventListener("keydown", e => {
-  if (!state.session || e.target.tagName === "INPUT") return;
+  if (!state.session || state.readOnly || e.target.tagName === "INPUT") return;
   const arrows = {ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1]};
   const wasd = {KeyW: [-1, 0], KeyS: [1, 0], KeyA: [0, -1], KeyD: [0, 1]};
   if (arrows[e.key]) {

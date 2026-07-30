@@ -138,6 +138,23 @@ public class MazeGenerationService {
         return cached;
     }
 
+    /**
+     * Register a grid produced outside the generator pipeline — crossbred offspring
+     * (ADR-006 idea #5) today, any future in-memory construction tomorrow. Runs the same
+     * finishing steps as {@link #generate}: extremes start/goal placement, metadata,
+     * cache entry, and the {@link MazeGeneratedEvent} plugins and the STOMP bridge expect,
+     * so an adopted maze is indistinguishable from a generated one downstream.
+     */
+    public Cached adopt(MazeGrid grid, String generatorId, long seed) {
+        MazeMetrics.placeStartAndGoalAtExtremes(grid);
+        MazeMetadata meta = MazeMetadata.of(grid.rows(), grid.cols(), seed, generatorId,
+                grid.start(), grid.goal());
+        Cached cached = new Cached(meta, grid, new MazeStats(), null);
+        cache.put(meta.id(), cached);
+        events.publishEvent(new MazeGeneratedEvent(this, meta, grid, cached.stats()));
+        return cached;
+    }
+
     public Cached find(UUID id) { return cache.getIfPresent(id); }
 
     /**
