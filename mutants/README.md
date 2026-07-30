@@ -10,6 +10,7 @@ by any test.
     python3 mutants/fuzzteeth.py  # six breaks aimed at GeneratorInvariantFuzzTest
     python3 mutants/idateeth.py   # four breaks aimed at IDA*'s node budget
     python3 mutants/tourteeth.py  # eight breaks aimed at the tournament + its statistics
+    python3 mutants/lensteeth.py  # seven breaks aimed at the heuristic lens
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module
@@ -56,3 +57,10 @@ distinguishing them was invisible; moving to 19×19, where it finishes five maze
 case real. The other asserted `worstGap >= bestGap`, which a mutation satisfied by collapsing
 both extremes onto one maze — `min >= min` is true. Both tests were strengthened rather than the
 mutations dropped.
+
+**An assertion that can only confirm one value cannot detect a dead counter.** `lensteeth.py`
+found this: the heuristic lens reports how many cells A* expanded above the optimal cost, which
+is zero for any admissible heuristic, and the test asserted zero. A mutation that never
+incremented the counter survived, because zero was the only answer the test could ever see. The
+fix was to add a deliberately inadmissible heuristic so the counter has a case that must fire —
+the test gained teeth and the product gained a demonstration of why admissibility matters.

@@ -478,6 +478,47 @@ def t_tournament():
         f"unknown generator -> 404")
 
 
+# ---- 22. heuristic lens (ADR-007 idea 8) -----------------------------------------
+def t_heuristic_lens():
+    """The lens reports a theorem, so the sweep checks the theorem, both directions.
+
+    An admissible heuristic must never expand a cell above the optimal cost, and a deliberately
+    inadmissible one must — otherwise the zero that admissible heuristics report proves nothing.
+    The pair also demonstrates the trade the feature exists to show: the inflated heuristic is
+    cheaper and returns a worse route."""
+    d = gen("dungeon", 31, 31, 7)
+    sm, manhattan = call("GET", f"/maze/{d['id']}/heuristic-lens?heuristic=MANHATTAN")
+    sl, landmark = call("GET", f"/maze/{d['id']}/heuristic-lens?heuristic=LANDMARK")
+    si, inflated = call("GET", f"/maze/{d['id']}/heuristic-lens?heuristic=INFLATED")
+
+    bands_ok = all(x["mustExpand"] + x["tie"] + x["never"] == x["reachable"]
+                   for x in (manhattan, landmark, inflated))
+    admissible_ok = (manhattan["expandedAboveOptimal"] == 0
+                     and landmark["expandedAboveOptimal"] == 0
+                     and manhattan["routeOptimal"] and landmark["routeOptimal"])
+    inadmissible_ok = (inflated["expandedAboveOptimal"] > 0
+                       and inflated["actualExpansions"] < manhattan["actualExpansions"]
+                       and not inflated["routeOptimal"]
+                       and inflated["routeLength"] > inflated["optimalCost"])
+    sharper_ok = landmark["mustExpand"] < manhattan["mustExpand"]
+    # A* must expand the whole mandatory band and nothing beyond band + ties — for an
+    # ADMISSIBLE heuristic. Including `inflated` here was a real (and instructive) mistake in
+    # the first version of this check: an overestimating heuristic breaks that bound by
+    # definition, which is the entire reason it is in the feature.
+    bounds_ok = all(x["mustExpand"] <= x["actualExpansions"] <= x["mustExpand"] + x["tie"]
+                    for x in (manhattan, landmark))
+    cap_ok = call("GET", f"/maze/{gen('recursive-backtracker', 200, 200, 1)['id']}"
+                         "/heuristic-lens")[0] == 400
+
+    return (bands_ok and admissible_ok and inadmissible_ok and sharper_ok
+            and bounds_ok and cap_ok), (
+        f"manhattan must={manhattan['mustExpand']} tie={manhattan['tie']} "
+        f"exp={manhattan['actualExpansions']}; landmark must={landmark['mustExpand']} "
+        f"exp={landmark['actualExpansions']}; inflated exp={inflated['actualExpansions']} "
+        f"aboveC*={inflated['expandedAboveOptimal']} route={inflated['routeLength']} vs "
+        f"optimum {inflated['optimalCost']}; 200x200 -> 400")
+
+
 for name, fn in [
     ("1. generation + determinism", t_generate),
     ("2. all solvers return routes", t_solvers),
@@ -500,6 +541,7 @@ for name, fn in [
     ("19. distance field + sanctuaries", t_topography),
     ("20. solver cost guard", t_solver_budget),
     ("21. tournament + adversarial seed", t_tournament),
+    ("22. heuristic lens", t_heuristic_lens),
 ]:
     check(name, fn)
 

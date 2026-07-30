@@ -1,6 +1,6 @@
 # ADR-007: Surfacing the theory module as product
 
-**Status:** Accepted (ideas 1–7, 9 and 10 implemented; only idea 8 queued)
+**Status:** Accepted — **all ten ideas implemented**, three of them reframed by measurement
 **Date:** 2026-07-30
 **Deciders:** Richmond
 **Supersedes / extends:** ADR-006 (living mazes roadmap, complete)
@@ -165,7 +165,9 @@ rather than a suggestion.
 12. [x] Idea 10 (**Solver tournament**) and idea 7 (**Adversarial seed search**) —
     `GET /api/v1/tournament`, with `SampleStats` in core carrying the interval arithmetic.
     Reframed by measurement: it reports how much a ranking can be trusted, not who wins
-13. [ ] Idea 8 (**Heuristic misleadingness**) — the last one outstanding
+13. [x] Idea 8 (**Heuristic lens**) — `GET /api/v1/maze/{id}/heuristic-lens`. Reframed: the
+    pitched per-cell "misleadingness" does not predict A*'s wasted work, so the endpoint reports
+    the exact `f` vs `C*` partition instead. Roadmap complete
 14. [x] Cost guard found on the way to idea 10 — **note:** the first probe toward idea
     10 (running every solver over many mazes) found an unbounded request rather than a
     statistic: IDA\* took 16 s on a 21×21 dungeon and over 300 s on a 25×25. That is fixed
@@ -320,3 +322,39 @@ indistinguishable from each other (all explore essentially every cell), and pair
 nothing over unpaired intervals — 1.0× — because one of the two series is very nearly constant,
 so there is no shared per-maze variation to cancel. Worth knowing before writing a paired t-test
 into a service and claiming it as rigour.
+
+## Postscript: what building idea 8 taught, and closing the roadmap
+
+**The third idea in this document that measurement rewrote.** Idea 8 asked to "measure where A*'s
+heuristic lies most, and overlay it", to explain why a solver lost. The obvious reading —
+per-cell heuristic error, `trueDistance - h` — was tested against what A* actually wasted work on
+before any feature code existed. The correlation across perfect, braided and dungeon mazes at two
+sizes ran from **+0.42 to −0.17**: inconsistent in size, unstable in sign, useless as an
+explanation. The overlay would have looked authoritative and meant nothing.
+
+The fix was to stop reaching for a correlation when a theorem was available. A* with an
+admissible heuristic expands a cell only when `f = g* + h ≤ C*`, so the maze partitions exactly
+into must-expand, tie-decides, and never-touched. Measured, zero cells above `C*` were expanded in
+every configuration — the theorem holding, not a trend. **When the thing you want to explain has
+an exact criterion, a correlation is a downgrade dressed as empiricism.**
+
+**A survivor turned into a feature.** The lens reports how many cells above `C*` were expanded,
+which is zero for any admissible heuristic — and a mutation that never incremented that counter
+survived the test suite, because an assertion that can only ever confirm zero cannot distinguish a
+working counter from a dead one. Making it testable required a heuristic that *should* break it,
+so `INFLATED` (Manhattan × 3) joined the enum. It earns its place twice over: it gives the check a
+case that must fire, and it demonstrates the weighted-A* trade with numbers — 341 expansions down
+to 213, and a 96-step route where the optimum is 88.
+
+### Closing the roadmap
+
+All ten ideas are shipped. The score worth recording is not ten for ten, but that **three of the
+ten were wrong as written** and were caught by measuring before building: idea 3's placement mode
+is vacuous on a tree, idea 6's `DistanceOracle` justification is slower than a plain sweep, and
+idea 8's correlation does not exist. Two more produced defects rather than features on the way —
+`LongestPath` overflowing the stack above 200×200, and IDA* running unbounded on dungeons.
+
+The pattern that produced all five: **write a throwaway probe that prints a table before writing
+any feature code.** Every one of them was found in under fifteen minutes by a program that
+measured the thing the roadmap had assumed. The ADR's ten rows were hypotheses, and treating them
+as specifications would have shipped three features that quietly did nothing.

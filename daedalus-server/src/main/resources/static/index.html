@@ -152,6 +152,15 @@
     <button id="sanctuaries" disabled
             title="Place k safe points so the worst-off cell is as close to one as possible (metric k-center, NP-hard, solved by a 2-approximation)">
       Place sanctuaries</button>
+    <label for="lensH">Heuristic lens on A* with</label>
+    <select id="lensH">
+      <option value="MANHATTAN">Manhattan (admissible)</option>
+      <option value="LANDMARK">Landmark / ALT (sharper)</option>
+      <option value="INFLATED">Manhattan x3 (inadmissible)</option>
+    </select>
+    <button id="lens" disabled
+            title="The three bands that explain A*'s work: cells it MUST expand, cells where tie-breaking decides, and cells it provably never touches">
+      Heuristic lens</button>
 
     <label for="player">Player name</label>
     <input id="player" value="web">
@@ -416,11 +425,13 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   $("analyze").disabled = false; $("tour").disabled = false;
   $("fingerprint").disabled = false; $("hardest").disabled = false;
   $("heatmap").disabled = false; $("sanctuaries").disabled = false;
+  $("lens").disabled = false;
   clearInterval(state.livePoll); state.livePoll = null;
   clearInterval(state.trafficPoll); state.trafficPoll = null;
   clearInterval(state.ghostTimer); state.ghostTimer = null;
   state.race = null; state.dailyId = null; state.analysis = null; state.ghost = null;
   state.hardest = null; state.field = null; state.sanctuaries = null;
+  state.lens = null;
   state.tour = null; state.tourGot = [];
   state.stageIndex = null; // playStage re-sets this after adopting the stage's maze
   $("compareBox").innerHTML = "";
@@ -898,7 +909,7 @@ const DISTANCE_RAMP = ["#1c5cab", "#2a78d6", "#3987e5", "#5598e7",
 async function distanceHeatMap() {
   const f = await api(`/maze/${state.maze.id}/distance-field`);
   state.field = f;
-  state.sanctuaries = null;                     // one overlay at a time stays readable
+  state.sanctuaries = null; state.lens = null;   // one overlay at a time stays readable
   log("state", `distance field from ${f.from.toLowerCase()}: farthest cell ${f.maxDistance} `
       + `steps away, ${f.unreachable} cells unreachable`);
   const swatches = DISTANCE_RAMP
@@ -922,7 +933,7 @@ async function distanceHeatMap() {
 async function placeSanctuaries() {
   const s = await api(`/maze/${state.maze.id}/sanctuaries?k=5`);
   state.sanctuaries = s;
-  state.field = null;
+  state.field = null; state.lens = null;
   log("state", `${s.placements.length} sanctuaries: covering radius ${s.coveringRadius}, `
       + `serving ${s.servedCells}/${s.habitableCells} cells`);
   $("compareBox").innerHTML = `<div style="margin-top:8px">`
@@ -994,6 +1005,38 @@ async function runTournament() {
   }
   log("state", `tournament: ${t.standings.filter(s => !s.excluded).length} solvers over `
       + `${t.mazes} mazes, ${t.ties.length} tied pairs`);
+}
+
+// ---------- heuristic lens (ADR-007 idea 8) ----------
+/**
+ * Three bands, not a gradient of "lying".
+ *
+ * The obvious version of this feature — shade each cell by how badly the heuristic underestimates
+ * it — was measured and thrown away: per-cell error correlates with A*'s wasted expansions
+ * anywhere from +0.42 to -0.17, so the picture would have explained nothing. What A* actually
+ * obeys is exact: it expands a cell only when f = g* + h is at most the optimal cost. So the
+ * overlay draws that partition instead, and the counts underneath it are provable rather than
+ * suggestive.
+ */
+const LENS_COLORS = ["#e5484d", "#f2c94c", "#4cc38a"];   // must expand / tie / never
+
+async function heuristicLens() {
+  const which = $("lensH").value;
+  const l = await api(`/maze/${state.maze.id}/heuristic-lens?heuristic=${which}`);
+  state.lens = l;
+  state.field = null; state.sanctuaries = null;
+  log("state", `lens [${which}]: must ${l.mustExpand}, tie ${l.tie}, never ${l.never}; `
+      + `A* expanded ${l.actualExpansions}`);
+  const chip = (i, label, n) => `<span style="display:inline-block;width:10px;height:10px;`
+      + `background:${LENS_COLORS[i]};margin-right:4px"></span>${label} <b>${n}</b>`;
+  $("compareBox").innerHTML = `<div style="margin-top:8px">`
+      + `${chip(0, "must expand", l.mustExpand)} &middot; ${chip(1, "tie decides", l.tie)} `
+      + `&middot; ${chip(2, "never touched", l.never)}`
+      + `<div style="margin-top:4px">A* really expanded <b>${l.actualExpansions}</b> of `
+      + `${l.reachable} reachable cells; route ${l.routeLength} steps against an optimum of `
+      + `${l.optimalCost}${l.routeOptimal ? "" : " — <b style='color:#e5484d'>not optimal</b>"}`
+      + `</div><div class="hint" style="margin-top:4px">${l.note}</div></div>`;
+  draw();
 }
 
 // ---------- ghost runs (ADR-006 idea #8) ----------
@@ -1571,6 +1614,19 @@ function draw() {
     }
     g.globalAlpha = 1;
   }
+  // Heuristic lens: the three bands A* obeys, drawn as a background like the distance field.
+  if (state.lens) {
+    for (let r = 0; r < state.lens.rows; r++) {
+      for (let c = 0; c < state.lens.cols; c++) {
+        const band = state.lens.bands[r][c];
+        if (band < 0) continue;                       // unreachable: leave it as wall
+        g.fillStyle = LENS_COLORS[band];
+        g.globalAlpha = band === 2 ? 0.16 : 0.42;     // "never" recedes; the costly bands lead
+        g.fillRect(geom.offX[2 * c + 1], geom.offY[2 * r + 1], geom.cell, geom.cell);
+      }
+    }
+    g.globalAlpha = 1;
+  }
   // Act one: the exploration front, in the algorithm's true expansion order.
   if (state.expansions && state.expansions.length && (state.searchProgress ?? 1) > 0) {
     const shown = Math.ceil(state.expansions.length * state.searchProgress);
@@ -1801,6 +1857,7 @@ $("hardest").onclick = () => hardestRoute().catch(e => log("err", e.message));
 $("heatmap").onclick = () => distanceHeatMap().catch(e => log("err", e.message));
 $("sanctuaries").onclick = () => placeSanctuaries().catch(e => log("err", e.message));
 $("tournament").onclick = () => runTournament().catch(e => log("err", e.message));
+$("lens").onclick = () => heuristicLens().catch(e => log("err", e.message));
 $("tour").onclick = () => startTour().catch(e => log("err", e.message));
 $("fingerprint").onclick = () => identifyGenerator().catch(e => log("err", e.message));
 $("measure").onclick = () => measureGrowth().catch(e => {

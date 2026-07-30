@@ -7,6 +7,7 @@ import com.daedalus.engine.Braider;
 import com.daedalus.server.ratelimit.PerKeyRateLimit;
 import com.daedalus.server.service.GhostService;
 import com.daedalus.server.service.HardestRouteService;
+import com.daedalus.server.service.HeuristicLensService;
 import com.daedalus.server.service.TopographyService;
 import com.daedalus.server.service.TournamentService;
 import com.daedalus.server.service.MazeGenerationService;
@@ -52,13 +53,15 @@ public class InsightController {
     private final HardestRouteService hardestRoutes;
     private final TopographyService topography;
     private final TournamentService tournaments;
+    private final HeuristicLensService lens;
 
     public InsightController(MazeGenerationService gen, GhostService ghosts,
                              WaypointService waypoints, ComplexityLabService complexity,
                              FingerprintService fingerprints,
                              HardestRouteService hardestRoutes,
                              TopographyService topography,
-                             TournamentService tournaments) {
+                             TournamentService tournaments,
+                             HeuristicLensService lens) {
         this.gen = gen;
         this.ghosts = ghosts;
         this.waypoints = waypoints;
@@ -67,6 +70,7 @@ public class InsightController {
         this.hardestRoutes = hardestRoutes;
         this.topography = topography;
         this.tournaments = tournaments;
+        this.lens = lens;
     }
 
     /**
@@ -272,6 +276,30 @@ public class InsightController {
             @RequestParam(required = false) Double braid,
             @RequestParam(required = false) Long seed) {
         var result = tournaments.run(generator, size, mazes, braid, seed);
+        return result == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(result);
+    }
+
+    /**
+     * ADR-007 idea 8 — why A* did the work it did. Two breadth-first sweeps plus one recorded
+     * A* run, so it shares the {@code mazeSolve} budget and the distance field's payload cap.
+     */
+    @GetMapping("/maze/{id}/heuristic-lens")
+    @Operation(summary = "The three bands that explain A*'s expansions: must, may, and never.",
+            description = "Not 'where the heuristic lies' — that was measured and does not "
+                    + "predict wasted work (per-cell error against wasteful expansion correlated "
+                    + "anywhere from +0.42 to -0.17, unstable even in sign). This reports the "
+                    + "exact criterion instead. A* expands a cell only when f = g* + h is at most "
+                    + "the optimal cost, so cells below it MUST be expanded whatever the "
+                    + "tie-breaking, cells exactly at it are decided by tie-breaking alone, and "
+                    + "cells above it are provably never touched — a count that must be zero and "
+                    + "is reported rather than assumed. Switch heuristic=LANDMARK to see the "
+                    + "mandatory band collapse. Rate-limited against 'mazeSolve'.")
+    @PerKeyRateLimit("mazeSolve")
+    public ResponseEntity<HeuristicLensService.Lens> heuristicLens(
+            @PathVariable UUID id,
+            @RequestParam(required = false, defaultValue = "MANHATTAN")
+            HeuristicLensService.Heuristic heuristic) {
+        var result = lens.forMaze(id, heuristic);
         return result == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(result);
     }
 

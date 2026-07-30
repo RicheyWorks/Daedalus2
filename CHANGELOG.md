@@ -34,6 +34,37 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Heuristic lens (ADR-007 idea 8) — completing the roadmap, and not the way it was written.**
+  `GET /api/v1/maze/{id}/heuristic-lens?heuristic=MANHATTAN|LANDMARK|INFLATED` partitions a maze
+  into the three bands that *explain* A\*'s work, with an overlay in the UI.
+  The ADR asked for "measure where A\*'s heuristic lies most, and overlay it". That was measured
+  first and rejected: per-cell heuristic error against wasteful expansion correlated anywhere from
+  **+0.42 to −0.17** across perfect, braided and dungeon mazes — inconsistent in magnitude and
+  unstable even in sign. An overlay built on it would have been a convincing picture that explains
+  nothing. What A\* actually obeys is exact, not statistical: it expands a cell only when
+  `f = g* + h` is at most the optimal cost `C*`. So the lens reports **must expand** (`f < C*`, no
+  tie-breaking can avoid these — this region *is* the heuristic's cost), **tie decides**
+  (`f = C*`, where measured on a 21×21 dungeon the band holds 88 cells against a mandatory 30, so
+  tie-breaking matters more than the heuristic there), and **never touched** (`f > C*`, of which
+  A\* expanded **zero** across every configuration measured — reported as a live check rather than
+  assumed).
+  That makes "a better heuristic" a measurable claim: the four-landmark ALT heuristic drops the
+  mandatory band from 925 cells to **0** on a 31×31 perfect maze and cuts real expansions by 1.8×
+  to 5.5×.
+- **A deliberately inadmissible heuristic, because a check that can only report zero cannot be
+  tested.** `INFLATED` (Manhattan × 3) was added after a mutation survived: the test asserted
+  `expandedAboveOptimal == 0`, so a mutation that never incremented the counter was invisible.
+  An overestimating heuristic gives the counter something it must detect — and demonstrates the
+  weighted-A\* trade honestly. Measured on a 31×31 dungeon it cuts expansions from 341 to 213 and
+  returns a **96-step route where the optimum is 88**. The response says so outright.
+- **SpotBugs caught float equality in the new lens, and it was a real trap.** The band logic
+  compared `f == C*` exactly. That happens to be correct for all three heuristics wired up —
+  they return integral values on a unit-cost grid — but the code accepts an arbitrary
+  `ToDoubleBiFunction`, and `Heuristics.EUCLIDEAN` already exists in the codebase: with it, a cell
+  whose `f` is exactly `C*` would fall into the tie band or the never band depending on the last
+  bit of a square root. Now compared against an epsilon, the same fix this project applied once
+  before to float comparison of cell costs.
+
 - **Solver tournament with confidence intervals (ADR-007 idea 10) and adversarial seed search
   (idea 7).** `GET /api/v1/tournament?generator=&size=&mazes=&braid=&seed=` runs every registered
   solver over a deterministic sample of mazes and reports, per solver, mean work with a
