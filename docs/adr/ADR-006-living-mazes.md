@@ -159,5 +159,8 @@ become dramatically better once mazes can already change under a walker's feet.
 5. [x] UI: mutation frames re-fetch, re-solve, and re-draw; "Bring to life" control
 6. [x] Tests: copy semantics, erosion ticks (mutation, connectivity, settling, capacity,
        drift clamp, determinism), endpoint statuses, frame bridge
-7. [ ] Roadmap follow-ups: fog-of-war agents (7) and traffic simulation (3) on top of
-       the mutation plumbing; daily maze (4) as a quick win
+7. [x] Roadmap follow-ups, first batch (2026-07-30): fog-of-war agents (7) shipped —
+       visibility reads the live grid, so living mazes change mid-walk, exactly the
+       composition predicted above; daily maze (4) shipped as the quick win
+8. [ ] Roadmap follow-ups, next: traffic simulation (3) on the mutation plumbing;
+       solver arena (2); chokepoint analytics overlay (9)

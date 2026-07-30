@@ -109,6 +109,9 @@
         <input id="hotspotCost" type="number" value="25" min="1" max="1000"></div>
     </div>
     <button id="generate" class="primary">Generate</button>
+    <button id="daily"
+            title="Everyone in the world gets the same maze today — the seed derives from the UTC date">
+      Daily challenge</button>
 
     <label for="solver">Solver</label>
     <select id="solver"></select>
@@ -276,8 +279,8 @@ async function generate() {
   adoptMaze(maze, performance.now() - t0);
 }
 
-/** Install a maze into the UI — from a fresh generate or a #maze=<id> permalink. */
-function adoptMaze(maze, roundTripMs) {
+/** Install a maze into the UI — from a fresh generate, a #maze=<id> permalink, or the daily. */
+function adoptMaze(maze, roundTripMs, sourceLabel) {
   state.maze = maze; state.path = null; state.session = null;
   state.joined = null; state.trails = {}; state.won = null;
   state.expansions = []; state.searchProgress = 1; state.pathProgress = 1;
@@ -294,7 +297,7 @@ function adoptMaze(maze, roundTripMs) {
       + `&middot; <span>seed</span> ${maze.seed}<br>`
       + (roundTripMs != null
           ? `<span>round-trip</span> ${roundTripMs.toFixed(0)} ms<br>`
-          : `<span>loaded from</span> permalink<br>`);
+          : `<span>loaded from</span> ${sourceLabel || "permalink"}<br>`);
   resubscribe();
   draw();
   $("pngExport").style.display = "inline";
@@ -303,6 +306,13 @@ function adoptMaze(maze, roundTripMs) {
 $("pngExport").addEventListener("click", function refresh() {
   this.href = $("maze").toDataURL("image/png");
 });
+
+/** The shared daily challenge — same maze for everyone until midnight UTC (ADR-006). */
+async function loadDaily() {
+  const d = await api("/maze/daily");
+  adoptMaze(d.maze, null, `daily challenge ${d.date}`);
+  log("state", `daily challenge ${d.date} — the whole world plays this maze today`);
+}
 
 /** #maze=<id> permalink: load an existing maze from this server on page open. */
 async function loadFromHash() {
@@ -798,6 +808,7 @@ function drawEmpty() {
 
 // ---------- wiring ----------
 $("generate").onclick = () => generate().catch(e => log("err", e.message));
+$("daily").onclick = () => loadDaily().catch(e => log("err", e.message));
 $("solve").onclick = () => solve().catch(e => log("err", e.message));
 $("compare").onclick = () => compareSolvers().catch(e => log("err", e.message));
 $("live").onclick = () => bringToLife().catch(e => log("err", e.message));

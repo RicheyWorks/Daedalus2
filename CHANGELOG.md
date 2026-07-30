@@ -10,6 +10,30 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Fog-of-war agent API (ADR-006 idea #7).** The maze as a benchmark anything that
+  speaks HTTP can compete on. `POST /api/v1/maze/{id}/agent` opens a *blind* walk: the
+  agent sees only its position, the goal's coordinates, and which of the four directions
+  are open from its current cell — the grid is never in any response (asserted on every
+  response of the endpoint test's full walk). `POST /api/v1/agent/{id}/step?direction=…`
+  moves; walking into a wall answers 400 *without consuming budget* (the view already told
+  you the openings); `GET /api/v1/agent/{id}` re-polls visibility for free. Visibility is
+  recomputed from the maze cache's **live** grid on every step and view, so a living maze
+  erodes under the agent's feet mid-walk — the composition ADR-006 predicted, proven by
+  `AgentWalkServiceTest` (swap an eroded snapshot in; the walled direction becomes open
+  and walkable). Bounded everywhere: Caffeine agent store (`daedalus.agent.max-agents` /
+  `idle-ttl`), per-walk step budget (default `4·rows·cols`, capped by `max-steps`), and a
+  new `agentStep` rate budget (1200/min — a blind walk is hundreds of tiny requests by
+  design). Verified end-to-end: a right-hand wall follower written against nothing but
+  the HTTP surface solved the daily maze blind in 475 of its 1764 budgeted steps.
+- **Daily maze (ADR-006 idea #4).** `GET /api/v1/maze/daily` — one shared challenge per
+  UTC day. The seed derives from the date alone (epoch day × 64-bit golden ratio), so
+  every instance, restart, and replica serves the *identical topology* with zero
+  coordination or storage; teeth-proven by breaking the seed with `nanoTime()` and
+  watching exactly the cross-instance determinism test fail. Lazily generated, self-
+  pruning date map (no unbounded store), regenerates identically if the maze cache evicts
+  it, and the literal `/maze/daily` path is pinned to outrank the `/maze/{id}` UUID
+  template. The web UI grew a **Daily challenge** button; the daily maze is a first-class
+  maze — solve it, bring it to life, or walk it blind.
 - **Living mazes (ADR-006).** `POST /api/v1/maze/{id}/live` brings a maze to life:
   scheduled erosion ticks copy the cached grid, open a fraction of its dead-end walls
   (`Braider` reused as the erosion primitive), drift hotspot costs on weighted grids

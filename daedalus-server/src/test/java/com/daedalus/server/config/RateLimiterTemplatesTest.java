@@ -44,5 +44,9 @@ class RateLimiterTemplatesTest {
                 .as("ADR-006's living-maze budget — @PerKeyRateLimit(\"mazeLive\") on "
                         + "POST /maze/{id}/live fails at request time without it")
                 .isPresent();
+        assertThat(registry.find("agentStep"))
+                .as("the fog-of-war walk budget — @PerKeyRateLimit(\"agentStep\") on "
+                        + "POST /agent/{id}/step fails at request time without it")
+                .isPresent();
     }
 }

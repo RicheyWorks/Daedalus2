@@ -67,6 +67,21 @@ daedalus:
     max-ticks: ${DAEDALUS_LIVING_MAX_TICKS:240}
     max-concurrent: ${DAEDALUS_LIVING_MAX_CONCURRENT:8}
     erosion-factor: ${DAEDALUS_LIVING_EROSION_FACTOR:0.08}
+  # ----- Daily maze (ADR-006 idea #4) -----
+  # GET /api/v1/maze/daily. Seed derives from the UTC date, so every instance generates the
+  # identical topology with no coordination — these knobs only shape what kind of maze the
+  # day serves.
+  daily:
+    generator-id: ${DAEDALUS_DAILY_GENERATOR:recursive-backtracker}
+    rows: ${DAEDALUS_DAILY_ROWS:21}
+    cols: ${DAEDALUS_DAILY_COLS:21}
+  # ----- Fog-of-war agents (ADR-006 idea #7) -----
+  # POST /api/v1/maze/{id}/agent + /api/v1/agent/{id}/step. Bounded store (Caffeine) and a
+  # per-walk step budget; max-steps caps what a caller may request.
+  agent:
+    max-agents: ${DAEDALUS_AGENT_MAX:10000}
+    idle-ttl: ${DAEDALUS_AGENT_IDLE_TTL:1h}
+    max-steps: ${DAEDALUS_AGENT_MAX_STEPS:100000}
   # ----- Per-key rate limiting -----
   # The Resilience4j instances below are treated as *templates*: PerKeyRateLimitInterceptor
   # clones each into an independent bucket per caller (authenticated subject, else client IP),
@@ -113,4 +128,9 @@ resilience4j:
         limit-for-period: 10          # each acceptance schedules a whole ticker run, so this
         limit-refresh-period: 1m      # is the most expensive request per call — keep it low;
         timeout-duration: 0           # daedalus.living.max-concurrent is the hard backstop
+        register-health-indicator: false
+      agentStep:
+        limit-for-period: 1200        # a blind walk is hundreds of tiny requests by design —
+        limit-refresh-period: 1m      # 20/s per caller lets a scripted agent actually walk
+        timeout-duration: 0           # while still bounding a runaway loop
         register-health-indicator: false

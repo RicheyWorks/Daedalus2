@@ -111,11 +111,15 @@ public consumers).
 | `POST` | `/api/v1/auth/login` | public | Exchange admin credentials for a JWT |
 | `GET` | `/api/v1/algorithms` | public | List every registered generator and solver |
 | `POST` | `/api/v1/maze/generate` | required | Generate a maze (`GenerateRequest` → `GenerateResponse`) |
+| `GET` | `/api/v1/maze/daily` | public | Today's shared challenge — same maze for everyone until midnight UTC (ADR-006) |
 | `GET` | `/api/v1/maze/{id}` | public | Fetch a previously-generated maze's metadata + tile grid |
 | `POST` | `/api/v1/maze/{id}/live?ticks=30` | required | Bring the maze to life: bounded erosion ticks mutate it in place (ADR-006) |
 | `POST` | `/api/v1/maze/{id}/solve/{solverId}` | required | Run a solver against a stored maze |
 | `POST` | `/api/v1/maze/{id}/session?player=...` | required | Open a play session (returns `SessionResponse`) |
 | `POST` | `/api/v1/session/{id}/move` | required | Move the player one step (`MoveRequest`) |
+| `POST` | `/api/v1/maze/{id}/agent?steps=...` | required | Open a fog-of-war walk: the agent sees only its cell's openings (ADR-006) |
+| `POST` | `/api/v1/agent/{id}/step?direction=NORTH` | required | Take one blind step — validated against the maze's *live* grid |
+| `GET` | `/api/v1/agent/{id}` | public | Re-poll the agent's view without spending a step |
 | `GET` | `/api/v1/leaderboard?n=20` | public | Top-N leaderboard |
 | `GET` | `/api/v1/plugins` | required | Currently-loaded plugins (`PluginInfo`) |
 | `GET` | `/api/v1/plugins/describe` | required | Human-readable plugin tree |

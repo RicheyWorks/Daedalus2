@@ -2,6 +2,7 @@
 
 package com.daedalus.server.controller;
 
+import com.daedalus.api.dto.DailyMazeResponse;
 import com.daedalus.api.dto.GenerateRequest;
 import com.daedalus.api.dto.GenerateResponse;
 import com.daedalus.api.dto.MoveRequest;
@@ -14,6 +15,7 @@ import com.daedalus.model.LeaderboardEntry;
 import com.daedalus.model.TileType;
 import com.daedalus.server.ratelimit.PerKeyRateLimit;
 import com.daedalus.server.service.AlgorithmCatalogService;
+import com.daedalus.server.service.DailyMazeService;
 import com.daedalus.server.service.GameSessionService;
 import com.daedalus.server.service.LeaderboardService;
 import com.daedalus.server.service.LivingMazeService;
@@ -44,6 +46,7 @@ import java.util.UUID;
  * <ul>
  *   <li>{@code GET    /api/v1/algorithms}                      — list everything registered</li>
  *   <li>{@code POST   /api/v1/maze/generate}                   — generate a maze</li>
+ *   <li>{@code GET    /api/v1/maze/daily}                      — today's shared challenge (ADR-006)</li>
  *   <li>{@code GET    /api/v1/maze/{id}}                       — fetch metadata + tile grid</li>
  *   <li>{@code POST   /api/v1/maze/{id}/live}                  — bring the maze to life (ADR-006)</li>
  *   <li>{@code POST   /api/v1/maze/{id}/solve/{solverId}}      — run a solver against the maze</li>
@@ -66,19 +69,22 @@ public class MazeController {
     private final GameSessionService sessions;
     private final LeaderboardService leaderboard;
     private final LivingMazeService living;
+    private final DailyMazeService daily;
 
     public MazeController(MazeGenerationService gen,
                           MazeSolverService solverSvc,
                           AlgorithmCatalogService catalog,
                           GameSessionService sessions,
                           LeaderboardService leaderboard,
-                          LivingMazeService living) {
+                          LivingMazeService living,
+                          DailyMazeService daily) {
         this.gen = gen;
         this.solverSvc = solverSvc;
         this.catalog = catalog;
         this.sessions = sessions;
         this.leaderboard = leaderboard;
         this.living = living;
+        this.daily = daily;
     }
 
     @GetMapping("/algorithms")
@@ -104,6 +110,27 @@ public class MazeController {
         String actualGeneratorId = cached.metadata().generatorId();
         return toResponse(cached.metadata().id(), actualGeneratorId,
                 req.rows(), req.cols(), seed, cached.grid(), cached.hotspots());
+    }
+
+    /**
+     * ADR-006 idea #4 — the shared daily challenge. The seed derives from the UTC date, so
+     * every instance serves the same topology with zero coordination; this endpoint is a
+     * cached read after the day's first request. Note the literal path deliberately
+     * outranks {@code GET /maze/{id}} (exact segments win over templates in Spring's
+     * mapping order), so "daily" is never misparsed as a UUID.
+     */
+    @GetMapping("/maze/daily")
+    @Operation(summary = "Today's shared challenge — same maze for everyone until midnight UTC.",
+            description = "Deterministic from the date: every server instance generates the "
+                    + "identical topology. The returned maze is ordinary — solve it, open a "
+                    + "session, bring it to life, or walk it blind via the agent API.")
+    public DailyMazeResponse daily() {
+        var d = daily.today();
+        var c = d.maze();
+        return new DailyMazeResponse(d.date().toString(), toResponse(
+                c.metadata().id(), c.metadata().generatorId(),
+                c.metadata().rows(), c.metadata().cols(), c.metadata().seed(), c.grid(),
+                c.hotspots()));
     }
 
     @GetMapping("/maze/{id}")
