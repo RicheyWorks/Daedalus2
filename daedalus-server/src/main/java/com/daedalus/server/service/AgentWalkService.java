@@ -5,10 +5,12 @@ package com.daedalus.server.service;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.Direction;
 import com.daedalus.model.Point;
+import com.daedalus.plugin.events.AgentSteppedEvent;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -61,15 +63,18 @@ public class AgentWalkService {
                         boolean arrived) {}
 
     private final MazeGenerationService gen;
+    private final ApplicationEventPublisher events;
     private final int maxSteps;
     private final Cache<UUID, Walk> walks;
 
     @Autowired
     public AgentWalkService(MazeGenerationService gen,
+            ApplicationEventPublisher events,
             @Value("${daedalus.agent.max-agents:10000}") long maxAgents,
             @Value("${daedalus.agent.idle-ttl:1h}") Duration idleTtl,
             @Value("${daedalus.agent.max-steps:100000}") int maxSteps) {
         this.gen = gen;
+        this.events = events;
         this.maxSteps = maxSteps;
         this.walks = Caffeine.newBuilder()
                 .maximumSize(maxAgents)
@@ -130,7 +135,14 @@ public class AgentWalkService {
             return new Walk(walk.id(), walk.mazeId(), to, walk.stepsUsed() + 1,
                     walk.budget(), to.equals(grid.goal()));
         });
-        return after == null ? null : view(after, holder.grid);
+        if (after == null) {
+            return null;
+        }
+        // Outside the store's compute (no listener work under the map lock). Traffic
+        // simulation counts this exactly like a player move — occupancy is occupancy.
+        events.publishEvent(new AgentSteppedEvent(this, after.mazeId(), after.id(),
+                after.position().step(direction.opposite()), after.position()));
+        return view(after, holder.grid);
     }
 
     /**

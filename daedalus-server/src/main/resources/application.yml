@@ -75,6 +75,17 @@ daedalus:
     generator-id: ${DAEDALUS_DAILY_GENERATOR:recursive-backtracker}
     rows: ${DAEDALUS_DAILY_ROWS:21}
     cols: ${DAEDALUS_DAILY_COLS:21}
+  # ----- Traffic simulation (ADR-006 idea #3) -----
+  # POST /api/v1/maze/{id}/traffic. Occupancy (player moves, agent steps) bumps entered
+  # cells' costs; each pulse decays raised costs toward uniform 1.0. Single-writer
+  # copy-on-write, bounded trackers, self-retiring when quiet.
+  traffic:
+    bump: ${DAEDALUS_TRAFFIC_BUMP:4.0}
+    decay-factor: ${DAEDALUS_TRAFFIC_DECAY:0.80}
+    max-cost: ${DAEDALUS_TRAFFIC_MAX_COST:200.0}
+    tick-interval: ${DAEDALUS_TRAFFIC_TICK_INTERVAL:2s}
+    max-concurrent: ${DAEDALUS_TRAFFIC_MAX_CONCURRENT:8}
+    quiet-ticks: ${DAEDALUS_TRAFFIC_QUIET_TICKS:5}
   # ----- Fog-of-war agents (ADR-006 idea #7) -----
   # POST /api/v1/maze/{id}/agent + /api/v1/agent/{id}/step. Bounded store (Caffeine) and a
   # per-walk step budget; max-steps caps what a caller may request.

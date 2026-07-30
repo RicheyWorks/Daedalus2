@@ -158,7 +158,7 @@ public class GameSessionService {
         long score = Math.max(0, 100_000 - s.moveCount() * 10 - elapsed / 100);
         s.complete(score);
         leaderboard.submit(new LeaderboardEntry(
-                s.id(), s.playerName(), score, s.moveCount(), elapsed,
+                s.id(), s.mazeId(), s.playerName(), score, s.moveCount(), elapsed,
                 /* mazeGeneratorId */ "unknown", Instant.now()));
     }
 }

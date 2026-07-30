@@ -37,7 +37,7 @@ class AgentWalkServiceTest {
         gen = new MazeGenerationService(
                 new GeneratorRegistry(List.of(new RecursiveBacktrackerGenerator())),
                 event -> { }, new SimpleMeterRegistry());
-        agents = new AgentWalkService(gen, 10_000, Duration.ofHours(1), 100_000);
+        agents = new AgentWalkService(gen, event -> { }, 10_000, Duration.ofHours(1), 100_000);
         var cached = gen.generate("recursive-backtracker", 11, 11, 42L);
         mazeId = cached.metadata().id();
         grid = cached.grid();

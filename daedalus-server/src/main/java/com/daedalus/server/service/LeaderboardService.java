@@ -31,6 +31,10 @@ public class LeaderboardService {
     private static final Logger log = LoggerFactory.getLogger(LeaderboardService.class);
     private static final String GLOBAL_KEY = "daedalus:leaderboard:global";
     private static final String PER_GEN_KEY = "daedalus:leaderboard:gen:";
+    private static final String PER_MAZE_KEY = "daedalus:leaderboard:maze:";
+    /** Per-maze boards expire — a maze's runs stop mattering once nobody plays it (and the
+     *  daily rolls over after a day), so time is the natural bound on key growth. */
+    private static final java.time.Duration PER_MAZE_TTL = java.time.Duration.ofHours(48);
 
     private final RedisTemplate<String, Object> redis;
     private final boolean redisEnabled;
@@ -75,9 +79,47 @@ public class LeaderboardService {
             ZSetOperations<String, Object> zset = redis.opsForZSet();
             zset.add(GLOBAL_KEY, entry, entry.score());
             zset.add(PER_GEN_KEY + entry.mazeGeneratorId(), entry, entry.score());
+            if (entry.mazeId() != null) {
+                String mazeKey = PER_MAZE_KEY + entry.mazeId();
+                zset.add(mazeKey, entry, entry.score());
+                redis.expire(mazeKey, PER_MAZE_TTL);
+            }
         } catch (Exception e) {
             log.warn("Redis leaderboard write failed; staying in-memory: {}", e.toString());
         }
+    }
+
+    /**
+     * Top-N for one maze — the partition behind the daily challenge's board (and any
+     * shared permalink race). In-memory this is a filter over the bounded global set,
+     * which is honest at portfolio scale: the retention cap governs how far down a
+     * single maze's runs can sit before they age out of the global top. The Redis
+     * backend keeps a true per-maze sorted set (48h TTL).
+     */
+    public List<LeaderboardEntry> top(int n, UUID mazeId) {
+        if (mazeId == null) {
+            return top(n);
+        }
+        if (redisEnabled) {
+            try {
+                Set<Object> raw = redis.opsForZSet()
+                        .reverseRange(PER_MAZE_KEY + mazeId, 0, n - 1);
+                if (raw != null && !raw.isEmpty()) {
+                    List<LeaderboardEntry> out = new ArrayList<>();
+                    for (Object o : raw) if (o instanceof LeaderboardEntry e) out.add(e);
+                    return out;
+                }
+            } catch (Exception e) {
+                log.warn("Redis per-maze leaderboard read failed; using in-memory: {}",
+                        e.toString());
+            }
+        }
+        List<LeaderboardEntry> out = new ArrayList<>();
+        for (LeaderboardEntry e : memory) {
+            if (mazeId.equals(e.mazeId())) out.add(e);
+        }
+        out.sort(Comparator.naturalOrder());
+        return out.subList(0, Math.min(n, out.size()));
     }
 
     public List<LeaderboardEntry> top(int n) {

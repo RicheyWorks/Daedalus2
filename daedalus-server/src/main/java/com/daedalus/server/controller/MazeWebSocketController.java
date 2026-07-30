@@ -7,9 +7,11 @@ import com.daedalus.api.dto.MoveFrame;
 import com.daedalus.api.dto.MutationFrame;
 import com.daedalus.api.dto.PluginFailedFrame;
 import com.daedalus.api.dto.SolvedFrame;
+import com.daedalus.api.dto.TrafficFrame;
 import com.daedalus.plugin.events.MazeGeneratedEvent;
 import com.daedalus.plugin.events.MazeMutatedEvent;
 import com.daedalus.plugin.events.MazeSolvedEvent;
+import com.daedalus.plugin.events.TrafficPulseEvent;
 import com.daedalus.plugin.events.PlayerMovedEvent;
 import com.daedalus.plugin.events.PluginFailedEvent;
 import org.springframework.context.event.EventListener;
@@ -48,6 +50,16 @@ public class MazeWebSocketController {
         stomp.convertAndSend("/topic/maze/" + e.mazeId() + "/state",
                 new MutationFrame(e.mazeId(), e.tick(), e.wallsOpened(),
                         e.deadEndsRemaining(), e.settled()));
+    }
+
+    /**
+     * Traffic pulse (ADR-006 idea #3) — the third frame shape on {@code /state}. Same
+     * delta-only contract as {@link MutationFrame}: clients re-fetch for the cost picture.
+     */
+    @EventListener
+    public void onTrafficPulse(TrafficPulseEvent e) {
+        stomp.convertAndSend("/topic/maze/" + e.mazeId() + "/state",
+                new TrafficFrame(e.mazeId(), e.congestedCells(), e.peakCost(), e.settled()));
     }
 
     @EventListener

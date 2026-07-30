@@ -168,6 +168,17 @@ public class ApiExceptionHandler {
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
     }
 
+    /** Traffic's tracker pool is full — same 409 posture as the living-maze ticker. */
+    @ExceptionHandler(com.daedalus.server.service.TrafficService.CapacityExceededException.class)
+    public ResponseEntity<ProblemDetail> onTrafficCapacity(
+            com.daedalus.server.service.TrafficService.CapacityExceededException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        pd.setTitle("Too many tracked mazes");
+        pd.setType(URI.create("https://daedalus.dev/problems/traffic-capacity"));
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ProblemDetail onMalformedBody(HttpMessageNotReadableException ex) {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(

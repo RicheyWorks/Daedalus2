@@ -21,6 +21,7 @@ import com.daedalus.server.service.LeaderboardService;
 import com.daedalus.server.service.LivingMazeService;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
+import com.daedalus.server.service.TrafficService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -70,6 +71,7 @@ public class MazeController {
     private final LeaderboardService leaderboard;
     private final LivingMazeService living;
     private final DailyMazeService daily;
+    private final TrafficService traffic;
 
     public MazeController(MazeGenerationService gen,
                           MazeSolverService solverSvc,
@@ -77,7 +79,8 @@ public class MazeController {
                           GameSessionService sessions,
                           LeaderboardService leaderboard,
                           LivingMazeService living,
-                          DailyMazeService daily) {
+                          DailyMazeService daily,
+                          TrafficService traffic) {
         this.gen = gen;
         this.solverSvc = solverSvc;
         this.catalog = catalog;
@@ -85,6 +88,7 @@ public class MazeController {
         this.leaderboard = leaderboard;
         this.living = living;
         this.daily = daily;
+        this.traffic = traffic;
     }
 
     @GetMapping("/algorithms")
@@ -194,6 +198,25 @@ public class MazeController {
         return ResponseEntity.ok(living.start(id, ticks, erosionSeed));
     }
 
+    /**
+     * ADR-006 idea #3 — traffic. Enabling wraps a uniform grid weighted; from then on,
+     * player moves and agent steps raise entered cells' costs and every pulse decays them
+     * back toward uniform. Shares the {@code mazeLive} budget: same cost profile (each
+     * acceptance schedules a ticker).
+     */
+    @PostMapping("/maze/{id}/traffic")
+    @Operation(summary = "Track traffic on a maze: occupancy raises cell costs, which decay each pulse.",
+            description = "Players and fog-of-war agents count identically. Weight-aware "
+                    + "solvers route around the crowd; the response's hotspots list mirrors "
+                    + "congestion so cost shading just works. Idempotent while tracked; 409 "
+                    + "when daedalus.traffic.max-concurrent mazes are already tracked. "
+                    + "Rate-limited against the 'mazeLive' budget.")
+    @PerKeyRateLimit("mazeLive")
+    public ResponseEntity<TrafficService.TrafficStatus> traffic(@PathVariable UUID id) {
+        var status = traffic.enable(id);
+        return status == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(status);
+    }
+
     @PostMapping("/maze/{id}/solve/{solverId}")
     @Operation(summary = "Run a registered solver against a stored maze.",
             description = "Rate-limited per caller (authenticated subject, else client IP) against "
@@ -292,13 +315,16 @@ public class MazeController {
 
     @GetMapping("/leaderboard")
     @Operation(summary = "Top-N completion times across active sessions.",
-            description = "Snapshot — backed by Redis when daedalus.redis.enabled=true, otherwise in-memory.")
+            description = "Snapshot — backed by Redis when daedalus.redis.enabled=true, "
+                    + "otherwise in-memory. Pass maze=<id> for that maze's own board — the "
+                    + "partition behind the daily challenge's leaderboard.")
     public List<LeaderboardEntry> leaderboard(
             @RequestParam(defaultValue = "20")
             @Min(value = 1,   message = "n must be at least 1")
             @Max(value = 100, message = "n must be at most 100")
-            int n) {
-        return leaderboard.top(n);
+            int n,
+            @RequestParam(required = false) UUID maze) {
+        return leaderboard.top(n, maze);
     }
 
     /**

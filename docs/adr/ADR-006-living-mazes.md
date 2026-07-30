@@ -162,5 +162,9 @@ become dramatically better once mazes can already change under a walker's feet.
 7. [x] Roadmap follow-ups, first batch (2026-07-30): fog-of-war agents (7) shipped —
        visibility reads the live grid, so living mazes change mid-walk, exactly the
        composition predicted above; daily maze (4) shipped as the quick win
-8. [ ] Roadmap follow-ups, next: traffic simulation (3) on the mutation plumbing;
-       solver arena (2); chokepoint analytics overlay (9)
+8. [x] Roadmap follow-ups, second batch (2026-07-30): traffic simulation (3) shipped on
+       the mutation plumbing (occupancy → cost → routing, decaying); solver arena (2)
+       shipped client-side over the replay seam; daily leaderboard partition completed
+       idea 4 (per-maze boards)
+9. [ ] Roadmap remainder: spectator mode (6), session ghosts (8), chokepoint analytics
+       overlay (9), maze crossbreeding (5), campaign mode (10)

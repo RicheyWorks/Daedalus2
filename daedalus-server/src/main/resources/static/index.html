@@ -122,6 +122,15 @@
     <button id="live" disabled
             title="Erode the maze in place: each tick opens dead-end walls (and drifts hotspot costs) — the route re-solves live as the maze changes">
       Bring to life</button>
+    <button id="traffic" disabled
+            title="Occupancy raises cell costs and decays over time — weight-aware solvers route around wherever you (or agents) walk">
+      Simulate traffic</button>
+
+    <label for="rival">Race the solver above against</label>
+    <select id="rival"></select>
+    <button id="race" disabled
+            title="Both algorithms' REAL recorded searches replay at the same expansions-per-second — the one that found the route with less work finishes first">
+      Race solvers</button>
 
     <label for="player">Player name</label>
     <input id="player" value="web">
@@ -155,7 +164,7 @@
 
   <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
     <section class="panel">
-      <h2>Leaderboard</h2>
+      <h2 id="lbTitle">Leaderboard</h2>
       <div id="lb" class="hint">loading…</div>
     </section>
     <section class="panel">
@@ -179,6 +188,9 @@ const state = {
   stomp: null,
   subs: [],
   livePoll: null,        // interval id — STOMP-less fallback while a maze is alive
+  trafficPoll: null,     // interval id — STOMP-less fallback while traffic is tracked
+  race: null,            // {lanes: [{id, color, expansions, path, front, pathProg}]} during a race
+  dailyId: null,         // set when the current maze is today's daily → scoped leaderboard
 };
 
 /** Escape untrusted text (player names arrive from other clients) before it meets innerHTML. */
@@ -200,9 +212,18 @@ function log(kind, text) {
   while (box.childElementCount > 200) box.lastChild.remove();
 }
 
+// When today's daily is on screen, the board is that maze's own partition — you compete
+// against everyone who played the same topology, not the world's mazes.
+function lbScope() {
+  return state.dailyId && state.maze && state.maze.id === state.dailyId
+      ? state.dailyId : null;
+}
 async function refreshLeaderboard() {
   try {
-    const rows = await api("/leaderboard?n=10");
+    const scoped = lbScope();
+    const rows = await api(`/leaderboard?n=10${scoped ? "&maze=" + scoped : ""}`);
+    if (lbScope() !== scoped) return; // scope changed while in flight — a newer call owns the panel
+    $("lbTitle").textContent = scoped ? "Daily leaderboard" : "Leaderboard";
     $("lb").innerHTML = rows.length === 0
         ? `<span class="hint">no completed runs yet — reach a goal</span>`
         : rows.map((e, i) =>
@@ -237,6 +258,15 @@ async function loadAlgorithms() {
   }
   $("generator").value = "recursive-backtracker";
   $("solver").value = "bfs";
+  // The arena's rival lane gets the same solver roster.
+  const rival = $("rival");
+  rival.innerHTML = "";
+  all.solvers.sort((a, b) => a.id.localeCompare(b.id)).forEach(a => {
+    const o = document.createElement("option");
+    o.value = a.id; o.textContent = a.displayName || a.id;
+    rival.appendChild(o);
+  });
+  rival.value = "astar";
   updateInfo();
 }
 
@@ -286,8 +316,10 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   state.expansions = []; state.searchProgress = 1; state.pathProgress = 1;
   $("solve").disabled = false; $("play").disabled = false; $("join").disabled = true;
   $("compare").disabled = false;
-  $("live").disabled = false;
+  $("live").disabled = false; $("traffic").disabled = false; $("race").disabled = false;
   clearInterval(state.livePoll); state.livePoll = null;
+  clearInterval(state.trafficPoll); state.trafficPoll = null;
+  state.race = null; state.dailyId = null;
   $("compareBox").innerHTML = "";
   location.hash = "maze=" + maze.id; // shareable — anyone on this server can open it
   $("status").textContent = "arrow keys move once a session is open";
@@ -299,6 +331,7 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
           ? `<span>round-trip</span> ${roundTripMs.toFixed(0)} ms<br>`
           : `<span>loaded from</span> ${sourceLabel || "permalink"}<br>`);
   resubscribe();
+  refreshLeaderboard(); // re-scope: global board unless loadDaily re-marks this maze as daily
   draw();
   $("pngExport").style.display = "inline";
 }
@@ -311,6 +344,8 @@ $("pngExport").addEventListener("click", function refresh() {
 async function loadDaily() {
   const d = await api("/maze/daily");
   adoptMaze(d.maze, null, `daily challenge ${d.date}`);
+  state.dailyId = d.maze.id; // after adoptMaze (which clears it) — scopes the leaderboard
+  refreshLeaderboard();
   log("state", `daily challenge ${d.date} — the whole world plays this maze today`);
 }
 
@@ -359,6 +394,37 @@ async function onMutation(m) {
   if (m.settled) $("live").disabled = false;
 }
 
+// ---------- traffic simulation (ADR-006 idea #3) ----------
+/** Track congestion: everywhere you (or agents) walk gets expensive, then cools off. */
+async function simulateTraffic() {
+  const r = await api(`/maze/${state.maze.id}/traffic`, {method: "POST"});
+  $("traffic").disabled = true;
+  log("state", `traffic tracking on — walk around and watch the costs bloom `
+      + `(pulse every ${(r.tickMillis / 1000).toFixed(1)}s)`);
+  if (!state.stomp) {
+    // STOMP-less fallback: poll while a session is being played; stop with the maze.
+    const mazeId = state.maze.id;
+    clearInterval(state.trafficPoll);
+    state.trafficPoll = setInterval(async () => {
+      if (!state.maze || state.maze.id !== mazeId) {
+        clearInterval(state.trafficPoll); state.trafficPoll = null;
+        return;
+      }
+      await refreshLivingMaze();
+    }, r.tickMillis);
+  }
+}
+
+/** A traffic pulse arrived: costs moved — re-fetch, re-solve, redraw (same as mutation). */
+async function onTrafficPulse(m) {
+  log("state", m.settled
+      ? "traffic fully decayed — tracking retired"
+      : `traffic: ${m.congestedCells} congested cell${m.congestedCells === 1 ? "" : "s"}, `
+          + `peak cost ${m.peakCost.toFixed(1)}`);
+  await refreshLivingMaze();
+  if (m.settled) $("traffic").disabled = false;
+}
+
 /** Swap in the latest snapshot without resetting session/solver state (unlike adoptMaze). */
 async function refreshLivingMaze() {
   try {
@@ -382,6 +448,7 @@ async function refreshLivingMaze() {
 async function solve() {
   const r = await api(`/maze/${state.maze.id}/solve/${$("solver").value}?replay=true`,
       {method: "POST"});
+  state.race = null; // a plain solve replaces any arena overlay
   state.path = r.path;
   state.expansions = r.expansions || [];
   log("solver", `${r.solverId}: path ${r.path.length}, visited ${r.visited}, `
@@ -427,6 +494,83 @@ function animateSearch() {
 function animatePath() {
   state.expansions = [];
   animateSearch();
+}
+
+// ---------- solver arena (ADR-006 idea #2) ----------
+/**
+ * Race two solvers head-to-head: both REAL recorded expansion orders replay at the SAME
+ * expansions-per-second, so the algorithm that found the route with less work visibly
+ * finishes first. This is observation, not reenactment — the fronts are the searches the
+ * server actually ran, cell for cell.
+ */
+async function raceSolvers() {
+  const a = $("solver").value, b = $("rival").value;
+  if (a === b) { log("err", "pick two different solvers to race"); return; }
+  $("race").disabled = true;
+  try {
+    const ra = await api(`/maze/${state.maze.id}/solve/${a}?replay=true`, {method: "POST"});
+    const rb = await api(`/maze/${state.maze.id}/solve/${b}?replay=true`, {method: "POST"});
+    state.path = null; state.expansions = []; state.searchProgress = 1; state.pathProgress = 1;
+    state.race = { lanes: [
+      {id: a, color: "#82b1ff", expansions: ra.expansions || [], path: ra.path,
+       success: ra.success, front: 0, pathProg: 0},
+      {id: b, color: "#f0b429", expansions: rb.expansions || [], path: rb.path,
+       success: rb.success, front: 0, pathProg: 0},
+    ]};
+    log("solver", `arena: ${a} (${(ra.expansions || []).length} expansions) vs `
+        + `${b} (${(rb.expansions || []).length} expansions) — racing at equal speed`);
+    animateRace();
+  } finally {
+    $("race").disabled = false;
+  }
+}
+
+function animateRace() {
+  const lanes = state.race.lanes;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    lanes.forEach(l => { l.front = 1; l.pathProg = 1; });
+    draw(); raceSummary();
+    return;
+  }
+  const maxN = Math.max(1, ...lanes.map(l => l.expansions.length));
+  const rate = Math.max(150, maxN / 3.5); // expansions/sec — biggest lane takes ≤3.5s
+  const pathMs = 600;
+  const started = performance.now();
+  const step = now => {
+    const t = (now - started) / 1000;
+    let running = false;
+    lanes.forEach(l => {
+      const n = l.expansions.length;
+      l.front = n ? Math.min(1, (t * rate) / n) : 1;
+      const doneAt = n / rate; // seconds at which this lane's search finished
+      l.pathProg = l.front >= 1 ? Math.min(1, ((t - doneAt) * 1000) / pathMs) : 0;
+      if (l.pathProg < 1) running = true;
+    });
+    draw();
+    if (running) requestAnimationFrame(step);
+    else raceSummary();
+  };
+  requestAnimationFrame(step);
+}
+
+function raceSummary() {
+  const [A, B] = state.race.lanes;
+  const ok = l => l.success !== false && l.path && l.path.length > 0;
+  let text;
+  if (ok(A) && ok(B)) {
+    const [w, l] = A.expansions.length <= B.expansions.length ? [A, B] : [B, A];
+    const ratio = (l.expansions.length / Math.max(1, w.expansions.length)).toFixed(1);
+    text = `<b style="color:${w.color}">${esc(w.id)}</b> wins the arena — route found after `
+        + `${w.expansions.length} expansions vs ${l.expansions.length} (${ratio}&times; less work). `
+        + `Path lengths: ${esc(A.id)} ${A.path.length}, ${esc(B.id)} ${B.path.length}.`;
+  } else if (ok(A) || ok(B)) {
+    const w = ok(A) ? A : B, l = w === A ? B : A;
+    text = `<b style="color:${w.color}">${esc(w.id)}</b> wins by default — `
+        + `${esc(l.id)} legitimately gave up (no route under its rules).`;
+  } else {
+    text = "neither solver found a route.";
+  }
+  $("compareBox").innerHTML = `<div style="margin-top:8px">${text}</div>`;
 }
 
 /**
@@ -598,9 +742,10 @@ function resubscribe() {
   if (state.maze) {
     state.subs.push(state.stomp.subscribe(`/topic/maze/${state.maze.id}/state`, f => {
       const m = JSON.parse(f.body);
-      // Two frame shapes ride /state: a MutationFrame (living maze tick, has `tick`)
-      // and a GeneratedFrame (has `generatorId`).
+      // Three frame shapes ride /state: MutationFrame (living tick, has `tick`),
+      // TrafficFrame (has `congestedCells`), GeneratedFrame (has `generatorId`).
       if (m.tick !== undefined) { onMutation(m); return; }
+      if (m.congestedCells !== undefined) { onTrafficPulse(m); return; }
       log("state", `generated ${m.rows}×${m.cols} by ${m.generatorId}`);
     }));
     state.subs.push(state.stomp.subscribe(`/topic/maze/${state.maze.id}/solver`, f => {
@@ -745,6 +890,39 @@ function draw() {
     g.stroke();
     g.globalAlpha = 1;
   }
+  // Arena lanes: two real searches racing at equal speed, then their routes.
+  if (state.race) {
+    state.race.lanes.forEach((lane, li) => {
+      const shown = Math.ceil(lane.expansions.length * lane.front);
+      g.fillStyle = lane.color;
+      g.globalAlpha = 0.13;
+      for (let i = 0; i < shown; i++) {
+        const p = lane.expansions[i];
+        g.fillRect(geom.offX[2 * p.col + 1], geom.offY[2 * p.row + 1], geom.cell, geom.cell);
+      }
+      g.globalAlpha = 0.4;
+      for (let i = Math.max(0, shown - 5); i < shown; i++) {
+        const p = lane.expansions[i];
+        g.fillRect(geom.offX[2 * p.col + 1], geom.offY[2 * p.row + 1], geom.cell, geom.cell);
+      }
+      g.globalAlpha = 1;
+      if (lane.pathProg > 0 && lane.path && lane.path.length > 1) {
+        const visible = Math.max(2, Math.ceil(lane.path.length * lane.pathProg));
+        g.strokeStyle = lane.color;
+        // Lane 0 draws wide underneath, lane 1 narrow on top — overlaps stay readable.
+        g.lineWidth = Math.max(2, geom.cell * (li === 0 ? 0.42 : 0.2));
+        g.lineCap = "round"; g.lineJoin = "round";
+        g.globalAlpha = li === 0 ? 0.7 : 0.95;
+        g.beginPath();
+        lane.path.slice(0, visible).forEach((p, i) => {
+          const [x, y] = cellCenter(p);
+          i === 0 ? g.moveTo(x, y) : g.lineTo(x, y);
+        });
+        g.stroke();
+        g.globalAlpha = 1;
+      }
+    });
+  }
   // Breadcrumb trails: where each player has actually walked.
   Object.entries(state.trails).forEach(([name, points], i) => {
     g.fillStyle = PLAYER_COLORS[i % PLAYER_COLORS.length];
@@ -812,6 +990,8 @@ $("daily").onclick = () => loadDaily().catch(e => log("err", e.message));
 $("solve").onclick = () => solve().catch(e => log("err", e.message));
 $("compare").onclick = () => compareSolvers().catch(e => log("err", e.message));
 $("live").onclick = () => bringToLife().catch(e => log("err", e.message));
+$("traffic").onclick = () => simulateTraffic().catch(e => log("err", e.message));
+$("race").onclick = () => raceSolvers().catch(e => log("err", e.message));
 $("play").onclick = () => play().catch(e => log("err", e.message));
 $("join").onclick = () => join();
 document.addEventListener("keydown", e => {

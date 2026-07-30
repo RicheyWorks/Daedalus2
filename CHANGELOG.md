@@ -10,6 +10,31 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Traffic simulation (ADR-006 idea #3).** `POST /api/v1/maze/{id}/traffic` closes the
+  loop between play and routing: every cell a player or fog-of-war agent enters
+  accumulates occupancy, a scheduled pulse applies it as cost (clamped at
+  `daedalus.traffic.max-cost`) and decays every raised cost back toward uniform — so
+  weight-aware solvers route around the crowd, and the shortcut reopens as it disperses.
+  Both occupancy sources count identically (new `AgentSteppedEvent` alongside
+  `PlayerMovedEvent`). Single-writer copy-on-write like the living ticker: moves only
+  bump counters; the pulse thread copies, applies, swaps, and publishes a `TrafficFrame`
+  (third frame shape on `/state`). Uniform grids are wrapped `WeightedMazeGrid` on
+  enable; congestion mirrors into the response's `hotspots` list so cost shading just
+  works. Bounded trackers (409 at capacity), self-retiring when fully decayed and quiet.
+  UI: **Simulate traffic** button — pace back and forth and watch the floor heat up
+  under your feet.
+- **Solver arena (ADR-006 idea #2).** **Race solvers** in the web UI: two algorithms'
+  REAL recorded expansion orders (the existing replay seam — observation, never
+  reenactment) replay simultaneously at the same expansions-per-second, so the one that
+  found the route with less work visibly finishes first; both routes then draw in lane
+  colors and the verdict names the winner with the work ratio. Honest by construction:
+  a solver that legitimately gives up loses by default, stated as such.
+- **Per-maze leaderboards.** `GET /api/v1/leaderboard?maze={id}` — `LeaderboardEntry`
+  gained a `mazeId` partition key (legacy null-maze entries stay global-only, pinned by
+  `LeaderboardPartitionTest`, teeth-proven by disabling the filter). The daily
+  challenge's board is now its own partition: the UI shows **Daily leaderboard** when
+  today's maze is on screen, so a run on an easy 5×5 can never outrank daily runs.
+  Redis backend keeps true per-maze sorted sets with a 48h TTL (time bounds key growth).
 - **Fog-of-war agent API (ADR-006 idea #7).** The maze as a benchmark anything that
   speaks HTTP can compete on. `POST /api/v1/maze/{id}/agent` opens a *blind* walk: the
   agent sees only its position, the goal's coordinates, and which of the four directions

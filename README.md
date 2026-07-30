@@ -120,7 +120,8 @@ public consumers).
 | `POST` | `/api/v1/maze/{id}/agent?steps=...` | required | Open a fog-of-war walk: the agent sees only its cell's openings (ADR-006) |
 | `POST` | `/api/v1/agent/{id}/step?direction=NORTH` | required | Take one blind step — validated against the maze's *live* grid |
 | `GET` | `/api/v1/agent/{id}` | public | Re-poll the agent's view without spending a step |
-| `GET` | `/api/v1/leaderboard?n=20` | public | Top-N leaderboard |
+| `POST` | `/api/v1/maze/{id}/traffic` | required | Track traffic: occupancy raises cell costs, which decay each pulse (ADR-006) |
+| `GET` | `/api/v1/leaderboard?n=20&maze={id}` | public | Top-N leaderboard — `maze=` scopes to one maze's board (the daily's partition) |
 | `GET` | `/api/v1/plugins` | required | Currently-loaded plugins (`PluginInfo`) |
 | `GET` | `/api/v1/plugins/describe` | required | Human-readable plugin tree |
 

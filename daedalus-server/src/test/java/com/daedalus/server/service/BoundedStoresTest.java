@@ -81,7 +81,7 @@ class BoundedStoresTest {
     void leaderboardRetainsOnlyTheBestUpToItsCap() {
         LeaderboardService svc = new LeaderboardService(null, false, 5);
         for (int score = 1; score <= 20; score++) {
-            svc.submit(new LeaderboardEntry(UUID.randomUUID(), "p" + score, score,
+            svc.submit(new LeaderboardEntry(UUID.randomUUID(), null, "p" + score, score,
                     10, 1000, "binary-tree", Instant.now()));
         }
         List<LeaderboardEntry> top = svc.top(100);
