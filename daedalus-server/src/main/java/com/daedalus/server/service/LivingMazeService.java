@@ -302,7 +302,7 @@ public class LivingMazeService {
         for (int r = 0; r < grid.rows(); r++) {
             for (int c = 0; c < grid.cols(); c++) {
                 double w = grid.weightOf(r, c);
-                if (w != 1.0) {
+                if (Math.abs(w - 1.0) > WEIGHT_EPSILON) {
                     out.add(new Hotspot(r, c, w));
                 }
             }

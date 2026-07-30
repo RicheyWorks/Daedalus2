@@ -32,8 +32,41 @@ under the `_migration/` portfolios.
   third of their cells on dead ends), and the original label bands put nearly every maze this
   project generates into "hard" or "brutal".
 
+### Changed
+
+- **Mutation-tested the headline guarantees.** Six semantic breaks were injected one at a time
+  — players able to walk through walls, BFS made LIFO so its paths stop being shortest,
+  generators ignoring their seed, the leaderboard comparator inverted, rate limiting disabled,
+  and half of all recorded search expansions dropped — each followed by a full test run and a
+  byte-for-byte restore. **All six were caught**, so the suite has real teeth on the properties
+  the project is sold on. (Harness at `mutants/run.py`; two apparent survivors turned out to be
+  artifacts of running only the module that owned each file, which is worth stating rather than
+  reporting as findings.)
+- **Two core guarantees now defend themselves in core.** That module-locality point was a real
+  gap, not just a harness quirk: `LeaderboardEntry`'s ordering and `SearchRecorder`'s fidelity
+  live in `daedalus-core`, but every test of them lived in `daedalus-server`, so
+  `mvn -pl daedalus-core test` stayed green with the leaderboard ranking worst-first and with
+  half of every recorded search thrown away. A developer iterating on core got false confidence.
+  New `LeaderboardEntryOrderingTest` and `SearchRecorderFidelityTest` close that, verified by
+  re-running the mutations core-only — including one that drops a *single* expansion.
+  `SearchRecorderFidelityTest` also documents a metric trap found while writing it:
+  `cellsVisited` looks like the count to compare a recording against and disagrees with it by up
+  to 17 on a 31×31 DFS solve; `cellsExplored` is the right one, and the true invariant
+  (`cellsExplored - recorded ∈ {0, 1}`, measured over 324 solves) is what the arena's
+  expansion-count verdict rests on.
+
 ### Fixed
 
+- **`LivingMazeService` still compared a cell cost with `==` in one place.** The previous batch
+  fixed the two sites SpotBugs flagged and left an identical third in `hotspotsOf`, where a
+  weight a hair off `1.0` would be reported as a hotspot and shaded red. Now uses the same
+  `WEIGHT_EPSILON` as its neighbours. Consistency rather than a live bug — traffic's decay snaps
+  to exactly `1.0` — but it is the same defect class, one function away from the fix.
+- **`TrafficService.quietTicks` was a `volatile int` being incremented.** The same
+  read-modify-write pattern SpotBugs flagged on `LivingMazeService`'s tick counter, which it
+  happened not to flag here. The fix goes the opposite way, because the field is genuinely
+  different: it is touched only by the single-threaded ticker, so it is now a plain `int` with
+  the confinement documented, rather than advertising cross-thread sharing that does not exist.
 - **Campaign planning polluted the maze cache and lied to plugins.** Candidates were graded by
   generating them through `MazeGenerationService.generate`, which caches every maze and
   publishes `MazeGeneratedEvent`. A 6-stage campaign evaluates 54 candidates and serves 6, so

@@ -94,7 +94,15 @@ public class TrafficService {
     private final class Tracker {
         final UUID mazeId;
         final ConcurrentHashMap<Point, Integer> pending = new ConcurrentHashMap<>();
-        volatile int quietTicks;
+        // Read and written only by the single-threaded ticker (see `ticker`), so it needs no
+        // synchronisation and is deliberately NOT volatile. It used to be, which was worse
+        // than useless: `++tracker.quietTicks` is a read-modify-write, so volatile bought no
+        // atomicity while advertising cross-thread sharing that does not exist — exactly the
+        // confusion SpotBugs flags as VO_VOLATILE_INCREMENT on LivingMazeService's tick
+        // counter. That counter genuinely is shared and became an AtomicInteger; this one is
+        // confined to one thread, so the honest fix is the opposite direction. Publication to
+        // the ticker thread happens-before via the executor submission in enable().
+        int quietTicks;
         volatile ScheduledFuture<?> future;
 
         Tracker(UUID mazeId) {

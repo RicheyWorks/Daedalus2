@@ -222,3 +222,31 @@ become dramatically better once mazes can already change under a walker's feet.
         The pattern worth keeping from both: the bug was in the part nobody looks at. Neither
         would have shown up in a response body, a screenshot, or a passing test suite, and both
         were found by writing a throwaway probe that counted something.
+
+13. [x] Audit pass (2026-07-30). Having been burned twice by tests that passed for the wrong
+        reason, the suite itself was put on trial: six semantic breaks injected one at a time
+        (walk through walls, BFS made LIFO, seeds ignored, leaderboard inverted, rate limiting
+        off, half of all recorded expansions dropped), each with a full test run and restore.
+        All six were caught — the good news, and worth recording as plainly as the failures.
+
+        Two lessons that generalise:
+
+        - **A guarantee can be pinned overall and unpinned where you work.** Two of the six
+          survived a *module-scoped* run: `LeaderboardEntry`'s ordering and `SearchRecorder`'s
+          fidelity live in core, and every test of them lived in the server module. Whole-reactor
+          CI was green either way, so nothing was broken — but `mvn -pl daedalus-core test`, the
+          command you actually run while editing core, accepted a worst-first leaderboard and a
+          recorder that discarded half its data. Both modules now guard their own invariants.
+        - **Pick the metric by measuring, not by name.** Writing the fidelity test, the
+          obvious-sounding `cellsVisited` disagreed with the recording by up to 17 expansions;
+          `cellsExplored` was the intended counterpart, and the exact relationship
+          (`cellsExplored - recorded ∈ {0, 1}`, because the goal's neighbours are never
+          requested) only became clear after sweeping 324 solves. A test asserting the
+          plausible-looking equality would have failed honestly and been "fixed" by loosening it
+          into something that no longer caught anything.
+
+        The two code defects this pass turned up were both small and both echoes of the previous
+        batch — a third `==` on a cell cost one function away from the two already fixed, and the
+        same volatile-increment shape in the service SpotBugs hadn't flagged. Defect classes
+        travel in packs; when one is found, the honest move is to grep for its siblings rather
+        than fix the reported instance and move on.
