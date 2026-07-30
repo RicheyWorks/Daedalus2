@@ -3,7 +3,10 @@
 package com.daedalus.server.service;
 
 import com.daedalus.engine.MazeGrid;
+import com.daedalus.engine.generators.GeneratorRegistry;
+import com.daedalus.model.MazeStats;
 import com.daedalus.theory.DifficultyGrader;
+import com.daedalus.theory.MazeMetrics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -65,6 +68,7 @@ public class CampaignService {
     public record Campaign(long seed, List<Stage> stages) {}
 
     private final MazeGenerationService gen;
+    private final GeneratorRegistry registry;
     private final int stageCount;
     private final int candidates;
     private final int baseSize;
@@ -75,12 +79,14 @@ public class CampaignService {
     private final int maxCampaigns;
 
     public CampaignService(MazeGenerationService gen,
+                           GeneratorRegistry registry,
                            @Value("${daedalus.campaign.stages:6}") int stageCount,
                            @Value("${daedalus.campaign.candidates:3}") int candidates,
                            @Value("${daedalus.campaign.base-size:9}") int baseSize,
                            @Value("${daedalus.campaign.size-step:4}") int sizeStep,
                            @Value("${daedalus.campaign.max-campaigns:50}") int maxCampaigns) {
         this.gen = gen;
+        this.registry = registry;
         this.stageCount = Math.max(1, stageCount);
         this.candidates = Math.max(1, candidates);
         this.baseSize = Math.max(7, baseSize);
@@ -178,9 +184,7 @@ public class CampaignService {
             int size = Math.max(5, nominal + (sizeVariant - 1) * 2);
             for (int c = 0; c < candidates; c++) {
                 long mazeSeed = seedFor(campaignSeed, index, sizeVariant * candidates + c);
-                var cached = gen.generate(generatorId, size, size, mazeSeed);
-                MazeGrid grid = cached.grid();
-                var candidate = new Candidate(cached, DifficultyGrader.grade(grid), mazeSeed, size);
+                var candidate = new Candidate(gradeOf(generatorId, size, mazeSeed), mazeSeed, size);
 
                 if (hardest == null || candidate.grade.score() > hardest.grade.score()) {
                     hardest = candidate;
@@ -195,13 +199,40 @@ public class CampaignService {
         }
 
         Candidate chosen = best != null ? best : hardest;
-        return new Stage(index, nameFor(index), chosen.cached.metadata().id(), generatorId,
+        // Only the winner enters the world. Determinism makes this exact rather than
+        // approximate: the same (generator, size, seed) reproduces the graded topology, and
+        // the pipeline places start/goal the same deterministic way gradeOf did, so the
+        // grade reported for this stage describes precisely the maze that gets served.
+        var served = gen.generate(generatorId, chosen.size, chosen.size, chosen.seed);
+        return new Stage(index, nameFor(index), served.metadata().id(), generatorId,
                 chosen.size, chosen.size, chosen.seed, round(target), chosen.grade,
                 hazardsFor(index));
     }
 
-    private record Candidate(MazeGenerationService.Cached cached, DifficultyGrader.Grade grade,
-                             long seed, int size) {}
+    /**
+     * Grade a candidate without letting it into the world.
+     *
+     * <p>Candidates are generated straight off the registry rather than through
+     * {@link MazeGenerationService#generate}, because that method — correctly, for a maze
+     * someone asked for — caches the result and publishes {@link
+     * com.daedalus.plugin.events.MazeGeneratedEvent}. Planning a 6-stage campaign evaluates 54
+     * candidates and keeps 6, so routing candidates through it was measurably wrong on two
+     * counts: 48 mazes per campaign (89%) landed in the bounded maze cache and evicted mazes
+     * real users were playing, and every plugin plus every STOMP subscriber was told 48 mazes
+     * had been generated that no one could ever fetch. Grading needs a grid, not a maze anyone
+     * can see.
+     *
+     * <p>Start/goal placement is applied here because the grader measures route length, and the
+     * pipeline places them after generation — grading a raw grid would score a different maze
+     * than the one served.
+     */
+    private DifficultyGrader.Grade gradeOf(String generatorId, int size, long seed) {
+        MazeGrid grid = registry.require(generatorId).generate(size, size, seed, new MazeStats());
+        MazeMetrics.placeStartAndGoalAtExtremes(grid);
+        return DifficultyGrader.grade(grid);
+    }
+
+    private record Candidate(DifficultyGrader.Grade grade, long seed, int size) {}
 
     /**
      * Stage targets climb linearly, and are deliberately <b>conservative</b> — they sit below

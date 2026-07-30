@@ -34,6 +34,27 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Campaign planning polluted the maze cache and lied to plugins.** Candidates were graded by
+  generating them through `MazeGenerationService.generate`, which caches every maze and
+  publishes `MazeGeneratedEvent`. A 6-stage campaign evaluates 54 candidates and serves 6, so
+  **89% of them** were landing in the bounded maze cache — evicting mazes real users were
+  playing, up to 2,400 junk entries at the default `max-campaigns` — while every plugin and
+  STOMP subscriber was told 48 mazes had been generated that nobody could fetch. Candidates are
+  now graded off the generator registry directly and only the winner enters the world;
+  determinism makes that exact rather than approximate. Planning also got 58% faster as a side
+  effect (411ms → 171ms), and the regression is pinned by a test, since nothing in the campaign
+  response revealed it.
+- **Dungeon crossbreeds came out with no dungeon left in them.** The connectivity repair ran
+  Kruskal over every closed wall, which connects uncarved rock as eagerly as rooms: breeding two
+  21×21 dungeon parents that were 49% and 50% rock produced children that were **0% rock on
+  every seed** — connected, and unrecognisable as either parent. Repair now works on the
+  habitable subgraph and tunnels a shortest corridor through rock only where leaving it would
+  orphan a room; dungeon crossbreeds measure 46–50% rock and stay fully playable. Habitability
+  is decided by each patch's donor parent rather than read off the stitched grid — the
+  distinction matters, because a cell's four edges are inherited independently and the lottery
+  can seal a cell both parents had carved, which the first version of this fix silently
+  abandoned as rock (caught by spanning-tree parents, which contain no rock at all, producing
+  children that did).
 - **Campaign hazards silently 404'd.** The UI built hazard paths by interpolating the hazard
   name, but the `living` hazard is served by `POST /live` — every late-stage hazard failed. The
   hazard→path mapping is now explicit, with the mismatch noted.
@@ -57,9 +78,10 @@ under the `_migration/` portfolios.
 - **Maze crossbreeding (ADR-006 idea #5).** `MazeBreeder` in core: two equal-sized parents
   produce a child by a patch-inheritance genome (3×3 blocks assigned to a parent by seeded
   coin flip, so offspring visibly wear both lineages — a Hilbert curve's discipline melting
-  into a backtracker's rivers at the seams), then a seeded Kruskal pass carves the minimum
-  set of openings that restores full connectivity. That repair is load-bearing and proven
-  so: disabling it leaves cells unreachable and fails the connectivity test immediately.
+  into a backtracker's rivers at the seams), then a seeded repair pass carves the minimum set
+  of openings that makes every room mutually reachable while leaving genuine rock intact. That
+  repair is load-bearing and proven so: disabling it leaves cells unreachable and fails the
+  connectivity test immediately.
   `POST /api/v1/maze/breed?a=&b=&seed=` adopts the child as a first-class maze via the new
   `MazeGenerationService.adopt` (same metadata, cache entry, and `MazeGeneratedEvent` as a
   generated maze) — so a child can be solved, played, analyzed, brought to life, and bred

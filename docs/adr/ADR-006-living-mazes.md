@@ -202,3 +202,23 @@ become dramatically better once mazes can already change under a walker's feet.
         `volatile` increment in `LivingMazeService`. The gate is green with SpotBugs and
         Checkstyle enabled; skipping a project's own quality gate to move faster is exactly the
         kind of shortcut this ADR's other entries were written to avoid.
+
+12. [x] Consolidation pass (2026-07-30). Two defects in the freshly-shipped roadmap code, both
+        found by measuring what the features actually did rather than by reading them:
+
+        - **Campaign planning treated a shared, bounded resource as scratch space.** Grading
+          candidates through the normal generate path cached all 54 of them and announced each
+          one, so 89% of a campaign's planning work evicted mazes real users were playing and
+          told every plugin about mazes that were never served. A feature can be entirely
+          correct in its own output and still be a bad citizen of the system it runs in; the
+          campaign response looked perfect throughout.
+        - **Crossbreeding's "full connectivity" guarantee was quietly deleting a generator's
+          defining trait.** Connecting every *cell* rather than every *room* carved away 100%
+          of a dungeon parent's rock. The guarantee was never wrong, it was aimed at the wrong
+          set — and the honest fix needed a second insight, that habitability has to come from
+          the patch's donor parent rather than the stitched grid, because inheriting four edges
+          independently can seal a cell both parents had carved.
+
+        The pattern worth keeping from both: the bug was in the part nobody looks at. Neither
+        would have shown up in a response body, a screenshot, or a passing test suite, and both
+        were found by writing a throwaway probe that counted something.

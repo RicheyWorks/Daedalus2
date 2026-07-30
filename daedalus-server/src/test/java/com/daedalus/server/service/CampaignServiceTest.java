@@ -26,18 +26,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CampaignServiceTest {
 
     private MazeGenerationService gen;
+    private GeneratorRegistry registry;
+    private final java.util.List<Object> published = new java.util.ArrayList<>();
 
     @BeforeEach
     void setUp() {
-        gen = new MazeGenerationService(new GeneratorRegistry(List.of(
+        registry = new GeneratorRegistry(List.of(
                 new BinaryTreeGenerator(), new SidewinderGenerator(), new PrimsGenerator(),
                 new HuntAndKillGenerator(), new AldousBroderGenerator(),
-                new RecursiveBacktrackerGenerator())),
-                event -> { }, new SimpleMeterRegistry());
+                new RecursiveBacktrackerGenerator()));
+        published.clear();
+        gen = new MazeGenerationService(registry, published::add, new SimpleMeterRegistry());
     }
 
     private CampaignService service() {
-        return new CampaignService(gen, 6, 3, 9, 4, 50);
+        return new CampaignService(gen, registry, 6, 3, 9, 4, 50);
     }
 
     /**
@@ -81,7 +84,7 @@ class CampaignServiceTest {
     @ParameterizedTest
     @ValueSource(longs = {1L, 2L})
     void theClearThePreviousRuleIsWhatOrdersLongerLadders(long seed) {
-        var campaign = new CampaignService(gen, 10, 2, 9, 3, 50).campaign(seed);
+        var campaign = new CampaignService(gen, registry, 10, 2, 9, 3, 50).campaign(seed);
         var scores = campaign.stages().stream().map(s -> s.grade().score()).toList();
         for (int i = 1; i < scores.size(); i++) {
             assertThat(scores.get(i))
@@ -100,7 +103,7 @@ class CampaignServiceTest {
                 new BinaryTreeGenerator(), new SidewinderGenerator(), new PrimsGenerator(),
                 new HuntAndKillGenerator(), new AldousBroderGenerator(),
                 new RecursiveBacktrackerGenerator())), event -> { }, new SimpleMeterRegistry());
-        var second = new CampaignService(other, 6, 3, 9, 4, 50).campaign(99L);
+        var second = new CampaignService(other, registry, 6, 3, 9, 4, 50).campaign(99L);
 
         for (int i = 0; i < first.stages().size(); i++) {
             var a = first.stages().get(i);
@@ -128,6 +131,38 @@ class CampaignServiceTest {
         assertThat(svc.stage(7L, 3).mazeId()).isEqualTo(first.stages().get(3).mazeId());
         assertThat(svc.stage(7L, 99)).isNull();
         assertThat(svc.stage(7L, -1)).isNull();
+    }
+
+    /**
+     * Planning must not leak its rejected candidates into the world.
+     *
+     * <p>The first implementation graded candidates by generating them through
+     * {@link MazeGenerationService#generate}, which caches every maze and announces it. A
+     * 6-stage campaign evaluates 54 candidates and serves 6, so 89% of them were caching into
+     * a bounded store — evicting mazes real users were playing — and firing
+     * {@code MazeGeneratedEvent} at every plugin and STOMP subscriber for mazes nobody could
+     * fetch. Nothing in the campaign response showed it, which is exactly why it needs a test.
+     */
+    @Test
+    void planningDoesNotCacheOrAnnounceTheCandidatesItRejects() {
+        var campaign = service().campaign(31337L);
+
+        var generated = published.stream()
+                .filter(com.daedalus.plugin.events.MazeGeneratedEvent.class::isInstance)
+                .map(com.daedalus.plugin.events.MazeGeneratedEvent.class::cast)
+                .map(e -> e.metadata().id())
+                .toList();
+        var servedIds = campaign.stages().stream().map(CampaignService.Stage::mazeId).toList();
+
+        assertThat(generated)
+                .as("exactly one announced maze per stage — one event per candidate means "
+                        + "plugins and subscribers are told about mazes that are never served")
+                .containsExactlyInAnyOrderElementsOf(servedIds);
+        // And nothing beyond the served stages is resident in the cache.
+        assertThat(generated).hasSize(campaign.stages().size());
+        for (var id : servedIds) {
+            assertThat(gen.find(id)).as("a served stage must be fetchable").isNotNull();
+        }
     }
 
     @Test
