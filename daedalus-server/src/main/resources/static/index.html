@@ -116,6 +116,9 @@
     <button id="solve" disabled>Solve</button>
     <button id="compare" disabled title="Run every registered solver against this maze">
       Compare all solvers</button>
+    <button id="live" disabled
+            title="Erode the maze in place: each tick opens dead-end walls (and drifts hotspot costs) — the route re-solves live as the maze changes">
+      Bring to life</button>
 
     <label for="player">Player name</label>
     <input id="player" value="web">
@@ -172,6 +175,7 @@ const state = {
   algos: {},             // id -> AlgorithmDescriptor, for the info cards
   stomp: null,
   subs: [],
+  livePoll: null,        // interval id — STOMP-less fallback while a maze is alive
 };
 
 /** Escape untrusted text (player names arrive from other clients) before it meets innerHTML. */
@@ -279,6 +283,8 @@ function adoptMaze(maze, roundTripMs) {
   state.expansions = []; state.searchProgress = 1; state.pathProgress = 1;
   $("solve").disabled = false; $("play").disabled = false; $("join").disabled = true;
   $("compare").disabled = false;
+  $("live").disabled = false;
+  clearInterval(state.livePoll); state.livePoll = null;
   $("compareBox").innerHTML = "";
   location.hash = "maze=" + maze.id; // shareable — anyone on this server can open it
   $("status").textContent = "arrow keys move once a session is open";
@@ -307,6 +313,59 @@ async function loadFromHash() {
     log("state", "loaded maze from permalink");
   } catch (e) {
     log("err", `permalink maze not found on this server (${e.message})`);
+  }
+}
+
+// ---------- living mazes (ADR-006) ----------
+/**
+ * Ask the server to erode this maze in place. Progress arrives as MutationFrames on the
+ * /state topic; without STOMP (CDN blocked / offline) we fall back to polling at the
+ * server-reported tick interval, so the maze still visibly lives.
+ */
+async function bringToLife() {
+  const r = await api(`/maze/${state.maze.id}/live?ticks=30`, {method: "POST"});
+  $("live").disabled = true;
+  log("state", `maze is alive — ${r.ticksRequested} erosion ticks, one every ${(r.tickMillis / 1000).toFixed(1)}s`);
+  if (!state.stomp) {
+    const mazeId = state.maze.id;
+    let polls = 0;
+    clearInterval(state.livePoll);
+    state.livePoll = setInterval(async () => {
+      if (!state.maze || state.maze.id !== mazeId || ++polls > r.ticksRequested + 1) {
+        clearInterval(state.livePoll); state.livePoll = null;
+        if (state.maze && state.maze.id === mazeId) $("live").disabled = false;
+        return;
+      }
+      await refreshLivingMaze();
+    }, r.tickMillis);
+  }
+}
+
+/** A mutation frame arrived: re-fetch the snapshot, re-solve if a route is shown, redraw. */
+async function onMutation(m) {
+  log("state", `tick ${m.tick}: ${m.wallsOpened} wall${m.wallsOpened === 1 ? "" : "s"} opened, `
+      + `${m.deadEndsRemaining} dead ends left${m.settled ? " — maze has settled" : ""}`);
+  await refreshLivingMaze();
+  if (m.settled) $("live").disabled = false;
+}
+
+/** Swap in the latest snapshot without resetting session/solver state (unlike adoptMaze). */
+async function refreshLivingMaze() {
+  try {
+    const maze = await api(`/maze/${state.maze.id}`);
+    state.maze = maze;
+    if (state.path) {
+      // The drawn route may now cross freshly-opened walls or stale costs — re-solve
+      // quietly (no replay animation; the mutation itself is the show).
+      const r = await api(`/maze/${maze.id}/solve/${$("solver").value}`, {method: "POST"});
+      state.path = r.path;
+      state.expansions = [];
+      state.searchProgress = 1;
+      state.pathProgress = 1;
+    }
+    draw();
+  } catch (e) {
+    log("err", `living refresh failed: ${e.message}`);
   }
 }
 
@@ -529,6 +588,9 @@ function resubscribe() {
   if (state.maze) {
     state.subs.push(state.stomp.subscribe(`/topic/maze/${state.maze.id}/state`, f => {
       const m = JSON.parse(f.body);
+      // Two frame shapes ride /state: a MutationFrame (living maze tick, has `tick`)
+      // and a GeneratedFrame (has `generatorId`).
+      if (m.tick !== undefined) { onMutation(m); return; }
       log("state", `generated ${m.rows}×${m.cols} by ${m.generatorId}`);
     }));
     state.subs.push(state.stomp.subscribe(`/topic/maze/${state.maze.id}/solver`, f => {
@@ -738,6 +800,7 @@ function drawEmpty() {
 $("generate").onclick = () => generate().catch(e => log("err", e.message));
 $("solve").onclick = () => solve().catch(e => log("err", e.message));
 $("compare").onclick = () => compareSolvers().catch(e => log("err", e.message));
+$("live").onclick = () => bringToLife().catch(e => log("err", e.message));
 $("play").onclick = () => play().catch(e => log("err", e.message));
 $("join").onclick = () => join();
 document.addEventListener("keydown", e => {

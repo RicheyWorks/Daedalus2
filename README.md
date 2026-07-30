@@ -112,6 +112,7 @@ public consumers).
 | `GET` | `/api/v1/algorithms` | public | List every registered generator and solver |
 | `POST` | `/api/v1/maze/generate` | required | Generate a maze (`GenerateRequest` → `GenerateResponse`) |
 | `GET` | `/api/v1/maze/{id}` | public | Fetch a previously-generated maze's metadata + tile grid |
+| `POST` | `/api/v1/maze/{id}/live?ticks=30` | required | Bring the maze to life: bounded erosion ticks mutate it in place (ADR-006) |
 | `POST` | `/api/v1/maze/{id}/solve/{solverId}` | required | Run a solver against a stored maze |
 | `POST` | `/api/v1/maze/{id}/session?player=...` | required | Open a play session (returns `SessionResponse`) |
 | `POST` | `/api/v1/session/{id}/move` | required | Move the player one step (`MoveRequest`) |

@@ -6,7 +6,44 @@ All notable changes to Daedalus are documented in this file. Format follows
 `1.0.0` (the multi-module split + first audit pass) live in git history
 under the `_migration/` portfolios.
 
-## [Unreleased] — 2026-07-29
+## [Unreleased] — 2026-07-30
+
+### Added
+
+- **Living mazes (ADR-006).** `POST /api/v1/maze/{id}/live` brings a maze to life:
+  scheduled erosion ticks copy the cached grid, open a fraction of its dead-end walls
+  (`Braider` reused as the erosion primitive), drift hotspot costs on weighted grids
+  (clamped to the API's `[1, 1000]` domain), and atomically swap the new immutable
+  snapshot into the maze cache — readers keep consistent old snapshots, no locking
+  anywhere. Safe by construction: erosion only ever *opens* walls, so a live maze can
+  never become unsolvable and a mid-run player can never be walled in. Deterministic:
+  same maze + same seed erodes identically (default seed derives from the maze id).
+  Bounded everywhere: ticks per run (`daedalus.living.max-ticks`), concurrent runs
+  (`max-concurrent`, capacity answers 409), a new `mazeLive` per-caller rate budget
+  (base/test/prod), and every run self-terminates — ticks exhausted, maze settled
+  (nothing left to erode), or maze evicted (`replace` never resurrects). Each tick
+  publishes `MazeMutatedEvent` (new plugin-api event), bridged as a `MutationFrame` on
+  `/topic/maze/{id}/state`; the web UI's new **Bring to life** button re-fetches and
+  quietly re-solves on every frame, so the drawn route visibly adapts as walls open —
+  with a polling fallback at the server-reported tick interval when STOMP is absent.
+  Chosen from a ten-idea deep audit recorded in ADR-006 (solver arena, traffic
+  simulation, daily maze, fog-of-war agents, ghosts, chokepoint analytics, and more —
+  now the roadmap). New core seam: `MazeGrid.copy()` / `WeightedMazeGrid.copy()`
+  (weights preserved — teeth-proven: removing the override flattens weighted mazes to
+  uniform cost and `LivingMazeServiceTest` fails on exactly that). Tests:
+  `MazeGridCopyTest`, `LivingMazeServiceTest` (mutation, snapshot isolation,
+  connectivity, determinism, settling, capacity, drift clamp),
+  `LivingMazeEndpointTest`, `MazeWebSocketMutationBridgeTest`, and the templates test
+  now pins `mazeLive`.
+- **`application-prod.yml` now lists `sessionOpen` and `mazeLive` explicitly** with
+  env-var-tunable limits and health indicators, matching their sibling budgets (they
+  previously inherited base-yml defaults silently).
+
+### Fixed
+
+- **`WebSocketOwnershipSmokeTest` teardown race** — the refused-subscription tests
+  provoke a server-side ERROR + close; `disconnect()` could race the socket into
+  CLOSING and fail the test that had just passed. Teardown now tolerates that close.
 
 ### Changed
 

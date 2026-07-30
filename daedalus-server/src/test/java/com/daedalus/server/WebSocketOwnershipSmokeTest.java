@@ -85,7 +85,14 @@ class WebSocketOwnershipSmokeTest {
     @AfterEach
     void tearDown() {
         if (session != null && session.isConnected()) {
-            session.disconnect();
+            try {
+                session.disconnect();
+            } catch (org.springframework.messaging.MessageDeliveryException race) {
+                // The refused-subscription tests provoke a server-side ERROR + close;
+                // isConnected() can answer true while the socket is already CLOSING, and
+                // DISCONNECT then fails. That close IS the behavior under test — a torn
+                // teardown must not fail the test that just passed.
+            }
         }
         client.stop();
     }

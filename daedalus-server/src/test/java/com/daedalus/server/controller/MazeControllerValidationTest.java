@@ -56,7 +56,8 @@ class MazeControllerValidationTest {
                 mock(MazeSolverService.class),
                 mock(AlgorithmCatalogService.class),
                 mock(GameSessionService.class),
-                mock(LeaderboardService.class));
+                mock(LeaderboardService.class),
+                mock(com.daedalus.server.service.LivingMazeService.class));
         mvc = MockMvcBuilders.standaloneSetup(controller)
                 .setControllerAdvice(new ApiExceptionHandler())
                 .build();

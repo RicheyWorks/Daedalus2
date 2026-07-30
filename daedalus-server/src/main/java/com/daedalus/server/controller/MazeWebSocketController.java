@@ -4,9 +4,11 @@ package com.daedalus.server.controller;
 
 import com.daedalus.api.dto.GeneratedFrame;
 import com.daedalus.api.dto.MoveFrame;
+import com.daedalus.api.dto.MutationFrame;
 import com.daedalus.api.dto.PluginFailedFrame;
 import com.daedalus.api.dto.SolvedFrame;
 import com.daedalus.plugin.events.MazeGeneratedEvent;
+import com.daedalus.plugin.events.MazeMutatedEvent;
 import com.daedalus.plugin.events.MazeSolvedEvent;
 import com.daedalus.plugin.events.PlayerMovedEvent;
 import com.daedalus.plugin.events.PluginFailedEvent;
@@ -32,6 +34,20 @@ public class MazeWebSocketController {
         var m = e.metadata();
         stomp.convertAndSend("/topic/maze/" + m.id() + "/state",
                 new GeneratedFrame(m.id(), m.rows(), m.cols(), m.generatorId()));
+    }
+
+    /**
+     * Living-maze tick (ADR-006) — rides the same {@code /state} topic as
+     * {@link GeneratedFrame} so existing subscribers need no new subscription; consumers
+     * branch on shape (a mutation frame has a {@code tick} field, a generated frame has a
+     * {@code generatorId}). The frame deliberately carries deltas, not the grid: clients
+     * re-fetch {@code GET /api/v1/maze/{id}} for the new snapshot, keeping frames tiny.
+     */
+    @EventListener
+    public void onMutated(MazeMutatedEvent e) {
+        stomp.convertAndSend("/topic/maze/" + e.mazeId() + "/state",
+                new MutationFrame(e.mazeId(), e.tick(), e.wallsOpened(),
+                        e.deadEndsRemaining(), e.settled()));
     }
 
     @EventListener

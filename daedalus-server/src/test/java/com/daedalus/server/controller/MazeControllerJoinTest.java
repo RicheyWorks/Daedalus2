@@ -62,7 +62,8 @@ class MazeControllerJoinTest {
                 mock(MazeSolverService.class),
                 mock(AlgorithmCatalogService.class),
                 sessions,
-                mock(LeaderboardService.class));
+                mock(LeaderboardService.class),
+                mock(com.daedalus.server.service.LivingMazeService.class));
         return MockMvcBuilders.standaloneSetup(controller).build();
     }
 

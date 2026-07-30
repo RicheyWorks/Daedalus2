@@ -198,6 +198,44 @@ public class MazeGrid {
     }
 
     /**
+     * An independent structural copy: same dimensions, same open walls, same start/goal,
+     * fresh (cleared) visited layer. Carving on the copy never touches the original and
+     * vice versa — this is the copy-on-write primitive the living-maze feature (ADR-006)
+     * mutates so readers holding the previous snapshot stay consistent without locking.
+     *
+     * <p>Subclasses carrying extra state should override to preserve it and to keep the
+     * runtime type — {@link WeightedMazeGrid#copy()} returns a weighted copy with weights
+     * intact. (Contrast with {@code new WeightedMazeGrid(source)}, which deliberately
+     * resets weights to {@code 1.0}: that constructor is "wrap this topology", this method
+     * is "duplicate this maze".)
+     *
+     * @return a new grid equal in structure to this one and sharing no mutable state
+     * @since 1.2
+     */
+    public MazeGrid copy() {
+        MazeGrid out = new MazeGrid(rows, cols);
+        copyStructureInto(out);
+        return out;
+    }
+
+    /** Copy topology + start/goal into {@code target} (same dimensions assumed). */
+    protected final void copyStructureInto(MazeGrid target) {
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                Cell source = cells[r][c];
+                Cell dest = target.cell(r, c);
+                for (Direction d : Direction.values()) {
+                    if (source.isOpen(d)) {
+                        dest.open(d);
+                    }
+                }
+            }
+        }
+        target.setStart(start);
+        target.setGoal(goal);
+    }
+
+    /**
      * Project the maze into the {@code (2r+1) x (2c+1)} glyph grid every renderer consumes.
      *
      * <p>Two honesty rules, both added 2026-07-29 after the same misrendering surfaced in

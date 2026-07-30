@@ -58,6 +58,15 @@ daedalus:
     admin:
       username: ${DAEDALUS_ADMIN_USER:admin}
       password-bcrypt: ${DAEDALUS_ADMIN_PASSWORD_BCRYPT:$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy}
+  # ----- Living mazes (ADR-006) -----
+  # POST /api/v1/maze/{id}/live schedules erosion ticks that mutate a cached maze in place.
+  # Every knob is a bound: runs cap their ticks, the service caps concurrent runs, and each
+  # tick erodes a fraction of the current dead ends (at least one wall whenever any remain).
+  living:
+    tick-interval: ${DAEDALUS_LIVING_TICK_INTERVAL:2s}
+    max-ticks: ${DAEDALUS_LIVING_MAX_TICKS:240}
+    max-concurrent: ${DAEDALUS_LIVING_MAX_CONCURRENT:8}
+    erosion-factor: ${DAEDALUS_LIVING_EROSION_FACTOR:0.08}
   # ----- Per-key rate limiting -----
   # The Resilience4j instances below are treated as *templates*: PerKeyRateLimitInterceptor
   # clones each into an independent bucket per caller (authenticated subject, else client IP),
@@ -99,4 +108,9 @@ resilience4j:
         limit-for-period: 10          # brute-force guard. Tighten in prod.
         limit-refresh-period: 1m
         timeout-duration: 0
+        register-health-indicator: false
+      mazeLive:
+        limit-for-period: 10          # each acceptance schedules a whole ticker run, so this
+        limit-refresh-period: 1m      # is the most expensive request per call — keep it low;
+        timeout-duration: 0           # daedalus.living.max-concurrent is the hard backstop
         register-health-indicator: false

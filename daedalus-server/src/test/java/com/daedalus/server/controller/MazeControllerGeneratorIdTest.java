@@ -47,7 +47,8 @@ class MazeControllerGeneratorIdTest {
                 mock(MazeSolverService.class),
                 mock(AlgorithmCatalogService.class),
                 mock(GameSessionService.class),
-                mock(LeaderboardService.class));
+                mock(LeaderboardService.class),
+                mock(com.daedalus.server.service.LivingMazeService.class));
         mvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 

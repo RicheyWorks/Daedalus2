@@ -16,6 +16,7 @@ import com.daedalus.server.ratelimit.PerKeyRateLimit;
 import com.daedalus.server.service.AlgorithmCatalogService;
 import com.daedalus.server.service.GameSessionService;
 import com.daedalus.server.service.LeaderboardService;
+import com.daedalus.server.service.LivingMazeService;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,6 +45,7 @@ import java.util.UUID;
  *   <li>{@code GET    /api/v1/algorithms}                      — list everything registered</li>
  *   <li>{@code POST   /api/v1/maze/generate}                   — generate a maze</li>
  *   <li>{@code GET    /api/v1/maze/{id}}                       — fetch metadata + tile grid</li>
+ *   <li>{@code POST   /api/v1/maze/{id}/live}                  — bring the maze to life (ADR-006)</li>
  *   <li>{@code POST   /api/v1/maze/{id}/solve/{solverId}}      — run a solver against the maze</li>
  *   <li>{@code POST   /api/v1/maze/{id}/session?player=...}    — open a play session</li>
  *   <li>{@code POST   /api/v1/session/{id}/move}               — move a player</li>
@@ -63,17 +65,20 @@ public class MazeController {
     private final AlgorithmCatalogService catalog;
     private final GameSessionService sessions;
     private final LeaderboardService leaderboard;
+    private final LivingMazeService living;
 
     public MazeController(MazeGenerationService gen,
                           MazeSolverService solverSvc,
                           AlgorithmCatalogService catalog,
                           GameSessionService sessions,
-                          LeaderboardService leaderboard) {
+                          LeaderboardService leaderboard,
+                          LivingMazeService living) {
         this.gen = gen;
         this.solverSvc = solverSvc;
         this.catalog = catalog;
         this.sessions = sessions;
         this.leaderboard = leaderboard;
+        this.living = living;
     }
 
     @GetMapping("/algorithms")
@@ -133,6 +138,33 @@ public class MazeController {
         }
         return ResponseEntity.ok(
                 com.daedalus.visualize.AsciiMazeVisualizer.renderToString(c.grid(), path));
+    }
+
+    /**
+     * ADR-006 — living mazes. Erosion only ever opens walls, so a live maze can never
+     * become unsolvable mid-run; the default seed derives from the maze id so the same
+     * maze brought to life erodes the same way every time.
+     */
+    @PostMapping("/maze/{id}/live")
+    @Operation(summary = "Bring a maze to life: schedule bounded erosion ticks that mutate it in place.",
+            description = "Each tick opens a fraction of the maze's dead-end walls and drifts "
+                    + "hotspot costs on weighted mazes, then swaps the new snapshot into the "
+                    + "cache and publishes a MutationFrame on /topic/maze/{id}/state. Idempotent "
+                    + "while alive (a second call returns the running ticker's status). Answers "
+                    + "409 when daedalus.living.max-concurrent mazes are already alive. "
+                    + "Rate-limited per caller against the 'mazeLive' budget.")
+    @PerKeyRateLimit("mazeLive")
+    public ResponseEntity<LivingMazeService.LiveStatus> live(
+            @PathVariable UUID id,
+            @RequestParam(defaultValue = "30")
+            @Min(value = 1,   message = "ticks must be at least 1")
+            @Max(value = 240, message = "ticks must be at most 240")
+            int ticks,
+            @RequestParam(required = false) Long seed) {
+        var c = gen.find(id);
+        if (c == null) return ResponseEntity.notFound().build();
+        long erosionSeed = seed != null ? seed : id.getLeastSignificantBits();
+        return ResponseEntity.ok(living.start(id, ticks, erosionSeed));
     }
 
     @PostMapping("/maze/{id}/solve/{solverId}")

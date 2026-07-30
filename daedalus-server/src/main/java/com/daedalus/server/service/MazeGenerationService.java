@@ -140,6 +140,20 @@ public class MazeGenerationService {
 
     public Cached find(UUID id) { return cache.getIfPresent(id); }
 
+    /**
+     * Atomically swap a cached maze for a new snapshot — the living-maze tick's commit
+     * point (ADR-006). Present-only by design: {@code computeIfPresent} never resurrects a
+     * maze the cache already evicted, so a living run whose maze ages out stops on its next
+     * tick instead of pinning the entry forever. Readers that fetched the old {@link Cached}
+     * keep a consistent immutable snapshot; the next {@link #find} sees the new one.
+     *
+     * @return true if the maze was present and swapped; false if it is gone (evicted or
+     *         never cached), which callers must treat as "stop mutating"
+     */
+    public boolean replace(UUID id, Cached updated) {
+        return cache.asMap().computeIfPresent(id, (k, old) -> updated) != null;
+    }
+
     @SuppressWarnings("unused")
     private Cached fallback(String generatorId, int rows, int cols, long seed,
                             java.util.List<Hotspot> hotspots, Throwable t) {

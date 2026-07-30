@@ -153,6 +153,21 @@ public class ApiExceptionHandler {
         return pd;
     }
 
+    /**
+     * The living-maze ticker is full ({@code daedalus.living.max-concurrent} runs already
+     * animating). 409 rather than 429: the caller's quota is fine — the shared resource is
+     * busy, and retrying after a run settles will succeed.
+     */
+    @ExceptionHandler(com.daedalus.server.service.LivingMazeService.CapacityExceededException.class)
+    public ResponseEntity<ProblemDetail> onLivingCapacity(
+            com.daedalus.server.service.LivingMazeService.CapacityExceededException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        pd.setTitle("Too many living mazes");
+        pd.setType(URI.create("https://daedalus.dev/problems/living-capacity"));
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ProblemDetail onMalformedBody(HttpMessageNotReadableException ex) {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(

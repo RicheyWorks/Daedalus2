@@ -40,5 +40,9 @@ class RateLimiterTemplatesTest {
                 .as("the 2026-07-29 audit's new budget must be configured in every profile "
                         + "that the base yml serves")
                 .isPresent();
+        assertThat(registry.find("mazeLive"))
+                .as("ADR-006's living-maze budget — @PerKeyRateLimit(\"mazeLive\") on "
+                        + "POST /maze/{id}/live fails at request time without it")
+                .isPresent();
     }
 }

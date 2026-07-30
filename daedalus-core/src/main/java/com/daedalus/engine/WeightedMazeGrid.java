@@ -101,6 +101,24 @@ public class WeightedMazeGrid extends MazeGrid {
     }
 
     /**
+     * An independent copy that stays weighted: topology, start/goal, <em>and</em> every
+     * per-cell weight. This is what {@link MazeGrid#copy()} promises subclasses will do —
+     * without this override a living-maze tick (ADR-006) would silently flatten a weighted
+     * maze back to uniform cost on its first mutation.
+     *
+     * @since 1.2
+     */
+    @Override
+    public WeightedMazeGrid copy() {
+        WeightedMazeGrid out = new WeightedMazeGrid(rows(), cols());
+        copyStructureInto(out);
+        for (int r = 0; r < rows(); r++) {
+            System.arraycopy(weights[r], 0, out.weights[r], 0, cols());
+        }
+        return out;
+    }
+
+    /**
      * Entry cost for a cell. Overrides {@link MazeGrid#weightOf(int, int)} — the
      * coordinate-indexed form — so any solver that consults the hook (Dijkstra, A*) sees the
      * per-cell weight instead of the uniform {@code 1.0} default.

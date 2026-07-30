@@ -60,3 +60,16 @@ resilience4j:
         limit-refresh-period: 1m
         timeout-duration: 0
         register-health-indicator: true
+      # sessionOpen and mazeLive were added after this file's original set; without explicit
+      # prod entries they inherit application.yml's defaults — listed here so prod tuning is
+      # env-var driven like the rest, and so the health indicator matches its siblings.
+      sessionOpen:
+        limit-for-period: ${DAEDALUS_RL_SESSION_PER_MIN:60}
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: true
+      mazeLive:
+        limit-for-period: ${DAEDALUS_RL_LIVE_PER_MIN:6}
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: true
