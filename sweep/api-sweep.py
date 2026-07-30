@@ -6,13 +6,19 @@ import json, time, urllib.request, urllib.error
 API = "http://localhost:8080/api/v1"
 results = []
 
-def call(method, path, body=None, expect=200, retries=4):
+def call(method, path, body=None, retries=4):
     """Call the API, backing off on 429.
 
     The sweep exercises every feature back to back, which is exactly the traffic the per-key
     rate limiter exists to throttle — the heavier endpoints (generate, campaign planning, the
     complexity lab) share one budget. A 429 here is the server behaving correctly, so the
-    client backs off and retries rather than reporting a feature as broken."""
+    client backs off and retries rather than reporting a feature as broken.
+
+    Error bodies are parsed as JSON when the server sends RFC 7807 ProblemDetail, so a check can
+    assert on `title` or a custom property instead of substring-matching a truncated string.
+    (There used to be an `expect=` parameter here that was accepted and then never used — a
+    parameter shaped like an assertion that asserted nothing. Removed rather than implemented:
+    every caller already compares the status it got.)"""
     data = json.dumps(body).encode() if body else None
     for attempt in range(retries):
         req = urllib.request.Request(API + path, data=data, method=method,
@@ -31,7 +37,11 @@ def call(method, path, body=None, expect=200, retries=4):
                 raise AssertionError(
                     "rate limited after retries — run the server with generous limits for a "
                     "full sweep:  SPRING_PROFILES_ACTIVE=test java -jar ...-exec.jar")
-            return e.code, e.read().decode()[:200]
+            raw = e.read().decode()
+            try:
+                return e.code, json.loads(raw)
+            except ValueError:
+                return e.code, raw[:200]
     return 429, "rate limited after retries"
 
 def check(name, fn):
@@ -372,7 +382,7 @@ def t_topography():
     rock_ok = sd == 200 and dungeon["unreachable"] > 100
 
     sb, _ = call("GET", f"/maze/{gen('recursive-backtracker', 200, 200, 1)['id']}"
-                        "/distance-field", expect=400)
+                        "/distance-field")
     cap_ok = sb == 400
 
     ss, sanc = call("GET", f"/maze/{m['id']}/sanctuaries?k=5")
@@ -387,6 +397,43 @@ def t_topography():
         f"field max={field['maxDistance']} worst adjacent jump={jump} (a wall); "
         f"dungeon rock unreachable={dungeon['unreachable']}; 200x200 -> {sb}; "
         f"radius by k {radii}; k=9999 clamped to 16")
+
+
+# ---- 20. solver cost guard (IDA* node budget) ------------------------------------
+def t_solver_budget():
+    """A 21x21 dungeon used to take IDA* 16 seconds and a 25x25 over 300 without finishing.
+
+    The check is deliberately about TIME as well as status: a 422 that arrives after a minute
+    has not fixed anything. It also runs the whole compare-all sweep over a dungeon, because
+    that is the path a user actually hits — one refusing solver must not stall or fail the
+    other nine."""
+    dungeon = gen("dungeon", 25, 25, 1000)
+    t0 = time.time()
+    st, body = call("POST", f"/maze/{dungeon['id']}/solve/ida-star")
+    refused_in = time.time() - t0
+    refused_ok = (st == 422 and refused_in < 10
+                  and body.get("solver") == "ida-star" and body.get("nodeBudget", 0) > 0)
+
+    # The mazes IDA* is a sensible choice for must still solve, and optimally.
+    perfect = gen("recursive-backtracker", 51, 51, 1000)
+    sp, solved = call("POST", f"/maze/{perfect['id']}/solve/ida-star")
+    sb, bfs = call("POST", f"/maze/{perfect['id']}/solve/bfs")
+    optimal_ok = sp == 200 and len(solved["path"]) == len(bfs["path"])
+
+    d21 = gen("dungeon", 21, 21, 1000)
+    t0 = time.time()
+    ok, refused = [], []
+    for sid in [a["id"] for a in call("GET", "/algorithms")[1]["solvers"]]:
+        code, _ = call("POST", f"/maze/{d21['id']}/solve/{sid}")
+        (ok if code == 200 else refused).append(f"{sid}({code})" if code != 200 else sid)
+    compare_seconds = time.time() - t0
+    compare_ok = len(ok) == 9 and refused == ["ida-star(422)"] and compare_seconds < 15
+
+    return refused_ok and optimal_ok and compare_ok, (
+        f"25x25 dungeon -> {st} in {refused_in:.2f}s (budget {body.get('nodeBudget')}); "
+        f"51x51 perfect still optimal ({len(solved.get('path', []))} cells); "
+        f"compare-all on a 21x21 dungeon {compare_seconds:.2f}s, "
+        f"{len(ok)} solved, refused {refused}")
 
 
 for name, fn in [
@@ -409,6 +456,7 @@ for name, fn in [
     ("17. maze fingerprint", t_fingerprint),
     ("18. hardest route", t_hardest_route),
     ("19. distance field + sanctuaries", t_topography),
+    ("20. solver cost guard", t_solver_budget),
 ]:
     check(name, fn)
 

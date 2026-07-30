@@ -8,6 +8,7 @@ by any test.
     python3 mutants/wide.py       # re-check survivors against the whole reactor
     python3 mutants/coreteeth.py  # core-only checks for guarantees that live in core
     python3 mutants/fuzzteeth.py  # six breaks aimed at GeneratorInvariantFuzzTest
+    python3 mutants/idateeth.py   # four breaks aimed at IDA*'s node budget
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module
@@ -34,3 +35,15 @@ lock. `run.py`, `wide.py` and `coreteeth.py` already restore per mutation in a `
 covers an ordinary crash but not a SIGKILL — they have no lock or sidecar yet. Until they do:
 run one harness at a time, and check `git diff` on the mutated file after any interrupted run
 before trusting a result.
+
+**A timeout can be a catch.** `idateeth.py` mutates a guard whose absence makes the suite run for
+minutes — that is what the guard is for. Its first version used a 20-minute subprocess cap and
+treated the resulting `TimeoutExpired` as a crash, so it aborted mid-run and lost the mutations
+after it, having spent twenty minutes to learn what four proves. When the defect under test *is*
+"this never finishes", cap the run short and count the timeout as evidence.
+
+**Record survivors instead of quietly deleting them.** One `idateeth.py` mutation survived: an
+early return inside IDA*'s neighbour loop that no test could distinguish, because every sibling
+call hit the identical check one frame up. The right response was to delete the line from the
+solver — it cost a comparison per neighbour and bought nothing — and leave the mutation in the
+list as the evidence for why the code is not there.

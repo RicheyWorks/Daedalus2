@@ -32,6 +32,34 @@ under the `_migration/` portfolios.
   third of their cells on dead ends), and the original label bands put nearly every maze this
   project generates into "hard" or "brutal".
 
+### Fixed
+
+- **IDA\* could run for minutes on a maze the API happily accepts — it now gives up in about a
+  second.** Probing solver workloads for the tournament idea turned up an unbounded request on a
+  public endpoint. Measured on dungeons: 15×15 instant, **21×21 nine to sixteen seconds** (~90
+  million node expansions), **25×25 abandoned after 300 seconds still running**. Every other
+  solver finishes the 21×21 dungeon in under 40 ms, and the UI's "Compare all solvers" runs IDA\*
+  alongside the other nine, so four extra rows of maze turned a slow page into one that never
+  loads. Iterative deepening re-searches from scratch under each new f-bound, and a rock-heavy
+  looped graph makes every pass expensive — no traversal tuning fixes that, only a bound.
+  `IDAStarSolver` now carries a 5,000,000-expansion budget (~1 s at the measured ~5.7 M/s) and
+  throws `SolverBudgetExceededException`, which the API answers as **422** with the solver id and
+  the budget in the ProblemDetail. Measured after: the 21×21, 25×25 and 41×41 dungeons all refuse
+  in 0.8–1.4 s, a 51×51 perfect maze still solves optimally in 0.13 s, and compare-all on a
+  dungeon fell from over 16 s to **0.94 s** with nine solvers answering and one honestly refusing.
+  A 512×512 perfect maze also now refuses in under a second instead of driving the recursive
+  search toward the stack limit.
+  **This is a deliberate behaviour change:** the 21×21 dungeon used to return a correct answer
+  after 16 seconds. It was never given the option of returning an empty path instead — the
+  `MazeSolver` contract reads an empty list as "unreachable", so a budget-exhausted search
+  reporting one would put a confident false claim into the compare table, the arena and the
+  sweep. Refusing loudly is the only answer that does not lie in a data structure.
+- **`sweep/api-sweep.py`'s `call()` had an `expect=` parameter that was never used.** It looked
+  like a status assertion and asserted nothing — three call sites passed `expect=400`, `422`,
+  `None` and got no checking whatever. Removed rather than implemented, since every caller
+  already compares the status it got. Error bodies are now parsed as JSON so a check can assert
+  on a ProblemDetail's fields instead of substring-matching a truncated string.
+
 ### Added
 
 - **Distance heat map (ADR-007 idea 6) and sanctuary placement (ADR-007 idea 5).**

@@ -40,8 +40,8 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   the search's real recorded expansion order (observation via the `Graph`
   seam, never simulation); the web UI animates it and can race all ten
   solvers on one maze in a compare table with per-route previews.
-- **Verified** — `mvn clean verify` passes **551 tests** across the five
-  modules (core 302, server 218, plugin-runtime 20, plugin-api 7, desktop 4)
+- **Verified** — `mvn clean verify` passes **557 tests** across the five
+  modules (core 308, server 218, plugin-runtime 20, plugin-api 7, desktop 4)
   with zero Checkstyle violations, zero SpotBugs findings, and a per-module
   JaCoCo coverage ratchet that fails the build on regression.
   [`CHANGELOG.md`](./CHANGELOG.md) records what changed and, where a decision
@@ -114,7 +114,7 @@ public consumers).
 | `GET` | `/api/v1/maze/daily` | public | Today's shared challenge — same maze for everyone until midnight UTC (ADR-006) |
 | `GET` | `/api/v1/maze/{id}` | public | Fetch a previously-generated maze's metadata + tile grid |
 | `POST` | `/api/v1/maze/{id}/live?ticks=30` | required | Bring the maze to life: bounded erosion ticks mutate it in place (ADR-006) |
-| `POST` | `/api/v1/maze/{id}/solve/{solverId}` | required | Run a solver against a stored maze |
+| `POST` | `/api/v1/maze/{id}/solve/{solverId}` | required | Run a solver against a stored maze. Answers **422** if the solver spends its node budget — IDA\* does this on dungeons from ~21×21 up, where the unguarded search took 16 s and worse (ADR-007 postscript) |
 | `POST` | `/api/v1/maze/{id}/session?player=...` | required | Open a play session (returns `SessionResponse`) |
 | `POST` | `/api/v1/session/{id}/move` | required | Move the player one step (`MoveRequest`) |
 | `POST` | `/api/v1/maze/{id}/agent?steps=...` | required | Open a fog-of-war walk: the agent sees only its cell's openings (ADR-006) |
@@ -236,7 +236,7 @@ mvn clean verify              # all five modules
 mvn -pl daedalus-server test  # one module
 ```
 
-Test inventory — **551 tests across 113 files, all green** (302 core, 7 plugin-api, 20
+Test inventory — **557 tests across 114 files, all green** (308 core, 7 plugin-api, 20
 plugin-runtime, 218 server, 4 desktop) as of 2026-07-30:
 
 | Module | Highlights |

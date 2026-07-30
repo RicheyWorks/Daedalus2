@@ -162,7 +162,11 @@ rather than a suggestion.
     payload-capped; **does not use `DistanceOracle`**, for the measured reason below
 11. [x] Idea 5 (**Sanctuary placement**) — `GET /api/v1/maze/{id}/sanctuaries?k=`, k-center via
     `FacilityPlacement`, reporting covering radius, served cells and the worst-served cell
-12. [ ] Ideas 7, 8 and 10, in the priority order above
+12. [ ] Ideas 7, 8 and 10, in the priority order above — **note:** the first probe toward idea
+    10 (running every solver over many mazes) found an unbounded request rather than a
+    statistic: IDA\* took 16 s on a 21×21 dungeon and over 300 s on a 25×25. That is fixed
+    (node budget, 422) before the tournament is built on top of it. Two early findings about
+    idea 10 itself are recorded below and change what it should report
 
 ## Postscript: what building idea 2 taught
 
@@ -286,3 +290,29 @@ so touching cells are remote when a wall stands between them — and every abrup
 marks a wall doing exactly that work. It is the most informative thing the overlay shows. The
 legend now says so, and a test pins it, because the next person to look at that picture will
 have the same instinct to "fix" it.
+
+## Postscript: what the first probe toward idea 10 found
+
+Idea 10 is "the arena races once; a tournament says which solver is *actually* better, with
+statistics". Before writing any of it, a probe ran all ten solvers over 30 mazes. Three results,
+none of them the one expected:
+
+**It found a bug, not a statistic.** IDA\* on dungeons is effectively unbounded — 9–16 s at
+21×21, over 300 s at 25×25, against under 40 ms for every other solver. That is a live defect on
+a public endpoint and on the UI's compare-all button, and it is fixed (node budget plus a 422)
+before any tournament is built on a harness that runs every solver over many mazes.
+
+**On perfect mazes the premise is false.** Dead-end filling won 30 of 30 mazes on cells-explored.
+A single race already gives the right answer there, so "a tournament reveals a different winner"
+is not the value.
+
+**On braided mazes the premise is true, and dramatically.** The per-maze winner splits
+wall-follower 12, dfs 10, tremaux 5, bidirectional 2, dead-end-filling 1 — a single race is close
+to a coin flip. Wall-follower's coefficient of variation is **98.9%** (mean 744, sd 736) and
+IDA\*'s is 131%, while BFS's is 0.1%. So what a tournament is actually for is **reliability and
+distinguishability, not ranking**: which solvers are steady versus erratic, and which measured
+gaps survive their own error bars. On the same run, BFS, Dial and Dijkstra were statistically
+indistinguishable from each other (all explore essentially every cell), and pairing bought
+nothing over unpaired intervals — 1.0× — because one of the two series is very nearly constant,
+so there is no shared per-maze variation to cancel. Worth knowing before writing a paired t-test
+into a service and claiming it as rigour.

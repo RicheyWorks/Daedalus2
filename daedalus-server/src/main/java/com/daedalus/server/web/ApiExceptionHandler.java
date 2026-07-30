@@ -168,6 +168,28 @@ public class ApiExceptionHandler {
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
     }
 
+    /**
+     * A solver spent its node budget without finding a route.
+     *
+     * <p>422 rather than 500 or 504: the request is well formed and the server is healthy — this
+     * particular algorithm cannot answer for this particular maze inside a sane cost. It is also
+     * not 404 or an empty path, because the maze is very likely solvable and every other solver
+     * will say so. Measured, this fires for IDA* on dungeons from about 21x21 up, where the
+     * unguarded search took 16 seconds at 21x21 and over 300 without finishing at 25x25.
+     */
+    @ExceptionHandler(com.daedalus.solver.SolverBudgetExceededException.class)
+    public ResponseEntity<ProblemDetail> onSolverBudget(
+            com.daedalus.solver.SolverBudgetExceededException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(
+                HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
+        pd.setTitle("Solver gave up");
+        pd.setType(URI.create("https://daedalus.dev/problems/solver-budget"));
+        pd.setProperty("solver", ex.solverId());
+        pd.setProperty("nodeBudget", ex.budget());
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+    }
+
     /** Traffic's tracker pool is full — same 409 posture as the living-maze ticker. */
     @ExceptionHandler(com.daedalus.server.service.TrafficService.CapacityExceededException.class)
     public ResponseEntity<ProblemDetail> onTrafficCapacity(

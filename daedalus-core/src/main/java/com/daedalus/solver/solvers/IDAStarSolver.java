@@ -8,6 +8,7 @@ import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
 import com.daedalus.solver.AbstractMazeSolver;
 import com.daedalus.solver.Heuristics;
+import com.daedalus.solver.SolverBudgetExceededException;
 
 import java.util.*;
 import java.util.function.ToDoubleBiFunction;
@@ -56,19 +57,55 @@ import java.util.function.ToDoubleBiFunction;
  *       rather than A*'s {@code O(b^d)}. It is a memory-optimised algorithm, not a
  *       time-optimised one, and the default Manhattan heuristic makes that trade steeply.</li>
  * </ul>
+ *
+ * <h3>The node budget, and the measurement that forced it</h3>
+ *
+ * <p>"300x BFS" above understates what happens on a maze with loops and rock. Measured on
+ * <b>dungeons</b>, served by an endpoint that accepts sizes up to 512x512:
+ *
+ * <pre>
+ *   15x15 dungeon      0.0 s
+ *   21x21 dungeon      9-16 s      (~90 million node expansions)
+ *   25x25 dungeon      &gt; 300 s     (abandoned, still running)
+ * </pre>
+ *
+ * <p>Every other solver finishes the 21x21 dungeon in under 40 ms. This is not slowness, it is
+ * an unbounded request on a public surface: four extra rows of maze turn a 9-second reply into
+ * one that never comes, and "Compare all solvers" runs this one alongside the rest.
+ *
+ * <p>So the search now carries {@link #DEFAULT_NODE_BUDGET} expansions (~1 s at the measured
+ * ~5.7 M expansions/second) and throws {@link SolverBudgetExceededException} when it is spent.
+ * <b>That is a deliberate behaviour change:</b> a 21x21 dungeon used to return a correct answer
+ * after 16 seconds and now refuses in about a second. A 16-second reply from a maze solver is
+ * not a feature worth protecting, and the alternative — returning an empty path — would claim
+ * the maze is unsolvable, which is a worse answer than an honest refusal.
  */
 public class IDAStarSolver extends AbstractMazeSolver {
 
     private static final double INF = Double.POSITIVE_INFINITY;
 
+    /**
+     * Node expansions allowed before the search gives up — about one second of work at the
+     * measured ~5.7 million expansions per second. Generous for anything this solver is a
+     * sensible choice for, and far below the ~90 million a 21x21 dungeon demands.
+     */
+    public static final long DEFAULT_NODE_BUDGET = 5_000_000L;
+
     private final ToDoubleBiFunction<Point, Point> h;
+    private final long nodeBudget;
 
     public IDAStarSolver() {
-        this(Heuristics.MANHATTAN);
+        this(Heuristics.MANHATTAN, DEFAULT_NODE_BUDGET);
     }
 
     public IDAStarSolver(ToDoubleBiFunction<Point, Point> heuristic) {
+        this(heuristic, DEFAULT_NODE_BUDGET);
+    }
+
+    /** @param nodeBudget expansions before giving up; {@code <= 0} means unlimited. */
+    public IDAStarSolver(ToDoubleBiFunction<Point, Point> heuristic, long nodeBudget) {
         this.h = heuristic;
+        this.nodeBudget = nodeBudget;
     }
 
     @Override public String id() { return "ida-star"; }
@@ -90,9 +127,14 @@ public class IDAStarSolver extends AbstractMazeSolver {
         path.push(start);
         Set<Point> onPath = new HashSet<>();
         onPath.add(start);
+        long[] remaining = { nodeBudget <= 0 ? Long.MAX_VALUE : nodeBudget };
 
         while (true) {
-            double next = search(grid, path, onPath, 0.0, bound, goal, stats);
+            double next = search(grid, path, onPath, 0.0, bound, goal, stats, remaining);
+            if (remaining[0] <= 0) {
+                stats.finish(false);
+                throw new SolverBudgetExceededException(id(), nodeBudget);
+            }
             if (next < 0) {  // sentinel meaning "found"
                 List<Point> result = new ArrayList<>(path);
                 Collections.reverse(result);
@@ -114,10 +156,20 @@ public class IDAStarSolver extends AbstractMazeSolver {
      *         otherwise the minimum f-value that exceeded {@code bound} in this subtree.
      */
     private double search(MazeGrid grid, Deque<Point> path, Set<Point> onPath,
-                          double g, double bound, Point goal, MazeStats stats) {
+                          double g, double bound, Point goal, MazeStats stats,
+                          long[] remaining) {
+        if (remaining[0] <= 0) {
+            // Unwind quietly; solve() turns the spent budget into the failure. This one check
+            // is enough: an early return here also existed inside the neighbour loop below
+            // until a mutation proved it inert — deleting it changed nothing any test could
+            // see, because every remaining sibling call lands on this line and returns at once,
+            // at a cost of one comparison per neighbour of one frame.
+            return INF;
+        }
         Point cur = path.peek();
         double f = g + h.applyAsDouble(cur, goal);
         if (f > bound) return f;
+        remaining[0]--;
         stats.incExplored();
         if (cur.equals(goal)) return -1;
 
@@ -128,7 +180,7 @@ public class IDAStarSolver extends AbstractMazeSolver {
             onPath.add(n);
             stats.incVisited();
             stats.recordFrontier(path.size());
-            double t = search(grid, path, onPath, g + 1.0, bound, goal, stats);
+            double t = search(grid, path, onPath, g + 1.0, bound, goal, stats, remaining);
             if (t < 0) return -1;
             if (t < min) min = t;
             path.pop();
