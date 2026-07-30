@@ -7,6 +7,7 @@ import com.daedalus.engine.Braider;
 import com.daedalus.server.ratelimit.PerKeyRateLimit;
 import com.daedalus.server.service.GhostService;
 import com.daedalus.server.service.HardestRouteService;
+import com.daedalus.server.service.TopographyService;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.theory.MazeFlow;
 import com.daedalus.theory.MazeMetrics;
@@ -48,17 +49,20 @@ public class InsightController {
     private final ComplexityLabService complexity;
     private final FingerprintService fingerprints;
     private final HardestRouteService hardestRoutes;
+    private final TopographyService topography;
 
     public InsightController(MazeGenerationService gen, GhostService ghosts,
                              WaypointService waypoints, ComplexityLabService complexity,
                              FingerprintService fingerprints,
-                             HardestRouteService hardestRoutes) {
+                             HardestRouteService hardestRoutes,
+                             TopographyService topography) {
         this.gen = gen;
         this.ghosts = ghosts;
         this.waypoints = waypoints;
         this.complexity = complexity;
         this.fingerprints = fingerprints;
         this.hardestRoutes = hardestRoutes;
+        this.topography = topography;
     }
 
     /**
@@ -191,6 +195,51 @@ public class InsightController {
     public ResponseEntity<HardestRouteService.HardestRoute> hardestRoute(@PathVariable UUID id) {
         var route = hardestRoutes.forMaze(id);
         return route == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(route);
+    }
+
+    /**
+     * ADR-007 idea 6 — the distance field, as a heat map. One breadth-first sweep, so this is
+     * the cheapest analytical endpoint here; it shares the {@code mazeSolve} budget anyway
+     * because the payload is the expensive part.
+     */
+    @GetMapping("/maze/{id}/distance-field")
+    @Operation(summary = "Every cell's distance from the goal (or the start), for a heat map.",
+            description = "Makes the breadth-first field visible, which is the quickest "
+                    + "explanation of why a maze feels the way it does: long smooth gradients "
+                    + "are corridors, tight rings of colour are a chokepoint, and an abrupt "
+                    + "boundary between distant and near cells is a wall doing a lot of work. "
+                    + "Unreachable cells report -1 rather than being omitted — a dungeon's rock "
+                    + "is most of the grid and pretending otherwise would misdraw it. Refused "
+                    + "with 400 above daedalus.topography.max-field-cells, because the sweep "
+                    + "stays linear but the JSON does not. Rate-limited against 'mazeSolve'.")
+    @PerKeyRateLimit("mazeSolve")
+    public ResponseEntity<TopographyService.DistanceField> distanceField(
+            @PathVariable UUID id,
+            @RequestParam(required = false, defaultValue = "GOAL") TopographyService.Origin from) {
+        var field = topography.fieldFor(id, from);
+        return field == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(field);
+    }
+
+    /**
+     * ADR-007 idea 5 — k-center sanctuary placement. {@code k} breadth-first sweeps for the
+     * greedy plus {@code k} more to locate the worst-served cell, so it shares {@code mazeSolve}.
+     */
+    @GetMapping("/maze/{id}/sanctuaries")
+    @Operation(summary = "Where to put k safe points so the worst-off cell is as close as possible.",
+            description = "The metric k-center problem, which is NP-hard, solved by "
+                    + "farthest-first greedy — a 2-approximation, and the best guarantee any "
+                    + "polynomial algorithm can offer unless P = NP. The response reports the "
+                    + "covering radius (the walk from the loneliest cell to its nearest "
+                    + "sanctuary), that cell itself, and how many cells are actually served, so "
+                    + "a placement that covers only part of a fragmented maze cannot hide behind "
+                    + "a shrinking radius. k is clamped to 1..16. Rate-limited against "
+                    + "'mazeSolve'.")
+    @PerKeyRateLimit("mazeSolve")
+    public ResponseEntity<TopographyService.Sanctuaries> sanctuaries(
+            @PathVariable UUID id,
+            @RequestParam(required = false) Integer k) {
+        var placement = topography.sanctuariesFor(id, k);
+        return placement == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(placement);
     }
 
     @GetMapping("/maze/{id}/ghost")

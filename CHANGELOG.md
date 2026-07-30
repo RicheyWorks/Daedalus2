@@ -34,6 +34,39 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Distance heat map (ADR-007 idea 6) and sanctuary placement (ADR-007 idea 5).**
+  `GET /api/v1/maze/{id}/distance-field?from=GOAL|START` returns every cell's walking distance
+  from a landmark, and the UI shades the maze with it — one hue, monotone in lightness, the
+  near-zero end receding into the floor. `GET /api/v1/maze/{id}/sanctuaries?k=` solves metric
+  k-center by farthest-first greedy (a 2-approximation, and the best guarantee available unless
+  P = NP), reporting the covering radius, how many cells are actually served, and *which* cell
+  is served worst — drawn as a ring, the loneliest place in the maze. Measured on a 21×21 perfect
+  maze the radius falls 203 → 149 → 90 → 48 → 39 as k goes 1 → 8. Unreachable cells report `-1`
+  rather than being omitted, so a dungeon's rock stays unshaded instead of being drawn as
+  distance zero. The field is payload-capped at 16,384 cells and **refused with a 400 that
+  explains itself** above that — the sweep stays linear at 512×512, the 1.5 MB of JSON does not,
+  and silently downsampling a per-cell overlay would be a lie told in colour.
+- **`DistanceOracle` stays dormant on purpose, with a measurement behind it.** ADR-007 justified
+  the heat map as "revives `DistanceOracle`". It does not, and shouldn't: the oracle tabulates
+  all-pairs distances for O(1) lookups, caps itself at 4,096 cells (the table is `V²` shorts —
+  32 MB at 64×64), and a heat map needs one source, not all pairs. It also loses on its own
+  ground — computing every cell's eccentricity measured **1,738 ms** precompute-then-scan against
+  **1,485 ms** for running the same sweeps directly, allocating nothing. It only pays for many
+  random-pair queries, which nothing here does. Eight of the nine `theory` classes are now
+  reachable from the product; the ninth is unreferenced by decision rather than neglect.
+
+### Fixed
+
+- **The heat map looked broken on first render and was not — the legend now says why.** The
+  overlay showed no smooth halo around the goal: bright patches mid-maze, sharp discontinuities
+  everywhere. Checking the numbers rather than the picture, the field is 0 at the goal and its
+  four *physically adjacent* cells measure 201, 1, 189 and 157. A maze distance field is walking
+  distance, so touching cells are remote when a wall stands between them, and every abrupt change
+  of shade marks a wall doing that work — the most informative thing the overlay shows. Both the
+  legend and a test now pin it, so the next reader does not "fix" the correct behaviour.
+
+### Added
+
 - **Hardest-route mode (ADR-007 idea 3) — and the roadmap entry for it was wrong.**
   `GET /api/v1/maze/{id}/hardest-route` returns the longest simple route from start to goal
   alongside the shortest, the ratio between them, the maze's independent loop count, and whether

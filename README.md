@@ -40,8 +40,8 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   the search's real recorded expansion order (observation via the `Graph`
   seam, never simulation); the web UI animates it and can race all ten
   solvers on one maze in a compare table with per-route previews.
-- **Verified** — `mvn clean verify` passes **416 tests** across the five
-  modules (core 263, server 122, plugin-runtime 20, plugin-api 7, desktop 4)
+- **Verified** — `mvn clean verify` passes **551 tests** across the five
+  modules (core 302, server 218, plugin-runtime 20, plugin-api 7, desktop 4)
   with zero Checkstyle violations, zero SpotBugs findings, and a per-module
   JaCoCo coverage ratchet that fails the build on regression.
   [`CHANGELOG.md`](./CHANGELOG.md) records what changed and, where a decision
@@ -129,6 +129,8 @@ public consumers).
 | `POST` | `/api/v1/maze/breed?a=&b=&seed=` | required | Crossbreed two equal-sized mazes into a connected child (ADR-006) |
 | `GET` | `/api/v1/session/{id}` | public | Read-only session snapshot — the spectator entry point (`#session=` permalink) |
 | `GET` | `/api/v1/maze/{id}/analysis` | required | Structural analysis: min-cut chokepoints, dead ends, route length (ADR-006) |
+| `GET` | `/api/v1/maze/{id}/distance-field` | required | Every cell's walking distance from the goal (or start), for a heat map. Unreachable cells report -1; payload-capped (ADR-007) |
+| `GET` | `/api/v1/maze/{id}/sanctuaries` | required | k-center safe points, the covering radius, and the cell served worst (ADR-007) |
 | `GET` | `/api/v1/maze/{id}/hardest-route` | required | Longest simple route vs shortest, the detour between them, and the maze's loop count. On a perfect maze the two are equal by mathematics and the response says so (ADR-007) |
 | `GET` | `/api/v1/maze/{id}/ghost` | public | The maze's best completed run as a timed recording — the UI replays it as a ghost racer |
 | `GET` | `/api/v1/leaderboard?n=20&maze={id}` | public | Top-N leaderboard — `maze=` scopes to one maze's board (the daily's partition) |
@@ -234,8 +236,8 @@ mvn clean verify              # all five modules
 mvn -pl daedalus-server test  # one module
 ```
 
-Test inventory — **542 tests across 112 files, all green** (302 core, 7 plugin-api, 20
-plugin-runtime, 209 server, 4 desktop) as of 2026-07-30:
+Test inventory — **551 tests across 113 files, all green** (302 core, 7 plugin-api, 20
+plugin-runtime, 218 server, 4 desktop) as of 2026-07-30:
 
 | Module | Highlights |
 |---|---|

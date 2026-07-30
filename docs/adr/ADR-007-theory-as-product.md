@@ -1,6 +1,6 @@
 # ADR-007: Surfacing the theory module as product
 
-**Status:** Accepted (ideas 1–4 and 9 implemented; 5–8 and 10 queued)
+**Status:** Accepted (ideas 1–6 and 9 implemented; 7, 8 and 10 queued)
 **Date:** 2026-07-30
 **Deciders:** Richmond
 **Supersedes / extends:** ADR-006 (living mazes roadmap, complete)
@@ -29,7 +29,9 @@ Counting references from the server and desktop modules:
 
 Six of nine classes — including an exact exponential-time TSP solver and an empirical
 complexity classifier — are fully built, documented, and tested, and contribute nothing to
-anything a user or reviewer can observe. That is the gap worth closing, and it is a much
+anything a user or reviewer can observe. *(Update after ideas 1–6 and 9 shipped: that count is
+now one. `DistanceOracle` remains unreferenced, and the postscript on ideas 5 and 6 explains why
+that is the right answer rather than a leftover.)* That is the gap worth closing, and it is a much
 better generator of ideas than brainstorming features from nothing.
 
 **Constraints.** Anything added must hold the standards this codebase already enforces:
@@ -51,8 +53,6 @@ same way ADR-006 was executed batch by batch.
 | 1 | **Waypoint Tour mode** — collect scattered waypoints then reach the goal; the server knows the provably optimal collection order and scores you against it | `WaypointTour` | Turns an exact exponential algorithm into a game mechanic. "You walked 87 steps; optimal is 64" is a hook no maze app has | M |
 | 2 | **Complexity Lab** — run a generator across sizes live, fit the growth curve, report empirical `O(·)` with R² | `ComplexityAnalyzer`, `GrowthEstimator` | Measuring algorithmic complexity *as a product feature*, live, rather than asserting it in a comment | M |
 | 3 | **Hardest-route mode** — place start/goal on the longest simple path instead of the extremes | `LongestPath` | The extremes are the farthest apart; the longest *simple path* is the cruellest walk. Different, and provably so | S |
-
-> **Idea 3 as written above is wrong** — on a tree the longest simple path between two cells *is* the only path, so this changes nothing on 22 of 23 generators. It shipped reframed as a measurement of the current maze. The row is left as first written because the postscript at the end of this document is about that mistake.
 | 4 | **Maze fingerprint + generator classifier** — a structural signature (degree histogram, dead-end density, branchiness, cut profile) that identifies which generator produced an unlabelled maze | — | "Guess the algorithm from the shape alone", with measured accuracy. Also gives dedup and find-similar for free | M |
 | 5 | **Sanctuary placement** — k-center safe points minimising worst-case distance from anywhere | `FacilityPlacement` | Optimal checkpoint placement is a real optimisation problem with an obvious game reading | S |
 | 6 | **Distance heat-map overlay** — shade every cell by its distance from the goal | `DistanceOracle` | Makes the BFS field visible; instantly explains why a maze feels hard | S |
@@ -60,6 +60,12 @@ same way ADR-006 was executed batch by batch.
 | 8 | **Heuristic misleadingness** — measure where A\*'s heuristic lies most, and overlay it | — | Explains *why* a solver lost the arena, in structural terms rather than vibes | M |
 | 9 | **Generator invariant fuzzing** — property-test every registered generator (perfect ⇒ spanning tree, sparse ⇒ connected habitable set) across sizes and seeds | — | Turns 23 generators from "presumably fine" into a proven set; would have caught the crossbreeding rock bug | S |
 | 10 | **Solver tournament with confidence intervals** — rank all solvers over many mazes, reporting variance rather than a single race | — | The arena races once; a tournament says which solver is *actually* better, with statistics | M |
+
+> **Two rows above are wrong as written, and are left standing.** Idea 3's placement framing is
+> vacuous on a tree, and idea 6's "revives `DistanceOracle`" is the wrong justification — the
+> oracle is slower than a plain sweep for what this needs. Both shipped reframed. The rows stay
+> as first written because the postscripts at the end of this document are about those mistakes,
+> and editing them away would hide the only interesting part.
 
 ## Options considered for idea 1
 
@@ -152,7 +158,11 @@ rather than a suggestion.
    shortest and longest simple routes, their ratio and the maze's loop count. Reframed after
    measurement (see the postscript): shipped as a *measurement of the current maze*, not as a
    start/goal placement mode, because on a tree those are the same thing
-10. [ ] Ideas 5–8, 10, in the priority order above
+10. [x] Idea 6 (**Distance heat map**) — `GET /api/v1/maze/{id}/distance-field`, one BFS sweep,
+    payload-capped; **does not use `DistanceOracle`**, for the measured reason below
+11. [x] Idea 5 (**Sanctuary placement**) — `GET /api/v1/maze/{id}/sanctuaries?k=`, k-center via
+    `FacilityPlacement`, reporting covering radius, served cells and the worst-served cell
+12. [ ] Ideas 7, 8 and 10, in the priority order above
 
 ## Postscript: what building idea 2 taught
 
@@ -240,3 +250,39 @@ something asked for large or braided inputs:
 The pattern worth keeping: **the roadmap entry is a hypothesis, not a specification.** Both of
 these were found by writing a throwaway probe that printed a table before any feature code
 existed.
+
+## Postscript: what building ideas 5 and 6 taught
+
+**`DistanceOracle` should stay dormant, and now there is a number saying why.** Idea 6 was
+written as "revives `DistanceOracle`" — the class exists, so surfacing it looked like pure
+upside. Measuring first says otherwise. The oracle tabulates all-pairs distances for O(1)
+lookups and caps itself at 4,096 cells because the table is `V²` shorts (32 MB at 64×64). A heat
+map needs *one* source, not all pairs, and that cap would exclude most mazes this server
+generates. Worse, on its own home ground the oracle loses: computing every cell's eccentricity
+measured **1,738 ms** via precompute-then-scan against **1,485 ms** for running the same sweeps
+directly, at 64×64, with the direct route allocating nothing. It only pays when many *random
+pairs* are queried after the table is built, and nothing in this product does that.
+
+So the heat map uses `MazeMetrics.distancesFrom`, and the roadmap's "revives X" column turned out
+to be the wrong reason to build the feature — the feature is good, the justification was not.
+Six of nine theory classes were dormant when this ADR was written; the right count today is one,
+and it stays dormant deliberately rather than by neglect. **"Unused" is a question, not a verdict.**
+
+**The k-center coverage trap did not fire, which is also worth recording.** `FacilityPlacement`
+documents a real hazard: on a fragmented graph, `kCenter` improves its radius while leaving most
+of the maze unserved. That is why the class ships two variants. Measured on this project's actual
+mazes, the hazard is absent — a 21×21 dungeon's 206 habitable cells form one component (the
+generator fuzz from idea 9 proves this holds for every registered generator), so `kCenter` serves
+all of them at every k, while `kCenterAcrossComponents` pins the radius at 40 and spends extra
+facilities "serving" isolated rock nobody can walk to. The dungeon reading is the correct one
+here, and `servedCells` is reported anyway so the claim stays checkable if a future generator
+changes that.
+
+**The heat map looked broken and was not.** The first render showed no smooth halo around the
+goal — bright patches scattered mid-maze, sharp discontinuities everywhere. That reads as a bug.
+Checking the numbers instead of the picture: the field is 0 at the goal, and the goal's four
+physically-adjacent cells measure 201, 1, 189 and 157. A maze distance field is walking distance,
+so touching cells are remote when a wall stands between them — and every abrupt change of shade
+marks a wall doing exactly that work. It is the most informative thing the overlay shows. The
+legend now says so, and a test pins it, because the next person to look at that picture will
+have the same instinct to "fix" it.

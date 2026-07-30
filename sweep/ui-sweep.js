@@ -91,6 +91,36 @@ async function check(name, fn) {
         + `loops=${eroded.loops}; ${gold} route pixels drawn`];
   });
 
+  await check('D3. heat map shades the field, sanctuaries mark the lonely cell', async () => {
+    await page.click('#heatmap');
+    await page.waitForFunction(() => state.field != null, null, {timeout:20000});
+    const shaded = await page.evaluate(() => {
+      const c = document.getElementById('maze');
+      const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+      let n = 0;
+      for (let i = 0; i < d.length; i += 4) if (d[i+2] - d[i] > 40 && d[i+2] > 110) n++;
+      return n;
+    });
+    const f = await page.evaluate(() => ({max: state.field.maxDistance, un: state.field.unreachable}));
+
+    await page.click('#sanctuaries');
+    await page.waitForFunction(() => state.sanctuaries != null, null, {timeout:20000});
+    const s = await page.evaluate(() => ({n: state.sanctuaries.placements.length,
+        r: state.sanctuaries.coveringRadius, served: state.sanctuaries.servedCells,
+        hab: state.sanctuaries.habitableCells, fieldCleared: state.field === null}));
+    const green = await page.evaluate(() => {
+      const c = document.getElementById('maze');
+      const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+      let n = 0;
+      for (let i = 0; i < d.length; i += 4) if (d[i+1] > 150 && d[i] < 130 && d[i+2] < 160) n++;
+      return n;
+    });
+    const ok = shaded > 5000 && f.max > 50 && f.un === 0
+        && s.n === 5 && s.r > 0 && s.served === s.hab && s.fieldCleared && green > 300;
+    return [ok, `${shaded} cells shaded up to ${f.max} steps; ${s.n} sanctuaries radius ${s.r} `
+        + `serving ${s.served}/${s.hab}; ${green} marker pixels`];
+  });
+
   await check('E. solver arena race', async () => {
     await page.selectOption('#solver','bfs'); await page.selectOption('#rival','astar');
     await page.click('#race');

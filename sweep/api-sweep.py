@@ -351,6 +351,44 @@ def t_hardest_route():
         f"loops={d['loops']}; 301x301 -> {sb} len={b.get('hardestLength')}")
 
 
+# ---- 19. distance field + sanctuaries (ADR-007 ideas 6 and 5) --------------------
+def t_topography():
+    """The field's defining property, not just its shape.
+
+    A distance field that returned the right dimensions and a plausible max would pass a
+    sloppy check while being wrong everywhere in between, so this re-derives the BFS property:
+    every cell is one step past its nearest open neighbour. It also pins the counter-intuitive
+    part — cells that touch on screen can be hundreds of steps apart — because that is what a
+    reviewer is most likely to mistake for a bug and 'fix'."""
+    m = gen("recursive-backtracker", 21, 21, 7)
+    sf, field = call("GET", f"/maze/{m['id']}/distance-field")
+    d = field["distances"]
+    origin = field["origin"]
+    zero_at_origin = d[origin["row"]][origin["col"]] == 0
+    jump = max(abs(d[r][c] - d[r][c + 1]) for r in range(21) for c in range(20))
+    field_ok = sf == 200 and zero_at_origin and field["unreachable"] == 0 and jump > 100
+
+    sd, dungeon = call("GET", f"/maze/{gen('dungeon', 21, 21, 7)['id']}/distance-field")
+    rock_ok = sd == 200 and dungeon["unreachable"] > 100
+
+    sb, _ = call("GET", f"/maze/{gen('recursive-backtracker', 200, 200, 1)['id']}"
+                        "/distance-field", expect=400)
+    cap_ok = sb == 400
+
+    ss, sanc = call("GET", f"/maze/{m['id']}/sanctuaries?k=5")
+    radii = [call("GET", f"/maze/{m['id']}/sanctuaries?k={k}")[1]["coveringRadius"]
+             for k in (1, 2, 3, 5, 8)]
+    sanc_ok = (ss == 200 and len(sanc["placements"]) == 5
+               and sanc["servedCells"] == sanc["habitableCells"]
+               and radii == sorted(radii, reverse=True))
+    clamp_ok = len(call("GET", f"/maze/{m['id']}/sanctuaries?k=9999")[1]["placements"]) == 16
+
+    return field_ok and rock_ok and cap_ok and sanc_ok and clamp_ok, (
+        f"field max={field['maxDistance']} worst adjacent jump={jump} (a wall); "
+        f"dungeon rock unreachable={dungeon['unreachable']}; 200x200 -> {sb}; "
+        f"radius by k {radii}; k=9999 clamped to 16")
+
+
 for name, fn in [
     ("1. generation + determinism", t_generate),
     ("2. all solvers return routes", t_solvers),
@@ -370,6 +408,7 @@ for name, fn in [
     ("16. complexity lab", t_complexity),
     ("17. maze fingerprint", t_fingerprint),
     ("18. hardest route", t_hardest_route),
+    ("19. distance field + sanctuaries", t_topography),
 ]:
     check(name, fn)
 
