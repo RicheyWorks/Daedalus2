@@ -174,6 +174,31 @@ become dramatically better once mazes can already change under a walker's feet.
         load-bearing, teeth-proven); spectator mode (6) shipped — read-only session
         snapshot endpoint behind a `#session=` permalink, live over the existing STOMP
         player frames
-11. [ ] Roadmap remainder: campaign mode (10) — the natural finale, since it can string
-        together daily seeds, living mazes, traffic, ghosts, and analytics-steered
-        difficulty
+11. [x] Roadmap complete (2026-07-30): campaign mode (10) shipped, and it did turn out to be a
+        composition rather than a subsystem — one endpoint, because a campaign is a table of
+        contents over the API the earlier nine ideas already built. Stage mazes are
+        deterministic per `(campaignSeed, index)` and stage ids are stable, which is what makes
+        the per-maze leaderboards (idea 4) and ghosts (idea 8) apply per stage for free; late
+        stages simply *declare* the living (1) and traffic (3) hazards and the client turns them
+        on through the existing opt-in endpoints.
+
+        Difficulty ordering came from the theory module via a new `DifficultyGrader`, and the
+        two findings worth remembering are both about measurement discipline:
+
+        - **Ordering must be measured, not reasoned about.** Dead ends per *cell* looks like the
+          natural difficulty signal and inverts the small end of the ladder (a 3×3 grades above
+          a 5×5). Per *perimeter* fixes it. Found by printing scores, not by thinking harder.
+        - **A single-seed test of a randomised ladder is not a test.** Asserting monotonicity on
+          one campaign seed passed while the ladder actually walked backwards on 15 of 40 seeds.
+          Worse, after the fix the same test still passed with the fix *deleted* — the
+          headroom rule is inert at the default config (60/60 either way) and only load-bearing
+          at longer ladders (0/60 → 53/60 at ten stages), so the test that pins it had to be
+          written at that config. Both numbers are in the code, and the 53/60 is stated rather
+          than rounded up: a strictly rising ladder is a measured property of the *default*
+          configuration, not a guarantee for every setting.
+
+        Also recorded, since it cost real trust: this roadmap's middle batches were verified with
+        `-Dspotbugs.skip`, which hid three findings including a genuine non-atomic
+        `volatile` increment in `LivingMazeService`. The gate is green with SpotBugs and
+        Checkstyle enabled; skipping a project's own quality gate to move faster is exactly the
+        kind of shortcut this ADR's other entries were written to avoid.

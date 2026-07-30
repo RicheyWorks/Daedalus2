@@ -59,6 +59,8 @@ public class LivingMazeService {
     private static final double DRIFT_SPAN = 0.5;
     private static final double COST_MIN = 1.0;
     private static final double COST_MAX = 1000.0;
+    /** Weight changes below this are no change at all — never compare costs with {@code ==}. */
+    private static final double WEIGHT_EPSILON = 1e-9;
 
     /** Thrown when {@code max-concurrent} living runs already exist — answered 409. */
     public static class CapacityExceededException extends RuntimeException {
@@ -99,7 +101,12 @@ public class LivingMazeService {
         final UUID mazeId;
         final int ticks;
         final long seed;
-        volatile int done;
+        // Incremented only by the single ticker thread but read by request threads
+        // (status, events). AtomicInteger rather than a volatile int: `done++` on a
+        // volatile field is a read-modify-write, so it is not atomic even with one
+        // writer, and SpotBugs (VO_VOLATILE_INCREMENT) is right to flag it.
+        final java.util.concurrent.atomic.AtomicInteger done =
+                new java.util.concurrent.atomic.AtomicInteger();
         volatile boolean settled;
         volatile ScheduledFuture<?> future; // set immediately after construction
 
@@ -182,7 +189,7 @@ public class LivingMazeService {
     }
 
     private LiveStatus status(Run run) {
-        return new LiveStatus(run.mazeId, run.ticks, run.done,
+        return new LiveStatus(run.mazeId, run.ticks, run.done.get(),
                 tickInterval.toMillis(), runs.containsKey(run.mazeId), run.settled);
     }
 
@@ -204,7 +211,7 @@ public class LivingMazeService {
                 return;
             }
 
-            long tickSeed = run.seed + run.done + 1;
+            long tickSeed = run.seed + run.done.get() + 1;
             MazeGrid next = current.grid().copy();
 
             // Erode: open a fraction of the dead ends — at least one whenever any remain,
@@ -222,13 +229,13 @@ public class LivingMazeService {
             }
 
             boolean changed = erosion.wallsOpened() > 0 || weightsDrifted;
-            boolean lastTick = run.done + 1 >= run.ticks;
+            boolean lastTick = run.done.get() + 1 >= run.ticks;
 
             if (!changed) {
                 // Fully eroded and nothing breathing: the maze has settled. Announce it
                 // once (settled=true, no new snapshot needed) and end the run early.
                 run.settled = true;
-                events.publishEvent(new MazeMutatedEvent(this, run.mazeId, run.done + 1,
+                events.publishEvent(new MazeMutatedEvent(this, run.mazeId, run.done.get() + 1,
                         0, erosion.deadEndsAfter(), true, current.grid()));
                 stop(run, true);
                 return;
@@ -241,9 +248,9 @@ public class LivingMazeService {
                 return;
             }
 
-            run.done++;
+            int ticksDone = run.done.incrementAndGet();
             meters.counter("daedalus.living.walls-opened").increment(erosion.wallsOpened());
-            events.publishEvent(new MazeMutatedEvent(this, run.mazeId, run.done,
+            events.publishEvent(new MazeMutatedEvent(this, run.mazeId, ticksDone,
                     erosion.wallsOpened(), erosion.deadEndsAfter(), lastTick, next));
             if (lastTick) {
                 stop(run, true);
@@ -263,7 +270,7 @@ public class LivingMazeService {
             f.cancel(false);
         }
         if (graceful) {
-            log.info("maze {} finished living after {} ticks{}", run.mazeId, run.done,
+            log.info("maze {} finished living after {} ticks{}", run.mazeId, run.done.get(),
                     run.settled ? " (settled)" : "");
         }
     }
@@ -275,12 +282,12 @@ public class LivingMazeService {
         for (int r = 0; r < grid.rows(); r++) {
             for (int c = 0; c < grid.cols(); c++) {
                 double w = grid.weightOf(r, c);
-                if (w == 1.0) {
+                if (Math.abs(w - 1.0) <= WEIGHT_EPSILON) {
                     continue; // only existing hotspots breathe; erosion never mints new ones
                 }
                 double drifted = Math.min(COST_MAX,
                         Math.max(COST_MIN, w * (DRIFT_MIN + DRIFT_SPAN * rng.nextDouble())));
-                if (drifted != w) {
+                if (Math.abs(drifted - w) > WEIGHT_EPSILON) {
                     grid.setWeight(new com.daedalus.model.Point(r, c), drifted);
                     changed = true;
                 }

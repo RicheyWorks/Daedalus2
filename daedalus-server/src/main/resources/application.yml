@@ -93,6 +93,19 @@ daedalus:
     max-agents: ${DAEDALUS_AGENT_MAX:10000}
     idle-ttl: ${DAEDALUS_AGENT_IDLE_TTL:1h}
     max-steps: ${DAEDALUS_AGENT_MAX_STEPS:100000}
+  # ----- Campaign mode (ADR-006 idea #10) -----
+  # A deterministic ladder: stage n's maze seed derives from (campaignSeed, n), and each stage
+  # picks among `candidates` generated mazes the one whose MEASURED DifficultyGrader score is
+  # nearest that stage's target. Planning a campaign therefore costs stages x candidates
+  # generations once per seed, then caches.
+  campaign:
+    stages: ${DAEDALUS_CAMPAIGN_STAGES:6}
+    candidates: ${DAEDALUS_CAMPAIGN_CANDIDATES:3}
+    # Raising base-size/size-step, or the target range in CampaignService, shrinks the headroom
+    # each stage leaves the next; past a point the ladder stops being monotone (measured).
+    base-size: ${DAEDALUS_CAMPAIGN_BASE_SIZE:9}
+    size-step: ${DAEDALUS_CAMPAIGN_SIZE_STEP:4}
+    max-campaigns: ${DAEDALUS_CAMPAIGN_MAX:50}
   # ----- Ghost runs (ADR-006 idea #8) -----
   # The best completed run per maze, replayed as a translucent racer. One recording per
   # maze, trail length capped in the model (GameSession.MAX_TRAIL).

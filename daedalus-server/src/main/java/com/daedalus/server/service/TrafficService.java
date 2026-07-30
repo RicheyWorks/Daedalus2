@@ -61,6 +61,8 @@ public class TrafficService {
     private static final double UNIFORM = 1.0;
     /** Below this, a decaying weight snaps to uniform — asymptotes never finish. */
     private static final double SNAP = 1.05;
+    /** Cost changes smaller than this are no change at all (weights are game-visible costs). */
+    private static final double EPSILON = 1e-9;
 
     /** Thrown when {@code max-concurrent} tracked mazes exist — answered 409. */
     public static class CapacityExceededException extends RuntimeException {
@@ -242,14 +244,18 @@ public class TrafficService {
             for (int r = 0; r < next.rows(); r++) {
                 for (int c = 0; c < next.cols(); c++) {
                     double w = next.weightOf(r, c);
-                    if (w == UNIFORM) {
-                        continue;
+                    if (isUniform(w)) {
+                        continue; // untouched cell: nothing to decay
                     }
                     double decayed = UNIFORM + (w - UNIFORM) * decayFactor;
                     if (decayed < SNAP) {
                         decayed = UNIFORM;
                     }
-                    if (decayed != w) {
+                    // Compare with a tolerance, not ==. The old exact test happened to work
+                    // (SNAP forces exactly UNIFORM), but it made the loop's "did anything
+                    // move?" answer depend on bit-level equality of a computed double — one
+                    // decay-factor change away from spinning on deltas no player could see.
+                    if (Math.abs(decayed - w) > EPSILON) {
                         next.setWeight(new Point(r, c), decayed);
                         changed = true;
                     }
@@ -295,13 +301,18 @@ public class TrafficService {
         }
     }
 
+    /** Uniform-cost test with tolerance — see EPSILON. */
+    private static boolean isUniform(double weight) {
+        return Math.abs(weight - UNIFORM) <= EPSILON;
+    }
+
     /** Response-facing hotspot list mirrors the live weights — congestion IS a hotspot. */
     private static List<Hotspot> hotspotsOf(WeightedMazeGrid grid) {
         List<Hotspot> out = new ArrayList<>();
         for (int r = 0; r < grid.rows(); r++) {
             for (int c = 0; c < grid.cols(); c++) {
                 double w = grid.weightOf(r, c);
-                if (w != UNIFORM) {
+                if (!isUniform(w)) {
                     out.add(new Hotspot(r, c, w));
                 }
             }

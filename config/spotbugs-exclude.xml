@@ -42,6 +42,31 @@
     </Match>
 
     <!--
+      DMI_RANDOM_USED_ONLY_ONCE on MazeBreeder.breed is a false positive: the single
+      seeded Random drives the patch genome (a nextBoolean per block), the seam
+      donor coin-flips (a nextBoolean per boundary edge), and the shuffle inside the
+      connectivity repair — dozens to thousands of draws. The detector's heuristic
+      appears to miss uses reached only through loops and a ternary. Crossbreeding
+      must use exactly ONE Random for the whole operation, because determinism per
+      (parentA, parentB, seed) is the documented contract and pinned by
+      MazeBreederTest; splitting or re-seeding it would change every child.
+    -->
+    <Match>
+        <Class name="com.daedalus.engine.MazeBreeder"/>
+        <Bug pattern="DMI_RANDOM_USED_ONLY_ONCE"/>
+    </Match>
+
+    <!--
+      Same false positive in LivingMazeService.drift: its seeded Random draws once per
+      weighted cell inside a nested loop, and the per-tick seed is what makes erosion
+      replayable. The detector misses uses reached only through loops.
+    -->
+    <Match>
+        <Class name="com.daedalus.server.service.LivingMazeService"/>
+        <Bug pattern="DMI_RANDOM_USED_ONLY_ONCE"/>
+    </Match>
+
+    <!--
       DaedalusApp and DaedalusLauncher keep a static
       ConfigurableApplicationContext so the desktop client can boot the server
       headless in-process and reach the context. MS_EXPOSE_REP flags the

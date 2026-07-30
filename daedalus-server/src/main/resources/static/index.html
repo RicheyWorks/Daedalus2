@@ -172,6 +172,14 @@
 
   <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
     <section class="panel">
+      <h2>Campaign</h2>
+      <button id="campaign"
+              title="A deterministic ladder of six stages, each picked by MEASURED difficulty — same seed anywhere plays the same campaign">
+        Start today's campaign</button>
+      <div id="campaignBox" class="hint">six stages, gentle to brutal — hazards ramp in late</div>
+    </section>
+
+    <section class="panel">
       <h2 id="lbTitle">Leaderboard</h2>
       <div id="lb" class="hint">loading…</div>
     </section>
@@ -206,6 +214,9 @@ const state = {
   prevMazeId: null,      // last maze before this one — crossbreeding's other parent
   readOnly: false,       // spectating: render everything, control nothing
   spectatePoll: null,    // interval id — STOMP-less spectator fallback
+  campaign: null,        // {seed, stages} once a campaign is loaded
+  stageIndex: null,      // which stage is on screen
+  cleared: {},           // stageIndex → true once its goal is reached
 };
 
 /** Escape untrusted text (player names arrive from other clients) before it meets innerHTML. */
@@ -227,18 +238,25 @@ function log(kind, text) {
   while (box.childElementCount > 200) box.lastChild.remove();
 }
 
-// When today's daily is on screen, the board is that maze's own partition — you compete
-// against everyone who played the same topology, not the world's mazes.
+// A shared maze gets its own board: the daily challenge, or a campaign stage. You compete
+// against everyone who played that same topology, not against the world's easiest mazes.
 function lbScope() {
-  return state.dailyId && state.maze && state.maze.id === state.dailyId
-      ? state.dailyId : null;
+  if (!state.maze) return null;
+  if (state.dailyId && state.maze.id === state.dailyId) return state.dailyId;
+  if (state.campaign && state.stageIndex != null
+      && state.campaign.stages[state.stageIndex].mazeId === state.maze.id) {
+    return state.maze.id;
+  }
+  return null;
 }
 async function refreshLeaderboard() {
   try {
     const scoped = lbScope();
     const rows = await api(`/leaderboard?n=10${scoped ? "&maze=" + scoped : ""}`);
     if (lbScope() !== scoped) return; // scope changed while in flight — a newer call owns the panel
-    $("lbTitle").textContent = scoped ? "Daily leaderboard" : "Leaderboard";
+    $("lbTitle").textContent = !scoped ? "Leaderboard"
+        : scoped === state.dailyId ? "Daily leaderboard"
+        : `Stage ${state.stageIndex + 1} leaderboard`;
     $("lb").innerHTML = rows.length === 0
         ? `<span class="hint">no completed runs yet — reach a goal</span>`
         : rows.map((e, i) =>
@@ -357,6 +375,7 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   clearInterval(state.trafficPoll); state.trafficPoll = null;
   clearInterval(state.ghostTimer); state.ghostTimer = null;
   state.race = null; state.dailyId = null; state.analysis = null; state.ghost = null;
+  state.stageIndex = null; // playStage re-sets this after adopting the stage's maze
   $("compareBox").innerHTML = "";
   location.hash = "maze=" + maze.id; // shareable — anyone on this server can open it
   $("status").textContent = "arrow keys move once a session is open";
@@ -386,6 +405,90 @@ async function loadDaily() {
   log("state", `daily challenge ${d.date} — the whole world plays this maze today`);
 }
 
+// ---------- campaign mode (ADR-006 idea #10) ----------
+/**
+ * Load a campaign and render its ladder. Everything a stage needs already exists as an
+ * endpoint — the maze by id, its own leaderboard partition, its ghost, its hazards — so the
+ * campaign is a table of contents, not a new game mode.
+ */
+async function loadCampaign(seed) {
+  const c = await api(`/campaign${seed != null ? "?seed=" + seed : ""}`);
+  state.campaign = c;
+  state.cleared = {};
+  renderCampaign();
+  log("state", `campaign ${c.seed} — ${c.stages.length} stages, `
+      + `${c.stages[0].grade.label} to ${c.stages[c.stages.length - 1].grade.label} `
+      + `(share: ${location.origin}${location.pathname}#campaign=${c.seed})`);
+  await playStage(0);
+}
+
+function renderCampaign() {
+  const c = state.campaign;
+  if (!c) return;
+  $("campaignBox").innerHTML = c.stages.map(s => {
+    const active = s.index === state.stageIndex;
+    const done = state.cleared[s.index];
+    const hazards = s.hazards.length ? ` · ${s.hazards.join(" + ")}` : "";
+    return `<div style="margin:4px 0;padding:4px 6px;border-radius:4px;`
+        + `${active ? "background:#1c2531;" : ""}">`
+        + `<a href="#" data-stage="${s.index}" style="color:${done ? "#4cc38a" : "#82b1ff"}">`
+        + `${done ? "✓" : s.index + 1}. ${esc(s.name)}</a> `
+        + `<span class="hint">${s.rows}×${s.cols} ${esc(s.generatorId)} · `
+        + `<b>${esc(s.grade.label)}</b> ${s.grade.score}${hazards}</span></div>`;
+  }).join("");
+  $("campaignBox").querySelectorAll("a[data-stage]").forEach(a => {
+    a.onclick = ev => {
+      ev.preventDefault();
+      playStage(Number(a.dataset.stage)).catch(e => log("err", e.message));
+    };
+  });
+}
+
+/** Stage cleared: mark it, then offer the next rung (the player chooses when to climb). */
+function onStageCleared() {
+  const index = state.stageIndex;
+  state.cleared[index] = true;
+  renderCampaign();
+  const next = index + 1;
+  if (next < state.campaign.stages.length) {
+    const s = state.campaign.stages[next];
+    log("state", `stage ${index + 1} cleared — next: ${s.name} (${s.grade.label})`);
+    $("status").textContent += ` · stage ${index + 1} cleared — click stage ${next + 1} to continue`;
+  } else {
+    log("state", `campaign complete — all ${state.campaign.stages.length} stages cleared`);
+    $("status").textContent += " · CAMPAIGN COMPLETE";
+  }
+}
+
+/** Load a stage: its maze, its own leaderboard, its ghost, and the hazards it declares. */
+async function playStage(index) {
+  const stage = state.campaign.stages[index];
+  const maze = await api(`/maze/${stage.mazeId}`);
+  adoptMaze(maze, null, `campaign stage ${index + 1}`);
+  state.stageIndex = index; // after adoptMaze, which resets per-maze state
+  state.dailyId = null;
+  renderCampaign();
+  log("state", `stage ${index + 1}/${state.campaign.stages.length} — ${stage.name}: `
+      + `${stage.grade.label} (${stage.grade.score}), route ${stage.grade.routeLength} cells, `
+      + `${stage.grade.deadEnds} dead ends`);
+  await play();                       // opens the session (and summons this stage's ghost)
+  for (const hazard of stage.hazards) {
+    // Hazard names are domain words; endpoint paths are an API detail and the two do NOT
+    // line up ("living" the hazard is served by POST /live). Interpolating the hazard name
+    // straight into the path silently 404s every hazard, so the mapping is explicit.
+    const path = {living: "live?ticks=30", traffic: "traffic"}[hazard];
+    if (!path) { log("err", `unknown hazard "${hazard}" — server declares one this client can't start`); continue; }
+    try {
+      await api(`/maze/${stage.mazeId}/${path}`, {method: "POST"});
+      log("state", `hazard active on this stage: ${hazard}`);
+    } catch (e) {
+      log("err", `could not start ${hazard}: ${e.message}`);
+    }
+  }
+  if (stage.hazards.includes("living") && !state.stomp) startLivePolling(stage.mazeId);
+  refreshLeaderboard();               // this stage's own board (per-maze partition)
+}
+
 /** Cross the current maze with the previous one — the child replaces the current maze. */
 async function crossbreed() {
   const child = await api(`/maze/breed?a=${state.prevMazeId}&b=${state.maze.id}`,
@@ -395,8 +498,14 @@ async function crossbreed() {
       + "connected maze (breed again to keep the lineage going)");
 }
 
-/** #maze=<id> or #session=<id> permalink: load a maze, or spectate a live session. */
+/** #maze=, #session= or #campaign= permalink: load a maze, spectate, or run a campaign. */
 async function loadFromHash() {
+  const camp = location.hash.match(/#campaign=(-?\d+)/);
+  if (camp) {
+    try { await loadCampaign(Number(camp[1])); }
+    catch (e) { log("err", `campaign permalink failed (${e.message})`); }
+    return;
+  }
   const s = location.hash.match(/#session=([0-9a-f-]{36})/);
   if (s) { await spectate(s[1]); return; }
   const m = location.hash.match(/#maze=([0-9a-f-]{36})/);
@@ -459,19 +568,25 @@ async function bringToLife() {
   const r = await api(`/maze/${state.maze.id}/live?ticks=30`, {method: "POST"});
   $("live").disabled = true;
   log("state", `maze is alive — ${r.ticksRequested} erosion ticks, one every ${(r.tickMillis / 1000).toFixed(1)}s`);
-  if (!state.stomp) {
-    const mazeId = state.maze.id;
-    let polls = 0;
-    clearInterval(state.livePoll);
-    state.livePoll = setInterval(async () => {
-      if (!state.maze || state.maze.id !== mazeId || ++polls > r.ticksRequested + 1) {
-        clearInterval(state.livePoll); state.livePoll = null;
-        if (state.maze && state.maze.id === mazeId) $("live").disabled = false;
-        return;
-      }
-      await refreshLivingMaze();
-    }, r.tickMillis);
-  }
+  if (!state.stomp) startLivePolling(state.maze.id, r.tickMillis, r.ticksRequested);
+}
+
+/**
+ * STOMP-less fallback while a maze erodes: re-fetch on the tick cadence until the ticks run
+ * out or the maze on screen changes. Shared by the Bring-to-life button and campaign stages
+ * that declare the `living` hazard.
+ */
+function startLivePolling(mazeId, tickMillis = 2000, ticks = 30) {
+  let polls = 0;
+  clearInterval(state.livePoll);
+  state.livePoll = setInterval(async () => {
+    if (!state.maze || state.maze.id !== mazeId || ++polls > ticks + 1) {
+      clearInterval(state.livePoll); state.livePoll = null;
+      if (state.maze && state.maze.id === mazeId) $("live").disabled = false;
+      return;
+    }
+    await refreshLivingMaze();
+  }, tickMillis);
 }
 
 /** A mutation frame arrived: re-fetch the snapshot, re-solve if a route is shown, redraw. */
@@ -567,8 +682,24 @@ async function onTrafficPulse(m) {
 /** Swap in the latest snapshot without resetting session/solver state (unlike adoptMaze). */
 async function refreshLivingMaze() {
   try {
+    const before = state.maze;
     const maze = await api(`/maze/${state.maze.id}`);
     state.maze = maze;
+    // Narrate on the polling path too. Tick/pulse messages normally come from STOMP frames,
+    // so with the broker unreachable a living or congested maze changed under the player in
+    // total silence — worst exactly where hazards matter most, the late campaign stages.
+    if (!state.stomp && before && before.id === maze.id) {
+      const walls = t => t.reduce((n, row) => n + (row.match(/#/g) || []).length, 0);
+      const openedNow = walls(before.tiles) - walls(maze.tiles);
+      const congestedNow = (maze.hotspots || []).length;
+      const congestedBefore = (before.hotspots || []).length;
+      if (openedNow > 0) {
+        log("state", `erosion: ${openedNow} wall${openedNow === 1 ? "" : "s"} opened`);
+      }
+      if (congestedNow !== congestedBefore) {
+        log("state", `traffic: ${congestedNow} congested cell${congestedNow === 1 ? "" : "s"}`);
+      }
+    }
     if (state.analysis) {
       // Re-analyze the new snapshot — watch chokepoints dissolve as erosion braids them.
       try { state.analysis = await api(`/maze/${maze.id}/analysis`); } catch (ignored) {}
@@ -846,6 +977,7 @@ function applyMove(who, to) {
     log("state", `${who} reached the goal — session complete${verdict}`);
     $("status").textContent = `${who} reached the goal — session complete${verdict}`;
     refreshLeaderboard();
+    if (state.campaign && state.stageIndex != null) onStageCleared();
   } else {
     const moves = (state.trails[who] || []).length - 1;
     $("status").textContent =
@@ -1183,6 +1315,7 @@ function drawEmpty() {
 $("generate").onclick = () => generate().catch(e => log("err", e.message));
 $("daily").onclick = () => loadDaily().catch(e => log("err", e.message));
 $("breed").onclick = () => crossbreed().catch(e => log("err", e.message));
+$("campaign").onclick = () => loadCampaign(null).catch(e => log("err", e.message));
 $("solve").onclick = () => solve().catch(e => log("err", e.message));
 $("compare").onclick = () => compareSolvers().catch(e => log("err", e.message));
 $("live").onclick = () => bringToLife().catch(e => log("err", e.message));

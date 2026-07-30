@@ -10,6 +10,50 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Campaign mode (ADR-006 idea #10) — completes the roadmap.** `GET /api/v1/campaign?seed=`
+  returns a deterministic ladder of stages (omit the seed for today's shared campaign). Stage
+  *n*'s maze seed derives from `(campaignSeed, n)` alone, so a campaign link replays
+  byte-identical stages anywhere with no stored state. Each stage's difficulty is **measured,
+  not assumed**: the service generates candidate mazes across three sizes, grades each with the
+  new `DifficultyGrader`, and keeps the one nearest that stage's target that still clears the
+  previous stage. Later stages declare hazards (`living`, `traffic`) but the service never
+  starts a ticker — the client activates them through the existing opt-in endpoints, so their
+  capacity caps and rate limits keep governing. Deliberately one endpoint: a campaign is a
+  table of contents over the API that already existed, so every stage gets its own leaderboard
+  partition (batch 2) and its own ghost (batch 3) for free, proven end-to-end in the tests.
+  UI: a campaign panel with the stage ladder, per-stage boards, and hazards activating on entry.
+- **`DifficultyGrader` in the theory module.** Grades a maze's playability from structure:
+  detour factor (route length over perimeter), branchiness (dead ends per perimeter),
+  scale, and a discount for braided alternate routes — reporting every measurement behind the
+  score, so callers can audit it rather than trust it. Weights and label bands are *chosen*, not
+  calibrated against human play, and the class says so; what it guarantees is **ordering**,
+  which is what a ladder needs. Two ordering defects were caught by measurement while building
+  it: normalizing dead ends per *cell* graded a trivial 3×3 above a 5×5 (tiny mazes spend a
+  third of their cells on dead ends), and the original label bands put nearly every maze this
+  project generates into "hard" or "brutal".
+
+### Fixed
+
+- **Campaign hazards silently 404'd.** The UI built hazard paths by interpolating the hazard
+  name, but the `living` hazard is served by `POST /live` — every late-stage hazard failed. The
+  hazard→path mapping is now explicit, with the mismatch noted.
+- **Living and congested mazes changed in silence without STOMP.** Tick and pulse narration
+  came only from broker frames, so with the CDN unreachable the polling fallback updated the
+  maze with no explanation — worst exactly on late campaign stages, where hazards are the point.
+  The polling path now reports walls opened and congestion changes.
+- **`LivingMazeService.tick` incremented a `volatile int`.** `done++` is a read-modify-write and
+  is not atomic even with a single writer thread; it is now an `AtomicInteger`. Pre-existing,
+  surfaced by re-enabling SpotBugs (below).
+- **Cell costs were compared with `==`.** `TrafficService` and `LivingMazeService.drift` tested
+  computed doubles for exact equality to decide "did anything change?". Both now compare against
+  a tolerance — the old code happened to work because a snap forces exactly `1.0`, which is one
+  tuning change away from spinning on invisible deltas.
+- **Verification gap owned:** batches 2–4 of this roadmap work were verified with
+  `-Dspotbugs.skip`, so they never passed the project's own static-analysis gate. The full gate
+  is green again, and the findings it had been hiding are fixed above (plus two documented
+  `DMI_RANDOM_USED_ONLY_ONCE` false positives excluded with justification, per the project's
+  convention of targeted exclusions over lowering the threshold).
+
 - **Maze crossbreeding (ADR-006 idea #5).** `MazeBreeder` in core: two equal-sized parents
   produce a child by a patch-inheritance genome (3×3 blocks assigned to a parent by seeded
   coin flip, so offspring visibly wear both lineages — a Hilbert curve's discipline melting
