@@ -16,6 +16,23 @@ Last consolidated: 2026-05-07
 
 ## Hardening (server)
 
+- **The 27 bodiless 404s.** `ResponseEntity.notFound().build()` appears 27 times across
+  `MazeController`, `InsightController` and `AgentController`, and each one answers 404 with no
+  body at all. After the 2026-07-31 error-contract audit this is the *only* remaining hole in the
+  RFC 7807 model, and it produces an odd inversion: a typo'd URL now comes back with a helpful
+  problem detail while an expired maze id — by far the most common 404 in this app, since mazes
+  live in a bounded Caffeine cache and get evicted — comes back with nothing. The caller cannot
+  tell "that route does not exist" from "that maze aged out; generate a new one", and the second
+  is the one they can act on.
+
+  The repair is a mechanism, not 27 edits: a small `ResourceNotFoundException(kind, id)` thrown
+  from the same places, plus one handler. The reason it is not in that batch is typing —
+  `ResponseEntity<AnalysisResponse>` cannot carry a `ProblemDetail` body, so the helper-function
+  version would force every return type to `Object`; throwing sidesteps that entirely, but it
+  touches 27 call sites across three controllers and deserves its own pass with its own teeth.
+  `ErrorContractTest` already permits an *empty* 404 body and nothing else, so the exemption
+  cannot quietly widen while this waits.
+
 - ~~**Per-key rate-limiter bucket eviction.**~~ **Done 2026-07-19.** Buckets now
   live in a Caffeine cache bounded by `daedalus.ratelimit.max-keys` (default
   10 000) and expiring on `daedalus.ratelimit.idle-ttl` (default 10 minutes),

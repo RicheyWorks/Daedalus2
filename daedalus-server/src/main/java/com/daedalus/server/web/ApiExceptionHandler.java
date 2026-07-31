@@ -2,6 +2,7 @@
 
 package com.daedalus.server.web;
 
+import com.daedalus.engine.UnknownAlgorithmException;
 import com.daedalus.server.ratelimit.RateLimitNaming;
 import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.ratelimiter.RateLimiterRegistry;
@@ -18,10 +19,14 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.net.URI;
 import java.time.Duration;
@@ -47,6 +52,22 @@ import java.util.TreeMap;
  *
  * <p>Ordered {@link Ordered#HIGHEST_PRECEDENCE} so this advice wins over Spring Boot's
  * default {@code DefaultErrorAttributes}-driven path.
+ *
+ * <h3>The contract is "every error", and it used not to be</h3>
+ *
+ * <p>An audit on 2026-07-31 drove twenty-one distinct failure modes at a running server and
+ * compared the bodies. Five were outside the RFC 7807 contract this class exists to provide:
+ * a missing required parameter, the wrong HTTP verb, an unsupported {@code Content-Type} and an
+ * unmapped path all fell through to Boot's {@code {timestamp, status, error, path}} default, and
+ * an unregistered generator or solver id answered <b>500 with a stack trace</b> for what is
+ * plainly a client typo. The status codes mostly looked right from the outside, which is why
+ * nothing had noticed — a client reading {@code detail} and {@code title} off those responses got
+ * nulls from a reply that otherwise seemed fine.
+ *
+ * <p>The lesson is in the shape of the gap rather than any one handler: an error contract is only
+ * as good as the least-travelled path that produces an error, and the least-travelled paths are
+ * exactly the ones no test drives. {@code ErrorContractTest} now drives them, generated from the
+ * controller sources rather than from a list somebody maintains.
  */
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -55,6 +76,9 @@ public class ApiExceptionHandler {
     private static final URI VALIDATION_TYPE  = URI.create("https://daedalus.dev/problems/validation");
     private static final URI MALFORMED_TYPE   = URI.create("https://daedalus.dev/problems/malformed-request");
     private static final URI RATE_LIMIT_TYPE  = URI.create("https://daedalus.dev/problems/rate-limited");
+    private static final URI UNKNOWN_ALGORITHM_TYPE =
+            URI.create("https://daedalus.dev/problems/unknown-algorithm");
+    private static final URI NOT_FOUND_TYPE   = URI.create("https://daedalus.dev/problems/not-found");
 
     /**
      * Optional registry of named Resilience4j rate limiters. When present (the normal Spring
@@ -207,6 +231,104 @@ public class ApiExceptionHandler {
                 HttpStatus.BAD_REQUEST, "Request body could not be parsed");
         pd.setTitle("Malformed request");
         pd.setType(MALFORMED_TYPE);
+        return pd;
+    }
+
+    /**
+     * A caller named a generator or solver that is not registered — {@code 404}, not {@code 500}.
+     *
+     * <p>This was the API's worst error: {@code POST /api/v1/maze/generate} with a mistyped
+     * {@code generatorId} and {@code POST /api/v1/maze/&#123;id&#125;/solve/&#123;solverId&#125;}
+     * with a mistyped solver both answered <b>500</b> and logged a stack trace, because the
+     * registries threw a bare {@code NoSuchElementException} that nothing here handled. The two
+     * most-used endpoints in the API were the two reporting a typo as a server fault, while every
+     * analytical endpoint added later answered a clean 404. Mapping {@code NoSuchElementException}
+     * itself would have been the wrong repair — see {@link UnknownAlgorithmException}.
+     *
+     * <p>The body lists the ids that <em>are</em> registered, so the answer tells the caller what
+     * to type rather than only that they were wrong.
+     */
+    @ExceptionHandler(UnknownAlgorithmException.class)
+    public ResponseEntity<ProblemDetail> onUnknownAlgorithm(UnknownAlgorithmException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND,
+                "No " + ex.kind() + " is registered with id '" + ex.id() + "'");
+        pd.setTitle("Unknown " + ex.kind());
+        pd.setType(UNKNOWN_ALGORITHM_TYPE);
+        pd.setProperty("kind", ex.kind());
+        pd.setProperty("requested", ex.id());
+        pd.setProperty("known", ex.known());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+    }
+
+    /**
+     * A required query parameter was absent.
+     *
+     * <p>Spring resolves this one itself by default, which is why it looked handled: the caller
+     * got a 400, just not <em>this</em> API's 400. The body was Boot's
+     * {@code {timestamp, status, error, path}} shape, so a client written against the documented
+     * RFC 7807 contract — reading {@code detail} and {@code title} — got nulls from a response
+     * that otherwise looked fine. Silent shape drift is worse than a wrong status code.
+     */
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ProblemDetail onMissingParam(MissingServletRequestParameterException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
+                "Required parameter '" + ex.getParameterName() + "' is missing");
+        pd.setTitle("Missing parameter");
+        pd.setType(MALFORMED_TYPE);
+        pd.setProperty("fieldErrors",
+                Map.of(ex.getParameterName(), "is required"));
+        return pd;
+    }
+
+    /**
+     * Right path, wrong verb. Carries the {@code Allow} header RFC 9110 §15.5.6 requires, which
+     * Boot's default path does set — but its body was the default shape, so this was the same
+     * silent contract break as {@link #onMissingParam}.
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ProblemDetail> onMethodNotAllowed(
+            HttpRequestMethodNotSupportedException ex) {
+        var allowed = ex.getSupportedHttpMethods();
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.METHOD_NOT_ALLOWED,
+                "Method " + ex.getMethod() + " is not supported on this path");
+        pd.setTitle("Method not allowed");
+        pd.setType(MALFORMED_TYPE);
+        pd.setProperty("allowed", allowed == null ? List.of()
+                : allowed.stream().map(Object::toString).sorted().toList());
+        HttpHeaders headers = new HttpHeaders();
+        if (allowed != null && !allowed.isEmpty()) {
+            headers.setAllow(allowed);
+        }
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).headers(headers)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+    }
+
+    /** A body arrived as something this API does not parse — {@code 415}, in the house shape. */
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ProblemDetail onUnsupportedMediaType(HttpMediaTypeNotSupportedException ex) {
+        var offered = ex.getContentType();
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.UNSUPPORTED_MEDIA_TYPE,
+                "Content-Type " + (offered == null ? "(absent)" : offered) + " is not supported");
+        pd.setTitle("Unsupported media type");
+        pd.setType(MALFORMED_TYPE);
+        pd.setProperty("supported",
+                ex.getSupportedMediaTypes().stream().map(Object::toString).sorted().toList());
+        return pd;
+    }
+
+    /**
+     * No handler matched the path at all — a typo'd URL, or a client built against a route that
+     * no longer exists. Answering in the house shape means "this endpoint does not exist" and
+     * "this maze does not exist" are told apart by {@code title}, not by guessing from a 404
+     * with an empty body.
+     */
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ProblemDetail onNoHandler(NoResourceFoundException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND,
+                "No endpoint at " + ex.getHttpMethod() + " /" + ex.getResourcePath());
+        pd.setTitle("No such endpoint");
+        pd.setType(NOT_FOUND_TYPE);
         return pd;
     }
 

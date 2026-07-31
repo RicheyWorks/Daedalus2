@@ -40,8 +40,8 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   the search's real recorded expansion order (observation via the `Graph`
   seam, never simulation); the web UI animates it and can race all ten
   solvers on one maze in a compare table with per-route previews.
-- **Verified** — `mvn clean verify` passes **598 tests** across the five
-  modules (core 316, server 245, plugin-runtime 20, plugin-api 7, desktop 10)
+- **Verified** — `mvn clean verify` passes **602 tests** across the five
+  modules (core 316, server 249, plugin-runtime 20, plugin-api 7, desktop 10)
   with zero Checkstyle violations, zero SpotBugs findings, and a per-module
   JaCoCo coverage ratchet that fails the build in **both** directions — on a
   regression below the floor, and on the floor going more than 3 points stale
@@ -154,6 +154,41 @@ against. It earned that on its first run: four endpoints marked `public` here we
 in prod, which meant the spectator permalink, the ghost racer and the agent re-poll did not work
 there at all.
 
+### Errors
+
+Every error this API produces is an [RFC 7807](https://www.rfc-editor.org/rfc/rfc7807) problem
+detail, served as `application/problem+json` and carrying `type`, `title`, `status`, `detail` and
+`instance`. Some carry more: validation failures add a `fieldErrors` map, a 429 adds `limiter`
+and `retryAfterSeconds` alongside the `Retry-After` header, and a 405 adds `allowed` alongside
+`Allow`.
+
+```jsonc
+// POST /api/v1/maze/generate  {"generatorId": "recursive-backtracer", ...}
+{
+  "type":     "https://daedalus.dev/problems/unknown-algorithm",
+  "title":    "Unknown generator",
+  "status":   404,
+  "detail":   "No generator is registered with id 'recursive-backtracer'",
+  "instance": "/api/v1/maze/generate",
+  "kind":     "generator",
+  "requested":"recursive-backtracer",
+  "known":    ["aldous-broder", "archimedes-spiral", "binary-tree", "..."]
+}
+```
+
+The `type` URIs are stable identifiers, not fetchable documents: `validation`,
+`malformed-request`, `rate-limited`, `unknown-algorithm`, `not-found`, plus the capacity and
+budget types. Match on `type`, not on `detail` — `detail` is written for a human.
+
+The one exception is a bare `404` with an empty body, which means "the resource you addressed is
+not here" (an expired maze id, an unknown session). That inconsistency is known and tracked in
+BACKLOG; `ErrorContractTest` permits an *empty* 404 body and nothing else, so it cannot spread.
+
+This is enforced, not described. `ErrorContractTest` drives twenty-one failure modes at a booted
+server, and — more importantly — generates a wrong-verb and a malformed-path-variable request for
+every mapping it finds in the controller sources, failing the build on any 4xx or 5xx that comes
+back without a `type`. Before it existed, a mistyped `generatorId` answered **500**.
+
 ### Auth flow
 
 ```bash
@@ -250,8 +285,8 @@ mvn clean verify              # all five modules
 mvn -pl daedalus-server test  # one module
 ```
 
-Test inventory — **598 tests across 121 files, all green** (316 core, 7 plugin-api, 20
-plugin-runtime, 245 server, 10 desktop) as of 2026-07-31:
+Test inventory — **602 tests across 122 files, all green** (316 core, 7 plugin-api, 20
+plugin-runtime, 249 server, 10 desktop) as of 2026-07-31:
 
 | Module | Highlights |
 |---|---|

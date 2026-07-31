@@ -30,9 +30,14 @@ public class SolverRegistry {
         return Optional.ofNullable(solvers.get(id));
     }
 
+    /**
+     * @throws com.daedalus.engine.UnknownAlgorithmException if nothing is registered under
+     *         {@code id} — see {@code GeneratorRegistry#require} for why this is its own type
+     *         rather than a bare {@link NoSuchElementException}.
+     */
     public MazeSolver require(String id) {
-        return find(id).orElseThrow(() ->
-                new NoSuchElementException("No solver registered with id: " + id));
+        return find(id).orElseThrow(() -> new com.daedalus.engine.UnknownAlgorithmException(
+                "solver", id, solvers.keySet().stream().sorted().toList()));
     }
 
     public Collection<MazeSolver> all() {

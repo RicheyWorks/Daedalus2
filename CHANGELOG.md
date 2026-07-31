@@ -63,8 +63,40 @@ under the `_migration/` portfolios.
   flipping and dropping a README row. All nine caught. A security test under default-deny passes
   before it is written and keeps passing if it breaks, so it needs the mutations more than most.
 
+- **`ErrorContractTest` — every way the API can say no, held to one shape.** Twenty-one distinct
+  failure modes driven at a running server, bodies compared against RFC 7807. The test that
+  matters is the third one: it does not list failure modes, it *generates* them from the
+  controller sources — every mapping gets the wrong verb and an uncoercible path variable, and
+  any 4xx or 5xx that comes back without a `type` field fails the build. All five gaps found by
+  this audit were on paths no test happened to visit, and a hand-written roster of failure modes
+  is a list of the paths somebody thought of, which is the same blind spot in a different
+  costume. A new endpoint is covered the day it is written. Teeth: `mutants/errteeth.py`, nine
+  mutations. The load-bearing one removes the 405 handler **and** the roster entry naming it, so
+  only the generated test can catch it — if that survives, the generated test is decorative.
+- **`UnknownAlgorithmException` in the theory-facing core.** Carries the kind, the requested id,
+  and every id that *is* registered, so a 404 tells the caller what to type instead of only that
+  they were wrong. Deliberately a subtype of `NoSuchElementException` (source-compatible with
+  what the registries threw before) rather than a reuse of it: mapping `NoSuchElementException`
+  itself to 404 would have caught `Optional.get()` and `Iterator.next()` too, quietly turning
+  genuine internal invariant failures into "not found".
+
 ### Fixed
 
+- **A client typo answered 500.** `POST /api/v1/maze/generate` with a mistyped `generatorId` and
+  `POST /api/v1/maze/{id}/solve/{solverId}` with a mistyped solver both returned **Internal
+  Server Error** with a stack trace in the log, because both registries' `require(...)` threw a
+  bare `NoSuchElementException` and `ApiExceptionHandler` had no handler for it. The two
+  most-used endpoints in the API were the two reporting a user's typo as a server fault, while
+  every analytical endpoint added later answered a clean 404. Both now answer **404** with a
+  problem detail listing all 23 registered generators (or all 10 solvers). The underlying mistake
+  is worth naming: `find` returns an `Optional` and `require` throws — the controllers called
+  `require` on caller-supplied input, which is the method for internal invariants.
+- **Three failure modes returned the right status with the wrong body.** A missing required query
+  parameter, the wrong HTTP verb, and an unsupported `Content-Type` all fell through to Boot's
+  default `{timestamp, status, error, path}`, as did an unmapped path. These are more dangerous
+  than the 500s: the status code looks correct from the outside, so nothing goes red, while a
+  client reading `detail` and `title` off the documented RFC 7807 contract silently gets nulls.
+  Four new handlers, and the 405 now carries the `Allow` header RFC 9110 §15.5.6 requires.
 - **Three shipped features did not work in prod at all.** The `#session=` spectator permalink,
   the ghost racer and the fog-of-war agent's free re-poll are documented public in the README's
   "Auth (prod)" column and were all being refused by `ProdSecurityConfig`'s default-deny rule —

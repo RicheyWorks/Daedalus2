@@ -16,6 +16,7 @@ by any test.
     python3 mutants/deskteeth.py  # four breaks aimed at the desktop's background work
     python3 mutants/ratchetteeth.py # both directions of the JaCoCo coverage ratchet
     python3 mutants/authteeth.py  # nine holes in the prod authentication posture + its docs
+    python3 mutants/errteeth.py   # nine holes in the RFC 7807 error contract
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module
@@ -117,6 +118,23 @@ the harness printed "caught" with no test name attached. It proved nothing about
 was aimed at. Moved to a controller where the new mapping is unique, it caught properly. When a
 harness reports a catch, check *which* test caught it; a blank there means the build fell over
 before any assertion ran.
+
+**Mutate the safety net too, not just the thing it catches.** `errteeth.py` has one mutation that
+removes the 405 handler *and* the roster entry in `ErrorContractTest` that names it, leaving only
+the source-derived test able to notice. Without that pairing the harness would have proved the
+roster works and said nothing about the generated test — which is the part actually claimed to
+protect endpoints nobody has thought about yet. When a test file contains both a hand-written list
+and a mechanism meant to outgrow it, a mutation that only the mechanism can catch is the only
+evidence the mechanism does anything.
+
+**A crash is not a catch, second helping.** The first `errteeth.py` run reported 9/9 with five
+blank test names, because those five mutations renamed the handled exception class to something
+that does not exist — javac failed, the build went red, and the harness counted red as caught.
+This is the same lesson `authteeth.py` learned one batch earlier, relearned immediately in a new
+disguise, which is worth recording as its own data point: the rule is not "avoid ambiguous
+mappings", it is **a mutation must compile**. Commenting out the `@ExceptionHandler` annotation
+does the same damage and builds cleanly, so the red is an assertion. Any harness line with no
+test name next to it should be treated as a failed measurement, not a pass.
 
 **Count what you parse.** The same scan-driven test missed two annotation forms — a bare
 `@GetMapping` and `@GetMapping(value = ..., produces = ...)` — because its regex demanded a

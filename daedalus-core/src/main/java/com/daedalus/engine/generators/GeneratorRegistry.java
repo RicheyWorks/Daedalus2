@@ -33,9 +33,16 @@ public class GeneratorRegistry {
         return Optional.ofNullable(generators.get(id));
     }
 
+    /**
+     * @throws com.daedalus.engine.UnknownAlgorithmException if nothing is registered under
+     *         {@code id}. A subtype of {@link NoSuchElementException}, so this is source- and
+     *         behaviour-compatible with what it used to throw; the REST layer needs the distinct
+     *         type to answer 404 for a caller's typo without also swallowing every genuine
+     *         internal {@code NoSuchElementException} as a 404.
+     */
     public MazeGenerator require(String id) {
-        return find(id).orElseThrow(() ->
-                new NoSuchElementException("No generator registered with id: " + id));
+        return find(id).orElseThrow(() -> new com.daedalus.engine.UnknownAlgorithmException(
+                "generator", id, generators.keySet().stream().sorted().toList()));
     }
 
     public Collection<MazeGenerator> all() {
