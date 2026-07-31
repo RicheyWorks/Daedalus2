@@ -40,12 +40,21 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   it arrive, 2026-07-31). A one-file vanilla-JS web UI served at `/` plays
   mazes against it, with an opt-in multiplayer flag
   (`daedalus.session.multiplayer`).
+- **Deterministic across restarts, not just across a cache hit.** Same seed,
+  same answer, on a process that has never seen the request before.
+  `DeterminismGoldenTest` compares 23 endpoints — seeded generation, the seeded
+  campaign, every analytical route, the tournament, a complexity fit and all
+  nine solvers — against digests recorded by a *different JVM* and committed to
+  the repo, so every build is a cross-process comparison. In-process tests
+  cannot do this job: these endpoints sit behind caches keyed on their inputs,
+  so the second call returns the first call's object whether the computation is
+  deterministic or not.
 - **Watch the algorithms think** — `?replay=true` on the solve endpoint ships
   the search's real recorded expansion order (observation via the `Graph`
   seam, never simulation); the web UI animates it and can race all ten
   solvers on one maze in a compare table with per-route previews.
-- **Verified** — `mvn clean verify` passes **609 tests** across the five
-  modules (core 316, server 256, plugin-runtime 20, plugin-api 7, desktop 10)
+- **Verified** — `mvn clean verify` passes **611 tests** across the five
+  modules (core 316, server 258, plugin-runtime 20, plugin-api 7, desktop 10)
   with zero Checkstyle violations, zero SpotBugs findings, and a per-module
   JaCoCo coverage ratchet that fails the build in **both** directions — on a
   regression below the floor, and on the floor going more than 3 points stale
@@ -294,8 +303,8 @@ mvn clean verify              # all five modules
 mvn -pl daedalus-server test  # one module
 ```
 
-Test inventory — **609 tests across 124 files, all green** (316 core, 7 plugin-api, 20
-plugin-runtime, 256 server, 10 desktop) as of 2026-07-31:
+Test inventory — **611 tests across 125 files, all green** (316 core, 7 plugin-api, 20
+plugin-runtime, 258 server, 10 desktop) as of 2026-07-31:
 
 | Module | Highlights |
 |---|---|

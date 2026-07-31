@@ -19,6 +19,7 @@ by any test.
     python3 mutants/errteeth.py   # nine holes in the RFC 7807 error contract
     python3 mutants/notfoundteeth.py # seven ways to lose the 404 bodies
     python3 mutants/stompteeth.py # five ways to reopen the STOMP forgery hole
+    python3 mutants/detteeth.py   # five ways to blind the cross-process determinism check
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module
@@ -189,3 +190,20 @@ beautifully when you have accidentally made it impossible for it to happen. That
 distinct instance of this failure in this file (`lensteeth.py`'s dead counter, `deskteeth.py`'s
 `contains(...)`, now this) and it is always found the same way — by a mutation that should turn
 the assertion red and does not.
+
+**When every assertion flows through one function, mutate that function.** `DeterminismGoldenTest`
+compares 23 digests, and all 23 are produced by a single canonicaliser. Blind it — return an empty
+object for every node — and every digest equals every other, the comparison succeeds, and the test
+reports 23 verified endpoints while verifying nothing. Three of `detteeth.py`'s five mutations
+therefore attack the canonicaliser rather than the product. The general rule: find the funnel every
+assertion passes through, and break the funnel. Coverage of the product means nothing if the
+measuring instrument can be switched off silently.
+
+**A probe that cries wolf is worse than no probe.** The determinism audit reported three drifting
+endpoints on its first run and a nondeterministic solver on its second. All four were the probe's
+own fault — per-process UUIDs it forgot to strip, a wall-clock field, and a mistyped solver id
+whose 404 body embedded the request path. Each false alarm cost a round of investigation, and the
+fourth nearly had me editing a solver implemented entirely with int arrays. Two habits came out of
+it and both are in the test now: canonicalise identifiers by *shape* rather than by field name,
+since an id inside a URL string is not something an exclusion list can name; and read the actual
+diff before believing the verdict, every time.

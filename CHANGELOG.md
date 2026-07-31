@@ -80,6 +80,35 @@ under the `_migration/` portfolios.
   itself to 404 would have caught `Optional.get()` and `Iterator.next()` too, quietly turning
   genuine internal invariant failures into "not found".
 
+- **`DeterminismGoldenTest` — determinism checked across a process, not across a cache hit.**
+  Determinism is one of this project's loudest claims: a campaign link "replays byte-identical
+  stages anywhere with no stored state", waypoints "derive from the maze alone", complexity fits
+  reproduce exactly. Every test of that ran inside one JVM, and almost every one of those
+  endpoints sits behind a Caffeine cache keyed on its inputs — so the second call returns the
+  first call's object and the assertion passes whether the computation is deterministic or not.
+
+  The bug class this cannot see is specific and real: anything reading `Object.hashCode()`
+  identity, or `HashSet` iteration order over enums (enum `hashCode` is identity-based, so the
+  order is stable within a run and arbitrary between runs). A tie-break fed by such an order
+  gives every user a different "optimal" route depending on when the server last restarted.
+
+  The oracle is a file of 23 digests recorded by a different JVM and committed to the repository,
+  so every build is a cross-process comparison. Covered: seeded generation, the seeded campaign,
+  all seven analytical endpoints, the tournament, a complexity fit, **all nine solvers**, and the
+  algorithm catalogue. Teeth: `mutants/detteeth.py`, five mutations, three of them aimed at the
+  canonicaliser rather than the product — blind that one function and every digest compares equal
+  to every other and the test checks nothing.
+
+  **The audit itself found nothing broken.** Sixteen endpoints captured, server restarted cold,
+  all sixteen identical. Two false alarms along the way were both the probe's fault and are now
+  the test's design constraints: identifiers are per-process (the first probe stripped only
+  top-level keys and missed the daily maze's nested `maze.id`), and `elapsedMs` was 5 on the
+  first solve after a cold start against 0–2 warm. A third apparent finding — "bidirectional-BFS
+  is nondeterministic" — was a solver id typo producing a 404 whose `instance` field carries the
+  request path, maze UUID included. That one changed the design: identifiers are now redacted by
+  *shape* wherever they appear, because an exclusion list of field names cannot name an id
+  hiding inside a URL.
+
 ### Fixed
 
 - **Any connected client could publish a forged frame onto any STOMP topic.** The client inbound
