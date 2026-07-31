@@ -40,8 +40,8 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   the search's real recorded expansion order (observation via the `Graph`
   seam, never simulation); the web UI animates it and can race all ten
   solvers on one maze in a compare table with per-route previews.
-- **Verified** — `mvn clean verify` passes **602 tests** across the five
-  modules (core 316, server 249, plugin-runtime 20, plugin-api 7, desktop 10)
+- **Verified** — `mvn clean verify` passes **604 tests** across the five
+  modules (core 316, server 251, plugin-runtime 20, plugin-api 7, desktop 10)
   with zero Checkstyle violations, zero SpotBugs findings, and a per-module
   JaCoCo coverage ratchet that fails the build in **both** directions — on a
   regression below the floor, and on the floor going more than 3 points stale
@@ -180,9 +180,14 @@ The `type` URIs are stable identifiers, not fetchable documents: `validation`,
 `malformed-request`, `rate-limited`, `unknown-algorithm`, `not-found`, plus the capacity and
 budget types. Match on `type`, not on `detail` — `detail` is written for a human.
 
-The one exception is a bare `404` with an empty body, which means "the resource you addressed is
-not here" (an expired maze id, an unknown session). That inconsistency is known and tracked in
-BACKLOG; `ErrorContractTest` permits an *empty* 404 body and nothing else, so it cannot spread.
+There are no exceptions — including the 404 for a resource that is not here. That one is worth a
+note, because the empty body it used to send was hiding real distinctions. `GET /maze/{id}/ghost`
+now tells you whether the *maze* is gone or whether the maze is fine and nobody has completed a
+run on it yet; `POST /session/{id}/move` tells you whether the *session* is unknown or whether the
+session is open and its maze has been evicted. Those pairs call for opposite reactions and used to
+send identical replies. One 404 deliberately stays uninformative: `join` with the multiplayer flag
+off answers exactly what an unknown session answers, so the endpoint reads as absent rather than
+disabled.
 
 This is enforced, not described. `ErrorContractTest` drives twenty-one failure modes at a booted
 server, and — more importantly — generates a wrong-verb and a malformed-path-variable request for
@@ -285,8 +290,8 @@ mvn clean verify              # all five modules
 mvn -pl daedalus-server test  # one module
 ```
 
-Test inventory — **602 tests across 122 files, all green** (316 core, 7 plugin-api, 20
-plugin-runtime, 249 server, 10 desktop) as of 2026-07-31:
+Test inventory — **604 tests across 122 files, all green** (316 core, 7 plugin-api, 20
+plugin-runtime, 251 server, 10 desktop) as of 2026-07-31:
 
 | Module | Highlights |
 |---|---|

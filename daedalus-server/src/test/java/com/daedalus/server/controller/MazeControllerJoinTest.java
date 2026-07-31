@@ -66,7 +66,12 @@ class MazeControllerJoinTest {
                 mock(com.daedalus.server.service.LivingMazeService.class),
                 mock(com.daedalus.server.service.DailyMazeService.class),
                 mock(com.daedalus.server.service.TrafficService.class));
-        return MockMvcBuilders.standaloneSetup(controller).build();
+        // The advice has to be registered here or a thrown ResourceNotFoundException
+        // escapes as a servlet error instead of becoming the 404 this test is about.
+        // ApiExceptionHandler's no-arg constructor exists for exactly this setup.
+        return MockMvcBuilders.standaloneSetup(controller)
+                .setControllerAdvice(new com.daedalus.server.web.ApiExceptionHandler())
+                .build();
     }
 
     @Test

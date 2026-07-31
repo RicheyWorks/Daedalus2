@@ -14,6 +14,7 @@ import com.daedalus.model.AlgorithmDescriptor;
 import com.daedalus.model.LeaderboardEntry;
 import com.daedalus.model.TileType;
 import com.daedalus.server.ratelimit.PerKeyRateLimit;
+import com.daedalus.server.web.ResourceNotFoundException;
 import com.daedalus.server.service.AlgorithmCatalogService;
 import com.daedalus.server.service.DailyMazeService;
 import com.daedalus.server.service.GameSessionService;
@@ -141,7 +142,7 @@ public class MazeController {
     @Operation(summary = "Fetch a previously-generated maze's metadata + tile grid.")
     public ResponseEntity<GenerateResponse> get(@PathVariable UUID id) {
         var c = gen.find(id);
-        if (c == null) return ResponseEntity.notFound().build();
+        if (c == null) throw ResourceNotFoundException.maze(id);
         return ResponseEntity.ok(toResponse(
                 c.metadata().id(), c.metadata().generatorId(),
                 c.metadata().rows(), c.metadata().cols(), c.metadata().seed(), c.grid(),
@@ -161,7 +162,7 @@ public class MazeController {
             @PathVariable UUID id,
             @RequestParam(required = false) @AlgorithmId String solve) {
         var c = gen.find(id);
-        if (c == null) return ResponseEntity.notFound().build();
+        if (c == null) throw ResourceNotFoundException.maze(id);
         List<com.daedalus.model.Point> path = List.of();
         if (solve != null) {
             var grid = c.grid();
@@ -193,7 +194,7 @@ public class MazeController {
             int ticks,
             @RequestParam(required = false) Long seed) {
         var c = gen.find(id);
-        if (c == null) return ResponseEntity.notFound().build();
+        if (c == null) throw ResourceNotFoundException.maze(id);
         long erosionSeed = seed != null ? seed : id.getLeastSignificantBits();
         return ResponseEntity.ok(living.start(id, ticks, erosionSeed));
     }
@@ -214,7 +215,8 @@ public class MazeController {
     @PerKeyRateLimit("mazeLive")
     public ResponseEntity<TrafficService.TrafficStatus> traffic(@PathVariable UUID id) {
         var status = traffic.enable(id);
-        return status == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(status);
+        if (status == null) throw ResourceNotFoundException.maze(id);
+        return ResponseEntity.ok(status);
     }
 
     @PostMapping("/maze/{id}/solve/{solverId}")
@@ -230,7 +232,7 @@ public class MazeController {
             String solverId,
             @RequestParam(defaultValue = "false") boolean replay) {
         var c = gen.find(id);
-        if (c == null) return ResponseEntity.notFound().build();
+        if (c == null) throw ResourceNotFoundException.maze(id);
         var grid = c.grid();
         var r = solverSvc.solve(solverId, grid, grid.start(), grid.goal(), id, replay);
         return ResponseEntity.ok(new SolveResponse(
@@ -256,7 +258,10 @@ public class MazeController {
             @RequestParam(required = false) Long seed) {
         var pa = gen.find(a);
         var pb = gen.find(b);
-        if (pa == null || pb == null) return ResponseEntity.notFound().build();
+        // Name the one that is missing. "one of your two parents is gone" is a worse answer
+        // than "parent b is gone", and the caller cannot tell which to regenerate.
+        if (pa == null) throw ResourceNotFoundException.maze(a);
+        if (pb == null) throw ResourceNotFoundException.maze(b);
         long s = seed != null ? seed
                 : a.getLeastSignificantBits() ^ Long.rotateLeft(b.getLeastSignificantBits(), 17);
         MazeGrid child = com.daedalus.engine.MazeBreeder.breed(pa.grid(), pb.grid(), s);
@@ -276,7 +281,7 @@ public class MazeController {
                     + "sessions keep their existing per-destination STOMP authorization.")
     public ResponseEntity<com.daedalus.api.dto.SessionViewResponse> session(@PathVariable UUID id) {
         var s = sessions.find(id);
-        if (s == null) return ResponseEntity.notFound().build();
+        if (s == null) throw ResourceNotFoundException.session(id);
         return ResponseEntity.ok(new com.daedalus.api.dto.SessionViewResponse(
                 s.id(), s.mazeId(), s.players(), s.completed(), s.moveCount(), s.score()));
     }
@@ -297,7 +302,7 @@ public class MazeController {
             String player,
             Authentication authentication) {
         var c = gen.find(id);
-        if (c == null) return ResponseEntity.notFound().build();
+        if (c == null) throw ResourceNotFoundException.maze(id);
         var s = sessions.open(id, player, c.grid().start(), ownerOf(authentication));
         return ResponseEntity.ok(new SessionResponse(s.id(), id, s.currentPosition()));
     }
@@ -328,9 +333,13 @@ public class MazeController {
     @PerKeyRateLimit("sessionMove")
     public ResponseEntity<Boolean> move(@PathVariable UUID id, @Valid @RequestBody MoveRequest req) {
         var s = sessions.find(id);
-        if (s == null) return ResponseEntity.notFound().build();
+        if (s == null) throw ResourceNotFoundException.session(id);
+        // The session is fine and its maze has been evicted. Previously indistinguishable from
+        // "no such session", which sent callers looking for the wrong problem.
         var c = gen.find(s.mazeId());
-        if (c == null) return ResponseEntity.notFound().build();
+        if (c == null) throw new ResourceNotFoundException("maze", s.mazeId().toString(),
+                "Session " + id + " is open but its maze " + s.mazeId() + " has been evicted "
+                        + "from the cache, so moves cannot be validated against it.");
         return ResponseEntity.ok(sessions.tryMove(id, req.player(), c.grid(), req.to()));
     }
 
@@ -347,11 +356,17 @@ public class MazeController {
             @NotBlank
             @Size(max = 64, message = "player name must be at most 64 chars")
             String player) {
-        if (!sessions.multiplayerEnabled()) return ResponseEntity.notFound().build();
+        // Multiplayer off answers exactly what an unknown session answers — the endpoint has
+        // to look absent, not disabled, or the 404 becomes a feature-flag oracle.
+        if (!sessions.multiplayerEnabled()) throw ResourceNotFoundException.session(id);
         var s = sessions.find(id);
-        if (s == null) return ResponseEntity.notFound().build();
+        if (s == null) throw ResourceNotFoundException.session(id);
+        // The session is fine and its maze has been evicted. Previously indistinguishable from
+        // "no such session", which sent callers looking for the wrong problem.
         var c = gen.find(s.mazeId());
-        if (c == null) return ResponseEntity.notFound().build();
+        if (c == null) throw new ResourceNotFoundException("maze", s.mazeId().toString(),
+                "Session " + id + " is open but its maze " + s.mazeId() + " has been evicted "
+                        + "from the cache, so moves cannot be validated against it.");
         var joined = sessions.join(id, player, c.grid().start());
         if (joined == null) return ResponseEntity.status(409).build(); // completed session
         return ResponseEntity.ok(new SessionResponse(

@@ -124,12 +124,12 @@ public class ComplexityLabService {
         if (extractor == null) {
             return null;
         }
-        MazeGenerator generator;
-        try {
-            generator = registry.require(generatorId);
-        } catch (RuntimeException unknown) {
-            return null;
-        }
+        // Deliberately NOT caught. This used to be a `catch (RuntimeException)` that returned
+        // null, which collapsed "no such generator" into the same empty 404 as "no such metric"
+        // — and, being a catch-all, would have swallowed any other runtime failure in the
+        // lookup as a 404 too. `require` now throws UnknownAlgorithmException, which the web
+        // layer turns into a 404 listing every generator that *is* registered.
+        MazeGenerator generator = registry.require(generatorId);
         long useSeed = seed == null ? ComplexityAnalyzer.DEFAULT_SEED : seed;
         int[] sizes = defaultSizes();
         String key = generatorId + "|" + metric + "|" + useSeed + "|" + Arrays.toString(sizes);

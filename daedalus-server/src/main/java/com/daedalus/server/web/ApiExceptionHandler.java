@@ -262,6 +262,24 @@ public class ApiExceptionHandler {
     }
 
     /**
+     * The addressed resource is not here — the 404 that used to have no body at all.
+     *
+     * <p>27 call sites answered {@code ResponseEntity.notFound().build()}, which is a 404 with
+     * nothing in it. See {@link ResourceNotFoundException} for why that mattered and what the
+     * distinctions between those sites turned out to be.
+     */
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ProblemDetail> onResourceNotFound(ResourceNotFoundException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        pd.setTitle("No such " + ex.kind());
+        pd.setType(NOT_FOUND_TYPE);
+        pd.setProperty("kind", ex.kind());
+        pd.setProperty("requested", ex.requested());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+    }
+
+    /**
      * A required query parameter was absent.
      *
      * <p>Spring resolves this one itself by default, which is why it looked handled: the caller

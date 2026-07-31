@@ -4,6 +4,7 @@ package com.daedalus.server.service;
 
 import com.daedalus.engine.generators.AldousBroderGenerator;
 import com.daedalus.engine.generators.BinaryTreeGenerator;
+import com.daedalus.engine.UnknownAlgorithmException;
 import com.daedalus.engine.generators.GeneratorRegistry;
 import com.daedalus.engine.generators.KruskalsGenerator;
 import com.daedalus.engine.generators.PrimsGenerator;
@@ -15,6 +16,7 @@ import java.time.Duration;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * The Complexity Lab (ADR-007 idea 2). These tests pin measured <em>facts about the
@@ -123,8 +125,19 @@ class ComplexityLabServiceTest {
     }
 
     @Test
-    void unknownGeneratorsAndMetricsAreRefused() {
-        assertThat(lab.fit("no-such-generator", "cellsVisited", null)).isNull();
+    void unknownGeneratorsAndMetricsAreRefusedDifferently() {
+        // These used to both return null, because the generator lookup sat inside a
+        // `catch (RuntimeException) { return null; }`. Collapsing them cost the web layer any
+        // chance of telling the caller which of the two they got wrong — and the catch-all would
+        // have swallowed an unrelated runtime failure into the same silent "not found".
+        assertThatThrownBy(() -> lab.fit("no-such-generator", "cellsVisited", null))
+                .isInstanceOf(UnknownAlgorithmException.class)
+                .satisfies(e -> assertThat(((UnknownAlgorithmException) e).known())
+                        .as("the exception must carry what the caller could have said instead")
+                        .isNotEmpty());
+
+        // A metric that is not measured is still a null — nothing was misidentified, the
+        // requested measurement simply does not exist.
         assertThat(lab.fit("prims", "no-such-metric", null)).isNull();
         assertThat(lab.metrics()).contains("cellsVisited", "cellsExplored", "maxFrontierSize");
     }

@@ -4,6 +4,7 @@ package com.daedalus.server.controller;
 
 import com.daedalus.model.Direction;
 import com.daedalus.server.ratelimit.PerKeyRateLimit;
+import com.daedalus.server.web.ResourceNotFoundException;
 import com.daedalus.server.service.AgentWalkService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -64,7 +65,8 @@ public class AgentController {
             @Max(value = 1_000_000, message = "steps must be at most 1000000")
             Integer steps) {
         var view = agents.open(id, steps);
-        return view == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(view);
+        if (view == null) throw ResourceNotFoundException.maze(id);
+        return ResponseEntity.ok(view);
     }
 
     @PostMapping("/agent/{id}/step")
@@ -79,7 +81,8 @@ public class AgentController {
             @PathVariable UUID id,
             @RequestParam Direction direction) {
         var view = agents.step(id, direction);
-        return view == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(view);
+        if (view == null) throw ResourceNotFoundException.agent(id);
+        return ResponseEntity.ok(view);
     }
 
     @GetMapping("/agent/{id}")
@@ -88,6 +91,7 @@ public class AgentController {
                     + "steps — polling is free and honest.")
     public ResponseEntity<AgentWalkService.AgentView> view(@PathVariable UUID id) {
         var view = agents.view(id);
-        return view == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(view);
+        if (view == null) throw ResourceNotFoundException.agent(id);
+        return ResponseEntity.ok(view);
     }
 }

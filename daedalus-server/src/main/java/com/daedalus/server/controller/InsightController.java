@@ -5,6 +5,7 @@ package com.daedalus.server.controller;
 import com.daedalus.api.dto.AnalysisResponse;
 import com.daedalus.engine.Braider;
 import com.daedalus.server.ratelimit.PerKeyRateLimit;
+import com.daedalus.server.web.ResourceNotFoundException;
 import com.daedalus.server.service.GhostService;
 import com.daedalus.server.service.HardestRouteService;
 import com.daedalus.server.service.HeuristicLensService;
@@ -93,8 +94,8 @@ public class InsightController {
     @PerKeyRateLimit("mazeSolve")
     public ResponseEntity<FingerprintService.Identification> fingerprint(@PathVariable UUID id) {
         var identification = fingerprints.identify(id);
-        return identification == null
-                ? ResponseEntity.notFound().build() : ResponseEntity.ok(identification);
+        if (identification == null) throw ResourceNotFoundException.maze(id);
+        return ResponseEntity.ok(identification);
     }
 
     /**
@@ -117,7 +118,12 @@ public class InsightController {
             @RequestParam(required = false) String metric,
             @RequestParam(required = false) Long seed) {
         var fit = complexity.fit(generator, metric, seed);
-        return fit == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(fit);
+        if (fit == null) {
+            throw new ResourceNotFoundException("metric", String.valueOf(metric),
+                    "No metric named '" + metric + "' is measured. Available: "
+                            + String.join(", ", complexity.metrics()) + ".");
+        }
+        return ResponseEntity.ok(fit);
     }
 
     @GetMapping("/complexity/metrics")
@@ -143,7 +149,8 @@ public class InsightController {
             @PathVariable UUID id,
             @RequestParam(required = false) Integer count) {
         var tour = waypoints.tourFor(id, count);
-        return tour == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(tour);
+        if (tour == null) throw ResourceNotFoundException.maze(id);
+        return ResponseEntity.ok(tour);
     }
 
     /**
@@ -166,7 +173,8 @@ public class InsightController {
     @PerKeyRateLimit("mazeSolve")
     public ResponseEntity<WaypointService.Progress> tourProgress(@PathVariable UUID id) {
         var progress = waypoints.progressFor(id);
-        return progress == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(progress);
+        if (progress == null) throw ResourceNotFoundException.session(id);
+        return ResponseEntity.ok(progress);
     }
 
     /**
@@ -184,7 +192,7 @@ public class InsightController {
     public ResponseEntity<AnalysisResponse> analysis(@PathVariable UUID id) {
         var c = gen.find(id);
         if (c == null) {
-            return ResponseEntity.notFound().build();
+            throw ResourceNotFoundException.maze(id);
         }
         var grid = c.grid();
         MazeFlow.MinCut cut = MazeFlow.minCutStartToGoal(grid);
@@ -216,7 +224,8 @@ public class InsightController {
     @PerKeyRateLimit("mazeSolve")
     public ResponseEntity<HardestRouteService.HardestRoute> hardestRoute(@PathVariable UUID id) {
         var route = hardestRoutes.forMaze(id);
-        return route == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(route);
+        if (route == null) throw ResourceNotFoundException.maze(id);
+        return ResponseEntity.ok(route);
     }
 
     /**
@@ -239,7 +248,8 @@ public class InsightController {
             @PathVariable UUID id,
             @RequestParam(required = false, defaultValue = "GOAL") TopographyService.Origin from) {
         var field = topography.fieldFor(id, from);
-        return field == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(field);
+        if (field == null) throw ResourceNotFoundException.maze(id);
+        return ResponseEntity.ok(field);
     }
 
     /**
@@ -261,7 +271,8 @@ public class InsightController {
             @PathVariable UUID id,
             @RequestParam(required = false) Integer k) {
         var placement = topography.sanctuariesFor(id, k);
-        return placement == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(placement);
+        if (placement == null) throw ResourceNotFoundException.maze(id);
+        return ResponseEntity.ok(placement);
     }
 
     /**
@@ -290,7 +301,11 @@ public class InsightController {
             @RequestParam(required = false) Double braid,
             @RequestParam(required = false) Long seed) {
         var result = tournaments.run(generator, size, mazes, braid, seed);
-        return result == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(result);
+        if (result == null) {
+            throw new ResourceNotFoundException("generator", String.valueOf(generator),
+                    "No generator is registered with id '" + generator + "'.");
+        }
+        return ResponseEntity.ok(result);
     }
 
     /**
@@ -314,7 +329,8 @@ public class InsightController {
             @RequestParam(required = false, defaultValue = "MANHATTAN")
             HeuristicLensService.Heuristic heuristic) {
         var result = lens.forMaze(id, heuristic);
-        return result == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(result);
+        if (result == null) throw ResourceNotFoundException.maze(id);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/maze/{id}/ghost")
@@ -324,6 +340,15 @@ public class InsightController {
                     + "pacing included, hesitations and all.")
     public ResponseEntity<GhostService.GhostRun> ghost(@PathVariable UUID id) {
         var run = ghosts.ghostOf(id);
-        return run == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(run);
+        if (run == null) {
+            // Two very different 404s used to share one empty body. "The maze is gone" and
+            // "nobody has finished this maze yet" call for opposite reactions from the client:
+            // regenerate, versus keep playing and try again later.
+            throw gen.find(id) == null ? ResourceNotFoundException.maze(id)
+                    : new ResourceNotFoundException("ghost run", String.valueOf(id),
+                            "Maze " + id + " exists but no session has been completed on it "
+                                    + "yet, so there is no run to replay. Finish one.");
+        }
+        return ResponseEntity.ok(run);
     }
 }

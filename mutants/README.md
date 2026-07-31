@@ -17,6 +17,7 @@ by any test.
     python3 mutants/ratchetteeth.py # both directions of the JaCoCo coverage ratchet
     python3 mutants/authteeth.py  # nine holes in the prod authentication posture + its docs
     python3 mutants/errteeth.py   # nine holes in the RFC 7807 error contract
+    python3 mutants/notfoundteeth.py # seven ways to lose the 404 bodies
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module
@@ -143,3 +144,20 @@ understands, and one real endpoint (`GET /api/v1/plugins`) had no posture record
 result. The fix generalises past this test: count the *occurrences* of the thing you are looking
 for with a maximally permissive pattern, parse them with the precise one, and assert the two
 counts agree. Then a form the parser cannot handle is a loud failure instead of a smaller sweep.
+
+**An exemption that costs nothing to leave on will be left on.** `notfoundteeth.py` produced one
+survivor and it was the most useful result in the run: flipping `ALLOW_EMPTY_404` back to `true`
+changed nothing, because an exemption only ever *permits*, and by then there was nothing left to
+permit. The flag was inert — switch it on, the suite stays green, and the next empty 404 walks
+straight through a door somebody left open for a reason that expired. The fix generalises to any
+temporary allowance: **count how often the exemption fires and fail when it is enabled but
+unused**. A known gap can then be carried between batches in a named, greppable constant that
+deletes itself the moment it stops being true, rather than accumulating as permanent permission
+nobody remembers granting.
+
+**Mutate in the direction of "nicer", not only "broken".** One mutation here replaces the 404 that
+`join` returns when multiplayer is off — deliberately indistinguishable from "no such session" —
+with a helpful `"Multiplayer is disabled; set daedalus.session.multiplayer=true"`. Every instinct
+reads that as an improvement, and it is a disclosure bug: the 404 exists to make the endpoint look
+absent rather than switched off, so the friendlier message turns it into a feature-flag oracle. A
+harness that only ever degrades things cannot find the defects that arrive disguised as polish.

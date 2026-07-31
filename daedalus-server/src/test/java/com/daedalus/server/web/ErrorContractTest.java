@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.client.RestTestClient;
 
 import java.io.IOException;
@@ -65,6 +66,12 @@ import static org.assertj.core.api.Assertions.assertThat;
         "daedalus.redis.enabled=false",
         "daedalus.plugins.scan-on-startup=false",
 })
+// The generated test fires three requests at every mapping, which is well past the dev
+// profile's mazeSolve budget. A 429 is a perfectly good problem detail, so those requests
+// would pass without ever reaching the 404 branch they exist to exercise — the test would
+// stay green while checking progressively less. The test profile's generous limits keep the
+// generated cases hitting the code they name.
+@ActiveProfiles("test")
 class ErrorContractTest {
 
     /** RFC 7807's members. A response missing any of them is not a problem detail. */
@@ -74,18 +81,32 @@ class ErrorContractTest {
     private static final String UUID_SHAPED = "11111111-2222-3333-4444-555555555555";
 
     /**
-     * The one deliberate exception: {@code ResponseEntity.notFound().build()} answers 404 with no
-     * body at all, at 27 call sites, meaning "the thing you addressed is not here".
+     * Closed on 2026-07-31, and kept as a named switch rather than deleted.
      *
-     * <p>This is a real inconsistency and it is recorded rather than repaired here, because the
-     * repair is a mechanism (a thrown domain exception with one handler) rather than 27 hand
-     * edits, and it deserves its own pass — see BACKLOG. What matters for now is that it cannot
-     * grow quietly: the assertion below permits an <em>empty</em> 404 body and nothing else, so
-     * any new half-populated or default-shaped error still fails.
+     * <p>When this class was written, {@code ResponseEntity.notFound().build()} appeared at 27
+     * call sites and answered 404 with no body at all — the last hole in the contract, and too
+     * wide to repair in the same pass. Setting this to {@code true} exempted exactly that shape
+     * (a 404 with an <em>empty</em> body) and nothing else, so the known gap could not quietly
+     * widen into half-populated or default-shaped errors while it waited.
+     *
+     * <p>All 27 now throw {@link ResourceNotFoundException} and the flag is {@code false}, which
+     * means every error this API produces is a problem detail with no exceptions. The constant
+     * stays because a named, documented, greppable exemption is the right way to carry a known
+     * gap between batches, and this is the worked example of one being opened and then closed.
+     *
+     * <p><b>It retires itself.</b> The mutation harness flipped this back to {@code true} and
+     * nothing failed — correctly, since an exemption only ever <em>permits</em>, and there was
+     * nothing left to permit. But a switch that can be left on with no consequence is a switch
+     * that will be, and then the next empty 404 walks straight through it. So the generated test
+     * counts how often the exemption actually fires and fails when it is enabled but unused. An
+     * exemption now has to be earned every run or it has to go.
      */
-    private static final boolean ALLOW_EMPTY_404 = true;
+    private static final boolean ALLOW_EMPTY_404 = false;
 
     private static final ObjectMapper JSON = new ObjectMapper();
+
+    /** How many generated requests took the {@link #ALLOW_EMPTY_404} escape hatch. */
+    private int exemptionsUsed;
 
     @LocalServerPort
     private int port;
@@ -172,7 +193,20 @@ class ErrorContractTest {
                         "{not json", MediaType.APPLICATION_JSON),
                 new Case("body validation", HttpMethod.POST, "/api/v1/maze/generate",
                         "{\"generatorId\":\"binary-tree\",\"rows\":-1,\"cols\":11}",
-                        MediaType.APPLICATION_JSON));
+                        MediaType.APPLICATION_JSON),
+                // The 27 that used to be a 404 with no body at all.
+                new Case("evicted maze", HttpMethod.GET, "/api/v1/maze/" + UUID_SHAPED,
+                        null, null),
+                new Case("unknown session", HttpMethod.GET, "/api/v1/session/" + UUID_SHAPED,
+                        null, null),
+                new Case("unknown agent walk", HttpMethod.GET, "/api/v1/agent/" + UUID_SHAPED,
+                        null, null),
+                new Case("unknown maze, analytical route", HttpMethod.GET,
+                        "/api/v1/maze/" + UUID_SHAPED + "/hardest-route", null, null),
+                new Case("unmeasured metric", HttpMethod.GET,
+                        "/api/v1/complexity?generator=binary-tree&metric=nope", null, null),
+                new Case("unregistered generator on tournament", HttpMethod.GET,
+                        "/api/v1/tournament?generator=nope", null, null));
 
         List<String> failures = new ArrayList<>();
         for (Case c : cases) {
@@ -211,6 +245,73 @@ class ErrorContractTest {
     }
 
     @Test
+    void theFourZeroFoursNowSayWhichThingIsMissing() {
+        // Giving every 404 a body was the mechanical half. The half that is worth anything is
+        // that several of those 27 sites were never answering the same question, and a caller
+        // reading an empty body had no way to tell them apart.
+        Answer generated = send(HttpMethod.POST, "/api/v1/maze/generate",
+                "{\"generatorId\":\"binary-tree\",\"rows\":11,\"cols\":11,\"seed\":3}",
+                MediaType.APPLICATION_JSON);
+        String mazeId = generated.json().get("id").asText();
+
+        // A maze that exists but has no completed run is not the same as a maze that is gone.
+        // "keep playing, come back" versus "regenerate" — opposite advice, one empty body.
+        Answer noRunYet = send(HttpMethod.GET, "/api/v1/maze/" + mazeId + "/ghost", null, null);
+        assertProblemDetail("ghost, maze exists but no run", noRunYet);
+        assertThat(noRunYet.json().get("kind").asText()).isEqualTo("ghost run");
+
+        Answer noMaze = send(HttpMethod.GET, "/api/v1/maze/" + UUID_SHAPED + "/ghost", null, null);
+        assertProblemDetail("ghost, no such maze", noMaze);
+        assertThat(noMaze.json().get("kind").asText()).isEqualTo("maze");
+
+        // /complexity 404s for two unrelated reasons. The generator case now lists every
+        // generator that is registered; the metric case names the metrics that are measured.
+        Answer badGenerator = send(HttpMethod.GET, "/api/v1/complexity?generator=nope",
+                null, null);
+        assertProblemDetail("complexity, unregistered generator", badGenerator);
+        assertThat(badGenerator.json().get("kind").asText()).isEqualTo("generator");
+        assertThat(badGenerator.json().get("known")).isNotNull();
+
+        Answer badMetric = send(HttpMethod.GET,
+                "/api/v1/complexity?generator=binary-tree&metric=nope", null, null);
+        assertProblemDetail("complexity, unmeasured metric", badMetric);
+        assertThat(badMetric.json().get("kind").asText()).isEqualTo("metric");
+        assertThat(badMetric.json().get("detail").asText()).contains("cellsVisited");
+    }
+
+    @Test
+    void joinStillLooksAbsentRatherThanDisabledWhenMultiplayerIsOff() {
+        // The one place a *more* helpful message would be a regression. With the multiplayer flag
+        // off, join answers 404 so the endpoint reads as nonexistent; if the new body said
+        // "multiplayer is disabled" it would confirm the feature exists and is merely switched
+        // off, which is exactly what the 404 was chosen to avoid disclosing.
+        Answer generated = send(HttpMethod.POST, "/api/v1/maze/generate",
+                "{\"generatorId\":\"binary-tree\",\"rows\":11,\"cols\":11,\"seed\":4}",
+                MediaType.APPLICATION_JSON);
+        String mazeId = generated.json().get("id").asText();
+        Answer opened = send(HttpMethod.POST, "/api/v1/maze/" + mazeId + "/session?player=solo",
+                null, null);
+        String realSession = opened.json().get("sessionId").asText();
+
+        Answer onRealSession = send(HttpMethod.POST,
+                "/api/v1/session/" + realSession + "/join?player=second", null, null);
+        Answer onFakeSession = send(HttpMethod.POST,
+                "/api/v1/session/" + UUID_SHAPED + "/join?player=second", null, null);
+
+        assertProblemDetail("join with multiplayer off", onRealSession);
+        assertProblemDetail("join on an unknown session", onFakeSession);
+        assertThat(onRealSession.json().get("title").asText())
+                .isEqualTo(onFakeSession.json().get("title").asText());
+        assertThat(onRealSession.json().get("kind").asText()).isEqualTo("session");
+        assertThat(onRealSession.body().toLowerCase(Locale.ROOT))
+                .as("the body must not disclose that multiplayer exists and is switched off")
+                .doesNotContain("multiplayer").doesNotContain("disabled").doesNotContain("flag");
+        // Same sentence, different id — the only thing that differs is what the caller sent.
+        assertThat(onRealSession.json().get("detail").asText().replace(realSession, "X"))
+                .isEqualTo(onFakeSession.json().get("detail").asText().replace(UUID_SHAPED, "X"));
+    }
+
+    @Test
     void noGeneratedRequestEscapesTheContract() throws IOException {
         // Every mapping, driven two ways it is not meant to be driven. The five gaps this class
         // was written for were all on paths no test happened to visit, so the cases here are
@@ -234,11 +335,25 @@ class ErrorContractTest {
                 String bad = m.path().replaceAll("\\{[^}]+}", "definitely-not-a-uuid");
                 checked += record(failures, m.method() + " " + m.path() + " (bad path variable)",
                         send(m.method(), bad, null, null));
+
+                // 3. A well-formed id for something that does not exist. This is the case the
+                // first version of this test missed: cases 1 and 2 fail during request binding
+                // and never reach the handler method, so the 404 branch inside every controller
+                // — 27 of them, all answering with an empty body until 2026-07-31 — was never
+                // generated at all. The roster caught those; a roster is what this test exists
+                // not to depend on.
+                checked += record(failures, m.method() + " " + m.path() + " (id that is absent)",
+                        send(m.method(), uri, null, null));
             }
         }
 
         assertThat(checked).as("no generated request produced an error, so nothing was checked")
                 .isGreaterThan(25);
+        assertThat(!ALLOW_EMPTY_404 || exemptionsUsed > 0)
+                .as("ALLOW_EMPTY_404 is enabled but no response needed it. An exemption nobody "
+                        + "uses is a hole left open for the next person to fall through — set it "
+                        + "to false.")
+                .isTrue();
         assertThat(failures).as("generated requests that escaped the error contract (%d):\n%s",
                 failures.size(), String.join("\n", failures)).isEmpty();
     }
@@ -252,7 +367,8 @@ class ErrorContractTest {
             return 0;
         }
         if (ALLOW_EMPTY_404 && a.status() == 404 && a.body().isEmpty()) {
-            return 1;   // the documented bodiless-404 exemption; see ALLOW_EMPTY_404
+            exemptionsUsed++;   // the documented bodiless-404 exemption; see ALLOW_EMPTY_404
+            return 1;
         }
         try {
             assertProblemDetail(label, a);

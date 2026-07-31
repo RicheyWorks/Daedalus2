@@ -82,6 +82,34 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **The last 27 errors with no body at all.** `ResponseEntity.notFound().build()` appeared 27
+  times across `MazeController`, `InsightController` and `AgentController`, each answering 404
+  with nothing in it — the remaining hole after the error-contract audit, and a perverse
+  inversion: a typo'd URL came back with a helpful problem detail while an expired maze id came
+  back with silence. The expired maze is the common case by a wide margin (mazes live in a
+  bounded Caffeine cache and get evicted) and the one the caller can act on. All 27 now throw
+  `ResourceNotFoundException` and answer in the house shape, saying which kind of thing was
+  missing and, for a maze, that regenerating with the same seed reproduces it exactly.
+
+  A helper returning a populated `ResponseEntity` was the obvious repair and does not compile:
+  `ResponseEntity<AnalysisResponse>` cannot carry a `ProblemDetail`, so every affected method
+  would have had to widen its return type to `Object`. Throwing keeps the signatures.
+
+  **Several of those 27 were never answering the same question.** `POST /session/{id}/move`
+  404s both when the session is unknown *and* when the session is fine but its maze has been
+  evicted — different problems, previously identical replies. `GET /maze/{id}/ghost` 404s for
+  "no such maze" and for "nobody has finished this maze yet", which call for opposite reactions
+  (regenerate, versus keep playing). `POST /maze/breed` named neither of the two parents it
+  could not find. `GET /complexity` 404s for an unregistered generator and for an unmeasured
+  metric; the first is now an `UnknownAlgorithmException` listing all 23 generators, the second
+  names the metrics that exist. One case deliberately did *not* gain detail: `join` with the
+  multiplayer flag off returns the same "no such session" body an unknown id produces, because
+  the 404 is there to make the endpoint look absent rather than disabled, and a more helpful
+  message would turn it into a feature-flag oracle. That is asserted, not just intended.
+- **`ComplexityLabService` swallowed every runtime exception from its registry lookup.**
+  `catch (RuntimeException unknown) { return null; }` collapsed "no such generator" into the
+  same null as "no such metric" — and, being a catch-all, would have turned any unrelated
+  failure in that lookup into a silent 404 too. The lookup now propagates.
 - **A client typo answered 500.** `POST /api/v1/maze/generate` with a mistyped `generatorId` and
   `POST /api/v1/maze/{id}/solve/{solverId}` with a mistyped solver both returned **Internal
   Server Error** with a stack trace in the log, because both registries' `require(...)` threw a
