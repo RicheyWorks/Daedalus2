@@ -25,8 +25,23 @@ public class GeneratorRegistry {
         builtIn.forEach(this::register);
     }
 
+    /**
+     * Adds a generator. <b>First registration wins</b> — see
+     * {@link com.daedalus.engine.DuplicateAlgorithmException} for why a collision is refused
+     * rather than logged. Built-ins register from the constructor, so no plugin can displace one.
+     *
+     * @throws com.daedalus.engine.DuplicateAlgorithmException if the id is already taken
+     */
     public void register(MazeGenerator gen) {
-        generators.put(gen.id(), gen);
+        MazeGenerator incumbent = generators.putIfAbsent(gen.id(), gen);
+        // No exemption for re-registering the identical instance. That looked like a kindness
+        // for a double-boot, and nobody could name the path that reaches it — an exception whose
+        // triggering case is hypothetical is permission granted for free. One rule: a taken id
+        // is taken. If something registers twice, that is worth failing over.
+        if (incumbent != null) {
+            throw new com.daedalus.engine.DuplicateAlgorithmException(
+                    "generator", gen.id(), incumbent.getClass(), gen.getClass());
+        }
     }
 
     public Optional<MazeGenerator> find(String id) {

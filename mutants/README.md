@@ -20,6 +20,7 @@ by any test.
     python3 mutants/notfoundteeth.py # seven ways to lose the 404 bodies
     python3 mutants/stompteeth.py # five ways to reopen the STOMP forgery hole
     python3 mutants/detteeth.py   # five ways to blind the cross-process determinism check
+    python3 mutants/registryteeth.py # five ways to let a plugin become a built-in
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module
@@ -207,3 +208,21 @@ fourth nearly had me editing a solver implemented entirely with int arrays. Two 
 it and both are in the test now: canonicalise identifiers by *shape* rather than by field name,
 since an id inside a URL string is not something an exclusion list can name; and read the actual
 diff before believing the verdict, every time.
+
+**Throw *after* the damage and the test still passes.** The algorithm-id collision guard is four
+lines, and `registryteeth.py`'s first mutation keeps the `throw` exactly as written while changing
+`putIfAbsent` to `put` — so the built-in is overwritten and *then* an exception is raised. Any test
+asserting only "a DuplicateAlgorithmException was thrown" goes green while the registry has already
+lost the generator it was defending. The assertion that kills it is the boring one underneath:
+after the refusal, `require(id)` must return the *same instance* it returned before. Whenever a
+guard's job is to prevent a state change, assert the state, not the exception.
+
+**A guard nothing currently triggers is a guard nothing currently tests.** One mutation survived:
+changing `GeneratorRegistry`'s constructor from `builtIn.forEach(this::register)` to a raw `put`,
+bypassing the collision check entirely. Every test stayed green — correctly, because the shipped
+generator set has no duplicate ids, so the bypass is unobservable today. It stops being
+unobservable the day someone adds a generator whose id is already taken, and the symptom then is
+one of them silently missing at startup. The fix was to stop testing the current contents and
+start testing the path: hand the constructor a deliberately duplicated list and require it to
+refuse. Same lesson as the unused `ALLOW_EMPTY_404` exemption, arriving from the opposite
+direction — there, permission that nothing exercised; here, a guard that nothing exercised.

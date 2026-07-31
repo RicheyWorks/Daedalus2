@@ -24,7 +24,23 @@ public class SolverRegistry {
         builtIn.forEach(this::register);
     }
 
-    public void register(MazeSolver s) { solvers.put(s.id(), s); }
+    /**
+     * Adds a solver. First registration wins; see
+     * {@link com.daedalus.engine.DuplicateAlgorithmException}.
+     *
+     * @throws com.daedalus.engine.DuplicateAlgorithmException if the id is already taken
+     */
+    public void register(MazeSolver s) {
+        MazeSolver incumbent = solvers.putIfAbsent(s.id(), s);
+        // No exemption for re-registering the identical instance. That looked like a kindness
+        // for a double-boot, and nobody could name the path that reaches it — an exception whose
+        // triggering case is hypothetical is permission granted for free. One rule: a taken id
+        // is taken. If something registers twice, that is worth failing over.
+        if (incumbent != null) {
+            throw new com.daedalus.engine.DuplicateAlgorithmException(
+                    "solver", s.id(), incumbent.getClass(), s.getClass());
+        }
+    }
 
     public Optional<MazeSolver> find(String id) {
         return Optional.ofNullable(solvers.get(id));

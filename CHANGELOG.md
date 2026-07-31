@@ -111,6 +111,35 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **A plugin could silently become a built-in algorithm.** `PluginContext` hands every plugin the
+  live `GeneratorRegistry` and `SolverRegistry`, and `register` was a bare `map.put` — so any
+  third-party JAR dropped in the plugins directory could declare
+  `id() == "recursive-backtracker"` and take the name. Measured with a hostile generator: the
+  registry's size did not change (2 → 2), `/api/v1/algorithms` still advertised the id while
+  carrying the impostor's description, `require(...)` returned the impostor, and neither registry
+  has an unregister, so the substitution outlived the plugin for the life of the process.
+
+  Everything this project claims about reproducibility resolves through that lookup — the daily
+  challenge, campaign stages, the seeded waypoint tour, and the cross-process digests in
+  `DeterminismGoldenTest`. A plugin could move all of them at once, and the only symptom visible
+  from outside would be that yesterday's seed makes a different maze today.
+
+  Both registries now refuse a collision with `DuplicateAlgorithmException`, naming the class
+  that holds the id and the one turned away. Refusing rather than warning costs nothing:
+  `PluginManager` already contains a throwing plugin, marks it `FAILED`, boots the rest, and the
+  plugin subsystem's health indicator reports it — so a colliding plugin now fails by the same
+  route as any other broken one, and the built-in it wanted keeps working. Built-ins register
+  from the constructor, through the same guarded path, so a duplicate among the shipped set fails
+  at startup instead of silently dropping one.
+
+  The guard's first draft exempted re-registering the *identical instance*, on the theory that a
+  double-boot should not fail. Writing the test for it showed nobody could name a path that
+  reaches it, so the exemption was permission granted for a case that does not exist — the same
+  shape as the `ALLOW_EMPTY_404` flag and the one-sided coverage ratchet. Removed: a taken id is
+  taken. Teeth in `mutants/registryteeth.py`; the load-bearing mutation keeps the throw and moves
+  the overwrite *before* it, so a test asserting only "an exception was raised" would pass while
+  the built-in is gone anyway.
+
 - **Any connected client could publish a forged frame onto any STOMP topic.** The client inbound
   channel had two interceptors: one authenticating `CONNECT`, one authorising `SUBSCRIBE` to an
   owned session's player feed. Neither looked at `SEND` — and because the broker is Spring's
