@@ -35,7 +35,7 @@
         <springdoc.version>3.0.3</springdoc.version>
 
         <!-- Build hygiene plugins -->
-        <jacoco.version>0.8.12</jacoco.version>
+        <jacoco.version>0.8.15</jacoco.version>
         <!-- Coverage ratchet (TESTING.md, gap P2): jacoco:check fails the build below this
              instruction-coverage ratio. Each module pins its own value 2-3 points below its
              measured coverage and raises it as coverage rises — never lower it to make a PR
@@ -46,9 +46,9 @@
         <!-- How far coverage may rise above the floor before the ratchet demands a bump. -->
         <jacoco.check.headroom>0.03</jacoco.check.headroom>
         <jacoco.check.ceiling>0.63</jacoco.check.ceiling>
-        <checkstyle-plugin.version>3.5.0</checkstyle-plugin.version>
+        <checkstyle-plugin.version>3.6.0</checkstyle-plugin.version>
         <checkstyle.version>10.18.2</checkstyle.version>
-        <spotbugs-plugin.version>4.8.6.4</spotbugs-plugin.version>
+        <spotbugs-plugin.version>4.10.3.0</spotbugs-plugin.version>
     </properties>
 
     <modules>
