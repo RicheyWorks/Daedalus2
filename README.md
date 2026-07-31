@@ -40,8 +40,8 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   the search's real recorded expansion order (observation via the `Graph`
   seam, never simulation); the web UI animates it and can race all ten
   solvers on one maze in a compare table with per-route previews.
-- **Verified** — `mvn clean verify` passes **589 tests** across the five
-  modules (core 316, server 242, plugin-runtime 20, plugin-api 7, desktop 4)
+- **Verified** — `mvn clean verify` passes **595 tests** across the five
+  modules (core 316, server 242, plugin-runtime 20, plugin-api 7, desktop 10)
   with zero Checkstyle violations, zero SpotBugs findings, and a per-module
   JaCoCo coverage ratchet that fails the build on regression.
   [`CHANGELOG.md`](./CHANGELOG.md) records what changed and, where a decision
@@ -238,8 +238,8 @@ mvn clean verify              # all five modules
 mvn -pl daedalus-server test  # one module
 ```
 
-Test inventory — **589 tests across 119 files, all green** (316 core, 7 plugin-api, 20
-plugin-runtime, 242 server, 4 desktop) as of 2026-07-31:
+Test inventory — **595 tests across 120 files, all green** (316 core, 7 plugin-api, 20
+plugin-runtime, 242 server, 10 desktop) as of 2026-07-31:
 
 | Module | Highlights |
 |---|---|
@@ -247,7 +247,7 @@ plugin-runtime, 242 server, 4 desktop) as of 2026-07-31:
 | `daedalus-plugin-api` | `PluginManifestNullGuardTest` — manifest required-field guards |
 | `daedalus-plugin-runtime` | `PluginManagerLifecycleTest`, `PluginManagerJarDiscoveryTest` — boot/shutdown ordering, classloader cleanup, `PluginFailedEvent` publication |
 | `daedalus-server` | `GeneratorInvariantFuzzTest` — **every registered generator**, taken from the live registry rather than a list, held to the universal invariants across 11 shapes × 2 seeds (506 generations, zero violations); `MazeGenerationServiceFallbackTest` (Resilience4j circuit breaker), `RedisConfigConditionalTest` (on/off toggle), `SecurityConfigProfileTest` (profile-aware filter chain), `MazeControllerGeneratorIdTest`, `MazeWebSocketControllerPluginFailedTest` |
-| `daedalus-desktop` | `ThemeManagerTest`, `DaedalusLauncherTest` |
+| `daedalus-desktop` | `DesktopWorkTest` — generation and solve run off the JavaFX thread as plain callables, so they are testable without a headless toolkit (measured: hunt-and-kill takes 1101 ms at 128×128, IDA\* 1783 ms, all of it frozen UI before this); `ThemeManagerTest`, `DaedalusLauncherTest` |
 
 ## Workspace layout
 

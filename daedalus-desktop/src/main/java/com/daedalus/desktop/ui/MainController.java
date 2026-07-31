@@ -11,6 +11,7 @@ import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
+import javafx.concurrent.Task;
 import com.daedalus.solver.MazeSolver;
 import com.daedalus.solver.solvers.SolverRegistry;
 import javafx.fxml.FXML;
@@ -36,13 +37,13 @@ import java.util.List;
  *
  * <p>Wired into the FXML loader via Spring's controller factory in
  * {@code DaedalusPrimaryStage}, so this class can constructor-inject any bean —
- * {@link GeneratorRegistry}, {@link SolverRegistry}, {@link MazeGenerationService},
- * {@link MazeSolverService}, {@link ThemeManager}.
+ * {@link GeneratorRegistry}, {@link SolverRegistry}, {@link DesktopWork},
+ * {@link ThemeManager}.
  *
  * <p>Responsibilities:
  * <ul>
  *   <li>Populate generator / solver dropdowns from the live registries (built-ins + plugins).</li>
- *   <li>Run a generation on Generate — delegates to {@code MazeGenerationService} so plugin
+ *   <li>Run a generation on Generate — delegates through {@link DesktopWork} so plugin
  *       events and metrics fire exactly the same way as the REST surface.</li>
  *   <li>Run a solve on Solve — same delegation rationale; overlays the returned path on
  *       the canvas in the theme's {@code path()} color.</li>
@@ -51,11 +52,18 @@ import java.util.List;
  *   <li>Render everything on a {@link Canvas}, repaint on resize.</li>
  * </ul>
  *
- * <p>JavaFX threading: every {@code @FXML} method runs on the JavaFX Application Thread,
- * which is also the thread that mutates the Canvas. Generation and solve are fast enough
- * at the Spinner-bounded sizes (≤ 128² = 16 384 cells) that we don't background them; if
- * a later change pushes that into the multi-second range, wrap the calls in a
- * {@link javafx.concurrent.Task} and bind the status label to its {@code messageProperty}.
+ * <p>JavaFX threading: every {@code @FXML} method runs on the JavaFX Application Thread, which
+ * is also the thread that mutates the Canvas. This class used to run generation and solve
+ * inline there, on the documented assumption that both were "fast enough at the Spinner-bounded
+ * sizes (≤ 128² = 16 384 cells)", with an explicit instruction to wrap them in a
+ * {@link javafx.concurrent.Task} if that ever reached the multi-second range.
+ *
+ * <p>It did. Re-measured at the spinner's own maximum: hunt-and-kill generates a 128×128 in
+ * <b>1101 ms</b>, and IDA* spends its node budget and refuses after <b>1783 ms</b> on a perfect
+ * 128×128 and 1518 ms on a dungeon. Frozen window, no repaint, no input, for all of it. So both
+ * now run on a {@link javafx.concurrent.Task} via {@link DesktopWork}, the controls disable
+ * while one is in flight, and the status label reports the outcome when it lands. Canvas
+ * mutation stays on the FX thread, where it belongs.
  */
 @Component
 public class MainController {
@@ -65,8 +73,7 @@ public class MainController {
 
     private final GeneratorRegistry generatorRegistry;
     private final SolverRegistry solverRegistry;
-    private final MazeGenerationService generationService;
-    private final MazeSolverService solverService;
+    private final DesktopWork work;
     private final ThemeManager themeManager;
 
     @FXML private ComboBox<String> generatorChoice;
@@ -95,13 +102,11 @@ public class MainController {
 
     public MainController(GeneratorRegistry generatorRegistry,
                           SolverRegistry solverRegistry,
-                          MazeGenerationService generationService,
-                          MazeSolverService solverService,
+                          DesktopWork work,
                           ThemeManager themeManager) {
         this.generatorRegistry = generatorRegistry;
         this.solverRegistry = solverRegistry;
-        this.generationService = generationService;
-        this.solverService = solverService;
+        this.work = work;
         this.themeManager = themeManager;
     }
 
@@ -181,9 +186,15 @@ public class MainController {
             }
         }
 
-        try {
-            long t0 = System.nanoTime();
-            current = generationService.generate(genId, rows, cols, seed);
+        long t0 = System.nanoTime();
+        Task<MazeGenerationService.Cached> task = new Task<>() {
+            @Override
+            protected MazeGenerationService.Cached call() throws Exception {
+                return work.generateJob(genId, rows, cols, seed).call();
+            }
+        };
+        task.setOnSucceeded(e -> {
+            current = task.getValue();
             long elapsedMs = (System.nanoTime() - t0) / 1_000_000L;
 
             // Fresh maze invalidates any prior solve overlay and snaps the player to start.
@@ -199,9 +210,34 @@ public class MainController {
             statusLabel.setText(String.format(
                     "Drew %d×%d via %s, seed=%d, %dms%s — arrow keys / WASD to walk.",
                     rows, cols, actualId, seed, elapsedMs, genNote));
-        } catch (RuntimeException e) {
-            statusLabel.setText("Generation failed: " + e.getMessage());
-        }
+            busy(false);
+        });
+        task.setOnFailed(e ->
+                fail(DesktopWork.describeFailure("Generation", task.getException())));
+        run(task, "Generating " + rows + "×" + cols + " via " + genId + "…");
+    }
+
+    /** Disable the controls, say what is happening, and run the job off the FX thread. */
+    private void run(Task<?> task, String message) {
+        busy(true);
+        statusLabel.setText(message);
+        Thread worker = new Thread(task, "daedalus-desktop-work");
+        worker.setDaemon(true);   // never keep the JVM alive past window close
+        worker.start();
+    }
+
+    private void fail(String message) {
+        statusLabel.setText(message);
+        busy(false);
+    }
+
+    /**
+     * One job at a time. Without this, a second Generate while the first is still running would
+     * race two workers to assign {@code current} and the later click could lose.
+     */
+    private void busy(boolean running) {
+        generateButton.setDisable(running);
+        solveButton.setDisable(running);
     }
 
     /** Wired from the FXML's Solve button. Runs the chosen solver against {@link #current}. */
@@ -216,22 +252,27 @@ public class MainController {
             statusLabel.setText("Pick a solver first.");
             return;
         }
-        try {
-            long t0 = System.nanoTime();
-            MazeSolverService.Result result = solverService.solve(
-                    solverId, current.grid(), current.metadata().id());
+        long t0 = System.nanoTime();
+        var grid = current.grid();
+        var mazeId = current.metadata().id();
+        Task<MazeSolverService.Result> task = new Task<>() {
+            @Override
+            protected MazeSolverService.Result call() throws Exception {
+                return work.solveJob(solverId, grid, mazeId).call();
+            }
+        };
+        task.setOnSucceeded(e -> {
             long elapsedMs = (System.nanoTime() - t0) / 1_000_000L;
-
-            currentPath = result.path();
+            currentPath = task.getValue().path();
             redraw();
             canvas.requestFocus();
-
             statusLabel.setText(String.format(
                     "Solved with %s in %dms — %d cells on the path.",
                     solverId, elapsedMs, currentPath == null ? 0 : currentPath.size()));
-        } catch (RuntimeException e) {
-            statusLabel.setText("Solve failed: " + e.getMessage());
-        }
+            busy(false);
+        });
+        task.setOnFailed(e -> fail(DesktopWork.describeFailure("Solve", task.getException())));
+        run(task, "Solving with " + solverId + "…");
     }
 
     /** Wired from the FXML's Reset button. Snaps the player back to the start cell. */

@@ -13,6 +13,7 @@ by any test.
     python3 mutants/lensteeth.py  # seven breaks aimed at the heuristic lens
     python3 mutants/auditteeth.py # three breaks aimed at the config + cache audits
     python3 mutants/rlteeth.py    # three breaks aimed at rate-limit coverage
+    python3 mutants/deskteeth.py  # four breaks aimed at the desktop's background work
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module
@@ -73,3 +74,10 @@ caches. Both pass trivially if the scanner silently finds nothing, so `auditteet
 original defects back — the dead `daedalus.cache.maze-cache-size` block, a mistyped key, an
 unbounded cache — and confirms each is caught. Each scanner also asserts a non-zero find count on
 its own, so a broken walk fails loudly instead of reporting a clean sweep.
+
+**`contains(...)` is the assertion most likely to be unfalsifiable.** `deskteeth.py` found two
+survivors and both were substring checks that could not fail. One asserted a returned Callable
+was non-null, which says nothing about whether it had already done the work; the other asserted
+an error string contained "ida-star", which is true whether or not the wrapper exception was
+unwrapped, because `ExecutionException.getMessage()` is its cause's `toString()`. Both were
+rewritten to assert the thing that actually differs — an event count, and string equality.

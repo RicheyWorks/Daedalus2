@@ -34,6 +34,33 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **The JavaFX desktop froze for up to 1.8 seconds per click, on an assumption that used to be
+  true.** `MainController` ran generation and solve inline on the JavaFX Application Thread, and
+  said so in a Javadoc that also named its own trigger for change: *"fast enough at the
+  Spinner-bounded sizes (≤ 128² = 16 384 cells) that we don't background them; if a later change
+  pushes that into the multi-second range, wrap the calls in a Task."* Nobody re-measured it
+  across twenty features. Re-measured now, at the spinner's own maximum:
+
+  | operation at 128×128 | on the FX thread |
+  |---|---|
+  | hunt-and-kill generate | **1101 ms** |
+  | IDA\* solve, perfect maze | **1783 ms** (spends its node budget, then refuses) |
+  | IDA\* solve, dungeon | **1518 ms** |
+
+  Every millisecond of that is a frozen window — no repaint, no input, and on some desktops the
+  "not responding" overlay. The assumption was true when written; the code that invalidated it
+  lives in another module, which is exactly why a documented assumption needs re-measuring rather
+  than re-reading. Both operations now run on a `javafx.concurrent.Task`, the buttons disable
+  while one is in flight (two concurrent Generates could otherwise race to assign the current
+  maze), and the worker thread is a daemon so it cannot outlive the window.
+- **The desktop was a second, unhandled consumer of `SolverBudgetExceededException`.** When IDA\*
+  gained its node budget, only the REST layer learned to translate it. The desktop happened to
+  catch `RuntimeException` and print the message, which reads acceptably by luck rather than
+  design — the exception's text was written to make sense outside the API. That is now explicit:
+  `DesktopWork.describeFailure` reports a budget refusal in its own words with no "Solve failed:"
+  prefix, since it is a cost guard rather than a crash, and unwraps `ExecutionException` because
+  that is how a Task hands a failure back.
+
 - **`POST /session/{id}/move` had no rate limit, and it is the most expensive write on the
   surface.** Counting annotations across the API found 10 of 32 endpoints unmetered. Most are
   cheap reads and deliberately stay that way; this one is not. A move mutates the session, feeds
@@ -69,6 +96,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **`DesktopWork` — the desktop's long operations as plain `Callable`s, so they are testable.**
+  A `javafx.concurrent.Task` cannot run headless (its state transitions go through
+  `Platform.runLater`), and this module deliberately carries no TestFX or Monocle — the existing
+  tests say so outright. Splitting the work from the wrapper keeps the part with behaviour under
+  test and leaves only glue in the controller. Six tests, including one that the job is *lazy*:
+  if building it did the generating, moving to a Task would have relocated the freeze to the
+  button click rather than removing it.
 - **`RateLimitCoverageTest` — three scans over the controller sources.** Every state-changing
   endpoint (POST/PUT/PATCH/DELETE) must carry `@PerKeyRateLimit`; every budget named in code must
   exist in `application.yml`, since one naming a missing instance silently limits nothing; and
