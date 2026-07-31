@@ -12,6 +12,7 @@ by any test.
     python3 mutants/tourteeth.py  # eight breaks aimed at the tournament + its statistics
     python3 mutants/lensteeth.py  # seven breaks aimed at the heuristic lens
     python3 mutants/auditteeth.py # three breaks aimed at the config + cache audits
+    python3 mutants/rlteeth.py    # three breaks aimed at rate-limit coverage
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module

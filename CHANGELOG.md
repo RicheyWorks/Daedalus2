@@ -34,6 +34,25 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **`POST /session/{id}/move` had no rate limit, and it is the most expensive write on the
+  surface.** Counting annotations across the API found 10 of 32 endpoints unmetered. Most are
+  cheap reads and deliberately stay that way; this one is not. A move mutates the session, feeds
+  traffic tracking and ghost recording, and publishes a `PlayerMovedEvent` to every plugin
+  listener **synchronously, inside the session lock** — the project already reasoned carefully
+  about a 60 ms listener serialising a session's moves, but never bounded how fast moves could
+  arrive. Measured against the running server on the default profile:
+
+  | endpoint | result |
+  |---|---|
+  | `POST /session/{id}/move` | **1206 accepted in 6.0 s (201/s), never throttled** |
+  | `POST /agent/{id}/step` | 1200 accepted, then 429 — `agentStep` budget working |
+
+  The two are the same shape of traffic, and the agent endpoint's own config comment says so:
+  "a blind walk is hundreds of tiny requests by design". Its twin would have sustained roughly
+  ten times the rate that reasoning allowed. A new `sessionMove` budget gives moves the same
+  1200/min; re-measured after the fix, the endpoint accepts exactly 1200 and then answers 429
+  with the standard ProblemDetail. Nobody removed the annotation — it was simply never added,
+  which is why the fix below matters more than the annotation does.
 - **`application.yml` documented a maze cache that did not exist.** A post-ADR-007 configuration
   audit found the file declaring `daedalus.cache.maze-cache-size: 256` and
   `maze-cache-ttl-minutes: 30`, while `MazeGenerationService` reads `daedalus.maze.cache.max-size`
@@ -50,6 +69,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **`RateLimitCoverageTest` — three scans over the controller sources.** Every state-changing
+  endpoint (POST/PUT/PATCH/DELETE) must carry `@PerKeyRateLimit`; every budget named in code must
+  exist in `application.yml`, since one naming a missing instance silently limits nothing; and
+  every configured limiter must be named by some endpoint, since one guarding nothing is dead
+  weight that reads as protection. The allowlist for unmetered writes is empty and documented as
+  worth keeping empty. The rule is deliberately scoped to writes: extending it to GET would force
+  a dozen annotations whose only effect is noise, and a rule everyone waives is worse than none.
 - **`ConfigCoverageTest` — the durable fix, checked in both directions.** It scans the server's
   sources for `${daedalus.*}` references and cross-references them against `application.yml`,
   failing the build on a key the code reads and the file omits *or* a key the file declares and

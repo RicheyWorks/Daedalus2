@@ -40,8 +40,8 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   the search's real recorded expansion order (observation via the `Graph`
   seam, never simulation); the web UI animates it and can race all ten
   solvers on one maze in a compare table with per-route previews.
-- **Verified** — `mvn clean verify` passes **586 tests** across the five
-  modules (core 316, server 239, plugin-runtime 20, plugin-api 7, desktop 4)
+- **Verified** — `mvn clean verify` passes **589 tests** across the five
+  modules (core 316, server 242, plugin-runtime 20, plugin-api 7, desktop 4)
   with zero Checkstyle violations, zero SpotBugs findings, and a per-module
   JaCoCo coverage ratchet that fails the build on regression.
   [`CHANGELOG.md`](./CHANGELOG.md) records what changed and, where a decision
@@ -116,7 +116,7 @@ public consumers).
 | `POST` | `/api/v1/maze/{id}/live?ticks=30` | required | Bring the maze to life: bounded erosion ticks mutate it in place (ADR-006) |
 | `POST` | `/api/v1/maze/{id}/solve/{solverId}` | required | Run a solver against a stored maze. Answers **422** if the solver spends its node budget — IDA\* does this on dungeons from ~21×21 up, where the unguarded search took 16 s and worse (ADR-007 postscript) |
 | `POST` | `/api/v1/maze/{id}/session?player=...` | required | Open a play session (returns `SessionResponse`) |
-| `POST` | `/api/v1/session/{id}/move` | required | Move the player one step (`MoveRequest`) |
+| `POST` | `/api/v1/session/{id}/move` | required | Move the player one step (`MoveRequest`). Rate-limited on the `sessionMove` budget — 1200/min, the same as the fog-of-war agent, because it is the same shape of traffic |
 | `POST` | `/api/v1/maze/{id}/agent?steps=...` | required | Open a fog-of-war walk: the agent sees only its cell's openings (ADR-006) |
 | `POST` | `/api/v1/agent/{id}/step?direction=NORTH` | required | Take one blind step — validated against the maze's *live* grid |
 | `GET` | `/api/v1/agent/{id}` | public | Re-poll the agent's view without spending a step |
@@ -238,8 +238,8 @@ mvn clean verify              # all five modules
 mvn -pl daedalus-server test  # one module
 ```
 
-Test inventory — **586 tests across 118 files, all green** (316 core, 7 plugin-api, 20
-plugin-runtime, 239 server, 4 desktop) as of 2026-07-30:
+Test inventory — **589 tests across 119 files, all green** (316 core, 7 plugin-api, 20
+plugin-runtime, 242 server, 4 desktop) as of 2026-07-31:
 
 | Module | Highlights |
 |---|---|

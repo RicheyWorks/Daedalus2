@@ -321,7 +321,11 @@ public class MazeController {
     @Operation(summary = "Move a player to an adjacent cell.",
             description = "Returns true if the move was legal (target cell is open and adjacent). "
                     + "Omit 'player' to move the session's opening player; name one to move a "
-                    + "joined player (multiplayer flag only).")
+                    + "joined player (multiplayer flag only). Rate-limited per caller against the "
+                    + "'sessionMove' budget — the same 1200/min the fog-of-war agent gets, because "
+                    + "it is the same shape of traffic. Until an audit measured it this endpoint "
+                    + "had no limit at all, and one client sustained 201 moves/s.")
+    @PerKeyRateLimit("sessionMove")
     public ResponseEntity<Boolean> move(@PathVariable UUID id, @Valid @RequestBody MoveRequest req) {
         var s = sessions.find(id);
         if (s == null) return ResponseEntity.notFound().build();

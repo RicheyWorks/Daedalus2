@@ -78,3 +78,8 @@ resilience4j:
         limit-refresh-period: 1m
         timeout-duration: 0
         register-health-indicator: true
+      sessionMove:
+        limit-for-period: ${DAEDALUS_RL_SESSION_MOVE_PER_MIN:1200}
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: true

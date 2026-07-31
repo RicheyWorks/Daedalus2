@@ -223,3 +223,11 @@ resilience4j:
         limit-refresh-period: 1m      # 20/s per caller lets a scripted agent actually walk
         timeout-duration: 0           # while still bounding a runaway loop
         register-health-indicator: false
+      sessionMove:
+        limit-for-period: 1200        # a played maze is the same shape as a scripted walk:
+        limit-refresh-period: 1m      # hundreds of tiny state-mutating requests. It went
+        timeout-duration: 0           # unbounded until an audit measured ONE client pushing
+        register-health-indicator: false   # 201 moves/s — ten times the budget its twin
+                                      # (agentStep) was given for identical traffic, and each
+                                      # move publishes a PlayerMovedEvent to every plugin
+                                      # listener synchronously, inside the session lock.
