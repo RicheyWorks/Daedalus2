@@ -32,8 +32,67 @@ under the `_migration/` portfolios.
   third of their cells on dead ends), and the original label bands put nearly every maze this
   project generates into "hard" or "brutal".
 
+### Added
+
+- **`ProdAuthPostureTest` — every endpoint's prod authentication posture, asserted rather than
+  inherited.** Twelve endpoints were added across ADR-007 and not one of them made an
+  authentication decision. They are all correctly closed, because `ProdSecurityConfig` ends in
+  `anyRequest().authenticated()` — but "protected because nobody listed it" and "protected
+  because somebody decided" look identical from outside, and only one of them survives a matcher
+  being widened later. The chain already permits `GET /api/v1/maze/*`; **one extra asterisk**
+  would publish the whole analytical surface — hardest route, distance field, sanctuaries,
+  heuristic lens, fingerprint, tour, analysis, ghost — and nothing in the suite would have said a
+  word. What existed before was `SecurityConfigProfileTest`, which checks `@Profile` annotations
+  and no actual decision, and `ProdProfileBootTest`, which pins exactly one path, against a README
+  that publishes an "Auth (prod)" column for the entire API.
+  The test boots a real prod context and drives unauthenticated requests at all 32 endpoints,
+  asserting each is refused or public per an explicit table — the README column made executable.
+  A second test scans the controller sources and fails if any mapping is missing from that table,
+  so a new endpoint cannot ship until somebody records which side of the line it belongs on. A
+  third holds the README's published table to the same standard in both directions.
+
+  **The first version of this test was written wrong, and the way it was wrong is the point.**
+  Its expectation table was filled in from what the running server answered — which makes the
+  test agree with the behaviour by construction, so it cannot find a behaviour bug, and it
+  promptly failed to find three (see *Fixed* below). The second source of truth is what makes it
+  work: the README says what the API promises, the boot test says what the server does, and the
+  build now fails when they disagree. Teeth proven nine ways in `mutants/authteeth.py` —
+  widening `maze/*` to `maze/**`, flipping `anyRequest()` to `permitAll`, closing the spectator
+  permalink again, adding an unclassified endpoint, declaring one with a bare `@GetMapping` or
+  the `value = ...` form, narrowing the source scanner back to its original regex, and both
+  flipping and dropping a README row. All nine caught. A security test under default-deny passes
+  before it is written and keeps passing if it breaks, so it needs the mutations more than most.
+
 ### Fixed
 
+- **Three shipped features did not work in prod at all.** The `#session=` spectator permalink,
+  the ghost racer and the fog-of-war agent's free re-poll are documented public in the README's
+  "Auth (prod)" column and were all being refused by `ProdSecurityConfig`'s default-deny rule —
+  `GET /api/v1/session/{id}`, `GET /api/v1/session/{id}/tour`, `GET /api/v1/maze/{id}/ghost` and
+  `GET /api/v1/agent/{id}` answered 401 to the anonymous caller they exist for. This system has
+  exactly one account, so "authenticated" here meant "only the operator", which makes a spectator
+  link nobody can spectate and a shareable ghost nobody can watch. All four are now permitted
+  explicitly, with **single-segment** matchers: `/api/v1/session/*` deliberately does not reach
+  `/session/{id}/join`, and `/api/v1/agent/*` deliberately does not reach `/agent/{id}/step` —
+  both of those spend server state and stay closed. Found only because the README and the
+  filter chain were finally compared to each other.
+- **`GET /api/v1/session/{id}/tour` reached Held-Karp with no rate limit.** It reads like a cheap
+  progress lookup and was metered as one — but `progressFor` calls `tourFor`, so a request that
+  misses the tour cache runs the same `O(2^k · k²)` exact TSP that its sibling
+  `GET /api/v1/maze/{id}/tour` carries a `mazeSolve` limiter for. Two routes to one computation
+  and only one of them counted; the limiter had been placed by reading the method, not by
+  following the call. Now on the `mazeSolve` budget, which matters more since the endpoint is
+  also anonymously reachable as of this release.
+- **The API table in the README was two rows short.** `GET /api/v1/complexity/metrics` and
+  `POST /api/v1/session/{id}/join` were live and undocumented. The cross-check test found both
+  on its first run.
+- **The endpoint scanner could not see two annotation forms.** `ProdAuthPostureTest`'s
+  completeness scan required a parenthesised string literal, so `PluginController`'s bare
+  `@GetMapping` and `MazeController`'s `@GetMapping(value = ..., produces = ...)` were invisible
+  to it — and `GET /api/v1/plugins` was consequently the one endpoint in the API with no posture
+  on record, in the test whose entire job is that no endpoint lacks one. The scanner now counts
+  annotations independently of parsing them and fails on any mismatch, so a form it does not
+  understand is a build failure instead of a silently smaller sweep.
 - **The coverage ratchet had stopped ratcheting.** `jacoco:check` enforced a floor and nothing
   else, so it caught regressions and never noticed the floors going stale as coverage climbed.
   Audited across all five modules:

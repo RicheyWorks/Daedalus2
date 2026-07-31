@@ -28,6 +28,14 @@ import org.springframework.security.web.SecurityFilterChain;
  *       {@code GET /api/v1/leaderboard} — read-only API surface, intentionally browsable</li>
  *   <li>{@code POST /api/v1/auth/login} — credentials → token; chicken-and-egg otherwise</li>
  *   <li>{@code GET /actuator/health}, {@code /info}, {@code /prometheus} — probes / scrapers</li>
+ *   <li><b>The share-a-link surface</b>: {@code GET /api/v1/session/&#123;id&#125;} (the
+ *       {@code #session=} spectator permalink), {@code GET /api/v1/session/&#123;id&#125;/tour},
+ *       {@code GET /api/v1/maze/&#123;id&#125;/ghost} (the ghost racer) and
+ *       {@code GET /api/v1/agent/&#123;id&#125;} (free re-poll). These are read-only, keyed by an
+ *       unguessable UUID, and there is exactly one account in this system — so "authenticated"
+ *       here would mean "only the operator", which makes a spectator link that nobody can
+ *       spectate. They were closed by the default-deny rule until 2026-07-31, which is to say
+ *       these features did not work in prod at all. See {@code ProdAuthPostureTest}.</li>
  * </ul>
  *
  * <p><b>Authenticated (token required)</b>:
@@ -92,6 +100,17 @@ public class ProdSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/algorithms").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/maze/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/leaderboard").permitAll()
+
+                        // ---- The share-a-link surface ----
+                        // Single-segment matchers on purpose: '*' stops at one path segment, so
+                        // /session/{id} does not drag in /session/{id}/join, and /agent/{id} does
+                        // not drag in /agent/{id}/step. Both of those spend server state and stay
+                        // closed. Widening any of these to '**' is the exact slip
+                        // ProdAuthPostureTest exists to catch.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/session/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/session/*/tour").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/maze/*/ghost").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/agent/*").permitAll()
 
                         // ---- Protected API surface ----
                         // Write operations.

@@ -146,10 +146,24 @@ public class InsightController {
         return tour == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(tour);
     }
 
+    /**
+     * Metered on {@code mazeSolve} because of what it calls, not what it looks like.
+     *
+     * <p>This reads as a cheap progress lookup, and the limiter was originally left off on that
+     * reading. It is not: {@code progressFor} calls {@code tourFor}, so a request that misses the
+     * tour cache runs Held-Karp — the same {@code O(2^k · k²)} the sibling
+     * {@code /maze/&#123;id&#125;/tour} carries a limiter for. Two routes to one computation, and
+     * only one of them was counted. Now that this endpoint is also anonymously reachable in prod
+     * (it is the spectator's view of a shared session), an unmetered path to that solve would be
+     * reachable without a token.
+     */
     @GetMapping("/session/{id}/tour")
     @Operation(summary = "How a session is doing against the optimal tour.",
             description = "Collection is observed server-side from the session's own moves, not "
-                    + "reported by the client, so the count that scores cannot be claimed.")
+                    + "reported by the client, so the count that scores cannot be claimed. "
+                    + "Rate-limited against the 'mazeSolve' budget: a cache miss here runs the "
+                    + "same Held-Karp tour as /maze/{id}/tour.")
+    @PerKeyRateLimit("mazeSolve")
     public ResponseEntity<WaypointService.Progress> tourProgress(@PathVariable UUID id) {
         var progress = waypoints.progressFor(id);
         return progress == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(progress);

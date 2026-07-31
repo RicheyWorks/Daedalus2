@@ -40,8 +40,8 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   the search's real recorded expansion order (observation via the `Graph`
   seam, never simulation); the web UI animates it and can race all ten
   solvers on one maze in a compare table with per-route previews.
-- **Verified** — `mvn clean verify` passes **595 tests** across the five
-  modules (core 316, server 242, plugin-runtime 20, plugin-api 7, desktop 10)
+- **Verified** — `mvn clean verify` passes **598 tests** across the five
+  modules (core 316, server 245, plugin-runtime 20, plugin-api 7, desktop 10)
   with zero Checkstyle violations, zero SpotBugs findings, and a per-module
   JaCoCo coverage ratchet that fails the build in **both** directions — on a
   regression below the floor, and on the floor going more than 3 points stale
@@ -120,12 +120,14 @@ public consumers).
 | `POST` | `/api/v1/maze/{id}/solve/{solverId}` | required | Run a solver against a stored maze. Answers **422** if the solver spends its node budget — IDA\* does this on dungeons from ~21×21 up, where the unguarded search took 16 s and worse (ADR-007 postscript) |
 | `POST` | `/api/v1/maze/{id}/session?player=...` | required | Open a play session (returns `SessionResponse`) |
 | `POST` | `/api/v1/session/{id}/move` | required | Move the player one step (`MoveRequest`). Rate-limited on the `sessionMove` budget — 1200/min, the same as the fog-of-war agent, because it is the same shape of traffic |
+| `POST` | `/api/v1/session/{id}/join` | required | Add another player to an open session |
 | `POST` | `/api/v1/maze/{id}/agent?steps=...` | required | Open a fog-of-war walk: the agent sees only its cell's openings (ADR-006) |
 | `POST` | `/api/v1/agent/{id}/step?direction=NORTH` | required | Take one blind step — validated against the maze's *live* grid |
 | `GET` | `/api/v1/agent/{id}` | public | Re-poll the agent's view without spending a step |
 | `POST` | `/api/v1/maze/{id}/traffic` | required | Track traffic: occupancy raises cell costs, which decay each pulse (ADR-006) |
 | `GET` | `/api/v1/maze/{id}/fingerprint` | required | Structural signature + which generator most likely made it (ADR-007) |
 | `GET` | `/api/v1/complexity?generator=&metric=` | required | Measure a generator's real growth curve and report its big-O with an R² (ADR-007) |
+| `GET` | `/api/v1/complexity/metrics` | required | Which metrics `/complexity` can be asked for |
 | `GET` | `/api/v1/maze/{id}/tour?count=` | required | Waypoints plus the provably optimal route collecting them all (ADR-007) |
 | `GET` | `/api/v1/session/{id}/tour` | public | Server-observed progress against that optimum |
 | `GET` | `/api/v1/campaign?seed=` | required | A deterministic, difficulty-graded ladder of stages; omit the seed for today's (ADR-006) |
@@ -143,7 +145,14 @@ public consumers).
 | `GET` | `/api/v1/plugins/describe` | required | Human-readable plugin tree |
 
 In dev / test profiles every endpoint is open. The "Auth (prod)" column applies when
-`spring.profiles.active=prod` (see `ProdSecurityConfig`).
+`spring.profiles.active=prod` (see `ProdSecurityConfig`), and it is **executable**:
+`ProdAuthPostureTest` boots a prod context, drives an unauthenticated request at every row above,
+and fails the build if the answer disagrees with the word in that column — in either direction,
+and also if a row is missing or an endpoint exists that no row covers. The table is not
+documentation of the security posture; it is one of the two sources the posture is checked
+against. It earned that on its first run: four endpoints marked `public` here were being refused
+in prod, which meant the spectator permalink, the ghost racer and the agent re-poll did not work
+there at all.
 
 ### Auth flow
 
@@ -241,8 +250,8 @@ mvn clean verify              # all five modules
 mvn -pl daedalus-server test  # one module
 ```
 
-Test inventory — **595 tests across 120 files, all green** (316 core, 7 plugin-api, 20
-plugin-runtime, 242 server, 10 desktop) as of 2026-07-31:
+Test inventory — **598 tests across 121 files, all green** (316 core, 7 plugin-api, 20
+plugin-runtime, 245 server, 10 desktop) as of 2026-07-31:
 
 | Module | Highlights |
 |---|---|

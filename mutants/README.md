@@ -15,6 +15,7 @@ by any test.
     python3 mutants/rlteeth.py    # three breaks aimed at rate-limit coverage
     python3 mutants/deskteeth.py  # four breaks aimed at the desktop's background work
     python3 mutants/ratchetteeth.py # both directions of the JaCoCo coverage ratchet
+    python3 mutants/authteeth.py  # nine holes in the prod authentication posture + its docs
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module
@@ -89,3 +90,38 @@ so it caught regressions and never noticed that the server had drifted to 91% co
 paired with a threshold bump. `ratchetteeth.py` proves both halves now bite: set the floor above
 actual and the minimum fires; leave the floor twelve points stale and the new maximum fires and
 asks for the bump.
+
+**A passing security test under default-deny proves the least.** Prod closes anything not
+enumerated, so "every endpoint refuses an unauthenticated caller" is true before the test is
+written and stays true if the test is broken. `authteeth.py` opens the holes a real change would
+open — widening `/api/v1/maze/*` to `/api/v1/maze/**`, flipping `anyRequest()` to `permitAll`,
+and adding an endpoint nobody classified — and confirms each is caught. The first is not
+hypothetical: one extra asterisk publishes the entire analytical surface.
+
+**A test written from observed behaviour cannot find a behaviour bug.** The first version of
+`ProdAuthPostureTest` had its expectation table filled in from what the running server answered.
+Every mutation above was caught, the suite was green, and the test was still wrong: four
+endpoints the README documents as public were being refused in prod, so the spectator permalink,
+the ghost racer and the agent re-poll did not work there at all. Writing `AUTHENTICATED` next to
+them recorded the bug as the specification. Mutations survive a test like that by definition —
+they perturb the system, and the test's expectations are a copy of the system. What fixed it was
+a *second, independent* source for the same fact: the README's published table, cross-checked
+against the enforced posture in both directions. That check found two more defects on its first
+run (two live endpoints missing from the table entirely). When writing an assertion, the question
+is not "does this pass" but "where did the expected value come from" — if it came from the code
+under test, it is not an expectation, it is an echo.
+
+**A crash is not a catch.** One mutation here — a bare `@GetMapping` added to `PluginController`,
+which already has one — collided into an ambiguous-mapping error, so Spring refused to start and
+the harness printed "caught" with no test name attached. It proved nothing about the assertion it
+was aimed at. Moved to a controller where the new mapping is unique, it caught properly. When a
+harness reports a catch, check *which* test caught it; a blank there means the build fell over
+before any assertion ran.
+
+**Count what you parse.** The same scan-driven test missed two annotation forms — a bare
+`@GetMapping` and `@GetMapping(value = ..., produces = ...)` — because its regex demanded a
+parenthesised string literal. A scanner that skips a form reports a clean sweep of the subset it
+understands, and one real endpoint (`GET /api/v1/plugins`) had no posture recorded anywhere as a
+result. The fix generalises past this test: count the *occurrences* of the thing you are looking
+for with a maximally permissive pattern, parse them with the precise one, and assert the two
+counts agree. Then a form the parser cannot handle is a loud failure instead of a smaller sweep.
