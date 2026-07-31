@@ -4,6 +4,7 @@ package com.daedalus.server.config;
 
 import com.daedalus.server.security.JwtTokenService;
 import com.daedalus.server.security.StompAuthChannelInterceptor;
+import com.daedalus.server.security.StompSendRejectionInterceptor;
 import com.daedalus.server.security.StompSubscriptionAuthorizationInterceptor;
 import com.daedalus.server.service.GameSessionService;
 import org.springframework.context.annotation.Configuration;
@@ -32,11 +33,20 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
  * 2026-07-19 against the source; a wrong topic name here costs an integrator a debugging
  * session, because subscribing to a destination nobody publishes to fails silently.
  *
- * <p>Traffic is currently <b>server → client only</b>. The {@code /app} application prefix and
- * the {@code /user} destination prefix are configured below but unused: there are no
- * {@code @MessageMapping} handlers, and nothing calls {@code convertAndSendToUser}. They are
- * left in place because inbound commands are a planned direction and removing them would be
- * churn — but do not read their presence as evidence that a client can send frames today.
+ * <p>Traffic is <b>server → client only</b>, and as of 2026-07-31 that is enforced rather than
+ * merely true of the handler set. The {@code /app} application prefix and the {@code /user}
+ * destination prefix are configured below but unused: there are no {@code @MessageMapping}
+ * handlers, and nothing calls {@code convertAndSendToUser}.
+ *
+ * <p><b>An earlier version of this paragraph got that wrong, and the mistake is instructive.</b>
+ * It read "do not read their presence as evidence that a client can send frames today" — a
+ * reassurance drawn from the correct observation that no {@code @MessageMapping} exists. The
+ * inference does not hold. A client {@code SEND} addressed to a {@code /topic} destination is not
+ * dispatched to application code at all; the simple broker enabled below handles it and relays it
+ * to every subscriber. Measured against a running server: an anonymous second client published a
+ * forged move frame into another player's session feed, and the spectator could not tell it from
+ * a real one. "No handler of ours" is not "no handler".
+ * {@link StompSendRejectionInterceptor} now refuses client {@code SEND} outright.
  *
  * <p>{@link StompAuthChannelInterceptor} authenticates the {@code CONNECT} frame, so the
  * messaging layer has a {@link java.security.Principal} rather than relying solely on the
@@ -82,6 +92,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // per-destination rule that reads that Principal on SUBSCRIBE.
         registration.interceptors(
                 new StompAuthChannelInterceptor(tokenService.decoder(), required),
-                new StompSubscriptionAuthorizationInterceptor(sessions::find));
+                new StompSubscriptionAuthorizationInterceptor(sessions::find),
+                // Third, refuse client SEND outright. The first two guard who may connect and
+                // who may read; until 2026-07-31 nothing guarded who may write, and with a
+                // simple broker on /topic that meant any connected client could publish a
+                // forged move frame into any session's feed. Measured, not theorised.
+                new StompSendRejectionInterceptor());
     }
 }

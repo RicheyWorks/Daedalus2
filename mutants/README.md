@@ -18,6 +18,7 @@ by any test.
     python3 mutants/authteeth.py  # nine holes in the prod authentication posture + its docs
     python3 mutants/errteeth.py   # nine holes in the RFC 7807 error contract
     python3 mutants/notfoundteeth.py # seven ways to lose the 404 bodies
+    python3 mutants/stompteeth.py # five ways to reopen the STOMP forgery hole
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module
@@ -161,3 +162,30 @@ with a helpful `"Multiplayer is disabled; set daedalus.session.multiplayer=true"
 reads that as an improvement, and it is a disclosure bug: the 404 exists to make the endpoint look
 absent rather than switched off, so the friendlier message turns it into a feature-flag oracle. A
 harness that only ever degrades things cannot find the defects that arrive disguised as polish.
+
+**"No handler of ours" is not "no handler".** The STOMP `SEND` hole survived a deliberate check:
+somebody (me, earlier) confirmed no `@MessageMapping` exists and wrote a Javadoc paragraph
+reassuring the next reader that clients therefore cannot send frames. Both halves were true
+except the "therefore" — Spring's simple broker handles `/topic` sends itself, without consulting
+any application code. The general form is worth carrying: when reasoning that some input path is
+inert, enumerate the *frameworks* on that path as well as your own handlers, and then send the
+input and watch. The probe took four minutes and the reasoning had stood for months.
+
+**Mutate the registration, not only the implementation.** `stompteeth.py`'s first mutation leaves
+`StompSendRejectionInterceptor` completely correct and simply omits it from `WebSocketConfig`.
+Every unit test still passes, because a unit test constructs the class itself — it cannot tell a
+registered interceptor from an unregistered one, which is precisely the state the codebase was in
+before this batch. Any guard that has to be *wired in* to work needs a mutation that unwires it;
+otherwise the suite is proving that a class nobody uses behaves correctly.
+
+**The load-bearing mutation found an unfalsifiable assertion, again.** `stompteeth.py`'s
+unregister-the-interceptor mutation survived its first run, which meant `WebSocketForgerySmokeTest`
+was green with the hole wide open. The cause was a converter mismatch inside the test: the
+attacker sent a JSON *string*, Jackson serialised it as a JSON string, and the spectator's `Map`
+payload type could never deserialise it — so the forged frame could not arrive whether or not
+anything was guarding the channel. Sending a `Map` fixed it and the mutation is now caught. Note
+the shape: the assertion was `isNull()`, and an assertion that something did not happen passes
+beautifully when you have accidentally made it impossible for it to happen. That is the third
+distinct instance of this failure in this file (`lensteeth.py`'s dead counter, `deskteeth.py`'s
+`contains(...)`, now this) and it is always found the same way — by a mutation that should turn
+the assertion red and does not.

@@ -32,16 +32,20 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   closed cleanly on shutdown (no Windows file-locks, no metaspace bloat).
 - **Java 21**, **Spring Boot 4.1**, **JavaFX 21**.
 - **Live over the wire** — a session-scoped STOMP surface (maze state, solver
-  runs, player moves, plugin failures) with `CONNECT` authentication and
-  per-destination `SUBSCRIBE` authorization on owned sessions, a one-file
-  vanilla-JS web UI served at `/` that plays mazes against it, and an opt-in
-  multiplayer flag (`daedalus.session.multiplayer`).
+  runs, player moves, plugin failures) with `CONNECT` authentication,
+  per-destination `SUBSCRIBE` authorization on owned sessions, and client
+  `SEND` refused outright: the surface is broadcast-only, and with a simple
+  broker on `/topic` anything less meant any connected client could publish a
+  forged move frame into any session's feed (found by sending one and watching
+  it arrive, 2026-07-31). A one-file vanilla-JS web UI served at `/` plays
+  mazes against it, with an opt-in multiplayer flag
+  (`daedalus.session.multiplayer`).
 - **Watch the algorithms think** — `?replay=true` on the solve endpoint ships
   the search's real recorded expansion order (observation via the `Graph`
   seam, never simulation); the web UI animates it and can race all ten
   solvers on one maze in a compare table with per-route previews.
-- **Verified** — `mvn clean verify` passes **604 tests** across the five
-  modules (core 316, server 251, plugin-runtime 20, plugin-api 7, desktop 10)
+- **Verified** — `mvn clean verify` passes **609 tests** across the five
+  modules (core 316, server 256, plugin-runtime 20, plugin-api 7, desktop 10)
   with zero Checkstyle violations, zero SpotBugs findings, and a per-module
   JaCoCo coverage ratchet that fails the build in **both** directions — on a
   regression below the floor, and on the floor going more than 3 points stale
@@ -290,8 +294,8 @@ mvn clean verify              # all five modules
 mvn -pl daedalus-server test  # one module
 ```
 
-Test inventory — **604 tests across 122 files, all green** (316 core, 7 plugin-api, 20
-plugin-runtime, 251 server, 10 desktop) as of 2026-07-31:
+Test inventory — **609 tests across 124 files, all green** (316 core, 7 plugin-api, 20
+plugin-runtime, 256 server, 10 desktop) as of 2026-07-31:
 
 | Module | Highlights |
 |---|---|

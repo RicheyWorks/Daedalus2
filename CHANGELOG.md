@@ -82,6 +82,34 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Any connected client could publish a forged frame onto any STOMP topic.** The client inbound
+  channel had two interceptors: one authenticating `CONNECT`, one authorising `SUBSCRIBE` to an
+  owned session's player feed. Neither looked at `SEND` — and because the broker is Spring's
+  *simple* broker with `/topic` enabled, a client frame addressed to a `/topic` destination is
+  never dispatched to application code at all. The broker relays it. Measured, not theorised: a
+  second anonymous client sent one frame to another player's `/topic/session/{id}/player` and the
+  spectator received it, indistinguishable in shape from a server-published move. The same worked
+  on `/topic/maze/{id}`. `StompSendRejectionInterceptor` now refuses every client `SEND`.
+
+  **Two things about how this hid.** First, `WebSocketConfig`'s own Javadoc said "do not read
+  their presence as evidence that a client can send frames today" — a reassurance written after
+  correctly confirming that no `@MessageMapping` exists. The observation was right and the
+  inference was wrong: no mapping proves no code *of ours* handles a client frame, not that the
+  frame goes nowhere. The simple broker is application code somebody else wrote, and it was
+  listening. Second, note which direction got the attention. Real design work went into who may
+  *read* an owned session's feed; nobody asked who may *write* to it. From the outside a guard on
+  one direction of a channel is indistinguishable from a guard on the channel.
+
+  What an attacker got was display, not state — `PlayerMovedEvent` is published by the server
+  from its own record, so scores, the leaderboard and waypoint progress were never forgeable. But
+  the spectator seam, the ghost racer and the multiplayer view all render what arrives on these
+  topics, and "the number is right, the picture is a lie" is not a defensible place to stand.
+
+  The refusal is **total** rather than per-destination, because this application has nothing for
+  a client to say. That is a fact about the codebase rather than a principle, so
+  `StompSendRejectionTest` scans for message-mapping annotations and fails the build if one
+  appears — the day a real client-to-server message is added, the blanket rule becomes wrong and
+  the build says so instead of the feature quietly not working.
 - **The last 27 errors with no body at all.** `ResponseEntity.notFound().build()` appeared 27
   times across `MazeController`, `InsightController` and `AgentController`, each answering 404
   with nothing in it — the remaining hole after the error-contract audit, and a perverse
