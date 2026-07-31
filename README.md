@@ -35,7 +35,12 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   2026-07-31 `register` was a bare map `put`, so any JAR in the plugins
   directory could declare `id() == "recursive-backtracker"` and become it —
   silently, irreversibly, and taking the daily challenge, campaign stages and
-  every seeded reproduction with it.
+  every seeded reproduction with it. Unloading is symmetric: a stopped plugin's
+  algorithms are removed from the registries, which until the same date they
+  were not — closing a classloader does not unload its classes, so a "stopped"
+  plugin stayed listed and callable. `unregister` refuses built-ins, because a
+  removal path reachable from teardown must not be able to delete a shipped
+  algorithm.
 - **Java 21**, **Spring Boot 4.1**, **JavaFX 21**.
 - **Live over the wire** — a session-scoped STOMP surface (maze state, solver
   runs, player moves, plugin failures) with `CONNECT` authentication,
@@ -59,8 +64,8 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   the search's real recorded expansion order (observation via the `Graph`
   seam, never simulation); the web UI animates it and can race all ten
   solvers on one maze in a compare table with per-route previews.
-- **Verified** — `mvn clean verify` passes **617 tests** across the five
-  modules (core 322, server 258, plugin-runtime 20, plugin-api 7, desktop 10)
+- **Verified** — `mvn clean verify` passes **623 tests** across the five
+  modules (core 322, server 258, plugin-runtime 26, plugin-api 7, desktop 10)
   with zero Checkstyle violations, zero SpotBugs findings, and a per-module
   JaCoCo coverage ratchet that fails the build in **both** directions — on a
   regression below the floor, and on the floor going more than 3 points stale
@@ -309,7 +314,7 @@ mvn clean verify              # all five modules
 mvn -pl daedalus-server test  # one module
 ```
 
-Test inventory — **617 tests across 126 files, all green** (322 core, 7 plugin-api, 20
+Test inventory — **623 tests across 127 files, all green** (322 core, 7 plugin-api, 26
 plugin-runtime, 258 server, 10 desktop) as of 2026-07-31:
 
 | Module | Highlights |

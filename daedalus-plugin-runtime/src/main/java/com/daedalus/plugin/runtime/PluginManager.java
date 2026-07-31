@@ -16,6 +16,10 @@ import org.springframework.context.ApplicationContext;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Set;
+import java.util.Map;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,6 +49,21 @@ public class PluginManager {
     private final ApplicationContext spring;
     private final String pluginDir;
     private PluginContext context;
+
+    /**
+     * The registries this manager booted against, captured rather than re-resolved.
+     * {@code shutdownAll()} must take algorithms out of the same maps {@code bootAll()} put them
+     * into; asking the container again is a second lookup that only happens to agree.
+     */
+    private GeneratorRegistry bootedGenerators;
+
+    private SolverRegistry bootedSolvers;
+
+    /** Plugin id → the generator ids that appeared in the registry while it was booting. */
+    private final Map<String, Set<String>> contributedGenerators = new LinkedHashMap<>();
+
+    /** Plugin id → the solver ids that appeared while it was booting. */
+    private final Map<String, Set<String>> contributedSolvers = new LinkedHashMap<>();
     private final List<URLClassLoader> externalLoaders = new ArrayList<>();
 
     public PluginManager(PluginRegistry registry, ApplicationContext spring, String pluginDir) {
@@ -107,12 +126,22 @@ public class PluginManager {
     }
 
     public void bootAll() {
-        this.context = new SpringPluginContext(
-                spring,
-                spring.getBean(GeneratorRegistry.class),
-                spring.getBean(SolverRegistry.class));
+        GeneratorRegistry generators = spring.getBean(GeneratorRegistry.class);
+        SolverRegistry solvers = spring.getBean(SolverRegistry.class);
+        this.bootedGenerators = generators;
+        this.bootedSolvers = solvers;
+        this.context = new SpringPluginContext(spring, generators, solvers);
 
         for (PluginRegistry.Entry e : registry.sortedByDependencies()) {
+            // Attribution by diff. Every plugin shares one PluginContext and therefore one
+            // registry, so nothing in the register call itself records who made it. Snapshotting
+            // the id sets around a plugin's whole boot — not just registerAlgorithms, because a
+            // plugin may also register from start() — attributes exactly the ids that appeared
+            // while it was running. A plugin that registers later still holds the context and
+            // can, and those contributions are unattributable; they are left alone rather than
+            // guessed at.
+            Set<String> generatorsBefore = generators.ids();
+            Set<String> solversBefore = solvers.ids();
             // Track which lifecycle phase we're attempting so the failure event reports it
             // accurately. Updated immediately before each call.
             PluginFailedEvent.Phase phase = PluginFailedEvent.Phase.INIT;
@@ -136,7 +165,54 @@ public class PluginManager {
                 spring.publishEvent(new PluginFailedEvent(
                         this, e.manifest().id(), e.manifest().version(), phase, t));
             }
+            // Recorded even when the plugin failed part-way: a plugin that registered two
+            // algorithms and then threw in start() still put those two in the registry, and
+            // leaving them behind is exactly the leak this is here to stop.
+            recordContributions(e.manifest().id(), generatorsBefore, generators.ids(),
+                    contributedGenerators);
+            recordContributions(e.manifest().id(), solversBefore, solvers.ids(),
+                    contributedSolvers);
         }
+    }
+
+    private static void recordContributions(String pluginId, Set<String> before,
+                                            Set<String> after,
+                                            Map<String, Set<String>> into) {
+        Set<String> added = new LinkedHashSet<>(after);
+        added.removeAll(before);
+        if (!added.isEmpty()) {
+            into.computeIfAbsent(pluginId, k -> new LinkedHashSet<>()).addAll(added);
+        }
+    }
+
+    /**
+     * Undoes a plugin's registrations. Called from {@link #shutdownAll()} before the
+     * classloaders close, because after {@code close()} the algorithm objects are still live
+     * (already-loaded classes survive) and would keep answering from a stopped plugin.
+     */
+    private void unregisterContributions(String pluginId, GeneratorRegistry generators,
+                                         SolverRegistry solvers) {
+        for (String id : contributedGenerators.getOrDefault(pluginId, Set.of())) {
+            try {
+                generators.unregister(id);
+            } catch (RuntimeException ex) {
+                // A built-in refusal here would mean the diff attributed something it should
+                // not have. Log rather than abort: one bad attribution must not stop the rest
+                // of shutdown, and the refusal already protected the built-in.
+                log.warn("Could not unregister generator '{}' contributed by '{}': {}",
+                        id, pluginId, ex.toString());
+            }
+        }
+        for (String id : contributedSolvers.getOrDefault(pluginId, Set.of())) {
+            try {
+                solvers.unregister(id);
+            } catch (RuntimeException ex) {
+                log.warn("Could not unregister solver '{}' contributed by '{}': {}",
+                        id, pluginId, ex.toString());
+            }
+        }
+        contributedGenerators.remove(pluginId);
+        contributedSolvers.remove(pluginId);
     }
 
     public void shutdownAll() {
@@ -152,6 +228,15 @@ public class PluginManager {
                         PluginFailedEvent.Phase.STOP, t));
             }
         }
+        // Take the algorithms back out. Every entry, not only the STARTED ones: a plugin that
+        // registered and then failed in start() is not STARTED and its contributions are in the
+        // registry all the same.
+        if (bootedGenerators != null && bootedSolvers != null) {
+            for (PluginRegistry.Entry e : registry.all()) {
+                unregisterContributions(e.manifest().id(), bootedGenerators, bootedSolvers);
+            }
+        }
+
         // Close external classloaders to release JAR file handles (prevents leaks on reload/shutdown)
         for (URLClassLoader cl : externalLoaders) {
             try {

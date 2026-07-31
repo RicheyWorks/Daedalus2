@@ -21,6 +21,7 @@ by any test.
     python3 mutants/stompteeth.py # five ways to reopen the STOMP forgery hole
     python3 mutants/detteeth.py   # five ways to blind the cross-process determinism check
     python3 mutants/registryteeth.py # five ways to let a plugin become a built-in
+    python3 mutants/unloadteeth.py # five ways to leak or over-delete on plugin unload
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module
@@ -226,3 +227,20 @@ one of them silently missing at startup. The fix was to stop testing the current
 start testing the path: hand the constructor a deliberately duplicated list and require it to
 refuse. Same lesson as the unused `ALLOW_EMPTY_404` exemption, arriving from the opposite
 direction — there, permission that nothing exercised; here, a guard that nothing exercised.
+
+**Check that the mutation actually mutates.** One `unloadteeth.py` mutation reported SURVIVED and
+had proved nothing: it was meant to move the attribution snapshot from "around the whole plugin
+boot" to "around registerAlgorithms only", and what it actually did was re-read the same value at
+the same point — a no-op. A no-op mutation survives by definition, and reads in the log exactly
+like a genuine gap in the tests. The tell is that a survivor should always be *explicable*: if you
+cannot say in one sentence which assertion ought to have caught it and why it did not, suspect the
+mutation before the suite. Rewritten to insert the snapshot after `registerAlgorithms`, it was
+caught immediately.
+
+**Mutate in the direction the fix could overshoot.** The plugin-unload work adds a removal path,
+so the risk is not only "removes too little" but "removes too much" — a teardown that takes a
+built-in with it would be strictly worse than the leak it fixes. So `unloadteeth.py` drops the
+built-in refusal from `unregister` as its own mutation. Every leak-fixing assertion still passes
+under it, because nothing about removing the plugin's own algorithms changes; only the assertion
+that `recursive-backtracker` is still there afterwards goes red. Whenever a fix hands out a new
+capability, mutate away the limit on that capability, not just the capability itself.

@@ -12,7 +12,7 @@ everything below it, paste-ready. They are verbatim extractions of
 `docs/upstream-requests-loadbalancerpro.md` (ADR-001 action item 6). File them in order —
 issues 1 and 2 block integration outright; issue 3 carries the ADR-002 measurement.
 
-- [ ] Filed 1, 2, 3 — then mark ADR-001 item 6 `[x]` and note the issue numbers there.
+- [x] Filed 1, 2, 3 on 2026-07-31 → LoadBalancerPro #527, #528, #529; ADR-001 item 6 marked `[x]` with the numbers.
 
 ## 2. Re-triage the open Dependabot PRs
 
@@ -25,7 +25,7 @@ gh auth status                                   # make sure gh is logged in
 The dry run prints CLOSE/KEEP per PR with the reason. KEEP rows (JavaFX, resilience4j,
 springdoc, build plugins, actions/*) are yours to judge individually.
 
-- [ ] Triage run — then strike the item in BACKLOG.md.
+- [x] Triage run 2026-07-31 — closed #3/#4/#5/#8, kept #1/#2/#9/#10/#11; BACKLOG.md item struck.
 
 ## 3. Activate the Codecov upload (optional — CI already guards on it)
 

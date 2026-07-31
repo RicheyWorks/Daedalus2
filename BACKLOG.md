@@ -28,18 +28,21 @@ Last consolidated: 2026-05-07
   giving each a body surfaced them. One case deliberately stayed flat: `join` with multiplayer
   off must keep looking absent rather than disabled.
 
-- **Registrations outlive the plugin that made them.** Neither `GeneratorRegistry` nor
-  `SolverRegistry` has an unregister, so `PluginManager.shutdownAll()` closes the plugin's
-  `URLClassLoader` while the algorithms it contributed stay in the global maps. Already-loaded
-  classes keep working after `close()`, so a "stopped" plugin's generator is still listed by
+- ~~**Registrations outlive the plugin that made them.**~~ **Done 2026-07-31.** Neither `GeneratorRegistry` nor
+  `SolverRegistry` had an unregister, so `PluginManager.shutdownAll()` closed the plugin's
+  `URLClassLoader` while the algorithms it contributed stayed in the global maps. Already-loaded
+  classes keep working after `close()`, so a "stopped" plugin's generator was still listed by
   `/api/v1/algorithms` and still callable — and on Windows the JAR cannot be replaced while those
   classes are reachable, which is the file-locking problem the classloader hygiene work was
   supposed to have solved.
 
-  Found alongside the id-collision fix (2026-07-31) and deliberately left: the repair needs the
-  registries to track which plugin contributed what, plus a removal path that cannot be used to
-  unregister a built-in, and that is a design decision rather than a patch. The collision guard
-  narrows the blast radius in the meantime — a plugin can no longer replace anything, only add.
+  Fixed the same day. Both registries gained `unregister(id)` that refuses built-ins, and
+  `PluginManager` attributes contributions by diffing the registry's id set across each plugin's
+  whole boot — which needs no change to the SPI plugin authors compile against, and is honest
+  that a plugin registering later from its own thread is unattributable. Every entry is unloaded,
+  not only the `STARTED` ones, because a plugin that registered and then threw in `start()` has
+  contributions in the registry and no `STARTED` state. `PluginUnloadTest`; teeth in
+  `mutants/unloadteeth.py`.
 
 - ~~**Per-key rate-limiter bucket eviction.**~~ **Done 2026-07-19.** Buckets now
   live in a Caffeine cache bounded by `daedalus.ratelimit.max-keys` (default
@@ -56,10 +59,14 @@ Last consolidated: 2026-05-07
   configure different refresh periods. `PerKeyRateLimitEvictionTest` pins both
   directions, driving a fake `Ticker` so the assertions are exact rather than
   slept for.
-- **Re-triage the open Dependabot PRs against Boot 4.** The parent bump to
-  `spring-boot-starter-parent` 4.1.0 re-pins most managed dependency versions,
-  so any open PR bumping a Boot-managed 3.x artifact is now either obsolete or
-  actively conflicting. Close the superseded ones rather than merging them.
+- ~~**Re-triage the open Dependabot PRs against Boot 4.**~~ **Done 2026-07-31.** Closed #3
+  (slf4j-api), #4 (spring-context), #5 (assertj-core) — all re-pinned by the Boot 4.1 parent —
+  and #8, the parent bump itself, long since applied by hand. Kept for individual judgment:
+  #1/#2 (actions bumps, low risk), #10 (Checkstyle 10→13, three majors, expect new rule
+  violations), #11 (jacoco/checkstyle/spotbugs build plugins — merge after a local
+  `mvn verify`). #9 (JavaFX 26) closed the same day once verified: it is compiled
+  `--release 24` and needs JDK 24+, and the project pins `java.version` 21 — revisit when
+  the JDK baseline moves. Original triage notes kept below for the record.
 
   *2026-07-29: fully scripted —* `docs/handoff/triage-dependabot.ps1` *(dry-run by
   default,* `-Close` *to execute); see* `docs/handoff/README.md` *for the whole

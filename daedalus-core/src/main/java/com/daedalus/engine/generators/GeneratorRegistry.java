@@ -21,8 +21,15 @@ public class GeneratorRegistry {
 
     private final Map<String, MazeGenerator> generators = new ConcurrentHashMap<>();
 
+    /** Ids present after construction. Permanent — {@link #unregister} refuses these. */
+    private final Set<String> builtInIds;
+
     public GeneratorRegistry(List<MazeGenerator> builtIn) {
         builtIn.forEach(this::register);
+        // Snapshotted after the built-ins register and never added to again: this is the set
+        // generator ids that {@link #unregister} must refuse, so a plugin unload can never take
+        // a shipped algorithm with it.
+        this.builtInIds = Set.copyOf(generators.keySet());
     }
 
     /**
@@ -42,6 +49,39 @@ public class GeneratorRegistry {
             throw new com.daedalus.engine.DuplicateAlgorithmException(
                     "generator", gen.id(), incumbent.getClass(), gen.getClass());
         }
+    }
+
+    /**
+     * Removes a generator contributed by a plugin. Built-ins are refused.
+     *
+     * <p>Added 2026-07-31 with the plugin-unload fix. Until then neither registry had any
+     * removal path at all, so {@code PluginManager.shutdownAll()} closed a plugin's
+     * {@code URLClassLoader} while the algorithms it contributed stayed in this map — a
+     * "stopped" plugin's generator remained listed by {@code /api/v1/algorithms} and remained
+     * callable, because closing a loader does not unload classes already loaded from it.
+     *
+     * <p>The refusal for built-ins is the whole reason this is not a plain {@code remove}.
+     * A removal path reachable from plugin teardown is a removal path a buggy or hostile
+     * teardown can point at {@code "recursive-backtracker"}, which would undo the collision
+     * guard from the other direction: a plugin that cannot replace a built-in could otherwise
+     * simply delete it.
+     *
+     * @param id the generator id to remove
+     * @return {@code true} if something was removed
+     * @throws IllegalArgumentException if {@code id} names a built-in
+     */
+    public boolean unregister(String id) {
+        if (builtInIds.contains(id)) {
+            throw new IllegalArgumentException(
+                    "'" + id + "' is a built-in generator and cannot be unregistered. Only "
+                            + "plugin-contributed algorithms can be removed.");
+        }
+        return generators.remove(id) != null;
+    }
+
+    /** Every registered id, for callers that need to diff the registry across an operation. */
+    public Set<String> ids() {
+        return Set.copyOf(generators.keySet());
     }
 
     public Optional<MazeGenerator> find(String id) {

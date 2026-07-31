@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * One playable session of a maze. Mutable — player position changes as the game progresses.
@@ -33,9 +34,18 @@ public class GameSession {
     private final java.util.List<TimedMove> trail =
             java.util.Collections.synchronizedList(new java.util.ArrayList<>());
     private Point currentPosition;
-    private long moveCount;
-    private long score;
-    private boolean completed;
+    /*
+     * Writes to the three fields below are serialized by GameSessionService's per-session
+     * lock; the concurrency here is for the un-locked readers this class promises never see
+     * corruption (the same contract that makes {@link #players} a ConcurrentMap). Without it
+     * a reader can see a torn 64-bit long or a stale completed flag. moveCount is an
+     * AtomicLong rather than volatile because ++ is a read-modify-write, which would silently
+     * start racing if the service lock ever stopped covering every writer. The SpotBugs
+     * 4.10+ AT_ and VO_ detector gates fail the build if any of this regresses.
+     */
+    private final AtomicLong moveCount = new AtomicLong();
+    private volatile long score;
+    private volatile boolean completed;
     private final Instant startedAt;
     private Instant completedAt;
 
@@ -82,7 +92,7 @@ public class GameSession {
                         java.time.Duration.between(startedAt, Instant.now()).toMillis()));
             }
         }
-        this.moveCount++;
+        this.moveCount.incrementAndGet();
     }
 
     /** Snapshot of the opening player's timed trail — the ghost recording. */
@@ -117,7 +127,7 @@ public class GameSession {
     /** Snapshot of every player's position, opening player included. */
     public Map<String, Point> players() { return Map.copyOf(players); }
     public Point currentPosition() { return currentPosition; }
-    public long moveCount() { return moveCount; }
+    public long moveCount() { return moveCount.get(); }
     public long score() { return score; }
     public boolean completed() { return completed; }
     public Instant startedAt() { return startedAt; }

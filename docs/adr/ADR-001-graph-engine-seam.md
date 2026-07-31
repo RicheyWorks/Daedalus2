@@ -1,8 +1,7 @@
 # ADR-001: Make Daedalus a Graph Engine, Not a Maze Engine
 
-**Status:** Accepted — implemented (items 1–5 and 7 done with measurements recorded inline;
-item 6's remaining step is pasting the prepared issue text into the LoadBalancerPro tracker,
-a GitHub-side action)
+**Status:** Accepted — implemented (all items done; measurements recorded inline. Item 6's
+issues filed 2026-07-31 as LoadBalancerPro #527/#528/#529)
 **Date:** 2026-07-19
 **Deciders:** Richmond (RicheyWorks)
 **Consumers in scope:** CSRBT, LoadBalancerPro, future embedders
@@ -354,8 +353,11 @@ valuable, and unblocked — that is where the first release should land.
        corner-to-corner at 32², 396 dead ends), which invalidates the "generate a Hilbert
        topology and route across it" advice in both vision documents unless the output is
        braided first.
-6. [~] Raise **three** requests against LoadBalancerPro (was two; the third came out of
-       item 7's measurements):
+6. [x] Raise **three** requests against LoadBalancerPro (was two; the third came out of
+       item 7's measurements) — **filed 2026-07-31** as LoadBalancerPro
+       [#527](https://github.com/RicheyWorks/LoadBalancerPro/issues/527),
+       [#528](https://github.com/RicheyWorks/LoadBalancerPro/issues/528) and
+       [#529](https://github.com/RicheyWorks/LoadBalancerPro/issues/529), in that order:
        1. Open `RoutingStrategyId` — it is a closed enum
           (`TAIL_LATENCY_POWER_OF_TWO`, `WEIGHTED_LEAST_LOAD`, `WEIGHTED_LEAST_CONNECTIONS`,
           `WEIGHTED_ROUND_ROBIN`, `ROUND_ROBIN`), so no external project can contribute a
@@ -376,7 +378,7 @@ valuable, and unblocked — that is where the first release should land.
        caveat that Daedalus is **not** asking for the policy that evaluation rejected — only for
        the architectural ceiling to be removed.
 
-       Still to do: paste them into the LoadBalancerPro tracker.
+       Filed verbatim from the handoff extractions on 2026-07-31; nothing remains here.
 7. [x] Evaluate CSRBT `RankedSet` behind `TailLatencyPowerOfTwoStrategy` — done 2026-07-19,
        **declined**. Full write-up in
        [ADR-002](ADR-002-csrbt-rankedset-for-routing.md); measured with the real classes

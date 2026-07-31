@@ -111,6 +111,52 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **`GameSession`'s unlocked readers could see torn or stale values.** The class promises that
+  un-locked readers (health details, spectator views) "never see corruption" — that promise is
+  why `players` is a `ConcurrentHashMap` — but `moveCount`, `score` and `completed` were plain
+  fields, so a reader off the service lock could observe a torn 64-bit `long` or a stale
+  completion flag. `score` and `completed` are now `volatile`; `moveCount` is an `AtomicLong`
+  rather than volatile because `++` is a read-modify-write that would silently start racing if
+  `GameSessionService`'s per-session lock ever stopped covering every writer.
+
+  Found by dry-running Dependabot #11 before merging it: SpotBugs 4.10's new `AT_*` atomicity
+  detectors flagged all three (and `VO_VOLATILE_INCREMENT` then rejected the lazy
+  volatile-only fix for the counter — the tool was right twice). The detectors are the
+  regression teeth: once #11 lands, dropping any of this fails `spotbugs:check`. Verified
+  off-mount with the full reactor green under checkstyle 13.8.0, jacoco 0.8.15 and
+  spotbugs-maven-plugin 4.10.3.0.
+
+- **A stopped plugin's algorithms kept working.** `shutdownAll()` called `stop()` on each plugin
+  and closed its `URLClassLoader` — and neither registry had any removal path, so everything the
+  plugin had contributed stayed in the global maps. Closing a loader does not unload classes
+  already loaded from it, so those objects were perfectly alive: a "stopped" plugin's generator
+  was still listed by `/api/v1/algorithms`, still resolvable, and still able to serve a request.
+  On Windows the JAR also stays locked while its classes are reachable, which is the file-handle
+  problem the classloader hygiene work was supposed to have solved.
+
+  Both registries now have `unregister(id)`, and it **refuses built-ins**. That refusal is the
+  point rather than a detail: a removal path reachable from plugin teardown is a removal path a
+  buggy teardown can aim at `recursive-backtracker`, which would undo the collision guard from
+  the opposite direction — a plugin that cannot *replace* a shipped algorithm could otherwise
+  simply delete one. A fix for a leak that deletes built-ins on shutdown is worse than the leak.
+
+  Attribution was the awkward part. Every plugin shares one `PluginContext` and therefore one
+  registry, and `register` takes only the algorithm, so nothing records who contributed what.
+  `PluginManager` now diffs the registry's id set across each plugin's whole boot — not just
+  `registerAlgorithms`, because a plugin can register from `start()` too — and unregisters
+  exactly those ids on shutdown. It is honest about its limit: a plugin that registers later,
+  from a thread it started, is unattributable and is left alone rather than guessed at. This
+  needs no change to the SPI plugin authors compile against.
+
+  Unloading covers **every** entry, not only the `STARTED` ones. A plugin that registered two
+  algorithms and then threw in `start()` never reaches `STARTED`, and its contributions are in
+  the registry all the same — an unload keyed on state would have leaked precisely the failure
+  case while handling the healthy one.
+
+  The coverage ratchet earned its keep here: the first version of the test registered only
+  generators, and the floor dropped 1 point because the entire solver branch of the unload was
+  dead code as far as the suite was concerned. Teeth in `mutants/unloadteeth.py`.
+
 - **A plugin could silently become a built-in algorithm.** `PluginContext` hands every plugin the
   live `GeneratorRegistry` and `SolverRegistry`, and `register` was a bare `map.put` — so any
   third-party JAR dropped in the plugins directory could declare
