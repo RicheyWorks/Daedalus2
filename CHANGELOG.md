@@ -32,6 +32,38 @@ under the `_migration/` portfolios.
   third of their cells on dead ends), and the original label bands put nearly every maze this
   project generates into "hard" or "brutal".
 
+### Fixed
+
+- **`application.yml` documented a maze cache that did not exist.** A post-ADR-007 configuration
+  audit found the file declaring `daedalus.cache.maze-cache-size: 256` and
+  `maze-cache-ttl-minutes: 30`, while `MazeGenerationService` reads `daedalus.maze.cache.max-size`
+  and `daedalus.maze.cache.idle-ttl` — different keys entirely. The real cache therefore held
+  **5,000 mazes for two hours** against the 256-for-30-minutes the file advertised, a twentyfold
+  difference in footprint, and an operator tuning the documented knob changed nothing at all.
+  Undocumented configuration is a nuisance; configuration that is documented and inert is worse,
+  because the value looks deliberate and survives review. Behaviour is unchanged — the defaults
+  were always the live ones — but the file now describes reality and the knob works.
+- **Five config blocks the code reads were missing from `application.yml` entirely** — the play
+  session store, the leaderboard cap, the distance-field/lens payload cap, and the tournament's
+  four bounds. All are now documented alongside the rest, with the environment overrides the
+  other blocks use.
+
+### Added
+
+- **`ConfigCoverageTest` — the durable fix, checked in both directions.** It scans the server's
+  sources for `${daedalus.*}` references and cross-references them against `application.yml`,
+  failing the build on a key the code reads and the file omits *or* a key the file declares and
+  nothing reads. Keys bound wholesale by `@ConfigurationProperties` are exempted by prefix rather
+  than by name, and a third test pins that the exemption stays narrow — a single prefix of
+  `daedalus` would silently forgive the entire tree.
+- **`BoundedStoresTest` now scans for caches rather than naming three.** The audit counted
+  **nine** Caffeine caches in the server against three named eviction tests. All nine declared a
+  `maximumSize`, so the "bounded everywhere" rule held — but it held because everyone remembered,
+  which is a run of luck rather than a property. The new test walks the sources and fails on any
+  `Caffeine.newBuilder()` without a `maximumSize`, so a tenth cache is covered the moment it
+  exists. Same reasoning as the registry-driven generator fuzz: a hand-written roster is correct
+  the day it is written and quietly incomplete afterwards.
+
 ### Added
 
 - **Heuristic lens (ADR-007 idea 8) — completing the roadmap, and not the way it was written.**

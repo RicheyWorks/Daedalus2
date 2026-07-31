@@ -40,8 +40,8 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   the search's real recorded expansion order (observation via the `Graph`
   seam, never simulation); the web UI animates it and can race all ten
   solvers on one maze in a compare table with per-route previews.
-- **Verified** — `mvn clean verify` passes **582 tests** across the five
-  modules (core 316, server 235, plugin-runtime 20, plugin-api 7, desktop 4)
+- **Verified** — `mvn clean verify` passes **586 tests** across the five
+  modules (core 316, server 239, plugin-runtime 20, plugin-api 7, desktop 4)
   with zero Checkstyle violations, zero SpotBugs findings, and a per-module
   JaCoCo coverage ratchet that fails the build on regression.
   [`CHANGELOG.md`](./CHANGELOG.md) records what changed and, where a decision
@@ -238,8 +238,8 @@ mvn clean verify              # all five modules
 mvn -pl daedalus-server test  # one module
 ```
 
-Test inventory — **582 tests across 117 files, all green** (316 core, 7 plugin-api, 20
-plugin-runtime, 235 server, 4 desktop) as of 2026-07-30:
+Test inventory — **586 tests across 118 files, all green** (316 core, 7 plugin-api, 20
+plugin-runtime, 239 server, 4 desktop) as of 2026-07-30:
 
 | Module | Highlights |
 |---|---|

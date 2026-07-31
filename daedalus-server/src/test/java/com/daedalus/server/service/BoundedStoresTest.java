@@ -51,6 +51,50 @@ class BoundedStoresTest {
         return survivors;
     }
 
+    /**
+     * The three tests below prove eviction for three named stores. This one asks the harder
+     * question: are there stores nobody wrote a test for?
+     *
+     * <p>Measured during the post-ADR-007 audit, there are <b>nine</b> Caffeine caches in the
+     * server and three named eviction tests. All nine turned out to declare a
+     * {@code maximumSize} — the rule held — but it held by everyone remembering, which is not a
+     * property, it is a run of luck. This scans the source instead, so a tenth cache added next
+     * month is covered the moment it exists rather than the moment someone thinks to add a test.
+     * The same reason {@code GeneratorInvariantFuzzTest} is driven by the registry and
+     * {@code ConfigCoverageTest} is driven by the yml.
+     */
+    @Test
+    void everyCaffeineCacheInTheServerDeclaresAMaximumSize() throws Exception {
+        java.nio.file.Path root = java.nio.file.Path.of("src/main/java");
+        assertThat(java.nio.file.Files.isDirectory(root))
+                .as("expected to run from the daedalus-server module directory").isTrue();
+
+        List<String> unbounded = new ArrayList<>();
+        int caches = 0;
+        try (var files = java.nio.file.Files.walk(root)) {
+            for (java.nio.file.Path file : files
+                    .filter(f -> f.toString().endsWith(".java")).toList()) {
+                String text = java.nio.file.Files.readString(file);
+                int at = text.indexOf("Caffeine.newBuilder");
+                while (at >= 0) {
+                    caches++;
+                    int end = text.indexOf(';', at);
+                    String statement = end < 0 ? text.substring(at) : text.substring(at, end);
+                    if (!statement.contains(".maximumSize(")) {
+                        unbounded.add(file.getFileName() + ": " + statement.replaceAll("\\s+", " "));
+                    }
+                    at = text.indexOf("Caffeine.newBuilder", at + 1);
+                }
+            }
+        }
+
+        assertThat(caches).as("the scanner found no caches at all, so it is broken")
+                .isGreaterThanOrEqualTo(8);
+        assertThat(unbounded)
+                .as("an unbounded Caffeine cache is a slow leak with a friendly API: %s", unbounded)
+                .isEmpty();
+    }
+
     @Test
     void mazeCacheEvictsPastItsBound() throws Exception {
         GeneratorRegistry registry = new GeneratorRegistry(List.of(new BinaryTreeGenerator()));

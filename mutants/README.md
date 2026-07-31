@@ -11,6 +11,7 @@ by any test.
     python3 mutants/idateeth.py   # four breaks aimed at IDA*'s node budget
     python3 mutants/tourteeth.py  # eight breaks aimed at the tournament + its statistics
     python3 mutants/lensteeth.py  # seven breaks aimed at the heuristic lens
+    python3 mutants/auditteeth.py # three breaks aimed at the config + cache audits
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module
@@ -64,3 +65,10 @@ is zero for any admissible heuristic, and the test asserted zero. A mutation tha
 incremented the counter survived, because zero was the only answer the test could ever see. The
 fix was to add a deliberately inadmissible heuristic so the counter has a case that must fire —
 the test gained teeth and the product gained a demonstration of why admissibility matters.
+
+**Tests that assert an absence need teeth most of all.** `ConfigCoverageTest` claims there are no
+undocumented config keys and no dead ones; the cache scan claims there are no unbounded Caffeine
+caches. Both pass trivially if the scanner silently finds nothing, so `auditteeth.py` puts the
+original defects back — the dead `daedalus.cache.maze-cache-size` block, a mistyped key, an
+unbounded cache — and confirms each is caught. Each scanner also asserts a non-zero find count on
+its own, so a broken walk fails loudly instead of reporting a clean sweep.

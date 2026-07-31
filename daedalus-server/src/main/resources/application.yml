@@ -39,9 +39,17 @@ daedalus:
   plugins:
     directory: ${DAEDALUS_PLUGIN_DIR:${user.home}/.daedalus/plugins}
     scan-on-startup: true
-  cache:
-    maze-cache-size: 256
-    maze-cache-ttl-minutes: 30
+  # ----- Maze cache -----
+  # These two keys used to read `cache.maze-cache-size: 256` and `maze-cache-ttl-minutes: 30`,
+  # which nothing bound: MazeGenerationService reads daedalus.maze.cache.*, so the real cache
+  # held 5000 mazes for 2h while this file advertised 256 for 30m. An operator tuning the
+  # documented knob changed nothing. ConfigCoverageTest now fails the build on either half of
+  # that mistake — a key the code reads and this file omits, or a key this file declares and
+  # nothing reads.
+  maze:
+    cache:
+      max-size: ${DAEDALUS_MAZE_CACHE_MAX:5000}
+      idle-ttl: ${DAEDALUS_MAZE_CACHE_TTL:2h}
   security:
     # JWT signing key. Required in every profile because AuthController is registered
     # everywhere (so dev and desktop builds can issue tokens for testing too). The default
@@ -128,6 +136,35 @@ daedalus:
     count: ${DAEDALUS_WAYPOINT_COUNT:5}
     max-tours: ${DAEDALUS_WAYPOINT_MAX_TOURS:500}
     idle-ttl: ${DAEDALUS_WAYPOINT_IDLE_TTL:2h}
+  # ----- Play sessions -----
+  # Bounded store of open sessions; idle ones are evicted rather than held for the process
+  # lifetime. `multiplayer` is deliberately not listed here — it is an opt-in flag set per
+  # profile, and ConfigCoverageTest records that exemption explicitly.
+  session:
+    max-sessions: ${DAEDALUS_SESSION_MAX:10000}
+    idle-ttl: ${DAEDALUS_SESSION_IDLE_TTL:2h}
+  # ----- Leaderboard -----
+  # Entries retained per board (global, per-generator, per-maze, per-stage). Applies to both
+  # backends: the in-memory one trims on write, and the Redis one trims the sorted set.
+  leaderboard:
+    max-entries: ${DAEDALUS_LEADERBOARD_MAX:100}
+  # ----- Distance field / sanctuaries / heuristic lens (ADR-007 ideas 5, 6 and 8) -----
+  # A payload bound, not an algorithmic one: the breadth-first sweeps behind these overlays are
+  # linear and happy at 512x512, but that maze is 262,144 integers — about 1.5 MB of JSON for
+  # one overlay. Larger grids are refused with a 400 that explains itself rather than being
+  # silently downsampled. The heuristic lens shares this cap deliberately; it ships the same
+  # shape of per-cell grid.
+  topography:
+    max-field-cells: ${DAEDALUS_TOPOGRAPHY_MAX_FIELD_CELLS:16384}
+  # ----- Solver tournament (ADR-007 ideas 10 and 7) -----
+  # One request runs `mazes` generations and up to `mazes` x solvers searches, so both are
+  # capped and results are cached per request shape. A solver that spends its node budget is
+  # dropped after three refusals rather than costing a second per maze for the whole sample.
+  tournament:
+    max-mazes: ${DAEDALUS_TOURNAMENT_MAX_MAZES:24}
+    max-size: ${DAEDALUS_TOURNAMENT_MAX_SIZE:41}
+    max-cached: ${DAEDALUS_TOURNAMENT_MAX_CACHED:100}
+    idle-ttl: ${DAEDALUS_TOURNAMENT_IDLE_TTL:6h}
   # ----- Ghost runs (ADR-006 idea #8) -----
   # The best completed run per maze, replayed as a translucent racer. One recording per
   # maze, trail length capped in the model (GameSession.MAX_TRAIL).
