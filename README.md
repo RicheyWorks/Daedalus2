@@ -43,7 +43,10 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
 - **Verified** — `mvn clean verify` passes **595 tests** across the five
   modules (core 316, server 242, plugin-runtime 20, plugin-api 7, desktop 10)
   with zero Checkstyle violations, zero SpotBugs findings, and a per-module
-  JaCoCo coverage ratchet that fails the build on regression.
+  JaCoCo coverage ratchet that fails the build in **both** directions — on a
+  regression below the floor, and on the floor going more than 3 points stale
+  as coverage rises (audited 2026-07-31: the server had drifted 12 points, so
+  the one-sided version was a floor rather than a ratchet).
   [`CHANGELOG.md`](./CHANGELOG.md) records what changed and, where a decision
   was measured rather than assumed, the numbers behind it;
   [`TESTING.md`](./TESTING.md) is the strategy those tests follow.

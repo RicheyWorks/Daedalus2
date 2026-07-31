@@ -34,6 +34,30 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **The coverage ratchet had stopped ratcheting.** `jacoco:check` enforced a floor and nothing
+  else, so it caught regressions and never noticed the floors going stale as coverage climbed.
+  Audited across all five modules:
+
+  | module | floor was | actual | slack |
+  |---|---|---|---|
+  | daedalus-server | 0.79 | 0.910 | **+12.0 pts** |
+  | daedalus-plugin-api | 0.00 | 0.130 | no guard at all |
+  | daedalus-desktop | 0.00 | 0.105 | no guard at all |
+  | daedalus-core | 0.87 | 0.901 | +3.1 pts |
+  | daedalus-plugin-runtime | 0.84 | 0.870 | +3.0 pts |
+
+  Server coverage could have fallen by a ninth of the codebase before the build objected, and the
+  README's claim of "a per-module JaCoCo coverage ratchet that fails the build on regression" was
+  only meaningfully true for two of five modules. `TESTING.md` had prescribed exactly the right
+  policy — pin each module a few points under actual, "raising it as coverage rises" — and, like
+  most conventions that rely on someone remembering, it was not followed.
+  The rule now carries a **maximum** alongside the minimum: drift more than 3 points above the
+  floor and the build fails asking for the bump, which makes the ratchet mechanical rather than
+  aspirational. Floors raised to 0.90 (server), 0.89 (core), 0.85 (plugin-runtime), and real
+  non-zero floors set for the two modules that had none. The cost is honest: improving coverage
+  now occasionally means a one-line pom edit, paid by the person who improved it rather than by
+  whoever regresses it six months later. Both directions proven by `mutants/ratchetteeth.py` —
+  set the floor above actual and the minimum fires, leave it 12 points stale and the maximum does.
 - **The JavaFX desktop froze for up to 1.8 seconds per click, on an assumption that used to be
   true.** `MainController` ran generation and solve inline on the JavaFX Application Thread, and
   said so in a Javadoc that also named its own trigger for change: *"fast enough at the

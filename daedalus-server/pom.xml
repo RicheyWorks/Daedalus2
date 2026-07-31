@@ -24,7 +24,8 @@
         <!-- Coverage ratchet: measured 82.2% instruction on 2026-07-29 (up from 70.3% at
              pinning — the UI-sprint and audit tests); re-pinned ~3 below. Raise as coverage
              rises; never lower to make a PR pass. -->
-        <jacoco.check.minimum>0.79</jacoco.check.minimum>
+        <jacoco.check.minimum>0.90</jacoco.check.minimum>
+        <jacoco.check.ceiling>0.93</jacoco.check.ceiling>
     </properties>
 
     <dependencies>

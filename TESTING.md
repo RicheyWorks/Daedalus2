@@ -107,11 +107,34 @@ void everyConcreteGeneratorInThePackageIsOnTheRoster() throws Exception {
 
 Apply the same pattern to the solver roster (replacing the `hasSize(10)` bump-me). A ~15-line `classesInPackage` helper over `ClassLoader.getResources` needs no new dependency. Exclusions stay possible — they just become visible code instead of invisible absence.
 
-### P2 — Coverage is reported but never enforced
+### ~~P2 — Coverage is reported but never enforced~~ — DONE, then audited again
 
-JaCoCo runs `prepare-agent` + `report`; the only consumer is the badge. Nothing fails a build on a coverage regression, so a PR that deletes tests (or adds a large untested class) passes CI with a quietly shrinking badge.
+The `jacoco:check` execution landed as prescribed: per-module floors pinned a few points under
+measured coverage, "raising it as coverage rises".
 
-**Fix:** add a `jacoco:check` execution with per-module ratchet thresholds. Don't invent numbers — run `mvn verify`, read the current per-module instruction coverage from the reports, and pin each module 2–3 points below its actual value (the ratchet), raising it as coverage rises. Suggested scope: enforce on daedalus-core, daedalus-plugin-runtime, and daedalus-server; explicitly exempt daedalus-desktop (see P3 policy) and daedalus-plugin-api (interfaces/events). Add exclusions for `api/dto/**` and `model/**` records if they drag the number without meaning.
+**Nobody raised it as coverage rose.** Audited 2026-07-31, after two roadmaps' worth of tests:
+
+| module | floor was | actual | slack |
+|---|---|---|---|
+| daedalus-server | 0.79 | 0.910 | **+12.0 pts** |
+| daedalus-plugin-api | 0.00 | 0.130 | no guard at all |
+| daedalus-desktop | 0.00 | 0.105 | no guard at all |
+| daedalus-core | 0.87 | 0.901 | +3.1 pts |
+| daedalus-plugin-runtime | 0.84 | 0.870 | +3.0 pts |
+
+Server coverage could have fallen by a ninth of the codebase before the build said a word. The
+instruction "raise it as coverage rises" was correct and, like most conventions that depend on
+someone remembering, it was not followed — which is the same failure the config and rate-limit
+audits found in their own areas.
+
+**Fix, applied:** the rule now carries a **maximum** as well as a minimum. Drift more than
+`jacoco.check.headroom` (3 points) above the floor and the build fails asking for the bump. That
+makes the ratchet mechanical instead of aspirational; the cost is that improving coverage
+occasionally means a one-line pom edit, paid by the person who improved it rather than by
+whoever regresses it later. Both directions are proven by `mutants/ratchetteeth.py`.
+
+Two modules were exempted at 0.00 on the reasoning below, and both now carry small real floors —
+see the P3 note, whose own trigger condition has since fired.
 
 ### P2 — Untested classes in the server and runtime
 
@@ -127,6 +150,21 @@ Sessions live in a `ConcurrentHashMap`, and the WebSocket layer makes concurrent
 
 Four test methods across launcher + theme manager. Recommended policy, worth a paragraph in the README or an ADR note rather than more tests: keep `daedalus-desktop` a thin JavaFX shell, push any logic that grows in `MainController` down into daedalus-core where the property tests live, and exclude the module from coverage enforcement. TestFX-style UI automation is not worth its flakiness for a single-developer desktop shell. The test-worthy signal to watch for: the first time a bug report is *in* desktop logic, that logic moves to core and gets tested there.
 
+**Update 2026-07-31 — the signal fired, and the prescription only half fitted.** The bug was in
+desktop logic: `MainController` ran generation and solve on the JavaFX Application Thread under a
+Javadoc assumption that had gone stale, freezing the window for up to 1.8 s per click (measured:
+hunt-and-kill 1101 ms at 128×128, IDA\* 1783 ms). The policy says move that logic to core — but it
+cannot go there. It depends on the server's services and on JavaFX's threading model, and
+`daedalus-core` has neither. So it moved as far as it usefully could: into `DesktopWork`, holding
+the work as plain `Callable`s that need no toolkit, leaving `MainController` with only the
+`Task` wrapper. Six tests, no TestFX.
+
+The rest of the policy stands — thin shell, no UI automation. What changes is the coverage
+exemption: a module with real logic in it should not sit at a 0.00 floor, so it now carries one
+just under its measured coverage, and the ratchet's ceiling will keep asking for more as the
+shell grows tests. Same for `daedalus-plugin-api`: "interfaces and events" was a fair reason for
+no *target*, but not for no *floor*, since a floor of zero cannot detect deletion.
+
 ## 3. What NOT to add
 
 - **More perfect-maze or square-grid fixtures.** The suite's whole immune system is built on hostile shapes; new tests should draw fixtures from the braided/awkward-shape helpers that already exist.
@@ -140,7 +178,7 @@ Four test methods across launcher + theme manager. Recommended policy, worth a p
 2. `WebSocketSmokeTest` (unblocks test-driving the STOMP authorization work that's already queued).
 3. Structural roster guards in `GeneratorConnectivityTest` and `SolverBraidedMazePropertyTest`.
 4. `PluginController` slice test + `SpringPluginContext` unit test.
-5. JaCoCo ratchet thresholds (after reading current numbers from a local `mvn verify`).
+5. ~~JaCoCo ratchet thresholds~~ — done, then re-audited: the floors had gone up to 12 points stale, so the rule gained a ceiling that fails the build when they do.
 6. GameSessionService concurrency test — only if inspection finds check-then-act; otherwise defer to the session-ownership work.
 
 Every new regression test in any of the above follows the house rule: replay it against the pre-fix code (or a deliberately broken variant) once, to prove it has teeth.

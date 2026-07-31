@@ -14,6 +14,7 @@ by any test.
     python3 mutants/auditteeth.py # three breaks aimed at the config + cache audits
     python3 mutants/rlteeth.py    # three breaks aimed at rate-limit coverage
     python3 mutants/deskteeth.py  # four breaks aimed at the desktop's background work
+    python3 mutants/ratchetteeth.py # both directions of the JaCoCo coverage ratchet
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module
@@ -81,3 +82,10 @@ was non-null, which says nothing about whether it had already done the work; the
 an error string contained "ida-star", which is true whether or not the wrapper exception was
 unwrapped, because `ExecutionException.getMessage()` is its cause's `toString()`. Both were
 rewritten to assert the thing that actually differs — an event count, and string equality.
+
+**A one-sided ratchet is a floor with good branding.** The JaCoCo gate enforced only a minimum,
+so it caught regressions and never noticed that the server had drifted to 91% coverage against a
+79% floor — twelve points of slack, accumulated by two roadmaps' worth of tests that nobody
+paired with a threshold bump. `ratchetteeth.py` proves both halves now bite: set the floor above
+actual and the minimum fires; leave the floor twelve points stale and the new maximum fires and
+asks for the bump.

@@ -43,6 +43,9 @@
              modules (desktop, plugin-api) set 0.00 explicitly so the exemption is visible
              code, not invisible absence. -->
         <jacoco.check.minimum>0.60</jacoco.check.minimum>
+        <!-- How far coverage may rise above the floor before the ratchet demands a bump. -->
+        <jacoco.check.headroom>0.03</jacoco.check.headroom>
+        <jacoco.check.ceiling>0.63</jacoco.check.ceiling>
         <checkstyle-plugin.version>3.5.0</checkstyle-plugin.version>
         <checkstyle.version>10.18.2</checkstyle.version>
         <spotbugs-plugin.version>4.8.6.4</spotbugs-plugin.version>
@@ -171,10 +174,35 @@
                                 <rule>
                                     <element>BUNDLE</element>
                                     <limits>
+                                        <!-- The floor: coverage may not regress below it. -->
                                         <limit>
                                             <counter>INSTRUCTION</counter>
                                             <value>COVEREDRATIO</value>
                                             <minimum>${jacoco.check.minimum}</minimum>
+                                        </limit>
+                                        <!-- The ceiling, which is what makes this an actual
+                                             ratchet rather than a floor someone set once.
+
+                                             Audited 2026-07-31: the server sat at 91% against a
+                                             79% floor, twelve points of slack, after gaining
+                                             ~100 tests across two roadmaps that nobody paired
+                                             with a threshold bump. Coverage could have fallen by
+                                             a ninth of the codebase before the build noticed,
+                                             which is not what "fails on regression" means. Two
+                                             other modules had the floor at 0.00 outright.
+
+                                             So: if coverage climbs more than
+                                             jacoco.check.headroom above the floor, the build
+                                             fails and asks you to raise the floor. Yes, that
+                                             means improving coverage occasionally costs a
+                                             one-line pom edit. That is the price of the number
+                                             meaning something, and it is paid by the person who
+                                             just improved it rather than by whoever regresses it
+                                             six months later. -->
+                                        <limit>
+                                            <counter>INSTRUCTION</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <maximum>${jacoco.check.ceiling}</maximum>
                                         </limit>
                                     </limits>
                                 </rule>
