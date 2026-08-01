@@ -205,12 +205,12 @@ public class ApiExceptionHandler {
     public ResponseEntity<ProblemDetail> onSolverBudget(
             com.daedalus.solver.SolverBudgetExceededException ex) {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(
-                HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
+                HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage());
         pd.setTitle("Solver gave up");
         pd.setType(URI.create("https://daedalus.dev/problems/solver-budget"));
         pd.setProperty("solver", ex.solverId());
         pd.setProperty("nodeBudget", ex.budget());
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
     }
 

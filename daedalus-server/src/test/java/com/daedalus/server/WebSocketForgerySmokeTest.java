@@ -83,7 +83,7 @@ class WebSocketForgerySmokeTest {
         // symptom of a broken broadcast channel, and a good way to spend twenty minutes
         // debugging the wrong layer.
         client.setMessageConverter(
-                new org.springframework.messaging.converter.MappingJackson2MessageConverter());
+                new org.springframework.messaging.converter.JacksonJsonMessageConverter());
         return client;
     }
 

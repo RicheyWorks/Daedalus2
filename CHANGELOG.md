@@ -109,22 +109,42 @@ under the `_migration/` portfolios.
   *shape* wherever they appear, because an exclusion list of field names cannot name an id
   hiding inside a URL.
 
+### Changed
+
+- **Off the Jackson 2 APIs Boot 4 marks for removal.** `MappingJackson2MessageConverter` →
+  `JacksonJsonMessageConverter` in the STOMP smoke test, and `HttpStatus.UNPROCESSABLE_ENTITY` →
+  `UNPROCESSABLE_CONTENT` (RFC 9110 renamed 422; the wire status is unchanged). With the Redis
+  serializer below, the reactor now compiles with **zero** deprecation warnings — which is worth
+  keeping at zero, because the one that mattered was invisible in a list of seven.
+
 ### Fixed
 
-- **`GameSession`'s unlocked readers could see torn or stale values.** The class promises that
-  un-locked readers (health details, spectator views) "never see corruption" — that promise is
-  why `players` is a `ConcurrentHashMap` — but `moveCount`, `score` and `completed` were plain
-  fields, so a reader off the service lock could observe a torn 64-bit `long` or a stale
-  completion flag. `score` and `completed` are now `volatile`; `moveCount` is an `AtomicLong`
-  rather than volatile because `++` is a read-modify-write that would silently start racing if
-  `GameSessionService`'s per-session lock ever stopped covering every writer.
+- **The Redis leaderboard backend wrote a format it could not read.** `RedisConfig` handed the
+  template a hand-built `ObjectMapper` with `activateDefaultTyping(validator, NON_FINAL)`, and the
+  two halves of that disagreed. Writing uses the value's runtime type, and `LeaderboardEntry` is a
+  `record` — **final** — so no type header was emitted. Reading targets `Object`, which is
+  non-final, so the deserializer demanded one. Every read threw `SerializationException`.
 
-  Found by dry-running Dependabot #11 before merging it: SpotBugs 4.10's new `AT_*` atomicity
-  detectors flagged all three (and `VO_VOLATILE_INCREMENT` then rejected the lazy
-  volatile-only fix for the counter — the tool was right twice). The detectors are the
-  regression teeth: once #11 lands, dropping any of this fails `spotbugs:check`. Verified
-  off-mount with the full reactor green under checkstyle 13.8.0, jacoco 0.8.15 and
-  spotbugs-maven-plugin 4.10.3.0.
+  The interesting part is how completely that hid. `LeaderboardService` catches read failures and
+  falls back to its in-memory set, so with `daedalus.redis.enabled=true` the boards still answered
+  — out of memory, one warn line per call — while every completed run kept appending unreadable
+  JSON to sorted sets that no code path could read back. Two of those three keys carry no TTL, so
+  the backend's only measurable effect was Redis growth. It looked like it worked and did nothing.
+
+  Fixed by moving to Spring Data's Jackson 3 `GenericJacksonJsonRedisSerializer` with default
+  typing enabled explicitly, which writes an `@class` property for every value regardless of
+  finality. Enabling it *requires* a `PolymorphicTypeValidator` — Jackson 3 removed the
+  laissez-faire default — and that requirement was worth having: the old configuration, asked to
+  read `["javax.naming.InitialContext",{}]`, constructed one. The replacement allows
+  `com.daedalus.*` and collections and refuses everything else.
+
+  Nothing caught this because the only Redis test asserted the beans **exist**. A serializer bean
+  that constructs is not a serializer that works, and the gap between those two claims was the
+  bug's entire hiding place — `RedisSerializationRoundTripTest` now closes it by round-tripping
+  through `RedisConfig`'s own factory method. Three of its four assertions fail against the old
+  configuration; the fourth is documented in the test as not having teeth, because `ArrayList`
+  is not final and therefore always did round-trip. That is the bug's shape in one line: it bit
+  exactly the final types, and a fixture stored in a list would have missed it.
 
 - **A stopped plugin's algorithms kept working.** `shutdownAll()` called `stop()` on each plugin
   and closed its `URLClassLoader` — and neither registry had any removal path, so everything the
