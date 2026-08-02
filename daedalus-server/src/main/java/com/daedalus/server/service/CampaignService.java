@@ -125,6 +125,17 @@ public class CampaignService {
         return stageCount;
     }
 
+    /**
+     * Cached plans — for tests and metrics, the same window {@code trackedCount} and
+     * {@code liveCount} open onto the tickers' maps. The bound this reports on is the house
+     * rule's, and it was unpinned until a mutation removed it and nothing failed: plans are
+     * cheap to recompute and identical every time, so an unbounded map here leaks quietly
+     * rather than breaking anything, which is precisely the shape that needs a test.
+     */
+    public int plannedCount() {
+        return plans.size();
+    }
+
     private boolean allStagesStillCached(Campaign c) {
         for (Stage s : c.stages()) {
             if (gen.find(s.mazeId()) == null) {
