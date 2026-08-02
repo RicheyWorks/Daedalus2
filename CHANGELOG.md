@@ -119,6 +119,29 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **The mutation harness could not run, and called broken builds catches.** Two defects in the
+  thing that verifies everything else. Sixteen of the nineteen scripts in `mutants/` hardcoded
+  `REPO = pathlib.Path("/root/daedalus-work/repo")`, a path belonging to the sandbox they were
+  authored in; every command `mutants/README.md` documents died on `FileNotFoundError` before
+  its first mutation. And the verdict logic — thirteen near-copies of it — read "Maven exited
+  non-zero" as "a test caught the mutation", which are different claims. A build that dies in
+  POM resolution, or compilation, or an OOM-killed fork, exits non-zero having run no tests at
+  all.
+
+  Both were found the same way: `retentionteeth.py`'s first run reported a confident **4/4
+  caught** while all four builds were failing before a single test executed. The five scripts
+  that did guard against this checked for the literal string `COMPILATION ERROR`, which none of
+  those failures print.
+
+  The rule is now in one place, `mutants/verdict.py`, and it is *no named failing test, no
+  catch*. Seventeen harnesses share it. Fixing the per-mutation verdicts turned out to be half
+  the job — the summary line counted anything not spelled `SURVIVED` as caught, so a run whose
+  every verdict read `NOT A CATCH` still printed "4/4 caught; survivors: none"; the tallies go
+  through `verdict.is_catch` now too. Verified in both directions: with a deliberately unusable
+  local repository the harness reports 0/4 and names all four as unresolved, and against the
+  real build it still reports 4/4 with the specific test that caught each mutation.
+  `rlteeth.py`, which could not start before this, now runs and catches 3/3.
+
 - **The Redis leaderboard sets grew forever.** Only the per-maze key carried a bound (a 48h
   TTL). The global and per-generator sorted sets gained a member on every completed run and lost
   one never. The constructor's javadoc called that keeping "full history", and the phrase was

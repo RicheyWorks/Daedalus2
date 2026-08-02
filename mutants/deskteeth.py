@@ -19,7 +19,8 @@ Usage:  python3 mutants/deskteeth.py
 """
 
 import pathlib, re, subprocess
-REPO = pathlib.Path("/root/daedalus-work/repo")
+import verdict as V
+REPO = pathlib.Path(__file__).resolve().parent.parent
 W = REPO / "daedalus-desktop/src/main/java/com/daedalus/desktop/ui/DesktopWork.java"
 MUT = [
  ("job runs eagerly at construction",
@@ -48,12 +49,12 @@ try:
                 "-Dcheckstyle.skip","-Dspotbugs.skip","-Djacoco.skip"],
                 cwd=REPO, capture_output=True, text=True, timeout=600)
             failed = sorted({m for m in re.findall(r"DesktopWorkTest\.(\w+)", p.stdout)})
-            v = "SURVIVED" if p.returncode==0 else "caught by " + ", ".join(failed[:2])
+            v = V.classify(p.returncode, p.stdout, failed)
         except subprocess.TimeoutExpired:
             v = "caught: timed out"
         finally:
             W.write_text(orig)
-        if v == "SURVIVED": survivors.append(name)
+        if not V.is_catch(v): survivors.append(name)
         print(f"{name:36s} -> {v}", flush=True)
 finally:
     W.write_text(orig); print("restored")

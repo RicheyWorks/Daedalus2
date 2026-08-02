@@ -2,7 +2,8 @@
 """The two new core tests exist so daedalus-core guards its own guarantees. Prove it:
 re-run the mutations that previously survived a core-only run."""
 import subprocess, pathlib
-REPO = pathlib.Path("/root/daedalus-work/repo")
+import verdict as V
+REPO = pathlib.Path(__file__).resolve().parent.parent
 CASES = [
     ("leaderboard-order",
      "daedalus-core/src/main/java/com/daedalus/model/LeaderboardEntry.java",
@@ -27,7 +28,8 @@ for name, rel, old, new in CASES:
                            "-Dcheckstyle.skip=true -Djacoco.skip=true 2>&1",
                            shell=True, cwd=REPO, capture_output=True, text=True, timeout=1200)
         out = r.stdout + r.stderr
-        caught = "BUILD SUCCESS" not in out
+        # A red reactor is only a catch if a test actually failed in it.
+        caught = V.is_catch(V.classify(0 if "BUILD SUCCESS" in out else 1, out))
         print(f"{'CAUGHT (core-only)' if caught else '*** STILL SURVIVES ***':26} {name}", flush=True)
         for line in out.splitlines():
             if "<<< FAILURE" in line:

@@ -18,7 +18,9 @@ the cap. Small, permanent, and invisible to any assertion phrased as "the set st
 
 REPO resolves from this file, so the harness runs wherever the checkout is.
 """
-import pathlib, re, subprocess
+import pathlib, subprocess
+
+import verdict as V
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 SVC = REPO / "daedalus-server/src/main/java/com/daedalus/server/service/LeaderboardService.java"
@@ -46,22 +48,9 @@ def run_once():
                         "-Dsurefire.failIfNoSpecifiedTests=false",
                         "-Dcheckstyle.skip", "-Dspotbugs.skip", "-Djacoco.skip"],
                        cwd=REPO, capture_output=True, text=True, timeout=1200)
-    failed = sorted({m for m in re.findall(
-        r"(?:LeaderboardRedisRetentionTest|LeaderboardPartitionTest)\.(\w+)", p.stdout)
-        if m not in ("java", "class", "lambda")})
-    if p.returncode == 0:
-        return "SURVIVED"
-    # A non-zero exit with no *named* test failure is not a catch, whatever went wrong. The
-    # first run of this harness reported 4/4 caught while every build was dying in POM
-    # resolution before a single test ran -- a green result meaning nothing at all. Checking
-    # only for "COMPILATION ERROR" (as the older harnesses here do) misses that, and misses
-    # every other setup failure: an unresolvable parent, a missing local repo, an OOM-killed
-    # fork. Treat "it went red somehow" as failure of the harness, never as evidence.
-    if not failed:
-        head = next((ln for ln in p.stdout.splitlines()
-                     if "ERROR" in ln and "Help" not in ln), "no diagnostic")
-        return "NOT A CATCH -- build failed before tests: " + head[:90]
-    return "caught by " + ", ".join(f[:44] for f in failed[:2])
+    failed = V.failing_tests(p.stdout, "LeaderboardRedisRetentionTest",
+                             "LeaderboardPartitionTest")
+    return V.classify(p.returncode, p.stdout, failed)
 
 
 originals = {p: p.read_text() for p in {m[0] for m in MUT}}
@@ -80,7 +69,7 @@ try:
             verdict = "timed out"
         finally:
             path.write_text(orig)
-        if verdict.startswith(("SURVIVED", "BROKEN")):
+        if not V.is_catch(verdict):
             survivors.append(name)
         print(f"{name:56s} -> {verdict}", flush=True)
 finally:

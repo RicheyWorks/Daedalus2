@@ -11,8 +11,9 @@ Mutation 3 runs the other way. It makes the multiplayer-off 404 *more* informati
 like an improvement and is a disclosure bug: the endpoint has to look absent, not disabled.
 """
 import pathlib, re, subprocess
+import verdict as V
 
-REPO = pathlib.Path("/root/daedalus-work/repo")
+REPO = pathlib.Path(__file__).resolve().parent.parent
 MZC = REPO / "daedalus-server/src/main/java/com/daedalus/server/controller/MazeController.java"
 INS = REPO / "daedalus-server/src/main/java/com/daedalus/server/controller/InsightController.java"
 RNF = REPO / "daedalus-server/src/main/java/com/daedalus/server/web/ResourceNotFoundException.java"
@@ -70,11 +71,7 @@ def run_once():
     failed = sorted({m for m in re.findall(r"(?:ErrorContractTest|ComplexityLabServiceTest)"
                                            r"\.(\w+)", p.stdout)
                      if m not in ("java", "class")})
-    if p.returncode == 0:
-        return "SURVIVED"
-    if not failed and "COMPILATION ERROR" in p.stdout:
-        return "BROKEN BUILD (not a catch)"
-    return "caught by " + ", ".join(failed[:2])
+    return V.classify(p.returncode, p.stdout, failed)
 
 
 ALL_FILES = {m[0] for m in MUT} | {m[0] for m in PAIRED}
@@ -94,7 +91,7 @@ try:
             verdict = "timed out"
         finally:
             path.write_text(orig)
-        if verdict.startswith(("SURVIVED", "BROKEN")):
+        if not V.is_catch(verdict):
             survivors.append(name)
         print(f"{name:56s} -> {verdict}", flush=True)
 
@@ -115,7 +112,7 @@ try:
         finally:
             for p, text in originals.items():
                 p.write_text(text)
-        if verdict.startswith(("SURVIVED", "BROKEN")):
+        if not V.is_catch(verdict):
             survivors.append(label)
         print(f"{label:56s} -> {verdict}", flush=True)
 finally:

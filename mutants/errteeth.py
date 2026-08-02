@@ -11,8 +11,9 @@ the test whose cases are derived from the controller sources rather than listed 
 mutation survives, the generated test is decorative and the roster is doing all the work.
 """
 import pathlib, re, subprocess
+import verdict as V
 
-REPO = pathlib.Path("/root/daedalus-work/repo")
+REPO = pathlib.Path(__file__).resolve().parent.parent
 HND = REPO / "daedalus-server/src/main/java/com/daedalus/server/web/ApiExceptionHandler.java"
 REG = REPO / "daedalus-core/src/main/java/com/daedalus/engine/generators/GeneratorRegistry.java"
 TST = REPO / "daedalus-server/src/test/java/com/daedalus/server/web/ErrorContractTest.java"
@@ -62,7 +63,7 @@ def run_once():
                        cwd=REPO, capture_output=True, text=True, timeout=1200)
     failed = sorted({m for m in re.findall(r"ErrorContractTest\.(\w+)", p.stdout)
                      if m not in ("java", "class")})
-    return "SURVIVED" if p.returncode == 0 else "caught by " + ", ".join(failed[:2])
+    return V.classify(p.returncode, p.stdout, failed)
 
 
 ALL_FILES = {m[0] for m in MUT} | {m[0] for m in PAIRED}
@@ -82,7 +83,7 @@ try:
             verdict = "timed out"
         finally:
             path.write_text(orig)
-        if verdict == "SURVIVED":
+        if not V.is_catch(verdict):
             survivors.append(name)
         print(f"{name:56s} -> {verdict}", flush=True)
 
@@ -102,7 +103,7 @@ try:
         finally:
             for p, text in originals.items():
                 p.write_text(text)
-        if verdict == "SURVIVED":
+        if not V.is_catch(verdict):
             survivors.append(label)
         print(f"{label:56s} -> {verdict}", flush=True)
 finally:

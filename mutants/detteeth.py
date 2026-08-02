@@ -10,8 +10,9 @@ The recorded file is the oracle, and it was written by a different JVM. That is 
 these mutations are checked against a comparison that genuinely crosses a process boundary.
 """
 import pathlib, re, subprocess
+import verdict as V
 
-REPO = pathlib.Path("/root/daedalus-work/repo")
+REPO = pathlib.Path(__file__).resolve().parent.parent
 TST = REPO / "daedalus-server/src/test/java/com/daedalus/server/DeterminismGoldenTest.java"
 GEN = REPO / "daedalus-core/src/main/java/com/daedalus/engine/generators/RecursiveBacktrackerGenerator.java"
 GOLD = REPO / "daedalus-server/src/test/resources/determinism-golden.json"
@@ -49,11 +50,7 @@ def run_once():
                        cwd=REPO, capture_output=True, text=True, timeout=1800)
     failed = sorted({m for m in re.findall(r"DeterminismGoldenTest\.(\w+)", p.stdout)
                      if m not in ("java", "class")})
-    if p.returncode == 0:
-        return "SURVIVED"
-    if not failed and "COMPILATION ERROR" in p.stdout:
-        return "BROKEN BUILD (not a catch)"
-    return "caught by " + ", ".join(f[:44] for f in failed[:2])
+    return V.classify(p.returncode, p.stdout, failed)
 
 
 originals = {p: p.read_text() for p in {m[0] for m in MUT}}
@@ -72,7 +69,7 @@ try:
             verdict = "timed out"
         finally:
             path.write_text(orig)
-        if verdict.startswith(("SURVIVED", "BROKEN")):
+        if not V.is_catch(verdict):
             survivors.append(name)
         print(f"{name:52s} -> {verdict}", flush=True)
 finally:

@@ -11,7 +11,8 @@ Usage:  python3 mutants/rlteeth.py
 """
 
 import pathlib, re, subprocess
-REPO = pathlib.Path("/root/daedalus-work/repo")
+import verdict as V
+REPO = pathlib.Path(__file__).resolve().parent.parent
 C = REPO / "daedalus-server/src/main/java/com/daedalus/server/controller/MazeController.java"
 Y = REPO / "daedalus-server/src/main/resources/application.yml"
 MUT = [
@@ -33,12 +34,12 @@ try:
                 "-Dcheckstyle.skip","-Dspotbugs.skip","-Djacoco.skip"],
                 cwd=REPO, capture_output=True, text=True, timeout=600)
             failed = sorted({m for m in re.findall(r"RateLimitCoverageTest\.(\w+)", p.stdout)})
-            v = "SURVIVED" if p.returncode==0 else "caught by " + ", ".join(failed[:2])
+            v = V.classify(p.returncode, p.stdout, failed)
         except subprocess.TimeoutExpired:
             v = "caught: timed out"
         finally:
             path.write_text(orig)
-        if v == "SURVIVED": survivors.append(name)
+        if not V.is_catch(v): survivors.append(name)
         print(f"{name:34s} -> {v}", flush=True)
 finally:
     for path, text in originals.items(): path.write_text(text)

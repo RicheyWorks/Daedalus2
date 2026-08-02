@@ -6,8 +6,9 @@ shape most at risk of being vacuous. So the mutations reintroduce the exact defe
 found, plus one that breaks the scanners themselves.
 """
 import pathlib, re, subprocess
+import verdict as V
 
-REPO = pathlib.Path("/root/daedalus-work/repo")
+REPO = pathlib.Path(__file__).resolve().parent.parent
 YML = REPO / "daedalus-server/src/main/resources/application.yml"
 SVC = REPO / "daedalus-server/src/main/java/com/daedalus/server/service/TournamentService.java"
 
@@ -40,12 +41,12 @@ try:
                                cwd=REPO, capture_output=True, text=True, timeout=600)
             failed = sorted({m for m in re.findall(
                 r"(?:ConfigCoverageTest|BoundedStoresTest)\.(\w+)", p.stdout)})
-            verdict = "SURVIVED" if p.returncode == 0 else "caught by " + ", ".join(failed[:2])
+            verdict = V.classify(p.returncode, p.stdout, failed)
         except subprocess.TimeoutExpired:
             verdict = "caught: timed out"
         finally:
             path.write_text(orig)
-        if verdict == "SURVIVED":
+        if not V.is_catch(verdict):
             survivors.append(name)
         print(f"{name:38s} -> {verdict}", flush=True)
 finally:

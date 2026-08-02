@@ -14,8 +14,9 @@ Mutation 1 is the important one: it keeps the throw and puts the corruption *bef
 that only asserts "an exception was raised" passes.
 """
 import pathlib, re, subprocess
+import verdict as V
 
-REPO = pathlib.Path("/root/daedalus-work/repo")
+REPO = pathlib.Path(__file__).resolve().parent.parent
 GEN = REPO / "daedalus-core/src/main/java/com/daedalus/engine/generators/GeneratorRegistry.java"
 SOL = REPO / "daedalus-core/src/main/java/com/daedalus/solver/solvers/SolverRegistry.java"
 EXC = REPO / "daedalus-core/src/main/java/com/daedalus/engine/DuplicateAlgorithmException.java"
@@ -48,11 +49,7 @@ def run_once():
                        cwd=REPO, capture_output=True, text=True, timeout=900)
     failed = sorted({m for m in re.findall(r"RegistryCollisionTest\.(\w+)", p.stdout)
                      if m not in ("java", "class", "lambda")})
-    if p.returncode == 0:
-        return "SURVIVED"
-    if not failed and "COMPILATION ERROR" in p.stdout:
-        return "BROKEN BUILD (not a catch)"
-    return "caught by " + ", ".join(f[:40] for f in failed[:2])
+    return V.classify(p.returncode, p.stdout, failed)
 
 
 originals = {p: p.read_text() for p in {m[0] for m in MUT}}
@@ -71,7 +68,7 @@ try:
             verdict = "timed out"
         finally:
             path.write_text(orig)
-        if verdict.startswith(("SURVIVED", "BROKEN")):
+        if not V.is_catch(verdict):
             survivors.append(name)
         print(f"{name:52s} -> {verdict}", flush=True)
 finally:

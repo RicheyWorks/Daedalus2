@@ -12,8 +12,9 @@ README documents as public were being refused in prod — and its source scanner
 two annotation forms. Mutations 4-8 target the assertions added to close those two gaps.
 """
 import pathlib, re, subprocess
+import verdict as V
 
-REPO = pathlib.Path("/root/daedalus-work/repo")
+REPO = pathlib.Path(__file__).resolve().parent.parent
 SEC = REPO / "daedalus-server/src/main/java/com/daedalus/server/config/ProdSecurityConfig.java"
 CTL = REPO / "daedalus-server/src/main/java/com/daedalus/server/controller/InsightController.java"
 CMP = REPO / "daedalus-server/src/main/java/com/daedalus/server/controller/CampaignController.java"
@@ -85,12 +86,12 @@ try:
                                cwd=REPO, capture_output=True, text=True, timeout=900)
             failed = sorted({m for m in re.findall(r"ProdAuthPostureTest\.(\w+)", p.stdout)
                              if m not in ("java", "class")})
-            verdict = "SURVIVED" if p.returncode == 0 else "caught by " + ", ".join(failed[:2])
+            verdict = V.classify(p.returncode, p.stdout, failed)
         except subprocess.TimeoutExpired:
             verdict = "timed out"
         finally:
             path.write_text(orig)
-        if verdict == "SURVIVED":
+        if not V.is_catch(verdict):
             survivors.append(name)
         print(f"{name:52s} -> {verdict}", flush=True)
 finally:

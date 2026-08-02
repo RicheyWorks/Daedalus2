@@ -7,8 +7,9 @@ then restore the file byte-for-byte. A mutation that survives means the guarante
 breaks is not actually pinned by any test.
 """
 import subprocess, pathlib, sys
+import verdict as V
 
-REPO = pathlib.Path("/root/daedalus-work/repo")
+REPO = pathlib.Path(__file__).resolve().parent.parent
 
 MUTANTS = [
     # (name, relative path, old, new, maven module, guarantee at stake)
@@ -80,7 +81,9 @@ def tests_fail(module):
     out = r.stdout + r.stderr
     if "BUILD SUCCESS" in out:
         return False, out
-    return True, out
+    # Red is not the same as caught: a build that dies in resolution or compilation
+    # never ran a test, and reporting it as a catch invents a guarantee.
+    return V.is_catch(V.classify(1, out)), out
 
 
 def main():

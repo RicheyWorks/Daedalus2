@@ -18,6 +18,7 @@ Usage:  python3 mutants/idateeth.py
 """
 
 import pathlib
+import verdict as V
 import re
 import subprocess
 import sys
@@ -74,7 +75,7 @@ def main():
                                  re.findall(r"IDAStarBudgetTest\.(\w+)", proc.stdout)})
                 verdict = ("SURVIVED  <-- no test can see this change"
                            if proc.returncode == 0
-                           else "caught by " + ", ".join(failed[:2]))
+                           else V.classify(proc.returncode, proc.stdout, failed))
             except subprocess.TimeoutExpired:
                 verdict = (f"caught: still running after {CAP_SECONDS}s "
                            "— the unbounded behaviour this budget exists to stop")
@@ -88,7 +89,7 @@ def main():
         PRISTINE.unlink(missing_ok=True)
         print("\nrestored", TARGET.name)
 
-    survivors = [n for n, v in results if v.startswith("SURVIVED")]
+    survivors = [n for n, v in results if not V.is_catch(v)]
     print(f"\n{len(results) - len(survivors)}/{len(results)} accounted for; "
           f"survivors: {survivors or 'none'}")
     return 1 if survivors else 0

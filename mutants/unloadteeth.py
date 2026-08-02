@@ -11,8 +11,9 @@ Mutation 4 is the one that pulls the other way: it drops the built-in refusal fr
 "the plugin's generators are gone" assertion still passes.
 """
 import pathlib, re, subprocess
+import verdict as V
 
-REPO = pathlib.Path("/root/daedalus-work/repo")
+REPO = pathlib.Path(__file__).resolve().parent.parent
 MGR = REPO / "daedalus-plugin-runtime/src/main/java/com/daedalus/plugin/runtime/PluginManager.java"
 GEN = REPO / "daedalus-core/src/main/java/com/daedalus/engine/generators/GeneratorRegistry.java"
 SOL = REPO / "daedalus-core/src/main/java/com/daedalus/solver/solvers/SolverRegistry.java"
@@ -57,11 +58,7 @@ def run_once():
     failed = sorted({m for m in re.findall(
         r"(?:PluginUnloadTest|RegistryCollisionTest)\.(\w+)", p.stdout)
         if m not in ("java", "class", "lambda")})
-    if p.returncode == 0:
-        return "SURVIVED"
-    if not failed and "COMPILATION ERROR" in p.stdout:
-        return "BROKEN BUILD (not a catch)"
-    return "caught by " + ", ".join(f[:44] for f in failed[:2])
+    return V.classify(p.returncode, p.stdout, failed)
 
 
 originals = {p: p.read_text() for p in {m[0] for m in MUT}}
@@ -80,7 +77,7 @@ try:
             verdict = "timed out"
         finally:
             path.write_text(orig)
-        if verdict.startswith(("SURVIVED", "BROKEN")):
+        if not V.is_catch(verdict):
             survivors.append(name)
         print(f"{name:56s} -> {verdict}", flush=True)
 finally:

@@ -12,8 +12,9 @@ matches nothing makes the "no @MessageMapping exists" sweep pass with more confi
 information, the same shape as the coverage ratchet that only enforced a floor.
 """
 import pathlib, re, subprocess
+import verdict as V
 
-REPO = pathlib.Path("/root/daedalus-work/repo")
+REPO = pathlib.Path(__file__).resolve().parent.parent
 CFG = REPO / "daedalus-server/src/main/java/com/daedalus/server/config/WebSocketConfig.java"
 ITC = REPO / "daedalus-server/src/main/java/com/daedalus/server/security/StompSendRejectionInterceptor.java"
 TST = REPO / "daedalus-server/src/test/java/com/daedalus/server/security/StompSendRejectionTest.java"
@@ -54,11 +55,7 @@ def run_once():
     failed = sorted({m for m in re.findall(
         r"(?:StompSendRejectionTest|WebSocketForgerySmokeTest|WebSocketOwnershipSmokeTest)"
         r"\.(\w+)", p.stdout) if m not in ("java", "class")})
-    if p.returncode == 0:
-        return "SURVIVED"
-    if not failed and "COMPILATION ERROR" in p.stdout:
-        return "BROKEN BUILD (not a catch)"
-    return "caught by " + ", ".join(failed[:2])
+    return V.classify(p.returncode, p.stdout, failed)
 
 
 originals = {p: p.read_text() for p in {m[0] for m in MUT}}
@@ -77,7 +74,7 @@ try:
             verdict = "timed out"
         finally:
             path.write_text(orig)
-        if verdict.startswith(("SURVIVED", "BROKEN")):
+        if not V.is_catch(verdict):
             survivors.append(name)
         print(f"{name:52s} -> {verdict}", flush=True)
 finally:

@@ -22,8 +22,9 @@ Usage:  python3 mutants/tourteeth.py
 """
 
 import pathlib, re, subprocess
+import verdict as V
 
-REPO = pathlib.Path("/root/daedalus-work/repo")
+REPO = pathlib.Path(__file__).resolve().parent.parent
 T = REPO / "daedalus-server/src/main/java/com/daedalus/server/service/TournamentService.java"
 S = REPO / "daedalus-core/src/main/java/com/daedalus/theory/SampleStats.java"
 CAP = 600
@@ -70,12 +71,12 @@ try:
                 "-Dcheckstyle.skip","-Dspotbugs.skip","-Djacoco.skip"],
                 cwd=REPO, capture_output=True, text=True, timeout=CAP)
             failed = sorted({m for m in re.findall(r"(?:TournamentServiceTest|SampleStatsTest)\.(\w+)", p.stdout)})
-            verdict = "SURVIVED" if p.returncode == 0 else "caught by " + ", ".join(failed[:2])
+            verdict = V.classify(p.returncode, p.stdout, failed)
         except subprocess.TimeoutExpired:
             verdict = f"caught: still running after {CAP}s"
         finally:
             path.write_text(orig)
-        if verdict == "SURVIVED":
+        if not V.is_catch(verdict):
             survivors.append(name)
         print(f"{name:38s} -> {verdict}", flush=True)
 finally:

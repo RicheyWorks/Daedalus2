@@ -10,7 +10,7 @@ all five, so proving it on one is proving the mechanism.
 """
 import pathlib, re, subprocess
 
-REPO = pathlib.Path("/root/daedalus-work/repo")
+REPO = pathlib.Path(__file__).resolve().parent.parent
 POM = REPO / "daedalus-server/pom.xml"
 orig = POM.read_text()
 

@@ -38,14 +38,26 @@ opening, non-determinism, seed ignored, cycles, stranded cells) and asserts the 
 the *specific* property each break violates, not merely that something went red. All six are
 caught.
 
-**A red build is not a catch.** Every harness here decides "caught" from a non-zero Maven exit,
-and only `retentionteeth.py` requires a *named* failing test before believing it. That gap is not
-theoretical: `retentionteeth.py`'s first run printed a confident **4/4 caught** while all four
-builds were dying in POM resolution before a single test executed. The existing
-`if not failed and "COMPILATION ERROR" in stdout` guard does not cover it, because an
-unresolvable parent, a missing local repo, or an OOM-killed fork produces neither phrase. Until
-the other harnesses adopt the same check, treat any verdict whose "caught by" list is **empty**
-as a failed run rather than a result.
+**A red build is not a catch — and until 2026-08-01 every harness here thought it was.** The
+verdict logic now lives in one place, `verdict.py`, and enforces one rule: *no named failing
+test, no catch*. A build that dies before any test runs — unresolvable parent POM, empty local
+repository, a fork killed for memory, a timeout — exits non-zero exactly like a caught mutation
+and used to be reported as one. That is not hypothetical: `retentionteeth.py`'s first run printed
+a confident **4/4 caught** while all four builds were failing in POM resolution, having executed
+no tests at all. The old `if not failed and "COMPILATION ERROR" in stdout` guard (present in five
+scripts, absent from the rest) misses every one of those failures, because none of them print
+that phrase. The bug had a second storey, too: even after the per-mutation verdicts were fixed,
+the summary line still counted anything not spelled `SURVIVED` as a catch and printed
+"4/4 caught; survivors: none" under four `NOT A CATCH` verdicts. Both layers now go through
+`verdict.is_catch`.
+
+**The scripts could not run at all.** Sixteen of them hardcoded
+`REPO = pathlib.Path("/root/daedalus-work/repo")` — a path from the sandbox they were written
+in, which exists on no machine anyone would run them from. Every command this README documents
+died on `FileNotFoundError` before its first mutation. They now resolve `REPO` from `__file__`,
+as `detteeth.py` and `stompteeth.py` already did. Worth stating plainly: a mutation harness that
+cannot start is the same as a mutation harness that reports everything caught — both leave you
+believing guarantees are pinned when nothing has checked.
 
 **Never leave a mutation harness unsupervised without a lock.** The first `fuzzteeth.py` run
 was launched under a wrapper that was killed at a timeout; the Python process was orphaned and
