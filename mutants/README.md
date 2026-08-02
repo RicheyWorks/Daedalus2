@@ -51,6 +51,24 @@ the summary line still counted anything not spelled `SURVIVED` as a catch and pr
 "4/4 caught; survivors: none" under four `NOT A CATCH` verdicts. Both layers now go through
 `verdict.is_catch`.
 
+## Baseline: 2026-08-01, first full run
+
+Every harness here executed against the tree for the first time on 2026-08-01, the repairs below
+having been what made that possible at all. **14 harnesses, 78 mutations, 0 survivors.**
+
+    authteeth  9/9   errteeth   9/9   tourteeth   8/8   lensteeth 8/8   notfoundteeth 7/7
+    detteeth   5/5   registry   5/5   stompteeth  5/5   unload    5/5   deskteeth     4/4
+    retention  4/4   auditteeth 3/3   idateeth    3/3   rlteeth   3/3
+
+Read that as a starting line, not a victory lap. A suite that catches every mutation someone
+thought to write is only as good as the mutations, and two of these were aimed at deleted code
+until this same day. The number worth watching is what a *new* mutation does — the ones added
+here caught real gaps in `LeaderboardService` and `RedisConfig` that 78 existing ones did not,
+because nobody had pointed a mutation at those files before.
+
+Timing, for planning: roughly 1–3 minutes of Maven per mutation, so the full suite is on the
+order of two to three hours. Run it in batches.
+
 **Audit the anchors before you trust a clean run.** A mutation whose anchor no longer matches
 reports SKIP, which is not a catch and not a survivor — it is a check that silently stopped
 happening. Two of `lensteeth.py`'s had been in that state since the lens moved to an epsilon
