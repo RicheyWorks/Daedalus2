@@ -21,11 +21,16 @@
     </description>
 
     <properties>
-        <!-- Coverage ratchet: measured 82.2% instruction on 2026-07-29 (up from 70.3% at
-             pinning — the UI-sprint and audit tests); re-pinned ~3 below. Raise as coverage
-             rises; never lower to make a PR pass. -->
-        <jacoco.check.minimum>0.91</jacoco.check.minimum>
-        <jacoco.check.ceiling>0.94</jacoco.check.ceiling>
+        <!-- Coverage ratchet: measured 94.63% instruction on 2026-08-01 (up from 82.2% on
+             07-29 — the UI-sprint, audit, error-contract and Redis tests); re-pinned ~3 below.
+             Raise as coverage rises; never lower to make a PR pass.
+
+             The ceiling did its job to get here: the Redis retention and round-trip tests
+             pushed the ratio past 0.94 and failed the build until this bump, which is the
+             whole point of pairing new tests with a threshold move rather than banking slack
+             the next regression can spend unnoticed. -->
+        <jacoco.check.minimum>0.92</jacoco.check.minimum>
+        <jacoco.check.ceiling>0.95</jacoco.check.ceiling>
     </properties>
 
     <dependencies>

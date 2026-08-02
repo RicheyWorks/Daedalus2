@@ -22,6 +22,7 @@ by any test.
     python3 mutants/detteeth.py   # five ways to blind the cross-process determinism check
     python3 mutants/registryteeth.py # five ways to let a plugin become a built-in
     python3 mutants/unloadteeth.py # five ways to leak or over-delete on plugin unload
+    python3 mutants/retentionteeth.py # four ways to unbound or mis-aim the leaderboard trim
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module
@@ -36,6 +37,15 @@ so this harness breaks Binary Tree six ways, once per property (asymmetric wall,
 opening, non-determinism, seed ignored, cycles, stranded cells) and asserts the fuzz reports
 the *specific* property each break violates, not merely that something went red. All six are
 caught.
+
+**A red build is not a catch.** Every harness here decides "caught" from a non-zero Maven exit,
+and only `retentionteeth.py` requires a *named* failing test before believing it. That gap is not
+theoretical: `retentionteeth.py`'s first run printed a confident **4/4 caught** while all four
+builds were dying in POM resolution before a single test executed. The existing
+`if not failed and "COMPILATION ERROR" in stdout` guard does not cover it, because an
+unresolvable parent, a missing local repo, or an OOM-killed fork produces neither phrase. Until
+the other harnesses adopt the same check, treat any verdict whose "caught by" list is **empty**
+as a failed run rather than a result.
 
 **Never leave a mutation harness unsupervised without a lock.** The first `fuzzteeth.py` run
 was launched under a wrapper that was killed at a timeout; the Python process was orphaned and

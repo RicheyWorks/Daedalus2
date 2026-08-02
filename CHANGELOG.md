@@ -119,6 +119,33 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **The Redis leaderboard sets grew forever.** Only the per-maze key carried a bound (a 48h
+  TTL). The global and per-generator sorted sets gained a member on every completed run and lost
+  one never. The constructor's javadoc called that keeping "full history", and the phrase was
+  doing a lot of work: `MazeController` caps `n` at 100 and every read is a `reverseRange` from
+  rank 0, so rank 101 downwards was storage no request could reach. Twenty-two generators means
+  twenty-two of these.
+
+  The argument against it was already written down, one field away — the in-memory cap's own
+  javadoc says retention past the deepest page anyone can request is pure growth, and the set was
+  capped for exactly that reason. Only the Redis half was exempt from its own reasoning. `submit`
+  now trims each set to `maxEntries` on write, so the config property that used to bound one
+  backend bounds both.
+
+  `removeRange(key, 0, -(maxEntries + 1))` deletes by *ascending* rank while every read here is
+  descending, which means the correct call looks backwards and the wrong one looks right. That is
+  why `LeaderboardRedisRetentionTest` asserts on **which entries survive** rather than on the
+  arguments the call was made with: a trim aimed at the best end leaves the set exactly the right
+  size while deleting exactly the wrong members, and `verify(zset).removeRange(...)` would wave it
+  through. The test drives a fake with real sorted-set semantics — score order, inclusive rank
+  windows, negative indices — so the assertions are about state. Teeth in
+  `mutants/retentionteeth.py`: four breaks (no trim, partitions unbounded, wrong end, off by one),
+  all four caught.
+
+  The coverage ratchet earned its keep again here — the new tests pushed the server past its 0.94
+  ceiling and failed the build until the threshold was re-pinned to 0.92/0.95, which is the point
+  of pairing tests with a threshold move instead of banking slack a later regression can spend.
+
 - **The Redis leaderboard backend wrote a format it could not read.** `RedisConfig` handed the
   template a hand-built `ObjectMapper` with `activateDefaultTyping(validator, NON_FINAL)`, and the
   two halves of that disagreed. Writing uses the value's runtime type, and `LeaderboardEntry` is a

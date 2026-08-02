@@ -47,11 +47,11 @@ public class LeaderboardService {
     }
 
     /**
-     * @param maxEntries in-memory retention cap. The set previously kept every entry ever
-     *        submitted — one per completed session, forever. A leaderboard's whole point is
-     *        the top of the ordering, so retention past the deepest page anyone can request
-     *        ({@code top(n)} caps n at 100) is pure growth. Trimmed from the worst end on
-     *        every submit; the Redis backend keeps full history independently.
+     * @param maxEntries retention cap, applied to <em>both</em> backends. The set previously
+     *        kept every entry ever submitted — one per completed session, forever. A
+     *        leaderboard's whole point is the top of the ordering, so retention past the
+     *        deepest page anyone can request ({@code top(n)} caps n at 100) is pure growth.
+     *        Trimmed from the worst end on every submit.
      */
     @Autowired
     public LeaderboardService(@Autowired(required = false) RedisTemplate<String, Object> redis,
@@ -77,16 +77,38 @@ public class LeaderboardService {
         if (!redisEnabled) return;
         try {
             ZSetOperations<String, Object> zset = redis.opsForZSet();
-            zset.add(GLOBAL_KEY, entry, entry.score());
-            zset.add(PER_GEN_KEY + entry.mazeGeneratorId(), entry, entry.score());
+            addAndTrim(zset, GLOBAL_KEY, entry);
+            addAndTrim(zset, PER_GEN_KEY + entry.mazeGeneratorId(), entry);
             if (entry.mazeId() != null) {
                 String mazeKey = PER_MAZE_KEY + entry.mazeId();
-                zset.add(mazeKey, entry, entry.score());
+                addAndTrim(zset, mazeKey, entry);
                 redis.expire(mazeKey, PER_MAZE_TTL);
             }
         } catch (Exception e) {
             log.warn("Redis leaderboard write failed; staying in-memory: {}", e.toString());
         }
+    }
+
+    /**
+     * Writes one entry to a sorted set and drops everything past {@code maxEntries}.
+     *
+     * <p>The trim is the same argument the in-memory cap makes, applied where it was missing.
+     * Only {@code PER_MAZE_KEY} carried a bound before — a 48h TTL — so the global and
+     * per-generator sets grew by one member per completed run, forever, holding runs that no
+     * request could reach: {@code top(n)} is capped at 100 by the controller and every read is
+     * a {@code reverseRange} from rank 0, so rank 101 down was write-only storage. A leaderboard
+     * that never forgets is not a feature, it is a slow leak with a scoreboard attached.
+     *
+     * <p>{@code removeRange(key, 0, -(maxEntries + 1))} deletes by <em>ascending</em> rank, and
+     * rank 0 is the lowest score, so this keeps the best {@code maxEntries} and drops the rest —
+     * the direction that matters, and the one that is easy to get backwards. On an already-trimmed
+     * set it removes nothing and costs an O(log N) lookup, which is why it can run on every write
+     * instead of behind a size check that would need its own round trip.
+     */
+    private void addAndTrim(ZSetOperations<String, Object> zset, String key,
+                            LeaderboardEntry entry) {
+        zset.add(key, entry, entry.score());
+        zset.removeRange(key, 0, -(maxEntries + 1L));
     }
 
     /**
