@@ -14,6 +14,7 @@ import com.daedalus.plugin.events.MazeGeneratedEvent;
 import com.daedalus.theory.MazeMetrics;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.Ticker;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
@@ -61,12 +62,32 @@ public class MazeGenerationService {
                                   MeterRegistry meters,
                                   @Value("${daedalus.maze.cache.max-size:5000}") long cacheMaxSize,
                                   @Value("${daedalus.maze.cache.idle-ttl:2h}") Duration cacheTtl) {
+        this(registry, events, meters, cacheMaxSize, cacheTtl, Ticker.systemTicker());
+    }
+
+    /**
+     * Ticker seam, the same one {@code GameSessionService} carries and for the same reason. The
+     * idle TTL is a promise about the passage of time, and a test that cannot move time can only
+     * assert that the builder was called: {@code BoundedStoresTest} pinned {@code maximumSize}
+     * here — and reflectively, that every cache in the server declares one — while deleting
+     * {@code expireAfterAccess} from this builder left the whole suite green. Size and idle are
+     * separate bounds. A cache bounded only by size holds every maze anyone ever generated until
+     * 5,000 more arrive, which on a quiet instance is indefinitely, and the eviction path that
+     * both tickers and the campaign planner are written around would then never fire in practice.
+     */
+    MazeGenerationService(GeneratorRegistry registry,
+                          ApplicationEventPublisher events,
+                          MeterRegistry meters,
+                          long cacheMaxSize,
+                          Duration cacheTtl,
+                          Ticker ticker) {
         this.registry = registry;
         this.events = events;
         this.meters = meters;
         this.cache = Caffeine.newBuilder()
                 .maximumSize(cacheMaxSize)
                 .expireAfterAccess(cacheTtl)
+                .ticker(ticker)
                 .build();
     }
 
