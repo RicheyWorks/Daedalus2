@@ -51,6 +51,20 @@ the summary line still counted anything not spelled `SURVIVED` as a catch and pr
 "4/4 caught; survivors: none" under four `NOT A CATCH` verdicts. Both layers now go through
 `verdict.is_catch`.
 
+**Audit the anchors before you trust a clean run.** A mutation whose anchor no longer matches
+reports SKIP, which is not a catch and not a survivor — it is a check that silently stopped
+happening. Two of `lensteeth.py`'s had been in that state since the lens moved to an epsilon
+band. The cheap way to find them: run each harness with `subprocess.run` stubbed to return
+success, so only the anchor checks execute. The whole suite audits in about two seconds, and the
+`SKIP` lines are the entire output you care about.
+
+**Beware the inert mutation.** A change that alters no behaviour survives every test and reads
+identically to a real gap. `lensteeth.py`'s epsilon mutation first scaled `delta` by 1e-9 —
+against integer path costs and EPSILON = 1e-9, that reclassifies nothing. It "survived", and the
+obvious next move was to write an assertion for the hole it implied. There was no hole. Before
+believing a survivor, confirm the mutation actually changes an observable: print the value it
+touches, or check that the mutated build differs from the clean one at all.
+
 **The scripts could not run at all.** Sixteen of them hardcoded
 `REPO = pathlib.Path("/root/daedalus-work/repo")` — a path from the sandbox they were written
 in, which exists on no machine anyone would run them from. Every command this README documents

@@ -21,9 +21,23 @@ REPO = pathlib.Path(__file__).resolve().parent.parent
 T = REPO / "daedalus-server/src/main/java/com/daedalus/server/service/HeuristicLensService.java"
 orig = T.read_text()
 MUT = [
- ("must-expand uses <=", "                if (f < optimal) {", "                if (f <= optimal) {"),
- ("tie folded into must", "                } else if (f == optimal) {\n                    bands[r][c] = BAND_TIE;\n                    tie++;",
-  "                } else if (f == optimal) {\n                    bands[r][c] = BAND_MUST_EXPAND;\n                    mustExpand++;"),
+ # Re-aimed 2026-08-01: the classifier moved from exact float comparison
+ # (`f < optimal` / `f == optimal`) to an epsilon band (`delta < -EPSILON` /
+ # `delta <= EPSILON`). Both mutations below had silently reported SKIP since that
+ # refactor -- and nobody saw it, because this script could not start at all.
+ ("must-expand swallows the tie band", "                if (delta < -EPSILON) {",
+  "                if (delta <= EPSILON) {"),
+ ("tie folded into must", "                } else if (delta <= EPSILON) {\n                    bands[r][c] = BAND_TIE;\n                    tie++;",
+  "                } else if (delta <= EPSILON) {\n                    bands[r][c] = BAND_MUST_EXPAND;\n                    mustExpand++;"),
+ # Aimed at the refactor itself: EPSILON is what makes the tie band a band rather than an
+ # equality test, so widening it should be visible. The first version of this mutation
+ # scaled `delta` by 1e-9 instead and duly "survived" -- proving nothing, because path
+ # costs are integers and EPSILON is 1e-9, so every comparison landed exactly where it
+ # had before. An inert mutation is the most expensive kind: it reads as a gap in the
+ # tests and sends you writing an assertion for a hole that is not there.
+ ("epsilon widened until every cell ties",
+  "private static final double EPSILON = 1e-9;",
+  "private static final double EPSILON = 1e9;"),
  ("above-optimal check disabled", "                    if (expanded.contains(p)) {\n                        expandedAbove++;\n                    }", "                    if (false) {\n                        expandedAbove++;\n                    }"),
  ("landmark ignored, always manhattan", "            case LANDMARK -> LandmarkHeuristic.precompute(grid, 4)::estimate;",
   "            case LANDMARK -> Heuristics.MANHATTAN;"),

@@ -11,8 +11,10 @@ makes the suite hang, the suite has teeth; that is the whole point.
 One mutation SURVIVES by design and is recorded rather than papered over: an early
 `if (remaining[0] <= 0) return INF;` inside the neighbour loop turned out to be inert, because
 every sibling call lands on the identical check at the top of `search` and returns immediately.
-The line was deleted from the solver, so that mutation no longer has an anchor and reports SKIP.
-It is left in the list as the evidence for why the code is not there.
+The line was deleted from the solver. The mutation that proved it inert is recorded here
+rather than in the list below: kept as a permanent SKIP it counted as an unresolved result on
+every run, and a harness whose survivor list always has one entry in it teaches you to stop
+reading the survivor list.
 
 Usage:  python3 mutants/idateeth.py
 """
@@ -38,10 +40,6 @@ MUTATIONS = [
     ("throw replaced by empty path",
      "                throw new SolverBudgetExceededException(id(), nodeBudget);",
      "                return java.util.Collections.emptyList();"),
-    # Deleted from the solver after this mutation survived — see the module docstring.
-    ("inner loop cutoff (removed as inert)",
-     "            if (remaining[0] <= 0) return INF;\n        }\n        return min;",
-     "        }\n        return min;"),
 ]
 
 

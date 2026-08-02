@@ -119,6 +119,32 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Two heuristic-lens mutations had been aimed at deleted code since the epsilon refactor.**
+  Once the harness could start, an audit of every mutation anchor (run each script with
+  `subprocess` stubbed, so only the anchor checks execute — a two-second pass instead of a
+  multi-hour suite) found 17 of 19 harnesses aimed at live code and two that were not.
+  `lensteeth.py`'s "must-expand uses <=" and "tie folded into must" still targeted
+  `if (f < optimal)` / `f == optimal`, which the classifier replaced with an epsilon band
+  (`delta < -EPSILON` / `delta <= EPSILON`). Both had been silently reporting SKIP ever since,
+  and nobody saw it because the script could not run at all. Re-aimed; both caught.
+
+  `idateeth.py`'s inert-cutoff mutation is retired to its docstring. It anchors on a line
+  deliberately deleted from the solver, so it reported SKIP forever — harmless until the tally
+  fix above started counting unresolved results as survivors, at which point it became a
+  permanent phantom entry, and a survivor list that always has something in it is a survivor
+  list nobody reads.
+
+  **One thing this did not find, reported because the near-miss is the useful part.** A new
+  mutation aimed at `EPSILON` first scaled `delta` by 1e-9 and survived, which reads exactly
+  like an unpinned guarantee — the band bounds are all vacuously satisfiable when every cell
+  lands in one band, so the conclusion was plausible enough to write a test for. The mutation
+  was inert: path costs are integers and EPSILON is 1e-9, so every comparison landed where it
+  already had. Re-aimed at the constant itself (`1e-9` → `1e9`) it is caught immediately, by two
+  tests that already existed. The test written for the imagined hole was then measured against
+  the harness — 8/8 mutations caught with it and 8/8 without — and deleted. An inert mutation is
+  the most expensive kind of false negative: it does not merely fail to find a bug, it invents
+  one and sends you writing assertions to cover it.
+
 - **The mutation harness could not run, and called broken builds catches.** Two defects in the
   thing that verifies everything else. Sixteen of the nineteen scripts in `mutants/` hardcoded
   `REPO = pathlib.Path("/root/daedalus-work/repo")`, a path belonging to the sandbox they were
