@@ -119,6 +119,33 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **`MazeGrid`'s input contracts were documented and unenforced — and its "big speed win" is
+  dead code.** 63 test files reference this class and no mutation had ever been aimed at it,
+  which is the standard shape of a substrate blind spot: every caller tests its own concern and
+  takes the foundation for granted. Nine mutations. The load-bearing ones were all caught —
+  carving one side of a wall, reflecting the wrong wall, ignoring walls entirely — but two
+  documented contracts were not: `carve(Point, Point)` promises to reject pairs that share no
+  wall, and the constructor promises to reject non-positive dimensions. Deleting either check
+  passed the whole suite. Neither is a live bug, which is exactly why they were worth pinning:
+  an unenforced contract on a class this widely used degrades in silence, and the first caller
+  to violate it gets a corrupt grid instead of an exception. `MazeGridContractTest` covers both.
+
+  The harness then caught a hole in that new test, which is the best argument for owning one.
+  `directionBetween` decides on a *signed* delta, so widening its NORTH branch to `dr <= -1` is
+  invisible to a non-adjacent pair whose delta is positive — the first version of the test
+  sampled only the downward ordering and the mutation walked straight through it. A rejection
+  test that samples one sign of an asymmetric comparison is half a test.
+
+  Three further mutations were measured and removed as unreachable rather than left as standing
+  survivors, and one of them is worth acting on. Dropping the in-bounds filter in
+  `openNeighbors` changes nothing, because a border cell's outward wall can never be open.
+  Removing the Cell synchronisation from `markVisited` and `clearVisited` changes nothing for a
+  more interesting reason: **nothing in production calls `grid.markVisited(Point)` or
+  `grid.isVisited(Point)` at all.** The `boolean[][]` the class comment labels "THE BIG SPEED
+  WIN" is written by nobody and read by nobody — every generator uses the Cell-level API
+  directly — so the array, its synchronisation, and the comment advertising it are dead weight
+  kept alive by the comment. Left in place pending a call on removing public API.
+
 - **The directed half of the ADR-001 optimality bug was documented but not pinned.**
   `LandmarkHeuristic`'s javadoc explains at length why weighted mode cannot use the symmetric
   bound `|d(L,t) - d(L,s)|`: the entry-cost model makes the graph directed, so `d(a,b)` and
