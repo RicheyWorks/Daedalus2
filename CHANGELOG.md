@@ -119,6 +119,33 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Two untested promises in `GameSessionService`, found by pointing mutations at it for the
+  first time.** The class had never been mutated, which mattered because the `GameSession` field
+  fix earlier the same day rests on it: making the fields safe for unlocked readers is only half
+  a design, and the per-session lock in `tryMove` that serialises the writers is the other half.
+  Ten mutations; eight were caught by tests that already existed — including widening the lock
+  to a shared monitor, which every single-threaded test survives and `SessionLockIsolationTest`
+  does not. Two survived.
+
+  **The idle TTL was never checked.** `BoundedStoresTest` pinned `maximumSize`, and pinned
+  reflectively that every Caffeine cache in the server declares one — but it passed a one-hour
+  TTL and never moved a clock, so deleting `expireAfterAccess` left the suite green. Size and
+  idle are separate bounds: with only the first, a finished game holds its slot until 10,000
+  more push it out, which on a quiet instance is most of what the unbounded map it replaced did.
+  Fixed with the `Ticker` seam `PerKeyRateLimitInterceptor` already established for exactly this
+  reason, and `sessionStoreEvictsAfterItsIdleTtl` advances a fake clock past it.
+
+  **The score floor was never checked.** `Math.max(0, ...)` clamps a long game's score at zero,
+  and removing the clamp passed everything. The negative regime is reachable honestly — 10,000
+  moves is about fourteen milliseconds of work, and the session TTL is two hours — so the test
+  paces a session past its own base score and asserts the published number stays non-negative.
+
+  Recorded in `mutants/sessionteeth.py`; 10/10 caught now. One note kept in that file for the
+  next author: the obvious way to mutate away the lock, `if (true) {`, does not compile, because
+  javac then cannot see that the method always returns — the harness reports a broken build
+  rather than a result. Locking a fresh object per call removes the mutual exclusion and leaves
+  the control flow intact.
+
 - **Hotspot bounds were being enforced by a deprecated path, and nothing pinned them.**
   `GenerateRequest` cascaded into its hotspot list with `@Valid List<Hotspot>` — the container
   form Hibernate Validator deprecates as HV000271, which names the collection rather than what

@@ -2,10 +2,15 @@
 
 package com.daedalus.server.service;
 
+import com.daedalus.engine.MazeGrid;
 import com.daedalus.engine.generators.BinaryTreeGenerator;
+import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
+import com.daedalus.model.MazeStats;
+import com.daedalus.solver.solvers.BfsSolver;
 import com.daedalus.engine.generators.GeneratorRegistry;
 import com.daedalus.model.LeaderboardEntry;
 import com.daedalus.model.Point;
+import com.github.benmanes.caffeine.cache.Ticker;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.jupiter.api.Test;
 
@@ -119,6 +124,78 @@ class BoundedStoresTest {
             ids.add(svc.open(UUID.randomUUID(), "p" + i, new Point(0, 0)).id());
         }
         assertThat(survivorsWithin(ids, svc::find, 3)).isLessThanOrEqualTo(3);
+    }
+
+    /** Moves Caffeine's clock without moving the wall clock — see {@code PerKeyRateLimitEvictionTest}. */
+    private static final class FakeClock implements Ticker {
+        private long nanos;
+
+        @Override
+        public long read() {
+            return nanos;
+        }
+
+        void advance(Duration by) {
+            nanos += by.toNanos();
+        }
+    }
+
+    @Test
+    void sessionStoreEvictsAfterItsIdleTtl() {
+        // The size bound above and this one are separate promises, and only the first was
+        // checked: deleting `expireAfterAccess` from the builder left every test in this class
+        // green, because none of them could move time. A store bounded only by size holds a
+        // finished game for as long as it takes 10,000 more to push it out — on a quiet
+        // instance, indefinitely — which is most of what the unbounded map it replaced did.
+        FakeClock clock = new FakeClock();
+        GameSessionService svc = new GameSessionService(
+                event -> { }, mock(LeaderboardService.class), false, 10_000,
+                Duration.ofHours(2), clock);
+
+        UUID id = svc.open(UUID.randomUUID(), "ariadne", new Point(0, 0)).id();
+        assertThat(svc.find(id))
+                .as("a session must be live the moment it is opened")
+                .isNotNull();
+
+        clock.advance(Duration.ofHours(3));
+
+        assertThat(svc.find(id))
+                .as("a session idle for longer than the TTL must be gone; an evicted session "
+                        + "answers 404 on its next move, which is the API's existing "
+                        + "unknown-session path")
+                .isNull();
+    }
+
+    @Test
+    void aRunLongEnoughToOutscoreItselfStillReportsANonNegativeScore() {
+        // The score formula subtracts moves and elapsed time from 100,000 and clamps at zero.
+        // Nothing pinned the clamp, so removing it passed the whole suite — and a session can
+        // reach the negative regime honestly: the idle TTL is two hours, and 10,000 moves is
+        // roughly fourteen milliseconds of actual work.
+        GameSessionService svc = new GameSessionService(event -> { },
+                mock(LeaderboardService.class), false);
+        // A real generated maze, not a hand-built fixture — house rule.
+        MazeGrid grid = new RecursiveBacktrackerGenerator()
+                .generate(8, 8, 42L, new MazeStats());
+        grid.setStart(new Point(0, 0));
+        grid.setGoal(new Point(7, 7));
+        var session = svc.open(UUID.randomUUID(), "sisyphus", grid.start());
+
+        // Pace between the start and one of its open neighbours until the move penalty alone
+        // exceeds the base score, then walk to the goal so the session completes.
+        Point home = grid.start();
+        Point neighbour = grid.openNeighbors(home).iterator().next();
+        for (int i = 0; i < 10_100; i++) {
+            svc.tryMove(session.id(), grid, (i % 2 == 0) ? neighbour : home);
+        }
+        for (Point step : new BfsSolver().solve(grid)) {
+            svc.tryMove(session.id(), grid, step);
+        }
+
+        assertThat(session.score())
+                .as("100,000 - 10,101*10 is already below zero before elapsed time is counted; "
+                        + "the clamp is what keeps a published score non-negative")
+                .isGreaterThanOrEqualTo(0L);
     }
 
     @Test

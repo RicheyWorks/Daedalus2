@@ -23,6 +23,7 @@ by any test.
     python3 mutants/registryteeth.py # five ways to let a plugin become a built-in
     python3 mutants/unloadteeth.py # five ways to leak or over-delete on plugin unload
     python3 mutants/retentionteeth.py # four ways to unbound or mis-aim the leaderboard trim
+    python3 mutants/sessionteeth.py # ten ways to break the session lock, flag gate or bounds
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module

@@ -9,6 +9,7 @@ import com.daedalus.model.Point;
 import com.daedalus.plugin.events.PlayerMovedEvent;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.Ticker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -60,12 +61,30 @@ public class GameSessionService {
                               @Value("${daedalus.session.multiplayer:false}") boolean multiplayer,
                               @Value("${daedalus.session.max-sessions:10000}") long maxSessions,
                               @Value("${daedalus.session.idle-ttl:2h}") Duration idleTtl) {
+        this(events, leaderboard, multiplayer, maxSessions, idleTtl, Ticker.systemTicker());
+    }
+
+    /**
+     * Ticker seam, same shape as {@code PerKeyRateLimitInterceptor}'s and for the same reason:
+     * the idle TTL is a promise about the passage of time, and a test that cannot move time can
+     * only assert that the builder was called. {@code BoundedStoresTest} pinned
+     * {@code maximumSize} and — reflectively — that every cache in the server declares one, but
+     * nothing advanced a clock, so deleting {@code expireAfterAccess} left the suite green. Size
+     * and idle are two separate bounds; only one of them was checked.
+     */
+    GameSessionService(ApplicationEventPublisher events,
+                       LeaderboardService leaderboard,
+                       boolean multiplayer,
+                       long maxSessions,
+                       Duration idleTtl,
+                       Ticker ticker) {
         this.events = events;
         this.leaderboard = leaderboard;
         this.multiplayer = multiplayer;
         this.sessions = Caffeine.newBuilder()
                 .maximumSize(maxSessions)
                 .expireAfterAccess(idleTtl)
+                .ticker(ticker)
                 .build();
     }
 
