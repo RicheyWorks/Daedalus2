@@ -11,6 +11,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -90,11 +91,15 @@ public class LivingMazeService {
     private final int maxConcurrent;
     private final double erosionFactor;
 
-    private final ScheduledExecutorService ticker = Executors.newSingleThreadScheduledExecutor(r -> {
-        Thread t = new Thread(r, "living-maze-ticker");
-        t.setDaemon(true);
-        return t;
-    });
+    private final ScheduledExecutorService ticker;
+
+    private static ScheduledExecutorService daemonTicker() {
+        return Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread t = new Thread(r, "living-maze-ticker");
+            t.setDaemon(true);
+            return t;
+        });
+    }
     private final ConcurrentHashMap<UUID, Run> runs = new ConcurrentHashMap<>();
 
     private final class Run {
@@ -127,6 +132,7 @@ public class LivingMazeService {
      *                      dead end remains at least one wall opens, so runs always make
      *                      progress until the maze genuinely settles
      */
+    @Autowired // two constructors now: the seam below is invisible to Spring without this
     public LivingMazeService(MazeGenerationService gen,
                              ApplicationEventPublisher events,
                              MeterRegistry meters,
@@ -134,6 +140,29 @@ public class LivingMazeService {
                              @Value("${daedalus.living.max-ticks:240}") int maxTicks,
                              @Value("${daedalus.living.max-concurrent:8}") int maxConcurrent,
                              @Value("${daedalus.living.erosion-factor:0.08}") double erosionFactor) {
+        this(gen, events, meters, tickInterval, maxTicks, maxConcurrent, erosionFactor,
+                daemonTicker());
+    }
+
+    /**
+     * Scheduler seam, the same one {@link TrafficService} carries and for the same reasons.
+     * This class's promises about <em>scheduling</em> — one ticker per maze however many times
+     * {@code /live} is called, nothing left running when a run ends, a run that cannot commit
+     * retiring instead of spinning — are not visible to a test that can only watch a clock. A
+     * duplicated ticker does not fail; it erodes the maze twice as fast and outlives the run it
+     * belongs to. Handing the executor in lets a test run ticks synchronously and count what is
+     * still scheduled. Production behaviour is unchanged: the public constructor passes the same
+     * daemon single-thread executor the field used to build inline.
+     */
+    LivingMazeService(MazeGenerationService gen,
+                      ApplicationEventPublisher events,
+                      MeterRegistry meters,
+                      Duration tickInterval,
+                      int maxTicks,
+                      int maxConcurrent,
+                      double erosionFactor,
+                      ScheduledExecutorService ticker) {
+        this.ticker = ticker;
         this.gen = gen;
         this.events = events;
         this.meters = meters;
