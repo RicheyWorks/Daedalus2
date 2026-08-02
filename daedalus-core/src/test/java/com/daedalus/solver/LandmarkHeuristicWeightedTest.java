@@ -8,6 +8,7 @@ import com.daedalus.engine.WeightedMazeGrid;
 import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
+import com.daedalus.theory.MazeMetrics;
 import com.daedalus.solver.solvers.AStarSolver;
 import com.daedalus.solver.solvers.DijkstraSolver;
 import org.junit.jupiter.api.Test;
@@ -112,6 +113,59 @@ class LandmarkHeuristicWeightedTest {
             }
         }
         assertThat(checked).as("fixture must actually be connected").isGreaterThan(SIZE * SIZE / 2);
+    }
+
+    @Test
+    void heuristicNeverExceedsTrueCost_forEveryOrderedPair() {
+        // The test above sweeps every source against ONE goal, which is exhaustive in the wrong
+        // dimension. Admissibility here is a property of ordered pairs: this class's javadoc
+        // explains that the entry-cost model makes the graph directed, so d(a,b) and d(b,a)
+        // differ by w(b) - w(a), and that the symmetric bound |d(L,t) - d(L,s)| is therefore
+        // invalid — it silently assumes the very symmetry that does not hold. Fixing the goal
+        // collapses one half of that asymmetry, so the guard against it went unpinned: restoring
+        // `Math.abs` to weightedEstimate passes the whole suite, while over-estimating on 7,454
+        // ordered pairs of a 12x12 grid, worst case h = 9.94 against a true cost of 5.97.
+        //
+        // A smaller grid than SIZE on purpose — this is O(cells^2) Dijkstra sweeps, and the
+        // property does not need a big maze to show up, only both endpoints free to vary.
+        int size = 12;
+        MazeGrid base = new RecursiveBacktrackerGenerator()
+                .generate(size, size, 7L, new MazeStats());
+        Braider.braid(base, 1.0, 7L);
+        WeightedMazeGrid grid = new WeightedMazeGrid(base);
+        Random random = new Random(11L);
+        for (int r = 0; r < size; r++) {
+            for (int c = 0; c < size; c++) {
+                // Straddle 1.0 rather than sitting below it: a spread of entry costs is what
+                // makes d(a,b) and d(b,a) diverge, and the divergence is what is being checked.
+                grid.setWeight(new Point(r, c), 0.05 + random.nextDouble() * 4.0);
+            }
+        }
+        LandmarkHeuristic alt = LandmarkHeuristic.precompute(grid, 4);
+
+        int checked = 0;
+        for (int r = 0; r < size; r++) {
+            for (int c = 0; c < size; c++) {
+                Point from = new Point(r, c);
+                double[][] trueCost = MazeMetrics.weightedDistancesFrom(grid, from);
+                for (int r2 = 0; r2 < size; r2++) {
+                    for (int c2 = 0; c2 < size; c2++) {
+                        Point to = new Point(r2, c2);
+                        if (!Double.isFinite(trueCost[r2][c2])) {
+                            continue;
+                        }
+                        checked++;
+                        assertThat(alt.estimate(from, to))
+                                .as("h(%s -> %s) must be a lower bound on the true cost of that "
+                                        + "direction, not of the cheaper one", from, to)
+                                .isLessThanOrEqualTo(trueCost[r2][c2] + EPSILON);
+                    }
+                }
+            }
+        }
+        assertThat(checked)
+                .as("fixture must actually be connected in both directions")
+                .isGreaterThan(size * size * size);
     }
 
     @Test

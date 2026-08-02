@@ -119,6 +119,29 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **The directed half of the ADR-001 optimality bug was documented but not pinned.**
+  `LandmarkHeuristic`'s javadoc explains at length why weighted mode cannot use the symmetric
+  bound `|d(L,t) - d(L,s)|`: the entry-cost model makes the graph directed, so `d(a,b)` and
+  `d(b,a)` differ by `w(b) - w(a)`, and the absolute value silently assumes the symmetry that
+  does not hold. Restoring that `Math.abs` passed the entire suite.
+
+  It is not a small error. Swept across every ordered pair of a braided 12x12 grid with entry
+  costs straddling 1.0, the symmetric bound over-estimates on **7,454 pairs**, worst case
+  `h = 9.94` against a true cost of `5.97` — inadmissible by 67%, which is A* returning routes
+  that merely look fine. The existing admissibility test is exhaustive in the wrong dimension:
+  it sweeps every source against **one** goal, and fixing the goal collapses exactly the
+  asymmetry being guarded. `heuristicNeverExceedsTrueCost_forEveryOrderedPair` varies both
+  endpoints, and catches it.
+
+  Recorded in `mutants/landmarkteeth.py`, 4/4. Three further mutations were written, measured,
+  and deleted rather than filed as gaps, which is the more useful half of the exercise: routing
+  weighted grids through `hopEstimate` returns 0 (admissible — the hop fields are empty in
+  weighted mode), removing the unreachable-landmark guard cannot over-estimate (a pair that sees
+  a -1 field entry spans components and has infinite true cost), and dropping the inbound bound
+  leaves the heuristic correct but looser. The last one is a real gap of a different kind —
+  weighted-mode *tightness* is unpinned — and the harness says so in prose instead of carrying a
+  permanent survivor that would train the reader to skip the survivor list.
+
 - **Two untested promises in `GameSessionService`, found by pointing mutations at it for the
   first time.** The class had never been mutated, which mattered because the `GameSession` field
   fix earlier the same day rests on it: making the fields safe for unlocked readers is only half
