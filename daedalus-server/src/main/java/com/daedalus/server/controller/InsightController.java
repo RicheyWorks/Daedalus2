@@ -322,7 +322,10 @@ public class InsightController {
                     + "tie-breaking, cells exactly at it are decided by tie-breaking alone, and "
                     + "cells above it are provably never touched — a count that must be zero and "
                     + "is reported rather than assumed. Switch heuristic=LANDMARK to see the "
-                    + "mandatory band collapse. Rate-limited against 'mazeSolve'.")
+                    + "mandatory band collapse, or heuristic=MANHATTAN_TIE_BROKEN to see what the "
+                    + "tie band is worth: on a 21x21 dungeon it cuts expansions from 115 to 80 "
+                    + "against 78 for the x3-inflated heuristic, and unlike that one it still "
+                    + "returns a shortest route. Rate-limited against 'mazeSolve'.")
     @PerKeyRateLimit("mazeSolve")
     public ResponseEntity<HeuristicLensService.Lens> heuristicLens(
             @PathVariable UUID id,

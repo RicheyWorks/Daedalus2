@@ -87,8 +87,39 @@ public class HeuristicLensService {
      * the optimum is 88. That is the weighted-A* trade in one request: real speed, and an answer
      * that is no longer the best one. It is also what gives the {@code expandedAboveOptimal}
      * check something to detect — a counter that only ever reports zero cannot be tested.
+     *
+     * <p>{@link #MANHATTAN_TIE_BROKEN} answers the question this lens kept raising and could not
+     * measure. The note it prints says the tie band is "where the tie-breaking rule decides more
+     * of this search than the heuristic does" — true, and useless without a way to see what a
+     * tie-breaking rule would actually buy. This is Manhattan scaled by {@code 1 + eps}, the
+     * classic straight-line bias, and on the 21x21 dungeon of seed 7 ({@code C* = 40}) the three
+     * options line up like this:
+     *
+     * <pre>
+     *                          mandatory   tie   expansions   above C*   route
+     *   MANHATTAN                     30    88          115          0      40  (optimal)
+     *   MANHATTAN_TIE_BROKEN          30     1           80         50      40  (optimal)
+     *   INFLATED (x3)                  0     1           78         78      42  (worse)
+     * </pre>
+     *
+     * <p>Read the third column against the last one. Tie-breaking captures almost all of the
+     * speed that tripling the heuristic buys — 115 expansions down to 80, against 78 — and pays
+     * none of its price: the route is still a shortest one, where {@code INFLATED} returns 42
+     * steps for a best of 40. The mandatory band does not move, because that band is the
+     * heuristic's business and this changes no cell's estimate relative to another's; the saving
+     * comes entirely out of the tie band, which is the claim the note had been making in prose.
+     *
+     * <p><b>It is inadmissible, and that is fine — read the fourth column.</b> Scaling h up is
+     * exactly what makes {@code INFLATED} inadmissible, and 50 cells above {@code C*} were
+     * expanded here too. What differs is the size of the violation. {@code eps} is chosen per
+     * maze as {@code 1 / (cells + 1)}: weighted A* returns a route within {@code (1 + eps)}
+     * times optimal, no route on a grid exceeds its cell count, so the excess is under one whole
+     * step — and costs are integers, so an excess under one step is no excess at all. The
+     * optimality is therefore provable rather than lucky. The difference between a tie-breaker
+     * and weighted A* is not that one scales and the other does not; it is that one keeps the
+     * inflation below the resolution of the cost function.
      */
-    public enum Heuristic { MANHATTAN, LANDMARK, INFLATED }
+    public enum Heuristic { MANHATTAN, LANDMARK, INFLATED, MANHATTAN_TIE_BROKEN }
 
     /** Multiplier making {@link Heuristic#INFLATED} overestimate, and so inadmissible. */
     public static final double INFLATION = 3.0;
@@ -148,6 +179,9 @@ public class HeuristicLensService {
             case LANDMARK -> LandmarkHeuristic.precompute(grid, 4)::estimate;
             case INFLATED -> (from, to) -> INFLATION * Heuristics.MANHATTAN.applyAsDouble(from, to);
             case MANHATTAN -> Heuristics.MANHATTAN;
+            // eps small enough that eps * C* < 1 — see the enum's javadoc for why that is the
+            // whole argument for optimality, and why the constant has to depend on the maze.
+            case MANHATTAN_TIE_BROKEN -> Heuristics.manhattanWithTieBreaker(1.0 / (cells + 1.0));
         };
 
         MazeReplay.Replay replay = MazeReplay.record(
@@ -217,6 +251,17 @@ public class HeuristicLensService {
                                     + "next maze. "
                             : routeLength + " steps against a best of " + optimalCost
                                     + " — no longer optimal. ");
+        } else if (expandedAbove > 0 && which == Heuristic.MANHATTAN_TIE_BROKEN) {
+            note.append(expandedAbove)
+                    .append(" cells above the optimal cost were expanded, which is what scaling h "
+                            + "by 1 + eps costs: the tie band moved above C*, and A* works "
+                            + "through some of it while the goal is still undiscovered. The "
+                            + "route is ")
+                    .append(routeOptimal
+                            ? "nevertheless optimal, and provably so — eps * C* is below one "
+                                    + "whole step and costs are integers. "
+                            : routeLength + " steps against a best of " + optimalCost
+                                    + ", which means eps was too large for this maze. ");
         } else if (expandedAbove > 0) {
             note.append("WARNING: ").append(expandedAbove).append(" cells above the optimal cost "
                     + "were expanded, which should be impossible with an admissible heuristic — "
@@ -225,10 +270,22 @@ public class HeuristicLensService {
             note.append("No cell above the optimal cost was expanded, as an admissible heuristic "
                     + "guarantees. ");
         }
+        if (which == Heuristic.MANHATTAN && tie > mustExpand) {
+            note.append("Try MANHATTAN_TIE_BROKEN to see what that tie band is worth: the same "
+                    + "heuristic scaled by 1 + 1/cells pushes every tie above the optimal cost, "
+                    + "so A* stops expanding them — and the scaling stays below one whole step, "
+                    + "so the route is still optimal. ");
+        }
         if (which == Heuristic.MANHATTAN) {
             note.append("Try the landmark heuristic: measured, it drops the mandatory band from "
                     + "925 cells to 0 on a 31x31 perfect maze and cuts real expansions by "
                     + "1.8x to 5.5x.");
+        }
+        if (which == Heuristic.MANHATTAN_TIE_BROKEN) {
+            note.append("Ties are broken toward the straight line, so the ")
+                    .append(tie)
+                    .append(" cells still at exactly the optimal cost are the ones no bias can "
+                            + "separate. Compare with heuristic=MANHATTAN on the same maze.");
         }
         return note.toString().trim();
     }

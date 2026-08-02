@@ -134,6 +134,96 @@ class HeuristicLensServiceTest {
     }
 
     @Test
+    void tieBreakingCollapsesTheTieBandAndKeepsTheRouteOptimal() {
+        // The measurement the class has been describing in prose since it was written. On this
+        // dungeon the tie band is several times the mandatory one (see the test above), so
+        // whatever decides ties decides most of the search — and until MANHATTAN_TIE_BROKEN was
+        // wired up, the lens could report that and nothing else.
+        var cached = gen.generate("dungeon", 21, 21, 7L);
+        UUID id = cached.metadata().id();
+
+        var plain = lens.forMaze(id, HeuristicLensService.Heuristic.MANHATTAN);
+        var broken = lens.forMaze(id, HeuristicLensService.Heuristic.MANHATTAN_TIE_BROKEN);
+
+        assertThat(broken.tie())
+                .as("scaling h by 1+eps lifts every tie above the optimal cost, so the band that "
+                        + "tie-breaking was deciding is simply gone")
+                .isLessThan(plain.tie());
+        assertThat(broken.actualExpansions())
+                .as("and the work saved is real, not bookkeeping: %d expansions against %d",
+                        broken.actualExpansions(), plain.actualExpansions())
+                .isLessThan(plain.actualExpansions());
+        assertThat(broken.mustExpand())
+                .as("the mandatory band is the heuristic's business and this changes it barely, "
+                        + "which is the point — the saving comes from ties, not from sharpness")
+                .isLessThanOrEqualTo(plain.mustExpand());
+
+        // And the half that separates a tie-breaker from weighted A*. INFLATED buys its speed by
+        // returning worse routes; this buys it for nothing, because eps * C* < 1 and costs are
+        // integers. Asserted, not assumed — it is the only reason scaling h is defensible here.
+        assertThat(broken.routeOptimal())
+                .as("route was %d steps against an optimum of %d",
+                        broken.routeLength(), broken.optimalCost())
+                .isTrue();
+        assertThat(broken.routeLength()).isEqualTo(plain.routeLength());
+        // The half that separates a tie-breaker from weighted A*, and the reason scaling h is
+        // defensible here at all. Both are inadmissible — `expandedAboveOptimal` is non-zero for
+        // both, because lifting the tie band above C* is precisely what saves the work — but the
+        // inflation here stays under one whole step, and costs are integers.
+        assertThat(broken.expandedAboveOptimal())
+                .as("lifting the ties above C* is the mechanism; a zero here would mean the "
+                        + "heuristic was not doing anything")
+                .isPositive();
+        assertThat(broken.routeOptimal())
+                .as("route was %d steps against an optimum of %d",
+                        broken.routeLength(), broken.optimalCost())
+                .isTrue();
+        assertThat(broken.routeLength()).isEqualTo(plain.routeLength());
+
+        var inflated = lens.forMaze(id, HeuristicLensService.Heuristic.INFLATED);
+        assertThat(broken.actualExpansions())
+                .as("tie-breaking should capture most of what x3 inflation buys: %d expansions "
+                        + "against %d inflated and %d plain",
+                        broken.actualExpansions(), inflated.actualExpansions(),
+                        plain.actualExpansions())
+                .isLessThan(plain.actualExpansions() - (plain.actualExpansions()
+                        - inflated.actualExpansions()) / 2);
+        assertThat(inflated.routeOptimal())
+                .as("and unlike inflation it costs nothing: x3 returns %d steps for a best of %d",
+                        inflated.routeLength(), inflated.optimalCost())
+                .isFalse();
+    }
+
+    /**
+     * The optimality guarantee, on a maze chosen because it discriminates.
+     *
+     * <p>{@code eps} is {@code 1 / (cells + 1)} so that {@code eps * C*} stays under one whole
+     * step. Asserting optimality on the 21x21 dungeon above does not pin that: measured, a fixed
+     * {@code eps = 0.5} — plain weighted A* with w = 1.5 — still returns a shortest route there,
+     * because Manhattan is such a weak bound inside a maze that even half again on top of it
+     * rarely overestimates. It does overestimate here. On this maze a fixed 0.5 returns 93 steps
+     * against a best of 91, so this assertion is the difference between a per-maze epsilon and a
+     * constant one, and the mutation in {@code mutants/lensteeth.py} that makes that swap fails
+     * on this line and nowhere else.
+     */
+    @Test
+    void theEpsilonScalesWithTheMazeSoTheRouteStaysOptimalOnBiggerOnes() {
+        var cached = gen.generate("dungeon", 31, 31, 5L);
+
+        var broken = lens.forMaze(cached.metadata().id(),
+                HeuristicLensService.Heuristic.MANHATTAN_TIE_BROKEN);
+
+        assertThat(broken.routeOptimal())
+                .as("%d steps against a best of %d — a fixed epsilon returns 93 here",
+                        broken.routeLength(), broken.optimalCost())
+                .isTrue();
+        assertThat(broken.tie())
+                .as("and the tie band still collapses, so the saving survives the smaller epsilon")
+                .isLessThan(lens.forMaze(cached.metadata().id(),
+                        HeuristicLensService.Heuristic.MANHATTAN).tie());
+    }
+
+    @Test
     void anInadmissibleHeuristicIsCaughtByTheVeryCheckThatIsZeroForTheOthers() {
         // The point of this test is that `expandedAboveOptimal` can be non-zero. Asserting it is
         // zero for admissible heuristics proves nothing on its own — a mutation that simply never

@@ -10,6 +10,43 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **`MANHATTAN_TIE_BROKEN`, the heuristic lens's fourth option — and the first that measures a
+  claim the lens has been making in prose since it was written.** Yesterday's audit found
+  `Heuristics.manhattanWithTieBreaker` with no caller anywhere in the repository, not even a test,
+  while `HeuristicLensService`'s own javadoc argued that "on some mazes tie-breaking matters more
+  than the heuristic does" and its note told operators the tie band "decides more of this search
+  than the heuristic does". Both true; neither measurable. The unused method is exactly the
+  instrument for it, and wiring it in cost one enum case and one switch arm.
+
+  On the 21×21 dungeon of seed 7 (optimum 40 steps) the three inadmissibility regimes now line up
+  in one request each:
+
+      heuristic                mandatory   tie   expansions   above C*   route
+      MANHATTAN                       30    88          115          0      40  (optimal)
+      MANHATTAN_TIE_BROKEN            30     1           80         50      40  (optimal)
+      INFLATED (×3)                    0     1           78         78      42  (worse)
+
+  Tie-breaking captures nearly all the speed that tripling the heuristic buys — 115 expansions
+  down to 80, against 78 — and pays none of its price. The mandatory band does not move, because
+  that band is the heuristic's business and this changes no cell's estimate relative to any
+  other's; the whole saving comes out of the tie band, which is the claim the note was making.
+
+  It is inadmissible too — 50 cells above `C*` were expanded, and that is the mechanism rather
+  than a defect. What differs from `INFLATED` is the size of the violation: `eps` is
+  `1 / (cells + 1)`, weighted A* returns within `(1 + eps)` of optimal, and no route on a grid
+  exceeds its cell count, so the excess is under one whole step — and with integer costs an
+  excess under one step is no excess at all. A tie-breaker is not distinguished from weighted A*
+  by declining to scale; it is distinguished by keeping the inflation below the resolution of the
+  cost function.
+
+  That guarantee needed its own fixture to be worth anything. Asserting optimality on the 21×21
+  dungeon does not pin it: a fixed `eps = 0.5` — plain weighted A* at w = 1.5 — still returns a
+  shortest route there, because Manhattan is a weak enough bound inside a maze that half again on
+  top of it rarely overestimates. A sweep found where it does: on the 31×31 dungeon of seed 5 a
+  fixed epsilon returns 93 steps against a best of 91. That maze is the second test, chosen
+  because it discriminates, and the `lensteeth.py` mutation that swaps the per-maze epsilon for a
+  constant fails on that assertion and nowhere else.
+
 - **Campaign mode (ADR-006 idea #10) — completes the roadmap.** `GET /api/v1/campaign?seed=`
   returns a deterministic ladder of stages (omit the seed for today's shared campaign). Stage
   *n*'s maze seed derives from `(campaignSeed, n)` alone, so a campaign link replays
