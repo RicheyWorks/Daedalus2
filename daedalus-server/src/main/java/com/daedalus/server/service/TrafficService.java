@@ -11,6 +11,7 @@ import com.daedalus.plugin.events.TrafficPulseEvent;
 import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -84,12 +85,16 @@ public class TrafficService {
     private final int maxConcurrent;
     private final int quietTicksToStop;
 
-    private final ScheduledExecutorService ticker = Executors.newSingleThreadScheduledExecutor(r -> {
-        Thread t = new Thread(r, "traffic-ticker");
-        t.setDaemon(true);
-        return t;
-    });
+    private final ScheduledExecutorService ticker;
     private final ConcurrentHashMap<UUID, Tracker> trackers = new ConcurrentHashMap<>();
+
+    private static ScheduledExecutorService daemonTicker() {
+        return Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread t = new Thread(r, "traffic-ticker");
+            t.setDaemon(true);
+            return t;
+        });
+    }
 
     private final class Tracker {
         final UUID mazeId;
@@ -117,6 +122,7 @@ public class TrafficService {
      * @param maxCost     congestion ceiling per cell, kept inside the weighted-maze API's
      *                    {@code [1, 1000]} domain
      */
+    @Autowired // two constructors now: the seam below is invisible to Spring without this
     public TrafficService(MazeGenerationService gen,
                           GameSessionService sessions,
                           ApplicationEventPublisher events,
@@ -126,6 +132,33 @@ public class TrafficService {
                           @Value("${daedalus.traffic.tick-interval:2s}") Duration tickInterval,
                           @Value("${daedalus.traffic.max-concurrent:8}") int maxConcurrent,
                           @Value("${daedalus.traffic.quiet-ticks:5}") int quietTicksToStop) {
+        this(gen, sessions, events, bump, decayFactor, maxCost, tickInterval,
+                maxConcurrent, quietTicksToStop, daemonTicker());
+    }
+
+    /**
+     * Scheduler seam — the same shape as {@code GameSessionService}'s {@code Ticker}
+     * constructor, and for the same reason. Every guarantee this class makes about
+     * <em>scheduling</em> (one ticker per maze however many times {@code enable} is called; a
+     * retired tracker leaves nothing running; a throwing tick retires rather than spins) is
+     * invisible to a test that can only watch a real clock: the difference between one
+     * scheduled task and two is a leak, not a failure, and the wall-clock test for it is a
+     * sleep long enough to be slow and short enough to be flaky. Handing the executor in lets
+     * a test run ticks synchronously and count what is still scheduled, so those become
+     * assertions instead of hopes. Production behaviour is unchanged — the public constructor
+     * passes the same daemon single-thread executor the field used to build inline.
+     */
+    TrafficService(MazeGenerationService gen,
+                   GameSessionService sessions,
+                   ApplicationEventPublisher events,
+                   double bump,
+                   double decayFactor,
+                   double maxCost,
+                   Duration tickInterval,
+                   int maxConcurrent,
+                   int quietTicksToStop,
+                   ScheduledExecutorService ticker) {
+        this.ticker = ticker;
         this.gen = gen;
         this.sessions = sessions;
         this.events = events;

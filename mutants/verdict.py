@@ -18,15 +18,34 @@ you now believe is pinned when it is not.
 """
 
 import re
+import signal
 
 #: Surefire prints one of these on the line naming a failing test class or method.
 _SUREFIRE_FAILURE = re.compile(r"<<< (FAILURE|ERROR)")
 
 
 def failing_tests(stdout, *class_names):
-    """Method names of the given test classes that Surefire reported as failing."""
+    """Method names of the given test classes that Surefire reported as failing.
+
+    Only lines Maven itself prefixed `[ERROR]` are considered. That restriction is the whole
+    correctness of this function, and it was learned the hard way: a `Class.method` match
+    anywhere in stdout used to count, and **a passing test that logs a stack trace names its
+    own method in that trace**. `TrafficTickContractTest` deliberately makes a tick throw, the
+    service logs the exception as designed, and the frame
+    `at ...TrafficTickContractTest.aTickThatThrows...` appeared in every single run — so every
+    mutation was reported as "caught by aTickThatThrows...", including mutations that test never
+    exercises. It happened to be harmless there (each of those mutations was genuinely caught by
+    some other test), but it is the same failure this module exists to prevent, one level down:
+    a catch attributed to a test that did not catch it, and — for any build that dies after the
+    logging but before a real failure — a catch attributed to no failure at all.
+
+    Output from the forked test JVM (logback lines, their stack traces) arrives unprefixed;
+    Surefire's own failure lines and its end-of-run summary both come through Maven with the
+    `[ERROR]` prefix. Filtering on it separates the two exactly.
+    """
     pattern = r"(?:" + "|".join(re.escape(c) for c in class_names) + r")\.(\w+)"
-    return sorted({m for m in re.findall(pattern, stdout)
+    lines = [ln for ln in stdout.splitlines() if ln.startswith("[ERROR]")]
+    return sorted({m for m in re.findall(pattern, "\n".join(lines))
                    if m not in ("java", "class", "lambda")})
 
 
@@ -58,3 +77,29 @@ def classify(returncode, out, failed=None):
 def is_catch(verdict_text):
     """True only for verdicts that represent an observed test failure."""
     return verdict_text.startswith("caught")
+
+
+def restore_on_signal():
+    """Make a kill signal raise, so the harness's `finally` still restores the source tree.
+
+    Every harness here edits production source in place and undoes it in a `finally`. That
+    covers exceptions and it covers Ctrl-C, because SIGINT already raises KeyboardInterrupt.
+    It does not cover SIGTERM, whose default action is to end the process outright — and
+    SIGTERM is exactly what a wrapper `timeout` sends. A run killed that way leaves the last
+    mutation **welded into the tree**, and the damage does not announce itself: the next run
+    snapshots the mutated file as its own baseline, so it restores *to the mutation*, reports
+    that mutation as `SKIP (anchor x0)` (the anchor it looks for is the code it replaced), and
+    reports every other mutation as caught — because the welded-in defect fails tests all by
+    itself. A harness whose failure mode is a green-looking sweep on a broken tree is worse
+    than no harness. Observed here on 2026-08-02, in this folder, at a cost of one confusing
+    hour: `trafficteeth.py` timed out under a 2-minute wrapper mid-mutation and the next run
+    read 8/9 caught against a tree with quiet-tick retirement disabled.
+    """
+    def _raise(signum, _frame):
+        raise KeyboardInterrupt("received signal %d — restoring sources" % signum)
+
+    for sig in (signal.SIGTERM, signal.SIGHUP):
+        try:
+            signal.signal(sig, _raise)
+        except (ValueError, AttributeError, OSError):
+            pass  # not the main thread, or the platform lacks it — best effort
