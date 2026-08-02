@@ -59,6 +59,7 @@ MUT = [
 TESTS = "TournamentServiceTest,SampleStatsTest"
 V.restore_on_signal()
 originals = {T: T.read_text(), S: S.read_text()}
+V.snapshot(originals)
 survivors = []
 try:
     for path, name, old, new in MUT:
@@ -83,5 +84,6 @@ try:
 finally:
     for path, text in originals.items():
         path.write_text(text)
+    V.release()
     print("restored")
 print(f"\n{len(MUT)-len(survivors)}/{len(MUT)} caught; survivors: {survivors or 'none'}")

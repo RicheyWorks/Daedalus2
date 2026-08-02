@@ -27,6 +27,7 @@ MUT = [
 TESTS = "ConfigCoverageTest,BoundedStoresTest"
 V.restore_on_signal()
 originals = {YML: YML.read_text(), SVC: SVC.read_text()}
+V.snapshot(originals)
 survivors = []
 try:
     for path, name, old, new in MUT:
@@ -53,5 +54,6 @@ try:
 finally:
     for path, text in originals.items():
         path.write_text(text)
+    V.release()
     print("restored")
 print(f"\n{len(MUT) - len(survivors)}/{len(MUT)} caught; survivors: {survivors or 'none'}")

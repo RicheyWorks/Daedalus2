@@ -38,6 +38,7 @@ MUT = [
 ]
 V.restore_on_signal()
 orig = W.read_text()
+V.snapshot([W])
 survivors = []
 try:
     for name, old, new in MUT:

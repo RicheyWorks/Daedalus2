@@ -22,6 +22,7 @@ MUT = [
 ]
 V.restore_on_signal()
 originals = {C: C.read_text(), Y: Y.read_text()}
+V.snapshot(originals)
 survivors = []
 try:
     for path, name, old, new in MUT:
@@ -44,5 +45,6 @@ try:
         print(f"{name:34s} -> {v}", flush=True)
 finally:
     for path, text in originals.items(): path.write_text(text)
+    V.release()
     print("restored")
 print(f"\n{len(MUT)-len(survivors)}/{len(MUT)} caught; survivors: {survivors or 'none'}")

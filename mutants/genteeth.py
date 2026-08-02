@@ -28,15 +28,22 @@ And two bounds: the maze cache's size and idle TTL. The idle half is exactly wha
 `MazeGenerationStartGoalTest` exists *because* of a real bug — fixed corners meant "a dungeon's
 corners are solid rock, so the served maze was unsolvable and a play session opened inside a
 wall" — and deleting `placeStartAndGoalAtExtremes` from `generate` leaves all three of its tests
-green. Verified directly, not inferred: mutate, run that class alone, 3/3 pass. Its dungeon case
-tests one (generator, size, seed) triple and at 15x21 seed 7 the corners happen to be carved and
-connected; its perfect-maze case asserts the route is at least as long as the grid's longer
-dimension, which corner-to-corner clears by itself. A regression test that cannot detect its own
-regression is the most expensive kind of green.
+green. Verified directly, not inferred: mutate, run that class alone, 3/3 pass.
 
-`MazeGenerationContractTest` replaces both with assertions that can tell the difference: a sweep
-of twelve dungeon seeds, and — on a perfect maze, where the graph is a tree and double-BFS
-placement is exact — start-to-goal *equals* the diameter. The other seven survivors are pinned
+The first explanation written here was wrong, and correcting it is the more useful result. It was
+not seed luck. A probe over 200 seeds found the 15x21 dungeon's corner cells are solid rock in
+**200 of 200** — and its tests still pass, because `DungeonGenerator` places its own start and
+goal inside carved rooms (50/50 seeds off the corners, all solvable as generated). The
+service-level placement is redundant for precisely the case the regression test exercises, so no
+dungeon sweep at any seed count can fail on its removal. The defect the test was written for can
+no longer reach it.
+
+What the service placement still buys is the other half of its javadoc: spanning-tree generators
+leave the corner defaults alone (0/50 seeds move them), so without it a perfect maze is played
+corner to corner rather than across its diameter. `MazeGenerationContractTest` asserts that as an
+equality — a tree makes double-BFS placement exact — and that single assertion is what catches
+this mutation. The dungeon sweep there is a solvability property worth keeping and is not claimed
+to pin this fix. The other seven survivors are pinned
 there too: the cache's idle expiry (via the same Ticker seam `GameSessionService` carries),
 `replace` not re-inserting an evicted maze (`put` also answers null for an absent key, so the
 naive form passes an `isFalse()` assertion while resurrecting the entry), `adopt`'s placement and
@@ -130,6 +137,7 @@ def run_once():
 
 V.restore_on_signal()
 originals = {p: p.read_text() for p in {m[0] for m in MUT}}
+V.snapshot(originals)
 survivors = []
 try:
     for path, name, old, new in MUT:
@@ -151,6 +159,7 @@ try:
 finally:
     for path, text in originals.items():
         path.write_text(text)
+    V.release()
     print("restored")
 
 print(f"\n{len(MUT) - len(survivors)}/{len(MUT)} caught; survivors: {survivors or 'none'}")

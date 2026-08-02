@@ -40,13 +40,23 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * of a real bug: start and goal used to be dropped at fixed corners, and "a dungeon's corners are
  * solid rock, so the served maze was unsolvable and a play session opened inside a wall". Delete
  * {@code placeStartAndGoalAtExtremes} from {@code generate} today and all three of its tests still
- * pass. The dungeon case checks one (generator, size, seed) triple, and at 15×21 seed 7 the
- * corners happen to be carved and connected; the perfect-maze case asserts the route is at least
- * as long as the grid's longer dimension, which a corner-to-corner walk clears on its own. The
- * regression test for the documented bug does not detect the bug's return. So the two assertions
- * below are the ones that do: a sweep of dungeon seeds (corner luck does not hold across twelve),
- * and — for a perfect maze, where the graph is a tree and the double-BFS placement is exact —
- * the route between start and goal must be the maze's diameter, not merely long.
+ * pass.
+ *
+ * <p>The reason is not the obvious one, and it took a probe rather than a guess to get right.
+ * It is not seed luck: at 15×21 the dungeon's two corner cells are solid rock in <b>200 of 200</b>
+ * seeds measured. It is that {@code DungeonGenerator} places its own start and goal inside carved
+ * rooms — 50 of 50 seeds put them off the corners, and every one of those mazes is solvable as
+ * generated, before the service touches it. The service-level placement is therefore
+ * <em>redundant for exactly the case the regression test exercises</em>, and no sweep of dungeon
+ * seeds can ever fail on its removal. A test cannot catch a defect that can no longer reach it.
+ *
+ * <p>What the service-level placement still buys is the other half of its javadoc: spanning-tree
+ * generators leave the corner defaults untouched (0 of 50 seeds move them), so without it a
+ * perfect maze is played corner to corner instead of across its diameter — the "maximum-challenge
+ * placement" the core recommends, quietly downgraded. That is the assertion below that
+ * discriminates, and it is an equality rather than a bound because a perfect maze is a tree,
+ * which makes the double-BFS placement exact. The dungeon sweep stays as a solvability property
+ * worth having; it is not what pins this fix, and it is not claimed to be.
  */
 class MazeGenerationContractTest {
 

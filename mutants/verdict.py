@@ -17,6 +17,8 @@ of the exercise is to find out which guarantees are unpinned — and a false cat
 you now believe is pinned when it is not.
 """
 
+import hashlib
+import pathlib
 import re
 import signal
 
@@ -103,3 +105,50 @@ def restore_on_signal():
             signal.signal(sig, _raise)
         except (ValueError, AttributeError, OSError):
             pass  # not the main thread, or the platform lacks it — best effort
+
+#: Sidecars for hard-killed runs. `restore_on_signal` covers SIGTERM; nothing covers SIGKILL, an
+#: OOM, or a container that goes away, and each of those leaves a mutation welded into the tree.
+_PRISTINE = pathlib.Path(__file__).resolve().parent / ".pristine"
+
+
+def _sidecar(path):
+    return _PRISTINE / (hashlib.sha1(str(path).encode()).hexdigest() + ".txt")
+
+
+def snapshot(paths):
+    """Heal anything a previous run left mutated, then record pristine copies of `paths`.
+
+    Call once, before the first mutation, with the same paths the harness will edit. Two things
+    happen. Any sidecar already on disk is from a run that died before its `finally` — its
+    content is written back to the file it came from and the sidecar is removed, so the *next*
+    run repairs what the last one broke even after a SIGKILL. Then fresh sidecars are written for
+    this run. `release()` deletes them on a clean exit.
+
+    This is `fuzzteeth.py`'s pristine-sidecar idea, moved somewhere every harness gets it. It was
+    written twice on 2026-08-02 after the same failure twice: a killed run welds its mutation in,
+    the next run snapshots the mutated file as its own baseline, and the sweep that follows is
+    measured against a broken tree while reporting almost everything caught.
+    """
+    _PRISTINE.mkdir(exist_ok=True)
+    healed = []
+    for side in sorted(_PRISTINE.glob("*.txt")):
+        target, _, content = side.read_text(encoding="utf-8").partition("\n")
+        try:
+            victim = pathlib.Path(target)
+            if victim.exists() and victim.read_text(encoding="utf-8") != content:
+                victim.write_text(content, encoding="utf-8")
+                healed.append(victim.name)
+        finally:
+            side.unlink()
+    if healed:
+        print("healed from an interrupted run: " + ", ".join(healed), flush=True)
+    for path in paths:
+        _sidecar(path).write_text(str(path) + "\n" + pathlib.Path(path).read_text(encoding="utf-8"),
+                                  encoding="utf-8")
+    return healed
+
+
+def release():
+    """Drop this run's sidecars — call from the same `finally` that restores the sources."""
+    for path in _PRISTINE.glob("*.txt"):
+        path.unlink()

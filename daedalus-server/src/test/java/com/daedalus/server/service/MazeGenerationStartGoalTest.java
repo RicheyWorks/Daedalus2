@@ -4,7 +4,10 @@ package com.daedalus.server.service;
 
 import com.daedalus.solver.solvers.BfsSolver;
 import com.daedalus.model.MazeStats;
+import com.daedalus.theory.MazeMetrics;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -41,9 +44,24 @@ class MazeGenerationStartGoalTest {
     @Autowired
     private MazeGenerationService service;
 
-    @Test
-    void aGeneratedDungeonIsSolvable() {
-        var cached = service.generate("dungeon", 15, 21, 7L);
+    /**
+     * Several seeds, because one is a fixture and six are a property — but read the note below
+     * before treating this as the test that holds the corner fix. It is not, and cannot be.
+     *
+     * <p>Measured on 2026-08-02: deleting {@code placeStartAndGoalAtExtremes} from
+     * {@code generate} left every test in this class green. Not seed luck — the 15×21 dungeon's
+     * corner cells are rock in 200 of 200 seeds probed. {@code DungeonGenerator} sets its own
+     * start and goal inside carved rooms (50/50 seeds, all solvable as generated), so the
+     * service-level placement is redundant here and its removal is invisible to any dungeon,
+     * at any seed. What does catch it is the diameter equality in
+     * {@code aGeneratedPerfectMazeIsSolvableAndUsesTheExtremes} below, because spanning-tree
+     * generators do leave the corner defaults in place. {@code mutants/claimteeth.py} keeps
+     * asking this question of every test that claims to hold a fix.
+     */
+    @ParameterizedTest
+    @ValueSource(longs = {1L, 3L, 7L, 11L, 19L, 42L})
+    void aGeneratedDungeonIsSolvable(long seed) {
+        var cached = service.generate("dungeon", 15, 21, seed);
         var grid = cached.grid();
 
         assertThat(grid.openNeighbors(grid.start()))
@@ -63,9 +81,13 @@ class MazeGenerationStartGoalTest {
 
         var path = new BfsSolver().solve(grid, grid.start(), grid.goal(), new MazeStats());
         assertThat(path).isNotEmpty();
-        // Extremes placement: the route between start and goal is at least as long as the
-        // grid's longer dimension — corners can't guarantee that, the diameter endpoints do.
-        assertThat(path.size()).isGreaterThanOrEqualTo(21);
+        // Equality, not a bound. The old assertion here was "at least as long as the grid's
+        // longer dimension", which a corner-to-corner walk on a 15x21 clears by itself — so it
+        // held just as well with the placement deleted. A perfect maze is a tree, which makes
+        // the double-BFS placement exact, so the served route must BE the diameter.
+        assertThat(path.size() - 1)
+                .as("start and goal must be the two farthest-apart cells, not merely far apart")
+                .isEqualTo(MazeMetrics.exactDiameter(grid).distance());
     }
 
     @Test

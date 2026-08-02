@@ -132,6 +132,24 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Eleven fixes, eleven named guardians, one that does not guard.** After finding that
+  `MazeGenerationStartGoalTest` passes with the fix it was written for deleted, the obvious
+  question was whether that is a pattern. `mutants/claimteeth.py` answers it: it pairs a fix with
+  the single test the repo's javadoc or commit message claims holds it, deletes the fix, and runs
+  **only that test**. A catch by anything else is deliberately invisible, because the question is
+  not "is this covered somewhere" but "does the guardian named in the comment actually guard".
+
+  Ten of eleven claims hold. Trémaux's third rule, the weighted copy's weights, `carve` opening
+  both sides, the directed landmark bound, the rate limiter's refill floor, the per-session lock,
+  the leaderboard trim, the STOMP `SEND` refusal, the hotspot cascade — each fails its named test
+  within seconds of being removed. The single exception is the one already known, and it is now
+  backstopped twice: `MazeGenerationContractTest` catches it, and `MazeGenerationStartGoalTest`
+  has been given a diameter equality so it catches it too.
+
+  A negative result, and worth the run. The failure found in the substrate was one bad assertion
+  rather than a habit, which is the more reassuring answer and not one available by inspection —
+  every one of these tests *looks* like it holds its fix, including the one that does not.
+
 - **The regression test for the corner bug does not detect the corner bug.** `MazeGenerationService`
   is the substrate every feature commits through — generation, the cache, the swap point both
   tickers use, the adoption path for crossbred mazes, the circuit-breaker fallback — and no
@@ -143,13 +161,23 @@ under the `_migration/` portfolios.
   maze was unsolvable and a play session opened inside a wall". `MazeGenerationStartGoalTest` was
   written to hold the fix. Delete `placeStartAndGoalAtExtremes` from `generate` today and all
   three of its tests still pass — verified directly, not inferred: mutate, run that class alone,
-  3 of 3 green. Its dungeon case exercises one (generator, size, seed) triple, and at 15×21 seed 7
-  the corners happen to be carved and connected; its perfect-maze case asserts the route is at
-  least as long as the grid's longer dimension, which a corner-to-corner walk clears on its own.
-  A regression test that cannot detect its own regression is the most expensive kind of green,
-  because it is the reason nobody looks again. `MazeGenerationContractTest` sweeps twelve dungeon
-  seeds (corner luck does not survive twelve) and, on a perfect maze — a tree, where the double-BFS
-  placement is exact — asserts the start-to-goal route *equals* the maze's diameter.
+  3 of 3 green.
+
+  The reason is not the obvious one, and the first version of this entry got it wrong. It is not
+  seed luck: a probe found the 15×21 dungeon's corner cells are solid rock in **200 of 200** seeds.
+  It is that `DungeonGenerator` places its own start and goal inside carved rooms — 50 of 50 seeds
+  put them off the corners, and every one of those mazes is solvable before the service touches it.
+  The service-level placement is redundant for exactly the maze the regression test exercises, so
+  no sweep of dungeon seeds at any count can fail on its removal. A test cannot catch a defect that
+  can no longer reach it, and no amount of strengthening that particular assertion would have
+  changed the result.
+
+  What the service placement still buys is the other half of its javadoc: spanning-tree generators
+  leave the corner defaults alone (0 of 50 seeds move them), so without it a perfect maze is played
+  corner to corner instead of across its diameter — the maximum-challenge placement the core
+  recommends, quietly downgraded. `MazeGenerationContractTest` asserts that as an *equality* (a
+  perfect maze is a tree, which makes the double-BFS placement exact), and so, now, does
+  `MazeGenerationStartGoalTest` itself: the fix is pinned where the code comment says it is pinned.
 
   The rest were unpinned in the ordinary way. `replace` promises `computeIfPresent` so an evicted
   maze is never resurrected; `put` also answers null for an absent key, so the naive form passes

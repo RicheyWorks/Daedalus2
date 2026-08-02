@@ -21,6 +21,7 @@ REPO = pathlib.Path(__file__).resolve().parent.parent
 T = REPO / "daedalus-server/src/main/java/com/daedalus/server/service/HeuristicLensService.java"
 V.restore_on_signal()
 orig = T.read_text()
+V.snapshot([T])
 MUT = [
  # Re-aimed 2026-08-01: the classifier moved from exact float comparison
  # (`f < optimal` / `f == optimal`) to an epsilon band (`delta < -EPSILON` /

@@ -70,6 +70,7 @@ MUT = [
 
 V.restore_on_signal()
 originals = {p: p.read_text() for p in {m[0] for m in MUT}}
+V.snapshot(originals)
 survivors = []
 try:
     for path, name, old, new in MUT:
@@ -98,5 +99,6 @@ try:
 finally:
     for path, text in originals.items():
         path.write_text(text)
+    V.release()
     print("restored")
 print(f"\n{len(MUT) - len(survivors)}/{len(MUT)} caught; survivors: {survivors or 'none'}")

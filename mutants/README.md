@@ -30,6 +30,7 @@ by any test.
     python3 mutants/livingteeth.py   # eleven ways to stall, overrun or leak a living run
     python3 mutants/campaignteeth.py # twelve ways to unrung the campaign ladder
     python3 mutants/genteeth.py      # thirteen ways to break the substrate everything commits through
+    python3 mutants/claimteeth.py    # eleven fixes, run against the one test each claims to have
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module
@@ -72,11 +73,22 @@ code) means the harness is matching noise, not evidence.
 
 **A test named after a bug is not the same as a test that catches it.** `genteeth.py` found that
 `MazeGenerationStartGoalTest` — written to hold the fix for start/goal landing on solid rock —
-passes with the fix deleted. Its dungeon case uses one seed where the corners happen to be carved;
-its perfect-maze case asserts a length that corner-to-corner already clears. When a mutation at
-the exact line a regression test was written for survives, do not assume the harness is wrong:
-mutate, run that one class, and read the count. Three of three green is the answer, and it is
-worth more than any number of new mutations elsewhere.
+passes with the fix deleted. When a mutation at the exact line a regression test was written for
+survives, do not assume the harness is wrong: mutate, run that one class, and read the count.
+Three of three green was the answer here.
+
+Then find out *why*, and do not stop at the first plausible story. The first explanation written
+up for this one — one unlucky seed where the corners happened to be carved — was wrong, and a
+200-seed probe said so: the corners are rock every time. The real reason is that
+`DungeonGenerator` places its own start and goal inside carved rooms, so the service-level fix is
+redundant on the very maze the test exercises and no seed sweep could ever catch its removal. The
+two explanations imply completely different repairs (more seeds versus a different assertion
+entirely), which is why the probe was worth the ten minutes.
+
+`claimteeth.py` generalises the question: each fix runs against only the one test that claims it.
+Ten of eleven claims hold, which is a negative result worth having — the substrate's bad assertion
+was an incident, not a habit, and no amount of reading would have told you which of the eleven was
+the broken one.
 
 **Value-based mutations drift like anchors do.** `ratchetteeth.py` simulates a coverage regression
 by setting the floor above actual coverage — 0.95, chosen when coverage was 94.63%. At 95.10% that
