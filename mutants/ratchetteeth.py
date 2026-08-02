@@ -15,7 +15,11 @@ POM = REPO / "daedalus-server/pom.xml"
 orig = POM.read_text()
 
 CASES = [
-    ("floor set above actual (simulates a regression)", 0.95, 0.98, "minimum"),
+    # Chase the measured ratio: this case only simulates a regression while the floor it sets is
+    # genuinely above actual coverage. It was 0.95 when coverage was 94.63%, which as of the
+    # 08-02 contract suites (95.10%) would have passed and reported a false survivor — the
+    # value-based twin of the anchor drift mutants/README.md warns about.
+    ("floor set above actual (simulates a regression)", 0.97, 0.99, "minimum"),
     ("floor left stale 12 points low (the audited bug)", 0.79, 0.82, "maximum"),
 ]
 

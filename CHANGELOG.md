@@ -111,6 +111,19 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Coverage ratchet raised to 0.93 / 0.96 — the ceiling has now fired twice.** Measured
+  instruction coverage is 95.10% (94.63% on 08-01, 82.2% on 07-29). The four contract suites added
+  today pushed the ratio past the old 0.95 ceiling and failed the build until this bump, which is
+  the ceiling working as designed: it forces the threshold move into the same commit as the tests
+  that earned it, instead of banking slack the next regression can spend unnoticed.
+
+  `ratchetteeth.py` needed a bump of its own, and it is the more interesting half. Its
+  regression-simulating case sets a floor *above* actual coverage — 0.95 when coverage was
+  94.63% — and at 95.10% that floor now passes, so the case would have reported a false survivor
+  while testing nothing. Value-based mutations drift exactly like anchor-based ones, and nothing
+  in the harness notices; the case now sets 0.97 and will need chasing again the next time
+  coverage climbs.
+
 - **Off the Jackson 2 APIs Boot 4 marks for removal.** `MappingJackson2MessageConverter` →
   `JacksonJsonMessageConverter` in the STOMP smoke test, and `HttpStatus.UNPROCESSABLE_ENTITY` →
   `UNPROCESSABLE_CONTENT` (RFC 9110 renamed 422; the wire status is unchanged). With the Redis
@@ -118,6 +131,40 @@ under the `_migration/` portfolios.
   keeping at zero, because the one that mattered was invisible in a list of seven.
 
 ### Fixed
+
+- **The regression test for the corner bug does not detect the corner bug.** `MazeGenerationService`
+  is the substrate every feature commits through — generation, the cache, the swap point both
+  tickers use, the adoption path for crossbred mazes, the circuit-breaker fallback — and no
+  mutation had ever been aimed at it. Thirteen mutations, eight survivors, and unusually for this
+  folder every one of the eight was real. Not one was inert.
+
+  The headline is the placement of start and goal. That code exists because of a documented bug:
+  they used to be dropped at fixed corners, and "a dungeon's corners are solid rock, so the served
+  maze was unsolvable and a play session opened inside a wall". `MazeGenerationStartGoalTest` was
+  written to hold the fix. Delete `placeStartAndGoalAtExtremes` from `generate` today and all
+  three of its tests still pass — verified directly, not inferred: mutate, run that class alone,
+  3 of 3 green. Its dungeon case exercises one (generator, size, seed) triple, and at 15×21 seed 7
+  the corners happen to be carved and connected; its perfect-maze case asserts the route is at
+  least as long as the grid's longer dimension, which a corner-to-corner walk clears on its own.
+  A regression test that cannot detect its own regression is the most expensive kind of green,
+  because it is the reason nobody looks again. `MazeGenerationContractTest` sweeps twelve dungeon
+  seeds (corner luck does not survive twelve) and, on a perfect maze — a tree, where the double-BFS
+  placement is exact — asserts the start-to-goal route *equals* the maze's diameter.
+
+  The rest were unpinned in the ordinary way. `replace` promises `computeIfPresent` so an evicted
+  maze is never resurrected; `put` also answers null for an absent key, so the naive form passes
+  an `isFalse()` assertion while quietly putting the entry back — and both tickers read false as
+  "stop", leaving a maze nothing will ever tick or evict again. The maze cache's idle expiry was
+  unpinned exactly as the session store's was on 08-01, so it gets the same `Ticker` seam and the
+  same clock-advancing test; size and idle are separate promises and only the first was checked.
+  `adopt` promises to run generation's finishing steps so an adopted maze is "indistinguishable
+  from a generated one downstream", and neither its placement nor its `MazeGeneratedEvent` was
+  asserted. The hotspot bounds check was pinned only by a comfortably out-of-range cell, so the
+  boundary it exists for — `row == rows`, the first invalid index — was free to drift. The
+  fallback's rethrow of a caller error, which is what makes a bad request answer 400 rather than
+  200 with a maze nobody asked for, had no test. And the null-grid guard is not the formality it
+  looks like: generators are a plugin extension point, so "returns null" is third-party behaviour
+  this service has to survive. `mutants/genteeth.py`, 13/13.
 
 - **A golden digest was standing in for four of campaign mode's properties.** `CampaignService`
   is the newest substantial code in the repo and its test is the most self-aware: it sweeps

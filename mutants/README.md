@@ -29,6 +29,7 @@ by any test.
     python3 mutants/trafficteeth.py  # nine ways to leak a ticker or unbound a cost
     python3 mutants/livingteeth.py   # eleven ways to stall, overrun or leak a living run
     python3 mutants/campaignteeth.py # twelve ways to unrung the campaign ladder
+    python3 mutants/genteeth.py      # thirteen ways to break the substrate everything commits through
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module
@@ -69,6 +70,20 @@ Surefire's failure lines come through Maven prefixed `[ERROR]`, so `failing_test
 prefixed lines. Read the catcher names: an implausible one (a test that cannot reach the mutated
 code) means the harness is matching noise, not evidence.
 
+**A test named after a bug is not the same as a test that catches it.** `genteeth.py` found that
+`MazeGenerationStartGoalTest` — written to hold the fix for start/goal landing on solid rock —
+passes with the fix deleted. Its dungeon case uses one seed where the corners happen to be carved;
+its perfect-maze case asserts a length that corner-to-corner already clears. When a mutation at
+the exact line a regression test was written for survives, do not assume the harness is wrong:
+mutate, run that one class, and read the count. Three of three green is the answer, and it is
+worth more than any number of new mutations elsewhere.
+
+**Value-based mutations drift like anchors do.** `ratchetteeth.py` simulates a coverage regression
+by setting the floor above actual coverage — 0.95, chosen when coverage was 94.63%. At 95.10% that
+floor passes and the case silently tests nothing. Anchors report SKIP when they drift; a stale
+constant reports a clean run. Re-check the numeric cases whenever the thing they compare against
+moves.
+
 **Read the catcher names for a second reason: a golden test is not a catch.** `campaignteeth.py`
 reported 11 of 13 caught, and four of those were caught by `DeterminismGoldenTest` alone — a
 digest comparison that fires on *any* output change. Re-running those four with the golden test
@@ -96,9 +111,10 @@ until this same day. The number worth watching is what a *new* mutation does —
 here caught real gaps in `LeaderboardService` and `RedisConfig` that 78 existing ones did not,
 because nobody had pointed a mutation at those files before.
 
-Since that baseline, six harnesses have been added by pointing mutations at classes nobody had
+Since that baseline, seven harnesses have been added by pointing mutations at classes nobody had
 attacked before — `sessionteeth` (10), `gridteeth` (6), `trafficteeth` (9), `livingteeth` (11),
-`campaignteeth` (12), `landmarkteeth` (4). **20 harnesses, 130 mutations, 0 survivors.** Every one of those five found
+`campaignteeth` (12), `genteeth` (13), `landmarkteeth` (4). **21 harnesses, 143 mutations, 0
+survivors.** Every one of those five found
 at least one real unpinned guarantee on its first run, which is the argument for writing the next
 one rather than re-running these.
 

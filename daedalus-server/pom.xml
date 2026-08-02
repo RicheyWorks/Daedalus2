@@ -21,16 +21,18 @@
     </description>
 
     <properties>
-        <!-- Coverage ratchet: measured 94.63% instruction on 2026-08-01 (up from 82.2% on
-             07-29 — the UI-sprint, audit, error-contract and Redis tests); re-pinned ~3 below.
-             Raise as coverage rises; never lower to make a PR pass.
+        <!-- Coverage ratchet: measured 95.10% instruction on 2026-08-02 (94.63% on 08-01, up
+             from 82.2% on 07-29); re-pinned ~2 below. Raise as coverage rises; never lower to
+             make a PR pass.
 
-             The ceiling did its job to get here: the Redis retention and round-trip tests
-             pushed the ratio past 0.94 and failed the build until this bump, which is the
-             whole point of pairing new tests with a threshold move rather than banking slack
-             the next regression can spend unnoticed. -->
-        <jacoco.check.minimum>0.92</jacoco.check.minimum>
-        <jacoco.check.ceiling>0.95</jacoco.check.ceiling>
+             The ceiling has now fired twice, which is the argument for keeping it. The Redis
+             retention and round-trip tests pushed past 0.94 and failed the build until the
+             last bump; the four tick/contract suites (traffic, living, campaign, generation)
+             pushed past 0.95 and failed it again. Each time the build insisted the threshold
+             move happen in the same commit as the tests that earned it, instead of banking
+             slack the next regression could spend unnoticed. -->
+        <jacoco.check.minimum>0.93</jacoco.check.minimum>
+        <jacoco.check.ceiling>0.96</jacoco.check.ceiling>
     </properties>
 
     <dependencies>
