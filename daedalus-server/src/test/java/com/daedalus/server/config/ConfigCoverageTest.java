@@ -46,6 +46,18 @@ import static org.assertj.core.api.Assertions.assertThat;
  * <p>Both directions are checked, because each catches a different mistake: a key in the code but
  * not the file is an operator who cannot find the knob, and a key in the file but not the code is
  * an operator turning a knob attached to nothing.
+ *
+ * <h3>Why it walks two modules</h3>
+ *
+ * <p>This check was scoped to {@code daedalus-server} and found nothing for weeks, which was
+ * true and incomplete: {@code daedalus-desktop} is a Spring Boot application too, it read
+ * {@code daedalus.ui.theme} through {@code @Value}, and it shipped <em>no configuration file at
+ * all</em>. {@code CosmicTheme}'s javadoc told the reader the default lived "in
+ * application.yml"; there was no application.yml. Selecting a theme meant a {@code -D} flag
+ * nothing documented. That is exactly the failure above — a knob an operator cannot find, and a
+ * comment pointing at a file that does not exist — sitting in the one module the guard could not
+ * see. A check scoped to where the last bug was found is a check with a blind spot by
+ * construction, so this now walks every module that reads configuration.
  */
 class ConfigCoverageTest {
 
@@ -66,26 +78,39 @@ class ConfigCoverageTest {
             "daedalus.session.multiplayer",   // opt-in feature flag, off unless a profile sets it
             "daedalus.redis.enabled");        // set per profile (dev off, prod on), never here
 
+    /**
+     * Every module that reads {@code daedalus.*} configuration, as (sources, yml) relative to the
+     * server module — Surefire runs each test with its own module directory as the working
+     * directory, which is what makes {@code ..} stable here.
+     */
+    private static final List<Path[]> MODULES = List.of(
+            new Path[] {Path.of("src/main/java"), Path.of("src/main/resources/application.yml")},
+            new Path[] {Path.of("../daedalus-desktop/src/main/java"),
+                        Path.of("../daedalus-desktop/src/main/resources/application.yml")});
+
     @Test
     void everyConfigKeyTheCodeReadsIsDocumentedInApplicationYml() throws IOException {
-        Set<String> used = keysReferencedInSource();
-        Set<String> documented = keysDeclaredInYaml();
+        for (Path[] module : MODULES) {
+            Set<String> used = keysReferencedInSource(module[0]);
+            Set<String> documented = keysDeclaredInYaml(module[1]);
 
-        Set<String> missing = new TreeSet<>(used);
-        missing.removeAll(documented);
-        missing.removeAll(INTENTIONALLY_UNDOCUMENTED);
+            Set<String> missing = new TreeSet<>(used);
+            missing.removeAll(documented);
+            missing.removeAll(INTENTIONALLY_UNDOCUMENTED);
 
-        assertThat(missing)
-                .as("these keys are read by @Value but appear nowhere in application.yml, so an "
-                        + "operator has no way to discover them: %s", missing)
-                .isEmpty();
+            assertThat(missing)
+                    .as("%s reads these keys via @Value and %s mentions none of them, so an "
+                            + "operator has no way to discover them: %s",
+                            module[0], module[1], missing)
+                    .isEmpty();
+        }
     }
 
     @Test
     void everyKeyApplicationYmlDeclaresIsActuallyReadBySomething() throws IOException {
-        Set<String> used = keysReferencedInSource();
+        Set<String> used = keysReferencedInSource(Path.of("src/main/java"));
         Set<String> boundPrefixes = configurationPropertiesPrefixes();
-        Set<String> documented = keysDeclaredInYaml();
+        Set<String> documented = keysDeclaredInYaml(Path.of("src/main/resources/application.yml"));
 
         // A @ConfigurationProperties class binds a whole subtree without a single ${...}, so a
         // scanner that only knows about @Value would report every security and rate-limit key as
@@ -101,12 +126,12 @@ class ConfigCoverageTest {
                 .isEmpty();
     }
 
-    /** Every {@code ${daedalus.x.y}} referenced from the server's main sources. */
-    private static Set<String> keysReferencedInSource() throws IOException {
+    /** Every {@code ${daedalus.x.y}} referenced from one module's main sources. */
+    private static Set<String> keysReferencedInSource(Path root) throws IOException {
         Set<String> keys = new LinkedHashSet<>();
-        Path root = Path.of("src/main/java");
         assertThat(Files.isDirectory(root))
-                .as("expected to run from the daedalus-server module directory")
+                .as("expected to run from the daedalus-server module directory, with %s readable",
+                        root)
                 .isTrue();
         try (Stream<Path> files = Files.walk(root)) {
             for (Path file : files.filter(p -> p.toString().endsWith(".java")).toList()) {
@@ -116,7 +141,10 @@ class ConfigCoverageTest {
                 }
             }
         }
-        assertThat(keys).as("the scanner found no keys at all, so it is broken").isNotEmpty();
+        assertThat(keys)
+                .as("the scanner found no keys at all under %s, so it is broken or aimed wrong",
+                        root)
+                .isNotEmpty();
         return keys;
     }
 
@@ -135,12 +163,15 @@ class ConfigCoverageTest {
         return prefixes;
     }
 
-    /** Every leaf under {@code daedalus:} in application.yml, flattened to dotted keys. */
-    private static Set<String> keysDeclaredInYaml() throws IOException {
-        try (InputStream in = Files.newInputStream(Path.of("src/main/resources/application.yml"))) {
+    /** Every leaf under {@code daedalus:} in one module's application.yml, as dotted keys. */
+    private static Set<String> keysDeclaredInYaml(Path yml) throws IOException {
+        assertThat(Files.isRegularFile(yml))
+                .as("%s reads configuration but ships no %s", yml.getParent(), yml)
+                .isTrue();
+        try (InputStream in = Files.newInputStream(yml)) {
             Map<String, Object> root = new Yaml().load(in);
             Object daedalus = root.get("daedalus");
-            assertThat(daedalus).as("application.yml has no daedalus block").isNotNull();
+            assertThat(daedalus).as("%s has no daedalus block", yml).isNotNull();
             Set<String> keys = new LinkedHashSet<>();
             flatten("daedalus", daedalus, keys);
             return keys;
@@ -170,6 +201,7 @@ class ConfigCoverageTest {
                         .as("a prefix this broad would exempt the entire config tree")
                         .isNotEqualTo("daedalus")
                         .startsWith("daedalus."));
-        assertThat(keysDeclaredInYaml()).anyMatch(k -> k.startsWith("daedalus.security."));
+        assertThat(keysDeclaredInYaml(Path.of("src/main/resources/application.yml")))
+                .anyMatch(k -> k.startsWith("daedalus.security."));
     }
 }

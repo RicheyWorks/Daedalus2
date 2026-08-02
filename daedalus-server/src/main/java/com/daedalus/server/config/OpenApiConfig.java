@@ -33,6 +33,16 @@ import java.util.List;
 @Configuration
 public class OpenApiConfig {
 
+    /**
+     * Where the published spec points readers. Until the repository was public this was a
+     * placeholder — {@code https://github.com/}, with a TODO beside it — and the licence and
+     * README links were relative paths ({@code ./LICENSE}, {@code ./README.md}) resolved against
+     * whatever page happened to be rendering the spec. In Swagger UI that is
+     * {@code /swagger-ui/./LICENSE}: three dead links in the one document whose whole job is to
+     * be handed to somebody who does not have the source checked out.
+     */
+    private static final String REPO = "https://github.com/RicheyWorks/Daedalus2";
+
     @Bean
     public OpenAPI daedalusOpenAPI(@Value("${spring.application.name:daedalus-server}") String appName,
                                    @Value("${server.port:8080}") String port) {
@@ -46,13 +56,13 @@ public class OpenApiConfig {
                         .version("1.0.0")
                         .contact(new Contact()
                                 .name("Daedalus")
-                                .url("https://github.com/")) // TODO: fill in once the repo is public
+                                .url(REPO))
                         .license(new License()
                                 .name("MIT")
-                                .url("./LICENSE")))
+                                .url(REPO + "/blob/main/LICENSE")))
                 .externalDocs(new ExternalDocumentation()
                         .description("Project README + audit + changelog")
-                        .url("./README.md"))
+                        .url(REPO + "#readme"))
                 .servers(List.of(
                         new Server().url("http://localhost:" + port).description("Local dev"),
                         new Server().url("/").description("Same-origin (deployed)")))

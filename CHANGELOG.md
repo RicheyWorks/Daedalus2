@@ -132,6 +132,52 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **The desktop shipped no configuration file, and the check that would have caught it only
+  looked at the server.** `daedalus-desktop` is a Spring Boot application; `ThemeManager` reads
+  `daedalus.ui.theme` through `@Value`; `CosmicTheme`'s javadoc tells the reader the default lives
+  "in `application.yml`". There was no `application.yml` in that module — the only way to pick a
+  theme was a `-Ddaedalus.ui.theme` flag nothing documents.
+
+  That is precisely the failure `ConfigCoverageTest` exists to prevent. Its own javadoc says
+  "configuration that is documented and inert is a lie", and it checks both directions of the
+  server's config surface — while scanning `src/main/java` relative to the server module, so it
+  could not see the desktop at all. A guard scoped to where the last bug was found has a blind
+  spot by construction. The desktop now ships an `application.yml` with the key and a
+  `DAEDALUS_UI_THEME` override, and the check walks every module that reads configuration:
+  removing that new file fails it, which is how the fix was verified rather than assumed.
+
+- **Three dead links in the published API document.** `OpenApiConfig` served
+  `https://github.com/` as the project's contact URL — a placeholder with a `TODO: fill in once
+  the repo is public` beside it, still there after the repo went public — and gave the licence and
+  README as the relative paths `./LICENSE` and `./README.md`, which Swagger UI resolves against
+  `/swagger-ui/`. An OpenAPI document exists to be handed to someone who does not have the source
+  checked out, and every link in this one failed exactly that reader. All three are now absolute,
+  and `ApplicationSmokeTest` asserts it: the placeholder fails the new assertion, checked by
+  putting it back.
+
+### Audited, unchanged
+
+  A sweep for wiring gaps also turned up things worth recording rather than acting on, and two
+  worth *not* acting on. Nine public methods have no caller anywhere in the repository — not in
+  production, not in a test: `Cell.isDeadEnd/isJunction/isCorridor/openWalls`,
+  `Point.translate/euclidean`, `TileType.walkable`, `Direction.shuffled`, and
+  `Heuristics.manhattanWithTieBreaker`. The last is the interesting one, because
+  `HeuristicLensService`'s own javadoc records that "on some mazes tie-breaking matters more than
+  the heuristic does" while the lens offers Manhattan, landmark and inflated — and not the
+  tie-breaking variant sitting unused beside them. A further ten methods are called only by their
+  tests (`DSU.largestComponent/connected/sizeOf`, `MazeFlow.edgeConnectivity`,
+  `FacilityPlacement.kCenterAcrossComponents`, `DistanceOracle.eccentricity`,
+  `GrowthEstimator.classifyVisited/toTable`, `WeightedMazeGrid.getWeight/setAllWeights`): library
+  surface, defensible as such, and now written down. The agent-walk feature — three endpoints, a
+  service and an event that feeds traffic — is the only server capability with no call site in the
+  web UI.
+
+  The two that look like gaps and are not: `daedalus.session.multiplayer` is absent from
+  `application.yml` on purpose (`ConfigCoverageTest` records the exemption, and the UI's join
+  button ships disabled with the flag named in its tooltip), and `DistanceOracle` is dormant by an
+  argument written into `TopographyService`'s javadoc. Both were checked before being reported,
+  which is the only reason they are not in the list above.
+
 - **Eleven fixes, eleven named guardians, one that does not guard.** After finding that
   `MazeGenerationStartGoalTest` passes with the fix it was written for deleted, the obvious
   question was whether that is a pattern. `mutants/claimteeth.py` answers it: it pairs a fix with

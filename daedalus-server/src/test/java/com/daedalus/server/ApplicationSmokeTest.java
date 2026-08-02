@@ -132,6 +132,23 @@ class ApplicationSmokeTest {
         assertThat(documented)
                 .as("generated OpenAPI document must cover the contract endpoints")
                 .containsAll(CONTRACT_PATHS);
+
+        // Every link the document hands out must be one a reader can follow from wherever the
+        // spec is rendered. Both of these were broken until 2026-08-02: the contact URL was the
+        // placeholder `https://github.com/` with a TODO beside it, and the licence and README
+        // were relative paths that Swagger UI resolves against /swagger-ui/. A spec exists to be
+        // read by someone without the source checked out, which is exactly the reader those
+        // links failed.
+        JsonNode info = doc.path("info");
+        for (String url : List.of(info.path("contact").path("url").asText(),
+                                  info.path("license").path("url").asText(),
+                                  doc.path("externalDocs").path("url").asText())) {
+            assertThat(url)
+                    .as("every published link must be absolute and resolvable off-site")
+                    .startsWith("https://")
+                    .doesNotContain("github.com/\"")
+                    .hasSizeGreaterThan("https://github.com/".length());
+        }
     }
 
     @Test
