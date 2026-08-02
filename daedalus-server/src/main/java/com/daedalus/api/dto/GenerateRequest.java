@@ -24,6 +24,13 @@ import java.util.List;
  *       bound (512) is a guardrail against accidental memory blowups (a 512×512 grid
  *       allocates roughly 1 MB of {@code boolean[]} state alone).</li>
  *   <li>{@code seed} — optional. {@code null} means "let the server pick {@code System.nanoTime()}".</li>
+ *   <li>{@code hotspots} — optional, at most 64, and <em>each element</em> is validated against
+ *       {@link Hotspot}'s own bounds. The cascade is written {@code List<@Valid Hotspot>} rather
+ *       than {@code @Valid List<Hotspot>}: the latter still cascades in Hibernate Validator 9,
+ *       but only by a deprecated path (HV000271) that names the container instead of what is
+ *       inside it. When that path goes, the element bounds stop being enforced — silently, and
+ *       in the direction that accepts bad input. {@code MazeControllerValidationTest} pins the
+ *       cascade so the removal cannot happen quietly.</li>
  * </ul>
  *
  * @param generatorId identifier of the registered generator algorithm (e.g. {@code "binary-tree"})
@@ -46,8 +53,7 @@ public record GenerateRequest(
         Long seed,
 
         @Size(max = 64, message = "at most 64 hotspots per maze")
-        @Valid
-        List<Hotspot> hotspots
+        List<@Valid Hotspot> hotspots
 ) {
     /** Pre-hotspot shape — uniform-cost maze, kept for source compatibility. */
     public GenerateRequest(String generatorId, int rows, int cols, Long seed) {

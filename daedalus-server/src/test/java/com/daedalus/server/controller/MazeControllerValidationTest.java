@@ -130,6 +130,27 @@ class MazeControllerValidationTest {
     }
 
     @Test
+    void generate_withAnOutOfRangeHotspot_returns400_soTheCascadeCannotLapse() throws Exception {
+        // Nothing pinned the element cascade before 2026-08-01, and it is the kind of thing
+        // that lapses without a sound: `@Valid List<Hotspot>` still cascades under Hibernate
+        // Validator 9, but only via the deprecated container form (HV000271). Move the
+        // annotation wrong, or let the deprecation land, and hotspots are no longer checked at
+        // all — a cost of 0.5 reaches the engine, where sub-1.0 weights invalidate the unit-cost
+        // landmark bound and A* quietly returns suboptimal routes (ADR-001 item 4 measured 36%).
+        // Every other bound in this class guards a scalar on the request itself; this is the
+        // only one that has to travel into a collection to matter.
+        String body = json.writeValueAsString(new GenerateRequest("binary-tree", 10, 10, 1L,
+                java.util.List.of(new com.daedalus.api.dto.Hotspot(3, 3, 0.5))));
+
+        mvc.perform(post("/api/v1/maze/generate")
+                        .contentType("application/json")
+                        .content(body))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.fieldErrors['hotspots[0].cost']",
+                        containsString("at least 1.0")));
+    }
+
+    @Test
     void generate_withMalformedJson_returns400_malformedRequest() throws Exception {
         mvc.perform(post("/api/v1/maze/generate")
                         .contentType("application/json")

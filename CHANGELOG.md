@@ -119,6 +119,23 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Hotspot bounds were being enforced by a deprecated path, and nothing pinned them.**
+  `GenerateRequest` cascaded into its hotspot list with `@Valid List<Hotspot>` — the container
+  form Hibernate Validator deprecates as HV000271, which names the collection rather than what
+  is inside it. It still cascades today (checked: an out-of-range hotspot produces all three
+  element violations), so this is a fix ahead of the removal rather than a live hole. The failure
+  it would have become is the quiet kind: element bounds stop being checked, nothing errors, and
+  a `cost` of 0.5 reaches the engine — where sub-1.0 weights invalidate the unit-cost landmark
+  bound and A\* returns silently suboptimal routes, measured at up to 36% in ADR-001 item 4.
+
+  Now written `List<@Valid Hotspot>`, and — the part that was actually missing —
+  `MazeControllerValidationTest` pins the cascade. Every other bound in that class guards a
+  scalar on the request itself; this is the only one that has to travel into a collection to
+  matter, and it was the only one untested. Teeth: dropping the cascade fails the new test;
+  reverting to the deprecated container form still passes, which is correct — the test pins the
+  behaviour, so it starts failing on the day the deprecation lands and not before. That clears
+  the last `HV000271` from the build.
+
 - **Two heuristic-lens mutations had been aimed at deleted code since the epsilon refactor.**
   Once the harness could start, an audit of every mutation anchor (run each script with
   `subprocess` stubbed, so only the anchor checks execute — a two-second pass instead of a
