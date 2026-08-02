@@ -75,6 +75,7 @@ def run_once():
 
 
 ALL_FILES = {m[0] for m in MUT} | {m[0] for m in PAIRED}
+V.restore_on_signal()
 originals = {p: p.read_text() for p in ALL_FILES}
 survivors = []
 try:

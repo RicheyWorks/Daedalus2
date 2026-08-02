@@ -36,6 +36,7 @@ MUT = [
   "                        ? cause == null ? \"unknown error\" : cause.getClass().getSimpleName()",
   "                        ? \"\""),
 ]
+V.restore_on_signal()
 orig = W.read_text()
 survivors = []
 try:

@@ -57,6 +57,7 @@ MUT = [
 ]
 
 TESTS = "TournamentServiceTest,SampleStatsTest"
+V.restore_on_signal()
 originals = {T: T.read_text(), S: S.read_text()}
 survivors = []
 try:

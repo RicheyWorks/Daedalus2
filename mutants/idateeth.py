@@ -49,6 +49,7 @@ def restore():
 
 
 def main():
+    V.restore_on_signal()
     if PRISTINE.exists():
         print("a previous run left a sidecar; restoring before starting")
         restore()

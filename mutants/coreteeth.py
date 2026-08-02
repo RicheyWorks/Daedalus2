@@ -18,6 +18,7 @@ CASES = [
      "observer.accept(node);",
      "if (node != 5) observer.accept(node); // MUTANT: drops a single expansion"),
 ]
+V.restore_on_signal()
 for name, rel, old, new in CASES:
     p = REPO / rel
     orig = p.read_text()

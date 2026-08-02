@@ -68,6 +68,7 @@ MUT = [
      '"@(Get|Post|Put|Patch|Delete)Mapping\\\\s*(\\\\(\\\\s*\\"?([^\\")]*)\\"?\\\\s*\\\\))"'),
 ]
 
+V.restore_on_signal()
 originals = {p: p.read_text() for p in {m[0] for m in MUT}}
 survivors = []
 try:

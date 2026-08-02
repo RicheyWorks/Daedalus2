@@ -87,6 +87,7 @@ def tests_fail(module):
 
 
 def main():
+    V.restore_on_signal()
     results = []
     for name, rel, old, new, module, guarantee in MUTANTS:
         if old is None:

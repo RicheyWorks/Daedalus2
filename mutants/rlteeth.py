@@ -20,6 +20,7 @@ MUT = [
  (C, "budget names a missing instance", '@PerKeyRateLimit("sessionMove")', '@PerKeyRateLimit("sessionMoveTypo")'),
  (Y, "a limiter guarding nothing", "      sessionMove:\n        limit-for-period: 1200", "      orphanBudget:\n        limit-for-period: 5\n        limit-refresh-period: 1m\n        timeout-duration: 0\n        register-health-indicator: false\n      sessionMove:\n        limit-for-period: 1200"),
 ]
+V.restore_on_signal()
 originals = {C: C.read_text(), Y: Y.read_text()}
 survivors = []
 try:

@@ -90,6 +90,7 @@ def run_once():
     return V.classify(p.returncode, p.stdout, V.failing_tests(p.stdout, *CLASSES))
 
 
+V.restore_on_signal()
 originals = {p: p.read_text() for p in {m[0] for m in MUT}}
 survivors = []
 try:

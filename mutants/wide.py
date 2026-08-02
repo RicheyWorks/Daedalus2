@@ -14,6 +14,7 @@ CASES = [
      "observer.accept(node);",
      "if (node % 2 == 0) observer.accept(node); // MUTANT"),
 ]
+V.restore_on_signal()
 for name, rel, old, new in CASES:
     p = REPO / rel
     orig = p.read_text()

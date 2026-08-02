@@ -19,6 +19,7 @@ import pathlib, re, subprocess
 import verdict as V
 REPO = pathlib.Path(__file__).resolve().parent.parent
 T = REPO / "daedalus-server/src/main/java/com/daedalus/server/service/HeuristicLensService.java"
+V.restore_on_signal()
 orig = T.read_text()
 MUT = [
  # Re-aimed 2026-08-01: the classifier moved from exact float comparison

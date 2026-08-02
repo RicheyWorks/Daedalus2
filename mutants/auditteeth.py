@@ -25,6 +25,7 @@ MUT = [
 ]
 
 TESTS = "ConfigCoverageTest,BoundedStoresTest"
+V.restore_on_signal()
 originals = {YML: YML.read_text(), SVC: SVC.read_text()}
 survivors = []
 try:
