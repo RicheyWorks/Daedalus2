@@ -95,7 +95,7 @@ jobs:
       # token as the CODECOV_TOKEN Actions secret.
       - name: Upload coverage to Codecov
         if: ${{ env.CODECOV_TOKEN != '' }}
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ env.CODECOV_TOKEN }}
           files: daedalus-core/target/site/jacoco/jacoco.xml,daedalus-plugin-api/target/site/jacoco/jacoco.xml,daedalus-plugin-runtime/target/site/jacoco/jacoco.xml,daedalus-server/target/site/jacoco/jacoco.xml,daedalus-desktop/target/site/jacoco/jacoco.xml
