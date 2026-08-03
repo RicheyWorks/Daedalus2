@@ -19,8 +19,24 @@ import java.util.List;
  * one from {@code goal}, alternating expansion until they meet.
  *
  * <p>Why bother: instead of exploring O(b^d) nodes once, you explore O(b^(d/2)) twice,
- * which is dramatically smaller for large mazes. On a 100×100 maze with goal in the
- * opposite corner, expect ~40% the explored count of plain BFS.
+ * which is dramatically smaller for large mazes.
+ *
+ * <p><b>How much smaller, measured.</b> This header used to promise "~40% the explored count of
+ * plain BFS" on a 100×100 maze. That is the best case reported as the typical one. Over 30 seeds
+ * at 101×101, expansions as a fraction of BFS's:
+ *
+ * <pre>
+ *                    mean    best   worst   lost to BFS
+ *   perfect maze     0.877   0.384  1.296   10 of 30
+ *   fully braided    0.734   0.626  0.808    0 of 30
+ * </pre>
+ *
+ * <p>0.384 is real, and so is 1.296. The advantage is exponential in <em>branching factor</em>,
+ * and a perfect maze is a spanning tree of one-wide corridors with very little branching to
+ * halve; on top of that the goal-side search pays for the dead ends hanging off the far side of
+ * the goal, which BFS never reaches because it stops the moment it pops the goal. Braiding puts
+ * branching back and the advantage returns, consistently. So: reach for this on open or looping
+ * graphs, not on corridors. {@code BidirectionalOptimalityTest} pins the braided figure.
  *
  * <p>Returns the same shortest path as BFS on unweighted grids — the result is optimal.
  *

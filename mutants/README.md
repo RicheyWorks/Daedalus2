@@ -401,3 +401,30 @@ built-in refusal from `unregister` as its own mutation. Every leak-fixing assert
 under it, because nothing about removing the plugin's own algorithms changes; only the assertion
 that `recursive-backtracker` is still there afterwards goes red. Whenever a fix hands out a new
 capability, mutate away the limit on that capability, not just the capability itself.
+
+**A performance claim needs a margin, not a comparison.** `solverteeth.py` flipped
+`BidirectionalSolver` to expand the larger frontier, which drops the `b^(d/2)` advantage the class
+javadoc promises and returns byte-identical paths, so every correctness assertion stayed green.
+The obvious pin — "bidirectional expands fewer cells than BFS" — *passes under the mutation*: the
+crippled solver still edges BFS out on every fixture, by about half a percent. Asserting the sign
+of a difference tests almost nothing when the defect leaves the sign intact. Measure both sides,
+find the gap (0.67 of BFS's expansions against 0.997), and put the threshold in it.
+
+**A survivor can be a proof rather than a hole.** Three of `solverteeth.py`'s five first-run
+survivors were mutations that cannot change behaviour. The best of them: deleting
+`tentative < dist[next]` from Dial's relaxation is the textbook way that algorithm fails, and it
+is unreachable here, because this engine's `Graph.edgeWeight` returns the destination cell's
+weight rather than an edge property — so a node's first relaxation is always its cheapest.
+Instrumenting the branch over 640 weighted grids confirmed it: 0 firings in 231,734 relaxations.
+Two responses are wrong. Leaving it in the list reports a permanent survivor for a mutation that
+changes nothing, which trains you to ignore the survivor column. Deleting the guard from the
+solver is worse, because the reason it is dead lives in a *different class's* contract, and the
+day that contract changes the guard is what keeps Dial correct. Retire the mutation, document the
+deadness where the code is, and record what would bring it back to life.
+
+**A test written on a hypothesis outlives the hypothesis — check what it is now proving.**
+`WeightedSolverOptimalityTest` was written to catch that Dial mutation and cannot, for the reason
+above. It was kept, because on the way it pinned something real that nothing else stated: of the
+seven solvers the property suite holds to BFS's hop count, only three read `weightOf`. The test
+was right, its stated motivation was wrong, and a javadoc that still claimed the mutation
+motivated it would have sent the next reader hunting a bug that does not exist.

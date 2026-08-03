@@ -10,6 +10,62 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **The bidirectional solver's `b^(d/2)` advantage is now asserted — and the number its header
+  advertised was the best case reported as the typical one.** `BidirectionalSolver` expands the
+  *smaller* of its two frontiers, and its javadoc leans on that twice: once for speed, and once
+  for correctness, because the argument that its first-touch stop is safe rests entirely on the
+  two search depths staying balanced. `mutants/solverteeth.py` flipped the comparison so the
+  larger frontier is expanded. Every path came back byte-identical, the whole core suite stayed
+  green, and the solver quietly became a slower BFS with two parent arrays — taking the premise
+  of the correctness argument with it.
+
+  **The obvious test does not work, which is the useful part.** "Bidirectional expands fewer
+  cells than BFS" was the first version, and the mutant *passes* it: with the balance removed it
+  still edges BFS out on every fixture, by about half a percent. What separates them is the
+  margin — 0.67 of BFS's expansions with the balance in place against 0.997 without — so the
+  threshold is the assertion. `BidirectionalOptimalityTest` now requires every fixture under
+  0.85, which sits in the gap between a measured worst case of 0.743 and a measured mutant best
+  of 0.991.
+
+  **And the fixture had to change too.** Over 120 perfect mazes at four sizes the real solver
+  expanded *more* cells than BFS on 34 of them. The advantage is exponential in branching factor,
+  and a perfect maze is a spanning tree of one-wide corridors with almost none; on top of that
+  the goal-side search pays for the dead ends hanging off the far side of the goal, which BFS
+  never reaches because it stops the moment it pops the goal. The class header promised "~40% the
+  explored count of plain BFS" on a 100×100 maze — measured over 30 seeds at 101×101 that is
+  0.877 mean, 1.296 worst, and losing to BFS on 10 of 30. 0.384 is real, and it is the best case.
+  Header replaced with the measured table for perfect and braided grids, and with the reason for
+  the difference, so the next person picks this solver for the graphs where it actually wins.
+
+### Changed
+
+- **Dial's decrease-key machinery is unreachable in this codebase — documented, kept, and no
+  longer counted as a hole.** Deleting `tentative < dist[next]` from `DialSolver`'s relaxation
+  is the textbook way this algorithm fails, and it passes the entire core suite. The first
+  reading was that a uniform-cost suite could not see it and weights would; `WeightedSolverOptimalityTest`
+  was written on that hypothesis and it is wrong. This engine uses an **entry-cost** model —
+  `Graph.edgeWeight` returns the weight of the destination cell, never a property of the edge —
+  so every edge into a node costs the same, buckets are scanned in ascending key order, and a
+  node's first relaxation always uses the smallest key any of its neighbours will be settled at.
+  Every later attempt is greater or equal. The branch cannot fire, and neither can the
+  `settled[current] || dist[current] != k` guard that exists to discard the stale bucket entry
+  such a relaxation would leave behind. Instrumented over 640 weighted grids (four sizes, four
+  braid factors, random weights 0–39 including zero-cost cells) the improving branch fired
+  **0 times in 231,734 relaxations** and the stale-entry guard **0 times**.
+
+  Both stay. The reason they are dead lives in `Graph`, not in `DialSolver`, and the day
+  `edgeWeight` becomes genuinely edge-dependent — a one-way ramp, a door that costs more from one
+  side — they come alive and a Dial without them returns wrong distances silently. Deleting dead
+  code whose deadness depends on a neighbouring class's contract is how that class gets to break
+  this one from a distance. The class javadoc now says so, the mutation is retired from
+  `solverteeth.py` with the measurement rather than left standing as a permanent survivor, and
+  `WeightedSolverOptimalityTest` keeps the thing weights genuinely do expose: of the seven solvers
+  `SolverBraidedMazePropertyTest` holds to BFS's *hop count*, only Dijkstra, Dial and A* read
+  `weightOf` at all — a split that lived in `TrafficService`'s prose and in no test.
+
+  `mutants/solverteeth.py` now reads **3/3**, from a first run of 1/6: one real hole, three
+  mutations proved inert and retired with their proofs, two closed by the weighted sweep.
+
 - **`MANHATTAN_TIE_BROKEN`, the heuristic lens's fourth option — and the first that measures a
   claim the lens has been making in prose since it was written.** Yesterday's audit found
   `Heuristics.manhattanWithTieBreaker` with no caller anywhere in the repository, not even a test,
