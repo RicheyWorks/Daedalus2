@@ -9,7 +9,7 @@ mutations attack the canonicaliser rather than the product, and two attack the p
 The recorded file is the oracle, and it was written by a different JVM. That is the whole point:
 these mutations are checked against a comparison that genuinely crosses a process boundary.
 """
-import pathlib, re, subprocess
+import pathlib, subprocess
 import verdict as V
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
@@ -48,9 +48,12 @@ def run_once():
                         "-Dsurefire.failIfNoSpecifiedTests=false",
                         "-Dcheckstyle.skip", "-Dspotbugs.skip", "-Djacoco.skip"],
                        cwd=REPO, capture_output=True, text=True, timeout=1800)
-    failed = sorted({m for m in re.findall(r"DeterminismGoldenTest\.(\w+)", p.stdout)
-                     if m not in ("java", "class")})
-    return V.classify(p.returncode, p.stdout, failed)
+    failed = V.failing_tests(p.stdout, "DeterminismGoldenTest")
+    # This harness's subject IS the golden digest: these mutations blind the cross-process
+    # determinism check, so DeterminismGoldenTest failing is the property rather than a proxy for
+    # it. Every other harness now treats a digest-only failure as no catch at all — see
+    # verdict.SNAPSHOT_TESTS for the campaign measurement that made that the rule.
+    return V.classify(p.returncode, p.stdout, failed, digest_counts=True)
 
 
 V.restore_on_signal()

@@ -198,6 +198,23 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **A digest-only catch now reports as no catch at all.** Yesterday's campaign work found that
+  four of `campaignteeth.py`'s reported catches came from `DeterminismGoldenTest` alone, and that
+  three of those mutations survived once the golden test was excluded — the target range, the
+  candidate-pool width and the hazard ramp could each revert to a configuration the code's own
+  javadoc records as broken, with every property test green. The conclusion was written down and
+  the comparison was done by hand, which is a habit rather than a rule, and habits are exactly
+  what the rest of this folder exists to replace.
+
+  `verdict.classify` now attributes each failure to its test class, and when the only failing
+  class is a snapshot test the verdict is `DIGEST ONLY` and does not count toward the tally. A
+  harness that would once have printed a comfortable 11/13 now prints the two survivors *and*
+  names the mutations whose only evidence was a byte comparison. `detteeth.py` opts out with
+  `digest_counts=True`, because its subject genuinely is the determinism digest: there, a golden
+  failure is the property rather than a proxy for one. Both harnesses were re-run under the new
+  rule — campaign 12/12, determinism 5/5 — which turns "the campaign fixes hold" from an
+  assertion into a measurement.
+
 - **Four more stores bounded by a clock nobody could move — and now a rule instead of a habit.**
   The same defect had been found and fixed three times on three days: delete `expireAfterAccess`
   from `GameSessionService` (08-01), from `MazeGenerationService` (08-02), from `AgentWalkService`
