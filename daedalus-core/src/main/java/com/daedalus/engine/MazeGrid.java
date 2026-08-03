@@ -8,21 +8,48 @@ import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
 
 /**
- * OPTIMIZED MazeGrid — same public API, but dramatically faster generation.
- * 
- * Key speed wins:
- *  • boolean[][] visited layer → O(1) visited checks (no Cell object indirection)
- *  • Arrays.fill for clearVisited (primitive array blast)
- *  • All original methods kept 100% unchanged for backwards compatibility
+ * The maze: a grid of {@link Cell}s, each holding its four walls, plus the start and goal the
+ * whole stack routes between.
+ *
+ * <h3>There used to be a second copy of "visited", and it was not faster</h3>
+ *
+ * <p>This class carried a {@code boolean[][] visited} layer beside the cells, introduced with a
+ * header promising "dramatically faster generation", a comment reading {@code ← THIS IS THE BIG
+ * SPEED WIN}, and an {@code Arrays.fill} annotated "blazing fast primitive blast". Two things
+ * were wrong with it. Nothing in production ever read it: every generator uses
+ * {@code grid.cell(p).isVisited()}, and {@code grid.isVisited(Point)} — the fast path the array
+ * existed for — had no caller anywhere in the repository (found by {@code mutants/gridteeth.py},
+ * where removing the array's synchronisation was inert for exactly that reason). And the array
+ * cost more than it saved: {@code markVisited(Point)} wrote both copies to keep them in step, and
+ * {@code clearVisited()} did the primitive fill <em>and then</em> the full Cell loop anyway.
+ *
+ * <p>Measured before removing it, interleaved A/B at 300×300, best of five runs each:
+ *
+ * <pre>
+ *                            with array   without
+ *   recursive-backtracker      71.2 ms     57.5 ms
+ *   prims                     115.8 ms     98.8 ms
+ *   aldous-broder             859.8 ms    864.4 ms
+ *   copy()                     51.5 ms     49.1 ms
+ * </pre>
+ *
+ * <p>Removing it was never slower across eight paired runs, and it saves {@code rows × cols}
+ * bytes per grid and per {@link #copy()} — which the living-maze tick performs every two seconds
+ * per animated maze. Aldous-Broder is the honest control: dominated by its random walk, it does
+ * not care either way.
+ *
+ * <p>What the removal actually buys is not the milliseconds. Two mutable copies of the same fact,
+ * kept in step by one line in one method, is a correctness hazard whose failure mode is a caller
+ * reading whichever copy happens to be wrong. There is now one visited flag, on the Cell, and the
+ * grid-level accessors delegate to it — the public API is unchanged and the two views can no
+ * longer disagree, which {@code MazeGridContractTest} pins.
  */
 public class MazeGrid {
     private final int rows;
     private final int cols;
     private final Cell[][] cells;
-    private final boolean[][] visited;   // ← THIS IS THE BIG SPEED WIN
     private Point start;
     private Point goal;
 
@@ -33,7 +60,6 @@ public class MazeGrid {
         this.rows = rows;
         this.cols = cols;
         this.cells = new Cell[rows][cols];
-        this.visited = new boolean[rows][cols];
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 cells[r][c] = new Cell(r, c);
@@ -43,21 +69,20 @@ public class MazeGrid {
         this.goal = new Point(rows - 1, cols - 1);
     }
 
-    // ====================== FAST VISITED API (new) ======================
+    /* --------- Visited state: one copy, on the Cell. See the class javadoc. --------- */
+
+    /** Marks a cell visited; equivalent to {@code cell(p).markVisited()}. */
     public void markVisited(Point p) {
-        visited[p.row()][p.col()] = true;
-        cells[p.row()][p.col()].markVisited(); // keep old Cell in sync
+        cells[p.row()][p.col()].markVisited();
     }
 
+    /** Whether a cell is marked; equivalent to {@code cell(p).isVisited()}. */
     public boolean isVisited(Point p) {
-        return visited[p.row()][p.col()];
+        return cells[p.row()][p.col()].isVisited();
     }
 
+    /** Clears every cell's mark — generators call this when they finish carving. */
     public void clearVisited() {
-        for (boolean[] row : visited) {
-            Arrays.fill(row, false);           // blazing fast primitive fill
-        }
-        // still sync old Cell objects for full compatibility
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 cells[r][c].clearVisited();
@@ -65,7 +90,6 @@ public class MazeGrid {
         }
     }
 
-    // ====================== ORIGINAL API (unchanged) ======================
     public int rows() { return rows; }
     public int cols() { return cols; }
     public Point start() { return start; }

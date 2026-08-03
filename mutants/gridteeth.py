@@ -17,9 +17,8 @@ The guarantees worth breaking here are the ones every layer above silently assum
     list escapes the grid, which surfaces as an ArrayIndexOutOfBounds somewhere far away.
   * `directionBetween` is what makes `carve(Point, Point)` refuse non-adjacent pairs. Widen it
     and diagonal or distant "carves" silently succeed, opening a wall between the wrong cells.
-  * `markVisited` keeps the fast boolean array and the legacy Cell objects in sync. The class
-    comment calls that array "THE BIG SPEED WIN" and the duplication is the price; if the two
-    ever disagree, whichever one a caller happens to read decides the answer.
+  * `markVisited` used to keep a fast boolean array and the Cell objects in sync. **That array is
+    gone as of 2026-08-02**, on the evidence this harness produced: see below.
   * The constructor rejects non-positive dimensions, and `carve(Point, Point)` refuses pairs
     that do not share a wall. Both are documented contracts, both were unpinned, and both are
     now covered by MazeGridContractTest.
@@ -31,13 +30,19 @@ standing survivors. Each is defensive code that no production path can reach:
     outward wall is never open: `carve(Cell, Direction)` returns early when the neighbour is off
     the grid, and RecursiveDivision — the one place that opens a wall directly — guards with
     `inBounds` itself.
-  * Removing the Cell sync from `markVisited`, and the Cell loop from `clearVisited`, are inert
-    for a more interesting reason. **Nothing in production calls `grid.markVisited(Point)` or
-    `grid.isVisited(Point)` at all.** The `boolean[][]` the class comment labels "THE BIG SPEED
-    WIN" is written by nobody and read by nobody; every generator uses the Cell-level API
-    directly (`grid.cell(p).markVisited()`), and no code outside the generators reads visited
-    state in any form. The fast array and its synchronisation are dead weight, and the comment
-    advertising it is the only thing keeping it alive.
+  * Removing the Cell sync from `markVisited`, and the Cell loop from `clearVisited`, were inert
+    for a more interesting reason. **Nothing in production called `grid.markVisited(Point)` or
+    `grid.isVisited(Point)` at all.** The `boolean[][]` the class comment labelled "THE BIG SPEED
+    WIN" was written by nobody and read by nobody; every generator uses the Cell-level API
+    directly, and no code outside the generators reads visited state in any form.
+
+    That finding was acted on. Before deleting the array it was measured, interleaved A/B at
+    300x300, best of five: recursive-backtracker 71.2ms -> 57.5ms, prims 115.8 -> 98.8,
+    aldous-broder 859.8 -> 864.4 (its random walk dominates, and it is the control), copy()
+    51.5 -> 49.1. Removing the "speed win" was never slower across eight paired runs, and it drops
+    rows*cols bytes per grid and per copy — which the living-maze tick allocates every two
+    seconds. The real gain is that two mutable copies of one fact, held in step by a single line,
+    can no longer disagree; `MazeGridContractTest` pins that the two views are one flag.
 
 Usage:  python3 mutants/gridteeth.py
 """

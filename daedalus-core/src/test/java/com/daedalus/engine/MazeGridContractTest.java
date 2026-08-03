@@ -82,4 +82,34 @@ class MazeGridContractTest {
         assertThatThrownBy(() -> new MazeGrid(-1, -1))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    void theGridAndCellViewsOfVisitedAreTheSameFlag() {
+        // This class used to keep a boolean[][] beside the cells and a line in markVisited to
+        // hold the two in step. Nothing read the array (mutants/gridteeth.py: removing that
+        // synchronisation was inert, because grid.isVisited(Point) had no caller), and removing
+        // it measured no slower — see the class javadoc for the numbers. What it removed that
+        // matters is the possibility of the two views disagreeing, so that is what this pins:
+        // there is one flag, reachable two ways, and a second copy cannot be reintroduced
+        // without failing here.
+        MazeGrid grid = new MazeGrid(4, 5);
+        Point p = new Point(2, 3);
+
+        grid.markVisited(p);
+        assertThat(grid.isVisited(p)).isTrue();
+        assertThat(grid.cell(p).isVisited())
+                .as("the Cell must see a mark made through the grid")
+                .isTrue();
+
+        grid.cell(p).clearVisited();
+        assertThat(grid.isVisited(p))
+                .as("and the grid must see a mark cleared through the Cell")
+                .isFalse();
+
+        grid.cell(p).markVisited();
+        assertThat(grid.isVisited(p)).isTrue();
+        grid.clearVisited();
+        assertThat(grid.cell(p).isVisited()).isFalse();
+        assertThat(grid.isVisited(p)).isFalse();
+    }
 }

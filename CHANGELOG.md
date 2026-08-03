@@ -148,6 +148,35 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **`MazeGrid`'s "BIG SPEED WIN" is gone, and the measurement is why.** The class opened with a
+  header promising "dramatically faster generation", a `boolean[][] visited` field annotated
+  `← THIS IS THE BIG SPEED WIN`, and an `Arrays.fill` described as a "blazing fast primitive
+  blast". `mutants/gridteeth.py` had already found that nothing in production read it — removing
+  the array's synchronisation was an inert mutation precisely because `grid.isVisited(Point)` has
+  no caller anywhere, while every generator uses `grid.cell(p).isVisited()`. The open question
+  was whether to wire it or delete it, and taste is a poor way to answer that, so it was measured:
+  interleaved A/B at 300×300, best of five runs each.
+
+      generator                with array   without
+      recursive-backtracker      71.2 ms     57.5 ms
+      prims                     115.8 ms     98.8 ms
+      aldous-broder             859.8 ms    864.4 ms
+      copy()                     51.5 ms     49.1 ms
+
+  Removing it was never slower across eight paired runs, and it drops `rows × cols` bytes per grid
+  and per `copy()` — which the living-maze tick allocates every two seconds per animated maze.
+  Aldous-Broder is the control: dominated by its random walk, it does not care either way, and a
+  result where everything improved would have been the suspicious one.
+
+  The milliseconds are not really the point. Two mutable copies of one fact, kept in step by a
+  single line inside one method, is a correctness hazard whose failure mode is a caller reading
+  whichever copy happens to be stale — and this one was kept alive entirely by the comment
+  advertising it. There is now one visited flag, on the `Cell`, with the grid-level accessors
+  delegating to it: same public API, no allocation, and no way for the two views to disagree.
+  `MazeGridContractTest` pins that they are one flag, so a second copy cannot come back quietly.
+
+### Changed
+
 - **Coverage ratchet raised to 0.93 / 0.96 — the ceiling has now fired twice.** Measured
   instruction coverage is 95.10% (94.63% on 08-01, 82.2% on 07-29). The four contract suites added
   today pushed the ratio past the old 0.95 ceiling and failed the build until this bump, which is
