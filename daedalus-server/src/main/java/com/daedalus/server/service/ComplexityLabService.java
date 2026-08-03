@@ -9,8 +9,10 @@ import com.daedalus.theory.ComplexityAnalyzer.Measurement;
 import com.daedalus.theory.GrowthEstimator;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.Ticker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -88,15 +90,34 @@ public class ComplexityLabService {
     private final int maxPoints;
     private final Cache<String, Fit> fits;
 
+    @Autowired
     public ComplexityLabService(GeneratorRegistry registry,
                                 @Value("${daedalus.complexity.max-size:96}") int maxSize,
                                 @Value("${daedalus.complexity.max-points:6}") int maxPoints,
                                 @Value("${daedalus.complexity.max-cached:200}") long maxCached,
                                 @Value("${daedalus.complexity.idle-ttl:6h}") Duration idleTtl) {
+        this(registry, maxSize, maxPoints, maxCached, idleTtl, Ticker.systemTicker());
+    }
+
+    /**
+     * Ticker seam — see {@code BoundedStoresTest.everyCacheWithAnIdleTtlExposesASeamForMovingTheClock}
+     * for why every idle-bounded store in this package now has one. Short version: deleting
+     * {@code expireAfterAccess} from three different services on three different days left the
+     * suite green each time, because no test could move a clock.
+     */
+    ComplexityLabService(GeneratorRegistry registry, int maxSize, int maxPoints,
+                         long maxCached, Duration idleTtl, Ticker ticker) {
         this.registry = registry;
         this.maxSize = Math.max(16, maxSize);
         this.maxPoints = Math.max(3, maxPoints); // a curve fit through two points is a line
-        this.fits = Caffeine.newBuilder().maximumSize(maxCached).expireAfterAccess(idleTtl).build();
+        this.fits = Caffeine.newBuilder().maximumSize(maxCached)
+                .expireAfterAccess(idleTtl).ticker(ticker).build();
+    }
+
+    /** Cached fits — for tests and metrics; see {@code BoundedStoresTest}. */
+    public long cachedFits() {
+        fits.cleanUp();
+        return fits.estimatedSize();
     }
 
     /** Metric names this lab can fit. */

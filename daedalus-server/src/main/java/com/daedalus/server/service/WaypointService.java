@@ -9,6 +9,8 @@ import com.daedalus.theory.FacilityPlacement;
 import com.daedalus.theory.WaypointTour;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.Ticker;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -72,16 +74,34 @@ public class WaypointService {
     private final Cache<String, Tour> tours;
     private final Cache<UUID, Set<Point>> collected;
 
+    @Autowired
     public WaypointService(MazeGenerationService gen,
                            GameSessionService sessions,
                            @Value("${daedalus.waypoint.count:5}") int defaultCount,
                            @Value("${daedalus.waypoint.max-tours:500}") long maxTours,
                            @Value("${daedalus.waypoint.idle-ttl:2h}") Duration idleTtl) {
+        this(gen, sessions, defaultCount, maxTours, idleTtl, Ticker.systemTicker());
+    }
+
+    /**
+     * Ticker seam — see {@code BoundedStoresTest.everyCacheWithAnIdleTtlExposesASeamForMovingTheClock}
+     * for why every idle-bounded store in this package now has one. Short version: deleting
+     * {@code expireAfterAccess} from three different services on three different days left the
+     * suite green each time, because no test could move a clock.
+     */
+    WaypointService(MazeGenerationService gen,
+                    GameSessionService sessions,
+                    int defaultCount,
+                    long maxTours,
+                    Duration idleTtl,
+                    Ticker ticker) {
         this.gen = gen;
         this.sessions = sessions;
         this.defaultCount = clamp(defaultCount);
-        this.tours = Caffeine.newBuilder().maximumSize(maxTours).expireAfterAccess(idleTtl).build();
-        this.collected = Caffeine.newBuilder().maximumSize(maxTours).expireAfterAccess(idleTtl).build();
+        this.tours = Caffeine.newBuilder().maximumSize(maxTours)
+                .expireAfterAccess(idleTtl).ticker(ticker).build();
+        this.collected = Caffeine.newBuilder().maximumSize(maxTours)
+                .expireAfterAccess(idleTtl).ticker(ticker).build();
     }
 
     /**
@@ -93,6 +113,12 @@ public class WaypointService {
      */
     private static int clamp(int count) {
         return Math.max(1, Math.min(WaypointTour.MAX_WAYPOINTS - 1, count));
+    }
+
+    /** Cached tours — for tests and metrics; see {@code BoundedStoresTest}. */
+    public long cachedTours() {
+        tours.cleanUp();
+        return tours.estimatedSize();
     }
 
     public int defaultCount() {

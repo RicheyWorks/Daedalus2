@@ -14,6 +14,8 @@ import com.daedalus.theory.MazeMetrics;
 import com.daedalus.theory.SampleStats;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.Ticker;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -71,17 +73,29 @@ public class TournamentService {
     private final int maxSize;
     private final Cache<String, Tournament> cache;
 
+    @Autowired
     public TournamentService(GeneratorRegistry generators, SolverRegistry solvers,
                              @Value("${daedalus.tournament.max-mazes:24}") int maxMazes,
                              @Value("${daedalus.tournament.max-size:41}") int maxSize,
                              @Value("${daedalus.tournament.max-cached:100}") int maxCached,
                              @Value("${daedalus.tournament.idle-ttl:6h}") Duration idleTtl) {
+        this(generators, solvers, maxMazes, maxSize, maxCached, idleTtl, Ticker.systemTicker());
+    }
+
+    /**
+     * Ticker seam — see {@code BoundedStoresTest.everyCacheWithAnIdleTtlExposesASeamForMovingTheClock}
+     * for why every idle-bounded store in this package now has one. Short version: deleting
+     * {@code expireAfterAccess} from three different services on three different days left the
+     * suite green each time, because no test could move a clock.
+     */
+    TournamentService(GeneratorRegistry generators, SolverRegistry solvers,
+                      int maxMazes, int maxSize, int maxCached, Duration idleTtl, Ticker ticker) {
         this.generators = generators;
         this.solvers = solvers;
         this.maxMazes = maxMazes;
         this.maxSize = maxSize;
         this.cache = Caffeine.newBuilder()
-                .maximumSize(maxCached).expireAfterAccess(idleTtl).build();
+                .maximumSize(maxCached).expireAfterAccess(idleTtl).ticker(ticker).build();
     }
 
     /**
@@ -125,6 +139,12 @@ public class TournamentService {
                              String note) { }
 
     /** {@code null} when the generator is unknown, so the controller can 404. */
+    /** Cached tournaments — for tests and metrics; see {@code BoundedStoresTest}. */
+    public long cachedTournaments() {
+        cache.cleanUp();
+        return cache.estimatedSize();
+    }
+
     public Tournament run(String generatorId, Integer sizeArg, Integer mazesArg,
                           Double braidArg, Long seedArg) {
         if (generatorId == null || generators.find(generatorId).isEmpty()) {

@@ -5,6 +5,8 @@ package com.daedalus.server.service;
 import com.daedalus.model.GameSession;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.Ticker;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -43,12 +45,24 @@ public class GhostService {
 
     private final Cache<UUID, GhostRun> ghosts;
 
+    @Autowired
     public GhostService(
             @Value("${daedalus.ghost.max-mazes:1000}") long maxMazes,
             @Value("${daedalus.ghost.idle-ttl:24h}") Duration idleTtl) {
+        this(maxMazes, idleTtl, Ticker.systemTicker());
+    }
+
+    /**
+     * Ticker seam — see {@code BoundedStoresTest.everyCacheWithAnIdleTtlExposesASeamForMovingTheClock}
+     * for why every idle-bounded store in this package now has one. Short version: deleting
+     * {@code expireAfterAccess} from three different services on three different days left the
+     * suite green each time, because no test could move a clock.
+     */
+    GhostService(long maxMazes, Duration idleTtl, Ticker ticker) {
         this.ghosts = Caffeine.newBuilder()
                 .maximumSize(maxMazes)
                 .expireAfterAccess(idleTtl)
+                .ticker(ticker)
                 .build();
     }
 
@@ -64,6 +78,16 @@ public class GhostService {
                 trail.get(trail.size() - 1).tMs(), trail);
         ghosts.asMap().merge(s.mazeId(), challenger,
                 (incumbent, fresh) -> fresh.score() > incumbent.score() ? fresh : incumbent);
+    }
+
+    /**
+     * Ghosts currently held — for tests and metrics, the window {@code trackedCount},
+     * {@code liveCount} and {@code plannedCount} open onto their own stores. A store's bounds
+     * are only as good as someone's ability to observe them working.
+     */
+    public long ghostCount() {
+        ghosts.cleanUp();
+        return ghosts.estimatedSize();
     }
 
     /** The maze's ghost, or {@code null} if nobody has completed a run on it (404). */

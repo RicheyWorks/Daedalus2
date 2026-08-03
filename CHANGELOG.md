@@ -198,6 +198,29 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Four more stores bounded by a clock nobody could move — and now a rule instead of a habit.**
+  The same defect had been found and fixed three times on three days: delete `expireAfterAccess`
+  from `GameSessionService` (08-01), from `MazeGenerationService` (08-02), from `AgentWalkService`
+  (08-03), and the suite stays green every time, because no test can advance a Caffeine clock
+  without a `Ticker` seam. Three identical fixes is not bad luck, it is a missing rule, so the
+  fourth response was to go looking rather than wait for the fourth harness.
+
+  Nine Caffeine caches in the server, six of them idle-bounded, and **four services holding five
+  of those caches had no seam at all**: `GhostService`, `WaypointService` (two), `TournamentService`
+  and `ComplexityLabService`. `BoundedStoresTest` already scanned the source to prove every cache
+  declares a `maximumSize` — the same scan now requires any cache with an idle TTL to belong to a
+  class a test can hand a `Ticker`. It named all four on its first run, which is how the list
+  above was produced rather than guessed.
+
+  Making eviction *observable* was the harder half. A memoization cache — tours, tournaments,
+  complexity fits — is a pure function behind a map: evicting it changes no answer any caller can
+  see, because the recomputed value is identical. So each service now reports its cached count,
+  the same window `trackedCount()`, `liveCount()` and `plannedCount()` already open onto their
+  stores, and the four new tests advance a clock and watch the count fall to zero. Without that
+  the assertion would have been unfalsifiable, which in a test file is worse than nothing: it
+  reads like coverage. Verified by deleting the ghost store's expiry and watching the new test go
+  red.
+
 - **The fog-of-war agent leaked in four directions nobody was checking.** `AgentWalkService` is a
   benchmark surface — its javadoc invites "a shell script, an RL policy, a student's first
   wall-follower" — and it had never been mutated. Fourteen mutations, seven survivors, six real.

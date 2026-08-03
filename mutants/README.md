@@ -131,8 +131,14 @@ attacked before — `sessionteeth` (10), `gridteeth` (6), `trafficteeth` (9), `l
 
 Every one of those eight found at least one real gap, and three of them found the *same* gap: a
 Caffeine store with a `maximumSize` and no test that moves a clock. Sessions, then the maze cache,
-then the agent store. When a harness finds a defect shaped like one you have seen, go looking for
-the third instance before it finds you. Every one of those five found
+then the agent store.
+
+The third repeat is the signal to stop fixing instances and write the rule. A source scan found
+four more services holding five more idle-bounded caches with no clock seam, and
+`BoundedStoresTest` now fails the build for any cache that declares an idle TTL in a class no test
+can hand a `Ticker`. Three fixes by hand, then one rule — and the rule found more than the hand
+had. When a harness finds a defect shaped like one you have seen twice, stop patching and go
+enumerate. Every one of those five found
 at least one real unpinned guarantee on its first run, which is the argument for writing the next
 one rather than re-running these.
 

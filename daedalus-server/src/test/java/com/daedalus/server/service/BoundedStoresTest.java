@@ -8,6 +8,7 @@ import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
 import com.daedalus.model.MazeStats;
 import com.daedalus.solver.solvers.BfsSolver;
 import com.daedalus.engine.generators.GeneratorRegistry;
+import com.daedalus.model.GameSession;
 import com.daedalus.model.LeaderboardEntry;
 import com.daedalus.model.Point;
 import com.github.benmanes.caffeine.cache.Ticker;
@@ -100,6 +101,68 @@ class BoundedStoresTest {
                 .isEmpty();
     }
 
+    /**
+     * The companion question, and the one this class kept getting wrong: a cache that declares
+     * {@code expireAfterAccess} is not a cache whose expiry anyone has checked.
+     *
+     * <p>Three separate mutation harnesses found the same defect on three separate days —
+     * deleting {@code expireAfterAccess} from `GameSessionService` (08-01), from
+     * {@code MazeGenerationService} (08-02) and from {@code AgentWalkService} (08-03) left the
+     * whole suite green each time, because no test could move a clock. Each was fixed the same
+     * way, with a package-private constructor taking a Caffeine {@link Ticker}. Three identical
+     * fixes is not a run of bad luck, it is a missing rule.
+     *
+     * <p>So this is the rule, enforced the way the {@code maximumSize} sweep above is enforced:
+     * scan the source, and for every cache that declares an idle TTL, require its class to offer
+     * a constructor a test can hand a {@code Ticker}. A store whose expiry cannot be exercised
+     * has an expiry nobody has ever seen work. When this fails it names the class, and the fix is
+     * ten lines — the alternative is finding out on the fourth harness.
+     */
+    @Test
+    void everyCacheWithAnIdleTtlExposesASeamForMovingTheClock() throws Exception {
+        java.nio.file.Path root = java.nio.file.Path.of("src/main/java");
+        List<String> unseamed = new ArrayList<>();
+        int idleBounded = 0;
+
+        try (var files = java.nio.file.Files.walk(root)) {
+            for (java.nio.file.Path file : files
+                    .filter(f -> f.toString().endsWith(".java")).toList()) {
+                String text = java.nio.file.Files.readString(file);
+                boolean idle = false;
+                int at = text.indexOf("Caffeine.newBuilder");
+                while (at >= 0) {
+                    int end = text.indexOf(';', at);
+                    String statement = end < 0 ? text.substring(at) : text.substring(at, end);
+                    if (statement.contains(".expireAfterAccess(") || statement.contains(".expireAfter(")) {
+                        idle = true;
+                    }
+                    at = text.indexOf("Caffeine.newBuilder", at + 1);
+                }
+                if (!idle) {
+                    continue;
+                }
+                idleBounded++;
+                String className = root.relativize(file).toString()
+                        .replace(".java", "").replace(java.io.File.separatorChar, '.');
+                Class<?> type = Class.forName(className);
+                boolean seam = java.util.Arrays.stream(type.getDeclaredConstructors())
+                        .flatMap(c -> java.util.Arrays.stream(c.getParameterTypes()))
+                        .anyMatch(Ticker.class::equals);
+                if (!seam) {
+                    unseamed.add(type.getSimpleName());
+                }
+            }
+        }
+
+        assertThat(idleBounded)
+                .as("the scanner found no idle-bounded caches, so it is broken")
+                .isGreaterThanOrEqualTo(6);
+        assertThat(unseamed)
+                .as("these classes bound a store by idle time and offer no way to advance the "
+                        + "clock, so nothing has ever observed that bound working: %s", unseamed)
+                .isEmpty();
+    }
+
     @Test
     void mazeCacheEvictsPastItsBound() throws Exception {
         GeneratorRegistry registry = new GeneratorRegistry(List.of(new BinaryTreeGenerator()));
@@ -127,6 +190,95 @@ class BoundedStoresTest {
     }
 
     /** Moves Caffeine's clock without moving the wall clock — see {@code PerKeyRateLimitEvictionTest}. */
+    /**
+     * The four stores the seam rule above just made testable, each with its clock moved.
+     *
+     * <p>These are grouped rather than split because they are one property measured four ways:
+     * an idle bound that no test advances a clock past is a line of configuration, not a bound.
+     * Three services had to be fixed one at a time, on three separate days, before it was worth
+     * asking how many others were in the same state. The answer was four more, holding five
+     * caches between them.
+     *
+     * <p>Note what makes them observable at all. A memoization cache — tours, tournaments, fits
+     * — is a pure function behind a map, so eviction changes no answer anybody can see; the
+     * recomputed value is identical. Each service therefore reports its own cached count, the
+     * same window {@code trackedCount}, {@code liveCount} and {@code plannedCount} already open
+     * onto their stores. Without that, "the bound works" is unfalsifiable, and an unfalsifiable
+     * claim in a test file is worse than no test because it reads like coverage.
+     */
+    @Test
+    void ghostsExpireWhenIdle() {
+        FakeClock clock = new FakeClock();
+        GhostService ghosts = new GhostService(1000, Duration.ofHours(24), clock);
+        UUID mazeId = UUID.randomUUID();
+        GameSession session = new GameSession(mazeId, "ariadne", new Point(0, 0));
+        session.move(new Point(0, 1));   // a ghost needs a trail; an empty one is ignored
+        session.complete(100);
+        ghosts.onCompleted(new com.daedalus.plugin.events.SessionCompletedEvent(this, session));
+        assertThat(ghosts.ghostOf(mazeId)).as("a completed run takes the seat").isNotNull();
+
+        clock.advance(Duration.ofHours(25));
+
+        assertThat(ghosts.ghostCount()).isZero();
+        assertThat(ghosts.ghostOf(mazeId))
+                .as("a ghost nobody has raced in a day is not worth a megabyte of trail")
+                .isNull();
+    }
+
+    @Test
+    void cachedToursExpireWhenIdle() {
+        FakeClock clock = new FakeClock();
+        GeneratorRegistry registry = new GeneratorRegistry(List.of(new RecursiveBacktrackerGenerator()));
+        MazeGenerationService gen = new MazeGenerationService(
+                registry, event -> { }, new SimpleMeterRegistry());
+        WaypointService waypoints = new WaypointService(gen,
+                new GameSessionService(event -> { }, mock(LeaderboardService.class), false),
+                5, 500, Duration.ofHours(2), clock);
+        UUID mazeId = gen.generate("recursive-backtracker", 11, 11, 1L).metadata().id();
+
+        assertThat(waypoints.tourFor(mazeId, 3)).isNotNull();
+        assertThat(waypoints.cachedTours()).isEqualTo(1);
+
+        clock.advance(Duration.ofHours(3));
+
+        assertThat(waypoints.cachedTours())
+                .as("a Held-Karp tour is expensive to compute and cheap to recompute; holding "
+                        + "one for a maze nobody has touched in hours is pure residency")
+                .isZero();
+    }
+
+    @Test
+    void cachedTournamentsExpireWhenIdle() {
+        FakeClock clock = new FakeClock();
+        TournamentService tournaments = new TournamentService(
+                new GeneratorRegistry(List.of(new BinaryTreeGenerator())),
+                new com.daedalus.solver.solvers.SolverRegistry(List.of(new BfsSolver())),
+                24, 41, 100, Duration.ofHours(6), clock);
+
+        assertThat(tournaments.run("binary-tree", 5, TournamentService.MIN_MAZES, 0.0, 1L))
+                .isNotNull();
+        assertThat(tournaments.cachedTournaments()).isEqualTo(1);
+
+        clock.advance(Duration.ofHours(7));
+
+        assertThat(tournaments.cachedTournaments()).isZero();
+    }
+
+    @Test
+    void cachedComplexityFitsExpireWhenIdle() {
+        FakeClock clock = new FakeClock();
+        ComplexityLabService lab = new ComplexityLabService(
+                new GeneratorRegistry(List.of(new BinaryTreeGenerator())),
+                16, 2, 200, Duration.ofHours(6), clock);
+
+        assertThat(lab.fit("binary-tree", "cellsVisited", 7L)).isNotNull();
+        assertThat(lab.cachedFits()).isEqualTo(1);
+
+        clock.advance(Duration.ofHours(7));
+
+        assertThat(lab.cachedFits()).isZero();
+    }
+
     private static final class FakeClock implements Ticker {
         private long nanos;
 
