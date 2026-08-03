@@ -26,8 +26,24 @@ public class GameSession {
      *  keeps a pathological client from growing a session without limit. */
     public static final int MAX_TRAIL = 5_000;
 
+    /**
+     * What {@link #generatorId()} reports when nobody told the session which algorithm built
+     * its maze — the legacy constructors below, and nothing else on the production path.
+     *
+     * <p>This constant used to be written unconditionally, three modules away, as a literal in
+     * {@code GameSessionService.complete}. Every completed run reached the leaderboard claiming
+     * {@code "unknown"}, which is a lie in the API response and a collapsed partition in Redis:
+     * {@code LeaderboardService} keys a per-generator sorted set on this string, so every run
+     * ever recorded landed in one set named after a placeholder. Carrying it on the session is
+     * what makes the value true, and carrying it from <em>open</em> rather than resolving it at
+     * completion is what keeps it true — a session outlives its maze in the cache by design, and
+     * a finished run must still be able to say what it was played on.
+     */
+    public static final String UNKNOWN_GENERATOR = "unknown";
+
     private final UUID id;
     private final UUID mazeId;
+    private final String generatorId;
     private final String playerName;
     private final String owner;
     private final ConcurrentMap<String, Point> players = new ConcurrentHashMap<>();
@@ -61,8 +77,20 @@ public class GameSession {
      *              verified token and is what authorization decisions key on.
      */
     public GameSession(UUID mazeId, String playerName, Point start, String owner) {
+        this(mazeId, UNKNOWN_GENERATOR, playerName, start, owner);
+    }
+
+    /**
+     * @param generatorId the algorithm that built this session's maze, recorded at open time.
+     *                    {@link #UNKNOWN_GENERATOR} when the caller genuinely does not know;
+     *                    the production path always does, because the controller has just
+     *                    read the maze out of the cache to find its start cell.
+     */
+    public GameSession(UUID mazeId, String generatorId, String playerName, Point start,
+                       String owner) {
         this.id = UUID.randomUUID();
         this.mazeId = mazeId;
+        this.generatorId = generatorId == null ? UNKNOWN_GENERATOR : generatorId;
         this.playerName = playerName;
         this.owner = owner;
         this.currentPosition = start;
@@ -119,6 +147,12 @@ public class GameSession {
 
     public UUID id() { return id; }
     public UUID mazeId() { return mazeId; }
+
+    /**
+     * The algorithm that built this session's maze — never {@code null}, and
+     * {@link #UNKNOWN_GENERATOR} only when the session was opened without it.
+     */
+    public String generatorId() { return generatorId; }
     public String playerName() { return playerName; }
     /** Verified owner subject, or {@code null} — an unowned session carries no access claim. */
     public String owner() { return owner; }

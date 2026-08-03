@@ -428,3 +428,26 @@ above. It was kept, because on the way it pinned something real that nothing els
 seven solvers the property suite holds to BFS's hop count, only three read `weightOf`. The test
 was right, its stated motivation was wrong, and a javadoc that still claimed the mutation
 motivated it would have sent the next reader hunting a bug that does not exist.
+
+**A field whose only producer is the code under test is the field nothing asserts.** `boardteeth.py`
+came from a bug no amount of reading found: every completed run reached the leaderboard claiming it
+was played on a generator called "unknown", because `GameSessionService` wrote that literal. Six
+test classes construct a `LeaderboardEntry` and every one of them passes its own generator id, so
+each is a good test of what it tests and collectively they never look at the value the service
+writes. Worse, `LeaderboardService` keys a Redis partition on that value, so the defect was not a
+cosmetic string — it collapsed every generator's board into one set named after the placeholder,
+and nothing read that set anyway. Two tells to reuse: a *constant* on a production write path is
+worth a second look wherever fixtures supply the same field, and a partition key nothing reads is
+not a partition. Found by booting the jar and playing a session, which no unit test in this repo
+does.
+
+**Write the regression test, then mutate the fix — the fix's own test is where the same mistake
+recurs.** `boardteeth.py` scored 5/7 on its first run and both survivors were holes in the tests
+written minutes earlier for the bug it was pinning. Reverting the controller to the old
+`open()` overload — the original defect, one level up — left every attribution test green,
+because all of them called the service directly with the value already in hand: the fix's test
+reproduced the bug's blind spot exactly. The other survivor lived in the seam between two tests,
+where a service-level test never passed the argument the controller always passes and the
+controller test mocked the service away. A fix is not verified by a test that passes; it is
+verified by a test that fails when the fix is removed, and by one that fails when each *layer*
+of the fix is removed separately.

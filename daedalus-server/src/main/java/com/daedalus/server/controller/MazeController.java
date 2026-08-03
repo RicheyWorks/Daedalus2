@@ -303,7 +303,8 @@ public class MazeController {
             Authentication authentication) {
         var c = gen.find(id);
         if (c == null) throw ResourceNotFoundException.maze(id);
-        var s = sessions.open(id, player, c.grid().start(), ownerOf(authentication));
+        var s = sessions.open(id, c.metadata().generatorId(), player, c.grid().start(),
+                ownerOf(authentication));
         return ResponseEntity.ok(new SessionResponse(s.id(), id, s.currentPosition()));
     }
 
@@ -377,14 +378,22 @@ public class MazeController {
     @Operation(summary = "Top-N completion times across active sessions.",
             description = "Snapshot — backed by Redis when daedalus.redis.enabled=true, "
                     + "otherwise in-memory. Pass maze=<id> for that maze's own board — the "
-                    + "partition behind the daily challenge's leaderboard.")
+                    + "partition behind the daily challenge's leaderboard — or generator=<id> "
+                    + "for one algorithm's board. maze wins if both are given, being the more "
+                    + "specific of the two.")
     public List<LeaderboardEntry> leaderboard(
             @RequestParam(defaultValue = "20")
             @Min(value = 1,   message = "n must be at least 1")
             @Max(value = 100, message = "n must be at most 100")
             int n,
-            @RequestParam(required = false) UUID maze) {
-        return leaderboard.top(n, maze);
+            @RequestParam(required = false) UUID maze,
+            @RequestParam(required = false)
+            @Size(max = 64, message = "generator id must be at most 64 chars")
+            String generator) {
+        if (maze != null) {
+            return leaderboard.top(n, maze);
+        }
+        return leaderboard.topByGenerator(n, generator);
     }
 
     /**

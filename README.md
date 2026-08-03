@@ -164,7 +164,7 @@ public consumers).
 | `GET` | `/api/v1/maze/{id}/sanctuaries` | required | k-center safe points, the covering radius, and the cell served worst (ADR-007) |
 | `GET` | `/api/v1/maze/{id}/hardest-route` | required | Longest simple route vs shortest, the detour between them, and the maze's loop count. On a perfect maze the two are equal by mathematics and the response says so (ADR-007) |
 | `GET` | `/api/v1/maze/{id}/ghost` | public | The maze's best completed run as a timed recording — the UI replays it as a ghost racer |
-| `GET` | `/api/v1/leaderboard?n=20&maze={id}` | public | Top-N leaderboard — `maze=` scopes to one maze's board (the daily's partition) |
+| `GET` | `/api/v1/leaderboard?n=20&maze={id}&generator={id}` | public | Top-N leaderboard — `maze=` scopes to one maze's board (the daily's partition), `generator=` to one algorithm's; `maze` wins if both are given |
 | `GET` | `/api/v1/plugins` | required | Currently-loaded plugins (`PluginInfo`) |
 | `GET` | `/api/v1/plugins/describe` | required | Human-readable plugin tree |
 

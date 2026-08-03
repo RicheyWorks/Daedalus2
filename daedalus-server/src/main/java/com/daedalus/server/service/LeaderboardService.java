@@ -144,6 +144,47 @@ public class LeaderboardService {
         return out.subList(0, Math.min(n, out.size()));
     }
 
+    /**
+     * Top-N for one generator — the read path this partition never had.
+     *
+     * <p>{@code submit} has written {@code PER_GEN_KEY + mazeGeneratorId} since the Redis
+     * backend landed, and nothing in the codebase read it: a sorted-set write plus a trim on
+     * every completed run, serving no request. That is the same "write-only storage" the trim's
+     * own javadoc argues against three lines above it, and it was worse than it looked, because
+     * the id being written was the constant {@code "unknown"} — so the partition was not merely
+     * unread, it was a single set holding every run on every generator.
+     *
+     * <p>Comparing algorithms is the thing this project is *about*, so the partition is worth
+     * more than the write it costs; the fix is a reader, not a delete. In-memory this filters
+     * the bounded global set, exactly as the per-maze board does, and for the same reason: the
+     * retention cap is what governs how far down one generator's runs can sit.
+     */
+    public List<LeaderboardEntry> topByGenerator(int n, String generatorId) {
+        if (generatorId == null || generatorId.isBlank()) {
+            return top(n);
+        }
+        if (redisEnabled) {
+            try {
+                Set<Object> raw = redis.opsForZSet()
+                        .reverseRange(PER_GEN_KEY + generatorId, 0, n - 1);
+                if (raw != null && !raw.isEmpty()) {
+                    List<LeaderboardEntry> out = new ArrayList<>();
+                    for (Object o : raw) if (o instanceof LeaderboardEntry e) out.add(e);
+                    return out;
+                }
+            } catch (Exception e) {
+                log.warn("Redis per-generator leaderboard read failed; using in-memory: {}",
+                        e.toString());
+            }
+        }
+        List<LeaderboardEntry> out = new ArrayList<>();
+        for (LeaderboardEntry e : memory) {
+            if (generatorId.equals(e.mazeGeneratorId())) out.add(e);
+        }
+        out.sort(Comparator.naturalOrder());
+        return out.subList(0, Math.min(n, out.size()));
+    }
+
     public List<LeaderboardEntry> top(int n) {
         if (redisEnabled) {
             try {

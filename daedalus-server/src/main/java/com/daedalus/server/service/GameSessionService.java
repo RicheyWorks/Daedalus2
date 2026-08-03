@@ -96,13 +96,26 @@ public class GameSessionService {
         return open(mazeId, playerName, start, null);
     }
 
-    /**
-     * @param owner verified subject from the caller's token, or {@code null} when the request
-     *              carried no credentials. Recorded at open and immutable — this is what STOMP
-     *              subscription authorization keys on (BACKLOG: per-destination rules).
-     */
+    /** Opens a session whose maze's generator is not known to the caller. */
     public GameSession open(UUID mazeId, String playerName, Point start, String owner) {
-        GameSession session = new GameSession(mazeId, playerName, start, owner);
+        return open(mazeId, GameSession.UNKNOWN_GENERATOR, playerName, start, owner);
+    }
+
+    /**
+     * @param generatorId the algorithm that built the maze, recorded now rather than looked up
+     *                    at completion. The controller already holds it — it has just read the
+     *                    maze out of the cache for its start cell — and resolving it later is
+     *                    unsound: a session is allowed to outlive its maze's cache entry, which
+     *                    this class handles explicitly elsewhere, so a completion-time lookup
+     *                    would put a placeholder on exactly the long games most worth recording.
+     * @param owner       verified subject from the caller's token, or {@code null} when the
+     *                    request carried no credentials. Recorded at open and immutable — this
+     *                    is what STOMP subscription authorization keys on (BACKLOG:
+     *                    per-destination rules).
+     */
+    public GameSession open(UUID mazeId, String generatorId, String playerName, Point start,
+                            String owner) {
+        GameSession session = new GameSession(mazeId, generatorId, playerName, start, owner);
         sessions.put(session.id(), session);
         return session;
     }
@@ -190,9 +203,15 @@ public class GameSessionService {
         // lands, the ideal-path baseline is grid.rows() + grid.cols().
         long score = Math.max(0, 100_000 - s.moveCount() * 10 - elapsed / 100);
         s.complete(score);
+        // This argument was the literal "unknown" until a live probe read it back off the API.
+        // Two things were wrong with that and only one of them was visible: the response field
+        // was false on every run, and LeaderboardService keys its per-generator sorted set on
+        // this string, so every run ever completed collapsed into one partition named after the
+        // placeholder. No test caught it because every test built its own LeaderboardEntry —
+        // the production value was the one value the suite never looked at.
         leaderboard.submit(new LeaderboardEntry(
                 s.id(), s.mazeId(), s.playerName(), score, s.moveCount(), elapsed,
-                /* mazeGeneratorId */ "unknown", Instant.now()));
+                s.generatorId(), Instant.now()));
         // Inline like PlayerMovedEvent — listeners observe completion in move order.
         events.publishEvent(new com.daedalus.plugin.events.SessionCompletedEvent(this, s));
     }

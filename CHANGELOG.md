@@ -8,7 +8,51 @@ under the `_migration/` portfolios.
 
 ## [Unreleased] — 2026-07-30
 
+### Fixed
+
+- **Every completed run was attributed to a generator called "unknown".** `GameSessionService`
+  built its `LeaderboardEntry` with the literal string `"unknown"` in the `mazeGeneratorId`
+  slot — one construction site, unconditional, on every run this server has ever recorded. A
+  debugging pass found it by *running* the thing: boot the jar, play a session through to the
+  goal, read the board back, and there it is in the response body.
+
+  **The visible half** is an API field that is always false. The shipped web client does not
+  render it, which is how it survived; any client that trusted it got a constant.
+
+  **The half that mattered more** is that `LeaderboardService.submit` keys a Redis sorted set on
+  that value — `daedalus:leaderboard:gen:{id}`. The per-generator partition was therefore never
+  a set per generator. It was one set, named after the placeholder, holding every run on every
+  algorithm. And it had no reader anywhere in main or test: a sorted-set write plus a trim on
+  every completed run, serving no request. The trim's own javadoc argues against exactly that,
+  three lines below the line doing it — *"write-only storage … a slow leak with a scoreboard
+  attached"* — which it was diagnosing for the global set's tail while the per-generator set
+  was the whole thing.
+
+  **Why the suite could not see it.** Six test classes construct a `LeaderboardEntry` and every
+  one supplies its own generator id. Each is a fine test of what it tests; together they mean
+  the value the *service* writes is the one value nothing observes. That is the shape worth
+  naming and it is now a lesson in `mutants/README.md`: a field whose only producer is the code
+  under test, asserted everywhere by fixtures that supply it themselves.
+
+  Fixed in both halves. `GameSession` now carries `generatorId`, recorded at **open** rather
+  than resolved at completion — a session is allowed to outlive its maze's cache entry (this
+  codebase already handles that case explicitly), so a completion-time lookup would put the
+  placeholder back on exactly the longest games. And `LeaderboardService.topByGenerator` is the
+  reader the partition never had, exposed as `GET /api/v1/leaderboard?generator=<id>`; `maze=`
+  still wins when both are given, being the more specific of the two.
+
 ### Added
+
+- **`mutants/boardteeth.py` — seven mutations on leaderboard attribution, and the first run
+  scored 5/7 against the tests written for this very fix.** Both survivors were the same
+  mistake the bug came from, committed again in its own regression test. One: reverting the
+  controller to the four-argument `open()` — the original defect moved one level up — left
+  every attribution test green, because all of them called the service directly with the
+  generator id already in hand. Exercise the production path or you are testing your fixture.
+  Closed with an endpoint test that generates a maze and opens a session over HTTP, then asks
+  the stored session what it thinks it is playing. Two: `topByGenerator(n, null)` forwarding to
+  the global board is load-bearing, because the controller routes every *unpartitioned* request
+  through it — and the routing test cannot see that, because it mocks the service. Now 7/7.
 
 - **The bidirectional solver's `b^(d/2)` advantage is now asserted — and the number its header
   advertised was the best case reported as the typical one.** `BidirectionalSolver` expands the
