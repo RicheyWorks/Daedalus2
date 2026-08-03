@@ -31,6 +31,7 @@ by any test.
     python3 mutants/campaignteeth.py # twelve ways to unrung the campaign ladder
     python3 mutants/genteeth.py      # thirteen ways to break the substrate everything commits through
     python3 mutants/claimteeth.py    # eleven fixes, run against the one test each claims to have
+    python3 mutants/agentteeth.py    # fourteen ways to lift the fog or unbound a walk
 
 **Scope matters.** `run.py` runs only the Maven module owning the mutated file, which is
 fast and can report false survivors: a guarantee may be pinned from a *different* module
@@ -123,10 +124,15 @@ until this same day. The number worth watching is what a *new* mutation does —
 here caught real gaps in `LeaderboardService` and `RedisConfig` that 78 existing ones did not,
 because nobody had pointed a mutation at those files before.
 
-Since that baseline, seven harnesses have been added by pointing mutations at classes nobody had
+Since that baseline, eight harnesses have been added by pointing mutations at classes nobody had
 attacked before — `sessionteeth` (10), `gridteeth` (6), `trafficteeth` (9), `livingteeth` (11),
-`campaignteeth` (12), `genteeth` (13), `landmarkteeth` (4). **21 harnesses, 143 mutations, 0
-survivors.** Every one of those five found
+`campaignteeth` (12), `genteeth` (13), `agentteeth` (14), `landmarkteeth` (4). **22 harnesses,
+157 mutations, 0 survivors.**
+
+Every one of those eight found at least one real gap, and three of them found the *same* gap: a
+Caffeine store with a `maximumSize` and no test that moves a clock. Sessions, then the maze cache,
+then the agent store. When a harness finds a defect shaped like one you have seen, go looking for
+the third instance before it finds you. Every one of those five found
 at least one real unpinned guarantee on its first run, which is the argument for writing the next
 one rather than re-running these.
 

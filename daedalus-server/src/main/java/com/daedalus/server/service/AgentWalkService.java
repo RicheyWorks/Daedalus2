@@ -8,6 +8,7 @@ import com.daedalus.model.Point;
 import com.daedalus.plugin.events.AgentSteppedEvent;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.Ticker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -73,12 +74,30 @@ public class AgentWalkService {
             @Value("${daedalus.agent.max-agents:10000}") long maxAgents,
             @Value("${daedalus.agent.idle-ttl:1h}") Duration idleTtl,
             @Value("${daedalus.agent.max-steps:100000}") int maxSteps) {
+        this(gen, events, maxAgents, idleTtl, maxSteps, Ticker.systemTicker());
+    }
+
+    /**
+     * Ticker seam — the third in this package, and the third time the same gap was found the
+     * same way. {@code BoundedStoresTest} pins that every Caffeine cache in the server declares
+     * a {@code maximumSize}, and a declaration is not an expiry: deleting
+     * {@code expireAfterAccess} from this builder left the suite green, exactly as it did for
+     * {@code GameSessionService} on 08-01 and {@code MazeGenerationService} on 08-02. An agent
+     * store bounded only by size holds every walk anyone ever opened until 10,000 more arrive.
+     */
+    AgentWalkService(MazeGenerationService gen,
+            ApplicationEventPublisher events,
+            long maxAgents,
+            Duration idleTtl,
+            int maxSteps,
+            Ticker ticker) {
         this.gen = gen;
         this.events = events;
         this.maxSteps = maxSteps;
         this.walks = Caffeine.newBuilder()
                 .maximumSize(maxAgents)
                 .expireAfterAccess(idleTtl)
+                .ticker(ticker)
                 .build();
     }
 

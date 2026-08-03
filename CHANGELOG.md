@@ -198,6 +198,36 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **The fog-of-war agent leaked in four directions nobody was checking.** `AgentWalkService` is a
+  benchmark surface — its javadoc invites "a shell script, an RL policy, a student's first
+  wall-follower" — and it had never been mutated. Fourteen mutations, seven survivors, six real.
+  The shape of the gap is worth naming, because it generalises: `AgentWalkServiceTest` tests the
+  walk from the caller's side and does it well, and a caller-side test asks whether the walk
+  *works*. It has no reason to ask whether the walk revealed too much, whether a configured
+  ceiling was honoured, or what happens on a path a caller cannot reach on purpose. An agent that
+  can see the whole maze still reaches the goal — faster, and with a cleaner test log.
+
+  What survived: the in-bounds half of the fog filter (a stray border opening would be offered to
+  the agent as a direction to walk); both step-budget clamps, so `max-steps` bounded nothing for
+  either an explicit request or the `4·rows·cols` default; the `AgentSteppedEvent` publish, whose
+  removal stops agents raising traffic congestion at all while both suites stay green, because
+  `TrafficServiceTest` publishes that event by hand and so covers the far side of a wire it never
+  checks is connected; the agent store's idle expiry — the third store in three days with a size
+  bound and no clock, after the session store and the maze cache, so `AgentWalkService` gets the
+  same `Ticker` seam; and the evicted-maze path, which answers 404 by design and threw a
+  NullPointerException once mutated. `AgentWalkContractTest` covers all six. `mutants/agentteeth.py`,
+  14/14.
+
+  Two of the fourteen taught something about writing mutations rather than about the code. One was
+  inert by construction: it rewrote the wall-bump guard into a logically identical condition, and
+  "survived" while testing nothing — a wall bump cannot be made to cost budget by editing that
+  condition, because the throw aborts the store's compute and nothing is written either way.
+  Re-aimed at the realistic defect (return a walk that stayed put with the step spent, silently),
+  it is caught. And the first version of the border-fog test asserted nothing, because `adopt`
+  re-places start and goal at the extremes and moved the agent off the doctored cell — it passed
+  with the guard deleted. A one-row corridor, where every cell is on the north edge whichever one
+  `adopt` picks, is what made the assertion real.
+
 - **The desktop shipped no configuration file, and the check that would have caught it only
   looked at the server.** `daedalus-desktop` is a Spring Boot application; `ThemeManager` reads
   `daedalus.ui.theme` through `@Value`; `CosmicTheme`'s javadoc tells the reader the default lives
