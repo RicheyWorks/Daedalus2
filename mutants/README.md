@@ -451,3 +451,22 @@ where a service-level test never passed the argument the controller always passe
 controller test mocked the service away. A fix is not verified by a test that passes; it is
 verified by a test that fails when the fix is removed, and by one that fails when each *layer*
 of the fix is removed separately.
+
+**A scanner defines the shape of what it can miss.** `ProdAuthPostureTest` walks the controller
+sources for `@…Mapping` annotations and fails the build for any endpoint with no recorded posture
+— genuinely thorough, and structurally incapable of noticing that the web UI answered 401 in prod
+for its whole life. A static file has no annotation, so it could never appear in that table. The
+lesson is not "add a row"; it is that every completeness check silently defines a category of
+thing it is blind to, and that category is worth naming out loud when you write the scanner. Here
+the blind spot happened to contain the client half of a feature whose server half had already been
+fixed, tested and written up — the spectator permalink points at `https://host/#session=`, which
+is the page, which was closed.
+
+**Pin the layer that refused, not the fact that it failed.** `staticteeth.py` scored 4/5, and the
+survivor was dropping `HttpMethod.GET` from a `permitAll` matcher so every verb on the path is
+permitted. `POST /` fails either way, which is why the first table missed it: with the method
+scope the *security* layer answers 401; without it security says yes and the servlet layer answers
+405. Both are "not 2xx". Treating 405 as a refusal makes the widening invisible, so the refused
+set now excludes it deliberately. Whenever a test asserts "this request is rejected", check which
+component is doing the rejecting — an assertion satisfied by a downstream accident does not pin
+the upstream decision.

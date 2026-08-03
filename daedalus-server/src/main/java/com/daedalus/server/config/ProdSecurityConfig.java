@@ -24,6 +24,10 @@ import org.springframework.security.web.SecurityFilterChain;
  *
  * <p><b>Public (no token required)</b>:
  * <ul>
+ *   <li>{@code GET /} and {@code GET /index.html} — the web UI. The README publishes it as
+ *       "served at {@code /}" and it was 401 in prod: {@code anyRequest().authenticated()}
+ *       covers static resources too, and {@code ProdAuthPostureTest} scans controller mappings,
+ *       so no table this project keeps had a row for a file. See the note at the matcher.</li>
  *   <li>{@code GET /api/v1/algorithms}, {@code GET /api/v1/maze/&#123;id&#125;},
  *       {@code GET /api/v1/leaderboard} — read-only API surface, intentionally browsable</li>
  *   <li>{@code POST /api/v1/auth/login} — credentials → token; chicken-and-egg otherwise</li>
@@ -95,6 +99,28 @@ public class ProdSecurityConfig {
                         // ---- Auth ----
                         // Login is the only way to obtain a token; must be reachable without one.
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+
+                        // ---- The web UI ----
+                        // The other half of the share-a-link surface, and the half that was
+                        // missed. Opening the spectator *API* in prod bought nothing while the
+                        // page that calls it stayed closed: the link the UI hands out is
+                        // `https://host/#session={id}` — origin root plus a fragment — so a
+                        // spectator following it got 401 from the static page and never reached
+                        // any of the endpoints carefully permitted below. Measured on a prod-
+                        // profile boot: /api/v1/session/{id} answered, "/" answered 401.
+                        //
+                        // Enumerated rather than globbed, and the enumeration is complete: the
+                        // UI is one file. A second asset added later will 401 until somebody
+                        // lists it, which is the same fail-closed choice as the single-segment
+                        // '*' matchers below — a static directory served by "/**" is exactly the
+                        // kind of matcher that silently publishes whatever lands in it.
+                        //
+                        // Nothing is given away by serving it. The page is markup and script
+                        // with no embedded credentials, and every capability it offers is still
+                        // governed by the rules in this method — a visitor without a token can
+                        // browse public mazes and spectate, and generate/solve/session all
+                        // answer 401 exactly as they did before.
+                        .requestMatchers(HttpMethod.GET, "/", "/index.html").permitAll()
 
                         // ---- Public read endpoints ----
                         .requestMatchers(HttpMethod.GET, "/api/v1/algorithms").permitAll()

@@ -10,6 +10,51 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **The web UI answered 401 in prod, and the spectator permalink never worked.** `GET /` and
+  `GET /index.html` were closed by `anyRequest().authenticated()` — measured on a prod-profile
+  boot, not inferred. The README publishes the UI as "served at `/`"; prod refused it.
+
+  What makes this more than a missing row is where it lands. `ProdSecurityConfig` deliberately
+  opens `GET /api/v1/session/{id}`, its tour, the ghost run and the agent re-poll, and argues
+  the case at length in its own javadoc: a spectator link only the operator can open is not a
+  spectator link, and until 2026-07-31 those endpoints "did not work in prod at all". But the
+  link the UI hands out is `https://host/#session={id}` — origin root plus a fragment. Every
+  endpoint on that carefully-reasoned list was reachable and the page that calls them was not,
+  so **the feature still did not work.** The fix had been applied to the half that had a test.
+
+  **Why no test could have caught it.** `ProdAuthPostureTest` is the strongest security test in
+  the repo and is blind to this by construction: its completeness half walks
+  `controller/**.java` extracting `@…Mapping` annotations, and a file served off the classpath
+  has no annotation to find. The gap was not a forgotten row — it was in what that table is
+  *able* to contain.
+
+  Fixed with an enumerated allowlist (`GET /`, `GET /index.html`), not a glob. The UI is one
+  file, so the enumeration is complete today and fail-closed tomorrow: a second asset 401s until
+  somebody lists it, which is the same reasoning as the single-segment `*` matchers beside it.
+
+- **`ProdStaticSurfacePostureTest` and `mutants/staticteeth.py` — the table the annotation
+  scanner cannot hold, and its teeth.** The test records an explicit posture per non-API path,
+  drives them against a real prod boot, and walks the static directory so a new file fails the
+  build until a decision is recorded for it. A third test asserts the page prod serves is
+  actually the page: a 200 with an empty body satisfies any status-only table and still leaves a
+  blank screen in front of every spectator.
+
+  **The harness scored 4/5 on its first run.** The survivor was the *method* scope — dropping
+  `HttpMethod.GET` from the matcher permits every verb on that path — and it survived because the
+  new table was keyed on paths alone with GET assumed on every row. A table cannot catch a
+  distinction it does not express.
+
+  Fixing it took more than adding write rows. `POST /` fails either way; what differs is **which
+  layer refuses it**. With the method scope, the security layer answers 401. Without it, security
+  says yes and the servlet layer answers 405. So 405 is now deliberately excluded from the
+  refused set — the property being pinned is "the security layer is the thing that said no", not
+  "the request did not succeed". 5/5.
+
+  One mutation is deliberately absent and the harness says so: nothing in this repo's source can
+  be edited to produce "prod answers 200 with something that is not the page". That failure
+  arrives from packaging or a resource-handler change, not a line to flip, and an inert edit
+  faking coverage reads exactly like a genuine gap.
+
 - **Every completed run was attributed to a generator called "unknown".** `GameSessionService`
   built its `LeaderboardEntry` with the literal string `"unknown"` in the `mazeGeneratorId`
   slot — one construction site, unconditional, on every run this server has ever recorded. A
