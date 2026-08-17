@@ -96,13 +96,12 @@ sample (Algorithm R) and carve from it: O(1) extra memory per step. Turns
 frontier-based generators into streaming ones for 512²+ grids.
 
 **G4 · Randomized-weight Kruskal + braiding** — `Ch. 23 (Kruskal) + Ch. 21 (disjoint sets) · Impact Low · Effort Low`
-**Braiding half shipped 2026-07-18 as `engine.Braider`** — dead-end braiding as a
-post-process, composable with all 20 generators (more general than re-admitting
-Kruskal's rejected edges). The randomized-weight Kruskal *texture* variant below
-is still open.
-`KruskalsGenerator` + `DSU` are already here. Sort a *randomly weighted* edge
-list for a free family of textures, then add a "braid factor" that re-admits
-k% of the rejected edges to introduce loops (imperfect mazes on demand).
+**Braiding half shipped 2026-07-18 as `engine.Braider`.** **Texture half
+declined 2026-08-17** — see [ADR-015](docs/adr/ADR-015-kruskal-texture.md).
+Random unique weights are a shuffle, which `KruskalsGenerator` already does
+(the G1 MST-order lesson). Directional bias is `WeightedPrimsGenerator`;
+Kruskal and Prim produce the same MST for the same weights. Re-admitting
+rejected edges is `Braider`, composable with everyone.
 
 ## 2. Solvers
 
@@ -156,12 +155,13 @@ ride on it, so this is a load-bearing few lines with an outsized story.
 flat arrays indexed by `row * cols + col` instead of `HashMap<Point,…>` /
 `HashSet<Point>`. Measured **1.42–1.72× faster** in the real solvers (a prototype
 predicted 1.47–2.00×), on the same 12×80² workload where the d-ary heap (D3)
-showed nothing — behaviour identical, all 124 tests untouched. The *other* half
-of this idea, packing wall bits into a `long[]` inside `MazeGrid` itself, is
-still open.
-Pack the four wall bits per cell into a `long[]`; neighbor scans and flood-fill
-become word-parallel and cache-friendly, a measurable gen/solve win at 128²+.
-Enables SWAR tricks (population counts for dead-end detection, etc.).
+showed nothing — behaviour identical, all 124 tests untouched.
+**`long[]` `MazeGrid` declined 2026-08-17** — see
+[ADR-016](docs/adr/ADR-016-bitset-maze-grid.md). A packed neighbor sweep is
+~150 µs faster at 128² against a 1.6 ms Dijkstra and a 2 s living tick;
+`copy()` is tens of times slower than memcpy and still a fraction of a
+millisecond. The cheap leftovers landed: `Cell` stores a nibble, not an
+`EnumSet`, and `MazeGraph.neighbors` no longer boxes a `Point` per hop.
 
 **D3 · d-ary heap tuned to grid degree** — `Ch. 6 (heaps) · Impact Low · Effort Low`
 **Measured 2026-07-18 — declined, no code shipped.** A 4-ary heap was

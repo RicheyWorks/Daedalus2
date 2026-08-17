@@ -176,14 +176,21 @@ public class MazeGrid {
 
     public List<Point> openNeighbors(Point p) {
         List<Point> out = new ArrayList<>(4);
-        Cell here = cell(p);
         for (Direction d : Direction.values()) {
-            if (here.isOpen(d)) {
+            if (isOpen(p.row(), p.col(), d)) {
                 Point n = p.step(d);
                 if (inBounds(n)) out.add(n);
             }
         }
         return out;
+    }
+
+    /**
+     * Whether the passage from {@code (row, col)} toward {@code d} is open. Coordinate form
+     * so the graph seam can walk walls without allocating a {@link Point} per hop.
+     */
+    public boolean isOpen(int row, int col, Direction d) {
+        return cell(row, col).isOpen(d);
     }
 
     /**

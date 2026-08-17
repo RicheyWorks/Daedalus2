@@ -2,12 +2,14 @@
 
 package com.daedalus.server.service;
 
+import com.daedalus.engine.Braider;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.engine.generators.GeneratorRegistry;
 import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
 import com.daedalus.model.Point;
 import com.daedalus.plugin.events.PlayerMovedEvent;
 import com.daedalus.theory.MazeMetrics;
+import com.daedalus.theory.WaypointTour;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -243,5 +245,32 @@ class WaypointServiceTest {
         assertThat(waypoints.tourFor(mazeId, 0).waypoints()).hasSize(1); // clamps up, not to zero
         assertThat(waypoints.tourFor(UUID.randomUUID(), 4)).isNull();
         assertThat(waypoints.progressFor(UUID.randomUUID())).isNull();
+    }
+
+    @Test
+    void aLivingTickRescoresTheTourWithoutMovingTheWaypoints() {
+        var before = waypoints.tourFor(mazeId, 4);
+        MazeGrid next = grid.copy();
+        Braider.braid(next, 1.0, 7L);
+        var cached = gen.find(mazeId);
+        assertThat(gen.replace(mazeId, new MazeGenerationService.Cached(
+                cached.metadata(), next, cached.stats(), cached.hotspots()))).isTrue();
+
+        var after = waypoints.tourFor(mazeId, 4);
+        assertThat(after.waypoints())
+                .as("the coins stay put — a living maze is a hazard, not a new puzzle")
+                .isEqualTo(before.waypoints());
+
+        List<Point> stops = new ArrayList<>(before.waypoints());
+        stops.add(next.goal());
+        int liveCost = WaypointTour.shortestTour(next, next.start(), stops).totalCost();
+        assertThat(after.optimalCost())
+                .as("the number we score against must be Held-Karp on the live grid, not "
+                        + "the tree the tour was first asked about")
+                .isEqualTo(liveCost);
+        assertThat(liveCost)
+                .as("full braid on a tree adds shortcuts; if this equals the tree cost the "
+                        + "fixture is not exercising the stale-cache bug")
+                .isLessThan(before.optimalCost());
     }
 }

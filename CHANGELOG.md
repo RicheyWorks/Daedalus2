@@ -63,6 +63,18 @@ under the `_migration/` portfolios.
   example assigns a lattice of request sites onto k-center replicas and shows
   capacity leaving seats unmatched.
 
+- **Living mazes rescore waypoint tours (ADR-014).** Placement freezes on
+  first ask; Held-Karp runs against the live grid. A cached optimum was a
+  recording of a maze that erosion and hardening had already changed. The
+  coins stay put so collection tracking does not teleport; the number you
+  are scored against does not. The UI refetches `/tour` on each living
+  refresh.
+
+- **Cell walls are a nibble; `MazeGraph` stopped boxing a `Point` per hop
+  (ADR-016 leftovers).** The class already claimed to be allocation-free.
+  `neighbors` was not. `MazeGrid.isOpen(row, col, dir)` is the coordinate
+  form that made the claim true. The `long[]` `MazeGrid` rewrite stays out.
+
 - **Join grants STOMP on owned sessions (ADR-012).** Multiplayer and
   per-destination authorization shipped the same day and did not compose: join
   put a piece on the board and left `/topic/session/{id}/player` owner-only, so
@@ -89,6 +101,17 @@ under the `_migration/` portfolios.
   that graph is a slower Dijkstra. Johnson without negatives is n Dijkstra,
   slower than the already-dormant `DistanceOracle`. Re-fire if a directed
   latency graph with signed or genuinely asymmetric hops appears.
+
+- **Kruskal texture declined (ADR-015 / CLRS G4).** Random unique weights
+  are a shuffle, which Kruskal already does. Directional bias is weighted
+  Prim's; the two algorithms produce the same MST. Braiding already shipped
+  as a post-process.
+
+- **Packed `MazeGrid` declined (ADR-016 / CLRS D2).** Measured: a packed
+  neighbor sweep saves ~150 µs at 128² on a 1.6 ms Dijkstra; `copy()` is
+  tens of times slower than memcpy and still sub-millisecond against a 2 s
+  tick. Harness at `docs/evaluations/BitsetGridEval.java`. The nibble and
+  the allocation-free graph walk are the leftovers that paid.
 
 ### Fixed
 

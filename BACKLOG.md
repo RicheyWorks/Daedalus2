@@ -138,6 +138,15 @@ Last consolidated: 2026-08-17
   item 4. Weights are costs in `[1, 1000]`; there is no negative edge.
   Re-fire if a directed latency graph with signed hops appears.
 
+- ~~**Waypoint tour vs living mazes.**~~ **Done 2026-08-17 (ADR-014).** The
+  tour cache scored you against the tree the coins were first placed on.
+  Placement stays frozen; the optimum is Held-Karp on the live grid.
+
+- ~~**CLRS G4 Kruskal texture / D2 packed grid.**~~ **Declined 2026-08-17
+  (ADR-015, ADR-016).** Shuffle is already Kruskal; bias is already
+  weighted Prim's. A `long[]` `MazeGrid` cannot pay at API sizes. Cell
+  nibble + allocation-free `MazeGraph` shipped as the cheap leftovers.
+
 ## New surfaces
 
 - ~~**Performance benchmark harness.**~~ **Done 2026-07-19** —

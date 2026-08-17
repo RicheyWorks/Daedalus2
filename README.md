@@ -332,7 +332,7 @@ Beyond the five Maven modules:
 ```
 Audit/       Vision-style audit + integration ideas (Grok, May 6)
 Code/        Sample integrations: HilbertLoadBalancer.java, daedalus-api-dtos.ts
-docs/adr/    Architecture decision records (graph seam; living mazes; theory-as-product; hardening)
+docs/adr/    Architecture decision records (graph seam; living mazes; theory-as-product; measured declines)
 docs/        benchmarks/ (harness output), evaluations/ (standalone measurement code)
 examples/    Four worked examples — see "Worked examples" above
 PDFs/        Auto-generated reference docs (server, runtime, desktop, core, generators, overview)

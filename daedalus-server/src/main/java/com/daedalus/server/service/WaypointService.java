@@ -40,6 +40,11 @@ import java.util.UUID;
  * optimal meaningful between players, and it is why the daily challenge, per-maze leaderboards,
  * ghosts and campaign stages all work in this mode without changing any of them.
  *
+ * <p><b>Living mazes keep the coins and move the score (ADR-014).</b> Placement is frozen
+ * the first time a maze is asked for a tour. The Held-Karp cost is not: a living tick
+ * opens or closes passages under the same waypoints, so a cached {@code optimalCost} would
+ * become a lie. {@link #tourFor} always rescores against the cache's current grid.
+ *
  * <p><b>Progress is observed, not trusted.</b> Collection is tracked here by listening to
  * {@link PlayerMovedEvent} — the same seam traffic uses — rather than accepting a client's
  * claim about which waypoints it picked up. A client can render whatever it likes; the
@@ -71,7 +76,8 @@ public class WaypointService {
     private final GameSessionService sessions;
     private final int defaultCount;
 
-    private final Cache<String, Tour> tours;
+    /** Frozen placements — the Held-Karp score is recomputed against the live grid. */
+    private final Cache<String, List<Point>> placements;
     private final Cache<UUID, Set<Point>> collected;
 
     @Autowired
@@ -98,7 +104,7 @@ public class WaypointService {
         this.gen = gen;
         this.sessions = sessions;
         this.defaultCount = clamp(defaultCount);
-        this.tours = Caffeine.newBuilder().maximumSize(maxTours)
+        this.placements = Caffeine.newBuilder().maximumSize(maxTours)
                 .expireAfterAccess(idleTtl).ticker(ticker).build();
         this.collected = Caffeine.newBuilder().maximumSize(maxTours)
                 .expireAfterAccess(idleTtl).ticker(ticker).build();
@@ -117,8 +123,8 @@ public class WaypointService {
 
     /** Cached tours — for tests and metrics; see {@code BoundedStoresTest}. */
     public long cachedTours() {
-        tours.cleanUp();
-        return tours.estimatedSize();
+        placements.cleanUp();
+        return placements.estimatedSize();
     }
 
     public int defaultCount() {
@@ -126,7 +132,8 @@ public class WaypointService {
     }
 
     /**
-     * The maze's waypoints and its optimal tour, computed once and cached.
+     * The maze's waypoints (frozen on first ask) and the optimal tour on the <em>current</em>
+     * grid. Living ticks change the score, not the coins.
      *
      * @return {@code null} when the maze is unknown (the controller answers 404)
      */
@@ -136,24 +143,27 @@ public class WaypointService {
             return null;
         }
         int k = clamp(count == null ? defaultCount : count);
-        return tours.get(mazeId + ":" + k, key -> computeTour(mazeId, cached.grid(), k));
+        List<Point> waypoints = placements.get(mazeId + ":" + k,
+                key -> place(cached.grid(), k));
+        return score(mazeId, cached.grid(), waypoints);
     }
 
-    private Tour computeTour(UUID mazeId, MazeGrid grid, int k) {
+    private static List<Point> place(MazeGrid grid, int k) {
         // Ask for k+2 and drop start/goal: k-center's first pick is an extreme cell, which is
         // frequently the start or the goal, and a waypoint sitting on either is not a waypoint.
         var placement = FacilityPlacement.kCenter(grid, k + 2);
-        List<Point> waypoints = placement.facilities().stream()
+        return placement.facilities().stream()
                 .filter(p -> !p.equals(grid.start()) && !p.equals(grid.goal()))
                 .limit(k)
                 .toList();
+    }
 
+    private static Tour score(UUID mazeId, MazeGrid grid, List<Point> waypoints) {
         // The tour must end at the goal, so the goal is the final compulsory stop: solving over
         // waypoints alone would score a route that stops wherever the last pickup happens to be.
         List<Point> stops = new java.util.ArrayList<>(waypoints);
         stops.add(grid.goal());
         var tour = WaypointTour.shortestTour(grid, grid.start(), stops);
-
         return new Tour(mazeId, waypoints, tour.order(), tour.totalCost(), tour.feasible());
     }
 
@@ -164,8 +174,8 @@ public class WaypointService {
         if (session == null) {
             return;
         }
-        Tour tour = tours.getIfPresent(session.mazeId() + ":" + defaultCount);
-        if (tour == null || !tour.waypoints().contains(e.to())) {
+        List<Point> waypoints = placements.getIfPresent(session.mazeId() + ":" + defaultCount);
+        if (waypoints == null || !waypoints.contains(e.to())) {
             return; // not a waypoint maze, or not a waypoint cell
         }
         collected.asMap()

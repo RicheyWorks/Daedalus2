@@ -1169,6 +1169,19 @@ async function refreshLivingMaze() {
         state.analysis = a;
       } catch (ignored) { /* analysis is an overlay; losing one refresh is harmless */ }
     }
+    if (state.tour) {
+      // Placement is frozen; the optimum is not (ADR-014).
+      try {
+        const t = await api(`/maze/${forMaze}/tour?count=${state.tour.waypoints.length}`);
+        if (stale()) return;
+        if (t.optimalCost !== state.tour.optimalCost) {
+          log("state", `tour optimum is now ${t.optimalCost} steps (was ${state.tour.optimalCost})`);
+        }
+        state.tour = t;
+        await refreshTourStatus();
+        if (stale()) return;
+      } catch (ignored) { /* tour overlay; losing one refresh is harmless */ }
+    }
     if (state.path) {
       // The drawn route may now cross freshly-opened walls or stale costs — re-solve
       // quietly (no replay animation; the mutation itself is the show).
