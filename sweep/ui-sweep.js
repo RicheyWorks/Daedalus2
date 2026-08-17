@@ -278,6 +278,20 @@ async function check(name, fn) {
         `ASCII ${art.length} chars; plugins: ${plugins.slice(0, 40)}`];
   });
 
+  await check('S. generator partition is a query, not a client filter', async () => {
+    // Leave any daily/campaign maze-scope so maze= cannot swallow generator=.
+    await page.fill('#seed','13'); await page.click('#generate');
+    await page.waitForFunction(() => state.maze && state.maze.seed === 13
+        && state.dailyId == null && state.stageIndex == null, null, {timeout:15000});
+    await page.selectOption('#lbGen', 'prims');
+    await page.waitForFunction(() => state.lbQuery && state.lbQuery.includes('generator=prims')
+        && !state.lbQuery.includes('maze='), null, {timeout:10000});
+    const q = await page.evaluate(() => state.lbQuery);
+    const title = await page.$eval('#lbTitle', e => e.textContent);
+    return [/generator=prims/.test(q) && !/maze=/.test(q) && /prim/i.test(title),
+        `${title} via ${q}`];
+  });
+
   await check('O. no uncaught page errors', async () =>
     [pageErrors.length === 0, pageErrors.length ? pageErrors.join(' | ').slice(0,150) : 'none']);
 

@@ -54,7 +54,9 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   generate/play and an authenticated join work from the page; Fog of war
   walks the agent API and paints only cells the walk has stood on. Show ASCII
   is `Accept: text/plain` on the maze, not a client-side dump; the plugin
-  panel lists what the runtime loaded.
+  panel lists what the runtime loaded. The leaderboard Algorithm select is
+  `GET /leaderboard?generator=`; a daily or campaign board keeps `maze=`
+  and disables the select, because maze wins if both are sent.
 - **Deterministic across restarts, not just across a cache hit.** Same seed,
   same answer, on a process that has never seen the request before.
   `DeterminismGoldenTest` compares 23 endpoints — seeded generation, the seeded

@@ -286,6 +286,11 @@
 
     <section class="panel">
       <h2 id="lbTitle">Leaderboard</h2>
+      <label for="lbGen">Algorithm</label>
+      <select id="lbGen"
+              title="GET /leaderboard?generator= — the per-algorithm partition. Disabled on a daily or campaign board because maze= is more specific and wins if both are sent">
+        <option value="">all generators</option>
+      </select>
       <div id="lb" class="hint">loading…</div>
     </section>
     <section class="panel">
@@ -331,6 +336,7 @@ const state = {
   token: null,           // JWT from POST /auth/login — attached to REST and STOMP
   user: null,            // display name that minted the token
   fog: null,             // AgentView + seen Set — cells this walk has stood on
+  lbQuery: null,         // last /leaderboard path actually fetched (partition, not a title)
 };
 
 /** Escape untrusted text (player names arrive from other clients) before it meets innerHTML. */
@@ -354,7 +360,7 @@ function log(kind, text) {
 
 // A shared maze gets its own board: the daily challenge, or a campaign stage. You compete
 // against everyone who played that same topology, not against the world's easiest mazes.
-function lbScope() {
+function lbMazeScope() {
   if (!state.maze) return null;
   if (state.dailyId && state.maze.id === state.dailyId) return state.dailyId;
   if (state.campaign && state.stageIndex != null
@@ -363,20 +369,46 @@ function lbScope() {
   }
   return null;
 }
+
+/** Which partition this refresh will ask for. maze= wins; never send both (the server
+ *  would drop generator= and the select would be lying). */
+function lbRequest() {
+  const maze = lbMazeScope();
+  const generator = $("lbGen") ? $("lbGen").value : "";
+  if (maze) return {path: `/leaderboard?n=10&maze=${maze}`, maze, generator: ""};
+  if (generator) {
+    return {path: `/leaderboard?n=10&generator=${encodeURIComponent(generator)}`,
+            maze: null, generator};
+  }
+  return {path: "/leaderboard?n=10", maze: null, generator: ""};
+}
+
 async function refreshLeaderboard() {
   try {
-    const scoped = lbScope();
-    const rows = await api(`/leaderboard?n=10${scoped ? "&maze=" + scoped : ""}`);
-    if (lbScope() !== scoped) return; // scope changed while in flight — a newer call owns the panel
-    $("lbTitle").textContent = !scoped ? "Leaderboard"
-        : scoped === state.dailyId ? "Daily leaderboard"
-        : `Stage ${state.stageIndex + 1} leaderboard`;
+    const req = lbRequest();
+    const rows = await api(req.path);
+    if (lbRequest().path !== req.path) return; // scope changed in flight
+    state.lbQuery = req.path; // what we actually asked — sweep pins generator= vs maze=
+    const mazeScoped = !!req.maze;
+    if ($("lbGen")) {
+      $("lbGen").disabled = mazeScoped;
+    }
+    $("lbTitle").textContent = mazeScoped
+        ? (req.maze === state.dailyId ? "Daily leaderboard"
+            : `Stage ${state.stageIndex + 1} leaderboard`)
+        : req.generator
+            ? `${(state.algos[req.generator] && state.algos[req.generator].displayName)
+                || req.generator} leaderboard`
+            : "Leaderboard";
     $("lb").innerHTML = rows.length === 0
         ? `<span class="hint">no completed runs yet — reach a goal</span>`
         : rows.map((e, i) =>
             `<div><span class="rank">${i + 1}</span><b>${esc(e.playerName)}</b> `
             + `<span class="score">${e.score}</span> `
-            + `<span>&middot; ${e.moveCount} moves &middot; ${(e.elapsedMs / 1000).toFixed(1)}s</span></div>`
+            + `<span>&middot; ${e.moveCount} moves &middot; ${(e.elapsedMs / 1000).toFixed(1)}s</span>`
+            + (!mazeScoped && e.mazeGeneratorId
+                ? ` <span>&middot; ${esc(e.mazeGeneratorId)}</span>` : "")
+            + `</div>`
           ).join("");
   } catch (e) {
     $("lb").textContent = "leaderboard unavailable";
@@ -512,6 +544,18 @@ async function loadAlgorithms() {
   }
   $("generator").value = "recursive-backtracker";
   $("solver").value = "bfs";
+  const lbGen = $("lbGen");
+  const keep = lbGen.value;
+  lbGen.innerHTML = "";
+  const allOpt = document.createElement("option");
+  allOpt.value = ""; allOpt.textContent = "all generators";
+  lbGen.appendChild(allOpt);
+  all.generators.slice().sort((a, b) => a.id.localeCompare(b.id)).forEach(a => {
+    const o = document.createElement("option");
+    o.value = a.id; o.textContent = a.displayName || a.id;
+    lbGen.appendChild(o);
+  });
+  if ([...lbGen.options].some(o => o.value === keep)) lbGen.value = keep;
   // The arena's rival lane gets the same solver roster.
   const rival = $("rival");
   rival.innerHTML = "";
@@ -534,6 +578,7 @@ function updateInfo() {
 }
 $("generator").addEventListener("change", updateInfo);
 $("solver").addEventListener("change", updateInfo);
+$("lbGen").addEventListener("change", () => refreshLeaderboard());
 
 async function generate() {
   const body = {

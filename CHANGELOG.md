@@ -105,6 +105,14 @@ under the `_migration/` portfolios.
   grid). The plugin panel is empty-honest when nothing is loaded, and refreshes
   after sign-in because prod keeps `/plugins` closed.
 
+- **The web UI reads the per-generator leaderboard.** `GET /leaderboard?generator=`
+  shipped with the attribution fix and the page never sent it — the only
+  scopes were daily/campaign `maze=` or the global board. The Algorithm
+  select asks that partition; it disables on a shared maze because `maze=`
+  wins if both are sent and a selected generator would have been theater.
+  `state.lbQuery` is the path actually fetched, so a title-only fake fails
+  the sweep.
+
 ### Fixed
 
 - **Signed-in live frames could not connect in prod.** `/ws/**` required a
