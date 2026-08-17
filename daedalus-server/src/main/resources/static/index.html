@@ -1461,6 +1461,25 @@ async function refreshLivingMaze() {
     const forMaze = state.maze.id;
     const stale = () => !state.maze || state.maze.id !== forMaze;
 
+    // Fog is the agent contract: position, openings, goal. GET /maze is the
+    // god-mode grid. Pulling it here would let a living tick paint rooms the
+    // walk has never stood in (and openings behind you that you have not
+    // re-seen). Re-poll the agent only; carveFogOpenings writes the cell
+    // underfoot.
+    if (state.fog) {
+      try {
+        const v = await api(`/agent/${state.fog.agentId}`);
+        if (stale()) return;
+        applyFogView(v);
+      } catch (gone) {
+        if (stale()) return;
+        state.fog = null;
+        log("err", `fog walk ended: ${gone.message}`);
+      }
+      draw();
+      return;
+    }
+
     const maze = await api(`/maze/${forMaze}`);
     if (stale()) return;
     state.maze = maze;
@@ -1509,19 +1528,6 @@ async function refreshLivingMaze() {
       state.expansions = [];
       state.searchProgress = 1;
       state.pathProgress = 1;
-    }
-    if (state.fog) {
-      // Openings at your feet can change between ticks — GET is free and does not
-      // spend budget (ADR-006). A 404 means the walk died with an evicted maze.
-      try {
-        const v = await api(`/agent/${state.fog.agentId}`);
-        if (stale()) return;
-        applyFogView(v);
-      } catch (gone) {
-        if (stale()) return;
-        state.fog = null;
-        log("err", `fog walk ended: ${gone.message}`);
-      }
     }
     draw();
   } catch (e) {
@@ -2036,6 +2042,31 @@ function applyFogView(view) {
   const last = state.fog.walk[state.fog.walk.length - 1];
   if (!last || last.row !== view.position.row || last.col !== view.position.col) {
     state.fog.walk.push(view.position);
+  }
+  carveFogOpenings(view);
+}
+
+/**
+ * The agent reports openings at the cell underfoot, not a grid. Write those four
+ * gap tiles into memory so a living tick that opens a wall at your feet is
+ * visible, without fetching GET /maze (that would paint rooms you have not
+ * stood in).
+ */
+function carveFogOpenings(view) {
+  if (!state.maze || !view || !view.position) return;
+  const r = view.position.row, c = view.position.col;
+  const tr = 2 * r + 1, tc = 2 * c + 1;
+  const open = new Set(view.open || []);
+  const gaps = [
+    ["NORTH", tr - 1, tc], ["SOUTH", tr + 1, tc],
+    ["WEST", tr, tc - 1], ["EAST", tr, tc + 1],
+  ];
+  for (const [dir, gr, gc] of gaps) {
+    const row = state.maze.tiles[gr];
+    if (row == null || gc < 0 || gc >= row.length) continue;
+    const ch = open.has(dir) ? " " : "#";
+    if (row[gc] === ch) continue;
+    state.maze.tiles[gr] = row.substring(0, gc) + ch + row.substring(gc + 1);
   }
 }
 

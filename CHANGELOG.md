@@ -158,6 +158,16 @@ under the `_migration/` portfolios.
   the ghost learned). A `#session=` arrival hydrates the hunt (if one
   was asked) and the ghost (if one exists) without creating either.
 
+- **Fog of war no longer pulls the god-mode grid when the maze lives.**
+  A living tick used to `GET /maze/{id}` and replace `state.maze.tiles`.
+  Fog paints from those tiles for every stood-on cell, so erosion in
+  rooms you had visited — and openings on the edge of the seen-set —
+  appeared without the agent reporting them. The agent contract is
+  position, openings, goal. The refresh now re-polls `GET /agent/{id}`
+  only, and `carveFogOpenings` writes the four gap tiles at your feet
+  from `view.open`. Memory of the void stays put. The sweep holds the
+  unseen glyph string across a tick.
+
 ### Fixed
 
 - **Signed-in live frames could not connect in prod.** `/ws/**` required a

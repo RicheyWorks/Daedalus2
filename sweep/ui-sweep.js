@@ -303,8 +303,26 @@ async function check(name, fn) {
       if (w.length < 2) return false;
       return Math.abs(w[1].row - w[0].row) + Math.abs(w[1].col - w[0].col) === 1;
     });
-    return [form.login && form.user && form.fog && f.seen === 1 && f.open > 0 && walked,
-        `login form present; fog opened with ${f.seen} seen cell, then a 4-adjacent step`];
+    // Living tick + fog: GET /maze would rewrite unseen rooms. Memory of the void
+    // must not change when the server erodes.
+    const unseen = () => page.evaluate(() => {
+      const tiles = state.maze.tiles;
+      let s = '';
+      for (let r = 0; r < tiles.length; r++) {
+        for (let c = 0; c < tiles[r].length; c++) {
+          if (!fogRevealsTile(r, c)) s += tiles[r][c];
+        }
+      }
+      return s;
+    });
+    const beforeUnseen = await unseen();
+    await page.click('#live');
+    await page.waitForFunction(() => /tick \d/.test(document.getElementById('log').innerText),
+        null, {timeout:20000});
+    const afterUnseen = await unseen();
+    return [form.login && form.user && form.fog && f.seen === 1 && f.open > 0 && walked
+        && beforeUnseen.length > 0 && beforeUnseen === afterUnseen,
+        `fog walk 4-adj; unseen glyphs held through a living tick (${beforeUnseen.length} chars)`];
   });
 
   await check('R. ASCII is negotiated as text/plain, not drawn from tiles', async () => {

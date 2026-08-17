@@ -66,7 +66,8 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   Held-Karp `path`, not only the coins. Permalinks keep their kind
   (`#daily`, `#campaign=`, `#generator=`) instead of collapsing to
   `#maze=`. `GET /session/{id}/tour` does not mint the coins; a
-  spectator hydrates a hunt or ghost that already exists.
+  spectator hydrates a hunt or ghost that already exists. Fog plus a
+  living tick re-polls the agent; it does not replace the grid.
 - **Deterministic across restarts, not just across a cache hit.** Same seed,
   same answer, on a process that has never seen the request before.
   `DeterminismGoldenTest` compares 23 endpoints — seeded generation, the seeded

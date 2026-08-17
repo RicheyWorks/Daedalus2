@@ -242,7 +242,8 @@ Last consolidated: 2026-08-17
   keep their kind (`#daily`, `#campaign=`, `#generator=`) instead of
   collapsing to `#maze=`. `GET /session/{id}/tour` is a read — a
   spectator cannot mint the coins — and hydrates a hunt or ghost that
-  already exists.
+  already exists. Fog plus a living tick re-polls the agent only;
+  `GET /maze` would have painted rooms the walk has not stood in.
 
 - ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`
   uploads every module's JaCoCo XML to Codecov via `codecov-action@v5`,
