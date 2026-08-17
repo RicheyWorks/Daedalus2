@@ -34,7 +34,10 @@ class WebUiSmokeTest {
         assertThat(body).isNotNull();
         String html = new String(body);
         // Contract, not implementation: the page talks to the versioned API and the STOMP
-        // endpoint. If either reference disappears, the UI broke or moved.
-        assertThat(html).contains("DAEDALUS").contains("/api/v1").contains("/ws");
+        // endpoint, can sign in (prod generate/play are 401 without a token), and can open
+        // a fog-of-war walk. If any of those disappear, the UI broke or moved.
+        assertThat(html).contains("DAEDALUS").contains("/api/v1").contains("/ws")
+                .contains("/auth/login").contains("id=\"login\"").contains("id=\"fog\"")
+                .contains("Authorization");
     }
 }

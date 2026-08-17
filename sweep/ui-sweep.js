@@ -244,6 +244,26 @@ async function check(name, fn) {
     return [String(dims.r) === String(dims.m), `loaded by id; size inputs synced to ${dims.m}`];
   });
 
+  await check('Q. login form + fog-of-war hides unseen floor', async () => {
+    const form = await page.evaluate(() => ({
+      login: !!document.getElementById('login'),
+      user: !!document.getElementById('user'),
+      fog: !!document.getElementById('fog'),
+    }));
+    await page.fill('#rows','15'); await page.fill('#cols','15'); await page.fill('#seed','7');
+    await page.click('#generate');
+    await page.waitForFunction(() => state.maze && state.maze.seed === 7, null, {timeout:15000});
+    await page.click('#fog');
+    await page.waitForFunction(() => state.fog && state.fog.seen && state.fog.seen.size === 1,
+        null, {timeout:15000});
+    const f = await page.evaluate(() => ({
+      seen: state.fog.seen.size,
+      open: (state.fog.open || []).length,
+    }));
+    return [form.login && form.user && form.fog && f.seen === 1 && f.open > 0,
+        `login form present; fog opened with ${f.seen} seen cell, ${f.open} openings`];
+  });
+
   await check('O. no uncaught page errors', async () =>
     [pageErrors.length === 0, pageErrors.length ? pageErrors.join(' | ').slice(0,150) : 'none']);
 

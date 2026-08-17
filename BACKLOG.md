@@ -224,7 +224,10 @@ Last consolidated: 2026-08-17
   the opening player, WASD the joined one when the multiplayer flag is on.
   Deliberately framework-free — no build step, no npm; it exercises the public
   surfaces exactly as an external integrator would, so it doubles as living
-  documentation of the API.
+  documentation of the API. **2026-08-17:** Sign in attaches the JWT to REST
+  and STOMP (prod generate/play and ADR-012 join-with-token); Fog of war
+  walks the agent API and paints only stood-on cells.
+
 - ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`
   uploads every module's JaCoCo XML to Codecov via `codecov-action@v5`,
   guarded on the `CODECOV_TOKEN` Actions secret: without the secret the step

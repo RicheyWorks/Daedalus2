@@ -85,6 +85,18 @@ under the `_migration/` portfolios.
   permalink stays read-only until **Join this session**. Subjects stay off
   `SessionResponse`.
 
+- **The web UI signs in and walks fog-of-war.** The page is living API
+  documentation, but it never called `/auth/login` and never opened an agent,
+  so prod generate/play were 401 from the only client we ship, and ADR-012's
+  join-with-token had no way to attach a principal. Sign in stores the JWT in
+  `sessionStorage` and puts `Authorization: Bearer` on REST and STOMP
+  `CONNECT` (reconnect after login so the subject exists). Fog of war paints
+  only cells the walk has stood on — the agent response never includes the
+  grid, and using `state.maze.tiles` for unseen cells would have been theater.
+  Controls are grouped under `<details>` (IDs unchanged; `ui-sweep.js` keys on
+  them). `WebUiSmokeTest` pins `#login`, `#fog`, `/auth/login`, and
+  `Authorization`.
+
 ### Decided
 
 - **Incremental SSSP declined (ADR-011 / ADR-001 appendix 5).** Living ticks,
