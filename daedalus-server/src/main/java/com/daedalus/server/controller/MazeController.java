@@ -360,14 +360,18 @@ public class MazeController {
             description = "Requires the daedalus.session.multiplayer flag; without it this "
                     + "endpoint answers 404 as if it did not exist. Joining a name already in "
                     + "the session keeps that player's position (reconnect must not teleport). "
-                    + "Rate-limited per caller against the 'sessionOpen' budget.")
+                    + "When the request is authenticated, the token's subject is added to the "
+                    + "session's STOMP allowlist (ADR-012) so the joiner can SUBSCRIBE to the "
+                    + "player topic — joining used to put a piece on the board and leave the "
+                    + "feed owner-only. Rate-limited per caller against the 'sessionOpen' budget.")
     @PerKeyRateLimit("sessionOpen")
     public ResponseEntity<SessionResponse> join(
             @PathVariable UUID id,
             @RequestParam
             @NotBlank
             @Size(max = 64, message = "player name must be at most 64 chars")
-            String player) {
+            String player,
+            Authentication authentication) {
         // Multiplayer off answers exactly what an unknown session answers — the endpoint has
         // to look absent, not disabled, or the 404 becomes a feature-flag oracle.
         if (!sessions.multiplayerEnabled()) throw ResourceNotFoundException.session(id);
@@ -379,8 +383,8 @@ public class MazeController {
         if (c == null) throw new ResourceNotFoundException("maze", s.mazeId().toString(),
                 "Session " + id + " is open but its maze " + s.mazeId() + " has been evicted "
                         + "from the cache, so moves cannot be validated against it.");
-        var joined = sessions.join(id, player, c.grid().start());
-        if (joined == null) return ResponseEntity.status(409).build(); // completed session
+        var joined = sessions.join(id, player, c.grid().start(), ownerOf(authentication));
+        if (joined == null) return ResponseEntity.status(409).build(); // completed or full
         return ResponseEntity.ok(new SessionResponse(
                 joined.id(), joined.mazeId(), joined.playerPosition(player)));
     }

@@ -432,9 +432,13 @@ primitive, the same posture as capacitated flow. First-fit is not a substitute �
 the test that pins the class is the fixture first-fit gets wrong.
 
 **4. Bellman-Ford and Johnson — Ch. 24, Ch. 25.**
-Real latency graphs are **asymmetric** (`d(u,v) ≠ d(v,u)`), which every current solver
-assumes away. Johnson's reweighting also makes all-pairs tractable on sparse directed
-graphs — the honest version of `DistanceOracle` for topologies too large for its V² table.
+~~Real latency graphs are asymmetric; Johnson makes all-pairs tractable on sparse
+directed graphs.~~ **Declined 2026-08-17** — see
+[ADR-013](ADR-013-bellman-ford-johnson.md). API weights are costs in
+`[1, 1000]`; core rejects negatives. Bellman-Ford on that graph is a slower
+Dijkstra. Johnson without negatives is n Dijkstra, slower than the already-dormant
+`DistanceOracle` (n BFS). Re-fire if a directed latency graph with signed or
+asymmetric hops appears.
 
 **5. Incremental shortest paths — Ch. 24, extended.**
 ~~Recomputing Dijkstra per update is the naive answer.~~ **Measured 2026-08-17 and

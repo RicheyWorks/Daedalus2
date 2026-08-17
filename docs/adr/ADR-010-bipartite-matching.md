@@ -43,6 +43,6 @@ be a number that looks like load-balancing and is just a recount of cells.
   replicas and shows capacity 1 leaving requests unmatched, capacity 4 filling
   every seat.
 - ADR-001 appendix item 5 shipped as a decline — [ADR-011](ADR-011-incremental-sssp.md).
-  Item 4 stays held: Bellman-Ford/Johnson wait on a directed latency graph that is
-  not a maze (current weights are costs ≥ 1, so there is no negative edge to
-  justify Bellman-Ford).
+  Item 4 shipped as a decline — [ADR-013](ADR-013-bellman-ford-johnson.md).
+  Weights are costs in `[1, 1000]`; there is no negative edge to justify
+  Bellman-Ford, and Johnson without negatives is n Dijkstra.

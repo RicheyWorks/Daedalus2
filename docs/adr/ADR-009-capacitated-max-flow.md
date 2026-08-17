@@ -44,6 +44,7 @@ like bandwidth and is just a recount of the passages.
   Prim's at the same seed — either of those would make the old claim true, and the
   descriptor would have to change with the test.
 - ADR-001 appendix item 3 shipped as [ADR-010](ADR-010-bipartite-matching.md) — the
-  primitive does not need the LoadBalancerPro seam. Items 4–5 stay held:
-  Bellman-Ford/Johnson wait on a directed latency graph that is not a maze;
-  incremental SSSP is still "measure first".
+  primitive does not need the LoadBalancerPro seam. Items 4–5 shipped as declines:
+  [ADR-013](ADR-013-bellman-ford-johnson.md) (no negative edges to justify
+  Bellman-Ford) and [ADR-011](ADR-011-incremental-sssp.md) (full Dijkstra is
+  already cheap).

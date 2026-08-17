@@ -88,15 +88,19 @@ Last consolidated: 2026-08-17
   The per-destination half: sessions opened by an authenticated request record
   the token's subject as **owner** (`GameSession.owner()`, null for anonymous
   opens), and `StompSubscriptionAuthorizationInterceptor` refuses `SUBSCRIBE`
-  to an owned session's `/topic/session/{id}/player` unless the connection's
-  principal is that owner. Deliberately open: unowned sessions (dev/desktop
+  to an owned session's `/topic/session/{id}/player` unless
+  `GameSession.maySubscribe` says yes — the owner, or a subject that joined
+  with a token (ADR-012, 2026-08-17). Joining used to put a piece on the board
+  and leave the feed owner-only. Deliberately open: unowned sessions (dev/desktop
   posture — no claim to enforce), unknown session ids (refusing would make the
   rule an existence oracle), and the shared `/topic/maze/**` +
   `/topic/plugins/**` surfaces, which carry no per-user data. Pinned by
+  `GameSessionTest` (the decision, in core),
   `StompSubscriptionAuthorizationInterceptorTest` (every branch) and
-  `WebSocketOwnershipSmokeTest` (interceptor installed; refusal reaches a real
-  client as a STOMP ERROR) — the latter replayed against a build without the
-  interceptor registered, per the house teeth rule.
+  `WebSocketOwnershipSmokeTest` (interceptor installed; owner and joiner
+  receive frames; refusal reaches a real client as a STOMP ERROR) — the latter
+  replayed against a build without the interceptor registered, per the house
+  teeth rule.
 
   Per-frame validation was deliberately *not* added: the principal is
   established once and carried on the session, so re-decoding the token on every
@@ -129,6 +133,10 @@ Last consolidated: 2026-08-17
   Dijkstra after a living tick is 50–200 µs at the sizes `/live` serves, 2 ms at
   128², against a 2 s ticker. The textbook repair cannot pay for itself. Re-fire
   conditions are in the ADR.
+
+- ~~**Bellman-Ford / Johnson.**~~ **Declined 2026-08-17 (ADR-013).** Appendix
+  item 4. Weights are costs in `[1, 1000]`; there is no negative edge.
+  Re-fire if a directed latency graph with signed hops appears.
 
 ## New surfaces
 
@@ -195,9 +203,10 @@ Last consolidated: 2026-08-17
   `MoveFrame` gained an additive nullable `player` field so existing listeners
   and clients keep working. Any player reaching the goal completes the session
   exactly once. Pinned by `GameSessionMultiplayerTest` +
-  `MazeControllerJoinTest`; ownership note: joining does not grant STOMP
-  subscription rights on owned sessions — multiplayer+auth interplay is future
-  work if anyone needs it.
+  `MazeControllerJoinTest`. **STOMP follow-up 2026-08-17 (ADR-012):** joining
+  with a token now grants `SUBSCRIBE` on the owned player topic. Anonymous
+  join still gets a seat, not the feed. Cap 8. Spectator permalink stays
+  read-only until the page POSTs `/join`.
 - ~~**Web UI.**~~ **Done 2026-07-28** — one file of vanilla JS
   (`daedalus-server/src/main/resources/static/index.html`, served at `/` by
   Boot convention; `WebUiSmokeTest` pins that convention). Generate/solve/play

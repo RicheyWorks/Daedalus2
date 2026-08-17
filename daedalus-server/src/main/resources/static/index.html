@@ -422,7 +422,10 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   state.maze = maze; state.path = null; state.session = null;
   state.joined = null; state.trails = {}; state.won = null;
   state.expansions = []; state.searchProgress = 1; state.pathProgress = 1;
-  $("solve").disabled = false; $("play").disabled = false; $("join").disabled = true;
+  $("solve").disabled = false; $("play").disabled = false;
+  $("join").disabled = true;
+  $("join").textContent = "Join as second player";
+  $("join").title = "Requires daedalus.session.multiplayer=true";
   $("compare").disabled = false;
   $("live").disabled = false; $("traffic").disabled = false; $("race").disabled = false;
   $("analyze").disabled = false; $("tour").disabled = false;
@@ -593,7 +596,9 @@ async function loadFromHash() {
  * Watch someone else's session, read-only: load the snapshot, then follow the same
  * /topic/session/{id}/player frames the players produce (or poll when STOMP is absent).
  * Owned sessions keep their per-destination STOMP authorization — a spectator can only
- * follow what the broker lets them subscribe to.
+ * follow what the broker lets them subscribe to. "Join this session" POSTs /join and
+ * drops read-only so a second client can play; an authenticated join also grants the
+ * player topic (ADR-012).
  */
 async function spectate(sessionId) {
   let view;
@@ -605,6 +610,9 @@ async function spectate(sessionId) {
   state.readOnly = true;
   if (view.completed) state.won = names[0];
   $("status").textContent = `spectating session ${view.sessionId.slice(0, 8)}… — read-only`;
+  $("join").disabled = false;
+  $("join").textContent = "Join this session";
+  $("join").title = "Join as the name in the player field (needs daedalus.session.multiplayer)";
   log("state", `spectating ${names.join(", ")} — moves arrive live`);
   resubscribe();
   if (!state.stomp) {
@@ -1376,6 +1384,8 @@ async function play() {
   state.trails = {[name]: [s.position]};
   state.sessionStart = performance.now();
   $("join").disabled = false;
+  $("join").textContent = "Join as second player";
+  $("join").title = "Requires daedalus.session.multiplayer=true";
   $("status").textContent = `session ${s.sessionId.slice(0, 8)}… — arrow keys to move`;
   log("state", `spectate link: ${location.origin}${location.pathname}#session=${s.sessionId}`);
   resubscribe();
@@ -1384,14 +1394,28 @@ async function play() {
 }
 
 async function join() {
-  const name = ($("player").value || "web") + "-2";
+  if (!state.session) return;
+  const fromSpectate = state.readOnly;
+  const name = fromSpectate
+      ? ($("player").value || "web")
+      : ($("player").value || "web") + "-2";
   try {
     const s = await api(`/session/${state.session.id}/join?player=${encodeURIComponent(name)}`,
         {method: "POST"});
-    state.joined = name;
     state.session.positions[name] = s.position;
     state.trails[name] = [s.position];
-    log("player", `${name} joined (multiplayer flag is on)`);
+    if (fromSpectate) {
+      state.readOnly = false;
+      state.session.primary = name;
+      state.joined = null;
+      $("join").textContent = "Join as second player";
+      $("status").textContent = `session ${state.session.id.slice(0, 8)}… — arrow keys to move`;
+      log("player", `${name} joined the spectated session`);
+      resubscribe();
+    } else {
+      state.joined = name;
+      log("player", `${name} joined (multiplayer flag is on)`);
+    }
     draw();
   } catch (e) {
     log("err", `join refused — is daedalus.session.multiplayer=true? (${e.message})`);

@@ -28,7 +28,10 @@ import java.util.regex.Pattern;
  * question could be asked; session ownership (recorded at open, see
  * {@code GameSessionService#open}) is what makes it answerable. A {@code SUBSCRIBE} to an
  * <b>owned</b> session's player topic is allowed only when the connection's principal is that
- * owner — anyone else, authenticated or not, is refused.
+ * owner <em>or a subject that joined with a token</em> (ADR-012) — anyone else,
+ * authenticated or not, is refused. Joining used to put a piece on the board and
+ * leave the live feed owner-only, so a second authenticated client could move
+ * over REST and never see the other player's frames.
  *
  * <h3>What this deliberately leaves open</h3>
  *
@@ -81,14 +84,15 @@ public class StompSubscriptionAuthorizationInterceptor implements ChannelInterce
             return message; // 36 chars of hex-and-dashes that still isn't a UUID: not ours
         }
         GameSession session = sessions.apply(sessionId);
-        if (session == null || session.owner() == null) {
+        if (session == null) {
             return message;
         }
         Principal user = accessor.getUser();
-        if (user == null || !session.owner().equals(user.getName())) {
-            throw new StompAuthChannelInterceptor.StompAuthenticationException(
-                    "SUBSCRIBE to " + destination + " refused: session is owned by another subject");
+        String subject = user == null ? null : user.getName();
+        if (session.maySubscribe(subject)) {
+            return message;
         }
-        return message;
+        throw new StompAuthChannelInterceptor.StompAuthenticationException(
+                "SUBSCRIBE to " + destination + " refused: session is owned by another subject");
     }
 }

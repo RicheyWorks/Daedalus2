@@ -152,4 +152,26 @@ class GameSessionMultiplayerTest {
         GameSessionService svc = service(true);
         assertThat(svc.join(UUID.randomUUID(), "Bob", grid.start())).isNull();
     }
+
+    @Test
+    void aFullSessionRefusesANewName() {
+        GameSessionService svc = service(true);
+        GameSession s = svc.open(UUID.randomUUID(), "Alice", grid.start());
+        for (int i = 1; i < GameSession.MAX_PLAYERS; i++) {
+            assertThat(svc.join(s.id(), "p" + i, grid.start())).isSameAs(s);
+        }
+        assertThat(svc.join(s.id(), "overflow", grid.start())).isNull();
+        assertThat(s.players()).hasSize(GameSession.MAX_PLAYERS);
+        assertThat(svc.join(s.id(), "p1", grid.start())).isSameAs(s);
+    }
+
+    @Test
+    void anAuthenticatedJoinRecordsTheSubjectOnTheAllowlist() {
+        GameSessionService svc = service(true);
+        GameSession s = svc.open(UUID.randomUUID(), "recursive-backtracker",
+                "Alice", grid.start(), "alice");
+        assertThat(svc.join(s.id(), "Bob", grid.start(), "bob")).isSameAs(s);
+        assertThat(s.maySubscribe("bob")).isTrue();
+        assertThat(s.maySubscribe("mallory")).isFalse();
+    }
 }

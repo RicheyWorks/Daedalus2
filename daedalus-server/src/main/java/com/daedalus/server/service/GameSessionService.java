@@ -109,9 +109,9 @@ public class GameSessionService {
      *                    this class handles explicitly elsewhere, so a completion-time lookup
      *                    would put a placeholder on exactly the long games most worth recording.
      * @param owner       verified subject from the caller's token, or {@code null} when the
-     *                    request carried no credentials. Recorded at open and immutable — this
-     *                    is what STOMP subscription authorization keys on (BACKLOG:
-     *                    per-destination rules).
+     *                    request carried no credentials. Recorded at open and immutable. STOMP
+     *                    subscription authorization admits this subject and anyone who later
+     *                    joins with a token via {@link #join} (ADR-012).
      */
     public GameSession open(UUID mazeId, String generatorId, String playerName, Point start,
                             String owner) {
@@ -126,17 +126,30 @@ public class GameSessionService {
      * Adds a named player to an existing session (multiplayer flag only).
      *
      * @return the session on success; {@code null} when the flag is off, the session is
-     *         unknown, or the session already completed. Joining under a name already present
+     *         unknown, the session already completed, or the session is at
+     *         {@link GameSession#MAX_PLAYERS}. Joining under a name already present
      *         succeeds and keeps that player's current position — rejoin after a dropped
      *         connection must not teleport anyone back to start.
      */
     public GameSession join(UUID sessionId, String player, Point start) {
+        return join(sessionId, player, start, null);
+    }
+
+    /**
+     * @param subject verified token subject, or {@code null} for an anonymous join.
+     *                A subject is added to the session's STOMP allowlist so a second
+     *                authenticated client can SUBSCRIBE to {@code /topic/session/{id}/player}.
+     *                An anonymous join still gets a seat on the board; it does not get the feed
+     *                of an owned session — that is the existing owner-only rule, extended
+     *                rather than replaced.
+     */
+    public GameSession join(UUID sessionId, String player, Point start, String subject) {
         if (!multiplayer) return null;
         GameSession s = sessions.getIfPresent(sessionId);
         if (s == null) return null;
         synchronized (s) {
             if (s.completed()) return null;
-            s.join(player, start);
+            if (!s.join(player, start, subject)) return null;
         }
         return s;
     }

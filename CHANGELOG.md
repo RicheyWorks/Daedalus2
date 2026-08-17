@@ -63,6 +63,16 @@ under the `_migration/` portfolios.
   example assigns a lattice of request sites onto k-center replicas and shows
   capacity leaving seats unmatched.
 
+- **Join grants STOMP on owned sessions (ADR-012).** Multiplayer and
+  per-destination authorization shipped the same day and did not compose: join
+  put a piece on the board and left `/topic/session/{id}/player` owner-only, so
+  a second authenticated client could move over REST and never see a frame.
+  `GameSession` now keeps a subject allowlist (owner plus anyone who joined
+  with a token). Anonymous join still gets a seat, not the feed. Rejoin of a
+  name does not hand the seat to a different token. Cap is 8. The spectator
+  permalink stays read-only until **Join this session**. Subjects stay off
+  `SessionResponse`.
+
 ### Decided
 
 - **Incremental SSSP declined (ADR-011 / ADR-001 appendix 5).** Living ticks,
@@ -73,6 +83,12 @@ under the `_migration/` portfolios.
   change for a 200 µs baseline. The recompute *is* the architecture. Harness at
   `docs/evaluations/IncrementalSsspEval.java`; re-fire if the tick becomes a
   data-plane interval or someone regularly solves ≥256² living mazes.
+
+- **Bellman-Ford / Johnson declined (ADR-013 / ADR-001 appendix 4).** API
+  weights are costs in `[1, 1000]`; core rejects negatives. Bellman-Ford on
+  that graph is a slower Dijkstra. Johnson without negatives is n Dijkstra,
+  slower than the already-dormant `DistanceOracle`. Re-fire if a directed
+  latency graph with signed or genuinely asymmetric hops appears.
 
 ### Fixed
 

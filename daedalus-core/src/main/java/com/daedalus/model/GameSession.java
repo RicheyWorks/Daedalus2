@@ -27,6 +27,13 @@ public class GameSession {
     public static final int MAX_TRAIL = 5_000;
 
     /**
+     * Seats including the opening player. A session is not a lobby; eight is enough for
+     * the WASD-plus-arrows UI and for a second authenticated client, and the bound is what
+     * keeps {@link #join} from being an unbounded map put.
+     */
+    public static final int MAX_PLAYERS = 8;
+
+    /**
      * What {@link #generatorId()} reports when nobody told the session which algorithm built
      * its maze — the legacy constructors below, and nothing else on the production path.
      *
@@ -47,6 +54,8 @@ public class GameSession {
     private final String playerName;
     private final String owner;
     private final ConcurrentMap<String, Point> players = new ConcurrentHashMap<>();
+    /** Verified subjects allowed to SUBSCRIBE — the owner, plus anyone who joined with a token. */
+    private final java.util.Set<String> subjects = ConcurrentHashMap.newKeySet();
     private final java.util.List<TimedMove> trail =
             java.util.Collections.synchronizedList(new java.util.ArrayList<>());
     private Point currentPosition;
@@ -96,6 +105,9 @@ public class GameSession {
         this.currentPosition = start;
         this.startedAt = Instant.now();
         this.players.put(playerName, start);
+        if (owner != null) {
+            subjects.add(owner);
+        }
     }
 
     /** Moves the opening player; see {@link #move(String, Point)}. */
@@ -130,13 +142,41 @@ public class GameSession {
         }
     }
 
+    /** Adds a player with no verified subject; see {@link #join(String, Point, String)}. */
+    public boolean join(String player, Point start) {
+        return join(player, start, null);
+    }
+
     /**
-     * Adds a player to this session at the given start, keeping the existing position if the
-     * name is already present. Multiplayer is a server-side feature flag; the model itself is
-     * indifferent to how many players a session tracks.
+     * Adds a player at {@code start}, keeping the existing position if the name is already
+     * present. {@code subject} is the verified token subject, or {@code null} for an
+     * anonymous join — only a subject is added to the STOMP allowlist. Returns {@code false}
+     * when the session is already at {@link #MAX_PLAYERS} and the name is new.
      */
-    public void join(String player, Point start) {
-        players.putIfAbsent(player, start);
+    public boolean join(String player, Point start, String subject) {
+        if (!players.containsKey(player) && players.size() >= MAX_PLAYERS) {
+            return false;
+        }
+        boolean added = players.putIfAbsent(player, start) == null;
+        // First claimant of a display name keeps the subject. A rejoin must not let a
+        // different token inherit the seat's STOMP rights by repeating the same name.
+        if (added && subject != null) {
+            subjects.add(subject);
+        }
+        return true;
+    }
+
+    /**
+     * Whether {@code subject} may SUBSCRIBE to this session's player topic.
+     * Unowned sessions have no claim to enforce (anyone may). Owned sessions allow the
+     * owner and every subject that joined with a token; everyone else, including an
+     * anonymous connection, is refused.
+     */
+    public boolean maySubscribe(String subject) {
+        if (owner == null) {
+            return true;
+        }
+        return subject != null && subjects.contains(subject);
     }
 
     public void complete(long finalScore) {

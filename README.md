@@ -262,7 +262,7 @@ Real-time updates are pushed over STOMP. Connect at `/ws` and subscribe to:
 |---|---|---|
 | `/topic/maze/{mazeId}/state` | Maze finishes generating | `GeneratedFrame` |
 | `/topic/maze/{mazeId}/solver` | Solver finishes a run | `SolvedFrame` |
-| `/topic/session/{sessionId}/player` | Player moves | `MoveFrame` |
+| `/topic/session/{sessionId}/player` | Player moves | `MoveFrame` (owned sessions: owner + authenticated joiners only; ADR-012) |
 | `/topic/plugins/failures` | A plugin throws in any lifecycle phase | `PluginFailedFrame` |
 
 The `PluginFailedFrame` topic is intentional: operators can surface plugin
@@ -374,9 +374,9 @@ working tree.
 - **WebSocket connections are authenticated in prod.** The STOMP `CONNECT`
   frame must carry `Authorization: Bearer <token>`; the JWT subject becomes
   the session principal. Outside `prod` a token is optional, but an *invalid*
-  token is rejected in every profile. Note this is authentication only —
-  destinations are not yet scoped per user, so any authenticated client can
-  subscribe to any topic (see BACKLOG.md).
+  token is rejected in every profile. Owned session player topics are scoped
+  to the opening subject and anyone who joined with a token (ADR-012);
+  unowned sessions, unknown ids, and maze/plugin topics stay open.
 - **The generation service is wrapped in a Resilience4j circuit breaker.**
   When it trips, a cached binary-tree maze is returned and the response
   reports the actual generator id (not the requested one) so clients,

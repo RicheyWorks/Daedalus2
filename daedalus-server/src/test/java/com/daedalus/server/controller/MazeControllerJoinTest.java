@@ -5,6 +5,7 @@ package com.daedalus.server.controller;
 import com.daedalus.api.dto.MoveRequest;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
+import com.daedalus.model.GameSession;
 import com.daedalus.model.MazeMetadata;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
@@ -117,6 +118,19 @@ class MazeControllerJoinTest {
         sessions.tryMove(s.id(), grid, grid.goal());
 
         mvc(sessions).perform(post("/api/v1/session/" + s.id() + "/join").param("player", "Bob"))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void joiningAFullSessionAnswers409() throws Exception {
+        GameSessionService sessions =
+                new GameSessionService(event -> { }, mock(LeaderboardService.class), true);
+        var s = sessions.open(mazeId, "Alice", grid.start());
+        for (int i = 1; i < GameSession.MAX_PLAYERS; i++) {
+            sessions.join(s.id(), "p" + i, grid.start());
+        }
+
+        mvc(sessions).perform(post("/api/v1/session/" + s.id() + "/join").param("player", "overflow"))
                 .andExpect(status().isConflict());
     }
 }
