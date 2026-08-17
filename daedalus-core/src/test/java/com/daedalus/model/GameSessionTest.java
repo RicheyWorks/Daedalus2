@@ -77,4 +77,20 @@ class GameSessionTest {
         assertThat(s.maySubscribe("s1")).isTrue();
         assertThat(s.maySubscribe("impostor")).isFalse();
     }
+
+    @Test
+    void aJoinersHopsAreRecordedAndAreNotGhostMaterial() {
+        GameSession s = owned();
+        s.join("Bob", new Point(0, 0), "bob");
+        s.move("Alice", new Point(0, 1));
+        s.move("Bob", new Point(1, 0));
+        s.move("Bob", new Point(1, 1));
+
+        assertThat(s.trail()).extracting(GameSession.TimedMove::to)
+                .containsExactly(new Point(0, 1));
+        assertThat(s.walks()).containsOnlyKeys("Alice", "Bob");
+        assertThat(s.walks().get("Bob")).extracting(GameSession.TimedMove::to)
+                .containsExactly(new Point(1, 0), new Point(1, 1));
+        assertThat(s.walks().get("Alice")).isEqualTo(s.trail());
+    }
 }

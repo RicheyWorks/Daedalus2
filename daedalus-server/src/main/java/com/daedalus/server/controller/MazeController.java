@@ -298,7 +298,7 @@ public class MazeController {
         if (s == null) throw ResourceNotFoundException.session(id);
         return ResponseEntity.ok(new com.daedalus.api.dto.SessionViewResponse(
                 s.id(), s.mazeId(), s.playerName(), s.players(),
-                s.completed(), s.moveCount(), s.score(), s.trail()));
+                s.completed(), s.moveCount(), s.score(), s.trail(), s.walks()));
     }
 
     @PostMapping("/maze/{id}/session")

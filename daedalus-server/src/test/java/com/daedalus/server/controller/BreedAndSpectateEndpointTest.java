@@ -126,6 +126,8 @@ class BreedAndSpectateEndpointTest {
         assertThat(after.get("trail").get(0).get("to").get("row").asInt()).isEqualTo(step.row());
         assertThat(after.get("trail").get(0).get("to").get("col").asInt()).isEqualTo(step.col());
         assertThat(after.get("trail").get(0).has("tMs")).isTrue();
+        assertThat(after.get("walks").get("runner")).as("the opener's walk is also under walks")
+                .hasSize(1);
 
         // Reading a session must never advance it — the view is a snapshot, not a turn.
         MAPPER.readTree(client().get().uri("/api/v1/session/" + sessionId)

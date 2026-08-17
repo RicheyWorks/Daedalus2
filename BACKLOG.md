@@ -235,14 +235,14 @@ Last consolidated: 2026-08-17
   leaderboard Algorithm select is `?generator=`, disabled when `maze=`
   already owns the board. Solver routes, player trails, fog walks, and
   the ghost all paint corridor tiles, not a polyline through the walls.
-  A `#session=` spectator hydrates that walk from the snapshot trail
-  (positions alone are a seat) and keeps the session hash so a refresh
-  still spectates. Hunt waypoints paints the Held-Karp `path` through
-  the openings, not only the coins you are scored against. Permalinks
-  keep their kind (`#daily`, `#campaign=`, `#generator=`) instead of
-  collapsing to `#maze=`. `GET /session/{id}/tour` is a read — a
-  spectator cannot mint the coins — and hydrates a hunt or ghost that
-  already exists. Fog plus a living tick re-polls the agent only;
+  A `#session=` spectator hydrates every player's walk from `walks`
+  (the opener's `trail` is still ghost material) and keeps the session
+  hash so a refresh still spectates. Hunt waypoints paints the Held-Karp
+  `path` through the openings, not only the coins you are scored against.
+  Permalinks keep their kind (`#daily`, `#campaign=`, `#generator=`)
+  instead of collapsing to `#maze=`. `GET /session/{id}/tour` is a read
+  — a spectator cannot mint the coins — and hydrates a hunt or ghost
+  that already exists. Fog plus a living tick re-polls the agent only;
   `GET /maze` would have painted rooms the walk has not stood in.
 
 - ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`

@@ -45,7 +45,7 @@ class WebUiSmokeTest {
                 .contains("/plugins").contains("id=\"pluginBox\"")
                 .contains("id=\"lbGen\"").contains("generator=")
                 .contains("paintWalk").contains("ghostWalk")
-                .contains("sessionWalk").contains("#session=")
+                .contains("sessionWalk").contains("view.walks").contains("#session=")
                 .contains("tourWalk").contains("pinHash").contains("parseHash")
                 .contains("hydrateSpectatorOverlays").contains("#daily")
                 .contains("carveFogOpenings");

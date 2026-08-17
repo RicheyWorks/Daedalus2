@@ -158,6 +158,13 @@ under the `_migration/` portfolios.
   the ghost learned). A `#session=` arrival hydrates the hunt (if one
   was asked) and the ghost (if one exists) without creating either.
 
+- **A spectator sees every seat's walk, not just the opener's.**
+  `GameSession` recorded hops only for the opening player — ghost
+  material. A joiner was a marker. The snapshot now includes `walks`
+  (every name that has moved); `trail` stays the opener's list so a
+  ghost is still one recording. The page hydrates `paintWalk` per
+  player from start plus every `to`. Subjects stay off the body.
+
 - **Fog of war no longer pulls the god-mode grid when the maze lives.**
   A living tick used to `GET /maze/{id}` and replace `state.maze.tiles`.
   Fog paints from those tiles for every stood-on cell, so erosion in

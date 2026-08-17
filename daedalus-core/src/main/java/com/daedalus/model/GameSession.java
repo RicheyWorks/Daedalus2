@@ -56,8 +56,13 @@ public class GameSession {
     private final ConcurrentMap<String, Point> players = new ConcurrentHashMap<>();
     /** Verified subjects allowed to SUBSCRIBE — the owner, plus anyone who joined with a token. */
     private final java.util.Set<String> subjects = ConcurrentHashMap.newKeySet();
-    private final java.util.List<TimedMove> trail =
-            java.util.Collections.synchronizedList(new java.util.ArrayList<>());
+    /**
+     * Per-player hops from start. The opening player's list is also what
+     * {@link #trail()} returns — ghost material stays opener-only. Joiners
+     * used to be seats on the spectator snapshot: a late arrival saw them
+     * teleport. Bounded per name by {@link #MAX_TRAIL}.
+     */
+    private final ConcurrentMap<String, java.util.List<TimedMove>> walks = new ConcurrentHashMap<>();
     private Point currentPosition;
     /*
      * Writes to the three fields below are serialized by GameSessionService's per-session
@@ -126,9 +131,12 @@ public class GameSession {
         players.put(player, next);
         if (player.equals(playerName)) {
             this.currentPosition = next;
-            // Only the opening player's run is ghost material; bounded by MAX_TRAIL.
-            if (trail.size() < MAX_TRAIL) {
-                trail.add(new TimedMove(next,
+        }
+        java.util.List<TimedMove> w = walks.computeIfAbsent(player,
+                p -> java.util.Collections.synchronizedList(new java.util.ArrayList<>()));
+        synchronized (w) {
+            if (w.size() < MAX_TRAIL) {
+                w.add(new TimedMove(next,
                         java.time.Duration.between(startedAt, Instant.now()).toMillis()));
             }
         }
@@ -137,8 +145,31 @@ public class GameSession {
 
     /** Snapshot of the opening player's timed trail — the ghost recording. */
     public java.util.List<TimedMove> trail() {
-        synchronized (trail) {
-            return java.util.List.copyOf(trail);
+        return walkOf(playerName);
+    }
+
+    /**
+     * Every player's recorded hops, opening player included. Empty lists are
+     * omitted — a seat that has not moved is just {@link #players()}.
+     */
+    public Map<String, java.util.List<TimedMove>> walks() {
+        java.util.Map<String, java.util.List<TimedMove>> out = new java.util.LinkedHashMap<>();
+        for (String name : players.keySet()) {
+            java.util.List<TimedMove> w = walkOf(name);
+            if (!w.isEmpty()) {
+                out.put(name, w);
+            }
+        }
+        return Map.copyOf(out);
+    }
+
+    private java.util.List<TimedMove> walkOf(String name) {
+        java.util.List<TimedMove> w = walks.get(name);
+        if (w == null) {
+            return java.util.List.of();
+        }
+        synchronized (w) {
+            return java.util.List.copyOf(w);
         }
     }
 

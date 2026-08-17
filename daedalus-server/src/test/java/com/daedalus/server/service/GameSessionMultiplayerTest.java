@@ -115,6 +115,9 @@ class GameSessionMultiplayerTest {
         assertThat(s.moveCount()).isEqualTo(2);
         assertThat(published).extracting(PlayerMovedEvent::player)
                 .containsExactly("Alice", "Bob");
+        assertThat(s.walks()).containsOnlyKeys("Alice", "Bob");
+        assertThat(s.trail()).extracting(GameSession.TimedMove::to).containsExactly(aliceTo);
+        assertThat(s.walks().get("Bob")).extracting(GameSession.TimedMove::to).containsExactly(bobTo);
     }
 
     @Test

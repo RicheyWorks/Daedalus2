@@ -28,8 +28,11 @@ import java.util.UUID;
  * @param moveCount steps taken (any player)
  * @param score     current score
  * @param trail     opening-player hops from start, empty before the first move
+ * @param walks     every player's recorded hops; the opener's list is {@code trail}.
+ *                  A late spectator used to see joiners teleport.
  */
 public record SessionViewResponse(UUID sessionId, UUID mazeId, String player,
                                   Map<String, Point> players,
                                   boolean completed, long moveCount, long score,
-                                  List<GameSession.TimedMove> trail) {}
+                                  List<GameSession.TimedMove> trail,
+                                  Map<String, List<GameSession.TimedMove>> walks) {}

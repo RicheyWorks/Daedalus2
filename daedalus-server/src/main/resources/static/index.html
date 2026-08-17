@@ -908,16 +908,19 @@ function adoptSessionView(view) {
   const primary = view.player || Object.keys(view.players)[0];
   state.session = {id: view.sessionId, positions: view.players, primary};
   if (view.completed) state.won = primary;
-  const walk = sessionWalk(view);
-  if (walk.length) state.trails[primary] = walk;
+  const start = mazeStart(state.maze);
+  const walks = Object.assign({}, view.walks || {});
+  if (view.trail && !walks[primary]) walks[primary] = view.trail;
+  Object.keys(view.players || {}).forEach(name => {
+    state.trails[name] = sessionWalk(start, walks[name] || []);
+  });
 }
 
-/** Opening-player 4-walk: maze start plus every recorded `to`. */
-function sessionWalk(view) {
-  const start = mazeStart(state.maze);
+/** Maze start plus every recorded `to` — one player's 4-walk. */
+function sessionWalk(start, moves) {
   const pts = [];
   if (start) pts.push(start);
-  for (const m of view.trail || []) {
+  for (const m of moves || []) {
     const p = m.to;
     if (!p) continue;
     const last = pts[pts.length - 1];
