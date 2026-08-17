@@ -92,6 +92,13 @@
   #log .err    { color: var(--warn); }
   #status { font-size: 12px; color: var(--dim); margin-top: 8px; }
   .hint { font-size: 11px; color: var(--dim); margin-top: 10px; }
+  #asciiOut { margin: 10px 0 0; padding: 8px; background: var(--bg);
+              border: 1px solid var(--line); border-radius: 6px;
+              font: 11px/1.2 ui-monospace, monospace; overflow: auto;
+              max-height: 280px; color: var(--text); }
+  .exports { text-align: center; margin-top: 8px;
+             display: flex; gap: 12px; justify-content: center; align-items: center; }
+  .exports button, .exports a { width: auto; margin-top: 0; padding: 4px 10px; font-size: 12px; }
   kbd { background: var(--bg); border: 1px solid var(--line); border-radius: 3px;
         padding: 0 4px; font-size: 11px; }
 </style>
@@ -233,9 +240,13 @@
       <span><i style="background:#0a0d10;border:1px solid #2a323b"></i>unseen (fog)</span>
     </div>
     <div id="compareBox"></div>
-    <div style="text-align:center;margin-top:8px">
+    <pre id="asciiOut" hidden></pre>
+    <div class="exports">
       <a id="pngExport" class="hint" href="#" download="maze.png"
          style="display:none;color:var(--accent2)">download as PNG</a>
+      <button id="ascii" disabled
+              title="The same maze negotiated as text/plain — what curl gets with Accept: text/plain. Client-side tile dump would skip the content-negotiation contract">
+        Show ASCII</button>
     </div>
   </section>
 
@@ -276,6 +287,10 @@
     <section class="panel">
       <h2 id="lbTitle">Leaderboard</h2>
       <div id="lb" class="hint">loading…</div>
+    </section>
+    <section class="panel">
+      <h2>Plugins</h2>
+      <div id="pluginBox" class="hint">loading…</div>
     </section>
     <section class="panel">
       <h2>Live frames</h2>
@@ -404,6 +419,7 @@ async function login() {
   // CONNECT is when the principal is established (ADR-012). A socket opened
   // before login has no subject, so join-with-token would still be a seat without a feed.
   connectStomp();
+  refreshPlugins();
 }
 
 function logout() {
@@ -416,6 +432,7 @@ function logout() {
   if (who) $("user").value = who;
   log("state", "signed out");
   connectStomp();
+  refreshPlugins();
 }
 
 async function api(path, opts) {
@@ -439,6 +456,46 @@ async function api(path, opts) {
   }
   const text = await res.text();
   return text ? JSON.parse(text) : null;
+}
+
+/** Content negotiation, not a client-side dump — GET /maze/{id} with Accept: text/plain. */
+async function apiPlain(path) {
+  const headers = {Accept: "text/plain"};
+  if (state.token) headers.Authorization = "Bearer " + state.token;
+  const res = await fetch(API + path, {headers});
+  if (!res.ok) {
+    throw new Error(`${res.status} ${res.statusText} on ${path}`);
+  }
+  return res.text();
+}
+
+async function refreshPlugins() {
+  try {
+    const list = await api("/plugins");
+    if (!list.length) {
+      $("pluginBox").textContent = "no external plugins loaded";
+      return;
+    }
+    $("pluginBox").innerHTML = list.map(p => {
+      const m = p.manifest || {};
+      const err = p.error ? ` — ${esc(p.error)}` : "";
+      return `<div><b>${esc(m.displayName || p.id)}</b> `
+          + `<span class="rank">${esc(p.state)}</span> `
+          + `${esc(m.version || "")}${err}</div>`;
+    }).join("");
+  } catch (e) {
+    $("pluginBox").textContent = "plugins unavailable — sign in if this is prod";
+  }
+}
+
+async function showAscii() {
+  if (!state.maze || state.fog) return;
+  const solver = $("solver").value;
+  const art = await apiPlain(`/maze/${state.maze.id}?solve=${encodeURIComponent(solver)}`);
+  const out = $("asciiOut");
+  out.hidden = false;
+  out.textContent = art;
+  log("state", `ASCII via Accept: text/plain (${art.length} chars, solve=${solver})`);
 }
 
 async function loadAlgorithms() {
@@ -532,6 +589,9 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   $("heatmap").disabled = false; $("sanctuaries").disabled = false;
   $("lens").disabled = false;
   $("fog").disabled = false;
+  $("ascii").disabled = false;
+  $("asciiOut").hidden = true;
+  $("asciiOut").textContent = "";
   state.fog = null;
   clearInterval(state.livePoll); state.livePoll = null;
   clearInterval(state.trafficPoll); state.trafficPoll = null;
@@ -1507,6 +1567,7 @@ async function play() {
   const s = await api(`/maze/${state.maze.id}/session?player=${encodeURIComponent(name)}`,
       {method: "POST"});
   state.fog = null; // session arrows would otherwise steal the fog walk
+  $("ascii").disabled = false;
   state.session = {id: s.sessionId, positions: {[name]: s.position}, primary: name};
   state.joined = null; state.won = null;
   state.trails = {[name]: [s.position]};
@@ -1789,6 +1850,8 @@ async function startFog() {
   state.lens = null; state.race = null; state.sanctuaries = null;
   state.fog = {seen: new Set()};
   applyFogView(view);
+  $("ascii").disabled = true;
+  $("asciiOut").hidden = true;
   $("status").textContent = `fog: ${view.stepsRemaining} steps left — arrows walk the agent`;
   log("state", `fog of war — agent ${String(view.agentId).slice(0, 8)}… sees `
       + (view.open && view.open.length ? view.open.join(", ") : "no openings"));
@@ -2140,6 +2203,7 @@ $("measure").onclick = () => measureGrowth().catch(e => {
 $("play").onclick = () => play().catch(e => log("err", e.message));
 $("join").onclick = () => join();
 $("fog").onclick = () => startFog().catch(e => log("err", e.message));
+$("ascii").onclick = () => showAscii().catch(e => log("err", e.message));
 $("auth").addEventListener("submit", e => {
   e.preventDefault();
   login().catch(err => log("err", err.message));
@@ -2170,6 +2234,7 @@ state.user = sessionStorage.getItem(USER_KEY);
 renderAuth();
 drawEmpty();
 refreshLeaderboard();
+refreshPlugins();
 loadLabMetrics();
 loadAlgorithms().then(connectStomp).then(loadFromHash).catch(e => log("err", e.message));
 </script>

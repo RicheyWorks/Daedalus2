@@ -97,6 +97,14 @@ under the `_migration/` portfolios.
   them). `WebUiSmokeTest` pins `#login`, `#fog`, `/auth/login`, and
   `Authorization`.
 
+- **The web UI fetches ASCII and the plugin list.** `GET /maze/{id}` as
+  `text/plain` and `GET /plugins` were product surfaces the living docs never
+  called — a client-side tile dump would have skipped content negotiation, and
+  plugin failures already arrived on STOMP with no roster to attach them to.
+  Show ASCII asks the server (and stays off during fog, because the art is the
+  grid). The plugin panel is empty-honest when nothing is loaded, and refreshes
+  after sign-in because prod keeps `/plugins` closed.
+
 ### Decided
 
 - **Incremental SSSP declined (ADR-011 / ADR-001 appendix 5).** Living ticks,

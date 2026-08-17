@@ -264,6 +264,20 @@ async function check(name, fn) {
         `login form present; fog opened with ${f.seen} seen cell, ${f.open} openings`];
   });
 
+  await check('R. ASCII is negotiated as text/plain, not drawn from tiles', async () => {
+    await page.fill('#seed','11'); await page.click('#generate');
+    await page.waitForFunction(() => state.maze && state.maze.seed === 11, null, {timeout:15000});
+    await page.click('#ascii');
+    await page.waitForFunction(() => {
+      const el = document.getElementById('asciiOut');
+      return el && !el.hidden && el.textContent.includes('#') && el.textContent.includes('S');
+    }, null, {timeout:15000});
+    const art = await page.$eval('#asciiOut', el => el.textContent);
+    const plugins = await page.$eval('#pluginBox', el => el.textContent);
+    return [art.includes('#') && art.includes('S') && !art.includes('{') && plugins.length > 0,
+        `ASCII ${art.length} chars; plugins: ${plugins.slice(0, 40)}`];
+  });
+
   await check('O. no uncaught page errors', async () =>
     [pageErrors.length === 0, pageErrors.length ? pageErrors.join(' | ').slice(0,150) : 'none']);
 

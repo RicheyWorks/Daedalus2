@@ -226,7 +226,8 @@ Last consolidated: 2026-08-17
   surfaces exactly as an external integrator would, so it doubles as living
   documentation of the API. **2026-08-17:** Sign in attaches the JWT to REST
   and STOMP (prod generate/play and ADR-012 join-with-token); Fog of war
-  walks the agent API and paints only stood-on cells.
+  walks the agent API and paints only stood-on cells. Show ASCII uses
+  `Accept: text/plain`; the plugin panel lists `GET /plugins`.
 
 - ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`
   uploads every module's JaCoCo XML to Codecov via `codecov-action@v5`,
