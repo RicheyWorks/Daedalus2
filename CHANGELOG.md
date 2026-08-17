@@ -113,6 +113,15 @@ under the `_migration/` portfolios.
   `state.lbQuery` is the path actually fetched, so a title-only fake fails
   the sweep.
 
+- **Solver movement stays in the corridors.** The web UI drew routes as a
+  polyline through cell centers, `0.4·cell` wide, over passages that are
+  `0.25·cell`. Every turn cut the corner post. Shortest-path solvers hid it;
+  wall-follower and Trémaux — long walks revealed in a flat 700 ms — looked
+  like they tunneled. Routes now paint stood-on cells and the opening between
+  consecutive 4-adjacent cells (what the desktop already did), refuse a chord
+  across a non-adjacent pair, put a marker on the walk head, and scale the
+  reveal to path length.
+
 ### Fixed
 
 - **Signed-in live frames could not connect in prod.** `/ws/**` required a

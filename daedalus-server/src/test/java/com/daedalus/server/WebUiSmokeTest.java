@@ -41,6 +41,7 @@ class WebUiSmokeTest {
                 .contains("/auth/login").contains("id=\"login\"").contains("id=\"fog\"")
                 .contains("Authorization").contains("text/plain").contains("id=\"ascii\"")
                 .contains("/plugins").contains("id=\"pluginBox\"")
-                .contains("id=\"lbGen\"").contains("generator=");
+                .contains("id=\"lbGen\"").contains("generator=")
+                .contains("paintWalk");
     }
 }

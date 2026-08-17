@@ -56,7 +56,10 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   is `Accept: text/plain` on the maze, not a client-side dump; the plugin
   panel lists what the runtime loaded. The leaderboard Algorithm select is
   `GET /leaderboard?generator=`; a daily or campaign board keeps `maze=`
-  and disables the select, because maze wins if both are sent.
+  and disables the select, because maze wins if both are sent. Solver
+  routes paint the cells and openings of a 4-walk — a fat polyline through
+  cell centers cut the corner posts, which made wall-follower and Trémaux
+  look like they walked through walls.
 - **Deterministic across restarts, not just across a cache hit.** Same seed,
   same answer, on a process that has never seen the request before.
   `DeterminismGoldenTest` compares 23 endpoints — seeded generation, the seeded

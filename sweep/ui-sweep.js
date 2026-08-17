@@ -292,6 +292,31 @@ async function check(name, fn) {
         `${title} via ${q}`];
   });
 
+  await check('T. solver walks stay 4-adjacent (no chord through a wall)', async () => {
+    await page.fill('#rows','15'); await page.fill('#cols','15'); await page.fill('#seed','5');
+    await page.click('#generate');
+    await page.waitForFunction(() => state.maze && state.maze.seed === 5, null, {timeout:15000});
+    const jumped = [];
+    for (const id of ['bfs', 'wall-follower', 'tremaux']) {
+      await page.selectOption('#solver', id);
+      await page.evaluate(() => { state.path = null; });
+      await page.click('#solve');
+      await page.waitForFunction(() => state.path && state.path.length > 1, null, {timeout:20000});
+      const hop = await page.evaluate(() => {
+        const p = state.path;
+        for (let i = 1; i < p.length; i++) {
+          if (Math.abs(p[i].row - p[i-1].row) + Math.abs(p[i].col - p[i-1].col) !== 1) {
+            return i;
+          }
+        }
+        return 0;
+      });
+      if (hop) jumped.push(id + '@' + hop);
+    }
+    return [jumped.length === 0 && typeof paintWalk === 'function',
+        jumped.length ? jumped.join(',') : 'bfs, wall-follower, tremaux are 4-walks'];
+  });
+
   await check('O. no uncaught page errors', async () =>
     [pageErrors.length === 0, pageErrors.length ? pageErrors.join(' | ').slice(0,150) : 'none']);
 

@@ -1448,7 +1448,8 @@ function animateSearch() {
   }
   const n = (state.expansions || []).length;
   const searchMs = n ? Math.min(2200, Math.max(600, n * 6)) : 0;
-  const pathMs = 700;
+  // A 400-step wall-follower in 700ms is a flash, not a walk.
+  const pathMs = pathRevealMs((state.path || []).length);
   const started = performance.now();
   const step = now => {
     const t = now - started;
@@ -1506,7 +1507,6 @@ function animateRace() {
   }
   const maxN = Math.max(1, ...lanes.map(l => l.expansions.length));
   const rate = Math.max(150, maxN / 3.5); // expansions/sec — biggest lane takes ≤3.5s
-  const pathMs = 600;
   const started = performance.now();
   const step = now => {
     const t = (now - started) / 1000;
@@ -1515,6 +1515,7 @@ function animateRace() {
       const n = l.expansions.length;
       l.front = n ? Math.min(1, (t * rate) / n) : 1;
       const doneAt = n / rate; // seconds at which this lane's search finished
+      const pathMs = pathRevealMs((l.path || []).length);
       l.pathProg = l.front >= 1 ? Math.min(1, ((t - doneAt) * 1000) / pathMs) : 0;
       if (l.pathProg < 1) running = true;
     });
@@ -1840,6 +1841,42 @@ function cellCenter(p) {
           geom.offY[2 * p.row + 1] + geom.cell / 2];
 }
 
+/**
+ * Paint a 4-walk: stood-on cells and the openings between them. A polyline through
+ * cell centers is wider than a passage (lineWidth 0.4·cell vs wall 0.25·cell) and
+ * cuts the corner post at every turn — wall-follower and Trémaux looked like they
+ * walked through walls. Desktop already paints connector tiles; this matches that.
+ * A non-adjacent pair is a teleport: we refuse the chord rather than draw through a wall.
+ */
+function paintWalk(g, points, color, progress, alpha) {
+  if (!points || !points.length || progress <= 0) return;
+  const visible = Math.max(1, Math.ceil(points.length * Math.min(1, progress)));
+  g.fillStyle = color;
+  g.globalAlpha = alpha == null ? 0.85 : alpha;
+  for (let i = 0; i < visible; i++) {
+    const p = points[i];
+    g.fillRect(geom.offX[2 * p.col + 1], geom.offY[2 * p.row + 1], geom.cell, geom.cell);
+    if (i === 0) continue;
+    const prev = points[i - 1];
+    if (Math.abs(p.row - prev.row) + Math.abs(p.col - prev.col) !== 1) continue;
+    const tr = prev.row + p.row + 1, tc = prev.col + p.col + 1;
+    g.fillRect(geom.offX[tc], geom.offY[tr],
+               geom.offX[tc + 1] - geom.offX[tc],
+               geom.offY[tr + 1] - geom.offY[tr]);
+  }
+  g.globalAlpha = 1;
+}
+
+function walkHead(points, progress) {
+  if (!points || !points.length || progress <= 0) return null;
+  return points[Math.min(points.length, Math.max(1,
+      Math.ceil(points.length * Math.min(1, progress)))) - 1];
+}
+
+function pathRevealMs(n) {
+  return Math.min(5000, Math.max(700, (n || 0) * 14));
+}
+
 function marker(g, p, color, radius) {
   const [x, y] = cellCenter(p);
   g.fillStyle = color;
@@ -2018,19 +2055,10 @@ function draw() {
     }
     g.globalAlpha = 1;
   }
-  if (state.path && state.path.length > 1 && state.pathProgress > 0) {
-    const visible = Math.max(2, Math.ceil(state.path.length * state.pathProgress));
-    g.strokeStyle = COLORS.path;
-    g.lineWidth = Math.max(2, geom.cell * 0.4);
-    g.lineCap = "round"; g.lineJoin = "round";
-    g.globalAlpha = 0.9;
-    g.beginPath();
-    state.path.slice(0, visible).forEach((p, i) => {
-      const [x, y] = cellCenter(p);
-      i === 0 ? g.moveTo(x, y) : g.lineTo(x, y);
-    });
-    g.stroke();
-    g.globalAlpha = 1;
+  if (state.path && state.path.length && state.pathProgress > 0) {
+    paintWalk(g, state.path, COLORS.path, state.pathProgress, 0.85);
+    const head = walkHead(state.path, state.pathProgress);
+    if (head) marker(g, head, COLORS.path, 0.38);
   }
   // Structural overlay: min-cut chokepoints glow on the passage between their two cells
   // (sever these and the maze splits); dead ends get quiet dots.
@@ -2078,18 +2106,8 @@ function draw() {
     }
   }
   // Hardest route: the longest simple walk, drawn under the waypoints so both stay readable.
-  if (state.hardest && state.hardest.path && state.hardest.path.length > 1) {
-    g.strokeStyle = "#f2c94c";
-    g.lineWidth = Math.max(1.5, geom.cell * 0.22);
-    g.lineCap = "round"; g.lineJoin = "round";
-    g.globalAlpha = 0.75;
-    g.beginPath();
-    state.hardest.path.forEach((p, i) => {
-      const [x, y] = cellCenter(p);
-      i === 0 ? g.moveTo(x, y) : g.lineTo(x, y);
-    });
-    g.stroke();
-    g.globalAlpha = 1;
+  if (state.hardest && state.hardest.path && state.hardest.path.length) {
+    paintWalk(g, state.hardest.path, "#f2c94c", 1, 0.75);
   }
   // Waypoint hunt: uncollected waypoints are solid, collected ones hollow.
   if (state.tour && state.tour.waypoints) {
@@ -2123,20 +2141,10 @@ function draw() {
         g.fillRect(geom.offX[2 * p.col + 1], geom.offY[2 * p.row + 1], geom.cell, geom.cell);
       }
       g.globalAlpha = 1;
-      if (lane.pathProg > 0 && lane.path && lane.path.length > 1) {
-        const visible = Math.max(2, Math.ceil(lane.path.length * lane.pathProg));
-        g.strokeStyle = lane.color;
-        // Lane 0 draws wide underneath, lane 1 narrow on top — overlaps stay readable.
-        g.lineWidth = Math.max(2, geom.cell * (li === 0 ? 0.42 : 0.2));
-        g.lineCap = "round"; g.lineJoin = "round";
-        g.globalAlpha = li === 0 ? 0.7 : 0.95;
-        g.beginPath();
-        lane.path.slice(0, visible).forEach((p, i) => {
-          const [x, y] = cellCenter(p);
-          i === 0 ? g.moveTo(x, y) : g.lineTo(x, y);
-        });
-        g.stroke();
-        g.globalAlpha = 1;
+      if (lane.pathProg > 0 && lane.path && lane.path.length) {
+        paintWalk(g, lane.path, lane.color, lane.pathProg, li === 0 ? 0.55 : 0.85);
+        const head = walkHead(lane.path, lane.pathProg);
+        if (head) marker(g, head, lane.color, 0.36);
       }
     });
   }
