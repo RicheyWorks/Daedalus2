@@ -131,6 +131,21 @@ public class MazeGrid {
     }
 
     /**
+     * Close the passage between two adjacent cells on both sides. The inverse of
+     * {@link #carve(Point, Point)} — living-mazes v2 ({@code Sealer}) uses this to harden a
+     * maze. Callers that must stay connected have to pick a non-bridge; this method itself
+     * only toggles walls.
+     */
+    public void seal(Point a, Point b) {
+        Direction d = directionBetween(a, b);
+        if (d == null) {
+            throw new IllegalArgumentException("Points " + a + " and " + b + " are not adjacent");
+        }
+        cell(a).close(d);
+        cell(b).close(d.opposite());
+    }
+
+    /**
      * ASCII art of the maze (audit recommendation §2.3) — same glyphs the REST surface ships,
      * rendered via {@code AsciiMazeVisualizer}. Debugger- and log-friendly; a 20×20 grid is
      * ~1.7 KB, so this stays cheap at the sizes logs actually see.

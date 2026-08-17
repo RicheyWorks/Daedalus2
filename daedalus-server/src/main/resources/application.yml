@@ -75,6 +75,9 @@ daedalus:
     max-ticks: ${DAEDALUS_LIVING_MAX_TICKS:240}
     max-concurrent: ${DAEDALUS_LIVING_MAX_CONCURRENT:8}
     erosion-factor: ${DAEDALUS_LIVING_EROSION_FACTOR:0.08}
+    # 0 keeps POST /live as v1 erosion. A positive value (or ?seal= on the request)
+    # closes extra passages each tick without disconnecting anyone (ADR-008).
+    seal-factor: ${DAEDALUS_LIVING_SEAL_FACTOR:0.0}
   # ----- Daily maze (ADR-006 idea #4) -----
   # GET /api/v1/maze/daily. Seed derives from the UTC date, so every instance generates the
   # identical topology with no coordination — these knobs only shape what kind of maze the

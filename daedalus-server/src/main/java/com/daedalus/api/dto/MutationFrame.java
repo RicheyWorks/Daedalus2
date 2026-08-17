@@ -14,9 +14,10 @@ import java.util.UUID;
  * @param mazeId            id of the maze that just mutated
  * @param tick              1-based tick index within the current run
  * @param wallsOpened       walls erosion carved this tick
+ * @param wallsClosed       walls hardening sealed this tick (0 when {@code seal} is off)
  * @param deadEndsRemaining dead ends left after this tick
  * @param settled           true on the run's final frame (ticks exhausted or nothing left
- *                          to erode) — clients can stop expecting further frames
+ *                          to erode or harden) — clients can stop expecting further frames
  */
-public record MutationFrame(UUID mazeId, int tick, int wallsOpened,
+public record MutationFrame(UUID mazeId, int tick, int wallsOpened, int wallsClosed,
                             int deadEndsRemaining, boolean settled) {}

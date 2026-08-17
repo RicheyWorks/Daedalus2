@@ -64,6 +64,20 @@ class TopologyLabTest {
     }
 
     @Test
+    void uniformCapacityScalesTheCutWithoutMovingIt() {
+        MazeGrid topology = TopologyLab.buildTopology();
+        Point ingress = new Point(0, 0);
+        Point egress = new Point(31, 31);
+
+        MazeFlow.MinCut unit = MazeFlow.minCut(topology, ingress, egress);
+        MazeFlow.MinCut fat = MazeFlow.minCut(topology, ingress, egress, (from, to) -> 2);
+
+        assertThat(fat.cutSize()).isEqualTo(2 * unit.cutSize());
+        assertThat(fat.cutEdges()).isEqualTo(unit.cutEdges());
+        assertThat(TopologyLab.describeCapacity(topology)).contains("uniformCapacity2=");
+    }
+
+    @Test
     void cutEdgesActuallySeverTheTopology() {
         MazeGrid topology = TopologyLab.buildTopology();
         Point ingress = new Point(0, 0);

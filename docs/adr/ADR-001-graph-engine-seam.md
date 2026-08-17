@@ -418,9 +418,11 @@ uses this exact selection rule to place landmarks. This directly serves the visi
 edge placement" and "rack & AZ placement" use cases.
 
 **2. Max-flow with real capacities — Ch. 26.**
-`MazeFlow` currently models unit-capacity passages. Generalising to integer capacities turns
-min-cut into **bisection bandwidth** — the actual throughput ceiling between two halves of a
-topology, and the number a capacity planner wants. Same machinery, strictly more useful.
+~~`MazeFlow` currently models unit-capacity passages.~~ **Shipped 2026-08-17** as
+`minCut(grid, source, sink, PassageCapacity)` — see
+[ADR-009](ADR-009-capacitated-max-flow.md). The no-arg overloads stay unit-capacity so
+`GET /analysis` keeps counting chokepoints; a real capacity function turns `cutSize` into
+bisection bandwidth. Weights are still costs, not capacities.
 
 **3. Bipartite matching — Ch. 26 via max-flow.**
 The one classical algorithm whose shape *does* match `RoutingStrategy`: assigning a batch of

@@ -5,6 +5,7 @@ package com.daedalus.server.service;
 import com.daedalus.api.dto.Hotspot;
 import com.daedalus.engine.Braider;
 import com.daedalus.engine.MazeGrid;
+import com.daedalus.engine.Sealer;
 import com.daedalus.engine.WeightedMazeGrid;
 import com.daedalus.plugin.events.MazeMutatedEvent;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -28,17 +29,19 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Living mazes (ADR-006): scheduled <em>erosion</em> ticks that mutate a cached maze in
- * place. Each tick copies the current snapshot ({@link MazeGrid#copy()}), opens a fraction
- * of its dead-end walls ({@link Braider} — the same primitive that braids perfect mazes),
- * drifts hotspot costs on weighted grids, and commits via
- * {@link MazeGenerationService#replace} — an atomic snapshot swap, so concurrent readers
- * are never shown a half-mutated grid and no locking is needed anywhere.
+ * Living mazes (ADR-006 / ADR-008): scheduled mutation ticks that mutate a cached maze
+ * in place. Each tick copies the current snapshot ({@link MazeGrid#copy()}), opens a
+ * fraction of its dead-end walls ({@link Braider}), optionally closes a fraction of
+ * extra passages ({@link Sealer} — ADR-008, off unless the caller asked), drifts hotspot
+ * costs on weighted grids, and commits via {@link MazeGenerationService#replace} — an
+ * atomic snapshot swap, so concurrent readers are never shown a half-mutated grid and
+ * no locking is needed anywhere.
  *
  * <p><b>Safe by construction.</b> Erosion only ever opens walls, so reachability can only
- * grow: a maze can never mutate into an unsolvable one, and a mid-run player can never be
- * walled in. That free proof is why v1 erodes and does not "grow" walls back (closing a
- * wall needs a connectivity check per closure — recorded as ADR-006's re-fire trigger).
+ * grow. Hardening only ever closes passages that are not in a spanning forest of the
+ * habitable graph, so reachability cannot shrink either: a mid-run player can never be
+ * walled in. ADR-006 left closing out of v1 pending that proof; the trigger (fog-of-war
+ * and traffic both shipped) fired, and ADR-008 is the proof.
  *
  * <p><b>Deterministic.</b> Tick {@code n} of a run seeded {@code s} braids with seed
  * {@code s + n}, so the same maze brought to life with the same seed erodes identically —
@@ -90,6 +93,7 @@ public class LivingMazeService {
     private final int maxTicks;
     private final int maxConcurrent;
     private final double erosionFactor;
+    private final double sealFactor;
 
     private final ScheduledExecutorService ticker;
 
@@ -106,6 +110,7 @@ public class LivingMazeService {
         final UUID mazeId;
         final int ticks;
         final long seed;
+        final double sealFactor;
         // Incremented only by the single ticker thread but read by request threads
         // (status, events). AtomicInteger rather than a volatile int: `done++` on a
         // volatile field is a read-modify-write, so it is not atomic even with one
@@ -115,10 +120,11 @@ public class LivingMazeService {
         volatile boolean settled;
         volatile ScheduledFuture<?> future; // set immediately after construction
 
-        Run(UUID mazeId, int ticks, long seed) {
+        Run(UUID mazeId, int ticks, long seed, double sealFactor) {
             this.mazeId = mazeId;
             this.ticks = ticks;
             this.seed = seed;
+            this.sealFactor = sealFactor;
         }
     }
 
@@ -139,9 +145,25 @@ public class LivingMazeService {
                              @Value("${daedalus.living.tick-interval:2s}") Duration tickInterval,
                              @Value("${daedalus.living.max-ticks:240}") int maxTicks,
                              @Value("${daedalus.living.max-concurrent:8}") int maxConcurrent,
-                             @Value("${daedalus.living.erosion-factor:0.08}") double erosionFactor) {
+                             @Value("${daedalus.living.erosion-factor:0.08}") double erosionFactor,
+                             @Value("${daedalus.living.seal-factor:0.0}") double sealFactor) {
         this(gen, events, meters, tickInterval, maxTicks, maxConcurrent, erosionFactor,
-                daemonTicker());
+                sealFactor, daemonTicker());
+    }
+
+    /**
+     * Test seam: real daemon ticker, hardening off. {@link LivingMazeServiceTest} uses
+     * this so its clock-bound assertions stay on v1 erosion.
+     */
+    LivingMazeService(MazeGenerationService gen,
+                      ApplicationEventPublisher events,
+                      MeterRegistry meters,
+                      Duration tickInterval,
+                      int maxTicks,
+                      int maxConcurrent,
+                      double erosionFactor) {
+        this(gen, events, meters, tickInterval, maxTicks, maxConcurrent, erosionFactor,
+                0.0, daemonTicker());
     }
 
     /**
@@ -162,6 +184,19 @@ public class LivingMazeService {
                       int maxConcurrent,
                       double erosionFactor,
                       ScheduledExecutorService ticker) {
+        this(gen, events, meters, tickInterval, maxTicks, maxConcurrent, erosionFactor,
+                0.0, ticker);
+    }
+
+    LivingMazeService(MazeGenerationService gen,
+                      ApplicationEventPublisher events,
+                      MeterRegistry meters,
+                      Duration tickInterval,
+                      int maxTicks,
+                      int maxConcurrent,
+                      double erosionFactor,
+                      double sealFactor,
+                      ScheduledExecutorService ticker) {
         this.ticker = ticker;
         this.gen = gen;
         this.events = events;
@@ -170,6 +205,7 @@ public class LivingMazeService {
         this.maxTicks = maxTicks;
         this.maxConcurrent = maxConcurrent;
         this.erosionFactor = erosionFactor;
+        this.sealFactor = clampUnit(sealFactor);
     }
 
     /**
@@ -184,7 +220,16 @@ public class LivingMazeService {
      * @throws CapacityExceededException when {@code max-concurrent} runs are live
      */
     public LiveStatus start(UUID mazeId, int ticks, long seed) {
+        return start(mazeId, ticks, seed, this.sealFactor);
+    }
+
+    /**
+     * Bring a maze to life, overriding the process-wide {@code seal-factor} for this run.
+     * {@code 0} is v1 erosion; a positive factor hardens extra passages each tick (ADR-008).
+     */
+    public LiveStatus start(UUID mazeId, int ticks, long seed, double sealFactor) {
         int bounded = Math.min(Math.max(1, ticks), maxTicks);
+        double seal = clampUnit(sealFactor);
         Run run = runs.compute(mazeId, (id, existing) -> {
             if (existing != null) {
                 return existing; // idempotent: one run per maze
@@ -192,7 +237,7 @@ public class LivingMazeService {
             if (runs.size() >= maxConcurrent) {
                 throw new CapacityExceededException(maxConcurrent);
             }
-            return new Run(id, bounded, seed);
+            return new Run(id, bounded, seed, seal);
         });
         // Schedule outside compute (no long work under the map's lock). The benign race —
         // two first-callers both reach here — is settled by `run.future == null` being
@@ -243,11 +288,25 @@ public class LivingMazeService {
             long tickSeed = run.seed + run.done.get() + 1;
             MazeGrid next = current.grid().copy();
 
-            // Erode: open a fraction of the dead ends — at least one whenever any remain,
-            // so small mazes don't stall at round(factor * few) == 0 forever.
+            // Erode: open a fraction of the dead ends — at least one whenever the
+            // caller asked to erode and any remain, so small mazes don't stall at
+            // round(factor * few) == 0. A zero factor stays a no-op (harden-only).
             int deadEnds = Braider.deadEnds(next).size();
-            double factor = deadEnds == 0 ? 0.0 : Math.max(erosionFactor, 1.0 / deadEnds);
+            double factor = 0.0;
+            if (erosionFactor > 0.0 && deadEnds > 0) {
+                factor = Math.max(erosionFactor, 1.0 / deadEnds);
+            }
             Braider.BraidResult erosion = Braider.braid(next, factor, tickSeed);
+
+            // Harden: close a fraction of extra (non-forest) passages — at least one
+            // whenever the caller asked to harden and any extra remains. A zero factor
+            // stays a no-op even if extras exist, so v1 /live is unchanged.
+            Sealer.SealResult sealing = new Sealer.SealResult(0, 0, 0);
+            if (run.sealFactor > 0.0) {
+                int closable = Sealer.closablePassages(next).size();
+                double sealF = closable == 0 ? 0.0 : Math.max(run.sealFactor, 1.0 / closable);
+                sealing = Sealer.seal(next, sealF, tickSeed ^ 0x9E3779B97F4A7C15L);
+            }
 
             // Breathe: drift hotspot costs on weighted grids, clamped to the API's domain.
             boolean weightsDrifted = false;
@@ -257,15 +316,15 @@ public class LivingMazeService {
                 hotspots = hotspotsOf(weighted);
             }
 
-            boolean changed = erosion.wallsOpened() > 0 || weightsDrifted;
+            boolean changed = erosion.wallsOpened() > 0 || sealing.wallsClosed() > 0
+                    || weightsDrifted;
             boolean lastTick = run.done.get() + 1 >= run.ticks;
 
             if (!changed) {
-                // Fully eroded and nothing breathing: the maze has settled. Announce it
-                // once (settled=true, no new snapshot needed) and end the run early.
+                // Fully eroded, fully hardened, nothing breathing: the maze has settled.
                 run.settled = true;
                 events.publishEvent(new MazeMutatedEvent(this, run.mazeId, run.done.get() + 1,
-                        0, erosion.deadEndsAfter(), true, current.grid()));
+                        0, 0, erosion.deadEndsAfter(), true, current.grid()));
                 stop(run, true);
                 return;
             }
@@ -279,8 +338,12 @@ public class LivingMazeService {
 
             int ticksDone = run.done.incrementAndGet();
             meters.counter("daedalus.living.walls-opened").increment(erosion.wallsOpened());
+            if (sealing.wallsClosed() > 0) {
+                meters.counter("daedalus.living.walls-closed").increment(sealing.wallsClosed());
+            }
             events.publishEvent(new MazeMutatedEvent(this, run.mazeId, ticksDone,
-                    erosion.wallsOpened(), erosion.deadEndsAfter(), lastTick, next));
+                    erosion.wallsOpened(), sealing.wallsClosed(),
+                    erosion.deadEndsAfter(), lastTick, next));
             if (lastTick) {
                 stop(run, true);
             }
@@ -323,6 +386,10 @@ public class LivingMazeService {
             }
         }
         return changed;
+    }
+
+    private static double clampUnit(double value) {
+        return Math.max(0.0, Math.min(1.0, value));
     }
 
     /** Rebuild the response-facing hotspot list from the grid's live weights. */

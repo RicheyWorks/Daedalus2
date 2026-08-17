@@ -10,7 +10,7 @@ portfolio drops (now deleted). Anything those archives contained that was
 either already implemented in the current code or already documented
 elsewhere has been omitted on purpose.
 
-Last consolidated: 2026-05-07
+Last consolidated: 2026-08-17
 
 ---
 
@@ -103,6 +103,21 @@ Last consolidated: 2026-05-07
   `SEND` would cost thousands of verifications for no additional guarantee. The
   consequence is that a connection outlives its token's expiry — disconnecting
   on expiry is its own feature.
+
+## Living mazes v2
+
+- ~~**Wall closing / hardening.**~~ **Done 2026-08-17 (ADR-008).** ADR-006's re-fire
+  trigger (traffic or fog-of-war shipped → revisit closing with a connectivity proof)
+  fired. `Sealer` closes the complement of a spanning forest so a tick can harden many
+  walls without stranding anyone; `POST /live?seal=` is opt-in and the process default
+  stays 0. Campaign stages that only declare `living` stay v1; the finale now also
+  declares `hardening`, and the client folds that into one `/live?seal=` call.
+
+- ~~**Capacitated max-flow.**~~ **Done 2026-08-17 (ADR-009).** `MazeFlow` already had
+  Edmonds-Karp; every passage was capacity 1, so "capacity" in the topology example was
+  a recount of links. The unit reading stays the product default (chokepoint count).
+  Real capacities are opt-in per call. Hilbert's API descriptor was still claiming the
+  locality the July measurement disproved; that string is what `/algorithms` ships.
 
 ## New surfaces
 

@@ -105,6 +105,9 @@ MUT = [
     (CS, "hazards all arrive at once, half way up",
      "            if (index >= (int) Math.ceil(stageCount * 0.75)) hazards.add(\"traffic\");",
      "            if (index >= (int) Math.ceil(stageCount * 0.5)) hazards.add(\"traffic\");"),
+    (CS, "hardening arrives with living instead of on the finale",
+     "            if (index == stageCount - 1) hazards.add(\"hardening\");",
+     "            if (index >= (int) Math.ceil(stageCount * 0.5)) hazards.add(\"hardening\");"),
 ]
 
 CLASSES = ("CampaignServiceTest", "CampaignEndpointTest", "DeterminismGoldenTest")

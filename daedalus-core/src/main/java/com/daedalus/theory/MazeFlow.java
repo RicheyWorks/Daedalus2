@@ -14,18 +14,25 @@ import java.util.List;
 /**
  * Max-flow / min-cut over the maze passage graph — CLRS Ch. 26, applied to level analysis.
  *
- * <p>Model every open passage as an undirected edge of capacity 1. The minimum start→goal cut
- * (equal to the max flow, by the max-flow–min-cut theorem) is then the <b>fewest passages you'd
- * have to wall off to seal the goal from the start</b> — and the cut edges are exactly those
- * bottleneck passages. It's also the start↔goal <b>edge connectivity</b>: the number of
- * edge-disjoint routes between them.
+ * <p>The default model treats every open passage as an undirected edge of capacity 1. The
+ * minimum start→goal cut (equal to the max flow, by the max-flow–min-cut theorem) is then the
+ * <b>fewest passages you'd have to wall off to seal the goal from the start</b> — and the cut
+ * edges are exactly those bottleneck passages. It's also the start↔goal <b>edge
+ * connectivity</b>: the number of edge-disjoint routes between them.
  *
- * <p>As a difficulty / structure signal: a perfect maze has a single route, so its min cut is
- * always {@code 1} (every passage on the unique solution is a chokepoint). A braided maze with
- * loops has connectivity {@code ≥ 2} — more independent routes, no single sealing passage.
+ * <p>Pass a {@link PassageCapacity} to read the same cut as <b>bisection bandwidth</b>:
+ * {@code cutSize} becomes the sum of those capacities, not the number of passages. Weights
+ * are not capacities — a cell's routing cost is latency; a passage's capacity is throughput.
+ * The product analysis endpoint stays on the unit reading, because a maze has no capacity
+ * source of its own.
  *
- * <p>Grid degree is at most 4, so the connectivity is at most 4 and Edmonds-Karp converges in a
- * handful of BFS augmentations. Deterministic: augmenting paths follow the fixed
+ * <p>As a difficulty / structure signal: a perfect maze has a single route, so its unit min
+ * cut is always {@code 1} (every passage on the unique solution is a chokepoint). A braided
+ * maze with loops has connectivity {@code ≥ 2} — more independent routes, no single sealing
+ * passage.
+ *
+ * <p>Grid degree is at most 4, so unit connectivity is at most 4 and Edmonds-Karp converges
+ * in a handful of BFS augmentations. Deterministic: augmenting paths follow the fixed
  * {@link MazeGrid#openNeighbors(Point)} order, and the cut edge list is sorted.
  */
 public final class MazeFlow {
@@ -49,13 +56,27 @@ public final class MazeFlow {
     }
 
     /**
+     * Capacity of a directed passage. An undirected link of capacity {@code c} returns
+     * {@code c} in both directions. Must be {@code >= 0}; zero is a sealed link for flow
+     * purposes. This is not {@code WeightedMazeGrid} — those numbers are costs.
+     */
+    @FunctionalInterface
+    public interface PassageCapacity {
+        int of(Point from, Point to);
+    }
+
+    /** Every open passage carries one unit — the product / difficulty reading. */
+    public static final PassageCapacity UNIT = (from, to) -> 1;
+
+    /**
      * The minimum cut between two cells.
      *
      * @param source   start cell
      * @param sink     goal cell
-     * @param cutSize  fewest passages to seal {@code source} from {@code sink} (= max flow =
-     *                 edge connectivity); {@code 0} if they're the same cell or already separated
-     * @param cutEdges the bottleneck passages forming that cut ({@code cutEdges.size() == cutSize})
+     * @param cutSize  max flow from {@code source} to {@code sink}. Under {@link #UNIT} this
+     *                 equals edge connectivity and {@code cutEdges.size()}; with real
+     *                 capacities it is the sum of those capacities (bisection bandwidth)
+     * @param cutEdges the bottleneck passages forming that cut
      */
     public record MinCut(Point source, Point sink, int cutSize, List<Passage> cutEdges) {
         public MinCut {
@@ -68,7 +89,7 @@ public final class MazeFlow {
         return minCut(grid, grid.start(), grid.goal());
     }
 
-    /** Start↔goal edge connectivity (the size of the minimum cut). */
+    /** Start↔goal edge connectivity (the size of the unit-capacity minimum cut). */
     public static int edgeConnectivity(MazeGrid grid, Point source, Point sink) {
         return minCut(grid, source, sink).cutSize();
     }
@@ -204,6 +225,16 @@ public final class MazeFlow {
      * Minimum {@code source}→{@code sink} cut via Edmonds-Karp on unit-capacity passages.
      */
     public static MinCut minCut(MazeGrid grid, Point source, Point sink) {
+        return minCut(grid, source, sink, UNIT);
+    }
+
+    /**
+     * Minimum {@code source}→{@code sink} cut with per-passage capacities. {@link #UNIT}
+     * is byte-equivalent to {@link #minCut(MazeGrid, Point, Point)}: same cut edges, same
+     * {@code cutSize}. A uniform capacity {@code k} scales {@code cutSize} by {@code k}
+     * and leaves the cut set alone.
+     */
+    public static MinCut minCut(MazeGrid grid, Point source, Point sink, PassageCapacity capacity) {
         int cols = grid.cols();
         int s = id(source, cols);
         int t = id(sink, cols);
@@ -211,16 +242,22 @@ public final class MazeFlow {
             return new MinCut(source, sink, 0, List.of());
         }
 
-        Residual net = Residual.of(grid);
+        Residual net = Residual.of(grid, capacity);
         int maxFlow = 0;
         int[] parentEdge = new int[net.nodeCount()];
         while (net.augmentingPath(s, t, parentEdge)) {
+            int bottleneck = Integer.MAX_VALUE;
             for (int v = t; v != s; ) {
                 int edge = parentEdge[v];
-                net.push(edge);
+                bottleneck = Math.min(bottleneck, net.residual(edge));
                 v = net.from(edge);
             }
-            maxFlow++; // unit capacities, so every augmenting path carries exactly 1
+            for (int v = t; v != s; ) {
+                int edge = parentEdge[v];
+                net.push(edge, bottleneck);
+                v = net.from(edge);
+            }
+            maxFlow += bottleneck;
         }
 
         boolean[] sourceSide = net.reachableFrom(s);
@@ -267,9 +304,10 @@ public final class MazeFlow {
             this.nodes = nodes;
         }
 
-        static Residual of(MazeGrid grid) {
+        static Residual of(MazeGrid grid, PassageCapacity cap) {
             MazeGraph graph = new MazeGraph(grid);
             int nodes = graph.nodeCount();
+            int cols = grid.cols();
             int[] adjacency = new int[graph.maxDegree()];
 
             int[] offsets = new int[nodes + 1];
@@ -287,7 +325,11 @@ public final class MazeFlow {
                     int e = cursor[v]++;
                     targets[e] = adjacency[i];
                     owner[e] = v;
-                    capacity[e] = 1;
+                    int c = cap.of(pointOf(v, cols), pointOf(adjacency[i], cols));
+                    if (c < 0) {
+                        throw new IllegalArgumentException("passage capacity must be >= 0, got " + c);
+                    }
+                    capacity[e] = c;
                 }
             }
             int[] twin = new int[edges];
@@ -325,10 +367,14 @@ public final class MazeFlow {
             return owner[edge];
         }
 
-        /** Send one unit along {@code edge}, crediting its twin. */
-        void push(int edge) {
-            capacity[edge]--;
-            capacity[twin[edge]]++;
+        int residual(int edge) {
+            return capacity[edge];
+        }
+
+        /** Send {@code amount} along {@code edge}, crediting its twin. */
+        void push(int edge, int amount) {
+            capacity[edge] -= amount;
+            capacity[twin[edge]] += amount;
         }
 
         /** BFS for an augmenting path; records the incoming edge per node. */

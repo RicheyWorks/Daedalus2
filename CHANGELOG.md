@@ -6,7 +6,54 @@ All notable changes to Daedalus are documented in this file. Format follows
 `1.0.0` (the multi-module split + first audit pass) live in git history
 under the `_migration/` portfolios.
 
-## [Unreleased] — 2026-07-30
+## [Unreleased] — 2026-08-17
+
+### Added
+
+- **Living mazes v2 — hardening (ADR-008).** ADR-006 left wall-closing out of v1 because
+  opening is safe by construction and closing is not. The named trigger (build traffic or
+  fog-of-war, then revisit with a connectivity proof) fired: both shipped 2026-07-30, and
+  a fog-of-war walk already sees the live grid, so a maze that can get *harder* mid-walk
+  is the composition that note called the killer version.
+
+  The proof is a **spanning-forest complement**, not the cut-vertex check the trigger
+  asked for. Closing a wall removes an edge, so the certificate is a cut-edge. And "close
+  every current non-bridge" is not safe as a batch — two parallel paths are each a
+  non-bridge; closing both disconnects the rooms. A BFS forest of the habitable graph
+  (rock skipped) is computed in the grid's stable neighbour order; every edge *not* in
+  that forest can come off at once and the forest still joins everyone. On a perfect maze
+  the extra set is empty, so hardening is a no-op — the same honesty the hardest-route
+  endpoint learned on trees.
+
+  `Sealer` in core; `MazeGrid.seal` is `carve`'s inverse. `POST /api/v1/maze/{id}/live`
+  takes optional `seal` in `[0, 1]`; `daedalus.living.seal-factor` defaults to **0**, so
+  a call without the query param is v1 erosion. `MazeMutatedEvent` / `MutationFrame` grow
+  an additive `wallsClosed`. The web UI's Harden checkbox passes `seal=0.08`.
+
+  Along the way: the living ticker's "at least one wall while any dead end remains" rule
+  treated `erosion-factor: 0` as "still erode". Zero now means off, matching seal, so a
+  harden-only run is actually possible.
+
+- **Campaign finale hardens (ADR-008 composition).** The ladder already declared `living`
+  then `traffic`. The new verb sits on the last stage only — `hardening` — and the web UI
+  folds it into the existing `/live` call as `?seal=0.08`. A second `POST /live` would
+  join the running ticker and drop the factor (start is idempotent per maze), which is
+  why this is a declared hazard the client maps, not a second endpoint. The hazard test
+  pins the whole ramp; `campaignteeth.py` has a mutation that dumps hardening at the
+  living threshold.
+
+- **Capacitated max-flow (ADR-009 / ADR-001 appendix 2).** `MazeFlow.minCut` takes an
+  optional `PassageCapacity`. The no-arg overloads stay unit-capacity — `GET /analysis`
+  still counts chokepoints — and a real function turns `cutSize` into bisection
+  bandwidth. Uniform capacity scales the cut and leaves the bottleneck set alone;
+  heterogeneous capacities make `cutSize` the sum, not the count. Weights stay costs.
+  The topology example prints both readings.
+
+- **Hilbert's live descriptor stopped claiming best locality.** The vision table was
+  corrected in July; `GET /algorithms` still advertised "best locality of any curve
+  generator". The tagline now matches the measured stretch (worse than Morton, more
+  than double Prim's diameter). A diameter test pins the order and refuses a
+  Hamiltonian snake.
 
 ### Fixed
 

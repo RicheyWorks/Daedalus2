@@ -191,7 +191,11 @@ class CampaignServiceTest {
                 .as("traffic arrives at three quarters, one rung after living — a ramp that "
                         + "arrives all at once is a difficulty cliff, not a ramp")
                 .containsExactly("living");
-        assertThat(campaign.stages().get(5).hazards()).containsExactly("living", "traffic");
+        assertThat(campaign.stages().get(5).hazards())
+                .as("hardening is the finale only — ADR-008's composition, not a second "
+                        + "living ticker. A second /live would join the existing run and "
+                        + "drop ?seal=")
+                .containsExactly("living", "traffic", "hardening");
         // Declared, never started: planning a campaign must not mutate any maze. A living
         // ticker would have eroded stage 5's grid; its topology still matches its seed.
         var stage = campaign.stages().get(5);

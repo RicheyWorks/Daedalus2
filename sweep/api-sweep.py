@@ -216,7 +216,7 @@ def t_campaign():
     _, again = call("GET", "/campaign?seed=2026")
     stable = [st["mazeId"] for st in again["stages"]] == [st["mazeId"] for st in c["stages"]]
     last = c["stages"][-1]
-    hazards = set(last["hazards"]) == {"living", "traffic"}
+    hazards = set(last["hazards"]) == {"living", "traffic", "hardening"}
     playable = bool(call("POST", f"/maze/{c['stages'][0]['mazeId']}/solve/bfs")[1]["path"])
     return rising and stable and hazards and playable, \
         f"ladder {[round(x,1) for x in scores]} rising={rising}, ids stable={stable}, finale hazards={sorted(last['hazards'])}"

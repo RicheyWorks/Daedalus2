@@ -108,18 +108,26 @@ public final class TopologyLab {
     /**
      * Min-cut between two nodes: the fewest links whose loss disconnects them. Equivalently the
      * number of independent routes, so it is both a capacity ceiling and a fragility score.
+     *
+     * <p>Unit capacity answers "how many links". Real capacities answer "how much bandwidth"
+     * — the number a capacity planner wants. A uniform factor scales the cut value and
+     * leaves the bottleneck set alone; weights (latency) are a different axis.
      */
     static String describeCapacity(MazeGrid topology) {
         Point ingress = new Point(0, 0);
         Point egress = new Point(SIZE - 1, SIZE - 1);
         MazeFlow.MinCut cut = MazeFlow.minCut(topology, ingress, egress);
+        MazeFlow.MinCut fat = MazeFlow.minCut(topology, ingress, egress, (from, to) -> 2);
         int independentRoutes = MazeFlow.vertexDisjointPaths(topology, ingress, egress);
         return "edgeConnectivity=" + cut.cutSize()
                 + "  vertexDisjointRoutes=" + independentRoutes
                 + "\n   bottleneckLinks=" + cut.cutEdges().size()
                 + " — sever these and " + ingress + " loses " + egress + "."
                 + "\n   Vertex-disjoint <= edge-disjoint always: killing nodes is at least as"
-                + "\n   effective as killing links.";
+                + "\n   effective as killing links."
+                + "\n   uniformCapacity2=" + fat.cutSize()
+                + " (= 2 × edgeConnectivity) — real capacities scale the cut; they do not"
+                + "\n   move the bottleneck. Weights are costs, not capacities.";
     }
 
     /** k-center: place replicas so the worst-served node is as close as possible. */

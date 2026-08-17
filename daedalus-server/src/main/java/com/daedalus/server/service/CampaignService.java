@@ -35,9 +35,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * worth, and {@code CampaignServiceTest} for the pinned behaviour.
  *
  * <p><b>Hazards are declared, not applied.</b> Later stages carry {@code hazards} —
- * {@code living}, {@code traffic} — but this service never starts a ticker. The client turns
- * them on through the existing opt-in endpoints, so their capacity caps and rate limits keep
- * governing exactly as they do outside a campaign.
+ * {@code living}, {@code traffic}, and on the finale {@code hardening} (ADR-008) — but this
+ * service never starts a ticker. The client turns them on through the existing opt-in
+ * endpoints, so their capacity caps and rate limits keep governing exactly as they do
+ * outside a campaign. {@code hardening} is not a second {@code /live} call: the client
+ * folds it into living as {@code ?seal=}, because a second start would join the existing
+ * run and drop the seal factor.
  *
  * <p><b>Bounded</b> (house rule): stage id maps are held per campaign in a bounded map and each
  * campaign holds at most {@code stages} entries; a full plan is computed once per seed and then
@@ -264,12 +267,18 @@ public class CampaignService {
         return 2.5 + t * 8.5;
     }
 
-    /** Hazards ramp in over the back half — the earlier batches, reused as difficulty. */
+    /**
+     * Hazards ramp in over the back half — the earlier batches, reused as difficulty.
+     * Hardening (ADR-008) is the finale only: living already made the maze easier, traffic
+     * already crowded it, and only then do walls start closing. Dumping it at the same
+     * rung as living would make "gets harder" indistinguishable from "starts eroding".
+     */
     private List<String> hazardsFor(int index) {
         List<String> hazards = new ArrayList<>();
         if (stageCount >= 3) {
             if (index >= (int) Math.ceil(stageCount * 0.5)) hazards.add("living");
             if (index >= (int) Math.ceil(stageCount * 0.75)) hazards.add("traffic");
+            if (index == stageCount - 1) hazards.add("hardening");
         }
         return List.copyOf(hazards);
     }

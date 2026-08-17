@@ -5,6 +5,7 @@ package com.daedalus.server.service;
 import com.daedalus.api.dto.Hotspot;
 import com.daedalus.engine.Braider;
 import com.daedalus.engine.MazeGrid;
+import com.daedalus.engine.Sealer;
 import com.daedalus.engine.WeightedMazeGrid;
 import com.daedalus.engine.generators.BinaryTreeGenerator;
 import com.daedalus.engine.generators.GeneratorRegistry;
@@ -171,6 +172,29 @@ class LivingMazeServiceTest {
                     .as("the response-facing hotspot list mirrors the grid's live weights")
                     .isEqualTo(h.cost());
         }
+    }
+
+    @Test
+    void hardeningClosesLoopsWithoutDisconnectingAnyone() {
+        var cached = gen.generate("recursive-backtracker", 12, 12, 42L);
+        UUID id = cached.metadata().id();
+        Braider.braid(cached.grid(), 1.0, 11L);
+        int extras = Sealer.closablePassages(cached.grid()).size();
+        assertThat(extras).isPositive();
+
+        // Erosion off, full seal: extras come off, the habitable graph stays one piece.
+        living = new LivingMazeService(gen, published::add, new SimpleMeterRegistry(),
+                FAST_TICK, 240, 8, 0.0, 1.0);
+        living.start(id, 8, 7L);
+        awaitUntil(() -> living.liveCount() == 0, "the hardening run to finish");
+
+        MazeGrid after = gen.find(id).grid();
+        assertThat(Sealer.closablePassages(after)).isEmpty();
+        assertThat(new BfsSolver().solve(after, after.start(), after.goal(), new MazeStats()))
+                .isNotEmpty();
+        assertThat(mutationEvents().stream().mapToInt(MazeMutatedEvent::wallsClosed).sum())
+                .as("erosion is off, so the extras present at start are exactly what closed")
+                .isEqualTo(extras);
     }
 
     @Test

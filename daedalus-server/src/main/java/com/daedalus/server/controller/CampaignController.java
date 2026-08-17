@@ -21,8 +21,9 @@ import java.time.LocalDate;
  * {@code mazeId}, so a client walks the ladder using the endpoints that already exist —
  * {@code GET /maze/{id}} to load a stage, {@code POST /maze/{id}/session} to play it,
  * {@code GET /leaderboard?maze=} for that stage's own board, {@code GET /maze/{id}/ghost} for
- * its record holder, {@code POST /maze/{id}/live} and {@code /traffic} for the hazards the
- * stage declares. Nothing about campaigns needed a parallel API.
+ * its record holder, {@code POST /maze/{id}/live} (with {@code ?seal=} when the stage
+ * declares {@code hardening}) and {@code /traffic} for the hazards the stage declares.
+ * Nothing about campaigns needed a parallel API.
  */
 @RestController
 @RequestMapping("/api/v1")

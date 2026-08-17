@@ -140,7 +140,7 @@ public consumers).
 | `POST` | `/api/v1/maze/generate` | required | Generate a maze (`GenerateRequest` → `GenerateResponse`) |
 | `GET` | `/api/v1/maze/daily` | public | Today's shared challenge — same maze for everyone until midnight UTC (ADR-006) |
 | `GET` | `/api/v1/maze/{id}` | public | Fetch a previously-generated maze's metadata + tile grid |
-| `POST` | `/api/v1/maze/{id}/live?ticks=30` | required | Bring the maze to life: bounded erosion ticks mutate it in place (ADR-006) |
+| `POST` | `/api/v1/maze/{id}/live?ticks=30` | required | Bring the maze to life: bounded erosion ticks mutate it in place (ADR-006). Optional `seal=` in `[0, 1]` also closes extra passages without disconnecting anyone (ADR-008; default 0 = v1) |
 | `POST` | `/api/v1/maze/{id}/solve/{solverId}` | required | Run a solver against a stored maze. Answers **422** if the solver spends its node budget — IDA\* does this on dungeons from ~21×21 up, where the unguarded search took 16 s and worse (ADR-007 postscript) |
 | `POST` | `/api/v1/maze/{id}/session?player=...` | required | Open a play session (returns `SessionResponse`) |
 | `POST` | `/api/v1/session/{id}/move` | required | Move the player one step (`MoveRequest`). Rate-limited on the `sessionMove` budget — 1200/min, the same as the fog-of-war agent, because it is the same shape of traffic |
@@ -154,10 +154,10 @@ public consumers).
 | `GET` | `/api/v1/complexity/metrics` | required | Which metrics `/complexity` can be asked for |
 | `GET` | `/api/v1/maze/{id}/tour?count=` | required | Waypoints plus the provably optimal route collecting them all (ADR-007) |
 | `GET` | `/api/v1/session/{id}/tour` | public | Server-observed progress against that optimum |
-| `GET` | `/api/v1/campaign?seed=` | required | A deterministic, difficulty-graded ladder of stages; omit the seed for today's (ADR-006) |
+| `GET` | `/api/v1/campaign?seed=` | required | A deterministic, difficulty-graded ladder of stages; omit the seed for today's (ADR-006). The finale declares `hardening` so the client starts `/live?seal=` (ADR-008) |
 | `POST` | `/api/v1/maze/breed?a=&b=&seed=` | required | Crossbreed two equal-sized mazes into a connected child (ADR-006) |
 | `GET` | `/api/v1/session/{id}` | public | Read-only session snapshot — the spectator entry point (`#session=` permalink) |
-| `GET` | `/api/v1/maze/{id}/analysis` | required | Structural analysis: min-cut chokepoints, dead ends, route length (ADR-006) |
+| `GET` | `/api/v1/maze/{id}/analysis` | required | Structural analysis: unit-capacity min-cut chokepoints, dead ends, route length (ADR-006). Real capacities live on `MazeFlow.minCut(..., PassageCapacity)` (ADR-009) — a maze has no bandwidth of its own |
 | `GET` | `/api/v1/maze/{id}/distance-field` | required | Every cell's walking distance from the goal (or start), for a heat map. Unreachable cells report -1; payload-capped (ADR-007) |
 | `GET` | `/api/v1/maze/{id}/heuristic-lens?heuristic=` | required | The three bands that explain A\*'s expansions — must expand, tie decides, never touched — plus a live admissibility check (ADR-007) |
 | `GET` | `/api/v1/tournament?generator=&size=&mazes=&braid=` | required | Rank every solver over a sample with Student-t intervals, report which pairs are statistically indistinguishable, and name the adversarial seed where the leader does worst (ADR-007) |
@@ -298,7 +298,7 @@ production modules only, so each is built and run on its own.
 | module | what it shows |
 |---|---|
 | [`examples/biome-plugin`](./examples/biome-plugin/) | Writing a plugin: two themed generators plus an event subscriber, loaded from a JAR. |
-| [`examples/loadbalancer-topology`](./examples/loadbalancer-topology/) | Daedalus as the topology and analysis engine behind a load balancer — generate a topology, measure its capacity with min-cut, place facilities with k-center, and route with cost in `g` rather than in the heuristic. |
+| [`examples/loadbalancer-topology`](./examples/loadbalancer-topology/) | Daedalus as the topology and analysis engine behind a load balancer — generate a topology, measure unit connectivity and capacitated bandwidth (ADR-009), place facilities with k-center, and route with cost in `g` rather than in the heuristic. |
 | [`examples/dungeon-layout`](./examples/dungeon-layout/) | Daedalus as the spatial layer under a narrative game engine — BSP rooms, level depth, the hardest route, and treasure placement, emitted as named locations. |
 | [`examples/benchmark-harness`](./examples/benchmark-harness/) | Times every generator and solver and writes `docs/benchmarks/benchmark-<date>.csv`. Run it by hand on a machine whose numbers you trust; timings are machine-specific and are deliberately not asserted in CI. |
 
@@ -332,7 +332,7 @@ Beyond the five Maven modules:
 ```
 Audit/       Vision-style audit + integration ideas (Grok, May 6)
 Code/        Sample integrations: HilbertLoadBalancer.java, daedalus-api-dtos.ts
-docs/adr/    Architecture decision records (graph seam; CSRBT evaluation)
+docs/adr/    Architecture decision records (graph seam; living mazes; theory-as-product; hardening)
 docs/        benchmarks/ (harness output), evaluations/ (standalone measurement code)
 examples/    Four worked examples — see "Worked examples" above
 PDFs/        Auto-generated reference docs (server, runtime, desktop, core, generators, overview)

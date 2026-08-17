@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * {@link MazeFlow} min-cut / max-flow. A perfect maze has a single route (cut = 1); a braided
@@ -85,7 +86,81 @@ class MazeFlowTest {
         assertThat(MazeFlow.minCutStartToGoal(grid)).isEqualTo(MazeFlow.minCutStartToGoal(grid));
     }
 
+    @Test
+    void unitCapacityOverload_matchesTheNoArgCut() {
+        MazeGrid grid = new RecursiveBacktrackerGenerator().generate(8, 8, 7L);
+
+        assertThat(MazeFlow.minCut(grid, grid.start(), grid.goal(), MazeFlow.UNIT))
+                .isEqualTo(MazeFlow.minCut(grid, grid.start(), grid.goal()));
+    }
+
+    @Test
+    void uniformCapacity_scalesFlowAndLeavesTheCutSetAlone() {
+        // If Residual still hardcodes 1, fat.cutSize stays 2 on this ring.
+        MazeGrid ring = ring();
+        Point s = new Point(0, 0);
+        Point t = new Point(1, 1);
+
+        MinCut unit = MazeFlow.minCut(ring, s, t);
+        MinCut fat = MazeFlow.minCut(ring, s, t, (from, to) -> 3);
+
+        assertThat(unit.cutSize()).isEqualTo(2);
+        assertThat(fat.cutSize()).isEqualTo(6);
+        assertThat(fat.cutEdges()).isEqualTo(unit.cutEdges());
+    }
+
+    @Test
+    void heterogeneousCapacities_cutValueIsTheSumNotTheCount() {
+        // Two routes: north capacity 5, south capacity 1. Bandwidth is 6; two passages.
+        // A unit-only implementation reports 2 and hides the fat uplink.
+        MazeGrid ring = ring();
+        Point s = new Point(0, 0);
+        Point t = new Point(1, 1);
+
+        MinCut cut = MazeFlow.minCut(ring, s, t, (from, to) -> north(from, to) ? 5 : 1);
+
+        assertThat(cut.cutSize()).isEqualTo(6);
+        assertThat(cut.cutEdges()).hasSize(2);
+        assertThat(connected(ring, s, t, Set.copyOf(cut.cutEdges()))).isFalse();
+    }
+
+    @Test
+    void zeroCapacitySealsAPassageForFlow() {
+        MazeGrid ring = ring();
+        Point s = new Point(0, 0);
+        Point t = new Point(1, 1);
+
+        MinCut cut = MazeFlow.minCut(ring, s, t, (from, to) -> north(from, to) ? 0 : 1);
+
+        assertThat(cut.cutSize()).isEqualTo(1);
+    }
+
+    @Test
+    void negativeCapacityIsRejected() {
+        MazeGrid ring = ring();
+
+        assertThatThrownBy(
+                        () -> MazeFlow.minCut(ring, new Point(0, 0), new Point(1, 1), (from, to) -> -1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining(">= 0");
+    }
+
     // ---------- helpers ----------
+
+    /** 2×2 ring: opposite corners have two edge-disjoint routes. */
+    private static MazeGrid ring() {
+        MazeGrid grid = new MazeGrid(2, 2);
+        carve(grid, 0, 0, 0, 1);
+        carve(grid, 0, 1, 1, 1);
+        carve(grid, 1, 1, 1, 0);
+        carve(grid, 1, 0, 0, 0);
+        return grid;
+    }
+
+    /** The two passages of the top-right path: (0,0)—(0,1) and (0,1)—(1,1). */
+    private static boolean north(Point a, Point b) {
+        return Math.min(a.row(), b.row()) == 0 && Math.max(a.col(), b.col()) == 1;
+    }
 
     private static void carve(MazeGrid grid, int r1, int c1, int r2, int c2) {
         grid.carve(new Point(r1, c1), new Point(r2, c2));

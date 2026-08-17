@@ -1,6 +1,6 @@
 {
-  "GET /algorithms" : "82abcfdb1ffc7f56",
-  "GET /campaign?seed=7" : "aae62ff8a319e3e0",
+  "GET /algorithms" : "cabf75725871ccc6",
+  "GET /campaign?seed=7" : "2af791986b00e7e3",
   "GET /complexity prims seed=5" : "a916f3cfb6243e54",
   "GET /maze/{id}" : "82ddb221127dfb27",
   "GET /maze/{id}analysis" : "7f48dfad6c38f630",

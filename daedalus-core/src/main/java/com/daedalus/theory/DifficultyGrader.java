@@ -35,7 +35,7 @@ import com.daedalus.engine.MazeGrid;
  * always grades below a winding maze of the same size. Ordering is all the campaign ladder
  * needs.
  *
- * <p>Hazards (living erosion, traffic) are deliberately not graded here: this reads a static
+ * <p>Hazards (living erosion, traffic, hardening) are deliberately not graded here: this reads a static
  * snapshot, and a hazard is a property of how a stage is <em>run</em>. The campaign adds its
  * own hazard premium on top.
  */

@@ -125,6 +125,8 @@
     <button id="live" disabled
             title="Erode the maze in place: each tick opens dead-end walls (and drifts hotspot costs) — the route re-solves live as the maze changes">
       Bring to life</button>
+    <label class="info" title="Also close extra passages each tick — the maze gets harder without ever trapping anyone (ADR-008)">
+      <input type="checkbox" id="harden"> Harden</label>
     <button id="traffic" disabled
             title="Occupancy raises cell costs and decays over time — weight-aware solvers route around wherever you (or agents) walk">
       Simulate traffic</button>
@@ -535,16 +537,25 @@ async function playStage(index) {
     // Hazard names are domain words; endpoint paths are an API detail and the two do NOT
     // line up ("living" the hazard is served by POST /live). Interpolating the hazard name
     // straight into the path silently 404s every hazard, so the mapping is explicit.
-    const path = {living: "live?ticks=30", traffic: "traffic"}[hazard];
+    //
+    // hardening is not its own call. A second POST /live joins the existing run and
+    // ignores ?seal= (LivingMazeService.start is idempotent per maze). Fold it into
+    // living so the finale breathes both ways in one ticker.
+    if (hazard === "hardening") continue;
+    const livingPath = stage.hazards.includes("hardening")
+        ? "live?ticks=30&seal=0.08" : "live?ticks=30";
+    const path = {living: livingPath, traffic: "traffic"}[hazard];
     if (!path) { log("err", `unknown hazard "${hazard}" — server declares one this client can't start`); continue; }
     try {
       await api(`/maze/${stage.mazeId}/${path}`, {method: "POST"});
-      log("state", `hazard active on this stage: ${hazard}`);
+      log("state", `hazard active on this stage: ${hazard}`
+          + (hazard === "living" && stage.hazards.includes("hardening") ? " + hardening" : ""));
     } catch (e) {
       log("err", `could not start ${hazard}: ${e.message}`);
     }
   }
-  if (stage.hazards.includes("living") && !state.stomp) startLivePolling(stage.mazeId);
+  if ((stage.hazards.includes("living") || stage.hazards.includes("hardening"))
+      && !state.stomp) startLivePolling(stage.mazeId);
   refreshLeaderboard();               // this stage's own board (per-maze partition)
 }
 
@@ -624,9 +635,13 @@ async function spectate(sessionId) {
  * server-reported tick interval, so the maze still visibly lives.
  */
 async function bringToLife() {
-  const r = await api(`/maze/${state.maze.id}/live?ticks=30`, {method: "POST"});
+  const harden = $("harden") && $("harden").checked;
+  const q = `/maze/${state.maze.id}/live?ticks=30` + (harden ? "&seal=0.08" : "");
+  const r = await api(q, {method: "POST"});
   $("live").disabled = true;
-  log("state", `maze is alive — ${r.ticksRequested} erosion ticks, one every ${(r.tickMillis / 1000).toFixed(1)}s`);
+  log("state", `maze is alive — ${r.ticksRequested} ticks`
+      + (harden ? " (eroding and hardening)" : " (erosion only)")
+      + `, one every ${(r.tickMillis / 1000).toFixed(1)}s`);
   if (!state.stomp) startLivePolling(state.maze.id, r.tickMillis, r.ticksRequested);
 }
 
@@ -650,8 +665,10 @@ function startLivePolling(mazeId, tickMillis = 2000, ticks = 30) {
 
 /** A mutation frame arrived: re-fetch the snapshot, re-solve if a route is shown, redraw. */
 async function onMutation(m) {
-  log("state", `tick ${m.tick}: ${m.wallsOpened} wall${m.wallsOpened === 1 ? "" : "s"} opened, `
-      + `${m.deadEndsRemaining} dead ends left${m.settled ? " — maze has settled" : ""}`);
+  const closed = m.wallsClosed || 0;
+  log("state", `tick ${m.tick}: ${m.wallsOpened} wall${m.wallsOpened === 1 ? "" : "s"} opened`
+      + (closed ? `, ${closed} closed` : "")
+      + `, ${m.deadEndsRemaining} dead ends left${m.settled ? " — maze has settled" : ""}`);
   await refreshLivingMaze();
   if (m.settled) $("live").disabled = false;
 }

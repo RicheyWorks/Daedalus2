@@ -26,6 +26,8 @@ import com.daedalus.server.service.TrafficService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -173,17 +175,20 @@ public class MazeController {
     }
 
     /**
-     * ADR-006 — living mazes. Erosion only ever opens walls, so a live maze can never
-     * become unsolvable mid-run; the default seed derives from the maze id so the same
-     * maze brought to life erodes the same way every time.
+     * ADR-006 / ADR-008 — living mazes. Erosion only ever opens walls; hardening
+     * ({@code seal}) only ever closes non-forest passages, so a live maze can never
+     * become unsolvable mid-run. The default seed derives from the maze id so the same
+     * maze brought to life mutates the same way every time. {@code seal} defaults to the
+     * process-wide {@code daedalus.living.seal-factor} (0 — v1 erosion only).
      */
     @PostMapping("/maze/{id}/live")
-    @Operation(summary = "Bring a maze to life: schedule bounded erosion ticks that mutate it in place.",
-            description = "Each tick opens a fraction of the maze's dead-end walls and drifts "
-                    + "hotspot costs on weighted mazes, then swaps the new snapshot into the "
-                    + "cache and publishes a MutationFrame on /topic/maze/{id}/state. Idempotent "
-                    + "while alive (a second call returns the running ticker's status). Answers "
-                    + "409 when daedalus.living.max-concurrent mazes are already alive. "
+    @Operation(summary = "Bring a maze to life: schedule bounded mutation ticks that mutate it in place.",
+            description = "Each tick opens a fraction of the maze's dead-end walls, optionally "
+                    + "closes a fraction of extra passages (seal in [0,1]), and drifts hotspot "
+                    + "costs on weighted mazes, then swaps the new snapshot into the cache and "
+                    + "publishes a MutationFrame on /topic/maze/{id}/state. Idempotent while "
+                    + "alive (a second call returns the running ticker's status). Answers 409 "
+                    + "when daedalus.living.max-concurrent mazes are already alive. "
                     + "Rate-limited per caller against the 'mazeLive' budget.")
     @PerKeyRateLimit("mazeLive")
     public ResponseEntity<LivingMazeService.LiveStatus> live(
@@ -192,11 +197,17 @@ public class MazeController {
             @Min(value = 1,   message = "ticks must be at least 1")
             @Max(value = 240, message = "ticks must be at most 240")
             int ticks,
-            @RequestParam(required = false) Long seed) {
+            @RequestParam(required = false) Long seed,
+            @RequestParam(required = false)
+            @DecimalMin(value = "0.0", message = "seal must be at least 0")
+            @DecimalMax(value = "1.0", message = "seal must be at most 1")
+            Double seal) {
         var c = gen.find(id);
         if (c == null) throw ResourceNotFoundException.maze(id);
         long erosionSeed = seed != null ? seed : id.getLeastSignificantBits();
-        return ResponseEntity.ok(living.start(id, ticks, erosionSeed));
+        return ResponseEntity.ok(seal == null
+                ? living.start(id, ticks, erosionSeed)
+                : living.start(id, ticks, erosionSeed, seal));
     }
 
     /**
