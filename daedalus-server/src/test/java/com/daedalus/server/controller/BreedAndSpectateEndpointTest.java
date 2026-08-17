@@ -101,9 +101,11 @@ class BreedAndSpectateEndpointTest {
                 .exchange().expectStatus().isOk()
                 .expectBody().returnResult().getResponseBody());
         assertThat(before.get("mazeId").asText()).isEqualTo(id.toString());
+        assertThat(before.get("player").asText()).isEqualTo("runner");
         assertThat(before.get("completed").asBoolean()).isFalse();
         assertThat(before.get("moveCount").asLong()).isZero();
         assertThat(before.get("players").get("runner")).isNotNull();
+        assertThat(before.get("trail")).as("no hops before the first move").isEmpty();
 
         Point step = grid.openNeighbors(grid.start()).get(0);
         client().post().uri("/api/v1/session/" + sessionId + "/move")
@@ -119,6 +121,11 @@ class BreedAndSpectateEndpointTest {
                 .isEqualTo(1);
         assertThat(after.get("players").get("runner").get("row").asInt()).isEqualTo(step.row());
         assertThat(after.get("players").get("runner").get("col").asInt()).isEqualTo(step.col());
+        assertThat(after.get("trail")).as("the snapshot carries the walk, not just the seat")
+                .hasSize(1);
+        assertThat(after.get("trail").get(0).get("to").get("row").asInt()).isEqualTo(step.row());
+        assertThat(after.get("trail").get(0).get("to").get("col").asInt()).isEqualTo(step.col());
+        assertThat(after.get("trail").get(0).has("tMs")).isTrue();
 
         // Reading a session must never advance it — the view is a snapshot, not a turn.
         MAPPER.readTree(client().get().uri("/api/v1/session/" + sessionId)

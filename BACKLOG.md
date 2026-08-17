@@ -235,6 +235,9 @@ Last consolidated: 2026-08-17
   leaderboard Algorithm select is `?generator=`, disabled when `maze=`
   already owns the board. Solver routes, player trails, fog walks, and
   the ghost all paint corridor tiles, not a polyline through the walls.
+  A `#session=` spectator hydrates that walk from the snapshot trail
+  (positions alone are a seat) and keeps the session hash so a refresh
+  still spectates.
 
 - ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`
   uploads every module's JaCoCo XML to Codecov via `codecov-action@v5`,

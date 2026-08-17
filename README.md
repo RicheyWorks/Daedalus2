@@ -60,7 +60,9 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   routes paint the cells and openings of a 4-walk — a fat polyline through
   cell centers cut the corner posts, which made wall-follower and Trémaux
   look like they walked through walls. Player trails, fog walks, and the
-  ghost use the same corridor painter.
+  ghost use the same corridor painter. A `#session=` spectator loads the
+  opening player's recorded trail from the snapshot so the walk is on
+  the canvas before the next frame arrives.
 - **Deterministic across restarts, not just across a cache hit.** Same seed,
   same answer, on a process that has never seen the request before.
   `DeterminismGoldenTest` compares 23 endpoints — seeded generation, the seeded
@@ -166,7 +168,7 @@ public consumers).
 | `GET` | `/api/v1/session/{id}/tour` | public | Server-observed progress against that optimum |
 | `GET` | `/api/v1/campaign?seed=` | required | A deterministic, difficulty-graded ladder of stages; omit the seed for today's (ADR-006). The finale declares `hardening` so the client starts `/live?seal=` (ADR-008) |
 | `POST` | `/api/v1/maze/breed?a=&b=&seed=` | required | Crossbreed two equal-sized mazes into a connected child (ADR-006) |
-| `GET` | `/api/v1/session/{id}` | public | Read-only session snapshot — the spectator entry point (`#session=` permalink) |
+| `GET` | `/api/v1/session/{id}` | public | Read-only session snapshot — the spectator entry point (`#session=` permalink). Includes the opening player's recorded trail so a late arrival can paint the walk |
 | `GET` | `/api/v1/maze/{id}/analysis` | required | Structural analysis: unit-capacity min-cut chokepoints, dead ends, route length (ADR-006). Real capacities live on `MazeFlow.minCut(..., PassageCapacity)` (ADR-009) — a maze has no bandwidth of its own |
 | `GET` | `/api/v1/maze/{id}/distance-field` | required | Every cell's walking distance from the goal (or start), for a heat map. Unreachable cells report -1; payload-capped (ADR-007) |
 | `GET` | `/api/v1/maze/{id}/heuristic-lens?heuristic=` | required | The three bands that explain A\*'s expansions — must expand, tie decides, never touched — plus a live admissibility check (ADR-007) |

@@ -128,6 +128,16 @@ under the `_migration/` portfolios.
   fog walk is the ordered agent path (not the seen-set), and the ghost is
   start plus every `to` whose clock has elapsed.
 
+- **A spectator permalink paints the walk, not just the seat.**
+  `GET /session/{id}` already returned live positions; frames only carry the
+  next hop, so a late `#session=` arrival saw a marker and no corridor.
+  The snapshot now includes the opening player's recorded trail (the same
+  `TimedMove` list a completed run becomes a ghost from) and the opening
+  name. The page hydrates `paintWalk` from start plus every `to`, keeps
+  `#session=` in the address bar so a refresh still spectates, and
+  polling rebuilds the walk from the snapshot instead of teleporting the
+  marker. Subjects stay off the body.
+
 ### Fixed
 
 - **Signed-in live frames could not connect in prod.** `/ws/**` required a

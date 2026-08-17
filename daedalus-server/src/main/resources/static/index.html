@@ -811,15 +811,16 @@ async function spectate(sessionId) {
   try { view = await api(`/session/${sessionId}`); }
   catch (e) { log("err", `session not found on this server (${e.message})`); return; }
   adoptMaze(await api(`/maze/${view.mazeId}`), null, "spectated session");
-  const names = Object.keys(view.players);
-  state.session = {id: view.sessionId, positions: view.players, primary: names[0]};
+  // adoptMaze writes #maze=; keep the permalink that got us here so a refresh
+  // still spectates instead of dropping into a mute maze.
+  location.hash = "session=" + view.sessionId;
+  adoptSessionView(view);
   state.readOnly = true;
-  if (view.completed) state.won = names[0];
   $("status").textContent = `spectating session ${view.sessionId.slice(0, 8)}… — read-only`;
   $("join").disabled = false;
   $("join").textContent = "Join this session";
   $("join").title = "Join as the name in the player field (needs daedalus.session.multiplayer)";
-  log("state", `spectating ${names.join(", ")} — moves arrive live`);
+  log("state", `spectating ${Object.keys(view.players).join(", ")} — moves arrive live`);
   resubscribe();
   if (!state.stomp) {
     clearInterval(state.spectatePoll);
@@ -829,9 +830,7 @@ async function spectate(sessionId) {
         return;
       }
       try {
-        const v = await api(`/session/${state.session.id}`);
-        state.session.positions = v.players;
-        if (v.completed && !state.won) state.won = Object.keys(v.players)[0];
+        adoptSessionView(await api(`/session/${state.session.id}`));
         draw();
       } catch (gone) {
         clearInterval(state.spectatePoll); state.spectatePoll = null;
@@ -840,6 +839,44 @@ async function spectate(sessionId) {
     }, 1000);
   }
   draw();
+}
+
+/**
+ * Install a session snapshot: positions, opening player, and the recorded walk.
+ * Frames only carry the next hop; without the trail a late spectator paints a
+ * marker and no corridor.
+ */
+function adoptSessionView(view) {
+  const primary = view.player || Object.keys(view.players)[0];
+  state.session = {id: view.sessionId, positions: view.players, primary};
+  if (view.completed) state.won = primary;
+  const walk = sessionWalk(view);
+  if (walk.length) state.trails[primary] = walk;
+}
+
+/** Opening-player 4-walk: maze start plus every recorded `to`. */
+function sessionWalk(view) {
+  const start = mazeStart(state.maze);
+  const pts = [];
+  if (start) pts.push(start);
+  for (const m of view.trail || []) {
+    const p = m.to;
+    if (!p) continue;
+    const last = pts[pts.length - 1];
+    if (!last || last.row !== p.row || last.col !== p.col) pts.push(p);
+  }
+  return pts;
+}
+
+function mazeStart(maze) {
+  const tiles = maze && maze.tiles;
+  if (!tiles) return null;
+  for (let r = 1; r < tiles.length; r += 2) {
+    for (let c = 1; c < tiles[0].length; c += 2) {
+      if (tiles[r][c] === "S") return {row: (r - 1) / 2, col: (c - 1) / 2};
+    }
+  }
+  return null;
 }
 
 // ---------- living mazes (ADR-006) ----------
@@ -1678,9 +1715,12 @@ async function move(name, dr, dc) {
 }
 
 /** Shared position update: called from the STOMP frame handler or the local fallback. */
-function applyMove(who, to) {
+function applyMove(who, to, from) {
   state.session.positions[who] = to;
-  (state.trails[who] = state.trails[who] || []).push(to);
+  const trail = state.trails[who] = state.trails[who] || [];
+  if (trail.length === 0 && from) trail.push(from);
+  const last = trail[trail.length - 1];
+  if (!last || last.row !== to.row || last.col !== to.col) trail.push(to);
   if (state.maze.tiles[2 * to.row + 1][2 * to.col + 1] === "G") {
     state.won = who;
     let verdict = "";
@@ -1785,7 +1825,7 @@ function resubscribe() {
       const m = JSON.parse(f.body);
       const who = m.player || state.session.primary;
       log("player", `${who}: (${m.from.row},${m.from.col}) → (${m.to.row},${m.to.col})`);
-      applyMove(who, m.to);
+      applyMove(who, m.to, m.from);
     }));
   }
   state.subs.push(state.stomp.subscribe("/topic/plugins/failures", f => {

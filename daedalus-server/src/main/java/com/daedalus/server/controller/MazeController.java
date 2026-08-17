@@ -283,18 +283,22 @@ public class MazeController {
 
     /**
      * ADR-006 idea #6 — the spectator seam: a read-only snapshot of a live session. The
-     * web UI's {@code #session=<id>} permalink loads this once and then follows the same
-     * STOMP frames the players produce.
+     * web UI's {@code #session=<id>} permalink loads this once (including the opening
+     * player's walk so far) and then follows the same STOMP frames the players produce.
      */
     @GetMapping("/session/{id}")
     @Operation(summary = "Read-only session snapshot — the spectator entry point.",
-            description = "Pair with /topic/session/{id}/player for live moves; owned "
-                    + "sessions keep their existing per-destination STOMP authorization.")
+            description = "Includes the opening player's recorded trail so a late spectator "
+                    + "can paint the walk, not just the current cell. Pair with "
+                    + "/topic/session/{id}/player for live moves; owned sessions keep their "
+                    + "existing per-destination STOMP authorization. Subjects stay off "
+                    + "the body.")
     public ResponseEntity<com.daedalus.api.dto.SessionViewResponse> session(@PathVariable UUID id) {
         var s = sessions.find(id);
         if (s == null) throw ResourceNotFoundException.session(id);
         return ResponseEntity.ok(new com.daedalus.api.dto.SessionViewResponse(
-                s.id(), s.mazeId(), s.players(), s.completed(), s.moveCount(), s.score()));
+                s.id(), s.mazeId(), s.playerName(), s.players(),
+                s.completed(), s.moveCount(), s.score(), s.trail()));
     }
 
     @PostMapping("/maze/{id}/session")

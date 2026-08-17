@@ -229,16 +229,36 @@ async function check(name, fn) {
       await page.click('#play');
       await page.waitForFunction(() => !!state.session, null, {timeout:15000});
     }
+    // One legal hop so the snapshot has a walk, not just a seat.
+    await page.evaluate(async () => {
+      const r = await api(`/maze/${state.maze.id}/solve/bfs`, {method:'POST'});
+      if (r.path && r.path.length > 1) {
+        const f = state.session.positions[state.session.primary], t = r.path[1];
+        await move(state.session.primary, t.row - f.row, t.col - f.col);
+      }
+    });
+    await page.waitForTimeout(400);
     const sid = await page.evaluate(() => state.session.id);
     const spec = await ctx.newPage();
     await spec.goto(`http://localhost:8080/#session=${sid}`, { waitUntil: 'networkidle' });
-    await spec.waitForFunction(() => state.readOnly === true && !!state.session, null, {timeout:25000});
+    await spec.waitForFunction(() => state.readOnly === true && !!state.session
+        && state.trails && Object.values(state.trails).some(w => w && w.length >= 2),
+        null, {timeout:25000});
+    const walk = await spec.evaluate(() => {
+      const w = state.trails[state.session.primary] || [];
+      let adj = true;
+      for (let i = 1; i < w.length; i++) {
+        if (Math.abs(w[i].row - w[i-1].row) + Math.abs(w[i].col - w[i-1].col) !== 1) adj = false;
+      }
+      return {n: w.length, adj, hash: location.hash};
+    });
     for (const k of ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight']) await spec.keyboard.press(k);
     await spec.waitForTimeout(500);
     const mc = await spec.evaluate(async () => (await api(`/session/${state.session.id}`)).moveCount);
     const mine = await page.evaluate(() => state.session ? 1 : 0);
     await spec.close();
-    return [mine === 1, `spectator read-only; its key presses left moveCount at ${mc}`];
+    return [mine === 1 && walk.n >= 2 && walk.adj && /session=/.test(walk.hash),
+        `spectator walk ${walk.n} 4-adj; hash ${walk.hash}; moveCount ${mc}`];
   });
 
   await check('N. maze permalink', async () => {
