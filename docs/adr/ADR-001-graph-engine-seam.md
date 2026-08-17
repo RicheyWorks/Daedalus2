@@ -425,10 +425,11 @@ edge placement" and "rack & AZ placement" use cases.
 bisection bandwidth. Weights are still costs, not capacities.
 
 **3. Bipartite matching — Ch. 26 via max-flow.**
-The one classical algorithm whose shape *does* match `RoutingStrategy`: assigning a batch of
-requests to servers under per-server capacity is bipartite b-matching. Unlike A\*, this
-answers a selection question, and it is the principled version of "least connections" when
-you are placing many requests at once rather than one at a time.
+~~The one classical algorithm whose shape *does* match `RoutingStrategy`.~~ **Shipped
+2026-08-17** as `BipartiteMatching` — see [ADR-010](ADR-010-bipartite-matching.md).
+The LoadBalancerPro strategy seam is still closed (#527); this is the offline
+primitive, the same posture as capacitated flow. First-fit is not a substitute —
+the test that pins the class is the fixture first-fit gets wrong.
 
 **4. Bellman-Ford and Johnson — Ch. 24, Ch. 25.**
 Real latency graphs are **asymmetric** (`d(u,v) ≠ d(v,u)`), which every current solver

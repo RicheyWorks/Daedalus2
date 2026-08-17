@@ -119,6 +119,12 @@ Last consolidated: 2026-08-17
   Real capacities are opt-in per call. Hilbert's API descriptor was still claiming the
   locality the July measurement disproved; that string is what `/algorithms` ships.
 
+- ~~**Bipartite matching.**~~ **Done 2026-08-17 (ADR-010).** The next ADR-001 appendix
+  item after capacitated flow. A* routes; matching assigns. First-fit strands the
+  request that can only use a seat someone else took — the test compares against
+  that greedy so a rewrite to it fails. No REST surface: a maze has no batch of
+  incoming requests.
+
 ## New surfaces
 
 - ~~**Performance benchmark harness.**~~ **Done 2026-07-19** —

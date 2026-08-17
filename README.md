@@ -298,7 +298,7 @@ production modules only, so each is built and run on its own.
 | module | what it shows |
 |---|---|
 | [`examples/biome-plugin`](./examples/biome-plugin/) | Writing a plugin: two themed generators plus an event subscriber, loaded from a JAR. |
-| [`examples/loadbalancer-topology`](./examples/loadbalancer-topology/) | Daedalus as the topology and analysis engine behind a load balancer — generate a topology, measure unit connectivity and capacitated bandwidth (ADR-009), place facilities with k-center, and route with cost in `g` rather than in the heuristic. |
+| [`examples/loadbalancer-topology`](./examples/loadbalancer-topology/) | Daedalus as the topology and analysis engine behind a load balancer — generate a topology, measure unit connectivity and capacitated bandwidth (ADR-009), place facilities with k-center, assign a batch of requests under replica capacity (ADR-010), and route with cost in `g` rather than in the heuristic. |
 | [`examples/dungeon-layout`](./examples/dungeon-layout/) | Daedalus as the spatial layer under a narrative game engine — BSP rooms, level depth, the hardest route, and treasure placement, emitted as named locations. |
 | [`examples/benchmark-harness`](./examples/benchmark-harness/) | Times every generator and solver and writes `docs/benchmarks/benchmark-<date>.csv`. Run it by hand on a machine whose numbers you trust; timings are machine-specific and are deliberately not asserted in CI. |
 

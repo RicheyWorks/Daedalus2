@@ -43,6 +43,7 @@ like bandwidth and is just a recount of the passages.
   fails if someone carves along the curve (Hamiltonian path) or if the tree ever beats
   Prim's at the same seed — either of those would make the old claim true, and the
   descriptor would have to change with the test.
-- ADR-001 appendix items 3–5 stay held: matching wants LoadBalancerPro's open strategy
-  seam; incremental SSSP is still "measure first"; Bellman-Ford/Johnson wait on a
-  directed latency graph that is not a maze.
+- ADR-001 appendix item 3 shipped as [ADR-010](ADR-010-bipartite-matching.md) — the
+  primitive does not need the LoadBalancerPro seam. Items 4–5 stay held:
+  Bellman-Ford/Johnson wait on a directed latency graph that is not a maze;
+  incremental SSSP is still "measure first".

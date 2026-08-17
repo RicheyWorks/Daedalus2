@@ -11,9 +11,11 @@ import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
 import com.daedalus.solver.LandmarkHeuristic;
 import com.daedalus.solver.solvers.AStarSolver;
+import com.daedalus.theory.BipartiteMatching;
 import com.daedalus.theory.FacilityPlacement;
 import com.daedalus.theory.MazeFlow;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,15 +30,18 @@ import java.util.List;
  * questions asked before a request arrives: how much capacity is there, where should things live,
  * and what does the network look like under failure.
  *
- * <p>Four demonstrations:
+ * <p>Six demonstrations:
  * <ol>
  *   <li><b>Topology</b> — a Hilbert curve, chosen for locality: nearby nodes in the 1-D ordering
  *       stay nearby in 2-D.</li>
  *   <li><b>Capacity</b> — min-cut as the bottleneck between two points (CLRS Ch. 26).</li>
  *   <li><b>Placement</b> — k-center for replicas / edge caches (CLRS Ch. 35).</li>
+ *   <li><b>Assignment</b> — bipartite b-matching of a request batch onto those replicas
+ *       under per-replica capacity (CLRS Ch. 26; ADR-010).</li>
  *   <li><b>Routing</b> — latency-aware A*, with load in the edge cost and an admissible
  *       heuristic. This is the corrected pattern; putting load into the heuristic silently
  *       breaks optimality.</li>
+ *   <li><b>Non-grid</b> — the same engine over a spine-and-leaf {@link CsrGraph}.</li>
  * </ol>
  *
  * <p>The last section builds a {@link CsrGraph} instead, to show the engine accepting a topology
@@ -55,8 +60,9 @@ public final class TopologyLab {
         report("1. TOPOLOGY", describeTopology(topology));
         report("2. CAPACITY", describeCapacity(topology));
         report("3. PLACEMENT", describePlacement(topology));
-        report("4. ROUTING", describeRouting(topology));
-        report("5. NON-GRID TOPOLOGY", describeServiceMesh());
+        report("4. ASSIGNMENT", describeAssignment(topology));
+        report("5. ROUTING", describeRouting(topology));
+        report("6. NON-GRID TOPOLOGY", describeServiceMesh());
     }
 
     /**
@@ -141,6 +147,40 @@ public final class TopologyLab {
         out.append("   Radius is the worst-case hops to the nearest replica. Greedy is a"
                 + "\n   2-approximation, and nothing polynomial does better unless P=NP.");
         return out.toString().stripTrailing();
+    }
+
+    /**
+     * Place a batch of requests onto the k-center replicas under per-replica capacity.
+     * First-fit would strand a request that can only use a seat someone else took;
+     * max-flow reassigns. Capacity 1 cannot cover 16 requests with 4 replicas.
+     */
+    static String describeAssignment(MazeGrid topology) {
+        List<Point> facilities = FacilityPlacement.kCenter(topology, 4).facilities();
+        List<Point> requests = sampleRequests(topology);
+        BipartiteMatching.Placement tight = BipartiteMatching.assignToFacilities(
+                topology, requests, facilities, 1, Integer.MAX_VALUE);
+        BipartiteMatching.Placement roomy = BipartiteMatching.assignToFacilities(
+                topology, requests, facilities, 4, Integer.MAX_VALUE);
+        return "requests=" + requests.size()
+                + "  replicas=" + facilities.size()
+                + "\n   capacity1 assigned=" + tight.pairs().size()
+                + " unmatched=" + tight.unmatchedRequests()
+                + "\n   capacity4 assigned=" + roomy.pairs().size()
+                + " unmatched=" + roomy.unmatchedRequests()
+                + " — four replicas of capacity 1 cannot take sixteen requests; raising"
+                + "\n   capacity to 4 fills every seat. This is b-matching, not a path.";
+    }
+
+    /** A 4×4 lattice of request sites on the topology — deterministic, no seed. */
+    static List<Point> sampleRequests(MazeGrid topology) {
+        List<Point> requests = new ArrayList<>();
+        int step = Math.max(1, topology.rows() / 4);
+        for (int r = 0; r < topology.rows(); r += step) {
+            for (int c = 0; c < topology.cols(); c += step) {
+                requests.add(new Point(r, c));
+            }
+        }
+        return requests;
     }
 
     /**

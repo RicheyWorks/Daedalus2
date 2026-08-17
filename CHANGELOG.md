@@ -55,6 +55,14 @@ under the `_migration/` portfolios.
   than double Prim's diameter). A diameter test pins the order and refuses a
   Hamiltonian snake.
 
+- **Bipartite b-matching (ADR-010 / ADR-001 appendix 3).** `BipartiteMatching` assigns
+  a batch of requests to servers under per-server capacity — the selection question
+  A* cannot answer. The LoadBalancerPro strategy seam is still closed; this is the
+  offline primitive, same posture as capacitated flow. First-fit is not a substitute:
+  the test that pins the class is the fixture first-fit gets wrong. The topology
+  example assigns a lattice of request sites onto k-center replicas and shows
+  capacity leaving seats unmatched.
+
 ### Fixed
 
 - **The web UI answered 401 in prod, and the spectator permalink never worked.** `GET /` and

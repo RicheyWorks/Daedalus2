@@ -8,6 +8,7 @@ import com.daedalus.engine.generators.HilbertCurveGenerator;
 import com.daedalus.graph.CsrGraph;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
+import com.daedalus.theory.BipartiteMatching;
 import com.daedalus.theory.FacilityPlacement;
 import com.daedalus.theory.MazeFlow;
 import org.junit.jupiter.api.Test;
@@ -126,12 +127,29 @@ class TopologyLabTest {
     }
 
     @Test
+    void raisingReplicaCapacityNeverLeavesMoreRequestsUnmatched() {
+        MazeGrid topology = TopologyLab.buildTopology();
+        var facilities = FacilityPlacement.kCenter(topology, 4).facilities();
+        var requests = TopologyLab.sampleRequests(topology);
+
+        var one = BipartiteMatching.assignToFacilities(
+                topology, requests, facilities, 1, Integer.MAX_VALUE);
+        var four = BipartiteMatching.assignToFacilities(
+                topology, requests, facilities, 4, Integer.MAX_VALUE);
+
+        assertThat(one.unmatchedRequests()).isGreaterThan(0);
+        assertThat(four.unmatchedRequests()).isLessThanOrEqualTo(one.unmatchedRequests());
+        assertThat(four.pairs().size() + four.unmatchedRequests()).isEqualTo(requests.size());
+    }
+
+    @Test
     void demoRunsEndToEnd() {
         MazeGrid topology = TopologyLab.buildTopology();
 
         assertThat(TopologyLab.describeTopology(topology)).contains("nodes=");
         assertThat(TopologyLab.describeCapacity(topology)).contains("edgeConnectivity=");
         assertThat(TopologyLab.describePlacement(topology)).contains("k=1");
+        assertThat(TopologyLab.describeAssignment(topology)).contains("unmatched=");
         assertThat(TopologyLab.describeServiceMesh()).contains("spineDegree=3");
     }
 }
