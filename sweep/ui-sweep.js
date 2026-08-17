@@ -138,7 +138,14 @@ async function check(name, fn) {
       await page.keyboard.press(k); await page.waitForTimeout(150);
     }
     const after = await page.evaluate(() => JSON.stringify(state.session.positions));
-    return [before !== after, `player moved via arrow keys`];
+    const trail = await page.evaluate(() => {
+      const t = Object.values(state.trails)[0] || [];
+      for (let i = 1; i < t.length; i++) {
+        if (Math.abs(t[i].row - t[i-1].row) + Math.abs(t[i].col - t[i-1].col) !== 1) return 0;
+      }
+      return t.length;
+    });
+    return [before !== after && trail >= 2, `player moved via arrow keys; trail ${trail} cells`];
   });
 
   await check('G. living maze erodes in UI', async () => {
@@ -259,9 +266,22 @@ async function check(name, fn) {
     const f = await page.evaluate(() => ({
       seen: state.fog.seen.size,
       open: (state.fog.open || []).length,
+      walk: (state.fog.walk || []).length,
     }));
-    return [form.login && form.user && form.fog && f.seen === 1 && f.open > 0,
-        `login form present; fog opened with ${f.seen} seen cell, ${f.open} openings`];
+    const key = {NORTH:'ArrowUp', SOUTH:'ArrowDown', WEST:'ArrowLeft', EAST:'ArrowRight'}
+        [(await page.evaluate(() => (state.fog.open || [])[0]))];
+    if (key) {
+      await page.keyboard.press(key);
+      await page.waitForFunction(() => state.fog.walk && state.fog.walk.length === 2,
+          null, {timeout:10000});
+    }
+    const walked = await page.evaluate(() => {
+      const w = state.fog.walk || [];
+      if (w.length < 2) return false;
+      return Math.abs(w[1].row - w[0].row) + Math.abs(w[1].col - w[0].col) === 1;
+    });
+    return [form.login && form.user && form.fog && f.seen === 1 && f.open > 0 && walked,
+        `login form present; fog opened with ${f.seen} seen cell, then a 4-adjacent step`];
   });
 
   await check('R. ASCII is negotiated as text/plain, not drawn from tiles', async () => {

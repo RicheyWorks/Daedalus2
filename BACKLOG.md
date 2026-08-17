@@ -233,8 +233,8 @@ Last consolidated: 2026-08-17
   walks the agent API and paints only stood-on cells. Show ASCII uses
   `Accept: text/plain`; the plugin panel lists `GET /plugins`. The
   leaderboard Algorithm select is `?generator=`, disabled when `maze=`
-  already owns the board. Solver routes paint corridor tiles, not a
-  polyline through the walls.
+  already owns the board. Solver routes, player trails, fog walks, and
+  the ghost all paint corridor tiles, not a polyline through the walls.
 
 - ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`
   uploads every module's JaCoCo XML to Codecov via `codecov-action@v5`,

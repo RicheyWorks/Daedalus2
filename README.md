@@ -59,7 +59,8 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   and disables the select, because maze wins if both are sent. Solver
   routes paint the cells and openings of a 4-walk — a fat polyline through
   cell centers cut the corner posts, which made wall-follower and Trémaux
-  look like they walked through walls.
+  look like they walked through walls. Player trails, fog walks, and the
+  ghost use the same corridor painter.
 - **Deterministic across restarts, not just across a cache hit.** Same seed,
   same answer, on a process that has never seen the request before.
   `DeterminismGoldenTest` compares 23 endpoints — seeded generation, the seeded

@@ -122,6 +122,12 @@ under the `_migration/` portfolios.
   across a non-adjacent pair, put a marker on the walk head, and scale the
   reveal to path length.
 
+- **Play, fog, and the ghost walk the same corridors.** Solver routes painted
+  openings; a player trail was still dots at cell centers, fog was a marker
+  on the void, and the ghost jumped. All three now feed `paintWalk` — the
+  fog walk is the ordered agent path (not the seen-set), and the ghost is
+  start plus every `to` whose clock has elapsed.
+
 ### Fixed
 
 - **Signed-in live frames could not connect in prod.** `/ws/**` required a

@@ -1277,10 +1277,10 @@ async function summonGhost() {
   let run;
   try { run = await api(`/maze/${state.maze.id}/ghost`); }
   catch (ignored) { return; } // 404 — nobody has finished this maze yet
+  const start = state.session.positions[state.session.primary];
   state.ghost = {
     moves: run.moves, name: run.playerName, score: run.score, elapsedMs: run.elapsedMs,
-    started: performance.now(), pos: state.session.positions[state.session.primary],
-    done: false,
+    started: performance.now(), pos: start, start, done: false,
   };
   log("player", `ghost summoned: ${run.playerName}'s best run `
       + `(${(run.elapsedMs / 1000).toFixed(1)}s, score ${run.score}) — beat it`);
@@ -1877,6 +1877,19 @@ function pathRevealMs(n) {
   return Math.min(5000, Math.max(700, (n || 0) * 14));
 }
 
+/** The ghost's walked prefix so far — start plus every `to` whose clock has elapsed. */
+function ghostWalk() {
+  const g = state.ghost;
+  if (!g || !g.start) return [];
+  const e = performance.now() - g.started;
+  const pts = [g.start];
+  for (const m of g.moves || []) {
+    if (m.tMs <= e) pts.push(m.to);
+    else break;
+  }
+  return pts;
+}
+
 function marker(g, p, color, radius) {
   const [x, y] = cellCenter(p);
   g.fillStyle = color;
@@ -1898,6 +1911,11 @@ function applyFogView(view) {
   state.fog.arrived = view.arrived;
   state.fog.expired = view.expired;
   state.fog.seen.add(cellKey(view.position.row, view.position.col));
+  if (!state.fog.walk) state.fog.walk = [];
+  const last = state.fog.walk[state.fog.walk.length - 1];
+  if (!last || last.row !== view.position.row || last.col !== view.position.col) {
+    state.fog.walk.push(view.position);
+  }
 }
 
 function seenCell(r, c) {
@@ -1992,6 +2010,7 @@ function draw() {
 
   // God-mode overlays leak the maze. Fog is the agent contract: position, openings, goal.
   if (state.fog) {
+    paintWalk(g, state.fog.walk, PLAYER_COLORS[0], 1, 0.45);
     marker(g, state.fog.position, PLAYER_COLORS[0], 0.42);
     if (state.fog.goal) marker(g, state.fog.goal, COLORS.goal, 0.34);
     return;
@@ -2148,18 +2167,13 @@ function draw() {
       }
     });
   }
-  // Breadcrumb trails: where each player has actually walked.
+  // Breadcrumb trails: the same 4-walk as a solver route, not dots that skip the openings.
   Object.entries(state.trails).forEach(([name, points], i) => {
-    g.fillStyle = PLAYER_COLORS[i % PLAYER_COLORS.length];
-    g.globalAlpha = 0.28;
-    points.forEach(p => {
-      const [x, y] = cellCenter(p);
-      g.beginPath();
-      g.arc(x, y, geom.cell * 0.16, 0, 2 * Math.PI);
-      g.fill();
-    });
-    g.globalAlpha = 1;
+    paintWalk(g, points, PLAYER_COLORS[i % PLAYER_COLORS.length], 1, 0.32);
   });
+  if (state.session && state.ghost) {
+    paintWalk(g, ghostWalk(), "#e6edf3", 1, 0.28);
+  }
   if (start) marker(g, start, COLORS.start, 0.34);
   if (goal)  marker(g, goal,  COLORS.goal,  0.34);
   if (state.session) {
