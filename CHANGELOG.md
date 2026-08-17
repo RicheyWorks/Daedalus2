@@ -138,6 +138,14 @@ under the `_migration/` portfolios.
   polling rebuilds the walk from the snapshot instead of teleporting the
   marker. Subjects stay off the body.
 
+- **The waypoint tour paints the Held-Karp walk, not just the coins.**
+  `WaypointTour` already built every cell of the optimal route; the product
+  `Tour` dropped it and the page drew diamonds on the stops. You were
+  scored against a corridor you could not see. `GET /maze/{id}/tour` now
+  includes `path` (start through goal, `optimalCost` hops), and the UI
+  feeds it to `paintWalk`. A living tick already refetches the tour, so
+  the walk moves with the score (ADR-014).
+
 ### Fixed
 
 - **Signed-in live frames could not connect in prod.** `/ws/**` required a

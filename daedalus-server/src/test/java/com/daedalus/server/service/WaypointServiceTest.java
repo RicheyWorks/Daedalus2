@@ -176,6 +176,26 @@ class WaypointServiceTest {
         var b = fresh.tourFor(mazeId, 4);
         assertThat(b.waypoints()).isEqualTo(a.waypoints());
         assertThat(b.optimalCost()).isEqualTo(a.optimalCost());
+        assertThat(b.path()).isEqualTo(a.path());
+    }
+
+    @Test
+    void theOptimalPathIsTheWalkTheCostCounts() {
+        var tour = waypoints.tourFor(mazeId, 4);
+        assertThat(tour.path()).isNotEmpty();
+        assertThat(tour.path().getFirst()).isEqualTo(grid.start());
+        assertThat(tour.path().getLast()).isEqualTo(grid.goal());
+        assertThat(tour.path().size() - 1)
+                .as("optimalCost is path hops, not a separate estimate")
+                .isEqualTo(tour.optimalCost());
+        for (int i = 1; i < tour.path().size(); i++) {
+            Point a = tour.path().get(i - 1);
+            Point b = tour.path().get(i);
+            assertThat(Math.abs(a.row() - b.row()) + Math.abs(a.col() - b.col()))
+                    .as("tour path hops through a wall at %s -> %s", a, b)
+                    .isEqualTo(1);
+        }
+        assertThat(tour.path()).containsAll(tour.waypoints());
     }
 
     @Test

@@ -141,10 +141,13 @@ public class InsightController {
             description = "Waypoints are placed by k-center (farthest-first), so they spread "
                     + "rather than clump, and they derive from the maze alone — every player on "
                     + "a maze solves the same instance, which is what makes scoring against the "
-                    + "optimum comparable between players. Placement freezes on first ask; a "
-                    + "living tick rescores Held-Karp on the current grid (ADR-014) so the "
-                    + "optimum is not a recording of a maze that no longer exists. Rate-limited "
-                    + "against the 'mazeSolve' budget.")
+                    + "optimum comparable between players. The response includes the cell walk "
+                    + "Held-Karp already built (path), not just the stop order — a late client "
+                    + "should not have to re-solve the corridors to paint the route it is "
+                    + "scored against. Placement freezes on first ask; a living tick rescores "
+                    + "Held-Karp on the current grid (ADR-014) so the optimum is not a "
+                    + "recording of a maze that no longer exists. Rate-limited against the "
+                    + "'mazeSolve' budget.")
     @PerKeyRateLimit("mazeSolve")
     public ResponseEntity<WaypointService.Tour> tour(
             @PathVariable UUID id,

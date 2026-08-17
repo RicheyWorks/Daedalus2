@@ -35,14 +35,16 @@ class WebUiSmokeTest {
         String html = new String(body);
         // Contract, not implementation: the page talks to the versioned API and the STOMP
         // endpoint, can sign in, open a fog-of-war walk, negotiate ASCII, list plugins,
-        // ask the per-generator leaderboard, and hydrate a spectator walk from the
-        // session snapshot. If any of those disappear, the UI broke or moved.
+        // ask the per-generator leaderboard, hydrate a spectator walk from the
+        // session snapshot, and paint the Held-Karp tour walk. If any of those
+        // disappear, the UI broke or moved.
         assertThat(html).contains("DAEDALUS").contains("/api/v1").contains("/ws")
                 .contains("/auth/login").contains("id=\"login\"").contains("id=\"fog\"")
                 .contains("Authorization").contains("text/plain").contains("id=\"ascii\"")
                 .contains("/plugins").contains("id=\"pluginBox\"")
                 .contains("id=\"lbGen\"").contains("generator=")
                 .contains("paintWalk").contains("ghostWalk")
-                .contains("sessionWalk").contains("#session=");
+                .contains("sessionWalk").contains("#session=")
+                .contains("tourWalk");
     }
 }

@@ -1075,7 +1075,8 @@ async function startTour() {
     return;
   }
   log("state", `waypoint hunt: collect ${t.waypoints.length} waypoints then reach the goal — `
-      + `the optimal route is ${t.optimalCost} steps`);
+      + `the optimal route is ${t.optimalCost} steps`
+      + (t.path && t.path.length ? ` (${t.path.length} cells)` : ""));
   if (!state.session) await play();
   draw();
   refreshTourStatus();
@@ -1917,6 +1918,11 @@ function pathRevealMs(n) {
   return Math.min(5000, Math.max(700, (n || 0) * 14));
 }
 
+/** The Held-Karp walk the tour scores against — coins are stops; this is the corridor. */
+function tourWalk() {
+  return (state.tour && state.tour.path) || [];
+}
+
 /** The ghost's walked prefix so far — start plus every `to` whose clock has elapsed. */
 function ghostWalk() {
   const g = state.ghost;
@@ -2167,6 +2173,11 @@ function draw() {
   // Hardest route: the longest simple walk, drawn under the waypoints so both stay readable.
   if (state.hardest && state.hardest.path && state.hardest.path.length) {
     paintWalk(g, state.hardest.path, "#f2c94c", 1, 0.75);
+  }
+  // Waypoint hunt: the optimal corridor first (the number you are scored against), then coins.
+  const hunt = tourWalk();
+  if (hunt.length) {
+    paintWalk(g, hunt, "#9ecbff", 1, 0.38);
   }
   // Waypoint hunt: uncollected waypoints are solid, collected ones hollow.
   if (state.tour && state.tour.waypoints) {

@@ -57,9 +57,19 @@ import java.util.UUID;
 @Service
 public class WaypointService {
 
-    /** A maze's waypoint set and the best possible route through it. */
+    /**
+     * A maze's waypoint set and the best possible route through it.
+     *
+     * @param mazeId       the maze
+     * @param waypoints    the coins (never start or goal)
+     * @param optimalOrder stops in Held-Karp order, goal last
+     * @param optimalCost  steps walked ({@code path.size() - 1}); {@code -1} if infeasible
+     * @param feasible     false when some stop is unreachable
+     * @param path         every cell of that walk, start through goal; empty if infeasible.
+     *                     The order list is the coins; this is the corridor they sit on.
+     */
     public record Tour(UUID mazeId, List<Point> waypoints, List<Point> optimalOrder,
-                       int optimalCost, boolean feasible) {}
+                       int optimalCost, boolean feasible, List<Point> path) {}
 
     /**
      * How a session is doing against that optimum.
@@ -164,7 +174,8 @@ public class WaypointService {
         List<Point> stops = new java.util.ArrayList<>(waypoints);
         stops.add(grid.goal());
         var tour = WaypointTour.shortestTour(grid, grid.start(), stops);
-        return new Tour(mazeId, waypoints, tour.order(), tour.totalCost(), tour.feasible());
+        return new Tour(mazeId, waypoints, tour.order(), tour.totalCost(), tour.feasible(),
+                tour.path());
     }
 
     /** Records a pickup when a player steps onto a waypoint of their session's maze. */

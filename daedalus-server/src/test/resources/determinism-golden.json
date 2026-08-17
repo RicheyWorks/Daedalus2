@@ -10,7 +10,7 @@
   "GET /maze/{id}heuristic-lens LANDMARK" : "04fb6e4c974fedd5",
   "GET /maze/{id}heuristic-lens MANHATTAN" : "08b2bf2b43ff6d40",
   "GET /maze/{id}sanctuaries k=5" : "231217b06b343704",
-  "GET /maze/{id}tour k=5" : "2fd030985d905bf1",
+  "GET /maze/{id}tour k=5" : "d27677a66cc2ab0a",
   "GET /tournament seed=99" : "9134299cfbe5f0e3",
   "POST /maze/generate seed=424242" : "82ddb221127dfb27",
   "POST /maze/{id}/solve/astar" : "d50e3fa023e617bd",

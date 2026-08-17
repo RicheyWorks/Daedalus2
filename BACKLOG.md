@@ -237,7 +237,8 @@ Last consolidated: 2026-08-17
   the ghost all paint corridor tiles, not a polyline through the walls.
   A `#session=` spectator hydrates that walk from the snapshot trail
   (positions alone are a seat) and keeps the session hash so a refresh
-  still spectates.
+  still spectates. Hunt waypoints paints the Held-Karp `path` through
+  the openings, not only the coins you are scored against.
 
 - ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`
   uploads every module's JaCoCo XML to Codecov via `codecov-action@v5`,
