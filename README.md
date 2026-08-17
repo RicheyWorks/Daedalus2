@@ -62,8 +62,11 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   look like they walked through walls. Player trails, fog walks, and the
   ghost use the same corridor painter. A `#session=` spectator loads the
   opening player's recorded trail from the snapshot so the walk is on
-  the canvas before the next frame arrives. Hunt waypoints paints the
-  Held-Karp `path`, not only the coins.
+  the   canvas before the next frame arrives. Hunt waypoints paints the
+  Held-Karp `path`, not only the coins. Permalinks keep their kind
+  (`#daily`, `#campaign=`, `#generator=`) instead of collapsing to
+  `#maze=`. `GET /session/{id}/tour` does not mint the coins; a
+  spectator hydrates a hunt or ghost that already exists.
 - **Deterministic across restarts, not just across a cache hit.** Same seed,
   same answer, on a process that has never seen the request before.
   `DeterminismGoldenTest` compares 23 endpoints — seeded generation, the seeded
@@ -166,7 +169,7 @@ public consumers).
 | `GET` | `/api/v1/complexity?generator=&metric=` | required | Measure a generator's real growth curve and report its big-O with an R² (ADR-007) |
 | `GET` | `/api/v1/complexity/metrics` | required | Which metrics `/complexity` can be asked for |
 | `GET` | `/api/v1/maze/{id}/tour?count=` | required | Waypoints plus the provably optimal route collecting them all, including the cell `path` Held-Karp already walked (ADR-007) |
-| `GET` | `/api/v1/session/{id}/tour` | public | Server-observed progress against that optimum |
+| `GET` | `/api/v1/session/{id}/tour` | public | Server-observed progress against that optimum. A read: 404 `tour` until someone has asked `GET /maze/{id}/tour`; does not freeze coins |
 | `GET` | `/api/v1/campaign?seed=` | required | A deterministic, difficulty-graded ladder of stages; omit the seed for today's (ADR-006). The finale declares `hardening` so the client starts `/live?seal=` (ADR-008) |
 | `POST` | `/api/v1/maze/breed?a=&b=&seed=` | required | Crossbreed two equal-sized mazes into a connected child (ADR-006) |
 | `GET` | `/api/v1/session/{id}` | public | Read-only session snapshot — the spectator entry point (`#session=` permalink). Includes the opening player's recorded trail so a late arrival can paint the walk |

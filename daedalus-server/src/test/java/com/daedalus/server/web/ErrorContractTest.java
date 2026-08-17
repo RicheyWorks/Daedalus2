@@ -277,6 +277,20 @@ class ErrorContractTest {
         assertProblemDetail("complexity, unmeasured metric", badMetric);
         assertThat(badMetric.json().get("kind").asText()).isEqualTo("metric");
         assertThat(badMetric.json().get("detail").asText()).contains("cellsVisited");
+
+        // Session tour: unknown session versus open session whose maze has no tour yet.
+        // The second used to mint the puzzle — a public GET that wrote the instance.
+        Answer opened = send(HttpMethod.POST, "/api/v1/maze/" + mazeId + "/session?player=watcher",
+                null, null);
+        String sessionId = opened.json().get("sessionId").asText();
+        Answer noTourYet = send(HttpMethod.GET, "/api/v1/session/" + sessionId + "/tour",
+                null, null);
+        assertProblemDetail("session tour, no hunt yet", noTourYet);
+        assertThat(noTourYet.json().get("kind").asText()).isEqualTo("tour");
+        Answer noSession = send(HttpMethod.GET, "/api/v1/session/" + UUID_SHAPED + "/tour",
+                null, null);
+        assertProblemDetail("session tour, no such session", noSession);
+        assertThat(noSession.json().get("kind").asText()).isEqualTo("session");
     }
 
     @Test

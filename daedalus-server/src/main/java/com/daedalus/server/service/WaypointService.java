@@ -196,19 +196,30 @@ public class WaypointService {
     }
 
     /**
-     * A session's progress against the optimal tour.
+     * A session's progress against an already-placed tour.
      *
-     * @return {@code null} when the session or its maze is unknown
+     * <p>This is a read. {@link #tourFor} is what freezes the coins; calling this
+     * on a maze nobody has hunted must not mint a puzzle. The spectator permalink
+     * is public in prod, and a GET that places waypoints would let a lurker write
+     * the instance the players then have to collect.
+     *
+     * @return {@code null} when the session is unknown, its maze is gone, or
+     *         nobody has asked {@code GET /maze/{id}/tour} yet
      */
     public Progress progressFor(UUID sessionId) {
         var session = sessions.find(sessionId);
         if (session == null) {
             return null;
         }
-        Tour tour = tourFor(session.mazeId(), null);
-        if (tour == null) {
+        List<Point> waypoints = placements.getIfPresent(session.mazeId() + ":" + defaultCount);
+        if (waypoints == null) {
             return null;
         }
+        var cached = gen.find(session.mazeId());
+        if (cached == null) {
+            return null;
+        }
+        Tour tour = score(session.mazeId(), cached.grid(), waypoints);
         Set<Point> got = collected.getIfPresent(sessionId);
         Set<Point> snapshot = got == null ? Set.of() : Set.copyOf(got);
         List<Point> remaining = tour.waypoints().stream()

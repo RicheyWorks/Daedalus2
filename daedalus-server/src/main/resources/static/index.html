@@ -578,7 +578,7 @@ function updateInfo() {
 }
 $("generator").addEventListener("change", updateInfo);
 $("solver").addEventListener("change", updateInfo);
-$("lbGen").addEventListener("change", () => refreshLeaderboard());
+$("lbGen").addEventListener("change", () => { refreshLeaderboard(); pinHash(); });
 
 async function generate() {
   const body = {
@@ -606,6 +606,7 @@ async function generate() {
     method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body),
   });
   adoptMaze(maze, performance.now() - t0);
+  pinHash();
 }
 
 /** Install a maze into the UI — from a fresh generate, a #maze=<id> permalink, or the daily. */
@@ -647,7 +648,6 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   state.tour = null; state.tourGot = [];
   state.stageIndex = null; // playStage re-sets this after adopting the stage's maze
   $("compareBox").innerHTML = "";
-  location.hash = "maze=" + maze.id; // shareable — anyone on this server can open it
   $("status").textContent = "arrow keys move once a session is open";
   $("stats").innerHTML =
       `<span>maze</span> ${maze.id.slice(0, 8)}&hellip;<br>`
@@ -671,6 +671,7 @@ async function loadDaily() {
   const d = await api("/maze/daily");
   adoptMaze(d.maze, null, `daily challenge ${d.date}`);
   state.dailyId = d.maze.id; // after adoptMaze (which clears it) — scopes the leaderboard
+  pinHash();
   refreshLeaderboard();
   log("state", `daily challenge ${d.date} — the whole world plays this maze today`);
 }
@@ -737,6 +738,7 @@ async function playStage(index) {
   adoptMaze(maze, null, `campaign stage ${index + 1}`);
   state.stageIndex = index; // after adoptMaze, which resets per-maze state
   state.dailyId = null;
+  pinHash();
   renderCampaign();
   log("state", `stage ${index + 1}/${state.campaign.stages.length} — ${stage.name}: `
       + `${stage.grade.label} (${stage.grade.score}), route ${stage.grade.routeLength} cells, `
@@ -773,27 +775,84 @@ async function crossbreed() {
   const child = await api(`/maze/breed?a=${state.prevMazeId}&b=${state.maze.id}`,
       {method: "POST"});
   adoptMaze(child, null, "crossbreeding");
+  pinHash();
   log("state", "bred a child of the last two mazes — patches of both, repaired to one "
       + "connected maze (breed again to keep the lineage going)");
 }
 
-/** #maze=, #session= or #campaign= permalink: load a maze, spectate, or run a campaign. */
+/**
+ * Shareable address-bar state. adoptMaze used to write #maze= unconditionally, which
+ * turned a campaign link into a mute maze, a daily into an unscoped board, and a
+ * spectator refresh into "just this topology". One writer, one reader.
+ *
+ * Exclusive kinds, first match wins: session, campaign, daily, maze, generator.
+ */
+function parseHash() {
+  const raw = (location.hash || "").replace(/^#/, "");
+  if (!raw) return {};
+  if (raw === "daily") return {daily: true};
+  const out = {};
+  raw.split("&").forEach(part => {
+    if (part === "daily") { out.daily = true; return; }
+    const eq = part.indexOf("=");
+    if (eq < 0) return;
+    out[decodeURIComponent(part.slice(0, eq))] = decodeURIComponent(part.slice(eq + 1));
+  });
+  return out;
+}
+
+function currentPermalink() {
+  if (state.session && state.readOnly) return {session: state.session.id};
+  if (state.campaign && state.stageIndex != null) return {campaign: String(state.campaign.seed)};
+  if (state.dailyId && state.maze && state.maze.id === state.dailyId) return {daily: true};
+  if (state.maze) return {maze: state.maze.id};
+  const g = $("lbGen") && $("lbGen").value;
+  if (g) return {generator: g};
+  return {};
+}
+
+function pinHash() {
+  const p = currentPermalink();
+  let next = "";
+  if (p.session) next = "session=" + p.session;
+  else if (p.campaign != null) next = "campaign=" + p.campaign;
+  else if (p.daily) next = "daily";
+  else if (p.maze) next = "maze=" + p.maze;
+  else if (p.generator) next = "generator=" + encodeURIComponent(p.generator);
+  const want = next ? "#" + next : "";
+  if (location.hash !== want) location.hash = next;
+}
+
+/** #session=, #campaign=, #daily, #maze= or #generator=: restore the view that hash names. */
 async function loadFromHash() {
-  const camp = location.hash.match(/#campaign=(-?\d+)/);
-  if (camp) {
-    try { await loadCampaign(Number(camp[1])); }
+  const h = parseHash();
+  if (h.session) { await spectate(h.session); return; }
+  if (h.campaign != null && h.campaign !== "") {
+    try { await loadCampaign(Number(h.campaign)); }
     catch (e) { log("err", `campaign permalink failed (${e.message})`); }
     return;
   }
-  const s = location.hash.match(/#session=([0-9a-f-]{36})/);
-  if (s) { await spectate(s[1]); return; }
-  const m = location.hash.match(/#maze=([0-9a-f-]{36})/);
-  if (!m) return;
-  try {
-    adoptMaze(await api(`/maze/${m[1]}`), null);
-    log("state", "loaded maze from permalink");
-  } catch (e) {
-    log("err", `permalink maze not found on this server (${e.message})`);
+  if (h.daily) {
+    try { await loadDaily(); }
+    catch (e) { log("err", `daily permalink failed (${e.message})`); }
+    return;
+  }
+  if (h.maze) {
+    try {
+      adoptMaze(await api(`/maze/${h.maze}`), null);
+      pinHash();
+      log("state", "loaded maze from permalink");
+    } catch (e) {
+      log("err", `permalink maze not found on this server (${e.message})`);
+    }
+    return;
+  }
+  if (h.generator && $("lbGen")) {
+    const opt = [...$("lbGen").options].some(o => o.value === h.generator);
+    if (opt) {
+      $("lbGen").value = h.generator;
+      await refreshLeaderboard();
+    }
   }
 }
 
@@ -811,16 +870,15 @@ async function spectate(sessionId) {
   try { view = await api(`/session/${sessionId}`); }
   catch (e) { log("err", `session not found on this server (${e.message})`); return; }
   adoptMaze(await api(`/maze/${view.mazeId}`), null, "spectated session");
-  // adoptMaze writes #maze=; keep the permalink that got us here so a refresh
-  // still spectates instead of dropping into a mute maze.
-  location.hash = "session=" + view.sessionId;
   adoptSessionView(view);
   state.readOnly = true;
+  pinHash();
   $("status").textContent = `spectating session ${view.sessionId.slice(0, 8)}… — read-only`;
   $("join").disabled = false;
   $("join").textContent = "Join this session";
   $("join").title = "Join as the name in the player field (needs daedalus.session.multiplayer)";
   log("state", `spectating ${Object.keys(view.players).join(", ")} — moves arrive live`);
+  await hydrateSpectatorOverlays(view);
   resubscribe();
   if (!state.stomp) {
     clearInterval(state.spectatePoll);
@@ -877,6 +935,22 @@ function mazeStart(maze) {
     }
   }
   return null;
+}
+
+/**
+ * Overlays the player already turned on — a hunt, a ghost — without minting them.
+ * GET /session/{id}/tour is a read (404 if nobody asked /maze/{id}/tour). Ghost 404
+ * is "no finished run yet".
+ */
+async function hydrateSpectatorOverlays(view) {
+  try {
+    const p = await api(`/session/${view.sessionId}/tour`);
+    const t = await api(`/maze/${view.mazeId}/tour?count=${p.total}`);
+    state.tour = t;
+    state.tourGot = (t.waypoints || []).filter(w => !(p.remaining || []).some(r => sameCell(r, w)));
+    log("state", `spectating a waypoint hunt — ${p.collected}/${p.total} collected`);
+  } catch (ignored) { /* no tour minted; do not create one */ }
+  await summonGhost();
 }
 
 // ---------- living mazes (ADR-006) ----------
@@ -1681,6 +1755,7 @@ async function join() {
       state.readOnly = false;
       state.session.primary = name;
       state.joined = null;
+      pinHash();
       $("join").textContent = "Join as second player";
       $("status").textContent = `session ${state.session.id.slice(0, 8)}… — arrow keys to move`;
       log("player", `${name} joined the spectated session`);

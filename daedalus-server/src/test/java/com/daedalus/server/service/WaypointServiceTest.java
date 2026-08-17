@@ -199,6 +199,18 @@ class WaypointServiceTest {
     }
 
     @Test
+    void readingProgressDoesNotMintATour() {
+        var session = sessions.open(mazeId, "p", grid.start());
+        assertThat(waypoints.progressFor(session.id()))
+                .as("a spectator GET must not freeze coins the players then have to collect")
+                .isNull();
+        assertThat(waypoints.tourFor(mazeId, 4)).isNotNull();
+        assertThat(waypoints.progressFor(session.id()))
+                .as("once someone has asked for the tour, progress is a read")
+                .isNotNull();
+    }
+
+    @Test
     void collectionIsObservedFromRealMovesNotClaimedByTheClient() {
         var tour = waypoints.tourFor(mazeId, 4);
         var session = sessions.open(mazeId, "p", grid.start());

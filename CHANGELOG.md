@@ -146,6 +146,18 @@ under the `_migration/` portfolios.
   feeds it to `paintWalk`. A living tick already refetches the tour, so
   the walk moves with the score (ADR-014).
 
+- **Shared views tell the truth, and a spectator GET no longer writes the
+  puzzle.** Three lies, one seam. `adoptMaze` always wrote `#maze=`, so a
+  campaign link became a mute maze, Daily lost its scoped board on
+  refresh, and `#generator=` did not exist. One `pinHash` writer keeps
+  `#session=`, `#campaign=`, `#daily`, `#maze=`, or `#generator=` —
+  whichever kind the page is actually in. `GET /session/{id}/tour` used
+  to call `tourFor`, which freezes coins: a public spectator hit minted
+  the instance the players then had to collect. Progress is a read;
+  unknown session and "no hunt yet" are different 404s (same distinction
+  the ghost learned). A `#session=` arrival hydrates the hunt (if one
+  was asked) and the ghost (if one exists) without creating either.
+
 ### Fixed
 
 - **Signed-in live frames could not connect in prod.** `/ws/**` required a

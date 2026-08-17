@@ -6,6 +6,7 @@ import com.daedalus.api.dto.AnalysisResponse;
 import com.daedalus.engine.Braider;
 import com.daedalus.server.ratelimit.PerKeyRateLimit;
 import com.daedalus.server.web.ResourceNotFoundException;
+import com.daedalus.server.service.GameSessionService;
 import com.daedalus.server.service.GhostService;
 import com.daedalus.server.service.HardestRouteService;
 import com.daedalus.server.service.HeuristicLensService;
@@ -47,6 +48,7 @@ import java.util.UUID;
 public class InsightController {
 
     private final MazeGenerationService gen;
+    private final GameSessionService sessions;
     private final GhostService ghosts;
     private final WaypointService waypoints;
     private final ComplexityLabService complexity;
@@ -56,7 +58,8 @@ public class InsightController {
     private final TournamentService tournaments;
     private final HeuristicLensService lens;
 
-    public InsightController(MazeGenerationService gen, GhostService ghosts,
+    public InsightController(MazeGenerationService gen, GameSessionService sessions,
+                             GhostService ghosts,
                              WaypointService waypoints, ComplexityLabService complexity,
                              FingerprintService fingerprints,
                              HardestRouteService hardestRoutes,
@@ -64,6 +67,7 @@ public class InsightController {
                              TournamentService tournaments,
                              HeuristicLensService lens) {
         this.gen = gen;
+        this.sessions = sessions;
         this.ghosts = ghosts;
         this.waypoints = waypoints;
         this.complexity = complexity;
@@ -161,23 +165,29 @@ public class InsightController {
      * Metered on {@code mazeSolve} because of what it calls, not what it looks like.
      *
      * <p>This reads as a cheap progress lookup, and the limiter was originally left off on that
-     * reading. It is not: {@code progressFor} calls {@code tourFor}, so a request that misses the
-     * tour cache runs Held-Karp — the same {@code O(2^k · k²)} the sibling
-     * {@code /maze/&#123;id&#125;/tour} carries a limiter for. Two routes to one computation, and
-     * only one of them was counted. Now that this endpoint is also anonymously reachable in prod
-     * (it is the spectator's view of a shared session), an unmetered path to that solve would be
-     * reachable without a token.
+     * reading. It still shares the {@code mazeSolve} budget because a cache hit on placement
+     * still rescores Held-Karp on the live grid (ADR-014). What it must not do is <em>mint</em>
+     * the puzzle: {@code progressFor} is a read, so a spectator GET cannot freeze coins the
+     * players then have to collect. No placement means 404 {@code tour}, not a silent
+     * {@code tourFor}. Unknown session stays 404 {@code session}.
      */
     @GetMapping("/session/{id}/tour")
     @Operation(summary = "How a session is doing against the optimal tour.",
             description = "Collection is observed server-side from the session's own moves, not "
                     + "reported by the client, so the count that scores cannot be claimed. "
-                    + "Rate-limited against the 'mazeSolve' budget: a cache miss here runs the "
-                    + "same Held-Karp tour as /maze/{id}/tour.")
+                    + "Does not place waypoints — GET /maze/{id}/tour is what freezes the coins. "
+                    + "Rate-limited against the 'mazeSolve' budget: a placed tour still rescores "
+                    + "Held-Karp on the live grid.")
     @PerKeyRateLimit("mazeSolve")
     public ResponseEntity<WaypointService.Progress> tourProgress(@PathVariable UUID id) {
+        if (sessions.find(id) == null) throw ResourceNotFoundException.session(id);
         var progress = waypoints.progressFor(id);
-        if (progress == null) throw ResourceNotFoundException.session(id);
+        if (progress == null) {
+            throw new ResourceNotFoundException("tour", String.valueOf(id),
+                    "Session " + id + " is open but nobody has asked for a waypoint tour on "
+                            + "its maze yet, so there is no progress to report. "
+                            + "GET /maze/{id}/tour first.");
+        }
         return ResponseEntity.ok(progress);
     }
 

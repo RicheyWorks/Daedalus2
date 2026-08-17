@@ -238,7 +238,11 @@ Last consolidated: 2026-08-17
   A `#session=` spectator hydrates that walk from the snapshot trail
   (positions alone are a seat) and keeps the session hash so a refresh
   still spectates. Hunt waypoints paints the Held-Karp `path` through
-  the openings, not only the coins you are scored against.
+  the openings, not only the coins you are scored against. Permalinks
+  keep their kind (`#daily`, `#campaign=`, `#generator=`) instead of
+  collapsing to `#maze=`. `GET /session/{id}/tour` is a read — a
+  spectator cannot mint the coins — and hydrates a hunt or ghost that
+  already exists.
 
 - ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`
   uploads every module's JaCoCo XML to Codecov via `codecov-action@v5`,

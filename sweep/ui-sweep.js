@@ -178,7 +178,8 @@ async function check(name, fn) {
   await check('I. daily challenge + scoped board', async () => {
     await page.click('#daily');
     await page.waitForFunction(() => document.getElementById('lbTitle').textContent === 'Daily leaderboard', null, {timeout:20000});
-    return [true, await page.$eval('#lbTitle', e => e.textContent)];
+    const hash = await page.evaluate(() => location.hash);
+    return [hash === '#daily', `${await page.$eval('#lbTitle', e => e.textContent)} ${hash}`];
   });
 
   await check('J. crossbreed lineage', async () => {
@@ -209,7 +210,9 @@ async function check(name, fn) {
       }
     });
     await page.waitForFunction(() => state.cleared[0] === true, null, {timeout:40000});
-    return [c.n === 6 && c.stage === 0, `${c.n} stages, "${c.title}", stage 1 cleared`];
+    const hash = await page.evaluate(() => location.hash);
+    return [c.n === 6 && c.stage === 0 && /campaign=/.test(hash),
+        `${c.n} stages, "${c.title}", stage 1 cleared, ${hash}`];
   });
 
   await check('L. ghost on stage replay', async () => {
@@ -373,8 +376,31 @@ async function check(name, fn) {
       return {n: p.length, cost: state.tour.optimalCost, adj,
         coins: (state.tour.waypoints || []).length};
     });
-    return [w.adj && w.n === w.cost + 1 && w.coins > 0,
-        `tour walk ${w.n} cells = cost ${w.cost}+1; ${w.coins} coins`];
+    const sid = await page.evaluate(() => state.session && state.session.id);
+    const spec = await ctx.newPage();
+    await spec.goto(`http://localhost:8080/#session=${sid}`, { waitUntil: 'networkidle' });
+    await spec.waitForFunction(() => state.readOnly && state.tour && tourWalk().length > 1,
+        null, {timeout:25000});
+    const specWalk = await spec.evaluate(() => ({n: tourWalk().length, hash: location.hash}));
+    await spec.close();
+    return [w.adj && w.n === w.cost + 1 && w.coins > 0
+        && specWalk.n === w.n && /session=/.test(specWalk.hash),
+        `tour walk ${w.n} cells = cost ${w.cost}+1; spectator ${specWalk.n} ${specWalk.hash}`];
+  });
+
+  await check('V. generator permalink is the partition, not a title', async () => {
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/#generator=prims', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => state.lbQuery && state.lbQuery.includes('generator=prims')
+        && !state.lbQuery.includes('maze='), null, {timeout:20000});
+    const q = await p2.evaluate(() => ({
+      path: state.lbQuery,
+      hash: location.hash,
+      sel: document.getElementById('lbGen').value,
+    }));
+    await p2.close();
+    return [/generator=prims/.test(q.path) && q.sel === 'prims' && /generator=prims/.test(q.hash),
+        `${q.sel} via ${q.path} ${q.hash}`];
   });
 
   await check('O. no uncaught page errors', async () =>
