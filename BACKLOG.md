@@ -125,6 +125,11 @@ Last consolidated: 2026-08-17
   that greedy so a rewrite to it fails. No REST surface: a maze has no batch of
   incoming requests.
 
+- ~~**Incremental SSSP.**~~ **Declined 2026-08-17 (ADR-011).** Measured: full
+  Dijkstra after a living tick is 50–200 µs at the sizes `/live` serves, 2 ms at
+  128², against a 2 s ticker. The textbook repair cannot pay for itself. Re-fire
+  conditions are in the ADR.
+
 ## New surfaces
 
 - ~~**Performance benchmark harness.**~~ **Done 2026-07-19** —

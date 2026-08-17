@@ -63,6 +63,17 @@ under the `_migration/` portfolios.
   example assigns a lattice of request sites onto k-center replicas and shows
   capacity leaving seats unmatched.
 
+### Decided
+
+- **Incremental SSSP declined (ADR-011 / ADR-001 appendix 5).** Living ticks,
+  traffic, and hotspot drift all change the graph, so the UI re-solves every 2 s.
+  Measured on this machine: a full Dijkstra after those mutations is 50–200 µs at
+  API sizes and 2 ms worst at 128² — a thousand times faster than the ticker.
+  D\*Lite would keep a search tree through edge insert, edge delete, and weight
+  change for a 200 µs baseline. The recompute *is* the architecture. Harness at
+  `docs/evaluations/IncrementalSsspEval.java`; re-fire if the tick becomes a
+  data-plane interval or someone regularly solves ≥256² living mazes.
+
 ### Fixed
 
 - **The web UI answered 401 in prod, and the spectator permalink never worked.** `GET /` and

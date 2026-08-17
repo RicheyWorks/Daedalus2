@@ -42,5 +42,7 @@ be a number that looks like load-balancing and is just a recount of cells.
 - Topology lab section 4 assigns a 4×4 lattice of request sites onto the k-center
   replicas and shows capacity 1 leaving requests unmatched, capacity 4 filling
   every seat.
-- ADR-001 appendix items 4–5 stay held: Bellman-Ford/Johnson wait on a directed
-  latency graph that is not a maze; incremental SSSP is still "measure first".
+- ADR-001 appendix item 5 shipped as a decline — [ADR-011](ADR-011-incremental-sssp.md).
+  Item 4 stays held: Bellman-Ford/Johnson wait on a directed latency graph that is
+  not a maze (current weights are costs ≥ 1, so there is no negative edge to
+  justify Bellman-Ford).

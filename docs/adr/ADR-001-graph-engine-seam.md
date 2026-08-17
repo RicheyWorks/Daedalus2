@@ -437,10 +437,11 @@ assumes away. Johnson's reweighting also makes all-pairs tractable on sparse dir
 graphs — the honest version of `DistanceOracle` for topologies too large for its V² table.
 
 **5. Incremental shortest paths — Ch. 24, extended.**
-The live-routing mode implies weights that change continuously. Recomputing Dijkstra per
-update is the naive answer; incremental/dynamic SSSP (D\*Lite-style) repairs only the
-affected subtree. This is the single largest algorithmic gap between "batch topology tool"
-and "data plane", and should be measured before it is assumed necessary.
+~~Recomputing Dijkstra per update is the naive answer.~~ **Measured 2026-08-17 and
+declined** — see [ADR-011](ADR-011-incremental-sssp.md). A full Dijkstra after a
+living tick is 50–200 µs at the sizes the API serves, 2 ms worst at 128², against a
+2 s ticker. D\*Lite cannot pay for its surface on a 200 µs baseline. Re-fire if the
+tick becomes a data-plane interval or someone regularly solves ≥256² living mazes.
 
 **6. Order statistics — CSRBT, not CLRS Ch. 9.**
 Selecting the p95 server does not need a new selection algorithm; CSRBT already maintains
