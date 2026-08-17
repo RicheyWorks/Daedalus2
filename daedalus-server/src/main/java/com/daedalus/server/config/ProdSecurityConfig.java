@@ -50,9 +50,10 @@ import org.springframework.security.web.SecurityFilterChain;
  *       {@code POST /api/v1/session/&#123;id&#125;/move}</li>
  *   <li>Plugin introspection: {@code GET /api/v1/plugins/**}</li>
  *   <li>Any {@code /actuator/**} path other than the three above</li>
- *   <li>{@code /ws/**} — WebSocket upgrade carries the bearer token via the {@code Authorization}
- *       header on the upgrade request. SockJS / STOMP clients can pass it via
- *       {@code connectHeaders}. Per-frame STOMP-level auth is left for a future iteration.</li>
+ *   <li>STOMP {@code CONNECT} — the bearer token rides the frame, not the HTTP upgrade.
+ *       Browsers cannot attach {@code Authorization} to a SockJS handshake, so authenticating
+ *       {@code /ws/**} made signed-in live frames impossible from the only client we ship.
+ *       The handshake is public; an unauthenticated {@code CONNECT} is still refused.</li>
  * </ul>
  *
  * <p><b>Denied</b>: {@code /v3/api-docs/**}, {@code /swagger-ui/**}, {@code /swagger-ui.html} —
@@ -148,9 +149,15 @@ public class ProdSecurityConfig {
                         // Plugin introspection — operator-facing, not drive-by readable.
                         .requestMatchers("/api/v1/plugins/**").authenticated()
 
-                        // WebSocket upgrade — token rides the Authorization header on the
-                        // HTTP upgrade request. STOMP-level per-frame auth is a future step.
-                        .requestMatchers("/ws/**").authenticated()
+                        // SockJS handshake. Public on purpose. A browser cannot put
+                        // Authorization on the HTTP upgrade (the WebSocket constructor has no
+                        // header argument), so closing /ws/** made the signed-in UI's STOMP
+                        // CONNECT unreachable — the token was on the frame that never got to
+                        // be sent. CONNECT remains required in prod
+                        // (StompAuthChannelInterceptor); this matcher only lets the socket
+                        // open. SockJS also uses HTTP POST fallbacks under /ws/**, so the
+                        // matcher is not GET-only.
+                        .requestMatchers("/ws/**").permitAll()
 
                         // ---- Denied ----
                         // OpenAPI spec + Swagger UI are intentionally NOT advertised in prod.

@@ -108,6 +108,10 @@ Last consolidated: 2026-08-17
   consequence is that a connection outlives its token's expiry — disconnecting
   on expiry is its own feature.
 
+  **2026-08-17:** the HTTP `/ws/**` upgrade is public in prod. Browsers cannot
+  attach `Authorization` to SockJS, so authenticating the handshake made the
+  signed-in UI's `CONNECT` unreachable. The frame is still the gate.
+
 ## Living mazes v2
 
 - ~~**Wall closing / hardening.**~~ **Done 2026-08-17 (ADR-008).** ADR-006's re-fire

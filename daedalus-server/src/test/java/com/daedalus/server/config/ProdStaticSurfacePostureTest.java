@@ -68,6 +68,10 @@ class ProdStaticSurfacePostureTest {
         EXPECTED.put("GET /", Posture.PUBLIC);
         EXPECTED.put("GET /index.html", Posture.PUBLIC);
 
+        // SockJS info is the first request a browser makes. Closing /ws/** made that 401, so
+        // a signed-in CONNECT never happened — the token was on a frame the handshake blocked.
+        EXPECTED.put("GET /ws/info", Posture.PUBLIC);
+
         // The method is half the decision and the first version of this table left it out —
         // every row said GET, so dropping `HttpMethod.GET` from the matcher in
         // ProdSecurityConfig changed nothing any assertion could see. Mutation found that: 4 of

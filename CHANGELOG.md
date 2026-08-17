@@ -105,6 +105,15 @@ under the `_migration/` portfolios.
   grid). The plugin panel is empty-honest when nothing is loaded, and refreshes
   after sign-in because prod keeps `/plugins` closed.
 
+### Fixed
+
+- **Signed-in live frames could not connect in prod.** `/ws/**` required a
+  bearer header on the HTTP upgrade. Browsers cannot set that header on
+  SockJS, so the UI's `CONNECT` token never left the tab. The handshake is
+  public; STOMP `CONNECT` stays required. `WebSocketProdHandshakeTest` pins
+  both sides: `/ws/info` is 200 without a token, a token-less `CONNECT` is
+  still refused, and a valid token opens a session.
+
 ### Decided
 
 - **Incremental SSSP declined (ADR-011 / ADR-001 appendix 5).** Living ticks,

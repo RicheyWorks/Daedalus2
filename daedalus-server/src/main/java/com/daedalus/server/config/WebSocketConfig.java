@@ -49,10 +49,10 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
  * {@link StompSendRejectionInterceptor} now refuses client {@code SEND} outright.
  *
  * <p>{@link StompAuthChannelInterceptor} authenticates the {@code CONNECT} frame, so the
- * messaging layer has a {@link java.security.Principal} rather than relying solely on the
- * HTTP rule guarding the {@code /ws/**} upgrade. It is <em>required</em> under the {@code prod}
- * profile and advisory elsewhere, matching how {@code SecurityConfig} and
- * {@code ProdSecurityConfig} already split the HTTP surface.
+ * messaging layer has a {@link java.security.Principal}. It is <em>required</em> under the
+ * {@code prod} profile and advisory elsewhere. The HTTP {@code /ws/**} upgrade is public in
+ * prod: browsers cannot attach {@code Authorization} to a SockJS handshake, so the token
+ * rides {@code CONNECT} or it does not ride at all.
  * {@link StompSubscriptionAuthorizationInterceptor} then enforces the per-destination rule
  * that principal exists for: {@code SUBSCRIBE} to an owned session's
  * {@code /topic/session/{id}/player} is refused unless the principal is the owner.

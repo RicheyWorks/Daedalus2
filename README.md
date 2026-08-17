@@ -375,12 +375,14 @@ working tree.
   Set `daedalus.ratelimit.trust-forwarded-header=true` **only** behind a proxy
   that overwrites `X-Forwarded-For`; otherwise a client can spoof it and mint
   a fresh bucket per forged IP.
-- **WebSocket connections are authenticated in prod.** The STOMP `CONNECT`
-  frame must carry `Authorization: Bearer <token>`; the JWT subject becomes
-  the session principal. Outside `prod` a token is optional, but an *invalid*
-  token is rejected in every profile. Owned session player topics are scoped
-  to the opening subject and anyone who joined with a token (ADR-012);
-  unowned sessions, unknown ids, and maze/plugin topics stay open.
+- **WebSocket connections are authenticated in prod.** The HTTP SockJS
+  handshake at `/ws/**` is public — browsers cannot attach `Authorization` to
+  the upgrade. The STOMP `CONNECT` frame must carry
+  `Authorization: Bearer <token>`; the JWT subject becomes the session
+  principal. Outside `prod` a token is optional, but an *invalid* token is
+  rejected in every profile. Owned session player topics are scoped to the
+  opening subject and anyone who joined with a token (ADR-012); unowned
+  sessions, unknown ids, and maze/plugin topics stay open.
 - **The generation service is wrapped in a Resilience4j circuit breaker.**
   When it trips, a cached binary-tree maze is returned and the response
   reports the actual generator id (not the requested one) so clients,
@@ -388,8 +390,9 @@ working tree.
 - **Security split by profile.** Dev / test / desktop use a permissive
   `SecurityConfig` (every endpoint open) — this matches the JavaFX client's
   needs and keeps `mvn test` simple. Prod uses `ProdSecurityConfig`: JWT
-  bearer-token auth on write endpoints, plugin introspection, and the
-  WebSocket; reads stay open; actuator-restricted endpoints require a token;
+  bearer-token auth on write endpoints, plugin introspection, and STOMP
+  `CONNECT`; the `/ws/**` handshake stays open so a browser can upgrade;
+  reads stay open; actuator-restricted endpoints require a token;
   Swagger UI is denied. See the auth-flow section above for the exact env-var
   contract.
 
