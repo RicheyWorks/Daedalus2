@@ -245,7 +245,9 @@ Last consolidated: 2026-08-17
   that already exists. Fog plus a living tick re-polls the agent only;
   `GET /maze` would have painted rooms the walk has not stood in.
   Generate accepts `braid`; the tournament load-it link rebuilds the
-  sample that was raced, not the unbraided seed.
+  sample that was raced, not the unbraided seed. A living tick
+  refreshes hardest-route, the heat map, sanctuaries, the lens, and
+  ASCII the same way it already rescored the tour.
 
 - ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`
   uploads every module's JaCoCo XML to Codecov via `codecov-action@v5`,

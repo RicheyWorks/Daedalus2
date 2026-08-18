@@ -344,6 +344,7 @@ const state = {
   user: null,            // display name that minted the token
   fog: null,             // AgentView + seen Set — cells this walk has stood on
   lbQuery: null,         // last /leaderboard path actually fetched (partition, not a title)
+  caption: null,         // which theory panel last wrote #compareBox — living ticks refresh it
 };
 
 /** Escape untrusted text (player names arrive from other clients) before it meets innerHTML. */
@@ -655,6 +656,7 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   state.hardest = null; state.field = null; state.sanctuaries = null;
   state.lens = null;
   state.tour = null; state.tourGot = [];
+  state.caption = null;
   state.stageIndex = null; // playStage re-sets this after adopting the stage's maze
   $("compareBox").innerHTML = "";
   $("status").textContent = "arrow keys move once a session is open";
@@ -1003,7 +1005,7 @@ function startLivePolling(mazeId, tickMillis = 2000, ticks = 30) {
   }, tickMillis);
 }
 
-/** A mutation frame arrived: re-fetch the snapshot, re-solve if a route is shown, redraw. */
+/** A mutation frame arrived: re-fetch the snapshot, refresh theory overlays, re-solve if a route is shown, redraw. */
 async function onMutation(m) {
   const closed = m.wallsClosed || 0;
   log("state", `tick ${m.tick}: ${m.wallsOpened} wall${m.wallsOpened === 1 ? "" : "s"} opened`
@@ -1023,6 +1025,7 @@ async function identifyGenerator() {
       : `<b style="color:#f0b429">${esc(f.predictedGeneratorId)}</b> — record says `
         + `${esc(f.recordedGeneratorId)}`;
   const sig = f.signature;
+  state.caption = "fingerprint";
   $("compareBox").innerHTML =
       `<div style="margin-top:8px">Structure says ${verdict} `
     + `<span class="hint">(margin over ${esc(f.runnerUp)}: ${pct}%)</span></div>`
@@ -1214,8 +1217,15 @@ async function tourVerdict() {
 async function analyzeStructure() {
   const a = await api(`/maze/${state.maze.id}/analysis`);
   state.analysis = a;
+  state.caption = "analysis";
   const cp = a.cutSize === 1 ? "1 chokepoint" : `${a.cutSize} chokepoints`;
   log("state", `analysis: ${cp}, ${a.deadEndCount} dead ends, route length ${a.routeLength}`);
+  paintAnalysisCaption(a);
+  draw();
+}
+
+function paintAnalysisCaption(a) {
+  const cp = a.cutSize === 1 ? "1 chokepoint" : `${a.cutSize} chokepoints`;
   $("compareBox").innerHTML = `<div style="margin-top:8px">`
       + `<b style="color:#c084fc">${cp}</b> — sever ${a.cutSize === 1 ? "it" : "them"} and `
       + `start and goal split into different worlds &middot; `
@@ -1224,7 +1234,6 @@ async function analyzeStructure() {
           ? ` &middot; <span class="hint">every perfect maze has exactly one cut — braid or `
             + `erode it (Bring to life) and re-analyze</span>` : "")
       + `</div>`;
-  draw();
 }
 
 // ---------- hardest route (ADR-007 idea 3) ----------
@@ -1239,9 +1248,15 @@ async function analyzeStructure() {
 async function hardestRoute() {
   const h = await api(`/maze/${state.maze.id}/hardest-route`);
   state.hardest = h;
-  const flat = h.loops === 0 || h.hardestLength === h.shortestLength;
+  state.caption = "hardest";
   log("state", `hardest route: ${h.hardestLength} steps vs ${h.shortestLength} shortest `
       + `(x${h.detour.toFixed(2)}), ${h.loops} loops, ${h.exact ? "proven optimal" : "lower bound"}`);
+  paintHardestCaption(h);
+  draw();
+}
+
+function paintHardestCaption(h) {
+  const flat = h.loops === 0 || h.hardestLength === h.shortestLength;
   $("compareBox").innerHTML = `<div style="margin-top:8px">`
       + (flat
           ? `<b style="color:#f2c94c">One route only</b> — ${h.hardestLength} steps. `
@@ -1250,7 +1265,6 @@ async function hardestRoute() {
       + `${h.loops} independent loop${h.loops === 1 ? "" : "s"} &middot; `
       + (h.exact ? `proven optimal` : `lower bound (search budget spent)`)
       + `<div class="hint" style="margin-top:4px">${h.note}</div></div>`;
-  draw();
 }
 
 // ---------- distance field + sanctuaries (ADR-007 ideas 6 and 5) ----------
@@ -1269,8 +1283,14 @@ async function distanceHeatMap() {
   const f = await api(`/maze/${state.maze.id}/distance-field`);
   state.field = f;
   state.sanctuaries = null; state.lens = null;   // one overlay at a time stays readable
+  state.caption = "field";
   log("state", `distance field from ${f.from.toLowerCase()}: farthest cell ${f.maxDistance} `
       + `steps away, ${f.unreachable} cells unreachable`);
+  paintFieldCaption(f);
+  draw();
+}
+
+function paintFieldCaption(f) {
   const swatches = DISTANCE_RAMP
       .map(c => `<span style="display:inline-block;width:16px;height:10px;background:${c}"></span>`)
       .join("");
@@ -1285,7 +1305,6 @@ async function distanceHeatMap() {
           ? `<div class="hint">${f.unreachable} cells are unreachable rock and stay `
             + `unshaded</div>` : "")
       + `</div>`;
-  draw();
 }
 
 /** k-center safe points, plus the cell they serve worst. */
@@ -1293,15 +1312,20 @@ async function placeSanctuaries() {
   const s = await api(`/maze/${state.maze.id}/sanctuaries?k=5`);
   state.sanctuaries = s;
   state.field = null; state.lens = null;
+  state.caption = "sanctuaries";
   log("state", `${s.placements.length} sanctuaries: covering radius ${s.coveringRadius}, `
       + `serving ${s.servedCells}/${s.habitableCells} cells`);
+  paintSanctuariesCaption(s);
+  draw();
+}
+
+function paintSanctuariesCaption(s) {
   $("compareBox").innerHTML = `<div style="margin-top:8px">`
       + `<b style="color:#4cc38a">${s.placements.length} sanctuaries</b> &middot; `
       + `nobody is more than <b>${s.coveringRadius} steps</b> from one &middot; `
       + `serving ${s.servedCells} of ${s.habitableCells} walkable cells`
       + `<div class="hint" style="margin-top:4px">The ring marks the worst-served cell — the `
       + `loneliest place in this maze. ${s.note}</div></div>`;
-  draw();
 }
 
 // ---------- solver tournament (ADR-007 ideas 10 and 7) ----------
@@ -1397,8 +1421,14 @@ async function heuristicLens() {
   const l = await api(`/maze/${state.maze.id}/heuristic-lens?heuristic=${which}`);
   state.lens = l;
   state.field = null; state.sanctuaries = null;
+  state.caption = "lens";
   log("state", `lens [${which}]: must ${l.mustExpand}, tie ${l.tie}, never ${l.never}; `
       + `A* expanded ${l.actualExpansions}`);
+  paintLensCaption(l);
+  draw();
+}
+
+function paintLensCaption(l) {
   const chip = (i, label, n) => `<span style="display:inline-block;width:10px;height:10px;`
       + `background:${LENS_COLORS[i]};margin-right:4px"></span>${label} <b>${n}</b>`;
   $("compareBox").innerHTML = `<div style="margin-top:8px">`
@@ -1408,7 +1438,6 @@ async function heuristicLens() {
       + `${l.reachable} reachable cells; route ${l.routeLength} steps against an optimum of `
       + `${l.optimalCost}${l.routeOptimal ? "" : " — <b style='color:#e5484d'>not optimal</b>"}`
       + `</div><div class="hint" style="margin-top:4px">${l.note}</div></div>`;
-  draw();
 }
 
 // ---------- ghost runs (ADR-006 idea #8) ----------
@@ -1475,6 +1504,85 @@ async function onTrafficPulse(m) {
   if (m.settled) $("traffic").disabled = false;
 }
 
+/**
+ * Theory overlays claim to be about the maze underfoot. Analysis, tour and the
+ * solver route already re-asked on each living tick; hardest-route, the heat
+ * map, sanctuaries, the lens and the ASCII dump did not — they painted the
+ * tree they were first asked about while the grid eroded under them. The
+ * services already read the live snapshot (HardestRouteService says that is
+ * the point). Race and ghost stay recordings.
+ *
+ * @return false when the maze on screen changed mid-refresh (caller must stop)
+ */
+async function refreshTheoryOverlays(forMaze, stale) {
+  if (state.analysis) {
+    try {
+      const a = await api(`/maze/${forMaze}/analysis`);
+      if (stale()) return false;
+      if (a.cutSize !== state.analysis.cutSize || a.deadEndCount !== state.analysis.deadEndCount) {
+        log("state", `analysis: ${a.cutSize} chokepoint${a.cutSize === 1 ? "" : "s"}, `
+            + `${a.deadEndCount} dead ends (was ${state.analysis.cutSize} / `
+            + `${state.analysis.deadEndCount})`);
+      }
+      state.analysis = a;
+      if (state.caption === "analysis") paintAnalysisCaption(a);
+    } catch (ignored) { /* overlay; losing one refresh is harmless */ }
+  }
+  if (state.hardest) {
+    try {
+      const h = await api(`/maze/${forMaze}/hardest-route`);
+      if (stale()) return false;
+      if (h.loops !== state.hardest.loops || h.hardestLength !== state.hardest.hardestLength) {
+        log("state", `hardest route is now ${h.hardestLength} steps vs ${h.shortestLength} `
+            + `(x${h.detour.toFixed(2)}), ${h.loops} loops`);
+      }
+      state.hardest = h;
+      if (state.caption === "hardest") paintHardestCaption(h);
+    } catch (ignored) { /* overlay */ }
+  }
+  if (state.field) {
+    try {
+      const f = await api(`/maze/${forMaze}/distance-field`);
+      if (stale()) return false;
+      if (f.maxDistance !== state.field.maxDistance) {
+        log("state", `distance field: farthest cell now ${f.maxDistance} steps`);
+      }
+      state.field = f;
+      if (state.caption === "field") paintFieldCaption(f);
+    } catch (ignored) { /* overlay */ }
+  }
+  if (state.sanctuaries) {
+    try {
+      const s = await api(`/maze/${forMaze}/sanctuaries?k=5`);
+      if (stale()) return false;
+      if (s.coveringRadius !== state.sanctuaries.coveringRadius) {
+        log("state", `sanctuaries: covering radius now ${s.coveringRadius}`);
+      }
+      state.sanctuaries = s;
+      if (state.caption === "sanctuaries") paintSanctuariesCaption(s);
+    } catch (ignored) { /* overlay */ }
+  }
+  if (state.lens) {
+    try {
+      const which = (state.lens.heuristic || $("lensH").value);
+      const l = await api(`/maze/${forMaze}/heuristic-lens?heuristic=${encodeURIComponent(which)}`);
+      if (stale()) return false;
+      if (l.mustExpand !== state.lens.mustExpand || l.actualExpansions !== state.lens.actualExpansions) {
+        log("state", `lens: must ${l.mustExpand}, A* expanded ${l.actualExpansions}`);
+      }
+      state.lens = l;
+      if (state.caption === "lens") paintLensCaption(l);
+    } catch (ignored) { /* overlay */ }
+  }
+  if ($("asciiOut") && !$("asciiOut").hidden) {
+    try {
+      await showAscii();
+      if (stale()) return false;
+    } catch (ignored) { /* dump */ }
+  }
+  return true;
+}
+
 /** Swap in the latest snapshot without resetting session/solver state (unlike adoptMaze). */
 async function refreshLivingMaze() {
   try {
@@ -1526,14 +1634,7 @@ async function refreshLivingMaze() {
         log("state", `traffic: ${congestedNow} congested cell${congestedNow === 1 ? "" : "s"}`);
       }
     }
-    if (state.analysis) {
-      // Re-analyze the new snapshot — watch chokepoints dissolve as erosion braids them.
-      try {
-        const a = await api(`/maze/${forMaze}/analysis`);
-        if (stale()) return;
-        state.analysis = a;
-      } catch (ignored) { /* analysis is an overlay; losing one refresh is harmless */ }
-    }
+    if (!(await refreshTheoryOverlays(forMaze, stale))) return;
     if (state.tour) {
       // Placement is frozen; the optimum is not (ADR-014).
       try {
@@ -1689,6 +1790,7 @@ function raceSummary() {
   } else {
     text = "neither solver found a route.";
   }
+  state.caption = "race";
   $("compareBox").innerHTML = `<div style="margin-top:8px">${text}</div>`;
 }
 
@@ -1716,6 +1818,7 @@ async function compareSolvers() {
   const bestVisited = Math.min(...ok.map(r => r.visited));
   results.sort((a, b) => (a.success !== b.success) ? (a.success ? -1 : 1) : a.visited - b.visited);
 
+  state.caption = "compare";
   $("compareBox").innerHTML = `<table><tr>
       <th>solver</th><th>path</th><th>visited</th><th>ms</th></tr>` +
     results.map(r => r.success
@@ -2128,6 +2231,7 @@ async function startFog() {
   state.path = null; state.expansions = [];
   state.analysis = null; state.hardest = null; state.field = null;
   state.lens = null; state.race = null; state.sanctuaries = null;
+  state.caption = null;
   state.fog = {seen: new Set()};
   applyFogView(view);
   $("ascii").disabled = true;

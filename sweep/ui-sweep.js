@@ -441,6 +441,21 @@ async function check(name, fn) {
     return [braided < tree, `dead ends ${tree} → ${braided}`];
   });
 
+  await check('X. living tick updates the hardest overlay without a second click', async () => {
+    await page.selectOption('#braid', '0');
+    await page.fill('#rows', '15'); await page.fill('#cols', '15'); await page.fill('#seed', '909');
+    await page.click('#generate');
+    await page.waitForFunction(() => state.maze && state.maze.seed === 909, null, {timeout:15000});
+    await page.click('#hardest');
+    await page.waitForFunction(() => state.hardest && state.hardest.loops === 0, null, {timeout:20000});
+    await page.click('#live');
+    await page.waitForFunction(() => state.hardest && state.hardest.loops > 0, null, {timeout:25000});
+    const h = await page.evaluate(() => ({loops: state.hardest.loops, detour: state.hardest.detour}));
+    await page.fill('#seed', '3'); await page.click('#generate');
+    await page.waitForFunction(() => state.maze && state.maze.seed === 3, null, {timeout:15000});
+    return [h.loops > 0 && h.detour > 1, `auto-refresh loops=${h.loops} x${h.detour}`];
+  });
+
   await check('O. no uncaught page errors', async () =>
     [pageErrors.length === 0, pageErrors.length ? pageErrors.join(' | ').slice(0,150) : 'none']);
 

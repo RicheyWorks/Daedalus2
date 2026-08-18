@@ -158,6 +158,14 @@ under the `_migration/` portfolios.
   the ghost learned). A `#session=` arrival hydrates the hunt (if one
   was asked) and the ghost (if one exists) without creating either.
 
+- **Theory overlays follow the living grid, not the snapshot they were first asked about.**
+  A living tick already re-solved the route, re-analyzed cuts, and rescored
+  the tour (ADR-014). Hardest-route, the distance field, sanctuaries, the
+  heuristic lens, and the ASCII dump stayed on the tree. The services already
+  read the current snapshot — HardestRouteService says that is the point —
+  so the page now re-asks. Race and ghost stay recordings. The panel caption
+  updates only for the overlay that last wrote it.
+
 - **Generate can braid, so the tournament's "load it" is the maze that was raced.**
   `POST /maze/generate` takes optional `braid` in `[0, 1]` — the same
   `Braider` pass, same seed, then extremes on the braided graph. The

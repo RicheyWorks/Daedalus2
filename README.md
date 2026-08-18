@@ -70,7 +70,9 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   living tick re-polls the agent; it does not replace the grid. A
   spectator paints every seat's recorded walk, not only the opener's.
   Generate accepts a braid factor; the tournament's load-it link sends
-  the sample's generator, seed, size, and braid, not only the seed.
+  the sample's generator, seed, size, and braid, not only the seed. A
+  living tick refreshes the theory overlays (hardest route, heat map,
+  sanctuaries, lens, ASCII) against the grid underfoot.
 - **Deterministic across restarts, not just across a cache hit.** Same seed,
   same answer, on a process that has never seen the request before.
   `DeterminismGoldenTest` compares 23 endpoints — seeded generation, the seeded
