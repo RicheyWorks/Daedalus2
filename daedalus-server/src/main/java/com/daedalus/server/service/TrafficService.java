@@ -188,7 +188,8 @@ public class TrafficService {
             // Wrap-on-enable: copy topology into a weighted grid so setWeight has a home.
             WeightedMazeGrid weighted = new WeightedMazeGrid(cached.grid());
             gen.replace(mazeId, new MazeGenerationService.Cached(
-                    cached.metadata(), weighted, cached.stats(), cached.hotspots()));
+                    cached.metadata(), weighted, cached.stats(), cached.hotspots(),
+                    cached.braid()));
         }
         Tracker tracker = trackers.compute(mazeId, (id, existing) -> {
             if (existing != null) {
@@ -319,7 +320,7 @@ public class TrafficService {
 
             List<Hotspot> hotspots = hotspotsOf(next);
             if (!gen.replace(tracker.mazeId, new MazeGenerationService.Cached(
-                    cached.metadata(), next, cached.stats(), hotspots))) {
+                    cached.metadata(), next, cached.stats(), hotspots, cached.braid()))) {
                 stop(tracker, false);
                 return;
             }

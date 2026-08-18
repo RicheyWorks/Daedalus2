@@ -249,7 +249,8 @@ Last consolidated: 2026-08-17
   refreshes hardest-route, the heat map, sanctuaries, the lens, the
   fingerprint, and ASCII the same way it already rescored the tour. A
   plugin failure refreshes the roster; generate and tournament share
-  one braid factor.
+  one braid factor. Generate and {@code GET /maze/{id}} echo that
+  factor so a permalink does not read the leftover select.
 
 - ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`
   uploads every module's JaCoCo XML to Codecov via `codecov-action@v5`,

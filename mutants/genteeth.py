@@ -115,6 +115,10 @@ MUT = [
     (GS, "a requested braid is never applied",
      "        if (braid > 0) {\n            Braider.braid(grid, braid, seed);\n        }",
      "        if (false) {\n            Braider.braid(grid, braid, seed);\n        }"),
+    (GS, "the braid factor is dropped from the cache entry",
+     "        Double recordedBraid = braid > 0 ? braid : null;\n"
+     "        Cached cached = new Cached(meta, grid, stats, applied, recordedBraid);",
+     "        Cached cached = new Cached(meta, grid, stats, applied, null);"),
 ]
 
 # Deliberately wide. This class is the substrate: a narrow list would report false survivors for
@@ -125,6 +129,7 @@ CLASSES = ("MazeGenerationContractTest",
            "CampaignServiceTest", "LivingMazeServiceTest", "LivingMazeTickContractTest",
            "TrafficServiceTest", "TrafficTickContractTest", "WeightedMazeApiTest",
            "MazeControllerValidationTest", "MazeGenerationBraidTest",
+           "GenerateBraidEchoTest",
            "BreedAndSpectateEndpointTest", "DailyMazeServiceTest",
            "SolveReplayTest", "MazeControllerGeneratorIdTest", "GeneratorInvariantFuzzTest")
 TESTS = ",".join(CLASSES)

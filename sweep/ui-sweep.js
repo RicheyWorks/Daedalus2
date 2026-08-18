@@ -437,8 +437,13 @@ async function check(name, fn) {
     await page.click('#analyze');
     await page.waitForFunction(() => state.analysis != null, null, {timeout:15000});
     const braided = await page.evaluate(() => state.analysis.deadEndCount);
+    const echoed = await page.evaluate(() => ({
+      factor: state.maze.braid,
+      stats: document.getElementById('stats').innerText,
+    }));
     await page.selectOption('#braid', '0');
-    return [braided < tree, `dead ends ${tree} → ${braided}`];
+    return [braided < tree && echoed.factor === 0.8 && echoed.stats.includes('0.8'),
+        `dead ends ${tree} → ${braided}; maze.braid=${echoed.factor}`];
   });
 
   await check('X. living tick updates the hardest overlay without a second click', async () => {

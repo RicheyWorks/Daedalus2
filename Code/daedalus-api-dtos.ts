@@ -76,6 +76,8 @@ export interface GenerateRequest {
   cols: number;
   /** optional RNG seed; when null the server uses System.nanoTime() */
   seed?: number | null;
+  /** optional dead-end opening factor in [0, 1]; omit or 0 for a tree */
+  braid?: number | null;
 }
 
 /**
@@ -107,6 +109,8 @@ export interface GenerateResponse {
    * If you need `string[][]` instead, register a custom Jackson serializer on the server side.
    */
   tiles: string[];
+  /** generate-time braid factor; omitted when none was applied */
+  braid?: number;
 }
 
 /**

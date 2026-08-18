@@ -330,7 +330,7 @@ public class LivingMazeService {
             }
 
             MazeGenerationService.Cached updated = new MazeGenerationService.Cached(
-                    current.metadata(), next, current.stats(), hotspots);
+                    current.metadata(), next, current.stats(), hotspots, current.braid());
             if (!gen.replace(run.mazeId, updated)) {
                 stop(run, false); // lost the race with eviction — never resurrect
                 return;

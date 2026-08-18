@@ -51,6 +51,7 @@ class WebUiSmokeTest {
                 .contains("carveFogOpenings")
                 .contains("id=\"braid\"").contains("t.generatorId").contains("t.braid")
                 .contains("refreshTheoryOverlays").contains("paintFingerprintCaption")
-                .contains("braidFactor").contains("/topic/plugins/failures");
+                .contains("braidFactor").contains("/topic/plugins/failures")
+                .contains("maze.braid").contains("applyBraidFromMaze");
     }
 }

@@ -120,7 +120,8 @@ public class MazeController {
                 req.hotspots(), braid);
         String actualGeneratorId = cached.metadata().generatorId();
         return toResponse(cached.metadata().id(), actualGeneratorId,
-                req.rows(), req.cols(), seed, cached.grid(), cached.hotspots());
+                req.rows(), req.cols(), seed, cached.grid(), cached.hotspots(),
+                cached.braid());
     }
 
     /**
@@ -141,7 +142,7 @@ public class MazeController {
         return new DailyMazeResponse(d.date().toString(), toResponse(
                 c.metadata().id(), c.metadata().generatorId(),
                 c.metadata().rows(), c.metadata().cols(), c.metadata().seed(), c.grid(),
-                c.hotspots()));
+                c.hotspots(), c.braid()));
     }
 
     @GetMapping("/maze/{id}")
@@ -152,7 +153,7 @@ public class MazeController {
         return ResponseEntity.ok(toResponse(
                 c.metadata().id(), c.metadata().generatorId(),
                 c.metadata().rows(), c.metadata().cols(), c.metadata().seed(), c.grid(),
-                c.hotspots()));
+                c.hotspots(), c.braid()));
     }
 
     /**
@@ -282,7 +283,7 @@ public class MazeController {
         MazeGrid child = com.daedalus.engine.MazeBreeder.breed(pa.grid(), pb.grid(), s);
         var cached = gen.adopt(child, "crossbreed", s);
         return ResponseEntity.ok(toResponse(cached.metadata().id(), "crossbreed",
-                child.rows(), child.cols(), s, child, null));
+                child.rows(), child.cols(), s, child, null, null));
     }
 
     /**
@@ -427,7 +428,8 @@ public class MazeController {
      */
     private static GenerateResponse toResponse(UUID id, String generatorId, int rows, int cols,
                                                 long seed, MazeGrid grid,
-                                                List<com.daedalus.api.dto.Hotspot> hotspots) {
+                                                List<com.daedalus.api.dto.Hotspot> hotspots,
+                                                Double braid) {
         TileType[][] tiles = grid.toTileGrid();
         char[][] glyphs = new char[tiles.length][];
         for (int r = 0; r < tiles.length; r++) {
@@ -436,6 +438,6 @@ public class MazeController {
                 glyphs[r][c] = tiles[r][c].glyph();
             }
         }
-        return new GenerateResponse(id, generatorId, rows, cols, seed, glyphs, hotspots);
+        return new GenerateResponse(id, generatorId, rows, cols, seed, glyphs, hotspots, braid);
     }
 }

@@ -92,12 +92,21 @@ public class MazeGenerationService {
                 .build();
     }
 
-    /** @param hotspots the weighted cells applied to this maze, or {@code null} for uniform cost */
+    /**
+     * @param hotspots the weighted cells applied to this maze, or {@code null} for uniform cost
+     * @param braid    generate-time opening factor, or {@code null} when none was applied
+     */
     public record Cached(MazeMetadata metadata, MazeGrid grid, MazeStats stats,
-                         java.util.List<Hotspot> hotspots) {
-        /** Uniform-cost shape, kept for source compatibility. */
+                         java.util.List<Hotspot> hotspots, Double braid) {
+        /** Uniform-cost, unbraided — the pre-hotspot contract. */
         public Cached(MazeMetadata metadata, MazeGrid grid, MazeStats stats) {
-            this(metadata, grid, stats, null);
+            this(metadata, grid, stats, null, null);
+        }
+
+        /** Weighted, unbraided — the pre-braid-echo contract. */
+        public Cached(MazeMetadata metadata, MazeGrid grid, MazeStats stats,
+                      java.util.List<Hotspot> hotspots) {
+            this(metadata, grid, stats, hotspots, null);
         }
     }
 
@@ -169,7 +178,8 @@ public class MazeGenerationService {
         MazeMetadata meta = MazeMetadata.of(rows, cols, seed, generatorId,
                 grid.start(), grid.goal());
 
-        Cached cached = new Cached(meta, grid, stats, applied);
+        Double recordedBraid = braid > 0 ? braid : null;
+        Cached cached = new Cached(meta, grid, stats, applied, recordedBraid);
         cache.put(meta.id(), cached);
         events.publishEvent(new MazeGeneratedEvent(this, meta, grid, stats));
         return cached;

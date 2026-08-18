@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Generate echoes the braid factor.** The request accepted it; the response
+  did not. The page labelled Daily and a `#maze=` permalink from the leftover
+  select. The factor now lives on the cached maze, is omitted when zero, and
+  survives a living or traffic tick. The stats line reads `maze.braid`.
+
 - **Generate-id smoke stubbed the pre-braid overload.** The controller
   calls `generate(..., hotspots, braid)`. The mock still answered the
   five-arg form, so Mockito returned null and `cached.metadata()` NPE'd

@@ -143,7 +143,7 @@ public consumers).
 |---|---|---|---|
 | `POST` | `/api/v1/auth/login` | public | Exchange admin credentials for a JWT |
 | `GET` | `/api/v1/algorithms` | public | List every registered generator and solver |
-| `POST` | `/api/v1/maze/generate` | required | Generate a maze (`GenerateRequest` → `GenerateResponse`). Optional `braid` in `[0, 1]` opens that fraction of dead ends — the same pass the tournament already ran, so "load the adversarial maze" can rebuild the sample |
+| `POST` | `/api/v1/maze/generate` | required | Generate a maze (`GenerateRequest` → `GenerateResponse`). Optional `braid` in `[0, 1]` opens that fraction of dead ends — the same pass the tournament already ran. The factor is echoed on the response and on `GET /maze/{id}` (omitted when zero) so a permalink can name it without guessing from a UI select |
 | `GET` | `/api/v1/maze/daily` | public | Today's shared challenge — same maze for everyone until midnight UTC (ADR-006) |
 | `GET` | `/api/v1/maze/{id}` | public | Fetch a previously-generated maze's metadata + tile grid |
 | `POST` | `/api/v1/maze/{id}/live?ticks=30` | required | Bring the maze to life: bounded erosion ticks mutate it in place (ADR-006). Optional `seal=` in `[0, 1]` also closes extra passages without disconnecting anyone (ADR-008; default 0 = v1) |
@@ -259,8 +259,8 @@ System.out.println(new BCryptPasswordEncoder().encode("your-password"));
 
 DTOs live in `com.daedalus.api.dto` and have Javadoc on every field. A
 TypeScript sketch lives in [`Code/daedalus-api-dtos.ts`](./Code/daedalus-api-dtos.ts);
-it lags the Java records (no `braid`, no session `walks`) and is not a
-generated client.
+it lags the Java records (session `walks` and several frames are missing)
+and is not a generated client.
 
 ## WebSocket / STOMP topics
 

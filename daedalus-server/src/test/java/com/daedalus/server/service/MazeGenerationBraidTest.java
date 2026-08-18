@@ -64,6 +64,12 @@ class MazeGenerationBraidTest {
         assertThat(deadEnds(served.grid()))
                 .as("braid opens dead ends; a label-only braid leaves the tree's count")
                 .isLessThan(deadEnds(tree.grid()));
+        assertThat(served.braid())
+                .as("the cache must remember the factor or GET /maze cannot tell a tree from 0.4")
+                .isEqualTo(braid);
+        assertThat(tree.braid())
+                .as("zero is omitted — a 0.0 field would make every old maze look newly braided")
+                .isNull();
     }
 
     @Test

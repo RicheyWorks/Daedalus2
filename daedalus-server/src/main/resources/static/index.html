@@ -617,6 +617,22 @@ function syncBraid(fromId) {
 if ($("braid")) $("braid").addEventListener("change", () => syncBraid("braid"));
 if ($("tourBraid")) $("tourBraid").addEventListener("change", () => syncBraid("tourBraid"));
 
+/** The maze's echoed factor owns the selects. A leftover 0.8 on Generate
+ *  used to label Daily and a #maze= permalink as braided. */
+function applyBraidFromMaze(maze) {
+  const v = maze && maze.braid > 0 ? String(maze.braid) : "0";
+  const el = $("braid");
+  if (!el) return;
+  if (![...el.options].some(o => o.value === v)) {
+    const o = document.createElement("option");
+    o.value = v;
+    o.textContent = v + " — from maze";
+    el.appendChild(o);
+  }
+  el.value = v;
+  syncBraid("braid");
+}
+
 async function generate(opts) {
   const braid = opts && opts.braid != null ? +opts.braid : +(($("braid") && $("braid").value) || 0);
   const body = {
@@ -658,6 +674,7 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   // can be a user's first view of the app; leaving the defaults there means their next
   // Generate silently produces a different-sized maze than the one on screen.
   $("rows").value = maze.rows; $("cols").value = maze.cols;
+  applyBraidFromMaze(maze);
   state.readOnly = false;
   clearInterval(state.spectatePoll); state.spectatePoll = null;
   state.maze = maze; state.path = null; state.session = null;
@@ -694,8 +711,7 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
       `<span>maze</span> ${maze.id.slice(0, 8)}&hellip;<br>`
       + `<span>by</span> ${maze.generatorId} &middot; ${maze.rows}&times;${maze.cols} `
       + `&middot; <span>seed</span> ${maze.seed}`
-      + (+(($("braid") && $("braid").value) || 0) > 0
-          ? ` &middot; braided ${$("braid").value}` : "")
+      + (maze.braid > 0 ? ` &middot; braided ${maze.braid}` : "")
       + `<br>`
       + (roundTripMs != null
           ? `<span>round-trip</span> ${roundTripMs.toFixed(0)} ms<br>`
