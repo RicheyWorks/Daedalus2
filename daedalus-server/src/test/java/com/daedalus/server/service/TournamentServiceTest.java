@@ -177,6 +177,9 @@ class TournamentServiceTest {
                 .as("braiding is what makes a single race unreliable — that is the whole feature")
                 .isGreaterThan(1);
         assertThat(braided.note()).contains("coin flip");
+        assertThat(braided.extremes().get(0).note())
+                .as("the seed alone is the tree; the note must name the braid")
+                .contains("braid=0.5");
     }
 
     @Test

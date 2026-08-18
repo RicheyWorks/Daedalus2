@@ -69,6 +69,8 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   spectator hydrates a hunt or ghost that already exists. Fog plus a
   living tick re-polls the agent; it does not replace the grid. A
   spectator paints every seat's recorded walk, not only the opener's.
+  Generate accepts a braid factor; the tournament's load-it link sends
+  the sample's generator, seed, size, and braid, not only the seed.
 - **Deterministic across restarts, not just across a cache hit.** Same seed,
   same answer, on a process that has never seen the request before.
   `DeterminismGoldenTest` compares 23 endpoints — seeded generation, the seeded
@@ -155,7 +157,7 @@ public consumers).
 |---|---|---|---|
 | `POST` | `/api/v1/auth/login` | public | Exchange admin credentials for a JWT |
 | `GET` | `/api/v1/algorithms` | public | List every registered generator and solver |
-| `POST` | `/api/v1/maze/generate` | required | Generate a maze (`GenerateRequest` → `GenerateResponse`) |
+| `POST` | `/api/v1/maze/generate` | required | Generate a maze (`GenerateRequest` → `GenerateResponse`). Optional `braid` in `[0, 1]` opens that fraction of dead ends — the same pass the tournament already ran, so "load the adversarial maze" can rebuild the sample |
 | `GET` | `/api/v1/maze/daily` | public | Today's shared challenge — same maze for everyone until midnight UTC (ADR-006) |
 | `GET` | `/api/v1/maze/{id}` | public | Fetch a previously-generated maze's metadata + tile grid |
 | `POST` | `/api/v1/maze/{id}/live?ticks=30` | required | Bring the maze to life: bounded erosion ticks mutate it in place (ADR-006). Optional `seal=` in `[0, 1]` also closes extra passages without disconnecting anyone (ADR-008; default 0 = v1) |

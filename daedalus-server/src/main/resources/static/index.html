@@ -132,6 +132,13 @@
     </div>
     <label for="seed">Seed (blank = random)</label>
     <input id="seed" type="number" placeholder="random">
+    <label for="braid" title="Open this fraction of dead ends after generation — the same Braider pass the tournament uses. Zero is a tree; without this, Load the adversarial maze rebuilt the unbraided seed">
+      Braid</label>
+    <select id="braid">
+      <option value="0">0 — unbraided</option>
+      <option value="0.4">0.4 — some loops</option>
+      <option value="0.8">0.8 — heavily braided</option>
+    </select>
     <div class="row">
       <div style="flex:1"><label for="hotspots" title="Random cells with raised traversal cost — weight-aware solvers (Dijkstra, A*, Dial) route around them">Hot spots</label>
         <input id="hotspots" type="number" value="0" min="0" max="64"></div>
@@ -580,12 +587,14 @@ $("generator").addEventListener("change", updateInfo);
 $("solver").addEventListener("change", updateInfo);
 $("lbGen").addEventListener("change", () => { refreshLeaderboard(); pinHash(); });
 
-async function generate() {
+async function generate(opts) {
+  const braid = opts && opts.braid != null ? +opts.braid : +(($("braid") && $("braid").value) || 0);
   const body = {
     generatorId: $("generator").value,
     rows: +$("rows").value, cols: +$("cols").value,
     seed: $("seed").value === "" ? null : +$("seed").value,
   };
+  if (braid > 0) body.braid = braid;
   const spotCount = Math.min(64, Math.max(0, +$("hotspots").value || 0));
   if (spotCount > 0) {
     // Random distinct cells; the server echoes what it applied, so the permalink and the
@@ -652,7 +661,10 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   $("stats").innerHTML =
       `<span>maze</span> ${maze.id.slice(0, 8)}&hellip;<br>`
       + `<span>by</span> ${maze.generatorId} &middot; ${maze.rows}&times;${maze.cols} `
-      + `&middot; <span>seed</span> ${maze.seed}<br>`
+      + `&middot; <span>seed</span> ${maze.seed}`
+      + (+(($("braid") && $("braid").value) || 0) > 0
+          ? ` &middot; braided ${$("braid").value}` : "")
+      + `<br>`
       + (roundTripMs != null
           ? `<span>round-trip</span> ${roundTripMs.toFixed(0)} ms<br>`
           : `<span>loaded from</span> ${sourceLabel || "permalink"}<br>`);
@@ -1345,9 +1357,22 @@ async function runTournament() {
   if (link && adv) {
     link.onclick = async (e) => {
       e.preventDefault();
+      $("generator").value = t.generatorId;
+      updateInfo();
       $("seed").value = adv.seed;
       $("rows").value = t.size; $("cols").value = t.size;
-      await generate();
+      const factor = t.braid == null ? 0 : t.braid;
+      if ($("braid")) {
+        const v = String(factor);
+        if (![...$("braid").options].some(o => o.value === v)) {
+          const o = document.createElement("option");
+          o.value = v;
+          o.textContent = v + " — from tournament";
+          $("braid").appendChild(o);
+        }
+        $("braid").value = v;
+      }
+      await generate({braid: factor});
     };
   }
   log("state", `tournament: ${t.standings.filter(s => !s.excluded).length} solvers over `

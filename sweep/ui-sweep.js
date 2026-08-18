@@ -421,6 +421,26 @@ async function check(name, fn) {
         `${q.sel} via ${q.path} ${q.hash}`];
   });
 
+  await check('W. generate braid opens dead ends, not just a label', async () => {
+    await page.fill('#rows', '15'); await page.fill('#cols', '15'); await page.fill('#seed', '7');
+    await page.selectOption('#braid', '0');
+    await page.click('#generate');
+    await page.waitForFunction(() => state.maze && state.maze.seed === 7, null, {timeout:15000});
+    await page.evaluate(() => { state.analysis = null; });
+    await page.click('#analyze');
+    await page.waitForFunction(() => state.analysis != null, null, {timeout:15000});
+    const tree = await page.evaluate(() => state.analysis.deadEndCount);
+    await page.selectOption('#braid', '0.8');
+    await page.click('#generate');
+    await page.waitForFunction(() => state.maze && state.maze.seed === 7, null, {timeout:15000});
+    await page.evaluate(() => { state.analysis = null; });
+    await page.click('#analyze');
+    await page.waitForFunction(() => state.analysis != null, null, {timeout:15000});
+    const braided = await page.evaluate(() => state.analysis.deadEndCount);
+    await page.selectOption('#braid', '0');
+    return [braided < tree, `dead ends ${tree} → ${braided}`];
+  });
+
   await check('O. no uncaught page errors', async () =>
     [pageErrors.length === 0, pageErrors.length ? pageErrors.join(' | ').slice(0,150) : 'none']);
 

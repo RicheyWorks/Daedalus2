@@ -158,6 +158,15 @@ under the `_migration/` portfolios.
   the ghost learned). A `#session=` arrival hydrates the hunt (if one
   was asked) and the ghost (if one exists) without creating either.
 
+- **Generate can braid, so the tournament's "load it" is the maze that was raced.**
+  `POST /maze/generate` takes optional `braid` in `[0, 1]` — the same
+  `Braider` pass, same seed, then extremes on the braided graph. The
+  page's Braid select is that field. "Load the adversarial maze" used
+  to set seed and size only: a braided sample rebuilt the tree, and a
+  changed Algorithm select rebuilt the wrong generator. The link now
+  sends generator, seed, size, and the sample's braid. Zero braid is
+  today's generate.
+
 - **A spectator sees every seat's walk, not just the opener's.**
   `GameSession` recorded hops only for the opening player — ghost
   material. A joiner was a marker. The snapshot now includes `walks`

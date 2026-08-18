@@ -244,6 +244,8 @@ Last consolidated: 2026-08-17
   — a spectator cannot mint the coins — and hydrates a hunt or ghost
   that already exists. Fog plus a living tick re-polls the agent only;
   `GET /maze` would have painted rooms the walk has not stood in.
+  Generate accepts `braid`; the tournament load-it link rebuilds the
+  sample that was raced, not the unbraided seed.
 
 - ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`
   uploads every module's JaCoCo XML to Codecov via `codecov-action@v5`,

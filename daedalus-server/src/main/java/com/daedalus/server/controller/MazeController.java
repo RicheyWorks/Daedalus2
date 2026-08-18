@@ -107,13 +107,17 @@ public class MazeController {
     @Operation(summary = "Generate a maze.",
             description = "If the named generator is unavailable or the circuit breaker is open, "
                     + "the response's generatorId reflects the actual fallback algorithm used. "
+                    + "Optional braid in [0, 1] opens that fraction of dead ends after generation "
+                    + "(the tournament's sample recipe). "
                     + "Rate-limited per caller (authenticated subject, else client IP) against the "
                     + "'mazeGenerate' budget; bursts past the configured limit return 429 with a "
                     + "Retry-After header.")
     @PerKeyRateLimit("mazeGenerate")
     public GenerateResponse generate(@Valid @RequestBody GenerateRequest req) {
         long seed = req.seed() != null ? req.seed() : System.nanoTime();
-        var cached = gen.generate(req.generatorId(), req.rows(), req.cols(), seed, req.hotspots());
+        double braid = req.braid() == null ? 0.0 : req.braid();
+        var cached = gen.generate(req.generatorId(), req.rows(), req.cols(), seed,
+                req.hotspots(), braid);
         String actualGeneratorId = cached.metadata().generatorId();
         return toResponse(cached.metadata().id(), actualGeneratorId,
                 req.rows(), req.cols(), seed, cached.grid(), cached.hotspots());

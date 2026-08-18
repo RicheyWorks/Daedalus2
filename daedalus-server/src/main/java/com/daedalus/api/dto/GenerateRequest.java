@@ -4,6 +4,8 @@ package com.daedalus.api.dto;
 
 import com.daedalus.api.validation.AlgorithmId;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
@@ -31,13 +33,22 @@ import java.util.List;
  *       inside it. When that path goes, the element bounds stop being enforced — silently, and
  *       in the direction that accepts bad input. {@code MazeControllerValidationTest} pins the
  *       cascade so the removal cannot happen quietly.</li>
+ *   <li>{@code braid} — optional fraction of dead ends to open, in {@code [0, 1]}.
+ *       {@code null} or {@code 0} is today's generate: a spanning tree (for the
+ *       22 tree generators). The tournament already braided its sample; without
+ *       this field "load the adversarial maze" rebuilt the tree and the race
+ *       was a different question.</li>
  * </ul>
  *
  * @param generatorId identifier of the registered generator algorithm (e.g. {@code "binary-tree"})
  * @param rows        number of rows in the maze grid
  * @param cols        number of columns in the maze grid
  * @param seed        optional RNG seed; when {@code null} the server uses {@code System.nanoTime()}
+ * @param hotspots    optional weighted cells; {@code null} for uniform cost
+ * @param braid       optional dead-end opening factor in {@code [0, 1]}; {@code null} is none
  */
+@com.fasterxml.jackson.annotation.JsonInclude(
+        com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 public record GenerateRequest(
         @AlgorithmId
         String generatorId,
@@ -53,10 +64,20 @@ public record GenerateRequest(
         Long seed,
 
         @Size(max = 64, message = "at most 64 hotspots per maze")
-        List<@Valid Hotspot> hotspots
+        List<@Valid Hotspot> hotspots,
+
+        @DecimalMin(value = "0.0", message = "braid must be at least 0")
+        @DecimalMax(value = "1.0", message = "braid must be at most 1")
+        Double braid
 ) {
     /** Pre-hotspot shape — uniform-cost maze, kept for source compatibility. */
     public GenerateRequest(String generatorId, int rows, int cols, Long seed) {
-        this(generatorId, rows, cols, seed, null);
+        this(generatorId, rows, cols, seed, null, null);
+    }
+
+    /** Uniform-cost maze, optional braid omitted. */
+    public GenerateRequest(String generatorId, int rows, int cols, Long seed,
+                           List<Hotspot> hotspots) {
+        this(generatorId, rows, cols, seed, hotspots, null);
     }
 }

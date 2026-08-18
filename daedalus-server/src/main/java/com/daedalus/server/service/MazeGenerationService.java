@@ -3,6 +3,7 @@
 package com.daedalus.server.service;
 
 import com.daedalus.api.dto.Hotspot;
+import com.daedalus.engine.Braider;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.engine.WeightedMazeGrid;
 import com.daedalus.engine.MazeGenerator;
@@ -115,9 +116,21 @@ public class MazeGenerationService {
      *                 offers a choice. This is what fired the weighted-shading trigger
      *                 recorded in ADR-004.
      */
-    @CircuitBreaker(name = "generation", fallbackMethod = "fallback")
     public Cached generate(String generatorId, int rows, int cols, long seed,
                            java.util.List<Hotspot> hotspots) {
+        return generate(generatorId, rows, cols, seed, hotspots, 0.0);
+    }
+
+    /**
+     * @param braid fraction of dead ends to open after generation, clamped to
+     *              {@code [0, 1]}. Zero is a no-op so existing callers keep a
+     *              tree. Same {@code (grid, factor, seed)} as the tournament,
+     *              then extremes are placed on the braided graph — otherwise
+     *              start and goal would still be the tree's diameter.
+     */
+    @CircuitBreaker(name = "generation", fallbackMethod = "fallback")
+    public Cached generate(String generatorId, int rows, int cols, long seed,
+                           java.util.List<Hotspot> hotspots, double braid) {
         MazeGenerator gen = registry.require(generatorId);
         Timer timer = meters.timer("daedalus.generate", "algo", generatorId);
         MazeStats stats = new MazeStats();
@@ -148,6 +161,9 @@ public class MazeGenerationService {
             }
             grid = weighted;
             applied = java.util.List.copyOf(hotspots);
+        }
+        if (braid > 0) {
+            Braider.braid(grid, braid, seed);
         }
         MazeMetrics.placeStartAndGoalAtExtremes(grid);
         MazeMetadata meta = MazeMetadata.of(rows, cols, seed, generatorId,
@@ -194,13 +210,13 @@ public class MazeGenerationService {
 
     @SuppressWarnings("unused")
     private Cached fallback(String generatorId, int rows, int cols, long seed,
-                            java.util.List<Hotspot> hotspots, Throwable t) {
+                            java.util.List<Hotspot> hotspots, double braid, Throwable t) {
         // A caller error is not a generator failure — rethrow so it answers 400, not a
         // silently different maze.
         if (t instanceof IllegalArgumentException iae) {
             throw iae;
         }
         // Minimal recovery: deterministic baseline using BinaryTree (always succeeds).
-        return generate("binary-tree", rows, cols, seed, hotspots);
+        return generate("binary-tree", rows, cols, seed, hotspots, braid);
     }
 }

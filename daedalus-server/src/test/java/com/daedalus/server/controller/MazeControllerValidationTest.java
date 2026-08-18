@@ -151,6 +151,16 @@ class MazeControllerValidationTest {
     }
 
     @Test
+    void generate_withBraidOutsideUnitInterval_returns400() throws Exception {
+        mvc.perform(post("/api/v1/maze/generate")
+                        .contentType("application/json")
+                        .content("{\"generatorId\":\"binary-tree\",\"rows\":10,\"cols\":10,"
+                                + "\"seed\":1,\"braid\":1.5}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.fieldErrors.braid", notNullValue()));
+    }
+
+    @Test
     void generate_withMalformedJson_returns400_malformedRequest() throws Exception {
         mvc.perform(post("/api/v1/maze/generate")
                         .contentType("application/json")

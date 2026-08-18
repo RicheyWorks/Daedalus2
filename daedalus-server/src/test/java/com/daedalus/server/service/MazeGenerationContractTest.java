@@ -187,11 +187,11 @@ class MazeGenerationContractTest {
         var svc = service();
         Method fallback = MazeGenerationService.class.getDeclaredMethod(
                 "fallback", String.class, int.class, int.class, long.class,
-                java.util.List.class, Throwable.class);
+                java.util.List.class, double.class, Throwable.class);
         fallback.setAccessible(true);
         var callerError = new IllegalArgumentException("unknown generator: nope");
 
-        assertThatThrownBy(() -> fallback.invoke(svc, "nope", 9, 9, 1L, null, callerError))
+        assertThatThrownBy(() -> fallback.invoke(svc, "nope", 9, 9, 1L, null, 0.0, callerError))
                 .isInstanceOf(InvocationTargetException.class)
                 .cause().isSameAs(callerError);
     }

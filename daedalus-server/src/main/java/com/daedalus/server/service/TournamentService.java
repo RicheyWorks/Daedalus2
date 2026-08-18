@@ -235,7 +235,7 @@ public class TournamentService {
 
         return new Tournament(generatorId, size, braid, mazes, baseSeed, standings,
                 tiesAmong(standings, perMazeWork, mazes),
-                extremes(standings, perMazeWork, baseSeed),
+                extremes(standings, perMazeWork, baseSeed, braid),
                 note(standings, mazes, braid));
     }
 
@@ -262,7 +262,8 @@ public class TournamentService {
 
     /** The best and worst mazes for the top-ranked solver against the runner-up. */
     private static List<Adversarial> extremes(List<Standing> standings,
-                                              Map<String, long[]> perMazeWork, long baseSeed) {
+                                              Map<String, long[]> perMazeWork, long baseSeed,
+                                              double braid) {
         List<Standing> ranked = standings.stream().filter(s -> !s.excluded()).toList();
         if (ranked.size() < 2) {
             return List.of();
@@ -285,7 +286,9 @@ public class TournamentService {
                 new Adversarial(a, b, baseSeed + worst, wa[worst], wb[worst],
                         ratio(wa[worst], wb[worst]),
                         "The maze in this sample where " + a + " does worst against " + b
-                                + ". Regenerate it with this seed and watch them race."),
+                                + ". Regenerate it with this seed"
+                                + (braid > 0 ? " and braid=" + braid : "")
+                                + " and watch them race."),
                 new Adversarial(a, b, baseSeed + best, wa[best], wb[best],
                         ratio(wa[best], wb[best]),
                         "The maze where " + a + " does best against " + b + "."));

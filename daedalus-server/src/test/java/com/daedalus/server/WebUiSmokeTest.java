@@ -48,6 +48,7 @@ class WebUiSmokeTest {
                 .contains("sessionWalk").contains("view.walks").contains("#session=")
                 .contains("tourWalk").contains("pinHash").contains("parseHash")
                 .contains("hydrateSpectatorOverlays").contains("#daily")
-                .contains("carveFogOpenings");
+                .contains("carveFogOpenings")
+                .contains("id=\"braid\"").contains("t.generatorId").contains("t.braid");
     }
 }
