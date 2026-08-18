@@ -456,6 +456,24 @@ async function check(name, fn) {
     return [h.loops > 0 && h.detour > 1, `auto-refresh loops=${h.loops} x${h.detour}`];
   });
 
+  await check('Y. living tick updates the fingerprint without a second click', async () => {
+    await page.selectOption('#braid', '0');
+    await page.fill('#rows', '15'); await page.fill('#cols', '15'); await page.fill('#seed', '909');
+    await page.click('#generate');
+    await page.waitForFunction(() => state.maze && state.maze.seed === 909, null, {timeout:15000});
+    await page.click('#fingerprint');
+    await page.waitForFunction(() => state.fingerprint && state.fingerprint.signature, null,
+        {timeout:40000});
+    const before = await page.evaluate(() => state.fingerprint.signature.deadEndRatio);
+    await page.click('#live');
+    await page.waitForFunction((was) => state.fingerprint
+        && state.fingerprint.signature.deadEndRatio !== was, before, {timeout:25000});
+    const after = await page.evaluate(() => state.fingerprint.signature.deadEndRatio);
+    await page.fill('#seed', '3'); await page.click('#generate');
+    await page.waitForFunction(() => state.maze && state.maze.seed === 3, null, {timeout:15000});
+    return [after < before, `dead-end ratio ${before.toFixed(3)} → ${after.toFixed(3)}`];
+  });
+
   await check('O. no uncaught page errors', async () =>
     [pageErrors.length === 0, pageErrors.length ? pageErrors.join(' | ').slice(0,150) : 'none']);
 

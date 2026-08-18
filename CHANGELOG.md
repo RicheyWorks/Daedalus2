@@ -158,6 +158,12 @@ under the `_migration/` portfolios.
   the ghost learned). A `#session=` arrival hydrates the hunt (if one
   was asked) and the ghost (if one exists) without creating either.
 
+- **Identify generator follows the living grid.** The button's claim is
+  eroded mazes whose recorded author no longer matches. A living tick
+  left the first verdict on screen. The page now re-asks `/fingerprint`;
+  the interesting answer is a falling dead-end ratio and, often,
+  `agrees: false`.
+
 - **Theory overlays follow the living grid, not the snapshot they were first asked about.**
   A living tick already re-solved the route, re-analyzed cuts, and rescored
   the tour (ADR-014). Hardest-route, the distance field, sanctuaries, the

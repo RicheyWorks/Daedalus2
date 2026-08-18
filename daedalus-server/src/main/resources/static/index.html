@@ -345,6 +345,7 @@ const state = {
   fog: null,             // AgentView + seen Set — cells this walk has stood on
   lbQuery: null,         // last /leaderboard path actually fetched (partition, not a title)
   caption: null,         // which theory panel last wrote #compareBox — living ticks refresh it
+  fingerprint: null,     // last Identification — living ticks re-ask; the feature is erosion
 };
 
 /** Escape untrusted text (player names arrive from other clients) before it meets innerHTML. */
@@ -655,6 +656,7 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   state.race = null; state.dailyId = null; state.analysis = null; state.ghost = null;
   state.hardest = null; state.field = null; state.sanctuaries = null;
   state.lens = null;
+  state.fingerprint = null;
   state.tour = null; state.tourGot = [];
   state.caption = null;
   state.stageIndex = null; // playStage re-sets this after adopting the stage's maze
@@ -1019,13 +1021,20 @@ async function onMutation(m) {
 /** Name the algorithm from the shape alone, and say how sure the structure allows us to be. */
 async function identifyGenerator() {
   const f = await api(`/maze/${state.maze.id}/fingerprint`);
+  state.fingerprint = f;
+  state.caption = "fingerprint";
+  log("state", `fingerprint: structure says ${f.predictedGeneratorId}`
+      + (f.agrees ? " (matches record)" : `, record says ${f.recordedGeneratorId}`));
+  paintFingerprintCaption(f);
+}
+
+function paintFingerprintCaption(f) {
   const pct = Math.round(f.confidence * 100);
   const verdict = f.agrees
       ? `<b style="color:#4cc38a">${esc(f.predictedGeneratorId)}</b> — matches the record`
       : `<b style="color:#f0b429">${esc(f.predictedGeneratorId)}</b> — record says `
         + `${esc(f.recordedGeneratorId)}`;
   const sig = f.signature;
-  state.caption = "fingerprint";
   $("compareBox").innerHTML =
       `<div style="margin-top:8px">Structure says ${verdict} `
     + `<span class="hint">(margin over ${esc(f.runnerUp)}: ${pct}%)</span></div>`
@@ -1034,8 +1043,6 @@ async function identifyGenerator() {
     + `corridors ${(sig.corridorRatio*100).toFixed(0)}% · junctions ${(sig.junctionRatio*100).toFixed(0)}% · `
     + `horizontal bias ${(sig.horizontalBias*100).toFixed(0)}% · straight-through `
     + `${(sig.straightRatio*100).toFixed(0)}% · mean run ${sig.meanStraightRun.toFixed(2)}</div>`;
-  log("state", `fingerprint: structure says ${f.predictedGeneratorId}`
-      + (f.agrees ? " (matches record)" : `, record says ${f.recordedGeneratorId}`));
 }
 
 // ---------- complexity lab (ADR-007 idea 2) ----------
@@ -1507,10 +1514,10 @@ async function onTrafficPulse(m) {
 /**
  * Theory overlays claim to be about the maze underfoot. Analysis, tour and the
  * solver route already re-asked on each living tick; hardest-route, the heat
- * map, sanctuaries, the lens and the ASCII dump did not — they painted the
- * tree they were first asked about while the grid eroded under them. The
- * services already read the live snapshot (HardestRouteService says that is
- * the point). Race and ghost stay recordings.
+ * map, sanctuaries, the lens, the fingerprint and the ASCII dump did not —
+ * they painted the tree they were first asked about while the grid eroded
+ * under them. The fingerprint button's whole claim is eroded mazes whose
+ * recorded author no longer matches. Race and ghost stay recordings.
  *
  * @return false when the maze on screen changed mid-refresh (caller must stop)
  */
@@ -1572,6 +1579,21 @@ async function refreshTheoryOverlays(forMaze, stale) {
       }
       state.lens = l;
       if (state.caption === "lens") paintLensCaption(l);
+    } catch (ignored) { /* overlay */ }
+  }
+  if (state.fingerprint) {
+    try {
+      const f = await api(`/maze/${forMaze}/fingerprint`);
+      if (stale()) return false;
+      const before = state.fingerprint;
+      if (f.agrees !== before.agrees
+          || f.predictedGeneratorId !== before.predictedGeneratorId
+          || f.signature.deadEndRatio !== before.signature.deadEndRatio) {
+        log("state", `fingerprint: structure says ${f.predictedGeneratorId}`
+            + (f.agrees ? " (matches record)" : `, record says ${f.recordedGeneratorId}`));
+      }
+      state.fingerprint = f;
+      if (state.caption === "fingerprint") paintFingerprintCaption(f);
     } catch (ignored) { /* overlay */ }
   }
   if ($("asciiOut") && !$("asciiOut").hidden) {
@@ -2231,6 +2253,7 @@ async function startFog() {
   state.path = null; state.expansions = [];
   state.analysis = null; state.hardest = null; state.field = null;
   state.lens = null; state.race = null; state.sanctuaries = null;
+  state.fingerprint = null;
   state.caption = null;
   state.fog = {seen: new Set()};
   applyFogView(view);
