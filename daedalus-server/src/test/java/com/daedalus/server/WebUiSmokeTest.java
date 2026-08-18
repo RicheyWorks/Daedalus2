@@ -50,6 +50,7 @@ class WebUiSmokeTest {
                 .contains("hydrateSpectatorOverlays").contains("#daily")
                 .contains("carveFogOpenings")
                 .contains("id=\"braid\"").contains("t.generatorId").contains("t.braid")
-                .contains("refreshTheoryOverlays").contains("paintFingerprintCaption");
+                .contains("refreshTheoryOverlays").contains("paintFingerprintCaption")
+                .contains("braidFactor").contains("/topic/plugins/failures");
     }
 }

@@ -271,7 +271,8 @@
     <section class="panel">
       <h2>Solver tournament</h2>
       <label for="tourBraid">Braid the sample by</label>
-      <select id="tourBraid">
+      <select id="tourBraid"
+              title="Same factor as Generate's Braid. Two selects that can disagree made the tournament race a different maze than Load it rebuilds">
         <option value="0">0 — unbraided</option>
         <option value="0.4">0.4 — some loops</option>
         <option value="0.8">0.8 — heavily braided</option>
@@ -520,9 +521,10 @@ async function refreshPlugins() {
     $("pluginBox").innerHTML = list.map(p => {
       const m = p.manifest || {};
       const err = p.error ? ` — ${esc(p.error)}` : "";
+      const desc = m.description ? `<div class="hint">${esc(m.description)}</div>` : "";
       return `<div><b>${esc(m.displayName || p.id)}</b> `
           + `<span class="rank">${esc(p.state)}</span> `
-          + `${esc(m.version || "")}${err}</div>`;
+          + `${esc(m.version || "")}${err}${desc}</div>`;
     }).join("");
   } catch (e) {
     $("pluginBox").textContent = "plugins unavailable — sign in if this is prod";
@@ -588,6 +590,32 @@ function updateInfo() {
 $("generator").addEventListener("change", updateInfo);
 $("solver").addEventListener("change", updateInfo);
 $("lbGen").addEventListener("change", () => { refreshLeaderboard(); pinHash(); });
+
+/** One braid factor. Generate and the tournament used to have two selects that
+ *  could disagree — Load it then rebuilt a different maze than the ranking. */
+function braidFactor() {
+  return ($("braid") && $("braid").value) || ($("tourBraid") && $("tourBraid").value) || "0";
+}
+
+function syncBraid(fromId) {
+  const src = $(fromId);
+  if (!src) return;
+  const v = src.value;
+  ["braid", "tourBraid"].forEach(id => {
+    const el = $(id);
+    if (!el || id === fromId) return;
+    if (![...el.options].some(o => o.value === v)) {
+      const o = document.createElement("option");
+      o.value = v;
+      o.textContent = v + " — from tournament";
+      el.appendChild(o);
+    }
+    el.value = v;
+  });
+}
+
+if ($("braid")) $("braid").addEventListener("change", () => syncBraid("braid"));
+if ($("tourBraid")) $("tourBraid").addEventListener("change", () => syncBraid("tourBraid"));
 
 async function generate(opts) {
   const braid = opts && opts.braid != null ? +opts.braid : +(($("braid") && $("braid").value) || 0);
@@ -1346,7 +1374,7 @@ function paintSanctuariesCaption(s) {
  */
 async function runTournament() {
   const generator = $("generator").value;
-  const braid = $("tourBraid").value;
+  const braid = braidFactor();
   $("tournament").disabled = true;
   $("tourBox").innerHTML = "running the sample…";
   let t;
@@ -1403,6 +1431,7 @@ async function runTournament() {
         }
         $("braid").value = v;
       }
+      syncBraid("braid");
       await generate({braid: factor});
     };
   }
@@ -2066,6 +2095,9 @@ function resubscribe() {
   state.subs.push(state.stomp.subscribe("/topic/plugins/failures", f => {
     const m = JSON.parse(f.body);
     log("err", `plugin ${m.pluginId} failed in ${m.phase}: ${m.errorClass}`);
+    // The frame exists so the roster can change. A log line with STARTED
+    // still on the Plugins panel is the failure buried in server logs.
+    refreshPlugins();
   }));
 }
 

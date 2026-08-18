@@ -158,6 +158,14 @@ under the `_migration/` portfolios.
   the ghost learned). A `#session=` arrival hydrates the hunt (if one
   was asked) and the ghost (if one exists) without creating either.
 
+- **The plugin roster and the braid factor tell the truth.**
+  A `PluginFailedFrame` hit the log and left the Plugins panel on
+  STARTED — the frame exists so the roster can change. The panel now
+  re-fetches `GET /plugins` and shows the manifest description the
+  describe endpoint was the only way to see. Generate and the tournament
+  each had a braid select; they stay in lockstep so a ranking cannot
+  race a different braid than Load it rebuilds.
+
 - **Identify generator follows the living grid.** The button's claim is
   eroded mazes whose recorded author no longer matches. A living tick
   left the first verdict on screen. The page now re-asks `/fingerprint`;

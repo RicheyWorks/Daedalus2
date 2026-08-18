@@ -247,7 +247,9 @@ Last consolidated: 2026-08-17
   Generate accepts `braid`; the tournament load-it link rebuilds the
   sample that was raced, not the unbraided seed. A living tick
   refreshes hardest-route, the heat map, sanctuaries, the lens, the
-  fingerprint, and ASCII the same way it already rescored the tour.
+  fingerprint, and ASCII the same way it already rescored the tour. A
+  plugin failure refreshes the roster; generate and tournament share
+  one braid factor.
 
 - ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`
   uploads every module's JaCoCo XML to Codecov via `codecov-action@v5`,

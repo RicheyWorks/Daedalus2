@@ -474,6 +474,22 @@ async function check(name, fn) {
     return [after < before, `dead-end ratio ${before.toFixed(3)} → ${after.toFixed(3)}`];
   });
 
+  await check('Z. generate braid and tournament braid stay one number', async () => {
+    await page.selectOption('#braid', '0.8');
+    const v = await page.evaluate(() => ({
+      g: document.getElementById('braid').value,
+      t: document.getElementById('tourBraid').value,
+    }));
+    await page.selectOption('#tourBraid', '0.4');
+    const back = await page.evaluate(() => ({
+      g: document.getElementById('braid').value,
+      t: document.getElementById('tourBraid').value,
+    }));
+    await page.selectOption('#braid', '0');
+    return [v.g === '0.8' && v.t === '0.8' && back.g === '0.4' && back.t === '0.4',
+        `braid ${v.g}/${v.t} then ${back.g}/${back.t}`];
+  });
+
   await check('O. no uncaught page errors', async () =>
     [pageErrors.length === 0, pageErrors.length ? pageErrors.join(' | ').slice(0,150) : 'none']);
 
