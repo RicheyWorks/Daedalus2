@@ -8,6 +8,13 @@ under the `_migration/` portfolios.
 
 ## [Unreleased] — 2026-08-17
 
+### Fixed
+
+- **Generate-id smoke stubbed the pre-braid overload.** The controller
+  calls `generate(..., hotspots, braid)`. The mock still answered the
+  five-arg form, so Mockito returned null and `cached.metadata()` NPE'd
+  — the audit's "report the fallback algorithm" pin was not running.
+
 ### Changed
 
 - **README matches the tree.** The glance list was a changelog of every UI

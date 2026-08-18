@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -64,7 +65,8 @@ class MazeControllerGeneratorIdTest {
         MazeGenerationService.Cached cached =
                 new MazeGenerationService.Cached(fallbackMeta, grid, new MazeStats());
 
-        when(gen.generate(anyString(), anyInt(), anyInt(), anyLong(), org.mockito.ArgumentMatchers.any())).thenReturn(cached);
+        when(gen.generate(anyString(), anyInt(), anyInt(), anyLong(),
+                org.mockito.ArgumentMatchers.any(), anyDouble())).thenReturn(cached);
 
         String body = new ObjectMapper().writeValueAsString(
                 new GenerateRequest("astar", 5, 5, 42L));
