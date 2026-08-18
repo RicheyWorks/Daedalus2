@@ -320,6 +320,7 @@ const state = {
   path: null,            // SolveResponse.path (cell coords)
   pathProgress: 1,       // 0..1 — animated reveal of the solver path
   session: null,         // { id, positions: {playerName: {row,col}}, primary, goal }
+  seat: null,            // who this tab's arrow keys move (opener, or the spectate-join)
   joined: null,          // second player's name, when joined
   trails: {},            // playerName -> [Point] breadcrumbs during play
   algos: {},             // id -> AlgorithmDescriptor, for the info cards
@@ -678,7 +679,7 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   state.readOnly = false;
   clearInterval(state.spectatePoll); state.spectatePoll = null;
   state.maze = maze; state.path = null; state.session = null;
-  state.joined = null; state.trails = {}; state.won = null;
+  state.seat = null; state.joined = null; state.trails = {}; state.won = null;
   state.expansions = []; state.searchProgress = 1; state.pathProgress = 1;
   $("solve").disabled = false; $("play").disabled = false;
   $("join").disabled = true;
@@ -862,9 +863,13 @@ function parseHash() {
 }
 
 function currentPermalink() {
-  if (state.session && state.readOnly) return {session: state.session.id};
+  // Campaign and daily keep the ladder / shared board. Everything else with a
+  // session — generate+play, spectate, join-from-spectate — is #session=.
+  // readOnly used to be the only way to get that hash, so Open session left
+  // #maze= in the bar and joining a spectate dropped the permalink you arrived on.
   if (state.campaign && state.stageIndex != null) return {campaign: String(state.campaign.seed)};
   if (state.dailyId && state.maze && state.maze.id === state.dailyId) return {daily: true};
+  if (state.session) return {session: state.session.id};
   if (state.maze) return {maze: state.maze.id};
   const g = $("lbGen") && $("lbGen").value;
   if (g) return {generator: g};
@@ -1926,11 +1931,19 @@ async function compareSolvers() {
 
 async function play() {
   const name = $("player").value || "web";
+  const hadFog = !!state.fog;
   const s = await api(`/maze/${state.maze.id}/session?player=${encodeURIComponent(name)}`,
       {method: "POST"});
   state.fog = null; // session arrows would otherwise steal the fog walk
+  if (hadFog) {
+    // Fog wrote openings into tiles and skipped GET /maze on living ticks.
+    // Leaving it without a refetch paints a fog-edited or generate-time grid.
+    try { Object.assign(state.maze, await api(`/maze/${state.maze.id}`)); }
+    catch (ignored) { /* play still works; walls may lag until the next refresh */ }
+  }
   $("ascii").disabled = false;
   state.session = {id: s.sessionId, positions: {[name]: s.position}, primary: name};
+  state.seat = name;
   state.joined = null; state.won = null;
   state.trails = {[name]: [s.position]};
   state.sessionStart = performance.now();
@@ -1939,6 +1952,7 @@ async function play() {
   $("join").title = "Requires daedalus.session.multiplayer=true";
   $("status").textContent = `session ${s.sessionId.slice(0, 8)}… — arrow keys to move`;
   log("state", `spectate link: ${location.origin}${location.pathname}#session=${s.sessionId}`);
+  pinHash();
   resubscribe();
   summonGhost(); // race the maze's best recorded run, if one exists
   draw();
@@ -1957,8 +1971,11 @@ async function join() {
     state.trails[name] = [s.position];
     if (fromSpectate) {
       state.readOnly = false;
-      state.session.primary = name;
-      state.joined = null;
+      // primary stays the opener — ghost start and win-vs-ghost key on it.
+      // This tab's arrows move the seat we just took.
+      state.seat = name;
+      state.joined = name;
+      state.sessionStart = performance.now();
       pinHash();
       $("join").textContent = "Join as second player";
       $("status").textContent = `session ${state.session.id.slice(0, 8)}… — arrow keys to move`;
@@ -2296,6 +2313,7 @@ const DIR_FROM_DELTA = {"-1,0": "NORTH", "1,0": "SOUTH", "0,-1": "WEST", "0,1": 
 async function startFog() {
   const view = await api(`/maze/${state.maze.id}/agent`, {method: "POST"});
   state.session = null;
+  state.seat = null;
   state.joined = null;
   $("join").disabled = true;
   state.path = null; state.expansions = [];
@@ -2643,8 +2661,8 @@ document.addEventListener("keydown", e => {
     const wasd = {KeyW: [-1, 0], KeyS: [1, 0], KeyA: [0, -1], KeyD: [0, 1]};
     if (arrows[e.key]) {
       e.preventDefault();
-      move(state.session.primary, ...arrows[e.key]);
-    } else if (state.joined && wasd[e.code]) {
+      move(state.seat || state.session.primary, ...arrows[e.key]);
+    } else if (state.joined && state.joined !== state.seat && wasd[e.code]) {
       e.preventDefault();
       move(state.joined, ...wasd[e.code]);
     }

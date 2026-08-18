@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Session permalinks and live-grid moves.** Open session logged a
+  `#session=` link and left `#maze=` in the bar; joining a spectate
+  dropped the hash and renamed `primary` to the joiner, so the ghost
+  and win keyed on the wrong seat. Campaign and daily stay first;
+  everything else with a session pins `#session=`. Arrows follow
+  `state.seat`. `tryMove` re-reads the cached grid inside the session
+  lock so a living tick cannot accept a sealed wall or refuse a newly
+  opened one. Leaving fog via play refetches the maze.
+
 - **Generate echoes the braid factor.** The request accepted it; the response
   did not. The page labelled Daily and a `#maze=` permalink from the leftover
   select. The factor now lives on the cached maze, is omitted when zero, and

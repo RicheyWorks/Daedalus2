@@ -145,7 +145,9 @@ async function check(name, fn) {
       }
       return t.length;
     });
-    return [before !== after && trail >= 2, `player moved via arrow keys; trail ${trail} cells`];
+    const hash = await page.evaluate(() => location.hash);
+    return [before !== after && trail >= 2 && /session=/.test(hash),
+        `player moved via arrow keys; trail ${trail} cells; ${hash}`];
   });
 
   await check('G. living maze erodes in UI', async () => {

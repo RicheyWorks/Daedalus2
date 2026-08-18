@@ -361,7 +361,7 @@ public class MazeController {
         if (c == null) throw new ResourceNotFoundException("maze", s.mazeId().toString(),
                 "Session " + id + " is open but its maze " + s.mazeId() + " has been evicted "
                         + "from the cache, so moves cannot be validated against it.");
-        return ResponseEntity.ok(sessions.tryMove(id, req.player(), c.grid(), req.to()));
+        return ResponseEntity.ok(sessions.tryMove(id, req.player(), c.grid(), req.to(), gen));
     }
 
     @PostMapping("/session/{id}/join")

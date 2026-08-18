@@ -52,6 +52,7 @@ class WebUiSmokeTest {
                 .contains("id=\"braid\"").contains("t.generatorId").contains("t.braid")
                 .contains("refreshTheoryOverlays").contains("paintFingerprintCaption")
                 .contains("braidFactor").contains("/topic/plugins/failures")
-                .contains("maze.braid").contains("applyBraidFromMaze");
+                .contains("maze.braid").contains("applyBraidFromMaze")
+                .contains("state.seat").contains("if (state.session) return {session");
     }
 }

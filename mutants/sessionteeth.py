@@ -45,8 +45,18 @@ MUT = [
      "            if (from == null) return false;",
      "            if (false) return false;"),
     (SVC, "illegal steps are accepted (walls ignored)",
-     "            if (!grid.openNeighbors(from).contains(to)) return false;",
+     "            if (!live.openNeighbors(from).contains(to)) return false;",
      "            if (false) return false;"),
+    (SVC, "a living replace is ignored (stale snapshot used)",
+     "            MazeGrid live = grid;\n"
+     "            if (mazes != null) {\n"
+     "                MazeGenerationService.Cached cached = mazes.find(s.mazeId());\n"
+     "                if (cached == null) {\n"
+     "                    return false;\n"
+     "                }\n"
+     "                live = cached.grid();\n"
+     "            }",
+     "            MazeGrid live = grid;"),
     (SVC, "join ignores the multiplayer flag",
      "        if (!multiplayer) return null;",
      "        if (false) return null;"),
@@ -66,7 +76,7 @@ MUT = [
 
 CLASSES = ("GameSessionServiceConcurrencyTest", "SessionLockIsolationTest",
            "GameSessionMultiplayerTest", "BoundedStoresTest", "MazeControllerJoinTest",
-           "GhostServiceTest")
+           "GhostServiceTest", "GameSessionLiveGridTest")
 TESTS = ",".join(CLASSES)
 
 

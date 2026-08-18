@@ -239,8 +239,9 @@ Last consolidated: 2026-08-17
   (the opener's `trail` is still ghost material) and keeps the session
   hash so a refresh still spectates. Hunt waypoints paints the Held-Karp
   `path` through the openings, not only the coins you are scored against.
-  Permalinks keep their kind (`#daily`, `#campaign=`, `#generator=`)
-  instead of collapsing to `#maze=`. `GET /session/{id}/tour` is a read
+  Permalinks keep their kind (`#daily`, `#campaign=`, `#generator=`).
+  Open session and join-from-spectate pin `#session=` without stealing
+  the opener; arrows follow `state.seat`. `GET /session/{id}/tour` is a read
   — a spectator cannot mint the coins — and hydrates a hunt or ghost
   that already exists. Fog plus a living tick re-polls the agent only;
   `GET /maze` would have painted rooms the walk has not stood in.

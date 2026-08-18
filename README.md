@@ -53,8 +53,9 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   accepts `braid`; the tournament and that control stay one number. Fog
   paints only stood-on cells and re-polls the agent when the maze lives.
   Walks (solver, player, ghost, tour) fill corridor tiles, not a polyline
-  through the posts. Permalinks keep their kind (`#session=`, `#campaign=`,
-  `#daily`, `#maze=`, `#generator=`). A spectator hydrates every seat's
+  through the posts. Permalinks keep their kind: campaign and daily stay
+  on the ladder and the shared board; Open session and a spectate pin
+  `#session=`; otherwise `#maze=` or `#generator=`. A spectator hydrates every seat's
   `walks` and does not mint a hunt. Living ticks refresh the theory
   overlays; a plugin failure refreshes the roster. Opt-in multiplayer:
   `daedalus.session.multiplayer`.

@@ -168,7 +168,7 @@ public class GameSessionService {
      * moment session-ownership modelling lands (TESTING.md, gap P3).
      */
     public boolean tryMove(UUID sessionId, MazeGrid grid, Point to) {
-        return tryMove(sessionId, null, grid, to);
+        return tryMove(sessionId, null, grid, to, null);
     }
 
     /**
@@ -177,6 +177,15 @@ public class GameSessionService {
      * cannot conjure a player into a session by moving them.
      */
     public boolean tryMove(UUID sessionId, String player, MazeGrid grid, Point to) {
+        return tryMove(sessionId, player, grid, to, null);
+    }
+
+    /**
+     * @param mazes when non-null, the maze is re-read inside the session lock so a
+     *              living tick cannot accept a sealed wall or refuse a newly opened one
+     */
+    public boolean tryMove(UUID sessionId, String player, MazeGrid grid, Point to,
+                           MazeGenerationService mazes) {
         GameSession s = sessions.getIfPresent(sessionId);
         if (s == null) return false;
         synchronized (s) {
@@ -184,8 +193,19 @@ public class GameSessionService {
             String actor = (player == null) ? s.playerName() : player;
             Point from = s.playerPosition(actor);
             if (from == null) return false;
-            // Only allow moves into open neighbors.
-            if (!grid.openNeighbors(from).contains(to)) return false;
+            // Re-read inside the lock when a live cache is provided. The controller
+            // found a snapshot, then waited for this lock; a living tick can
+            // replace() the grid in that window. Agent steps already re-read
+            // inside computeIfPresent. Tests keep passing a fixture grid.
+            MazeGrid live = grid;
+            if (mazes != null) {
+                MazeGenerationService.Cached cached = mazes.find(s.mazeId());
+                if (cached == null) {
+                    return false;
+                }
+                live = cached.grid();
+            }
+            if (!live.openNeighbors(from).contains(to)) return false;
             s.move(actor, to);
             // Published inside the lock so events observe the same order the moves were
             // applied in — listeners were already invoked inline by publishEvent before
@@ -205,7 +225,7 @@ public class GameSessionService {
             // do slow or I/O-bound work should hand off to its own executor rather than
             // borrowing this thread.
             events.publishEvent(new PlayerMovedEvent(this, sessionId, actor, from, to));
-            if (to.equals(grid.goal())) complete(s, grid);
+            if (to.equals(live.goal())) complete(s, live);
             return true;
         }
     }
