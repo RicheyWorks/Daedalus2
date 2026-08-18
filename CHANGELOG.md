@@ -10,6 +10,17 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Tour progress ignored `?count=` and unsigned spectators could not
+  paint the hunt.** Pickups and `GET /session/{id}/tour` looked up
+  `mazeId:defaultCount` only, so a hunt opened at `count=8` was
+  uncollectable. Progress now finds the placed instance, includes the
+  coins and the Held-Karp path (so a public spectator GET can paint
+  without `GET /maze/{id}/tour`, which is auth-required and would mint),
+  and reports the opener's trail rather than every seat's hops. A fog
+  walk that 404s falls through to `GET /maze` instead of leaving
+  `carveFogOpenings` tiles on a god-mode canvas. `GameSession` no longer
+  claims to live in Redis.
+
 - **Session permalinks and live-grid moves.** Open session logged a
   `#session=` link and left `#maze=` in the bar; joining a spectate
   dropped the hash and renamed `primary` to the joiner, so the ghost

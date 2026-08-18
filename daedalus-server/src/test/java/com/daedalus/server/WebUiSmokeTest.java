@@ -53,6 +53,7 @@ class WebUiSmokeTest {
                 .contains("refreshTheoryOverlays").contains("paintFingerprintCaption")
                 .contains("braidFactor").contains("/topic/plugins/failures")
                 .contains("maze.braid").contains("applyBraidFromMaze")
-                .contains("state.seat").contains("if (state.session) return {session");
+                .contains("state.seat").contains("if (state.session) return {session")
+                .contains("p.waypoints").contains("fog walk ended");
     }
 }

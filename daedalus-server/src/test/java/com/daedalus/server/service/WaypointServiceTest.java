@@ -261,6 +261,47 @@ class WaypointServiceTest {
                 .isGreaterThanOrEqualTo(0L);
     }
 
+    @Test
+    void aHuntOpenedAtANonDefaultCountIsCollectable() {
+        var tour = waypoints.tourFor(mazeId, 8);
+        assertThat(tour.waypoints()).hasSize(8);
+        var session = sessions.open(mazeId, "p", grid.start());
+        var before = waypoints.progressFor(session.id());
+        assertThat(before).isNotNull();
+        assertThat(before.total()).isEqualTo(8);
+        assertThat(before.waypoints()).isEqualTo(tour.waypoints());
+        assertThat(before.path()).isEqualTo(tour.path());
+
+        Point target = tour.waypoints().get(0);
+        List<Point> route = MazeMetrics.shortestPath(grid, grid.start(), target);
+        for (int i = 1; i < route.size(); i++) {
+            assertThat(sessions.tryMove(session.id(), grid, route.get(i))).isTrue();
+            waypoints.onPlayerMoved(new PlayerMovedEvent(this, session.id(), "p",
+                    route.get(i - 1), route.get(i)));
+        }
+        var after = waypoints.progressFor(session.id());
+        // k=8 is dense enough that the shortest path to the first coin can
+        // step on another; collected is observed pickups, not "we named one".
+        long onRoute = tour.waypoints().stream().filter(route::contains).count();
+        assertThat(after.collected()).isEqualTo((int) onRoute);
+        assertThat(after.remaining()).doesNotContain(target);
+        assertThat(after.walked()).isEqualTo(route.size() - 1L);
+    }
+
+    @Test
+    void walkedCountsTheOpenerTrailNotEverySeat() {
+        waypoints.tourFor(mazeId, 4);
+        var session = sessions.open(mazeId, "opener", grid.start());
+        assertThat(sessions.join(session.id(), "joiner", grid.start())).isNotNull();
+        Point step = grid.openNeighbors(grid.start()).get(0);
+        assertThat(sessions.tryMove(session.id(), "joiner", grid, step)).isTrue();
+        var progress = waypoints.progressFor(session.id());
+        assertThat(progress.walked())
+                .as("a joiner hop must not inflate the tour verdict")
+                .isZero();
+        assertThat(session.moveCount()).isEqualTo(1);
+    }
+
     /**
      * The cap has to leave room for the goal. Clamping to {@code MAX_WAYPOINTS} exactly and
      * then appending the goal as the compulsory last stop hands Held-Karp one stop too many,

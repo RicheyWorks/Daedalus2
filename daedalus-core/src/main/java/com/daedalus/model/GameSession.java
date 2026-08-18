@@ -11,7 +11,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * One playable session of a maze. Mutable — player position changes as the game progresses.
- * Stored in Redis under {@code session:{id}} for resume and replay.
+ * Held in the server process (Caffeine via {@code GameSessionService}); a restart
+ * forgets every session. Redis backs the leaderboard, not this store.
  */
 public class GameSession {
 

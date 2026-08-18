@@ -74,13 +74,18 @@ public class WaypointService {
     /**
      * How a session is doing against that optimum.
      *
-     * @param walked    steps the player has actually taken
+     * @param walked    hops the opening player has taken ({@link com.daedalus.model.GameSession#trail()}),
+     *                  not {@link com.daedalus.model.GameSession#moveCount()} — that sums every seat
      * @param optimal   steps the optimal tour needs (collect everything, then reach the goal)
      * @param collected waypoints reached so far
      * @param complete  every waypoint collected — the run counts as a tour only then
+     * @param waypoints the frozen coins (so a public spectator GET can paint without
+     *                  {@code GET /maze/{id}/tour}, which is auth-required and would mint)
+     * @param path      Held-Karp corridor on the live grid
      */
     public record Progress(UUID sessionId, int collected, int total, long walked,
-                           int optimal, boolean complete, List<Point> remaining) {}
+                           int optimal, boolean complete, List<Point> remaining,
+                           List<Point> waypoints, List<Point> path) {}
 
     private final MazeGenerationService gen;
     private final GameSessionService sessions;
@@ -185,7 +190,7 @@ public class WaypointService {
         if (session == null) {
             return;
         }
-        List<Point> waypoints = placements.getIfPresent(session.mazeId() + ":" + defaultCount);
+        List<Point> waypoints = placedFor(session.mazeId());
         if (waypoints == null || !waypoints.contains(e.to())) {
             return; // not a waypoint maze, or not a waypoint cell
         }
@@ -211,7 +216,7 @@ public class WaypointService {
         if (session == null) {
             return null;
         }
-        List<Point> waypoints = placements.getIfPresent(session.mazeId() + ":" + defaultCount);
+        List<Point> waypoints = placedFor(session.mazeId());
         if (waypoints == null) {
             return null;
         }
@@ -226,6 +231,28 @@ public class WaypointService {
                 .filter(p -> !snapshot.contains(p))
                 .toList();
         return new Progress(sessionId, snapshot.size(), tour.waypoints().size(),
-                session.moveCount(), tour.optimalCost(), remaining.isEmpty(), remaining);
+                session.trail().size(), tour.optimalCost(), remaining.isEmpty(), remaining,
+                tour.waypoints(), tour.path());
+    }
+
+    /**
+     * The coins already frozen for this maze. {@link #tourFor} keys {@code mazeId:k}, but
+     * pickups and progress used to look up {@code mazeId:defaultCount} only — a hunt opened
+     * at {@code ?count=8} was uncollectable and {@code GET /session/{id}/tour} 404'd.
+     * Prefer the default count when both exist (the UI's no-arg tour); otherwise the one
+     * placement that does.
+     */
+    private List<Point> placedFor(UUID mazeId) {
+        List<Point> atDefault = placements.getIfPresent(mazeId + ":" + defaultCount);
+        if (atDefault != null) {
+            return atDefault;
+        }
+        String prefix = mazeId + ":";
+        for (var e : placements.asMap().entrySet()) {
+            if (e.getKey().startsWith(prefix)) {
+                return e.getValue();
+            }
+        }
+        return null;
     }
 }

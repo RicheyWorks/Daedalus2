@@ -1013,10 +1013,19 @@ function mazeStart(maze) {
 async function hydrateSpectatorOverlays(view) {
   try {
     const p = await api(`/session/${view.sessionId}/tour`);
-    const t = await api(`/maze/${view.mazeId}/tour?count=${p.total}`);
-    state.tour = t;
-    state.tourGot = (t.waypoints || []).filter(w => !(p.remaining || []).some(r => sameCell(r, w)));
-    log("state", `spectating a waypoint hunt — ${p.collected}/${p.total} collected`);
+    // Progress carries the coins and the Held-Karp path. GET /maze/{id}/tour
+    // is auth-required in prod and would 401 here; it is also what freezes
+    // coins, which a spectator GET must not do.
+    if (p.waypoints && p.waypoints.length) {
+      state.tour = {
+        waypoints: p.waypoints,
+        path: p.path || [],
+        optimalCost: p.optimal,
+        feasible: true,
+      };
+      state.tourGot = p.waypoints.filter(w => !(p.remaining || []).some(r => sameCell(r, w)));
+      log("state", `spectating a waypoint hunt — ${p.collected}/${p.total} collected`);
+    }
   } catch (ignored) { /* no tour minted; do not create one */ }
   await summonGhost();
 }
@@ -1679,13 +1688,16 @@ async function refreshLivingMaze() {
         const v = await api(`/agent/${state.fog.agentId}`);
         if (stale()) return;
         applyFogView(v);
+        draw();
+        return;
       } catch (gone) {
         if (stale()) return;
+        // Agent is gone. carveFogOpenings mutated tiles and living ticks
+        // skipped GET /maze on purpose — fall through and refetch the live grid.
         state.fog = null;
+        $("ascii").disabled = false;
         log("err", `fog walk ended: ${gone.message}`);
       }
-      draw();
-      return;
     }
 
     const maze = await api(`/maze/${forMaze}`);

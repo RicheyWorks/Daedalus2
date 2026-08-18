@@ -56,7 +56,8 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   through the posts. Permalinks keep their kind: campaign and daily stay
   on the ladder and the shared board; Open session and a spectate pin
   `#session=`; otherwise `#maze=` or `#generator=`. A spectator hydrates every seat's
-  `walks` and does not mint a hunt. Living ticks refresh the theory
+  `walks` and paints a hunt from the session tour, not a minting GET.
+  Living ticks refresh the theory
   overlays; a plugin failure refreshes the roster. Opt-in multiplayer:
   `daedalus.session.multiplayer`.
 - **Deterministic across restarts, not just across a cache hit.** Same seed,
@@ -160,7 +161,7 @@ public consumers).
 | `GET` | `/api/v1/complexity?generator=&metric=` | required | Measure a generator's real growth curve and report its big-O with an R² (ADR-007) |
 | `GET` | `/api/v1/complexity/metrics` | required | Which metrics `/complexity` can be asked for |
 | `GET` | `/api/v1/maze/{id}/tour?count=` | required | Waypoints plus the provably optimal route collecting them all, including the cell `path` Held-Karp already walked (ADR-007) |
-| `GET` | `/api/v1/session/{id}/tour` | public | Server-observed progress against that optimum. A read: 404 `tour` until someone has asked `GET /maze/{id}/tour`; does not freeze coins |
+| `GET` | `/api/v1/session/{id}/tour` | public | Server-observed progress against that optimum. A read: 404 `tour` until someone has asked `GET /maze/{id}/tour`; does not freeze coins. Includes the coins and Held-Karp `path` so a spectator can paint without that minting GET |
 | `GET` | `/api/v1/campaign?seed=` | required | A deterministic, difficulty-graded ladder of stages; omit the seed for today's (ADR-006). The finale declares `hardening` so the client starts `/live?seal=` (ADR-008) |
 | `POST` | `/api/v1/maze/breed?a=&b=&seed=` | required | Crossbreed two equal-sized mazes into a connected child (ADR-006) |
 | `GET` | `/api/v1/session/{id}` | public | Read-only session snapshot — the spectator entry point (`#session=` permalink). Includes the opening player's `trail` (ghost material) and every player's `walks` so joiners do not teleport |

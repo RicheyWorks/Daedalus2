@@ -176,6 +176,9 @@ public class InsightController {
             description = "Collection is observed server-side from the session's own moves, not "
                     + "reported by the client, so the count that scores cannot be claimed. "
                     + "Does not place waypoints — GET /maze/{id}/tour is what freezes the coins. "
+                    + "The body includes those coins and the Held-Karp path so an unsigned "
+                    + "spectator can paint the hunt; GET /maze/{id}/tour is auth-required in "
+                    + "prod and must not be the paint source. "
                     + "Rate-limited against the 'mazeSolve' budget: a placed tour still rescores "
                     + "Held-Karp on the live grid.")
     @PerKeyRateLimit("mazeSolve")
