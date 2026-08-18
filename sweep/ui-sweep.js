@@ -417,10 +417,12 @@ async function check(name, fn) {
       path: state.lbQuery,
       hash: location.hash,
       sel: document.getElementById('lbGen').value,
+      gen: document.getElementById('generator').value,
     }));
     await p2.close();
-    return [/generator=prims/.test(q.path) && q.sel === 'prims' && /generator=prims/.test(q.hash),
-        `${q.sel} via ${q.path} ${q.hash}`];
+    return [/generator=prims/.test(q.path) && q.sel === 'prims' && q.gen === 'prims'
+        && /generator=prims/.test(q.hash),
+        `${q.sel}/${q.gen} via ${q.path} ${q.hash}`];
   });
 
   await check('W. generate braid opens dead ends, not just a label', async () => {

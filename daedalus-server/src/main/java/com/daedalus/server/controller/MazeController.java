@@ -5,6 +5,7 @@ package com.daedalus.server.controller;
 import com.daedalus.api.dto.DailyMazeResponse;
 import com.daedalus.api.dto.GenerateRequest;
 import com.daedalus.api.dto.GenerateResponse;
+import com.daedalus.api.dto.Hotspot;
 import com.daedalus.api.dto.MoveRequest;
 import com.daedalus.api.dto.SessionResponse;
 import com.daedalus.api.dto.SolveResponse;
@@ -266,7 +267,9 @@ public class MazeController {
     @Operation(summary = "Breed two mazes: the child inherits patches of both and is repaired to full connectivity.",
             description = "Parents must share dimensions (400 otherwise). The child is a "
                     + "first-class maze — solve it, play it, bring it to life, breed it "
-                    + "again. Rate-limited against the 'mazeGenerate' budget.")
+                    + "again. Parent hotspots are unioned (max cost on a shared cell, "
+                    + "capped at 64) so a weighted pair does not breed a uniform-cost child. "
+                    + "Rate-limited against the 'mazeGenerate' budget.")
     @PerKeyRateLimit("mazeGenerate")
     public ResponseEntity<GenerateResponse> breed(
             @RequestParam UUID a,
@@ -281,9 +284,11 @@ public class MazeController {
         long s = seed != null ? seed
                 : a.getLeastSignificantBits() ^ Long.rotateLeft(b.getLeastSignificantBits(), 17);
         MazeGrid child = com.daedalus.engine.MazeBreeder.breed(pa.grid(), pb.grid(), s);
-        var cached = gen.adopt(child, "crossbreed", s);
+        var cached = gen.adopt(child, "crossbreed", s,
+                mergeParentHotspots(pa.hotspots(), pb.hotspots()));
         return ResponseEntity.ok(toResponse(cached.metadata().id(), "crossbreed",
-                child.rows(), child.cols(), s, child, null, null));
+                cached.grid().rows(), cached.grid().cols(), s, cached.grid(),
+                cached.hotspots(), null));
     }
 
     /**
@@ -439,5 +444,25 @@ public class MazeController {
             }
         }
         return new GenerateResponse(id, generatorId, rows, cols, seed, glyphs, hotspots, braid);
+    }
+
+    /**
+     * Union of parent weights, row-major, max cost on a shared cell. Generate accepts
+     * at most 64 hotspots; a pair of full lists would otherwise overflow that contract.
+     */
+    static List<Hotspot> mergeParentHotspots(List<Hotspot> a, List<Hotspot> b) {
+        if ((a == null || a.isEmpty()) && (b == null || b.isEmpty())) {
+            return null;
+        }
+        java.util.TreeMap<String, Hotspot> byCell = new java.util.TreeMap<>();
+        for (Hotspot h : a == null ? List.<Hotspot>of() : a) {
+            byCell.merge(String.format("%04d,%04d", h.row(), h.col()), h,
+                    (x, y) -> x.cost() >= y.cost() ? x : y);
+        }
+        for (Hotspot h : b == null ? List.<Hotspot>of() : b) {
+            byCell.merge(String.format("%04d,%04d", h.row(), h.col()), h,
+                    (x, y) -> x.cost() >= y.cost() ? x : y);
+        }
+        return byCell.values().stream().limit(64).toList();
     }
 }

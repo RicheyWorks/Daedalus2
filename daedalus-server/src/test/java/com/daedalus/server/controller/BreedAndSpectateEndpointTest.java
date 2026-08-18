@@ -2,6 +2,7 @@
 
 package com.daedalus.server.controller;
 
+import com.daedalus.api.dto.Hotspot;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.Point;
 import com.daedalus.server.service.MazeGenerationService;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.client.RestTestClient;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -73,6 +75,31 @@ class BreedAndSpectateEndpointTest {
         assertThat(again.get("tiles")).isEqualTo(child.get("tiles"));
         client().post().uri("/api/v1/maze/breed?a=" + childId + "&b=" + a)
                 .exchange().expectStatus().isOk();
+    }
+
+    @Test
+    void aBredChildInheritsParentHotspots() throws Exception {
+        UUID a = generateWeighted("recursive-backtracker", 11, 11, 5L, 2, 2, 10);
+        UUID b = generateWeighted("binary-tree", 11, 11, 6L, 4, 4, 25);
+
+        JsonNode child = MAPPER.readTree(client()
+                .post().uri("/api/v1/maze/breed?a=" + a + "&b=" + b + "&seed=7")
+                .exchange().expectStatus().isOk()
+                .expectBody().returnResult().getResponseBody());
+        assertThat(child.get("hotspots")).hasSize(2);
+        UUID childId = UUID.fromString(child.get("id").asText());
+        MazeGrid grid = gen.find(childId).grid();
+        assertThat(grid.weightOf(new Point(2, 2))).isEqualTo(10.0);
+        assertThat(grid.weightOf(new Point(4, 4))).isEqualTo(25.0);
+    }
+
+    @Test
+    void overlappingParentHotspotsKeepTheHigherCost() {
+        List<Hotspot> merged = MazeController.mergeParentHotspots(
+                List.of(new Hotspot(1, 1, 10), new Hotspot(2, 2, 5)),
+                List.of(new Hotspot(1, 1, 25), new Hotspot(3, 3, 8)));
+        assertThat(merged).containsExactly(
+                new Hotspot(1, 1, 25), new Hotspot(2, 2, 5), new Hotspot(3, 3, 8));
     }
 
     @Test
@@ -146,6 +173,19 @@ class BreedAndSpectateEndpointTest {
                 .header("Content-Type", "application/json")
                 .body("{\"generatorId\":\"" + generator + "\",\"rows\":" + rows
                         + ",\"cols\":" + cols + ",\"seed\":" + seed + "}")
+                .exchange().expectStatus().isOk()
+                .expectBody().returnResult().getResponseBody());
+        return UUID.fromString(maze.get("id").asText());
+    }
+
+    private UUID generateWeighted(String generator, int rows, int cols, long seed,
+                                  int row, int col, double cost) throws Exception {
+        JsonNode maze = MAPPER.readTree(client().post().uri("/api/v1/maze/generate")
+                .header("Content-Type", "application/json")
+                .body("{\"generatorId\":\"" + generator + "\",\"rows\":" + rows
+                        + ",\"cols\":" + cols + ",\"seed\":" + seed
+                        + ",\"hotspots\":[{\"row\":" + row + ",\"col\":" + col
+                        + ",\"cost\":" + cost + "}]}")
                 .exchange().expectStatus().isOk()
                 .expectBody().returnResult().getResponseBody());
         return UUID.fromString(maze.get("id").asText());

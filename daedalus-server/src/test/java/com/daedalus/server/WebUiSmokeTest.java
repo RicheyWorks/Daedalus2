@@ -54,6 +54,9 @@ class WebUiSmokeTest {
                 .contains("braidFactor").contains("/topic/plugins/failures")
                 .contains("maze.braid").contains("applyBraidFromMaze")
                 .contains("state.seat").contains("if (state.session) return {session")
-                .contains("p.waypoints").contains("fog walk ended");
+                .contains("p.waypoints").contains("fog walk ended")
+                .contains("esc(a.displayName)").contains("integrity=")
+                .contains("$(\"generator\").value = h.generator")
+                .contains("already alive");
     }
 }

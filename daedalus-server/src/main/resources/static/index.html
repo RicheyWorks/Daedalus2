@@ -16,8 +16,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Daedalus</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"
+        integrity="sha384-svdnwiXBL+Js+yUneJSRFy24NgGiOfDM/vkQl/vCeVrcbYD6yW8EwPr1FnxTEZsR"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
+        integrity="sha384-clKAk7WaYNQiu/pGVWisoFQcSK2VL7YweoI1gim9/HFbMsRvD2ZtLWNoZoL4df65"
+        crossorigin="anonymous"></script>
 <style>
   :root {
     --bg: #101418; --panel: #1a2026; --line: #2a323b; --text: #d7dde3; --dim: #8a949e;
@@ -585,7 +589,8 @@ function updateInfo() {
   for (const [selId, infoId] of [["generator", "genInfo"], ["solver", "solInfo"]]) {
     const a = state.algos[$(selId).value];
     $(infoId).innerHTML = !a ? "" :
-        `<b>${a.displayName}</b> &middot; ${a.complexity || ""}<br>${a.biasNote || a.description || ""}`;
+        `<b>${esc(a.displayName)}</b> &middot; ${esc(a.complexity || "")}<br>`
+        + `${esc(a.biasNote || a.description || "")}`;
   }
 }
 $("generator").addEventListener("change", updateInfo);
@@ -687,6 +692,7 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   $("join").title = "Requires daedalus.session.multiplayer=true";
   $("compare").disabled = false;
   $("live").disabled = false; $("traffic").disabled = false; $("race").disabled = false;
+  if ($("harden")) $("harden").disabled = false;
   $("analyze").disabled = false; $("tour").disabled = false;
   $("fingerprint").disabled = false; $("hardest").disabled = false;
   $("heatmap").disabled = false; $("sanctuaries").disabled = false;
@@ -826,8 +832,11 @@ async function playStage(index) {
       log("err", `could not start ${hazard}: ${e.message}`);
     }
   }
-  if ((stage.hazards.includes("living") || stage.hazards.includes("hardening"))
-      && !state.stomp) startLivePolling(stage.mazeId);
+  if (stage.hazards.includes("living") || stage.hazards.includes("hardening")) {
+    $("live").disabled = true;
+    if ($("harden")) $("harden").disabled = true;
+    if (!state.stomp) startLivePolling(stage.mazeId);
+  }
   refreshLeaderboard();               // this stage's own board (per-maze partition)
 }
 
@@ -912,11 +921,15 @@ async function loadFromHash() {
     }
     return;
   }
-  if (h.generator && $("lbGen")) {
-    const opt = [...$("lbGen").options].some(o => o.value === h.generator);
-    if (opt) {
+  if (h.generator) {
+    if ($("lbGen") && [...$("lbGen").options].some(o => o.value === h.generator)) {
       $("lbGen").value = h.generator;
       await refreshLeaderboard();
+    }
+    // The hash named an algorithm, not just a leaderboard partition.
+    if ($("generator") && [...$("generator").options].some(o => o.value === h.generator)) {
+      $("generator").value = h.generator;
+      updateInfo();
     }
   }
 }
@@ -1037,10 +1050,15 @@ async function hydrateSpectatorOverlays(view) {
  * server-reported tick interval, so the maze still visibly lives.
  */
 async function bringToLife() {
+  if ($("live").disabled) {
+    log("err", "already alive — Harden only applies on the first Bring to life");
+    return;
+  }
   const harden = $("harden") && $("harden").checked;
   const q = `/maze/${state.maze.id}/live?ticks=30` + (harden ? "&seal=0.08" : "");
   const r = await api(q, {method: "POST"});
   $("live").disabled = true;
+  if ($("harden")) $("harden").disabled = true;
   log("state", `maze is alive — ${r.ticksRequested} ticks`
       + (harden ? " (eroding and hardening)" : " (erosion only)")
       + `, one every ${(r.tickMillis / 1000).toFixed(1)}s`);
@@ -1058,7 +1076,10 @@ function startLivePolling(mazeId, tickMillis = 2000, ticks = 30) {
   state.livePoll = setInterval(async () => {
     if (!state.maze || state.maze.id !== mazeId || ++polls > ticks + 1) {
       clearInterval(state.livePoll); state.livePoll = null;
-      if (state.maze && state.maze.id === mazeId) $("live").disabled = false;
+      if (state.maze && state.maze.id === mazeId) {
+        $("live").disabled = false;
+        if ($("harden")) $("harden").disabled = false;
+      }
       return;
     }
     await refreshLivingMaze();
@@ -1072,7 +1093,10 @@ async function onMutation(m) {
       + (closed ? `, ${closed} closed` : "")
       + `, ${m.deadEndsRemaining} dead ends left${m.settled ? " — maze has settled" : ""}`);
   await refreshLivingMaze();
-  if (m.settled) $("live").disabled = false;
+  if (m.settled) {
+    $("live").disabled = false;
+    if ($("harden")) $("harden").disabled = false;
+  }
 }
 
 // ---------- maze fingerprint (ADR-007 idea 4) ----------

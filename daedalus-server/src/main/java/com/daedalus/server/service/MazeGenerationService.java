@@ -193,10 +193,31 @@ public class MazeGenerationService {
      * so an adopted maze is indistinguishable from a generated one downstream.
      */
     public Cached adopt(MazeGrid grid, String generatorId, long seed) {
+        return adopt(grid, generatorId, seed, null);
+    }
+
+    /**
+     * @param hotspots parent weights to keep on an adopted child; {@code null} for uniform cost
+     */
+    public Cached adopt(MazeGrid grid, String generatorId, long seed,
+                        java.util.List<Hotspot> hotspots) {
         MazeMetrics.placeStartAndGoalAtExtremes(grid);
+        java.util.List<Hotspot> applied = null;
+        if (hotspots != null && !hotspots.isEmpty()) {
+            WeightedMazeGrid weighted = new WeightedMazeGrid(grid);
+            for (Hotspot h : hotspots) {
+                if (h.row() >= grid.rows() || h.col() >= grid.cols()) {
+                    throw new IllegalArgumentException("hotspot (" + h.row() + "," + h.col()
+                            + ") is outside a " + grid.rows() + "x" + grid.cols() + " maze");
+                }
+                weighted.setWeight(new Point(h.row(), h.col()), h.cost());
+            }
+            grid = weighted;
+            applied = java.util.List.copyOf(hotspots);
+        }
         MazeMetadata meta = MazeMetadata.of(grid.rows(), grid.cols(), seed, generatorId,
                 grid.start(), grid.goal());
-        Cached cached = new Cached(meta, grid, new MazeStats(), null);
+        Cached cached = new Cached(meta, grid, new MazeStats(), applied);
         cache.put(meta.id(), cached);
         events.publishEvent(new MazeGeneratedEvent(this, meta, grid, cached.stats()));
         return cached;

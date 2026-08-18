@@ -181,8 +181,7 @@ daedalus:
   ratelimit:
     # Trust X-Forwarded-For when deriving the client IP? Enable ONLY behind a proxy / load
     # balancer that overwrites the header — otherwise a caller can spoof it to mint a fresh
-    # bucket per forged IP and defeat the limit. Off by default (use the socket remoteAddr);
-    # application-prod.yml turns it on because that surface sits behind an ingress.
+    # bucket per forged IP and defeat the limit. Off by default in every profile.
     trust-forwarded-header: ${DAEDALUS_RL_TRUST_XFF:false}
 
 # ----- Resilience4j rate limiters -----

@@ -255,6 +255,9 @@ Last consolidated: 2026-08-17
   plugin failure refreshes the roster; generate and tournament share
   one braid factor. Generate and {@code GET /maze/{id}} echo that
   factor so a permalink does not read the leftover select.
+  `#generator=` sets the Generate dropdown. Catalog blurbs are escaped.
+  Crossbreed keeps parent hotspots. CDN scripts have SRI. Prod rate
+  limits ignore `X-Forwarded-For` unless opted in.
 
 - ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`
   uploads every module's JaCoCo XML to Codecov via `codecov-action@v5`,

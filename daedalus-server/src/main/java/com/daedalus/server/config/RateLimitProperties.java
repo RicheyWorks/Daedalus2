@@ -18,8 +18,8 @@ import java.time.Duration;
  *        {@code remoteAddr}. Enable this <em>only</em> when the app sits behind a trusted reverse
  *        proxy / load balancer that overwrites {@code X-Forwarded-For} — otherwise a client can
  *        spoof the header and hand itself a fresh bucket per forged IP, defeating the limit.
- *        Defaults to {@code false} (trust the socket address); {@code application-prod.yml} turns
- *        it on because that surface runs behind an ingress.
+ *        Defaults to {@code false} (trust the socket address) in every profile. Turn it on
+ *        only behind an ingress that overwrites {@code X-Forwarded-For}.
  * @param maxKeys ceiling on how many distinct caller buckets are held at once. Beyond this,
  *        Caffeine evicts the least-recently-used. Bounds the memory a high-cardinality caller can
  *        force the process to allocate — see {@code PerKeyRateLimitInterceptor} for why eviction

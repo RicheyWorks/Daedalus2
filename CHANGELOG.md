@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Catalog blurbs, `#generator=`, breed weights, and prod XFF.**
+  Algorithm notes go through `esc()`. A `#generator=` permalink sets
+  Generate, not only the leaderboard select. SockJS/stomp.js carry SRI.
+  Crossbreed unions parent hotspots (max cost on a shared cell). Prod
+  no longer trusts `X-Forwarded-For` unless `DAEDALUS_RL_TRUST_XFF=true`.
+  Harden after `/live` is already running is refused instead of a silent
+  no-op.
+
 - **Tour progress ignored `?count=` and unsigned spectators could not
   paint the hunt.** Pickups and `GET /session/{id}/tour` looked up
   `mazeId:defaultCount` only, so a hunt opened at `count=8` was
