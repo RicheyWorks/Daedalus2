@@ -8,6 +8,14 @@ under the `_migration/` portfolios.
 
 ## [Unreleased] — 2026-08-17
 
+### Changed
+
+- **README matches the tree.** The glance list was a changelog of every UI
+  honesty fix; it is a product sketch again. The fat-jar example is
+  `1.2.0-SNAPSHOT`, not `1.0.0`. The July 623-test snapshot is dated. The
+  TypeScript file is a sketch, not a generated client. Golden digests cover
+  nine solvers because IDA\* answers 422.
+
 ### Added
 
 - **Living mazes v2 — hardening (ADR-008).** ADR-006 left wall-closing out of v1 because

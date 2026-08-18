@@ -42,61 +42,43 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   removal path reachable from teardown must not be able to delete a shipped
   algorithm.
 - **Java 21**, **Spring Boot 4.1**, **JavaFX 21**.
-- **Live over the wire** — a session-scoped STOMP surface (maze state, solver
-  runs, player moves, plugin failures) with `CONNECT` authentication,
-  per-destination `SUBSCRIBE` authorization on owned sessions, and client
-  `SEND` refused outright: the surface is broadcast-only, and with a simple
-  broker on `/topic` anything less meant any connected client could publish a
-  forged move frame into any session's feed (found by sending one and watching
-  it arrive, 2026-07-31). A one-file vanilla-JS web UI served at `/` plays
-  mazes against it, with an opt-in multiplayer flag
-  (`daedalus.session.multiplayer`). Sign in attaches the JWT so prod
-  generate/play and an authenticated join work from the page; Fog of war
-  walks the agent API and paints only cells the walk has stood on. Show ASCII
-  is `Accept: text/plain` on the maze, not a client-side dump; the plugin
-  panel lists what the runtime loaded. The leaderboard Algorithm select is
-  `GET /leaderboard?generator=`; a daily or campaign board keeps `maze=`
-  and disables the select, because maze wins if both are sent. Solver
-  routes paint the cells and openings of a 4-walk — a fat polyline through
-  cell centers cut the corner posts, which made wall-follower and Trémaux
-  look like they walked through walls. Player trails, fog walks, and the
-  ghost use the same corridor painter. A `#session=` spectator loads the
-  opening player's recorded trail from the snapshot so the walk is on
-  the   canvas before the next frame arrives. Hunt waypoints paints the
-  Held-Karp `path`, not only the coins. Permalinks keep their kind
-  (`#daily`, `#campaign=`, `#generator=`) instead of collapsing to
-  `#maze=`. `GET /session/{id}/tour` does not mint the coins; a
-  spectator hydrates a hunt or ghost that already exists. Fog plus a
-  living tick re-polls the agent; it does not replace the grid. A
-  spectator paints every seat's recorded walk, not only the opener's.
-  Generate accepts a braid factor; the tournament's load-it link sends
-  the sample's generator, seed, size, and braid, not only the seed. A
-  living tick refreshes the theory overlays (hardest route, heat map,
-  sanctuaries, lens, fingerprint, ASCII) against the grid underfoot. A
-  plugin failure refreshes the roster. Generate and the tournament share
-  one braid factor.
+- **Live over the wire** — STOMP at `/ws` (maze state, solver runs, player
+  moves, plugin failures). `CONNECT` carries the JWT in prod; owned session
+  topics are per-destination `SUBSCRIBE`; client `SEND` is refused. The
+  surface is broadcast-only — with a simple broker on `/topic`, anything less
+  let any connected client forge a move frame into any session (found by
+  sending one, 2026-07-31).
+- **A one-file web UI at `/`** — vanilla JS, no npm, the same REST + STOMP
+  an external integrator would use. Sign in attaches the JWT. Generate
+  accepts `braid`; the tournament and that control stay one number. Fog
+  paints only stood-on cells and re-polls the agent when the maze lives.
+  Walks (solver, player, ghost, tour) fill corridor tiles, not a polyline
+  through the posts. Permalinks keep their kind (`#session=`, `#campaign=`,
+  `#daily`, `#maze=`, `#generator=`). A spectator hydrates every seat's
+  `walks` and does not mint a hunt. Living ticks refresh the theory
+  overlays; a plugin failure refreshes the roster. Opt-in multiplayer:
+  `daedalus.session.multiplayer`.
 - **Deterministic across restarts, not just across a cache hit.** Same seed,
   same answer, on a process that has never seen the request before.
-  `DeterminismGoldenTest` compares 23 endpoints — seeded generation, the seeded
-  campaign, every analytical route, the tournament, a complexity fit and all
-  nine solvers — against digests recorded by a *different JVM* and committed to
-  the repo, so every build is a cross-process comparison. In-process tests
-  cannot do this job: these endpoints sit behind caches keyed on their inputs,
-  so the second call returns the first call's object whether the computation is
-  deterministic or not.
+  `DeterminismGoldenTest` compares 23 endpoints — seeded generation, the
+  seeded campaign, the analytical routes, the tournament, a complexity fit,
+  and nine solvers (IDA\* is the tenth and answers 422 once it spends its
+  node budget, so it is not in the digest set) — against digests recorded
+  by a *different JVM* and committed to the repo. In-process tests cannot
+  do this job: these endpoints sit behind caches keyed on their inputs, so
+  the second call returns the first call's object whether the computation
+  is deterministic or not.
 - **Watch the algorithms think** — `?replay=true` on the solve endpoint ships
   the search's real recorded expansion order (observation via the `Graph`
   seam, never simulation); the web UI animates it and can race all ten
   solvers on one maze in a compare table with per-route previews.
-- **Verified** — `mvn clean verify` passes **623 tests** across the five
-  modules (core 322, server 258, plugin-runtime 26, plugin-api 7, desktop 10)
-  with zero Checkstyle violations, zero SpotBugs findings, and a per-module
-  JaCoCo coverage ratchet that fails the build in **both** directions — on a
-  regression below the floor, and on the floor going more than 3 points stale
-  as coverage rises (audited 2026-07-31: the server had drifted 12 points, so
-  the one-sided version was a floor rather than a ratchet).
-  [`CHANGELOG.md`](./CHANGELOG.md) records what changed and, where a decision
-  was measured rather than assumed, the numbers behind it;
+- **Verified** — `mvn clean verify` is the living number (five modules,
+  Checkstyle, SpotBugs, and a per-module JaCoCo ratchet that fails in
+  **both** directions: below the floor, or the floor more than 3 points
+  stale as coverage rises). A July 2026 snapshot was 623 tests; the suite
+  has grown with the living-maze and web-UI work since.
+  [`CHANGELOG.md`](./CHANGELOG.md) records what changed and, where a
+  decision was measured rather than assumed, the numbers behind it;
   [`TESTING.md`](./TESTING.md) is the strategy those tests follow.
 
 ## Modules
@@ -115,7 +97,7 @@ daedalus/
 | `daedalus-core` | SLF4J only | `MazeGrid`, `MazeGenerator`/`MazeSolver` interfaces, all 23 + 10 algorithms, `Point`/`MazeMetadata`/`MazeStats` model. No Spring, no Jackson, no JPA. |
 | `daedalus-plugin-api` | core | `MazePlugin`, `PluginManifest`, `PluginLifecycle`, `PluginContext`, lifecycle events (`MazeGeneratedEvent`, `MazeSolvedEvent`, `PlayerMovedEvent`, `PluginFailedEvent`). What plugin authors implement against. |
 | `daedalus-plugin-runtime` | core, plugin-api, Spring | `PluginManager` (discovery, lifecycle), `PluginRegistry`, JAR `URLClassLoader` isolation. Spring is allowed here so events can be published into a Spring `ApplicationContext`. |
-| `daedalus-server` | plugin-runtime, Spring Boot, Redis (optional) | Controllers (`MazeController`, `MazeWebSocketController`, `PluginController`), DTOs in `com.daedalus.api.dto`, services (`MazeGenerationService` with Resilience4j circuit breaker, `LeaderboardService` with optional Redis backing, `GameSessionService`). |
+| `daedalus-server` | plugin-runtime, Spring Boot, Redis (optional) | Controllers (`MazeController`, `InsightController`, `AgentController`, `CampaignController`, `MazeWebSocketController`, `PluginController`), DTOs in `com.daedalus.api.dto`, services (`MazeGenerationService` with Resilience4j circuit breaker, `LeaderboardService` with optional Redis backing, `GameSessionService`). One-file web UI at `src/main/resources/static/index.html`. |
 | `daedalus-desktop` | server, JavaFX | `DaedalusLauncher` (boots Spring + JavaFX), `DaedalusPrimaryStage`, `ThemeManager`. Loads `/ui/main.fxml`. |
 
 ## Build & run
@@ -131,7 +113,7 @@ To run the server headless:
 ```bash
 mvn -pl daedalus-server -am spring-boot:run
 # or after a build:
-java -jar daedalus-server/target/daedalus-server-1.0.0-SNAPSHOT-exec.jar
+java -jar daedalus-server/target/daedalus-server-1.2.0-SNAPSHOT-exec.jar
 ```
 
 (Note the `-exec` classifier — see `CHANGELOG.md` for why this matters in
@@ -276,7 +258,9 @@ System.out.println(new BCryptPasswordEncoder().encode("your-password"));
 ```
 
 DTOs live in `com.daedalus.api.dto` and have Javadoc on every field. A
-TypeScript mirror of the DTOs is in [`Code/daedalus-api-dtos.ts`](./Code/daedalus-api-dtos.ts).
+TypeScript sketch lives in [`Code/daedalus-api-dtos.ts`](./Code/daedalus-api-dtos.ts);
+it lags the Java records (no `braid`, no session `walks`) and is not a
+generated client.
 
 ## WebSocket / STOMP topics
 
@@ -338,8 +322,9 @@ mvn clean verify              # all five modules
 mvn -pl daedalus-server test  # one module
 ```
 
-Test inventory — **623 tests across 127 files, all green** (322 core, 7 plugin-api, 26
-plugin-runtime, 258 server, 10 desktop) as of 2026-07-31:
+Test inventory — **623 tests across 127 files** (322 core, 7 plugin-api, 26
+plugin-runtime, 258 server, 10 desktop) was the 2026-07-31 snapshot. The
+suite has grown since; `mvn clean verify` is the number that matters. Highlights:
 
 | Module | Highlights |
 |---|---|
@@ -370,6 +355,10 @@ working tree.
 
 ## Operational notes
 
+- **Sessions are not in Redis.** `GameSessionService` keeps live sessions in
+  a Caffeine cache (`daedalus.session.max-sessions` / `idle-ttl`). Redis,
+  when enabled, backs the leaderboard. A restart or a second instance
+  forgets every open session; `#session=` permalinks 404.
 - **Redis is optional — and disabling it no longer reports the app as
   unhealthy.** `daedalus.redis.enabled=false` (the dev default) uses an
   in-memory leaderboard; set it `true` for the Redis-backed implementation.
