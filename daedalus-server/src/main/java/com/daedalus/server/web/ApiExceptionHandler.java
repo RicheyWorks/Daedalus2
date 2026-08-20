@@ -189,6 +189,7 @@ public class ApiExceptionHandler {
                 HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
         pd.setTitle("Classifier warming");
         pd.setType(URI.create("https://daedalus.dev/problems/classifier-warming"));
+        pd.setProperty("kind", "classifier-warming");
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                 .header(HttpHeaders.RETRY_AFTER, "5")
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
@@ -205,6 +206,7 @@ public class ApiExceptionHandler {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
         pd.setTitle("Too many living mazes");
         pd.setType(URI.create("https://daedalus.dev/problems/living-capacity"));
+        pd.setProperty("kind", "living-capacity");
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
     }
@@ -225,6 +227,7 @@ public class ApiExceptionHandler {
                 HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage());
         pd.setTitle("Solver gave up");
         pd.setType(URI.create("https://daedalus.dev/problems/solver-budget"));
+        pd.setProperty("kind", "solver-budget");
         pd.setProperty("solver", ex.solverId());
         pd.setProperty("nodeBudget", ex.budget());
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT)
@@ -257,6 +260,7 @@ public class ApiExceptionHandler {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
         pd.setTitle("Too many tracked mazes");
         pd.setType(URI.create("https://daedalus.dev/problems/traffic-capacity"));
+        pd.setProperty("kind", "traffic-capacity");
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
     }

@@ -1160,7 +1160,16 @@ async function bringToLife() {
   }
   const harden = $("harden") && $("harden").checked;
   const q = `/maze/${state.maze.id}/live?ticks=30` + (harden ? "&seal=0.08" : "");
-  const r = await api(q, {method: "POST"});
+  let r;
+  try {
+    r = await api(q, {method: "POST"});
+  } catch (e) {
+    if (/living-capacity|already animating/.test(e.message)) {
+      log("err", "too many mazes are already alive — wait for one to settle");
+      return;
+    }
+    throw e;
+  }
   $("live").disabled = true;
   if ($("harden")) $("harden").disabled = true;
   log("state", `maze is alive — ${r.ticksRequested} ticks`
@@ -1689,7 +1698,16 @@ async function summonGhost() {
 // ---------- traffic simulation (ADR-006 idea #3) ----------
 /** Track congestion: everywhere you (or agents) walk gets expensive, then cools off. */
 async function simulateTraffic() {
-  const r = await api(`/maze/${state.maze.id}/traffic`, {method: "POST"});
+  let r;
+  try {
+    r = await api(`/maze/${state.maze.id}/traffic`, {method: "POST"});
+  } catch (e) {
+    if (/traffic-capacity|already tracking/.test(e.message)) {
+      log("err", "too many mazes are already tracked — wait for one to settle");
+      return;
+    }
+    throw e;
+  }
   $("traffic").disabled = true;
   log("state", `traffic tracking on — walk around and watch the costs bloom `
       + `(pulse every ${(r.tickMillis / 1000).toFixed(1)}s)`);

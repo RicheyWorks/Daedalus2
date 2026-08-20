@@ -4,16 +4,20 @@ package com.daedalus.server;
 
 import com.daedalus.api.dto.GeneratedFrame;
 import com.daedalus.api.dto.MoveFrame;
+import com.daedalus.api.dto.MutationFrame;
 import com.daedalus.api.dto.PluginFailedFrame;
 import com.daedalus.api.dto.SolvedFrame;
+import com.daedalus.api.dto.TrafficFrame;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.MazeMetadata;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
 import com.daedalus.plugin.events.MazeGeneratedEvent;
+import com.daedalus.plugin.events.MazeMutatedEvent;
 import com.daedalus.plugin.events.MazeSolvedEvent;
 import com.daedalus.plugin.events.PlayerMovedEvent;
 import com.daedalus.plugin.events.PluginFailedEvent;
+import com.daedalus.plugin.events.TrafficPulseEvent;
 import com.daedalus.server.security.JwtTokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -219,6 +223,44 @@ class WebSocketSmokeTest {
         assertThat(frame.rows()).isEqualTo(5);
         assertThat(frame.cols()).isEqualTo(7);
         assertThat(frame.generatorId()).isEqualTo("recursive-backtracker");
+    }
+
+    @Test
+    void aMutatedEventReachesTheMazeStateTopic() throws Exception {
+        StompSession s = connect();
+        UUID mazeId = UUID.randomUUID();
+        BlockingQueue<MutationFrame> received =
+                subscribe(s, "/topic/maze/" + mazeId + "/state", MutationFrame.class);
+
+        MazeMutatedEvent event = new MazeMutatedEvent(this, mazeId, 4, 3, 1, 12, false,
+                new MazeGrid(5, 5));
+
+        MutationFrame frame = publishUntilReceived(received, () -> events.publishEvent(event));
+        assertThat(frame).isNotNull();
+        assertThat(frame.mazeId()).isEqualTo(mazeId);
+        assertThat(frame.tick()).isEqualTo(4);
+        assertThat(frame.wallsOpened()).isEqualTo(3);
+        assertThat(frame.wallsClosed()).isEqualTo(1);
+        assertThat(frame.deadEndsRemaining()).isEqualTo(12);
+        assertThat(frame.settled()).isFalse();
+    }
+
+    @Test
+    void aTrafficPulseReachesTheMazeStateTopic() throws Exception {
+        StompSession s = connect();
+        UUID mazeId = UUID.randomUUID();
+        BlockingQueue<TrafficFrame> received =
+                subscribe(s, "/topic/maze/" + mazeId + "/state", TrafficFrame.class);
+
+        TrafficPulseEvent event = new TrafficPulseEvent(this, mazeId, 7, 42.5, false,
+                new MazeGrid(3, 3));
+
+        TrafficFrame frame = publishUntilReceived(received, () -> events.publishEvent(event));
+        assertThat(frame).isNotNull();
+        assertThat(frame.mazeId()).isEqualTo(mazeId);
+        assertThat(frame.congestedCells()).isEqualTo(7);
+        assertThat(frame.peakCost()).isEqualTo(42.5);
+        assertThat(frame.settled()).isFalse();
     }
 
     @Test

@@ -46,6 +46,7 @@ class FingerprintWarmingEndpointTest {
         mvc.perform(get("/api/v1/maze/" + UUID.randomUUID() + "/fingerprint"))
                 .andExpect(status().isServiceUnavailable())
                 .andExpect(header().string("Retry-After", "5"))
-                .andExpect(jsonPath("$.title", equalTo("Classifier warming")));
+                .andExpect(jsonPath("$.title", equalTo("Classifier warming")))
+                .andExpect(jsonPath("$.kind", equalTo("classifier-warming")));
     }
 }

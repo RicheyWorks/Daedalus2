@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Living/traffic 409 and a spent solver budget now have an HTTP pin.**
+  The services threw; the advice mapped them; nothing asked the
+  controller. Dropping the handler would 500. Standalone MockMvc now
+  expects 409 `living-capacity` / `traffic-capacity` and 422
+  `solver-budget`. The STOMP smoke publishes a mutation and a traffic
+  pulse, so those listeners are on the broker, not only `convertAndSend`.
+  The page names a full pool instead of dumping the status line.
+
 - **`/state` is not generate-only.** Living ticks and traffic pulses already
   ride `/topic/maze/{id}/state`. The README and the STOMP wiring javadoc
   still said `GeneratedFrame` only. They now name all three shapes and the

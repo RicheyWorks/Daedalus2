@@ -67,6 +67,8 @@ class WebUiSmokeTest {
                 .contains("setGodModeEnabled").contains("GOD_MODE")
                 .contains("this session already finished")
                 .contains("that session is gone")
-                .contains("Three frame shapes ride /state");
+                .contains("Three frame shapes ride /state")
+                .contains("too many mazes are already alive")
+                .contains("too many mazes are already tracked");
     }
 }
