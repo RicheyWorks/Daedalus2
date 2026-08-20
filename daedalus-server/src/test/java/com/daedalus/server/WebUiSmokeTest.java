@@ -62,6 +62,7 @@ class WebUiSmokeTest {
                 .contains("confirmWin").contains("declareWin")
                 .contains("problemWhy").contains("every solver failed")
                 .contains("aged out of the cache")
-                .contains("fingerprintWhenReady").contains("classifier is warming");
+                .contains("fingerprintWhenReady").contains("classifier is warming")
+                .contains("recipeParts").contains("rebuildFromRecipe");
     }
 }

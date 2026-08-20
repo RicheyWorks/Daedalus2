@@ -911,6 +911,53 @@ function parseHash() {
   return out;
 }
 
+/** Recipe that rebuilds this maze when the cached id is gone. `g` not `generator` —
+ *  `#generator=` is its own permalink kind (the partition), not a field on `#maze=`. */
+function recipeParts(maze) {
+  if (!maze) return [];
+  const parts = [
+    "g=" + encodeURIComponent(maze.generatorId),
+    "seed=" + maze.seed,
+    "rows=" + maze.rows,
+    "cols=" + maze.cols,
+  ];
+  if (maze.braid > 0) parts.push("braid=" + maze.braid);
+  const hs = maze.hotspots || [];
+  if (hs.length) {
+    parts.push("hotspots=" + hs.length);
+    parts.push("cost=" + hs[0].cost);
+  }
+  return parts;
+}
+
+function applyRecipeToForm(h) {
+  if (h.g && $("generator") && [...$("generator").options].some(o => o.value === h.g)) {
+    $("generator").value = h.g;
+    updateInfo();
+  }
+  if (h.rows) $("rows").value = h.rows;
+  if (h.cols) $("cols").value = h.cols;
+  if (h.seed != null && h.seed !== "") $("seed").value = h.seed;
+  if ($("braid")) {
+    const v = h.braid && +h.braid > 0 ? String(h.braid) : "0";
+    if (![...$("braid").options].some(o => o.value === v)) {
+      const o = document.createElement("option");
+      o.value = v;
+      o.textContent = v + " — from permalink";
+      $("braid").appendChild(o);
+    }
+    $("braid").value = v;
+    syncBraid("braid");
+  }
+  if ($("hotspots")) $("hotspots").value = h.hotspots || "0";
+  if ($("hotspotCost") && h.cost) $("hotspotCost").value = h.cost;
+}
+
+async function rebuildFromRecipe(h) {
+  applyRecipeToForm(h);
+  await generate();
+}
+
 function currentPermalink() {
   // Campaign and daily keep the ladder / shared board. Everything else with a
   // session — generate+play, spectate, join-from-spectate — is #session=.
@@ -931,7 +978,7 @@ function pinHash() {
   if (p.session) next = "session=" + p.session;
   else if (p.campaign != null) next = "campaign=" + p.campaign;
   else if (p.daily) next = "daily";
-  else if (p.maze) next = "maze=" + p.maze;
+  else if (p.maze) next = ["maze=" + p.maze].concat(recipeParts(state.maze)).join("&");
   else if (p.generator) next = "generator=" + encodeURIComponent(p.generator);
   const want = next ? "#" + next : "";
   if (location.hash !== want) location.hash = next;
@@ -957,6 +1004,13 @@ async function loadFromHash() {
       pinHash();
       log("state", "loaded maze from permalink");
     } catch (e) {
+      if (h.g && h.seed != null && h.seed !== "" && h.rows && h.cols) {
+        try {
+          await rebuildFromRecipe(h);
+          log("state", "permalink maze aged out — rebuilt from the recipe");
+          return;
+        } catch (ignored) { /* fall through to the original 404 */ }
+      }
       log("err", `permalink maze not found on this server (${e.message})`);
     }
     return;

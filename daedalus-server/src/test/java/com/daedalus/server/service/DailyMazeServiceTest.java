@@ -93,4 +93,41 @@ class DailyMazeServiceTest {
         // low-quality generators could turn into visibly similar mazes.
         assertThat(Math.abs(d2 - d1)).isGreaterThan(1_000_000L);
     }
+
+    @Test
+    void twoFirstRequestsMintOneMazeNotAnOrphan() throws Exception {
+        var published = new java.util.concurrent.CopyOnWriteArrayList<>();
+        var gen = new MazeGenerationService(
+                new GeneratorRegistry(List.of(new RecursiveBacktrackerGenerator())),
+                published::add, new SimpleMeterRegistry());
+        var daily = service(gen, DAY_ONE);
+        var go = new java.util.concurrent.CountDownLatch(1);
+        var ids = new java.util.concurrent.ConcurrentLinkedQueue<java.util.UUID>();
+        try (var pool = java.util.concurrent.Executors.newFixedThreadPool(2)) {
+            var a = pool.submit(() -> raceToday(daily, go, ids));
+            var b = pool.submit(() -> raceToday(daily, go, ids));
+            go.countDown();
+            a.get(5, java.util.concurrent.TimeUnit.SECONDS);
+            b.get(5, java.util.concurrent.TimeUnit.SECONDS);
+        }
+        assertThat(ids.stream().distinct()).hasSize(1);
+        long minted = published.stream()
+                .filter(com.daedalus.plugin.events.MazeGeneratedEvent.class::isInstance)
+                .count();
+        assertThat(minted)
+                .as("a lost first-request race used to leave a second maze in the cache")
+                .isEqualTo(1);
+    }
+
+    private static void raceToday(DailyMazeService daily,
+                                  java.util.concurrent.CountDownLatch go,
+                                  java.util.Queue<java.util.UUID> ids) {
+        try {
+            go.await();
+            ids.add(daily.today().maze().metadata().id());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new AssertionError(e);
+        }
+    }
 }

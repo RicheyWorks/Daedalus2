@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **A `#maze=` permalink carries the recipe that rebuilt it.** Seed, size,
+  algorithm, braid, and hotspot count sit beside the id. If the cache
+  dropped the maze, the page regenerates the same spots instead of 404ing.
+  Two first hits on the daily mint one maze, not an orphan. The TypeScript
+  sketch names `/api/v1` and the fields it used to omit.
+
 - **First Identify no longer trains on a Tomcat worker.** The classifier
   fit runs on a dedicated thread. Concurrent first hits share that one
   train. Until it publishes, `GET /fingerprint` is 503 with

@@ -288,6 +288,27 @@ async function check(name, fn) {
     return [String(dims.r) === String(dims.m), `loaded by id; size inputs synced to ${dims.m}`];
   });
 
+  await check('N2. hotspot recipe rebuilds an aged-out maze id', async () => {
+    await page.fill('#rows', '15'); await page.fill('#cols', '15'); await page.fill('#seed', '42');
+    await page.fill('#hotspots', '4');
+    await page.click('#generate');
+    await page.waitForFunction(() => state.maze && state.maze.seed === 42
+        && (state.maze.hotspots || []).length === 4, null, {timeout:15000});
+    const hash = await page.evaluate(() => location.hash);
+    const spots = await page.evaluate(() => JSON.stringify(state.maze.hotspots));
+    const recipe = hash.replace(/maze=[0-9a-fA-F-]+/,
+        'maze=00000000-0000-0000-0000-000000000000');
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/' + recipe, { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => state.maze && (state.maze.hotspots || []).length === 4,
+        null, {timeout:20000});
+    const rebuilt = await p2.evaluate(() => JSON.stringify(state.maze.hotspots));
+    await p2.close();
+    await page.fill('#hotspots', '0');
+    return [rebuilt === spots && /hotspots=4/.test(hash),
+        `recipe ${hash}; spots ${rebuilt === spots}`];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

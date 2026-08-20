@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 
 /**
- * Daedalus API Data Transfer Objects
- * 
- * TypeScript equivalents of the Java DTO records for frontend consumption.
- * Generated based on the provided backend DTOs for /api/* endpoints and STOMP frames.
- * 
+ * Hand-written TypeScript sketch of selected Daedalus DTOs (May 2026, lightly
+ * refreshed). This is not a generated client and it is not a mirror of
+ * `com.daedalus.api.dto`. Controllers live under `/api/v1`. The live contract
+ * is the Java records and OpenAPI.
+ *
  * @see PluginInfo.java, SolveResponse.java, GenerateResponse.java, etc.
  */
 
@@ -50,7 +50,7 @@ export interface PluginManifest {
 // ============================================
 
 /**
- * Element of the response body for GET /api/plugins.
+ * Element of the response body for GET /api/v1/plugins.
  * Lightweight projection of a PluginRegistry.Entry suitable for HTTP clients.
  */
 export interface PluginInfo {
@@ -65,7 +65,7 @@ export interface PluginInfo {
 }
 
 /**
- * Request body for POST /api/maze/generate.
+ * Request body for POST /api/v1/maze/generate.
  */
 export interface GenerateRequest {
   /** identifier of the registered generator algorithm (e.g. "binary-tree") */
@@ -78,10 +78,12 @@ export interface GenerateRequest {
   seed?: number | null;
   /** optional dead-end opening factor in [0, 1]; omit or 0 for a tree */
   braid?: number | null;
+  /** optional weighted cells; the web UI derives these from seed + count */
+  hotspots?: { row: number; col: number; cost: number }[];
 }
 
 /**
- * Response body for POST /api/maze/generate and GET /api/maze/{id}.
+ * Response body for POST /api/v1/maze/generate and GET /api/v1/maze/{id}.
  *
  * generatorId reflects the actual generator that produced the cached maze, which may
  * differ from the requested id when a circuit-breaker fallback fires.
@@ -111,10 +113,12 @@ export interface GenerateResponse {
   tiles: string[];
   /** generate-time braid factor; omitted when none was applied */
   braid?: number;
+  /** weighted cells echoed so a client can shade them; omitted when uniform */
+  hotspots?: { row: number; col: number; cost: number }[];
 }
 
 /**
- * Response body for POST /api/maze/{id}/session.
+ * Response body for POST /api/v1/maze/{id}/session.
  */
 export interface SessionResponse {
   /** server-assigned session id */
@@ -126,15 +130,17 @@ export interface SessionResponse {
 }
 
 /**
- * Request body for POST /api/session/{id}/move.
+ * Request body for POST /api/v1/session/{id}/move.
  */
 export interface MoveRequest {
   /** grid coordinate the player wants to move to (must be adjacent to the current position) */
   to: Point;
+  /** named seat; omit to move the opening player */
+  player?: string;
 }
 
 /**
- * Response body for POST /api/maze/{id}/solve/{solverId}.
+ * Response body for POST /api/v1/maze/{id}/solve/{solverId}.
  */
 export interface SolveResponse {
   /** id of the solver that produced the run */
@@ -181,10 +187,28 @@ export interface PluginFailedFrame {
 export interface MoveFrame {
   /** id of the session the move belongs to */
   sessionId: string; // UUID
+  /** seat that moved */
+  player?: string;
   /** previous player position */
   from: Point;
   /** new player position */
   to: Point;
+}
+
+/**
+ * GET /api/v1/session/{id} — spectator snapshot. Subjects stay off this record.
+ */
+export interface SessionView {
+  sessionId: string;
+  mazeId: string;
+  player: string;
+  players: Record<string, Point>;
+  completed: boolean;
+  completedBy?: string | null;
+  moveCount: number;
+  score: number;
+  trail: { to: Point; tMs: number }[];
+  walks: Record<string, { to: Point; tMs: number }[]>;
 }
 
 /**
