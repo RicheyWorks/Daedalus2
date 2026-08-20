@@ -46,7 +46,8 @@ class RateLimiterTemplatesTest {
                 .isPresent();
         assertThat(registry.find("agentStep"))
                 .as("the fog-of-war walk budget — @PerKeyRateLimit(\"agentStep\") on "
-                        + "POST /agent/{id}/step fails at request time without it")
+                        + "POST /agent/{id}/step and GET /agent/{id} fails at request time "
+                        + "without it")
                 .isPresent();
     }
 }

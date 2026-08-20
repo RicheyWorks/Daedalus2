@@ -61,8 +61,12 @@ MUT = [
      "        if (!multiplayer) return null;",
      "        if (false) return null;"),
     (SVC, "join admits players into a finished session",
-     "            if (s.completed()) return null;",
-     "            if (false) return null;"),
+     "            if (s.completed()) {\n"
+     "                throw new JoinRefusedException(JoinRefusedException.Reason.COMPLETED);\n"
+     "            }",
+     "            if (false) {\n"
+     "                throw new JoinRefusedException(JoinRefusedException.Reason.COMPLETED);\n"
+     "            }"),
     (SVC, "the session store loses its size bound",
      "                .maximumSize(maxSessions)\n",
      ""),

@@ -378,7 +378,9 @@ public class MazeController {
                     + "When the request is authenticated, the token's subject is added to the "
                     + "session's STOMP allowlist (ADR-012) so the joiner can SUBSCRIBE to the "
                     + "player topic — joining used to put a piece on the board and leave the "
-                    + "feed owner-only. Rate-limited per caller against the 'sessionOpen' budget.")
+                    + "feed owner-only. A finished session and a full session both answer 409 "
+                    + "but with distinct problem types (session-completed vs session-full). "
+                    + "Rate-limited per caller against the 'sessionOpen' budget.")
     @PerKeyRateLimit("sessionOpen")
     public ResponseEntity<SessionResponse> join(
             @PathVariable UUID id,
@@ -399,7 +401,8 @@ public class MazeController {
                 "Session " + id + " is open but its maze " + s.mazeId() + " has been evicted "
                         + "from the cache, so moves cannot be validated against it.");
         var joined = sessions.join(id, player, c.grid().start(), ownerOf(authentication));
-        if (joined == null) return ResponseEntity.status(409).build(); // completed or full
+        // Idle eviction between find and join — same 404 as an unknown session.
+        if (joined == null) throw ResourceNotFoundException.session(id);
         return ResponseEntity.ok(new SessionResponse(
                 joined.id(), joined.mazeId(), joined.playerPosition(player)));
     }

@@ -118,7 +118,9 @@ class MazeControllerJoinTest {
         sessions.tryMove(s.id(), grid, grid.goal());
 
         mvc(sessions).perform(post("/api/v1/session/" + s.id() + "/join").param("player", "Bob"))
-                .andExpect(status().isConflict());
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.kind", equalTo("session-completed")))
+                .andExpect(jsonPath("$.title", equalTo("Session completed")));
     }
 
     @Test
@@ -131,6 +133,8 @@ class MazeControllerJoinTest {
         }
 
         mvc(sessions).perform(post("/api/v1/session/" + s.id() + "/join").param("player", "overflow"))
-                .andExpect(status().isConflict());
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.kind", equalTo("session-full")))
+                .andExpect(jsonPath("$.title", equalTo("Session full")));
     }
 }

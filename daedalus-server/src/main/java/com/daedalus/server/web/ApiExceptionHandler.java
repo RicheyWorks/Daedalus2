@@ -214,6 +214,25 @@ public class ApiExceptionHandler {
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
     }
 
+    /**
+     * Join refused: the session finished, or it already has {@code MAX_PLAYERS}.
+     * Both are 409; the type tells the client whether to wait or pick another room.
+     */
+    @ExceptionHandler(com.daedalus.server.service.GameSessionService.JoinRefusedException.class)
+    public ResponseEntity<ProblemDetail> onJoinRefused(
+            com.daedalus.server.service.GameSessionService.JoinRefusedException ex) {
+        boolean done = ex.reason()
+                == com.daedalus.server.service.GameSessionService.JoinRefusedException.Reason.COMPLETED;
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        pd.setTitle(done ? "Session completed" : "Session full");
+        pd.setType(URI.create(done
+                ? "https://daedalus.dev/problems/session-completed"
+                : "https://daedalus.dev/problems/session-full"));
+        pd.setProperty("kind", done ? "session-completed" : "session-full");
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+    }
+
     /** Traffic's tracker pool is full — same 409 posture as the living-maze ticker. */
     @ExceptionHandler(com.daedalus.server.service.TrafficService.CapacityExceededException.class)
     public ResponseEntity<ProblemDetail> onTrafficCapacity(

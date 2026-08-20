@@ -24,6 +24,27 @@ import java.util.UUID;
 @Service
 public class GameSessionService {
 
+    /**
+     * Join refused because the session finished or is at {@link GameSession#MAX_PLAYERS}.
+     * Those used to be the same empty 409, so a client could not tell wait from give up.
+     */
+    public static final class JoinRefusedException extends RuntimeException {
+        public enum Reason { COMPLETED, FULL }
+
+        private final Reason reason;
+
+        JoinRefusedException(Reason reason) {
+            super(reason == Reason.COMPLETED
+                    ? "This session is already finished."
+                    : "This session is full (" + GameSession.MAX_PLAYERS + " players).");
+            this.reason = reason;
+        }
+
+        public Reason reason() {
+            return reason;
+        }
+    }
+
     private final ApplicationEventPublisher events;
     private final LeaderboardService leaderboard;
     private final boolean multiplayer;
@@ -125,9 +146,10 @@ public class GameSessionService {
     /**
      * Adds a named player to an existing session (multiplayer flag only).
      *
-     * @return the session on success; {@code null} when the flag is off, the session is
-     *         unknown, the session already completed, or the session is at
-     *         {@link GameSession#MAX_PLAYERS}. Joining under a name already present
+     * @return the session on success; {@code null} when the flag is off or the session is
+     *         unknown. A finished session and a full session throw
+     *         {@link JoinRefusedException} — those used to be the same {@code null}, so the
+     *         controller could only answer an empty 409. Joining under a name already present
      *         succeeds and keeps that player's current position — rejoin after a dropped
      *         connection must not teleport anyone back to start.
      */
@@ -148,8 +170,12 @@ public class GameSessionService {
         GameSession s = sessions.getIfPresent(sessionId);
         if (s == null) return null;
         synchronized (s) {
-            if (s.completed()) return null;
-            if (!s.join(player, start, subject)) return null;
+            if (s.completed()) {
+                throw new JoinRefusedException(JoinRefusedException.Reason.COMPLETED);
+            }
+            if (!s.join(player, start, subject)) {
+                throw new JoinRefusedException(JoinRefusedException.Reason.FULL);
+            }
         }
         return s;
     }

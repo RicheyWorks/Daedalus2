@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Join 409 says finished or full, and agent views cost a step.**
+  `POST /session/{id}/join` used to answer an empty 409 for both a
+  completed session and a full one. Those are now
+  `session-completed` and `session-full` problem types. `GET /agent/{id}`
+  shares the `agentStep` budget. Session and solve DTO javadocs name
+  `/api/v1`.
+
 - **ASCII errors, a failed compare, and an evicted maze.** `apiPlain`
   reads ProblemDetail the same way `api` does, so a 401 is not a missing
   maze. Compare no longer logs `best path Infinity` when every solver

@@ -88,7 +88,11 @@ public class AgentController {
     @GetMapping("/agent/{id}")
     @Operation(summary = "Re-poll the agent's view without spending a step.",
             description = "On living mazes the openings at your feet can change between "
-                    + "steps — polling is free and honest.")
+                    + "steps — polling does not spend the walk budget. Rate-limited against "
+                    + "the 'agentStep' bucket: fog living refresh hits this every tick when "
+                    + "STOMP is down, and an unsigned prod client used to hammer views while "
+                    + "steps stayed throttled.")
+    @PerKeyRateLimit("agentStep")
     public ResponseEntity<AgentWalkService.AgentView> view(@PathVariable UUID id) {
         var view = agents.view(id);
         if (view == null) throw ResourceNotFoundException.agent(id);

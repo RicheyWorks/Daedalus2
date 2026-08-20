@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -154,7 +155,10 @@ class GameSessionMultiplayerTest {
         // Completion freezes the whole session, opening player included.
         assertThat(svc.tryMove(s.id(), "Alice",
                 grid, grid.openNeighbors(grid.start()).get(0))).isFalse();
-        assertThat(svc.join(s.id(), "Carol", grid.start())).isNull();
+        assertThatThrownBy(() -> svc.join(s.id(), "Carol", grid.start()))
+                .isInstanceOf(GameSessionService.JoinRefusedException.class)
+                .extracting(ex -> ((GameSessionService.JoinRefusedException) ex).reason())
+                .isEqualTo(GameSessionService.JoinRefusedException.Reason.COMPLETED);
     }
 
     @Test
@@ -170,7 +174,10 @@ class GameSessionMultiplayerTest {
         for (int i = 1; i < GameSession.MAX_PLAYERS; i++) {
             assertThat(svc.join(s.id(), "p" + i, grid.start())).isSameAs(s);
         }
-        assertThat(svc.join(s.id(), "overflow", grid.start())).isNull();
+        assertThatThrownBy(() -> svc.join(s.id(), "overflow", grid.start()))
+                .isInstanceOf(GameSessionService.JoinRefusedException.class)
+                .extracting(ex -> ((GameSessionService.JoinRefusedException) ex).reason())
+                .isEqualTo(GameSessionService.JoinRefusedException.Reason.FULL);
         assertThat(s.players()).hasSize(GameSession.MAX_PLAYERS);
         assertThat(svc.join(s.id(), "p1", grid.start())).isSameAs(s);
     }

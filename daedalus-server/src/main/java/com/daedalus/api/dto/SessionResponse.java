@@ -7,7 +7,8 @@ import com.daedalus.model.Point;
 import java.util.UUID;
 
 /**
- * Response body for {@code POST /api/maze/{id}/session}.
+ * Response body for {@code POST /api/v1/maze/{id}/session} and
+ * {@code POST /api/v1/session/{id}/join}.
  *
  * @param sessionId server-assigned session id
  * @param mazeId    id of the maze the session is bound to
