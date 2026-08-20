@@ -21,7 +21,10 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
  * <p>Destinations the server actually publishes to, verified against
  * {@code MazeWebSocketController}'s {@code convertAndSend} calls:
  * <ul>
- *   <li>{@code /topic/maze/{mazeId}/state}        — maze finished generating</li>
+ *   <li>{@code /topic/maze/{mazeId}/state}        — generate, living tick, or
+ *       traffic pulse ({@code GeneratedFrame} / {@code MutationFrame} /
+ *       {@code TrafficFrame}; consumers branch on {@code generatorId},
+ *       {@code tick}, {@code congestedCells})</li>
  *   <li>{@code /topic/maze/{mazeId}/solver}       — solver finished a run</li>
  *   <li>{@code /topic/session/{sessionId}/player} — player moved</li>
  *   <li>{@code /topic/plugins/failures}           — a plugin threw in any lifecycle phase</li>

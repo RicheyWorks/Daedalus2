@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **`/state` is not generate-only.** Living ticks and traffic pulses already
+  ride `/topic/maze/{id}/state`. The README and the STOMP wiring javadoc
+  still said `GeneratedFrame` only. They now name all three shapes and the
+  field that distinguishes them. The TypeScript sketch no longer ends
+  mid-`SolvedFrame`.
+
 - **Join names finished, full, or gone — not the multiplayer flag.** The
   server already splits those 409s. The page logged every other failure
   as "is the flag on?", including a 404 for an unknown session, which

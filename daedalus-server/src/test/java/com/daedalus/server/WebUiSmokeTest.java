@@ -66,6 +66,7 @@ class WebUiSmokeTest {
                 .contains("recipeParts").contains("rebuildFromRecipe")
                 .contains("setGodModeEnabled").contains("GOD_MODE")
                 .contains("this session already finished")
-                .contains("that session is gone");
+                .contains("that session is gone")
+                .contains("Three frame shapes ride /state");
     }
 }

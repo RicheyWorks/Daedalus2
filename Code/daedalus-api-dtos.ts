@@ -212,6 +212,41 @@ export interface SessionView {
 }
 
 /**
+ * STOMP frame published to /topic/maze/{id}/state when a maze finishes generating.
+ * Same topic as MutationFrame and TrafficFrame — branch on generatorId.
+ */
+export interface GeneratedFrame {
+  mazeId: string;
+  rows: number;
+  cols: number;
+  generatorId: string;
+}
+
+/**
+ * STOMP frame published to /topic/maze/{id}/state after each living-maze tick.
+ * Branch: a frame with `tick` is a mutation. Deltas only; re-fetch GET /maze/{id}.
+ */
+export interface MutationFrame {
+  mazeId: string;
+  tick: number;
+  wallsOpened: number;
+  wallsClosed: number;
+  deadEndsRemaining: number;
+  settled: boolean;
+}
+
+/**
+ * STOMP frame published to /topic/maze/{id}/state after each traffic pulse.
+ * Branch: a frame with `congestedCells` is traffic. Deltas only; re-fetch for costs.
+ */
+export interface TrafficFrame {
+  mazeId: string;
+  congestedCells: number;
+  peakCost: number;
+  settled: boolean;
+}
+
+/**
  * STOMP frame published to /topic/maze/{id}/solver when a solver finishes a run.
  */
 export interface SolvedFrame {
@@ -222,4 +257,5 @@ export interface SolvedFrame {
   /** length of the solution path (0 when success=false) */
   pathLength: number;
   /** whether the solver actually reached the goal */
-  succ
+  success: boolean;
+}

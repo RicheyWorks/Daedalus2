@@ -273,7 +273,7 @@ Real-time updates are pushed over STOMP. Connect at `/ws` and subscribe to:
 
 | Topic | When it fires | Frame type |
 |---|---|---|
-| `/topic/maze/{mazeId}/state` | Maze finishes generating | `GeneratedFrame` |
+| `/topic/maze/{mazeId}/state` | Maze generated, living tick, or traffic pulse | `GeneratedFrame`, `MutationFrame`, or `TrafficFrame` — branch on `generatorId` / `tick` / `congestedCells` |
 | `/topic/maze/{mazeId}/solver` | Solver finishes a run | `SolvedFrame` |
 | `/topic/session/{sessionId}/player` | Player moves | `MoveFrame` (owned sessions: owner + authenticated joiners only; ADR-012) |
 | `/topic/plugins/failures` | A plugin throws in any lifecycle phase | `PluginFailedFrame` |

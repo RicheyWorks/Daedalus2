@@ -139,9 +139,10 @@ become dramatically better once mazes can already change under a walker's feet.
 - The maze cache stops being append-only: `MazeGenerationService.replace` swaps immutable
   snapshots, and every reader (REST, ASCII, sessions, solvers) picks up the newest grid on
   its next lookup with no locking — readers mid-request keep a consistent old snapshot.
-- `/topic/maze/{id}/state` now carries two frame shapes (`GeneratedFrame`, `MutationFrame`);
-  subscribers must branch on shape. The web UI does; external consumers are told via the
-  frame's self-describing `tick` field.
+- `/topic/maze/{id}/state` carries three frame shapes (`GeneratedFrame`,
+  `MutationFrame`, `TrafficFrame`); subscribers must branch on shape. The web
+  UI does; external consumers are told via `generatorId` / `tick` /
+  `congestedCells`.
 - Solved paths and leaderboard times refer to the maze *as it was* — accepted for v1 and
   visible in the UI (it re-solves on every mutation).
 - Wall *closing* (mazes getting harder) is deliberately out of scope: it needs a
