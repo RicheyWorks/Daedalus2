@@ -59,7 +59,9 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   A spectator hydrates every seat's
   `walks` and paints a hunt from the session tour, not a minting GET.
   Living ticks refresh the theory
-  overlays; a plugin failure refreshes the roster. Opt-in multiplayer:
+  overlays; a plugin failure refreshes the roster. Generate hotspots
+  follow the seed so the same count rebuilds. A joiner who finishes is
+  the name on the board. Opt-in multiplayer:
   `daedalus.session.multiplayer`.
 - **Deterministic across restarts, not just across a cache hit.** Same seed,
   same answer, on a process that has never seen the request before.

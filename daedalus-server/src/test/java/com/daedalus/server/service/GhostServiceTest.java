@@ -21,8 +21,7 @@ import static org.mockito.Mockito.mock;
 /**
  * Ghost selection rules (ADR-006 idea #8): completed runs challenge the maze's incumbent
  * ghost and the higher score keeps the seat — so the ghost IS the local record holder, in
- * the same ordering the leaderboard uses. Recordings carry the opening player's timed
- * trail; second players never pollute it.
+ * the same ordering the leaderboard uses. Recordings carry the winner's timed walk.
  */
 class GhostServiceTest {
 
@@ -86,6 +85,20 @@ class GhostServiceTest {
         assertThat(ghosts.ghostOf(mazeId).playerName())
                 .as("a challenger that doesn't strictly beat the score keeps the incumbent")
                 .isEqualTo(incumbent.playerName());
+    }
+
+    @Test
+    void aJoinerFinishRecordsTheJoinersWalk() {
+        var s = sessions.open(mazeId, "opener", grid.start());
+        Point nextToGoal = grid.openNeighbors(grid.goal()).get(0);
+        sessions.join(s.id(), "joiner", nextToGoal);
+        assertThat(sessions.tryMove(s.id(), "joiner", grid, grid.goal())).isTrue();
+
+        var ghost = ghosts.ghostOf(mazeId);
+        assertThat(ghost).as("an empty opener trail must not skip the winner's walk").isNotNull();
+        assertThat(ghost.playerName()).isEqualTo("joiner");
+        assertThat(ghost.moves().get(ghost.moves().size() - 1).to()).isEqualTo(grid.goal());
+        assertThat(s.trail()).as("the opener still has no ghost material of their own").isEmpty();
     }
 
     @Test

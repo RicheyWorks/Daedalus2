@@ -57,6 +57,8 @@ class WebUiSmokeTest {
                 .contains("p.waypoints").contains("fog walk ended")
                 .contains("esc(a.displayName)").contains("integrity=")
                 .contains("$(\"generator\").value = h.generator")
-                .contains("already alive");
+                .contains("already alive")
+                .contains("placeHotspots").contains("applyHotspotsFromMaze")
+                .contains("confirmWin").contains("declareWin");
     }
 }

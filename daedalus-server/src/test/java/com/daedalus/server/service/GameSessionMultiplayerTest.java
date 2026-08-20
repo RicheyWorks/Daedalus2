@@ -5,11 +5,13 @@ package com.daedalus.server.service;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
 import com.daedalus.model.GameSession;
+import com.daedalus.model.LeaderboardEntry;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
 import com.daedalus.plugin.events.PlayerMovedEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.ArrayList;
@@ -17,7 +19,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -142,7 +143,13 @@ class GameSessionMultiplayerTest {
 
         assertThat(svc.tryMove(s.id(), "Bob", grid, grid.goal())).isTrue();
         assertThat(s.completed()).isTrue();
-        verify(leaderboard, times(1)).submit(any());
+        assertThat(s.completedBy()).isEqualTo("Bob");
+        ArgumentCaptor<LeaderboardEntry> submitted = ArgumentCaptor.forClass(LeaderboardEntry.class);
+        verify(leaderboard, times(1)).submit(submitted.capture());
+        assertThat(submitted.getValue().playerName())
+                .as("a joiner finish must not be credited to the opener")
+                .isEqualTo("Bob");
+        assertThat(submitted.getValue().moveCount()).isEqualTo(1);
 
         // Completion freezes the whole session, opening player included.
         assertThat(svc.tryMove(s.id(), "Alice",

@@ -225,17 +225,20 @@ public class GameSessionService {
             // do slow or I/O-bound work should hand off to its own executor rather than
             // borrowing this thread.
             events.publishEvent(new PlayerMovedEvent(this, sessionId, actor, from, to));
-            if (to.equals(live.goal())) complete(s, live);
+            if (to.equals(live.goal())) complete(s, live, actor);
             return true;
         }
     }
 
-    private void complete(GameSession s, MazeGrid grid) {
+    private void complete(GameSession s, MazeGrid grid, String winner) {
         long elapsed = Duration.between(s.startedAt(), Instant.now()).toMillis();
+        // The winner's hops, not every seat's. moveCount() sums joiners and
+        // would make a two-player finish look worse than it was.
+        long hops = s.walkOf(winner).size();
         // Score formula ignores maze size for now; if size-normalized scoring
         // lands, the ideal-path baseline is grid.rows() + grid.cols().
-        long score = Math.max(0, 100_000 - s.moveCount() * 10 - elapsed / 100);
-        s.complete(score);
+        long score = Math.max(0, 100_000 - hops * 10 - elapsed / 100);
+        s.complete(score, winner);
         // This argument was the literal "unknown" until a live probe read it back off the API.
         // Two things were wrong with that and only one of them was visible: the response field
         // was false on every run, and LeaderboardService keys its per-generator sorted set on
@@ -243,7 +246,7 @@ public class GameSessionService {
         // placeholder. No test caught it because every test built its own LeaderboardEntry —
         // the production value was the one value the suite never looked at.
         leaderboard.submit(new LeaderboardEntry(
-                s.id(), s.mazeId(), s.playerName(), score, s.moveCount(), elapsed,
+                s.id(), s.mazeId(), winner, score, hops, elapsed,
                 s.generatorId(), Instant.now()));
         // Inline like PlayerMovedEvent — listeners observe completion in move order.
         events.publishEvent(new com.daedalus.plugin.events.SessionCompletedEvent(this, s));

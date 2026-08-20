@@ -77,6 +77,8 @@ public class GameSession {
     private final AtomicLong moveCount = new AtomicLong();
     private volatile long score;
     private volatile boolean completed;
+    /** Who stepped on the goal; {@code null} until {@link #complete(long, String)}. */
+    private volatile String completedBy;
     private final Instant startedAt;
     private Instant completedAt;
 
@@ -164,7 +166,8 @@ public class GameSession {
         return Map.copyOf(out);
     }
 
-    private java.util.List<TimedMove> walkOf(String name) {
+    /** Snapshot of one seat's hops, empty if they have not moved. */
+    public java.util.List<TimedMove> walkOf(String name) {
         java.util.List<TimedMove> w = walks.get(name);
         if (w == null) {
             return java.util.List.of();
@@ -211,10 +214,21 @@ public class GameSession {
         return subject != null && subjects.contains(subject);
     }
 
+    /** Completes as the opening player; see {@link #complete(long, String)}. */
     public void complete(long finalScore) {
+        complete(finalScore, playerName);
+    }
+
+    /**
+     * @param winner the seat that stepped on the goal — the name the leaderboard and
+     *               ghost must record. Completing as the opener was a lie when a joiner
+     *               finished first and the opener's trail was still empty.
+     */
+    public void complete(long finalScore, String winner) {
         this.completed = true;
         this.completedAt = Instant.now();
         this.score = finalScore;
+        this.completedBy = (winner == null || winner.isBlank()) ? playerName : winner;
     }
 
     public UUID id() { return id; }
@@ -236,6 +250,8 @@ public class GameSession {
     public long moveCount() { return moveCount.get(); }
     public long score() { return score; }
     public boolean completed() { return completed; }
+    /** Seat that reached the goal, or the opener before anyone has. */
+    public String completedBy() { return completedBy != null ? completedBy : playerName; }
     public Instant startedAt() { return startedAt; }
     public Instant completedAt() { return completedAt; }
 }

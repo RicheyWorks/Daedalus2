@@ -257,7 +257,8 @@ Last consolidated: 2026-08-17
   factor so a permalink does not read the leftover select.
   `#generator=` sets the Generate dropdown. Catalog blurbs are escaped.
   Crossbreed keeps parent hotspots. CDN scripts have SRI. Prod rate
-  limits ignore `X-Forwarded-For` unless opted in.
+  limits ignore `X-Forwarded-For` unless opted in. Generate hotspots
+  follow the seed. A joiner finish is credited to the joiner.
 
 - ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`
   uploads every module's JaCoCo XML to Codecov via `codecov-action@v5`,

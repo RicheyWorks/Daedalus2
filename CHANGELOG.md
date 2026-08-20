@@ -6,9 +6,17 @@ All notable changes to Daedalus are documented in this file. Format follows
 `1.0.0` (the multi-module split + first audit pass) live in git history
 under the `_migration/` portfolios.
 
-## [Unreleased] — 2026-08-17
+## [Unreleased] — 2026-08-20
 
 ### Fixed
+
+- **Hotspots, offline wins, and joiner credit.** Generate places
+  weighted cells from the seed, not `Math.random()`, and a `#maze=`
+  refresh restores the count. An offline hop that does not show `G`
+  still asks the session snapshot, so a living tick cannot hide a
+  finish. A joiner who steps on the goal is the name on the leaderboard
+  and the ghost walk; the opener's empty trail no longer drops the
+  recording.
 
 - **Catalog blurbs, `#generator=`, breed weights, and prod XFF.**
   Algorithm notes go through `esc()`. A `#generator=` permalink sets

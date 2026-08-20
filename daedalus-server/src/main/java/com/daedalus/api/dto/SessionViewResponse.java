@@ -24,7 +24,8 @@ import java.util.UUID;
  * @param mazeId    the maze that session is playing
  * @param player    the opening player's display name — whose trail this is
  * @param players   every player's current position, opening player included
- * @param completed true once the opening player reached the goal
+ * @param completed true once any seat reached the goal
+ * @param completedBy the seat that finished, or {@code null} while the session is open
  * @param moveCount steps taken (any player)
  * @param score     current score
  * @param trail     opening-player hops from start, empty before the first move
@@ -35,4 +36,15 @@ public record SessionViewResponse(UUID sessionId, UUID mazeId, String player,
                                   Map<String, Point> players,
                                   boolean completed, long moveCount, long score,
                                   List<GameSession.TimedMove> trail,
-                                  Map<String, List<GameSession.TimedMove>> walks) {}
+                                  Map<String, List<GameSession.TimedMove>> walks,
+                                  String completedBy) {
+    /** Pre-winner-name shape. */
+    public SessionViewResponse(UUID sessionId, UUID mazeId, String player,
+                               Map<String, Point> players,
+                               boolean completed, long moveCount, long score,
+                               List<GameSession.TimedMove> trail,
+                               Map<String, List<GameSession.TimedMove>> walks) {
+        this(sessionId, mazeId, player, players, completed, moveCount, score, trail, walks,
+                completed ? player : null);
+    }
+}

@@ -36,6 +36,18 @@ async function check(name, fn) {
     return [n.p > 1 && n.e > 0, `route ${n.p} cells, ${n.e} expansions animated`];
   });
 
+  await check('B2. hotspot cells follow the seed', async () => {
+    const d = await page.evaluate(() => {
+      const a = placeHotspots(15, 15, 4, 42, 25);
+      const b = placeHotspots(15, 15, 4, 42, 25);
+      const c = placeHotspots(15, 15, 4, 43, 25);
+      return {same: JSON.stringify(a) === JSON.stringify(b),
+              diff: JSON.stringify(a) !== JSON.stringify(c), n: a.length};
+    });
+    return [d.same && d.diff && d.n === 4,
+        `4 spots; seed-stable ${d.same} seed-sensitive ${d.diff}`];
+  });
+
   await check('C. compare all solvers', async () => {
     await page.click('#compare');
     await page.waitForFunction(() => document.getElementById('compareBox').innerText.length > 40, null, {timeout:20000});

@@ -93,4 +93,15 @@ class GameSessionTest {
                 .containsExactly(new Point(1, 0), new Point(1, 1));
         assertThat(s.walks().get("Alice")).isEqualTo(s.trail());
     }
+
+    @Test
+    void completeRecordsTheWinnerNotTheOpener() {
+        GameSession s = owned();
+        s.join("Bob", new Point(0, 0), "bob");
+        s.complete(99, "Bob");
+        assertThat(s.completed()).isTrue();
+        assertThat(s.completedBy()).isEqualTo("Bob");
+        assertThat(s.score()).isEqualTo(99);
+        assertThat(s.playerName()).isEqualTo("Alice");
+    }
 }

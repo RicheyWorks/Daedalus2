@@ -70,8 +70,11 @@ MUT = [
      "                .expireAfterAccess(idleTtl)\n",
      ""),
     (SVC, "the score floor is removed (negative scores)",
-     "        long score = Math.max(0, 100_000 - s.moveCount() * 10 - elapsed / 100);",
-     "        long score = 100_000 - s.moveCount() * 10 - elapsed / 100;"),
+     "        long score = Math.max(0, 100_000 - hops * 10 - elapsed / 100);",
+     "        long score = 100_000 - hops * 10 - elapsed / 100;"),
+    (SVC, "a joiner finish is credited to the opener",
+     "                s.id(), s.mazeId(), winner, score, hops, elapsed,",
+     "                s.id(), s.mazeId(), s.playerName(), score, hops, elapsed,"),
 ]
 
 CLASSES = ("GameSessionServiceConcurrencyTest", "SessionLockIsolationTest",

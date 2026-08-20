@@ -130,6 +130,7 @@ class BreedAndSpectateEndpointTest {
         assertThat(before.get("mazeId").asText()).isEqualTo(id.toString());
         assertThat(before.get("player").asText()).isEqualTo("runner");
         assertThat(before.get("completed").asBoolean()).isFalse();
+        assertThat(before.get("completedBy").isNull()).isTrue();
         assertThat(before.get("moveCount").asLong()).isZero();
         assertThat(before.get("players").get("runner")).isNotNull();
         assertThat(before.get("trail")).as("no hops before the first move").isEmpty();

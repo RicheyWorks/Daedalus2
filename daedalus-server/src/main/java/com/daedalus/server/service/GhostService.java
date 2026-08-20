@@ -25,8 +25,9 @@ import java.util.UUID;
  *
  * <p>Only completed runs qualify — an abandoned wander is not a ghost — and "best" means
  * highest score (the same ordering the leaderboard uses, so the ghost IS the local record
- * holder). Empty trails (a session completed without recorded moves — theoretically a
- * 1×1 maze) are ignored rather than stored as degenerate ghosts.
+ * holder). Empty walks (a session completed without recorded moves — theoretically a
+ * 1×1 maze) are ignored rather than stored as degenerate ghosts. The recording is
+ * the seat that stepped on the goal, not always the opener.
  *
  * <p><b>Bounded</b> (house rule): one ghost per maze in a Caffeine cache
  * ({@code daedalus.ghost.max-mazes} / {@code idle-ttl}), and each recording is already
@@ -70,11 +71,12 @@ public class GhostService {
     @EventListener
     public void onCompleted(SessionCompletedEvent e) {
         GameSession s = e.session();
-        List<GameSession.TimedMove> trail = s.trail();
+        String who = s.completedBy();
+        List<GameSession.TimedMove> trail = s.walkOf(who);
         if (trail.isEmpty()) {
             return;
         }
-        GhostRun challenger = new GhostRun(s.mazeId(), s.playerName(), s.score(),
+        GhostRun challenger = new GhostRun(s.mazeId(), who, s.score(),
                 trail.get(trail.size() - 1).tMs(), trail);
         ghosts.asMap().merge(s.mazeId(), challenger,
                 (incumbent, fresh) -> fresh.score() > incumbent.score() ? fresh : incumbent);
