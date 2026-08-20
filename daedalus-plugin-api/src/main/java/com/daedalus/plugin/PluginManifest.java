@@ -5,8 +5,7 @@ package com.daedalus.plugin;
 import java.util.Objects;
 
 /**
- * Plugin metadata. Surfaced via {@code GET /api/plugins} so clients can list everything
- * loaded.
+ * Plugin metadata. Surfaced to HTTP clients via {@code GET /api/v1/plugins}.
  *
  * <p><b>Required fields</b> (rejected at construction time when {@code null}):
  * {@link #id()}, {@link #displayName()}, {@link #version()}.

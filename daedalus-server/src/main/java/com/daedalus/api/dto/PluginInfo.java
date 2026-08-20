@@ -5,7 +5,7 @@ package com.daedalus.api.dto;
 import com.daedalus.plugin.PluginManifest;
 
 /**
- * Element of the response body for {@code GET /api/plugins}. Lightweight projection of a
+ * Element of the response body for {@code GET /api/v1/plugins}. Lightweight projection of a
  * {@code PluginRegistry.Entry} suitable for HTTP clients.
  *
  * @param id       plugin id from the manifest

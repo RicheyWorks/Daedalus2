@@ -482,11 +482,14 @@ function logout() {
   refreshPlugins();
 }
 
-/** RFC 7807 `detail` (or `title`) when the error body is ProblemDetail. */
+/** RFC 7807 `kind` + `detail` (or `title`) when the error body is ProblemDetail. */
 async function problemWhy(res) {
   try {
     const body = await res.json();
-    return body && (body.detail || body.title) ? ` — ${body.detail || body.title}` : "";
+    if (!body) return "";
+    const why = body.detail || body.title;
+    const bits = [body.kind, why].filter(Boolean);
+    return bits.length ? ` — ${bits.join(": ")}` : "";
   } catch (notProblemJson) {
     return "";
   }
@@ -2146,9 +2149,16 @@ async function join() {
     }
     draw();
   } catch (e) {
-    log("err", e.message.includes("409")
-        ? `join refused — ${e.message}`
-        : `join refused — is daedalus.session.multiplayer=true? (${e.message})`);
+    const msg = e.message || "";
+    // Flag-off join is the same 404 as an unknown session — do not name the flag.
+    const why = /session-completed|already finished/i.test(msg)
+        ? "this session already finished"
+        : /session-full|is full/i.test(msg)
+            ? "this session is full"
+            : /404/.test(msg)
+                ? "that session is gone"
+                : msg;
+    log("err", `join refused — ${why}`);
   }
 }
 

@@ -263,9 +263,9 @@ System.out.println(new BCryptPasswordEncoder().encode("your-password"));
 ```
 
 DTOs live in `com.daedalus.api.dto` and have Javadoc on every field. A
-TypeScript sketch lives in [`Code/daedalus-api-dtos.ts`](./Code/daedalus-api-dtos.ts);
-it lags the Java records (session `walks` and several frames are missing)
-and is not a generated client.
+hand-written TypeScript sketch of selected records lives in
+[`Code/daedalus-api-dtos.ts`](./Code/daedalus-api-dtos.ts). It is not a
+generated client. The live contract is the Java records and OpenAPI.
 
 ## WebSocket / STOMP topics
 
@@ -327,9 +327,9 @@ mvn clean verify              # all five modules
 mvn -pl daedalus-server test  # one module
 ```
 
-Test inventory — **623 tests across 127 files** (322 core, 7 plugin-api, 26
-plugin-runtime, 258 server, 10 desktop) was the 2026-07-31 snapshot. The
-suite has grown since; `mvn clean verify` is the number that matters. Highlights:
+The living count is `mvn clean verify`. A 2026-07-31 snapshot was 623 tests
+across 127 files (322 core, 7 plugin-api, 26 plugin-runtime, 258 server,
+10 desktop); do not treat that number as current. Highlights:
 
 | Module | Highlights |
 |---|---|

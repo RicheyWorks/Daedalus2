@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Join names finished, full, or gone — not the multiplayer flag.** The
+  server already splits those 409s. The page logged every other failure
+  as "is the flag on?", including a 404 for an unknown session, which
+  is also how a flag-off join is supposed to look. Plugin DTO javadoc
+  names `/api/v1/plugins`. The README no longer headlines the July test
+  count or claims the TypeScript sketch is missing `walks`.
+
 - **Fog locks the overlays `draw()` would swallow.** Solve, analyze, the
   tour, Identify, and ASCII stayed clickable during a walk; they wrote
   `state` and painted nothing. Those buttons disable for the walk and

@@ -265,7 +265,9 @@ Last consolidated: 2026-08-17
   `max-concurrent` holds under two first starts. First Identify trains
   off the request thread and 503s until ready. A `#maze=` hash carries
   the generate recipe so an evicted id rebuilds. The daily first
-  request no longer orphans a second maze.
+  request no longer orphans a second maze. Fog locks overlays that
+  `draw()` would swallow. Join names finished, full, or gone — a 404
+  does not ask whether the multiplayer flag is on.
 
 - ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`
   uploads every module's JaCoCo XML to Codecov via `codecov-action@v5`,

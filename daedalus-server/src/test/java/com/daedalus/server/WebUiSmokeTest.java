@@ -64,6 +64,8 @@ class WebUiSmokeTest {
                 .contains("aged out of the cache")
                 .contains("fingerprintWhenReady").contains("classifier is warming")
                 .contains("recipeParts").contains("rebuildFromRecipe")
-                .contains("setGodModeEnabled").contains("GOD_MODE");
+                .contains("setGodModeEnabled").contains("GOD_MODE")
+                .contains("this session already finished")
+                .contains("that session is gone");
     }
 }
