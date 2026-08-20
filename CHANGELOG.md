@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **ASCII errors, a failed compare, and an evicted maze.** `apiPlain`
+  reads ProblemDetail the same way `api` does, so a 401 is not a missing
+  maze. Compare no longer logs `best path Infinity` when every solver
+  fails. A move against an evicted maze says the maze aged out.
+
 - **Hotspots, offline wins, and joiner credit.** Generate places
   weighted cells from the seed, not `Math.random()`, and a `#maze=`
   refresh restores the count. An offline hop that does not show `G`

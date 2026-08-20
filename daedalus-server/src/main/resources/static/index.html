@@ -482,6 +482,16 @@ function logout() {
   refreshPlugins();
 }
 
+/** RFC 7807 `detail` (or `title`) when the error body is ProblemDetail. */
+async function problemWhy(res) {
+  try {
+    const body = await res.json();
+    return body && (body.detail || body.title) ? ` — ${body.detail || body.title}` : "";
+  } catch (notProblemJson) {
+    return "";
+  }
+}
+
 async function api(path, opts) {
   opts = opts || {};
   const headers = Object.assign({}, opts.headers);
@@ -492,11 +502,7 @@ async function api(path, opts) {
     // The server answers errors as RFC 7807 ProblemDetail; its `detail` says WHY
     // ("parents must share dimensions: 15x15 vs 7x7"). Surfacing only the status code
     // throws that away and makes every failure look the same, so prefer the detail.
-    let why = "";
-    try {
-      const body = await res.json();
-      why = body && (body.detail || body.title) ? ` — ${body.detail || body.title}` : "";
-    } catch (notProblemJson) { /* empty or non-JSON body: status alone is all we have */ }
+    const why = await problemWhy(res);
     const hint = res.status === 401 && path !== "/auth/login"
         ? " — sign in (prod requires a token)" : "";
     throw new Error(`${res.status} ${res.statusText} on ${path}${why}${hint}`);
@@ -511,7 +517,11 @@ async function apiPlain(path) {
   if (state.token) headers.Authorization = "Bearer " + state.token;
   const res = await fetch(API + path, {headers});
   if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText} on ${path}`);
+    // Errors stay ProblemDetail JSON even when the success body is text/plain.
+    // Status + statusText alone made a 401 look like a missing maze.
+    const why = await problemWhy(res);
+    const hint = res.status === 401 ? " — sign in (prod requires a token)" : "";
+    throw new Error(`${res.status} ${res.statusText} on ${path}${why}${hint}`);
   }
   return res.text();
 }
@@ -1952,8 +1962,9 @@ async function compareSolvers() {
   }
   $("compare").disabled = false;
   const ok = results.filter(r => r.success);
-  const bestPath = Math.min(...ok.map(r => r.path.length));
-  const bestVisited = Math.min(...ok.map(r => r.visited));
+  // Math.min() of an empty list is Infinity — the log used to say "best path Infinity".
+  const bestPath = ok.length ? Math.min(...ok.map(r => r.path.length)) : null;
+  const bestVisited = ok.length ? Math.min(...ok.map(r => r.visited)) : null;
   results.sort((a, b) => (a.success !== b.success) ? (a.success ? -1 : 1) : a.visited - b.visited);
 
   state.caption = "compare";
@@ -1991,8 +2002,10 @@ async function compareSolvers() {
       show();
     });
   });
-  log("solver", `compared ${ok.length}/${results.length} solvers — `
-      + `best path ${bestPath}, fewest visits ${bestVisited}`);
+  log("solver", ok.length
+      ? `compared ${ok.length}/${results.length} solvers — `
+          + `best path ${bestPath}, fewest visits ${bestVisited}`
+      : `compared 0/${results.length} solvers — every solver failed`);
 }
 
 async function play() {
@@ -2053,7 +2066,9 @@ async function join() {
     }
     draw();
   } catch (e) {
-    log("err", `join refused — is daedalus.session.multiplayer=true? (${e.message})`);
+    log("err", e.message.includes("409")
+        ? `join refused — ${e.message}`
+        : `join refused — is daedalus.session.multiplayer=true? (${e.message})`);
   }
 }
 
@@ -2074,7 +2089,14 @@ async function move(name, dr, dc) {
     // With STOMP connected, the frame is the source of truth (keeps every viewer
     // consistent, including other tabs). Without it, apply locally so play still works.
     if (!state.stomp) applyMove(name, to);
-  } catch (e) { log("err", e.message); }
+  } catch (e) {
+    if (/evicted/.test(e.message)) {
+      log("err", "this maze aged out of the cache — generate again");
+      $("status").textContent = "this maze aged out of the cache — generate again";
+    } else {
+      log("err", e.message);
+    }
+  }
 }
 
 /** Shared position update: called from the STOMP frame handler or the local fallback. */

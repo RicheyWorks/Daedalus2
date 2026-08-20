@@ -59,6 +59,8 @@ class WebUiSmokeTest {
                 .contains("$(\"generator\").value = h.generator")
                 .contains("already alive")
                 .contains("placeHotspots").contains("applyHotspotsFromMaze")
-                .contains("confirmWin").contains("declareWin");
+                .contains("confirmWin").contains("declareWin")
+                .contains("problemWhy").contains("every solver failed")
+                .contains("aged out of the cache");
     }
 }

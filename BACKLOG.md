@@ -258,7 +258,9 @@ Last consolidated: 2026-08-17
   `#generator=` sets the Generate dropdown. Catalog blurbs are escaped.
   Crossbreed keeps parent hotspots. CDN scripts have SRI. Prod rate
   limits ignore `X-Forwarded-For` unless opted in. Generate hotspots
-  follow the seed. A joiner finish is credited to the joiner.
+  follow the seed. A joiner finish is credited to the joiner. ASCII
+  errors keep the ProblemDetail. A failed compare does not say Infinity.
+  An evicted maze says it aged out.
 
 - ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`
   uploads every module's JaCoCo XML to Codecov via `codecov-action@v5`,
