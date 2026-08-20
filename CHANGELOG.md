@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Living and traffic caps are real under burst.** First starts used
+  to read `map.size()` inside a per-key `compute`, so two mazes could
+  both see a free slot and both insert. Admission is now one lock;
+  a two-thread first-start pin keeps the last slot singular.
+
 - **Join 409 says finished or full, and agent views cost a step.**
   `POST /session/{id}/join` used to answer an empty 409 for both a
   completed session and a full one. Those are now

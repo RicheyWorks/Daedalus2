@@ -261,7 +261,8 @@ Last consolidated: 2026-08-17
   follow the seed. A joiner finish is credited to the joiner. ASCII
   errors keep the ProblemDetail. A failed compare does not say Infinity.
   An evicted maze says it aged out. Join 409 distinguishes finished
-  from full. Agent re-polls share the step budget.
+  from full. Agent re-polls share the step budget. Living and traffic
+  `max-concurrent` holds under two first starts.
 
 - ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`
   uploads every module's JaCoCo XML to Codecov via `codecov-action@v5`,

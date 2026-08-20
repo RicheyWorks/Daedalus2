@@ -87,6 +87,11 @@ public class TrafficService {
 
     private final ScheduledExecutorService ticker;
     private final ConcurrentHashMap<UUID, Tracker> trackers = new ConcurrentHashMap<>();
+    /**
+     * Serialises first-insert against the cap. {@code compute} locks one key, so two first
+     * enables on different mazes both used to see {@code size() < cap} and both insert.
+     */
+    private final Object admission = new Object();
 
     private static ScheduledExecutorService daemonTicker() {
         return Executors.newSingleThreadScheduledExecutor(r -> {
@@ -191,15 +196,18 @@ public class TrafficService {
                     cached.metadata(), weighted, cached.stats(), cached.hotspots(),
                     cached.braid()));
         }
-        Tracker tracker = trackers.compute(mazeId, (id, existing) -> {
+        Tracker tracker;
+        synchronized (admission) {
+            Tracker existing = trackers.get(mazeId);
             if (existing != null) {
-                return existing;
-            }
-            if (trackers.size() >= maxConcurrent) {
+                tracker = existing;
+            } else if (trackers.size() >= maxConcurrent) {
                 throw new CapacityExceededException(maxConcurrent);
+            } else {
+                tracker = new Tracker(mazeId);
+                trackers.put(mazeId, tracker);
             }
-            return new Tracker(id);
-        });
+        }
         synchronized (tracker) {
             if (tracker.future == null) {
                 tracker.future = ticker.scheduleAtFixedRate(() -> tick(tracker),

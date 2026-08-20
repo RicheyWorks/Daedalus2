@@ -105,6 +105,11 @@ public class LivingMazeService {
         });
     }
     private final ConcurrentHashMap<UUID, Run> runs = new ConcurrentHashMap<>();
+    /**
+     * Serialises first-insert against the cap. {@code compute} locks one key, so two first
+     * starts on different mazes both used to see {@code size() < cap} and both insert.
+     */
+    private final Object admission = new Object();
 
     private final class Run {
         final UUID mazeId;
@@ -230,15 +235,18 @@ public class LivingMazeService {
     public LiveStatus start(UUID mazeId, int ticks, long seed, double sealFactor) {
         int bounded = Math.min(Math.max(1, ticks), maxTicks);
         double seal = clampUnit(sealFactor);
-        Run run = runs.compute(mazeId, (id, existing) -> {
+        Run run;
+        synchronized (admission) {
+            Run existing = runs.get(mazeId);
             if (existing != null) {
-                return existing; // idempotent: one run per maze
-            }
-            if (runs.size() >= maxConcurrent) {
+                run = existing;
+            } else if (runs.size() >= maxConcurrent) {
                 throw new CapacityExceededException(maxConcurrent);
+            } else {
+                run = new Run(mazeId, bounded, seed, seal);
+                runs.put(mazeId, run);
             }
-            return new Run(id, bounded, seed, seal);
-        });
+        }
         // Schedule outside compute (no long work under the map's lock). The benign race —
         // two first-callers both reach here — is settled by `run.future == null` being
         // assigned only once: compute returned the same Run instance to both, and only the
