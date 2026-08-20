@@ -178,6 +178,23 @@ public class ApiExceptionHandler {
     }
 
     /**
+     * First Identify used to train on the request thread (~40s). The fit now runs on a
+     * dedicated trainer; until it publishes, the answer is 503 with Retry-After, not a
+     * stuck Tomcat worker.
+     */
+    @ExceptionHandler(com.daedalus.server.service.FingerprintService.ClassifierWarmingException.class)
+    public ResponseEntity<ProblemDetail> onClassifierWarming(
+            com.daedalus.server.service.FingerprintService.ClassifierWarmingException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(
+                HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+        pd.setTitle("Classifier warming");
+        pd.setType(URI.create("https://daedalus.dev/problems/classifier-warming"));
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .header(HttpHeaders.RETRY_AFTER, "5")
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+    }
+
+    /**
      * The living-maze ticker is full ({@code daedalus.living.max-concurrent} runs already
      * animating). 409 rather than 429: the caller's quota is fine — the shared resource is
      * busy, and retrying after a run settles will succeed.

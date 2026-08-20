@@ -5,12 +5,18 @@ package com.daedalus.server.service;
 import com.daedalus.engine.generators.GeneratorRegistry;
 import com.daedalus.theory.GeneratorClassifier;
 import com.daedalus.theory.MazeFingerprint;
+import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -22,16 +28,27 @@ import java.util.concurrent.atomic.AtomicReference;
  * living maze, or a maze whose recorded {@code generatorId} says nothing about its current
  * shape.
  *
- * <p><b>Trained lazily and exactly once.</b> Training samples every registered generator at
- * several sizes and seeds, which costs real work; doing it in a constructor would tax every
- * application start, including tests that never ask for a fingerprint. The reference is
- * published atomically, so a race at worst trains twice and keeps one — cheaper than holding a
- * lock across generation work.
+ * <p><b>Trained lazily, off the request thread, and exactly once.</b> Training samples every
+ * registered generator at several sizes and seeds. Doing it in a constructor would tax every
+ * start, including tests that never ask. Doing it on the first GET used to pin a Tomcat
+ * worker for the whole fit (~40s) and, on a race, train once per concurrent first hit. A
+ * dedicated thread trains; {@link #identify} answers {@link ClassifierWarmingException}
+ * (503) until the reference is published.
  */
 @Service
 public class FingerprintService {
 
     private static final Logger log = LoggerFactory.getLogger(FingerprintService.class);
+    private static final int[] TRAIN_SIZES = {21, 31, 41};
+
+    /**
+     * The classifier is still fitting. Retry — do not hold a request thread across generation.
+     */
+    public static final class ClassifierWarmingException extends RuntimeException {
+        public ClassifierWarmingException() {
+            super("The generator classifier is still training. Retry shortly.");
+        }
+    }
 
     /**
      * A maze's signature and the classifier's verdict.
@@ -49,41 +66,81 @@ public class FingerprintService {
     private final MazeGenerationService gen;
     private final GeneratorRegistry registry;
     private final int trainSeeds;
+    private final int[] trainSizes;
+    private final Executor trainer;
     private final AtomicReference<GeneratorClassifier> classifier = new AtomicReference<>();
+    private final AtomicBoolean training = new AtomicBoolean();
 
+    @Autowired
     public FingerprintService(MazeGenerationService gen, GeneratorRegistry registry,
                               @Value("${daedalus.fingerprint.train-seeds:4}") int trainSeeds) {
+        this(gen, registry, trainSeeds, TRAIN_SIZES, dedicatedTrainer());
+    }
+
+    /** Test seam — a stalling executor pins single-flight without a 40s fit. */
+    FingerprintService(MazeGenerationService gen, GeneratorRegistry registry,
+                       int trainSeeds, int[] trainSizes, Executor trainer) {
         this.gen = gen;
         this.registry = registry;
         this.trainSeeds = Math.max(1, trainSeeds);
+        this.trainSizes = trainSizes.clone();
+        this.trainer = trainer;
     }
 
-    private GeneratorClassifier classifier() {
-        GeneratorClassifier existing = classifier.get();
-        if (existing != null) {
-            return existing;
+    private static ExecutorService dedicatedTrainer() {
+        return Executors.newSingleThreadExecutor(r -> {
+            Thread t = new Thread(r, "fingerprint-trainer");
+            t.setDaemon(true);
+            return t;
+        });
+    }
+
+    @PreDestroy
+    void shutdown() {
+        if (trainer instanceof ExecutorService es) {
+            es.shutdownNow();
         }
-        long start = System.nanoTime();
-        GeneratorClassifier trained = GeneratorClassifier.train(
-                registry.all().stream().toList(), new int[] {21, 31, 41}, trainSeeds);
-        classifier.compareAndSet(null, trained);
-        log.info("generator classifier trained on {} generators in {} ms",
-                trained.knownGenerators().size(), (System.nanoTime() - start) / 1_000_000);
-        return classifier.get();
+    }
+
+    private void requestTrain() {
+        if (classifier.get() != null || !training.compareAndSet(false, true)) {
+            return;
+        }
+        trainer.execute(() -> {
+            try {
+                long start = System.nanoTime();
+                GeneratorClassifier trained = GeneratorClassifier.train(
+                        registry.all().stream().toList(), trainSizes, trainSeeds);
+                classifier.set(trained);
+                log.info("generator classifier trained on {} generators in {} ms",
+                        trained.knownGenerators().size(),
+                        (System.nanoTime() - start) / 1_000_000);
+            } catch (RuntimeException e) {
+                log.warn("generator classifier training failed; the next identify will retry", e);
+            } finally {
+                training.set(false);
+            }
+        });
     }
 
     /**
      * Fingerprint a stored maze and name its likely author.
      *
      * @return {@code null} when the maze is unknown (the controller answers 404)
+     * @throws ClassifierWarmingException when the fit has been kicked off but is not ready
      */
     public Identification identify(UUID mazeId) {
         var cached = gen.find(mazeId);
         if (cached == null) {
             return null;
         }
+        GeneratorClassifier ready = classifier.get();
+        if (ready == null) {
+            requestTrain();
+            throw new ClassifierWarmingException();
+        }
         var signature = MazeFingerprint.of(cached.grid());
-        var verdict = classifier().classify(cached.grid());
+        var verdict = ready.classify(cached.grid());
         String recorded = cached.metadata().generatorId();
         boolean agrees = verdict.generatorId().equals(recorded);
         return new Identification(mazeId, signature, verdict.generatorId(), verdict.confidence(),

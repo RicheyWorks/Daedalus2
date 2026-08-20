@@ -80,8 +80,8 @@ public class InsightController {
 
     /**
      * ADR-007 idea 4 — identify the algorithm from the maze's shape. One O(cells) sweep plus a
-     * nearest-centroid lookup, so it shares the {@code mazeSolve} budget; the classifier trains
-     * once on first use.
+     * nearest-centroid lookup, so it shares the {@code mazeSolve} budget. The classifier trains
+     * once, off the request thread; until that fit publishes, this answers 503.
      */
     @GetMapping("/maze/{id}/fingerprint")
     @Operation(summary = "Structural signature of a maze, and which generator most likely made it.",
@@ -94,7 +94,9 @@ public class InsightController {
                     + "trees, so no statistic of a single maze can separate them. Disagreement "
                     + "with the recorded generator is reported, not hidden: an eroded or "
                     + "crossbred maze legitimately no longer looks like its author. "
-                    + "Rate-limited against the 'mazeSolve' budget.")
+                    + "The first call kicks a dedicated trainer and answers 503 until the "
+                    + "centroids are published — it used to pin a request thread for the "
+                    + "whole fit. Rate-limited against the 'mazeSolve' budget.")
     @PerKeyRateLimit("mazeSolve")
     public ResponseEntity<FingerprintService.Identification> fingerprint(@PathVariable UUID id) {
         var identification = fingerprints.identify(id);

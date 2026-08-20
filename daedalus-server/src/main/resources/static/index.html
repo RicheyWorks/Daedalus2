@@ -1140,9 +1140,28 @@ async function onMutation(m) {
 }
 
 // ---------- maze fingerprint (ADR-007 idea 4) ----------
+/** First Identify used to hang the tab on a 40s request-thread fit. 503 means warming. */
+async function fingerprintWhenReady(id) {
+  const t0 = performance.now();
+  let warned = false;
+  while (performance.now() - t0 < 60000) {
+    try {
+      return await api(`/maze/${id}/fingerprint`);
+    } catch (e) {
+      if (!/503/.test(e.message)) throw e;
+      if (!warned) {
+        log("state", "fingerprint: classifier is warming");
+        warned = true;
+      }
+      await new Promise(r => setTimeout(r, 800));
+    }
+  }
+  throw new Error("classifier is still warming");
+}
+
 /** Name the algorithm from the shape alone, and say how sure the structure allows us to be. */
 async function identifyGenerator() {
-  const f = await api(`/maze/${state.maze.id}/fingerprint`);
+  const f = await fingerprintWhenReady(state.maze.id);
   state.fingerprint = f;
   state.caption = "fingerprint";
   log("state", `fingerprint: structure says ${f.predictedGeneratorId}`

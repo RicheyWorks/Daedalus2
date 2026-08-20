@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **First Identify no longer trains on a Tomcat worker.** The classifier
+  fit runs on a dedicated thread. Concurrent first hits share that one
+  train. Until it publishes, `GET /fingerprint` is 503 with
+  `Retry-After`; the page retries instead of hanging the tab.
+
 - **Living and traffic caps are real under burst.** First starts used
   to read `map.size()` inside a per-key `compute`, so two mazes could
   both see a free slot and both insert. Admission is now one lock;

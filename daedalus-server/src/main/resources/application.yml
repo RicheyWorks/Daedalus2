@@ -119,7 +119,8 @@ daedalus:
     max-campaigns: ${DAEDALUS_CAMPAIGN_MAX:50}
   # ----- Maze fingerprint / generator classifier (ADR-007 idea 4) -----
   # Nearest-centroid over scale-invariant structural signatures. Training samples each
-  # registered generator at 3 sizes x train-seeds seeds, once, on first use.
+  # registered generator at 3 sizes x train-seeds seeds, once, on a dedicated thread
+  # kicked by the first Identify. Until then GET /fingerprint answers 503.
   fingerprint:
     train-seeds: ${DAEDALUS_FINGERPRINT_TRAIN_SEEDS:4}
   # ----- Complexity Lab (ADR-007 idea 2) -----
