@@ -10,6 +10,17 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Fog locks the overlays `draw()` would swallow.** Solve, analyze, the
+  tour, Identify, and ASCII stayed clickable during a walk; they wrote
+  `state` and painted nothing. Those buttons disable for the walk and
+  re-arm when generate, play, or an agent 404 ends it. Living stays
+  armed. Stats and campaign hazards go through `esc()`.
+
+- **OpenAPI names this release and the live tags.** The spec still said
+  `1.0.0` and listed Mazes / Plugins / Leaderboard. The version is
+  `1.2.0-SNAPSHOT`. Agents, Insight, Campaign, and Auth are registered.
+  `GET /leaderboard` sits under Leaderboard instead of an empty tag.
+
 - **A `#maze=` permalink carries the recipe that rebuilt it.** Seed, size,
   algorithm, braid, and hotspot count sit beside the id. If the cache
   dropped the maze, the page regenerates the same spots instead of 404ing.

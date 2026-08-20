@@ -68,7 +68,8 @@ class ApplicationSmokeTest {
             "/api/v1/maze/{id}",
             "/api/v1/maze/{id}/solve/{solverId}",
             "/api/v1/auth/login",
-            "/api/v1/plugins");
+            "/api/v1/plugins",
+            "/api/v1/leaderboard");
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -140,6 +141,17 @@ class ApplicationSmokeTest {
         // read by someone without the source checked out, which is exactly the reader those
         // links failed.
         JsonNode info = doc.path("info");
+        assertThat(info.path("version").asText())
+                .as("spec version is the project version, not the first-draft leftover")
+                .isEqualTo("1.2.0-SNAPSHOT");
+        List<String> tagNames = new ArrayList<>();
+        doc.path("tags").forEach(t -> tagNames.add(t.path("name").asText()));
+        assertThat(tagNames)
+                .as("every live controller tag is registered, not only the first three")
+                .contains("Mazes", "Agents", "Insight", "Campaign", "Auth",
+                        "Plugins", "Leaderboard");
+        JsonNode lbTags = paths.path("/api/v1/leaderboard").path("get").path("tags");
+        assertThat(lbTags.toString()).contains("Leaderboard");
         for (String url : List.of(info.path("contact").path("url").asText(),
                                   info.path("license").path("url").asText(),
                                   doc.path("externalDocs").path("url").asText())) {

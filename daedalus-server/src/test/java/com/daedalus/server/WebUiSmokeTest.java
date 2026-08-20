@@ -63,6 +63,7 @@ class WebUiSmokeTest {
                 .contains("problemWhy").contains("every solver failed")
                 .contains("aged out of the cache")
                 .contains("fingerprintWhenReady").contains("classifier is warming")
-                .contains("recipeParts").contains("rebuildFromRecipe");
+                .contains("recipeParts").contains("rebuildFromRecipe")
+                .contains("setGodModeEnabled").contains("GOD_MODE");
     }
 }

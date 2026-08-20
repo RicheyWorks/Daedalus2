@@ -360,6 +360,26 @@ async function check(name, fn) {
         `fog walk 4-adj; unseen glyphs held through a living tick (${beforeUnseen.length} chars)`];
   });
 
+  await check('Q2. fog locks overlays that draw() would swallow', async () => {
+    await page.fill('#rows','15'); await page.fill('#cols','15'); await page.fill('#seed','8');
+    await page.click('#generate');
+    await page.waitForFunction(() => state.maze && state.maze.seed === 8, null, {timeout:15000});
+    await page.click('#fog');
+    await page.waitForFunction(() => state.fog && state.fog.seen, null, {timeout:15000});
+    const d = await page.evaluate(() => ({
+      solve: document.getElementById('solve').disabled,
+      analyze: document.getElementById('analyze').disabled,
+      fingerprint: document.getElementById('fingerprint').disabled,
+      ascii: document.getElementById('ascii').disabled,
+      live: document.getElementById('live').disabled,
+    }));
+    await page.click('#generate');
+    await page.waitForFunction(() => !state.fog && !document.getElementById('solve').disabled,
+        null, {timeout:15000});
+    return [d.solve && d.analyze && d.fingerprint && d.ascii && !d.live,
+        `overlays locked; live still armed`];
+  });
+
   await check('R. ASCII is negotiated as text/plain, not drawn from tiles', async () => {
     await page.fill('#seed','11'); await page.click('#generate');
     await page.waitForFunction(() => state.maze && state.maze.seed === 11, null, {timeout:15000});

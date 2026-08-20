@@ -409,6 +409,7 @@ public class MazeController {
 
     @GetMapping("/leaderboard")
     @Operation(summary = "Top-N completion times across active sessions.",
+            tags = "Leaderboard",
             description = "Snapshot — backed by Redis when daedalus.redis.enabled=true, "
                     + "otherwise in-memory. Pass maze=<id> for that maze's own board — the "
                     + "partition behind the daily challenge's leaderboard — or generator=<id> "

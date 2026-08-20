@@ -709,6 +709,18 @@ async function generate(opts) {
   pinHash();
 }
 
+/**
+ * Buttons whose paint draw() swallows while fog is on. Living, play, and
+ * generate stay armed — those are how you leave the walk or keep eroding
+ * without a god-mode GET /maze.
+ */
+const GOD_MODE = ["solve", "compare", "race", "tour", "fingerprint", "analyze",
+    "hardest", "heatmap", "sanctuaries", "lens", "ascii"];
+
+function setGodModeEnabled(on) {
+  GOD_MODE.forEach(id => { const el = $(id); if (el) el.disabled = !on; });
+}
+
 /** Install a maze into the UI — from a fresh generate, a #maze=<id> permalink, or the daily. */
 function adoptMaze(maze, roundTripMs, sourceLabel) {
   if (state.maze && state.maze.id !== maze.id) {
@@ -726,19 +738,14 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   state.maze = maze; state.path = null; state.session = null;
   state.seat = null; state.joined = null; state.trails = {}; state.won = null;
   state.expansions = []; state.searchProgress = 1; state.pathProgress = 1;
-  $("solve").disabled = false; $("play").disabled = false;
+  $("play").disabled = false;
   $("join").disabled = true;
   $("join").textContent = "Join as second player";
   $("join").title = "Requires daedalus.session.multiplayer=true";
-  $("compare").disabled = false;
-  $("live").disabled = false; $("traffic").disabled = false; $("race").disabled = false;
+  $("live").disabled = false; $("traffic").disabled = false;
   if ($("harden")) $("harden").disabled = false;
-  $("analyze").disabled = false; $("tour").disabled = false;
-  $("fingerprint").disabled = false; $("hardest").disabled = false;
-  $("heatmap").disabled = false; $("sanctuaries").disabled = false;
-  $("lens").disabled = false;
   $("fog").disabled = false;
-  $("ascii").disabled = false;
+  setGodModeEnabled(true);
   $("asciiOut").hidden = true;
   $("asciiOut").textContent = "";
   state.fog = null;
@@ -755,8 +762,8 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   $("compareBox").innerHTML = "";
   $("status").textContent = "arrow keys move once a session is open";
   $("stats").innerHTML =
-      `<span>maze</span> ${maze.id.slice(0, 8)}&hellip;<br>`
-      + `<span>by</span> ${maze.generatorId} &middot; ${maze.rows}&times;${maze.cols} `
+      `<span>maze</span> ${esc(maze.id.slice(0, 8))}&hellip;<br>`
+      + `<span>by</span> ${esc(maze.generatorId)} &middot; ${maze.rows}&times;${maze.cols} `
       + `&middot; <span>seed</span> ${maze.seed}`
       + (maze.braid > 0 ? ` &middot; braided ${maze.braid}` : "")
       + `<br>`
@@ -806,7 +813,7 @@ function renderCampaign() {
   $("campaignBox").innerHTML = c.stages.map(s => {
     const active = s.index === state.stageIndex;
     const done = state.cleared[s.index];
-    const hazards = s.hazards.length ? ` · ${s.hazards.join(" + ")}` : "";
+    const hazards = s.hazards.length ? ` · ${esc(s.hazards.join(" + "))}` : "";
     return `<div style="margin:4px 0;padding:4px 6px;border-radius:4px;`
         + `${active ? "background:#1c2531;" : ""}">`
         + `<a href="#" data-stage="${s.index}" style="color:${done ? "#4cc38a" : "#82b1ff"}">`
@@ -1832,7 +1839,7 @@ async function refreshLivingMaze() {
         // Agent is gone. carveFogOpenings mutated tiles and living ticks
         // skipped GET /maze on purpose — fall through and refetch the live grid.
         state.fog = null;
-        $("ascii").disabled = false;
+        setGodModeEnabled(true);
         log("err", `fog walk ended: ${gone.message}`);
       }
     }
@@ -1894,7 +1901,7 @@ async function solve() {
   log("solver", `${r.solverId}: path ${r.path.length}, visited ${r.visited}, `
       + `${r.elapsedMs}ms, success=${r.success}`);
   $("stats").innerHTML +=
-      `<span>${r.solverId}</span> path ${r.path.length} &middot; visited ${r.visited} `
+      `<span>${esc(r.solverId)}</span> path ${r.path.length} &middot; visited ${r.visited} `
       + `&middot; explored ${r.explored} &middot; ${r.elapsedMs} ms`
       + (r.success ? "" : " &middot; <b>no route</b>") + "<br>";
   animateSearch();
@@ -2093,7 +2100,7 @@ async function play() {
     try { Object.assign(state.maze, await api(`/maze/${state.maze.id}`)); }
     catch (ignored) { /* play still works; walls may lag until the next refresh */ }
   }
-  $("ascii").disabled = false;
+  setGodModeEnabled(true);
   state.session = {id: s.sessionId, positions: {[name]: s.position}, primary: name};
   state.seat = name;
   state.joined = null; state.won = null;
@@ -2499,7 +2506,7 @@ async function startFog() {
   state.caption = null;
   state.fog = {seen: new Set()};
   applyFogView(view);
-  $("ascii").disabled = true;
+  setGodModeEnabled(false);
   $("asciiOut").hidden = true;
   $("status").textContent = `fog: ${view.stepsRemaining} steps left — arrows walk the agent`;
   log("state", `fog of war — agent ${String(view.agentId).slice(0, 8)}… sees `

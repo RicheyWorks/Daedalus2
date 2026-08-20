@@ -26,9 +26,10 @@ import java.util.List;
  * </ul>
  *
  * <p>The bean below sets the document-level info (title, description, version, contact,
- * license placeholder), declares the active server URL, and pre-registers the three controller
- * tags so they show up in a stable order. Per-endpoint summaries live on the controllers
- * themselves via {@code @Operation(summary = "...")}.
+ * license), declares the active server URL, and pre-registers the controller tags so they
+ * show up in a stable order. Per-endpoint summaries live on the controllers themselves via
+ * {@code @Operation(summary = "...")}. The version string is the project version, not a
+ * leftover {@code 1.0.0} from the first spec draft.
  */
 @Configuration
 public class OpenApiConfig {
@@ -53,7 +54,7 @@ public class OpenApiConfig {
                                 + "All endpoints are mounted under /api/v1. STOMP topics are documented "
                                 + "in the project README; they do not appear in this OpenAPI spec because "
                                 + "OpenAPI 3.0 does not model STOMP.")
-                        .version("1.0.0")
+                        .version("1.2.0-SNAPSHOT")
                         .contact(new Contact()
                                 .name("Daedalus")
                                 .url(REPO))
@@ -69,6 +70,14 @@ public class OpenApiConfig {
                 .tags(List.of(
                         new Tag().name("Mazes")
                                 .description("Generate, fetch, solve, and play mazes."),
+                        new Tag().name("Agents")
+                                .description("Blind (fog-of-war) maze walks over REST."),
+                        new Tag().name("Insight")
+                                .description("Structural analysis and ghost recordings."),
+                        new Tag().name("Campaign")
+                                .description("A deterministic, difficulty-graded ladder of stages."),
+                        new Tag().name("Auth")
+                                .description("Issue JWTs for the protected API surface."),
                         new Tag().name("Plugins")
                                 .description("Inspect plugins discovered and loaded by the runtime."),
                         new Tag().name("Leaderboard")
