@@ -85,6 +85,13 @@ class WebUiSmokeTest {
                 .contains("nameBudget").contains("BUDGET_WHY")
                 .contains("solver-budget")
                 .contains("this solver spent its node budget")
-                .contains("nameBudget(raw)");
+                .contains("nameBudget(raw)")
+                .contains("leaveSpectate").contains("thisTabSeat")
+                .contains("armSpectatorWrites").contains("refuseSpectatorWrite")
+                .contains("mazeStart(state.maze) || state.session.positions")
+                .contains("spectating is read-only")
+                .doesNotContain("positions[state.session.primary]")
+                .doesNotContain("move(state.session.primary")
+                .doesNotContain("move(state.seat || state.session.primary");
     }
 }

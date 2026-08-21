@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Open session after a `#session=` hydrate actually plays, and this tab moves its own seat.**
+  Spectate left `readOnly` set. Open session minted a session and said "arrow
+  keys to move", then arrows and clicks no-op'd. Clicks still aimed at the
+  opener after join-from-spectate. A late hydrate started the ghost on the
+  opener's current cell. Tour / live / traffic stayed armed and could mint
+  or mutate under the player. `leaveSpectate` drops watch mode; click and
+  arrows share `thisTabSeat`; the ghost starts at the maze start.
+
 - **Solve and Compare name a 422 `solver-budget` instead of dumping the status line.**
   HTTP already answers 422 when a solver spends its node budget. The page
   still logged `422 Unprocessable Entity … — solver-budget: …`. `nameBudget`
