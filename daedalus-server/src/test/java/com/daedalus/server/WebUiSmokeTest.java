@@ -81,6 +81,10 @@ class WebUiSmokeTest {
                 .contains("permalink maze aged out —")
                 .contains("nameGone").contains("GONE_WHY")
                 .contains("that maze is gone")
-                .contains("that fog walk is gone");
+                .contains("that fog walk is gone")
+                .contains("nameBudget").contains("BUDGET_WHY")
+                .contains("solver-budget")
+                .contains("this solver spent its node budget")
+                .contains("nameBudget(raw)");
     }
 }

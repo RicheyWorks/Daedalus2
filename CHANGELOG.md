@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Solve and Compare name a 422 `solver-budget` instead of dumping the status line.**
+  HTTP already answers 422 when a solver spends its node budget. The page
+  still logged `422 Unprocessable Entity … — solver-budget: …`. `nameBudget`
+  maps the kind; matching the named string again is a no-op.
+
 - **Spectator hydrate and a `#maze=` permalink name a TTL-evicted maze as gone.**
   Join already said "that session is gone". `#session=` then `GET /maze/{id}`
   after idle TTL dumped `404 Not Found on /maze/{id}`, and permalink wrapped

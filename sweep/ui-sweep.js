@@ -358,6 +358,23 @@ async function check(name, fn) {
         : JSON.stringify(d).slice(0, 180)];
   });
 
+  await check('N5. solver-budget names the give-up, not the status line', async () => {
+    const d = await page.evaluate(() => {
+      const raw = '422 Unprocessable Entity on /maze/x/solve/ida-star — solver-budget: '
+          + 'ida-star gave up after expanding 50000 nodes';
+      const named = nameBudget(raw);
+      const again = nameBudget(named);
+      const miss = nameBudget('404 Not Found on /maze/x/solve/nope — solver: unknown');
+      const cap = nameBudget('409 Conflict on /maze/x — maze-capacity: already holding 1');
+      return {named, again, miss, cap,
+        dumps: /422|Unprocessable/.test(named || '')};
+    });
+    const ok = d.named && /budget/.test(d.named) && d.again === d.named
+        && d.miss == null && d.cap == null && !d.dumps;
+    return [ok, ok ? 'solver-budget named; 404/409 stay unnamed'
+        : JSON.stringify(d).slice(0, 180)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

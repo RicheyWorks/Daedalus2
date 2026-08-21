@@ -551,6 +551,24 @@ function nameGone(msg) {
   return null;
 }
 
+/**
+ * A solver that spends its node budget is 422 solver-budget — correct at HTTP.
+ * Solve and Compare still dumped the status line. Matching the named string
+ * again is a no-op so api() and a button catch can both call this.
+ */
+const BUDGET_WHY = {
+  "solver-budget": "this solver spent its node budget without finding a route",
+};
+
+function nameBudget(msg) {
+  const m = String(msg || "");
+  const why = BUDGET_WHY["solver-budget"];
+  if (m === why || m.includes("solver-budget")) return why;
+  if (/gave up after expanding/.test(m)) return why;
+  if (/422/.test(m) && /\/solve\//.test(m)) return why;
+  return null;
+}
+
 /** Permalink rebuild shares generate's admit(). A 409 is not a missing maze. */
 function permalinkLoadFailed(getErr, rebuildErr) {
   const cap = rebuildErr && nameCapacity(rebuildErr.message);
@@ -572,7 +590,7 @@ async function api(path, opts) {
     const hint = res.status === 401 && path !== "/auth/login"
         ? " — sign in (prod requires a token)" : "";
     const raw = `${res.status} ${res.statusText} on ${path}${why}${hint}`;
-    throw new Error(nameCapacity(raw) || nameGone(raw) || raw);
+    throw new Error(nameCapacity(raw) || nameGone(raw) || nameBudget(raw) || raw);
   }
   const text = await res.text();
   return text ? JSON.parse(text) : null;
@@ -589,7 +607,7 @@ async function apiPlain(path) {
     const why = await problemWhy(res);
     const hint = res.status === 401 ? " — sign in (prod requires a token)" : "";
     const raw = `${res.status} ${res.statusText} on ${path}${why}${hint}`;
-    throw new Error(nameCapacity(raw) || nameGone(raw) || raw);
+    throw new Error(nameCapacity(raw) || nameGone(raw) || nameBudget(raw) || raw);
   }
   return res.text();
 }
