@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Two first campaigns can no longer both take a free plan slot.**
+  `CampaignService.campaign` checked `size()` then `clear`/`put` without a
+  lock. Two first seeds both inserted, and two arrivals at a full map
+  both survived the wipe. Admission is one lock, the same compound
+  living/traffic closed; two first requests for one seed mint one plan.
+
 - **Two sessions finishing the same maze keep both runs, and the better
   ghost.** `LeaderboardEntry.compareTo` stopped at elapsed time, so the
   in-memory skip-list treated a tied score as one member and dropped a

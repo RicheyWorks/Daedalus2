@@ -10,6 +10,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -240,5 +246,101 @@ class CampaignServiceTest {
         assertThat(again.stages().stream().map(CampaignService.Stage::seed).toList())
                 .as("replanning is regeneration from the same seeds, not a different campaign")
                 .isEqualTo(first.stages().stream().map(CampaignService.Stage::seed).toList());
+    }
+
+    /**
+     * Two first campaigns used to both see {@code size() < cap} and both
+     * {@code put}. {@code ConcurrentHashMap} does not make that atomic. Planning
+     * is the window: each thread is still grading while the other reads a free
+     * slot. Admission is one lock, the same compound living/traffic closed.
+     */
+    @Test
+    void twoFirstCampaignsCannotBothTakeTheLastSlot() throws Exception {
+        var svc = new CampaignService(gen, registry, 1, 1, 7, 1, 1);
+        var go = new CountDownLatch(1);
+        try (var pool = Executors.newFixedThreadPool(2)) {
+            var a = pool.submit(() -> raceCampaign(svc, 1L, go));
+            var b = pool.submit(() -> raceCampaign(svc, 2L, go));
+            go.countDown();
+            a.get(30, TimeUnit.SECONDS);
+            b.get(30, TimeUnit.SECONDS);
+        }
+        assertThat(svc.plannedCount())
+                .as("two first inserts both saw a free slot and both put")
+                .isEqualTo(1);
+    }
+
+    /**
+     * The other half of the compound: the map is already full, so both arrivals
+     * {@code clear()} then both {@code put()}. A lock-free wipe can leave two
+     * plans after an eviction that should have left one.
+     */
+    @Test
+    void twoArrivalsAtAFullPlanMapDoNotBothSurviveTheClear() throws Exception {
+        var svc = new CampaignService(gen, registry, 1, 1, 7, 1, 1);
+        svc.campaign(1L);
+        assertThat(svc.plannedCount()).isEqualTo(1);
+        var go = new CountDownLatch(1);
+        try (var pool = Executors.newFixedThreadPool(2)) {
+            var a = pool.submit(() -> raceCampaign(svc, 2L, go));
+            var b = pool.submit(() -> raceCampaign(svc, 3L, go));
+            go.countDown();
+            a.get(30, TimeUnit.SECONDS);
+            b.get(30, TimeUnit.SECONDS);
+        }
+        assertThat(svc.plannedCount())
+                .as("two threads both clearing a full map and both putting overshoot the cap")
+                .isEqualTo(1);
+    }
+
+    /**
+     * Same-seed honesty daily maze already has: two first requests mint one
+     * plan. Without the lock both {@code plan()}, both announce a stage maze,
+     * and the loser sits in the generation cache until idle TTL.
+     */
+    @Test
+    void twoFirstRequestsForTheSameSeedMintOnePlan() throws Exception {
+        var announced = new CopyOnWriteArrayList<>();
+        var isolated = new MazeGenerationService(registry, announced::add, new SimpleMeterRegistry());
+        var svc = new CampaignService(isolated, registry, 1, 1, 7, 1, 50);
+        var go = new CountDownLatch(1);
+        var ids = new ConcurrentLinkedQueue<UUID>();
+        try (var pool = Executors.newFixedThreadPool(2)) {
+            var a = pool.submit(() -> raceCampaignIds(svc, 99L, go, ids));
+            var b = pool.submit(() -> raceCampaignIds(svc, 99L, go, ids));
+            go.countDown();
+            a.get(30, TimeUnit.SECONDS);
+            b.get(30, TimeUnit.SECONDS);
+        }
+        assertThat(ids.stream().distinct())
+                .as("two first requests used to each plan and leave the loser in the maze cache")
+                .hasSize(1);
+        long minted = announced.stream()
+                .filter(com.daedalus.plugin.events.MazeGeneratedEvent.class::isInstance)
+                .count();
+        assertThat(minted)
+                .as("a lost first-request race used to announce a second stage maze")
+                .isEqualTo(1);
+    }
+
+    private static void raceCampaign(CampaignService svc, long seed, CountDownLatch go) {
+        try {
+            go.await();
+            svc.campaign(seed);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new AssertionError(e);
+        }
+    }
+
+    private static void raceCampaignIds(CampaignService svc, long seed, CountDownLatch go,
+                                        java.util.Queue<UUID> ids) {
+        try {
+            go.await();
+            ids.add(svc.campaign(seed).stages().get(0).mazeId());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new AssertionError(e);
+        }
     }
 }
