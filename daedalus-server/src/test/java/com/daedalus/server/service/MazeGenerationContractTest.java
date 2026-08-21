@@ -197,6 +197,21 @@ class MazeGenerationContractTest {
     }
 
     @Test
+    void theFallbackRethrowsCapacityInsteadOfServingADifferentMaze() throws Exception {
+        var svc = service();
+        Method fallback = MazeGenerationService.class.getDeclaredMethod(
+                "fallback", String.class, int.class, int.class, long.class,
+                java.util.List.class, double.class, Throwable.class);
+        fallback.setAccessible(true);
+        var full = new MazeGenerationService.CapacityExceededException(1);
+
+        assertThatThrownBy(() -> fallback.invoke(svc, "recursive-backtracker", 9, 9, 1L,
+                null, 0.0, full))
+                .isInstanceOf(InvocationTargetException.class)
+                .cause().isSameAs(full);
+    }
+
+    @Test
     void aGeneratorThatReturnsNullFailsLoudlyRatherThanCachingNothing() {
         // Not a defensive-code formality: generators are a plugin extension point, so "returns
         // null" is third-party behaviour this service has to survive. The guard turns it into a

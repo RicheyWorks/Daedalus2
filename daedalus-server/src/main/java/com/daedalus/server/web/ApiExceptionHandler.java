@@ -289,6 +289,18 @@ public class ApiExceptionHandler {
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
     }
 
+    /** Maze cache is full — refuse the new generate; do not LRU-evict a maze still in play. */
+    @ExceptionHandler(com.daedalus.server.service.MazeGenerationService.CapacityExceededException.class)
+    public ResponseEntity<ProblemDetail> onMazeCapacity(
+            com.daedalus.server.service.MazeGenerationService.CapacityExceededException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        pd.setTitle("Too many cached mazes");
+        pd.setType(URI.create("https://daedalus.dev/problems/maze-capacity"));
+        pd.setProperty("kind", "maze-capacity");
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ProblemDetail onMalformedBody(HttpMessageNotReadableException ex) {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(

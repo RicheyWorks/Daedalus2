@@ -35,10 +35,26 @@ import java.util.UUID;
 @Service
 public class MazeGenerationService {
 
+    /** Thrown when {@code cache.max-size} mazes already exist — answered 409. */
+    public static class CapacityExceededException extends RuntimeException {
+        CapacityExceededException(long cap) {
+            super("already holding " + cap + " cached mazes — retry after one idles out");
+        }
+    }
+
     private final GeneratorRegistry registry;
     private final ApplicationEventPublisher events;
     private final MeterRegistry meters;
+    private final long cacheMaxSize;
     private final Cache<UUID, Cached> cache;
+    /**
+     * Serialises first-insert against the cap. Caffeine {@code put} at
+     * {@code maximumSize} evicts LRU, so an unrelated generate used to 404 a
+     * live session or walk whose maze was the victim. Living, traffic, session,
+     * and walk refuse at cap under this lock; idle TTL still evicts abandoned
+     * mazes. Daily, campaign, and permalink share {@link #generate} / {@link #adopt}.
+     */
+    private final Object admission = new Object();
 
     /** Default bounds — see the four-arg constructor. */
     public MazeGenerationService(GeneratorRegistry registry,
@@ -52,9 +68,10 @@ public class MazeGenerationService {
      *        was previously an unbounded {@code ConcurrentHashMap} — at the base rate limit
      *        (30 generations/minute/caller) a long-running instance accumulated grids without
      *        end, the same slow-leak shape the rate-limiter buckets had before their Caffeine
-     *        bound (BACKLOG, 2026-07-19). Eviction is safe by construction: {@code find}
-     *        answering {@code null} is already the API's "unknown maze" path (404), and the
-     *        idle TTL comfortably outlives any session actually being played. Bounds are
+     *        bound (BACKLOG, 2026-07-19). Generating past the size bound refuses
+     *        ({@link CapacityExceededException}) instead of LRU-evicting a maze a live
+     *        session or walk still needs. Idle TTL still evicts abandoned mazes — {@code find}
+     *        answering {@code null} is the API's existing "unknown maze" path (404). Bounds are
      *        configurable via {@code daedalus.maze.cache.*}.
      */
     @Autowired
@@ -85,6 +102,7 @@ public class MazeGenerationService {
         this.registry = registry;
         this.events = events;
         this.meters = meters;
+        this.cacheMaxSize = cacheMaxSize;
         this.cache = Caffeine.newBuilder()
                 .maximumSize(cacheMaxSize)
                 .expireAfterAccess(cacheTtl)
@@ -180,7 +198,7 @@ public class MazeGenerationService {
 
         Double recordedBraid = braid > 0 ? braid : null;
         Cached cached = new Cached(meta, grid, stats, applied, recordedBraid);
-        cache.put(meta.id(), cached);
+        admit(cached);
         events.publishEvent(new MazeGeneratedEvent(this, meta, grid, stats));
         return cached;
     }
@@ -218,9 +236,24 @@ public class MazeGenerationService {
         MazeMetadata meta = MazeMetadata.of(grid.rows(), grid.cols(), seed, generatorId,
                 grid.start(), grid.goal());
         Cached cached = new Cached(meta, grid, new MazeStats(), applied);
-        cache.put(meta.id(), cached);
+        admit(cached);
         events.publishEvent(new MazeGeneratedEvent(this, meta, grid, cached.stats()));
         return cached;
+    }
+
+    /**
+     * First insert against the size bound. Caffeine {@code put} at {@code maximumSize}
+     * evicts LRU, which is how a generate nobody is playing used to 404 a mid-hunt
+     * session or walk. Idle expiry still drops abandoned mazes.
+     */
+    private void admit(Cached cached) {
+        synchronized (admission) {
+            cache.cleanUp();
+            if (cache.asMap().size() >= cacheMaxSize) {
+                throw new CapacityExceededException(cacheMaxSize);
+            }
+            cache.put(cached.metadata().id(), cached);
+        }
     }
 
     public Cached find(UUID id) { return cache.getIfPresent(id); }
@@ -243,7 +276,11 @@ public class MazeGenerationService {
     private Cached fallback(String generatorId, int rows, int cols, long seed,
                             java.util.List<Hotspot> hotspots, double braid, Throwable t) {
         // A caller error is not a generator failure — rethrow so it answers 400, not a
-        // silently different maze.
+        // silently different maze. Capacity is the same: serving a binary-tree maze
+        // because the cache is full would 200 a generate that must 409.
+        if (t instanceof CapacityExceededException cap) {
+            throw cap;
+        }
         if (t instanceof IllegalArgumentException iae) {
             throw iae;
         }

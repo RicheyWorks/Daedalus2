@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Generating a maze at cache cap refuses instead of LRU-evicting one still in play.**
+  Caffeine `maximumSize` on `MazeGenerationService` silently dropped the LRU
+  maze, so an unrelated generate 404ed a live session or walk
+  (`tryMove` / agent step treat a missing maze as gone). Admission is one
+  lock, the same compound living/traffic/session/walk closed; idle TTL still
+  evicts abandoned mazes. Daily, campaign, and permalink share `generate`.
+  Waypoint `collected` refuses a new hunt's first pickup at cap rather than
+  wiping a mid-hunt set. The new generate is 409.
+
 - **Opening a session or walk at cap refuses instead of LRU-evicting a live one.**
   Caffeine `maximumSize` on `GameSessionService` and `AgentWalkService`
   silently dropped the oldest mid-hunt entry so an unrelated open 404ed

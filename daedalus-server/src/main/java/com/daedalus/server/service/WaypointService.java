@@ -90,10 +90,18 @@ public class WaypointService {
     private final MazeGenerationService gen;
     private final GameSessionService sessions;
     private final int defaultCount;
+    private final long maxTours;
 
     /** Frozen placements — the Held-Karp score is recomputed against the live grid. */
     private final Cache<UUID, List<Point>> placements;
     private final Cache<UUID, Set<Point>> collected;
+    /**
+     * Serialises first insert of a session's pickup set. Caffeine {@code put} at
+     * {@code maximumSize} evicts LRU, so a new hunt's first coin used to wipe
+     * another session's mid-hunt {@code collected}. Placements can recompute;
+     * pickups cannot. Idle TTL still drops abandoned sets.
+     */
+    private final Object collectedAdmission = new Object();
 
     @Autowired
     public WaypointService(MazeGenerationService gen,
@@ -119,6 +127,7 @@ public class WaypointService {
         this.gen = gen;
         this.sessions = sessions;
         this.defaultCount = clamp(defaultCount);
+        this.maxTours = maxTours;
         this.placements = Caffeine.newBuilder().maximumSize(maxTours)
                 .expireAfterAccess(idleTtl).ticker(ticker).build();
         this.collected = Caffeine.newBuilder().maximumSize(maxTours)
@@ -195,10 +204,18 @@ public class WaypointService {
         if (waypoints == null || !waypoints.contains(e.to())) {
             return; // not a waypoint maze, or not a waypoint cell
         }
-        collected.asMap()
-                .computeIfAbsent(e.sessionId(), id -> java.util.Collections.synchronizedSet(
-                        new LinkedHashSet<>()))
-                .add(e.to());
+        synchronized (collectedAdmission) {
+            collected.cleanUp();
+            Set<Point> bag = collected.getIfPresent(e.sessionId());
+            if (bag == null) {
+                if (collected.asMap().size() >= maxTours) {
+                    return;
+                }
+                bag = java.util.Collections.synchronizedSet(new LinkedHashSet<>());
+                collected.put(e.sessionId(), bag);
+            }
+            bag.add(e.to());
+        }
     }
 
     /**

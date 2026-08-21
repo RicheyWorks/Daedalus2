@@ -202,6 +202,24 @@ class WaypointServiceTest {
     }
 
     @Test
+    void aNewHuntAtTheCollectedCapDoesNotWipeAMidHuntPickup() {
+        waypoints = new WaypointService(gen, sessions, 4, 1, Duration.ofHours(2));
+        var tour = waypoints.tourFor(mazeId, 4);
+        var first = sessions.open(mazeId, "a", grid.start());
+        Point coin = tour.waypoints().get(0);
+        waypoints.onPlayerMoved(new PlayerMovedEvent(this, first.id(), "a", grid.start(), coin));
+        assertThat(waypoints.progressFor(first.id()).collected()).isEqualTo(1);
+
+        var second = sessions.open(mazeId, "b", grid.start());
+        waypoints.onPlayerMoved(new PlayerMovedEvent(this, second.id(), "b", grid.start(), coin));
+
+        assertThat(waypoints.progressFor(first.id()).collected())
+                .as("Caffeine put at maximumSize used to LRU-evict the older collected set "
+                        + "so a mid-hunt pickup vanished after an unrelated hunt's first coin")
+                .isEqualTo(1);
+    }
+
+    @Test
     void readingProgressDoesNotMintATour() {
         var session = sessions.open(mazeId, "p", grid.start());
         assertThat(waypoints.progressFor(session.id()))

@@ -2,11 +2,13 @@
 
 package com.daedalus.server.controller;
 
+import com.daedalus.api.dto.GenerateRequest;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
 import com.daedalus.model.MazeMetadata;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.daedalus.server.service.AgentWalkService;
 import com.daedalus.server.service.AlgorithmCatalogService;
 import com.daedalus.server.service.DailyMazeService;
@@ -28,8 +30,10 @@ import java.util.UUID;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -142,6 +146,24 @@ class MazeControllerCapacityTest {
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.kind", equalTo("agent-capacity")))
                 .andExpect(jsonPath("$.title", equalTo("Too many agent walks")));
+    }
+
+    @Test
+    void aFullMazeCacheAnswers409() throws Exception {
+        MazeGenerationService.CapacityExceededException full =
+                mock(MazeGenerationService.CapacityExceededException.class);
+        when(full.getMessage()).thenReturn("already holding 1 cached mazes — retry after one idles out");
+        when(gen.generate(anyString(), anyInt(), anyInt(), anyLong(), any(), anyDouble()))
+                .thenThrow(full);
+        String body = new ObjectMapper().writeValueAsString(
+                new GenerateRequest("recursive-backtracker", 8, 8, 7L));
+
+        mvc.perform(post("/api/v1/maze/generate")
+                        .contentType("application/json")
+                        .content(body))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.kind", equalTo("maze-capacity")))
+                .andExpect(jsonPath("$.title", equalTo("Too many cached mazes")));
     }
 
     @Test
