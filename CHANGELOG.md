@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Opening a session or walk at cap refuses instead of LRU-evicting a live one.**
+  Caffeine `maximumSize` on `GameSessionService` and `AgentWalkService`
+  silently dropped the oldest mid-hunt entry so an unrelated open 404ed
+  it. Admission is one lock, the same compound living/traffic closed;
+  idle TTL still evicts abandoned work. The new open is 409.
+
 - **Two first `GET /tour?count=` can no longer mint two coin sets.**
   `tourFor` keyed `mazeId:k`, so two first asks at different counts each
   placed. `placedFor` then preferred the default count or the first

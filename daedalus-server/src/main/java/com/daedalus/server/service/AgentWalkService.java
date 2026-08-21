@@ -47,6 +47,13 @@ import java.util.UUID;
 @Service
 public class AgentWalkService {
 
+    /** Thrown when {@code max-agents} live walks already exist — answered 409. */
+    public static class CapacityExceededException extends RuntimeException {
+        CapacityExceededException(long cap) {
+            super("already walking " + cap + " agents — retry after one arrives or idles out");
+        }
+    }
+
     /**
      * Everything an agent is allowed to know.
      *
@@ -65,8 +72,15 @@ public class AgentWalkService {
 
     private final MazeGenerationService gen;
     private final ApplicationEventPublisher events;
+    private final long maxAgents;
     private final int maxSteps;
     private final Cache<UUID, Walk> walks;
+    /**
+     * Serialises first-insert against the cap. Caffeine {@code put} at
+     * {@code maximumSize} evicts LRU, so an unrelated open used to 404 a
+     * mid-hunt walk. Living and traffic refuse at cap under this lock.
+     */
+    private final Object admission = new Object();
 
     @Autowired
     public AgentWalkService(MazeGenerationService gen,
@@ -93,6 +107,7 @@ public class AgentWalkService {
             Ticker ticker) {
         this.gen = gen;
         this.events = events;
+        this.maxAgents = maxAgents;
         this.maxSteps = maxSteps;
         this.walks = Caffeine.newBuilder()
                 .maximumSize(maxAgents)
@@ -107,6 +122,7 @@ public class AgentWalkService {
      * @param requestedBudget step budget, or {@code null} for the {@code 4·rows·cols}
      *                        default; clamped to {@code [1, daedalus.agent.max-steps]}
      * @return the opening view, or {@code null} if the maze is unknown (caller answers 404)
+     * @throws CapacityExceededException when {@code max-agents} walks are live
      */
     public AgentView open(UUID mazeId, Integer requestedBudget) {
         var cached = gen.find(mazeId);
@@ -119,7 +135,13 @@ public class AgentWalkService {
                 : Math.max(1, Math.min(requestedBudget, maxSteps));
         Walk walk = new Walk(UUID.randomUUID(), mazeId, grid.start(), 0,
                 budget, grid.start().equals(grid.goal()));
-        walks.put(walk.id(), walk);
+        synchronized (admission) {
+            walks.cleanUp();
+            if (walks.asMap().size() >= maxAgents) {
+                throw new CapacityExceededException(maxAgents);
+            }
+            walks.put(walk.id(), walk);
+        }
         return view(walk, grid);
     }
 

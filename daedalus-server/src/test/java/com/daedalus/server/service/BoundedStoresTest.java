@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -178,15 +179,23 @@ class BoundedStoresTest {
     }
 
     @Test
-    void sessionStoreEvictsPastItsBound() throws Exception {
+    void sessionStoreRefusesPastItsBoundInsteadOfEvictingALiveOne() {
         GameSessionService svc = new GameSessionService(
                 event -> { }, mock(LeaderboardService.class), false, 3, Duration.ofHours(1));
 
-        List<UUID> ids = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            ids.add(svc.open(UUID.randomUUID(), "p" + i, new Point(0, 0)).id());
+        List<UUID> live = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            live.add(svc.open(UUID.randomUUID(), "p" + i, new Point(0, 0)).id());
         }
-        assertThat(survivorsWithin(ids, svc::find, 3)).isLessThanOrEqualTo(3);
+        assertThatThrownBy(() -> svc.open(UUID.randomUUID(), "overflow", new Point(0, 0)))
+                .as("Caffeine put at maximumSize used to LRU-evict; a mid-hunt session "
+                        + "then 404ed after an unrelated open")
+                .isInstanceOf(GameSessionService.CapacityExceededException.class);
+        for (UUID id : live) {
+            assertThat(svc.find(id))
+                    .as("the older live session must still be findable after the refused open")
+                    .isNotNull();
+        }
     }
 
     /** Moves Caffeine's clock without moving the wall clock — see {@code PerKeyRateLimitEvictionTest}. */

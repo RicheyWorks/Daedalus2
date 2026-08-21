@@ -7,6 +7,7 @@ import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
 import com.daedalus.model.MazeMetadata;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
+import com.daedalus.server.service.AgentWalkService;
 import com.daedalus.server.service.AlgorithmCatalogService;
 import com.daedalus.server.service.DailyMazeService;
 import com.daedalus.server.service.GameSessionService;
@@ -99,6 +100,48 @@ class MazeControllerCapacityTest {
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.kind", equalTo("traffic-capacity")))
                 .andExpect(jsonPath("$.title", equalTo("Too many tracked mazes")));
+    }
+
+    @Test
+    void aFullSessionPoolAnswers409() throws Exception {
+        GameSessionService sessions = mock(GameSessionService.class);
+        GameSessionService.CapacityExceededException full =
+                mock(GameSessionService.CapacityExceededException.class);
+        when(full.getMessage()).thenReturn("already holding 1 live sessions — retry after one idles out");
+        when(sessions.open(any(), any(), any(), any(), any())).thenThrow(full);
+        MockMvc sessionMvc = MockMvcBuilders.standaloneSetup(new MazeController(
+                        gen,
+                        solverSvc,
+                        mock(AlgorithmCatalogService.class),
+                        sessions,
+                        mock(LeaderboardService.class),
+                        living,
+                        mock(DailyMazeService.class),
+                        traffic))
+                .setControllerAdvice(new ApiExceptionHandler())
+                .build();
+
+        sessionMvc.perform(post("/api/v1/maze/" + mazeId + "/session"))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.kind", equalTo("session-capacity")))
+                .andExpect(jsonPath("$.title", equalTo("Too many live sessions")));
+    }
+
+    @Test
+    void aFullAgentPoolAnswers409() throws Exception {
+        AgentWalkService agents = mock(AgentWalkService.class);
+        AgentWalkService.CapacityExceededException full =
+                mock(AgentWalkService.CapacityExceededException.class);
+        when(full.getMessage()).thenReturn("already walking 1 agents — retry after one arrives or idles out");
+        when(agents.open(any(), any())).thenThrow(full);
+        MockMvc agentMvc = MockMvcBuilders.standaloneSetup(new AgentController(agents))
+                .setControllerAdvice(new ApiExceptionHandler())
+                .build();
+
+        agentMvc.perform(post("/api/v1/maze/" + mazeId + "/agent"))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.kind", equalTo("agent-capacity")))
+                .andExpect(jsonPath("$.title", equalTo("Too many agent walks")));
     }
 
     @Test

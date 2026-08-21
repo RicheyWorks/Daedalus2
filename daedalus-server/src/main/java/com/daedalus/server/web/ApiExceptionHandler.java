@@ -265,6 +265,30 @@ public class ApiExceptionHandler {
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
     }
 
+    /** Session store is full — refuse the new open; do not LRU-evict a mid-hunt session. */
+    @ExceptionHandler(com.daedalus.server.service.GameSessionService.CapacityExceededException.class)
+    public ResponseEntity<ProblemDetail> onSessionCapacity(
+            com.daedalus.server.service.GameSessionService.CapacityExceededException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        pd.setTitle("Too many live sessions");
+        pd.setType(URI.create("https://daedalus.dev/problems/session-capacity"));
+        pd.setProperty("kind", "session-capacity");
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+    }
+
+    /** Agent walk store is full — same 409 posture as the session pool. */
+    @ExceptionHandler(com.daedalus.server.service.AgentWalkService.CapacityExceededException.class)
+    public ResponseEntity<ProblemDetail> onAgentCapacity(
+            com.daedalus.server.service.AgentWalkService.CapacityExceededException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        pd.setTitle("Too many agent walks");
+        pd.setType(URI.create("https://daedalus.dev/problems/agent-capacity"));
+        pd.setProperty("kind", "agent-capacity");
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ProblemDetail onMalformedBody(HttpMessageNotReadableException ex) {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(

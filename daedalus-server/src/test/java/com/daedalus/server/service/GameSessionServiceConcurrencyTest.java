@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationEventPublisher;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -201,6 +202,45 @@ class GameSessionServiceConcurrencyTest {
             assertThat(full).as("the other name is FULL, not a silent extra seat").isEqualTo(1);
             assertThat(session.players()).hasSize(GameSession.MAX_PLAYERS);
             assertThat(session.completed()).isFalse();
+        }
+    }
+
+    @Test
+    void twoThreadsCannotBothTakeTheLastSessionSlot() throws Exception {
+        service = new GameSessionService(event -> { }, leaderboard, false, 1, Duration.ofHours(1));
+        Point start = grid.start();
+        CyclicBarrier go = new CyclicBarrier(2);
+        ExecutorService pool = Executors.newFixedThreadPool(2);
+        List<Object> results = Collections.synchronizedList(new ArrayList<>());
+        pool.submit(() -> raceServiceOpen("x", start, go, results));
+        pool.submit(() -> raceServiceOpen("y", start, go, results));
+        pool.shutdown();
+        assertThat(pool.awaitTermination(30, TimeUnit.SECONDS)).isTrue();
+
+        long accepted = results.stream().filter(r -> r instanceof GameSession).count();
+        long full = results.stream()
+                .filter(r -> r instanceof GameSessionService.CapacityExceededException)
+                .count();
+        assertThat(accepted).as("exactly one open takes the only slot").isEqualTo(1);
+        assertThat(full).as("the other open is refused, not an LRU eviction").isEqualTo(1);
+        GameSession kept = results.stream()
+                .filter(GameSession.class::isInstance)
+                .map(GameSession.class::cast)
+                .findFirst()
+                .orElseThrow();
+        assertThat(service.find(kept.id()))
+                .as("the session that won the slot is still findable")
+                .isNotNull();
+    }
+
+    private void raceServiceOpen(String name, Point start, CyclicBarrier go, List<Object> results) {
+        try {
+            go.await(10, TimeUnit.SECONDS);
+            results.add(service.open(UUID.randomUUID(), name, start));
+        } catch (GameSessionService.CapacityExceededException refused) {
+            results.add(refused);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
         }
     }
 

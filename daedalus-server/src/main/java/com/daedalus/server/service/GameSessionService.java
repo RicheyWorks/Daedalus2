@@ -24,6 +24,13 @@ import java.util.UUID;
 @Service
 public class GameSessionService {
 
+    /** Thrown when {@code max-sessions} live sessions already exist — answered 409. */
+    public static class CapacityExceededException extends RuntimeException {
+        CapacityExceededException(long cap) {
+            super("already holding " + cap + " live sessions — retry after one idles out");
+        }
+    }
+
     /**
      * Join refused because the session finished or is at {@link GameSession#MAX_PLAYERS}.
      * Those used to be the same empty 409, so a client could not tell wait from give up.
@@ -48,7 +55,15 @@ public class GameSessionService {
     private final ApplicationEventPublisher events;
     private final LeaderboardService leaderboard;
     private final boolean multiplayer;
+    private final long maxSessions;
     private final Cache<UUID, GameSession> sessions;
+    /**
+     * Serialises first-insert against the cap. Caffeine {@code put} at
+     * {@code maximumSize} evicts LRU, so two opens past the bound used to
+     * succeed and a mid-hunt session answered 404. Living and traffic refuse
+     * at cap under this lock; idle TTL still evicts abandoned sessions.
+     */
+    private final Object admission = new Object();
 
     /** Single-player service (multiplayer flag off) — the pre-flag behavior, kept for tests. */
     public GameSessionService(ApplicationEventPublisher events, LeaderboardService leaderboard) {
@@ -67,11 +82,13 @@ public class GameSessionService {
      *                    goal, default {@code false}): when on, {@link #join} admits additional
      *                    named players into an existing session. Off, sessions behave exactly
      *                    as before the flag existed.
-     * @param maxSessions bound on live sessions
+     * @param maxSessions bound on live sessions. Opening past it refuses
+     *                    ({@link CapacityExceededException}) instead of LRU-evicting
+     *                    a session still being played.
      * @param idleTtl     eviction after inactivity. Sessions previously lived in an unbounded
      *                    {@code ConcurrentHashMap} and were never removed — not even after
      *                    completion — so every session ever opened stayed resident for the
-     *                    life of the process. An evicted session simply answers 404 on its
+     *                    life of the process. An idle-evicted session answers 404 on its
      *                    next move, which is the API's existing "unknown session" path; the
      *                    idle TTL far outlives any game actually being played. Configurable
      *                    via {@code daedalus.session.*}.
@@ -102,6 +119,7 @@ public class GameSessionService {
         this.events = events;
         this.leaderboard = leaderboard;
         this.multiplayer = multiplayer;
+        this.maxSessions = maxSessions;
         this.sessions = Caffeine.newBuilder()
                 .maximumSize(maxSessions)
                 .expireAfterAccess(idleTtl)
@@ -137,7 +155,13 @@ public class GameSessionService {
     public GameSession open(UUID mazeId, String generatorId, String playerName, Point start,
                             String owner) {
         GameSession session = new GameSession(mazeId, generatorId, playerName, start, owner);
-        sessions.put(session.id(), session);
+        synchronized (admission) {
+            sessions.cleanUp();
+            if (sessions.asMap().size() >= maxSessions) {
+                throw new CapacityExceededException(maxSessions);
+            }
+            sessions.put(session.id(), session);
+        }
         return session;
     }
 
