@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Two sessions finishing the same maze keep both runs, and the better
+  ghost.** `LeaderboardEntry.compareTo` stopped at elapsed time, so the
+  in-memory skip-list treated a tied score as one member and dropped a
+  run Redis would have kept. Identity breaks the tie. In-memory
+  add-and-trim is one lock, so two threads at the cap cannot
+  `pollLast` an extra row. Ghost `merge` already keeps the higher
+  score; a two-thread pin holds it.
+
 - **Two joiners can no longer both take the last seat.** `GameSession.join`
   checked `size()` then `putIfAbsent` without a lock. `ConcurrentHashMap`
   does not make that atomic, so two names racing the eighth seat both sat

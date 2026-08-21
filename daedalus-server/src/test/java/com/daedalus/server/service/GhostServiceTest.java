@@ -14,6 +14,9 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -99,6 +102,50 @@ class GhostServiceTest {
         assertThat(ghost.playerName()).isEqualTo("joiner");
         assertThat(ghost.moves().get(ghost.moves().size() - 1).to()).isEqualTo(grid.goal());
         assertThat(s.trail()).as("the opener still has no ghost material of their own").isEmpty();
+    }
+
+    /**
+     * Two sessions finish the same maze at once. {@code ConcurrentHashMap.merge} keeps
+     * the higher score; a last-writer {@code put} lets the worse ghost overwrite.
+     * Replayed against put, this loop lost the better run.
+     */
+    @Test
+    void twoSessionsFinishingTheSameMazeKeepTheHigherGhost() throws Exception {
+        for (int attempt = 0; attempt < 200; attempt++) {
+            ghosts = new GhostService(1000, Duration.ofHours(24));
+            UUID maze = UUID.randomUUID();
+            GameSession worse = finished(maze, "slow", 100);
+            GameSession better = finished(maze, "fast", 9_000);
+            var go = new CountDownLatch(1);
+            try (var pool = Executors.newFixedThreadPool(2)) {
+                var a = pool.submit(() -> raceComplete(worse, go));
+                var b = pool.submit(() -> raceComplete(better, go));
+                go.countDown();
+                a.get(2, TimeUnit.SECONDS);
+                b.get(2, TimeUnit.SECONDS);
+            }
+            assertThat(ghosts.ghostOf(maze).playerName())
+                    .as("the worse finish must not overwrite the better")
+                    .isEqualTo("fast");
+            assertThat(ghosts.ghostOf(maze).score()).isEqualTo(9_000L);
+        }
+    }
+
+    private static GameSession finished(UUID maze, String name, long score) {
+        GameSession s = new GameSession(maze, name, new Point(0, 0));
+        s.move(new Point(0, 1));
+        s.complete(score);
+        return s;
+    }
+
+    private void raceComplete(GameSession s, CountDownLatch go) {
+        try {
+            go.await();
+            ghosts.onCompleted(new SessionCompletedEvent(this, s));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new AssertionError(e);
+        }
     }
 
     @Test

@@ -40,6 +40,8 @@ public class LeaderboardService {
     private final boolean redisEnabled;
     private final int maxEntries;
     private final ConcurrentSkipListSet<LeaderboardEntry> memory = new ConcurrentSkipListSet<>();
+    /** Guards in-memory add-and-trim; ConcurrentSkipListSet does not make that compound atomic. */
+    private final Object memoryLock = new Object();
 
     /** Default retention — see the three-arg constructor. */
     public LeaderboardService(RedisTemplate<String, Object> redis, boolean redisEnabled) {
@@ -68,11 +70,14 @@ public class LeaderboardService {
     }
 
     public void submit(LeaderboardEntry entry) {
-        memory.add(entry);
-        // Natural order is best-first, so pollLast() drops the worst. Approximate under
-        // concurrent submits, exact at rest — fine for a cap whose only job is boundedness.
-        while (memory.size() > maxEntries) {
-            memory.pollLast();
+        synchronized (memoryLock) {
+            memory.add(entry);
+            // Natural order is best-first, so pollLast() drops the worst. Size-then-poll
+            // without this lock lets two threads both see size == cap+1 and both evict,
+            // dropping a run that should have stayed.
+            while (memory.size() > maxEntries) {
+                memory.pollLast();
+            }
         }
         if (!redisEnabled) return;
         try {
