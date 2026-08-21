@@ -187,8 +187,14 @@ public class GameSession {
      * present. {@code subject} is the verified token subject, or {@code null} for an
      * anonymous join — only a subject is added to the STOMP allowlist. Returns {@code false}
      * when the session is already at {@link #MAX_PLAYERS} and the name is new.
+     *
+     * <p>Synchronized on {@code this} — the same monitor {@code GameSessionService} already
+     * holds — because the bound is check-then-act ({@code size()} then {@code putIfAbsent}).
+     * {@code ConcurrentHashMap} does not make that compound atomic: two names racing the last
+     * seat both saw room and both sat down. Move check-then-act stays the caller's job; this
+     * lock is only the seat cap.
      */
-    public boolean join(String player, Point start, String subject) {
+    public synchronized boolean join(String player, Point start, String subject) {
         if (!players.containsKey(player) && players.size() >= MAX_PLAYERS) {
             return false;
         }

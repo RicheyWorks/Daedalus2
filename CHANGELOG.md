@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Two joiners can no longer both take the last seat.** `GameSession.join`
+  checked `size()` then `putIfAbsent` without a lock. `ConcurrentHashMap`
+  does not make that atomic, so two names racing the eighth seat both sat
+  down. The method now uses the same session monitor `tryMove` already
+  holds. A two-thread pin overflows on the unsynchronized body.
+
 - **Living/traffic 409 and a spent solver budget now have an HTTP pin.**
   The services threw; the advice mapped them; nothing asked the
   controller. Dropping the handler would 500. Standalone MockMvc now

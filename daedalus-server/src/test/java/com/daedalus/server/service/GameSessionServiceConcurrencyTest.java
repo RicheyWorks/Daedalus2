@@ -30,8 +30,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
- * Pins {@code tryMove}'s atomicity per session (TESTING.md, gap P3 — promoted from "only if
- * inspection finds check-then-act": it did).
+ * Pins session check-then-act per session (TESTING.md, gap P3 — promoted from "only if
+ * inspection finds check-then-act": it did). {@code tryMove} was already locked;
+ * {@code GameSession.join}'s last-seat bound was not.
  *
  * <h3>Why this exists</h3>
  *
@@ -163,6 +164,55 @@ class GameSessionServiceConcurrencyTest {
                     .containsExactlyInAnyOrder(true, false);
             assertThat(session.completed()).isTrue();
             verify(leaderboard, times(1)).submit(any());
+        }
+    }
+
+    /**
+     * Last seat, two names, one slot. The map-level {@code join} used to let both through;
+     * the service lock hid it from HTTP until a core pin forced the seat cap onto the
+     * session itself. This is the same race on the service API: exactly one
+     * {@code JoinRefusedException.FULL}, size stays {@code MAX_PLAYERS}.
+     */
+    @Test
+    void twoThreadsCannotBothTakeTheLastJoinSlot() throws Exception {
+        service = new GameSessionService(event -> { }, leaderboard, true);
+        Point start = grid.start();
+        for (int attempt = 0; attempt < 200; attempt++) {
+            GameSession session = service.open(UUID.randomUUID(), "Alice", start);
+            for (int i = 1; i <= GameSession.MAX_PLAYERS - 2; i++) {
+                assertThat(service.join(session.id(), "p" + i, start)).isSameAs(session);
+            }
+            assertThat(session.players()).hasSize(GameSession.MAX_PLAYERS - 1);
+
+            CyclicBarrier go = new CyclicBarrier(2);
+            ExecutorService pool = Executors.newFixedThreadPool(2);
+            List<Object> results = Collections.synchronizedList(new ArrayList<>());
+            pool.submit(() -> raceServiceJoin(session.id(), "x", start, go, results));
+            pool.submit(() -> raceServiceJoin(session.id(), "y", start, go, results));
+            pool.shutdown();
+            assertThat(pool.awaitTermination(30, TimeUnit.SECONDS)).isTrue();
+
+            long accepted = results.stream().filter(r -> r instanceof GameSession).count();
+            long full = results.stream()
+                    .filter(r -> r instanceof GameSessionService.JoinRefusedException ex
+                            && ex.reason() == GameSessionService.JoinRefusedException.Reason.FULL)
+                    .count();
+            assertThat(accepted).as("exactly one name sits down").isEqualTo(1);
+            assertThat(full).as("the other name is FULL, not a silent extra seat").isEqualTo(1);
+            assertThat(session.players()).hasSize(GameSession.MAX_PLAYERS);
+            assertThat(session.completed()).isFalse();
+        }
+    }
+
+    private void raceServiceJoin(UUID sessionId, String name, Point start,
+                                 CyclicBarrier go, List<Object> results) {
+        try {
+            go.await(10, TimeUnit.SECONDS);
+            results.add(service.join(sessionId, name, start));
+        } catch (GameSessionService.JoinRefusedException refused) {
+            results.add(refused);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
         }
     }
 
