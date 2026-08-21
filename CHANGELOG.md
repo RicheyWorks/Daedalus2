@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **A finish on a new maze at the ghost cap no longer LRU-evicts another maze's recording.**
+  Caffeine `maximumSize` on `GhostService` silently dropped the LRU ghost, so
+  `GET /maze/{id}/ghost` 404ed while someone was still racing or spectating
+  that maze. Finish cannot 409 — the run already completed — so a new maze
+  at cap drops this ghost instead of an in-use one. An existing seat still
+  merges the higher score. Admission is one lock, the same compound
+  living/traffic/session/walk/maze closed; idle TTL still evicts abandoned
+  recordings.
+
 - **Generating a maze at cache cap refuses instead of LRU-evicting one still in play.**
   Caffeine `maximumSize` on `MazeGenerationService` silently dropped the LRU
   maze, so an unrelated generate 404ed a live session or walk

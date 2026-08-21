@@ -276,6 +276,37 @@ class BoundedStoresTest {
      * claim in a test file is worse than no test because it reads like coverage.
      */
     @Test
+    void ghostStoreDropsANewMazeAtCapInsteadOfEvictingAnInUseOne() {
+        GhostService ghosts = new GhostService(2, Duration.ofHours(24));
+        UUID a = UUID.randomUUID();
+        UUID b = UUID.randomUUID();
+        UUID c = UUID.randomUUID();
+        ghosts.onCompleted(new com.daedalus.plugin.events.SessionCompletedEvent(
+                this, finishedGhost(a, "alice")));
+        ghosts.onCompleted(new com.daedalus.plugin.events.SessionCompletedEvent(
+                this, finishedGhost(b, "bob")));
+
+        ghosts.onCompleted(new com.daedalus.plugin.events.SessionCompletedEvent(
+                this, finishedGhost(c, "cara")));
+
+        assertThat(ghosts.ghostOf(a))
+                .as("Caffeine merge at maximumSize used to LRU-evict; a spectator "
+                        + "or racer then 404ed after an unrelated finish")
+                .isNotNull();
+        assertThat(ghosts.ghostOf(b)).isNotNull();
+        assertThat(ghosts.ghostOf(c))
+                .as("finish cannot 409; the new maze's ghost is dropped, not an in-use one")
+                .isNull();
+    }
+
+    private static GameSession finishedGhost(UUID mazeId, String name) {
+        GameSession session = new GameSession(mazeId, name, new Point(0, 0));
+        session.move(new Point(0, 1));
+        session.complete(100);
+        return session;
+    }
+
+    @Test
     void ghostsExpireWhenIdle() {
         FakeClock clock = new FakeClock();
         GhostService ghosts = new GhostService(1000, Duration.ofHours(24), clock);

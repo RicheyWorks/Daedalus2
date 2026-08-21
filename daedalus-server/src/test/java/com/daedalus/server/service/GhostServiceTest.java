@@ -148,6 +148,73 @@ class GhostServiceTest {
         }
     }
 
+    /**
+     * Fill the store, finish a new maze. Caffeine {@code merge} at {@code maximumSize}
+     * used to LRU-evict the older recording, so {@code GET /maze/{id}/ghost} 404ed
+     * while a spectator or racer still needed it. Finish cannot 409 — the run
+     * already completed — so the new maze's ghost is dropped instead.
+     */
+    @Test
+    void aFinishOnANewMazeAtCapDoesNotDropAnotherMazesGhost() {
+        ghosts = new GhostService(2, Duration.ofHours(24));
+        UUID a = UUID.randomUUID();
+        UUID b = UUID.randomUUID();
+        UUID c = UUID.randomUUID();
+        ghosts.onCompleted(new SessionCompletedEvent(this, finished(a, "alice", 100)));
+        ghosts.onCompleted(new SessionCompletedEvent(this, finished(b, "bob", 100)));
+
+        ghosts.onCompleted(new SessionCompletedEvent(this, finished(c, "cara", 100)));
+
+        assertThat(ghosts.ghostOf(a))
+                .as("Caffeine merge at maximumSize used to LRU-evict; a spectator "
+                        + "or racer on maze A then got 404 after an unrelated finish")
+                .isNotNull();
+        assertThat(ghosts.ghostOf(b)).isNotNull();
+        assertThat(ghosts.ghostOf(c))
+                .as("finish cannot 409; the new maze's ghost is dropped, not an in-use one")
+                .isNull();
+        assertThat(ghosts.ghostCount()).isEqualTo(2);
+    }
+
+    /** An existing seat is a replace, not a new key — cap must not freeze the record. */
+    @Test
+    void aBetterFinishOnASeatedMazeStillTakesTheSeatAtCap() {
+        ghosts = new GhostService(1, Duration.ofHours(24));
+        UUID maze = UUID.randomUUID();
+        ghosts.onCompleted(new SessionCompletedEvent(this, finished(maze, "slow", 100)));
+        ghosts.onCompleted(new SessionCompletedEvent(this, finished(maze, "fast", 9_000)));
+        assertThat(ghosts.ghostOf(maze).playerName()).isEqualTo("fast");
+        assertThat(ghosts.ghostCount()).isEqualTo(1);
+    }
+
+    /**
+     * Two first ghosts on new mazes at cap. Without the lock both merge and
+     * Caffeine evicts the maze someone is still racing. Replayed against put,
+     * this loop lost the incumbent.
+     */
+    @Test
+    void twoFinishesOnNewMazesAtCapKeepTheIncumbentGhost() throws Exception {
+        for (int attempt = 0; attempt < 200; attempt++) {
+            ghosts = new GhostService(1, Duration.ofHours(24));
+            UUID incumbent = UUID.randomUUID();
+            ghosts.onCompleted(new SessionCompletedEvent(this, finished(incumbent, "first", 100)));
+            UUID b = UUID.randomUUID();
+            UUID c = UUID.randomUUID();
+            var go = new CountDownLatch(1);
+            try (var pool = Executors.newFixedThreadPool(2)) {
+                var x = pool.submit(() -> raceComplete(finished(b, "b", 100), go));
+                var y = pool.submit(() -> raceComplete(finished(c, "c", 100), go));
+                go.countDown();
+                x.get(2, TimeUnit.SECONDS);
+                y.get(2, TimeUnit.SECONDS);
+            }
+            assertThat(ghosts.ghostOf(incumbent))
+                    .as("two first ghosts at cap used to LRU-evict the maze someone is still racing")
+                    .isNotNull();
+            assertThat(ghosts.ghostCount()).isEqualTo(1);
+        }
+    }
+
     @Test
     void secondPlayersNeverPolluteTheRecording() {
         var s = sessions.open(mazeId, "primary", grid.start());
