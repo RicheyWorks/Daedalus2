@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -261,6 +264,69 @@ class WaypointServiceTest {
                 .isGreaterThanOrEqualTo(0L);
     }
 
+    /**
+     * Two first asks used to each mint {@code mazeId:k}. Progress then preferred
+     * {@code mazeId:defaultCount} (or the first {@code asMap()} scan), so a hunt
+     * opened at {@code ?count=8} collected against the default coin set once
+     * anyone also asked for the no-arg tour.
+     */
+    @Test
+    void twoFirstToursAtDifferentCountsShareOnePlacementAndPickups() {
+        var first = waypoints.tourFor(mazeId, 8);
+        var later = waypoints.tourFor(mazeId, 4);
+        assertThat(later.waypoints())
+                .as("a later ?count= must not mint a second coin set")
+                .isEqualTo(first.waypoints());
+        assertThat(first.waypoints()).hasSize(8);
+        assertThat(waypoints.cachedTours()).isEqualTo(1);
+
+        var session = sessions.open(mazeId, "p", grid.start());
+        var before = waypoints.progressFor(session.id());
+        assertThat(before.waypoints()).isEqualTo(first.waypoints());
+        assertThat(before.total()).isEqualTo(8);
+
+        Point target = first.waypoints().get(0);
+        List<Point> route = MazeMetrics.shortestPath(grid, grid.start(), target);
+        for (int i = 1; i < route.size(); i++) {
+            assertThat(sessions.tryMove(session.id(), grid, route.get(i))).isTrue();
+            waypoints.onPlayerMoved(new PlayerMovedEvent(this, session.id(), "p",
+                    route.get(i - 1), route.get(i)));
+        }
+        var after = waypoints.progressFor(session.id());
+        long onRoute = first.waypoints().stream().filter(route::contains).count();
+        assertThat(after.collected())
+                .as("pickups attached to the default set, not the frozen hunt")
+                .isEqualTo((int) onRoute);
+        assertThat(after.remaining()).doesNotContain(target);
+        assertThat(after.total()).isEqualTo(8);
+    }
+
+    @Test
+    void twoFirstToursAtDifferentCountsMintOnePlacement() throws Exception {
+        var go = new CountDownLatch(1);
+        try (var pool = Executors.newFixedThreadPool(2)) {
+            var a = pool.submit(() -> raceTour(3, go));
+            var b = pool.submit(() -> raceTour(8, go));
+            go.countDown();
+            var left = a.get(30, TimeUnit.SECONDS);
+            var right = b.get(30, TimeUnit.SECONDS);
+            assertThat(left.waypoints())
+                    .as("two first inserts at different k used to each mint mazeId:k")
+                    .isEqualTo(right.waypoints());
+        }
+        assertThat(waypoints.cachedTours()).isEqualTo(1);
+    }
+
+    private WaypointService.Tour raceTour(int count, CountDownLatch go) {
+        try {
+            go.await();
+            return waypoints.tourFor(mazeId, count);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new AssertionError(e);
+        }
+    }
+
     @Test
     void aHuntOpenedAtANonDefaultCountIsCollectable() {
         var tour = waypoints.tourFor(mazeId, 8);
@@ -315,7 +381,8 @@ class WaypointServiceTest {
                 .as("an unbounded waypoint count would let one request run 2^k Held-Karp")
                 .isLessThanOrEqualTo(com.daedalus.theory.WaypointTour.MAX_WAYPOINTS - 1);
         assertThat(huge.feasible()).isTrue();
-        assertThat(waypoints.tourFor(mazeId, 0).waypoints()).hasSize(1); // clamps up, not to zero
+        UUID other = gen.generate("recursive-backtracker", 13, 13, 43L).metadata().id();
+        assertThat(waypoints.tourFor(other, 0).waypoints()).hasSize(1); // clamps up, not to zero
         assertThat(waypoints.tourFor(UUID.randomUUID(), 4)).isNull();
         assertThat(waypoints.progressFor(UUID.randomUUID())).isNull();
     }

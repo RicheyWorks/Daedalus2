@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Two first `GET /tour?count=` can no longer mint two coin sets.**
+  `tourFor` keyed `mazeId:k`, so two first asks at different counts each
+  placed. `placedFor` then preferred the default count or the first
+  `asMap()` scan, and pickups attached to the wrong hunt. Placement
+  keys on the maze alone; the first insert wins. Progress stays a read.
+
 - **Two first campaigns can no longer both take a free plan slot.**
   `CampaignService.campaign` checked `size()` then `clear`/`put` without a
   lock. Two first seeds both inserted, and two arrivals at a full map

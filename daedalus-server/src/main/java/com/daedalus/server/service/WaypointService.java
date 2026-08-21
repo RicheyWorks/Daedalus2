@@ -92,7 +92,7 @@ public class WaypointService {
     private final int defaultCount;
 
     /** Frozen placements — the Held-Karp score is recomputed against the live grid. */
-    private final Cache<String, List<Point>> placements;
+    private final Cache<UUID, List<Point>> placements;
     private final Cache<UUID, Set<Point>> collected;
 
     @Autowired
@@ -148,7 +148,9 @@ public class WaypointService {
 
     /**
      * The maze's waypoints (frozen on first ask) and the optimal tour on the <em>current</em>
-     * grid. Living ticks change the score, not the coins.
+     * grid. Living ticks change the score, not the coins. The first {@code count} that
+     * inserts wins; a later ask at a different count returns that same set rather than
+     * minting a second coin set that pickups cannot tell apart.
      *
      * @return {@code null} when the maze is unknown (the controller answers 404)
      */
@@ -158,8 +160,7 @@ public class WaypointService {
             return null;
         }
         int k = clamp(count == null ? defaultCount : count);
-        List<Point> waypoints = placements.get(mazeId + ":" + k,
-                key -> place(cached.grid(), k));
+        List<Point> waypoints = placements.get(mazeId, key -> place(cached.grid(), k));
         return score(mazeId, cached.grid(), waypoints);
     }
 
@@ -236,23 +237,11 @@ public class WaypointService {
     }
 
     /**
-     * The coins already frozen for this maze. {@link #tourFor} keys {@code mazeId:k}, but
-     * pickups and progress used to look up {@code mazeId:defaultCount} only — a hunt opened
-     * at {@code ?count=8} was uncollectable and {@code GET /session/{id}/tour} 404'd.
-     * Prefer the default count when both exist (the UI's no-arg tour); otherwise the one
-     * placement that does.
+     * The coins already frozen for this maze. Placement keys on the maze alone — the
+     * first {@link #tourFor} inserts, and that is the set pickups and progress read.
+     * This must not mint.
      */
     private List<Point> placedFor(UUID mazeId) {
-        List<Point> atDefault = placements.getIfPresent(mazeId + ":" + defaultCount);
-        if (atDefault != null) {
-            return atDefault;
-        }
-        String prefix = mazeId + ":";
-        for (var e : placements.asMap().entrySet()) {
-            if (e.getKey().startsWith(prefix)) {
-                return e.getValue();
-            }
-        }
-        return null;
+        return placements.getIfPresent(mazeId);
     }
 }
