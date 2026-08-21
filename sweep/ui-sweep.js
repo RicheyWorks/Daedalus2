@@ -331,9 +331,31 @@ async function check(name, fn) {
         && /cached/.test(d.maze) && /sessions/.test(d.session)
         && /fog/.test(d.agent) && /waypoint/.test(d.tour)
         && /aged out/.test(d.rebuild) && /cached/.test(d.rebuild)
-        && !/not found/.test(d.rebuild) && /not found/.test(d.gone);
+        && !/not found/.test(d.rebuild) && /gone/.test(d.gone) && !/404/.test(d.gone);
     return [named, named ? 'six pools named; permalink 409 is not a 404'
         : JSON.stringify(d).slice(0, 160)];
+  });
+
+  await check('N4. spectator and permalink 404s name gone, not the status line', async () => {
+    const d = await page.evaluate(() => {
+      const mazeRaw = '404 Not Found on /maze/dead — maze: No maze dead is available';
+      const sessionRaw = '404 Not Found on /session/dead — session: No session dead is open.';
+      const agentRaw = '404 Not Found on /agent/dead — agent: No agent walk dead is open.';
+      const maze = nameGone(mazeRaw);
+      const session = nameGone(sessionRaw);
+      const agent = nameGone(agentRaw);
+      const permalink = permalinkLoadFailed({message: mazeRaw}, null);
+      const tour = nameGone('404 Not Found on /session/dead/tour — tour: no hunt');
+      const ghost = nameGone('404 Not Found on /maze/dead/ghost — ghost run: none');
+      const solver = nameGone('404 Not Found on /maze/dead/solve/nope — solver: unknown');
+      return {maze, session, agent, permalink, tour, ghost, solver,
+        dumps: /404/.test([maze, session, agent, permalink].join(' '))};
+    });
+    const named = d.maze === 'that maze is gone' && d.session === 'that session is gone'
+        && d.agent === 'that fog walk is gone' && d.permalink === 'that maze is gone'
+        && d.tour == null && d.ghost == null && d.solver == null && !d.dumps;
+    return [named, named ? 'gone named; tour/ghost/solver 404s stay unnamed'
+        : JSON.stringify(d).slice(0, 180)];
   });
 
   await check('Q. login form + fog-of-war hides unseen floor', async () => {

@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Spectator hydrate and a `#maze=` permalink name a TTL-evicted maze as gone.**
+  Join already said "that session is gone". `#session=` then `GET /maze/{id}`
+  after idle TTL dumped `404 Not Found on /maze/{id}`, and permalink wrapped
+  the same status line. `nameGone` maps maze/session/agent 404s; a missing
+  tour or ghost stays unnamed so those reads can stay silent.
+
 - **Daily, campaign, and breed 409s carry `maze-capacity` the same way generate does.**
   Those routes share `admit()`. Generate already had an HTTP pin; a full cache
   on the daily, a campaign plan, or a crossbreed had none. Standalone MockMvc

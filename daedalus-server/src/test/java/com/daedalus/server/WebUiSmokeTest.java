@@ -78,6 +78,9 @@ class WebUiSmokeTest {
                 .contains("too many mazes are already cached")
                 .contains("too many waypoint hunts are already seated")
                 .contains("permalinkLoadFailed")
-                .contains("permalink maze aged out —");
+                .contains("permalink maze aged out —")
+                .contains("nameGone").contains("GONE_WHY")
+                .contains("that maze is gone")
+                .contains("that fog walk is gone");
     }
 }

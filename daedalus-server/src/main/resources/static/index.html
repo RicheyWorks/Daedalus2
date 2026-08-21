@@ -522,11 +522,40 @@ function nameCapacity(msg) {
   return null;
 }
 
+/**
+ * Idle TTL 404s are correct at HTTP — the maze/session/walk is gone. Join already
+ * said so; spectator hydrate and a #maze= permalink still dumped the status line.
+ * ProblemDetail `kind` is "maze" / "session" / "agent". Tour and ghost 404s stay
+ * unnamed so those reads can stay silent. Matching the named string again is a no-op.
+ */
+const GONE_WHY = {
+  maze: "that maze is gone",
+  session: "that session is gone",
+  agent: "that fog walk is gone",
+};
+
+function nameGone(msg) {
+  const m = String(msg || "");
+  for (const kind of Object.keys(GONE_WHY)) {
+    if (m === GONE_WHY[kind]) return GONE_WHY[kind];
+  }
+  if (!/404/.test(m)) return null;
+  if (/ — maze:/.test(m) || /on \/maze\/[^/\s]+(?:\s| —|$)/.test(m)) return GONE_WHY.maze;
+  if (/ — session:/.test(m)
+      || /on \/session\/[^/\s]+(?:\/(?:move|join))?(?:\s| —|$)/.test(m)) {
+    return GONE_WHY.session;
+  }
+  if (/ — agent:/.test(m) || /on \/agent\/[^/\s]+(?:\/step)?(?:\s| —|$)/.test(m)) {
+    return GONE_WHY.agent;
+  }
+  return null;
+}
+
 /** Permalink rebuild shares generate's admit(). A 409 is not a missing maze. */
 function permalinkLoadFailed(getErr, rebuildErr) {
   const cap = rebuildErr && nameCapacity(rebuildErr.message);
   if (cap) return "permalink maze aged out — " + cap;
-  return "permalink maze not found on this server (" + (getErr && getErr.message) + ")";
+  return nameGone(getErr && getErr.message) || "permalink maze not found on this server";
 }
 
 async function api(path, opts) {
@@ -543,7 +572,7 @@ async function api(path, opts) {
     const hint = res.status === 401 && path !== "/auth/login"
         ? " — sign in (prod requires a token)" : "";
     const raw = `${res.status} ${res.statusText} on ${path}${why}${hint}`;
-    throw new Error(nameCapacity(raw) || raw);
+    throw new Error(nameCapacity(raw) || nameGone(raw) || raw);
   }
   const text = await res.text();
   return text ? JSON.parse(text) : null;
@@ -560,7 +589,7 @@ async function apiPlain(path) {
     const why = await problemWhy(res);
     const hint = res.status === 401 ? " — sign in (prod requires a token)" : "";
     const raw = `${res.status} ${res.statusText} on ${path}${why}${hint}`;
-    throw new Error(nameCapacity(raw) || raw);
+    throw new Error(nameCapacity(raw) || nameGone(raw) || raw);
   }
   return res.text();
 }
@@ -1091,8 +1120,14 @@ async function loadFromHash() {
 async function spectate(sessionId) {
   let view;
   try { view = await api(`/session/${sessionId}`); }
-  catch (e) { log("err", `session not found on this server (${e.message})`); return; }
-  adoptMaze(await api(`/maze/${view.mazeId}`), null, "spectated session");
+  catch (e) { log("err", nameGone(e.message) || e.message); return; }
+  try {
+    adoptMaze(await api(`/maze/${view.mazeId}`), null, "spectated session");
+  } catch (e) {
+    // Session still open, maze idle-TTL evicted — do not dump the status line.
+    log("err", nameGone(e.message) || e.message);
+    return;
+  }
   adoptSessionView(view);
   state.readOnly = true;
   pinHash();
@@ -2216,9 +2251,7 @@ async function join() {
         ? "this session already finished"
         : /session-full|is full/i.test(msg)
             ? "this session is full"
-            : /404/.test(msg)
-                ? "that session is gone"
-                : msg;
+            : nameGone(msg) || msg;
     log("err", `join refused — ${why}`);
   }
 }
