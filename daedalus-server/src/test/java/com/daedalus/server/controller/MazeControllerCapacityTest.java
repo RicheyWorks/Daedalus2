@@ -18,6 +18,7 @@ import com.daedalus.server.service.LivingMazeService;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
 import com.daedalus.server.service.TrafficService;
+import com.daedalus.server.service.WaypointService;
 import com.daedalus.server.web.ApiExceptionHandler;
 import com.daedalus.solver.SolverBudgetExceededException;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +37,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -164,6 +166,33 @@ class MazeControllerCapacityTest {
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.kind", equalTo("maze-capacity")))
                 .andExpect(jsonPath("$.title", equalTo("Too many cached mazes")));
+    }
+
+    @Test
+    void aFullTourPoolAnswers409() throws Exception {
+        WaypointService waypoints = mock(WaypointService.class);
+        WaypointService.CapacityExceededException full =
+                mock(WaypointService.CapacityExceededException.class);
+        when(full.getMessage()).thenReturn("already holding 1 waypoint tours — retry after one idles out");
+        when(waypoints.tourFor(any(), any())).thenThrow(full);
+        MockMvc tourMvc = MockMvcBuilders.standaloneSetup(new InsightController(
+                        gen,
+                        mock(GameSessionService.class),
+                        mock(com.daedalus.server.service.GhostService.class),
+                        waypoints,
+                        mock(com.daedalus.server.service.ComplexityLabService.class),
+                        mock(com.daedalus.server.service.FingerprintService.class),
+                        mock(com.daedalus.server.service.HardestRouteService.class),
+                        mock(com.daedalus.server.service.TopographyService.class),
+                        mock(com.daedalus.server.service.TournamentService.class),
+                        mock(com.daedalus.server.service.HeuristicLensService.class)))
+                .setControllerAdvice(new ApiExceptionHandler())
+                .build();
+
+        tourMvc.perform(get("/api/v1/maze/" + mazeId + "/tour"))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.kind", equalTo("tour-capacity")))
+                .andExpect(jsonPath("$.title", equalTo("Too many waypoint tours")));
     }
 
     @Test

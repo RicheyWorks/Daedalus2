@@ -57,6 +57,13 @@ import java.util.UUID;
 @Service
 public class WaypointService {
 
+    /** Thrown when {@code max-tours} placements already exist — answered 409. */
+    public static class CapacityExceededException extends RuntimeException {
+        CapacityExceededException(long cap) {
+            super("already holding " + cap + " waypoint tours — retry after one idles out");
+        }
+    }
+
     /**
      * A maze's waypoint set and the best possible route through it.
      *
@@ -96,10 +103,20 @@ public class WaypointService {
     private final Cache<UUID, List<Point>> placements;
     private final Cache<UUID, Set<Point>> collected;
     /**
+     * Serialises first insert of a maze's frozen coins. Caffeine {@code get}
+     * at {@code maximumSize} evicts LRU, so a first {@code GET /tour} on a
+     * new maze used to wipe another maze's placement: {@code progressFor}
+     * went null, pickups stopped, and a later {@code tourFor} reminted a
+     * different set. HTTP can 409 a first tour; a later tour for a seated
+     * maze still returns that set. Idle TTL still drops abandoned tours.
+     */
+    private final Object placementsAdmission = new Object();
+    /**
      * Serialises first insert of a session's pickup set. Caffeine {@code put} at
      * {@code maximumSize} evicts LRU, so a new hunt's first coin used to wipe
-     * another session's mid-hunt {@code collected}. Placements can recompute;
-     * pickups cannot. Idle TTL still drops abandoned sets.
+     * another session's mid-hunt {@code collected}. A move that already
+     * happened cannot 409, so a new hunt at cap drops this pickup instead.
+     * Idle TTL still drops abandoned sets.
      */
     private final Object collectedAdmission = new Object();
 
@@ -159,9 +176,12 @@ public class WaypointService {
      * The maze's waypoints (frozen on first ask) and the optimal tour on the <em>current</em>
      * grid. Living ticks change the score, not the coins. The first {@code count} that
      * inserts wins; a later ask at a different count returns that same set rather than
-     * minting a second coin set that pickups cannot tell apart.
+     * minting a second coin set that pickups cannot tell apart. A first tour for a maze
+     * that is not already seated, at cap, refuses ({@link CapacityExceededException})
+     * instead of LRU-evicting another maze's frozen coins.
      *
      * @return {@code null} when the maze is unknown (the controller answers 404)
+     * @throws CapacityExceededException when {@code max-tours} placements are already seated
      */
     public Tour tourFor(UUID mazeId, Integer count) {
         var cached = gen.find(mazeId);
@@ -169,8 +189,32 @@ public class WaypointService {
             return null;
         }
         int k = clamp(count == null ? defaultCount : count);
-        List<Point> waypoints = placements.get(mazeId, key -> place(cached.grid(), k));
+        List<Point> waypoints = placedFor(mazeId);
+        if (waypoints == null) {
+            waypoints = admit(mazeId, cached.grid(), k);
+        }
         return score(mazeId, cached.grid(), waypoints);
+    }
+
+    /**
+     * First insert against the size bound. Caffeine {@code get} at {@code maximumSize}
+     * evicts LRU, which is how a first tour on a maze nobody was hunting used to
+     * wipe another maze's coins mid-hunt. Idle expiry still drops abandoned tours.
+     */
+    private List<Point> admit(UUID mazeId, MazeGrid grid, int k) {
+        synchronized (placementsAdmission) {
+            List<Point> existing = placements.getIfPresent(mazeId);
+            if (existing != null) {
+                return existing;
+            }
+            placements.cleanUp();
+            if (placements.asMap().size() >= maxTours) {
+                throw new CapacityExceededException(maxTours);
+            }
+            List<Point> placed = place(grid, k);
+            placements.put(mazeId, placed);
+            return placed;
+        }
     }
 
     private static List<Point> place(MazeGrid grid, int k) {

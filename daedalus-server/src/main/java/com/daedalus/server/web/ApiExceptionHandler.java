@@ -301,6 +301,18 @@ public class ApiExceptionHandler {
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
     }
 
+    /** Waypoint placements are full — refuse the new maze's first tour; do not LRU-evict frozen coins. */
+    @ExceptionHandler(com.daedalus.server.service.WaypointService.CapacityExceededException.class)
+    public ResponseEntity<ProblemDetail> onTourCapacity(
+            com.daedalus.server.service.WaypointService.CapacityExceededException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        pd.setTitle("Too many waypoint tours");
+        pd.setType(URI.create("https://daedalus.dev/problems/tour-capacity"));
+        pd.setProperty("kind", "tour-capacity");
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ProblemDetail onMalformedBody(HttpMessageNotReadableException ex) {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(

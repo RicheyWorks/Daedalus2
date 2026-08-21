@@ -21,11 +21,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -217,6 +220,83 @@ class WaypointServiceTest {
                 .as("Caffeine put at maximumSize used to LRU-evict the older collected set "
                         + "so a mid-hunt pickup vanished after an unrelated hunt's first coin")
                 .isEqualTo(1);
+    }
+
+    /**
+     * Caffeine {@code get(compute)} at {@code maximumSize} used to LRU-evict another
+     * maze's frozen coins on a first {@code GET /tour}. {@code progressFor} then
+     * went null, pickups stopped attaching, and a later {@code tourFor} reminted
+     * a different set. HTTP can 409 here — unlike a move that already happened.
+     */
+    @Test
+    void aFirstTourOnANewMazeAtCapDoesNotEvictAnotherMazesFrozenCoins() {
+        waypoints = new WaypointService(gen, sessions, 4, 1, Duration.ofHours(2));
+        var frozen = waypoints.tourFor(mazeId, 8);
+        var session = sessions.open(mazeId, "p", grid.start());
+        Point coin = frozen.waypoints().get(0);
+        waypoints.onPlayerMoved(new PlayerMovedEvent(this, session.id(), "p",
+                grid.start(), coin));
+        assertThat(waypoints.progressFor(session.id()).collected()).isEqualTo(1);
+
+        UUID other = gen.generate("recursive-backtracker", 13, 13, 43L).metadata().id();
+        assertThatThrownBy(() -> waypoints.tourFor(other, 4))
+                .as("Caffeine get(compute) at maximumSize used to LRU-evict the seated "
+                        + "maze's coins so progressFor went null and a later tour reminted")
+                .isInstanceOf(WaypointService.CapacityExceededException.class);
+
+        assertThat(waypoints.progressFor(session.id()))
+                .as("the seated maze's frozen coins must still be readable")
+                .isNotNull();
+        assertThat(waypoints.progressFor(session.id()).collected())
+                .as("pickups must keep attaching to the seated hunt")
+                .isEqualTo(1);
+        assertThat(waypoints.progressFor(session.id()).waypoints())
+                .isEqualTo(frozen.waypoints());
+
+        var later = waypoints.tourFor(mazeId, 4);
+        assertThat(later.waypoints())
+                .as("a later ?count= on the seated maze must not remint after a refused stranger")
+                .isEqualTo(frozen.waypoints());
+        assertThat(later.waypoints()).hasSize(8);
+        assertThat(waypoints.cachedTours()).isEqualTo(1);
+    }
+
+    @Test
+    void twoFirstToursCannotBothTakeTheLastPlacementSlot() throws Exception {
+        waypoints = new WaypointService(gen, sessions, 4, 1, Duration.ofHours(2));
+        UUID other = gen.generate("recursive-backtracker", 13, 13, 43L).metadata().id();
+        var go = new CountDownLatch(1);
+        var accepted = new CopyOnWriteArrayList<UUID>();
+        var refused = new AtomicInteger();
+        try (var pool = Executors.newFixedThreadPool(2)) {
+            var a = pool.submit(() -> raceAdmitTour(mazeId, 3, go, accepted, refused));
+            var b = pool.submit(() -> raceAdmitTour(other, 8, go, accepted, refused));
+            go.countDown();
+            a.get(30, TimeUnit.SECONDS);
+            b.get(30, TimeUnit.SECONDS);
+        }
+        assertThat(accepted).as("exactly one first tour owns the only slot").hasSize(1);
+        assertThat(refused.get()).isEqualTo(1);
+        UUID seated = accepted.get(0);
+        var again = waypoints.tourFor(seated, 4);
+        assertThat(again.waypoints())
+                .as("the maze that won the slot must still return its frozen set")
+                .hasSize(seated.equals(mazeId) ? 3 : 8);
+        assertThat(waypoints.cachedTours()).isEqualTo(1);
+    }
+
+    private void raceAdmitTour(UUID id, int count, CountDownLatch go,
+                               CopyOnWriteArrayList<UUID> accepted, AtomicInteger refused) {
+        try {
+            go.await();
+            waypoints.tourFor(id, count);
+            accepted.add(id);
+        } catch (WaypointService.CapacityExceededException e) {
+            refused.incrementAndGet();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new AssertionError(e);
+        }
     }
 
     @Test

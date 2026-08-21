@@ -10,6 +10,16 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **A first `GET /tour` on a new maze at the placement cap no longer LRU-evicts another maze's frozen coins.**
+  Caffeine `get(compute)` at `maximumSize` on `WaypointService` placements
+  silently dropped the LRU coin set, so `progressFor` went null, pickups
+  stopped attaching, and a later `tourFor` reminted a different set.
+  HTTP can 409 a first tour — unlike a move that already happened — so a
+  new maze at cap is refused. A later tour for a seated maze still
+  returns that maze's first-insert set. Admission is one lock, the same
+  compound living/traffic/session/walk/maze closed; idle TTL still
+  evicts abandoned tours.
+
 - **A finish on a new maze at the ghost cap no longer LRU-evicts another maze's recording.**
   Caffeine `maximumSize` on `GhostService` silently dropped the LRU ghost, so
   `GET /maze/{id}/ghost` 404ed while someone was still racing or spectating

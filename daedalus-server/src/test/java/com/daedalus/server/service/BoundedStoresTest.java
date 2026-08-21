@@ -268,12 +268,14 @@ class BoundedStoresTest {
      * asking how many others were in the same state. The answer was four more, holding five
      * caches between them.
      *
-     * <p>Note what makes them observable at all. A memoization cache — tours, tournaments, fits
-     * — is a pure function behind a map, so eviction changes no answer anybody can see; the
-     * recomputed value is identical. Each service therefore reports its own cached count, the
-     * same window {@code trackedCount}, {@code liveCount} and {@code plannedCount} already open
-     * onto their stores. Without that, "the bound works" is unfalsifiable, and an unfalsifiable
-     * claim in a test file is worse than no test because it reads like coverage.
+     * <p>Note what makes them observable at all. A memoization cache — tournaments, fits —
+     * is a pure function behind a map, so eviction changes no answer anybody can see; the
+     * recomputed value is identical. Placement is not: LRU-evicting a seated maze's coins
+     * made {@code progressFor} null and a later {@code tourFor} remint. Each service
+     * therefore reports its own cached count, the same window {@code trackedCount},
+     * {@code liveCount} and {@code plannedCount} already open onto their stores. Without
+     * that, "the bound works" is unfalsifiable, and an unfalsifiable claim in a test file
+     * is worse than no test because it reads like coverage.
      */
     @Test
     void ghostStoreDropsANewMazeAtCapInsteadOfEvictingAnInUseOne() {
@@ -323,6 +325,28 @@ class BoundedStoresTest {
         assertThat(ghosts.ghostOf(mazeId))
                 .as("a ghost nobody has raced in a day is not worth a megabyte of trail")
                 .isNull();
+    }
+
+    @Test
+    void waypointPlacementsRefusePastTheirBoundInsteadOfEvictingAFrozenTour() {
+        GeneratorRegistry registry = new GeneratorRegistry(List.of(new RecursiveBacktrackerGenerator()));
+        MazeGenerationService gen = new MazeGenerationService(
+                registry, event -> { }, new SimpleMeterRegistry());
+        WaypointService waypoints = new WaypointService(gen,
+                new GameSessionService(event -> { }, mock(LeaderboardService.class), false),
+                5, 1, Duration.ofHours(2));
+        UUID seated = gen.generate("recursive-backtracker", 11, 11, 1L).metadata().id();
+        var frozen = waypoints.tourFor(seated, 3);
+        UUID stranger = gen.generate("recursive-backtracker", 11, 11, 2L).metadata().id();
+
+        assertThatThrownBy(() -> waypoints.tourFor(stranger, 4))
+                .as("Caffeine get(compute) at maximumSize used to LRU-evict; another maze's "
+                        + "frozen coins then vanished and a later tour reminted a different set")
+                .isInstanceOf(WaypointService.CapacityExceededException.class);
+        assertThat(waypoints.tourFor(seated, 8).waypoints())
+                .as("the seated maze must still return the first-insert set after the refused tour")
+                .isEqualTo(frozen.waypoints());
+        assertThat(waypoints.cachedTours()).isEqualTo(1);
     }
 
     @Test
