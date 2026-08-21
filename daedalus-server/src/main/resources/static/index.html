@@ -495,6 +495,40 @@ async function problemWhy(res) {
   }
 }
 
+/**
+ * The pool a 409 refused, named — not "409 Conflict on /maze/generate — maze-capacity: …".
+ * Living/traffic already had this; session/agent/maze/tour must too. Keys are the
+ * ProblemDetail `kind`s; values are what the log shows. Matching the named string
+ * again is a no-op so api() and a button catch can both call this.
+ */
+const CAPACITY_WHY = {
+  "living-capacity": "too many mazes are already alive — wait for one to settle",
+  "traffic-capacity": "too many mazes are already tracked — wait for one to settle",
+  "session-capacity": "too many sessions are already open — wait for one to idle out",
+  "agent-capacity": "too many fog walks are already open — wait for one to arrive or idle out",
+  "maze-capacity": "too many mazes are already cached — wait for one to idle out",
+  "tour-capacity": "too many waypoint hunts are already seated — wait for one to idle out",
+};
+
+function nameCapacity(msg) {
+  const m = String(msg || "");
+  for (const kind of Object.keys(CAPACITY_WHY)) {
+    const why = CAPACITY_WHY[kind];
+    if (m.includes(kind) || m === why) return why;
+  }
+  // Server detail without kind (the strings living/traffic already matched).
+  if (/already animating/.test(m)) return CAPACITY_WHY["living-capacity"];
+  if (/already tracking/.test(m)) return CAPACITY_WHY["traffic-capacity"];
+  return null;
+}
+
+/** Permalink rebuild shares generate's admit(). A 409 is not a missing maze. */
+function permalinkLoadFailed(getErr, rebuildErr) {
+  const cap = rebuildErr && nameCapacity(rebuildErr.message);
+  if (cap) return "permalink maze aged out — " + cap;
+  return "permalink maze not found on this server (" + (getErr && getErr.message) + ")";
+}
+
 async function api(path, opts) {
   opts = opts || {};
   const headers = Object.assign({}, opts.headers);
@@ -508,7 +542,8 @@ async function api(path, opts) {
     const why = await problemWhy(res);
     const hint = res.status === 401 && path !== "/auth/login"
         ? " — sign in (prod requires a token)" : "";
-    throw new Error(`${res.status} ${res.statusText} on ${path}${why}${hint}`);
+    const raw = `${res.status} ${res.statusText} on ${path}${why}${hint}`;
+    throw new Error(nameCapacity(raw) || raw);
   }
   const text = await res.text();
   return text ? JSON.parse(text) : null;
@@ -524,7 +559,8 @@ async function apiPlain(path) {
     // Status + statusText alone made a 401 look like a missing maze.
     const why = await problemWhy(res);
     const hint = res.status === 401 ? " — sign in (prod requires a token)" : "";
-    throw new Error(`${res.status} ${res.statusText} on ${path}${why}${hint}`);
+    const raw = `${res.status} ${res.statusText} on ${path}${why}${hint}`;
+    throw new Error(nameCapacity(raw) || raw);
   }
   return res.text();
 }
@@ -1019,9 +1055,14 @@ async function loadFromHash() {
           await rebuildFromRecipe(h);
           log("state", "permalink maze aged out — rebuilt from the recipe");
           return;
-        } catch (ignored) { /* fall through to the original 404 */ }
+        } catch (rebuildErr) {
+          // maze-capacity is a full cache, not a missing maze. Swallowing it
+          // as 404 made a refused remint look like the recipe was gone.
+          log("err", permalinkLoadFailed(e, rebuildErr));
+          return;
+        }
       }
-      log("err", `permalink maze not found on this server (${e.message})`);
+      log("err", permalinkLoadFailed(e, null));
     }
     return;
   }
@@ -1164,8 +1205,9 @@ async function bringToLife() {
   try {
     r = await api(q, {method: "POST"});
   } catch (e) {
-    if (/living-capacity|already animating/.test(e.message)) {
-      log("err", "too many mazes are already alive — wait for one to settle");
+    const why = nameCapacity(e.message);
+    if (why) {
+      log("err", why);
       return;
     }
     throw e;
@@ -1702,8 +1744,9 @@ async function simulateTraffic() {
   try {
     r = await api(`/maze/${state.maze.id}/traffic`, {method: "POST"});
   } catch (e) {
-    if (/traffic-capacity|already tracking/.test(e.message)) {
-      log("err", "too many mazes are already tracked — wait for one to settle");
+    const why = nameCapacity(e.message);
+    if (why) {
+      log("err", why);
       return;
     }
     throw e;

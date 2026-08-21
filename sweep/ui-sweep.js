@@ -309,6 +309,33 @@ async function check(name, fn) {
         `recipe ${hash}; spots ${rebuilt === spots}`];
   });
 
+  await check('N3. capacity kinds name the pool, not the status line', async () => {
+    const d = await page.evaluate(() => {
+      const raw = kind => `409 Conflict on /maze/x — ${kind}: already holding 1`;
+      const maze = nameCapacity(raw('maze-capacity'));
+      const session = nameCapacity(raw('session-capacity'));
+      const agent = nameCapacity(raw('agent-capacity'));
+      const tour = nameCapacity(raw('tour-capacity'));
+      const living = nameCapacity(raw('living-capacity'));
+      const traffic = nameCapacity(raw('traffic-capacity'));
+      const miss = nameCapacity('404 Not Found on /maze/x');
+      const rebuild = permalinkLoadFailed(
+          {message: '404 Not Found on /maze/dead'},
+          {message: raw('maze-capacity')});
+      const gone = permalinkLoadFailed({message: '404 Not Found on /maze/dead'}, null);
+      return {maze, session, agent, tour, living, traffic, miss, rebuild, gone,
+        dumps: /409/.test([maze, session, agent, tour, living, traffic].join(' '))};
+    });
+    const named = d.maze && d.session && d.agent && d.tour && d.living && d.traffic
+        && d.miss == null && !d.dumps
+        && /cached/.test(d.maze) && /sessions/.test(d.session)
+        && /fog/.test(d.agent) && /waypoint/.test(d.tour)
+        && /aged out/.test(d.rebuild) && /cached/.test(d.rebuild)
+        && !/not found/.test(d.rebuild) && /not found/.test(d.gone);
+    return [named, named ? 'six pools named; permalink 409 is not a 404'
+        : JSON.stringify(d).slice(0, 160)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

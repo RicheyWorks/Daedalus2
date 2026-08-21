@@ -69,6 +69,15 @@ class WebUiSmokeTest {
                 .contains("that session is gone")
                 .contains("Three frame shapes ride /state")
                 .contains("too many mazes are already alive")
-                .contains("too many mazes are already tracked");
+                .contains("too many mazes are already tracked")
+                .contains("nameCapacity").contains("CAPACITY_WHY")
+                .contains("session-capacity").contains("agent-capacity")
+                .contains("maze-capacity").contains("tour-capacity")
+                .contains("too many sessions are already open")
+                .contains("too many fog walks are already open")
+                .contains("too many mazes are already cached")
+                .contains("too many waypoint hunts are already seated")
+                .contains("permalinkLoadFailed")
+                .contains("permalink maze aged out —");
     }
 }

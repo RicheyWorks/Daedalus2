@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **The page names the pool a 409 refused, including a permalink remint at maze-capacity.**
+  Living and traffic already said "too many mazes are already alive/tracked".
+  Session, fog, generate, and tour dumped `409 Conflict on /path — kind: …`,
+  and a `#maze=` rebuild that hit the cache cap was logged as "not found".
+  `nameCapacity` maps the ProblemDetail kind; `permalinkLoadFailed` does not
+  treat a refused remint as a missing maze.
+
 - **A first `GET /tour` on a new maze at the placement cap no longer LRU-evicts another maze's frozen coins.**
   Caffeine `get(compute)` at `maximumSize` on `WaypointService` placements
   silently dropped the LRU coin set, so `progressFor` went null, pickups
