@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Daily, campaign, and breed 409s carry `maze-capacity` the same way generate does.**
+  Those routes share `admit()`. Generate already had an HTTP pin; a full cache
+  on the daily, a campaign plan, or a crossbreed had none. Standalone MockMvc
+  now expects 409 `maze-capacity` on `GET /maze/daily`, `GET /campaign`, and
+  `POST /maze/breed`.
+
 - **The page names the pool a 409 refused, including a permalink remint at maze-capacity.**
   Living and traffic already said "too many mazes are already alive/tracked".
   Session, fog, generate, and tour dumped `409 Conflict on /path — kind: …`,

@@ -11,6 +11,7 @@ import com.daedalus.model.Point;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.daedalus.server.service.AgentWalkService;
 import com.daedalus.server.service.AlgorithmCatalogService;
+import com.daedalus.server.service.CampaignService;
 import com.daedalus.server.service.DailyMazeService;
 import com.daedalus.server.service.GameSessionService;
 import com.daedalus.server.service.LeaderboardService;
@@ -45,7 +46,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Living/traffic capacity and a solver budget used to throw in the service
  * and become an untested 500 if the advice mapping disappeared. These are
- * the HTTP seam: 409 / 422 with a problem type, not a stack trace.
+ * the HTTP seam: 409 / 422 with a problem type, not a stack trace. Daily,
+ * campaign, and breed share generate's admit() — a full cache there is the
+ * same kind, not a 500 or a silent fallback.
  */
 class MazeControllerCapacityTest {
 
@@ -163,6 +166,61 @@ class MazeControllerCapacityTest {
         mvc.perform(post("/api/v1/maze/generate")
                         .contentType("application/json")
                         .content(body))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.kind", equalTo("maze-capacity")))
+                .andExpect(jsonPath("$.title", equalTo("Too many cached mazes")));
+    }
+
+    @Test
+    void aFullMazeCacheOnDailyAnswers409() throws Exception {
+        MazeGenerationService.CapacityExceededException full =
+                mock(MazeGenerationService.CapacityExceededException.class);
+        when(full.getMessage()).thenReturn("already holding 1 cached mazes — retry after one idles out");
+        DailyMazeService dailySvc = mock(DailyMazeService.class);
+        when(dailySvc.today()).thenThrow(full);
+        MockMvc dailyMvc = MockMvcBuilders.standaloneSetup(new MazeController(
+                        gen,
+                        solverSvc,
+                        mock(AlgorithmCatalogService.class),
+                        mock(GameSessionService.class),
+                        mock(LeaderboardService.class),
+                        living,
+                        dailySvc,
+                        traffic))
+                .setControllerAdvice(new ApiExceptionHandler())
+                .build();
+
+        dailyMvc.perform(get("/api/v1/maze/daily"))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.kind", equalTo("maze-capacity")))
+                .andExpect(jsonPath("$.title", equalTo("Too many cached mazes")));
+    }
+
+    @Test
+    void aFullMazeCacheOnCampaignAnswers409() throws Exception {
+        MazeGenerationService.CapacityExceededException full =
+                mock(MazeGenerationService.CapacityExceededException.class);
+        when(full.getMessage()).thenReturn("already holding 1 cached mazes — retry after one idles out");
+        CampaignService campaigns = mock(CampaignService.class);
+        when(campaigns.campaign(anyLong())).thenThrow(full);
+        MockMvc campaignMvc = MockMvcBuilders.standaloneSetup(new CampaignController(campaigns))
+                .setControllerAdvice(new ApiExceptionHandler())
+                .build();
+
+        campaignMvc.perform(get("/api/v1/campaign"))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.kind", equalTo("maze-capacity")))
+                .andExpect(jsonPath("$.title", equalTo("Too many cached mazes")));
+    }
+
+    @Test
+    void aFullMazeCacheOnBreedAnswers409() throws Exception {
+        MazeGenerationService.CapacityExceededException full =
+                mock(MazeGenerationService.CapacityExceededException.class);
+        when(full.getMessage()).thenReturn("already holding 1 cached mazes — retry after one idles out");
+        when(gen.adopt(any(), anyString(), anyLong(), any())).thenThrow(full);
+
+        mvc.perform(post("/api/v1/maze/breed?a=" + mazeId + "&b=" + mazeId))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.kind", equalTo("maze-capacity")))
                 .andExpect(jsonPath("$.title", equalTo("Too many cached mazes")));
