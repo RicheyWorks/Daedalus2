@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **`adoptMaze` mirrors generator and seed, not just size / braid / hotspots.**
+  A `#maze=` (or Daily / campaign / `#session=`) success path wrote `g=` and
+  `seed=` into the hash from the maze, then left the selects on leftovers.
+  Generate, Measure, and the tournament still read the form, so the bar named
+  one recipe and the next click built another.
+
 - **Show ASCII no longer drops watch to dump text, and Measure / Run tournament stay watchers.**
   Those three fill a sidebar or a `<pre>` — they do not adopt, paint, or mutate
   the watched maze. Show ASCII called `leaveSpectate` before the `text/plain`

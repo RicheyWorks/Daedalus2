@@ -816,10 +816,18 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
     state.prevMazeId = state.maze.id; // remember the other parent for crossbreeding
   }
   $("breed").disabled = !state.prevMazeId;
-  // Mirror the adopted maze's size into the inputs. A permalink (#maze= or #session=)
-  // can be a user's first view of the app; leaving the defaults there means their next
-  // Generate silently produces a different-sized maze than the one on screen.
+  // Mirror the adopted maze into the inputs. Size/braid/hotspots already
+  // followed the snapshot; generator and seed did not. A #maze= (or Daily /
+  // campaign / #session=) success path wrote g= and seed= into the hash from
+  // the maze, then Generate / Measure / tournament still read the leftover
+  // selects — half-hydrated: the bar named one recipe, the form another.
   $("rows").value = maze.rows; $("cols").value = maze.cols;
+  if ($("seed") && maze.seed != null) $("seed").value = maze.seed;
+  if ($("generator") && maze.generatorId
+      && [...$("generator").options].some(o => o.value === maze.generatorId)) {
+    $("generator").value = maze.generatorId;
+    updateInfo();
+  }
   applyBraidFromMaze(maze);
   applyHotspotsFromMaze(maze);
   state.readOnly = false;

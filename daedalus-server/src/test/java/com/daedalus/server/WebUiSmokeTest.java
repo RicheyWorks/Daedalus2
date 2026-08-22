@@ -110,6 +110,17 @@ class WebUiSmokeTest {
         assertStayWhileWatching(html, "async function measureGrowth", "function renderLab");
         assertStayWhileWatching(html, "async function runTournament", "// ---------- heuristic lens");
         assertStayWhileWatching(html, "async function showAscii", "async function loadAlgorithms");
+        // Size / braid / hotspots already followed the snapshot. Generator and
+        // seed stayed on leftovers, so a #maze= success path half-hydrated:
+        // pinHash wrote the maze recipe, Generate / Measure still read the form.
+        int adoptFrom = html.indexOf("function adoptMaze");
+        int adoptTo = html.indexOf("// Snapshot whatever is on the canvas");
+        assertThat(adoptFrom).isGreaterThanOrEqualTo(0);
+        assertThat(adoptTo).isGreaterThan(adoptFrom);
+        String adopt = html.substring(adoptFrom, adoptTo);
+        assertThat(adopt)
+                .contains("$(\"generator\").value = maze.generatorId")
+                .contains("$(\"seed\").value = maze.seed");
     }
 
     /** First {@code leaveSpectate} after {@code start} is before {@code write}. */
