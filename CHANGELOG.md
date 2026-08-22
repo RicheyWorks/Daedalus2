@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Show ASCII no longer drops watch to dump text, and Measure / Run tournament stay watchers.**
+  Those three fill a sidebar or a `<pre>` — they do not adopt, paint, or mutate
+  the watched maze. Show ASCII called `leaveSpectate` before the `text/plain`
+  GET; a living tick that refreshed that dump then re-armed Bring to life.
+
 - **Daily, Campaign, Breed, and Solve leave watch mode before they write.**
   A `#session=` hydrate left those buttons armed. Daily / Campaign / Breed
   fetched, then `adoptMaze` cleared `readOnly` as a side effect. Solve

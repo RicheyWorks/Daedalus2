@@ -105,6 +105,11 @@ class WebUiSmokeTest {
         assertLeaveBeforeWrite(html, "async function playStage", "/maze/${stage.mazeId}");
         assertLeaveBeforeWrite(html, "async function crossbreed", "/maze/breed");
         assertLeaveBeforeWrite(html, "async function solve", "/solve/");
+        // Measure / tournament / ASCII fill a sidebar or a <pre>. Leaving dropped
+        // watch; a living tick that refreshed ASCII then re-armed Bring to life.
+        assertStayWhileWatching(html, "async function measureGrowth", "function renderLab");
+        assertStayWhileWatching(html, "async function runTournament", "// ---------- heuristic lens");
+        assertStayWhileWatching(html, "async function showAscii", "async function loadAlgorithms");
     }
 
     /** First {@code leaveSpectate} after {@code start} is before {@code write}. */
@@ -116,5 +121,15 @@ class WebUiSmokeTest {
         assertThat(leave).isGreaterThan(from);
         assertThat(fetch).isGreaterThan(from);
         assertThat(leave).isLessThan(fetch);
+    }
+
+    /** Sidebar / text-dump lab reads must not drop watch or refuse. */
+    private static void assertStayWhileWatching(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end);
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("leaveSpectate").doesNotContain("refuseSpectatorWrite");
     }
 }

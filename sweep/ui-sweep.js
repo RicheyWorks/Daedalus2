@@ -470,6 +470,58 @@ async function check(name, fn) {
         : JSON.stringify({src, armed, after}).slice(0, 220)];
   });
 
+  await check('N8. spectator Measure/tournament/ASCII stay watchers', async () => {
+    // Old body: showAscii called leaveSpectate, so a living-tick refresh of the
+    // dump re-armed Bring to life. Measure and tournament already stayed.
+    const src = await page.evaluate(() => {
+      const stay = (fn) => {
+        const s = fn.toString();
+        return !s.includes('leaveSpectate') && !s.includes('refuseSpectatorWrite');
+      };
+      return {measure: stay(measureGrowth), tour: stay(runTournament), ascii: stay(showAscii)};
+    });
+    if (!(await page.evaluate(() => !!state.session))) {
+      await page.click('#play');
+      await page.waitForFunction(() => !!state.session, null, {timeout:15000});
+    }
+    const sid = await page.evaluate(() => state.session.id);
+    const spec = await ctx.newPage();
+    await spec.goto(`http://localhost:8080/#session=${sid}`, { waitUntil: 'networkidle' });
+    await spec.waitForFunction(() => state.readOnly === true && !!state.session, null, {timeout:25000});
+    const armed = await spec.evaluate(() => ({
+      measure: !document.getElementById('measure').disabled,
+      tournament: !document.getElementById('tournament').disabled,
+      ascii: !document.getElementById('ascii').disabled,
+      live: document.getElementById('live').disabled,
+      tour: document.getElementById('tour').disabled,
+    }));
+    await spec.click('#measure');
+    await spec.waitForFunction(() => {
+      const t = document.getElementById('labOut').innerText;
+      return t && t.length > 20 && !/measuring/.test(t);
+    }, null, {timeout:25000});
+    await spec.click('#ascii');
+    await spec.waitForFunction(() => {
+      const el = document.getElementById('asciiOut');
+      return el && !el.hidden && el.textContent.includes('#');
+    }, null, {timeout:15000});
+    const after = await spec.evaluate(() => ({
+      readOnly: state.readOnly,
+      session: !!state.session,
+      path: !!(state.path && state.path.length > 1),
+      analysis: !!state.analysis,
+      lab: document.getElementById('labOut').innerText.length,
+      ascii: !document.getElementById('asciiOut').hidden,
+    }));
+    await spec.close();
+    const ok = src.measure && src.tour && src.ascii
+        && armed.measure && armed.tournament && armed.ascii && armed.live && armed.tour
+        && after.readOnly && after.session && !after.path && !after.analysis
+        && after.lab > 20 && after.ascii;
+    return [ok, ok ? 'stay watching; sidebar/pre only'
+        : JSON.stringify({src, armed, after}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

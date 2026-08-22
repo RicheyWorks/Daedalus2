@@ -634,7 +634,8 @@ async function refreshPlugins() {
 
 async function showAscii() {
   if (!state.maze || state.fog) return;
-  leaveSpectate();
+  // A text/plain dump of the maze on screen, not a leave path. Living ticks
+  // refresh this pre; dropping watch here re-armed Bring to life mid-erosion.
   const solver = $("solver").value;
   const art = await apiPlain(`/maze/${state.maze.id}?solve=${encodeURIComponent(solver)}`);
   const out = $("asciiOut");
@@ -1421,6 +1422,7 @@ async function loadLabMetrics() {
 }
 
 async function measureGrowth() {
+  // Sidebar lab read — does not adopt, paint, or drop watch.
   const generator = $("generator").value;
   const metric = $("labMetric").value;
   $("labOut").textContent = `measuring ${generator}…`;
@@ -1704,6 +1706,7 @@ function paintSanctuariesCaption(s) {
  * but "how much does first mean here".
  */
 async function runTournament() {
+  // Sidebar lab read — Load it goes through generate(), which already leaves.
   const generator = $("generator").value;
   const braid = braidFactor();
   $("tournament").disabled = true;
