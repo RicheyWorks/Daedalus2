@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Fog, Generate, and Open session leave watch mode before they write.**
+  A `#session=` hydrate left those buttons armed. Fog POSTed an agent walk
+  and left `readOnly` set. Generate replaced the maze under the spectator.
+  Open session minted, then left. `leaveSpectate` now runs first, same as
+  join-from-spectate; Tour / live / traffic stay disarmed.
+
 - **Open session after a `#session=` hydrate actually plays, and this tab moves its own seat.**
   Spectate left `readOnly` set. Open session minted a session and said "arrow
   keys to move", then arrows and clicks no-op'd. Clicks still aimed at the

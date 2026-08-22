@@ -375,6 +375,52 @@ async function check(name, fn) {
         : JSON.stringify(d).slice(0, 180)];
   });
 
+  await check('N6. spectator Fog/Generate/Open session leave watch before they write', async () => {
+    // Old body: generate had no leaveSpectate; play left after the POST; fog never left
+    // (readOnly stayed true while POST /agent minted a walk on the watched maze).
+    const src = await page.evaluate(() => {
+      const order = (fn, write) => {
+        const s = fn.toString();
+        const leave = s.indexOf('leaveSpectate');
+        const w = s.indexOf(write);
+        return leave >= 0 && w >= 0 && leave < w;
+      };
+      return {
+        gen: order(generate, '/maze/generate'),
+        fog: order(startFog, '/agent'),
+        play: order(play, '/session?'),
+      };
+    });
+    if (!(await page.evaluate(() => !!state.session))) {
+      await page.click('#play');
+      await page.waitForFunction(() => !!state.session, null, {timeout:15000});
+    }
+    const sid = await page.evaluate(() => state.session.id);
+    const spec = await ctx.newPage();
+    await spec.goto(`http://localhost:8080/#session=${sid}`, { waitUntil: 'networkidle' });
+    await spec.waitForFunction(() => state.readOnly === true && !!state.session, null, {timeout:25000});
+    const armed = await spec.evaluate(() => ({
+      fog: !document.getElementById('fog').disabled,
+      gen: !document.getElementById('generate').disabled,
+      play: !document.getElementById('play').disabled,
+      live: document.getElementById('live').disabled,
+      tour: document.getElementById('tour').disabled,
+    }));
+    await spec.click('#fog');
+    await spec.waitForFunction(() => state.fog && state.fog.seen, null, {timeout:15000});
+    const after = await spec.evaluate(() => ({
+      readOnly: state.readOnly,
+      session: !!state.session,
+      fog: !!(state.fog && state.fog.agentId),
+    }));
+    await spec.close();
+    const ok = src.gen && src.fog && src.play
+        && armed.fog && armed.gen && armed.play && armed.live && armed.tour
+        && !after.readOnly && after.fog && !after.session;
+    return [ok, ok ? 'leave before write; fog dropped watch'
+        : JSON.stringify({src, armed, after}).slice(0, 200)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

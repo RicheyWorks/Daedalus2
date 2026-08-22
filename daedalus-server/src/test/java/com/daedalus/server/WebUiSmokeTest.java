@@ -93,5 +93,21 @@ class WebUiSmokeTest {
                 .doesNotContain("positions[state.session.primary]")
                 .doesNotContain("move(state.session.primary")
                 .doesNotContain("move(state.seat || state.session.primary");
+        // Fog / Generate / Open session used to write while readOnly was still set.
+        // leaveSpectate must run before those fetches, not after (play) or never (fog).
+        assertLeaveBeforeWrite(html, "async function generate", "/maze/generate");
+        assertLeaveBeforeWrite(html, "async function startFog", "/agent");
+        assertLeaveBeforeWrite(html, "async function play", "/session?");
+    }
+
+    /** First {@code leaveSpectate} after {@code start} is before {@code write}. */
+    private static void assertLeaveBeforeWrite(String html, String start, String write) {
+        int from = html.indexOf(start);
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        int leave = html.indexOf("leaveSpectate", from);
+        int fetch = html.indexOf(write, from);
+        assertThat(leave).isGreaterThan(from);
+        assertThat(fetch).isGreaterThan(from);
+        assertThat(leave).isLessThan(fetch);
     }
 }

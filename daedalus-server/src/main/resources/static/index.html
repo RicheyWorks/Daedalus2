@@ -768,6 +768,7 @@ function applyBraidFromMaze(maze) {
 }
 
 async function generate(opts) {
+  leaveSpectate();
   const braid = opts && opts.braid != null ? +opts.braid : +(($("braid") && $("braid").value) || 0);
   let seed = $("seed").value === "" ? null : +$("seed").value;
   if (seed == null || Number.isNaN(seed)) {
@@ -1083,10 +1084,12 @@ function thisTabSeat() {
 }
 
 /**
- * Open session and join-from-spectate leave watch mode. play() used to mint a
- * session and leave readOnly set, so the status line said "arrow keys to move"
- * and both inputs no-op'd. Live / traffic / tour mutate the maze underfoot
- * and must not stay armed on a #session= hydrate.
+ * Open session, Generate, Fog, and join-from-spectate leave watch mode before
+ * they write. play() used to mint a session and leave readOnly set, so the
+ * status line said "arrow keys to move" and both inputs no-op'd. Generate
+ * replaced the maze and Fog POSTed an agent walk while still watching. Live /
+ * traffic / tour mutate the maze underfoot and must not stay armed on a
+ * #session= hydrate.
  */
 function leaveSpectate() {
   state.readOnly = false;
@@ -2245,6 +2248,7 @@ async function compareSolvers() {
 }
 
 async function play() {
+  leaveSpectate();
   const name = $("player").value || "web";
   const hadFog = !!state.fog;
   const s = await api(`/maze/${state.maze.id}/session?player=${encodeURIComponent(name)}`,
@@ -2265,7 +2269,6 @@ async function play() {
   $("join").disabled = false;
   $("join").textContent = "Join as second player";
   $("join").title = "Requires daedalus.session.multiplayer=true";
-  leaveSpectate();
   $("status").textContent = `session ${s.sessionId.slice(0, 8)}… — arrow keys to move`;
   log("state", `spectate link: ${location.origin}${location.pathname}#session=${s.sessionId}`);
   pinHash();
@@ -2656,6 +2659,7 @@ function fogRevealsTile(tr, tc) {
 const DIR_FROM_DELTA = {"-1,0": "NORTH", "1,0": "SOUTH", "0,-1": "WEST", "0,1": "EAST"};
 
 async function startFog() {
+  leaveSpectate();
   const view = await api(`/maze/${state.maze.id}/agent`, {method: "POST"});
   state.session = null;
   state.seat = null;
