@@ -32,6 +32,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -168,7 +169,12 @@ public class MazeController {
     @Operation(summary = "The maze as ASCII art (Accept: text/plain); optional ?solve=<solverId> overlays a route.")
     public ResponseEntity<String> getAscii(
             @PathVariable UUID id,
-            @RequestParam(required = false) @AlgorithmId String solve) {
+            @RequestParam(required = false)
+            // @AlgorithmId is @NotBlank — a missing query 400'd the dump.
+            @Pattern(regexp = "^[a-z0-9][a-z0-9-]{0,63}$",
+                    message = "must be 1-64 chars, lowercase letters / digits / hyphens, "
+                            + "leading hyphen disallowed")
+            String solve) {
         var c = gen.find(id);
         if (c == null) throw ResourceNotFoundException.maze(id);
         List<com.daedalus.model.Point> path = List.of();

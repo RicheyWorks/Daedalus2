@@ -35,6 +35,15 @@ class AsciiMazeEndpointTest {
         RestTestClient client = RestTestClient.bindToServer()
                 .baseUrl("http://localhost:" + port).build();
 
+        byte[] dump = client.get().uri("/api/v1/maze/" + id)
+                .header("Accept", "text/plain")
+                .exchange().expectStatus().isOk()
+                .expectBody().returnResult().getResponseBody();
+        String bare = new String(dump);
+        assertThat(bare).contains("#").contains("S").contains("G")
+                .as("a dump without ?solve= is the maze, not a route").doesNotContain(".");
+        assertThat(bare).as("no JSON leaked into the art").doesNotContain("{");
+
         byte[] plain = client.get().uri("/api/v1/maze/" + id + "?solve=bfs")
                 .header("Accept", "text/plain")
                 .exchange().expectStatus().isOk()

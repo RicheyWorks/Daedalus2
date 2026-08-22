@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Show ASCII is a text/plain dump, not a solve.** Living-tick refresh and a
+  spectator click sent `?solve=`, which ran a solver and published
+  `MazeSolvedEvent` while claiming to be a lab read. The GET without a
+  solver query 400'd because `@AlgorithmId` is `@NotBlank`. The dump is
+  the maze as text; `leaveSpectate` stays off this path.
+
 - **`adoptMaze` mirrors generator and seed, not just size / braid / hotspots.**
   A `#maze=` (or Daily / campaign / `#session=`) success path wrote `g=` and
   `seed=` into the hash from the maze, then left the selects on leftovers.

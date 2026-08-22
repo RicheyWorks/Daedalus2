@@ -634,14 +634,15 @@ async function refreshPlugins() {
 
 async function showAscii() {
   if (!state.maze || state.fog) return;
-  // A text/plain dump of the maze on screen, not a leave path. Living ticks
-  // refresh this pre; dropping watch here re-armed Bring to life mid-erosion.
-  const solver = $("solver").value;
-  const art = await apiPlain(`/maze/${state.maze.id}?solve=${encodeURIComponent(solver)}`);
+  // A text/plain dump of the maze on screen, not a leave path and not a solve.
+  // Living ticks refresh this pre; dropping watch here re-armed Bring to life
+  // mid-erosion. A solver query ran the solver and published MazeSolvedEvent
+  // on a read.
+  const art = await apiPlain(`/maze/${state.maze.id}`);
   const out = $("asciiOut");
   out.hidden = false;
   out.textContent = art;
-  log("state", `ASCII via Accept: text/plain (${art.length} chars, solve=${solver})`);
+  log("state", `ASCII via Accept: text/plain (${art.length} chars)`);
 }
 
 async function loadAlgorithms() {

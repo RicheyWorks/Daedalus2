@@ -110,6 +110,15 @@ class WebUiSmokeTest {
         assertStayWhileWatching(html, "async function measureGrowth", "function renderLab");
         assertStayWhileWatching(html, "async function runTournament", "// ---------- heuristic lens");
         assertStayWhileWatching(html, "async function showAscii", "async function loadAlgorithms");
+        // A dump that sent ?solve= minted MazeSolvedEvent on a text/plain read.
+        // Living-tick refresh and a spectator click both go through showAscii.
+        int asciiFrom = html.indexOf("async function showAscii");
+        int asciiTo = html.indexOf("async function loadAlgorithms");
+        assertThat(asciiFrom).isGreaterThanOrEqualTo(0);
+        assertThat(asciiTo).isGreaterThan(asciiFrom);
+        assertThat(html.substring(asciiFrom, asciiTo))
+                .contains("apiPlain(`/maze/${state.maze.id}`)")
+                .doesNotContain("?solve=${");
         // Size / braid / hotspots already followed the snapshot. Generator and
         // seed stayed on leftovers, so a #maze= success path half-hydrated:
         // pinHash wrote the maze recipe, Generate / Measure still read the form.

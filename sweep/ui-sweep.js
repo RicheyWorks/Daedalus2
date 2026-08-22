@@ -522,6 +522,35 @@ async function check(name, fn) {
         : JSON.stringify({src, armed, after}).slice(0, 220)];
   });
 
+  await check('N9. ASCII dump does not mint a solve', async () => {
+    // Old body: showAscii appended ?solve=, so a living-tick dump refresh
+    // (or a spectator click) ran a solver and published MazeSolvedEvent.
+    const src = await page.evaluate(() => {
+      const s = showAscii.toString();
+      return !s.includes('?solve=') && !s.includes('leaveSpectate');
+    });
+    const minted = [];
+    const onReq = (r) => {
+      if (r.method() === 'GET' && /\/api\/v1\/maze\/[^/?]+/.test(r.url())
+          && /[?&]solve=/.test(r.url())) minted.push(r.url());
+    };
+    page.on('request', onReq);
+    try {
+      await page.click('#ascii');
+      await page.waitForFunction(() => {
+        const el = document.getElementById('asciiOut');
+        return el && !el.hidden && el.textContent.includes('#');
+      }, null, {timeout:15000});
+    } finally {
+      page.off('request', onReq);
+    }
+    const art = await page.evaluate(() => document.getElementById('asciiOut').textContent);
+    const dump = art.includes('#') && art.includes('S') && !art.includes('.');
+    const ok = src && minted.length === 0 && dump;
+    return [ok, ok ? 'text/plain dump, no ?solve='
+        : JSON.stringify({src, minted: minted.length, dump}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),
