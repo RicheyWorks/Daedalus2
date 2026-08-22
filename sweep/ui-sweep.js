@@ -421,6 +421,55 @@ async function check(name, fn) {
         : JSON.stringify({src, armed, after}).slice(0, 200)];
   });
 
+  await check('N7. spectator Daily/Campaign/Breed/Solve leave watch before they write', async () => {
+    // Old body: those four fetched (or painted) while readOnly was still set;
+    // adoptMaze then cleared watch as a side effect. Solve never left.
+    const src = await page.evaluate(() => {
+      const order = (fn, write) => {
+        const s = fn.toString();
+        const leave = s.indexOf('leaveSpectate');
+        const w = s.indexOf(write);
+        return leave >= 0 && w >= 0 && leave < w;
+      };
+      return {
+        daily: order(loadDaily, '/maze/daily'),
+        campaign: order(loadCampaign, '/campaign'),
+        stage: order(playStage, 'stage.mazeId'),
+        breed: order(crossbreed, '/maze/breed'),
+        solve: order(solve, '/solve/'),
+      };
+    });
+    if (!(await page.evaluate(() => !!state.session))) {
+      await page.click('#play');
+      await page.waitForFunction(() => !!state.session, null, {timeout:15000});
+    }
+    const sid = await page.evaluate(() => state.session.id);
+    const spec = await ctx.newPage();
+    await spec.goto(`http://localhost:8080/#session=${sid}`, { waitUntil: 'networkidle' });
+    await spec.waitForFunction(() => state.readOnly === true && !!state.session, null, {timeout:25000});
+    const armed = await spec.evaluate(() => ({
+      daily: !document.getElementById('daily').disabled,
+      campaign: !document.getElementById('campaign').disabled,
+      solve: !document.getElementById('solve').disabled,
+      live: document.getElementById('live').disabled,
+      tour: document.getElementById('tour').disabled,
+    }));
+    await spec.click('#solve');
+    await spec.waitForFunction(() => state.path && state.path.length > 1 && !state.readOnly,
+        null, {timeout:15000});
+    const after = await spec.evaluate(() => ({
+      readOnly: state.readOnly,
+      path: !!(state.path && state.path.length > 1),
+      session: !!state.session,
+    }));
+    await spec.close();
+    const ok = src.daily && src.campaign && src.stage && src.breed && src.solve
+        && armed.daily && armed.campaign && armed.solve && armed.live && armed.tour
+        && !after.readOnly && after.path;
+    return [ok, ok ? 'leave before daily/campaign/breed/solve write'
+        : JSON.stringify({src, armed, after}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

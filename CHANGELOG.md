@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Daily, Campaign, Breed, and Solve leave watch mode before they write.**
+  A `#session=` hydrate left those buttons armed. Daily / Campaign / Breed
+  fetched, then `adoptMaze` cleared `readOnly` as a side effect. Solve
+  painted a god-mode overlay on the watched maze. `leaveSpectate` now runs
+  first, same as Fog / Generate / Open session; Tour / live / traffic stay
+  disarmed.
+
 - **Fog, Generate, and Open session leave watch mode before they write.**
   A `#session=` hydrate left those buttons armed. Fog POSTed an agent walk
   and left `readOnly` set. Generate replaced the maze under the spectator.

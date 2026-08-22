@@ -634,6 +634,7 @@ async function refreshPlugins() {
 
 async function showAscii() {
   if (!state.maze || state.fog) return;
+  leaveSpectate();
   const solver = $("solver").value;
   const art = await apiPlain(`/maze/${state.maze.id}?solve=${encodeURIComponent(solver)}`);
   const out = $("asciiOut");
@@ -869,6 +870,7 @@ $("pngExport").addEventListener("click", function refresh() {
 
 /** The shared daily challenge — same maze for everyone until midnight UTC (ADR-006). */
 async function loadDaily() {
+  leaveSpectate();
   const d = await api("/maze/daily");
   adoptMaze(d.maze, null, `daily challenge ${d.date}`);
   state.dailyId = d.maze.id; // after adoptMaze (which clears it) — scopes the leaderboard
@@ -884,6 +886,7 @@ async function loadDaily() {
  * campaign is a table of contents, not a new game mode.
  */
 async function loadCampaign(seed) {
+  leaveSpectate();
   const c = await api(`/campaign${seed != null ? "?seed=" + seed : ""}`);
   state.campaign = c;
   state.cleared = {};
@@ -934,6 +937,7 @@ function onStageCleared() {
 
 /** Load a stage: its maze, its own leaderboard, its ghost, and the hazards it declares. */
 async function playStage(index) {
+  leaveSpectate();
   const stage = state.campaign.stages[index];
   const maze = await api(`/maze/${stage.mazeId}`);
   adoptMaze(maze, null, `campaign stage ${index + 1}`);
@@ -976,6 +980,7 @@ async function playStage(index) {
 
 /** Cross the current maze with the previous one — the child replaces the current maze. */
 async function crossbreed() {
+  leaveSpectate();
   const child = await api(`/maze/breed?a=${state.prevMazeId}&b=${state.maze.id}`,
       {method: "POST"});
   adoptMaze(child, null, "crossbreeding");
@@ -1084,12 +1089,14 @@ function thisTabSeat() {
 }
 
 /**
- * Open session, Generate, Fog, and join-from-spectate leave watch mode before
- * they write. play() used to mint a session and leave readOnly set, so the
- * status line said "arrow keys to move" and both inputs no-op'd. Generate
- * replaced the maze and Fog POSTed an agent walk while still watching. Live /
- * traffic / tour mutate the maze underfoot and must not stay armed on a
- * #session= hydrate.
+ * Open session, Generate, Fog, Daily, Campaign, Breed, Solve overlays, and
+ * join-from-spectate leave watch mode before they write. play() used to mint
+ * a session and leave readOnly set, so the status line said "arrow keys to
+ * move" and both inputs no-op'd. Generate replaced the maze and Fog POSTed
+ * an agent walk while still watching. Daily / Campaign / Breed fetched, then
+ * adoptMaze cleared readOnly as a side effect. Solve painted a god-mode
+ * overlay on the watched maze. Live / traffic / tour mutate the maze
+ * underfoot and must not stay armed on a #session= hydrate.
  */
 function leaveSpectate() {
   state.readOnly = false;
@@ -1366,6 +1373,7 @@ async function fingerprintWhenReady(id) {
 
 /** Name the algorithm from the shape alone, and say how sure the structure allows us to be. */
 async function identifyGenerator() {
+  leaveSpectate();
   const f = await fingerprintWhenReady(state.maze.id);
   state.fingerprint = f;
   state.caption = "fingerprint";
@@ -1569,6 +1577,7 @@ async function tourVerdict() {
 // ---------- structural analysis (ADR-006 idea #9) ----------
 /** Min-cut chokepoints + dead ends from the theory module, drawn over the maze. */
 async function analyzeStructure() {
+  leaveSpectate();
   const a = await api(`/maze/${state.maze.id}/analysis`);
   state.analysis = a;
   state.caption = "analysis";
@@ -1600,6 +1609,7 @@ function paintAnalysisCaption(a) {
  * points at the operations that make the question interesting — braiding, erosion, dungeons.
  */
 async function hardestRoute() {
+  leaveSpectate();
   const h = await api(`/maze/${state.maze.id}/hardest-route`);
   state.hardest = h;
   state.caption = "hardest";
@@ -1634,6 +1644,7 @@ const DISTANCE_RAMP = ["#1c5cab", "#2a78d6", "#3987e5", "#5598e7",
 
 /** Shade every cell by its distance from the goal (or start). */
 async function distanceHeatMap() {
+  leaveSpectate();
   const f = await api(`/maze/${state.maze.id}/distance-field`);
   state.field = f;
   state.sanctuaries = null; state.lens = null;   // one overlay at a time stays readable
@@ -1663,6 +1674,7 @@ function paintFieldCaption(f) {
 
 /** k-center safe points, plus the cell they serve worst. */
 async function placeSanctuaries() {
+  leaveSpectate();
   const s = await api(`/maze/${state.maze.id}/sanctuaries?k=5`);
   state.sanctuaries = s;
   state.field = null; state.lens = null;
@@ -1772,6 +1784,7 @@ async function runTournament() {
 const LENS_COLORS = ["#e5484d", "#f2c94c", "#4cc38a"];   // must expand / tie / never
 
 async function heuristicLens() {
+  leaveSpectate();
   const which = $("lensH").value;
   const l = await api(`/maze/${state.maze.id}/heuristic-lens?heuristic=${which}`);
   state.lens = l;
@@ -2052,6 +2065,7 @@ async function refreshLivingMaze() {
 }
 
 async function solve() {
+  leaveSpectate();
   const r = await api(`/maze/${state.maze.id}/solve/${$("solver").value}?replay=true`,
       {method: "POST"});
   state.race = null; // a plain solve replaces any arena overlay
@@ -2113,6 +2127,7 @@ function animatePath() {
 async function raceSolvers() {
   const a = $("solver").value, b = $("rival").value;
   if (a === b) { log("err", "pick two different solvers to race"); return; }
+  leaveSpectate();
   $("race").disabled = true;
   try {
     const ra = await api(`/maze/${state.maze.id}/solve/${a}?replay=true`, {method: "POST"});
@@ -2188,6 +2203,7 @@ function raceSummary() {
  * follower on a braided maze) shows as such rather than as an error.
  */
 async function compareSolvers() {
+  leaveSpectate();
   const ids = [...$("solver").options].map(o => o.value);
   $("compare").disabled = true;
   const results = [];

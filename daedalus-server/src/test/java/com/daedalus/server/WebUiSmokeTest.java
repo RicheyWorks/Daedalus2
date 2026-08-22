@@ -94,10 +94,17 @@ class WebUiSmokeTest {
                 .doesNotContain("move(state.session.primary")
                 .doesNotContain("move(state.seat || state.session.primary");
         // Fog / Generate / Open session used to write while readOnly was still set.
+        // Daily / Campaign / Breed fetched, then adoptMaze cleared watch as a side effect.
+        // Solve painted a god-mode overlay on the watched maze.
         // leaveSpectate must run before those fetches, not after (play) or never (fog).
         assertLeaveBeforeWrite(html, "async function generate", "/maze/generate");
         assertLeaveBeforeWrite(html, "async function startFog", "/agent");
         assertLeaveBeforeWrite(html, "async function play", "/session?");
+        assertLeaveBeforeWrite(html, "async function loadDaily", "/maze/daily");
+        assertLeaveBeforeWrite(html, "async function loadCampaign", "/campaign");
+        assertLeaveBeforeWrite(html, "async function playStage", "/maze/${stage.mazeId}");
+        assertLeaveBeforeWrite(html, "async function crossbreed", "/maze/breed");
+        assertLeaveBeforeWrite(html, "async function solve", "/solve/");
     }
 
     /** First {@code leaveSpectate} after {@code start} is before {@code write}. */
