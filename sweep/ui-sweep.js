@@ -1076,6 +1076,86 @@ async function check(name, fn) {
         : JSON.stringify({src, before, after}).slice(0, 220)];
   });
 
+  await check('N22. hash hydrate leaves fog before fetch; late #session= does not seat after discard', async () => {
+    // Old body: #maze= fetched then adoptMaze no-op'd during fog, so the
+    // bar named a maze the canvas still walked. #session= adopt discarded
+    // but adoptSessionView still attached a spectator seat. Leave fog
+    // before the fetch (leave-walk path); same-hash still no-ops.
+    const src = await page.evaluate(() => {
+      const from = loadFromHash.toString();
+      const spec = spectate.toString();
+      const guard = from.indexOf('hashShowsCurrent()');
+      const drop = from.indexOf('state.fog = null');
+      const mazeGet = from.indexOf('await api(`/maze/${h.maze}`)');
+      const mazeDiscard = from.indexOf('if (state.fog)', mazeGet);
+      const mazeAdopt = from.indexOf('adoptMaze', mazeDiscard);
+      const specDrop = spec.indexOf('state.fog = null');
+      const specFetch = spec.indexOf('/session/');
+      const specAwait = spec.indexOf('await ');
+      const specDiscard = spec.indexOf('if (state.fog)', specAwait);
+      const specView = spec.indexOf('adoptSessionView', specDiscard);
+      return guard >= 0 && drop > guard && drop < mazeGet
+          && mazeDiscard > mazeGet && mazeAdopt > mazeDiscard
+          && specDrop >= 0 && specDrop < specFetch
+          && specDiscard > specAwait && specView > specDiscard;
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '33');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 33, null, {timeout:15000});
+    const a = await p2.evaluate(() => ({id: state.maze.id, hash: location.hash}));
+    await p2.fill('#seed', '34');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 34, null, {timeout:15000});
+    await p2.click('#fog');
+    await p2.waitForFunction(() => !!(state.fog && state.fog.agentId), null, {timeout:20000});
+    const same = await p2.evaluate(async () => {
+      const before = {fog: !!(state.fog && state.fog.agentId), id: state.maze.id};
+      await loadFromHash();
+      return {before, after: {fog: !!(state.fog && state.fog.agentId), id: state.maze && state.maze.id}};
+    });
+    await p2.evaluate(() => history.back());
+    await p2.waitForFunction(id => state.maze && state.maze.id === id && !state.fog,
+        a.id, {timeout:20000});
+    const back = await p2.evaluate(() => ({
+      fog: !!state.fog,
+      id: state.maze && state.maze.id,
+      hash: location.hash,
+    }));
+    await p2.fill('#seed', '35');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 35, null, {timeout:15000});
+    await p2.click('#play');
+    await p2.waitForFunction(() => !!state.session, null, {timeout:15000});
+    const sid = await p2.evaluate(() => state.session.id);
+    await p2.fill('#seed', '36');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 36, null, {timeout:15000});
+    await p2.route('**/api/v1/session/**', async route => {
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    await p2.evaluate(id => { location.hash = 'session=' + id; }, sid);
+    await p2.click('#fog');
+    await p2.waitForFunction(() => !!(state.fog && state.fog.agentId), null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const late = await p2.evaluate(() => ({
+      fog: !!(state.fog && state.fog.agentId),
+      session: !!state.session,
+      readOnly: !!state.readOnly,
+      hash: location.hash,
+    }));
+    await p2.close();
+    const ok = src && same.before.fog && same.after.fog && same.after.id === same.before.id
+        && back.id === a.id && !back.fog && back.hash === a.hash
+        && late.fog && !late.session && !late.readOnly && !/session=/.test(late.hash);
+    return [ok, ok ? 'Back left fog and hydrated; late #session= discarded'
+        : JSON.stringify({src, same, back, late}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

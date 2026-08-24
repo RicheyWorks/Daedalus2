@@ -1277,9 +1277,18 @@ function leaveMaze() {
  * different campaign id) drops it so a leftover stage cannot play.
  * `#campaign=SEED:N` hydrates that rung; a missing stage token is stage 0.
  * A hash with no maze kind drops the leftover maze (N14).
+ * A different maze / session / daily / campaign is a leave-fog path:
+ * Back / paste / Forward already wrote the bar, and adoptMaze used to
+ * no-op during fog without saying why, so the bar named a maze the
+ * canvas still walked. Leave before the fetch (same as N20 / N21).
+ * Same-hash still no-ops above and does not remint.
  */
 async function loadFromHash() {
   if (hashShowsCurrent()) return;
+  if (state.fog) {
+    state.fog = null;
+    setGodModeEnabled(true);
+  }
   const h = parseHash();
   const named = parseCampaignToken(h);
   if (!named || !state.campaign || String(state.campaign.seed) !== String(named.seed)) {
@@ -1304,7 +1313,9 @@ async function loadFromHash() {
   }
   if (h.maze) {
     try {
-      adoptMaze(await api(`/maze/${h.maze}`), null);
+      const maze = await api(`/maze/${h.maze}`);
+      if (state.fog) return;
+      adoptMaze(maze, null);
       pinHash();
       log("state", "loaded maze from permalink");
     } catch (e) {
@@ -1356,6 +1367,13 @@ window.addEventListener("hashchange", () => {
  * player topic (ADR-012).
  */
 async function spectate(sessionId) {
+  // #session= hydrate is a leave-fog path — the bar already named the
+  // session. Leave before the fetch; a Fog that starts mid-flight still
+  // hits adoptMaze's discard, and must not adoptSessionView after that.
+  if (state.fog) {
+    state.fog = null;
+    setGodModeEnabled(true);
+  }
   let view;
   try { view = await api(`/session/${sessionId}`); }
   catch (e) { log("err", nameGone(e.message) || e.message); return; }
@@ -1366,6 +1384,7 @@ async function spectate(sessionId) {
     log("err", nameGone(e.message) || e.message);
     return;
   }
+  if (state.fog) return;
   adoptSessionView(view);
   state.readOnly = true;
   armSpectatorWrites(false);

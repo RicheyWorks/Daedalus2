@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Hash hydrate leaves fog before fetch; late `#session=` does not seat after discard.** `#maze=` fetched then `adoptMaze` no-op'd during fog, so the bar named a maze the canvas still walked. A late `#session=` still ran `adoptSessionView` after adopt discarded. Leave fog before those fetches (Back / paste / Forward already wrote the bar); same-hash still no-ops. Discard adopt / the spectator seat when Fog starts mid-flight. Same class as N20 / N21.
+
 - **Late Generate after Fog does not replace the walk.** Generate /
   Daily / Campaign / Breed stay armed during fog and fetched, then
   `adoptMaze` always replaced the maze. A Fog that started mid-flight

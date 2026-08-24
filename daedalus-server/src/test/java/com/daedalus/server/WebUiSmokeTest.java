@@ -209,6 +209,31 @@ class WebUiSmokeTest {
                 "/maze/breed");
         assertDiscardAfterFetch(html, "async function crossbreed", "function parseHash",
                 "adoptMaze");
+        // N22. #maze= / #session= hydrate fetched then adoptMaze no-op'd
+        // during fog, so the bar named a maze the canvas still walked, and
+        // a late #session= still ran adoptSessionView after adopt discarded.
+        // Leave fog before those fetches (leave-walk path, same as N20);
+        // same-hash still no-ops. Discard adopt / adoptSessionView when
+        // Fog starts mid-flight.
+        assertLeaveFogBeforeFetch(html, "async function loadFromHash",
+                "// ---------- spectator mode", "/maze/${h.maze}");
+        assertLeaveFogBeforeFetch(html, "async function loadFromHash",
+                "// ---------- spectator mode", "spectate(h.session)");
+        int hashMaze = html.indexOf("if (h.maze)", html.indexOf("async function loadFromHash"));
+        int hashSpec = html.indexOf("// ---------- spectator mode", hashMaze);
+        assertThat(hashMaze).isGreaterThanOrEqualTo(0);
+        assertThat(hashSpec).isGreaterThan(hashMaze);
+        String mazeHydrate = html.substring(hashMaze, hashSpec);
+        int mazeGet = mazeHydrate.indexOf("await api(`/maze/${h.maze}`)");
+        int mazeDiscard = mazeHydrate.indexOf("if (state.fog)", mazeGet);
+        int mazeAdopt = mazeHydrate.indexOf("adoptMaze", mazeDiscard);
+        assertThat(mazeGet).isGreaterThanOrEqualTo(0);
+        assertThat(mazeDiscard).isGreaterThan(mazeGet);
+        assertThat(mazeAdopt).isGreaterThan(mazeDiscard);
+        assertLeaveFogBeforeFetch(html, "async function spectate",
+                "function adoptSessionView", "/session/${sessionId}");
+        assertDiscardAfterFetch(html, "async function spectate",
+                "function adoptSessionView", "adoptSessionView");
         int applyFrom = html.indexOf("function applyMove");
         int applyTo = html.indexOf("async function confirmWin");
         assertThat(applyFrom).isGreaterThanOrEqualTo(0);
@@ -282,6 +307,14 @@ class WebUiSmokeTest {
                 .contains("drawEmpty")
                 .doesNotContain("pinHash()");
         String fromHash = html.substring(hashFrom, hashTo);
+        // Leave fog after the same-hash guard and before any hydrate fetch,
+        // so a matching #maze= during fog still does not remint (N10).
+        int sameHash = fromHash.indexOf("hashShowsCurrent()");
+        int leaveFog = fromHash.indexOf("state.fog = null");
+        int sessionHydrate = fromHash.indexOf("if (h.session)");
+        assertThat(sameHash).isGreaterThanOrEqualTo(0);
+        assertThat(leaveFog).isGreaterThan(sameHash);
+        assertThat(sessionHydrate).isGreaterThan(leaveFog);
         int mazeKind = fromHash.indexOf("if (h.maze)");
         int dropCall = fromHash.lastIndexOf("leaveMaze()");
         assertThat(mazeKind).isGreaterThanOrEqualTo(0);
