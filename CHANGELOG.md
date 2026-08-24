@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Back from a campaign drops the ladder.**
+  `hashchange` re-hydrated the maze and hash (N10), but `adoptMaze` only
+  nulled `stageIndex`. `state.campaign` and `#campaignBox` stayed painted,
+  so a stage click still played a campaign maze the bar no longer named.
+  A non-campaign hydrate (or a different campaign id) now leaves the
+  ladder; a matching `#campaign=` hydrate still keeps it.
+
 - **Back/Forward re-hydrate the hash, and pinHash does not remint.**
   `loadFromHash` was boot-only. Generate / Daily / a `#maze=` hydrate wrote the
   bar; History Back updated the URL and left the canvas on the previous maze.

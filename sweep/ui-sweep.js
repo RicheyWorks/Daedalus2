@@ -593,6 +593,55 @@ async function check(name, fn) {
         : JSON.stringify({src, a: a.id, b: b.id, after, fetched: fetched.length}).slice(0, 220)];
   });
 
+  await check('N11. Back from a campaign drops the ladder', async () => {
+    // Old body: hashchange re-hydrated the maze (N10) but adoptMaze only
+    // nulled stageIndex. state.campaign and #campaignBox stayed painted;
+    // a stage click still played a campaign maze the bar no longer named.
+    const src = await page.evaluate(() => {
+      const s = loadFromHash.toString();
+      return typeof leaveCampaign === 'function'
+          && typeof hashShowsCurrent === 'function'
+          && s.includes('leaveCampaign()')
+          && s.includes('hashShowsCurrent()');
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '13');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 13, null, {timeout:15000});
+    const maze = await p2.evaluate(() => ({id: state.maze.id, hash: location.hash}));
+    await p2.click('#campaign');
+    await p2.waitForFunction(() => state.campaign && state.stageIndex === 0
+        && !!document.querySelector('#campaignBox a[data-stage]'), null, {timeout:40000});
+    await p2.evaluate(() => history.back());
+    await p2.waitForFunction(id => state.maze && state.maze.id === id
+        && !state.campaign
+        && !document.querySelector('#campaignBox a[data-stage]'), maze.id, {timeout:20000});
+    const after = await p2.evaluate(() => ({
+      id: state.maze && state.maze.id,
+      hash: location.hash,
+      campaign: !!state.campaign,
+      stages: document.querySelectorAll('#campaignBox a[data-stage]').length,
+    }));
+    let stillPlays = false;
+    try {
+      stillPlays = await p2.evaluate(async () => {
+        await playStage(0);
+        return !!(state.campaign && state.stageIndex === 0);
+      });
+    } catch (e) {
+      stillPlays = false;
+    }
+    await p2.close();
+    const ok = src && /maze=/.test(maze.hash) && after.id === maze.id
+        && /maze=/.test(after.hash) && !after.campaign && after.stages === 0
+        && !stillPlays;
+    return [ok, ok ? `Back dropped the ladder; ${after.hash.slice(0, 28)}`
+        : JSON.stringify({src, maze: maze.id, after, stillPlays}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

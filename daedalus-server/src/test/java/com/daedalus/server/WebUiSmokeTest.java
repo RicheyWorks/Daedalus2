@@ -141,7 +141,21 @@ class WebUiSmokeTest {
         assertThat(html.substring(hashFrom, hashTo))
                 .contains("if (hashShowsCurrent()) return")
                 .contains("addEventListener(\"hashchange\"")
-                .contains("loadFromHash()");
+                .contains("loadFromHash()")
+                .contains("leaveCampaign()")
+                .contains("loadCampaign");
+        // adoptMaze only nulled stageIndex. Back re-hydrated the maze (N10)
+        // and left state.campaign / #campaignBox painted, so a stage click
+        // still played a campaign maze the bar no longer named.
+        int leaveFrom = html.indexOf("function leaveCampaign");
+        int leaveTo = html.indexOf("function renderCampaign");
+        assertThat(leaveFrom).isGreaterThanOrEqualTo(0);
+        assertThat(leaveTo).isGreaterThan(leaveFrom);
+        assertThat(html.substring(leaveFrom, leaveTo))
+                .contains("state.campaign = null")
+                .contains("$(\"campaignBox\")");
+        assertThat(adopt).contains("state.stageIndex = null")
+                .doesNotContain("state.campaign = null");
     }
 
     /** First {@code leaveSpectate} after {@code start} is before {@code write}. */

@@ -907,6 +907,14 @@ async function loadCampaign(seed) {
   await playStage(0);
 }
 
+/** Drop the ladder so a leftover stage click cannot play a maze the bar does not name. */
+function leaveCampaign() {
+  state.campaign = null;
+  state.stageIndex = null;
+  state.cleared = {};
+  $("campaignBox").innerHTML = "six stages, gentle to brutal — hazards ramp in late";
+}
+
 function renderCampaign() {
   const c = state.campaign;
   if (!c) return;
@@ -1148,10 +1156,17 @@ function refuseSpectatorWrite(what) {
  * #session=, #campaign=, #daily, #maze= or #generator=: restore the view that hash names.
  * Boot and hashchange share this path. The same-hash guard stops pinHash's write
  * from looping — Back/Forward (and a pasted hash after boot) still hydrate.
+ * A matching campaign hash keeps the ladder; any other permalink (or a
+ * different campaign id) drops it so a leftover stage cannot play.
  */
 async function loadFromHash() {
   if (hashShowsCurrent()) return;
   const h = parseHash();
+  if (h.campaign == null || h.campaign === ""
+      || !state.campaign
+      || String(state.campaign.seed) !== String(h.campaign)) {
+    leaveCampaign();
+  }
   if (h.session) { await spectate(h.session); return; }
   if (h.campaign != null && h.campaign !== "") {
     try { await loadCampaign(Number(h.campaign)); }
