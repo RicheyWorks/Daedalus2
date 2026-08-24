@@ -1093,6 +1093,21 @@ function pinHash() {
   if (location.hash !== want) location.hash = next;
 }
 
+/**
+ * True when the bar already names what the canvas is showing. pinHash's
+ * write fires hashchange; that must not re-fetch / re-adopt / remint.
+ */
+function hashShowsCurrent() {
+  const h = parseHash();
+  const p = currentPermalink();
+  if (h.session) return p.session === h.session;
+  if (h.campaign != null && h.campaign !== "") return p.campaign === String(h.campaign);
+  if (h.daily) return !!p.daily;
+  if (h.maze) return p.maze === h.maze;
+  if (h.generator) return p.generator === h.generator;
+  return !p.session && p.campaign == null && !p.daily && !p.maze && !p.generator;
+}
+
 /** Who this tab moves — join-from-spectate keeps primary as the opener. */
 function thisTabSeat() {
   return state.session && (state.seat || state.session.primary);
@@ -1129,8 +1144,13 @@ function refuseSpectatorWrite(what) {
   return true;
 }
 
-/** #session=, #campaign=, #daily, #maze= or #generator=: restore the view that hash names. */
+/**
+ * #session=, #campaign=, #daily, #maze= or #generator=: restore the view that hash names.
+ * Boot and hashchange share this path. The same-hash guard stops pinHash's write
+ * from looping — Back/Forward (and a pasted hash after boot) still hydrate.
+ */
 async function loadFromHash() {
+  if (hashShowsCurrent()) return;
   const h = parseHash();
   if (h.session) { await spectate(h.session); return; }
   if (h.campaign != null && h.campaign !== "") {
@@ -1177,6 +1197,10 @@ async function loadFromHash() {
     }
   }
 }
+
+window.addEventListener("hashchange", () => {
+  loadFromHash().catch(e => log("err", e.message));
+});
 
 // ---------- spectator mode (ADR-006 idea #6) ----------
 /**

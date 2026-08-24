@@ -551,6 +551,48 @@ async function check(name, fn) {
         : JSON.stringify({src, minted: minted.length, dump}).slice(0, 220)];
   });
 
+  await check('N10. Back re-hydrates the hash; pinHash does not remint', async () => {
+    // Old body: loadFromHash was boot-only. Generate wrote #maze=B; Back left
+    // the bar on A and the canvas on B. pinHash's write must not re-GET.
+    const src = await page.evaluate(() => {
+      const s = loadFromHash.toString();
+      return typeof hashShowsCurrent === 'function'
+          && s.includes('hashShowsCurrent()');
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '11');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 11, null, {timeout:15000});
+    const a = await p2.evaluate(() => ({id: state.maze.id, hash: location.hash}));
+    await p2.fill('#seed', '12');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 12, null, {timeout:15000});
+    const b = await p2.evaluate(() => ({id: state.maze.id, hash: location.hash}));
+    const fetched = [];
+    const onReq = (r) => {
+      if (r.method() === 'GET' && r.url().includes(`/api/v1/maze/${a.id}`)
+          && !/[?&]/.test(r.url().split(`/api/v1/maze/${a.id}`)[1] || '')) {
+        fetched.push(r.url());
+      }
+    };
+    p2.on('request', onReq);
+    try {
+      await p2.evaluate(() => history.back());
+      await p2.waitForFunction(id => state.maze && state.maze.id === id, a.id, {timeout:20000});
+    } finally {
+      p2.off('request', onReq);
+    }
+    const after = await p2.evaluate(() => ({id: state.maze.id, hash: location.hash}));
+    await p2.close();
+    const ok = src && a.id !== b.id && /maze=/.test(a.hash) && /maze=/.test(b.hash)
+        && after.id === a.id && after.hash === a.hash && fetched.length === 1;
+    return [ok, ok ? `Back ${b.hash.slice(0, 24)} → ${a.hash.slice(0, 24)}; one GET`
+        : JSON.stringify({src, a: a.id, b: b.id, after, fetched: fetched.length}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

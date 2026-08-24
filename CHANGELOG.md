@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Back/Forward re-hydrate the hash, and pinHash does not remint.**
+  `loadFromHash` was boot-only. Generate / Daily / a `#maze=` hydrate wrote the
+  bar; History Back updated the URL and left the canvas on the previous maze.
+  `hashchange` re-runs the boot hydrate; a same-hash no-op stops the write from
+  looping.
+
 - **Show ASCII is a text/plain dump, not a solve.** Living-tick refresh and a
   spectator click sent `?solve=`, which ran a solver and published
   `MazeSolvedEvent` while claiming to be a lab read. The GET without a

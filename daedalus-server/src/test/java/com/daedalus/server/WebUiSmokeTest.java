@@ -88,6 +88,7 @@ class WebUiSmokeTest {
                 .contains("nameBudget(raw)")
                 .contains("leaveSpectate").contains("thisTabSeat")
                 .contains("armSpectatorWrites").contains("refuseSpectatorWrite")
+                .contains("hashShowsCurrent").contains("addEventListener(\"hashchange\"")
                 .contains("mazeStart(state.maze) || state.session.positions")
                 .contains("spectating is read-only")
                 .doesNotContain("positions[state.session.primary]")
@@ -130,6 +131,17 @@ class WebUiSmokeTest {
         assertThat(adopt)
                 .contains("$(\"generator\").value = maze.generatorId")
                 .contains("$(\"seed\").value = maze.seed");
+        // loadFromHash was boot-only. pinHash wrote the bar; Back updated the
+        // URL and left the canvas on the previous maze. hashchange re-runs the
+        // boot hydrate; the same-hash guard stops pinHash's write from looping.
+        int hashFrom = html.indexOf("async function loadFromHash");
+        int hashTo = html.indexOf("// ---------- spectator mode");
+        assertThat(hashFrom).isGreaterThanOrEqualTo(0);
+        assertThat(hashTo).isGreaterThan(hashFrom);
+        assertThat(html.substring(hashFrom, hashTo))
+                .contains("if (hashShowsCurrent()) return")
+                .contains("addEventListener(\"hashchange\"")
+                .contains("loadFromHash()");
     }
 
     /** First {@code leaveSpectate} after {@code start} is before {@code write}. */
