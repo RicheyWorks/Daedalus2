@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Late `#session=` / spectate after Generate does not steal the maze now on screen.** Initial hydrate `adoptMaze`'d the session maze before its fog check and had no maze-id discard. Generate mid-flight replaced the canvas, then the late GET still adopted over it. Capture maze id (or none) before the fetch; skip `adoptMaze` / `adoptSessionView` when fog is on or the canvas id is no longer the one you left. Leave-fog-before-fetch stays (N22). Stay until join lands. Poll discard stays (N34).
+
 - **Late Daily / Breed / `#maze=` after Generate does not steal the maze now on screen.** Those hydrates discarded `adoptMaze` after only fog. Generate mid-flight replaced the canvas, then the late fetch still adopted over it. Capture maze id (or none) before the fetch; discard when fog is on or the canvas id is no longer the one you left. Campaign / `playStage` / `#daily=` siblings too. `playStage` still adopts the same campaign stage. Fog discard stays (N21 / N22).
 
 - **Late Fog start after Play does not re-arm fog on the session walk.** `startFog` POSTed `/agent` then applied after only maze-id. Play on the same maze seats a session; maze id still matches, so a late mint dropped the seat and `applyFogView` recreated `state.fog` on the play walk. Capture session id; discard after the POST when the seated session is new. Maze-id discard stays (N26). Same class as N38.

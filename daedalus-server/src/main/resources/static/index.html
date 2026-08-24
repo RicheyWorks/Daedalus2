@@ -1421,11 +1421,23 @@ async function spectate(sessionId) {
     state.fog = null;
     setGodModeEnabled(true);
   }
+  // Generate mid-flight: a late #session= would adopt over the maze
+  // now on screen (N41). Capture maze id (or none); skip adoptMaze /
+  // adoptSessionView when fog is on or the canvas id no longer
+  // matches. Fog discard stays (N22). Stay until join lands.
+  const mazeId = state.maze && state.maze.id;
   let view;
   try { view = await api(`/session/${sessionId}`); }
   catch (e) { log("err", nameGone(e.message) || e.message); return; }
+  if (state.fog) return;
+  if (state.maze && state.maze.id !== mazeId) return;
+  if (!state.maze && mazeId) return;
   try {
-    adoptMaze(await api(`/maze/${view.mazeId}`), null, "spectated session");
+    const maze = await api(`/maze/${view.mazeId}`);
+    if (state.fog) return;
+    if (state.maze && state.maze.id !== mazeId) return;
+    if (!state.maze && mazeId) return;
+    adoptMaze(maze, null, "spectated session");
   } catch (e) {
     // Session still open, maze idle-TTL evicted — do not dump the status line.
     log("err", nameGone(e.message) || e.message);

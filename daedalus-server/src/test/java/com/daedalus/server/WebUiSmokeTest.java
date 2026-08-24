@@ -318,6 +318,18 @@ class WebUiSmokeTest {
                 "function adoptSessionView", "/session/${sessionId}");
         assertDiscardAfterFetch(html, "async function spectate",
                 "function adoptSessionView", "adoptSessionView");
+        // N41. #session= / spectate adoptMaze'd the session maze
+        // before its fog check and had no maze-id discard. Generate
+        // mid-flight replaced the canvas, then the late GET still
+        // adopted over it. Capture maze id (or none) before the
+        // fetch; skip adoptMaze / adoptSessionView when fog is on
+        // or the canvas id is no longer the one you left. Leave
+        // fog before the fetch stays (N22). Stay until join lands.
+        // Poll discard stays (N34).
+        assertMazeIdDiscardAfterFetch(html, "async function spectate",
+                "function adoptSessionView", "adoptMaze");
+        assertMazeIdDiscardAfterFetch(html, "async function spectate",
+                "function adoptSessionView", "adoptSessionView");
         // N23. join() POSTed /join then always wrote the seat. A Fog
         // that started mid-flight hit a nulled state.session or
         // reattached the seat after the walk dropped it. Stay a

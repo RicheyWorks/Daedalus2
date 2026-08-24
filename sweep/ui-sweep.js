@@ -2488,6 +2488,72 @@ async function check(name, fn) {
         : JSON.stringify({src, lateDaily, lateHash, first}).slice(0, 220)];
   });
 
+  await check('N41. late #session= after Generate does not steal the maze now on screen', async () => {
+    // Old body: spectate GET /session then adoptMaze before the fog
+    // check, and had no maze-id discard. Generate mid-flight
+    // replaced the canvas, then the late GET still adopted over it.
+    // Capture maze id (or none); skip adoptMaze / adoptSessionView
+    // when fog is on or the canvas id changed. Leave-fog-before-fetch
+    // stays (N22). Stay until join lands. Poll discard stays (N34).
+    const src = await page.evaluate(() => {
+      const s = spectate.toString();
+      const id = s.indexOf('mazeId');
+      const fetch = s.indexOf('await ');
+      const fog = s.indexOf('if (state.fog)', fetch);
+      const discard = s.indexOf('state.maze.id !== mazeId', fetch);
+      const adopt = s.indexOf('adoptMaze', Math.max(fog, discard));
+      const view = s.indexOf('adoptSessionView', adopt);
+      const drop = s.indexOf('state.fog = null');
+      const sess = s.indexOf('/session/');
+      return id >= 0 && id < fetch && fetch >= 0
+          && fog > fetch && discard > fog && adopt > discard && view > adopt
+          && drop >= 0 && drop < sess;
+    });
+    await page.fill('#rows', '15'); await page.fill('#cols', '15'); await page.fill('#seed', '102');
+    await page.click('#generate');
+    await page.waitForFunction(() => state.maze && state.maze.seed === 102, null, {timeout:15000});
+    await page.click('#play');
+    await page.waitForFunction(() => !!state.session, null, {timeout:15000});
+    const host = await page.evaluate(() => ({
+      sid: state.session.id,
+      maze: state.maze.id,
+    }));
+    const p2 = await ctx.newPage();
+    await p2.route('**/api/v1/session/*', async route => {
+      const url = new URL(route.request().url());
+      const parts = url.pathname.split('/').filter(Boolean);
+      const extra = parts[4];
+      if (route.request().method() === 'GET' && !extra && parts[3] === host.sid) {
+        await new Promise(r => setTimeout(r, 1200));
+      }
+      await route.continue();
+    });
+    const pending = p2.waitForRequest(r => {
+      const url = new URL(r.url());
+      const parts = url.pathname.split('/').filter(Boolean);
+      return r.method() === 'GET' && parts[2] === 'session' && parts[3] === host.sid && !parts[4];
+    });
+    await p2.goto(`http://localhost:8080/#session=${host.sid}`, { waitUntil: 'domcontentloaded' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await pending;
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '103');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 103, null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const late = await p2.evaluate(() => ({
+      seed: state.maze && state.maze.seed,
+      id: state.maze && state.maze.id,
+      session: !!state.session,
+      readOnly: !!state.readOnly,
+    }));
+    await p2.close();
+    const ok = src && late.seed === 103 && late.id !== host.maze
+        && !late.session && !late.readOnly;
+    return [ok, ok ? 'late #session= discarded; generated maze stayed'
+        : JSON.stringify({src, late, host}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),
