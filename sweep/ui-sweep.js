@@ -2277,6 +2277,78 @@ async function check(name, fn) {
         : JSON.stringify({src, after, first}).slice(0, 220)];
   });
 
+  await check('N37. late ghost after Generate + Play does not seat the maze now on screen', async () => {
+    // Old body: summonGhost GETs /ghost then armed state.ghost
+    // after only fog + session-exists. Generate + Play mid-flight
+    // seated the old recording on the maze now on screen. Capture
+    // maze id; discard after the GET. Fog discard stays (N25).
+    // Ghost is maze-bound, not seat-bound. startFog still must
+    // not null tour (N17). Must not GET /maze.
+    const src = await page.evaluate(() => {
+      const s = summonGhost.toString();
+      const id = s.indexOf('mazeId');
+      const get = s.indexOf('/ghost');
+      const fog = s.indexOf('if (state.fog)', get);
+      const maze = s.indexOf('state.maze.id !== mazeId', get);
+      const fogSrc = startFog.toString();
+      return id >= 0 && id < get && get >= 0 && fog > get
+          && s.indexOf('if (!state.session)', get) > fog
+          && maze > fog
+          && s.indexOf('state.ghost =', maze) > maze
+          && s.includes('/maze/${mazeId}/ghost')
+          && !s.includes('/maze/${state.maze.id}')
+          && !s.includes('state.session.id !== sessionId')
+          && !fogSrc.includes('state.tour = null');
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '96');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 96, null, {timeout:15000});
+    const first = await p2.evaluate(() => state.maze.id);
+    await p2.route('**/api/v1/maze/*/ghost', async route => {
+      const url = route.request().url();
+      await new Promise(r => setTimeout(r, 1200));
+      if (url.includes(first)) {
+        await route.fulfill({
+          status: 200,
+          headers: {'content-type': 'application/json'},
+          body: JSON.stringify({
+            mazeId: first,
+            playerName: 'speedrunner',
+            score: 42,
+            elapsedMs: 1500,
+            moves: [{to: {row: 0, col: 1}, tMs: 200}],
+          }),
+        });
+        return;
+      }
+      await route.fulfill({status: 404, body: ''});
+    });
+    await p2.click('#play');
+    await p2.waitForFunction(() => !!state.session, null, {timeout:15000});
+    await p2.fill('#seed', '97');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 97, null, {timeout:20000});
+    await p2.click('#play');
+    await p2.waitForFunction(() => !!state.session, null, {timeout:15000});
+    await p2.waitForTimeout(1800);
+    const after = await p2.evaluate(() => ({
+      seed: state.maze && state.maze.seed,
+      id: state.maze && state.maze.id,
+      session: !!state.session,
+      ghost: state.ghost && state.ghost.name,
+      timer: !!state.ghostTimer,
+    }));
+    await p2.close();
+    const ok = src && after.seed === 97 && after.id !== first
+        && after.session && after.ghost !== 'speedrunner' && !after.timer;
+    return [ok, ok ? 'late ghost discarded; generated maze stayed unseated'
+        : JSON.stringify({src, after, first}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

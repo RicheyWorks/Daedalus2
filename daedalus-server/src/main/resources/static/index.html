@@ -2109,13 +2109,19 @@ function paintLensCaption(l) {
 /** If this maze has a recorded best run, race it: same pacing, hesitations and all. */
 async function summonGhost() {
   if (!state.session) return;
+  const mazeId = state.maze && state.maze.id;
+  if (!mazeId) return;
   let run;
-  try { run = await api(`/maze/${state.maze.id}/ghost`); }
+  try { run = await api(`/maze/${mazeId}/ghost`); }
   catch (ignored) { return; } // 404 — nobody has finished this maze yet
   // Fog dropped the seat and cleared the ghost while this GET was
   // out. Do not re-arm the ticker onto a walk that just emptied it.
+  // Generate + Play: a late /ghost would seat the old recording
+  // on the maze now on screen (N37). Maze-bound, not seat-bound —
+  // a new Play on the same maze still races this recording.
   if (state.fog) return;
   if (!state.session) return;
+  if (!state.maze || state.maze.id !== mazeId) return;
   // Recording is a walk from the maze start. A late #session= hydrate used
   // the opener's current cell, so the ghost trail teleported from mid-run.
   const start = mazeStart(state.maze) || state.session.positions[thisTabSeat()];

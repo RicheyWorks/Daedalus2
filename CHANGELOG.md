@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Late ghost after Generate does not seat the maze now on screen.** `summonGhost()` GETs `/ghost` then armed `state.ghost` and the ticker after only a fog + session-exists check. Generate + Play mid-flight seated the old recording on the maze now on screen. Capture maze id; discard after the GET when fog is on, the seat is gone, or maze id no longer matches. Fog discard stays (N25). Ghost is maze-bound, not seat-bound.
+
 - **Late Join after Generate does not seat the maze now on screen.** `join()` POSTed `/join` then wrote the seat after only a fog + session-exists check. Generate + Play / a new `#session=` mid-flight wrote the joiner (`leaveSpectate`, pin) onto the maze now on screen. Capture session and maze id; discard after the POST when fog is on or the seat no longer matches. Fog discard stays (N23). Stay a watcher until join lands.
 
 - **Late confirmWin / tour status after Generate does not paint the maze now on screen.** `confirmWin()` GETs `/session/{id}` then `declareWin` after only a fog + session-exists check; `refreshTourStatus()` painted hunt status the same way. Generate + a new Play mid-flight wrote a win (status, leaderboard, campaign) onto the maze now on screen. Capture session and maze id; discard after the GET when fog is on or the seat no longer matches. `tourVerdict` sibling too. Fog discard stays (N24). Fog still keeps tour (N17).

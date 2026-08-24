@@ -342,6 +342,32 @@ class WebUiSmokeTest {
         assertThat(ghostArm).isGreaterThan(ghostDiscard);
         assertThat(ghost.indexOf("if (!state.session)", ghostGet)).isGreaterThan(ghostDiscard);
         assertThat(ghost.indexOf("setInterval", ghostDiscard)).isGreaterThan(ghostArm);
+        // N37. After only fog + session-exists, Generate + Play
+        // mid-flight armed the old recording on the maze now on
+        // screen. Capture maze id before the GET; discard after
+        // when fog is on, the seat is gone, or maze id no longer
+        // matches. Ghost is maze-bound, not seat-bound — no
+        // session-id pin. Must not GET /maze. startFog still
+        // must not null tour (N17).
+        assertMazeIdDiscardAfterFetch(html, "async function summonGhost",
+                "async function simulateTraffic", "state.ghost");
+        int n37Id = ghost.indexOf("const mazeId");
+        int n37Get = ghost.indexOf("/maze/${mazeId}/ghost");
+        int n37Fog = ghost.indexOf("if (state.fog)", n37Get);
+        int n37Sess = ghost.indexOf("if (!state.session)", n37Get);
+        int n37Maze = ghost.indexOf("state.maze.id !== mazeId", n37Get);
+        int n37Arm = ghost.indexOf("state.ghost =", n37Maze);
+        assertThat(n37Id).isGreaterThanOrEqualTo(0);
+        assertThat(n37Id).isLessThan(n37Get);
+        assertThat(n37Get).isGreaterThanOrEqualTo(0);
+        assertThat(n37Fog).isGreaterThan(n37Get);
+        assertThat(n37Sess).isGreaterThan(n37Fog);
+        assertThat(n37Maze).isGreaterThan(n37Sess);
+        assertThat(n37Arm).isGreaterThan(n37Maze);
+        assertThat(ghost.indexOf("setInterval", n37Arm)).isGreaterThan(n37Arm);
+        assertThat(ghost).doesNotContain("/maze/${state.maze.id}");
+        assertThat(ghost).doesNotContain("tourFor");
+        assertThat(ghost).doesNotContain("state.session.id !== sessionId");
         // N26. fogStep POSTed /step then always applyFogView, which
         // recreates state.fog. Generate / Play that dropped the walk
         // mid-flight still got the old openings carved into the maze
