@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Late campaign hazard `/live` or `/traffic` after Generate does not bind the maze now on screen.** `playStage` POSTed those hazards then always disabled `#live` and armed a poller. Generate mid-flight bound the maze now on screen. Discard after the POST when maze id no longer matches the stage. Fog stays — living+fog is honest.
+
 - **Late `/live` or `/traffic` after Generate does not bind the maze now on screen.** `bringToLife()` / `simulateTraffic()` POSTed then always disabled the button and armed a poller. `onMutation` logged the tick and could re-enable `#live` after `refreshLivingMaze` discarded. Discard after the POST / refresh when maze id no longer matches. Fog stays — living+fog is honest.
 
 - **Late move after Fog or a new session does not overwrite status or the new seat.** `move()` POSTed `/move` then always `flashStatus` / `applyMove`. A blocked reply overwrote fog status; Generate + a new Open session wrote the old hop onto the new seat. Arrows and click-to-move both call `move()`. Discard after the POST when fog is on or the session/maze/seat no longer match.

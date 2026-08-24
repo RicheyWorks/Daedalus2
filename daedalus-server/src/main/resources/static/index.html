@@ -1012,12 +1012,17 @@ async function playStage(index) {
     if (!path) { log("err", `unknown hazard "${hazard}" — server declares one this client can't start`); continue; }
     try {
       await api(`/maze/${stage.mazeId}/${path}`, {method: "POST"});
+      // Generate / Daily / Breed replaced the maze while this POST
+      // was out. Disabling #live and arming a poller would bind the
+      // maze now on screen. Fog stays — living under fog is honest.
+      if (!state.maze || state.maze.id !== stage.mazeId) return;
       log("state", `hazard active on this stage: ${hazard}`
           + (hazard === "living" && stage.hazards.includes("hardening") ? " + hardening" : ""));
     } catch (e) {
       log("err", `could not start ${hazard}: ${e.message}`);
     }
   }
+  if (!state.maze || state.maze.id !== stage.mazeId) return;
   if (stage.hazards.includes("living") || stage.hazards.includes("hardening")) {
     $("live").disabled = true;
     if ($("harden")) $("harden").disabled = true;

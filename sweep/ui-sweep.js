@@ -1645,6 +1645,62 @@ async function check(name, fn) {
         : JSON.stringify({src, lateLive, lateTraffic, lateTick, first}).slice(0, 220)];
   });
 
+  await check('N29. late campaign hazard /live after Generate does not bind the new maze', async () => {
+    // Old body: playStage POSTed hazard /live / /traffic then always
+    // disabled #live and armed startLivePolling. Generate mid-flight
+    // bound the maze now on screen. Discard after those POSTs when
+    // maze id no longer matches the stage. Fog stays — living+fog
+    // is honest (N19 / Q2 / N28).
+    const src = await page.evaluate(() => {
+      const s = playStage.toString();
+      const post = s.indexOf('method: "POST"');
+      const discard = s.indexOf('state.maze.id !== stage.mazeId', post);
+      const hazard = s.slice(s.indexOf('for (const hazard'));
+      return post >= 0 && discard > post
+          && s.indexOf('$("live").disabled = true') > discard
+          && s.indexOf('startLivePolling') > discard
+          && !hazard.includes('if (state.fog)');
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.click('#campaign');
+    await p2.waitForFunction(() => state.campaign && state.stageIndex === 0
+        && !!document.querySelector('#campaignBox a[data-stage="4"]'), null, {timeout:40000});
+    await p2.route('**/api/v1/maze/*/live*', async route => {
+      if (route.request().method() !== 'POST') return route.continue();
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    await p2.route('**/api/v1/maze/*/traffic', async route => {
+      if (route.request().method() !== 'POST') return route.continue();
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    const liveInFlight = p2.waitForRequest(r =>
+        r.method() === 'POST' && /\/maze\/[^/]+\/live/.test(r.url()), {timeout: 40000});
+    await p2.evaluate(() => document.querySelector('#campaignBox a[data-stage="4"]').click());
+    await liveInFlight;
+    const stageId = await p2.evaluate(() => state.maze && state.maze.id);
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '64');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 64, null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const late = await p2.evaluate(() => ({
+      live: document.getElementById('live').disabled,
+      poll: !!state.livePoll,
+      seed: state.maze && state.maze.seed,
+      id: state.maze && state.maze.id,
+    }));
+    await p2.unroute('**/api/v1/maze/*/live*');
+    await p2.unroute('**/api/v1/maze/*/traffic');
+    await p2.close();
+    const ok = src && !late.live && !late.poll && late.seed === 64 && late.id !== stageId;
+    return [ok, ok ? 'late campaign hazard discarded; generated maze stayed unbound'
+        : JSON.stringify({src, late, stageId}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

@@ -446,6 +446,28 @@ class WebUiSmokeTest {
         assertThat(pulseDiscard).isGreaterThan(pulseRefresh);
         assertThat(pulseOn).isGreaterThan(pulseDiscard);
         assertThat(pulse).doesNotContain("if (state.fog)");
+        // N29. playStage POSTed hazard /live / /traffic then always
+        // disabled #live and armed a poller. Generate mid-flight
+        // bound the maze now on screen. Discard after those POSTs
+        // when maze id no longer matches the stage. Fog stays —
+        // living+fog is honest (N19 / Q2 / N28). Not if (state.fog)
+        // after the POST; that would stop the run.
+        int n29From = html.indexOf("async function playStage");
+        int n29To = html.indexOf("async function crossbreed");
+        assertThat(n29From).isGreaterThanOrEqualTo(0);
+        assertThat(n29To).isGreaterThan(n29From);
+        String n29 = html.substring(n29From, n29To);
+        int n29Post = n29.indexOf("method: \"POST\"");
+        int n29Discard = n29.indexOf("state.maze.id !== stage.mazeId", n29Post);
+        int n29Off = n29.indexOf("$(\"live\").disabled = true");
+        int n29Poll = n29.indexOf("startLivePolling");
+        assertThat(n29Post).isGreaterThanOrEqualTo(0);
+        assertThat(n29Discard).isGreaterThan(n29Post);
+        assertThat(n29Off).isGreaterThan(n29Discard);
+        assertThat(n29Poll).isGreaterThan(n29Discard);
+        int n29Hazards = n29.indexOf("for (const hazard");
+        assertThat(n29Hazards).isGreaterThanOrEqualTo(0);
+        assertThat(n29.substring(n29Hazards)).doesNotContain("if (state.fog)");
         int playerFrom = html.indexOf("if (state.session) {",
                 html.indexOf("function resubscribe"));
         int playerTo = html.indexOf("/topic/plugins/failures");
