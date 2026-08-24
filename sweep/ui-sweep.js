@@ -2171,6 +2171,112 @@ async function check(name, fn) {
         : JSON.stringify({src, lateGen, lateFog, lateSess, host, sidB}).slice(0, 220)];
   });
 
+  await check('N35. late confirmWin / tour status after Generate do not paint the maze now on screen', async () => {
+    // Old body: confirmWin GETs /session/{id} then declareWin after
+    // only a fog + session-exists check. refreshTourStatus painted
+    // hunt status the same way. Generate + a new Play mid-flight
+    // wrote a win (status, leaderboard, campaign) onto the maze now
+    // on screen. Capture session + maze id; discard after the GET.
+    // tourVerdict sibling too. N24 fog discard stays. startFog
+    // still must not null tour (N17). Must not GET /maze.
+    const src = await page.evaluate(() => {
+      const w = confirmWin.toString();
+      const t = refreshTourStatus.toString();
+      const v = tourVerdict.toString();
+      const d = declareWin.toString();
+      const wGet = w.indexOf('/session/${sessionId}');
+      const wFog = w.indexOf('if (state.fog)', wGet);
+      const wSess = w.indexOf('state.session.id !== sessionId', wGet);
+      const wMaze = w.indexOf('state.maze.id !== mazeId', wGet);
+      const tGet = t.indexOf('/session/${sessionId}/tour');
+      const tFog = t.indexOf('if (state.fog)', tGet);
+      const tSess = t.indexOf('state.session.id !== sessionId', tGet);
+      const tMaze = t.indexOf('state.maze.id !== mazeId', tGet);
+      const vAwait = v.indexOf('await refreshTourStatus()');
+      const vFog = v.indexOf('if (state.fog)', vAwait);
+      const vMaze = v.indexOf('state.maze.id !== mazeId', vAwait);
+      const dTv = d.indexOf('tourVerdict');
+      const dMaze = d.indexOf('state.maze.id !== mazeId', dTv);
+      const fogSrc = startFog.toString();
+      return w.indexOf('const sessionId') >= 0 && w.indexOf('const mazeId') > w.indexOf('const sessionId')
+          && w.indexOf('const mazeId') < wGet && wGet >= 0 && wFog > wGet && wSess > wFog
+          && wMaze > wSess && w.indexOf('declareWin', wMaze) > wMaze
+          && !w.includes('/session/${state.session.id}') && !w.includes('/maze/${')
+          && t.indexOf('const sessionId') >= 0 && t.indexOf('const mazeId') > t.indexOf('const sessionId')
+          && t.indexOf('const mazeId') < tGet && tGet >= 0 && tFog > tGet && tSess > tFog
+          && tMaze > tSess && t.indexOf('$("status")', tMaze) > tMaze
+          && !t.includes('/session/${state.session.id}') && !t.includes('/maze/${')
+          && !t.includes('tourFor')
+          && v.indexOf('const mazeId') >= 0 && v.indexOf('const mazeId') < vAwait
+          && vAwait >= 0 && vFog > vAwait && vMaze > vFog && !v.includes('/maze/${')
+          && d.indexOf('const mazeId') >= 0 && d.indexOf('const mazeId') < d.indexOf('state.won =')
+          && dTv >= 0 && dMaze > dTv && d.indexOf('$("status")', dMaze) > dMaze
+          && !fogSrc.includes('state.tour = null');
+    });
+    const p2 = await ctx.newPage();
+    await p2.route('**/api/v1/session/**', async route => {
+      const url = new URL(route.request().url());
+      const segs = url.pathname.split('/').filter(Boolean);
+      const method = route.request().method();
+      const isTour = method === 'GET' && segs[segs.length - 1] === 'tour';
+      const isSnap = method === 'GET' && segs.length === 4 && segs[2] === 'session';
+      if (!isTour && !isSnap) return route.continue();
+      await new Promise(r => setTimeout(r, 1200));
+      if (isTour) {
+        await route.fulfill({
+          status: 200,
+          headers: {'content-type': 'application/json'},
+          body: JSON.stringify({
+            remaining: [], total: 3, collected: 3, complete: true, walked: 10, optimal: 8,
+          }),
+        });
+        return;
+      }
+      await route.fulfill({
+        status: 200,
+        headers: {'content-type': 'application/json'},
+        body: JSON.stringify({completed: true, completedBy: 'web'}),
+      });
+    });
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '94');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 94, null, {timeout:15000});
+    await p2.click('#play');
+    await p2.waitForFunction(() => !!state.session, null, {timeout:15000});
+    const first = await p2.evaluate(() => ({sid: state.session.id, maze: state.maze.id}));
+    await p2.evaluate(() => {
+      state.tour = state.tour || {waypoints: [], optimalCost: 0};
+      void refreshTourStatus();
+      void confirmWin('web');
+    });
+    await p2.fill('#seed', '95');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 95, null, {timeout:20000});
+    await p2.click('#play');
+    await p2.waitForFunction(() => !!state.session, null, {timeout:15000});
+    await p2.evaluate(() => {
+      state.tour = state.tour || {waypoints: [], optimalCost: 0};
+    });
+    await p2.waitForTimeout(1800);
+    const after = await p2.evaluate(() => ({
+      seed: state.maze && state.maze.seed,
+      id: state.maze && state.maze.id,
+      sid: state.session && state.session.id,
+      won: state.won,
+      status: document.getElementById('status').textContent,
+      tour: !!state.tour,
+    }));
+    await p2.close();
+    const painted = /reached the goal|waypoint hunt|waypoints collected/i.test(after.status || '');
+    const ok = src && after.seed === 95 && after.id !== first.maze
+        && after.sid && after.sid !== first.sid && !after.won && !painted;
+    return [ok, ok ? 'late win/hunt discarded; generated maze stayed unpainted'
+        : JSON.stringify({src, after, first}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

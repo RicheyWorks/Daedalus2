@@ -283,7 +283,7 @@ class WebUiSmokeTest {
         assertThat(winFrom).isGreaterThanOrEqualTo(0);
         assertThat(winTo).isGreaterThan(winFrom);
         String win = html.substring(winFrom, winTo);
-        int winGet = win.indexOf("/session/${state.session.id}");
+        int winGet = win.indexOf("/session/${sessionId}");
         int winDiscard = win.indexOf("if (state.fog)", winGet);
         int winDeclare = win.indexOf("declareWin", winDiscard);
         assertThat(winGet).isGreaterThanOrEqualTo(0);
@@ -610,6 +610,97 @@ class WebUiSmokeTest {
         assertThat(n34.substring(n34Poll)).doesNotContain("/session/${state.session.id}");
         assertThat(n34.substring(n34Poll)).doesNotContain("/maze/${");
         assertThat(n34.substring(n34Poll)).doesNotContain("tourFor");
+        // N35. confirmWin / refreshTourStatus GET /session/{id} after
+        // only a fog + session-exists check. Generate + a new Play
+        // mid-flight painted hunt status or declareWin (leaderboard,
+        // campaign) on the maze now on screen. Capture session + maze
+        // id before the GET; discard after when fog is on, the session
+        // no longer matches, or maze id no longer matches. N24 fog
+        // discard stays. tourVerdict sibling too. Must not GET /maze.
+        // startFog still must not null tour (N17).
+        assertMazeIdDiscardAfterFetch(html, "async function confirmWin",
+                "function declareWin", "declareWin");
+        assertMazeIdDiscardAfterFetch(html, "async function refreshTourStatus",
+                "async function tourVerdict", "$(\"status\")");
+        assertMazeIdDiscardAfterFetch(html, "async function tourVerdict",
+                "async function analyzeStructure", "p.complete");
+        int n35WinFrom = html.indexOf("async function confirmWin");
+        int n35WinTo = html.indexOf("function declareWin");
+        assertThat(n35WinFrom).isGreaterThanOrEqualTo(0);
+        assertThat(n35WinTo).isGreaterThan(n35WinFrom);
+        String n35Win = html.substring(n35WinFrom, n35WinTo);
+        int n35WinId = n35Win.indexOf("const sessionId");
+        int n35WinMaze = n35Win.indexOf("const mazeId");
+        int n35WinGet = n35Win.indexOf("/session/${sessionId}");
+        int n35WinFog = n35Win.indexOf("if (state.fog)", n35WinGet);
+        int n35WinSess = n35Win.indexOf("state.session.id !== sessionId", n35WinGet);
+        int n35WinMazeCheck = n35Win.indexOf("state.maze.id !== mazeId", n35WinGet);
+        int n35WinWrite = n35Win.indexOf("declareWin", n35WinMazeCheck);
+        assertThat(n35WinId).isGreaterThanOrEqualTo(0);
+        assertThat(n35WinMaze).isGreaterThan(n35WinId);
+        assertThat(n35WinMaze).isLessThan(n35WinGet);
+        assertThat(n35WinGet).isGreaterThanOrEqualTo(0);
+        assertThat(n35WinFog).isGreaterThan(n35WinGet);
+        assertThat(n35WinSess).isGreaterThan(n35WinFog);
+        assertThat(n35WinMazeCheck).isGreaterThan(n35WinSess);
+        assertThat(n35WinWrite).isGreaterThan(n35WinMazeCheck);
+        assertThat(n35Win).doesNotContain("/session/${state.session.id}");
+        assertThat(n35Win).doesNotContain("/maze/${");
+        int n35HuntFrom = html.indexOf("async function refreshTourStatus");
+        int n35HuntTo = html.indexOf("async function tourVerdict");
+        assertThat(n35HuntFrom).isGreaterThanOrEqualTo(0);
+        assertThat(n35HuntTo).isGreaterThan(n35HuntFrom);
+        String n35Hunt = html.substring(n35HuntFrom, n35HuntTo);
+        int n35HuntId = n35Hunt.indexOf("const sessionId");
+        int n35HuntMaze = n35Hunt.indexOf("const mazeId");
+        int n35HuntGet = n35Hunt.indexOf("/session/${sessionId}/tour");
+        int n35HuntFog = n35Hunt.indexOf("if (state.fog)", n35HuntGet);
+        int n35HuntSess = n35Hunt.indexOf("state.session.id !== sessionId", n35HuntGet);
+        int n35HuntMazeCheck = n35Hunt.indexOf("state.maze.id !== mazeId", n35HuntGet);
+        int n35HuntWrite = n35Hunt.indexOf("$(\"status\")", n35HuntMazeCheck);
+        assertThat(n35HuntId).isGreaterThanOrEqualTo(0);
+        assertThat(n35HuntMaze).isGreaterThan(n35HuntId);
+        assertThat(n35HuntMaze).isLessThan(n35HuntGet);
+        assertThat(n35HuntGet).isGreaterThanOrEqualTo(0);
+        assertThat(n35HuntFog).isGreaterThan(n35HuntGet);
+        assertThat(n35HuntSess).isGreaterThan(n35HuntFog);
+        assertThat(n35HuntMazeCheck).isGreaterThan(n35HuntSess);
+        assertThat(n35HuntWrite).isGreaterThan(n35HuntMazeCheck);
+        assertThat(n35Hunt).doesNotContain("/session/${state.session.id}");
+        assertThat(n35Hunt).doesNotContain("/maze/${");
+        assertThat(n35Hunt).doesNotContain("tourFor");
+        int n35TvFrom = html.indexOf("async function tourVerdict");
+        int n35TvTo = html.indexOf("async function analyzeStructure");
+        assertThat(n35TvFrom).isGreaterThanOrEqualTo(0);
+        assertThat(n35TvTo).isGreaterThan(n35TvFrom);
+        String n35Tv = html.substring(n35TvFrom, n35TvTo);
+        int n35TvId = n35Tv.indexOf("const sessionId");
+        int n35TvMaze = n35Tv.indexOf("const mazeId");
+        int n35TvAwait = n35Tv.indexOf("await refreshTourStatus()");
+        int n35TvFog = n35Tv.indexOf("if (state.fog)", n35TvAwait);
+        int n35TvSess = n35Tv.indexOf("state.session.id !== sessionId", n35TvAwait);
+        int n35TvMazeCheck = n35Tv.indexOf("state.maze.id !== mazeId", n35TvAwait);
+        assertThat(n35TvId).isGreaterThanOrEqualTo(0);
+        assertThat(n35TvMaze).isGreaterThan(n35TvId);
+        assertThat(n35TvMaze).isLessThan(n35TvAwait);
+        assertThat(n35TvAwait).isGreaterThanOrEqualTo(0);
+        assertThat(n35TvFog).isGreaterThan(n35TvAwait);
+        assertThat(n35TvSess).isGreaterThan(n35TvFog);
+        assertThat(n35TvMazeCheck).isGreaterThan(n35TvSess);
+        assertThat(n35Tv).doesNotContain("/maze/${");
+        assertThat(n35Tv).doesNotContain("tourFor");
+        int n35DeclFrom = html.indexOf("function declareWin");
+        int n35DeclTo = html.indexOf("let statusFlashTimer");
+        assertThat(n35DeclFrom).isGreaterThanOrEqualTo(0);
+        assertThat(n35DeclTo).isGreaterThan(n35DeclFrom);
+        String n35Decl = html.substring(n35DeclFrom, n35DeclTo);
+        int n35DeclTv = n35Decl.indexOf("tourVerdict");
+        int n35DeclMaze = n35Decl.indexOf("state.maze.id !== mazeId", n35DeclTv);
+        assertThat(n35Decl.indexOf("const mazeId")).isGreaterThanOrEqualTo(0);
+        assertThat(n35Decl.indexOf("const mazeId")).isLessThan(n35Decl.indexOf("state.won ="));
+        assertThat(n35DeclTv).isGreaterThanOrEqualTo(0);
+        assertThat(n35DeclMaze).isGreaterThan(n35DeclTv);
+        assertThat(n35Decl.indexOf("$(\"status\")", n35DeclMaze)).isGreaterThan(n35DeclMaze);
         int raceFrom = html.indexOf("async function raceSolvers");
         int raceTo = html.indexOf("function animateRace");
         assertThat(raceFrom).isGreaterThanOrEqualTo(0);

@@ -1798,12 +1798,18 @@ function sameCell(a, b) { return a && b && a.row === b.row && a.col === b.col; }
 /** Ask the server how we are doing; it counts pickups from real moves, not our word for it. */
 async function refreshTourStatus() {
   if (!state.tour || !state.session) return;
+  const sessionId = state.session.id;
+  const mazeId = state.maze && state.maze.id;
   try {
-    const p = await api(`/session/${state.session.id}/tour`);
+    const p = await api(`/session/${sessionId}/tour`);
     // Fog dropped the seat while this snapshot was out. Do not paint
-    // hunt status onto the walk (N24). state.tour stays — same maze.
+    // hunt status onto the walk (N24). Generate + a new Play: the
+    // GET would name the old hunt on the maze now on screen (N35).
+    // state.tour stays on Fog — same maze.
     if (state.fog) return;
     if (!state.session) return;
+    if (state.session.id !== sessionId) return;
+    if (!state.maze || state.maze.id !== mazeId) return;
     state.tourGot = state.tour.waypoints.filter(w => !p.remaining.some(r => sameCell(r, w)));
     const left = p.total - p.collected;
     $("status").textContent = p.complete
@@ -1820,8 +1826,14 @@ async function refreshTourStatus() {
 
 /** Final verdict, once the goal is reached. */
 async function tourVerdict() {
+  const sessionId = state.session && state.session.id;
+  const mazeId = state.maze && state.maze.id;
   const p = await refreshTourStatus();
   if (!p) return "";
+  if (state.fog) return "";
+  if (!state.session) return "";
+  if (state.session.id !== sessionId) return "";
+  if (!state.maze || state.maze.id !== mazeId) return "";
   if (!p.complete) {
     const missed = p.total - p.collected;
     return ` — but ${missed} waypoint${missed === 1 ? "" : "s"} left uncollected, so that is `
@@ -2738,12 +2750,18 @@ function applyMove(who, to, from) {
 /** Offline path: tiles can lag a living tick. The session snapshot is the win. */
 async function confirmWin(who) {
   if (!state.session || state.won) return;
+  const sessionId = state.session.id;
+  const mazeId = state.maze && state.maze.id;
   try {
-    const view = await api(`/session/${state.session.id}`);
+    const view = await api(`/session/${sessionId}`);
     // Fog dropped the seat while this snapshot was out. applyMove
     // already bails when !state.session; do not declareWin onto fog.
+    // Generate + a new Play: the old snapshot would declareWin
+    // (leaderboard, campaign) on the maze now on screen (N35).
     if (state.fog) return;
     if (!state.session) return;
+    if (state.session.id !== sessionId) return;
+    if (!state.maze || state.maze.id !== mazeId) return;
     if (view.completed) declareWin(view.completedBy || who);
   } catch (ignored) { /* play still works; the next hop will ask again */ }
 }
@@ -2752,6 +2770,8 @@ function declareWin(who) {
   if (state.won) return;
   if (state.fog) return;
   if (!state.session) return;
+  const sessionId = state.session.id;
+  const mazeId = state.maze && state.maze.id;
   state.won = who;
   let verdict = "";
   if (state.ghost) {
@@ -2765,6 +2785,8 @@ function declareWin(who) {
     tourVerdict().then(tv => {
       if (state.fog) return;
       if (!state.session) return;
+      if (state.session.id !== sessionId) return;
+      if (!state.maze || state.maze.id !== mazeId) return;
       log("state", `${who} reached the goal — session complete${verdict}${tv}`);
       $("status").textContent = `${who} reached the goal${verdict}${tv}`;
     });
