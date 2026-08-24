@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Late Daily / Breed / `#maze=` after Generate does not steal the maze now on screen.** Those hydrates discarded `adoptMaze` after only fog. Generate mid-flight replaced the canvas, then the late fetch still adopted over it. Capture maze id (or none) before the fetch; discard when fog is on or the canvas id is no longer the one you left. Campaign / `playStage` / `#daily=` siblings too. `playStage` still adopts the same campaign stage. Fog discard stays (N21 / N22).
+
 - **Late Fog start after Play does not re-arm fog on the session walk.** `startFog` POSTed `/agent` then applied after only maze-id. Play on the same maze seats a session; maze id still matches, so a late mint dropped the seat and `applyFogView` recreated `state.fog` on the play walk. Capture session id; discard after the POST when the seated session is new. Maze-id discard stays (N26). Same class as N38.
 
 - **Late living GET `/agent` after Play does not re-arm fog.** `refreshLivingMaze` GETs `/agent/{id}` then `applyFogView` after only maze-id `stale()`. Play on the same maze leaves fog; maze id still matches, so a late GET recreated `state.fog` on the session walk. Capture agent id; discard after the GET when fog is gone or the agent no longer matches. Same class as N26. Living-under-fog stays.

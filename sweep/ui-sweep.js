@@ -2405,6 +2405,89 @@ async function check(name, fn) {
         : JSON.stringify({src, after, mazeId}).slice(0, 220)];
   });
 
+  await check('N40. late Daily / Breed / #maze= after Generate does not steal the maze now on screen', async () => {
+    // Old body: Daily / Breed / Campaign / #maze= discarded adopt
+    // after only fog. Generate mid-flight replaced the canvas, then
+    // the late fetch still adoptMaze'd over it. Capture maze id
+    // (or none); discard when fog is on OR the canvas id changed.
+    // playStage compares the canvas it left, not the stage maze —
+    // re-clicking the same rung still adopts. Fog discard stays
+    // (N21 / N22). Generate stays fog-only — it is the winner.
+    const src = await page.evaluate(() => {
+      const after = (fn, write) => {
+        const s = fn.toString();
+        const id = s.indexOf('mazeId');
+        const fetch = s.indexOf('await ');
+        const fog = s.indexOf('if (state.fog)', fetch);
+        const discard = s.indexOf('state.maze.id !== mazeId', fetch);
+        const out = s.indexOf(write, Math.max(fog, discard));
+        return id >= 0 && id < fetch && fog > fetch && discard > fog && out > discard;
+      };
+      const stage = playStage.toString();
+      const from = loadFromHash.toString();
+      const mazeGet = from.indexOf('await api(`/maze/${h.maze}`)');
+      const mazeIdCap = from.indexOf('const mazeId', from.indexOf('if (h.maze)'));
+      const mazeDiscard = from.indexOf('if (state.fog)', mazeGet);
+      const mazeIdDiscard = from.indexOf('state.maze.id !== mazeId', mazeGet);
+      const mazeAdopt = from.indexOf('adoptMaze', mazeIdDiscard);
+      const gen = generate.toString();
+      return after(loadDaily, 'adoptMaze')
+          && after(crossbreed, 'adoptMaze')
+          && after(loadCampaign, 'state.campaign')
+          && after(playStage, 'adoptMaze')
+          && stage.indexOf('state.maze.id !== mazeId') < stage.indexOf('adoptMaze')
+          && stage.indexOf('state.maze.id !== stage.mazeId') > stage.indexOf('adoptMaze')
+          && mazeIdCap >= 0 && mazeIdCap < mazeGet && mazeGet >= 0
+          && mazeDiscard > mazeGet && mazeIdDiscard > mazeDiscard && mazeAdopt > mazeIdDiscard
+          && !gen.includes('state.maze.id !== mazeId');
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '99');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 99, null, {timeout:15000});
+    const first = await p2.evaluate(() => state.maze.id);
+    await p2.route('**/api/v1/maze/daily', async route => {
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    await p2.click('#daily');
+    await p2.fill('#seed', '100');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 100, null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const lateDaily = await p2.evaluate(() => ({
+      seed: state.maze && state.maze.seed,
+      id: state.maze && state.maze.id,
+      daily: !!state.dailyId,
+    }));
+    await p2.unroute('**/api/v1/maze/daily');
+    await p2.route(`**/api/v1/maze/${first}`, async route => {
+      if (route.request().method() !== 'GET') {
+        await route.continue();
+        return;
+      }
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    await p2.evaluate(id => { location.hash = 'maze=' + id; }, first);
+    await p2.fill('#seed', '101');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 101, null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const lateHash = await p2.evaluate(() => ({
+      seed: state.maze && state.maze.seed,
+      id: state.maze && state.maze.id,
+    }));
+    await p2.close();
+    const ok = src && lateDaily.seed === 100 && lateDaily.id !== first && !lateDaily.daily
+        && lateHash.seed === 101 && lateHash.id !== first;
+    return [ok, ok ? 'late Daily / #maze= discarded; generated maze stayed'
+        : JSON.stringify({src, lateDaily, lateHash, first}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

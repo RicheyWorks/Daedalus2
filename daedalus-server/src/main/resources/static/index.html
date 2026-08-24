@@ -903,8 +903,15 @@ async function loadDaily() {
     state.fog = null;
     setGodModeEnabled(true);
   }
+  // Generate mid-flight: a late Daily would adopt over the maze
+  // now on screen (N40). Capture maze id (or none); discard after
+  // the GET when fog is on or the canvas id no longer matches.
+  // Fog discard stays (N21).
+  const mazeId = state.maze && state.maze.id;
   const d = await api("/maze/daily");
   if (state.fog) return;
+  if (state.maze && state.maze.id !== mazeId) return;
+  if (!state.maze && mazeId) return;
   adoptMaze(d.maze, null, `daily challenge ${d.date}`);
   state.dailyId = d.maze.id; // after adoptMaze (which clears it) — scopes the leaderboard
   pinHash();
@@ -924,8 +931,15 @@ async function loadCampaign(seed, stage) {
     state.fog = null;
     setGodModeEnabled(true);
   }
+  // Generate mid-flight: installing the ladder then playStage
+  // would capture the generated id and adopt the stage over it
+  // (N40). Capture maze id (or none); discard after the GET.
+  // Fog discard stays (N21).
+  const mazeId = state.maze && state.maze.id;
   const c = await api(`/campaign${seed != null ? "?seed=" + seed : ""}`);
   if (state.fog) return;
+  if (state.maze && state.maze.id !== mazeId) return;
+  if (!state.maze && mazeId) return;
   state.campaign = c;
   state.cleared = {};
   renderCampaign();
@@ -989,9 +1003,16 @@ async function playStage(index) {
     state.fog = null;
     setGodModeEnabled(true);
   }
+  // Canvas we left, not the stage's maze — re-clicking this rung
+  // (or climbing to another) still adopts. Generate mid-flight
+  // changes the canvas id and the late adopt is discarded (N40).
+  // Fog discard stays (N21).
+  const mazeId = state.maze && state.maze.id;
   const stage = state.campaign.stages[index];
   const maze = await api(`/maze/${stage.mazeId}`);
   if (state.fog) return;
+  if (state.maze && state.maze.id !== mazeId) return;
+  if (!state.maze && mazeId) return;
   adoptMaze(maze, null, `campaign stage ${index + 1}`);
   state.stageIndex = index; // after adoptMaze, which resets per-maze state
   state.dailyId = null;
@@ -1042,9 +1063,16 @@ async function crossbreed() {
     state.fog = null;
     setGodModeEnabled(true);
   }
+  // Generate mid-flight: a late Breed would adopt over the maze
+  // now on screen (N40). Capture maze id (or none); discard after
+  // the POST when fog is on or the canvas id no longer matches.
+  // Fog discard stays (N21).
+  const mazeId = state.maze && state.maze.id;
   const child = await api(`/maze/breed?a=${state.prevMazeId}&b=${state.maze.id}`,
       {method: "POST"});
   if (state.fog) return;
+  if (state.maze && state.maze.id !== mazeId) return;
+  if (!state.maze && mazeId) return;
   adoptMaze(child, null, "crossbreeding");
   pinHash();
   log("state", "bred a child of the last two mazes — patches of both, repaired to one "
@@ -1321,15 +1349,25 @@ async function loadFromHash() {
     return;
   }
   if (h.maze) {
+    // Generate mid-flight: a late #maze= would adopt over the maze
+    // now on screen (N40). Capture maze id (or none); discard after
+    // the GET (and a recipe rebuild) when the canvas id changed.
+    // Fog discard stays (N22).
+    const mazeId = state.maze && state.maze.id;
     try {
       const maze = await api(`/maze/${h.maze}`);
       if (state.fog) return;
+      if (state.maze && state.maze.id !== mazeId) return;
+      if (!state.maze && mazeId) return;
       adoptMaze(maze, null);
       pinHash();
       log("state", "loaded maze from permalink");
     } catch (e) {
       if (h.g && h.seed != null && h.seed !== "" && h.rows && h.cols) {
         try {
+          if (state.fog) return;
+          if (state.maze && state.maze.id !== mazeId) return;
+          if (!state.maze && mazeId) return;
           await rebuildFromRecipe(h);
           log("state", "permalink maze aged out — rebuilt from the recipe");
           return;

@@ -256,6 +256,34 @@ class WebUiSmokeTest {
                 "/maze/breed");
         assertDiscardAfterFetch(html, "async function crossbreed", "function parseHash",
                 "adoptMaze");
+        // N40. Daily / Breed / Campaign / #maze= hydrate discarded
+        // adopt after only fog. Generate mid-flight replaced the
+        // canvas, then the late fetch still adoptMaze'd over it.
+        // Capture maze id (or none) before the fetch; discard when
+        // fog is on OR the canvas id is no longer the one you left.
+        // playStage compares the canvas it left, not stage.mazeId —
+        // re-clicking the same rung still adopts. Fog discard stays
+        // (N21 / N22). Generate stays fog-only — it is the winner.
+        assertMazeIdDiscardAfterFetch(html, "async function loadDaily",
+                "async function loadCampaign", "adoptMaze");
+        assertMazeIdDiscardAfterFetch(html, "async function loadCampaign",
+                "function leaveCampaign", "state.campaign");
+        assertMazeIdDiscardAfterFetch(html, "async function playStage",
+                "async function crossbreed", "adoptMaze");
+        assertMazeIdDiscardAfterFetch(html, "async function crossbreed",
+                "function parseHash", "adoptMaze");
+        int n40StageFrom = html.indexOf("async function playStage");
+        int n40StageTo = html.indexOf("async function crossbreed");
+        assertThat(n40StageFrom).isGreaterThanOrEqualTo(0);
+        assertThat(n40StageTo).isGreaterThan(n40StageFrom);
+        String n40Stage = html.substring(n40StageFrom, n40StageTo);
+        int n40Canvas = n40Stage.indexOf("const mazeId");
+        int n40StageGet = n40Stage.indexOf("await api(`/maze/${stage.mazeId}`)");
+        int n40Adopt = n40Stage.indexOf("adoptMaze");
+        assertThat(n40Canvas).isGreaterThanOrEqualTo(0);
+        assertThat(n40Canvas).isLessThan(n40StageGet);
+        assertThat(n40Stage.indexOf("state.maze.id !== mazeId")).isLessThan(n40Adopt);
+        assertThat(n40Stage.indexOf("state.maze.id !== stage.mazeId")).isGreaterThan(n40Adopt);
         // N22. #maze= / #session= hydrate fetched then adoptMaze no-op'd
         // during fog, so the bar named a maze the canvas still walked, and
         // a late #session= still ran adoptSessionView after adopt discarded.
@@ -277,6 +305,15 @@ class WebUiSmokeTest {
         assertThat(mazeGet).isGreaterThanOrEqualTo(0);
         assertThat(mazeDiscard).isGreaterThan(mazeGet);
         assertThat(mazeAdopt).isGreaterThan(mazeDiscard);
+        // N40 sibling. #maze= hydrate discarded adopt after only fog.
+        int mazeIdCap = mazeHydrate.indexOf("mazeId");
+        int mazeIdDiscard = mazeHydrate.indexOf("state.maze.id !== mazeId", mazeGet);
+        int mazeRebuild = mazeHydrate.indexOf("rebuildFromRecipe");
+        assertThat(mazeIdCap).isGreaterThanOrEqualTo(0);
+        assertThat(mazeIdCap).isLessThan(mazeGet);
+        assertThat(mazeIdDiscard).isGreaterThan(mazeDiscard);
+        assertThat(mazeAdopt).isGreaterThan(mazeIdDiscard);
+        assertThat(mazeRebuild).isGreaterThan(mazeIdDiscard);
         assertLeaveFogBeforeFetch(html, "async function spectate",
                 "function adoptSessionView", "/session/${sessionId}");
         assertDiscardAfterFetch(html, "async function spectate",
