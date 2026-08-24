@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **A living or traffic poll started before STOMP does not write an older grid after the broker arrives.** Bring to life / traffic arm a GET `/maze` fallback only when SockJS is down. A late CONNECT used to leave those intervals running, so a snapshot that left before the next tick overwrote the `/state` frame. Stop the poller when `state.stomp` is set; a poll-initiated refresh discards after the GET; CONNECT clears the leftover intervals (N44). Fog / maze-id discard stays (N28 / N38).
+
 - **A spectate poll started before STOMP does not rewind a hop after the broker arrives.** `#session=` arms a 1s `GET /session/{id}` fallback only when SockJS is down. A late CONNECT used to leave that interval running, so a snapshot that left before the next move overwrote the `/player` frame. Drop the poll on CONNECT and after the GET when `state.stomp` is set (N43). Fog / session / maze discard stays (N34).
 
 - **Spectator living ticks rescore the hunt from `GET /session/{id}/tour`, not `GET /maze/{id}/tour`.** Hydrate already painted coins from the public session read (`progressFor` rescores Held-Karp). A living tick then asked `tourFor`, which is auth-required in prod and can mint — unsigned spectate 401'd and kept a stale optimum. Prefer the session read when a seat exists; maze tour is only the Hunt-before-Play fallback (N42).

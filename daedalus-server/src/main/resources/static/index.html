@@ -1627,15 +1627,15 @@ function startLivePolling(mazeId, tickMillis = 2000, ticks = 30) {
   let polls = 0;
   clearInterval(state.livePoll);
   state.livePoll = setInterval(async () => {
-    if (!state.maze || state.maze.id !== mazeId || ++polls > ticks + 1) {
+    if (state.stomp || !state.maze || state.maze.id !== mazeId || ++polls > ticks + 1) {
       clearInterval(state.livePoll); state.livePoll = null;
-      if (state.maze && state.maze.id === mazeId) {
+      if (!state.stomp && state.maze && state.maze.id === mazeId) {
         $("live").disabled = false;
         if ($("harden")) $("harden").disabled = false;
       }
       return;
     }
-    await refreshLivingMaze();
+    await refreshLivingMaze(true);
   }, tickMillis);
 }
 
@@ -2243,11 +2243,11 @@ async function simulateTraffic() {
     // STOMP-less fallback: poll while a session is being played; stop with the maze.
     clearInterval(state.trafficPoll);
     state.trafficPoll = setInterval(async () => {
-      if (!state.maze || state.maze.id !== mazeId) {
+      if (state.stomp || !state.maze || state.maze.id !== mazeId) {
         clearInterval(state.trafficPoll); state.trafficPoll = null;
         return;
       }
-      await refreshLivingMaze();
+      await refreshLivingMaze(true);
     }, r.tickMillis);
   }
 }
@@ -2360,7 +2360,7 @@ async function refreshTheoryOverlays(forMaze, stale) {
 }
 
 /** Swap in the latest snapshot without resetting session/solver state (unlike adoptMaze). */
-async function refreshLivingMaze() {
+async function refreshLivingMaze(fromPoll) {
   try {
     const before = state.maze;
     // Which maze this refresh is FOR. Every await below is a window in which the player can
@@ -2388,6 +2388,7 @@ async function refreshLivingMaze() {
         // the session walk. Same class as N26.
         if (stale()) return;
         if (!state.fog || state.fog.agentId !== agentId) return;
+        if (fromPoll && state.stomp) return;
         applyFogView(v);
         draw();
         return;
@@ -2408,6 +2409,7 @@ async function refreshLivingMaze() {
     // god-mode grid — unseen rooms and openings you have not
     // re-seen — into that walk. Discard, matching N18.
     if (stale() || state.fog) return;
+    if (fromPoll && state.stomp) return;
     state.maze = maze;
     // Narrate on the polling path too. Tick/pulse messages normally come from STOMP frames,
     // so with the broker unreachable a living or congested maze changed under the player in
@@ -2946,10 +2948,13 @@ function connectStomp() {
     }
     state.stomp = client;
     log("state", state.token ? "STOMP connected (authenticated)" : "STOMP connected");
-    // Spectate armed a 1s GET /session poll because the broker was
-    // not up yet. Frames are now the source of truth; a late poll
-    // snapshot would rewind a hop applyMove already painted (N43).
+    // STOMP-less fallbacks were armed because the broker was not
+    // up yet. Frames are now the source of truth. A leftover spectate
+    // poll rewinds a hop (N43); leftover living / traffic polls
+    // write an older GET /maze over a tick that already landed (N44).
     clearInterval(state.spectatePoll); state.spectatePoll = null;
+    clearInterval(state.livePoll); state.livePoll = null;
+    clearInterval(state.trafficPoll); state.trafficPoll = null;
     resubscribe();
   }, err => {
     if (gen !== stompGen) return;

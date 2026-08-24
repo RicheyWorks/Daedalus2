@@ -781,6 +781,36 @@ class WebUiSmokeTest {
         assertThat(n43Assign).isGreaterThanOrEqualTo(0);
         assertThat(n43Drop).isGreaterThan(n43Assign);
         assertThat(n43Resub).isGreaterThan(n43Drop);
+        // N44. Living / traffic polls armed because STOMP was absent
+        // used to keep GET /maze after CONNECT. A snapshot that left
+        // before the next tick wrote the older grid over the frame
+        // that already landed. Pollers stop when state.stomp is set;
+        // a poll-initiated refresh discards after the GET; connectStomp
+        // clears those leftover intervals too. Fog / maze-id discard
+        // stays (N28 / N38). Must not GET /maze on the fog path.
+        int n44LiveFrom = html.indexOf("function startLivePolling");
+        int n44LiveTo = html.indexOf("async function onMutation");
+        assertThat(n44LiveFrom).isGreaterThanOrEqualTo(0);
+        assertThat(n44LiveTo).isGreaterThan(n44LiveFrom);
+        String n44Live = html.substring(n44LiveFrom, n44LiveTo);
+        int n44LiveStomp = n44Live.indexOf("state.stomp");
+        int n44LiveRefresh = n44Live.indexOf("refreshLivingMaze(true)");
+        assertThat(n44LiveStomp).isGreaterThanOrEqualTo(0);
+        assertThat(n44LiveStomp).isLessThan(n44LiveRefresh);
+        int n44TrafStomp = traf.indexOf("state.stomp");
+        int n44TrafRefresh = traf.indexOf("refreshLivingMaze(true)");
+        assertThat(n44TrafStomp).isGreaterThanOrEqualTo(0);
+        assertThat(n44TrafStomp).isLessThan(n44TrafRefresh);
+        int n44Poll = live.indexOf("fromPoll && state.stomp");
+        int n44Assign = live.indexOf("state.maze = maze");
+        assertThat(n44Poll).isGreaterThanOrEqualTo(0);
+        assertThat(n44Poll).isLessThan(n44Assign);
+        int n44DropLive = n43Connect.indexOf("clearInterval(state.livePoll)", n43Assign);
+        int n44DropTraf = n43Connect.indexOf("clearInterval(state.trafficPoll)", n43Assign);
+        assertThat(n44DropLive).isGreaterThan(n43Assign);
+        assertThat(n44DropTraf).isGreaterThan(n43Assign);
+        assertThat(n43Resub).isGreaterThan(n44DropLive);
+        assertThat(n43Resub).isGreaterThan(n44DropTraf);
         // N35. confirmWin / refreshTourStatus GET /session/{id} after
         // only a fog + session-exists check. Generate + a new Play
         // mid-flight painted hunt status or declareWin (leaderboard,

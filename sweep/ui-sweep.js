@@ -2194,6 +2194,28 @@ async function check(name, fn) {
         : 'N43 source pin failed'];
   });
 
+  await check('N44. living / traffic poll after STOMP connects does not write an older grid', async () => {
+    // Old body: pollers armed because !state.stomp kept GET /maze
+    // after CONNECT. A snapshot that left before the next tick
+    // overwrote the /state frame. Pollers stop when state.stomp
+    // is set; poll-initiated refresh discards after the GET.
+    const src = await page.evaluate(() => {
+      const live = startLivePolling.toString();
+      const traf = simulateTraffic.toString();
+      const refresh = refreshLivingMaze.toString();
+      const c = connectStomp.toString();
+      const assign = c.indexOf('state.stomp = client');
+      return live.includes('state.stomp') && live.includes('refreshLivingMaze(true)')
+          && traf.includes('state.stomp') && traf.includes('refreshLivingMaze(true)')
+          && refresh.includes('fromPoll && state.stomp')
+          && assign >= 0
+          && c.indexOf('clearInterval(state.livePoll)', assign) > assign
+          && c.indexOf('clearInterval(state.trafficPoll)', assign) > assign;
+    });
+    return [src, src ? 'living/traffic polls discard after STOMP; CONNECT drops leftover intervals'
+        : 'N44 source pin failed'];
+  });
+
   await check('N35. late confirmWin / tour status after Generate do not paint the maze now on screen', async () => {
     // Old body: confirmWin GETs /session/{id} then declareWin after
     // only a fog + session-exists check. refreshTourStatus painted
