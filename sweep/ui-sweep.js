@@ -1701,6 +1701,25 @@ async function check(name, fn) {
         : JSON.stringify({src, late, stageId}).slice(0, 220)];
   });
 
+  await check('N46. campaign hazard is not POSTed after Generate already replaced the stage', async () => {
+    // Old body: N29 discarded the UI bind after /live. Generate that
+    // already won the canvas still started the stage you left.
+    // Gate before the first hazard POST. After-POST discard stays.
+    const src = await page.evaluate(() => {
+      const s = playStage.toString();
+      const play = s.indexOf('await play()');
+      const gate = s.indexOf('state.maze.id !== stage.mazeId', play);
+      const loop = s.indexOf('for (const hazard');
+      const post = s.indexOf('method: "POST"');
+      const loopGate = s.indexOf('state.maze.id !== stage.mazeId', loop);
+      return play >= 0 && gate > play && gate < post
+          && loop > gate && loopGate > loop && loopGate < post
+          && !s.slice(loop).includes('if (state.fog)');
+    });
+    return [src, src ? 'hazard POST gated on the stage still being on screen'
+        : 'N46 source pin failed'];
+  });
+
   await check('N30. late /solve after Generate does not paint the maze now on screen', async () => {
     // Old body: solve / race / compare POSTed /solve then painted
     // after only a fog check. Generate mid-flight applied the old

@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **A late campaign hazard does not start `/live` or `/traffic` on a stage Generate already replaced.** N29 discarded the UI bind after those POSTs so `#live` could not attach to the maze now on screen. The POST still fired against the stage you left, so a ticker ran on a maze the bar no longer names. Gate before the first hazard POST (N46). After-POST discard stays (N29).
+
 - **A STOMP drop re-arms the living / traffic / spectate polls CONNECT just cleared.** N43 / N44 stop those fallbacks when the broker arrives so a late snapshot cannot rewind a hop or a tick. A later disconnect left them dead, so a watched walk or an eroding campaign stage froze until the next CONNECT. After `state.stomp = null`, start the same polls again — do not POST `/live` (N45).
 
 - **A living or traffic poll started before STOMP does not write an older grid after the broker arrives.** Bring to life / traffic arm a GET `/maze` fallback only when SockJS is down. A late CONNECT used to leave those intervals running, so a snapshot that left before the next tick overwrote the `/state` frame. Stop the poller when `state.stomp` is set; a poll-initiated refresh discards after the GET; CONNECT clears the leftover intervals (N44). Fog / maze-id discard stays (N28 / N38).

@@ -1024,6 +1024,11 @@ async function playStage(index) {
       + `${stage.grade.label} (${stage.grade.score}), route ${stage.grade.routeLength} cells, `
       + `${stage.grade.deadEnds} dead ends`);
   await play();                       // opens the session (and summons this stage's ghost)
+  // Generate won the canvas while play() was out. N29 discarded
+  // the UI bind after a late /live; the POST still started the
+  // stage you left. Do not mint a ticker on a maze the bar no
+  // longer names (N46).
+  if (!state.maze || state.maze.id !== stage.mazeId) return;
   for (const hazard of stage.hazards) {
     // Hazard names are domain words; endpoint paths are an API detail and the two do NOT
     // line up ("living" the hazard is served by POST /live). Interpolating the hazard name
@@ -1037,6 +1042,7 @@ async function playStage(index) {
         ? "live?ticks=30&seal=0.08" : "live?ticks=30";
     const path = {living: livingPath, traffic: "traffic"}[hazard];
     if (!path) { log("err", `unknown hazard "${hazard}" — server declares one this client can't start`); continue; }
+    if (!state.maze || state.maze.id !== stage.mazeId) return;
     try {
       await api(`/maze/${stage.mazeId}/${path}`, {method: "POST"});
       // Generate / Daily / Breed replaced the maze while this POST

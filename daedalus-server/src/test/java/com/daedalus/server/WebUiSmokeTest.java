@@ -615,6 +615,20 @@ class WebUiSmokeTest {
         int n29Hazards = n29.indexOf("for (const hazard");
         assertThat(n29Hazards).isGreaterThanOrEqualTo(0);
         assertThat(n29.substring(n29Hazards)).doesNotContain("if (state.fog)");
+        // N46. N29 discarded the UI bind after the POST. Generate
+        // that already won the canvas still started /live or
+        // /traffic on the stage you left — a ticker on a maze
+        // the bar no longer names. Gate before the first hazard
+        // POST (and before each later one). After-POST discard
+        // stays (N29). Not if (state.fog) in the loop.
+        int n46Play = n29.indexOf("await play()");
+        int n46Gate = n29.indexOf("state.maze.id !== stage.mazeId", n46Play);
+        assertThat(n46Play).isGreaterThanOrEqualTo(0);
+        assertThat(n46Gate).isGreaterThan(n46Play);
+        assertThat(n46Gate).isLessThan(n29Post);
+        int n46LoopGate = n29.indexOf("state.maze.id !== stage.mazeId", n29Hazards);
+        assertThat(n46LoopGate).isGreaterThan(n29Hazards);
+        assertThat(n46LoopGate).isLessThan(n29Post);
         // N30. solve / race / compare POSTed /solve then painted after
         // only a fog check. Generate mid-flight applied the old
         // expansions / #compareBox onto the maze now on screen; Race
