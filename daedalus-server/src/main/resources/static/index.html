@@ -2314,14 +2314,21 @@ async function refreshLivingMaze() {
     // re-seen). Re-poll the agent only; carveFogOpenings writes the cell
     // underfoot.
     if (state.fog) {
+      const agentId = state.fog.agentId;
       try {
-        const v = await api(`/agent/${state.fog.agentId}`);
+        const v = await api(`/agent/${agentId}`);
+        // Play / Open session dropped the walk while this GET was
+        // out. Maze id still matches (same maze), so stale() is
+        // not enough — applyFogView would recreate state.fog on
+        // the session walk. Same class as N26.
         if (stale()) return;
+        if (!state.fog || state.fog.agentId !== agentId) return;
         applyFogView(v);
         draw();
         return;
       } catch (gone) {
         if (stale()) return;
+        if (!state.fog || state.fog.agentId !== agentId) return;
         // Agent is gone. carveFogOpenings mutated tiles and living ticks
         // skipped GET /maze on purpose — fall through and refetch the live grid.
         state.fog = null;

@@ -2349,6 +2349,62 @@ async function check(name, fn) {
         : JSON.stringify({src, after, first}).slice(0, 220)];
   });
 
+  await check('N38. late living GET /agent after Play does not re-arm fog', async () => {
+    // Old body: refreshLivingMaze GETs /agent then applyFogView after
+    // only maze-id stale(). Play on the same maze leaves fog; maze
+    // id still matches, so a late GET recreates state.fog on the
+    // session walk. Capture agent id; discard after the GET.
+    // Fog path still must not GET /maze. startFog still must not
+    // null tour (N17). Living-under-fog stays (N19 / Q2).
+    const src = await page.evaluate(() => {
+      const s = refreshLivingMaze.toString();
+      const id = s.indexOf('agentId');
+      const get = s.indexOf('await api(`/agent/${');
+      const discard = s.indexOf('state.fog.agentId !== agentId', get);
+      const apply = s.indexOf('applyFogView', discard);
+      const snap = s.indexOf('await api(`/maze/${forMaze}`)');
+      const fogSrc = startFog.toString();
+      return id >= 0 && id < get && get >= 0 && discard > get && apply > discard
+          && !s.slice(s.indexOf('if (state.fog)'), snap).includes('await api(`/maze/${forMaze}`)')
+          && !fogSrc.includes('state.tour = null');
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '98');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 98, null, {timeout:15000});
+    const mazeId = await p2.evaluate(() => state.maze.id);
+    await p2.click('#fog');
+    await p2.waitForFunction(() => !!(state.fog && state.fog.agentId), null, {timeout:20000});
+    await p2.route('**/api/v1/agent/*', async route => {
+      const path = new URL(route.request().url()).pathname;
+      const view = route.request().method() === 'GET'
+          && /\/api\/v1\/agent\/[^/]+$/.test(path);
+      if (!view) {
+        await route.continue();
+        return;
+      }
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    await p2.evaluate(() => { refreshLivingMaze(); });
+    await p2.click('#play');
+    await p2.waitForFunction(() => !!state.session && !state.fog, null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const after = await p2.evaluate(() => ({
+      fog: !!state.fog,
+      session: !!state.session,
+      seed: state.maze && state.maze.seed,
+      id: state.maze && state.maze.id,
+    }));
+    await p2.close();
+    const ok = src && !after.fog && after.session && after.seed === 98 && after.id === mazeId;
+    return [ok, ok ? 'late /agent discarded; Play kept the session walk'
+        : JSON.stringify({src, after, mazeId}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

@@ -172,6 +172,24 @@ class WebUiSmokeTest {
         assertThat(assign).isGreaterThan(discard);
         assertThat(live.substring(live.indexOf("if (state.fog)"), snap))
                 .doesNotContain("await api(`/maze/${forMaze}`)");
+        // N38. refreshLivingMaze GETs /agent then applyFogView after
+        // only maze-id stale(). Play on the same maze leaves fog;
+        // maze id still matches, so a late GET recreates state.fog
+        // on the play walk. Capture agent id; discard after the GET
+        // when fog is gone or the agent no longer matches. Same
+        // class as N26. Fog path still must not GET /maze. startFog
+        // still must not null tour (N17). Living-under-fog stays.
+        int fogAgentGet = live.indexOf("await api(`/agent/${");
+        int fogAgentId = live.indexOf("agentId");
+        int fogWalkDiscard = live.indexOf("state.fog.agentId !== agentId");
+        int fogApply = live.indexOf("applyFogView", fogWalkDiscard);
+        assertThat(fogAgentGet).isGreaterThanOrEqualTo(0);
+        assertThat(fogAgentId).isGreaterThanOrEqualTo(0);
+        assertThat(fogAgentId).isLessThan(fogAgentGet);
+        assertThat(fogWalkDiscard).isGreaterThan(fogAgentGet);
+        assertThat(fogApply).isGreaterThan(fogWalkDiscard);
+        assertThat(html.substring(html.indexOf("async function startFog"),
+                html.indexOf("async function fogStep"))).doesNotContain("state.tour = null");
         // N20. play() snapshotted hadFog, POSTed, then always
         // state.fog = null. A Fog that started mid-flight was "no
         // fog" and the session still pinned #session=. Leave fog
