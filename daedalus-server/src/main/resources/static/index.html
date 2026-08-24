@@ -2827,6 +2827,10 @@ async function startFog() {
   state.seat = null;
   state.joined = null;
   $("join").disabled = true;
+  // Open session pinned #session=. Fog drops that seat and does not adopt,
+  // so hashShowsCurrent never ran and the bar kept naming the session
+  // while the canvas walked fog. Pin after the drop — daily / campaign
+  // stay those kinds; a leftover #session= becomes #maze=.
   state.path = null; state.expansions = [];
   state.analysis = null; state.hardest = null; state.field = null;
   state.lens = null; state.race = null; state.sanctuaries = null;
@@ -2839,6 +2843,7 @@ async function startFog() {
   $("status").textContent = `fog: ${view.stepsRemaining} steps left — arrows walk the agent`;
   log("state", `fog of war — agent ${String(view.agentId).slice(0, 8)}… sees `
       + (view.open && view.open.length ? view.open.join(", ") : "no openings"));
+  pinHash();
   draw();
 }
 

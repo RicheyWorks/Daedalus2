@@ -834,6 +834,49 @@ async function check(name, fn) {
         : JSON.stringify({src, hashed, empty, gen}).slice(0, 220)];
   });
 
+  await check('N15. Fog after Open session drops the leftover #session= hash', async () => {
+    // Old body: play pinned #session=. Fog nulled the seat and started
+    // the walk without pinning, so the bar still named the session.
+    const src = await page.evaluate(() => {
+      const s = startFog.toString();
+      return s.includes('state.session = null')
+          && s.includes('pinHash()')
+          && s.indexOf('pinHash()') > s.indexOf('state.session = null');
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '17');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 17, null, {timeout:15000});
+    await p2.click('#play');
+    await p2.waitForFunction(() => !!state.session && /session=/.test(location.hash),
+        null, {timeout:15000});
+    const opened = await p2.evaluate(() => ({
+      sid: state.session.id,
+      maze: state.maze.id,
+      hash: location.hash,
+    }));
+    await p2.click('#fog');
+    await p2.waitForFunction(() => !!(state.fog && state.fog.agentId) && !state.session
+        && /maze=/.test(location.hash) && !/session=/.test(location.hash),
+        null, {timeout:20000});
+    const after = await p2.evaluate(() => ({
+      session: !!state.session,
+      fog: !!(state.fog && state.fog.agentId),
+      maze: state.maze && state.maze.id,
+      hash: location.hash,
+    }));
+    await p2.close();
+    const ok = src && /session=/.test(opened.hash)
+        && after.fog && !after.session && after.maze === opened.maze
+        && /maze=/.test(after.hash) && !/session=/.test(after.hash)
+        && after.hash.includes(opened.maze);
+    return [ok, ok ? `Fog rewrote ${opened.hash.slice(0, 24)} → ${after.hash.slice(0, 28)}`
+        : JSON.stringify({src, opened, after}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

@@ -101,6 +101,16 @@ class WebUiSmokeTest {
         assertLeaveBeforeWrite(html, "async function generate", "/maze/generate");
         assertLeaveBeforeWrite(html, "async function startFog", "/agent");
         assertLeaveBeforeWrite(html, "async function play", "/session?");
+        // Open session pinned #session=. Fog dropped the seat and left
+        // the bar on that hash while the canvas walked fog. pinHash
+        // after the null writes #maze= (or keeps daily / campaign).
+        int fogFrom = html.indexOf("async function startFog");
+        int fogTo = html.indexOf("async function fogStep");
+        assertThat(fogFrom).isGreaterThanOrEqualTo(0);
+        assertThat(fogTo).isGreaterThan(fogFrom);
+        String fog = html.substring(fogFrom, fogTo);
+        assertThat(fog.indexOf("pinHash()"))
+                .isGreaterThan(fog.indexOf("state.session = null"));
         assertLeaveBeforeWrite(html, "async function loadDaily", "/maze/daily");
         assertLeaveBeforeWrite(html, "async function loadCampaign", "/campaign");
         assertLeaveBeforeWrite(html, "async function playStage", "/maze/${stage.mazeId}");

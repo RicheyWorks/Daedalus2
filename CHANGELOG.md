@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Fog after Open session drops the leftover `#session=` hash.**
+  Open session pinned `#session=`. Fog nulled the seat and started the
+  agent walk without pinning, so the bar still named the session while
+  the canvas walked fog. `pinHash` runs after that drop — daily /
+  campaign stay those kinds; a leftover `#session=` becomes `#maze=`.
+
 - **Back onto an empty or `#generator=` hash drops the maze.**
   N10 re-hydrated maze-to-maze. Back from `#maze=` onto `""` or
   `#generator=` only touched selects and left the previous maze — and a
