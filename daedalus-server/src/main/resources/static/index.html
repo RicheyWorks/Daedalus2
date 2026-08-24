@@ -1589,8 +1589,12 @@ async function fingerprintWhenReady(id) {
 /** Name the algorithm from the shape alone, and say how sure the structure allows us to be. */
 async function identifyGenerator() {
   leaveSpectate();
-  const f = await fingerprintWhenReady(state.maze.id);
+  const mazeId = state.maze.id;
+  const f = await fingerprintWhenReady(mazeId);
+  // Fog emptied the sidebar (N18). Generate mid-flight: a late
+  // fingerprint would name the old maze on the one now on screen.
   if (state.fog) return;
+  if (!state.maze || state.maze.id !== mazeId) return;
   state.fingerprint = f;
   state.caption = "fingerprint";
   log("state", `fingerprint: structure says ${f.predictedGeneratorId}`
@@ -1803,10 +1807,14 @@ async function tourVerdict() {
 /** Min-cut chokepoints + dead ends from the theory module, drawn over the maze. */
 async function analyzeStructure() {
   leaveSpectate();
-  const a = await api(`/maze/${state.maze.id}/analysis`);
+  const mazeId = state.maze.id;
+  const a = await api(`/maze/${mazeId}/analysis`);
   // startFog already emptied #compareBox (N17). A response that
   // was already out still landed and named chokepoints again.
+  // Generate mid-flight: paint would name the old maze's cuts
+  // on the maze now on screen. Discard — same as N18 / N28.
   if (state.fog) return;
+  if (!state.maze || state.maze.id !== mazeId) return;
   state.analysis = a;
   state.caption = "analysis";
   const cp = a.cutSize === 1 ? "1 chokepoint" : `${a.cutSize} chokepoints`;
@@ -1874,8 +1882,10 @@ const DISTANCE_RAMP = ["#1c5cab", "#2a78d6", "#3987e5", "#5598e7",
 /** Shade every cell by its distance from the goal (or start). */
 async function distanceHeatMap() {
   leaveSpectate();
-  const f = await api(`/maze/${state.maze.id}/distance-field`);
+  const mazeId = state.maze.id;
+  const f = await api(`/maze/${mazeId}/distance-field`);
   if (state.fog) return;
+  if (!state.maze || state.maze.id !== mazeId) return;
   state.field = f;
   state.sanctuaries = null; state.lens = null;   // one overlay at a time stays readable
   state.caption = "field";
@@ -2017,9 +2027,11 @@ const LENS_COLORS = ["#e5484d", "#f2c94c", "#4cc38a"];   // must expand / tie / 
 
 async function heuristicLens() {
   leaveSpectate();
+  const mazeId = state.maze.id;
   const which = $("lensH").value;
-  const l = await api(`/maze/${state.maze.id}/heuristic-lens?heuristic=${which}`);
+  const l = await api(`/maze/${mazeId}/heuristic-lens?heuristic=${which}`);
   if (state.fog) return;
+  if (!state.maze || state.maze.id !== mazeId) return;
   state.lens = l;
   state.field = null; state.sanctuaries = null;
   state.caption = "lens";
@@ -2314,9 +2326,13 @@ async function refreshLivingMaze() {
 
 async function solve() {
   leaveSpectate();
-  const r = await api(`/maze/${state.maze.id}/solve/${$("solver").value}?replay=true`,
+  const mazeId = state.maze.id;
+  const r = await api(`/maze/${mazeId}/solve/${$("solver").value}?replay=true`,
       {method: "POST"});
+  // Fog emptied the overlay (N18). Generate mid-flight: the old
+  // path / expansions would paint onto the maze now on screen.
   if (state.fog) return;
+  if (!state.maze || state.maze.id !== mazeId) return;
   state.race = null; // a plain solve replaces any arena overlay
   state.path = r.path;
   state.expansions = r.expansions || [];
@@ -2377,12 +2393,15 @@ async function raceSolvers() {
   const a = $("solver").value, b = $("rival").value;
   if (a === b) { log("err", "pick two different solvers to race"); return; }
   leaveSpectate();
+  const mazeId = state.maze.id;
   $("race").disabled = true;
   try {
-    const ra = await api(`/maze/${state.maze.id}/solve/${a}?replay=true`, {method: "POST"});
+    const ra = await api(`/maze/${mazeId}/solve/${a}?replay=true`, {method: "POST"});
     if (state.fog) return;
-    const rb = await api(`/maze/${state.maze.id}/solve/${b}?replay=true`, {method: "POST"});
+    if (!state.maze || state.maze.id !== mazeId) return;
+    const rb = await api(`/maze/${mazeId}/solve/${b}?replay=true`, {method: "POST"});
     if (state.fog) return;
+    if (!state.maze || state.maze.id !== mazeId) return;
     state.path = null; state.expansions = []; state.searchProgress = 1; state.pathProgress = 1;
     state.race = { lanes: [
       {id: a, color: "#82b1ff", expansions: ra.expansions || [], path: ra.path,
@@ -2456,14 +2475,16 @@ function raceSummary() {
  */
 async function compareSolvers() {
   leaveSpectate();
+  const mazeId = state.maze.id;
   const ids = [...$("solver").options].map(o => o.value);
   $("compare").disabled = true;
   const results = [];
   try {
     for (const id of ids) {
       try {
-        const r = await api(`/maze/${state.maze.id}/solve/${id}`, {method: "POST"});
+        const r = await api(`/maze/${mazeId}/solve/${id}`, {method: "POST"});
         if (state.fog) return;
+        if (!state.maze || state.maze.id !== mazeId) return;
         results.push(r);
       } catch (e) {
         log("err", `${id}: ${e.message}`);
@@ -2473,6 +2494,7 @@ async function compareSolvers() {
     $("compare").disabled = false;
   }
   if (state.fog) return;
+  if (!state.maze || state.maze.id !== mazeId) return;
   const ok = results.filter(r => r.success);
   // Math.min() of an empty list is Infinity — the log used to say "best path Infinity".
   const bestPath = ok.length ? Math.min(...ok.map(r => r.path.length)) : null;

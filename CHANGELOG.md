@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Late `/solve` after Generate does not paint the maze now on screen.** `solve` / `raceSolvers` / `compareSolvers` POSTed then painted after only a fog check. Generate mid-flight applied the old path, expansions, or `#compareBox` onto the maze now on screen; Race / Compare could POST later `/solve` against the new id. Discard when maze id no longer matches. Fog discard stays. Identify / Heat / Lens / Analyze too.
+
 - **Late campaign hazard `/live` or `/traffic` after Generate does not bind the maze now on screen.** `playStage` POSTed those hazards then always disabled `#live` and armed a poller. Generate mid-flight bound the maze now on screen. Discard after the POST when maze id no longer matches the stage. Fog stays — living+fog is honest.
 
 - **Late `/live` or `/traffic` after Generate does not bind the maze now on screen.** `bringToLife()` / `simulateTraffic()` POSTed then always disabled the button and armed a poller. `onMutation` logged the tick and could re-enable `#live` after `refreshLivingMaze` discarded. Discard after the POST / refresh when maze id no longer matches. Fog stays — living+fog is honest.

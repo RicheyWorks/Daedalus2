@@ -1701,6 +1701,98 @@ async function check(name, fn) {
         : JSON.stringify({src, late, stageId}).slice(0, 220)];
   });
 
+  await check('N30. late /solve after Generate does not paint the maze now on screen', async () => {
+    // Old body: solve / race / compare POSTed /solve then painted
+    // after only a fog check. Generate mid-flight applied the old
+    // expansions / #compareBox onto the maze now on screen; Race
+    // / Compare could POST later /solve against the new id.
+    // Discard after the fetch when maze id no longer matches.
+    // Fog discard stays (N18). startFog still must not null tour.
+    const src = await page.evaluate(() => {
+      const after = (fn) => {
+        const s = fn.toString();
+        const id = s.indexOf('mazeId');
+        const w = s.indexOf('await ');
+        const f = s.indexOf('if (state.fog)', w);
+        const d = s.indexOf('state.maze.id !== mazeId', w);
+        return id >= 0 && id < w && w >= 0 && f > w && d > w;
+      };
+      const race = raceSolvers.toString();
+      const cmp = compareSolvers.toString();
+      const fog = startFog.toString();
+      return after(solve) && after(raceSolvers) && after(compareSolvers)
+          && after(analyzeStructure) && after(identifyGenerator)
+          && after(distanceHeatMap) && after(heuristicLens)
+          && race.includes('/maze/${mazeId}/solve')
+          && !race.slice(race.indexOf('const mazeId')).includes('/maze/${state.maze.id}/solve')
+          && cmp.includes('/maze/${mazeId}/solve')
+          && !cmp.slice(cmp.indexOf('const mazeId')).includes('/maze/${state.maze.id}/solve')
+          && !fog.includes('state.tour = null');
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0
+        && document.getElementById('solver').options.length > 1
+        && document.getElementById('rival').options.length > 1, null, {timeout:20000});
+    await p2.evaluate(() => {
+      const s = document.getElementById('solver');
+      const r = document.getElementById('rival');
+      if (s.value === r.value) {
+        const i = [...r.options].findIndex(o => o.value !== s.value);
+        if (i >= 0) r.selectedIndex = i;
+      }
+    });
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '71');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 71, null, {timeout:15000});
+    const first = await p2.evaluate(() => state.maze.id);
+    await p2.route('**/api/v1/maze/*/solve/**', async route => {
+      if (route.request().method() !== 'POST') return route.continue();
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    await p2.click('#solve');
+    await p2.fill('#seed', '72');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 72, null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const lateSolve = await p2.evaluate(() => ({
+      path: !!(state.path && state.path.length),
+      expansions: (state.expansions || []).length,
+      seed: state.maze && state.maze.seed,
+      id: state.maze && state.maze.id,
+    }));
+    await p2.click('#race');
+    await p2.fill('#seed', '73');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 73, null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const lateRace = await p2.evaluate(() => ({
+      race: !!state.race,
+      path: !!(state.path && state.path.length),
+      seed: state.maze && state.maze.seed,
+    }));
+    await p2.click('#compare');
+    await p2.fill('#seed', '74');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 74, null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const lateCompare = await p2.evaluate(() => ({
+      box: document.getElementById('compareBox').innerText.trim(),
+      caption: state.caption,
+      path: !!(state.path && state.path.length),
+      seed: state.maze && state.maze.seed,
+    }));
+    await p2.close();
+    const ok = src && !lateSolve.path && lateSolve.expansions === 0
+        && lateSolve.seed === 72 && lateSolve.id !== first
+        && !lateRace.race && !lateRace.path && lateRace.seed === 73
+        && lateCompare.box === '' && lateCompare.caption == null
+        && !lateCompare.path && lateCompare.seed === 74;
+    return [ok, ok ? 'late /solve discarded; generated maze stayed unpainted'
+        : JSON.stringify({src, lateSolve, lateRace, lateCompare, first}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

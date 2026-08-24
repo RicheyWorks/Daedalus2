@@ -468,6 +468,47 @@ class WebUiSmokeTest {
         int n29Hazards = n29.indexOf("for (const hazard");
         assertThat(n29Hazards).isGreaterThanOrEqualTo(0);
         assertThat(n29.substring(n29Hazards)).doesNotContain("if (state.fog)");
+        // N30. solve / race / compare POSTed /solve then painted after
+        // only a fog check. Generate mid-flight applied the old
+        // expansions / #compareBox onto the maze now on screen; Race
+        // / Compare could even POST later /solve against the new id.
+        // Discard after the fetch when maze id no longer matches.
+        // Fog discard stays (N18). startFog still must not null tour.
+        assertMazeIdDiscardAfterFetch(html, "async function solve",
+                "function animateSearch", "state.path");
+        assertMazeIdDiscardAfterFetch(html, "async function raceSolvers",
+                "function animateRace", "state.race");
+        assertMazeIdDiscardAfterFetch(html, "async function compareSolvers",
+                "async function play", "$(\"compareBox\")");
+        assertMazeIdDiscardAfterFetch(html, "async function analyzeStructure",
+                "function paintAnalysisCaption", "paintAnalysisCaption");
+        assertMazeIdDiscardAfterFetch(html, "async function identifyGenerator",
+                "function paintFingerprintCaption", "paintFingerprintCaption");
+        assertMazeIdDiscardAfterFetch(html, "async function distanceHeatMap",
+                "function paintFieldCaption", "paintFieldCaption");
+        assertMazeIdDiscardAfterFetch(html, "async function heuristicLens",
+                "function paintLensCaption", "paintLensCaption");
+        int raceFrom = html.indexOf("async function raceSolvers");
+        int raceTo = html.indexOf("function animateRace");
+        assertThat(raceFrom).isGreaterThanOrEqualTo(0);
+        assertThat(raceTo).isGreaterThan(raceFrom);
+        String race = html.substring(raceFrom, raceTo);
+        assertThat(race).contains("/maze/${mazeId}/solve");
+        assertThat(race.substring(race.indexOf("const mazeId")))
+                .doesNotContain("/maze/${state.maze.id}/solve");
+        int cmpFrom = html.indexOf("async function compareSolvers");
+        int cmpTo = html.indexOf("async function play()", cmpFrom);
+        assertThat(cmpFrom).isGreaterThanOrEqualTo(0);
+        assertThat(cmpTo).isGreaterThan(cmpFrom);
+        String cmp = html.substring(cmpFrom, cmpTo);
+        assertThat(cmp).contains("/maze/${mazeId}/solve");
+        assertThat(cmp.substring(cmp.indexOf("const mazeId")))
+                .doesNotContain("/maze/${state.maze.id}/solve");
+        int fogFn = html.indexOf("async function startFog");
+        int fogEnd = html.indexOf("async function fogStep");
+        assertThat(fogFn).isGreaterThanOrEqualTo(0);
+        assertThat(fogEnd).isGreaterThan(fogFn);
+        assertThat(html.substring(fogFn, fogEnd)).doesNotContain("state.tour = null");
         int playerFrom = html.indexOf("if (state.session) {",
                 html.indexOf("function resubscribe"));
         int playerTo = html.indexOf("/topic/plugins/failures");
@@ -653,6 +694,27 @@ class WebUiSmokeTest {
         String body = html.substring(from, to);
         assertThat(body.indexOf("pinHash()")).isGreaterThan(body.indexOf("adoptMaze"));
         assertThat(body).doesNotContain("leaveCampaign()");
+    }
+
+    /** Fog discard (N18) plus maze-id discard after the fetch (N28/N30). */
+    private static void assertMazeIdDiscardAfterFetch(String html, String start, String end,
+            String write) {
+        int from = html.indexOf(start);
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        int id = body.indexOf("mazeId");
+        int fetch = body.indexOf("await ");
+        int fog = body.indexOf("if (state.fog)", fetch);
+        int discard = body.indexOf("state.maze.id !== mazeId", fetch);
+        int out = body.indexOf(write, Math.max(fog, discard));
+        assertThat(id).isGreaterThanOrEqualTo(0);
+        assertThat(id).isLessThan(fetch);
+        assertThat(fetch).isGreaterThanOrEqualTo(0);
+        assertThat(fog).isGreaterThan(fetch);
+        assertThat(discard).isGreaterThan(fog);
+        assertThat(out).isGreaterThan(discard);
     }
 
     /** First {@code if (state.fog)} after the fetch is before {@code write}. */
