@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Late `/live` or `/traffic` after Generate does not bind the maze now on screen.** `bringToLife()` / `simulateTraffic()` POSTed then always disabled the button and armed a poller. `onMutation` logged the tick and could re-enable `#live` after `refreshLivingMaze` discarded. Discard after the POST / refresh when maze id no longer matches. Fog stays — living+fog is honest.
+
 - **Late move after Fog or a new session does not overwrite status or the new seat.** `move()` POSTed `/move` then always `flashStatus` / `applyMove`. A blocked reply overwrote fog status; Generate + a new Open session wrote the old hop onto the new seat. Arrows and click-to-move both call `move()`. Discard after the POST when fog is on or the session/maze/seat no longer match.
 
 - **Late fog step / Fog start after Generate does not re-arm the walk.** `fogStep()` POSTed `/step` then always `applyFogView`, which recreates `state.fog` and carves the old openings into whatever maze is now on screen. `startFog()` applied the same way after Generate replaced the maze. Discard after the POST when the walk or maze is gone.

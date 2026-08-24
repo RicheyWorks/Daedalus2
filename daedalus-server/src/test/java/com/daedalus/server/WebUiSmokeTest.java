@@ -377,6 +377,75 @@ class WebUiSmokeTest {
                 .doesNotContain("flashStatus")
                 .doesNotContain("applyMove")
                 .doesNotContain("/move");
+        // N28. bringToLife / simulateTraffic POSTed then always disabled
+        // the button and armed a poller. Generate that replaced the maze
+        // mid-flight still bound #live / #traffic to a maze that is gone.
+        // onMutation logged the tick and could re-enable #live after
+        // refreshLivingMaze discarded. Discard after the POST / refresh
+        // when maze id no longer matches. Fog stays — living+fog is
+        // honest (N19 / Q2). Not if (state.fog); that would stop the run.
+        int lifeFrom = html.indexOf("async function bringToLife");
+        int lifeTo = html.indexOf("function startLivePolling");
+        assertThat(lifeFrom).isGreaterThanOrEqualTo(0);
+        assertThat(lifeTo).isGreaterThan(lifeFrom);
+        String life = html.substring(lifeFrom, lifeTo);
+        int lifeId = life.indexOf("mazeId");
+        int lifePost = life.indexOf("/live");
+        int lifeDiscard = life.indexOf("state.maze.id !== mazeId", lifePost);
+        int lifeOff = life.indexOf("$(\"live\").disabled = true");
+        int lifePoll = life.indexOf("startLivePolling");
+        assertThat(lifeId).isGreaterThanOrEqualTo(0);
+        assertThat(lifePost).isGreaterThan(lifeId);
+        assertThat(lifeDiscard).isGreaterThan(lifePost);
+        assertThat(lifeOff).isGreaterThan(lifeDiscard);
+        assertThat(lifePoll).isGreaterThan(lifeDiscard);
+        assertThat(life).doesNotContain("if (state.fog)");
+        int mutFrom = html.indexOf("async function onMutation");
+        int mutTo = html.indexOf("async function fingerprintWhenReady");
+        assertThat(mutFrom).isGreaterThanOrEqualTo(0);
+        assertThat(mutTo).isGreaterThan(mutFrom);
+        String mut = html.substring(mutFrom, mutTo);
+        int mutId = mut.indexOf("mazeId");
+        int mutLog = mut.indexOf("log(\"state\"");
+        int mutRefresh = mut.indexOf("await refreshLivingMaze");
+        int mutDiscard = mut.indexOf("state.maze.id !== mazeId", mutRefresh);
+        int mutOn = mut.indexOf("$(\"live\").disabled = false");
+        assertThat(mutId).isGreaterThanOrEqualTo(0);
+        assertThat(mutId).isLessThan(mutLog);
+        assertThat(mutRefresh).isGreaterThan(mutLog);
+        assertThat(mutDiscard).isGreaterThan(mutRefresh);
+        assertThat(mutOn).isGreaterThan(mutDiscard);
+        assertThat(mut).doesNotContain("if (state.fog)");
+        int trafFrom = html.indexOf("async function simulateTraffic");
+        int trafTo = html.indexOf("async function onTrafficPulse");
+        assertThat(trafFrom).isGreaterThanOrEqualTo(0);
+        assertThat(trafTo).isGreaterThan(trafFrom);
+        String traf = html.substring(trafFrom, trafTo);
+        int trafId = traf.indexOf("mazeId");
+        int trafPost = traf.indexOf("/traffic");
+        int trafDiscard = traf.indexOf("state.maze.id !== mazeId", trafPost);
+        int trafOff = traf.indexOf("$(\"traffic\").disabled = true");
+        assertThat(trafId).isGreaterThanOrEqualTo(0);
+        assertThat(trafPost).isGreaterThan(trafId);
+        assertThat(trafDiscard).isGreaterThan(trafPost);
+        assertThat(trafOff).isGreaterThan(trafDiscard);
+        assertThat(traf).doesNotContain("if (state.fog)");
+        int pulseFrom = html.indexOf("async function onTrafficPulse");
+        int pulseTo = html.indexOf("async function refreshTheoryOverlays");
+        assertThat(pulseFrom).isGreaterThanOrEqualTo(0);
+        assertThat(pulseTo).isGreaterThan(pulseFrom);
+        String pulse = html.substring(pulseFrom, pulseTo);
+        int pulseId = pulse.indexOf("mazeId");
+        int pulseLog = pulse.indexOf("log(\"state\"");
+        int pulseRefresh = pulse.indexOf("await refreshLivingMaze");
+        int pulseDiscard = pulse.indexOf("state.maze.id !== mazeId", pulseRefresh);
+        int pulseOn = pulse.indexOf("$(\"traffic\").disabled = false");
+        assertThat(pulseId).isGreaterThanOrEqualTo(0);
+        assertThat(pulseId).isLessThan(pulseLog);
+        assertThat(pulseRefresh).isGreaterThan(pulseLog);
+        assertThat(pulseDiscard).isGreaterThan(pulseRefresh);
+        assertThat(pulseOn).isGreaterThan(pulseDiscard);
+        assertThat(pulse).doesNotContain("if (state.fog)");
         int playerFrom = html.indexOf("if (state.session) {",
                 html.indexOf("function resubscribe"));
         int playerTo = html.indexOf("/topic/plugins/failures");

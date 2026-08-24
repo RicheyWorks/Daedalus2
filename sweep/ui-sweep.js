@@ -1533,6 +1533,118 @@ async function check(name, fn) {
         : JSON.stringify({src, lateFog, lateHop, before}).slice(0, 220)];
   });
 
+  await check('N28. late /live or /traffic after Generate does not bind the new maze', async () => {
+    // Old body: bringToLife / simulateTraffic POSTed then always
+    // disabled the button and armed a poller. onMutation logged the
+    // tick and could re-enable #live after refreshLivingMaze discarded.
+    // Discard after the POST / refresh when maze id no longer matches.
+    // Fog stays — living+fog is honest (N19 / Q2).
+    const src = await page.evaluate(() => {
+      const life = bringToLife.toString();
+      const lifePost = life.indexOf('/live');
+      const mut = onMutation.toString();
+      const mutRefresh = mut.indexOf('await refreshLivingMaze');
+      const traf = simulateTraffic.toString();
+      const trafPost = traf.indexOf('/traffic');
+      const pulse = onTrafficPulse.toString();
+      const pulseRefresh = pulse.indexOf('await refreshLivingMaze');
+      const fog = startFog.toString();
+      return lifePost >= 0 && life.indexOf('mazeId') >= 0
+          && life.indexOf('mazeId') < lifePost
+          && life.indexOf('state.maze.id !== mazeId', lifePost) > lifePost
+          && life.indexOf('$("live").disabled = true')
+              > life.indexOf('state.maze.id !== mazeId', lifePost)
+          && !life.includes('if (state.fog)')
+          && mut.indexOf('mazeId') >= 0
+          && mut.indexOf('mazeId') < mut.indexOf('log("state"')
+          && mutRefresh > mut.indexOf('log("state"')
+          && mut.indexOf('state.maze.id !== mazeId', mutRefresh) > mutRefresh
+          && mut.indexOf('$("live").disabled = false')
+              > mut.indexOf('state.maze.id !== mazeId', mutRefresh)
+          && !mut.includes('if (state.fog)')
+          && trafPost >= 0 && traf.indexOf('mazeId') >= 0
+          && traf.indexOf('mazeId') < trafPost
+          && traf.indexOf('state.maze.id !== mazeId', trafPost) > trafPost
+          && traf.indexOf('$("traffic").disabled = true')
+              > traf.indexOf('state.maze.id !== mazeId', trafPost)
+          && !traf.includes('if (state.fog)')
+          && pulse.indexOf('mazeId') >= 0
+          && pulse.indexOf('mazeId') < pulse.indexOf('log("state"')
+          && pulseRefresh > pulse.indexOf('log("state"')
+          && pulse.indexOf('state.maze.id !== mazeId', pulseRefresh) > pulseRefresh
+          && pulse.indexOf('$("traffic").disabled = false')
+              > pulse.indexOf('state.maze.id !== mazeId', pulseRefresh)
+          && !pulse.includes('if (state.fog)')
+          && !fog.includes('state.tour = null');
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '61');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 61, null, {timeout:15000});
+    const first = await p2.evaluate(() => state.maze.id);
+    await p2.route('**/api/v1/maze/*/live*', async route => {
+      if (route.request().method() !== 'POST') return route.continue();
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    await p2.click('#live');
+    await p2.fill('#seed', '62');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 62, null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const lateLive = await p2.evaluate(() => ({
+      live: document.getElementById('live').disabled,
+      poll: !!state.livePoll,
+      seed: state.maze && state.maze.seed,
+      id: state.maze && state.maze.id,
+    }));
+    await p2.unroute('**/api/v1/maze/*/live*');
+    await p2.route('**/api/v1/maze/*/traffic', async route => {
+      if (route.request().method() !== 'POST') return route.continue();
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    await p2.click('#traffic');
+    await p2.fill('#seed', '63');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 63, null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const lateTraffic = await p2.evaluate(() => ({
+      traffic: document.getElementById('traffic').disabled,
+      poll: !!state.trafficPoll,
+      seed: state.maze && state.maze.seed,
+    }));
+    await p2.unroute('**/api/v1/maze/*/traffic');
+    // Settled tick for the maze we left must not log or re-enable #live
+    // after adopt already armed the new maze (or a subsequent Bring).
+    const beforeTick = await p2.evaluate(() => document.getElementById('log').innerText);
+    await p2.evaluate(() => { document.getElementById('live').disabled = true; });
+    await p2.evaluate((oldId) => onMutation({
+      mazeId: oldId,
+      tick: 9,
+      wallsOpened: 2,
+      wallsClosed: 0,
+      deadEndsRemaining: 1,
+      settled: true,
+    }), first);
+    await p2.waitForTimeout(400);
+    const lateTick = await p2.evaluate((before) => ({
+      live: document.getElementById('live').disabled,
+      logged: document.getElementById('log').innerText.slice(before.length),
+      seed: state.maze && state.maze.seed,
+    }), beforeTick);
+    await p2.close();
+    const ok = src && !lateLive.live && !lateLive.poll && lateLive.seed === 62
+        && lateLive.id !== first
+        && !lateTraffic.traffic && !lateTraffic.poll && lateTraffic.seed === 63
+        && lateTick.live && !/tick 9/.test(lateTick.logged) && lateTick.seed === 63;
+    return [ok, ok ? 'late live/traffic discarded; new maze stayed unbound'
+        : JSON.stringify({src, lateLive, lateTraffic, lateTick, first}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

@@ -1494,7 +1494,8 @@ async function bringToLife() {
     return;
   }
   const harden = $("harden") && $("harden").checked;
-  const q = `/maze/${state.maze.id}/live?ticks=30` + (harden ? "&seal=0.08" : "");
+  const mazeId = state.maze.id;
+  const q = `/maze/${mazeId}/live?ticks=30` + (harden ? "&seal=0.08" : "");
   let r;
   try {
     r = await api(q, {method: "POST"});
@@ -1506,12 +1507,17 @@ async function bringToLife() {
     }
     throw e;
   }
+  // Generate / Daily / Campaign / Breed replaced the maze while
+  // this POST was out. Disabling #live and arming a poller would
+  // bind the maze now on screen — the one that is gone. Fog stays:
+  // living under fog is honest (N19 / Q2).
+  if (!state.maze || state.maze.id !== mazeId) return;
   $("live").disabled = true;
   if ($("harden")) $("harden").disabled = true;
   log("state", `maze is alive — ${r.ticksRequested} ticks`
       + (harden ? " (eroding and hardening)" : " (erosion only)")
       + `, one every ${(r.tickMillis / 1000).toFixed(1)}s`);
-  if (!state.stomp) startLivePolling(state.maze.id, r.tickMillis, r.ticksRequested);
+  if (!state.stomp) startLivePolling(mazeId, r.tickMillis, r.ticksRequested);
 }
 
 /**
@@ -1537,11 +1543,18 @@ function startLivePolling(mazeId, tickMillis = 2000, ticks = 30) {
 
 /** A mutation frame arrived: re-fetch the snapshot, refresh theory overlays, re-solve if a route is shown, redraw. */
 async function onMutation(m) {
+  // Frame is for a maze. Generate / adopt can replace the canvas
+  // before this lands, or while the living refresh is out. Do not
+  // log a tick or re-enable #live for a maze that is gone. Fog
+  // stays — living under fog is honest (N19 / Q2).
+  const mazeId = m.mazeId;
+  if (!state.maze || state.maze.id !== mazeId) return;
   const closed = m.wallsClosed || 0;
   log("state", `tick ${m.tick}: ${m.wallsOpened} wall${m.wallsOpened === 1 ? "" : "s"} opened`
       + (closed ? `, ${closed} closed` : "")
       + `, ${m.deadEndsRemaining} dead ends left${m.settled ? " — maze has settled" : ""}`);
   await refreshLivingMaze();
+  if (!state.maze || state.maze.id !== mazeId) return;
   if (m.settled) {
     $("live").disabled = false;
     if ($("harden")) $("harden").disabled = false;
@@ -2067,9 +2080,10 @@ async function summonGhost() {
 /** Track congestion: everywhere you (or agents) walk gets expensive, then cools off. */
 async function simulateTraffic() {
   if (refuseSpectatorWrite("track traffic")) return;
+  const mazeId = state.maze.id;
   let r;
   try {
-    r = await api(`/maze/${state.maze.id}/traffic`, {method: "POST"});
+    r = await api(`/maze/${mazeId}/traffic`, {method: "POST"});
   } catch (e) {
     const why = nameCapacity(e.message);
     if (why) {
@@ -2078,12 +2092,15 @@ async function simulateTraffic() {
     }
     throw e;
   }
+  // Same steal as bringToLife: a late /traffic after Generate
+  // must not disable #traffic or arm a poller for the maze now
+  // on screen. Fog stays — traffic under fog is honest (Q2).
+  if (!state.maze || state.maze.id !== mazeId) return;
   $("traffic").disabled = true;
   log("state", `traffic tracking on — walk around and watch the costs bloom `
       + `(pulse every ${(r.tickMillis / 1000).toFixed(1)}s)`);
   if (!state.stomp) {
     // STOMP-less fallback: poll while a session is being played; stop with the maze.
-    const mazeId = state.maze.id;
     clearInterval(state.trafficPoll);
     state.trafficPoll = setInterval(async () => {
       if (!state.maze || state.maze.id !== mazeId) {
@@ -2097,11 +2114,14 @@ async function simulateTraffic() {
 
 /** A traffic pulse arrived: costs moved — re-fetch, re-solve, redraw (same as mutation). */
 async function onTrafficPulse(m) {
+  const mazeId = m.mazeId;
+  if (!state.maze || state.maze.id !== mazeId) return;
   log("state", m.settled
       ? "traffic fully decayed — tracking retired"
       : `traffic: ${m.congestedCells} congested cell${m.congestedCells === 1 ? "" : "s"}, `
           + `peak cost ${m.peakCost.toFixed(1)}`);
   await refreshLivingMaze();
+  if (!state.maze || state.maze.id !== mazeId) return;
   if (m.settled) $("traffic").disabled = false;
 }
 
