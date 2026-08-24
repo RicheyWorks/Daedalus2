@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Fog after Open session drops the leftover `/player` subscription and ghost ticker.**
+  N15 dropped the seat and hash. The STOMP `/player` sub and ghost
+  interval stayed, so a joiner's frame still logged a session move and
+  the ghost still advanced while `draw()` returned early and the canvas
+  walked fog. `resubscribe` and the ghost clear run after that drop.
+
 - **Fog after Open session drops the leftover `#session=` hash.**
   Open session pinned `#session=`. Fog nulled the seat and started the
   agent walk without pinning, so the bar still named the session while

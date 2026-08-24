@@ -101,9 +101,11 @@ class WebUiSmokeTest {
         assertLeaveBeforeWrite(html, "async function generate", "/maze/generate");
         assertLeaveBeforeWrite(html, "async function startFog", "/agent");
         assertLeaveBeforeWrite(html, "async function play", "/session?");
-        // Open session pinned #session=. Fog dropped the seat and left
-        // the bar on that hash while the canvas walked fog. pinHash
-        // after the null writes #maze= (or keeps daily / campaign).
+        // Open session pinned #session= and subscribed /player. Fog
+        // dropped the seat (N15 pinned the hash) and left the
+        // subscription and ghost ticker, so a joiner frame still logged
+        // a session move and the ghost still advanced while draw()
+        // returned early. resubscribe / ghost clear after the null.
         int fogFrom = html.indexOf("async function startFog");
         int fogTo = html.indexOf("async function fogStep");
         assertThat(fogFrom).isGreaterThanOrEqualTo(0);
@@ -111,6 +113,16 @@ class WebUiSmokeTest {
         String fog = html.substring(fogFrom, fogTo);
         assertThat(fog.indexOf("pinHash()"))
                 .isGreaterThan(fog.indexOf("state.session = null"));
+        assertThat(fog.indexOf("resubscribe()"))
+                .isGreaterThan(fog.indexOf("state.session = null"));
+        assertThat(fog.indexOf("clearInterval(state.ghostTimer)"))
+                .isGreaterThan(fog.indexOf("state.session = null"));
+        int applyFrom = html.indexOf("function applyMove");
+        int applyTo = html.indexOf("async function confirmWin");
+        assertThat(applyFrom).isGreaterThanOrEqualTo(0);
+        assertThat(applyTo).isGreaterThan(applyFrom);
+        assertThat(html.substring(applyFrom, applyTo))
+                .contains("if (!state.session) return");
         assertLeaveBeforeWrite(html, "async function loadDaily", "/maze/daily");
         assertLeaveBeforeWrite(html, "async function loadCampaign", "/campaign");
         assertLeaveBeforeWrite(html, "async function playStage", "/maze/${stage.mazeId}");

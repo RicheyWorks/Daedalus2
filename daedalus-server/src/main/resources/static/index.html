@@ -2508,6 +2508,7 @@ async function move(name, dr, dc) {
 
 /** Shared position update: called from the STOMP frame handler or the local fallback. */
 function applyMove(who, to, from) {
+  if (!state.session) return;
   state.session.positions[who] = to;
   const trail = state.trails[who] = state.trails[who] || [];
   if (trail.length === 0 && from) trail.push(from);
@@ -2630,6 +2631,9 @@ function resubscribe() {
   if (state.session) {
     state.subs.push(state.stomp.subscribe(`/topic/session/${state.session.id}/player`, f => {
       const m = JSON.parse(f.body);
+      // Fog / generate can drop the seat after this subscribe was armed.
+      // An in-flight frame must not log or apply a session the canvas left.
+      if (!state.session) return;
       const who = m.player || state.session.primary;
       log("player", `${who}: (${m.from.row},${m.from.col}) → (${m.to.row},${m.to.col})`);
       applyMove(who, m.to, m.from);
@@ -2827,10 +2831,15 @@ async function startFog() {
   state.seat = null;
   state.joined = null;
   $("join").disabled = true;
-  // Open session pinned #session=. Fog drops that seat and does not adopt,
-  // so hashShowsCurrent never ran and the bar kept naming the session
-  // while the canvas walked fog. Pin after the drop — daily / campaign
-  // stay those kinds; a leftover #session= becomes #maze=.
+  // Open session pinned #session= and subscribed /player. N15 dropped the
+  // seat and hash; the subscription and ghost ticker stayed, so a joiner
+  // frame still logged a session move and the ghost still advanced —
+  // draw() returned early, so it did not paint, while the canvas walked
+  // fog. resubscribe / ghost clear after the null, same as adoptMaze.
+  // Pin after the drop — daily / campaign stay those kinds; a leftover
+  // #session= becomes #maze=.
+  clearInterval(state.ghostTimer); state.ghostTimer = null;
+  state.ghost = null;
   state.path = null; state.expansions = [];
   state.analysis = null; state.hardest = null; state.field = null;
   state.lens = null; state.race = null; state.sanctuaries = null;
@@ -2844,6 +2853,7 @@ async function startFog() {
   log("state", `fog of war — agent ${String(view.agentId).slice(0, 8)}… sees `
       + (view.open && view.open.length ? view.open.join(", ") : "no openings"));
   pinHash();
+  resubscribe();
   draw();
 }
 
