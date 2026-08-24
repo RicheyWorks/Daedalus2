@@ -719,6 +719,70 @@ async function check(name, fn) {
         : JSON.stringify({src, gen, daily, breed}).slice(0, 220)];
   });
 
+  await check('N13. campaign permalink names the stage', async () => {
+    // Old body: currentPermalink wrote only the seed; loadCampaign always
+    // playStage(0). Back / Forward / paste of #campaign=SEED reminted stage 1.
+    const src = await page.evaluate(() => {
+      const perm = currentPermalink.toString();
+      const load = loadCampaign.toString();
+      const from = loadFromHash.toString();
+      return typeof parseCampaignToken === 'function'
+          && perm.includes('stageIndex')
+          && perm.includes('+ ":" +')
+          && load.includes('playStage(index)')
+          && !load.includes('playStage(0)')
+          && from.includes('named.stage')
+          && from.includes('parseCampaignToken')
+          && !from.includes('loadCampaign(Number(h.campaign))');
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.click('#campaign');
+    await p2.waitForFunction(() => state.campaign && state.stageIndex === 0
+        && !!document.querySelector('#campaignBox a[data-stage="2"]'), null, {timeout:40000});
+    const at0 = await p2.evaluate(() => ({
+      hash: location.hash,
+      seed: state.campaign.seed,
+      stage: state.stageIndex,
+      maze: state.maze.id,
+    }));
+    await p2.evaluate(() => document.querySelector('#campaignBox a[data-stage="2"]').click());
+    await p2.waitForFunction(() => state.campaign && state.stageIndex === 2
+        && state.maze, null, {timeout:30000});
+    const at2 = await p2.evaluate(() => ({
+      hash: location.hash,
+      stage: state.stageIndex,
+      maze: state.maze.id,
+    }));
+    await p2.evaluate(() => history.back());
+    await p2.waitForFunction(id => state.campaign && state.stageIndex === 0
+        && state.maze && state.maze.id === id, at0.maze, {timeout:20000});
+    const back = await p2.evaluate(() => ({
+      hash: location.hash,
+      stage: state.stageIndex,
+      maze: state.maze && state.maze.id,
+    }));
+    await p2.evaluate(() => history.forward());
+    await p2.waitForFunction(id => state.campaign && state.stageIndex === 2
+        && state.maze && state.maze.id === id, at2.maze, {timeout:20000});
+    const fwd = await p2.evaluate(() => ({
+      hash: location.hash,
+      stage: state.stageIndex,
+      maze: state.maze && state.maze.id,
+    }));
+    await p2.close();
+    const want0 = `#campaign=${at0.seed}`;
+    const want2 = `#campaign=${at0.seed}:2`;
+    const ok = src && at0.stage === 0 && at0.hash === want0
+        && at2.stage === 2 && at2.hash === want2 && at2.maze !== at0.maze
+        && back.stage === 0 && back.hash === want0 && back.maze === at0.maze
+        && fwd.stage === 2 && fwd.hash === want2 && fwd.maze === at2.maze;
+    return [ok, ok ? `Back/Forward ${want0} ↔ ${want2}`
+        : JSON.stringify({src, at0, at2, back, fwd}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

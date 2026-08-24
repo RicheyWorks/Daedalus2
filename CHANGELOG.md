@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **A campaign permalink names the current stage.**
+  `#campaign=` stored only the seed, so hydrate — including Back onto the
+  same hash — always `loadCampaign` → `playStage(0)` and reminted stage-1
+  hazards. The token is now `#campaign=SEED` (stage 0, old links) or
+  `#campaign=SEED:N`; `playStage` still keeps the ladder.
+
 - **Generate / Daily / Breed from a campaign drop the ladder.**
   A non-campaign hydrate already left (N11), but those three adopted
   then pinned a matching `#maze=` / `#daily`. `hashShowsCurrent` no-op'd,

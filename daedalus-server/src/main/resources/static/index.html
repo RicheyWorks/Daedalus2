@@ -895,7 +895,7 @@ async function loadDaily() {
  * endpoint — the maze by id, its own leaderboard partition, its ghost, its hazards — so the
  * campaign is a table of contents, not a new game mode.
  */
-async function loadCampaign(seed) {
+async function loadCampaign(seed, stage) {
   leaveSpectate();
   const c = await api(`/campaign${seed != null ? "?seed=" + seed : ""}`);
   state.campaign = c;
@@ -904,7 +904,8 @@ async function loadCampaign(seed) {
   log("state", `campaign ${c.seed} — ${c.stages.length} stages, `
       + `${c.stages[0].grade.label} to ${c.stages[c.stages.length - 1].grade.label} `
       + `(share: ${location.origin}${location.pathname}#campaign=${c.seed})`);
-  await playStage(0);
+  const index = Number.isInteger(stage) && stage >= 0 && stage < c.stages.length ? stage : 0;
+  await playStage(index);
 }
 
 /** Drop the ladder so a leftover stage click cannot play a maze the bar does not name. */
@@ -1028,6 +1029,20 @@ function parseHash() {
   return out;
 }
 
+/** Seed and optional stage from `#campaign=SEED` / `#campaign=SEED:N`. Missing stage is 0. */
+function parseCampaignToken(h) {
+  if (!h || h.campaign == null || h.campaign === "") return null;
+  const raw = String(h.campaign);
+  const colon = raw.lastIndexOf(":");
+  if (colon >= 0) {
+    const stage = Number(raw.slice(colon + 1));
+    if (Number.isInteger(stage) && stage >= 0) {
+      return {seed: raw.slice(0, colon), stage};
+    }
+  }
+  return {seed: raw, stage: 0};
+}
+
 /** Recipe that rebuilds this maze when the cached id is gone. `g` not `generator` —
  *  `#generator=` is its own permalink kind (the partition), not a field on `#maze=`. */
 function recipeParts(maze) {
@@ -1080,7 +1095,13 @@ function currentPermalink() {
   // session — generate+play, spectate, join-from-spectate — is #session=.
   // readOnly used to be the only way to get that hash, so Open session left
   // #maze= in the bar and joining a spectate dropped the permalink you arrived on.
-  if (state.campaign && state.stageIndex != null) return {campaign: String(state.campaign.seed)};
+  if (state.campaign && state.stageIndex != null) {
+    // Stage 0 stays `#campaign=SEED` so old links still hydrate. Later rungs
+    // extend the same token (`#campaign=SEED:N`) — not a second kind.
+    return {campaign: state.stageIndex > 0
+        ? state.campaign.seed + ":" + state.stageIndex
+        : String(state.campaign.seed)};
+  }
   if (state.dailyId && state.maze && state.maze.id === state.dailyId) return {daily: true};
   if (state.session) return {session: state.session.id};
   if (state.maze) return {maze: state.maze.id};
@@ -1163,19 +1184,25 @@ function refuseSpectatorWrite(what) {
  * from looping — Back/Forward (and a pasted hash after boot) still hydrate.
  * A matching campaign hash keeps the ladder; any other permalink (or a
  * different campaign id) drops it so a leftover stage cannot play.
+ * `#campaign=SEED:N` hydrates that rung; a missing stage token is stage 0.
  */
 async function loadFromHash() {
   if (hashShowsCurrent()) return;
   const h = parseHash();
-  if (h.campaign == null || h.campaign === ""
-      || !state.campaign
-      || String(state.campaign.seed) !== String(h.campaign)) {
+  const named = parseCampaignToken(h);
+  if (!named || !state.campaign || String(state.campaign.seed) !== String(named.seed)) {
     leaveCampaign();
   }
   if (h.session) { await spectate(h.session); return; }
-  if (h.campaign != null && h.campaign !== "") {
-    try { await loadCampaign(Number(h.campaign)); }
-    catch (e) { log("err", `campaign permalink failed (${e.message})`); }
+  if (named) {
+    try {
+      if (state.campaign && String(state.campaign.seed) === String(named.seed)) {
+        const index = named.stage < state.campaign.stages.length ? named.stage : 0;
+        await playStage(index);
+      } else {
+        await loadCampaign(Number(named.seed), named.stage);
+      }
+    } catch (e) { log("err", `campaign permalink failed (${e.message})`); }
     return;
   }
   if (h.daily) {

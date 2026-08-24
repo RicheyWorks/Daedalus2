@@ -143,7 +143,10 @@ class WebUiSmokeTest {
                 .contains("addEventListener(\"hashchange\"")
                 .contains("loadFromHash()")
                 .contains("leaveCampaign()")
-                .contains("loadCampaign");
+                .contains("loadCampaign")
+                .contains("parseCampaignToken")
+                .contains("named.stage")
+                .doesNotContain("await loadCampaign(Number(h.campaign))");
         // adoptMaze only nulled stageIndex. Back re-hydrated the maze (N10)
         // and left state.campaign / #campaignBox painted, so a stage click
         // still played a campaign maze the bar no longer named.
@@ -177,6 +180,30 @@ class WebUiSmokeTest {
         assertThat(stage.indexOf("pinHash()"))
                 .isGreaterThan(stage.indexOf("state.stageIndex = index"));
         assertThat(stage).doesNotContain("leaveCampaign()");
+        // #campaign= named only the seed. loadCampaign always playStage(0), so
+        // Back / Forward / paste reminted stage 1. The token now carries :N;
+        // a missing stage still hydrates rung 0 so old links keep working.
+        int permFrom = html.indexOf("function currentPermalink");
+        int permTo = html.indexOf("function pinHash");
+        assertThat(permFrom).isGreaterThanOrEqualTo(0);
+        assertThat(permTo).isGreaterThan(permFrom);
+        assertThat(html.substring(permFrom, permTo))
+                .contains("stageIndex")
+                .contains("+ \":\" +");
+        int campFrom = html.indexOf("async function loadCampaign");
+        int campTo = html.indexOf("function leaveCampaign");
+        assertThat(campFrom).isGreaterThanOrEqualTo(0);
+        assertThat(campTo).isGreaterThan(campFrom);
+        assertThat(html.substring(campFrom, campTo))
+                .contains("playStage(index)")
+                .doesNotContain("await playStage(0)");
+        int tokenFrom = html.indexOf("function parseCampaignToken");
+        int tokenTo = html.indexOf("function recipeParts");
+        assertThat(tokenFrom).isGreaterThanOrEqualTo(0);
+        assertThat(tokenTo).isGreaterThan(tokenFrom);
+        assertThat(html.substring(tokenFrom, tokenTo))
+                .contains("h.campaign")
+                .contains("stage: 0");
         assertAdoptThenPin(html, "async function generate", "function adoptMaze");
         assertAdoptThenPin(html, "async function loadDaily", "async function loadCampaign");
         assertAdoptThenPin(html, "async function crossbreed", "function parseHash");
