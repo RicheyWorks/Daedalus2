@@ -234,6 +234,28 @@ class WebUiSmokeTest {
                 "function adoptSessionView", "/session/${sessionId}");
         assertDiscardAfterFetch(html, "async function spectate",
                 "function adoptSessionView", "adoptSessionView");
+        // N23. join() POSTed /join then always wrote the seat. A Fog
+        // that started mid-flight hit a nulled state.session or
+        // reattached the seat after the walk dropped it. Stay a
+        // watcher until join lands (leaveSpectate after the POST);
+        // discard the apply when state.fog is set. Not a
+        // leave-fog-before-fetch path — that would break spectate.
+        int joinFrom = html.indexOf("async function join()");
+        int joinTo = html.indexOf("async function move(");
+        assertThat(joinFrom).isGreaterThanOrEqualTo(0);
+        assertThat(joinTo).isGreaterThan(joinFrom);
+        String join = html.substring(joinFrom, joinTo);
+        int joinPost = join.indexOf("/join?");
+        int joinDiscard = join.indexOf("if (state.fog)", joinPost);
+        int joinSeat = join.indexOf("state.seat");
+        assertThat(joinPost).isGreaterThanOrEqualTo(0);
+        assertThat(joinDiscard).isGreaterThan(joinPost);
+        assertThat(joinSeat).isGreaterThan(joinDiscard);
+        assertThat(join.indexOf("pinHash()")).isGreaterThan(joinDiscard);
+        assertThat(join.indexOf("resubscribe()")).isGreaterThan(joinDiscard);
+        assertThat(join.indexOf("leaveSpectate")).isGreaterThan(joinPost);
+        assertThat(join).doesNotContain("state.fog = null");
+        assertThat(join.indexOf("if (!state.session)", joinPost)).isGreaterThan(joinDiscard);
         int applyFrom = html.indexOf("function applyMove");
         int applyTo = html.indexOf("async function confirmWin");
         assertThat(applyFrom).isGreaterThanOrEqualTo(0);

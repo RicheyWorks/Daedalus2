@@ -1156,6 +1156,63 @@ async function check(name, fn) {
         : JSON.stringify({src, same, back, late}).slice(0, 220)];
   });
 
+  await check('N23. late Join after Fog does not steal the walk', async () => {
+    // Old body: join POSTed /join then always wrote the seat. Fog
+    // mid-flight hit a nulled state.session or reattached the seat.
+    // Stay a watcher until join lands; discard when state.fog is set.
+    // Not a leave-fog-before-fetch path (spectate honesty).
+    const src = await page.evaluate(() => {
+      const s = join.toString();
+      const post = s.indexOf('/join');
+      const discard = s.indexOf('if (state.fog)', post);
+      const seat = s.indexOf('state.seat');
+      const leave = s.indexOf('leaveSpectate');
+      return post >= 0 && discard > post && seat > discard
+          && leave > post && !s.includes('state.fog = null')
+          && s.indexOf('if (!state.session)', post) > discard;
+    });
+    const p2 = await ctx.newPage();
+    await p2.route('**/api/v1/session/**/join*', async route => {
+      await new Promise(r => setTimeout(r, 1200));
+      const url = new URL(route.request().url());
+      const sid = url.pathname.split('/')[4];
+      await route.fulfill({
+        status: 200,
+        headers: {'content-type': 'application/json'},
+        body: JSON.stringify({
+          sessionId: sid,
+          mazeId: '00000000-0000-0000-0000-000000000000',
+          position: {row: 0, col: 0},
+        }),
+      });
+    });
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '37');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 37, null, {timeout:15000});
+    await p2.click('#play');
+    await p2.waitForFunction(() => !!state.session, null, {timeout:15000});
+    await p2.click('#join');
+    await p2.click('#fog');
+    await p2.waitForFunction(() => !!(state.fog && state.fog.agentId), null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const after = await p2.evaluate(() => ({
+      fog: !!(state.fog && state.fog.agentId),
+      session: !!state.session,
+      seat: state.seat,
+      joined: state.joined,
+      hash: location.hash,
+      ghost: !!state.ghostTimer,
+    }));
+    await p2.close();
+    const ok = src && after.fog && !after.session && !after.seat && !after.joined
+        && !/session=/.test(after.hash) && !after.ghost;
+    return [ok, ok ? 'late join discarded; fog walk kept the canvas'
+        : JSON.stringify({src, after}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),
