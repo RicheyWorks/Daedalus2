@@ -1412,10 +1412,23 @@ async function spectate(sessionId) {
         clearInterval(state.spectatePoll); state.spectatePoll = null;
         return;
       }
+      const sessionId = state.session.id;
+      const mazeId = state.maze && state.maze.id;
       try {
-        adoptSessionView(await api(`/session/${state.session.id}`));
+        const view = await api(`/session/${sessionId}`);
+        // Generate / Fog / a new #session= while this GET was out
+        // would re-seat the old walk onto the maze now on screen.
+        // Discard — same class as N33. startFog still must not
+        // null tour (N17).
+        if (state.fog) return;
+        if (!state.session || state.session.id !== sessionId) return;
+        if (!state.maze || state.maze.id !== mazeId) return;
+        adoptSessionView(view);
         draw();
       } catch (gone) {
+        if (state.fog) return;
+        if (!state.session || state.session.id !== sessionId) return;
+        if (!state.maze || state.maze.id !== mazeId) return;
         clearInterval(state.spectatePoll); state.spectatePoll = null;
         log("err", "spectated session ended (evicted)");
       }

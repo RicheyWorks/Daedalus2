@@ -578,6 +578,38 @@ class WebUiSmokeTest {
         assertThat(n33).doesNotContain("/maze/${");
         assertThat(n33).doesNotContain("state.tour = null");
         assertThat(n33).doesNotContain("tourFor");
+        // N34. spectate poll GETs /session/{id} then always
+        // adoptSessionView. Generate / Fog / a new #session=
+        // mid-flight re-seated the old walk on the maze now on
+        // screen. Capture session + maze id before the GET;
+        // discard after when fog is on, the session no longer
+        // matches, or maze id no longer matches. Must not GET
+        // /maze. startFog still must not null tour (N17).
+        int n34From = html.indexOf("async function spectate");
+        int n34To = html.indexOf("function adoptSessionView");
+        assertThat(n34From).isGreaterThanOrEqualTo(0);
+        assertThat(n34To).isGreaterThan(n34From);
+        String n34 = html.substring(n34From, n34To);
+        int n34Poll = n34.indexOf("setInterval");
+        int n34Id = n34.indexOf("const sessionId", n34Poll);
+        int n34Maze = n34.indexOf("const mazeId", n34Poll);
+        int n34Get = n34.indexOf("/session/${sessionId}", n34Poll);
+        int n34Fog = n34.indexOf("if (state.fog)", n34Get);
+        int n34Sess = n34.indexOf("state.session.id !== sessionId", n34Get);
+        int n34MazeCheck = n34.indexOf("state.maze.id !== mazeId", n34Get);
+        int n34Write = n34.indexOf("adoptSessionView", n34MazeCheck);
+        assertThat(n34Poll).isGreaterThanOrEqualTo(0);
+        assertThat(n34Id).isGreaterThan(n34Poll);
+        assertThat(n34Maze).isGreaterThan(n34Id);
+        assertThat(n34Maze).isLessThan(n34Get);
+        assertThat(n34Get).isGreaterThanOrEqualTo(0);
+        assertThat(n34Fog).isGreaterThan(n34Get);
+        assertThat(n34Sess).isGreaterThan(n34Fog);
+        assertThat(n34MazeCheck).isGreaterThan(n34Sess);
+        assertThat(n34Write).isGreaterThan(n34MazeCheck);
+        assertThat(n34.substring(n34Poll)).doesNotContain("/session/${state.session.id}");
+        assertThat(n34.substring(n34Poll)).doesNotContain("/maze/${");
+        assertThat(n34.substring(n34Poll)).doesNotContain("tourFor");
         int raceFrom = html.indexOf("async function raceSolvers");
         int raceTo = html.indexOf("function animateRace");
         assertThat(raceFrom).isGreaterThanOrEqualTo(0);
