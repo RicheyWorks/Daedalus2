@@ -2064,7 +2064,7 @@ async function check(name, fn) {
     // session + maze id; discard after the GET. startFog still
     // must not null tour (N17). Must not GET /maze.
     const src = await page.evaluate(() => {
-      const s = spectate.toString();
+      const s = startSpectatePolling.toString();
       const poll = s.indexOf('setInterval');
       const sid = s.indexOf('sessionId', poll);
       const mid = s.indexOf('mazeId', poll);
@@ -2177,7 +2177,7 @@ async function check(name, fn) {
     // move overwrote applyMove. After the GET, discard when
     // state.stomp is set; connectStomp clears the leftover interval.
     const src = await page.evaluate(() => {
-      const s = spectate.toString();
+      const s = startSpectatePolling.toString();
       const poll = s.indexOf('setInterval');
       const w = s.indexOf('await ', poll);
       const stomp = s.indexOf('if (state.stomp)', w);
@@ -2201,7 +2201,7 @@ async function check(name, fn) {
     // is set; poll-initiated refresh discards after the GET.
     const src = await page.evaluate(() => {
       const live = startLivePolling.toString();
-      const traf = simulateTraffic.toString();
+      const traf = startTrafficPolling.toString();
       const refresh = refreshLivingMaze.toString();
       const c = connectStomp.toString();
       const assign = c.indexOf('state.stomp = client');
@@ -2214,6 +2214,27 @@ async function check(name, fn) {
     });
     return [src, src ? 'living/traffic polls discard after STOMP; CONNECT drops leftover intervals'
         : 'N44 source pin failed'];
+  });
+
+  await check('N45. STOMP drop re-arms living / traffic / spectate polls CONNECT cleared', async () => {
+    // Old body: CONNECT dropped the fallbacks; disconnect left
+    // them dead. A watched walk or eroding stage froze. After
+    // state.stomp = null, re-arm the same polls — no POST /live.
+    const src = await page.evaluate(() => {
+      const c = connectStomp.toString();
+      const lost = c.indexOf('STOMP connection lost');
+      const nul = c.lastIndexOf('state.stomp = null', lost);
+      const arm = c.indexOf('armStompFallbacks()', lost);
+      const a = armStompFallbacks.toString();
+      return lost >= 0 && nul >= 0 && nul < lost && arm > lost
+          && a.includes('startSpectatePolling()')
+          && a.includes('startLivePolling(')
+          && a.includes('startTrafficPolling(')
+          && !a.includes('/live')
+          && !a.includes('POST');
+    });
+    return [src, src ? 'disconnect re-arms STOMP-less polls; no second /live'
+        : 'N45 source pin failed'];
   });
 
   await check('N35. late confirmWin / tour status after Generate do not paint the maze now on screen', async () => {

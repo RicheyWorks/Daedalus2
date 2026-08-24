@@ -811,6 +811,28 @@ class WebUiSmokeTest {
         assertThat(n44DropTraf).isGreaterThan(n43Assign);
         assertThat(n43Resub).isGreaterThan(n44DropLive);
         assertThat(n43Resub).isGreaterThan(n44DropTraf);
+        // N45. CONNECT drops the STOMP-less polls (N43 / N44). A
+        // later disconnect used to leave them dead, so a living /
+        // traffic / watched maze froze until the next CONNECT.
+        // After state.stomp = null, re-arm the same polls. Do not
+        // POST /live (no second ticker). Fog / maze-id discard stays.
+        int n45Lost = n43Connect.indexOf("STOMP connection lost");
+        int n45Err = n43Connect.lastIndexOf("state.stomp = null", n45Lost);
+        int n45Arm = n43Connect.indexOf("armStompFallbacks()", n45Lost);
+        assertThat(n45Lost).isGreaterThanOrEqualTo(0);
+        assertThat(n45Err).isGreaterThanOrEqualTo(0);
+        assertThat(n45Err).isLessThan(n45Lost);
+        assertThat(n45Arm).isGreaterThan(n45Lost);
+        int n45From = html.indexOf("function armStompFallbacks");
+        int n45To = html.indexOf("function resubscribe");
+        assertThat(n45From).isGreaterThanOrEqualTo(0);
+        assertThat(n45To).isGreaterThan(n45From);
+        String n45 = html.substring(n45From, n45To);
+        assertThat(n45).contains("startSpectatePolling()");
+        assertThat(n45).contains("startLivePolling(");
+        assertThat(n45).contains("startTrafficPolling(");
+        assertThat(n45).doesNotContain("/live");
+        assertThat(n45).doesNotContain("method: \"POST\"");
         // N35. confirmWin / refreshTourStatus GET /session/{id} after
         // only a fog + session-exists check. Generate + a new Play
         // mid-flight painted hunt status or declareWin (leaderboard,

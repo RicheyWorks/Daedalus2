@@ -331,7 +331,9 @@ const state = {
   stomp: null,
   subs: [],
   livePoll: null,        // interval id — STOMP-less fallback while a maze is alive
+  liveTickMs: 2000,      // last living cadence — reconnect re-arms with this
   trafficPoll: null,     // interval id — STOMP-less fallback while traffic is tracked
+  trafficTickMs: 2000,   // last traffic cadence — reconnect re-arms with this
   race: null,            // {lanes: [{id, color, expansions, path, front, pathProg}]} during a race
   dailyId: null,         // set when the current maze is today's daily → scoped leaderboard
   analysis: null,        // AnalysisResponse — chokepoint/dead-end overlay when set
@@ -1455,51 +1457,58 @@ async function spectate(sessionId) {
   log("state", `spectating ${Object.keys(view.players).join(", ")} — moves arrive live`);
   await hydrateSpectatorOverlays(view);
   resubscribe();
-  if (!state.stomp) {
-    clearInterval(state.spectatePoll);
-    state.spectatePoll = setInterval(async () => {
-      if (!state.readOnly || !state.session) {
-        clearInterval(state.spectatePoll); state.spectatePoll = null;
-        return;
-      }
-      // Broker arrived after this fallback was armed. Frames own
-      // the walk; keep polling and a late snapshot rewinds a hop
-      // STOMP already applied (N43).
+  if (!state.stomp) startSpectatePolling();
+  draw();
+}
+
+/**
+ * STOMP-less spectator fallback. CONNECT drops this (N43); a later
+ * disconnect must re-arm it or a watched walk freezes (N45).
+ */
+function startSpectatePolling() {
+  if (state.stomp || !state.readOnly || !state.session) return;
+  clearInterval(state.spectatePoll);
+  state.spectatePoll = setInterval(async () => {
+    if (!state.readOnly || !state.session) {
+      clearInterval(state.spectatePoll); state.spectatePoll = null;
+      return;
+    }
+    // Broker arrived after this fallback was armed. Frames own
+    // the walk; keep polling and a late snapshot rewinds a hop
+    // STOMP already applied (N43).
+    if (state.stomp) {
+      clearInterval(state.spectatePoll); state.spectatePoll = null;
+      return;
+    }
+    const sessionId = state.session.id;
+    const mazeId = state.maze && state.maze.id;
+    try {
+      const view = await api(`/session/${sessionId}`);
+      // Generate / Fog / a new #session= while this GET was out
+      // would re-seat the old walk onto the maze now on screen.
+      // Discard — same class as N33. startFog still must not
+      // null tour (N17).
+      if (state.fog) return;
       if (state.stomp) {
         clearInterval(state.spectatePoll); state.spectatePoll = null;
         return;
       }
-      const sessionId = state.session.id;
-      const mazeId = state.maze && state.maze.id;
-      try {
-        const view = await api(`/session/${sessionId}`);
-        // Generate / Fog / a new #session= while this GET was out
-        // would re-seat the old walk onto the maze now on screen.
-        // Discard — same class as N33. startFog still must not
-        // null tour (N17).
-        if (state.fog) return;
-        if (state.stomp) {
-          clearInterval(state.spectatePoll); state.spectatePoll = null;
-          return;
-        }
-        if (!state.session || state.session.id !== sessionId) return;
-        if (!state.maze || state.maze.id !== mazeId) return;
-        adoptSessionView(view);
-        draw();
-      } catch (gone) {
-        if (state.fog) return;
-        if (state.stomp) {
-          clearInterval(state.spectatePoll); state.spectatePoll = null;
-          return;
-        }
-        if (!state.session || state.session.id !== sessionId) return;
-        if (!state.maze || state.maze.id !== mazeId) return;
+      if (!state.session || state.session.id !== sessionId) return;
+      if (!state.maze || state.maze.id !== mazeId) return;
+      adoptSessionView(view);
+      draw();
+    } catch (gone) {
+      if (state.fog) return;
+      if (state.stomp) {
         clearInterval(state.spectatePoll); state.spectatePoll = null;
-        log("err", "spectated session ended (evicted)");
+        return;
       }
-    }, 1000);
-  }
-  draw();
+      if (!state.session || state.session.id !== sessionId) return;
+      if (!state.maze || state.maze.id !== mazeId) return;
+      clearInterval(state.spectatePoll); state.spectatePoll = null;
+      log("err", "spectated session ended (evicted)");
+    }
+  }, 1000);
 }
 
 /**
@@ -1624,6 +1633,7 @@ async function bringToLife() {
  * that declare the `living` hazard.
  */
 function startLivePolling(mazeId, tickMillis = 2000, ticks = 30) {
+  state.liveTickMs = tickMillis;
   let polls = 0;
   clearInterval(state.livePoll);
   state.livePoll = setInterval(async () => {
@@ -2239,17 +2249,20 @@ async function simulateTraffic() {
   $("traffic").disabled = true;
   log("state", `traffic tracking on — walk around and watch the costs bloom `
       + `(pulse every ${(r.tickMillis / 1000).toFixed(1)}s)`);
-  if (!state.stomp) {
-    // STOMP-less fallback: poll while a session is being played; stop with the maze.
-    clearInterval(state.trafficPoll);
-    state.trafficPoll = setInterval(async () => {
-      if (state.stomp || !state.maze || state.maze.id !== mazeId) {
-        clearInterval(state.trafficPoll); state.trafficPoll = null;
-        return;
-      }
-      await refreshLivingMaze(true);
-    }, r.tickMillis);
-  }
+  if (!state.stomp) startTrafficPolling(mazeId, r.tickMillis);
+}
+
+/** STOMP-less traffic fallback. CONNECT drops this (N44); disconnect re-arms (N45). */
+function startTrafficPolling(mazeId, tickMillis = 2000) {
+  state.trafficTickMs = tickMillis;
+  clearInterval(state.trafficPoll);
+  state.trafficPoll = setInterval(async () => {
+    if (state.stomp || !state.maze || state.maze.id !== mazeId) {
+      clearInterval(state.trafficPoll); state.trafficPoll = null;
+      return;
+    }
+    await refreshLivingMaze(true);
+  }, tickMillis);
 }
 
 /** A traffic pulse arrived: costs moved — re-fetch, re-solve, redraw (same as mutation). */
@@ -2960,8 +2973,24 @@ function connectStomp() {
     if (gen !== stompGen) return;
     state.stomp = null;
     log("err", "STOMP connection lost — retrying in 3s");
+    // CONNECT dropped the fallbacks (N43 / N44). The broker is gone
+    // again, so a living / traffic / watched maze would freeze until
+    // the next CONNECT. Re-arm the same polls; do not POST /live.
+    armStompFallbacks();
     setTimeout(() => { if (gen === stompGen) connectStomp(); }, 3000);
   });
+}
+
+/** Poll while the broker is down. CONNECT clears these (N43 / N44). */
+function armStompFallbacks() {
+  if (state.stomp) return;
+  if (state.readOnly && state.session && state.maze) startSpectatePolling();
+  if (state.maze && $("live") && $("live").disabled && !state.livePoll) {
+    startLivePolling(state.maze.id, state.liveTickMs || 2000, Infinity);
+  }
+  if (state.maze && $("traffic") && $("traffic").disabled && !state.trafficPoll) {
+    startTrafficPolling(state.maze.id, state.trafficTickMs || 2000);
+  }
 }
 
 function resubscribe() {
