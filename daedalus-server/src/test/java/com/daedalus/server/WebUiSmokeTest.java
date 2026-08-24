@@ -288,6 +288,25 @@ class WebUiSmokeTest {
         assertThat(huntDiscard).isGreaterThan(huntGet);
         assertThat(hunt.indexOf("$(\"status\")", huntDiscard)).isGreaterThan(huntDiscard);
         assertThat(hunt.indexOf("if (!state.session)", huntGet)).isGreaterThan(huntDiscard);
+        // N25. summonGhost GETs /ghost then always armed state.ghost and
+        // the ticker. Fog mid-flight cleared both; the GET still re-armed
+        // the ghost onto the walk. Discard after the GET; startFog still
+        // must not null tour. hydrateSpectatorOverlays only calls this.
+        assertDiscardAfterFetch(html, "async function summonGhost",
+                "async function simulateTraffic", "state.ghost");
+        int ghostFrom = html.indexOf("async function summonGhost");
+        int ghostTo = html.indexOf("async function simulateTraffic");
+        assertThat(ghostFrom).isGreaterThanOrEqualTo(0);
+        assertThat(ghostTo).isGreaterThan(ghostFrom);
+        String ghost = html.substring(ghostFrom, ghostTo);
+        int ghostGet = ghost.indexOf("/ghost");
+        int ghostDiscard = ghost.indexOf("if (state.fog)", ghostGet);
+        int ghostArm = ghost.indexOf("state.ghost =", ghostDiscard);
+        assertThat(ghostGet).isGreaterThanOrEqualTo(0);
+        assertThat(ghostDiscard).isGreaterThan(ghostGet);
+        assertThat(ghostArm).isGreaterThan(ghostDiscard);
+        assertThat(ghost.indexOf("if (!state.session)", ghostGet)).isGreaterThan(ghostDiscard);
+        assertThat(ghost.indexOf("setInterval", ghostDiscard)).isGreaterThan(ghostArm);
         int declFrom = html.indexOf("function declareWin");
         int declTo = html.indexOf("let statusFlashTimer");
         assertThat(declFrom).isGreaterThanOrEqualTo(0);

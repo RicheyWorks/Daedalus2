@@ -2030,6 +2030,10 @@ async function summonGhost() {
   let run;
   try { run = await api(`/maze/${state.maze.id}/ghost`); }
   catch (ignored) { return; } // 404 — nobody has finished this maze yet
+  // Fog dropped the seat and cleared the ghost while this GET was
+  // out. Do not re-arm the ticker onto a walk that just emptied it.
+  if (state.fog) return;
+  if (!state.session) return;
   // Recording is a walk from the maze start. A late #session= hydrate used
   // the opener's current cell, so the ghost trail teleported from mid-run.
   const start = mazeStart(state.maze) || state.session.positions[thisTabSeat()];

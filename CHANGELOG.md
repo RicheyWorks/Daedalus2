@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Late ghost after Fog does not re-arm the ticker.** `summonGhost()` GETs `/ghost` then always armed `state.ghost` and the ticker. Fog mid-flight cleared both; the GET still re-armed the ghost onto the walk. Discard after the GET when `state.fog` is set or the seat is gone. Same class as N20–N24.
+
 - **Late confirmWin / tour status after Fog do not paint the walk.** `confirmWin()` GETs `/session/{id}` then `declareWin` with no fog/session re-check; `refreshTourStatus()` painted hunt status the same way. Fog mid-flight still wrote a win (status, leaderboard, campaign) onto the walk. Discard after the GET when `state.fog` is set or the seat is gone. Same class as N20–N23.
 
 - **Late Join after Fog does not steal the walk.** `join()` POSTed `/join` then always wrote the seat. Fog mid-flight hit a nulled `state.session` or reattached the seat after the walk dropped it. Stay a watcher until join lands (spectate honesty); discard the apply when `state.fog` is set. Same class as N20–N22.

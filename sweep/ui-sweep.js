@@ -1291,6 +1291,62 @@ async function check(name, fn) {
         : JSON.stringify({src, after}).slice(0, 220)];
   });
 
+  await check('N25. late ghost after Fog does not re-arm the ticker', async () => {
+    // Old body: summonGhost GETs /ghost then always armed state.ghost
+    // and the ticker. Fog mid-flight cleared both; the GET still
+    // re-armed the ghost onto the walk. Discard after the GET;
+    // startFog still must not null tour.
+    const src = await page.evaluate(() => {
+      const s = summonGhost.toString();
+      const get = s.indexOf('/ghost');
+      const fog = s.indexOf('if (state.fog)', get);
+      const fogSrc = startFog.toString();
+      return get >= 0 && fog > get
+          && s.indexOf('state.ghost =', fog) > fog
+          && s.indexOf('if (!state.session)', get) > fog
+          && s.indexOf('setInterval', fog) > fog
+          && !fogSrc.includes('state.tour = null');
+    });
+    const p2 = await ctx.newPage();
+    await p2.route('**/api/v1/maze/*/ghost', async route => {
+      await new Promise(r => setTimeout(r, 1200));
+      await route.fulfill({
+        status: 200,
+        headers: {'content-type': 'application/json'},
+        body: JSON.stringify({
+          mazeId: '00000000-0000-0000-0000-000000000025',
+          playerName: 'speedrunner',
+          score: 42,
+          elapsedMs: 1500,
+          moves: [{to: {row: 0, col: 1}, tMs: 200}],
+        }),
+      });
+    });
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '43');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 43, null, {timeout:15000});
+    await p2.click('#play');
+    await p2.waitForFunction(() => !!state.session, null, {timeout:15000});
+    await p2.click('#fog');
+    await p2.waitForFunction(() => !!(state.fog && state.fog.agentId), null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const after = await p2.evaluate(() => ({
+      fog: !!(state.fog && state.fog.agentId),
+      session: !!state.session,
+      ghost: !!state.ghost,
+      timer: !!state.ghostTimer,
+      hash: location.hash,
+    }));
+    await p2.close();
+    const ok = src && after.fog && !after.session && !after.ghost && !after.timer
+        && !/session=/.test(after.hash);
+    return [ok, ok ? 'late ghost discarded; fog walk kept the canvas'
+        : JSON.stringify({src, after}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),
