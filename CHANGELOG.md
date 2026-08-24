@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Late spectator `/session/{id}/tour` after Generate does not paint the maze now on screen.** `hydrateSpectatorOverlays` GETs session tour progress then always wrote `state.tour`. Generate / Fog / a new `#session=` mid-flight painted the old hunt onto the maze now on screen. Capture session and maze id; discard after the GET when fog is on or the seat no longer matches. Sibling `summonGhost` is the same discard. Progress only — not `GET /maze/{id}/tour`. Fog still keeps tour (N17).
+
 - **Late Open session after Generate does not seat the maze now on screen.** `play()` POSTed `/session` after only a fog check. Generate mid-flight pinned `#session=` and wrote the seat onto the generated maze. Capture maze id before the POST; discard after `/session` (and the leave-fog GET `/maze`) when fog is on or maze id no longer matches. Fog discard stays.
 
 - **Late `/tour` after Generate does not play or paint the maze now on screen.** `startTour` / `hardestRoute` / `placeSanctuaries` / `showAscii` fetched then painted after only a fog check. Generate mid-flight assigned the old tour, route, rings, or dump onto the maze now on screen; Hunt could even `play()` a session on the new id. Discard when maze id no longer matches. Fog discard stays.

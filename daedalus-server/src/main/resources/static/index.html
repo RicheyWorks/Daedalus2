@@ -1471,11 +1471,19 @@ function mazeStart(maze) {
  * is "no finished run yet".
  */
 async function hydrateSpectatorOverlays(view) {
+  const sessionId = view.sessionId;
+  const mazeId = view.mazeId;
   try {
-    const p = await api(`/session/${view.sessionId}/tour`);
+    const p = await api(`/session/${sessionId}/tour`);
     // Progress carries the coins and the Held-Karp path. GET /maze/{id}/tour
     // is auth-required in prod and would 401 here; it is also what freezes
     // coins, which a spectator GET must not do.
+    // Generate / Fog / a new #session= while this GET was out would
+    // paint the old hunt onto the maze now on screen. Discard — same
+    // class as N31. startFog still must not null tour (N17).
+    if (state.fog) return;
+    if (!state.session || state.session.id !== sessionId) return;
+    if (!state.maze || state.maze.id !== mazeId) return;
     if (p.waypoints && p.waypoints.length) {
       state.tour = {
         waypoints: p.waypoints,
@@ -1487,6 +1495,9 @@ async function hydrateSpectatorOverlays(view) {
       log("state", `spectating a waypoint hunt — ${p.collected}/${p.total} collected`);
     }
   } catch (ignored) { /* no tour minted; do not create one */ }
+  if (state.fog) return;
+  if (!state.session || state.session.id !== sessionId) return;
+  if (!state.maze || state.maze.id !== mazeId) return;
   await summonGhost();
 }
 
