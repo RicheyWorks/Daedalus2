@@ -642,6 +642,83 @@ async function check(name, fn) {
         : JSON.stringify({src, maze: maze.id, after, stillPlays}).slice(0, 220)];
   });
 
+  await check('N12. Generate / Daily / Breed from a campaign drop the ladder', async () => {
+    // Old body: loadFromHash left on a non-campaign hydrate (N11), but
+    // Generate / Daily / Breed adopt then pin a matching #maze= / #daily.
+    // hashShowsCurrent no-ops, so the ladder stayed and a stage click
+    // still played a campaign maze the bar no longer named.
+    const src = await page.evaluate(() => {
+      const pin = pinHash.toString();
+      const stage = playStage.toString();
+      const afterAdopt = (fn) => {
+        const s = fn.toString();
+        const a = s.indexOf('adoptMaze');
+        const p = s.indexOf('pinHash()');
+        return a >= 0 && p > a && !s.includes('leaveCampaign()');
+      };
+      return typeof leaveCampaign === 'function'
+          && pin.includes('leaveCampaign()')
+          && pin.includes('p.campaign == null')
+          && afterAdopt(generate) && afterAdopt(loadDaily) && afterAdopt(crossbreed)
+          && stage.includes('state.stageIndex = index')
+          && stage.indexOf('pinHash()') > stage.indexOf('state.stageIndex = index')
+          && !stage.includes('leaveCampaign()');
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    const enterCampaign = async () => {
+      await p2.click('#campaign');
+      await p2.waitForFunction(() => state.campaign && state.stageIndex === 0
+          && !!document.querySelector('#campaignBox a[data-stage]'), null, {timeout:40000});
+    };
+    const left = async (hashRe) => {
+      await p2.waitForFunction(() => !state.campaign
+          && !document.querySelector('#campaignBox a[data-stage]'), null, {timeout:20000});
+      const snap = await p2.evaluate(() => ({
+        hash: location.hash,
+        campaign: !!state.campaign,
+        stages: document.querySelectorAll('#campaignBox a[data-stage]').length,
+      }));
+      let stillPlays = false;
+      try {
+        stillPlays = await p2.evaluate(async () => {
+          await playStage(0);
+          return !!(state.campaign && state.stageIndex === 0);
+        });
+      } catch (e) {
+        stillPlays = false;
+      }
+      return {ok: hashRe.test(snap.hash) && !snap.campaign && snap.stages === 0
+          && !stillPlays, snap, stillPlays};
+    };
+    await enterCampaign();
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '14');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 14, null, {timeout:15000});
+    const gen = await left(/maze=/);
+    await enterCampaign();
+    await p2.click('#daily');
+    await p2.waitForFunction(() => !!state.dailyId, null, {timeout:20000});
+    const daily = await left(/^#daily$/);
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '15');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 15, null, {timeout:15000});
+    await p2.waitForFunction(() => !document.getElementById('breed').disabled,
+        null, {timeout:5000});
+    await enterCampaign();
+    await p2.waitForFunction(() => !document.getElementById('breed').disabled,
+        null, {timeout:5000});
+    await p2.click('#breed');
+    await p2.waitForFunction(() => state.maze && !state.campaign, null, {timeout:20000});
+    const breed = await left(/maze=/);
+    await p2.close();
+    const ok = src && gen.ok && daily.ok && breed.ok;
+    return [ok, ok ? 'Generate / Daily / Breed dropped the ladder'
+        : JSON.stringify({src, gen, daily, breed}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

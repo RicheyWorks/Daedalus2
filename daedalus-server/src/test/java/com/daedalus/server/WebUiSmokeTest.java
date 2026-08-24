@@ -156,6 +156,41 @@ class WebUiSmokeTest {
                 .contains("$(\"campaignBox\")");
         assertThat(adopt).contains("state.stageIndex = null")
                 .doesNotContain("state.campaign = null");
+        // Generate / Daily / Breed adopt then pin a matching #maze= / #daily.
+        // hashShowsCurrent then no-ops, so loadFromHash never leaves. pinHash
+        // drops the ladder when the exclusive kind is not campaign; playStage
+        // restores stageIndex first so that write stays #campaign=.
+        int pinFrom = html.indexOf("function pinHash");
+        int pinTo = html.indexOf("function hashShowsCurrent");
+        assertThat(pinFrom).isGreaterThanOrEqualTo(0);
+        assertThat(pinTo).isGreaterThan(pinFrom);
+        assertThat(html.substring(pinFrom, pinTo))
+                .contains("leaveCampaign()")
+                .contains("p.campaign == null");
+        int stageFrom = html.indexOf("async function playStage");
+        int stageTo = html.indexOf("async function crossbreed");
+        assertThat(stageFrom).isGreaterThanOrEqualTo(0);
+        assertThat(stageTo).isGreaterThan(stageFrom);
+        String stage = html.substring(stageFrom, stageTo);
+        assertThat(stage.indexOf("state.stageIndex = index"))
+                .isGreaterThan(stage.indexOf("adoptMaze"));
+        assertThat(stage.indexOf("pinHash()"))
+                .isGreaterThan(stage.indexOf("state.stageIndex = index"));
+        assertThat(stage).doesNotContain("leaveCampaign()");
+        assertAdoptThenPin(html, "async function generate", "function adoptMaze");
+        assertAdoptThenPin(html, "async function loadDaily", "async function loadCampaign");
+        assertAdoptThenPin(html, "async function crossbreed", "function parseHash");
+    }
+
+    /** Generate / Daily / Breed adopt a non-campaign maze, then pinHash leaves. */
+    private static void assertAdoptThenPin(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end);
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body.indexOf("pinHash()")).isGreaterThan(body.indexOf("adoptMaze"));
+        assertThat(body).doesNotContain("leaveCampaign()");
     }
 
     /** First {@code leaveSpectate} after {@code start} is before {@code write}. */

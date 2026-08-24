@@ -1091,6 +1091,11 @@ function currentPermalink() {
 
 function pinHash() {
   const p = currentPermalink();
+  // playStage restores stageIndex before pinning, so that write stays
+  // #campaign= and the ladder lives. Generate / Daily / Breed (and any
+  // sibling that pins maze / daily / session) must drop it — adoptMaze
+  // only nulls stageIndex, and a matching hash makes loadFromHash no-op.
+  if (p.campaign == null) leaveCampaign();
   let next = "";
   if (p.session) next = "session=" + p.session;
   else if (p.campaign != null) next = "campaign=" + p.campaign;

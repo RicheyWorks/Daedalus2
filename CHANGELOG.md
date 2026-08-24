@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Generate / Daily / Breed from a campaign drop the ladder.**
+  A non-campaign hydrate already left (N11), but those three adopted
+  then pinned a matching `#maze=` / `#daily`. `hashShowsCurrent` no-op'd,
+  so `state.campaign` and `#campaignBox` stayed painted and a stage click
+  still played a campaign maze the bar no longer named. `pinHash` now
+  leaves when the exclusive kind is not campaign; `playStage` still
+  restores `stageIndex` first so the ladder stays.
+
 - **Back from a campaign drops the ladder.**
   `hashchange` re-hydrated the maze and hash (N10), but `adoptMaze` only
   nulled `stageIndex`. `state.campaign` and `#campaignBox` stayed painted,
