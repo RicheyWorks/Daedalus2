@@ -773,6 +773,14 @@ function applyBraidFromMaze(maze) {
 
 async function generate(opts) {
   leaveSpectate();
+  // Generate stays armed during fog — it is a leave-fog path. Drop the
+  // walk before the fetch (leaveSpectate-before-write). adoptMaze used
+  // to always replace the maze, so a generate that was already out
+  // still stole the canvas after Fog started mid-flight.
+  if (state.fog) {
+    state.fog = null;
+    setGodModeEnabled(true);
+  }
   const braid = opts && opts.braid != null ? +opts.braid : +(($("braid") && $("braid").value) || 0);
   let seed = $("seed").value === "" ? null : +$("seed").value;
   if (seed == null || Number.isNaN(seed)) {
@@ -796,6 +804,7 @@ async function generate(opts) {
   const maze = await api("/maze/generate", {
     method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body),
   });
+  if (state.fog) return;
   adoptMaze(maze, performance.now() - t0);
   pinHash();
 }
@@ -814,6 +823,10 @@ function setGodModeEnabled(on) {
 
 /** Install a maze into the UI — from a fresh generate, a #maze=<id> permalink, or the daily. */
 function adoptMaze(maze, roundTripMs, sourceLabel) {
+  // A Fog that started while Generate / Daily / Campaign / Breed was
+  // already out must keep the walk. Callers leave fog before they
+  // fetch; this discard is the late-arrival gate.
+  if (state.fog) return;
   if (state.maze && state.maze.id !== maze.id) {
     state.prevMazeId = state.maze.id; // remember the other parent for crossbreeding
   }
@@ -882,7 +895,12 @@ $("pngExport").addEventListener("click", function refresh() {
 /** The shared daily challenge — same maze for everyone until midnight UTC (ADR-006). */
 async function loadDaily() {
   leaveSpectate();
+  if (state.fog) {
+    state.fog = null;
+    setGodModeEnabled(true);
+  }
   const d = await api("/maze/daily");
+  if (state.fog) return;
   adoptMaze(d.maze, null, `daily challenge ${d.date}`);
   state.dailyId = d.maze.id; // after adoptMaze (which clears it) — scopes the leaderboard
   pinHash();
@@ -898,7 +916,12 @@ async function loadDaily() {
  */
 async function loadCampaign(seed, stage) {
   leaveSpectate();
+  if (state.fog) {
+    state.fog = null;
+    setGodModeEnabled(true);
+  }
   const c = await api(`/campaign${seed != null ? "?seed=" + seed : ""}`);
+  if (state.fog) return;
   state.campaign = c;
   state.cleared = {};
   renderCampaign();
@@ -958,8 +981,13 @@ function onStageCleared() {
 /** Load a stage: its maze, its own leaderboard, its ghost, and the hazards it declares. */
 async function playStage(index) {
   leaveSpectate();
+  if (state.fog) {
+    state.fog = null;
+    setGodModeEnabled(true);
+  }
   const stage = state.campaign.stages[index];
   const maze = await api(`/maze/${stage.mazeId}`);
+  if (state.fog) return;
   adoptMaze(maze, null, `campaign stage ${index + 1}`);
   state.stageIndex = index; // after adoptMaze, which resets per-maze state
   state.dailyId = null;
@@ -1001,8 +1029,13 @@ async function playStage(index) {
 /** Cross the current maze with the previous one — the child replaces the current maze. */
 async function crossbreed() {
   leaveSpectate();
+  if (state.fog) {
+    state.fog = null;
+    setGodModeEnabled(true);
+  }
   const child = await api(`/maze/breed?a=${state.prevMazeId}&b=${state.maze.id}`,
       {method: "POST"});
+  if (state.fog) return;
   adoptMaze(child, null, "crossbreeding");
   pinHash();
   log("state", "bred a child of the last two mazes — patches of both, repaired to one "

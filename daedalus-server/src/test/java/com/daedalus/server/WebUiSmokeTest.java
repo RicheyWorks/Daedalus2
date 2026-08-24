@@ -184,6 +184,31 @@ class WebUiSmokeTest {
         assertThat(play).doesNotContain("hadFog");
         assertDiscardAfterFetch(html, "async function startTour",
                 "function sameCell", "state.tour = t");
+        // N21. Generate / Daily / Campaign / Breed stay armed during
+        // fog (leave-walk paths). They fetched, then adoptMaze always
+        // replaced the maze, so a generate that was already out still
+        // stole the walk. Leave fog before the fetch; discard adopt
+        // when state.fog is set after the POST.
+        assertLeaveFogBeforeFetch(html, "async function generate", "function adoptMaze",
+                "/maze/generate");
+        assertDiscardAfterFetch(html, "async function generate", "function adoptMaze",
+                "adoptMaze");
+        assertLeaveFogBeforeFetch(html, "async function loadDaily", "async function loadCampaign",
+                "/maze/daily");
+        assertDiscardAfterFetch(html, "async function loadDaily", "async function loadCampaign",
+                "adoptMaze");
+        assertLeaveFogBeforeFetch(html, "async function loadCampaign", "function leaveCampaign",
+                "/campaign");
+        assertDiscardAfterFetch(html, "async function loadCampaign", "function leaveCampaign",
+                "state.campaign");
+        assertLeaveFogBeforeFetch(html, "async function playStage", "async function crossbreed",
+                "/maze/${stage.mazeId}");
+        assertDiscardAfterFetch(html, "async function playStage", "async function crossbreed",
+                "adoptMaze");
+        assertLeaveFogBeforeFetch(html, "async function crossbreed", "function parseHash",
+                "/maze/breed");
+        assertDiscardAfterFetch(html, "async function crossbreed", "function parseHash",
+                "adoptMaze");
         int applyFrom = html.indexOf("function applyMove");
         int applyTo = html.indexOf("async function confirmWin");
         assertThat(applyFrom).isGreaterThanOrEqualTo(0);
@@ -220,6 +245,12 @@ class WebUiSmokeTest {
         assertThat(adopt)
                 .contains("$(\"generator\").value = maze.generatorId")
                 .contains("$(\"seed\").value = maze.seed");
+        assertThat(adopt.indexOf("if (state.fog)"))
+                .isGreaterThanOrEqualTo(0);
+        assertThat(adopt.indexOf("if (state.fog)"))
+                .isLessThan(adopt.indexOf("state.maze = maze"));
+        assertThat(adopt.indexOf("if (state.fog)"))
+                .isLessThan(adopt.indexOf("state.fog = null"));
         // loadFromHash was boot-only. pinHash wrote the bar; Back updated the
         // URL and left the canvas on the previous maze. hashchange re-runs the
         // boot hydrate; the same-hash guard stops pinHash's write from looping.
@@ -339,11 +370,25 @@ class WebUiSmokeTest {
         assertThat(to).isGreaterThan(from);
         String body = html.substring(from, to);
         int fetch = body.indexOf("await ");
-        int fog = body.indexOf("if (state.fog)");
-        int out = body.indexOf(write);
+        int fog = body.indexOf("if (state.fog)", fetch);
+        int out = body.indexOf(write, fog);
         assertThat(fetch).isGreaterThanOrEqualTo(0);
         assertThat(fog).isGreaterThan(fetch);
         assertThat(out).isGreaterThan(fog);
+    }
+
+    /** Leave-fog paths drop the walk before they fetch, not after. */
+    private static void assertLeaveFogBeforeFetch(String html, String start, String end,
+            String write) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        int drop = body.indexOf("state.fog = null");
+        int fetch = body.indexOf(write);
+        assertThat(drop).isGreaterThanOrEqualTo(0);
+        assertThat(fetch).isGreaterThan(drop);
     }
 
     /** First {@code leaveSpectate} after {@code start} is before {@code write}. */

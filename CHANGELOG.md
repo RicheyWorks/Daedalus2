@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Late Generate after Fog does not replace the walk.** Generate /
+  Daily / Campaign / Breed stay armed during fog and fetched, then
+  `adoptMaze` always replaced the maze. A Fog that started mid-flight
+  still lost the canvas. Leave fog before the fetch (they are
+  leave-fog paths); discard adopt when `state.fog` is set. Same
+  class as N20.
+
 - **Late Open session after Fog does not steal the walk.** `play()`
   snapshotted `hadFog`, POSTed, then always nulled fog. A Fog that
   started mid-flight was treated as “no fog” and the session still

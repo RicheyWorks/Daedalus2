@@ -1022,6 +1022,60 @@ async function check(name, fn) {
         : JSON.stringify({src, after}).slice(0, 220)];
   });
 
+  await check('N21. late Generate after Fog does not replace the walk', async () => {
+    // Old body: generate / daily / campaign / breed fetched then
+    // adoptMaze always replaced the maze. A Fog that started
+    // mid-flight still lost the canvas. Leave fog before the
+    // fetch; discard adopt when state.fog is set after the POST.
+    const src = await page.evaluate(() => {
+      const after = (fn, write) => {
+        const s = fn.toString();
+        const drop = s.indexOf('state.fog = null');
+        const w = s.indexOf(write);
+        const fetch = s.indexOf('await ');
+        const discard = s.indexOf('if (state.fog)', fetch);
+        const adopt = s.indexOf('adoptMaze', discard);
+        return drop >= 0 && drop < w && discard > fetch
+            && (adopt > discard || s.indexOf('state.campaign', discard) > discard);
+      };
+      const a = adoptMaze.toString();
+      return after(generate, '/maze/generate')
+          && after(loadDaily, '/maze/daily')
+          && after(loadCampaign, '/campaign')
+          && after(playStage, 'stage.mazeId')
+          && after(crossbreed, '/maze/breed')
+          && a.indexOf('if (state.fog)') >= 0
+          && a.indexOf('if (state.fog)') < a.indexOf('state.maze = maze');
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '31');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 31, null, {timeout:15000});
+    const before = await p2.evaluate(() => ({id: state.maze.id, seed: state.maze.seed}));
+    await p2.route('**/api/v1/maze/generate', async route => {
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    await p2.fill('#seed', '32');
+    await p2.click('#generate');
+    await p2.click('#fog');
+    await p2.waitForFunction(() => !!(state.fog && state.fog.agentId), null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const after = await p2.evaluate(() => ({
+      fog: !!(state.fog && state.fog.agentId),
+      seed: state.maze && state.maze.seed,
+      id: state.maze && state.maze.id,
+    }));
+    await p2.close();
+    const ok = src && after.fog && after.seed === before.seed && after.id === before.id
+        && after.seed !== 32;
+    return [ok, ok ? 'late generate discarded; fog walk kept the maze'
+        : JSON.stringify({src, before, after}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),
