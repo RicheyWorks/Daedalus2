@@ -638,8 +638,12 @@ async function showAscii() {
   // Living ticks refresh this pre; dropping watch here re-armed Bring to life
   // mid-erosion. A solver query ran the solver and published MazeSolvedEvent
   // on a read.
-  const art = await apiPlain(`/maze/${state.maze.id}`);
+  const mazeId = state.maze.id;
+  const art = await apiPlain(`/maze/${mazeId}`);
+  // Fog emptied the pre (N18). Generate mid-flight: the old dump
+  // would paint the maze now on screen. Discard — same as N18 / N30.
   if (state.fog) return;
+  if (!state.maze || state.maze.id !== mazeId) return;
   const out = $("asciiOut");
   out.hidden = false;
   out.textContent = art;
@@ -1742,11 +1746,15 @@ function wireChartHover(fit) {
  */
 async function startTour() {
   if (refuseSpectatorWrite("hunt waypoints")) return;
-  const t = await api(`/maze/${state.maze.id}/tour`);
+  const mazeId = state.maze.id;
+  const t = await api(`/maze/${mazeId}/tour`);
   // Hunt then play() used to leave fog after the session POST. A Fog
   // that started while /tour was out still called play() and lost the
   // walk. Discard — Hunt is locked during fog, so this is only late.
+  // Generate mid-flight: a late /tour would state.tour = t and play()
+  // on the maze now on screen. Discard — same as N18 / N30.
   if (state.fog) return;
+  if (!state.maze || state.maze.id !== mazeId) return;
   state.tour = t;
   state.tourGot = [];
   if (!t.feasible) {
@@ -1846,8 +1854,12 @@ function paintAnalysisCaption(a) {
  */
 async function hardestRoute() {
   leaveSpectate();
-  const h = await api(`/maze/${state.maze.id}/hardest-route`);
+  const mazeId = state.maze.id;
+  const h = await api(`/maze/${mazeId}/hardest-route`);
+  // Fog emptied the overlay (N18). Generate mid-flight: the old
+  // route would paint the maze now on screen. Discard — same as N18 / N30.
   if (state.fog) return;
+  if (!state.maze || state.maze.id !== mazeId) return;
   state.hardest = h;
   state.caption = "hardest";
   log("state", `hardest route: ${h.hardestLength} steps vs ${h.shortestLength} shortest `
@@ -1915,8 +1927,12 @@ function paintFieldCaption(f) {
 /** k-center safe points, plus the cell they serve worst. */
 async function placeSanctuaries() {
   leaveSpectate();
-  const s = await api(`/maze/${state.maze.id}/sanctuaries?k=5`);
+  const mazeId = state.maze.id;
+  const s = await api(`/maze/${mazeId}/sanctuaries?k=5`);
+  // Fog emptied the overlay (N18). Generate mid-flight: the old
+  // rings would paint the maze now on screen. Discard — same as N18 / N30.
   if (state.fog) return;
+  if (!state.maze || state.maze.id !== mazeId) return;
   state.sanctuaries = s;
   state.field = null; state.lens = null;
   state.caption = "sanctuaries";

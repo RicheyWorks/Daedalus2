@@ -488,6 +488,29 @@ class WebUiSmokeTest {
                 "function paintFieldCaption", "paintFieldCaption");
         assertMazeIdDiscardAfterFetch(html, "async function heuristicLens",
                 "function paintLensCaption", "paintLensCaption");
+        // N31. Hunt / hardest / sanctuaries / ASCII fetched then painted
+        // after only a fog check. Generate mid-flight assigned the old
+        // tour / route / rings / dump onto the maze now on screen; Hunt
+        // could even play() a session on the new id. Discard after the
+        // fetch when maze id no longer matches. Fog discard stays (N18).
+        assertMazeIdDiscardAfterFetch(html, "async function startTour",
+                "function sameCell", "state.tour = t");
+        assertMazeIdDiscardAfterFetch(html, "async function hardestRoute",
+                "function paintHardestCaption", "paintHardestCaption");
+        assertMazeIdDiscardAfterFetch(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption", "paintSanctuariesCaption");
+        assertMazeIdDiscardAfterFetch(html, "async function showAscii",
+                "async function loadAlgorithms", "$(\"asciiOut\")");
+        int n31From = html.indexOf("async function startTour");
+        int n31To = html.indexOf("function sameCell");
+        assertThat(n31From).isGreaterThanOrEqualTo(0);
+        assertThat(n31To).isGreaterThan(n31From);
+        String n31 = html.substring(n31From, n31To);
+        int n31Play = n31.indexOf("await play()");
+        int n31Discard = n31.indexOf("state.maze.id !== mazeId");
+        assertThat(n31.indexOf("/maze/${mazeId}/tour")).isGreaterThanOrEqualTo(0);
+        assertThat(n31Discard).isGreaterThan(n31.indexOf("await "));
+        assertThat(n31Play).isGreaterThan(n31Discard);
         int raceFrom = html.indexOf("async function raceSolvers");
         int raceTo = html.indexOf("function animateRace");
         assertThat(raceFrom).isGreaterThanOrEqualTo(0);
@@ -559,8 +582,9 @@ class WebUiSmokeTest {
         assertThat(asciiFrom).isGreaterThanOrEqualTo(0);
         assertThat(asciiTo).isGreaterThan(asciiFrom);
         assertThat(html.substring(asciiFrom, asciiTo))
-                .contains("apiPlain(`/maze/${state.maze.id}`)")
-                .doesNotContain("?solve=${");
+                .contains("apiPlain(`/maze/${mazeId}`)")
+                .doesNotContain("?solve=${")
+                .doesNotContain("apiPlain(`/maze/${state.maze.id}`)");
         // Size / braid / hotspots already followed the snapshot. Generator and
         // seed stayed on leftovers, so a #maze= success path half-hydrated:
         // pinHash wrote the maze recipe, Generate / Measure still read the form.

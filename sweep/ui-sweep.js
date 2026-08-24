@@ -1793,6 +1793,116 @@ async function check(name, fn) {
         : JSON.stringify({src, lateSolve, lateRace, lateCompare, first}).slice(0, 220)];
   });
 
+  await check('N31. late /tour after Generate does not play or paint the maze now on screen', async () => {
+    // Old body: startTour / hardest / sanctuaries / ASCII fetched then
+    // painted after only a fog check. Generate mid-flight assigned the
+    // old tour / route / rings / dump onto the maze now on screen; Hunt
+    // could even play() a session on the new id. Discard after the
+    // fetch when maze id no longer matches. Fog discard stays (N18).
+    const src = await page.evaluate(() => {
+      const after = (fn) => {
+        const s = fn.toString();
+        const id = s.indexOf('mazeId');
+        const w = s.indexOf('await ');
+        const f = s.indexOf('if (state.fog)', w);
+        const d = s.indexOf('state.maze.id !== mazeId', w);
+        return id >= 0 && id < w && w >= 0 && f > w && d > w;
+      };
+      const hunt = startTour.toString();
+      return after(startTour) && after(hardestRoute) && after(placeSanctuaries)
+          && after(showAscii)
+          && hunt.includes('/maze/${mazeId}/tour')
+          && hunt.indexOf('await play()') > hunt.indexOf('state.maze.id !== mazeId');
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '81');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 81, null, {timeout:15000});
+    const first = await p2.evaluate(() => state.maze.id);
+    await p2.route('**/api/v1/maze/*/tour*', async route => {
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    await p2.click('#tour');
+    await p2.fill('#seed', '82');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 82, null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const lateHunt = await p2.evaluate(() => ({
+      tour: !!state.tour,
+      session: !!state.session,
+      seed: state.maze && state.maze.seed,
+      id: state.maze && state.maze.id,
+    }));
+    await p2.route('**/api/v1/maze/*/hardest-route*', async route => {
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    await p2.click('#hardest');
+    await p2.fill('#seed', '83');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 83, null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const lateHardest = await p2.evaluate(() => ({
+      hardest: !!state.hardest,
+      box: document.getElementById('compareBox').innerText.trim(),
+      caption: state.caption,
+      seed: state.maze && state.maze.seed,
+    }));
+    await p2.route('**/api/v1/maze/*/sanctuaries*', async route => {
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    await p2.click('#sanctuaries');
+    await p2.fill('#seed', '84');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 84, null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const lateSanct = await p2.evaluate(() => ({
+      sanctuaries: !!state.sanctuaries,
+      box: document.getElementById('compareBox').innerText.trim(),
+      caption: state.caption,
+      seed: state.maze && state.maze.seed,
+    }));
+    await p2.route('**/api/v1/maze/*', async route => {
+      const req = route.request();
+      const path = new URL(req.url()).pathname;
+      const accept = (req.headers()['accept'] || '').toLowerCase();
+      const dump = req.method() === 'GET'
+          && /\/api\/v1\/maze\/[^/]+$/.test(path)
+          && accept.includes('text/plain');
+      if (!dump) {
+        await route.continue();
+        return;
+      }
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    await p2.click('#ascii');
+    await p2.fill('#seed', '85');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 85, null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const lateAscii = await p2.evaluate(() => ({
+      shown: !document.getElementById('asciiOut').hidden,
+      text: document.getElementById('asciiOut').textContent,
+      seed: state.maze && state.maze.seed,
+    }));
+    await p2.close();
+    const ok = src && !lateHunt.tour && !lateHunt.session
+        && lateHunt.seed === 82 && lateHunt.id !== first
+        && !lateHardest.hardest && lateHardest.box === '' && lateHardest.caption == null
+        && lateHardest.seed === 83
+        && !lateSanct.sanctuaries && lateSanct.box === '' && lateSanct.caption == null
+        && lateSanct.seed === 84
+        && !lateAscii.shown && !lateAscii.text && lateAscii.seed === 85;
+    return [ok, ok ? 'late /tour discarded; generated maze stayed unpainted'
+        : JSON.stringify({src, lateHunt, lateHardest, lateSanct, lateAscii, first}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),
