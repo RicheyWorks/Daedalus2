@@ -976,6 +976,52 @@ async function check(name, fn) {
         : JSON.stringify({src, before, after}).slice(0, 220)];
   });
 
+  await check('N20. late Open session after Fog does not steal the walk', async () => {
+    // Old body: play snapshotted hadFog, POSTed, then always
+    // state.fog = null. A Fog that started mid-flight still pinned
+    // #session= and left the blind walk. Discard after the POST.
+    // Hunt → play: discard /tour too, or a late Hunt still calls play().
+    const src = await page.evaluate(() => {
+      const s = play.toString();
+      const post = s.indexOf('/session?');
+      const discard = s.indexOf('if (state.fog)', post);
+      const apply = s.indexOf('state.session =');
+      const drop = s.indexOf('state.fog = null');
+      const t = startTour.toString();
+      const tw = t.indexOf('await ');
+      const tf = t.indexOf('if (state.fog)');
+      return post >= 0 && discard > post && apply > discard
+          && drop >= 0 && drop < post && !s.includes('hadFog')
+          && tw >= 0 && tf > tw;
+    });
+    const p2 = await ctx.newPage();
+    await p2.route('**/api/v1/maze/*/session*', async route => {
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '29');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 29, null, {timeout:15000});
+    await p2.click('#play');
+    await p2.click('#fog');
+    await p2.waitForFunction(() => !!(state.fog && state.fog.agentId), null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const after = await p2.evaluate(() => ({
+      fog: !!(state.fog && state.fog.agentId),
+      session: !!state.session,
+      hash: location.hash,
+      ghost: !!state.ghostTimer,
+    }));
+    await p2.close();
+    const ok = src && after.fog && !after.session && !/session=/.test(after.hash)
+        && !after.ghost;
+    return [ok, ok ? 'late session discarded; fog walk kept the canvas'
+        : JSON.stringify({src, after}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

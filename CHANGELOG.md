@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Late Open session after Fog does not steal the walk.** `play()`
+  snapshotted `hadFog`, POSTed, then always nulled fog. A Fog that
+  started mid-flight was treated as “no fog” and the session still
+  pinned `#session=`. Leave fog before the fetch (Open session is a
+  leave-fog path); discard the apply when `state.fog` is set — Hunt
+  waypoints’ `/tour` too. Same class as N18 / N19.
+
 - **Late living refresh after Fog does not install the god-mode grid.**
   A tick that passed the fog gate could still have GET `/maze` in
   flight. Fog starts; `if (stale())` let `state.maze = maze` write

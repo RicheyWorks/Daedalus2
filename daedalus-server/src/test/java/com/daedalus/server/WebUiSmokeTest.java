@@ -159,6 +159,31 @@ class WebUiSmokeTest {
         assertThat(assign).isGreaterThan(discard);
         assertThat(live.substring(live.indexOf("if (state.fog)"), snap))
                 .doesNotContain("await api(`/maze/${forMaze}`)");
+        // N20. play() snapshotted hadFog, POSTed, then always
+        // state.fog = null. A Fog that started mid-flight was "no
+        // fog" and the session still pinned #session=. Leave fog
+        // before the fetch (play is a leave-fog path); discard the
+        // session apply when state.fog is set after the POST.
+        // Hunt waypoints → play: discard /tour too, or a late Hunt
+        // still calls play() and leaves the walk.
+        int playFrom = html.indexOf("async function play()");
+        int playTo = html.indexOf("async function join");
+        assertThat(playFrom).isGreaterThanOrEqualTo(0);
+        assertThat(playTo).isGreaterThan(playFrom);
+        String play = html.substring(playFrom, playTo);
+        int sessionPost = play.indexOf("/session?");
+        int sessionDiscard = play.indexOf("if (state.fog)", sessionPost);
+        int sessionApply = play.indexOf("state.session =");
+        assertThat(sessionPost).isGreaterThanOrEqualTo(0);
+        assertThat(sessionDiscard).isGreaterThan(sessionPost);
+        assertThat(sessionApply).isGreaterThan(sessionDiscard);
+        assertThat(play.indexOf("pinHash()")).isGreaterThan(sessionDiscard);
+        assertThat(play.indexOf("summonGhost()")).isGreaterThan(sessionDiscard);
+        assertThat(play.indexOf("resubscribe()")).isGreaterThan(sessionDiscard);
+        assertThat(play.indexOf("state.fog = null")).isLessThan(sessionPost);
+        assertThat(play).doesNotContain("hadFog");
+        assertDiscardAfterFetch(html, "async function startTour",
+                "function sameCell", "state.tour = t");
         int applyFrom = html.indexOf("function applyMove");
         int applyTo = html.indexOf("async function confirmWin");
         assertThat(applyFrom).isGreaterThanOrEqualTo(0);

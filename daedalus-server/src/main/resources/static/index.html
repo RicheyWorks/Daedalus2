@@ -1669,6 +1669,10 @@ function wireChartHover(fit) {
 async function startTour() {
   if (refuseSpectatorWrite("hunt waypoints")) return;
   const t = await api(`/maze/${state.maze.id}/tour`);
+  // Hunt then play() used to leave fog after the session POST. A Fog
+  // that started while /tour was out still called play() and lost the
+  // walk. Discard — Hunt is locked during fog, so this is only late.
+  if (state.fog) return;
   state.tour = t;
   state.tourGot = [];
   if (!t.feasible) {
@@ -2434,16 +2438,25 @@ async function compareSolvers() {
 async function play() {
   leaveSpectate();
   const name = $("player").value || "web";
-  const hadFog = !!state.fog;
-  const s = await api(`/maze/${state.maze.id}/session?player=${encodeURIComponent(name)}`,
-      {method: "POST"});
-  state.fog = null; // session arrows would otherwise steal the fog walk
-  if (hadFog) {
+  // play stays armed during fog — it is a leave-fog path. Drop the
+  // walk before the fetch (leaveSpectate-before-write). A before-click
+  // snapshot that always nulled fog after the POST treated a Fog that
+  // started mid-flight as "no fog" and still pinned #session=.
+  if (state.fog) {
+    state.fog = null;
+    setGodModeEnabled(true);
     // Fog wrote openings into tiles and skipped GET /maze on living ticks.
     // Leaving it without a refetch paints a fog-edited or generate-time grid.
-    try { Object.assign(state.maze, await api(`/maze/${state.maze.id}`)); }
-    catch (ignored) { /* play still works; walls may lag until the next refresh */ }
+    try {
+      const maze = await api(`/maze/${state.maze.id}`);
+      if (state.fog) return;
+      Object.assign(state.maze, maze);
+    } catch (ignored) { /* play still works; walls may lag until the next refresh */ }
+    if (state.fog) return;
   }
+  const s = await api(`/maze/${state.maze.id}/session?player=${encodeURIComponent(name)}`,
+      {method: "POST"});
+  if (state.fog) return;
   setGodModeEnabled(true);
   state.session = {id: s.sessionId, positions: {[name]: s.position}, primary: name};
   state.seat = name;
