@@ -130,6 +130,22 @@ class WebUiSmokeTest {
         assertThat(fogDiscard).isGreaterThan(fogMint);
         assertThat(fog.indexOf("state.session = null")).isGreaterThan(fogDiscard);
         assertThat(fog.indexOf("applyFogView")).isGreaterThan(fogDiscard);
+        // N39. startFog POSTed /agent then applied after only maze-id.
+        // Play on the same maze seats a session; maze id still matches,
+        // so a late mint dropped the seat and applyFogView recreated
+        // state.fog on the play walk. Capture session id; discard after
+        // the POST when the seated session is new. Maze-id discard
+        // stays (N26). Same class as N38. startFog still must not
+        // null tour (N17). Must not GET /maze.
+        int fogSessionId = fog.indexOf("const sessionId");
+        int fogSeatDiscard = fog.indexOf("state.session.id !== sessionId");
+        int fogSeatDrop = fog.indexOf("state.session = null");
+        int fogMintApply = fog.indexOf("applyFogView", fogSeatDiscard);
+        assertThat(fogSessionId).isGreaterThanOrEqualTo(0);
+        assertThat(fogSessionId).isLessThan(fogMint);
+        assertThat(fogSeatDiscard).isGreaterThan(fogMint);
+        assertThat(fogSeatDrop).isGreaterThan(fogSeatDiscard);
+        assertThat(fogMintApply).isGreaterThan(fogSeatDiscard);
         // Analyze / Compare wrote #compareBox. Fog dropped the overlay
         // objects (N16) and left the sidebar, so a leftover caption still
         // named chokepoints and a leftover compare row could hover-arm a

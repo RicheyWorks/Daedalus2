@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Late Fog start after Play does not re-arm fog on the session walk.** `startFog` POSTed `/agent` then applied after only maze-id. Play on the same maze seats a session; maze id still matches, so a late mint dropped the seat and `applyFogView` recreated `state.fog` on the play walk. Capture session id; discard after the POST when the seated session is new. Maze-id discard stays (N26). Same class as N38.
+
 - **Late living GET `/agent` after Play does not re-arm fog.** `refreshLivingMaze` GETs `/agent/{id}` then `applyFogView` after only maze-id `stale()`. Play on the same maze leaves fog; maze id still matches, so a late GET recreated `state.fog` on the session walk. Capture agent id; discard after the GET when fog is gone or the agent no longer matches. Same class as N26. Living-under-fog stays.
 
 - **Late ghost after Generate does not seat the maze now on screen.** `summonGhost()` GETs `/ghost` then armed `state.ghost` and the ticker after only a fog + session-exists check. Generate + Play mid-flight seated the old recording on the maze now on screen. Capture maze id; discard after the GET when fog is on, the seat is gone, or maze id no longer matches. Fog discard stays (N25). Ghost is maze-bound, not seat-bound.

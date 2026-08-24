@@ -3086,11 +3086,19 @@ const DIR_FROM_DELTA = {"-1,0": "NORTH", "1,0": "SOUTH", "0,-1": "WEST", "0,1": 
 async function startFog() {
   leaveSpectate();
   const mazeId = state.maze.id;
+  const sessionId = state.session && state.session.id;
   const view = await api(`/maze/${mazeId}/agent`, {method: "POST"});
   // Generate / Daily / Back replaced the maze while this mint was
   // out. Applying would walk fog on a grid this agent was not
   // minted for, and carve its openings into those tiles.
   if (!state.maze || state.maze.id !== mazeId) return;
+  // Play on the same maze seats a session; maze id still matches
+  // (N26), so a late mint would drop the new seat and re-arm
+  // fog on the play walk. Same class as N38. Discard when a
+  // session is seated that was not the one we started with —
+  // Fog still drops a seat that was already there (leave-session
+  // path).
+  if (state.session && state.session.id !== sessionId) return;
   state.session = null;
   state.seat = null;
   state.joined = null;
