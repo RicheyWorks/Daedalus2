@@ -2561,25 +2561,32 @@ async function compareSolvers() {
 async function play() {
   leaveSpectate();
   const name = $("player").value || "web";
+  const mazeId = state.maze.id;
   // play stays armed during fog — it is a leave-fog path. Drop the
   // walk before the fetch (leaveSpectate-before-write). A before-click
   // snapshot that always nulled fog after the POST treated a Fog that
   // started mid-flight as "no fog" and still pinned #session=.
+  // Generate mid-flight: a late /session would pin #session= and
+  // seat the old session on the maze now on screen. Capture maze
+  // id; discard after the POST (and the leave-fog GET /maze).
   if (state.fog) {
     state.fog = null;
     setGodModeEnabled(true);
     // Fog wrote openings into tiles and skipped GET /maze on living ticks.
     // Leaving it without a refetch paints a fog-edited or generate-time grid.
     try {
-      const maze = await api(`/maze/${state.maze.id}`);
+      const maze = await api(`/maze/${mazeId}`);
       if (state.fog) return;
+      if (!state.maze || state.maze.id !== mazeId) return;
       Object.assign(state.maze, maze);
     } catch (ignored) { /* play still works; walls may lag until the next refresh */ }
     if (state.fog) return;
+    if (!state.maze || state.maze.id !== mazeId) return;
   }
-  const s = await api(`/maze/${state.maze.id}/session?player=${encodeURIComponent(name)}`,
+  const s = await api(`/maze/${mazeId}/session?player=${encodeURIComponent(name)}`,
       {method: "POST"});
   if (state.fog) return;
+  if (!state.maze || state.maze.id !== mazeId) return;
   setGodModeEnabled(true);
   state.session = {id: s.sessionId, positions: {[name]: s.position}, primary: name};
   state.seat = name;

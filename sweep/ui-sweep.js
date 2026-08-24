@@ -1903,6 +1903,55 @@ async function check(name, fn) {
         : JSON.stringify({src, lateHunt, lateHardest, lateSanct, lateAscii, first}).slice(0, 220)];
   });
 
+  await check('N32. late Open session after Generate does not seat the maze now on screen', async () => {
+    // Old body: play() POSTed /session after only a fog check.
+    // Generate mid-flight pinned #session= and wrote the seat
+    // onto the generated maze. Capture maze id; discard after
+    // the POST when maze id no longer matches. Fog discard stays (N20).
+    const src = await page.evaluate(() => {
+      const s = play.toString();
+      const id = s.indexOf('mazeId');
+      const w = s.indexOf('await ');
+      const f = s.indexOf('if (state.fog)', w);
+      const d = s.indexOf('state.maze.id !== mazeId', w);
+      const apply = s.indexOf('state.session =');
+      return id >= 0 && id < w && w >= 0 && f > w && d > w
+          && apply > d
+          && s.includes('/maze/${mazeId}/session')
+          && s.indexOf('pinHash()') > d
+          && s.indexOf('summonGhost()') > d;
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '86');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 86, null, {timeout:15000});
+    const first = await p2.evaluate(() => state.maze.id);
+    await p2.route('**/api/v1/maze/*/session*', async route => {
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    await p2.click('#play');
+    await p2.fill('#seed', '87');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 87, null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const after = await p2.evaluate(() => ({
+      session: !!state.session,
+      hash: location.hash,
+      ghost: !!state.ghostTimer,
+      seed: state.maze && state.maze.seed,
+      id: state.maze && state.maze.id,
+    }));
+    await p2.close();
+    const ok = src && !after.session && !/session=/.test(after.hash)
+        && !after.ghost && after.seed === 87 && after.id !== first;
+    return [ok, ok ? 'late session discarded; generated maze stayed unseated'
+        : JSON.stringify({src, after, first}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

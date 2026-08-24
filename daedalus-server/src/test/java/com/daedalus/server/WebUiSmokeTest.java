@@ -511,6 +511,38 @@ class WebUiSmokeTest {
         assertThat(n31.indexOf("/maze/${mazeId}/tour")).isGreaterThanOrEqualTo(0);
         assertThat(n31Discard).isGreaterThan(n31.indexOf("await "));
         assertThat(n31Play).isGreaterThan(n31Discard);
+        // N32. play() POSTed /session after only a fog check. Generate
+        // mid-flight pinned #session= and seated the old session on the
+        // maze now on screen. Capture maze id before the POST; discard
+        // after /session (and the leave-fog GET /maze) when fog is on
+        // OR maze id no longer matches. Fog discard stays (N20).
+        assertMazeIdDiscardAfterFetch(html, "async function play()",
+                "async function join", "state.session =");
+        int n32From = html.indexOf("async function play()");
+        int n32To = html.indexOf("async function join");
+        assertThat(n32From).isGreaterThanOrEqualTo(0);
+        assertThat(n32To).isGreaterThan(n32From);
+        String n32 = html.substring(n32From, n32To);
+        int n32Id = n32.indexOf("const mazeId");
+        int n32Get = n32.indexOf("api(`/maze/${mazeId}`)");
+        int n32Post = n32.indexOf("/maze/${mazeId}/session");
+        int n32Maze = n32.indexOf("state.maze.id !== mazeId", n32Post);
+        assertThat(n32Id).isGreaterThanOrEqualTo(0);
+        assertThat(n32Id).isLessThan(n32Get);
+        assertThat(n32Get).isGreaterThanOrEqualTo(0);
+        assertThat(n32Get).isLessThan(n32Post);
+        assertThat(n32Post).isGreaterThanOrEqualTo(0);
+        assertThat(n32.indexOf("if (state.fog)", n32Get)).isGreaterThan(n32Get);
+        assertThat(n32.indexOf("state.maze.id !== mazeId", n32Get)).isGreaterThan(n32Get);
+        assertThat(n32.indexOf("Object.assign", n32Get))
+                .isGreaterThan(n32.indexOf("state.maze.id !== mazeId", n32Get));
+        assertThat(n32.indexOf("if (state.fog)", n32Post)).isGreaterThan(n32Post);
+        assertThat(n32Maze).isGreaterThan(n32Post);
+        assertThat(n32.indexOf("state.session =")).isGreaterThan(n32Maze);
+        assertThat(n32.indexOf("pinHash()")).isGreaterThan(n32Maze);
+        assertThat(n32.indexOf("summonGhost()")).isGreaterThan(n32Maze);
+        assertThat(n32.indexOf("resubscribe()")).isGreaterThan(n32Maze);
+        assertThat(n32.substring(n32Id)).doesNotContain("/maze/${state.maze.id}");
         int raceFrom = html.indexOf("async function raceSolvers");
         int raceTo = html.indexOf("function animateRace");
         assertThat(raceFrom).isGreaterThanOrEqualTo(0);

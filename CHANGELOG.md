@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Late Open session after Generate does not seat the maze now on screen.** `play()` POSTed `/session` after only a fog check. Generate mid-flight pinned `#session=` and wrote the seat onto the generated maze. Capture maze id before the POST; discard after `/session` (and the leave-fog GET `/maze`) when fog is on or maze id no longer matches. Fog discard stays.
+
 - **Late `/tour` after Generate does not play or paint the maze now on screen.** `startTour` / `hardestRoute` / `placeSanctuaries` / `showAscii` fetched then painted after only a fog check. Generate mid-flight assigned the old tour, route, rings, or dump onto the maze now on screen; Hunt could even `play()` a session on the new id. Discard when maze id no longer matches. Fog discard stays.
 
 - **Late `/solve` after Generate does not paint the maze now on screen.** `solve` / `raceSolvers` / `compareSolvers` POSTed then painted after only a fog check. Generate mid-flight applied the old path, expansions, or `#compareBox` onto the maze now on screen; Race / Compare could POST later `/solve` against the new id. Discard when maze id no longer matches. Fog discard stays. Identify / Heat / Lens / Analyze too.
