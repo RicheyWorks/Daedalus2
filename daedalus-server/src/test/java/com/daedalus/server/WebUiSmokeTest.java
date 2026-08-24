@@ -757,6 +757,30 @@ class WebUiSmokeTest {
         assertThat(n34.substring(n34Poll)).doesNotContain("/session/${state.session.id}");
         assertThat(n34.substring(n34Poll)).doesNotContain("/maze/${");
         assertThat(n34.substring(n34Poll)).doesNotContain("tourFor");
+        // N43. Spectate arms the 1s GET /session poll only when STOMP
+        // is absent. A broker that connects later used to leave that
+        // poll running, so a late snapshot rewound a hop the /player
+        // frame already applied. After the GET (and before
+        // adoptSessionView) discard when state.stomp is set, and drop
+        // the interval. connectStomp clears the leftover poll too.
+        // Fog / session / maze discard stays (N34). Must not GET /maze.
+        int n43Stomp = n34.indexOf("if (state.stomp)", n34Get);
+        int n43Clear = n34.indexOf("clearInterval(state.spectatePoll)", n43Stomp);
+        int n43Write = n34.indexOf("adoptSessionView", n43Stomp);
+        assertThat(n43Stomp).isGreaterThan(n34Get);
+        assertThat(n43Clear).isGreaterThan(n43Stomp);
+        assertThat(n43Write).isGreaterThan(n43Clear);
+        int n43ConnectFrom = html.indexOf("function connectStomp");
+        int n43ConnectTo = html.indexOf("function resubscribe");
+        assertThat(n43ConnectFrom).isGreaterThanOrEqualTo(0);
+        assertThat(n43ConnectTo).isGreaterThan(n43ConnectFrom);
+        String n43Connect = html.substring(n43ConnectFrom, n43ConnectTo);
+        int n43Assign = n43Connect.indexOf("state.stomp = client");
+        int n43Drop = n43Connect.indexOf("clearInterval(state.spectatePoll)", n43Assign);
+        int n43Resub = n43Connect.indexOf("resubscribe()", n43Drop);
+        assertThat(n43Assign).isGreaterThanOrEqualTo(0);
+        assertThat(n43Drop).isGreaterThan(n43Assign);
+        assertThat(n43Resub).isGreaterThan(n43Drop);
         // N35. confirmWin / refreshTourStatus GET /session/{id} after
         // only a fog + session-exists check. Generate + a new Play
         // mid-flight painted hunt status or declareWin (leaderboard,

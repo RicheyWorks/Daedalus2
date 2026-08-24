@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **A spectate poll started before STOMP does not rewind a hop after the broker arrives.** `#session=` arms a 1s `GET /session/{id}` fallback only when SockJS is down. A late CONNECT used to leave that interval running, so a snapshot that left before the next move overwrote the `/player` frame. Drop the poll on CONNECT and after the GET when `state.stomp` is set (N43). Fog / session / maze discard stays (N34).
+
 - **Spectator living ticks rescore the hunt from `GET /session/{id}/tour`, not `GET /maze/{id}/tour`.** Hydrate already painted coins from the public session read (`progressFor` rescores Held-Karp). A living tick then asked `tourFor`, which is auth-required in prod and can mint — unsigned spectate 401'd and kept a stale optimum. Prefer the session read when a seat exists; maze tour is only the Hunt-before-Play fallback (N42).
 
 - **Late `#session=` / spectate after Generate does not steal the maze now on screen.** Initial hydrate `adoptMaze`'d the session maze before its fog check and had no maze-id discard. Generate mid-flight replaced the canvas, then the late GET still adopted over it. Capture maze id (or none) before the fetch; skip `adoptMaze` / `adoptSessionView` when fog is on or the canvas id is no longer the one you left. Leave-fog-before-fetch stays (N22). Stay until join lands. Poll discard stays (N34).

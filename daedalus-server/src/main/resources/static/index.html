@@ -1462,6 +1462,13 @@ async function spectate(sessionId) {
         clearInterval(state.spectatePoll); state.spectatePoll = null;
         return;
       }
+      // Broker arrived after this fallback was armed. Frames own
+      // the walk; keep polling and a late snapshot rewinds a hop
+      // STOMP already applied (N43).
+      if (state.stomp) {
+        clearInterval(state.spectatePoll); state.spectatePoll = null;
+        return;
+      }
       const sessionId = state.session.id;
       const mazeId = state.maze && state.maze.id;
       try {
@@ -1471,12 +1478,20 @@ async function spectate(sessionId) {
         // Discard — same class as N33. startFog still must not
         // null tour (N17).
         if (state.fog) return;
+        if (state.stomp) {
+          clearInterval(state.spectatePoll); state.spectatePoll = null;
+          return;
+        }
         if (!state.session || state.session.id !== sessionId) return;
         if (!state.maze || state.maze.id !== mazeId) return;
         adoptSessionView(view);
         draw();
       } catch (gone) {
         if (state.fog) return;
+        if (state.stomp) {
+          clearInterval(state.spectatePoll); state.spectatePoll = null;
+          return;
+        }
         if (!state.session || state.session.id !== sessionId) return;
         if (!state.maze || state.maze.id !== mazeId) return;
         clearInterval(state.spectatePoll); state.spectatePoll = null;
@@ -2931,6 +2946,10 @@ function connectStomp() {
     }
     state.stomp = client;
     log("state", state.token ? "STOMP connected (authenticated)" : "STOMP connected");
+    // Spectate armed a 1s GET /session poll because the broker was
+    // not up yet. Frames are now the source of truth; a late poll
+    // snapshot would rewind a hop applyMove already painted (N43).
+    clearInterval(state.spectatePoll); state.spectatePoll = null;
     resubscribe();
   }, err => {
     if (gen !== stompGen) return;

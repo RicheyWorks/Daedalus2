@@ -2171,6 +2171,29 @@ async function check(name, fn) {
         : JSON.stringify({src, lateGen, lateFog, lateSess, host, sidB}).slice(0, 220)];
   });
 
+  await check('N43. spectate poll after STOMP connects does not rewind a hop the frame already applied', async () => {
+    // Old body: poll armed because !state.stomp, then kept GETting
+    // /session after CONNECT. A snapshot that left before the next
+    // move overwrote applyMove. After the GET, discard when
+    // state.stomp is set; connectStomp clears the leftover interval.
+    const src = await page.evaluate(() => {
+      const s = spectate.toString();
+      const poll = s.indexOf('setInterval');
+      const w = s.indexOf('await ', poll);
+      const stomp = s.indexOf('if (state.stomp)', w);
+      const clear = s.indexOf('clearInterval(state.spectatePoll)', stomp);
+      const write = s.indexOf('adoptSessionView', stomp);
+      const c = connectStomp.toString();
+      const assign = c.indexOf('state.stomp = client');
+      const drop = c.indexOf('clearInterval(state.spectatePoll)', assign);
+      const resub = c.indexOf('resubscribe()', drop);
+      return poll >= 0 && w > poll && stomp > w && clear > stomp && write > clear
+          && assign >= 0 && drop > assign && resub > drop;
+    });
+    return [src, src ? 'spectate poll discards after STOMP; CONNECT drops the leftover interval'
+        : 'N43 source pin failed'];
+  });
+
   await check('N35. late confirmWin / tour status after Generate do not paint the maze now on screen', async () => {
     // Old body: confirmWin GETs /session/{id} then declareWin after
     // only a fog + session-exists check. refreshTourStatus painted
