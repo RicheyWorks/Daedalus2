@@ -877,6 +877,51 @@ async function check(name, fn) {
         : JSON.stringify({src, opened, after}).slice(0, 220)];
   });
 
+  await check('N18. late Analyze after Fog does not restore the sidebar', async () => {
+    // Old body: startFog emptied #compareBox (N17). Analyze / Compare
+    // that were already out still wrote the caption and hover-armed
+    // state.path. Discard after the fetch when state.fog is set.
+    const src = await page.evaluate(() => {
+      const after = (fn) => {
+        const s = fn.toString();
+        const w = s.indexOf('await ');
+        const f = s.indexOf('if (state.fog)');
+        return w >= 0 && f > w;
+      };
+      return after(analyzeStructure) && after(compareSolvers)
+          && after(identifyGenerator) && after(distanceHeatMap)
+          && after(heuristicLens) && after(solve);
+    });
+    const p2 = await ctx.newPage();
+    await p2.route('**/api/v1/maze/*/analysis', async route => {
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '19');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 19, null, {timeout:15000});
+    await p2.click('#analyze');
+    await p2.click('#fog');
+    await p2.waitForFunction(() => !!(state.fog && state.fog.agentId), null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const after = await p2.evaluate(() => ({
+      fog: !!(state.fog && state.fog.agentId),
+      box: document.getElementById('compareBox').innerText.trim(),
+      analysis: !!state.analysis,
+      path: !!(state.path && state.path.length),
+      caption: state.caption,
+      tour: !!state.tour,
+    }));
+    await p2.close();
+    const ok = src && after.fog && after.box === '' && !after.analysis
+        && !after.path && after.caption == null;
+    return [ok, ok ? 'late analysis discarded; sidebar stayed empty'
+        : JSON.stringify({src, after}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

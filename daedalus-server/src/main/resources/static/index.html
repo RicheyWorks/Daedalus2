@@ -639,6 +639,7 @@ async function showAscii() {
   // mid-erosion. A solver query ran the solver and published MazeSolvedEvent
   // on a read.
   const art = await apiPlain(`/maze/${state.maze.id}`);
+  if (state.fog) return;
   const out = $("asciiOut");
   out.hidden = false;
   out.textContent = art;
@@ -1519,6 +1520,7 @@ async function fingerprintWhenReady(id) {
 async function identifyGenerator() {
   leaveSpectate();
   const f = await fingerprintWhenReady(state.maze.id);
+  if (state.fog) return;
   state.fingerprint = f;
   state.caption = "fingerprint";
   log("state", `fingerprint: structure says ${f.predictedGeneratorId}`
@@ -1724,6 +1726,9 @@ async function tourVerdict() {
 async function analyzeStructure() {
   leaveSpectate();
   const a = await api(`/maze/${state.maze.id}/analysis`);
+  // startFog already emptied #compareBox (N17). A response that
+  // was already out still landed and named chokepoints again.
+  if (state.fog) return;
   state.analysis = a;
   state.caption = "analysis";
   const cp = a.cutSize === 1 ? "1 chokepoint" : `${a.cutSize} chokepoints`;
@@ -1756,6 +1761,7 @@ function paintAnalysisCaption(a) {
 async function hardestRoute() {
   leaveSpectate();
   const h = await api(`/maze/${state.maze.id}/hardest-route`);
+  if (state.fog) return;
   state.hardest = h;
   state.caption = "hardest";
   log("state", `hardest route: ${h.hardestLength} steps vs ${h.shortestLength} shortest `
@@ -1791,6 +1797,7 @@ const DISTANCE_RAMP = ["#1c5cab", "#2a78d6", "#3987e5", "#5598e7",
 async function distanceHeatMap() {
   leaveSpectate();
   const f = await api(`/maze/${state.maze.id}/distance-field`);
+  if (state.fog) return;
   state.field = f;
   state.sanctuaries = null; state.lens = null;   // one overlay at a time stays readable
   state.caption = "field";
@@ -1821,6 +1828,7 @@ function paintFieldCaption(f) {
 async function placeSanctuaries() {
   leaveSpectate();
   const s = await api(`/maze/${state.maze.id}/sanctuaries?k=5`);
+  if (state.fog) return;
   state.sanctuaries = s;
   state.field = null; state.lens = null;
   state.caption = "sanctuaries";
@@ -1933,6 +1941,7 @@ async function heuristicLens() {
   leaveSpectate();
   const which = $("lensH").value;
   const l = await api(`/maze/${state.maze.id}/heuristic-lens?heuristic=${which}`);
+  if (state.fog) return;
   state.lens = l;
   state.field = null; state.sanctuaries = null;
   state.caption = "lens";
@@ -2046,7 +2055,7 @@ async function refreshTheoryOverlays(forMaze, stale) {
   if (state.analysis) {
     try {
       const a = await api(`/maze/${forMaze}/analysis`);
-      if (stale()) return false;
+      if (stale() || state.fog) return false;
       if (a.cutSize !== state.analysis.cutSize || a.deadEndCount !== state.analysis.deadEndCount) {
         log("state", `analysis: ${a.cutSize} chokepoint${a.cutSize === 1 ? "" : "s"}, `
             + `${a.deadEndCount} dead ends (was ${state.analysis.cutSize} / `
@@ -2059,7 +2068,7 @@ async function refreshTheoryOverlays(forMaze, stale) {
   if (state.hardest) {
     try {
       const h = await api(`/maze/${forMaze}/hardest-route`);
-      if (stale()) return false;
+      if (stale() || state.fog) return false;
       if (h.loops !== state.hardest.loops || h.hardestLength !== state.hardest.hardestLength) {
         log("state", `hardest route is now ${h.hardestLength} steps vs ${h.shortestLength} `
             + `(x${h.detour.toFixed(2)}), ${h.loops} loops`);
@@ -2071,7 +2080,7 @@ async function refreshTheoryOverlays(forMaze, stale) {
   if (state.field) {
     try {
       const f = await api(`/maze/${forMaze}/distance-field`);
-      if (stale()) return false;
+      if (stale() || state.fog) return false;
       if (f.maxDistance !== state.field.maxDistance) {
         log("state", `distance field: farthest cell now ${f.maxDistance} steps`);
       }
@@ -2082,7 +2091,7 @@ async function refreshTheoryOverlays(forMaze, stale) {
   if (state.sanctuaries) {
     try {
       const s = await api(`/maze/${forMaze}/sanctuaries?k=5`);
-      if (stale()) return false;
+      if (stale() || state.fog) return false;
       if (s.coveringRadius !== state.sanctuaries.coveringRadius) {
         log("state", `sanctuaries: covering radius now ${s.coveringRadius}`);
       }
@@ -2094,7 +2103,7 @@ async function refreshTheoryOverlays(forMaze, stale) {
     try {
       const which = (state.lens.heuristic || $("lensH").value);
       const l = await api(`/maze/${forMaze}/heuristic-lens?heuristic=${encodeURIComponent(which)}`);
-      if (stale()) return false;
+      if (stale() || state.fog) return false;
       if (l.mustExpand !== state.lens.mustExpand || l.actualExpansions !== state.lens.actualExpansions) {
         log("state", `lens: must ${l.mustExpand}, A* expanded ${l.actualExpansions}`);
       }
@@ -2105,7 +2114,7 @@ async function refreshTheoryOverlays(forMaze, stale) {
   if (state.fingerprint) {
     try {
       const f = await api(`/maze/${forMaze}/fingerprint`);
-      if (stale()) return false;
+      if (stale() || state.fog) return false;
       const before = state.fingerprint;
       if (f.agrees !== before.agrees
           || f.predictedGeneratorId !== before.predictedGeneratorId
@@ -2120,7 +2129,7 @@ async function refreshTheoryOverlays(forMaze, stale) {
   if ($("asciiOut") && !$("asciiOut").hidden) {
     try {
       await showAscii();
-      if (stale()) return false;
+      if (stale() || state.fog) return false;
     } catch (ignored) { /* dump */ }
   }
   return true;
@@ -2198,7 +2207,7 @@ async function refreshLivingMaze() {
       // The drawn route may now cross freshly-opened walls or stale costs — re-solve
       // quietly (no replay animation; the mutation itself is the show).
       const r = await api(`/maze/${forMaze}/solve/${$("solver").value}`, {method: "POST"});
-      if (stale()) return;
+      if (stale() || state.fog) return;
       state.path = r.path;
       state.expansions = [];
       state.searchProgress = 1;
@@ -2214,6 +2223,7 @@ async function solve() {
   leaveSpectate();
   const r = await api(`/maze/${state.maze.id}/solve/${$("solver").value}?replay=true`,
       {method: "POST"});
+  if (state.fog) return;
   state.race = null; // a plain solve replaces any arena overlay
   state.path = r.path;
   state.expansions = r.expansions || [];
@@ -2277,7 +2287,9 @@ async function raceSolvers() {
   $("race").disabled = true;
   try {
     const ra = await api(`/maze/${state.maze.id}/solve/${a}?replay=true`, {method: "POST"});
+    if (state.fog) return;
     const rb = await api(`/maze/${state.maze.id}/solve/${b}?replay=true`, {method: "POST"});
+    if (state.fog) return;
     state.path = null; state.expansions = []; state.searchProgress = 1; state.pathProgress = 1;
     state.race = { lanes: [
       {id: a, color: "#82b1ff", expansions: ra.expansions || [], path: ra.path,
@@ -2322,6 +2334,7 @@ function animateRace() {
 }
 
 function raceSummary() {
+  if (state.fog || !state.race) return;
   const [A, B] = state.race.lanes;
   const ok = l => l.success !== false && l.path && l.path.length > 0;
   let text;
@@ -2353,15 +2366,20 @@ async function compareSolvers() {
   const ids = [...$("solver").options].map(o => o.value);
   $("compare").disabled = true;
   const results = [];
-  for (const id of ids) {
-    try {
-      const r = await api(`/maze/${state.maze.id}/solve/${id}`, {method: "POST"});
-      results.push(r);
-    } catch (e) {
-      log("err", `${id}: ${e.message}`);
+  try {
+    for (const id of ids) {
+      try {
+        const r = await api(`/maze/${state.maze.id}/solve/${id}`, {method: "POST"});
+        if (state.fog) return;
+        results.push(r);
+      } catch (e) {
+        log("err", `${id}: ${e.message}`);
+      }
     }
+  } finally {
+    $("compare").disabled = false;
   }
-  $("compare").disabled = false;
+  if (state.fog) return;
   const ok = results.filter(r => r.success);
   // Math.min() of an empty list is Infinity — the log used to say "best path Infinity".
   const bestPath = ok.length ? Math.min(...ok.map(r => r.path.length)) : null;

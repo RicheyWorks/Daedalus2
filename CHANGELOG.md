@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Late Analyze / Compare after Fog does not restore the sidebar.**
+  N17 emptied `#compareBox` when Fog started. A request that was
+  already out still landed, named chokepoints again, and Compare
+  hover-armed `state.path` for Play to paint. Discard after the
+  fetch when `state.fog` is set — Identify / Heat / Lens / Solve
+  too. `state.tour` still stays.
+
 - **Fog drops the leftover theory sidebar.** Analyze / Compare / Identify
   wrote `#compareBox`. Fog already dropped those overlay objects and hid
   ASCII; the sidebar stayed, so a leftover caption still named

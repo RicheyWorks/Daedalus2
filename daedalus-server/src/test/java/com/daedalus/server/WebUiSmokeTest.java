@@ -125,6 +125,22 @@ class WebUiSmokeTest {
         assertThat(fog.indexOf("$(\"compareBox\").innerHTML"))
                 .isGreaterThan(fog.indexOf("state.session = null"));
         assertThat(fog).doesNotContain("state.tour = null");
+        // N17 emptied the sidebar when Fog started. An Analyze /
+        // Compare (or Identify / Heat / Lens) that was already out
+        // still landed and rewrote #compareBox / armed state.path.
+        // Discard after the fetch; startFog still must not null tour.
+        assertDiscardAfterFetch(html, "async function analyzeStructure",
+                "function paintAnalysisCaption", "paintAnalysisCaption");
+        assertDiscardAfterFetch(html, "async function compareSolvers",
+                "async function play", "$(\"compareBox\")");
+        assertDiscardAfterFetch(html, "async function identifyGenerator",
+                "function paintFingerprintCaption", "paintFingerprintCaption");
+        assertDiscardAfterFetch(html, "async function distanceHeatMap",
+                "function paintFieldCaption", "paintFieldCaption");
+        assertDiscardAfterFetch(html, "async function heuristicLens",
+                "function paintLensCaption", "paintLensCaption");
+        assertDiscardAfterFetch(html, "async function solve",
+                "function animateSearch", "state.path");
         int applyFrom = html.indexOf("function applyMove");
         int applyTo = html.indexOf("async function confirmWin");
         assertThat(applyFrom).isGreaterThanOrEqualTo(0);
@@ -269,6 +285,22 @@ class WebUiSmokeTest {
         String body = html.substring(from, to);
         assertThat(body.indexOf("pinHash()")).isGreaterThan(body.indexOf("adoptMaze"));
         assertThat(body).doesNotContain("leaveCampaign()");
+    }
+
+    /** First {@code if (state.fog)} after the fetch is before {@code write}. */
+    private static void assertDiscardAfterFetch(String html, String start, String end,
+            String write) {
+        int from = html.indexOf(start);
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        int fetch = body.indexOf("await ");
+        int fog = body.indexOf("if (state.fog)");
+        int out = body.indexOf(write);
+        assertThat(fetch).isGreaterThanOrEqualTo(0);
+        assertThat(fog).isGreaterThan(fetch);
+        assertThat(out).isGreaterThan(fog);
     }
 
     /** First {@code leaveSpectate} after {@code start} is before {@code write}. */
