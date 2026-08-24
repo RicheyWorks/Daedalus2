@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Spectator living ticks rescore the hunt from `GET /session/{id}/tour`, not `GET /maze/{id}/tour`.** Hydrate already painted coins from the public session read (`progressFor` rescores Held-Karp). A living tick then asked `tourFor`, which is auth-required in prod and can mint — unsigned spectate 401'd and kept a stale optimum. Prefer the session read when a seat exists; maze tour is only the Hunt-before-Play fallback (N42).
+
 - **Late `#session=` / spectate after Generate does not steal the maze now on screen.** Initial hydrate `adoptMaze`'d the session maze before its fog check and had no maze-id discard. Generate mid-flight replaced the canvas, then the late GET still adopted over it. Capture maze id (or none) before the fetch; skip `adoptMaze` / `adoptSessionView` when fog is on or the canvas id is no longer the one you left. Leave-fog-before-fetch stays (N22). Stay until join lands. Poll discard stays (N34).
 
 - **Late Daily / Breed / `#maze=` after Generate does not steal the maze now on screen.** Those hydrates discarded `adoptMaze` after only fog. Generate mid-flight replaced the canvas, then the late fetch still adopted over it. Capture maze id (or none) before the fetch; discard when fog is on or the canvas id is no longer the one you left. Campaign / `playStage` / `#daily=` siblings too. `playStage` still adopts the same campaign stage. Fog discard stays (N21 / N22).

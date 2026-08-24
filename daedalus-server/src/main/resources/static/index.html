@@ -2411,14 +2411,38 @@ async function refreshLivingMaze() {
     }
     if (!(await refreshTheoryOverlays(forMaze, stale))) return;
     if (state.tour) {
-      // Placement is frozen; the optimum is not (ADR-014).
+      // Placement is frozen; the optimum is not (ADR-014). A seated
+      // session — player or spectator — must rescore via
+      // GET /session/{id}/tour. That read already reruns Held-Karp on
+      // the live grid, and it is the public paint source. The old
+      // body always asked GET /maze/{id}/tour (tourFor): auth-required
+      // in prod, and it can mint. Spectator hydrate already used the
+      // session read; a living tick then 401'd and kept a stale
+      // optimum on the watched hunt (N42). Maze tour is only the
+      // Hunt-before-Play fallback, when no seat exists to progress.
       try {
-        const t = await api(`/maze/${forMaze}/tour?count=${state.tour.waypoints.length}`);
-        if (stale() || state.fog) return;
-        if (t.optimalCost !== state.tour.optimalCost) {
-          log("state", `tour optimum is now ${t.optimalCost} steps (was ${state.tour.optimalCost})`);
+        if (state.session) {
+          const sessionId = state.session.id;
+          const p = await api(`/session/${sessionId}/tour`);
+          if (stale() || state.fog) return;
+          if (!state.session || state.session.id !== sessionId) return;
+          if (p.optimal !== state.tour.optimalCost) {
+            log("state", `tour optimum is now ${p.optimal} steps (was ${state.tour.optimalCost})`);
+          }
+          state.tour = {
+            waypoints: p.waypoints,
+            path: p.path || [],
+            optimalCost: p.optimal,
+            feasible: true,
+          };
+        } else {
+          const t = await api(`/maze/${forMaze}/tour?count=${state.tour.waypoints.length}`);
+          if (stale() || state.fog) return;
+          if (t.optimalCost !== state.tour.optimalCost) {
+            log("state", `tour optimum is now ${t.optimalCost} steps (was ${state.tour.optimalCost})`);
+          }
+          state.tour = t;
         }
-        state.tour = t;
         await refreshTourStatus();
         if (stale() || state.fog) return;
       } catch (ignored) { /* tour overlay; losing one refresh is harmless */ }

@@ -206,6 +206,22 @@ class WebUiSmokeTest {
         assertThat(fogApply).isGreaterThan(fogWalkDiscard);
         assertThat(html.substring(html.indexOf("async function startFog"),
                 html.indexOf("async function fogStep"))).doesNotContain("state.tour = null");
+        // N42. A seated session's living tick asked GET /maze/{id}/tour
+        // (tourFor — auth-required in prod, and it can mint). Spectator
+        // hydrate already paints from GET /session/{id}/tour (progressFor
+        // rescores Held-Karp, public). The old body 401'd and kept a
+        // stale optimum on the watched hunt. Prefer the session read
+        // when a seat exists; maze tour is only the no-session fallback.
+        int n42Guard = live.indexOf("if (state.session)");
+        int n42Sess = live.indexOf("/session/${sessionId}/tour");
+        int n42MazeTour = live.indexOf("/maze/${forMaze}/tour");
+        assertThat(n42Guard).isGreaterThanOrEqualTo(0);
+        assertThat(n42Sess).isGreaterThan(n42Guard);
+        assertThat(n42MazeTour).isGreaterThan(n42Sess);
+        assertThat(live).contains("p.optimal");
+        assertThat(live).contains("p.waypoints");
+        assertThat(live.indexOf("state.session.id !== sessionId", n42Sess))
+                .isGreaterThan(n42Sess);
         // N20. play() snapshotted hadFog, POSTed, then always
         // state.fog = null. A Fog that started mid-flight was "no
         // fog" and the session still pinned #session=. Leave fog
