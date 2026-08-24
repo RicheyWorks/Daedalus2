@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Late Join after Generate does not seat the maze now on screen.** `join()` POSTed `/join` then wrote the seat after only a fog + session-exists check. Generate + Play / a new `#session=` mid-flight wrote the joiner (`leaveSpectate`, pin) onto the maze now on screen. Capture session and maze id; discard after the POST when fog is on or the seat no longer matches. Fog discard stays (N23). Stay a watcher until join lands.
+
 - **Late confirmWin / tour status after Generate does not paint the maze now on screen.** `confirmWin()` GETs `/session/{id}` then `declareWin` after only a fog + session-exists check; `refreshTourStatus()` painted hunt status the same way. Generate + a new Play mid-flight wrote a win (status, leaderboard, campaign) onto the maze now on screen. Capture session and maze id; discard after the GET when fog is on or the seat no longer matches. `tourVerdict` sibling too. Fog discard stays (N24). Fog still keeps tour (N17).
 
 - **Late spectator `/session/{id}` poll after Generate does not re-seat the maze now on screen.** The STOMP-less spectate interval GETs the session snapshot then always `adoptSessionView`. Generate / Fog / a new `#session=` mid-flight wrote the old walk onto the maze now on screen. Capture session and maze id; discard after the GET when fog is on or the seat no longer matches. Overlay hydrate stay (N33). Fog still keeps tour (N17).

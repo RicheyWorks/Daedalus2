@@ -2646,14 +2646,20 @@ async function join() {
   const name = fromSpectate
       ? ($("player").value || "web")
       : ($("player").value || "web") + "-2";
+  const sessionId = state.session.id;
+  const mazeId = state.maze && state.maze.id;
   try {
-    const s = await api(`/session/${state.session.id}/join?player=${encodeURIComponent(name)}`,
+    const s = await api(`/session/${sessionId}/join?player=${encodeURIComponent(name)}`,
         {method: "POST"});
     // Stay a watcher until join lands — leaveSpectate after a successful
     // POST, not before (spectate honesty). A Fog that started mid-flight
     // dropped the seat; do not write it back onto the walk.
+    // Generate + Play / a new #session=: the POST would write the
+    // joiner (seat, leaveSpectate, pin) onto the maze now on screen (N36).
     if (state.fog) return;
     if (!state.session) return;
+    if (state.session.id !== sessionId) return;
+    if (!state.maze || state.maze.id !== mazeId) return;
     state.session.positions[name] = s.position;
     state.trails[name] = [s.position];
     if (fromSpectate) {

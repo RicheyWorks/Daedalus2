@@ -253,21 +253,43 @@ class WebUiSmokeTest {
         // watcher until join lands (leaveSpectate after the POST);
         // discard the apply when state.fog is set. Not a
         // leave-fog-before-fetch path — that would break spectate.
+        // N36. After only fog + session-exists, Generate + Play /
+        // a new #session= mid-flight wrote the joiner (seat,
+        // leaveSpectate, pin) onto the maze now on screen. Capture
+        // session + maze id before the POST; discard after when
+        // fog is on, the session no longer matches, or maze id
+        // no longer matches. Must not GET /maze. startFog still
+        // must not null tour (N17).
+        assertMazeIdDiscardAfterFetch(html, "async function join()",
+                "async function move(", "state.seat");
         int joinFrom = html.indexOf("async function join()");
         int joinTo = html.indexOf("async function move(");
         assertThat(joinFrom).isGreaterThanOrEqualTo(0);
         assertThat(joinTo).isGreaterThan(joinFrom);
         String join = html.substring(joinFrom, joinTo);
-        int joinPost = join.indexOf("/join?");
+        int joinId = join.indexOf("const sessionId");
+        int joinMaze = join.indexOf("const mazeId");
+        int joinPost = join.indexOf("/session/${sessionId}/join?");
         int joinDiscard = join.indexOf("if (state.fog)", joinPost);
+        int joinSess = join.indexOf("state.session.id !== sessionId", joinPost);
+        int joinMazeCheck = join.indexOf("state.maze.id !== mazeId", joinPost);
         int joinSeat = join.indexOf("state.seat");
+        assertThat(joinId).isGreaterThanOrEqualTo(0);
+        assertThat(joinMaze).isGreaterThan(joinId);
+        assertThat(joinMaze).isLessThan(joinPost);
         assertThat(joinPost).isGreaterThanOrEqualTo(0);
         assertThat(joinDiscard).isGreaterThan(joinPost);
-        assertThat(joinSeat).isGreaterThan(joinDiscard);
-        assertThat(join.indexOf("pinHash()")).isGreaterThan(joinDiscard);
-        assertThat(join.indexOf("resubscribe()")).isGreaterThan(joinDiscard);
+        assertThat(joinSess).isGreaterThan(joinDiscard);
+        assertThat(joinMazeCheck).isGreaterThan(joinSess);
+        assertThat(joinSeat).isGreaterThan(joinMazeCheck);
+        assertThat(join.indexOf("pinHash()")).isGreaterThan(joinMazeCheck);
+        assertThat(join.indexOf("resubscribe()")).isGreaterThan(joinMazeCheck);
         assertThat(join.indexOf("leaveSpectate")).isGreaterThan(joinPost);
+        assertThat(join.indexOf("leaveSpectate()")).isGreaterThan(joinMazeCheck);
         assertThat(join).doesNotContain("state.fog = null");
+        assertThat(join).doesNotContain("/session/${state.session.id}");
+        assertThat(join).doesNotContain("/maze/${");
+        assertThat(join).doesNotContain("tourFor");
         assertThat(join.indexOf("if (!state.session)", joinPost)).isGreaterThan(joinDiscard);
         // N24. confirmWin GETs /session/{id} then declareWin with no
         // fog/session re-check. Fog mid-flight painted a win (status,
