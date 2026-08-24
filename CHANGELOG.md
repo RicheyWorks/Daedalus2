@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Late move after Fog or a new session does not overwrite status or the new seat.** `move()` POSTed `/move` then always `flashStatus` / `applyMove`. A blocked reply overwrote fog status; Generate + a new Open session wrote the old hop onto the new seat. Arrows and click-to-move both call `move()`. Discard after the POST when fog is on or the session/maze/seat no longer match.
+
 - **Late fog step / Fog start after Generate does not re-arm the walk.** `fogStep()` POSTed `/step` then always `applyFogView`, which recreates `state.fog` and carves the old openings into whatever maze is now on screen. `startFog()` applied the same way after Generate replaced the maze. Discard after the POST when the walk or maze is gone.
 
 - **Late ghost after Fog does not re-arm the ticker.** `summonGhost()` GETs `/ghost` then always armed `state.ghost` and the ticker. Fog mid-flight cleared both; the GET still re-armed the ghost onto the walk. Discard after the GET when `state.fog` is set or the seat is gone. Same class as N20–N24.

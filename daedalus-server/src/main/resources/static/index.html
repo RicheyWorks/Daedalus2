@@ -2585,10 +2585,21 @@ async function move(name, dr, dc) {
   if (!at) return;
   const to = {row: at.row + dr, col: at.col + dc};
   const body = name === state.session.primary ? {to} : {to, player: name};
+  const sessionId = state.session.id;
+  const mazeId = state.maze && state.maze.id;
   try {
-    const ok = await api(`/session/${state.session.id}/move`, {
+    const ok = await api(`/session/${sessionId}/move`, {
       method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body),
     });
+    // Fog / Generate + a new Open session can replace the
+    // seat while this hop is out. A blocked reply's
+    // flashStatus would overwrite fog status; applyMove
+    // would write the old hop onto the new seat. Arrows
+    // and click-to-move both land here.
+    if (state.fog) return;
+    if (!state.session || state.session.id !== sessionId) return;
+    if (!state.maze || state.maze.id !== mazeId) return;
+    if (state.session.positions[name] == null) return;
     if (ok === false) {
       flashStatus("blocked — that way is a wall");
       return;
@@ -2597,6 +2608,8 @@ async function move(name, dr, dc) {
     // consistent, including other tabs). Without it, apply locally so play still works.
     if (!state.stomp) applyMove(name, to);
   } catch (e) {
+    if (state.fog) return;
+    if (!state.session || state.session.id !== sessionId) return;
     if (/evicted/.test(e.message)) {
       log("err", "this maze aged out of the cache — generate again");
       $("status").textContent = "this maze aged out of the cache — generate again";
@@ -2737,11 +2750,14 @@ function resubscribe() {
     }));
   }
   if (state.session) {
-    state.subs.push(state.stomp.subscribe(`/topic/session/${state.session.id}/player`, f => {
+    const sessionId = state.session.id;
+    state.subs.push(state.stomp.subscribe(`/topic/session/${sessionId}/player`, f => {
       const m = JSON.parse(f.body);
-      // Fog / generate can drop the seat after this subscribe was armed.
-      // An in-flight frame must not log or apply a session the canvas left.
-      if (!state.session) return;
+      // Fog / Generate + a new Open session can replace the
+      // seat after this subscribe was armed. An in-flight
+      // frame must not log or apply a hop onto the new seat.
+      if (state.fog) return;
+      if (!state.session || state.session.id !== sessionId) return;
       const who = m.player || state.session.primary;
       log("player", `${who}: (${m.from.row},${m.from.col}) → (${m.to.row},${m.to.col})`);
       applyMove(who, m.to, m.from);

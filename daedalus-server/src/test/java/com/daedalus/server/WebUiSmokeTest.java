@@ -336,6 +336,63 @@ class WebUiSmokeTest {
         assertThat(stepPost).isGreaterThanOrEqualTo(0);
         assertThat(stepDiscard).isGreaterThan(stepPost);
         assertThat(stepApply).isGreaterThan(stepDiscard);
+        // N27. move() POSTed /move then always flashStatus / applyMove.
+        // Fog mid-flight: a blocked reply overwrote fog status.
+        // Generate + a new Open session: applyMove wrote the old hop
+        // onto the new seat. Arrows and click-to-move both call move().
+        // Discard after the POST; startFog still must not null tour.
+        assertDiscardAfterFetch(html, "async function move(",
+                "function applyMove", "flashStatus");
+        int mvFrom = html.indexOf("async function move(");
+        int mvTo = html.indexOf("function applyMove");
+        assertThat(mvFrom).isGreaterThanOrEqualTo(0);
+        assertThat(mvTo).isGreaterThan(mvFrom);
+        String mv = html.substring(mvFrom, mvTo);
+        int mvId = mv.indexOf("sessionId");
+        int mvMaze = mv.indexOf("mazeId");
+        int mvPost = mv.indexOf("sessionId}/move");
+        int mvFog = mv.indexOf("if (state.fog)", mvPost);
+        int mvSession = mv.indexOf("state.session.id !== sessionId", mvPost);
+        int mvMazeCheck = mv.indexOf("state.maze.id !== mazeId", mvPost);
+        int mvSeat = mv.indexOf("positions[name] == null", mvPost);
+        int mvFlash = mv.indexOf("flashStatus", mvSeat);
+        int mvApply = mv.indexOf("applyMove", mvFlash);
+        assertThat(mvId).isGreaterThanOrEqualTo(0);
+        assertThat(mvMaze).isGreaterThanOrEqualTo(0);
+        assertThat(mvId).isLessThan(mvPost);
+        assertThat(mvMaze).isLessThan(mvPost);
+        assertThat(mvPost).isGreaterThanOrEqualTo(0);
+        assertThat(mvFog).isGreaterThan(mvPost);
+        assertThat(mvSession).isGreaterThan(mvFog);
+        assertThat(mvMazeCheck).isGreaterThan(mvFog);
+        assertThat(mvSeat).isGreaterThan(mvFog);
+        assertThat(mvFlash).isGreaterThan(mvSeat);
+        assertThat(mvApply).isGreaterThan(mvFlash);
+        int clickFrom = html.indexOf("$(\"maze\").addEventListener(\"click\"");
+        int clickTo = html.indexOf("function drawEmpty");
+        assertThat(clickFrom).isGreaterThanOrEqualTo(0);
+        assertThat(clickTo).isGreaterThan(clickFrom);
+        assertThat(html.substring(clickFrom, clickTo))
+                .contains("move(who, dr, dc)")
+                .doesNotContain("flashStatus")
+                .doesNotContain("applyMove")
+                .doesNotContain("/move");
+        int playerFrom = html.indexOf("if (state.session) {",
+                html.indexOf("function resubscribe"));
+        int playerTo = html.indexOf("/topic/plugins/failures");
+        assertThat(playerFrom).isGreaterThanOrEqualTo(0);
+        assertThat(playerTo).isGreaterThan(playerFrom);
+        String player = html.substring(playerFrom, playerTo);
+        int playerId = player.indexOf("sessionId");
+        int playerSub = player.indexOf("/player");
+        int playerFog = player.indexOf("if (state.fog)", playerSub);
+        int playerSession = player.indexOf("state.session.id !== sessionId", playerSub);
+        int playerApply = player.indexOf("applyMove");
+        assertThat(playerId).isGreaterThanOrEqualTo(0);
+        assertThat(playerId).isLessThan(playerSub);
+        assertThat(playerFog).isGreaterThan(playerSub);
+        assertThat(playerSession).isGreaterThan(playerFog);
+        assertThat(playerApply).isGreaterThan(playerSession);
         int declFrom = html.indexOf("function declareWin");
         int declTo = html.indexOf("let statusFlashTimer");
         assertThat(declFrom).isGreaterThanOrEqualTo(0);

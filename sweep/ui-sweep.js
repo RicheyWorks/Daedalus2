@@ -1419,6 +1419,120 @@ async function check(name, fn) {
         : JSON.stringify({src, lateMint, lateStep, first, agent}).slice(0, 220)];
   });
 
+  await check('N27. late move after Fog or a new session does not overwrite status or the new seat', async () => {
+    // Old body: move() POSTed /move then always flashStatus / applyMove.
+    // Fog mid-flight: a blocked reply overwrote fog status.
+    // Generate + a new Open session: applyMove wrote the old hop onto
+    // the new seat. Arrows and click-to-move both call move().
+    // Discard after the POST; startFog still must not null tour.
+    const src = await page.evaluate(() => {
+      const s = move.toString();
+      const post = s.indexOf('sessionId}/move');
+      const fog = s.indexOf('if (state.fog)', post);
+      const id = s.indexOf('sessionId');
+      const maze = s.indexOf('mazeId');
+      const f = startFog.toString();
+      return post >= 0 && id >= 0 && maze >= 0 && id < post && maze < post
+          && fog > post
+          && s.indexOf('state.session.id !== sessionId', post) > fog
+          && s.indexOf('state.maze.id !== mazeId', post) > fog
+          && s.indexOf('positions[name] == null', post) > fog
+          && s.indexOf('flashStatus', fog) > fog
+          && s.indexOf('applyMove', fog) > fog
+          && !f.includes('state.tour = null');
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '51');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 51, null, {timeout:15000});
+    await p2.click('#play');
+    await p2.waitForFunction(() => !!state.session, null, {timeout:15000});
+    await p2.route('**/api/v1/session/*/move', async route => {
+      await new Promise(r => setTimeout(r, 1200));
+      await route.fulfill({
+        status: 200,
+        headers: {'content-type': 'application/json'},
+        body: 'false',
+      });
+    });
+    // Sample across the delayed reply so a 900ms flashStatus cannot
+    // hide behind the restore. Old body writes "blocked" over fog.
+    const lateFog = await p2.evaluate(async () => {
+      const seen = [];
+      const hopping = move(thisTabSeat(), 0, 1);
+      document.getElementById('fog').click();
+      const start = Date.now();
+      while (Date.now() - start < 2500) {
+        seen.push(document.getElementById('status').textContent);
+        await new Promise(r => setTimeout(r, 40));
+      }
+      await hopping.catch(() => {});
+      return {
+        fog: !!(state.fog && state.fog.agentId),
+        session: !!state.session,
+        seen,
+      };
+    });
+    await p2.unroute('**/api/v1/session/*/move');
+    await p2.evaluate(() => { state.fog = null; setGodModeEnabled(true); });
+    await p2.fill('#seed', '52');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 52, null, {timeout:15000});
+    await p2.click('#play');
+    await p2.waitForFunction(() => !!state.session, null, {timeout:15000});
+    const before = await p2.evaluate(() => {
+      const who = thisTabSeat();
+      return {
+        session: state.session.id,
+        maze: state.maze.id,
+        who,
+        at: Object.assign({}, state.session.positions[who]),
+      };
+    });
+    await p2.evaluate(() => { state.stomp = null; });
+    await p2.route('**/api/v1/session/*/move', async route => {
+      await new Promise(r => setTimeout(r, 1200));
+      await route.fulfill({
+        status: 200,
+        headers: {'content-type': 'application/json'},
+        body: 'true',
+      });
+    });
+    await p2.evaluate(() => move(thisTabSeat(), 0, 1));
+    await p2.fill('#seed', '53');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 53, null, {timeout:20000});
+    await p2.click('#play');
+    await p2.waitForFunction(() => !!state.session, null, {timeout:15000});
+    await p2.waitForTimeout(1800);
+    const lateHop = await p2.evaluate(() => {
+      const who = thisTabSeat();
+      const at = who && state.session && state.session.positions[who];
+      return {
+        session: state.session && state.session.id,
+        maze: state.maze && state.maze.id,
+        who,
+        at: at && Object.assign({}, at),
+        fog: !!state.fog,
+      };
+    });
+    await p2.close();
+    const statusOk = lateFog.fog && !lateFog.session
+        && lateFog.seen.some(t => /fog:/.test(t))
+        && lateFog.seen.every(t => !/blocked/.test(t));
+    // New seat stays at its own start, not the old hop (0, +1).
+    const stayed = lateHop.at && before.at
+        && !(lateHop.at.row === before.at.row && lateHop.at.col === before.at.col + 1);
+    const hopOk = !lateHop.fog && lateHop.session && lateHop.session !== before.session
+        && lateHop.maze !== before.maze && stayed;
+    const ok = src && statusOk && hopOk;
+    return [ok, ok ? 'late move discarded; fog status and new seat kept'
+        : JSON.stringify({src, lateFog, lateHop, before}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),
