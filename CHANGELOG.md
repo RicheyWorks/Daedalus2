@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Late living refresh after Fog does not install the god-mode grid.**
+  A tick that passed the fog gate could still have GET `/maze` in
+  flight. Fog starts; `if (stale())` let `state.maze = maze` write
+  unseen rooms into a walk that skipped that fetch on purpose.
+  Discard when `state.fog` is set — same as N18. The fog path still
+  does not GET `/maze`.
+
 - **Late Analyze / Compare after Fog does not restore the sidebar.**
   N17 emptied `#compareBox` when Fog started. A request that was
   already out still landed, named chokepoints again, and Compare

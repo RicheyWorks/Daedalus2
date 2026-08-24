@@ -922,6 +922,60 @@ async function check(name, fn) {
         : JSON.stringify({src, after}).slice(0, 220)];
   });
 
+  await check('N19. late living GET /maze after Fog does not install the god-mode grid', async () => {
+    // Old body: refreshLivingMaze skipped GET /maze only when fog
+    // was already set. A tick that passed that gate still assigned
+    // the snapshot after Fog started. Discard after the fetch.
+    const src = await page.evaluate(() => {
+      const s = refreshLivingMaze.toString();
+      const snap = s.indexOf('await api(`/maze/${forMaze}`)');
+      const discard = s.indexOf('if (stale() || state.fog)', snap);
+      const assign = s.indexOf('state.maze = maze');
+      return snap >= 0 && discard > snap && assign > discard;
+    });
+    const p2 = await ctx.newPage();
+    await p2.route('**/api/v1/maze/*', async route => {
+      const path = new URL(route.request().url()).pathname;
+      const snapshot = route.request().method() === 'GET'
+          && /\/api\/v1\/maze\/[^/]+$/.test(path);
+      if (!snapshot) {
+        await route.continue();
+        return;
+      }
+      await new Promise(r => setTimeout(r, 1200));
+      const res = await route.fetch();
+      const json = await res.json();
+      json.seed = 999999;
+      await route.fulfill({
+        status: res.status(),
+        headers: {'content-type': 'application/json'},
+        body: JSON.stringify(json),
+      });
+    });
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '23');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 23, null, {timeout:15000});
+    const before = await p2.evaluate(() => ({id: state.maze.id, seed: state.maze.seed}));
+    await p2.evaluate(() => { refreshLivingMaze(); });
+    await p2.click('#fog');
+    await p2.waitForFunction(() => !!(state.fog && state.fog.agentId), null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const after = await p2.evaluate(() => ({
+      fog: !!(state.fog && state.fog.agentId),
+      seed: state.maze && state.maze.seed,
+      id: state.maze && state.maze.id,
+      tour: !!state.tour,
+    }));
+    await p2.close();
+    const ok = src && after.fog && after.seed === before.seed && after.id === before.id
+        && after.seed !== 999999;
+    return [ok, ok ? 'late living snapshot discarded; fog walk kept its grid'
+        : JSON.stringify({src, before, after}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

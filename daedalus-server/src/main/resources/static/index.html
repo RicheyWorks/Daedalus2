@@ -2172,7 +2172,11 @@ async function refreshLivingMaze() {
     }
 
     const maze = await api(`/maze/${forMaze}`);
-    if (stale()) return;
+    // startFog can land while this snapshot is out. The fog path
+    // skipped GET /maze on purpose; a late assign would write the
+    // god-mode grid — unseen rooms and openings you have not
+    // re-seen — into that walk. Discard, matching N18.
+    if (stale() || state.fog) return;
     state.maze = maze;
     // Narrate on the polling path too. Tick/pulse messages normally come from STOMP frames,
     // so with the broker unreachable a living or congested maze changed under the player in
@@ -2194,13 +2198,13 @@ async function refreshLivingMaze() {
       // Placement is frozen; the optimum is not (ADR-014).
       try {
         const t = await api(`/maze/${forMaze}/tour?count=${state.tour.waypoints.length}`);
-        if (stale()) return;
+        if (stale() || state.fog) return;
         if (t.optimalCost !== state.tour.optimalCost) {
           log("state", `tour optimum is now ${t.optimalCost} steps (was ${state.tour.optimalCost})`);
         }
         state.tour = t;
         await refreshTourStatus();
-        if (stale()) return;
+        if (stale() || state.fog) return;
       } catch (ignored) { /* tour overlay; losing one refresh is harmless */ }
     }
     if (state.path) {

@@ -141,6 +141,24 @@ class WebUiSmokeTest {
                 "function paintLensCaption", "paintLensCaption");
         assertDiscardAfterFetch(html, "async function solve",
                 "function animateSearch", "state.path");
+        // N19. A living refresh that passed the fog gate can still
+        // have GET /maze in flight. Fog starts; late state.maze = maze
+        // would install the god-mode grid into a walk that skipped
+        // that fetch on purpose. Discard after the snapshot; the fog
+        // path still must not GET /maze. startFog still must not null tour.
+        int liveFrom = html.indexOf("async function refreshLivingMaze");
+        int liveTo = html.indexOf("async function solve");
+        assertThat(liveFrom).isGreaterThanOrEqualTo(0);
+        assertThat(liveTo).isGreaterThan(liveFrom);
+        String live = html.substring(liveFrom, liveTo);
+        int snap = live.indexOf("await api(`/maze/${forMaze}`)");
+        int assign = live.indexOf("state.maze = maze");
+        int discard = live.indexOf("if (stale() || state.fog)", snap);
+        assertThat(snap).isGreaterThanOrEqualTo(0);
+        assertThat(discard).isGreaterThan(snap);
+        assertThat(assign).isGreaterThan(discard);
+        assertThat(live.substring(live.indexOf("if (state.fog)"), snap))
+                .doesNotContain("await api(`/maze/${forMaze}`)");
         int applyFrom = html.indexOf("function applyMove");
         int applyTo = html.indexOf("async function confirmWin");
         assertThat(applyFrom).isGreaterThanOrEqualTo(0);
