@@ -143,10 +143,31 @@ class WebUiSmokeTest {
                 .contains("addEventListener(\"hashchange\"")
                 .contains("loadFromHash()")
                 .contains("leaveCampaign()")
+                .contains("leaveMaze()")
                 .contains("loadCampaign")
                 .contains("parseCampaignToken")
                 .contains("named.stage")
                 .doesNotContain("await loadCampaign(Number(h.campaign))");
+        // Back onto "" or #generator= re-hydrated selects and left the previous
+        // maze on the canvas (N10 is maze-to-maze). leaveMaze runs after the
+        // maze kinds return, and must not pin (that would fight History).
+        int dropFrom = html.indexOf("function leaveMaze");
+        assertThat(dropFrom).isGreaterThanOrEqualTo(0);
+        assertThat(dropFrom).isLessThan(hashFrom);
+        String drop = html.substring(dropFrom, hashFrom);
+        assertThat(drop)
+                .contains("state.maze = null")
+                .contains("state.dailyId = null")
+                .contains("state.session = null")
+                .contains("drawEmpty")
+                .doesNotContain("pinHash()");
+        String fromHash = html.substring(hashFrom, hashTo);
+        int mazeKind = fromHash.indexOf("if (h.maze)");
+        int dropCall = fromHash.lastIndexOf("leaveMaze()");
+        assertThat(mazeKind).isGreaterThanOrEqualTo(0);
+        assertThat(dropCall).isGreaterThan(mazeKind);
+        assertThat(fromHash.substring(fromHash.indexOf("if (h.session)"), mazeKind))
+                .doesNotContain("leaveMaze()");
         // adoptMaze only nulled stageIndex. Back re-hydrated the maze (N10)
         // and left state.campaign / #campaignBox painted, so a stage click
         // still played a campaign maze the bar no longer named.

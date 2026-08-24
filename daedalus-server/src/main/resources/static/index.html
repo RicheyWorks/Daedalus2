@@ -1179,12 +1179,70 @@ function refuseSpectatorWrite(what) {
 }
 
 /**
+ * Drop the canvas maze so a hash that names no maze cannot keep showing one.
+ * Back onto "" or #generator= used to leave the previous maze (and its daily
+ * / session seat) on screen after N10 re-hydrated maze-to-maze. Does not pin
+ * — rewriting the bar would fight History.
+ */
+function leaveMaze() {
+  clearInterval(state.livePoll); state.livePoll = null;
+  clearInterval(state.trafficPoll); state.trafficPoll = null;
+  clearInterval(state.ghostTimer); state.ghostTimer = null;
+  leaveSpectate();
+  state.maze = null;
+  state.path = null;
+  state.session = null;
+  state.seat = null;
+  state.joined = null;
+  state.trails = {};
+  state.won = null;
+  state.expansions = [];
+  state.searchProgress = 1;
+  state.pathProgress = 1;
+  state.fog = null;
+  state.race = null;
+  state.dailyId = null;
+  state.analysis = null;
+  state.ghost = null;
+  state.hardest = null;
+  state.field = null;
+  state.sanctuaries = null;
+  state.lens = null;
+  state.fingerprint = null;
+  state.tour = null;
+  state.tourGot = [];
+  state.caption = null;
+  state.prevMazeId = null;
+  state.stageIndex = null;
+  $("breed").disabled = true;
+  $("play").disabled = true;
+  $("join").disabled = true;
+  $("join").textContent = "Join as second player";
+  $("join").title = "Requires daedalus.session.multiplayer=true";
+  $("live").disabled = true;
+  $("traffic").disabled = true;
+  if ($("harden")) $("harden").disabled = true;
+  $("fog").disabled = true;
+  setGodModeEnabled(false);
+  $("asciiOut").hidden = true;
+  $("asciiOut").textContent = "";
+  $("compareBox").innerHTML = "";
+  $("status").textContent = "no maze yet";
+  $("stats").innerHTML = "";
+  $("pngExport").style.display = "none";
+  resubscribe();
+  refreshLeaderboard();
+  drawEmpty();
+}
+
+/**
  * #session=, #campaign=, #daily, #maze= or #generator=: restore the view that hash names.
  * Boot and hashchange share this path. The same-hash guard stops pinHash's write
  * from looping — Back/Forward (and a pasted hash after boot) still hydrate.
  * A matching campaign hash keeps the ladder; any other permalink (or a
  * different campaign id) drops it so a leftover stage cannot play.
  * `#campaign=SEED:N` hydrates that rung; a missing stage token is stage 0.
+ * A hash with no maze kind drops the leftover maze (N14).
  */
 async function loadFromHash() {
   if (hashShowsCurrent()) return;
@@ -1232,6 +1290,11 @@ async function loadFromHash() {
     }
     return;
   }
+  // "" and #generator= name no maze. N10 re-hydrated maze-to-maze and left
+  // the previous maze here — daily / session / canvas leftovers the bar
+  // no longer names. Drop them before the generator select so the board
+  // cannot stay maze-scoped.
+  leaveMaze();
   if (h.generator) {
     if ($("lbGen") && [...$("lbGen").options].some(o => o.value === h.generator)) {
       $("lbGen").value = h.generator;

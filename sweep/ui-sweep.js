@@ -783,6 +783,57 @@ async function check(name, fn) {
         : JSON.stringify({src, at0, at2, back, fwd}).slice(0, 220)];
   });
 
+  await check('N14. Back onto an empty / #generator= hash drops the maze', async () => {
+    // Old body: N10 re-hydrated maze-to-maze. Back from #maze= onto "" or
+    // #generator= only touched selects and left the previous maze (and a
+    // daily / session seat) on the canvas the bar no longer named.
+    const src = await page.evaluate(() => {
+      const from = loadFromHash.toString();
+      const drop = leaveMaze.toString();
+      return typeof leaveMaze === 'function'
+          && from.includes('leaveMaze()')
+          && from.indexOf('leaveMaze()') > from.indexOf('if (h.maze)')
+          && drop.includes('state.maze = null')
+          && drop.includes('drawEmpty')
+          && !drop.includes('pinHash()');
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '16');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 16, null, {timeout:15000});
+    const hashed = await p2.evaluate(() => location.hash);
+    await p2.evaluate(() => history.back());
+    await p2.waitForFunction(() => !state.maze && !location.hash, null, {timeout:20000});
+    const empty = await p2.evaluate(() => ({
+      maze: !!state.maze,
+      session: !!state.session,
+      daily: !!state.dailyId,
+      campaign: !!state.campaign,
+      hash: location.hash,
+    }));
+    await p2.selectOption('#lbGen', 'prims');
+    await p2.waitForFunction(() => location.hash === '#generator=prims', null, {timeout:5000});
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && /maze=/.test(location.hash), null, {timeout:15000});
+    await p2.evaluate(() => history.back());
+    await p2.waitForFunction(() => !state.maze && location.hash === '#generator=prims',
+        null, {timeout:20000});
+    const gen = await p2.evaluate(() => ({
+      maze: !!state.maze,
+      hash: location.hash,
+      lb: document.getElementById('lbGen').value,
+    }));
+    await p2.close();
+    const ok = src && /maze=/.test(hashed) && !empty.maze && !empty.session
+        && !empty.daily && !empty.campaign && empty.hash === ''
+        && !gen.maze && gen.hash === '#generator=prims' && gen.lb === 'prims';
+    return [ok, ok ? 'Back dropped the maze onto "" and #generator=prims'
+        : JSON.stringify({src, hashed, empty, gen}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

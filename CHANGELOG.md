@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Back onto an empty or `#generator=` hash drops the maze.**
+  N10 re-hydrated maze-to-maze. Back from `#maze=` onto `""` or
+  `#generator=` only touched selects and left the previous maze — and a
+  daily / session seat — on the canvas the bar no longer named.
+  `leaveMaze` clears that leftover; it does not pin.
+
 - **A campaign permalink names the current stage.**
   `#campaign=` stored only the seed, so hydrate — including Back onto the
   same hash — always `loadCampaign` → `playStage(0)` and reminted stage-1
