@@ -117,6 +117,14 @@ class WebUiSmokeTest {
                 .isGreaterThan(fog.indexOf("state.session = null"));
         assertThat(fog.indexOf("clearInterval(state.ghostTimer)"))
                 .isGreaterThan(fog.indexOf("state.session = null"));
+        // Analyze / Compare wrote #compareBox. Fog dropped the overlay
+        // objects (N16) and left the sidebar, so a leftover caption still
+        // named chokepoints and a leftover compare row could hover-arm a
+        // solve path draw() swallowed until Play. Empty after the drop.
+        // state.tour stays — same maze, not a GET/mutate under fog.
+        assertThat(fog.indexOf("$(\"compareBox\").innerHTML"))
+                .isGreaterThan(fog.indexOf("state.session = null"));
+        assertThat(fog).doesNotContain("state.tour = null");
         int applyFrom = html.indexOf("function applyMove");
         int applyTo = html.indexOf("async function confirmWin");
         assertThat(applyFrom).isGreaterThanOrEqualTo(0);

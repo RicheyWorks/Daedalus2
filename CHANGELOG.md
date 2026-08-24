@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Fog drops the leftover theory sidebar.** Analyze / Compare / Identify
+  wrote `#compareBox`. Fog already dropped those overlay objects and hid
+  ASCII; the sidebar stayed, so a leftover caption still named
+  chokepoints during the walk and a leftover compare row could hover-arm
+  a solve path `draw()` swallowed until Play. Empty it after that drop.
+  `state.tour` stays — same maze, not a GET or mutate under fog.
+
 - **Fog after Open session drops the leftover `/player` subscription and ghost ticker.**
   N15 dropped the seat and hash. The STOMP `/player` sub and ghost
   interval stayed, so a joiner's frame still logged a session move and

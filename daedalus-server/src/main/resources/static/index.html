@@ -2845,6 +2845,15 @@ async function startFog() {
   state.lens = null; state.race = null; state.sanctuaries = null;
   state.fingerprint = null;
   state.caption = null;
+  // Analyze / Compare / Identify write #compareBox. Fog already drops
+  // those overlay objects (and hides ASCII); the sidebar stayed, so a
+  // leftover caption still named chokepoints during the walk, and a
+  // leftover compare table could hover-arm a solve path draw() swallowed
+  // until Play. Empty it after the drop, same as adoptMaze.
+  // state.tour stays: draw() returns early, refreshTourStatus needs the
+  // seat N16 dropped, and Play / a living fall-through still belong to
+  // this maze.
+  $("compareBox").innerHTML = "";
   state.fog = {seen: new Set()};
   applyFogView(view);
   setGodModeEnabled(false);
