@@ -2934,7 +2934,12 @@ const DIR_FROM_DELTA = {"-1,0": "NORTH", "1,0": "SOUTH", "0,-1": "WEST", "0,1": 
 
 async function startFog() {
   leaveSpectate();
-  const view = await api(`/maze/${state.maze.id}/agent`, {method: "POST"});
+  const mazeId = state.maze.id;
+  const view = await api(`/maze/${mazeId}/agent`, {method: "POST"});
+  // Generate / Daily / Back replaced the maze while this mint was
+  // out. Applying would walk fog on a grid this agent was not
+  // minted for, and carve its openings into those tiles.
+  if (!state.maze || state.maze.id !== mazeId) return;
   state.session = null;
   state.seat = null;
   state.joined = null;
@@ -2982,7 +2987,12 @@ async function fogStep(dr, dc) {
     log("err", `no opening ${dir}`);
     return;
   }
-  const view = await api(`/agent/${state.fog.agentId}/step?direction=${dir}`, {method: "POST"});
+  const agentId = state.fog.agentId;
+  const view = await api(`/agent/${agentId}/step?direction=${dir}`, {method: "POST"});
+  // Generate / Play dropped the walk while this step was out.
+  // applyFogView used to recreate state.fog and carve the old
+  // openings into the maze now on screen.
+  if (!state.fog || state.fog.agentId !== agentId) return;
   applyFogView(view);
   if (view.arrived) {
     $("status").textContent = `arrived in ${view.stepsUsed} steps`;

@@ -1347,6 +1347,78 @@ async function check(name, fn) {
         : JSON.stringify({src, after}).slice(0, 220)];
   });
 
+  await check('N26. late fog step / Fog start after Generate does not re-arm the walk', async () => {
+    // Old body: fogStep POSTed /step then always applyFogView, which
+    // recreates state.fog. startFog POSTed /agent then always applied.
+    // Generate that replaced the maze mid-flight still got the old
+    // openings carved into the new tiles. Discard after the POST;
+    // startFog still must not null tour.
+    const src = await page.evaluate(() => {
+      const s = fogStep.toString();
+      const post = s.indexOf('/step');
+      const fog = s.indexOf('state.fog.agentId !== agentId', post);
+      const f = startFog.toString();
+      const mint = f.indexOf('/agent');
+      const id = f.indexOf('mazeId');
+      const discard = f.indexOf('state.maze.id !== mazeId');
+      return post >= 0 && fog > post
+          && s.indexOf('applyFogView(view)', fog) > fog
+          && mint >= 0 && id >= 0 && id < mint && discard > mint
+          && f.indexOf('applyFogView') > discard
+          && !f.includes('state.tour = null');
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '47');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 47, null, {timeout:15000});
+    const first = await p2.evaluate(() => state.maze.id);
+    await p2.route('**/api/v1/maze/*/agent', async route => {
+      if (route.request().method() !== 'POST') return route.continue();
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    await p2.click('#fog');
+    await p2.fill('#seed', '48');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 48, null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const lateMint = await p2.evaluate(() => ({
+      fog: !!state.fog,
+      seed: state.maze && state.maze.seed,
+      id: state.maze && state.maze.id,
+    }));
+    await p2.unroute('**/api/v1/maze/*/agent');
+    await p2.click('#fog');
+    await p2.waitForFunction(() => !!(state.fog && state.fog.agentId), null, {timeout:20000});
+    const agent = await p2.evaluate(() => state.fog.agentId);
+    await p2.route('**/api/v1/agent/*/step*', async route => {
+      await new Promise(r => setTimeout(r, 1200));
+      await route.continue();
+    });
+    await p2.evaluate(() => {
+      const dir = (state.fog.open || [])[0];
+      const delta = {NORTH: [-1, 0], SOUTH: [1, 0], WEST: [0, -1], EAST: [0, 1]}[dir];
+      if (delta) return fogStep(delta[0], delta[1]);
+    });
+    await p2.fill('#seed', '49');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 49, null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const lateStep = await p2.evaluate(() => ({
+      fog: !!state.fog,
+      seed: state.maze && state.maze.seed,
+      agent: state.fog && state.fog.agentId,
+    }));
+    await p2.close();
+    const ok = src && !lateMint.fog && lateMint.seed === 48 && lateMint.id !== first
+        && !lateStep.fog && lateStep.seed === 49 && lateStep.agent !== agent;
+    return [ok, ok ? 'late fog mint/step discarded; Generate kept the canvas'
+        : JSON.stringify({src, lateMint, lateStep, first, agent}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

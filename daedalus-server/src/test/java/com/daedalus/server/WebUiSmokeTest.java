@@ -117,6 +117,19 @@ class WebUiSmokeTest {
                 .isGreaterThan(fog.indexOf("state.session = null"));
         assertThat(fog.indexOf("clearInterval(state.ghostTimer)"))
                 .isGreaterThan(fog.indexOf("state.session = null"));
+        // N26. startFog POSTed /agent then always applied. Generate
+        // that replaced the maze mid-flight still got the old agent's
+        // openings carved into the new tiles. Discard after the POST;
+        // startFog still must not null tour.
+        int fogMint = fog.indexOf("/agent");
+        int fogMazeId = fog.indexOf("mazeId");
+        int fogDiscard = fog.indexOf("state.maze.id !== mazeId");
+        assertThat(fogMint).isGreaterThanOrEqualTo(0);
+        assertThat(fogMazeId).isGreaterThanOrEqualTo(0);
+        assertThat(fogMazeId).isLessThan(fogMint);
+        assertThat(fogDiscard).isGreaterThan(fogMint);
+        assertThat(fog.indexOf("state.session = null")).isGreaterThan(fogDiscard);
+        assertThat(fog.indexOf("applyFogView")).isGreaterThan(fogDiscard);
         // Analyze / Compare wrote #compareBox. Fog dropped the overlay
         // objects (N16) and left the sidebar, so a leftover caption still
         // named chokepoints and a leftover compare row could hover-arm a
@@ -307,6 +320,22 @@ class WebUiSmokeTest {
         assertThat(ghostArm).isGreaterThan(ghostDiscard);
         assertThat(ghost.indexOf("if (!state.session)", ghostGet)).isGreaterThan(ghostDiscard);
         assertThat(ghost.indexOf("setInterval", ghostDiscard)).isGreaterThan(ghostArm);
+        // N26. fogStep POSTed /step then always applyFogView, which
+        // recreates state.fog. Generate / Play that dropped the walk
+        // mid-flight still got the old openings carved into the maze
+        // now on screen. Discard after the POST; startFog still must
+        // not null tour.
+        int stepFrom = html.indexOf("async function fogStep");
+        int stepTo = html.indexOf("function draw()");
+        assertThat(stepFrom).isGreaterThanOrEqualTo(0);
+        assertThat(stepTo).isGreaterThan(stepFrom);
+        String step = html.substring(stepFrom, stepTo);
+        int stepPost = step.indexOf("/step");
+        int stepDiscard = step.indexOf("state.fog.agentId !== agentId", stepPost);
+        int stepApply = step.indexOf("applyFogView(view)", stepDiscard);
+        assertThat(stepPost).isGreaterThanOrEqualTo(0);
+        assertThat(stepDiscard).isGreaterThan(stepPost);
+        assertThat(stepApply).isGreaterThan(stepDiscard);
         int declFrom = html.indexOf("function declareWin");
         int declTo = html.indexOf("let statusFlashTimer");
         assertThat(declFrom).isGreaterThanOrEqualTo(0);

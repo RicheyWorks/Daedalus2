@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Late fog step / Fog start after Generate does not re-arm the walk.** `fogStep()` POSTed `/step` then always `applyFogView`, which recreates `state.fog` and carves the old openings into whatever maze is now on screen. `startFog()` applied the same way after Generate replaced the maze. Discard after the POST when the walk or maze is gone.
+
 - **Late ghost after Fog does not re-arm the ticker.** `summonGhost()` GETs `/ghost` then always armed `state.ghost` and the ticker. Fog mid-flight cleared both; the GET still re-armed the ghost onto the walk. Discard after the GET when `state.fog` is set or the seat is gone. Same class as N20–N24.
 
 - **Late confirmWin / tour status after Fog do not paint the walk.** `confirmWin()` GETs `/session/{id}` then `declareWin` with no fog/session re-check; `refreshTourStatus()` painted hunt status the same way. Fog mid-flight still wrote a win (status, leaderboard, campaign) onto the walk. Discard after the GET when `state.fog` is set or the seat is gone. Same class as N20–N23.
