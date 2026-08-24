@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Late confirmWin / tour status after Fog do not paint the walk.** `confirmWin()` GETs `/session/{id}` then `declareWin` with no fog/session re-check; `refreshTourStatus()` painted hunt status the same way. Fog mid-flight still wrote a win (status, leaderboard, campaign) onto the walk. Discard after the GET when `state.fog` is set or the seat is gone. Same class as N20–N23.
+
 - **Late Join after Fog does not steal the walk.** `join()` POSTed `/join` then always wrote the seat. Fog mid-flight hit a nulled `state.session` or reattached the seat after the walk dropped it. Stay a watcher until join lands (spectate honesty); discard the apply when `state.fog` is set. Same class as N20–N22.
 
 - **Hash hydrate leaves fog before fetch; late `#session=` does not seat after discard.** `#maze=` fetched then `adoptMaze` no-op'd during fog, so the bar named a maze the canvas still walked. A late `#session=` still ran `adoptSessionView` after adopt discarded. Leave fog before those fetches (Back / paste / Forward already wrote the bar); same-hash still no-ops. Discard adopt / the spectator seat when Fog starts mid-flight. Same class as N20 / N21.

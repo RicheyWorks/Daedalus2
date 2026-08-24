@@ -1213,6 +1213,84 @@ async function check(name, fn) {
         : JSON.stringify({src, after}).slice(0, 220)];
   });
 
+  await check('N24. late confirmWin / tour status after Fog do not paint the walk', async () => {
+    // Old body: confirmWin GETs /session/{id} then declareWin with no
+    // fog/session re-check. refreshTourStatus painted hunt status the
+    // same way. Discard after the GET; startFog still must not null tour.
+    const src = await page.evaluate(() => {
+      const w = confirmWin.toString();
+      const t = refreshTourStatus.toString();
+      const d = declareWin.toString();
+      const wGet = w.indexOf('/session/');
+      const wFog = w.indexOf('if (state.fog)', wGet);
+      const tGet = t.indexOf('/tour');
+      const tFog = t.indexOf('if (state.fog)', tGet);
+      const dFog = d.indexOf('if (state.fog)');
+      const fogSrc = startFog.toString();
+      return wGet >= 0 && wFog > wGet && w.indexOf('declareWin', wFog) > wFog
+          && w.indexOf('if (!state.session)', wGet) > wFog
+          && tGet >= 0 && tFog > tGet && t.indexOf('$("status")', tFog) > tFog
+          && t.indexOf('if (!state.session)', tGet) > tFog
+          && dFog >= 0 && dFog < d.indexOf('state.won =')
+          && !fogSrc.includes('state.tour = null');
+    });
+    const p2 = await ctx.newPage();
+    await p2.route('**/api/v1/session/**', async route => {
+      const url = new URL(route.request().url());
+      const segs = url.pathname.split('/').filter(Boolean);
+      const method = route.request().method();
+      const isTour = method === 'GET' && segs[segs.length - 1] === 'tour';
+      const isSnap = method === 'GET' && segs.length === 4 && segs[2] === 'session';
+      if (!isTour && !isSnap) return route.continue();
+      await new Promise(r => setTimeout(r, 1200));
+      if (isTour) {
+        await route.fulfill({
+          status: 200,
+          headers: {'content-type': 'application/json'},
+          body: JSON.stringify({
+            remaining: [], total: 3, collected: 3, complete: true, walked: 10, optimal: 8,
+          }),
+        });
+        return;
+      }
+      await route.fulfill({
+        status: 200,
+        headers: {'content-type': 'application/json'},
+        body: JSON.stringify({completed: true, completedBy: 'web'}),
+      });
+    });
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '41');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 41, null, {timeout:15000});
+    await p2.click('#play');
+    await p2.waitForFunction(() => !!state.session, null, {timeout:15000});
+    await p2.evaluate(() => {
+      state.tour = state.tour || {waypoints: [], optimalCost: 0};
+      void refreshTourStatus();
+      void confirmWin('web');
+    });
+    await p2.click('#fog');
+    await p2.waitForFunction(() => !!(state.fog && state.fog.agentId), null, {timeout:20000});
+    await p2.waitForTimeout(1800);
+    const after = await p2.evaluate(() => ({
+      fog: !!(state.fog && state.fog.agentId),
+      session: !!state.session,
+      won: state.won,
+      status: document.getElementById('status').textContent,
+      tour: !!state.tour,
+      hash: location.hash,
+    }));
+    await p2.close();
+    const painted = /reached the goal|waypoint hunt|waypoints collected/i.test(after.status || '');
+    const ok = src && after.fog && !after.session && !after.won && after.tour
+        && /^fog:/.test(after.status || '') && !painted && !/session=/.test(after.hash);
+    return [ok, ok ? 'late win/hunt discarded; fog walk kept the canvas'
+        : JSON.stringify({src, after}).slice(0, 220)];
+  });
+
   await check('Q. login form + fog-of-war hides unseen floor', async () => {
     const form = await page.evaluate(() => ({
       login: !!document.getElementById('login'),

@@ -256,6 +256,49 @@ class WebUiSmokeTest {
         assertThat(join.indexOf("leaveSpectate")).isGreaterThan(joinPost);
         assertThat(join).doesNotContain("state.fog = null");
         assertThat(join.indexOf("if (!state.session)", joinPost)).isGreaterThan(joinDiscard);
+        // N24. confirmWin GETs /session/{id} then declareWin with no
+        // fog/session re-check. Fog mid-flight painted a win (status,
+        // leaderboard, campaign) on a fog walk. refreshTourStatus is
+        // the same class. Discard after the GET; startFog still must
+        // not null tour. applyMove already bails when !state.session.
+        assertDiscardAfterFetch(html, "async function confirmWin",
+                "function declareWin", "declareWin");
+        assertDiscardAfterFetch(html, "async function refreshTourStatus",
+                "async function tourVerdict", "$(\"status\")");
+        int winFrom = html.indexOf("async function confirmWin");
+        int winTo = html.indexOf("function declareWin");
+        assertThat(winFrom).isGreaterThanOrEqualTo(0);
+        assertThat(winTo).isGreaterThan(winFrom);
+        String win = html.substring(winFrom, winTo);
+        int winGet = win.indexOf("/session/${state.session.id}");
+        int winDiscard = win.indexOf("if (state.fog)", winGet);
+        int winDeclare = win.indexOf("declareWin", winDiscard);
+        assertThat(winGet).isGreaterThanOrEqualTo(0);
+        assertThat(winDiscard).isGreaterThan(winGet);
+        assertThat(winDeclare).isGreaterThan(winDiscard);
+        assertThat(win.indexOf("if (!state.session)", winGet)).isGreaterThan(winDiscard);
+        int huntFrom = html.indexOf("async function refreshTourStatus");
+        int huntTo = html.indexOf("async function tourVerdict");
+        assertThat(huntFrom).isGreaterThanOrEqualTo(0);
+        assertThat(huntTo).isGreaterThan(huntFrom);
+        String hunt = html.substring(huntFrom, huntTo);
+        int huntGet = hunt.indexOf("/tour");
+        int huntDiscard = hunt.indexOf("if (state.fog)", huntGet);
+        assertThat(huntGet).isGreaterThanOrEqualTo(0);
+        assertThat(huntDiscard).isGreaterThan(huntGet);
+        assertThat(hunt.indexOf("$(\"status\")", huntDiscard)).isGreaterThan(huntDiscard);
+        assertThat(hunt.indexOf("if (!state.session)", huntGet)).isGreaterThan(huntDiscard);
+        int declFrom = html.indexOf("function declareWin");
+        int declTo = html.indexOf("let statusFlashTimer");
+        assertThat(declFrom).isGreaterThanOrEqualTo(0);
+        assertThat(declTo).isGreaterThan(declFrom);
+        String decl = html.substring(declFrom, declTo);
+        assertThat(decl.indexOf("if (state.fog)")).isGreaterThanOrEqualTo(0);
+        assertThat(decl.indexOf("if (state.fog)")).isLessThan(decl.indexOf("state.won = who"));
+        assertThat(decl.indexOf("if (state.fog)")).isLessThan(decl.indexOf("refreshLeaderboard"));
+        int thenFog = decl.indexOf("if (state.fog)", decl.indexOf("tourVerdict"));
+        assertThat(thenFog).isGreaterThan(decl.indexOf("tourVerdict"));
+        assertThat(decl.indexOf("$(\"status\")", thenFog)).isGreaterThan(thenFog);
         int applyFrom = html.indexOf("function applyMove");
         int applyTo = html.indexOf("async function confirmWin");
         assertThat(applyFrom).isGreaterThanOrEqualTo(0);
