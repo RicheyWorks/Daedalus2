@@ -1446,6 +1446,34 @@ class WebUiSmokeTest {
         assertLeftoverCampaignStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N113. Remaining leftover live / traffic stays.
+        // adoptMaze / leaveMaze already drop leftover polls.
+        // Living under fog is honest (N19): the poller is
+        // maze-bound and re-polls the agent instead of GET
+        // /maze. These stays must not be taught away: Hunt /
+        // Play / Fog / theory / Join leftover live stay —
+        // same maze still erodes; leftover #live / #traffic
+        // disabled stay — maze still alive; Hunt through
+        // Play and Join-from-spectate still keep tour; Fog
+        // still keeps tour (N17); leftover Solve path stays
+        // as a theory route hint (N62); Join leftover ghost
+        // stays (N86).
+        assertLeftoverLiveStay(html, "async function startTour", "function sameCell");
+        assertLeftoverLiveStay(html, "async function play()", "async function join()");
+        assertLeftoverLiveStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverLiveStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverLiveStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverLiveStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverLiveStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverLiveStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverLiveStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -2300,6 +2328,27 @@ class WebUiSmokeTest {
         assertThat(to).isGreaterThan(from);
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("leaveCampaign()");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover live / traffic stay (N113). Same maze still
+     * erodes. Living under fog is honest (N19). Must not
+     * drop or remint the poller. Must not rewrite #live /
+     * #traffic. Must not null tour.
+     */
+    private static void assertLeftoverLiveStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("clearInterval(state.livePoll)");
+        assertThat(body).doesNotContain("clearInterval(state.trafficPoll)");
+        assertThat(body).doesNotContain("startLivePolling");
+        assertThat(body).doesNotContain("startTrafficPolling");
+        assertThat(body).doesNotContain("$(\"live\")");
+        assertThat(body).doesNotContain("$(\"traffic\")");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
