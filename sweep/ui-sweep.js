@@ -1720,6 +1720,21 @@ async function check(name, fn) {
         : 'N46 source pin failed'];
   });
 
+  await check('N47. Identify 503 wait does not GET /fingerprint after Generate left the maze', async () => {
+    // Old body: fingerprintWhenReady retried the old id for 60s.
+    // identifyGenerator discarded the paint (N30); the wait still
+    // minted work. Abort before the next GET when fog or maze id
+    // no longer matches.
+    const src = await page.evaluate(() => {
+      const s = fingerprintWhenReady.toString();
+      const id = s.indexOf('state.maze.id !== id');
+      const get = s.indexOf('api(`/maze/${id}/fingerprint`)');
+      return id >= 0 && id < get && s.includes('state.fog') && s.includes('return null');
+    });
+    return [src, src ? 'warming loop aborts when the maze on screen changed'
+        : 'N47 source pin failed'];
+  });
+
   await check('N30. late /solve after Generate does not paint the maze now on screen', async () => {
     // Old body: solve / race / compare POSTed /solve then painted
     // after only a fog check. Generate mid-flight applied the old

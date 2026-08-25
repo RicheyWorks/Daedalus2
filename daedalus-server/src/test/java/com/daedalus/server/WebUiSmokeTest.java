@@ -645,6 +645,23 @@ class WebUiSmokeTest {
                 "function paintAnalysisCaption", "paintAnalysisCaption");
         assertMazeIdDiscardAfterFetch(html, "async function identifyGenerator",
                 "function paintFingerprintCaption", "paintFingerprintCaption");
+        // N47. fingerprintWhenReady retried GET /fingerprint for 60s
+        // on 503. Generate / Fog left that maze; the wait still
+        // minted work against the id you left. identifyGenerator
+        // already discards the paint (N30). Abort the loop when fog
+        // is on or maze id no longer matches, before the next GET.
+        int n47From = html.indexOf("async function fingerprintWhenReady");
+        int n47To = html.indexOf("async function identifyGenerator");
+        assertThat(n47From).isGreaterThanOrEqualTo(0);
+        assertThat(n47To).isGreaterThan(n47From);
+        String n47 = html.substring(n47From, n47To);
+        int n47Id = n47.indexOf("state.maze.id !== id");
+        int n47Get = n47.indexOf("api(`/maze/${id}/fingerprint`)");
+        assertThat(n47Id).isGreaterThanOrEqualTo(0);
+        assertThat(n47Get).isGreaterThanOrEqualTo(0);
+        assertThat(n47Id).isLessThan(n47Get);
+        assertThat(n47).contains("state.fog");
+        assertThat(n47).contains("return null");
         assertMazeIdDiscardAfterFetch(html, "async function distanceHeatMap",
                 "function paintFieldCaption", "paintFieldCaption");
         assertMazeIdDiscardAfterFetch(html, "async function heuristicLens",

@@ -1681,6 +1681,10 @@ async function fingerprintWhenReady(id) {
   const t0 = performance.now();
   let warned = false;
   while (performance.now() - t0 < 60000) {
+    // Generate / Fog left this maze while we waited on 503. Another
+    // fingerprint GET would still mint work against the id you left
+    // (N47). identifyGenerator already discards the paint.
+    if (state.fog || !state.maze || state.maze.id !== id) return null;
     try {
       return await api(`/maze/${id}/fingerprint`);
     } catch (e) {
@@ -1702,6 +1706,7 @@ async function identifyGenerator() {
   const f = await fingerprintWhenReady(mazeId);
   // Fog emptied the sidebar (N18). Generate mid-flight: a late
   // fingerprint would name the old maze on the one now on screen.
+  if (!f) return;
   if (state.fog) return;
   if (!state.maze || state.maze.id !== mazeId) return;
   state.fingerprint = f;

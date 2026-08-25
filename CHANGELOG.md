@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Identify's 503 wait does not keep GET `/fingerprint` on a maze Generate already replaced.** First Identify retries for 60s while the classifier warms. Generate / Fog left that maze; the wait still asked the old id. Abort the loop when fog is on or maze id no longer matches, before the next GET (N47). Paint discard stays (N30).
+
 - **A late campaign hazard does not start `/live` or `/traffic` on a stage Generate already replaced.** N29 discarded the UI bind after those POSTs so `#live` could not attach to the maze now on screen. The POST still fired against the stage you left, so a ticker ran on a maze the bar no longer names. Gate before the first hazard POST (N46). After-POST discard stays (N29).
 
 - **A STOMP drop re-arms the living / traffic / spectate polls CONNECT just cleared.** N43 / N44 stop those fallbacks when the broker arrives so a late snapshot cannot rewind a hop or a tick. A later disconnect left them dead, so a watched walk or an eroding campaign stage froze until the next CONNECT. After `state.stomp = null`, start the same polls again — do not POST `/live` (N45).
