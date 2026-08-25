@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Leftover lab / tournament / PNG stays.** Measure and Run tournament remint those panels when you ask. adoptMaze / leaveMaze already show or hide the snapshot. Hunt / Play / Fog / theory / Join leftover lab stay — the curve you asked for. Leftover tournament stay — the sample you asked for. Leftover PNG stay — same maze canvas (fog snapshot is the fog walk). Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N116).
+
 - **Leftover plugin / log / player stays.** `refreshPlugins` remints the roster on login / logout / plugin failure. Hunt / Play / Fog / theory / Join leftover plugin stay — global catalog. Leftover log stay — history. Leftover `#player` stay — the name you typed. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N115).
 
 - **Leftover form stays.** adoptMaze / leaveMaze / applyRecipeToForm already rewrite the recipe on maze change. Hunt / Play / Fog / theory / Join leftover form stay — same maze recipe. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N114).

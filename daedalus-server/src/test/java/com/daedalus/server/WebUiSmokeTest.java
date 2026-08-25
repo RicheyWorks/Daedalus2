@@ -1525,6 +1525,34 @@ class WebUiSmokeTest {
         assertLeftoverCatalogStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N116. Remaining leftover lab / tournament / PNG stays.
+        // Measure and Run tournament remint those panels when
+        // you ask. adoptMaze / leaveMaze already show or hide
+        // the snapshot. These stays must not be taught away:
+        // Hunt / Play / Fog / theory / Join leftover lab stay
+        // — the curve you asked for; leftover tournament stay
+        // — the sample you asked for; leftover PNG stay —
+        // same maze canvas (fog snapshot is the fog walk);
+        // Hunt through Play and Join-from-spectate still keep
+        // tour; Fog still keeps tour (N17); leftover Solve
+        // path stays as a theory route hint (N62); Join
+        // leftover ghost stays (N86).
+        assertLeftoverLabStay(html, "async function startTour", "function sameCell");
+        assertLeftoverLabStay(html, "async function play()", "async function join()");
+        assertLeftoverLabStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverLabStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverLabStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverLabStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverLabStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverLabStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverLabStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -2440,6 +2468,24 @@ class WebUiSmokeTest {
         assertThat(body).doesNotContain("$(\"log\").innerHTML");
         assertThat(body).doesNotContain("$(\"log\").textContent");
         assertThat(body).doesNotContain("$(\"player\").value =");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover lab / tournament / PNG stay (N116). The curve
+     * and the sample are what you asked for. The snapshot is
+     * the maze still on the canvas. Must not rewrite #labOut
+     * / #tourBox / #pngExport. Must not null tour.
+     */
+    private static void assertLeftoverLabStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("labOut");
+        assertThat(body).doesNotContain("tourBox");
+        assertThat(body).doesNotContain("pngExport");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
