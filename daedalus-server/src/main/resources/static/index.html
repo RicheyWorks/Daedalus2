@@ -3331,6 +3331,13 @@ async function play() {
       + `&middot; <span>seed</span> ${state.maze.seed}`
       + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
       + `<br>`;
+  // Leftover tourGot stays after Open session. Hunt remints
+  // collected coins. Play reminted trails / won but left
+  // leftover tourGot, so leftover collected coins painted
+  // on the new seat until the first move reminted (N117).
+  // Hunt calls play() after installing tour — do not null
+  // tour (N50). startFog still must not null tour (N17).
+  state.tourGot = [];
   // Hardest stays armed after Open session when caption is
   // not hardest. Join already drops leftover gold
   // unconditionally (N77). Play gated it (N58), so leftover
@@ -3926,6 +3933,13 @@ async function startFog() {
   // ended the fog walk without Play (N110). startFog still
   // must not null tour (N17).
   state.won = null;
+  // Leftover tourGot stays after Fog. Hunt remints collected
+  // coins. Fog dropped the seat and leftover won (N110) but
+  // left leftover tourGot, so leftover collected coins
+  // painted after Play seated a new walk (draw swallows
+  // during fog). Drop those coins after the maze-id discard
+  // (N117). startFog still must not null tour (N17).
+  state.tourGot = [];
   $("join").disabled = true;
   // Open session pinned #session= and subscribed /player. N15 dropped the
   // seat and hash; the subscription and ghost ticker stayed, so a joiner

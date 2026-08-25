@@ -183,6 +183,16 @@ class WebUiSmokeTest {
         assertThat(n110Won).isGreaterThan(fogDiscard);
         assertThat(n110Won).isGreaterThan(fog.indexOf("state.session = null"));
         assertThat(n110Won).isGreaterThan(n109Trails);
+        // N117. Fog left leftover tourGot armed. Hunt remints
+        // collected coins. Fog dropped the seat and leftover
+        // won (N110) but left leftover tourGot, so leftover
+        // collected coins painted after Play seated a new
+        // walk. Drop tourGot after the maze-id discard.
+        // startFog still must not null tour (N17).
+        int n117FogGot = fog.indexOf("state.tourGot = []");
+        assertThat(n117FogGot).isGreaterThan(fogDiscard);
+        assertThat(n117FogGot).isGreaterThan(fog.indexOf("state.session = null"));
+        assertThat(n117FogGot).isGreaterThan(n110Won);
         assertThat(fog).doesNotContain("state.tour = null");
         // N17 emptied the sidebar when Fog started. An Analyze /
         // Compare (or Identify / Heat / Lens) that was already out
@@ -1553,6 +1563,27 @@ class WebUiSmokeTest {
         assertLeftoverLabStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N117 stay. Remaining leftover tourGot during theory /
+        // Join stays. Fog / Play drop leftover collected coins
+        // when the seat that collected them is gone. These
+        // stays must not be taught away: theory leftover
+        // tourGot stay — current hunt; Join leftover tourGot
+        // stay — same session; Hunt remints empty coins then
+        // collects; Hunt through Play and Join-from-spectate
+        // still keep tour; Fog still keeps tour (N17).
+        assertLeftoverTourGotStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverTourGotStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverTourGotStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverTourGotStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverTourGotStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverTourGotStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -1770,6 +1801,17 @@ class WebUiSmokeTest {
         int n92Stats = n32.indexOf("$(\"stats\").innerHTML =", n32Maze);
         assertThat(n92Stats).isGreaterThan(n32Maze);
         assertThat(n92Stats).isLessThan(n55Seat);
+        // N117. Open session left leftover tourGot armed.
+        // Hunt remints collected coins. Play reminted trails
+        // / won but left leftover tourGot, so leftover
+        // collected coins painted on the new seat until the
+        // first move reminted. Drop tourGot after the
+        // session POST discard. Hunt calls play() after
+        // installing tour — must not null tour (N50).
+        // startFog still must not null tour (N17).
+        int n117PlayGot = n32.indexOf("state.tourGot = []", n32Maze);
+        assertThat(n117PlayGot).isGreaterThan(n32Maze);
+        assertThat(n117PlayGot).isLessThan(n55Seat);
         assertThat(n32).doesNotContain("state.tour = null");
         // N33. hydrateSpectatorOverlays GETs /session/{id}/tour then
         // always wrote state.tour. Generate / Fog / a new #session=
@@ -2486,6 +2528,21 @@ class WebUiSmokeTest {
         assertThat(body).doesNotContain("labOut");
         assertThat(body).doesNotContain("tourBox");
         assertThat(body).doesNotContain("pngExport");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover tourGot stay (N117). Same hunt still owns
+     * those collected coins. Must not empty tourGot. Must
+     * not null tour.
+     */
+    private static void assertLeftoverTourGotStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("state.tourGot = []");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
