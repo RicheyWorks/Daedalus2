@@ -1040,6 +1040,20 @@ class WebUiSmokeTest {
         int n98Stats = n53Cmp.indexOf("$(\"stats\").innerHTML =");
         assertThat(n98Stats).isGreaterThan(n53CmpDiscard);
         assertThat(n98Stats).isLessThan(n53CmpBox);
+        // N104. Compare left leftover Hunt status armed.
+        // Generate / Fog / Play rewrite #status (N48). Solve /
+        // Hardest / Race rewrite after dropping tour
+        // (N101–N103). Compare dropped tour (N53) but left
+        // leftover hunt text, so leftover "waypoint hunt"
+        // named a hunt that is gone under the table. Rewrite
+        // after the maze-id discard. Hover still arms a
+        // preview. startFog still must not null tour (N17).
+        int n104Flash = n53Cmp.indexOf("clearTimeout(statusFlashTimer)");
+        int n104Status = n53Cmp.indexOf("$(\"status\").textContent");
+        assertThat(n104Flash).isGreaterThan(n53CmpDiscard);
+        assertThat(n104Flash).isLessThan(n53CmpBox);
+        assertThat(n104Status).isGreaterThan(n104Flash);
+        assertThat(n104Status).isLessThan(n53CmpBox);
         // N65. Solve left Hunt coins / Hardest / sibling theory
         // armed. Leftover tourWalk / leftover gold painted under
         // the solver path; leftover cuts reminted GET /analysis.

@@ -3140,6 +3140,17 @@ async function compareSolvers() {
   // Same leftover as Race: Hunt coins stay under a compare
   // hover path that is not the Held-Karp corridor (N53).
   state.tour = null; state.tourGot = [];
+  // Leftover Hunt status stays after Compare. Generate /
+  // Fog / Play rewrite #status (N48). Solve / Hardest /
+  // Race rewrite after dropping tour (N101–N103). Compare
+  // dropped tour (N53) but left leftover hunt text, so
+  // leftover "waypoint hunt" named a hunt that is gone
+  // under the table (N104). Hover still arms a preview.
+  // startFog still must not null tour (N17).
+  clearTimeout(statusFlashTimer); statusFlashTimer = null;
+  $("status").textContent = state.session
+      ? `session ${state.session.id.slice(0, 8)}… — arrow keys to move`
+      : "arrow keys move once a session is open";
   state.analysis = null; state.hardest = null;
   state.field = null; state.sanctuaries = null;
   state.lens = null; state.fingerprint = null;
