@@ -676,6 +676,39 @@ class WebUiSmokeTest {
                 "async function join");
         assertStatusFlashClearedBeforeWrite(html, "async function startFog",
                 "async function fogStep");
+        // N49. Solve / race rAF kept writing progress after Generate /
+        // Fog / Back zeroed path and race. A leftover frame could
+        // finish the reveal or raceSummary the maze now on screen.
+        // Bump animGen on those leave paths; step returns when gen
+        // no longer matches.
+        int n49SearchFrom = html.indexOf("function animateSearch");
+        int n49SearchTo = html.indexOf("function animatePath");
+        assertThat(n49SearchFrom).isGreaterThanOrEqualTo(0);
+        assertThat(n49SearchTo).isGreaterThan(n49SearchFrom);
+        String n49Search = html.substring(n49SearchFrom, n49SearchTo);
+        int n49Gen = n49Search.indexOf("const gen = ++animGen");
+        int n49Guard = n49Search.indexOf("if (gen !== animGen) return");
+        int n49Prog = n49Search.indexOf("state.pathProgress = Math.max");
+        assertThat(n49Gen).isGreaterThanOrEqualTo(0);
+        assertThat(n49Guard).isGreaterThan(n49Gen);
+        assertThat(n49Guard).isLessThan(n49Prog);
+        int n49RaceFrom = html.indexOf("function animateRace");
+        int n49RaceTo = html.indexOf("function raceSummary");
+        assertThat(n49RaceFrom).isGreaterThanOrEqualTo(0);
+        assertThat(n49RaceTo).isGreaterThan(n49RaceFrom);
+        String n49Race = html.substring(n49RaceFrom, n49RaceTo);
+        assertThat(n49Race.indexOf("const gen = ++animGen")).isGreaterThanOrEqualTo(0);
+        assertThat(n49Race.indexOf("if (gen !== animGen) return"))
+                .isGreaterThan(n49Race.indexOf("const gen = ++animGen"));
+        String n49Adopt = html.substring(html.indexOf("function adoptMaze"),
+                html.indexOf("// Snapshot whatever is on the canvas"));
+        String n49Leave = html.substring(html.indexOf("function leaveMaze"),
+                html.indexOf("async function loadFromHash"));
+        String n49Fog = html.substring(html.indexOf("async function startFog"),
+                html.indexOf("async function fogStep"));
+        assertThat(n49Adopt).contains("animGen++");
+        assertThat(n49Leave).contains("animGen++");
+        assertThat(n49Fog).contains("animGen++");
         assertMazeIdDiscardAfterFetch(html, "async function distanceHeatMap",
                 "function paintFieldCaption", "paintFieldCaption");
         assertMazeIdDiscardAfterFetch(html, "async function heuristicLens",

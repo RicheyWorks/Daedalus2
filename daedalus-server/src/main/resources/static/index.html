@@ -870,6 +870,10 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   clearInterval(state.livePoll); state.livePoll = null;
   clearInterval(state.trafficPoll); state.trafficPoll = null;
   clearInterval(state.ghostTimer); state.ghostTimer = null;
+  // Solve / race rAF captured the previous reveal. Generate would
+  // zero path / race, then a leftover frame write progress or
+  // raceSummary onto the maze now on screen (N49).
+  animGen++;
   state.race = null; state.dailyId = null; state.analysis = null; state.ghost = null;
   state.hardest = null; state.field = null; state.sanctuaries = null;
   state.lens = null;
@@ -1272,6 +1276,7 @@ function leaveMaze() {
   clearInterval(state.livePoll); state.livePoll = null;
   clearInterval(state.trafficPoll); state.trafficPoll = null;
   clearInterval(state.ghostTimer); state.ghostTimer = null;
+  animGen++;
   leaveSpectate();
   state.maze = null;
   state.path = null;
@@ -2538,7 +2543,9 @@ async function solve() {
  * route draws over it. BFS visibly floods, A* visibly beelines, Trémaux visibly wanders.
  * Solvers with no recorded expansions (off the graph seam) skip straight to the path.
  */
+let animGen = 0;
 function animateSearch() {
+  const gen = ++animGen;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     state.searchProgress = 1;
     state.pathProgress = 1;
@@ -2551,6 +2558,7 @@ function animateSearch() {
   const pathMs = pathRevealMs((state.path || []).length);
   const started = performance.now();
   const step = now => {
+    if (gen !== animGen) return;
     const t = now - started;
     state.searchProgress = n ? Math.min(1, t / searchMs) : 1;
     state.pathProgress = Math.max(0, Math.min(1, (t - searchMs) / pathMs));
@@ -2604,6 +2612,7 @@ async function raceSolvers() {
 }
 
 function animateRace() {
+  const gen = ++animGen;
   const lanes = state.race.lanes;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     lanes.forEach(l => { l.front = 1; l.pathProg = 1; });
@@ -2614,6 +2623,7 @@ function animateRace() {
   const rate = Math.max(150, maxN / 3.5); // expansions/sec — biggest lane takes ≤3.5s
   const started = performance.now();
   const step = now => {
+    if (gen !== animGen) return;
     const t = (now - started) / 1000;
     let running = false;
     lanes.forEach(l => {
@@ -3258,6 +3268,7 @@ async function startFog() {
   // Pin after the drop — daily / campaign stay those kinds; a leftover
   // #session= becomes #maze=.
   clearInterval(state.ghostTimer); state.ghostTimer = null;
+  animGen++;
   state.ghost = null;
   state.path = null; state.expansions = [];
   state.analysis = null; state.hardest = null; state.field = null;

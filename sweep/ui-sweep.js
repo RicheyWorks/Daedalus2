@@ -1783,6 +1783,26 @@ async function check(name, fn) {
         : JSON.stringify({src, late}).slice(0, 220)];
   });
 
+  await check('N49. leftover solve rAF does not write progress after Generate', async () => {
+    // Old body: animateSearch kept stepping after adoptMaze zeroed
+    // path. A leftover frame wrote searchProgress / pathProgress
+    // onto the maze now on screen and could finish a new reveal.
+    const src = await page.evaluate(() => {
+      const s = animateSearch.toString();
+      const r = animateRace.toString();
+      const a = adoptMaze.toString();
+      const gen = s.indexOf('const gen = ++animGen');
+      const guard = s.indexOf('if (gen !== animGen) return');
+      const prog = s.indexOf('state.pathProgress = Math.max');
+      return gen >= 0 && guard > gen && guard < prog
+          && r.includes('const gen = ++animGen')
+          && r.includes('if (gen !== animGen) return')
+          && a.includes('animGen++');
+    });
+    return [src, src ? 'stale solve / race frames return after leave'
+        : 'N49 source pin failed'];
+  });
+
   await check('N30. late /solve after Generate does not paint the maze now on screen', async () => {
     // Old body: solve / race / compare POSTed /solve then painted
     // after only a fog check. Generate mid-flight applied the old
