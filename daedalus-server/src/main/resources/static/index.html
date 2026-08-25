@@ -3078,6 +3078,17 @@ async function compareSolvers() {
   state.expansions = [];
   state.searchProgress = 1;
   state.pathProgress = 1;
+  // Leftover Solve stats stay after Compare. Play / Hunt /
+  // Join / Fog / Hardest / Race rewrite #stats (N92–N97).
+  // Compare did not, so leftover solver numbers named the
+  // previous walk under the table (N98). Hover still arms a
+  // preview. startFog still must not null tour (N17).
+  $("stats").innerHTML =
+      `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
+      + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
+      + `&middot; <span>seed</span> ${state.maze.seed}`
+      + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
+      + `<br>`;
   const ok = results.filter(r => r.success);
   // Math.min() of an empty list is Infinity — the log used to say "best path Infinity".
   const bestPath = ok.length ? Math.min(...ok.map(r => r.path.length)) : null;

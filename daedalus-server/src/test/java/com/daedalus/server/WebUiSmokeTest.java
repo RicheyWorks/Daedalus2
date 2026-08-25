@@ -1018,6 +1018,15 @@ class WebUiSmokeTest {
         assertThat(n90Path).isLessThan(n53CmpBox);
         assertThat(n90Exp).isGreaterThan(n90Path);
         assertThat(n90Exp).isLessThan(n53CmpBox);
+        // N98. Compare left leftover Solve stats armed. Play /
+        // Hunt / Join / Fog / Hardest / Race rewrite #stats
+        // (N92–N97). Compare did not, so leftover solver
+        // numbers named the previous walk under the table.
+        // Rewrite after the maze-id discard. Hover still arms
+        // a preview. startFog still must not null tour (N17).
+        int n98Stats = n53Cmp.indexOf("$(\"stats\").innerHTML =");
+        assertThat(n98Stats).isGreaterThan(n53CmpDiscard);
+        assertThat(n98Stats).isLessThan(n53CmpBox);
         // N65. Solve left Hunt coins / Hardest / sibling theory
         // armed. Leftover tourWalk / leftover gold painted under
         // the solver path; leftover cuts reminted GET /analysis.
