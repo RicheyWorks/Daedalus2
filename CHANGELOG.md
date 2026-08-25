@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Analyze / Identify / heat / sanctuaries / lens drop leftover Compare hover.** N60 / N61 dropped leftover Race and Hardest; Compare hover stayed, so leftover solver path painted over the theory and a living tick reminted `POST /solve`. Drop that path after the maze-id discard when caption is compare (N62). A leftover Solve path stays as a route hint. Hunt stays. Fog still keeps tour (N17).
+
 - **Analyze / Identify / heat / sanctuaries / lens drop leftover Hardest walk.** N60 dropped leftover Race; Hardest stayed, so leftover gold painted over the theory and a living tick reminted `GET /hardest-route`. Drop `state.hardest` after the maze-id discard (N61). Hunt stays. Fog still keeps tour (N17).
 
 - **Analyze / Identify / heat / sanctuaries / lens drop leftover Race lanes.** Hardest already dropped leftover arena (N59). Those theory writes left Race armed, so leftover lanes painted over the cuts, field, rings, bands, or Identify sidebar. Drop `state.race` after the maze-id discard (N60). Hunt stays — chokepoints during a hunt are useful. Fog still keeps tour (N17).

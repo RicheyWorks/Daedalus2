@@ -840,6 +840,22 @@ class WebUiSmokeTest {
                 "function paintSanctuariesCaption", "state.sanctuaries = s");
         assertLeftoverHardestDroppedAfterDiscard(html, "async function heuristicLens",
                 "function paintLensCaption", "state.lens = l");
+        // N62. Theory writes left Compare hover armed. Leftover
+        // solver path painted over the theory and a living tick
+        // reminted POST /solve. Drop path after the maze-id
+        // discard when caption is compare. Do not null a leftover
+        // Solve path (route hint). Hunt stays. startFog still
+        // must not null tour (N17).
+        assertLeftoverComparePathDroppedAfterDiscard(html, "async function analyzeStructure",
+                "function paintAnalysisCaption", "state.analysis = a");
+        assertLeftoverComparePathDroppedAfterDiscard(html, "async function identifyGenerator",
+                "function paintFingerprintCaption", "state.fingerprint = f");
+        assertLeftoverComparePathDroppedAfterDiscard(html, "async function distanceHeatMap",
+                "function paintFieldCaption", "state.field = f");
+        assertLeftoverComparePathDroppedAfterDiscard(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption", "state.sanctuaries = s");
+        assertLeftoverComparePathDroppedAfterDiscard(html, "async function heuristicLens",
+                "function paintLensCaption", "state.lens = l");
         // N51. leaveSpectate only cleared readOnly. Solve / Analyze
         // after a watch kept the opener's session writable, so
         // arrows POSTed /move on a walk this tab only watched.
@@ -1440,6 +1456,31 @@ class WebUiSmokeTest {
         assertThat(discard).isGreaterThanOrEqualTo(0);
         assertThat(hard).isGreaterThan(discard);
         assertThat(hard).isLessThan(out);
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover Compare hover after a theory write (N62). Drop path
+     * after the maze-id discard when caption is compare, before the
+     * overlay write. Must not null tour. Must not always-null path
+     * (Solve hint stays).
+     */
+    private static void assertLeftoverComparePathDroppedAfterDiscard(String html, String start,
+            String end, String write) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        int discard = body.lastIndexOf("state.maze.id !== mazeId");
+        int cap = body.indexOf("caption === \"compare\"");
+        int path = body.indexOf("state.path = null");
+        int out = body.indexOf(write);
+        assertThat(discard).isGreaterThanOrEqualTo(0);
+        assertThat(cap).isGreaterThan(discard);
+        assertThat(cap).isLessThan(out);
+        assertThat(path).isGreaterThan(cap);
+        assertThat(path).isLessThan(out);
         assertThat(body).doesNotContain("state.tour = null");
     }
 

@@ -1963,6 +1963,34 @@ async function check(name, fn) {
         : 'N61 source pin failed'];
   });
 
+  await check('N62. theory writes drop leftover Compare hover', async () => {
+    // Old body: N60 / N61 dropped leftover Race / Hardest;
+    // Compare hover stayed. Leftover solver path painted
+    // over the theory; a living tick reminted POST /solve.
+    const src = await page.evaluate(() => {
+      const fog = startFog.toString();
+      const hunt = startTour.toString();
+      const after = (fn, write) => {
+        const s = fn.toString();
+        const d = s.lastIndexOf('state.maze.id !== mazeId');
+        const c = s.indexOf('caption === "compare"');
+        const p = s.indexOf('state.path = null');
+        const w = s.indexOf(write);
+        return d >= 0 && c > d && c < w && p > c && p < w
+            && !s.includes('state.tour = null');
+      };
+      return after(analyzeStructure, 'state.analysis = a')
+          && after(identifyGenerator, 'state.fingerprint = f')
+          && after(distanceHeatMap, 'state.field = f')
+          && after(placeSanctuaries, 'state.sanctuaries = s')
+          && after(heuristicLens, 'state.lens = l')
+          && !fog.includes('state.tour = null')
+          && !hunt.includes('state.tour = null');
+    });
+    return [src, src ? 'theory writes empty leftover Compare hover'
+        : 'N62 source pin failed'];
+  });
+
   await check('N54. leaveMaze restores catalog generate defaults', async () => {
     // Old body: leaveMaze dropped the canvas and left the adopted
     // recipe. Back onto "" / #generator= then Generate rebuilt
