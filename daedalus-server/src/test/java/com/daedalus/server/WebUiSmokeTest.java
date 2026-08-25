@@ -438,6 +438,22 @@ class WebUiSmokeTest {
         int n77Hard = join.indexOf("state.hardest = null");
         assertThat(n77Hard).isGreaterThan(joinMazeCheck);
         assertThat(n77Hard).isLessThan(joinSeat);
+        // N78. Remaining remint stays. Competing writers drop
+        // leftover remints. These writers must not null tour:
+        // Hunt during theory (N63), Hunt through Play (N50),
+        // Join-from-spectate, startFog (N17). Theory writes
+        // must not always-null a leftover Solve path (N62).
+        assertTourStay(html, "async function analyzeStructure", "function paintAnalysisCaption");
+        assertTourStay(html, "async function identifyGenerator", "function paintFingerprintCaption");
+        assertTourStay(html, "async function distanceHeatMap", "function paintFieldCaption");
+        assertTourStay(html, "async function placeSanctuaries", "function paintSanctuariesCaption");
+        assertTourStay(html, "async function heuristicLens", "function paintLensCaption");
+        assertTourStay(html, "async function play()", "async function join()");
+        assertTourStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertTourStay(html, "async function startTour", "function sameCell");
+        assertLeftoverComparePathDroppedAfterDiscard(html, "async function analyzeStructure",
+                "function paintAnalysisCaption", "state.analysis = a");
         // N24. confirmWin GETs /session/{id} then declareWin with no
         // fog/session re-check. Fog mid-flight painted a win (status,
         // leaderboard, campaign) on a fog walk. refreshTourStatus is
@@ -1710,6 +1726,15 @@ class WebUiSmokeTest {
         assertThat(gone).isGreaterThan(discard);
         assertThat(gone).isLessThan(out);
         assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /** Remint stay (N78). Writer must not null tour. */
+    private static void assertTourStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        assertThat(html.substring(from, to)).doesNotContain("state.tour = null");
     }
 
     /**

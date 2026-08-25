@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Leftover remint stays.** Competing writers drop leftover remints. Living ticks still remint the overlay you asked for. Hunt stays during theory; a leftover Solve path stays as a theory route hint (N62 / N63). Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour and does not remint until that walk ends (N17). Race and ghost stay recordings (N78).
+
 - **Join drops leftover Hardest walk.** Open session already drops leftover gold when caption is hardest (N58). Join left it armed, so leftover gold painted under the seat just taken and a living tick reminted `GET /hardest-route`. Drop that walk after the join POST discard (N77). Join-from-spectate still keeps the hunt. Fog still keeps tour (N17).
 
 - **Join drops leftover Solve path.** Open session already drops leftover path (N67). Join left the solver route armed, so leftover path painted under the seat just taken and a living tick reminted `POST /solve`. Drop that path after the join POST discard (N76). Join-from-spectate still keeps the hunt. Fog still keeps tour (N17).
