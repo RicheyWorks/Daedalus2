@@ -2788,6 +2788,12 @@ async function raceSolvers() {
     state.field = null; state.sanctuaries = null;
     state.lens = null; state.fingerprint = null;
     state.path = null; state.expansions = []; state.searchProgress = 1; state.pathProgress = 1;
+    // Leftover ASCII stays armed after Race. Generate / Fog /
+    // Play / Solve / Hardest hide #asciiOut (N68–N70). Race did
+    // not, so leftover dump reminted the text/plain maze under
+    // the arena (N71). startFog still must not null tour (N17).
+    $("asciiOut").hidden = true;
+    $("asciiOut").textContent = "";
     state.race = { lanes: [
       {id: a, color: "#82b1ff", expansions: ra.expansions || [], path: ra.path,
        success: ra.success, front: 0, pathProg: 0},
@@ -2888,6 +2894,10 @@ async function compareSolvers() {
   state.analysis = null; state.hardest = null;
   state.field = null; state.sanctuaries = null;
   state.lens = null; state.fingerprint = null;
+  // Leftover ASCII stays armed after Compare. Same leftover
+  // as Race (N71). startFog still must not null tour (N17).
+  $("asciiOut").hidden = true;
+  $("asciiOut").textContent = "";
   const ok = results.filter(r => r.success);
   // Math.min() of an empty list is Infinity — the log used to say "best path Infinity".
   const bestPath = ok.length ? Math.min(...ok.map(r => r.path.length)) : null;

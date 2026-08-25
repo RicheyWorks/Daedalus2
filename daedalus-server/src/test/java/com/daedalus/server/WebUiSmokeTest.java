@@ -775,6 +775,18 @@ class WebUiSmokeTest {
         assertThat(n53RaceTour).isGreaterThan(n53RaceDiscard);
         assertThat(n53RaceTour).isLessThan(n53RaceSet);
         assertThat(n53Race).contains("state.hardest = null");
+        // N71. Race / Compare left leftover ASCII armed. Generate
+        // / Fog / Play / Solve / Hardest hide #asciiOut (N68–N70).
+        // Those arena writes did not, so leftover dump reminted
+        // the text/plain maze under the lanes / a compare hover.
+        // Hide it after the maze-id discard. startFog still must
+        // not null tour (N17).
+        int n71RaceHide = n53Race.indexOf("$(\"asciiOut\").hidden = true");
+        int n71RaceClear = n53Race.indexOf("$(\"asciiOut\").textContent = \"\"");
+        assertThat(n71RaceHide).isGreaterThan(n53RaceDiscard);
+        assertThat(n71RaceHide).isLessThan(n53RaceSet);
+        assertThat(n71RaceClear).isGreaterThan(n71RaceHide);
+        assertThat(n71RaceClear).isLessThan(n53RaceSet);
         int n53CmpFrom = html.indexOf("async function compareSolvers");
         int n53CmpTo = html.indexOf("async function play()", n53CmpFrom);
         assertThat(n53CmpFrom).isGreaterThanOrEqualTo(0);
@@ -787,6 +799,12 @@ class WebUiSmokeTest {
         assertThat(n53CmpTour).isGreaterThan(n53CmpDiscard);
         assertThat(n53CmpTour).isLessThan(n53CmpBox);
         assertThat(n53Cmp).contains("state.hardest = null");
+        int n71CmpHide = n53Cmp.indexOf("$(\"asciiOut\").hidden = true");
+        int n71CmpClear = n53Cmp.indexOf("$(\"asciiOut\").textContent = \"\"");
+        assertThat(n71CmpHide).isGreaterThan(n53CmpDiscard);
+        assertThat(n71CmpHide).isLessThan(n53CmpBox);
+        assertThat(n71CmpClear).isGreaterThan(n71CmpHide);
+        assertThat(n71CmpClear).isLessThan(n53CmpBox);
         // N65. Solve left Hunt coins / Hardest / sibling theory
         // armed. Leftover tourWalk / leftover gold painted under
         // the solver path; leftover cuts reminted GET /analysis.
