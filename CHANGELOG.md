@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Hunt drops leftover ASCII.** Generate, Fog, Play, Solve, Hardest, Race, and Compare hide `#asciiOut` (N68–N71). Hunt left the dump armed, and `play()` is skipped when a seat already exists, so leftover art reminted the text/plain maze under the Held-Karp walk. Hide it after the maze-id discard (N72). Fog still keeps tour (N17).
+
 - **Race / Compare drop leftover ASCII.** Generate, Fog, Play, Solve, and Hardest hide `#asciiOut` (N68–N70). Those arena writes left the dump armed, so leftover art reminted the text/plain maze under the lanes or a compare hover. Hide it after the maze-id discard (N71). Fog still keeps tour (N17).
 
 - **Hardest drops leftover ASCII.** Generate, Fog, Play, and Solve hide `#asciiOut` (N68 / N69). Hardest left the dump armed, so leftover art reminted the text/plain maze under the gold walk. Hide it after the maze-id discard (N70). Fog still keeps tour (N17).

@@ -1957,6 +1957,14 @@ async function startTour() {
   state.field = null; state.sanctuaries = null; state.lens = null;
   state.fingerprint = null; state.caption = null;
   $("compareBox").innerHTML = "";
+  // Leftover ASCII stays armed after Hunt. Generate / Fog /
+  // Play / Solve / Hardest / Race hide #asciiOut (N68–N71).
+  // Hunt did not, and play() is skipped when a seat already
+  // exists, so leftover dump reminted the text/plain maze
+  // under the Held-Karp walk (N72). Must not null tour (N50).
+  // startFog still must not null tour (N17).
+  $("asciiOut").hidden = true;
+  $("asciiOut").textContent = "";
   if (!t.feasible) {
     log("err", "this maze has unreachable waypoints — tour not possible");
     return;

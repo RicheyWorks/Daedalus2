@@ -758,6 +758,18 @@ class WebUiSmokeTest {
         assertThat(n31).contains("state.lens = null");
         assertThat(n31).contains("animGen++");
         assertThat(n31).doesNotContain("state.tour = null");
+        // N72. Hunt left leftover ASCII armed. play() hides it
+        // (N68) only when it seats; a hunt on an existing seat
+        // skipped that hide, so leftover dump reminted under
+        // the Held-Karp walk. Hide after the maze-id discard,
+        // before play(). Must not null tour (N50). startFog
+        // still must not null tour (N17).
+        int n72Hide = n31.indexOf("$(\"asciiOut\").hidden = true");
+        int n72Clear = n31.indexOf("$(\"asciiOut\").textContent = \"\"");
+        assertThat(n72Hide).isGreaterThan(n31Discard);
+        assertThat(n72Hide).isLessThan(n31Play);
+        assertThat(n72Clear).isGreaterThan(n72Hide);
+        assertThat(n72Clear).isLessThan(n31Play);
         // N53. Race / Compare left Hunt coins and hardest armed.
         // Leftover tourWalk painted under the arena / a compare
         // hover — not a solver lane. Drop those overlays after
