@@ -2871,6 +2871,13 @@ async function raceSolvers() {
     // the arena (N71). startFog still must not null tour (N17).
     $("asciiOut").hidden = true;
     $("asciiOut").textContent = "";
+    // Ghost stays armed after Race. Fog already drops the
+    // ticker. Theory / Solve / Hardest already drop it
+    // (N80–N82). Race did not, so leftover recording painted
+    // under the arena (N83). startFog still must not null
+    // tour (N17).
+    clearInterval(state.ghostTimer); state.ghostTimer = null;
+    state.ghost = null;
     state.race = { lanes: [
       {id: a, color: "#82b1ff", expansions: ra.expansions || [], path: ra.path,
        success: ra.success, front: 0, pathProg: 0},
@@ -2975,6 +2982,10 @@ async function compareSolvers() {
   // as Race (N71). startFog still must not null tour (N17).
   $("asciiOut").hidden = true;
   $("asciiOut").textContent = "";
+  // Ghost stays armed after Compare. Same leftover as Race
+  // (N83). startFog still must not null tour (N17).
+  clearInterval(state.ghostTimer); state.ghostTimer = null;
+  state.ghost = null;
   const ok = results.filter(r => r.success);
   // Math.min() of an empty list is Infinity — the log used to say "best path Infinity".
   const bestPath = ok.length ? Math.min(...ok.map(r => r.path.length)) : null;

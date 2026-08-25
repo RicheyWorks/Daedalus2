@@ -873,6 +873,21 @@ class WebUiSmokeTest {
         assertThat(n71RaceHide).isLessThan(n53RaceSet);
         assertThat(n71RaceClear).isGreaterThan(n71RaceHide);
         assertThat(n71RaceClear).isLessThan(n53RaceSet);
+        // N83. Race / Compare left leftover ghost armed. Fog
+        // already drops the ticker. Theory / Solve / Hardest
+        // already drop it (N80–N82). Those arena writes did
+        // not, so leftover recording painted under the lanes /
+        // a compare hover. Drop it after the maze-id discard.
+        // startFog still must not null tour (N17).
+        int n83RaceClear = n53Race.indexOf("clearInterval(state.ghostTimer)");
+        int n83RaceTimer = n53Race.indexOf("state.ghostTimer = null");
+        int n83RaceGone = n53Race.indexOf("state.ghost = null");
+        assertThat(n83RaceClear).isGreaterThan(n53RaceDiscard);
+        assertThat(n83RaceClear).isLessThan(n53RaceSet);
+        assertThat(n83RaceTimer).isGreaterThan(n83RaceClear);
+        assertThat(n83RaceTimer).isLessThan(n53RaceSet);
+        assertThat(n83RaceGone).isGreaterThan(n83RaceTimer);
+        assertThat(n83RaceGone).isLessThan(n53RaceSet);
         int n53CmpFrom = html.indexOf("async function compareSolvers");
         int n53CmpTo = html.indexOf("async function play()", n53CmpFrom);
         assertThat(n53CmpFrom).isGreaterThanOrEqualTo(0);
@@ -891,6 +906,15 @@ class WebUiSmokeTest {
         assertThat(n71CmpHide).isLessThan(n53CmpBox);
         assertThat(n71CmpClear).isGreaterThan(n71CmpHide);
         assertThat(n71CmpClear).isLessThan(n53CmpBox);
+        int n83CmpClear = n53Cmp.indexOf("clearInterval(state.ghostTimer)");
+        int n83CmpTimer = n53Cmp.indexOf("state.ghostTimer = null");
+        int n83CmpGone = n53Cmp.indexOf("state.ghost = null");
+        assertThat(n83CmpClear).isGreaterThan(n53CmpDiscard);
+        assertThat(n83CmpClear).isLessThan(n53CmpBox);
+        assertThat(n83CmpTimer).isGreaterThan(n83CmpClear);
+        assertThat(n83CmpTimer).isLessThan(n53CmpBox);
+        assertThat(n83CmpGone).isGreaterThan(n83CmpTimer);
+        assertThat(n83CmpGone).isLessThan(n53CmpBox);
         // N65. Solve left Hunt coins / Hardest / sibling theory
         // armed. Leftover tourWalk / leftover gold painted under
         // the solver path; leftover cuts reminted GET /analysis.

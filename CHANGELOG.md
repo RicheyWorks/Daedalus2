@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Race / Compare drop leftover ghost.** Fog already drops the ticker. Theory / Solve / Hardest already drop it (N80–N82). Those arena writes left ghost armed, so leftover recording painted under the lanes or a compare hover. Drop that ticker after the maze-id discard (N83). Fog still keeps tour (N17).
+
 - **Hardest drops leftover ghost.** Fog already drops the ticker. Theory / Solve already drop it (N80 / N81). Hardest dropped leftover Race but left ghost armed, so leftover recording painted under the gold walk. Drop that ticker after the maze-id discard (N82).
 
 - **Solve drops leftover ghost.** Fog already drops the ticker. Theory writes already drop it (N80). Solve dropped leftover Race but left ghost armed, so leftover recording painted under the solver path. Drop that ticker after the maze-id discard (N81).
