@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Open session drops leftover Solve path.** N57 only dropped Compare hover. Solve then Play left the solver route armed, so leftover path painted over the seat and a living tick reminted `POST /solve`. Drop that path after the session POST discard (N67). Hunt still calls `play()` after installing tour — do not null tour. Fog still keeps tour (N17).
+
+- **Open session drops leftover sibling theory remints.** Theory writes already drop siblings (N63). Hardest / Solve already drop them (N64 / N65). Play left leftover cuts / heat armed, so leftover analysis painted under the seat and a living tick reminted `GET /analysis`. Drop those overlays after the session POST discard (N66). Hunt still calls `play()` after installing tour — do not null tour. Fog still keeps tour (N17).
+
 - **Solve drops leftover Hunt coins, Hardest walk, and sibling theory remints.** Race / Compare already drop those (N53). Hardest already drops leftover Hunt and sibling theory (N59 / N64). Solve left them armed, so leftover coins and leftover gold painted under the solver path and a living tick reminted `GET /analysis`. Drop those overlays after the maze-id discard (N65). Fog still keeps tour (N17).
 
 - **Hardest drops leftover sibling theory remints.** Theory writes already drop siblings (N63). Hardest left leftover cuts / heat armed, so leftover analysis painted under the gold walk and a living tick reminted `GET /analysis`. Drop those overlays after the maze-id discard (N64). Fog still keeps tour (N17).

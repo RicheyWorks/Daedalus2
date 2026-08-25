@@ -1011,16 +1011,13 @@ class WebUiSmokeTest {
         assertThat(n32).doesNotContain("state.tour = null");
         // N57. Open session left Compare hover armed. Leftover
         // solver path painted over the walk. Empty #compareBox
-        // and drop path after the session POST discard when
-        // caption is compare. Do not null tour.
+        // after the session POST discard when caption is compare.
+        // N67 drops path for leftover Solve too. Do not null tour.
         int n57Cap = n32.indexOf("caption === \"compare\"", n32Maze);
-        int n57Path = n32.indexOf("state.path = null", n32Maze);
         int n57Box = n32.indexOf("$(\"compareBox\").innerHTML = \"\"", n32Maze);
         assertThat(n57Cap).isGreaterThan(n32Maze);
         assertThat(n57Cap).isLessThan(n55Seat);
-        assertThat(n57Path).isGreaterThan(n57Cap);
-        assertThat(n57Path).isLessThan(n55Seat);
-        assertThat(n57Box).isGreaterThan(n57Path);
+        assertThat(n57Box).isGreaterThan(n57Cap);
         assertThat(n57Box).isLessThan(n55Seat);
         // N58. Open session left Hardest armed. Leftover gold walk
         // painted over the seat; a living tick reminted it. Drop
@@ -1033,6 +1030,31 @@ class WebUiSmokeTest {
         assertThat(n58Drop).isGreaterThan(n58Cap);
         assertThat(n58Drop).isLessThan(n55Seat);
         assertThat(n57Box).isGreaterThan(n58Drop);
+        // N66. Open session left sibling theory armed. Leftover
+        // cuts reminted GET /analysis under the seat. Drop those
+        // after the session POST discard. Theory writes already
+        // drop siblings (N63). Hardest / Solve already drop them
+        // (N64 / N65). Hunt calls play() after installing tour —
+        // must not null tour (N50). startFog still must not null
+        // tour (N17).
+        int n66An = n32.indexOf("state.analysis = null", n32Maze);
+        int n66Field = n32.indexOf("state.field = null", n32Maze);
+        assertThat(n66An).isGreaterThan(n32Maze);
+        assertThat(n66An).isLessThan(n55Seat);
+        assertThat(n66Field).isGreaterThan(n66An);
+        assertThat(n66Field).isLessThan(n55Seat);
+        assertThat(n32).contains("state.lens = null");
+        assertThat(n32).contains("state.fingerprint = null");
+        // N67. Open session left a leftover Solve path armed.
+        // N57 only dropped Compare hover. Leftover solver route
+        // painted over the seat and a living tick reminted POST
+        // /solve. Drop path after the session POST discard. Hunt
+        // calls play() after installing tour — must not null tour
+        // (N50). startFog still must not null tour (N17).
+        int n67Path = n32.indexOf("state.path = null", n32Maze);
+        assertThat(n67Path).isGreaterThan(n32Maze);
+        assertThat(n67Path).isLessThan(n55Seat);
+        assertThat(n67Path).isLessThan(n57Cap);
         // N33. hydrateSpectatorOverlays GETs /session/{id}/tour then
         // always wrote state.tour. Generate / Fog / a new #session=
         // mid-flight painted the old hunt onto the maze now on screen.
