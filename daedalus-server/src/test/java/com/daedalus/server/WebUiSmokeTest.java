@@ -1122,6 +1122,15 @@ class WebUiSmokeTest {
         assertThat(n82Timer).isLessThan(n59Set);
         assertThat(n82Gone).isGreaterThan(n82Timer);
         assertThat(n82Gone).isLessThan(n59Set);
+        // N96. Hardest left leftover Solve stats armed. Play /
+        // Hunt / Join / Fog rewrite #stats (N92–N95). Hardest
+        // did not, so leftover solver numbers named the
+        // previous walk under the gold walk. Rewrite after
+        // the maze-id discard. startFog still must not null
+        // tour (N17).
+        int n96Stats = n59.indexOf("$(\"stats\").innerHTML =");
+        assertThat(n96Stats).isGreaterThan(n59Discard);
+        assertThat(n96Stats).isLessThan(n59Set);
         // N60. Theory writes left Race lanes armed. Leftover arena
         // painted over the cuts / field / rings / bands / Identify
         // sidebar. Drop race after the maze-id discard. Hunt stays

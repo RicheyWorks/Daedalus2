@@ -2191,6 +2191,17 @@ async function hardestRoute() {
   // recording painted under the gold walk (N82).
   clearInterval(state.ghostTimer); state.ghostTimer = null;
   state.ghost = null;
+  // Leftover Solve stats stay after Hardest. Play / Hunt /
+  // Join / Fog rewrite #stats (N92–N95). Hardest did not,
+  // so leftover solver numbers named the previous walk
+  // under the gold walk (N96). startFog still must not
+  // null tour (N17).
+  $("stats").innerHTML =
+      `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
+      + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
+      + `&middot; <span>seed</span> ${state.maze.seed}`
+      + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
+      + `<br>`;
   state.hardest = h;
   state.caption = "hardest";
   log("state", `hardest route: ${h.hardestLength} steps vs ${h.shortestLength} shortest `
