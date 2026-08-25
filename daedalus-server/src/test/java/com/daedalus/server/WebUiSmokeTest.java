@@ -451,6 +451,17 @@ class WebUiSmokeTest {
         assertThat(n79Race).isLessThan(joinSeat);
         assertThat(n79Anim).isGreaterThan(n79Race);
         assertThat(n79Anim).isLessThan(joinSeat);
+        // N94. Join left leftover Solve stats armed. Open
+        // session rewrites #stats (N92). Hunt rewrites when
+        // play() is skipped (N93). Join did not, so leftover
+        // solver numbers named the previous walk under the
+        // seat just taken. Rewrite after the join POST
+        // discard. Join-from-spectate still keeps the hunt —
+        // must not null tour. startFog still must not null
+        // tour (N17).
+        int n94Stats = join.indexOf("$(\"stats\").innerHTML =");
+        assertThat(n94Stats).isGreaterThan(joinMazeCheck);
+        assertThat(n94Stats).isLessThan(joinSeat);
         // N86. Join leftover ghost is a stay. The ticker is
         // maze-bound (N37): same session still races the
         // recorded best. Competing writers already drop leftover

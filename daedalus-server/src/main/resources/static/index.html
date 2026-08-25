@@ -3279,6 +3279,19 @@ async function join() {
     // not null tour. startFog still must not null tour (N17).
     state.race = null;
     animGen++;
+    // Leftover Solve stats stay after Join. Open session
+    // rewrites #stats (N92). Hunt rewrites when play() is
+    // skipped (N93). Join did not, so leftover solver
+    // numbers named the previous walk under the seat just
+    // taken (N94). Join-from-spectate still keeps the hunt
+    // — do not null tour. startFog still must not null tour
+    // (N17).
+    $("stats").innerHTML =
+        `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
+        + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
+        + `&middot; <span>seed</span> ${state.maze.seed}`
+        + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
+        + `<br>`;
     state.session.positions[name] = s.position;
     state.trails[name] = [s.position];
     if (fromSpectate) {
