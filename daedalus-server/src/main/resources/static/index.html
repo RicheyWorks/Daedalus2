@@ -3101,6 +3101,13 @@ async function play() {
   // still must not null tour (N17).
   $("asciiOut").hidden = true;
   $("asciiOut").textContent = "";
+  // Hardest stays armed after Open session when caption is
+  // not hardest. Join already drops leftover gold
+  // unconditionally (N77). Play gated it (N58), so leftover
+  // gold painted under the seat (N85). Hunt calls play()
+  // after installing tour — do not null tour (N50). startFog
+  // still must not null tour (N17).
+  state.hardest = null;
   // Compare hover stays armed after Open session. Leftover
   // solver path paints over the walk (N57). Hunt already
   // emptied #compareBox (N50). Do not null tour.
@@ -3109,10 +3116,6 @@ async function play() {
       || state.caption === "analysis" || state.caption === "field"
       || state.caption === "sanctuaries" || state.caption === "lens"
       || state.caption === "fingerprint") {
-    // Hardest stays armed after Open session. Leftover gold
-    // walk paints over the seat, and a living tick remints it
-    // (N58). Hunt already dropped hardest (N50). Do not null tour.
-    if (state.caption === "hardest") state.hardest = null;
     state.caption = null;
     $("compareBox").innerHTML = "";
   }

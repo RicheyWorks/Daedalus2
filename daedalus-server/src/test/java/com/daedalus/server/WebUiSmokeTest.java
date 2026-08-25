@@ -1247,17 +1247,17 @@ class WebUiSmokeTest {
         assertThat(n57Cap).isLessThan(n55Seat);
         assertThat(n57Box).isGreaterThan(n57Cap);
         assertThat(n57Box).isLessThan(n55Seat);
-        // N58. Open session left Hardest armed. Leftover gold walk
-        // painted over the seat; a living tick reminted it. Drop
-        // hardest after the session POST discard when caption is
-        // hardest. Do not null tour.
-        int n58Cap = n32.indexOf("caption === \"hardest\"", n32Maze);
-        int n58Drop = n32.indexOf("state.hardest = null", n32Maze);
-        assertThat(n58Cap).isGreaterThan(n32Maze);
-        assertThat(n58Cap).isLessThan(n55Seat);
-        assertThat(n58Drop).isGreaterThan(n58Cap);
-        assertThat(n58Drop).isLessThan(n55Seat);
-        assertThat(n57Box).isGreaterThan(n58Drop);
+        // N85. Open session gated leftover Hardest on caption
+        // (N58). Join already drops leftover gold
+        // unconditionally (N77). Play did not, so leftover gold
+        // painted under the seat when caption had drifted.
+        // Drop hardest after the session POST discard. Do not
+        // null tour.
+        int n85Drop = n32.indexOf("state.hardest = null", n32Maze);
+        assertThat(n85Drop).isGreaterThan(n32Maze);
+        assertThat(n85Drop).isLessThan(n55Seat);
+        assertThat(n85Drop).isLessThan(n57Cap);
+        assertThat(n57Box).isGreaterThan(n85Drop);
         // N66. Open session left sibling theory armed. Leftover
         // cuts reminted GET /analysis under the seat. Drop those
         // after the session POST discard. Theory writes already
