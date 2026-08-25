@@ -1980,6 +1980,14 @@ async function startTour() {
   // startFog still must not null tour (N17).
   $("asciiOut").hidden = true;
   $("asciiOut").textContent = "";
+  // Ghost stays armed after Hunt. Fog already drops the
+  // ticker. Theory / Solve / Hardest / Race already drop
+  // it (N80–N83). Hunt did not, and play() is skipped when
+  // a seat already exists, so leftover recording painted
+  // under the Held-Karp walk (N84). Must not null tour
+  // (N50). startFog still must not null tour (N17).
+  clearInterval(state.ghostTimer); state.ghostTimer = null;
+  state.ghost = null;
   if (!t.feasible) {
     log("err", "this maze has unreachable waypoints — tour not possible");
     return;

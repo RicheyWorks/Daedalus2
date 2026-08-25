@@ -844,6 +844,21 @@ class WebUiSmokeTest {
         assertThat(n72Hide).isLessThan(n31Play);
         assertThat(n72Clear).isGreaterThan(n72Hide);
         assertThat(n72Clear).isLessThan(n31Play);
+        // N84. Hunt left leftover ghost armed. play() re-summons
+        // only when it seats; a hunt on an existing seat skipped
+        // that, so leftover recording painted under the Held-Karp
+        // walk. Drop it after the maze-id discard, before play().
+        // Must not null tour (N50). startFog still must not null
+        // tour (N17).
+        int n84Clear = n31.indexOf("clearInterval(state.ghostTimer)");
+        int n84Timer = n31.indexOf("state.ghostTimer = null");
+        int n84Gone = n31.indexOf("state.ghost = null");
+        assertThat(n84Clear).isGreaterThan(n31Discard);
+        assertThat(n84Clear).isLessThan(n31Play);
+        assertThat(n84Timer).isGreaterThan(n84Clear);
+        assertThat(n84Timer).isLessThan(n31Play);
+        assertThat(n84Gone).isGreaterThan(n84Timer);
+        assertThat(n84Gone).isLessThan(n31Play);
         // N53. Race / Compare left Hunt coins and hardest armed.
         // Leftover tourWalk painted under the arena / a compare
         // hover — not a solver lane. Drop those overlays after
