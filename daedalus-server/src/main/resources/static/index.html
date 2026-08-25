@@ -1781,11 +1781,17 @@ async function identifyGenerator() {
     state.path = null;
     state.expansions = [];
   }
+  // Sibling theory stays armed after Identify. Leftover
+  // cuts / heat / rings / bands remint on a living tick
+  // (N63). Hunt and a leftover Solve path stay.
+  state.analysis = null; state.field = null;
+  state.sanctuaries = null; state.lens = null;
   state.fingerprint = f;
   state.caption = "fingerprint";
   log("state", `fingerprint: structure says ${f.predictedGeneratorId}`
       + (f.agrees ? " (matches record)" : `, record says ${f.recordedGeneratorId}`));
   paintFingerprintCaption(f);
+  draw();
 }
 
 function paintFingerprintCaption(f) {
@@ -2044,6 +2050,12 @@ async function analyzeStructure() {
     state.path = null;
     state.expansions = [];
   }
+  // Sibling theory stays armed after Analyze. Leftover
+  // heat remints GET /distance-field on a living tick
+  // (N63). Field already drops sibling overlays. Hunt
+  // and a leftover Solve path stay.
+  state.field = null; state.sanctuaries = null;
+  state.lens = null; state.fingerprint = null;
   state.analysis = a;
   state.caption = "analysis";
   const cp = a.cutSize === 1 ? "1 chokepoint" : `${a.cutSize} chokepoints`;
@@ -2139,6 +2151,8 @@ async function distanceHeatMap() {
     state.path = null;
     state.expansions = [];
   }
+  // Leftover cuts remint GET /analysis under the field (N63).
+  state.analysis = null; state.fingerprint = null;
   state.field = f;
   state.sanctuaries = null; state.lens = null;   // one overlay at a time stays readable
   state.caption = "field";
@@ -2185,6 +2199,8 @@ async function placeSanctuaries() {
     state.path = null;
     state.expansions = [];
   }
+  // Leftover cuts remint GET /analysis under the rings (N63).
+  state.analysis = null; state.fingerprint = null;
   state.sanctuaries = s;
   state.field = null; state.lens = null;
   state.caption = "sanctuaries";
@@ -2311,6 +2327,8 @@ async function heuristicLens() {
     state.path = null;
     state.expansions = [];
   }
+  // Leftover cuts remint GET /analysis under the bands (N63).
+  state.analysis = null; state.fingerprint = null;
   state.lens = l;
   state.field = null; state.sanctuaries = null;
   state.caption = "lens";

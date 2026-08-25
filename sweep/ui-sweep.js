@@ -1991,6 +1991,33 @@ async function check(name, fn) {
         : 'N62 source pin failed'];
   });
 
+  await check('N63. theory writes drop leftover sibling remints', async () => {
+    // Old body: Field dropped sanctuaries / lens; Analyze left
+    // leftover heat reminting GET /distance-field. Field left
+    // leftover cuts reminting GET /analysis.
+    const src = await page.evaluate(() => {
+      const fog = startFog.toString();
+      const hunt = startTour.toString();
+      const after = (fn, write, drop) => {
+        const s = fn.toString();
+        const d = s.lastIndexOf('state.maze.id !== mazeId');
+        const g = s.indexOf(drop);
+        const w = s.indexOf(write);
+        return d >= 0 && g > d && g < w
+            && !s.includes('state.tour = null');
+      };
+      return after(analyzeStructure, 'state.analysis = a', 'state.field = null')
+          && after(identifyGenerator, 'state.fingerprint = f', 'state.analysis = null')
+          && after(distanceHeatMap, 'state.field = f', 'state.analysis = null')
+          && after(placeSanctuaries, 'state.sanctuaries = s', 'state.analysis = null')
+          && after(heuristicLens, 'state.lens = l', 'state.analysis = null')
+          && !fog.includes('state.tour = null')
+          && !hunt.includes('state.tour = null');
+    });
+    return [src, src ? 'theory writes empty leftover sibling remints'
+        : 'N63 source pin failed'];
+  });
+
   await check('N54. leaveMaze restores catalog generate defaults', async () => {
     // Old body: leaveMaze dropped the canvas and left the adopted
     // recipe. Back onto "" / #generator= then Generate rebuilt

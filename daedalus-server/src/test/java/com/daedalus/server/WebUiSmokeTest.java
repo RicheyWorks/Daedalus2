@@ -856,6 +856,24 @@ class WebUiSmokeTest {
                 "function paintSanctuariesCaption", "state.sanctuaries = s");
         assertLeftoverComparePathDroppedAfterDiscard(html, "async function heuristicLens",
                 "function paintLensCaption", "state.lens = l");
+        // N63. Theory writes left sibling theory armed. Leftover
+        // heat reminted GET /distance-field after Analyze; leftover
+        // cuts reminted GET /analysis after Field. Drop sibling
+        // remint overlays after the maze-id discard. Hunt and a
+        // leftover Solve path stay. startFog still must not null
+        // tour (N17).
+        assertLeftoverSiblingTheoryDroppedAfterDiscard(html, "async function analyzeStructure",
+                "function paintAnalysisCaption", "state.analysis = a", "state.field = null");
+        assertLeftoverSiblingTheoryDroppedAfterDiscard(html, "async function identifyGenerator",
+                "function paintFingerprintCaption", "state.fingerprint = f",
+                "state.analysis = null");
+        assertLeftoverSiblingTheoryDroppedAfterDiscard(html, "async function distanceHeatMap",
+                "function paintFieldCaption", "state.field = f", "state.analysis = null");
+        assertLeftoverSiblingTheoryDroppedAfterDiscard(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption", "state.sanctuaries = s",
+                "state.analysis = null");
+        assertLeftoverSiblingTheoryDroppedAfterDiscard(html, "async function heuristicLens",
+                "function paintLensCaption", "state.lens = l", "state.analysis = null");
         // N51. leaveSpectate only cleared readOnly. Solve / Analyze
         // after a watch kept the opener's session writable, so
         // arrows POSTed /move on a walk this tab only watched.
@@ -1481,6 +1499,27 @@ class WebUiSmokeTest {
         assertThat(cap).isLessThan(out);
         assertThat(path).isGreaterThan(cap);
         assertThat(path).isLessThan(out);
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover sibling theory after a theory write (N63). Drop the
+     * remint overlay after the maze-id discard, before the write.
+     * Must not null tour.
+     */
+    private static void assertLeftoverSiblingTheoryDroppedAfterDiscard(String html, String start,
+            String end, String write, String drop) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        int discard = body.lastIndexOf("state.maze.id !== mazeId");
+        int gone = body.indexOf(drop);
+        int out = body.indexOf(write);
+        assertThat(discard).isGreaterThanOrEqualTo(0);
+        assertThat(gone).isGreaterThan(discard);
+        assertThat(gone).isLessThan(out);
         assertThat(body).doesNotContain("state.tour = null");
     }
 
