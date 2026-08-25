@@ -470,6 +470,20 @@ class WebUiSmokeTest {
         int n94Stats = join.indexOf("$(\"stats\").innerHTML =");
         assertThat(n94Stats).isGreaterThan(joinMazeCheck);
         assertThat(n94Stats).isLessThan(joinSeat);
+        // N107. Join-from-spectate left leftover spectate
+        // join title armed. Open session rewrites #join
+        // (label + title). leaveSpectate rewrites when it
+        // drops a watch (N105). Join-from-spectate only
+        // rewrote the label, so leftover spectate title
+        // named a watch that is gone under the seat just
+        // taken. Rewrite title after the seat is taken.
+        // Join-from-spectate still keeps the hunt — must
+        // not null tour. startFog still must not null tour
+        // (N17).
+        int n107Text = join.lastIndexOf("$(\"join\").textContent");
+        int n107Title = join.indexOf("$(\"join\").title");
+        assertThat(n107Text).isGreaterThan(joinSeat);
+        assertThat(n107Title).isGreaterThan(n107Text);
         // N86. Join leftover ghost is a stay. The ticker is
         // maze-bound (N37): same session still races the
         // recorded best. Competing writers already drop leftover

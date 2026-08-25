@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Join-from-spectate drops leftover spectate join title.** Open session rewrites `#join` (label + title). `leaveSpectate` rewrites when it drops a watch (N105). Join-from-spectate only rewrote the label, so leftover spectate title named a watch that is gone under the seat just taken. Rewrite the title after the seat is taken (N107). Join-from-spectate still keeps the hunt. Fog still keeps tour (N17).
+
 - **Hunt drops leftover Hunt / win status.** Play rewrites `#status` (N48) only when it seats. `refreshTourStatus` remints hunt status only when the tour is feasible. An infeasible hunt skipped both, so leftover "waypoint hunt" or leftover "reached the goal" named the previous walk under the new coins. Restore the session line after the maze-id discard (N106). Hunt still calls `play()` after installing tour — do not null tour. Fog still keeps tour (N17).
 
 - **Leaving a watch drops leftover spectate status.** Generate / Fog / Play rewrite `#status` (N48). Solve / Hardest / Race / Compare rewrite after leaving a watch (N101–N104). Analyze / Identify / heat / sanctuaries / lens call `leaveSpectate` and left leftover "spectating session… — read-only" naming a watch that is gone under the cuts. Restore the no-seat prompt after the leftover seat drop (N105). Join-from-spectate sets the seat first and keeps the session. Fog still keeps tour (N17) except this leave-watch path (N56).

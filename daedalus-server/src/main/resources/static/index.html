@@ -3460,7 +3460,17 @@ async function join() {
       state.joined = name;
       state.sessionStart = performance.now();
       pinHash();
+      // Leftover spectate join title stays after
+      // Join-from-spectate. Open session rewrites #join
+      // (label + title). leaveSpectate rewrites when it
+      // drops a watch (N105). Join-from-spectate only
+      // rewrote the label, so leftover spectate title
+      // named a watch that is gone under the seat just
+      // taken (N107). Join-from-spectate still keeps the
+      // hunt — do not null tour. startFog still must not
+      // null tour (N17).
       $("join").textContent = "Join as second player";
+      $("join").title = "Requires daedalus.session.multiplayer=true";
       $("status").textContent = `session ${state.session.id.slice(0, 8)}… — arrow keys to move`;
       log("player", `${name} joined the spectated session`);
       resubscribe();
