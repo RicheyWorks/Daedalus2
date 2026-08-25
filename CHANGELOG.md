@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Waypoint hunt drops leftover Compare / Analyze / Hardest overlays.** Hunt installed the tour and left those armed. A leftover compare hover painted a solver path over the Held-Karp corridor you are scored against; leftover hardest was a second walk that is not the score. Empty `#compareBox` and drop those overlays after the maze-id discard (N50). Fog already drops them. `state.tour` stays (N17).
+
 - **A leftover solve or race animation does not write progress after Generate, Fog, or Back.** Those leave paths zero path and race; an in-flight `requestAnimationFrame` still advanced the previous reveal and could `raceSummary` the maze now on screen. Bump `animGen` on leave; a stale frame returns (N49).
 
 - **A leftover wall-block flash does not restore old status after Generate, Fog, Back, or a new Open session.** `flashStatus` captured the line and put it back 900ms later. Generate / Fog / Back / Play already wrote the new status; the restore put the previous session or hunt text on a maze that no longer has that seat. Clear the timer before those writers set status (N48). `move()` still flashes after its fog / seat discard (N27).

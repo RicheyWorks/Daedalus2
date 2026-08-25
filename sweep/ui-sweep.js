@@ -1803,6 +1803,28 @@ async function check(name, fn) {
         : 'N49 source pin failed'];
   });
 
+  await check('N50. Hunt drops leftover Compare / Hardest overlays', async () => {
+    // Old body: startTour set state.tour and left Compare / Analyze /
+    // Hardest / Lens armed. A leftover compare hover painted a solver
+    // path over the Held-Karp corridor; leftover hardest was a second
+    // walk that is not the score. Fog already drops these (N16).
+    const src = await page.evaluate(() => {
+      const s = startTour.toString();
+      const discard = s.indexOf('state.maze.id !== mazeId');
+      const box = s.indexOf('$("compareBox").innerHTML = ""');
+      const play = s.indexOf('await play()');
+      return discard >= 0 && box > discard && box < play
+          && s.indexOf('state.hardest = null') > discard
+          && s.indexOf('state.path = null') > discard
+          && s.includes('state.analysis = null')
+          && s.includes('state.lens = null')
+          && s.includes('animGen++')
+          && !s.includes('state.tour = null');
+    });
+    return [src, src ? 'Hunt empties leftover theory overlays before play'
+        : 'N50 source pin failed'];
+  });
+
   await check('N30. late /solve after Generate does not paint the maze now on screen', async () => {
     // Old body: solve / race / compare POSTed /solve then painted
     // after only a fog check. Generate mid-flight applied the old

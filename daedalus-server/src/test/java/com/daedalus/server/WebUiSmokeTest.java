@@ -736,6 +736,25 @@ class WebUiSmokeTest {
         assertThat(n31.indexOf("/maze/${mazeId}/tour")).isGreaterThanOrEqualTo(0);
         assertThat(n31Discard).isGreaterThan(n31.indexOf("await "));
         assertThat(n31Play).isGreaterThan(n31Discard);
+        // N50. Hunt installed the tour and left Compare / Analyze /
+        // Hardest / Lens armed. A leftover compare hover painted a
+        // solver path over the Held-Karp corridor; leftover hardest
+        // was a second walk that is not the score. Drop those
+        // overlays after the maze-id discard, before play(). Fog
+        // already drops them. Must not null tour (N17).
+        int n50Box = n31.indexOf("$(\"compareBox\").innerHTML = \"\"");
+        int n50Hard = n31.indexOf("state.hardest = null");
+        int n50Path = n31.indexOf("state.path = null");
+        assertThat(n50Box).isGreaterThan(n31Discard);
+        assertThat(n50Box).isLessThan(n31Play);
+        assertThat(n50Hard).isGreaterThan(n31Discard);
+        assertThat(n50Hard).isLessThan(n31Play);
+        assertThat(n50Path).isGreaterThan(n31Discard);
+        assertThat(n50Path).isLessThan(n31Play);
+        assertThat(n31).contains("state.analysis = null");
+        assertThat(n31).contains("state.lens = null");
+        assertThat(n31).contains("animGen++");
+        assertThat(n31).doesNotContain("state.tour = null");
         // N32. play() POSTed /session after only a fog check. Generate
         // mid-flight pinned #session= and seated the old session on the
         // maze now on screen. Capture maze id before the POST; discard
