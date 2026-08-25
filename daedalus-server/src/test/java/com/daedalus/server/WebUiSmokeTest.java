@@ -1421,6 +1421,31 @@ class WebUiSmokeTest {
         assertThat(fog).doesNotContain("refreshLeaderboard");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N112. Remaining leftover campaign stays. pinHash
+        // already drops the ladder when the exclusive kind
+        // is not campaign. These stays must not be taught
+        // away: Hunt / Play / Fog / theory / Join leftover
+        // campaign stay — same maze; Hunt through Play and
+        // Join-from-spectate still keep tour; Fog still
+        // keeps tour (N17); leftover Solve path stays as a
+        // theory route hint (N62); Join leftover ghost
+        // stays (N86).
+        assertLeftoverCampaignStay(html, "async function startTour", "function sameCell");
+        assertLeftoverCampaignStay(html, "async function play()", "async function join()");
+        assertLeftoverCampaignStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverCampaignStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverCampaignStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverCampaignStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverCampaignStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverCampaignStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverCampaignStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -2261,6 +2286,20 @@ class WebUiSmokeTest {
         assertThat(body).doesNotContain("state.trails = {}");
         assertThat(body).doesNotContain("state.won = null");
         assertThat(body).doesNotContain("refreshLeaderboard");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover campaign stay (N112). Same maze still owns
+     * the ladder. Must not leaveCampaign. Must not null tour.
+     */
+    private static void assertLeftoverCampaignStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("leaveCampaign()");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
