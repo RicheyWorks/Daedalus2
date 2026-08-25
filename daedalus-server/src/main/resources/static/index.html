@@ -2109,6 +2109,13 @@ async function hardestRoute() {
   state.analysis = null; state.field = null;
   state.sanctuaries = null; state.lens = null;
   state.fingerprint = null;
+  // Leftover ASCII stays armed after Hardest. Generate, Fog,
+  // Play, and Solve hide #asciiOut (N68 / N69). Hardest did
+  // not, so leftover dump reminted the text/plain maze under
+  // the gold walk (N70). startFog still must not null tour
+  // (N17).
+  $("asciiOut").hidden = true;
+  $("asciiOut").textContent = "";
   state.hardest = h;
   state.caption = "hardest";
   log("state", `hardest route: ${h.hardestLength} steps vs ${h.shortestLength} shortest `

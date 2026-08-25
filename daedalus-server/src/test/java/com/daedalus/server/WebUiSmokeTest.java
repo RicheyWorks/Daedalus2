@@ -861,6 +861,17 @@ class WebUiSmokeTest {
         assertThat(n64Field).isLessThan(n59Set);
         assertThat(n59).contains("state.lens = null");
         assertThat(n59).contains("state.fingerprint = null");
+        // N70. Hardest left leftover ASCII armed. Generate / Fog /
+        // Play / Solve hide #asciiOut (N68 / N69). Hardest did
+        // not, so leftover dump reminted the text/plain maze under
+        // the gold walk. Hide it after the maze-id discard.
+        // startFog still must not null tour (N17).
+        int n70Hide = n59.indexOf("$(\"asciiOut\").hidden = true");
+        int n70Clear = n59.indexOf("$(\"asciiOut\").textContent = \"\"");
+        assertThat(n70Hide).isGreaterThan(n59Discard);
+        assertThat(n70Hide).isLessThan(n59Set);
+        assertThat(n70Clear).isGreaterThan(n70Hide);
+        assertThat(n70Clear).isLessThan(n59Set);
         // N60. Theory writes left Race lanes armed. Leftover arena
         // painted over the cuts / field / rings / bands / Identify
         // sidebar. Drop race after the maze-id discard. Hunt stays

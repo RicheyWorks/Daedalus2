@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Hardest drops leftover ASCII.** Generate, Fog, Play, and Solve hide `#asciiOut` (N68 / N69). Hardest left the dump armed, so leftover art reminted the text/plain maze under the gold walk. Hide it after the maze-id discard (N70). Fog still keeps tour (N17).
+
 - **Solve drops leftover ASCII.** Generate, Fog, and Play hide `#asciiOut` (N68). Solve left the dump armed, so leftover art reminted the text/plain maze under the solver path. Hide it after the maze-id discard (N69). Fog still keeps tour (N17).
 
 - **Open session drops leftover ASCII.** Generate and Fog hide `#asciiOut`. Play left the dump armed, so leftover art stayed on screen and a living tick reminted the text/plain maze under the seat. Hide it after the session POST discard (N68). Hunt still calls `play()` after installing tour — do not null tour. Fog still keeps tour (N17).
