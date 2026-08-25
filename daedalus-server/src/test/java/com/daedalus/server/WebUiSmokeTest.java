@@ -909,6 +909,16 @@ class WebUiSmokeTest {
         assertThat(n83RaceTimer).isLessThan(n53RaceSet);
         assertThat(n83RaceGone).isGreaterThan(n83RaceTimer);
         assertThat(n83RaceGone).isLessThan(n53RaceSet);
+        // N89. Race left leftover sidebar armed. Hunt already
+        // empties #compareBox (N50). Race did not, so leftover
+        // cuts caption or a leftover compare hover painted under
+        // the arena. Empty it after the maze-id discard.
+        int n89Cap = n53Race.indexOf("state.caption = null");
+        int n89Box = n53Race.indexOf("$(\"compareBox\").innerHTML = \"\"");
+        assertThat(n89Cap).isGreaterThan(n53RaceDiscard);
+        assertThat(n89Cap).isLessThan(n53RaceSet);
+        assertThat(n89Box).isGreaterThan(n89Cap);
+        assertThat(n89Box).isLessThan(n53RaceSet);
         int n53CmpFrom = html.indexOf("async function compareSolvers");
         int n53CmpTo = html.indexOf("async function play()", n53CmpFrom);
         assertThat(n53CmpFrom).isGreaterThanOrEqualTo(0);

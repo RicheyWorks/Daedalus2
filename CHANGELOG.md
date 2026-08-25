@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Race drops leftover Compare table.** Hunt already empties leftover hover (N50). Race left the table armed, so leftover cuts caption or a leftover row hover painted under the arena. Empty `#compareBox` after the maze-id discard (N89). Fog still keeps tour (N17).
+
 - **Compare drops leftover Race lanes.** Play / theory / Solve / Hardest / Join / Hunt already drop leftover arena. Compare left it armed, so leftover lanes painted under a compare hover. Drop that arena after the maze-id discard (N88). Fog still keeps tour (N17).
 
 - **Theory writes drop leftover Solve search wash.** A leftover Solve path stays as a route hint (N62). Leftover expansions still painted the search wash under the cuts, field, rings, bands, or Identify sidebar. Drop that wash after the maze-id discard (N87). Hunt stays. Fog still keeps tour (N17).

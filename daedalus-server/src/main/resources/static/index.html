@@ -2915,6 +2915,11 @@ async function raceSolvers() {
     // tour (N17).
     clearInterval(state.ghostTimer); state.ghostTimer = null;
     state.ghost = null;
+    // Leftover sidebar stays after Race. Hunt already empties
+    // #compareBox (N50). Race did not, so leftover cuts caption
+    // or a leftover compare hover painted under the arena (N89).
+    state.caption = null;
+    $("compareBox").innerHTML = "";
     state.race = { lanes: [
       {id: a, color: "#82b1ff", expansions: ra.expansions || [], path: ra.path,
        success: ra.success, front: 0, pathProg: 0},
