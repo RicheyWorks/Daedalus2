@@ -1345,6 +1345,25 @@ function leaveMaze() {
   $("status").textContent = "no maze yet";
   $("stats").innerHTML = "";
   $("pngExport").style.display = "none";
+  // adoptMaze wrote the snapshot into the form. Back onto "" /
+  // #generator= dropped the canvas and left that recipe, so
+  // Generate rebuilt the maze the bar no longer names (N54).
+  // Catalog defaults match the inputs. #generator= overwrites
+  // the select after this. Do not pin.
+  if ($("rows")) $("rows").value = 21;
+  if ($("cols")) $("cols").value = 31;
+  if ($("seed")) $("seed").value = "";
+  if ($("hotspots")) $("hotspots").value = 0;
+  if ($("hotspotCost")) $("hotspotCost").value = 25;
+  if ($("braid")) {
+    $("braid").value = "0";
+    syncBraid("braid");
+  }
+  if ($("generator")
+      && [...$("generator").options].some(o => o.value === "recursive-backtracker")) {
+    $("generator").value = "recursive-backtracker";
+    updateInfo();
+  }
   resubscribe();
   refreshLeaderboard();
   drawEmpty();

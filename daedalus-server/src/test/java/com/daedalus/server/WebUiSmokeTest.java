@@ -817,6 +817,22 @@ class WebUiSmokeTest {
         assertThat(n52Leave.indexOf("state.maze = null"))
                 .isLessThan(n52Leave.indexOf("leaveSpectate()"));
         assertThat(n52Leave).doesNotContain("pinHash()");
+        // N54. leaveMaze dropped the canvas and left the adopted
+        // recipe in the form. Back onto "" / #generator= then
+        // Generate rebuilt the maze the bar no longer names.
+        // Restore catalog defaults. Do not pin.
+        int n54Rows = n52Leave.indexOf("$(\"rows\").value = 21");
+        int n54Seed = n52Leave.indexOf("$(\"seed\").value = \"\"");
+        int n54Braid = n52Leave.indexOf("$(\"braid\").value = \"0\"");
+        int n54Draw = n52Leave.indexOf("drawEmpty");
+        assertThat(n54Rows).isGreaterThanOrEqualTo(0);
+        assertThat(n54Rows).isLessThan(n54Draw);
+        assertThat(n54Seed).isGreaterThan(n54Rows);
+        assertThat(n54Seed).isLessThan(n54Draw);
+        assertThat(n54Braid).isGreaterThan(n54Seed);
+        assertThat(n54Braid).isLessThan(n54Draw);
+        assertThat(n52Leave).contains("syncBraid(\"braid\")");
+        assertThat(n52Leave).contains("$(\"cols\").value = 31");
         // N32. play() POSTed /session after only a fog check. Generate
         // mid-flight pinned #session= and seated the old session on the
         // maze now on screen. Capture maze id before the POST; discard

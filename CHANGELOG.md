@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Back onto `""` / `#generator=` does not leave the adopted generate recipe in the form.** `leaveMaze` dropped the canvas; rows / seed / braid still named the maze the bar no longer named, so Generate rebuilt it. Restore catalog defaults (N54). Do not pin.
+
 - **Race / Compare drop leftover Hunt coins.** Hunt already empties leftover Compare / Hardest (N50). Race and Compare left the Held-Karp walk and waypoints armed, so leftover coins painted under the arena or a compare hover. Drop those overlays after the maze-id discard (N53). Fog still keeps tour (N17).
 
 - **Solve / Analyze after spectate does not leave a leftover `#session=` permalink.** N51 dropped the seat; the bar still named the watch, so refresh reminted it. Pin `#maze=` after the drop when the canvas remains (N52). `leaveMaze` nulls the maze first so that write cannot fight History.

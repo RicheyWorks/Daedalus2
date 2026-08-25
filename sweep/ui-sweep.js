@@ -1890,6 +1890,26 @@ async function check(name, fn) {
         : 'N53 source pin failed'];
   });
 
+  await check('N54. leaveMaze restores catalog generate defaults', async () => {
+    // Old body: leaveMaze dropped the canvas and left the adopted
+    // recipe. Back onto "" / #generator= then Generate rebuilt
+    // the maze the bar no longer names. Restore catalog defaults.
+    const src = await page.evaluate(() => {
+      const s = leaveMaze.toString();
+      const rows = s.indexOf('$("rows").value = 21');
+      const seed = s.indexOf('$("seed").value = ""');
+      const braid = s.indexOf('$("braid").value = "0"');
+      const draw = s.indexOf('drawEmpty');
+      return rows >= 0 && rows < draw && seed > rows && seed < draw
+          && braid > seed && braid < draw
+          && s.includes('syncBraid("braid")')
+          && s.includes('$("cols").value = 31')
+          && !s.includes('pinHash()');
+    });
+    return [src, src ? 'leaveMaze clears the leftover adopted recipe'
+        : 'N54 source pin failed'];
+  });
+
   await check('N30. late /solve after Generate does not paint the maze now on screen', async () => {
     // Old body: solve / race / compare POSTed /solve then painted
     // after only a fog check. Generate mid-flight applied the old
