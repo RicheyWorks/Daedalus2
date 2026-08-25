@@ -966,6 +966,24 @@ class WebUiSmokeTest {
                 "state.analysis = null");
         assertLeftoverSiblingTheoryDroppedAfterDiscard(html, "async function heuristicLens",
                 "function paintLensCaption", "state.lens = l", "state.analysis = null");
+        // N73. Theory writes left leftover ASCII armed. Generate /
+        // Fog / Play / Solve / Hardest / Race / Hunt hide
+        // #asciiOut (N68–N72). Those theory writes did not, so
+        // leftover dump reminted the text/plain maze under the
+        // cuts / field / rings / bands / Identify sidebar. Hide
+        // it after the maze-id discard. Hunt and a leftover
+        // Solve path stay. startFog still must not null tour
+        // (N17).
+        assertLeftoverAsciiHiddenAfterDiscard(html, "async function analyzeStructure",
+                "function paintAnalysisCaption", "state.analysis = a");
+        assertLeftoverAsciiHiddenAfterDiscard(html, "async function identifyGenerator",
+                "function paintFingerprintCaption", "state.fingerprint = f");
+        assertLeftoverAsciiHiddenAfterDiscard(html, "async function distanceHeatMap",
+                "function paintFieldCaption", "state.field = f");
+        assertLeftoverAsciiHiddenAfterDiscard(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption", "state.sanctuaries = s");
+        assertLeftoverAsciiHiddenAfterDiscard(html, "async function heuristicLens",
+                "function paintLensCaption", "state.lens = l");
         // N51. leaveSpectate only cleared readOnly. Solve / Analyze
         // after a watch kept the opener's session writable, so
         // arrows POSTed /move on a walk this tab only watched.
@@ -1646,6 +1664,30 @@ class WebUiSmokeTest {
         assertThat(discard).isGreaterThanOrEqualTo(0);
         assertThat(gone).isGreaterThan(discard);
         assertThat(gone).isLessThan(out);
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover ASCII after a theory write (N73). Hide #asciiOut
+     * after the maze-id discard, before the overlay write. Must
+     * not null tour.
+     */
+    private static void assertLeftoverAsciiHiddenAfterDiscard(String html, String start,
+            String end, String write) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        int discard = body.lastIndexOf("state.maze.id !== mazeId");
+        int hide = body.indexOf("$(\"asciiOut\").hidden = true");
+        int clear = body.indexOf("$(\"asciiOut\").textContent = \"\"");
+        int out = body.indexOf(write);
+        assertThat(discard).isGreaterThanOrEqualTo(0);
+        assertThat(hide).isGreaterThan(discard);
+        assertThat(hide).isLessThan(out);
+        assertThat(clear).isGreaterThan(hide);
+        assertThat(clear).isLessThan(out);
         assertThat(body).doesNotContain("state.tour = null");
     }
 

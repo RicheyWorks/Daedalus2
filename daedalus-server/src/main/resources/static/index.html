@@ -1786,6 +1786,14 @@ async function identifyGenerator() {
   // (N63). Hunt and a leftover Solve path stay.
   state.analysis = null; state.field = null;
   state.sanctuaries = null; state.lens = null;
+  // Leftover ASCII stays armed after Identify. Generate /
+  // Fog / Play / Solve / Hardest / Race / Hunt hide
+  // #asciiOut (N68–N72). Theory writes did not, so leftover
+  // dump reminted the text/plain maze under the sidebar
+  // (N73). Hunt and a leftover Solve path stay. startFog
+  // still must not null tour (N17).
+  $("asciiOut").hidden = true;
+  $("asciiOut").textContent = "";
   state.fingerprint = f;
   state.caption = "fingerprint";
   log("state", `fingerprint: structure says ${f.predictedGeneratorId}`
@@ -2064,6 +2072,11 @@ async function analyzeStructure() {
   // and a leftover Solve path stay.
   state.field = null; state.sanctuaries = null;
   state.lens = null; state.fingerprint = null;
+  // Leftover ASCII remints the text/plain maze under the
+  // cuts (N73). Hunt and a leftover Solve path stay.
+  // startFog still must not null tour (N17).
+  $("asciiOut").hidden = true;
+  $("asciiOut").textContent = "";
   state.analysis = a;
   state.caption = "analysis";
   const cp = a.cutSize === 1 ? "1 chokepoint" : `${a.cutSize} chokepoints`;
@@ -2175,6 +2188,11 @@ async function distanceHeatMap() {
   }
   // Leftover cuts remint GET /analysis under the field (N63).
   state.analysis = null; state.fingerprint = null;
+  // Leftover ASCII remints the text/plain maze under the
+  // field (N73). Hunt and a leftover Solve path stay.
+  // startFog still must not null tour (N17).
+  $("asciiOut").hidden = true;
+  $("asciiOut").textContent = "";
   state.field = f;
   state.sanctuaries = null; state.lens = null;   // one overlay at a time stays readable
   state.caption = "field";
@@ -2223,6 +2241,11 @@ async function placeSanctuaries() {
   }
   // Leftover cuts remint GET /analysis under the rings (N63).
   state.analysis = null; state.fingerprint = null;
+  // Leftover ASCII remints the text/plain maze under the
+  // rings (N73). Hunt and a leftover Solve path stay.
+  // startFog still must not null tour (N17).
+  $("asciiOut").hidden = true;
+  $("asciiOut").textContent = "";
   state.sanctuaries = s;
   state.field = null; state.lens = null;
   state.caption = "sanctuaries";
@@ -2351,6 +2374,11 @@ async function heuristicLens() {
   }
   // Leftover cuts remint GET /analysis under the bands (N63).
   state.analysis = null; state.fingerprint = null;
+  // Leftover ASCII remints the text/plain maze under the
+  // bands (N73). Hunt and a leftover Solve path stay.
+  // startFog still must not null tour (N17).
+  $("asciiOut").hidden = true;
+  $("asciiOut").textContent = "";
   state.lens = l;
   state.field = null; state.sanctuaries = null;
   state.caption = "lens";
