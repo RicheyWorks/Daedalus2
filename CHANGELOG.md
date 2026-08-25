@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Leftover credential stays.** login remints leftover `#pass`. logout remints leftover `#user`. Hunt / Play / Fog / theory / Join leftover `#user` / leftover `#pass` stay — the name you typed. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N126).
+
 - **Leftover sessionStart stays.** Play remints leftover clock when it seats. Join-from-spectate remints leftover clock. Hunt leftover sessionStart stay — current walk. Fog leftover sessionStart stay — unused leftover clock (`declareWin` needs session + ghost). Theory leftover sessionStart stay — leftover clock unused. Hunt through Play still keeps tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Race and ghost stay recordings when you asked for them (N125).
 
 - **Leftover sidebar picker stays.** `loadLabMetrics` remints `#labMetric`. `applyBraidFromMaze` remints `#tourBraid`. Hunt / Play / Fog / theory / Join leftover `#labMetric` stay — the metric you asked for. Leftover `#tourBraid` stay — the sample braid you asked for. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N124).
