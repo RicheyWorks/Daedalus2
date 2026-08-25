@@ -162,6 +162,17 @@ class WebUiSmokeTest {
         int n95Stats = fog.indexOf("$(\"stats\").innerHTML =");
         assertThat(n95Stats).isGreaterThan(fogDiscard);
         assertThat(n95Stats).isGreaterThan(fog.indexOf("state.session = null"));
+        // N109. Fog left leftover trails armed. Generate /
+        // leave-watch / leaveMaze / Play drop leftover crumbs.
+        // Fog dropped the seat and leftover ghost (N15) but
+        // left leftover trails, so leftover crumbs painted
+        // after a living tick ended the fog walk without
+        // Play. Drop trails after the maze-id discard.
+        // startFog still must not null tour (N17).
+        int n109Trails = fog.indexOf("state.trails = {}");
+        assertThat(n109Trails).isGreaterThan(fogDiscard);
+        assertThat(n109Trails).isGreaterThan(fog.indexOf("state.session = null"));
+        assertThat(fog).doesNotContain("state.tour = null");
         // N17 emptied the sidebar when Fog started. An Analyze /
         // Compare (or Identify / Heat / Lens) that was already out
         // still landed and rewrote #compareBox / armed state.path.

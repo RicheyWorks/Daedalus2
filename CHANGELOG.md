@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Fog drops leftover trails.** Generate / leave-watch / leaveMaze / Play already drop leftover crumbs. Fog dropped the seat and leftover ghost (N15) but left leftover trails, so leftover crumbs painted after a living tick ended the fog walk without Play. Drop those trails after the maze-id discard (N109). Fog still keeps tour (N17).
+
 - **Leftover `#status` / `#join` stays.** Competing writers rewrite leftover hunt / win / spectate chrome (N48 / N101–N107). Hunt / session / win lines during theory stay current. ASCII does not rewrite `#status`. Fog leftover `#join` text stays — Play already set the seated label; Fog only disables. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N108).
 
 - **Join-from-spectate drops leftover spectate join title.** Open session rewrites `#join` (label + title). `leaveSpectate` rewrites when it drops a watch (N105). Join-from-spectate only rewrote the label, so leftover spectate title named a watch that is gone under the seat just taken. Rewrite the title after the seat is taken (N107). Join-from-spectate still keeps the hunt. Fog still keeps tour (N17).

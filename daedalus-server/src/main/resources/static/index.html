@@ -3912,6 +3912,13 @@ async function startFog() {
   state.session = null;
   state.seat = null;
   state.joined = null;
+  // Leftover trails stay after Fog. Generate / leave-watch /
+  // leaveMaze / Play drop leftover crumbs. Fog dropped the
+  // seat and leftover ghost (N15) but left leftover trails,
+  // so leftover crumbs painted after a living tick ended
+  // the fog walk without Play (N109). startFog still must
+  // not null tour (N17).
+  state.trails = {};
   $("join").disabled = true;
   // Open session pinned #session= and subscribed /player. N15 dropped the
   // seat and hash; the subscription and ghost ticker stayed, so a joiner
