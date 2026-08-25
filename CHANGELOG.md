@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Solve drops leftover Hunt coins, Hardest walk, and sibling theory remints.** Race / Compare already drop those (N53). Hardest already drops leftover Hunt and sibling theory (N59 / N64). Solve left them armed, so leftover coins and leftover gold painted under the solver path and a living tick reminted `GET /analysis`. Drop those overlays after the maze-id discard (N65). Fog still keeps tour (N17).
+
 - **Hardest drops leftover sibling theory remints.** Theory writes already drop siblings (N63). Hardest left leftover cuts / heat armed, so leftover analysis painted under the gold walk and a living tick reminted `GET /analysis`. Drop those overlays after the maze-id discard (N64). Fog still keeps tour (N17).
 
 - **Theory writes drop leftover sibling theory remints.** Field already drops sanctuaries / lens. Analyze left leftover heat armed, so a living tick reminted `GET /distance-field` under the cuts; Field left leftover cuts reminting `GET /analysis`. Drop those sibling overlays after the maze-id discard (N63). Hunt and a leftover Solve path stay. Fog still keeps tour (N17).

@@ -2679,7 +2679,22 @@ async function solve() {
   // path / expansions would paint onto the maze now on screen.
   if (state.fog) return;
   if (!state.maze || state.maze.id !== mazeId) return;
+  // Hunt coins / Hardest / sibling theory stay armed after
+  // Solve. Leftover tourWalk is not the solver route;
+  // leftover gold is not either; leftover cuts remint
+  // GET /analysis under the walk (N65). Race / Compare
+  // already drop those (N53). Hardest already drops
+  // leftover Hunt and sibling theory (N59 / N64).
+  // startFog still must not null tour (N17).
+  state.tour = null; state.tourGot = [];
+  state.analysis = null; state.hardest = null;
+  state.field = null; state.sanctuaries = null;
+  state.lens = null; state.fingerprint = null;
   state.race = null; // a plain solve replaces any arena overlay
+  if (state.caption) {
+    state.caption = null;
+    $("compareBox").innerHTML = "";
+  }
   state.path = r.path;
   state.expansions = r.expansions || [];
   log("solver", `${r.solverId}: path ${r.path.length}, visited ${r.visited}, `

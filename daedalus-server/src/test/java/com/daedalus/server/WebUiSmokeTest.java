@@ -787,6 +787,34 @@ class WebUiSmokeTest {
         assertThat(n53CmpTour).isGreaterThan(n53CmpDiscard);
         assertThat(n53CmpTour).isLessThan(n53CmpBox);
         assertThat(n53Cmp).contains("state.hardest = null");
+        // N65. Solve left Hunt coins / Hardest / sibling theory
+        // armed. Leftover tourWalk / leftover gold painted under
+        // the solver path; leftover cuts reminted GET /analysis.
+        // Drop those after the maze-id discard. Race / Compare
+        // already drop them (N53). Hardest already drops leftover
+        // Hunt and sibling theory (N59 / N64). startFog still
+        // must not null tour (N17).
+        int n65From = html.indexOf("async function solve");
+        int n65To = html.indexOf("function animateSearch");
+        assertThat(n65From).isGreaterThanOrEqualTo(0);
+        assertThat(n65To).isGreaterThan(n65From);
+        String n65 = html.substring(n65From, n65To);
+        int n65Discard = n65.lastIndexOf("state.maze.id !== mazeId");
+        int n65Tour = n65.indexOf("state.tour = null");
+        int n65An = n65.indexOf("state.analysis = null");
+        int n65Hard = n65.indexOf("state.hardest = null");
+        int n65Path = n65.indexOf("state.path = r.path");
+        assertThat(n65Discard).isGreaterThanOrEqualTo(0);
+        assertThat(n65Tour).isGreaterThan(n65Discard);
+        assertThat(n65Tour).isLessThan(n65Path);
+        assertThat(n65An).isGreaterThan(n65Tour);
+        assertThat(n65An).isLessThan(n65Path);
+        assertThat(n65Hard).isGreaterThan(n65An);
+        assertThat(n65Hard).isLessThan(n65Path);
+        assertThat(n65).contains("state.field = null");
+        assertThat(n65).contains("state.lens = null");
+        assertThat(n65).contains("state.fingerprint = null");
+        assertThat(n65).contains("state.race = null");
         // N59. Hardest left Hunt coins and Race lanes armed.
         // Leftover tourWalk / leftover arena painted over the
         // cruel route. Drop those after the maze-id discard.
