@@ -876,6 +876,16 @@ class WebUiSmokeTest {
         assertThat(n84Timer).isLessThan(n31Play);
         assertThat(n84Gone).isGreaterThan(n84Timer);
         assertThat(n84Gone).isLessThan(n31Play);
+        // N93. Hunt left leftover Solve stats armed. play()
+        // rewrites #stats (N92) only when it seats; a hunt on
+        // an existing seat skipped that, so leftover solver
+        // numbers named the previous walk under the Held-Karp
+        // coins. Rewrite after the maze-id discard, before
+        // play(). Must not null tour (N50). startFog still
+        // must not null tour (N17).
+        int n93Stats = n31.indexOf("$(\"stats\").innerHTML =");
+        assertThat(n93Stats).isGreaterThan(n31Discard);
+        assertThat(n93Stats).isLessThan(n31Play);
         // N53. Race / Compare left Hunt coins and hardest armed.
         // Leftover tourWalk painted under the arena / a compare
         // hover — not a solver lane. Drop those overlays after
