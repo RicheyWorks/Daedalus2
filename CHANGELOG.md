@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Theory writes drop leftover ghost.** Fog already drops the ticker. Analyze / Identify / heat / sanctuaries / lens dropped leftover Race (N60) but left ghost armed, so leftover recording painted under the cuts, field, rings, bands, or Identify sidebar. Drop that ticker after the maze-id discard (N80). Hunt and a leftover Solve path stay. Fog still keeps tour (N17).
+
 - **Join drops leftover Race lanes.** Open session already drops leftover arena (N55). Join left it armed, so leftover lanes painted under the seat just taken. Drop that arena after the join POST discard (N79). Race stays a recording. Join-from-spectate still keeps the hunt. Fog still keeps tour (N17).
 
 - **Leftover remint stays.** Competing writers drop leftover remints. Living ticks still remint the overlay you asked for. Hunt stays during theory; a leftover Solve path stays as a theory route hint (N62 / N63). Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour and does not remint until that walk ends (N17). Race and ghost stay recordings (N78).

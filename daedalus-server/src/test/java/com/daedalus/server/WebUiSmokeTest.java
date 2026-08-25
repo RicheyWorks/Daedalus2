@@ -991,6 +991,23 @@ class WebUiSmokeTest {
                 "function paintSanctuariesCaption", "state.sanctuaries = s");
         assertLeftoverRaceDroppedAfterDiscard(html, "async function heuristicLens",
                 "function paintLensCaption", "state.lens = l");
+        // N80. Theory writes left leftover ghost armed. Fog
+        // already drops the ticker. Those writes dropped leftover
+        // Race (N60) but not ghost, so leftover recording painted
+        // under the cuts / field / rings / bands / Identify
+        // sidebar. Drop it after the maze-id discard. Hunt and a
+        // leftover Solve path stay. startFog still must not null
+        // tour (N17).
+        assertLeftoverGhostDroppedAfterDiscard(html, "async function analyzeStructure",
+                "function paintAnalysisCaption", "state.analysis = a");
+        assertLeftoverGhostDroppedAfterDiscard(html, "async function identifyGenerator",
+                "function paintFingerprintCaption", "state.fingerprint = f");
+        assertLeftoverGhostDroppedAfterDiscard(html, "async function distanceHeatMap",
+                "function paintFieldCaption", "state.field = f");
+        assertLeftoverGhostDroppedAfterDiscard(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption", "state.sanctuaries = s");
+        assertLeftoverGhostDroppedAfterDiscard(html, "async function heuristicLens",
+                "function paintLensCaption", "state.lens = l");
         // N61. Theory writes left Hardest armed. Leftover gold
         // painted over the cuts / field / rings / bands, and a
         // living tick reminted GET /hardest-route. Drop hardest
@@ -1672,6 +1689,33 @@ class WebUiSmokeTest {
         assertThat(race).isGreaterThan(discard);
         assertThat(race).isLessThan(out);
         assertThat(body).contains("animGen++");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover ghost after a theory write (N80). Drop the ticker
+     * after the maze-id discard, before the overlay write. Must
+     * not null tour.
+     */
+    private static void assertLeftoverGhostDroppedAfterDiscard(String html, String start,
+            String end, String write) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        int discard = body.lastIndexOf("state.maze.id !== mazeId");
+        int clear = body.indexOf("clearInterval(state.ghostTimer)");
+        int timer = body.indexOf("state.ghostTimer = null");
+        int gone = body.indexOf("state.ghost = null");
+        int out = body.indexOf(write);
+        assertThat(discard).isGreaterThanOrEqualTo(0);
+        assertThat(clear).isGreaterThan(discard);
+        assertThat(clear).isLessThan(out);
+        assertThat(timer).isGreaterThan(clear);
+        assertThat(timer).isLessThan(out);
+        assertThat(gone).isGreaterThan(timer);
+        assertThat(gone).isLessThan(out);
         assertThat(body).doesNotContain("state.tour = null");
     }
 

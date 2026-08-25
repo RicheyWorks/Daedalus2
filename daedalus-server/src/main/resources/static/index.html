@@ -1781,6 +1781,13 @@ async function identifyGenerator() {
     state.path = null;
     state.expansions = [];
   }
+  // Ghost stays armed after Identify. Fog already drops the
+  // ticker. Theory writes dropped leftover Race (N60) but
+  // not ghost, so leftover recording painted under the
+  // sidebar (N80). Hunt and a leftover Solve path stay.
+  // startFog still must not null tour (N17).
+  clearInterval(state.ghostTimer); state.ghostTimer = null;
+  state.ghost = null;
   // Sibling theory stays armed after Identify. Leftover
   // cuts / heat / rings / bands remint on a living tick
   // (N63). Hunt and a leftover Solve path stay.
@@ -2066,6 +2073,13 @@ async function analyzeStructure() {
     state.path = null;
     state.expansions = [];
   }
+  // Ghost stays armed after Analyze. Fog already drops the
+  // ticker. Theory writes dropped leftover Race (N60) but
+  // not ghost, so leftover recording painted under the cuts
+  // (N80). Hunt and a leftover Solve path stay. startFog
+  // still must not null tour (N17).
+  clearInterval(state.ghostTimer); state.ghostTimer = null;
+  state.ghost = null;
   // Sibling theory stays armed after Analyze. Leftover
   // heat remints GET /distance-field on a living tick
   // (N63). Field already drops sibling overlays. Hunt
@@ -2186,6 +2200,11 @@ async function distanceHeatMap() {
     state.path = null;
     state.expansions = [];
   }
+  // Leftover ghost paints under the field (N80). Hunt and
+  // a leftover Solve path stay. startFog still must not
+  // null tour (N17).
+  clearInterval(state.ghostTimer); state.ghostTimer = null;
+  state.ghost = null;
   // Leftover cuts remint GET /analysis under the field (N63).
   state.analysis = null; state.fingerprint = null;
   // Leftover ASCII remints the text/plain maze under the
@@ -2239,6 +2258,11 @@ async function placeSanctuaries() {
     state.path = null;
     state.expansions = [];
   }
+  // Leftover ghost paints under the rings (N80). Hunt and
+  // a leftover Solve path stay. startFog still must not
+  // null tour (N17).
+  clearInterval(state.ghostTimer); state.ghostTimer = null;
+  state.ghost = null;
   // Leftover cuts remint GET /analysis under the rings (N63).
   state.analysis = null; state.fingerprint = null;
   // Leftover ASCII remints the text/plain maze under the
@@ -2372,6 +2396,11 @@ async function heuristicLens() {
     state.path = null;
     state.expansions = [];
   }
+  // Leftover ghost paints under the bands (N80). Hunt and
+  // a leftover Solve path stay. startFog still must not
+  // null tour (N17).
+  clearInterval(state.ghostTimer); state.ghostTimer = null;
+  state.ghost = null;
   // Leftover cuts remint GET /analysis under the bands (N63).
   state.analysis = null; state.fingerprint = null;
   // Leftover ASCII remints the text/plain maze under the
