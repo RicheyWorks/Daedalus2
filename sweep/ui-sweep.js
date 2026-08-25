@@ -1936,6 +1936,33 @@ async function check(name, fn) {
         : 'N60 source pin failed'];
   });
 
+  await check('N61. theory writes drop leftover Hardest walk', async () => {
+    // Old body: N60 dropped leftover Race; Hardest stayed.
+    // Leftover gold painted over the theory; a living tick
+    // reminted GET /hardest-route.
+    const src = await page.evaluate(() => {
+      const fog = startFog.toString();
+      const hunt = startTour.toString();
+      const after = (fn, write) => {
+        const s = fn.toString();
+        const d = s.lastIndexOf('state.maze.id !== mazeId');
+        const h = s.indexOf('state.hardest = null');
+        const w = s.indexOf(write);
+        return d >= 0 && h > d && h < w
+            && !s.includes('state.tour = null');
+      };
+      return after(analyzeStructure, 'state.analysis = a')
+          && after(identifyGenerator, 'state.fingerprint = f')
+          && after(distanceHeatMap, 'state.field = f')
+          && after(placeSanctuaries, 'state.sanctuaries = s')
+          && after(heuristicLens, 'state.lens = l')
+          && !fog.includes('state.tour = null')
+          && !hunt.includes('state.tour = null');
+    });
+    return [src, src ? 'theory writes empty leftover hardest'
+        : 'N61 source pin failed'];
+  });
+
   await check('N54. leaveMaze restores catalog generate defaults', async () => {
     // Old body: leaveMaze dropped the canvas and left the adopted
     // recipe. Back onto "" / #generator= then Generate rebuilt
