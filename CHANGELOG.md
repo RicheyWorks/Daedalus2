@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Open session drops leftover Solve stats.** Generate already rewrites `#stats`. Play left leftover solver numbers armed, so leftover figures named the previous walk under the seat. Rewrite the maze identity after the session POST discard (N92). Hunt still calls `play()` after installing tour — do not null tour. Fog still keeps tour (N17).
+
 - **Leftover paint stays.** Competing writers drop leftover paint. Hunt stays during theory; a leftover Solve path stays as a theory route hint (N62). Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N91).
 
 - **Compare drops leftover Solve path.** Race already drops leftover path. Compare left it armed, so leftover solver route painted under the table until a hover. Drop that path after the maze-id discard (N90). Hover still arms a preview. Fog still keeps tour (N17).

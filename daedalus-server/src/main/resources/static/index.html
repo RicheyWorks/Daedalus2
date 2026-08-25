@@ -3151,6 +3151,17 @@ async function play() {
   // still must not null tour (N17).
   $("asciiOut").hidden = true;
   $("asciiOut").textContent = "";
+  // Leftover Solve stats stay after Open session. Generate
+  // rewrites #stats. Play did not, so leftover solver
+  // numbers named the previous walk under the seat (N92).
+  // Hunt calls play() after installing tour — do not null
+  // tour (N50). startFog still must not null tour (N17).
+  $("stats").innerHTML =
+      `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
+      + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
+      + `&middot; <span>seed</span> ${state.maze.seed}`
+      + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
+      + `<br>`;
   // Hardest stays armed after Open session when caption is
   // not hardest. Join already drops leftover gold
   // unconditionally (N77). Play gated it (N58), so leftover

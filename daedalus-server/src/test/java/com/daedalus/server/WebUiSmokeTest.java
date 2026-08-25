@@ -1361,6 +1361,17 @@ class WebUiSmokeTest {
         assertThat(n68Hide).isLessThan(n55Seat);
         assertThat(n68Clear).isGreaterThan(n68Hide);
         assertThat(n68Clear).isLessThan(n55Seat);
+        // N92. Open session left leftover Solve stats armed.
+        // Generate rewrites #stats. Play did not, so leftover
+        // solver numbers named the previous walk under the seat.
+        // Rewrite maze identity after the session POST discard.
+        // Hunt calls play() after installing tour — must not
+        // null tour (N50). startFog still must not null tour
+        // (N17).
+        int n92Stats = n32.indexOf("$(\"stats\").innerHTML =", n32Maze);
+        assertThat(n92Stats).isGreaterThan(n32Maze);
+        assertThat(n92Stats).isLessThan(n55Seat);
+        assertThat(n32).doesNotContain("state.tour = null");
         // N33. hydrateSpectatorOverlays GETs /session/{id}/tour then
         // always wrote state.tour. Generate / Fog / a new #session=
         // mid-flight painted the old hunt onto the maze now on screen.
