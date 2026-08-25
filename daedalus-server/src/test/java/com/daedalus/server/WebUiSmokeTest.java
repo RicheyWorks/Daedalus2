@@ -763,8 +763,8 @@ class WebUiSmokeTest {
         // arrows POSTed /move on a walk this tab only watched.
         // Drop the leftover seat when we were watching and have
         // not taken one. Join sets the seat first and keeps it.
-        // Do not pin (leaveMaze must not fight History). Do not
-        // null tour (N17).
+        // null tour (N17). N52 pins #maze= after the drop when the
+        // canvas remains so refresh cannot remint a leftover watch.
         int n51From = html.indexOf("function leaveSpectate");
         int n51To = html.indexOf("function armSpectatorWrites");
         assertThat(n51From).isGreaterThanOrEqualTo(0);
@@ -772,12 +772,22 @@ class WebUiSmokeTest {
         String n51 = html.substring(n51From, n51To);
         int n51Watch = n51.indexOf("state.readOnly");
         int n51Drop = n51.indexOf("state.session = null");
+        int n51Pin = n51.indexOf("pinHash()");
+        int n51Keep = n51.indexOf("if (state.maze)");
         assertThat(n51Watch).isGreaterThanOrEqualTo(0);
         assertThat(n51Drop).isGreaterThan(n51Watch);
         assertThat(n51).contains("state.seat");
         assertThat(n51).contains("resubscribe()");
         assertThat(n51).doesNotContain("state.tour = null");
-        assertThat(n51).doesNotContain("pinHash()");
+        assertThat(n51Keep).isGreaterThan(n51Drop);
+        assertThat(n51Pin).isGreaterThan(n51Keep);
+        // N52. leaveMaze must null the maze before leaveSpectate
+        // so that pin cannot rewrite History.
+        String n52Leave = html.substring(html.indexOf("function leaveMaze"),
+                html.indexOf("async function loadFromHash"));
+        assertThat(n52Leave.indexOf("state.maze = null"))
+                .isLessThan(n52Leave.indexOf("leaveSpectate()"));
+        assertThat(n52Leave).doesNotContain("pinHash()");
         // N32. play() POSTed /session after only a fog check. Generate
         // mid-flight pinned #session= and seated the old session on the
         // maze now on screen. Capture maze id before the POST; discard

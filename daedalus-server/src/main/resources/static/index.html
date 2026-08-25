@@ -1255,8 +1255,7 @@ function leaveSpectate() {
   // keeps the session. Solve / Analyze after watch used to
   // keep the opener's session writable — arrows POSTed
   // /move on a walk this tab only watched (N51). Do not
-  // pin — leaveMaze must not fight History. Do not null
-  // tour (N17).
+  // null tour (N17).
   if (!wasWatching || state.seat) return;
   clearInterval(state.ghostTimer); state.ghostTimer = null;
   state.ghost = null;
@@ -1268,6 +1267,11 @@ function leaveSpectate() {
   $("join").textContent = "Join as second player";
   $("join").title = "Requires daedalus.session.multiplayer=true";
   resubscribe();
+  // The bar still said #session= after the seat drop. Refresh
+  // reminted a watch this tab already left (N52). Pin the maze
+  // that stayed. leaveMaze nulls maze first so this does not
+  // fight History.
+  if (state.maze) pinHash();
 }
 
 function armSpectatorWrites(on) {
@@ -1295,8 +1299,11 @@ function leaveMaze() {
   clearInterval(state.trafficPoll); state.trafficPoll = null;
   clearInterval(state.ghostTimer); state.ghostTimer = null;
   animGen++;
-  leaveSpectate();
+  // Null the maze before leaveSpectate. N52 pins #maze= when
+  // a watch leave keeps the canvas; writing that here would
+  // fight History (Back onto "" / #generator=).
   state.maze = null;
+  leaveSpectate();
   state.path = null;
   state.session = null;
   state.seat = null;

@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Solve / Analyze after spectate does not leave a leftover `#session=` permalink.** N51 dropped the seat; the bar still named the watch, so refresh reminted it. Pin `#maze=` after the drop when the canvas remains (N52). `leaveMaze` nulls the maze first so that write cannot fight History.
+
 - **Solve / Analyze after spectate does not take the opener's leftover seat.** `leaveSpectate` only cleared `readOnly`. Arrows then POSTed `/move` on a walk this tab only watched. Drop the leftover session when we were watching and have not taken a seat (N51). Join sets the seat first and keeps it. Do not pin (`leaveMaze` must not fight History). `state.tour` stays (N17).
 
 - **Waypoint hunt drops leftover Compare / Analyze / Hardest overlays.** Hunt installed the tour and left those armed. A leftover compare hover painted a solver path over the Held-Karp corridor you are scored against; leftover hardest was a second walk that is not the score. Empty `#compareBox` and drop those overlays after the maze-id discard (N50). Fog already drops them. `state.tour` stays (N17).

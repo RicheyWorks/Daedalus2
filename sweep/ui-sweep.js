@@ -1840,11 +1840,29 @@ async function check(name, fn) {
       return watch >= 0 && drop > watch && s.includes('state.seat')
           && s.includes('resubscribe()')
           && !s.includes('state.tour = null')
-          && !s.includes('pinHash()')
           && seat >= 0 && leave > seat;
     });
     return [src, src ? 'watch leave drops the leftover opener seat'
         : 'N51 source pin failed'];
+  });
+
+  await check('N52. Solve after spectate does not leave a leftover #session= hash', async () => {
+    // Old body: N51 dropped the seat; the bar still said #session=,
+    // so refresh reminted a watch this tab already left. Pin #maze=
+    // when the canvas remains. leaveMaze nulls maze first so that
+    // write cannot fight History.
+    const src = await page.evaluate(() => {
+      const s = leaveSpectate.toString();
+      const drop = leaveMaze.toString();
+      const sess = s.indexOf('state.session = null');
+      const keep = s.indexOf('if (state.maze)');
+      const pin = s.indexOf('pinHash()');
+      return sess >= 0 && keep > sess && pin > keep
+          && drop.indexOf('state.maze = null') < drop.indexOf('leaveSpectate()')
+          && !drop.includes('pinHash()');
+    });
+    return [src, src ? 'watch leave pins #maze= when the canvas remains'
+        : 'N52 source pin failed'];
   });
 
   await check('N30. late /solve after Generate does not paint the maze now on screen', async () => {
