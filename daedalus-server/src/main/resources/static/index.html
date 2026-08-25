@@ -2031,6 +2031,18 @@ async function startTour() {
       + `&middot; <span>seed</span> ${state.maze.seed}`
       + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
       + `<br>`;
+  // Leftover Hunt / win status stays after Hunt. play()
+  // rewrites #status (N48) only when it seats;
+  // refreshTourStatus remints hunt status only when the
+  // tour is feasible. An infeasible hunt skipped both, so
+  // leftover "waypoint hunt" or leftover "reached the goal"
+  // named the previous walk under the new coins (N106).
+  // Must not null tour (N50). startFog still must not null
+  // tour (N17).
+  clearTimeout(statusFlashTimer); statusFlashTimer = null;
+  $("status").textContent = state.session
+      ? `session ${state.session.id.slice(0, 8)}… — arrow keys to move`
+      : "arrow keys move once a session is open";
   if (!t.feasible) {
     log("err", "this maze has unreachable waypoints — tour not possible");
     return;

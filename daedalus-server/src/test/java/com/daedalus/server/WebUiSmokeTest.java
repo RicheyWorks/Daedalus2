@@ -905,6 +905,21 @@ class WebUiSmokeTest {
         int n93Stats = n31.indexOf("$(\"stats\").innerHTML =");
         assertThat(n93Stats).isGreaterThan(n31Discard);
         assertThat(n93Stats).isLessThan(n31Play);
+        // N106. Hunt left leftover Hunt / win status armed.
+        // play() rewrites #status (N48) only when it seats;
+        // refreshTourStatus remints hunt status only when the
+        // tour is feasible. An infeasible hunt skipped both,
+        // so leftover "waypoint hunt" or leftover "reached
+        // the goal" named the previous walk under the new
+        // coins. Rewrite after the maze-id discard, before
+        // play(). Must not null tour (N50). startFog still
+        // must not null tour (N17).
+        int n106Flash = n31.indexOf("clearTimeout(statusFlashTimer)");
+        int n106Status = n31.indexOf("$(\"status\").textContent");
+        assertThat(n106Flash).isGreaterThan(n31Discard);
+        assertThat(n106Flash).isLessThan(n31Play);
+        assertThat(n106Status).isGreaterThan(n106Flash);
+        assertThat(n106Status).isLessThan(n31Play);
         // N53. Race / Compare left Hunt coins and hardest armed.
         // Leftover tourWalk painted under the arena / a compare
         // hover — not a solver lane. Drop those overlays after
