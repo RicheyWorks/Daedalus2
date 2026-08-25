@@ -154,6 +154,14 @@ class WebUiSmokeTest {
         assertThat(fog.indexOf("$(\"compareBox\").innerHTML"))
                 .isGreaterThan(fog.indexOf("state.session = null"));
         assertThat(fog).doesNotContain("state.tour = null");
+        // N95. Fog left leftover Solve stats armed. Play /
+        // Hunt / Join rewrite #stats (N92–N94). Fog did not,
+        // so leftover solver numbers named the previous walk
+        // under the fog walk. Rewrite after the maze-id
+        // discard. startFog still must not null tour (N17).
+        int n95Stats = fog.indexOf("$(\"stats\").innerHTML =");
+        assertThat(n95Stats).isGreaterThan(fogDiscard);
+        assertThat(n95Stats).isGreaterThan(fog.indexOf("state.session = null"));
         // N17 emptied the sidebar when Fog started. An Analyze /
         // Compare (or Identify / Heat / Lens) that was already out
         // still landed and rewrote #compareBox / armed state.path.

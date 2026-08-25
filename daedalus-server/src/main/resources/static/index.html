@@ -3774,6 +3774,16 @@ async function startFog() {
   applyFogView(view);
   setGodModeEnabled(false);
   $("asciiOut").hidden = true;
+  // Leftover Solve stats stay after Fog. Play / Hunt /
+  // Join rewrite #stats (N92–N94). Fog did not, so leftover
+  // solver numbers named the previous walk under the fog
+  // walk (N95). startFog still must not null tour (N17).
+  $("stats").innerHTML =
+      `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
+      + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
+      + `&middot; <span>seed</span> ${state.maze.seed}`
+      + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
+      + `<br>`;
   clearTimeout(statusFlashTimer); statusFlashTimer = null;
   $("status").textContent = `fog: ${view.stepsRemaining} steps left — arrows walk the agent`;
   log("state", `fog of war — agent ${String(view.agentId).slice(0, 8)}… sees `
