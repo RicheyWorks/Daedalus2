@@ -1865,6 +1865,31 @@ async function check(name, fn) {
         : 'N52 source pin failed'];
   });
 
+  await check('N53. Race / Compare drop leftover Hunt coins', async () => {
+    // Old body: Hunt dropped leftover Compare / Hardest (N50);
+    // Race / Compare left tourWalk armed. Leftover coins painted
+    // under the arena or a compare hover. Drop after maze-id
+    // discard. startFog still must not null tour (N17).
+    const src = await page.evaluate(() => {
+      const race = raceSolvers.toString();
+      const cmp = compareSolvers.toString();
+      const fog = startFog.toString();
+      const hunt = startTour.toString();
+      const dR = race.lastIndexOf('state.maze.id !== mazeId');
+      const tR = race.indexOf('state.tour = null');
+      const sR = race.indexOf('state.race =');
+      const dC = cmp.lastIndexOf('state.maze.id !== mazeId');
+      const tC = cmp.indexOf('state.tour = null');
+      const bC = cmp.lastIndexOf('$("compareBox")');
+      return dR >= 0 && tR > dR && tR < sR && race.includes('state.hardest = null')
+          && dC >= 0 && tC > dC && tC < bC && cmp.includes('state.hardest = null')
+          && !fog.includes('state.tour = null')
+          && !hunt.includes('state.tour = null');
+    });
+    return [src, src ? 'Race / Compare empty leftover hunt overlays'
+        : 'N53 source pin failed'];
+  });
+
   await check('N30. late /solve after Generate does not paint the maze now on screen', async () => {
     // Old body: solve / race / compare POSTed /solve then painted
     // after only a fog check. Generate mid-flight applied the old

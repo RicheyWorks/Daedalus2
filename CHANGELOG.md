@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Race / Compare drop leftover Hunt coins.** Hunt already empties leftover Compare / Hardest (N50). Race and Compare left the Held-Karp walk and waypoints armed, so leftover coins painted under the arena or a compare hover. Drop those overlays after the maze-id discard (N53). Fog still keeps tour (N17).
+
 - **Solve / Analyze after spectate does not leave a leftover `#session=` permalink.** N51 dropped the seat; the bar still named the watch, so refresh reminted it. Pin `#maze=` after the drop when the canvas remains (N52). `leaveMaze` nulls the maze first so that write cannot fight History.
 
 - **Solve / Analyze after spectate does not take the opener's leftover seat.** `leaveSpectate` only cleared `readOnly`. Arrows then POSTed `/move` on a walk this tab only watched. Drop the leftover session when we were watching and have not taken a seat (N51). Join sets the seat first and keeps it. Do not pin (`leaveMaze` must not fight History). `state.tour` stays (N17).

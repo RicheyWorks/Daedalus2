@@ -758,6 +758,35 @@ class WebUiSmokeTest {
         assertThat(n31).contains("state.lens = null");
         assertThat(n31).contains("animGen++");
         assertThat(n31).doesNotContain("state.tour = null");
+        // N53. Race / Compare left Hunt coins and hardest armed.
+        // Leftover tourWalk painted under the arena / a compare
+        // hover — not a solver lane. Drop those overlays after
+        // the maze-id discard. Hunt already drops leftover theory
+        // (N50). startFog still must not null tour (N17).
+        int n53RaceFrom = html.indexOf("async function raceSolvers");
+        int n53RaceTo = html.indexOf("function animateRace");
+        assertThat(n53RaceFrom).isGreaterThanOrEqualTo(0);
+        assertThat(n53RaceTo).isGreaterThan(n53RaceFrom);
+        String n53Race = html.substring(n53RaceFrom, n53RaceTo);
+        int n53RaceDiscard = n53Race.lastIndexOf("state.maze.id !== mazeId");
+        int n53RaceTour = n53Race.indexOf("state.tour = null");
+        int n53RaceSet = n53Race.indexOf("state.race =");
+        assertThat(n53RaceDiscard).isGreaterThanOrEqualTo(0);
+        assertThat(n53RaceTour).isGreaterThan(n53RaceDiscard);
+        assertThat(n53RaceTour).isLessThan(n53RaceSet);
+        assertThat(n53Race).contains("state.hardest = null");
+        int n53CmpFrom = html.indexOf("async function compareSolvers");
+        int n53CmpTo = html.indexOf("async function play()", n53CmpFrom);
+        assertThat(n53CmpFrom).isGreaterThanOrEqualTo(0);
+        assertThat(n53CmpTo).isGreaterThan(n53CmpFrom);
+        String n53Cmp = html.substring(n53CmpFrom, n53CmpTo);
+        int n53CmpDiscard = n53Cmp.lastIndexOf("state.maze.id !== mazeId");
+        int n53CmpTour = n53Cmp.indexOf("state.tour = null");
+        int n53CmpBox = n53Cmp.lastIndexOf("$(\"compareBox\")");
+        assertThat(n53CmpDiscard).isGreaterThanOrEqualTo(0);
+        assertThat(n53CmpTour).isGreaterThan(n53CmpDiscard);
+        assertThat(n53CmpTour).isLessThan(n53CmpBox);
+        assertThat(n53Cmp).contains("state.hardest = null");
         // N51. leaveSpectate only cleared readOnly. Solve / Analyze
         // after a watch kept the opener's session writable, so
         // arrows POSTed /move on a walk this tab only watched.
