@@ -1254,12 +1254,17 @@ function leaveSpectate() {
   // Join-from-spectate sets the seat before this call and
   // keeps the session. Solve / Analyze after watch used to
   // keep the opener's session writable — arrows POSTed
-  // /move on a walk this tab only watched (N51). Do not
-  // null tour (N17).
+  // /move on a walk this tab only watched (N51).
   if (!wasWatching || state.seat) return;
   clearInterval(state.ghostTimer); state.ghostTimer = null;
   state.ghost = null;
   state.session = null;
+  // Spectated hunt stayed after the seat drop. Solve / Fog
+  // then Play scored a new walk against leftover waypoints,
+  // and a living tick asked tourFor with no seat (N56).
+  // startFog still must not null tour (N17).
+  state.tour = null;
+  state.tourGot = [];
   state.joined = null;
   state.trails = {};
   state.won = null;

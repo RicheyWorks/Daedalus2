@@ -1839,7 +1839,6 @@ async function check(name, fn) {
       const leave = j.indexOf('leaveSpectate()');
       return watch >= 0 && drop > watch && s.includes('state.seat')
           && s.includes('resubscribe()')
-          && !s.includes('state.tour = null')
           && seat >= 0 && leave > seat;
     });
     return [src, src ? 'watch leave drops the leftover opener seat'
@@ -1927,6 +1926,23 @@ async function check(name, fn) {
     });
     return [src, src ? 'Play empties leftover arena before seating'
         : 'N55 source pin failed'];
+  });
+
+  await check('N56. leaving a watch drops leftover Hunt coins', async () => {
+    // Old body: N51 dropped the seat and kept the spectated tour.
+    // Solve / Fog then Play scored a new walk against leftover
+    // waypoints; a living tick asked tourFor with no seat.
+    const src = await page.evaluate(() => {
+      const s = leaveSpectate.toString();
+      const fog = startFog.toString();
+      const drop = s.indexOf('state.session = null');
+      const tour = s.indexOf('state.tour = null');
+      const keep = s.indexOf('if (state.maze)');
+      return drop >= 0 && tour > drop && tour < keep
+          && !fog.includes('state.tour = null');
+    });
+    return [src, src ? 'watch leave drops leftover spectated hunt'
+        : 'N56 source pin failed'];
   });
 
   await check('N30. late /solve after Generate does not paint the maze now on screen', async () => {

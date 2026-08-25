@@ -807,9 +807,16 @@ class WebUiSmokeTest {
         assertThat(n51Drop).isGreaterThan(n51Watch);
         assertThat(n51).contains("state.seat");
         assertThat(n51).contains("resubscribe()");
-        assertThat(n51).doesNotContain("state.tour = null");
         assertThat(n51Keep).isGreaterThan(n51Drop);
         assertThat(n51Pin).isGreaterThan(n51Keep);
+        // N56. Spectated hunt stayed after the seat drop. Solve /
+        // Fog then Play scored a new walk against leftover
+        // waypoints; a living tick asked tourFor with no seat.
+        // Drop tour with the leftover seat. startFog still must
+        // not null tour (N17).
+        int n56Tour = n51.indexOf("state.tour = null");
+        assertThat(n56Tour).isGreaterThan(n51Drop);
+        assertThat(n56Tour).isLessThan(n51Keep);
         // N52. leaveMaze must null the maze before leaveSpectate
         // so that pin cannot rewrite History.
         String n52Leave = html.substring(html.indexOf("function leaveMaze"),

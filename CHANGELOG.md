@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Leaving a watch drops leftover Hunt coins.** N51 dropped the seat and kept the spectated tour. Solve / Fog then Play scored a new walk against leftover waypoints, and a living tick asked `tourFor` with no seat. Drop `state.tour` with the leftover seat (N56). `startFog` still must not null tour (N17). Join-from-spectate still keeps the hunt.
+
 - **Open session drops leftover Race lanes.** Race stayed armed after Play, so leftover arena painted over the walk. Drop `state.race` after the session POST discard (N55). Hunt still calls `play()` after installing tour — do not null tour (N50). Fog still keeps tour (N17).
 
 - **Back onto `""` / `#generator=` does not leave the adopted generate recipe in the form.** `leaveMaze` dropped the canvas; rows / seed / braid still named the maze the bar no longer named, so Generate rebuilt it. Restore catalog defaults (N54). Do not pin.
