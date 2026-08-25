@@ -1609,6 +1609,33 @@ class WebUiSmokeTest {
         assertLeftoverAuthStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N119. Remaining leftover daily / breed stays.
+        // adoptMaze / playStage / leaveMaze already drop
+        // leftover dailyId and leftover breed parent on
+        // maze change. These stays must not be taught away:
+        // Hunt / Play / Fog / theory / Join leftover daily
+        // stay — same maze still daily; leftover prevMazeId
+        // / leftover #breed stay — breed parent still
+        // valid; Hunt through Play and Join-from-spectate
+        // still keep tour; Fog still keeps tour (N17);
+        // leftover Solve path stays as a theory route hint
+        // (N62); Join leftover ghost stays (N86).
+        assertLeftoverDailyBreedStay(html, "async function startTour", "function sameCell");
+        assertLeftoverDailyBreedStay(html, "async function play()", "async function join()");
+        assertLeftoverDailyBreedStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverDailyBreedStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverDailyBreedStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverDailyBreedStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverDailyBreedStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverDailyBreedStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverDailyBreedStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -2588,6 +2615,24 @@ class WebUiSmokeTest {
         assertThat(body).doesNotContain("TOKEN_KEY");
         assertThat(body).doesNotContain("authWho");
         assertThat(body).doesNotContain("sessionStorage");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover daily / breed stay (N119). Same maze still
+     * daily. Breed parent still valid. Must not drop
+     * dailyId or prevMazeId. Must not disable #breed. Must
+     * not null tour.
+     */
+    private static void assertLeftoverDailyBreedStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("state.dailyId = null");
+        assertThat(body).doesNotContain("state.prevMazeId = null");
+        assertThat(body).doesNotContain("$(\"breed\").disabled");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
