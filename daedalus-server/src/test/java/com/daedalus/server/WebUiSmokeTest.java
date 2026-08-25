@@ -1378,6 +1378,24 @@ class WebUiSmokeTest {
         int n56Tour = n51.indexOf("state.tour = null");
         assertThat(n56Tour).isGreaterThan(n51Drop);
         assertThat(n56Tour).isLessThan(n51Keep);
+        // N105. leaveSpectate dropped the leftover seat (N51)
+        // and spectated hunt (N56) but left leftover spectate
+        // status, so leftover "spectating session… — read-only"
+        // named a watch that is gone under Analyze / Identify /
+        // heat / sanctuaries / lens. Rewrite after the seat
+        // drop. Join-from-spectate sets the seat first and
+        // keeps the session — must return before this write.
+        // startFog still must not null tour (N17) except this
+        // leave-watch path (N56).
+        int n105Flash = n51.indexOf("clearTimeout(statusFlashTimer)");
+        int n105Status = n51.indexOf("$(\"status\").textContent");
+        int n105Keep = n51.indexOf("if (!wasWatching || state.seat) return");
+        assertThat(n105Flash).isGreaterThan(n51Drop);
+        assertThat(n105Flash).isLessThan(n51Keep);
+        assertThat(n105Status).isGreaterThan(n105Flash);
+        assertThat(n105Status).isLessThan(n51Keep);
+        assertThat(n105Keep).isGreaterThanOrEqualTo(0);
+        assertThat(n105Keep).isLessThan(n105Status);
         // N52. leaveMaze must null the maze before leaveSpectate
         // so that pin cannot rewrite History.
         String n52Leave = html.substring(html.indexOf("function leaveMaze"),

@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Leaving a watch drops leftover spectate status.** Generate / Fog / Play rewrite `#status` (N48). Solve / Hardest / Race / Compare rewrite after leaving a watch (N101–N104). Analyze / Identify / heat / sanctuaries / lens call `leaveSpectate` and left leftover "spectating session… — read-only" naming a watch that is gone under the cuts. Restore the no-seat prompt after the leftover seat drop (N105). Join-from-spectate sets the seat first and keeps the session. Fog still keeps tour (N17) except this leave-watch path (N56).
+
 - **Compare drops leftover Hunt status.** Generate / Fog / Play rewrite `#status` (N48). Solve / Hardest / Race rewrite after dropping tour (N101–N103). Compare dropped tour (N53) but left leftover hunt text armed, so leftover "waypoint hunt" named a hunt that is gone under the table. Restore the session line after the maze-id discard (N104). Hover still arms a preview. Fog still keeps tour (N17).
 
 - **Race drops leftover Hunt status.** Generate / Fog / Play rewrite `#status` (N48). Solve / Hardest rewrite after dropping tour (N101 / N102). Race dropped tour (N53) but left leftover hunt text armed, so leftover "waypoint hunt" named a hunt that is gone under the arena. Restore the session line after the maze-id discard (N103). Fog still keeps tour (N17).

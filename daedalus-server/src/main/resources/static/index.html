@@ -1268,6 +1268,18 @@ function leaveSpectate() {
   state.joined = null;
   state.trails = {};
   state.won = null;
+  // Leftover spectate status stays after the seat drop.
+  // Generate / Fog / Play rewrite #status (N48). Solve /
+  // Hardest / Race / Compare rewrite after leaving a
+  // watch (N101–N104). Analyze / Identify / heat /
+  // sanctuaries / lens call leaveSpectate and left
+  // leftover "spectating session… — read-only" naming a
+  // watch that is gone under the cuts (N105). Join-from-
+  // spectate sets the seat first and keeps the session —
+  // do not rewrite. startFog still must not null tour
+  // (N17) except this leave-watch path (N56).
+  clearTimeout(statusFlashTimer); statusFlashTimer = null;
+  $("status").textContent = "arrow keys move once a session is open";
   $("join").disabled = true;
   $("join").textContent = "Join as second player";
   $("join").title = "Requires daedalus.session.multiplayer=true";
