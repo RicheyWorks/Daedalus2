@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Solve drops leftover Hunt status.** Generate / Fog / Play already rewrite `#status` (N48). Solve dropped tour (N65) but left leftover hunt text armed, so leftover "waypoint hunt" named a hunt that is gone under the solver path. Restore the session line after the maze-id discard (N101). Fog still keeps tour (N17).
+
 - **Leftover Solve stats stays.** Competing writers rewrite `#stats` (N92–N99). Solve still appends current walk figures. ASCII, living, ghost, and the lab do not rewrite `#stats`. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N100).
 
 - **Theory writes drop leftover Solve stats.** Play / Hunt / Join / Fog / Hardest / Race / Compare rewrite `#stats` (N92–N98). Analyze / Identify / heat / sanctuaries / lens left leftover solver numbers armed, so leftover figures named the previous walk under the cuts, field, rings, bands, or Identify sidebar. Rewrite the maze identity after the maze-id discard (N99). Hunt and a leftover Solve path stay. Fog still keeps tour (N17).

@@ -1080,6 +1080,18 @@ class WebUiSmokeTest {
         assertThat(n81Timer).isLessThan(n65Path);
         assertThat(n81Gone).isGreaterThan(n81Timer);
         assertThat(n81Gone).isLessThan(n65Path);
+        // N101. Solve left leftover Hunt status armed.
+        // Generate / Fog / Play rewrite #status (N48). Solve
+        // dropped tour (N65) but left leftover hunt text, so
+        // leftover "waypoint hunt" named a hunt that is gone
+        // under the solver path. Rewrite after the maze-id
+        // discard. startFog still must not null tour (N17).
+        int n101Flash = n65.indexOf("clearTimeout(statusFlashTimer)");
+        int n101Status = n65.indexOf("$(\"status\").textContent");
+        assertThat(n101Flash).isGreaterThan(n65Discard);
+        assertThat(n101Flash).isLessThan(n65Path);
+        assertThat(n101Status).isGreaterThan(n101Flash);
+        assertThat(n101Status).isLessThan(n65Path);
         // N59. Hardest left Hunt coins and Race lanes armed.
         // Leftover tourWalk / leftover arena painted over the
         // cruel route. Drop those after the maze-id discard.
