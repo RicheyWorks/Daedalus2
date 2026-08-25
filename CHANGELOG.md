@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Leftover paint stays.** Competing writers drop leftover paint. Hunt stays during theory; a leftover Solve path stays as a theory route hint (N62). Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N91).
+
 - **Compare drops leftover Solve path.** Race already drops leftover path. Compare left it armed, so leftover solver route painted under the table until a hover. Drop that path after the maze-id discard (N90). Hover still arms a preview. Fog still keeps tour (N17).
 
 - **Race drops leftover Compare table.** Hunt already empties leftover hover (N50). Race left the table armed, so leftover cuts caption or a leftover row hover painted under the arena. Empty `#compareBox` after the maze-id discard (N89). Fog still keeps tour (N17).

@@ -473,6 +473,17 @@ class WebUiSmokeTest {
         assertTourStay(html, "async function startTour", "function sameCell");
         assertLeftoverComparePathDroppedAfterDiscard(html, "async function analyzeStructure",
                 "function paintAnalysisCaption", "state.analysis = a");
+        // N91. Remaining leftover paint stays. Competing writers
+        // drop leftover paint. These stays must not be taught
+        // away: Hunt during theory, leftover Solve path as a
+        // theory route hint (N62), Hunt through Play and
+        // Join-from-spectate, Fog keeps tour (N17), Join leftover
+        // ghost (N86). Race and ghost stay recordings when you
+        // asked for them.
+        assertThat(join).doesNotContain("state.ghost = null");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverSolveSearchDroppedAfterDiscard(html, "async function analyzeStructure",
+                "function paintAnalysisCaption", "state.analysis = a");
         // N24. confirmWin GETs /session/{id} then declareWin with no
         // fog/session re-check. Fog mid-flight painted a win (status,
         // leaderboard, campaign) on a fog walk. refreshTourStatus is
