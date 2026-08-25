@@ -3919,6 +3919,13 @@ async function startFog() {
   // the fog walk without Play (N109). startFog still must
   // not null tour (N17).
   state.trails = {};
+  // Leftover won stays after Fog. Generate / leave-watch /
+  // leaveMaze / Play drop leftover won. Fog dropped the
+  // seat and leftover trails (N109) but left leftover won,
+  // so leftover victory ring painted after a living tick
+  // ended the fog walk without Play (N110). startFog still
+  // must not null tour (N17).
+  state.won = null;
   $("join").disabled = true;
   // Open session pinned #session= and subscribed /player. N15 dropped the
   // seat and hash; the subscription and ghost ticker stayed, so a joiner
