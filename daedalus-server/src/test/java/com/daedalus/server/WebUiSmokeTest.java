@@ -882,6 +882,19 @@ class WebUiSmokeTest {
         assertThat(n55Race).isLessThan(n55Seat);
         assertThat(n32).contains("animGen++");
         assertThat(n32).doesNotContain("state.tour = null");
+        // N57. Open session left Compare hover armed. Leftover
+        // solver path painted over the walk. Empty #compareBox
+        // and drop path after the session POST discard when
+        // caption is compare. Do not null tour.
+        int n57Cap = n32.indexOf("caption === \"compare\"", n32Maze);
+        int n57Path = n32.indexOf("state.path = null", n32Maze);
+        int n57Box = n32.indexOf("$(\"compareBox\").innerHTML = \"\"", n32Maze);
+        assertThat(n57Cap).isGreaterThan(n32Maze);
+        assertThat(n57Cap).isLessThan(n55Seat);
+        assertThat(n57Path).isGreaterThan(n57Cap);
+        assertThat(n57Path).isLessThan(n55Seat);
+        assertThat(n57Box).isGreaterThan(n57Path);
+        assertThat(n57Box).isLessThan(n55Seat);
         // N33. hydrateSpectatorOverlays GETs /session/{id}/tour then
         // always wrote state.tour. Generate / Fog / a new #session=
         // mid-flight painted the old hunt onto the maze now on screen.

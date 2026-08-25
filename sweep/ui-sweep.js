@@ -1945,6 +1945,25 @@ async function check(name, fn) {
         : 'N56 source pin failed'];
   });
 
+  await check('N57. Open session drops leftover Compare hover', async () => {
+    // Old body: play() dropped Race (N55) and left Compare armed.
+    // Hover painted a leftover solver path over the walk.
+    const src = await page.evaluate(() => {
+      const s = play.toString();
+      const post = s.indexOf('/maze/${mazeId}/session');
+      const discard = s.indexOf('state.maze.id !== mazeId', post);
+      const cap = s.indexOf('caption === "compare"', discard);
+      const path = s.indexOf('state.path = null', discard);
+      const box = s.indexOf('$("compareBox").innerHTML = ""', discard);
+      const seat = s.indexOf('state.session =', discard);
+      return post >= 0 && discard > post && cap > discard && path > cap
+          && box > path && box < seat
+          && !s.includes('state.tour = null');
+    });
+    return [src, src ? 'Play empties leftover Compare hover before seating'
+        : 'N57 source pin failed'];
+  });
+
   await check('N30. late /solve after Generate does not paint the maze now on screen', async () => {
     // Old body: solve / race / compare POSTed /solve then painted
     // after only a fog check. Generate mid-flight applied the old
