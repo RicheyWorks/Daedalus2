@@ -1584,6 +1584,31 @@ class WebUiSmokeTest {
         assertLeftoverTourGotStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N118. Remaining leftover auth stays. login / logout
+        // already remint the token. These stays must not be
+        // taught away: Hunt / Play / Fog / theory / Join
+        // leftover auth stay — still signed in; leftover
+        // #authWho stay — the name you signed in as; Hunt
+        // through Play and Join-from-spectate still keep
+        // tour; Fog still keeps tour (N17); leftover Solve
+        // path stays as a theory route hint (N62); Join
+        // leftover ghost stays (N86).
+        assertLeftoverAuthStay(html, "async function startTour", "function sameCell");
+        assertLeftoverAuthStay(html, "async function play()", "async function join()");
+        assertLeftoverAuthStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverAuthStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverAuthStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverAuthStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverAuthStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverAuthStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverAuthStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -2543,6 +2568,26 @@ class WebUiSmokeTest {
         assertThat(to).isGreaterThan(from);
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("state.tourGot = []");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover auth stay (N118). Still signed in. Must not
+     * logout. Must not rewrite the token or #authWho. Must
+     * not null tour.
+     */
+    private static void assertLeftoverAuthStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("logout()");
+        assertThat(body).doesNotContain("state.token =");
+        assertThat(body).doesNotContain("state.user =");
+        assertThat(body).doesNotContain("TOKEN_KEY");
+        assertThat(body).doesNotContain("authWho");
+        assertThat(body).doesNotContain("sessionStorage");
         assertThat(body).doesNotContain("state.tour = null");
     }
 

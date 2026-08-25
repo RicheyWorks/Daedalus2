@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Leftover auth stays.** login / logout already remint the token. Hunt / Play / Fog / theory / Join leftover auth stay — still signed in. Leftover `#authWho` stay — the name you signed in as. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N118).
+
 - **Fog / Play drop leftover tourGot.** Hunt remints collected coins. Fog dropped the seat and leftover won (N110) but left leftover tourGot; Play reminted trails / won but left leftover tourGot, so leftover collected coins painted on the new seat until the first move reminted. Drop leftover tourGot after the maze-id discard (N117). Theory leftover tourGot stay — current hunt. Join leftover tourGot stay — same session. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17).
 
 - **Leftover lab / tournament / PNG stays.** Measure and Run tournament remint those panels when you ask. adoptMaze / leaveMaze already show or hide the snapshot. Hunt / Play / Fog / theory / Join leftover lab stay — the curve you asked for. Leftover tournament stay — the sample you asked for. Leftover PNG stay — same maze canvas (fog snapshot is the fog walk). Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N116).
