@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Hardest drops leftover Hunt coins and Race lanes.** Race / Compare already drop leftover Hunt (N53). Hardest left the Held-Karp walk and leftover arena armed, so leftover coins and leftover lanes painted over the cruel route. Drop those overlays after the maze-id discard (N59). Fog still keeps tour (N17).
+
 - **Open session drops leftover Hardest walk.** N55 / N57 dropped Race and Compare; Hardest stayed, so leftover gold painted over the seat and a living tick reminted it. Drop `state.hardest` after the session POST discard (N58). Hunt still calls `play()` after installing tour — do not null tour.
 
 - **Open session drops leftover Compare hover.** N55 dropped Race lanes; the Compare table stayed, so hovering a row painted a leftover solver path over the walk just seated. Empty `#compareBox` and drop that path after the session POST discard (N57). Hunt still calls `play()` after installing tour — do not null tour.

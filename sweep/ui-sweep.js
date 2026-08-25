@@ -1889,6 +1889,26 @@ async function check(name, fn) {
         : 'N53 source pin failed'];
   });
 
+  await check('N59. Hardest drops leftover Hunt coins and Race lanes', async () => {
+    // Old body: Race / Compare dropped leftover Hunt (N53);
+    // Hardest left tourWalk and leftover arena armed. Leftover
+    // coins / leftover lanes painted over the cruel route.
+    const src = await page.evaluate(() => {
+      const h = hardestRoute.toString();
+      const fog = startFog.toString();
+      const d = h.lastIndexOf('state.maze.id !== mazeId');
+      const t = h.indexOf('state.tour = null');
+      const r = h.indexOf('state.race = null');
+      const p = h.indexOf('state.path = null');
+      const set = h.indexOf('state.hardest = h');
+      return d >= 0 && t > d && t < set && r > t && r < set
+          && p > r && p < set && h.includes('animGen++')
+          && !fog.includes('state.tour = null');
+    });
+    return [src, src ? 'Hardest empties leftover hunt and arena'
+        : 'N59 source pin failed'];
+  });
+
   await check('N54. leaveMaze restores catalog generate defaults', async () => {
     // Old body: leaveMaze dropped the canvas and left the adopted
     // recipe. Back onto "" / #generator= then Generate rebuilt

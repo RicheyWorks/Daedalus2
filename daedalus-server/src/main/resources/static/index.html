@@ -2054,6 +2054,15 @@ async function hardestRoute() {
   // route would paint the maze now on screen. Discard — same as N18 / N30.
   if (state.fog) return;
   if (!state.maze || state.maze.id !== mazeId) return;
+  // Hunt coins / Race lanes stay armed after Hardest. Leftover
+  // tourWalk is not the cruel route; leftover arena is not
+  // either (N59). Race / Compare already drop leftover Hunt
+  // (N53). startFog still must not null tour (N17).
+  state.tour = null; state.tourGot = [];
+  state.race = null;
+  animGen++;
+  state.path = null; state.expansions = [];
+  state.searchProgress = 1; state.pathProgress = 1;
   state.hardest = h;
   state.caption = "hardest";
   log("state", `hardest route: ${h.hardestLength} steps vs ${h.shortestLength} shortest `

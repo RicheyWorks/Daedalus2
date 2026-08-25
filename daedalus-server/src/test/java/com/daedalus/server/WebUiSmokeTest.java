@@ -787,6 +787,29 @@ class WebUiSmokeTest {
         assertThat(n53CmpTour).isGreaterThan(n53CmpDiscard);
         assertThat(n53CmpTour).isLessThan(n53CmpBox);
         assertThat(n53Cmp).contains("state.hardest = null");
+        // N59. Hardest left Hunt coins and Race lanes armed.
+        // Leftover tourWalk / leftover arena painted over the
+        // cruel route. Drop those after the maze-id discard.
+        // Race / Compare already drop leftover Hunt (N53).
+        // startFog still must not null tour (N17).
+        int n59From = html.indexOf("async function hardestRoute");
+        int n59To = html.indexOf("function paintHardestCaption");
+        assertThat(n59From).isGreaterThanOrEqualTo(0);
+        assertThat(n59To).isGreaterThan(n59From);
+        String n59 = html.substring(n59From, n59To);
+        int n59Discard = n59.lastIndexOf("state.maze.id !== mazeId");
+        int n59Tour = n59.indexOf("state.tour = null");
+        int n59Race = n59.indexOf("state.race = null");
+        int n59Path = n59.indexOf("state.path = null");
+        int n59Set = n59.indexOf("state.hardest = h");
+        assertThat(n59Discard).isGreaterThanOrEqualTo(0);
+        assertThat(n59Tour).isGreaterThan(n59Discard);
+        assertThat(n59Tour).isLessThan(n59Set);
+        assertThat(n59Race).isGreaterThan(n59Tour);
+        assertThat(n59Race).isLessThan(n59Set);
+        assertThat(n59Path).isGreaterThan(n59Race);
+        assertThat(n59Path).isLessThan(n59Set);
+        assertThat(n59).contains("animGen++");
         // N51. leaveSpectate only cleared readOnly. Solve / Analyze
         // after a watch kept the opener's session writable, so
         // arrows POSTed /move on a walk this tab only watched.
