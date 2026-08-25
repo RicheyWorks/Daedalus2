@@ -419,6 +419,15 @@ class WebUiSmokeTest {
         assertThat(n75Field).isLessThan(joinSeat);
         assertThat(join).contains("state.lens = null");
         assertThat(join).contains("state.fingerprint = null");
+        // N76. Join left a leftover Solve path armed. Open session
+        // drops it (N67). Join did not, so leftover solver route
+        // reminted POST /solve under the seat just taken. Drop
+        // path after the join POST discard. Join-from-spectate
+        // still keeps the hunt — must not null tour. startFog
+        // still must not null tour (N17).
+        int n76Path = join.indexOf("state.path = null");
+        assertThat(n76Path).isGreaterThan(joinMazeCheck);
+        assertThat(n76Path).isLessThan(joinSeat);
         // N24. confirmWin GETs /session/{id} then declareWin with no
         // fog/session re-check. Fog mid-flight painted a win (status,
         // leaderboard, campaign) on a fog walk. refreshTourStatus is

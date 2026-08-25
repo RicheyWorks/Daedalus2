@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Join drops leftover Solve path.** Open session already drops leftover path (N67). Join left the solver route armed, so leftover path painted under the seat just taken and a living tick reminted `POST /solve`. Drop that path after the join POST discard (N76). Join-from-spectate still keeps the hunt. Fog still keeps tour (N17).
+
 - **Join drops leftover sibling theory remints.** Open session already drops leftover cuts (N66). Join left leftover analysis armed, so leftover cuts painted under the seat just taken and a living tick reminted `GET /analysis`. Drop those overlays after the join POST discard (N75). Join-from-spectate still keeps the hunt. Fog still keeps tour (N17).
 
 - **Join drops leftover ASCII.** Open session hides `#asciiOut` (N68). Join left the dump armed, so leftover art reminted the text/plain maze under the seat just taken. Hide it after the join POST discard (N74). Join-from-spectate still keeps the hunt. Fog still keeps tour (N17).

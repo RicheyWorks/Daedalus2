@@ -3118,6 +3118,13 @@ async function join() {
       state.caption = null;
       $("compareBox").innerHTML = "";
     }
+    // Leftover Solve path stays armed after Join. Open session
+    // drops it (N67). Join did not, so leftover solver route
+    // reminted POST /solve under the seat just taken (N76).
+    // Join-from-spectate still keeps the hunt — do not null
+    // tour. startFog still must not null tour (N17).
+    state.path = null;
+    state.expansions = [];
     state.session.positions[name] = s.position;
     state.trails[name] = [s.position];
     if (fromSpectate) {
