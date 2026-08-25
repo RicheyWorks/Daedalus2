@@ -1636,6 +1636,28 @@ class WebUiSmokeTest {
         assertLeftoverDailyBreedStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N120. Remaining leftover hash on Hunt / theory stays.
+        // Play / Fog / Join-from-spectate remint the bar when
+        // the exclusive kind changes. These stays must not be
+        // taught away: Hunt leftover hash stay — same maze
+        // (play() remints #session= only when it seats);
+        // theory leftover hash stay — same maze; Hunt through
+        // Play still keeps tour; Fog still keeps tour (N17);
+        // leftover Solve path stays as a theory route hint
+        // (N62).
+        assertLeftoverHashStay(html, "async function startTour", "function sameCell");
+        assertLeftoverHashStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverHashStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverHashStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverHashStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverHashStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -2633,6 +2655,22 @@ class WebUiSmokeTest {
         assertThat(body).doesNotContain("state.dailyId = null");
         assertThat(body).doesNotContain("state.prevMazeId = null");
         assertThat(body).doesNotContain("$(\"breed\").disabled");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover hash stay on Hunt / theory (N120). Same maze
+     * still owns the bar. Play / Fog / Join remint when the
+     * exclusive kind changes. Must not pinHash. Must not
+     * null tour.
+     */
+    private static void assertLeftoverHashStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("pinHash()");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
