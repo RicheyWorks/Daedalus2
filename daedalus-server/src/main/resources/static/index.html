@@ -3103,6 +3103,21 @@ async function join() {
     // not null tour. startFog still must not null tour (N17).
     $("asciiOut").hidden = true;
     $("asciiOut").textContent = "";
+    // Sibling theory stays armed after Join. Open session
+    // drops leftover cuts (N66). Join did not, so leftover
+    // analysis reminted GET /analysis under the seat just
+    // taken (N75). Join-from-spectate still keeps the hunt
+    // — do not null tour. startFog still must not null tour
+    // (N17).
+    state.analysis = null; state.field = null;
+    state.sanctuaries = null; state.lens = null;
+    state.fingerprint = null;
+    if (state.caption === "analysis" || state.caption === "field"
+        || state.caption === "sanctuaries" || state.caption === "lens"
+        || state.caption === "fingerprint") {
+      state.caption = null;
+      $("compareBox").innerHTML = "";
+    }
     state.session.positions[name] = s.position;
     state.trails[name] = [s.position];
     if (fromSpectate) {

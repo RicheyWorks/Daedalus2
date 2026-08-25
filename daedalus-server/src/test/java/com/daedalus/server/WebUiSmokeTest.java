@@ -405,6 +405,20 @@ class WebUiSmokeTest {
         assertThat(n74Clear).isGreaterThan(n74Hide);
         assertThat(n74Clear).isLessThan(joinSeat);
         assertThat(join).doesNotContain("state.tour = null");
+        // N75. Join left sibling theory armed. Open session
+        // drops leftover cuts (N66). Join did not, so leftover
+        // analysis reminted GET /analysis under the seat just
+        // taken. Drop those after the join POST discard.
+        // Join-from-spectate still keeps the hunt — must not
+        // null tour. startFog still must not null tour (N17).
+        int n75An = join.indexOf("state.analysis = null");
+        int n75Field = join.indexOf("state.field = null");
+        assertThat(n75An).isGreaterThan(joinMazeCheck);
+        assertThat(n75An).isLessThan(joinSeat);
+        assertThat(n75Field).isGreaterThan(n75An);
+        assertThat(n75Field).isLessThan(joinSeat);
+        assertThat(join).contains("state.lens = null");
+        assertThat(join).contains("state.fingerprint = null");
         // N24. confirmWin GETs /session/{id} then declareWin with no
         // fog/session re-check. Fog mid-flight painted a win (status,
         // leaderboard, campaign) on a fog walk. refreshTourStatus is
