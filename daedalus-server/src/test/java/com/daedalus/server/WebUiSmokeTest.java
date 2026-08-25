@@ -1474,6 +1474,31 @@ class WebUiSmokeTest {
         assertLeftoverLiveStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N114. Remaining leftover form stays. adoptMaze /
+        // leaveMaze / applyRecipeToForm already rewrite the
+        // recipe on maze change. These stays must not be
+        // taught away: Hunt / Play / Fog / theory / Join
+        // leftover form stay — same maze recipe; Hunt
+        // through Play and Join-from-spectate still keep
+        // tour; Fog still keeps tour (N17); leftover Solve
+        // path stays as a theory route hint (N62); Join
+        // leftover ghost stays (N86).
+        assertLeftoverFormStay(html, "async function startTour", "function sameCell");
+        assertLeftoverFormStay(html, "async function play()", "async function join()");
+        assertLeftoverFormStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverFormStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverFormStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverFormStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverFormStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverFormStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverFormStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -2349,6 +2374,26 @@ class WebUiSmokeTest {
         assertThat(body).doesNotContain("startTrafficPolling");
         assertThat(body).doesNotContain("$(\"live\")");
         assertThat(body).doesNotContain("$(\"traffic\")");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover form stay (N114). Same maze still owns the
+     * recipe. Must not rewrite rows / cols / seed /
+     * generator / braid / hotspots. Must not null tour.
+     */
+    private static void assertLeftoverFormStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"rows\").value =");
+        assertThat(body).doesNotContain("$(\"cols\").value =");
+        assertThat(body).doesNotContain("$(\"seed\").value =");
+        assertThat(body).doesNotContain("$(\"generator\").value =");
+        assertThat(body).doesNotContain("$(\"braid\").value =");
+        assertThat(body).doesNotContain("$(\"hotspots\").value =");
         assertThat(body).doesNotContain("state.tour = null");
     }
 

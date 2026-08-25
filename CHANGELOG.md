@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Leftover form stays.** adoptMaze / leaveMaze / applyRecipeToForm already rewrite the recipe on maze change. Hunt / Play / Fog / theory / Join leftover form stay — same maze recipe. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N114).
+
 - **Leftover live / traffic stays.** adoptMaze / leaveMaze already drop leftover polls. Living under fog is honest (N19): the poller is maze-bound and re-polls the agent instead of GET `/maze`. Hunt / Play / Fog / theory / Join leftover live stay — same maze still erodes. Leftover `#live` / `#traffic` disabled stay — maze still alive. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N113).
 
 - **Leftover campaign stays.** `pinHash` already drops the ladder when the exclusive kind is not campaign. Hunt / Play / Fog / theory / Join leftover campaign stay — same maze. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N112).
