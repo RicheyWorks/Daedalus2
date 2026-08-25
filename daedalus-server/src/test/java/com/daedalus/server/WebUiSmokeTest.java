@@ -1246,6 +1246,20 @@ class WebUiSmokeTest {
                 "function paintSanctuariesCaption", "state.sanctuaries = s");
         assertLeftoverSolveStatsDroppedAfterDiscard(html, "async function heuristicLens",
                 "function paintLensCaption", "state.lens = l");
+        // N100. Remaining leftover #stats stays. Competing
+        // writers rewrite maze identity (N92–N99). These stays
+        // must not be taught away: Solve still appends current
+        // walk figures; ASCII / living / ghost / lab do not
+        // rewrite #stats; Hunt through Play and Join-from-
+        // spectate still keep tour; Fog still keeps tour
+        // (N17); leftover Solve path stays as a theory route
+        // hint (N62); Join leftover ghost stays (N86).
+        assertThat(n65).contains("$(\"stats\").innerHTML +=");
+        String n100Ascii = html.substring(html.indexOf("async function showAscii"),
+                html.indexOf("async function loadAlgorithms"));
+        assertThat(n100Ascii).doesNotContain("$(\"stats\")");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
