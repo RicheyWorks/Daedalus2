@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Open session drops leftover ASCII.** Generate and Fog hide `#asciiOut`. Play left the dump armed, so leftover art stayed on screen and a living tick reminted the text/plain maze under the seat. Hide it after the session POST discard (N68). Hunt still calls `play()` after installing tour — do not null tour. Fog still keeps tour (N17).
+
 - **Open session drops leftover Solve path.** N57 only dropped Compare hover. Solve then Play left the solver route armed, so leftover path painted over the seat and a living tick reminted `POST /solve`. Drop that path after the session POST discard (N67). Hunt still calls `play()` after installing tour — do not null tour. Fog still keeps tour (N17).
 
 - **Open session drops leftover sibling theory remints.** Theory writes already drop siblings (N63). Hardest / Solve already drop them (N64 / N65). Play left leftover cuts / heat armed, so leftover analysis painted under the seat and a living tick reminted `GET /analysis`. Drop those overlays after the session POST discard (N66). Hunt still calls `play()` after installing tour — do not null tour. Fog still keeps tour (N17).

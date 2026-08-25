@@ -2974,6 +2974,14 @@ async function play() {
   // tour (N17).
   state.path = null;
   state.expansions = [];
+  // Leftover ASCII stays armed after Open session. Generate
+  // and Fog hide #asciiOut. Play did not, so leftover dump
+  // stayed on screen and a living tick reminted the
+  // text/plain maze under the seat (N68). Hunt calls play()
+  // after installing tour — do not null tour (N50). startFog
+  // still must not null tour (N17).
+  $("asciiOut").hidden = true;
+  $("asciiOut").textContent = "";
   // Compare hover stays armed after Open session. Leftover
   // solver path paints over the walk (N57). Hunt already
   // emptied #compareBox (N50). Do not null tour.

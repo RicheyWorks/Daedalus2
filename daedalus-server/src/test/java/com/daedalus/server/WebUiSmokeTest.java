@@ -1055,6 +1055,18 @@ class WebUiSmokeTest {
         assertThat(n67Path).isGreaterThan(n32Maze);
         assertThat(n67Path).isLessThan(n55Seat);
         assertThat(n67Path).isLessThan(n57Cap);
+        // N68. Open session left leftover ASCII armed. Generate
+        // and Fog hide #asciiOut. Play did not, so leftover dump
+        // reminted the text/plain maze under the seat. Hide it
+        // after the session POST discard. Hunt calls play() after
+        // installing tour — must not null tour (N50). startFog
+        // still must not null tour (N17).
+        int n68Hide = n32.indexOf("$(\"asciiOut\").hidden = true", n32Maze);
+        int n68Clear = n32.indexOf("$(\"asciiOut\").textContent = \"\"", n32Maze);
+        assertThat(n68Hide).isGreaterThan(n32Maze);
+        assertThat(n68Hide).isLessThan(n55Seat);
+        assertThat(n68Clear).isGreaterThan(n68Hide);
+        assertThat(n68Clear).isLessThan(n55Seat);
         // N33. hydrateSpectatorOverlays GETs /session/{id}/tour then
         // always wrote state.tour. Generate / Fog / a new #session=
         // mid-flight painted the old hunt onto the maze now on screen.
