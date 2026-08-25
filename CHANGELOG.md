@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Theory writes drop leftover Solve stats.** Play / Hunt / Join / Fog / Hardest / Race / Compare rewrite `#stats` (N92–N98). Analyze / Identify / heat / sanctuaries / lens left leftover solver numbers armed, so leftover figures named the previous walk under the cuts, field, rings, bands, or Identify sidebar. Rewrite the maze identity after the maze-id discard (N99). Hunt and a leftover Solve path stay. Fog still keeps tour (N17).
+
 - **Compare drops leftover Solve stats.** Play / Hunt / Join / Fog / Hardest / Race rewrite `#stats` (N92–N97). Compare left leftover solver numbers armed, so leftover figures named the previous walk under the table. Rewrite the maze identity after the maze-id discard (N98). Hover still arms a preview. Fog still keeps tour (N17).
 
 - **Race drops leftover Solve stats.** Play / Hunt / Join / Fog / Hardest rewrite `#stats` (N92–N96). Race left leftover solver numbers armed, so leftover figures named the previous walk under the arena. Rewrite the maze identity after the maze-id discard (N97). Fog still keeps tour (N17).

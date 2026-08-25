@@ -1808,6 +1808,18 @@ async function identifyGenerator() {
   // still must not null tour (N17).
   $("asciiOut").hidden = true;
   $("asciiOut").textContent = "";
+  // Leftover Solve stats stay after Identify. Play / Hunt /
+  // Join / Fog / Hardest / Race / Compare rewrite #stats
+  // (N92–N98). Theory writes did not, so leftover solver
+  // numbers named the previous walk under the sidebar (N99).
+  // Hunt and a leftover Solve path stay. startFog still
+  // must not null tour (N17).
+  $("stats").innerHTML =
+      `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
+      + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
+      + `&middot; <span>seed</span> ${state.maze.seed}`
+      + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
+      + `<br>`;
   state.fingerprint = f;
   state.caption = "fingerprint";
   log("state", `fingerprint: structure says ${f.predictedGeneratorId}`
@@ -2125,6 +2137,18 @@ async function analyzeStructure() {
   // startFog still must not null tour (N17).
   $("asciiOut").hidden = true;
   $("asciiOut").textContent = "";
+  // Leftover Solve stats stay after Analyze. Play / Hunt /
+  // Join / Fog / Hardest / Race / Compare rewrite #stats
+  // (N92–N98). Theory writes did not, so leftover solver
+  // numbers named the previous walk under the cuts (N99).
+  // Hunt and a leftover Solve path stay. startFog still
+  // must not null tour (N17).
+  $("stats").innerHTML =
+      `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
+      + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
+      + `&middot; <span>seed</span> ${state.maze.seed}`
+      + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
+      + `<br>`;
   state.analysis = a;
   state.caption = "analysis";
   const cp = a.cutSize === 1 ? "1 chokepoint" : `${a.cutSize} chokepoints`;
@@ -2268,6 +2292,18 @@ async function distanceHeatMap() {
   // startFog still must not null tour (N17).
   $("asciiOut").hidden = true;
   $("asciiOut").textContent = "";
+  // Leftover Solve stats stay after heat. Play / Hunt /
+  // Join / Fog / Hardest / Race / Compare rewrite #stats
+  // (N92–N98). Theory writes did not, so leftover solver
+  // numbers named the previous walk under the field (N99).
+  // Hunt and a leftover Solve path stay. startFog still
+  // must not null tour (N17).
+  $("stats").innerHTML =
+      `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
+      + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
+      + `&middot; <span>seed</span> ${state.maze.seed}`
+      + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
+      + `<br>`;
   state.field = f;
   state.sanctuaries = null; state.lens = null;   // one overlay at a time stays readable
   state.caption = "field";
@@ -2331,6 +2367,18 @@ async function placeSanctuaries() {
   // startFog still must not null tour (N17).
   $("asciiOut").hidden = true;
   $("asciiOut").textContent = "";
+  // Leftover Solve stats stay after sanctuaries. Play /
+  // Hunt / Join / Fog / Hardest / Race / Compare rewrite
+  // #stats (N92–N98). Theory writes did not, so leftover
+  // solver numbers named the previous walk under the rings
+  // (N99). Hunt and a leftover Solve path stay. startFog
+  // still must not null tour (N17).
+  $("stats").innerHTML =
+      `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
+      + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
+      + `&middot; <span>seed</span> ${state.maze.seed}`
+      + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
+      + `<br>`;
   state.sanctuaries = s;
   state.field = null; state.lens = null;
   state.caption = "sanctuaries";
@@ -2474,6 +2522,18 @@ async function heuristicLens() {
   // startFog still must not null tour (N17).
   $("asciiOut").hidden = true;
   $("asciiOut").textContent = "";
+  // Leftover Solve stats stay after lens. Play / Hunt /
+  // Join / Fog / Hardest / Race / Compare rewrite #stats
+  // (N92–N98). Theory writes did not, so leftover solver
+  // numbers named the previous walk under the bands (N99).
+  // Hunt and a leftover Solve path stay. startFog still
+  // must not null tour (N17).
+  $("stats").innerHTML =
+      `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
+      + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
+      + `&middot; <span>seed</span> ${state.maze.seed}`
+      + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
+      + `<br>`;
   state.lens = l;
   state.field = null; state.sanctuaries = null;
   state.caption = "lens";

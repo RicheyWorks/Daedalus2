@@ -1228,6 +1228,24 @@ class WebUiSmokeTest {
                 "function paintSanctuariesCaption", "state.sanctuaries = s");
         assertLeftoverSolveSearchDroppedAfterDiscard(html, "async function heuristicLens",
                 "function paintLensCaption", "state.lens = l");
+        // N99. Theory writes left leftover Solve stats armed.
+        // Play / Hunt / Join / Fog / Hardest / Race / Compare
+        // rewrite #stats (N92–N98). Theory writes did not, so
+        // leftover solver numbers named the previous walk under
+        // the cuts / field / rings / bands / Identify sidebar.
+        // Rewrite after the maze-id discard. Hunt and a leftover
+        // Solve path stay. startFog still must not null tour
+        // (N17).
+        assertLeftoverSolveStatsDroppedAfterDiscard(html, "async function analyzeStructure",
+                "function paintAnalysisCaption", "state.analysis = a");
+        assertLeftoverSolveStatsDroppedAfterDiscard(html, "async function identifyGenerator",
+                "function paintFingerprintCaption", "state.fingerprint = f");
+        assertLeftoverSolveStatsDroppedAfterDiscard(html, "async function distanceHeatMap",
+                "function paintFieldCaption", "state.field = f");
+        assertLeftoverSolveStatsDroppedAfterDiscard(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption", "state.sanctuaries = s");
+        assertLeftoverSolveStatsDroppedAfterDiscard(html, "async function heuristicLens",
+                "function paintLensCaption", "state.lens = l");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -1989,6 +2007,28 @@ class WebUiSmokeTest {
         assertThat(path).isGreaterThan(cap);
         assertThat(path).isLessThan(out);
         assertThat(body).contains("state.searchProgress = 1");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover Solve stats after a theory write (N99).
+     * Rewrite maze identity after the maze-id discard,
+     * before the overlay write. Leftover path stays
+     * unless caption is compare (N62). Must not null tour.
+     */
+    private static void assertLeftoverSolveStatsDroppedAfterDiscard(String html, String start,
+            String end, String write) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        int discard = body.lastIndexOf("state.maze.id !== mazeId");
+        int stats = body.indexOf("$(\"stats\").innerHTML =");
+        int out = body.indexOf(write);
+        assertThat(discard).isGreaterThanOrEqualTo(0);
+        assertThat(stats).isGreaterThan(discard);
+        assertThat(stats).isLessThan(out);
         assertThat(body).doesNotContain("state.tour = null");
     }
 
