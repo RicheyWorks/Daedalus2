@@ -1161,6 +1161,19 @@ class WebUiSmokeTest {
         int n96Stats = n59.indexOf("$(\"stats\").innerHTML =");
         assertThat(n96Stats).isGreaterThan(n59Discard);
         assertThat(n96Stats).isLessThan(n59Set);
+        // N102. Hardest left leftover Hunt status armed.
+        // Generate / Fog / Play rewrite #status (N48). Solve
+        // rewrites after dropping tour (N101). Hardest dropped
+        // tour (N59) but left leftover hunt text, so leftover
+        // "waypoint hunt" named a hunt that is gone under the
+        // gold walk. Rewrite after the maze-id discard.
+        // startFog still must not null tour (N17).
+        int n102Flash = n59.indexOf("clearTimeout(statusFlashTimer)");
+        int n102Status = n59.indexOf("$(\"status\").textContent");
+        assertThat(n102Flash).isGreaterThan(n59Discard);
+        assertThat(n102Flash).isLessThan(n59Set);
+        assertThat(n102Status).isGreaterThan(n102Flash);
+        assertThat(n102Status).isLessThan(n59Set);
         // N60. Theory writes left Race lanes armed. Leftover arena
         // painted over the cuts / field / rings / bands / Identify
         // sidebar. Drop race after the maze-id discard. Hunt stays

@@ -2191,6 +2191,16 @@ async function hardestRoute() {
   // either (N59). Race / Compare already drop leftover Hunt
   // (N53). startFog still must not null tour (N17).
   state.tour = null; state.tourGot = [];
+  // Leftover Hunt status stays after Hardest. Generate /
+  // Fog / Play rewrite #status (N48). Solve rewrites after
+  // dropping tour (N101). Hardest dropped tour (N59) but
+  // left leftover hunt text, so leftover "waypoint hunt"
+  // named a hunt that is gone under the gold walk (N102).
+  // startFog still must not null tour (N17).
+  clearTimeout(statusFlashTimer); statusFlashTimer = null;
+  $("status").textContent = state.session
+      ? `session ${state.session.id.slice(0, 8)}… — arrow keys to move`
+      : "arrow keys move once a session is open";
   state.race = null;
   animGen++;
   state.path = null; state.expansions = [];
