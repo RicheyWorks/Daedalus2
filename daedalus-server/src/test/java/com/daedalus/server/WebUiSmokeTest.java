@@ -810,6 +810,21 @@ class WebUiSmokeTest {
         assertThat(n59Path).isGreaterThan(n59Race);
         assertThat(n59Path).isLessThan(n59Set);
         assertThat(n59).contains("animGen++");
+        // N60. Theory writes left Race lanes armed. Leftover arena
+        // painted over the cuts / field / rings / bands / Identify
+        // sidebar. Drop race after the maze-id discard. Hunt stays
+        // (chokepoints during a hunt are useful). startFog still
+        // must not null tour (N17).
+        assertLeftoverRaceDroppedAfterDiscard(html, "async function analyzeStructure",
+                "function paintAnalysisCaption", "state.analysis = a");
+        assertLeftoverRaceDroppedAfterDiscard(html, "async function identifyGenerator",
+                "function paintFingerprintCaption", "state.fingerprint = f");
+        assertLeftoverRaceDroppedAfterDiscard(html, "async function distanceHeatMap",
+                "function paintFieldCaption", "state.field = f");
+        assertLeftoverRaceDroppedAfterDiscard(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption", "state.sanctuaries = s");
+        assertLeftoverRaceDroppedAfterDiscard(html, "async function heuristicLens",
+                "function paintLensCaption", "state.lens = l");
         // N51. leaveSpectate only cleared readOnly. Solve / Analyze
         // after a watch kept the opener's session writable, so
         // arrows POSTed /move on a walk this tab only watched.
@@ -1370,6 +1385,27 @@ class WebUiSmokeTest {
         String body = html.substring(from, to);
         assertThat(body.indexOf("pinHash()")).isGreaterThan(body.indexOf("adoptMaze"));
         assertThat(body).doesNotContain("leaveCampaign()");
+    }
+
+    /**
+     * Leftover Race after a theory write (N60). Drop race after the
+     * maze-id discard, before the overlay write. Must not null tour.
+     */
+    private static void assertLeftoverRaceDroppedAfterDiscard(String html, String start,
+            String end, String write) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        int discard = body.lastIndexOf("state.maze.id !== mazeId");
+        int race = body.indexOf("state.race = null");
+        int out = body.indexOf(write);
+        assertThat(discard).isGreaterThanOrEqualTo(0);
+        assertThat(race).isGreaterThan(discard);
+        assertThat(race).isLessThan(out);
+        assertThat(body).contains("animGen++");
+        assertThat(body).doesNotContain("state.tour = null");
     }
 
     /** Fog discard (N18) plus maze-id discard after the fetch (N28/N30). */

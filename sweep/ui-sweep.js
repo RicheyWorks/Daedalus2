@@ -1909,6 +1909,33 @@ async function check(name, fn) {
         : 'N59 source pin failed'];
   });
 
+  await check('N60. theory writes drop leftover Race lanes', async () => {
+    // Old body: Hardest dropped leftover arena (N59); Analyze /
+    // Identify / heat / sanctuaries / lens left Race armed.
+    // Leftover lanes painted over the theory they asked for.
+    const src = await page.evaluate(() => {
+      const fog = startFog.toString();
+      const hunt = startTour.toString();
+      const after = (fn, write) => {
+        const s = fn.toString();
+        const d = s.lastIndexOf('state.maze.id !== mazeId');
+        const r = s.indexOf('state.race = null');
+        const w = s.indexOf(write);
+        return d >= 0 && r > d && r < w && s.includes('animGen++')
+            && !s.includes('state.tour = null');
+      };
+      return after(analyzeStructure, 'state.analysis = a')
+          && after(identifyGenerator, 'state.fingerprint = f')
+          && after(distanceHeatMap, 'state.field = f')
+          && after(placeSanctuaries, 'state.sanctuaries = s')
+          && after(heuristicLens, 'state.lens = l')
+          && !fog.includes('state.tour = null')
+          && !hunt.includes('state.tour = null');
+    });
+    return [src, src ? 'theory writes empty leftover arena'
+        : 'N60 source pin failed'];
+  });
+
   await check('N54. leaveMaze restores catalog generate defaults', async () => {
     // Old body: leaveMaze dropped the canvas and left the adopted
     // recipe. Back onto "" / #generator= then Generate rebuilt

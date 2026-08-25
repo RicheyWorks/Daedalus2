@@ -1769,6 +1769,10 @@ async function identifyGenerator() {
   if (!f) return;
   if (state.fog) return;
   if (!state.maze || state.maze.id !== mazeId) return;
+  // Race lanes stay armed after Identify. Leftover arena
+  // keeps racing under the sidebar (N60). Hunt stays.
+  state.race = null;
+  animGen++;
   state.fingerprint = f;
   state.caption = "fingerprint";
   log("state", `fingerprint: structure says ${f.predictedGeneratorId}`
@@ -2017,6 +2021,12 @@ async function analyzeStructure() {
   // on the maze now on screen. Discard — same as N18 / N28.
   if (state.fog) return;
   if (!state.maze || state.maze.id !== mazeId) return;
+  // Race lanes stay armed after Analyze. Leftover arena
+  // paints over the cuts (N60). Hunt stays — chokepoints
+  // during a hunt are useful. startFog still must not
+  // null tour (N17).
+  state.race = null;
+  animGen++;
   state.analysis = a;
   state.caption = "analysis";
   const cp = a.cutSize === 1 ? "1 chokepoint" : `${a.cutSize} chokepoints`;
@@ -2101,6 +2111,10 @@ async function distanceHeatMap() {
   const f = await api(`/maze/${mazeId}/distance-field`);
   if (state.fog) return;
   if (!state.maze || state.maze.id !== mazeId) return;
+  // Race lanes stay armed after the heat map. Leftover
+  // arena paints over the field (N60). Hunt stays.
+  state.race = null;
+  animGen++;
   state.field = f;
   state.sanctuaries = null; state.lens = null;   // one overlay at a time stays readable
   state.caption = "field";
@@ -2136,6 +2150,10 @@ async function placeSanctuaries() {
   // rings would paint the maze now on screen. Discard — same as N18 / N30.
   if (state.fog) return;
   if (!state.maze || state.maze.id !== mazeId) return;
+  // Race lanes stay armed after Sanctuaries. Leftover
+  // arena paints over the rings (N60). Hunt stays.
+  state.race = null;
+  animGen++;
   state.sanctuaries = s;
   state.field = null; state.lens = null;
   state.caption = "sanctuaries";
@@ -2251,6 +2269,10 @@ async function heuristicLens() {
   const l = await api(`/maze/${mazeId}/heuristic-lens?heuristic=${which}`);
   if (state.fog) return;
   if (!state.maze || state.maze.id !== mazeId) return;
+  // Race lanes stay armed after Lens. Leftover arena
+  // paints over the bands (N60). Hunt stays.
+  state.race = null;
+  animGen++;
   state.lens = l;
   state.field = null; state.sanctuaries = null;
   state.caption = "lens";

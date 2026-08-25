@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Analyze / Identify / heat / sanctuaries / lens drop leftover Race lanes.** Hardest already dropped leftover arena (N59). Those theory writes left Race armed, so leftover lanes painted over the cuts, field, rings, bands, or Identify sidebar. Drop `state.race` after the maze-id discard (N60). Hunt stays — chokepoints during a hunt are useful. Fog still keeps tour (N17).
+
 - **Hardest drops leftover Hunt coins and Race lanes.** Race / Compare already drop leftover Hunt (N53). Hardest left the Held-Karp walk and leftover arena armed, so leftover coins and leftover lanes painted over the cruel route. Drop those overlays after the maze-id discard (N59). Fog still keeps tour (N17).
 
 - **Open session drops leftover Hardest walk.** N55 / N57 dropped Race and Compare; Hardest stayed, so leftover gold painted over the seat and a living tick reminted it. Drop `state.hardest` after the session POST discard (N58). Hunt still calls `play()` after installing tour — do not null tour.
