@@ -1112,6 +1112,22 @@ class WebUiSmokeTest {
                 "function paintSanctuariesCaption", "state.sanctuaries = s");
         assertLeftoverComparePathDroppedAfterDiscard(html, "async function heuristicLens",
                 "function paintLensCaption", "state.lens = l");
+        // N87. Theory writes left leftover Solve search wash
+        // armed. Leftover path stays as a route hint (N62).
+        // Leftover expansions painted the wash under the cuts /
+        // field / rings / bands / Identify sidebar. Drop the
+        // wash after the maze-id discard. Hunt stays. startFog
+        // still must not null tour (N17).
+        assertLeftoverSolveSearchDroppedAfterDiscard(html, "async function analyzeStructure",
+                "function paintAnalysisCaption", "state.analysis = a");
+        assertLeftoverSolveSearchDroppedAfterDiscard(html, "async function identifyGenerator",
+                "function paintFingerprintCaption", "state.fingerprint = f");
+        assertLeftoverSolveSearchDroppedAfterDiscard(html, "async function distanceHeatMap",
+                "function paintFieldCaption", "state.field = f");
+        assertLeftoverSolveSearchDroppedAfterDiscard(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption", "state.sanctuaries = s");
+        assertLeftoverSolveSearchDroppedAfterDiscard(html, "async function heuristicLens",
+                "function paintLensCaption", "state.lens = l");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -1834,6 +1850,34 @@ class WebUiSmokeTest {
         assertThat(cap).isLessThan(out);
         assertThat(path).isGreaterThan(cap);
         assertThat(path).isLessThan(out);
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover Solve search wash after a theory write (N87).
+     * Drop expansions after the maze-id discard, before the
+     * overlay write. Leftover path stays unless caption is
+     * compare (N62). Must not null tour.
+     */
+    private static void assertLeftoverSolveSearchDroppedAfterDiscard(String html, String start,
+            String end, String write) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        int discard = body.lastIndexOf("state.maze.id !== mazeId");
+        int wash = body.indexOf("state.expansions = []");
+        int cap = body.indexOf("caption === \"compare\"");
+        int path = body.indexOf("state.path = null");
+        int out = body.indexOf(write);
+        assertThat(discard).isGreaterThanOrEqualTo(0);
+        assertThat(wash).isGreaterThan(discard);
+        assertThat(wash).isLessThan(out);
+        assertThat(wash).isLessThan(cap);
+        assertThat(path).isGreaterThan(cap);
+        assertThat(path).isLessThan(out);
+        assertThat(body).contains("state.searchProgress = 1");
         assertThat(body).doesNotContain("state.tour = null");
     }
 

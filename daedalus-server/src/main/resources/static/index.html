@@ -1777,9 +1777,16 @@ async function identifyGenerator() {
   state.race = null;
   animGen++;
   state.hardest = null;
+  // Leftover Solve search wash stays armed after Identify.
+  // Leftover path stays as a route hint (N62). Leftover
+  // expansions painted the search wash under the sidebar
+  // (N87). Hunt stays. startFog still must not null tour
+  // (N17).
+  state.expansions = [];
+  state.searchProgress = 1;
+  if (state.path) state.pathProgress = 1;
   if (state.caption === "compare") {
     state.path = null;
-    state.expansions = [];
   }
   // Ghost stays armed after Identify. Fog already drops the
   // ticker. Theory writes dropped leftover Race (N60) but
@@ -2077,9 +2084,16 @@ async function analyzeStructure() {
   state.race = null;
   animGen++;
   state.hardest = null;
+  // Leftover Solve search wash stays armed after Analyze.
+  // Leftover path stays as a route hint (N62). Leftover
+  // expansions painted the search wash under the cuts
+  // (N87). Hunt stays. startFog still must not null tour
+  // (N17).
+  state.expansions = [];
+  state.searchProgress = 1;
+  if (state.path) state.pathProgress = 1;
   if (state.caption === "compare") {
     state.path = null;
-    state.expansions = [];
   }
   // Ghost stays armed after Analyze. Fog already drops the
   // ticker. Theory writes dropped leftover Race (N60) but
@@ -2210,9 +2224,14 @@ async function distanceHeatMap() {
   state.race = null;
   animGen++;
   state.hardest = null;
+  // Leftover Solve search wash paints under the field (N87).
+  // Leftover path stays as a route hint (N62). Hunt stays.
+  // startFog still must not null tour (N17).
+  state.expansions = [];
+  state.searchProgress = 1;
+  if (state.path) state.pathProgress = 1;
   if (state.caption === "compare") {
     state.path = null;
-    state.expansions = [];
   }
   // Leftover ghost paints under the field (N80). Hunt and
   // a leftover Solve path stay. startFog still must not
@@ -2268,9 +2287,14 @@ async function placeSanctuaries() {
   state.race = null;
   animGen++;
   state.hardest = null;
+  // Leftover Solve search wash paints under the rings (N87).
+  // Leftover path stays as a route hint (N62). Hunt stays.
+  // startFog still must not null tour (N17).
+  state.expansions = [];
+  state.searchProgress = 1;
+  if (state.path) state.pathProgress = 1;
   if (state.caption === "compare") {
     state.path = null;
-    state.expansions = [];
   }
   // Leftover ghost paints under the rings (N80). Hunt and
   // a leftover Solve path stay. startFog still must not
@@ -2406,9 +2430,14 @@ async function heuristicLens() {
   state.race = null;
   animGen++;
   state.hardest = null;
+  // Leftover Solve search wash paints under the bands (N87).
+  // Leftover path stays as a route hint (N62). Hunt stays.
+  // startFog still must not null tour (N17).
+  state.expansions = [];
+  state.searchProgress = 1;
+  if (state.path) state.pathProgress = 1;
   if (state.caption === "compare") {
     state.path = null;
-    state.expansions = [];
   }
   // Leftover ghost paints under the bands (N80). Hunt and
   // a leftover Solve path stay. startFog still must not

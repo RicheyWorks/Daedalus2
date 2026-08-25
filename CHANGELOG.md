@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Theory writes drop leftover Solve search wash.** A leftover Solve path stays as a route hint (N62). Leftover expansions still painted the search wash under the cuts, field, rings, bands, or Identify sidebar. Drop that wash after the maze-id discard (N87). Hunt stays. Fog still keeps tour (N17).
+
 - **Join leftover ghost stays.** Competing writers drop leftover ghost (N80–N84). Join is the same session: the ticker is maze-bound and still races the recorded best (N86). Join-from-spectate still keeps the hunt. Fog still keeps tour (N17).
 
 - **Open session drops leftover Hardest walk unconditionally.** N58 only dropped gold when caption was hardest. Join already drops it either way (N77). Play left leftover gold armed when caption had drifted, so leftover gold painted under the seat. Drop that walk after the session POST discard (N85). Hunt still calls `play()` after installing tour — do not null tour. Fog still keeps tour (N17).
