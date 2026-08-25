@@ -393,6 +393,18 @@ class WebUiSmokeTest {
         assertThat(join).doesNotContain("/maze/${");
         assertThat(join).doesNotContain("tourFor");
         assertThat(join.indexOf("if (!state.session)", joinPost)).isGreaterThan(joinDiscard);
+        // N74. Join left leftover ASCII armed. Open session hides
+        // #asciiOut (N68). Join did not, so leftover dump reminted
+        // under the seat just taken. Hide after the join POST
+        // discard. Join-from-spectate still keeps the hunt — must
+        // not null tour. startFog still must not null tour (N17).
+        int n74Hide = join.indexOf("$(\"asciiOut\").hidden = true");
+        int n74Clear = join.indexOf("$(\"asciiOut\").textContent = \"\"");
+        assertThat(n74Hide).isGreaterThan(joinMazeCheck);
+        assertThat(n74Hide).isLessThan(joinSeat);
+        assertThat(n74Clear).isGreaterThan(n74Hide);
+        assertThat(n74Clear).isLessThan(joinSeat);
+        assertThat(join).doesNotContain("state.tour = null");
         // N24. confirmWin GETs /session/{id} then declareWin with no
         // fog/session re-check. Fog mid-flight painted a win (status,
         // leaderboard, campaign) on a fog walk. refreshTourStatus is

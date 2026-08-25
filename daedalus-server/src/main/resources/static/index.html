@@ -3096,6 +3096,13 @@ async function join() {
     if (!state.session) return;
     if (state.session.id !== sessionId) return;
     if (!state.maze || state.maze.id !== mazeId) return;
+    // Leftover ASCII stays armed after Join. Open session
+    // hides #asciiOut (N68). Join did not, so leftover dump
+    // reminted the text/plain maze under the seat just taken
+    // (N74). Join-from-spectate still keeps the hunt — do
+    // not null tour. startFog still must not null tour (N17).
+    $("asciiOut").hidden = true;
+    $("asciiOut").textContent = "";
     state.session.positions[name] = s.position;
     state.trails[name] = [s.position];
     if (fromSpectate) {

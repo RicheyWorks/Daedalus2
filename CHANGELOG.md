@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Join drops leftover ASCII.** Open session hides `#asciiOut` (N68). Join left the dump armed, so leftover art reminted the text/plain maze under the seat just taken. Hide it after the join POST discard (N74). Join-from-spectate still keeps the hunt. Fog still keeps tour (N17).
+
 - **Theory writes drop leftover ASCII.** Generate, Fog, Play, Solve, Hardest, Race, and Hunt hide `#asciiOut` (N68–N72). Analyze / Identify / heat / sanctuaries / lens left the dump armed, so leftover art reminted the text/plain maze under the cuts, field, rings, bands, or Identify sidebar. Hide it after the maze-id discard (N73). Hunt and a leftover Solve path stay. Fog still keeps tour (N17).
 
 - **Hunt drops leftover ASCII.** Generate, Fog, Play, Solve, Hardest, Race, and Compare hide `#asciiOut` (N68–N71). Hunt left the dump armed, and `play()` is skipped when a seat already exists, so leftover art reminted the text/plain maze under the Held-Karp walk. Hide it after the maze-id discard (N72). Fog still keeps tour (N17).
