@@ -968,6 +968,19 @@ class WebUiSmokeTest {
         int n97Stats = n53Race.indexOf("$(\"stats\").innerHTML =");
         assertThat(n97Stats).isGreaterThan(n53RaceDiscard);
         assertThat(n97Stats).isLessThan(n53RaceSet);
+        // N103. Race left leftover Hunt status armed. Generate /
+        // Fog / Play rewrite #status (N48). Solve / Hardest
+        // rewrite after dropping tour (N101 / N102). Race
+        // dropped tour (N53) but left leftover hunt text, so
+        // leftover "waypoint hunt" named a hunt that is gone
+        // under the arena. Rewrite after the maze-id discard.
+        // startFog still must not null tour (N17).
+        int n103Flash = n53Race.indexOf("clearTimeout(statusFlashTimer)");
+        int n103Status = n53Race.indexOf("$(\"status\").textContent");
+        assertThat(n103Flash).isGreaterThan(n53RaceDiscard);
+        assertThat(n103Flash).isLessThan(n53RaceSet);
+        assertThat(n103Status).isGreaterThan(n103Flash);
+        assertThat(n103Status).isLessThan(n53RaceSet);
         int n53CmpFrom = html.indexOf("async function compareSolvers");
         int n53CmpTo = html.indexOf("async function play()", n53CmpFrom);
         assertThat(n53CmpFrom).isGreaterThanOrEqualTo(0);

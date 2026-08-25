@@ -3000,6 +3000,16 @@ async function raceSolvers() {
     // of two searches (N53). Hunt already drops leftover theory
     // (N50). startFog still must not null tour (N17).
     state.tour = null; state.tourGot = [];
+    // Leftover Hunt status stays after Race. Generate / Fog /
+    // Play rewrite #status (N48). Solve / Hardest rewrite
+    // after dropping tour (N101 / N102). Race dropped tour
+    // (N53) but left leftover hunt text, so leftover
+    // "waypoint hunt" named a hunt that is gone under the
+    // arena (N103). startFog still must not null tour (N17).
+    clearTimeout(statusFlashTimer); statusFlashTimer = null;
+    $("status").textContent = state.session
+        ? `session ${state.session.id.slice(0, 8)}… — arrow keys to move`
+        : "arrow keys move once a session is open";
     state.analysis = null; state.hardest = null;
     state.field = null; state.sanctuaries = null;
     state.lens = null; state.fingerprint = null;

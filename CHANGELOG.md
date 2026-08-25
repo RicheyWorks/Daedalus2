@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Race drops leftover Hunt status.** Generate / Fog / Play rewrite `#status` (N48). Solve / Hardest rewrite after dropping tour (N101 / N102). Race dropped tour (N53) but left leftover hunt text armed, so leftover "waypoint hunt" named a hunt that is gone under the arena. Restore the session line after the maze-id discard (N103). Fog still keeps tour (N17).
+
 - **Hardest drops leftover Hunt status.** Generate / Fog / Play rewrite `#status` (N48). Solve rewrites after dropping tour (N101). Hardest dropped tour (N59) but left leftover hunt text armed, so leftover "waypoint hunt" named a hunt that is gone under the gold walk. Restore the session line after the maze-id discard (N102). Fog still keeps tour (N17).
 
 - **Solve drops leftover Hunt status.** Generate / Fog / Play already rewrite `#status` (N48). Solve dropped tour (N65) but left leftover hunt text armed, so leftover "waypoint hunt" named a hunt that is gone under the solver path. Restore the session line after the maze-id discard (N101). Fog still keeps tour (N17).
