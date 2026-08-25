@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Open session drops leftover Race lanes.** Race stayed armed after Play, so leftover arena painted over the walk. Drop `state.race` after the session POST discard (N55). Hunt still calls `play()` after installing tour — do not null tour (N50). Fog still keeps tour (N17).
+
 - **Back onto `""` / `#generator=` does not leave the adopted generate recipe in the form.** `leaveMaze` dropped the canvas; rows / seed / braid still named the maze the bar no longer named, so Generate rebuilt it. Restore catalog defaults (N54). Do not pin.
 
 - **Race / Compare drop leftover Hunt coins.** Hunt already empties leftover Compare / Hardest (N50). Race and Compare left the Held-Karp walk and waypoints armed, so leftover coins painted under the arena or a compare hover. Drop those overlays after the maze-id discard (N53). Fog still keeps tour (N17).

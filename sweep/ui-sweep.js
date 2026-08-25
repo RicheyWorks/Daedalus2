@@ -1910,6 +1910,25 @@ async function check(name, fn) {
         : 'N54 source pin failed'];
   });
 
+  await check('N55. Open session drops leftover Race lanes', async () => {
+    // Old body: play() seated a session and left Race armed.
+    // Leftover arena painted over the walk. Drop after the
+    // session POST discard. Hunt calls play() after installing
+    // tour — must not null tour.
+    const src = await page.evaluate(() => {
+      const s = play.toString();
+      const post = s.indexOf('/maze/${mazeId}/session');
+      const discard = s.indexOf('state.maze.id !== mazeId', post);
+      const race = s.indexOf('state.race = null', discard);
+      const seat = s.indexOf('state.session =', discard);
+      return post >= 0 && discard > post && race > discard && race < seat
+          && s.includes('animGen++')
+          && !s.includes('state.tour = null');
+    });
+    return [src, src ? 'Play empties leftover arena before seating'
+        : 'N55 source pin failed'];
+  });
+
   await check('N30. late /solve after Generate does not paint the maze now on screen', async () => {
     // Old body: solve / race / compare POSTed /solve then painted
     // after only a fog check. Generate mid-flight applied the old

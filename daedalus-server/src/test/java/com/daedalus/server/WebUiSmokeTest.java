@@ -865,6 +865,16 @@ class WebUiSmokeTest {
         assertThat(n32.indexOf("summonGhost()")).isGreaterThan(n32Maze);
         assertThat(n32.indexOf("resubscribe()")).isGreaterThan(n32Maze);
         assertThat(n32.substring(n32Id)).doesNotContain("/maze/${state.maze.id}");
+        // N55. Open session left Race lanes armed. Leftover arena
+        // painted over the walk. Drop race after the session POST
+        // discard. Hunt calls play() after installing tour — must
+        // not null tour (N50). startFog still must not null tour.
+        int n55Race = n32.indexOf("state.race = null", n32Maze);
+        int n55Seat = n32.indexOf("state.session =", n32Maze);
+        assertThat(n55Race).isGreaterThan(n32Maze);
+        assertThat(n55Race).isLessThan(n55Seat);
+        assertThat(n32).contains("animGen++");
+        assertThat(n32).doesNotContain("state.tour = null");
         // N33. hydrateSpectatorOverlays GETs /session/{id}/tour then
         // always wrote state.tour. Generate / Fog / a new #session=
         // mid-flight painted the old hunt onto the maze now on screen.

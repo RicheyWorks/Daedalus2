@@ -2837,6 +2837,15 @@ async function play() {
       {method: "POST"});
   if (state.fog) return;
   if (!state.maze || state.maze.id !== mazeId) return;
+  // Race lanes stay armed after Open session. Leftover
+  // arena paints over the walk (N55). Hunt calls play()
+  // after installing tour — do not null tour (N50).
+  state.race = null;
+  animGen++;
+  if (state.caption === "race") {
+    state.caption = null;
+    $("compareBox").innerHTML = "";
+  }
   setGodModeEnabled(true);
   state.session = {id: s.sessionId, positions: {[name]: s.position}, primary: name};
   state.seat = name;
