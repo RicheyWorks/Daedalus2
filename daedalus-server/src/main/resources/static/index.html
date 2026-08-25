@@ -878,6 +878,11 @@ function adoptMaze(maze, roundTripMs, sourceLabel) {
   state.caption = null;
   state.stageIndex = null; // playStage re-sets this after adopting the stage's maze
   $("compareBox").innerHTML = "";
+  // Wall-block flash captured the previous status. Generate /
+  // Daily / permalink writes a new line; 900ms later the leftover
+  // restore put the old session / hunt text on a maze that no
+  // longer has that seat (N48).
+  clearTimeout(statusFlashTimer); statusFlashTimer = null;
   $("status").textContent = "arrow keys move once a session is open";
   $("stats").innerHTML =
       `<span>maze</span> ${esc(maze.id.slice(0, 8))}&hellip;<br>`
@@ -1306,6 +1311,7 @@ function leaveMaze() {
   $("asciiOut").hidden = true;
   $("asciiOut").textContent = "";
   $("compareBox").innerHTML = "";
+  clearTimeout(statusFlashTimer); statusFlashTimer = null;
   $("status").textContent = "no maze yet";
   $("stats").innerHTML = "";
   $("pngExport").style.display = "none";
@@ -2760,6 +2766,9 @@ async function play() {
   $("join").disabled = false;
   $("join").textContent = "Join as second player";
   $("join").title = "Requires daedalus.session.multiplayer=true";
+  // A leftover wall-block restore would put the previous seat's
+  // line on this new session (N48).
+  clearTimeout(statusFlashTimer); statusFlashTimer = null;
   $("status").textContent = `session ${s.sessionId.slice(0, 8)}… — arrow keys to move`;
   log("state", `spectate link: ${location.origin}${location.pathname}#session=${s.sessionId}`);
   pinHash();
@@ -3268,6 +3277,7 @@ async function startFog() {
   applyFogView(view);
   setGodModeEnabled(false);
   $("asciiOut").hidden = true;
+  clearTimeout(statusFlashTimer); statusFlashTimer = null;
   $("status").textContent = `fog: ${view.stepsRemaining} steps left — arrows walk the agent`;
   log("state", `fog of war — agent ${String(view.agentId).slice(0, 8)}… sees `
       + (view.open && view.open.length ? view.open.join(", ") : "no openings"));

@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **A leftover wall-block flash does not restore old status after Generate, Fog, Back, or a new Open session.** `flashStatus` captured the line and put it back 900ms later. Generate / Fog / Back / Play already wrote the new status; the restore put the previous session or hunt text on a maze that no longer has that seat. Clear the timer before those writers set status (N48). `move()` still flashes after its fog / seat discard (N27).
+
 - **Identify's 503 wait does not keep GET `/fingerprint` on a maze Generate already replaced.** First Identify retries for 60s while the classifier warms. Generate / Fog left that maze; the wait still asked the old id. Abort the loop when fog is on or maze id no longer matches, before the next GET (N47). Paint discard stays (N30).
 
 - **A late campaign hazard does not start `/live` or `/traffic` on a stage Generate already replaced.** N29 discarded the UI bind after those POSTs so `#live` could not attach to the maze now on screen. The POST still fired against the stage you left, so a ticker ran on a maze the bar no longer names. Gate before the first hazard POST (N46). After-POST discard stays (N29).

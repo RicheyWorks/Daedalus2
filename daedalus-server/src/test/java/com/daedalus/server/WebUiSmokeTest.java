@@ -662,6 +662,20 @@ class WebUiSmokeTest {
         assertThat(n47Id).isLessThan(n47Get);
         assertThat(n47).contains("state.fog");
         assertThat(n47).contains("return null");
+        // N48. flashStatus restores the captured line after 900ms.
+        // Generate / Fog / Back / a new Open session already wrote
+        // the new status; the leftover restore put the old session
+        // or hunt text on a maze that no longer has that seat.
+        // Clear the timer before those writers set status. move()
+        // still flashes after its fog / seat discard (N27).
+        assertStatusFlashClearedBeforeWrite(html, "function adoptMaze",
+                "// Snapshot whatever is on the canvas");
+        assertStatusFlashClearedBeforeWrite(html, "function leaveMaze",
+                "async function loadFromHash");
+        assertStatusFlashClearedBeforeWrite(html, "async function play",
+                "async function join");
+        assertStatusFlashClearedBeforeWrite(html, "async function startFog",
+                "async function fogStep");
         assertMazeIdDiscardAfterFetch(html, "async function distanceHeatMap",
                 "function paintFieldCaption", "paintFieldCaption");
         assertMazeIdDiscardAfterFetch(html, "async function heuristicLens",
@@ -1224,6 +1238,21 @@ class WebUiSmokeTest {
         assertThat(leave).isGreaterThan(from);
         assertThat(fetch).isGreaterThan(from);
         assertThat(leave).isLessThan(fetch);
+    }
+
+    /** Leftover flash restore must not overwrite the new status (N48). */
+    private static void assertStatusFlashClearedBeforeWrite(String html, String start,
+            String end) {
+        int from = html.indexOf(start);
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        int clear = body.indexOf("clearTimeout(statusFlashTimer)");
+        int write = body.indexOf("$(\"status\").textContent");
+        assertThat(clear).isGreaterThanOrEqualTo(0);
+        assertThat(write).isGreaterThanOrEqualTo(0);
+        assertThat(clear).isLessThan(write);
     }
 
     /** Sidebar / text-dump lab reads must not drop watch or refuse. */

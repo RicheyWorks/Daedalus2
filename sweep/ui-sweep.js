@@ -1735,6 +1735,54 @@ async function check(name, fn) {
         : 'N47 source pin failed'];
   });
 
+  await check('N48. leftover wall-block flash does not restore old status after Generate', async () => {
+    // Old body: flashStatus restored `prev` after 900ms. Generate
+    // already wrote the new line; the leftover put the old session
+    // text on a maze that no longer has that seat. Clear the timer
+    // before adopt / leave / play / fog write status.
+    const src = await page.evaluate(() => {
+      const pin = fn => {
+        const s = fn.toString();
+        const clear = s.indexOf('clearTimeout(statusFlashTimer)');
+        const write = s.indexOf('$("status").textContent');
+        return clear >= 0 && write >= 0 && clear < write;
+      };
+      return pin(adoptMaze) && pin(leaveMaze) && pin(play) && pin(startFog);
+    });
+    const p2 = await ctx.newPage();
+    await p2.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+    await p2.waitForFunction(() => document.getElementById('generator').options.length > 0,
+        null, {timeout:20000});
+    await p2.fill('#rows', '15'); await p2.fill('#cols', '15'); await p2.fill('#seed', '61');
+    await p2.click('#generate');
+    await p2.waitForFunction(() => state.maze && state.maze.seed === 61, null, {timeout:15000});
+    await p2.click('#play');
+    await p2.waitForFunction(() => !!state.session, null, {timeout:15000});
+    const late = await p2.evaluate(async () => {
+      flashStatus('blocked — that way is a wall');
+      document.getElementById('seed').value = '62';
+      document.getElementById('generate').click();
+      const start = Date.now();
+      while (Date.now() - start < 15000) {
+        if (state.maze && state.maze.seed === 62 && !state.session) break;
+        await new Promise(r => setTimeout(r, 40));
+      }
+      await new Promise(r => setTimeout(r, 1000));
+      return {
+        seed: state.maze && state.maze.seed,
+        session: !!state.session,
+        status: document.getElementById('status').textContent,
+      };
+    });
+    await p2.close();
+    const ok = src && late.seed === 62 && !late.session
+        && late.status.includes('arrow keys move once a session is open')
+        && !late.status.includes('blocked')
+        && !late.status.includes('session ');
+    return [ok, ok ? 'leftover flash did not restore the old session line'
+        : JSON.stringify({src, late}).slice(0, 220)];
+  });
+
   await check('N30. late /solve after Generate does not paint the maze now on screen', async () => {
     // Old body: solve / race / compare POSTed /solve then painted
     // after only a fog check. Generate mid-flight applied the old
