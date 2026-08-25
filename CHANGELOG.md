@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Leftover plugin / log / player stays.** `refreshPlugins` remints the roster on login / logout / plugin failure. Hunt / Play / Fog / theory / Join leftover plugin stay — global catalog. Leftover log stay — history. Leftover `#player` stay — the name you typed. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N115).
+
 - **Leftover form stays.** adoptMaze / leaveMaze / applyRecipeToForm already rewrite the recipe on maze change. Hunt / Play / Fog / theory / Join leftover form stay — same maze recipe. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N114).
 
 - **Leftover live / traffic stays.** adoptMaze / leaveMaze already drop leftover polls. Living under fog is honest (N19): the poller is maze-bound and re-polls the agent instead of GET `/maze`. Hunt / Play / Fog / theory / Join leftover live stay — same maze still erodes. Leftover `#live` / `#traffic` disabled stay — maze still alive. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N113).

@@ -1499,6 +1499,32 @@ class WebUiSmokeTest {
         assertLeftoverFormStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N115. Remaining leftover plugin / log / player stays.
+        // refreshPlugins remints the roster on login / logout /
+        // plugin failure. These stays must not be taught away:
+        // Hunt / Play / Fog / theory / Join leftover plugin stay
+        // — global catalog; leftover log stay — history;
+        // leftover #player stay — the name you typed; Hunt
+        // through Play and Join-from-spectate still keep tour;
+        // Fog still keeps tour (N17); leftover Solve path stays
+        // as a theory route hint (N62); Join leftover ghost
+        // stays (N86).
+        assertLeftoverCatalogStay(html, "async function startTour", "function sameCell");
+        assertLeftoverCatalogStay(html, "async function play()", "async function join()");
+        assertLeftoverCatalogStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverCatalogStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverCatalogStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverCatalogStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverCatalogStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverCatalogStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverCatalogStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -2394,6 +2420,26 @@ class WebUiSmokeTest {
         assertThat(body).doesNotContain("$(\"generator\").value =");
         assertThat(body).doesNotContain("$(\"braid\").value =");
         assertThat(body).doesNotContain("$(\"hotspots\").value =");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover plugin / log / player stay (N115). Plugins are
+     * a global catalog. Log is history. #player is the name
+     * you typed. Must not remint the roster. Must not clear
+     * the log. Must not rewrite the name. Must not null tour.
+     */
+    private static void assertLeftoverCatalogStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("refreshPlugins");
+        assertThat(body).doesNotContain("pluginBox");
+        assertThat(body).doesNotContain("$(\"log\").innerHTML");
+        assertThat(body).doesNotContain("$(\"log\").textContent");
+        assertThat(body).doesNotContain("$(\"player\").value =");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
