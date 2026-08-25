@@ -930,6 +930,20 @@ class WebUiSmokeTest {
         assertThat(n69Hide).isLessThan(n65Path);
         assertThat(n69Clear).isGreaterThan(n69Hide);
         assertThat(n69Clear).isLessThan(n65Path);
+        // N81. Solve left leftover ghost armed. Fog already
+        // drops the ticker. Theory writes already drop it
+        // (N80). Solve dropped leftover Race but not ghost,
+        // so leftover recording painted under the solver path.
+        // Drop it after the maze-id discard.
+        int n81Clear = n65.indexOf("clearInterval(state.ghostTimer)");
+        int n81Timer = n65.indexOf("state.ghostTimer = null");
+        int n81Gone = n65.indexOf("state.ghost = null");
+        assertThat(n81Clear).isGreaterThan(n65Discard);
+        assertThat(n81Clear).isLessThan(n65Path);
+        assertThat(n81Timer).isGreaterThan(n81Clear);
+        assertThat(n81Timer).isLessThan(n65Path);
+        assertThat(n81Gone).isGreaterThan(n81Timer);
+        assertThat(n81Gone).isLessThan(n65Path);
         // N59. Hardest left Hunt coins and Race lanes armed.
         // Leftover tourWalk / leftover arena painted over the
         // cruel route. Drop those after the maze-id discard.

@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Solve drops leftover ghost.** Fog already drops the ticker. Theory writes already drop it (N80). Solve dropped leftover Race but left ghost armed, so leftover recording painted under the solver path. Drop that ticker after the maze-id discard (N81).
+
 - **Theory writes drop leftover ghost.** Fog already drops the ticker. Analyze / Identify / heat / sanctuaries / lens dropped leftover Race (N60) but left ghost armed, so leftover recording painted under the cuts, field, rings, bands, or Identify sidebar. Drop that ticker after the maze-id discard (N80). Hunt and a leftover Solve path stay. Fog still keeps tour (N17).
 
 - **Join drops leftover Race lanes.** Open session already drops leftover arena (N55). Join left it armed, so leftover lanes painted under the seat just taken. Drop that arena after the join POST discard (N79). Race stays a recording. Join-from-spectate still keeps the hunt. Fog still keeps tour (N17).

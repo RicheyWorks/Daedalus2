@@ -2773,6 +2773,12 @@ async function solve() {
   // (N69). startFog still must not null tour (N17).
   $("asciiOut").hidden = true;
   $("asciiOut").textContent = "";
+  // Ghost stays armed after Solve. Fog already drops the
+  // ticker. Theory writes already drop it (N80). Solve
+  // dropped leftover Race but not ghost, so leftover
+  // recording painted under the solver path (N81).
+  clearInterval(state.ghostTimer); state.ghostTimer = null;
+  state.ghost = null;
   state.path = r.path;
   state.expansions = r.expansions || [];
   log("solver", `${r.solverId}: path ${r.path.length}, visited ${r.visited}, `
