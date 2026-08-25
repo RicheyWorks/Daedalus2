@@ -1760,6 +1760,31 @@ class WebUiSmokeTest {
         assertLeftoverSidebarStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N125. Remaining leftover sessionStart stays. Play
+        // remints leftover clock when it seats. Join-from-
+        // spectate remints leftover clock. These stays must
+        // not be taught away: Hunt leftover sessionStart
+        // stay — current walk; Fog leftover sessionStart
+        // stay — unused leftover clock (declareWin needs
+        // session + ghost); theory leftover sessionStart
+        // stay — leftover clock unused; Hunt through Play
+        // still keeps tour; Fog still keeps tour (N17);
+        // leftover Solve path stays as a theory route hint
+        // (N62).
+        assertLeftoverClockStay(html, "async function startTour", "function sameCell");
+        assertLeftoverClockStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverClockStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverClockStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverClockStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverClockStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverClockStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -2825,6 +2850,22 @@ class WebUiSmokeTest {
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("$(\"labMetric\").value =");
         assertThat(body).doesNotContain("$(\"tourBraid\").value =");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover sessionStart stay (N125). Hunt leftover
+     * clock is this walk. Fog leftover clock is unused
+     * (declareWin needs session + ghost). Must not remint
+     * sessionStart. Must not null tour.
+     */
+    private static void assertLeftoverClockStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("state.sessionStart =");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
