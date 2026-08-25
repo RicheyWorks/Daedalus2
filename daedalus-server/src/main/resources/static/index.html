@@ -2695,6 +2695,12 @@ async function solve() {
     state.caption = null;
     $("compareBox").innerHTML = "";
   }
+  // Leftover ASCII stays armed after Solve. Generate, Fog,
+  // and Play hide #asciiOut (N68). Solve did not, so leftover
+  // dump reminted the text/plain maze under the solver path
+  // (N69). startFog still must not null tour (N17).
+  $("asciiOut").hidden = true;
+  $("asciiOut").textContent = "";
   state.path = r.path;
   state.expansions = r.expansions || [];
   log("solver", `${r.solverId}: path ${r.path.length}, visited ${r.visited}, `

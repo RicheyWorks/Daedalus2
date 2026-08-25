@@ -815,6 +815,17 @@ class WebUiSmokeTest {
         assertThat(n65).contains("state.lens = null");
         assertThat(n65).contains("state.fingerprint = null");
         assertThat(n65).contains("state.race = null");
+        // N69. Solve left leftover ASCII armed. Generate / Fog /
+        // Play hide #asciiOut (N68). Solve did not, so leftover
+        // dump reminted the text/plain maze under the solver path.
+        // Hide it after the maze-id discard. startFog still must
+        // not null tour (N17).
+        int n69Hide = n65.indexOf("$(\"asciiOut\").hidden = true");
+        int n69Clear = n65.indexOf("$(\"asciiOut\").textContent = \"\"");
+        assertThat(n69Hide).isGreaterThan(n65Discard);
+        assertThat(n69Hide).isLessThan(n65Path);
+        assertThat(n69Clear).isGreaterThan(n69Hide);
+        assertThat(n69Clear).isLessThan(n65Path);
         // N59. Hardest left Hunt coins and Race lanes armed.
         // Leftover tourWalk / leftover arena painted over the
         // cruel route. Drop those after the maze-id discard.
