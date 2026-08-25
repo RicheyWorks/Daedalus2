@@ -1733,6 +1733,33 @@ class WebUiSmokeTest {
                 html.indexOf("async function rebuildFromRecipe"));
         assertThat(n123Recipe).contains("$(\"hotspotCost\").value = h.cost || 25");
         assertThat(n123Recipe).doesNotContain("if ($(\"hotspotCost\") && h.cost)");
+        // N124. Remaining leftover sidebar picker stays.
+        // loadLabMetrics remints #labMetric. applyBraidFromMaze
+        // remints #tourBraid. These stays must not be taught
+        // away: Hunt / Play / Fog / theory / Join leftover
+        // labMetric stay — the metric you asked for;
+        // leftover #tourBraid stay — the sample braid you
+        // asked for; Hunt through Play and
+        // Join-from-spectate still keep tour; Fog still
+        // keeps tour (N17); leftover Solve path stays as a
+        // theory route hint (N62); Join leftover ghost
+        // stays (N86).
+        assertLeftoverSidebarStay(html, "async function startTour", "function sameCell");
+        assertLeftoverSidebarStay(html, "async function play()", "async function join()");
+        assertLeftoverSidebarStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverSidebarStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverSidebarStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverSidebarStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverSidebarStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverSidebarStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverSidebarStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -2782,6 +2809,22 @@ class WebUiSmokeTest {
         assertThat(body).doesNotContain("$(\"lensH\").value =");
         assertThat(body).doesNotContain("$(\"rival\").value =");
         assertThat(body).doesNotContain("$(\"lbGen\").value =");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover sidebar picker stay (N124). The lab metric
+     * and tournament braid are what you asked for. Must not
+     * rewrite those selects. Must not null tour.
+     */
+    private static void assertLeftoverSidebarStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"labMetric\").value =");
+        assertThat(body).doesNotContain("$(\"tourBraid\").value =");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
