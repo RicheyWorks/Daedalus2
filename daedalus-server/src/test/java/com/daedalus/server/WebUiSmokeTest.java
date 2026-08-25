@@ -1712,6 +1712,27 @@ class WebUiSmokeTest {
         assertLeftoverPickerStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N123. applyHotspotsFromMaze reminted spot count and
+        // left leftover #hotspotCost from the previous recipe,
+        // so Daily / Generate / #maze= of a no-spot maze still
+        // billed leftover cost when spots were later asked for.
+        // Remint cost from the snapshot (catalog 25 when the
+        // maze has none). applyRecipeToForm remints cost even
+        // when the permalink omits cost=. Hunt / Play / Fog /
+        // theory / Join leftover #hotspotCost stay — same maze
+        // recipe (N114). startFog still must not null tour
+        // (N17).
+        String n123Hs = html.substring(html.indexOf("function applyHotspotsFromMaze"),
+                html.indexOf("function applyBraidFromMaze"));
+        int n123Count = n123Hs.indexOf("$(\"hotspots\").value = hs.length");
+        int n123Cost = n123Hs.indexOf("$(\"hotspotCost\").value = hs.length ? hs[0].cost : 25");
+        assertThat(n123Count).isGreaterThanOrEqualTo(0);
+        assertThat(n123Cost).isGreaterThan(n123Count);
+        assertThat(n123Hs).doesNotContain("if (hs.length && $(\"hotspotCost\")");
+        String n123Recipe = html.substring(html.indexOf("function applyRecipeToForm"),
+                html.indexOf("async function rebuildFromRecipe"));
+        assertThat(n123Recipe).contains("$(\"hotspotCost\").value = h.cost || 25");
+        assertThat(n123Recipe).doesNotContain("if ($(\"hotspotCost\") && h.cost)");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -1819,6 +1840,7 @@ class WebUiSmokeTest {
         assertThat(n54Braid).isLessThan(n54Draw);
         assertThat(n52Leave).contains("syncBraid(\"braid\")");
         assertThat(n52Leave).contains("$(\"cols\").value = 31");
+        assertThat(n52Leave).contains("$(\"hotspotCost\").value = 25");
         // N32. play() POSTed /session after only a fog check. Generate
         // mid-flight pinned #session= and seated the old session on the
         // maze now on screen. Capture maze id before the POST; discard
@@ -2602,9 +2624,10 @@ class WebUiSmokeTest {
     }
 
     /**
-     * Leftover form stay (N114). Same maze still owns the
-     * recipe. Must not rewrite rows / cols / seed /
-     * generator / braid / hotspots. Must not null tour.
+     * Leftover form stay (N114 / N123). Same maze still owns
+     * the recipe. Must not rewrite rows / cols / seed /
+     * generator / braid / hotspots / hotspotCost. Must not
+     * null tour.
      */
     private static void assertLeftoverFormStay(String html, String start, String end) {
         int from = html.indexOf(start);
@@ -2618,6 +2641,7 @@ class WebUiSmokeTest {
         assertThat(body).doesNotContain("$(\"generator\").value =");
         assertThat(body).doesNotContain("$(\"braid\").value =");
         assertThat(body).doesNotContain("$(\"hotspots\").value =");
+        assertThat(body).doesNotContain("$(\"hotspotCost\").value =");
         assertThat(body).doesNotContain("state.tour = null");
     }
 

@@ -758,7 +758,11 @@ function placeHotspots(rows, cols, count, seed, cost) {
 function applyHotspotsFromMaze(maze) {
   const hs = (maze && maze.hotspots) || [];
   if ($("hotspots")) $("hotspots").value = hs.length;
-  if (hs.length && $("hotspotCost")) $("hotspotCost").value = hs[0].cost;
+  // Daily / Generate / #maze= reminted count and left leftover
+  // spot cost from the previous recipe, so Generate of a
+  // no-spot maze still billed leftover cost when spots were
+  // later asked for (N123). Catalog default matches leaveMaze.
+  if ($("hotspotCost")) $("hotspotCost").value = hs.length ? hs[0].cost : 25;
 }
 
 /** The maze's echoed factor owns the selects. A leftover 0.8 on Generate
@@ -1170,7 +1174,9 @@ function applyRecipeToForm(h) {
     syncBraid("braid");
   }
   if ($("hotspots")) $("hotspots").value = h.hotspots || "0";
-  if ($("hotspotCost") && h.cost) $("hotspotCost").value = h.cost;
+  // Permalink without cost= left leftover #hotspotCost from
+  // the previous recipe (N123). Catalog default matches leaveMaze.
+  if ($("hotspotCost")) $("hotspotCost").value = h.cost || 25;
 }
 
 async function rebuildFromRecipe(h) {

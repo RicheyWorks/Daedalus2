@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Adopt remints leftover hotspot cost.** `applyHotspotsFromMaze` reminted spot count and left leftover `#hotspotCost` from the previous recipe, so Daily / Generate / `#maze=` of a no-spot maze still billed leftover cost when spots were later asked for. Remint cost from the snapshot (catalog 25 when the maze has none). `applyRecipeToForm` remints cost even when the permalink omits `cost=`. Hunt / Play / Fog / theory / Join leftover `#hotspotCost` stay — same maze recipe (N123). Fog still keeps tour (N17).
+
 - **Leftover picker stays.** `loadAlgorithms` / `#generator=` hydrate already remint those selects. Hunt / Play / Fog / theory / Join leftover solver / leftover lensH / leftover rival stay — the picker you asked for. Leftover `#lbGen` stay — the filter you asked for. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N122).
 
 - **Leftover harden stays.** adoptMaze / leaveMaze / Bring to life already enable or disable `#harden`. Living under fog is honest (N19). Hunt / Play / Fog / theory / Join leftover harden stay — same maze still alive. Leftover `#harden` checked stay — you asked for seal. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N121).
