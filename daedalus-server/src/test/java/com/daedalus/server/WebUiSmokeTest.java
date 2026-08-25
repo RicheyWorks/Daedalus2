@@ -385,6 +385,9 @@ class WebUiSmokeTest {
         assertThat(join.indexOf("resubscribe()")).isGreaterThan(joinMazeCheck);
         assertThat(join.indexOf("leaveSpectate")).isGreaterThan(joinPost);
         assertThat(join.indexOf("leaveSpectate()")).isGreaterThan(joinMazeCheck);
+        // Join takes the seat before leaveSpectate so N51 keeps
+        // the session this tab just joined.
+        assertThat(joinSeat).isLessThan(join.indexOf("leaveSpectate()"));
         assertThat(join).doesNotContain("state.fog = null");
         assertThat(join).doesNotContain("/session/${state.session.id}");
         assertThat(join).doesNotContain("/maze/${");
@@ -755,6 +758,26 @@ class WebUiSmokeTest {
         assertThat(n31).contains("state.lens = null");
         assertThat(n31).contains("animGen++");
         assertThat(n31).doesNotContain("state.tour = null");
+        // N51. leaveSpectate only cleared readOnly. Solve / Analyze
+        // after a watch kept the opener's session writable, so
+        // arrows POSTed /move on a walk this tab only watched.
+        // Drop the leftover seat when we were watching and have
+        // not taken one. Join sets the seat first and keeps it.
+        // Do not pin (leaveMaze must not fight History). Do not
+        // null tour (N17).
+        int n51From = html.indexOf("function leaveSpectate");
+        int n51To = html.indexOf("function armSpectatorWrites");
+        assertThat(n51From).isGreaterThanOrEqualTo(0);
+        assertThat(n51To).isGreaterThan(n51From);
+        String n51 = html.substring(n51From, n51To);
+        int n51Watch = n51.indexOf("state.readOnly");
+        int n51Drop = n51.indexOf("state.session = null");
+        assertThat(n51Watch).isGreaterThanOrEqualTo(0);
+        assertThat(n51Drop).isGreaterThan(n51Watch);
+        assertThat(n51).contains("state.seat");
+        assertThat(n51).contains("resubscribe()");
+        assertThat(n51).doesNotContain("state.tour = null");
+        assertThat(n51).doesNotContain("pinHash()");
         // N32. play() POSTed /session after only a fog check. Generate
         // mid-flight pinned #session= and seated the old session on the
         // maze now on screen. Capture maze id before the POST; discard

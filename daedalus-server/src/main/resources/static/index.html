@@ -1246,10 +1246,28 @@ function thisTabSeat() {
  * underfoot and must not stay armed on a #session= hydrate.
  */
 function leaveSpectate() {
+  const wasWatching = state.readOnly;
   state.readOnly = false;
   clearInterval(state.spectatePoll);
   state.spectatePoll = null;
   armSpectatorWrites(true);
+  // Join-from-spectate sets the seat before this call and
+  // keeps the session. Solve / Analyze after watch used to
+  // keep the opener's session writable — arrows POSTed
+  // /move on a walk this tab only watched (N51). Do not
+  // pin — leaveMaze must not fight History. Do not null
+  // tour (N17).
+  if (!wasWatching || state.seat) return;
+  clearInterval(state.ghostTimer); state.ghostTimer = null;
+  state.ghost = null;
+  state.session = null;
+  state.joined = null;
+  state.trails = {};
+  state.won = null;
+  $("join").disabled = true;
+  $("join").textContent = "Join as second player";
+  $("join").title = "Requires daedalus.session.multiplayer=true";
+  resubscribe();
 }
 
 function armSpectatorWrites(on) {
@@ -2822,10 +2840,11 @@ async function join() {
     state.session.positions[name] = s.position;
     state.trails[name] = [s.position];
     if (fromSpectate) {
-      leaveSpectate();
+      // Seat first so leaveSpectate keeps this session (N51).
       // primary stays the opener — win-vs-ghost keys on it.
       // This tab's arrows and clicks move the seat we just took.
       state.seat = name;
+      leaveSpectate();
       state.joined = name;
       state.sessionStart = performance.now();
       pinHash();

@@ -1825,6 +1825,28 @@ async function check(name, fn) {
         : 'N50 source pin failed'];
   });
 
+  await check('N51. Solve after spectate does not keep the opener leftover-writable', async () => {
+    // Old body: leaveSpectate only cleared readOnly. Solve / Analyze
+    // after a watch kept the opener's session, so arrows POSTed
+    // /move on a walk this tab only watched. Drop the leftover
+    // seat when we were watching and have not taken one.
+    const src = await page.evaluate(() => {
+      const s = leaveSpectate.toString();
+      const j = join.toString();
+      const watch = s.indexOf('state.readOnly');
+      const drop = s.indexOf('state.session = null');
+      const seat = j.indexOf('state.seat');
+      const leave = j.indexOf('leaveSpectate()');
+      return watch >= 0 && drop > watch && s.includes('state.seat')
+          && s.includes('resubscribe()')
+          && !s.includes('state.tour = null')
+          && !s.includes('pinHash()')
+          && seat >= 0 && leave > seat;
+    });
+    return [src, src ? 'watch leave drops the leftover opener seat'
+        : 'N51 source pin failed'];
+  });
+
   await check('N30. late /solve after Generate does not paint the maze now on screen', async () => {
     // Old body: solve / race / compare POSTed /solve then painted
     // after only a fog check. Generate mid-flight applied the old
