@@ -428,6 +428,16 @@ class WebUiSmokeTest {
         int n76Path = join.indexOf("state.path = null");
         assertThat(n76Path).isGreaterThan(joinMazeCheck);
         assertThat(n76Path).isLessThan(joinSeat);
+        // N77. Join left leftover Hardest armed. Open session
+        // drops leftover gold when caption is hardest (N58).
+        // Join did not, so leftover gold reminted GET
+        // /hardest-route under the seat just taken. Drop
+        // hardest after the join POST discard. Join-from-spectate
+        // still keeps the hunt — must not null tour. startFog
+        // still must not null tour (N17).
+        int n77Hard = join.indexOf("state.hardest = null");
+        assertThat(n77Hard).isGreaterThan(joinMazeCheck);
+        assertThat(n77Hard).isLessThan(joinSeat);
         // N24. confirmWin GETs /session/{id} then declareWin with no
         // fog/session re-check. Fog mid-flight painted a win (status,
         // leaderboard, campaign) on a fog walk. refreshTourStatus is

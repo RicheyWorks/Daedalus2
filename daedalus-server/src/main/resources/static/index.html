@@ -3125,6 +3125,17 @@ async function join() {
     // tour. startFog still must not null tour (N17).
     state.path = null;
     state.expansions = [];
+    // Hardest stays armed after Join. Open session drops leftover
+    // gold when caption is hardest (N58). Join did not, so leftover
+    // gold reminted GET /hardest-route under the seat just taken
+    // (N77). Join-from-spectate still keeps the hunt — do not null
+    // tour. startFog still must not null tour (N17).
+    state.hardest = null;
+    if (state.caption === "hardest" || state.caption === "race"
+        || state.caption === "compare") {
+      state.caption = null;
+      $("compareBox").innerHTML = "";
+    }
     state.session.positions[name] = s.position;
     state.trails[name] = [s.position];
     if (fromSpectate) {
