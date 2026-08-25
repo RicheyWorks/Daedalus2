@@ -1341,6 +1341,31 @@ class WebUiSmokeTest {
         assertThat(n100Ascii).doesNotContain("$(\"stats\")");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N108. Remaining leftover #status / #join stays.
+        // Competing writers rewrite leftover hunt / win /
+        // spectate chrome (N48 / N101–N107). These stays
+        // must not be taught away: Hunt / session / win
+        // lines during theory stay current; ASCII does not
+        // rewrite #status; Fog leftover #join text stays
+        // (Play already set the seated label; Fog only
+        // disables); Hunt through Play and Join-from-
+        // spectate still keep tour; Fog still keeps tour
+        // (N17); leftover Solve path stays as a theory
+        // route hint (N62); Join leftover ghost stays
+        // (N86).
+        String n108An = html.substring(html.indexOf("async function analyzeStructure"),
+                html.indexOf("function paintAnalysisCaption"));
+        assertThat(n108An).doesNotContain("$(\"status\")");
+        String n108Ascii = html.substring(html.indexOf("async function showAscii"),
+                html.indexOf("async function loadAlgorithms"));
+        assertThat(n108Ascii).doesNotContain("$(\"status\")");
+        String n108Fog = html.substring(html.indexOf("async function startFog"),
+                html.indexOf("async function fogStep"));
+        assertThat(n108Fog).contains("$(\"join\").disabled = true");
+        assertThat(n108Fog).doesNotContain("$(\"join\").textContent");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
+        assertThat(join).doesNotContain("state.tour = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling

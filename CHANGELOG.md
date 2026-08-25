@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Leftover `#status` / `#join` stays.** Competing writers rewrite leftover hunt / win / spectate chrome (N48 / N101–N107). Hunt / session / win lines during theory stay current. ASCII does not rewrite `#status`. Fog leftover `#join` text stays — Play already set the seated label; Fog only disables. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N108).
+
 - **Join-from-spectate drops leftover spectate join title.** Open session rewrites `#join` (label + title). `leaveSpectate` rewrites when it drops a watch (N105). Join-from-spectate only rewrote the label, so leftover spectate title named a watch that is gone under the seat just taken. Rewrite the title after the seat is taken (N107). Join-from-spectate still keeps the hunt. Fog still keeps tour (N17).
 
 - **Hunt drops leftover Hunt / win status.** Play rewrites `#status` (N48) only when it seats. `refreshTourStatus` remints hunt status only when the tour is feasible. An infeasible hunt skipped both, so leftover "waypoint hunt" or leftover "reached the goal" named the previous walk under the new coins. Restore the session line after the maze-id discard (N106). Hunt still calls `play()` after installing tour — do not null tour. Fog still keeps tour (N17).
