@@ -810,6 +810,18 @@ class WebUiSmokeTest {
         assertThat(n59Path).isGreaterThan(n59Race);
         assertThat(n59Path).isLessThan(n59Set);
         assertThat(n59).contains("animGen++");
+        // N64. Hardest left sibling theory armed. Leftover cuts
+        // reminted GET /analysis under the gold walk. Drop those
+        // after the maze-id discard. Theory writes already drop
+        // siblings (N63). startFog still must not null tour.
+        int n64An = n59.indexOf("state.analysis = null");
+        int n64Field = n59.indexOf("state.field = null");
+        assertThat(n64An).isGreaterThan(n59Discard);
+        assertThat(n64An).isLessThan(n59Set);
+        assertThat(n64Field).isGreaterThan(n64An);
+        assertThat(n64Field).isLessThan(n59Set);
+        assertThat(n59).contains("state.lens = null");
+        assertThat(n59).contains("state.fingerprint = null");
         // N60. Theory writes left Race lanes armed. Leftover arena
         // painted over the cuts / field / rings / bands / Identify
         // sidebar. Drop race after the maze-id discard. Hunt stays

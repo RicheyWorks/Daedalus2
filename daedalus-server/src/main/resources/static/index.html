@@ -2102,6 +2102,13 @@ async function hardestRoute() {
   animGen++;
   state.path = null; state.expansions = [];
   state.searchProgress = 1; state.pathProgress = 1;
+  // Sibling theory stays armed after Hardest. Leftover
+  // cuts remint GET /analysis under the gold walk (N64).
+  // Theory writes already drop siblings (N63). startFog
+  // still must not null tour (N17).
+  state.analysis = null; state.field = null;
+  state.sanctuaries = null; state.lens = null;
+  state.fingerprint = null;
   state.hardest = h;
   state.caption = "hardest";
   log("state", `hardest route: ${h.hardestLength} steps vs ${h.shortestLength} shortest `

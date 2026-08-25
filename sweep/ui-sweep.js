@@ -1909,6 +1909,25 @@ async function check(name, fn) {
         : 'N59 source pin failed'];
   });
 
+  await check('N64. Hardest drops leftover sibling theory remints', async () => {
+    // Old body: N63 dropped siblings on theory writes; Hardest
+    // left leftover cuts reminting GET /analysis under gold.
+    const src = await page.evaluate(() => {
+      const h = hardestRoute.toString();
+      const fog = startFog.toString();
+      const d = h.lastIndexOf('state.maze.id !== mazeId');
+      const a = h.indexOf('state.analysis = null');
+      const f = h.indexOf('state.field = null');
+      const set = h.indexOf('state.hardest = h');
+      return d >= 0 && a > d && a < set && f > a && f < set
+          && h.includes('state.lens = null')
+          && h.includes('state.fingerprint = null')
+          && !fog.includes('state.tour = null');
+    });
+    return [src, src ? 'Hardest empties leftover sibling theory'
+        : 'N64 source pin failed'];
+  });
+
   await check('N60. theory writes drop leftover Race lanes', async () => {
     // Old body: Hardest dropped leftover arena (N59); Analyze /
     // Identify / heat / sanctuaries / lens left Race armed.
