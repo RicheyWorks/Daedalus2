@@ -3136,6 +3136,13 @@ async function join() {
       state.caption = null;
       $("compareBox").innerHTML = "";
     }
+    // Race stays armed after Join. Open session drops leftover
+    // arena (N55). Join did not, so leftover lanes painted under
+    // the seat just taken (N79). Race stays a recording — do
+    // not remint. Join-from-spectate still keeps the hunt — do
+    // not null tour. startFog still must not null tour (N17).
+    state.race = null;
+    animGen++;
     state.session.positions[name] = s.position;
     state.trails[name] = [s.position];
     if (fromSpectate) {

@@ -438,6 +438,19 @@ class WebUiSmokeTest {
         int n77Hard = join.indexOf("state.hardest = null");
         assertThat(n77Hard).isGreaterThan(joinMazeCheck);
         assertThat(n77Hard).isLessThan(joinSeat);
+        // N79. Join left leftover Race armed. Open session
+        // drops leftover arena (N55). Join did not, so leftover
+        // lanes painted under the seat just taken. Drop race
+        // after the join POST discard. Race stays a recording
+        // — do not remint. Join-from-spectate still keeps the
+        // hunt — must not null tour. startFog still must not
+        // null tour (N17).
+        int n79Race = join.indexOf("state.race = null");
+        int n79Anim = join.indexOf("animGen++");
+        assertThat(n79Race).isGreaterThan(joinMazeCheck);
+        assertThat(n79Race).isLessThan(joinSeat);
+        assertThat(n79Anim).isGreaterThan(n79Race);
+        assertThat(n79Anim).isLessThan(joinSeat);
         // N78. Remaining remint stays. Competing writers drop
         // leftover remints. These writers must not null tour:
         // Hunt during theory (N63), Hunt through Play (N50),
