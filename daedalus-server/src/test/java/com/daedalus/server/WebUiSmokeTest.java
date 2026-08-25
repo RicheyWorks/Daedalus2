@@ -959,6 +959,15 @@ class WebUiSmokeTest {
         assertThat(n89Cap).isLessThan(n53RaceSet);
         assertThat(n89Box).isGreaterThan(n89Cap);
         assertThat(n89Box).isLessThan(n53RaceSet);
+        // N97. Race left leftover Solve stats armed. Play /
+        // Hunt / Join / Fog / Hardest rewrite #stats (N92–N96).
+        // Race did not, so leftover solver numbers named the
+        // previous walk under the arena. Rewrite after the
+        // maze-id discard. startFog still must not null tour
+        // (N17).
+        int n97Stats = n53Race.indexOf("$(\"stats\").innerHTML =");
+        assertThat(n97Stats).isGreaterThan(n53RaceDiscard);
+        assertThat(n97Stats).isLessThan(n53RaceSet);
         int n53CmpFrom = html.indexOf("async function compareSolvers");
         int n53CmpTo = html.indexOf("async function play()", n53CmpFrom);
         assertThat(n53CmpFrom).isGreaterThanOrEqualTo(0);

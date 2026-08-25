@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Race drops leftover Solve stats.** Play / Hunt / Join / Fog / Hardest rewrite `#stats` (N92–N96). Race left leftover solver numbers armed, so leftover figures named the previous walk under the arena. Rewrite the maze identity after the maze-id discard (N97). Fog still keeps tour (N17).
+
 - **Hardest drops leftover Solve stats.** Play / Hunt / Join / Fog rewrite `#stats` (N92–N95). Hardest left leftover solver numbers armed, so leftover figures named the previous walk under the gold walk. Rewrite the maze identity after the maze-id discard (N96). Fog still keeps tour (N17).
 
 - **Fog drops leftover Solve stats.** Play / Hunt / Join rewrite `#stats` (N92–N94). Fog left leftover solver numbers armed, so leftover figures named the previous walk under the fog walk. Rewrite the maze identity after the maze-id discard (N95). Fog still keeps tour (N17).

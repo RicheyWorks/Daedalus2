@@ -2943,6 +2943,17 @@ async function raceSolvers() {
     // or a leftover compare hover painted under the arena (N89).
     state.caption = null;
     $("compareBox").innerHTML = "";
+    // Leftover Solve stats stay after Race. Play / Hunt /
+    // Join / Fog / Hardest rewrite #stats (N92–N96). Race
+    // did not, so leftover solver numbers named the previous
+    // walk under the arena (N97). startFog still must not
+    // null tour (N17).
+    $("stats").innerHTML =
+        `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
+        + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
+        + `&middot; <span>seed</span> ${state.maze.seed}`
+        + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
+        + `<br>`;
     state.race = { lanes: [
       {id: a, color: "#82b1ff", expansions: ra.expansions || [], path: ra.path,
        success: ra.success, front: 0, pathProg: 0},
