@@ -1658,6 +1658,33 @@ class WebUiSmokeTest {
                 "function paintLensCaption");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N121. Remaining leftover harden stays. adoptMaze /
+        // leaveMaze / Bring to life already enable or disable
+        // #harden. Living under fog is honest (N19). These
+        // stays must not be taught away: Hunt / Play / Fog /
+        // theory / Join leftover harden stay — same maze
+        // still alive; leftover #harden checked stay — you
+        // asked for seal; Hunt through Play and
+        // Join-from-spectate still keep tour; Fog still
+        // keeps tour (N17); leftover Solve path stays as a
+        // theory route hint (N62); Join leftover ghost
+        // stays (N86).
+        assertLeftoverHardenStay(html, "async function startTour", "function sameCell");
+        assertLeftoverHardenStay(html, "async function play()", "async function join()");
+        assertLeftoverHardenStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverHardenStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverHardenStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverHardenStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverHardenStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverHardenStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverHardenStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -2671,6 +2698,21 @@ class WebUiSmokeTest {
         assertThat(to).isGreaterThan(from);
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("pinHash()");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover harden stay (N121). Same maze still alive.
+     * Living under fog is honest (N19). Must not rewrite
+     * #harden. Must not null tour.
+     */
+    private static void assertLeftoverHardenStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"harden\")");
         assertThat(body).doesNotContain("state.tour = null");
     }
 

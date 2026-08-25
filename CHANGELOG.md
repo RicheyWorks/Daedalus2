@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Leftover harden stays.** adoptMaze / leaveMaze / Bring to life already enable or disable `#harden`. Living under fog is honest (N19). Hunt / Play / Fog / theory / Join leftover harden stay — same maze still alive. Leftover `#harden` checked stay — you asked for seal. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N121).
+
 - **Leftover hash on Hunt / theory stays.** Play / Fog / Join-from-spectate remint the bar when the exclusive kind changes. Hunt leftover hash stay — same maze (`play()` remints `#session=` only when it seats). Theory leftover hash stay — same maze. Hunt through Play still keeps tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Race and ghost stay recordings when you asked for them (N120).
 
 - **Leftover daily / breed stays.** adoptMaze / playStage / leaveMaze already drop leftover dailyId and leftover breed parent on maze change. Hunt / Play / Fog / theory / Join leftover daily stay — same maze still daily. Leftover prevMazeId / leftover `#breed` stay — breed parent still valid. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N119).
