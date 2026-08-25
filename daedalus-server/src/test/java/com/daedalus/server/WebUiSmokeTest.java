@@ -1810,6 +1810,32 @@ class WebUiSmokeTest {
         assertLeftoverCredentialStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N127. Remaining leftover picker caption stays.
+        // updateInfo remints leftover #genInfo / leftover
+        // #solInfo when leftover generator / leftover solver
+        // changes. These stays must not be taught away: Hunt
+        // / Play / Fog / theory / Join leftover #genInfo /
+        // leftover #solInfo stay — the picker caption you
+        // asked for; Hunt through Play and Join-from-
+        // spectate still keep tour; Fog still keeps tour
+        // (N17); leftover Solve path stays as a theory
+        // route hint (N62); Join leftover ghost stays (N86).
+        assertLeftoverInfoStay(html, "async function startTour", "function sameCell");
+        assertLeftoverInfoStay(html, "async function play()", "async function join()");
+        assertLeftoverInfoStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverInfoStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverInfoStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverInfoStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverInfoStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverInfoStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverInfoStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -2907,6 +2933,24 @@ class WebUiSmokeTest {
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("$(\"user\").value =");
         assertThat(body).doesNotContain("$(\"pass\").value =");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover picker caption stay (N127). leftover #genInfo
+     * / leftover #solInfo still name leftover generator /
+     * leftover solver. Must not remint updateInfo. Must not
+     * null tour.
+     */
+    private static void assertLeftoverInfoStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("updateInfo");
+        assertThat(body).doesNotContain("genInfo");
+        assertThat(body).doesNotContain("solInfo");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
