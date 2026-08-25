@@ -2151,6 +2151,12 @@ async function hardestRoute() {
   // (N17).
   $("asciiOut").hidden = true;
   $("asciiOut").textContent = "";
+  // Ghost stays armed after Hardest. Fog already drops the
+  // ticker. Theory / Solve already drop it (N80 / N81).
+  // Hardest dropped leftover Race but not ghost, so leftover
+  // recording painted under the gold walk (N82).
+  clearInterval(state.ghostTimer); state.ghostTimer = null;
+  state.ghost = null;
   state.hardest = h;
   state.caption = "hardest";
   log("state", `hardest route: ${h.hardestLength} steps vs ${h.shortestLength} shortest `

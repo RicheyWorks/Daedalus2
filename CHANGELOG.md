@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Hardest drops leftover ghost.** Fog already drops the ticker. Theory / Solve already drop it (N80 / N81). Hardest dropped leftover Race but left ghost armed, so leftover recording painted under the gold walk. Drop that ticker after the maze-id discard (N82).
+
 - **Solve drops leftover ghost.** Fog already drops the ticker. Theory writes already drop it (N80). Solve dropped leftover Race but left ghost armed, so leftover recording painted under the solver path. Drop that ticker after the maze-id discard (N81).
 
 - **Theory writes drop leftover ghost.** Fog already drops the ticker. Analyze / Identify / heat / sanctuaries / lens dropped leftover Race (N60) but left ghost armed, so leftover recording painted under the cuts, field, rings, bands, or Identify sidebar. Drop that ticker after the maze-id discard (N80). Hunt and a leftover Solve path stay. Fog still keeps tour (N17).
