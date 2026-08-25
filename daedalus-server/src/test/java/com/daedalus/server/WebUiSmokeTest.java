@@ -1685,6 +1685,33 @@ class WebUiSmokeTest {
         assertLeftoverHardenStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N122. Remaining leftover picker stays. loadAlgorithms
+        // / #generator= hydrate already remint those selects.
+        // These stays must not be taught away: Hunt / Play /
+        // Fog / theory / Join leftover solver / leftover
+        // lensH / leftover rival stay — the picker you
+        // asked for; leftover #lbGen stay — the filter you
+        // asked for; Hunt through Play and
+        // Join-from-spectate still keep tour; Fog still
+        // keeps tour (N17); leftover Solve path stays as a
+        // theory route hint (N62); Join leftover ghost
+        // stays (N86).
+        assertLeftoverPickerStay(html, "async function startTour", "function sameCell");
+        assertLeftoverPickerStay(html, "async function play()", "async function join()");
+        assertLeftoverPickerStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverPickerStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverPickerStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverPickerStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverPickerStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverPickerStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverPickerStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -2713,6 +2740,24 @@ class WebUiSmokeTest {
         assertThat(to).isGreaterThan(from);
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("$(\"harden\")");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover picker stay (N122). The solver, heuristic,
+     * rival, and leaderboard filter are what you asked for.
+     * Must not rewrite those selects. Must not null tour.
+     */
+    private static void assertLeftoverPickerStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"solver\").value =");
+        assertThat(body).doesNotContain("$(\"lensH\").value =");
+        assertThat(body).doesNotContain("$(\"rival\").value =");
+        assertThat(body).doesNotContain("$(\"lbGen\").value =");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
