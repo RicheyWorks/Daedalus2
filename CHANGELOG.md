@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Compare drops leftover Race lanes.** Play / theory / Solve / Hardest / Join / Hunt already drop leftover arena. Compare left it armed, so leftover lanes painted under a compare hover. Drop that arena after the maze-id discard (N88). Fog still keeps tour (N17).
+
 - **Theory writes drop leftover Solve search wash.** A leftover Solve path stays as a route hint (N62). Leftover expansions still painted the search wash under the cuts, field, rings, bands, or Identify sidebar. Drop that wash after the maze-id discard (N87). Hunt stays. Fog still keeps tour (N17).
 
 - **Join leftover ghost stays.** Competing writers drop leftover ghost (N80–N84). Join is the same session: the ticker is maze-bound and still races the recorded best (N86). Join-from-spectate still keeps the hunt. Fog still keeps tour (N17).

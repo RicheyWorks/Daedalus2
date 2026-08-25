@@ -936,6 +936,17 @@ class WebUiSmokeTest {
         assertThat(n83CmpTimer).isLessThan(n53CmpBox);
         assertThat(n83CmpGone).isGreaterThan(n83CmpTimer);
         assertThat(n83CmpGone).isLessThan(n53CmpBox);
+        // N88. Compare left leftover Race armed. Play / theory /
+        // Solve / Hardest / Join / Hunt already drop leftover
+        // arena. Compare did not, so leftover lanes painted
+        // under a compare hover. Drop race after the maze-id
+        // discard. startFog still must not null tour (N17).
+        int n88Race = n53Cmp.indexOf("state.race = null");
+        int n88Anim = n53Cmp.indexOf("animGen++");
+        assertThat(n88Race).isGreaterThan(n53CmpDiscard);
+        assertThat(n88Race).isLessThan(n53CmpBox);
+        assertThat(n88Anim).isGreaterThan(n88Race);
+        assertThat(n88Anim).isLessThan(n53CmpBox);
         // N65. Solve left Hunt coins / Hardest / sibling theory
         // armed. Leftover tourWalk / leftover gold painted under
         // the solver path; leftover cuts reminted GET /analysis.

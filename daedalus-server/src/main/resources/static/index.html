@@ -3023,6 +3023,13 @@ async function compareSolvers() {
   // (N83). startFog still must not null tour (N17).
   clearInterval(state.ghostTimer); state.ghostTimer = null;
   state.ghost = null;
+  // Race stays armed after Compare. Play / theory / Solve /
+  // Hardest / Join / Hunt already drop leftover arena
+  // (N55 / N60 / N59 / N79). Compare did not, so leftover
+  // lanes painted under a compare hover (N88). startFog
+  // still must not null tour (N17).
+  state.race = null;
+  animGen++;
   const ok = results.filter(r => r.success);
   // Math.min() of an empty list is Infinity — the log used to say "best path Infinity".
   const bestPath = ok.length ? Math.min(...ok.map(r => r.path.length)) : null;
