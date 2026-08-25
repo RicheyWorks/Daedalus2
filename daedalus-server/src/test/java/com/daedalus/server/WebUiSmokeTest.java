@@ -895,6 +895,17 @@ class WebUiSmokeTest {
         assertThat(n57Path).isLessThan(n55Seat);
         assertThat(n57Box).isGreaterThan(n57Path);
         assertThat(n57Box).isLessThan(n55Seat);
+        // N58. Open session left Hardest armed. Leftover gold walk
+        // painted over the seat; a living tick reminted it. Drop
+        // hardest after the session POST discard when caption is
+        // hardest. Do not null tour.
+        int n58Cap = n32.indexOf("caption === \"hardest\"", n32Maze);
+        int n58Drop = n32.indexOf("state.hardest = null", n32Maze);
+        assertThat(n58Cap).isGreaterThan(n32Maze);
+        assertThat(n58Cap).isLessThan(n55Seat);
+        assertThat(n58Drop).isGreaterThan(n58Cap);
+        assertThat(n58Drop).isLessThan(n55Seat);
+        assertThat(n57Box).isGreaterThan(n58Drop);
         // N33. hydrateSpectatorOverlays GETs /session/{id}/tour then
         // always wrote state.tour. Generate / Fog / a new #session=
         // mid-flight painted the old hunt onto the maze now on screen.

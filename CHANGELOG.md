@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Open session drops leftover Hardest walk.** N55 / N57 dropped Race and Compare; Hardest stayed, so leftover gold painted over the seat and a living tick reminted it. Drop `state.hardest` after the session POST discard (N58). Hunt still calls `play()` after installing tour — do not null tour.
+
 - **Open session drops leftover Compare hover.** N55 dropped Race lanes; the Compare table stayed, so hovering a row painted a leftover solver path over the walk just seated. Empty `#compareBox` and drop that path after the session POST discard (N57). Hunt still calls `play()` after installing tour — do not null tour.
 
 - **Leaving a watch drops leftover Hunt coins.** N51 dropped the seat and kept the spectated tour. Solve / Fog then Play scored a new walk against leftover waypoints, and a living tick asked `tourFor` with no seat. Drop `state.tour` with the leftover seat (N56). `startFog` still must not null tour (N17). Join-from-spectate still keeps the hunt.
