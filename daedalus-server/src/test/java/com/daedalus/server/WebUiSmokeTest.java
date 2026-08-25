@@ -451,6 +451,12 @@ class WebUiSmokeTest {
         assertThat(n79Race).isLessThan(joinSeat);
         assertThat(n79Anim).isGreaterThan(n79Race);
         assertThat(n79Anim).isLessThan(joinSeat);
+        // N86. Join leftover ghost is a stay. The ticker is
+        // maze-bound (N37): same session still races the
+        // recorded best. Competing writers already drop leftover
+        // ghost (N80–N84). Join must not drop it. Must not null
+        // tour.
+        assertThat(join).doesNotContain("state.ghost = null");
         // N78. Remaining remint stays. Competing writers drop
         // leftover remints. These writers must not null tour:
         // Hunt during theory (N63), Hunt through Play (N50),

@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Join leftover ghost stays.** Competing writers drop leftover ghost (N80–N84). Join is the same session: the ticker is maze-bound and still races the recorded best (N86). Join-from-spectate still keeps the hunt. Fog still keeps tour (N17).
+
 - **Open session drops leftover Hardest walk unconditionally.** N58 only dropped gold when caption was hardest. Join already drops it either way (N77). Play left leftover gold armed when caption had drifted, so leftover gold painted under the seat. Drop that walk after the session POST discard (N85). Hunt still calls `play()` after installing tour — do not null tour. Fog still keeps tour (N17).
 
 - **Hunt drops leftover ghost.** Fog already drops the ticker. Theory / Solve / Hardest / Race already drop it (N80–N83). Hunt left it armed, and `play()` is skipped when a seat already exists, so leftover recording painted under the Held-Karp walk. Drop that ticker after the maze-id discard (N84). Fog still keeps tour (N17).
