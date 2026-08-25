@@ -1388,6 +1388,39 @@ class WebUiSmokeTest {
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
         assertThat(join).doesNotContain("state.tour = null");
+        // N111. Remaining leftover trails / won / leaderboard
+        // stays. Competing writers drop leftover crumbs / won
+        // (N109 / N110) and remint the board on maze change
+        // (adoptMaze / Daily / campaign / leaveMaze /
+        // declareWin). These stays must not be taught away:
+        // Hunt leftover trails stay — current walk; theory
+        // leftover trails stay — current walk; Join leftover
+        // opener trails stay — same session; leftover won
+        // during Hunt / theory / Join stays — session still
+        // won; leftover leaderboard / leftover #lb title stay
+        // — same maze; Play / Fog / Hunt / theory / Join do
+        // not remint; Hunt through Play and Join-from-spectate
+        // still keep tour; Fog still keeps tour (N17);
+        // leftover Solve path stays as a theory route hint
+        // (N62); Join leftover ghost stays (N86).
+        assertLeftoverWalkChromeStay(html, "async function startTour", "function sameCell");
+        assertLeftoverWalkChromeStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverWalkChromeStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverWalkChromeStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverWalkChromeStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverWalkChromeStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverWalkChromeStay(html, "async function join()", "async function move(");
+        String n111Play = html.substring(html.indexOf("async function play()"),
+                html.indexOf("async function join()"));
+        assertThat(n111Play).doesNotContain("refreshLeaderboard");
+        assertThat(fog).doesNotContain("refreshLeaderboard");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -2210,6 +2243,24 @@ class WebUiSmokeTest {
         assertThat(discard).isGreaterThanOrEqualTo(0);
         assertThat(gone).isGreaterThan(discard);
         assertThat(gone).isLessThan(out);
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover trails / won / leaderboard stay (N111). Same
+     * session still walks those crumbs, still won, still
+     * names this maze's board. Must not drop them. Must not
+     * remint the board. Must not null tour.
+     */
+    private static void assertLeftoverWalkChromeStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("state.trails = {}");
+        assertThat(body).doesNotContain("state.won = null");
+        assertThat(body).doesNotContain("refreshLeaderboard");
         assertThat(body).doesNotContain("state.tour = null");
     }
 

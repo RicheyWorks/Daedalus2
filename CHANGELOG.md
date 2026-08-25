@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Leftover trails / won / leaderboard stays.** Competing writers drop leftover crumbs / won (N109 / N110) and remint the board on maze change (adoptMaze / Daily / campaign / leaveMaze / declareWin). Hunt leftover trails stay — current walk. Theory leftover trails stay — current walk. Join leftover opener trails stay — same session. Leftover won during Hunt / theory / Join stays — session still won. Leftover leaderboard / leftover `#lb` title stay — same maze; Play / Fog / Hunt / theory / Join do not remint. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N111).
+
 - **Fog drops leftover won.** Generate / leave-watch / leaveMaze / Play already drop leftover won. Fog dropped the seat and leftover trails (N109) but left leftover won, so leftover victory ring painted after a living tick ended the fog walk without Play. Drop leftover won after the maze-id discard (N110). Fog still keeps tour (N17).
 
 - **Fog drops leftover trails.** Generate / leave-watch / leaveMaze / Play already drop leftover crumbs. Fog dropped the seat and leftover ghost (N15) but left leftover trails, so leftover crumbs painted after a living tick ended the fog walk without Play. Drop those trails after the maze-id discard (N109). Fog still keeps tour (N17).
