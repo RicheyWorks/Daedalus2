@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Leftover search / path progress stays.** Hunt remints leftover `searchProgress` / leftover `pathProgress`. Theory remints leftover search wash (N87). Play / Fog / Join remint leftover path / leftover expansions and leave leftover progress, so leftover clock is unused (`draw` needs leftover path / leftover expansions). Play / Fog / Join leftover `searchProgress` / leftover `pathProgress` stay — unused leftover clock. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N129).
+
 - **Leftover campaign box stays.** `leaveCampaign` / `renderCampaign` remint leftover `#campaignBox`. Hunt / Play / Fog / theory / Join leftover `#campaignBox` stay — the ladder you asked for. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N128).
 
 - **Leftover picker caption stays.** `updateInfo` remints leftover `#genInfo` / leftover `#solInfo` when leftover generator / leftover solver changes. Hunt / Play / Fog / theory / Join leftover `#genInfo` / leftover `#solInfo` stay — the picker caption you asked for. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N127).
