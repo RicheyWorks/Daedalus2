@@ -3165,6 +3165,66 @@ class WebUiSmokeTest {
         assertLeftoverTourBoxStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N181–N183. Remaining leftover leftover #log / leftover
+        // leftover #user / leftover leftover #pass family stays.
+        // leftover leftover catalog stay already forbids reminting
+        // leftover leftover log (N115). leftover leftover auth stay
+        // already forbids reminting leftover leftover token (N118).
+        // leftover leftover #tourBox stay already N180. These stays
+        // must not be taught away: Hunt / Play / Fog / theory /
+        // Join leftover leftover #log stay — leftover leftover
+        // history you already loaded; leftover leftover #user stay
+        // — leftover leftover account you already typed; leftover
+        // leftover #pass stay — leftover leftover secret you
+        // already typed; Hunt through Play and Join-from-spectate
+        // still keep tour; Fog still keeps tour (N17); leftover
+        // leftover Solve path stays as a theory route hint (N62);
+        // Join leftover leftover ghost stays (N86). Must not null
+        // tour (N17).
+        assertLeftoverLogStay(html, "async function startTour", "function sameCell");
+        assertLeftoverLogStay(html, "async function play()", "async function join()");
+        assertLeftoverLogStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverLogStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverLogStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverLogStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverLogStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverLogStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverLogStay(html, "async function join()", "async function move(");
+        assertLeftoverUserStay(html, "async function startTour", "function sameCell");
+        assertLeftoverUserStay(html, "async function play()", "async function join()");
+        assertLeftoverUserStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverUserStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverUserStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverUserStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverUserStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverUserStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverUserStay(html, "async function join()", "async function move(");
+        assertLeftoverPassStay(html, "async function startTour", "function sameCell");
+        assertLeftoverPassStay(html, "async function play()", "async function join()");
+        assertLeftoverPassStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverPassStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverPassStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverPassStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverPassStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverPassStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverPassStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -5219,6 +5279,58 @@ class WebUiSmokeTest {
         assertThat(to).isGreaterThan(from);
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("tourBox");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover leftover #log stay (N181). leftover leftover
+     * history you already loaded. leftover leftover catalog stay
+     * already forbids reminting leftover leftover log (N115).
+     * leftover leftover #tourBox stay already N180. Must not
+     * remint leftover leftover #log. Must not null tour.
+     */
+    private static void assertLeftoverLogStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"log\").innerHTML");
+        assertThat(body).doesNotContain("$(\"log\").textContent");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover leftover #user stay (N182). leftover leftover
+     * account you already typed. leftover leftover auth stay
+     * already forbids reminting leftover leftover token (N118).
+     * leftover leftover #log stay already N181. Must not remint
+     * leftover leftover #user. Must not null tour.
+     */
+    private static void assertLeftoverUserStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"user\").value =");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover leftover #pass stay (N183). leftover leftover
+     * secret you already typed. leftover leftover auth stay
+     * already forbids reminting leftover leftover token (N118).
+     * leftover leftover #user stay already N182. Must not remint
+     * leftover leftover #pass. Must not null tour.
+     */
+    private static void assertLeftoverPassStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"pass\").value =");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
