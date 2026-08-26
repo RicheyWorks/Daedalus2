@@ -53,7 +53,7 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   surface is broadcast-only — with a simple broker on `/topic`, anything less
   let any connected client forge a move frame into any session (found by
   sending one, 2026-07-31).
-- **A vanilla web UI at `/`** — markup in `index.html`, paint in `draw.js`, HTTP in `api.js`, hash/walk helpers in `share.js`, fog memory in `fog.js`, seat/trail helpers in `seat.js`, the complexity-lab chart in `lab.js`, theory captions in `caption.js`, leftover-state wiring in `app.js`, no npm, the same REST + STOMP
+- **A vanilla web UI at `/`** — markup in `index.html`, paint in `draw.js`, HTTP in `api.js`, hash/walk helpers in `share.js`, fog memory in `fog.js`, seat/trail helpers in `seat.js`, the complexity-lab chart in `lab.js`, theory captions in `caption.js`, STOMP in `live.js`, seats in `session.js`, fog walks in `fogwalk.js`, leftover-state wiring in `app.js`, no npm, the same REST + STOMP
   an external integrator would use. Sign in attaches the JWT. Generate
   accepts `braid`; the tournament and that control stay one number. Fog
   paints only stood-on cells and re-polls the agent when the maze lives.
@@ -107,7 +107,7 @@ daedalus/
 | `daedalus-core` | SLF4J only | `MazeGrid`, `MazeGenerator`/`MazeSolver` interfaces, all 23 + 10 algorithms, `Point`/`MazeMetadata`/`MazeStats` model. No Spring, no Jackson, no JPA. |
 | `daedalus-plugin-api` | core | `MazePlugin`, `PluginManifest`, `PluginLifecycle`, `PluginContext`, lifecycle events (`MazeGeneratedEvent`, `MazeSolvedEvent`, `PlayerMovedEvent`, `PluginFailedEvent`). What plugin authors implement against. |
 | `daedalus-plugin-runtime` | core, plugin-api, Spring | `PluginManager` (discovery, lifecycle), `PluginRegistry`, JAR `URLClassLoader` isolation. Spring is allowed here so events can be published into a Spring `ApplicationContext`. |
-| `daedalus-server` | plugin-runtime, Spring Boot, Redis (optional) | Controllers (`MazeController`, `SessionController`, `LeaderboardController`, `InsightController`, `AgentController`, `CampaignController`, `MazeWebSocketController`, `PluginController`), DTOs in `com.daedalus.api.dto`, services (`MazeGenerationService` with Resilience4j circuit breaker, `LeaderboardService` with optional Redis backing, `GameSessionService`). Web UI at `src/main/resources/static/index.html` + `draw.js` + `api.js` + `share.js` + `fog.js` + `seat.js` + `lab.js` + `caption.js` + `app.js`. |
+| `daedalus-server` | plugin-runtime, Spring Boot, Redis (optional) | Controllers (`MazeController`, `SessionController`, `LeaderboardController`, `InsightController`, `AgentController`, `CampaignController`, `MazeWebSocketController`, `PluginController`), DTOs in `com.daedalus.api.dto`, services (`MazeGenerationService` with Resilience4j circuit breaker, `LeaderboardService` with optional Redis backing, `GameSessionService`). Web UI at `src/main/resources/static/index.html` + `draw.js` + `api.js` + `share.js` + `fog.js` + `seat.js` + `lab.js` + `caption.js` + `live.js` + `session.js` + `fogwalk.js` + `app.js`. |
 | `daedalus-desktop` | server, JavaFX | `DaedalusLauncher` (boots Spring + JavaFX), `DaedalusPrimaryStage`, `ThemeManager`. Loads `/ui/main.fxml`. |
 
 ## Build & run
@@ -360,7 +360,7 @@ docs/        benchmarks/ (harness output), evaluations/ (standalone measurement 
 examples/    Four worked examples — see "Worked examples" above
 PDFs/        Auto-generated reference docs (server, runtime, desktop, core, generators, overview)
 Vision/      Forward-looking direction docs
-_migration/  Archive only — see `_migration/README.md`. Not compiled or served.
+(The `_migration/` archive was removed from the working tree; git history still has it.)
 ```
 
 `AUDIT_RECOMMENDATIONS_2026-05-05.md` is the canonical audit-verification

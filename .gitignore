@@ -22,8 +22,6 @@ Thumbs.db
 __pycache__/
 *.pyc
 
-# Scratch source tarballs used to ship the tree to a build sandbox. _migration/ is TRACKED
-# (165 archival files), not ignored, so an unignored tarball dropped here rides along on the
-# next `git add -A` -- which is exactly how d2src-2026-07-31.tgz reached commit b7b4ecb.
-_migration/*.tgz
-_migration/*.tar.gz
+# The _migration/ archive was removed from the working tree. Ignore it if
+# someone checks the history copy out beside the live modules.
+_migration/

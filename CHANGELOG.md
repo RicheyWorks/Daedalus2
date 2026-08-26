@@ -10,6 +10,25 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Web UI leftover coordinators left `app.js`.** `live.js` owns STOMP,
+  live polls, and mutation apply; `session.js` owns play / join / move;
+  `fogwalk.js` owns the agent walk; `mint.js` owns generate / adopt /
+  daily / breed; `campaign.js` owns the stage ladder; `theory.js` owns
+  identify / analyze / hardest / heat / sanctuaries / lens and living
+  overlay refresh. Each takes `state`
+  plus a host bag — they do not read leftover globals. Leftover
+  `indexOf` body pins were retired from `WebUiSmokeTest`; leftover
+  behavior stays in `sweep/ui-sweep.js`. Prod enumerates each path.
+
+- **`_migration/` is gone from the working tree.** Git history still has the
+  archive. Docs no longer point at a live folder of uncompiled Java.
+
+- **CI runs the plugin-host shutdown test on Windows.** Ubuntu still runs the
+  full reactor. JAR-lock is a Windows property; linux file locks hid it.
+
+- **Plugin SPI events have constructor pins.** `PluginSpiContractTest` covers
+  the remaining six events. plugin-api JaCoCo is 0.96 / 0.99.
+
 - **Web UI paint, HTTP, share, fog, seat, lab, and caption helpers no longer share one file.**
   `draw.js` takes a scene; `api.js` names RFC 7807 errors and fetches;
   `share.js` parses hashes and walks; `fog.js` owns agent memory; `seat.js`
@@ -30,8 +49,7 @@ under the `_migration/` portfolios.
   lifecycle no-ops, `AbstractPlugin` stashing context, and `PluginFailedEvent`
   with a null cause.
 
-- **`_migration/` is labelled an archive.** A README at the root says nothing
-  there is compiled or served.
+- **`_migration/` left the working tree.** History still has the archive.
 
 ### Fixed
 

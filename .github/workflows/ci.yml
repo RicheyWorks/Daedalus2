@@ -30,6 +30,26 @@ permissions:
   contents: write
 
 jobs:
+  windows-host:
+    name: Windows plugin host
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Set up Java 21 (Temurin)
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      # Plugin JAR-lock and host destroyMethod are Windows-specific. Ubuntu
+      # already runs the full reactor; this job is the half that was invisible
+      # on linux file locks.
+      - name: Plugin host shutdown on Windows
+        shell: bash
+        run: mvn -B -ntp -pl daedalus-server -am test -Dtest=PluginHostShutdownTest -Dsurefire.failIfNoSpecifiedTests=false
+
   build:
     name: Build & test
     runs-on: ubuntu-latest

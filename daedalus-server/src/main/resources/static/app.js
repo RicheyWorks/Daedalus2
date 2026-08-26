@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+﻿// SPDX-License-Identifier: MIT
 // Daedalus web UI script. Served next to index.html; no build step.
 "use strict";
 const $ = id => document.getElementById(id);
@@ -181,6 +181,114 @@ function permalinkLoadFailed(getErr, rebuildErr) {
 async function api(path, opts) { return DaedalusApi.request(path, opts, state.token); }
 async function apiPlain(path) { return DaedalusApi.requestPlain(path, state.token); }
 
+/** Host bags for extracted coordinators. Built at call time so leftover helpers can stay below. */
+function liveHost() {
+  return {
+    $, log,
+    startSpectatePolling, startTrafficPolling, onTrafficPulse,
+    applyMove, refreshPlugins, refreshLivingMaze,
+  };
+}
+function sessionHost() {
+  return {
+    $, api, log, esc, draw,
+    leaveSpectate, setGodModeEnabled, pinHash, resubscribe, summonGhost,
+    nameGone, flashStatus, refreshTourStatus, tourVerdict,
+    refreshLeaderboard, onStageCleared,
+    bumpAnim() { animGen++; },
+    clearStatusFlash() { clearTimeout(statusFlashTimer); statusFlashTimer = null; },
+  };
+}
+function fogHost() {
+  return {
+    $, api, log, esc, draw,
+    leaveSpectate, setGodModeEnabled, pinHash, resubscribe,
+    bumpAnim() { animGen++; },
+    clearStatusFlash() { clearTimeout(statusFlashTimer); statusFlashTimer = null; },
+  };
+}
+
+function connectStomp() { return DaedalusLive.connect(state, liveHost()); }
+function armStompFallbacks() { return DaedalusLive.armFallbacks(state, liveHost()); }
+function resubscribe() { return DaedalusLive.resubscribe(state, liveHost()); }
+function startLivePolling(mazeId, tickMillis, ticks) {
+  return DaedalusLive.startPolling(state, liveHost(), mazeId, tickMillis, ticks);
+}
+async function onMutation(m) { return DaedalusLive.applyMutation(state, liveHost(), m); }
+
+async function play() { return DaedalusSession.open(state, sessionHost()); }
+async function join() { return DaedalusSession.joinSeat(state, sessionHost()); }
+async function move(name, dr, dc) { return DaedalusSession.hop(state, sessionHost(), name, dr, dc); }
+function applyMove(who, to, from) { return DaedalusSession.apply(state, sessionHost(), who, to, from); }
+async function confirmWin(who) { return DaedalusSession.confirm(state, sessionHost(), who); }
+function declareWin(who) { return DaedalusSession.declare(state, sessionHost(), who); }
+
+function applyFogView(view) { return DaedalusFogWalk.applyView(state, view); }
+function carveFogOpenings(view) { return DaedalusFogWalk.carveOpenings(state, view); }
+async function startFog() { return DaedalusFogWalk.start(state, fogHost()); }
+async function fogStep(dr, dc) { return DaedalusFogWalk.step(state, fogHost(), dr, dc); }
+
+function mintHost() {
+  return {
+    $, api, log, esc, draw,
+    leaveSpectate, setGodModeEnabled, pinHash, resubscribe,
+    refreshLeaderboard, updateInfo, syncBraid,
+    bumpAnim() { animGen++; },
+    clearStatusFlash() { clearTimeout(statusFlashTimer); statusFlashTimer = null; },
+  };
+}
+function campaignHost() {
+  return {
+    $, api, log, esc,
+    leaveSpectate, setGodModeEnabled, pinHash, adoptMaze, play,
+    startLivePolling, refreshLeaderboard,
+  };
+}
+
+function applyHotspotsFromMaze(maze) { return DaedalusMint.applySpots(state, mintHost(), maze); }
+function applyBraidFromMaze(maze) { return DaedalusMint.applyBraid(state, mintHost(), maze); }
+function adoptMaze(maze, roundTripMs, sourceLabel) {
+  return DaedalusMint.adopt(state, mintHost(), maze, roundTripMs, sourceLabel);
+}
+async function generate(opts) { return DaedalusMint.mint(state, mintHost(), opts); }
+async function loadDaily() { return DaedalusMint.daily(state, mintHost()); }
+async function crossbreed() { return DaedalusMint.breed(state, mintHost()); }
+
+async function loadCampaign(seed, stage) {
+  return DaedalusCampaign.load(state, campaignHost(), seed, stage);
+}
+function leaveCampaign() { return DaedalusCampaign.leave(state, campaignHost()); }
+function renderCampaign() { return DaedalusCampaign.render(state, campaignHost()); }
+function onStageCleared() { return DaedalusCampaign.onCleared(state, campaignHost()); }
+async function playStage(index) { return DaedalusCampaign.playRung(state, campaignHost(), index); }
+
+function theoryHost() {
+  return {
+    $, api, log, esc, draw,
+    leaveSpectate, showAscii,
+    bumpAnim() { animGen++; },
+    clearStatusFlash() { clearTimeout(statusFlashTimer); statusFlashTimer = null; },
+  };
+}
+async function fingerprintWhenReady(id) {
+  return DaedalusTheory.waitFingerprint(state, theoryHost(), id);
+}
+async function identifyGenerator() { return DaedalusTheory.identify(state, theoryHost()); }
+function paintFingerprintCaption(f) { return DaedalusTheory.paintFingerprint(state, theoryHost(), f); }
+async function analyzeStructure() { return DaedalusTheory.analyze(state, theoryHost()); }
+function paintAnalysisCaption(a) { return DaedalusTheory.paintAnalysis(state, theoryHost(), a); }
+async function hardestRoute() { return DaedalusTheory.hardest(state, theoryHost()); }
+function paintHardestCaption(h) { return DaedalusTheory.paintHardest(state, theoryHost(), h); }
+async function distanceHeatMap() { return DaedalusTheory.heat(state, theoryHost()); }
+function paintFieldCaption(f) { return DaedalusTheory.paintField(state, theoryHost(), f); }
+async function placeSanctuaries() { return DaedalusTheory.sanctuaries(state, theoryHost()); }
+function paintSanctuariesCaption(s) { return DaedalusTheory.paintSanctuaries(state, theoryHost(), s); }
+async function heuristicLens() { return DaedalusTheory.lens(state, theoryHost()); }
+function paintLensCaption(l) { return DaedalusTheory.paintLens(state, theoryHost(), l); }
+async function refreshTheoryOverlays(forMaze, stale) {
+  return DaedalusTheory.refreshOverlays(state, theoryHost(), forMaze, stale);
+}
+
 async function refreshPlugins() {
   try {
     const list = await api("/plugins");
@@ -301,70 +409,6 @@ function placeHotspots(rows, cols, count, seed, cost) {
   return DaedalusShare.placeSpots(rows, cols, count, seed, cost);
 }
 
-function applyHotspotsFromMaze(maze) {
-  const hs = (maze && maze.hotspots) || [];
-  if ($("hotspots")) $("hotspots").value = hs.length;
-  // Daily / Generate / #maze= reminted count and left leftover
-  // spot cost from the previous recipe, so Generate of a
-  // no-spot maze still billed leftover cost when spots were
-  // later asked for (N123). Catalog default matches leaveMaze.
-  if ($("hotspotCost")) $("hotspotCost").value = hs.length ? hs[0].cost : 25;
-}
-
-/** The maze's echoed factor owns the selects. A leftover 0.8 on Generate
- *  used to label Daily and a #maze= permalink as braided. */
-function applyBraidFromMaze(maze) {
-  const v = maze && maze.braid > 0 ? String(maze.braid) : "0";
-  const el = $("braid");
-  if (!el) return;
-  if (![...el.options].some(o => o.value === v)) {
-    const o = document.createElement("option");
-    o.value = v;
-    o.textContent = v + " — from maze";
-    el.appendChild(o);
-  }
-  el.value = v;
-  syncBraid("braid");
-}
-
-async function generate(opts) {
-  leaveSpectate();
-  // Generate stays armed during fog — it is a leave-fog path. Drop the
-  // walk before the fetch (leaveSpectate-before-write). adoptMaze used
-  // to always replace the maze, so a generate that was already out
-  // still stole the canvas after Fog started mid-flight.
-  if (state.fog) {
-    state.fog = null;
-    setGodModeEnabled(true);
-  }
-  const braid = opts && opts.braid != null ? +opts.braid : +(($("braid") && $("braid").value) || 0);
-  let seed = $("seed").value === "" ? null : +$("seed").value;
-  if (seed == null || Number.isNaN(seed)) {
-    // An empty seed used to be server nanoTime plus Math.random spots — same
-    // count could not be rebuilt. Pick a seed here so the request is a recipe.
-    seed = Math.floor(Math.random() * 0x7fffffff);
-    $("seed").value = seed;
-  }
-  const body = {
-    generatorId: $("generator").value,
-    rows: +$("rows").value, cols: +$("cols").value,
-    seed,
-  };
-  if (braid > 0) body.braid = braid;
-  const spotCount = Math.min(64, Math.max(0, +$("hotspots").value || 0));
-  if (spotCount > 0) {
-    const cost = Math.min(1000, Math.max(1, +$("hotspotCost").value || 25));
-    body.hotspots = placeHotspots(body.rows, body.cols, spotCount, seed, cost);
-  }
-  const t0 = performance.now();
-  const maze = await api("/maze/generate", {
-    method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body),
-  });
-  if (state.fog) return;
-  adoptMaze(maze, performance.now() - t0);
-  pinHash();
-}
-
 /**
  * Buttons whose paint draw() swallows while fog is on. Living, play, and
  * generate stay armed — those are how you leave the walk or keep eroding
@@ -377,274 +421,10 @@ function setGodModeEnabled(on) {
   GOD_MODE.forEach(id => { const el = $(id); if (el) el.disabled = !on; });
 }
 
-/** Install a maze into the UI — from a fresh generate, a #maze=<id> permalink, or the daily. */
-function adoptMaze(maze, roundTripMs, sourceLabel) {
-  // A Fog that started while Generate / Daily / Campaign / Breed was
-  // already out must keep the walk. Callers leave fog before they
-  // fetch; this discard is the late-arrival gate.
-  if (state.fog) return;
-  if (state.maze && state.maze.id !== maze.id) {
-    state.prevMazeId = state.maze.id; // remember the other parent for crossbreeding
-  }
-  $("breed").disabled = !state.prevMazeId;
-  // Mirror the adopted maze into the inputs. Size/braid/hotspots already
-  // followed the snapshot; generator and seed did not. A #maze= (or Daily /
-  // campaign / #session=) success path wrote g= and seed= into the hash from
-  // the maze, then Generate / Measure / tournament still read the leftover
-  // selects — half-hydrated: the bar named one recipe, the form another.
-  $("rows").value = maze.rows; $("cols").value = maze.cols;
-  if ($("seed") && maze.seed != null) $("seed").value = maze.seed;
-  if ($("generator") && maze.generatorId
-      && [...$("generator").options].some(o => o.value === maze.generatorId)) {
-    $("generator").value = maze.generatorId;
-    updateInfo();
-  }
-  applyBraidFromMaze(maze);
-  applyHotspotsFromMaze(maze);
-  state.readOnly = false;
-  clearInterval(state.spectatePoll); state.spectatePoll = null;
-  state.maze = maze; state.path = null; state.session = null;
-  state.seat = null; state.joined = null; state.trails = {}; state.won = null;
-  state.expansions = []; state.searchProgress = 1; state.pathProgress = 1;
-  $("play").disabled = false;
-  $("join").disabled = true;
-  $("join").textContent = "Join as second player";
-  $("join").title = "Requires daedalus.session.multiplayer=true";
-  $("live").disabled = false; $("traffic").disabled = false;
-  if ($("harden")) $("harden").disabled = false;
-  $("fog").disabled = false;
-  setGodModeEnabled(true);
-  $("asciiOut").hidden = true;
-  $("asciiOut").textContent = "";
-  state.fog = null;
-  clearInterval(state.livePoll); state.livePoll = null;
-  clearInterval(state.trafficPoll); state.trafficPoll = null;
-  clearInterval(state.ghostTimer); state.ghostTimer = null;
-  // Solve / race rAF captured the previous reveal. Generate would
-  // zero path / race, then a leftover frame write progress or
-  // raceSummary onto the maze now on screen (N49).
-  animGen++;
-  state.race = null; state.dailyId = null; state.analysis = null; state.ghost = null;
-  state.hardest = null; state.field = null; state.sanctuaries = null;
-  state.lens = null;
-  state.fingerprint = null;
-  state.tour = null; state.tourGot = [];
-  state.caption = null;
-  state.stageIndex = null; // playStage re-sets this after adopting the stage's maze
-  $("compareBox").innerHTML = "";
-  // Wall-block flash captured the previous status. Generate /
-  // Daily / permalink writes a new line; 900ms later the leftover
-  // restore put the old session / hunt text on a maze that no
-  // longer has that seat (N48).
-  clearTimeout(statusFlashTimer); statusFlashTimer = null;
-  $("status").textContent = "arrow keys move once a session is open";
-  $("stats").innerHTML =
-      `<span>maze</span> ${esc(maze.id.slice(0, 8))}&hellip;<br>`
-      + `<span>by</span> ${esc(maze.generatorId)} &middot; ${maze.rows}&times;${maze.cols} `
-      + `&middot; <span>seed</span> ${maze.seed}`
-      + (maze.braid > 0 ? ` &middot; braided ${maze.braid}` : "")
-      + `<br>`
-      + (roundTripMs != null
-          ? `<span>round-trip</span> ${roundTripMs.toFixed(0)} ms<br>`
-          : `<span>loaded from</span> ${sourceLabel || "permalink"}<br>`);
-  resubscribe();
-  refreshLeaderboard(); // re-scope: global board unless loadDaily re-marks this maze as daily
-  draw();
-  $("pngExport").style.display = "inline";
-}
 // Snapshot whatever is on the canvas at click time — path overlays and players included.
 $("pngExport").addEventListener("click", function refresh() {
   this.href = $("maze").toDataURL("image/png");
 });
-
-/** The shared daily challenge — same maze for everyone until midnight UTC (ADR-006). */
-async function loadDaily() {
-  leaveSpectate();
-  if (state.fog) {
-    state.fog = null;
-    setGodModeEnabled(true);
-  }
-  // Generate mid-flight: a late Daily would adopt over the maze
-  // now on screen (N40). Capture maze id (or none); discard after
-  // the GET when fog is on or the canvas id no longer matches.
-  // Fog discard stays (N21).
-  const mazeId = state.maze && state.maze.id;
-  const d = await api("/maze/daily");
-  if (state.fog) return;
-  if (state.maze && state.maze.id !== mazeId) return;
-  if (!state.maze && mazeId) return;
-  adoptMaze(d.maze, null, `daily challenge ${d.date}`);
-  state.dailyId = d.maze.id; // after adoptMaze (which clears it) — scopes the leaderboard
-  pinHash();
-  refreshLeaderboard();
-  log("state", `daily challenge ${d.date} — the whole world plays this maze today`);
-}
-
-// ---------- campaign mode (ADR-006 idea #10) ----------
-/**
- * Load a campaign and render its ladder. Everything a stage needs already exists as an
- * endpoint — the maze by id, its own leaderboard partition, its ghost, its hazards — so the
- * campaign is a table of contents, not a new game mode.
- */
-async function loadCampaign(seed, stage) {
-  leaveSpectate();
-  if (state.fog) {
-    state.fog = null;
-    setGodModeEnabled(true);
-  }
-  // Generate mid-flight: installing the ladder then playStage
-  // would capture the generated id and adopt the stage over it
-  // (N40). Capture maze id (or none); discard after the GET.
-  // Fog discard stays (N21).
-  const mazeId = state.maze && state.maze.id;
-  const c = await api(`/campaign${seed != null ? "?seed=" + seed : ""}`);
-  if (state.fog) return;
-  if (state.maze && state.maze.id !== mazeId) return;
-  if (!state.maze && mazeId) return;
-  state.campaign = c;
-  state.cleared = {};
-  renderCampaign();
-  log("state", `campaign ${c.seed} — ${c.stages.length} stages, `
-      + `${c.stages[0].grade.label} to ${c.stages[c.stages.length - 1].grade.label} `
-      + `(share: ${location.origin}${location.pathname}#campaign=${c.seed})`);
-  const index = Number.isInteger(stage) && stage >= 0 && stage < c.stages.length ? stage : 0;
-  await playStage(index);
-}
-
-/** Drop the ladder so a leftover stage click cannot play a maze the bar does not name. */
-function leaveCampaign() {
-  state.campaign = null;
-  state.stageIndex = null;
-  state.cleared = {};
-  $("campaignBox").innerHTML = "six stages, gentle to brutal — hazards ramp in late";
-}
-
-function renderCampaign() {
-  const c = state.campaign;
-  if (!c) return;
-  $("campaignBox").innerHTML = c.stages.map(s => {
-    const active = s.index === state.stageIndex;
-    const done = state.cleared[s.index];
-    const hazards = s.hazards.length ? ` · ${esc(s.hazards.join(" + "))}` : "";
-    return `<div style="margin:4px 0;padding:4px 6px;border-radius:4px;`
-        + `${active ? "background:#1c2531;" : ""}">`
-        + `<a href="#" data-stage="${s.index}" style="color:${done ? "#4cc38a" : "#82b1ff"}">`
-        + `${done ? "✓" : s.index + 1}. ${esc(s.name)}</a> `
-        + `<span class="hint">${s.rows}×${s.cols} ${esc(s.generatorId)} · `
-        + `<b>${esc(s.grade.label)}</b> ${s.grade.score}${hazards}</span></div>`;
-  }).join("");
-  $("campaignBox").querySelectorAll("a[data-stage]").forEach(a => {
-    a.onclick = ev => {
-      ev.preventDefault();
-      playStage(Number(a.dataset.stage)).catch(e => log("err", e.message));
-    };
-  });
-}
-
-/** Stage cleared: mark it, then offer the next rung (the player chooses when to climb). */
-function onStageCleared() {
-  const index = state.stageIndex;
-  state.cleared[index] = true;
-  renderCampaign();
-  const next = index + 1;
-  if (next < state.campaign.stages.length) {
-    const s = state.campaign.stages[next];
-    log("state", `stage ${index + 1} cleared — next: ${s.name} (${s.grade.label})`);
-    $("status").textContent += ` · stage ${index + 1} cleared — click stage ${next + 1} to continue`;
-  } else {
-    log("state", `campaign complete — all ${state.campaign.stages.length} stages cleared`);
-    $("status").textContent += " · CAMPAIGN COMPLETE";
-  }
-}
-
-/** Load a stage: its maze, its own leaderboard, its ghost, and the hazards it declares. */
-async function playStage(index) {
-  leaveSpectate();
-  if (state.fog) {
-    state.fog = null;
-    setGodModeEnabled(true);
-  }
-  // Canvas we left, not the stage's maze — re-clicking this rung
-  // (or climbing to another) still adopts. Generate mid-flight
-  // changes the canvas id and the late adopt is discarded (N40).
-  // Fog discard stays (N21).
-  const mazeId = state.maze && state.maze.id;
-  const stage = state.campaign.stages[index];
-  const maze = await api(`/maze/${stage.mazeId}`);
-  if (state.fog) return;
-  if (state.maze && state.maze.id !== mazeId) return;
-  if (!state.maze && mazeId) return;
-  adoptMaze(maze, null, `campaign stage ${index + 1}`);
-  state.stageIndex = index; // after adoptMaze, which resets per-maze state
-  state.dailyId = null;
-  pinHash();
-  renderCampaign();
-  log("state", `stage ${index + 1}/${state.campaign.stages.length} — ${stage.name}: `
-      + `${stage.grade.label} (${stage.grade.score}), route ${stage.grade.routeLength} cells, `
-      + `${stage.grade.deadEnds} dead ends`);
-  await play();                       // opens the session (and summons this stage's ghost)
-  // Generate won the canvas while play() was out. N29 discarded
-  // the UI bind after a late /live; the POST still started the
-  // stage you left. Do not mint a ticker on a maze the bar no
-  // longer names (N46).
-  if (!state.maze || state.maze.id !== stage.mazeId) return;
-  for (const hazard of stage.hazards) {
-    // Hazard names are domain words; endpoint paths are an API detail and the two do NOT
-    // line up ("living" the hazard is served by POST /live). Interpolating the hazard name
-    // straight into the path silently 404s every hazard, so the mapping is explicit.
-    //
-    // hardening is not its own call. A second POST /live joins the existing run and
-    // ignores ?seal= (LivingMazeService.start is idempotent per maze). Fold it into
-    // living so the finale breathes both ways in one ticker.
-    if (hazard === "hardening") continue;
-    const livingPath = stage.hazards.includes("hardening")
-        ? "live?ticks=30&seal=0.08" : "live?ticks=30";
-    const path = {living: livingPath, traffic: "traffic"}[hazard];
-    if (!path) { log("err", `unknown hazard "${hazard}" — server declares one this client can't start`); continue; }
-    if (!state.maze || state.maze.id !== stage.mazeId) return;
-    try {
-      await api(`/maze/${stage.mazeId}/${path}`, {method: "POST"});
-      // Generate / Daily / Breed replaced the maze while this POST
-      // was out. Disabling #live and arming a poller would bind the
-      // maze now on screen. Fog stays — living under fog is honest.
-      if (!state.maze || state.maze.id !== stage.mazeId) return;
-      log("state", `hazard active on this stage: ${hazard}`
-          + (hazard === "living" && stage.hazards.includes("hardening") ? " + hardening" : ""));
-    } catch (e) {
-      log("err", `could not start ${hazard}: ${e.message}`);
-    }
-  }
-  if (!state.maze || state.maze.id !== stage.mazeId) return;
-  if (stage.hazards.includes("living") || stage.hazards.includes("hardening")) {
-    $("live").disabled = true;
-    if ($("harden")) $("harden").disabled = true;
-    if (!state.stomp) startLivePolling(stage.mazeId);
-  }
-  refreshLeaderboard();               // this stage's own board (per-maze partition)
-}
-
-/** Cross the current maze with the previous one — the child replaces the current maze. */
-async function crossbreed() {
-  leaveSpectate();
-  if (state.fog) {
-    state.fog = null;
-    setGodModeEnabled(true);
-  }
-  // Generate mid-flight: a late Breed would adopt over the maze
-  // now on screen (N40). Capture maze id (or none); discard after
-  // the POST when fog is on or the canvas id no longer matches.
-  // Fog discard stays (N21).
-  const mazeId = state.maze && state.maze.id;
-  const child = await api(`/maze/breed?a=${state.prevMazeId}&b=${state.maze.id}`,
-      {method: "POST"});
-  if (state.fog) return;
-  if (state.maze && state.maze.id !== mazeId) return;
-  if (!state.maze && mazeId) return;
-  adoptMaze(child, null, "crossbreeding");
-  pinHash();
-  log("state", "bred a child of the last two mazes — patches of both, repaired to one "
-      + "connected maze (breed again to keep the lineage going)");
-}
 
 /**
  * Shareable address-bar state. adoptMaze used to write #maze= unconditionally, which
@@ -1210,145 +990,6 @@ async function bringToLife() {
   if (!state.stomp) startLivePolling(mazeId, r.tickMillis, r.ticksRequested);
 }
 
-/**
- * STOMP-less fallback while a maze erodes: re-fetch on the tick cadence until the ticks run
- * out or the maze on screen changes. Shared by the Bring-to-life button and campaign stages
- * that declare the `living` hazard.
- */
-function startLivePolling(mazeId, tickMillis = 2000, ticks = 30) {
-  state.liveTickMs = tickMillis;
-  let polls = 0;
-  clearInterval(state.livePoll);
-  state.livePoll = setInterval(async () => {
-    if (state.stomp || !state.maze || state.maze.id !== mazeId || ++polls > ticks + 1) {
-      clearInterval(state.livePoll); state.livePoll = null;
-      if (!state.stomp && state.maze && state.maze.id === mazeId) {
-        $("live").disabled = false;
-        if ($("harden")) $("harden").disabled = false;
-      }
-      return;
-    }
-    await refreshLivingMaze(true);
-  }, tickMillis);
-}
-
-/** A mutation frame arrived: re-fetch the snapshot, refresh theory overlays, re-solve if a route is shown, redraw. */
-async function onMutation(m) {
-  // Frame is for a maze. Generate / adopt can replace the canvas
-  // before this lands, or while the living refresh is out. Do not
-  // log a tick or re-enable #live for a maze that is gone. Fog
-  // stays — living under fog is honest (N19 / Q2).
-  const mazeId = m.mazeId;
-  if (!state.maze || state.maze.id !== mazeId) return;
-  const closed = m.wallsClosed || 0;
-  log("state", `tick ${m.tick}: ${m.wallsOpened} wall${m.wallsOpened === 1 ? "" : "s"} opened`
-      + (closed ? `, ${closed} closed` : "")
-      + `, ${m.deadEndsRemaining} dead ends left${m.settled ? " — maze has settled" : ""}`);
-  await refreshLivingMaze();
-  if (!state.maze || state.maze.id !== mazeId) return;
-  if (m.settled) {
-    $("live").disabled = false;
-    if ($("harden")) $("harden").disabled = false;
-  }
-}
-
-// ---------- maze fingerprint (ADR-007 idea 4) ----------
-/** First Identify used to hang the tab on a 40s request-thread fit. 503 means warming. */
-async function fingerprintWhenReady(id) {
-  const t0 = performance.now();
-  let warned = false;
-  while (performance.now() - t0 < 60000) {
-    // Generate / Fog left this maze while we waited on 503. Another
-    // fingerprint GET would still mint work against the id you left
-    // (N47). identifyGenerator already discards the paint.
-    if (state.fog || !state.maze || state.maze.id !== id) return null;
-    try {
-      return await api(`/maze/${id}/fingerprint`);
-    } catch (e) {
-      if (!/503/.test(e.message)) throw e;
-      if (!warned) {
-        log("state", "fingerprint: classifier is warming");
-        warned = true;
-      }
-      await new Promise(r => setTimeout(r, 800));
-    }
-  }
-  throw new Error("classifier is still warming");
-}
-
-/** Name the algorithm from the shape alone, and say how sure the structure allows us to be. */
-async function identifyGenerator() {
-  leaveSpectate();
-  const mazeId = state.maze.id;
-  const f = await fingerprintWhenReady(mazeId);
-  // Fog emptied the sidebar (N18). Generate mid-flight: a late
-  // fingerprint would name the old maze on the one now on screen.
-  if (!f) return;
-  if (state.fog) return;
-  if (!state.maze || state.maze.id !== mazeId) return;
-  // Race lanes stay armed after Identify. Leftover arena
-  // keeps racing under the sidebar (N60). Hunt stays.
-  // Hardest stays too — leftover gold remints on a living
-  // tick (N61). Compare hover stays too — leftover
-  // solver path remints POST /solve on a living tick (N62).
-  state.race = null;
-  animGen++;
-  state.hardest = null;
-  // Leftover Solve search wash stays armed after Identify.
-  // Leftover path stays as a route hint (N62). Leftover
-  // expansions painted the search wash under the sidebar
-  // (N87). Hunt stays. startFog still must not null tour
-  // (N17).
-  state.expansions = [];
-  state.searchProgress = 1;
-  if (state.path) state.pathProgress = 1;
-  if (state.caption === "compare") {
-    state.path = null;
-  }
-  // Ghost stays armed after Identify. Fog already drops the
-  // ticker. Theory writes dropped leftover Race (N60) but
-  // not ghost, so leftover recording painted under the
-  // sidebar (N80). Hunt and a leftover Solve path stay.
-  // startFog still must not null tour (N17).
-  clearInterval(state.ghostTimer); state.ghostTimer = null;
-  state.ghost = null;
-  // Sibling theory stays armed after Identify. Leftover
-  // cuts / heat / rings / bands remint on a living tick
-  // (N63). Hunt and a leftover Solve path stay.
-  state.analysis = null; state.field = null;
-  state.sanctuaries = null; state.lens = null;
-  // Leftover ASCII stays armed after Identify. Generate /
-  // Fog / Play / Solve / Hardest / Race / Hunt hide
-  // #asciiOut (N68–N72). Theory writes did not, so leftover
-  // dump reminted the text/plain maze under the sidebar
-  // (N73). Hunt and a leftover Solve path stay. startFog
-  // still must not null tour (N17).
-  $("asciiOut").hidden = true;
-  $("asciiOut").textContent = "";
-  // Leftover Solve stats stay after Identify. Play / Hunt /
-  // Join / Fog / Hardest / Race / Compare rewrite #stats
-  // (N92–N98). Theory writes did not, so leftover solver
-  // numbers named the previous walk under the sidebar (N99).
-  // Hunt and a leftover Solve path stay. startFog still
-  // must not null tour (N17).
-  $("stats").innerHTML =
-      `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
-      + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
-      + `&middot; <span>seed</span> ${state.maze.seed}`
-      + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
-      + `<br>`;
-  state.fingerprint = f;
-  state.caption = "fingerprint";
-  log("state", `fingerprint: structure says ${f.predictedGeneratorId}`
-      + (f.agrees ? " (matches record)" : `, record says ${f.recordedGeneratorId}`));
-  paintFingerprintCaption(f);
-  draw();
-}
-
-function paintFingerprintCaption(f) {
-  $("compareBox").innerHTML = DaedalusCaption.fingerprintHtml(f, esc);
-}
-
 // ---------- complexity lab (ADR-007 idea 2) ----------
 // One series (the measurements) plus a de-emphasised model overlay (the fitted curve), on
 // log-log axes so a power law reads as a straight line and its slope IS the exponent.
@@ -1553,82 +1194,6 @@ async function tourVerdict() {
         + `${(100 * p.walked / p.optimal).toFixed(0)}% of optimal)`;
 }
 
-// ---------- structural analysis (ADR-006 idea #9) ----------
-/** Min-cut chokepoints + dead ends from the theory module, drawn over the maze. */
-async function analyzeStructure() {
-  leaveSpectate();
-  const mazeId = state.maze.id;
-  const a = await api(`/maze/${mazeId}/analysis`);
-  // startFog already emptied #compareBox (N17). A response that
-  // was already out still landed and named chokepoints again.
-  // Generate mid-flight: paint would name the old maze's cuts
-  // on the maze now on screen. Discard — same as N18 / N28.
-  if (state.fog) return;
-  if (!state.maze || state.maze.id !== mazeId) return;
-  // Race lanes stay armed after Analyze. Leftover arena
-  // paints over the cuts (N60). Hunt stays — chokepoints
-  // during a hunt are useful. Hardest stays too —
-  // leftover gold paints over the cuts and a living tick
-  // remints GET /hardest-route (N61). Compare hover
-  // stays too — leftover solver path remints POST
-  // /solve on a living tick (N62). startFog still
-  // must not null tour (N17).
-  state.race = null;
-  animGen++;
-  state.hardest = null;
-  // Leftover Solve search wash stays armed after Analyze.
-  // Leftover path stays as a route hint (N62). Leftover
-  // expansions painted the search wash under the cuts
-  // (N87). Hunt stays. startFog still must not null tour
-  // (N17).
-  state.expansions = [];
-  state.searchProgress = 1;
-  if (state.path) state.pathProgress = 1;
-  if (state.caption === "compare") {
-    state.path = null;
-  }
-  // Ghost stays armed after Analyze. Fog already drops the
-  // ticker. Theory writes dropped leftover Race (N60) but
-  // not ghost, so leftover recording painted under the cuts
-  // (N80). Hunt and a leftover Solve path stay. startFog
-  // still must not null tour (N17).
-  clearInterval(state.ghostTimer); state.ghostTimer = null;
-  state.ghost = null;
-  // Sibling theory stays armed after Analyze. Leftover
-  // heat remints GET /distance-field on a living tick
-  // (N63). Field already drops sibling overlays. Hunt
-  // and a leftover Solve path stay.
-  state.field = null; state.sanctuaries = null;
-  state.lens = null; state.fingerprint = null;
-  // Leftover ASCII remints the text/plain maze under the
-  // cuts (N73). Hunt and a leftover Solve path stay.
-  // startFog still must not null tour (N17).
-  $("asciiOut").hidden = true;
-  $("asciiOut").textContent = "";
-  // Leftover Solve stats stay after Analyze. Play / Hunt /
-  // Join / Fog / Hardest / Race / Compare rewrite #stats
-  // (N92–N98). Theory writes did not, so leftover solver
-  // numbers named the previous walk under the cuts (N99).
-  // Hunt and a leftover Solve path stay. startFog still
-  // must not null tour (N17).
-  $("stats").innerHTML =
-      `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
-      + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
-      + `&middot; <span>seed</span> ${state.maze.seed}`
-      + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
-      + `<br>`;
-  state.analysis = a;
-  state.caption = "analysis";
-  const cp = a.cutSize === 1 ? "1 chokepoint" : `${a.cutSize} chokepoints`;
-  log("state", `analysis: ${cp}, ${a.deadEndCount} dead ends, route length ${a.routeLength}`);
-  paintAnalysisCaption(a);
-  draw();
-}
-
-function paintAnalysisCaption(a) {
-  $("compareBox").innerHTML = DaedalusCaption.analysisHtml(a);
-}
-
 // ---------- hardest route (ADR-007 idea 3) ----------
 /**
  * The longest simple route from start to goal, drawn over the maze.
@@ -1638,76 +1203,6 @@ function paintAnalysisCaption(a) {
  * detour is 1.00 by mathematics, not by a bug. Rather than hide that, the panel says it and
  * points at the operations that make the question interesting — braiding, erosion, dungeons.
  */
-async function hardestRoute() {
-  leaveSpectate();
-  const mazeId = state.maze.id;
-  const h = await api(`/maze/${mazeId}/hardest-route`);
-  // Fog emptied the overlay (N18). Generate mid-flight: the old
-  // route would paint the maze now on screen. Discard — same as N18 / N30.
-  if (state.fog) return;
-  if (!state.maze || state.maze.id !== mazeId) return;
-  // Hunt coins / Race lanes stay armed after Hardest. Leftover
-  // tourWalk is not the cruel route; leftover arena is not
-  // either (N59). Race / Compare already drop leftover Hunt
-  // (N53). startFog still must not null tour (N17).
-  state.tour = null; state.tourGot = [];
-  // Leftover Hunt status stays after Hardest. Generate /
-  // Fog / Play rewrite #status (N48). Solve rewrites after
-  // dropping tour (N101). Hardest dropped tour (N59) but
-  // left leftover hunt text, so leftover "waypoint hunt"
-  // named a hunt that is gone under the gold walk (N102).
-  // startFog still must not null tour (N17).
-  clearTimeout(statusFlashTimer); statusFlashTimer = null;
-  $("status").textContent = state.session
-      ? `session ${state.session.id.slice(0, 8)}… — arrow keys to move`
-      : "arrow keys move once a session is open";
-  state.race = null;
-  animGen++;
-  state.path = null; state.expansions = [];
-  state.searchProgress = 1; state.pathProgress = 1;
-  // Sibling theory stays armed after Hardest. Leftover
-  // cuts remint GET /analysis under the gold walk (N64).
-  // Theory writes already drop siblings (N63). startFog
-  // still must not null tour (N17).
-  state.analysis = null; state.field = null;
-  state.sanctuaries = null; state.lens = null;
-  state.fingerprint = null;
-  // Leftover ASCII stays armed after Hardest. Generate, Fog,
-  // Play, and Solve hide #asciiOut (N68 / N69). Hardest did
-  // not, so leftover dump reminted the text/plain maze under
-  // the gold walk (N70). startFog still must not null tour
-  // (N17).
-  $("asciiOut").hidden = true;
-  $("asciiOut").textContent = "";
-  // Ghost stays armed after Hardest. Fog already drops the
-  // ticker. Theory / Solve already drop it (N80 / N81).
-  // Hardest dropped leftover Race but not ghost, so leftover
-  // recording painted under the gold walk (N82).
-  clearInterval(state.ghostTimer); state.ghostTimer = null;
-  state.ghost = null;
-  // Leftover Solve stats stay after Hardest. Play / Hunt /
-  // Join / Fog rewrite #stats (N92–N95). Hardest did not,
-  // so leftover solver numbers named the previous walk
-  // under the gold walk (N96). startFog still must not
-  // null tour (N17).
-  $("stats").innerHTML =
-      `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
-      + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
-      + `&middot; <span>seed</span> ${state.maze.seed}`
-      + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
-      + `<br>`;
-  state.hardest = h;
-  state.caption = "hardest";
-  log("state", `hardest route: ${h.hardestLength} steps vs ${h.shortestLength} shortest `
-      + `(x${h.detour.toFixed(2)}), ${h.loops} loops, ${h.exact ? "proven optimal" : "lower bound"}`);
-  paintHardestCaption(h);
-  draw();
-}
-
-function paintHardestCaption(h) {
-  $("compareBox").innerHTML = DaedalusCaption.hardestHtml(h);
-}
-
 // ---------- distance field + sanctuaries (ADR-007 ideas 6 and 5) ----------
 /**
  * A sequential ramp: ONE hue, monotone in lightness, with the near-zero end receding into the
@@ -1717,128 +1212,6 @@ function paintHardestCaption(h) {
  * lightness against this UI's actual floor colour rather than eyeballed.
  */
 const DISTANCE_RAMP = DaedalusCaption.DISTANCE_RAMP;
-
-/** Shade every cell by its distance from the goal (or start). */
-async function distanceHeatMap() {
-  leaveSpectate();
-  const mazeId = state.maze.id;
-  const f = await api(`/maze/${mazeId}/distance-field`);
-  if (state.fog) return;
-  if (!state.maze || state.maze.id !== mazeId) return;
-  // Race lanes stay armed after the heat map. Leftover
-  // arena paints over the field (N60). Hunt stays.
-  // Hardest stays too — leftover gold remints (N61).
-  // Compare hover remints POST /solve (N62).
-  state.race = null;
-  animGen++;
-  state.hardest = null;
-  // Leftover Solve search wash paints under the field (N87).
-  // Leftover path stays as a route hint (N62). Hunt stays.
-  // startFog still must not null tour (N17).
-  state.expansions = [];
-  state.searchProgress = 1;
-  if (state.path) state.pathProgress = 1;
-  if (state.caption === "compare") {
-    state.path = null;
-  }
-  // Leftover ghost paints under the field (N80). Hunt and
-  // a leftover Solve path stay. startFog still must not
-  // null tour (N17).
-  clearInterval(state.ghostTimer); state.ghostTimer = null;
-  state.ghost = null;
-  // Leftover cuts remint GET /analysis under the field (N63).
-  state.analysis = null; state.fingerprint = null;
-  // Leftover ASCII remints the text/plain maze under the
-  // field (N73). Hunt and a leftover Solve path stay.
-  // startFog still must not null tour (N17).
-  $("asciiOut").hidden = true;
-  $("asciiOut").textContent = "";
-  // Leftover Solve stats stay after heat. Play / Hunt /
-  // Join / Fog / Hardest / Race / Compare rewrite #stats
-  // (N92–N98). Theory writes did not, so leftover solver
-  // numbers named the previous walk under the field (N99).
-  // Hunt and a leftover Solve path stay. startFog still
-  // must not null tour (N17).
-  $("stats").innerHTML =
-      `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
-      + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
-      + `&middot; <span>seed</span> ${state.maze.seed}`
-      + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
-      + `<br>`;
-  state.field = f;
-  state.sanctuaries = null; state.lens = null;   // one overlay at a time stays readable
-  state.caption = "field";
-  log("state", `distance field from ${f.from.toLowerCase()}: farthest cell ${f.maxDistance} `
-      + `steps away, ${f.unreachable} cells unreachable`);
-  paintFieldCaption(f);
-  draw();
-}
-
-function paintFieldCaption(f) {
-  $("compareBox").innerHTML = DaedalusCaption.fieldHtml(f);
-}
-
-/** k-center safe points, plus the cell they serve worst. */
-async function placeSanctuaries() {
-  leaveSpectate();
-  const mazeId = state.maze.id;
-  const s = await api(`/maze/${mazeId}/sanctuaries?k=5`);
-  // Fog emptied the overlay (N18). Generate mid-flight: the old
-  // rings would paint the maze now on screen. Discard — same as N18 / N30.
-  if (state.fog) return;
-  if (!state.maze || state.maze.id !== mazeId) return;
-  // Race lanes stay armed after Sanctuaries. Leftover
-  // arena paints over the rings (N60). Hunt stays.
-  // Hardest stays too — leftover gold remints (N61).
-  // Compare hover remints POST /solve (N62).
-  state.race = null;
-  animGen++;
-  state.hardest = null;
-  // Leftover Solve search wash paints under the rings (N87).
-  // Leftover path stays as a route hint (N62). Hunt stays.
-  // startFog still must not null tour (N17).
-  state.expansions = [];
-  state.searchProgress = 1;
-  if (state.path) state.pathProgress = 1;
-  if (state.caption === "compare") {
-    state.path = null;
-  }
-  // Leftover ghost paints under the rings (N80). Hunt and
-  // a leftover Solve path stay. startFog still must not
-  // null tour (N17).
-  clearInterval(state.ghostTimer); state.ghostTimer = null;
-  state.ghost = null;
-  // Leftover cuts remint GET /analysis under the rings (N63).
-  state.analysis = null; state.fingerprint = null;
-  // Leftover ASCII remints the text/plain maze under the
-  // rings (N73). Hunt and a leftover Solve path stay.
-  // startFog still must not null tour (N17).
-  $("asciiOut").hidden = true;
-  $("asciiOut").textContent = "";
-  // Leftover Solve stats stay after sanctuaries. Play /
-  // Hunt / Join / Fog / Hardest / Race / Compare rewrite
-  // #stats (N92–N98). Theory writes did not, so leftover
-  // solver numbers named the previous walk under the rings
-  // (N99). Hunt and a leftover Solve path stay. startFog
-  // still must not null tour (N17).
-  $("stats").innerHTML =
-      `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
-      + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
-      + `&middot; <span>seed</span> ${state.maze.seed}`
-      + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
-      + `<br>`;
-  state.sanctuaries = s;
-  state.field = null; state.lens = null;
-  state.caption = "sanctuaries";
-  log("state", `${s.placements.length} sanctuaries: covering radius ${s.coveringRadius}, `
-      + `serving ${s.servedCells}/${s.habitableCells} cells`);
-  paintSanctuariesCaption(s);
-  draw();
-}
-
-function paintSanctuariesCaption(s) {
-  $("compareBox").innerHTML = DaedalusCaption.sanctuariesHtml(s);
-}
 
 // ---------- solver tournament (ADR-007 ideas 10 and 7) ----------
 /**
@@ -1929,66 +1302,6 @@ async function runTournament() {
  * suggestive.
  */
 const LENS_COLORS = DaedalusCaption.LENS_COLORS;   // must expand / tie / never
-
-async function heuristicLens() {
-  leaveSpectate();
-  const mazeId = state.maze.id;
-  const which = $("lensH").value;
-  const l = await api(`/maze/${mazeId}/heuristic-lens?heuristic=${which}`);
-  if (state.fog) return;
-  if (!state.maze || state.maze.id !== mazeId) return;
-  // Race lanes stay armed after Lens. Leftover arena
-  // paints over the bands (N60). Hunt stays.
-  // Hardest stays too — leftover gold remints (N61).
-  // Compare hover remints POST /solve (N62).
-  state.race = null;
-  animGen++;
-  state.hardest = null;
-  // Leftover Solve search wash paints under the bands (N87).
-  // Leftover path stays as a route hint (N62). Hunt stays.
-  // startFog still must not null tour (N17).
-  state.expansions = [];
-  state.searchProgress = 1;
-  if (state.path) state.pathProgress = 1;
-  if (state.caption === "compare") {
-    state.path = null;
-  }
-  // Leftover ghost paints under the bands (N80). Hunt and
-  // a leftover Solve path stay. startFog still must not
-  // null tour (N17).
-  clearInterval(state.ghostTimer); state.ghostTimer = null;
-  state.ghost = null;
-  // Leftover cuts remint GET /analysis under the bands (N63).
-  state.analysis = null; state.fingerprint = null;
-  // Leftover ASCII remints the text/plain maze under the
-  // bands (N73). Hunt and a leftover Solve path stay.
-  // startFog still must not null tour (N17).
-  $("asciiOut").hidden = true;
-  $("asciiOut").textContent = "";
-  // Leftover Solve stats stay after lens. Play / Hunt /
-  // Join / Fog / Hardest / Race / Compare rewrite #stats
-  // (N92–N98). Theory writes did not, so leftover solver
-  // numbers named the previous walk under the bands (N99).
-  // Hunt and a leftover Solve path stay. startFog still
-  // must not null tour (N17).
-  $("stats").innerHTML =
-      `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
-      + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
-      + `&middot; <span>seed</span> ${state.maze.seed}`
-      + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
-      + `<br>`;
-  state.lens = l;
-  state.field = null; state.sanctuaries = null;
-  state.caption = "lens";
-  log("state", `lens [${which}]: must ${l.mustExpand}, tie ${l.tie}, never ${l.never}; `
-      + `A* expanded ${l.actualExpansions}`);
-  paintLensCaption(l);
-  draw();
-}
-
-function paintLensCaption(l) {
-  $("compareBox").innerHTML = DaedalusCaption.lensHtml(l);
-}
 
 // ---------- ghost runs (ADR-006 idea #8) ----------
 /** If this maze has a recorded best run, race it: same pacing, hesitations and all. */
@@ -2088,99 +1401,7 @@ async function onTrafficPulse(m) {
   if (m.settled) $("traffic").disabled = false;
 }
 
-/**
- * Theory overlays claim to be about the maze underfoot. Analysis, tour and the
- * solver route already re-asked on each living tick; hardest-route, the heat
- * map, sanctuaries, the lens, the fingerprint and the ASCII dump did not —
- * they painted the tree they were first asked about while the grid eroded
- * under them. The fingerprint button's whole claim is eroded mazes whose
- * recorded author no longer matches. Race and ghost stay recordings.
- *
- * @return false when the maze on screen changed mid-refresh (caller must stop)
- */
-async function refreshTheoryOverlays(forMaze, stale) {
-  if (state.analysis) {
-    try {
-      const a = await api(`/maze/${forMaze}/analysis`);
-      if (stale() || state.fog) return false;
-      if (a.cutSize !== state.analysis.cutSize || a.deadEndCount !== state.analysis.deadEndCount) {
-        log("state", `analysis: ${a.cutSize} chokepoint${a.cutSize === 1 ? "" : "s"}, `
-            + `${a.deadEndCount} dead ends (was ${state.analysis.cutSize} / `
-            + `${state.analysis.deadEndCount})`);
-      }
-      state.analysis = a;
-      if (state.caption === "analysis") paintAnalysisCaption(a);
-    } catch (ignored) { /* overlay; losing one refresh is harmless */ }
-  }
-  if (state.hardest) {
-    try {
-      const h = await api(`/maze/${forMaze}/hardest-route`);
-      if (stale() || state.fog) return false;
-      if (h.loops !== state.hardest.loops || h.hardestLength !== state.hardest.hardestLength) {
-        log("state", `hardest route is now ${h.hardestLength} steps vs ${h.shortestLength} `
-            + `(x${h.detour.toFixed(2)}), ${h.loops} loops`);
-      }
-      state.hardest = h;
-      if (state.caption === "hardest") paintHardestCaption(h);
-    } catch (ignored) { /* overlay */ }
-  }
-  if (state.field) {
-    try {
-      const f = await api(`/maze/${forMaze}/distance-field`);
-      if (stale() || state.fog) return false;
-      if (f.maxDistance !== state.field.maxDistance) {
-        log("state", `distance field: farthest cell now ${f.maxDistance} steps`);
-      }
-      state.field = f;
-      if (state.caption === "field") paintFieldCaption(f);
-    } catch (ignored) { /* overlay */ }
-  }
-  if (state.sanctuaries) {
-    try {
-      const s = await api(`/maze/${forMaze}/sanctuaries?k=5`);
-      if (stale() || state.fog) return false;
-      if (s.coveringRadius !== state.sanctuaries.coveringRadius) {
-        log("state", `sanctuaries: covering radius now ${s.coveringRadius}`);
-      }
-      state.sanctuaries = s;
-      if (state.caption === "sanctuaries") paintSanctuariesCaption(s);
-    } catch (ignored) { /* overlay */ }
-  }
-  if (state.lens) {
-    try {
-      const which = (state.lens.heuristic || $("lensH").value);
-      const l = await api(`/maze/${forMaze}/heuristic-lens?heuristic=${encodeURIComponent(which)}`);
-      if (stale() || state.fog) return false;
-      if (l.mustExpand !== state.lens.mustExpand || l.actualExpansions !== state.lens.actualExpansions) {
-        log("state", `lens: must ${l.mustExpand}, A* expanded ${l.actualExpansions}`);
-      }
-      state.lens = l;
-      if (state.caption === "lens") paintLensCaption(l);
-    } catch (ignored) { /* overlay */ }
-  }
-  if (state.fingerprint) {
-    try {
-      const f = await api(`/maze/${forMaze}/fingerprint`);
-      if (stale() || state.fog) return false;
-      const before = state.fingerprint;
-      if (f.agrees !== before.agrees
-          || f.predictedGeneratorId !== before.predictedGeneratorId
-          || f.signature.deadEndRatio !== before.signature.deadEndRatio) {
-        log("state", `fingerprint: structure says ${f.predictedGeneratorId}`
-            + (f.agrees ? " (matches record)" : `, record says ${f.recordedGeneratorId}`));
-      }
-      state.fingerprint = f;
-      if (state.caption === "fingerprint") paintFingerprintCaption(f);
-    } catch (ignored) { /* overlay */ }
-  }
-  if ($("asciiOut") && !$("asciiOut").hidden) {
-    try {
-      await showAscii();
-      if (stale() || state.fog) return false;
-    } catch (ignored) { /* dump */ }
-  }
-  return true;
-}
+// Theory overlay refresh lives in theory.js (DaedalusTheory.refreshOverlays).
 
 /** Swap in the latest snapshot without resetting session/solver state (unlike adoptMaze). */
 async function refreshLivingMaze(fromPoll) {
@@ -2647,355 +1868,6 @@ async function compareSolvers() {
       : `compared 0/${results.length} solvers — every solver failed`);
 }
 
-async function play() {
-  leaveSpectate();
-  const name = $("player").value || "web";
-  const mazeId = state.maze.id;
-  // play stays armed during fog — it is a leave-fog path. Drop the
-  // walk before the fetch (leaveSpectate-before-write). A before-click
-  // snapshot that always nulled fog after the POST treated a Fog that
-  // started mid-flight as "no fog" and still pinned #session=.
-  // Generate mid-flight: a late /session would pin #session= and
-  // seat the old session on the maze now on screen. Capture maze
-  // id; discard after the POST (and the leave-fog GET /maze).
-  if (state.fog) {
-    state.fog = null;
-    setGodModeEnabled(true);
-    // Fog wrote openings into tiles and skipped GET /maze on living ticks.
-    // Leaving it without a refetch paints a fog-edited or generate-time grid.
-    try {
-      const maze = await api(`/maze/${mazeId}`);
-      if (state.fog) return;
-      if (!state.maze || state.maze.id !== mazeId) return;
-      Object.assign(state.maze, maze);
-    } catch (ignored) { /* play still works; walls may lag until the next refresh */ }
-    if (state.fog) return;
-    if (!state.maze || state.maze.id !== mazeId) return;
-  }
-  const s = await api(`/maze/${mazeId}/session?player=${encodeURIComponent(name)}`,
-      {method: "POST"});
-  if (state.fog) return;
-  if (!state.maze || state.maze.id !== mazeId) return;
-  // Race lanes stay armed after Open session. Leftover
-  // arena paints over the walk (N55). Hunt calls play()
-  // after installing tour — do not null tour (N50).
-  state.race = null;
-  animGen++;
-  // Sibling theory stays armed after Open session. Leftover
-  // cuts remint GET /analysis under the seat (N66). Theory
-  // writes already drop siblings (N63). Hardest already
-  // drops leftover sibling theory (N64). Solve already
-  // drops them (N65). Hunt calls play() after installing
-  // tour — do not null tour (N50). startFog still must
-  // not null tour (N17).
-  state.analysis = null; state.field = null;
-  state.sanctuaries = null; state.lens = null;
-  state.fingerprint = null;
-  // Leftover Solve path stays armed after Open session.
-  // N57 only dropped Compare hover. Leftover solver route
-  // paints over the seat and a living tick remints POST
-  // /solve (N67). Hunt calls play() after installing tour
-  // — do not null tour (N50). startFog still must not null
-  // tour (N17).
-  state.path = null;
-  state.expansions = [];
-  // Leftover ASCII stays armed after Open session. Generate
-  // and Fog hide #asciiOut. Play did not, so leftover dump
-  // stayed on screen and a living tick reminted the
-  // text/plain maze under the seat (N68). Hunt calls play()
-  // after installing tour — do not null tour (N50). startFog
-  // still must not null tour (N17).
-  $("asciiOut").hidden = true;
-  $("asciiOut").textContent = "";
-  // Leftover Solve stats stay after Open session. Generate
-  // rewrites #stats. Play did not, so leftover solver
-  // numbers named the previous walk under the seat (N92).
-  // Hunt calls play() after installing tour — do not null
-  // tour (N50). startFog still must not null tour (N17).
-  $("stats").innerHTML =
-      `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
-      + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
-      + `&middot; <span>seed</span> ${state.maze.seed}`
-      + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
-      + `<br>`;
-  // Leftover tourGot stays after Open session. Hunt remints
-  // collected coins. Play reminted trails / won but left
-  // leftover tourGot, so leftover collected coins painted
-  // on the new seat until the first move reminted (N117).
-  // Hunt calls play() after installing tour — do not null
-  // tour (N50). startFog still must not null tour (N17).
-  state.tourGot = [];
-  // Hardest stays armed after Open session when caption is
-  // not hardest. Join already drops leftover gold
-  // unconditionally (N77). Play gated it (N58), so leftover
-  // gold painted under the seat (N85). Hunt calls play()
-  // after installing tour — do not null tour (N50). startFog
-  // still must not null tour (N17).
-  state.hardest = null;
-  // Compare hover stays armed after Open session. Leftover
-  // solver path paints over the walk (N57). Hunt already
-  // emptied #compareBox (N50). Do not null tour.
-  if (state.caption === "race" || state.caption === "compare"
-      || state.caption === "hardest"
-      || state.caption === "analysis" || state.caption === "field"
-      || state.caption === "sanctuaries" || state.caption === "lens"
-      || state.caption === "fingerprint") {
-    state.caption = null;
-    $("compareBox").innerHTML = "";
-  }
-  setGodModeEnabled(true);
-  state.session = {id: s.sessionId, positions: {[name]: s.position}, primary: name};
-  state.seat = name;
-  state.joined = null; state.won = null;
-  state.trails = {[name]: [s.position]};
-  state.sessionStart = performance.now();
-  $("join").disabled = false;
-  $("join").textContent = "Join as second player";
-  $("join").title = "Requires daedalus.session.multiplayer=true";
-  // A leftover wall-block restore would put the previous seat's
-  // line on this new session (N48).
-  clearTimeout(statusFlashTimer); statusFlashTimer = null;
-  $("status").textContent = `session ${s.sessionId.slice(0, 8)}… — arrow keys to move`;
-  log("state", `spectate link: ${location.origin}${location.pathname}#session=${s.sessionId}`);
-  pinHash();
-  resubscribe();
-  summonGhost(); // race the maze's best recorded run, if one exists
-  draw();
-}
-
-async function join() {
-  if (!state.session) return;
-  const fromSpectate = state.readOnly;
-  const name = fromSpectate
-      ? ($("player").value || "web")
-      : ($("player").value || "web") + "-2";
-  const sessionId = state.session.id;
-  const mazeId = state.maze && state.maze.id;
-  try {
-    const s = await api(`/session/${sessionId}/join?player=${encodeURIComponent(name)}`,
-        {method: "POST"});
-    // Stay a watcher until join lands — leaveSpectate after a successful
-    // POST, not before (spectate honesty). A Fog that started mid-flight
-    // dropped the seat; do not write it back onto the walk.
-    // Generate + Play / a new #session=: the POST would write the
-    // joiner (seat, leaveSpectate, pin) onto the maze now on screen (N36).
-    if (state.fog) return;
-    if (!state.session) return;
-    if (state.session.id !== sessionId) return;
-    if (!state.maze || state.maze.id !== mazeId) return;
-    // Leftover ASCII stays armed after Join. Open session
-    // hides #asciiOut (N68). Join did not, so leftover dump
-    // reminted the text/plain maze under the seat just taken
-    // (N74). Join-from-spectate still keeps the hunt — do
-    // not null tour. startFog still must not null tour (N17).
-    $("asciiOut").hidden = true;
-    $("asciiOut").textContent = "";
-    // Sibling theory stays armed after Join. Open session
-    // drops leftover cuts (N66). Join did not, so leftover
-    // analysis reminted GET /analysis under the seat just
-    // taken (N75). Join-from-spectate still keeps the hunt
-    // — do not null tour. startFog still must not null tour
-    // (N17).
-    state.analysis = null; state.field = null;
-    state.sanctuaries = null; state.lens = null;
-    state.fingerprint = null;
-    if (state.caption === "analysis" || state.caption === "field"
-        || state.caption === "sanctuaries" || state.caption === "lens"
-        || state.caption === "fingerprint") {
-      state.caption = null;
-      $("compareBox").innerHTML = "";
-    }
-    // Leftover Solve path stays armed after Join. Open session
-    // drops it (N67). Join did not, so leftover solver route
-    // reminted POST /solve under the seat just taken (N76).
-    // Join-from-spectate still keeps the hunt — do not null
-    // tour. startFog still must not null tour (N17).
-    state.path = null;
-    state.expansions = [];
-    // Hardest stays armed after Join. Open session drops leftover
-    // gold when caption is hardest (N58). Join did not, so leftover
-    // gold reminted GET /hardest-route under the seat just taken
-    // (N77). Join-from-spectate still keeps the hunt — do not null
-    // tour. startFog still must not null tour (N17).
-    state.hardest = null;
-    if (state.caption === "hardest" || state.caption === "race"
-        || state.caption === "compare") {
-      state.caption = null;
-      $("compareBox").innerHTML = "";
-    }
-    // Race stays armed after Join. Open session drops leftover
-    // arena (N55). Join did not, so leftover lanes painted under
-    // the seat just taken (N79). Race stays a recording — do
-    // not remint. Join-from-spectate still keeps the hunt — do
-    // not null tour. startFog still must not null tour (N17).
-    state.race = null;
-    animGen++;
-    // Leftover Solve stats stay after Join. Open session
-    // rewrites #stats (N92). Hunt rewrites when play() is
-    // skipped (N93). Join did not, so leftover solver
-    // numbers named the previous walk under the seat just
-    // taken (N94). Join-from-spectate still keeps the hunt
-    // — do not null tour. startFog still must not null tour
-    // (N17).
-    $("stats").innerHTML =
-        `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
-        + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
-        + `&middot; <span>seed</span> ${state.maze.seed}`
-        + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
-        + `<br>`;
-    state.session.positions[name] = s.position;
-    state.trails[name] = [s.position];
-    if (fromSpectate) {
-      // Seat first so leaveSpectate keeps this session (N51).
-      // primary stays the opener — win-vs-ghost keys on it.
-      // This tab's arrows and clicks move the seat we just took.
-      state.seat = name;
-      leaveSpectate();
-      state.joined = name;
-      state.sessionStart = performance.now();
-      pinHash();
-      // Leftover spectate join title stays after
-      // Join-from-spectate. Open session rewrites #join
-      // (label + title). leaveSpectate rewrites when it
-      // drops a watch (N105). Join-from-spectate only
-      // rewrote the label, so leftover spectate title
-      // named a watch that is gone under the seat just
-      // taken (N107). Join-from-spectate still keeps the
-      // hunt — do not null tour. startFog still must not
-      // null tour (N17).
-      $("join").textContent = "Join as second player";
-      $("join").title = "Requires daedalus.session.multiplayer=true";
-      $("status").textContent = `session ${state.session.id.slice(0, 8)}… — arrow keys to move`;
-      log("player", `${name} joined the spectated session`);
-      resubscribe();
-    } else {
-      state.joined = name;
-      log("player", `${name} joined (multiplayer flag is on)`);
-    }
-    draw();
-  } catch (e) {
-    const msg = e.message || "";
-    // Flag-off join is the same 404 as an unknown session — do not name the flag.
-    const why = /session-completed|already finished/i.test(msg)
-        ? "this session already finished"
-        : /session-full|is full/i.test(msg)
-            ? "this session is full"
-            : nameGone(msg) || msg;
-    log("err", `join refused — ${why}`);
-  }
-}
-
-async function move(name, dr, dc) {
-  if (!state.session || state.won) return;
-  const at = state.session.positions[name];
-  if (!at) return;
-  const to = {row: at.row + dr, col: at.col + dc};
-  const body = name === state.session.primary ? {to} : {to, player: name};
-  const sessionId = state.session.id;
-  const mazeId = state.maze && state.maze.id;
-  try {
-    const ok = await api(`/session/${sessionId}/move`, {
-      method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body),
-    });
-    // Fog / Generate + a new Open session can replace the
-    // seat while this hop is out. A blocked reply's
-    // flashStatus would overwrite fog status; applyMove
-    // would write the old hop onto the new seat. Arrows
-    // and click-to-move both land here.
-    if (state.fog) return;
-    if (!state.session || state.session.id !== sessionId) return;
-    if (!state.maze || state.maze.id !== mazeId) return;
-    if (state.session.positions[name] == null) return;
-    if (ok === false) {
-      flashStatus("blocked — that way is a wall");
-      return;
-    }
-    // With STOMP connected, the frame is the source of truth (keeps every viewer
-    // consistent, including other tabs). Without it, apply locally so play still works.
-    if (!state.stomp) applyMove(name, to);
-  } catch (e) {
-    if (state.fog) return;
-    if (!state.session || state.session.id !== sessionId) return;
-    if (/evicted/.test(e.message)) {
-      log("err", "this maze aged out of the cache — generate again");
-      $("status").textContent = "this maze aged out of the cache — generate again";
-    } else {
-      log("err", e.message);
-    }
-  }
-}
-
-/** Shared position update: called from the STOMP frame handler or the local fallback. */
-function applyMove(who, to, from) {
-  if (!state.session) return;
-  state.session.positions[who] = to;
-  state.trails[who] = DaedalusSeat.extendTrail(state.trails[who], from, to);
-  const tile = DaedalusSeat.tileAt(state.maze.tiles, to);
-  if (tile === "G") declareWin(who);
-  else {
-    const moves = (state.trails[who] || []).length - 1;
-    if (state.tour) refreshTourStatus();
-    else {
-      $("status").textContent =
-          `session ${state.session.id.slice(0, 8)}… — ${who}: ${moves} moves`;
-    }
-    if (!state.stomp && !state.won) confirmWin(who);
-  }
-  draw();
-}
-
-/** Offline path: tiles can lag a living tick. The session snapshot is the win. */
-async function confirmWin(who) {
-  if (!state.session || state.won) return;
-  const sessionId = state.session.id;
-  const mazeId = state.maze && state.maze.id;
-  try {
-    const view = await api(`/session/${sessionId}`);
-    // Fog dropped the seat while this snapshot was out. applyMove
-    // already bails when !state.session; do not declareWin onto fog.
-    // Generate + a new Play: the old snapshot would declareWin
-    // (leaderboard, campaign) on the maze now on screen (N35).
-    if (state.fog) return;
-    if (!state.session) return;
-    if (state.session.id !== sessionId) return;
-    if (!state.maze || state.maze.id !== mazeId) return;
-    if (view.completed) declareWin(view.completedBy || who);
-  } catch (ignored) { /* play still works; the next hop will ask again */ }
-}
-
-function declareWin(who) {
-  if (state.won) return;
-  if (state.fog) return;
-  if (!state.session) return;
-  const sessionId = state.session.id;
-  const mazeId = state.maze && state.maze.id;
-  state.won = who;
-  let verdict = "";
-  if (state.ghost) {
-    const myMs = performance.now() - state.sessionStart;
-    verdict = myMs < state.ghost.elapsedMs
-        ? ` — you BEAT the ghost by ${((state.ghost.elapsedMs - myMs) / 1000).toFixed(1)}s!`
-        : ` — the ghost was ${((myMs - state.ghost.elapsedMs) / 1000).toFixed(1)}s faster`;
-    clearInterval(state.ghostTimer);
-  }
-  if (state.tour) {
-    tourVerdict().then(tv => {
-      if (state.fog) return;
-      if (!state.session) return;
-      if (state.session.id !== sessionId) return;
-      if (!state.maze || state.maze.id !== mazeId) return;
-      log("state", `${who} reached the goal — session complete${verdict}${tv}`);
-      $("status").textContent = `${who} reached the goal${verdict}${tv}`;
-    });
-  } else {
-    log("state", `${who} reached the goal — session complete${verdict}`);
-    $("status").textContent = `${who} reached the goal — session complete${verdict}`;
-  }
-  refreshLeaderboard();
-  if (state.campaign && state.stageIndex != null) onStageCleared();
-  draw();
-}
-
 let statusFlashTimer = null;
 function flashStatus(text) {
   const el = $("status"), prev = el.textContent;
@@ -3004,109 +1876,6 @@ function flashStatus(text) {
   statusFlashTimer = setTimeout(() => { el.textContent = prev; }, 900);
 }
 
-// ---------- STOMP ----------
-let stompWarned = false;
-let stompGen = 0;
-function connectStomp() {
-  if (typeof Stomp === "undefined" || typeof SockJS === "undefined") {
-    // CDN unreachable (offline / blocked network). Everything REST-driven still works;
-    // only the live-frames panel degrades. Say so once, quietly, instead of leaking a
-    // ReferenceError into the log.
-    if (!stompWarned) {
-      stompWarned = true;
-      log("state", "live frames unavailable (STOMP libraries did not load) — "
-          + "generate, solve, and play still work");
-    }
-    return;
-  }
-  const gen = ++stompGen;
-  if (state.stomp) {
-    try { state.stomp.disconnect(); } catch (ignored) {}
-    state.stomp = null;
-  }
-  const client = Stomp.over(new SockJS("/ws"));
-  client.debug = null;
-  const headers = {};
-  if (state.token) headers.Authorization = "Bearer " + state.token;
-  client.connect(headers, () => {
-    if (gen !== stompGen) {
-      try { client.disconnect(); } catch (ignored) {}
-      return;
-    }
-    state.stomp = client;
-    log("state", state.token ? "STOMP connected (authenticated)" : "STOMP connected");
-    // STOMP-less fallbacks were armed because the broker was not
-    // up yet. Frames are now the source of truth. A leftover spectate
-    // poll rewinds a hop (N43); leftover living / traffic polls
-    // write an older GET /maze over a tick that already landed (N44).
-    clearInterval(state.spectatePoll); state.spectatePoll = null;
-    clearInterval(state.livePoll); state.livePoll = null;
-    clearInterval(state.trafficPoll); state.trafficPoll = null;
-    resubscribe();
-  }, err => {
-    if (gen !== stompGen) return;
-    state.stomp = null;
-    log("err", "STOMP connection lost — retrying in 3s");
-    // CONNECT dropped the fallbacks (N43 / N44). The broker is gone
-    // again, so a living / traffic / watched maze would freeze until
-    // the next CONNECT. Re-arm the same polls; do not POST /live.
-    armStompFallbacks();
-    setTimeout(() => { if (gen === stompGen) connectStomp(); }, 3000);
-  });
-}
-
-/** Poll while the broker is down. CONNECT clears these (N43 / N44). */
-function armStompFallbacks() {
-  if (state.stomp) return;
-  if (state.readOnly && state.session && state.maze) startSpectatePolling();
-  if (state.maze && $("live") && $("live").disabled && !state.livePoll) {
-    startLivePolling(state.maze.id, state.liveTickMs || 2000, Infinity);
-  }
-  if (state.maze && $("traffic") && $("traffic").disabled && !state.trafficPoll) {
-    startTrafficPolling(state.maze.id, state.trafficTickMs || 2000);
-  }
-}
-
-function resubscribe() {
-  if (!state.stomp) return;
-  state.subs.forEach(s => { try { s.unsubscribe(); } catch (ignored) {} });
-  state.subs = [];
-  if (state.maze) {
-    state.subs.push(state.stomp.subscribe(`/topic/maze/${state.maze.id}/state`, f => {
-      const m = JSON.parse(f.body);
-      // Three frame shapes ride /state: MutationFrame (living tick, has `tick`),
-      // TrafficFrame (has `congestedCells`), GeneratedFrame (has `generatorId`).
-      if (m.tick !== undefined) { onMutation(m); return; }
-      if (m.congestedCells !== undefined) { onTrafficPulse(m); return; }
-      log("state", `generated ${m.rows}×${m.cols} by ${m.generatorId}`);
-    }));
-    state.subs.push(state.stomp.subscribe(`/topic/maze/${state.maze.id}/solver`, f => {
-      const m = JSON.parse(f.body);
-      log("solver", `${m.solverId} finished: path ${m.pathLength}, success=${m.success}`);
-    }));
-  }
-  if (state.session) {
-    const sessionId = state.session.id;
-    state.subs.push(state.stomp.subscribe(`/topic/session/${sessionId}/player`, f => {
-      const m = JSON.parse(f.body);
-      // Fog / Generate + a new Open session can replace the
-      // seat after this subscribe was armed. An in-flight
-      // frame must not log or apply a hop onto the new seat.
-      if (state.fog) return;
-      if (!state.session || state.session.id !== sessionId) return;
-      const who = m.player || state.session.primary;
-      log("player", `${who}: (${m.from.row},${m.from.col}) → (${m.to.row},${m.to.col})`);
-      applyMove(who, m.to, m.from);
-    }));
-  }
-  state.subs.push(state.stomp.subscribe("/topic/plugins/failures", f => {
-    const m = JSON.parse(f.body);
-    log("err", `plugin ${m.pluginId} failed in ${m.phase}: ${m.errorClass}`);
-    // The frame exists so the roster can change. A log line with STARTED
-    // still on the Plugins panel is the failure buried in server logs.
-    refreshPlugins();
-  }));
-}
 
 // ---------- rendering ----------
 // Geometry and paint live in draw.js. This file snapshots state into a
@@ -3129,139 +1898,6 @@ function ghostWalk() {
 }
 
 function cellKey(r, c) { return DaedalusFog.key(r, c); }
-
-function applyFogView(view) {
-  state.fog = DaedalusFog.mergeView(state.fog, view);
-  carveFogOpenings(view);
-}
-
-/**
- * The agent reports openings at the cell underfoot, not a grid. Write those four
- * gap tiles into memory so a living tick that opens a wall at your feet is
- * visible, without fetching GET /maze (that would paint rooms you have not
- * stood in).
- */
-function carveFogOpenings(view) {
-  if (!state.maze) return;
-  state.maze.tiles = DaedalusFog.carveTiles(state.maze.tiles, view);
-}
-
-const DIR_FROM_DELTA = {"-1,0": "NORTH", "1,0": "SOUTH", "0,-1": "WEST", "0,1": "EAST"};
-
-async function startFog() {
-  leaveSpectate();
-  const mazeId = state.maze.id;
-  const sessionId = state.session && state.session.id;
-  const view = await api(`/maze/${mazeId}/agent`, {method: "POST"});
-  // Generate / Daily / Back replaced the maze while this mint was
-  // out. Applying would walk fog on a grid this agent was not
-  // minted for, and carve its openings into those tiles.
-  if (!state.maze || state.maze.id !== mazeId) return;
-  // Play on the same maze seats a session; maze id still matches
-  // (N26), so a late mint would drop the new seat and re-arm
-  // fog on the play walk. Same class as N38. Discard when a
-  // session is seated that was not the one we started with —
-  // Fog still drops a seat that was already there (leave-session
-  // path).
-  if (state.session && state.session.id !== sessionId) return;
-  state.session = null;
-  state.seat = null;
-  state.joined = null;
-  // Leftover trails stay after Fog. Generate / leave-watch /
-  // leaveMaze / Play drop leftover crumbs. Fog dropped the
-  // seat and leftover ghost (N15) but left leftover trails,
-  // so leftover crumbs painted after a living tick ended
-  // the fog walk without Play (N109). startFog still must
-  // not null tour (N17).
-  state.trails = {};
-  // Leftover won stays after Fog. Generate / leave-watch /
-  // leaveMaze / Play drop leftover won. Fog dropped the
-  // seat and leftover trails (N109) but left leftover won,
-  // so leftover victory ring painted after a living tick
-  // ended the fog walk without Play (N110). startFog still
-  // must not null tour (N17).
-  state.won = null;
-  // Leftover tourGot stays after Fog. Hunt remints collected
-  // coins. Fog dropped the seat and leftover won (N110) but
-  // left leftover tourGot, so leftover collected coins
-  // painted after Play seated a new walk (draw swallows
-  // during fog). Drop those coins after the maze-id discard
-  // (N117). startFog still must not null tour (N17).
-  state.tourGot = [];
-  $("join").disabled = true;
-  // Open session pinned #session= and subscribed /player. N15 dropped the
-  // seat and hash; the subscription and ghost ticker stayed, so a joiner
-  // frame still logged a session move and the ghost still advanced —
-  // draw() returned early, so it did not paint, while the canvas walked
-  // fog. resubscribe / ghost clear after the null, same as adoptMaze.
-  // Pin after the drop — daily / campaign stay those kinds; a leftover
-  // #session= becomes #maze=.
-  clearInterval(state.ghostTimer); state.ghostTimer = null;
-  animGen++;
-  state.ghost = null;
-  state.path = null; state.expansions = [];
-  state.analysis = null; state.hardest = null; state.field = null;
-  state.lens = null; state.race = null; state.sanctuaries = null;
-  state.fingerprint = null;
-  state.caption = null;
-  // Analyze / Compare / Identify write #compareBox. Fog already drops
-  // those overlay objects (and hides ASCII); the sidebar stayed, so a
-  // leftover caption still named chokepoints during the walk, and a
-  // leftover compare table could hover-arm a solve path draw() swallowed
-  // until Play. Empty it after the drop, same as adoptMaze.
-  // state.tour stays: draw() returns early, refreshTourStatus needs the
-  // seat N16 dropped, and Play / a living fall-through still belong to
-  // this maze.
-  $("compareBox").innerHTML = "";
-  state.fog = {seen: new Set()};
-  applyFogView(view);
-  setGodModeEnabled(false);
-  $("asciiOut").hidden = true;
-  // Leftover Solve stats stay after Fog. Play / Hunt /
-  // Join rewrite #stats (N92–N94). Fog did not, so leftover
-  // solver numbers named the previous walk under the fog
-  // walk (N95). startFog still must not null tour (N17).
-  $("stats").innerHTML =
-      `<span>maze</span> ${esc(state.maze.id.slice(0, 8))}&hellip;<br>`
-      + `<span>by</span> ${esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
-      + `&middot; <span>seed</span> ${state.maze.seed}`
-      + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
-      + `<br>`;
-  clearTimeout(statusFlashTimer); statusFlashTimer = null;
-  $("status").textContent = `fog: ${view.stepsRemaining} steps left — arrows walk the agent`;
-  log("state", `fog of war — agent ${String(view.agentId).slice(0, 8)}… sees `
-      + (view.open && view.open.length ? view.open.join(", ") : "no openings"));
-  pinHash();
-  resubscribe();
-  draw();
-}
-
-async function fogStep(dr, dc) {
-  if (!state.fog || state.fog.arrived || state.fog.expired) return;
-  const dir = DIR_FROM_DELTA[dr + "," + dc];
-  if (!dir) return;
-  if (!state.fog.open.includes(dir)) {
-    log("err", `no opening ${dir}`);
-    return;
-  }
-  const agentId = state.fog.agentId;
-  const view = await api(`/agent/${agentId}/step?direction=${dir}`, {method: "POST"});
-  // Generate / Play dropped the walk while this step was out.
-  // applyFogView used to recreate state.fog and carve the old
-  // openings into the maze now on screen.
-  if (!state.fog || state.fog.agentId !== agentId) return;
-  applyFogView(view);
-  if (view.arrived) {
-    $("status").textContent = `arrived in ${view.stepsUsed} steps`;
-    log("state", `fog: arrived in ${view.stepsUsed} steps`);
-  } else if (view.expired) {
-    $("status").textContent = "budget exhausted — open a new fog walk";
-    log("err", "fog: step budget exhausted");
-  } else {
-    $("status").textContent = `fog: ${view.stepsRemaining} steps left · ${view.open.join(", ")}`;
-  }
-  draw();
-}
 
 function mazeScene() {
   return {

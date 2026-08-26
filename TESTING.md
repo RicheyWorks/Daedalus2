@@ -80,8 +80,8 @@ Floors as of 2026-08-26 (not 0.00 exemptions):
 | daedalus-server | 0.93 | 0.96 |
 | daedalus-core | 0.90 | 0.93 |
 | daedalus-plugin-runtime | 0.84 | 0.87 |
-| daedalus-plugin-api | 0.49 | 0.52 |
-| daedalus-desktop | 0.09 | 0.14 |
+| daedalus-plugin-api | 0.96 | 0.99 |
+| daedalus-desktop | 0.28 | 0.31 |
 
 Parent and module pom comments that still said "visible 0.00 exemption" were corrected on
 2026-08-26. The 0.00 figures above are the July audit, not the current poms.
@@ -107,9 +107,9 @@ Policy is written (ADR-003): thin JavaFX shell, no TestFX. The 2026-07-31 FX-thr
 moved generation/solve into `DesktopWork` (6 tests). Launcher + theme add 4 more.
 
 What remains: `MainController` (~393 LOC) still owns rendering, movement, and FXML glue,
-with zero tests. The module floor is 0.09 / 0.14 — a deletion guard, not a 0.00 exemption,
-and not high enough to notice a `MainController` regression. Keep pushing logic that can
-leave the toolkit into testable helpers; do not add TestFX.
+with zero tests. The module floor is 0.28 / 0.31 after DesktopWalk / DesktopPaint.
+FXML wiring is still launch-only. Keep pushing logic that can leave the toolkit
+into testable helpers; do not add TestFX.
 
 ## 3. What NOT to add
 
@@ -117,7 +117,7 @@ leave the toolkit into testable helpers; do not add TestFX.
 - **Per-SEND JWT re-verification tests.** `nonConnectFramesPassThroughUntouched` documents a deliberate design (authenticate at CONNECT, not per frame). Don't add tests that would enshrine the opposite until session-ownership work deliberately changes the design.
 - **Benchmark assertions in CI.** The staleness lesson from ADR-002 applies: performance claims need a swept, controlled harness, not a CI assert that flakes on runner noise. `benchmark-harness` tests should pin correctness of the harness, never latency numbers.
 - **Mutation testing as a gate.** `mutants/` is a local proof that tests have teeth. Too slow for every push; optional curiosity, not process.
-- **New `contains(...)` pins in `WebUiSmokeTest`.** That class is a boot-and-serve check plus a frozen snapshot of strings the page once contained. It cannot prove a click still works. Leftover-state and feature regressions belong in `sweep/` (`api-sweep.py` runs in CI against a test-profile server; `ui-sweep.js` is the local Playwright pass). Do not add another `contains("someIdentifier")` when a UI change lands.
+- **New `contains(...)` or leftover `indexOf` body pins in `WebUiSmokeTest`.** That class is a boot-and-serve contract. Leftover-state and feature regressions belong in `sweep/` (`api-sweep.py` runs in CI against a test-profile server; `ui-sweep.js` is the local Playwright pass). The leftover `indexOf("async function play")` mirror was retired 2026-08-26. Do not add it back.
 
 ## 4. Suggested order of work
 
@@ -129,6 +129,7 @@ leave the toolkit into testable helpers; do not add TestFX.
 6. ~~GameSessionService concurrency test~~ — done.
 7. ~~Desktop: extract more of `MainController` into testable helpers~~ — walk rules live in `DesktopWalk`; letterbox / path tiles / player disc live in `DesktopPaint` (2026-08-26). FXML wiring stays launch-only (ADR-003).
 8. Keep `TESTING.md` dated when the standings table moves. A strategy doc that describes last month's gaps is itself a gap.
-9. ~~Stop growing `WebUiSmokeTest`; add a real API sweep in CI~~ — done 2026-08-26. `sweep/api-sweep.py` now fails the job on a failed check. Playwright `ui-sweep.js` stays local.
+9. ~~Stop growing `WebUiSmokeTest`; add a real API sweep in CI~~ — done 2026-08-26. `sweep/api-sweep.py` now fails the job on a failed check. Playwright `ui-sweep.js` stays local. Leftover body pins were retired the same day.
+10. ~~Windows CI for plugin-host JAR-lock~~ — done 2026-08-26. `ci.yml` runs `PluginHostShutdownTest` on `windows-latest`.
 
 Every new regression test in any of the above follows the house rule: replay it against the pre-fix code (or a deliberately broken variant) once, to prove it has teeth.

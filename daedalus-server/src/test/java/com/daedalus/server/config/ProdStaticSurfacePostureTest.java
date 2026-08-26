@@ -74,6 +74,12 @@ class ProdStaticSurfacePostureTest {
         EXPECTED.put("GET /seat.js", Posture.PUBLIC);
         EXPECTED.put("GET /lab.js", Posture.PUBLIC);
         EXPECTED.put("GET /caption.js", Posture.PUBLIC);
+        EXPECTED.put("GET /mint.js", Posture.PUBLIC);
+        EXPECTED.put("GET /campaign.js", Posture.PUBLIC);
+        EXPECTED.put("GET /theory.js", Posture.PUBLIC);
+        EXPECTED.put("GET /live.js", Posture.PUBLIC);
+        EXPECTED.put("GET /session.js", Posture.PUBLIC);
+        EXPECTED.put("GET /fogwalk.js", Posture.PUBLIC);
         EXPECTED.put("GET /app.js", Posture.PUBLIC);
 
         // SockJS info is the first request a browser makes. Closing /ws/** made that 401, so
@@ -97,6 +103,12 @@ class ProdStaticSurfacePostureTest {
         EXPECTED.put("POST /seat.js", Posture.REFUSED);
         EXPECTED.put("POST /lab.js", Posture.REFUSED);
         EXPECTED.put("POST /caption.js", Posture.REFUSED);
+        EXPECTED.put("POST /mint.js", Posture.REFUSED);
+        EXPECTED.put("POST /campaign.js", Posture.REFUSED);
+        EXPECTED.put("POST /theory.js", Posture.REFUSED);
+        EXPECTED.put("POST /live.js", Posture.REFUSED);
+        EXPECTED.put("POST /session.js", Posture.REFUSED);
+        EXPECTED.put("POST /fogwalk.js", Posture.REFUSED);
         EXPECTED.put("POST /app.js", Posture.REFUSED);
 
         // Nothing else is served, and the fail-closed default is the feature. A path that does
@@ -174,6 +186,18 @@ class ProdStaticSurfacePostureTest {
                 .returnResult(byte[].class).getResponseBody();
         byte[] caption = client.method(HttpMethod.GET).uri("/caption.js").exchange()
                 .returnResult(byte[].class).getResponseBody();
+        byte[] mint = client.method(HttpMethod.GET).uri("/mint.js").exchange()
+                .returnResult(byte[].class).getResponseBody();
+        byte[] campaign = client.method(HttpMethod.GET).uri("/campaign.js").exchange()
+                .returnResult(byte[].class).getResponseBody();
+        byte[] theory = client.method(HttpMethod.GET).uri("/theory.js").exchange()
+                .returnResult(byte[].class).getResponseBody();
+        byte[] live = client.method(HttpMethod.GET).uri("/live.js").exchange()
+                .returnResult(byte[].class).getResponseBody();
+        byte[] session = client.method(HttpMethod.GET).uri("/session.js").exchange()
+                .returnResult(byte[].class).getResponseBody();
+        byte[] fogwalk = client.method(HttpMethod.GET).uri("/fogwalk.js").exchange()
+                .returnResult(byte[].class).getResponseBody();
         byte[] script = client.method(HttpMethod.GET).uri("/app.js").exchange()
                 .returnResult(byte[].class).getResponseBody();
 
@@ -185,16 +209,29 @@ class ProdStaticSurfacePostureTest {
         assertThat(seat).as("prod served nothing at /seat.js").isNotNull();
         assertThat(lab).as("prod served nothing at /lab.js").isNotNull();
         assertThat(caption).as("prod served nothing at /caption.js").isNotNull();
+        assertThat(mint).as("prod served nothing at /mint.js").isNotNull();
+        assertThat(campaign).as("prod served nothing at /campaign.js").isNotNull();
+        assertThat(theory).as("prod served nothing at /theory.js").isNotNull();
+        assertThat(live).as("prod served nothing at /live.js").isNotNull();
+        assertThat(session).as("prod served nothing at /session.js").isNotNull();
+        assertThat(fogwalk).as("prod served nothing at /fogwalk.js").isNotNull();
         assertThat(script).as("prod served nothing at /app.js").isNotNull();
         String html = new String(body);
         String js = new String(painter) + new String(api) + new String(share)
                 + new String(fog) + new String(seat) + new String(lab)
-                + new String(caption) + new String(script);
+                + new String(caption) + new String(mint) + new String(campaign)
+                + new String(theory) + new String(live) + new String(session)
+                + new String(fogwalk) + new String(script);
         assertThat(html).contains("<html", "/draw.js", "/api.js", "/share.js",
-                "/fog.js", "/seat.js", "/lab.js", "/caption.js", "/app.js");
+                "/fog.js", "/seat.js", "/lab.js", "/caption.js", "/mint.js",
+                "/campaign.js", "/theory.js", "/live.js", "/session.js",
+                "/fogwalk.js", "/app.js");
         assertThat(js).contains("#session=", "DaedalusDraw", "DaedalusApi",
                 "DaedalusShare", "DaedalusFog", "DaedalusSeat", "DaedalusLab",
-                "DaedalusCaption");
+                "DaedalusCaption", "DaedalusMint", "DaedalusCampaign",
+                "DaedalusTheory",
+                "connectStomp", "async function play",
+                "async function startFog");
         assertThat(html.length() + js.length())
                 .as("the page+script prod serves is %d bytes, which is not the UI",
                         html.length() + js.length())

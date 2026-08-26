@@ -22,11 +22,11 @@
     </description>
 
     <properties>
-        <!-- Coverage ratchet: contracts module — interfaces, events, records. Most
-             behavior is exercised through runtime/server; this floor is a deletion
-             guard, not a 0.00 exemption. Raise it when coverage climbs past the ceiling. -->
-        <jacoco.check.minimum>0.49</jacoco.check.minimum>
-        <jacoco.check.ceiling>0.52</jacoco.check.ceiling>
+        <!-- Coverage ratchet: contracts module — interfaces, events, records.
+             Event constructor pins moved this off a deletion guard. Raise the
+             pair when coverage climbs past the ceiling. -->
+        <jacoco.check.minimum>0.96</jacoco.check.minimum>
+        <jacoco.check.ceiling>0.99</jacoco.check.ceiling>
     </properties>
 
     <dependencies>
