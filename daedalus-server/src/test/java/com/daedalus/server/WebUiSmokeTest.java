@@ -1909,6 +1909,34 @@ class WebUiSmokeTest {
         assertLeftoverCadenceStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N131. Remaining leftover cleared stays. loadCampaign /
+        // leaveCampaign remint leftover cleared. leftover
+        // campaign stay already forbids leaveCampaign (N112).
+        // These stays must not be taught away: Hunt / Play /
+        // Fog / theory / Join leftover cleared stay — leftover
+        // stages you cleared; leftover campaign stay already
+        // forbids dropping leftover ladder (N112); leftover
+        // campaign box stay already forbids reminting leftover
+        // #campaignBox (N128); Hunt through Play and
+        // Join-from-spectate still keep tour; Fog still keeps
+        // tour (N17); leftover Solve path stays as a theory
+        // route hint (N62); Join leftover ghost stays (N86).
+        assertLeftoverClearedStay(html, "async function startTour", "function sameCell");
+        assertLeftoverClearedStay(html, "async function play()", "async function join()");
+        assertLeftoverClearedStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverClearedStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverClearedStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverClearedStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverClearedStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverClearedStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverClearedStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -3075,6 +3103,21 @@ class WebUiSmokeTest {
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("state.liveTickMs");
         assertThat(body).doesNotContain("state.trafficTickMs");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover cleared stay (N131). leftover stages you
+     * cleared still name leftover ladder. Must not remint
+     * leftover cleared. Must not null tour.
+     */
+    private static void assertLeftoverClearedStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("state.cleared");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
