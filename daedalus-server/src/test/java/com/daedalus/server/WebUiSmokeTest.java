@@ -34,7 +34,9 @@ class WebUiSmokeTest {
         String[] scripts = {
                 "/draw.js", "/api.js", "/share.js", "/fog.js", "/seat.js",
                 "/lab.js", "/caption.js", "/mint.js", "/campaign.js",
-                "/theory.js", "/live.js", "/session.js", "/fogwalk.js",
+                "/hunt.js", "/solve.js", "/theory.js", "/live.js",
+                "/session.js",
+                "/fogwalk.js",
                 "/app.js",
         };
         byte[] body = client.get().uri("/index.html").exchange()
