@@ -30,6 +30,11 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
 - **Pluggable** — third-party JARs can contribute generators, solvers, themes,
   and event listeners through a Spring-free SPI; loaders are tracked and
   closed cleanly on shutdown (no Windows file-locks, no metaspace bloat).
+  The host actually calls that shutdown: `PluginConfig` registers
+  `PluginManager` with `destroyMethod = "shutdownAll"`. Until 2026-08-26
+  the method existed and the runtime suite called it, but the server never
+  did — `stop()` did not run, contributed algorithms stayed in the catalogs,
+  and Windows kept plugin JARs locked after a graceful stop.
   A plugin can **add** an algorithm, never replace one: ids are claimed once
   and a collision fails that plugin rather than shadowing the incumbent. Until
   2026-07-31 `register` was a bare map `put`, so any JAR in the plugins
@@ -289,11 +294,14 @@ JAR into the plugin directory (`daedalus.plugins.directory`, defaults to
 `/var/daedalus/plugins` in prod). The runtime discovers it via
 `ServiceLoader`, isolates it in its own `URLClassLoader`, and drives it
 through `init` → `registerAlgorithms` → `start` on boot, `stop` on shutdown.
+Spring invokes `PluginManager.shutdownAll()` as the `PluginManager` bean's
+destroy method when the context closes — not only when a test calls it.
 
 Failures at any phase publish `PluginFailedEvent`, which the server
-re-emits to `/topic/plugins/failures`. The runtime closes every external
-classloader in `shutdownAll()`, so JARs aren't kept locked open and you
-can swap a plugin without restarting the server.
+re-emits to `/topic/plugins/failures`. Shutdown unregisters the plugin's
+algorithms (built-ins stay) and closes every external classloader, so JARs
+aren't kept locked open and you can swap a plugin without restarting the
+server. `PluginHostShutdownTest` pins the host wiring.
 
 See `daedalus-plugin-api/src/main/java/com/daedalus/plugin/AbstractPlugin.java`
 for the easiest starting point. The
@@ -336,7 +344,7 @@ across 127 files (322 core, 7 plugin-api, 26 plugin-runtime, 258 server,
 | `daedalus-core` | `PerfectMazePropertyTest` — every generator output is a spanning tree (perfect-maze contract) |
 | `daedalus-plugin-api` | `PluginManifestNullGuardTest` — manifest required-field guards |
 | `daedalus-plugin-runtime` | `PluginManagerLifecycleTest`, `PluginManagerJarDiscoveryTest` — boot/shutdown ordering, classloader cleanup, `PluginFailedEvent` publication |
-| `daedalus-server` | `GeneratorInvariantFuzzTest` — **every registered generator**, taken from the live registry rather than a list, held to the universal invariants across 11 shapes × 2 seeds (506 generations, zero violations); `MazeGenerationServiceFallbackTest` (Resilience4j circuit breaker), `RedisConfigConditionalTest` (on/off toggle), `SecurityConfigProfileTest` (profile-aware filter chain), `MazeControllerGeneratorIdTest`, `MazeWebSocketControllerPluginFailedTest` |
+| `daedalus-server` | `GeneratorInvariantFuzzTest` — **every registered generator**, taken from the live registry rather than a list, held to the universal invariants across 11 shapes × 2 seeds (506 generations, zero violations); `PluginHostShutdownTest` (host `destroyMethod` actually calls `shutdownAll`); `MazeGenerationServiceFallbackTest` (Resilience4j circuit breaker), `RedisConfigConditionalTest` (on/off toggle), `SecurityConfigProfileTest` (profile-aware filter chain), `MazeControllerGeneratorIdTest`, `MazeWebSocketControllerPluginFailedTest` |
 | `daedalus-desktop` | `DesktopWorkTest` — generation and solve run off the JavaFX thread as plain callables, so they are testable without a headless toolkit (measured: hunt-and-kill takes 1101 ms at 128×128, IDA\* 1783 ms, all of it frozen UI before this); `ThemeManagerTest`, `DaedalusLauncherTest` |
 
 ## Workspace layout

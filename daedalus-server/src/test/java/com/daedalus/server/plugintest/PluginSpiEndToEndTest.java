@@ -39,6 +39,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  * recipe as the runtime module's discovery tests. Fresh context by construction (unique
  * property values), so this is one of the suite's expensive tests — deliberately, since a
  * cached context cannot prove startup wiring.
+ *
+ * <p>Shutdown is the other half of the same wiring and is pinned by
+ * {@link com.daedalus.server.config.PluginHostShutdownTest}: this class must not close the
+ * Spring Test-managed context mid-method.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")

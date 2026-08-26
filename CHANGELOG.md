@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Plugin shutdown now runs in the host.** `PluginManager.shutdownAll()` was implemented
+  and tested in `daedalus-plugin-runtime`, but `PluginConfig` never registered it as the
+  bean destroy method — so `stop()` never ran, contributed algorithms stayed in the
+  catalogs, and Windows kept plugin JARs locked after a graceful shutdown. The bean now
+  uses `destroyMethod = "shutdownAll"`; `PluginHostShutdownTest` closes a host context
+  and asserts `plugin-echo` is gone while built-ins stay.
+
 - **Leftover leftover #pass stays.** leftover leftover auth stay already forbids reminting leftover leftover token (N118). leftover leftover `#user` stay already forbids reminting leftover leftover account (N182). Hunt / Play / Fog / theory / Join leftover leftover `#pass` stay — leftover leftover secret you already typed. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover leftover Solve path stays as a theory route hint (N62). Join leftover leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N183).
 
 - **Leftover leftover #user stays.** leftover leftover auth stay already forbids reminting leftover leftover token (N118). leftover leftover `#log` stay already forbids reminting leftover leftover history (N181). Hunt / Play / Fog / theory / Join leftover leftover `#user` stay — leftover leftover account you already typed. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover leftover Solve path stays as a theory route hint (N62). Join leftover leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N182).
