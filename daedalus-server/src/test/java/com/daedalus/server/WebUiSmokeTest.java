@@ -2525,6 +2525,34 @@ class WebUiSmokeTest {
         assertLeftoverBraidOptionsStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N153. Remaining leftover plugin version stays.
+        // refreshPlugins remints leftover version. leftover
+        // plugin stay already forbids reminting leftover
+        // roster (N115). leftover plugins describe stay
+        // already forbids reminting leftover describe (N140).
+        // These stays must not be taught away: Hunt / Play /
+        // Fog / theory / Join leftover plugin version stay —
+        // leftover version you already loaded; Hunt through
+        // Play and Join-from-spectate still keep tour; Fog
+        // still keeps tour (N17); leftover Solve path stays
+        // as a theory route hint (N62); Join leftover ghost
+        // stays (N86). Must not null tour (N17).
+        assertLeftoverPluginVersionStay(html, "async function startTour", "function sameCell");
+        assertLeftoverPluginVersionStay(html, "async function play()", "async function join()");
+        assertLeftoverPluginVersionStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverPluginVersionStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverPluginVersionStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverPluginVersionStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverPluginVersionStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverPluginVersionStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverPluginVersionStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -4067,6 +4095,24 @@ class WebUiSmokeTest {
         assertThat(body).doesNotContain("$(\"braid\").appendChild");
         assertThat(body).doesNotContain("applyBraidFromMaze");
         assertThat(body).doesNotContain("applyRecipeToForm");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover plugin version stay (N153). leftover version
+     * you already loaded. leftover plugin stay already
+     * forbids reminting leftover roster (N115). leftover
+     * plugins describe stay already N140. Must not remint
+     * leftover version. Must not null tour.
+     */
+    private static void assertLeftoverPluginVersionStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("m.version");
+        assertThat(body).doesNotContain("refreshPlugins");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
