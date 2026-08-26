@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Leftover plugin manifest stays.** `refreshPlugins` remints leftover plugin manifest. leftover plugin stay already forbids reminting leftover roster (N115). leftover plugin id stay already forbids reminting leftover id (N157). Hunt / Play / Fog / theory / Join leftover plugin manifest stay — leftover manifest you already loaded. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N158).
+
 - **Leftover plugin id stays.** `refreshPlugins` remints leftover plugin id. leftover plugin stay already forbids reminting leftover roster (N115). leftover plugin displayName stay already forbids reminting leftover name (N156). Hunt / Play / Fog / theory / Join leftover plugin id stay — leftover id you already loaded. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N157).
 
 - **Leftover plugin displayName stays.** `refreshPlugins` remints leftover plugin displayName. leftover plugin stay already forbids reminting leftover roster (N115). leftover plugin error stay already forbids reminting leftover failure (N155). Hunt / Play / Fog / theory / Join leftover plugin displayName stay — leftover name you already loaded. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N156).
