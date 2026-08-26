@@ -2375,6 +2375,35 @@ class WebUiSmokeTest {
         assertLeftoverSolverOptionsStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N148. Remaining leftover #generator options stay.
+        // loadAlgorithms remints leftover #generator options.
+        // leftover form stay already forbids reminting leftover
+        // generator value (N114). leftover algos stay already
+        // forbids reminting leftover catalog (N133). leftover
+        // #solver options stay already forbids reminting leftover
+        // solver roster (N147). These stays must not be taught
+        // away: Hunt / Play / Fog / theory / Join leftover
+        // #generator options stay — leftover generator roster
+        // you loaded; Hunt through Play and Join-from-spectate
+        // still keep tour; Fog still keeps tour (N17); leftover
+        // Solve path stays as a theory route hint (N62); Join
+        // leftover ghost stays (N86). Must not null tour (N17).
+        assertLeftoverGeneratorOptionsStay(html, "async function startTour", "function sameCell");
+        assertLeftoverGeneratorOptionsStay(html, "async function play()", "async function join()");
+        assertLeftoverGeneratorOptionsStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverGeneratorOptionsStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverGeneratorOptionsStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverGeneratorOptionsStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverGeneratorOptionsStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverGeneratorOptionsStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverGeneratorOptionsStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -3823,6 +3852,24 @@ class WebUiSmokeTest {
         assertThat(to).isGreaterThan(from);
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("[\"solver\", all.solvers]");
+        assertThat(body).doesNotContain("loadAlgorithms");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover #generator options stay (N148). leftover
+     * generator roster you loaded. leftover form stay
+     * already forbids reminting leftover generator value
+     * (N114). leftover algos stay already N133. Must not
+     * remint leftover #generator options. Must not null tour.
+     */
+    private static void assertLeftoverGeneratorOptionsStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("[\"generator\", all.generators]");
         assertThat(body).doesNotContain("loadAlgorithms");
         assertThat(body).doesNotContain("state.tour = null");
     }
