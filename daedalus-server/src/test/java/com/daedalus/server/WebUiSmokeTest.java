@@ -2833,6 +2833,79 @@ class WebUiSmokeTest {
         assertLeftoverPluginListMapStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N165–N168. Remaining leftover leftover recipe
+        // family stays. leftover form stay already forbids
+        // reminting leftover recipe (N114). leftover
+        // #hotspotCost stay already N123. These stays must
+        // not be taught away: Hunt / Play / Fog / theory /
+        // Join leftover #rows stay — leftover height you
+        // already asked for; leftover #cols stay — leftover
+        // width you already asked for; leftover #seed stay
+        // — leftover seed you already asked for; leftover
+        // #hotspots stay — leftover spots you already asked
+        // for; Hunt through Play and Join-from-spectate
+        // still keep tour; Fog still keeps tour (N17);
+        // leftover Solve path stays as a theory route hint
+        // (N62); Join leftover ghost stays (N86). Must not
+        // null tour (N17).
+        assertLeftoverRowsStay(html, "async function startTour", "function sameCell");
+        assertLeftoverRowsStay(html, "async function play()", "async function join()");
+        assertLeftoverRowsStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverRowsStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverRowsStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverRowsStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverRowsStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverRowsStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverRowsStay(html, "async function join()", "async function move(");
+        assertLeftoverColsStay(html, "async function startTour", "function sameCell");
+        assertLeftoverColsStay(html, "async function play()", "async function join()");
+        assertLeftoverColsStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverColsStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverColsStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverColsStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverColsStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverColsStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverColsStay(html, "async function join()", "async function move(");
+        assertLeftoverSeedStay(html, "async function startTour", "function sameCell");
+        assertLeftoverSeedStay(html, "async function play()", "async function join()");
+        assertLeftoverSeedStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverSeedStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverSeedStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverSeedStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverSeedStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverSeedStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverSeedStay(html, "async function join()", "async function move(");
+        assertLeftoverHotspotsStay(html, "async function startTour", "function sameCell");
+        assertLeftoverHotspotsStay(html, "async function play()", "async function join()");
+        assertLeftoverHotspotsStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverHotspotsStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverHotspotsStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverHotspotsStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverHotspotsStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverHotspotsStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverHotspotsStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -4595,6 +4668,77 @@ class WebUiSmokeTest {
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("list.map");
         assertThat(body).doesNotContain("refreshPlugins");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover #rows stay (N165). leftover height you
+     * already asked for. leftover form stay already forbids
+     * reminting leftover recipe (N114). Must not remint
+     * leftover #rows. Must not null tour.
+     */
+    private static void assertLeftoverRowsStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"rows\").value =");
+        assertThat(body).doesNotContain("applyRecipeToForm");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover #cols stay (N166). leftover width you already
+     * asked for. leftover form stay already forbids reminting
+     * leftover recipe (N114). leftover #rows stay already
+     * N165. Must not remint leftover #cols. Must not null
+     * tour.
+     */
+    private static void assertLeftoverColsStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"cols\").value =");
+        assertThat(body).doesNotContain("applyRecipeToForm");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover #seed stay (N167). leftover seed you already
+     * asked for. leftover form stay already forbids reminting
+     * leftover recipe (N114). leftover #cols stay already
+     * N166. Must not remint leftover #seed. Must not null
+     * tour.
+     */
+    private static void assertLeftoverSeedStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"seed\").value =");
+        assertThat(body).doesNotContain("applyRecipeToForm");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover #hotspots stay (N168). leftover spots you
+     * already asked for. leftover form stay already forbids
+     * reminting leftover recipe (N114). leftover #seed stay
+     * already N167. leftover #hotspotCost stay already N123.
+     * Must not remint leftover #hotspots. Must not null tour.
+     */
+    private static void assertLeftoverHotspotsStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"hotspots\").value =");
+        assertThat(body).doesNotContain("applyRecipeToForm");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
