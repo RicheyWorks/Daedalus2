@@ -5,6 +5,7 @@ package com.daedalus.api.dto;
 import com.daedalus.model.GameSession;
 import com.daedalus.model.Point;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -38,6 +39,22 @@ public record SessionViewResponse(UUID sessionId, UUID mazeId, String player,
                                   List<GameSession.TimedMove> trail,
                                   Map<String, List<GameSession.TimedMove>> walks,
                                   String completedBy) {
+    public SessionViewResponse {
+        players = players == null ? null : Map.copyOf(players);
+        trail = trail == null ? null : List.copyOf(trail);
+        walks = copyWalks(walks);
+    }
+
+    private static Map<String, List<GameSession.TimedMove>> copyWalks(
+            Map<String, List<GameSession.TimedMove>> walks) {
+        if (walks == null) {
+            return null;
+        }
+        HashMap<String, List<GameSession.TimedMove>> copy = new HashMap<>();
+        walks.forEach((name, hops) -> copy.put(name, hops == null ? List.of() : List.copyOf(hops)));
+        return Map.copyOf(copy);
+    }
+
     /** Pre-winner-name shape. */
     public SessionViewResponse(UUID sessionId, UUID mazeId, String player,
                                Map<String, Point> players,

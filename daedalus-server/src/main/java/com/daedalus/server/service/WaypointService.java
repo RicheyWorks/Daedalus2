@@ -76,7 +76,13 @@ public class WaypointService {
      *                     The order list is the coins; this is the corridor they sit on.
      */
     public record Tour(UUID mazeId, List<Point> waypoints, List<Point> optimalOrder,
-                       int optimalCost, boolean feasible, List<Point> path) {}
+                       int optimalCost, boolean feasible, List<Point> path) {
+        public Tour {
+            waypoints = waypoints == null ? null : List.copyOf(waypoints);
+            optimalOrder = optimalOrder == null ? null : List.copyOf(optimalOrder);
+            path = path == null ? null : List.copyOf(path);
+        }
+    }
 
     /**
      * How a session is doing against that optimum.
@@ -92,7 +98,13 @@ public class WaypointService {
      */
     public record Progress(UUID sessionId, int collected, int total, long walked,
                            int optimal, boolean complete, List<Point> remaining,
-                           List<Point> waypoints, List<Point> path) {}
+                           List<Point> waypoints, List<Point> path) {
+        public Progress {
+            remaining = remaining == null ? null : List.copyOf(remaining);
+            waypoints = waypoints == null ? null : List.copyOf(waypoints);
+            path = path == null ? null : List.copyOf(path);
+        }
+    }
 
     private final MazeGenerationService gen;
     private final GameSessionService sessions;

@@ -2,6 +2,7 @@
 
 package com.daedalus.server;
 
+import com.daedalus.server.config.ProdSecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -31,21 +32,12 @@ class WebUiSmokeTest {
     void theWebUiIsServedAtTheRoot() {
         RestTestClient client = RestTestClient.bindToServer()
                 .baseUrl("http://localhost:" + port).build();
-        String[] scripts = {
-                "/draw.js", "/api.js", "/share.js", "/fog.js", "/seat.js",
-                "/lab.js", "/caption.js", "/mint.js", "/campaign.js",
-                "/spectate.js", "/hunt.js", "/solve.js", "/theory.js",
-                "/living.js", "/ghost.js", "/tournament.js", "/live.js",
-                "/session.js",
-                "/fogwalk.js",
-                "/app.js",
-        };
         byte[] body = client.get().uri("/index.html").exchange()
                 .expectStatus().isOk()
                 .expectBody().returnResult().getResponseBody();
         assertThat(body).isNotNull();
         StringBuilder js = new StringBuilder();
-        for (String path : scripts) {
+        for (String path : ProdSecurityConfig.STATIC_SCRIPTS) {
             byte[] bytes = client.get().uri(path).exchange()
                     .expectStatus().isOk()
                     .expectBody().returnResult().getResponseBody();

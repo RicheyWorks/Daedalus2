@@ -14,6 +14,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Production security posture. Active when {@code spring.profiles.active=prod}.
  *
@@ -24,14 +27,8 @@ import org.springframework.security.web.SecurityFilterChain;
  *
  * <p><b>Public (no token required)</b>:
  * <ul>
- *   <li>{@code GET /}, {@code GET /index.html}, {@code GET /draw.js}, {@code GET /api.js},
- *       {@code GET /share.js}, {@code GET /fog.js}, {@code GET /seat.js},
- *       {@code GET /lab.js}, {@code GET /caption.js}, {@code GET /mint.js},
- *       {@code GET /campaign.js}, {@code GET /spectate.js}, {@code GET /hunt.js},
- *       {@code GET /solve.js}, {@code GET /theory.js}, {@code GET /living.js},
- *       {@code GET /ghost.js}, {@code GET /tournament.js}, {@code GET /live.js},
- *       {@code GET /session.js}, {@code GET /fogwalk.js}, and {@code GET /app.js} —
- *       the web UI. The README publishes it as
+ *   <li>{@code GET /}, {@code GET /index.html}, and every path in
+ *       {@link #STATIC_SCRIPTS} — the web UI. The README publishes it as
  *       "served at {@code /}" and it was 401 in prod: {@code anyRequest().authenticated()}
  *       covers static resources too, and {@code ProdAuthPostureTest} scans controller mappings,
  *       so no table this project keeps had a row for a file. See the note at the matcher.</li>
@@ -71,6 +68,29 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @Profile("prod")
 public class ProdSecurityConfig {
+
+    /**
+     * Fail-closed inventory of static scripts the UI loads, in {@code index.html}
+     * order. A new {@code .js} under {@code static/} 401s in prod until it is
+     * listed here. Posture and smoke tests read this same list — they do not
+     * keep a second copy. {@code index.html} still names each {@code <script>}
+     * because HTML cannot import this constant; the serve test fails if a path
+     * is missing from the page.
+     */
+    public static final List<String> STATIC_SCRIPTS = List.of(
+            "/draw.js", "/api.js", "/share.js", "/fog.js", "/seat.js",
+            "/lab.js", "/caption.js", "/mint.js", "/campaign.js",
+            "/spectate.js", "/hunt.js", "/solve.js", "/theory.js",
+            "/living.js", "/ghost.js", "/tournament.js", "/live.js",
+            "/session.js", "/fogwalk.js", "/desk.js", "/stage.js", "/app.js");
+
+    private static String[] publicStaticGets() {
+        List<String> paths = new ArrayList<>();
+        paths.add("/");
+        paths.add("/index.html");
+        paths.addAll(STATIC_SCRIPTS);
+        return paths.toArray(String[]::new);
+    }
 
     private final JwtTokenService tokenService;
 
@@ -128,12 +148,7 @@ public class ProdSecurityConfig {
                         // governed by the rules in this method — a visitor without a token can
                         // browse public mazes and spectate, and generate/solve/session all
                         // answer 401 exactly as they did before.
-                        .requestMatchers(HttpMethod.GET, "/", "/index.html", "/draw.js",
-                                "/api.js", "/share.js", "/fog.js", "/seat.js", "/lab.js",
-                                "/caption.js", "/mint.js", "/campaign.js", "/spectate.js",
-                                "/hunt.js", "/solve.js", "/theory.js", "/living.js",
-                                "/ghost.js", "/tournament.js", "/live.js", "/session.js",
-                                "/fogwalk.js", "/app.js")
+                        .requestMatchers(HttpMethod.GET, publicStaticGets())
                                 .permitAll()
 
                         // ---- Public read endpoints ----

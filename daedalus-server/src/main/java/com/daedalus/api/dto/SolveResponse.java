@@ -23,6 +23,11 @@ import java.util.List;
 public record SolveResponse(String solverId, List<Point> path,
                              long visited, long explored, long elapsedMs, boolean success,
                              List<Point> expansions) {
+    public SolveResponse {
+        path = path == null ? null : List.copyOf(path);
+        expansions = expansions == null ? null : List.copyOf(expansions);
+    }
+
     /** Pre-replay shape — no expansion data, omitted from the JSON entirely. */
     public SolveResponse(String solverId, List<Point> path,
                          long visited, long explored, long elapsedMs, boolean success) {

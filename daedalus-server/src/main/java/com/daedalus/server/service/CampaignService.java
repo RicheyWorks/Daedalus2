@@ -67,10 +67,18 @@ public class CampaignService {
     public record Stage(int index, String name, UUID mazeId, String generatorId,
                         int rows, int cols, long seed,
                         double targetScore, DifficultyGrader.Grade grade,
-                        List<String> hazards) {}
+                        List<String> hazards) {
+        public Stage {
+            hazards = hazards == null ? null : List.copyOf(hazards);
+        }
+    }
 
     /** A whole campaign: its seed and its ladder. */
-    public record Campaign(long seed, List<Stage> stages) {}
+    public record Campaign(long seed, List<Stage> stages) {
+        public Campaign {
+            stages = stages == null ? null : List.copyOf(stages);
+        }
+    }
 
     private final MazeGenerationService gen;
     private final GeneratorRegistry registry;

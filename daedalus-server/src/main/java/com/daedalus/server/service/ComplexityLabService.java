@@ -83,7 +83,11 @@ public class ComplexityLabService {
      */
     public record Fit(String generatorId, String metric, long seed, String claimed,
                       double exponent, double rSquared, int points, boolean instrumented,
-                      String note, List<Point> measured) {}
+                      String note, List<Point> measured) {
+        public Fit {
+            measured = measured == null ? null : List.copyOf(measured);
+        }
+    }
 
     private final GeneratorRegistry registry;
     private final int maxSize;

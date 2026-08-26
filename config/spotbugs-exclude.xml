@@ -30,15 +30,87 @@
     </Match>
 
     <!--
-      EI_EXPOSE_REP/REP2 across the server: constructor-injected Spring beans
-      and DTO/record components holding references are flagged as "exposing
-      internal representation". Sharing live engine objects across layers is
-      this codebase's deliberate design (same rationale as the plugin API
-      above), and defensive-copying injected singletons is meaningless.
-      Excluded project-wide rather than annotating every service.
+      MazeGraph is a live view: it must hold the caller's MazeGrid so carving
+      after construction is visible. A defensive copy would be a snapshot,
+      which is the opposite of the class.
     -->
     <Match>
+        <Class name="com.daedalus.graph.MazeGraph"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+
+    <!--
+      Replay copies on construct (EI_EXPOSE_REP2 is gone). Returning the
+      unmodifiable List still flags EI_EXPOSE_REP; the detector only sees List.
+    -->
+    <Match>
+        <Class name="com.daedalus.visualize.MazeReplay$Replay"/>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+
+    <!--
+      Constructor-injected Spring collaborators. Copying a singleton
+      MazeGenerationService (or a JwtDecoder, MeterRegistry, RedisTemplate)
+      is meaningless; SpotBugs cannot tell a @Service from a mutable DTO.
+      Top-level service classes only — inner snapshot records stay visible.
+    -->
+    <Match>
+        <Or>
+            <Package name="com.daedalus.server.controller"/>
+            <Package name="com.daedalus.server.health"/>
+            <Class name="~com\.daedalus\.server\.service\.[A-Za-z0-9]+"/>
+            <Class name="com.daedalus.server.security.JwtTokenService"/>
+            <Class name="com.daedalus.desktop.ui.DesktopWork"/>
+        </Or>
         <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+    </Match>
+
+    <!--
+      The maze cache IS the live grid: living ticks, traffic, and solvers all
+      mutate the same MazeGrid / MazeStats. Copying on get would fork the world.
+    -->
+    <Match>
+        <Class name="com.daedalus.server.service.MazeGenerationService$Cached"/>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+    </Match>
+
+    <!--
+      MazeStats is a live accumulator filled during the solve. The Result
+      holds that same instance so visited/explored stay the numbers the
+      solver just wrote. A copy would be a second set of counters.
+    -->
+    <Match>
+        <Class name="com.daedalus.server.service.MazeSolverService$Result"/>
+        <Field name="stats"/>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+    </Match>
+
+    <!--
+      Distance / heuristic heatmaps are computed snapshots whose payload is an
+      int[][]. Cloning on every accessor is O(cells); the record is discarded
+      after the HTTP response.
+    -->
+    <Match>
+        <Or>
+            <Class name="com.daedalus.server.service.HeuristicLensService$Lens"/>
+            <Class name="com.daedalus.server.service.TopographyService$DistanceField"/>
+        </Or>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+    </Match>
+
+    <!--
+      JSON transport records and request snapshots. List.copyOf on construct
+      stops the caller mutating the stored list (EI_EXPOSE_REP2). Returning
+      the unmodifiable List still flags EI_EXPOSE_REP because the detector
+      only sees the field type. A new mutable-list leak on session state
+      (a non-record service field) is not covered here.
+    -->
+    <Match>
+        <Or>
+            <Package name="com.daedalus.api.dto"/>
+            <Class name="~com\.daedalus\.server\.service\.[A-Za-z0-9]+\$[A-Za-z0-9]+"/>
+        </Or>
+        <Bug pattern="EI_EXPOSE_REP"/>
     </Match>
 
     <!--

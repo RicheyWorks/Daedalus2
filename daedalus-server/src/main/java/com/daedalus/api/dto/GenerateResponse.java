@@ -27,6 +27,27 @@ import java.util.UUID;
 @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 public record GenerateResponse(UUID id, String generatorId, int rows, int cols,
                                long seed, char[][] tiles, List<Hotspot> hotspots, Double braid) {
+    public GenerateResponse {
+        tiles = copyTiles(tiles);
+        hotspots = hotspots == null ? null : List.copyOf(hotspots);
+    }
+
+    @Override
+    public char[][] tiles() {
+        return copyTiles(tiles);
+    }
+
+    private static char[][] copyTiles(char[][] src) {
+        if (src == null) {
+            return null;
+        }
+        char[][] out = new char[src.length][];
+        for (int i = 0; i < src.length; i++) {
+            out[i] = src[i] == null ? null : src[i].clone();
+        }
+        return out;
+    }
+
     /** Uniform-cost, unbraided shape — neither optional field in the JSON. */
     public GenerateResponse(UUID id, String generatorId, int rows, int cols,
                             long seed, char[][] tiles) {

@@ -10,6 +10,32 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Paint snapshot and input leftover writes left `app.js`.** `stage.js`
+  owns the scene bag, canvas paint, click-to-move, and WASD. Leftover
+  `draw` / `drawEmpty` / `mazeScene` names stay as wrappers. `flashStatus`
+  stays leftover — sweep pins the leftover timer. Prod enumerates
+  `/stage.js`.
+
+- **Operator-desk leftover writes left `app.js`.** `desk.js` owns auth,
+  leaderboard partitions, plugins, ASCII dump, algorithm catalog, braid
+  sync, and god-mode arming. Each takes `state` plus a host bag. Leftover
+  names stay as wrappers. Prod enumerates `/desk.js`.
+
+- **Prod static scripts are one enumerated list.** `ProdSecurityConfig.STATIC_SCRIPTS`
+  is the fail-closed GET allowlist. Posture GET/POST rows and `WebUiSmokeTest`
+  fetch from it. A new `.js` still 401s until listed; `index.html` script tags
+  stay in the page because HTML cannot import the constant.
+
+- **SpotBugs `EI_EXPOSE_REP` is no longer project-wide.** Plugin events still
+  share live grids. Snapshot records copy their lists. Spring collaborators,
+  the live maze cache, and heatmap arrays stay excluded with a comment each.
+
+- **Leaderboard Redis write fallback is a meter and a health detail.** A completed
+  run still stays 200 in memory; `daedalus.leaderboard.redis.write.fallback`
+  increments and `/actuator/health` reports `lastWriteFellBack` while staying
+  UP. Two instances can still score different boards — that is now visible,
+  not a warn-only log.
+
 - **Generation circuit-breaker fallback now runs through the Spring proxy.**
   Boot 4's AspectJ starter was missing, so `@CircuitBreaker` on
   `MazeGenerationService.generate` was a no-op and a dying generator

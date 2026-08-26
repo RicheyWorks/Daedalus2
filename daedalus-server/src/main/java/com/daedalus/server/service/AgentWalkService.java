@@ -65,7 +65,11 @@ public class AgentWalkService {
      */
     public record AgentView(UUID agentId, UUID mazeId, Point position, Point goal,
                             List<Direction> open, int stepsUsed, int stepsRemaining,
-                            boolean arrived, boolean expired) {}
+                            boolean arrived, boolean expired) {
+        public AgentView {
+            open = open == null ? null : List.copyOf(open);
+        }
+    }
 
     private record Walk(UUID id, UUID mazeId, Point position, int stepsUsed, int budget,
                         boolean arrived) {}

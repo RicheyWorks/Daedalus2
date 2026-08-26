@@ -136,7 +136,13 @@ public class TournamentService {
 
     public record Tournament(String generatorId, int size, double braid, int mazes, long baseSeed,
                              List<Standing> standings, List<Tie> ties, List<Adversarial> extremes,
-                             String note) { }
+                             String note) {
+        public Tournament {
+            standings = standings == null ? null : List.copyOf(standings);
+            ties = ties == null ? null : List.copyOf(ties);
+            extremes = extremes == null ? null : List.copyOf(extremes);
+        }
+    }
 
     /** {@code null} when the generator is unknown, so the controller can 404. */
     /** Cached tournaments — for tests and metrics; see {@code BoundedStoresTest}. */

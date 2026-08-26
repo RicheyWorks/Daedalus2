@@ -3,6 +3,7 @@
 package com.daedalus.server;
 
 import com.daedalus.engine.generators.GeneratorRegistry;
+import com.daedalus.server.health.LeaderboardHealthIndicator;
 import com.daedalus.server.health.PluginSubsystemHealthIndicator;
 import com.daedalus.solver.solvers.SolverRegistry;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -113,6 +114,14 @@ class ApplicationSmokeTest {
 
         // And with it contributing, the aggregate is still UP — the property that keeps a
         // broken optional plugin from pulling the instance out of rotation.
+        assertThat(readTree(getBody("/actuator/health")).path("status").asText()).isEqualTo("UP");
+    }
+
+    @Test
+    void leaderboardHealthIndicatorIsRegistered_andDoesNotDragTheAggregateDown() {
+        assertThat(context.getBeansOfType(LeaderboardHealthIndicator.class))
+                .as("Redis write-fallback must be a health detail, not a warn-only log")
+                .isNotEmpty();
         assertThat(readTree(getBody("/actuator/health")).path("status").asText()).isEqualTo("UP");
     }
 

@@ -24,4 +24,9 @@ import java.util.UUID;
 public record AnalysisResponse(UUID mazeId, int rows, int cols,
                                int routeLength, int cutSize,
                                List<MazeFlow.Passage> chokepoints,
-                               int deadEndCount, List<Point> deadEnds) {}
+                               int deadEndCount, List<Point> deadEnds) {
+    public AnalysisResponse {
+        chokepoints = chokepoints == null ? null : List.copyOf(chokepoints);
+        deadEnds = deadEnds == null ? null : List.copyOf(deadEnds);
+    }
+}

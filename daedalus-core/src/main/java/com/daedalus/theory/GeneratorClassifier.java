@@ -35,7 +35,16 @@ import java.util.Map;
 public final class GeneratorClassifier {
 
     /** One generator's learned centre in feature space. */
-    public record Centroid(String generatorId, double[] mean) {}
+    public record Centroid(String generatorId, double[] mean) {
+        public Centroid {
+            mean = mean.clone();
+        }
+
+        @Override
+        public double[] mean() {
+            return mean.clone();
+        }
+    }
 
     /**
      * A verdict.

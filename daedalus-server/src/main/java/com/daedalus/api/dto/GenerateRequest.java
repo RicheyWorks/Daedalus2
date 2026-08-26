@@ -70,6 +70,10 @@ public record GenerateRequest(
         @DecimalMax(value = "1.0", message = "braid must be at most 1")
         Double braid
 ) {
+    public GenerateRequest {
+        hotspots = hotspots == null ? null : List.copyOf(hotspots);
+    }
+
     /** Pre-hotspot shape — uniform-cost maze, kept for source compatibility. */
     public GenerateRequest(String generatorId, int rows, int cols, Long seed) {
         this(generatorId, rows, cols, seed, null, null);

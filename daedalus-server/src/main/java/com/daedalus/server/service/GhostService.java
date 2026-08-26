@@ -46,7 +46,11 @@ public class GhostService {
      * @param elapsedMs wall-clock duration of the recorded run (last move's stamp)
      */
     public record GhostRun(UUID mazeId, String playerName, long score,
-                           long elapsedMs, List<GameSession.TimedMove> moves) {}
+                           long elapsedMs, List<GameSession.TimedMove> moves) {
+        public GhostRun {
+            moves = moves == null ? null : List.copyOf(moves);
+        }
+    }
 
     private final long maxMazes;
     private final Cache<UUID, GhostRun> ghosts;

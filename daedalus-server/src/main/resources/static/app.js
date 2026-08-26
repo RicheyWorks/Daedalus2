@@ -58,114 +58,22 @@ function log(kind, text) {
   while (box.childElementCount > 200) box.lastChild.remove();
 }
 
-// A shared maze gets its own board: the daily challenge, or a campaign stage. You compete
-// against everyone who played that same topology, not against the world's easiest mazes.
-function lbMazeScope() {
-  if (!state.maze) return null;
-  if (state.dailyId && state.maze.id === state.dailyId) return state.dailyId;
-  if (state.campaign && state.stageIndex != null
-      && state.campaign.stages[state.stageIndex].mazeId === state.maze.id) {
-    return state.maze.id;
-  }
-  return null;
+/** Host bag for desk leftover writes. Built at call time. */
+function deskHost() {
+  return {$, api, apiPlain, esc, log, connectStomp, refreshPlugins, updateInfo};
 }
 
-/** Which partition this refresh will ask for. maze= wins; never send both (the server
- *  would drop generator= and the select would be lying). */
-function lbRequest() {
-  const maze = lbMazeScope();
-  const generator = $("lbGen") ? $("lbGen").value : "";
-  if (maze) return {path: `/leaderboard?n=10&maze=${maze}`, maze, generator: ""};
-  if (generator) {
-    return {path: `/leaderboard?n=10&generator=${encodeURIComponent(generator)}`,
-            maze: null, generator};
-  }
-  return {path: "/leaderboard?n=10", maze: null, generator: ""};
-}
-
-async function refreshLeaderboard() {
-  try {
-    const req = lbRequest();
-    const rows = await api(req.path);
-    if (lbRequest().path !== req.path) return; // scope changed in flight
-    state.lbQuery = req.path; // what we actually asked — sweep pins generator= vs maze=
-    const mazeScoped = !!req.maze;
-    if ($("lbGen")) {
-      $("lbGen").disabled = mazeScoped;
-    }
-    $("lbTitle").textContent = mazeScoped
-        ? (req.maze === state.dailyId ? "Daily leaderboard"
-            : `Stage ${state.stageIndex + 1} leaderboard`)
-        : req.generator
-            ? `${(state.algos[req.generator] && state.algos[req.generator].displayName)
-                || req.generator} leaderboard`
-            : "Leaderboard";
-    $("lb").innerHTML = rows.length === 0
-        ? `<span class="hint">no completed runs yet — reach a goal</span>`
-        : rows.map((e, i) =>
-            `<div><span class="rank">${i + 1}</span><b>${esc(e.playerName)}</b> `
-            + `<span class="score">${e.score}</span> `
-            + `<span>&middot; ${e.moveCount} moves &middot; ${(e.elapsedMs / 1000).toFixed(1)}s</span>`
-            + (!mazeScoped && e.mazeGeneratorId
-                ? ` <span>&middot; ${esc(e.mazeGeneratorId)}</span>` : "")
-            + `</div>`
-          ).join("");
-  } catch (e) {
-    $("lb").textContent = "leaderboard unavailable";
-  }
-}
+function lbMazeScope() { return DaedalusDesk.mazeScope(state); }
+function lbRequest() { return DaedalusDesk.request(state, deskHost()); }
+async function refreshLeaderboard() { return DaedalusDesk.refresh(state, deskHost()); }
 
 // ---------- REST ----------
-const TOKEN_KEY = "daedalus.token";
-const USER_KEY = "daedalus.user";
+const TOKEN_KEY = DaedalusDesk.TOKEN_KEY;
+const USER_KEY = DaedalusDesk.USER_KEY;
 
-function renderAuth() {
-  const in_ = !!state.token;
-  $("user").hidden = in_;
-  $("pass").hidden = in_;
-  $("login").hidden = in_;
-  $("authWho").hidden = !in_;
-  $("logout").hidden = !in_;
-  $("authWho").textContent = in_ ? state.user : "";
-}
-
-async function login() {
-  const username = $("user").value.trim();
-  const password = $("pass").value;
-  if (!username || !password) {
-    log("err", "sign in needs a username and password");
-    return;
-  }
-  const r = await api("/auth/login", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({username, password}),
-  });
-  state.token = r.token;
-  state.user = username;
-  sessionStorage.setItem(TOKEN_KEY, r.token);
-  sessionStorage.setItem(USER_KEY, username);
-  $("pass").value = "";
-  renderAuth();
-  log("state", `signed in as ${username} — token attached to REST and STOMP`);
-  // CONNECT is when the principal is established (ADR-012). A socket opened
-  // before login has no subject, so join-with-token would still be a seat without a feed.
-  connectStomp();
-  refreshPlugins();
-}
-
-function logout() {
-  const who = state.user;
-  state.token = null;
-  state.user = null;
-  sessionStorage.removeItem(TOKEN_KEY);
-  sessionStorage.removeItem(USER_KEY);
-  renderAuth();
-  if (who) $("user").value = who;
-  log("state", "signed out");
-  connectStomp();
-  refreshPlugins();
-}
+function renderAuth() { return DaedalusDesk.renderAuth(state, deskHost()); }
+async function login() { return DaedalusDesk.login(state, deskHost()); }
+function logout() { return DaedalusDesk.logout(state, deskHost()); }
 
 /** RFC 7807 + fetch live in api.js. Wrappers keep leftover-state name pins. */
 const CAPACITY_WHY = DaedalusApi.CAPACITY_WHY;
@@ -378,117 +286,16 @@ async function hydrateSpectatorOverlays(view) {
   return DaedalusSpectate.hydrate(state, spectateHost(), view);
 }
 
-async function refreshPlugins() {
-  try {
-    const list = await api("/plugins");
-    if (!list.length) {
-      $("pluginBox").textContent = "no external plugins loaded";
-      return;
-    }
-    $("pluginBox").innerHTML = list.map(p => {
-      const m = p.manifest || {};
-      const err = p.error ? ` — ${esc(p.error)}` : "";
-      const desc = m.description ? `<div class="hint">${esc(m.description)}</div>` : "";
-      return `<div><b>${esc(m.displayName || p.id)}</b> `
-          + `<span class="rank">${esc(p.state)}</span> `
-          + `${esc(m.version || "")}${err}${desc}</div>`;
-    }).join("");
-  } catch (e) {
-    $("pluginBox").textContent = "plugins unavailable — sign in if this is prod";
-  }
-}
-
-async function showAscii() {
-  if (!state.maze || state.fog) return;
-  // A text/plain dump of the maze on screen, not a leave path and not a solve.
-  // Living ticks refresh this pre; dropping watch here re-armed Bring to life
-  // mid-erosion. A solver query ran the solver and published MazeSolvedEvent
-  // on a read.
-  const mazeId = state.maze.id;
-  const art = await apiPlain(`/maze/${mazeId}`);
-  // Fog emptied the pre (N18). Generate mid-flight: the old dump
-  // would paint the maze now on screen. Discard — same as N18 / N30.
-  if (state.fog) return;
-  if (!state.maze || state.maze.id !== mazeId) return;
-  const out = $("asciiOut");
-  out.hidden = false;
-  out.textContent = art;
-  log("state", `ASCII via Accept: text/plain (${art.length} chars)`);
-}
-
-async function loadAlgorithms() {
-  const all = await api("/algorithms");
-  for (const [selId, list] of [["generator", all.generators], ["solver", all.solvers]]) {
-    const sel = $(selId);
-    sel.innerHTML = "";
-    list.sort((a, b) => a.id.localeCompare(b.id)).forEach(a => {
-      state.algos[a.id] = a;
-      const o = document.createElement("option");
-      o.value = a.id; o.textContent = a.displayName || a.id;
-      sel.appendChild(o);
-    });
-  }
-  $("generator").value = "recursive-backtracker";
-  $("solver").value = "bfs";
-  const lbGen = $("lbGen");
-  const keep = lbGen.value;
-  lbGen.innerHTML = "";
-  const allOpt = document.createElement("option");
-  allOpt.value = ""; allOpt.textContent = "all generators";
-  lbGen.appendChild(allOpt);
-  all.generators.slice().sort((a, b) => a.id.localeCompare(b.id)).forEach(a => {
-    const o = document.createElement("option");
-    o.value = a.id; o.textContent = a.displayName || a.id;
-    lbGen.appendChild(o);
-  });
-  if ([...lbGen.options].some(o => o.value === keep)) lbGen.value = keep;
-  // The arena's rival lane gets the same solver roster.
-  const rival = $("rival");
-  rival.innerHTML = "";
-  all.solvers.sort((a, b) => a.id.localeCompare(b.id)).forEach(a => {
-    const o = document.createElement("option");
-    o.value = a.id; o.textContent = a.displayName || a.id;
-    rival.appendChild(o);
-  });
-  rival.value = "astar";
-  updateInfo();
-}
-
-/** The catalog ships bias notes and complexity for every algorithm — show them off. */
-function updateInfo() {
-  for (const [selId, infoId] of [["generator", "genInfo"], ["solver", "solInfo"]]) {
-    const a = state.algos[$(selId).value];
-    $(infoId).innerHTML = !a ? "" :
-        `<b>${esc(a.displayName)}</b> &middot; ${esc(a.complexity || "")}<br>`
-        + `${esc(a.biasNote || a.description || "")}`;
-  }
-}
+async function refreshPlugins() { return DaedalusDesk.plugins(state, deskHost()); }
+async function showAscii() { return DaedalusDesk.ascii(state, deskHost()); }
+async function loadAlgorithms() { return DaedalusDesk.algorithms(state, deskHost()); }
+function updateInfo() { return DaedalusDesk.updateInfo(state, deskHost()); }
 $("generator").addEventListener("change", updateInfo);
 $("solver").addEventListener("change", updateInfo);
 $("lbGen").addEventListener("change", () => { refreshLeaderboard(); pinHash(); });
 
-/** One braid factor. Generate and the tournament used to have two selects that
- *  could disagree — Load it then rebuilt a different maze than the ranking. */
-function braidFactor() {
-  return ($("braid") && $("braid").value) || ($("tourBraid") && $("tourBraid").value) || "0";
-}
-
-function syncBraid(fromId) {
-  const src = $(fromId);
-  if (!src) return;
-  const v = src.value;
-  ["braid", "tourBraid"].forEach(id => {
-    const el = $(id);
-    if (!el || id === fromId) return;
-    if (![...el.options].some(o => o.value === v)) {
-      const o = document.createElement("option");
-      o.value = v;
-      o.textContent = v + " — from tournament";
-      el.appendChild(o);
-    }
-    el.value = v;
-  });
-}
+function braidFactor() { return DaedalusDesk.braidFactor(deskHost()); }
+function syncBraid(fromId) { return DaedalusDesk.syncBraid(deskHost(), fromId); }
 
 if ($("braid")) $("braid").addEventListener("change", () => syncBraid("braid"));
 if ($("tourBraid")) $("tourBraid").addEventListener("change", () => syncBraid("tourBraid"));
@@ -498,17 +305,8 @@ function placeHotspots(rows, cols, count, seed, cost) {
   return DaedalusShare.placeSpots(rows, cols, count, seed, cost);
 }
 
-/**
- * Buttons whose paint draw() swallows while fog is on. Living, play, and
- * generate stay armed — those are how you leave the walk or keep eroding
- * without a god-mode GET /maze.
- */
-const GOD_MODE = ["solve", "compare", "race", "tour", "fingerprint", "analyze",
-    "hardest", "heatmap", "sanctuaries", "lens", "ascii"];
-
-function setGodModeEnabled(on) {
-  GOD_MODE.forEach(id => { const el = $(id); if (el) el.disabled = !on; });
-}
+const GOD_MODE = DaedalusDesk.GOD_MODE;
+function setGodModeEnabled(on) { return DaedalusDesk.setGodModeEnabled(deskHost(), on); }
 
 // Snapshot whatever is on the canvas at click time — path overlays and players included.
 $("pngExport").addEventListener("click", function refresh() {
@@ -565,38 +363,7 @@ function mazeStart(maze) {
 // Hunt leftover writes live in hunt.js (DaedalusHunt).
 function sameCell(a, b) { return a && b && a.row === b.row && a.col === b.col; }
 
-// ---------- hardest route (ADR-007 idea 3) ----------
-/**
- * The longest simple route from start to goal, drawn over the maze.
- *
- * The honest bit of this feature is the perfect-maze case. A tree has exactly one simple path
- * between two cells, so on 22 of the 23 generators the "hardest" route is the only route and the
- * detour is 1.00 by mathematics, not by a bug. Rather than hide that, the panel says it and
- * points at the operations that make the question interesting — braiding, erosion, dungeons.
- */
-// ---------- distance field + sanctuaries (ADR-007 ideas 6 and 5) ----------
-/**
- * A sequential ramp: ONE hue, monotone in lightness, with the near-zero end receding into the
- * maze floor rather than competing with it. Distance is a magnitude, so it gets a magnitude
- * encoding — not a rainbow, which would invent boundaries the data does not have. Steps are the
- * validated blue scale; the ramp was checked for single-hue (4 degrees of spread) and monotone
- * lightness against this UI's actual floor colour rather than eyeballed.
- */
 const DISTANCE_RAMP = DaedalusCaption.DISTANCE_RAMP;
-
-// Tournament leftover writes live in tournament.js (DaedalusTournament).
-
-// ---------- heuristic lens (ADR-007 idea 8) ----------
-/**
- * Three bands, not a gradient of "lying".
- *
- * The obvious version of this feature — shade each cell by how badly the heuristic underestimates
- * it — was measured and thrown away: per-cell error correlates with A*'s wasted expansions
- * anywhere from +0.42 to -0.17, so the picture would have explained nothing. What A* actually
- * obeys is exact: it expands a cell only when f = g* + h is at most the optimal cost. So the
- * overlay draws that partition instead, and the counts underneath it are provable rather than
- * suggestive.
- */
 const LENS_COLORS = DaedalusCaption.LENS_COLORS;   // must expand / tie / never
 
 // Ghost leftover writes live in ghost.js (DaedalusGhost).
@@ -615,89 +382,24 @@ function flashStatus(text) {
 }
 
 
-// ---------- rendering ----------
-// Geometry and paint live in draw.js. This file snapshots state into a
-// scene so leftover overlays cannot hide inside a 300-line draw() that
-// reads globals. Smoke pins still look for function draw / drawEmpty.
-let geom = null;
+function stageHost() {
+  return {$, log, thisTabSeat, move, fogStep};
+}
 
 function pathRevealMs(n) {
   return DaedalusDraw.pathRevealMs(n);
 }
 
-/** The Held-Karp walk the tour scores against — coins are stops; this is the corridor. */
-function tourWalk() {
-  return (state.tour && state.tour.path) || [];
-}
-
-/** The ghost's walked prefix so far — start plus every `to` whose clock has elapsed. */
-function ghostWalk() {
-  return DaedalusShare.ghostPrefix(state.ghost, performance.now());
-}
-
+function tourWalk() { return DaedalusStage.tourWalk(state); }
+function ghostWalk() { return DaedalusStage.ghostWalk(state); }
 function cellKey(r, c) { return DaedalusFog.key(r, c); }
+function mazeScene() { return DaedalusStage.scene(state); }
+function draw() { return DaedalusStage.paint(state, stageHost()); }
+function drawEmpty() { return DaedalusStage.paintEmpty(stageHost()); }
 
-function mazeScene() {
-  return {
-    tiles: state.maze.tiles,
-    fog: state.fog,
-    hotspots: state.maze.hotspots || [],
-    field: state.field,
-    lens: state.lens,
-    expansions: state.expansions,
-    searchProgress: state.searchProgress,
-    path: state.path,
-    pathProgress: state.pathProgress,
-    analysis: state.analysis,
-    sanctuaries: state.sanctuaries,
-    hardest: state.hardest,
-    tourPath: tourWalk(),
-    tour: state.tour,
-    tourGot: state.tourGot,
-    race: state.race,
-    trails: state.trails,
-    session: state.session,
-    ghostWalk: ghostWalk(),
-    ghost: state.ghost,
-    won: state.won,
-    distanceRamp: DISTANCE_RAMP,
-    lensColors: LENS_COLORS,
-  };
-}
-
-function draw() {
-  if (!state.maze) return;
-  geom = DaedalusDraw.paint($("maze"), mazeScene());
-}
-
-// Click (or tap) an adjacent cell to move — session first, then the fog agent.
 $("maze").addEventListener("click", ev => {
-  if (!geom) return;
-  const rect = $("maze").getBoundingClientRect();
-  const scale = $("maze").width / rect.width; // canvas may be CSS-shrunk by max-width
-  const x = (ev.clientX - rect.left) * scale, y = (ev.clientY - rect.top) * scale;
-  const hit = DaedalusDraw.hitCell(geom, x, y);
-  if (!hit) return;
-  const row = hit.row, col = hit.col;
-  if (state.session && !state.won && !state.readOnly) {
-    const who = thisTabSeat();
-    const at = who && state.session.positions[who];
-    if (!at) return;
-    const dr = row - at.row, dc = col - at.col;
-    if (Math.abs(dr) + Math.abs(dc) === 1) move(who, dr, dc);
-    return;
-  }
-  if (state.fog && !state.fog.arrived && !state.fog.expired) {
-    const at = state.fog.position;
-    const dr = row - at.row, dc = col - at.col;
-    if (Math.abs(dr) + Math.abs(dc) === 1) fogStep(dr, dc).catch(e => log("err", e.message));
-  }
+  DaedalusStage.click(state, stageHost(), ev);
 });
-
-/** Empty-state canvas: an invitation, not a void. */
-function drawEmpty() {
-  DaedalusDraw.paintEmpty($("maze"));
-}
 
 // ---------- wiring ----------
 $("generate").onclick = () => generate().catch(e => log("err", e.message));
@@ -730,27 +432,10 @@ $("auth").addEventListener("submit", e => {
 });
 $("logout").onclick = logout;
 document.addEventListener("keydown", e => {
-  if (e.target.tagName === "INPUT") return;
-  const arrows = {ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1]};
-  if (state.session && !state.readOnly) {
-    const wasd = {KeyW: [-1, 0], KeyS: [1, 0], KeyA: [0, -1], KeyD: [0, 1]};
-    if (arrows[e.key]) {
-      e.preventDefault();
-      move(thisTabSeat(), ...arrows[e.key]);
-    } else if (state.joined && state.joined !== state.seat && wasd[e.code]) {
-      e.preventDefault();
-      move(state.joined, ...wasd[e.code]);
-    }
-    return;
-  }
-  if (state.fog && arrows[e.key]) {
-    e.preventDefault();
-    fogStep(...arrows[e.key]).catch(err => log("err", err.message));
-  }
+  DaedalusStage.key(state, stageHost(), e);
 });
 
-state.token = sessionStorage.getItem(TOKEN_KEY);
-state.user = sessionStorage.getItem(USER_KEY);
+DaedalusDesk.restore(state);
 renderAuth();
 drawEmpty();
 refreshLeaderboard();

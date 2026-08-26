@@ -67,26 +67,9 @@ class ProdStaticSurfacePostureTest {
         // the other is a coin flip on which request shape a real visitor makes.
         EXPECTED.put("GET /", Posture.PUBLIC);
         EXPECTED.put("GET /index.html", Posture.PUBLIC);
-        EXPECTED.put("GET /draw.js", Posture.PUBLIC);
-        EXPECTED.put("GET /api.js", Posture.PUBLIC);
-        EXPECTED.put("GET /share.js", Posture.PUBLIC);
-        EXPECTED.put("GET /fog.js", Posture.PUBLIC);
-        EXPECTED.put("GET /seat.js", Posture.PUBLIC);
-        EXPECTED.put("GET /lab.js", Posture.PUBLIC);
-        EXPECTED.put("GET /caption.js", Posture.PUBLIC);
-        EXPECTED.put("GET /mint.js", Posture.PUBLIC);
-        EXPECTED.put("GET /campaign.js", Posture.PUBLIC);
-        EXPECTED.put("GET /spectate.js", Posture.PUBLIC);
-        EXPECTED.put("GET /hunt.js", Posture.PUBLIC);
-        EXPECTED.put("GET /solve.js", Posture.PUBLIC);
-        EXPECTED.put("GET /theory.js", Posture.PUBLIC);
-        EXPECTED.put("GET /living.js", Posture.PUBLIC);
-        EXPECTED.put("GET /ghost.js", Posture.PUBLIC);
-        EXPECTED.put("GET /tournament.js", Posture.PUBLIC);
-        EXPECTED.put("GET /live.js", Posture.PUBLIC);
-        EXPECTED.put("GET /session.js", Posture.PUBLIC);
-        EXPECTED.put("GET /fogwalk.js", Posture.PUBLIC);
-        EXPECTED.put("GET /app.js", Posture.PUBLIC);
+        for (String path : ProdSecurityConfig.STATIC_SCRIPTS) {
+            EXPECTED.put("GET " + path, Posture.PUBLIC);
+        }
 
         // SockJS info is the first request a browser makes. Closing /ws/** made that 401, so
         // a signed-in CONNECT never happened — the token was on a frame the handshake blocked.
@@ -102,26 +85,9 @@ class ProdStaticSurfacePostureTest {
         EXPECTED.put("POST /index.html", Posture.REFUSED);
         EXPECTED.put("PUT /index.html", Posture.REFUSED);
         EXPECTED.put("DELETE /index.html", Posture.REFUSED);
-        EXPECTED.put("POST /draw.js", Posture.REFUSED);
-        EXPECTED.put("POST /api.js", Posture.REFUSED);
-        EXPECTED.put("POST /share.js", Posture.REFUSED);
-        EXPECTED.put("POST /fog.js", Posture.REFUSED);
-        EXPECTED.put("POST /seat.js", Posture.REFUSED);
-        EXPECTED.put("POST /lab.js", Posture.REFUSED);
-        EXPECTED.put("POST /caption.js", Posture.REFUSED);
-        EXPECTED.put("POST /mint.js", Posture.REFUSED);
-        EXPECTED.put("POST /campaign.js", Posture.REFUSED);
-        EXPECTED.put("POST /spectate.js", Posture.REFUSED);
-        EXPECTED.put("POST /hunt.js", Posture.REFUSED);
-        EXPECTED.put("POST /solve.js", Posture.REFUSED);
-        EXPECTED.put("POST /theory.js", Posture.REFUSED);
-        EXPECTED.put("POST /living.js", Posture.REFUSED);
-        EXPECTED.put("POST /ghost.js", Posture.REFUSED);
-        EXPECTED.put("POST /tournament.js", Posture.REFUSED);
-        EXPECTED.put("POST /live.js", Posture.REFUSED);
-        EXPECTED.put("POST /session.js", Posture.REFUSED);
-        EXPECTED.put("POST /fogwalk.js", Posture.REFUSED);
-        EXPECTED.put("POST /app.js", Posture.REFUSED);
+        for (String path : ProdSecurityConfig.STATIC_SCRIPTS) {
+            EXPECTED.put("POST " + path, Posture.REFUSED);
+        }
 
         // Nothing else is served, and the fail-closed default is the feature. A path that does
         // not exist must not be distinguishable from one that is merely protected.
@@ -184,83 +150,20 @@ class ProdStaticSurfacePostureTest {
 
         byte[] body = client.method(HttpMethod.GET).uri("/").exchange()
                 .returnResult(byte[].class).getResponseBody();
-        byte[] painter = client.method(HttpMethod.GET).uri("/draw.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] api = client.method(HttpMethod.GET).uri("/api.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] share = client.method(HttpMethod.GET).uri("/share.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] fog = client.method(HttpMethod.GET).uri("/fog.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] seat = client.method(HttpMethod.GET).uri("/seat.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] lab = client.method(HttpMethod.GET).uri("/lab.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] caption = client.method(HttpMethod.GET).uri("/caption.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] mint = client.method(HttpMethod.GET).uri("/mint.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] campaign = client.method(HttpMethod.GET).uri("/campaign.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] spectate = client.method(HttpMethod.GET).uri("/spectate.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] hunt = client.method(HttpMethod.GET).uri("/hunt.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] solve = client.method(HttpMethod.GET).uri("/solve.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] theory = client.method(HttpMethod.GET).uri("/theory.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] living = client.method(HttpMethod.GET).uri("/living.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] ghost = client.method(HttpMethod.GET).uri("/ghost.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] tournament = client.method(HttpMethod.GET).uri("/tournament.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] live = client.method(HttpMethod.GET).uri("/live.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] session = client.method(HttpMethod.GET).uri("/session.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] fogwalk = client.method(HttpMethod.GET).uri("/fogwalk.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-        byte[] script = client.method(HttpMethod.GET).uri("/app.js").exchange()
-                .returnResult(byte[].class).getResponseBody();
-
         assertThat(body).as("prod served nothing at /").isNotNull();
-        assertThat(painter).as("prod served nothing at /draw.js").isNotNull();
-        assertThat(api).as("prod served nothing at /api.js").isNotNull();
-        assertThat(share).as("prod served nothing at /share.js").isNotNull();
-        assertThat(fog).as("prod served nothing at /fog.js").isNotNull();
-        assertThat(seat).as("prod served nothing at /seat.js").isNotNull();
-        assertThat(lab).as("prod served nothing at /lab.js").isNotNull();
-        assertThat(caption).as("prod served nothing at /caption.js").isNotNull();
-        assertThat(mint).as("prod served nothing at /mint.js").isNotNull();
-        assertThat(campaign).as("prod served nothing at /campaign.js").isNotNull();
-        assertThat(spectate).as("prod served nothing at /spectate.js").isNotNull();
-        assertThat(hunt).as("prod served nothing at /hunt.js").isNotNull();
-        assertThat(solve).as("prod served nothing at /solve.js").isNotNull();
-        assertThat(theory).as("prod served nothing at /theory.js").isNotNull();
-        assertThat(living).as("prod served nothing at /living.js").isNotNull();
-        assertThat(ghost).as("prod served nothing at /ghost.js").isNotNull();
-        assertThat(tournament).as("prod served nothing at /tournament.js").isNotNull();
-        assertThat(live).as("prod served nothing at /live.js").isNotNull();
-        assertThat(session).as("prod served nothing at /session.js").isNotNull();
-        assertThat(fogwalk).as("prod served nothing at /fogwalk.js").isNotNull();
-        assertThat(script).as("prod served nothing at /app.js").isNotNull();
         String html = new String(body);
-        String js = new String(painter) + new String(api) + new String(share)
-                + new String(fog) + new String(seat) + new String(lab)
-                + new String(caption) + new String(mint) + new String(campaign)
-                + new String(spectate) + new String(hunt) + new String(solve)
-                + new String(theory) + new String(living) + new String(ghost)
-                + new String(tournament)
-                + new String(live) + new String(session)
-                + new String(fogwalk) + new String(script);
-        assertThat(html).contains("<html", "/draw.js", "/api.js", "/share.js",
-                "/fog.js", "/seat.js", "/lab.js", "/caption.js", "/mint.js",
-                "/campaign.js", "/spectate.js", "/hunt.js", "/solve.js",
-                "/theory.js", "/living.js", "/ghost.js", "/tournament.js",
-                "/live.js", "/session.js", "/fogwalk.js", "/app.js");
-        assertThat(js).contains("#session=", "DaedalusDraw", "DaedalusApi",
+        StringBuilder js = new StringBuilder();
+        for (String path : ProdSecurityConfig.STATIC_SCRIPTS) {
+            byte[] bytes = client.method(HttpMethod.GET).uri(path).exchange()
+                    .returnResult(byte[].class).getResponseBody();
+            assertThat(bytes).as("prod served nothing at %s", path).isNotNull();
+            js.append(new String(bytes));
+            assertThat(html).as("index.html must name %s — HTML cannot import STATIC_SCRIPTS",
+                    path).contains(path);
+        }
+        String script = js.toString();
+        assertThat(html).contains("<html");
+        assertThat(script).contains("#session=", "DaedalusDraw", "DaedalusApi",
                 "DaedalusShare", "DaedalusFog", "DaedalusSeat", "DaedalusLab",
                 "DaedalusCaption", "DaedalusMint", "DaedalusCampaign",
                 "DaedalusSpectate",
@@ -268,9 +171,9 @@ class ProdStaticSurfacePostureTest {
                 "DaedalusLiving", "DaedalusGhost", "DaedalusTournament",
                 "connectStomp", "async function play",
                 "async function startFog");
-        assertThat(html.length() + js.length())
+        assertThat(html.length() + script.length())
                 .as("the page+script prod serves is %d bytes, which is not the UI",
-                        html.length() + js.length())
+                        html.length() + script.length())
                 .isGreaterThan(10_000);
     }
 
