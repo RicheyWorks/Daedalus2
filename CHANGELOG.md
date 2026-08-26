@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Leftover algos stays.** `loadAlgorithms` remints leftover `algos`. leftover picker stay already forbids rewriting leftover solver (N122). leftover picker caption stay already forbids reminting leftover `#genInfo` / leftover `#solInfo` (N127). Hunt / Play / Fog / theory / Join leftover `algos` stay — leftover catalog you loaded. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N133).
+
 - **Leftover Play / Fog button stays.** adoptMaze / leaveMaze remint leftover `#play` / leftover `#fog`. Hunt / Play / Fog / theory / Join leftover `#play` stay — same maze still playable. Leftover `#fog` stay — same maze still fogable. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N132).
 
 - **Leftover cleared stays.** `loadCampaign` / `leaveCampaign` remint leftover `cleared`. leftover campaign stay already forbids `leaveCampaign` (N112). leftover campaign box stay already forbids reminting leftover `#campaignBox` (N128). Hunt / Play / Fog / theory / Join leftover `cleared` stay — leftover stages you cleared. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N131).

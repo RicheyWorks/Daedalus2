@@ -1962,6 +1962,33 @@ class WebUiSmokeTest {
         assertLeftoverWalkButtonStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N133. Remaining leftover algos stays. loadAlgorithms
+        // remints leftover algos. leftover picker stay already
+        // forbids rewriting leftover solver (N122). leftover
+        // picker caption stay already forbids reminting leftover
+        // #genInfo / leftover #solInfo (N127). These stays must
+        // not be taught away: Hunt / Play / Fog / theory / Join
+        // leftover algos stay — leftover catalog you loaded;
+        // Hunt through Play and Join-from-spectate still keep
+        // tour; Fog still keeps tour (N17); leftover Solve path
+        // stays as a theory route hint (N62); Join leftover
+        // ghost stays (N86).
+        assertLeftoverAlgosStay(html, "async function startTour", "function sameCell");
+        assertLeftoverAlgosStay(html, "async function play()", "async function join()");
+        assertLeftoverAlgosStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverAlgosStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverAlgosStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverAlgosStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverAlgosStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverAlgosStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverAlgosStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -3159,6 +3186,22 @@ class WebUiSmokeTest {
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("$(\"play\")");
         assertThat(body).doesNotContain("$(\"fog\")");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover algos stay (N133). leftover catalog you loaded
+     * still names leftover generator / leftover solver.
+     * Must not remint leftover algos. Must not null tour.
+     */
+    private static void assertLeftoverAlgosStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("state.algos");
+        assertThat(body).doesNotContain("loadAlgorithms");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
