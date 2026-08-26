@@ -2433,6 +2433,35 @@ class WebUiSmokeTest {
         assertLeftoverLensHOptionsStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N150. Remaining leftover #labMetric options stay.
+        // loadLabMetrics remints leftover #labMetric options.
+        // leftover sidebar picker stay already forbids
+        // reminting leftover #labMetric value (N124). leftover
+        // #lensH options stay already forbids reminting leftover
+        // heuristic roster (N149). These stays must not be
+        // taught away: Hunt / Play / Fog / theory / Join
+        // leftover #labMetric options stay — leftover metric
+        // roster you loaded; Hunt through Play and
+        // Join-from-spectate still keep tour; Fog still
+        // keeps tour (N17); leftover Solve path stays as a
+        // theory route hint (N62); Join leftover ghost stays
+        // (N86). Must not null tour (N17).
+        assertLeftoverLabMetricOptionsStay(html, "async function startTour", "function sameCell");
+        assertLeftoverLabMetricOptionsStay(html, "async function play()", "async function join()");
+        assertLeftoverLabMetricOptionsStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverLabMetricOptionsStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverLabMetricOptionsStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverLabMetricOptionsStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverLabMetricOptionsStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverLabMetricOptionsStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverLabMetricOptionsStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -3919,6 +3948,24 @@ class WebUiSmokeTest {
         assertThat(body).doesNotContain("$(\"lensH\").innerHTML");
         assertThat(body).doesNotContain("lensH.innerHTML");
         assertThat(body).doesNotContain("lensH.appendChild");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover #labMetric options stay (N150). leftover
+     * metric roster you loaded. leftover sidebar picker
+     * stay already forbids reminting leftover #labMetric
+     * value (N124). Must not remint leftover #labMetric
+     * options. Must not null tour.
+     */
+    private static void assertLeftoverLabMetricOptionsStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("loadLabMetrics");
+        assertThat(body).doesNotContain("const sel = $(\"labMetric\")");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
