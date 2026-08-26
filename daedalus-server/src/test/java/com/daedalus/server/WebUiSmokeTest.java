@@ -2256,6 +2256,35 @@ class WebUiSmokeTest {
         assertLeftoverLbRowsStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N144. Remaining leftover #lbGen disabled stays.
+        // refreshLeaderboard remints leftover #lbGen
+        // disabled. leftover picker stay already forbids
+        // reminting leftover #lbGen value (N122). leftover
+        // walk chrome stay already forbids reminting leftover
+        // board (N111). These stays must not be taught away:
+        // Hunt / Play / Fog / theory / Join leftover #lbGen
+        // disabled stay — leftover filter still enabled or
+        // still locked to this maze; Hunt through Play and
+        // Join-from-spectate still keep tour; Fog still
+        // keeps tour (N17); leftover Solve path stays as a
+        // theory route hint (N62); Join leftover ghost stays
+        // (N86). Must not null tour (N17).
+        assertLeftoverLbGenDisabledStay(html, "async function startTour", "function sameCell");
+        assertLeftoverLbGenDisabledStay(html, "async function play()", "async function join()");
+        assertLeftoverLbGenDisabledStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverLbGenDisabledStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverLbGenDisabledStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverLbGenDisabledStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverLbGenDisabledStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverLbGenDisabledStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverLbGenDisabledStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -3630,6 +3659,24 @@ class WebUiSmokeTest {
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("$(\"lb\").innerHTML");
         assertThat(body).doesNotContain("$(\"lb\").textContent");
+        assertThat(body).doesNotContain("refreshLeaderboard");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover #lbGen disabled stay (N144). leftover filter
+     * still enabled or still locked to this maze. leftover
+     * picker stay already forbids reminting leftover
+     * #lbGen value (N122). Must not remint leftover
+     * #lbGen disabled. Must not null tour.
+     */
+    private static void assertLeftoverLbGenDisabledStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"lbGen\").disabled");
         assertThat(body).doesNotContain("refreshLeaderboard");
         assertThat(body).doesNotContain("state.tour = null");
     }
