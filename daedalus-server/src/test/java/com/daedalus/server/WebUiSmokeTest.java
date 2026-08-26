@@ -2065,6 +2065,35 @@ class WebUiSmokeTest {
         assertLeftoverAsciiStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N137. Remaining leftover #pngExport stays. leftover
+        // lab / tournament / PNG stay already forbids reminting
+        // leftover #pngExport in those writers (N116). adoptMaze
+        // / leaveMaze remint leftover snapshot. Click remints
+        // leftover href from the canvas. These stays must not be
+        // taught away: Hunt / Play / Fog / theory / Join leftover
+        // #pngExport stay — leftover snapshot stays visible
+        // (same maze canvas); Fog leftover snapshot visibility
+        // unused (click remints the fog walk); Hunt through Play
+        // and Join-from-spectate still keep tour; Fog still
+        // keeps tour (N17); leftover Solve path stays as a
+        // theory route hint (N62); Join leftover ghost stays
+        // (N86).
+        assertLeftoverPngExportStay(html, "async function startTour", "function sameCell");
+        assertLeftoverPngExportStay(html, "async function play()", "async function join()");
+        assertLeftoverPngExportStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverPngExportStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverPngExportStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverPngExportStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverPngExportStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverPngExportStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverPngExportStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -3310,6 +3339,24 @@ class WebUiSmokeTest {
         assertThat(to).isGreaterThan(from);
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("state.lbQuery");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover #pngExport stay (N137). leftover snapshot
+     * stays visible. Fog leftover snapshot visibility
+     * unused (click remints the fog walk). Must not remint
+     * leftover snapshot visibility. Must not remint leftover
+     * href. Must not null tour.
+     */
+    private static void assertLeftoverPngExportStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"pngExport\")");
+        assertThat(body).doesNotContain("toDataURL");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
