@@ -24,7 +24,8 @@ import org.springframework.security.web.SecurityFilterChain;
  *
  * <p><b>Public (no token required)</b>:
  * <ul>
- *   <li>{@code GET /} and {@code GET /index.html} — the web UI. The README publishes it as
+ *   <li>{@code GET /}, {@code GET /index.html}, {@code GET /draw.js}, {@code GET /api.js},
+ *       {@code GET /share.js}, and {@code GET /app.js} — the web UI. The README publishes it as
  *       "served at {@code /}" and it was 401 in prod: {@code anyRequest().authenticated()}
  *       covers static resources too, and {@code ProdAuthPostureTest} scans controller mappings,
  *       so no table this project keeps had a row for a file. See the note at the matcher.</li>
@@ -110,18 +111,19 @@ public class ProdSecurityConfig {
                         // any of the endpoints carefully permitted below. Measured on a prod-
                         // profile boot: /api/v1/session/{id} answered, "/" answered 401.
                         //
-                        // Enumerated rather than globbed, and the enumeration is complete: the
-                        // UI is one file. A second asset added later will 401 until somebody
+                        // Enumerated rather than globbed: markup and each script are listed
+                        // separately. A new asset added later will 401 until somebody
                         // lists it, which is the same fail-closed choice as the single-segment
                         // '*' matchers below — a static directory served by "/**" is exactly the
                         // kind of matcher that silently publishes whatever lands in it.
                         //
-                        // Nothing is given away by serving it. The page is markup and script
+                        // Nothing is given away by serving them. The page is markup and script
                         // with no embedded credentials, and every capability it offers is still
                         // governed by the rules in this method — a visitor without a token can
                         // browse public mazes and spectate, and generate/solve/session all
                         // answer 401 exactly as they did before.
-                        .requestMatchers(HttpMethod.GET, "/", "/index.html").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/", "/index.html", "/draw.js",
+                                "/api.js", "/share.js", "/app.js").permitAll()
 
                         // ---- Public read endpoints ----
                         .requestMatchers(HttpMethod.GET, "/api/v1/algorithms").permitAll()

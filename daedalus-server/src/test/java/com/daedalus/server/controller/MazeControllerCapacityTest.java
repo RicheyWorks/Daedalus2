@@ -143,6 +143,22 @@ class MazeControllerCapacityTest {
     }
 
     @Test
+    void aGeneratorThatReturnsNullAnswers500AsAProblem() throws Exception {
+        when(gen.generate(anyString(), anyInt(), anyInt(), anyLong(), any(), anyDouble()))
+                .thenThrow(new MazeGenerationService.NullGridException("null-plugin"));
+        String body = new ObjectMapper().writeValueAsString(
+                new GenerateRequest("null-plugin", 8, 8, 7L));
+
+        mvc.perform(post("/api/v1/maze/generate")
+                        .contentType("application/json")
+                        .content(body))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.kind", equalTo("generator-contract")))
+                .andExpect(jsonPath("$.title", equalTo("Generator returned nothing")))
+                .andExpect(jsonPath("$.generator", equalTo("null-plugin")));
+    }
+
+    @Test
     void aFullMazeCacheAnswers409() throws Exception {
         MazeGenerationService.CapacityExceededException full =
                 mock(MazeGenerationService.CapacityExceededException.class);

@@ -10,6 +10,34 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Web UI paint, HTTP, and share helpers no longer share one file.** `draw.js`
+  takes a scene; `api.js` names RFC 7807 errors and fetches; `share.js` parses
+  hashes and walks. `app.js` keeps leftover-state wiring. Prod enumerates each
+  path.
+
+- **Generator and solver registries share one map.** `AlgorithmRegistry` owns
+  collision, built-in refusal, and unregister. The two public types are facades
+  so a lifecycle bug cannot be fixed on only one side.
+
+- **Desktop walk and canvas geometry left the FX controller.** `DesktopWalk`
+  is the legal-step helper; `DesktopPaint` owns letterboxing, path-connector
+  tiles, and the inset player disc. `MainController` still calls
+  `GraphicsContext`.
+
+- **Plugin SPI events and defaults have tests.** `PluginSpiContractTest` covers
+  lifecycle no-ops, `AbstractPlugin` stashing context, and `PluginFailedEvent`
+  with a null cause.
+
+- **`_migration/` is labelled an archive.** A README at the root says nothing
+  there is compiled or served.
+
+### Fixed
+
+- **A generator that returns null is a 500 problem, not a raw stack.**
+  `MazeGenerationService.NullGridException` maps to `generator-contract`.
+
+### Changed
+
 - **Maze REST surface split by resource.** Generate / daily / live / solve / breed
   stay on `MazeController`. Sessions (open, spectate, move, join) moved to
   `SessionController`; the board to `LeaderboardController`. Capacity 409s in

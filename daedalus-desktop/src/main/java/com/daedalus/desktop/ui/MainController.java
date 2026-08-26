@@ -49,7 +49,8 @@ import java.util.List;
  *       the canvas in the theme's {@code path()} color.</li>
  *   <li>Track a movable player marker; arrow keys / WASD walk it through open walls,
  *       reaching the goal flips the status bar to a celebration message.</li>
- *   <li>Render everything on a {@link Canvas}, repaint on resize.</li>
+ *   <li>Render everything on a {@link Canvas}, repaint on resize. Layout,
+ *       path tiles, and the player disc live on {@link DesktopPaint}.</li>
  * </ul>
  *
  * <p>JavaFX threading: every {@code @FXML} method runs on the JavaFX Application Thread, which
@@ -315,19 +316,14 @@ public class MainController {
      * wall is closed. Updates the status bar with a celebration when the goal is reached.
      */
     private void tryMove(Direction dir) {
-        if (current == null || playerPos == null) return;
-        if (reachedGoal) return;
-
-        if (!current.grid().cell(playerPos).isOpen(dir)) {
-            // Hitting a wall — silent, no status spam (status is the most distracting place
-            // to flash this; let the player keep tapping keys).
+        if (current == null) return;
+        DesktopWalk.Outcome step = DesktopWalk.step(
+                current.grid(), playerPos, current.metadata().goal(), dir, reachedGoal);
+        if (!step.moved()) {
             return;
         }
-        Point next = playerPos.step(dir);
-        if (!current.grid().inBounds(next)) return;   // defensive — shouldn't happen if isOpen is correct
-        playerPos = next;
-
-        if (playerPos.equals(current.metadata().goal())) {
+        playerPos = step.position();
+        if (step.reachedGoal()) {
             reachedGoal = true;
             statusLabel.setText("Reached the goal!  Press Reset, or Generate a new maze.");
         }
@@ -362,64 +358,34 @@ public class MainController {
         if (current == null) return;
 
         TileType[][] tiles = current.grid().toTileGrid();
-        int tr = tiles.length;
-        int tc = tiles[0].length;
-
-        double cellSize = Math.max(1.0, Math.floor(Math.min(w / tc, h / tr)));
-        double drawW = cellSize * tc;
-        double drawH = cellSize * tr;
-        double offsetX = Math.floor((w - drawW) / 2);
-        double offsetY = Math.floor((h - drawH) / 2);
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(
+                tiles.length, tiles[0].length, w, h);
+        if (layout == null) return;
 
         // ---- 1) tile grid ----
-        for (int r = 0; r < tr; r++) {
-            for (int c = 0; c < tc; c++) {
-                Color color = colorFor(tiles[r][c], theme);
-                g.setFill(color);
-                g.fillRect(offsetX + c * cellSize, offsetY + r * cellSize, cellSize, cellSize);
+        for (int r = 0; r < layout.tileRows(); r++) {
+            for (int c = 0; c < layout.tileCols(); c++) {
+                g.setFill(colorFor(DesktopPaint.roleFor(tiles[r][c]), theme));
+                g.fillRect(layout.x(c), layout.y(r), layout.cellSize(), layout.cellSize());
             }
         }
 
         // ---- 2) solve-path overlay ----
         if (currentPath != null && !currentPath.isEmpty() && theme != null) {
             g.setFill(theme.path());
-            Point start = current.metadata().start();
-            Point goal = current.metadata().goal();
-
-            for (int i = 0; i < currentPath.size(); i++) {
-                Point p = currentPath.get(i);
-                if (p.equals(start) || p.equals(goal)) continue;   // preserve endpoint colors
-                fillTile(g, offsetX, offsetY, cellSize, 2 * p.row() + 1, 2 * p.col() + 1);
-
-                // Connecting opening to the previous cell — paints the wall-tile carved
-                // between them so the path renders continuously, not as dots.
-                if (i > 0) {
-                    Point prev = currentPath.get(i - 1);
-                    int connR = prev.row() + p.row() + 1;
-                    int connC = prev.col() + p.col() + 1;
-                    fillTile(g, offsetX, offsetY, cellSize, connR, connC);
-                }
+            for (DesktopPaint.TileRect tile : DesktopPaint.pathOverlay(
+                    currentPath, current.metadata().start(), current.metadata().goal())) {
+                g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
+                        layout.cellSize(), layout.cellSize());
             }
         }
 
         // ---- 3) player marker ----
-        if (playerPos != null && theme != null) {
-            // Slightly inset square so the player reads as distinct from a solid passage tile;
-            // color flips to gold (path color) when reachedGoal so victory is unambiguous.
-            Color playerColor = reachedGoal ? theme.path() : theme.player();
-            g.setFill(playerColor);
-            double inset = Math.max(1.0, cellSize * 0.1);
-            double px = offsetX + (2 * playerPos.col() + 1) * cellSize + inset;
-            double py = offsetY + (2 * playerPos.row() + 1) * cellSize + inset;
-            double pSize = cellSize - 2 * inset;
-            g.fillOval(px, py, pSize, pSize);
+        DesktopPaint.Marker mark = DesktopPaint.playerMarker(layout, playerPos);
+        if (mark != null && theme != null) {
+            g.setFill(reachedGoal ? theme.path() : theme.player());
+            g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
         }
-    }
-
-    /** Helper: paint a single tile cell at the given tile-grid (row, col). */
-    private static void fillTile(GraphicsContext g, double offsetX, double offsetY,
-                                 double cellSize, int tileRow, int tileCol) {
-        g.fillRect(offsetX + tileCol * cellSize, offsetY + tileRow * cellSize, cellSize, cellSize);
     }
 
     /** Resolve a tile glyph to a theme color. Defensive — unknown enum cases fall back to passage. */

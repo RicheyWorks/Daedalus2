@@ -14,8 +14,9 @@ manager — near-zero coverage (measured 5.9% instruction) against a reactor who
 module sits above 90%. The gap audit's finding was that this needs *a deliberate policy,
 not necessarily more tests*: leaving the module's posture undocumented invites either
 guilt-driven test theater or a slow accretion of untested logic, and neither failure
-mode announces itself. As of 2026-08-26 the module has ten test methods and a 0.09
-floor; `MainController` is still untested.
+mode announces itself. As of 2026-08-26 the module has eighteen test methods and a 0.28
+floor; walk and canvas geometry left the controller. FXML wiring is still
+launch-only.
 
 The candidate remedies were TestFX-style UI automation, a coverage push on the module as it
 stands, or an architectural rule that makes low desktop coverage *correct* rather than
@@ -33,9 +34,8 @@ by UI tests:
    costs more than its coverage is worth. Launcher and theme tests stay; generation/solve
    logic that left the FX thread lives in `DesktopWork` (six tests, 2026-07-31).
 3. **The module is not exempt at 0.00.** A 2026-07-31 amendment replaced the visible
-   `<jacoco.check.minimum>0.00</jacoco.check.minimum>` with a small real floor (0.09) and
-   ceiling (0.14) — a deletion guard, not the absence of one. `MainController` is still
-   untested; the floor is not high enough to notice a rendering regression.
+   `<jacoco.check.minimum>0.00</jacoco.check.minimum>` with a real floor. After
+   `DesktopPaint` the pair is 0.28 / 0.31. FXML wiring is still launch-only.
 4. **The tripwire that revisits this ADR:** the first time a bug report is *in* desktop
    logic, that logic moves to core in the fix commit and gets tested there. If that keeps
    happening, the shell is no longer thin and this policy is failing — reopen it.

@@ -200,6 +200,23 @@ public class ApiExceptionHandler {
      * animating). 409 rather than 429: the caller's quota is fine — the shared resource is
      * busy, and retrying after a run settles will succeed.
      */
+    /**
+     * A plugin generator returned null. 500 rather than 400: the request named a
+     * registered id and valid dimensions — the implementation broke its contract.
+     */
+    @ExceptionHandler(com.daedalus.server.service.MazeGenerationService.NullGridException.class)
+    public ResponseEntity<ProblemDetail> onNullGrid(
+            com.daedalus.server.service.MazeGenerationService.NullGridException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(
+                HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+        pd.setTitle("Generator returned nothing");
+        pd.setType(URI.create("https://daedalus.dev/problems/generator-contract"));
+        pd.setProperty("kind", "generator-contract");
+        pd.setProperty("generator", ex.generatorId());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+    }
+
     @ExceptionHandler(com.daedalus.server.service.LivingMazeService.CapacityExceededException.class)
     public ResponseEntity<ProblemDetail> onLivingCapacity(
             com.daedalus.server.service.LivingMazeService.CapacityExceededException ex) {

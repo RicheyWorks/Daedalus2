@@ -22,10 +22,10 @@
 
     <properties>
         <!-- Coverage ratchet: thin-shell policy (ADR-003, TESTING.md P3) — no TestFX.
-             DesktopWork is tested; MainController is not. Floor 0.09 / ceiling 0.14 is
-             a deletion guard, not a 0.00 exemption. Raise it when coverage climbs. -->
-        <jacoco.check.minimum>0.09</jacoco.check.minimum>
-        <jacoco.check.ceiling>0.14</jacoco.check.ceiling>
+             DesktopWork, DesktopWalk, and DesktopPaint are tested; FXML is not.
+             Measured 0.30 after DesktopPaint; 0.28 / 0.31 is the 3-point pair. -->
+        <jacoco.check.minimum>0.28</jacoco.check.minimum>
+        <jacoco.check.ceiling>0.31</jacoco.check.ceiling>
     </properties>
 
     <dependencies>

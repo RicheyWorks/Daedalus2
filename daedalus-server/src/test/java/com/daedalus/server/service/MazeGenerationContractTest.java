@@ -222,7 +222,7 @@ class MazeGenerationContractTest {
                 new SimpleMeterRegistry());
 
         assertThatThrownBy(() -> svc.generate("null-plugin", 9, 9, 1L))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(MazeGenerationService.NullGridException.class)
                 .hasMessageContaining("null-plugin");
     }
 

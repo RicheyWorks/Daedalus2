@@ -42,6 +42,23 @@ public class MazeGenerationService {
         }
     }
 
+    /**
+     * A registered generator returned {@code null}. That is a plugin contract
+     * break, not a caller typo — 500 with a problem body, not an untyped stack.
+     */
+    public static class NullGridException extends IllegalStateException {
+        private final String generatorId;
+
+        public NullGridException(String generatorId) {
+            super("generator returned null grid: " + generatorId);
+            this.generatorId = generatorId;
+        }
+
+        public String generatorId() {
+            return generatorId;
+        }
+    }
+
     private final GeneratorRegistry registry;
     private final ApplicationEventPublisher events;
     private final MeterRegistry meters;
@@ -165,7 +182,7 @@ public class MazeGenerationService {
         if (grid == null) {
             // Timer.record(Supplier) is @Nullable; a generator returning null
             // is a contract violation worth failing loudly on.
-            throw new IllegalStateException("generator returned null grid: " + generatorId);
+            throw new NullGridException(generatorId);
         }
 
         // Start/goal at the maze's two farthest-apart carved cells — never at fixed corners.

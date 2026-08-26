@@ -67,6 +67,10 @@ class ProdStaticSurfacePostureTest {
         // the other is a coin flip on which request shape a real visitor makes.
         EXPECTED.put("GET /", Posture.PUBLIC);
         EXPECTED.put("GET /index.html", Posture.PUBLIC);
+        EXPECTED.put("GET /draw.js", Posture.PUBLIC);
+        EXPECTED.put("GET /api.js", Posture.PUBLIC);
+        EXPECTED.put("GET /share.js", Posture.PUBLIC);
+        EXPECTED.put("GET /app.js", Posture.PUBLIC);
 
         // SockJS info is the first request a browser makes. Closing /ws/** made that 401, so
         // a signed-in CONNECT never happened — the token was on a frame the handshake blocked.
@@ -82,6 +86,10 @@ class ProdStaticSurfacePostureTest {
         EXPECTED.put("POST /index.html", Posture.REFUSED);
         EXPECTED.put("PUT /index.html", Posture.REFUSED);
         EXPECTED.put("DELETE /index.html", Posture.REFUSED);
+        EXPECTED.put("POST /draw.js", Posture.REFUSED);
+        EXPECTED.put("POST /api.js", Posture.REFUSED);
+        EXPECTED.put("POST /share.js", Posture.REFUSED);
+        EXPECTED.put("POST /app.js", Posture.REFUSED);
 
         // Nothing else is served, and the fail-closed default is the feature. A path that does
         // not exist must not be distinguishable from one that is merely protected.
@@ -144,12 +152,27 @@ class ProdStaticSurfacePostureTest {
 
         byte[] body = client.method(HttpMethod.GET).uri("/").exchange()
                 .returnResult(byte[].class).getResponseBody();
+        byte[] painter = client.method(HttpMethod.GET).uri("/draw.js").exchange()
+                .returnResult(byte[].class).getResponseBody();
+        byte[] api = client.method(HttpMethod.GET).uri("/api.js").exchange()
+                .returnResult(byte[].class).getResponseBody();
+        byte[] share = client.method(HttpMethod.GET).uri("/share.js").exchange()
+                .returnResult(byte[].class).getResponseBody();
+        byte[] script = client.method(HttpMethod.GET).uri("/app.js").exchange()
+                .returnResult(byte[].class).getResponseBody();
 
         assertThat(body).as("prod served nothing at /").isNotNull();
+        assertThat(painter).as("prod served nothing at /draw.js").isNotNull();
+        assertThat(api).as("prod served nothing at /api.js").isNotNull();
+        assertThat(share).as("prod served nothing at /share.js").isNotNull();
+        assertThat(script).as("prod served nothing at /app.js").isNotNull();
         String html = new String(body);
-        assertThat(html).contains("<html", "#session=");
-        assertThat(html.length())
-                .as("the page prod serves is %d bytes, which is not the UI", html.length())
+        String js = new String(painter) + new String(api) + new String(share) + new String(script);
+        assertThat(html).contains("<html", "/draw.js", "/api.js", "/share.js", "/app.js");
+        assertThat(js).contains("#session=", "DaedalusDraw", "DaedalusApi", "DaedalusShare");
+        assertThat(html.length() + js.length())
+                .as("the page+script prod serves is %d bytes, which is not the UI",
+                        html.length() + js.length())
                 .isGreaterThan(10_000);
     }
 

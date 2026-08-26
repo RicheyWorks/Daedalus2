@@ -12,8 +12,8 @@ test methods, plus 24 in `examples/*`). Counts are `@Test` /
 | daedalus-core | 203 | 313 | Strong — property tests, awkward-shape sweeps, structural roster guards |
 | daedalus-server | 78 | 378 | Slice coverage, real-context smokes, WebSocket/STOMP on the wire, concurrency |
 | daedalus-plugin-runtime | 16 | 26 | Lifecycle, JAR discovery, unload, `SpringPluginContext` |
-| daedalus-plugin-api | 7 | 7 | Adequate for a contracts module |
-| daedalus-desktop | 4 | 10 | `DesktopWork` + launcher/theme; `MainController` still untested |
+| daedalus-plugin-api | 7 | 12 | Manifest guards plus SPI lifecycle/event contracts |
+| daedalus-desktop | 4 | 18 | `DesktopWork` + `DesktopWalk` + `DesktopPaint`; FXML stays launch-only |
 | examples/* (4 modules) | 22 | 24 | All four run in CI after the reactor `install` |
 
 What the suite already does well, and should keep doing:
@@ -78,9 +78,9 @@ Floors as of 2026-08-26 (not 0.00 exemptions):
 | module | floor | ceiling |
 |---|---|---|
 | daedalus-server | 0.93 | 0.96 |
-| daedalus-core | 0.89 | 0.92 |
-| daedalus-plugin-runtime | 0.85 | 0.88 |
-| daedalus-plugin-api | 0.11 | 0.16 |
+| daedalus-core | 0.90 | 0.93 |
+| daedalus-plugin-runtime | 0.84 | 0.87 |
+| daedalus-plugin-api | 0.49 | 0.52 |
 | daedalus-desktop | 0.09 | 0.14 |
 
 Parent and module pom comments that still said "visible 0.00 exemption" were corrected on
@@ -127,7 +127,7 @@ leave the toolkit into testable helpers; do not add TestFX.
 4. ~~`PluginController` slice + `SpringPluginContext` unit test~~ — done.
 5. ~~JaCoCo ratchet thresholds~~ — done, then re-audited: the floors had gone up to 12 points stale, so the rule gained a ceiling. 2026-08-26: pom comments no longer claim a 0.00 exemption.
 6. ~~GameSessionService concurrency test~~ — done.
-7. Desktop: extract more of `MainController` into testable helpers, or accept that FXML/canvas wiring stays launch-only (ADR-003).
+7. ~~Desktop: extract more of `MainController` into testable helpers~~ — walk rules live in `DesktopWalk`; letterbox / path tiles / player disc live in `DesktopPaint` (2026-08-26). FXML wiring stays launch-only (ADR-003).
 8. Keep `TESTING.md` dated when the standings table moves. A strategy doc that describes last month's gaps is itself a gap.
 9. ~~Stop growing `WebUiSmokeTest`; add a real API sweep in CI~~ — done 2026-08-26. `sweep/api-sweep.py` now fails the job on a failed check. Playwright `ui-sweep.js` stays local.
 

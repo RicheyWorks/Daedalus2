@@ -38,8 +38,25 @@ class WebUiSmokeTest {
         byte[] body = client.get().uri("/index.html").exchange()
                 .expectStatus().isOk()
                 .expectBody().returnResult().getResponseBody();
+        byte[] painter = client.get().uri("/draw.js").exchange()
+                .expectStatus().isOk()
+                .expectBody().returnResult().getResponseBody();
+        byte[] api = client.get().uri("/api.js").exchange()
+                .expectStatus().isOk()
+                .expectBody().returnResult().getResponseBody();
+        byte[] share = client.get().uri("/share.js").exchange()
+                .expectStatus().isOk()
+                .expectBody().returnResult().getResponseBody();
+        byte[] script = client.get().uri("/app.js").exchange()
+                .expectStatus().isOk()
+                .expectBody().returnResult().getResponseBody();
         assertThat(body).isNotNull();
-        String html = new String(body);
+        assertThat(painter).isNotNull();
+        assertThat(api).isNotNull();
+        assertThat(share).isNotNull();
+        assertThat(script).isNotNull();
+        String html = new String(body) + new String(painter) + new String(api)
+                + new String(share) + new String(script);
         // Contract, not implementation: the page talks to the versioned API and the STOMP
         // endpoint, can sign in, open a fog-of-war walk, negotiate ASCII, list plugins,
         // ask the per-generator leaderboard, hydrate a spectator walk from the
@@ -3882,8 +3899,8 @@ class WebUiSmokeTest {
         assertThat(html.substring(campFrom, campTo))
                 .contains("playStage(index)")
                 .doesNotContain("await playStage(0)");
-        int tokenFrom = html.indexOf("function parseCampaignToken");
-        int tokenTo = html.indexOf("function recipeParts");
+        int tokenFrom = html.indexOf("function campaignToken");
+        int tokenTo = html.indexOf("function mazeRecipe");
         assertThat(tokenFrom).isGreaterThanOrEqualTo(0);
         assertThat(tokenTo).isGreaterThan(tokenFrom);
         assertThat(html.substring(tokenFrom, tokenTo))
