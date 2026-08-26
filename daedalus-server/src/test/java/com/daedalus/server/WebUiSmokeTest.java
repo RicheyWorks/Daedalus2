@@ -2227,6 +2227,35 @@ class WebUiSmokeTest {
         assertLeftoverLbTitleStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N143. Remaining leftover #lb rows stay.
+        // refreshLeaderboard remints leftover #lb rows.
+        // leftover walk chrome stay already forbids reminting
+        // leftover board (N111). leftover #lb title stay
+        // already forbids reminting leftover heading (N142).
+        // These stays must not be taught away: Hunt / Play /
+        // Fog / theory / Join leftover #lb rows stay —
+        // leftover scores still name this maze's board; Hunt
+        // through Play and Join-from-spectate still keep
+        // tour; Fog still keeps tour (N17); leftover Solve
+        // path stays as a theory route hint (N62); Join
+        // leftover ghost stays (N86). Must not null tour
+        // (N17).
+        assertLeftoverLbRowsStay(html, "async function startTour", "function sameCell");
+        assertLeftoverLbRowsStay(html, "async function play()", "async function join()");
+        assertLeftoverLbRowsStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverLbRowsStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverLbRowsStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverLbRowsStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverLbRowsStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverLbRowsStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverLbRowsStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -3582,6 +3611,25 @@ class WebUiSmokeTest {
         assertThat(to).isGreaterThan(from);
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("lbTitle");
+        assertThat(body).doesNotContain("refreshLeaderboard");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover #lb rows stay (N143). leftover scores still
+     * name this maze's board. leftover walk chrome stay
+     * already forbids reminting leftover board (N111).
+     * leftover #lb title stay already N142. Must not remint
+     * leftover #lb rows. Must not null tour.
+     */
+    private static void assertLeftoverLbRowsStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"lb\").innerHTML");
+        assertThat(body).doesNotContain("$(\"lb\").textContent");
         assertThat(body).doesNotContain("refreshLeaderboard");
         assertThat(body).doesNotContain("state.tour = null");
     }
