@@ -2173,6 +2173,31 @@ class WebUiSmokeTest {
         assertLeftoverPluginsDescribeStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N141. Remaining leftover walk chrome remint stays.
+        // Play remints leftover trails / leftover won after
+        // the maze-id discard. Fog remints leftover trails /
+        // leftover won (N109 / N110). Join remints leftover
+        // joiner crumbs after the maze-id discard. leftover
+        // walk chrome stay already forbids reminting leftover
+        // trails / leftover won during Hunt / theory (N111).
+        // These remints must not be taught away. Must not
+        // null tour (N17).
+        assertLeftoverWalkChromeRemintStay(html, "async function play()", "async function join()");
+        assertLeftoverWalkChromeRemintStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverWalkChromeRemintStay(html, "async function join()", "async function move(");
+        assertLeftoverWalkChromeStay(html, "async function startTour", "function sameCell");
+        assertLeftoverWalkChromeStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverWalkChromeStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverWalkChromeStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverWalkChromeStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverWalkChromeStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -3492,6 +3517,25 @@ class WebUiSmokeTest {
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("m.description");
         assertThat(body).doesNotContain("refreshPlugins");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover walk chrome remint stay (N141). Play / Fog
+     * remint leftover crumbs after the maze-id discard.
+     * Join remints leftover joiner crumbs. leftover walk
+     * chrome stay already N111. Must not null tour.
+     */
+    private static void assertLeftoverWalkChromeRemintStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        int discard = body.lastIndexOf("state.maze.id !== mazeId");
+        int crumbs = body.indexOf("state.trails");
+        assertThat(discard).isGreaterThanOrEqualTo(0);
+        assertThat(crumbs).isGreaterThan(discard);
         assertThat(body).doesNotContain("state.tour = null");
     }
 
