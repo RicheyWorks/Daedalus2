@@ -2123,6 +2123,29 @@ class WebUiSmokeTest {
         assertLeftoverExpansionsStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N139. Remaining leftover sanctuaries remint stays.
+        // Hunt / Play / Fog / Join remint leftover rings
+        // after the maze-id discard. Theory remints leftover
+        // sibling rings (N63). placeSanctuaries remints
+        // leftover rings after leftover sibling null. These
+        // remints must not be taught away. Must not null
+        // tour (N17).
+        assertLeftoverSanctuariesStay(html, "async function startTour", "function sameCell");
+        assertLeftoverSanctuariesStay(html, "async function play()", "async function join()");
+        assertLeftoverSanctuariesStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverSanctuariesStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverSanctuariesStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverSanctuariesStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverSanctuariesStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverSanctuariesStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverSanctuariesStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -3406,6 +3429,25 @@ class WebUiSmokeTest {
         int wash = body.indexOf("state.expansions = []");
         assertThat(discard).isGreaterThanOrEqualTo(0);
         assertThat(wash).isGreaterThan(discard);
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover sanctuaries remint stay (N139). Hunt / Play /
+     * Fog / theory / Join remint leftover rings after the
+     * maze-id discard. Theory remint already N63. Must not
+     * null tour.
+     */
+    private static void assertLeftoverSanctuariesStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        int discard = body.lastIndexOf("state.maze.id !== mazeId");
+        int rings = body.indexOf("state.sanctuaries =");
+        assertThat(discard).isGreaterThanOrEqualTo(0);
+        assertThat(rings).isGreaterThan(discard);
         assertThat(body).doesNotContain("state.tour = null");
     }
 
