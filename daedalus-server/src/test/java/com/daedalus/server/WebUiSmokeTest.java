@@ -2345,6 +2345,36 @@ class WebUiSmokeTest {
         assertLeftoverRivalOptionsStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N147. Remaining leftover #solver options stay.
+        // loadAlgorithms remints leftover #solver options.
+        // leftover picker stay already forbids reminting
+        // leftover solver value (N122). leftover algos stay
+        // already forbids reminting leftover catalog (N133).
+        // leftover #rival options stay already forbids
+        // reminting leftover arena roster (N146). These
+        // stays must not be taught away: Hunt / Play / Fog /
+        // theory / Join leftover #solver options stay —
+        // leftover solver roster you loaded; Hunt through
+        // Play and Join-from-spectate still keep tour; Fog
+        // still keeps tour (N17); leftover Solve path stays
+        // as a theory route hint (N62); Join leftover ghost
+        // stays (N86). Must not null tour (N17).
+        assertLeftoverSolverOptionsStay(html, "async function startTour", "function sameCell");
+        assertLeftoverSolverOptionsStay(html, "async function play()", "async function join()");
+        assertLeftoverSolverOptionsStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverSolverOptionsStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverSolverOptionsStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverSolverOptionsStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverSolverOptionsStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverSolverOptionsStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverSolverOptionsStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -3775,6 +3805,24 @@ class WebUiSmokeTest {
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("rival.innerHTML");
         assertThat(body).doesNotContain("rival.appendChild");
+        assertThat(body).doesNotContain("loadAlgorithms");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover #solver options stay (N147). leftover solver
+     * roster you loaded. leftover picker stay already
+     * forbids reminting leftover solver value (N122).
+     * leftover algos stay already N133. Must not remint
+     * leftover #solver options. Must not null tour.
+     */
+    private static void assertLeftoverSolverOptionsStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("[\"solver\", all.solvers]");
         assertThat(body).doesNotContain("loadAlgorithms");
         assertThat(body).doesNotContain("state.tour = null");
     }
