@@ -27,9 +27,9 @@ import org.springframework.security.web.SecurityFilterChain;
  *   <li>{@code GET /}, {@code GET /index.html}, {@code GET /draw.js}, {@code GET /api.js},
  *       {@code GET /share.js}, {@code GET /fog.js}, {@code GET /seat.js},
  *       {@code GET /lab.js}, {@code GET /caption.js}, {@code GET /mint.js},
- *       {@code GET /campaign.js}, {@code GET /hunt.js}, {@code GET /solve.js},
- *       {@code GET /theory.js}, {@code GET /live.js}, {@code GET /session.js},
- *       {@code GET /fogwalk.js}, and {@code GET /app.js} —
+ *       {@code GET /campaign.js}, {@code GET /spectate.js}, {@code GET /hunt.js},
+ *       {@code GET /solve.js}, {@code GET /theory.js}, {@code GET /live.js},
+ *       {@code GET /session.js}, {@code GET /fogwalk.js}, and {@code GET /app.js} —
  *       the web UI. The README publishes it as
  *       "served at {@code /}" and it was 401 in prod: {@code anyRequest().authenticated()}
  *       covers static resources too, and {@code ProdAuthPostureTest} scans controller mappings,
@@ -129,9 +129,9 @@ public class ProdSecurityConfig {
                         // answer 401 exactly as they did before.
                         .requestMatchers(HttpMethod.GET, "/", "/index.html", "/draw.js",
                                 "/api.js", "/share.js", "/fog.js", "/seat.js", "/lab.js",
-                                "/caption.js", "/mint.js", "/campaign.js", "/hunt.js",
-                                "/solve.js", "/theory.js", "/live.js", "/session.js",
-                                "/fogwalk.js", "/app.js")
+                                "/caption.js", "/mint.js", "/campaign.js", "/spectate.js",
+                                "/hunt.js", "/solve.js", "/theory.js", "/live.js",
+                                "/session.js", "/fogwalk.js", "/app.js")
                                 .permitAll()
 
                         // ---- Public read endpoints ----

@@ -76,6 +76,7 @@ class ProdStaticSurfacePostureTest {
         EXPECTED.put("GET /caption.js", Posture.PUBLIC);
         EXPECTED.put("GET /mint.js", Posture.PUBLIC);
         EXPECTED.put("GET /campaign.js", Posture.PUBLIC);
+        EXPECTED.put("GET /spectate.js", Posture.PUBLIC);
         EXPECTED.put("GET /hunt.js", Posture.PUBLIC);
         EXPECTED.put("GET /solve.js", Posture.PUBLIC);
         EXPECTED.put("GET /theory.js", Posture.PUBLIC);
@@ -107,6 +108,7 @@ class ProdStaticSurfacePostureTest {
         EXPECTED.put("POST /caption.js", Posture.REFUSED);
         EXPECTED.put("POST /mint.js", Posture.REFUSED);
         EXPECTED.put("POST /campaign.js", Posture.REFUSED);
+        EXPECTED.put("POST /spectate.js", Posture.REFUSED);
         EXPECTED.put("POST /hunt.js", Posture.REFUSED);
         EXPECTED.put("POST /solve.js", Posture.REFUSED);
         EXPECTED.put("POST /theory.js", Posture.REFUSED);
@@ -194,6 +196,8 @@ class ProdStaticSurfacePostureTest {
                 .returnResult(byte[].class).getResponseBody();
         byte[] campaign = client.method(HttpMethod.GET).uri("/campaign.js").exchange()
                 .returnResult(byte[].class).getResponseBody();
+        byte[] spectate = client.method(HttpMethod.GET).uri("/spectate.js").exchange()
+                .returnResult(byte[].class).getResponseBody();
         byte[] hunt = client.method(HttpMethod.GET).uri("/hunt.js").exchange()
                 .returnResult(byte[].class).getResponseBody();
         byte[] solve = client.method(HttpMethod.GET).uri("/solve.js").exchange()
@@ -219,6 +223,7 @@ class ProdStaticSurfacePostureTest {
         assertThat(caption).as("prod served nothing at /caption.js").isNotNull();
         assertThat(mint).as("prod served nothing at /mint.js").isNotNull();
         assertThat(campaign).as("prod served nothing at /campaign.js").isNotNull();
+        assertThat(spectate).as("prod served nothing at /spectate.js").isNotNull();
         assertThat(hunt).as("prod served nothing at /hunt.js").isNotNull();
         assertThat(solve).as("prod served nothing at /solve.js").isNotNull();
         assertThat(theory).as("prod served nothing at /theory.js").isNotNull();
@@ -230,16 +235,19 @@ class ProdStaticSurfacePostureTest {
         String js = new String(painter) + new String(api) + new String(share)
                 + new String(fog) + new String(seat) + new String(lab)
                 + new String(caption) + new String(mint) + new String(campaign)
-                + new String(hunt) + new String(solve) + new String(theory)
+                + new String(spectate) + new String(hunt) + new String(solve)
+                + new String(theory)
                 + new String(live) + new String(session)
                 + new String(fogwalk) + new String(script);
         assertThat(html).contains("<html", "/draw.js", "/api.js", "/share.js",
                 "/fog.js", "/seat.js", "/lab.js", "/caption.js", "/mint.js",
-                "/campaign.js", "/hunt.js", "/solve.js", "/theory.js",
-                "/live.js", "/session.js", "/fogwalk.js", "/app.js");
+                "/campaign.js", "/spectate.js", "/hunt.js", "/solve.js",
+                "/theory.js", "/live.js", "/session.js", "/fogwalk.js",
+                "/app.js");
         assertThat(js).contains("#session=", "DaedalusDraw", "DaedalusApi",
                 "DaedalusShare", "DaedalusFog", "DaedalusSeat", "DaedalusLab",
                 "DaedalusCaption", "DaedalusMint", "DaedalusCampaign",
+                "DaedalusSpectate",
                 "DaedalusHunt", "DaedalusSolve", "DaedalusTheory",
                 "connectStomp", "async function play",
                 "async function startFog");

@@ -13,7 +13,8 @@ under the `_migration/` portfolios.
 - **Web UI leftover coordinators left `app.js`.** `live.js` owns STOMP,
   live polls, and mutation apply; `session.js` owns play / join / move;
   `fogwalk.js` owns the agent walk; `mint.js` owns generate / adopt /
-  daily / breed; `campaign.js` owns the stage ladder; `hunt.js` owns
+  daily / breed; `campaign.js` owns the stage ladder; `spectate.js` owns
+  permalinks / watch / leave-maze; `hunt.js` owns
   waypoint start / status / verdict; `solve.js` owns solve /
   race / compare; `theory.js` owns
   identify / analyze / hardest / heat / sanctuaries / lens and living

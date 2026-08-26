@@ -34,7 +34,8 @@ class WebUiSmokeTest {
         String[] scripts = {
                 "/draw.js", "/api.js", "/share.js", "/fog.js", "/seat.js",
                 "/lab.js", "/caption.js", "/mint.js", "/campaign.js",
-                "/hunt.js", "/solve.js", "/theory.js", "/live.js",
+                "/spectate.js", "/hunt.js", "/solve.js", "/theory.js",
+                "/live.js",
                 "/session.js",
                 "/fogwalk.js",
                 "/app.js",
