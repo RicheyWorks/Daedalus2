@@ -8,7 +8,20 @@ under the `_migration/` portfolios.
 
 ## [Unreleased] — 2026-08-20
 
+### Changed
+
+- **TESTING.md matches the tree again.** The 2026-07-28 audit still said 347 tests,
+  skipped examples, no WebSocket smoke, and 0.00 coverage exemptions. The living
+  count is 734 reactor methods; those gaps are closed. Pom comments and ADR-003
+  no longer advertise a 0.00 floor — plugin-api is 0.11 / 0.16, desktop is
+  0.09 / 0.14.
+
 ### Fixed
+
+- **Join eviction 404 no longer talks about moves.** `POST /session/{id}/join` reused the
+  move endpoint's sentence when the session was open but its maze had been evicted, so a
+  joiner was told "moves cannot be validated." It now says a join cannot be seated.
+  `MazeControllerJoinTest` pins the verbs.
 
 - **Plugin shutdown now runs in the host.** `PluginManager.shutdownAll()` was implemented
   and tested in `daedalus-plugin-runtime`, but `PluginConfig` never registered it as the

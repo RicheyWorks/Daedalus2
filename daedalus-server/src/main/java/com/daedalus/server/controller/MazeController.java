@@ -405,7 +405,7 @@ public class MazeController {
         var c = gen.find(s.mazeId());
         if (c == null) throw new ResourceNotFoundException("maze", s.mazeId().toString(),
                 "Session " + id + " is open but its maze " + s.mazeId() + " has been evicted "
-                        + "from the cache, so moves cannot be validated against it.");
+                        + "from the cache, so a join cannot be seated against it.");
         var joined = sessions.join(id, player, c.grid().start(), ownerOf(authentication));
         // Idle eviction between find and join — same 404 as an unknown session.
         if (joined == null) throw ResourceNotFoundException.session(id);

@@ -27,9 +27,11 @@ package com.daedalus.server.web;
  *
  * <p>All 27 sites used to answer identically. Several were never the same thing:
  * <ul>
- *   <li>{@code POST /session/&#123;id&#125;/move} 404s both when the session is unknown
- *       <em>and</em> when the session is fine but its maze has been evicted from the cache — very
- *       different problems for the caller, previously indistinguishable;</li>
+ *   <li>{@code POST /session/&#123;id&#125;/move} and {@code POST /session/&#123;id&#125;/join}
+ *       404 both when the session is unknown <em>and</em> when the session is fine but its maze
+ *       has been evicted from the cache — very different problems for the caller, previously
+ *       indistinguishable. The two endpoints must not share a sentence: join used to say
+ *       "moves cannot be validated" (copy-paste, 2026-08-26);</li>
  *   <li>{@code GET /maze/&#123;id&#125;/ghost} 404s when the maze is unknown and when the maze is
  *       fine but nobody has completed a run on it yet — the second is not an error at all, it is
  *       "come back later";</li>

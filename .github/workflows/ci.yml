@@ -81,7 +81,7 @@ jobs:
         # Their tests pin the claims the examples' narratives make — without
         # this step, 17 test methods across these three modules never execute
         # on any push, and a core API change that breaks an example ships
-        # green (TESTING.md, gap P1).
+        # green (TESTING.md, former gap P1 — closed 2026-07-31).
         run: |
           mvn -B -ntp -f examples/loadbalancer-topology/pom.xml clean package
           mvn -B -ntp -f examples/dungeon-layout/pom.xml clean package

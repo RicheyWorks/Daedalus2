@@ -23,7 +23,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.UUID;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -136,5 +138,22 @@ class MazeControllerJoinTest {
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.kind", equalTo("session-full")))
                 .andExpect(jsonPath("$.title", equalTo("Session full")));
+    }
+
+    @Test
+    void joiningWhenTheMazeWasEvictedNamesJoinNotMoves() throws Exception {
+        // The session is open; the maze cache entry is gone. Until 2026-08-26 this 404 reused
+        // the move endpoint's sentence ("moves cannot be validated"), which sent a joiner
+        // looking at the wrong verb.
+        GameSessionService sessions =
+                new GameSessionService(event -> { }, mock(LeaderboardService.class), true);
+        var s = sessions.open(mazeId, "Alice", grid.start());
+        when(gen.find(any())).thenReturn(null);
+
+        mvc(sessions).perform(post("/api/v1/session/" + s.id() + "/join").param("player", "Bob"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.kind", equalTo("maze")))
+                .andExpect(jsonPath("$.detail", containsString("join")))
+                .andExpect(jsonPath("$.detail", not(containsString("moves"))));
     }
 }

@@ -22,9 +22,9 @@
     </description>
 
     <properties>
-        <!-- Coverage ratchet exemption: contracts module — interfaces, events, records.
-             Its behavior is exercised through core/runtime/server; an instruction ratio
-             here measures little. Visible 0.00, not a missing property. -->
+        <!-- Coverage ratchet: contracts module — interfaces, events, records. Most
+             behavior is exercised through runtime/server; this floor is a deletion
+             guard, not a 0.00 exemption. Raise it when coverage climbs past the ceiling. -->
         <jacoco.check.minimum>0.11</jacoco.check.minimum>
         <jacoco.check.ceiling>0.16</jacoco.check.ceiling>
     </properties>

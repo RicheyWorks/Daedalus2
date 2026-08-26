@@ -39,9 +39,10 @@
         <!-- Coverage ratchet (TESTING.md, gap P2): jacoco:check fails the build below this
              instruction-coverage ratio. Each module pins its own value 2-3 points below its
              measured coverage and raises it as coverage rises — never lower it to make a PR
-             pass. This default is only the floor a brand-new module starts from; exempt
-             modules (desktop, plugin-api) set 0.00 explicitly so the exemption is visible
-             code, not invisible absence. -->
+             pass. This default is only the floor a brand-new module starts from. Desktop
+             and plugin-api used to advertise a visible 0.00 exemption; they now carry
+             small real floors (0.09 / 0.11) with matching ceilings — a deletion guard,
+             not the absence of one. -->
         <jacoco.check.minimum>0.60</jacoco.check.minimum>
         <!-- How far coverage may rise above the floor before the ratchet demands a bump. -->
         <jacoco.check.headroom>0.03</jacoco.check.headroom>

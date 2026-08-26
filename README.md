@@ -85,8 +85,8 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
 - **Verified** — `mvn clean verify` is the living number (five modules,
   Checkstyle, SpotBugs, and a per-module JaCoCo ratchet that fails in
   **both** directions: below the floor, or the floor more than 3 points
-  stale as coverage rises). A July 2026 snapshot was 623 tests; the suite
-  has grown with the living-maze and web-UI work since.
+  stale as coverage rises). An August 2026 snapshot was 734 reactor test
+  methods; do not treat that number as current.
   [`CHANGELOG.md`](./CHANGELOG.md) records what changed and, where a
   decision was measured rather than assumed, the numbers behind it;
   [`TESTING.md`](./TESTING.md) is the strategy those tests follow.
@@ -335,9 +335,10 @@ mvn clean verify              # all five modules
 mvn -pl daedalus-server test  # one module
 ```
 
-The living count is `mvn clean verify`. A 2026-07-31 snapshot was 623 tests
-across 127 files (322 core, 7 plugin-api, 26 plugin-runtime, 258 server,
-10 desktop); do not treat that number as current. Highlights:
+The living count is `mvn clean verify`. A 2026-08-26 snapshot was **734**
+reactor test methods (313 core, 7 plugin-api, 26 plugin-runtime, 378 server,
+10 desktop), plus 24 in `examples/*`. Do not treat that number as current.
+Highlights:
 
 | Module | Highlights |
 |---|---|
