@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Leftover plugins describe stays.** `refreshPlugins` remints leftover describe. leftover plugin stay already forbids reminting leftover roster (N115). Hunt / Play / Fog / theory / Join leftover plugins describe stay — leftover description you already loaded. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N140).
+
 - **Leftover sanctuaries remint stays.** Hunt / Play / Fog / Join remint leftover rings after the maze-id discard. Theory remints leftover sibling rings (N63). `placeSanctuaries` remints leftover rings after leftover sibling null. Hunt / Play / Fog / theory / Join leftover sanctuaries remint stay — leftover rings reminted. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N139).
 
 - **Leftover expansions remint stays.** Hunt remints leftover expansions after the maze-id discard. Play / Fog / Join remint leftover path / leftover expansions. Theory remints leftover search wash (N87). Distinct from leftover progress clock (N129). Hunt / Play / Fog / theory / Join leftover expansions remint stay — leftover wash emptied (`draw` needs leftover expansions). Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N138).
