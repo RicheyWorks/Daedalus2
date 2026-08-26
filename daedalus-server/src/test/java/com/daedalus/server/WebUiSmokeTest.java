@@ -1989,6 +1989,29 @@ class WebUiSmokeTest {
         assertLeftoverAlgosStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N134. Remaining leftover STOMP stays. Play remints
+        // leftover session frames when it seats. Fog remints
+        // leftover session frames. Join-from-spectate remints
+        // leftover session frames. These stays must not be
+        // taught away: Hunt leftover STOMP stay — leftover
+        // frames still name this maze; theory leftover STOMP
+        // stay — leftover frames still name this maze; Hunt
+        // through Play still keeps tour; Fog still keeps
+        // tour (N17); leftover Solve path stays as a theory
+        // route hint (N62).
+        assertLeftoverStompStay(html, "async function startTour", "function sameCell");
+        assertLeftoverStompStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverStompStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverStompStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverStompStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverStompStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -3202,6 +3225,23 @@ class WebUiSmokeTest {
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("state.algos");
         assertThat(body).doesNotContain("loadAlgorithms");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover STOMP stay (N134). leftover frames still
+     * name this maze. Must not remint leftover subs.
+     * Must not null tour.
+     */
+    private static void assertLeftoverStompStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("resubscribe");
+        assertThat(body).doesNotContain("connectStomp");
+        assertThat(body).doesNotContain("state.subs");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
