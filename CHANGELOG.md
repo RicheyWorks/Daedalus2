@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Leftover Play / Fog button stays.** adoptMaze / leaveMaze remint leftover `#play` / leftover `#fog`. Hunt / Play / Fog / theory / Join leftover `#play` stay — same maze still playable. Leftover `#fog` stay — same maze still fogable. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N132).
+
 - **Leftover cleared stays.** `loadCampaign` / `leaveCampaign` remint leftover `cleared`. leftover campaign stay already forbids `leaveCampaign` (N112). leftover campaign box stay already forbids reminting leftover `#campaignBox` (N128). Hunt / Play / Fog / theory / Join leftover `cleared` stay — leftover stages you cleared. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N131).
 
 - **Leftover cadence stays.** `startLivePolling` remints leftover `liveTickMs`. `startTrafficPolling` remints leftover `trafficTickMs`. leftover live stay already forbids reminting leftover polls (N113). Hunt / Play / Fog / theory / Join leftover `liveTickMs` / leftover `trafficTickMs` stay — leftover cadence you asked for. Reconnect re-arms with leftover cadence when leftover `#live` is disabled. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N130).

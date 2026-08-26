@@ -1937,6 +1937,31 @@ class WebUiSmokeTest {
         assertLeftoverClearedStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N132. Remaining leftover Play / Fog button stays.
+        // adoptMaze / leaveMaze remint leftover #play /
+        // leftover #fog. These stays must not be taught away:
+        // Hunt / Play / Fog / theory / Join leftover #play
+        // stay — same maze still playable; leftover #fog stay
+        // — same maze still fogable; Hunt through Play and
+        // Join-from-spectate still keep tour; Fog still keeps
+        // tour (N17); leftover Solve path stays as a theory
+        // route hint (N62); Join leftover ghost stays (N86).
+        assertLeftoverWalkButtonStay(html, "async function startTour", "function sameCell");
+        assertLeftoverWalkButtonStay(html, "async function play()", "async function join()");
+        assertLeftoverWalkButtonStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverWalkButtonStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverWalkButtonStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverWalkButtonStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverWalkButtonStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverWalkButtonStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverWalkButtonStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -3118,6 +3143,22 @@ class WebUiSmokeTest {
         assertThat(to).isGreaterThan(from);
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("state.cleared");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover Play / Fog button stay (N132). Same maze still
+     * playable / still fogable. Must not rewrite leftover
+     * #play / leftover #fog. Must not null tour.
+     */
+    private static void assertLeftoverWalkButtonStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"play\")");
+        assertThat(body).doesNotContain("$(\"fog\")");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
