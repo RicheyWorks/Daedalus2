@@ -10,11 +10,12 @@ under the `_migration/` portfolios.
 
 ### Changed
 
-- **Web UI paint, HTTP, share, fog, and seat helpers no longer share one file.**
+- **Web UI paint, HTTP, share, fog, seat, lab, and caption helpers no longer share one file.**
   `draw.js` takes a scene; `api.js` names RFC 7807 errors and fetches;
   `share.js` parses hashes and walks; `fog.js` owns agent memory; `seat.js`
-  owns who-moves and trails. `app.js` keeps leftover-state wiring. Prod
-  enumerates each path.
+  owns who-moves and trails; `lab.js` owns the complexity-lab chart;
+  `caption.js` owns theory-overlay HTML. `app.js` keeps leftover-state
+  wiring. Prod enumerates each path.
 
 - **Generator and solver registries share one map.** `AlgorithmRegistry` owns
   collision, built-in refusal, and unregister. The two public types are facades

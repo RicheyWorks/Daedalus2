@@ -93,8 +93,19 @@
     return out;
   }
 
+  function ghostPrefix(ghost, nowMs) {
+    if (!ghost || !ghost.start) return [];
+    const e = nowMs - ghost.started;
+    const pts = [ghost.start];
+    for (const m of ghost.moves || []) {
+      if (m.tMs <= e) pts.push(m.to);
+      else break;
+    }
+    return pts;
+  }
+
   global.DaedalusShare = {
     readHash, campaignToken, mazeRecipe,
-    walkFromMoves, startFromTiles, rng32, placeSpots,
+    walkFromMoves, startFromTiles, rng32, placeSpots, ghostPrefix,
   };
 })(window);

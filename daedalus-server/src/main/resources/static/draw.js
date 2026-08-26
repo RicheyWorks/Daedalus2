@@ -335,8 +335,12 @@
         canvas.width / 2, canvas.height / 2 + 16);
   }
 
+  function pathRevealMs(n) {
+    return Math.min(5000, Math.max(700, (n || 0) * 14));
+  }
+
   global.DaedalusDraw = {
     paint, paintEmpty, computeGeometry, isRock, isInteriorPost,
-    paintWalk, walkHead, fogRevealsTile, hitCell,
+    paintWalk, walkHead, fogRevealsTile, hitCell, pathRevealMs,
   };
 })(window);

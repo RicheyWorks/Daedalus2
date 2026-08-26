@@ -1346,20 +1346,7 @@ async function identifyGenerator() {
 }
 
 function paintFingerprintCaption(f) {
-  const pct = Math.round(f.confidence * 100);
-  const verdict = f.agrees
-      ? `<b style="color:#4cc38a">${esc(f.predictedGeneratorId)}</b> — matches the record`
-      : `<b style="color:#f0b429">${esc(f.predictedGeneratorId)}</b> — record says `
-        + `${esc(f.recordedGeneratorId)}`;
-  const sig = f.signature;
-  $("compareBox").innerHTML =
-      `<div style="margin-top:8px">Structure says ${verdict} `
-    + `<span class="hint">(margin over ${esc(f.runnerUp)}: ${pct}%)</span></div>`
-    + `<div class="hint" style="margin-top:4px">${esc(f.note)}</div>`
-    + `<div class="hint" style="margin-top:4px">dead ends ${(sig.deadEndRatio*100).toFixed(0)}% · `
-    + `corridors ${(sig.corridorRatio*100).toFixed(0)}% · junctions ${(sig.junctionRatio*100).toFixed(0)}% · `
-    + `horizontal bias ${(sig.horizontalBias*100).toFixed(0)}% · straight-through `
-    + `${(sig.straightRatio*100).toFixed(0)}% · mean run ${sig.meanStraightRun.toFixed(2)}</div>`;
+  $("compareBox").innerHTML = DaedalusCaption.fingerprintHtml(f, esc);
 }
 
 // ---------- complexity lab (ADR-007 idea 2) ----------
@@ -1420,60 +1407,12 @@ function renderLab(fit) {
 
 /** Log-log scatter+line: on these axes a power law is a straight line whose slope is the exponent. */
 function growthChart(fit) {
-  const W = 288, H = 150, L = 38, R = 8, T = 10, B = 22;
-  const pts = fit.measured.filter(m => m.value > 0);
-  if (pts.length < 2) return "";
-  const lx = m => Math.log10(m.cells), ly = m => Math.log10(m.value);
-  const xs = pts.map(lx), ys = pts.map(ly);
-  const x0 = Math.min(...xs), x1 = Math.max(...xs);
-  const y0 = Math.min(...ys), y1 = Math.max(...ys);
-  const px = v => L + (x1 === x0 ? 0.5 : (v - x0) / (x1 - x0)) * (W - L - R);
-  const py = v => H - B - (y1 === y0 ? 0.5 : (v - y0) / (y1 - y0)) * (H - T - B);
-
-  // Model overlay: the fitted power law through the first point, drawn de-emphasised so the
-  // measurements stay the subject and the fit is visibly context.
-  const e = fit.exponent;
-  const modelY = v => ys[0] + e * (v - xs[0]);
-  const model = `<line x1="${px(x0)}" y1="${py(modelY(x0))}" x2="${px(x1)}" `
-      + `y2="${py(Math.max(y0, Math.min(y1, modelY(x1))))}" stroke="#8a949e" stroke-width="2" `
-      + `stroke-dasharray="4 3" opacity="0.8"/>`;
-  const path = pts.map((m, i) => `${i ? "L" : "M"}${px(lx(m)).toFixed(1)},${py(ly(m)).toFixed(1)}`).join("");
-  const dots = pts.map((m, i) =>
-      `<circle class="labdot" data-i="${i}" cx="${px(lx(m)).toFixed(1)}" cy="${py(ly(m)).toFixed(1)}" `
-      + `r="4.5" fill="${LAB_SERIES}" stroke="#1a2026" stroke-width="2"/>`).join("");
-  const last = pts[pts.length - 1];
-
-  return `<svg id="labChart" viewBox="0 0 ${W} ${H}" width="100%" height="${H}"
-       role="img" aria-label="${esc(fit.metric)} against cell count, log-log">
-    <line x1="${L}" y1="${T}" x2="${L}" y2="${H-B}" stroke="#2a323b"/>
-    <line x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}" stroke="#2a323b"/>
-    ${model}
-    <path d="${path}" fill="none" stroke="${LAB_SERIES}" stroke-width="2"
-          stroke-linejoin="round" stroke-linecap="round"/>
-    ${dots}
-    <text x="${L}" y="${H-6}" fill="#8a949e" font-size="9">${pts[0].cells} cells</text>
-    <text x="${W-R}" y="${H-6}" fill="#8a949e" font-size="9" text-anchor="end">${last.cells}</text>
-    <text x="4" y="${T+8}" fill="#8a949e" font-size="9">${last.value}</text>
-    <text x="4" y="${H-B}" fill="#8a949e" font-size="9">${pts[0].value}</text>
-    <title>log-log: a straight line means a power law, and its slope is the exponent</title>
-  </svg>
-  <div id="labTip" class="hint" style="min-height:14px"></div>`;
+  return DaedalusLab.chartSvg(fit, LAB_SERIES, esc);
 }
 
 /** Per-point hover: an SVG chart is interactive, so it ships with a readout. */
 function wireChartHover(fit) {
-  const pts = fit.measured.filter(m => m.value > 0);
-  const tip = $("labTip");
-  if (!tip) return;
-  document.querySelectorAll("#labChart .labdot").forEach(dot => {
-    const show = () => {
-      const m = pts[Number(dot.dataset.i)];
-      tip.textContent = `${m.size}×${m.size} — ${m.cells} cells, ${fit.metric} ${m.value}`;
-    };
-    dot.addEventListener("mouseenter", show);
-    dot.addEventListener("focus", show);
-    dot.addEventListener("mouseleave", () => { tip.textContent = ""; });
-  });
+  DaedalusLab.bindHover(document.querySelectorAll("#labChart .labdot"), $("labTip"), fit);
 }
 
 // ---------- waypoint tour mode (ADR-007 idea 1) ----------
@@ -1687,15 +1626,7 @@ async function analyzeStructure() {
 }
 
 function paintAnalysisCaption(a) {
-  const cp = a.cutSize === 1 ? "1 chokepoint" : `${a.cutSize} chokepoints`;
-  $("compareBox").innerHTML = `<div style="margin-top:8px">`
-      + `<b style="color:#c084fc">${cp}</b> — sever ${a.cutSize === 1 ? "it" : "them"} and `
-      + `start and goal split into different worlds &middot; `
-      + `${a.deadEndCount} dead ends &middot; shortest route ${a.routeLength} cells`
-      + (a.cutSize === 1
-          ? ` &middot; <span class="hint">every perfect maze has exactly one cut — braid or `
-            + `erode it (Bring to life) and re-analyze</span>` : "")
-      + `</div>`;
+  $("compareBox").innerHTML = DaedalusCaption.analysisHtml(a);
 }
 
 // ---------- hardest route (ADR-007 idea 3) ----------
@@ -1774,15 +1705,7 @@ async function hardestRoute() {
 }
 
 function paintHardestCaption(h) {
-  const flat = h.loops === 0 || h.hardestLength === h.shortestLength;
-  $("compareBox").innerHTML = `<div style="margin-top:8px">`
-      + (flat
-          ? `<b style="color:#f2c94c">One route only</b> — ${h.hardestLength} steps. `
-          : `<b style="color:#f2c94c">${h.hardestLength} steps</b> the cruel way against `
-            + `<b>${h.shortestLength}</b> direct — a <b>&times;${h.detour.toFixed(2)}</b> detour. `)
-      + `${h.loops} independent loop${h.loops === 1 ? "" : "s"} &middot; `
-      + (h.exact ? `proven optimal` : `lower bound (search budget spent)`)
-      + `<div class="hint" style="margin-top:4px">${h.note}</div></div>`;
+  $("compareBox").innerHTML = DaedalusCaption.hardestHtml(h);
 }
 
 // ---------- distance field + sanctuaries (ADR-007 ideas 6 and 5) ----------
@@ -1793,8 +1716,7 @@ function paintHardestCaption(h) {
  * validated blue scale; the ramp was checked for single-hue (4 degrees of spread) and monotone
  * lightness against this UI's actual floor colour rather than eyeballed.
  */
-const DISTANCE_RAMP = ["#1c5cab", "#2a78d6", "#3987e5", "#5598e7",
-                       "#6da7ec", "#86b6ef", "#9ec5f4", "#cde2fb"];
+const DISTANCE_RAMP = DaedalusCaption.DISTANCE_RAMP;
 
 /** Shade every cell by its distance from the goal (or start). */
 async function distanceHeatMap() {
@@ -1853,20 +1775,7 @@ async function distanceHeatMap() {
 }
 
 function paintFieldCaption(f) {
-  const swatches = DISTANCE_RAMP
-      .map(c => `<span style="display:inline-block;width:16px;height:10px;background:${c}"></span>`)
-      .join("");
-  $("compareBox").innerHTML = `<div style="margin-top:8px">`
-      + `<b style="color:#9ec5f4">Distance from the ${f.from.toLowerCase()}</b> — the `
-      + `breadth-first field, shaded. `
-      + `<div style="margin-top:6px">0 ${swatches} ${f.maxDistance} steps</div>`
-      + `<div class="hint" style="margin-top:4px">This is maze distance, not distance across `
-      + `the picture, so it will not look like a smooth halo: two cells touching on screen can `
-      + `be 200 steps apart. Every abrupt jump in shade is a wall doing that work.</div>`
-      + (f.unreachable > 0
-          ? `<div class="hint">${f.unreachable} cells are unreachable rock and stay `
-            + `unshaded</div>` : "")
-      + `</div>`;
+  $("compareBox").innerHTML = DaedalusCaption.fieldHtml(f);
 }
 
 /** k-center safe points, plus the cell they serve worst. */
@@ -1928,12 +1837,7 @@ async function placeSanctuaries() {
 }
 
 function paintSanctuariesCaption(s) {
-  $("compareBox").innerHTML = `<div style="margin-top:8px">`
-      + `<b style="color:#4cc38a">${s.placements.length} sanctuaries</b> &middot; `
-      + `nobody is more than <b>${s.coveringRadius} steps</b> from one &middot; `
-      + `serving ${s.servedCells} of ${s.habitableCells} walkable cells`
-      + `<div class="hint" style="margin-top:4px">The ring marks the worst-served cell — the `
-      + `loneliest place in this maze. ${s.note}</div></div>`;
+  $("compareBox").innerHTML = DaedalusCaption.sanctuariesHtml(s);
 }
 
 // ---------- solver tournament (ADR-007 ideas 10 and 7) ----------
@@ -2024,7 +1928,7 @@ async function runTournament() {
  * overlay draws that partition instead, and the counts underneath it are provable rather than
  * suggestive.
  */
-const LENS_COLORS = ["#e5484d", "#f2c94c", "#4cc38a"];   // must expand / tie / never
+const LENS_COLORS = DaedalusCaption.LENS_COLORS;   // must expand / tie / never
 
 async function heuristicLens() {
   leaveSpectate();
@@ -2083,15 +1987,7 @@ async function heuristicLens() {
 }
 
 function paintLensCaption(l) {
-  const chip = (i, label, n) => `<span style="display:inline-block;width:10px;height:10px;`
-      + `background:${LENS_COLORS[i]};margin-right:4px"></span>${label} <b>${n}</b>`;
-  $("compareBox").innerHTML = `<div style="margin-top:8px">`
-      + `${chip(0, "must expand", l.mustExpand)} &middot; ${chip(1, "tie decides", l.tie)} `
-      + `&middot; ${chip(2, "never touched", l.never)}`
-      + `<div style="margin-top:4px">A* really expanded <b>${l.actualExpansions}</b> of `
-      + `${l.reachable} reachable cells; route ${l.routeLength} steps against an optimum of `
-      + `${l.optimalCost}${l.routeOptimal ? "" : " — <b style='color:#e5484d'>not optimal</b>"}`
-      + `</div><div class="hint" style="margin-top:4px">${l.note}</div></div>`;
+  $("compareBox").innerHTML = DaedalusCaption.lensHtml(l);
 }
 
 // ---------- ghost runs (ADR-006 idea #8) ----------
@@ -2618,24 +2514,10 @@ function animateRace() {
 
 function raceSummary() {
   if (state.fog || !state.race) return;
-  const [A, B] = state.race.lanes;
-  const ok = l => l.success !== false && l.path && l.path.length > 0;
-  let text;
-  if (ok(A) && ok(B)) {
-    const [w, l] = A.expansions.length <= B.expansions.length ? [A, B] : [B, A];
-    const ratio = (l.expansions.length / Math.max(1, w.expansions.length)).toFixed(1);
-    text = `<b style="color:${w.color}">${esc(w.id)}</b> wins the arena — route found after `
-        + `${w.expansions.length} expansions vs ${l.expansions.length} (${ratio}&times; less work). `
-        + `Path lengths: ${esc(A.id)} ${A.path.length}, ${esc(B.id)} ${B.path.length}.`;
-  } else if (ok(A) || ok(B)) {
-    const w = ok(A) ? A : B, l = w === A ? B : A;
-    text = `<b style="color:${w.color}">${esc(w.id)}</b> wins by default — `
-        + `${esc(l.id)} legitimately gave up (no route under its rules).`;
-  } else {
-    text = "neither solver found a route.";
-  }
+  const html = DaedalusCaption.raceHtml(state.race.lanes, esc);
+  if (!html) return;
   state.caption = "race";
-  $("compareBox").innerHTML = `<div style="margin-top:8px">${text}</div>`;
+  $("compareBox").innerHTML = html;
 }
 
 /**
@@ -3233,7 +3115,7 @@ function resubscribe() {
 let geom = null;
 
 function pathRevealMs(n) {
-  return Math.min(5000, Math.max(700, (n || 0) * 14));
+  return DaedalusDraw.pathRevealMs(n);
 }
 
 /** The Held-Karp walk the tour scores against — coins are stops; this is the corridor. */
@@ -3243,15 +3125,7 @@ function tourWalk() {
 
 /** The ghost's walked prefix so far — start plus every `to` whose clock has elapsed. */
 function ghostWalk() {
-  const g = state.ghost;
-  if (!g || !g.start) return [];
-  const e = performance.now() - g.started;
-  const pts = [g.start];
-  for (const m of g.moves || []) {
-    if (m.tMs <= e) pts.push(m.to);
-    else break;
-  }
-  return pts;
+  return DaedalusShare.ghostPrefix(state.ghost, performance.now());
 }
 
 function cellKey(r, c) { return DaedalusFog.key(r, c); }

@@ -25,8 +25,9 @@ import org.springframework.security.web.SecurityFilterChain;
  * <p><b>Public (no token required)</b>:
  * <ul>
  *   <li>{@code GET /}, {@code GET /index.html}, {@code GET /draw.js}, {@code GET /api.js},
- *       {@code GET /share.js}, {@code GET /fog.js}, {@code GET /seat.js}, and
- *       {@code GET /app.js} — the web UI. The README publishes it as
+ *       {@code GET /share.js}, {@code GET /fog.js}, {@code GET /seat.js},
+ *       {@code GET /lab.js}, {@code GET /caption.js}, and {@code GET /app.js} —
+ *       the web UI. The README publishes it as
  *       "served at {@code /}" and it was 401 in prod: {@code anyRequest().authenticated()}
  *       covers static resources too, and {@code ProdAuthPostureTest} scans controller mappings,
  *       so no table this project keeps had a row for a file. See the note at the matcher.</li>
@@ -124,7 +125,8 @@ public class ProdSecurityConfig {
                         // browse public mazes and spectate, and generate/solve/session all
                         // answer 401 exactly as they did before.
                         .requestMatchers(HttpMethod.GET, "/", "/index.html", "/draw.js",
-                                "/api.js", "/share.js", "/fog.js", "/seat.js", "/app.js")
+                                "/api.js", "/share.js", "/fog.js", "/seat.js", "/lab.js",
+                                "/caption.js", "/app.js")
                                 .permitAll()
 
                         // ---- Public read endpoints ----
