@@ -84,7 +84,16 @@
             <artifactId>commons-pool2</artifactId>
         </dependency>
 
-        <!-- Resilience + caching -->
+        <!-- Resilience + caching. starter-aspectj is the missing half of
+             @CircuitBreaker: resilience4j-spring-boot4 registers the aspect,
+             but without AspectJ proxies the annotation is a no-op and
+             generate() 500s instead of degrading to binary-tree. Rate
+             limiters do not need this — they use a HandlerInterceptor.
+             Boot 4 renamed the old starter-aop artifact. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aspectj</artifactId>
+        </dependency>
         <dependency>
             <groupId>io.github.resilience4j</groupId>
             <artifactId>resilience4j-spring-boot4</artifactId>

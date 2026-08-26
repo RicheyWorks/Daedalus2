@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Generation circuit-breaker fallback now runs through the Spring proxy.**
+  Boot 4's AspectJ starter was missing, so `@CircuitBreaker` on
+  `MazeGenerationService.generate` was a no-op and a dying generator
+  500'd instead of degrading to binary-tree. `spring-boot-starter-aspectj`
+  plus `MazeGenerationFallbackProxyTest` pin `POST /generate` through
+  the bean the controller injects.
+
 - **Web UI leftover coordinators left `app.js`.** `live.js` owns STOMP,
   live polls, and mutation apply; `session.js` owns play / join / move;
   `fogwalk.js` owns the agent walk; `mint.js` owns generate / adopt /
