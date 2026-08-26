@@ -2094,6 +2094,35 @@ class WebUiSmokeTest {
         assertLeftoverPngExportStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N138. Remaining leftover expansions remint stays.
+        // Hunt remints leftover expansions after the maze-id
+        // discard. Play / Fog / Join remint leftover path /
+        // leftover expansions. Theory remints leftover search
+        // wash (N87). Distinct from leftover progress clock
+        // (N129). These remints must not be taught away: Hunt
+        // / Play / Fog / theory / Join leftover expansions
+        // remint stay — leftover wash emptied (draw needs
+        // leftover expansions); Hunt through Play and
+        // Join-from-spectate still keep tour; Fog still
+        // keeps tour (N17); leftover Solve path stays as a
+        // theory route hint (N62); Join leftover ghost stays
+        // (N86).
+        assertLeftoverExpansionsStay(html, "async function startTour", "function sameCell");
+        assertLeftoverExpansionsStay(html, "async function play()", "async function join()");
+        assertLeftoverExpansionsStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverExpansionsStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverExpansionsStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverExpansionsStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverExpansionsStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverExpansionsStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverExpansionsStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -3357,6 +3386,26 @@ class WebUiSmokeTest {
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("$(\"pngExport\")");
         assertThat(body).doesNotContain("toDataURL");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover expansions remint stay (N138). Hunt / Play /
+     * Fog / theory / Join remint leftover wash after the
+     * maze-id discard. Theory remint already N87. Distinct
+     * from leftover progress clock (N129). Must not null
+     * tour.
+     */
+    private static void assertLeftoverExpansionsStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        int discard = body.lastIndexOf("state.maze.id !== mazeId");
+        int wash = body.indexOf("state.expansions = []");
+        assertThat(discard).isGreaterThanOrEqualTo(0);
+        assertThat(wash).isGreaterThan(discard);
         assertThat(body).doesNotContain("state.tour = null");
     }
 
