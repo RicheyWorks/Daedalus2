@@ -2012,6 +2012,32 @@ class WebUiSmokeTest {
                 "function paintLensCaption");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N135. Remaining leftover lbQuery stays. refreshLeaderboard
+        // remints leftover lbQuery. leftover walk chrome stay
+        // already forbids reminting leftover board (N111). These
+        // stays must not be taught away: Hunt / Play / Fog /
+        // theory / Join leftover lbQuery stay — leftover last
+        // /leaderboard path still names this maze; Hunt through
+        // Play and Join-from-spectate still keep tour; Fog still
+        // keeps tour (N17); leftover Solve path stays as a
+        // theory route hint (N62); Join leftover ghost stays
+        // (N86).
+        assertLeftoverLbQueryStay(html, "async function startTour", "function sameCell");
+        assertLeftoverLbQueryStay(html, "async function play()", "async function join()");
+        assertLeftoverLbQueryStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverLbQueryStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverLbQueryStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverLbQueryStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverLbQueryStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverLbQueryStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverLbQueryStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -3242,6 +3268,21 @@ class WebUiSmokeTest {
         assertThat(body).doesNotContain("resubscribe");
         assertThat(body).doesNotContain("connectStomp");
         assertThat(body).doesNotContain("state.subs");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover lbQuery stay (N135). leftover last
+     * /leaderboard path still names this maze. Must not
+     * remint leftover lbQuery. Must not null tour.
+     */
+    private static void assertLeftoverLbQueryStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("state.lbQuery");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
