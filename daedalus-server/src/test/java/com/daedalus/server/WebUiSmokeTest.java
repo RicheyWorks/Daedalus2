@@ -1836,6 +1836,32 @@ class WebUiSmokeTest {
         assertLeftoverInfoStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N128. Remaining leftover campaign box stays.
+        // leaveCampaign / renderCampaign remint leftover
+        // #campaignBox. These stays must not be taught away:
+        // Hunt / Play / Fog / theory / Join leftover
+        // #campaignBox stay — the ladder you asked for;
+        // leftover campaign stay already forbids leaveCampaign
+        // (N112); Hunt through Play and Join-from-spectate
+        // still keep tour; Fog still keeps tour (N17);
+        // leftover Solve path stays as a theory route hint
+        // (N62); Join leftover ghost stays (N86).
+        assertLeftoverCampaignBoxStay(html, "async function startTour", "function sameCell");
+        assertLeftoverCampaignBoxStay(html, "async function play()", "async function join()");
+        assertLeftoverCampaignBoxStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverCampaignBoxStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverCampaignBoxStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverCampaignBoxStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverCampaignBoxStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverCampaignBoxStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverCampaignBoxStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -2951,6 +2977,23 @@ class WebUiSmokeTest {
         assertThat(body).doesNotContain("updateInfo");
         assertThat(body).doesNotContain("genInfo");
         assertThat(body).doesNotContain("solInfo");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover campaign box stay (N128). leftover #campaignBox
+     * still names leftover ladder. Must not remint
+     * renderCampaign. Must not rewrite campaignBox. Must not
+     * null tour.
+     */
+    private static void assertLeftoverCampaignBoxStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("renderCampaign");
+        assertThat(body).doesNotContain("campaignBox");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
