@@ -16,6 +16,13 @@ import static org.assertj.core.api.Assertions.assertThat;
  * conventions are exactly what starter upgrades silently change (the lesson
  * {@code ApplicationSmokeTest} exists to teach). Uses the same context configuration as the
  * other smoke tests, so Spring reuses the cached context instead of booting another one.
+ *
+ * <p><b>Do not grow this class as a source-shape mirror.</b> A {@code contains} pin
+ * here proves a string still exists in {@code index.html}, not that the page still
+ * works. Leftover-state and feature regressions belong in {@code sweep/}:
+ * {@code api-sweep.py} now runs in CI against a test-profile server;
+ * {@code ui-sweep.js} is the local Playwright pass. New UI behavior gets a sweep
+ * check, not another substring assertion.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")

@@ -116,7 +116,10 @@ public class MazeGrid {
 
     public void carve(Cell from, Direction d) {
         Point np = from.position().step(d);
-        if (!inBounds(np)) return;
+        if (!inBounds(np)) {
+            throw new IllegalArgumentException(
+                    "Cannot carve " + d + " from " + from.position() + ": out of bounds");
+        }
         Cell to = cell(np);
         from.open(d);
         to.open(d.opposite());

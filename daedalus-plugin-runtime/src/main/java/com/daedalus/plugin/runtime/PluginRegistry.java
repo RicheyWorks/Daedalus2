@@ -23,7 +23,14 @@ public class PluginRegistry {
 
     public void put(MazePlugin plugin) {
         PluginManifest m = plugin.manifest();
-        entries.put(m.id(), new Entry(plugin, m, PluginLifecycle.DISCOVERED, null));
+        Entry claimed = new Entry(plugin, m, PluginLifecycle.DISCOVERED, null);
+        Entry incumbent = entries.putIfAbsent(m.id(), claimed);
+        if (incumbent != null) {
+            throw new IllegalArgumentException(
+                    "plugin id '" + m.id() + "' is already claimed by "
+                            + incumbent.plugin().getClass().getName()
+                            + "; a later JAR cannot silently replace it");
+        }
     }
 
     public Entry get(String id) { return entries.get(id); }
@@ -65,8 +72,14 @@ public class PluginRegistry {
                 }
             }
         }
-        // If anything still unemitted (cyclic), append them anyway.
-        result.addAll(all);
+        if (!all.isEmpty()) {
+            List<String> stuck = new ArrayList<>();
+            for (Entry e : all) {
+                stuck.add(e.manifest().id());
+            }
+            throw new IllegalStateException(
+                    "Unsatisfiable plugin dependencies (cycle or missing requires): " + stuck);
+        }
         return result;
     }
 }

@@ -2,6 +2,7 @@
 
 package com.daedalus.engine;
 
+import com.daedalus.model.Direction;
 import com.daedalus.model.Point;
 import org.junit.jupiter.api.Test;
 
@@ -55,6 +56,24 @@ class MazeGridContractTest {
         assertThatThrownBy(() -> grid.carve(new Point(3, 3), new Point(3, 3)))
                 .as("a cell is not its own neighbour")
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void carvingOffTheGridIsRefused() {
+        // carve(Cell, Direction) used to return silently when the step left the grid, so a
+        // generator bug that walked off an edge produced a wall that looked intentional.
+        // carve(Point, Point) already threw; the two overloads now agree.
+        MazeGrid grid = new MazeGrid(3, 3);
+
+        assertThatThrownBy(() -> grid.carve(grid.cell(0, 0), Direction.NORTH))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("out of bounds");
+        assertThatThrownBy(() -> grid.carve(grid.cell(0, 0), Direction.WEST))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("out of bounds");
+
+        grid.carve(grid.cell(0, 0), Direction.EAST);
+        assertThat(grid.openNeighbors(new Point(0, 0))).contains(new Point(0, 1));
     }
 
     @Test

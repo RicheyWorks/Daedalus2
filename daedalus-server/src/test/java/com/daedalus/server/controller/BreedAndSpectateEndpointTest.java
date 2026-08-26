@@ -95,7 +95,7 @@ class BreedAndSpectateEndpointTest {
 
     @Test
     void overlappingParentHotspotsKeepTheHigherCost() {
-        List<Hotspot> merged = MazeController.mergeParentHotspots(
+        List<Hotspot> merged = MazeResponses.mergeParentHotspots(
                 List.of(new Hotspot(1, 1, 10), new Hotspot(2, 2, 5)),
                 List.of(new Hotspot(1, 1, 25), new Hotspot(3, 3, 8)));
         assertThat(merged).containsExactly(

@@ -7,7 +7,6 @@ import com.daedalus.api.dto.MoveRequest;
 import com.daedalus.model.Point;
 import com.daedalus.server.service.AlgorithmCatalogService;
 import com.daedalus.server.service.GameSessionService;
-import com.daedalus.server.service.LeaderboardService;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
 import com.daedalus.server.web.ApiExceptionHandler;
@@ -51,16 +50,16 @@ class MazeControllerValidationTest {
 
     @BeforeEach
     void setUp() {
-        MazeController controller = new MazeController(
+        MazeController mazes = new MazeController(
                 mock(MazeGenerationService.class),
                 mock(MazeSolverService.class),
                 mock(AlgorithmCatalogService.class),
-                mock(GameSessionService.class),
-                mock(LeaderboardService.class),
                 mock(com.daedalus.server.service.LivingMazeService.class),
                 mock(com.daedalus.server.service.DailyMazeService.class),
                 mock(com.daedalus.server.service.TrafficService.class));
-        mvc = MockMvcBuilders.standaloneSetup(controller)
+        SessionController sessions = new SessionController(
+                mock(MazeGenerationService.class), mock(GameSessionService.class));
+        mvc = MockMvcBuilders.standaloneSetup(mazes, sessions)
                 .setControllerAdvice(new ApiExceptionHandler())
                 .build();
         json = new ObjectMapper();

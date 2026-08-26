@@ -117,6 +117,7 @@ leave the toolkit into testable helpers; do not add TestFX.
 - **Per-SEND JWT re-verification tests.** `nonConnectFramesPassThroughUntouched` documents a deliberate design (authenticate at CONNECT, not per frame). Don't add tests that would enshrine the opposite until session-ownership work deliberately changes the design.
 - **Benchmark assertions in CI.** The staleness lesson from ADR-002 applies: performance claims need a swept, controlled harness, not a CI assert that flakes on runner noise. `benchmark-harness` tests should pin correctness of the harness, never latency numbers.
 - **Mutation testing as a gate.** `mutants/` is a local proof that tests have teeth. Too slow for every push; optional curiosity, not process.
+- **New `contains(...)` pins in `WebUiSmokeTest`.** That class is a boot-and-serve check plus a frozen snapshot of strings the page once contained. It cannot prove a click still works. Leftover-state and feature regressions belong in `sweep/` (`api-sweep.py` runs in CI against a test-profile server; `ui-sweep.js` is the local Playwright pass). Do not add another `contains("someIdentifier")` when a UI change lands.
 
 ## 4. Suggested order of work
 
@@ -128,5 +129,6 @@ leave the toolkit into testable helpers; do not add TestFX.
 6. ~~GameSessionService concurrency test~~ — done.
 7. Desktop: extract more of `MainController` into testable helpers, or accept that FXML/canvas wiring stays launch-only (ADR-003).
 8. Keep `TESTING.md` dated when the standings table moves. A strategy doc that describes last month's gaps is itself a gap.
+9. ~~Stop growing `WebUiSmokeTest`; add a real API sweep in CI~~ — done 2026-08-26. `sweep/api-sweep.py` now fails the job on a failed check. Playwright `ui-sweep.js` stays local.
 
 Every new regression test in any of the above follows the house rule: replay it against the pre-fix code (or a deliberately broken variant) once, to prove it has teeth.

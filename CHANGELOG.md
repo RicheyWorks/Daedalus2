@@ -10,11 +10,30 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Maze REST surface split by resource.** Generate / daily / live / solve / breed
+  stay on `MazeController`. Sessions (open, spectate, move, join) moved to
+  `SessionController`; the board to `LeaderboardController`. Capacity 409s in
+  `ApiExceptionHandler` now share one `capacityConflict` helper. URLs are unchanged.
+
+- **Plugin ids are claimed once.** A second plugin with the same id is refused
+  instead of silently replacing the first. Cyclic or missing `requires` fail
+  discovery rather than being appended in undefined order.
+
+- **`MazeGrid.carve(Cell, Direction)` throws on out-of-bounds.** It used to return
+  silently, so a generator bug that walked off an edge looked like an intentional
+  wall. Matches `carve(Point, Point)`.
+
+- **`AbstractMazeGenerator` is a marker again.** Unused neighbor helpers that no
+  generator (and no plugin) called were deleted so plugin authors are not inheriting
+  dead advice.
+
 - **TESTING.md matches the tree again.** The 2026-07-28 audit still said 347 tests,
   skipped examples, no WebSocket smoke, and 0.00 coverage exemptions. The living
   count is 734 reactor methods; those gaps are closed. Pom comments and ADR-003
   no longer advertise a 0.00 floor — plugin-api is 0.11 / 0.16, desktop is
-  0.09 / 0.14.
+  0.09 / 0.14. `WebUiSmokeTest` is not to grow as a source-shape mirror;
+  leftover-state pins belong in `sweep/`. `sweep/api-sweep.py` now exits 1 on
+  failure and runs in CI against a test-profile server.
 
 ### Fixed
 

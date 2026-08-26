@@ -75,7 +75,14 @@ public class PluginManager {
     public void discover() {
         // 1. Built-in via classpath ServiceLoader.
         for (MazePlugin p : ServiceLoader.load(MazePlugin.class)) {
-            register(p, "classpath");
+            try {
+                register(p, "classpath");
+            } catch (RuntimeException ex) {
+                log.warn("Failed to register classpath plugin: {}", ex.toString());
+                spring.publishEvent(new PluginFailedEvent(
+                        this, p.manifest().id(), p.manifest().version(),
+                        PluginFailedEvent.Phase.DISCOVER, ex));
+            }
         }
 
         // 2. External JARs in pluginDir.

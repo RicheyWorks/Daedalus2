@@ -547,6 +547,10 @@ for name, fn in [
 
 passed = sum(1 for _, ok, _ in results if ok)
 print(f"\n=== {passed}/{len(results)} checks passed ===")
+failed = 0
 for n, ok, ev in results:
     if not ok:
+        failed += 1
         print(f"FAILED: {n} -- {ev}")
+if failed:
+    raise SystemExit(1)

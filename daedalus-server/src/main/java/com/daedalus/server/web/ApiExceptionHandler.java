@@ -203,12 +203,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(com.daedalus.server.service.LivingMazeService.CapacityExceededException.class)
     public ResponseEntity<ProblemDetail> onLivingCapacity(
             com.daedalus.server.service.LivingMazeService.CapacityExceededException ex) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
-        pd.setTitle("Too many living mazes");
-        pd.setType(URI.create("https://daedalus.dev/problems/living-capacity"));
-        pd.setProperty("kind", "living-capacity");
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+        return capacityConflict("Too many living mazes", "living-capacity", ex.getMessage());
     }
 
     /**
@@ -257,58 +252,48 @@ public class ApiExceptionHandler {
     @ExceptionHandler(com.daedalus.server.service.TrafficService.CapacityExceededException.class)
     public ResponseEntity<ProblemDetail> onTrafficCapacity(
             com.daedalus.server.service.TrafficService.CapacityExceededException ex) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
-        pd.setTitle("Too many tracked mazes");
-        pd.setType(URI.create("https://daedalus.dev/problems/traffic-capacity"));
-        pd.setProperty("kind", "traffic-capacity");
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+        return capacityConflict("Too many tracked mazes", "traffic-capacity", ex.getMessage());
     }
 
     /** Session store is full — refuse the new open; do not LRU-evict a mid-hunt session. */
     @ExceptionHandler(com.daedalus.server.service.GameSessionService.CapacityExceededException.class)
     public ResponseEntity<ProblemDetail> onSessionCapacity(
             com.daedalus.server.service.GameSessionService.CapacityExceededException ex) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
-        pd.setTitle("Too many live sessions");
-        pd.setType(URI.create("https://daedalus.dev/problems/session-capacity"));
-        pd.setProperty("kind", "session-capacity");
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+        return capacityConflict("Too many live sessions", "session-capacity", ex.getMessage());
     }
 
     /** Agent walk store is full — same 409 posture as the session pool. */
     @ExceptionHandler(com.daedalus.server.service.AgentWalkService.CapacityExceededException.class)
     public ResponseEntity<ProblemDetail> onAgentCapacity(
             com.daedalus.server.service.AgentWalkService.CapacityExceededException ex) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
-        pd.setTitle("Too many agent walks");
-        pd.setType(URI.create("https://daedalus.dev/problems/agent-capacity"));
-        pd.setProperty("kind", "agent-capacity");
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+        return capacityConflict("Too many agent walks", "agent-capacity", ex.getMessage());
     }
 
     /** Maze cache is full — refuse the new generate; do not LRU-evict a maze still in play. */
     @ExceptionHandler(com.daedalus.server.service.MazeGenerationService.CapacityExceededException.class)
     public ResponseEntity<ProblemDetail> onMazeCapacity(
             com.daedalus.server.service.MazeGenerationService.CapacityExceededException ex) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
-        pd.setTitle("Too many cached mazes");
-        pd.setType(URI.create("https://daedalus.dev/problems/maze-capacity"));
-        pd.setProperty("kind", "maze-capacity");
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+        return capacityConflict("Too many cached mazes", "maze-capacity", ex.getMessage());
     }
 
     /** Waypoint placements are full — refuse the new maze's first tour; do not LRU-evict frozen coins. */
     @ExceptionHandler(com.daedalus.server.service.WaypointService.CapacityExceededException.class)
     public ResponseEntity<ProblemDetail> onTourCapacity(
             com.daedalus.server.service.WaypointService.CapacityExceededException ex) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
-        pd.setTitle("Too many waypoint tours");
-        pd.setType(URI.create("https://daedalus.dev/problems/tour-capacity"));
-        pd.setProperty("kind", "tour-capacity");
+        return capacityConflict("Too many waypoint tours", "tour-capacity", ex.getMessage());
+    }
+
+    /**
+     * Shared 409 for a bounded store that is full. Kind is the problem-type slug
+     * ({@code living-capacity}, {@code session-capacity}, …) so clients can tell
+     * which pool to wait on. Title stays human; detail is the service message.
+     */
+    private static ResponseEntity<ProblemDetail> capacityConflict(
+            String title, String kind, String detail) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, detail);
+        pd.setTitle(title);
+        pd.setType(URI.create("https://daedalus.dev/problems/" + kind));
+        pd.setProperty("kind", kind);
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
     }

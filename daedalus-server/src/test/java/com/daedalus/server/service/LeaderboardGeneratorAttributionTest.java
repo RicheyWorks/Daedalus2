@@ -11,7 +11,7 @@ import com.daedalus.model.LeaderboardEntry;
 import com.daedalus.model.Point;
 import com.daedalus.solver.solvers.BfsSolver;
 import com.daedalus.model.MazeStats;
-import com.daedalus.server.controller.MazeController;
+import com.daedalus.server.controller.SessionController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -150,10 +149,7 @@ class LeaderboardGeneratorAttributionTest {
         LeaderboardService board = new LeaderboardService(null, false, 100);
         GameSessionService sessions = new GameSessionService(event -> { }, board);
 
-        MazeController controller = new MazeController(gen,
-                mock(MazeSolverService.class), mock(AlgorithmCatalogService.class),
-                sessions, board, mock(LivingMazeService.class),
-                mock(DailyMazeService.class), mock(TrafficService.class));
+        SessionController controller = new SessionController(gen, sessions);
         MockMvc mvc = MockMvcBuilders.standaloneSetup(controller).build();
 
         UUID mazeId = gen.generate("prims", 11, 11, 5L).metadata().id();

@@ -8,8 +8,6 @@ import com.daedalus.model.MazeMetadata;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
 import com.daedalus.server.service.AlgorithmCatalogService;
-import com.daedalus.server.service.GameSessionService;
-import com.daedalus.server.service.LeaderboardService;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,8 +45,6 @@ class MazeControllerGeneratorIdTest {
                 gen,
                 mock(MazeSolverService.class),
                 mock(AlgorithmCatalogService.class),
-                mock(GameSessionService.class),
-                mock(LeaderboardService.class),
                 mock(com.daedalus.server.service.LivingMazeService.class),
                 mock(com.daedalus.server.service.DailyMazeService.class),
                 mock(com.daedalus.server.service.TrafficService.class));

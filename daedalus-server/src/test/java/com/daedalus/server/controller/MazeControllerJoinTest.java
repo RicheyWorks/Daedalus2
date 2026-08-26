@@ -9,11 +9,9 @@ import com.daedalus.model.GameSession;
 import com.daedalus.model.MazeMetadata;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
-import com.daedalus.server.service.AlgorithmCatalogService;
 import com.daedalus.server.service.GameSessionService;
 import com.daedalus.server.service.LeaderboardService;
 import com.daedalus.server.service.MazeGenerationService;
-import com.daedalus.server.service.MazeSolverService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,15 +58,7 @@ class MazeControllerJoinTest {
     }
 
     private MockMvc mvc(GameSessionService sessions) {
-        MazeController controller = new MazeController(
-                gen,
-                mock(MazeSolverService.class),
-                mock(AlgorithmCatalogService.class),
-                sessions,
-                mock(LeaderboardService.class),
-                mock(com.daedalus.server.service.LivingMazeService.class),
-                mock(com.daedalus.server.service.DailyMazeService.class),
-                mock(com.daedalus.server.service.TrafficService.class));
+        SessionController controller = new SessionController(gen, sessions);
         // The advice has to be registered here or a thrown ResourceNotFoundException
         // escapes as a servlet error instead of becoming the 404 this test is about.
         // ApiExceptionHandler's no-arg constructor exists for exactly this setup.

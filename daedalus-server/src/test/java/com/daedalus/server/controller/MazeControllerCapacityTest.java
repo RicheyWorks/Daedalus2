@@ -14,7 +14,6 @@ import com.daedalus.server.service.AlgorithmCatalogService;
 import com.daedalus.server.service.CampaignService;
 import com.daedalus.server.service.DailyMazeService;
 import com.daedalus.server.service.GameSessionService;
-import com.daedalus.server.service.LeaderboardService;
 import com.daedalus.server.service.LivingMazeService;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
@@ -76,8 +75,6 @@ class MazeControllerCapacityTest {
                         gen,
                         solverSvc,
                         mock(AlgorithmCatalogService.class),
-                        mock(GameSessionService.class),
-                        mock(LeaderboardService.class),
                         living,
                         mock(DailyMazeService.class),
                         traffic))
@@ -118,15 +115,7 @@ class MazeControllerCapacityTest {
                 mock(GameSessionService.CapacityExceededException.class);
         when(full.getMessage()).thenReturn("already holding 1 live sessions — retry after one idles out");
         when(sessions.open(any(), any(), any(), any(), any())).thenThrow(full);
-        MockMvc sessionMvc = MockMvcBuilders.standaloneSetup(new MazeController(
-                        gen,
-                        solverSvc,
-                        mock(AlgorithmCatalogService.class),
-                        sessions,
-                        mock(LeaderboardService.class),
-                        living,
-                        mock(DailyMazeService.class),
-                        traffic))
+        MockMvc sessionMvc = MockMvcBuilders.standaloneSetup(new SessionController(gen, sessions))
                 .setControllerAdvice(new ApiExceptionHandler())
                 .build();
 
@@ -182,8 +171,6 @@ class MazeControllerCapacityTest {
                         gen,
                         solverSvc,
                         mock(AlgorithmCatalogService.class),
-                        mock(GameSessionService.class),
-                        mock(LeaderboardService.class),
                         living,
                         dailySvc,
                         traffic))

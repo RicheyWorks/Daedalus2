@@ -5,21 +5,14 @@ package com.daedalus.server.controller;
 import com.daedalus.api.dto.DailyMazeResponse;
 import com.daedalus.api.dto.GenerateRequest;
 import com.daedalus.api.dto.GenerateResponse;
-import com.daedalus.api.dto.Hotspot;
-import com.daedalus.api.dto.MoveRequest;
-import com.daedalus.api.dto.SessionResponse;
 import com.daedalus.api.dto.SolveResponse;
 import com.daedalus.api.validation.AlgorithmId;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.AlgorithmDescriptor;
-import com.daedalus.model.LeaderboardEntry;
-import com.daedalus.model.TileType;
 import com.daedalus.server.ratelimit.PerKeyRateLimit;
 import com.daedalus.server.web.ResourceNotFoundException;
 import com.daedalus.server.service.AlgorithmCatalogService;
 import com.daedalus.server.service.DailyMazeService;
-import com.daedalus.server.service.GameSessionService;
-import com.daedalus.server.service.LeaderboardService;
 import com.daedalus.server.service.LivingMazeService;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
@@ -31,13 +24,9 @@ import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,24 +45,20 @@ import java.util.UUID;
  *   <li>{@code GET    /api/v1/maze/{id}}                       — fetch metadata + tile grid</li>
  *   <li>{@code POST   /api/v1/maze/{id}/live}                  — bring the maze to life (ADR-006)</li>
  *   <li>{@code POST   /api/v1/maze/{id}/solve/{solverId}}      — run a solver against the maze</li>
- *   <li>{@code POST   /api/v1/maze/{id}/session?player=...}    — open a play session</li>
- *   <li>{@code POST   /api/v1/session/{id}/move}               — move a player</li>
- *   <li>{@code POST   /api/v1/session/{id}/join?player=...}    — join as an extra player
- *       (multiplayer flag)</li>
- *   <li>{@code GET    /api/v1/leaderboard?n=20}                — leaderboard snapshot</li>
+ *   <li>{@code POST   /api/v1/maze/breed}                      — crossbreed two mazes</li>
  * </ul>
+ * Session open/move/join live on {@link SessionController}; the board lives on
+ * {@link LeaderboardController}.
  */
 @RestController
 @RequestMapping("/api/v1")
-@Tag(name = "Mazes", description = "Generate, fetch, solve, and play mazes.")
+@Tag(name = "Mazes", description = "Generate, fetch, and solve mazes.")
 @Validated // enables @Min/@Max/@Pattern on @PathVariable and @RequestParam (body validation works without it)
 public class MazeController {
 
     private final MazeGenerationService gen;
     private final MazeSolverService solverSvc;
     private final AlgorithmCatalogService catalog;
-    private final GameSessionService sessions;
-    private final LeaderboardService leaderboard;
     private final LivingMazeService living;
     private final DailyMazeService daily;
     private final TrafficService traffic;
@@ -81,16 +66,12 @@ public class MazeController {
     public MazeController(MazeGenerationService gen,
                           MazeSolverService solverSvc,
                           AlgorithmCatalogService catalog,
-                          GameSessionService sessions,
-                          LeaderboardService leaderboard,
                           LivingMazeService living,
                           DailyMazeService daily,
                           TrafficService traffic) {
         this.gen = gen;
         this.solverSvc = solverSvc;
         this.catalog = catalog;
-        this.sessions = sessions;
-        this.leaderboard = leaderboard;
         this.living = living;
         this.daily = daily;
         this.traffic = traffic;
@@ -121,7 +102,7 @@ public class MazeController {
         var cached = gen.generate(req.generatorId(), req.rows(), req.cols(), seed,
                 req.hotspots(), braid);
         String actualGeneratorId = cached.metadata().generatorId();
-        return toResponse(cached.metadata().id(), actualGeneratorId,
+        return MazeResponses.toResponse(cached.metadata().id(), actualGeneratorId,
                 req.rows(), req.cols(), seed, cached.grid(), cached.hotspots(),
                 cached.braid());
     }
@@ -141,7 +122,7 @@ public class MazeController {
     public DailyMazeResponse daily() {
         var d = daily.today();
         var c = d.maze();
-        return new DailyMazeResponse(d.date().toString(), toResponse(
+        return new DailyMazeResponse(d.date().toString(), MazeResponses.toResponse(
                 c.metadata().id(), c.metadata().generatorId(),
                 c.metadata().rows(), c.metadata().cols(), c.metadata().seed(), c.grid(),
                 c.hotspots(), c.braid()));
@@ -152,7 +133,7 @@ public class MazeController {
     public ResponseEntity<GenerateResponse> get(@PathVariable UUID id) {
         var c = gen.find(id);
         if (c == null) throw ResourceNotFoundException.maze(id);
-        return ResponseEntity.ok(toResponse(
+        return ResponseEntity.ok(MazeResponses.toResponse(
                 c.metadata().id(), c.metadata().generatorId(),
                 c.metadata().rows(), c.metadata().cols(), c.metadata().seed(), c.grid(),
                 c.hotspots(), c.braid()));
@@ -291,189 +272,9 @@ public class MazeController {
                 : a.getLeastSignificantBits() ^ Long.rotateLeft(b.getLeastSignificantBits(), 17);
         MazeGrid child = com.daedalus.engine.MazeBreeder.breed(pa.grid(), pb.grid(), s);
         var cached = gen.adopt(child, "crossbreed", s,
-                mergeParentHotspots(pa.hotspots(), pb.hotspots()));
-        return ResponseEntity.ok(toResponse(cached.metadata().id(), "crossbreed",
+                MazeResponses.mergeParentHotspots(pa.hotspots(), pb.hotspots()));
+        return ResponseEntity.ok(MazeResponses.toResponse(cached.metadata().id(), "crossbreed",
                 cached.grid().rows(), cached.grid().cols(), s, cached.grid(),
                 cached.hotspots(), null));
-    }
-
-    /**
-     * ADR-006 idea #6 — the spectator seam: a read-only snapshot of a live session. The
-     * web UI's {@code #session=<id>} permalink loads this once (including the opening
-     * player's walk so far) and then follows the same STOMP frames the players produce.
-     */
-    @GetMapping("/session/{id}")
-    @Operation(summary = "Read-only session snapshot — the spectator entry point.",
-            description = "Includes the opening player's recorded trail so a late spectator "
-                    + "can paint the walk, not just the current cell. Pair with "
-                    + "/topic/session/{id}/player for live moves; owned sessions keep their "
-                    + "existing per-destination STOMP authorization. Subjects stay off "
-                    + "the body.")
-    public ResponseEntity<com.daedalus.api.dto.SessionViewResponse> session(@PathVariable UUID id) {
-        var s = sessions.find(id);
-        if (s == null) throw ResourceNotFoundException.session(id);
-        return ResponseEntity.ok(new com.daedalus.api.dto.SessionViewResponse(
-                s.id(), s.mazeId(), s.playerName(), s.players(),
-                s.completed(), s.moveCount(), s.score(), s.trail(), s.walks(),
-                s.completed() ? s.completedBy() : null));
-    }
-
-    @PostMapping("/maze/{id}/session")
-    @Operation(summary = "Open a play session for the given maze.",
-            description = "The returned session id is required for /api/v1/session/{id}/move. "
-                    + "When the request is authenticated, the session is owned by the token's "
-                    + "subject and its /topic/session/{id}/player STOMP topic is restricted "
-                    + "to that subject. Rate-limited per caller against the 'sessionOpen' "
-                    + "budget — session creation feeds every bounded store downstream.")
-    @PerKeyRateLimit("sessionOpen")
-    public ResponseEntity<SessionResponse> openSession(
-            @PathVariable UUID id,
-            @RequestParam(defaultValue = "anon")
-            @NotBlank
-            @Size(max = 64, message = "player name must be at most 64 chars")
-            String player,
-            Authentication authentication) {
-        var c = gen.find(id);
-        if (c == null) throw ResourceNotFoundException.maze(id);
-        var s = sessions.open(id, c.metadata().generatorId(), player, c.grid().start(),
-                ownerOf(authentication));
-        return ResponseEntity.ok(new SessionResponse(s.id(), id, s.currentPosition()));
-    }
-
-    /**
-     * The verified subject a new session should be owned by, or {@code null} for anonymous
-     * callers. Anonymous includes Spring's {@code AnonymousAuthenticationToken} (the dev
-     * profile's permitAll posture), so a dev session stays unowned and its topics stay open —
-     * mirroring how {@code StompAuthChannelInterceptor} treats missing-vs-forged credentials.
-     */
-    static String ownerOf(Authentication authentication) {
-        if (authentication == null
-                || !authentication.isAuthenticated()
-                || authentication instanceof AnonymousAuthenticationToken) {
-            return null;
-        }
-        return authentication.getName();
-    }
-
-    @PostMapping("/session/{id}/move")
-    @Operation(summary = "Move a player to an adjacent cell.",
-            description = "Returns true if the move was legal (target cell is open and adjacent). "
-                    + "Omit 'player' to move the session's opening player; name one to move a "
-                    + "joined player (multiplayer flag only). Rate-limited per caller against the "
-                    + "'sessionMove' budget — the same 1200/min the fog-of-war agent gets, because "
-                    + "it is the same shape of traffic. Until an audit measured it this endpoint "
-                    + "had no limit at all, and one client sustained 201 moves/s.")
-    @PerKeyRateLimit("sessionMove")
-    public ResponseEntity<Boolean> move(@PathVariable UUID id, @Valid @RequestBody MoveRequest req) {
-        var s = sessions.find(id);
-        if (s == null) throw ResourceNotFoundException.session(id);
-        // The session is fine and its maze has been evicted. Previously indistinguishable from
-        // "no such session", which sent callers looking for the wrong problem.
-        var c = gen.find(s.mazeId());
-        if (c == null) throw new ResourceNotFoundException("maze", s.mazeId().toString(),
-                "Session " + id + " is open but its maze " + s.mazeId() + " has been evicted "
-                        + "from the cache, so moves cannot be validated against it.");
-        return ResponseEntity.ok(sessions.tryMove(id, req.player(), c.grid(), req.to(), gen));
-    }
-
-    @PostMapping("/session/{id}/join")
-    @Operation(summary = "Join an existing session as an additional named player.",
-            description = "Requires the daedalus.session.multiplayer flag; without it this "
-                    + "endpoint answers 404 as if it did not exist. Joining a name already in "
-                    + "the session keeps that player's position (reconnect must not teleport). "
-                    + "When the request is authenticated, the token's subject is added to the "
-                    + "session's STOMP allowlist (ADR-012) so the joiner can SUBSCRIBE to the "
-                    + "player topic — joining used to put a piece on the board and leave the "
-                    + "feed owner-only. A finished session and a full session both answer 409 "
-                    + "but with distinct problem types (session-completed vs session-full). "
-                    + "Rate-limited per caller against the 'sessionOpen' budget.")
-    @PerKeyRateLimit("sessionOpen")
-    public ResponseEntity<SessionResponse> join(
-            @PathVariable UUID id,
-            @RequestParam
-            @NotBlank
-            @Size(max = 64, message = "player name must be at most 64 chars")
-            String player,
-            Authentication authentication) {
-        // Multiplayer off answers exactly what an unknown session answers — the endpoint has
-        // to look absent, not disabled, or the 404 becomes a feature-flag oracle.
-        if (!sessions.multiplayerEnabled()) throw ResourceNotFoundException.session(id);
-        var s = sessions.find(id);
-        if (s == null) throw ResourceNotFoundException.session(id);
-        // The session is fine and its maze has been evicted. Previously indistinguishable from
-        // "no such session", which sent callers looking for the wrong problem.
-        var c = gen.find(s.mazeId());
-        if (c == null) throw new ResourceNotFoundException("maze", s.mazeId().toString(),
-                "Session " + id + " is open but its maze " + s.mazeId() + " has been evicted "
-                        + "from the cache, so a join cannot be seated against it.");
-        var joined = sessions.join(id, player, c.grid().start(), ownerOf(authentication));
-        // Idle eviction between find and join — same 404 as an unknown session.
-        if (joined == null) throw ResourceNotFoundException.session(id);
-        return ResponseEntity.ok(new SessionResponse(
-                joined.id(), joined.mazeId(), joined.playerPosition(player)));
-    }
-
-    @GetMapping("/leaderboard")
-    @Operation(summary = "Top-N completion times across active sessions.",
-            tags = "Leaderboard",
-            description = "Snapshot — backed by Redis when daedalus.redis.enabled=true, "
-                    + "otherwise in-memory. Pass maze=<id> for that maze's own board — the "
-                    + "partition behind the daily challenge's leaderboard — or generator=<id> "
-                    + "for one algorithm's board. maze wins if both are given, being the more "
-                    + "specific of the two.")
-    public List<LeaderboardEntry> leaderboard(
-            @RequestParam(defaultValue = "20")
-            @Min(value = 1,   message = "n must be at least 1")
-            @Max(value = 100, message = "n must be at most 100")
-            int n,
-            @RequestParam(required = false) UUID maze,
-            @RequestParam(required = false)
-            @Size(max = 64, message = "generator id must be at most 64 chars")
-            String generator) {
-        if (maze != null) {
-            return leaderboard.top(n, maze);
-        }
-        return leaderboard.topByGenerator(n, generator);
-    }
-
-    /**
-     * Build a {@link GenerateResponse} from a maze grid + its identifying metadata. The grid's
-     * {@link MazeGrid#toTileGrid()} returns the typed {@link TileType} layer; we flatten it to
-     * {@code char[][]} here so the JSON response carries glyphs that any tile renderer (web,
-     * desktop, terminal) can consume directly without importing the {@code TileType} enum.
-     */
-    private static GenerateResponse toResponse(UUID id, String generatorId, int rows, int cols,
-                                                long seed, MazeGrid grid,
-                                                List<com.daedalus.api.dto.Hotspot> hotspots,
-                                                Double braid) {
-        TileType[][] tiles = grid.toTileGrid();
-        char[][] glyphs = new char[tiles.length][];
-        for (int r = 0; r < tiles.length; r++) {
-            glyphs[r] = new char[tiles[r].length];
-            for (int c = 0; c < tiles[r].length; c++) {
-                glyphs[r][c] = tiles[r][c].glyph();
-            }
-        }
-        return new GenerateResponse(id, generatorId, rows, cols, seed, glyphs, hotspots, braid);
-    }
-
-    /**
-     * Union of parent weights, row-major, max cost on a shared cell. Generate accepts
-     * at most 64 hotspots; a pair of full lists would otherwise overflow that contract.
-     */
-    static List<Hotspot> mergeParentHotspots(List<Hotspot> a, List<Hotspot> b) {
-        if ((a == null || a.isEmpty()) && (b == null || b.isEmpty())) {
-            return null;
-        }
-        java.util.TreeMap<String, Hotspot> byCell = new java.util.TreeMap<>();
-        for (Hotspot h : a == null ? List.<Hotspot>of() : a) {
-            byCell.merge(String.format("%04d,%04d", h.row(), h.col()), h,
-                    (x, y) -> x.cost() >= y.cost() ? x : y);
-        }
-        for (Hotspot h : b == null ? List.<Hotspot>of() : b) {
-            byCell.merge(String.format("%04d,%04d", h.row(), h.col()), h,
-                    (x, y) -> x.cost() >= y.cost() ? x : y);
-        }
-        return byCell.values().stream().limit(64).toList();
     }
 }
