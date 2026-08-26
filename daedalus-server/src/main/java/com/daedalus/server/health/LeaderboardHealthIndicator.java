@@ -8,12 +8,13 @@ import org.springframework.boot.health.contributor.HealthIndicator;
 import org.springframework.stereotype.Component;
 
 /**
- * Reports whether leaderboard Redis writes are landing, without condemning the instance.
+ * Reports whether leaderboard Redis reads and writes are landing, without
+ * condemning the instance.
  *
- * <p>When {@code daedalus.redis.enabled} is true and a write throws, the completed run
- * still stays in memory (it must not 500). Two instances then score different boards.
- * That is split-brain, not a crash — so this indicator stays {@code UP} and puts the
- * last fallback on the payload, the same contract as
+ * <p>When {@code daedalus.redis.enabled} is true and Redis throws, the page
+ * still stays 200 from memory. Two instances then score different boards.
+ * That is split-brain, not a crash — so this indicator stays {@code UP} and
+ * puts the last fallback on the payload, the same contract as
  * {@link PluginSubsystemHealthIndicator}.
  */
 @Component
@@ -29,10 +30,15 @@ public class LeaderboardHealthIndicator implements HealthIndicator {
     public Health health() {
         Health.Builder builder = Health.up()
                 .withDetail("redisConfigured", board.redisConfigured())
-                .withDetail("lastWriteFellBack", board.lastWriteFellBack());
-        String error = board.lastWriteError();
-        if (error != null) {
-            builder.withDetail("lastWriteError", error);
+                .withDetail("lastWriteFellBack", board.lastWriteFellBack())
+                .withDetail("lastReadFellBack", board.lastReadFellBack());
+        String writeError = board.lastWriteError();
+        if (writeError != null) {
+            builder.withDetail("lastWriteError", writeError);
+        }
+        String readError = board.lastReadError();
+        if (readError != null) {
+            builder.withDetail("lastReadError", readError);
         }
         return builder.build();
     }

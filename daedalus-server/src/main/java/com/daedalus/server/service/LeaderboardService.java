@@ -48,8 +48,11 @@ public class LeaderboardService {
     /** Guards in-memory add-and-trim; ConcurrentSkipListSet does not make that compound atomic. */
     private final Object memoryLock = new Object();
     private final Counter writeFallback;
+    private final Counter readFallback;
     private final AtomicBoolean lastWriteFellBack = new AtomicBoolean();
+    private final AtomicBoolean lastReadFellBack = new AtomicBoolean();
     private final AtomicReference<String> lastWriteError = new AtomicReference<>();
+    private final AtomicReference<String> lastReadError = new AtomicReference<>();
 
     /** Default retention — see the three-arg constructor. */
     public LeaderboardService(RedisTemplate<String, Object> redis, boolean redisEnabled) {
@@ -79,6 +82,9 @@ public class LeaderboardService {
         this.writeFallback = Counter.builder("daedalus.leaderboard.redis.write.fallback")
                 .description("Redis leaderboard writes that stayed in-memory")
                 .register(meters);
+        this.readFallback = Counter.builder("daedalus.leaderboard.redis.read.fallback")
+                .description("Redis leaderboard reads that used in-memory")
+                .register(meters);
         if (this.redisEnabled) {
             log.info("LeaderboardService: Redis backend active");
         } else {
@@ -99,6 +105,27 @@ public class LeaderboardService {
     /** Last Redis write exception, or null when the last write succeeded or never ran. */
     public String lastWriteError() {
         return lastWriteError.get();
+    }
+
+    /** True after a Redis read exception until a later read succeeds. */
+    public boolean lastReadFellBack() {
+        return lastReadFellBack.get();
+    }
+
+    /** Last Redis read exception, or null when the last read succeeded or never ran. */
+    public String lastReadError() {
+        return lastReadError.get();
+    }
+
+    private void markReadOk() {
+        lastReadFellBack.set(false);
+        lastReadError.set(null);
+    }
+
+    private void markReadFallback(Exception e) {
+        lastReadFellBack.set(true);
+        lastReadError.set(e.toString());
+        readFallback.increment();
     }
 
     public void submit(LeaderboardEntry entry) {
@@ -173,9 +200,13 @@ public class LeaderboardService {
                 if (raw != null && !raw.isEmpty()) {
                     List<LeaderboardEntry> out = new ArrayList<>();
                     for (Object o : raw) if (o instanceof LeaderboardEntry e) out.add(e);
+                    markReadOk();
                     return out;
                 }
             } catch (Exception e) {
+                // The page must stay 200. Redis answered for writes or not — this
+                // instance is now scoring the memory board the other one is not.
+                markReadFallback(e);
                 log.warn("Redis per-maze leaderboard read failed; using in-memory: {}",
                         e.toString());
             }
@@ -214,9 +245,11 @@ public class LeaderboardService {
                 if (raw != null && !raw.isEmpty()) {
                     List<LeaderboardEntry> out = new ArrayList<>();
                     for (Object o : raw) if (o instanceof LeaderboardEntry e) out.add(e);
+                    markReadOk();
                     return out;
                 }
             } catch (Exception e) {
+                markReadFallback(e);
                 log.warn("Redis per-generator leaderboard read failed; using in-memory: {}",
                         e.toString());
             }
@@ -236,9 +269,13 @@ public class LeaderboardService {
                 if (raw != null) {
                     List<LeaderboardEntry> out = new ArrayList<>();
                     for (Object o : raw) if (o instanceof LeaderboardEntry e) out.add(e);
-                    if (!out.isEmpty()) return out;
+                    if (!out.isEmpty()) {
+                        markReadOk();
+                        return out;
+                    }
                 }
             } catch (Exception e) {
+                markReadFallback(e);
                 log.warn("Redis leaderboard read failed; using in-memory: {}", e.toString());
             }
         }

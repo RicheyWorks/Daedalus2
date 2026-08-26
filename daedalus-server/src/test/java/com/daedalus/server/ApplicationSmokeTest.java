@@ -120,7 +120,7 @@ class ApplicationSmokeTest {
     @Test
     void leaderboardHealthIndicatorIsRegistered_andDoesNotDragTheAggregateDown() {
         assertThat(context.getBeansOfType(LeaderboardHealthIndicator.class))
-                .as("Redis write-fallback must be a health detail, not a warn-only log")
+                .as("Redis read and write fallbacks must be health details, not warn-only logs")
                 .isNotEmpty();
         assertThat(readTree(getBody("/actuator/health")).path("status").asText()).isEqualTo("UP");
     }

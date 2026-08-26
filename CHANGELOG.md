@@ -10,6 +10,19 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **WebUiSmokeTest dropped leftover function-name pins.** The boot-and-serve
+  test still pins paths, element ids, permalink kinds, refuse copy, and the
+  join-vs-move 404 distinction. Identifier names belong in `sweep/`.
+
+- **PluginFailedEvent.Phase is a roster pin.** The SPI contract now names
+  every host stop, the same way `PluginLifecycle` already does. DISCOVER is
+  no longer the only constructed phase in that suite.
+
+- **Leaderboard Redis read fallback is a meter and a health detail.** A
+  board GET still stays 200 from memory; `daedalus.leaderboard.redis.read.fallback`
+  increments and `/actuator/health` reports `lastReadFellBack` while staying
+  UP. An empty Redis set is not a fallback — only a thrown read is.
+
 - **Paint snapshot and input leftover writes left `app.js`.** `stage.js`
   owns the scene bag, canvas paint, click-to-move, and WASD. Leftover
   `draw` / `drawEmpty` / `mazeScene` names stay as wrappers. `flashStatus`

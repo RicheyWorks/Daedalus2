@@ -24,12 +24,16 @@ class LeaderboardHealthIndicatorTest {
         when(board.redisConfigured()).thenReturn(true);
         when(board.lastWriteFellBack()).thenReturn(false);
         when(board.lastWriteError()).thenReturn(null);
+        when(board.lastReadFellBack()).thenReturn(false);
+        when(board.lastReadError()).thenReturn(null);
 
         Health health = new LeaderboardHealthIndicator(board).health();
         assertThat(health.getStatus()).isEqualTo(Status.UP);
         assertThat(health.getDetails()).containsEntry("redisConfigured", true);
         assertThat(health.getDetails()).containsEntry("lastWriteFellBack", false);
+        assertThat(health.getDetails()).containsEntry("lastReadFellBack", false);
         assertThat(health.getDetails()).doesNotContainKey("lastWriteError");
+        assertThat(health.getDetails()).doesNotContainKey("lastReadError");
     }
 
     @Test
@@ -38,6 +42,8 @@ class LeaderboardHealthIndicatorTest {
         when(board.redisConfigured()).thenReturn(true);
         when(board.lastWriteFellBack()).thenReturn(true);
         when(board.lastWriteError()).thenReturn("connection refused");
+        when(board.lastReadFellBack()).thenReturn(true);
+        when(board.lastReadError()).thenReturn("timeout");
 
         Health health = new LeaderboardHealthIndicator(board).health();
         assertThat(health.getStatus())
@@ -45,5 +51,7 @@ class LeaderboardHealthIndicatorTest {
                 .isEqualTo(Status.UP);
         assertThat(health.getDetails()).containsEntry("lastWriteFellBack", true);
         assertThat(health.getDetails()).containsEntry("lastWriteError", "connection refused");
+        assertThat(health.getDetails()).containsEntry("lastReadFellBack", true);
+        assertThat(health.getDetails()).containsEntry("lastReadError", "timeout");
     }
 }

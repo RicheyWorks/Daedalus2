@@ -95,6 +95,16 @@ class PluginSpiContractTest {
     }
 
     @Test
+    void failedEventPhasesNameTheHostStops() {
+        assertThat(PluginFailedEvent.Phase.values()).containsExactly(
+                PluginFailedEvent.Phase.DISCOVER,
+                PluginFailedEvent.Phase.INIT,
+                PluginFailedEvent.Phase.REGISTER_ALGORITHMS,
+                PluginFailedEvent.Phase.START,
+                PluginFailedEvent.Phase.STOP);
+    }
+
+    @Test
     void solvedEventCarriesThePathThatWasFound() {
         UUID mazeId = UUID.randomUUID();
         List<Point> path = List.of(new Point(0, 0), new Point(0, 1));
