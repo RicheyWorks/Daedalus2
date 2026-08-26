@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Fixed
 
+- **Leftover #asciiOut stays.** Generate / Play / Hunt / theory / Join / Fog already hide leftover dump (N68–N74). Living tick remints leftover dump only when the pre is shown. Hunt / Play / Fog / theory / Join leftover `#asciiOut` stay — leftover dump stays hidden. Fog leftover dump text unused (hidden). Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N136).
+
 - **Leftover lbQuery stays.** `refreshLeaderboard` remints leftover `lbQuery`. leftover walk chrome stay already forbids reminting leftover board (N111). Hunt / Play / Fog / theory / Join leftover `lbQuery` stay — leftover last `/leaderboard` path still names this maze. Hunt through Play and Join-from-spectate still keep tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Join leftover ghost stays (N86). Race and ghost stay recordings when you asked for them (N135).
 
 - **Leftover STOMP stays.** Play remints leftover session frames when it seats. Fog remints leftover session frames. Join-from-spectate remints leftover session frames. Hunt leftover STOMP stay — leftover frames still name this maze. Theory leftover STOMP stay — leftover frames still name this maze. Hunt through Play still keeps tour. Fog still keeps tour (N17). A leftover Solve path stays as a theory route hint (N62). Race and ghost stay recordings when you asked for them (N134).

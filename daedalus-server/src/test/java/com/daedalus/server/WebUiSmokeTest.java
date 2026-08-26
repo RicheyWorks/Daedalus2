@@ -2038,6 +2038,33 @@ class WebUiSmokeTest {
         assertLeftoverLbQueryStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N136. Remaining leftover #asciiOut stays. Generate /
+        // Play / Hunt / theory / Join / Fog already hide leftover
+        // dump (N68–N74). Living tick remints leftover dump only
+        // when the pre is shown. These stays must not be taught
+        // away: Hunt / Play / Fog / theory / Join leftover
+        // #asciiOut stay — leftover dump stays hidden; Fog
+        // leftover dump text unused (hidden); Hunt through Play
+        // and Join-from-spectate still keep tour; Fog still
+        // keeps tour (N17); leftover Solve path stays as a
+        // theory route hint (N62); Join leftover ghost stays
+        // (N86).
+        assertLeftoverAsciiStay(html, "async function startTour", "function sameCell");
+        assertLeftoverAsciiStay(html, "async function play()", "async function join()");
+        assertLeftoverAsciiStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverAsciiStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverAsciiStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverAsciiStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverAsciiStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverAsciiStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverAsciiStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -3283,6 +3310,22 @@ class WebUiSmokeTest {
         assertThat(to).isGreaterThan(from);
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("state.lbQuery");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover #asciiOut stay (N136). leftover dump stays
+     * hidden. Must not unhide leftover dump. Must not remint
+     * leftover dump. Must not null tour.
+     */
+    private static void assertLeftoverAsciiStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("hidden = false");
+        assertThat(body).doesNotContain("showAscii");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
