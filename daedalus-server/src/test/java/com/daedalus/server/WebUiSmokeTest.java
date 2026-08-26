@@ -2493,6 +2493,38 @@ class WebUiSmokeTest {
         assertLeftoverTourBraidOptionsStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N152. Remaining leftover #braid options stay.
+        // leftover #braid options ship in the markup.
+        // applyBraidFromMaze / applyRecipeToForm /
+        // runTournament remint leftover braid options on
+        // maze adopt or tournament. leftover form stay
+        // already forbids reminting leftover braid value
+        // (N114). leftover #tourBraid options stay already
+        // forbids reminting leftover sample braid roster
+        // (N151). These stays must not be taught away: Hunt /
+        // Play / Fog / theory / Join leftover #braid options
+        // stay — leftover braid roster you loaded; Hunt
+        // through Play and Join-from-spectate still keep
+        // tour; Fog still keeps tour (N17); leftover Solve
+        // path stays as a theory route hint (N62); Join
+        // leftover ghost stays (N86). Must not null tour
+        // (N17).
+        assertLeftoverBraidOptionsStay(html, "async function startTour", "function sameCell");
+        assertLeftoverBraidOptionsStay(html, "async function play()", "async function join()");
+        assertLeftoverBraidOptionsStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverBraidOptionsStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverBraidOptionsStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverBraidOptionsStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverBraidOptionsStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverBraidOptionsStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverBraidOptionsStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -4016,6 +4048,25 @@ class WebUiSmokeTest {
         assertThat(body).doesNotContain("syncBraid");
         assertThat(body).doesNotContain("applyBraidFromMaze");
         assertThat(body).doesNotContain("tourBraid.appendChild");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover #braid options stay (N152). leftover braid
+     * roster you loaded. leftover form stay already forbids
+     * reminting leftover braid value (N114). leftover
+     * #tourBraid options stay already N151. Must not remint
+     * leftover #braid options. Must not null tour.
+     */
+    private static void assertLeftoverBraidOptionsStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"braid\").appendChild");
+        assertThat(body).doesNotContain("applyBraidFromMaze");
+        assertThat(body).doesNotContain("applyRecipeToForm");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
