@@ -47,6 +47,12 @@ class WebUiSmokeTest {
         byte[] share = client.get().uri("/share.js").exchange()
                 .expectStatus().isOk()
                 .expectBody().returnResult().getResponseBody();
+        byte[] fogScript = client.get().uri("/fog.js").exchange()
+                .expectStatus().isOk()
+                .expectBody().returnResult().getResponseBody();
+        byte[] seatScript = client.get().uri("/seat.js").exchange()
+                .expectStatus().isOk()
+                .expectBody().returnResult().getResponseBody();
         byte[] script = client.get().uri("/app.js").exchange()
                 .expectStatus().isOk()
                 .expectBody().returnResult().getResponseBody();
@@ -54,9 +60,12 @@ class WebUiSmokeTest {
         assertThat(painter).isNotNull();
         assertThat(api).isNotNull();
         assertThat(share).isNotNull();
+        assertThat(fogScript).isNotNull();
+        assertThat(seatScript).isNotNull();
         assertThat(script).isNotNull();
         String html = new String(body) + new String(painter) + new String(api)
-                + new String(share) + new String(script);
+                + new String(share) + new String(fogScript) + new String(seatScript)
+                + new String(script);
         // Contract, not implementation: the page talks to the versioned API and the STOMP
         // endpoint, can sign in, open a fog-of-war walk, negotiate ASCII, list plugins,
         // ask the per-generator leaderboard, hydrate a spectator walk from the

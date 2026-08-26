@@ -752,7 +752,7 @@ function hashShowsCurrent() {
 
 /** Who this tab moves — join-from-spectate keeps primary as the opener. */
 function thisTabSeat() {
-  return state.session && (state.seat || state.session.primary);
+  return DaedalusSeat.whoMoves(state.session, state.seat);
 }
 
 /**
@@ -3047,11 +3047,8 @@ async function move(name, dr, dc) {
 function applyMove(who, to, from) {
   if (!state.session) return;
   state.session.positions[who] = to;
-  const trail = state.trails[who] = state.trails[who] || [];
-  if (trail.length === 0 && from) trail.push(from);
-  const last = trail[trail.length - 1];
-  if (!last || last.row !== to.row || last.col !== to.col) trail.push(to);
-  const tile = state.maze.tiles[2 * to.row + 1] && state.maze.tiles[2 * to.row + 1][2 * to.col + 1];
+  state.trails[who] = DaedalusSeat.extendTrail(state.trails[who], from, to);
+  const tile = DaedalusSeat.tileAt(state.maze.tiles, to);
   if (tile === "G") declareWin(who);
   else {
     const moves = (state.trails[who] || []).length - 1;
@@ -3257,24 +3254,10 @@ function ghostWalk() {
   return pts;
 }
 
-function cellKey(r, c) { return r + "," + c; }
+function cellKey(r, c) { return DaedalusFog.key(r, c); }
 
 function applyFogView(view) {
-  if (!state.fog) state.fog = {seen: new Set()};
-  state.fog.agentId = view.agentId;
-  state.fog.position = view.position;
-  state.fog.goal = view.goal;
-  state.fog.open = view.open || [];
-  state.fog.stepsUsed = view.stepsUsed;
-  state.fog.stepsRemaining = view.stepsRemaining;
-  state.fog.arrived = view.arrived;
-  state.fog.expired = view.expired;
-  state.fog.seen.add(cellKey(view.position.row, view.position.col));
-  if (!state.fog.walk) state.fog.walk = [];
-  const last = state.fog.walk[state.fog.walk.length - 1];
-  if (!last || last.row !== view.position.row || last.col !== view.position.col) {
-    state.fog.walk.push(view.position);
-  }
+  state.fog = DaedalusFog.mergeView(state.fog, view);
   carveFogOpenings(view);
 }
 
@@ -3285,21 +3268,8 @@ function applyFogView(view) {
  * stood in).
  */
 function carveFogOpenings(view) {
-  if (!state.maze || !view || !view.position) return;
-  const r = view.position.row, c = view.position.col;
-  const tr = 2 * r + 1, tc = 2 * c + 1;
-  const open = new Set(view.open || []);
-  const gaps = [
-    ["NORTH", tr - 1, tc], ["SOUTH", tr + 1, tc],
-    ["WEST", tr, tc - 1], ["EAST", tr, tc + 1],
-  ];
-  for (const [dir, gr, gc] of gaps) {
-    const row = state.maze.tiles[gr];
-    if (row == null || gc < 0 || gc >= row.length) continue;
-    const ch = open.has(dir) ? " " : "#";
-    if (row[gc] === ch) continue;
-    state.maze.tiles[gr] = row.substring(0, gc) + ch + row.substring(gc + 1);
-  }
+  if (!state.maze) return;
+  state.maze.tiles = DaedalusFog.carveTiles(state.maze.tiles, view);
 }
 
 const DIR_FROM_DELTA = {"-1,0": "NORTH", "1,0": "SOUTH", "0,-1": "WEST", "0,1": "EAST"};

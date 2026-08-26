@@ -5,6 +5,7 @@
 
      Deliberately vanilla JS — no build step, no framework, no npm. Markup here,
      paint in draw.js, HTTP in api.js, hash/walk helpers in share.js,
+     fog memory in fog.js, seat/trail helpers in seat.js,
      leftover-state wiring in app.js. It exercises the
      public surfaces exactly as an external integrator would: the REST API for generate/solve/
      session verbs and the STOMP topics for live frames. If this page can't do something, the
@@ -320,6 +321,8 @@
 <script src="/draw.js" defer></script>
 <script src="/api.js" defer></script>
 <script src="/share.js" defer></script>
+<script src="/fog.js" defer></script>
+<script src="/seat.js" defer></script>
 <script src="/app.js" defer></script>
 </body>
 </html>

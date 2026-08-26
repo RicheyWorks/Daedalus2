@@ -70,6 +70,8 @@ class ProdStaticSurfacePostureTest {
         EXPECTED.put("GET /draw.js", Posture.PUBLIC);
         EXPECTED.put("GET /api.js", Posture.PUBLIC);
         EXPECTED.put("GET /share.js", Posture.PUBLIC);
+        EXPECTED.put("GET /fog.js", Posture.PUBLIC);
+        EXPECTED.put("GET /seat.js", Posture.PUBLIC);
         EXPECTED.put("GET /app.js", Posture.PUBLIC);
 
         // SockJS info is the first request a browser makes. Closing /ws/** made that 401, so
@@ -89,6 +91,8 @@ class ProdStaticSurfacePostureTest {
         EXPECTED.put("POST /draw.js", Posture.REFUSED);
         EXPECTED.put("POST /api.js", Posture.REFUSED);
         EXPECTED.put("POST /share.js", Posture.REFUSED);
+        EXPECTED.put("POST /fog.js", Posture.REFUSED);
+        EXPECTED.put("POST /seat.js", Posture.REFUSED);
         EXPECTED.put("POST /app.js", Posture.REFUSED);
 
         // Nothing else is served, and the fail-closed default is the feature. A path that does
@@ -158,6 +162,10 @@ class ProdStaticSurfacePostureTest {
                 .returnResult(byte[].class).getResponseBody();
         byte[] share = client.method(HttpMethod.GET).uri("/share.js").exchange()
                 .returnResult(byte[].class).getResponseBody();
+        byte[] fog = client.method(HttpMethod.GET).uri("/fog.js").exchange()
+                .returnResult(byte[].class).getResponseBody();
+        byte[] seat = client.method(HttpMethod.GET).uri("/seat.js").exchange()
+                .returnResult(byte[].class).getResponseBody();
         byte[] script = client.method(HttpMethod.GET).uri("/app.js").exchange()
                 .returnResult(byte[].class).getResponseBody();
 
@@ -165,11 +173,16 @@ class ProdStaticSurfacePostureTest {
         assertThat(painter).as("prod served nothing at /draw.js").isNotNull();
         assertThat(api).as("prod served nothing at /api.js").isNotNull();
         assertThat(share).as("prod served nothing at /share.js").isNotNull();
+        assertThat(fog).as("prod served nothing at /fog.js").isNotNull();
+        assertThat(seat).as("prod served nothing at /seat.js").isNotNull();
         assertThat(script).as("prod served nothing at /app.js").isNotNull();
         String html = new String(body);
-        String js = new String(painter) + new String(api) + new String(share) + new String(script);
-        assertThat(html).contains("<html", "/draw.js", "/api.js", "/share.js", "/app.js");
-        assertThat(js).contains("#session=", "DaedalusDraw", "DaedalusApi", "DaedalusShare");
+        String js = new String(painter) + new String(api) + new String(share)
+                + new String(fog) + new String(seat) + new String(script);
+        assertThat(html).contains("<html", "/draw.js", "/api.js", "/share.js",
+                "/fog.js", "/seat.js", "/app.js");
+        assertThat(js).contains("#session=", "DaedalusDraw", "DaedalusApi",
+                "DaedalusShare", "DaedalusFog", "DaedalusSeat");
         assertThat(html.length() + js.length())
                 .as("the page+script prod serves is %d bytes, which is not the UI",
                         html.length() + js.length())
