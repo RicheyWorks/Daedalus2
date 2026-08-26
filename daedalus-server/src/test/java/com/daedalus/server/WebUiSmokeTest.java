@@ -2756,6 +2756,83 @@ class WebUiSmokeTest {
         assertLeftoverPluginUnavailableCopyStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N161–N164. Remaining leftover leftover-copy family
+        // stays. leftover plugin stay already forbids
+        // reminting leftover roster (N115). leftover #lb
+        // rows stay already forbids reminting leftover
+        // board rows (N143). leftover plugin unavailable
+        // copy stay already forbids reminting leftover
+        // unavailable roster (N160). These stays must not
+        // be taught away: Hunt / Play / Fog / theory / Join
+        // leftover plugin loading copy stay — leftover
+        // loading roster you already loaded; leftover #lb
+        // loading copy stay — leftover board loading you
+        // already loaded; leftover /plugins fetch stay —
+        // leftover catalog fetch you already loaded;
+        // leftover plugin list.map stay — leftover roster
+        // rows you already loaded; Hunt through Play and
+        // Join-from-spectate still keep tour; Fog still
+        // keeps tour (N17); leftover Solve path stays as a
+        // theory route hint (N62); Join leftover ghost
+        // stays (N86). Must not null tour (N17).
+        assertLeftoverPluginLoadingCopyStay(html, "async function startTour", "function sameCell");
+        assertLeftoverPluginLoadingCopyStay(html, "async function play()", "async function join()");
+        assertLeftoverPluginLoadingCopyStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverPluginLoadingCopyStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverPluginLoadingCopyStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverPluginLoadingCopyStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverPluginLoadingCopyStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverPluginLoadingCopyStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverPluginLoadingCopyStay(html, "async function join()", "async function move(");
+        assertLeftoverLbLoadingCopyStay(html, "async function startTour", "function sameCell");
+        assertLeftoverLbLoadingCopyStay(html, "async function play()", "async function join()");
+        assertLeftoverLbLoadingCopyStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverLbLoadingCopyStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverLbLoadingCopyStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverLbLoadingCopyStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverLbLoadingCopyStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverLbLoadingCopyStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverLbLoadingCopyStay(html, "async function join()", "async function move(");
+        assertLeftoverPluginsFetchStay(html, "async function startTour", "function sameCell");
+        assertLeftoverPluginsFetchStay(html, "async function play()", "async function join()");
+        assertLeftoverPluginsFetchStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverPluginsFetchStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverPluginsFetchStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverPluginsFetchStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverPluginsFetchStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverPluginsFetchStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverPluginsFetchStay(html, "async function join()", "async function move(");
+        assertLeftoverPluginListMapStay(html, "async function startTour", "function sameCell");
+        assertLeftoverPluginListMapStay(html, "async function play()", "async function join()");
+        assertLeftoverPluginListMapStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverPluginListMapStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverPluginListMapStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverPluginListMapStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverPluginListMapStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverPluginListMapStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverPluginListMapStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -4442,6 +4519,81 @@ class WebUiSmokeTest {
         assertThat(to).isGreaterThan(from);
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("plugins unavailable");
+        assertThat(body).doesNotContain("refreshPlugins");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover plugin loading copy stay (N161). leftover
+     * loading roster you already loaded. leftover plugin
+     * stay already forbids reminting leftover roster (N115).
+     * leftover plugin unavailable copy stay already N160.
+     * Must not remint leftover plugin loading copy. Must not
+     * null tour.
+     */
+    private static void assertLeftoverPluginLoadingCopyStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("loading…");
+        assertThat(body).doesNotContain("refreshPlugins");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover #lb loading copy stay (N162). leftover board
+     * loading you already loaded. leftover #lb rows stay
+     * already forbids reminting leftover board rows (N143).
+     * leftover plugin loading copy stay already N161. Must
+     * not remint leftover #lb loading copy. Must not null
+     * tour.
+     */
+    private static void assertLeftoverLbLoadingCopyStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("loading…");
+        assertThat(body).doesNotContain("refreshLeaderboard");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover /plugins fetch stay (N163). leftover catalog
+     * fetch you already loaded. leftover plugin stay already
+     * forbids reminting leftover roster (N115). leftover #lb
+     * loading copy stay already N162. Must not remint leftover
+     * /plugins fetch. Must not match leftover plugin failure
+     * topic. Must not null tour.
+     */
+    private static void assertLeftoverPluginsFetchStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("api(\"/plugins\")");
+        assertThat(body).doesNotContain("refreshPlugins");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover plugin list.map stay (N164). leftover roster
+     * rows you already loaded. leftover plugin stay already
+     * forbids reminting leftover roster (N115). leftover
+     * /plugins fetch stay already N163. Must not remint
+     * leftover plugin rows. Must not null tour.
+     */
+    private static void assertLeftoverPluginListMapStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("list.map");
         assertThat(body).doesNotContain("refreshPlugins");
         assertThat(body).doesNotContain("state.tour = null");
     }
