@@ -2285,6 +2285,36 @@ class WebUiSmokeTest {
         assertLeftoverLbGenDisabledStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N145. Remaining leftover #lbGen options stay.
+        // loadAlgorithms remints leftover #lbGen options.
+        // leftover picker stay already forbids reminting
+        // leftover #lbGen value (N122). leftover algos stay
+        // already forbids reminting leftover catalog (N133).
+        // leftover #lbGen disabled stay already forbids
+        // reminting leftover lock (N144). These stays must
+        // not be taught away: Hunt / Play / Fog / theory /
+        // Join leftover #lbGen options stay — leftover
+        // filter roster you loaded; Hunt through Play and
+        // Join-from-spectate still keep tour; Fog still
+        // keeps tour (N17); leftover Solve path stays as a
+        // theory route hint (N62); Join leftover ghost stays
+        // (N86). Must not null tour (N17).
+        assertLeftoverLbGenOptionsStay(html, "async function startTour", "function sameCell");
+        assertLeftoverLbGenOptionsStay(html, "async function play()", "async function join()");
+        assertLeftoverLbGenOptionsStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverLbGenOptionsStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverLbGenOptionsStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverLbGenOptionsStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverLbGenOptionsStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverLbGenOptionsStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverLbGenOptionsStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -3678,6 +3708,25 @@ class WebUiSmokeTest {
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("$(\"lbGen\").disabled");
         assertThat(body).doesNotContain("refreshLeaderboard");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover #lbGen options stay (N145). leftover filter
+     * roster you loaded. leftover picker stay already
+     * forbids reminting leftover #lbGen value (N122).
+     * leftover algos stay already N133. Must not remint
+     * leftover #lbGen options. Must not null tour.
+     */
+    private static void assertLeftoverLbGenOptionsStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("lbGen.innerHTML");
+        assertThat(body).doesNotContain("lbGen.appendChild");
+        assertThat(body).doesNotContain("loadAlgorithms");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
