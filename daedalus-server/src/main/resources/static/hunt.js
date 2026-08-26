@@ -5,14 +5,6 @@
 (function (global) {
   function same(a, b) { return a && b && a.row === b.row && a.col === b.col; }
 
-  function mazeStatsHtml(state, host) {
-    return `<span>maze</span> ${host.esc(state.maze.id.slice(0, 8))}&hellip;<br>`
-        + `<span>by</span> ${host.esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
-        + `&middot; <span>seed</span> ${state.maze.seed}`
-        + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
-        + `<br>`;
-  }
-
   /**
    * Collect every waypoint, then reach the goal. The optimal collection order is computed
    * server-side by exact Held-Karp, so the score at the end compares your walk against a proven
@@ -66,7 +58,7 @@
     // named the previous walk under the Held-Karp coins (N93).
     // Must not null tour (N50). startFog still must not null
     // tour (N17).
-    host.$("stats").innerHTML = mazeStatsHtml(state, host);
+    host.$("stats").innerHTML = DaedalusCaption.mazeStats(state.maze, host.esc);
     // Leftover Hunt / win status stays after Hunt. play()
     // rewrites #status (N48) only when it seats;
     // refreshTourStatus remints hunt status only when the
@@ -76,9 +68,7 @@
     // Must not null tour (N50). startFog still must not null
     // tour (N17).
     host.clearStatusFlash();
-    host.$("status").textContent = state.session
-        ? `session ${state.session.id.slice(0, 8)}… — arrow keys to move`
-        : "arrow keys move once a session is open";
+    host.$("status").textContent = DaedalusCaption.sessionStatus(state.session);
     if (!t.feasible) {
       host.log("err", "this maze has unreachable waypoints — tour not possible");
       return;

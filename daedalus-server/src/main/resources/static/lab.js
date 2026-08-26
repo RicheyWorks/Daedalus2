@@ -1,7 +1,14 @@
 // SPDX-License-Identifier: MIT
-// Complexity-lab chart. app.js owns leftover-state wiring; this file does not read `state`.
+// Complexity-lab leftover rules (ADR-007 idea 2). app.js owns leftover-state
+// wiring; this file does not read leftover globals — it takes `state` plus a host bag.
 "use strict";
 (function (global) {
+  // One series (the measurements) plus a de-emphasised model overlay (the fitted curve), on
+  // log-log axes so a power law reads as a straight line and its slope IS the exponent.
+  // Colour: a single in-band step of the app's blue, validated against this panel's surface
+  // (#1a2026) — the app's lighter #82b1ff sits outside the dark-mode lightness band.
+  const LAB_SERIES = "#4f83d6";
+
   function chartSvg(fit, seriesColor, escapeHtml) {
     const W = 288, H = 150, L = 38, R = 8, T = 10, B = 22;
     const pts = fit.measured.filter(m => m.value > 0);
@@ -57,5 +64,54 @@
     });
   }
 
-  global.DaedalusLab = {chartSvg, bindHover};
+  async function loadMetrics(state, host) {
+    try {
+      const metrics = await host.api("/complexity/metrics");
+      const sel = host.$("labMetric");
+      sel.innerHTML = "";
+      metrics.forEach(m => {
+        const o = document.createElement("option");
+        o.value = m; o.textContent = m;
+        sel.appendChild(o);
+      });
+      sel.value = metrics.includes("maxFrontierSize") ? "maxFrontierSize" : metrics[0];
+    } catch (e) { /* lab is optional; the rest of the UI does not depend on it */ }
+  }
+
+  async function measure(state, host) {
+    // Sidebar lab read — does not adopt, paint, or drop watch.
+    const generator = host.$("generator").value;
+    const metric = host.$("labMetric").value;
+    host.$("labOut").textContent = `measuring ${generator}…`;
+    const fit = await host.api(`/complexity?generator=${encodeURIComponent(generator)}`
+        + `&metric=${encodeURIComponent(metric)}`);
+    render(state, host, fit);
+    host.log("state", `complexity: ${fit.generatorId} [${fit.metric}] -> ${fit.claimed}`
+        + (fit.instrumented ? ` (exponent ${fit.exponent}, R² ${fit.rSquared})` : ""));
+  }
+
+  function render(state, host, fit) {
+    const box = host.$("labOut");
+    if (!fit.instrumented) {
+      box.innerHTML = `<div><b>${host.esc(fit.generatorId)}</b> · ${host.esc(fit.metric)}: `
+          + `<b>not reported</b></div><div class="hint" style="margin-top:4px">${host.esc(fit.note)}</div>`;
+      return;
+    }
+    box.innerHTML =
+        `<div style="margin-bottom:2px"><b>${host.esc(fit.generatorId)}</b> · ${host.esc(fit.metric)}</div>`
+      + `<div style="font-size:20px;color:${LAB_SERIES};line-height:1.2">${host.esc(fit.claimed)}</div>`
+      + `<div class="hint">exponent ${fit.exponent} · R² ${fit.rSquared} · ${fit.points} sizes</div>`
+      + chartSvg(fit, LAB_SERIES, host.esc)
+      + `<details style="margin-top:6px"><summary class="hint">measured points</summary>`
+      + `<table style="width:100%;font-size:11px;margin-top:4px">`
+      + `<tr class="hint"><th align="left">size</th><th align="right">cells</th>`
+      + `<th align="right">${host.esc(fit.metric)}</th></tr>`
+      + fit.measured.map(m => `<tr><td>${m.size}×${m.size}</td><td align="right">${m.cells}</td>`
+          + `<td align="right">${m.value}</td></tr>`).join("")
+      + `</table></details>`
+      + `<div class="hint" style="margin-top:6px">${host.esc(fit.note)}</div>`;
+    bindHover(document.querySelectorAll("#labChart .labdot"), host.$("labTip"), fit);
+  }
+
+  global.DaedalusLab = {chartSvg, bindHover, loadMetrics, measure, render};
 })(window);

@@ -216,6 +216,40 @@ function startLivePolling(mazeId, tickMillis, ticks) {
 }
 async function onMutation(m) { return DaedalusLive.applyMutation(state, liveHost(), m); }
 
+function livingHost() {
+  return {
+    $, api, log,
+    refuseSpectatorWrite, nameCapacity, startLivePolling,
+    applyFogView, setGodModeEnabled, refreshTheoryOverlays, refreshTourStatus, draw,
+  };
+}
+async function bringToLife() { return DaedalusLiving.awaken(state, livingHost()); }
+async function simulateTraffic() { return DaedalusLiving.simulate(state, livingHost()); }
+function startTrafficPolling(mazeId, tickMillis) {
+  return DaedalusLiving.pollTraffic(state, livingHost(), mazeId, tickMillis);
+}
+async function onTrafficPulse(m) { return DaedalusLiving.onPulse(state, livingHost(), m); }
+async function refreshLivingMaze(fromPoll) {
+  return DaedalusLiving.refresh(state, livingHost(), fromPoll);
+}
+
+function ghostHost() {
+  return {api, log, draw, mazeStart, thisTabSeat};
+}
+async function summonGhost() { return DaedalusGhost.summon(state, ghostHost()); }
+
+function labHost() {
+  return {$, api, log, esc};
+}
+async function loadLabMetrics() { return DaedalusLab.loadMetrics(state, labHost()); }
+async function measureGrowth() { return DaedalusLab.measure(state, labHost()); }
+function renderLab(fit) { return DaedalusLab.render(state, labHost(), fit); }
+
+function tournamentHost() {
+  return {$, api, log, esc, braidFactor, updateInfo, syncBraid, generate};
+}
+async function runTournament() { return DaedalusTournament.run(state, tournamentHost()); }
+
 async function play() { return DaedalusSession.open(state, sessionHost()); }
 async function join() { return DaedalusSession.joinSeat(state, sessionHost()); }
 async function move(name, dr, dc) { return DaedalusSession.hop(state, sessionHost(), name, dr, dc); }
@@ -525,111 +559,9 @@ function mazeStart(maze) {
   return DaedalusShare.startFromTiles(maze && maze.tiles);
 }
 
-// ---------- living mazes (ADR-006) ----------
-/**
- * Ask the server to erode this maze in place. Progress arrives as MutationFrames on the
- * /state topic; without STOMP (CDN blocked / offline) we fall back to polling at the
- * server-reported tick interval, so the maze still visibly lives.
- */
-async function bringToLife() {
-  if (refuseSpectatorWrite("bring the maze to life")) return;
-  if ($("live").disabled) {
-    log("err", "already alive — Harden only applies on the first Bring to life");
-    return;
-  }
-  const harden = $("harden") && $("harden").checked;
-  const mazeId = state.maze.id;
-  const q = `/maze/${mazeId}/live?ticks=30` + (harden ? "&seal=0.08" : "");
-  let r;
-  try {
-    r = await api(q, {method: "POST"});
-  } catch (e) {
-    const why = nameCapacity(e.message);
-    if (why) {
-      log("err", why);
-      return;
-    }
-    throw e;
-  }
-  // Generate / Daily / Campaign / Breed replaced the maze while
-  // this POST was out. Disabling #live and arming a poller would
-  // bind the maze now on screen — the one that is gone. Fog stays:
-  // living under fog is honest (N19 / Q2).
-  if (!state.maze || state.maze.id !== mazeId) return;
-  $("live").disabled = true;
-  if ($("harden")) $("harden").disabled = true;
-  log("state", `maze is alive — ${r.ticksRequested} ticks`
-      + (harden ? " (eroding and hardening)" : " (erosion only)")
-      + `, one every ${(r.tickMillis / 1000).toFixed(1)}s`);
-  if (!state.stomp) startLivePolling(mazeId, r.tickMillis, r.ticksRequested);
-}
+// Living-maze leftover writes live in living.js (DaedalusLiving).
 
-// ---------- complexity lab (ADR-007 idea 2) ----------
-// One series (the measurements) plus a de-emphasised model overlay (the fitted curve), on
-// log-log axes so a power law reads as a straight line and its slope IS the exponent.
-// Colour: a single in-band step of the app's blue, validated against this panel's surface
-// (#1a2026) — the app's lighter #82b1ff sits outside the dark-mode lightness band.
-const LAB_SERIES = "#4f83d6";
-
-async function loadLabMetrics() {
-  try {
-    const metrics = await api("/complexity/metrics");
-    const sel = $("labMetric");
-    sel.innerHTML = "";
-    metrics.forEach(m => {
-      const o = document.createElement("option");
-      o.value = m; o.textContent = m;
-      sel.appendChild(o);
-    });
-    sel.value = metrics.includes("maxFrontierSize") ? "maxFrontierSize" : metrics[0];
-  } catch (e) { /* lab is optional; the rest of the UI does not depend on it */ }
-}
-
-async function measureGrowth() {
-  // Sidebar lab read — does not adopt, paint, or drop watch.
-  const generator = $("generator").value;
-  const metric = $("labMetric").value;
-  $("labOut").textContent = `measuring ${generator}…`;
-  const fit = await api(`/complexity?generator=${encodeURIComponent(generator)}`
-      + `&metric=${encodeURIComponent(metric)}`);
-  renderLab(fit);
-  log("state", `complexity: ${fit.generatorId} [${fit.metric}] -> ${fit.claimed}`
-      + (fit.instrumented ? ` (exponent ${fit.exponent}, R² ${fit.rSquared})` : ""));
-}
-
-function renderLab(fit) {
-  const box = $("labOut");
-  if (!fit.instrumented) {
-    box.innerHTML = `<div><b>${esc(fit.generatorId)}</b> · ${esc(fit.metric)}: `
-        + `<b>not reported</b></div><div class="hint" style="margin-top:4px">${esc(fit.note)}</div>`;
-    return;
-  }
-  box.innerHTML =
-      `<div style="margin-bottom:2px"><b>${esc(fit.generatorId)}</b> · ${esc(fit.metric)}</div>`
-    + `<div style="font-size:20px;color:${LAB_SERIES};line-height:1.2">${esc(fit.claimed)}</div>`
-    + `<div class="hint">exponent ${fit.exponent} · R² ${fit.rSquared} · ${fit.points} sizes</div>`
-    + growthChart(fit)
-    + `<details style="margin-top:6px"><summary class="hint">measured points</summary>`
-    + `<table style="width:100%;font-size:11px;margin-top:4px">`
-    + `<tr class="hint"><th align="left">size</th><th align="right">cells</th>`
-    + `<th align="right">${esc(fit.metric)}</th></tr>`
-    + fit.measured.map(m => `<tr><td>${m.size}×${m.size}</td><td align="right">${m.cells}</td>`
-        + `<td align="right">${m.value}</td></tr>`).join("")
-    + `</table></details>`
-    + `<div class="hint" style="margin-top:6px">${esc(fit.note)}</div>`;
-  wireChartHover(fit);
-}
-
-/** Log-log scatter+line: on these axes a power law is a straight line whose slope is the exponent. */
-function growthChart(fit) {
-  return DaedalusLab.chartSvg(fit, LAB_SERIES, esc);
-}
-
-/** Per-point hover: an SVG chart is interactive, so it ships with a readout. */
-function wireChartHover(fit) {
-  DaedalusLab.bindHover(document.querySelectorAll("#labChart .labdot"), $("labTip"), fit);
-}
-
+// Lab leftover writes live in lab.js (DaedalusLab).
 // Hunt leftover writes live in hunt.js (DaedalusHunt).
 function sameCell(a, b) { return a && b && a.row === b.row && a.col === b.col; }
 
@@ -652,82 +584,7 @@ function sameCell(a, b) { return a && b && a.row === b.row && a.col === b.col; }
  */
 const DISTANCE_RAMP = DaedalusCaption.DISTANCE_RAMP;
 
-// ---------- solver tournament (ADR-007 ideas 10 and 7) ----------
-/**
- * Rank every solver over a sample, with intervals.
- *
- * The table deliberately leads with spread and ties rather than position. Measured, a single
- * race is already correct on perfect mazes (one solver won 30 of 30) and close to a coin flip on
- * braided ones (the winner split five ways) — so the number worth showing is not "who is first"
- * but "how much does first mean here".
- */
-async function runTournament() {
-  // Sidebar lab read — Load it goes through generate(), which already leaves.
-  const generator = $("generator").value;
-  const braid = braidFactor();
-  $("tournament").disabled = true;
-  $("tourBox").innerHTML = "running the sample…";
-  let t;
-  try {
-    t = await api(`/tournament?generator=${encodeURIComponent(generator)}&size=21&mazes=16`
-        + `&braid=${braid}`);
-  } finally {
-    $("tournament").disabled = false;
-  }
-  const tied = new Set();
-  t.ties.forEach(x => { tied.add(x.a); tied.add(x.b); });
-  const rows = t.standings.map(s => {
-    if (s.excluded) {
-      return `<tr><td>${s.solverId}</td><td colspan="4" class="hint">excluded — gave up on `
-          + `${s.refusals} mazes${s.completed ? `, after finishing ${s.completed}` : ""}</td></tr>`;
-    }
-    const w = s.work;
-    return `<tr><td>${s.solverId}${tied.has(s.solverId) ? " <span title='statistically tied "
-        + "with a neighbour'>=</span>" : ""}</td>`
-        + `<td style="text-align:right">${w.mean.toFixed(0)}</td>`
-        + `<td style="text-align:right" class="hint">${w.low.toFixed(0)}–${w.high.toFixed(0)}</td>`
-        + `<td style="text-align:right">${w.cv.toFixed(0)}%</td>`
-        + `<td style="text-align:right">${s.wins}</td></tr>`;
-  }).join("");
-  const ties = t.ties.length
-      ? t.ties.map(x => `${x.a} = ${x.b}`).join(" &middot; ")
-      : "none — every neighbouring pair is separated by more than its error bars";
-  const adv = (t.extremes || [])[0];
-  $("tourBox").innerHTML = `<table style="width:100%"><tr><th style="text-align:left">solver</th>`
-      + `<th>mean work</th><th>95% CI</th><th>spread</th><th>wins</th></tr>${rows}</table>`
-      + `<div class="hint" style="margin-top:4px">= marks a solver whose gap to the one below `
-      + `it is smaller than the error bars, so the order between them is not a result.</div>`
-      + `<div style="margin-top:8px"><b>Statistically tied:</b> ${ties}</div>`
-      + (adv ? `<div style="margin-top:6px">Hardest maze for <b>${adv.solver}</b> against `
-          + `${adv.rival}: seed <b>${adv.seed}</b> (${adv.solverWork} vs ${adv.rivalWork} cells) — `
-          + `<a href="#" id="loadAdversarial">load it</a></div>` : "")
-      + `<div class="hint" style="margin-top:6px">${t.note}</div>`;
-  const link = $("loadAdversarial");
-  if (link && adv) {
-    link.onclick = async (e) => {
-      e.preventDefault();
-      $("generator").value = t.generatorId;
-      updateInfo();
-      $("seed").value = adv.seed;
-      $("rows").value = t.size; $("cols").value = t.size;
-      const factor = t.braid == null ? 0 : t.braid;
-      if ($("braid")) {
-        const v = String(factor);
-        if (![...$("braid").options].some(o => o.value === v)) {
-          const o = document.createElement("option");
-          o.value = v;
-          o.textContent = v + " — from tournament";
-          $("braid").appendChild(o);
-        }
-        $("braid").value = v;
-      }
-      syncBraid("braid");
-      await generate({braid: factor});
-    };
-  }
-  log("state", `tournament: ${t.standings.filter(s => !s.excluded).length} solvers over `
-      + `${t.mazes} mazes, ${t.ties.length} tied pairs`);
-}
+// Tournament leftover writes live in tournament.js (DaedalusTournament).
 
 // ---------- heuristic lens (ADR-007 idea 8) ----------
 /**
@@ -742,226 +599,10 @@ async function runTournament() {
  */
 const LENS_COLORS = DaedalusCaption.LENS_COLORS;   // must expand / tie / never
 
-// ---------- ghost runs (ADR-006 idea #8) ----------
-/** If this maze has a recorded best run, race it: same pacing, hesitations and all. */
-async function summonGhost() {
-  if (!state.session) return;
-  const mazeId = state.maze && state.maze.id;
-  if (!mazeId) return;
-  let run;
-  try { run = await api(`/maze/${mazeId}/ghost`); }
-  catch (ignored) { return; } // 404 — nobody has finished this maze yet
-  // Fog dropped the seat and cleared the ghost while this GET was
-  // out. Do not re-arm the ticker onto a walk that just emptied it.
-  // Generate + Play: a late /ghost would seat the old recording
-  // on the maze now on screen (N37). Maze-bound, not seat-bound —
-  // a new Play on the same maze still races this recording.
-  if (state.fog) return;
-  if (!state.session) return;
-  if (!state.maze || state.maze.id !== mazeId) return;
-  // Recording is a walk from the maze start. A late #session= hydrate used
-  // the opener's current cell, so the ghost trail teleported from mid-run.
-  const start = mazeStart(state.maze) || state.session.positions[thisTabSeat()];
-  state.ghost = {
-    moves: run.moves, name: run.playerName, score: run.score, elapsedMs: run.elapsedMs,
-    started: performance.now(), pos: start, start, done: false,
-  };
-  log("player", `ghost summoned: ${run.playerName}'s best run `
-      + `(${(run.elapsedMs / 1000).toFixed(1)}s, score ${run.score}) — beat it`);
-  clearInterval(state.ghostTimer);
-  state.ghostTimer = setInterval(() => {
-    const g = state.ghost;
-    if (!g || !state.session) { clearInterval(state.ghostTimer); return; }
-    const e = performance.now() - g.started;
-    let pos = g.pos, done = true;
-    for (const m of g.moves) {
-      if (m.tMs <= e) pos = m.to;
-      else { done = false; break; }
-    }
-    g.pos = pos;
-    if (done && !g.done) {
-      g.done = true;
-      log("player", `the ghost finished its run (${(g.elapsedMs / 1000).toFixed(1)}s)`);
-      clearInterval(state.ghostTimer);
-    }
-    draw();
-  }, 100);
-}
+// Ghost leftover writes live in ghost.js (DaedalusGhost).
 
-// ---------- traffic simulation (ADR-006 idea #3) ----------
-/** Track congestion: everywhere you (or agents) walk gets expensive, then cools off. */
-async function simulateTraffic() {
-  if (refuseSpectatorWrite("track traffic")) return;
-  const mazeId = state.maze.id;
-  let r;
-  try {
-    r = await api(`/maze/${mazeId}/traffic`, {method: "POST"});
-  } catch (e) {
-    const why = nameCapacity(e.message);
-    if (why) {
-      log("err", why);
-      return;
-    }
-    throw e;
-  }
-  // Same steal as bringToLife: a late /traffic after Generate
-  // must not disable #traffic or arm a poller for the maze now
-  // on screen. Fog stays — traffic under fog is honest (Q2).
-  if (!state.maze || state.maze.id !== mazeId) return;
-  $("traffic").disabled = true;
-  log("state", `traffic tracking on — walk around and watch the costs bloom `
-      + `(pulse every ${(r.tickMillis / 1000).toFixed(1)}s)`);
-  if (!state.stomp) startTrafficPolling(mazeId, r.tickMillis);
-}
-
-/** STOMP-less traffic fallback. CONNECT drops this (N44); disconnect re-arms (N45). */
-function startTrafficPolling(mazeId, tickMillis = 2000) {
-  state.trafficTickMs = tickMillis;
-  clearInterval(state.trafficPoll);
-  state.trafficPoll = setInterval(async () => {
-    if (state.stomp || !state.maze || state.maze.id !== mazeId) {
-      clearInterval(state.trafficPoll); state.trafficPoll = null;
-      return;
-    }
-    await refreshLivingMaze(true);
-  }, tickMillis);
-}
-
-/** A traffic pulse arrived: costs moved — re-fetch, re-solve, redraw (same as mutation). */
-async function onTrafficPulse(m) {
-  const mazeId = m.mazeId;
-  if (!state.maze || state.maze.id !== mazeId) return;
-  log("state", m.settled
-      ? "traffic fully decayed — tracking retired"
-      : `traffic: ${m.congestedCells} congested cell${m.congestedCells === 1 ? "" : "s"}, `
-          + `peak cost ${m.peakCost.toFixed(1)}`);
-  await refreshLivingMaze();
-  if (!state.maze || state.maze.id !== mazeId) return;
-  if (m.settled) $("traffic").disabled = false;
-}
-
+// Traffic leftover writes live in living.js (DaedalusLiving).
 // Theory overlay refresh lives in theory.js (DaedalusTheory.refreshOverlays).
-
-/** Swap in the latest snapshot without resetting session/solver state (unlike adoptMaze). */
-async function refreshLivingMaze(fromPoll) {
-  try {
-    const before = state.maze;
-    // Which maze this refresh is FOR. Every await below is a window in which the player can
-    // switch mazes (Daily, a campaign stage, Generate), and a response that lands after that
-    // must be dropped rather than applied. Without this the poll's in-flight response
-    // reinstates the maze the player just left: reproduced deterministically by delaying the
-    // old maze's fetch and loading the daily challenge during it, which left state.maze on
-    // the old maze under a "Daily leaderboard" heading — a session opened then would play a
-    // different maze than the one being scored.
-    const forMaze = state.maze.id;
-    const stale = () => !state.maze || state.maze.id !== forMaze;
-
-    // Fog is the agent contract: position, openings, goal. GET /maze is the
-    // god-mode grid. Pulling it here would let a living tick paint rooms the
-    // walk has never stood in (and openings behind you that you have not
-    // re-seen). Re-poll the agent only; carveFogOpenings writes the cell
-    // underfoot.
-    if (state.fog) {
-      const agentId = state.fog.agentId;
-      try {
-        const v = await api(`/agent/${agentId}`);
-        // Play / Open session dropped the walk while this GET was
-        // out. Maze id still matches (same maze), so stale() is
-        // not enough — applyFogView would recreate state.fog on
-        // the session walk. Same class as N26.
-        if (stale()) return;
-        if (!state.fog || state.fog.agentId !== agentId) return;
-        if (fromPoll && state.stomp) return;
-        applyFogView(v);
-        draw();
-        return;
-      } catch (gone) {
-        if (stale()) return;
-        if (!state.fog || state.fog.agentId !== agentId) return;
-        // Agent is gone. carveFogOpenings mutated tiles and living ticks
-        // skipped GET /maze on purpose — fall through and refetch the live grid.
-        state.fog = null;
-        setGodModeEnabled(true);
-        log("err", `fog walk ended: ${gone.message}`);
-      }
-    }
-
-    const maze = await api(`/maze/${forMaze}`);
-    // startFog can land while this snapshot is out. The fog path
-    // skipped GET /maze on purpose; a late assign would write the
-    // god-mode grid — unseen rooms and openings you have not
-    // re-seen — into that walk. Discard, matching N18.
-    if (stale() || state.fog) return;
-    if (fromPoll && state.stomp) return;
-    state.maze = maze;
-    // Narrate on the polling path too. Tick/pulse messages normally come from STOMP frames,
-    // so with the broker unreachable a living or congested maze changed under the player in
-    // total silence — worst exactly where hazards matter most, the late campaign stages.
-    if (!state.stomp && before && before.id === maze.id) {
-      const walls = t => t.reduce((n, row) => n + (row.match(/#/g) || []).length, 0);
-      const openedNow = walls(before.tiles) - walls(maze.tiles);
-      const congestedNow = (maze.hotspots || []).length;
-      const congestedBefore = (before.hotspots || []).length;
-      if (openedNow > 0) {
-        log("state", `erosion: ${openedNow} wall${openedNow === 1 ? "" : "s"} opened`);
-      }
-      if (congestedNow !== congestedBefore) {
-        log("state", `traffic: ${congestedNow} congested cell${congestedNow === 1 ? "" : "s"}`);
-      }
-    }
-    if (!(await refreshTheoryOverlays(forMaze, stale))) return;
-    if (state.tour) {
-      // Placement is frozen; the optimum is not (ADR-014). A seated
-      // session — player or spectator — must rescore via
-      // GET /session/{id}/tour. That read already reruns Held-Karp on
-      // the live grid, and it is the public paint source. The old
-      // body always asked GET /maze/{id}/tour (tourFor): auth-required
-      // in prod, and it can mint. Spectator hydrate already used the
-      // session read; a living tick then 401'd and kept a stale
-      // optimum on the watched hunt (N42). Maze tour is only the
-      // Hunt-before-Play fallback, when no seat exists to progress.
-      try {
-        if (state.session) {
-          const sessionId = state.session.id;
-          const p = await api(`/session/${sessionId}/tour`);
-          if (stale() || state.fog) return;
-          if (!state.session || state.session.id !== sessionId) return;
-          if (p.optimal !== state.tour.optimalCost) {
-            log("state", `tour optimum is now ${p.optimal} steps (was ${state.tour.optimalCost})`);
-          }
-          state.tour = {
-            waypoints: p.waypoints,
-            path: p.path || [],
-            optimalCost: p.optimal,
-            feasible: true,
-          };
-        } else {
-          const t = await api(`/maze/${forMaze}/tour?count=${state.tour.waypoints.length}`);
-          if (stale() || state.fog) return;
-          if (t.optimalCost !== state.tour.optimalCost) {
-            log("state", `tour optimum is now ${t.optimalCost} steps (was ${state.tour.optimalCost})`);
-          }
-          state.tour = t;
-        }
-        await refreshTourStatus();
-        if (stale() || state.fog) return;
-      } catch (ignored) { /* tour overlay; losing one refresh is harmless */ }
-    }
-    if (state.path) {
-      // The drawn route may now cross freshly-opened walls or stale costs — re-solve
-      // quietly (no replay animation; the mutation itself is the show).
-      const r = await api(`/maze/${forMaze}/solve/${$("solver").value}`, {method: "POST"});
-      if (stale() || state.fog) return;
-      state.path = r.path;
-      state.expansions = [];
-      state.searchProgress = 1;
-      state.pathProgress = 1;
-    }
-    draw();
-  } catch (e) {
-    log("err", `living refresh failed: ${e.message}`);
-  }
-}
 
 // Solve leftover writes live in solve.js (DaedalusSolve).
 

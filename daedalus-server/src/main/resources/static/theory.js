@@ -3,14 +3,6 @@
 // read leftover globals — it takes `state` plus a host bag.
 "use strict";
 (function (global) {
-  function mazeStatsHtml(state, host) {
-    return `<span>maze</span> ${host.esc(state.maze.id.slice(0, 8))}&hellip;<br>`
-        + `<span>by</span> ${host.esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
-        + `&middot; <span>seed</span> ${state.maze.seed}`
-        + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
-        + `<br>`;
-  }
-
   /** First Identify used to hang the tab on a 40s request-thread fit. 503 means warming. */
   async function waitFingerprint(state, host, id) {
     const t0 = performance.now();
@@ -113,7 +105,7 @@
     // numbers named the previous walk under the sidebar (N99).
     // Hunt and a leftover Solve path stay. startFog still
     // must not null tour (N17).
-    host.$("stats").innerHTML = mazeStatsHtml(state, host);
+    host.$("stats").innerHTML = DaedalusCaption.mazeStats(state.maze, host.esc);
     state.fingerprint = f;
     state.caption = "fingerprint";
     host.log("state", `fingerprint: structure says ${f.predictedGeneratorId}`
@@ -179,7 +171,7 @@
     // numbers named the previous walk under the cuts (N99).
     // Hunt and a leftover Solve path stay. startFog still
     // must not null tour (N17).
-    host.$("stats").innerHTML = mazeStatsHtml(state, host);
+    host.$("stats").innerHTML = DaedalusCaption.mazeStats(state.maze, host.esc);
     state.analysis = a;
     state.caption = "analysis";
     const cp = a.cutSize === 1 ? "1 chokepoint" : `${a.cutSize} chokepoints`;
@@ -208,9 +200,7 @@
     // named a hunt that is gone under the gold walk (N102).
     // startFog still must not null tour (N17).
     host.clearStatusFlash();
-    host.$("status").textContent = state.session
-        ? `session ${state.session.id.slice(0, 8)}… — arrow keys to move`
-        : "arrow keys move once a session is open";
+    host.$("status").textContent = DaedalusCaption.sessionStatus(state.session);
     state.race = null;
     host.bumpAnim();
     state.path = null; state.expansions = [];
@@ -240,7 +230,7 @@
     // so leftover solver numbers named the previous walk
     // under the gold walk (N96). startFog still must not
     // null tour (N17).
-    host.$("stats").innerHTML = mazeStatsHtml(state, host);
+    host.$("stats").innerHTML = DaedalusCaption.mazeStats(state.maze, host.esc);
     state.hardest = h;
     state.caption = "hardest";
     host.log("state", `hardest route: ${h.hardestLength} steps vs ${h.shortestLength} shortest `
@@ -289,7 +279,7 @@
     // numbers named the previous walk under the field (N99).
     // Hunt and a leftover Solve path stay. startFog still
     // must not null tour (N17).
-    host.$("stats").innerHTML = mazeStatsHtml(state, host);
+    host.$("stats").innerHTML = DaedalusCaption.mazeStats(state.maze, host.esc);
     state.field = f;
     state.sanctuaries = null; state.lens = null;   // one overlay at a time stays readable
     state.caption = "field";
@@ -341,7 +331,7 @@
     // solver numbers named the previous walk under the rings
     // (N99). Hunt and a leftover Solve path stay. startFog
     // still must not null tour (N17).
-    host.$("stats").innerHTML = mazeStatsHtml(state, host);
+    host.$("stats").innerHTML = DaedalusCaption.mazeStats(state.maze, host.esc);
     state.sanctuaries = s;
     state.field = null; state.lens = null;
     state.caption = "sanctuaries";
@@ -392,7 +382,7 @@
     // numbers named the previous walk under the bands (N99).
     // Hunt and a leftover Solve path stay. startFog still
     // must not null tour (N17).
-    host.$("stats").innerHTML = mazeStatsHtml(state, host);
+    host.$("stats").innerHTML = DaedalusCaption.mazeStats(state.maze, host.esc);
     state.lens = l;
     state.field = null; state.sanctuaries = null;
     state.caption = "lens";

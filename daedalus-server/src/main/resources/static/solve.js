@@ -7,18 +7,8 @@
 
   function bump() { animGen++; }
 
-  function mazeStatsHtml(state, host) {
-    return `<span>maze</span> ${host.esc(state.maze.id.slice(0, 8))}&hellip;<br>`
-        + `<span>by</span> ${host.esc(state.maze.generatorId)} &middot; ${state.maze.rows}&times;${state.maze.cols} `
-        + `&middot; <span>seed</span> ${state.maze.seed}`
-        + (state.maze.braid > 0 ? ` &middot; braided ${state.maze.braid}` : "")
-        + `<br>`;
-  }
-
   function sessionStatus(state) {
-    return state.session
-        ? `session ${state.session.id.slice(0, 8)}… — arrow keys to move`
-        : "arrow keys move once a session is open";
+    return DaedalusCaption.sessionStatus(state.session);
   }
 
   async function run(state, host) {
@@ -174,7 +164,7 @@
       // did not, so leftover solver numbers named the previous
       // walk under the arena (N97). startFog still must not
       // null tour (N17).
-      host.$("stats").innerHTML = mazeStatsHtml(state, host);
+      host.$("stats").innerHTML = DaedalusCaption.mazeStats(state.maze, host.esc);
       state.race = { lanes: [
         {id: a, color: "#82b1ff", expansions: ra.expansions || [], path: ra.path,
          success: ra.success, front: 0, pathProg: 0},
@@ -299,7 +289,7 @@
     // Compare did not, so leftover solver numbers named the
     // previous walk under the table (N98). Hover still arms a
     // preview. startFog still must not null tour (N17).
-    host.$("stats").innerHTML = mazeStatsHtml(state, host);
+    host.$("stats").innerHTML = DaedalusCaption.mazeStats(state.maze, host.esc);
     const ok = results.filter(r => r.success);
     // Math.min() of an empty list is Infinity — the log used to say "best path Infinity".
     const bestPath = ok.length ? Math.min(...ok.map(r => r.path.length)) : null;

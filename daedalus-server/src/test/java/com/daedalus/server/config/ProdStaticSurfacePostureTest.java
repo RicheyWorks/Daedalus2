@@ -80,6 +80,9 @@ class ProdStaticSurfacePostureTest {
         EXPECTED.put("GET /hunt.js", Posture.PUBLIC);
         EXPECTED.put("GET /solve.js", Posture.PUBLIC);
         EXPECTED.put("GET /theory.js", Posture.PUBLIC);
+        EXPECTED.put("GET /living.js", Posture.PUBLIC);
+        EXPECTED.put("GET /ghost.js", Posture.PUBLIC);
+        EXPECTED.put("GET /tournament.js", Posture.PUBLIC);
         EXPECTED.put("GET /live.js", Posture.PUBLIC);
         EXPECTED.put("GET /session.js", Posture.PUBLIC);
         EXPECTED.put("GET /fogwalk.js", Posture.PUBLIC);
@@ -112,6 +115,9 @@ class ProdStaticSurfacePostureTest {
         EXPECTED.put("POST /hunt.js", Posture.REFUSED);
         EXPECTED.put("POST /solve.js", Posture.REFUSED);
         EXPECTED.put("POST /theory.js", Posture.REFUSED);
+        EXPECTED.put("POST /living.js", Posture.REFUSED);
+        EXPECTED.put("POST /ghost.js", Posture.REFUSED);
+        EXPECTED.put("POST /tournament.js", Posture.REFUSED);
         EXPECTED.put("POST /live.js", Posture.REFUSED);
         EXPECTED.put("POST /session.js", Posture.REFUSED);
         EXPECTED.put("POST /fogwalk.js", Posture.REFUSED);
@@ -204,6 +210,12 @@ class ProdStaticSurfacePostureTest {
                 .returnResult(byte[].class).getResponseBody();
         byte[] theory = client.method(HttpMethod.GET).uri("/theory.js").exchange()
                 .returnResult(byte[].class).getResponseBody();
+        byte[] living = client.method(HttpMethod.GET).uri("/living.js").exchange()
+                .returnResult(byte[].class).getResponseBody();
+        byte[] ghost = client.method(HttpMethod.GET).uri("/ghost.js").exchange()
+                .returnResult(byte[].class).getResponseBody();
+        byte[] tournament = client.method(HttpMethod.GET).uri("/tournament.js").exchange()
+                .returnResult(byte[].class).getResponseBody();
         byte[] live = client.method(HttpMethod.GET).uri("/live.js").exchange()
                 .returnResult(byte[].class).getResponseBody();
         byte[] session = client.method(HttpMethod.GET).uri("/session.js").exchange()
@@ -227,6 +239,9 @@ class ProdStaticSurfacePostureTest {
         assertThat(hunt).as("prod served nothing at /hunt.js").isNotNull();
         assertThat(solve).as("prod served nothing at /solve.js").isNotNull();
         assertThat(theory).as("prod served nothing at /theory.js").isNotNull();
+        assertThat(living).as("prod served nothing at /living.js").isNotNull();
+        assertThat(ghost).as("prod served nothing at /ghost.js").isNotNull();
+        assertThat(tournament).as("prod served nothing at /tournament.js").isNotNull();
         assertThat(live).as("prod served nothing at /live.js").isNotNull();
         assertThat(session).as("prod served nothing at /session.js").isNotNull();
         assertThat(fogwalk).as("prod served nothing at /fogwalk.js").isNotNull();
@@ -236,19 +251,21 @@ class ProdStaticSurfacePostureTest {
                 + new String(fog) + new String(seat) + new String(lab)
                 + new String(caption) + new String(mint) + new String(campaign)
                 + new String(spectate) + new String(hunt) + new String(solve)
-                + new String(theory)
+                + new String(theory) + new String(living) + new String(ghost)
+                + new String(tournament)
                 + new String(live) + new String(session)
                 + new String(fogwalk) + new String(script);
         assertThat(html).contains("<html", "/draw.js", "/api.js", "/share.js",
                 "/fog.js", "/seat.js", "/lab.js", "/caption.js", "/mint.js",
                 "/campaign.js", "/spectate.js", "/hunt.js", "/solve.js",
-                "/theory.js", "/live.js", "/session.js", "/fogwalk.js",
-                "/app.js");
+                "/theory.js", "/living.js", "/ghost.js", "/tournament.js",
+                "/live.js", "/session.js", "/fogwalk.js", "/app.js");
         assertThat(js).contains("#session=", "DaedalusDraw", "DaedalusApi",
                 "DaedalusShare", "DaedalusFog", "DaedalusSeat", "DaedalusLab",
                 "DaedalusCaption", "DaedalusMint", "DaedalusCampaign",
                 "DaedalusSpectate",
                 "DaedalusHunt", "DaedalusSolve", "DaedalusTheory",
+                "DaedalusLiving", "DaedalusGhost", "DaedalusTournament",
                 "connectStomp", "async function play",
                 "async function startFog");
         assertThat(html.length() + js.length())

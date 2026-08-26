@@ -35,7 +35,7 @@ class WebUiSmokeTest {
                 "/draw.js", "/api.js", "/share.js", "/fog.js", "/seat.js",
                 "/lab.js", "/caption.js", "/mint.js", "/campaign.js",
                 "/spectate.js", "/hunt.js", "/solve.js", "/theory.js",
-                "/live.js",
+                "/living.js", "/ghost.js", "/tournament.js", "/live.js",
                 "/session.js",
                 "/fogwalk.js",
                 "/app.js",
@@ -73,7 +73,7 @@ class WebUiSmokeTest {
                 .contains("refreshTheoryOverlays").contains("paintFingerprintCaption")
                 .contains("braidFactor").contains("/topic/plugins/failures")
                 .contains("maze.braid").contains("applyBraidFromMaze")
-                .contains("state.seat").contains("if (state.session) return {session")
+                .contains("state.seat")
                 .contains("p.waypoints").contains("fog walk ended")
                 .contains("esc(a.displayName)").contains("integrity=")
                 .contains("$(\"generator\").value = h.generator")
@@ -105,11 +105,9 @@ class WebUiSmokeTest {
                 .contains("nameBudget").contains("BUDGET_WHY")
                 .contains("solver-budget")
                 .contains("this solver spent its node budget")
-                .contains("nameBudget(raw)")
                 .contains("leaveSpectate").contains("thisTabSeat")
                 .contains("armSpectatorWrites").contains("refuseSpectatorWrite")
                 .contains("hashShowsCurrent").contains("addEventListener(\"hashchange\"")
-                .contains("mazeStart(state.maze) || state.session.positions")
                 .contains("spectating is read-only")
                 .doesNotContain("positions[state.session.primary]")
                 .doesNotContain("move(state.session.primary")

@@ -90,13 +90,8 @@
     // restore put the old session / hunt text on a maze that no
     // longer has that seat (N48).
     host.clearStatusFlash();
-    host.$("status").textContent = "arrow keys move once a session is open";
-    host.$("stats").innerHTML =
-        `<span>maze</span> ${host.esc(maze.id.slice(0, 8))}&hellip;<br>`
-        + `<span>by</span> ${host.esc(maze.generatorId)} &middot; ${maze.rows}&times;${maze.cols} `
-        + `&middot; <span>seed</span> ${maze.seed}`
-        + (maze.braid > 0 ? ` &middot; braided ${maze.braid}` : "")
-        + `<br>`
+    host.$("status").textContent = DaedalusCaption.sessionStatus(null);
+    host.$("stats").innerHTML = DaedalusCaption.mazeStats(maze, host.esc)
         + (roundTripMs != null
             ? `<span>round-trip</span> ${roundTripMs.toFixed(0)} ms<br>`
             : `<span>loaded from</span> ${sourceLabel || "permalink"}<br>`);

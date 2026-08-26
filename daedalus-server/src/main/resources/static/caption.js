@@ -105,8 +105,23 @@
     return `<div style="margin-top:8px">${text}</div>`;
   }
 
+  function mazeStats(maze, escapeHtml) {
+    return `<span>maze</span> ${escapeHtml(maze.id.slice(0, 8))}&hellip;<br>`
+        + `<span>by</span> ${escapeHtml(maze.generatorId)} &middot; ${maze.rows}&times;${maze.cols} `
+        + `&middot; <span>seed</span> ${maze.seed}`
+        + (maze.braid > 0 ? ` &middot; braided ${maze.braid}` : "")
+        + `<br>`;
+  }
+
+  function sessionStatus(session) {
+    return session
+        ? `session ${session.id.slice(0, 8)}… — arrow keys to move`
+        : "arrow keys move once a session is open";
+  }
+
   global.DaedalusCaption = {
     DISTANCE_RAMP, LENS_COLORS,
     fingerprintHtml, analysisHtml, hardestHtml, fieldHtml, sanctuariesHtml, lensHtml, raceHtml,
+    mazeStats, sessionStatus,
   };
 })(window);
