@@ -2698,6 +2698,35 @@ class WebUiSmokeTest {
         assertLeftoverPluginManifestStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N159. Remaining leftover plugin empty copy stays.
+        // refreshPlugins remints leftover plugin empty copy.
+        // leftover plugin stay already forbids reminting
+        // leftover roster (N115). leftover plugin manifest
+        // stay already forbids reminting leftover manifest
+        // (N158). These stays must not be taught away: Hunt /
+        // Play / Fog / theory / Join leftover plugin empty
+        // copy stay — leftover empty roster you already
+        // loaded; Hunt through Play and Join-from-spectate
+        // still keep tour; Fog still keeps tour (N17);
+        // leftover Solve path stays as a theory route hint
+        // (N62); Join leftover ghost stays (N86). Must not
+        // null tour (N17).
+        assertLeftoverPluginEmptyCopyStay(html, "async function startTour", "function sameCell");
+        assertLeftoverPluginEmptyCopyStay(html, "async function play()", "async function join()");
+        assertLeftoverPluginEmptyCopyStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverPluginEmptyCopyStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverPluginEmptyCopyStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverPluginEmptyCopyStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverPluginEmptyCopyStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverPluginEmptyCopyStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverPluginEmptyCopyStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -4347,6 +4376,24 @@ class WebUiSmokeTest {
         assertThat(to).isGreaterThan(from);
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("p.manifest");
+        assertThat(body).doesNotContain("refreshPlugins");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover plugin empty copy stay (N159). leftover
+     * empty roster you already loaded. leftover plugin stay
+     * already forbids reminting leftover roster (N115).
+     * leftover plugin manifest stay already N158. Must not
+     * remint leftover plugin empty copy. Must not null tour.
+     */
+    private static void assertLeftoverPluginEmptyCopyStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("no external plugins loaded");
         assertThat(body).doesNotContain("refreshPlugins");
         assertThat(body).doesNotContain("state.tour = null");
     }
