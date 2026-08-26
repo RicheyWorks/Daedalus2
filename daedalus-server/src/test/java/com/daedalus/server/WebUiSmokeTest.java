@@ -2952,6 +2952,67 @@ class WebUiSmokeTest {
         assertLeftoverBraidStay(html, "async function join()", "async function move(");
         assertTourStay(html, "async function startFog()", "async function fogStep");
         assertThat(join).doesNotContain("state.ghost = null");
+        // N171–N173. Remaining leftover leftover picker-value
+        // family stays. leftover leftover picker stay already
+        // forbids reminting leftover leftover solver / leftover
+        // leftover lensH / leftover leftover rival / leftover
+        // leftover #lbGen (N122). leftover leftover #braid stay
+        // already N170. leftover leftover #rival options stay
+        // already N146. These stays must not be taught away:
+        // Hunt / Play / Fog / theory / Join leftover leftover
+        // solver stay — leftover leftover solver you already
+        // asked for; leftover leftover #lensH stay — leftover
+        // leftover heuristic you already asked for; leftover
+        // leftover rival stay — leftover leftover rival you
+        // already asked for; Hunt through Play and
+        // Join-from-spectate still keep tour; Fog still keeps
+        // tour (N17); leftover leftover Solve path stays as a
+        // theory route hint (N62); Join leftover leftover ghost
+        // stays (N86). Must not null tour (N17).
+        assertLeftoverSolverStay(html, "async function startTour", "function sameCell");
+        assertLeftoverSolverStay(html, "async function play()", "async function join()");
+        assertLeftoverSolverStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverSolverStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverSolverStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverSolverStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverSolverStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverSolverStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverSolverStay(html, "async function join()", "async function move(");
+        assertLeftoverLensHStay(html, "async function startTour", "function sameCell");
+        assertLeftoverLensHStay(html, "async function play()", "async function join()");
+        assertLeftoverLensHStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverLensHStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverLensHStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverLensHStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverLensHStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverLensHStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverLensHStay(html, "async function join()", "async function move(");
+        assertLeftoverRivalStay(html, "async function startTour", "function sameCell");
+        assertLeftoverRivalStay(html, "async function play()", "async function join()");
+        assertLeftoverRivalStay(html, "async function startFog()", "async function fogStep");
+        assertLeftoverRivalStay(html, "async function analyzeStructure",
+                "function paintAnalysisCaption");
+        assertLeftoverRivalStay(html, "async function identifyGenerator",
+                "function paintFingerprintCaption");
+        assertLeftoverRivalStay(html, "async function distanceHeatMap",
+                "function paintFieldCaption");
+        assertLeftoverRivalStay(html, "async function placeSanctuaries",
+                "function paintSanctuariesCaption");
+        assertLeftoverRivalStay(html, "async function heuristicLens",
+                "function paintLensCaption");
+        assertLeftoverRivalStay(html, "async function join()", "async function move(");
+        assertTourStay(html, "async function startFog()", "async function fogStep");
+        assertThat(join).doesNotContain("state.ghost = null");
         // N63. Theory writes left sibling theory armed. Leftover
         // heat reminted GET /distance-field after Analyze; leftover
         // cuts reminted GET /analysis after Field. Drop sibling
@@ -4823,6 +4884,61 @@ class WebUiSmokeTest {
         String body = html.substring(from, to);
         assertThat(body).doesNotContain("$(\"braid\").value =");
         assertThat(body).doesNotContain("applyRecipeToForm");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover leftover solver stay (N171). leftover leftover
+     * solver you already asked for. leftover leftover picker
+     * stay already forbids reminting leftover leftover solver
+     * (N122). leftover leftover #braid stay already N170.
+     * Must not remint leftover leftover solver. Must not null
+     * tour.
+     */
+    private static void assertLeftoverSolverStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"solver\").value =");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover leftover #lensH stay (N172). leftover leftover
+     * heuristic you already asked for. leftover leftover
+     * picker stay already forbids reminting leftover leftover
+     * #lensH (N122). leftover leftover solver stay already
+     * N171. Must not remint leftover leftover #lensH. Must
+     * not null tour.
+     */
+    private static void assertLeftoverLensHStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"lensH\").value =");
+        assertThat(body).doesNotContain("state.tour = null");
+    }
+
+    /**
+     * Leftover leftover rival stay (N173). leftover leftover
+     * rival you already asked for. leftover leftover picker
+     * stay already forbids reminting leftover leftover rival
+     * (N122). leftover leftover #lensH stay already N172.
+     * leftover leftover #rival options stay already N146.
+     * Must not remint leftover leftover rival. Must not null
+     * tour.
+     */
+    private static void assertLeftoverRivalStay(String html, String start, String end) {
+        int from = html.indexOf(start);
+        int to = html.indexOf(end, from + start.length());
+        assertThat(from).isGreaterThanOrEqualTo(0);
+        assertThat(to).isGreaterThan(from);
+        String body = html.substring(from, to);
+        assertThat(body).doesNotContain("$(\"rival\").value =");
         assertThat(body).doesNotContain("state.tour = null");
     }
 
