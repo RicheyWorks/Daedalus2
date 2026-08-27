@@ -102,6 +102,19 @@ class DesktopWorkTest {
     }
 
     @Test
+    void aTreeHardestRouteIsTheUniqueWalk() throws Exception {
+        var cached = work.generateJob("recursive-backtracker", 11, 11, 7L).call();
+        var hardest = work.hardestJob(cached.grid()).call();
+        assertThat(hardest.exact()).isTrue();
+        assertThat(hardest.path().getFirst()).isEqualTo(cached.grid().start());
+        assertThat(hardest.path().getLast()).isEqualTo(cached.grid().goal());
+        var shortest = work.solveJob("bfs", cached.grid(), cached.metadata().id()).call();
+        assertThat(hardest.path())
+                .as("a perfect maze has one simple start-to-goal walk")
+                .isEqualTo(shortest.path());
+    }
+
+    @Test
     void aTreeHasOneChokepoint() throws Exception {
         var cached = work.generateJob("recursive-backtracker", 11, 11, 7L).call();
         DesktopPaint.Cuts cuts = work.cutsJob(cached.grid()).call();

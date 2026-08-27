@@ -8,6 +8,7 @@ import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
 import com.daedalus.solver.SolverBudgetExceededException;
 import com.daedalus.engine.Braider;
+import com.daedalus.theory.LongestPath;
 import com.daedalus.theory.MazeFlow;
 import com.daedalus.theory.MazeMetrics;
 import org.springframework.stereotype.Component;
@@ -91,6 +92,11 @@ public class DesktopWork {
             MazeFlow.MinCut cut = MazeFlow.minCutStartToGoal(grid);
             return new DesktopPaint.Cuts(cut.cutSize(), cut.cutEdges(), Braider.deadEnds(grid));
         };
+    }
+
+    /** Longest simple start→goal walk — same gold route as the web Hardest button. */
+    public Callable<LongestPath.LongPath> hardestJob(MazeGrid grid) {
+        return () -> LongestPath.hardestRoute(grid);
     }
 
     /** Solve a maze off the FX thread. */

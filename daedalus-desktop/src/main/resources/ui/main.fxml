@@ -38,7 +38,7 @@
                 <Insets top="6" right="8" bottom="6" left="8"/>
             </padding>
 
-            <ComboBox fx:id="generatorChoice" prefWidth="150" maxWidth="150">
+            <ComboBox fx:id="generatorChoice" prefWidth="132" maxWidth="132">
                 <tooltip><Tooltip text="Generator"/></tooltip>
             </ComboBox>
 
@@ -60,7 +60,7 @@
 
             <Separator orientation="VERTICAL"/>
 
-            <TextField fx:id="seedField" prefWidth="80" promptText="seed">
+            <TextField fx:id="seedField" prefWidth="68" promptText="seed">
                 <tooltip><Tooltip text="Seed (blank = random)"/></tooltip>
             </TextField>
 
@@ -71,7 +71,7 @@
 
             <Separator orientation="VERTICAL"/>
 
-            <ComboBox fx:id="solverChoice" prefWidth="120" maxWidth="120">
+            <ComboBox fx:id="solverChoice" prefWidth="100" maxWidth="100">
                 <tooltip><Tooltip text="Solver"/></tooltip>
             </ComboBox>
             <Button fx:id="solveButton" text="Solve" onAction="#onSolve"/>
@@ -84,6 +84,9 @@
             </CheckBox>
             <CheckBox fx:id="cutsToggle" text="Cuts" onAction="#onCuts">
                 <tooltip><Tooltip text="Min-cut chokepoints and dead ends"/></tooltip>
+            </CheckBox>
+            <CheckBox fx:id="hardestToggle" text="Long" onAction="#onHardest">
+                <tooltip><Tooltip text="Hardest simple route"/></tooltip>
             </CheckBox>
         </HBox>
     </top>
@@ -139,6 +142,11 @@
                 <Label fx:id="legendChoke" text="chokepoint" managed="false" visible="false">
                     <graphic>
                         <Rectangle width="10" height="10" fill="#c084fc" arcWidth="3" arcHeight="3"/>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendHardest" text="hardest" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="10" height="10" fill="#f2c94c" arcWidth="3" arcHeight="3"/>
                     </graphic>
                 </Label>
             </HBox>

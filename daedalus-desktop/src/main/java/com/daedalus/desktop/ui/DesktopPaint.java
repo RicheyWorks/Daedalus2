@@ -81,6 +81,9 @@ public final class DesktopPaint {
     public static final String CHOKE = "#c084fc";
     /** Dead-end speck — same ice as {@code draw.js}. */
     public static final String DEAD_END = "#9ecbff";
+    /** Hardest simple route — same gold as {@code draw.js}. */
+    public static final String HARDEST = "#f2c94c";
+    public static final double HARDEST_ALPHA = 0.75;
 
     private DesktopPaint() {
     }
@@ -326,6 +329,12 @@ public final class DesktopPaint {
 
     public static List<String> legendKeys(boolean maze, boolean path, boolean walk,
                                           boolean hotspot, Fog fog, boolean choke) {
+        return legendKeys(maze, path, walk, hotspot, fog, choke, false);
+    }
+
+    public static List<String> legendKeys(boolean maze, boolean path, boolean walk,
+                                          boolean hotspot, Fog fog, boolean choke,
+                                          boolean hardest) {
         if (!maze) {
             return List.of();
         }
@@ -347,6 +356,9 @@ public final class DesktopPaint {
         }
         if (choke && fog == null) {
             keys.add("choke");
+        }
+        if (hardest && fog == null) {
+            keys.add("hardest");
         }
         if (fog != null) {
             keys.add("fog");

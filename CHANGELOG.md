@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Desktop Long paints the hardest route.** The web already gold-washes
+  the longest simple walk; desktop had only the solver ribbon. Same
+  `#f2c94c` at 0.75, so a braid shows the detour and a tree shows that
+  there is only one path. Combos recede again so Long still fits the
+  960px well.
+
 - **Desktop cuts paint the min-cut.** The web already marks chokepoints
   and dead ends; desktop had only the plan. Same purple seal on the
   pinch, same ice specks in cul-de-sacs, so a perfect maze shows the

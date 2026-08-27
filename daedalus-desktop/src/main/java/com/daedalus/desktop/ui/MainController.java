@@ -11,6 +11,7 @@ import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
+import com.daedalus.theory.LongestPath;
 import javafx.animation.AnimationTimer;
 import javafx.concurrent.Task;
 import com.daedalus.solver.MazeSolver;
@@ -110,6 +111,7 @@ public class MainController {
     @FXML private CheckBox fogToggle;
     @FXML private CheckBox heatToggle;
     @FXML private CheckBox cutsToggle;
+    @FXML private CheckBox hardestToggle;
     @FXML private HBox exportBox;
     @FXML private Pane canvasParent;
     @FXML private Canvas canvas;
@@ -121,6 +123,7 @@ public class MainController {
     @FXML private Label legendHotspot;
     @FXML private Label legendFog;
     @FXML private Label legendChoke;
+    @FXML private Label legendHardest;
     @FXML private Label statusLabel;
 
     /** Last successfully-generated maze; held so resize events can re-render it. */
@@ -148,6 +151,9 @@ public class MainController {
 
     /** Min-cut passages — cleared on Generate and Fog. */
     private DesktopPaint.Cuts currentCuts;
+
+    /** Hardest simple route — cleared on Generate and Fog. */
+    private LongestPath.LongPath currentHardest;
 
     public MainController(GeneratorRegistry generatorRegistry,
                           SolverRegistry solverRegistry,
@@ -432,9 +438,56 @@ public class MainController {
     private void clearTheory() {
         clearField();
         currentCuts = null;
+        currentHardest = null;
         if (cutsToggle != null) {
             cutsToggle.setSelected(false);
         }
+        if (hardestToggle != null) {
+            hardestToggle.setSelected(false);
+        }
+    }
+
+    /** Wired from the FXML Long checkbox. Same gold walk as the web Hardest button. */
+    @FXML
+    public void onHardest() {
+        if (hardestToggle == null || !hardestToggle.isSelected()) {
+            currentHardest = null;
+            redraw();
+            return;
+        }
+        if (current == null) {
+            hardestToggle.setSelected(false);
+            statusLabel.setText("Generate a maze first, then check Long.");
+            return;
+        }
+        if (fogOn()) {
+            hardestToggle.setSelected(false);
+            statusLabel.setText("Fog hides the hardest route — uncheck Fog to search.");
+            return;
+        }
+        var grid = current.grid();
+        Task<LongestPath.LongPath> task = new Task<>() {
+            @Override
+            protected LongestPath.LongPath call() throws Exception {
+                return work.hardestJob(grid).call();
+            }
+        };
+        task.setOnSucceeded(e -> {
+            currentHardest = task.getValue();
+            int n = currentHardest == null || currentHardest.path() == null
+                    ? 0 : currentHardest.path().size();
+            String bound = currentHardest != null && currentHardest.exact()
+                    ? "exact" : "lower bound";
+            statusLabel.setText("Hardest route — " + n + " cells (" + bound + ").");
+            redraw();
+            canvas.requestFocus();
+            busy(false);
+        });
+        task.setOnFailed(e -> {
+            hardestToggle.setSelected(false);
+            fail(DesktopWork.describeFailure("Hardest", task.getException()));
+        });
+        run(task, "Searching for the hardest route…");
     }
 
     /** Wired from the FXML Cuts checkbox. Same min-cut overlay as the web Analyze button. */
@@ -851,6 +904,17 @@ public class MainController {
             }
         }
 
+        if (currentHardest != null && currentHardest.path() != null
+                && !currentHardest.path().isEmpty()) {
+            g.setGlobalAlpha(DesktopPaint.HARDEST_ALPHA);
+            g.setFill(Color.web(DesktopPaint.HARDEST));
+            for (DesktopPaint.TileRect tile : DesktopPaint.walkOverlay(currentHardest.path())) {
+                g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
+                        layout.w(tile.tileCol()), layout.h(tile.tileRow()));
+            }
+            g.setGlobalAlpha(1);
+        }
+
         // ---- 3) start / goal discs (floor + marker, same as the web painter) ----
         if (theme != null) {
             paintDisc(g, DesktopPaint.endpointMarker(layout, current.metadata().start()),
@@ -882,7 +946,9 @@ public class MainController {
                 current != null && current.hotspots() != null && !current.hotspots().isEmpty(),
                 fog,
                 currentCuts != null && currentCuts.chokepoints() != null
-                        && !currentCuts.chokepoints().isEmpty());
+                        && !currentCuts.chokepoints().isEmpty(),
+                currentHardest != null && currentHardest.path() != null
+                        && !currentHardest.path().isEmpty());
         legendBox.setVisible(!keys.isEmpty());
         if (exportBox != null) {
             exportBox.setVisible(current != null);
@@ -894,6 +960,7 @@ public class MainController {
         showLegendKey(legendHotspot, keys.contains("hotspot"));
         showLegendKey(legendFog, keys.contains("fog"));
         showLegendKey(legendChoke, keys.contains("choke"));
+        showLegendKey(legendHardest, keys.contains("hardest"));
     }
 
     private boolean fogOn() {
