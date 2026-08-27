@@ -51,8 +51,10 @@ public final class DesktopPaint {
     };
     public static final Point EMPTY_MARK_START = new Point(0, 0);
     public static final Point EMPTY_MARK_GOAL = new Point(2, 4);
-    public static final double EMPTY_MARK_BUDGET_W = 132;
-    public static final double EMPTY_MARK_BUDGET_H = 92;
+    public static final double EMPTY_MARK_BUDGET_W = 200;
+    public static final double EMPTY_MARK_BUDGET_H = 140;
+    /** Idle mark sits above the wordmark — same lift as {@code draw.js} paintEmpty. */
+    public static final double EMPTY_MARK_LIFT = 48;
     /** Overlay legend sits on the well — same reserve as {@code draw.js}. */
     public static final double LEGEND_RESERVE = 40;
     /** PNG sits on the well — same reserve as {@code draw.js} so the first row is not under it. */
@@ -1221,7 +1223,7 @@ public final class DesktopPaint {
                 fitted.cellSize(),
                 fitted.wall(),
                 Math.floor(canvasW / 2.0 - drawW / 2.0),
-                Math.floor(canvasH / 2.0 - 28.0 - drawH / 2.0),
+                Math.floor(canvasH / 2.0 - EMPTY_MARK_LIFT - drawH / 2.0),
                 fitted.tileRows(),
                 fitted.tileCols(),
                 fitted.offX(),

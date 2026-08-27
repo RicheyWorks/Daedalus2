@@ -1665,15 +1665,25 @@ public class MainController {
         if (current == null) {
             g.setFill(theme != null ? theme.wall() : Color.web("#0b0f14"));
             g.fillRect(0, 0, w, h);
+            double cx = w / 2.0;
+            double cy = h / 2.0;
+            var glow = new javafx.scene.paint.RadialGradient(
+                    0, 0, cx, cy - 36, Math.min(w, h) * 0.42, false,
+                    javafx.scene.paint.CycleMethod.NO_CYCLE,
+                    new javafx.scene.paint.Stop(0, Color.web("#3ee08f", 0.10)),
+                    new javafx.scene.paint.Stop(0.55, Color.web("#7eb6ff", 0.04)),
+                    new javafx.scene.paint.Stop(1, Color.web("#000000", 0)));
+            g.setFill(glow);
+            g.fillRect(0, 0, w, h);
             DesktopPaint.Layout mark = DesktopPaint.emptyMarkLayout(w, h);
             if (mark != null && theme != null) {
-                g.setGlobalAlpha(0.38);
+                g.setGlobalAlpha(0.42);
                 g.setFill(theme.passage());
                 for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkFloors()) {
                     g.fillRect(mark.x(tile.tileCol()), mark.y(tile.tileRow()),
                             mark.w(tile.tileCol()), mark.h(tile.tileRow()));
                 }
-                g.setGlobalAlpha(0.7);
+                g.setGlobalAlpha(0.78);
                 paintDisc(g, DesktopPaint.endpointMarker(mark, DesktopPaint.EMPTY_MARK_START),
                         theme.start());
                 paintDisc(g, DesktopPaint.endpointMarker(mark, DesktopPaint.EMPTY_MARK_GOAL),
@@ -1681,16 +1691,16 @@ public class MainController {
                 g.setGlobalAlpha(1);
             }
             g.setTextAlign(TextAlignment.CENTER);
-            g.setFill(Color.web("#9aa3ad"));
-            g.setFont(Font.font("Segoe UI", FontWeight.SEMI_BOLD, 12));
-            g.fillText(DesktopPaint.EMPTY_WORDMARK, w / 2, h / 2 + 42);
-            g.setFill(Color.web("#6b7580"));
-            g.setFont(Font.font("Segoe UI", FontWeight.SEMI_BOLD, 13));
-            g.fillText(DesktopPaint.EMPTY_TITLE, w / 2, h / 2 + 66);
-            g.setFill(Color.web("#4a5560"));
+            g.setFill(Color.web("#e8eef4"));
+            g.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 28));
+            g.fillText(DesktopPaint.EMPTY_WORDMARK, cx, cy + 48);
+            g.setFill(Color.web("#7d8894"));
+            g.setFont(Font.font("Bahnschrift", FontWeight.SEMI_BOLD, 13));
+            g.fillText(DesktopPaint.EMPTY_TITLE, cx, cy + 78);
+            g.setFill(Color.web("#5a6570"));
             g.setFont(Font.font("Segoe UI", 13));
-            g.fillText(DesktopPaint.EMPTY_DETAIL, w / 2, h / 2 + 86);
-            g.fillText(DesktopPaint.EMPTY_HINT, w / 2, h / 2 + 104);
+            g.fillText(DesktopPaint.EMPTY_DETAIL, cx, cy + 98);
+            g.fillText(DesktopPaint.EMPTY_HINT, cx, cy + 116);
             syncLegend();
             return;
         }

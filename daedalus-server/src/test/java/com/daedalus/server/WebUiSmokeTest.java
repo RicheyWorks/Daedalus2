@@ -57,6 +57,7 @@ class WebUiSmokeTest {
                 .contains("id=\"compareBox\"").contains("id=\"genInfo\"").contains("id=\"asciiOut\"")
                 .contains("class=\"exports\"").contains("EXPORT_RESERVE")
                 .contains("Pick a generator and press Generate")
+                .contains("Bahnschrift")
                 .contains("data-key=\"path\"").contains("data-key=\"floor\"")
                 .contains("data-key=\"fog\"")
                 .contains("Authorization").contains("text/plain").contains("id=\"ascii\"")

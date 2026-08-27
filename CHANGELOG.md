@@ -40,8 +40,10 @@ under the `_migration/` portfolios.
   bobbing torch hand fills the lower-right so the view is held, not
   floating. The start gate leads with a hero-sized DAEDALUS over a
   thin-wall lattice, Enter the well as the primary CTA, and the other
-  hosts below — brand first, not a seven-card grid. `run-daedalus.ps1`
-  launches those hosts from the repo root.
+  hosts below — brand first, not a seven-card grid. The empty well on
+  web and desktop matches that brand: larger idle maze, soft mint glow,
+  and a hero DAEDALUS wordmark instead of a 12px caption.
+  `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
   re-solves quietly on each living / traffic tick; desktop dropped the
@@ -225,7 +227,9 @@ under the `_migration/` portfolios.
 - **The empty well is a mark, not leftover stub text.** A faint thin-wall
   maze sits in the void with the same Generate / Solve copy. The legend
   stays hidden until a maze is on the board. Desktop paints the same
-  invitation instead of a blank canvas.
+  invitation instead of a blank canvas. The idle mark and DAEDALUS
+  wordmark now match the start-gate brand (larger maze, soft glow,
+  hero lettering) on both surfaces.
 
 - **Right-rail captions wrap before they clip.** The rail keeps 240px,
   folds under the maze at 1440px, and the lab / tournament / theory

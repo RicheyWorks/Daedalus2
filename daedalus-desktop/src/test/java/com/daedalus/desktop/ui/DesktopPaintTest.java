@@ -593,12 +593,15 @@ class DesktopPaintTest {
         DesktopPaint.Layout mark = DesktopPaint.emptyMarkLayout(400, 300);
         assertThat(mark).isNotNull();
         assertThat(mark.cellSize())
-                .as("budget is 132×92 so a large window does not inflate the mark")
-                .isEqualTo(20.0);
+                .as("budget is 200×140 so a large window does not inflate the mark")
+                .isEqualTo(30.0);
+        assertThat(DesktopPaint.EMPTY_MARK_BUDGET_W).isEqualTo(200.0);
+        assertThat(DesktopPaint.EMPTY_MARK_BUDGET_H).isEqualTo(140.0);
+        assertThat(DesktopPaint.EMPTY_MARK_LIFT).isEqualTo(48.0);
         assertThat(mark.offsetX())
-                .as("centered on the canvas, not left-aligned in the 132px budget")
-                .isEqualTo(135.0);
-        assertThat(mark.offsetY()).isEqualTo(82.0);
+                .as("centered on the canvas, not left-aligned in the budget")
+                .isEqualTo(101.0);
+        assertThat(mark.offsetY()).isEqualTo(41.0);
         assertThat(DesktopPaint.endpointMarker(mark, DesktopPaint.EMPTY_MARK_START)).isNotNull();
         assertThat(DesktopPaint.endpointMarker(mark, DesktopPaint.EMPTY_MARK_GOAL)).isNotNull();
         assertThat(DesktopPaint.emptyMarkLayout(0, 300)).isNull();

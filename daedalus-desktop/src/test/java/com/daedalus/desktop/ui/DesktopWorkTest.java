@@ -314,8 +314,7 @@ class DesktopWorkTest {
     void walkingUnderTrafficBloomsAHotspotOnTheCachedMaze() throws Exception {
         TrafficService traffic = new TrafficService(generation,
                 new GameSessionService(event -> { }, new LeaderboardService(null, false)),
-                event -> { }, 4.0, 0.80, 200.0, Duration.ofMillis(25), 2, 8,
-                new SimpleMeterRegistry());
+                event -> { }, 4.0, 0.80, 200.0, Duration.ofMillis(25), 2, 8);
         work = new DesktopWork(generation, solving, fallbackLiving(), traffic);
         var cached = work.generateJob("recursive-backtracker", 11, 11, 7L).call();
         var id = cached.metadata().id();

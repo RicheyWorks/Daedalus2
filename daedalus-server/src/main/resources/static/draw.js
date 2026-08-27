@@ -466,12 +466,12 @@
 
   function paintIdleMark(g, cx, cy) {
     const tiles = IDLE_TILES;
-    const geom = computeGeometry(tiles, 132, 92, 1);
+    const geom = computeGeometry(tiles, 200, 140, 1);
     const w = geom.offX[tiles[0].length], h = geom.offY[tiles.length];
     const ox = Math.round(cx - w / 2), oy = Math.round(cy - h / 2);
     g.save();
     g.translate(ox, oy);
-    g.globalAlpha = 0.38;
+    g.globalAlpha = 0.42;
     g.fillStyle = COLORS.floor;
     for (let r = 0; r < tiles.length; r++) {
       for (let c = 0; c < tiles[r].length; c++) {
@@ -480,7 +480,7 @@
                    geom.offX[c + 1] - geom.offX[c], geom.offY[r + 1] - geom.offY[r]);
       }
     }
-    g.globalAlpha = 0.7;
+    g.globalAlpha = 0.78;
     marker(g, geom, {row: 0, col: 0}, COLORS.start, 0.34);
     marker(g, geom, {row: 2, col: 4}, COLORS.goal, 0.34);
     g.restore();
@@ -502,17 +502,28 @@
     g.imageSmoothingEnabled = false;
     g.fillStyle = COLORS.wall;
     g.fillRect(0, 0, cssW, cssH);
-    paintIdleMark(g, cssW / 2, cssH / 2 - 28);
+    const cx = cssW / 2;
+    const cy = cssH / 2;
+    const glow = g.createRadialGradient(cx, cy - 36, 12, cx, cy - 36, Math.min(cssW, cssH) * 0.42);
+    glow.addColorStop(0, "rgba(62, 224, 143, 0.10)");
+    glow.addColorStop(0.55, "rgba(126, 182, 255, 0.04)");
+    glow.addColorStop(1, "rgba(0, 0, 0, 0)");
+    g.fillStyle = glow;
+    g.fillRect(0, 0, cssW, cssH);
+    paintIdleMark(g, cx, cy - 48);
     g.textAlign = "center";
-    g.fillStyle = "#9aa3ad";
-    g.font = "600 12px system-ui, sans-serif";
-    g.fillText("DAEDALUS", cssW / 2, cssH / 2 + 42);
-    g.fillStyle = "#6b7580";
-    g.font = "13px system-ui, sans-serif";
-    g.fillText("Pick a generator and press Generate", cssW / 2, cssH / 2 + 66);
-    g.fillStyle = "#4a5560";
-    g.fillText("then Solve to watch a route unfold", cssW / 2, cssH / 2 + 86);
-    g.fillText("or open a session and play", cssW / 2, cssH / 2 + 104);
+    g.textBaseline = "alphabetic";
+    g.fillStyle = "#e8eef4";
+    g.font = "700 28px Bahnschrift, \"Avenir Next Condensed\", \"Trebuchet MS\", sans-serif";
+    g.letterSpacing = "0.22em";
+    g.fillText("DAEDALUS", cx, cy + 48);
+    g.letterSpacing = "0";
+    g.fillStyle = "#7d8894";
+    g.font = "13px Bahnschrift, \"Segoe UI\", sans-serif";
+    g.fillText("Pick a generator and press Generate", cx, cy + 78);
+    g.fillStyle = "#5a6570";
+    g.fillText("then Solve to watch a route unfold", cx, cy + 98);
+    g.fillText("or open a session and play", cx, cy + 116);
   }
 
   function pathRevealMs(n) {
