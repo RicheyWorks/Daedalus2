@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": "node .cursor/hooks/stay-on-task.mjs",
+        "timeout": 5
+      }
+    ],
+    "postToolUseFailure": [
+      {
+        "command": "node .cursor/hooks/stay-on-task.mjs",
+        "timeout": 5
+      }
+    ],
+    "afterShellExecution": [
+      {
+        "command": "node .cursor/hooks/stay-on-task.mjs",
+        "timeout": 5
+      }
+    ],
+    "stop": [
+      {
+        "command": "node .cursor/hooks/stay-on-task.mjs",
+        "timeout": 5,
+        "loop_limit": 3
+      }
+    ]
+  }
+}

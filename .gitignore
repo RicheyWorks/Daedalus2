@@ -9,6 +9,9 @@ target/
 hs_err_pid*
 replay_pid*
 
+# Stay-on-task hook counters (not source)
+.cursor/hooks/state/
+
 # IDE
 .idea/
 *.iml

@@ -1,0 +1,14 @@
+---
+description: Stay on task; restart after errors; pivot after a repeated hang
+alwaysApply: true
+---
+
+# Stay on task
+
+A Cursor goal is active: finish the current piece of work. Do not idle after a failure.
+
+- If a tool, test, or turn errors out, **restart that same task immediately**.
+- The project hook records the failure signature from `postToolUseFailure` and from a non-zero shell exit. Treat a `STAY-ON-TASK` note as authoritative.
+- First hit: retry. Second hit on the same error: change the method — do not rerun the same command.
+- Third hit on the same hang: **stop that approach** and move on to the next remaining task. Leave one line about what blocked you.
+- A `stop` follow-up is a restart, not a new conversation. Continue the goal.
