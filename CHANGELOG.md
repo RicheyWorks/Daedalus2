@@ -32,8 +32,11 @@ under the `_migration/` portfolios.
   flat box. A torch favors the wall you face, and a top-right automap
   paints only stood-on stone so the layout is earned, not implied.
   Xbox look uses the same signs as the mouse so stick-right turns
-  right. A start gate lists the well, daily, campaign, living,
-  theory, desktop, and first-person — 3D is one card. `run-daedalus.ps1`
+  right. A scrolling dusk sky replaces the flat clear color, and a
+  bottom status strip names the nearest visible place, facing, and
+  stood count beside a mood face — Doom chrome, not a blank HUD. A
+  start gate lists the well, daily, campaign, living, theory,
+  desktop, and first-person — 3D is one card. `run-daedalus.ps1`
   launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

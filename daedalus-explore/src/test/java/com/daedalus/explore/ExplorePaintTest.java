@@ -133,6 +133,67 @@ class ExplorePaintTest {
         assertThat(boot[0]).isLessThan(high[0]);
     }
 
+    @Test
+    void skyAndFaceRastersFillTheAtlas() {
+        byte[] sky = ExplorePaint.skyRgba();
+        byte[] calm = ExplorePaint.faceRgba(0);
+        byte[] grim = ExplorePaint.faceRgba(2);
+        assertThat(sky).hasSize(ExplorePaint.TEX * ExplorePaint.TEX * 4);
+        assertThat(calm).hasSize(sky.length);
+        assertThat(Byte.toUnsignedInt(sky[0])).isNotEqualTo(0);
+        int mouth = (44 * ExplorePaint.TEX + 28) * 4;
+        assertThat(Byte.toUnsignedInt(grim[mouth]))
+                .isLessThan(Byte.toUnsignedInt(calm[mouth]));
+    }
+
+    @Test
+    void skyUvScrollsWithYaw() {
+        float[] a = new float[2];
+        float[] b = new float[2];
+        ExplorePaint.skyUv(0, 0, 0.25f, 0.5f, a);
+        ExplorePaint.skyUv(Math.PI, 0, 0.25f, 0.5f, b);
+        assertThat(b[0]).isGreaterThan(a[0]);
+        ExplorePaint.skyUv(0, 0, 0, 0, null);
+        ExplorePaint.skyUv(0, 0, 0, 0, new float[1]);
+    }
+
+    @Test
+    void statusNamesTheNearestVisibleMark() {
+        ExploreFog fog = new ExploreFog();
+        fog.stand(new Point(0, 0));
+        ExploreBody body = ExploreBody.atCell(new Point(0, 0));
+        ExplorePaint.Status hall = ExplorePaint.status(fog, body, List.of());
+        assertThat(hall.place()).isEqualTo("HALL");
+        assertThat(hall.facing()).isEqualTo("N");
+        assertThat(ExplorePaint.caption(hall)).contains("HALL").contains("N");
+        List<ExploreMarker> marks = List.of(
+                new ExploreMarker("door", new Point(0, 0), 0, "ENTRANCE"),
+                new ExploreMarker("boss", new Point(0, 1), 0, "BOSS"));
+        ExplorePaint.Status near = ExplorePaint.status(fog, body, marks);
+        assertThat(near.place()).isEqualTo("ENTRANCE");
+        assertThat(near.marks()).isGreaterThanOrEqualTo(1);
+        assertThat(ExplorePaint.status(null, null, null).place()).isEqualTo("HALL");
+        assertThat(ExplorePaint.caption(null)).isEqualTo("HALL");
+    }
+
+    @Test
+    void facingCompassFollowsYaw() {
+        assertThat(ExplorePaint.facing(0)).isEqualTo("N");
+        assertThat(ExplorePaint.facing(Math.PI / 2)).isEqualTo("E");
+        assertThat(ExplorePaint.facing(Math.PI)).isEqualTo("S");
+        assertThat(ExplorePaint.facing(-Math.PI / 2)).isEqualTo("W");
+    }
+
+    @Test
+    void glyphsPaintLettersUsedOnTheStrip() {
+        assertThat(ExplorePaint.glyphDot('H', 0, 0)).isTrue();
+        assertThat(ExplorePaint.glyphDot('A', 2, 0)).isTrue();
+        assertThat(ExplorePaint.glyphDot(' ', 0, 0)).isFalse();
+        assertThat(ExplorePaint.glyphDot('H', -1, 0)).isFalse();
+        assertThat(ExplorePaint.glyphDot('H', 0, 9)).isFalse();
+        assertThat(ExplorePaint.glyphDot('1', 2, 0)).isTrue();
+    }
+
     private static ExploreMesh.Triangle nsWall(double x, double y, double z) {
         return new ExploreMesh.Triangle(x, y, z, x + 1, y, z, x + 1, y + 0.4, z,
                 ExploreMesh.Face.WALL, 2, 3);

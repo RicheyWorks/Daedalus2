@@ -181,6 +181,12 @@ public final class ExploreHost {
         int wallTex = upload(ExplorePaint.brickRgba());
         int floorTex = upload(ExplorePaint.floorRgba());
         int ceilTex = upload(ExplorePaint.ceilingRgba());
+        int skyTex = upload(ExplorePaint.skyRgba());
+        int[] faceTex = {
+                upload(ExplorePaint.faceRgba(0)),
+                upload(ExplorePaint.faceRgba(1)),
+                upload(ExplorePaint.faceRgba(2))
+        };
 
         Optional<XrRuntime> xr = XrRuntimes.firstPresent(ExploreHost.class.getClassLoader());
         xr.ifPresent(runtime -> runtime.attach(world));
@@ -224,7 +230,7 @@ public final class ExploreHost {
             jamDown = j;
             harden = glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS;
 
-            draw(window, world, wallTex, floorTex, ceilTex);
+            draw(window, world, wallTex, floorTex, ceilTex, skyTex, faceTex);
             xr.ifPresent(runtime -> runtime.endFrame(frame));
             glfwSwapBuffers(window);
             if (smoke && ++frames >= 3) {
@@ -298,28 +304,31 @@ public final class ExploreHost {
     }
 
     private static void draw(long window, ExploreWorld world, int wallTex, int floorTex,
-                             int ceilTex) {
+                             int ceilTex, int skyTex, int[] faceTex) {
         int width;
         int height;
+        double aspect;
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer w = stack.mallocInt(1);
             IntBuffer h = stack.mallocInt(1);
             glfwGetWindowSize(window, w, h);
             width = Math.max(1, w.get(0));
             height = Math.max(1, h.get(0));
+            aspect = width / (double) height;
             glViewport(0, 0, width, height);
-            glMatrixMode(GL_PROJECTION);
-            glLoadIdentity();
-            double aspect = width / (double) height;
-            glFrustum(-0.12 * aspect, 0.12 * aspect, -0.12, 0.12, 0.08, 200);
-            glMatrixMode(GL_MODELVIEW);
-            glLoadIdentity();
-            ExploreBody body = world.body();
-            glRotatef((float) Math.toDegrees(-body.pitch()), 1, 0, 0);
-            glRotatef((float) Math.toDegrees(-body.yaw()), 0, 1, 0);
-            glTranslatef((float) -body.x(), (float) -ExploreBody.EYE_Y, (float) -body.z());
         }
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        sky(world.body(), skyTex, aspect);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glFrustum(-0.12 * aspect, 0.12 * aspect, -0.12, 0.12, 0.08, 200);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        ExploreBody body = world.body();
+        glRotatef((float) Math.toDegrees(-body.pitch()), 1, 0, 0);
+        glRotatef((float) Math.toDegrees(-body.yaw()), 0, 1, 0);
+        glTranslatef((float) -body.x(), (float) -ExploreBody.EYE_Y, (float) -body.z());
+        glEnable(GL_DEPTH_TEST);
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_FOG);
         float[] rgb = new float[3];
@@ -342,7 +351,41 @@ public final class ExploreHost {
                     ExploreMesh.worldZ(marker.cell().row()));
         }
         glEnd();
-        hud(width, height, world);
+        hud(aspect, world, faceTex);
+    }
+
+    private static void sky(ExploreBody body, int skyTex, double aspect) {
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_FOG);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(-aspect, aspect, -1, 1, -1, 1);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, skyTex);
+        glColor3f(1f, 1f, 1f);
+        float span = (float) (1.15 * aspect);
+        float[] bl = new float[2];
+        float[] br = new float[2];
+        float[] tr = new float[2];
+        float[] tl = new float[2];
+        ExplorePaint.skyUv(body.yaw(), body.pitch(), 0, 0.85f, bl);
+        ExplorePaint.skyUv(body.yaw(), body.pitch(), span, 0.85f, br);
+        ExplorePaint.skyUv(body.yaw(), body.pitch(), span, 0.15f, tr);
+        ExplorePaint.skyUv(body.yaw(), body.pitch(), 0, 0.15f, tl);
+        glBegin(GL_QUADS);
+        glTexCoord2f(bl[0], bl[1]);
+        glVertex2f((float) -aspect, -1f);
+        glTexCoord2f(br[0], br[1]);
+        glVertex2f((float) aspect, -1f);
+        glTexCoord2f(tr[0], tr[1]);
+        glVertex2f((float) aspect, 1f);
+        glTexCoord2f(tl[0], tl[1]);
+        glVertex2f((float) -aspect, 1f);
+        glEnd();
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glDisable(GL_TEXTURE_2D);
     }
 
     private static void faces(ExploreWorld world, ExploreMesh.Face face, int tex,
@@ -370,15 +413,15 @@ public final class ExploreHost {
         glEnd();
     }
 
-    private static void hud(int width, int height, ExploreWorld world) {
+    private static void hud(double aspect, ExploreWorld world, int[] faceTex) {
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_FOG);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        double aspect = width / (double) height;
         glOrtho(-aspect, aspect, -1, 1, -1, 1);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
+        status(aspect, world, faceTex);
         glColor3f(0.92f, 0.84f, 0.28f);
         glBegin(GL_LINES);
         glVertex2f(-0.03f, 0);
@@ -389,6 +432,71 @@ public final class ExploreHost {
         automap(aspect, world);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_FOG);
+    }
+
+    private static void status(double aspect, ExploreWorld world, int[] faceTex) {
+        ExplorePaint.Status line = ExplorePaint.status(
+                world.fog(), world.body(), world.markers());
+        float bot = -1f;
+        float top = bot + ExplorePaint.STATUS_H;
+        glColor3f(0.12f, 0.08f, 0.06f);
+        fill(-aspect, bot, aspect, top);
+        glColor3f(0.36f, 0.22f, 0.12f);
+        fill(-aspect, top - 0.012, aspect, top);
+        float faceLeft = (float) (-aspect + 0.04);
+        float faceRight = faceLeft + 0.22f;
+        float faceBot = bot + 0.03f;
+        float faceTop = top - 0.03f;
+        int mood = Math.max(0, Math.min(faceTex.length - 1, line.mood()));
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, faceTex[mood]);
+        glColor3f(1f, 1f, 1f);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0, 1);
+        glVertex2f(faceLeft, faceBot);
+        glTexCoord2f(1, 1);
+        glVertex2f(faceRight, faceBot);
+        glTexCoord2f(1, 0);
+        glVertex2f(faceRight, faceTop);
+        glTexCoord2f(0, 0);
+        glVertex2f(faceLeft, faceTop);
+        glEnd();
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glDisable(GL_TEXTURE_2D);
+        paintCaption(ExplorePaint.caption(line), faceRight + 0.04f, bot + 0.09f);
+    }
+
+    private static void paintCaption(String text, float x0, float y0) {
+        if (text == null || text.isEmpty()) {
+            return;
+        }
+        float cell = 0.022f;
+        float gap = 0.008f;
+        float x = x0;
+        glBegin(GL_QUADS);
+        for (int i = 0; i < text.length(); i++) {
+            char ch = text.charAt(i);
+            if (ch == ' ') {
+                x += (ExplorePaint.GLYPH_W + 1) * cell + gap;
+                continue;
+            }
+            for (int gy = 0; gy < ExplorePaint.GLYPH_H; gy++) {
+                for (int gx = 0; gx < ExplorePaint.GLYPH_W; gx++) {
+                    if (!ExplorePaint.glyphDot(ch, gx, gy)) {
+                        continue;
+                    }
+                    float px = x + gx * cell;
+                    float py = y0 + (ExplorePaint.GLYPH_H - 1 - gy) * cell;
+                    glColor3f(0.94f, 0.78f, 0.32f);
+                    glVertex2f(px, py);
+                    glVertex2f(px + cell, py);
+                    glVertex2f(px + cell, py + cell);
+                    glVertex2f(px, py + cell);
+                }
+            }
+            x += (ExplorePaint.GLYPH_W + 1) * cell + gap;
+        }
+        glEnd();
     }
 
     private static void automap(double aspect, ExploreWorld world) {

@@ -2,6 +2,7 @@
 
 package com.daedalus.explore;
 
+import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
 
 import java.util.ArrayList;
@@ -18,6 +19,10 @@ public final class ExplorePaint {
     public static final float SKY_B = 0.07f;
     public static final int TEX = 64;
     public static final int MAP = 36;
+    public static final int GLYPH_W = 5;
+    public static final int GLYPH_H = 7;
+    /** Ortho strip under the crosshair — Doom status height in NDC. */
+    public static final float STATUS_H = 0.28f;
     public static final double TORCH_REACH = 11.0;
 
     public enum MapKind {
@@ -28,6 +33,13 @@ public final class ExplorePaint {
     }
 
     public record MapDot(int x, int y, MapKind kind) {
+    }
+
+    /**
+     * Bottom strip: named place, compass, how much stone is earned.
+     * GLFW only paints this; tests lock the words so the bar cannot lie.
+     */
+    public record Status(String place, String facing, int stood, int marks, int mood) {
     }
 
     private ExplorePaint() {
@@ -88,6 +100,85 @@ public final class ExplorePaint {
             int n = hash(x, y) & 19;
             return rgbBytes(58 + n / 2, 42 + n / 3, 34);
         });
+    }
+
+    public static byte[] skyRgba() {
+        return raster((x, y) -> {
+            int n = hash(x, y) & 31;
+            boolean star = y < 20 && (hash(x, y) & 63) == 0;
+            if (star) {
+                return rgbBytes(220, 196, 140);
+            }
+            if (y < 18) {
+                return rgbBytes(78 + n / 3, 30 + n / 6, 24);
+            }
+            if (y < 36) {
+                return rgbBytes(148 + n / 2, 56 + n / 4, 30);
+            }
+            if (y < 46) {
+                return rgbBytes(196 + n / 3, 88 + n / 5, 34);
+            }
+            boolean hill = y > 50 && ((hash(x / 6, 3) & 15) > (64 - y));
+            if (hill) {
+                return rgbBytes(30 + n / 4, 16, 14);
+            }
+            return rgbBytes(52 + n / 3, 24, 20);
+        });
+    }
+
+    public static byte[] faceRgba(int mood) {
+        int grim = Math.max(0, Math.min(2, mood));
+        return raster((x, y) -> {
+            int px = x / 8;
+            int py = y / 8;
+            if (px <= 0 || px >= 7 || py <= 0 || py >= 7) {
+                return rgbBytes(34, 22, 16);
+            }
+            if (py == 1) {
+                return rgbBytes(62, 36, 22);
+            }
+            if (py == 3 && (px == 2 || px == 5)) {
+                return rgbBytes(18, 12, 10);
+            }
+            if (py == 5) {
+                return mouth(grim, px);
+            }
+            return rgbBytes(186, 128, 78);
+        });
+    }
+
+    public static void skyUv(double yaw, double pitch, float sx, float sy, float[] out) {
+        if (out == null || out.length < 2) {
+            return;
+        }
+        out[0] = sx + (float) (yaw / (Math.PI * 2.0));
+        out[1] = sy - (float) (pitch * 0.35);
+    }
+
+    public static Status status(ExploreFog fog, ExploreBody body, List<ExploreMarker> markers) {
+        String facing = facing(body == null ? 0 : body.yaw());
+        int stood = fog == null ? 0 : fog.memorySize();
+        ExploreMarker near = nearestVisible(fog, body, markers);
+        int marks = countVisible(fog, markers);
+        if (near == null) {
+            return new Status("HALL", facing, stood, marks, 0);
+        }
+        return new Status(placeName(near.kind()), facing, stood, marks, mood(near.kind()));
+    }
+
+    public static String caption(Status status) {
+        if (status == null) {
+            return "HALL";
+        }
+        return status.place() + "  " + status.facing() + "  " + status.stood();
+    }
+
+    public static boolean glyphDot(char raw, int x, int y) {
+        if (x < 0 || x >= GLYPH_W || y < 0 || y >= GLYPH_H) {
+            return false;
+        }
+        long bits = glyphBits(Character.toUpperCase(raw));
+        return ((bits >>> (y * GLYPH_W + x)) & 1L) == 1L;
     }
 
     public static void uv(ExploreMesh.Triangle tri, double x, double y, double z, float[] out) {
@@ -177,6 +268,151 @@ public final class ExplorePaint {
         } else {
             set(rgb, 0.28f, 0.52f, 0.58f);
         }
+    }
+
+    static String facing(double yaw) {
+        double a = yaw;
+        while (a <= -Math.PI) {
+            a += Math.PI * 2.0;
+        }
+        while (a > Math.PI) {
+            a -= Math.PI * 2.0;
+        }
+        if (a > Math.PI * 0.75 || a <= -Math.PI * 0.75) {
+            return "S";
+        }
+        if (a > Math.PI * 0.25) {
+            return "E";
+        }
+        if (a < -Math.PI * 0.25) {
+            return "W";
+        }
+        return "N";
+    }
+
+    private static ExploreMarker nearestVisible(ExploreFog fog, ExploreBody body,
+                                               List<ExploreMarker> markers) {
+        if (fog == null || markers == null) {
+            return null;
+        }
+        Point here = body == null ? new Point(0, 0) : body.cell();
+        ExploreMarker best = null;
+        double bestDist = Double.POSITIVE_INFINITY;
+        for (ExploreMarker mark : markers) {
+            if (mark == null || mark.cell() == null) {
+                continue;
+            }
+            int tr = 2 * mark.cell().row() + 1;
+            int tc = 2 * mark.cell().col() + 1;
+            if (!fog.tileVisible(tr, tc)) {
+                continue;
+            }
+            double dist = Math.hypot(mark.cell().row() - here.row(),
+                    mark.cell().col() - here.col());
+            if (dist < bestDist) {
+                bestDist = dist;
+                best = mark;
+            }
+        }
+        return best;
+    }
+
+    private static int countVisible(ExploreFog fog, List<ExploreMarker> markers) {
+        if (fog == null || markers == null) {
+            return 0;
+        }
+        int n = 0;
+        for (ExploreMarker mark : markers) {
+            if (mark == null || mark.cell() == null) {
+                continue;
+            }
+            if (fog.tileVisible(2 * mark.cell().row() + 1, 2 * mark.cell().col() + 1)) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    private static String placeName(String kind) {
+        if ("BOSS".equals(kind)) {
+            return "BOSS";
+        }
+        if ("ENTRANCE".equals(kind)) {
+            return "ENTRANCE";
+        }
+        if ("TREASURE".equals(kind) || "VAULT".equals(kind)) {
+            return "VAULT";
+        }
+        return "HALL";
+    }
+
+    private static int mood(String kind) {
+        if ("BOSS".equals(kind)) {
+            return 2;
+        }
+        if ("TREASURE".equals(kind) || "VAULT".equals(kind)) {
+            return 1;
+        }
+        return 0;
+    }
+
+    private static int[] mouth(int grim, int px) {
+        if (grim == 1 && px >= 2 && px <= 5) {
+            return rgbBytes(92, 36, 28);
+        }
+        if (grim == 2 && px >= 3 && px <= 4) {
+            return rgbBytes(48, 22, 18);
+        }
+        if (grim == 0 && (px == 3 || px == 4)) {
+            return rgbBytes(92, 48, 36);
+        }
+        return rgbBytes(186, 128, 78);
+    }
+
+    private static long glyphBits(char c) {
+        // Exactly 35 cells (5×7), row-major. long — int only holds 32 bits.
+        return switch (c) {
+            case '0' -> bits(".###.#...##...##...##...##...#.###.");
+            case '1' -> bits("..#....##....#....#....#....#.#####");
+            case '2' -> bits(".###.#...#....#..##..#...#....#####");
+            case '3' -> bits(".###.#...#....#.###.....##...#.###.");
+            case '4' -> bits("#...##...#.#...######....#....#...#");
+            case '5' -> bits("######....#.....####....##...#.###.");
+            case '6' -> bits(".###.#....#....####.#...##...#.###.");
+            case '7' -> bits("#####....#...#...#...#....#....#...");
+            case '8' -> bits(".###.#...##...#.###.#...##...#.###.");
+            case '9' -> bits(".###.#...##...#.####.....#....#.###");
+            case 'A' -> bits(".###.#...##...#######...##...##...#");
+            case 'B' -> bits("####.#...##...#####.#...##...#####.");
+            case 'C' -> bits(".###.#...##....#....#....#...#.###.");
+            case 'E' -> bits("######....#....####.#....#....#####");
+            case 'H' -> bits("#...##...##...#######...##...##...#");
+            case 'L' -> bits("#....#....#....#....#....#....#####");
+            case 'N' -> bits("#...###..##.#.##.#.##..###...##...#");
+            case 'O' -> bits(".###.#...##...##...##...##...#.###.");
+            case 'R' -> bits("####.#...##...#####.#.#.##..##...#.");
+            case 'S' -> bits(".####.#....#....###.....#....#####.");
+            case 'T' -> bits("#####..#....#....#....#....#....#..");
+            case 'U' -> bits("#...##...##...##...##...##...#.###.");
+            case 'V' -> bits("#...##...##...##...##...#.#.#...#..");
+            case 'W' -> bits("#...##...##...##.#.##.#.##.#.#.#.#.");
+            case '-' -> bits("....................#####..........");
+            default -> 0L;
+        };
+    }
+
+    private static long bits(String pattern) {
+        if (pattern == null || pattern.length() != GLYPH_W * GLYPH_H) {
+            return 0L;
+        }
+        long out = 0L;
+        for (int i = 0; i < pattern.length(); i++) {
+            char ch = pattern.charAt(i);
+            if (ch == '#' || ch == '1') {
+                out |= 1L << i;
+            }
+        }
+        return out;
     }
 
     private static void floor(ExploreMesh.Triangle tri, float[] rgb) {
