@@ -46,7 +46,7 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   plugin stayed listed and callable. `unregister` refuses built-ins, because a
   removal path reachable from teardown must not be able to delete a shipped
   algorithm.
-- **Java 21**, **Spring Boot 4.1**, **JavaFX 21**.
+- **Java 21**, **Spring Boot 4.1**, **JavaFX 21**, optional **LWJGL** first-person host.
 - **Live over the wire** — STOMP at `/ws` (maze state, solver runs, player
   moves, plugin failures). `CONNECT` carries the JWT in prod; owned session
   topics are per-destination `SUBSCRIBE`; client `SEND` is refused. The
@@ -82,7 +82,7 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   the search's real recorded expansion order (observation via the `Graph`
   seam, never simulation); the web UI animates it and can race all ten
   solvers on one maze in a compare table with per-route previews.
-- **Verified** — `mvn clean verify` is the living number (five modules,
+- **Verified** — `mvn clean verify` is the living number (six modules,
   Checkstyle, SpotBugs, and a per-module JaCoCo ratchet that fails in
   **both** directions: below the floor, or the floor more than 3 points
   stale as coverage rises). An August 2026 snapshot was 734 reactor test
@@ -99,7 +99,8 @@ daedalus/
 ├── daedalus-plugin-api/       SPI types (Spring-free) for plugin authors
 ├── daedalus-plugin-runtime/   PluginManager, PluginRegistry, JAR discovery
 ├── daedalus-server/           Spring Boot REST + WebSocket + Redis-optional
-└── daedalus-desktop/          JavaFX desktop host (optional)
+├── daedalus-desktop/          JavaFX desktop host (optional)
+└── daedalus-explore/          first-person host (optional; ADR-017)
 ```
 
 | Module | Depends on | What lives here |
@@ -109,6 +110,7 @@ daedalus/
 | `daedalus-plugin-runtime` | core, plugin-api, Spring | `PluginManager` (discovery, lifecycle), `PluginRegistry`, JAR `URLClassLoader` isolation. Spring is allowed here so events can be published into a Spring `ApplicationContext`. |
 | `daedalus-server` | plugin-runtime, Spring Boot, Redis (optional) | Controllers (`MazeController`, `SessionController`, `LeaderboardController`, `InsightController`, `AgentController`, `CampaignController`, `MazeWebSocketController`, `PluginController`), DTOs in `com.daedalus.api.dto`, services (`MazeGenerationService` with Resilience4j circuit breaker, `LeaderboardService` with optional Redis backing, `GameSessionService`). Web UI at `src/main/resources/static/index.html` plus enumerated scripts (`draw.js`, `api.js`, `share.js`, `fog.js`, `seat.js`, `lab.js`, `caption.js`, `mint.js`, `campaign.js`, `spectate.js`, `hunt.js`, `solve.js`, `theory.js`, `living.js`, `ghost.js`, `tournament.js`, `live.js`, `session.js`, `fogwalk.js`, `desk.js`, `stage.js`, `app.js`). |
 | `daedalus-desktop` | server, JavaFX | `DaedalusLauncher` (boots Spring + JavaFX), `DaedalusPrimaryStage`, `ThemeManager`. Loads `/ui/main.fxml`. |
+| `daedalus-explore` | core, plugin-api, LWJGL | First-person extrusion of `MazeGrid` (ADR-017). Mesh / walk / fog / input are headless; GLFW and OpenXR are launch-only (`DAEDALUS_EXPLORE=1`). |
 
 ## Build & run
 
@@ -133,6 +135,13 @@ To run the JavaFX desktop client (boots Spring first, then opens the UI):
 
 ```bash
 mvn -pl daedalus-desktop -am javafx:run
+```
+
+To print a dungeon story JSON (no window), or walk it first-person:
+
+```bash
+mvn -pl daedalus-explore -am exec:java
+DAEDALUS_EXPLORE=1 mvn -pl daedalus-explore -am exec:java
 ```
 
 Default server port is `8080` (override with `SERVER_PORT`). Default profile
@@ -313,7 +322,7 @@ live server in one command with `./examples/run-with-biome.sh`.
 
 ## Worked examples
 
-Four standalone modules, none of them reactor children — the parent pom lists
+Five standalone modules, none of them reactor children — the parent pom lists
 production modules only, so each is built and run on its own.
 
 | module | what it shows |
@@ -322,6 +331,7 @@ production modules only, so each is built and run on its own.
 | [`examples/loadbalancer-topology`](./examples/loadbalancer-topology/) | Daedalus as the topology and analysis engine behind a load balancer — generate a topology, measure unit connectivity and capacitated bandwidth (ADR-009), place facilities with k-center, assign a batch of requests under replica capacity (ADR-010), and route with cost in `g` rather than in the heuristic. |
 | [`examples/dungeon-layout`](./examples/dungeon-layout/) | Daedalus as the spatial layer under a narrative game engine — BSP rooms, level depth, the hardest route, and treasure placement, emitted as named locations. |
 | [`examples/benchmark-harness`](./examples/benchmark-harness/) | Times every generator and solver and writes `docs/benchmarks/benchmark-<date>.csv`. Run it by hand on a machine whose numbers you trust; timings are machine-specific and are deliberately not asserted in CI. |
+| [`examples/openxr-plugin`](./examples/openxr-plugin/) | Optional `XrRuntime` for first-person explore (ADR-017). `present()` only when `DAEDALUS_OPENXR=1`. |
 
 ```bash
 mvn -f examples/loadbalancer-topology/pom.xml clean test
@@ -331,7 +341,7 @@ mvn -f examples/dungeon-layout/pom.xml exec:java
 ## Testing
 
 ```bash
-mvn clean verify              # all five modules
+mvn clean verify              # all six modules
 mvn -pl daedalus-server test  # one module
 ```
 

@@ -8,6 +8,15 @@ under the `_migration/` portfolios.
 
 ## [Unreleased] — 2026-08-20
 
+### Added
+
+- **First-person explore extrudes the dungeon.** A new `daedalus-explore`
+  host walks the same `MazeGrid` the 2D well paints — WASD, mouse, and
+  Xbox pads share one intent, fog keeps unseen stone dark, living ticks
+  rebuild the mesh, and a story JSON names entrance / vaults / boss for
+  ai-dungeon-master. VR is an OpenXR plugin JAR, not a native on
+  `mvn verify`. Launch a window with `DAEDALUS_EXPLORE=1`.
+
 ### Changed
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

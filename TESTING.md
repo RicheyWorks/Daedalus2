@@ -14,7 +14,8 @@ test methods, plus 24 in `examples/*`). Counts are `@Test` /
 | daedalus-plugin-runtime | 16 | 26 | Lifecycle, JAR discovery, unload, `SpringPluginContext` |
 | daedalus-plugin-api | 7 | 12 | Manifest guards plus SPI lifecycle/event contracts |
 | daedalus-desktop | 4 | 18 | `DesktopWork` + `DesktopWalk` + `DesktopPaint`; FXML stays launch-only |
-| examples/* (4 modules) | 22 | 24 | All four run in CI after the reactor `install` |
+| daedalus-explore | — | headless mesh/walk/input/fog/story; GLFW excluded (ADR-017) |
+| examples/* | 22 | 24+ | Built in CI after the reactor `install` (includes openxr-plugin) |
 
 What the suite already does well, and should keep doing:
 
@@ -82,6 +83,7 @@ Floors as of 2026-08-26 (not 0.00 exemptions):
 | daedalus-plugin-runtime | 0.84 | 0.87 |
 | daedalus-plugin-api | 0.96 | 0.99 |
 | daedalus-desktop | 0.28 | 0.31 |
+| daedalus-explore | 0.89 | 0.92 |
 
 Parent and module pom comments that still said "visible 0.00 exemption" were corrected on
 2026-08-26. The 0.00 figures above are the July audit, not the current poms.

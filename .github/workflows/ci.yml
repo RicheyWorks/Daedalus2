@@ -106,6 +106,7 @@ jobs:
           mvn -B -ntp -f examples/loadbalancer-topology/pom.xml clean package
           mvn -B -ntp -f examples/dungeon-layout/pom.xml clean package
           mvn -B -ntp -f examples/benchmark-harness/pom.xml clean package
+          mvn -B -ntp -f examples/openxr-plugin/pom.xml clean package
 
       # WebUiSmokeTest is a source-shape pin, not a feature sweep. This is the
       # real HTTP pass: generate, solve, live, traffic, sessions, breed, tour.
@@ -138,7 +139,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ env.CODECOV_TOKEN }}
-          files: daedalus-core/target/site/jacoco/jacoco.xml,daedalus-plugin-api/target/site/jacoco/jacoco.xml,daedalus-plugin-runtime/target/site/jacoco/jacoco.xml,daedalus-server/target/site/jacoco/jacoco.xml,daedalus-desktop/target/site/jacoco/jacoco.xml
+          files: daedalus-core/target/site/jacoco/jacoco.xml,daedalus-plugin-api/target/site/jacoco/jacoco.xml,daedalus-plugin-runtime/target/site/jacoco/jacoco.xml,daedalus-server/target/site/jacoco/jacoco.xml,daedalus-desktop/target/site/jacoco/jacoco.xml,daedalus-explore/target/site/jacoco/jacoco.xml
           fail_ci_if_error: false
 
       # Coverage badge: only on pushes to main (not PRs — no commit rights

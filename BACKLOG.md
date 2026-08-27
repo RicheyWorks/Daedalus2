@@ -153,6 +153,15 @@ Last consolidated: 2026-08-17
 
 ## New surfaces
 
+- ~~**First-person explore (3D / gamepad / VR plugins).**~~ **Done 2026-08-27
+  (ADR-017).** New reactor module `daedalus-explore` extrudes `MazeGrid` via
+  `toTileGrid()`, walks with the same `openNeighbors` rule as the 2D well, and
+  merges keyboard, mouse, and Xbox pads into one intent. Headset support is
+  an `XrRuntime` JAR (`examples/openxr-plugin`), not a native on `mvn verify`.
+  Dungeon-AI markers and a story JSON export are the handshake for
+  ai-dungeon-master. GLFW / OpenXR windows stay launch-only
+  (`DAEDALUS_EXPLORE=1`).
+
 - ~~**Performance benchmark harness.**~~ **Done 2026-07-19** —
   `examples/benchmark-harness`, a standalone `main` timing all 22 generators and
   10 solvers at configurable sizes (default 50/100/200) and seed counts, writing

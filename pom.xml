@@ -27,6 +27,7 @@
     <properties>
         <java.version>21</java.version>
         <javafx.version>21.0.3</javafx.version>
+        <lwjgl.version>3.3.6</lwjgl.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -58,6 +59,7 @@
         <module>daedalus-plugin-runtime</module>
         <module>daedalus-server</module>
         <module>daedalus-desktop</module>
+        <module>daedalus-explore</module>
     </modules>
 
     <dependencyManagement>
@@ -81,6 +83,11 @@
             <dependency>
                 <groupId>com.daedalus</groupId>
                 <artifactId>daedalus-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.daedalus</groupId>
+                <artifactId>daedalus-explore</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

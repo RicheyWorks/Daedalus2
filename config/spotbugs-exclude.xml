@@ -66,6 +66,19 @@
     </Match>
 
     <!--
+      ExploreWorld holds the live extruded snapshot (ADR-017). Copying the
+      grid or mesh on every accessor would fork collision from the body.
+      Unmodifiable hull/triangle lists still flag EI_EXPOSE_REP.
+    -->
+    <Match>
+        <Or>
+            <Class name="com.daedalus.explore.ExploreWorld"/>
+            <Class name="com.daedalus.explore.ExploreMesh"/>
+        </Or>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+    </Match>
+
+    <!--
       The maze cache IS the live grid: living ticks, traffic, and solvers all
       mutate the same MazeGrid / MazeStats. Copying on get would fork the world.
     -->

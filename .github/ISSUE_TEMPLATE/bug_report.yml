@@ -11,6 +11,7 @@ body:
         - daedalus-core
         - daedalus-server
         - daedalus-desktop
+        - daedalus-explore
         - daedalus-plugin-api
         - daedalus-plugin-runtime
         - examples/biome-plugin
