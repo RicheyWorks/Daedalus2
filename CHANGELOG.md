@@ -38,9 +38,10 @@ under the `_migration/` portfolios.
   crosshair sits in the playable band above that strip, and visible
   marks paint as key diamonds on the right (boss red, vault teal). A
   bobbing torch hand fills the lower-right so the view is held, not
-  floating. A start gate lists the well, daily, campaign, living,
-  theory, desktop, and first-person — 3D is one card.
-  `run-daedalus.ps1` launches those hosts from the repo root.
+  floating. The start gate leads with a hero-sized DAEDALUS over a
+  thin-wall lattice, Enter the well as the primary CTA, and the other
+  hosts below — brand first, not a seven-card grid. `run-daedalus.ps1`
+  launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
   re-solves quietly on each living / traffic tick; desktop dropped the

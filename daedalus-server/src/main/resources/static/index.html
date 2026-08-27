@@ -52,20 +52,53 @@
   header h1 button { all: unset; cursor: pointer; letter-spacing: .22em; }
   header h1 button:hover { color: var(--accent); }
   #gate { position: fixed; inset: 0; z-index: 20; overflow: auto;
-          background: radial-gradient(1200px 700px at 50% -10%, #121821 0%, var(--bg) 55%);
-          padding: 36px 22px 48px; }
+          background: radial-gradient(1100px 640px at 50% -8%, #151c26 0%, var(--bg) 58%);
+          padding: 48px 22px 56px; }
   #gate[hidden] { display: none; }
-  #gate .gate-inner { max-width: 980px; margin: 0 auto; }
-  #gate h2 { margin: 0 0 8px; font-size: 22px; letter-spacing: .16em; }
-  #gate .lede { color: var(--dim); margin: 0 0 22px; max-width: 52rem; }
+  #gate .gate-veil { position: absolute; inset: 0; pointer-events: none; opacity: .28;
+          background:
+            linear-gradient(90deg, transparent 23px, rgba(62, 224, 143, .08) 24px, transparent 25px),
+            linear-gradient(transparent 23px, rgba(126, 182, 255, .05) 24px, transparent 25px),
+            radial-gradient(70% 45% at 50% 0%, rgba(245, 193, 74, .06), transparent 70%);
+          background-size: 48px 48px, 48px 48px, auto;
+          mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 92%); }
+  #gate .gate-inner { position: relative; max-width: 980px; margin: 0 auto; }
+  #gate .gate-hero { margin: 0 0 36px; max-width: 40rem; }
+  #gate .gate-brand { margin: 0 0 14px; font: 700 clamp(2.8rem, 9vw, 5.4rem)/.95
+          "Bahnschrift", "Avenir Next Condensed", "Trebuchet MS", sans-serif;
+          letter-spacing: .22em; text-indent: .22em; color: var(--text);
+          animation: gateRise .7s ease both; }
+  #gate .lede { color: var(--dim); margin: 0 0 22px; max-width: 34rem; font-size: 15px;
+          animation: gateRise .7s .1s ease both; }
+  #gate .gate-enter { width: auto; min-width: 11rem; padding: 10px 18px; font-size: 14px;
+          animation: gateRise .7s .18s ease both; }
+  #gate .gate-ways { margin: 0 0 10px; font-size: 11px; letter-spacing: .16em;
+          text-transform: uppercase; color: var(--dim); }
   #gate .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
                  gap: 12px; }
-  #gate article { background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
-                  padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+  #gate article { background: rgba(16, 21, 27, .88); border: 1px solid var(--line);
+                  border-radius: 10px; padding: 14px 16px; display: flex;
+                  flex-direction: column; gap: 8px;
+                  animation: gateRise .55s ease both; }
+  #gate article:nth-child(1) { animation-delay: .22s; }
+  #gate article:nth-child(2) { animation-delay: .28s; }
+  #gate article:nth-child(3) { animation-delay: .34s; }
+  #gate article:nth-child(4) { animation-delay: .4s; }
+  #gate article:nth-child(5) { animation-delay: .46s; }
+  #gate article:nth-child(6) { animation-delay: .52s; }
   #gate article h3 { margin: 0; font-size: 14px; letter-spacing: .04em; }
   #gate article p { margin: 0; color: var(--dim); font-size: 13px; flex: 1; }
   #gate pre { margin: 0; padding: 8px; background: var(--bg); border: 1px solid var(--line);
               border-radius: 6px; font: 11px/1.45 ui-monospace, monospace; overflow: auto; }
+  @keyframes gateRise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #gate .gate-brand, #gate .lede, #gate .gate-enter, #gate article {
+      animation: none;
+    }
+  }
   header .tag { color: var(--dim); font-size: 11px; flex: 1; letter-spacing: .04em;
                 text-transform: lowercase; }
   #auth { display: flex; align-items: center; gap: 6px; margin-left: auto; }
@@ -182,17 +215,16 @@
 </head>
 <body>
 <div id="gate">
+  <div class="gate-veil" aria-hidden="true"></div>
   <div class="gate-inner">
-    <h2>DAEDALUS</h2>
-    <p class="lede">Pick a way in. First-person is one host. The same maze also
-      paints a 2D well, lives, races, and scores a campaign.</p>
+    <div class="gate-hero">
+      <h2 class="gate-brand">DAEDALUS</h2>
+      <p class="lede">Pick a way in. First-person is one host. The same maze also
+        paints a 2D well, lives, races, and scores a campaign.</p>
+      <button type="button" id="gateWell" class="primary gate-enter">Enter the well</button>
+    </div>
+    <p class="gate-ways">Other hosts</p>
     <div class="cards">
-      <article>
-        <h3>The well</h3>
-        <p>Generate, solve, walk, and fog the thin-wall board — 23 generators,
-          10 solvers, live over STOMP.</p>
-        <button type="button" id="gateWell" class="primary">Enter the well</button>
-      </article>
       <article>
         <h3>Daily challenge</h3>
         <p>The same maze for everyone until midnight UTC. One shared board.</p>

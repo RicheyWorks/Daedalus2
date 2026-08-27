@@ -50,6 +50,7 @@ class WebUiSmokeTest {
         // in sweep/ — a rename there must not fail this boot-and-serve test.
         assertThat(html).contains("DAEDALUS").contains("id=\"gate\"").contains("id=\"gateWell\"")
                 .contains("id=\"gateExploreCmd\"").contains("id=\"home\"")
+                .contains("gate-brand").contains("gate-veil").contains("Other hosts")
                 .contains("/api/v1").contains("/ws")
                 .contains("/auth/login").contains("id=\"login\"").contains("id=\"fog\"")
                 .contains("id=\"legend\"").contains("id=\"labMetric\"").contains("class=\"rail\"")
