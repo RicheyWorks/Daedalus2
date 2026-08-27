@@ -54,6 +54,8 @@ under the `_migration/` portfolios.
   hosts. The well legend and export chips sit in a deeper fade with
   Bahnschrift keys and frosted PNG/ASCII buttons; explore's automap
   wears a gold frame so the earned map reads as chrome, not a sticker.
+  Fog floors warm toward torch-brown underfoot, and the explore flame
+  flickers so the hand is fire, not a flat triangle.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

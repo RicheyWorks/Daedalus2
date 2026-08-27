@@ -230,6 +230,15 @@ class ExplorePaintTest {
         ExplorePaint.handTint(ExplorePaint.HandPart.FLAME, 2, hot);
         assertThat(hot[1]).isLessThan(calm[1]);
         assertThat(hot[2]).isLessThan(calm[2]);
+        float bright = ExplorePaint.flameFlicker(0.1);
+        float dim = ExplorePaint.flameFlicker(0.2);
+        assertThat(bright).isGreaterThan(0.7f);
+        assertThat(dim).isLessThan(1.15f);
+        float[] flickA = new float[3];
+        float[] flickB = new float[3];
+        ExplorePaint.handTint(ExplorePaint.HandPart.FLAME, 0, flickA, 0.05);
+        ExplorePaint.handTint(ExplorePaint.HandPart.FLAME, 0, flickB, 0.18);
+        assertThat(flickA[0]).isNotEqualTo(flickB[0]);
         ExplorePaint.handTint(null, 0, calm);
         ExplorePaint.handTint(ExplorePaint.HandPart.GRIP, 0, null);
     }

@@ -343,6 +343,10 @@ class DesktopPaintTest {
                 DesktopPaint.FOG_FLOOR, 0)).isEqualTo(DesktopPaint.FOG_FLOOR_DIM);
         assertThat(DesktopPaint.mixHex(DesktopPaint.FOG_FLOOR_DIM,
                 DesktopPaint.FOG_FLOOR, 1)).isEqualTo(DesktopPaint.FOG_FLOOR);
+        assertThat(DesktopPaint.FOG_FLOOR_WARM).isEqualTo("#5c4a32");
+        String underfoot = DesktopPaint.mixHex(DesktopPaint.FOG_FLOOR,
+                DesktopPaint.FOG_FLOOR_WARM, 0.28);
+        assertThat(underfoot).isNotEqualTo(DesktopPaint.FOG_FLOOR);
         assertThat(DesktopPaint.FOG_UNSEEN).isEqualTo("#05070a");
     }
 

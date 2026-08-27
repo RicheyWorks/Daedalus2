@@ -242,6 +242,10 @@ public final class ExplorePaint {
     }
 
     public static void handTint(HandPart part, int mood, float[] rgb) {
+        handTint(part, mood, rgb, 0);
+    }
+
+    public static void handTint(HandPart part, int mood, float[] rgb, double seconds) {
         if (rgb == null || rgb.length < 3 || part == null) {
             return;
         }
@@ -257,9 +261,20 @@ public final class ExplorePaint {
                 } else {
                     set(rgb, 0.98f, 0.78f, 0.28f);
                 }
+                float flick = flameFlicker(seconds);
+                rgb[0] = Math.min(1f, rgb[0] * flick);
+                rgb[1] = Math.min(1f, rgb[1] * flick);
+                rgb[2] = Math.min(1f, rgb[2] * Math.max(0.72f, flick * 0.92f));
             }
             default -> set(rgb, 0.5f, 0.5f, 0.5f);
         }
+    }
+
+    /** Uneven torch breath — not a metronome sine. */
+    public static float flameFlicker(double seconds) {
+        double a = Math.sin(seconds * 19.0);
+        double b = Math.sin(seconds * 31.7 + 1.1);
+        return (float) (0.82 + 0.18 * (0.55 + 0.45 * a + 0.22 * b));
     }
 
     public static boolean glyphDot(char raw, int x, int y) {

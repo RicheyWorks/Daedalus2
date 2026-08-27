@@ -60,6 +60,7 @@ class WebUiSmokeTest {
                 .contains("Bahnschrift")
                 .contains("radial-gradient(80% 70% at 50% 45%")
                 .contains("backdrop-filter")
+                .contains("floorWarm")
                 .contains("data-key=\"path\"").contains("data-key=\"floor\"")
                 .contains("data-key=\"fog\"")
                 .contains("Authorization").contains("text/plain").contains("id=\"ascii\"")

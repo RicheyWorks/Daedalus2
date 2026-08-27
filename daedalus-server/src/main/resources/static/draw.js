@@ -5,6 +5,7 @@
   const COLORS = {
     wall: "#0b0f14", unseen: "#05070a",
     floor: "#3d4a58", floorHi: "#536272", floorDim: "#2a333c",
+    floorWarm: "#5c4a32",
     start: "#3ee08f", goal: "#ff5a5f", path: "#8fb8ff",
   };
   const PLAYER_COLORS = ["#f5c14a", "#ff8fa3", "#9ecbff", "#7ce2b3"];
@@ -261,7 +262,12 @@
         }
         if (r % 2 === 1 && col % 2 === 1 && isRock(tiles, r, col)) continue;
         const lamp = scene.fog ? fogLamp(scene.fog, r, col) : 1;
-        g.fillStyle = scene.fog ? mixHex(COLORS.floorDim, COLORS.floor, lamp) : COLORS.floor;
+        if (scene.fog) {
+          const lit = mixHex(COLORS.floor, COLORS.floorWarm, lamp * 0.28);
+          g.fillStyle = mixHex(COLORS.floorDim, lit, lamp);
+        } else {
+          g.fillStyle = COLORS.floor;
+        }
         g.fillRect(geom.offX[col], geom.offY[r],
                    geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
         if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {

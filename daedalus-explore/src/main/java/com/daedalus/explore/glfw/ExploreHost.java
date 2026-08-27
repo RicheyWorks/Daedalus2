@@ -440,12 +440,13 @@ public final class ExploreHost {
     }
 
     private static void paintHand(double aspect, int mood, double stride) {
-        float bob = ExplorePaint.handBob(System.nanoTime() / 1_000_000_000.0, stride);
+        double seconds = System.nanoTime() / 1_000_000_000.0;
+        float bob = ExplorePaint.handBob(seconds, stride);
         List<ExplorePaint.HandTri> mesh = ExplorePaint.handMesh(aspect, bob);
         float[] rgb = new float[3];
         glBegin(GL_TRIANGLES);
         for (ExplorePaint.HandTri tri : mesh) {
-            ExplorePaint.handTint(tri.part(), mood, rgb);
+            ExplorePaint.handTint(tri.part(), mood, rgb, seconds);
             glColor3f(rgb[0], rgb[1], rgb[2]);
             glVertex2f(tri.x1(), tri.y1());
             glVertex2f(tri.x2(), tri.y2());
