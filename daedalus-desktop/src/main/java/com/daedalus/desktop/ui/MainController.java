@@ -336,10 +336,10 @@ public class MainController {
      * Paint {@link #current} onto the canvas. Layered:
      * <ol>
      *   <li>Background fill.</li>
-     *   <li>Tile grid via {@link MazeGrid#toTileGrid()} — passages, walls, start, goal.</li>
-     *   <li>Solve path overlay (if {@link #currentPath} is set) — drawn under start/goal so
-     *       endpoint markers stay visible.</li>
-     *   <li>Player marker — drawn last so it's always on top of whatever is underneath.</li>
+     *   <li>Tile grid via {@link MazeGrid#toTileGrid()} — walls and passages. Start and
+     *       goal tiles paint as floor; the discs come later.</li>
+     *   <li>Solve path overlay (if {@link #currentPath} is set) — drawn under the discs.</li>
+     *   <li>Start / goal discs, then the player — last so it's always on top.</li>
      * </ol>
      * Thin-wall cells, centered with letterboxing on the longer axis so the maze isn't stretched.
      */
@@ -365,7 +365,7 @@ public class MainController {
         // ---- 1) tile grid ----
         for (int r = 0; r < layout.tileRows(); r++) {
             for (int c = 0; c < layout.tileCols(); c++) {
-                g.setFill(colorFor(DesktopPaint.roleFor(tiles[r][c]), theme));
+                g.setFill(colorFor(DesktopPaint.floorRole(tiles[r][c]), theme));
                 g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
             }
         }
@@ -380,12 +380,32 @@ public class MainController {
             }
         }
 
-        // ---- 3) player marker ----
+        // ---- 3) start / goal discs (floor + marker, same as the web painter) ----
+        if (theme != null) {
+            paintDisc(g, DesktopPaint.endpointMarker(layout, current.metadata().start()),
+                    theme.start());
+            paintDisc(g, DesktopPaint.endpointMarker(layout, current.metadata().goal()),
+                    theme.goal());
+        }
+
+        // ---- 4) player marker ----
         DesktopPaint.Marker mark = DesktopPaint.playerMarker(layout, playerPos);
         if (mark != null && theme != null) {
-            g.setFill(reachedGoal ? theme.path() : theme.player());
-            g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
+            paintDisc(g, mark, reachedGoal ? theme.path() : theme.player());
         }
+    }
+
+    private static void paintDisc(GraphicsContext g, DesktopPaint.Marker mark, Color color) {
+        if (mark == null || color == null) {
+            return;
+        }
+        Color glow = color.deriveColor(0, 1, 1, 0.22);
+        double pad = mark.size() * 0.32;
+        g.setFill(glow);
+        g.fillOval(mark.x() - pad / 2, mark.y() - pad / 2,
+                mark.size() + pad, mark.size() + pad);
+        g.setFill(color);
+        g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
     }
 
     /** Resolve a tile glyph to a theme color. Defensive — unknown enum cases fall back to passage. */

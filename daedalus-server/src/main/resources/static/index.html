@@ -45,11 +45,12 @@
            radial-gradient(1200px 700px at 50% -10%, #121821 0%, var(--bg) 55%);
          color: var(--text);
          font: 14px/1.5 system-ui, "Segoe UI", sans-serif; }
-  header { padding: 12px 22px; border-bottom: 1px solid var(--line);
-           display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  header { padding: 10px 22px; border-bottom: 1px solid var(--line);
+           display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
            background: rgba(7, 9, 12, 0.92); position: sticky; top: 0; z-index: 4; }
-  header h1 { margin: 0; font-size: 17px; letter-spacing: .18em; font-weight: 700; }
-  header .tag { color: var(--dim); font-size: 12px; flex: 1; letter-spacing: .02em; }
+  header h1 { margin: 0; font-size: 16px; letter-spacing: .22em; font-weight: 700; }
+  header .tag { color: var(--dim); font-size: 11px; flex: 1; letter-spacing: .04em;
+                text-transform: lowercase; }
   #auth { display: flex; align-items: center; gap: 6px; margin-left: auto; }
   #auth input { width: 110px; padding: 4px 6px; font-size: 12px; }
   #auth button { margin-top: 0; width: auto; padding: 4px 10px; font-size: 12px; }
@@ -60,23 +61,28 @@
   .hint, .info, #labOut, #tourBox, #campaignBox, #pluginBox, #lb { overflow-wrap: anywhere; }
   @media (max-width: 1280px) {
     main { grid-template-columns: minmax(220px, 260px) minmax(0, 1fr); }
-    main > div:last-child { grid-column: 1 / -1; display: grid;
+    .rail { grid-column: 1 / -1; display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
   }
   @media (max-width: 960px) {
     main { grid-template-columns: 1fr; }
-    main > div:last-child { grid-column: auto; display: flex; flex-direction: column; }
+    .rail { grid-column: auto; display: flex; flex-direction: column; }
     .board-panel { position: static; min-height: auto; }
     #stage { min-height: 360px; }
   }
-  details { margin-top: 8px; border-top: 1px solid var(--line); padding-top: 4px; }
+  details { margin-top: 10px; border-top: 1px solid var(--line); padding-top: 6px; }
   details:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
   summary { cursor: pointer; font-size: 11px; text-transform: uppercase;
-            letter-spacing: .1em; color: var(--dim); margin: 6px 0 2px; }
+            letter-spacing: .12em; color: var(--dim); margin: 4px 0 2px;
+            list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: " ▸"; color: var(--line); }
+  details[open] summary::after { content: " ▾"; }
   .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
-           padding: 14px; }
-  .panel h2 { margin: 0 0 10px; font-size: 12px; text-transform: uppercase;
-              letter-spacing: .1em; color: var(--dim); }
+           padding: 14px 16px; }
+  .panel h2 { margin: 0 0 8px; font-size: 11px; text-transform: uppercase;
+              letter-spacing: .14em; color: var(--dim); font-weight: 600; }
+  .rail { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
   .board-panel { display: flex; flex-direction: column; min-height: calc(100vh - 88px);
                  position: sticky; top: 60px; padding: 12px; }
   #stage { flex: 1 1 auto; min-height: 420px; display: flex; align-items: center;
@@ -91,15 +97,21 @@
   select:focus, input:focus, button:focus-visible {
     outline: 2px solid var(--accent2); outline-offset: 1px; }
   .row { display: flex; gap: 8px; }
-  button { margin-top: 10px; width: 100%; padding: 8px 10px; border-radius: 7px;
+  .actions { display: flex; gap: 8px; margin-top: 8px; }
+  .actions button { margin-top: 0; }
+  button { margin-top: 8px; width: 100%; padding: 7px 10px; border-radius: 7px;
            border: 1px solid var(--line); background: #1a222b; color: var(--text);
            cursor: pointer; font-weight: 600; }
   button:hover { border-color: var(--accent); }
   button.primary { background: var(--accent); border-color: var(--accent); color: #08130d; }
   button.primary:hover { filter: brightness(1.06); }
+  button.accent { background: transparent; border-color: var(--accent2); color: var(--accent2); }
+  button.accent:hover { background: #152033; }
+  button.quiet { background: transparent; font-weight: 500; color: var(--text); }
+  button.quiet:hover { background: #1a222b; }
   button:disabled { opacity: .4; cursor: default; }
   canvas { background: transparent; display: block; }
-  #log { height: 380px; overflow-y: auto; font: 12px/1.6 ui-monospace, monospace;
+  #log { height: 240px; overflow-y: auto; font: 12px/1.6 ui-monospace, monospace;
          scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
   #lb { font: 12px/1.9 ui-monospace, monospace; }
   #lb .rank { display: inline-block; width: 18px; color: var(--dim); }
@@ -185,12 +197,14 @@
         <input id="hotspotCost" type="number" value="25" min="1" max="1000"></div>
     </div>
     <button id="generate" class="primary">Generate</button>
-    <button id="daily"
+    <div class="actions">
+    <button id="daily" class="quiet"
             title="Everyone in the world gets the same maze today — the seed derives from the UTC date">
       Daily challenge</button>
-    <button id="breed" disabled
+    <button id="breed" class="quiet" disabled
             title="Cross this maze with the previous one: the child inherits patches of both parents, repaired to full connectivity (parents must share dimensions)">
-      Crossbreed with previous</button>
+      Crossbreed</button>
+    </div>
 
     </details>
     <details open>
@@ -198,11 +212,13 @@
     <label for="solver">Solver</label>
     <select id="solver"></select>
     <div id="solInfo" class="info"></div>
-    <button id="solve" disabled>Solve</button>
-    <button id="compare" disabled title="Run every registered solver against this maze">
-      Compare all solvers</button>
+    <div class="actions">
+    <button id="solve" class="accent" disabled>Solve</button>
+    <button id="compare" class="quiet" disabled title="Run every registered solver against this maze">
+      Compare all</button>
+    </div>
     </details>
-    <details open>
+    <details>
     <summary>Hazards</summary>
     <button id="live" disabled
             title="Erode the maze in place: each tick opens dead-end walls (and drifts hotspot costs) — the route re-solves live as the maze changes">
@@ -217,7 +233,7 @@
             title="Walk blind: the page paints only cells you have stood on. The agent API never ships the grid — this is that contract made visible (ADR-006)">
       Fog of war</button>
     </details>
-    <details open>
+    <details>
     <summary>Theory</summary>
     <label for="rival">Race the solver above against</label>
     <select id="rival"></select>
@@ -254,7 +270,7 @@
       Heuristic lens</button>
 
     </details>
-    <details open>
+    <details>
     <summary>Play</summary>
     <label for="player">Player name</label>
     <input id="player" value="web">
@@ -296,7 +312,7 @@
     </div>
   </section>
 
-  <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+  <div class="rail">
     <section class="panel">
       <h2>Complexity lab</h2>
       <label for="labMetric">Measure the selected generator's</label>

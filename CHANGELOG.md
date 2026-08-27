@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Desktop and web share one void.** Cosmic was navy / neon / gold path;
+  the web painter is slate / mint / coral. Same dungeon looked like two
+  games. `CosmicTheme` and `cosmic.css` now use the web tokens. Start and
+  goal paint as floor plus a disc — a neon slab was louder than the maze.
+
+- **Web chrome recedes so the maze can speak.** Hazards, Theory, and Play
+  start closed. Daily / Crossbreed and Solve / Compare sit in quiet pairs.
+  The right rail is a rail, not an inline flex bag.
+
 - **Web canvas fills the well and paints at devicePixelRatio.** Geometry
   used to hard-code an 880px budget and write CSS pixels into
   `canvas.width`, so a wide board left a tiny maze and a 2× display

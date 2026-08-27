@@ -94,8 +94,33 @@ public final class DesktopPaint {
     }
 
     /**
+     * Floor role for a tile. Start and goal paint as passage so the discs
+     * can sit on the corridor — a neon slab was louder than the maze.
+     */
+    public static TileType floorRole(TileType tile) {
+        TileType role = roleFor(tile);
+        return role == TileType.START || role == TileType.GOAL ? TileType.PASSAGE : role;
+    }
+
+    /**
+     * Disc inset inside a passage cell. {@code radiusFrac} is a fraction of
+     * {@link Layout#cellSize()} — the web painter uses 0.34 for endpoints.
+     */
+    public static Marker disc(Layout layout, Point cell, double radiusFrac) {
+        if (layout == null || cell == null) {
+            return null;
+        }
+        double diameter = layout.cellSize() * radiusFrac * 2.0;
+        double inset = (layout.cellSize() - diameter) / 2.0;
+        return new Marker(
+                layout.x(2 * cell.col() + 1) + inset,
+                layout.y(2 * cell.row() + 1) + inset,
+                diameter);
+    }
+
+    /**
      * Solve-path tiles, skipping start and goal cells so those keep their
-     * endpoint colors. Adjacent steps also paint the carved wall between them.
+     * endpoint discs. Adjacent steps also paint the carved wall between them.
      */
     public static List<TileRect> pathOverlay(List<Point> path, Point start, Point goal) {
         if (path == null || path.isEmpty()) {
@@ -120,14 +145,11 @@ public final class DesktopPaint {
     }
 
     public static Marker playerMarker(Layout layout, Point player) {
-        if (layout == null || player == null) {
-            return null;
-        }
-        double inset = Math.max(1.0, layout.cellSize() * 0.1);
-        return new Marker(
-                layout.x(2 * player.col() + 1) + inset,
-                layout.y(2 * player.row() + 1) + inset,
-                layout.cellSize() - 2 * inset);
+        return disc(layout, player, 0.4);
+    }
+
+    public static Marker endpointMarker(Layout layout, Point cell) {
+        return disc(layout, cell, 0.34);
     }
 
     /** Unknown or null tiles paint as passage — the same fallback the controller used. */

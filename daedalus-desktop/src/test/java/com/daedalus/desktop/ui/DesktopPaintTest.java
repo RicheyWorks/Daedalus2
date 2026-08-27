@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 /**
  * Canvas geometry without a JavaFX toolkit. {@code MainController#redraw}
@@ -95,5 +96,27 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.playerMarker(layout, null)).isNull();
         assertThat(DesktopPaint.roleFor(null)).isEqualTo(TileType.PASSAGE);
         assertThat(DesktopPaint.roleFor(TileType.WALL)).isEqualTo(TileType.WALL);
+    }
+
+    @Test
+    void startAndGoalTilesPaintAsFloorSoTheDiscsCanSitOnTheCorridor() {
+        assertThat(DesktopPaint.floorRole(TileType.START)).isEqualTo(TileType.PASSAGE);
+        assertThat(DesktopPaint.floorRole(TileType.GOAL)).isEqualTo(TileType.PASSAGE);
+        assertThat(DesktopPaint.floorRole(TileType.WALL)).isEqualTo(TileType.WALL);
+        assertThat(DesktopPaint.floorRole(null)).isEqualTo(TileType.PASSAGE);
+    }
+
+    @Test
+    void theEndpointDiscIsSmallerThanThePlayerDisc() {
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(3, 3, 30, 30);
+        DesktopPaint.Marker end = DesktopPaint.endpointMarker(layout, new Point(0, 0));
+        DesktopPaint.Marker player = DesktopPaint.playerMarker(layout, new Point(0, 0));
+        assertThat(end).isNotNull();
+        assertThat(end.size())
+                .as("web radius is 0.34·cell, so the disc is 0.68·cell")
+                .isCloseTo(13.6, within(1e-9));
+        assertThat(end.size()).isLessThan(player.size());
+        assertThat(DesktopPaint.endpointMarker(layout, null)).isNull();
+        assertThat(DesktopPaint.disc(null, new Point(0, 0), 0.34)).isNull();
     }
 }
