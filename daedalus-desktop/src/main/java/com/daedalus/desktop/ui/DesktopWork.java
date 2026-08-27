@@ -310,7 +310,16 @@ public class DesktopWork {
     /** Solve a maze off the FX thread, with the recorded expansion order the web paints. */
     public Callable<MazeSolverService.Result> solveJob(
             String solverId, MazeGrid grid, UUID mazeId) {
-        return () -> solving.solve(solverId, grid, grid.start(), grid.goal(), mazeId, true);
+        return solveJob(solverId, grid, mazeId, true);
+    }
+
+    /**
+     * {@code replay} false is a quiet re-solve — living and traffic ticks
+     * refresh the ribbon without a second search wash.
+     */
+    public Callable<MazeSolverService.Result> solveJob(
+            String solverId, MazeGrid grid, UUID mazeId, boolean replay) {
+        return () -> solving.solve(solverId, grid, grid.start(), grid.goal(), mazeId, replay);
     }
 
     /**

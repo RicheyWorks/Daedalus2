@@ -19,6 +19,7 @@ import com.daedalus.theory.LongestPath;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import com.daedalus.solver.MazeSolver;
 import com.daedalus.solver.solvers.SolverRegistry;
@@ -157,6 +158,10 @@ public class MainController {
 
     /** Full solve route; {@link #currentPath} is the visible prefix while it unfolds. */
     private List<Point> solvedPath;
+
+    /** Solver to re-run quietly on living / traffic ticks — same as the web refresh. */
+    private String followSolver;
+    private int followGen;
 
     /** Recorded search order; {@link #currentExpansions} is the visible prefix. */
     private List<Point> solvedExpansions;
@@ -397,6 +402,7 @@ public class MainController {
             clearRace();
             clearHunt();
             clearCompare();
+            clearFollow();
             playerPos = current.metadata().start();
             resetWalk(playerPos);
             reachedGoal = false;
@@ -476,6 +482,7 @@ public class MainController {
             solvedExpansions = task.getValue().expansions();
             currentPath = List.of();
             currentExpansions = List.of();
+            followSolver = solverId;
             startSolveReveal();
             canvas.requestFocus();
             int expanded = solvedExpansions == null ? 0 : solvedExpansions.size();
@@ -584,6 +591,59 @@ public class MainController {
         if (allToggle != null) {
             allToggle.setSelected(false);
         }
+    }
+
+    private void clearFollow() {
+        followSolver = null;
+        followGen++;
+    }
+
+    /**
+     * Keep the ribbon and drop the search wash — living / traffic
+     * ticks re-solve quietly like {@code living.js} {@code refresh}.
+     */
+    private void keepFollowRoute() {
+        stopPathReveal();
+        currentExpansions = null;
+        solvedExpansions = null;
+        if ((solvedPath != null && !solvedPath.isEmpty())
+                || (currentPath != null && !currentPath.isEmpty())) {
+            followSolver = solverChoice.getValue();
+            if (solvedPath != null) {
+                currentPath = solvedPath;
+            }
+        } else {
+            clearFollow();
+        }
+    }
+
+    private void refreshFollowRoute(UUID mazeId) {
+        if (followSolver == null || fogOn() || current == null || mazeId == null) {
+            return;
+        }
+        final int gen = ++followGen;
+        final String solver = followSolver;
+        final var grid = current.grid();
+        Thread worker = new Thread(() -> {
+            try {
+                var result = work.solveJob(solver, grid, mazeId, false).call();
+                Platform.runLater(() -> {
+                    if (gen != followGen || current == null
+                            || !mazeId.equals(current.metadata().id())) {
+                        return;
+                    }
+                    solvedPath = result.path();
+                    currentPath = result.path();
+                    currentExpansions = null;
+                    solvedExpansions = null;
+                    redraw();
+                });
+            } catch (Exception ignored) {
+                // budget refusal: keep the last ribbon
+            }
+        }, "daedalus-desktop-follow");
+        worker.setDaemon(true);
+        worker.start();
     }
 
     private void clearGhost() {
@@ -698,11 +758,7 @@ public class MainController {
             statusLabel.setText("Generate a maze first, then check Live.");
             return;
         }
-        stopPathReveal();
-        currentPath = null;
-        solvedPath = null;
-        currentExpansions = null;
-        solvedExpansions = null;
+        keepFollowRoute();
         clearRace();
         clearTheory();
         clearCompare();
@@ -748,6 +804,7 @@ public class MainController {
                 currentHunt = DesktopPaint.Hunt.retarget(current.grid(),
                         currentHunt.waypoints());
             }
+            refreshFollowRoute(mazeId);
             redraw();
         }
         if (!status.active()) {
@@ -796,11 +853,7 @@ public class MainController {
             statusLabel.setText("Generate a maze first, then check Jam.");
             return;
         }
-        stopPathReveal();
-        currentPath = null;
-        solvedPath = null;
-        currentExpansions = null;
-        solvedExpansions = null;
+        keepFollowRoute();
         clearRace();
         clearLens();
         clearCompare();
@@ -811,6 +864,7 @@ public class MainController {
             if (snap != null) {
                 current = snap;
             }
+            refreshFollowRoute(mazeId);
             watchTraffic(mazeId, status.tickMillis());
             statusLabel.setText(String.format(
                     "Traffic tracking on — walk and watch costs bloom, one pulse every %.1fs.",
@@ -841,6 +895,7 @@ public class MainController {
         TrafficService.TrafficStatus status = work.trafficStatus(mazeId);
         if (snap != null) {
             current = snap;
+            refreshFollowRoute(mazeId);
             redraw();
         }
         if (!status.active()) {
@@ -903,6 +958,7 @@ public class MainController {
         clearRace();
         clearHunt();
         clearTheory();
+        clearFollow();
         allToggle.setSelected(true);
         var grid = current.grid();
         var mazeId = current.metadata().id();
@@ -966,6 +1022,7 @@ public class MainController {
         clearRace();
         clearTheory();
         clearCompare();
+        clearFollow();
         huntToggle.setSelected(true);
         huntGot.clear();
         var grid = current.grid();
@@ -1032,6 +1089,7 @@ public class MainController {
         clearHunt();
         clearTheory();
         clearCompare();
+        clearFollow();
         raceToggle.setSelected(true);
         var grid = current.grid();
         var mazeId = current.metadata().id();
@@ -1311,6 +1369,7 @@ public class MainController {
             clearRace();
             clearHunt();
             clearCompare();
+            clearFollow();
             clearTheory();
             statusLabel.setText("Fog of war — arrows / WASD or a click walk the dungeon.");
         } else if (current != null) {

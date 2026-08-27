@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Desktop Live and Jam keep the solver ribbon.** The web already
+  re-solves quietly on each living / traffic tick; desktop dropped the
+  path when the well started breathing, so a solved corridor vanished
+  just as walls opened. Same quiet re-solve, no second search wash, so
+  the ribbon follows the graph you already asked it to watch.
+
 - **Desktop All paints every solver's route.** The web already previews
   one hover at a time from a table that steals the well; desktop had
   only Race. Same corridors stacked at 0.22, so agreement is a brighter

@@ -277,6 +277,15 @@ class DesktopWorkTest {
                 .as("living ticks must not move the coins")
                 .isEqualTo(hunt.waypoints());
         assertThat(retargeted.feasible()).isTrue();
+        var treeWalk = work.solveJob("bfs", cached.grid(), cached.metadata().id(), false).call();
+        assertThat(treeWalk.expansions())
+                .as("quiet follow must skip the search wash")
+                .isNull();
+        var later = work.solveJob("bfs", after.grid(), after.metadata().id(), false).call();
+        assertThat(later.path().getLast()).isEqualTo(after.grid().goal());
+        assertThat(later.path().size())
+                .as("opening walls can only shorten the unique tree walk")
+                .isLessThanOrEqualTo(treeWalk.path().size());
     }
 
     @Test
