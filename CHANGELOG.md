@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Compare and theory captions no longer steal the well.** `#compareBox`
+  scrolls inside 22vh instead of shrinking `#stage`. Generator and solver
+  cards keep the bias note; complexity moves to the select title.
+
 - **Web maze fills the well without a 42px cell cap.** A 15×15 on a
   wide stage sat in a puddle of void while desktop already grew to the
   pane. Passage size is now the fit, same as `DesktopPaint.Layout`.

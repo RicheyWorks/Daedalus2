@@ -51,6 +51,7 @@ class WebUiSmokeTest {
         assertThat(html).contains("DAEDALUS").contains("/api/v1").contains("/ws")
                 .contains("/auth/login").contains("id=\"login\"").contains("id=\"fog\"")
                 .contains("id=\"legend\"").contains("id=\"labMetric\"").contains("class=\"rail\"")
+                .contains("id=\"compareBox\"").contains("id=\"genInfo\"")
                 .contains("Pick a generator and press Generate")
                 .contains("data-key=\"path\"").contains("data-key=\"floor\"")
                 .contains("Authorization").contains("text/plain").contains("id=\"ascii\"")

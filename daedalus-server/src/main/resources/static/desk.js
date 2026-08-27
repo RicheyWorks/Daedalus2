@@ -198,13 +198,19 @@
     host.updateInfo();
   }
 
-  /** The catalog ships bias notes and complexity for every algorithm — show them off. */
+  /** Bias on the card; complexity lives on the select title so the maze stays the hero. */
   function updateInfo(state, host) {
     for (const [selId, infoId] of [["generator", "genInfo"], ["solver", "solInfo"]]) {
       const a = state.algos[host.$(selId).value];
-      host.$(infoId).innerHTML = !a ? "" :
-          `<b>${host.esc(a.displayName)}</b> &middot; ${host.esc(a.complexity || "")}<br>`
-          + `${host.esc(a.biasNote || a.description || "")}`;
+      const card = host.$(infoId);
+      const sel = host.$(selId);
+      if (!a) {
+        if (card) card.innerHTML = "";
+        if (sel) sel.removeAttribute("title");
+        continue;
+      }
+      if (card) card.innerHTML = host.esc(a.biasNote || a.description || "");
+      if (sel) sel.title = [a.displayName, a.complexity].filter(Boolean).join(" · ");
     }
   }
 

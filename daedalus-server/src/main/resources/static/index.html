@@ -128,7 +128,10 @@
   #legend[hidden], #legend [hidden] { display: none; }
   #legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px;
               margin-right: 5px; vertical-align: -1px; }
-  #compareBox table { width: 100%; margin-top: 12px; border-collapse: collapse;
+  #compareBox:empty { display: none; }
+  #compareBox { max-height: 22vh; overflow: auto; min-width: 0;
+                scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+  #compareBox table { width: 100%; margin-top: 8px; border-collapse: collapse;
                       font: 12px/1.7 ui-monospace, monospace; }
   #compareBox th { text-align: left; color: var(--dim); font-weight: 600;
                    border-bottom: 1px solid var(--line); padding: 2px 8px; }
