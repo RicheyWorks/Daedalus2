@@ -178,12 +178,16 @@
   #stats span { color: var(--dim); }
   #legend { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
             position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
-            margin: 0; padding: 18px 12px 8px;
-            background: linear-gradient(transparent, rgba(5, 7, 10, .82));
-            font-size: 11px; color: var(--dim); pointer-events: none; }
+            margin: 0; padding: 22px 14px 10px;
+            background: linear-gradient(transparent, rgba(5, 7, 10, .55) 35%,
+                        rgba(5, 7, 10, .92));
+            font: 600 11px/1.4 Bahnschrift, "Segoe UI", sans-serif;
+            letter-spacing: .04em; color: #9aa3ad; pointer-events: none; }
   #legend[hidden], #legend [hidden] { display: none; }
   #legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px;
-              margin-right: 5px; vertical-align: -1px; }
+              margin-right: 5px; vertical-align: -1px; box-shadow: 0 0 0 1px rgba(255,255,255,.06); }
+  #legend [data-key="start"] i, #legend [data-key="goal"] i, #legend [data-key="player"] i {
+    box-shadow: 0 0 0 1.5px rgba(232, 238, 244, .28); }
   #compareBox:empty { display: none; }
   #compareBox { max-height: 22vh; overflow: auto; min-width: 0;
                 scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
@@ -210,8 +214,13 @@
               max-height: 22vh; color: var(--text); }
   .exports { position: absolute; top: 8px; right: 10px; z-index: 2;
              margin: 0; display: flex; gap: 8px; align-items: center; }
-  .exports button, .exports a { width: auto; margin: 0; padding: 3px 8px; font-size: 11px;
-                                background: rgba(7, 9, 12, .72); }
+  .exports button, .exports a { width: auto; margin: 0; padding: 4px 10px; font-size: 11px;
+                                letter-spacing: .03em;
+                                background: rgba(7, 9, 12, .78);
+                                border: 1px solid rgba(30, 40, 50, .95);
+                                border-radius: 6px;
+                                backdrop-filter: blur(4px); }
+  .exports button:hover, .exports a:hover { border-color: var(--accent2); color: var(--text); }
   kbd { background: var(--bg); border: 1px solid var(--line); border-radius: 3px;
         padding: 0 4px; font-size: 11px; }
 </style>

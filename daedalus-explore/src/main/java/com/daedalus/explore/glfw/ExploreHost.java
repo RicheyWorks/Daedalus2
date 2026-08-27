@@ -553,6 +553,8 @@ public final class ExploreHost {
         double left = right - 0.40;
         double top = 0.93;
         double bot = top - 0.40;
+        glColor3f(0.72f, 0.52f, 0.22f);
+        fill(left - 0.022, bot - 0.022, right + 0.022, top + 0.022);
         glColor3f(0.16f, 0.11f, 0.08f);
         fill(left - 0.014, bot - 0.014, right + 0.014, top + 0.014);
         glColor3f(0.04f, 0.03f, 0.03f);

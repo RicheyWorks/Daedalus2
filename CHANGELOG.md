@@ -51,7 +51,10 @@ under the `_migration/` portfolios.
   you walk. Start and goal wear a wider place-ring; the unfolding
   solver tip gets a soft halo so the head of the ribbon is a place,
   not another cell. Explore's window title is DAEDALUS with the other
-  hosts. `run-daedalus.ps1` launches those hosts from the repo root.
+  hosts. The well legend and export chips sit in a deeper fade with
+  Bahnschrift keys and frosted PNG/ASCII buttons; explore's automap
+  wears a gold frame so the earned map reads as chrome, not a sticker.
+  `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
   re-solves quietly on each living / traffic tick; desktop dropped the
