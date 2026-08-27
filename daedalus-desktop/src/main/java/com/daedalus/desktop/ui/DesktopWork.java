@@ -2,12 +2,14 @@
 
 package com.daedalus.desktop.ui;
 
+import com.daedalus.api.dto.Hotspot;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
 import com.daedalus.solver.SolverBudgetExceededException;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
@@ -58,7 +60,14 @@ public class DesktopWork {
     /** Generate a maze off the FX thread. */
     public Callable<MazeGenerationService.Cached> generateJob(
             String generatorId, int rows, int cols, long seed) {
-        return () -> generation.generate(generatorId, rows, cols, seed);
+        return generateJob(generatorId, rows, cols, seed, null);
+    }
+
+    /** Weighted generate — {@code null} or empty hotspots stay the uniform-cost contract. */
+    public Callable<MazeGenerationService.Cached> generateJob(
+            String generatorId, int rows, int cols, long seed,
+            List<Hotspot> hotspots) {
+        return () -> generation.generate(generatorId, rows, cols, seed, hotspots);
     }
 
     /** Solve a maze off the FX thread. */

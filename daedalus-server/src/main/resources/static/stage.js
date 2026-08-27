@@ -79,8 +79,8 @@
     const show = {
       floor: true,
       wall: true,
-      start: true,
-      goal: true,
+      start: !snap.fog || !!(snap.fog.position || (snap.fog.seen && snap.fog.seen.size)),
+      goal: !snap.fog || !!snap.fog.goal,
       path: !!(snap.path && snap.path.length)
           || !!(snap.hardest && snap.hardest.path && snap.hardest.path.length)
           || !!(snap.race && snap.race.lanes

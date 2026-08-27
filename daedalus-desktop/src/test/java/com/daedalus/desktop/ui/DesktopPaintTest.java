@@ -2,6 +2,7 @@
 
 package com.daedalus.desktop.ui;
 
+import com.daedalus.api.dto.Hotspot;
 import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
 import org.junit.jupiter.api.Test;
@@ -74,6 +75,87 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.pathOverlay(List.of(a, b), a, b))
                 .as("a teleport pair is two endpoints — no connector tile")
                 .isEmpty();
+    }
+
+    @Test
+    void aSolvePathUnfoldsInsteadOfAppearingFinished() {
+        List<Point> path = List.of(
+                new Point(0, 0), new Point(0, 1), new Point(0, 2), new Point(0, 3));
+        assertThat(DesktopPaint.pathPrefix(path, 0)).isEmpty();
+        assertThat(DesktopPaint.pathPrefix(path, 0.5)).containsExactly(
+                new Point(0, 0), new Point(0, 1));
+        assertThat(DesktopPaint.pathPrefix(path, 1)).hasSize(4);
+        assertThat(DesktopPaint.pathRevealMs(10)).isEqualTo(700);
+        assertThat(DesktopPaint.pathRevealMs(300)).isEqualTo(4200);
+        assertThat(DesktopPaint.pathRevealMs(800)).isEqualTo(5000);
+        assertThat(DesktopPaint.pathPrefix(null, 0.5)).isEmpty();
+    }
+
+    @Test
+    void aMazeFitsAboveTheOverlayLegend() {
+        DesktopPaint.Layout full = DesktopPaint.Layout.fit(5, 5, 100, 100);
+        DesktopPaint.Layout maze = DesktopPaint.Layout.fitMaze(5, 5, 100, 100);
+        assertThat(DesktopPaint.LEGEND_RESERVE).isEqualTo(40);
+        assertThat(full).isNotNull();
+        assertThat(maze).isNotNull();
+        assertThat(maze.cellSize())
+                .as("the key keeps 40px so the last passage is not under the legend")
+                .isLessThan(full.cellSize());
+        assertThat(maze.offsetY() + maze.offY()[maze.tileRows()])
+                .as("the painted maze stays in the band above the reserve")
+                .isLessThanOrEqualTo(100 - DesktopPaint.LEGEND_RESERVE);
+    }
+
+    @Test
+    void theLegendNamesOnlyWhatIsOnTheBoard() {
+        assertThat(DesktopPaint.legendKeys(false, true, true)).isEmpty();
+        assertThat(DesktopPaint.legendKeys(true, false, false))
+                .containsExactly("floor", "wall", "start", "goal");
+        assertThat(DesktopPaint.legendKeys(true, true, true))
+                .containsExactly("floor", "wall", "start", "goal", "path", "player");
+        assertThat(DesktopPaint.legendKeys(true, false, false, true))
+                .containsExactly("floor", "wall", "start", "goal", "hotspot");
+    }
+
+    @Test
+    void hotspotPlacementIsDeterministicAndPaintsAdjacentOpenings() {
+        List<Hotspot> a = DesktopPaint.placeSpots(15, 15, 4, 42, 25);
+        List<Hotspot> b = DesktopPaint.placeSpots(15, 15, 4, 42, 25);
+        List<Hotspot> c = DesktopPaint.placeSpots(15, 15, 4, 43, 25);
+        assertThat(a).hasSize(4).isEqualTo(b).isNotEqualTo(c);
+        assertThat(DesktopPaint.placeSpots(15, 15, 0, 42, 25)).isEmpty();
+
+        TileType[][] tiles = new TileType[5][5];
+        for (int r = 0; r < 5; r++) {
+            for (int col = 0; col < 5; col++) {
+                tiles[r][col] = (r % 2 == 0 || col % 2 == 0) ? TileType.WALL : TileType.PASSAGE;
+            }
+        }
+        tiles[1][2] = TileType.PASSAGE;
+        List<Hotspot> pair = List.of(new Hotspot(0, 0, 25), new Hotspot(0, 1, 25));
+        assertThat(DesktopPaint.hotspotOverlay(pair, tiles))
+                .contains(
+                        new DesktopPaint.TileRect(1, 1),
+                        new DesktopPaint.TileRect(1, 3),
+                        new DesktopPaint.TileRect(1, 2));
+        tiles[1][1] = TileType.WALL;
+        assertThat(DesktopPaint.hotspotOverlay(pair, tiles))
+                .as("a wall cell is not a hot-spot wash")
+                .doesNotContain(new DesktopPaint.TileRect(1, 1));
+    }
+
+    @Test
+    void aWalkPaintsStoodOnCellsAndTheOpeningBetweenThem() {
+        Point a = new Point(0, 0);
+        Point b = new Point(0, 1);
+        assertThat(DesktopPaint.walkOverlay(List.of(a, b)))
+                .as("a walk keeps start underfoot; a solve ribbon would have skipped it")
+                .containsExactly(
+                        new DesktopPaint.TileRect(1, 1),
+                        new DesktopPaint.TileRect(1, 3),
+                        new DesktopPaint.TileRect(1, 2));
+        assertThat(DesktopPaint.walkOverlay(List.of())).isEmpty();
+        assertThat(DesktopPaint.walkOverlay(null)).isEmpty();
     }
 
     @Test

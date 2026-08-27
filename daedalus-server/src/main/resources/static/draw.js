@@ -3,10 +3,15 @@
 "use strict";
 (function (global) {
   const COLORS = {
-    wall: "#0b0f14", floor: "#3d4a58", floorHi: "#536272",
+    wall: "#0b0f14", unseen: "#05070a",
+    floor: "#3d4a58", floorHi: "#536272", floorDim: "#2a333c",
     start: "#3ee08f", goal: "#ff5a5f", path: "#8fb8ff",
   };
   const PLAYER_COLORS = ["#f5c14a", "#ff8fa3", "#9ecbff", "#7ce2b3"];
+  /** Overlay legend sits on the well — reserve so the last row is not under the key. */
+  const LEGEND_RESERVE = 40;
+  /** Show ASCII / PNG sit on the well — reserve so the first row is not under them. */
+  const EXPORT_RESERVE = 28;
 
   function stageBox(canvas) {
     const wrap = canvas.parentElement;
@@ -125,6 +130,34 @@
         || seenCell(fog, r, c - 1) || seenCell(fog, r, c);
   }
 
+  function mixHex(a, b, t) {
+    const n = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+    const A = n(a), B = n(b);
+    const u = Math.max(0, Math.min(1, t));
+    return "rgb(" + A.map((v, i) => Math.round(v + (B[i] - v) * u)).join(",") + ")";
+  }
+
+  /**
+   * Lamp falloff from the explorer. Stood-on memory stays visible; cells
+   * underfoot read as the bright end of the corridor.
+   */
+  function fogLamp(fog, tr, tc) {
+    if (!fog || !fog.position) return 1;
+    const d = (r, c) => Math.abs(r - fog.position.row) + Math.abs(c - fog.position.col);
+    const nearest = dists => Math.max(0.38, 1 - 0.12 * Math.min.apply(null, dists));
+    if (tr % 2 === 1 && tc % 2 === 1) return nearest([d((tr - 1) / 2, (tc - 1) / 2)]);
+    if (tr % 2 === 1 && tc % 2 === 0) {
+      const r = (tr - 1) / 2, c = tc / 2;
+      return nearest([d(r, c - 1), d(r, c)]);
+    }
+    if (tr % 2 === 0 && tc % 2 === 1) {
+      const r = tr / 2, c = (tc - 1) / 2;
+      return nearest([d(r - 1, c), d(r, c)]);
+    }
+    const r = tr / 2, c = tc / 2;
+    return nearest([d(r - 1, c - 1), d(r - 1, c), d(r, c - 1), d(r, c)]);
+  }
+
   function hitCell(geom, x, y) {
     if (!geom) return null;
     const track = (off, v) => {
@@ -164,29 +197,39 @@
     const tiles = scene.tiles;
     const th = tiles.length, tw = tiles[0].length;
     const box = stageBox(canvas);
-    const geom = computeGeometry(tiles, box.w, box.h);
+    const geom = computeGeometry(tiles, box.w, box.h - LEGEND_RESERVE - EXPORT_RESERVE);
     canvas.width = geom.offX[tw];
     canvas.height = geom.offY[th];
     canvas.style.width = geom.cssW + "px";
     canvas.style.height = geom.cssH + "px";
+    canvas.style.marginTop = EXPORT_RESERVE + "px";
+    canvas.style.marginBottom = LEGEND_RESERVE + "px";
     const g = canvas.getContext("2d");
     g.imageSmoothingEnabled = false;
 
-    g.fillStyle = COLORS.wall;
+    g.fillStyle = scene.fog ? COLORS.unseen : COLORS.wall;
     g.fillRect(0, 0, canvas.width, canvas.height);
     let start = null, goal = null;
     for (let r = 0; r < th; r++) {
       for (let col = 0; col < tw; col++) {
         const t = tiles[r][col];
-        if (t === "#" && !(r % 2 === 0 && col % 2 === 0 && isInteriorPost(tiles, r, col))) {
+        if (!fogRevealsTile(scene.fog, r, col)) continue;
+        const wallTile = t === "#"
+            && !(r % 2 === 0 && col % 2 === 0 && isInteriorPost(tiles, r, col));
+        if (wallTile) {
+          if (scene.fog) {
+            g.fillStyle = COLORS.wall;
+            g.fillRect(geom.offX[col], geom.offY[r],
+                       geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
+          }
           continue;
         }
         if (r % 2 === 1 && col % 2 === 1 && isRock(tiles, r, col)) continue;
-        if (!fogRevealsTile(scene.fog, r, col)) continue;
-        g.fillStyle = COLORS.floor;
+        const lamp = scene.fog ? fogLamp(scene.fog, r, col) : 1;
+        g.fillStyle = scene.fog ? mixHex(COLORS.floorDim, COLORS.floor, lamp) : COLORS.floor;
         g.fillRect(geom.offX[col], geom.offY[r],
                    geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
-        if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10) {
+        if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
           g.fillStyle = COLORS.floorHi;
           g.fillRect(geom.offX[col] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
         }
@@ -196,9 +239,12 @@
     }
 
     if (scene.fog) {
-      paintWalk(g, geom, scene.fog.walk, PLAYER_COLORS[0], 1, 0.45);
-      marker(g, geom, scene.fog.position, PLAYER_COLORS[0], 0.42);
+      paintWalk(g, geom, scene.fog.walk, PLAYER_COLORS[0], 1, 0.32);
+      if (start && seenCell(scene.fog, start.row, start.col)) {
+        marker(g, geom, start, COLORS.start, 0.34);
+      }
       if (scene.fog.goal) marker(g, geom, scene.fog.goal, COLORS.goal, 0.34);
+      marker(g, geom, scene.fog.position, PLAYER_COLORS[0], 0.42);
       return geom;
     }
 
@@ -449,6 +495,8 @@
     canvas.height = Math.round(cssH * dpr);
     canvas.style.width = cssW + "px";
     canvas.style.height = cssH + "px";
+    canvas.style.marginTop = "0";
+    canvas.style.marginBottom = "0";
     const g = canvas.getContext("2d");
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
     g.imageSmoothingEnabled = false;
@@ -473,6 +521,7 @@
 
   global.DaedalusDraw = {
     paint, paintEmpty, computeGeometry, isRock, isInteriorPost,
-    paintWalk, walkHead, fogRevealsTile, hitCell, pathRevealMs,
+    paintWalk, walkHead, fogRevealsTile, fogLamp, hitCell, pathRevealMs,
+    LEGEND_RESERVE, EXPORT_RESERVE,
   };
 })(window);

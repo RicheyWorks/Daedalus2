@@ -8,15 +8,18 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
 
 <!--
     Main desktop layout. Three regions:
 
-      - top:    toolbar (generator picker + grid dimensions + seed + Generate)
-      - center: a Pane that holds a Canvas; canvas is sized to fill the pane
+      - top:    compact toolbar (generator, grid, seed, Generate, solver)
+      - center: canvas pane; legend overlays the well and does not steal height
       - bottom: status bar (last action + timing)
 
     Controller is wired by Spring (DaedalusPrimaryStage's controller factory).
@@ -29,27 +32,33 @@
             styleClass="root">
 
     <top>
-        <HBox spacing="8" alignment="CENTER_LEFT" styleClass="toolbar">
+        <HBox spacing="6" alignment="CENTER_LEFT" styleClass="toolbar">
             <padding>
-                <Insets top="10" right="12" bottom="10" left="12"/>
+                <Insets top="6" right="10" bottom="6" left="10"/>
             </padding>
 
-            <Label text="Generator:"/>
-            <ComboBox fx:id="generatorChoice" prefWidth="240"/>
+            <ComboBox fx:id="generatorChoice" prefWidth="200">
+                <tooltip><Tooltip text="Generator"/></tooltip>
+            </ComboBox>
 
             <Separator orientation="VERTICAL"/>
 
-            <Label text="Rows:"/>
-            <Spinner fx:id="rowsSpinner" prefWidth="80" editable="true"/>
-            <Label text="Cols:"/>
-            <Spinner fx:id="colsSpinner" prefWidth="80" editable="true"/>
+            <Label text="Rows"/>
+            <Spinner fx:id="rowsSpinner" prefWidth="64" editable="true"/>
+            <Label text="Cols"/>
+            <Spinner fx:id="colsSpinner" prefWidth="64" editable="true"/>
+            <Spinner fx:id="hotspotSpinner" prefWidth="52" editable="true">
+                <tooltip><Tooltip text="Hot spots"/></tooltip>
+            </Spinner>
+            <Spinner fx:id="hotspotCostSpinner" prefWidth="56" editable="true">
+                <tooltip><Tooltip text="Spot cost"/></tooltip>
+            </Spinner>
 
             <Separator orientation="VERTICAL"/>
 
-            <Label text="Seed:"/>
-            <TextField fx:id="seedField" prefWidth="140" promptText="auto"/>
-
-            <Separator orientation="VERTICAL"/>
+            <TextField fx:id="seedField" prefWidth="110" promptText="seed">
+                <tooltip><Tooltip text="Seed (blank = random)"/></tooltip>
+            </TextField>
 
             <Button fx:id="generateButton"
                     text="Generate"
@@ -58,8 +67,9 @@
 
             <Separator orientation="VERTICAL"/>
 
-            <Label text="Solver:"/>
-            <ComboBox fx:id="solverChoice" prefWidth="180"/>
+            <ComboBox fx:id="solverChoice" prefWidth="150">
+                <tooltip><Tooltip text="Solver"/></tooltip>
+            </ComboBox>
             <Button fx:id="solveButton" text="Solve" onAction="#onSolve"/>
             <Button fx:id="resetButton" text="Reset" onAction="#onReset"/>
         </HBox>
@@ -68,13 +78,53 @@
     <center>
         <Pane fx:id="canvasParent" styleClass="canvas-pane">
             <Canvas fx:id="canvas"/>
+            <HBox fx:id="legendBox" spacing="14" alignment="CENTER" styleClass="legend"
+                  managed="false" mouseTransparent="true" visible="false">
+                <Label text="floor">
+                    <graphic>
+                        <Rectangle width="10" height="10" fill="#3d4a58" arcWidth="3" arcHeight="3"/>
+                    </graphic>
+                </Label>
+                <Label text="wall / rock">
+                    <graphic>
+                        <Rectangle width="10" height="10" fill="#0b0f14"
+                                   stroke="#1e2832" arcWidth="3" arcHeight="3"/>
+                    </graphic>
+                </Label>
+                <Label text="start">
+                    <graphic>
+                        <Circle radius="5" fill="#3ee08f"/>
+                    </graphic>
+                </Label>
+                <Label text="goal">
+                    <graphic>
+                        <Circle radius="5" fill="#ff5a5f"/>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendPath" text="solver path" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="10" height="10" fill="#8fb8ff" arcWidth="3" arcHeight="3"/>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendPlayer" text="walk" managed="false" visible="false">
+                    <graphic>
+                        <Circle radius="5" fill="#f5c14a"/>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendHotspot" text="hot spot" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="10" height="10" fill="#e5484d" opacity="0.5"
+                                   arcWidth="3" arcHeight="3"/>
+                    </graphic>
+                </Label>
+            </HBox>
         </Pane>
     </center>
 
     <bottom>
         <HBox spacing="8" alignment="CENTER_LEFT" styleClass="status-bar">
             <padding>
-                <Insets top="6" right="12" bottom="6" left="12"/>
+                <Insets top="4" right="10" bottom="4" left="10"/>
             </padding>
             <Label fx:id="statusLabel" text="Ready — pick a generator and click Generate."/>
         </HBox>

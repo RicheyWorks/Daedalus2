@@ -88,7 +88,7 @@
                  position: sticky; top: 60px; padding: 12px; }
   #stage { flex: 1 1 auto; min-height: 420px; display: flex; align-items: center;
            justify-content: center; background: var(--void); border-radius: 10px;
-           border: 1px solid var(--line); overflow: hidden; }
+           border: 1px solid var(--line); overflow: hidden; position: relative; }
   label { display: block; font-size: 12px; color: var(--dim); margin: 8px 0 2px; }
   label.check { display: flex; align-items: center; gap: 8px; margin: 10px 0 0;
                 color: var(--text); cursor: pointer; }
@@ -124,7 +124,10 @@
            border-top: 1px solid var(--line); margin-top: 12px; padding-top: 8px; }
   #stats span { color: var(--dim); }
   #legend { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
-            margin-top: 10px; font-size: 11px; color: var(--dim); }
+            position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
+            margin: 0; padding: 18px 12px 8px;
+            background: linear-gradient(transparent, rgba(5, 7, 10, .82));
+            font-size: 11px; color: var(--dim); pointer-events: none; }
   #legend[hidden], #legend [hidden] { display: none; }
   #legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px;
               margin-right: 5px; vertical-align: -1px; }
@@ -151,10 +154,11 @@
   #asciiOut { margin: 10px 0 0; padding: 8px; background: var(--bg);
               border: 1px solid var(--line); border-radius: 6px;
               font: 11px/1.2 ui-monospace, monospace; overflow: auto;
-              max-height: 280px; color: var(--text); }
-  .exports { text-align: center; margin-top: 8px;
-             display: flex; gap: 12px; justify-content: center; align-items: center; }
-  .exports button, .exports a { width: auto; margin-top: 0; padding: 4px 10px; font-size: 12px; }
+              max-height: 22vh; color: var(--text); }
+  .exports { position: absolute; top: 8px; right: 10px; z-index: 2;
+             margin: 0; display: flex; gap: 8px; align-items: center; }
+  .exports button, .exports a { width: auto; margin: 0; padding: 3px 8px; font-size: 11px;
+                                background: rgba(7, 9, 12, .72); }
   kbd { background: var(--bg); border: 1px solid var(--line); border-radius: 3px;
         padding: 0 4px; font-size: 11px; }
 </style>
@@ -292,29 +296,31 @@
   </section>
 
   <section class="panel board-panel" id="board">
-    <div id="stage"><canvas id="maze" width="640" height="480"></canvas></div>
-    <div id="legend" hidden>
-      <span data-key="floor"><i style="background:#3d4a58"></i>floor</span>
-      <span data-key="wall"><i style="background:#0b0f14;border:1px solid #1e2832"></i>wall / rock</span>
-      <span data-key="start"><i style="background:#3ee08f;border-radius:50%"></i>start</span>
-      <span data-key="goal"><i style="background:#ff5a5f;border-radius:50%"></i>goal</span>
-      <span data-key="path"><i style="background:#8fb8ff"></i>solver path</span>
-      <span data-key="hotspot"><i style="background:rgba(229,72,77,.5)"></i>hot spot</span>
-      <span data-key="player"><i style="background:#f5c14a;border-radius:50%"></i>players</span>
-      <span data-key="choke"><i style="background:#c084fc"></i>chokepoint</span>
-      <span data-key="waypoint"><i style="background:#f2c94c;transform:rotate(45deg)"></i>waypoint</span>
-      <span data-key="ghost"><i style="background:#e6edf3;border-radius:50%;opacity:.6"></i>ghost</span>
-      <span data-key="fog"><i style="background:#0b0f14;border:1px solid #1e2832"></i>unseen (fog)</span>
+    <div id="stage">
+      <canvas id="maze" width="640" height="480"></canvas>
+      <div id="legend" hidden>
+        <span data-key="floor"><i style="background:#3d4a58"></i>floor</span>
+        <span data-key="wall"><i style="background:#0b0f14;border:1px solid #1e2832"></i>wall / rock</span>
+        <span data-key="start"><i style="background:#3ee08f;border-radius:50%"></i>start</span>
+        <span data-key="goal"><i style="background:#ff5a5f;border-radius:50%"></i>goal</span>
+        <span data-key="path"><i style="background:#8fb8ff"></i>solver path</span>
+        <span data-key="hotspot"><i style="background:rgba(229,72,77,.5)"></i>hot spot</span>
+        <span data-key="player"><i style="background:#f5c14a;border-radius:50%"></i>players</span>
+        <span data-key="choke"><i style="background:#c084fc"></i>chokepoint</span>
+        <span data-key="waypoint"><i style="background:#f2c94c;transform:rotate(45deg)"></i>waypoint</span>
+        <span data-key="ghost"><i style="background:#e6edf3;border-radius:50%;opacity:.6"></i>ghost</span>
+        <span data-key="fog"><i style="background:#05070a;border:1px solid #1e2832"></i>unseen (fog)</span>
+      </div>
+      <div class="exports">
+        <a id="pngExport" class="hint" href="#" download="maze.png"
+           style="display:none;color:var(--accent2)">download as PNG</a>
+        <button id="ascii" disabled
+                title="The same maze negotiated as text/plain — what curl gets with Accept: text/plain. Client-side tile dump would skip the content-negotiation contract">
+          Show ASCII</button>
+      </div>
     </div>
     <div id="compareBox"></div>
     <pre id="asciiOut" hidden></pre>
-    <div class="exports">
-      <a id="pngExport" class="hint" href="#" download="maze.png"
-         style="display:none;color:var(--accent2)">download as PNG</a>
-      <button id="ascii" disabled
-              title="The same maze negotiated as text/plain — what curl gets with Accept: text/plain. Client-side tile dump would skip the content-negotiation contract">
-        Show ASCII</button>
-    </div>
   </section>
 
   <div class="rail">

@@ -2,11 +2,14 @@
 
 package com.daedalus.desktop.ui;
 
+import com.daedalus.api.dto.Hotspot;
 import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Canvas layout for the desktop shell, without JavaFX.
@@ -44,6 +47,8 @@ public final class DesktopPaint {
     public static final Point EMPTY_MARK_GOAL = new Point(2, 4);
     public static final double EMPTY_MARK_BUDGET_W = 132;
     public static final double EMPTY_MARK_BUDGET_H = 92;
+    /** Overlay legend sits on the well — same reserve as {@code draw.js}. */
+    public static final double LEGEND_RESERVE = 40;
 
     private DesktopPaint() {
     }
@@ -81,6 +86,14 @@ public final class DesktopPaint {
                     tileCols,
                     offX,
                     offY);
+        }
+
+        /**
+         * Fit a maze above the overlay legend. Using the full pane put the
+         * last row under the key.
+         */
+        public static Layout fitMaze(int tileRows, int tileCols, double width, double height) {
+            return fit(tileRows, tileCols, width, height - LEGEND_RESERVE);
         }
 
         private static double[] track(int n, double wall, double cell) {
@@ -165,6 +178,142 @@ public final class DesktopPaint {
             }
         }
         return List.copyOf(out);
+    }
+
+    /**
+     * Player memory — every stood-on cell and the opening between adjacent
+     * steps. A solve ribbon skips start/goal; a walk that hid those cells
+     * looked like the explorer had never been there.
+     */
+    public static List<TileRect> walkOverlay(List<Point> walk) {
+        return pathOverlay(walk, null, null);
+    }
+
+    /**
+     * Name only what is on the board — same rule as {@code stage.js} {@code syncLegend}.
+     */
+    public static List<String> legendKeys(boolean maze, boolean path, boolean walk) {
+        return legendKeys(maze, path, walk, false);
+    }
+
+    public static List<String> legendKeys(boolean maze, boolean path, boolean walk,
+                                          boolean hotspot) {
+        if (!maze) {
+            return List.of();
+        }
+        List<String> keys = new ArrayList<>(List.of("floor", "wall", "start", "goal"));
+        if (path) {
+            keys.add("path");
+        }
+        if (walk) {
+            keys.add("player");
+        }
+        if (hotspot) {
+            keys.add("hotspot");
+        }
+        return List.copyOf(keys);
+    }
+
+    /**
+     * Same placement as {@code share.js} {@code placeSpots} so a seed that
+     * paints a field on the web paints the same cells here.
+     */
+    public static List<Hotspot> placeSpots(int rows, int cols, int count, long seed,
+                                           double cost) {
+        if (rows <= 0 || cols <= 0 || count <= 0) {
+            return List.of();
+        }
+        int max = Math.min(count, rows * cols);
+        int[] state = {(int) seed};
+        Set<String> seen = new HashSet<>();
+        List<Hotspot> out = new ArrayList<>();
+        while (out.size() < max) {
+            int r = (int) Math.floor(rng32(state) * rows);
+            int c = (int) Math.floor(rng32(state) * cols);
+            String k = r + "," + c;
+            if (seen.add(k)) {
+                out.add(new Hotspot(r, c, cost));
+            }
+        }
+        return List.copyOf(out);
+    }
+
+    /**
+     * Mulberry32 — bit-identical to {@code share.js} {@code rng32}.
+     */
+    static double rng32(int[] state) {
+        int a = state[0] + 0x6D2B79F5;
+        state[0] = a;
+        int t = (a ^ (a >>> 15)) * (1 | a);
+        t = t + ((t ^ (t >>> 7)) * (61 | t)) ^ t;
+        return Integer.toUnsignedLong(t ^ (t >>> 14)) / 4294967296.0;
+    }
+
+    /**
+     * Hot-spot cells and the openings between adjacent ones. Rock and wall
+     * cells stay void — same skip as {@code draw.js}.
+     */
+    public static List<TileRect> hotspotOverlay(List<Hotspot> spots, TileType[][] tiles) {
+        if (spots == null || spots.isEmpty() || tiles == null || tiles.length < 3) {
+            return List.of();
+        }
+        int rows = (tiles.length - 1) / 2;
+        int cols = (tiles[0].length - 1) / 2;
+        Set<String> live = new HashSet<>();
+        List<TileRect> out = new ArrayList<>();
+        for (Hotspot h : spots) {
+            if (h == null || h.row() < 0 || h.col() < 0 || h.row() >= rows || h.col() >= cols) {
+                continue;
+            }
+            int tr = 2 * h.row() + 1;
+            int tc = 2 * h.col() + 1;
+            if (tiles[tr][tc] == TileType.WALL || rockCell(tiles, tr, tc)) {
+                continue;
+            }
+            live.add(h.row() + "," + h.col());
+            out.add(new TileRect(tr, tc));
+        }
+        for (String key : live) {
+            String[] parts = key.split(",");
+            int r = Integer.parseInt(parts[0]);
+            int c = Integer.parseInt(parts[1]);
+            if (live.contains(r + "," + (c + 1)) && tiles[2 * r + 1][2 * c + 2] != TileType.WALL) {
+                out.add(new TileRect(2 * r + 1, 2 * c + 2));
+            }
+            if (live.contains((r + 1) + "," + c) && tiles[2 * r + 2][2 * c + 1] != TileType.WALL) {
+                out.add(new TileRect(2 * r + 2, 2 * c + 1));
+            }
+        }
+        return List.copyOf(out);
+    }
+
+    private static boolean rockCell(TileType[][] tiles, int r, int c) {
+        if (r <= 0 || c <= 0 || r >= tiles.length - 1 || c >= tiles[0].length - 1) {
+            return false;
+        }
+        return tiles[r][c] != TileType.START && tiles[r][c] != TileType.GOAL
+                && tiles[r - 1][c] == TileType.WALL && tiles[r + 1][c] == TileType.WALL
+                && tiles[r][c - 1] == TileType.WALL && tiles[r][c + 1] == TileType.WALL;
+    }
+
+    /**
+     * Same unfold budget as {@code draw.js} {@code pathRevealMs} — a 300-cell
+     * route should grow, not appear as a finished ribbon.
+     */
+    public static int pathRevealMs(int pathLength) {
+        return Math.min(5000, Math.max(700, pathLength * 14));
+    }
+
+    /** Visible prefix of a route at {@code progress} in {@code [0, 1]}. */
+    public static List<Point> pathPrefix(List<Point> path, double progress) {
+        if (path == null || path.isEmpty() || progress <= 0) {
+            return List.of();
+        }
+        if (progress >= 1) {
+            return List.copyOf(path);
+        }
+        int n = Math.max(1, (int) Math.ceil(path.size() * progress));
+        return List.copyOf(path.subList(0, Math.min(n, path.size())));
     }
 
     public static Marker playerMarker(Layout layout, Point player) {

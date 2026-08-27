@@ -11,6 +11,7 @@ import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
+import javafx.animation.AnimationTimer;
 import javafx.concurrent.Task;
 import com.daedalus.solver.MazeSolver;
 import com.daedalus.solver.solvers.SolverRegistry;
@@ -25,6 +26,7 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -34,6 +36,7 @@ import javafx.scene.transform.Scale;
 import javafx.stage.Window;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -85,6 +88,8 @@ public class MainController {
     @FXML private ComboBox<String> generatorChoice;
     @FXML private Spinner<Integer> rowsSpinner;
     @FXML private Spinner<Integer> colsSpinner;
+    @FXML private Spinner<Integer> hotspotSpinner;
+    @FXML private Spinner<Integer> hotspotCostSpinner;
     @FXML private TextField seedField;
     @FXML private Button generateButton;     // referenced from FXML, kept for future enable/disable
     @FXML private ComboBox<String> solverChoice;
@@ -92,6 +97,10 @@ public class MainController {
     @FXML private Button resetButton;        // ditto
     @FXML private Pane canvasParent;
     @FXML private Canvas canvas;
+    @FXML private HBox legendBox;
+    @FXML private Label legendPath;
+    @FXML private Label legendPlayer;
+    @FXML private Label legendHotspot;
     @FXML private Label statusLabel;
 
     /** Last successfully-generated maze; held so resize events can re-render it. */
@@ -100,8 +109,16 @@ public class MainController {
     /** Solver path overlay (cell-coordinate {@link Point}s) — null when no solve has run since the last Generate. */
     private List<Point> currentPath;
 
+    /** Full solve route; {@link #currentPath} is the visible prefix while it unfolds. */
+    private List<Point> solvedPath;
+
+    private AnimationTimer pathReveal;
+
     /** Player marker position. Set on Generate / Reset; updated on arrow-key moves. */
     private Point playerPos;
+
+    /** Stood-on cells for the walk wash — web paints {@code trails}; a lone disc left no corridor. */
+    private final List<Point> playerWalk = new ArrayList<>();
 
     /** Cached: true once playerPos has reached current.metadata().goal(). Reset on Generate / Reset. */
     private boolean reachedGoal;
@@ -151,6 +168,14 @@ public class MainController {
 
         rowsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, MAX_DIM, 30));
         colsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, MAX_DIM, 40));
+        if (hotspotSpinner != null) {
+            hotspotSpinner.setValueFactory(
+                    new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 64, 0));
+        }
+        if (hotspotCostSpinner != null) {
+            hotspotCostSpinner.setValueFactory(
+                    new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 25));
+        }
 
         // Backing store is the pane times the window output scale — a 2× display
         // used to smear thin walls the same way the web did before devicePixelRatio.
@@ -171,6 +196,14 @@ public class MainController {
         canvas.setFocusTraversable(true);
         canvas.setOnMouseClicked(e -> canvas.requestFocus());
         canvas.setOnKeyPressed(this::onKeyPressed);
+
+        if (legendBox != null) {
+            legendBox.layoutXProperty().bind(
+                    canvasParent.widthProperty().subtract(legendBox.widthProperty()).divide(2));
+            legendBox.layoutYProperty().bind(
+                    canvasParent.heightProperty().subtract(legendBox.heightProperty()).subtract(4));
+        }
+        syncLegend();
     }
 
     /** Wired from the FXML's Generate button. */
@@ -197,11 +230,15 @@ public class MainController {
             }
         }
 
+        int spotCount = hotspotSpinner != null ? hotspotSpinner.getValue() : 0;
+        int spotCost = hotspotCostSpinner != null ? hotspotCostSpinner.getValue() : 25;
+        var spots = DesktopPaint.placeSpots(rows, cols, spotCount, seed, spotCost);
+
         long t0 = System.nanoTime();
         Task<MazeGenerationService.Cached> task = new Task<>() {
             @Override
             protected MazeGenerationService.Cached call() throws Exception {
-                return work.generateJob(genId, rows, cols, seed).call();
+                return work.generateJob(genId, rows, cols, seed, spots).call();
             }
         };
         task.setOnSucceeded(e -> {
@@ -209,8 +246,11 @@ public class MainController {
             long elapsedMs = (System.nanoTime() - t0) / 1_000_000L;
 
             // Fresh maze invalidates any prior solve overlay and snaps the player to start.
+            stopPathReveal();
             currentPath = null;
+            solvedPath = null;
             playerPos = current.metadata().start();
+            resetWalk(playerPos);
             reachedGoal = false;
 
             redraw();
@@ -274,12 +314,13 @@ public class MainController {
         };
         task.setOnSucceeded(e -> {
             long elapsedMs = (System.nanoTime() - t0) / 1_000_000L;
-            currentPath = task.getValue().path();
-            redraw();
+            solvedPath = task.getValue().path();
+            currentPath = DesktopPaint.pathPrefix(solvedPath, 0.01);
+            startPathReveal();
             canvas.requestFocus();
             statusLabel.setText(String.format(
                     "Solved with %s in %dms — %d cells on the path.",
-                    solverId, elapsedMs, currentPath == null ? 0 : currentPath.size()));
+                    solverId, elapsedMs, solvedPath == null ? 0 : solvedPath.size()));
             busy(false);
         });
         task.setOnFailed(e -> fail(DesktopWork.describeFailure("Solve", task.getException())));
@@ -291,6 +332,7 @@ public class MainController {
     public void onReset() {
         if (current == null) return;
         playerPos = current.metadata().start();
+        resetWalk(playerPos);
         reachedGoal = false;
         redraw();
         canvas.requestFocus();
@@ -333,6 +375,7 @@ public class MainController {
             return;
         }
         playerPos = step.position();
+        rememberWalk(playerPos);
         if (step.reachedGoal()) {
             reachedGoal = true;
             statusLabel.setText("Reached the goal!  Press Reset, or Generate a new maze.");
@@ -342,17 +385,39 @@ public class MainController {
 
     // ---------- rendering ----------
 
-    /**
-     * Paint {@link #current} onto the canvas. Layered:
-     * <ol>
-     *   <li>Background fill.</li>
-     *   <li>Tile grid via {@link MazeGrid#toTileGrid()} — walls and passages. Start and
-     *       goal tiles paint as floor; the discs come later.</li>
-     *   <li>Solve path overlay (if {@link #currentPath} is set) — drawn under the discs.</li>
-     *   <li>Start / goal discs, then the player — last so it's always on top.</li>
-     * </ol>
-     * Thin-wall cells, centered with letterboxing on the longer axis so the maze isn't stretched.
-     */
+    private void stopPathReveal() {
+        if (pathReveal != null) {
+            pathReveal.stop();
+            pathReveal = null;
+        }
+    }
+
+    /** Unfold the route the way the web painter does — not a finished ribbon. */
+    private void startPathReveal() {
+        stopPathReveal();
+        List<Point> full = solvedPath;
+        if (full == null || full.isEmpty()) {
+            currentPath = full;
+            redraw();
+            return;
+        }
+        long budgetNs = DesktopPaint.pathRevealMs(full.size()) * 1_000_000L;
+        long started = System.nanoTime();
+        pathReveal = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                double progress = (System.nanoTime() - started) / (double) budgetNs;
+                currentPath = DesktopPaint.pathPrefix(full, progress);
+                redraw();
+                if (progress >= 1) {
+                    currentPath = full;
+                    stopPathReveal();
+                }
+            }
+        };
+        pathReveal.start();
+    }
+
     private void armWindow(Window win) {
         if (win == null) {
             return;
@@ -387,6 +452,17 @@ public class MainController {
         redraw();
     }
 
+    /**
+     * Paint {@link #current} onto the canvas. Layered:
+     * <ol>
+     *   <li>Background fill.</li>
+     *   <li>Tile grid via {@link MazeGrid#toTileGrid()} — walls and passages. Start and
+     *       goal tiles paint as floor; the discs come later.</li>
+     *   <li>Solve path overlay (if {@link #currentPath} is set) — drawn under the discs.</li>
+     *   <li>Start / goal discs, then the player — last so it's always on top.</li>
+     * </ol>
+     * Thin-wall cells, centered with letterboxing on the longer axis so the maze isn't stretched.
+     */
     private void redraw() {
         DesktopPaint.Backing store = backing();
         if (store == null) {
@@ -432,11 +508,12 @@ public class MainController {
             g.setFont(Font.font("Segoe UI", 13));
             g.fillText(DesktopPaint.EMPTY_DETAIL, w / 2, h / 2 + 86);
             g.fillText(DesktopPaint.EMPTY_HINT, w / 2, h / 2 + 104);
+            syncLegend();
             return;
         }
 
         TileType[][] tiles = current.grid().toTileGrid();
-        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fitMaze(
                 tiles.length, tiles[0].length, w, h);
         if (layout == null) return;
 
@@ -448,7 +525,26 @@ public class MainController {
             }
         }
 
-        // ---- 2) solve-path overlay ----
+        if (current.hotspots() != null && !current.hotspots().isEmpty()) {
+            g.setFill(Color.web("#e5484d"));
+            g.setGlobalAlpha(0.4);
+            for (DesktopPaint.TileRect tile : DesktopPaint.hotspotOverlay(current.hotspots(), tiles)) {
+                g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
+                        layout.w(tile.tileCol()), layout.h(tile.tileRow()));
+            }
+            g.setGlobalAlpha(1);
+        }
+
+        // ---- 2) player walk, then solve-path overlay ----
+        if (!playerWalk.isEmpty() && theme != null) {
+            g.setGlobalAlpha(0.32);
+            g.setFill(theme.player());
+            for (DesktopPaint.TileRect tile : DesktopPaint.walkOverlay(playerWalk)) {
+                g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
+                        layout.w(tile.tileCol()), layout.h(tile.tileRow()));
+            }
+            g.setGlobalAlpha(1);
+        }
         if (currentPath != null && !currentPath.isEmpty() && theme != null) {
             g.setFill(theme.path());
             for (DesktopPaint.TileRect tile : DesktopPaint.pathOverlay(
@@ -470,6 +566,46 @@ public class MainController {
         DesktopPaint.Marker mark = DesktopPaint.playerMarker(layout, playerPos);
         if (mark != null && theme != null) {
             paintDisc(g, mark, reachedGoal ? theme.path() : theme.player());
+        }
+        syncLegend();
+    }
+
+    private void syncLegend() {
+        if (legendBox == null) {
+            return;
+        }
+        List<String> keys = DesktopPaint.legendKeys(
+                current != null,
+                currentPath != null && !currentPath.isEmpty(),
+                playerWalk.size() > 1,
+                current != null && current.hotspots() != null && !current.hotspots().isEmpty());
+        legendBox.setVisible(!keys.isEmpty());
+        showLegendKey(legendPath, keys.contains("path"));
+        showLegendKey(legendPlayer, keys.contains("player"));
+        showLegendKey(legendHotspot, keys.contains("hotspot"));
+    }
+
+    private static void showLegendKey(Label key, boolean on) {
+        if (key == null) {
+            return;
+        }
+        key.setVisible(on);
+        key.setManaged(on);
+    }
+
+    private void resetWalk(Point start) {
+        playerWalk.clear();
+        if (start != null) {
+            playerWalk.add(start);
+        }
+    }
+
+    private void rememberWalk(Point cell) {
+        if (cell == null) {
+            return;
+        }
+        if (playerWalk.isEmpty() || !playerWalk.get(playerWalk.size() - 1).equals(cell)) {
+            playerWalk.add(cell);
         }
     }
 

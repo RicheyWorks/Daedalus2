@@ -10,6 +10,42 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Show ASCII and PNG no longer cover the first row.** They sit on the
+  well; the maze now keeps 28px above the dungeon so the top-right cells
+  stay a corridor, not a button.
+
+- **Desktop hot spots paint as a field.** The web already washed costs;
+  desktop generate had no spots, so a weighted maze was a plain dungeon.
+  Same placement as the web, same coral wash, and the legend names them.
+
+- **Show ASCII and PNG sit on the well.** They were a row under `#stage`.
+  The dump still scrolls in 22vh; the buttons no longer shrink the maze.
+
+- **The overlay legend no longer covers the last row.** Web and desktop
+  reserve 40px under the maze so the key sits in the well without hiding
+  the dungeon.
+
+- **Desktop chrome recedes so the maze keeps the well.** The toolbar
+  drops the caption labels and the fat padding. The legend sits on the
+  canvas and names only what is on the board, same as the web key.
+
+- **Desktop walking leaves a corridor.** The web paints a trail; desktop
+  used to show only the disc, so a walk left no memory on the floor.
+
+- **Fog of war paints a dungeon, not stamped cells in a void.** Unseen is
+  darker than the walls you have touched; memory floors fall off from the
+  explorer. Start stays a disc. Goal only when the agent knows it.
+
+- **The legend sits on the well.** It no longer takes a row under `#stage`,
+  so the maze keeps that height. The key still names only what is on the
+  board.
+
+- **Desktop Solve unfolds the route.** The web painter grows a path;
+  desktop used to stamp the finished ribbon. Same 14ms-per-cell budget.
+
+- **Show ASCII no longer steals the well.** The dump scrolls inside 22vh,
+  same cap as Compare, so a 99×99 text dump cannot shrink the maze.
+
 - **Compare and theory captions no longer steal the well.** `#compareBox`
   scrolls inside 22vh instead of shrinking `#stage`. Generator and solver
   cards keep the bias note; complexity moves to the select title.
