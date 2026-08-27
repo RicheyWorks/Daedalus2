@@ -89,6 +89,18 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.pathRevealMs(300)).isEqualTo(4200);
         assertThat(DesktopPaint.pathRevealMs(800)).isEqualTo(5000);
         assertThat(DesktopPaint.pathPrefix(null, 0.5)).isEmpty();
+        assertThat(DesktopPaint.walkHead(DesktopPaint.pathPrefix(path, 0.5)))
+                .isEqualTo(new Point(0, 1));
+        assertThat(DesktopPaint.walkHead(List.of())).isNull();
+        assertThat(DesktopPaint.PATH_ALPHA).isEqualTo(0.85);
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(3, 3, 30, 30);
+        DesktopPaint.Marker head = DesktopPaint.pathHeadMarker(layout, List.of(new Point(0, 0)));
+        DesktopPaint.Marker player = DesktopPaint.playerMarker(layout, new Point(0, 0));
+        assertThat(head).isNotNull();
+        assertThat(head.size())
+                .as("web head radius is 0.38·cell")
+                .isCloseTo(15.2, within(1e-9));
+        assertThat(head.size()).isLessThan(player.size());
     }
 
     @Test
@@ -185,6 +197,28 @@ class DesktopPaintTest {
     }
 
     @Test
+    void aWidePassageGetsTheSameHighlightStripeAsTheWeb() {
+        DesktopPaint.Layout roomy = DesktopPaint.Layout.fit(3, 3, 30, 30);
+        DesktopPaint.Hairline stripe = DesktopPaint.floorHiStroke(roomy, 1, 1);
+        assertThat(roomy.cellSize()).isEqualTo(20.0);
+        assertThat(DesktopPaint.FLOOR_HI).isEqualTo("#536272");
+        assertThat(stripe).isNotNull();
+        assertThat(stripe.w()).isEqualTo(18.0);
+        assertThat(stripe.h()).isEqualTo(1.0);
+        assertThat(DesktopPaint.floorHi(roomy, 0, 1))
+                .as("a wall tile is not a corridor")
+                .isFalse();
+        DesktopPaint.Layout tight = DesktopPaint.Layout.fit(5, 5, 20, 20);
+        assertThat(tight.cellSize()).isLessThan(10);
+        assertThat(DesktopPaint.floorHiStroke(tight, 1, 1))
+                .as("web skips the highlight when the cell is under 10px")
+                .isNull();
+        assertThat(DesktopPaint.floorHi(roomy, 1, 1, 0.6))
+                .as("fog lamp below 0.7 leaves the floor dim")
+                .isFalse();
+    }
+
+    @Test
     void hotspotPlacementIsDeterministicAndPaintsAdjacentOpenings() {
         List<Hotspot> a = DesktopPaint.placeSpots(15, 15, 4, 42, 25);
         List<Hotspot> b = DesktopPaint.placeSpots(15, 15, 4, 42, 25);
@@ -209,6 +243,19 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.hotspotOverlay(pair, tiles))
                 .as("a wall cell is not a hot-spot wash")
                 .doesNotContain(new DesktopPaint.TileRect(1, 1));
+
+        assertThat(DesktopPaint.hotspotCellAlpha(0)).isEqualTo(0.2);
+        assertThat(DesktopPaint.hotspotCellAlpha(25)).isEqualTo(0.325);
+        assertThat(DesktopPaint.hotspotCellAlpha(100)).isEqualTo(0.7);
+        assertThat(DesktopPaint.hotspotCellAlpha(200)).isEqualTo(0.7);
+        assertThat(DesktopPaint.HOTSPOT_OPENING_ALPHA).isEqualTo(0.35);
+        assertThat(DesktopPaint.HOTSPOT).isEqualTo("#e5484d");
+        DesktopPaint.HotWash wash = DesktopPaint.hotspotWash(
+                List.of(new Hotspot(0, 0, 10), new Hotspot(0, 1, 80)), tiles);
+        assertThat(wash.cells()).hasSize(1);
+        assertThat(wash.cells().get(0).cost()).isEqualTo(80);
+        assertThat(DesktopPaint.hotspotCellAlpha(10))
+                .isLessThan(DesktopPaint.hotspotCellAlpha(80));
     }
 
     @Test

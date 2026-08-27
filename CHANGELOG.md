@@ -10,6 +10,19 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Desktop solve is a wash, not a slab.** The web already paints the
+  route at 0.85 with a head disc on the tip; desktop filled the tiles
+  opaque, so the corridor and the highlight vanished under the ribbon.
+
+- **Desktop hot spots speak their cost.** The web already washed
+  `min(0.7, 0.2 + cost/200)` on the cell and 0.35 on the opening; desktop
+  painted every tile at 0.4, so a cheap trap and an expensive one were
+  the same stain.
+
+- **Desktop corridors get the web highlight.** Fog already painted the
+  1px `#536272` stripe; a generated dungeon was a flat floor. Same
+  10px threshold, same inset, so god-mode and fog read as one stone.
+
 - **Desktop PNG sits on the well.** The web already snapshots the
   dungeon; desktop had no picture to take. Same 28px top reserve so
   the first row stays a corridor, not a button.

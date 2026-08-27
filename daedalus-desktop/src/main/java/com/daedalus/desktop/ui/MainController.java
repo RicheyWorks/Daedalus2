@@ -647,18 +647,29 @@ public class MainController {
             return;
         }
 
-        // ---- 1) tile grid ----
+        // ---- 1) tile grid, then the web corridor highlight ----
         for (int r = 0; r < layout.tileRows(); r++) {
             for (int c = 0; c < layout.tileCols(); c++) {
-                g.setFill(colorFor(DesktopPaint.floorRole(tiles[r][c]), theme));
+                TileType role = DesktopPaint.floorRole(tiles[r][c]);
+                g.setFill(colorFor(role, theme));
                 g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
+                if (role != TileType.WALL) {
+                    paintHairline(g, DesktopPaint.floorHiStroke(layout, r, c));
+                }
             }
         }
 
         if (current.hotspots() != null && !current.hotspots().isEmpty()) {
-            g.setFill(Color.web("#e5484d"));
-            g.setGlobalAlpha(0.4);
-            for (DesktopPaint.TileRect tile : DesktopPaint.hotspotOverlay(current.hotspots(), tiles)) {
+            DesktopPaint.HotWash wash = DesktopPaint.hotspotWash(current.hotspots(), tiles);
+            g.setFill(Color.web(DesktopPaint.HOTSPOT));
+            for (var spot : wash.cells()) {
+                g.setGlobalAlpha(DesktopPaint.hotspotCellAlpha(spot.cost()));
+                int tr = 2 * spot.row() + 1;
+                int tc = 2 * spot.col() + 1;
+                g.fillRect(layout.x(tc), layout.y(tr), layout.w(tc), layout.h(tr));
+            }
+            g.setGlobalAlpha(DesktopPaint.HOTSPOT_OPENING_ALPHA);
+            for (DesktopPaint.TileRect tile : wash.openings()) {
                 g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                         layout.w(tile.tileCol()), layout.h(tile.tileRow()));
             }
@@ -676,12 +687,15 @@ public class MainController {
             g.setGlobalAlpha(1);
         }
         if (currentPath != null && !currentPath.isEmpty() && theme != null) {
+            g.setGlobalAlpha(DesktopPaint.PATH_ALPHA);
             g.setFill(theme.path());
             for (DesktopPaint.TileRect tile : DesktopPaint.pathOverlay(
                     currentPath, current.metadata().start(), current.metadata().goal())) {
                 g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                         layout.w(tile.tileCol()), layout.h(tile.tileRow()));
             }
+            g.setGlobalAlpha(1);
+            paintDisc(g, DesktopPaint.pathHeadMarker(layout, currentPath), theme.path());
         }
 
         // ---- 3) start / goal discs (floor + marker, same as the web painter) ----
@@ -755,11 +769,8 @@ public class MainController {
                 }
                 g.setFill(Color.web(DesktopPaint.fogFloor(fog, r, c)));
                 g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
-                if (DesktopPaint.fogFloorHi(layout, fog, r, c)) {
-                    g.setFill(Color.web(DesktopPaint.FOG_FLOOR_HI));
-                    g.fillRect(layout.x(c) + 1, layout.y(r) + 1,
-                            Math.max(0, layout.cellSize() - 2), 1);
-                }
+                paintHairline(g, DesktopPaint.floorHiStroke(layout, r, c,
+                        DesktopPaint.fogLamp(fog, r, c)));
             }
         }
         if (!playerWalk.isEmpty() && theme != null) {
@@ -822,6 +833,14 @@ public class MainController {
                 mark.size() + pad, mark.size() + pad);
         g.setFill(color);
         g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
+    }
+
+    private static void paintHairline(GraphicsContext g, DesktopPaint.Hairline line) {
+        if (line == null) {
+            return;
+        }
+        g.setFill(Color.web(DesktopPaint.FLOOR_HI));
+        g.fillRect(line.x(), line.y(), line.w(), line.h());
     }
 
     private static void paintRing(GraphicsContext g, DesktopPaint.Ring ring) {

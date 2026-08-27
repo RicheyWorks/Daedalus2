@@ -57,7 +57,15 @@ public final class DesktopPaint {
     public static final String FOG_UNSEEN = "#05070a";
     public static final String FOG_FLOOR_DIM = "#2a333c";
     public static final String FOG_FLOOR = "#3d4a58";
-    public static final String FOG_FLOOR_HI = "#536272";
+    /** Same 1px corridor highlight as {@code draw.js} {@code floorHi}. */
+    public static final String FLOOR_HI = "#536272";
+    public static final String FOG_FLOOR_HI = FLOOR_HI;
+    /** Coral wash — same token as {@code draw.js} hot spots. */
+    public static final String HOTSPOT = "#e5484d";
+    /** Opening wash between adjacent spots — same alpha as {@code draw.js}. */
+    public static final double HOTSPOT_OPENING_ALPHA = 0.35;
+    /** Solver ribbon — same alpha as {@code draw.js} {@code paintWalk}. */
+    public static final double PATH_ALPHA = 0.85;
 
     private DesktopPaint() {
     }
@@ -190,6 +198,10 @@ public final class DesktopPaint {
 
     /** Stroke around the goal when the walk arrives — same 0.7·cell as {@code draw.js}. */
     public record Ring(double cx, double cy, double radius, double width) {
+    }
+
+    /** 1px highlight on a passage — same inset as {@code draw.js}. */
+    public record Hairline(double x, double y, double w, double h) {
     }
 
     /**
@@ -354,18 +366,30 @@ public final class DesktopPaint {
         return Integer.toUnsignedLong(t ^ (t >>> 14)) / 4294967296.0;
     }
 
+    /** Cell wash plus the quieter openings — same two-pass as {@code draw.js}. */
+    public record HotWash(List<Hotspot> cells, List<TileRect> openings) {
+    }
+
+    /**
+     * Cell alpha from cost — {@code min(0.7, 0.2 + cost/200)}, same as the web.
+     * A flat 0.4 made a cheap trap and an expensive one look identical.
+     */
+    public static double hotspotCellAlpha(double cost) {
+        return Math.min(0.7, 0.2 + cost / 200.0);
+    }
+
     /**
      * Hot-spot cells and the openings between adjacent ones. Rock and wall
      * cells stay void — same skip as {@code draw.js}.
      */
-    public static List<TileRect> hotspotOverlay(List<Hotspot> spots, TileType[][] tiles) {
+    public static HotWash hotspotWash(List<Hotspot> spots, TileType[][] tiles) {
         if (spots == null || spots.isEmpty() || tiles == null || tiles.length < 3) {
-            return List.of();
+            return new HotWash(List.of(), List.of());
         }
         int rows = (tiles.length - 1) / 2;
         int cols = (tiles[0].length - 1) / 2;
         Set<String> live = new HashSet<>();
-        List<TileRect> out = new ArrayList<>();
+        List<Hotspot> cells = new ArrayList<>();
         for (Hotspot h : spots) {
             if (h == null || h.row() < 0 || h.col() < 0 || h.row() >= rows || h.col() >= cols) {
                 continue;
@@ -376,19 +400,30 @@ public final class DesktopPaint {
                 continue;
             }
             live.add(h.row() + "," + h.col());
-            out.add(new TileRect(tr, tc));
+            cells.add(h);
         }
+        List<TileRect> openings = new ArrayList<>();
         for (String key : live) {
             String[] parts = key.split(",");
             int r = Integer.parseInt(parts[0]);
             int c = Integer.parseInt(parts[1]);
             if (live.contains(r + "," + (c + 1)) && tiles[2 * r + 1][2 * c + 2] != TileType.WALL) {
-                out.add(new TileRect(2 * r + 1, 2 * c + 2));
+                openings.add(new TileRect(2 * r + 1, 2 * c + 2));
             }
             if (live.contains((r + 1) + "," + c) && tiles[2 * r + 2][2 * c + 1] != TileType.WALL) {
-                out.add(new TileRect(2 * r + 2, 2 * c + 1));
+                openings.add(new TileRect(2 * r + 2, 2 * c + 1));
             }
         }
+        return new HotWash(List.copyOf(cells), List.copyOf(openings));
+    }
+
+    public static List<TileRect> hotspotOverlay(List<Hotspot> spots, TileType[][] tiles) {
+        HotWash wash = hotspotWash(spots, tiles);
+        List<TileRect> out = new ArrayList<>();
+        for (Hotspot h : wash.cells()) {
+            out.add(new TileRect(2 * h.row() + 1, 2 * h.col() + 1));
+        }
+        out.addAll(wash.openings());
         return List.copyOf(out);
     }
 
@@ -419,6 +454,20 @@ public final class DesktopPaint {
         }
         int n = Math.max(1, (int) Math.ceil(path.size() * progress));
         return List.copyOf(path.subList(0, Math.min(n, path.size())));
+    }
+
+    /**
+     * Tip of a visible prefix — same cell as {@code draw.js} {@code walkHead}.
+     */
+    public static Point walkHead(List<Point> path) {
+        if (path == null || path.isEmpty()) {
+            return null;
+        }
+        return path.get(path.size() - 1);
+    }
+
+    public static Marker pathHeadMarker(Layout layout, List<Point> path) {
+        return disc(layout, walkHead(path), 0.38);
     }
 
     public static Marker playerMarker(Layout layout, Point player) {
@@ -498,11 +547,34 @@ public final class DesktopPaint {
         return mixHex(FOG_FLOOR_DIM, FOG_FLOOR, fogLamp(fog, tileRow, tileCol));
     }
 
-    public static boolean fogFloorHi(Layout layout, Fog fog, int tileRow, int tileCol) {
+    public static boolean floorHi(Layout layout, int tileRow, int tileCol) {
+        return floorHi(layout, tileRow, tileCol, 1);
+    }
+
+    public static boolean floorHi(Layout layout, int tileRow, int tileCol, double lamp) {
         return layout != null
                 && tileRow % 2 == 1 && tileCol % 2 == 1
                 && layout.cellSize() >= 10
-                && fogLamp(fog, tileRow, tileCol) > 0.7;
+                && lamp > 0.7;
+    }
+
+    public static boolean fogFloorHi(Layout layout, Fog fog, int tileRow, int tileCol) {
+        return floorHi(layout, tileRow, tileCol, fogLamp(fog, tileRow, tileCol));
+    }
+
+    public static Hairline floorHiStroke(Layout layout, int tileRow, int tileCol) {
+        return floorHiStroke(layout, tileRow, tileCol, 1);
+    }
+
+    public static Hairline floorHiStroke(Layout layout, int tileRow, int tileCol, double lamp) {
+        if (!floorHi(layout, tileRow, tileCol, lamp)) {
+            return null;
+        }
+        return new Hairline(
+                layout.x(tileCol) + 1,
+                layout.y(tileRow) + 1,
+                Math.max(0, layout.cellSize() - 2),
+                1);
     }
 
     static String mixHex(String from, String to, double t) {
