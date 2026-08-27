@@ -57,7 +57,9 @@ under the `_migration/` portfolios.
   Fog floors warm toward torch-brown underfoot, and the explore flame
   flickers so the hand is fire, not a flat triangle. Race search tips
   and path heads wear the same soft halo as the solver ribbon so
-  competing fronts read as places, not wash cells.
+  competing fronts read as places, not wash cells. The ghost disc wears
+  the same soft glow and rim as a walker so the recording reads as a
+  presence, not a flat stamp.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

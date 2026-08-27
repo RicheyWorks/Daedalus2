@@ -141,6 +141,8 @@ public final class DesktopPaint {
     public static final String GHOST = "#e6edf3";
     public static final double GHOST_WALK_ALPHA = 0.28;
     public static final double GHOST_DISC_ALPHA = 0.55;
+    public static final double GHOST_GLOW_ALPHA = 0.18;
+    public static final double GHOST_RIM_ALPHA = 0.65;
     public static final double GHOST_RADIUS = 0.3;
 
     private DesktopPaint() {

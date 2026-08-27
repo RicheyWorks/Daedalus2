@@ -2176,12 +2176,16 @@ public class MainController {
             return;
         }
         Color ink = Color.web(DesktopPaint.GHOST);
-        g.setGlobalAlpha(DesktopPaint.GHOST_DISC_ALPHA);
+        double pad = mark.size() * 0.32;
+        g.setGlobalAlpha(DesktopPaint.GHOST_GLOW_ALPHA);
         g.setFill(ink);
+        g.fillOval(mark.x() - pad / 2, mark.y() - pad / 2,
+                mark.size() + pad, mark.size() + pad);
+        g.setGlobalAlpha(DesktopPaint.GHOST_DISC_ALPHA);
         g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
         g.setGlobalAlpha(1);
-        g.setStroke(ink);
-        g.setLineWidth(1);
+        g.setStroke(ink.deriveColor(0, 1, 1, DesktopPaint.GHOST_RIM_ALPHA));
+        g.setLineWidth(Math.max(1.0, mark.size() * 0.07));
         g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
     }
 

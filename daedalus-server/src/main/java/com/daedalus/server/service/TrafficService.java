@@ -155,7 +155,7 @@ public class TrafficService {
     }
 
     /** Wall-clock test seam — daemon ticker, in-memory meters. */
-    TrafficService(MazeGenerationService gen,
+    public TrafficService(MazeGenerationService gen,
                    GameSessionService sessions,
                    ApplicationEventPublisher events,
                    double bump,

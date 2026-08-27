@@ -301,6 +301,8 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.GHOST).isEqualTo("#e6edf3");
         assertThat(DesktopPaint.GHOST_WALK_ALPHA).isEqualTo(0.28);
         assertThat(DesktopPaint.GHOST_DISC_ALPHA).isEqualTo(0.55);
+        assertThat(DesktopPaint.GHOST_GLOW_ALPHA).isEqualTo(0.18);
+        assertThat(DesktopPaint.GHOST_RIM_ALPHA).isEqualTo(0.65);
         assertThat(DesktopPaint.GHOST_RADIUS).isEqualTo(0.3);
         DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 100, 100);
         DesktopPaint.Marker ghost = DesktopPaint.ghostMarker(layout, new Point(0, 0));

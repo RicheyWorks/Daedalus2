@@ -7,6 +7,7 @@
     floor: "#3d4a58", floorHi: "#536272", floorDim: "#2a333c",
     floorWarm: "#5c4a32",
     start: "#3ee08f", goal: "#ff5a5f", path: "#8fb8ff",
+    ghost: "#e6edf3",
   };
   const PLAYER_COLORS = ["#f5c14a", "#ff8fa3", "#9ecbff", "#7ce2b3"];
   /** Overlay legend sits on the well — reserve so the last row is not under the key. */
@@ -113,6 +114,29 @@
     g.lineWidth = Math.max(1, geom.cell * 0.07);
     g.beginPath();
     g.arc(x, y, geom.cell * radius, 0, 2 * Math.PI);
+    g.stroke();
+    g.globalAlpha = 1;
+  }
+
+  /** Recorded racer — soft glow + rim like a walker, translucent core so it stays a ghost. */
+  function ghostDisc(g, geom, p) {
+    if (!p) return;
+    const [x, y] = cellCenter(geom, p);
+    const r = geom.cell * 0.3;
+    g.fillStyle = COLORS.ghost;
+    g.globalAlpha = 0.18;
+    g.beginPath();
+    g.arc(x, y, r + geom.cell * 0.18, 0, 2 * Math.PI);
+    g.fill();
+    g.globalAlpha = 0.55;
+    g.beginPath();
+    g.arc(x, y, r, 0, 2 * Math.PI);
+    g.fill();
+    g.strokeStyle = COLORS.ghost;
+    g.globalAlpha = 0.65;
+    g.lineWidth = Math.max(1, geom.cell * 0.07);
+    g.beginPath();
+    g.arc(x, y, r, 0, 2 * Math.PI);
     g.stroke();
     g.globalAlpha = 1;
   }
@@ -461,7 +485,7 @@
       paintWalk(g, geom, points, PLAYER_COLORS[i % PLAYER_COLORS.length], 1, 0.32);
     });
     if (scene.session && scene.ghostWalk && scene.ghostWalk.length) {
-      paintWalk(g, geom, scene.ghostWalk, "#e6edf3", 1, 0.28);
+      paintWalk(g, geom, scene.ghostWalk, COLORS.ghost, 1, 0.28);
     }
     if (start) endpoint(g, geom, start, COLORS.start);
     if (goal)  endpoint(g, geom, goal,  COLORS.goal);
@@ -471,18 +495,7 @@
       });
     }
     if (scene.session && scene.ghost && scene.ghost.pos) {
-      const [x, y] = cellCenter(geom, scene.ghost.pos);
-      g.globalAlpha = 0.55;
-      g.fillStyle = "#e6edf3";
-      g.beginPath();
-      g.arc(x, y, geom.cell * 0.3, 0, 2 * Math.PI);
-      g.fill();
-      g.globalAlpha = 1;
-      g.strokeStyle = "#e6edf3";
-      g.lineWidth = 1;
-      g.beginPath();
-      g.arc(x, y, geom.cell * 0.3, 0, 2 * Math.PI);
-      g.stroke();
+      ghostDisc(g, geom, scene.ghost.pos);
     }
     if (scene.won && goal) {
       const [x, y] = cellCenter(geom, goal);
