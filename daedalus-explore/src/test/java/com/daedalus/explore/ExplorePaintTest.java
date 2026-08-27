@@ -68,6 +68,32 @@ class ExplorePaintTest {
     }
 
     @Test
+    void brickTextureHasMortarLines() {
+        byte[] brick = ExplorePaint.brickRgba();
+        byte[] floor = ExplorePaint.floorRgba();
+        byte[] ceil = ExplorePaint.ceilingRgba();
+        assertThat(brick).hasSize(ExplorePaint.TEX * ExplorePaint.TEX * 4);
+        assertThat(floor).hasSize(brick.length);
+        assertThat(ceil).hasSize(brick.length);
+        int mortar = Byte.toUnsignedInt(brick[0]);
+        int face = Byte.toUnsignedInt(brick[(2 * ExplorePaint.TEX + 2) * 4]);
+        assertThat(face).isGreaterThan(mortar);
+        assertThat(Byte.toUnsignedInt(floor[0])).isNotEqualTo(Byte.toUnsignedInt(brick[0]));
+    }
+
+    @Test
+    void wallUvRunsAlongTheFace() {
+        float[] uv = new float[2];
+        ExplorePaint.uv(nsWall(0, 1.4, 0), 0, 1.4, 0, uv);
+        assertThat(uv[0]).isZero();
+        assertThat(uv[1]).isCloseTo(1.4f / (float) ExploreMesh.WALL_HEIGHT, within(0.001f));
+        ExplorePaint.uv(face(ExploreMesh.Face.FLOOR, 0, 1, 1), 2, 0, 4, uv);
+        assertThat(uv[0]).isCloseTo(2f / (float) ExploreMesh.TILE, within(0.001f));
+        ExplorePaint.uv(null, 0, 0, 0, uv);
+        ExplorePaint.uv(nsWall(0, 1, 0), 0, 1, 0, null);
+    }
+
+    @Test
     void wainscotDarkensTheBoot() {
         float[] boot = new float[3];
         float[] high = new float[3];

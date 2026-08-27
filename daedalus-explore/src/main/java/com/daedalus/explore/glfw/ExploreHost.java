@@ -16,8 +16,11 @@ import org.lwjgl.glfw.GLFWGamepadState;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
+import org.lwjgl.system.MemoryUtil;
 
+import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.Optional;
 
@@ -70,22 +73,49 @@ import static org.lwjgl.glfw.GLFW.GLFW_CURSOR_DISABLED;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.GL_FOG;
+import static org.lwjgl.opengl.GL11.GL_FOG_COLOR;
+import static org.lwjgl.opengl.GL11.GL_FOG_END;
+import static org.lwjgl.opengl.GL11.GL_FOG_MODE;
+import static org.lwjgl.opengl.GL11.GL_FOG_START;
+import static org.lwjgl.opengl.GL11.GL_LINEAR;
+import static org.lwjgl.opengl.GL11.GL_LINES;
 import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
+import static org.lwjgl.opengl.GL11.GL_NEAREST;
 import static org.lwjgl.opengl.GL11.GL_PROJECTION;
+import static org.lwjgl.opengl.GL11.GL_REPEAT;
+import static org.lwjgl.opengl.GL11.GL_RGBA;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_S;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_T;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glColor3f;
+import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glFogf;
+import static org.lwjgl.opengl.GL11.glFogfv;
+import static org.lwjgl.opengl.GL11.glFogi;
+import static org.lwjgl.opengl.GL11.glFrustum;
+import static org.lwjgl.opengl.GL11.glGenTextures;
 import static org.lwjgl.opengl.GL11.glLoadIdentity;
 import static org.lwjgl.opengl.GL11.glMatrixMode;
+import static org.lwjgl.opengl.GL11.glOrtho;
 import static org.lwjgl.opengl.GL11.glRotatef;
+import static org.lwjgl.opengl.GL11.glTexCoord2f;
+import static org.lwjgl.opengl.GL11.glTexImage2D;
+import static org.lwjgl.opengl.GL11.glTexParameteri;
 import static org.lwjgl.opengl.GL11.glTranslatef;
+import static org.lwjgl.opengl.GL11.glVertex2f;
 import static org.lwjgl.opengl.GL11.glVertex3d;
 import static org.lwjgl.opengl.GL11.glViewport;
-import static org.lwjgl.opengl.GL11.glFrustum;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 /**
@@ -134,7 +164,21 @@ public final class ExploreHost {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         GL.createCapabilities();
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL_TEXTURE_2D);
+        glEnable(GL_FOG);
+        glFogi(GL_FOG_MODE, GL_LINEAR);
+        glFogf(GL_FOG_START, 1.6f);
+        glFogf(GL_FOG_END, 14f);
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            FloatBuffer fog = stack.mallocFloat(4);
+            fog.put(ExplorePaint.SKY_R).put(ExplorePaint.SKY_G).put(ExplorePaint.SKY_B).put(1f);
+            fog.flip();
+            glFogfv(GL_FOG_COLOR, fog);
+        }
         glClearColor(ExplorePaint.SKY_R, ExplorePaint.SKY_G, ExplorePaint.SKY_B, 1f);
+        int wallTex = upload(ExplorePaint.brickRgba());
+        int floorTex = upload(ExplorePaint.floorRgba());
+        int ceilTex = upload(ExplorePaint.ceilingRgba());
 
         Optional<XrRuntime> xr = XrRuntimes.firstPresent(ExploreHost.class.getClassLoader());
         xr.ifPresent(runtime -> runtime.attach(world));
@@ -178,7 +222,7 @@ public final class ExploreHost {
             jamDown = j;
             harden = glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS;
 
-            draw(window, world);
+            draw(window, world, wallTex, floorTex, ceilTex);
             xr.ifPresent(runtime -> runtime.endFrame(frame));
             glfwSwapBuffers(window);
             if (smoke && ++frames >= 3) {
@@ -236,13 +280,31 @@ public final class ExploreHost {
                 snapLeft, snapRight, dt);
     }
 
-    private static void draw(long window, ExploreWorld world) {
+    private static int upload(byte[] rgba) {
+        int id = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, id);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        ByteBuffer buf = MemoryUtil.memAlloc(rgba.length);
+        buf.put(rgba).flip();
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ExplorePaint.TEX, ExplorePaint.TEX, 0,
+                GL_RGBA, GL_UNSIGNED_BYTE, buf);
+        MemoryUtil.memFree(buf);
+        return id;
+    }
+
+    private static void draw(long window, ExploreWorld world, int wallTex, int floorTex,
+                             int ceilTex) {
+        int width;
+        int height;
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer w = stack.mallocInt(1);
             IntBuffer h = stack.mallocInt(1);
             glfwGetWindowSize(window, w, h);
-            int width = Math.max(1, w.get(0));
-            int height = Math.max(1, h.get(0));
+            width = Math.max(1, w.get(0));
+            height = Math.max(1, h.get(0));
             glViewport(0, 0, width, height);
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
@@ -256,15 +318,16 @@ public final class ExploreHost {
             glTranslatef((float) -body.x(), (float) -ExploreBody.EYE_Y, (float) -body.z());
         }
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glEnable(GL_TEXTURE_2D);
+        glEnable(GL_FOG);
         float[] rgb = new float[3];
+        float[] uv = new float[2];
+        faces(world, ExploreMesh.Face.WALL, wallTex, rgb, uv);
+        faces(world, ExploreMesh.Face.FLOOR, floorTex, rgb, uv);
+        faces(world, ExploreMesh.Face.CEILING, ceilTex, rgb, uv);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glDisable(GL_TEXTURE_2D);
         glBegin(GL_TRIANGLES);
-        for (ExploreMesh.Triangle tri : world.mesh().triangles()) {
-            ExplorePaint.tint(tri, world.fog().tileVisible(tri.tr(), tri.tc()), rgb);
-            glColor3f(rgb[0], rgb[1], rgb[2]);
-            glVertex3d(tri.x1(), tri.y1(), tri.z1());
-            glVertex3d(tri.x2(), tri.y2(), tri.z2());
-            glVertex3d(tri.x3(), tri.y3(), tri.z3());
-        }
         for (ExploreMarker marker : world.markers()) {
             int tr = 2 * marker.cell().row() + 1;
             int tc = 2 * marker.cell().col() + 1;
@@ -277,6 +340,50 @@ public final class ExploreHost {
                     ExploreMesh.worldZ(marker.cell().row()));
         }
         glEnd();
+        crosshair(width, height);
+    }
+
+    private static void faces(ExploreWorld world, ExploreMesh.Face face, int tex,
+                              float[] rgb, float[] uv) {
+        glBindTexture(GL_TEXTURE_2D, tex);
+        glBegin(GL_TRIANGLES);
+        for (ExploreMesh.Triangle tri : world.mesh().triangles()) {
+            if (tri.face() != face) {
+                continue;
+            }
+            ExplorePaint.tint(tri, world.fog().tileVisible(tri.tr(), tri.tc()), rgb);
+            glColor3f(rgb[0], rgb[1], rgb[2]);
+            ExplorePaint.uv(tri, tri.x1(), tri.y1(), tri.z1(), uv);
+            glTexCoord2f(uv[0], uv[1]);
+            glVertex3d(tri.x1(), tri.y1(), tri.z1());
+            ExplorePaint.uv(tri, tri.x2(), tri.y2(), tri.z2(), uv);
+            glTexCoord2f(uv[0], uv[1]);
+            glVertex3d(tri.x2(), tri.y2(), tri.z2());
+            ExplorePaint.uv(tri, tri.x3(), tri.y3(), tri.z3(), uv);
+            glTexCoord2f(uv[0], uv[1]);
+            glVertex3d(tri.x3(), tri.y3(), tri.z3());
+        }
+        glEnd();
+    }
+
+    private static void crosshair(int width, int height) {
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_FOG);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        double aspect = width / (double) height;
+        glOrtho(-aspect, aspect, -1, 1, -1, 1);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glColor3f(0.92f, 0.84f, 0.28f);
+        glBegin(GL_LINES);
+        glVertex2f(-0.03f, 0);
+        glVertex2f(0.03f, 0);
+        glVertex2f(0, -0.04f);
+        glVertex2f(0, 0.04f);
+        glEnd();
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_FOG);
     }
 
     private static void pillar(double x, double z) {

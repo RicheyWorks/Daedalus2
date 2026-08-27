@@ -26,7 +26,10 @@ under the `_migration/` portfolios.
   the enclosing wall posts, walkable tiles have a ceiling, and faces
   keep a tan/brown palette so looking up is stone, not a void. Xbox
   uses raw GLFW axes (stick-up is −1) so forward walks the look, and
-  right-stick look is rad/s × dt so a nudge is not a 360.
+  right-stick look is rad/s × dt so a nudge is not a 360. Walls now
+  wear a nearest-neighbor brick, floor and ceiling have their own
+  rasters, and linear fog keeps the far corridor from reading as a
+  flat box.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
   re-solves quietly on each living / traffic tick; desktop dropped the
