@@ -103,6 +103,10 @@
 
 .canvas-pane {
     -fx-background-color: radial-gradient(center 50% 45%, radius 72%, #121821, #0b0f14);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(184, 133, 56, 0.55);
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
 }
 
 .exports {

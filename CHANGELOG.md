@@ -59,7 +59,9 @@ under the `_migration/` portfolios.
   and path heads wear the same soft halo as the solver ribbon so
   competing fronts read as places, not wash cells. The ghost disc wears
   the same soft glow and rim as a walker so the recording reads as a
-  presence, not a flat stamp.
+  presence, not a flat stamp. The well stage on web and desktop wears a
+  soft gold rim like the explore automap so the board is chrome, not a
+  gray admin panel.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

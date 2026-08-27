@@ -59,6 +59,7 @@ class WebUiSmokeTest {
                 .contains("Pick a generator and press Generate")
                 .contains("Bahnschrift")
                 .contains("radial-gradient(80% 70% at 50% 45%")
+                .contains("rgba(184, 133, 56")
                 .contains("backdrop-filter")
                 .contains("floorWarm")
                 .contains("ghost:")
