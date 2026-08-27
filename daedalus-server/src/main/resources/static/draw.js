@@ -116,6 +116,34 @@
     g.globalAlpha = 1;
   }
 
+  /** Start / goal: disc plus a wider ring so the ends of the maze read as places. */
+  function endpoint(g, geom, p, color) {
+    if (!p) return;
+    marker(g, geom, p, color, 0.34);
+    const [x, y] = cellCenter(geom, p);
+    g.strokeStyle = color;
+    g.globalAlpha = 0.42;
+    g.lineWidth = Math.max(1.5, geom.cell * 0.09);
+    g.beginPath();
+    g.arc(x, y, geom.cell * 0.55, 0, 2 * Math.PI);
+    g.stroke();
+    g.globalAlpha = 1;
+  }
+
+  /** Tip of an unfolding route — soft halo so the head is not just another cell. */
+  function pathHead(g, geom, p, color) {
+    if (!p) return;
+    const [x, y] = cellCenter(geom, p);
+    g.strokeStyle = color;
+    g.globalAlpha = 0.38;
+    g.lineWidth = Math.max(1.5, geom.cell * 0.1);
+    g.beginPath();
+    g.arc(x, y, geom.cell * 0.5, 0, 2 * Math.PI);
+    g.stroke();
+    g.globalAlpha = 1;
+    marker(g, geom, p, color, 0.3);
+  }
+
   function seenCell(fog, r, c) {
     return !!(fog && fog.seen && fog.seen.has(r + "," + c));
   }
@@ -248,9 +276,9 @@
     if (scene.fog) {
       paintWalk(g, geom, scene.fog.walk, PLAYER_COLORS[0], 1, 0.32);
       if (start && seenCell(scene.fog, start.row, start.col)) {
-        marker(g, geom, start, COLORS.start, 0.34);
+        endpoint(g, geom, start, COLORS.start);
       }
-      if (scene.fog.goal) marker(g, geom, scene.fog.goal, COLORS.goal, 0.34);
+      if (scene.fog.goal) endpoint(g, geom, scene.fog.goal, COLORS.goal);
       marker(g, geom, scene.fog.position, PLAYER_COLORS[0], 0.42);
       return geom;
     }
@@ -331,8 +359,7 @@
     }
     if (scene.path && scene.path.length && scene.pathProgress > 0) {
       paintWalk(g, geom, scene.path, COLORS.path, scene.pathProgress, 0.85);
-      const head = walkHead(scene.path, scene.pathProgress);
-      if (head) marker(g, geom, head, COLORS.path, 0.38);
+      pathHead(g, geom, walkHead(scene.path, scene.pathProgress), COLORS.path);
     }
     if (scene.analysis) {
       (scene.analysis.deadEnds || []).forEach(p => {
@@ -428,8 +455,8 @@
     if (scene.session && scene.ghostWalk && scene.ghostWalk.length) {
       paintWalk(g, geom, scene.ghostWalk, "#e6edf3", 1, 0.28);
     }
-    if (start) marker(g, geom, start, COLORS.start, 0.34);
-    if (goal)  marker(g, geom, goal,  COLORS.goal,  0.34);
+    if (start) endpoint(g, geom, start, COLORS.start);
+    if (goal)  endpoint(g, geom, goal,  COLORS.goal);
     if (scene.session) {
       Object.entries(scene.session.positions).forEach(([name, p], i) => {
         marker(g, geom, p, PLAYER_COLORS[i % PLAYER_COLORS.length], 0.42);

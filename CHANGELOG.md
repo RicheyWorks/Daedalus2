@@ -48,7 +48,10 @@ under the `_migration/` portfolios.
   so the board still reads as the product, not a flat admin panel.
   Markers wear a bright rim so the walker reads on dark stone; the
   desktop window and toolbar say DAEDALUS; the torch hand strides when
-  you walk. `run-daedalus.ps1` launches those hosts from the repo root.
+  you walk. Start and goal wear a wider place-ring; the unfolding
+  solver tip gets a soft halo so the head of the ribbon is a place,
+  not another cell. Explore's window title is DAEDALUS with the other
+  hosts. `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
   re-solves quietly on each living / traffic tick; desktop dropped the

@@ -1862,6 +1862,9 @@ public class MainController {
                         layout.w(tile.tileCol()), layout.h(tile.tileRow()));
             }
             g.setGlobalAlpha(1);
+            Point tip = DesktopPaint.walkHead(currentPath);
+            paintRing(g, DesktopPaint.pathHeadHalo(layout, tip),
+                    theme.path().deriveColor(0, 1, 1, 0.38));
             paintDisc(g, DesktopPaint.pathHeadMarker(layout, currentPath), theme.path());
         }
 
@@ -1923,12 +1926,10 @@ public class MainController {
             }
         }
 
-        // ---- 3) start / goal discs (floor + marker, same as the web painter) ----
+        // ---- 3) start / goal discs (floor + marker + ring, same as the web) ----
         if (theme != null) {
-            paintDisc(g, DesktopPaint.endpointMarker(layout, current.metadata().start()),
-                    theme.start());
-            paintDisc(g, DesktopPaint.endpointMarker(layout, current.metadata().goal()),
-                    theme.goal());
+            paintEndpoint(g, layout, current.metadata().start(), theme.start());
+            paintEndpoint(g, layout, current.metadata().goal(), theme.goal());
         }
 
         // ---- 4) player marker, then the web victory ring ----
@@ -2032,10 +2033,10 @@ public class MainController {
         }
         Point start = current.metadata().start();
         if (theme != null && start != null && fog.seen(start.row(), start.col())) {
-            paintDisc(g, DesktopPaint.endpointMarker(layout, start), theme.start());
+            paintEndpoint(g, layout, start, theme.start());
         }
         if (theme != null && fog.goal() != null) {
-            paintDisc(g, DesktopPaint.endpointMarker(layout, fog.goal()), theme.goal());
+            paintEndpoint(g, layout, fog.goal(), theme.goal());
         }
         DesktopPaint.Marker mark = DesktopPaint.playerMarker(layout, fog.position());
         if (mark != null && theme != null) {
@@ -2172,6 +2173,16 @@ public class MainController {
         g.setStroke(ink);
         g.setLineWidth(1);
         g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
+    }
+
+    private static void paintEndpoint(GraphicsContext g, DesktopPaint.Layout layout,
+                                      Point cell, Color color) {
+        if (layout == null || cell == null || color == null) {
+            return;
+        }
+        paintDisc(g, DesktopPaint.endpointMarker(layout, cell), color);
+        paintRing(g, DesktopPaint.endpointRing(layout, cell),
+                color.deriveColor(0, 1, 1, 0.42));
     }
 
     private static void paintDisc(GraphicsContext g, DesktopPaint.Marker mark, Color color) {

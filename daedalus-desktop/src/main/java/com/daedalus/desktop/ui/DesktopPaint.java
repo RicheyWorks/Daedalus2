@@ -1049,6 +1049,28 @@ public final class DesktopPaint {
         return disc(layout, cell, 0.34);
     }
 
+    /** Outer ring around start / goal — same 0.55·cell as {@code draw.js} endpoint. */
+    public static Ring endpointRing(Layout layout, Point cell) {
+        if (layout == null || cell == null) {
+            return null;
+        }
+        double cx = layout.x(2 * cell.col() + 1) + layout.cellSize() / 2.0;
+        double cy = layout.y(2 * cell.row() + 1) + layout.cellSize() / 2.0;
+        return new Ring(cx, cy, layout.cellSize() * 0.55,
+                Math.max(1.5, layout.cellSize() * 0.09));
+    }
+
+    /** Soft halo at the tip of an unfolding route — same band as {@code draw.js} pathHead. */
+    public static Ring pathHeadHalo(Layout layout, Point cell) {
+        if (layout == null || cell == null) {
+            return null;
+        }
+        double cx = layout.x(2 * cell.col() + 1) + layout.cellSize() / 2.0;
+        double cy = layout.y(2 * cell.row() + 1) + layout.cellSize() / 2.0;
+        return new Ring(cx, cy, layout.cellSize() * 0.5,
+                Math.max(1.5, layout.cellSize() * 0.1));
+    }
+
     public static Ring victoryRing(Layout layout, Point goal) {
         if (layout == null || goal == null) {
             return null;

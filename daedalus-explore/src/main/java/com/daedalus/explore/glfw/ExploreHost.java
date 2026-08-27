@@ -145,7 +145,7 @@ public final class ExploreHost {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-        long window = glfwCreateWindow(1280, 720, "Daedalus Explore", NULL, NULL);
+        long window = glfwCreateWindow(1280, 720, "DAEDALUS", NULL, NULL);
         if (window == NULL) {
             glfwTerminate();
             throw new IllegalStateException("Failed to create the explore window");

@@ -606,4 +606,19 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.endpointMarker(mark, DesktopPaint.EMPTY_MARK_GOAL)).isNotNull();
         assertThat(DesktopPaint.emptyMarkLayout(0, 300)).isNull();
     }
+
+    @Test
+    void endpointsAndPathHeadsWearRingsLikeTheWeb() {
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 200, 200);
+        assertThat(layout).isNotNull();
+        Point cell = new Point(1, 1);
+        DesktopPaint.Ring place = DesktopPaint.endpointRing(layout, cell);
+        DesktopPaint.Ring tip = DesktopPaint.pathHeadHalo(layout, cell);
+        assertThat(place).isNotNull();
+        assertThat(tip).isNotNull();
+        assertThat(place.radius()).isEqualTo(layout.cellSize() * 0.55);
+        assertThat(tip.radius()).isEqualTo(layout.cellSize() * 0.5);
+        assertThat(DesktopPaint.endpointRing(null, cell)).isNull();
+        assertThat(DesktopPaint.pathHeadHalo(layout, null)).isNull();
+    }
 }
