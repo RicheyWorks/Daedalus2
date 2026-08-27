@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Desktop All paints every solver's route.** The web already previews
+  one hover at a time from a table that steals the well; desktop had
+  only Race. Same corridors stacked at 0.22, so agreement is a brighter
+  wash and a leaner algorithm's detour still reads. Checkbox on the well
+  so the 960px toolbar still generates.
+
 - **Desktop Hard seals extra passages.** The web already hardens on the
   first Bring to life; desktop Live only opened walls, so a braid never
   tightened. Same 0.08 seal, checkbox on the well next to Live, so a

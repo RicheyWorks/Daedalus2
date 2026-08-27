@@ -250,6 +250,35 @@ public class DesktopWork {
         return () -> DesktopPaint.Hunt.of(grid);
     }
 
+    /**
+     * Every registered solver's route — same compare as the web table,
+     * painted together so consensus is a brighter corridor.
+     */
+    public Callable<DesktopPaint.Compare> compareJob(
+            List<String> ids, MazeGrid grid, UUID mazeId) {
+        return () -> {
+            List<DesktopPaint.CompareLane> lanes = new ArrayList<>();
+            if (ids == null) {
+                return new DesktopPaint.Compare(lanes);
+            }
+            int color = 0;
+            for (String id : ids) {
+                if (id == null || id.isBlank()) {
+                    continue;
+                }
+                String ink = DesktopPaint.COMPARE[color % DesktopPaint.COMPARE.length];
+                color++;
+                try {
+                    var result = solving.solve(id, grid, grid.start(), grid.goal(), mazeId, false);
+                    lanes.add(new DesktopPaint.CompareLane(id, ink, result.path(), true));
+                } catch (SolverBudgetExceededException refused) {
+                    lanes.add(new DesktopPaint.CompareLane(id, ink, List.of(), false));
+                }
+            }
+            return new DesktopPaint.Compare(lanes);
+        };
+    }
+
     /** Two recorded searches — same blue / gold arena as the web Race button. */
     public Callable<DesktopPaint.Race> raceJob(
             String firstId, String secondId, MazeGrid grid, UUID mazeId) {

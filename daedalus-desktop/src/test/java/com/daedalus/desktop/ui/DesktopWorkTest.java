@@ -223,6 +223,23 @@ class DesktopWorkTest {
     }
 
     @Test
+    void aComparePaintsEveryRegisteredSolverRoute() throws Exception {
+        var cached = work.generateJob("recursive-backtracker", 11, 11, 7L).call();
+        DesktopPaint.Compare compared = work.compareJob(
+                List.of("astar", "bfs", "ida-star"), cached.grid(),
+                cached.metadata().id()).call();
+        assertThat(compared.lanes()).hasSize(3);
+        assertThat(compared.lanes().get(0).id()).isEqualTo("astar");
+        assertThat(compared.lanes().get(0).color()).isEqualTo(DesktopPaint.COMPARE[0]);
+        assertThat(compared.lanes().get(1).color()).isEqualTo(DesktopPaint.COMPARE[1]);
+        for (DesktopPaint.CompareLane lane : compared.lanes()) {
+            assertThat(lane.ok()).isTrue();
+            assertThat(lane.path().getFirst()).isEqualTo(cached.grid().start());
+            assertThat(lane.path().getLast()).isEqualTo(cached.grid().goal());
+        }
+    }
+
+    @Test
     void aHuntPlacesFiveCoinsOffTheStartAndGoal() throws Exception {
         var cached = work.generateJob("recursive-backtracker", 11, 11, 7L).call();
         DesktopPaint.Hunt hunt = work.huntJob(cached.grid()).call();

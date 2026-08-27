@@ -128,6 +128,7 @@ public class MainController {
     @FXML private CheckBox liveToggle;
     @FXML private CheckBox hardToggle;
     @FXML private CheckBox jamToggle;
+    @FXML private CheckBox allToggle;
     @FXML private HBox exportBox;
     @FXML private Pane canvasParent;
     @FXML private Canvas canvas;
@@ -145,6 +146,7 @@ public class MainController {
     @FXML private Label legendRace;
     @FXML private Label legendWaypoint;
     @FXML private Label legendGhost;
+    @FXML private Label legendCompare;
     @FXML private Label statusLabel;
 
     /** Last successfully-generated maze; held so resize events can re-render it. */
@@ -200,6 +202,9 @@ public class MainController {
 
     /** Heuristic lens — cleared on Generate and Fog. */
     private DesktopPaint.LensWash currentLens;
+
+    /** Every solver's route — cleared on Generate, Fog, Race, and Solve. */
+    private DesktopPaint.Compare currentCompare;
 
     /** Two-solver arena — cleared on Generate, Fog, and a plain Solve. */
     private DesktopPaint.Race currentRace;
@@ -391,6 +396,7 @@ public class MainController {
             solvedExpansions = null;
             clearRace();
             clearHunt();
+            clearCompare();
             playerPos = current.metadata().start();
             resetWalk(playerPos);
             reachedGoal = false;
@@ -449,6 +455,7 @@ public class MainController {
         clearRace();
         clearHunt();
         clearGhost();
+        clearCompare();
         String solverId = solverChoice.getValue();
         if (solverId == null || solverId.isBlank()) {
             statusLabel.setText("Pick a solver first.");
@@ -572,6 +579,13 @@ public class MainController {
         clearGhost();
     }
 
+    private void clearCompare() {
+        currentCompare = null;
+        if (allToggle != null) {
+            allToggle.setSelected(false);
+        }
+    }
+
     private void clearGhost() {
         stopGhostWatch();
         ghostTape = null;
@@ -691,6 +705,7 @@ public class MainController {
         solvedExpansions = null;
         clearRace();
         clearTheory();
+        clearCompare();
         UUID mazeId = current.metadata().id();
         boolean harden = hardToggle != null && hardToggle.isSelected();
         try {
@@ -788,6 +803,7 @@ public class MainController {
         solvedExpansions = null;
         clearRace();
         clearLens();
+        clearCompare();
         UUID mazeId = current.metadata().id();
         try {
             TrafficService.TrafficStatus status = work.enableTraffic(mazeId);
@@ -852,6 +868,77 @@ public class MainController {
         }
     }
 
+    /**
+     * Wired from the well's All checkbox. Same Compare all as the web —
+     * every solver's route stacked so agreement is a brighter corridor.
+     */
+    @FXML
+    public void onAll() {
+        if (allToggle == null || !allToggle.isSelected()) {
+            currentCompare = null;
+            redraw();
+            return;
+        }
+        if (current == null) {
+            allToggle.setSelected(false);
+            statusLabel.setText("Generate a maze first, then check All.");
+            return;
+        }
+        if (fogOn()) {
+            allToggle.setSelected(false);
+            statusLabel.setText("Fog hides the compared routes — uncheck Fog to compare.");
+            return;
+        }
+        List<String> ids = solverChoice.getItems();
+        if (ids == null || ids.isEmpty()) {
+            allToggle.setSelected(false);
+            statusLabel.setText("No solvers are registered.");
+            return;
+        }
+        stopPathReveal();
+        currentPath = null;
+        solvedPath = null;
+        currentExpansions = null;
+        solvedExpansions = null;
+        clearRace();
+        clearHunt();
+        clearTheory();
+        allToggle.setSelected(true);
+        var grid = current.grid();
+        var mazeId = current.metadata().id();
+        Task<DesktopPaint.Compare> task = new Task<>() {
+            @Override
+            protected DesktopPaint.Compare call() throws Exception {
+                return work.compareJob(ids, grid, mazeId).call();
+            }
+        };
+        task.setOnSucceeded(e -> {
+            currentCompare = task.getValue();
+            int ok = 0;
+            int n = 0;
+            if (currentCompare != null && currentCompare.lanes() != null) {
+                n = currentCompare.lanes().size();
+                for (DesktopPaint.CompareLane lane : currentCompare.lanes()) {
+                    if (lane.ok()) {
+                        ok++;
+                    }
+                }
+            }
+            statusLabel.setText(ok == 0
+                    ? "Compared 0/" + n + " solvers — every solver failed."
+                    : "Compared " + ok + "/" + n
+                            + " solvers — overlapping routes are consensus.");
+            redraw();
+            canvas.requestFocus();
+            busy(false);
+        });
+        task.setOnFailed(e -> {
+            allToggle.setSelected(false);
+            fail(DesktopWork.describeFailure("Compare", task.getException()));
+        });
+        run(task, "Comparing every solver…");
+    }
+
     /** Wired from the FXML Hunt checkbox. Same gold coins as the web Tour button. */
     @FXML
     public void onHunt() {
@@ -878,6 +965,7 @@ public class MainController {
         solvedExpansions = null;
         clearRace();
         clearTheory();
+        clearCompare();
         huntToggle.setSelected(true);
         huntGot.clear();
         var grid = current.grid();
@@ -943,6 +1031,7 @@ public class MainController {
         solvedExpansions = null;
         clearHunt();
         clearTheory();
+        clearCompare();
         raceToggle.setSelected(true);
         var grid = current.grid();
         var mazeId = current.metadata().id();
@@ -1221,6 +1310,7 @@ public class MainController {
             solvedExpansions = null;
             clearRace();
             clearHunt();
+            clearCompare();
             clearTheory();
             statusLabel.setText("Fog of war — arrows / WASD or a click walk the dungeon.");
         } else if (current != null) {
@@ -1661,6 +1751,20 @@ public class MainController {
             paintRaceLane(g, layout, tiles, currentRace.second(), raceFrontB, racePathB,
                     DesktopPaint.RACE_PATH_B);
         }
+        if (currentCompare != null && currentCompare.lanes() != null) {
+            for (DesktopPaint.CompareLane lane : currentCompare.lanes()) {
+                if (lane.path() == null || lane.path().isEmpty()) {
+                    continue;
+                }
+                g.setFill(Color.web(lane.color()));
+                g.setGlobalAlpha(DesktopPaint.COMPARE_ALPHA);
+                for (DesktopPaint.TileRect tile : DesktopPaint.walkOverlay(lane.path())) {
+                    g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
+                            layout.w(tile.tileCol()), layout.h(tile.tileRow()));
+                }
+            }
+            g.setGlobalAlpha(1);
+        }
         if (!playerWalk.isEmpty() && theme != null) {
             g.setGlobalAlpha(0.32);
             g.setFill(theme.player());
@@ -1792,7 +1896,9 @@ public class MainController {
                 currentRace != null,
                 currentHunt != null && currentHunt.waypoints() != null
                         && !currentHunt.waypoints().isEmpty(),
-                !ghostWalkNow().isEmpty());
+                !ghostWalkNow().isEmpty(),
+                currentCompare != null && currentCompare.lanes() != null
+                        && !currentCompare.lanes().isEmpty());
         legendBox.setVisible(!keys.isEmpty());
         if (exportBox != null) {
             exportBox.setVisible(current != null);
@@ -1810,6 +1916,7 @@ public class MainController {
         showLegendKey(legendRace, keys.contains("race"));
         showLegendKey(legendWaypoint, keys.contains("waypoint"));
         showLegendKey(legendGhost, keys.contains("ghost"));
+        showLegendKey(legendCompare, keys.contains("compare"));
     }
 
     private boolean fogOn() {

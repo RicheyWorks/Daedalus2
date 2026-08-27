@@ -185,6 +185,17 @@ class DesktopPaintTest {
                 true, false, false, false, fog, false, false, false, false, false, false, true))
                 .as("fog swallows the ghost")
                 .containsExactly("floor", "wall", "start", "fog");
+        assertThat(DesktopPaint.legendKeys(
+                true, false, false, false, null, false, false, false, false, false, false, false,
+                true))
+                .containsExactly("floor", "wall", "start", "goal", "path", "compare");
+        assertThat(DesktopPaint.legendKeys(
+                true, false, false, false, fog, false, false, false, false, false, false, false,
+                true))
+                .as("fog swallows the compared routes")
+                .containsExactly("floor", "wall", "start", "fog");
+        assertThat(DesktopPaint.COMPARE_ALPHA).isEqualTo(0.22);
+        assertThat(DesktopPaint.COMPARE[0]).isEqualTo("#8fb8ff");
     }
 
     @Test

@@ -104,6 +104,14 @@ public final class DesktopPaint {
     public static final int RACE_FRONT = 5;
     public static final double RACE_PATH_A = 0.85;
     public static final double RACE_PATH_B = 0.58;
+    /**
+     * Compare-all routes — same tokens the web table hover would paint,
+     * stacked so agreement reads brighter than a lone corridor.
+     */
+    public static final String[] COMPARE = {
+            "#8fb8ff", "#f0b429", "#e5484d", "#4cc38a", "#c084fc", "#9ecbff"
+    };
+    public static final double COMPARE_ALPHA = 0.22;
     /** Min-cut passage — same purple as {@code draw.js} chokepoints. */
     public static final String CHOKE = "#c084fc";
     /** Dead-end speck — same ice as {@code draw.js}. */
@@ -416,6 +424,15 @@ public final class DesktopPaint {
                                           boolean hotspot, Fog fog, boolean choke,
                                           boolean hardest, boolean sanctuary, boolean lens,
                                           boolean race, boolean waypoint, boolean ghost) {
+        return legendKeys(maze, path, walk, hotspot, fog, choke, hardest, sanctuary, lens, race,
+                waypoint, ghost, false);
+    }
+
+    public static List<String> legendKeys(boolean maze, boolean path, boolean walk,
+                                          boolean hotspot, Fog fog, boolean choke,
+                                          boolean hardest, boolean sanctuary, boolean lens,
+                                          boolean race, boolean waypoint, boolean ghost,
+                                          boolean compare) {
         if (!maze) {
             return List.of();
         }
@@ -426,7 +443,7 @@ public final class DesktopPaint {
         if (fog == null || fog.goal() != null) {
             keys.add("goal");
         }
-        if ((path || race) && fog == null) {
+        if ((path || race || compare) && fog == null) {
             keys.add("path");
         }
         if (walk) {
@@ -455,6 +472,9 @@ public final class DesktopPaint {
         }
         if (ghost && fog == null) {
             keys.add("ghost");
+        }
+        if (compare && fog == null) {
+            keys.add("compare");
         }
         if (fog != null) {
             keys.add("fog");
@@ -645,6 +665,19 @@ public final class DesktopPaint {
     }
 
     public record Race(RaceLane first, RaceLane second) {
+    }
+
+    /** One solver's finished walk in a compare-all wash. */
+    public record CompareLane(String id, String color, List<Point> path, boolean ok) {
+        public CompareLane {
+            path = path == null ? List.of() : List.copyOf(path);
+        }
+    }
+
+    public record Compare(List<CompareLane> lanes) {
+        public Compare {
+            lanes = lanes == null ? List.of() : List.copyOf(lanes);
+        }
     }
 
     /** Expansions per second — biggest lane takes at most 3.5s, same as {@code solve.js}. */
