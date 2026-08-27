@@ -64,6 +64,7 @@ class WebUiSmokeTest {
                 .contains("backdrop-filter")
                 .contains("floorWarm")
                 .contains("wallWarm")
+                .contains("shadowBlur")
                 .contains("ghost:")
                 .contains("ghostDisc")
                 .contains("data-key=\"path\"").contains("data-key=\"floor\"")

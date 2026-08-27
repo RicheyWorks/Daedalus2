@@ -1691,8 +1691,20 @@ public class MainController {
                 g.setGlobalAlpha(1);
             }
             g.setTextAlign(TextAlignment.CENTER);
-            g.setFill(Color.web("#e8eef4"));
             g.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 28));
+            g.setFill(Color.web("#e8eef4"));
+            var mint = new javafx.scene.effect.DropShadow(
+                    DesktopPaint.EMPTY_WORDMARK_GLOW_RADIUS, 0, 0,
+                    Color.web(DesktopPaint.EMPTY_WORDMARK_GLOW,
+                            DesktopPaint.EMPTY_WORDMARK_GLOW_ALPHA));
+            var gold = new javafx.scene.effect.DropShadow(
+                    DesktopPaint.EMPTY_WORDMARK_GOLD_RADIUS, 0, 0,
+                    Color.web(DesktopPaint.EMPTY_WORDMARK_GOLD,
+                            DesktopPaint.EMPTY_WORDMARK_GOLD_ALPHA));
+            mint.setInput(gold);
+            g.setEffect(mint);
+            g.fillText(DesktopPaint.EMPTY_WORDMARK, cx, cy + 48);
+            g.setEffect(null);
             g.fillText(DesktopPaint.EMPTY_WORDMARK, cx, cy + 48);
             g.setFill(Color.web("#7d8894"));
             g.setFont(Font.font("Bahnschrift", FontWeight.SEMI_BOLD, 13));

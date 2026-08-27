@@ -569,9 +569,17 @@
     paintIdleMark(g, cx, cy - 48);
     g.textAlign = "center";
     g.textBaseline = "alphabetic";
-    g.fillStyle = "#e8eef4";
     g.font = "700 28px Bahnschrift, \"Avenir Next Condensed\", \"Trebuchet MS\", sans-serif";
     g.letterSpacing = "0.22em";
+    g.fillStyle = "#e8eef4";
+    g.shadowColor = "rgba(62, 224, 143, 0.32)";
+    g.shadowBlur = 28;
+    g.fillText("DAEDALUS", cx, cy + 48);
+    g.shadowColor = "rgba(245, 193, 74, 0.18)";
+    g.shadowBlur = 48;
+    g.fillText("DAEDALUS", cx, cy + 48);
+    g.shadowColor = "transparent";
+    g.shadowBlur = 0;
     g.fillText("DAEDALUS", cx, cy + 48);
     g.letterSpacing = "0";
     g.fillStyle = "#7d8894";

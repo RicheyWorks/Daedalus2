@@ -593,6 +593,10 @@ class DesktopPaintTest {
     @Test
     void anEmptyCanvasHasCopyInsteadOfABlankVoid() {
         assertThat(DesktopPaint.EMPTY_WORDMARK).isEqualTo("DAEDALUS");
+        assertThat(DesktopPaint.EMPTY_WORDMARK_GLOW).isEqualTo("#3ee08f");
+        assertThat(DesktopPaint.EMPTY_WORDMARK_GOLD).isEqualTo("#f5c14a");
+        assertThat(DesktopPaint.EMPTY_WORDMARK_GLOW_RADIUS).isEqualTo(28);
+        assertThat(DesktopPaint.EMPTY_WORDMARK_GOLD_RADIUS).isEqualTo(48);
         assertThat(DesktopPaint.EMPTY_TITLE).contains("Generate");
         assertThat(DesktopPaint.EMPTY_DETAIL).contains("Solve");
         assertThat(DesktopPaint.EMPTY_HINT).contains("arrow");

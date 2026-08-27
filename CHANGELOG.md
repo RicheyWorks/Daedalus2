@@ -64,7 +64,8 @@ under the `_migration/` portfolios.
   gray admin panel. The start gate brand breathes a mint/gold glow and
   the lattice veil pulses so the landing still feels held, not static.
   Fog walls near the lamp warm toward torch-brown with the floors so
-  revealed stone is one light, not cold ink beside warm slate.
+  revealed stone is one light, not cold ink beside warm slate. The empty
+  well wordmark wears the same mint/gold glow as the start-gate brand.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

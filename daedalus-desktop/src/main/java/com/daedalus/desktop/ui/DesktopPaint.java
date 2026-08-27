@@ -36,6 +36,13 @@ public final class DesktopPaint {
     public static final String EMPTY_TITLE = "Pick a generator and click Generate";
     public static final String EMPTY_DETAIL = "then Solve to watch a route";
     public static final String EMPTY_HINT = "or walk with arrows or a click";
+    /** Soft mint/gold aura — same tokens as the start-gate brand breath. */
+    public static final String EMPTY_WORDMARK_GLOW = "#3ee08f";
+    public static final double EMPTY_WORDMARK_GLOW_ALPHA = 0.32;
+    public static final double EMPTY_WORDMARK_GLOW_RADIUS = 28;
+    public static final String EMPTY_WORDMARK_GOLD = "#f5c14a";
+    public static final double EMPTY_WORDMARK_GOLD_ALPHA = 0.18;
+    public static final double EMPTY_WORDMARK_GOLD_RADIUS = 48;
 
     /**
      * Same miniature as {@code draw.js} {@code IDLE_TILES} — one product empty well.
