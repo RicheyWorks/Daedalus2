@@ -95,7 +95,7 @@
 /* ---------- canvas pane + status bar ---------- */
 
 .canvas-pane {
-    -fx-background-color: #0b0f14;
+    -fx-background-color: radial-gradient(center 50% 45%, radius 72%, #121821, #0b0f14);
 }
 
 .exports {

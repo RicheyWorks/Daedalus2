@@ -43,6 +43,9 @@ under the `_migration/` portfolios.
   hosts below — brand first, not a seven-card grid. The empty well on
   web and desktop matches that brand: larger idle maze, soft mint glow,
   and a hero DAEDALUS wordmark instead of a 12px caption.
+  After Enter the well, the sticky header keeps the same Bahnschrift
+  wordmark and the stage well has a soft radial void plus inset shade
+  so the board still reads as the product, not a flat admin panel.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
