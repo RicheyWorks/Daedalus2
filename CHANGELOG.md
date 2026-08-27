@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Plugin boot failures name REGISTER_ALGORITHMS and START.** Init and stop
+  were already pinned. A throw in either later phase now publishes the
+  matching `PluginFailedEvent` and does not stop the next plugin.
+
 - **Traffic tick failure is a meter and a health detail.** A thrown tick still
   retires that tracker; `daedalus.traffic.tick.failure` increments and
   `/actuator/health` reports `lastTickFailed` while staying UP. An eviction
