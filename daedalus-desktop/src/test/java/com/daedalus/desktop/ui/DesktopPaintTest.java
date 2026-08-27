@@ -96,13 +96,17 @@ class DesktopPaintTest {
         DesktopPaint.Layout full = DesktopPaint.Layout.fit(5, 5, 100, 100);
         DesktopPaint.Layout maze = DesktopPaint.Layout.fitMaze(5, 5, 100, 100);
         assertThat(DesktopPaint.LEGEND_RESERVE).isEqualTo(40);
+        assertThat(DesktopPaint.EXPORT_RESERVE).isEqualTo(28);
         assertThat(full).isNotNull();
         assertThat(maze).isNotNull();
         assertThat(maze.cellSize())
-                .as("the key keeps 40px so the last passage is not under the legend")
+                .as("the key and PNG keep their bands so passages are not under chrome")
                 .isLessThan(full.cellSize());
+        assertThat(maze.offsetY())
+                .as("the first row stays below the PNG")
+                .isGreaterThanOrEqualTo(DesktopPaint.EXPORT_RESERVE);
         assertThat(maze.offsetY() + maze.offY()[maze.tileRows()])
-                .as("the painted maze stays in the band above the reserve")
+                .as("the painted maze stays in the band above the legend")
                 .isLessThanOrEqualTo(100 - DesktopPaint.LEGEND_RESERVE);
     }
 
@@ -115,6 +119,69 @@ class DesktopPaintTest {
                 .containsExactly("floor", "wall", "start", "goal", "path", "player");
         assertThat(DesktopPaint.legendKeys(true, false, false, true))
                 .containsExactly("floor", "wall", "start", "goal", "hotspot");
+        DesktopPaint.Fog fog = DesktopPaint.Fog.of(
+                List.of(new Point(0, 0)), new Point(0, 0), null);
+        assertThat(DesktopPaint.legendKeys(true, true, true, true, fog))
+                .as("fog swallows the solver path and hot spots; the goal stays hidden")
+                .containsExactly("floor", "wall", "start", "player", "fog");
+        DesktopPaint.Fog arrived = DesktopPaint.Fog.of(
+                List.of(new Point(0, 0)), new Point(0, 0), new Point(2, 2));
+        assertThat(DesktopPaint.legendKeys(true, false, true, false, arrived))
+                .containsExactly("floor", "wall", "start", "goal", "player", "fog");
+    }
+
+    @Test
+    void fogRevealsStoodOnCellsAndTheWallsThatTouchThem() {
+        DesktopPaint.Fog fog = DesktopPaint.Fog.of(
+                List.of(new Point(0, 0)), new Point(0, 0), null);
+        assertThat(DesktopPaint.fogRevealsTile(fog, 1, 1))
+                .as("the cell underfoot is memory")
+                .isTrue();
+        assertThat(DesktopPaint.fogRevealsTile(fog, 1, 0))
+                .as("the west wall touches the stood-on cell")
+                .isTrue();
+        assertThat(DesktopPaint.fogRevealsTile(fog, 0, 1))
+                .as("the north wall touches the stood-on cell")
+                .isTrue();
+        assertThat(DesktopPaint.fogRevealsTile(fog, 5, 5))
+                .as("a far cell stays unseen void")
+                .isFalse();
+        assertThat(DesktopPaint.fogRevealsTile(null, 5, 5)).isTrue();
+        assertThat(DesktopPaint.fogLamp(fog, 1, 1))
+                .as("underfoot is the bright end of the lamp")
+                .isEqualTo(1.0);
+        assertThat(DesktopPaint.fogLamp(fog, 1, 5))
+                .as("two cells east: max(0.38, 1 - 0.24)")
+                .isCloseTo(0.76, within(1e-9));
+        assertThat(DesktopPaint.mixHex(DesktopPaint.FOG_FLOOR_DIM,
+                DesktopPaint.FOG_FLOOR, 0)).isEqualTo(DesktopPaint.FOG_FLOOR_DIM);
+        assertThat(DesktopPaint.mixHex(DesktopPaint.FOG_FLOOR_DIM,
+                DesktopPaint.FOG_FLOOR, 1)).isEqualTo(DesktopPaint.FOG_FLOOR);
+        assertThat(DesktopPaint.FOG_UNSEEN).isEqualTo("#05070a");
+    }
+
+    @Test
+    void aClickHitsAPassageAndMissesAWall() {
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 100, 100);
+        double cell = layout.cellSize();
+        double wall = layout.wall();
+        double cx = layout.x(1) + cell / 2.0;
+        double cy = layout.y(1) + cell / 2.0;
+        assertThat(DesktopPaint.hitCell(layout, cx, cy)).isEqualTo(new Point(0, 0));
+        assertThat(DesktopPaint.hitCell(layout, wall / 2.0, cy))
+                .as("the west wall is not a cell")
+                .isNull();
+        DesktopPaint.Layout wide = DesktopPaint.Layout.fit(5, 5, 200, 100);
+        assertThat(DesktopPaint.hitCell(wide, 10, cy))
+                .as("the letterbox is not a cell")
+                .isNull();
+        assertThat(DesktopPaint.hitCell(wide, wide.offsetX() + cx, cy))
+                .isEqualTo(new Point(0, 0));
+        DesktopPaint.Backing hidpi = DesktopPaint.Backing.of(100, 100, 2, 2);
+        assertThat(DesktopPaint.hitCell(layout, hidpi, cx * 2, cy * 2))
+                .as("HiDPI local coords are bitmap pixels")
+                .isEqualTo(new Point(0, 0));
+        assertThat(DesktopPaint.hitCell(null, 10, 10)).isNull();
     }
 
     @Test
@@ -176,8 +243,21 @@ class DesktopPaintTest {
                 .as("inset is 10%% of the passage, so the disc is smaller than the tile")
                 .isEqualTo(16.0);
         assertThat(DesktopPaint.playerMarker(layout, null)).isNull();
-        assertThat(DesktopPaint.roleFor(null)).isEqualTo(TileType.PASSAGE);
-        assertThat(DesktopPaint.roleFor(TileType.WALL)).isEqualTo(TileType.WALL);
+    }
+
+    @Test
+    void arrivingPaintsAGoldRingLargerThanTheGoalDisc() {
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(3, 3, 30, 30);
+        DesktopPaint.Ring ring = DesktopPaint.victoryRing(layout, new Point(0, 0));
+        DesktopPaint.Marker goal = DesktopPaint.endpointMarker(layout, new Point(0, 0));
+        assertThat(ring).isNotNull();
+        assertThat(DesktopPaint.VICTORY_GOLD).isEqualTo("#f0b429");
+        assertThat(ring.radius())
+                .as("web strokes 0.7·cell around the goal")
+                .isEqualTo(layout.cellSize() * 0.7);
+        assertThat(ring.radius() * 2).isGreaterThan(goal.size());
+        assertThat(ring.width()).isEqualTo(Math.max(2.0, layout.wall()));
+        assertThat(DesktopPaint.victoryRing(layout, null)).isNull();
     }
 
     @Test

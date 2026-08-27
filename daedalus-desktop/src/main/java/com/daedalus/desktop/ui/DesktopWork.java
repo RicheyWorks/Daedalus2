@@ -67,7 +67,14 @@ public class DesktopWork {
     public Callable<MazeGenerationService.Cached> generateJob(
             String generatorId, int rows, int cols, long seed,
             List<Hotspot> hotspots) {
-        return () -> generation.generate(generatorId, rows, cols, seed, hotspots);
+        return generateJob(generatorId, rows, cols, seed, hotspots, 0.0);
+    }
+
+    /** Same braid pass as the web / tournament — zero stays a tree. */
+    public Callable<MazeGenerationService.Cached> generateJob(
+            String generatorId, int rows, int cols, long seed,
+            List<Hotspot> hotspots, double braid) {
+        return () -> generation.generate(generatorId, rows, cols, seed, hotspots, braid);
     }
 
     /** Solve a maze off the FX thread. */

@@ -10,6 +10,28 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Desktop PNG sits on the well.** The web already snapshots the
+  dungeon; desktop had no picture to take. Same 28px top reserve so
+  the first row stays a corridor, not a button.
+
+- **Desktop walks on a click.** The web already steps into an adjacent
+  cell; desktop only grabbed focus. Same odd-tile hit-test, same refuse
+  of chords, so fog and god-mode walks can be pointed at.
+
+- **Desktop fog paints the dungeon.** Walking used to show the whole
+  plan. Checking Fog now uses the same ADR-006 contract as the web:
+  unseen `#05070a`, stood-on memory plus touching walls, and lamp
+  falloff. The goal appears when you arrive; Solve stays off until
+  Fog is lifted.
+
+- **Desktop victory paints the gold ring.** Arriving at the goal only
+  recolored the player disc; the web already strokes `#f0b429` around
+  the cell. Same 0.7·cell radius, same wall-width stroke.
+
+- **Desktop generate uses the web recipe.** The first board was 30×40
+  unbraided while the web opens 21×31 with optional braid, so one seed
+  was two dungeons.
+
 - **Show ASCII and PNG no longer cover the first row.** They sit on the
   well; the maze now keeps 28px above the dungeon so the top-right cells
   stay a corridor, not a button.

@@ -6,6 +6,7 @@ import com.daedalus.engine.MazeGrid;
 import com.daedalus.engine.generators.DungeonGenerator;
 import com.daedalus.engine.generators.GeneratorRegistry;
 import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
+import com.daedalus.model.Direction;
 import com.daedalus.model.MazeStats;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
@@ -75,6 +76,32 @@ class DesktopWorkTest {
         assertThat(generationsPerformed).hasValue(1);
         assertThat(cached.grid().rows()).isEqualTo(21);
         assertThat(generation.find(cached.metadata().id())).isNotNull();
+    }
+
+    @Test
+    void aBraidOpensDeadEndsOnTheSameSeed() throws Exception {
+        var tree = work.generateJob("recursive-backtracker", 21, 31, 7L, null, 0.0).call();
+        var loops = work.generateJob("recursive-backtracker", 21, 31, 7L, null, 0.8).call();
+        assertThat(tree.braid()).isNull();
+        assertThat(loops.braid()).isEqualTo(0.8);
+        assertThat(openPassages(loops.grid()))
+                .as("0.8 braid must open dead ends the tree kept closed")
+                .isGreaterThan(openPassages(tree.grid()));
+    }
+
+    private static int openPassages(MazeGrid grid) {
+        int n = 0;
+        for (int r = 0; r < grid.rows(); r++) {
+            for (int c = 0; c < grid.cols(); c++) {
+                if (grid.isOpen(r, c, Direction.EAST)) {
+                    n++;
+                }
+                if (grid.isOpen(r, c, Direction.SOUTH)) {
+                    n++;
+                }
+            }
+        }
+        return n;
     }
 
     @Test

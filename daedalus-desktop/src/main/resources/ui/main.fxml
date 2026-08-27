@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -53,6 +54,9 @@
             <Spinner fx:id="hotspotCostSpinner" prefWidth="56" editable="true">
                 <tooltip><Tooltip text="Spot cost"/></tooltip>
             </Spinner>
+            <ComboBox fx:id="braidChoice" prefWidth="64">
+                <tooltip><Tooltip text="Braid"/></tooltip>
+            </ComboBox>
 
             <Separator orientation="VERTICAL"/>
 
@@ -72,6 +76,9 @@
             </ComboBox>
             <Button fx:id="solveButton" text="Solve" onAction="#onSolve"/>
             <Button fx:id="resetButton" text="Reset" onAction="#onReset"/>
+            <CheckBox fx:id="fogToggle" text="Fog" onAction="#onFog">
+                <tooltip><Tooltip text="Fog of war — walk reveals the dungeon"/></tooltip>
+            </CheckBox>
         </HBox>
     </top>
 
@@ -91,12 +98,12 @@
                                    stroke="#1e2832" arcWidth="3" arcHeight="3"/>
                     </graphic>
                 </Label>
-                <Label text="start">
+                <Label fx:id="legendStart" text="start">
                     <graphic>
                         <Circle radius="5" fill="#3ee08f"/>
                     </graphic>
                 </Label>
-                <Label text="goal">
+                <Label fx:id="legendGoal" text="goal">
                     <graphic>
                         <Circle radius="5" fill="#ff5a5f"/>
                     </graphic>
@@ -117,6 +124,18 @@
                                    arcWidth="3" arcHeight="3"/>
                     </graphic>
                 </Label>
+                <Label fx:id="legendFog" text="unseen (fog)" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="10" height="10" fill="#05070a"
+                                   stroke="#1e2832" arcWidth="3" arcHeight="3"/>
+                    </graphic>
+                </Label>
+            </HBox>
+            <HBox fx:id="exportBox" spacing="8" alignment="CENTER_RIGHT" styleClass="exports"
+                  managed="false" visible="false">
+                <Button fx:id="pngButton" text="PNG" onAction="#onExportPng">
+                    <tooltip><Tooltip text="Save the dungeon as a PNG"/></tooltip>
+                </Button>
             </HBox>
         </Pane>
     </center>

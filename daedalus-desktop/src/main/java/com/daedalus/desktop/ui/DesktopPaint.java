@@ -29,7 +29,7 @@ public final class DesktopPaint {
     public static final String EMPTY_WORDMARK = "DAEDALUS";
     public static final String EMPTY_TITLE = "Pick a generator and click Generate";
     public static final String EMPTY_DETAIL = "then Solve to watch a route";
-    public static final String EMPTY_HINT = "or walk with the arrow keys";
+    public static final String EMPTY_HINT = "or walk with arrows or a click";
 
     /**
      * Same miniature as {@code draw.js} {@code IDLE_TILES} — one product empty well.
@@ -49,6 +49,15 @@ public final class DesktopPaint {
     public static final double EMPTY_MARK_BUDGET_H = 92;
     /** Overlay legend sits on the well — same reserve as {@code draw.js}. */
     public static final double LEGEND_RESERVE = 40;
+    /** PNG sits on the well — same reserve as {@code draw.js} so the first row is not under it. */
+    public static final double EXPORT_RESERVE = 28;
+    /** Same gold as the web victory ring ({@code --gold}). */
+    public static final String VICTORY_GOLD = "#f0b429";
+    /** ADR-006 unseen void — same tokens as {@code draw.js}. */
+    public static final String FOG_UNSEEN = "#05070a";
+    public static final String FOG_FLOOR_DIM = "#2a333c";
+    public static final String FOG_FLOOR = "#3d4a58";
+    public static final String FOG_FLOOR_HI = "#536272";
 
     private DesktopPaint() {
     }
@@ -89,11 +98,25 @@ public final class DesktopPaint {
         }
 
         /**
-         * Fit a maze above the overlay legend. Using the full pane put the
+         * Fit a maze between the PNG control and the overlay legend.
+         * Using the full pane put the first row under the export and the
          * last row under the key.
          */
         public static Layout fitMaze(int tileRows, int tileCols, double width, double height) {
-            return fit(tileRows, tileCols, width, height - LEGEND_RESERVE);
+            Layout fitted = fit(tileRows, tileCols, width,
+                    height - LEGEND_RESERVE - EXPORT_RESERVE);
+            if (fitted == null) {
+                return null;
+            }
+            return new Layout(
+                    fitted.cellSize(),
+                    fitted.wall(),
+                    fitted.offsetX(),
+                    fitted.offsetY() + EXPORT_RESERVE,
+                    fitted.tileRows(),
+                    fitted.tileCols(),
+                    fitted.offX(),
+                    fitted.offY());
         }
 
         private static double[] track(int n, double wall, double cell) {
@@ -121,12 +144,80 @@ public final class DesktopPaint {
         }
     }
 
+    /**
+     * Passage cell under a canvas point — same odd-tile track as
+     * {@code draw.js} {@code hitCell}. Walls and the letterbox miss.
+     * {@code canvasX}/{@code canvasY} are the JavaFX local coords
+     * (bitmap pixels on a HiDPI backing store).
+     */
+    public static Point hitCell(Layout layout, Backing store, double canvasX, double canvasY) {
+        if (layout == null) {
+            return null;
+        }
+        double sx = store != null ? store.scaleX() : 1;
+        double sy = store != null ? store.scaleY() : 1;
+        return hitCell(layout, canvasX / sx, canvasY / sy);
+    }
+
+    public static Point hitCell(Layout layout, double x, double y) {
+        if (layout == null) {
+            return null;
+        }
+        int col = trackHit(layout.offX(), x - layout.offsetX());
+        int row = trackHit(layout.offY(), y - layout.offsetY());
+        if (row < 0 || col < 0) {
+            return null;
+        }
+        return new Point(row, col);
+    }
+
+    private static int trackHit(double[] off, double v) {
+        for (int i = 1; i < off.length; i += 2) {
+            if (v >= off[i] && v < off[i + 1]) {
+                return (i - 1) / 2;
+            }
+        }
+        return -1;
+    }
+
     /** One filled square in the 2r+1 / 2c+1 tile projection. */
     public record TileRect(int tileRow, int tileCol) {
     }
 
     /** Axis-aligned box for the player disc (inset from the passage tile). */
     public record Marker(double x, double y, double size) {
+    }
+
+    /** Stroke around the goal when the walk arrives — same 0.7·cell as {@code draw.js}. */
+    public record Ring(double cx, double cy, double radius, double width) {
+    }
+
+    /**
+     * Fog memory for a local walk. Stood-on cells plus the explorer —
+     * same reveal contract as {@code draw.js} {@code fogRevealsTile}.
+     */
+    public record Fog(Set<String> seen, Point position, Point goal) {
+
+        public static Fog of(List<Point> walk, Point position, Point goal) {
+            Set<String> next = new HashSet<>();
+            if (walk != null) {
+                for (Point cell : walk) {
+                    remember(next, cell);
+                }
+            }
+            remember(next, position);
+            return new Fog(Set.copyOf(next), position, goal);
+        }
+
+        public boolean seen(int row, int col) {
+            return seen.contains(row + "," + col);
+        }
+
+        private static void remember(Set<String> into, Point cell) {
+            if (cell != null) {
+                into.add(cell.row() + "," + cell.col());
+            }
+        }
     }
 
     /**
@@ -198,18 +289,32 @@ public final class DesktopPaint {
 
     public static List<String> legendKeys(boolean maze, boolean path, boolean walk,
                                           boolean hotspot) {
+        return legendKeys(maze, path, walk, hotspot, null);
+    }
+
+    public static List<String> legendKeys(boolean maze, boolean path, boolean walk,
+                                          boolean hotspot, Fog fog) {
         if (!maze) {
             return List.of();
         }
-        List<String> keys = new ArrayList<>(List.of("floor", "wall", "start", "goal"));
-        if (path) {
+        List<String> keys = new ArrayList<>(List.of("floor", "wall"));
+        if (fog == null || fog.position() != null || !fog.seen().isEmpty()) {
+            keys.add("start");
+        }
+        if (fog == null || fog.goal() != null) {
+            keys.add("goal");
+        }
+        if (path && fog == null) {
             keys.add("path");
         }
         if (walk) {
             keys.add("player");
         }
-        if (hotspot) {
+        if (hotspot && fog == null) {
             keys.add("hotspot");
+        }
+        if (fog != null) {
+            keys.add("fog");
         }
         return List.copyOf(keys);
     }
@@ -322,6 +427,113 @@ public final class DesktopPaint {
 
     public static Marker endpointMarker(Layout layout, Point cell) {
         return disc(layout, cell, 0.34);
+    }
+
+    public static Ring victoryRing(Layout layout, Point goal) {
+        if (layout == null || goal == null) {
+            return null;
+        }
+        double cx = layout.x(2 * goal.col() + 1) + layout.cellSize() / 2.0;
+        double cy = layout.y(2 * goal.row() + 1) + layout.cellSize() / 2.0;
+        return new Ring(cx, cy, layout.cellSize() * 0.7, Math.max(2.0, layout.wall()));
+    }
+
+    /**
+     * Memory of stood-on cells, plus the wall segments that touch them.
+     * Unseen stays void — same rules as {@code draw.js}.
+     */
+    public static boolean fogRevealsTile(Fog fog, int tileRow, int tileCol) {
+        if (fog == null) {
+            return true;
+        }
+        if (tileRow % 2 == 1 && tileCol % 2 == 1) {
+            return fog.seen((tileRow - 1) / 2, (tileCol - 1) / 2);
+        }
+        if (tileRow % 2 == 1 && tileCol % 2 == 0) {
+            int row = (tileRow - 1) / 2;
+            int col = tileCol / 2;
+            return fog.seen(row, col - 1) || fog.seen(row, col);
+        }
+        if (tileRow % 2 == 0 && tileCol % 2 == 1) {
+            int row = tileRow / 2;
+            int col = (tileCol - 1) / 2;
+            return fog.seen(row - 1, col) || fog.seen(row, col);
+        }
+        int row = tileRow / 2;
+        int col = tileCol / 2;
+        return fog.seen(row - 1, col - 1) || fog.seen(row - 1, col)
+                || fog.seen(row, col - 1) || fog.seen(row, col);
+    }
+
+    /**
+     * Lamp falloff from the explorer. Stood-on memory stays visible;
+     * cells underfoot read as the bright end of the corridor.
+     */
+    public static double fogLamp(Fog fog, int tileRow, int tileCol) {
+        if (fog == null || fog.position() == null) {
+            return 1;
+        }
+        Point at = fog.position();
+        if (tileRow % 2 == 1 && tileCol % 2 == 1) {
+            return nearestLamp(manhattan(at, (tileRow - 1) / 2, (tileCol - 1) / 2));
+        }
+        if (tileRow % 2 == 1 && tileCol % 2 == 0) {
+            int row = (tileRow - 1) / 2;
+            int col = tileCol / 2;
+            return nearestLamp(manhattan(at, row, col - 1), manhattan(at, row, col));
+        }
+        if (tileRow % 2 == 0 && tileCol % 2 == 1) {
+            int row = tileRow / 2;
+            int col = (tileCol - 1) / 2;
+            return nearestLamp(manhattan(at, row - 1, col), manhattan(at, row, col));
+        }
+        int row = tileRow / 2;
+        int col = tileCol / 2;
+        return nearestLamp(
+                manhattan(at, row - 1, col - 1), manhattan(at, row - 1, col),
+                manhattan(at, row, col - 1), manhattan(at, row, col));
+    }
+
+    public static String fogFloor(Fog fog, int tileRow, int tileCol) {
+        return mixHex(FOG_FLOOR_DIM, FOG_FLOOR, fogLamp(fog, tileRow, tileCol));
+    }
+
+    public static boolean fogFloorHi(Layout layout, Fog fog, int tileRow, int tileCol) {
+        return layout != null
+                && tileRow % 2 == 1 && tileCol % 2 == 1
+                && layout.cellSize() >= 10
+                && fogLamp(fog, tileRow, tileCol) > 0.7;
+    }
+
+    static String mixHex(String from, String to, double t) {
+        int[] a = rgb(from);
+        int[] b = rgb(to);
+        double u = Math.max(0, Math.min(1, t));
+        return String.format("#%02x%02x%02x",
+                (int) Math.round(a[0] + (b[0] - a[0]) * u),
+                (int) Math.round(a[1] + (b[1] - a[1]) * u),
+                (int) Math.round(a[2] + (b[2] - a[2]) * u));
+    }
+
+    private static int[] rgb(String hex) {
+        String h = hex.charAt(0) == '#' ? hex.substring(1) : hex;
+        return new int[] {
+                Integer.parseInt(h.substring(0, 2), 16),
+                Integer.parseInt(h.substring(2, 4), 16),
+                Integer.parseInt(h.substring(4, 6), 16)
+        };
+    }
+
+    private static int manhattan(Point at, int row, int col) {
+        return Math.abs(row - at.row()) + Math.abs(col - at.col());
+    }
+
+    private static double nearestLamp(int... dists) {
+        int min = Integer.MAX_VALUE;
+        for (int d : dists) {
+            min = Math.min(min, d);
+        }
+        return Math.max(0.38, 1 - 0.12 * min);
     }
 
     /** Unknown or null tiles paint as passage — the same fallback the controller used. */

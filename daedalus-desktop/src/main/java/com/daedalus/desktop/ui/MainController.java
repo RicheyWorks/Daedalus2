@@ -19,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
@@ -26,19 +27,28 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.image.PixelFormat;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Scale;
+import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import org.springframework.stereotype.Component;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 /**
  * Controller for {@code /ui/main.fxml}.
@@ -55,8 +65,9 @@ import java.util.List;
  *       events and metrics fire exactly the same way as the REST surface.</li>
  *   <li>Run a solve on Solve — same delegation rationale; overlays the returned path on
  *       the canvas in the theme's {@code path()} color.</li>
- *   <li>Track a movable player marker; arrow keys / WASD walk it through open walls,
- *       reaching the goal flips the status bar to a celebration message.</li>
+ *   <li>Track a movable player marker; arrow keys / WASD or a click walk it through
+ *       open walls, reaching the goal flips the status bar to a celebration message.
+ *       Fog paints only stood-on memory and touching walls, same as the web dungeon.</li>
  *   <li>Render everything on a {@link Canvas}, repaint on resize. Layout,
  *       path tiles, and the player disc live on {@link DesktopPaint}.</li>
  * </ul>
@@ -90,17 +101,23 @@ public class MainController {
     @FXML private Spinner<Integer> colsSpinner;
     @FXML private Spinner<Integer> hotspotSpinner;
     @FXML private Spinner<Integer> hotspotCostSpinner;
+    @FXML private ComboBox<Double> braidChoice;
     @FXML private TextField seedField;
     @FXML private Button generateButton;     // referenced from FXML, kept for future enable/disable
     @FXML private ComboBox<String> solverChoice;
     @FXML private Button solveButton;        // ditto
     @FXML private Button resetButton;        // ditto
+    @FXML private CheckBox fogToggle;
+    @FXML private HBox exportBox;
     @FXML private Pane canvasParent;
     @FXML private Canvas canvas;
     @FXML private HBox legendBox;
+    @FXML private Label legendStart;
+    @FXML private Label legendGoal;
     @FXML private Label legendPath;
     @FXML private Label legendPlayer;
     @FXML private Label legendHotspot;
+    @FXML private Label legendFog;
     @FXML private Label statusLabel;
 
     /** Last successfully-generated maze; held so resize events can re-render it. */
@@ -166,8 +183,12 @@ public class MainController {
             solverChoice.getSelectionModel().select(preferred);
         }
 
-        rowsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, MAX_DIM, 30));
-        colsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, MAX_DIM, 40));
+        rowsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, MAX_DIM, 21));
+        colsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, MAX_DIM, 31));
+        if (braidChoice != null) {
+            braidChoice.getItems().setAll(0.0, 0.4, 0.8);
+            braidChoice.getSelectionModel().select(0.0);
+        }
         if (hotspotSpinner != null) {
             hotspotSpinner.setValueFactory(
                     new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 64, 0));
@@ -194,7 +215,7 @@ public class MainController {
         // field is focused (e.g. typing in Seed) goes to the text field; that's the right
         // behavior — explicit click on the maze area transfers focus back.
         canvas.setFocusTraversable(true);
-        canvas.setOnMouseClicked(e -> canvas.requestFocus());
+        canvas.setOnMouseClicked(this::onCanvasClicked);
         canvas.setOnKeyPressed(this::onKeyPressed);
 
         if (legendBox != null) {
@@ -202,6 +223,11 @@ public class MainController {
                     canvasParent.widthProperty().subtract(legendBox.widthProperty()).divide(2));
             legendBox.layoutYProperty().bind(
                     canvasParent.heightProperty().subtract(legendBox.heightProperty()).subtract(4));
+        }
+        if (exportBox != null) {
+            exportBox.layoutXProperty().bind(
+                    canvasParent.widthProperty().subtract(exportBox.widthProperty()).subtract(10));
+            exportBox.layoutYProperty().set(8);
         }
         syncLegend();
     }
@@ -233,12 +259,14 @@ public class MainController {
         int spotCount = hotspotSpinner != null ? hotspotSpinner.getValue() : 0;
         int spotCost = hotspotCostSpinner != null ? hotspotCostSpinner.getValue() : 25;
         var spots = DesktopPaint.placeSpots(rows, cols, spotCount, seed, spotCost);
+        double braid = braidChoice != null && braidChoice.getValue() != null
+                ? braidChoice.getValue() : 0.0;
 
         long t0 = System.nanoTime();
         Task<MazeGenerationService.Cached> task = new Task<>() {
             @Override
             protected MazeGenerationService.Cached call() throws Exception {
-                return work.generateJob(genId, rows, cols, seed, spots).call();
+                return work.generateJob(genId, rows, cols, seed, spots, braid).call();
             }
         };
         task.setOnSucceeded(e -> {
@@ -258,9 +286,10 @@ public class MainController {
 
             String actualId = current.metadata().generatorId();
             String genNote = actualId.equals(genId) ? "" : "  (fell back from " + genId + ")";
+            String braidNote = current.braid() != null ? ", braid=" + current.braid() : "";
             statusLabel.setText(String.format(
-                    "Drew %d×%d via %s, seed=%d, %dms%s — arrow keys / WASD to walk.",
-                    rows, cols, actualId, seed, elapsedMs, genNote));
+                    "Drew %d×%d via %s, seed=%d%s, %dms%s — arrows / WASD or a click to walk.",
+                    rows, cols, actualId, seed, braidNote, elapsedMs, genNote));
             busy(false);
         });
         task.setOnFailed(e ->
@@ -296,6 +325,10 @@ public class MainController {
     public void onSolve() {
         if (current == null) {
             statusLabel.setText("Generate a maze first, then click Solve.");
+            return;
+        }
+        if (fogOn()) {
+            statusLabel.setText("Fog hides the solver path — uncheck Fog to solve.");
             return;
         }
         String solverId = solverChoice.getValue();
@@ -339,6 +372,71 @@ public class MainController {
         statusLabel.setText("Reset to start.");
     }
 
+    /** Snapshot the well — same picture the web PNG takes, at the backing-store resolution. */
+    @FXML
+    public void onExportPng() {
+        if (current == null || canvas.getScene() == null) {
+            return;
+        }
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Save maze");
+        chooser.setInitialFileName("maze.png");
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG", "*.png"));
+        File file = chooser.showSaveDialog(canvas.getScene().getWindow());
+        if (file == null) {
+            return;
+        }
+        try {
+            writePng(snapshotWell(), file);
+            statusLabel.setText("Saved " + file.getName() + ".");
+        } catch (IOException e) {
+            statusLabel.setText("Could not save PNG: " + e.getMessage());
+        }
+        canvas.requestFocus();
+    }
+
+    private WritableImage snapshotWell() {
+        int pw = (int) Math.round(canvas.getWidth());
+        int ph = (int) Math.round(canvas.getHeight());
+        var saved = List.copyOf(canvas.getTransforms());
+        canvas.getTransforms().clear();
+        WritableImage snap = new WritableImage(Math.max(1, pw), Math.max(1, ph));
+        canvas.snapshot(null, snap);
+        canvas.getTransforms().setAll(saved);
+        return snap;
+    }
+
+    private static void writePng(WritableImage snap, File file) throws IOException {
+        int w = (int) Math.round(snap.getWidth());
+        int h = (int) Math.round(snap.getHeight());
+        int[] buf = new int[w * h];
+        snap.getPixelReader().getPixels(0, 0, w, h,
+                PixelFormat.getIntArgbInstance(), buf, 0, w);
+        BufferedImage out = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        out.setRGB(0, 0, w, h, buf, 0, w);
+        if (!ImageIO.write(out, "png", file)) {
+            throw new IOException("PNG writer is not available");
+        }
+    }
+
+    /** Wired from the FXML Fog checkbox. Checking it starts a fresh walk. */
+    @FXML
+    public void onFog() {
+        if (fogOn()) {
+            playerPos = current.metadata().start();
+            resetWalk(playerPos);
+            reachedGoal = false;
+            stopPathReveal();
+            currentPath = null;
+            solvedPath = null;
+            statusLabel.setText("Fog of war — arrows / WASD or a click walk the dungeon.");
+        } else if (current != null) {
+            statusLabel.setText("Fog lifted — the whole dungeon is visible.");
+        }
+        redraw();
+        canvas.requestFocus();
+    }
+
     // ---------- key handling ----------
 
     /**
@@ -350,6 +448,29 @@ public class MainController {
         if (dir == null) return;
         e.consume();
         tryMove(dir);
+    }
+
+    /**
+     * Click an adjacent passage to step — same hit-test as {@code stage.js}.
+     * A miss still focuses the canvas so arrows keep working.
+     */
+    private void onCanvasClicked(MouseEvent e) {
+        canvas.requestFocus();
+        if (current == null || playerPos == null) {
+            return;
+        }
+        DesktopPaint.Backing store = backing();
+        TileType[][] tiles = current.grid().toTileGrid();
+        if (store == null || tiles.length == 0) {
+            return;
+        }
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fitMaze(
+                tiles.length, tiles[0].length, store.cssW(), store.cssH());
+        Point hit = DesktopPaint.hitCell(layout, store, e.getX(), e.getY());
+        Direction dir = DesktopWalk.toward(playerPos, hit);
+        if (dir != null) {
+            tryMove(dir);
+        }
     }
 
     private static Direction directionForKey(KeyCode code) {
@@ -475,7 +596,9 @@ public class MainController {
         GraphicsContext g = canvas.getGraphicsContext2D();
         g.setTransform(store.scaleX(), 0, 0, store.scaleY(), 0, 0);
 
-        Color bg = theme != null ? theme.background() : Color.web("#000000");
+        Color bg = fogOn()
+                ? Color.web(DesktopPaint.FOG_UNSEEN)
+                : (theme != null ? theme.wall() : Color.web("#0b0f14"));
         g.setFill(bg);
         g.fillRect(0, 0, w, h);
 
@@ -516,6 +639,13 @@ public class MainController {
         DesktopPaint.Layout layout = DesktopPaint.Layout.fitMaze(
                 tiles.length, tiles[0].length, w, h);
         if (layout == null) return;
+
+        DesktopPaint.Fog fog = fogScene();
+        if (fog != null) {
+            paintFogDungeon(g, layout, tiles, theme, fog);
+            syncLegend();
+            return;
+        }
 
         // ---- 1) tile grid ----
         for (int r = 0; r < layout.tileRows(); r++) {
@@ -562,10 +692,13 @@ public class MainController {
                     theme.goal());
         }
 
-        // ---- 4) player marker ----
+        // ---- 4) player marker, then the web victory ring ----
         DesktopPaint.Marker mark = DesktopPaint.playerMarker(layout, playerPos);
         if (mark != null && theme != null) {
-            paintDisc(g, mark, reachedGoal ? theme.path() : theme.player());
+            paintDisc(g, mark, theme.player());
+        }
+        if (reachedGoal) {
+            paintRing(g, DesktopPaint.victoryRing(layout, current.metadata().goal()));
         }
         syncLegend();
     }
@@ -574,15 +707,84 @@ public class MainController {
         if (legendBox == null) {
             return;
         }
+        DesktopPaint.Fog fog = fogScene();
         List<String> keys = DesktopPaint.legendKeys(
                 current != null,
                 currentPath != null && !currentPath.isEmpty(),
                 playerWalk.size() > 1,
-                current != null && current.hotspots() != null && !current.hotspots().isEmpty());
+                current != null && current.hotspots() != null && !current.hotspots().isEmpty(),
+                fog);
         legendBox.setVisible(!keys.isEmpty());
+        if (exportBox != null) {
+            exportBox.setVisible(current != null);
+        }
+        showLegendKey(legendStart, keys.contains("start"));
+        showLegendKey(legendGoal, keys.contains("goal"));
         showLegendKey(legendPath, keys.contains("path"));
         showLegendKey(legendPlayer, keys.contains("player"));
         showLegendKey(legendHotspot, keys.contains("hotspot"));
+        showLegendKey(legendFog, keys.contains("fog"));
+    }
+
+    private boolean fogOn() {
+        return fogToggle != null && fogToggle.isSelected() && current != null;
+    }
+
+    private DesktopPaint.Fog fogScene() {
+        if (!fogOn()) {
+            return null;
+        }
+        Point target = current.metadata().goal();
+        Point goal = reachedGoal || (playerPos != null && playerPos.equals(target))
+                ? target : null;
+        return DesktopPaint.Fog.of(playerWalk, playerPos, goal);
+    }
+
+    private void paintFogDungeon(GraphicsContext g, DesktopPaint.Layout layout,
+                                 TileType[][] tiles, Theme theme, DesktopPaint.Fog fog) {
+        for (int r = 0; r < layout.tileRows(); r++) {
+            for (int c = 0; c < layout.tileCols(); c++) {
+                if (!DesktopPaint.fogRevealsTile(fog, r, c)) {
+                    continue;
+                }
+                TileType role = DesktopPaint.floorRole(tiles[r][c]);
+                if (role == TileType.WALL) {
+                    g.setFill(theme != null ? theme.wall() : Color.web("#0b0f14"));
+                    g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
+                    continue;
+                }
+                g.setFill(Color.web(DesktopPaint.fogFloor(fog, r, c)));
+                g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
+                if (DesktopPaint.fogFloorHi(layout, fog, r, c)) {
+                    g.setFill(Color.web(DesktopPaint.FOG_FLOOR_HI));
+                    g.fillRect(layout.x(c) + 1, layout.y(r) + 1,
+                            Math.max(0, layout.cellSize() - 2), 1);
+                }
+            }
+        }
+        if (!playerWalk.isEmpty() && theme != null) {
+            g.setGlobalAlpha(0.32);
+            g.setFill(theme.player());
+            for (DesktopPaint.TileRect tile : DesktopPaint.walkOverlay(playerWalk)) {
+                g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
+                        layout.w(tile.tileCol()), layout.h(tile.tileRow()));
+            }
+            g.setGlobalAlpha(1);
+        }
+        Point start = current.metadata().start();
+        if (theme != null && start != null && fog.seen(start.row(), start.col())) {
+            paintDisc(g, DesktopPaint.endpointMarker(layout, start), theme.start());
+        }
+        if (theme != null && fog.goal() != null) {
+            paintDisc(g, DesktopPaint.endpointMarker(layout, fog.goal()), theme.goal());
+        }
+        DesktopPaint.Marker mark = DesktopPaint.playerMarker(layout, fog.position());
+        if (mark != null && theme != null) {
+            paintDisc(g, mark, theme.player());
+        }
+        if (reachedGoal) {
+            paintRing(g, DesktopPaint.victoryRing(layout, current.metadata().goal()));
+        }
     }
 
     private static void showLegendKey(Label key, boolean on) {
@@ -620,6 +822,16 @@ public class MainController {
                 mark.size() + pad, mark.size() + pad);
         g.setFill(color);
         g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
+    }
+
+    private static void paintRing(GraphicsContext g, DesktopPaint.Ring ring) {
+        if (ring == null) {
+            return;
+        }
+        g.setStroke(Color.web(DesktopPaint.VICTORY_GOLD));
+        g.setLineWidth(ring.width());
+        g.strokeOval(ring.cx() - ring.radius(), ring.cy() - ring.radius(),
+                ring.radius() * 2, ring.radius() * 2);
     }
 
     /** Resolve a tile glyph to a theme color. Defensive — unknown enum cases fall back to passage. */

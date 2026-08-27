@@ -40,4 +40,26 @@ public final class DesktopWalk {
         }
         return new Outcome(next, next.equals(goal), true);
     }
+
+    /**
+     * Direction of a one-cell click, or {@code null} when the hit is not
+     * a neighbor — same refuse as {@code stage.js} (no chords, no teleports).
+     */
+    public static Direction toward(Point from, Point hit) {
+        if (from == null || hit == null) {
+            return null;
+        }
+        int dr = hit.row() - from.row();
+        int dc = hit.col() - from.col();
+        if (Math.abs(dr) + Math.abs(dc) != 1) {
+            return null;
+        }
+        if (dr == -1) {
+            return Direction.NORTH;
+        }
+        if (dr == 1) {
+            return Direction.SOUTH;
+        }
+        return dc == -1 ? Direction.WEST : Direction.EAST;
+    }
 }

@@ -50,4 +50,18 @@ class DesktopWalkTest {
         assertThat(none.moved()).isFalse();
         assertThat(none.position()).isEqualTo(new Point(0, 0));
     }
+
+    @Test
+    void aClickStepsOnlyToANeighbor() {
+        Point at = new Point(1, 1);
+        assertThat(DesktopWalk.toward(at, new Point(0, 1))).isEqualTo(Direction.NORTH);
+        assertThat(DesktopWalk.toward(at, new Point(2, 1))).isEqualTo(Direction.SOUTH);
+        assertThat(DesktopWalk.toward(at, new Point(1, 0))).isEqualTo(Direction.WEST);
+        assertThat(DesktopWalk.toward(at, new Point(1, 2))).isEqualTo(Direction.EAST);
+        assertThat(DesktopWalk.toward(at, new Point(2, 2)))
+                .as("a diagonal is a chord through a post")
+                .isNull();
+        assertThat(DesktopWalk.toward(at, at)).isNull();
+        assertThat(DesktopWalk.toward(at, null)).isNull();
+    }
 }
