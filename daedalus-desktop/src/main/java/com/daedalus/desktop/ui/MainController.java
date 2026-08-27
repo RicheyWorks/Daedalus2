@@ -341,7 +341,7 @@ public class MainController {
      *       endpoint markers stay visible.</li>
      *   <li>Player marker — drawn last so it's always on top of whatever is underneath.</li>
      * </ol>
-     * Square cells, centered with letterboxing on the longer axis so the maze isn't stretched.
+     * Thin-wall cells, centered with letterboxing on the longer axis so the maze isn't stretched.
      */
     private void redraw() {
         double w = canvas.getWidth();
@@ -366,7 +366,7 @@ public class MainController {
         for (int r = 0; r < layout.tileRows(); r++) {
             for (int c = 0; c < layout.tileCols(); c++) {
                 g.setFill(colorFor(DesktopPaint.roleFor(tiles[r][c]), theme));
-                g.fillRect(layout.x(c), layout.y(r), layout.cellSize(), layout.cellSize());
+                g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
             }
         }
 
@@ -376,7 +376,7 @@ public class MainController {
             for (DesktopPaint.TileRect tile : DesktopPaint.pathOverlay(
                     currentPath, current.metadata().start(), current.metadata().goal())) {
                 g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
-                        layout.cellSize(), layout.cellSize());
+                        layout.w(tile.tileCol()), layout.h(tile.tileRow()));
             }
         }
 

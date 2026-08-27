@@ -59,6 +59,23 @@
     DaedalusDraw.paintEmpty(host.$("maze"));
   }
 
+  function watch(host, getState) {
+    const canvas = host.$("maze");
+    const wrap = canvas && canvas.parentElement;
+    if (!wrap || wrap._daedalusRO) return;
+    let raf = 0;
+    const ro = new ResizeObserver(() => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const s = getState();
+        if (s.maze) paint(s, host);
+        else paintEmpty(host);
+      });
+    });
+    wrap._daedalusRO = ro;
+    ro.observe(wrap);
+  }
+
   // Click (or tap) an adjacent cell to move — session first, then the fog agent.
   function click(state, host, ev) {
     if (!geom) return;
@@ -106,5 +123,5 @@
     }
   }
 
-  global.DaedalusStage = {tourWalk, ghostWalk, scene, paint, paintEmpty, click, key};
+  global.DaedalusStage = {tourWalk, ghostWalk, scene, paint, paintEmpty, watch, click, key};
 })(window);

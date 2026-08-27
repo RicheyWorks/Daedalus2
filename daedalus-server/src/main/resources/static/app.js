@@ -437,6 +437,7 @@ document.addEventListener("keydown", e => {
 
 DaedalusDesk.restore(state);
 renderAuth();
+DaedalusStage.watch(stageHost(), () => state);
 drawEmpty();
 refreshLeaderboard();
 refreshPlugins();

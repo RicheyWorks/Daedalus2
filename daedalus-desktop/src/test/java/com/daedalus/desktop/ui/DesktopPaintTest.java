@@ -17,19 +17,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 class DesktopPaintTest {
 
     @Test
-    void aSquareCanvasUsesTheFullWidthAndAWideCanvasLetterboxes() {
+    void aSquareCanvasUsesThinWallsAndAWideCanvasLetterboxes() {
         DesktopPaint.Layout square = DesktopPaint.Layout.fit(5, 5, 100, 100);
         assertThat(square)
-                .as("a 5×5 tile grid in 100×100 should fill the canvas")
+                .as("a 5×5 tile grid (2×2 cells) should fit the canvas")
                 .isNotNull();
-        assertThat(square.cellSize()).isEqualTo(20.0);
+        assertThat(square.cellSize())
+                .as("passage size wins: 100 / (2·1.25 + 0.25) floors to 36")
+                .isEqualTo(36.0);
+        assertThat(square.wall())
+                .as("walls are a quarter of the passage, not the same square")
+                .isEqualTo(9.0);
+        assertThat(square.w(0)).isEqualTo(9.0);
+        assertThat(square.w(1)).isEqualTo(36.0);
+        assertThat(square.offX()[5]).isEqualTo(99.0);
         assertThat(square.offsetX()).isZero();
         assertThat(square.offsetY()).isZero();
 
         DesktopPaint.Layout wide = DesktopPaint.Layout.fit(5, 5, 200, 100);
         assertThat(wide.cellSize())
                 .as("the short axis owns cell size so the maze is not stretched")
-                .isEqualTo(20.0);
+                .isEqualTo(36.0);
         assertThat(wide.offsetX())
                 .as("leftover width is split as letterbox, not left-aligned")
                 .isEqualTo(50.0);
@@ -59,6 +67,15 @@ class DesktopPaintTest {
     }
 
     @Test
+    void aNonAdjacentStepDoesNotPaintAChordThroughAWall() {
+        Point a = new Point(0, 0);
+        Point b = new Point(2, 2);
+        assertThat(DesktopPaint.pathOverlay(List.of(a, b), a, b))
+                .as("a teleport pair is two endpoints — no connector tile")
+                .isEmpty();
+    }
+
+    @Test
     void aMissingPathIsNoOverlay() {
         assertThat(DesktopPaint.pathOverlay(null, new Point(0, 0), new Point(1, 1)))
                 .isEmpty();
@@ -71,9 +88,10 @@ class DesktopPaintTest {
         DesktopPaint.Layout layout = DesktopPaint.Layout.fit(3, 3, 30, 30);
         DesktopPaint.Marker mark = DesktopPaint.playerMarker(layout, new Point(0, 0));
         assertThat(mark).isNotNull();
+        assertThat(layout.cellSize()).isEqualTo(20.0);
         assertThat(mark.size())
-                .as("inset is 10%% of the cell, so the disc is smaller than the tile")
-                .isEqualTo(8.0);
+                .as("inset is 10%% of the passage, so the disc is smaller than the tile")
+                .isEqualTo(16.0);
         assertThat(DesktopPaint.playerMarker(layout, null)).isNull();
         assertThat(DesktopPaint.roleFor(null)).isEqualTo(TileType.PASSAGE);
         assertThat(DesktopPaint.roleFor(TileType.WALL)).isEqualTo(TileType.WALL);

@@ -3,22 +3,39 @@
 "use strict";
 (function (global) {
   const COLORS = {
-    wall: "#161c24", floor: "#465362", start: "#4cc38a", goal: "#e5484d", path: "#82b1ff",
+    wall: "#0b0f14", floor: "#3d4a58", floorHi: "#536272",
+    start: "#3ee08f", goal: "#ff5a5f", path: "#8fb8ff",
   };
-  const PLAYER_COLORS = ["#f0b429", "#ff8fa3", "#9ecbff", "#7ce2b3"];
+  const PLAYER_COLORS = ["#f5c14a", "#ff8fa3", "#9ecbff", "#7ce2b3"];
 
-  function computeGeometry(tiles) {
+  function stageBox(canvas) {
+    const wrap = canvas.parentElement;
+    const w = wrap && wrap.clientWidth ? wrap.clientWidth : 880;
+    const h = wrap && wrap.clientHeight ? wrap.clientHeight : 640;
+    return { w: Math.max(80, w), h: Math.max(80, h) };
+  }
+
+  function computeGeometry(tiles, availW, availH) {
     const th = tiles.length, tw = tiles[0].length;
     const cols = (tw - 1) / 2;
-    const cell = Math.max(6, Math.min(26, Math.floor(880 / (cols * 1.25 + 0.25))));
-    const wall = Math.max(2, Math.round(cell / 4));
+    const rows = (th - 1) / 2;
+    const cssW = Math.max(80, availW || 880);
+    const cssH = Math.max(80, availH || 640);
+    const cellByW = Math.floor(cssW / (cols * 1.25 + 0.25));
+    const cellByH = Math.floor(cssH / (rows * 1.25 + 0.25));
+    const cellCss = Math.max(6, Math.min(42, Math.min(cellByW, cellByH)));
+    const wallCss = Math.max(2, Math.round(cellCss / 4));
+    const dpr = (typeof window !== "undefined" && window.devicePixelRatio) || 1;
+    const cell = Math.max(1, Math.round(cellCss * dpr));
+    const wall = Math.max(1, Math.round(wallCss * dpr));
     const track = n => {
       const off = new Array(n + 1);
       off[0] = 0;
       for (let i = 0; i < n; i++) off[i + 1] = off[i] + (i % 2 === 0 ? wall : cell);
       return off;
     };
-    return { offX: track(tw), offY: track(th), cell, wall };
+    const offX = track(tw), offY = track(th);
+    return { offX, offY, cell, wall, dpr, cssW: offX[tw] / dpr, cssH: offY[th] / dpr };
   }
 
   function isRock(tiles, r, c) {
@@ -73,6 +90,11 @@
   function marker(g, geom, p, color, radius) {
     const [x, y] = cellCenter(geom, p);
     g.fillStyle = color;
+    g.globalAlpha = 0.22;
+    g.beginPath();
+    g.arc(x, y, geom.cell * (radius + 0.22), 0, 2 * Math.PI);
+    g.fill();
+    g.globalAlpha = 1;
     g.beginPath();
     g.arc(x, y, geom.cell * radius, 0, 2 * Math.PI);
     g.fill();
@@ -110,13 +132,41 @@
     return { row, col };
   }
 
+  function paintWashCell(g, geom, r, c) {
+    g.fillRect(geom.offX[2 * c + 1], geom.offY[2 * r + 1], geom.cell, geom.cell);
+  }
+
+  /** Openings between live cells so a wash reads as a field, not graph paper. */
+  function paintWashOpenings(g, geom, tiles, live) {
+    const rows = (tiles.length - 1) / 2, cols = (tiles[0].length - 1) / 2;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        if (!live(r, c)) continue;
+        if (c + 1 < cols && live(r, c + 1) && tiles[2 * r + 1][2 * c + 2] !== "#") {
+          const tc = 2 * c + 2;
+          g.fillRect(geom.offX[tc], geom.offY[2 * r + 1],
+                     geom.offX[tc + 1] - geom.offX[tc], geom.cell);
+        }
+        if (r + 1 < rows && live(r + 1, c) && tiles[2 * r + 2][2 * c + 1] !== "#") {
+          const tr = 2 * r + 2;
+          g.fillRect(geom.offX[2 * c + 1], geom.offY[tr],
+                     geom.cell, geom.offY[tr + 1] - geom.offY[tr]);
+        }
+      }
+    }
+  }
+
   function paint(canvas, scene) {
     const tiles = scene.tiles;
     const th = tiles.length, tw = tiles[0].length;
-    const geom = computeGeometry(tiles);
+    const box = stageBox(canvas);
+    const geom = computeGeometry(tiles, box.w, box.h);
     canvas.width = geom.offX[tw];
     canvas.height = geom.offY[th];
+    canvas.style.width = geom.cssW + "px";
+    canvas.style.height = geom.cssH + "px";
     const g = canvas.getContext("2d");
+    g.imageSmoothingEnabled = false;
 
     g.fillStyle = COLORS.wall;
     g.fillRect(0, 0, canvas.width, canvas.height);
@@ -132,6 +182,10 @@
         g.fillStyle = COLORS.floor;
         g.fillRect(geom.offX[col], geom.offY[r],
                    geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
+        if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10) {
+          g.fillStyle = COLORS.floorHi;
+          g.fillRect(geom.offX[col] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
+        }
         if (t === "S") start = { row: (r - 1) / 2, col: (col - 1) / 2 };
         if (t === "G") goal  = { row: (r - 1) / 2, col: (col - 1) / 2 };
       }
@@ -155,16 +209,25 @@
     if (scene.field) {
       const max = Math.max(1, scene.field.maxDistance);
       const ramp = scene.distanceRamp;
+      const tone = (r, c) => {
+        const d = scene.field.distances[r][c];
+        if (d < 0) return null;
+        const t = d / max;
+        return { color: ramp[Math.min(ramp.length - 1, Math.round(t * (ramp.length - 1)))],
+                 alpha: 0.12 + 0.68 * t };
+      };
       for (let r = 0; r < scene.field.rows; r++) {
         for (let c = 0; c < scene.field.cols; c++) {
-          const d = scene.field.distances[r][c];
-          if (d < 0) continue;
-          const t = d / max;
-          g.fillStyle = ramp[Math.min(ramp.length - 1, Math.round(t * (ramp.length - 1)))];
-          g.globalAlpha = 0.12 + 0.68 * t;
-          g.fillRect(geom.offX[2 * c + 1], geom.offY[2 * r + 1], geom.cell, geom.cell);
+          const s = tone(r, c);
+          if (!s) continue;
+          g.fillStyle = s.color;
+          g.globalAlpha = s.alpha;
+          paintWashCell(g, geom, r, c);
         }
       }
+      g.fillStyle = ramp[Math.min(ramp.length - 1, Math.round(0.55 * (ramp.length - 1)))];
+      g.globalAlpha = 0.42;
+      paintWashOpenings(g, geom, tiles, (r, c) => scene.field.distances[r][c] >= 0);
       g.globalAlpha = 1;
     }
     if (scene.lens) {
@@ -175,23 +238,30 @@
           if (band < 0) continue;
           g.fillStyle = lensColors[band];
           g.globalAlpha = band === 2 ? 0.16 : 0.42;
-          g.fillRect(geom.offX[2 * c + 1], geom.offY[2 * r + 1], geom.cell, geom.cell);
+          paintWashCell(g, geom, r, c);
         }
       }
+      g.fillStyle = lensColors[2];
+      g.globalAlpha = 0.2;
+      paintWashOpenings(g, geom, tiles, (r, c) => scene.lens.bands[r][c] >= 0);
       g.globalAlpha = 1;
     }
     if (scene.expansions && scene.expansions.length && (scene.searchProgress ?? 1) > 0) {
       const shown = Math.ceil(scene.expansions.length * scene.searchProgress);
+      const live = new Set();
+      for (let i = 0; i < shown; i++) {
+        const p = scene.expansions[i];
+        live.add(p.row + "," + p.col);
+      }
       g.fillStyle = COLORS.path;
       g.globalAlpha = 0.16;
       for (let i = 0; i < shown; i++) {
-        const p = scene.expansions[i];
-        g.fillRect(geom.offX[2 * p.col + 1], geom.offY[2 * p.row + 1], geom.cell, geom.cell);
+        paintWashCell(g, geom, scene.expansions[i].row, scene.expansions[i].col);
       }
+      paintWashOpenings(g, geom, tiles, (r, c) => live.has(r + "," + c));
       g.globalAlpha = 0.45;
       for (let i = Math.max(0, shown - 6); i < shown; i++) {
-        const p = scene.expansions[i];
-        g.fillRect(geom.offX[2 * p.col + 1], geom.offY[2 * p.row + 1], geom.cell, geom.cell);
+        paintWashCell(g, geom, scene.expansions[i].row, scene.expansions[i].col);
       }
       g.globalAlpha = 1;
     }
@@ -265,20 +335,24 @@
     if (scene.race) {
       scene.race.lanes.forEach((lane, li) => {
         const shown = Math.ceil(lane.expansions.length * lane.front);
+        const live = new Set();
+        for (let i = 0; i < shown; i++) {
+          const p = lane.expansions[i];
+          live.add(p.row + "," + p.col);
+        }
         g.fillStyle = lane.color;
         g.globalAlpha = 0.13;
         for (let i = 0; i < shown; i++) {
-          const p = lane.expansions[i];
-          g.fillRect(geom.offX[2 * p.col + 1], geom.offY[2 * p.row + 1], geom.cell, geom.cell);
+          paintWashCell(g, geom, lane.expansions[i].row, lane.expansions[i].col);
         }
+        paintWashOpenings(g, geom, tiles, (r, c) => live.has(r + "," + c));
         g.globalAlpha = 0.4;
         for (let i = Math.max(0, shown - 5); i < shown; i++) {
-          const p = lane.expansions[i];
-          g.fillRect(geom.offX[2 * p.col + 1], geom.offY[2 * p.row + 1], geom.cell, geom.cell);
+          paintWashCell(g, geom, lane.expansions[i].row, lane.expansions[i].col);
         }
         g.globalAlpha = 1;
         if (lane.pathProg > 0 && lane.path && lane.path.length) {
-          paintWalk(g, geom, lane.path, lane.color, lane.pathProg, li === 0 ? 0.55 : 0.85);
+          paintWalk(g, geom, lane.path, lane.color, lane.pathProg, li === 0 ? 0.85 : 0.58);
           const head = walkHead(lane.path, lane.pathProg);
           if (head) marker(g, geom, head, lane.color, 0.36);
         }
@@ -323,16 +397,27 @@
   }
 
   function paintEmpty(canvas) {
+    const box = stageBox(canvas);
+    const dpr = (typeof window !== "undefined" && window.devicePixelRatio) || 1;
+    const cssW = Math.max(280, box.w);
+    const cssH = Math.max(220, box.h);
+    canvas.width = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    canvas.style.width = cssW + "px";
+    canvas.style.height = cssH + "px";
     const g = canvas.getContext("2d");
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.imageSmoothingEnabled = false;
     g.fillStyle = COLORS.wall;
-    g.fillRect(0, 0, canvas.width, canvas.height);
-    g.fillStyle = "#8a949e";
-    g.font = "14px system-ui, sans-serif";
+    g.fillRect(0, 0, cssW, cssH);
+    g.fillStyle = "#6b7580";
+    g.font = "600 15px system-ui, sans-serif";
     g.textAlign = "center";
-    g.fillText("Pick a generator and press Generate", canvas.width / 2, canvas.height / 2 - 8);
-    g.fillStyle = "#5c6771";
+    g.fillText("Pick a generator and press Generate", cssW / 2, cssH / 2 - 8);
+    g.fillStyle = "#4a5560";
+    g.font = "13px system-ui, sans-serif";
     g.fillText("then Solve to watch a route unfold, or open a session and play",
-        canvas.width / 2, canvas.height / 2 + 16);
+        cssW / 2, cssH / 2 + 16);
   }
 
   function pathRevealMs(n) {

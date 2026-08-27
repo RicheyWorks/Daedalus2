@@ -15,15 +15,21 @@ import java.util.List;
  * letterboxing, path-connector tiles, and the inset player disc. Those
  * rules are geometry, not FXML glue, so a 1-pixel drift on resize was
  * invisible to the suite. The controller still calls {@code GraphicsContext}.
+ *
+ * <p>Thin-wall track matches the web painter: even tiles are walls
+ * ({@code cell/4}), odd tiles are passages. A uniform 2r+1 square grid
+ * made every dungeon look like a chunky bitmap.
  */
 public final class DesktopPaint {
 
     private DesktopPaint() {
     }
 
-    /** Square cells, centered in the canvas so a non-square window letterboxes. */
-    public record Layout(double cellSize, double offsetX, double offsetY,
-                         int tileRows, int tileCols) {
+    /**
+     * Thin-wall cells, centered in the canvas so a non-square window letterboxes.
+     */
+    public record Layout(double cellSize, double wall, double offsetX, double offsetY,
+                         int tileRows, int tileCols, double[] offX, double[] offY) {
 
         /**
          * Fit a tile grid into {@code width}×{@code height}. {@code null} when
@@ -33,23 +39,49 @@ public final class DesktopPaint {
             if (tileRows <= 0 || tileCols <= 0 || width <= 0 || height <= 0) {
                 return null;
             }
-            double cellSize = Math.max(1.0, Math.floor(Math.min(width / tileCols, height / tileRows)));
-            double drawW = cellSize * tileCols;
-            double drawH = cellSize * tileRows;
+            int cols = Math.max(1, (tileCols - 1) / 2);
+            int rows = Math.max(1, (tileRows - 1) / 2);
+            double cell = Math.max(2.0, Math.floor(Math.min(
+                    width / (cols * 1.25 + 0.25),
+                    height / (rows * 1.25 + 0.25))));
+            double wall = Math.max(1.0, Math.round(cell / 4.0));
+            double[] offX = track(tileCols, wall, cell);
+            double[] offY = track(tileRows, wall, cell);
+            double drawW = offX[tileCols];
+            double drawH = offY[tileRows];
             return new Layout(
-                    cellSize,
+                    cell,
+                    wall,
                     Math.floor((width - drawW) / 2),
                     Math.floor((height - drawH) / 2),
                     tileRows,
-                    tileCols);
+                    tileCols,
+                    offX,
+                    offY);
+        }
+
+        private static double[] track(int n, double wall, double cell) {
+            double[] off = new double[n + 1];
+            for (int i = 0; i < n; i++) {
+                off[i + 1] = off[i] + (i % 2 == 0 ? wall : cell);
+            }
+            return off;
         }
 
         public double x(int tileCol) {
-            return offsetX + tileCol * cellSize;
+            return offsetX + offX[tileCol];
         }
 
         public double y(int tileRow) {
-            return offsetY + tileRow * cellSize;
+            return offsetY + offY[tileRow];
+        }
+
+        public double w(int tileCol) {
+            return offX[tileCol + 1] - offX[tileCol];
+        }
+
+        public double h(int tileRow) {
+            return offY[tileRow + 1] - offY[tileRow];
         }
     }
 
@@ -79,7 +111,9 @@ public final class DesktopPaint {
             }
             if (i > 0) {
                 Point prev = path.get(i - 1);
-                out.add(new TileRect(prev.row() + p.row() + 1, prev.col() + p.col() + 1));
+                if (Math.abs(prev.row() - p.row()) + Math.abs(prev.col() - p.col()) == 1) {
+                    out.add(new TileRect(prev.row() + p.row() + 1, prev.col() + p.col() + 1));
+                }
             }
         }
         return List.copyOf(out);

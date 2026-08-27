@@ -10,6 +10,23 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Web canvas fills the well and paints at devicePixelRatio.** Geometry
+  used to hard-code an 880px budget and write CSS pixels into
+  `canvas.width`, so a wide board left a tiny maze and a 2× display
+  smeared the corridors. Paint now fits `#stage`, backs the bitmap with
+  `devicePixelRatio`, and redraws on resize. Empty canvas sizes to the
+  well instead of keeping the last maze. Heat / lens / search / race wash
+  fill openings, not just cells. The primary race lane is the loud one.
+
+- **Web chrome treats the maze as the hero.** Deeper void, quieter
+  panels, a sticky stage well, Harden looks like a control, and the fog
+  legend matches the wall fill.
+
+- **Desktop thin-wall track matches the web.** `DesktopPaint.Layout`
+  used to size every 2r+1 tile the same, so a dungeon was a chunky
+  bitmap. Walls are now a quarter of the passage; a non-adjacent path
+  step no longer paints a chord through a wall.
+
 - **Plugin boot failures name REGISTER_ALGORITHMS and START.** Init and stop
   were already pinned. A throw in either later phase now publishes the
   matching `PluginFailedEvent` and does not stop the next plugin.
