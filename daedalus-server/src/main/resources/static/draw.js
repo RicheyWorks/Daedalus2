@@ -448,10 +448,12 @@
           paintWashCell(g, geom, lane.expansions[i].row, lane.expansions[i].col);
         }
         g.globalAlpha = 1;
+        if (!(lane.pathProg > 0) && shown > 0) {
+          pathHead(g, geom, lane.expansions[shown - 1], lane.color);
+        }
         if (lane.pathProg > 0 && lane.path && lane.path.length) {
           paintWalk(g, geom, lane.path, lane.color, lane.pathProg, li === 0 ? 0.85 : 0.58);
-          const head = walkHead(lane.path, lane.pathProg);
-          if (head) marker(g, geom, head, lane.color, 0.36);
+          pathHead(g, geom, walkHead(lane.path, lane.pathProg), lane.color);
         }
       });
     }

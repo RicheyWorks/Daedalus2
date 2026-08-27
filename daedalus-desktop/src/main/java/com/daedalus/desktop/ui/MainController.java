@@ -2128,6 +2128,13 @@ public class MainController {
                     layout.w(tile.tileCol()), layout.h(tile.tileRow()));
         }
         g.setGlobalAlpha(1);
+        Color laneColor = Color.web(lane.color());
+        if (pathProg <= 0 && !shown.isEmpty()) {
+            Point tip = DesktopPaint.walkHead(shown);
+            paintRing(g, DesktopPaint.pathHeadHalo(layout, tip),
+                    laneColor.deriveColor(0, 1, 1, 0.38));
+            paintDisc(g, DesktopPaint.disc(layout, tip, 0.3), laneColor);
+        }
         if (pathProg > 0 && !lane.path().isEmpty()) {
             List<Point> ribbon = DesktopPaint.pathPrefix(lane.path(), pathProg);
             g.setGlobalAlpha(pathAlpha);
@@ -2136,7 +2143,10 @@ public class MainController {
                         layout.w(tile.tileCol()), layout.h(tile.tileRow()));
             }
             g.setGlobalAlpha(1);
-            paintDisc(g, DesktopPaint.raceHeadMarker(layout, ribbon), Color.web(lane.color()));
+            Point head = DesktopPaint.walkHead(ribbon);
+            paintRing(g, DesktopPaint.pathHeadHalo(layout, head),
+                    laneColor.deriveColor(0, 1, 1, 0.38));
+            paintDisc(g, DesktopPaint.raceHeadMarker(layout, ribbon), laneColor);
         }
     }
 

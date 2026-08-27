@@ -55,7 +55,9 @@ under the `_migration/` portfolios.
   Bahnschrift keys and frosted PNG/ASCII buttons; explore's automap
   wears a gold frame so the earned map reads as chrome, not a sticker.
   Fog floors warm toward torch-brown underfoot, and the explore flame
-  flickers so the hand is fire, not a flat triangle.
+  flickers so the hand is fire, not a flat triangle. Race search tips
+  and path heads wear the same soft halo as the solver ribbon so
+  competing fronts read as places, not wash cells.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

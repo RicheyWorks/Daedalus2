@@ -268,6 +268,12 @@ class DesktopPaintTest {
         }
         assertThat(DesktopPaint.raceFront(many)).hasSize(5)
                 .startsWith(new Point(0, 3)).endsWith(new Point(0, 7));
+        assertThat(DesktopPaint.walkHead(DesktopPaint.raceFront(many)))
+                .as("search tip halo sits on the newest expanded cell")
+                .isEqualTo(new Point(0, 7));
+        assertThat(DesktopPaint.pathHeadHalo(
+                DesktopPaint.Layout.fit(5, 5, 100, 100), new Point(1, 1)))
+                .isNotNull();
         assertThat(DesktopPaint.raceFront(List.of())).isEmpty();
     }
 
