@@ -67,6 +67,10 @@ public final class DesktopPaint {
     public static final String FOG_FLOOR = "#3d4a58";
     /** Torch-warm stone underfoot — same mix as {@code draw.js} floorWarm. */
     public static final String FOG_FLOOR_WARM = "#5c4a32";
+    /** Cold wall ink — same token as {@code draw.js} wall. */
+    public static final String FOG_WALL = "#0b0f14";
+    /** Torch-warm wall — same mix as {@code draw.js} wallWarm. */
+    public static final String FOG_WALL_WARM = "#2a2218";
     /** Same 1px corridor highlight as {@code draw.js} {@code floorHi}. */
     public static final String FLOOR_HI = "#536272";
     public static final String FOG_FLOOR_HI = FLOOR_HI;
@@ -1144,6 +1148,12 @@ public final class DesktopPaint {
         double lamp = fogLamp(fog, tileRow, tileCol);
         String lit = mixHex(FOG_FLOOR, FOG_FLOOR_WARM, 0.28 * lamp);
         return mixHex(FOG_FLOOR_DIM, lit, lamp);
+    }
+
+    /** Revealed wall near the lamp warms toward torch-brown — same as {@code draw.js}. */
+    public static String fogWall(Fog fog, int tileRow, int tileCol) {
+        double lamp = fogLamp(fog, tileRow, tileCol);
+        return mixHex(FOG_WALL, FOG_WALL_WARM, 0.45 * lamp);
     }
 
     public static boolean floorHi(Layout layout, int tileRow, int tileCol) {

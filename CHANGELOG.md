@@ -63,6 +63,8 @@ under the `_migration/` portfolios.
   soft gold rim like the explore automap so the board is chrome, not a
   gray admin panel. The start gate brand breathes a mint/gold glow and
   the lattice veil pulses so the landing still feels held, not static.
+  Fog walls near the lamp warm toward torch-brown with the floors so
+  revealed stone is one light, not cold ink beside warm slate.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

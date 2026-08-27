@@ -2012,7 +2012,7 @@ public class MainController {
                 }
                 TileType role = DesktopPaint.floorRole(tiles[r][c]);
                 if (role == TileType.WALL) {
-                    g.setFill(theme != null ? theme.wall() : Color.web("#0b0f14"));
+                    g.setFill(Color.web(DesktopPaint.fogWall(fog, r, c)));
                     g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
                     continue;
                 }

@@ -3,7 +3,7 @@
 "use strict";
 (function (global) {
   const COLORS = {
-    wall: "#0b0f14", unseen: "#05070a",
+    wall: "#0b0f14", wallWarm: "#2a2218", unseen: "#05070a",
     floor: "#3d4a58", floorHi: "#536272", floorDim: "#2a333c",
     floorWarm: "#5c4a32",
     start: "#3ee08f", goal: "#ff5a5f", path: "#8fb8ff",
@@ -278,7 +278,8 @@
             && !(r % 2 === 0 && col % 2 === 0 && isInteriorPost(tiles, r, col));
         if (wallTile) {
           if (scene.fog) {
-            g.fillStyle = COLORS.wall;
+            const lamp = fogLamp(scene.fog, r, col);
+            g.fillStyle = mixHex(COLORS.wall, COLORS.wallWarm, lamp * 0.45);
             g.fillRect(geom.offX[col], geom.offY[r],
                        geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
           }

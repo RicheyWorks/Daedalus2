@@ -355,6 +355,11 @@ class DesktopPaintTest {
         String underfoot = DesktopPaint.mixHex(DesktopPaint.FOG_FLOOR,
                 DesktopPaint.FOG_FLOOR_WARM, 0.28);
         assertThat(underfoot).isNotEqualTo(DesktopPaint.FOG_FLOOR);
+        assertThat(DesktopPaint.FOG_WALL).isEqualTo("#0b0f14");
+        assertThat(DesktopPaint.FOG_WALL_WARM).isEqualTo("#2a2218");
+        assertThat(DesktopPaint.fogWall(fog, 1, 0))
+                .as("a touching wall near the lamp is warmer than cold ink")
+                .isNotEqualTo(DesktopPaint.FOG_WALL);
         assertThat(DesktopPaint.FOG_UNSEEN).isEqualTo("#05070a");
     }
 
