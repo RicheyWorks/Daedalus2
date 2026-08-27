@@ -7,7 +7,9 @@ import com.daedalus.engine.generators.DungeonGenerator;
 import com.daedalus.engine.generators.GeneratorRegistry;
 import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
 import com.daedalus.model.Direction;
+import com.daedalus.model.GameSession;
 import com.daedalus.model.MazeStats;
+import com.daedalus.model.Point;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
 import com.daedalus.solver.SolverBudgetExceededException;
@@ -15,14 +17,18 @@ import com.daedalus.solver.solvers.AStarSolver;
 import com.daedalus.solver.solvers.BfsSolver;
 import com.daedalus.solver.solvers.IDAStarSolver;
 import com.daedalus.solver.solvers.SolverRegistry;
+import com.daedalus.server.service.HeuristicLensService;
+import com.daedalus.server.service.LivingMazeService;
 import com.daedalus.theory.MazeMetrics;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BooleanSupplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -39,6 +45,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class DesktopWorkTest {
 
     private MazeGenerationService generation;
+    private MazeSolverService solving;
     private DesktopWork work;
     private final AtomicInteger generationsPerformed = new AtomicInteger();
 
@@ -48,7 +55,7 @@ class DesktopWorkTest {
                 new GeneratorRegistry(List.of(
                         new RecursiveBacktrackerGenerator(), new DungeonGenerator())),
                 event -> generationsPerformed.incrementAndGet(), new SimpleMeterRegistry());
-        MazeSolverService solving = new MazeSolverService(
+        solving = new MazeSolverService(
                 new SolverRegistry(List.of(new AStarSolver(), new BfsSolver(),
                         new IDAStarSolver())),
                 event -> { }, new SimpleMeterRegistry());
@@ -115,6 +122,43 @@ class DesktopWorkTest {
     }
 
     @Test
+    void fiveSanctuariesCoverTheMaze() throws Exception {
+        var cached = work.generateJob("recursive-backtracker", 11, 11, 7L).call();
+        DesktopPaint.Sanctuaries safe = work.sanctuariesJob(cached.grid()).call();
+        assertThat(safe.placements()).hasSize(DesktopPaint.SANCTUARY_K);
+        assertThat(safe.worstServed()).isNotNull();
+        int nearest = Integer.MAX_VALUE;
+        for (var site : safe.placements()) {
+            int[][] fromSite = MazeMetrics.distancesFrom(cached.grid(), site);
+            int d = fromSite[safe.worstServed().row()][safe.worstServed().col()];
+            if (d >= 0 && d < nearest) {
+                nearest = d;
+            }
+        }
+        assertThat(nearest)
+                .as("the coral ring sits on the cell that owns the covering radius")
+                .isEqualTo(safe.coveringRadius());
+    }
+
+    @Test
+    void aManhattanLensPartitionsEveryReachableCell() throws Exception {
+        var cached = work.generateJob("recursive-backtracker", 11, 11, 7L).call();
+        DesktopPaint.LensWash lens = work.lensJob(
+                cached.metadata().id(), HeuristicLensService.Heuristic.MANHATTAN).call();
+        assertThat(lens).isNotNull();
+        assertThat(lens.mustExpand() + lens.tie() + lens.never())
+                .as("every reachable cell lands in one band")
+                .isEqualTo(11 * 11);
+        assertThat(lens.routeOptimal()).isTrue();
+        int[][] bands = lens.bands();
+        for (int[] row : bands) {
+            for (int band : row) {
+                assertThat(band).isBetween(-1, 2);
+            }
+        }
+    }
+
+    @Test
     void aTreeHasOneChokepoint() throws Exception {
         var cached = work.generateJob("recursive-backtracker", 11, 11, 7L).call();
         DesktopPaint.Cuts cuts = work.cutsJob(cached.grid()).call();
@@ -149,6 +193,105 @@ class DesktopWorkTest {
         assertThat(result.path()).isNotEmpty();
         assertThat(result.path().get(0)).isEqualTo(cached.grid().start());
         assertThat(result.path().get(result.path().size() - 1)).isEqualTo(cached.grid().goal());
+        assertThat(result.expansions())
+                .as("replay records the search so the desktop can wash it like the web")
+                .isNotEmpty();
+    }
+
+    @Test
+    void aRacePitsTheSelectedSolverAgainstARival() throws Exception {
+        assertThat(DesktopWork.rivalOf("astar", List.of("astar", "bfs", "ida-star")))
+                .isEqualTo("bfs");
+        assertThat(DesktopWork.rivalOf("bfs", List.of("astar", "bfs")))
+                .isEqualTo("astar");
+        assertThat(DesktopWork.rivalOf("astar", List.of("astar"))).isNull();
+        var cached = work.generateJob("recursive-backtracker", 11, 11, 7L).call();
+        DesktopPaint.Race race = work.raceJob(
+                "astar", "bfs", cached.grid(), cached.metadata().id()).call();
+        assertThat(race.first().id()).isEqualTo("astar");
+        assertThat(race.first().color()).isEqualTo(DesktopPaint.RACE_A);
+        assertThat(race.second().id()).isEqualTo("bfs");
+        assertThat(race.second().color()).isEqualTo(DesktopPaint.RACE_B);
+        assertThat(race.first().expansions()).isNotEmpty();
+        assertThat(race.second().expansions()).isNotEmpty();
+        assertThat(race.first().path().getLast()).isEqualTo(cached.grid().goal());
+    }
+
+    @Test
+    void aHuntPlacesFiveCoinsOffTheStartAndGoal() throws Exception {
+        var cached = work.generateJob("recursive-backtracker", 11, 11, 7L).call();
+        DesktopPaint.Hunt hunt = work.huntJob(cached.grid()).call();
+        assertThat(hunt.waypoints()).hasSize(DesktopPaint.WAYPOINT_K);
+        assertThat(hunt.waypoints()).doesNotContain(cached.grid().start(), cached.grid().goal());
+        assertThat(hunt.feasible()).isTrue();
+        assertThat(hunt.path().getFirst()).isEqualTo(cached.grid().start());
+        assertThat(hunt.path().getLast()).isEqualTo(cached.grid().goal());
+        assertThat(hunt.optimalCost()).isEqualTo(hunt.path().size() - 1);
+    }
+
+    @Test
+    void bringingATreeToLifeOpensDeadEndsOnTheCachedMaze() throws Exception {
+        LivingMazeService living = new LivingMazeService(generation, event -> { },
+                new SimpleMeterRegistry(), Duration.ofMillis(25), DesktopWork.LIVE_TICKS,
+                2, 0.08, 0.0);
+        work = new DesktopWork(generation, solving, living);
+        var cached = work.generateJob("recursive-backtracker", 11, 11, 7L).call();
+        int before = openPassages(cached.grid());
+        var status = work.startLive(cached.metadata().id(), 7L);
+        assertThat(status.active()).isTrue();
+        assertThat(status.ticksRequested()).isEqualTo(DesktopWork.LIVE_TICKS);
+        awaitUntil(() -> {
+            var snap = work.snapshot(cached.metadata().id());
+            return snap != null && openPassages(snap.grid()) > before;
+        }, "erosion to open a wall");
+        var after = work.snapshot(cached.metadata().id());
+        assertThat(after.grid())
+                .as("the cache must serve a new snapshot — the well follows replace")
+                .isNotSameAs(cached.grid());
+        assertThat(openPassages(after.grid())).isGreaterThan(before);
+        DesktopPaint.Hunt hunt = work.huntJob(cached.grid()).call();
+        DesktopPaint.Hunt retargeted = DesktopPaint.Hunt.retarget(after.grid(), hunt.waypoints());
+        assertThat(retargeted.waypoints())
+                .as("living ticks must not move the coins")
+                .isEqualTo(hunt.waypoints());
+        assertThat(retargeted.feasible()).isTrue();
+    }
+
+    @Test
+    void aFasterFinishKeepsTheGhostSeat() throws Exception {
+        var cached = work.generateJob("recursive-backtracker", 11, 11, 7L).call();
+        var id = cached.metadata().id();
+        Point start = cached.grid().start();
+        assertThat(DesktopWork.ghostScore(10, 1_000)).isEqualTo(100_000 - 100 - 10);
+        assertThat(work.challengeGhost(id, "slow", start, List.of())).isNull();
+        DesktopWork.GhostTape first = work.challengeGhost(id, "slow", start, List.of(
+                new GameSession.TimedMove(cached.grid().goal(), 4_000)));
+        assertThat(first.playerName()).isEqualTo("slow");
+        DesktopWork.GhostTape kept = work.challengeGhost(id, "fast", start, List.of(
+                new GameSession.TimedMove(cached.grid().goal(), 1_000)));
+        assertThat(kept.playerName())
+                .as("higher score (fewer hops and less time) keeps the seat")
+                .isEqualTo("fast");
+        DesktopWork.GhostTape still = work.challengeGhost(id, "later", start, List.of(
+                new GameSession.TimedMove(cached.grid().goal(), 8_000)));
+        assertThat(still.playerName()).isEqualTo("fast");
+        assertThat(work.ghostOf(id).elapsedMs()).isEqualTo(1_000);
+    }
+
+    private static void awaitUntil(BooleanSupplier condition, String what) {
+        long deadline = System.nanoTime() + Duration.ofSeconds(10).toNanos();
+        while (System.nanoTime() < deadline) {
+            if (condition.getAsBoolean()) {
+                return;
+            }
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new AssertionError("interrupted awaiting " + what, e);
+            }
+        }
+        throw new AssertionError("timed out awaiting " + what);
     }
 
     @Test

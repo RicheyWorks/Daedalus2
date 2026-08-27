@@ -3,9 +3,14 @@
 package com.daedalus.desktop.ui;
 
 import com.daedalus.api.dto.Hotspot;
+import com.daedalus.engine.MazeGrid;
+import com.daedalus.model.GameSession;
 import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
+import com.daedalus.theory.FacilityPlacement;
 import com.daedalus.theory.MazeFlow;
+import com.daedalus.theory.MazeMetrics;
+import com.daedalus.theory.WaypointTour;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -67,6 +72,12 @@ public final class DesktopPaint {
     public static final double HOTSPOT_OPENING_ALPHA = 0.35;
     /** Solver ribbon — same alpha as {@code draw.js} {@code paintWalk}. */
     public static final double PATH_ALPHA = 0.85;
+    /** Same radius as {@code draw.js} session / fog player. */
+    public static final double PLAYER_RADIUS = 0.42;
+    /** Search wash — same alphas as {@code draw.js} expansions. */
+    public static final double EXPANSION_ALPHA = 0.16;
+    public static final double EXPANSION_FRONT_ALPHA = 0.45;
+    public static final int EXPANSION_FRONT = 6;
     /**
      * Sequential distance ramp — bit-identical to {@code caption.js}
      * {@code DISTANCE_RAMP}. One hue, monotone in lightness.
@@ -77,6 +88,22 @@ public final class DesktopPaint {
     };
     /** Opening wash for the field — same alpha as {@code draw.js}. */
     public static final double FIELD_OPENING_ALPHA = 0.42;
+    /**
+     * Heuristic lens bands — bit-identical to {@code caption.js} {@code LENS_COLORS}.
+     * Must, tie, never.
+     */
+    public static final String[] LENS_COLORS = {"#e5484d", "#f2c94c", "#4cc38a"};
+    public static final double LENS_MUST_ALPHA = 0.42;
+    public static final double LENS_NEVER_ALPHA = 0.16;
+    public static final double LENS_OPENING_ALPHA = 0.2;
+    /** Arena lanes — same tokens as {@code solve.js}. */
+    public static final String RACE_A = "#82b1ff";
+    public static final String RACE_B = "#f0b429";
+    public static final double RACE_WASH = 0.13;
+    public static final double RACE_FRONT_ALPHA = 0.4;
+    public static final int RACE_FRONT = 5;
+    public static final double RACE_PATH_A = 0.85;
+    public static final double RACE_PATH_B = 0.58;
     /** Min-cut passage — same purple as {@code draw.js} chokepoints. */
     public static final String CHOKE = "#c084fc";
     /** Dead-end speck — same ice as {@code draw.js}. */
@@ -84,6 +111,25 @@ public final class DesktopPaint {
     /** Hardest simple route — same gold as {@code draw.js}. */
     public static final String HARDEST = "#f2c94c";
     public static final double HARDEST_ALPHA = 0.75;
+    /** Sanctuary disc — same mint as {@code draw.js}. */
+    public static final String SANCTUARY = "#4cc38a";
+    /** Loneliest cell — same coral stroke as {@code draw.js}. */
+    public static final String WORST_SERVED = "#e5484d";
+    /** Same k as the web Place sanctuaries button. */
+    public static final int SANCTUARY_K = 5;
+    /** Held-Karp corridor — same ice as {@code draw.js} {@code tourPath}. */
+    public static final String TOUR = "#9ecbff";
+    public static final double TOUR_ALPHA = 0.38;
+    /** Uncollected coin — same gold diamond as {@code draw.js}. */
+    public static final String WAYPOINT = "#f2c94c";
+    public static final String WAYPOINT_GOT = "#4cc38a";
+    /** Same k as the web Hunt button. */
+    public static final int WAYPOINT_K = 5;
+    /** Recorded racer — same tokens as {@code draw.js} ghost walk / disc. */
+    public static final String GHOST = "#e6edf3";
+    public static final double GHOST_WALK_ALPHA = 0.28;
+    public static final double GHOST_DISC_ALPHA = 0.55;
+    public static final double GHOST_RADIUS = 0.3;
 
     private DesktopPaint() {
     }
@@ -335,6 +381,41 @@ public final class DesktopPaint {
     public static List<String> legendKeys(boolean maze, boolean path, boolean walk,
                                           boolean hotspot, Fog fog, boolean choke,
                                           boolean hardest) {
+        return legendKeys(maze, path, walk, hotspot, fog, choke, hardest, false);
+    }
+
+    public static List<String> legendKeys(boolean maze, boolean path, boolean walk,
+                                          boolean hotspot, Fog fog, boolean choke,
+                                          boolean hardest, boolean sanctuary) {
+        return legendKeys(maze, path, walk, hotspot, fog, choke, hardest, sanctuary, false);
+    }
+
+    public static List<String> legendKeys(boolean maze, boolean path, boolean walk,
+                                          boolean hotspot, Fog fog, boolean choke,
+                                          boolean hardest, boolean sanctuary, boolean lens) {
+        return legendKeys(maze, path, walk, hotspot, fog, choke, hardest, sanctuary, lens, false);
+    }
+
+    public static List<String> legendKeys(boolean maze, boolean path, boolean walk,
+                                          boolean hotspot, Fog fog, boolean choke,
+                                          boolean hardest, boolean sanctuary, boolean lens,
+                                          boolean race) {
+        return legendKeys(maze, path, walk, hotspot, fog, choke, hardest, sanctuary, lens, race,
+                false);
+    }
+
+    public static List<String> legendKeys(boolean maze, boolean path, boolean walk,
+                                          boolean hotspot, Fog fog, boolean choke,
+                                          boolean hardest, boolean sanctuary, boolean lens,
+                                          boolean race, boolean waypoint) {
+        return legendKeys(maze, path, walk, hotspot, fog, choke, hardest, sanctuary, lens, race,
+                waypoint, false);
+    }
+
+    public static List<String> legendKeys(boolean maze, boolean path, boolean walk,
+                                          boolean hotspot, Fog fog, boolean choke,
+                                          boolean hardest, boolean sanctuary, boolean lens,
+                                          boolean race, boolean waypoint, boolean ghost) {
         if (!maze) {
             return List.of();
         }
@@ -345,7 +426,7 @@ public final class DesktopPaint {
         if (fog == null || fog.goal() != null) {
             keys.add("goal");
         }
-        if (path && fog == null) {
+        if ((path || race) && fog == null) {
             keys.add("path");
         }
         if (walk) {
@@ -359,6 +440,21 @@ public final class DesktopPaint {
         }
         if (hardest && fog == null) {
             keys.add("hardest");
+        }
+        if (sanctuary && fog == null) {
+            keys.add("sanctuary");
+        }
+        if (lens && fog == null) {
+            keys.add("lens");
+        }
+        if (race && fog == null) {
+            keys.add("race");
+        }
+        if (waypoint && fog == null) {
+            keys.add("waypoint");
+        }
+        if (ghost && fog == null) {
+            keys.add("ghost");
         }
         if (fog != null) {
             keys.add("fog");
@@ -531,6 +627,77 @@ public final class DesktopPaint {
         return List.copyOf(out);
     }
 
+    /**
+     * Three A* bands — same wash as {@code draw.js} {@code scene.lens}.
+     * Band 0 must expand, 1 tie, 2 never, −1 unreachable.
+     */
+    public record LensWash(int[][] bands, int mustExpand, int tie, int never,
+                           int actualExpansions, int routeLength, int optimalCost,
+                           boolean routeOptimal) {
+    }
+
+    /** Two recorded searches — same arena as {@code draw.js} {@code scene.race}. */
+    public record RaceLane(String id, String color, List<Point> expansions, List<Point> path) {
+        public RaceLane {
+            expansions = expansions == null ? List.of() : List.copyOf(expansions);
+            path = path == null ? List.of() : List.copyOf(path);
+        }
+    }
+
+    public record Race(RaceLane first, RaceLane second) {
+    }
+
+    /** Expansions per second — biggest lane takes at most 3.5s, same as {@code solve.js}. */
+    public static double raceRate(int maxExpansions) {
+        return Math.max(150.0, Math.max(1, maxExpansions) / 3.5);
+    }
+
+    public static List<Point> raceFront(List<Point> shown) {
+        if (shown == null || shown.isEmpty()) {
+            return List.of();
+        }
+        return List.copyOf(shown.subList(Math.max(0, shown.size() - RACE_FRONT), shown.size()));
+    }
+
+    public static String lensColor(int band) {
+        if (band < 0 || band >= LENS_COLORS.length) {
+            return null;
+        }
+        return LENS_COLORS[band];
+    }
+
+    public static double lensAlpha(int band) {
+        if (band < 0) {
+            return 0;
+        }
+        return band == 2 ? LENS_NEVER_ALPHA : LENS_MUST_ALPHA;
+    }
+
+    public static List<TileRect> lensOpenings(int[][] bands, TileType[][] tiles) {
+        if (bands == null || tiles == null || bands.length == 0) {
+            return List.of();
+        }
+        List<TileRect> out = new ArrayList<>();
+        int rows = bands.length;
+        int cols = bands[0].length;
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (bands[r][c] < 0) {
+                    continue;
+                }
+                if (c + 1 < cols && bands[r][c + 1] >= 0
+                        && tiles[2 * r + 1][2 * c + 2] != TileType.WALL) {
+                    out.add(new TileRect(2 * r + 1, 2 * c + 2));
+                }
+                if (r + 1 < rows && bands[r + 1][c] >= 0
+                        && tiles[2 * r + 2][2 * c + 1] != TileType.WALL) {
+                    out.add(new TileRect(2 * r + 2, 2 * c + 1));
+                }
+            }
+        }
+        return List.copyOf(out);
+    }
+
     /** Min-cut passages plus dead-end specks — same overlay as {@code draw.js} analysis. */
     public record Cuts(int cutSize, List<MazeFlow.Passage> chokepoints, List<Point> deadEnds) {
     }
@@ -569,6 +736,132 @@ public final class DesktopPaint {
         return disc(layout, cell, 0.12);
     }
 
+    /** k-center safe points — same mint discs and loneliest ring as {@code draw.js}. */
+    public record Sanctuaries(List<Point> placements, int coveringRadius, Point worstServed) {
+        public Sanctuaries {
+            placements = placements == null ? List.of() : List.copyOf(placements);
+        }
+
+        public static Sanctuaries of(MazeGrid grid) {
+            return of(grid, SANCTUARY_K);
+        }
+
+        public static Sanctuaries of(MazeGrid grid, int k) {
+            FacilityPlacement.Placement placed = FacilityPlacement.kCenter(grid, k);
+            return new Sanctuaries(placed.facilities(), placed.coveringRadius(),
+                    loneliestCell(grid, placed.facilities()));
+        }
+    }
+
+    /**
+     * Waypoint hunt — same k-center coins and Held-Karp corridor as the web.
+     * Start and goal are never coins.
+     */
+    public record Hunt(List<Point> waypoints, List<Point> path, int optimalCost,
+                       boolean feasible) {
+        public Hunt {
+            waypoints = waypoints == null ? List.of() : List.copyOf(waypoints);
+            path = path == null ? List.of() : List.copyOf(path);
+        }
+
+        public static Hunt of(MazeGrid grid) {
+            return of(grid, WAYPOINT_K);
+        }
+
+        public static Hunt of(MazeGrid grid, int k) {
+            FacilityPlacement.Placement placed = FacilityPlacement.kCenter(grid, k + 2);
+            List<Point> coins = new ArrayList<>();
+            for (Point cell : placed.facilities()) {
+                if (cell.equals(grid.start()) || cell.equals(grid.goal())) {
+                    continue;
+                }
+                coins.add(cell);
+                if (coins.size() == k) {
+                    break;
+                }
+            }
+            List<Point> stops = new ArrayList<>(coins);
+            stops.add(grid.goal());
+            WaypointTour.Tour tour = WaypointTour.shortestTour(grid, grid.start(), stops);
+            return new Hunt(coins, tour.path(), tour.totalCost(), tour.feasible());
+        }
+
+        /**
+         * Placement is frozen; the optimum is not (ADR-014). A living tick
+         * may open a cheaper corridor without moving the coins.
+         */
+        public static Hunt retarget(MazeGrid grid, List<Point> coins) {
+            List<Point> kept = coins == null ? List.of() : List.copyOf(coins);
+            if (grid == null) {
+                return new Hunt(kept, List.of(), -1, false);
+            }
+            List<Point> stops = new ArrayList<>(kept);
+            stops.add(grid.goal());
+            WaypointTour.Tour tour = WaypointTour.shortestTour(grid, grid.start(), stops);
+            return new Hunt(kept, tour.path(), tour.totalCost(), tour.feasible());
+        }
+    }
+
+    /** Gold diamond — same 0.3·cell radius as {@code draw.js} waypoints. */
+    public record Diamond(double cx, double cy, double radius, double stroke) {
+    }
+
+    public static Diamond waypointDiamond(Layout layout, Point cell) {
+        if (layout == null || cell == null) {
+            return null;
+        }
+        double cx = layout.x(2 * cell.col() + 1) + layout.cellSize() / 2.0;
+        double cy = layout.y(2 * cell.row() + 1) + layout.cellSize() / 2.0;
+        return new Diamond(cx, cy, layout.cellSize() * 0.3,
+                Math.max(1.5, layout.cellSize() * 0.09));
+    }
+
+    public static Marker sanctuaryMarker(Layout layout, Point cell) {
+        return disc(layout, cell, 0.32);
+    }
+
+    public static Ring worstServedRing(Layout layout, Point cell) {
+        if (layout == null || cell == null) {
+            return null;
+        }
+        double cx = layout.x(2 * cell.col() + 1) + layout.cellSize() / 2.0;
+        double cy = layout.y(2 * cell.row() + 1) + layout.cellSize() / 2.0;
+        return new Ring(cx, cy, layout.cellSize() * 0.36,
+                Math.max(1.5, layout.cellSize() * 0.16));
+    }
+
+    /** The cell that owns the covering radius — same scan as the web topography note. */
+    static Point loneliestCell(MazeGrid grid, List<Point> facilities) {
+        if (grid == null || facilities == null || facilities.isEmpty()) {
+            return null;
+        }
+        List<int[][]> fields = new ArrayList<>(facilities.size());
+        for (Point facility : facilities) {
+            fields.add(MazeMetrics.distancesFrom(grid, facility));
+        }
+        Point worst = facilities.get(0);
+        int worstDistance = -1;
+        for (int r = 0; r < grid.rows(); r++) {
+            for (int c = 0; c < grid.cols(); c++) {
+                if (grid.openNeighbors(new Point(r, c)).isEmpty()) {
+                    continue;
+                }
+                int nearest = Integer.MAX_VALUE;
+                for (int[][] field : fields) {
+                    int d = field[r][c];
+                    if (d >= 0 && d < nearest) {
+                        nearest = d;
+                    }
+                }
+                if (nearest != Integer.MAX_VALUE && nearest > worstDistance) {
+                    worstDistance = nearest;
+                    worst = new Point(r, c);
+                }
+            }
+        }
+        return worst;
+    }
+
     private static boolean rockCell(TileType[][] tiles, int r, int c) {
         if (r <= 0 || c <= 0 || r >= tiles.length - 1 || c >= tiles[0].length - 1) {
             return false;
@@ -584,6 +877,74 @@ public final class DesktopPaint {
      */
     public static int pathRevealMs(int pathLength) {
         return Math.min(5000, Math.max(700, pathLength * 14));
+    }
+
+    /**
+     * First act of a recorded search — same budget as {@code solve.js}
+     * {@code searchMs}. Zero expansions skips straight to the path.
+     */
+    public static int searchRevealMs(int expansionCount) {
+        if (expansionCount <= 0) {
+            return 0;
+        }
+        return Math.min(2200, Math.max(600, expansionCount * 6));
+    }
+
+    public static List<TileRect> expansionCells(List<Point> shown) {
+        if (shown == null || shown.isEmpty()) {
+            return List.of();
+        }
+        List<TileRect> out = new ArrayList<>();
+        for (Point cell : shown) {
+            if (cell != null) {
+                out.add(new TileRect(2 * cell.row() + 1, 2 * cell.col() + 1));
+            }
+        }
+        return List.copyOf(out);
+    }
+
+    /**
+     * Openings between adjacent expanded cells — same live-neighbor rule
+     * as {@code draw.js} {@code paintWashOpenings}.
+     */
+    public static List<TileRect> expansionOpenings(List<Point> shown, TileType[][] tiles) {
+        if (shown == null || shown.isEmpty() || tiles == null || tiles.length < 3) {
+            return List.of();
+        }
+        Set<String> live = new HashSet<>();
+        for (Point cell : shown) {
+            if (cell != null) {
+                live.add(cell.row() + "," + cell.col());
+            }
+        }
+        List<TileRect> openings = new ArrayList<>();
+        for (Point cell : shown) {
+            if (cell == null) {
+                continue;
+            }
+            int r = cell.row();
+            int c = cell.col();
+            int east = 2 * c + 2;
+            int south = 2 * r + 2;
+            if (live.contains(r + "," + (c + 1)) && east < tiles[0].length
+                    && tiles[2 * r + 1][east] != TileType.WALL) {
+                openings.add(new TileRect(2 * r + 1, east));
+            }
+            if (live.contains((r + 1) + "," + c) && south < tiles.length
+                    && tiles[south][2 * c + 1] != TileType.WALL) {
+                openings.add(new TileRect(south, 2 * c + 1));
+            }
+        }
+        return List.copyOf(openings);
+    }
+
+    /** Last six expanded cells — the moving front in {@code draw.js}. */
+    public static List<Point> expansionFront(List<Point> shown) {
+        if (shown == null || shown.isEmpty()) {
+            return List.of();
+        }
+        return List.copyOf(shown.subList(Math.max(0, shown.size() - EXPANSION_FRONT),
+                shown.size()));
     }
 
     /** Visible prefix of a route at {@code progress} in {@code [0, 1]}. */
@@ -612,8 +973,41 @@ public final class DesktopPaint {
         return disc(layout, walkHead(path), 0.38);
     }
 
+    public static Marker raceHeadMarker(Layout layout, List<Point> path) {
+        return disc(layout, walkHead(path), 0.36);
+    }
+
     public static Marker playerMarker(Layout layout, Point player) {
-        return disc(layout, player, 0.4);
+        return disc(layout, player, PLAYER_RADIUS);
+    }
+
+    public static Marker ghostMarker(Layout layout, Point cell) {
+        return disc(layout, cell, GHOST_RADIUS);
+    }
+
+    /**
+     * Walked prefix of a recording — same clock as {@code share.js} {@code ghostPrefix}.
+     */
+    public static List<Point> ghostPrefix(Point start, List<GameSession.TimedMove> moves,
+                                          long elapsedMs) {
+        if (start == null) {
+            return List.of();
+        }
+        List<Point> pts = new ArrayList<>();
+        pts.add(start);
+        if (moves != null) {
+            for (GameSession.TimedMove step : moves) {
+                if (step == null || step.tMs() > elapsedMs) {
+                    break;
+                }
+                pts.add(step.to());
+            }
+        }
+        return List.copyOf(pts);
+    }
+
+    public static Point ghostHead(List<Point> prefix) {
+        return walkHead(prefix);
     }
 
     public static Marker endpointMarker(Layout layout, Point cell) {

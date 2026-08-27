@@ -3,6 +3,7 @@
 package com.daedalus.desktop.ui;
 
 import com.daedalus.api.dto.Hotspot;
+import com.daedalus.model.GameSession;
 import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
 import com.daedalus.theory.MazeFlow;
@@ -89,6 +90,10 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.pathRevealMs(10)).isEqualTo(700);
         assertThat(DesktopPaint.pathRevealMs(300)).isEqualTo(4200);
         assertThat(DesktopPaint.pathRevealMs(800)).isEqualTo(5000);
+        assertThat(DesktopPaint.searchRevealMs(0)).isZero();
+        assertThat(DesktopPaint.searchRevealMs(50)).isEqualTo(600);
+        assertThat(DesktopPaint.searchRevealMs(200)).isEqualTo(1200);
+        assertThat(DesktopPaint.searchRevealMs(800)).isEqualTo(2200);
         assertThat(DesktopPaint.pathPrefix(null, 0.5)).isEmpty();
         assertThat(DesktopPaint.walkHead(DesktopPaint.pathPrefix(path, 0.5)))
                 .isEqualTo(new Point(0, 1));
@@ -151,6 +156,35 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.legendKeys(true, false, false, false, fog, false, true))
                 .as("fog swallows the hardest key")
                 .containsExactly("floor", "wall", "start", "fog");
+        assertThat(DesktopPaint.legendKeys(true, false, false, false, null, false, false, true))
+                .containsExactly("floor", "wall", "start", "goal", "sanctuary");
+        assertThat(DesktopPaint.legendKeys(true, false, false, false, fog, false, false, true))
+                .as("fog swallows the sanctuary key")
+                .containsExactly("floor", "wall", "start", "fog");
+        assertThat(DesktopPaint.legendKeys(true, false, false, false, null, false, false, false, true))
+                .containsExactly("floor", "wall", "start", "goal", "lens");
+        assertThat(DesktopPaint.legendKeys(true, false, false, false, fog, false, false, false, true))
+                .as("fog swallows the lens key")
+                .containsExactly("floor", "wall", "start", "fog");
+        assertThat(DesktopPaint.legendKeys(true, false, false, false, null, false, false, false, false, true))
+                .containsExactly("floor", "wall", "start", "goal", "path", "race");
+        assertThat(DesktopPaint.legendKeys(true, false, false, false, fog, false, false, false, false, true))
+                .as("fog swallows the arena")
+                .containsExactly("floor", "wall", "start", "fog");
+        assertThat(DesktopPaint.legendKeys(
+                true, false, false, false, null, false, false, false, false, false, true))
+                .containsExactly("floor", "wall", "start", "goal", "waypoint");
+        assertThat(DesktopPaint.legendKeys(
+                true, false, false, false, fog, false, false, false, false, false, true))
+                .as("fog swallows the coins")
+                .containsExactly("floor", "wall", "start", "fog");
+        assertThat(DesktopPaint.legendKeys(
+                true, false, false, false, null, false, false, false, false, false, false, true))
+                .containsExactly("floor", "wall", "start", "goal", "ghost");
+        assertThat(DesktopPaint.legendKeys(
+                true, false, false, false, fog, false, false, false, false, false, false, true))
+                .as("fog swallows the ghost")
+                .containsExactly("floor", "wall", "start", "fog");
     }
 
     @Test
@@ -169,6 +203,106 @@ class DesktopPaintTest {
                 .as("web dead-end radius is 0.12·cell")
                 .isEqualTo(layout.cellSize() * 0.24);
         assertThat(DesktopPaint.chokeTile(null)).isNull();
+    }
+
+    @Test
+    void aSanctuaryPaintsAMintDiscAndTheLoneliestCellGetsACoralRing() {
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 100, 100);
+        DesktopPaint.Marker disc = DesktopPaint.sanctuaryMarker(layout, new Point(0, 0));
+        DesktopPaint.Ring lonely = DesktopPaint.worstServedRing(layout, new Point(0, 0));
+        assertThat(DesktopPaint.SANCTUARY).isEqualTo("#4cc38a");
+        assertThat(DesktopPaint.WORST_SERVED).isEqualTo("#e5484d");
+        assertThat(disc.size())
+                .as("web sanctuary radius is 0.32·cell")
+                .isEqualTo(layout.cellSize() * 0.64);
+        assertThat(lonely.radius())
+                .as("web worst-served ring is 0.36·cell")
+                .isEqualTo(layout.cellSize() * 0.36);
+        assertThat(lonely.width()).isEqualTo(Math.max(1.5, layout.cellSize() * 0.16));
+        assertThat(DesktopPaint.worstServedRing(layout, null)).isNull();
+    }
+
+    @Test
+    void aLensWashesMustTieAndNeverWithTheWebAlphas() {
+        assertThat(DesktopPaint.LENS_COLORS).containsExactly("#e5484d", "#f2c94c", "#4cc38a");
+        assertThat(DesktopPaint.lensColor(0)).isEqualTo("#e5484d");
+        assertThat(DesktopPaint.lensColor(1)).isEqualTo("#f2c94c");
+        assertThat(DesktopPaint.lensColor(2)).isEqualTo("#4cc38a");
+        assertThat(DesktopPaint.lensColor(-1)).isNull();
+        assertThat(DesktopPaint.lensAlpha(0)).isEqualTo(0.42);
+        assertThat(DesktopPaint.lensAlpha(2)).isEqualTo(0.16);
+        int[][] bands = {{0, 1}, {2, -1}};
+        TileType[][] tiles = {
+                {TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL},
+                {TileType.WALL, TileType.PASSAGE, TileType.PASSAGE, TileType.PASSAGE, TileType.WALL},
+                {TileType.WALL, TileType.PASSAGE, TileType.WALL, TileType.WALL, TileType.WALL},
+                {TileType.WALL, TileType.PASSAGE, TileType.WALL, TileType.WALL, TileType.WALL},
+                {TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL},
+        };
+        assertThat(DesktopPaint.lensOpenings(bands, tiles))
+                .contains(new DesktopPaint.TileRect(1, 2));
+        assertThat(DesktopPaint.LENS_OPENING_ALPHA).isEqualTo(0.2);
+    }
+
+    @Test
+    void aRaceFrontIsTheLastFiveExpandedCells() {
+        assertThat(DesktopPaint.RACE_A).isEqualTo("#82b1ff");
+        assertThat(DesktopPaint.RACE_B).isEqualTo("#f0b429");
+        assertThat(DesktopPaint.RACE_WASH).isEqualTo(0.13);
+        assertThat(DesktopPaint.raceRate(1)).isEqualTo(150.0);
+        assertThat(DesktopPaint.raceRate(700)).isEqualTo(200.0);
+        List<Point> many = new java.util.ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            many.add(new Point(0, i));
+        }
+        assertThat(DesktopPaint.raceFront(many)).hasSize(5)
+                .startsWith(new Point(0, 3)).endsWith(new Point(0, 7));
+        assertThat(DesktopPaint.raceFront(List.of())).isEmpty();
+    }
+
+    @Test
+    void aWaypointIsAGoldDiamondOnThePassage() {
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 100, 100);
+        DesktopPaint.Diamond coin = DesktopPaint.waypointDiamond(layout, new Point(0, 0));
+        assertThat(DesktopPaint.TOUR).isEqualTo("#9ecbff");
+        assertThat(DesktopPaint.WAYPOINT).isEqualTo("#f2c94c");
+        assertThat(DesktopPaint.WAYPOINT_GOT).isEqualTo("#4cc38a");
+        assertThat(coin.radius())
+                .as("web waypoint radius is 0.3·cell")
+                .isEqualTo(layout.cellSize() * 0.3);
+        assertThat(coin.stroke()).isEqualTo(Math.max(1.5, layout.cellSize() * 0.09));
+        assertThat(DesktopPaint.waypointDiamond(layout, null)).isNull();
+        assertThat(DesktopPaint.TOUR_ALPHA).isEqualTo(0.38);
+        DesktopPaint.Hunt frozen = DesktopPaint.Hunt.retarget(null, List.of(new Point(1, 1)));
+        assertThat(frozen.waypoints()).containsExactly(new Point(1, 1));
+        assertThat(frozen.path()).isEmpty();
+        assertThat(frozen.feasible()).isFalse();
+    }
+
+    @Test
+    void aGhostPrefixFollowsTheRecordingClock() {
+        assertThat(DesktopPaint.GHOST).isEqualTo("#e6edf3");
+        assertThat(DesktopPaint.GHOST_WALK_ALPHA).isEqualTo(0.28);
+        assertThat(DesktopPaint.GHOST_DISC_ALPHA).isEqualTo(0.55);
+        assertThat(DesktopPaint.GHOST_RADIUS).isEqualTo(0.3);
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 100, 100);
+        DesktopPaint.Marker ghost = DesktopPaint.ghostMarker(layout, new Point(0, 0));
+        assertThat(ghost.size())
+                .as("web ghost disc is 0.3·cell")
+                .isEqualTo(layout.cellSize() * 0.3 * 2);
+        assertThat(DesktopPaint.ghostMarker(layout, null)).isNull();
+        Point start = new Point(0, 0);
+        List<GameSession.TimedMove> steps = List.of(
+                new GameSession.TimedMove(new Point(0, 1), 40),
+                new GameSession.TimedMove(new Point(0, 2), 90));
+        assertThat(DesktopPaint.ghostPrefix(null, steps, 90)).isEmpty();
+        assertThat(DesktopPaint.ghostPrefix(start, steps, 0)).containsExactly(start);
+        assertThat(DesktopPaint.ghostPrefix(start, steps, 40))
+                .containsExactly(start, new Point(0, 1));
+        assertThat(DesktopPaint.ghostPrefix(start, steps, 90))
+                .containsExactly(start, new Point(0, 1), new Point(0, 2));
+        assertThat(DesktopPaint.ghostHead(DesktopPaint.ghostPrefix(start, steps, 40)))
+                .isEqualTo(new Point(0, 1));
     }
 
     @Test
@@ -332,6 +466,34 @@ class DesktopPaintTest {
     }
 
     @Test
+    void aSearchWashPaintsExpandedCellsAndTheLastSixAsTheFront() {
+        Point a = new Point(0, 0);
+        Point b = new Point(0, 1);
+        List<Point> shown = List.of(a, b);
+        TileType[][] tiles = {
+                {TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL},
+                {TileType.WALL, TileType.PASSAGE, TileType.PASSAGE, TileType.PASSAGE, TileType.WALL},
+                {TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL},
+        };
+        assertThat(DesktopPaint.expansionCells(shown))
+                .containsExactly(
+                        new DesktopPaint.TileRect(1, 1),
+                        new DesktopPaint.TileRect(1, 3));
+        assertThat(DesktopPaint.expansionOpenings(shown, tiles))
+                .containsExactly(new DesktopPaint.TileRect(1, 2));
+        List<Point> many = new java.util.ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            many.add(new Point(0, i));
+        }
+        assertThat(DesktopPaint.expansionFront(many)).hasSize(6)
+                .startsWith(new Point(0, 2)).endsWith(new Point(0, 7));
+        assertThat(DesktopPaint.EXPANSION_ALPHA).isEqualTo(0.16);
+        assertThat(DesktopPaint.EXPANSION_FRONT_ALPHA).isEqualTo(0.45);
+        assertThat(DesktopPaint.expansionCells(null)).isEmpty();
+        assertThat(DesktopPaint.expansionOpenings(List.of(), tiles)).isEmpty();
+    }
+
+    @Test
     void aMissingPathIsNoOverlay() {
         assertThat(DesktopPaint.pathOverlay(null, new Point(0, 0), new Point(1, 1)))
                 .isEmpty();
@@ -346,8 +508,9 @@ class DesktopPaintTest {
         assertThat(mark).isNotNull();
         assertThat(layout.cellSize()).isEqualTo(20.0);
         assertThat(mark.size())
-                .as("inset is 10%% of the passage, so the disc is smaller than the tile")
-                .isEqualTo(16.0);
+                .as("web player radius is 0.42·cell, so the disc is 0.84·cell")
+                .isEqualTo(16.8);
+        assertThat(DesktopPaint.PLAYER_RADIUS).isEqualTo(0.42);
         assertThat(DesktopPaint.playerMarker(layout, null)).isNull();
     }
 

@@ -38,7 +38,7 @@
                 <Insets top="6" right="8" bottom="6" left="8"/>
             </padding>
 
-            <ComboBox fx:id="generatorChoice" prefWidth="132" maxWidth="132">
+            <ComboBox fx:id="generatorChoice" prefWidth="88" maxWidth="88">
                 <tooltip><Tooltip text="Generator"/></tooltip>
             </ComboBox>
 
@@ -60,7 +60,7 @@
 
             <Separator orientation="VERTICAL"/>
 
-            <TextField fx:id="seedField" prefWidth="68" promptText="seed">
+            <TextField fx:id="seedField" prefWidth="52" promptText="seed">
                 <tooltip><Tooltip text="Seed (blank = random)"/></tooltip>
             </TextField>
 
@@ -71,7 +71,7 @@
 
             <Separator orientation="VERTICAL"/>
 
-            <ComboBox fx:id="solverChoice" prefWidth="100" maxWidth="100">
+            <ComboBox fx:id="solverChoice" prefWidth="80" maxWidth="80">
                 <tooltip><Tooltip text="Solver"/></tooltip>
             </ComboBox>
             <Button fx:id="solveButton" text="Solve" onAction="#onSolve"/>
@@ -87,6 +87,18 @@
             </CheckBox>
             <CheckBox fx:id="hardestToggle" text="Long" onAction="#onHardest">
                 <tooltip><Tooltip text="Hardest simple route"/></tooltip>
+            </CheckBox>
+            <CheckBox fx:id="sanctuaryToggle" text="Safe" onAction="#onSanctuaries">
+                <tooltip><Tooltip text="Sanctuaries — k-center safe points"/></tooltip>
+            </CheckBox>
+            <ComboBox fx:id="lensChoice" prefWidth="64" maxWidth="64" onAction="#onLens">
+                <tooltip><Tooltip text="Heuristic lens — must / tie / never"/></tooltip>
+            </ComboBox>
+            <CheckBox fx:id="raceToggle" text="Race" onAction="#onRace">
+                <tooltip><Tooltip text="Selected solver vs a rival, same arena as the web"/></tooltip>
+            </CheckBox>
+            <CheckBox fx:id="huntToggle" text="Hunt" onAction="#onHunt">
+                <tooltip><Tooltip text="Waypoint hunt — collect the coins"/></tooltip>
             </CheckBox>
         </HBox>
     </top>
@@ -149,9 +161,44 @@
                         <Rectangle width="10" height="10" fill="#f2c94c" arcWidth="3" arcHeight="3"/>
                     </graphic>
                 </Label>
+                <Label fx:id="legendSanctuary" text="sanctuary" managed="false" visible="false">
+                    <graphic>
+                        <Circle radius="5" fill="#4cc38a"/>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendLens" text="lens" managed="false" visible="false">
+                    <graphic>
+                        <HBox spacing="1">
+                            <Rectangle width="6" height="10" fill="#e5484d"/>
+                            <Rectangle width="6" height="10" fill="#f2c94c"/>
+                            <Rectangle width="6" height="10" fill="#4cc38a"/>
+                        </HBox>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendRace" text="arena" managed="false" visible="false">
+                    <graphic>
+                        <HBox spacing="1">
+                            <Rectangle width="6" height="10" fill="#82b1ff"/>
+                            <Rectangle width="6" height="10" fill="#f0b429"/>
+                        </HBox>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendWaypoint" text="waypoint" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="8" height="8" fill="#f2c94c" rotate="45"/>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendGhost" text="ghost" managed="false" visible="false">
+                    <graphic>
+                        <Circle radius="5" fill="#e6edf3" opacity="0.6"/>
+                    </graphic>
+                </Label>
             </HBox>
             <HBox fx:id="exportBox" spacing="8" alignment="CENTER_RIGHT" styleClass="exports"
                   managed="false" visible="false">
+                <CheckBox fx:id="liveToggle" text="Live" onAction="#onLive">
+                    <tooltip><Tooltip text="Bring the maze to life — same erosion ticks as the web"/></tooltip>
+                </CheckBox>
                 <Button fx:id="pngButton" text="PNG" onAction="#onExportPng">
                     <tooltip><Tooltip text="Save the dungeon as a PNG"/></tooltip>
                 </Button>

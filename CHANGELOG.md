@@ -10,6 +10,48 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Desktop Reset races the ghost.** The web already replays the maze's
+  best finish as a pale racer; desktop had only the live walker. Same
+  `#e6edf3` wash at 0.28, same 0.3·cell disc, same score formula, so
+  a second walk can beat the first. No extra toolbar control — Reset
+  summons, Fog and theory drop the replay.
+
+- **Desktop Live erodes the cached maze.** The web already opens dead
+  ends on a 2s Braider tick; desktop stayed a still after Generate.
+  Same thirty ticks, same seed, checkbox on the well next to PNG so
+  the 960px toolbar still generates.
+
+- **Desktop player matches the web disc.** The session and fog painters
+  already use 0.42·cell; desktop used 0.4, so the walker sat smaller
+  than the explorer on the same seed.
+
+- **Desktop Hunt paints the coins and the corridor.** The web already
+  marks five gold diamonds on the Held-Karp walk; desktop had only
+  a stroll to the goal. Same ice wash at 0.38, same mint stroke when
+  a coin is collected, so a finished walk can be scored against
+  the optimal tour.
+
+- **Desktop Race paints two searches at once.** The web already floods
+  two solvers in blue and gold; desktop had only one ribbon. Same 0.13
+  wash, same 0.4 front of five cells, same equal expansions-per-second,
+  so the leaner algorithm finishes first.
+
+- **Desktop lens paints the three A* bands.** The web already washes
+  must / tie / never; desktop had only the plan. Same coral, gold, and
+  mint, same alphas, so Manhattan and Landmark read as different
+  searches. Combos recede again so the picker still fits the 960px well.
+
+- **Desktop Solve paints the search, then the route.** The web already
+  washes the recorded expansion order before the ribbon; desktop jumped
+  straight to the path, so BFS and A* looked the same. Same 0.16 flood,
+  same 0.45 front of six cells, same two-act timing.
+
+- **Desktop Safe paints the sanctuaries.** The web already marks five
+  mint safe points and the loneliest cell; desktop had only the plan.
+  Same `#4cc38a` discs at 0.32·cell, same coral ring on the
+  worst-served cell, so a long corridor reads as a covering-radius
+  problem. Combos recede again so Safe still fits the 960px well.
+
 - **Desktop Long paints the hardest route.** The web already gold-washes
   the longest simple walk; desktop had only the solver ribbon. Same
   `#f2c94c` at 0.75, so a braid shows the detour and a tree shows that

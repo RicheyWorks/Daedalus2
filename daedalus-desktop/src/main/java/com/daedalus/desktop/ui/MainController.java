@@ -7,12 +7,17 @@ import com.daedalus.engine.MazeGenerator;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.engine.generators.GeneratorRegistry;
 import com.daedalus.model.Direction;
+import com.daedalus.model.GameSession;
 import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
+import com.daedalus.server.service.HeuristicLensService;
+import com.daedalus.server.service.LivingMazeService;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
 import com.daedalus.theory.LongestPath;
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.concurrent.Task;
 import com.daedalus.solver.MazeSolver;
 import com.daedalus.solver.solvers.SolverRegistry;
@@ -47,7 +52,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
@@ -112,6 +120,11 @@ public class MainController {
     @FXML private CheckBox heatToggle;
     @FXML private CheckBox cutsToggle;
     @FXML private CheckBox hardestToggle;
+    @FXML private CheckBox sanctuaryToggle;
+    @FXML private ComboBox<LensPick> lensChoice;
+    @FXML private CheckBox raceToggle;
+    @FXML private CheckBox huntToggle;
+    @FXML private CheckBox liveToggle;
     @FXML private HBox exportBox;
     @FXML private Pane canvasParent;
     @FXML private Canvas canvas;
@@ -124,6 +137,11 @@ public class MainController {
     @FXML private Label legendFog;
     @FXML private Label legendChoke;
     @FXML private Label legendHardest;
+    @FXML private Label legendSanctuary;
+    @FXML private Label legendLens;
+    @FXML private Label legendRace;
+    @FXML private Label legendWaypoint;
+    @FXML private Label legendGhost;
     @FXML private Label statusLabel;
 
     /** Last successfully-generated maze; held so resize events can re-render it. */
@@ -135,7 +153,23 @@ public class MainController {
     /** Full solve route; {@link #currentPath} is the visible prefix while it unfolds. */
     private List<Point> solvedPath;
 
+    /** Recorded search order; {@link #currentExpansions} is the visible prefix. */
+    private List<Point> solvedExpansions;
+    private List<Point> currentExpansions;
+
     private AnimationTimer pathReveal;
+
+    /** Polls the living snapshot at the server tick interval. */
+    private Timeline liveWatch;
+
+    /** Replays the maze's best finish — same 100ms tick as {@code ghost.js}. */
+    private Timeline ghostWatch;
+    private DesktopWork.GhostTape ghostTape;
+    private long ghostStartedNs;
+    private boolean ghostDone;
+
+    private final List<GameSession.TimedMove> walkMoves = new ArrayList<>();
+    private long walkStartedNs;
 
     /** Player marker position. Set on Generate / Reset; updated on arrow-key moves. */
     private Point playerPos;
@@ -154,6 +188,45 @@ public class MainController {
 
     /** Hardest simple route — cleared on Generate and Fog. */
     private LongestPath.LongPath currentHardest;
+
+    /** k-center safe points — cleared on Generate and Fog. */
+    private DesktopPaint.Sanctuaries currentSanctuaries;
+
+    /** Heuristic lens — cleared on Generate and Fog. */
+    private DesktopPaint.LensWash currentLens;
+
+    /** Two-solver arena — cleared on Generate, Fog, and a plain Solve. */
+    private DesktopPaint.Race currentRace;
+    private double raceFrontA;
+    private double racePathA;
+    private double raceFrontB;
+    private double racePathB;
+
+    /** Waypoint hunt — cleared on Generate, Fog, Solve, and Race. */
+    private DesktopPaint.Hunt currentHunt;
+    private final Set<Point> huntGot = new LinkedHashSet<>();
+
+    /** Compact picker labels — same four heuristics as the web {@code lensH} select. */
+    private enum LensPick {
+        OFF("Off", null),
+        MANHATTAN("Manh", HeuristicLensService.Heuristic.MANHATTAN),
+        LANDMARK("Land", HeuristicLensService.Heuristic.LANDMARK),
+        TIE("Tie", HeuristicLensService.Heuristic.MANHATTAN_TIE_BROKEN),
+        INFLATED("×3", HeuristicLensService.Heuristic.INFLATED);
+
+        private final String label;
+        private final HeuristicLensService.Heuristic heuristic;
+
+        LensPick(String label, HeuristicLensService.Heuristic heuristic) {
+            this.label = label;
+            this.heuristic = heuristic;
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
+    }
 
     public MainController(GeneratorRegistry generatorRegistry,
                           SolverRegistry solverRegistry,
@@ -211,6 +284,10 @@ public class MainController {
         if (hotspotCostSpinner != null) {
             hotspotCostSpinner.setValueFactory(
                     new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 25));
+        }
+        if (lensChoice != null) {
+            lensChoice.getItems().setAll(LensPick.values());
+            lensChoice.getSelectionModel().select(LensPick.OFF);
         }
 
         // Backing store is the pane times the window output scale — a 2× display
@@ -277,6 +354,11 @@ public class MainController {
         double braid = braidChoice != null && braidChoice.getValue() != null
                 ? braidChoice.getValue() : 0.0;
 
+        stopLiveWatch();
+        if (liveToggle != null) {
+            liveToggle.setSelected(false);
+        }
+
         long t0 = System.nanoTime();
         Task<MazeGenerationService.Cached> task = new Task<>() {
             @Override
@@ -292,6 +374,10 @@ public class MainController {
             stopPathReveal();
             currentPath = null;
             solvedPath = null;
+            currentExpansions = null;
+            solvedExpansions = null;
+            clearRace();
+            clearHunt();
             playerPos = current.metadata().start();
             resetWalk(playerPos);
             reachedGoal = false;
@@ -347,6 +433,9 @@ public class MainController {
             statusLabel.setText("Fog hides the solver path — uncheck Fog to solve.");
             return;
         }
+        clearRace();
+        clearHunt();
+        clearGhost();
         String solverId = solverChoice.getValue();
         if (solverId == null || solverId.isBlank()) {
             statusLabel.setText("Pick a solver first.");
@@ -364,12 +453,16 @@ public class MainController {
         task.setOnSucceeded(e -> {
             long elapsedMs = (System.nanoTime() - t0) / 1_000_000L;
             solvedPath = task.getValue().path();
-            currentPath = DesktopPaint.pathPrefix(solvedPath, 0.01);
-            startPathReveal();
+            solvedExpansions = task.getValue().expansions();
+            currentPath = List.of();
+            currentExpansions = List.of();
+            startSolveReveal();
             canvas.requestFocus();
+            int expanded = solvedExpansions == null ? 0 : solvedExpansions.size();
             statusLabel.setText(String.format(
-                    "Solved with %s in %dms — %d cells on the path.",
-                    solverId, elapsedMs, solvedPath == null ? 0 : solvedPath.size()));
+                    "Solved with %s in %dms — %d cells on the path, %d expanded.",
+                    solverId, elapsedMs, solvedPath == null ? 0 : solvedPath.size(),
+                    expanded));
             busy(false);
         });
         task.setOnFailed(e -> fail(DesktopWork.describeFailure("Solve", task.getException())));
@@ -383,9 +476,20 @@ public class MainController {
         playerPos = current.metadata().start();
         resetWalk(playerPos);
         reachedGoal = false;
+        huntGot.clear();
+        clearGhost();
+        if (currentHunt == null) {
+            summonGhost();
+        }
         redraw();
         canvas.requestFocus();
-        statusLabel.setText("Reset to start.");
+        if (ghostTape != null) {
+            return;
+        }
+        statusLabel.setText(currentHunt == null
+                ? "Reset to start."
+                : "Hunt reset — collect " + currentHunt.waypoints().size()
+                        + " coins then the goal.");
     }
 
     /** Wired from the FXML Heat checkbox. Same goal-sourced field as the web heat map. */
@@ -406,6 +510,8 @@ public class MainController {
             statusLabel.setText("Fog hides the distance field — uncheck Fog to heat.");
             return;
         }
+        clearGhost();
+        clearLens();
         var grid = current.grid();
         Task<DesktopPaint.Field> task = new Task<>() {
             @Override
@@ -445,6 +551,409 @@ public class MainController {
         if (hardestToggle != null) {
             hardestToggle.setSelected(false);
         }
+        currentSanctuaries = null;
+        if (sanctuaryToggle != null) {
+            sanctuaryToggle.setSelected(false);
+        }
+        clearLens();
+        clearGhost();
+    }
+
+    private void clearGhost() {
+        stopGhostWatch();
+        ghostTape = null;
+        ghostDone = false;
+    }
+
+    private void stopGhostWatch() {
+        if (ghostWatch != null) {
+            ghostWatch.stop();
+            ghostWatch = null;
+        }
+    }
+
+    private void summonGhost() {
+        if (current == null || fogOn()) {
+            return;
+        }
+        DesktopWork.GhostTape tape = work.ghostOf(current.metadata().id());
+        if (tape == null || tape.moves().isEmpty()) {
+            return;
+        }
+        ghostTape = tape;
+        ghostStartedNs = System.nanoTime();
+        ghostDone = false;
+        stopGhostWatch();
+        ghostWatch = new Timeline(new KeyFrame(javafx.util.Duration.millis(100),
+                e -> pulseGhost()));
+        ghostWatch.setCycleCount(Timeline.INDEFINITE);
+        ghostWatch.play();
+        statusLabel.setText(String.format(
+                "Ghost summoned: %s's best run (%.1fs) — beat it.",
+                tape.playerName(), tape.elapsedMs() / 1000.0));
+    }
+
+    private void pulseGhost() {
+        if (ghostTape == null) {
+            stopGhostWatch();
+            return;
+        }
+        if (ghostDone) {
+            stopGhostWatch();
+            redraw();
+            return;
+        }
+        long elapsed = (System.nanoTime() - ghostStartedNs) / 1_000_000L;
+        boolean stillGoing = false;
+        for (GameSession.TimedMove step : ghostTape.moves()) {
+            if (step.tMs() > elapsed) {
+                stillGoing = true;
+                break;
+            }
+        }
+        if (!stillGoing) {
+            ghostDone = true;
+            stopGhostWatch();
+            if (!reachedGoal) {
+                statusLabel.setText(String.format("The ghost finished its run (%.1fs).",
+                        ghostTape.elapsedMs() / 1000.0));
+            }
+        }
+        redraw();
+    }
+
+    private List<Point> ghostWalkNow() {
+        if (ghostTape == null) {
+            return List.of();
+        }
+        long elapsed = (System.nanoTime() - ghostStartedNs) / 1_000_000L;
+        return DesktopPaint.ghostPrefix(ghostTape.start(), ghostTape.moves(), elapsed);
+    }
+
+    private void clearRace() {
+        currentRace = null;
+        raceFrontA = 0;
+        racePathA = 0;
+        raceFrontB = 0;
+        racePathB = 0;
+        if (raceToggle != null) {
+            raceToggle.setSelected(false);
+        }
+    }
+
+    private void clearHunt() {
+        currentHunt = null;
+        huntGot.clear();
+        if (huntToggle != null) {
+            huntToggle.setSelected(false);
+        }
+    }
+
+    /**
+     * Wired from the well's Live checkbox. Same Bring to life as the web —
+     * the maze erodes in the cache and the well follows each tick.
+     */
+    @FXML
+    public void onLive() {
+        if (liveToggle == null) {
+            return;
+        }
+        if (!liveToggle.isSelected()) {
+            if (current != null && work.liveStatus(current.metadata().id()).active()) {
+                liveToggle.setSelected(true);
+            } else {
+                stopLiveWatch();
+            }
+            return;
+        }
+        if (current == null) {
+            liveToggle.setSelected(false);
+            statusLabel.setText("Generate a maze first, then check Live.");
+            return;
+        }
+        stopPathReveal();
+        currentPath = null;
+        solvedPath = null;
+        currentExpansions = null;
+        solvedExpansions = null;
+        clearRace();
+        clearTheory();
+        UUID mazeId = current.metadata().id();
+        try {
+            LivingMazeService.LiveStatus status = work.startLive(mazeId,
+                    current.metadata().seed());
+            watchLive(mazeId, status.tickMillis());
+            statusLabel.setText(String.format(
+                    "Maze is alive — %d ticks, one every %.1fs.",
+                    status.ticksRequested(), status.tickMillis() / 1000.0));
+        } catch (LivingMazeService.CapacityExceededException full) {
+            liveToggle.setSelected(false);
+            statusLabel.setText(full.getMessage());
+        }
+        canvas.requestFocus();
+    }
+
+    private void watchLive(UUID mazeId, long tickMillis) {
+        stopLiveWatch();
+        long interval = Math.max(50L, tickMillis);
+        liveWatch = new Timeline(new KeyFrame(javafx.util.Duration.millis(interval),
+                e -> pulseLive(mazeId)));
+        liveWatch.setCycleCount(Timeline.INDEFINITE);
+        liveWatch.play();
+    }
+
+    private void pulseLive(UUID mazeId) {
+        if (current == null || !mazeId.equals(current.metadata().id())) {
+            stopLiveWatch();
+            return;
+        }
+        MazeGenerationService.Cached snap = work.snapshot(mazeId);
+        LivingMazeService.LiveStatus status = work.liveStatus(mazeId);
+        if (snap != null) {
+            current = snap;
+            if (currentHunt != null) {
+                currentHunt = DesktopPaint.Hunt.retarget(current.grid(),
+                        currentHunt.waypoints());
+            }
+            redraw();
+        }
+        if (!status.active()) {
+            stopLiveWatch();
+            if (liveToggle != null) {
+                liveToggle.setSelected(false);
+            }
+            statusLabel.setText(status.settled()
+                    ? "Maze settled after " + status.ticksDone() + " ticks."
+                    : "Living run ended.");
+            return;
+        }
+        statusLabel.setText(String.format("Alive — tick %d / %d.",
+                status.ticksDone(), status.ticksRequested()));
+    }
+
+    private void stopLiveWatch() {
+        if (liveWatch != null) {
+            liveWatch.stop();
+            liveWatch = null;
+        }
+    }
+
+    /** Wired from the FXML Hunt checkbox. Same gold coins as the web Tour button. */
+    @FXML
+    public void onHunt() {
+        if (huntToggle == null || !huntToggle.isSelected()) {
+            currentHunt = null;
+            huntGot.clear();
+            redraw();
+            return;
+        }
+        if (current == null) {
+            huntToggle.setSelected(false);
+            statusLabel.setText("Generate a maze first, then check Hunt.");
+            return;
+        }
+        if (fogOn()) {
+            huntToggle.setSelected(false);
+            statusLabel.setText("Fog hides the hunt — uncheck Fog to place coins.");
+            return;
+        }
+        stopPathReveal();
+        currentPath = null;
+        solvedPath = null;
+        currentExpansions = null;
+        solvedExpansions = null;
+        clearRace();
+        clearTheory();
+        huntToggle.setSelected(true);
+        huntGot.clear();
+        var grid = current.grid();
+        Task<DesktopPaint.Hunt> task = new Task<>() {
+            @Override
+            protected DesktopPaint.Hunt call() throws Exception {
+                return work.huntJob(grid).call();
+            }
+        };
+        task.setOnSucceeded(e -> {
+            currentHunt = task.getValue();
+            if (currentHunt == null || !currentHunt.feasible()) {
+                statusLabel.setText("Hunt — those coins are not all reachable.");
+            } else {
+                statusLabel.setText("Hunt — collect " + currentHunt.waypoints().size()
+                        + " coins then the goal. Optimal tour "
+                        + currentHunt.optimalCost() + " steps.");
+            }
+            playerPos = current.metadata().start();
+            resetWalk(playerPos);
+            reachedGoal = false;
+            redraw();
+            canvas.requestFocus();
+            busy(false);
+        });
+        task.setOnFailed(e -> {
+            huntToggle.setSelected(false);
+            fail(DesktopWork.describeFailure("Hunt", task.getException()));
+        });
+        run(task, "Placing the hunt…");
+    }
+
+    /** Wired from the FXML Race checkbox. Selected solver vs a rival, same arena as the web. */
+    @FXML
+    public void onRace() {
+        if (raceToggle == null || !raceToggle.isSelected()) {
+            currentRace = null;
+            stopPathReveal();
+            redraw();
+            return;
+        }
+        if (current == null) {
+            raceToggle.setSelected(false);
+            statusLabel.setText("Generate a maze first, then check Race.");
+            return;
+        }
+        if (fogOn()) {
+            raceToggle.setSelected(false);
+            statusLabel.setText("Fog hides the arena — uncheck Fog to race.");
+            return;
+        }
+        String firstId = solverChoice.getValue();
+        String secondId = DesktopWork.rivalOf(firstId, solverChoice.getItems());
+        if (firstId == null || firstId.isBlank() || secondId == null) {
+            raceToggle.setSelected(false);
+            statusLabel.setText("Need two solvers to race.");
+            return;
+        }
+        stopPathReveal();
+        currentPath = null;
+        solvedPath = null;
+        currentExpansions = null;
+        solvedExpansions = null;
+        clearHunt();
+        clearTheory();
+        raceToggle.setSelected(true);
+        var grid = current.grid();
+        var mazeId = current.metadata().id();
+        Task<DesktopPaint.Race> task = new Task<>() {
+            @Override
+            protected DesktopPaint.Race call() throws Exception {
+                return work.raceJob(firstId, secondId, grid, mazeId).call();
+            }
+        };
+        task.setOnSucceeded(e -> {
+            currentRace = task.getValue();
+            startRaceReveal();
+            canvas.requestFocus();
+            busy(false);
+        });
+        task.setOnFailed(e -> {
+            raceToggle.setSelected(false);
+            fail(DesktopWork.describeFailure("Race", task.getException()));
+        });
+        run(task, "Racing " + firstId + " vs " + secondId + "…");
+    }
+
+    private void clearLens() {
+        currentLens = null;
+        if (lensChoice != null && lensChoice.getValue() != LensPick.OFF) {
+            lensChoice.getSelectionModel().select(LensPick.OFF);
+        }
+    }
+
+    /** Wired from the FXML lens combo. Same three bands as the web Heuristic lens button. */
+    @FXML
+    public void onLens() {
+        LensPick pick = lensChoice == null ? LensPick.OFF : lensChoice.getValue();
+        if (pick == null || pick == LensPick.OFF || pick.heuristic == null) {
+            currentLens = null;
+            if (current != null) {
+                redraw();
+            }
+            return;
+        }
+        if (current == null) {
+            lensChoice.getSelectionModel().select(LensPick.OFF);
+            statusLabel.setText("Generate a maze first, then pick a lens.");
+            return;
+        }
+        if (fogOn()) {
+            lensChoice.getSelectionModel().select(LensPick.OFF);
+            statusLabel.setText("Fog hides the lens — uncheck Fog to see the bands.");
+            return;
+        }
+        clearGhost();
+        clearField();
+        var mazeId = current.metadata().id();
+        var which = pick.heuristic;
+        Task<DesktopPaint.LensWash> task = new Task<>() {
+            @Override
+            protected DesktopPaint.LensWash call() throws Exception {
+                return work.lensJob(mazeId, which).call();
+            }
+        };
+        task.setOnSucceeded(e -> {
+            currentLens = task.getValue();
+            if (currentLens == null) {
+                statusLabel.setText("Lens — no maze on the board.");
+            } else {
+                String opt = currentLens.routeOptimal() ? "optimal" : "not optimal";
+                statusLabel.setText("Lens " + pick.label + " — must " + currentLens.mustExpand()
+                        + " · tie " + currentLens.tie() + " · never " + currentLens.never()
+                        + " · A* expanded " + currentLens.actualExpansions()
+                        + " · route " + currentLens.routeLength() + " (" + opt + ").");
+            }
+            redraw();
+            canvas.requestFocus();
+            busy(false);
+        });
+        task.setOnFailed(e -> {
+            if (lensChoice != null) {
+                lensChoice.getSelectionModel().select(LensPick.OFF);
+            }
+            fail(DesktopWork.describeFailure("Lens", task.getException()));
+        });
+        run(task, "Shading the heuristic lens…");
+    }
+
+    /** Wired from the FXML Safe checkbox. Same mint discs as the web Place sanctuaries button. */
+    @FXML
+    public void onSanctuaries() {
+        if (sanctuaryToggle == null || !sanctuaryToggle.isSelected()) {
+            currentSanctuaries = null;
+            redraw();
+            return;
+        }
+        if (current == null) {
+            sanctuaryToggle.setSelected(false);
+            statusLabel.setText("Generate a maze first, then check Safe.");
+            return;
+        }
+        if (fogOn()) {
+            sanctuaryToggle.setSelected(false);
+            statusLabel.setText("Fog hides the sanctuaries — uncheck Fog to place them.");
+            return;
+        }
+        clearGhost();
+        var grid = current.grid();
+        Task<DesktopPaint.Sanctuaries> task = new Task<>() {
+            @Override
+            protected DesktopPaint.Sanctuaries call() throws Exception {
+                return work.sanctuariesJob(grid).call();
+            }
+        };
+        task.setOnSucceeded(e -> {
+            currentSanctuaries = task.getValue();
+            int n = currentSanctuaries == null || currentSanctuaries.placements() == null
+                    ? 0 : currentSanctuaries.placements().size();
+            int radius = currentSanctuaries == null ? 0 : currentSanctuaries.coveringRadius();
+            statusLabel.setText(n + " sanctuaries · covering radius " + radius + ".");
+            redraw();
+            canvas.requestFocus();
+            busy(false);
+        });
+        task.setOnFailed(e -> {
+            sanctuaryToggle.setSelected(false);
+            fail(DesktopWork.describeFailure("Sanctuaries", task.getException()));
+        });
+        run(task, "Placing sanctuaries…");
     }
 
     /** Wired from the FXML Long checkbox. Same gold walk as the web Hardest button. */
@@ -465,6 +974,8 @@ public class MainController {
             statusLabel.setText("Fog hides the hardest route — uncheck Fog to search.");
             return;
         }
+        clearGhost();
+        clearHunt();
         var grid = current.grid();
         Task<LongestPath.LongPath> task = new Task<>() {
             @Override
@@ -508,6 +1019,7 @@ public class MainController {
             statusLabel.setText("Fog hides the cuts — uncheck Fog to analyze.");
             return;
         }
+        clearGhost();
         var grid = current.grid();
         Task<DesktopPaint.Cuts> task = new Task<>() {
             @Override
@@ -591,6 +1103,10 @@ public class MainController {
             stopPathReveal();
             currentPath = null;
             solvedPath = null;
+            currentExpansions = null;
+            solvedExpansions = null;
+            clearRace();
+            clearHunt();
             clearTheory();
             statusLabel.setText("Fog of war — arrows / WASD or a click walk the dungeon.");
         } else if (current != null) {
@@ -660,11 +1176,43 @@ public class MainController {
         }
         playerPos = step.position();
         rememberWalk(playerPos);
+        if (currentHunt != null) {
+            noteHunt(playerPos, step.reachedGoal());
+        } else if (step.reachedGoal()) {
+            reachedGoal = true;
+            finishGhostRace();
+        }
         if (step.reachedGoal()) {
             reachedGoal = true;
-            statusLabel.setText("Reached the goal!  Press Reset, or Generate a new maze.");
         }
         redraw();
+    }
+
+    private void noteHunt(Point at, boolean atGoal) {
+        if (currentHunt.waypoints().contains(at)) {
+            huntGot.add(at);
+        }
+        int got = huntGot.size();
+        int total = currentHunt.waypoints().size();
+        int walked = Math.max(0, playerWalk.size() - 1);
+        if (atGoal && got == total) {
+            statusLabel.setText("Tour complete in " + walked + " steps; optimal is "
+                    + currentHunt.optimalCost() + ".");
+            return;
+        }
+        if (atGoal) {
+            int missed = total - got;
+            statusLabel.setText("Reached the goal — " + missed
+                    + (missed == 1 ? " coin" : " coins") + " still out.");
+            return;
+        }
+        if (got == total) {
+            statusLabel.setText("All coins collected — reach the goal (" + walked
+                    + " steps, optimal " + currentHunt.optimalCost() + ").");
+            return;
+        }
+        statusLabel.setText("Hunt " + got + "/" + total + " · " + walked
+                + " steps · optimal " + currentHunt.optimalCost() + ".");
     }
 
     // ---------- rendering ----------
@@ -676,30 +1224,114 @@ public class MainController {
         }
     }
 
-    /** Unfold the route the way the web painter does — not a finished ribbon. */
-    private void startPathReveal() {
+    /**
+     * Two-act reveal — search wash, then the route. Same timing as
+     * {@code solve.js} {@code search}: BFS floods, A* beelines, then the ribbon.
+     */
+    private void startSolveReveal() {
         stopPathReveal();
-        List<Point> full = solvedPath;
-        if (full == null || full.isEmpty()) {
-            currentPath = full;
+        List<Point> search = solvedExpansions == null ? List.of() : solvedExpansions;
+        List<Point> full = solvedPath == null ? List.of() : solvedPath;
+        currentExpansions = List.of();
+        currentPath = List.of();
+        long searchNs = DesktopPaint.searchRevealMs(search.size()) * 1_000_000L;
+        long pathNs = DesktopPaint.pathRevealMs(full.size()) * 1_000_000L;
+        if (search.isEmpty() && full.isEmpty()) {
             redraw();
             return;
         }
-        long budgetNs = DesktopPaint.pathRevealMs(full.size()) * 1_000_000L;
+        if (search.isEmpty()) {
+            currentExpansions = List.of();
+        }
         long started = System.nanoTime();
         pathReveal = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                double progress = (System.nanoTime() - started) / (double) budgetNs;
-                currentPath = DesktopPaint.pathPrefix(full, progress);
+                long t = System.nanoTime() - started;
+                double searchP = searchNs == 0 ? 1.0 : Math.min(1.0, t / (double) searchNs);
+                currentExpansions = search.isEmpty()
+                        ? List.of() : DesktopPaint.pathPrefix(search, searchP);
+                double pathP = searchNs == 0
+                        ? Math.min(1.0, t / (double) pathNs)
+                        : Math.max(0.0, Math.min(1.0, (t - searchNs) / (double) pathNs));
+                currentPath = full.isEmpty() ? List.of() : DesktopPaint.pathPrefix(full, pathP);
                 redraw();
-                if (progress >= 1) {
+                if (searchP >= 1 && pathP >= 1) {
+                    currentExpansions = search;
                     currentPath = full;
                     stopPathReveal();
                 }
             }
         };
         pathReveal.start();
+    }
+
+    /**
+     * Equal expansions-per-second, then each route. Same timing as
+     * {@code solve.js} {@code raceTick} — the leaner search finishes first.
+     */
+    private void startRaceReveal() {
+        stopPathReveal();
+        DesktopPaint.Race race = currentRace;
+        if (race == null || race.first() == null || race.second() == null) {
+            redraw();
+            return;
+        }
+        raceFrontA = 0;
+        racePathA = 0;
+        raceFrontB = 0;
+        racePathB = 0;
+        int maxN = Math.max(1, Math.max(race.first().expansions().size(),
+                race.second().expansions().size()));
+        double rate = DesktopPaint.raceRate(maxN);
+        long pathANs = DesktopPaint.pathRevealMs(race.first().path().size()) * 1_000_000L;
+        long pathBNs = DesktopPaint.pathRevealMs(race.second().path().size()) * 1_000_000L;
+        long started = System.nanoTime();
+        pathReveal = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                double t = (System.nanoTime() - started) / 1_000_000_000.0;
+                raceFrontA = frontAt(race.first().expansions().size(), t, rate);
+                raceFrontB = frontAt(race.second().expansions().size(), t, rate);
+                racePathA = pathAt(race.first().expansions().size(), t, rate, pathANs);
+                racePathB = pathAt(race.second().expansions().size(), t, rate, pathBNs);
+                redraw();
+                if (raceFrontA >= 1 && raceFrontB >= 1 && racePathA >= 1 && racePathB >= 1) {
+                    raceFrontA = 1;
+                    raceFrontB = 1;
+                    racePathA = 1;
+                    racePathB = 1;
+                    statusLabel.setText(raceSummary(race));
+                    stopPathReveal();
+                }
+            }
+        };
+        pathReveal.start();
+    }
+
+    private static double frontAt(int expansions, double seconds, double rate) {
+        if (expansions <= 0) {
+            return 1;
+        }
+        return Math.min(1.0, (seconds * rate) / expansions);
+    }
+
+    private static double pathAt(int expansions, double seconds, double rate, long pathNs) {
+        double front = frontAt(expansions, seconds, rate);
+        if (front < 1 || pathNs <= 0) {
+            return front >= 1 ? 1 : 0;
+        }
+        double doneAt = expansions / rate;
+        return Math.min(1.0, ((seconds - doneAt) * 1_000_000_000.0) / pathNs);
+    }
+
+    private static String raceSummary(DesktopPaint.Race race) {
+        int a = race.first().expansions().size();
+        int b = race.second().expansions().size();
+        String winner = a == b ? "tied on work"
+                : (a < b ? race.first().id() : race.second().id()) + " wins";
+        return "Arena — " + race.first().id() + " " + a + " expansions vs "
+                + race.second().id() + " " + b + ". " + winner + ".";
     }
 
     private void armWindow(Window win) {
@@ -863,11 +1495,70 @@ public class MainController {
             g.setGlobalAlpha(1);
         }
 
-        // ---- 2) player walk, then solve-path overlay ----
+        if (currentLens != null && currentLens.bands() != null) {
+            int[][] bands = currentLens.bands();
+            for (int r = 0; r < bands.length; r++) {
+                for (int c = 0; c < bands[r].length; c++) {
+                    String color = DesktopPaint.lensColor(bands[r][c]);
+                    if (color == null) {
+                        continue;
+                    }
+                    g.setFill(Color.web(color));
+                    g.setGlobalAlpha(DesktopPaint.lensAlpha(bands[r][c]));
+                    g.fillRect(layout.x(2 * c + 1), layout.y(2 * r + 1),
+                            layout.w(2 * c + 1), layout.h(2 * r + 1));
+                }
+            }
+            g.setFill(Color.web(DesktopPaint.LENS_COLORS[2]));
+            g.setGlobalAlpha(DesktopPaint.LENS_OPENING_ALPHA);
+            for (DesktopPaint.TileRect tile : DesktopPaint.lensOpenings(bands, tiles)) {
+                g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
+                        layout.w(tile.tileCol()), layout.h(tile.tileRow()));
+            }
+            g.setGlobalAlpha(1);
+        }
+
+        // ---- 2) recorded search wash, player walk, then solve-path overlay ----
+        if (currentExpansions != null && !currentExpansions.isEmpty() && theme != null) {
+            g.setFill(theme.path());
+            g.setGlobalAlpha(DesktopPaint.EXPANSION_ALPHA);
+            for (DesktopPaint.TileRect tile : DesktopPaint.expansionCells(currentExpansions)) {
+                g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
+                        layout.w(tile.tileCol()), layout.h(tile.tileRow()));
+            }
+            for (DesktopPaint.TileRect tile : DesktopPaint.expansionOpenings(
+                    currentExpansions, tiles)) {
+                g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
+                        layout.w(tile.tileCol()), layout.h(tile.tileRow()));
+            }
+            g.setGlobalAlpha(DesktopPaint.EXPANSION_FRONT_ALPHA);
+            for (DesktopPaint.TileRect tile : DesktopPaint.expansionCells(
+                    DesktopPaint.expansionFront(currentExpansions))) {
+                g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
+                        layout.w(tile.tileCol()), layout.h(tile.tileRow()));
+            }
+            g.setGlobalAlpha(1);
+        }
+        if (currentRace != null) {
+            paintRaceLane(g, layout, tiles, currentRace.first(), raceFrontA, racePathA,
+                    DesktopPaint.RACE_PATH_A);
+            paintRaceLane(g, layout, tiles, currentRace.second(), raceFrontB, racePathB,
+                    DesktopPaint.RACE_PATH_B);
+        }
         if (!playerWalk.isEmpty() && theme != null) {
             g.setGlobalAlpha(0.32);
             g.setFill(theme.player());
             for (DesktopPaint.TileRect tile : DesktopPaint.walkOverlay(playerWalk)) {
+                g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
+                        layout.w(tile.tileCol()), layout.h(tile.tileRow()));
+            }
+            g.setGlobalAlpha(1);
+        }
+        List<Point> ghostWalk = ghostWalkNow();
+        if (!ghostWalk.isEmpty()) {
+            g.setGlobalAlpha(DesktopPaint.GHOST_WALK_ALPHA);
+            g.setFill(Color.web(DesktopPaint.GHOST));
+            for (DesktopPaint.TileRect tile : DesktopPaint.walkOverlay(ghostWalk)) {
                 g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                         layout.w(tile.tileCol()), layout.h(tile.tileRow()));
             }
@@ -904,6 +1595,19 @@ public class MainController {
             }
         }
 
+        if (currentSanctuaries != null && currentSanctuaries.placements() != null) {
+            g.setFill(Color.web(DesktopPaint.SANCTUARY));
+            for (Point safe : currentSanctuaries.placements()) {
+                DesktopPaint.Marker disc = DesktopPaint.sanctuaryMarker(layout, safe);
+                if (disc == null) {
+                    continue;
+                }
+                g.fillOval(disc.x(), disc.y(), disc.size(), disc.size());
+            }
+            paintRing(g, DesktopPaint.worstServedRing(layout, currentSanctuaries.worstServed()),
+                    Color.web(DesktopPaint.WORST_SERVED));
+        }
+
         if (currentHardest != null && currentHardest.path() != null
                 && !currentHardest.path().isEmpty()) {
             g.setGlobalAlpha(DesktopPaint.HARDEST_ALPHA);
@@ -913,6 +1617,21 @@ public class MainController {
                         layout.w(tile.tileCol()), layout.h(tile.tileRow()));
             }
             g.setGlobalAlpha(1);
+        }
+
+        if (currentHunt != null && currentHunt.path() != null && !currentHunt.path().isEmpty()) {
+            g.setGlobalAlpha(DesktopPaint.TOUR_ALPHA);
+            g.setFill(Color.web(DesktopPaint.TOUR));
+            for (DesktopPaint.TileRect tile : DesktopPaint.walkOverlay(currentHunt.path())) {
+                g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
+                        layout.w(tile.tileCol()), layout.h(tile.tileRow()));
+            }
+            g.setGlobalAlpha(1);
+        }
+        if (currentHunt != null && currentHunt.waypoints() != null) {
+            for (Point coin : currentHunt.waypoints()) {
+                paintDiamond(g, DesktopPaint.waypointDiamond(layout, coin), huntGot.contains(coin));
+            }
         }
 
         // ---- 3) start / goal discs (floor + marker, same as the web painter) ----
@@ -928,8 +1647,10 @@ public class MainController {
         if (mark != null && theme != null) {
             paintDisc(g, mark, theme.player());
         }
+        paintGhostDisc(g, layout, DesktopPaint.ghostHead(ghostWalkNow()));
         if (reachedGoal) {
-            paintRing(g, DesktopPaint.victoryRing(layout, current.metadata().goal()));
+            paintRing(g, DesktopPaint.victoryRing(layout, current.metadata().goal()),
+                    Color.web(DesktopPaint.VICTORY_GOLD));
         }
         syncLegend();
     }
@@ -948,7 +1669,14 @@ public class MainController {
                 currentCuts != null && currentCuts.chokepoints() != null
                         && !currentCuts.chokepoints().isEmpty(),
                 currentHardest != null && currentHardest.path() != null
-                        && !currentHardest.path().isEmpty());
+                        && !currentHardest.path().isEmpty(),
+                currentSanctuaries != null && currentSanctuaries.placements() != null
+                        && !currentSanctuaries.placements().isEmpty(),
+                currentLens != null && currentLens.bands() != null,
+                currentRace != null,
+                currentHunt != null && currentHunt.waypoints() != null
+                        && !currentHunt.waypoints().isEmpty(),
+                !ghostWalkNow().isEmpty());
         legendBox.setVisible(!keys.isEmpty());
         if (exportBox != null) {
             exportBox.setVisible(current != null);
@@ -961,6 +1689,11 @@ public class MainController {
         showLegendKey(legendFog, keys.contains("fog"));
         showLegendKey(legendChoke, keys.contains("choke"));
         showLegendKey(legendHardest, keys.contains("hardest"));
+        showLegendKey(legendSanctuary, keys.contains("sanctuary"));
+        showLegendKey(legendLens, keys.contains("lens"));
+        showLegendKey(legendRace, keys.contains("race"));
+        showLegendKey(legendWaypoint, keys.contains("waypoint"));
+        showLegendKey(legendGhost, keys.contains("ghost"));
     }
 
     private boolean fogOn() {
@@ -1017,7 +1750,8 @@ public class MainController {
             paintDisc(g, mark, theme.player());
         }
         if (reachedGoal) {
-            paintRing(g, DesktopPaint.victoryRing(layout, current.metadata().goal()));
+            paintRing(g, DesktopPaint.victoryRing(layout, current.metadata().goal()),
+                    Color.web(DesktopPaint.VICTORY_GOLD));
         }
     }
 
@@ -1031,6 +1765,8 @@ public class MainController {
 
     private void resetWalk(Point start) {
         playerWalk.clear();
+        walkMoves.clear();
+        walkStartedNs = System.nanoTime();
         if (start != null) {
             playerWalk.add(start);
         }
@@ -1043,6 +1779,107 @@ public class MainController {
         if (playerWalk.isEmpty() || !playerWalk.get(playerWalk.size() - 1).equals(cell)) {
             playerWalk.add(cell);
         }
+        if (walkMoves.size() >= GameSession.MAX_TRAIL) {
+            return;
+        }
+        long tMs = Math.max(0L, (System.nanoTime() - walkStartedNs) / 1_000_000L);
+        walkMoves.add(new GameSession.TimedMove(cell, tMs));
+    }
+
+    private void finishGhostRace() {
+        DesktopWork.GhostTape racing = ghostTape;
+        if (current != null && !walkMoves.isEmpty()) {
+            work.challengeGhost(current.metadata().id(), "you",
+                    current.metadata().start(), walkMoves);
+        }
+        stopGhostWatch();
+        ghostDone = true;
+        if (racing != null && !walkMoves.isEmpty()) {
+            long mine = walkMoves.get(walkMoves.size() - 1).tMs();
+            long theirs = racing.elapsedMs();
+            if (mine < theirs) {
+                statusLabel.setText(String.format(
+                        "Reached the goal — you BEAT the ghost by %.1fs!",
+                        (theirs - mine) / 1000.0));
+            } else {
+                statusLabel.setText(String.format(
+                        "Reached the goal — the ghost was %.1fs faster.",
+                        (mine - theirs) / 1000.0));
+            }
+            return;
+        }
+        statusLabel.setText("Reached the goal! Reset to race the ghost.");
+    }
+
+    private void paintRaceLane(GraphicsContext g, DesktopPaint.Layout layout,
+                               TileType[][] tiles, DesktopPaint.RaceLane lane,
+                               double front, double pathProg, double pathAlpha) {
+        if (lane == null) {
+            return;
+        }
+        List<Point> shown = DesktopPaint.pathPrefix(lane.expansions(), front);
+        g.setFill(Color.web(lane.color()));
+        g.setGlobalAlpha(DesktopPaint.RACE_WASH);
+        for (DesktopPaint.TileRect tile : DesktopPaint.expansionCells(shown)) {
+            g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
+                    layout.w(tile.tileCol()), layout.h(tile.tileRow()));
+        }
+        for (DesktopPaint.TileRect tile : DesktopPaint.expansionOpenings(shown, tiles)) {
+            g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
+                    layout.w(tile.tileCol()), layout.h(tile.tileRow()));
+        }
+        g.setGlobalAlpha(DesktopPaint.RACE_FRONT_ALPHA);
+        for (DesktopPaint.TileRect tile : DesktopPaint.expansionCells(
+                DesktopPaint.raceFront(shown))) {
+            g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
+                    layout.w(tile.tileCol()), layout.h(tile.tileRow()));
+        }
+        g.setGlobalAlpha(1);
+        if (pathProg > 0 && !lane.path().isEmpty()) {
+            List<Point> ribbon = DesktopPaint.pathPrefix(lane.path(), pathProg);
+            g.setGlobalAlpha(pathAlpha);
+            for (DesktopPaint.TileRect tile : DesktopPaint.walkOverlay(ribbon)) {
+                g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
+                        layout.w(tile.tileCol()), layout.h(tile.tileRow()));
+            }
+            g.setGlobalAlpha(1);
+            paintDisc(g, DesktopPaint.raceHeadMarker(layout, ribbon), Color.web(lane.color()));
+        }
+    }
+
+    private static void paintDiamond(GraphicsContext g, DesktopPaint.Diamond diamond,
+                                     boolean collected) {
+        if (diamond == null) {
+            return;
+        }
+        double cx = diamond.cx();
+        double cy = diamond.cy();
+        double r = diamond.radius();
+        double[] xs = {cx, cx + r, cx, cx - r};
+        double[] ys = {cy - r, cy, cy + r, cy};
+        if (collected) {
+            g.setStroke(Color.web(DesktopPaint.WAYPOINT_GOT));
+            g.setLineWidth(diamond.stroke());
+            g.strokePolygon(xs, ys, 4);
+        } else {
+            g.setFill(Color.web(DesktopPaint.WAYPOINT));
+            g.fillPolygon(xs, ys, 4);
+        }
+    }
+
+    private static void paintGhostDisc(GraphicsContext g, DesktopPaint.Layout layout, Point cell) {
+        DesktopPaint.Marker mark = DesktopPaint.ghostMarker(layout, cell);
+        if (mark == null) {
+            return;
+        }
+        Color ink = Color.web(DesktopPaint.GHOST);
+        g.setGlobalAlpha(DesktopPaint.GHOST_DISC_ALPHA);
+        g.setFill(ink);
+        g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
+        g.setGlobalAlpha(1);
+        g.setStroke(ink);
+        g.setLineWidth(1);
+        g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
     }
 
     private static void paintDisc(GraphicsContext g, DesktopPaint.Marker mark, Color color) {
@@ -1066,11 +1903,11 @@ public class MainController {
         g.fillRect(line.x(), line.y(), line.w(), line.h());
     }
 
-    private static void paintRing(GraphicsContext g, DesktopPaint.Ring ring) {
-        if (ring == null) {
+    private static void paintRing(GraphicsContext g, DesktopPaint.Ring ring, Color color) {
+        if (ring == null || color == null) {
             return;
         }
-        g.setStroke(Color.web(DesktopPaint.VICTORY_GOLD));
+        g.setStroke(color);
         g.setLineWidth(ring.width());
         g.strokeOval(ring.cx() - ring.radius(), ring.cy() - ring.radius(),
                 ring.radius() * 2, ring.radius() * 2);
