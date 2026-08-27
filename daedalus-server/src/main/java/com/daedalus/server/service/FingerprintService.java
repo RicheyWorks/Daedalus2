@@ -5,6 +5,9 @@ package com.daedalus.server.service;
 import com.daedalus.engine.generators.GeneratorRegistry;
 import com.daedalus.theory.GeneratorClassifier;
 import com.daedalus.theory.MazeFingerprint;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +36,10 @@ import java.util.concurrent.atomic.AtomicReference;
  * start, including tests that never ask. Doing it on the first GET used to pin a Tomcat
  * worker for the whole fit (~40s) and, on a race, train once per concurrent first hit. A
  * dedicated thread trains; {@link #identify} answers {@link ClassifierWarmingException}
- * (503) until the reference is published.
+ * (503) until the reference is published. A thrown fit stays a 503 on the next
+ * identify — that must not look like "still warming" in a warn-only log. The miss
+ * increments {@code daedalus.fingerprint.train.failure} and health reports it
+ * while staying UP.
  */
 @Service
 public class FingerprintService {
@@ -68,23 +74,35 @@ public class FingerprintService {
     private final int trainSeeds;
     private final int[] trainSizes;
     private final Executor trainer;
+    private final Counter trainFailure;
     private final AtomicReference<GeneratorClassifier> classifier = new AtomicReference<>();
     private final AtomicBoolean training = new AtomicBoolean();
+    private final AtomicBoolean lastTrainFailed = new AtomicBoolean();
+    private final AtomicReference<String> lastTrainError = new AtomicReference<>();
 
     @Autowired
     public FingerprintService(MazeGenerationService gen, GeneratorRegistry registry,
-                              @Value("${daedalus.fingerprint.train-seeds:4}") int trainSeeds) {
-        this(gen, registry, trainSeeds, TRAIN_SIZES, dedicatedTrainer());
+                              @Value("${daedalus.fingerprint.train-seeds:4}") int trainSeeds,
+                              MeterRegistry meters) {
+        this(gen, registry, trainSeeds, TRAIN_SIZES, dedicatedTrainer(), meters);
     }
 
     /** Test seam — a stalling executor pins single-flight without a 40s fit. */
     FingerprintService(MazeGenerationService gen, GeneratorRegistry registry,
                        int trainSeeds, int[] trainSizes, Executor trainer) {
+        this(gen, registry, trainSeeds, trainSizes, trainer, new SimpleMeterRegistry());
+    }
+
+    FingerprintService(MazeGenerationService gen, GeneratorRegistry registry,
+                       int trainSeeds, int[] trainSizes, Executor trainer, MeterRegistry meters) {
         this.gen = gen;
         this.registry = registry;
         this.trainSeeds = Math.max(1, trainSeeds);
         this.trainSizes = trainSizes.clone();
         this.trainer = trainer;
+        this.trainFailure = Counter.builder("daedalus.fingerprint.train.failure")
+                .description("Generator-classifier fits that threw")
+                .register(meters);
     }
 
     private static ExecutorService dedicatedTrainer() {
@@ -93,6 +111,21 @@ public class FingerprintService {
             t.setDaemon(true);
             return t;
         });
+    }
+
+    /** True after the classifier has published a fit. */
+    public boolean ready() {
+        return classifier.get() != null;
+    }
+
+    /** True after a thrown fit until a later fit publishes. */
+    public boolean lastTrainFailed() {
+        return lastTrainFailed.get();
+    }
+
+    /** Last fit exception, or null when the last fit succeeded or never ran. */
+    public String lastTrainError() {
+        return lastTrainError.get();
     }
 
     @PreDestroy
@@ -112,10 +145,17 @@ public class FingerprintService {
                 GeneratorClassifier trained = GeneratorClassifier.train(
                         registry.all().stream().toList(), trainSizes, trainSeeds);
                 classifier.set(trained);
+                lastTrainFailed.set(false);
+                lastTrainError.set(null);
                 log.info("generator classifier trained on {} generators in {} ms",
                         trained.knownGenerators().size(),
                         (System.nanoTime() - start) / 1_000_000);
             } catch (RuntimeException e) {
+                // Identify stays 503 until a fit publishes. That is not "still
+                // warming" — surface it, do not leave the miss in a warn-only log.
+                lastTrainFailed.set(true);
+                lastTrainError.set(e.toString());
+                trainFailure.increment();
                 log.warn("generator classifier training failed; the next identify will retry", e);
             } finally {
                 training.set(false);

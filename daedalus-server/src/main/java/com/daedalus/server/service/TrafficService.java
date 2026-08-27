@@ -8,6 +8,8 @@ import com.daedalus.model.Point;
 import com.daedalus.plugin.events.AgentSteppedEvent;
 import com.daedalus.plugin.events.PlayerMovedEvent;
 import com.daedalus.plugin.events.TrafficPulseEvent;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +28,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Traffic simulation (ADR-006 idea #3): occupancy feeds cost, cost feeds routing. Once a
@@ -54,6 +58,11 @@ import java.util.concurrent.TimeUnit;
  * capacity), per-cell cost ({@code max-cost}), pending map (at most rows·cols keys), and
  * self-termination — a tracker whose maze went quiet (fully decayed, no bumps for
  * {@code quiet-ticks}) retires itself and announces {@code settled}.
+ *
+ * <p>A thrown tick still retires that tracker so the shared ticker lives. That
+ * must not stay a warn-only log: the miss increments
+ * {@code daedalus.traffic.tick.failure} and health reports it while staying UP.
+ * An eviction ({@code find} null or {@code replace} false) is not a failure.
  */
 @Service
 public class TrafficService {
@@ -78,6 +87,7 @@ public class TrafficService {
     private final MazeGenerationService gen;
     private final GameSessionService sessions;
     private final ApplicationEventPublisher events;
+    private final MeterRegistry meters;
     private final double bump;
     private final double decayFactor;
     private final double maxCost;
@@ -92,6 +102,8 @@ public class TrafficService {
      * enables on different mazes both used to see {@code size() < cap} and both insert.
      */
     private final Object admission = new Object();
+    private final AtomicBoolean lastTickFailed = new AtomicBoolean();
+    private final AtomicReference<String> lastTickError = new AtomicReference<>();
 
     private static ScheduledExecutorService daemonTicker() {
         return Executors.newSingleThreadScheduledExecutor(r -> {
@@ -136,9 +148,24 @@ public class TrafficService {
                           @Value("${daedalus.traffic.max-cost:200.0}") double maxCost,
                           @Value("${daedalus.traffic.tick-interval:2s}") Duration tickInterval,
                           @Value("${daedalus.traffic.max-concurrent:8}") int maxConcurrent,
-                          @Value("${daedalus.traffic.quiet-ticks:5}") int quietTicksToStop) {
+                          @Value("${daedalus.traffic.quiet-ticks:5}") int quietTicksToStop,
+                          MeterRegistry meters) {
         this(gen, sessions, events, bump, decayFactor, maxCost, tickInterval,
-                maxConcurrent, quietTicksToStop, daemonTicker());
+                maxConcurrent, quietTicksToStop, daemonTicker(), meters);
+    }
+
+    /** Wall-clock test seam — daemon ticker, in-memory meters. */
+    TrafficService(MazeGenerationService gen,
+                   GameSessionService sessions,
+                   ApplicationEventPublisher events,
+                   double bump,
+                   double decayFactor,
+                   double maxCost,
+                   Duration tickInterval,
+                   int maxConcurrent,
+                   int quietTicksToStop) {
+        this(gen, sessions, events, bump, decayFactor, maxCost, tickInterval,
+                maxConcurrent, quietTicksToStop, daemonTicker(), new SimpleMeterRegistry());
     }
 
     /**
@@ -163,10 +190,26 @@ public class TrafficService {
                    int maxConcurrent,
                    int quietTicksToStop,
                    ScheduledExecutorService ticker) {
+        this(gen, sessions, events, bump, decayFactor, maxCost, tickInterval,
+                maxConcurrent, quietTicksToStop, ticker, new SimpleMeterRegistry());
+    }
+
+    TrafficService(MazeGenerationService gen,
+                   GameSessionService sessions,
+                   ApplicationEventPublisher events,
+                   double bump,
+                   double decayFactor,
+                   double maxCost,
+                   Duration tickInterval,
+                   int maxConcurrent,
+                   int quietTicksToStop,
+                   ScheduledExecutorService ticker,
+                   MeterRegistry meters) {
         this.ticker = ticker;
         this.gen = gen;
         this.sessions = sessions;
         this.events = events;
+        this.meters = meters;
         this.bump = bump;
         this.decayFactor = Math.max(0.0, Math.min(0.99, decayFactor));
         this.maxCost = Math.min(1000.0, maxCost);
@@ -227,6 +270,27 @@ public class TrafficService {
         return trackers.size();
     }
 
+    /** True after a thrown tick until a later tick completes without throwing. */
+    public boolean lastTickFailed() {
+        return lastTickFailed.get();
+    }
+
+    /** Last tick exception, or null when the last tick succeeded or never ran. */
+    public String lastTickError() {
+        return lastTickError.get();
+    }
+
+    private void markTickOk() {
+        lastTickFailed.set(false);
+        lastTickError.set(null);
+    }
+
+    private void markTickFailed(RuntimeException e) {
+        lastTickFailed.set(true);
+        lastTickError.set(e.toString());
+        meters.counter("daedalus.traffic.tick.failure").increment();
+    }
+
     /* ------------------------------------------------------------------ */
     /* Occupancy intake — cheap counters only; the grid is never touched   */
     /* here. Both sources count identically: occupancy is occupancy.       */
@@ -258,6 +322,7 @@ public class TrafficService {
     /* ------------------------------------------------------------------ */
 
     private void tick(Tracker tracker) {
+        boolean failed = false;
         try {
             var cached = gen.find(tracker.mazeId);
             if (cached == null || !(cached.grid() instanceof WeightedMazeGrid current)) {
@@ -335,8 +400,16 @@ public class TrafficService {
             events.publishEvent(new TrafficPulseEvent(this, tracker.mazeId,
                     congested, peak, false, next));
         } catch (RuntimeException e) {
+            // One broken maze must not hold the shared ticker. Surface the miss;
+            // do not leave it in a warn-only log.
+            failed = true;
+            markTickFailed(e);
             log.warn("traffic tick on maze {} failed — retiring its tracker", tracker.mazeId, e);
             stop(tracker, false);
+        } finally {
+            if (!failed) {
+                markTickOk();
+            }
         }
     }
 

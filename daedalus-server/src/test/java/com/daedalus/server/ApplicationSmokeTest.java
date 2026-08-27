@@ -3,8 +3,11 @@
 package com.daedalus.server;
 
 import com.daedalus.engine.generators.GeneratorRegistry;
+import com.daedalus.server.health.FingerprintHealthIndicator;
 import com.daedalus.server.health.LeaderboardHealthIndicator;
+import com.daedalus.server.health.LivingMazeHealthIndicator;
 import com.daedalus.server.health.PluginSubsystemHealthIndicator;
+import com.daedalus.server.health.TrafficHealthIndicator;
 import com.daedalus.solver.solvers.SolverRegistry;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -121,6 +124,30 @@ class ApplicationSmokeTest {
     void leaderboardHealthIndicatorIsRegistered_andDoesNotDragTheAggregateDown() {
         assertThat(context.getBeansOfType(LeaderboardHealthIndicator.class))
                 .as("Redis read and write fallbacks must be health details, not warn-only logs")
+                .isNotEmpty();
+        assertThat(readTree(getBody("/actuator/health")).path("status").asText()).isEqualTo("UP");
+    }
+
+    @Test
+    void fingerprintHealthIndicatorIsRegistered_andDoesNotDragTheAggregateDown() {
+        assertThat(context.getBeansOfType(FingerprintHealthIndicator.class))
+                .as("a thrown classifier fit must be a health detail, not a warn-only log")
+                .isNotEmpty();
+        assertThat(readTree(getBody("/actuator/health")).path("status").asText()).isEqualTo("UP");
+    }
+
+    @Test
+    void livingMazeHealthIndicatorIsRegistered_andDoesNotDragTheAggregateDown() {
+        assertThat(context.getBeansOfType(LivingMazeHealthIndicator.class))
+                .as("a thrown living tick must be a health detail, not a warn-only log")
+                .isNotEmpty();
+        assertThat(readTree(getBody("/actuator/health")).path("status").asText()).isEqualTo("UP");
+    }
+
+    @Test
+    void trafficHealthIndicatorIsRegistered_andDoesNotDragTheAggregateDown() {
+        assertThat(context.getBeansOfType(TrafficHealthIndicator.class))
+                .as("a thrown traffic tick must be a health detail, not a warn-only log")
                 .isNotEmpty();
         assertThat(readTree(getBody("/actuator/health")).path("status").asText()).isEqualTo("UP");
     }

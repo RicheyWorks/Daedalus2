@@ -27,6 +27,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Living mazes (ADR-006 / ADR-008): scheduled mutation ticks that mutate a cached maze
@@ -52,6 +54,11 @@ import java.util.concurrent.TimeUnit;
  * capped ({@code daedalus.living.max-ticks}), and every run self-terminates — ticks
  * exhausted, nothing left to erode ("settled"), or the maze evicted from the cache
  * ({@code replace} answering false is the stop signal, never a resurrection).
+ *
+ * <p>A thrown tick still retires that run so the shared ticker lives. That must
+ * not stay a warn-only log: the miss increments
+ * {@code daedalus.living.tick.failure} and health reports it while staying UP.
+ * An eviction ({@code find} null or {@code replace} false) is not a failure.
  */
 @Service
 public class LivingMazeService {
@@ -110,6 +117,8 @@ public class LivingMazeService {
      * starts on different mazes both used to see {@code size() < cap} and both insert.
      */
     private final Object admission = new Object();
+    private final AtomicBoolean lastTickFailed = new AtomicBoolean();
+    private final AtomicReference<String> lastTickError = new AtomicReference<>();
 
     private final class Run {
         final UUID mazeId;
@@ -280,11 +289,33 @@ public class LivingMazeService {
         return runs.size();
     }
 
+    /** True after a thrown tick until a later tick completes without throwing. */
+    public boolean lastTickFailed() {
+        return lastTickFailed.get();
+    }
+
+    /** Last tick exception, or null when the last tick succeeded or never ran. */
+    public String lastTickError() {
+        return lastTickError.get();
+    }
+
+    private void markTickOk() {
+        lastTickFailed.set(false);
+        lastTickError.set(null);
+    }
+
+    private void markTickFailed(RuntimeException e) {
+        lastTickFailed.set(true);
+        lastTickError.set(e.toString());
+        meters.counter("daedalus.living.tick.failure").increment();
+    }
+
     /* ------------------------------------------------------------------ */
     /* The tick                                                            */
     /* ------------------------------------------------------------------ */
 
     private void tick(Run run) {
+        boolean failed = false;
         try {
             MazeGenerationService.Cached current = gen.find(run.mazeId);
             if (current == null) {
@@ -357,9 +388,16 @@ public class LivingMazeService {
             }
         } catch (RuntimeException e) {
             // A tick must never kill the shared ticker thread's schedule silently — log,
-            // stop this run, let the others live.
+            // stop this run, let the others live. Surface the miss; do not leave it
+            // in a warn-only log.
+            failed = true;
+            markTickFailed(e);
             log.warn("living maze {} tick failed — ending its run", run.mazeId, e);
             stop(run, false);
+        } finally {
+            if (!failed) {
+                markTickOk();
+            }
         }
     }
 

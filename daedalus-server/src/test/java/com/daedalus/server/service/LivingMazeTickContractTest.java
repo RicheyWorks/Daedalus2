@@ -7,6 +7,7 @@ import com.daedalus.engine.Braider;
 import com.daedalus.engine.generators.GeneratorRegistry;
 import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
 import com.daedalus.plugin.events.MazeMutatedEvent;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,6 +64,7 @@ class LivingMazeTickContractTest {
 
     private ScriptedGen gen;
     private LivingMazeService living;
+    private SimpleMeterRegistry meters;
 
     @BeforeEach
     void setUp() {
@@ -71,9 +73,9 @@ class LivingMazeTickContractTest {
     }
 
     private LivingMazeService service(int maxTicks, int maxConcurrent, double erosionFactor) {
-        living = new LivingMazeService(gen, published::add, new io.micrometer.core.instrument
-                .simple.SimpleMeterRegistry(), Duration.ofMillis(25), maxTicks, maxConcurrent,
-                erosionFactor, ticker);
+        meters = new SimpleMeterRegistry();
+        living = new LivingMazeService(gen, published::add, meters, Duration.ofMillis(25),
+                maxTicks, maxConcurrent, erosionFactor, ticker);
         return living;
     }
 
@@ -170,6 +172,10 @@ class LivingMazeTickContractTest {
                 .as("no mutation is announced for a snapshot that was never committed")
                 .isEmpty();
         assertThat(living.status(id).ticksDone()).isZero();
+        assertThat(living.lastTickFailed())
+                .as("an eviction is the documented stop signal, not a thrown tick")
+                .isFalse();
+        assertThat(living.lastTickError()).isNull();
     }
 
     @Test
@@ -184,6 +190,26 @@ class LivingMazeTickContractTest {
                 .as("one broken maze must not hold the shared ticker thread forever")
                 .isZero();
         assertThat(ticker.live()).isZero();
+        assertThat(living.lastTickFailed())
+                .as("a thrown tick is not a warn-only log")
+                .isTrue();
+        assertThat(living.lastTickError()).contains("cache swap failed");
+        assertThat(meters.counter("daedalus.living.tick.failure").count()).isEqualTo(1.0);
+
+        gen.explode = false;
+        living.start(id, 3, 1L);
+        ticker.tick();
+        assertThat(living.lastTickFailed())
+                .as("health must recover when a later tick completes")
+                .isFalse();
+        assertThat(living.lastTickError()).isNull();
+    }
+
+    @Test
+    void aTickerNeverAskedIsNotAFailure() {
+        service(240, 8, 0.08);
+        assertThat(living.lastTickFailed()).isFalse();
+        assertThat(living.lastTickError()).isNull();
     }
 
     /* ------------------------------------------------------------------ */

@@ -7,6 +7,7 @@ import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
 import com.daedalus.model.Point;
 import com.daedalus.plugin.events.AgentSteppedEvent;
 import com.daedalus.plugin.events.TrafficPulseEvent;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,6 +61,7 @@ class TrafficTickContractTest {
     private ScriptedGen gen;
     private GameSessionService sessions;
     private TrafficService traffic;
+    private SimpleMeterRegistry meters;
     private UUID mazeId;
 
     @BeforeEach
@@ -71,8 +73,10 @@ class TrafficTickContractTest {
     }
 
     private TrafficService service(int maxConcurrent, int quietTicks) {
+        meters = new SimpleMeterRegistry();
         traffic = new TrafficService(gen, sessions, published::add,
-                4.0, 0.80, 200.0, Duration.ofMillis(25), maxConcurrent, quietTicks, ticker);
+                4.0, 0.80, 200.0, Duration.ofMillis(25), maxConcurrent, quietTicks, ticker,
+                meters);
         return traffic;
     }
 
@@ -155,6 +159,26 @@ class TrafficTickContractTest {
                 .as("a tracker that cannot commit is retired, not left logging every tick")
                 .isZero();
         assertThat(ticker.live()).isZero();
+        assertThat(traffic.lastTickFailed())
+                .as("a thrown tick is not a warn-only log")
+                .isTrue();
+        assertThat(traffic.lastTickError()).contains("cache swap failed");
+        assertThat(meters.counter("daedalus.traffic.tick.failure").count()).isEqualTo(1.0);
+
+        gen.explode = false;
+        traffic.enable(mazeId);
+        ticker.tick();
+        assertThat(traffic.lastTickFailed())
+                .as("health must recover when a later tick completes")
+                .isFalse();
+        assertThat(traffic.lastTickError()).isNull();
+    }
+
+    @Test
+    void aTickerNeverAskedIsNotAFailure() {
+        service(8, 5);
+        assertThat(traffic.lastTickFailed()).isFalse();
+        assertThat(traffic.lastTickError()).isNull();
     }
 
     /* ------------------------------------------------------------------ */

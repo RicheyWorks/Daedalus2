@@ -10,6 +10,21 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Traffic tick failure is a meter and a health detail.** A thrown tick still
+  retires that tracker; `daedalus.traffic.tick.failure` increments and
+  `/actuator/health` reports `lastTickFailed` while staying UP. An eviction
+  is not a failure.
+
+- **Living-maze tick failure is a meter and a health detail.** A thrown tick
+  still retires that run; `daedalus.living.tick.failure` increments and
+  `/actuator/health` reports `lastTickFailed` while staying UP. An eviction
+  is not a failure.
+
+- **Classifier train failure is a meter and a health detail.** Identify still
+  stays 503 until a later fit publishes; `daedalus.fingerprint.train.failure`
+  increments and `/actuator/health` reports `lastTrainFailed` while staying
+  UP. A classifier never asked is not a failure.
+
 - **WebUiSmokeTest dropped leftover function-name pins.** The boot-and-serve
   test still pins paths, element ids, permalink kinds, refuse copy, and the
   join-vs-move 404 distinction. Identifier names belong in `sweep/`.
