@@ -421,22 +421,23 @@ public final class ExploreHost {
         glOrtho(-aspect, aspect, -1, 1, -1, 1);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        status(aspect, world, faceTex);
+        ExplorePaint.Status line = ExplorePaint.status(
+                world.fog(), world.body(), world.markers());
+        status(aspect, line, faceTex);
+        float aim = ExplorePaint.aimY();
         glColor3f(0.92f, 0.84f, 0.28f);
         glBegin(GL_LINES);
-        glVertex2f(-0.03f, 0);
-        glVertex2f(0.03f, 0);
-        glVertex2f(0, -0.04f);
-        glVertex2f(0, 0.04f);
+        glVertex2f(-0.03f, aim);
+        glVertex2f(0.03f, aim);
+        glVertex2f(0, aim - 0.04f);
+        glVertex2f(0, aim + 0.04f);
         glEnd();
         automap(aspect, world);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_FOG);
     }
 
-    private static void status(double aspect, ExploreWorld world, int[] faceTex) {
-        ExplorePaint.Status line = ExplorePaint.status(
-                world.fog(), world.body(), world.markers());
+    private static void status(double aspect, ExplorePaint.Status line, int[] faceTex) {
         float bot = -1f;
         float top = bot + ExplorePaint.STATUS_H;
         glColor3f(0.12f, 0.08f, 0.06f);
@@ -464,6 +465,32 @@ public final class ExploreHost {
         glBindTexture(GL_TEXTURE_2D, 0);
         glDisable(GL_TEXTURE_2D);
         paintCaption(ExplorePaint.caption(line), faceRight + 0.04f, bot + 0.09f);
+        paintKeys(aspect, line);
+    }
+
+    private static void paintKeys(double aspect, ExplorePaint.Status line) {
+        int marks = Math.max(0, Math.min(8, line.marks()));
+        if (marks == 0) {
+            return;
+        }
+        float[] rgb = new float[3];
+        float cy = -1f + ExplorePaint.STATUS_H * 0.52f;
+        float x = (float) (aspect - 0.08);
+        for (int i = marks - 1; i >= 0; i--) {
+            ExplorePaint.keyTint(i, marks, line.mood(), rgb);
+            glColor3f(rgb[0], rgb[1], rgb[2]);
+            diamond(x, cy, 0.028f);
+            x -= 0.07f;
+        }
+    }
+
+    private static void diamond(float cx, float cy, float r) {
+        glBegin(GL_QUADS);
+        glVertex2f(cx, cy + r);
+        glVertex2f(cx + r, cy);
+        glVertex2f(cx, cy - r);
+        glVertex2f(cx - r, cy);
+        glEnd();
     }
 
     private static void paintCaption(String text, float x0, float y0) {

@@ -173,6 +173,28 @@ public final class ExplorePaint {
         return status.place() + "  " + status.facing() + "  " + status.stood();
     }
 
+    /**
+     * Crosshair Y in ortho NDC. Status eats the bottom strip, so aim sits in
+     * the center of what is left — not the window midpoint.
+     */
+    public static float aimY() {
+        return STATUS_H * 0.5f;
+    }
+
+    public static void keyTint(int slot, int marks, int mood, float[] rgb) {
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        boolean last = marks > 0 && slot == marks - 1;
+        if (last && mood >= 2) {
+            set(rgb, 0.78f, 0.22f, 0.16f);
+        } else if (last && mood == 1) {
+            set(rgb, 0.28f, 0.52f, 0.58f);
+        } else {
+            set(rgb, 0.82f, 0.62f, 0.18f);
+        }
+    }
+
     public static boolean glyphDot(char raw, int x, int y) {
         if (x < 0 || x >= GLYPH_W || y < 0 || y >= GLYPH_H) {
             return false;

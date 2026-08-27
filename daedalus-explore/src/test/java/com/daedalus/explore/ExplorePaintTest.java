@@ -194,6 +194,25 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.glyphDot('1', 2, 0)).isTrue();
     }
 
+    @Test
+    void aimSitsAboveTheStatusStrip() {
+        assertThat(ExplorePaint.aimY()).isGreaterThan(0f);
+        assertThat(ExplorePaint.aimY()).isEqualTo(ExplorePaint.STATUS_H * 0.5f);
+    }
+
+    @Test
+    void keyTintMarksBossAndVaultApart() {
+        float[] rgb = new float[3];
+        ExplorePaint.keyTint(0, 1, 2, rgb);
+        assertThat(rgb[0]).isGreaterThan(rgb[1]);
+        ExplorePaint.keyTint(0, 1, 1, rgb);
+        assertThat(rgb[2]).isGreaterThan(rgb[0]);
+        ExplorePaint.keyTint(0, 2, 0, rgb);
+        assertThat(rgb[0]).isGreaterThan(rgb[2]);
+        ExplorePaint.keyTint(0, 1, 0, null);
+        ExplorePaint.keyTint(0, 1, 0, new float[1]);
+    }
+
     private static ExploreMesh.Triangle nsWall(double x, double y, double z) {
         return new ExploreMesh.Triangle(x, y, z, x + 1, y, z, x + 1, y + 0.4, z,
                 ExploreMesh.Face.WALL, 2, 3);
