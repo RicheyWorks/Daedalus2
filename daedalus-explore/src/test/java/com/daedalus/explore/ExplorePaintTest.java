@@ -213,6 +213,24 @@ class ExplorePaintTest {
         ExplorePaint.keyTint(0, 1, 0, new float[1]);
     }
 
+    @Test
+    void torchHandSitsAboveTheStripAndBobs() {
+        List<ExplorePaint.HandTri> a = ExplorePaint.handMesh(1.6, 0);
+        List<ExplorePaint.HandTri> b = ExplorePaint.handMesh(1.6, ExplorePaint.handBob(0.3));
+        assertThat(a).isNotEmpty();
+        assertThat(a.stream().anyMatch(t -> t.part() == ExplorePaint.HandPart.FLAME)).isTrue();
+        assertThat(a.get(0).y1()).isGreaterThan(-1f + ExplorePaint.STATUS_H - 0.001f);
+        assertThat(b.get(0).y1()).isNotEqualTo(a.get(0).y1());
+        float[] calm = new float[3];
+        float[] hot = new float[3];
+        ExplorePaint.handTint(ExplorePaint.HandPart.FLAME, 0, calm);
+        ExplorePaint.handTint(ExplorePaint.HandPart.FLAME, 2, hot);
+        assertThat(hot[1]).isLessThan(calm[1]);
+        assertThat(hot[2]).isLessThan(calm[2]);
+        ExplorePaint.handTint(null, 0, calm);
+        ExplorePaint.handTint(ExplorePaint.HandPart.GRIP, 0, null);
+    }
+
     private static ExploreMesh.Triangle nsWall(double x, double y, double z) {
         return new ExploreMesh.Triangle(x, y, z, x + 1, y, z, x + 1, y + 0.4, z,
                 ExploreMesh.Face.WALL, 2, 3);

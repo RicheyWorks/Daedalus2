@@ -42,6 +42,16 @@ public final class ExplorePaint {
     public record Status(String place, String facing, int stood, int marks, int mood) {
     }
 
+    public enum HandPart {
+        GRIP,
+        SHAFT,
+        FLAME
+    }
+
+    /** Ortho triangles for the torch hand — GLFW fills these; tests lock the silhouette. */
+    public record HandTri(float x1, float y1, float x2, float y2, float x3, float y3, HandPart part) {
+    }
+
     private ExplorePaint() {
     }
 
@@ -192,6 +202,52 @@ public final class ExplorePaint {
             set(rgb, 0.28f, 0.52f, 0.58f);
         } else {
             set(rgb, 0.82f, 0.62f, 0.18f);
+        }
+    }
+
+    /** Idle bob so the torch is not a pasted sticker. */
+    public static float handBob(double seconds) {
+        return (float) (Math.sin(seconds * 5.2) * 0.018);
+    }
+
+    /**
+     * Lower-right torch above the status strip. Same band as Doom's weapon —
+     * presence, not combat.
+     */
+    public static List<HandTri> handMesh(double aspect, float bob) {
+        float ox = (float) (Math.max(0.55, aspect) * 0.48);
+        float oy = -1f + STATUS_H + 0.06f + bob;
+        List<HandTri> out = new ArrayList<>();
+        // Fist / grip
+        tri(out, ox - 0.02f, oy, ox + 0.12f, oy - 0.02f, ox + 0.10f, oy + 0.10f, HandPart.GRIP);
+        tri(out, ox - 0.02f, oy, ox + 0.10f, oy + 0.10f, ox - 0.04f, oy + 0.08f, HandPart.GRIP);
+        // Shaft
+        tri(out, ox + 0.04f, oy + 0.08f, ox + 0.09f, oy + 0.08f, ox + 0.07f, oy + 0.28f, HandPart.SHAFT);
+        tri(out, ox + 0.04f, oy + 0.08f, ox + 0.07f, oy + 0.28f, ox + 0.03f, oy + 0.26f, HandPart.SHAFT);
+        // Flame
+        tri(out, ox + 0.02f, oy + 0.26f, ox + 0.12f, oy + 0.26f, ox + 0.07f, oy + 0.42f, HandPart.FLAME);
+        tri(out, ox + 0.04f, oy + 0.26f, ox + 0.10f, oy + 0.26f, ox + 0.07f, oy + 0.36f, HandPart.FLAME);
+        return List.copyOf(out);
+    }
+
+    public static void handTint(HandPart part, int mood, float[] rgb) {
+        if (rgb == null || rgb.length < 3 || part == null) {
+            return;
+        }
+        int grim = Math.max(0, Math.min(2, mood));
+        switch (part) {
+            case GRIP -> set(rgb, 0.72f, 0.48f, 0.30f);
+            case SHAFT -> set(rgb, 0.28f, 0.18f, 0.12f);
+            case FLAME -> {
+                if (grim >= 2) {
+                    set(rgb, 0.95f, 0.28f, 0.12f);
+                } else if (grim == 1) {
+                    set(rgb, 0.95f, 0.62f, 0.22f);
+                } else {
+                    set(rgb, 0.98f, 0.78f, 0.28f);
+                }
+            }
+            default -> set(rgb, 0.5f, 0.5f, 0.5f);
         }
     }
 
@@ -494,6 +550,11 @@ public final class ExplorePaint {
         rgb[0] = r;
         rgb[1] = g;
         rgb[2] = b;
+    }
+
+    private static void tri(List<HandTri> out, float x1, float y1, float x2, float y2,
+                            float x3, float y3, HandPart part) {
+        out.add(new HandTri(x1, y1, x2, y2, x3, y3, part));
     }
 
     @FunctionalInterface

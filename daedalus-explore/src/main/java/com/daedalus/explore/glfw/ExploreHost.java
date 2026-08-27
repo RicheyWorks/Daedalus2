@@ -424,6 +424,7 @@ public final class ExploreHost {
         ExplorePaint.Status line = ExplorePaint.status(
                 world.fog(), world.body(), world.markers());
         status(aspect, line, faceTex);
+        paintHand(aspect, line.mood());
         float aim = ExplorePaint.aimY();
         glColor3f(0.92f, 0.84f, 0.28f);
         glBegin(GL_LINES);
@@ -435,6 +436,21 @@ public final class ExploreHost {
         automap(aspect, world);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_FOG);
+    }
+
+    private static void paintHand(double aspect, int mood) {
+        float bob = ExplorePaint.handBob(System.nanoTime() / 1_000_000_000.0);
+        List<ExplorePaint.HandTri> mesh = ExplorePaint.handMesh(aspect, bob);
+        float[] rgb = new float[3];
+        glBegin(GL_TRIANGLES);
+        for (ExplorePaint.HandTri tri : mesh) {
+            ExplorePaint.handTint(tri.part(), mood, rgb);
+            glColor3f(rgb[0], rgb[1], rgb[2]);
+            glVertex2f(tri.x1(), tri.y1());
+            glVertex2f(tri.x2(), tri.y2());
+            glVertex2f(tri.x3(), tri.y3());
+        }
+        glEnd();
     }
 
     private static void status(double aspect, ExplorePaint.Status line, int[] faceTex) {
