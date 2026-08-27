@@ -22,6 +22,7 @@ import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.List;
 import java.util.Optional;
 
 import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MAJOR;
@@ -82,6 +83,7 @@ import static org.lwjgl.opengl.GL11.GL_LINEAR;
 import static org.lwjgl.opengl.GL11.GL_LINES;
 import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
 import static org.lwjgl.opengl.GL11.GL_NEAREST;
+import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static org.lwjgl.opengl.GL11.GL_PROJECTION;
 import static org.lwjgl.opengl.GL11.GL_REPEAT;
 import static org.lwjgl.opengl.GL11.GL_RGBA;
@@ -340,7 +342,7 @@ public final class ExploreHost {
                     ExploreMesh.worldZ(marker.cell().row()));
         }
         glEnd();
-        crosshair(width, height);
+        hud(width, height, world);
     }
 
     private static void faces(ExploreWorld world, ExploreMesh.Face face, int tex,
@@ -351,7 +353,9 @@ public final class ExploreHost {
             if (tri.face() != face) {
                 continue;
             }
-            ExplorePaint.tint(tri, world.fog().tileVisible(tri.tr(), tri.tc()), rgb);
+            ExploreBody body = world.body();
+            ExplorePaint.tint(tri, world.fog().tileVisible(tri.tr(), tri.tc()), rgb,
+                    body.x(), body.z(), body.yaw());
             glColor3f(rgb[0], rgb[1], rgb[2]);
             ExplorePaint.uv(tri, tri.x1(), tri.y1(), tri.z1(), uv);
             glTexCoord2f(uv[0], uv[1]);
@@ -366,7 +370,7 @@ public final class ExploreHost {
         glEnd();
     }
 
-    private static void crosshair(int width, int height) {
+    private static void hud(int width, int height, ExploreWorld world) {
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_FOG);
         glMatrixMode(GL_PROJECTION);
@@ -382,8 +386,56 @@ public final class ExploreHost {
         glVertex2f(0, -0.04f);
         glVertex2f(0, 0.04f);
         glEnd();
+        automap(aspect, world);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_FOG);
+    }
+
+    private static void automap(double aspect, ExploreWorld world) {
+        List<ExplorePaint.MapDot> dots = ExplorePaint.automap(
+                world.fog(), world.mesh(), world.body(), world.markers());
+        if (dots.isEmpty()) {
+            return;
+        }
+        double right = aspect - 0.05;
+        double left = right - 0.40;
+        double top = 0.93;
+        double bot = top - 0.40;
+        glColor3f(0.16f, 0.11f, 0.08f);
+        fill(left - 0.014, bot - 0.014, right + 0.014, top + 0.014);
+        glColor3f(0.04f, 0.03f, 0.03f);
+        fill(left, bot, right, top);
+        double sx = (right - left) / ExplorePaint.MAP;
+        double sy = (top - bot) / ExplorePaint.MAP;
+        glBegin(GL_QUADS);
+        for (ExplorePaint.MapDot dot : dots) {
+            mapColor(dot.kind());
+            double x0 = left + dot.x() * sx;
+            double y0 = bot + dot.y() * sy;
+            glVertex2f((float) x0, (float) y0);
+            glVertex2f((float) (x0 + sx), (float) y0);
+            glVertex2f((float) (x0 + sx), (float) (y0 + sy));
+            glVertex2f((float) x0, (float) (y0 + sy));
+        }
+        glEnd();
+    }
+
+    private static void mapColor(ExplorePaint.MapKind kind) {
+        switch (kind) {
+            case WALL -> glColor3f(0.62f, 0.38f, 0.20f);
+            case HERE -> glColor3f(0.95f, 0.86f, 0.28f);
+            case MARK -> glColor3f(0.78f, 0.22f, 0.16f);
+            default -> glColor3f(0.28f, 0.20f, 0.12f);
+        }
+    }
+
+    private static void fill(double x0, double y0, double x1, double y1) {
+        glBegin(GL_QUADS);
+        glVertex2f((float) x0, (float) y0);
+        glVertex2f((float) x1, (float) y0);
+        glVertex2f((float) x1, (float) y1);
+        glVertex2f((float) x0, (float) y1);
+        glEnd();
     }
 
     private static void pillar(double x, double z) {

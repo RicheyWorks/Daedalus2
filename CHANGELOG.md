@@ -29,7 +29,12 @@ under the `_migration/` portfolios.
   right-stick look is rad/s × dt so a nudge is not a 360. Walls now
   wear a nearest-neighbor brick, floor and ceiling have their own
   rasters, and linear fog keeps the far corridor from reading as a
-  flat box.
+  flat box. A torch favors the wall you face, and a top-right automap
+  paints only stood-on stone so the layout is earned, not implied.
+  Xbox look uses the same signs as the mouse so stick-right turns
+  right. A start gate lists the well, daily, campaign, living,
+  theory, desktop, and first-person — 3D is one card. `run-daedalus.ps1`
+  launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
   re-solves quietly on each living / traffic tick; desktop dropped the

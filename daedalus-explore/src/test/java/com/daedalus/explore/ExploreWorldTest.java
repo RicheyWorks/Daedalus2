@@ -26,6 +26,7 @@ class ExploreWorldTest {
         assertThat(fog.tileVisible(2, 2)).isTrue();
         assertThat(fog.tileVisible(8, 8)).isFalse();
         assertThat(fog.stoodOn(start)).isTrue();
+        assertThat(fog.stood()).containsExactly(start);
         assertThat(fog.memorySize()).isEqualTo(1);
     }
 

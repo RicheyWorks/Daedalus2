@@ -54,12 +54,14 @@ public final class ExploreInput {
                                 boolean snapLeft, boolean snapRight, double dt) {
         double scale = STICK_LOOK * Math.max(0, dt);
         Intent move = normalizeMove(-dead(ly), dead(lx));
-        double yaw = dead(rx) * scale;
+        // Same signs as mouse(): stick-right / mouse-right is negative yaw;
+        // GLFW stick-up is −1, same as mouse-up, so −ry looks up.
+        double yaw = -dead(rx) * scale;
         if (snapLeft) {
-            yaw -= SNAP_TURN;
+            yaw += SNAP_TURN;
         }
         if (snapRight) {
-            yaw += SNAP_TURN;
+            yaw -= SNAP_TURN;
         }
         return move.plus(new Intent(0, 0, yaw, -dead(ry) * scale));
     }

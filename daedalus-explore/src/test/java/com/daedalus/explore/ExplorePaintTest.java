@@ -2,7 +2,12 @@
 
 package com.daedalus.explore;
 
+import com.daedalus.engine.MazeGrid;
+import com.daedalus.model.Direction;
+import com.daedalus.model.Point;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
@@ -91,6 +96,32 @@ class ExplorePaintTest {
         assertThat(uv[0]).isCloseTo(2f / (float) ExploreMesh.TILE, within(0.001f));
         ExplorePaint.uv(null, 0, 0, 0, uv);
         ExplorePaint.uv(nsWall(0, 1, 0), 0, 1, 0, null);
+    }
+
+    @Test
+    void torchPrefersWhatYouLookAt() {
+        float[] ahead = new float[3];
+        float[] behind = new float[3];
+        ExplorePaint.tint(nsWall(0, 1.4, -3), true, ahead, 0, 0, 0);
+        ExplorePaint.tint(nsWall(0, 1.4, 3), true, behind, 0, 0, 0);
+        assertThat(ahead[0]).isGreaterThan(behind[0]);
+    }
+
+    @Test
+    void automapKeepsUnseenTilesOffThePage() {
+        MazeGrid grid = new MazeGrid(1, 2);
+        grid.carve(grid.cell(0, 0), Direction.EAST);
+        ExploreMesh mesh = ExploreMesh.of(grid);
+        ExploreFog fog = new ExploreFog();
+        assertThat(ExplorePaint.automap(null, mesh, null, null)).isEmpty();
+        assertThat(ExplorePaint.automap(fog, mesh, null, null)).isEmpty();
+        fog.stand(new Point(0, 0));
+        List<ExplorePaint.MapDot> dots = ExplorePaint.automap(fog, mesh,
+                ExploreBody.atCell(new Point(0, 0)),
+                List.of(new ExploreMarker("door", new Point(0, 0), 0, "ENTRANCE")));
+        assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.HERE)).isTrue();
+        assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.WALL)).isTrue();
+        assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.MARK)).isTrue();
     }
 
     @Test

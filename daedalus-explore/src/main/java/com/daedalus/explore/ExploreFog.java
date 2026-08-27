@@ -43,4 +43,8 @@ public final class ExploreFog {
     public int memorySize() {
         return stood.size();
     }
+
+    public Set<Point> stood() {
+        return Set.copyOf(stood);
+    }
 }

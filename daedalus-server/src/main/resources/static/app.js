@@ -435,6 +435,53 @@ document.addEventListener("keydown", e => {
   DaedalusStage.key(state, stageHost(), e);
 });
 
+function permalinkOnBar() {
+  const h = DaedalusShare.readHash(location.hash);
+  return !!(h.session || h.maze || h.daily || h.campaign || h.generator);
+}
+
+function showGate(on) {
+  const gate = $("gate");
+  if (gate) gate.hidden = !on;
+}
+
+function enterWell() {
+  showGate(false);
+}
+
+function copyPre(id) {
+  const el = $(id);
+  if (!el || !navigator.clipboard) return;
+  navigator.clipboard.writeText(el.textContent).catch(() => {});
+}
+
+function openDetails(label) {
+  enterWell();
+  document.querySelectorAll("details").forEach(d => {
+    const sum = d.querySelector("summary");
+    if (sum && sum.textContent.trim().toLowerCase() === label) d.open = true;
+  });
+}
+
+$("home").onclick = () => showGate(true);
+$("gateWell").onclick = enterWell;
+$("gateDaily").onclick = () => {
+  enterWell();
+  loadDaily().catch(e => log("err", e.message));
+};
+$("gateCampaign").onclick = () => {
+  enterWell();
+  loadCampaign(null).catch(e => log("err", e.message));
+};
+$("gateLive").onclick = () => openDetails("hazards");
+$("gateTheory").onclick = () => openDetails("theory");
+$("gateCopyDesktop").onclick = () => copyPre("gateDesktopCmd");
+$("gateCopyExplore").onclick = () => copyPre("gateExploreCmd");
+window.addEventListener("hashchange", () => {
+  if (permalinkOnBar()) showGate(false);
+});
+if (permalinkOnBar()) showGate(false);
+
 DaedalusDesk.restore(state);
 renderAuth();
 DaedalusStage.watch(stageHost(), () => state);
@@ -442,4 +489,6 @@ drawEmpty();
 refreshLeaderboard();
 refreshPlugins();
 loadLabMetrics();
-loadAlgorithms().then(connectStomp).then(loadFromHash).catch(e => log("err", e.message));
+loadAlgorithms().then(connectStomp).then(loadFromHash).then(() => {
+  if (permalinkOnBar()) showGate(false);
+}).catch(e => log("err", e.message));

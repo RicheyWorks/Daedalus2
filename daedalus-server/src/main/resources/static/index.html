@@ -49,6 +49,23 @@
            display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
            background: rgba(7, 9, 12, 0.92); position: sticky; top: 0; z-index: 4; }
   header h1 { margin: 0; font-size: 16px; letter-spacing: .22em; font-weight: 700; }
+  header h1 button { all: unset; cursor: pointer; letter-spacing: .22em; }
+  header h1 button:hover { color: var(--accent); }
+  #gate { position: fixed; inset: 0; z-index: 20; overflow: auto;
+          background: radial-gradient(1200px 700px at 50% -10%, #121821 0%, var(--bg) 55%);
+          padding: 36px 22px 48px; }
+  #gate[hidden] { display: none; }
+  #gate .gate-inner { max-width: 980px; margin: 0 auto; }
+  #gate h2 { margin: 0 0 8px; font-size: 22px; letter-spacing: .16em; }
+  #gate .lede { color: var(--dim); margin: 0 0 22px; max-width: 52rem; }
+  #gate .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                 gap: 12px; }
+  #gate article { background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+                  padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+  #gate article h3 { margin: 0; font-size: 14px; letter-spacing: .04em; }
+  #gate article p { margin: 0; color: var(--dim); font-size: 13px; flex: 1; }
+  #gate pre { margin: 0; padding: 8px; background: var(--bg); border: 1px solid var(--line);
+              border-radius: 6px; font: 11px/1.45 ui-monospace, monospace; overflow: auto; }
   header .tag { color: var(--dim); font-size: 11px; flex: 1; letter-spacing: .04em;
                 text-transform: lowercase; }
   #auth { display: flex; align-items: center; gap: 6px; margin-left: auto; }
@@ -164,8 +181,62 @@
 </style>
 </head>
 <body>
+<div id="gate">
+  <div class="gate-inner">
+    <h2>DAEDALUS</h2>
+    <p class="lede">Pick a way in. First-person is one host. The same maze also
+      paints a 2D well, lives, races, and scores a campaign.</p>
+    <div class="cards">
+      <article>
+        <h3>The well</h3>
+        <p>Generate, solve, walk, and fog the thin-wall board — 23 generators,
+          10 solvers, live over STOMP.</p>
+        <button type="button" id="gateWell" class="primary">Enter the well</button>
+      </article>
+      <article>
+        <h3>Daily challenge</h3>
+        <p>The same maze for everyone until midnight UTC. One shared board.</p>
+        <button type="button" id="gateDaily" class="quiet">Today's maze</button>
+      </article>
+      <article>
+        <h3>Campaign</h3>
+        <p>Six measured stages, gentle to brutal. Same seed anywhere plays the
+          same ladder.</p>
+        <button type="button" id="gateCampaign" class="quiet">Start the ladder</button>
+      </article>
+      <article>
+        <h3>Living maze</h3>
+        <p>Erode walls, harden passages, bloom traffic. The ribbon follows the
+          graph as it breathes.</p>
+        <button type="button" id="gateLive" class="quiet">Open living controls</button>
+      </article>
+      <article>
+        <h3>Theory desk</h3>
+        <p>Race solvers, hunt waypoints, heat maps, sanctuaries, identify the
+          generator from shape alone.</p>
+        <button type="button" id="gateTheory" class="quiet">Open theory</button>
+      </article>
+      <article>
+        <h3>Desktop well</h3>
+        <p>JavaFX host of the same board. Not a toolbar extra — the 960px
+          window.</p>
+        <pre id="gateDesktopCmd">cd C:\Users\730ri\projects\Daedalus2
+mvn -pl daedalus-desktop -am javafx:run</pre>
+        <button type="button" id="gateCopyDesktop" class="quiet">Copy command</button>
+      </article>
+      <article>
+        <h3>First-person dungeon</h3>
+        <p>Walk the extruded grid with WASD, mouse, or Xbox. One choice, not
+          the whole product.</p>
+        <pre id="gateExploreCmd">cd C:\Users\730ri\projects\Daedalus2
+powershell -File daedalus-explore\run-explore.ps1</pre>
+        <button type="button" id="gateCopyExplore" class="quiet">Copy command</button>
+      </article>
+    </div>
+  </div>
+</div>
 <header>
-  <h1>DAEDALUS</h1>
+  <h1><button type="button" id="home" title="Back to the start page">DAEDALUS</button></h1>
   <span class="tag">generate &middot; solve &middot; play &mdash; live over STOMP</span>
   <form id="auth" autocomplete="on">
     <input id="user" name="username" placeholder="user" autocomplete="username" maxlength="64">

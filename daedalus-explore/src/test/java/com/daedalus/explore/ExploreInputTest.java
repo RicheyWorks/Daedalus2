@@ -31,7 +31,9 @@ class ExploreInputTest {
         ExploreInput.Intent back = ExploreInput.gamepad(0, 1, 0, 0, false, false);
         assertThat(back.forward()).isCloseTo(-1.0, within(0.001));
         ExploreInput.Intent look = ExploreInput.gamepad(0, 0, 1, -1, false, false, 0.05);
-        assertThat(look.yawDelta()).isCloseTo(ExploreInput.STICK_LOOK * 0.05, within(0.0001));
+        ExploreInput.Intent mouseRight = ExploreInput.mouse(1, 0);
+        assertThat(Math.signum(look.yawDelta())).isEqualTo(Math.signum(mouseRight.yawDelta()));
+        assertThat(look.yawDelta()).isCloseTo(-ExploreInput.STICK_LOOK * 0.05, within(0.0001));
         assertThat(look.pitchDelta()).isCloseTo(ExploreInput.STICK_LOOK * 0.05, within(0.0001));
         assertThat(ExploreInput.gamepad(0, 0, 1, 0, false, false).yawDelta()).isZero();
     }
@@ -39,9 +41,9 @@ class ExploreInputTest {
     @Test
     void snapTurnIsFortyFiveDegrees() {
         ExploreInput.Intent snap = ExploreInput.gamepad(0, 0, 0, 0, false, true);
-        assertThat(snap.yawDelta()).isEqualTo(ExploreInput.SNAP_TURN);
+        assertThat(snap.yawDelta()).isEqualTo(-ExploreInput.SNAP_TURN);
         ExploreInput.Intent left = ExploreInput.gamepad(0, 0, 0, 0, true, false);
-        assertThat(left.yawDelta()).isEqualTo(-ExploreInput.SNAP_TURN);
+        assertThat(left.yawDelta()).isEqualTo(ExploreInput.SNAP_TURN);
     }
 
     @Test

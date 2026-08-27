@@ -152,6 +152,15 @@ powershell -File daedalus-explore/run-explore.ps1
 powershell -File daedalus-explore/run-explore.ps1 --smoke
 ```
 
+A start page at `/` lists the well, daily, campaign, living, theory,
+desktop, and first-person. From the repo root:
+
+```bash
+powershell -File run-daedalus.ps1 well
+powershell -File run-daedalus.ps1 desktop
+powershell -File run-daedalus.ps1 explore
+```
+
 Default server port is `8080` (override with `SERVER_PORT`). Default profile
 is `dev` (in-memory leaderboard, no Redis required); flip to `prod` when
 deploying:
