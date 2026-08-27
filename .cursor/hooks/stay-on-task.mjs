@@ -106,13 +106,28 @@ function failureContext(hit) {
   return "";
 }
 
+function markSuccess() {
+  const state = loadState();
+  state.lastAction = "clear";
+  state.lastSuccessAt = Date.now();
+  state.updatedAt = Date.now();
+  saveState(state);
+}
+
 function stopFollowup() {
   const state = loadState();
   const recent = Date.now() - (state.updatedAt || 0) < STALE_MS;
   if (!recent || state.lastAction === "clear") {
     return null;
   }
-  if (state.lastAction === "pivot") {
+  if (state.lastSuccessAt && state.lastSuccessAt >= (state.updatedAt || 0)) {
+    return null;
+  }
+  const action = state.lastAction;
+  state.lastAction = "clear";
+  state.updatedAt = Date.now();
+  saveState(state);
+  if (action === "pivot") {
     return [
       "Stay-on-task restart: the last approach hung (same error " + PIVOT_AFTER + "+ times).",
       "Do not resume that approach. Pick the next remaining task on the goal and continue.",
@@ -168,6 +183,10 @@ if (looksLikeFailure) {
   const hit = countFailure(input);
   console.log(JSON.stringify({ additional_context: failureContext(hit) }));
   process.exit(0);
+}
+
+if (code === 0) {
+  markSuccess();
 }
 
 console.log("{}");
