@@ -46,7 +46,7 @@ public class DaedalusPrimaryStage extends Application {
 
         themeManager.applyDefault(scene);
 
-        stage.setTitle("Daedalus");
+        stage.setTitle("DAEDALUS");
         stage.setScene(scene);
         stage.setMinWidth(960);
         stage.setMinHeight(640);

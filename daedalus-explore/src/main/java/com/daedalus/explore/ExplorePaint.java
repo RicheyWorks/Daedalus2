@@ -207,7 +207,18 @@ public final class ExplorePaint {
 
     /** Idle bob so the torch is not a pasted sticker. */
     public static float handBob(double seconds) {
-        return (float) (Math.sin(seconds * 5.2) * 0.018);
+        return handBob(seconds, 0);
+    }
+
+    /**
+     * {@code stride} in {@code [0, 1]} is how hard you are walking — a step
+     * lifts the torch; standing still only breathes.
+     */
+    public static float handBob(double seconds, double stride) {
+        double go = Math.max(0, Math.min(1, Math.abs(stride)));
+        double amp = 0.018 + 0.028 * go;
+        double hz = 5.2 + 5.5 * go;
+        return (float) (Math.sin(seconds * hz) * amp);
     }
 
     /**

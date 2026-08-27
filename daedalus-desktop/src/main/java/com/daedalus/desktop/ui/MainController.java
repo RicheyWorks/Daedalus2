@@ -2185,6 +2185,9 @@ public class MainController {
                 mark.size() + pad, mark.size() + pad);
         g.setFill(color);
         g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
+        g.setStroke(color.deriveColor(0, 1, 1, 0.65));
+        g.setLineWidth(Math.max(1.0, mark.size() * 0.07));
+        g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
     }
 
     private static void paintHairline(GraphicsContext g, DesktopPaint.Hairline line) {

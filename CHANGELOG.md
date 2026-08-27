@@ -46,7 +46,9 @@ under the `_migration/` portfolios.
   After Enter the well, the sticky header keeps the same Bahnschrift
   wordmark and the stage well has a soft radial void plus inset shade
   so the board still reads as the product, not a flat admin panel.
-  `run-daedalus.ps1` launches those hosts from the repo root.
+  Markers wear a bright rim so the walker reads on dark stone; the
+  desktop window and toolbar say DAEDALUS; the torch hand strides when
+  you walk. `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
   re-solves quietly on each living / traffic tick; desktop dropped the

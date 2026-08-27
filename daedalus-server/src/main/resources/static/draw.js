@@ -107,6 +107,13 @@
     g.beginPath();
     g.arc(x, y, geom.cell * radius, 0, 2 * Math.PI);
     g.fill();
+    g.strokeStyle = color;
+    g.globalAlpha = 0.65;
+    g.lineWidth = Math.max(1, geom.cell * 0.07);
+    g.beginPath();
+    g.arc(x, y, geom.cell * radius, 0, 2 * Math.PI);
+    g.stroke();
+    g.globalAlpha = 1;
   }
 
   function seenCell(fog, r, c) {

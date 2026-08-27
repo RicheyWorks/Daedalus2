@@ -15,6 +15,13 @@
     -fx-border-color: transparent transparent #1e2832 transparent;
     -fx-border-width: 0 0 1 0;
 }
+.toolbar .brand {
+    -fx-font-family: "Bahnschrift", "Avenir Next Condensed", "Trebuchet MS", "Segoe UI";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e8eef4;
+    -fx-padding: 0 8 0 2;
+}
 .toolbar .label {
     -fx-text-fill: #7d8894;
 }

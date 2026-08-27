@@ -217,6 +217,7 @@ public final class ExploreHost {
                         frame.snapLeft(), frame.snapRight()));
             }
             world.apply(intent, dt);
+            double stride = Math.hypot(intent.forward(), intent.strafe());
 
             boolean l = glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS;
             if (l && !liveDown) {
@@ -230,7 +231,7 @@ public final class ExploreHost {
             jamDown = j;
             harden = glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS;
 
-            draw(window, world, wallTex, floorTex, ceilTex, skyTex, faceTex);
+            draw(window, world, wallTex, floorTex, ceilTex, skyTex, faceTex, stride);
             xr.ifPresent(runtime -> runtime.endFrame(frame));
             glfwSwapBuffers(window);
             if (smoke && ++frames >= 3) {
@@ -304,7 +305,7 @@ public final class ExploreHost {
     }
 
     private static void draw(long window, ExploreWorld world, int wallTex, int floorTex,
-                             int ceilTex, int skyTex, int[] faceTex) {
+                             int ceilTex, int skyTex, int[] faceTex, double stride) {
         int width;
         int height;
         double aspect;
@@ -351,7 +352,7 @@ public final class ExploreHost {
                     ExploreMesh.worldZ(marker.cell().row()));
         }
         glEnd();
-        hud(aspect, world, faceTex);
+        hud(aspect, world, faceTex, stride);
     }
 
     private static void sky(ExploreBody body, int skyTex, double aspect) {
@@ -413,7 +414,7 @@ public final class ExploreHost {
         glEnd();
     }
 
-    private static void hud(double aspect, ExploreWorld world, int[] faceTex) {
+    private static void hud(double aspect, ExploreWorld world, int[] faceTex, double stride) {
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_FOG);
         glMatrixMode(GL_PROJECTION);
@@ -424,7 +425,7 @@ public final class ExploreHost {
         ExplorePaint.Status line = ExplorePaint.status(
                 world.fog(), world.body(), world.markers());
         status(aspect, line, faceTex);
-        paintHand(aspect, line.mood());
+        paintHand(aspect, line.mood(), stride);
         float aim = ExplorePaint.aimY();
         glColor3f(0.92f, 0.84f, 0.28f);
         glBegin(GL_LINES);
@@ -438,8 +439,8 @@ public final class ExploreHost {
         glEnable(GL_FOG);
     }
 
-    private static void paintHand(double aspect, int mood) {
-        float bob = ExplorePaint.handBob(System.nanoTime() / 1_000_000_000.0);
+    private static void paintHand(double aspect, int mood, double stride) {
+        float bob = ExplorePaint.handBob(System.nanoTime() / 1_000_000_000.0, stride);
         List<ExplorePaint.HandTri> mesh = ExplorePaint.handMesh(aspect, bob);
         float[] rgb = new float[3];
         glBegin(GL_TRIANGLES);

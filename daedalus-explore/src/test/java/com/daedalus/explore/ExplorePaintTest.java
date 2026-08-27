@@ -221,6 +221,9 @@ class ExplorePaintTest {
         assertThat(a.stream().anyMatch(t -> t.part() == ExplorePaint.HandPart.FLAME)).isTrue();
         assertThat(a.get(0).y1()).isGreaterThan(-1f + ExplorePaint.STATUS_H - 0.001f);
         assertThat(b.get(0).y1()).isNotEqualTo(a.get(0).y1());
+        float idle = Math.abs(ExplorePaint.handBob(0.4));
+        float walk = Math.abs(ExplorePaint.handBob(0.4, 1));
+        assertThat(walk).isGreaterThan(idle);
         float[] calm = new float[3];
         float[] hot = new float[3];
         ExplorePaint.handTint(ExplorePaint.HandPart.FLAME, 0, calm);

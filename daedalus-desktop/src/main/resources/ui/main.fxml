@@ -38,6 +38,9 @@
                 <Insets top="6" right="8" bottom="6" left="8"/>
             </padding>
 
+            <Label text="DAEDALUS" styleClass="brand"/>
+            <Separator orientation="VERTICAL"/>
+
             <ComboBox fx:id="generatorChoice" prefWidth="88" maxWidth="88">
                 <tooltip><Tooltip text="Generator"/></tooltip>
             </ComboBox>
