@@ -33,34 +33,34 @@
             styleClass="root">
 
     <top>
-        <HBox spacing="6" alignment="CENTER_LEFT" styleClass="toolbar">
+        <HBox spacing="4" alignment="CENTER_LEFT" styleClass="toolbar">
             <padding>
-                <Insets top="6" right="10" bottom="6" left="10"/>
+                <Insets top="6" right="8" bottom="6" left="8"/>
             </padding>
 
-            <ComboBox fx:id="generatorChoice" prefWidth="200">
+            <ComboBox fx:id="generatorChoice" prefWidth="150" maxWidth="150">
                 <tooltip><Tooltip text="Generator"/></tooltip>
             </ComboBox>
 
-            <Separator orientation="VERTICAL"/>
-
-            <Label text="Rows"/>
-            <Spinner fx:id="rowsSpinner" prefWidth="64" editable="true"/>
-            <Label text="Cols"/>
-            <Spinner fx:id="colsSpinner" prefWidth="64" editable="true"/>
-            <Spinner fx:id="hotspotSpinner" prefWidth="52" editable="true">
+            <Spinner fx:id="rowsSpinner" prefWidth="58" editable="true">
+                <tooltip><Tooltip text="Rows"/></tooltip>
+            </Spinner>
+            <Spinner fx:id="colsSpinner" prefWidth="58" editable="true">
+                <tooltip><Tooltip text="Cols"/></tooltip>
+            </Spinner>
+            <Spinner fx:id="hotspotSpinner" prefWidth="46" editable="true">
                 <tooltip><Tooltip text="Hot spots"/></tooltip>
             </Spinner>
-            <Spinner fx:id="hotspotCostSpinner" prefWidth="56" editable="true">
+            <Spinner fx:id="hotspotCostSpinner" prefWidth="50" editable="true">
                 <tooltip><Tooltip text="Spot cost"/></tooltip>
             </Spinner>
-            <ComboBox fx:id="braidChoice" prefWidth="64">
+            <ComboBox fx:id="braidChoice" prefWidth="56" maxWidth="56">
                 <tooltip><Tooltip text="Braid"/></tooltip>
             </ComboBox>
 
             <Separator orientation="VERTICAL"/>
 
-            <TextField fx:id="seedField" prefWidth="110" promptText="seed">
+            <TextField fx:id="seedField" prefWidth="80" promptText="seed">
                 <tooltip><Tooltip text="Seed (blank = random)"/></tooltip>
             </TextField>
 
@@ -71,13 +71,19 @@
 
             <Separator orientation="VERTICAL"/>
 
-            <ComboBox fx:id="solverChoice" prefWidth="150">
+            <ComboBox fx:id="solverChoice" prefWidth="120" maxWidth="120">
                 <tooltip><Tooltip text="Solver"/></tooltip>
             </ComboBox>
             <Button fx:id="solveButton" text="Solve" onAction="#onSolve"/>
             <Button fx:id="resetButton" text="Reset" onAction="#onReset"/>
             <CheckBox fx:id="fogToggle" text="Fog" onAction="#onFog">
                 <tooltip><Tooltip text="Fog of war — walk reveals the dungeon"/></tooltip>
+            </CheckBox>
+            <CheckBox fx:id="heatToggle" text="Heat" onAction="#onHeat">
+                <tooltip><Tooltip text="Distance from the goal"/></tooltip>
+            </CheckBox>
+            <CheckBox fx:id="cutsToggle" text="Cuts" onAction="#onCuts">
+                <tooltip><Tooltip text="Min-cut chokepoints and dead ends"/></tooltip>
             </CheckBox>
         </HBox>
     </top>
@@ -128,6 +134,11 @@
                     <graphic>
                         <Rectangle width="10" height="10" fill="#05070a"
                                    stroke="#1e2832" arcWidth="3" arcHeight="3"/>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendChoke" text="chokepoint" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="10" height="10" fill="#c084fc" arcWidth="3" arcHeight="3"/>
                     </graphic>
                 </Label>
             </HBox>

@@ -5,6 +5,7 @@ package com.daedalus.desktop.ui;
 import com.daedalus.api.dto.Hotspot;
 import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
+import com.daedalus.theory.MazeFlow;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -140,6 +141,29 @@ class DesktopPaintTest {
                 List.of(new Point(0, 0)), new Point(0, 0), new Point(2, 2));
         assertThat(DesktopPaint.legendKeys(true, false, true, false, arrived))
                 .containsExactly("floor", "wall", "start", "goal", "player", "fog");
+        assertThat(DesktopPaint.legendKeys(true, false, false, false, null, true))
+                .containsExactly("floor", "wall", "start", "goal", "choke");
+        assertThat(DesktopPaint.legendKeys(true, false, false, false, fog, true))
+                .as("fog swallows the cut key")
+                .containsExactly("floor", "wall", "start", "fog");
+    }
+
+    @Test
+    void aChokepointPaintsTheOpeningBetweenTheTwoCells() {
+        MazeFlow.Passage east = new MazeFlow.Passage(new Point(0, 0), new Point(0, 1));
+        assertThat(DesktopPaint.chokeTile(east))
+                .isEqualTo(new DesktopPaint.TileRect(1, 2));
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 100, 100);
+        DesktopPaint.ChokeMark mark = DesktopPaint.chokeMark(layout, east);
+        assertThat(mark).isNotNull();
+        assertThat(mark.haloW()).isGreaterThan(mark.w());
+        assertThat(DesktopPaint.CHOKE).isEqualTo("#c084fc");
+        assertThat(DesktopPaint.DEAD_END).isEqualTo("#9ecbff");
+        DesktopPaint.Marker speck = DesktopPaint.deadEndMarker(layout, new Point(0, 0));
+        assertThat(speck.size())
+                .as("web dead-end radius is 0.12·cell")
+                .isEqualTo(layout.cellSize() * 0.24);
+        assertThat(DesktopPaint.chokeTile(null)).isNull();
     }
 
     @Test
@@ -216,6 +240,36 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.floorHi(roomy, 1, 1, 0.6))
                 .as("fog lamp below 0.7 leaves the floor dim")
                 .isFalse();
+    }
+
+    @Test
+    void theDistanceFieldUsesTheWebRampAndSkipsRock() {
+        assertThat(DesktopPaint.DISTANCE_RAMP).containsExactly(
+                "#1c5cab", "#2a78d6", "#3987e5", "#5598e7",
+                "#6da7ec", "#86b6ef", "#9ec5f4", "#cde2fb");
+        DesktopPaint.FieldTone near = DesktopPaint.fieldCell(0, 10);
+        DesktopPaint.FieldTone far = DesktopPaint.fieldCell(10, 10);
+        assertThat(near.color()).isEqualTo("#1c5cab");
+        assertThat(near.alpha()).isEqualTo(0.12);
+        assertThat(far.color()).isEqualTo("#cde2fb");
+        assertThat(far.alpha()).isEqualTo(0.80);
+        assertThat(DesktopPaint.fieldCell(-1, 10)).isNull();
+        assertThat(DesktopPaint.fieldOpeningColor()).isEqualTo("#6da7ec");
+        assertThat(DesktopPaint.FIELD_OPENING_ALPHA).isEqualTo(0.42);
+
+        TileType[][] tiles = new TileType[5][5];
+        for (int r = 0; r < 5; r++) {
+            for (int c = 0; c < 5; c++) {
+                tiles[r][c] = (r % 2 == 0 || c % 2 == 0) ? TileType.WALL : TileType.PASSAGE;
+            }
+        }
+        tiles[1][2] = TileType.PASSAGE;
+        int[][] dist = {{0, 1}, {1, -1}};
+        assertThat(DesktopPaint.fieldOpenings(dist, tiles))
+                .contains(new DesktopPaint.TileRect(1, 2));
+        assertThat(DesktopPaint.fieldOpenings(dist, tiles))
+                .as("a -1 neighbor is rock, not an opening")
+                .doesNotContain(new DesktopPaint.TileRect(2, 3));
     }
 
     @Test

@@ -7,6 +7,9 @@ import com.daedalus.engine.MazeGrid;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
 import com.daedalus.solver.SolverBudgetExceededException;
+import com.daedalus.engine.Braider;
+import com.daedalus.theory.MazeFlow;
+import com.daedalus.theory.MazeMetrics;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -75,6 +78,19 @@ public class DesktopWork {
             String generatorId, int rows, int cols, long seed,
             List<Hotspot> hotspots, double braid) {
         return () -> generation.generate(generatorId, rows, cols, seed, hotspots, braid);
+    }
+
+    /** Distance field from the goal — same sweep the web heat map uses. */
+    public Callable<DesktopPaint.Field> fieldJob(MazeGrid grid) {
+        return () -> DesktopPaint.Field.of(MazeMetrics.distancesFrom(grid, grid.goal()));
+    }
+
+    /** Min-cut passages and dead ends — same overlay as the web Analyze button. */
+    public Callable<DesktopPaint.Cuts> cutsJob(MazeGrid grid) {
+        return () -> {
+            MazeFlow.MinCut cut = MazeFlow.minCutStartToGoal(grid);
+            return new DesktopPaint.Cuts(cut.cutSize(), cut.cutEdges(), Braider.deadEnds(grid));
+        };
     }
 
     /** Solve a maze off the FX thread. */

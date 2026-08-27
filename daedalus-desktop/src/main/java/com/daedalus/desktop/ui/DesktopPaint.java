@@ -5,6 +5,7 @@ package com.daedalus.desktop.ui;
 import com.daedalus.api.dto.Hotspot;
 import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
+import com.daedalus.theory.MazeFlow;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -66,6 +67,20 @@ public final class DesktopPaint {
     public static final double HOTSPOT_OPENING_ALPHA = 0.35;
     /** Solver ribbon — same alpha as {@code draw.js} {@code paintWalk}. */
     public static final double PATH_ALPHA = 0.85;
+    /**
+     * Sequential distance ramp — bit-identical to {@code caption.js}
+     * {@code DISTANCE_RAMP}. One hue, monotone in lightness.
+     */
+    public static final String[] DISTANCE_RAMP = {
+            "#1c5cab", "#2a78d6", "#3987e5", "#5598e7",
+            "#6da7ec", "#86b6ef", "#9ec5f4", "#cde2fb"
+    };
+    /** Opening wash for the field — same alpha as {@code draw.js}. */
+    public static final double FIELD_OPENING_ALPHA = 0.42;
+    /** Min-cut passage — same purple as {@code draw.js} chokepoints. */
+    public static final String CHOKE = "#c084fc";
+    /** Dead-end speck — same ice as {@code draw.js}. */
+    public static final String DEAD_END = "#9ecbff";
 
     private DesktopPaint() {
     }
@@ -306,6 +321,11 @@ public final class DesktopPaint {
 
     public static List<String> legendKeys(boolean maze, boolean path, boolean walk,
                                           boolean hotspot, Fog fog) {
+        return legendKeys(maze, path, walk, hotspot, fog, false);
+    }
+
+    public static List<String> legendKeys(boolean maze, boolean path, boolean walk,
+                                          boolean hotspot, Fog fog, boolean choke) {
         if (!maze) {
             return List.of();
         }
@@ -324,6 +344,9 @@ public final class DesktopPaint {
         }
         if (hotspot && fog == null) {
             keys.add("hotspot");
+        }
+        if (choke && fog == null) {
+            keys.add("choke");
         }
         if (fog != null) {
             keys.add("fog");
@@ -425,6 +448,113 @@ public final class DesktopPaint {
         }
         out.addAll(wash.openings());
         return List.copyOf(out);
+    }
+
+    /** Breadth-first field from the goal — same shape as {@code draw.js} {@code scene.field}. */
+    public record Field(int maxDistance, int[][] distances) {
+
+        public static Field of(int[][] distances) {
+            if (distances == null || distances.length == 0) {
+                return null;
+            }
+            int max = 0;
+            for (int[] row : distances) {
+                for (int d : row) {
+                    if (d > max) {
+                        max = d;
+                    }
+                }
+            }
+            return new Field(max, distances);
+        }
+    }
+
+    /** One cell of the sequential ramp. {@code null} when the cell is unreachable rock. */
+    public record FieldTone(String color, double alpha) {
+    }
+
+    public static FieldTone fieldCell(int distance, int maxDistance) {
+        if (distance < 0) {
+            return null;
+        }
+        int max = Math.max(1, maxDistance);
+        double t = distance / (double) max;
+        int i = Math.min(DISTANCE_RAMP.length - 1,
+                (int) Math.round(t * (DISTANCE_RAMP.length - 1)));
+        return new FieldTone(DISTANCE_RAMP[i], 0.12 + 0.68 * t);
+    }
+
+    public static String fieldOpeningColor() {
+        int i = Math.min(DISTANCE_RAMP.length - 1,
+                (int) Math.round(0.55 * (DISTANCE_RAMP.length - 1)));
+        return DISTANCE_RAMP[i];
+    }
+
+    /**
+     * Openings between reachable cells so the heat reads as a field, not
+     * graph paper — same live-neighbor rule as {@code paintWashOpenings}.
+     */
+    public static List<TileRect> fieldOpenings(int[][] distances, TileType[][] tiles) {
+        if (distances == null || tiles == null || distances.length == 0) {
+            return List.of();
+        }
+        List<TileRect> out = new ArrayList<>();
+        int rows = distances.length;
+        int cols = distances[0].length;
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (distances[r][c] < 0) {
+                    continue;
+                }
+                if (c + 1 < cols && distances[r][c + 1] >= 0
+                        && tiles[2 * r + 1][2 * c + 2] != TileType.WALL) {
+                    out.add(new TileRect(2 * r + 1, 2 * c + 2));
+                }
+                if (r + 1 < rows && distances[r + 1][c] >= 0
+                        && tiles[2 * r + 2][2 * c + 1] != TileType.WALL) {
+                    out.add(new TileRect(2 * r + 2, 2 * c + 1));
+                }
+            }
+        }
+        return List.copyOf(out);
+    }
+
+    /** Min-cut passages plus dead-end specks — same overlay as {@code draw.js} analysis. */
+    public record Cuts(int cutSize, List<MazeFlow.Passage> chokepoints, List<Point> deadEnds) {
+    }
+
+    /**
+     * Halo plus core for one cut edge. Web paints the opening tile, then a
+     * wall-width pad so the pinch reads as a seal, not a pixel.
+     */
+    public record ChokeMark(double x, double y, double w, double h,
+                            double haloX, double haloY, double haloW, double haloH) {
+    }
+
+    public static TileRect chokeTile(MazeFlow.Passage passage) {
+        if (passage == null || passage.a() == null || passage.b() == null) {
+            return null;
+        }
+        return new TileRect(
+                passage.a().row() + passage.b().row() + 1,
+                passage.a().col() + passage.b().col() + 1);
+    }
+
+    public static ChokeMark chokeMark(Layout layout, MazeFlow.Passage passage) {
+        TileRect tile = chokeTile(passage);
+        if (layout == null || tile == null) {
+            return null;
+        }
+        double x = layout.x(tile.tileCol());
+        double y = layout.y(tile.tileRow());
+        double w = layout.w(tile.tileCol());
+        double h = layout.h(tile.tileRow());
+        double pad = layout.wall();
+        return new ChokeMark(x, y, w, h, x - pad, y - pad, w + 2 * pad, h + 2 * pad);
+    }
+
+    public static Marker deadEndMarker(Layout layout, Point cell) {
+        return disc(layout, cell, 0.12);
     }
 
     private static boolean rockCell(TileType[][] tiles, int r, int c) {

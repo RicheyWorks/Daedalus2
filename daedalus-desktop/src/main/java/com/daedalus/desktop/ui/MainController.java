@@ -108,6 +108,8 @@ public class MainController {
     @FXML private Button solveButton;        // ditto
     @FXML private Button resetButton;        // ditto
     @FXML private CheckBox fogToggle;
+    @FXML private CheckBox heatToggle;
+    @FXML private CheckBox cutsToggle;
     @FXML private HBox exportBox;
     @FXML private Pane canvasParent;
     @FXML private Canvas canvas;
@@ -118,6 +120,7 @@ public class MainController {
     @FXML private Label legendPlayer;
     @FXML private Label legendHotspot;
     @FXML private Label legendFog;
+    @FXML private Label legendChoke;
     @FXML private Label statusLabel;
 
     /** Last successfully-generated maze; held so resize events can re-render it. */
@@ -139,6 +142,12 @@ public class MainController {
 
     /** Cached: true once playerPos has reached current.metadata().goal(). Reset on Generate / Reset. */
     private boolean reachedGoal;
+
+    /** Goal-sourced distance field — cleared on Generate and Fog. */
+    private DesktopPaint.Field currentField;
+
+    /** Min-cut passages — cleared on Generate and Fog. */
+    private DesktopPaint.Cuts currentCuts;
 
     public MainController(GeneratorRegistry generatorRegistry,
                           SolverRegistry solverRegistry,
@@ -280,6 +289,7 @@ public class MainController {
             playerPos = current.metadata().start();
             resetWalk(playerPos);
             reachedGoal = false;
+            clearTheory();
 
             redraw();
             canvas.requestFocus();
@@ -372,6 +382,105 @@ public class MainController {
         statusLabel.setText("Reset to start.");
     }
 
+    /** Wired from the FXML Heat checkbox. Same goal-sourced field as the web heat map. */
+    @FXML
+    public void onHeat() {
+        if (heatToggle == null || !heatToggle.isSelected()) {
+            currentField = null;
+            redraw();
+            return;
+        }
+        if (current == null) {
+            heatToggle.setSelected(false);
+            statusLabel.setText("Generate a maze first, then check Heat.");
+            return;
+        }
+        if (fogOn()) {
+            heatToggle.setSelected(false);
+            statusLabel.setText("Fog hides the distance field — uncheck Fog to heat.");
+            return;
+        }
+        var grid = current.grid();
+        Task<DesktopPaint.Field> task = new Task<>() {
+            @Override
+            protected DesktopPaint.Field call() throws Exception {
+                return work.fieldJob(grid).call();
+            }
+        };
+        task.setOnSucceeded(e -> {
+            currentField = task.getValue();
+            int farthest = currentField == null ? 0 : currentField.maxDistance();
+            statusLabel.setText("Distance from the goal — farthest " + farthest + " steps.");
+            redraw();
+            canvas.requestFocus();
+            busy(false);
+        });
+        task.setOnFailed(e -> {
+            heatToggle.setSelected(false);
+            fail(DesktopWork.describeFailure("Heat", task.getException()));
+        });
+        run(task, "Shading the distance field…");
+    }
+
+    private void clearField() {
+        currentField = null;
+        if (heatToggle != null) {
+            heatToggle.setSelected(false);
+        }
+    }
+
+    private void clearTheory() {
+        clearField();
+        currentCuts = null;
+        if (cutsToggle != null) {
+            cutsToggle.setSelected(false);
+        }
+    }
+
+    /** Wired from the FXML Cuts checkbox. Same min-cut overlay as the web Analyze button. */
+    @FXML
+    public void onCuts() {
+        if (cutsToggle == null || !cutsToggle.isSelected()) {
+            currentCuts = null;
+            redraw();
+            return;
+        }
+        if (current == null) {
+            cutsToggle.setSelected(false);
+            statusLabel.setText("Generate a maze first, then check Cuts.");
+            return;
+        }
+        if (fogOn()) {
+            cutsToggle.setSelected(false);
+            statusLabel.setText("Fog hides the cuts — uncheck Fog to analyze.");
+            return;
+        }
+        var grid = current.grid();
+        Task<DesktopPaint.Cuts> task = new Task<>() {
+            @Override
+            protected DesktopPaint.Cuts call() throws Exception {
+                return work.cutsJob(grid).call();
+            }
+        };
+        task.setOnSucceeded(e -> {
+            currentCuts = task.getValue();
+            int n = currentCuts == null ? 0 : currentCuts.cutSize();
+            int ends = currentCuts == null || currentCuts.deadEnds() == null
+                    ? 0 : currentCuts.deadEnds().size();
+            statusLabel.setText(n == 1
+                    ? "1 chokepoint · " + ends + " dead ends."
+                    : n + " chokepoints · " + ends + " dead ends.");
+            redraw();
+            canvas.requestFocus();
+            busy(false);
+        });
+        task.setOnFailed(e -> {
+            cutsToggle.setSelected(false);
+            fail(DesktopWork.describeFailure("Cuts", task.getException()));
+        });
+        run(task, "Finding the min-cut…");
+    }
+
     /** Snapshot the well — same picture the web PNG takes, at the backing-store resolution. */
     @FXML
     public void onExportPng() {
@@ -429,6 +538,7 @@ public class MainController {
             stopPathReveal();
             currentPath = null;
             solvedPath = null;
+            clearTheory();
             statusLabel.setText("Fog of war — arrows / WASD or a click walk the dungeon.");
         } else if (current != null) {
             statusLabel.setText("Fog lifted — the whole dungeon is visible.");
@@ -676,6 +786,30 @@ public class MainController {
             g.setGlobalAlpha(1);
         }
 
+        if (currentField != null) {
+            int max = currentField.maxDistance();
+            int[][] dist = currentField.distances();
+            for (int r = 0; r < dist.length; r++) {
+                for (int c = 0; c < dist[r].length; c++) {
+                    DesktopPaint.FieldTone tone = DesktopPaint.fieldCell(dist[r][c], max);
+                    if (tone == null) {
+                        continue;
+                    }
+                    g.setFill(Color.web(tone.color()));
+                    g.setGlobalAlpha(tone.alpha());
+                    g.fillRect(layout.x(2 * c + 1), layout.y(2 * r + 1),
+                            layout.w(2 * c + 1), layout.h(2 * r + 1));
+                }
+            }
+            g.setFill(Color.web(DesktopPaint.fieldOpeningColor()));
+            g.setGlobalAlpha(DesktopPaint.FIELD_OPENING_ALPHA);
+            for (DesktopPaint.TileRect tile : DesktopPaint.fieldOpenings(dist, tiles)) {
+                g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
+                        layout.w(tile.tileCol()), layout.h(tile.tileRow()));
+            }
+            g.setGlobalAlpha(1);
+        }
+
         // ---- 2) player walk, then solve-path overlay ----
         if (!playerWalk.isEmpty() && theme != null) {
             g.setGlobalAlpha(0.32);
@@ -696,6 +830,25 @@ public class MainController {
             }
             g.setGlobalAlpha(1);
             paintDisc(g, DesktopPaint.pathHeadMarker(layout, currentPath), theme.path());
+        }
+
+        if (currentCuts != null) {
+            g.setFill(Color.web(DesktopPaint.CHOKE));
+            for (var passage : currentCuts.chokepoints()) {
+                DesktopPaint.ChokeMark mark = DesktopPaint.chokeMark(layout, passage);
+                if (mark == null) {
+                    continue;
+                }
+                g.setGlobalAlpha(0.35);
+                g.fillRect(mark.haloX(), mark.haloY(), mark.haloW(), mark.haloH());
+                g.setGlobalAlpha(0.95);
+                g.fillRect(mark.x(), mark.y(), mark.w(), mark.h());
+            }
+            g.setGlobalAlpha(1);
+            for (Point end : currentCuts.deadEnds()) {
+                paintDisc(g, DesktopPaint.deadEndMarker(layout, end),
+                        Color.web(DesktopPaint.DEAD_END));
+            }
         }
 
         // ---- 3) start / goal discs (floor + marker, same as the web painter) ----
@@ -727,7 +880,9 @@ public class MainController {
                 currentPath != null && !currentPath.isEmpty(),
                 playerWalk.size() > 1,
                 current != null && current.hotspots() != null && !current.hotspots().isEmpty(),
-                fog);
+                fog,
+                currentCuts != null && currentCuts.chokepoints() != null
+                        && !currentCuts.chokepoints().isEmpty());
         legendBox.setVisible(!keys.isEmpty());
         if (exportBox != null) {
             exportBox.setVisible(current != null);
@@ -738,6 +893,7 @@ public class MainController {
         showLegendKey(legendPlayer, keys.contains("player"));
         showLegendKey(legendHotspot, keys.contains("hotspot"));
         showLegendKey(legendFog, keys.contains("fog"));
+        showLegendKey(legendChoke, keys.contains("choke"));
     }
 
     private boolean fogOn() {

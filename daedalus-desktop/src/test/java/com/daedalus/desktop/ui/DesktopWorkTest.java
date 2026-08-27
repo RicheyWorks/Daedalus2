@@ -89,6 +89,29 @@ class DesktopWorkTest {
                 .isGreaterThan(openPassages(tree.grid()));
     }
 
+    @Test
+    void theFieldJobIsZeroAtTheGoal() throws Exception {
+        var cached = work.generateJob("recursive-backtracker", 11, 11, 7L).call();
+        DesktopPaint.Field field = work.fieldJob(cached.grid()).call();
+        var goal = cached.grid().goal();
+        var start = cached.grid().start();
+        assertThat(field).isNotNull();
+        assertThat(field.distances()[goal.row()][goal.col()]).isZero();
+        assertThat(field.distances()[start.row()][start.col()]).isGreaterThan(0);
+        assertThat(field.maxDistance()).isGreaterThan(0);
+    }
+
+    @Test
+    void aTreeHasOneChokepoint() throws Exception {
+        var cached = work.generateJob("recursive-backtracker", 11, 11, 7L).call();
+        DesktopPaint.Cuts cuts = work.cutsJob(cached.grid()).call();
+        assertThat(cuts.cutSize())
+                .as("a perfect maze has one start-to-goal seal")
+                .isEqualTo(1);
+        assertThat(cuts.chokepoints()).hasSize(1);
+        assertThat(cuts.deadEnds()).isNotEmpty();
+    }
+
     private static int openPassages(MazeGrid grid) {
         int n = 0;
         for (int r = 0; r < grid.rows(); r++) {

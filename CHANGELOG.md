@@ -10,6 +10,21 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Desktop cuts paint the min-cut.** The web already marks chokepoints
+  and dead ends; desktop had only the plan. Same purple seal on the
+  pinch, same ice specks in cul-de-sacs, so a perfect maze shows the
+  one passage that splits start from goal.
+
+- **Desktop heat paints the distance field.** The web already shaded
+  every cell from the goal; desktop had only the plan. Same sequential
+  ramp, same opening wash, so corridors read as long gradients and
+  chokepoints as tight rings.
+
+- **Desktop toolbar fits the 960px well.** Rows/Cols captions and the
+  fat combos pushed Solve and Fog off the min window, so the maze
+  could not be generated. Labels moved to tooltips; the well keeps
+  its height.
+
 - **Desktop solve is a wash, not a slab.** The web already paints the
   route at 0.85 with a head disc on the tip; desktop filled the tiles
   opaque, so the corridor and the highlight vanished under the ribbon.
