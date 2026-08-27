@@ -61,7 +61,8 @@ under the `_migration/` portfolios.
   the same soft glow and rim as a walker so the recording reads as a
   presence, not a flat stamp. The well stage on web and desktop wears a
   soft gold rim like the explore automap so the board is chrome, not a
-  gray admin panel.
+  gray admin panel. The start gate brand breathes a mint/gold glow and
+  the lattice veil pulses so the landing still feels held, not static.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
