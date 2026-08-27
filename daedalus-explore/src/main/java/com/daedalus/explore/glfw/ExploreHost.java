@@ -4,7 +4,9 @@ package com.daedalus.explore.glfw;
 
 import com.daedalus.explore.ExploreBody;
 import com.daedalus.explore.ExploreInput;
+import com.daedalus.explore.ExploreMarker;
 import com.daedalus.explore.ExploreMesh;
+import com.daedalus.explore.ExplorePaint;
 import com.daedalus.explore.ExploreWorld;
 import com.daedalus.explore.XrFrame;
 import com.daedalus.explore.XrRuntime;
@@ -132,7 +134,7 @@ public final class ExploreHost {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         GL.createCapabilities();
         glEnable(GL_DEPTH_TEST);
-        glClearColor(0.02f, 0.03f, 0.04f, 1f);
+        glClearColor(ExplorePaint.SKY_R, ExplorePaint.SKY_G, ExplorePaint.SKY_B, 1f);
 
         Optional<XrRuntime> xr = XrRuntimes.firstPresent(ExploreHost.class.getClassLoader());
         xr.ifPresent(runtime -> runtime.attach(world));
@@ -219,7 +221,7 @@ public final class ExploreHost {
         }
         return ExploreInput.gamepad(
                 state.axes(GLFW_GAMEPAD_AXIS_LEFT_X),
-                -state.axes(GLFW_GAMEPAD_AXIS_LEFT_Y),
+                state.axes(GLFW_GAMEPAD_AXIS_LEFT_Y),
                 state.axes(GLFW_GAMEPAD_AXIS_RIGHT_X),
                 -state.axes(GLFW_GAMEPAD_AXIS_RIGHT_Y),
                 state.buttons(GLFW_GAMEPAD_BUTTON_DPAD_LEFT) == GLFW_PRESS,
@@ -237,7 +239,7 @@ public final class ExploreHost {
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
             double aspect = width / (double) height;
-            glFrustum(-0.1 * aspect, 0.1 * aspect, -0.1, 0.1, 0.1, 200);
+            glFrustum(-0.12 * aspect, 0.12 * aspect, -0.12, 0.12, 0.08, 200);
             glMatrixMode(GL_MODELVIEW);
             glLoadIdentity();
             ExploreBody body = world.body();
@@ -246,23 +248,65 @@ public final class ExploreHost {
             glTranslatef((float) -body.x(), (float) -ExploreBody.EYE_Y, (float) -body.z());
         }
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        float[] rgb = new float[3];
         glBegin(GL_TRIANGLES);
         for (ExploreMesh.Triangle tri : world.mesh().triangles()) {
-            double cx = (tri.x1() + tri.x2() + tri.x3()) / 3.0;
-            double cz = (tri.z1() + tri.z2() + tri.z3()) / 3.0;
-            int tc = (int) Math.round(cx / ExploreMesh.TILE + 1);
-            int tr = (int) Math.round(cz / ExploreMesh.TILE + 1);
-            if (!world.fog().tileVisible(tr, tc)) {
-                glColor3f(0.02f, 0.03f, 0.04f);
-            } else if (tri.wall()) {
-                glColor3f(0.22f, 0.26f, 0.32f);
-            } else {
-                glColor3f(0.24f, 0.29f, 0.34f);
-            }
+            ExplorePaint.tint(tri, world.fog().tileVisible(tri.tr(), tri.tc()), rgb);
+            glColor3f(rgb[0], rgb[1], rgb[2]);
             glVertex3d(tri.x1(), tri.y1(), tri.z1());
             glVertex3d(tri.x2(), tri.y2(), tri.z2());
             glVertex3d(tri.x3(), tri.y3(), tri.z3());
         }
+        for (ExploreMarker marker : world.markers()) {
+            int tr = 2 * marker.cell().row() + 1;
+            int tc = 2 * marker.cell().col() + 1;
+            if (!world.fog().tileVisible(tr, tc)) {
+                continue;
+            }
+            ExplorePaint.marker(marker.kind(), rgb);
+            glColor3f(rgb[0], rgb[1], rgb[2]);
+            pillar(ExploreMesh.worldX(marker.cell().col()),
+                    ExploreMesh.worldZ(marker.cell().row()));
+        }
         glEnd();
+    }
+
+    private static void pillar(double x, double z) {
+        double h = 0.16;
+        double y1 = 0.95;
+        double x0 = x - h;
+        double x1 = x + h;
+        double z0 = z - h;
+        double z1 = z + h;
+        glVertex3d(x0, 0, z0);
+        glVertex3d(x1, 0, z0);
+        glVertex3d(x1, y1, z0);
+        glVertex3d(x0, 0, z0);
+        glVertex3d(x1, y1, z0);
+        glVertex3d(x0, y1, z0);
+        glVertex3d(x0, 0, z1);
+        glVertex3d(x1, y1, z1);
+        glVertex3d(x1, 0, z1);
+        glVertex3d(x0, 0, z1);
+        glVertex3d(x0, y1, z1);
+        glVertex3d(x1, y1, z1);
+        glVertex3d(x0, 0, z0);
+        glVertex3d(x0, y1, z0);
+        glVertex3d(x0, y1, z1);
+        glVertex3d(x0, 0, z0);
+        glVertex3d(x0, y1, z1);
+        glVertex3d(x0, 0, z1);
+        glVertex3d(x1, 0, z0);
+        glVertex3d(x1, 0, z1);
+        glVertex3d(x1, y1, z1);
+        glVertex3d(x1, 0, z0);
+        glVertex3d(x1, y1, z1);
+        glVertex3d(x1, y1, z0);
+        glVertex3d(x0, y1, z0);
+        glVertex3d(x1, y1, z0);
+        glVertex3d(x1, y1, z1);
+        glVertex3d(x0, y1, z0);
+        glVertex3d(x1, y1, z1);
+        glVertex3d(x0, y1, z1);
     }
 }

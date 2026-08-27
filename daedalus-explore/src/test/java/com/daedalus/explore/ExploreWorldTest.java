@@ -23,9 +23,22 @@ class ExploreWorldTest {
         fog.stand(start);
         assertThat(fog.tileVisible(3, 3)).isTrue();
         assertThat(fog.tileVisible(2, 3)).isTrue();
-        assertThat(fog.tileVisible(0, 0)).isFalse();
+        assertThat(fog.tileVisible(2, 2)).isTrue();
+        assertThat(fog.tileVisible(8, 8)).isFalse();
         assertThat(fog.stoodOn(start)).isTrue();
         assertThat(fog.memorySize()).isEqualTo(1);
+    }
+
+    @Test
+    void spawnLooksDownAnOpening() {
+        MazeGrid grid = new MazeGrid(1, 2);
+        grid.carve(grid.cell(0, 0), Direction.EAST);
+        ExploreWorld world = new ExploreWorld("test", 1L, grid);
+        assertThat(world.body().yaw()).isEqualTo(ExploreWorld.yawToward(Direction.EAST));
+        assertThat(ExploreWorld.yawToward(null)).isZero();
+        assertThat(ExploreWorld.yawToward(Direction.NORTH)).isZero();
+        assertThat(ExploreWorld.yawToward(Direction.SOUTH)).isEqualTo(Math.PI);
+        assertThat(ExploreWorld.yawToward(Direction.WEST)).isEqualTo(-Math.PI / 2);
     }
 
     @Test
@@ -69,7 +82,6 @@ class ExploreWorldTest {
         ExploreWorld world = new ExploreWorld("test", 1L, grid);
         AtomicReference<Point> movedTo = new AtomicReference<>();
         world.session().onStep((from, to) -> movedTo.set(to));
-        world.body().look(Math.PI / 2, 0);
         ExploreWalk.Outcome out = world.apply(new ExploreInput.Intent(1, 0, 0, 0), 0.3);
         assertThat(out.cellChanged()).isTrue();
         assertThat(movedTo.get()).isEqualTo(new Point(0, 1));

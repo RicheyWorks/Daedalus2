@@ -22,8 +22,8 @@
 
     <properties>
         <!-- Thin-shell floor: GLFW host is excluded. Raise after measuring. -->
-        <jacoco.check.minimum>0.89</jacoco.check.minimum>
-        <jacoco.check.ceiling>0.92</jacoco.check.ceiling>
+        <jacoco.check.minimum>0.90</jacoco.check.minimum>
+        <jacoco.check.ceiling>0.93</jacoco.check.ceiling>
         <lwjgl.natives>natives-windows</lwjgl.natives>
     </properties>
 

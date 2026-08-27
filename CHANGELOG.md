@@ -22,6 +22,11 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **First-person explore paints a Doom-like corridor.** Fog now keeps
+  the enclosing wall posts, walkable tiles have a ceiling, and faces
+  keep a tan/brown palette so looking up is stone, not a void. Xbox
+  forward is the raw GLFW stick so a push walks the look direction.
+
 - **Desktop Live and Jam keep the solver ribbon.** The web already
   re-solves quietly on each living / traffic tick; desktop dropped the
   path when the well started breathing, so a solved corridor vanished

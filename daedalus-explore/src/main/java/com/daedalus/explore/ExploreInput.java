@@ -41,8 +41,9 @@ public final class ExploreInput {
     }
 
     /**
-     * Xbox-standard GLFW axes: left stick move, right stick look.
-     * {@code ly}/{@code ry} are already inverted if the pad reports up as −1.
+     * Left stick is move ({@code +ly} walks the look direction), right stick
+     * is look. GLFW reports stick-up as −1; the host passes that axis raw so
+     * Xbox/Windows does not walk opposite the camera.
      */
     public static Intent gamepad(double lx, double ly, double rx, double ry,
                                 boolean snapLeft, boolean snapRight) {

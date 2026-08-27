@@ -54,6 +54,12 @@ class ExploreMeshTest {
         }
         assertThat(mesh.triangles()).isNotEmpty();
         assertThat(mesh.hulls()).isNotEmpty();
+        assertThat(mesh.triangles().stream().anyMatch(t -> t.face() == ExploreMesh.Face.CEILING))
+                .isTrue();
+        assertThat(mesh.triangles().stream().anyMatch(ExploreMesh.Triangle::wall)).isTrue();
+        ExploreMesh.Triangle first = mesh.triangles().getFirst();
+        assertThat(first.tr()).isGreaterThanOrEqualTo(0);
+        assertThat(first.tc()).isGreaterThanOrEqualTo(0);
     }
 
     @Test

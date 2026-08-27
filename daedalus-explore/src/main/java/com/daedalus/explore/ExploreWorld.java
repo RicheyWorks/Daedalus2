@@ -5,6 +5,7 @@ package com.daedalus.explore;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.engine.WeightedMazeGrid;
 import com.daedalus.engine.generators.DungeonGenerator;
+import com.daedalus.model.Direction;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
 
@@ -35,6 +36,7 @@ public final class ExploreWorld {
         this.grid = grid;
         this.mesh = ExploreMesh.of(grid);
         this.body = ExploreBody.atCell(grid.start());
+        faceFirstOpening(grid, this.body);
         this.markers = ExploreMarkers.plan(grid);
         fog.stand(grid.start());
     }
@@ -112,6 +114,31 @@ public final class ExploreWorld {
 
     public void pulseLive(long tickSeed, boolean harden) {
         replace(ExploreLive.pulse(grid, tickSeed, harden));
+    }
+
+    static double yawToward(Direction d) {
+        if (d == null) {
+            return 0;
+        }
+        return switch (d) {
+            case NORTH -> 0;
+            case EAST -> Math.PI / 2;
+            case SOUTH -> Math.PI;
+            case WEST -> -Math.PI / 2;
+        };
+    }
+
+    private static void faceFirstOpening(MazeGrid grid, ExploreBody body) {
+        Point start = grid.start();
+        if (start == null) {
+            return;
+        }
+        for (Direction d : Direction.values()) {
+            if (grid.isOpen(start.row(), start.col(), d)) {
+                body.look(yawToward(d), 0);
+                return;
+            }
+        }
     }
 
     public void occupyHere() {

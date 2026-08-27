@@ -19,8 +19,14 @@ public final class ExploreMesh {
 
     public static final double CELL = 2.0;
     public static final double TILE = CELL / 2.0;
-    public static final double WALL_HEIGHT = 2.4;
+    public static final double WALL_HEIGHT = 2.8;
     public static final double PLAYER_RADIUS = 0.28;
+
+    public enum Face {
+        FLOOR,
+        CEILING,
+        WALL
+    }
 
     public record Hull(double minX, double maxX, double minZ, double maxZ) {
         public boolean hits(double x, double z, double radius) {
@@ -35,7 +41,10 @@ public final class ExploreMesh {
     public record Triangle(double x1, double y1, double z1,
                            double x2, double y2, double z2,
                            double x3, double y3, double z3,
-                           boolean wall) {
+                           Face face, int tr, int tc) {
+        public boolean wall() {
+            return face == Face.WALL;
+        }
     }
 
     private final MazeGrid grid;
@@ -65,9 +74,9 @@ public final class ExploreMesh {
                 double h = TILE / 2.0;
                 if (tiles[tr][tc] == TileType.WALL) {
                     hulls.add(new Hull(cx - h, cx + h, cz - h, cz + h));
-                    addBox(triangles, cx, cz, h, true);
+                    addBox(triangles, cx, cz, h, tr, tc);
                 } else {
-                    addFloor(triangles, cx, cz, h);
+                    addFloor(triangles, cx, cz, h, tr, tc);
                 }
             }
         }
@@ -134,29 +143,36 @@ public final class ExploreMesh {
         return Math.max(lo, Math.min(hi, v));
     }
 
-    private static void addFloor(List<Triangle> out, double cx, double cz, double h) {
-        out.add(new Triangle(cx - h, 0, cz - h, cx + h, 0, cz - h, cx + h, 0, cz + h, false));
-        out.add(new Triangle(cx - h, 0, cz - h, cx + h, 0, cz + h, cx - h, 0, cz + h, false));
+    private static void addFloor(List<Triangle> out, double cx, double cz, double h,
+                                int tr, int tc) {
+        out.add(new Triangle(cx - h, 0, cz - h, cx + h, 0, cz - h, cx + h, 0, cz + h,
+                Face.FLOOR, tr, tc));
+        out.add(new Triangle(cx - h, 0, cz - h, cx + h, 0, cz + h, cx - h, 0, cz + h,
+                Face.FLOOR, tr, tc));
+        double y1 = WALL_HEIGHT;
+        out.add(new Triangle(cx - h, y1, cz - h, cx + h, y1, cz + h, cx + h, y1, cz - h,
+                Face.CEILING, tr, tc));
+        out.add(new Triangle(cx - h, y1, cz - h, cx - h, y1, cz + h, cx + h, y1, cz + h,
+                Face.CEILING, tr, tc));
     }
 
-    private static void addBox(List<Triangle> out, double cx, double cz, double h, boolean wall) {
+    private static void addBox(List<Triangle> out, double cx, double cz, double h,
+                              int tr, int tc) {
         double y0 = 0;
         double y1 = WALL_HEIGHT;
         double x0 = cx - h;
         double x1 = cx + h;
         double z0 = cz - h;
         double z1 = cz + h;
-        // top
-        out.add(new Triangle(x0, y1, z0, x1, y1, z0, x1, y1, z1, wall));
-        out.add(new Triangle(x0, y1, z0, x1, y1, z1, x0, y1, z1, wall));
-        // four sides
-        out.add(new Triangle(x0, y0, z0, x1, y0, z0, x1, y1, z0, wall));
-        out.add(new Triangle(x0, y0, z0, x1, y1, z0, x0, y1, z0, wall));
-        out.add(new Triangle(x0, y0, z1, x1, y1, z1, x1, y0, z1, wall));
-        out.add(new Triangle(x0, y0, z1, x0, y1, z1, x1, y1, z1, wall));
-        out.add(new Triangle(x0, y0, z0, x0, y1, z0, x0, y1, z1, wall));
-        out.add(new Triangle(x0, y0, z0, x0, y1, z1, x0, y0, z1, wall));
-        out.add(new Triangle(x1, y0, z0, x1, y0, z1, x1, y1, z1, wall));
-        out.add(new Triangle(x1, y0, z0, x1, y1, z1, x1, y1, z0, wall));
+        out.add(new Triangle(x0, y1, z0, x1, y1, z0, x1, y1, z1, Face.WALL, tr, tc));
+        out.add(new Triangle(x0, y1, z0, x1, y1, z1, x0, y1, z1, Face.WALL, tr, tc));
+        out.add(new Triangle(x0, y0, z0, x1, y0, z0, x1, y1, z0, Face.WALL, tr, tc));
+        out.add(new Triangle(x0, y0, z0, x1, y1, z0, x0, y1, z0, Face.WALL, tr, tc));
+        out.add(new Triangle(x0, y0, z1, x1, y1, z1, x1, y0, z1, Face.WALL, tr, tc));
+        out.add(new Triangle(x0, y0, z1, x0, y1, z1, x1, y1, z1, Face.WALL, tr, tc));
+        out.add(new Triangle(x0, y0, z0, x0, y1, z0, x0, y1, z1, Face.WALL, tr, tc));
+        out.add(new Triangle(x0, y0, z0, x0, y1, z1, x0, y0, z1, Face.WALL, tr, tc));
+        out.add(new Triangle(x1, y0, z0, x1, y0, z1, x1, y1, z1, Face.WALL, tr, tc));
+        out.add(new Triangle(x1, y0, z0, x1, y1, z1, x1, y1, z0, Face.WALL, tr, tc));
     }
 }

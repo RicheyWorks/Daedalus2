@@ -8,10 +8,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * ADR-006 memory: stood-on cells plus the four wall tiles that touch them.
- * Unseen tiles stay dark; the goal is not implied until stood on or marked.
+ * ADR-006 memory: stood-on cells plus a Chebyshev neighborhood so the
+ * enclosing wall posts stay painted. Unseen tiles stay dark; the goal
+ * is not implied until stood on or marked.
  */
 public final class ExploreFog {
+
+    /** Tiles from a cell center that still count as in-view stone. */
+    public static final int REACH = 3;
 
     private final Set<Point> stood = new HashSet<>();
 
@@ -29,13 +33,7 @@ public final class ExploreFog {
         for (Point cell : stood) {
             int cr = 2 * cell.row() + 1;
             int cc = 2 * cell.col() + 1;
-            if (tr == cr && tc == cc) {
-                return true;
-            }
-            if ((tr == cr - 1 && tc == cc)
-                    || (tr == cr + 1 && tc == cc)
-                    || (tr == cr && tc == cc - 1)
-                    || (tr == cr && tc == cc + 1)) {
+            if (Math.max(Math.abs(tr - cr), Math.abs(tc - cc)) <= REACH) {
                 return true;
             }
         }
