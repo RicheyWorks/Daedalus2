@@ -55,11 +55,12 @@
   #auth input { width: 110px; padding: 4px 6px; font-size: 12px; }
   #auth button { margin-top: 0; width: auto; padding: 4px 10px; font-size: 12px; }
   #authWho { font-size: 12px; color: var(--accent); }
-  main { display: grid; grid-template-columns: minmax(220px, 260px) minmax(0, 1fr) minmax(200px, 280px);
+  main { display: grid; grid-template-columns: minmax(220px, 260px) minmax(0, 1fr) minmax(240px, 280px);
          gap: 16px; padding: 16px 20px 28px; align-items: start; }
   main > * { min-width: 0; }
-  .hint, .info, #labOut, #tourBox, #campaignBox, #pluginBox, #lb { overflow-wrap: anywhere; }
-  @media (max-width: 1280px) {
+  .hint, .info, #labOut, #tourBox, #campaignBox, #pluginBox, #lb {
+    overflow-wrap: break-word; hyphens: auto; line-height: 1.5; }
+  @media (max-width: 1440px) {
     main { grid-template-columns: minmax(220px, 260px) minmax(0, 1fr); }
     .rail { grid-column: 1 / -1; display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
@@ -124,6 +125,7 @@
   #stats span { color: var(--dim); }
   #legend { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
             margin-top: 10px; font-size: 11px; color: var(--dim); }
+  #legend[hidden], #legend [hidden] { display: none; }
   #legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px;
               margin-right: 5px; vertical-align: -1px; }
   #compareBox table { width: 100%; margin-top: 12px; border-collapse: collapse;
@@ -235,7 +237,7 @@
     </details>
     <details>
     <summary>Theory</summary>
-    <label for="rival">Race the solver above against</label>
+    <label for="rival">Race against</label>
     <select id="rival"></select>
     <button id="race" disabled
             title="Both algorithms' REAL recorded searches replay at the same expansions-per-second — the one that found the route with less work finishes first">
@@ -258,7 +260,7 @@
     <button id="sanctuaries" disabled
             title="Place k safe points so the worst-off cell is as close to one as possible (metric k-center, NP-hard, solved by a 2-approximation)">
       Place sanctuaries</button>
-    <label for="lensH">Heuristic lens on A* with</label>
+    <label for="lensH">A* heuristic</label>
     <select id="lensH">
       <option value="MANHATTAN">Manhattan (admissible)</option>
       <option value="LANDMARK">Landmark / ALT (sharper)</option>
@@ -288,18 +290,18 @@
 
   <section class="panel board-panel" id="board">
     <div id="stage"><canvas id="maze" width="640" height="480"></canvas></div>
-    <div id="legend">
-      <span><i style="background:#3d4a58"></i>floor</span>
-      <span><i style="background:#0b0f14;border:1px solid #1e2832"></i>wall / rock</span>
-      <span><i style="background:#3ee08f;border-radius:50%"></i>start</span>
-      <span><i style="background:#ff5a5f;border-radius:50%"></i>goal</span>
-      <span><i style="background:#8fb8ff"></i>solver path</span>
-      <span><i style="background:rgba(229,72,77,.5)"></i>hot spot (cost-shaded)</span>
-      <span><i style="background:#f5c14a;border-radius:50%"></i>players</span>
-      <span><i style="background:#c084fc"></i>chokepoint</span>
-      <span><i style="background:#f2c94c;transform:rotate(45deg)"></i>waypoint</span>
-      <span><i style="background:#e6edf3;border-radius:50%;opacity:.6"></i>ghost</span>
-      <span><i style="background:#0b0f14;border:1px solid #1e2832"></i>unseen (fog)</span>
+    <div id="legend" hidden>
+      <span data-key="floor"><i style="background:#3d4a58"></i>floor</span>
+      <span data-key="wall"><i style="background:#0b0f14;border:1px solid #1e2832"></i>wall / rock</span>
+      <span data-key="start"><i style="background:#3ee08f;border-radius:50%"></i>start</span>
+      <span data-key="goal"><i style="background:#ff5a5f;border-radius:50%"></i>goal</span>
+      <span data-key="path"><i style="background:#8fb8ff"></i>solver path</span>
+      <span data-key="hotspot"><i style="background:rgba(229,72,77,.5)"></i>hot spot</span>
+      <span data-key="player"><i style="background:#f5c14a;border-radius:50%"></i>players</span>
+      <span data-key="choke"><i style="background:#c084fc"></i>chokepoint</span>
+      <span data-key="waypoint"><i style="background:#f2c94c;transform:rotate(45deg)"></i>waypoint</span>
+      <span data-key="ghost"><i style="background:#e6edf3;border-radius:50%;opacity:.6"></i>ghost</span>
+      <span data-key="fog"><i style="background:#0b0f14;border:1px solid #1e2832"></i>unseen (fog)</span>
     </div>
     <div id="compareBox"></div>
     <pre id="asciiOut" hidden></pre>
@@ -315,17 +317,17 @@
   <div class="rail">
     <section class="panel">
       <h2>Complexity lab</h2>
-      <label for="labMetric">Measure the selected generator's</label>
+      <label for="labMetric">Metric</label>
       <select id="labMetric"></select>
       <button id="measure" title="Run the generator across a sweep of sizes and fit its real growth curve — counters, never wall-clock">
         Measure growth</button>
-      <div id="labOut" class="hint">pick a metric — cellsExplored and maxFrontierSize are where
-        generators actually differ</div>
+      <div id="labOut" class="hint">cellsExplored and maxFrontierSize are where
+        generators differ</div>
     </section>
 
     <section class="panel">
       <h2>Solver tournament</h2>
-      <label for="tourBraid">Braid the sample by</label>
+      <label for="tourBraid">Braid</label>
       <select id="tourBraid"
               title="Same factor as Generate's Braid. Two selects that can disagree made the tournament race a different maze than Load it rebuilds">
         <option value="0">0 — unbraided</option>
@@ -335,8 +337,7 @@
       <button id="tournament"
               title="Rank every solver over a sample of mazes with confidence intervals — and report which pairs are statistically indistinguishable rather than inventing a 1-2-3">
         Run tournament</button>
-      <div id="tourBox" class="hint">one race is one maze; this runs a sample and reports how
-        much the ranking can be trusted</div>
+      <div id="tourBox" class="hint">a sample of mazes, with confidence — not a 1-2-3 from one race</div>
     </section>
 
     <section class="panel">

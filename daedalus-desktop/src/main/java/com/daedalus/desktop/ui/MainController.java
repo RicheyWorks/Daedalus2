@@ -27,6 +27,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
@@ -355,7 +358,37 @@ public class MainController {
         g.setFill(bg);
         g.fillRect(0, 0, w, h);
 
-        if (current == null) return;
+        if (current == null) {
+            g.setFill(theme != null ? theme.wall() : Color.web("#0b0f14"));
+            g.fillRect(0, 0, w, h);
+            DesktopPaint.Layout mark = DesktopPaint.emptyMarkLayout(w, h);
+            if (mark != null && theme != null) {
+                g.setGlobalAlpha(0.38);
+                g.setFill(theme.passage());
+                for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkFloors()) {
+                    g.fillRect(mark.x(tile.tileCol()), mark.y(tile.tileRow()),
+                            mark.w(tile.tileCol()), mark.h(tile.tileRow()));
+                }
+                g.setGlobalAlpha(0.7);
+                paintDisc(g, DesktopPaint.endpointMarker(mark, DesktopPaint.EMPTY_MARK_START),
+                        theme.start());
+                paintDisc(g, DesktopPaint.endpointMarker(mark, DesktopPaint.EMPTY_MARK_GOAL),
+                        theme.goal());
+                g.setGlobalAlpha(1);
+            }
+            g.setTextAlign(TextAlignment.CENTER);
+            g.setFill(Color.web("#9aa3ad"));
+            g.setFont(Font.font("Segoe UI", FontWeight.SEMI_BOLD, 12));
+            g.fillText(DesktopPaint.EMPTY_WORDMARK, w / 2, h / 2 + 42);
+            g.setFill(Color.web("#6b7580"));
+            g.setFont(Font.font("Segoe UI", FontWeight.SEMI_BOLD, 13));
+            g.fillText(DesktopPaint.EMPTY_TITLE, w / 2, h / 2 + 66);
+            g.setFill(Color.web("#4a5560"));
+            g.setFont(Font.font("Segoe UI", 13));
+            g.fillText(DesktopPaint.EMPTY_DETAIL, w / 2, h / 2 + 86);
+            g.fillText(DesktopPaint.EMPTY_HINT, w / 2, h / 2 + 104);
+            return;
+        }
 
         TileType[][] tiles = current.grid().toTileGrid();
         DesktopPaint.Layout layout = DesktopPaint.Layout.fit(

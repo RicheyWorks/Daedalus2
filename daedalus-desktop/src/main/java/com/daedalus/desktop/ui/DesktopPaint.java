@@ -22,6 +22,29 @@ import java.util.List;
  */
 public final class DesktopPaint {
 
+    /** Copy for an empty canvas — the well should speak, not stay a blank void. */
+    public static final String EMPTY_WORDMARK = "DAEDALUS";
+    public static final String EMPTY_TITLE = "Pick a generator and click Generate";
+    public static final String EMPTY_DETAIL = "then Solve to watch a route";
+    public static final String EMPTY_HINT = "or walk with the arrow keys";
+
+    /**
+     * Same miniature as {@code draw.js} {@code IDLE_TILES} — one product empty well.
+     */
+    public static final String[] EMPTY_MARK = {
+            "###########",
+            "# #   #   #",
+            "# ### ### #",
+            "#   #   # #",
+            "### ### # #",
+            "#     #   #",
+            "###########",
+    };
+    public static final Point EMPTY_MARK_START = new Point(0, 0);
+    public static final Point EMPTY_MARK_GOAL = new Point(2, 4);
+    public static final double EMPTY_MARK_BUDGET_W = 132;
+    public static final double EMPTY_MARK_BUDGET_H = 92;
+
     private DesktopPaint() {
     }
 
@@ -155,5 +178,46 @@ public final class DesktopPaint {
     /** Unknown or null tiles paint as passage — the same fallback the controller used. */
     public static TileType roleFor(TileType tile) {
         return tile == null ? TileType.PASSAGE : tile;
+    }
+
+    /**
+     * Fit the idle maze into a small budget, then center it above the copy
+     * so a large window does not blow the mark up into a real dungeon.
+     */
+    public static Layout emptyMarkLayout(double canvasW, double canvasH) {
+        if (canvasW <= 0 || canvasH <= 0) {
+            return null;
+        }
+        Layout fitted = Layout.fit(
+                EMPTY_MARK.length, EMPTY_MARK[0].length(),
+                EMPTY_MARK_BUDGET_W, EMPTY_MARK_BUDGET_H);
+        if (fitted == null) {
+            return null;
+        }
+        double drawW = fitted.offX()[fitted.tileCols()];
+        double drawH = fitted.offY()[fitted.tileRows()];
+        return new Layout(
+                fitted.cellSize(),
+                fitted.wall(),
+                Math.floor(canvasW / 2.0 - drawW / 2.0),
+                Math.floor(canvasH / 2.0 - 28.0 - drawH / 2.0),
+                fitted.tileRows(),
+                fitted.tileCols(),
+                fitted.offX(),
+                fitted.offY());
+    }
+
+    /** Passage tiles of the idle mark — walls stay the void. */
+    public static List<TileRect> emptyMarkFloors() {
+        List<TileRect> out = new ArrayList<>();
+        for (int r = 0; r < EMPTY_MARK.length; r++) {
+            String row = EMPTY_MARK[r];
+            for (int c = 0; c < row.length(); c++) {
+                if (row.charAt(c) != '#') {
+                    out.add(new TileRect(r, c));
+                }
+            }
+        }
+        return List.copyOf(out);
     }
 }

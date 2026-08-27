@@ -15,7 +15,7 @@
     return { w: Math.max(80, w), h: Math.max(80, h) };
   }
 
-  function computeGeometry(tiles, availW, availH) {
+  function computeGeometry(tiles, availW, availH, dprOverride) {
     const th = tiles.length, tw = tiles[0].length;
     const cols = (tw - 1) / 2;
     const rows = (th - 1) / 2;
@@ -25,7 +25,9 @@
     const cellByH = Math.floor(cssH / (rows * 1.25 + 0.25));
     const cellCss = Math.max(6, Math.min(42, Math.min(cellByW, cellByH)));
     const wallCss = Math.max(2, Math.round(cellCss / 4));
-    const dpr = (typeof window !== "undefined" && window.devicePixelRatio) || 1;
+    const dpr = dprOverride != null
+        ? dprOverride
+        : ((typeof window !== "undefined" && window.devicePixelRatio) || 1);
     const cell = Math.max(1, Math.round(cellCss * dpr));
     const wall = Math.max(1, Math.round(wallCss * dpr));
     const track = n => {
@@ -396,6 +398,39 @@
     return geom;
   }
 
+  /** A tiny honest maze — same thin-wall track, faint — so the empty well is a mark, not a caption. */
+  const IDLE_TILES = [
+    "###########",
+    "# #   #   #",
+    "# ### ### #",
+    "#   #   # #",
+    "### ### # #",
+    "#     #   #",
+    "###########",
+  ];
+
+  function paintIdleMark(g, cx, cy) {
+    const tiles = IDLE_TILES;
+    const geom = computeGeometry(tiles, 132, 92, 1);
+    const w = geom.offX[tiles[0].length], h = geom.offY[tiles.length];
+    const ox = Math.round(cx - w / 2), oy = Math.round(cy - h / 2);
+    g.save();
+    g.translate(ox, oy);
+    g.globalAlpha = 0.38;
+    g.fillStyle = COLORS.floor;
+    for (let r = 0; r < tiles.length; r++) {
+      for (let c = 0; c < tiles[r].length; c++) {
+        if (tiles[r][c] === "#") continue;
+        g.fillRect(geom.offX[c], geom.offY[r],
+                   geom.offX[c + 1] - geom.offX[c], geom.offY[r + 1] - geom.offY[r]);
+      }
+    }
+    g.globalAlpha = 0.7;
+    marker(g, geom, {row: 0, col: 0}, COLORS.start, 0.34);
+    marker(g, geom, {row: 2, col: 4}, COLORS.goal, 0.34);
+    g.restore();
+  }
+
   function paintEmpty(canvas) {
     const box = stageBox(canvas);
     const dpr = (typeof window !== "undefined" && window.devicePixelRatio) || 1;
@@ -410,14 +445,17 @@
     g.imageSmoothingEnabled = false;
     g.fillStyle = COLORS.wall;
     g.fillRect(0, 0, cssW, cssH);
-    g.fillStyle = "#6b7580";
-    g.font = "600 15px system-ui, sans-serif";
+    paintIdleMark(g, cssW / 2, cssH / 2 - 28);
     g.textAlign = "center";
-    g.fillText("Pick a generator and press Generate", cssW / 2, cssH / 2 - 8);
-    g.fillStyle = "#4a5560";
+    g.fillStyle = "#9aa3ad";
+    g.font = "600 12px system-ui, sans-serif";
+    g.fillText("DAEDALUS", cssW / 2, cssH / 2 + 42);
+    g.fillStyle = "#6b7580";
     g.font = "13px system-ui, sans-serif";
-    g.fillText("then Solve to watch a route unfold, or open a session and play",
-        cssW / 2, cssH / 2 + 16);
+    g.fillText("Pick a generator and press Generate", cssW / 2, cssH / 2 + 66);
+    g.fillStyle = "#4a5560";
+    g.fillText("then Solve to watch a route unfold", cssW / 2, cssH / 2 + 86);
+    g.fillText("or open a session and play", cssW / 2, cssH / 2 + 104);
   }
 
   function pathRevealMs(n) {

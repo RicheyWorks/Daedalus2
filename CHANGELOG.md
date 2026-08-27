@@ -10,6 +10,24 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Desktop empty well paints the same idle maze as the web.** Copy alone
+  still looked like a stub. The miniature uses the same thin-wall tiles,
+  start / goal discs, and DAEDALUS wordmark, kept to a 132×92 budget so a
+  large window does not inflate it into a dungeon.
+
+- **The legend only names what is on the board.** A fresh maze no longer
+  lists hot spots, ghosts, and fog that are not there.
+
+- **The empty well is a mark, not leftover stub text.** A faint thin-wall
+  maze sits in the void with the same Generate / Solve copy. The legend
+  stays hidden until a maze is on the board. Desktop paints the same
+  invitation instead of a blank canvas.
+
+- **Right-rail captions wrap before they clip.** The rail keeps 240px,
+  folds under the maze at 1440px, and the lab / tournament / theory
+  labels are short enough to stay on one line. The empty-well legend
+  uses `[hidden]` so `#legend { display: flex }` cannot keep it visible.
+
 - **Desktop and web share one void.** Cosmic was navy / neon / gold path;
   the web painter is slate / mint / coral. Same dungeon looked like two
   games. `CosmicTheme` and `cosmic.css` now use the web tokens. Start and

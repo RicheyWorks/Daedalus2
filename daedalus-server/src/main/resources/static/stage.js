@@ -52,11 +52,50 @@
 
   function paint(state, host) {
     if (!state.maze) return;
-    geom = DaedalusDraw.paint(host.$("maze"), scene(state));
+    const snap = scene(state);
+    geom = DaedalusDraw.paint(host.$("maze"), snap);
+    syncLegend(host, snap);
   }
 
   function paintEmpty(host) {
     DaedalusDraw.paintEmpty(host.$("maze"));
+    syncLegend(host, null);
+  }
+
+  /**
+   * Name only what is on the board. A fresh maze listing fog, ghosts, and
+   * hot spots that are not there is leftover chrome on the well.
+   */
+  function syncLegend(host, snap) {
+    const legend = host.$("legend");
+    if (!legend) return;
+    if (!snap) {
+      legend.hidden = true;
+      return;
+    }
+    legend.hidden = false;
+    const seats = snap.session && snap.session.positions
+        ? Object.keys(snap.session.positions).length : 0;
+    const show = {
+      floor: true,
+      wall: true,
+      start: true,
+      goal: true,
+      path: !!(snap.path && snap.path.length)
+          || !!(snap.hardest && snap.hardest.path && snap.hardest.path.length)
+          || !!(snap.race && snap.race.lanes
+              && snap.race.lanes.some(lane => lane.path && lane.path.length)),
+      hotspot: !!(snap.hotspots && snap.hotspots.length),
+      player: seats > 0,
+      choke: !!(snap.analysis && snap.analysis.chokepoints
+          && snap.analysis.chokepoints.length),
+      waypoint: !!(snap.tour && snap.tour.waypoints && snap.tour.waypoints.length),
+      ghost: !!(snap.ghostWalk && snap.ghostWalk.length),
+      fog: !!snap.fog,
+    };
+    legend.querySelectorAll("[data-key]").forEach(el => {
+      el.hidden = !show[el.dataset.key];
+    });
   }
 
   function watch(host, getState) {
