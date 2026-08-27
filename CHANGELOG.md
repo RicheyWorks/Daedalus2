@@ -10,6 +10,17 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Web maze fills the well without a 42px cell cap.** A 15×15 on a
+  wide stage sat in a puddle of void while desktop already grew to the
+  pane. Passage size is now the fit, same as `DesktopPaint.Layout`.
+
+- **Desktop canvas paints at the window output scale.** JavaFX used the
+  pane's CSS size as the bitmap, so a 2× display smeared thin walls the
+  same way the web did before `devicePixelRatio`.
+
+- **Hot spots fill openings between adjacent cells.** A cluster of costs
+  was a dotted grid of cells; the wash now reads as a field.
+
 - **Desktop empty well paints the same idle maze as the web.** Copy alone
   still looked like a stub. The miniature uses the same thin-wall tiles,
   start / goal discs, and DAEDALUS wordmark, kept to a 132×92 budget so a

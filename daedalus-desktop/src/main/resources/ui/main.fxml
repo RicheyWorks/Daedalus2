@@ -20,8 +20,8 @@
       - bottom: status bar (last action + timing)
 
     Controller is wired by Spring (DaedalusPrimaryStage's controller factory).
-    The canvas itself doesn't auto-resize — MainController binds it to
-    canvasParent's width/height and redraws on change.
+    The canvas itself doesn't auto-resize — MainController sizes the
+    backing store to the pane times the window output scale and redraws.
 -->
 <BorderPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"

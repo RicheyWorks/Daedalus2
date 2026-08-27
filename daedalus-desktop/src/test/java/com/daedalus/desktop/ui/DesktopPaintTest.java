@@ -121,6 +121,17 @@ class DesktopPaintTest {
     }
 
     @Test
+    void aHiDpiCanvasHasADevicePixelBackingStore() {
+        DesktopPaint.Backing store = DesktopPaint.Backing.of(800, 600, 2, 2);
+        assertThat(store).isNotNull();
+        assertThat(store.cssW()).isEqualTo(800);
+        assertThat(store.pixelW()).isEqualTo(1600);
+        assertThat(store.pixelH()).isEqualTo(1200);
+        assertThat(DesktopPaint.Backing.of(800, 600, 0, 2).scaleX()).isEqualTo(1);
+        assertThat(DesktopPaint.Backing.of(0, 600, 2, 2)).isNull();
+    }
+
+    @Test
     void anEmptyCanvasHasCopyInsteadOfABlankVoid() {
         assertThat(DesktopPaint.EMPTY_WORDMARK).isEqualTo("DAEDALUS");
         assertThat(DesktopPaint.EMPTY_TITLE).contains("Generate");

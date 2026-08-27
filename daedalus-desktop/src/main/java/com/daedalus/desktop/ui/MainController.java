@@ -30,6 +30,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.transform.Scale;
+import javafx.stage.Window;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
@@ -150,12 +152,17 @@ public class MainController {
         rowsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, MAX_DIM, 30));
         colsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, MAX_DIM, 40));
 
-        // Canvas tracks its parent's size, redraws on every change so the existing maze
-        // rescales when the window is resized.
-        canvas.widthProperty().bind(canvasParent.widthProperty());
-        canvas.heightProperty().bind(canvasParent.heightProperty());
-        canvas.widthProperty().addListener((obs, oldV, newV) -> redraw());
-        canvas.heightProperty().addListener((obs, oldV, newV) -> redraw());
+        // Backing store is the pane times the window output scale — a 2× display
+        // used to smear thin walls the same way the web did before devicePixelRatio.
+        canvasParent.widthProperty().addListener((obs, oldV, newV) -> resizeBacking());
+        canvasParent.heightProperty().addListener((obs, oldV, newV) -> resizeBacking());
+        canvas.sceneProperty().addListener((obs, oldS, scene) -> {
+            if (scene == null) {
+                return;
+            }
+            scene.windowProperty().addListener((wObs, oldW, win) -> armWindow(win));
+            armWindow(scene.getWindow());
+        });
 
         // Keyboard handler for player movement. Canvas grabs focus on Generate so arrow
         // keys "just work" without an explicit click. Pressing a movement key while a text
@@ -346,13 +353,51 @@ public class MainController {
      * </ol>
      * Thin-wall cells, centered with letterboxing on the longer axis so the maze isn't stretched.
      */
+    private void armWindow(Window win) {
+        if (win == null) {
+            return;
+        }
+        win.outputScaleXProperty().addListener((obs, oldV, newV) -> resizeBacking());
+        win.outputScaleYProperty().addListener((obs, oldV, newV) -> resizeBacking());
+        resizeBacking();
+    }
+
+    private DesktopPaint.Backing backing() {
+        double sx = 1;
+        double sy = 1;
+        if (canvas.getScene() != null && canvas.getScene().getWindow() != null) {
+            Window win = canvas.getScene().getWindow();
+            sx = win.getOutputScaleX();
+            sy = win.getOutputScaleY();
+        }
+        return DesktopPaint.Backing.of(canvasParent.getWidth(), canvasParent.getHeight(), sx, sy);
+    }
+
+    private void resizeBacking() {
+        DesktopPaint.Backing store = backing();
+        if (store == null) {
+            return;
+        }
+        if (Math.abs(canvas.getWidth() - store.pixelW()) > 0.5
+                || Math.abs(canvas.getHeight() - store.pixelH()) > 0.5) {
+            canvas.setWidth(store.pixelW());
+            canvas.setHeight(store.pixelH());
+        }
+        canvas.getTransforms().setAll(new Scale(1 / store.scaleX(), 1 / store.scaleY(), 0, 0));
+        redraw();
+    }
+
     private void redraw() {
-        double w = canvas.getWidth();
-        double h = canvas.getHeight();
-        if (w <= 0 || h <= 0) return;
+        DesktopPaint.Backing store = backing();
+        if (store == null) {
+            return;
+        }
+        double w = store.cssW();
+        double h = store.cssH();
 
         Theme theme = themeManager.active();
         GraphicsContext g = canvas.getGraphicsContext2D();
+        g.setTransform(store.scaleX(), 0, 0, store.scaleY(), 0, 0);
 
         Color bg = theme != null ? theme.background() : Color.web("#000000");
         g.setFill(bg);

@@ -184,6 +184,25 @@ public final class DesktopPaint {
      * Fit the idle maze into a small budget, then center it above the copy
      * so a large window does not blow the mark up into a real dungeon.
      */
+    /**
+     * Backing store for a HiDPI canvas. JavaFX {@code Canvas} is a bitmap
+     * in its own width×height; painting in CSS pixels on a 2× display
+     * smears the same corridors the web used to.
+     */
+    public record Backing(double cssW, double cssH, double scaleX, double scaleY,
+                          double pixelW, double pixelH) {
+
+        public static Backing of(double cssW, double cssH, double scaleX, double scaleY) {
+            if (cssW <= 0 || cssH <= 0) {
+                return null;
+            }
+            double sx = scaleX > 0 ? scaleX : 1;
+            double sy = scaleY > 0 ? scaleY : 1;
+            return new Backing(cssW, cssH, sx, sy,
+                    Math.round(cssW * sx), Math.round(cssH * sy));
+        }
+    }
+
     public static Layout emptyMarkLayout(double canvasW, double canvasH) {
         if (canvasW <= 0 || canvasH <= 0) {
             return null;

@@ -23,7 +23,9 @@
     const cssH = Math.max(80, availH || 640);
     const cellByW = Math.floor(cssW / (cols * 1.25 + 0.25));
     const cellByH = Math.floor(cssH / (rows * 1.25 + 0.25));
-    const cellCss = Math.max(6, Math.min(42, Math.min(cellByW, cellByH)));
+    // No 42px ceiling — desktop Layout.fit already grows to the pane.
+    // A small maze on a wide stage used to sit in a puddle of void.
+    const cellCss = Math.max(6, Math.min(cellByW, cellByH));
     const wallCss = Math.max(2, Math.round(cellCss / 4));
     const dpr = dprOverride != null
         ? dprOverride
@@ -200,14 +202,21 @@
       return geom;
     }
 
+    const hot = new Map();
     (scene.hotspots || []).forEach(h => {
       const tr = 2 * h.row + 1, tc = 2 * h.col + 1;
       if (tiles[tr][tc] === "#" || isRock(tiles, tr, tc)) return;
+      hot.set(h.row + "," + h.col, h.cost);
       g.fillStyle = "#e5484d";
       g.globalAlpha = Math.min(0.7, 0.2 + h.cost / 200);
       g.fillRect(geom.offX[tc], geom.offY[tr], geom.cell, geom.cell);
-      g.globalAlpha = 1;
     });
+    if (hot.size) {
+      g.fillStyle = "#e5484d";
+      g.globalAlpha = 0.35;
+      paintWashOpenings(g, geom, tiles, (r, c) => hot.has(r + "," + c));
+      g.globalAlpha = 1;
+    }
     if (scene.field) {
       const max = Math.max(1, scene.field.maxDistance);
       const ramp = scene.distanceRamp;
