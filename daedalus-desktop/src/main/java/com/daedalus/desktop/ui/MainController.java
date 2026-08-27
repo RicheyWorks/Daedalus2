@@ -14,6 +14,7 @@ import com.daedalus.server.service.HeuristicLensService;
 import com.daedalus.server.service.LivingMazeService;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
+import com.daedalus.server.service.TrafficService;
 import com.daedalus.theory.LongestPath;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
@@ -125,6 +126,8 @@ public class MainController {
     @FXML private CheckBox raceToggle;
     @FXML private CheckBox huntToggle;
     @FXML private CheckBox liveToggle;
+    @FXML private CheckBox hardToggle;
+    @FXML private CheckBox jamToggle;
     @FXML private HBox exportBox;
     @FXML private Pane canvasParent;
     @FXML private Canvas canvas;
@@ -161,6 +164,9 @@ public class MainController {
 
     /** Polls the living snapshot at the server tick interval. */
     private Timeline liveWatch;
+
+    /** Polls congested weights at the traffic tick interval. */
+    private Timeline trafficWatch;
 
     /** Replays the maze's best finish — same 100ms tick as {@code ghost.js}. */
     private Timeline ghostWatch;
@@ -357,6 +363,13 @@ public class MainController {
         stopLiveWatch();
         if (liveToggle != null) {
             liveToggle.setSelected(false);
+        }
+        if (hardToggle != null) {
+            hardToggle.setDisable(false);
+        }
+        stopTrafficWatch();
+        if (jamToggle != null) {
+            jamToggle.setSelected(false);
         }
 
         long t0 = System.nanoTime();
@@ -679,13 +692,18 @@ public class MainController {
         clearRace();
         clearTheory();
         UUID mazeId = current.metadata().id();
+        boolean harden = hardToggle != null && hardToggle.isSelected();
         try {
             LivingMazeService.LiveStatus status = work.startLive(mazeId,
-                    current.metadata().seed());
+                    current.metadata().seed(), harden);
+            if (hardToggle != null) {
+                hardToggle.setDisable(true);
+            }
             watchLive(mazeId, status.tickMillis());
             statusLabel.setText(String.format(
-                    "Maze is alive — %d ticks, one every %.1fs.",
-                    status.ticksRequested(), status.tickMillis() / 1000.0));
+                    "Maze is alive — %d ticks, one every %.1fs%s.",
+                    status.ticksRequested(), status.tickMillis() / 1000.0,
+                    harden ? " (eroding and hardening)" : " (erosion only)"));
         } catch (LivingMazeService.CapacityExceededException full) {
             liveToggle.setSelected(false);
             statusLabel.setText(full.getMessage());
@@ -722,6 +740,9 @@ public class MainController {
             if (liveToggle != null) {
                 liveToggle.setSelected(false);
             }
+            if (hardToggle != null) {
+                hardToggle.setDisable(false);
+            }
             statusLabel.setText(status.settled()
                     ? "Maze settled after " + status.ticksDone() + " ticks."
                     : "Living run ended.");
@@ -735,6 +756,99 @@ public class MainController {
         if (liveWatch != null) {
             liveWatch.stop();
             liveWatch = null;
+        }
+    }
+
+    /**
+     * Wired from the well's Jam checkbox. Same Simulate traffic as the web —
+     * walked cells bloom cost, then cool off.
+     */
+    @FXML
+    public void onJam() {
+        if (jamToggle == null) {
+            return;
+        }
+        if (!jamToggle.isSelected()) {
+            if (current != null && work.trafficStatus(current.metadata().id()).active()) {
+                jamToggle.setSelected(true);
+            } else {
+                stopTrafficWatch();
+            }
+            return;
+        }
+        if (current == null) {
+            jamToggle.setSelected(false);
+            statusLabel.setText("Generate a maze first, then check Jam.");
+            return;
+        }
+        stopPathReveal();
+        currentPath = null;
+        solvedPath = null;
+        currentExpansions = null;
+        solvedExpansions = null;
+        clearRace();
+        clearLens();
+        UUID mazeId = current.metadata().id();
+        try {
+            TrafficService.TrafficStatus status = work.enableTraffic(mazeId);
+            MazeGenerationService.Cached snap = work.snapshot(mazeId);
+            if (snap != null) {
+                current = snap;
+            }
+            watchTraffic(mazeId, status.tickMillis());
+            statusLabel.setText(String.format(
+                    "Traffic tracking on — walk and watch costs bloom, one pulse every %.1fs.",
+                    status.tickMillis() / 1000.0));
+        } catch (TrafficService.CapacityExceededException full) {
+            jamToggle.setSelected(false);
+            statusLabel.setText(full.getMessage());
+        }
+        redraw();
+        canvas.requestFocus();
+    }
+
+    private void watchTraffic(UUID mazeId, long tickMillis) {
+        stopTrafficWatch();
+        long interval = Math.max(50L, tickMillis);
+        trafficWatch = new Timeline(new KeyFrame(javafx.util.Duration.millis(interval),
+                e -> pulseTraffic(mazeId)));
+        trafficWatch.setCycleCount(Timeline.INDEFINITE);
+        trafficWatch.play();
+    }
+
+    private void pulseTraffic(UUID mazeId) {
+        if (current == null || !mazeId.equals(current.metadata().id())) {
+            stopTrafficWatch();
+            return;
+        }
+        MazeGenerationService.Cached snap = work.snapshot(mazeId);
+        TrafficService.TrafficStatus status = work.trafficStatus(mazeId);
+        if (snap != null) {
+            current = snap;
+            redraw();
+        }
+        if (!status.active()) {
+            stopTrafficWatch();
+            if (jamToggle != null) {
+                jamToggle.setSelected(false);
+            }
+            int n = current.hotspots() == null ? 0 : current.hotspots().size();
+            statusLabel.setText(n == 0
+                    ? "Traffic fully decayed — tracking retired."
+                    : "Traffic tracking ended.");
+            return;
+        }
+        int congested = current.hotspots() == null ? 0 : current.hotspots().size();
+        statusLabel.setText(congested == 0
+                ? "Traffic — walk to bloom costs."
+                : "Traffic — " + congested
+                        + (congested == 1 ? " congested cell." : " congested cells."));
+    }
+
+    private void stopTrafficWatch() {
+        if (trafficWatch != null) {
+            trafficWatch.stop();
+            trafficWatch = null;
         }
     }
 
@@ -1174,7 +1288,9 @@ public class MainController {
         if (!step.moved()) {
             return;
         }
+        Point from = playerPos;
         playerPos = step.position();
+        work.occupy(current.metadata().id(), from, playerPos);
         rememberWalk(playerPos);
         if (currentHunt != null) {
             noteHunt(playerPos, step.reachedGoal());

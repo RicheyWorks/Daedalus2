@@ -3,6 +3,8 @@
 package com.daedalus.desktop.ui;
 
 import com.daedalus.engine.MazeGrid;
+import com.daedalus.engine.Sealer;
+import com.daedalus.engine.WeightedMazeGrid;
 import com.daedalus.engine.generators.DungeonGenerator;
 import com.daedalus.engine.generators.GeneratorRegistry;
 import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
@@ -17,8 +19,11 @@ import com.daedalus.solver.solvers.AStarSolver;
 import com.daedalus.solver.solvers.BfsSolver;
 import com.daedalus.solver.solvers.IDAStarSolver;
 import com.daedalus.solver.solvers.SolverRegistry;
+import com.daedalus.server.service.GameSessionService;
 import com.daedalus.server.service.HeuristicLensService;
+import com.daedalus.server.service.LeaderboardService;
 import com.daedalus.server.service.LivingMazeService;
+import com.daedalus.server.service.TrafficService;
 import com.daedalus.theory.MazeMetrics;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.jupiter.api.BeforeEach;
@@ -255,6 +260,60 @@ class DesktopWorkTest {
                 .as("living ticks must not move the coins")
                 .isEqualTo(hunt.waypoints());
         assertThat(retargeted.feasible()).isTrue();
+    }
+
+    @Test
+    void hardeningABraidClosesExtraPassages() throws Exception {
+        LivingMazeService living = new LivingMazeService(generation, event -> { },
+                new SimpleMeterRegistry(), Duration.ofMillis(25), DesktopWork.LIVE_TICKS,
+                2, 0.0, 0.0);
+        work = new DesktopWork(generation, solving, living);
+        var cached = work.generateJob("recursive-backtracker", 11, 11, 7L, null, 0.8).call();
+        int extras = Sealer.closablePassages(cached.grid()).size();
+        assertThat(extras)
+                .as("0.8 braid must leave loops the sealer can close")
+                .isGreaterThan(0);
+        var status = work.startLive(cached.metadata().id(), 7L, true);
+        assertThat(status.active()).isTrue();
+        awaitUntil(() -> {
+            var snap = work.snapshot(cached.metadata().id());
+            return snap != null && Sealer.closablePassages(snap.grid()).size() < extras;
+        }, "hardening to close a loop");
+        assertThat(Sealer.closablePassages(work.snapshot(cached.metadata().id()).grid()))
+                .as("ADR-008 closes extras; reachability cannot shrink")
+                .hasSizeLessThan(extras);
+    }
+
+    @Test
+    void walkingUnderTrafficBloomsAHotspotOnTheCachedMaze() throws Exception {
+        TrafficService traffic = new TrafficService(generation,
+                new GameSessionService(event -> { }, new LeaderboardService(null, false)),
+                event -> { }, 4.0, 0.80, 200.0, Duration.ofMillis(25), 2, 8,
+                new SimpleMeterRegistry());
+        work = new DesktopWork(generation, solving, fallbackLiving(), traffic);
+        var cached = work.generateJob("recursive-backtracker", 11, 11, 7L).call();
+        var id = cached.metadata().id();
+        Point start = cached.grid().start();
+        assertThat(work.enableTraffic(id).active()).isTrue();
+        assertThat(work.snapshot(id).grid()).isInstanceOf(WeightedMazeGrid.class);
+        work.occupy(id, start, start);
+        awaitUntil(() -> {
+            var snap = work.snapshot(id);
+            return snap != null && snap.grid().weightOf(start.row(), start.col()) > 1.0;
+        }, "occupancy to bloom as cost");
+        var after = work.snapshot(id);
+        assertThat(after.grid().weightOf(start.row(), start.col())).isGreaterThan(1.0);
+        assertThat(after.hotspots())
+                .as("congestion IS a hotspot — the coral wash already paints it")
+                .anySatisfy(h -> {
+                    assertThat(h.row()).isEqualTo(start.row());
+                    assertThat(h.col()).isEqualTo(start.col());
+                });
+    }
+
+    private LivingMazeService fallbackLiving() {
+        return new LivingMazeService(generation, event -> { }, new SimpleMeterRegistry(),
+                Duration.ofSeconds(2), DesktopWork.LIVE_TICKS, 2, 0.08, 0.0);
     }
 
     @Test

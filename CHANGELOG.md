@@ -10,6 +10,16 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- **Desktop Hard seals extra passages.** The web already hardens on the
+  first Bring to life; desktop Live only opened walls, so a braid never
+  tightened. Same 0.08 seal, checkbox on the well next to Live, so a
+  looped corridor can close without clipping Generate.
+
+- **Desktop Jam blooms walked cells.** The web already tracks occupancy
+  as rising cost; desktop stayed a still after you walked. Same coral
+  wash, same decay, checkbox on the well next to Live so the 960px
+  toolbar still generates.
+
 - **Desktop Reset races the ghost.** The web already replays the maze's
   best finish as a pale racer; desktop had only the live walker. Same
   `#e6edf3` wash at 0.28, same 0.3·cell disc, same score formula, so

@@ -6,10 +6,12 @@ import com.daedalus.api.dto.Hotspot;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.GameSession;
 import com.daedalus.model.Point;
+import com.daedalus.plugin.events.AgentSteppedEvent;
 import com.daedalus.server.service.HeuristicLensService;
 import com.daedalus.server.service.LivingMazeService;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
+import com.daedalus.server.service.TrafficService;
 import com.daedalus.solver.SolverBudgetExceededException;
 import com.daedalus.engine.Braider;
 import com.daedalus.theory.LongestPath;
@@ -65,23 +67,36 @@ public class DesktopWork {
     /** Same tick count the web {@code /live?ticks=30} button asks for. */
     public static final int LIVE_TICKS = 30;
 
+    /** Same seal factor the web Harden checkbox sends as {@code seal=0.08}. */
+    public static final double HARDEN_SEAL = 0.08;
+
+    /** Occupancy source for desktop walks — traffic treats agents and players the same. */
+    private static final UUID WALKER = UUID.fromString("aaaaaaaa-bbbb-cccc-dddd-000000000001");
+
     private final MazeGenerationService generation;
     private final MazeSolverService solving;
     private final HeuristicLensService lens;
     private final LivingMazeService living;
+    private final TrafficService traffic;
     private final ConcurrentHashMap<UUID, GhostTape> ghosts = new ConcurrentHashMap<>();
 
     public DesktopWork(MazeGenerationService generation, MazeSolverService solving) {
-        this(generation, solving, fallbackLiving(generation));
+        this(generation, solving, fallbackLiving(generation), null);
+    }
+
+    public DesktopWork(MazeGenerationService generation, MazeSolverService solving,
+                       LivingMazeService living) {
+        this(generation, solving, living, null);
     }
 
     @Autowired
     public DesktopWork(MazeGenerationService generation, MazeSolverService solving,
-                       LivingMazeService living) {
+                       LivingMazeService living, TrafficService traffic) {
         this.generation = generation;
         this.solving = solving;
         this.lens = new HeuristicLensService(generation, 16_384);
         this.living = living;
+        this.traffic = traffic;
     }
 
     private static LivingMazeService fallbackLiving(MazeGenerationService generation) {
@@ -91,7 +106,15 @@ public class DesktopWork {
 
     /** Bring the cached maze to life — same Braider ticks as the web Bring to life button. */
     public LivingMazeService.LiveStatus startLive(UUID mazeId, long seed) {
-        return living.start(mazeId, LIVE_TICKS, seed);
+        return startLive(mazeId, seed, false);
+    }
+
+    /**
+     * {@code harden} is ADR-008: close extra passages each tick so a braid
+     * can tighten, not only open. Same 0.08 the web sends on first Live.
+     */
+    public LivingMazeService.LiveStatus startLive(UUID mazeId, long seed, boolean harden) {
+        return living.start(mazeId, LIVE_TICKS, seed, harden ? HARDEN_SEAL : 0.0);
     }
 
     public LivingMazeService.LiveStatus liveStatus(UUID mazeId) {
@@ -101,6 +124,23 @@ public class DesktopWork {
     /** Latest swapped snapshot — living ticks replace the cache in place. */
     public MazeGenerationService.Cached snapshot(UUID mazeId) {
         return generation.find(mazeId);
+    }
+
+    /** Same occupancy intake as a fog agent step — the well has no session seat. */
+    public void occupy(UUID mazeId, Point from, Point to) {
+        if (traffic == null || mazeId == null || to == null) {
+            return;
+        }
+        traffic.onAgentStepped(new AgentSteppedEvent(this, mazeId, WALKER,
+                from == null ? to : from, to));
+    }
+
+    public TrafficService.TrafficStatus enableTraffic(UUID mazeId) {
+        return traffic.enable(mazeId);
+    }
+
+    public TrafficService.TrafficStatus trafficStatus(UUID mazeId) {
+        return traffic.status(mazeId);
     }
 
     /**

@@ -199,6 +199,12 @@
                 <CheckBox fx:id="liveToggle" text="Live" onAction="#onLive">
                     <tooltip><Tooltip text="Bring the maze to life — same erosion ticks as the web"/></tooltip>
                 </CheckBox>
+                <CheckBox fx:id="hardToggle" text="Hard">
+                    <tooltip><Tooltip text="Harden — close extra passages each Live tick (ADR-008)"/></tooltip>
+                </CheckBox>
+                <CheckBox fx:id="jamToggle" text="Jam" onAction="#onJam">
+                    <tooltip><Tooltip text="Simulate traffic — walked cells bloom cost, then cool off"/></tooltip>
+                </CheckBox>
                 <Button fx:id="pngButton" text="PNG" onAction="#onExportPng">
                     <tooltip><Tooltip text="Save the dungeon as a PNG"/></tooltip>
                 </Button>
