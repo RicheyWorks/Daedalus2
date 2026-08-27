@@ -61,6 +61,7 @@ class WebUiSmokeTest {
                 .contains("Bahnschrift")
                 .contains("radial-gradient(80% 70% at 50% 45%")
                 .contains("rgba(184, 133, 56")
+                .contains("0 0 18px rgba(62, 224, 143")
                 .contains("backdrop-filter")
                 .contains("floorWarm")
                 .contains("wallWarm")
