@@ -10,7 +10,8 @@ public final class ExploreInput {
 
     public static final double DEADZONE = 0.18;
     public static final double LOOK_SENS = 0.0022;
-    public static final double STICK_LOOK = 1.8;
+    /** Radians per second at full right-stick. Must be scaled by frame dt. */
+    public static final double STICK_LOOK = 2.4;
     public static final double SNAP_TURN = Math.toRadians(45);
 
     public record Intent(double forward, double strafe, double yawDelta, double pitchDelta) {
@@ -41,25 +42,26 @@ public final class ExploreInput {
     }
 
     /**
-     * Left stick is move ({@code +ly} walks the look direction), right stick
-     * is look. GLFW reports stick-up as −1; the host passes that axis raw so
-     * Xbox/Windows does not walk opposite the camera.
+     * Raw GLFW Xbox axes: stick-up is −1, stick-right is +1. Left stick
+     * walks the look; right stick looks at {@link #STICK_LOOK} rad/s × dt.
      */
     public static Intent gamepad(double lx, double ly, double rx, double ry,
                                 boolean snapLeft, boolean snapRight) {
-        double mx = dead(lx);
-        double my = dead(ly);
-        double lookX = dead(rx);
-        double lookY = dead(ry);
-        Intent move = normalizeMove(my, mx);
-        double yaw = -lookX * STICK_LOOK;
+        return gamepad(lx, ly, rx, ry, snapLeft, snapRight, 0);
+    }
+
+    public static Intent gamepad(double lx, double ly, double rx, double ry,
+                                boolean snapLeft, boolean snapRight, double dt) {
+        double scale = STICK_LOOK * Math.max(0, dt);
+        Intent move = normalizeMove(-dead(ly), dead(lx));
+        double yaw = dead(rx) * scale;
         if (snapLeft) {
             yaw -= SNAP_TURN;
         }
         if (snapRight) {
             yaw += SNAP_TURN;
         }
-        return move.plus(new Intent(0, 0, yaw, -lookY * STICK_LOOK));
+        return move.plus(new Intent(0, 0, yaw, -dead(ry) * scale));
     }
 
     public static double dead(double axis) {

@@ -12,7 +12,7 @@ class ExploreInputTest {
     @Test
     void wasdAndAStickAreTheSameIntent() {
         ExploreInput.Intent keys = ExploreInput.keyboard(true, false, false, false);
-        ExploreInput.Intent stick = ExploreInput.gamepad(0, 1, 0, 0, false, false);
+        ExploreInput.Intent stick = ExploreInput.gamepad(0, -1, 0, 0, false, false);
         assertThat(keys.forward()).isCloseTo(1.0, within(0.001));
         assertThat(stick.forward()).isCloseTo(1.0, within(0.001));
         assertThat(keys.strafe()).isZero();
@@ -24,6 +24,16 @@ class ExploreInputTest {
         assertThat(ExploreInput.dead(0.05)).isZero();
         assertThat(ExploreInput.dead(-0.05)).isZero();
         assertThat(ExploreInput.dead(1.0)).isCloseTo(1.0, within(0.001));
+    }
+
+    @Test
+    void glfwStickUpWalksLookAndLookScalesWithDt() {
+        ExploreInput.Intent back = ExploreInput.gamepad(0, 1, 0, 0, false, false);
+        assertThat(back.forward()).isCloseTo(-1.0, within(0.001));
+        ExploreInput.Intent look = ExploreInput.gamepad(0, 0, 1, -1, false, false, 0.05);
+        assertThat(look.yawDelta()).isCloseTo(ExploreInput.STICK_LOOK * 0.05, within(0.0001));
+        assertThat(look.pitchDelta()).isCloseTo(ExploreInput.STICK_LOOK * 0.05, within(0.0001));
+        assertThat(ExploreInput.gamepad(0, 0, 1, 0, false, false).yawDelta()).isZero();
     }
 
     @Test

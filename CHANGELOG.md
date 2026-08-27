@@ -25,7 +25,8 @@ under the `_migration/` portfolios.
 - **First-person explore paints a Doom-like corridor.** Fog now keeps
   the enclosing wall posts, walkable tiles have a ceiling, and faces
   keep a tan/brown palette so looking up is stone, not a void. Xbox
-  forward is the raw GLFW stick so a push walks the look direction.
+  uses raw GLFW axes (stick-up is −1) so forward walks the look, and
+  right-stick look is rad/s × dt so a nudge is not a 360.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
   re-solves quietly on each living / traffic tick; desktop dropped the

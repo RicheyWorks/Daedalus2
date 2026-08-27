@@ -145,6 +145,7 @@ public final class ExploreHost {
         boolean jamDown = false;
         boolean harden = false;
         GLFWGamepadState pad = GLFWGamepadState.create();
+        boolean[] snapHeld = {false, false};
         int frames = 0;
         while (!glfwWindowShouldClose(window)) {
             glfwPollEvents();
@@ -155,7 +156,8 @@ public final class ExploreHost {
             double dt = Math.min(0.05, (now - last) / 1_000_000_000.0);
             last = now;
 
-            ExploreInput.Intent intent = keys(window).plus(mouse(window, cursor)).plus(pad(pad));
+            ExploreInput.Intent intent = keys(window).plus(mouse(window, cursor))
+                    .plus(pad(pad, dt, snapHeld));
             XrFrame frame = xr.map(XrRuntime::beginFrame).orElse(XrFrame.none());
             intent = intent.plus(new ExploreInput.Intent(0, 0, frame.yawDelta(), frame.pitchDelta()));
             if (frame.snapLeft() || frame.snapRight()) {
@@ -215,17 +217,23 @@ public final class ExploreHost {
         }
     }
 
-    private static ExploreInput.Intent pad(GLFWGamepadState state) {
+    private static ExploreInput.Intent pad(GLFWGamepadState state, double dt,
+                                         boolean[] snapHeld) {
         if (!glfwJoystickIsGamepad(GLFW_JOYSTICK_1) || !glfwGetGamepadState(GLFW_JOYSTICK_1, state)) {
             return ExploreInput.Intent.none();
         }
+        boolean left = state.buttons(GLFW_GAMEPAD_BUTTON_DPAD_LEFT) == GLFW_PRESS;
+        boolean right = state.buttons(GLFW_GAMEPAD_BUTTON_DPAD_RIGHT) == GLFW_PRESS;
+        boolean snapLeft = left && !snapHeld[0];
+        boolean snapRight = right && !snapHeld[1];
+        snapHeld[0] = left;
+        snapHeld[1] = right;
         return ExploreInput.gamepad(
                 state.axes(GLFW_GAMEPAD_AXIS_LEFT_X),
                 state.axes(GLFW_GAMEPAD_AXIS_LEFT_Y),
                 state.axes(GLFW_GAMEPAD_AXIS_RIGHT_X),
-                -state.axes(GLFW_GAMEPAD_AXIS_RIGHT_Y),
-                state.buttons(GLFW_GAMEPAD_BUTTON_DPAD_LEFT) == GLFW_PRESS,
-                state.buttons(GLFW_GAMEPAD_BUTTON_DPAD_RIGHT) == GLFW_PRESS);
+                state.axes(GLFW_GAMEPAD_AXIS_RIGHT_Y),
+                snapLeft, snapRight, dt);
     }
 
     private static void draw(long window, ExploreWorld world) {
