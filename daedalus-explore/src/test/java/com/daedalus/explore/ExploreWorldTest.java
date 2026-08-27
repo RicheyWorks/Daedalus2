@@ -94,6 +94,9 @@ class ExploreWorldTest {
         assertThat(ExploreLauncher.windowRequested(new String[] {})).isFalse();
         assertThat(ExploreLauncher.windowRequested(new String[] {ExploreLauncher.WINDOW_FLAG}))
                 .isTrue();
+        assertThat(ExploreLauncher.flag(new String[] {ExploreLauncher.SMOKE_FLAG},
+                ExploreLauncher.SMOKE_FLAG)).isTrue();
+        assertThat(ExploreLauncher.flag(null, ExploreLauncher.SMOKE_FLAG)).isFalse();
     }
 
     private static int openCount(MazeGrid grid) {

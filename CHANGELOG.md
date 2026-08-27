@@ -15,7 +15,10 @@ under the `_migration/` portfolios.
   Xbox pads share one intent, fog keeps unseen stone dark, living ticks
   rebuild the mesh, and a story JSON names entrance / vaults / boss for
   ai-dungeon-master. VR is an OpenXR plugin JAR, not a native on
-  `mvn verify`. Launch a window with `DAEDALUS_EXPLORE=1`.
+  `mvn verify`. `mvn -pl daedalus-explore -am package` writes
+  `target/daedalus-explore-*.jar` plus `target/dist/lib`;
+  `daedalus-explore/run-explore.ps1` opens the window. `--smoke` draws
+  three frames and exits so a deploy can be proven without a hang.
 
 ### Changed
 

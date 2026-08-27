@@ -144,6 +144,14 @@ mvn -pl daedalus-explore -am exec:java
 DAEDALUS_EXPLORE=1 mvn -pl daedalus-explore -am exec:java
 ```
 
+The packaged product (window by default):
+
+```bash
+mvn -pl daedalus-explore -am package
+powershell -File daedalus-explore/run-explore.ps1
+powershell -File daedalus-explore/run-explore.ps1 --smoke
+```
+
 Default server port is `8080` (override with `SERVER_PORT`). Default profile
 is `dev` (in-memory leaderboard, no Redis required); flip to `prod` when
 deploying:

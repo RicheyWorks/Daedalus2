@@ -98,6 +98,10 @@ public final class ExploreHost {
     }
 
     public static void run(ExploreWorld world) {
+        run(world, false);
+    }
+
+    public static void run(ExploreWorld world, boolean smoke) {
         GLFWErrorCallback.createPrint(System.err).set();
         if (!glfwInit()) {
             throw new IllegalStateException("Unable to initialize GLFW");
@@ -139,6 +143,7 @@ public final class ExploreHost {
         boolean jamDown = false;
         boolean harden = false;
         GLFWGamepadState pad = GLFWGamepadState.create();
+        int frames = 0;
         while (!glfwWindowShouldClose(window)) {
             glfwPollEvents();
             if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -172,6 +177,9 @@ public final class ExploreHost {
             draw(window, world);
             xr.ifPresent(runtime -> runtime.endFrame(frame));
             glfwSwapBuffers(window);
+            if (smoke && ++frames >= 3) {
+                break;
+            }
         }
         xr.ifPresent(XrRuntime::stop);
         glfwDestroyWindow(window);
