@@ -198,6 +198,12 @@ class ExplorePaintTest {
     void aimSitsAboveTheStatusStrip() {
         assertThat(ExplorePaint.aimY()).isGreaterThan(0f);
         assertThat(ExplorePaint.aimY()).isEqualTo(ExplorePaint.STATUS_H * 0.5f);
+        assertThat(ExplorePaint.STATUS_GOLD_R).isEqualTo(0.72f);
+        assertThat(ExplorePaint.STATUS_GOLD_G).isEqualTo(0.52f);
+        assertThat(ExplorePaint.STATUS_GOLD_B).isEqualTo(0.22f);
+        assertThat(ExplorePaint.STATUS_GOLD_H)
+                .as("gold lip sits inside the under-brown band")
+                .isLessThan(ExplorePaint.STATUS_GOLD_UNDER_H);
     }
 
     @Test

@@ -66,6 +66,8 @@ under the `_migration/` portfolios.
   Fog walls near the lamp warm toward torch-brown with the floors so
   revealed stone is one light, not cold ink beside warm slate. The empty
   well wordmark wears the same mint/gold glow as the start-gate brand.
+  Explore's status strip wears the same gold lip as the automap so HUD
+  chrome matches the earned map.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

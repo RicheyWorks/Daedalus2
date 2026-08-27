@@ -23,6 +23,16 @@ public final class ExplorePaint {
     public static final int GLYPH_H = 7;
     /** Ortho strip under the crosshair — Doom status height in NDC. */
     public static final float STATUS_H = 0.28f;
+    /** Gold lip — same ink as the automap frame. */
+    public static final float STATUS_GOLD_R = 0.72f;
+    public static final float STATUS_GOLD_G = 0.52f;
+    public static final float STATUS_GOLD_B = 0.22f;
+    public static final float STATUS_GOLD_H = 0.014f;
+    /** Dark under the gold lip — same brown as the automap inset. */
+    public static final float STATUS_GOLD_UNDER_R = 0.16f;
+    public static final float STATUS_GOLD_UNDER_G = 0.11f;
+    public static final float STATUS_GOLD_UNDER_B = 0.08f;
+    public static final float STATUS_GOLD_UNDER_H = 0.022f;
     public static final double TORCH_REACH = 11.0;
 
     public enum MapKind {
