@@ -70,7 +70,8 @@ under the `_migration/` portfolios.
   chrome matches the earned map. Web header and desktop toolbar/status
   wear gold lips and a soft mint brand glow so the shell matches the well.
   Explore's crosshair wears a soft gold underglow under the bright arms so
-  aim reads as chrome, not a hairline.
+  aim reads as chrome, not a hairline. Desktop All tips each compared route
+  with the same soft halo as race and solve so agreement ends are places.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

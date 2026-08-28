@@ -1845,6 +1845,17 @@ public class MainController {
                 }
             }
             g.setGlobalAlpha(1);
+            for (DesktopPaint.CompareLane lane : currentCompare.lanes()) {
+                if (lane.path() == null || lane.path().isEmpty()) {
+                    continue;
+                }
+                Point tip = DesktopPaint.walkHead(lane.path());
+                Color ink = Color.web(lane.color());
+                paintRing(g, DesktopPaint.pathHeadHalo(layout, tip),
+                        ink.deriveColor(0, 1, 1, 0.38));
+                paintDisc(g, DesktopPaint.disc(layout, tip, DesktopPaint.COMPARE_HEAD_RADIUS),
+                        ink);
+            }
         }
         if (!playerWalk.isEmpty() && theme != null) {
             g.setGlobalAlpha(0.32);

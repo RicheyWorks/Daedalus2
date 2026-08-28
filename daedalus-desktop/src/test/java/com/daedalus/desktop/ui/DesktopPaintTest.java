@@ -196,6 +196,11 @@ class DesktopPaintTest {
                 .containsExactly("floor", "wall", "start", "fog");
         assertThat(DesktopPaint.COMPARE_ALPHA).isEqualTo(0.22);
         assertThat(DesktopPaint.COMPARE[0]).isEqualTo("#8fb8ff");
+        assertThat(DesktopPaint.COMPARE_HEAD_RADIUS)
+                .as("compare tips stay smaller than race heads")
+                .isLessThan(0.36);
+        assertThat(DesktopPaint.walkHead(List.of(new Point(0, 0), new Point(1, 2))))
+                .isEqualTo(new Point(1, 2));
     }
 
     @Test

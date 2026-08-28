@@ -127,6 +127,8 @@ public final class DesktopPaint {
             "#8fb8ff", "#f0b429", "#e5484d", "#4cc38a", "#c084fc", "#9ecbff"
     };
     public static final double COMPARE_ALPHA = 0.22;
+    /** Tip disc on each finished route — smaller than race so washes stay readable. */
+    public static final double COMPARE_HEAD_RADIUS = 0.28;
     /** Min-cut passage — same purple as {@code draw.js} chokepoints. */
     public static final String CHOKE = "#c084fc";
     /** Dead-end speck — same ice as {@code draw.js}. */
