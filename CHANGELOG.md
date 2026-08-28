@@ -73,7 +73,9 @@ under the `_migration/` portfolios.
   aim reads as chrome, not a hairline. Desktop All tips each compared route
   with the same soft halo as race and solve so agreement ends are places.
   Explore's automap rings you-are-here with a soft gold halo so the earned
-  map names your place, not a single pixel.
+  map names your place, not a single pixel. The board panel wears a soft
+  gold rim, and a pinned compare row gets a gold inset so the table matches
+  the well chrome.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

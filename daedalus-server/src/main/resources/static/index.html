@@ -155,7 +155,9 @@
               letter-spacing: .14em; color: var(--dim); font-weight: 600; }
   .rail { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
   .board-panel { display: flex; flex-direction: column; min-height: calc(100vh - 88px);
-                 position: sticky; top: 60px; padding: 12px; }
+                 position: sticky; top: 60px; padding: 12px;
+                 border-color: rgba(184, 133, 56, 0.42);
+                 box-shadow: 0 0 0 1px rgba(16, 11, 8, 0.85); }
   #stage { flex: 1 1 auto; min-height: 420px; display: flex; align-items: center;
            justify-content: center; background:
              radial-gradient(80% 70% at 50% 45%, #121821 0%, var(--void) 72%);
@@ -220,7 +222,9 @@
                    border-bottom: 1px solid var(--line); padding: 2px 8px; }
   #compareBox td { padding: 2px 8px; border-bottom: 1px solid var(--line); }
   #compareBox tr.solver-row { cursor: pointer; }
-  #compareBox tr.solver-row:hover, #compareBox tr.pinned { background: #1a222b; }
+  #compareBox tr.solver-row:hover { background: #1a222b; }
+  #compareBox tr.pinned { background: #1a222b;
+                          box-shadow: inset 3px 0 0 rgba(184, 133, 56, 0.85); }
   #compareBox .best { color: var(--accent); font-weight: 700; }
   #compareBox .gave-up { color: var(--warn); }
   #log div { border-bottom: 1px solid var(--line); padding: 2px 0; }
