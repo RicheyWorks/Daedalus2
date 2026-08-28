@@ -201,6 +201,18 @@ public final class ExplorePaint {
         return STATUS_H * 0.5f;
     }
 
+    /** Bright gold core — same ink as status caption glyphs. */
+    public static final float AIM_BRIGHT_R = 0.94f;
+    public static final float AIM_BRIGHT_G = 0.78f;
+    public static final float AIM_BRIGHT_B = 0.32f;
+    /** Dim underglow so the cross reads as chrome, not a hairline. */
+    public static final float AIM_SOFT_R = 0.45f;
+    public static final float AIM_SOFT_G = 0.32f;
+    public static final float AIM_SOFT_B = 0.10f;
+    public static final float AIM_ARM = 0.03f;
+    public static final float AIM_SOFT_ARM = 0.048f;
+    public static final float AIM_SOFT_THICK = 0.012f;
+
     public static void keyTint(int slot, int marks, int mood, float[] rgb) {
         if (rgb == null || rgb.length < 3) {
             return;

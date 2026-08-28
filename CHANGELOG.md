@@ -69,6 +69,8 @@ under the `_migration/` portfolios.
   Explore's status strip wears the same gold lip as the automap so HUD
   chrome matches the earned map. Web header and desktop toolbar/status
   wear gold lips and a soft mint brand glow so the shell matches the well.
+  Explore's crosshair wears a soft gold underglow under the bright arms so
+  aim reads as chrome, not a hairline.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

@@ -204,6 +204,10 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.STATUS_GOLD_H)
                 .as("gold lip sits inside the under-brown band")
                 .isLessThan(ExplorePaint.STATUS_GOLD_UNDER_H);
+        assertThat(ExplorePaint.AIM_SOFT_ARM)
+                .as("soft underglow is wider than the bright arm")
+                .isGreaterThan(ExplorePaint.AIM_ARM);
+        assertThat(ExplorePaint.AIM_BRIGHT_R).isGreaterThan(ExplorePaint.AIM_SOFT_R);
     }
 
     @Test
