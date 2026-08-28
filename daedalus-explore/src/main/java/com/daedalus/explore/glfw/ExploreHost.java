@@ -527,7 +527,17 @@ public final class ExploreHost {
         }
         float cell = 0.022f;
         float gap = 0.008f;
+        float pad = cell * ExplorePaint.CAPTION_SOFT_PAD;
+        paintCaptionPass(text, x0, y0, cell, gap, pad,
+                ExplorePaint.CAPTION_SOFT_R, ExplorePaint.CAPTION_SOFT_G, ExplorePaint.CAPTION_SOFT_B);
+        paintCaptionPass(text, x0, y0, cell, gap, 0,
+                ExplorePaint.AIM_BRIGHT_R, ExplorePaint.AIM_BRIGHT_G, ExplorePaint.AIM_BRIGHT_B);
+    }
+
+    private static void paintCaptionPass(String text, float x0, float y0, float cell, float gap,
+                                         float pad, float r, float g, float b) {
         float x = x0;
+        glColor3f(r, g, b);
         glBegin(GL_QUADS);
         for (int i = 0; i < text.length(); i++) {
             char ch = text.charAt(i);
@@ -542,11 +552,10 @@ public final class ExploreHost {
                     }
                     float px = x + gx * cell;
                     float py = y0 + (ExplorePaint.GLYPH_H - 1 - gy) * cell;
-                    glColor3f(0.94f, 0.78f, 0.32f);
-                    glVertex2f(px, py);
-                    glVertex2f(px + cell, py);
-                    glVertex2f(px + cell, py + cell);
-                    glVertex2f(px, py + cell);
+                    glVertex2f(px - pad, py - pad);
+                    glVertex2f(px + cell + pad, py - pad);
+                    glVertex2f(px + cell + pad, py + cell + pad);
+                    glVertex2f(px - pad, py + cell + pad);
                 }
             }
             x += (ExplorePaint.GLYPH_W + 1) * cell + gap;

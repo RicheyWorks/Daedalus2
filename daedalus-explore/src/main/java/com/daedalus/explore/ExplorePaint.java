@@ -213,6 +213,11 @@ public final class ExplorePaint {
     public static final float AIM_BRIGHT_R = 0.94f;
     public static final float AIM_BRIGHT_G = 0.78f;
     public static final float AIM_BRIGHT_B = 0.32f;
+    /** Caption glyph underglow — readable chrome on the dark strip. */
+    public static final float CAPTION_SOFT_R = 0.42f;
+    public static final float CAPTION_SOFT_G = 0.30f;
+    public static final float CAPTION_SOFT_B = 0.10f;
+    public static final float CAPTION_SOFT_PAD = 0.35f;
     /** Dim underglow so the cross reads as chrome, not a hairline. */
     public static final float AIM_SOFT_R = 0.45f;
     public static final float AIM_SOFT_G = 0.32f;
