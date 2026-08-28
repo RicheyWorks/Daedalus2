@@ -122,6 +122,10 @@ class ExplorePaintTest {
         assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.HERE)).isTrue();
         assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.WALL)).isTrue();
         assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.MARK)).isTrue();
+        assertThat(ExplorePaint.MAP_HERE_HALO)
+                .as("HERE wears a soft pad wider than the cell")
+                .isGreaterThan(0.5f);
+        assertThat(ExplorePaint.MAP_HERE_R).isGreaterThan(ExplorePaint.MAP_HERE_SOFT_R);
     }
 
     @Test

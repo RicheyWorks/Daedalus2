@@ -574,6 +574,9 @@ public final class ExploreHost {
         double sy = (top - bot) / ExplorePaint.MAP;
         glBegin(GL_QUADS);
         for (ExplorePaint.MapDot dot : dots) {
+            if (dot.kind() == ExplorePaint.MapKind.HERE) {
+                continue;
+            }
             mapColor(dot.kind());
             double x0 = left + dot.x() * sx;
             double y0 = bot + dot.y() * sy;
@@ -583,12 +586,27 @@ public final class ExploreHost {
             glVertex2f((float) x0, (float) (y0 + sy));
         }
         glEnd();
+        for (ExplorePaint.MapDot dot : dots) {
+            if (dot.kind() != ExplorePaint.MapKind.HERE) {
+                continue;
+            }
+            double x0 = left + dot.x() * sx;
+            double y0 = bot + dot.y() * sy;
+            double padX = sx * ExplorePaint.MAP_HERE_HALO;
+            double padY = sy * ExplorePaint.MAP_HERE_HALO;
+            glColor3f(ExplorePaint.MAP_HERE_SOFT_R, ExplorePaint.MAP_HERE_SOFT_G,
+                    ExplorePaint.MAP_HERE_SOFT_B);
+            fill(x0 - padX, y0 - padY, x0 + sx + padX, y0 + sy + padY);
+            glColor3f(ExplorePaint.MAP_HERE_R, ExplorePaint.MAP_HERE_G, ExplorePaint.MAP_HERE_B);
+            fill(x0, y0, x0 + sx, y0 + sy);
+        }
     }
 
     private static void mapColor(ExplorePaint.MapKind kind) {
         switch (kind) {
             case WALL -> glColor3f(0.62f, 0.38f, 0.20f);
-            case HERE -> glColor3f(0.95f, 0.86f, 0.28f);
+            case HERE -> glColor3f(ExplorePaint.MAP_HERE_R, ExplorePaint.MAP_HERE_G,
+                    ExplorePaint.MAP_HERE_B);
             case MARK -> glColor3f(0.78f, 0.22f, 0.16f);
             default -> glColor3f(0.28f, 0.20f, 0.12f);
         }
