@@ -5,6 +5,10 @@
       {
         "command": "node .cursor/hooks/stay-on-task.mjs",
         "timeout": 5
+      },
+      {
+        "command": "node .cursor/hooks/viewing-continue.mjs",
+        "timeout": 5
       }
     ],
     "postToolUseFailure": [
@@ -24,6 +28,11 @@
         "command": "node .cursor/hooks/stay-on-task.mjs",
         "timeout": 5,
         "loop_limit": 3
+      },
+      {
+        "command": "node .cursor/hooks/viewing-continue.mjs",
+        "timeout": 5,
+        "loop_limit": 40
       }
     ]
   }
