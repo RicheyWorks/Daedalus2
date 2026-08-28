@@ -124,8 +124,9 @@
 }
 .exports .button:hover {
     -fx-background-color: #1a222b;
-    -fx-border-color: #7eb6ff;
+    -fx-border-color: rgba(184, 133, 56, 0.85);
     -fx-text-fill: #e8eef4;
+    -fx-effect: dropshadow(one-pass-box, rgba(184, 133, 56, 0.22), 10, 0.4, 0, 0);
 }
 
 .legend {

@@ -47,6 +47,7 @@ class ThemeManagerTest {
             String css = new String(in.readAllBytes());
             assertThat(css).contains("rgba(184, 133, 56, 0.45)");
             assertThat(css).contains("dropshadow(one-pass-box, rgba(62, 224, 143, 0.28)");
+            assertThat(css).contains("dropshadow(one-pass-box, rgba(184, 133, 56, 0.22)");
             assertThat(css).contains(".status-bar");
         }
     }
