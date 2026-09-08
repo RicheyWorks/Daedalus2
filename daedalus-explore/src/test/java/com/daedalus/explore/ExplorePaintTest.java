@@ -105,6 +105,14 @@ class ExplorePaintTest {
         ExplorePaint.tint(nsWall(0, 1.4, -3), true, ahead, 0, 0, 0);
         ExplorePaint.tint(nsWall(0, 1.4, 3), true, behind, 0, 0, 0);
         assertThat(ahead[0]).isGreaterThan(behind[0]);
+        float[] early = new float[3];
+        float[] late = new float[3];
+        ExplorePaint.tint(nsWall(0, 1.4, -3), true, early, 0, 0, 0, 0.05);
+        ExplorePaint.tint(nsWall(0, 1.4, -3), true, late, 0, 0, 0, 0.18);
+        assertThat(early[0]).isNotEqualTo(late[0]);
+        assertThat(ExplorePaint.torchBreath(0.1))
+                .isGreaterThan(ExplorePaint.TORCH_BREATH_BASE);
+        assertThat(ExplorePaint.TORCH_BREATH_SPAN).isLessThan(0.2f);
     }
 
     @Test

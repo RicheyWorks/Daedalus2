@@ -334,9 +334,10 @@ public final class ExploreHost {
         glEnable(GL_FOG);
         float[] rgb = new float[3];
         float[] uv = new float[2];
-        faces(world, ExploreMesh.Face.WALL, wallTex, rgb, uv);
-        faces(world, ExploreMesh.Face.FLOOR, floorTex, rgb, uv);
-        faces(world, ExploreMesh.Face.CEILING, ceilTex, rgb, uv);
+        double seconds = System.nanoTime() / 1_000_000_000.0;
+        faces(world, ExploreMesh.Face.WALL, wallTex, rgb, uv, seconds);
+        faces(world, ExploreMesh.Face.FLOOR, floorTex, rgb, uv, seconds);
+        faces(world, ExploreMesh.Face.CEILING, ceilTex, rgb, uv, seconds);
         glBindTexture(GL_TEXTURE_2D, 0);
         glDisable(GL_TEXTURE_2D);
         glBegin(GL_TRIANGLES);
@@ -390,7 +391,7 @@ public final class ExploreHost {
     }
 
     private static void faces(ExploreWorld world, ExploreMesh.Face face, int tex,
-                              float[] rgb, float[] uv) {
+                              float[] rgb, float[] uv, double seconds) {
         glBindTexture(GL_TEXTURE_2D, tex);
         glBegin(GL_TRIANGLES);
         for (ExploreMesh.Triangle tri : world.mesh().triangles()) {
@@ -399,7 +400,7 @@ public final class ExploreHost {
             }
             ExploreBody body = world.body();
             ExplorePaint.tint(tri, world.fog().tileVisible(tri.tr(), tri.tc()), rgb,
-                    body.x(), body.z(), body.yaw());
+                    body.x(), body.z(), body.yaw(), seconds);
             glColor3f(rgb[0], rgb[1], rgb[2]);
             ExplorePaint.uv(tri, tri.x1(), tri.y1(), tri.z1(), uv);
             glTexCoord2f(uv[0], uv[1]);

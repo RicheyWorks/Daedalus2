@@ -103,6 +103,8 @@ under the `_migration/` portfolios.
   so overlay chrome matches the well even before hover.
   Web legend ghost and waypoint keys wear soft rims, and desktop toolbar
   separators are soft gold so the shell stays chrome end to end.
+  Explore corridor lamp flickers with the hand flame so revealed stone
+  breathes as fire, not a static wash.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

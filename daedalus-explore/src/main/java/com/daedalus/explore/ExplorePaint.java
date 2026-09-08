@@ -87,6 +87,11 @@ public final class ExplorePaint {
 
     public static void tint(ExploreMesh.Triangle tri, boolean visible, float[] rgb,
                             double eyeX, double eyeZ, double yaw) {
+        tint(tri, visible, rgb, eyeX, eyeZ, yaw, 0);
+    }
+
+    public static void tint(ExploreMesh.Triangle tri, boolean visible, float[] rgb,
+                            double eyeX, double eyeZ, double yaw, double seconds) {
         if (rgb == null || rgb.length < 3 || tri == null || tri.face() == null) {
             return;
         }
@@ -105,7 +110,7 @@ public final class ExplorePaint {
             default -> set(rgb, SKY_R, SKY_G, SKY_B);
         }
         if (!Double.isNaN(eyeX)) {
-            torch(tri, eyeX, eyeZ, yaw, rgb);
+            torch(tri, eyeX, eyeZ, yaw, rgb, seconds);
         }
     }
 
@@ -326,6 +331,14 @@ public final class ExplorePaint {
         double a = Math.sin(seconds * 19.0);
         double b = Math.sin(seconds * 31.7 + 1.1);
         return (float) (0.82 + 0.18 * (0.55 + 0.45 * a + 0.22 * b));
+    }
+
+    /** World lamp rides the same flicker as the hand flame — soft, not strobe. */
+    public static final float TORCH_BREATH_BASE = 0.92f;
+    public static final float TORCH_BREATH_SPAN = 0.08f;
+
+    public static float torchBreath(double seconds) {
+        return TORCH_BREATH_BASE + TORCH_BREATH_SPAN * flameFlicker(seconds);
     }
 
     public static boolean glyphDot(char raw, int x, int y) {
@@ -601,7 +614,7 @@ public final class ExplorePaint {
     }
 
     private static void torch(ExploreMesh.Triangle tri, double eyeX, double eyeZ,
-                             double yaw, float[] rgb) {
+                             double yaw, float[] rgb, double seconds) {
         double cx = (tri.x1() + tri.x2() + tri.x3()) / 3.0;
         double cz = (tri.z1() + tri.z2() + tri.z3()) / 3.0;
         double dx = cx - eyeX;
@@ -613,6 +626,7 @@ public final class ExplorePaint {
         }
         float lamp = (float) (0.40 + 0.60 * Math.max(0, facing)
                 * Math.max(0, 1.0 - dist / TORCH_REACH));
+        lamp *= torchBreath(seconds);
         rgb[0] = Math.min(1f, rgb[0] * lamp);
         rgb[1] = Math.min(1f, rgb[1] * lamp);
         rgb[2] = Math.min(1f, rgb[2] * lamp);
