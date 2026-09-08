@@ -211,7 +211,23 @@
     g.arc(x, y, geom.cell * (0.5 + 0.05 * wave), 0, 2 * Math.PI);
     g.stroke();
     g.globalAlpha = 1;
-    marker(g, geom, p, color, 0.3);
+    const radius = 0.3;
+    g.fillStyle = color;
+    g.globalAlpha = 0.22 + 0.10 * wave;
+    g.beginPath();
+    g.arc(x, y, geom.cell * (radius + 0.22 + 0.04 * wave), 0, 2 * Math.PI);
+    g.fill();
+    g.globalAlpha = 1;
+    g.beginPath();
+    g.arc(x, y, geom.cell * radius, 0, 2 * Math.PI);
+    g.fill();
+    g.strokeStyle = color;
+    g.globalAlpha = 0.65 + 0.15 * wave;
+    g.lineWidth = Math.max(1, geom.cell * 0.07);
+    g.beginPath();
+    g.arc(x, y, geom.cell * radius, 0, 2 * Math.PI);
+    g.stroke();
+    g.globalAlpha = 1;
   }
 
   function seenCell(fog, r, c) {

@@ -121,6 +121,8 @@ class WebUiSmokeTest {
                 .contains("0.72 + 0.28")
                 .contains("PATH_HEAD_BREATH_MS")
                 .contains("0.5 + 0.05")
+                .contains("0.22 + 0.10")
+                .contains("0.65 + 0.15")
                 .contains("SANCTUARY_BREATH_MS")
                 .contains("0.48 + 0.05")
                 .contains("HOTSPOT_BREATH_MS")
