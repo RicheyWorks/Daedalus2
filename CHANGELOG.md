@@ -212,6 +212,8 @@ under the `_migration/` portfolios.
   graph-paper stamps.
   Empty-well idle lattice walls lift softly against the void so the miniature
   maze silhouettes, not floating floors alone.
+  Explore corridor vignette softens the screen edge so the tunnel still feels
+  held, not a flat ortho box around the stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

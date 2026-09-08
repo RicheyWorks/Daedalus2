@@ -263,6 +263,13 @@ class ExplorePaintTest {
                 .isNotEqualTo(ExplorePaint.statusGoldH(0.8));
         assertThat(ExplorePaint.statusGoldUnderH(0.1))
                 .isNotEqualTo(ExplorePaint.statusGoldUnderH(0.8));
+        assertThat(ExplorePaint.VIGNETTE_INSET).isGreaterThan(0f);
+        assertThat(ExplorePaint.VIGNETTE_ALPHA).isGreaterThan(0f);
+        assertThat(ExplorePaint.VIGNETTE_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
+        assertThat(ExplorePaint.vignetteAlpha(0.1))
+                .isNotEqualTo(ExplorePaint.vignetteAlpha(0.8));
+        assertThat(ExplorePaint.vignetteAlpha(0.1))
+                .isGreaterThan(ExplorePaint.VIGNETTE_ALPHA * 0.85f);
         assertThat(ExplorePaint.AIM_SOFT_ARM)
                 .as("soft underglow is wider than the bright arm")
                 .isGreaterThan(ExplorePaint.AIM_ARM);

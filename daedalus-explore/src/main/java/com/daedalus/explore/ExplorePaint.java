@@ -86,6 +86,20 @@ public final class ExplorePaint {
     /** Status lip breath — same cadence as automap frame chrome. */
     public static final float STATUS_BREATH_MS = MAP_HERE_BREATH_MS;
 
+    /** Soft screen-edge shade — corridor tunnel, not a flat ortho box. */
+    public static final float VIGNETTE_INSET = 0.16f;
+    public static final float VIGNETTE_ALPHA = 0.26f;
+    public static final float VIGNETTE_R = 0.02f;
+    public static final float VIGNETTE_G = 0.015f;
+    public static final float VIGNETTE_B = 0.01f;
+    public static final float VIGNETTE_BREATH_MS = MAP_HERE_BREATH_MS;
+
+    public static float vignetteAlpha(double seconds) {
+        double t = ((seconds * 1000.0) % VIGNETTE_BREATH_MS) / VIGNETTE_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return VIGNETTE_ALPHA * (float) (0.88 + 0.24 * wave);
+    }
+
     public static float statusGoldH(double seconds) {
         double t = ((seconds * 1000.0) % STATUS_BREATH_MS) / STATUS_BREATH_MS;
         double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
