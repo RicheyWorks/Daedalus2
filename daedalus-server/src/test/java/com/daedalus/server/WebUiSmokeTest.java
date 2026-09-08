@@ -63,6 +63,7 @@ class WebUiSmokeTest {
                 .contains("rgba(184, 133, 56")
                 .contains("0 0 18px rgba(62, 224, 143")
                 .contains("board-panel")
+                .contains("0 0 0 1px rgba(16, 11, 8, 0.85)")
                 .contains("inset 3px 0 0 rgba(184, 133, 56")
                 .contains("0 0 12px rgba(184, 133, 56")
                 .contains("backdrop-filter")
