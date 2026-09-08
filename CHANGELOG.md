@@ -91,6 +91,8 @@ under the `_migration/` portfolios.
   is mint-to-gold only — no leftover ice blue next to the brand breath.
   Compare row hover gets a faint gold left lip like the pinned row so the
   table chrome stays held while you scan solvers.
+  Explore automap story marks wear a soft red pad like you-are-here so vault
+  and boss dots read as places on the earned map, not flat pixels.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

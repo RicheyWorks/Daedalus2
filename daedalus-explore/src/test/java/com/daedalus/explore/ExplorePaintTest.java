@@ -126,6 +126,10 @@ class ExplorePaintTest {
                 .as("HERE wears a soft pad wider than the cell")
                 .isGreaterThan(0.5f);
         assertThat(ExplorePaint.MAP_HERE_R).isGreaterThan(ExplorePaint.MAP_HERE_SOFT_R);
+        assertThat(ExplorePaint.MAP_MARK_HALO)
+                .as("story marks wear a soft pad like HERE")
+                .isGreaterThan(0.4f);
+        assertThat(ExplorePaint.MAP_MARK_R).isGreaterThan(ExplorePaint.MAP_MARK_SOFT_R);
     }
 
     @Test

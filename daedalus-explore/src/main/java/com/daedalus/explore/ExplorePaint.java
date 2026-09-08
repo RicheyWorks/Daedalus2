@@ -29,6 +29,14 @@ public final class ExplorePaint {
     public static final float MAP_HERE_R = 0.95f;
     public static final float MAP_HERE_G = 0.86f;
     public static final float MAP_HERE_B = 0.28f;
+    /** Soft pad under automap story marks — presence, not a flat red pixel. */
+    public static final float MAP_MARK_HALO = 0.55f;
+    public static final float MAP_MARK_SOFT_R = 0.45f;
+    public static final float MAP_MARK_SOFT_G = 0.12f;
+    public static final float MAP_MARK_SOFT_B = 0.08f;
+    public static final float MAP_MARK_R = 0.78f;
+    public static final float MAP_MARK_G = 0.22f;
+    public static final float MAP_MARK_B = 0.16f;
     /** Ortho strip under the crosshair — Doom status height in NDC. */
     public static final float STATUS_H = 0.28f;
     /** Gold lip — same ink as the automap frame. */
