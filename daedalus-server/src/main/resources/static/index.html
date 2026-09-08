@@ -225,9 +225,11 @@
                    border-bottom: 1px solid var(--line); padding: 2px 8px; }
   #compareBox td { padding: 2px 8px; border-bottom: 1px solid var(--line); }
   #compareBox tr.solver-row { cursor: pointer; }
-  #compareBox tr.solver-row:hover { background: #1a222b; }
+  #compareBox tr.solver-row:hover { background: #1a222b;
+                                   box-shadow: inset 3px 0 0 rgba(184, 133, 56, 0.55); }
   #compareBox tr.pinned { background: #1a222b;
                           box-shadow: inset 3px 0 0 rgba(184, 133, 56, 0.85); }
+  #compareBox tr.pinned:hover { box-shadow: inset 3px 0 0 rgba(184, 133, 56, 0.95); }
   #compareBox .best { color: var(--accent); font-weight: 700; }
   #compareBox .gave-up { color: var(--warn); }
   #log div { border-bottom: 1px solid var(--line); padding: 2px 0; }

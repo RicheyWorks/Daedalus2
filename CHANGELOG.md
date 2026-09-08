@@ -89,6 +89,8 @@ under the `_migration/` portfolios.
   gold lip so HUD loot and portrait match the status chrome.
   Gate host cards wear a soft gold rim, and the empty-well / lattice mid-glow
   is mint-to-gold only — no leftover ice blue next to the brand breath.
+  Compare row hover gets a faint gold left lip like the pinned row so the
+  table chrome stays held while you scan solvers.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

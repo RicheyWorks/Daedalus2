@@ -67,6 +67,7 @@ class WebUiSmokeTest {
                 .contains("board-panel")
                 .contains("0 0 0 1px rgba(16, 11, 8, 0.85)")
                 .contains("inset 3px 0 0 rgba(184, 133, 56")
+                .contains("inset 3px 0 0 rgba(184, 133, 56, 0.55)")
                 .contains("0 0 12px rgba(184, 133, 56")
                 .contains("outline: 2px solid rgba(184, 133, 56")
                 .contains("button.accent")
