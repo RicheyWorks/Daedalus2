@@ -732,6 +732,9 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.pathHeadHaloAlpha(1))
                 .isGreaterThan(DesktopPaint.pathHeadHaloAlpha(0));
         assertThat(DesktopPaint.PATH_HEAD_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
+        assertThat(DesktopPaint.HARDEST).isEqualTo("#f2c94c");
+        assertThat(DesktopPaint.HARDEST_ALPHA).isEqualTo(0.75);
+        assertThat(DesktopPaint.walkHead(List.of(new Point(0, 0), cell))).isEqualTo(cell);
         assertThat(DesktopPaint.endpointRing(null, cell)).isNull();
         assertThat(DesktopPaint.pathHeadHalo(layout, null)).isNull();
     }

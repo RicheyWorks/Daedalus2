@@ -143,6 +143,8 @@ under the `_migration/` portfolios.
   not flat admin slabs.
   Fog and session walkers breathe soft glow on the gate cadence so you still
   feel held at rest, not a stuck stamp.
+  Hardest-route tips wear the same breathing path-head halo as solve and race
+  so the gold ribbon ends as a place.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

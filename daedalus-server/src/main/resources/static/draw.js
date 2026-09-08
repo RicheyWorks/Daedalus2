@@ -535,6 +535,7 @@
     }
     if (scene.hardest && scene.hardest.path && scene.hardest.path.length) {
       paintWalk(g, geom, scene.hardest.path, "#f2c94c", 1, 0.75);
+      pathHead(g, geom, walkHead(scene.hardest.path, 1), "#f2c94c");
     }
     if (scene.tourPath && scene.tourPath.length) {
       paintWalk(g, geom, scene.tourPath, "#9ecbff", 1, 0.38);

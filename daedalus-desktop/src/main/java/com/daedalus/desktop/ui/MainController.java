@@ -1976,6 +1976,12 @@ public class MainController {
                         layout.w(tile.tileCol()), layout.h(tile.tileRow()));
             }
             g.setGlobalAlpha(1);
+            Point tip = DesktopPaint.walkHead(currentHardest.path());
+            double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
+            Color gold = Color.web(DesktopPaint.HARDEST);
+            paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
+                    gold.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
+            paintDisc(g, DesktopPaint.disc(layout, tip, 0.3), gold);
         }
 
         if (currentHunt != null && currentHunt.path() != null && !currentHunt.path().isEmpty()) {
