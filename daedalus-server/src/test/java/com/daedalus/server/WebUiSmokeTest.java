@@ -103,6 +103,7 @@ class WebUiSmokeTest {
                 .contains("PLAYER_BREATH_MS")
                 .contains("function walker")
                 .contains("walkHead(scene.hardest.path, 1)")
+                .contains("walkHead(scene.tourPath, 1)")
                 .contains("VICTORY_BREATH_MS")
                 .contains("0.85 + 0.08")
                 .contains("rgba(245, 193, 74, 0.05)")

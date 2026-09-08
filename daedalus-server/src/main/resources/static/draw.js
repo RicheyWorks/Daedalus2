@@ -539,6 +539,7 @@
     }
     if (scene.tourPath && scene.tourPath.length) {
       paintWalk(g, geom, scene.tourPath, "#9ecbff", 1, 0.38);
+      pathHead(g, geom, walkHead(scene.tourPath, 1), "#9ecbff");
     }
     if (scene.tour && scene.tour.waypoints) {
       const WAYPOINT_BREATH_MS = 2800;

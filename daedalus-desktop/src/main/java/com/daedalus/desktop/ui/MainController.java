@@ -1992,6 +1992,12 @@ public class MainController {
                         layout.w(tile.tileCol()), layout.h(tile.tileRow()));
             }
             g.setGlobalAlpha(1);
+            Point tip = DesktopPaint.walkHead(currentHunt.path());
+            double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
+            Color ice = Color.web(DesktopPaint.TOUR);
+            paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
+                    ice.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
+            paintDisc(g, DesktopPaint.disc(layout, tip, 0.3), ice);
         }
         if (currentHunt != null && currentHunt.waypoints() != null) {
             for (Point coin : currentHunt.waypoints()) {
