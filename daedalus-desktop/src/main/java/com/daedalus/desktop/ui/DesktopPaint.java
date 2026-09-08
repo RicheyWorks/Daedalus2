@@ -68,6 +68,12 @@ public final class DesktopPaint {
     public static final double EXPORT_RESERVE = 28;
     /** Same gold as the web victory ring ({@code --gold}). */
     public static final String VICTORY_GOLD = "#f0b429";
+    /** Soft glow under the victory stroke — same 0.85·cell pad as {@code draw.js}. */
+    public static final double VICTORY_GLOW_RADIUS = 0.85;
+    public static final double VICTORY_GLOW_ALPHA = 0.22;
+    /** Soft pad under uncollected hunt coins — same as {@code draw.js}. */
+    public static final double WAYPOINT_GLOW_PAD = 0.14;
+    public static final double WAYPOINT_GLOW_ALPHA = 0.22;
     /** ADR-006 unseen void — same tokens as {@code draw.js}. */
     public static final String FOG_UNSEEN = "#05070a";
     public static final String FOG_FLOOR_DIM = "#2a333c";
@@ -1095,6 +1101,11 @@ public final class DesktopPaint {
         double cx = layout.x(2 * goal.col() + 1) + layout.cellSize() / 2.0;
         double cy = layout.y(2 * goal.row() + 1) + layout.cellSize() / 2.0;
         return new Ring(cx, cy, layout.cellSize() * 0.7, Math.max(2.0, layout.wall()));
+    }
+
+    /** Soft gold wash under the victory stroke — same pad as {@code draw.js}. */
+    public static Marker victoryGlow(Layout layout, Point goal) {
+        return disc(layout, goal, VICTORY_GLOW_RADIUS);
     }
 
     /**

@@ -1911,13 +1911,9 @@ public class MainController {
         }
 
         if (currentSanctuaries != null && currentSanctuaries.placements() != null) {
-            g.setFill(Color.web(DesktopPaint.SANCTUARY));
             for (Point safe : currentSanctuaries.placements()) {
-                DesktopPaint.Marker disc = DesktopPaint.sanctuaryMarker(layout, safe);
-                if (disc == null) {
-                    continue;
-                }
-                g.fillOval(disc.x(), disc.y(), disc.size(), disc.size());
+                paintDisc(g, DesktopPaint.sanctuaryMarker(layout, safe),
+                        Color.web(DesktopPaint.SANCTUARY));
             }
             paintRing(g, DesktopPaint.worstServedRing(layout, currentSanctuaries.worstServed()),
                     Color.web(DesktopPaint.WORST_SERVED));
@@ -1962,8 +1958,7 @@ public class MainController {
         }
         paintGhostDisc(g, layout, DesktopPaint.ghostHead(ghostWalkNow()));
         if (reachedGoal) {
-            paintRing(g, DesktopPaint.victoryRing(layout, current.metadata().goal()),
-                    Color.web(DesktopPaint.VICTORY_GOLD));
+            paintVictory(g, layout, current.metadata().goal());
         }
         syncLegend();
     }
@@ -2066,8 +2061,7 @@ public class MainController {
             paintDisc(g, mark, theme.player());
         }
         if (reachedGoal) {
-            paintRing(g, DesktopPaint.victoryRing(layout, current.metadata().goal()),
-                    Color.web(DesktopPaint.VICTORY_GOLD));
+            paintVictory(g, layout, current.metadata().goal());
         }
     }
 
@@ -2181,6 +2175,16 @@ public class MainController {
         double cx = diamond.cx();
         double cy = diamond.cy();
         double r = diamond.radius();
+        if (!collected) {
+            // soft = cell*(0.3+0.14); core radius is cell*0.3
+            double soft = r * (0.3 + DesktopPaint.WAYPOINT_GLOW_PAD) / 0.3;
+            double[] softXs = {cx, cx + soft, cx, cx - soft};
+            double[] softYs = {cy - soft, cy, cy + soft, cy};
+            g.setGlobalAlpha(DesktopPaint.WAYPOINT_GLOW_ALPHA);
+            g.setFill(Color.web(DesktopPaint.WAYPOINT));
+            g.fillPolygon(softXs, softYs, 4);
+            g.setGlobalAlpha(1);
+        }
         double[] xs = {cx, cx + r, cx, cx - r};
         double[] ys = {cy - r, cy, cy + r, cy};
         if (collected) {
@@ -2191,6 +2195,18 @@ public class MainController {
             g.setFill(Color.web(DesktopPaint.WAYPOINT));
             g.fillPolygon(xs, ys, 4);
         }
+    }
+
+    private static void paintVictory(GraphicsContext g, DesktopPaint.Layout layout, Point goal) {
+        DesktopPaint.Marker glow = DesktopPaint.victoryGlow(layout, goal);
+        Color ink = Color.web(DesktopPaint.VICTORY_GOLD);
+        if (glow != null) {
+            g.setGlobalAlpha(DesktopPaint.VICTORY_GLOW_ALPHA);
+            g.setFill(ink);
+            g.fillOval(glow.x(), glow.y(), glow.size(), glow.size());
+            g.setGlobalAlpha(1);
+        }
+        paintRing(g, DesktopPaint.victoryRing(layout, goal), ink);
     }
 
     private static void paintGhostDisc(GraphicsContext g, DesktopPaint.Layout layout, Point cell) {

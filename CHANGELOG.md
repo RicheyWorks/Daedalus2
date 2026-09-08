@@ -82,6 +82,9 @@ under the `_migration/` portfolios.
   board so Generate / Lab / Compare read as chrome, not gray admin boxes.
   Focus rings, Solve, and the PNG download link wear gold instead of ice
   blue, and desktop focused inputs match — chrome accents, not admin ice.
+  Victory rings wash a soft gold pad, sanctuary discs wear the walker rim,
+  and uncollected hunt coins get a faint underglow so win / safe / loot
+  read as places, not flat stamps.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

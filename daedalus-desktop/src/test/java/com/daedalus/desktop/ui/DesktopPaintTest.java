@@ -559,7 +559,15 @@ class DesktopPaintTest {
                 .isEqualTo(layout.cellSize() * 0.7);
         assertThat(ring.radius() * 2).isGreaterThan(goal.size());
         assertThat(ring.width()).isEqualTo(Math.max(2.0, layout.wall()));
+        DesktopPaint.Marker glow = DesktopPaint.victoryGlow(layout, new Point(0, 0));
+        assertThat(glow).isNotNull();
+        assertThat(glow.size())
+                .as("web victory soft pad is 0.85·cell radius")
+                .isEqualTo(layout.cellSize() * DesktopPaint.VICTORY_GLOW_RADIUS * 2.0);
+        assertThat(DesktopPaint.VICTORY_GLOW_ALPHA).isEqualTo(0.22);
+        assertThat(DesktopPaint.WAYPOINT_GLOW_PAD).isEqualTo(0.14);
         assertThat(DesktopPaint.victoryRing(layout, null)).isNull();
+        assertThat(DesktopPaint.victoryGlow(layout, null)).isNull();
     }
 
     @Test

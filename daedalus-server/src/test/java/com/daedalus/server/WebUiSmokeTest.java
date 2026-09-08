@@ -75,6 +75,7 @@ class WebUiSmokeTest {
                 .contains("shadowBlur")
                 .contains("ghost:")
                 .contains("ghostDisc")
+                .contains("geom.cell * 0.85")
                 .contains("data-key=\"path\"").contains("data-key=\"floor\"")
                 .contains("data-key=\"fog\"")
                 .contains("Authorization").contains("text/plain").contains("id=\"ascii\"")

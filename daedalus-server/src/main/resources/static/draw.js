@@ -417,11 +417,7 @@
     }
     if (scene.sanctuaries) {
       scene.sanctuaries.placements.forEach(p => {
-        const [x, y] = cellCenter(geom, p);
-        g.fillStyle = "#4cc38a";
-        g.beginPath();
-        g.arc(x, y, geom.cell * 0.32, 0, 2 * Math.PI);
-        g.fill();
+        marker(g, geom, p, "#4cc38a", 0.32);
       });
       const w = scene.sanctuaries.worstServed;
       if (w) {
@@ -444,6 +440,16 @@
         const got = (scene.tourGot || []).some(p => p.row === w.row && p.col === w.col);
         const [x, y] = cellCenter(geom, w);
         const rad = geom.cell * 0.3;
+        if (!got) {
+          const soft = rad + geom.cell * 0.14;
+          g.fillStyle = "#f2c94c";
+          g.globalAlpha = 0.22;
+          g.beginPath();
+          g.moveTo(x, y - soft); g.lineTo(x + soft, y); g.lineTo(x, y + soft); g.lineTo(x - soft, y);
+          g.closePath();
+          g.fill();
+          g.globalAlpha = 1;
+        }
         g.beginPath();
         g.moveTo(x, y - rad); g.lineTo(x + rad, y); g.lineTo(x, y + rad); g.lineTo(x - rad, y);
         g.closePath();
@@ -500,6 +506,12 @@
     }
     if (scene.won && goal) {
       const [x, y] = cellCenter(geom, goal);
+      g.fillStyle = "#f0b429";
+      g.globalAlpha = 0.22;
+      g.beginPath();
+      g.arc(x, y, geom.cell * 0.85, 0, 2 * Math.PI);
+      g.fill();
+      g.globalAlpha = 1;
       g.strokeStyle = "#f0b429";
       g.lineWidth = Math.max(2, geom.wall);
       g.beginPath();
