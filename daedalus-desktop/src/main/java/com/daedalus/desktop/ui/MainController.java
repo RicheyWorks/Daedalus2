@@ -1917,8 +1917,24 @@ public class MainController {
                         choke.deriveColor(0, 1, 1, DesktopPaint.CHOKE_RING_ALPHA));
             }
             for (Point end : currentCuts.deadEnds()) {
-                paintDisc(g, DesktopPaint.deadEndMarker(layout, end),
-                        Color.web(DesktopPaint.DEAD_END));
+                Color ink = Color.web(DesktopPaint.DEAD_END);
+                DesktopPaint.Marker soft = DesktopPaint.deadEndHalo(layout, end);
+                if (soft != null) {
+                    g.setGlobalAlpha(DesktopPaint.DEAD_END_HALO_ALPHA);
+                    g.setFill(ink);
+                    g.fillOval(soft.x(), soft.y(), soft.size(), soft.size());
+                    g.setGlobalAlpha(1);
+                }
+                DesktopPaint.Marker core = DesktopPaint.deadEndMarker(layout, end);
+                if (core != null) {
+                    g.setGlobalAlpha(DesktopPaint.DEAD_END_CORE_ALPHA);
+                    g.setFill(ink);
+                    g.fillOval(core.x(), core.y(), core.size(), core.size());
+                    g.setGlobalAlpha(1);
+                    g.setStroke(ink.deriveColor(0, 1, 1, DesktopPaint.DEAD_END_RIM_ALPHA));
+                    g.setLineWidth(Math.max(1.0, core.size() * 0.07));
+                    g.strokeOval(core.x(), core.y(), core.size(), core.size());
+                }
             }
         }
 

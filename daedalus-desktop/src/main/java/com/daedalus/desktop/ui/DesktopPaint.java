@@ -184,6 +184,11 @@ public final class DesktopPaint {
     public static final String CHOKE = "#c084fc";
     /** Dead-end speck — same ice as {@code draw.js}. */
     public static final String DEAD_END = "#9ecbff";
+    public static final double DEAD_END_RADIUS = 0.14;
+    public static final double DEAD_END_HALO = 0.28;
+    public static final double DEAD_END_HALO_ALPHA = 0.22;
+    public static final double DEAD_END_CORE_ALPHA = 0.55;
+    public static final double DEAD_END_RIM_ALPHA = 0.65;
     /** Hardest simple route — same gold as {@code draw.js}. */
     public static final String HARDEST = "#f2c94c";
     public static final double HARDEST_ALPHA = 0.75;
@@ -865,7 +870,11 @@ public final class DesktopPaint {
     }
 
     public static Marker deadEndMarker(Layout layout, Point cell) {
-        return disc(layout, cell, 0.12);
+        return disc(layout, cell, DEAD_END_RADIUS);
+    }
+
+    public static Marker deadEndHalo(Layout layout, Point cell) {
+        return disc(layout, cell, DEAD_END_HALO);
     }
 
     /** k-center safe points — same mint discs and loneliest ring as {@code draw.js}. */

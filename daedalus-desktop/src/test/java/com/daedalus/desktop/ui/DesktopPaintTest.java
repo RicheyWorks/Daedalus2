@@ -222,8 +222,11 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.DEAD_END).isEqualTo("#9ecbff");
         DesktopPaint.Marker speck = DesktopPaint.deadEndMarker(layout, new Point(0, 0));
         assertThat(speck.size())
-                .as("web dead-end radius is 0.12·cell")
-                .isEqualTo(layout.cellSize() * 0.24);
+                .as("web dead-end core is 0.14·cell")
+                .isEqualTo(layout.cellSize() * DesktopPaint.DEAD_END_RADIUS * 2);
+        assertThat(DesktopPaint.deadEndHalo(layout, new Point(0, 0)).size())
+                .isGreaterThan(speck.size());
+        assertThat(DesktopPaint.DEAD_END_HALO).isGreaterThan(DesktopPaint.DEAD_END_RADIUS);
         assertThat(DesktopPaint.chokeTile(null)).isNull();
         assertThat(DesktopPaint.chokeHalo(layout, null)).isNull();
     }

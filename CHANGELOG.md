@@ -121,6 +121,8 @@ under the `_migration/` portfolios.
   still — atmosphere, not a pasted backdrop.
   Analysis chokepoints wear soft purple place rings instead of admin slabs
   so cuts read as passages on the board.
+  Analysis dead ends wear a soft ice pad and rim so cul-de-sacs read as
+  places, not flat dots.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
