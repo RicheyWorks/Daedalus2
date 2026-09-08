@@ -1686,11 +1686,12 @@ public class MainController {
         GraphicsContext g = canvas.getGraphicsContext2D();
         g.setTransform(store.scaleX(), 0, 0, store.scaleY(), 0, 0);
 
-        Color bg = fogOn()
-                ? Color.web(DesktopPaint.FOG_UNSEEN)
-                : (theme != null ? theme.wall() : Color.web("#0b0f14"));
-        g.setFill(bg);
-        g.fillRect(0, 0, w, h);
+        if (fogOn()) {
+            g.setFill(Color.web(DesktopPaint.FOG_UNSEEN));
+            g.fillRect(0, 0, w, h);
+        } else {
+            paintWellVoid(g, w, h);
+        }
 
         if (current == null) {
             g.setFill(theme != null ? theme.wall() : Color.web("#0b0f14"));
@@ -2083,6 +2084,17 @@ public class MainController {
         showLegendKey(legendWaypoint, keys.contains("waypoint"));
         showLegendKey(legendGhost, keys.contains("ghost"));
         showLegendKey(legendCompare, keys.contains("compare"));
+    }
+
+    /** Letterbox pocket — same soft radial as web {@code #stage}, not flat wall. */
+    private static void paintWellVoid(GraphicsContext g, double w, double h) {
+        var voidWash = new javafx.scene.paint.RadialGradient(
+                0, 0, w / 2.0, h * 0.45, Math.max(w, h) * 0.72, false,
+                javafx.scene.paint.CycleMethod.NO_CYCLE,
+                new javafx.scene.paint.Stop(0, Color.web(DesktopPaint.WELL_VOID_CENTER)),
+                new javafx.scene.paint.Stop(1, Color.web(DesktopPaint.WELL_VOID_EDGE)));
+        g.setFill(voidWash);
+        g.fillRect(0, 0, w, h);
     }
 
     private boolean fogOn() {

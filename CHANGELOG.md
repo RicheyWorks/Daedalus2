@@ -180,6 +180,8 @@ under the `_migration/` portfolios.
   corridors read as continuous fields, not graph-paper stamps.
   Desktop well gold rim breathes with the web stage so the board chrome still
   feels held, not a stuck frame.
+  Desktop letterbox paints the same soft well void as the web stage so a
+  letterboxed maze sits in a pocket, not infinite flat stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
