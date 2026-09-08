@@ -112,6 +112,15 @@ public final class ExplorePaint {
         return STATUS_GOLD_UNDER_H * (float) (0.88 + 0.24 * wave);
     }
     public static final double TORCH_REACH = 11.0;
+    /** Torch-brown mix — same tokens as 2D fog {@code floorWarm} / {@code wallWarm}. */
+    public static final float TORCH_FLOOR_WARM_R = 0x5c / 255f;
+    public static final float TORCH_FLOOR_WARM_G = 0x4a / 255f;
+    public static final float TORCH_FLOOR_WARM_B = 0x32 / 255f;
+    public static final float TORCH_WALL_WARM_R = 0x2a / 255f;
+    public static final float TORCH_WALL_WARM_G = 0x22 / 255f;
+    public static final float TORCH_WALL_WARM_B = 0x18 / 255f;
+    public static final float TORCH_FLOOR_WARM_WEIGHT = 0.28f;
+    public static final float TORCH_WALL_WARM_WEIGHT = 0.45f;
 
     public enum MapKind {
         FLOOR,
@@ -809,6 +818,18 @@ public final class ExplorePaint {
         float lamp = (float) (0.40 + 0.60 * Math.max(0, facing)
                 * Math.max(0, 1.0 - dist / TORCH_REACH));
         lamp *= torchBreath(seconds);
+        float weight = tri.face() == ExploreMesh.Face.WALL
+                ? TORCH_WALL_WARM_WEIGHT : TORCH_FLOOR_WARM_WEIGHT;
+        float warmR = tri.face() == ExploreMesh.Face.WALL
+                ? TORCH_WALL_WARM_R : TORCH_FLOOR_WARM_R;
+        float warmG = tri.face() == ExploreMesh.Face.WALL
+                ? TORCH_WALL_WARM_G : TORCH_FLOOR_WARM_G;
+        float warmB = tri.face() == ExploreMesh.Face.WALL
+                ? TORCH_WALL_WARM_B : TORCH_FLOOR_WARM_B;
+        float mix = Math.max(0f, Math.min(1f, lamp * weight));
+        rgb[0] = rgb[0] + (warmR - rgb[0]) * mix;
+        rgb[1] = rgb[1] + (warmG - rgb[1]) * mix;
+        rgb[2] = rgb[2] + (warmB - rgb[2]) * mix;
         rgb[0] = Math.min(1f, rgb[0] * lamp);
         rgb[1] = Math.min(1f, rgb[1] * lamp);
         rgb[2] = Math.min(1f, rgb[2] * lamp);

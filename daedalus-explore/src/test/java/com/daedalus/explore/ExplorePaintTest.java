@@ -123,6 +123,14 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.torchBreath(0.1))
                 .isGreaterThan(ExplorePaint.TORCH_BREATH_BASE);
         assertThat(ExplorePaint.TORCH_BREATH_SPAN).isLessThan(0.2f);
+        assertThat(ExplorePaint.TORCH_FLOOR_WARM_WEIGHT).isEqualTo(0.28f);
+        assertThat(ExplorePaint.TORCH_WALL_WARM_WEIGHT).isEqualTo(0.45f);
+        assertThat(ExplorePaint.TORCH_FLOOR_WARM_R).isEqualTo(0x5c / 255f);
+        assertThat(ExplorePaint.TORCH_WALL_WARM_R).isEqualTo(0x2a / 255f);
+        // Lit stone ahead is warmer in hue (higher R relative to B), not only brighter.
+        float aheadWarmth = ahead[0] / Math.max(1e-6f, ahead[2]);
+        float behindWarmth = behind[0] / Math.max(1e-6f, behind[2]);
+        assertThat(aheadWarmth).isGreaterThan(behindWarmth);
     }
 
     @Test
