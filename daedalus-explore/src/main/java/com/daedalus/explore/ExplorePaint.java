@@ -39,6 +39,15 @@ public final class ExplorePaint {
     }
     /** Soft pad under automap story marks — presence, not a flat red pixel. */
     public static final float MAP_MARK_HALO = 0.55f;
+    /** Story-mark pad breath — same cadence as HERE. */
+    public static final float MAP_MARK_BREATH_MS = MAP_HERE_BREATH_MS;
+
+    public static float mapMarkHalo(double seconds) {
+        double t = ((seconds * 1000.0) % MAP_MARK_BREATH_MS) / MAP_MARK_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return MAP_MARK_HALO * (float) (0.85 + 0.30 * wave);
+    }
+
     public static final float MAP_MARK_SOFT_R = 0.45f;
     public static final float MAP_MARK_SOFT_G = 0.12f;
     public static final float MAP_MARK_SOFT_B = 0.08f;

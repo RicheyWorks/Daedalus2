@@ -147,6 +147,9 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.MAP_MARK_HALO)
                 .as("story marks wear a soft pad like HERE")
                 .isGreaterThan(0.4f);
+        assertThat(ExplorePaint.mapMarkHalo(0.1))
+                .isNotEqualTo(ExplorePaint.mapMarkHalo(0.8));
+        assertThat(ExplorePaint.MAP_MARK_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
         assertThat(ExplorePaint.MAP_MARK_R).isGreaterThan(ExplorePaint.MAP_MARK_SOFT_R);
     }
 

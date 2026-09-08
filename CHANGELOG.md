@@ -135,6 +135,8 @@ under the `_migration/` portfolios.
   not a stuck stamp.
   Sanctuary place rings and the worst-served coral breath on the gate cadence so
   safe marks still feel held, not stuck stamps.
+  Explore automap story marks breathe with HERE so vault / boss pads feel like
+  presence on the earned map.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

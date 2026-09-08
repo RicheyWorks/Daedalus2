@@ -627,14 +627,15 @@ public final class ExploreHost {
             glVertex2f((float) x0, (float) (y0 + sy));
         }
         glEnd();
+        float markHalo = ExplorePaint.mapMarkHalo(seconds);
         for (ExplorePaint.MapDot dot : dots) {
             if (dot.kind() != ExplorePaint.MapKind.MARK) {
                 continue;
             }
             double x0 = left + dot.x() * sx;
             double y0 = bot + dot.y() * sy;
-            double padX = sx * ExplorePaint.MAP_MARK_HALO;
-            double padY = sy * ExplorePaint.MAP_MARK_HALO;
+            double padX = sx * markHalo;
+            double padY = sy * markHalo;
             glColor3f(ExplorePaint.MAP_MARK_SOFT_R, ExplorePaint.MAP_MARK_SOFT_G,
                     ExplorePaint.MAP_MARK_SOFT_B);
             fill(x0 - padX, y0 - padY, x0 + sx + padX, y0 + sy + padY);
