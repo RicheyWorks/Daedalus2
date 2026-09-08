@@ -2392,7 +2392,7 @@ public class MainController {
             return;
         }
         double wave = DesktopPaint.endpointBreathWave(System.nanoTime());
-        paintDisc(g, DesktopPaint.endpointMarker(layout, cell), color);
+        paintDisc(g, DesktopPaint.endpointMarker(layout, cell), color, wave);
         paintRing(g, DesktopPaint.endpointRing(layout, cell, wave),
                 color.deriveColor(0, 1, 1, DesktopPaint.endpointRingAlpha(wave)));
     }
@@ -2476,17 +2476,22 @@ public class MainController {
     }
 
     private static void paintDisc(GraphicsContext g, DesktopPaint.Marker mark, Color color) {
+        paintDisc(g, mark, color, 0);
+    }
+
+    private static void paintDisc(GraphicsContext g, DesktopPaint.Marker mark, Color color,
+                                  double wave) {
         if (mark == null || color == null) {
             return;
         }
-        Color glow = color.deriveColor(0, 1, 1, 0.22);
-        double pad = mark.size() * 0.32;
+        Color glow = color.deriveColor(0, 1, 1, DesktopPaint.endpointGlowAlpha(wave));
+        double pad = mark.size() * DesktopPaint.endpointGlowPadFraction(wave);
         g.setFill(glow);
         g.fillOval(mark.x() - pad / 2, mark.y() - pad / 2,
                 mark.size() + pad, mark.size() + pad);
         g.setFill(color);
         g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
-        g.setStroke(color.deriveColor(0, 1, 1, 0.65));
+        g.setStroke(color.deriveColor(0, 1, 1, DesktopPaint.endpointCoreRimAlpha(wave)));
         g.setLineWidth(Math.max(1.0, mark.size() * 0.07));
         g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
     }

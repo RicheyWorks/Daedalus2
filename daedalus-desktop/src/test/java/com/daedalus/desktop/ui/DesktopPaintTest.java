@@ -893,6 +893,12 @@ class DesktopPaintTest {
                 .isGreaterThan(place.radius());
         assertThat(DesktopPaint.endpointRingAlpha(1))
                 .isGreaterThan(DesktopPaint.endpointRingAlpha(0));
+        assertThat(DesktopPaint.endpointGlowAlpha(1))
+                .isGreaterThan(DesktopPaint.endpointGlowAlpha(0));
+        assertThat(DesktopPaint.endpointGlowPadFraction(1))
+                .isGreaterThan(DesktopPaint.endpointGlowPadFraction(0));
+        assertThat(DesktopPaint.endpointCoreRimAlpha(1))
+                .isGreaterThan(DesktopPaint.endpointCoreRimAlpha(0));
         assertThat(DesktopPaint.ENDPOINT_BREATH_MS).isEqualTo(DesktopPaint.EMPTY_BREATH_MS);
         assertThat(tip.radius()).isEqualTo(layout.cellSize() * 0.5);
         assertThat(DesktopPaint.pathHeadHalo(layout, cell, 1).radius())

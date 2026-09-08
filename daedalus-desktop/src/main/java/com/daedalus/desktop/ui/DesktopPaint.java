@@ -1585,6 +1585,19 @@ public final class DesktopPaint {
         return 0.32 + 0.18 * wave;
     }
 
+    /** Soft pad under start / goal — same band as web {@code marker} glow. */
+    public static double endpointGlowAlpha(double wave) {
+        return 0.16 + 0.12 * wave;
+    }
+
+    public static double endpointGlowPadFraction(double wave) {
+        return 0.32 + 0.08 * wave;
+    }
+
+    public static double endpointCoreRimAlpha(double wave) {
+        return 0.55 + 0.20 * wave;
+    }
+
     /** Living tip pulse — same cadence as victory / hunt loot. */
     public static final double PATH_HEAD_BREATH_MS = VICTORY_BREATH_MS;
 
