@@ -196,6 +196,24 @@ public final class DesktopPaint {
     public static final double PATH_ALPHA = 0.85;
     /** Same radius as {@code draw.js} session / fog player. */
     public static final double PLAYER_RADIUS = 0.42;
+    /** Walker glow breath — same gate cadence as ghost / endpoints. */
+    public static final double PLAYER_BREATH_MS = EMPTY_BREATH_MS;
+
+    public static double playerBreathWave(long nanos) {
+        return emptyBreathWave(nanos);
+    }
+
+    public static double playerGlowAlpha(double wave) {
+        return 0.16 + 0.12 * wave;
+    }
+
+    public static double playerGlowPadFraction(double wave) {
+        return 0.32 + 0.08 * wave;
+    }
+
+    public static double playerRimAlpha(double wave) {
+        return 0.55 + 0.20 * wave;
+    }
     /** Search wash — same alphas as {@code draw.js} expansions. */
     public static final double EXPANSION_ALPHA = 0.16;
     public static final double EXPANSION_FRONT_ALPHA = 0.45;

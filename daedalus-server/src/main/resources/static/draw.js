@@ -118,6 +118,33 @@
     g.globalAlpha = 1;
   }
 
+  /** Fog / session walker — soft glow breathes so you still feel held at rest. */
+  function walker(g, geom, p, color) {
+    if (!p) return;
+    const PLAYER_BREATH_MS = 4500;
+    const now = typeof performance !== "undefined" ? performance.now() : 0;
+    const t = (now % PLAYER_BREATH_MS) / PLAYER_BREATH_MS;
+    const wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
+    const radius = 0.42;
+    const [x, y] = cellCenter(geom, p);
+    g.fillStyle = color;
+    g.globalAlpha = 0.16 + 0.12 * wave;
+    g.beginPath();
+    g.arc(x, y, geom.cell * (radius + 0.22 + 0.04 * wave), 0, 2 * Math.PI);
+    g.fill();
+    g.globalAlpha = 1;
+    g.beginPath();
+    g.arc(x, y, geom.cell * radius, 0, 2 * Math.PI);
+    g.fill();
+    g.strokeStyle = color;
+    g.globalAlpha = 0.55 + 0.20 * wave;
+    g.lineWidth = Math.max(1, geom.cell * 0.07);
+    g.beginPath();
+    g.arc(x, y, geom.cell * radius, 0, 2 * Math.PI);
+    g.stroke();
+    g.globalAlpha = 1;
+  }
+
   /** Recorded racer — soft glow + rim like a walker, translucent core so it stays a ghost. */
   function ghostDisc(g, geom, p) {
     if (!p) return;
@@ -334,7 +361,7 @@
         endpoint(g, geom, start, COLORS.start);
       }
       if (scene.fog.goal) endpoint(g, geom, scene.fog.goal, COLORS.goal);
-      marker(g, geom, scene.fog.position, PLAYER_COLORS[0], 0.42);
+      walker(g, geom, scene.fog.position, PLAYER_COLORS[0]);
       return geom;
     }
 
@@ -579,7 +606,7 @@
     if (goal)  endpoint(g, geom, goal,  COLORS.goal);
     if (scene.session) {
       Object.entries(scene.session.positions).forEach(([name, p], i) => {
-        marker(g, geom, p, PLAYER_COLORS[i % PLAYER_COLORS.length], 0.42);
+        walker(g, geom, p, PLAYER_COLORS[i % PLAYER_COLORS.length]);
       });
     }
     if (scene.session && scene.ghost && scene.ghost.pos) {

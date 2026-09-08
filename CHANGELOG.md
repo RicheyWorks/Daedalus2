@@ -141,6 +141,8 @@ under the `_migration/` portfolios.
   entrance still feel held underfoot.
   Jam / hotspot coral breathes soft place pads so congestion reads as presence,
   not flat admin slabs.
+  Fog and session walkers breathe soft glow on the gate cadence so you still
+  feel held at rest, not a stuck stamp.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

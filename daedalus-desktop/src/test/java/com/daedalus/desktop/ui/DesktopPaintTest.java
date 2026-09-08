@@ -590,6 +590,13 @@ class DesktopPaintTest {
                 .as("web player radius is 0.42·cell, so the disc is 0.84·cell")
                 .isEqualTo(16.8);
         assertThat(DesktopPaint.PLAYER_RADIUS).isEqualTo(0.42);
+        assertThat(DesktopPaint.PLAYER_BREATH_MS).isEqualTo(DesktopPaint.EMPTY_BREATH_MS);
+        assertThat(DesktopPaint.playerGlowAlpha(1))
+                .isGreaterThan(DesktopPaint.playerGlowAlpha(0));
+        assertThat(DesktopPaint.playerGlowPadFraction(1))
+                .isGreaterThan(DesktopPaint.playerGlowPadFraction(0));
+        assertThat(DesktopPaint.playerRimAlpha(1))
+                .isGreaterThan(DesktopPaint.playerRimAlpha(0));
         assertThat(DesktopPaint.playerMarker(layout, null)).isNull();
     }
 

@@ -2002,7 +2002,7 @@ public class MainController {
         // ---- 4) player marker, then the web victory ring ----
         DesktopPaint.Marker mark = DesktopPaint.playerMarker(layout, playerPos);
         if (mark != null && theme != null) {
-            paintDisc(g, mark, theme.player());
+            paintWalker(g, mark, theme.player());
         }
         paintGhostDisc(g, layout, DesktopPaint.ghostHead(ghostWalkNow()));
         if (reachedGoal) {
@@ -2106,7 +2106,7 @@ public class MainController {
         }
         DesktopPaint.Marker mark = DesktopPaint.playerMarker(layout, fog.position());
         if (mark != null && theme != null) {
-            paintDisc(g, mark, theme.player());
+            paintWalker(g, mark, theme.player());
         }
         if (reachedGoal) {
             paintVictory(g, layout, current.metadata().goal());
@@ -2291,6 +2291,24 @@ public class MainController {
         paintDisc(g, DesktopPaint.endpointMarker(layout, cell), color);
         paintRing(g, DesktopPaint.endpointRing(layout, cell, wave),
                 color.deriveColor(0, 1, 1, DesktopPaint.endpointRingAlpha(wave)));
+    }
+
+    private static void paintWalker(GraphicsContext g, DesktopPaint.Marker mark, Color color) {
+        if (mark == null || color == null) {
+            return;
+        }
+        double wave = DesktopPaint.playerBreathWave(System.nanoTime());
+        double pad = mark.size() * DesktopPaint.playerGlowPadFraction(wave);
+        g.setGlobalAlpha(DesktopPaint.playerGlowAlpha(wave));
+        g.setFill(color);
+        g.fillOval(mark.x() - pad / 2, mark.y() - pad / 2,
+                mark.size() + pad, mark.size() + pad);
+        g.setGlobalAlpha(1);
+        g.setFill(color);
+        g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
+        g.setStroke(color.deriveColor(0, 1, 1, DesktopPaint.playerRimAlpha(wave)));
+        g.setLineWidth(Math.max(1.0, mark.size() * 0.07));
+        g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
     }
 
     private static void paintDisc(GraphicsContext g, DesktopPaint.Marker mark, Color color) {
