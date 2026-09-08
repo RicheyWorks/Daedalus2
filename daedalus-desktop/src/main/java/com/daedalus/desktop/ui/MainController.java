@@ -1915,35 +1915,36 @@ public class MainController {
         }
 
         if (currentCuts != null) {
+            double cutsWave = DesktopPaint.cutsBreathWave(System.nanoTime());
             Color choke = Color.web(DesktopPaint.CHOKE);
             for (var passage : currentCuts.chokepoints()) {
-                DesktopPaint.Ring halo = DesktopPaint.chokeHalo(layout, passage);
+                DesktopPaint.Ring halo = DesktopPaint.chokeHalo(layout, passage, cutsWave);
                 if (halo != null) {
-                    g.setGlobalAlpha(DesktopPaint.CHOKE_HALO_ALPHA);
+                    g.setGlobalAlpha(DesktopPaint.chokeHaloAlpha(cutsWave));
                     g.setFill(choke);
                     g.fillOval(halo.cx() - halo.radius(), halo.cy() - halo.radius(),
                             halo.radius() * 2, halo.radius() * 2);
                     g.setGlobalAlpha(1);
                 }
                 paintRing(g, DesktopPaint.chokeRing(layout, passage),
-                        choke.deriveColor(0, 1, 1, DesktopPaint.CHOKE_RING_ALPHA));
+                        choke.deriveColor(0, 1, 1, DesktopPaint.chokeRingAlpha(cutsWave)));
             }
             for (Point end : currentCuts.deadEnds()) {
                 Color ink = Color.web(DesktopPaint.DEAD_END);
-                DesktopPaint.Marker soft = DesktopPaint.deadEndHalo(layout, end);
+                DesktopPaint.Marker soft = DesktopPaint.deadEndHalo(layout, end, cutsWave);
                 if (soft != null) {
-                    g.setGlobalAlpha(DesktopPaint.DEAD_END_HALO_ALPHA);
+                    g.setGlobalAlpha(DesktopPaint.deadEndHaloAlpha(cutsWave));
                     g.setFill(ink);
                     g.fillOval(soft.x(), soft.y(), soft.size(), soft.size());
                     g.setGlobalAlpha(1);
                 }
                 DesktopPaint.Marker core = DesktopPaint.deadEndMarker(layout, end);
                 if (core != null) {
-                    g.setGlobalAlpha(DesktopPaint.DEAD_END_CORE_ALPHA);
+                    g.setGlobalAlpha(DesktopPaint.deadEndCoreAlpha(cutsWave));
                     g.setFill(ink);
                     g.fillOval(core.x(), core.y(), core.size(), core.size());
                     g.setGlobalAlpha(1);
-                    g.setStroke(ink.deriveColor(0, 1, 1, DesktopPaint.DEAD_END_RIM_ALPHA));
+                    g.setStroke(ink.deriveColor(0, 1, 1, DesktopPaint.deadEndRimAlpha(cutsWave)));
                     g.setLineWidth(Math.max(1.0, core.size() * 0.07));
                     g.strokeOval(core.x(), core.y(), core.size(), core.size());
                 }

@@ -149,6 +149,8 @@ under the `_migration/` portfolios.
   a place beside the loot pads.
   Empty-well idle start and goal wear the same breathing place rings as the live
   maze so the miniature mark still feels held.
+  Analysis chokepoints and dead ends breathe on the gate cadence so cuts and
+  cul-de-sacs still feel like presence, not stuck stamps.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

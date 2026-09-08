@@ -464,19 +464,23 @@
       pathHead(g, geom, walkHead(scene.path, scene.pathProgress), COLORS.path);
     }
     if (scene.analysis) {
+      const CUTS_BREATH_MS = 4500;
+      const cutsNow = typeof performance !== "undefined" ? performance.now() : 0;
+      const cutsT = (cutsNow % CUTS_BREATH_MS) / CUTS_BREATH_MS;
+      const cutsWave = 0.5 - 0.5 * Math.cos(cutsT * Math.PI * 2);
       (scene.analysis.deadEnds || []).forEach(p => {
         const [x, y] = cellCenter(geom, p);
         g.fillStyle = "#9ecbff";
-        g.globalAlpha = 0.22;
+        g.globalAlpha = 0.16 + 0.12 * cutsWave;
         g.beginPath();
-        g.arc(x, y, geom.cell * 0.28, 0, 2 * Math.PI);
+        g.arc(x, y, geom.cell * (0.28 + 0.04 * cutsWave), 0, 2 * Math.PI);
         g.fill();
-        g.globalAlpha = 0.55;
+        g.globalAlpha = 0.55 + 0.10 * cutsWave;
         g.beginPath();
         g.arc(x, y, geom.cell * 0.14, 0, 2 * Math.PI);
         g.fill();
         g.strokeStyle = "#9ecbff";
-        g.globalAlpha = 0.65;
+        g.globalAlpha = 0.65 + 0.15 * cutsWave;
         g.lineWidth = Math.max(1, geom.cell * 0.06);
         g.beginPath();
         g.arc(x, y, geom.cell * 0.14, 0, 2 * Math.PI);
@@ -490,13 +494,13 @@
         const core = Math.max(geom.cell, geom.offX[tc + 1] - geom.offX[tc],
             geom.offY[tr + 1] - geom.offY[tr]) * 0.55;
         g.fillStyle = "#c084fc";
-        g.globalAlpha = 0.22;
+        g.globalAlpha = 0.16 + 0.12 * cutsWave;
         g.beginPath();
-        g.arc(cx, cy, core + geom.cell * 0.18, 0, 2 * Math.PI);
+        g.arc(cx, cy, core + geom.cell * (0.18 + 0.05 * cutsWave), 0, 2 * Math.PI);
         g.fill();
         g.globalAlpha = 1;
         g.strokeStyle = "#c084fc";
-        g.globalAlpha = 0.72;
+        g.globalAlpha = 0.72 + 0.18 * cutsWave;
         g.lineWidth = Math.max(1.5, geom.cell * 0.1);
         g.beginPath();
         g.arc(cx, cy, core, 0, 2 * Math.PI);

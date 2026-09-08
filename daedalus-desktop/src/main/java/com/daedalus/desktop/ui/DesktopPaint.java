@@ -941,8 +941,46 @@ public final class DesktopPaint {
     public static final double CHOKE_HALO_PAD = 0.18;
     public static final double CHOKE_HALO_ALPHA = 0.22;
     public static final double CHOKE_RING_ALPHA = 0.72;
+    /** Same 4.5s cadence as empty / gate / sanctuary place breath. */
+    public static final double CUTS_BREATH_MS = EMPTY_BREATH_MS;
+
+    public static double cutsBreathWave(long nanos) {
+        return emptyBreathWave(nanos);
+    }
+
+    public static double chokeHaloPad(double wave) {
+        return CHOKE_HALO_PAD + 0.05 * wave;
+    }
+
+    public static double chokeHaloAlpha(double wave) {
+        return 0.16 + 0.12 * wave;
+    }
+
+    public static double chokeRingAlpha(double wave) {
+        return CHOKE_RING_ALPHA + 0.18 * wave;
+    }
+
+    public static double deadEndHaloRadius(double wave) {
+        return DEAD_END_HALO + 0.04 * wave;
+    }
+
+    public static double deadEndHaloAlpha(double wave) {
+        return 0.16 + 0.12 * wave;
+    }
+
+    public static double deadEndCoreAlpha(double wave) {
+        return DEAD_END_CORE_ALPHA + 0.10 * wave;
+    }
+
+    public static double deadEndRimAlpha(double wave) {
+        return DEAD_END_RIM_ALPHA + 0.15 * wave;
+    }
 
     public static Ring chokeHalo(Layout layout, MazeFlow.Passage passage) {
+        return chokeHalo(layout, passage, 0);
+    }
+
+    public static Ring chokeHalo(Layout layout, MazeFlow.Passage passage, double wave) {
         ChokeMark mark = chokeMark(layout, passage);
         if (layout == null || mark == null) {
             return null;
@@ -950,7 +988,7 @@ public final class DesktopPaint {
         double cx = mark.x() + mark.w() / 2.0;
         double cy = mark.y() + mark.h() / 2.0;
         double core = Math.max(mark.w(), mark.h()) * CHOKE_CORE;
-        return new Ring(cx, cy, core + layout.cellSize() * CHOKE_HALO_PAD,
+        return new Ring(cx, cy, core + layout.cellSize() * chokeHaloPad(wave),
                 Math.max(1.5, layout.cellSize() * 0.1));
     }
 
@@ -970,7 +1008,11 @@ public final class DesktopPaint {
     }
 
     public static Marker deadEndHalo(Layout layout, Point cell) {
-        return disc(layout, cell, DEAD_END_HALO);
+        return deadEndHalo(layout, cell, 0);
+    }
+
+    public static Marker deadEndHalo(Layout layout, Point cell, double wave) {
+        return disc(layout, cell, deadEndHaloRadius(wave));
     }
 
     /** k-center safe points — same mint discs and loneliest ring as {@code draw.js}. */

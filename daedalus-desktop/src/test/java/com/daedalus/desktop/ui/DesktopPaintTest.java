@@ -227,6 +227,21 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.deadEndHalo(layout, new Point(0, 0)).size())
                 .isGreaterThan(speck.size());
         assertThat(DesktopPaint.DEAD_END_HALO).isGreaterThan(DesktopPaint.DEAD_END_RADIUS);
+        assertThat(DesktopPaint.CUTS_BREATH_MS).isEqualTo(DesktopPaint.EMPTY_BREATH_MS);
+        assertThat(DesktopPaint.chokeHalo(layout, east, 1).radius())
+                .isGreaterThan(DesktopPaint.chokeHalo(layout, east).radius());
+        assertThat(DesktopPaint.chokeHaloAlpha(1))
+                .isGreaterThan(DesktopPaint.chokeHaloAlpha(0));
+        assertThat(DesktopPaint.chokeRingAlpha(1))
+                .isGreaterThan(DesktopPaint.chokeRingAlpha(0));
+        assertThat(DesktopPaint.deadEndHalo(layout, new Point(0, 0), 1).size())
+                .isGreaterThan(DesktopPaint.deadEndHalo(layout, new Point(0, 0)).size());
+        assertThat(DesktopPaint.deadEndHaloAlpha(1))
+                .isGreaterThan(DesktopPaint.deadEndHaloAlpha(0));
+        assertThat(DesktopPaint.deadEndCoreAlpha(1))
+                .isGreaterThan(DesktopPaint.deadEndCoreAlpha(0));
+        assertThat(DesktopPaint.deadEndRimAlpha(1))
+                .isGreaterThan(DesktopPaint.deadEndRimAlpha(0));
         assertThat(DesktopPaint.chokeTile(null)).isNull();
         assertThat(DesktopPaint.chokeHalo(layout, null)).isNull();
     }
