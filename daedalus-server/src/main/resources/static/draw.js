@@ -480,6 +480,10 @@
       g.globalAlpha = 1;
     }
     if (scene.expansions && scene.expansions.length && (scene.searchProgress ?? 1) > 0) {
+      const EXPANSION_BREATH_MS = 2800;
+      const expansionNow = typeof performance !== "undefined" ? performance.now() : 0;
+      const expansionT = (expansionNow % EXPANSION_BREATH_MS) / EXPANSION_BREATH_MS;
+      const expansionWave = 0.5 - 0.5 * Math.cos(expansionT * Math.PI * 2);
       const shown = Math.ceil(scene.expansions.length * scene.searchProgress);
       const live = new Set();
       for (let i = 0; i < shown; i++) {
@@ -493,7 +497,7 @@
       }
       g.globalAlpha = 0.26;
       paintWashOpenings(g, geom, tiles, (r, c) => live.has(r + "," + c));
-      g.globalAlpha = 0.45;
+      g.globalAlpha = 0.45 * (0.88 + 0.24 * expansionWave);
       for (let i = Math.max(0, shown - 6); i < shown; i++) {
         paintWashCell(g, geom, scene.expansions[i].row, scene.expansions[i].col);
       }
@@ -627,6 +631,10 @@
       });
     }
     if (scene.race) {
+      const RACE_BREATH_MS = 2800;
+      const raceNow = typeof performance !== "undefined" ? performance.now() : 0;
+      const raceT = (raceNow % RACE_BREATH_MS) / RACE_BREATH_MS;
+      const raceWave = 0.5 - 0.5 * Math.cos(raceT * Math.PI * 2);
       scene.race.lanes.forEach((lane, li) => {
         const shown = Math.ceil(lane.expansions.length * lane.front);
         const live = new Set();
@@ -640,7 +648,7 @@
           paintWashCell(g, geom, lane.expansions[i].row, lane.expansions[i].col);
         }
         paintWashOpenings(g, geom, tiles, (r, c) => live.has(r + "," + c));
-        g.globalAlpha = 0.4;
+        g.globalAlpha = 0.4 * (0.88 + 0.24 * raceWave);
         for (let i = Math.max(0, shown - 5); i < shown; i++) {
           paintWashCell(g, geom, lane.expansions[i].row, lane.expansions[i].col);
         }

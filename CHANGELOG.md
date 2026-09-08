@@ -204,6 +204,8 @@ under the `_migration/` portfolios.
   held, not a stuck red-green wash over the corridors.
   Search wash openings read louder than cells so the flood is corridors, not
   graph-paper stamps.
+  Solve and Race expansion fronts breathe on the victory cadence so the search
+  tip still feels live, not a stuck bright wash at the frontier.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

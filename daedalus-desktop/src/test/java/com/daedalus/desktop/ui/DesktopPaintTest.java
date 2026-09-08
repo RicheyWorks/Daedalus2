@@ -337,6 +337,11 @@ class DesktopPaintTest {
                 DesktopPaint.Layout.fit(5, 5, 100, 100), new Point(1, 1)))
                 .isNotNull();
         assertThat(DesktopPaint.raceFront(List.of())).isEmpty();
+        assertThat(DesktopPaint.RACE_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
+        assertThat(DesktopPaint.raceFrontPaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.RACE_FRONT_ALPHA * 0.88);
+        assertThat(DesktopPaint.raceFrontPaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.RACE_FRONT_ALPHA * 1.12);
     }
 
     @Test
@@ -645,6 +650,11 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.EXPANSION_OPENING_ALPHA)
                 .isGreaterThan(DesktopPaint.EXPANSION_ALPHA);
         assertThat(DesktopPaint.EXPANSION_FRONT_ALPHA).isEqualTo(0.45);
+        assertThat(DesktopPaint.EXPANSION_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
+        assertThat(DesktopPaint.expansionFrontPaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.EXPANSION_FRONT_ALPHA * 0.88);
+        assertThat(DesktopPaint.expansionFrontPaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.EXPANSION_FRONT_ALPHA * 1.12);
         assertThat(DesktopPaint.expansionCells(null)).isEmpty();
         assertThat(DesktopPaint.expansionOpenings(List.of(), tiles)).isEmpty();
     }

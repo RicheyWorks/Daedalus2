@@ -1876,7 +1876,8 @@ public class MainController {
                 g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                         layout.w(tile.tileCol()), layout.h(tile.tileRow()));
             }
-            g.setGlobalAlpha(DesktopPaint.EXPANSION_FRONT_ALPHA);
+            double expansionWave = DesktopPaint.expansionBreathWave(System.nanoTime());
+            g.setGlobalAlpha(DesktopPaint.expansionFrontPaintAlpha(expansionWave));
             for (DesktopPaint.TileRect tile : DesktopPaint.expansionCells(
                     DesktopPaint.expansionFront(currentExpansions))) {
                 g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
@@ -2220,7 +2221,8 @@ public class MainController {
             g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                     layout.w(tile.tileCol()), layout.h(tile.tileRow()));
         }
-        g.setGlobalAlpha(DesktopPaint.RACE_FRONT_ALPHA);
+        double raceWave = DesktopPaint.raceBreathWave(System.nanoTime());
+        g.setGlobalAlpha(DesktopPaint.raceFrontPaintAlpha(raceWave));
         for (DesktopPaint.TileRect tile : DesktopPaint.expansionCells(
                 DesktopPaint.raceFront(shown))) {
             g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
