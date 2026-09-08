@@ -133,6 +133,7 @@ class WebUiSmokeTest {
                 .contains("0.45 * (0.88 + 0.24")
                 .contains("RACE_BREATH_MS")
                 .contains("0.4 * (0.88 + 0.24")
+                .contains("g.globalAlpha = 0.20")
                 .contains("CUTS_BREATH_MS")
                 .contains("0.18 + 0.05")
                 .contains("PLAYER_BREATH_MS")

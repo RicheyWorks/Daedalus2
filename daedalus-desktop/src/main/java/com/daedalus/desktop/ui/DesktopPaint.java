@@ -364,6 +364,8 @@ public final class DesktopPaint {
     public static final String RACE_A = "#82b1ff";
     public static final String RACE_B = "#f0b429";
     public static final double RACE_WASH = 0.13;
+    /** Openings louder than cells — same idea as search wash, quieter than the ribbon. */
+    public static final double RACE_OPENING_ALPHA = 0.20;
     public static final double RACE_FRONT_ALPHA = 0.4;
     public static final int RACE_FRONT = 5;
     /** Race-front pulse — same cadence as expansion front. */

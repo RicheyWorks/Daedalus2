@@ -2217,6 +2217,7 @@ public class MainController {
             g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                     layout.w(tile.tileCol()), layout.h(tile.tileRow()));
         }
+        g.setGlobalAlpha(DesktopPaint.RACE_OPENING_ALPHA);
         for (DesktopPaint.TileRect tile : DesktopPaint.expansionOpenings(shown, tiles)) {
             g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                     layout.w(tile.tileCol()), layout.h(tile.tileRow()));

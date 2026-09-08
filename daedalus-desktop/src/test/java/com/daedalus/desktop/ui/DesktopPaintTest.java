@@ -337,6 +337,10 @@ class DesktopPaintTest {
                 DesktopPaint.Layout.fit(5, 5, 100, 100), new Point(1, 1)))
                 .isNotNull();
         assertThat(DesktopPaint.raceFront(List.of())).isEmpty();
+        assertThat(DesktopPaint.RACE_WASH).isEqualTo(0.13);
+        assertThat(DesktopPaint.RACE_OPENING_ALPHA).isEqualTo(0.20);
+        assertThat(DesktopPaint.RACE_OPENING_ALPHA)
+                .isGreaterThan(DesktopPaint.RACE_WASH);
         assertThat(DesktopPaint.RACE_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
         assertThat(DesktopPaint.raceFrontPaintAlpha(0.0))
                 .isEqualTo(DesktopPaint.RACE_FRONT_ALPHA * 0.88);

@@ -206,6 +206,8 @@ under the `_migration/` portfolios.
   graph-paper stamps.
   Solve and Race expansion fronts breathe on the victory cadence so the search
   tip still feels live, not a stuck bright wash at the frontier.
+  Race wash openings read louder than cells so arena floods are corridors, not
+  graph-paper stamps.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
