@@ -159,6 +159,9 @@ under the `_migration/` portfolios.
   Explore mood-face gold lip breathes so the HUD portrait still feels held.
   Explore automap gold frame breathes so the earned map chrome still feels held.
   Explore status-strip gold lip breathes so HUD chrome matches the automap frame.
+  Explore status caption soft underglow breathes so HUD words still feel held.
+  Desktop canvas pane wears the same inset void shade as the web stage so the
+  board sinks into the well, not a flat gold frame.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

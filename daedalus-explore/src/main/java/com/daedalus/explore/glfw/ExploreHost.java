@@ -508,7 +508,7 @@ public final class ExploreHost {
         glEnd();
         glBindTexture(GL_TEXTURE_2D, 0);
         glDisable(GL_TEXTURE_2D);
-        paintCaption(line, faceRight + 0.04f, bot + 0.09f);
+        paintCaption(line, faceRight + 0.04f, bot + 0.09f, seconds);
         paintKeys(aspect, line, seconds);
     }
 
@@ -540,14 +540,16 @@ public final class ExploreHost {
         glEnd();
     }
 
-    private static void paintCaption(ExplorePaint.Status line, float x0, float y0) {
+    private static void paintCaption(ExplorePaint.Status line, float x0, float y0,
+                                     double seconds) {
         String place = ExplorePaint.captionPlace(line);
         String meta = ExplorePaint.captionMeta(line);
         float gap = 0.008f;
         float placeCell = ExplorePaint.CAPTION_PLACE_CELL;
         float metaCell = ExplorePaint.CAPTION_META_CELL;
-        float placePad = placeCell * ExplorePaint.CAPTION_SOFT_PAD;
-        float metaPad = metaCell * ExplorePaint.CAPTION_SOFT_PAD;
+        float softPad = ExplorePaint.captionSoftPad(seconds);
+        float placePad = placeCell * softPad;
+        float metaPad = metaCell * softPad;
         paintCaptionPass(place, x0, y0, placeCell, gap, placePad,
                 ExplorePaint.CAPTION_SOFT_R, ExplorePaint.CAPTION_SOFT_G, ExplorePaint.CAPTION_SOFT_B);
         paintCaptionPass(place, x0, y0, placeCell, gap, 0,

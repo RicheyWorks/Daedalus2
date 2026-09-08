@@ -324,6 +324,14 @@ public final class ExplorePaint {
     public static final float CAPTION_SOFT_G = 0.30f;
     public static final float CAPTION_SOFT_B = 0.10f;
     public static final float CAPTION_SOFT_PAD = 0.35f;
+    /** Caption soft breath — same cadence as status / key chrome. */
+    public static final float CAPTION_BREATH_MS = MAP_HERE_BREATH_MS;
+
+    public static float captionSoftPad(double seconds) {
+        double t = ((seconds * 1000.0) % CAPTION_BREATH_MS) / CAPTION_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return CAPTION_SOFT_PAD * (float) (0.88 + 0.24 * wave);
+    }
     /** Dim underglow so the cross reads as chrome, not a hairline. */
     public static final float AIM_SOFT_R = 0.45f;
     public static final float AIM_SOFT_G = 0.32f;

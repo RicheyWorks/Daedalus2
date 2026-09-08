@@ -53,6 +53,9 @@ class ThemeManagerTest {
             assertThat(css).contains("-fx-border-color: rgba(184, 133, 56, 0.32)");
             assertThat(css).contains("-fx-border-color: rgba(184, 133, 56, 0.36)");
             assertThat(css).contains(".status-bar");
+            assertThat(css)
+                    .as("desktop well wears the same inset void shade as web #stage")
+                    .contains("innershadow(gaussian, rgba(0, 0, 0, 0.35), 48");
         }
         try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
             assertThat(in).as("main.fxml is on the classpath").isNotNull();

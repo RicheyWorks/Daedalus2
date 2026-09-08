@@ -273,6 +273,9 @@ class ExplorePaintTest {
                 .isNotEqualTo(ExplorePaint.aimSoftThick(0.8));
         assertThat(ExplorePaint.AIM_BRIGHT_R).isGreaterThan(ExplorePaint.AIM_SOFT_R);
         assertThat(ExplorePaint.CAPTION_SOFT_PAD).isGreaterThan(0f);
+        assertThat(ExplorePaint.CAPTION_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
+        assertThat(ExplorePaint.captionSoftPad(0.1))
+                .isNotEqualTo(ExplorePaint.captionSoftPad(0.8));
         assertThat(ExplorePaint.AIM_BRIGHT_R).isGreaterThan(ExplorePaint.CAPTION_SOFT_R);
         assertThat(ExplorePaint.KEY_SOFT_PAD)
                 .as("key soft pad is larger than the bright diamond")

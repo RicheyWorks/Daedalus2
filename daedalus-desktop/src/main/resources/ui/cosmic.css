@@ -110,6 +110,8 @@
     -fx-border-color: rgba(184, 133, 56, 0.55);
     -fx-border-width: 1;
     -fx-border-radius: 10;
+    /* Same inset void shade as web #stage — the board sinks into the well. */
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.35), 48, 0.0, 0, 0);
 }
 
 .exports {
