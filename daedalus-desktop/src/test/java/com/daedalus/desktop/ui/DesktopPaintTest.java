@@ -340,6 +340,10 @@ class DesktopPaintTest {
     void aGhostPrefixFollowsTheRecordingClock() {
         assertThat(DesktopPaint.GHOST).isEqualTo("#e6edf3");
         assertThat(DesktopPaint.GHOST_WALK_ALPHA).isEqualTo(0.28);
+        assertThat(DesktopPaint.WALK_TRAIL_ALPHA).isEqualTo(0.32);
+        assertThat(DesktopPaint.walkTrailAlpha(0.32, 0, 4))
+                .isLessThan(DesktopPaint.walkTrailAlpha(0.32, 3, 4));
+        assertThat(DesktopPaint.walkTrailAlpha(0.32, 0, 1)).isEqualTo(0.32);
         assertThat(DesktopPaint.GHOST_DISC_ALPHA).isEqualTo(0.55);
         assertThat(DesktopPaint.GHOST_GLOW_ALPHA).isEqualTo(0.18);
         assertThat(DesktopPaint.GHOST_RIM_ALPHA).isEqualTo(0.65);

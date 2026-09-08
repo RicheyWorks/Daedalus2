@@ -73,12 +73,15 @@
    * walked through walls. Desktop already paints connector tiles; this matches that.
    * A non-adjacent pair is a teleport: we refuse the chord rather than draw through a wall.
    */
-  function paintWalk(g, geom, points, color, progress, alpha) {
+  function paintWalk(g, geom, points, color, progress, alpha, ageFade) {
     if (!points || !points.length || progress <= 0) return;
     const visible = Math.max(1, Math.ceil(points.length * Math.min(1, progress)));
+    const base = alpha == null ? 0.85 : alpha;
     g.fillStyle = color;
-    g.globalAlpha = alpha == null ? 0.85 : alpha;
     for (let i = 0; i < visible; i++) {
+      // Recent steps near the walker read brighter; older corridor fades.
+      const fade = ageFade ? (0.35 + 0.65 * ((i + 1) / visible)) : 1;
+      g.globalAlpha = base * fade;
       const p = points[i];
       g.fillRect(geom.offX[2 * p.col + 1], geom.offY[2 * p.row + 1], geom.cell, geom.cell);
       if (i === 0) continue;
@@ -362,7 +365,7 @@
     }
 
     if (scene.fog) {
-      paintWalk(g, geom, scene.fog.walk, PLAYER_COLORS[0], 1, 0.32);
+      paintWalk(g, geom, scene.fog.walk, PLAYER_COLORS[0], 1, 0.32, true);
       if (start && seenCell(scene.fog, start.row, start.col)) {
         endpoint(g, geom, start, COLORS.start);
       }
@@ -621,10 +624,10 @@
       });
     }
     Object.entries(scene.trails || {}).forEach(([name, points], i) => {
-      paintWalk(g, geom, points, PLAYER_COLORS[i % PLAYER_COLORS.length], 1, 0.32);
+      paintWalk(g, geom, points, PLAYER_COLORS[i % PLAYER_COLORS.length], 1, 0.32, true);
     });
     if (scene.session && scene.ghostWalk && scene.ghostWalk.length) {
-      paintWalk(g, geom, scene.ghostWalk, COLORS.ghost, 1, 0.28);
+      paintWalk(g, geom, scene.ghostWalk, COLORS.ghost, 1, 0.28, true);
     }
     if (start) endpoint(g, geom, start, COLORS.start);
     if (goal)  endpoint(g, geom, goal,  COLORS.goal);

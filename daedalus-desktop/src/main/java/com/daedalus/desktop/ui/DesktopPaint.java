@@ -307,6 +307,17 @@ public final class DesktopPaint {
     /** Recorded racer — same tokens as {@code draw.js} ghost walk / disc. */
     public static final String GHOST = "#e6edf3";
     public static final double GHOST_WALK_ALPHA = 0.28;
+    /** Fog / session / ghost trail base — same as {@code draw.js}. */
+    public static final double WALK_TRAIL_ALPHA = 0.32;
+
+    /** Age fade — recent steps near the walker stay bright; older corridor softens. */
+    public static double walkTrailAlpha(double base, int index, int length) {
+        if (length <= 1) {
+            return base;
+        }
+        double fade = 0.35 + 0.65 * ((index + 1.0) / length);
+        return base * fade;
+    }
     public static final double GHOST_DISC_ALPHA = 0.55;
     public static final double GHOST_GLOW_ALPHA = 0.18;
     public static final double GHOST_RIM_ALPHA = 0.65;

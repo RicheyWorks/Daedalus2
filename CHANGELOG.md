@@ -168,6 +168,8 @@ under the `_migration/` portfolios.
   still feels held, not a stuck stamp under DAEDALUS.
   Web stage gold rim breathes on the gate cadence so the well chrome still feels
   held around the board.
+  Fog, session, and ghost walk trails age-fade so the corridor behind you softens
+  while the living tip stays bright.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
