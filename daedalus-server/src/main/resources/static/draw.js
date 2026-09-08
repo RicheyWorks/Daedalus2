@@ -259,11 +259,17 @@
 
   /** Soft rim at the memory edge — light falloff, not a hard stencil. */
   const FOG_FRONTIER = 0.72;
+  const FOG_FRONTIER_BREATH_MS = 4500;
   function fogFrontier(fog, tr, tc) {
     if (!fog || !fogRevealsTile(fog, tr, tc)) return 1;
     const n = [[0, 1], [0, -1], [1, 0], [-1, 0]];
     for (let i = 0; i < n.length; i++) {
-      if (!fogRevealsTile(fog, tr + n[i][0], tc + n[i][1])) return FOG_FRONTIER;
+      if (!fogRevealsTile(fog, tr + n[i][0], tc + n[i][1])) {
+        const now = typeof performance !== "undefined" ? performance.now() : 0;
+        const t = (now % FOG_FRONTIER_BREATH_MS) / FOG_FRONTIER_BREATH_MS;
+        const wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
+        return FOG_FRONTIER * (0.92 + 0.16 * wave);
+      }
     }
     return 1;
   }
@@ -665,14 +671,15 @@
     "###########",
   ];
 
-  function paintIdleMark(g, cx, cy) {
+  function paintIdleMark(g, cx, cy, wave) {
     const tiles = IDLE_TILES;
     const geom = computeGeometry(tiles, 200, 140, 1);
     const w = geom.offX[tiles[0].length], h = geom.offY[tiles.length];
     const ox = Math.round(cx - w / 2), oy = Math.round(cy - h / 2);
+    const w0 = wave == null ? 0 : wave;
     g.save();
     g.translate(ox, oy);
-    g.globalAlpha = 0.42;
+    g.globalAlpha = 0.36 + 0.10 * w0;
     g.fillStyle = COLORS.floor;
     for (let r = 0; r < tiles.length; r++) {
       for (let c = 0; c < tiles[r].length; c++) {
@@ -711,17 +718,17 @@
     glow.addColorStop(1, "rgba(0, 0, 0, 0)");
     g.fillStyle = glow;
     g.fillRect(0, 0, cssW, cssH);
-    paintIdleMark(g, cx, cy - 48);
-    g.textAlign = "center";
-    g.textBaseline = "alphabetic";
-    g.font = "700 28px Bahnschrift, \"Avenir Next Condensed\", \"Trebuchet MS\", sans-serif";
-    g.letterSpacing = "0.22em";
-    g.fillStyle = "#e8eef4";
     // Same 4.5s mint/gold breath as #gate .gate-brand — idle well still feels held.
     const EMPTY_BREATH_MS = 4500;
     const t = ((nowMs == null ? (typeof performance !== "undefined" ? performance.now() : 0)
         : nowMs) % EMPTY_BREATH_MS) / EMPTY_BREATH_MS;
     const wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
+    paintIdleMark(g, cx, cy - 48, wave);
+    g.textAlign = "center";
+    g.textBaseline = "alphabetic";
+    g.font = "700 28px Bahnschrift, \"Avenir Next Condensed\", \"Trebuchet MS\", sans-serif";
+    g.letterSpacing = "0.22em";
+    g.fillStyle = "#e8eef4";
     const mintA = 0.16 + 0.16 * wave;
     const goldA = 0.08 + 0.10 * wave;
     const mintBlur = 22 + 14 * wave;

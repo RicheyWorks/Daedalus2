@@ -394,13 +394,18 @@ class DesktopPaintTest {
                 .as("two cells east: max(0.38, 1 - 0.24)")
                 .isCloseTo(0.76, within(1e-9));
         assertThat(DesktopPaint.FOG_FRONTIER).isEqualTo(0.72);
+        assertThat(DesktopPaint.FOG_FRONTIER_BREATH_MS).isEqualTo(DesktopPaint.EMPTY_BREATH_MS);
         assertThat(DesktopPaint.fogFrontier(null, 1, 1)).isEqualTo(1.0);
-        assertThat(DesktopPaint.fogFrontier(fog, 5, 5))
+        assertThat(DesktopPaint.fogFrontier(fog, 5, 5, 0.5))
                 .as("unseen tiles skip the rim multiplier")
                 .isEqualTo(1.0);
-        assertThat(DesktopPaint.fogFrontier(fog, 1, 2))
-                .as("opening toward unseen softens toward the void")
+        assertThat(DesktopPaint.fogFrontier(fog, 1, 2, 0.5))
+                .as("mid-breath edge matches the resting FOG_FRONTIER")
                 .isEqualTo(DesktopPaint.FOG_FRONTIER);
+        assertThat(DesktopPaint.fogFrontierDim(1))
+                .isGreaterThan(DesktopPaint.fogFrontierDim(0));
+        assertThat(DesktopPaint.fogFrontier(fog, 1, 2, 1))
+                .isGreaterThan(DesktopPaint.fogFrontier(fog, 1, 2, 0));
         assertThat(DesktopPaint.mixHex(DesktopPaint.FOG_FLOOR_DIM,
                 DesktopPaint.FOG_FLOOR, 0)).isEqualTo(DesktopPaint.FOG_FLOOR_DIM);
         assertThat(DesktopPaint.mixHex(DesktopPaint.FOG_FLOOR_DIM,
@@ -698,6 +703,9 @@ class DesktopPaintTest {
         double hi = DesktopPaint.emptyBreathWave((long) (DesktopPaint.EMPTY_BREATH_MS * 500_000));
         assertThat(DesktopPaint.emptyMintAlpha(1)).isGreaterThan(DesktopPaint.emptyMintAlpha(0));
         assertThat(DesktopPaint.emptyGoldRadius(1)).isGreaterThan(DesktopPaint.emptyGoldRadius(0));
+        assertThat(DesktopPaint.emptyMarkFloorAlpha(1))
+                .isGreaterThan(DesktopPaint.emptyMarkFloorAlpha(0));
+        assertThat(DesktopPaint.emptyMarkFloorAlpha(0)).isEqualTo(0.36);
         assertThat(hi).isNotEqualTo(lo);
         assertThat(DesktopPaint.EMPTY_TITLE).contains("Generate");
         assertThat(DesktopPaint.EMPTY_DETAIL).contains("Solve");

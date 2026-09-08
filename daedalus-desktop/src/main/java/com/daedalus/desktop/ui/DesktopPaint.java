@@ -68,6 +68,11 @@ public final class DesktopPaint {
         return 48 + 24 * wave;
     }
 
+    /** Idle lattice floors — same gate wave as the wordmark. */
+    public static double emptyMarkFloorAlpha(double wave) {
+        return 0.36 + 0.10 * wave;
+    }
+
     /**
      * Same miniature as {@code draw.js} {@code IDLE_TILES} — one product empty well.
      */
@@ -148,6 +153,16 @@ public final class DesktopPaint {
     public static final String FOG_FLOOR_WARM = "#5c4a32";
     /** Soft rim at the memory edge — same falloff as {@code draw.js} FOG_FRONTIER. */
     public static final double FOG_FRONTIER = 0.72;
+    /** Same 4.5s cadence as empty / gate place breath. */
+    public static final double FOG_FRONTIER_BREATH_MS = EMPTY_BREATH_MS;
+
+    public static double fogFrontierBreathWave(long nanos) {
+        return emptyBreathWave(nanos);
+    }
+
+    public static double fogFrontierDim(double wave) {
+        return FOG_FRONTIER * (0.92 + 0.16 * wave);
+    }
     /** Cold wall ink — same token as {@code draw.js} wall. */
     public static final String FOG_WALL = "#0b0f14";
     /** Torch-warm wall — same mix as {@code draw.js} wallWarm. */
@@ -1455,13 +1470,17 @@ public final class DesktopPaint {
 
     /** Soft rim at the memory edge — light falloff, not a hard stencil. */
     public static double fogFrontier(Fog fog, int tileRow, int tileCol) {
+        return fogFrontier(fog, tileRow, tileCol, fogFrontierBreathWave(System.nanoTime()));
+    }
+
+    public static double fogFrontier(Fog fog, int tileRow, int tileCol, double wave) {
         if (fog == null || !fogRevealsTile(fog, tileRow, tileCol)) {
             return 1;
         }
         int[][] n = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
         for (int[] d : n) {
             if (!fogRevealsTile(fog, tileRow + d[0], tileCol + d[1])) {
-                return FOG_FRONTIER;
+                return fogFrontierDim(wave);
             }
         }
         return 1;

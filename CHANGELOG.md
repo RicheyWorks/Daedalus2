@@ -162,6 +162,10 @@ under the `_migration/` portfolios.
   Explore status caption soft underglow breathes so HUD words still feel held.
   Desktop canvas pane wears the same inset void shade as the web stage so the
   board sinks into the well, not a flat gold frame.
+  Fog memory edges breathe on the gate cadence so the frontier still feels like
+  light, not a stuck stencil.
+  Empty-well idle lattice floors breathe with the wordmark so the miniature maze
+  still feels held, not a stuck stamp under DAEDALUS.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
