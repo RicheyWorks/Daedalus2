@@ -334,6 +334,14 @@ public final class DesktopPaint {
     public static double expansionFrontPaintAlpha(double wave) {
         return EXPANSION_FRONT_ALPHA * (0.88 + 0.24 * wave);
     }
+
+    public static double expansionWashPaintAlpha(double wave) {
+        return EXPANSION_ALPHA * (0.88 + 0.24 * wave);
+    }
+
+    public static double expansionOpeningPaintAlpha(double wave) {
+        return EXPANSION_OPENING_ALPHA * (0.85 + 0.30 * wave);
+    }
     /**
      * Sequential distance ramp — bit-identical to {@code caption.js}
      * {@code DISTANCE_RAMP}. One hue, monotone in lightness.

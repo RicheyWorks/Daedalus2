@@ -507,11 +507,11 @@
         live.add(p.row + "," + p.col);
       }
       g.fillStyle = COLORS.path;
-      g.globalAlpha = 0.16;
+      g.globalAlpha = 0.16 * (0.88 + 0.24 * expansionWave);
       for (let i = 0; i < shown; i++) {
         paintWashCell(g, geom, scene.expansions[i].row, scene.expansions[i].col);
       }
-      g.globalAlpha = 0.26;
+      g.globalAlpha = 0.26 * (0.85 + 0.30 * expansionWave);
       paintWashOpenings(g, geom, tiles, (r, c) => live.has(r + "," + c));
       g.globalAlpha = 0.45 * (0.88 + 0.24 * expansionWave);
       for (let i = Math.max(0, shown - 6); i < shown; i++) {

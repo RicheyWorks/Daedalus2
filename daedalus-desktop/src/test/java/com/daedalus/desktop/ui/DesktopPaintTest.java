@@ -682,6 +682,14 @@ class DesktopPaintTest {
                 .isEqualTo(DesktopPaint.EXPANSION_FRONT_ALPHA * 0.88);
         assertThat(DesktopPaint.expansionFrontPaintAlpha(1.0))
                 .isEqualTo(DesktopPaint.EXPANSION_FRONT_ALPHA * 1.12);
+        assertThat(DesktopPaint.expansionWashPaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.EXPANSION_ALPHA * 0.88);
+        assertThat(DesktopPaint.expansionWashPaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.EXPANSION_ALPHA * 1.12);
+        assertThat(DesktopPaint.expansionOpeningPaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.EXPANSION_OPENING_ALPHA * 0.85);
+        assertThat(DesktopPaint.expansionOpeningPaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.EXPANSION_OPENING_ALPHA * 1.15);
         assertThat(DesktopPaint.expansionCells(null)).isEmpty();
         assertThat(DesktopPaint.expansionOpenings(List.of(), tiles)).isEmpty();
     }

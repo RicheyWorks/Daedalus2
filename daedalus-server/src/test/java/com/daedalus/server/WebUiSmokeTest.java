@@ -134,6 +134,8 @@ class WebUiSmokeTest {
                 .contains("0.88 + 0.24 * lensWave")
                 .contains("0.85 + 0.30 * lensWave")
                 .contains("EXPANSION_BREATH_MS")
+                .contains("0.16 * (0.88 + 0.24")
+                .contains("0.26 * (0.85 + 0.30")
                 .contains("0.45 * (0.88 + 0.24")
                 .contains("RACE_BREATH_MS")
                 .contains("0.13 * (0.88 + 0.24")

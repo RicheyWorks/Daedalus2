@@ -1919,19 +1919,19 @@ public class MainController {
 
         // ---- 2) recorded search wash, player walk, then solve-path overlay ----
         if (currentExpansions != null && !currentExpansions.isEmpty() && theme != null) {
+            double expansionWave = DesktopPaint.expansionBreathWave(System.nanoTime());
             g.setFill(theme.path());
-            g.setGlobalAlpha(DesktopPaint.EXPANSION_ALPHA);
+            g.setGlobalAlpha(DesktopPaint.expansionWashPaintAlpha(expansionWave));
             for (DesktopPaint.TileRect tile : DesktopPaint.expansionCells(currentExpansions)) {
                 g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                         layout.w(tile.tileCol()), layout.h(tile.tileRow()));
             }
-            g.setGlobalAlpha(DesktopPaint.EXPANSION_OPENING_ALPHA);
+            g.setGlobalAlpha(DesktopPaint.expansionOpeningPaintAlpha(expansionWave));
             for (DesktopPaint.TileRect tile : DesktopPaint.expansionOpenings(
                     currentExpansions, tiles)) {
                 g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                         layout.w(tile.tileCol()), layout.h(tile.tileRow()));
             }
-            double expansionWave = DesktopPaint.expansionBreathWave(System.nanoTime());
             g.setGlobalAlpha(DesktopPaint.expansionFrontPaintAlpha(expansionWave));
             for (DesktopPaint.TileRect tile : DesktopPaint.expansionCells(
                     DesktopPaint.expansionFront(currentExpansions))) {
