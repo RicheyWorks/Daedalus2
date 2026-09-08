@@ -431,7 +431,7 @@ public final class ExploreHost {
         glLoadIdentity();
         ExplorePaint.Status line = ExplorePaint.status(
                 world.fog(), world.body(), world.markers());
-        status(aspect, line, faceTex);
+        status(aspect, line, faceTex, seconds);
         paintHand(aspect, line.mood(), stride);
         float aim = ExplorePaint.aimY();
         float soft = ExplorePaint.AIM_SOFT_ARM;
@@ -468,7 +468,8 @@ public final class ExploreHost {
         glEnd();
     }
 
-    private static void status(double aspect, ExplorePaint.Status line, int[] faceTex) {
+    private static void status(double aspect, ExplorePaint.Status line, int[] faceTex,
+                               double seconds) {
         float bot = -1f;
         float top = bot + ExplorePaint.STATUS_H;
         glColor3f(0.12f, 0.08f, 0.06f);
@@ -508,10 +509,10 @@ public final class ExploreHost {
         glBindTexture(GL_TEXTURE_2D, 0);
         glDisable(GL_TEXTURE_2D);
         paintCaption(line, faceRight + 0.04f, bot + 0.09f);
-        paintKeys(aspect, line);
+        paintKeys(aspect, line, seconds);
     }
 
-    private static void paintKeys(double aspect, ExplorePaint.Status line) {
+    private static void paintKeys(double aspect, ExplorePaint.Status line, double seconds) {
         int marks = Math.max(0, Math.min(8, line.marks()));
         if (marks == 0) {
             return;
@@ -519,10 +520,11 @@ public final class ExploreHost {
         float[] rgb = new float[3];
         float cy = -1f + ExplorePaint.STATUS_H * 0.52f;
         float x = (float) (aspect - 0.08);
+        float softPad = ExplorePaint.keySoftPad(seconds);
         for (int i = marks - 1; i >= 0; i--) {
             ExplorePaint.keyTint(i, marks, line.mood(), rgb);
             glColor3f(ExplorePaint.KEY_SOFT_R, ExplorePaint.KEY_SOFT_G, ExplorePaint.KEY_SOFT_B);
-            diamond(x, cy, 0.028f * ExplorePaint.KEY_SOFT_PAD);
+            diamond(x, cy, 0.028f * softPad);
             glColor3f(rgb[0], rgb[1], rgb[2]);
             diamond(x, cy, 0.028f);
             x -= 0.07f;

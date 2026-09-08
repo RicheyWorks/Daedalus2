@@ -305,6 +305,14 @@ public final class ExplorePaint {
     public static final float KEY_SOFT_G = 0.30f;
     public static final float KEY_SOFT_B = 0.10f;
     public static final float KEY_SOFT_PAD = 1.55f;
+    /** Key pad breath — same cadence as automap HERE / story marks. */
+    public static final float KEY_BREATH_MS = MAP_HERE_BREATH_MS;
+
+    public static float keySoftPad(double seconds) {
+        double t = ((seconds * 1000.0) % KEY_BREATH_MS) / KEY_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return KEY_SOFT_PAD * (float) (0.88 + 0.24 * wave);
+    }
     /** Thin gold lip around the mood face so the portrait matches strip chrome. */
     public static final float FACE_LIP = 0.008f;
     public static final float FACE_LIP_CORE = 0.004f;

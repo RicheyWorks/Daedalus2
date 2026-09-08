@@ -151,6 +151,8 @@ under the `_migration/` portfolios.
   maze so the miniature mark still feels held.
   Analysis chokepoints and dead ends breathe on the gate cadence so cuts and
   cul-de-sacs still feel like presence, not stuck stamps.
+  Explore key diamonds breathe a soft gold pad so HUD loot still feels like
+  presence on the status strip.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
