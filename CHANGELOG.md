@@ -105,6 +105,8 @@ under the `_migration/` portfolios.
   separators are soft gold so the shell stays chrome end to end.
   Explore corridor lamp flickers with the hand flame so revealed stone
   breathes as fire, not a static wash.
+  Explore story pillars sit on a soft floor pad so vault / boss / entrance
+  read as places in the corridor, not furniture sticks.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

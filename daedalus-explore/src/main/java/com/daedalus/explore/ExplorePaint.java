@@ -438,6 +438,24 @@ public final class ExplorePaint {
         }
     }
 
+    /** Soft floor disc under corridor story pillars — place, not a furniture stick. */
+    public static final float PLACE_PAD_R = 0.42f;
+    public static final float PLACE_PAD_Y = 0.02f;
+    public static final int PLACE_PAD_SEGS = 12;
+    public static final float PLACE_PAD_DIM = 0.42f;
+
+    public static void placePadTint(float[] markerRgb, float[] out) {
+        if (out == null || out.length < 3) {
+            return;
+        }
+        if (markerRgb == null || markerRgb.length < 3) {
+            set(out, 0.2f, 0.14f, 0.08f);
+            return;
+        }
+        set(out, markerRgb[0] * PLACE_PAD_DIM, markerRgb[1] * PLACE_PAD_DIM,
+                markerRgb[2] * PLACE_PAD_DIM);
+    }
+
     static String facing(double yaw) {
         double a = yaw;
         while (a <= -Math.PI) {

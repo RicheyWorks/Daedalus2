@@ -341,6 +341,7 @@ public final class ExploreHost {
         glBindTexture(GL_TEXTURE_2D, 0);
         glDisable(GL_TEXTURE_2D);
         glBegin(GL_TRIANGLES);
+        float[] pad = new float[3];
         for (ExploreMarker marker : world.markers()) {
             int tr = 2 * marker.cell().row() + 1;
             int tc = 2 * marker.cell().col() + 1;
@@ -348,9 +349,12 @@ public final class ExploreHost {
                 continue;
             }
             ExplorePaint.marker(marker.kind(), rgb);
+            double wx = ExploreMesh.worldX(marker.cell().col());
+            double wz = ExploreMesh.worldZ(marker.cell().row());
+            ExplorePaint.placePadTint(rgb, pad);
+            placePad(wx, wz, pad[0], pad[1], pad[2]);
             glColor3f(rgb[0], rgb[1], rgb[2]);
-            pillar(ExploreMesh.worldX(marker.cell().col()),
-                    ExploreMesh.worldZ(marker.cell().row()));
+            pillar(wx, wz);
         }
         glEnd();
         hud(aspect, world, faceTex, stride);
@@ -655,6 +659,20 @@ public final class ExploreHost {
         glVertex2f((float) x1, (float) y1);
         glVertex2f((float) x0, (float) y1);
         glEnd();
+    }
+
+    private static void placePad(double x, double z, float r, float g, float b) {
+        double rad = ExplorePaint.PLACE_PAD_R;
+        double y = ExplorePaint.PLACE_PAD_Y;
+        int segs = ExplorePaint.PLACE_PAD_SEGS;
+        glColor3f(r, g, b);
+        for (int i = 0; i < segs; i++) {
+            double a0 = i * Math.PI * 2.0 / segs;
+            double a1 = (i + 1) * Math.PI * 2.0 / segs;
+            glVertex3d(x, y, z);
+            glVertex3d(x + rad * Math.cos(a0), y, z + rad * Math.sin(a0));
+            glVertex3d(x + rad * Math.cos(a1), y, z + rad * Math.sin(a1));
+        }
     }
 
     private static void pillar(double x, double z) {

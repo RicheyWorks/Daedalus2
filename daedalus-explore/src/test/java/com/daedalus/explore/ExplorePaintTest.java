@@ -61,6 +61,13 @@ class ExplorePaintTest {
         assertThat(rgb[0]).isGreaterThan(rgb[1]);
         ExplorePaint.marker("VAULT", rgb);
         assertThat(rgb[2]).isGreaterThan(rgb[0]);
+        float[] pad = new float[3];
+        ExplorePaint.placePadTint(rgb, pad);
+        assertThat(pad[2]).isLessThan(rgb[2]);
+        assertThat(ExplorePaint.PLACE_PAD_R).isGreaterThan(0.3f);
+        assertThat(ExplorePaint.PLACE_PAD_SEGS).isGreaterThanOrEqualTo(8);
+        ExplorePaint.placePadTint(null, pad);
+        ExplorePaint.placePadTint(rgb, null);
     }
 
     @Test
