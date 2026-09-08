@@ -2242,15 +2242,16 @@ public class MainController {
             return;
         }
         Color ink = Color.web(DesktopPaint.GHOST);
-        double pad = mark.size() * 0.32;
-        g.setGlobalAlpha(DesktopPaint.GHOST_GLOW_ALPHA);
+        double wave = DesktopPaint.ghostBreathWave(System.nanoTime());
+        double pad = mark.size() * DesktopPaint.ghostGlowPadFraction(wave);
+        g.setGlobalAlpha(DesktopPaint.ghostGlowAlpha(wave));
         g.setFill(ink);
         g.fillOval(mark.x() - pad / 2, mark.y() - pad / 2,
                 mark.size() + pad, mark.size() + pad);
-        g.setGlobalAlpha(DesktopPaint.GHOST_DISC_ALPHA);
+        g.setGlobalAlpha(DesktopPaint.ghostDiscAlpha(wave));
         g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
         g.setGlobalAlpha(1);
-        g.setStroke(ink.deriveColor(0, 1, 1, DesktopPaint.GHOST_RIM_ALPHA));
+        g.setStroke(ink.deriveColor(0, 1, 1, DesktopPaint.ghostRimAlpha(wave)));
         g.setLineWidth(Math.max(1.0, mark.size() * 0.07));
         g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
     }

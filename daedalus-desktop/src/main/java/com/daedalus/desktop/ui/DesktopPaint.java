@@ -213,6 +213,28 @@ public final class DesktopPaint {
     public static final double GHOST_GLOW_ALPHA = 0.18;
     public static final double GHOST_RIM_ALPHA = 0.65;
     public static final double GHOST_RADIUS = 0.3;
+    /** Same 4.5s cadence as empty / gate / endpoint breath. */
+    public static final double GHOST_BREATH_MS = EMPTY_BREATH_MS;
+
+    public static double ghostBreathWave(long nanos) {
+        return emptyBreathWave(nanos);
+    }
+
+    public static double ghostGlowAlpha(double wave) {
+        return GHOST_GLOW_ALPHA + 0.08 * wave;
+    }
+
+    public static double ghostGlowPadFraction(double wave) {
+        return 0.32 + 0.08 * wave;
+    }
+
+    public static double ghostDiscAlpha(double wave) {
+        return GHOST_DISC_ALPHA + 0.08 * wave;
+    }
+
+    public static double ghostRimAlpha(double wave) {
+        return GHOST_RIM_ALPHA + 0.1 * wave;
+    }
 
     private DesktopPaint() {
     }

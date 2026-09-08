@@ -319,6 +319,12 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.GHOST_GLOW_ALPHA).isEqualTo(0.18);
         assertThat(DesktopPaint.GHOST_RIM_ALPHA).isEqualTo(0.65);
         assertThat(DesktopPaint.GHOST_RADIUS).isEqualTo(0.3);
+        assertThat(DesktopPaint.GHOST_BREATH_MS).isEqualTo(DesktopPaint.EMPTY_BREATH_MS);
+        assertThat(DesktopPaint.ghostGlowAlpha(1)).isGreaterThan(DesktopPaint.ghostGlowAlpha(0));
+        assertThat(DesktopPaint.ghostGlowPadFraction(1))
+                .isGreaterThan(DesktopPaint.ghostGlowPadFraction(0));
+        assertThat(DesktopPaint.ghostDiscAlpha(1)).isGreaterThan(DesktopPaint.ghostDiscAlpha(0));
+        assertThat(DesktopPaint.ghostRimAlpha(1)).isGreaterThan(DesktopPaint.ghostRimAlpha(0));
         DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 100, 100);
         DesktopPaint.Marker ghost = DesktopPaint.ghostMarker(layout, new Point(0, 0));
         assertThat(ghost.size())

@@ -122,18 +122,22 @@
   function ghostDisc(g, geom, p) {
     if (!p) return;
     const [x, y] = cellCenter(geom, p);
+    const GHOST_BREATH_MS = 4500;
+    const now = typeof performance !== "undefined" ? performance.now() : 0;
+    const t = (now % GHOST_BREATH_MS) / GHOST_BREATH_MS;
+    const wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
     const r = geom.cell * 0.3;
     g.fillStyle = COLORS.ghost;
-    g.globalAlpha = 0.18;
+    g.globalAlpha = 0.18 + 0.08 * wave;
     g.beginPath();
-    g.arc(x, y, r + geom.cell * 0.18, 0, 2 * Math.PI);
+    g.arc(x, y, r + geom.cell * (0.18 + 0.04 * wave), 0, 2 * Math.PI);
     g.fill();
-    g.globalAlpha = 0.55;
+    g.globalAlpha = 0.55 + 0.08 * wave;
     g.beginPath();
     g.arc(x, y, r, 0, 2 * Math.PI);
     g.fill();
     g.strokeStyle = COLORS.ghost;
-    g.globalAlpha = 0.65;
+    g.globalAlpha = 0.65 + 0.1 * wave;
     g.lineWidth = Math.max(1, geom.cell * 0.07);
     g.beginPath();
     g.arc(x, y, r, 0, 2 * Math.PI);

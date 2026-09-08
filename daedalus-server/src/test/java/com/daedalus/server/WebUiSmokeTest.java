@@ -90,6 +90,8 @@ class WebUiSmokeTest {
                 .contains("prefers-reduced-motion")
                 .contains("ghost:")
                 .contains("ghostDisc")
+                .contains("GHOST_BREATH_MS")
+                .contains("0.18 + 0.08")
                 .contains("VICTORY_BREATH_MS")
                 .contains("0.85 + 0.08")
                 .contains("rgba(245, 193, 74, 0.05)")
