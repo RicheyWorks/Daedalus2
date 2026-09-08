@@ -139,6 +139,8 @@ under the `_migration/` portfolios.
   presence on the earned map.
   Explore corridor story pillars breathe a soft floor pad so vault / boss /
   entrance still feel held underfoot.
+  Jam / hotspot coral breathes soft place pads so congestion reads as presence,
+  not flat admin slabs.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

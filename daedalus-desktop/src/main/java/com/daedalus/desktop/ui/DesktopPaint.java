@@ -150,6 +150,48 @@ public final class DesktopPaint {
     public static final String HOTSPOT = "#e5484d";
     /** Opening wash between adjacent spots — same alpha as {@code draw.js}. */
     public static final double HOTSPOT_OPENING_ALPHA = 0.35;
+    /** Congestion pulse — same cadence as victory / hunt loot. */
+    public static final double HOTSPOT_BREATH_MS = VICTORY_BREATH_MS;
+    public static final double HOTSPOT_RIM_RADIUS = 0.18;
+
+    public static double hotspotBreathWave(long nanos) {
+        return victoryBreathWave(nanos);
+    }
+
+    public static double hotspotCellPaintAlpha(double cost, double wave) {
+        return hotspotCellAlpha(cost) * (0.88 + 0.24 * wave);
+    }
+
+    public static double hotspotOpeningPaintAlpha(double wave) {
+        return HOTSPOT_OPENING_ALPHA * (0.85 + 0.30 * wave);
+    }
+
+    public static double hotspotPadAlpha(double wave) {
+        return 0.16 + 0.12 * wave;
+    }
+
+    public static double hotspotPadRadius(double wave) {
+        return 0.28 + 0.04 * wave;
+    }
+
+    public static double hotspotRimAlpha(double wave) {
+        return 0.45 + 0.20 * wave;
+    }
+
+    /** Soft pad / rim around a jam cell — place, not a flat coral slab. */
+    public static Marker hotspotPad(Layout layout, Point cell, double wave) {
+        return disc(layout, cell, hotspotPadRadius(wave));
+    }
+
+    public static Ring hotspotRim(Layout layout, Point cell) {
+        if (layout == null || cell == null) {
+            return null;
+        }
+        double cx = layout.x(2 * cell.col() + 1) + layout.cellSize() / 2.0;
+        double cy = layout.y(2 * cell.row() + 1) + layout.cellSize() / 2.0;
+        return new Ring(cx, cy, layout.cellSize() * HOTSPOT_RIM_RADIUS,
+                Math.max(1.0, layout.cellSize() * 0.06));
+    }
     /** Solver ribbon — same alpha as {@code draw.js} {@code paintWalk}. */
     public static final double PATH_ALPHA = 0.85;
     /** Same radius as {@code draw.js} session / fog player. */

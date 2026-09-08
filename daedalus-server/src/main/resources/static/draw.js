@@ -339,19 +339,39 @@
     }
 
     const hot = new Map();
+    const HOTSPOT_BREATH_MS = 2800;
+    const hotNow = typeof performance !== "undefined" ? performance.now() : 0;
+    const hotT = (hotNow % HOTSPOT_BREATH_MS) / HOTSPOT_BREATH_MS;
+    const hotWave = 0.5 - 0.5 * Math.cos(hotT * Math.PI * 2);
     (scene.hotspots || []).forEach(h => {
       const tr = 2 * h.row + 1, tc = 2 * h.col + 1;
       if (tiles[tr][tc] === "#" || isRock(tiles, tr, tc)) return;
       hot.set(h.row + "," + h.col, h.cost);
       g.fillStyle = "#e5484d";
-      g.globalAlpha = Math.min(0.7, 0.2 + h.cost / 200);
+      g.globalAlpha = Math.min(0.7, 0.2 + h.cost / 200) * (0.88 + 0.24 * hotWave);
       g.fillRect(geom.offX[tc], geom.offY[tr], geom.cell, geom.cell);
     });
     if (hot.size) {
       g.fillStyle = "#e5484d";
-      g.globalAlpha = 0.35;
+      g.globalAlpha = 0.35 * (0.85 + 0.30 * hotWave);
       paintWashOpenings(g, geom, tiles, (r, c) => hot.has(r + "," + c));
       g.globalAlpha = 1;
+      (scene.hotspots || []).forEach(h => {
+        if (!hot.has(h.row + "," + h.col)) return;
+        const [x, y] = cellCenter(geom, h);
+        g.fillStyle = "#e5484d";
+        g.globalAlpha = 0.16 + 0.12 * hotWave;
+        g.beginPath();
+        g.arc(x, y, geom.cell * (0.28 + 0.04 * hotWave), 0, 2 * Math.PI);
+        g.fill();
+        g.strokeStyle = "#e5484d";
+        g.globalAlpha = 0.45 + 0.20 * hotWave;
+        g.lineWidth = Math.max(1, geom.cell * 0.06);
+        g.beginPath();
+        g.arc(x, y, geom.cell * 0.18, 0, 2 * Math.PI);
+        g.stroke();
+        g.globalAlpha = 1;
+      });
     }
     if (scene.field) {
       const max = Math.max(1, scene.field.maxDistance);

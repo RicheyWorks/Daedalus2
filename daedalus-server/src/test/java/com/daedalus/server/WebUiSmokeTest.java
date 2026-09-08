@@ -98,6 +98,8 @@ class WebUiSmokeTest {
                 .contains("0.5 + 0.05")
                 .contains("SANCTUARY_BREATH_MS")
                 .contains("0.48 + 0.05")
+                .contains("HOTSPOT_BREATH_MS")
+                .contains("0.28 + 0.04")
                 .contains("VICTORY_BREATH_MS")
                 .contains("0.85 + 0.08")
                 .contains("rgba(245, 193, 74, 0.05)")

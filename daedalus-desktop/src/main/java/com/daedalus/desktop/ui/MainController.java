@@ -1752,19 +1752,33 @@ public class MainController {
 
         if (current.hotspots() != null && !current.hotspots().isEmpty()) {
             DesktopPaint.HotWash wash = DesktopPaint.hotspotWash(current.hotspots(), tiles);
-            g.setFill(Color.web(DesktopPaint.HOTSPOT));
+            double hotWave = DesktopPaint.hotspotBreathWave(System.nanoTime());
+            Color hotInk = Color.web(DesktopPaint.HOTSPOT);
+            g.setFill(hotInk);
             for (var spot : wash.cells()) {
-                g.setGlobalAlpha(DesktopPaint.hotspotCellAlpha(spot.cost()));
+                g.setGlobalAlpha(DesktopPaint.hotspotCellPaintAlpha(spot.cost(), hotWave));
                 int tr = 2 * spot.row() + 1;
                 int tc = 2 * spot.col() + 1;
                 g.fillRect(layout.x(tc), layout.y(tr), layout.w(tc), layout.h(tr));
             }
-            g.setGlobalAlpha(DesktopPaint.HOTSPOT_OPENING_ALPHA);
+            g.setGlobalAlpha(DesktopPaint.hotspotOpeningPaintAlpha(hotWave));
             for (DesktopPaint.TileRect tile : wash.openings()) {
                 g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                         layout.w(tile.tileCol()), layout.h(tile.tileRow()));
             }
             g.setGlobalAlpha(1);
+            for (var spot : wash.cells()) {
+                Point cell = new Point(spot.row(), spot.col());
+                DesktopPaint.Marker pad = DesktopPaint.hotspotPad(layout, cell, hotWave);
+                if (pad != null) {
+                    g.setGlobalAlpha(DesktopPaint.hotspotPadAlpha(hotWave));
+                    g.setFill(hotInk);
+                    g.fillOval(pad.x(), pad.y(), pad.size(), pad.size());
+                    g.setGlobalAlpha(1);
+                }
+                paintRing(g, DesktopPaint.hotspotRim(layout, cell),
+                        hotInk.deriveColor(0, 1, 1, DesktopPaint.hotspotRimAlpha(hotWave)));
+            }
         }
 
         if (currentField != null) {

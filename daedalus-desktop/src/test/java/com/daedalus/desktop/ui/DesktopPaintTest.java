@@ -510,6 +510,18 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.hotspotCellAlpha(200)).isEqualTo(0.7);
         assertThat(DesktopPaint.HOTSPOT_OPENING_ALPHA).isEqualTo(0.35);
         assertThat(DesktopPaint.HOTSPOT).isEqualTo("#e5484d");
+        assertThat(DesktopPaint.HOTSPOT_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
+        assertThat(DesktopPaint.hotspotCellPaintAlpha(25, 1))
+                .isGreaterThan(DesktopPaint.hotspotCellPaintAlpha(25, 0));
+        assertThat(DesktopPaint.hotspotOpeningPaintAlpha(1))
+                .isGreaterThan(DesktopPaint.hotspotOpeningPaintAlpha(0));
+        assertThat(DesktopPaint.hotspotPadAlpha(1))
+                .isGreaterThan(DesktopPaint.hotspotPadAlpha(0));
+        assertThat(DesktopPaint.hotspotPadRadius(1))
+                .isGreaterThan(DesktopPaint.hotspotPadRadius(0));
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 100, 100);
+        assertThat(DesktopPaint.hotspotRim(layout, new Point(0, 0)).radius())
+                .isEqualTo(layout.cellSize() * DesktopPaint.HOTSPOT_RIM_RADIUS);
         DesktopPaint.HotWash wash = DesktopPaint.hotspotWash(
                 List.of(new Hotspot(0, 0, 10), new Hotspot(0, 1, 80)), tiles);
         assertThat(wash.cells()).hasSize(1);
