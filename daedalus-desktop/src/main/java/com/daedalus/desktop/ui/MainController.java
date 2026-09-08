@@ -1765,7 +1765,13 @@ public class MainController {
         for (int r = 0; r < layout.tileRows(); r++) {
             for (int c = 0; c < layout.tileCols(); c++) {
                 TileType role = DesktopPaint.floorRole(tiles[r][c]);
-                g.setFill(colorFor(role, theme));
+                Color ink = colorFor(role, theme);
+                if (role != TileType.WALL && ink != null) {
+                    double edge = DesktopPaint.floorEdge(layout, r, c);
+                    ink = ink.interpolate(Color.web(DesktopPaint.FLOOR_DIM),
+                            DesktopPaint.FLOOR_EDGE_DIM * edge);
+                }
+                g.setFill(ink);
                 g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
                 if (role != TileType.WALL) {
                     paintHairline(g, DesktopPaint.floorHiStroke(layout, r, c));

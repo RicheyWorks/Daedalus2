@@ -184,6 +184,8 @@ under the `_migration/` portfolios.
   letterboxed maze sits in a pocket, not infinite flat stone.
   Sticky header gold lip breathes on the gate cadence so post-Enter shell chrome
   still feels held with the brand.
+  Clear-board floors soften toward the edges so stone has depth, not flat slate
+  under every corridor.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

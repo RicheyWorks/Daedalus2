@@ -173,6 +173,9 @@ public final class DesktopPaint {
     public static final String WELL_VOID_CENTER = "#121821";
     public static final String WELL_VOID_EDGE = "#0b0f14";
     public static final String FOG_FLOOR_DIM = "#2a333c";
+    /** Clear-board edge falloff toward dim slate — same ink as fog dim. */
+    public static final String FLOOR_DIM = FOG_FLOOR_DIM;
+    public static final double FLOOR_EDGE_DIM = 0.22;
     public static final String FOG_FLOOR = "#3d4a58";
     /** Torch-warm stone underfoot — same mix as {@code draw.js} floorWarm. */
     public static final String FOG_FLOOR_WARM = "#5c4a32";
@@ -1574,6 +1577,20 @@ public final class DesktopPaint {
                 && tileRow % 2 == 1 && tileCol % 2 == 1
                 && layout.cellSize() >= 10
                 && lamp > 0.7;
+    }
+
+    /**
+     * 0 at maze center → 1 at the far corner — drives clear-board floor falloff.
+     */
+    public static double floorEdge(Layout layout, int tileRow, int tileCol) {
+        if (layout == null || layout.tileRows() < 2 || layout.tileCols() < 2) {
+            return 0;
+        }
+        double cx = (layout.tileCols() - 1) / 2.0;
+        double cy = (layout.tileRows() - 1) / 2.0;
+        double dx = (tileCol - cx) / Math.max(1.0, layout.tileCols() / 2.0);
+        double dy = (tileRow - cy) / Math.max(1.0, layout.tileRows() / 2.0);
+        return Math.min(1.0, Math.sqrt(dx * dx + dy * dy));
     }
 
     public static boolean fogFloorHi(Layout layout, Fog fog, int tileRow, int tileCol) {

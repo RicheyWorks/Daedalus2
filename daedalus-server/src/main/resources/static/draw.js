@@ -351,7 +351,12 @@
           const lit = mixHex(COLORS.floor, COLORS.floorWarm, lamp * 0.28);
           g.fillStyle = mixHex(COLORS.floorDim, lit, lamp);
         } else {
-          g.fillStyle = COLORS.floor;
+          // Soft edge falloff — clear stone has depth, not flat slate.
+          const cx = (tw - 1) / 2, cy = (th - 1) / 2;
+          const dx = (col - cx) / Math.max(1, tw / 2);
+          const dy = (r - cy) / Math.max(1, th / 2);
+          const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+          g.fillStyle = mixHex(COLORS.floor, COLORS.floorDim, 0.22 * edge);
         }
         g.fillRect(geom.offX[col], geom.offY[r],
                    geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);

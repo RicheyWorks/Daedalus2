@@ -440,6 +440,11 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.FOG_UNSEEN).isEqualTo("#05070a");
         assertThat(DesktopPaint.WELL_VOID_CENTER).isEqualTo("#121821");
         assertThat(DesktopPaint.WELL_VOID_EDGE).isEqualTo("#0b0f14");
+        assertThat(DesktopPaint.FLOOR_DIM).isEqualTo("#2a333c");
+        assertThat(DesktopPaint.FLOOR_EDGE_DIM).isEqualTo(0.22);
+        DesktopPaint.Layout edgeLayout = DesktopPaint.Layout.fit(5, 5, 100, 100);
+        assertThat(DesktopPaint.floorEdge(edgeLayout, 0, 0))
+                .isGreaterThan(DesktopPaint.floorEdge(edgeLayout, 2, 2));
     }
 
     @Test
