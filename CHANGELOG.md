@@ -133,6 +133,8 @@ under the `_migration/` portfolios.
   still feels like a place, not a flat stamp.
   Path-head and race tip halos breathe so the living tip feels like presence,
   not a stuck stamp.
+  Sanctuary place rings and the worst-served coral breath on the gate cadence so
+  safe marks still feel held, not stuck stamps.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

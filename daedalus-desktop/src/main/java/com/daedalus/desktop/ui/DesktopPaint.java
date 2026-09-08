@@ -997,13 +997,54 @@ public final class DesktopPaint {
         return disc(layout, cell, 0.32);
     }
 
-    public static Ring worstServedRing(Layout layout, Point cell) {
+    /** Same 4.5s cadence as empty / gate / endpoint breath. */
+    public static final double SANCTUARY_BREATH_MS = EMPTY_BREATH_MS;
+
+    public static double sanctuaryBreathWave(long nanos) {
+        return emptyBreathWave(nanos);
+    }
+
+    public static double sanctuaryRingRadius(double wave) {
+        return 0.48 + 0.05 * wave;
+    }
+
+    public static double sanctuaryRingAlpha(double wave) {
+        return 0.26 + 0.16 * wave;
+    }
+
+    public static double worstServedRingRadius(double wave) {
+        return 0.36 + 0.05 * wave;
+    }
+
+    public static double worstServedRingAlpha(double wave) {
+        return 0.72 + 0.28 * wave;
+    }
+
+    public static Ring sanctuaryRing(Layout layout, Point cell) {
+        return sanctuaryRing(layout, cell, 0);
+    }
+
+    public static Ring sanctuaryRing(Layout layout, Point cell, double wave) {
         if (layout == null || cell == null) {
             return null;
         }
         double cx = layout.x(2 * cell.col() + 1) + layout.cellSize() / 2.0;
         double cy = layout.y(2 * cell.row() + 1) + layout.cellSize() / 2.0;
-        return new Ring(cx, cy, layout.cellSize() * 0.36,
+        return new Ring(cx, cy, layout.cellSize() * sanctuaryRingRadius(wave),
+                Math.max(1.5, layout.cellSize() * 0.08));
+    }
+
+    public static Ring worstServedRing(Layout layout, Point cell) {
+        return worstServedRing(layout, cell, 0);
+    }
+
+    public static Ring worstServedRing(Layout layout, Point cell, double wave) {
+        if (layout == null || cell == null) {
+            return null;
+        }
+        double cx = layout.x(2 * cell.col() + 1) + layout.cellSize() / 2.0;
+        double cy = layout.y(2 * cell.row() + 1) + layout.cellSize() / 2.0;
+        return new Ring(cx, cy, layout.cellSize() * worstServedRingRadius(wave),
                 Math.max(1.5, layout.cellSize() * 0.16));
     }
 

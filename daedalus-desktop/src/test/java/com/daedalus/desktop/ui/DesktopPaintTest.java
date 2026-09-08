@@ -245,7 +245,17 @@ class DesktopPaintTest {
                 .as("web worst-served ring is 0.36·cell")
                 .isEqualTo(layout.cellSize() * 0.36);
         assertThat(lonely.width()).isEqualTo(Math.max(1.5, layout.cellSize() * 0.16));
+        assertThat(DesktopPaint.SANCTUARY_BREATH_MS).isEqualTo(DesktopPaint.EMPTY_BREATH_MS);
+        assertThat(DesktopPaint.sanctuaryRing(layout, new Point(0, 0), 1).radius())
+                .isGreaterThan(DesktopPaint.sanctuaryRing(layout, new Point(0, 0)).radius());
+        assertThat(DesktopPaint.sanctuaryRingAlpha(1))
+                .isGreaterThan(DesktopPaint.sanctuaryRingAlpha(0));
+        assertThat(DesktopPaint.worstServedRing(layout, new Point(0, 0), 1).radius())
+                .isGreaterThan(lonely.radius());
+        assertThat(DesktopPaint.worstServedRingAlpha(1))
+                .isGreaterThan(DesktopPaint.worstServedRingAlpha(0));
         assertThat(DesktopPaint.worstServedRing(layout, null)).isNull();
+        assertThat(DesktopPaint.sanctuaryRing(layout, null)).isNull();
     }
 
     @Test

@@ -458,17 +458,32 @@
       });
     }
     if (scene.sanctuaries) {
+      const SANCTUARY_BREATH_MS = 4500;
+      const now = typeof performance !== "undefined" ? performance.now() : 0;
+      const t = (now % SANCTUARY_BREATH_MS) / SANCTUARY_BREATH_MS;
+      const wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
       scene.sanctuaries.placements.forEach(p => {
         marker(g, geom, p, "#4cc38a", 0.32);
+        if (!p) return;
+        const [x, y] = cellCenter(geom, p);
+        g.strokeStyle = "#4cc38a";
+        g.globalAlpha = 0.26 + 0.16 * wave;
+        g.lineWidth = Math.max(1.5, geom.cell * 0.08);
+        g.beginPath();
+        g.arc(x, y, geom.cell * (0.48 + 0.05 * wave), 0, 2 * Math.PI);
+        g.stroke();
+        g.globalAlpha = 1;
       });
       const w = scene.sanctuaries.worstServed;
       if (w) {
         const [x, y] = cellCenter(geom, w);
         g.strokeStyle = "#e5484d";
+        g.globalAlpha = 0.72 + 0.28 * wave;
         g.lineWidth = Math.max(1.5, geom.cell * 0.16);
         g.beginPath();
-        g.arc(x, y, geom.cell * 0.36, 0, 2 * Math.PI);
+        g.arc(x, y, geom.cell * (0.36 + 0.05 * wave), 0, 2 * Math.PI);
         g.stroke();
+        g.globalAlpha = 1;
       }
     }
     if (scene.hardest && scene.hardest.path && scene.hardest.path.length) {
