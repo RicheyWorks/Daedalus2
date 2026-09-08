@@ -170,6 +170,8 @@ under the `_migration/` portfolios.
   held around the board.
   Fog, session, and ghost walk trails age-fade so the corridor behind you softens
   while the living tip stays bright.
+  Empty-well mid mint/gold wash breathes with the wordmark so the idle board
+  glow still feels held, not a stuck puddle under DAEDALUS.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

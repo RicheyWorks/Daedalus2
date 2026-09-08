@@ -707,6 +707,10 @@ class DesktopPaintTest {
         double hi = DesktopPaint.emptyBreathWave((long) (DesktopPaint.EMPTY_BREATH_MS * 500_000));
         assertThat(DesktopPaint.emptyMintAlpha(1)).isGreaterThan(DesktopPaint.emptyMintAlpha(0));
         assertThat(DesktopPaint.emptyGoldRadius(1)).isGreaterThan(DesktopPaint.emptyGoldRadius(0));
+        assertThat(DesktopPaint.emptyGlowMintAlpha(1))
+                .isGreaterThan(DesktopPaint.emptyGlowMintAlpha(0));
+        assertThat(DesktopPaint.emptyGlowGoldAlpha(1))
+                .isGreaterThan(DesktopPaint.emptyGlowGoldAlpha(0));
         assertThat(DesktopPaint.emptyMarkFloorAlpha(1))
                 .isGreaterThan(DesktopPaint.emptyMarkFloorAlpha(0));
         assertThat(DesktopPaint.emptyMarkFloorAlpha(0)).isEqualTo(0.36);

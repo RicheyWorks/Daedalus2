@@ -68,6 +68,15 @@ public final class DesktopPaint {
         return 48 + 24 * wave;
     }
 
+    /** Soft mid-well mint wash under the mark — same gate wave. */
+    public static double emptyGlowMintAlpha(double wave) {
+        return 0.08 + 0.04 * wave;
+    }
+
+    public static double emptyGlowGoldAlpha(double wave) {
+        return 0.04 + 0.03 * wave;
+    }
+
     /** Idle lattice floors — same gate wave as the wordmark. */
     public static double emptyMarkFloorAlpha(double wave) {
         return 0.36 + 0.10 * wave;

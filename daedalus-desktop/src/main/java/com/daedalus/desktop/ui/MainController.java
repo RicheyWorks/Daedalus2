@@ -1675,16 +1675,18 @@ public class MainController {
             g.fillRect(0, 0, w, h);
             double cx = w / 2.0;
             double cy = h / 2.0;
+            double wave = DesktopPaint.emptyBreathWave(System.nanoTime());
             var glow = new javafx.scene.paint.RadialGradient(
                     0, 0, cx, cy - 36, Math.min(w, h) * 0.42, false,
                     javafx.scene.paint.CycleMethod.NO_CYCLE,
-                    new javafx.scene.paint.Stop(0, Color.web("#3ee08f", 0.10)),
-                    new javafx.scene.paint.Stop(0.55, Color.web("#f5c14a", 0.05)),
+                    new javafx.scene.paint.Stop(0, Color.web("#3ee08f",
+                            DesktopPaint.emptyGlowMintAlpha(wave))),
+                    new javafx.scene.paint.Stop(0.55, Color.web("#f5c14a",
+                            DesktopPaint.emptyGlowGoldAlpha(wave))),
                     new javafx.scene.paint.Stop(1, Color.web("#000000", 0)));
             g.setFill(glow);
             g.fillRect(0, 0, w, h);
             DesktopPaint.Layout mark = DesktopPaint.emptyMarkLayout(w, h);
-            double wave = DesktopPaint.emptyBreathWave(System.nanoTime());
             if (mark != null && theme != null) {
                 g.setGlobalAlpha(DesktopPaint.emptyMarkFloorAlpha(wave));
                 g.setFill(theme.passage());

@@ -715,17 +715,17 @@
     g.fillRect(0, 0, cssW, cssH);
     const cx = cssW / 2;
     const cy = cssH / 2;
-    const glow = g.createRadialGradient(cx, cy - 36, 12, cx, cy - 36, Math.min(cssW, cssH) * 0.42);
-    glow.addColorStop(0, "rgba(62, 224, 143, 0.10)");
-    glow.addColorStop(0.55, "rgba(245, 193, 74, 0.05)");
-    glow.addColorStop(1, "rgba(0, 0, 0, 0)");
-    g.fillStyle = glow;
-    g.fillRect(0, 0, cssW, cssH);
     // Same 4.5s mint/gold breath as #gate .gate-brand — idle well still feels held.
     const EMPTY_BREATH_MS = 4500;
     const t = ((nowMs == null ? (typeof performance !== "undefined" ? performance.now() : 0)
         : nowMs) % EMPTY_BREATH_MS) / EMPTY_BREATH_MS;
     const wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
+    const glow = g.createRadialGradient(cx, cy - 36, 12, cx, cy - 36, Math.min(cssW, cssH) * 0.42);
+    glow.addColorStop(0, "rgba(62, 224, 143, " + (0.08 + 0.04 * wave) + ")");
+    glow.addColorStop(0.55, "rgba(245, 193, 74, " + (0.04 + 0.03 * wave) + ")");
+    glow.addColorStop(1, "rgba(0, 0, 0, 0)");
+    g.fillStyle = glow;
+    g.fillRect(0, 0, cssW, cssH);
     paintIdleMark(g, cx, cy - 48, wave);
     g.textAlign = "center";
     g.textBaseline = "alphabetic";
