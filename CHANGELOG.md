@@ -119,6 +119,8 @@ under the `_migration/` portfolios.
   chrome still feels held.
   Explore dusk drifts and twinkles so the sky scrapes even when you stand
   still — atmosphere, not a pasted backdrop.
+  Analysis chokepoints wear soft purple place rings instead of admin slabs
+  so cuts read as passages on the board.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

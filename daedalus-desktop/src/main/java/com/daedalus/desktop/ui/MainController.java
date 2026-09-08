@@ -1903,18 +1903,19 @@ public class MainController {
         }
 
         if (currentCuts != null) {
-            g.setFill(Color.web(DesktopPaint.CHOKE));
+            Color choke = Color.web(DesktopPaint.CHOKE);
             for (var passage : currentCuts.chokepoints()) {
-                DesktopPaint.ChokeMark mark = DesktopPaint.chokeMark(layout, passage);
-                if (mark == null) {
-                    continue;
+                DesktopPaint.Ring halo = DesktopPaint.chokeHalo(layout, passage);
+                if (halo != null) {
+                    g.setGlobalAlpha(DesktopPaint.CHOKE_HALO_ALPHA);
+                    g.setFill(choke);
+                    g.fillOval(halo.cx() - halo.radius(), halo.cy() - halo.radius(),
+                            halo.radius() * 2, halo.radius() * 2);
+                    g.setGlobalAlpha(1);
                 }
-                g.setGlobalAlpha(0.35);
-                g.fillRect(mark.haloX(), mark.haloY(), mark.haloW(), mark.haloH());
-                g.setGlobalAlpha(0.95);
-                g.fillRect(mark.x(), mark.y(), mark.w(), mark.h());
+                paintRing(g, DesktopPaint.chokeRing(layout, passage),
+                        choke.deriveColor(0, 1, 1, DesktopPaint.CHOKE_RING_ALPHA));
             }
-            g.setGlobalAlpha(1);
             for (Point end : currentCuts.deadEnds()) {
                 paintDisc(g, DesktopPaint.deadEndMarker(layout, end),
                         Color.web(DesktopPaint.DEAD_END));

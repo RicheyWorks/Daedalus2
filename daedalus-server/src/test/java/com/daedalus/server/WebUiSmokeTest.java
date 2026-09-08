@@ -81,6 +81,7 @@ class WebUiSmokeTest {
                 .contains("wallWarm")
                 .contains("FOG_FRONTIER")
                 .contains("fogFrontier")
+                .contains("core + geom.cell * 0.18")
                 .contains("shadowBlur")
                 .contains("EMPTY_BREATH_MS")
                 .contains("prefers-reduced-motion")

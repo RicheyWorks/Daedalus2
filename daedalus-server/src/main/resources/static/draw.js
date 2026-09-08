@@ -416,14 +416,22 @@
       });
       (scene.analysis.chokepoints || []).forEach(cp => {
         const tr = cp.a.row + cp.b.row + 1, tc = cp.a.col + cp.b.col + 1;
+        const cx = (geom.offX[tc] + geom.offX[tc + 1]) / 2;
+        const cy = (geom.offY[tr] + geom.offY[tr + 1]) / 2;
+        const core = Math.max(geom.cell, geom.offX[tc + 1] - geom.offX[tc],
+            geom.offY[tr + 1] - geom.offY[tr]) * 0.55;
         g.fillStyle = "#c084fc";
-        g.globalAlpha = 0.35;
-        g.fillRect(geom.offX[tc] - geom.wall, geom.offY[tr] - geom.wall,
-                   (geom.offX[tc + 1] - geom.offX[tc]) + 2 * geom.wall,
-                   (geom.offY[tr + 1] - geom.offY[tr]) + 2 * geom.wall);
-        g.globalAlpha = 0.95;
-        g.fillRect(geom.offX[tc], geom.offY[tr],
-                   geom.offX[tc + 1] - geom.offX[tc], geom.offY[tr + 1] - geom.offY[tr]);
+        g.globalAlpha = 0.22;
+        g.beginPath();
+        g.arc(cx, cy, core + geom.cell * 0.18, 0, 2 * Math.PI);
+        g.fill();
+        g.globalAlpha = 1;
+        g.strokeStyle = "#c084fc";
+        g.globalAlpha = 0.72;
+        g.lineWidth = Math.max(1.5, geom.cell * 0.1);
+        g.beginPath();
+        g.arc(cx, cy, core, 0, 2 * Math.PI);
+        g.stroke();
         g.globalAlpha = 1;
       });
     }

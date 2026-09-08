@@ -213,12 +213,19 @@ class DesktopPaintTest {
         assertThat(mark).isNotNull();
         assertThat(mark.haloW()).isGreaterThan(mark.w());
         assertThat(DesktopPaint.CHOKE).isEqualTo("#c084fc");
+        DesktopPaint.Ring halo = DesktopPaint.chokeHalo(layout, east);
+        DesktopPaint.Ring ring = DesktopPaint.chokeRing(layout, east);
+        assertThat(halo).isNotNull();
+        assertThat(ring).isNotNull();
+        assertThat(halo.radius()).isGreaterThan(ring.radius());
+        assertThat(DesktopPaint.CHOKE_CORE).isEqualTo(0.55);
         assertThat(DesktopPaint.DEAD_END).isEqualTo("#9ecbff");
         DesktopPaint.Marker speck = DesktopPaint.deadEndMarker(layout, new Point(0, 0));
         assertThat(speck.size())
                 .as("web dead-end radius is 0.12·cell")
                 .isEqualTo(layout.cellSize() * 0.24);
         assertThat(DesktopPaint.chokeTile(null)).isNull();
+        assertThat(DesktopPaint.chokeHalo(layout, null)).isNull();
     }
 
     @Test

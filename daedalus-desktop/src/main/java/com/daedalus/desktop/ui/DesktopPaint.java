@@ -835,6 +835,35 @@ public final class DesktopPaint {
         return new ChokeMark(x, y, w, h, x - pad, y - pad, w + 2 * pad, h + 2 * pad);
     }
 
+    /** Soft place ring on a cut — same language as {@code draw.js} choke arcs. */
+    public static final double CHOKE_CORE = 0.55;
+    public static final double CHOKE_HALO_PAD = 0.18;
+    public static final double CHOKE_HALO_ALPHA = 0.22;
+    public static final double CHOKE_RING_ALPHA = 0.72;
+
+    public static Ring chokeHalo(Layout layout, MazeFlow.Passage passage) {
+        ChokeMark mark = chokeMark(layout, passage);
+        if (layout == null || mark == null) {
+            return null;
+        }
+        double cx = mark.x() + mark.w() / 2.0;
+        double cy = mark.y() + mark.h() / 2.0;
+        double core = Math.max(mark.w(), mark.h()) * CHOKE_CORE;
+        return new Ring(cx, cy, core + layout.cellSize() * CHOKE_HALO_PAD,
+                Math.max(1.5, layout.cellSize() * 0.1));
+    }
+
+    public static Ring chokeRing(Layout layout, MazeFlow.Passage passage) {
+        ChokeMark mark = chokeMark(layout, passage);
+        if (layout == null || mark == null) {
+            return null;
+        }
+        double cx = mark.x() + mark.w() / 2.0;
+        double cy = mark.y() + mark.h() / 2.0;
+        double core = Math.max(mark.w(), mark.h()) * CHOKE_CORE;
+        return new Ring(cx, cy, core, Math.max(1.5, layout.cellSize() * 0.1));
+    }
+
     public static Marker deadEndMarker(Layout layout, Point cell) {
         return disc(layout, cell, 0.12);
     }
