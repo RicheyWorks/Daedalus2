@@ -123,6 +123,11 @@ public final class DesktopPaint {
         return 12 + 8 * wave;
     }
 
+    /** Well export chip gold lip — same band as web {@code exportsRimBreath}. */
+    public static double exportsRimAlpha(double wave) {
+        return 0.36 + 0.19 * wave;
+    }
+
     /**
      * Same miniature as {@code draw.js} {@code IDLE_TILES} — one product empty well.
      */

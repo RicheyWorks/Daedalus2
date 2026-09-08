@@ -837,6 +837,8 @@ class DesktopPaintTest {
                 .isGreaterThan(DesktopPaint.brandMintRadius(0));
         assertThat(DesktopPaint.brandMintAlpha(0)).isEqualTo(0.20);
         assertThat(DesktopPaint.brandMintRadius(0)).isEqualTo(12.0);
+        assertThat(DesktopPaint.exportsRimAlpha(0)).isEqualTo(0.36);
+        assertThat(DesktopPaint.exportsRimAlpha(1)).isEqualTo(0.55);
         assertThat(hi).isNotEqualTo(lo);
         assertThat(DesktopPaint.EMPTY_TITLE).contains("Generate");
         assertThat(DesktopPaint.EMPTY_DETAIL).contains("Solve");

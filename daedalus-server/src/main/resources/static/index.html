@@ -153,9 +153,14 @@
                   rgba(5, 7, 10, .96));
     }
   }
+  @keyframes exportsRimBreath {
+    0%, 100% { border-color: rgba(184, 133, 56, 0.36); }
+    50% { border-color: rgba(184, 133, 56, 0.55); }
+  }
   @media (prefers-reduced-motion: reduce) {
     #gate .gate-brand, #gate .lede, #gate .gate-enter, #gate article, #gate .gate-veil,
-    header h1 button, #stage, .board-panel, .panel, header, #legend {
+    header h1 button, #stage, .board-panel, .panel, header, #legend,
+    .exports button, .exports a {
       animation: none;
     }
     #gate .gate-brand {
@@ -316,7 +321,8 @@
                                 background: rgba(7, 9, 12, .78);
                                 border: 1px solid rgba(184, 133, 56, 0.36);
                                 border-radius: 6px;
-                                backdrop-filter: blur(4px); }
+                                backdrop-filter: blur(4px);
+                                animation: exportsRimBreath 4.5s ease-in-out infinite; }
   .exports button:hover, .exports a:hover {
     border-color: rgba(184, 133, 56, 0.85); color: var(--text);
     box-shadow: 0 0 12px rgba(184, 133, 56, 0.18); }

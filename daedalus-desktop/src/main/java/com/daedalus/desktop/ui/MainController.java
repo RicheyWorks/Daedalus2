@@ -1720,6 +1720,19 @@ public class MainController {
                 }
             }
         }
+        if (exportBox != null) {
+            double chip = DesktopPaint.exportsRimAlpha(wave);
+            for (javafx.scene.Node child : exportBox.getChildrenUnmodifiable()) {
+                if (child instanceof javafx.scene.layout.Region chipNode) {
+                    chipNode.setBorder(new javafx.scene.layout.Border(
+                            new javafx.scene.layout.BorderStroke(
+                                    Color.rgb(184, 133, 56, chip),
+                                    javafx.scene.layout.BorderStrokeStyle.SOLID,
+                                    new javafx.scene.layout.CornerRadii(6),
+                                    new javafx.scene.layout.BorderWidths(1))));
+                }
+            }
+        }
     }
 
     private void redraw() {

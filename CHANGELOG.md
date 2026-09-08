@@ -232,6 +232,8 @@ under the `_migration/` portfolios.
   maze still feel held, not a stuck stamp under the ring.
   Explore wall–floor contact softens the skirting so tunnels have weight, not a
   hard join between flat floor and wall.
+  Well export chips breathe a gold lip with the board rim so overlay chrome still
+  feels held over the maze.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
