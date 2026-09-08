@@ -123,6 +123,8 @@ under the `_migration/` portfolios.
   so cuts read as passages on the board.
   Analysis dead ends wear a soft ice pad and rim so cul-de-sacs read as
   places, not flat dots.
+  Explore automap you-are-here breathes so the earned map names your place
+  as presence, not a stuck stamp.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

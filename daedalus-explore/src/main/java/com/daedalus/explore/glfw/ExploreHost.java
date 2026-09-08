@@ -357,7 +357,7 @@ public final class ExploreHost {
             pillar(wx, wz);
         }
         glEnd();
-        hud(aspect, world, faceTex, stride);
+        hud(aspect, world, faceTex, stride, seconds);
     }
 
     private static void sky(ExploreBody body, int skyTex, double aspect, double seconds) {
@@ -420,7 +420,8 @@ public final class ExploreHost {
         glEnd();
     }
 
-    private static void hud(double aspect, ExploreWorld world, int[] faceTex, double stride) {
+    private static void hud(double aspect, ExploreWorld world, int[] faceTex, double stride,
+                            double seconds) {
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_FOG);
         glMatrixMode(GL_PROJECTION);
@@ -446,7 +447,7 @@ public final class ExploreHost {
         glVertex2f(0, aim - arm * 1.33f);
         glVertex2f(0, aim + arm * 1.33f);
         glEnd();
-        automap(aspect, world);
+        automap(aspect, world, seconds);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_FOG);
     }
@@ -593,7 +594,7 @@ public final class ExploreHost {
         glEnd();
     }
 
-    private static void automap(double aspect, ExploreWorld world) {
+    private static void automap(double aspect, ExploreWorld world, double seconds) {
         List<ExplorePaint.MapDot> dots = ExplorePaint.automap(
                 world.fog(), world.mesh(), world.body(), world.markers());
         if (dots.isEmpty()) {
@@ -640,14 +641,15 @@ public final class ExploreHost {
             glColor3f(ExplorePaint.MAP_MARK_R, ExplorePaint.MAP_MARK_G, ExplorePaint.MAP_MARK_B);
             fill(x0, y0, x0 + sx, y0 + sy);
         }
+        float hereHalo = ExplorePaint.mapHereHalo(seconds);
         for (ExplorePaint.MapDot dot : dots) {
             if (dot.kind() != ExplorePaint.MapKind.HERE) {
                 continue;
             }
             double x0 = left + dot.x() * sx;
             double y0 = bot + dot.y() * sy;
-            double padX = sx * ExplorePaint.MAP_HERE_HALO;
-            double padY = sy * ExplorePaint.MAP_HERE_HALO;
+            double padX = sx * hereHalo;
+            double padY = sy * hereHalo;
             glColor3f(ExplorePaint.MAP_HERE_SOFT_R, ExplorePaint.MAP_HERE_SOFT_G,
                     ExplorePaint.MAP_HERE_SOFT_B);
             fill(x0 - padX, y0 - padY, x0 + sx + padX, y0 + sy + padY);

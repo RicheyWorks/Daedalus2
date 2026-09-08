@@ -29,6 +29,14 @@ public final class ExplorePaint {
     public static final float MAP_HERE_R = 0.95f;
     public static final float MAP_HERE_G = 0.86f;
     public static final float MAP_HERE_B = 0.28f;
+    /** HERE pad breath — same cadence idea as victory (~2.8s). */
+    public static final float MAP_HERE_BREATH_MS = 2800f;
+
+    public static float mapHereHalo(double seconds) {
+        double t = ((seconds * 1000.0) % MAP_HERE_BREATH_MS) / MAP_HERE_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return MAP_HERE_HALO * (float) (0.85 + 0.30 * wave);
+    }
     /** Soft pad under automap story marks — presence, not a flat red pixel. */
     public static final float MAP_MARK_HALO = 0.55f;
     public static final float MAP_MARK_SOFT_R = 0.45f;
