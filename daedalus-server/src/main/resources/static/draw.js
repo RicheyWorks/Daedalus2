@@ -722,6 +722,15 @@
     const w0 = wave == null ? 0 : wave;
     g.save();
     g.translate(ox, oy);
+    g.globalAlpha = 0.22 + 0.08 * w0;
+    g.fillStyle = "#121821";
+    for (let r = 0; r < tiles.length; r++) {
+      for (let c = 0; c < tiles[r].length; c++) {
+        if (tiles[r][c] !== "#") continue;
+        g.fillRect(geom.offX[c], geom.offY[r],
+                   geom.offX[c + 1] - geom.offX[c], geom.offY[r + 1] - geom.offY[r]);
+      }
+    }
     g.globalAlpha = 0.36 + 0.10 * w0;
     g.fillStyle = COLORS.floor;
     for (let r = 0; r < tiles.length; r++) {

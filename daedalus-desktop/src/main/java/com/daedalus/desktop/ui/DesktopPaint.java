@@ -82,6 +82,11 @@ public final class DesktopPaint {
         return 0.36 + 0.10 * wave;
     }
 
+    /** Idle lattice walls — soft lift against the void so the miniature silhouettes. */
+    public static double emptyMarkWallAlpha(double wave) {
+        return 0.22 + 0.08 * wave;
+    }
+
     /** Desktop well gold rim — same 0.48↔0.72 band as web {@code stageRimBreath}. */
     public static double canvasRimAlpha(double wave) {
         return 0.48 + 0.24 * wave;
@@ -107,6 +112,15 @@ public final class DesktopPaint {
     /** Status / toolbar gold lip — same band as canvas rim. */
     public static double shellRimAlpha(double wave) {
         return canvasRimAlpha(wave);
+    }
+
+    /** Toolbar brand mint — same soft band as cosmic.css brand glow. */
+    public static double brandMintAlpha(double wave) {
+        return 0.20 + 0.16 * wave;
+    }
+
+    public static double brandMintRadius(double wave) {
+        return 12 + 8 * wave;
     }
 
     /**
@@ -1787,13 +1801,27 @@ public final class DesktopPaint {
                 fitted.offY());
     }
 
-    /** Passage tiles of the idle mark — walls stay the void. */
+    /** Passage tiles of the idle mark. */
     public static List<TileRect> emptyMarkFloors() {
         List<TileRect> out = new ArrayList<>();
         for (int r = 0; r < EMPTY_MARK.length; r++) {
             String row = EMPTY_MARK[r];
             for (int c = 0; c < row.length(); c++) {
                 if (row.charAt(c) != '#') {
+                    out.add(new TileRect(r, c));
+                }
+            }
+        }
+        return List.copyOf(out);
+    }
+
+    /** Wall tiles of the idle mark — soft silhouette against the void. */
+    public static List<TileRect> emptyMarkWalls() {
+        List<TileRect> out = new ArrayList<>();
+        for (int r = 0; r < EMPTY_MARK.length; r++) {
+            String row = EMPTY_MARK[r];
+            for (int c = 0; c < row.length(); c++) {
+                if (row.charAt(c) == '#') {
                     out.add(new TileRect(r, c));
                 }
             }

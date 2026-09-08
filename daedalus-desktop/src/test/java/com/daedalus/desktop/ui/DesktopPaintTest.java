@@ -804,6 +804,14 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.EMPTY_MARK).hasSize(7);
         assertThat(DesktopPaint.EMPTY_MARK[0]).hasSize(11);
         assertThat(DesktopPaint.emptyMarkFloors()).hasSize(28);
+        assertThat(DesktopPaint.emptyMarkWalls()).isNotEmpty();
+        assertThat(DesktopPaint.emptyMarkWalls().size()
+                + DesktopPaint.emptyMarkFloors().size())
+                .isEqualTo(7 * 11);
+        assertThat(DesktopPaint.emptyMarkWallAlpha(1))
+                .isGreaterThan(DesktopPaint.emptyMarkWallAlpha(0));
+        assertThat(DesktopPaint.emptyMarkFloorAlpha(0))
+                .isGreaterThan(DesktopPaint.emptyMarkWallAlpha(0));
         assertThat(DesktopPaint.emptyMarkFloors())
                 .contains(
                         new DesktopPaint.TileRect(1, 1),

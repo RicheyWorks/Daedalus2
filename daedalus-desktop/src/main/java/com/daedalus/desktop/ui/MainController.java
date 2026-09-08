@@ -1671,6 +1671,55 @@ public class MainController {
         glow.setColor(Color.rgb(184, 133, 56, DesktopPaint.canvasRimGlowAlpha(wave)));
         glow.setInput(inset);
         canvasParent.setEffect(glow);
+        pulseShellChrome(wave);
+    }
+
+    /** Legend fade + toolbar/status gold lips — same cadence as web shell chrome. */
+    private void pulseShellChrome(double wave) {
+        if (legendBox != null) {
+            legendBox.setBackground(new javafx.scene.layout.Background(
+                    new javafx.scene.layout.BackgroundFill(
+                            new javafx.scene.paint.LinearGradient(
+                                    0, 0, 0, 1, true,
+                                    javafx.scene.paint.CycleMethod.NO_CYCLE,
+                                    new javafx.scene.paint.Stop(0, Color.TRANSPARENT),
+                                    new javafx.scene.paint.Stop(0.35,
+                                            Color.rgb(5, 7, 10,
+                                                    DesktopPaint.legendFadeMidAlpha(wave))),
+                                    new javafx.scene.paint.Stop(1,
+                                            Color.rgb(5, 7, 10,
+                                                    DesktopPaint.legendFadeBotAlpha(wave)))),
+                            javafx.scene.layout.CornerRadii.EMPTY,
+                            javafx.geometry.Insets.EMPTY)));
+        }
+        double lip = DesktopPaint.shellRimAlpha(wave);
+        if (statusLabel != null
+                && statusLabel.getParent() instanceof javafx.scene.layout.Region statusBar) {
+            statusBar.setBorder(new javafx.scene.layout.Border(
+                    new javafx.scene.layout.BorderStroke(
+                            Color.rgb(184, 133, 56, lip),
+                            javafx.scene.layout.BorderStrokeStyle.SOLID,
+                            javafx.scene.layout.CornerRadii.EMPTY,
+                            new javafx.scene.layout.BorderWidths(1, 0, 0, 0))));
+        }
+        if (generateButton != null
+                && generateButton.getParent() instanceof javafx.scene.layout.Region toolbar) {
+            toolbar.setBorder(new javafx.scene.layout.Border(
+                    new javafx.scene.layout.BorderStroke(
+                            Color.rgb(184, 133, 56, lip),
+                            javafx.scene.layout.BorderStrokeStyle.SOLID,
+                            javafx.scene.layout.CornerRadii.EMPTY,
+                            new javafx.scene.layout.BorderWidths(0, 0, 1, 0))));
+            for (javafx.scene.Node child : toolbar.getChildrenUnmodifiable()) {
+                if (child instanceof Label brand && brand.getStyleClass().contains("brand")) {
+                    var mint = new javafx.scene.effect.DropShadow(
+                            DesktopPaint.brandMintRadius(wave), 0, 0,
+                            Color.web("#3ee08f", DesktopPaint.brandMintAlpha(wave)));
+                    brand.setEffect(mint);
+                    break;
+                }
+            }
+        }
     }
 
     private void redraw() {
@@ -1711,6 +1760,12 @@ public class MainController {
             g.fillRect(0, 0, w, h);
             DesktopPaint.Layout mark = DesktopPaint.emptyMarkLayout(w, h);
             if (mark != null && theme != null) {
+                g.setGlobalAlpha(DesktopPaint.emptyMarkWallAlpha(wave));
+                g.setFill(Color.web(DesktopPaint.WELL_VOID_CENTER));
+                for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkWalls()) {
+                    g.fillRect(mark.x(tile.tileCol()), mark.y(tile.tileRow()),
+                            mark.w(tile.tileCol()), mark.h(tile.tileRow()));
+                }
                 g.setGlobalAlpha(DesktopPaint.emptyMarkFloorAlpha(wave));
                 g.setFill(theme.passage());
                 for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkFloors()) {

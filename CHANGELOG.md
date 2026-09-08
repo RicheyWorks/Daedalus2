@@ -208,6 +208,8 @@ under the `_migration/` portfolios.
   tip still feels live, not a stuck bright wash at the frontier.
   Race wash openings read louder than cells so arena floods are corridors, not
   graph-paper stamps.
+  Empty-well idle lattice walls lift softly against the void so the miniature
+  maze silhouettes, not floating floors alone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
