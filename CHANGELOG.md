@@ -172,6 +172,8 @@ under the `_migration/` portfolios.
   while the living tip stays bright.
   Empty-well mid mint/gold wash breathes with the wordmark so the idle board
   glow still feels held, not a stuck puddle under DAEDALUS.
+  Web board-panel gold rim breathes with the stage so post-Enter chrome still
+  feels held around the well.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
