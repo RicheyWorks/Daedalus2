@@ -154,6 +154,12 @@ class ExplorePaintTest {
                 .isNotEqualTo(ExplorePaint.mapMarkHalo(0.8));
         assertThat(ExplorePaint.MAP_MARK_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
         assertThat(ExplorePaint.MAP_MARK_R).isGreaterThan(ExplorePaint.MAP_MARK_SOFT_R);
+        assertThat(ExplorePaint.MAP_FRAME_OUT).isGreaterThan(ExplorePaint.MAP_FRAME_IN);
+        assertThat(ExplorePaint.MAP_FRAME_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
+        assertThat(ExplorePaint.mapFrameOut(0.1))
+                .isNotEqualTo(ExplorePaint.mapFrameOut(0.8));
+        assertThat(ExplorePaint.mapFrameIn(0.1))
+                .isNotEqualTo(ExplorePaint.mapFrameIn(0.8));
     }
 
     @Test

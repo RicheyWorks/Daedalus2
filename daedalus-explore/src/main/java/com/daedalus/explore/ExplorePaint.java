@@ -54,6 +54,23 @@ public final class ExplorePaint {
     public static final float MAP_MARK_R = 0.78f;
     public static final float MAP_MARK_G = 0.22f;
     public static final float MAP_MARK_B = 0.16f;
+    /** Automap gold frame — same ink as the status lip. */
+    public static final float MAP_FRAME_OUT = 0.022f;
+    public static final float MAP_FRAME_IN = 0.014f;
+    /** Frame breath — same cadence as HERE / story pads. */
+    public static final float MAP_FRAME_BREATH_MS = MAP_HERE_BREATH_MS;
+
+    public static float mapFrameOut(double seconds) {
+        double t = ((seconds * 1000.0) % MAP_FRAME_BREATH_MS) / MAP_FRAME_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return MAP_FRAME_OUT * (float) (0.88 + 0.24 * wave);
+    }
+
+    public static float mapFrameIn(double seconds) {
+        double t = ((seconds * 1000.0) % MAP_FRAME_BREATH_MS) / MAP_FRAME_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return MAP_FRAME_IN * (float) (0.88 + 0.24 * wave);
+    }
     /** Ortho strip under the crosshair — Doom status height in NDC. */
     public static final float STATUS_H = 0.28f;
     /** Gold lip — same ink as the automap frame. */
