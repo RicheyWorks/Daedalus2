@@ -410,6 +410,20 @@ public final class DesktopPaint {
     public static final double COMPARE_ALPHA = 0.22;
     /** Opening wash between adjacent compare cells — louder than the cell wash. */
     public static final double COMPARE_OPENING_ALPHA = 0.34;
+    /** Compare wash pulse — same cadence as race / expansion front. */
+    public static final double COMPARE_BREATH_MS = VICTORY_BREATH_MS;
+
+    public static double compareBreathWave(long nanos) {
+        return victoryBreathWave(nanos);
+    }
+
+    public static double comparePaintAlpha(double wave) {
+        return COMPARE_ALPHA * (0.88 + 0.24 * wave);
+    }
+
+    public static double compareOpeningPaintAlpha(double wave) {
+        return COMPARE_OPENING_ALPHA * (0.85 + 0.30 * wave);
+    }
     /** Tip disc on each finished route — smaller than race so washes stay readable. */
     public static final double COMPARE_HEAD_RADIUS = 0.28;
     /** Min-cut passage — same purple as {@code draw.js} chokepoints. */
@@ -1555,6 +1569,18 @@ public final class DesktopPaint {
 
     public static double pathHeadHaloAlpha(double wave) {
         return 0.28 + 0.16 * wave;
+    }
+
+    public static double pathHeadGlowAlpha(double wave) {
+        return 0.22 + 0.10 * wave;
+    }
+
+    public static double pathHeadGlowPadFraction(double wave) {
+        return 0.32 + 0.08 * wave;
+    }
+
+    public static double pathHeadRimAlpha(double wave) {
+        return 0.65 + 0.15 * wave;
     }
 
     /** Soft halo at the tip of an unfolding route — same band as {@code draw.js} pathHead. */

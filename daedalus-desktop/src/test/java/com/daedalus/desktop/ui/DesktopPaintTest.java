@@ -199,6 +199,15 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.COMPARE_OPENING_ALPHA)
                 .as("openings read louder than stacked cell wash")
                 .isGreaterThan(DesktopPaint.COMPARE_ALPHA);
+        assertThat(DesktopPaint.COMPARE_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
+        assertThat(DesktopPaint.comparePaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.COMPARE_ALPHA * 0.88);
+        assertThat(DesktopPaint.comparePaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.COMPARE_ALPHA * 1.12);
+        assertThat(DesktopPaint.compareOpeningPaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.COMPARE_OPENING_ALPHA * 0.85);
+        assertThat(DesktopPaint.compareOpeningPaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.COMPARE_OPENING_ALPHA * 1.15);
         TileType[][] tiles = new TileType[5][5];
         for (int r = 0; r < 5; r++) {
             for (int c = 0; c < 5; c++) {
@@ -867,6 +876,12 @@ class DesktopPaintTest {
                 .isGreaterThan(tip.radius());
         assertThat(DesktopPaint.pathHeadHaloAlpha(1))
                 .isGreaterThan(DesktopPaint.pathHeadHaloAlpha(0));
+        assertThat(DesktopPaint.pathHeadGlowAlpha(1))
+                .isGreaterThan(DesktopPaint.pathHeadGlowAlpha(0));
+        assertThat(DesktopPaint.pathHeadGlowPadFraction(1))
+                .isGreaterThan(DesktopPaint.pathHeadGlowPadFraction(0));
+        assertThat(DesktopPaint.pathHeadRimAlpha(1))
+                .isGreaterThan(DesktopPaint.pathHeadRimAlpha(0));
         assertThat(DesktopPaint.PATH_HEAD_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
         assertThat(DesktopPaint.HARDEST).isEqualTo("#f2c94c");
         assertThat(DesktopPaint.HARDEST_ALPHA).isEqualTo(0.75);

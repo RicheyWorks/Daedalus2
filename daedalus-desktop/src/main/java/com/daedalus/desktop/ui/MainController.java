@@ -1947,17 +1947,18 @@ public class MainController {
                     DesktopPaint.RACE_PATH_B);
         }
         if (currentCompare != null && currentCompare.lanes() != null) {
+            double compareWave = DesktopPaint.compareBreathWave(System.nanoTime());
             for (DesktopPaint.CompareLane lane : currentCompare.lanes()) {
                 if (lane.path() == null || lane.path().isEmpty()) {
                     continue;
                 }
                 g.setFill(Color.web(lane.color()));
-                g.setGlobalAlpha(DesktopPaint.COMPARE_ALPHA);
+                g.setGlobalAlpha(DesktopPaint.comparePaintAlpha(compareWave));
                 for (DesktopPaint.TileRect tile : DesktopPaint.expansionCells(lane.path())) {
                     g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                             layout.w(tile.tileCol()), layout.h(tile.tileRow()));
                 }
-                g.setGlobalAlpha(DesktopPaint.COMPARE_OPENING_ALPHA);
+                g.setGlobalAlpha(DesktopPaint.compareOpeningPaintAlpha(compareWave));
                 for (DesktopPaint.TileRect tile : DesktopPaint.expansionOpenings(
                         lane.path(), tiles)) {
                     g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
@@ -1974,8 +1975,8 @@ public class MainController {
                 double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
                 paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
                         ink.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
-                paintDisc(g, DesktopPaint.disc(layout, tip, DesktopPaint.COMPARE_HEAD_RADIUS),
-                        ink);
+                paintPathHeadDisc(g, DesktopPaint.disc(layout, tip, DesktopPaint.COMPARE_HEAD_RADIUS),
+                        ink, tipWave);
             }
         }
         if (!playerWalk.isEmpty() && theme != null) {
@@ -1993,7 +1994,8 @@ public class MainController {
             double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
             paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
                     theme.path().deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
-            paintDisc(g, DesktopPaint.pathHeadMarker(layout, currentPath), theme.path());
+            paintPathHeadDisc(g, DesktopPaint.pathHeadMarker(layout, currentPath), theme.path(),
+                    tipWave);
         }
 
         if (currentCuts != null) {
@@ -2057,7 +2059,7 @@ public class MainController {
             Color gold = Color.web(DesktopPaint.HARDEST);
             paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
                     gold.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
-            paintDisc(g, DesktopPaint.disc(layout, tip, 0.3), gold);
+            paintPathHeadDisc(g, DesktopPaint.disc(layout, tip, 0.3), gold, tipWave);
         }
 
         if (currentHunt != null && currentHunt.path() != null && !currentHunt.path().isEmpty()) {
@@ -2068,7 +2070,7 @@ public class MainController {
             Color ice = Color.web(DesktopPaint.TOUR);
             paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
                     ice.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
-            paintDisc(g, DesktopPaint.disc(layout, tip, 0.3), ice);
+            paintPathHeadDisc(g, DesktopPaint.disc(layout, tip, 0.3), ice, tipWave);
         }
         if (currentHunt != null && currentHunt.waypoints() != null) {
             for (Point coin : currentHunt.waypoints()) {
@@ -2292,7 +2294,7 @@ public class MainController {
             double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
             paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
                     laneColor.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
-            paintDisc(g, DesktopPaint.disc(layout, tip, 0.3), laneColor);
+            paintPathHeadDisc(g, DesktopPaint.disc(layout, tip, 0.3), laneColor, tipWave);
         }
         if (pathProg > 0 && !lane.path().isEmpty()) {
             List<Point> ribbon = DesktopPaint.pathPrefix(lane.path(), pathProg);
@@ -2301,7 +2303,7 @@ public class MainController {
             double headWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
             paintRing(g, DesktopPaint.pathHeadHalo(layout, head, headWave),
                     laneColor.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(headWave)));
-            paintDisc(g, DesktopPaint.raceHeadMarker(layout, ribbon), laneColor);
+            paintPathHeadDisc(g, DesktopPaint.raceHeadMarker(layout, ribbon), laneColor, headWave);
         }
     }
 
@@ -2477,6 +2479,25 @@ public class MainController {
         g.setFill(color);
         g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
         g.setStroke(color.deriveColor(0, 1, 1, 0.65));
+        g.setLineWidth(Math.max(1.0, mark.size() * 0.07));
+        g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
+    }
+
+    /** Solver / race / tour tip disc — soft pad + rim breathe with the halo. */
+    private static void paintPathHeadDisc(GraphicsContext g, DesktopPaint.Marker mark,
+                                          Color color, double wave) {
+        if (mark == null || color == null) {
+            return;
+        }
+        double pad = mark.size() * DesktopPaint.pathHeadGlowPadFraction(wave);
+        g.setGlobalAlpha(DesktopPaint.pathHeadGlowAlpha(wave));
+        g.setFill(color);
+        g.fillOval(mark.x() - pad / 2, mark.y() - pad / 2,
+                mark.size() + pad, mark.size() + pad);
+        g.setGlobalAlpha(1);
+        g.setFill(color);
+        g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
+        g.setStroke(color.deriveColor(0, 1, 1, DesktopPaint.pathHeadRimAlpha(wave)));
         g.setLineWidth(Math.max(1.0, mark.size() * 0.07));
         g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
     }
