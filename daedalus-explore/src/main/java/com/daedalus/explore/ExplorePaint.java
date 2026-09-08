@@ -83,6 +83,20 @@ public final class ExplorePaint {
     public static final float STATUS_GOLD_UNDER_G = 0.11f;
     public static final float STATUS_GOLD_UNDER_B = 0.08f;
     public static final float STATUS_GOLD_UNDER_H = 0.022f;
+    /** Status lip breath — same cadence as automap frame chrome. */
+    public static final float STATUS_BREATH_MS = MAP_HERE_BREATH_MS;
+
+    public static float statusGoldH(double seconds) {
+        double t = ((seconds * 1000.0) % STATUS_BREATH_MS) / STATUS_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return STATUS_GOLD_H * (float) (0.88 + 0.24 * wave);
+    }
+
+    public static float statusGoldUnderH(double seconds) {
+        double t = ((seconds * 1000.0) % STATUS_BREATH_MS) / STATUS_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return STATUS_GOLD_UNDER_H * (float) (0.88 + 0.24 * wave);
+    }
     public static final double TORCH_REACH = 11.0;
 
     public enum MapKind {

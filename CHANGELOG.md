@@ -158,6 +158,7 @@ under the `_migration/` portfolios.
   Explore crosshair soft underglow breathes so aim still feels held at rest.
   Explore mood-face gold lip breathes so the HUD portrait still feels held.
   Explore automap gold frame breathes so the earned map chrome still feels held.
+  Explore status-strip gold lip breathes so HUD chrome matches the automap frame.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

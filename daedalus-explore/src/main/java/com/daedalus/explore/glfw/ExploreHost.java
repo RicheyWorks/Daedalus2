@@ -476,10 +476,10 @@ public final class ExploreHost {
         fill(-aspect, bot, aspect, top);
         glColor3f(ExplorePaint.STATUS_GOLD_UNDER_R, ExplorePaint.STATUS_GOLD_UNDER_G,
                 ExplorePaint.STATUS_GOLD_UNDER_B);
-        fill(-aspect, top - ExplorePaint.STATUS_GOLD_UNDER_H, aspect, top);
+        fill(-aspect, top - ExplorePaint.statusGoldUnderH(seconds), aspect, top);
         glColor3f(ExplorePaint.STATUS_GOLD_R, ExplorePaint.STATUS_GOLD_G,
                 ExplorePaint.STATUS_GOLD_B);
-        fill(-aspect, top - ExplorePaint.STATUS_GOLD_H, aspect, top);
+        fill(-aspect, top - ExplorePaint.statusGoldH(seconds), aspect, top);
         float faceLeft = (float) (-aspect + 0.04);
         float faceRight = faceLeft + 0.22f;
         float faceBot = bot + 0.03f;
