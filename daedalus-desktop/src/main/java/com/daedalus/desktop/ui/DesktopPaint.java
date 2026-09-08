@@ -98,6 +98,25 @@ public final class DesktopPaint {
     /** Soft pad under uncollected hunt coins — same as {@code draw.js}. */
     public static final double WAYPOINT_GLOW_PAD = 0.14;
     public static final double WAYPOINT_GLOW_ALPHA = 0.22;
+    /** Win place pulse — same cadence idea as empty breath, a bit faster. */
+    public static final double VICTORY_BREATH_MS = 2800;
+
+    public static double victoryBreathWave(long nanos) {
+        double t = ((nanos / 1_000_000.0) % VICTORY_BREATH_MS) / VICTORY_BREATH_MS;
+        return 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+    }
+
+    public static double victoryGlowAlpha(double wave) {
+        return 0.14 + 0.16 * wave;
+    }
+
+    public static double victoryGlowRadius(double wave) {
+        return VICTORY_GLOW_RADIUS + 0.08 * wave;
+    }
+
+    public static double victoryRingRadius(double wave) {
+        return 0.70 + 0.04 * wave;
+    }
     /** ADR-006 unseen void — same tokens as {@code draw.js}. */
     public static final String FOG_UNSEEN = "#05070a";
     public static final String FOG_FLOOR_DIM = "#2a333c";
@@ -1120,18 +1139,27 @@ public final class DesktopPaint {
                 Math.max(1.5, layout.cellSize() * 0.1));
     }
 
+    /** Soft gold wash under the victory stroke — same pad as {@code draw.js}. */
+    public static Marker victoryGlow(Layout layout, Point goal) {
+        return victoryGlow(layout, goal, 0);
+    }
+
+    public static Marker victoryGlow(Layout layout, Point goal, double wave) {
+        return disc(layout, goal, victoryGlowRadius(wave));
+    }
+
     public static Ring victoryRing(Layout layout, Point goal) {
+        return victoryRing(layout, goal, 0);
+    }
+
+    public static Ring victoryRing(Layout layout, Point goal, double wave) {
         if (layout == null || goal == null) {
             return null;
         }
         double cx = layout.x(2 * goal.col() + 1) + layout.cellSize() / 2.0;
         double cy = layout.y(2 * goal.row() + 1) + layout.cellSize() / 2.0;
-        return new Ring(cx, cy, layout.cellSize() * 0.7, Math.max(2.0, layout.wall()));
-    }
-
-    /** Soft gold wash under the victory stroke — same pad as {@code draw.js}. */
-    public static Marker victoryGlow(Layout layout, Point goal) {
-        return disc(layout, goal, VICTORY_GLOW_RADIUS);
+        return new Ring(cx, cy, layout.cellSize() * victoryRingRadius(wave),
+                Math.max(2.0, layout.wall()));
     }
 
     /**

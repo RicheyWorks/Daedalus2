@@ -574,6 +574,11 @@ class DesktopPaintTest {
                 .isEqualTo(layout.cellSize() * DesktopPaint.VICTORY_GLOW_RADIUS * 2.0);
         assertThat(DesktopPaint.VICTORY_GLOW_ALPHA).isEqualTo(0.22);
         assertThat(DesktopPaint.WAYPOINT_GLOW_PAD).isEqualTo(0.14);
+        assertThat(DesktopPaint.VICTORY_BREATH_MS).isEqualTo(2800);
+        assertThat(DesktopPaint.victoryGlowAlpha(1))
+                .isGreaterThan(DesktopPaint.victoryGlowAlpha(0));
+        assertThat(DesktopPaint.victoryRingRadius(1))
+                .isGreaterThan(DesktopPaint.victoryRingRadius(0));
         assertThat(DesktopPaint.victoryRing(layout, null)).isNull();
         assertThat(DesktopPaint.victoryGlow(layout, null)).isNull();
     }

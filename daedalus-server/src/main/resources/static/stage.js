@@ -121,6 +121,7 @@
       const idle = () => {
         const s = getState();
         if (!s.maze) paintEmpty(host);
+        else if (s.won) paint(s, host);
         breath = requestAnimationFrame(idle);
       };
       breath = requestAnimationFrame(idle);

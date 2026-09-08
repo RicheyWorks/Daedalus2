@@ -342,7 +342,7 @@ public class MainController {
         emptyBreath = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if (current == null) {
+                if (current == null || reachedGoal) {
                     redraw();
                 }
             }
@@ -2209,15 +2209,16 @@ public class MainController {
     }
 
     private static void paintVictory(GraphicsContext g, DesktopPaint.Layout layout, Point goal) {
-        DesktopPaint.Marker glow = DesktopPaint.victoryGlow(layout, goal);
+        double wave = DesktopPaint.victoryBreathWave(System.nanoTime());
+        DesktopPaint.Marker glow = DesktopPaint.victoryGlow(layout, goal, wave);
         Color ink = Color.web(DesktopPaint.VICTORY_GOLD);
         if (glow != null) {
-            g.setGlobalAlpha(DesktopPaint.VICTORY_GLOW_ALPHA);
+            g.setGlobalAlpha(DesktopPaint.victoryGlowAlpha(wave));
             g.setFill(ink);
             g.fillOval(glow.x(), glow.y(), glow.size(), glow.size());
             g.setGlobalAlpha(1);
         }
-        paintRing(g, DesktopPaint.victoryRing(layout, goal), ink);
+        paintRing(g, DesktopPaint.victoryRing(layout, goal, wave), ink);
     }
 
     private static void paintGhostDisc(GraphicsContext g, DesktopPaint.Layout layout, Point cell) {

@@ -113,6 +113,8 @@ under the `_migration/` portfolios.
   facing / stood count so the HUD names the room first.
   Fog memory edges soften with a warm lamp falloff so the frontier reads as
   light, not a hard stencil against the void.
+  Victory rings breathe a soft gold pulse so a win still feels like a place,
+  not a stuck stamp.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

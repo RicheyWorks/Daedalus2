@@ -518,16 +518,23 @@
     }
     if (scene.won && goal) {
       const [x, y] = cellCenter(geom, goal);
+      const VICTORY_BREATH_MS = 2800;
+      const now = (typeof performance !== "undefined" ? performance.now() : 0);
+      const t = (now % VICTORY_BREATH_MS) / VICTORY_BREATH_MS;
+      const wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
+      const padR = 0.85 + 0.08 * wave;
+      const padA = 0.14 + 0.16 * wave;
+      const ringR = 0.70 + 0.04 * wave;
       g.fillStyle = "#f0b429";
-      g.globalAlpha = 0.22;
+      g.globalAlpha = padA;
       g.beginPath();
-      g.arc(x, y, geom.cell * 0.85, 0, 2 * Math.PI);
+      g.arc(x, y, geom.cell * padR, 0, 2 * Math.PI);
       g.fill();
       g.globalAlpha = 1;
       g.strokeStyle = "#f0b429";
       g.lineWidth = Math.max(2, geom.wall);
       g.beginPath();
-      g.arc(x, y, geom.cell * 0.7, 0, 2 * Math.PI);
+      g.arc(x, y, geom.cell * ringR, 0, 2 * Math.PI);
       g.stroke();
     }
     return geom;
