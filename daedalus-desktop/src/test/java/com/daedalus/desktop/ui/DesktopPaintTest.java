@@ -819,6 +819,12 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.emptyMarkFloorAlpha(1))
                 .isGreaterThan(DesktopPaint.emptyMarkFloorAlpha(0));
         assertThat(DesktopPaint.emptyMarkFloorAlpha(0)).isEqualTo(0.36);
+        assertThat(DesktopPaint.emptyCaptionTitleAlpha(1))
+                .isGreaterThan(DesktopPaint.emptyCaptionTitleAlpha(0));
+        assertThat(DesktopPaint.emptyCaptionDetailAlpha(1))
+                .isGreaterThan(DesktopPaint.emptyCaptionDetailAlpha(0));
+        assertThat(DesktopPaint.emptyCaptionTitleAlpha(0)).isEqualTo(0.72);
+        assertThat(DesktopPaint.emptyCaptionDetailAlpha(0)).isEqualTo(0.55);
         assertThat(DesktopPaint.canvasRimAlpha(1))
                 .isGreaterThan(DesktopPaint.canvasRimAlpha(0));
         assertThat(DesktopPaint.canvasRimGlowRadius(1))

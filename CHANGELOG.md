@@ -234,6 +234,8 @@ under the `_migration/` portfolios.
   hard join between flat floor and wall.
   Well export chips breathe a gold lip with the board rim so overlay chrome still
   feels held over the maze.
+  Empty-well captions breathe under the wordmark so idle copy still feels held,
+  not stuck slate under DAEDALUS.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

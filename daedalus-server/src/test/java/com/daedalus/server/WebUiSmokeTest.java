@@ -96,6 +96,8 @@ class WebUiSmokeTest {
                 .contains("EMPTY_BREATH_MS")
                 .contains("0.36 + 0.10")
                 .contains("0.22 + 0.08")
+                .contains("0.72 + 0.18")
+                .contains("0.55 + 0.20")
                 .contains("0.08 + 0.04")
                 .contains("0.04 + 0.03")
                 .contains("prefers-reduced-motion")

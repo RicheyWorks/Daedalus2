@@ -1806,13 +1806,16 @@ public class MainController {
             g.fillText(DesktopPaint.EMPTY_WORDMARK, cx, cy + 48);
             g.setEffect(null);
             g.fillText(DesktopPaint.EMPTY_WORDMARK, cx, cy + 48);
+            g.setGlobalAlpha(DesktopPaint.emptyCaptionTitleAlpha(wave));
             g.setFill(Color.web("#7d8894"));
             g.setFont(Font.font("Bahnschrift", FontWeight.SEMI_BOLD, 13));
             g.fillText(DesktopPaint.EMPTY_TITLE, cx, cy + 78);
+            g.setGlobalAlpha(DesktopPaint.emptyCaptionDetailAlpha(wave));
             g.setFill(Color.web("#5a6570"));
             g.setFont(Font.font("Segoe UI", 13));
             g.fillText(DesktopPaint.EMPTY_DETAIL, cx, cy + 98);
             g.fillText(DesktopPaint.EMPTY_HINT, cx, cy + 116);
+            g.setGlobalAlpha(1);
             syncLegend();
             return;
         }

@@ -816,10 +816,10 @@
     g.shadowBlur = 0;
     g.fillText("DAEDALUS", cx, cy + 48);
     g.letterSpacing = "0";
-    g.fillStyle = "#7d8894";
+    g.fillStyle = "rgba(125, 136, 148, " + (0.72 + 0.18 * wave) + ")";
     g.font = "13px Bahnschrift, \"Segoe UI\", sans-serif";
     g.fillText("Pick a generator and press Generate", cx, cy + 78);
-    g.fillStyle = "#5a6570";
+    g.fillStyle = "rgba(90, 101, 112, " + (0.55 + 0.20 * wave) + ")";
     g.fillText("then Solve to watch a route unfold", cx, cy + 98);
     g.fillText("or open a session and play", cx, cy + 116);
   }

@@ -87,6 +87,15 @@ public final class DesktopPaint {
         return 0.22 + 0.08 * wave;
     }
 
+    /** Idle caption under the wordmark — soft gate pulse, not stuck slate. */
+    public static double emptyCaptionTitleAlpha(double wave) {
+        return 0.72 + 0.18 * wave;
+    }
+
+    public static double emptyCaptionDetailAlpha(double wave) {
+        return 0.55 + 0.20 * wave;
+    }
+
     /** Desktop well gold rim — same 0.48↔0.72 band as web {@code stageRimBreath}. */
     public static double canvasRimAlpha(double wave) {
         return 0.48 + 0.24 * wave;
