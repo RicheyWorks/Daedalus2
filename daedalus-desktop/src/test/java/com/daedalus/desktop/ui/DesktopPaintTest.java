@@ -698,6 +698,11 @@ class DesktopPaintTest {
                 .isGreaterThan(DesktopPaint.endpointRingAlpha(0));
         assertThat(DesktopPaint.ENDPOINT_BREATH_MS).isEqualTo(DesktopPaint.EMPTY_BREATH_MS);
         assertThat(tip.radius()).isEqualTo(layout.cellSize() * 0.5);
+        assertThat(DesktopPaint.pathHeadHalo(layout, cell, 1).radius())
+                .isGreaterThan(tip.radius());
+        assertThat(DesktopPaint.pathHeadHaloAlpha(1))
+                .isGreaterThan(DesktopPaint.pathHeadHaloAlpha(0));
+        assertThat(DesktopPaint.PATH_HEAD_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
         assertThat(DesktopPaint.endpointRing(null, cell)).isNull();
         assertThat(DesktopPaint.pathHeadHalo(layout, null)).isNull();
     }

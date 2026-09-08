@@ -131,6 +131,8 @@ under the `_migration/` portfolios.
   feels like presence, not a stuck stamp.
   Uncollected hunt coins breathe a soft gold pad on the victory cadence so loot
   still feels like a place, not a flat stamp.
+  Path-head and race tip halos breathe so the living tip feels like presence,
+  not a stuck stamp.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

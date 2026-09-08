@@ -1221,14 +1221,33 @@ public final class DesktopPaint {
         return 0.32 + 0.18 * wave;
     }
 
+    /** Living tip pulse — same cadence as victory / hunt loot. */
+    public static final double PATH_HEAD_BREATH_MS = VICTORY_BREATH_MS;
+
+    public static double pathHeadBreathWave(long nanos) {
+        return victoryBreathWave(nanos);
+    }
+
+    public static double pathHeadHaloRadius(double wave) {
+        return 0.5 + 0.05 * wave;
+    }
+
+    public static double pathHeadHaloAlpha(double wave) {
+        return 0.28 + 0.16 * wave;
+    }
+
     /** Soft halo at the tip of an unfolding route — same band as {@code draw.js} pathHead. */
     public static Ring pathHeadHalo(Layout layout, Point cell) {
+        return pathHeadHalo(layout, cell, 0);
+    }
+
+    public static Ring pathHeadHalo(Layout layout, Point cell, double wave) {
         if (layout == null || cell == null) {
             return null;
         }
         double cx = layout.x(2 * cell.col() + 1) + layout.cellSize() / 2.0;
         double cy = layout.y(2 * cell.row() + 1) + layout.cellSize() / 2.0;
-        return new Ring(cx, cy, layout.cellSize() * 0.5,
+        return new Ring(cx, cy, layout.cellSize() * pathHeadHaloRadius(wave),
                 Math.max(1.5, layout.cellSize() * 0.1));
     }
 

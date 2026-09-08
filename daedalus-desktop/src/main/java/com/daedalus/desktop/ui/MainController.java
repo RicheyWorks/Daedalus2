@@ -1860,8 +1860,9 @@ public class MainController {
                 }
                 Point tip = DesktopPaint.walkHead(lane.path());
                 Color ink = Color.web(lane.color());
-                paintRing(g, DesktopPaint.pathHeadHalo(layout, tip),
-                        ink.deriveColor(0, 1, 1, 0.38));
+                double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
+                paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
+                        ink.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
                 paintDisc(g, DesktopPaint.disc(layout, tip, DesktopPaint.COMPARE_HEAD_RADIUS),
                         ink);
             }
@@ -1895,8 +1896,9 @@ public class MainController {
             }
             g.setGlobalAlpha(1);
             Point tip = DesktopPaint.walkHead(currentPath);
-            paintRing(g, DesktopPaint.pathHeadHalo(layout, tip),
-                    theme.path().deriveColor(0, 1, 1, 0.38));
+            double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
+            paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
+                    theme.path().deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
             paintDisc(g, DesktopPaint.pathHeadMarker(layout, currentPath), theme.path());
         }
 
@@ -2174,8 +2176,9 @@ public class MainController {
         Color laneColor = Color.web(lane.color());
         if (pathProg <= 0 && !shown.isEmpty()) {
             Point tip = DesktopPaint.walkHead(shown);
-            paintRing(g, DesktopPaint.pathHeadHalo(layout, tip),
-                    laneColor.deriveColor(0, 1, 1, 0.38));
+            double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
+            paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
+                    laneColor.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
             paintDisc(g, DesktopPaint.disc(layout, tip, 0.3), laneColor);
         }
         if (pathProg > 0 && !lane.path().isEmpty()) {
@@ -2187,8 +2190,9 @@ public class MainController {
             }
             g.setGlobalAlpha(1);
             Point head = DesktopPaint.walkHead(ribbon);
-            paintRing(g, DesktopPaint.pathHeadHalo(layout, head),
-                    laneColor.deriveColor(0, 1, 1, 0.38));
+            double headWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
+            paintRing(g, DesktopPaint.pathHeadHalo(layout, head, headWave),
+                    laneColor.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(headWave)));
             paintDisc(g, DesktopPaint.raceHeadMarker(layout, ribbon), laneColor);
         }
     }
