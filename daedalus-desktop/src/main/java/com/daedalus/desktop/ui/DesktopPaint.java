@@ -95,6 +95,20 @@ public final class DesktopPaint {
         return 0.06 + 0.08 * wave;
     }
 
+    /** Legend fade — same cadence as web {@code legendFadeBreath}. */
+    public static double legendFadeMidAlpha(double wave) {
+        return 0.50 + 0.12 * wave;
+    }
+
+    public static double legendFadeBotAlpha(double wave) {
+        return 0.88 + 0.08 * wave;
+    }
+
+    /** Status / toolbar gold lip — same band as canvas rim. */
+    public static double shellRimAlpha(double wave) {
+        return canvasRimAlpha(wave);
+    }
+
     /**
      * Same miniature as {@code draw.js} {@code IDLE_TILES} — one product empty well.
      */
@@ -364,6 +378,15 @@ public final class DesktopPaint {
             return base;
         }
         double fade = 0.35 + 0.65 * ((index + 1.0) / length);
+        return base * fade;
+    }
+
+    /** Solver ribbon — softer toward the start, tip stays full (quieter than walk age-fade). */
+    public static double pathRibbonAlpha(double base, int index, int length) {
+        if (length <= 1) {
+            return base;
+        }
+        double fade = 0.55 + 0.45 * ((index + 1.0) / length);
         return base * fade;
     }
     public static final double GHOST_DISC_ALPHA = 0.55;

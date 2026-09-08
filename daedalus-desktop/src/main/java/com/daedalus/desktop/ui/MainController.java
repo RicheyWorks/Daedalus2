@@ -1928,14 +1928,8 @@ public class MainController {
                     DesktopPaint.GHOST_WALK_ALPHA);
         }
         if (currentPath != null && !currentPath.isEmpty() && theme != null) {
-            g.setGlobalAlpha(DesktopPaint.PATH_ALPHA);
-            g.setFill(theme.path());
-            for (DesktopPaint.TileRect tile : DesktopPaint.pathOverlay(
-                    currentPath, current.metadata().start(), current.metadata().goal())) {
-                g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
-                        layout.w(tile.tileCol()), layout.h(tile.tileRow()));
-            }
-            g.setGlobalAlpha(1);
+            paintPathRibbon(g, layout, currentPath, theme.path(), DesktopPaint.PATH_ALPHA,
+                    current.metadata().start(), current.metadata().goal());
             Point tip = DesktopPaint.walkHead(currentPath);
             double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
             paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
@@ -1997,13 +1991,8 @@ public class MainController {
 
         if (currentHardest != null && currentHardest.path() != null
                 && !currentHardest.path().isEmpty()) {
-            g.setGlobalAlpha(DesktopPaint.HARDEST_ALPHA);
-            g.setFill(Color.web(DesktopPaint.HARDEST));
-            for (DesktopPaint.TileRect tile : DesktopPaint.walkOverlay(currentHardest.path())) {
-                g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
-                        layout.w(tile.tileCol()), layout.h(tile.tileRow()));
-            }
-            g.setGlobalAlpha(1);
+            paintPathRibbon(g, layout, currentHardest.path(), Color.web(DesktopPaint.HARDEST),
+                    DesktopPaint.HARDEST_ALPHA, null, null);
             Point tip = DesktopPaint.walkHead(currentHardest.path());
             double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
             Color gold = Color.web(DesktopPaint.HARDEST);
@@ -2013,13 +2002,8 @@ public class MainController {
         }
 
         if (currentHunt != null && currentHunt.path() != null && !currentHunt.path().isEmpty()) {
-            g.setGlobalAlpha(DesktopPaint.TOUR_ALPHA);
-            g.setFill(Color.web(DesktopPaint.TOUR));
-            for (DesktopPaint.TileRect tile : DesktopPaint.walkOverlay(currentHunt.path())) {
-                g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
-                        layout.w(tile.tileCol()), layout.h(tile.tileRow()));
-            }
-            g.setGlobalAlpha(1);
+            paintPathRibbon(g, layout, currentHunt.path(), Color.web(DesktopPaint.TOUR),
+                    DesktopPaint.TOUR_ALPHA, null, null);
             Point tip = DesktopPaint.walkHead(currentHunt.path());
             double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
             Color ice = Color.web(DesktopPaint.TOUR);
@@ -2250,12 +2234,7 @@ public class MainController {
         }
         if (pathProg > 0 && !lane.path().isEmpty()) {
             List<Point> ribbon = DesktopPaint.pathPrefix(lane.path(), pathProg);
-            g.setGlobalAlpha(pathAlpha);
-            for (DesktopPaint.TileRect tile : DesktopPaint.walkOverlay(ribbon)) {
-                g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
-                        layout.w(tile.tileCol()), layout.h(tile.tileRow()));
-            }
-            g.setGlobalAlpha(1);
+            paintPathRibbon(g, layout, ribbon, laneColor, pathAlpha, null, null);
             Point head = DesktopPaint.walkHead(ribbon);
             double headWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
             paintRing(g, DesktopPaint.pathHeadHalo(layout, head, headWave),
@@ -2363,6 +2342,39 @@ public class MainController {
                 continue;
             }
             Point prev = walk.get(i - 1);
+            if (Math.abs(p.row() - prev.row()) + Math.abs(p.col() - prev.col()) != 1) {
+                continue;
+            }
+            int otc = prev.col() + p.col() + 1;
+            int otr = prev.row() + p.row() + 1;
+            g.fillRect(layout.x(otc), layout.y(otr), layout.w(otc), layout.h(otr));
+        }
+        g.setGlobalAlpha(1);
+    }
+
+    /** Solver / race / tour ribbon — softens toward the start, tip stays full. */
+    private static void paintPathRibbon(GraphicsContext g, DesktopPaint.Layout layout,
+                                        List<Point> path, Color color, double baseAlpha,
+                                        Point start, Point goal) {
+        if (g == null || layout == null || path == null || path.isEmpty() || color == null) {
+            return;
+        }
+        int n = path.size();
+        g.setFill(color);
+        for (int i = 0; i < n; i++) {
+            g.setGlobalAlpha(DesktopPaint.pathRibbonAlpha(baseAlpha, i, n));
+            Point p = path.get(i);
+            boolean endpoint = (start != null && p.equals(start))
+                    || (goal != null && p.equals(goal));
+            if (!endpoint) {
+                int tc = 2 * p.col() + 1;
+                int tr = 2 * p.row() + 1;
+                g.fillRect(layout.x(tc), layout.y(tr), layout.w(tc), layout.h(tr));
+            }
+            if (i == 0) {
+                continue;
+            }
+            Point prev = path.get(i - 1);
             if (Math.abs(p.row() - prev.row()) + Math.abs(p.col() - prev.col()) != 1) {
                 continue;
             }

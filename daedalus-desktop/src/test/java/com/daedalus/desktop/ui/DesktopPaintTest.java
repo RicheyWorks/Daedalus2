@@ -358,6 +358,11 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.walkTrailAlpha(0.32, 0, 4))
                 .isLessThan(DesktopPaint.walkTrailAlpha(0.32, 3, 4));
         assertThat(DesktopPaint.walkTrailAlpha(0.32, 0, 1)).isEqualTo(0.32);
+        assertThat(DesktopPaint.pathRibbonAlpha(0.85, 0, 4))
+                .isLessThan(DesktopPaint.pathRibbonAlpha(0.85, 3, 4));
+        assertThat(DesktopPaint.pathRibbonAlpha(0.85, 0, 1)).isEqualTo(0.85);
+        assertThat(DesktopPaint.pathRibbonAlpha(0.85, 0, 4))
+                .isGreaterThan(DesktopPaint.walkTrailAlpha(0.85, 0, 4));
         assertThat(DesktopPaint.GHOST_DISC_ALPHA).isEqualTo(0.55);
         assertThat(DesktopPaint.GHOST_GLOW_ALPHA).isEqualTo(0.18);
         assertThat(DesktopPaint.GHOST_RIM_ALPHA).isEqualTo(0.65);
@@ -750,6 +755,12 @@ class DesktopPaintTest {
                 .isGreaterThan(DesktopPaint.canvasRimGlowRadius(0));
         assertThat(DesktopPaint.canvasRimGlowAlpha(1))
                 .isGreaterThan(DesktopPaint.canvasRimGlowAlpha(0));
+        assertThat(DesktopPaint.legendFadeMidAlpha(1))
+                .isGreaterThan(DesktopPaint.legendFadeMidAlpha(0));
+        assertThat(DesktopPaint.legendFadeBotAlpha(1))
+                .isGreaterThan(DesktopPaint.legendFadeBotAlpha(0));
+        assertThat(DesktopPaint.shellRimAlpha(1))
+                .isEqualTo(DesktopPaint.canvasRimAlpha(1));
         assertThat(hi).isNotEqualTo(lo);
         assertThat(DesktopPaint.EMPTY_TITLE).contains("Generate");
         assertThat(DesktopPaint.EMPTY_DETAIL).contains("Solve");

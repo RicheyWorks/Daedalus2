@@ -194,6 +194,10 @@ under the `_migration/` portfolios.
   not a stuck gradient behind the maze.
   Well legend fade breathes on the gate cadence so overlay chrome still feels
   held over the board.
+  Desktop legend fade and status gold lip breathe with the web so shell chrome
+  still feels held around the well.
+  Solver path ribbons soften toward the start and brighten at the tip so a
+  finished route has depth, not flat ink.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
