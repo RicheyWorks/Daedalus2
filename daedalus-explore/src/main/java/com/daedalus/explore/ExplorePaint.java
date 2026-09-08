@@ -214,6 +214,30 @@ public final class ExplorePaint {
         return status.place() + "  " + status.facing() + "  " + status.stood();
     }
 
+    public static String captionPlace(Status status) {
+        return status == null || status.place() == null || status.place().isBlank()
+                ? "HALL" : status.place();
+    }
+
+    public static String captionMeta(Status status) {
+        if (status == null) {
+            return "";
+        }
+        return status.facing() + "  " + status.stood();
+    }
+
+    /** Glyph advance for one caption character — same spacing as {@code paintCaptionPass}. */
+    public static float captionAdvance(float cell, float gap) {
+        return (GLYPH_W + 1) * cell + gap;
+    }
+
+    public static float captionWidth(String text, float cell, float gap) {
+        if (text == null || text.isEmpty()) {
+            return 0f;
+        }
+        return text.length() * captionAdvance(cell, gap);
+    }
+
     /**
      * Crosshair Y in ortho NDC. Status eats the bottom strip, so aim sits in
      * the center of what is left — not the window midpoint.
@@ -226,6 +250,12 @@ public final class ExplorePaint {
     public static final float AIM_BRIGHT_R = 0.94f;
     public static final float AIM_BRIGHT_G = 0.78f;
     public static final float AIM_BRIGHT_B = 0.32f;
+    /** Place name leads the strip — slightly larger than facing / stood. */
+    public static final float CAPTION_PLACE_CELL = 0.026f;
+    public static final float CAPTION_META_CELL = 0.018f;
+    public static final float CAPTION_META_R = 0.62f;
+    public static final float CAPTION_META_G = 0.52f;
+    public static final float CAPTION_META_B = 0.28f;
     /** Caption glyph underglow — readable chrome on the dark strip. */
     public static final float CAPTION_SOFT_R = 0.42f;
     public static final float CAPTION_SOFT_G = 0.30f;

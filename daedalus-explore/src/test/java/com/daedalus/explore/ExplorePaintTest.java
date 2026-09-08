@@ -189,6 +189,14 @@ class ExplorePaintTest {
         assertThat(hall.place()).isEqualTo("HALL");
         assertThat(hall.facing()).isEqualTo("N");
         assertThat(ExplorePaint.caption(hall)).contains("HALL").contains("N");
+        assertThat(ExplorePaint.captionPlace(hall)).isEqualTo("HALL");
+        assertThat(ExplorePaint.captionMeta(hall)).contains("N");
+        assertThat(ExplorePaint.CAPTION_PLACE_CELL)
+                .as("place glyphs lead the strip")
+                .isGreaterThan(ExplorePaint.CAPTION_META_CELL);
+        assertThat(ExplorePaint.AIM_BRIGHT_R).isGreaterThan(ExplorePaint.CAPTION_META_R);
+        assertThat(ExplorePaint.captionWidth("AB", 0.02f, 0.008f))
+                .isGreaterThan(ExplorePaint.captionAdvance(0.02f, 0.008f));
         List<ExploreMarker> marks = List.of(
                 new ExploreMarker("door", new Point(0, 0), 0, "ENTRANCE"),
                 new ExploreMarker("boss", new Point(0, 1), 0, "BOSS"));

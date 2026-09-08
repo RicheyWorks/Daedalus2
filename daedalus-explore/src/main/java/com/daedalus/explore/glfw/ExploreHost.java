@@ -505,7 +505,7 @@ public final class ExploreHost {
         glEnd();
         glBindTexture(GL_TEXTURE_2D, 0);
         glDisable(GL_TEXTURE_2D);
-        paintCaption(ExplorePaint.caption(line), faceRight + 0.04f, bot + 0.09f);
+        paintCaption(line, faceRight + 0.04f, bot + 0.09f);
         paintKeys(aspect, line);
     }
 
@@ -536,21 +536,35 @@ public final class ExploreHost {
         glEnd();
     }
 
-    private static void paintCaption(String text, float x0, float y0) {
-        if (text == null || text.isEmpty()) {
-            return;
-        }
-        float cell = 0.022f;
+    private static void paintCaption(ExplorePaint.Status line, float x0, float y0) {
+        String place = ExplorePaint.captionPlace(line);
+        String meta = ExplorePaint.captionMeta(line);
         float gap = 0.008f;
-        float pad = cell * ExplorePaint.CAPTION_SOFT_PAD;
-        paintCaptionPass(text, x0, y0, cell, gap, pad,
+        float placeCell = ExplorePaint.CAPTION_PLACE_CELL;
+        float metaCell = ExplorePaint.CAPTION_META_CELL;
+        float placePad = placeCell * ExplorePaint.CAPTION_SOFT_PAD;
+        float metaPad = metaCell * ExplorePaint.CAPTION_SOFT_PAD;
+        paintCaptionPass(place, x0, y0, placeCell, gap, placePad,
                 ExplorePaint.CAPTION_SOFT_R, ExplorePaint.CAPTION_SOFT_G, ExplorePaint.CAPTION_SOFT_B);
-        paintCaptionPass(text, x0, y0, cell, gap, 0,
+        paintCaptionPass(place, x0, y0, placeCell, gap, 0,
                 ExplorePaint.AIM_BRIGHT_R, ExplorePaint.AIM_BRIGHT_G, ExplorePaint.AIM_BRIGHT_B);
+        float metaX = x0 + ExplorePaint.captionWidth(place, placeCell, gap) + 0.02f;
+        float metaY = y0 + (placeCell - metaCell) * ExplorePaint.GLYPH_H * 0.5f;
+        if (!meta.isEmpty()) {
+            paintCaptionPass(meta, metaX, metaY, metaCell, gap, metaPad,
+                    ExplorePaint.CAPTION_SOFT_R * 0.7f, ExplorePaint.CAPTION_SOFT_G * 0.7f,
+                    ExplorePaint.CAPTION_SOFT_B * 0.7f);
+            paintCaptionPass(meta, metaX, metaY, metaCell, gap, 0,
+                    ExplorePaint.CAPTION_META_R, ExplorePaint.CAPTION_META_G,
+                    ExplorePaint.CAPTION_META_B);
+        }
     }
 
     private static void paintCaptionPass(String text, float x0, float y0, float cell, float gap,
                                          float pad, float r, float g, float b) {
+        if (text == null || text.isEmpty()) {
+            return;
+        }
         float x = x0;
         glColor3f(r, g, b);
         glBegin(GL_QUADS);
