@@ -113,7 +113,8 @@
                   managed="false" mouseTransparent="true" visible="false">
                 <Label text="floor">
                     <graphic>
-                        <Rectangle width="10" height="10" fill="#3d4a58" arcWidth="3" arcHeight="3"/>
+                        <Rectangle width="10" height="10" fill="#3d4a58" stroke="rgba(255,255,255,0.06)"
+                                   strokeWidth="1" arcWidth="3" arcHeight="3"/>
                     </graphic>
                 </Label>
                 <Label text="wall / rock">
@@ -124,12 +125,12 @@
                 </Label>
                 <Label fx:id="legendStart" text="start">
                     <graphic>
-                        <Circle radius="5" fill="#3ee08f"/>
+                        <Circle radius="5" fill="#3ee08f" stroke="rgba(232,238,244,0.28)" strokeWidth="1.5"/>
                     </graphic>
                 </Label>
                 <Label fx:id="legendGoal" text="goal">
                     <graphic>
-                        <Circle radius="5" fill="#ff5a5f"/>
+                        <Circle radius="5" fill="#ff5a5f" stroke="rgba(232,238,244,0.28)" strokeWidth="1.5"/>
                     </graphic>
                 </Label>
                 <Label fx:id="legendPath" text="solver path" managed="false" visible="false">
@@ -139,7 +140,7 @@
                 </Label>
                 <Label fx:id="legendPlayer" text="walk" managed="false" visible="false">
                     <graphic>
-                        <Circle radius="5" fill="#f5c14a"/>
+                        <Circle radius="5" fill="#f5c14a" stroke="rgba(232,238,244,0.28)" strokeWidth="1.5"/>
                     </graphic>
                 </Label>
                 <Label fx:id="legendHotspot" text="hot spot" managed="false" visible="false">
@@ -166,7 +167,7 @@
                 </Label>
                 <Label fx:id="legendSanctuary" text="sanctuary" managed="false" visible="false">
                     <graphic>
-                        <Circle radius="5" fill="#4cc38a"/>
+                        <Circle radius="5" fill="#4cc38a" stroke="rgba(232,238,244,0.28)" strokeWidth="1.5"/>
                     </graphic>
                 </Label>
                 <Label fx:id="legendLens" text="lens" managed="false" visible="false">
@@ -193,7 +194,8 @@
                 </Label>
                 <Label fx:id="legendGhost" text="ghost" managed="false" visible="false">
                     <graphic>
-                        <Circle radius="5" fill="#e6edf3" opacity="0.6"/>
+                        <Circle radius="5" fill="#e6edf3" opacity="0.6"
+                                stroke="rgba(232,238,244,0.28)" strokeWidth="1.5"/>
                     </graphic>
                 </Label>
                 <Label fx:id="legendCompare" text="compare" managed="false" visible="false">

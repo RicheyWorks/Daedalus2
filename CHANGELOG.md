@@ -93,6 +93,8 @@ under the `_migration/` portfolios.
   table chrome stays held while you scan solvers.
   Explore automap story marks wear a soft red pad like you-are-here so vault
   and boss dots read as places on the earned map, not flat pixels.
+  Desktop legend start / goal / walk / sanctuary / ghost swatches wear the
+  same soft rim as the web legend so overlay keys match the well markers.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

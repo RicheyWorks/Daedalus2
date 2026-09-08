@@ -51,6 +51,12 @@ class ThemeManagerTest {
             assertThat(css).contains("-fx-border-color: rgba(184, 133, 56, 0.85)");
             assertThat(css).contains(".status-bar");
         }
+        try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
+            assertThat(in).as("main.fxml is on the classpath").isNotNull();
+            String fxml = new String(in.readAllBytes());
+            assertThat(fxml).contains("stroke=\"rgba(232,238,244,0.28)\"");
+            assertThat(fxml).contains("legendStart");
+        }
     }
 
     @Test
