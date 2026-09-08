@@ -182,6 +182,8 @@ under the `_migration/` portfolios.
   feels held, not a stuck frame.
   Desktop letterbox paints the same soft well void as the web stage so a
   letterboxed maze sits in a pocket, not infinite flat stone.
+  Sticky header gold lip breathes on the gate cadence so post-Enter shell chrome
+  still feels held with the brand.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

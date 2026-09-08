@@ -47,7 +47,8 @@
          font: 14px/1.5 system-ui, "Segoe UI", sans-serif; }
   header { padding: 10px 22px; border-bottom: 1px solid rgba(184, 133, 56, 0.45);
            display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-           background: rgba(7, 9, 12, 0.92); position: sticky; top: 0; z-index: 4; }
+           background: rgba(7, 9, 12, 0.92); position: sticky; top: 0; z-index: 4;
+           animation: headerRimBreath 4.5s ease-in-out infinite; }
   header h1 { margin: 0; font: 700 18px/1 "Bahnschrift", "Avenir Next Condensed",
            "Trebuchet MS", sans-serif; letter-spacing: .22em; }
   header h1 button { all: unset; cursor: pointer; letter-spacing: .22em;
@@ -136,9 +137,13 @@
     0%, 100% { border-color: rgba(184, 133, 56, 0.30); }
     50% { border-color: rgba(184, 133, 56, 0.48); }
   }
+  @keyframes headerRimBreath {
+    0%, 100% { border-bottom-color: rgba(184, 133, 56, 0.38); }
+    50% { border-bottom-color: rgba(184, 133, 56, 0.62); }
+  }
   @media (prefers-reduced-motion: reduce) {
     #gate .gate-brand, #gate .lede, #gate .gate-enter, #gate article, #gate .gate-veil,
-    header h1 button, #stage, .board-panel, .panel {
+    header h1 button, #stage, .board-panel, .panel, header {
       animation: none;
     }
     #gate .gate-brand {
@@ -155,6 +160,7 @@
     }
     .board-panel { border-color: rgba(184, 133, 56, 0.42); }
     .panel { border-color: rgba(184, 133, 56, 0.36); }
+    header { border-bottom-color: rgba(184, 133, 56, 0.45); }
   }
   header .tag { color: var(--dim); font-size: 11px; flex: 1; letter-spacing: .04em;
                 text-transform: lowercase; }

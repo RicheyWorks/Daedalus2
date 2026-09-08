@@ -97,6 +97,7 @@ class WebUiSmokeTest {
                 .contains("stageRimBreath")
                 .contains("boardRimBreath")
                 .contains("panelRimBreath")
+                .contains("headerRimBreath")
                 .contains("ghost:")
                 .contains("ghostDisc")
                 .contains("ageFade")
