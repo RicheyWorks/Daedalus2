@@ -474,14 +474,18 @@
       paintWalk(g, geom, scene.tourPath, "#9ecbff", 1, 0.38);
     }
     if (scene.tour && scene.tour.waypoints) {
+      const WAYPOINT_BREATH_MS = 2800;
+      const now = typeof performance !== "undefined" ? performance.now() : 0;
+      const t = (now % WAYPOINT_BREATH_MS) / WAYPOINT_BREATH_MS;
+      const wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
       scene.tour.waypoints.forEach(w => {
         const got = (scene.tourGot || []).some(p => p.row === w.row && p.col === w.col);
         const [x, y] = cellCenter(geom, w);
         const rad = geom.cell * 0.3;
         if (!got) {
-          const soft = rad + geom.cell * 0.14;
+          const soft = rad + geom.cell * (0.14 + 0.05 * wave);
           g.fillStyle = "#f2c94c";
-          g.globalAlpha = 0.22;
+          g.globalAlpha = 0.16 + 0.14 * wave;
           g.beginPath();
           g.moveTo(x, y - soft); g.lineTo(x + soft, y); g.lineTo(x, y + soft); g.lineTo(x - soft, y);
           g.closePath();

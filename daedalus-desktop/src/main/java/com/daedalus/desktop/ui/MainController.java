@@ -2202,11 +2202,13 @@ public class MainController {
         double cy = diamond.cy();
         double r = diamond.radius();
         if (!collected) {
-            // soft = cell*(0.3+0.14); core radius is cell*0.3
-            double soft = r * (0.3 + DesktopPaint.WAYPOINT_GLOW_PAD) / 0.3;
+            // soft = cell*(0.3+pad); core radius is cell*0.3
+            double wave = DesktopPaint.waypointBreathWave(System.nanoTime());
+            double pad = DesktopPaint.waypointGlowPad(wave);
+            double soft = r * (0.3 + pad) / 0.3;
             double[] softXs = {cx, cx + soft, cx, cx - soft};
             double[] softYs = {cy - soft, cy, cy + soft, cy};
-            g.setGlobalAlpha(DesktopPaint.WAYPOINT_GLOW_ALPHA);
+            g.setGlobalAlpha(DesktopPaint.waypointGlowAlpha(wave));
             g.setFill(Color.web(DesktopPaint.WAYPOINT));
             g.fillPolygon(softXs, softYs, 4);
             g.setGlobalAlpha(1);

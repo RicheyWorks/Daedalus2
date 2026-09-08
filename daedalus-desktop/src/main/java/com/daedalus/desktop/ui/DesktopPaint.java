@@ -100,10 +100,24 @@ public final class DesktopPaint {
     public static final double WAYPOINT_GLOW_ALPHA = 0.22;
     /** Win place pulse — same cadence idea as empty breath, a bit faster. */
     public static final double VICTORY_BREATH_MS = 2800;
+    /** Uncollected loot pad pulse — same cadence as victory. */
+    public static final double WAYPOINT_BREATH_MS = VICTORY_BREATH_MS;
 
     public static double victoryBreathWave(long nanos) {
         double t = ((nanos / 1_000_000.0) % VICTORY_BREATH_MS) / VICTORY_BREATH_MS;
         return 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+    }
+
+    public static double waypointBreathWave(long nanos) {
+        return victoryBreathWave(nanos);
+    }
+
+    public static double waypointGlowAlpha(double wave) {
+        return 0.16 + 0.14 * wave;
+    }
+
+    public static double waypointGlowPad(double wave) {
+        return WAYPOINT_GLOW_PAD + 0.05 * wave;
     }
 
     public static double victoryGlowAlpha(double wave) {
