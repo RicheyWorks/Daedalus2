@@ -50,6 +50,7 @@ class ThemeManagerTest {
             assertThat(css).contains("dropshadow(one-pass-box, rgba(184, 133, 56, 0.22)");
             assertThat(css).contains("-fx-border-color: rgba(184, 133, 56, 0.85)");
             assertThat(css).contains("-fx-border-color: rgba(184, 133, 56, 0.28)");
+            assertThat(css).contains("-fx-border-color: rgba(184, 133, 56, 0.32)");
             assertThat(css).contains(".status-bar");
         }
         try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {

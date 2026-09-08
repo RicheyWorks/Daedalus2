@@ -67,6 +67,8 @@
     -fx-background-color: #1a222b;
     -fx-text-fill: #e8eef4;
     -fx-background-radius: 7;
+    -fx-border-color: rgba(184, 133, 56, 0.32);
+    -fx-border-radius: 7;
     -fx-padding: 4 10 4 10;
     -fx-cursor: hand;
 }
@@ -88,7 +90,7 @@
 }
 .check-box .box {
     -fx-background-color: #07090c;
-    -fx-border-color: #1e2832;
+    -fx-border-color: rgba(184, 133, 56, 0.28);
     -fx-background-radius: 3;
     -fx-border-radius: 3;
 }

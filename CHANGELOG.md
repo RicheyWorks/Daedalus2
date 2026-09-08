@@ -97,6 +97,8 @@ under the `_migration/` portfolios.
   same soft rim as the web legend so overlay keys match the well markers.
   Web selects / inputs and desktop combo fields wear a soft gold idle rim so
   form chrome matches the side panels, not flat gray admin lines.
+  Default buttons and desktop checkboxes wear the same soft gold idle rim so
+  Generate / Live / Fog chrome matches the well, not gray admin outlines.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
