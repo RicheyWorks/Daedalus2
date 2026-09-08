@@ -1684,8 +1684,9 @@ public class MainController {
             g.setFill(glow);
             g.fillRect(0, 0, w, h);
             DesktopPaint.Layout mark = DesktopPaint.emptyMarkLayout(w, h);
+            double wave = DesktopPaint.emptyBreathWave(System.nanoTime());
             if (mark != null && theme != null) {
-                g.setGlobalAlpha(0.42);
+                g.setGlobalAlpha(DesktopPaint.emptyMarkFloorAlpha(wave));
                 g.setFill(theme.passage());
                 for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkFloors()) {
                     g.fillRect(mark.x(tile.tileCol()), mark.y(tile.tileRow()),
@@ -1699,7 +1700,6 @@ public class MainController {
             g.setTextAlign(TextAlignment.CENTER);
             g.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 28));
             g.setFill(Color.web("#e8eef4"));
-            double wave = DesktopPaint.emptyBreathWave(System.nanoTime());
             var mint = new javafx.scene.effect.DropShadow(
                     DesktopPaint.emptyMintRadius(wave), 0, 0,
                     Color.web(DesktopPaint.EMPTY_WORDMARK_GLOW,
