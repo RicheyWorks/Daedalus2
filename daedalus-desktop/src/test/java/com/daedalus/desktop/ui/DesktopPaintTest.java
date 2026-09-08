@@ -708,6 +708,8 @@ class DesktopPaintTest {
         assertThat(mark.offsetY()).isEqualTo(41.0);
         assertThat(DesktopPaint.endpointMarker(mark, DesktopPaint.EMPTY_MARK_START)).isNotNull();
         assertThat(DesktopPaint.endpointMarker(mark, DesktopPaint.EMPTY_MARK_GOAL)).isNotNull();
+        assertThat(DesktopPaint.endpointRing(mark, DesktopPaint.EMPTY_MARK_START, 1).radius())
+                .isGreaterThan(DesktopPaint.endpointRing(mark, DesktopPaint.EMPTY_MARK_START).radius());
         assertThat(DesktopPaint.emptyMarkLayout(0, 300)).isNull();
     }
 

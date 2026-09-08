@@ -666,8 +666,8 @@
       }
     }
     g.globalAlpha = 0.78;
-    marker(g, geom, {row: 0, col: 0}, COLORS.start, 0.34);
-    marker(g, geom, {row: 2, col: 4}, COLORS.goal, 0.34);
+    endpoint(g, geom, {row: 0, col: 0}, COLORS.start);
+    endpoint(g, geom, {row: 2, col: 4}, COLORS.goal);
     g.restore();
   }
 
