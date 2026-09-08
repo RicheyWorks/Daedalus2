@@ -105,18 +105,23 @@
   }
 
   function marker(g, geom, p, color, radius) {
+    if (!p) return;
+    const MARKER_BREATH_MS = 4500;
+    const now = typeof performance !== "undefined" ? performance.now() : 0;
+    const t = (now % MARKER_BREATH_MS) / MARKER_BREATH_MS;
+    const wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
     const [x, y] = cellCenter(geom, p);
     g.fillStyle = color;
-    g.globalAlpha = 0.22;
+    g.globalAlpha = 0.16 + 0.12 * wave;
     g.beginPath();
-    g.arc(x, y, geom.cell * (radius + 0.22), 0, 2 * Math.PI);
+    g.arc(x, y, geom.cell * (radius + 0.22 + 0.04 * wave), 0, 2 * Math.PI);
     g.fill();
     g.globalAlpha = 1;
     g.beginPath();
     g.arc(x, y, geom.cell * radius, 0, 2 * Math.PI);
     g.fill();
     g.strokeStyle = color;
-    g.globalAlpha = 0.65;
+    g.globalAlpha = 0.55 + 0.20 * wave;
     g.lineWidth = Math.max(1, geom.cell * 0.07);
     g.beginPath();
     g.arc(x, y, geom.cell * radius, 0, 2 * Math.PI);

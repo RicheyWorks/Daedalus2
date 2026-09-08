@@ -226,6 +226,8 @@ under the `_migration/` portfolios.
   live, not a stuck path stain behind the tip.
   Sanctuary discs wear a breathing soft pad so safe points still feel held, not
   a flat mint stamp under the ring.
+  Explore torch warms corridor stone toward torch-brown so lit tunnels feel like
+  fire, not cold brightness alone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

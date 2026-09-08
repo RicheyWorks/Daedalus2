@@ -1322,6 +1322,19 @@ public final class DesktopPaint {
         return 0.26 + 0.16 * wave;
     }
 
+    /** Soft pad under the mint disc — same band as web {@code marker} glow. */
+    public static double sanctuaryGlowAlpha(double wave) {
+        return 0.16 + 0.12 * wave;
+    }
+
+    public static double sanctuaryGlowPad(double wave) {
+        return 0.22 + 0.04 * wave;
+    }
+
+    public static Marker sanctuaryGlow(Layout layout, Point cell, double wave) {
+        return disc(layout, cell, 0.32 + sanctuaryGlowPad(wave));
+    }
+
     public static double worstServedRingRadius(double wave) {
         return 0.36 + 0.05 * wave;
     }

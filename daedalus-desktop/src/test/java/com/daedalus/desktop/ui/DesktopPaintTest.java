@@ -288,6 +288,13 @@ class DesktopPaintTest {
                 .isGreaterThan(DesktopPaint.sanctuaryRing(layout, new Point(0, 0)).radius());
         assertThat(DesktopPaint.sanctuaryRingAlpha(1))
                 .isGreaterThan(DesktopPaint.sanctuaryRingAlpha(0));
+        assertThat(DesktopPaint.sanctuaryGlowAlpha(1))
+                .isGreaterThan(DesktopPaint.sanctuaryGlowAlpha(0));
+        assertThat(DesktopPaint.sanctuaryGlowPad(1))
+                .isGreaterThan(DesktopPaint.sanctuaryGlowPad(0));
+        assertThat(DesktopPaint.sanctuaryGlow(
+                DesktopPaint.Layout.fit(5, 5, 100, 100), new Point(0, 0), 1))
+                .isNotNull();
         assertThat(DesktopPaint.worstServedRing(layout, new Point(0, 0), 1).radius())
                 .isGreaterThan(lonely.radius());
         assertThat(DesktopPaint.worstServedRingAlpha(1))

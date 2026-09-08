@@ -2038,11 +2038,19 @@ public class MainController {
         if (currentSanctuaries != null && currentSanctuaries.placements() != null) {
             double safeWave = DesktopPaint.sanctuaryBreathWave(System.nanoTime());
             for (Point safe : currentSanctuaries.placements()) {
-                paintDisc(g, DesktopPaint.sanctuaryMarker(layout, safe),
-                        Color.web(DesktopPaint.SANCTUARY));
+                Color mint = Color.web(DesktopPaint.SANCTUARY);
+                DesktopPaint.Marker glow = DesktopPaint.sanctuaryGlow(layout, safe, safeWave);
+                if (glow != null) {
+                    g.setFill(mint.deriveColor(0, 1, 1, DesktopPaint.sanctuaryGlowAlpha(safeWave)));
+                    g.fillOval(glow.x(), glow.y(), glow.size(), glow.size());
+                }
+                DesktopPaint.Marker core = DesktopPaint.sanctuaryMarker(layout, safe);
+                if (core != null) {
+                    g.setFill(mint);
+                    g.fillOval(core.x(), core.y(), core.size(), core.size());
+                }
                 paintRing(g, DesktopPaint.sanctuaryRing(layout, safe, safeWave),
-                        Color.web(DesktopPaint.SANCTUARY)
-                                .deriveColor(0, 1, 1, DesktopPaint.sanctuaryRingAlpha(safeWave)));
+                        mint.deriveColor(0, 1, 1, DesktopPaint.sanctuaryRingAlpha(safeWave)));
             }
             paintRing(g, DesktopPaint.worstServedRing(layout, currentSanctuaries.worstServed(),
                             safeWave),
