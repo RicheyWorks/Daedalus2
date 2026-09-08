@@ -214,6 +214,8 @@ under the `_migration/` portfolios.
   maze silhouettes, not floating floors alone.
   Explore corridor vignette softens the screen edge so the tunnel still feels
   held, not a flat ortho box around the stone.
+  Fog corridor hairlines warm with the lamp so shine matches torch stone, not a
+  cold stencil on warm floors.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

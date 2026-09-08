@@ -2180,8 +2180,9 @@ public class MainController {
                 }
                 g.setFill(Color.web(DesktopPaint.fogFloor(fog, r, c)));
                 g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
-                paintHairline(g, DesktopPaint.floorHiStroke(layout, r, c,
-                        DesktopPaint.fogLamp(fog, r, c)));
+                double intensity = DesktopPaint.fogFloorIntensity(fog, r, c);
+                paintHairline(g, DesktopPaint.floorHiStroke(layout, r, c, intensity),
+                        Color.web(DesktopPaint.fogFloorHiInk(intensity)));
             }
         }
         if (!playerWalk.isEmpty() && theme != null) {

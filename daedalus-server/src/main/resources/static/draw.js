@@ -364,7 +364,7 @@
           g.fillRect(geom.offX[col], geom.offY[r],
                      geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
           if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
-            g.fillStyle = COLORS.floorHi;
+            g.fillStyle = mixHex(COLORS.floorHi, COLORS.floorWarm, lamp * 0.28);
             g.fillRect(geom.offX[col] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
           }
         } else {

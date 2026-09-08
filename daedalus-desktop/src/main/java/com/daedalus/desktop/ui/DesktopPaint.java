@@ -240,6 +240,12 @@ public final class DesktopPaint {
         return mixHex(FLOOR_HI, FLOOR_DIM, FLOOR_EDGE_DIM * Math.max(0, Math.min(1, edge)));
     }
 
+    /** Fog corridor shine warms with the lamp — same 0.28 weight as underfoot. */
+    public static String fogFloorHiInk(double intensity) {
+        return mixHex(FLOOR_HI, FOG_FLOOR_WARM,
+                0.28 * Math.max(0, Math.min(1, intensity)));
+    }
+
     /** Clear wall ink darkens toward unseen at the rim. */
     public static String wallInk(double edge) {
         return mixHex(FOG_WALL, FOG_UNSEEN, WALL_EDGE_DIM * Math.max(0, Math.min(1, edge)));
@@ -1701,7 +1707,15 @@ public final class DesktopPaint {
     }
 
     public static boolean fogFloorHi(Layout layout, Fog fog, int tileRow, int tileCol) {
-        return floorHi(layout, tileRow, tileCol, fogLamp(fog, tileRow, tileCol));
+        return floorHi(layout, tileRow, tileCol, fogFloorIntensity(fog, tileRow, tileCol));
+    }
+
+    /** Lamp × frontier — same product that warms fog floors and walls. */
+    public static double fogFloorIntensity(Fog fog, int tileRow, int tileCol) {
+        if (fog == null) {
+            return 1;
+        }
+        return fogLamp(fog, tileRow, tileCol) * fogFrontier(fog, tileRow, tileCol);
     }
 
     public static Hairline floorHiStroke(Layout layout, int tileRow, int tileCol) {
