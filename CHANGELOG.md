@@ -156,6 +156,7 @@ under the `_migration/` portfolios.
   Collected hunt coins breathe a soft mint pad so taken loot still feels held,
   not a flat outline.
   Explore crosshair soft underglow breathes so aim still feels held at rest.
+  Explore mood-face gold lip breathes so the HUD portrait still feels held.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

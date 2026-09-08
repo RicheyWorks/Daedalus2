@@ -330,6 +330,20 @@ public final class ExplorePaint {
     /** Thin gold lip around the mood face so the portrait matches strip chrome. */
     public static final float FACE_LIP = 0.008f;
     public static final float FACE_LIP_CORE = 0.004f;
+    /** Face lip breath — same cadence as aim / key presence. */
+    public static final float FACE_BREATH_MS = MAP_HERE_BREATH_MS;
+
+    public static float faceLip(double seconds) {
+        double t = ((seconds * 1000.0) % FACE_BREATH_MS) / FACE_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return FACE_LIP * (float) (0.88 + 0.24 * wave);
+    }
+
+    public static float faceLipCore(double seconds) {
+        double t = ((seconds * 1000.0) % FACE_BREATH_MS) / FACE_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return FACE_LIP_CORE * (float) (0.88 + 0.24 * wave);
+    }
 
     public static void keyTint(int slot, int marks, int mood, float[] rgb) {
         if (rgb == null || rgb.length < 3) {
