@@ -342,9 +342,7 @@ public class MainController {
         emptyBreath = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if (current == null || reachedGoal) {
-                    redraw();
-                }
+                redraw();
             }
         };
         emptyBreath.start();
@@ -2262,9 +2260,10 @@ public class MainController {
         if (layout == null || cell == null || color == null) {
             return;
         }
+        double wave = DesktopPaint.endpointBreathWave(System.nanoTime());
         paintDisc(g, DesktopPaint.endpointMarker(layout, cell), color);
-        paintRing(g, DesktopPaint.endpointRing(layout, cell),
-                color.deriveColor(0, 1, 1, 0.42));
+        paintRing(g, DesktopPaint.endpointRing(layout, cell, wave),
+                color.deriveColor(0, 1, 1, DesktopPaint.endpointRingAlpha(wave)));
     }
 
     private static void paintDisc(GraphicsContext g, DesktopPaint.Marker mark, Color color) {

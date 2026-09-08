@@ -1157,13 +1157,32 @@ public final class DesktopPaint {
 
     /** Outer ring around start / goal — same 0.55·cell as {@code draw.js} endpoint. */
     public static Ring endpointRing(Layout layout, Point cell) {
+        return endpointRing(layout, cell, 0);
+    }
+
+    public static Ring endpointRing(Layout layout, Point cell, double wave) {
         if (layout == null || cell == null) {
             return null;
         }
         double cx = layout.x(2 * cell.col() + 1) + layout.cellSize() / 2.0;
         double cy = layout.y(2 * cell.row() + 1) + layout.cellSize() / 2.0;
-        return new Ring(cx, cy, layout.cellSize() * 0.55,
+        return new Ring(cx, cy, layout.cellSize() * endpointRingRadius(wave),
                 Math.max(1.5, layout.cellSize() * 0.09));
+    }
+
+    /** Same 4.5s cadence as empty / gate breath. */
+    public static final double ENDPOINT_BREATH_MS = EMPTY_BREATH_MS;
+
+    public static double endpointBreathWave(long nanos) {
+        return emptyBreathWave(nanos);
+    }
+
+    public static double endpointRingRadius(double wave) {
+        return 0.55 + 0.06 * wave;
+    }
+
+    public static double endpointRingAlpha(double wave) {
+        return 0.32 + 0.18 * wave;
     }
 
     /** Soft halo at the tip of an unfolding route — same band as {@code draw.js} pathHead. */

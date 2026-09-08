@@ -83,6 +83,8 @@ class WebUiSmokeTest {
                 .contains("fogFrontier")
                 .contains("core + geom.cell * 0.18")
                 .contains("geom.cell * 0.28")
+                .contains("ENDPOINT_BREATH_MS")
+                .contains("0.55 + 0.06")
                 .contains("shadowBlur")
                 .contains("EMPTY_BREATH_MS")
                 .contains("prefers-reduced-motion")

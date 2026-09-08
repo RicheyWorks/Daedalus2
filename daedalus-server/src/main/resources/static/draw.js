@@ -146,11 +146,15 @@
     if (!p) return;
     marker(g, geom, p, color, 0.34);
     const [x, y] = cellCenter(geom, p);
+    const ENDPOINT_BREATH_MS = 4500;
+    const now = typeof performance !== "undefined" ? performance.now() : 0;
+    const t = (now % ENDPOINT_BREATH_MS) / ENDPOINT_BREATH_MS;
+    const wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
     g.strokeStyle = color;
-    g.globalAlpha = 0.42;
+    g.globalAlpha = 0.32 + 0.18 * wave;
     g.lineWidth = Math.max(1.5, geom.cell * 0.09);
     g.beginPath();
-    g.arc(x, y, geom.cell * 0.55, 0, 2 * Math.PI);
+    g.arc(x, y, geom.cell * (0.55 + 0.06 * wave), 0, 2 * Math.PI);
     g.stroke();
     g.globalAlpha = 1;
   }

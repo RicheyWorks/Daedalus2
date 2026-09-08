@@ -680,6 +680,11 @@ class DesktopPaintTest {
         assertThat(place).isNotNull();
         assertThat(tip).isNotNull();
         assertThat(place.radius()).isEqualTo(layout.cellSize() * 0.55);
+        assertThat(DesktopPaint.endpointRing(layout, cell, 1).radius())
+                .isGreaterThan(place.radius());
+        assertThat(DesktopPaint.endpointRingAlpha(1))
+                .isGreaterThan(DesktopPaint.endpointRingAlpha(0));
+        assertThat(DesktopPaint.ENDPOINT_BREATH_MS).isEqualTo(DesktopPaint.EMPTY_BREATH_MS);
         assertThat(tip.radius()).isEqualTo(layout.cellSize() * 0.5);
         assertThat(DesktopPaint.endpointRing(null, cell)).isNull();
         assertThat(DesktopPaint.pathHeadHalo(layout, null)).isNull();

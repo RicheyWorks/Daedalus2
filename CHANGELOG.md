@@ -125,6 +125,8 @@ under the `_migration/` portfolios.
   places, not flat dots.
   Explore automap you-are-here breathes so the earned map names your place
   as presence, not a stuck stamp.
+  Start and goal place rings breathe on the gate cadence so the ends of the
+  maze still feel held at rest.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
