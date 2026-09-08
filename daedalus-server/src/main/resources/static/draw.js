@@ -554,8 +554,16 @@
         const got = (scene.tourGot || []).some(p => p.row === w.row && p.col === w.col);
         const [x, y] = cellCenter(geom, w);
         const rad = geom.cell * 0.3;
-        if (!got) {
-          const soft = rad + geom.cell * (0.14 + 0.05 * wave);
+        const soft = rad + geom.cell * (0.14 + 0.05 * wave);
+        if (got) {
+          g.fillStyle = "#4cc38a";
+          g.globalAlpha = 0.10 + 0.10 * wave;
+          g.beginPath();
+          g.moveTo(x, y - soft); g.lineTo(x + soft, y); g.lineTo(x, y + soft); g.lineTo(x - soft, y);
+          g.closePath();
+          g.fill();
+          g.globalAlpha = 1;
+        } else {
           g.fillStyle = "#f2c94c";
           g.globalAlpha = 0.16 + 0.14 * wave;
           g.beginPath();
@@ -568,7 +576,11 @@
         g.moveTo(x, y - rad); g.lineTo(x + rad, y); g.lineTo(x, y + rad); g.lineTo(x - rad, y);
         g.closePath();
         if (got) {
-          g.strokeStyle = "#4cc38a"; g.lineWidth = Math.max(1.5, geom.cell * 0.09); g.stroke();
+          g.strokeStyle = "#4cc38a";
+          g.globalAlpha = 0.72 + 0.28 * wave;
+          g.lineWidth = Math.max(1.5, geom.cell * 0.09);
+          g.stroke();
+          g.globalAlpha = 1;
         } else {
           g.fillStyle = "#f2c94c"; g.fill();
         }

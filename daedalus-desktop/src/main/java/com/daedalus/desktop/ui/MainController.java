@@ -2236,13 +2236,17 @@ public class MainController {
         double cx = diamond.cx();
         double cy = diamond.cy();
         double r = diamond.radius();
-        if (!collected) {
-            // soft = cell*(0.3+pad); core radius is cell*0.3
-            double wave = DesktopPaint.waypointBreathWave(System.nanoTime());
-            double pad = DesktopPaint.waypointGlowPad(wave);
-            double soft = r * (0.3 + pad) / 0.3;
-            double[] softXs = {cx, cx + soft, cx, cx - soft};
-            double[] softYs = {cy - soft, cy, cy + soft, cy};
+        double wave = DesktopPaint.waypointBreathWave(System.nanoTime());
+        double pad = DesktopPaint.waypointGlowPad(wave);
+        double soft = r * (0.3 + pad) / 0.3;
+        double[] softXs = {cx, cx + soft, cx, cx - soft};
+        double[] softYs = {cy - soft, cy, cy + soft, cy};
+        if (collected) {
+            g.setGlobalAlpha(DesktopPaint.waypointGotGlowAlpha(wave));
+            g.setFill(Color.web(DesktopPaint.WAYPOINT_GOT));
+            g.fillPolygon(softXs, softYs, 4);
+            g.setGlobalAlpha(1);
+        } else {
             g.setGlobalAlpha(DesktopPaint.waypointGlowAlpha(wave));
             g.setFill(Color.web(DesktopPaint.WAYPOINT));
             g.fillPolygon(softXs, softYs, 4);
@@ -2251,9 +2255,11 @@ public class MainController {
         double[] xs = {cx, cx + r, cx, cx - r};
         double[] ys = {cy - r, cy, cy + r, cy};
         if (collected) {
+            g.setGlobalAlpha(DesktopPaint.waypointGotStrokeAlpha(wave));
             g.setStroke(Color.web(DesktopPaint.WAYPOINT_GOT));
             g.setLineWidth(diamond.stroke());
             g.strokePolygon(xs, ys, 4);
+            g.setGlobalAlpha(1);
         } else {
             g.setFill(Color.web(DesktopPaint.WAYPOINT));
             g.fillPolygon(xs, ys, 4);

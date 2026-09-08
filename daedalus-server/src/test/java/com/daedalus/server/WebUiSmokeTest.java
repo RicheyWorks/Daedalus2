@@ -94,6 +94,8 @@ class WebUiSmokeTest {
                 .contains("0.18 + 0.08")
                 .contains("WAYPOINT_BREATH_MS")
                 .contains("0.14 + 0.05")
+                .contains("0.10 + 0.10")
+                .contains("0.72 + 0.28")
                 .contains("PATH_HEAD_BREATH_MS")
                 .contains("0.5 + 0.05")
                 .contains("SANCTUARY_BREATH_MS")

@@ -640,6 +640,10 @@ class DesktopPaintTest {
                 .isGreaterThan(DesktopPaint.waypointGlowAlpha(0));
         assertThat(DesktopPaint.waypointGlowPad(1))
                 .isGreaterThan(DesktopPaint.waypointGlowPad(0));
+        assertThat(DesktopPaint.waypointGotGlowAlpha(1))
+                .isGreaterThan(DesktopPaint.waypointGotGlowAlpha(0));
+        assertThat(DesktopPaint.waypointGotStrokeAlpha(1))
+                .isGreaterThan(DesktopPaint.waypointGotStrokeAlpha(0));
         assertThat(DesktopPaint.VICTORY_BREATH_MS).isEqualTo(2800);
         assertThat(DesktopPaint.victoryGlowAlpha(1))
                 .isGreaterThan(DesktopPaint.victoryGlowAlpha(0));

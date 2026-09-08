@@ -120,6 +120,15 @@ public final class DesktopPaint {
         return WAYPOINT_GLOW_PAD + 0.05 * wave;
     }
 
+    /** Collected mint pad — quieter than uncollected gold, still held. */
+    public static double waypointGotGlowAlpha(double wave) {
+        return 0.10 + 0.10 * wave;
+    }
+
+    public static double waypointGotStrokeAlpha(double wave) {
+        return 0.72 + 0.28 * wave;
+    }
+
     public static double victoryGlowAlpha(double wave) {
         return 0.14 + 0.16 * wave;
     }
