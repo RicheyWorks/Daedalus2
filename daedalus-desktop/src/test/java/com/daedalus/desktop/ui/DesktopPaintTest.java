@@ -352,6 +352,14 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.fogLamp(fog, 1, 5))
                 .as("two cells east: max(0.38, 1 - 0.24)")
                 .isCloseTo(0.76, within(1e-9));
+        assertThat(DesktopPaint.FOG_FRONTIER).isEqualTo(0.72);
+        assertThat(DesktopPaint.fogFrontier(null, 1, 1)).isEqualTo(1.0);
+        assertThat(DesktopPaint.fogFrontier(fog, 5, 5))
+                .as("unseen tiles skip the rim multiplier")
+                .isEqualTo(1.0);
+        assertThat(DesktopPaint.fogFrontier(fog, 1, 2))
+                .as("opening toward unseen softens toward the void")
+                .isEqualTo(DesktopPaint.FOG_FRONTIER);
         assertThat(DesktopPaint.mixHex(DesktopPaint.FOG_FLOOR_DIM,
                 DesktopPaint.FOG_FLOOR, 0)).isEqualTo(DesktopPaint.FOG_FLOOR_DIM);
         assertThat(DesktopPaint.mixHex(DesktopPaint.FOG_FLOOR_DIM,

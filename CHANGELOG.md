@@ -111,6 +111,8 @@ under the `_migration/` portfolios.
   start-gate brand so the idle board still feels held.
   Explore status captions lead with a brighter place name and dim the
   facing / stood count so the HUD names the room first.
+  Fog memory edges soften with a warm lamp falloff so the frontier reads as
+  light, not a hard stencil against the void.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

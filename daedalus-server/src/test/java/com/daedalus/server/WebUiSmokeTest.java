@@ -78,6 +78,8 @@ class WebUiSmokeTest {
                 .contains("backdrop-filter")
                 .contains("floorWarm")
                 .contains("wallWarm")
+                .contains("FOG_FRONTIER")
+                .contains("fogFrontier")
                 .contains("shadowBlur")
                 .contains("EMPTY_BREATH_MS")
                 .contains("prefers-reduced-motion")

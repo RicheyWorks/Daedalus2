@@ -104,6 +104,8 @@ public final class DesktopPaint {
     public static final String FOG_FLOOR = "#3d4a58";
     /** Torch-warm stone underfoot — same mix as {@code draw.js} floorWarm. */
     public static final String FOG_FLOOR_WARM = "#5c4a32";
+    /** Soft rim at the memory edge — same falloff as {@code draw.js} FOG_FRONTIER. */
+    public static final double FOG_FRONTIER = 0.72;
     /** Cold wall ink — same token as {@code draw.js} wall. */
     public static final String FOG_WALL = "#0b0f14";
     /** Torch-warm wall — same mix as {@code draw.js} wallWarm. */
@@ -1159,6 +1161,20 @@ public final class DesktopPaint {
                 || fog.seen(row, col - 1) || fog.seen(row, col);
     }
 
+    /** Soft rim at the memory edge — light falloff, not a hard stencil. */
+    public static double fogFrontier(Fog fog, int tileRow, int tileCol) {
+        if (fog == null || !fogRevealsTile(fog, tileRow, tileCol)) {
+            return 1;
+        }
+        int[][] n = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        for (int[] d : n) {
+            if (!fogRevealsTile(fog, tileRow + d[0], tileCol + d[1])) {
+                return FOG_FRONTIER;
+            }
+        }
+        return 1;
+    }
+
     /**
      * Lamp falloff from the explorer. Stood-on memory stays visible;
      * cells underfoot read as the bright end of the corridor.
@@ -1189,14 +1205,14 @@ public final class DesktopPaint {
     }
 
     public static String fogFloor(Fog fog, int tileRow, int tileCol) {
-        double lamp = fogLamp(fog, tileRow, tileCol);
+        double lamp = fogLamp(fog, tileRow, tileCol) * fogFrontier(fog, tileRow, tileCol);
         String lit = mixHex(FOG_FLOOR, FOG_FLOOR_WARM, 0.28 * lamp);
         return mixHex(FOG_FLOOR_DIM, lit, lamp);
     }
 
     /** Revealed wall near the lamp warms toward torch-brown — same as {@code draw.js}. */
     public static String fogWall(Fog fog, int tileRow, int tileCol) {
-        double lamp = fogLamp(fog, tileRow, tileCol);
+        double lamp = fogLamp(fog, tileRow, tileCol) * fogFrontier(fog, tileRow, tileCol);
         return mixHex(FOG_WALL, FOG_WALL_WARM, 0.45 * lamp);
     }
 

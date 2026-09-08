@@ -218,6 +218,17 @@
     return nearest([d(r - 1, c - 1), d(r - 1, c), d(r, c - 1), d(r, c)]);
   }
 
+  /** Soft rim at the memory edge — light falloff, not a hard stencil. */
+  const FOG_FRONTIER = 0.72;
+  function fogFrontier(fog, tr, tc) {
+    if (!fog || !fogRevealsTile(fog, tr, tc)) return 1;
+    const n = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+    for (let i = 0; i < n.length; i++) {
+      if (!fogRevealsTile(fog, tr + n[i][0], tc + n[i][1])) return FOG_FRONTIER;
+    }
+    return 1;
+  }
+
   function hitCell(geom, x, y) {
     if (!geom) return null;
     const track = (off, v) => {
@@ -278,7 +289,7 @@
             && !(r % 2 === 0 && col % 2 === 0 && isInteriorPost(tiles, r, col));
         if (wallTile) {
           if (scene.fog) {
-            const lamp = fogLamp(scene.fog, r, col);
+            const lamp = fogLamp(scene.fog, r, col) * fogFrontier(scene.fog, r, col);
             g.fillStyle = mixHex(COLORS.wall, COLORS.wallWarm, lamp * 0.45);
             g.fillRect(geom.offX[col], geom.offY[r],
                        geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
@@ -286,7 +297,8 @@
           continue;
         }
         if (r % 2 === 1 && col % 2 === 1 && isRock(tiles, r, col)) continue;
-        const lamp = scene.fog ? fogLamp(scene.fog, r, col) : 1;
+        const lamp = scene.fog
+            ? fogLamp(scene.fog, r, col) * fogFrontier(scene.fog, r, col) : 1;
         if (scene.fog) {
           const lit = mixHex(COLORS.floor, COLORS.floorWarm, lamp * 0.28);
           g.fillStyle = mixHex(COLORS.floorDim, lit, lamp);
@@ -617,7 +629,7 @@
 
   global.DaedalusDraw = {
     paint, paintEmpty, computeGeometry, isRock, isInteriorPost,
-    paintWalk, walkHead, fogRevealsTile, fogLamp, hitCell, pathRevealMs,
+    paintWalk, walkHead, fogRevealsTile, fogLamp, fogFrontier, hitCell, pathRevealMs,
     LEGEND_RESERVE, EXPORT_RESERVE,
   };
 })(window);
