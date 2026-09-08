@@ -1671,7 +1671,7 @@ public class MainController {
                     0, 0, cx, cy - 36, Math.min(w, h) * 0.42, false,
                     javafx.scene.paint.CycleMethod.NO_CYCLE,
                     new javafx.scene.paint.Stop(0, Color.web("#3ee08f", 0.10)),
-                    new javafx.scene.paint.Stop(0.55, Color.web("#7eb6ff", 0.04)),
+                    new javafx.scene.paint.Stop(0.55, Color.web("#f5c14a", 0.05)),
                     new javafx.scene.paint.Stop(1, Color.web("#000000", 0)));
             g.setFill(glow);
             g.fillRect(0, 0, w, h);

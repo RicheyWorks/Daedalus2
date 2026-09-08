@@ -60,7 +60,7 @@
   #gate .gate-veil { position: absolute; inset: 0; pointer-events: none; opacity: .28;
           background:
             linear-gradient(90deg, transparent 23px, rgba(62, 224, 143, .08) 24px, transparent 25px),
-            linear-gradient(transparent 23px, rgba(126, 182, 255, .05) 24px, transparent 25px),
+            linear-gradient(transparent 23px, rgba(245, 193, 74, .05) 24px, transparent 25px),
             radial-gradient(70% 45% at 50% 0%, rgba(245, 193, 74, .06), transparent 70%);
           background-size: 48px 48px, 48px 48px, auto;
           mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 92%);
@@ -80,9 +80,11 @@
           text-transform: uppercase; color: var(--dim); }
   #gate .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
                  gap: 12px; }
-  #gate article { background: rgba(16, 21, 27, .88); border: 1px solid var(--line);
+  #gate article { background: rgba(16, 21, 27, .88);
+                  border: 1px solid rgba(184, 133, 56, 0.28);
                   border-radius: 10px; padding: 14px 16px; display: flex;
                   flex-direction: column; gap: 8px;
+                  box-shadow: 0 0 0 1px rgba(16, 11, 8, 0.75);
                   animation: gateRise .55s ease both; }
   #gate article:nth-child(1) { animation-delay: .22s; }
   #gate article:nth-child(2) { animation-delay: .28s; }
