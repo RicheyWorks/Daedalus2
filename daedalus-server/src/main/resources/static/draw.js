@@ -659,11 +659,11 @@
           live.add(p.row + "," + p.col);
         }
         g.fillStyle = lane.color;
-        g.globalAlpha = 0.13;
+        g.globalAlpha = 0.13 * (0.88 + 0.24 * raceWave);
         for (let i = 0; i < shown; i++) {
           paintWashCell(g, geom, lane.expansions[i].row, lane.expansions[i].col);
         }
-        g.globalAlpha = 0.20;
+        g.globalAlpha = 0.20 * (0.85 + 0.30 * raceWave);
         paintWashOpenings(g, geom, tiles, (r, c) => live.has(r + "," + c));
         g.globalAlpha = 0.4 * (0.88 + 0.24 * raceWave);
         for (let i = Math.max(0, shown - 5); i < shown; i++) {

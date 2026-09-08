@@ -136,6 +136,8 @@ class WebUiSmokeTest {
                 .contains("EXPANSION_BREATH_MS")
                 .contains("0.45 * (0.88 + 0.24")
                 .contains("RACE_BREATH_MS")
+                .contains("0.13 * (0.88 + 0.24")
+                .contains("0.20 * (0.85 + 0.30")
                 .contains("0.4 * (0.88 + 0.24")
                 .contains("g.globalAlpha = 0.20")
                 .contains("CUTS_BREATH_MS")

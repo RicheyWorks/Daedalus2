@@ -355,6 +355,14 @@ class DesktopPaintTest {
                 .isEqualTo(DesktopPaint.RACE_FRONT_ALPHA * 0.88);
         assertThat(DesktopPaint.raceFrontPaintAlpha(1.0))
                 .isEqualTo(DesktopPaint.RACE_FRONT_ALPHA * 1.12);
+        assertThat(DesktopPaint.raceWashPaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.RACE_WASH * 0.88);
+        assertThat(DesktopPaint.raceWashPaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.RACE_WASH * 1.12);
+        assertThat(DesktopPaint.raceOpeningPaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.RACE_OPENING_ALPHA * 0.85);
+        assertThat(DesktopPaint.raceOpeningPaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.RACE_OPENING_ALPHA * 1.15);
     }
 
     @Test

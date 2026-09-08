@@ -2269,18 +2269,18 @@ public class MainController {
             return;
         }
         List<Point> shown = DesktopPaint.pathPrefix(lane.expansions(), front);
+        double raceWave = DesktopPaint.raceBreathWave(System.nanoTime());
         g.setFill(Color.web(lane.color()));
-        g.setGlobalAlpha(DesktopPaint.RACE_WASH);
+        g.setGlobalAlpha(DesktopPaint.raceWashPaintAlpha(raceWave));
         for (DesktopPaint.TileRect tile : DesktopPaint.expansionCells(shown)) {
             g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                     layout.w(tile.tileCol()), layout.h(tile.tileRow()));
         }
-        g.setGlobalAlpha(DesktopPaint.RACE_OPENING_ALPHA);
+        g.setGlobalAlpha(DesktopPaint.raceOpeningPaintAlpha(raceWave));
         for (DesktopPaint.TileRect tile : DesktopPaint.expansionOpenings(shown, tiles)) {
             g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                     layout.w(tile.tileCol()), layout.h(tile.tileRow()));
         }
-        double raceWave = DesktopPaint.raceBreathWave(System.nanoTime());
         g.setGlobalAlpha(DesktopPaint.raceFrontPaintAlpha(raceWave));
         for (DesktopPaint.TileRect tile : DesktopPaint.expansionCells(
                 DesktopPaint.raceFront(shown))) {

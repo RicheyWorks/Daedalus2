@@ -398,6 +398,14 @@ public final class DesktopPaint {
     public static double raceFrontPaintAlpha(double wave) {
         return RACE_FRONT_ALPHA * (0.88 + 0.24 * wave);
     }
+
+    public static double raceWashPaintAlpha(double wave) {
+        return RACE_WASH * (0.88 + 0.24 * wave);
+    }
+
+    public static double raceOpeningPaintAlpha(double wave) {
+        return RACE_OPENING_ALPHA * (0.85 + 0.30 * wave);
+    }
     public static final double RACE_PATH_A = 0.85;
     public static final double RACE_PATH_B = 0.58;
     /**

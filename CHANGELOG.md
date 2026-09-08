@@ -220,6 +220,8 @@ under the `_migration/` portfolios.
   feel held, not a stuck agreement wash over the corridors.
   Path-head tip discs breathe with their halos so the living tip is a place, not
   a stuck stamp under a pulsing ring.
+  Race wash and openings breathe with the front so arena floods still feel live,
+  not a stuck blue-gold stain behind the tip.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
