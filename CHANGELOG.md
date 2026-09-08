@@ -80,6 +80,8 @@ under the `_migration/` portfolios.
   with a soft gold rim so PNG/ASCII match the well chrome, not blue admin.
   Side rail panels wear the same soft gold rim and under-brown lip as the
   board so Generate / Lab / Compare read as chrome, not gray admin boxes.
+  Focus rings, Solve, and the PNG download link wear gold instead of ice
+  blue, and desktop focused inputs match — chrome accents, not admin ice.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

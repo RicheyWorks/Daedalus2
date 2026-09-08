@@ -175,7 +175,7 @@
   select, input { width: 100%; background: var(--bg); color: var(--text);
                   border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; }
   select:focus, input:focus, button:focus-visible {
-    outline: 2px solid var(--accent2); outline-offset: 1px; }
+    outline: 2px solid rgba(184, 133, 56, 0.85); outline-offset: 1px; }
   .row { display: flex; gap: 8px; }
   .actions { display: flex; gap: 8px; margin-top: 8px; }
   .actions button { margin-top: 0; }
@@ -185,8 +185,8 @@
   button:hover { border-color: var(--accent); }
   button.primary { background: var(--accent); border-color: var(--accent); color: #08130d; }
   button.primary:hover { filter: brightness(1.06); }
-  button.accent { background: transparent; border-color: var(--accent2); color: var(--accent2); }
-  button.accent:hover { background: #152033; }
+  button.accent { background: transparent; border-color: var(--gold); color: var(--gold); }
+  button.accent:hover { background: #1a1610; border-color: rgba(184, 133, 56, 0.95); }
   button.quiet { background: transparent; font-weight: 500; color: var(--text); }
   button.quiet:hover { background: #1a222b; }
   button:disabled { opacity: .4; cursor: default; }
@@ -458,7 +458,7 @@ powershell -File daedalus-explore\run-explore.ps1</pre>
       </div>
       <div class="exports">
         <a id="pngExport" class="hint" href="#" download="maze.png"
-           style="display:none;color:var(--accent2)">download as PNG</a>
+           style="display:none;color:var(--gold)">download as PNG</a>
         <button id="ascii" disabled
                 title="The same maze negotiated as text/plain — what curl gets with Accept: text/plain. Client-side tile dump would skip the content-negotiation contract">
           Show ASCII</button>

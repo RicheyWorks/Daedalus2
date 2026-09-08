@@ -48,7 +48,7 @@
 .text-field:focused,
 .spinner:focused,
 .spinner .text-field:focused {
-    -fx-border-color: #7eb6ff;
+    -fx-border-color: rgba(184, 133, 56, 0.85);
 }
 .combo-box .list-cell,
 .combo-box-popup .list-view {
