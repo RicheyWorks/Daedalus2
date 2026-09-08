@@ -41,7 +41,7 @@
     -fx-text-fill: #e8eef4;
     -fx-prompt-text-fill: #7d8894;
     -fx-background-radius: 6;
-    -fx-border-color: #1e2832;
+    -fx-border-color: rgba(184, 133, 56, 0.28);
     -fx-border-radius: 6;
 }
 .combo-box:focused,

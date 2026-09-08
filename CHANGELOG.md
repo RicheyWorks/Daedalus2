@@ -95,6 +95,8 @@ under the `_migration/` portfolios.
   and boss dots read as places on the earned map, not flat pixels.
   Desktop legend start / goal / walk / sanctuary / ghost swatches wear the
   same soft rim as the web legend so overlay keys match the well markers.
+  Web selects / inputs and desktop combo fields wear a soft gold idle rim so
+  form chrome matches the side panels, not flat gray admin lines.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

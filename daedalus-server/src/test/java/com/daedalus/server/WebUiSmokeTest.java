@@ -70,6 +70,7 @@ class WebUiSmokeTest {
                 .contains("inset 3px 0 0 rgba(184, 133, 56, 0.55)")
                 .contains("0 0 12px rgba(184, 133, 56")
                 .contains("outline: 2px solid rgba(184, 133, 56")
+                .contains("border: 1px solid rgba(184, 133, 56, 0.28)")
                 .contains("button.accent")
                 .contains("border-color: var(--gold)")
                 .contains("backdrop-filter")
