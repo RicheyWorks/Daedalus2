@@ -109,6 +109,7 @@ class WebUiSmokeTest {
                 .contains("0.35 + 0.65")
                 .contains("0.55 + 0.45")
                 .contains("\"ribbon\"")
+                .contains("g.globalAlpha = 0.26")
                 .contains("0.32, true")
                 .contains("GHOST_BREATH_MS")
                 .contains("0.18 + 0.08")

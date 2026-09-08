@@ -356,6 +356,16 @@ public final class DesktopPaint {
     public static final double RACE_WASH = 0.13;
     public static final double RACE_FRONT_ALPHA = 0.4;
     public static final int RACE_FRONT = 5;
+    /** Race-front pulse — same cadence as expansion front. */
+    public static final double RACE_BREATH_MS = VICTORY_BREATH_MS;
+
+    public static double raceBreathWave(long nanos) {
+        return victoryBreathWave(nanos);
+    }
+
+    public static double raceFrontPaintAlpha(double wave) {
+        return RACE_FRONT_ALPHA * (0.88 + 0.24 * wave);
+    }
     public static final double RACE_PATH_A = 0.85;
     public static final double RACE_PATH_B = 0.58;
     /**

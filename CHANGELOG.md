@@ -202,6 +202,8 @@ under the `_migration/` portfolios.
   held, not a stuck blue wash over the corridors.
   Heuristic lens bands breathe on the same cadence so must / never still feel
   held, not a stuck red-green wash over the corridors.
+  Search wash openings read louder than cells so the flood is corridors, not
+  graph-paper stamps.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
