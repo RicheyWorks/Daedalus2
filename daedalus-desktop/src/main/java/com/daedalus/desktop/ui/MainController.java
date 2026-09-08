@@ -2097,10 +2097,12 @@ public class MainController {
 
     /** Letterbox pocket — same soft radial as web {@code #stage}, not flat wall. */
     private static void paintWellVoid(GraphicsContext g, double w, double h) {
+        double wave = DesktopPaint.emptyBreathWave(System.nanoTime());
         var voidWash = new javafx.scene.paint.RadialGradient(
                 0, 0, w / 2.0, h * 0.45, Math.max(w, h) * 0.72, false,
                 javafx.scene.paint.CycleMethod.NO_CYCLE,
-                new javafx.scene.paint.Stop(0, Color.web(DesktopPaint.WELL_VOID_CENTER)),
+                new javafx.scene.paint.Stop(0,
+                        Color.web(DesktopPaint.wellVoidCenterInk(wave))),
                 new javafx.scene.paint.Stop(1, Color.web(DesktopPaint.WELL_VOID_EDGE)));
         g.setFill(voidWash);
         g.fillRect(0, 0, w, h);

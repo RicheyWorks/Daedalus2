@@ -172,6 +172,12 @@ public final class DesktopPaint {
     /** Soft well pocket behind a letterboxed maze — same band as web {@code #stage}. */
     public static final String WELL_VOID_CENTER = "#121821";
     public static final String WELL_VOID_EDGE = "#0b0f14";
+    /** Peak mid-glow of the void pocket — same lift as web {@code stageRimBreath}. */
+    public static final String WELL_VOID_CENTER_LIT = "#151c26";
+
+    public static String wellVoidCenterInk(double wave) {
+        return mixHex(WELL_VOID_CENTER, WELL_VOID_CENTER_LIT, Math.max(0, Math.min(1, wave)));
+    }
     public static final String FOG_FLOOR_DIM = "#2a333c";
     /** Clear-board edge falloff toward dim slate — same ink as fog dim. */
     public static final String FLOOR_DIM = FOG_FLOOR_DIM;

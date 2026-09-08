@@ -98,6 +98,7 @@ class WebUiSmokeTest {
                 .contains("0.04 + 0.03")
                 .contains("prefers-reduced-motion")
                 .contains("stageRimBreath")
+                .contains("#151c26 0%")
                 .contains("boardRimBreath")
                 .contains("panelRimBreath")
                 .contains("headerRimBreath")

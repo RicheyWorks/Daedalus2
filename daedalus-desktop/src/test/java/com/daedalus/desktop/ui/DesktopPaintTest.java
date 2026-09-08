@@ -440,6 +440,9 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.FOG_UNSEEN).isEqualTo("#05070a");
         assertThat(DesktopPaint.WELL_VOID_CENTER).isEqualTo("#121821");
         assertThat(DesktopPaint.WELL_VOID_EDGE).isEqualTo("#0b0f14");
+        assertThat(DesktopPaint.WELL_VOID_CENTER_LIT).isEqualTo("#151c26");
+        assertThat(DesktopPaint.wellVoidCenterInk(0)).isEqualTo(DesktopPaint.WELL_VOID_CENTER);
+        assertThat(DesktopPaint.wellVoidCenterInk(1)).isEqualTo(DesktopPaint.WELL_VOID_CENTER_LIT);
         assertThat(DesktopPaint.FLOOR_DIM).isEqualTo("#2a333c");
         assertThat(DesktopPaint.FLOOR_EDGE_DIM).isEqualTo(0.22);
         assertThat(DesktopPaint.WALL_EDGE_DIM).isEqualTo(0.28);
