@@ -198,6 +198,8 @@ under the `_migration/` portfolios.
   still feels held around the well.
   Solver path ribbons soften toward the start and brighten at the tip so a
   finished route has depth, not flat ink.
+  Distance heat wash breathes on the victory cadence so the field still feels
+  held, not a stuck blue wash over the corridors.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

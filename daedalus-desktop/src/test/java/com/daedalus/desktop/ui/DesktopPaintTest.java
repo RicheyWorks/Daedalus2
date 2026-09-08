@@ -521,6 +521,13 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.fieldCell(-1, 10)).isNull();
         assertThat(DesktopPaint.fieldOpeningColor()).isEqualTo("#6da7ec");
         assertThat(DesktopPaint.FIELD_OPENING_ALPHA).isEqualTo(0.42);
+        assertThat(DesktopPaint.FIELD_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
+        assertThat(DesktopPaint.fieldPaintAlpha(0.80, 0.0)).isEqualTo(0.80 * 0.88);
+        assertThat(DesktopPaint.fieldPaintAlpha(0.80, 1.0)).isEqualTo(0.80 * 1.12);
+        assertThat(DesktopPaint.fieldOpeningPaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.FIELD_OPENING_ALPHA * 0.85);
+        assertThat(DesktopPaint.fieldOpeningPaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.FIELD_OPENING_ALPHA * 1.15);
 
         TileType[][] tiles = new TileType[5][5];
         for (int r = 0; r < 5; r++) {

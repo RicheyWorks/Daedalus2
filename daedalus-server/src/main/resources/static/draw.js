@@ -432,6 +432,10 @@
       });
     }
     if (scene.field) {
+      const FIELD_BREATH_MS = 2800;
+      const fieldNow = typeof performance !== "undefined" ? performance.now() : 0;
+      const fieldT = (fieldNow % FIELD_BREATH_MS) / FIELD_BREATH_MS;
+      const fieldWave = 0.5 - 0.5 * Math.cos(fieldT * Math.PI * 2);
       const max = Math.max(1, scene.field.maxDistance);
       const ramp = scene.distanceRamp;
       const tone = (r, c) => {
@@ -439,7 +443,7 @@
         if (d < 0) return null;
         const t = d / max;
         return { color: ramp[Math.min(ramp.length - 1, Math.round(t * (ramp.length - 1)))],
-                 alpha: 0.12 + 0.68 * t };
+                 alpha: (0.12 + 0.68 * t) * (0.88 + 0.24 * fieldWave) };
       };
       for (let r = 0; r < scene.field.rows; r++) {
         for (let c = 0; c < scene.field.cols; c++) {
@@ -451,7 +455,7 @@
         }
       }
       g.fillStyle = ramp[Math.min(ramp.length - 1, Math.round(0.55 * (ramp.length - 1)))];
-      g.globalAlpha = 0.42;
+      g.globalAlpha = 0.42 * (0.85 + 0.30 * fieldWave);
       paintWashOpenings(g, geom, tiles, (r, c) => scene.field.distances[r][c] >= 0);
       g.globalAlpha = 1;
     }

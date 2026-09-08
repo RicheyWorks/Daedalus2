@@ -312,6 +312,20 @@ public final class DesktopPaint {
     };
     /** Opening wash for the field — same alpha as {@code draw.js}. */
     public static final double FIELD_OPENING_ALPHA = 0.42;
+    /** Heat wash pulse — same cadence as victory / jam. */
+    public static final double FIELD_BREATH_MS = VICTORY_BREATH_MS;
+
+    public static double fieldBreathWave(long nanos) {
+        return victoryBreathWave(nanos);
+    }
+
+    public static double fieldPaintAlpha(double base, double wave) {
+        return base * (0.88 + 0.24 * wave);
+    }
+
+    public static double fieldOpeningPaintAlpha(double wave) {
+        return FIELD_OPENING_ALPHA * (0.85 + 0.30 * wave);
+    }
     /**
      * Heuristic lens bands — bit-identical to {@code caption.js} {@code LENS_COLORS}.
      * Must, tie, never.

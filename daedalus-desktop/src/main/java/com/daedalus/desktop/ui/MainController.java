@@ -1816,6 +1816,7 @@ public class MainController {
         if (currentField != null) {
             int max = currentField.maxDistance();
             int[][] dist = currentField.distances();
+            double fieldWave = DesktopPaint.fieldBreathWave(System.nanoTime());
             for (int r = 0; r < dist.length; r++) {
                 for (int c = 0; c < dist[r].length; c++) {
                     DesktopPaint.FieldTone tone = DesktopPaint.fieldCell(dist[r][c], max);
@@ -1823,13 +1824,13 @@ public class MainController {
                         continue;
                     }
                     g.setFill(Color.web(tone.color()));
-                    g.setGlobalAlpha(tone.alpha());
+                    g.setGlobalAlpha(DesktopPaint.fieldPaintAlpha(tone.alpha(), fieldWave));
                     g.fillRect(layout.x(2 * c + 1), layout.y(2 * r + 1),
                             layout.w(2 * c + 1), layout.h(2 * r + 1));
                 }
             }
             g.setFill(Color.web(DesktopPaint.fieldOpeningColor()));
-            g.setGlobalAlpha(DesktopPaint.FIELD_OPENING_ALPHA);
+            g.setGlobalAlpha(DesktopPaint.fieldOpeningPaintAlpha(fieldWave));
             for (DesktopPaint.TileRect tile : DesktopPaint.fieldOpenings(dist, tiles)) {
                 g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                         layout.w(tile.tileCol()), layout.h(tile.tileRow()));
