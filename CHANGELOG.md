@@ -174,6 +174,12 @@ under the `_migration/` portfolios.
   glow still feels held, not a stuck puddle under DAEDALUS.
   Web board-panel gold rim breathes with the stage so post-Enter chrome still
   feels held around the well.
+  Web side-rail panels breathe gold rims so Generate / Lab / Compare chrome
+  still feels held with the board.
+  Desktop Compare All washes openings louder than stacked cells so agreement
+  corridors read as continuous fields, not graph-paper stamps.
+  Desktop well gold rim breathes with the web stage so the board chrome still
+  feels held, not a stuck frame.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

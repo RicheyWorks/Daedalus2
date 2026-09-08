@@ -4,7 +4,6 @@ package com.daedalus.desktop.ui;
 
 import com.daedalus.desktop.ui.themes.Theme;
 import com.daedalus.engine.MazeGenerator;
-import com.daedalus.engine.MazeGrid;
 import com.daedalus.engine.generators.GeneratorRegistry;
 import com.daedalus.model.Direction;
 import com.daedalus.model.GameSession;
@@ -1645,14 +1644,37 @@ public class MainController {
      * Paint {@link #current} onto the canvas. Layered:
      * <ol>
      *   <li>Background fill.</li>
-     *   <li>Tile grid via {@link MazeGrid#toTileGrid()} — walls and passages. Start and
+     *   <li>Tile grid via {@link com.daedalus.engine.MazeGrid#toTileGrid()} — walls and passages. Start and
      *       goal tiles paint as floor; the discs come later.</li>
      *   <li>Solve path overlay (if {@link #currentPath} is set) — drawn under the discs.</li>
      *   <li>Start / goal discs, then the player — last so it's always on top.</li>
      * </ol>
      * Thin-wall cells, centered with letterboxing on the longer axis so the maze isn't stretched.
      */
+    /** Match web {@code stageRimBreath} — gold lip + soft glow on the gate cadence. */
+    private void pulseWellChrome() {
+        if (canvasParent == null) {
+            return;
+        }
+        double wave = DesktopPaint.emptyBreathWave(System.nanoTime());
+        double rimA = DesktopPaint.canvasRimAlpha(wave);
+        canvasParent.setBorder(new javafx.scene.layout.Border(new javafx.scene.layout.BorderStroke(
+                Color.rgb(184, 133, 56, rimA),
+                javafx.scene.layout.BorderStrokeStyle.SOLID,
+                new javafx.scene.layout.CornerRadii(10),
+                new javafx.scene.layout.BorderWidths(1))));
+        var inset = new javafx.scene.effect.InnerShadow();
+        inset.setRadius(48);
+        inset.setColor(Color.rgb(0, 0, 0, 0.35));
+        var glow = new javafx.scene.effect.DropShadow();
+        glow.setRadius(DesktopPaint.canvasRimGlowRadius(wave));
+        glow.setColor(Color.rgb(184, 133, 56, DesktopPaint.canvasRimGlowAlpha(wave)));
+        glow.setInput(inset);
+        canvasParent.setEffect(glow);
+    }
+
     private void redraw() {
+        pulseWellChrome();
         DesktopPaint.Backing store = backing();
         if (store == null) {
             return;
@@ -1862,7 +1884,13 @@ public class MainController {
                 }
                 g.setFill(Color.web(lane.color()));
                 g.setGlobalAlpha(DesktopPaint.COMPARE_ALPHA);
-                for (DesktopPaint.TileRect tile : DesktopPaint.walkOverlay(lane.path())) {
+                for (DesktopPaint.TileRect tile : DesktopPaint.expansionCells(lane.path())) {
+                    g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
+                            layout.w(tile.tileCol()), layout.h(tile.tileRow()));
+                }
+                g.setGlobalAlpha(DesktopPaint.COMPARE_OPENING_ALPHA);
+                for (DesktopPaint.TileRect tile : DesktopPaint.expansionOpenings(
+                        lane.path(), tiles)) {
                     g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                             layout.w(tile.tileCol()), layout.h(tile.tileRow()));
                 }

@@ -195,6 +195,20 @@ class DesktopPaintTest {
                 .as("fog swallows the compared routes")
                 .containsExactly("floor", "wall", "start", "fog");
         assertThat(DesktopPaint.COMPARE_ALPHA).isEqualTo(0.22);
+        assertThat(DesktopPaint.COMPARE_OPENING_ALPHA).isEqualTo(0.34);
+        assertThat(DesktopPaint.COMPARE_OPENING_ALPHA)
+                .as("openings read louder than stacked cell wash")
+                .isGreaterThan(DesktopPaint.COMPARE_ALPHA);
+        TileType[][] tiles = new TileType[5][5];
+        for (int r = 0; r < 5; r++) {
+            for (int c = 0; c < 5; c++) {
+                tiles[r][c] = (r % 2 == 0 || c % 2 == 0) ? TileType.WALL : TileType.PASSAGE;
+            }
+        }
+        tiles[1][2] = TileType.PASSAGE;
+        List<Point> lane = List.of(new Point(0, 0), new Point(0, 1));
+        assertThat(DesktopPaint.expansionOpenings(lane, tiles))
+                .contains(new DesktopPaint.TileRect(1, 2));
         assertThat(DesktopPaint.COMPARE[0]).isEqualTo("#8fb8ff");
         assertThat(DesktopPaint.COMPARE_HEAD_RADIUS)
                 .as("compare tips stay smaller than race heads")
@@ -714,6 +728,12 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.emptyMarkFloorAlpha(1))
                 .isGreaterThan(DesktopPaint.emptyMarkFloorAlpha(0));
         assertThat(DesktopPaint.emptyMarkFloorAlpha(0)).isEqualTo(0.36);
+        assertThat(DesktopPaint.canvasRimAlpha(1))
+                .isGreaterThan(DesktopPaint.canvasRimAlpha(0));
+        assertThat(DesktopPaint.canvasRimGlowRadius(1))
+                .isGreaterThan(DesktopPaint.canvasRimGlowRadius(0));
+        assertThat(DesktopPaint.canvasRimGlowAlpha(1))
+                .isGreaterThan(DesktopPaint.canvasRimGlowAlpha(0));
         assertThat(hi).isNotEqualTo(lo);
         assertThat(DesktopPaint.EMPTY_TITLE).contains("Generate");
         assertThat(DesktopPaint.EMPTY_DETAIL).contains("Solve");

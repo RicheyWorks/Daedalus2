@@ -82,6 +82,19 @@ public final class DesktopPaint {
         return 0.36 + 0.10 * wave;
     }
 
+    /** Desktop well gold rim — same 0.48↔0.72 band as web {@code stageRimBreath}. */
+    public static double canvasRimAlpha(double wave) {
+        return 0.48 + 0.24 * wave;
+    }
+
+    public static double canvasRimGlowRadius(double wave) {
+        return 18 + 10 * wave;
+    }
+
+    public static double canvasRimGlowAlpha(double wave) {
+        return 0.06 + 0.08 * wave;
+    }
+
     /**
      * Same miniature as {@code draw.js} {@code IDLE_TILES} — one product empty well.
      */
@@ -285,6 +298,8 @@ public final class DesktopPaint {
             "#8fb8ff", "#f0b429", "#e5484d", "#4cc38a", "#c084fc", "#9ecbff"
     };
     public static final double COMPARE_ALPHA = 0.22;
+    /** Opening wash between adjacent compare cells — louder than the cell wash. */
+    public static final double COMPARE_OPENING_ALPHA = 0.34;
     /** Tip disc on each finished route — smaller than race so washes stay readable. */
     public static final double COMPARE_HEAD_RADIUS = 0.28;
     /** Min-cut passage — same purple as {@code draw.js} chokepoints. */
