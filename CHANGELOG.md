@@ -115,6 +115,8 @@ under the `_migration/` portfolios.
   light, not a hard stencil against the void.
   Victory rings breathe a soft gold pulse so a win still feels like a place,
   not a stuck stamp.
+  Sticky-header DAEDALUS breathes on the same gate cadence so post-Enter
+  chrome still feels held.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

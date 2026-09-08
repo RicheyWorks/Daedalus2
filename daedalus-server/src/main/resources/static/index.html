@@ -51,7 +51,8 @@
   header h1 { margin: 0; font: 700 18px/1 "Bahnschrift", "Avenir Next Condensed",
            "Trebuchet MS", sans-serif; letter-spacing: .22em; }
   header h1 button { all: unset; cursor: pointer; letter-spacing: .22em;
-           text-shadow: 0 0 18px rgba(62, 224, 143, 0.22), 0 0 36px rgba(245, 193, 74, 0.10); }
+           text-shadow: 0 0 18px rgba(62, 224, 143, 0.22), 0 0 36px rgba(245, 193, 74, 0.10);
+           animation: gateBreath 4.5s ease-in-out infinite; }
   header h1 button:hover { color: var(--accent); }
   #gate { position: fixed; inset: 0; z-index: 20; overflow: auto;
           background: radial-gradient(1100px 640px at 50% -8%, #151c26 0%, var(--bg) 58%);
@@ -114,11 +115,15 @@
     50% { opacity: .34; }
   }
   @media (prefers-reduced-motion: reduce) {
-    #gate .gate-brand, #gate .lede, #gate .gate-enter, #gate article, #gate .gate-veil {
+    #gate .gate-brand, #gate .lede, #gate .gate-enter, #gate article, #gate .gate-veil,
+    header h1 button {
       animation: none;
     }
     #gate .gate-brand {
       text-shadow: 0 0 22px rgba(62, 224, 143, 0.16), 0 0 48px rgba(245, 193, 74, 0.08);
+    }
+    header h1 button {
+      text-shadow: 0 0 18px rgba(62, 224, 143, 0.22), 0 0 36px rgba(245, 193, 74, 0.10);
     }
     #gate .gate-veil { opacity: .28; }
   }
