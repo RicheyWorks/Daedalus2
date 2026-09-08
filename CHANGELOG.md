@@ -196,6 +196,8 @@ under the `_migration/` portfolios.
   held over the board.
   Desktop legend fade and status gold lip breathe with the web so shell chrome
   still feels held around the well.
+  Desktop toolbar brand mint and gold lips breathe with the legend so shell
+  chrome still feels held above and below the well.
   Solver path ribbons soften toward the start and brighten at the tip so a
   finished route has depth, not flat ink.
   Distance heat wash breathes on the victory cadence so the field still feels

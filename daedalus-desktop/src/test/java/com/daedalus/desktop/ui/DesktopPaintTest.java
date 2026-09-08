@@ -793,6 +793,12 @@ class DesktopPaintTest {
                 .isGreaterThan(DesktopPaint.legendFadeBotAlpha(0));
         assertThat(DesktopPaint.shellRimAlpha(1))
                 .isEqualTo(DesktopPaint.canvasRimAlpha(1));
+        assertThat(DesktopPaint.brandMintAlpha(1))
+                .isGreaterThan(DesktopPaint.brandMintAlpha(0));
+        assertThat(DesktopPaint.brandMintRadius(1))
+                .isGreaterThan(DesktopPaint.brandMintRadius(0));
+        assertThat(DesktopPaint.brandMintAlpha(0)).isEqualTo(0.20);
+        assertThat(DesktopPaint.brandMintRadius(0)).isEqualTo(12.0);
         assertThat(hi).isNotEqualTo(lo);
         assertThat(DesktopPaint.EMPTY_TITLE).contains("Generate");
         assertThat(DesktopPaint.EMPTY_DETAIL).contains("Solve");
