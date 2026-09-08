@@ -127,10 +127,10 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.TORCH_WALL_WARM_WEIGHT).isEqualTo(0.45f);
         assertThat(ExplorePaint.TORCH_FLOOR_WARM_R).isEqualTo(0x5c / 255f);
         assertThat(ExplorePaint.TORCH_WALL_WARM_R).isEqualTo(0x2a / 255f);
-        // Lit stone ahead is warmer in hue (higher R relative to B), not only brighter.
-        float aheadWarmth = ahead[0] / Math.max(1e-6f, ahead[2]);
-        float behindWarmth = behind[0] / Math.max(1e-6f, behind[2]);
-        assertThat(aheadWarmth).isGreaterThan(behindWarmth);
+        // Lit stone shifts toward torch-brown — R share drops vs a dim cold wall.
+        float aheadShare = ahead[0] / Math.max(1e-6f, ahead[0] + ahead[1] + ahead[2]);
+        float behindShare = behind[0] / Math.max(1e-6f, behind[0] + behind[1] + behind[2]);
+        assertThat(aheadShare).isLessThan(behindShare);
     }
 
     @Test
@@ -177,6 +177,36 @@ class ExplorePaintTest {
         ExplorePaint.tint(nsWall(0, 0.2, 0), true, boot);
         ExplorePaint.tint(nsWall(0, 2.0, 0), true, high);
         assertThat(boot[0]).isLessThan(high[0]);
+        assertThat(ExplorePaint.CONTACT_BOOT_FRAC).isEqualTo(0.28);
+        assertThat(ExplorePaint.CONTACT_BOOT_MIN).isEqualTo(0.55f);
+        assertThat(ExplorePaint.wallContactShade(0))
+                .isEqualTo(ExplorePaint.CONTACT_BOOT_MIN);
+        assertThat(ExplorePaint.wallContactShade(ExploreMesh.WALL_HEIGHT))
+                .isEqualTo(1f);
+        assertThat(ExplorePaint.wallContactShade(ExploreMesh.WALL_HEIGHT * 0.1))
+                .isLessThan(ExplorePaint.wallContactShade(ExploreMesh.WALL_HEIGHT * 0.25));
+    }
+
+    @Test
+    void floorSkirtingDarkensTowardTheRim() {
+        assertThat(ExplorePaint.FLOOR_CONTACT_DIM).isEqualTo(0.16f);
+        assertThat(ExplorePaint.FLOOR_CONTACT_START).isEqualTo(0.55f);
+        // Tile (1,1) center is world (0,0); a center triangle stays bright.
+        ExploreMesh.Triangle center = new ExploreMesh.Triangle(
+                -0.2, 0, -0.2, 0.2, 0, -0.2, 0.2, 0, 0.2,
+                ExploreMesh.Face.FLOOR, 1, 1);
+        // Same tile, centroid near the east rim.
+        ExploreMesh.Triangle rim = new ExploreMesh.Triangle(
+                0.7, 0, -0.2, 0.95, 0, -0.2, 0.95, 0, 0.2,
+                ExploreMesh.Face.FLOOR, 1, 1);
+        assertThat(ExplorePaint.floorContactShade(center)).isEqualTo(1f);
+        assertThat(ExplorePaint.floorContactShade(rim))
+                .isLessThan(ExplorePaint.floorContactShade(center));
+        float[] mid = new float[3];
+        float[] edge = new float[3];
+        ExplorePaint.tint(center, true, mid);
+        ExplorePaint.tint(rim, true, edge);
+        assertThat(edge[0]).isLessThan(mid[0]);
     }
 
     @Test

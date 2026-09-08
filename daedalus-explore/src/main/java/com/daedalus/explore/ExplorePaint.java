@@ -121,6 +121,12 @@ public final class ExplorePaint {
     public static final float TORCH_WALL_WARM_B = 0x18 / 255f;
     public static final float TORCH_FLOOR_WARM_WEIGHT = 0.28f;
     public static final float TORCH_WALL_WARM_WEIGHT = 0.45f;
+    /** Soft wall–floor contact — dark near the skirting, full by this height fraction. */
+    public static final double CONTACT_BOOT_FRAC = 0.28;
+    public static final float CONTACT_BOOT_MIN = 0.55f;
+    /** Floor skirting — darken toward the tile rim where walls meet. */
+    public static final float FLOOR_CONTACT_START = 0.55f;
+    public static final float FLOOR_CONTACT_DIM = 0.16f;
 
     public enum MapKind {
         FLOOR,
@@ -776,7 +782,8 @@ public final class ExplorePaint {
 
     private static void floor(ExploreMesh.Triangle tri, float[] rgb) {
         float check = ((tri.tr() + tri.tc()) & 1) == 0 ? 1f : 0.82f;
-        set(rgb, 0.34f * check, 0.24f * check, 0.14f * check);
+        float skirt = floorContactShade(tri);
+        set(rgb, 0.34f * check * skirt, 0.24f * check * skirt, 0.14f * check * skirt);
     }
 
     private static void wall(ExploreMesh.Triangle tri, float[] rgb) {
@@ -786,7 +793,7 @@ public final class ExplorePaint {
                 - (tri.y2() - tri.y1()) * (tri.x3() - tri.x1());
         boolean eastWest = Math.abs(nx) > Math.abs(nz);
         double midY = (tri.y1() + tri.y2() + tri.y3()) / 3.0;
-        float boot = midY < ExploreMesh.WALL_HEIGHT * 0.38 ? 0.70f : 1f;
+        float boot = wallContactShade(midY);
         float stripe = stripe(tri, eastWest);
         float shade = boot * stripe;
         if (eastWest) {
@@ -794,6 +801,36 @@ public final class ExplorePaint {
         } else {
             set(rgb, 0.64f * shade, 0.40f * shade, 0.22f * shade);
         }
+    }
+
+    /** Soft skirting on the wall — dark at the floor, full by {@link #CONTACT_BOOT_FRAC}. */
+    public static float wallContactShade(double midY) {
+        double yFrac = Math.max(0, Math.min(1, midY / ExploreMesh.WALL_HEIGHT));
+        if (yFrac >= CONTACT_BOOT_FRAC) {
+            return 1f;
+        }
+        float t = (float) (yFrac / CONTACT_BOOT_FRAC);
+        return CONTACT_BOOT_MIN + (1f - CONTACT_BOOT_MIN) * t;
+    }
+
+    /** Soft skirting on the floor — dark toward the tile rim where walls meet. */
+    public static float floorContactShade(ExploreMesh.Triangle tri) {
+        if (tri == null || tri.face() != ExploreMesh.Face.FLOOR) {
+            return 1f;
+        }
+        double cx = (tri.x1() + tri.x2() + tri.x3()) / 3.0;
+        double cz = (tri.z1() + tri.z2() + tri.z3()) / 3.0;
+        double tcx = ExploreMesh.tileCenterX(tri.tc());
+        double tcz = ExploreMesh.tileCenterZ(tri.tr());
+        double half = ExploreMesh.TILE / 2.0;
+        double lx = Math.abs(cx - tcx) / half;
+        double lz = Math.abs(cz - tcz) / half;
+        double rim = Math.max(0, Math.min(1, Math.max(lx, lz)));
+        if (rim <= FLOOR_CONTACT_START) {
+            return 1f;
+        }
+        float t = (float) ((rim - FLOOR_CONTACT_START) / (1.0 - FLOOR_CONTACT_START));
+        return 1f - FLOOR_CONTACT_DIM * t;
     }
 
     private static float stripe(ExploreMesh.Triangle tri, boolean eastWest) {

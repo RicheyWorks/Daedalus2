@@ -230,6 +230,8 @@ under the `_migration/` portfolios.
   fire, not cold brightness alone.
   Desktop start and goal soft pads breathe with the web marker so the ends of the
   maze still feel held, not a stuck stamp under the ring.
+  Explore wall–floor contact softens the skirting so tunnels have weight, not a
+  hard join between flat floor and wall.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
