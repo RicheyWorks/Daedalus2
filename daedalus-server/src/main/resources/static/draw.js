@@ -79,8 +79,11 @@
     const base = alpha == null ? 0.85 : alpha;
     g.fillStyle = color;
     for (let i = 0; i < visible; i++) {
-      // Recent steps near the walker read brighter; older corridor fades.
-      const fade = ageFade ? (0.35 + 0.65 * ((i + 1) / visible)) : 1;
+      // ageFade: recent steps near the walker stay bright.
+      // "ribbon": solver corridor softens toward the start, tip stays full.
+      const fade = ageFade === "ribbon"
+          ? (0.55 + 0.45 * ((i + 1) / visible))
+          : ageFade ? (0.35 + 0.65 * ((i + 1) / visible)) : 1;
       g.globalAlpha = base * fade;
       const p = points[i];
       g.fillRect(geom.offX[2 * p.col + 1], geom.offY[2 * p.row + 1], geom.cell, geom.cell);
@@ -488,7 +491,7 @@
       g.globalAlpha = 1;
     }
     if (scene.path && scene.path.length && scene.pathProgress > 0) {
-      paintWalk(g, geom, scene.path, COLORS.path, scene.pathProgress, 0.85);
+      paintWalk(g, geom, scene.path, COLORS.path, scene.pathProgress, 0.85, "ribbon");
       pathHead(g, geom, walkHead(scene.path, scene.pathProgress), COLORS.path);
     }
     if (scene.analysis) {
@@ -566,11 +569,11 @@
       }
     }
     if (scene.hardest && scene.hardest.path && scene.hardest.path.length) {
-      paintWalk(g, geom, scene.hardest.path, "#f2c94c", 1, 0.75);
+      paintWalk(g, geom, scene.hardest.path, "#f2c94c", 1, 0.75, "ribbon");
       pathHead(g, geom, walkHead(scene.hardest.path, 1), "#f2c94c");
     }
     if (scene.tourPath && scene.tourPath.length) {
-      paintWalk(g, geom, scene.tourPath, "#9ecbff", 1, 0.38);
+      paintWalk(g, geom, scene.tourPath, "#9ecbff", 1, 0.38, "ribbon");
       pathHead(g, geom, walkHead(scene.tourPath, 1), "#9ecbff");
     }
     if (scene.tour && scene.tour.waypoints) {
@@ -637,7 +640,7 @@
           pathHead(g, geom, lane.expansions[shown - 1], lane.color);
         }
         if (lane.pathProg > 0 && lane.path && lane.path.length) {
-          paintWalk(g, geom, lane.path, lane.color, lane.pathProg, li === 0 ? 0.85 : 0.58);
+          paintWalk(g, geom, lane.path, lane.color, lane.pathProg, li === 0 ? 0.85 : 0.58, "ribbon");
           pathHead(g, geom, walkHead(lane.path, lane.pathProg), lane.color);
         }
       });
