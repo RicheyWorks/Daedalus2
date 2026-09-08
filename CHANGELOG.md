@@ -186,6 +186,8 @@ under the `_migration/` portfolios.
   still feels held with the brand.
   Clear-board floors soften toward the edges so stone has depth, not flat slate
   under every corridor.
+  Clear-board corridor hairlines soften with the same edge falloff so shine
+  matches the stone depth, not a flat highlight on dim slate.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

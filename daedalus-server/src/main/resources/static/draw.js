@@ -350,6 +350,12 @@
         if (scene.fog) {
           const lit = mixHex(COLORS.floor, COLORS.floorWarm, lamp * 0.28);
           g.fillStyle = mixHex(COLORS.floorDim, lit, lamp);
+          g.fillRect(geom.offX[col], geom.offY[r],
+                     geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
+          if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
+            g.fillStyle = COLORS.floorHi;
+            g.fillRect(geom.offX[col] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
+          }
         } else {
           // Soft edge falloff — clear stone has depth, not flat slate.
           const cx = (tw - 1) / 2, cy = (th - 1) / 2;
@@ -357,12 +363,12 @@
           const dy = (r - cy) / Math.max(1, th / 2);
           const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
           g.fillStyle = mixHex(COLORS.floor, COLORS.floorDim, 0.22 * edge);
-        }
-        g.fillRect(geom.offX[col], geom.offY[r],
-                   geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
-        if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
-          g.fillStyle = COLORS.floorHi;
-          g.fillRect(geom.offX[col] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
+          g.fillRect(geom.offX[col], geom.offY[r],
+                     geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
+          if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
+            g.fillStyle = mixHex(COLORS.floorHi, COLORS.floorDim, 0.22 * edge);
+            g.fillRect(geom.offX[col] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
+          }
         }
         if (t === "S") start = { row: (r - 1) / 2, col: (col - 1) / 2 };
         if (t === "G") goal  = { row: (r - 1) / 2, col: (col - 1) / 2 };

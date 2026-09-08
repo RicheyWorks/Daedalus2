@@ -198,6 +198,11 @@ public final class DesktopPaint {
     /** Same 1px corridor highlight as {@code draw.js} {@code floorHi}. */
     public static final String FLOOR_HI = "#536272";
     public static final String FOG_FLOOR_HI = FLOOR_HI;
+
+    /** Corridor shine softens toward the board edge with the floor wash. */
+    public static String floorHiInk(double edge) {
+        return mixHex(FLOOR_HI, FLOOR_DIM, FLOOR_EDGE_DIM * Math.max(0, Math.min(1, edge)));
+    }
     /** Coral wash — same token as {@code draw.js} hot spots. */
     public static final String HOTSPOT = "#e5484d";
     /** Opening wash between adjacent spots — same alpha as {@code draw.js}. */

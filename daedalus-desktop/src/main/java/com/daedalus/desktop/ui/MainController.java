@@ -1766,15 +1766,16 @@ public class MainController {
             for (int c = 0; c < layout.tileCols(); c++) {
                 TileType role = DesktopPaint.floorRole(tiles[r][c]);
                 Color ink = colorFor(role, theme);
+                double edge = DesktopPaint.floorEdge(layout, r, c);
                 if (role != TileType.WALL && ink != null) {
-                    double edge = DesktopPaint.floorEdge(layout, r, c);
                     ink = ink.interpolate(Color.web(DesktopPaint.FLOOR_DIM),
                             DesktopPaint.FLOOR_EDGE_DIM * edge);
                 }
                 g.setFill(ink);
                 g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
                 if (role != TileType.WALL) {
-                    paintHairline(g, DesktopPaint.floorHiStroke(layout, r, c));
+                    paintHairline(g, DesktopPaint.floorHiStroke(layout, r, c),
+                            Color.web(DesktopPaint.floorHiInk(edge)));
                 }
             }
         }
@@ -2403,10 +2404,14 @@ public class MainController {
     }
 
     private static void paintHairline(GraphicsContext g, DesktopPaint.Hairline line) {
-        if (line == null) {
+        paintHairline(g, line, Color.web(DesktopPaint.FLOOR_HI));
+    }
+
+    private static void paintHairline(GraphicsContext g, DesktopPaint.Hairline line, Color ink) {
+        if (line == null || ink == null) {
             return;
         }
-        g.setFill(Color.web(DesktopPaint.FLOOR_HI));
+        g.setFill(ink);
         g.fillRect(line.x(), line.y(), line.w(), line.h());
     }
 
