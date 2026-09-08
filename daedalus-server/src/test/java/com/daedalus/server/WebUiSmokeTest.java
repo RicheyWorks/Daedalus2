@@ -85,6 +85,7 @@ class WebUiSmokeTest {
                 .contains("rgba(245, 193, 74, 0.05)")
                 .contains("data-key=\"path\"").contains("data-key=\"floor\"")
                 .contains("data-key=\"fog\"")
+                .contains("rgba(245, 193, 74, .35)")
                 .contains("Authorization").contains("text/plain").contains("id=\"ascii\"")
                 .contains("/plugins").contains("id=\"pluginBox\"")
                 .contains("id=\"lbGen\"").contains("generator=")

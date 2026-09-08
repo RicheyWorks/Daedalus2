@@ -27,7 +27,7 @@
     -fx-text-fill: #7d8894;
 }
 .toolbar .separator .line {
-    -fx-border-color: #1e2832;
+    -fx-border-color: rgba(184, 133, 56, 0.28);
     -fx-border-width: 0 0 0 1;
 }
 

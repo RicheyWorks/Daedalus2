@@ -215,8 +215,11 @@
   #legend[hidden], #legend [hidden] { display: none; }
   #legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px;
               margin-right: 5px; vertical-align: -1px; box-shadow: 0 0 0 1px rgba(255,255,255,.06); }
-  #legend [data-key="start"] i, #legend [data-key="goal"] i, #legend [data-key="player"] i {
+  #legend [data-key="start"] i, #legend [data-key="goal"] i, #legend [data-key="player"] i,
+  #legend [data-key="ghost"] i {
     box-shadow: 0 0 0 1.5px rgba(232, 238, 244, .28); }
+  #legend [data-key="waypoint"] i {
+    box-shadow: 0 0 0 1.5px rgba(245, 193, 74, .35); }
   #compareBox:empty { display: none; }
   #compareBox { max-height: 22vh; overflow: auto; min-width: 0;
                 scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
