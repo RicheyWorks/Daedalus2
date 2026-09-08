@@ -79,6 +79,8 @@ class WebUiSmokeTest {
                 .contains("floorWarm")
                 .contains("wallWarm")
                 .contains("shadowBlur")
+                .contains("EMPTY_BREATH_MS")
+                .contains("prefers-reduced-motion")
                 .contains("ghost:")
                 .contains("ghostDisc")
                 .contains("geom.cell * 0.85")

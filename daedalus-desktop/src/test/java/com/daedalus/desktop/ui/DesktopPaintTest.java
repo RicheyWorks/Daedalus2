@@ -610,6 +610,12 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.EMPTY_WORDMARK_GOLD).isEqualTo("#f5c14a");
         assertThat(DesktopPaint.EMPTY_WORDMARK_GLOW_RADIUS).isEqualTo(28);
         assertThat(DesktopPaint.EMPTY_WORDMARK_GOLD_RADIUS).isEqualTo(48);
+        assertThat(DesktopPaint.EMPTY_BREATH_MS).isEqualTo(4500);
+        double lo = DesktopPaint.emptyBreathWave(0L);
+        double hi = DesktopPaint.emptyBreathWave((long) (DesktopPaint.EMPTY_BREATH_MS * 500_000));
+        assertThat(DesktopPaint.emptyMintAlpha(1)).isGreaterThan(DesktopPaint.emptyMintAlpha(0));
+        assertThat(DesktopPaint.emptyGoldRadius(1)).isGreaterThan(DesktopPaint.emptyGoldRadius(0));
+        assertThat(hi).isNotEqualTo(lo);
         assertThat(DesktopPaint.EMPTY_TITLE).contains("Generate");
         assertThat(DesktopPaint.EMPTY_DETAIL).contains("Solve");
         assertThat(DesktopPaint.EMPTY_HINT).contains("arrow");

@@ -554,7 +554,7 @@
     g.restore();
   }
 
-  function paintEmpty(canvas) {
+  function paintEmpty(canvas, nowMs) {
     const box = stageBox(canvas);
     const dpr = (typeof window !== "undefined" && window.devicePixelRatio) || 1;
     const cssW = Math.max(280, box.w);
@@ -584,11 +584,20 @@
     g.font = "700 28px Bahnschrift, \"Avenir Next Condensed\", \"Trebuchet MS\", sans-serif";
     g.letterSpacing = "0.22em";
     g.fillStyle = "#e8eef4";
-    g.shadowColor = "rgba(62, 224, 143, 0.32)";
-    g.shadowBlur = 28;
+    // Same 4.5s mint/gold breath as #gate .gate-brand — idle well still feels held.
+    const EMPTY_BREATH_MS = 4500;
+    const t = ((nowMs == null ? (typeof performance !== "undefined" ? performance.now() : 0)
+        : nowMs) % EMPTY_BREATH_MS) / EMPTY_BREATH_MS;
+    const wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
+    const mintA = 0.16 + 0.16 * wave;
+    const goldA = 0.08 + 0.10 * wave;
+    const mintBlur = 22 + 14 * wave;
+    const goldBlur = 48 + 24 * wave;
+    g.shadowColor = "rgba(62, 224, 143, " + mintA + ")";
+    g.shadowBlur = mintBlur;
     g.fillText("DAEDALUS", cx, cy + 48);
-    g.shadowColor = "rgba(245, 193, 74, 0.18)";
-    g.shadowBlur = 48;
+    g.shadowColor = "rgba(245, 193, 74, " + goldA + ")";
+    g.shadowBlur = goldBlur;
     g.fillText("DAEDALUS", cx, cy + 48);
     g.shadowColor = "transparent";
     g.shadowBlur = 0;

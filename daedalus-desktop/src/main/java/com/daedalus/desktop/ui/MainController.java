@@ -168,6 +168,7 @@ public class MainController {
     private List<Point> currentExpansions;
 
     private AnimationTimer pathReveal;
+    private AnimationTimer emptyBreath;
 
     /** Polls the living snapshot at the server tick interval. */
     private Timeline liveWatch;
@@ -338,6 +339,15 @@ public class MainController {
             exportBox.layoutYProperty().set(8);
         }
         syncLegend();
+        emptyBreath = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                if (current == null) {
+                    redraw();
+                }
+            }
+        };
+        emptyBreath.start();
     }
 
     /** Wired from the FXML's Generate button. */
@@ -1693,14 +1703,15 @@ public class MainController {
             g.setTextAlign(TextAlignment.CENTER);
             g.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 28));
             g.setFill(Color.web("#e8eef4"));
+            double wave = DesktopPaint.emptyBreathWave(System.nanoTime());
             var mint = new javafx.scene.effect.DropShadow(
-                    DesktopPaint.EMPTY_WORDMARK_GLOW_RADIUS, 0, 0,
+                    DesktopPaint.emptyMintRadius(wave), 0, 0,
                     Color.web(DesktopPaint.EMPTY_WORDMARK_GLOW,
-                            DesktopPaint.EMPTY_WORDMARK_GLOW_ALPHA));
+                            DesktopPaint.emptyMintAlpha(wave)));
             var gold = new javafx.scene.effect.DropShadow(
-                    DesktopPaint.EMPTY_WORDMARK_GOLD_RADIUS, 0, 0,
+                    DesktopPaint.emptyGoldRadius(wave), 0, 0,
                     Color.web(DesktopPaint.EMPTY_WORDMARK_GOLD,
-                            DesktopPaint.EMPTY_WORDMARK_GOLD_ALPHA));
+                            DesktopPaint.emptyGoldAlpha(wave)));
             mint.setInput(gold);
             g.setEffect(mint);
             g.fillText(DesktopPaint.EMPTY_WORDMARK, cx, cy + 48);

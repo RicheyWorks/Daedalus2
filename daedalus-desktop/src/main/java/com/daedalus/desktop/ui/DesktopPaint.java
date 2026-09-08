@@ -43,6 +43,30 @@ public final class DesktopPaint {
     public static final String EMPTY_WORDMARK_GOLD = "#f5c14a";
     public static final double EMPTY_WORDMARK_GOLD_ALPHA = 0.18;
     public static final double EMPTY_WORDMARK_GOLD_RADIUS = 48;
+    /** Same 4.5s gateBreath cadence as {@code draw.js} / {@code #gate .gate-brand}. */
+    public static final double EMPTY_BREATH_MS = 4500;
+
+    /** Smooth 0..1 wave — matches CSS ease-in-out gateBreath. */
+    public static double emptyBreathWave(long nanos) {
+        double t = ((nanos / 1_000_000.0) % EMPTY_BREATH_MS) / EMPTY_BREATH_MS;
+        return 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+    }
+
+    public static double emptyMintAlpha(double wave) {
+        return 0.16 + 0.16 * wave;
+    }
+
+    public static double emptyGoldAlpha(double wave) {
+        return 0.08 + 0.10 * wave;
+    }
+
+    public static double emptyMintRadius(double wave) {
+        return 22 + 14 * wave;
+    }
+
+    public static double emptyGoldRadius(double wave) {
+        return 48 + 24 * wave;
+    }
 
     /**
      * Same miniature as {@code draw.js} {@code IDLE_TILES} — one product empty well.

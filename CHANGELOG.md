@@ -107,6 +107,8 @@ under the `_migration/` portfolios.
   breathes as fire, not a static wash.
   Explore story pillars sit on a soft floor pad so vault / boss / entrance
   read as places in the corridor, not furniture sticks.
+  Empty-well DAEDALUS breathes mint/gold on the same 4.5s cadence as the
+  start-gate brand so the idle board still feels held.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

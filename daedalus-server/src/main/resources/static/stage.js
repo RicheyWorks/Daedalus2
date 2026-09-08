@@ -103,6 +103,7 @@
     const wrap = canvas && canvas.parentElement;
     if (!wrap || wrap._daedalusRO) return;
     let raf = 0;
+    let breath = 0;
     const ro = new ResizeObserver(() => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
@@ -113,6 +114,18 @@
     });
     wrap._daedalusRO = ro;
     ro.observe(wrap);
+    // Idle DAEDALUS breathes like the start-gate brand; stop when a maze paints.
+    const reduced = typeof matchMedia === "function"
+        && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduced) {
+      const idle = () => {
+        const s = getState();
+        if (!s.maze) paintEmpty(host);
+        breath = requestAnimationFrame(idle);
+      };
+      breath = requestAnimationFrame(idle);
+      wrap._daedalusBreath = () => cancelAnimationFrame(breath);
+    }
   }
 
   // Click (or tap) an adjacent cell to move — session first, then the fog agent.
