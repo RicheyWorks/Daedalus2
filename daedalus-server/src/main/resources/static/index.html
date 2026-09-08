@@ -143,9 +143,19 @@
     0%, 100% { border-bottom-color: rgba(184, 133, 56, 0.38); }
     50% { border-bottom-color: rgba(184, 133, 56, 0.62); }
   }
+  @keyframes legendFadeBreath {
+    0%, 100% {
+      background: linear-gradient(transparent, rgba(5, 7, 10, .50) 35%,
+                  rgba(5, 7, 10, .88));
+    }
+    50% {
+      background: linear-gradient(transparent, rgba(5, 7, 10, .62) 35%,
+                  rgba(5, 7, 10, .96));
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
     #gate .gate-brand, #gate .lede, #gate .gate-enter, #gate article, #gate .gate-veil,
-    header h1 button, #stage, .board-panel, .panel, header {
+    header h1 button, #stage, .board-panel, .panel, header, #legend {
       animation: none;
     }
     #gate .gate-brand {
@@ -164,6 +174,10 @@
     .board-panel { border-color: rgba(184, 133, 56, 0.42); }
     .panel { border-color: rgba(184, 133, 56, 0.36); }
     header { border-bottom-color: rgba(184, 133, 56, 0.45); }
+    #legend {
+      background: linear-gradient(transparent, rgba(5, 7, 10, .55) 35%,
+                  rgba(5, 7, 10, .92));
+    }
   }
   header .tag { color: var(--dim); font-size: 11px; flex: 1; letter-spacing: .04em;
                 text-transform: lowercase; }
@@ -257,7 +271,8 @@
             background: linear-gradient(transparent, rgba(5, 7, 10, .55) 35%,
                         rgba(5, 7, 10, .92));
             font: 600 11px/1.4 Bahnschrift, "Segoe UI", sans-serif;
-            letter-spacing: .04em; color: #9aa3ad; pointer-events: none; }
+            letter-spacing: .04em; color: #9aa3ad; pointer-events: none;
+            animation: legendFadeBreath 4.5s ease-in-out infinite; }
   #legend[hidden], #legend [hidden] { display: none; }
   #legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px;
               margin-right: 5px; vertical-align: -1px; box-shadow: 0 0 0 1px rgba(255,255,255,.06); }

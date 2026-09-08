@@ -192,6 +192,8 @@ under the `_migration/` portfolios.
   ink under every corridor.
   Well void pocket breathes with the stage rim so the letterbox still feels held,
   not a stuck gradient behind the maze.
+  Well legend fade breathes on the gate cadence so overlay chrome still feels
+  held over the board.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
