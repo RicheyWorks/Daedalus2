@@ -66,6 +66,9 @@ class ExplorePaintTest {
         assertThat(pad[2]).isLessThan(rgb[2]);
         assertThat(ExplorePaint.PLACE_PAD_R).isGreaterThan(0.3f);
         assertThat(ExplorePaint.PLACE_PAD_SEGS).isGreaterThanOrEqualTo(8);
+        assertThat(ExplorePaint.PLACE_PAD_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
+        assertThat(ExplorePaint.placePadDim(0.1))
+                .isNotEqualTo(ExplorePaint.placePadDim(0.8));
         ExplorePaint.placePadTint(null, pad);
         ExplorePaint.placePadTint(rgb, null);
     }

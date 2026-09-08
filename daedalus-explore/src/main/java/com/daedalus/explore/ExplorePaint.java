@@ -505,17 +505,30 @@ public final class ExplorePaint {
     public static final float PLACE_PAD_Y = 0.02f;
     public static final int PLACE_PAD_SEGS = 12;
     public static final float PLACE_PAD_DIM = 0.42f;
+    /** Corridor place-pad breath — same cadence as automap HERE. */
+    public static final float PLACE_PAD_BREATH_MS = MAP_HERE_BREATH_MS;
+
+    public static float placePadDim(double seconds) {
+        double t = ((seconds * 1000.0) % PLACE_PAD_BREATH_MS) / PLACE_PAD_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return PLACE_PAD_DIM * (float) (0.88 + 0.24 * wave);
+    }
 
     public static void placePadTint(float[] markerRgb, float[] out) {
+        placePadTint(markerRgb, out, 0);
+    }
+
+    public static void placePadTint(float[] markerRgb, float[] out, double seconds) {
         if (out == null || out.length < 3) {
             return;
         }
+        float dim = placePadDim(seconds);
         if (markerRgb == null || markerRgb.length < 3) {
-            set(out, 0.2f, 0.14f, 0.08f);
+            set(out, 0.2f * (dim / PLACE_PAD_DIM), 0.14f * (dim / PLACE_PAD_DIM),
+                    0.08f * (dim / PLACE_PAD_DIM));
             return;
         }
-        set(out, markerRgb[0] * PLACE_PAD_DIM, markerRgb[1] * PLACE_PAD_DIM,
-                markerRgb[2] * PLACE_PAD_DIM);
+        set(out, markerRgb[0] * dim, markerRgb[1] * dim, markerRgb[2] * dim);
     }
 
     static String facing(double yaw) {

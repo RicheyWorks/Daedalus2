@@ -351,7 +351,7 @@ public final class ExploreHost {
             ExplorePaint.marker(marker.kind(), rgb);
             double wx = ExploreMesh.worldX(marker.cell().col());
             double wz = ExploreMesh.worldZ(marker.cell().row());
-            ExplorePaint.placePadTint(rgb, pad);
+            ExplorePaint.placePadTint(rgb, pad, seconds);
             placePad(wx, wz, pad[0], pad[1], pad[2]);
             glColor3f(rgb[0], rgb[1], rgb[2]);
             pillar(wx, wz);

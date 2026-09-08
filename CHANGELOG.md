@@ -137,6 +137,8 @@ under the `_migration/` portfolios.
   safe marks still feel held, not stuck stamps.
   Explore automap story marks breathe with HERE so vault / boss pads feel like
   presence on the earned map.
+  Explore corridor story pillars breathe a soft floor pad so vault / boss /
+  entrance still feel held underfoot.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
