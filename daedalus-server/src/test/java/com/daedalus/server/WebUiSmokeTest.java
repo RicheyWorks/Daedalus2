@@ -92,6 +92,7 @@ class WebUiSmokeTest {
                 .contains("EMPTY_BREATH_MS")
                 .contains("0.36 + 0.10")
                 .contains("prefers-reduced-motion")
+                .contains("stageRimBreath")
                 .contains("ghost:")
                 .contains("ghostDisc")
                 .contains("GHOST_BREATH_MS")

@@ -166,6 +166,8 @@ under the `_migration/` portfolios.
   light, not a stuck stencil.
   Empty-well idle lattice floors breathe with the wordmark so the miniature maze
   still feels held, not a stuck stamp under DAEDALUS.
+  Web stage gold rim breathes on the gate cadence so the well chrome still feels
+  held around the board.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
