@@ -434,8 +434,8 @@ public final class ExploreHost {
         status(aspect, line, faceTex, seconds);
         paintHand(aspect, line.mood(), stride);
         float aim = ExplorePaint.aimY();
-        float soft = ExplorePaint.AIM_SOFT_ARM;
-        float thick = ExplorePaint.AIM_SOFT_THICK;
+        float soft = ExplorePaint.aimSoftArm(seconds);
+        float thick = ExplorePaint.aimSoftThick(seconds);
         glColor3f(ExplorePaint.AIM_SOFT_R, ExplorePaint.AIM_SOFT_G, ExplorePaint.AIM_SOFT_B);
         fill(-soft, aim - thick / 2f, soft, aim + thick / 2f);
         fill(-thick / 2f, aim - soft, thick / 2f, aim + soft);

@@ -255,6 +255,11 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.AIM_SOFT_ARM)
                 .as("soft underglow is wider than the bright arm")
                 .isGreaterThan(ExplorePaint.AIM_ARM);
+        assertThat(ExplorePaint.AIM_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
+        assertThat(ExplorePaint.aimSoftArm(0.1))
+                .isNotEqualTo(ExplorePaint.aimSoftArm(0.8));
+        assertThat(ExplorePaint.aimSoftThick(0.1))
+                .isNotEqualTo(ExplorePaint.aimSoftThick(0.8));
         assertThat(ExplorePaint.AIM_BRIGHT_R).isGreaterThan(ExplorePaint.AIM_SOFT_R);
         assertThat(ExplorePaint.CAPTION_SOFT_PAD).isGreaterThan(0f);
         assertThat(ExplorePaint.AIM_BRIGHT_R).isGreaterThan(ExplorePaint.CAPTION_SOFT_R);

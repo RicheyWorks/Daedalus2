@@ -300,6 +300,20 @@ public final class ExplorePaint {
     public static final float AIM_ARM = 0.03f;
     public static final float AIM_SOFT_ARM = 0.048f;
     public static final float AIM_SOFT_THICK = 0.012f;
+    /** Soft aim breath — same cadence as HUD key / automap presence. */
+    public static final float AIM_BREATH_MS = MAP_HERE_BREATH_MS;
+
+    public static float aimSoftArm(double seconds) {
+        double t = ((seconds * 1000.0) % AIM_BREATH_MS) / AIM_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return AIM_SOFT_ARM * (float) (0.88 + 0.24 * wave);
+    }
+
+    public static float aimSoftThick(double seconds) {
+        double t = ((seconds * 1000.0) % AIM_BREATH_MS) / AIM_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return AIM_SOFT_THICK * (float) (0.88 + 0.24 * wave);
+    }
     /** Soft gold pad under key diamonds — same language as caption underglow. */
     public static final float KEY_SOFT_R = 0.42f;
     public static final float KEY_SOFT_G = 0.30f;
