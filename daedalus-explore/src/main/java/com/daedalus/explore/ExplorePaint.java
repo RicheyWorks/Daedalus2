@@ -189,11 +189,26 @@ public final class ExplorePaint {
     }
 
     public static void skyUv(double yaw, double pitch, float sx, float sy, float[] out) {
+        skyUv(yaw, pitch, sx, sy, out, 0);
+    }
+
+    /** Slow U drift so dusk scrapes even when you stand still. */
+    public static final float SKY_DRIFT = 0.008f;
+
+    public static void skyUv(double yaw, double pitch, float sx, float sy, float[] out,
+                             double seconds) {
         if (out == null || out.length < 2) {
             return;
         }
-        out[0] = sx + (float) (yaw / (Math.PI * 2.0));
+        out[0] = sx + (float) (yaw / (Math.PI * 2.0) + seconds * SKY_DRIFT);
         out[1] = sy - (float) (pitch * 0.35);
+    }
+
+    /** Soft star breath on the sky quad — not a disco strobe. */
+    public static float skyTwinkle(double seconds) {
+        double a = Math.sin(seconds * 2.7);
+        double b = Math.sin(seconds * 4.1 + 0.8);
+        return (float) (0.90 + 0.10 * (0.55 + 0.45 * a + 0.2 * b));
     }
 
     public static Status status(ExploreFog fog, ExploreBody body, List<ExploreMarker> markers) {

@@ -117,6 +117,8 @@ under the `_migration/` portfolios.
   not a stuck stamp.
   Sticky-header DAEDALUS breathes on the same gate cadence so post-Enter
   chrome still feels held.
+  Explore dusk drifts and twinkles so the sky scrapes even when you stand
+  still — atmosphere, not a pasted backdrop.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

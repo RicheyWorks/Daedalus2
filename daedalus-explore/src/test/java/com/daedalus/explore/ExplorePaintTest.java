@@ -176,6 +176,14 @@ class ExplorePaintTest {
         ExplorePaint.skyUv(0, 0, 0.25f, 0.5f, a);
         ExplorePaint.skyUv(Math.PI, 0, 0.25f, 0.5f, b);
         assertThat(b[0]).isGreaterThan(a[0]);
+        float[] early = new float[2];
+        float[] late = new float[2];
+        ExplorePaint.skyUv(0, 0, 0, 0.5f, early, 0);
+        ExplorePaint.skyUv(0, 0, 0, 0.5f, late, 10);
+        assertThat(late[0]).isGreaterThan(early[0]);
+        assertThat(ExplorePaint.SKY_DRIFT).isGreaterThan(0f);
+        assertThat(ExplorePaint.skyTwinkle(0.1)).isGreaterThan(0.85f);
+        assertThat(ExplorePaint.skyTwinkle(0.1)).isNotEqualTo(ExplorePaint.skyTwinkle(0.4));
         ExplorePaint.skyUv(0, 0, 0, 0, null);
         ExplorePaint.skyUv(0, 0, 0, 0, new float[1]);
     }

@@ -319,7 +319,8 @@ public final class ExploreHost {
             glViewport(0, 0, width, height);
         }
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        sky(world.body(), skyTex, aspect);
+        double seconds = System.nanoTime() / 1_000_000_000.0;
+        sky(world.body(), skyTex, aspect, seconds);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glFrustum(-0.12 * aspect, 0.12 * aspect, -0.12, 0.12, 0.08, 200);
@@ -334,7 +335,6 @@ public final class ExploreHost {
         glEnable(GL_FOG);
         float[] rgb = new float[3];
         float[] uv = new float[2];
-        double seconds = System.nanoTime() / 1_000_000_000.0;
         faces(world, ExploreMesh.Face.WALL, wallTex, rgb, uv, seconds);
         faces(world, ExploreMesh.Face.FLOOR, floorTex, rgb, uv, seconds);
         faces(world, ExploreMesh.Face.CEILING, ceilTex, rgb, uv, seconds);
@@ -360,7 +360,7 @@ public final class ExploreHost {
         hud(aspect, world, faceTex, stride);
     }
 
-    private static void sky(ExploreBody body, int skyTex, double aspect) {
+    private static void sky(ExploreBody body, int skyTex, double aspect, double seconds) {
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_FOG);
         glMatrixMode(GL_PROJECTION);
@@ -370,16 +370,17 @@ public final class ExploreHost {
         glLoadIdentity();
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, skyTex);
-        glColor3f(1f, 1f, 1f);
+        float twinkle = ExplorePaint.skyTwinkle(seconds);
+        glColor3f(twinkle, twinkle * 0.96f, twinkle * 0.90f);
         float span = (float) (1.15 * aspect);
         float[] bl = new float[2];
         float[] br = new float[2];
         float[] tr = new float[2];
         float[] tl = new float[2];
-        ExplorePaint.skyUv(body.yaw(), body.pitch(), 0, 0.85f, bl);
-        ExplorePaint.skyUv(body.yaw(), body.pitch(), span, 0.85f, br);
-        ExplorePaint.skyUv(body.yaw(), body.pitch(), span, 0.15f, tr);
-        ExplorePaint.skyUv(body.yaw(), body.pitch(), 0, 0.15f, tl);
+        ExplorePaint.skyUv(body.yaw(), body.pitch(), 0, 0.85f, bl, seconds);
+        ExplorePaint.skyUv(body.yaw(), body.pitch(), span, 0.85f, br, seconds);
+        ExplorePaint.skyUv(body.yaw(), body.pitch(), span, 0.15f, tr, seconds);
+        ExplorePaint.skyUv(body.yaw(), body.pitch(), 0, 0.15f, tl, seconds);
         glBegin(GL_QUADS);
         glTexCoord2f(bl[0], bl[1]);
         glVertex2f((float) -aspect, -1f);
