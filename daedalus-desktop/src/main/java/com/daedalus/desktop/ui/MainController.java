@@ -1840,6 +1840,7 @@ public class MainController {
 
         if (currentLens != null && currentLens.bands() != null) {
             int[][] bands = currentLens.bands();
+            double lensWave = DesktopPaint.lensBreathWave(System.nanoTime());
             for (int r = 0; r < bands.length; r++) {
                 for (int c = 0; c < bands[r].length; c++) {
                     String color = DesktopPaint.lensColor(bands[r][c]);
@@ -1847,13 +1848,13 @@ public class MainController {
                         continue;
                     }
                     g.setFill(Color.web(color));
-                    g.setGlobalAlpha(DesktopPaint.lensAlpha(bands[r][c]));
+                    g.setGlobalAlpha(DesktopPaint.lensPaintAlpha(bands[r][c], lensWave));
                     g.fillRect(layout.x(2 * c + 1), layout.y(2 * r + 1),
                             layout.w(2 * c + 1), layout.h(2 * r + 1));
                 }
             }
             g.setFill(Color.web(DesktopPaint.LENS_COLORS[2]));
-            g.setGlobalAlpha(DesktopPaint.LENS_OPENING_ALPHA);
+            g.setGlobalAlpha(DesktopPaint.lensOpeningPaintAlpha(lensWave));
             for (DesktopPaint.TileRect tile : DesktopPaint.lensOpenings(bands, tiles)) {
                 g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                         layout.w(tile.tileCol()), layout.h(tile.tileRow()));
@@ -1869,6 +1870,7 @@ public class MainController {
                 g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                         layout.w(tile.tileCol()), layout.h(tile.tileRow()));
             }
+            g.setGlobalAlpha(DesktopPaint.EXPANSION_OPENING_ALPHA);
             for (DesktopPaint.TileRect tile : DesktopPaint.expansionOpenings(
                     currentExpansions, tiles)) {
                 g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),

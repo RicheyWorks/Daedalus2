@@ -307,6 +307,14 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.lensOpenings(bands, tiles))
                 .contains(new DesktopPaint.TileRect(1, 2));
         assertThat(DesktopPaint.LENS_OPENING_ALPHA).isEqualTo(0.2);
+        assertThat(DesktopPaint.LENS_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
+        assertThat(DesktopPaint.lensPaintAlpha(0, 0.0)).isEqualTo(0.42 * 0.88);
+        assertThat(DesktopPaint.lensPaintAlpha(0, 1.0)).isEqualTo(0.42 * 1.12);
+        assertThat(DesktopPaint.lensPaintAlpha(2, 0.0)).isEqualTo(0.16 * 0.88);
+        assertThat(DesktopPaint.lensOpeningPaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.LENS_OPENING_ALPHA * 0.85);
+        assertThat(DesktopPaint.lensOpeningPaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.LENS_OPENING_ALPHA * 1.15);
     }
 
     @Test
@@ -633,6 +641,9 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.expansionFront(many)).hasSize(6)
                 .startsWith(new Point(0, 2)).endsWith(new Point(0, 7));
         assertThat(DesktopPaint.EXPANSION_ALPHA).isEqualTo(0.16);
+        assertThat(DesktopPaint.EXPANSION_OPENING_ALPHA).isEqualTo(0.26);
+        assertThat(DesktopPaint.EXPANSION_OPENING_ALPHA)
+                .isGreaterThan(DesktopPaint.EXPANSION_ALPHA);
         assertThat(DesktopPaint.EXPANSION_FRONT_ALPHA).isEqualTo(0.45);
         assertThat(DesktopPaint.expansionCells(null)).isEmpty();
         assertThat(DesktopPaint.expansionOpenings(List.of(), tiles)).isEmpty();

@@ -460,18 +460,22 @@
       g.globalAlpha = 1;
     }
     if (scene.lens) {
+      const LENS_BREATH_MS = 2800;
+      const lensNow = typeof performance !== "undefined" ? performance.now() : 0;
+      const lensT = (lensNow % LENS_BREATH_MS) / LENS_BREATH_MS;
+      const lensWave = 0.5 - 0.5 * Math.cos(lensT * Math.PI * 2);
       const lensColors = scene.lensColors;
       for (let r = 0; r < scene.lens.rows; r++) {
         for (let c = 0; c < scene.lens.cols; c++) {
           const band = scene.lens.bands[r][c];
           if (band < 0) continue;
           g.fillStyle = lensColors[band];
-          g.globalAlpha = band === 2 ? 0.16 : 0.42;
+          g.globalAlpha = (band === 2 ? 0.16 : 0.42) * (0.88 + 0.24 * lensWave);
           paintWashCell(g, geom, r, c);
         }
       }
       g.fillStyle = lensColors[2];
-      g.globalAlpha = 0.2;
+      g.globalAlpha = 0.2 * (0.85 + 0.30 * lensWave);
       paintWashOpenings(g, geom, tiles, (r, c) => scene.lens.bands[r][c] >= 0);
       g.globalAlpha = 1;
     }
@@ -487,6 +491,7 @@
       for (let i = 0; i < shown; i++) {
         paintWashCell(g, geom, scene.expansions[i].row, scene.expansions[i].col);
       }
+      g.globalAlpha = 0.26;
       paintWashOpenings(g, geom, tiles, (r, c) => live.has(r + "," + c));
       g.globalAlpha = 0.45;
       for (let i = Math.max(0, shown - 6); i < shown; i++) {

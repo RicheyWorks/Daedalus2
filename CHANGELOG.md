@@ -200,6 +200,8 @@ under the `_migration/` portfolios.
   finished route has depth, not flat ink.
   Distance heat wash breathes on the victory cadence so the field still feels
   held, not a stuck blue wash over the corridors.
+  Heuristic lens bands breathe on the same cadence so must / never still feel
+  held, not a stuck red-green wash over the corridors.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

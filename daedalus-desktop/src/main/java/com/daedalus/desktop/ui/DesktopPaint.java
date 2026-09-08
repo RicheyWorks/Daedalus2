@@ -300,6 +300,8 @@ public final class DesktopPaint {
     }
     /** Search wash — same alphas as {@code draw.js} expansions. */
     public static final double EXPANSION_ALPHA = 0.16;
+    /** Openings louder than cells — same idea as Compare, quieter than the ribbon. */
+    public static final double EXPANSION_OPENING_ALPHA = 0.26;
     public static final double EXPANSION_FRONT_ALPHA = 0.45;
     public static final int EXPANSION_FRONT = 6;
     /**
@@ -334,6 +336,20 @@ public final class DesktopPaint {
     public static final double LENS_MUST_ALPHA = 0.42;
     public static final double LENS_NEVER_ALPHA = 0.16;
     public static final double LENS_OPENING_ALPHA = 0.2;
+    /** Lens wash pulse — same cadence as victory / field. */
+    public static final double LENS_BREATH_MS = VICTORY_BREATH_MS;
+
+    public static double lensBreathWave(long nanos) {
+        return victoryBreathWave(nanos);
+    }
+
+    public static double lensPaintAlpha(int band, double wave) {
+        return lensAlpha(band) * (0.88 + 0.24 * wave);
+    }
+
+    public static double lensOpeningPaintAlpha(double wave) {
+        return LENS_OPENING_ALPHA * (0.85 + 0.30 * wave);
+    }
     /** Arena lanes — same tokens as {@code solve.js}. */
     public static final String RACE_A = "#82b1ff";
     public static final String RACE_B = "#f0b429";
