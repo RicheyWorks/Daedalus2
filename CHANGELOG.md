@@ -188,6 +188,8 @@ under the `_migration/` portfolios.
   under every corridor.
   Clear-board corridor hairlines soften with the same edge falloff so shine
   matches the stone depth, not a flat highlight on dim slate.
+  Clear-board walls darken toward the unseen rim so stone has depth, not flat
+  ink under every corridor.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

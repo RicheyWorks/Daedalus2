@@ -1767,7 +1767,9 @@ public class MainController {
                 TileType role = DesktopPaint.floorRole(tiles[r][c]);
                 Color ink = colorFor(role, theme);
                 double edge = DesktopPaint.floorEdge(layout, r, c);
-                if (role != TileType.WALL && ink != null) {
+                if (role == TileType.WALL) {
+                    ink = Color.web(DesktopPaint.wallInk(edge));
+                } else if (ink != null) {
                     ink = ink.interpolate(Color.web(DesktopPaint.FLOOR_DIM),
                             DesktopPaint.FLOOR_EDGE_DIM * edge);
                 }

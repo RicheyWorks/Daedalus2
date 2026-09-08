@@ -176,6 +176,8 @@ public final class DesktopPaint {
     /** Clear-board edge falloff toward dim slate — same ink as fog dim. */
     public static final String FLOOR_DIM = FOG_FLOOR_DIM;
     public static final double FLOOR_EDGE_DIM = 0.22;
+    /** Clear-board wall rim toward unseen void — same depth idea as floors. */
+    public static final double WALL_EDGE_DIM = 0.28;
     public static final String FOG_FLOOR = "#3d4a58";
     /** Torch-warm stone underfoot — same mix as {@code draw.js} floorWarm. */
     public static final String FOG_FLOOR_WARM = "#5c4a32";
@@ -202,6 +204,11 @@ public final class DesktopPaint {
     /** Corridor shine softens toward the board edge with the floor wash. */
     public static String floorHiInk(double edge) {
         return mixHex(FLOOR_HI, FLOOR_DIM, FLOOR_EDGE_DIM * Math.max(0, Math.min(1, edge)));
+    }
+
+    /** Clear wall ink darkens toward unseen at the rim. */
+    public static String wallInk(double edge) {
+        return mixHex(FOG_WALL, FOG_UNSEEN, WALL_EDGE_DIM * Math.max(0, Math.min(1, edge)));
     }
     /** Coral wash — same token as {@code draw.js} hot spots. */
     public static final String HOTSPOT = "#e5484d";

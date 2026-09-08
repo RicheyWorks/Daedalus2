@@ -341,6 +341,14 @@
             g.fillStyle = mixHex(COLORS.wall, COLORS.wallWarm, lamp * 0.45);
             g.fillRect(geom.offX[col], geom.offY[r],
                        geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
+          } else {
+            const cx = (tw - 1) / 2, cy = (th - 1) / 2;
+            const dx = (col - cx) / Math.max(1, tw / 2);
+            const dy = (r - cy) / Math.max(1, th / 2);
+            const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+            g.fillStyle = mixHex(COLORS.wall, COLORS.unseen, 0.28 * edge);
+            g.fillRect(geom.offX[col], geom.offY[r],
+                       geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
           }
           continue;
         }
