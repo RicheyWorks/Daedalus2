@@ -85,6 +85,8 @@ under the `_migration/` portfolios.
   Victory rings wash a soft gold pad, sanctuary discs wear the walker rim,
   and uncollected hunt coins get a faint underglow so win / safe / loot
   read as places, not flat stamps.
+  Explore key diamonds wear a soft gold pad and the mood face gets a thin
+  gold lip so HUD loot and portrait match the status chrome.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

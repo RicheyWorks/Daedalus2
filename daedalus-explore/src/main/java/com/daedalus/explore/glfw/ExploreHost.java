@@ -476,6 +476,14 @@ public final class ExploreHost {
         float faceRight = faceLeft + 0.22f;
         float faceBot = bot + 0.03f;
         float faceTop = top - 0.03f;
+        float lip = ExplorePaint.FACE_LIP;
+        float core = ExplorePaint.FACE_LIP_CORE;
+        glColor3f(ExplorePaint.STATUS_GOLD_UNDER_R, ExplorePaint.STATUS_GOLD_UNDER_G,
+                ExplorePaint.STATUS_GOLD_UNDER_B);
+        fill(faceLeft - lip, faceBot - lip, faceRight + lip, faceTop + lip);
+        glColor3f(ExplorePaint.STATUS_GOLD_R, ExplorePaint.STATUS_GOLD_G,
+                ExplorePaint.STATUS_GOLD_B);
+        fill(faceLeft - core, faceBot - core, faceRight + core, faceTop + core);
         int mood = Math.max(0, Math.min(faceTex.length - 1, line.mood()));
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, faceTex[mood]);
@@ -506,6 +514,8 @@ public final class ExploreHost {
         float x = (float) (aspect - 0.08);
         for (int i = marks - 1; i >= 0; i--) {
             ExplorePaint.keyTint(i, marks, line.mood(), rgb);
+            glColor3f(ExplorePaint.KEY_SOFT_R, ExplorePaint.KEY_SOFT_G, ExplorePaint.KEY_SOFT_B);
+            diamond(x, cy, 0.028f * ExplorePaint.KEY_SOFT_PAD);
             glColor3f(rgb[0], rgb[1], rgb[2]);
             diamond(x, cy, 0.028f);
             x -= 0.07f;

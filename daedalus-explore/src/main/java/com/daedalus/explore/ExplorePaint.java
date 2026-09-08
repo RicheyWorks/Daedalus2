@@ -225,6 +225,14 @@ public final class ExplorePaint {
     public static final float AIM_ARM = 0.03f;
     public static final float AIM_SOFT_ARM = 0.048f;
     public static final float AIM_SOFT_THICK = 0.012f;
+    /** Soft gold pad under key diamonds — same language as caption underglow. */
+    public static final float KEY_SOFT_R = 0.42f;
+    public static final float KEY_SOFT_G = 0.30f;
+    public static final float KEY_SOFT_B = 0.10f;
+    public static final float KEY_SOFT_PAD = 1.55f;
+    /** Thin gold lip around the mood face so the portrait matches strip chrome. */
+    public static final float FACE_LIP = 0.008f;
+    public static final float FACE_LIP_CORE = 0.004f;
 
     public static void keyTint(int slot, int marks, int mood, float[] rgb) {
         if (rgb == null || rgb.length < 3) {
