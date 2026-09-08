@@ -51,6 +51,7 @@ class ThemeManagerTest {
             assertThat(css).contains("-fx-border-color: rgba(184, 133, 56, 0.85)");
             assertThat(css).contains("-fx-border-color: rgba(184, 133, 56, 0.28)");
             assertThat(css).contains("-fx-border-color: rgba(184, 133, 56, 0.32)");
+            assertThat(css).contains("-fx-border-color: rgba(184, 133, 56, 0.36)");
             assertThat(css).contains(".status-bar");
         }
         try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {

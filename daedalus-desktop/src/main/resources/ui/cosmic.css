@@ -121,7 +121,7 @@
     -fx-font-size: 11px;
     -fx-padding: 4 10 4 10;
     -fx-background-radius: 6;
-    -fx-border-color: rgba(30, 40, 50, 0.95);
+    -fx-border-color: rgba(184, 133, 56, 0.36);
     -fx-border-radius: 6;
 }
 .exports .button:hover {

@@ -99,6 +99,8 @@ under the `_migration/` portfolios.
   form chrome matches the side panels, not flat gray admin lines.
   Default buttons and desktop checkboxes wear the same soft gold idle rim so
   Generate / Live / Fog chrome matches the well, not gray admin outlines.
+  Export chips, ASCII out, and gate command blocks wear a soft gold idle rim
+  so overlay chrome matches the well even before hover.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

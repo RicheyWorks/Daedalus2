@@ -72,6 +72,7 @@ class WebUiSmokeTest {
                 .contains("outline: 2px solid rgba(184, 133, 56")
                 .contains("border: 1px solid rgba(184, 133, 56, 0.28)")
                 .contains("border: 1px solid rgba(184, 133, 56, 0.32)")
+                .contains("border: 1px solid rgba(184, 133, 56, 0.36)")
                 .contains("button.accent")
                 .contains("border-color: var(--gold)")
                 .contains("backdrop-filter")
