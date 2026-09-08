@@ -132,9 +132,13 @@
     0%, 100% { border-color: rgba(184, 133, 56, 0.36); }
     50% { border-color: rgba(184, 133, 56, 0.55); }
   }
+  @keyframes panelRimBreath {
+    0%, 100% { border-color: rgba(184, 133, 56, 0.30); }
+    50% { border-color: rgba(184, 133, 56, 0.48); }
+  }
   @media (prefers-reduced-motion: reduce) {
     #gate .gate-brand, #gate .lede, #gate .gate-enter, #gate article, #gate .gate-veil,
-    header h1 button, #stage, .board-panel {
+    header h1 button, #stage, .board-panel, .panel {
       animation: none;
     }
     #gate .gate-brand {
@@ -150,6 +154,7 @@
                   0 0 0 1px rgba(16, 11, 8, 0.95);
     }
     .board-panel { border-color: rgba(184, 133, 56, 0.42); }
+    .panel { border-color: rgba(184, 133, 56, 0.36); }
   }
   header .tag { color: var(--dim); font-size: 11px; flex: 1; letter-spacing: .04em;
                 text-transform: lowercase; }
@@ -183,7 +188,8 @@
   details[open] summary::after { content: " ▾"; }
   .panel { background: var(--panel); border: 1px solid rgba(184, 133, 56, 0.36);
            border-radius: 10px; padding: 14px 16px;
-           box-shadow: 0 0 0 1px rgba(16, 11, 8, 0.85); }
+           box-shadow: 0 0 0 1px rgba(16, 11, 8, 0.85);
+           animation: panelRimBreath 4.5s ease-in-out infinite; }
   .panel h2 { margin: 0 0 8px; font-size: 11px; text-transform: uppercase;
               letter-spacing: .14em; color: var(--dim); font-weight: 600; }
   .rail { display: flex; flex-direction: column; gap: 12px; min-width: 0; }

@@ -96,6 +96,7 @@ class WebUiSmokeTest {
                 .contains("prefers-reduced-motion")
                 .contains("stageRimBreath")
                 .contains("boardRimBreath")
+                .contains("panelRimBreath")
                 .contains("ghost:")
                 .contains("ghostDisc")
                 .contains("ageFade")
