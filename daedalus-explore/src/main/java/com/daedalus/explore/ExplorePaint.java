@@ -201,6 +201,24 @@ public final class ExplorePaint {
     public record DustMote(float x, float y, float half, float a) {
     }
 
+    /** Soft lamp wash behind the flame — the HUD is lit, not a pasted sticker. */
+    public record TorchBloom(float x, float y, float rx, float ry, float a) {
+    }
+
+    public static final float BLOOM_R = 1.00f;
+    public static final float BLOOM_G = 0.62f;
+    public static final float BLOOM_B = 0.22f;
+    public static final float BLOOM_RX = 0.18f;
+    public static final float BLOOM_RY = 0.22f;
+
+    public static TorchBloom torchBloom(double aspect, float bob, double seconds) {
+        float ox = (float) (Math.max(0.55, aspect) * 0.48);
+        float oy = -1f + STATUS_H + 0.06f + bob;
+        float flick = flameFlicker(seconds);
+        float a = Math.max(0.06f, Math.min(0.28f, 0.10f + 0.12f * flick));
+        return new TorchBloom(ox + 0.07f, oy + 0.34f, BLOOM_RX, BLOOM_RY, a);
+    }
+
     public static final int DUST_COUNT = 8;
     public static final float DUST_HALF = 0.006f;
     public static final float DUST_R = 0.98f;

@@ -266,6 +266,8 @@ under the `_migration/` portfolios.
   is the same stone as the idle mark, not cold slate corridors.
   Clear-board walls warm toward torch-brown with the floors so posts are the same
   stone, not cold ink around warm corridors.
+  Explore torch bloom washes gold behind the HUD flame so the lamp lights the
+  bar, not a pasted sticker on a dark strip.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

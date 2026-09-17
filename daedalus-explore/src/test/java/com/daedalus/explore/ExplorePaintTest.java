@@ -485,6 +485,22 @@ class ExplorePaintTest {
         assertThat(a.get(3).a()).isNotEqualTo(ExplorePaint.dustMotes(1.6, 0, 0.18).get(3).a());
     }
 
+    @Test
+    void torchBloomWashesBehindTheFlame() {
+        ExplorePaint.TorchBloom bloom = ExplorePaint.torchBloom(1.6, 0, 0.1);
+        float strip = -1f + ExplorePaint.STATUS_H;
+        assertThat(bloom.y() - bloom.ry()).isGreaterThan(strip);
+        assertThat(bloom.rx()).isEqualTo(ExplorePaint.BLOOM_RX);
+        assertThat(bloom.ry()).isEqualTo(ExplorePaint.BLOOM_RY);
+        assertThat(bloom.a()).isBetween(0.06f, 0.28f);
+        ExplorePaint.TorchBloom dim = ExplorePaint.torchBloom(1.6, 0, 0.2);
+        assertThat(bloom.a()).isNotEqualTo(dim.a());
+        ExplorePaint.TorchBloom bobbed = ExplorePaint.torchBloom(1.6, 0.02f, 0.1);
+        assertThat(bobbed.y()).isGreaterThan(bloom.y());
+        assertThat(ExplorePaint.BLOOM_R).isGreaterThan(ExplorePaint.BLOOM_G);
+        assertThat(ExplorePaint.BLOOM_G).isGreaterThan(ExplorePaint.BLOOM_B);
+    }
+
     private static ExploreMesh.Triangle nsWall(double x, double y, double z) {
         return new ExploreMesh.Triangle(x, y, z, x + 1, y, z, x + 1, y + 0.4, z,
                 ExploreMesh.Face.WALL, 2, 3);
