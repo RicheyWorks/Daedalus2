@@ -58,6 +58,8 @@ class WebUiSmokeTest {
                 .contains("rel=\"icon\" type=\"image/svg+xml\"")
                 .contains("fill='%230c0908'")
                 .contains("stroke='%23b88538'")
+                .contains("rel=\"mask-icon\" color=\"#b88538\"")
+                .contains("fill-rule='evenodd' d='M0 0h32v32H0zM4 4h24v24H4z'")
                 .contains("color: #f2ead8")
                 .contains("header h1 button")
                 .contains("header .tag { color: #b09a72")

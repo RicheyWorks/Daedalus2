@@ -663,6 +663,8 @@ under the `_migration/` portfolios.
   Web tab icon wears torch void with a gold lip so the host sits in the lamp,
   not leftover browser chrome around the well.
   Page color-scheme is dark so leftover light UA chrome does not flash around the well.
+  Safari pinned-tab mask wears a gold well lip so the host sits in the lamp,
+  not leftover OS chrome around the well.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
