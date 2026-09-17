@@ -358,6 +358,8 @@ under the `_migration/` portfolios.
   the well key matches the discs, not leftover mint on torch stone.
   Web overlay legend names sanctuary and lens when those marks are on the well
   so moss discs are keyed, not leftover unnamed on torch stone.
+  Web overlay legend names the hardest ribbon when that gold walk is on the well
+  so the detour is keyed, not leftover unnamed on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

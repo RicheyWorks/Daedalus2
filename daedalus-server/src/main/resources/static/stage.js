@@ -89,6 +89,7 @@
       player: seats > 0,
       choke: !!(snap.analysis && snap.analysis.chokepoints
           && snap.analysis.chokepoints.length),
+      hardest: !!(snap.hardest && snap.hardest.path && snap.hardest.path.length),
       sanctuary: !!(snap.sanctuaries && snap.sanctuaries.placements
           && snap.sanctuaries.placements.length),
       lens: !!snap.lens,
