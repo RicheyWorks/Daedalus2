@@ -132,6 +132,7 @@ class WebUiSmokeTest {
                 .contains("#1a1510 0%")
                 .contains("--void: #0c0908")
                 .contains("--bg: #0c0908")
+                .contains("background: rgba(12, 9, 8, 0.92)")
                 .contains("boardRimBreath")
                 .contains("panelRimBreath")
                 .contains("headerRimBreath")

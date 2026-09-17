@@ -326,6 +326,8 @@ under the `_migration/` portfolios.
   on leftover cool page ink.
   Web page fade uses the same void as the well edge so the board wash does not
   fall back into leftover cool page ink.
+  Web header fill sits in the same void as the page wash so the bar above the
+  well is not leftover cool ink on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
