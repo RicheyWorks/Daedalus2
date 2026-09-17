@@ -416,6 +416,8 @@ under the `_migration/` portfolios.
   in the lamp, not leftover gold on torch stone.
   Start-gate command dumps wear the same gold scroll lip as the ASCII dump so
   those lines are not leftover cool navy on torch stone.
+  Compare-box winners under the well wear victory gold so the best path sits
+  in the lamp, not leftover mint on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

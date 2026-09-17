@@ -76,6 +76,7 @@ class WebUiSmokeTest {
                 .contains("#compareBox th { text-align: left; color: #b09a72")
                 .contains("#compareBox td { padding: 2px 8px; border-bottom: 1px solid rgba(184, 133, 56, 0.28)")
                 .contains("#compareBox .hint { color: #b09a72")
+                .contains("#compareBox .best { color: #f0b429")
                 .contains("id=\"genInfo\"").contains("id=\"asciiOut\"")
                 .contains("#asciiOut { margin: 10px 0 0; padding: 8px; background: #16120e;")
                 .contains("color: #d4c4a8;")
