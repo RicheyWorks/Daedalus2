@@ -56,6 +56,7 @@ class WebUiSmokeTest {
                 .contains("header .tag { color: #b09a72")
                 .contains("rgba(22, 18, 14, .88)")
                 .contains("#gate { position: fixed; inset: 0; z-index: 20; overflow: auto;")
+                .contains("html, body { min-height: 100%;")
                 .contains("#gate article h3")
                 .contains("letter-spacing: .04em; color: #f2ead8")
                 .contains("#gate .lede { color: #b09a72")
