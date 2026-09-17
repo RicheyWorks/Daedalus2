@@ -289,6 +289,7 @@ class WebUiSmokeTest {
                 .contains("letter-spacing: .14em; color: #b09a72; font-weight: 600; user-select: none")
                 .contains("font-weight: 600; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none")
                 .contains("font-weight: 600; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none")
+                .contains("600; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none; cursor: default")
                 .contains(".hint { font-size: 11px; color: #b09a72; margin-top: 10px; }")
                 .contains("#log { height: 240px; overflow-y: auto; overscroll-behavior: none; font: 12px/1.6 ui-monospace, monospace;")
                 .contains("color: #f2ead8;")
