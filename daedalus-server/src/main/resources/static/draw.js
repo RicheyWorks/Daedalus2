@@ -386,6 +386,13 @@
     return ghostTileInk(2 * p.row + 1, 2 * p.col + 1, th, tw);
   }
 
+  function hardestTileInk(tr, tc, th, tw) {
+    const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
+    const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
+    const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+    return mixHex("#f2c94c", COLORS.floorDim, 0.22 * edge);
+  }
+
   function chokeInk(tr, tc, th, tw) {
     const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
     const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
@@ -712,7 +719,8 @@
       }
     }
     if (scene.hardest && scene.hardest.path && scene.hardest.path.length) {
-      paintWalk(g, geom, scene.hardest.path, "#f2c94c", 1, 0.75, "ribbon");
+      paintWalk(g, geom, scene.hardest.path, "#f2c94c", 1, 0.75, "ribbon",
+          (tr, tc) => hardestTileInk(tr, tc, th, tw));
       pathHead(g, geom, walkHead(scene.hardest.path, 1), "#f2c94c");
     }
     if (scene.tourPath && scene.tourPath.length) {

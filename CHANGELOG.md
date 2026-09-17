@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well hardest trail depth.**
+  Longest-route gold falls off toward floor-dim at the board rim
+  with the same 0.22 edge as halls, so leftover even ribbon is not
+  the last word on a hard walk. The legend hardest chip stays
+  leftover even. KEEP path ice stays. Start mint and goal coral
+  stay.
+
 - **Desktop ghost trail depth.**
   Recorded-racer corridor cream falls off toward floor-dim at the
   board rim with the same 0.22 edge as halls, so leftover even

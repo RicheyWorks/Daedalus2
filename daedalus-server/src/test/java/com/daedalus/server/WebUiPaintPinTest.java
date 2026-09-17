@@ -238,6 +238,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellHardestTrailsHaveRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("mixHex(\"#f2c94c\", COLORS.floorDim, 0.22 * edge)")
+                    .contains("(tr, tc) => hardestTileInk(tr, tc, th, tw)");
+        }
+    }
+
+    @Test
     void wellFieldCellsHaveRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
