@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well clear void pocket.**
+  Clear-board letterbox uses the same `#16120e`→unseen radial as
+  fog, so leftover even warm-wall grout is not the last word under
+  the maze. Start mint and goal coral stay.
+
 - **Explore brick face depth.**
   Corridor brick faces fall off toward grout with the same 0.22
   edge as floor tiles, so leftover even clay is not the last word

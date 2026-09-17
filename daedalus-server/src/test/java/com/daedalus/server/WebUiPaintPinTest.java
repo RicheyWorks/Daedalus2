@@ -163,7 +163,8 @@ class WebUiPaintPinTest {
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js).contains("if (scene.fog) {")
                     .contains("fogWash.addColorStop(0, \"#16120e\")")
-                    .contains("fogWash.addColorStop(1, COLORS.unseen)");
+                    .contains("fogWash.addColorStop(1, COLORS.unseen)")
+                    .doesNotContain("g.fillStyle = mixHex(COLORS.wall, COLORS.wallWarm, 0.28)");
         }
     }
 

@@ -366,17 +366,13 @@
     const g = canvas.getContext("2d");
     g.imageSmoothingEnabled = false;
 
-    if (scene.fog) {
-      const fogCx = canvas.width / 2;
-      const fogCy = canvas.height * 0.45;
-      const fogWash = g.createRadialGradient(fogCx, fogCy, 0, fogCx, fogCy,
-          Math.max(canvas.width, canvas.height) * 0.72);
-      fogWash.addColorStop(0, "#16120e");
-      fogWash.addColorStop(1, COLORS.unseen);
-      g.fillStyle = fogWash;
-    } else {
-      g.fillStyle = mixHex(COLORS.wall, COLORS.wallWarm, 0.28);
-    }
+    const fogCx = canvas.width / 2;
+    const fogCy = canvas.height * 0.45;
+    const fogWash = g.createRadialGradient(fogCx, fogCy, 0, fogCx, fogCy,
+        Math.max(canvas.width, canvas.height) * 0.72);
+    fogWash.addColorStop(0, "#16120e");
+    fogWash.addColorStop(1, COLORS.unseen);
+    g.fillStyle = fogWash;
     g.fillRect(0, 0, canvas.width, canvas.height);
     let start = null, goal = null;
     for (let r = 0; r < th; r++) {
