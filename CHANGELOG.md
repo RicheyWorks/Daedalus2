@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well world agent fold.**
+  The world panel maps `WorldZeroDrive` ids onto existing REST and
+  shows the last builder step from `/trace`. Invented `agent.*`
+  verbs are rejected. `/` stays the maze well.
+
 - **World agent builder.**
   `WorldBuilder` is a client on `WorldOps` / `AutomationSession`.
   Recipes place, inspect, and arm with the same capability ids

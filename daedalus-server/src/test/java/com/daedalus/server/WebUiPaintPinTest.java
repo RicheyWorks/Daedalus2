@@ -427,4 +427,20 @@ class WebUiPaintPinTest {
                     .contains("host.onWorldEvent");
         }
     }
+
+    @Test
+    void wellWorldAgentDrivesWorldOps() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/world.js")) {
+            assertThat(in).as("world panel").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("\"block.place\"")
+                    .contains("\"trap.arm\"")
+                    .contains("/world/\" + WORLD + \"/trace")
+                    .contains("throw new Error(\"Unknown capability \" + capability)")
+                    .contains("builder — WorldOps only");
+            assertThat(js).doesNotContain("\"agent.build\"");
+            assertThat(js).doesNotContain("/maze/");
+        }
+    }
 }

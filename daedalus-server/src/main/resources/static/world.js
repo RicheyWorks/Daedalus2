@@ -5,6 +5,30 @@
   const WORLD = "world-zero";
   const MAX_EVENTS = 8;
   const events = [];
+  /** Same ids as {@code WorldZeroDrive}. No agent.* verbs. */
+  const DRIVEN = {
+    "world.inspect": {method: "GET", path: () => "/world/" + WORLD},
+    "chunk.inspect": {method: "GET", path: at =>
+        "/world/" + WORLD + "/chunk?x=" + at.x + "&y=" + at.y + "&z=" + at.z},
+    "block.inspect": {method: "GET", path: at =>
+        "/world/" + WORLD + "/block?x=" + at.x + "&y=" + at.y + "&z=" + at.z},
+    "block.place": {method: "PUT", path: () => "/world/" + WORLD + "/block",
+      body: (at, type) => ({x: at.x, y: at.y, z: at.z, type: type || "STONE"})},
+    "block.remove": {method: "DELETE", path: at =>
+        "/world/" + WORLD + "/block?x=" + at.x + "&y=" + at.y + "&z=" + at.z},
+    "door.inspect": {method: "GET", path: () => "/world/" + WORLD + "/door"},
+    "door.open": {method: "POST", path: () => "/world/" + WORLD + "/door/open"},
+    "door.close": {method: "POST", path: () => "/world/" + WORLD + "/door/close"},
+    "trap.inspect": {method: "GET", path: () => "/world/" + WORLD + "/trap"},
+    "trap.arm": {method: "POST", path: () => "/world/" + WORLD + "/trap/arm"},
+    "trap.disarm": {method: "POST", path: () => "/world/" + WORLD + "/trap/disarm"},
+    "portal.inspect": {method: "GET", path: () => "/world/" + WORLD + "/portal"},
+    "portal.open": {method: "POST", path: () => "/world/" + WORLD + "/portal/open"},
+    "portal.seal": {method: "POST", path: () => "/world/" + WORLD + "/portal/seal"},
+    "npc.inspect": {method: "GET", path: () => "/world/" + WORLD + "/npc"},
+    "npc.talk": {method: "POST", path: () => "/world/" + WORLD + "/npc/talk"},
+    "npc.hush": {method: "POST", path: () => "/world/" + WORLD + "/npc/hush"},
+  };
 
   async function inspect(host) {
     const box = host && host.$ && host.$("worldBox");
@@ -17,7 +41,8 @@
       const npc = await host.api("/world/" + WORLD + "/npc");
       const parcels = await host.api("/world/" + WORLD + "/parcels");
       const chunk = await host.api("/world/" + WORLD + "/chunk?x=0&y=0&z=0");
-      paint(box, world, door, trap, portal, npc, parcels, chunk);
+      const trace = await host.api("/world/" + WORLD + "/trace");
+      paint(box, world, door, trap, portal, npc, parcels, chunk, trace);
     } catch (e) {
       box.textContent = "world inspect unavailable — " + (e && e.message ? e.message : e);
     }
@@ -34,7 +59,24 @@
     inspect(host);
   }
 
-  function paint(box, world, door, trap, portal, npc, parcels, chunk) {
+  async function drive(host, capability, at, type) {
+    if (!host || !host.api) {
+      throw new Error("World host is required");
+    }
+    const step = DRIVEN[capability];
+    if (!step) {
+      throw new Error("Unknown capability " + capability);
+    }
+    const cell = at || {x: 0, y: 0, z: 0};
+    const opts = {method: step.method};
+    if (step.body) {
+      opts.headers = {"Content-Type": "application/json"};
+      opts.body = JSON.stringify(step.body(cell, type));
+    }
+    return host.api(step.path(cell), opts);
+  }
+
+  function paint(box, world, door, trap, portal, npc, parcels, chunk, trace) {
     box.replaceChildren();
     row(box, "world", world && world.id ? world.id : WORLD);
     row(box, "revision", world && world.revision != null ? String(world.revision) : "—");
@@ -60,6 +102,13 @@
           + " " + (frame.type || "") + " r=" + frame.revision;
       box.appendChild(line);
     });
+    const built = document.createElement("div");
+    built.className = "hint";
+    const steps = trace && trace.steps ? trace.steps : [];
+    built.textContent = steps.length
+        ? "builder " + steps[steps.length - 1].capability
+        : "builder — WorldOps only";
+    box.appendChild(built);
   }
 
   function row(box, label, value, wood) {
@@ -79,5 +128,5 @@
     box.appendChild(line);
   }
 
-  global.DaedalusWorld = {inspect, onEvent, WORLD};
+  global.DaedalusWorld = {inspect, onEvent, drive, DRIVEN, WORLD};
 })(window);
