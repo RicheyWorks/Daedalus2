@@ -253,7 +253,7 @@ class WebUiSmokeTest {
                 .contains("0.04 + 0.03")
                 .contains("prefers-reduced-motion")
                 .contains("stageRimBreath")
-                .contains("animation: stageRimBreath 4.5s ease-in-out infinite; -webkit-tap-highlight-color: transparent")
+                .contains("animation: stageRimBreath 4.5s ease-in-out infinite; -webkit-tap-highlight-color: transparent; outline: none")
                 .contains("#1a1510 0%")
                 .contains("#16120e 0%")
                 .contains("radial-gradient(1200px 700px at 50% -10%, #16120e 0%")
