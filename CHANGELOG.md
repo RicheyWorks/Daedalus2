@@ -690,6 +690,7 @@ under the `_migration/` portfolios.
   Maze copy keeps lamp size so leftover iOS ice does not inflate cream on torch stone.
   Maze numbers stay cream so leftover UA ice does not turn seeds and sizes into phone links.
   Desktop maze copy inherits cream so leftover Modena ink does not sit on torch stone.
+  Marked maze copy wears a gold wash so leftover UA yellow does not stain torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
