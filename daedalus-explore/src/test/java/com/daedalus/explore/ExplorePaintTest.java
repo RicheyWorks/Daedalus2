@@ -216,11 +216,17 @@ class ExplorePaintTest {
         assertThat(icon[3] & 0xFF).isEqualTo(255);
         int mid = (ExplorePaint.WINDOW_ICON_SIZE / 2 * ExplorePaint.WINDOW_ICON_SIZE
                 + ExplorePaint.WINDOW_ICON_SIZE / 2) * 4;
+        int[] midFloor = ExplorePaint.windowIconFloorRgb(3, 5);
         assertThat(icon[mid] & 0xFF)
                 .as("idle maze floors sit at the icon center")
-                .isEqualTo(ExplorePaint.WINDOW_ICON_FLOOR_R);
-        assertThat(icon[mid + 1] & 0xFF).isEqualTo(ExplorePaint.WINDOW_ICON_FLOOR_G);
-        assertThat(icon[mid + 2] & 0xFF).isEqualTo(ExplorePaint.WINDOW_ICON_FLOOR_B);
+                .isEqualTo(midFloor[0]);
+        assertThat(icon[mid + 1] & 0xFF).isEqualTo(midFloor[1]);
+        assertThat(icon[mid + 2] & 0xFF).isEqualTo(midFloor[2]);
+        int rimFloor = (11 * ExplorePaint.WINDOW_ICON_SIZE + 23) * 4;
+        assertThat(icon[rimFloor] & 0xFF)
+                .as("idle icon rim slate falls off like the live well")
+                .isEqualTo(ExplorePaint.windowIconFloorRgb(1, 9)[0])
+                .isNotEqualTo(icon[mid] & 0xFF);
         int start = (11 * ExplorePaint.WINDOW_ICON_SIZE + 7) * 4;
         assertThat(icon[start] & 0xFF)
                 .as("start mint sits on the idle gate cell")

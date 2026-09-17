@@ -75,6 +75,15 @@ public final class ExplorePaint {
         return Math.min(1, Math.hypot(dx, dy));
     }
 
+    public static int[] windowIconFloorRgb(int tileRow, int tileCol) {
+        double edge = windowIconEdge(tileRow, tileCol);
+        return new int[] {
+                mixByte(WINDOW_ICON_FLOOR_R, 0x2a, 0.22 * edge),
+                mixByte(WINDOW_ICON_FLOOR_G, 0x22, 0.22 * edge),
+                mixByte(WINDOW_ICON_FLOOR_B, 0x18, 0.22 * edge)
+        };
+    }
+
     public static int[] windowIconWallRgb(int tileRow, int tileCol) {
         double edge = windowIconEdge(tileRow, tileCol);
         return new int[] {
@@ -124,9 +133,10 @@ public final class ExplorePaint {
                     green = wall[1];
                     blue = wall[2];
                 } else {
-                    red = WINDOW_ICON_FLOOR_R;
-                    green = WINDOW_ICON_FLOOR_G;
-                    blue = WINDOW_ICON_FLOOR_B;
+                    int[] floor = windowIconFloorRgb(r, c);
+                    red = floor[0];
+                    green = floor[1];
+                    blue = floor[2];
                 }
                 fillWindowIconCell(px, ox + c * WINDOW_ICON_CELL, oy + r * WINDOW_ICON_CELL,
                         red, green, blue);
