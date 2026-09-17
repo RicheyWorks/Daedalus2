@@ -175,6 +175,8 @@ class WebUiSmokeTest {
                 .contains("#log div { border-bottom: 1px solid rgba(184, 133, 56, 0.28); padding: 2px 0; }")
                 .contains("#lb .rank { display: inline-block; width: 18px; color: #b09a72; }")
                 .contains("details { margin-top: 10px; border-top: 1px solid rgba(184, 133, 56, 0.28); padding-top: 6px; }")
+                .contains("kbd { background: #16120e; border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 3px;")
+                .contains("padding: 0 4px; font-size: 11px; color: #b09a72; }")
                 .contains("background: rgba(12, 9, 8, 0.92)")
                 .contains("boardRimBreath")
                 .contains("panelRimBreath")
