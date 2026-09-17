@@ -178,7 +178,7 @@
     #gate .gate-brand, #gate .lede, #gate .gate-enter, #gate article, #gate .gate-veil,
     header h1 button, #stage, .board-panel, .panel, header, #legend,
     .exports button, .exports a, #asciiOut, #gate pre, .info, #stats, details,
-    #compareBox > div, kbd, summary::after {
+    #compareBox > div, kbd, summary::after, #log {
       animation: none;
     }
     #gate .gate-brand {
@@ -298,8 +298,10 @@
   button:disabled { opacity: .4; cursor: default; }
   canvas { background: transparent; display: block; }
   #log { height: 240px; overflow-y: auto; font: 12px/1.6 ui-monospace, monospace;
-         color: #f2ead8;
-         scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent; }
+         color: #f2ead8; padding: 8px; background: #16120e;
+         border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 6px;
+         scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent;
+         animation: panelRimBreath 4.5s ease-in-out infinite; }
   #lb { font: 12px/1.9 ui-monospace, monospace; color: #f2ead8; }
   #lb div { border-bottom: 1px solid rgba(184, 133, 56, 0.28); padding: 2px 0; }
   #lb span { color: #b09a72; }
