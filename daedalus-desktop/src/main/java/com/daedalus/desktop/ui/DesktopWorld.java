@@ -3,6 +3,7 @@
 package com.daedalus.desktop.ui;
 
 import com.daedalus.api.dto.WorldEventFrame;
+import com.daedalus.world.Parcel;
 import com.daedalus.world.World;
 import com.daedalus.world.WorldId;
 
@@ -21,15 +22,36 @@ public final class DesktopWorld {
         if (world == null) {
             return ID + " · unavailable";
         }
-        return inspectLine(world.revision().value(), last);
+        return inspectLine(world.revision().value(), firstPlace(world), last);
     }
 
     public static String inspectLine(long revision, WorldEventFrame last) {
-        if (last == null) {
-            return ID + " r=" + revision + " · listening";
+        return inspectLine(revision, "", last);
+    }
+
+    public static String inspectLine(long revision, String place, WorldEventFrame last) {
+        String head = ID + " r=" + revision;
+        if (place != null && !place.isBlank()) {
+            head += " · " + place;
         }
-        return ID + " r=" + revision + " · " + last.kind() + " "
+        if (last == null) {
+            return head + " · listening";
+        }
+        return head + " · " + last.kind() + " "
                 + last.x() + "," + last.y() + "," + last.z()
                 + " " + last.type();
+    }
+
+    /** First inspired toponym on inspect — same well place row, not GIS. */
+    static String firstPlace(World world) {
+        if (world == null) {
+            return "";
+        }
+        for (Parcel parcel : world.parcels()) {
+            if (parcel != null && !parcel.placeName().isEmpty()) {
+                return parcel.placeName();
+            }
+        }
+        return "";
     }
 }

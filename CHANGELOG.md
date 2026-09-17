@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop world street inspect.**
+  The desktop world line names the first parcel place (`Willow Walk`)
+  beside revision, same as the well place row. Empty worlds stay
+  listening. Maze generate / solve stay.
+
 - **Explore automap HERE street wash.**
   You-are-here on a named parcel lifts toward torch wood so the pocket
   names the street, not leftover gold on Willow Walk. Start and goal
