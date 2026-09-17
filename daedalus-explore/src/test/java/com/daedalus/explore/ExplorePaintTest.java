@@ -200,6 +200,20 @@ class ExplorePaintTest {
         assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.HERE)).isTrue();
         assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.WALL)).isTrue();
         assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.MARK)).isTrue();
+        assertThat(dots.stream().filter(d -> d.kind() == ExplorePaint.MapKind.MARK)
+                .map(ExplorePaint.MapDot::story))
+                .as("automap diamonds keep the story kind so vault teal is not leftover red")
+                .containsExactly("ENTRANCE");
+        float[] vault = new float[3];
+        ExplorePaint.mapMarkTint("VAULT", vault);
+        assertThat(vault[2]).isGreaterThan(vault[0]);
+        float[] boss = new float[3];
+        ExplorePaint.mapMarkTint("BOSS", boss);
+        assertThat(boss[0]).isGreaterThan(boss[2]);
+        float[] soft = new float[3];
+        ExplorePaint.mapMarkSoftTint("VAULT", soft);
+        assertThat(soft[2]).isLessThan(vault[2]);
+        assertThat(ExplorePaint.MAP_MARK_SOFT_WEIGHT).isEqualTo(0.58f);
         assertThat(ExplorePaint.MAP_HERE_HALO)
                 .as("HERE wears a soft pad wider than the cell")
                 .isGreaterThan(0.5f);

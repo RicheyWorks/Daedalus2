@@ -62,6 +62,8 @@ public final class ExplorePaint {
     public static final float MAP_MARK_R = 0.78f;
     public static final float MAP_MARK_G = 0.22f;
     public static final float MAP_MARK_B = 0.16f;
+    /** Halo under a story mark — same dim as the old leftover-red pad. */
+    public static final float MAP_MARK_SOFT_WEIGHT = 0.58f;
     /** Earned-map stone — same corridor tints, not a separate admin brown. */
     public static final float MAP_FLOOR_R = 0.34f;
     public static final float MAP_FLOOR_G = 0.24f;
@@ -190,7 +192,10 @@ public final class ExplorePaint {
         MARK
     }
 
-    public record MapDot(int x, int y, MapKind kind) {
+    public record MapDot(int x, int y, MapKind kind, String story) {
+        public MapDot(int x, int y, MapKind kind) {
+            this(x, y, kind, "");
+        }
     }
 
     /**
@@ -732,7 +737,7 @@ public final class ExplorePaint {
                     continue;
                 }
                 out.add(new MapDot(project(tc, minC, maxC),
-                        MAP - 1 - project(tr, minR, maxR), MapKind.MARK));
+                        MAP - 1 - project(tr, minR, maxR), MapKind.MARK, mark.kind()));
             }
         }
         if (body != null) {
@@ -742,6 +747,21 @@ public final class ExplorePaint {
                     MAP - 1 - project(tr, minR, maxR), MapKind.HERE));
         }
         return List.copyOf(out);
+    }
+
+    /** Automap diamond — same inks as the HUD key, not leftover red on every mark. */
+    public static void mapMarkTint(String kind, float[] rgb) {
+        marker(kind, rgb);
+    }
+
+    public static void mapMarkSoftTint(String kind, float[] rgb) {
+        mapMarkTint(kind, rgb);
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        rgb[0] *= MAP_MARK_SOFT_WEIGHT;
+        rgb[1] *= MAP_MARK_SOFT_WEIGHT;
+        rgb[2] *= MAP_MARK_SOFT_WEIGHT;
     }
 
     public static void marker(String kind, float[] rgb) {
