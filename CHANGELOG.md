@@ -642,6 +642,8 @@ under the `_migration/` portfolios.
   lamp, not leftover OS ice on torch stone.
   The well canvas stays pixel-crisp so torch stone sits in the lamp,
   not leftover OS smear on the board.
+  Firefox well canvas stays edge-crisp so torch stone sits in the lamp,
+  not leftover OS smear on the board.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
