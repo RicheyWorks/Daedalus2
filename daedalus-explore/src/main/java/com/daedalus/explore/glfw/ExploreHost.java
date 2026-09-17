@@ -749,7 +749,8 @@ public final class ExploreHost {
             if (dot.kind() == ExplorePaint.MapKind.HERE
                     || dot.kind() == ExplorePaint.MapKind.MARK
                     || dot.kind() == ExplorePaint.MapKind.START
-                    || dot.kind() == ExplorePaint.MapKind.GOAL) {
+                    || dot.kind() == ExplorePaint.MapKind.GOAL
+                    || dot.kind() == ExplorePaint.MapKind.BLOCK) {
                 continue;
             }
             mapColor(dot.kind(), seconds);
@@ -793,6 +794,23 @@ public final class ExploreHost {
             glColor3f(ink[0], ink[1], ink[2]);
             fill(x0 - padX, y0 - padY, x0 + sx + padX, y0 + sy + padY);
             ExplorePaint.mapMarkTint(dot.story(), ink);
+            glColor3f(ink[0], ink[1], ink[2]);
+            fill(x0, y0, x0 + sx, y0 + sy);
+        }
+        float blockHalo = ExplorePaint.mapBlockHalo(seconds);
+        for (ExplorePaint.MapDot dot : dots) {
+            if (dot.kind() != ExplorePaint.MapKind.BLOCK) {
+                continue;
+            }
+            double x0 = left + dot.x() * sx;
+            double y0 = bot + dot.y() * sy;
+            double padX = sx * blockHalo;
+            double padY = sy * blockHalo;
+            float[] ink = new float[3];
+            ExplorePaint.mapBlockSoftTint(ink);
+            glColor3f(ink[0], ink[1], ink[2]);
+            fill(x0 - padX, y0 - padY, x0 + sx + padX, y0 + sy + padY);
+            ExplorePaint.mapStoneTint(ExplorePaint.MapKind.BLOCK, seconds, ink);
             glColor3f(ink[0], ink[1], ink[2]);
             fill(x0, y0, x0 + sx, y0 + sy);
         }

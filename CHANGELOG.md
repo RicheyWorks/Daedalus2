@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore automap cube pad.**
+  Earned occupied cubes wear a torch-wood halo on the pocket, same
+  width as story marks, so the slab is a place on the page and not a
+  leftover flat pixel.
+
 - **Explore cube and street caption wash.**
   WOOD / STONE / DIRT / GLASS underglow lifts toward their lamp inks,
   and a named street underglow lifts toward torch wood, so leftover

@@ -234,6 +234,25 @@ public final class ExplorePaint {
     public static final float MAP_BLOCK_R = 0.58f;
     public static final float MAP_BLOCK_G = 0.38f;
     public static final float MAP_BLOCK_B = 0.18f;
+    /** Soft pad under an earned cube — presence, not a flat wood pixel. */
+    public static final float MAP_BLOCK_HALO = MAP_MARK_HALO;
+    public static final float MAP_BLOCK_BREATH_MS = MAP_HERE_BREATH_MS;
+
+    public static float mapBlockHalo(double seconds) {
+        double t = ((seconds * 1000.0) % MAP_BLOCK_BREATH_MS) / MAP_BLOCK_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return MAP_BLOCK_HALO * (float) (0.85 + 0.30 * wave);
+    }
+
+    public static void mapBlockSoftTint(float[] rgb) {
+        mapStoneTint(MapKind.BLOCK, 0, rgb);
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        rgb[0] *= MAP_MARK_SOFT_WEIGHT;
+        rgb[1] *= MAP_MARK_SOFT_WEIGHT;
+        rgb[2] *= MAP_MARK_SOFT_WEIGHT;
+    }
     /** Map stone breath — same cadence as the gold frame. */
     public static final float MAP_STONE_BREATH_MS = MAP_HERE_BREATH_MS;
 

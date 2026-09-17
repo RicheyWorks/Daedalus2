@@ -351,6 +351,15 @@ class ExplorePaintTest {
         assertThat(cube[0]).as("block ink is torch wood, not leftover ice")
                 .isGreaterThan(ExplorePaint.MAP_FLOOR_R);
         assertThat(cube[2]).isLessThan(cube[0]);
+        assertThat(ExplorePaint.MAP_BLOCK_HALO)
+                .as("earned cubes wear a soft pad like story marks")
+                .isEqualTo(ExplorePaint.MAP_MARK_HALO);
+        float[] cubeSoft = new float[3];
+        ExplorePaint.mapBlockSoftTint(cubeSoft);
+        assertThat(cubeSoft[0]).isLessThan(cube[0]);
+        assertThat(ExplorePaint.mapBlockHalo(0.1))
+                .isNotEqualTo(ExplorePaint.mapBlockHalo(0.8));
+        ExplorePaint.mapBlockSoftTint(null);
         assertThat(ExplorePaint.MAP_START_G).isEqualTo(0xe0 / 255f);
         float[] exit = new float[3];
         ExplorePaint.mapEndTint(ExplorePaint.MapKind.GOAL, exit);
