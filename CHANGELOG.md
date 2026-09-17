@@ -600,6 +600,8 @@ under the `_migration/` portfolios.
   not a leftover unrimmed pit on torch stone.
   Compare-box well wears a breathing gold lip so those races sit in the lamp,
   not a leftover unrimmed pit on torch stone.
+  Maze status wears a breathing gold hairline so that note sits in the lamp,
+  not leftover unrimmed copy on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
