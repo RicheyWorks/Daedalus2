@@ -1785,6 +1785,10 @@ public class MainController {
                     g.fillRect(mark.x(tile.tileCol()), mark.y(tile.tileRow()),
                             mark.w(tile.tileCol()), mark.h(tile.tileRow()));
                 }
+                Color hi = Color.web(DesktopPaint.fogFloorHiInk(1));
+                for (DesktopPaint.Hairline stroke : DesktopPaint.emptyMarkHairlines(mark)) {
+                    paintHairline(g, stroke, hi);
+                }
                 g.setGlobalAlpha(0.78);
                 paintEndpoint(g, mark, DesktopPaint.EMPTY_MARK_START, theme.start());
                 paintEndpoint(g, mark, DesktopPaint.EMPTY_MARK_GOAL, theme.goal());

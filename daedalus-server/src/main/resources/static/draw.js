@@ -761,6 +761,13 @@
                    geom.offX[c + 1] - geom.offX[c], geom.offY[r + 1] - geom.offY[r]);
       }
     }
+    g.fillStyle = mixHex(COLORS.floorHi, COLORS.floorWarm, 0.28);
+    for (let r = 0; r < tiles.length; r++) {
+      for (let c = 0; c < tiles[r].length; c++) {
+        if (tiles[r][c] === "#" || r % 2 !== 1 || c % 2 !== 1 || geom.cell < 10) continue;
+        g.fillRect(geom.offX[c] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
+      }
+    }
     g.globalAlpha = 0.78;
     endpoint(g, geom, {row: 0, col: 0}, COLORS.start);
     endpoint(g, geom, {row: 2, col: 4}, COLORS.goal);

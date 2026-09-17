@@ -878,6 +878,10 @@ class DesktopPaintTest {
         assertThat(mark.cellSize())
                 .as("budget is 200×140 so a large window does not inflate the mark")
                 .isEqualTo(30.0);
+        assertThat(DesktopPaint.emptyMarkHairlines(mark))
+                .as("idle corridors wear the same 1px shine as the live board")
+                .isNotEmpty();
+        assertThat(DesktopPaint.emptyMarkHairlines(null)).isEmpty();
         assertThat(DesktopPaint.EMPTY_MARK_BUDGET_W).isEqualTo(200.0);
         assertThat(DesktopPaint.EMPTY_MARK_BUDGET_H).isEqualTo(140.0);
         assertThat(DesktopPaint.EMPTY_MARK_LIFT).isEqualTo(48.0);

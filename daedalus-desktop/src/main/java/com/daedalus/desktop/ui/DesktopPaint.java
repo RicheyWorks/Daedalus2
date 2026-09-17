@@ -1901,6 +1901,21 @@ public final class DesktopPaint {
                 fitted.offY());
     }
 
+    /** Corridor shine on the idle mark — same 1px hairline as the live board. */
+    public static List<Hairline> emptyMarkHairlines(Layout mark) {
+        if (mark == null) {
+            return List.of();
+        }
+        List<Hairline> out = new ArrayList<>();
+        for (TileRect tile : emptyMarkFloors()) {
+            Hairline stroke = floorHiStroke(mark, tile.tileRow(), tile.tileCol());
+            if (stroke != null) {
+                out.add(stroke);
+            }
+        }
+        return List.copyOf(out);
+    }
+
     /** Passage tiles of the idle mark. */
     public static List<TileRect> emptyMarkFloors() {
         List<TileRect> out = new ArrayList<>();

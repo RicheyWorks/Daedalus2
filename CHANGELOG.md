@@ -256,6 +256,8 @@ under the `_migration/` portfolios.
   miniature silhouettes, not the same slate as the void.
   Empty-well idle lattice floors warm toward torch-brown with the walls so the
   miniature is one light, not cold slate passages beside warm posts.
+  Empty-well idle lattice floors wear the same 1px corridor shine as the live
+  board so the miniature has stone depth, not flat warm fills.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
