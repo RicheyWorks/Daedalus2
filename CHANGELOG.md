@@ -540,6 +540,8 @@ under the `_migration/` portfolios.
   cool blue on torch stone.
   Complexity-lab axes wear gold hairlines and khaki ticks so the chart sits in the
   lamp, not leftover cool navy on torch stone.
+  Plugin state chips wear the same warm khaki as ranks so those names sit in the
+  lamp, not leftover cool white on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
