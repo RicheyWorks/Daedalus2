@@ -264,6 +264,8 @@ under the `_migration/` portfolios.
   the warm miniature, not cool slate under DAEDALUS.
   Clear-board floors warm toward torch-brown with fog underfoot so the live well
   is the same stone as the idle mark, not cold slate corridors.
+  Clear-board walls warm toward torch-brown with the floors so posts are the same
+  stone, not cold ink around warm corridors.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

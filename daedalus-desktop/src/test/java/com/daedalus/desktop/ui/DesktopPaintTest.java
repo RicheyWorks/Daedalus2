@@ -497,8 +497,10 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.FLOOR_DIM).isEqualTo("#2a333c");
         assertThat(DesktopPaint.FLOOR_EDGE_DIM).isEqualTo(0.22);
         assertThat(DesktopPaint.WALL_EDGE_DIM).isEqualTo(0.28);
-        assertThat(DesktopPaint.wallInk(0)).isEqualTo(DesktopPaint.FOG_WALL);
-        assertThat(DesktopPaint.wallInk(1)).isNotEqualTo(DesktopPaint.FOG_WALL);
+        assertThat(DesktopPaint.wallInk(0)).isEqualTo(DesktopPaint.mixHex(
+                DesktopPaint.FOG_WALL, DesktopPaint.FOG_WALL_WARM, 0.28));
+        assertThat(DesktopPaint.wallInk(0)).isNotEqualTo(DesktopPaint.FOG_WALL);
+        assertThat(DesktopPaint.wallInk(1)).isNotEqualTo(DesktopPaint.wallInk(0));
         DesktopPaint.Layout edgeLayout = DesktopPaint.Layout.fit(5, 5, 100, 100);
         assertThat(DesktopPaint.floorEdge(edgeLayout, 0, 0))
                 .isGreaterThan(DesktopPaint.floorEdge(edgeLayout, 2, 2));

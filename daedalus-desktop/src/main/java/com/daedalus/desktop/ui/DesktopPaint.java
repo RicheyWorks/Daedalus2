@@ -282,9 +282,10 @@ public final class DesktopPaint {
                 0.28 * Math.max(0, Math.min(1, intensity)));
     }
 
-    /** Clear wall ink darkens toward unseen at the rim. */
+    /** Clear wall ink — torch-warm posts, then darker toward unseen at the rim. */
     public static String wallInk(double edge) {
-        return mixHex(FOG_WALL, FOG_UNSEEN, WALL_EDGE_DIM * Math.max(0, Math.min(1, edge)));
+        String warm = mixHex(FOG_WALL, FOG_WALL_WARM, 0.28);
+        return mixHex(warm, FOG_UNSEEN, WALL_EDGE_DIM * Math.max(0, Math.min(1, edge)));
     }
     /** Coral wash — same token as {@code draw.js} hot spots. */
     public static final String HOTSPOT = "#e5484d";
