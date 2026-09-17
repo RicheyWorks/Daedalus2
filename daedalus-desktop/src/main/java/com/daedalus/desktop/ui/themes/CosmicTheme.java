@@ -26,6 +26,8 @@ public class CosmicTheme implements Theme {
     public static final String WALL_INK = "#19140f";
     /** Same 0.28 torch mix as the live well / legend floor swatch. */
     public static final String PASSAGE_INK = "#484339";
+    /** Search-memory wash — torch-brown, not leftover cool slate on the well. */
+    public static final String VISITED_INK = "#3a3024";
 
     @Override public Color background()       { return Color.web("#07090c"); }
     @Override public Color wall()             { return Color.web(WALL_INK); }
@@ -33,7 +35,7 @@ public class CosmicTheme implements Theme {
     @Override public Color start()            { return Color.web("#3ee08f"); }
     @Override public Color goal()             { return Color.web("#ff5a5f"); }
     @Override public Color path()             { return Color.web("#8fb8ff"); }
-    @Override public Color visited()          { return Color.web("#2a3440"); }
+    @Override public Color visited()          { return Color.web(VISITED_INK); }
     @Override public Color frontier()         { return Color.web("#7eb6ff"); }
     @Override public Color player()           { return Color.web("#f5c14a"); }
     @Override public Color accent()           { return Color.web("#3ee08f"); }

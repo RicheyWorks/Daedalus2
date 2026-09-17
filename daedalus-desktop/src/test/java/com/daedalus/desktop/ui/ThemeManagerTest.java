@@ -77,6 +77,10 @@ class ThemeManagerTest {
         }
         assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.PASSAGE_INK).isEqualTo("#484339");
         assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.WALL_INK).isEqualTo("#19140f");
+        assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.VISITED_INK).isEqualTo("#3a3024");
+        assertThat(Integer.parseInt(com.daedalus.desktop.ui.themes.CosmicTheme.VISITED_INK.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(
+                        com.daedalus.desktop.ui.themes.CosmicTheme.VISITED_INK.substring(5, 7), 16));
     }
 
     @Test

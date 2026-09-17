@@ -318,6 +318,8 @@ under the `_migration/` portfolios.
   the idle miniature is letterboxed in the lamp, not a flat wall slab.
   Start-gate stage warms to the well's lit void so the landing sits in the same
   lamp as the board, not a cool blue pit before you enter.
+  Desktop search-memory wash warms to torch-brown so visited cells sit in the
+  lamp, not leftover cool slate on the well.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
