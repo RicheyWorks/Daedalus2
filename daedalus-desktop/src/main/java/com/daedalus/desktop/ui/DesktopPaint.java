@@ -2100,18 +2100,27 @@ public final class DesktopPaint {
     }
 
     /** Idle start / goal floors — same 0.42 wash as the live well. */
-    public static String emptyMarkFloorInk(int tileRow, int tileCol) {
+    public static TileType emptyMarkTile(int tileRow, int tileCol) {
         int startRow = 2 * EMPTY_MARK_START.row() + 1;
         int startCol = 2 * EMPTY_MARK_START.col() + 1;
         int goalRow = 2 * EMPTY_MARK_GOAL.row() + 1;
         int goalCol = 2 * EMPTY_MARK_GOAL.col() + 1;
         if (tileRow == startRow && tileCol == startCol) {
-            return endFloorInk(EMPTY_MARK_FLOOR, TileType.START);
+            return TileType.START;
         }
         if (tileRow == goalRow && tileCol == goalCol) {
-            return endFloorInk(EMPTY_MARK_FLOOR, TileType.GOAL);
+            return TileType.GOAL;
         }
-        return EMPTY_MARK_FLOOR;
+        return TileType.PASSAGE;
+    }
+
+    public static String emptyMarkFloorInk(int tileRow, int tileCol) {
+        return endFloorInk(EMPTY_MARK_FLOOR, emptyMarkTile(tileRow, tileCol));
+    }
+
+    /** Idle corridor shine — same mint / coral wash as the live hairline. */
+    public static String emptyMarkFloorHiInk(int tileRow, int tileCol) {
+        return endFloorInk(fogFloorHiInk(1), emptyMarkTile(tileRow, tileCol));
     }
 
     /** Passage tiles of the idle mark. */

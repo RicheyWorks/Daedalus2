@@ -1798,9 +1798,11 @@ public class MainController {
                     g.fillRect(mark.x(tile.tileCol()), mark.y(tile.tileRow()),
                             mark.w(tile.tileCol()), mark.h(tile.tileRow()));
                 }
-                Color hi = Color.web(DesktopPaint.fogFloorHiInk(1));
-                for (DesktopPaint.Hairline stroke : DesktopPaint.emptyMarkHairlines(mark)) {
-                    paintHairline(g, stroke, hi);
+                for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkFloors()) {
+                    paintHairline(g, DesktopPaint.floorHiStroke(
+                            mark, tile.tileRow(), tile.tileCol()),
+                            Color.web(DesktopPaint.emptyMarkFloorHiInk(
+                                    tile.tileRow(), tile.tileCol())));
                 }
                 g.setGlobalAlpha(0.78);
                 paintEndpoint(g, mark, DesktopPaint.EMPTY_MARK_START, theme.start());
@@ -1873,7 +1875,8 @@ public class MainController {
                 g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
                 if (role != TileType.WALL) {
                     paintHairline(g, DesktopPaint.floorHiStroke(layout, r, c),
-                            Color.web(DesktopPaint.clearFloorHiInk(edge)));
+                            Color.web(DesktopPaint.endFloorInk(
+                                    DesktopPaint.clearFloorHiInk(edge), tiles[r][c])));
                 }
             }
         }
@@ -2241,7 +2244,8 @@ public class MainController {
                 g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
                 double intensity = DesktopPaint.fogFloorIntensity(fog, r, c);
                 paintHairline(g, DesktopPaint.floorHiStroke(layout, r, c, intensity),
-                        Color.web(DesktopPaint.fogFloorHiInk(intensity)));
+                        Color.web(DesktopPaint.endFloorInk(
+                                DesktopPaint.fogFloorHiInk(intensity), tiles[r][c])));
             }
         }
         if (!playerWalk.isEmpty() && theme != null) {

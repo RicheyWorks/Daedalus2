@@ -125,7 +125,9 @@ class WebUiPaintPinTest {
                     .contains("mixHex(base, COLORS.start, END_FLOOR_W)")
                     .contains("mixHex(base, COLORS.goal, END_FLOOR_W)")
                     .contains("endFloorInk(mixHex(COLORS.floorDim, lit, lamp), t)")
-                    .contains("endFloorInk(mixHex(warm, COLORS.floorDim, 0.22 * edge), t)");
+                    .contains("endFloorInk(mixHex(warm, COLORS.floorDim, 0.22 * edge), t)")
+                    .contains("endFloorInk(mixHex(COLORS.floorHi, COLORS.floorWarm, lamp * 0.28), t)")
+                    .contains("endFloorInk(mixHex(hi, COLORS.floorDim, 0.22 * edge), t)");
         }
     }
 
@@ -136,7 +138,9 @@ class WebUiPaintPinTest {
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js).contains("const idleFloor = mixHex(COLORS.floor, COLORS.floorWarm, 0.28)")
                     .contains("(r === 1 && c === 1) ? \"S\" : (r === 5 && c === 9) ? \"G\"")
-                    .contains("endFloorInk(idleFloor, end)");
+                    .contains("endFloorInk(idleFloor, end)")
+                    .contains("const idleHi = mixHex(COLORS.floorHi, COLORS.floorWarm, 0.28)")
+                    .contains("endFloorInk(idleHi, end)");
         }
     }
 }

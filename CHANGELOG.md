@@ -93,6 +93,7 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- Well start and goal corridor shine washes toward mint and coral on web and desktop so the 1px hairline names the ends of the maze, not leftover torch on mint and coral stone.
 - Idle-well start and goal floors wash toward mint and coral on web and desktop so the empty mark names the ends of the maze, not leftover bare stone.
 - Well start and goal floors wash toward mint and coral on web and desktop so the ends of the maze sit in the corridor, not leftover bare stone.
 - Explore status names stood-on start and goal so the strip says START / GOAL, not leftover HALL on the ends of the maze.

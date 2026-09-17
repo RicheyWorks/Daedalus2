@@ -407,7 +407,7 @@
           g.fillRect(geom.offX[col], geom.offY[r],
                      geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
           if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
-            g.fillStyle = mixHex(COLORS.floorHi, COLORS.floorWarm, lamp * 0.28);
+            g.fillStyle = endFloorInk(mixHex(COLORS.floorHi, COLORS.floorWarm, lamp * 0.28), t);
             g.fillRect(geom.offX[col] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
           }
         } else {
@@ -422,7 +422,7 @@
                      geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
           if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
             const hi = mixHex(COLORS.floorHi, COLORS.floorWarm, 0.28);
-            g.fillStyle = mixHex(hi, COLORS.floorDim, 0.22 * edge);
+            g.fillStyle = endFloorInk(mixHex(hi, COLORS.floorDim, 0.22 * edge), t);
             g.fillRect(geom.offX[col] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
           }
         }
@@ -794,10 +794,12 @@
                    geom.offX[c + 1] - geom.offX[c], geom.offY[r + 1] - geom.offY[r]);
       }
     }
-    g.fillStyle = mixHex(COLORS.floorHi, COLORS.floorWarm, 0.28);
+    const idleHi = mixHex(COLORS.floorHi, COLORS.floorWarm, 0.28);
     for (let r = 0; r < tiles.length; r++) {
       for (let c = 0; c < tiles[r].length; c++) {
         if (tiles[r][c] === "#" || r % 2 !== 1 || c % 2 !== 1 || geom.cell < 10) continue;
+        const end = (r === 1 && c === 1) ? "S" : (r === 5 && c === 9) ? "G" : " ";
+        g.fillStyle = endFloorInk(idleHi, end);
         g.fillRect(geom.offX[c] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
       }
     }

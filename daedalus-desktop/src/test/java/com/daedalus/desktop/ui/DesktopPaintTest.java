@@ -1024,6 +1024,18 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.emptyMarkFloorInk(1, 3))
                 .as("idle mid-corridor stays leftover-warm stone")
                 .isEqualTo(idleStone);
+        String idleHi = DesktopPaint.fogFloorHiInk(1);
+        assertThat(DesktopPaint.emptyMarkTile(1, 1)).isEqualTo(TileType.START);
+        assertThat(DesktopPaint.emptyMarkTile(5, 9)).isEqualTo(TileType.GOAL);
+        assertThat(DesktopPaint.emptyMarkFloorHiInk(1, 1))
+                .as("idle start shine lifts toward well mint")
+                .isEqualTo(DesktopPaint.endFloorInk(idleHi, TileType.START));
+        assertThat(DesktopPaint.emptyMarkFloorHiInk(5, 9))
+                .as("idle goal shine lifts toward well coral")
+                .isEqualTo(DesktopPaint.endFloorInk(idleHi, TileType.GOAL));
+        assertThat(DesktopPaint.emptyMarkFloorHiInk(1, 3))
+                .as("idle mid-corridor shine stays leftover torch")
+                .isEqualTo(idleHi);
         DesktopPaint.Layout mark = DesktopPaint.emptyMarkLayout(400, 300);
         assertThat(mark).isNotNull();
         assertThat(mark.cellSize())
