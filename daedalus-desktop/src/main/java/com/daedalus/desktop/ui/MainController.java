@@ -1962,7 +1962,8 @@ public class MainController {
                     if (tone == null) {
                         continue;
                     }
-                    g.setFill(Color.web(tone.color()));
+                    g.setFill(Color.web(DesktopPaint.fieldInk(tone.color(),
+                            DesktopPaint.floorEdge(layout, 2 * r + 1, 2 * c + 1))));
                     g.setGlobalAlpha(DesktopPaint.fieldPaintAlpha(tone.alpha(), fieldWave));
                     g.fillRect(layout.x(2 * c + 1), layout.y(2 * r + 1),
                             layout.w(2 * c + 1), layout.h(2 * r + 1));

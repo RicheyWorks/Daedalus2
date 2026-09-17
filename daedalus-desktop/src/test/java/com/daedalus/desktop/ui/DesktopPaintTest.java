@@ -694,6 +694,12 @@ class DesktopPaintTest {
                 .isGreaterThan(Integer.parseInt(DesktopPaint.DISTANCE_RAMP[0].substring(5, 7), 16));
         assertThat(Integer.parseInt(DesktopPaint.DISTANCE_RAMP[7].substring(1, 3), 16))
                 .isGreaterThan(Integer.parseInt(DesktopPaint.DISTANCE_RAMP[7].substring(5, 7), 16));
+        assertThat(DesktopPaint.FIELD_EDGE_DIM).isEqualTo(0.22);
+        assertThat(DesktopPaint.fieldInk(DesktopPaint.DISTANCE_RAMP[0], 0))
+                .isEqualTo(DesktopPaint.DISTANCE_RAMP[0]);
+        assertThat(DesktopPaint.fieldInk(DesktopPaint.DISTANCE_RAMP[0], 1))
+                .as("field rim falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.DISTANCE_RAMP[0]);
         DesktopPaint.FieldTone near = DesktopPaint.fieldCell(0, 10);
         DesktopPaint.FieldTone far = DesktopPaint.fieldCell(10, 10);
         assertThat(near.color()).isEqualTo("#4a2210");

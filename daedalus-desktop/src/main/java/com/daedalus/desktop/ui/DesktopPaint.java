@@ -1111,6 +1111,15 @@ public final class DesktopPaint {
     public record FieldTone(String color, double alpha) {
     }
 
+    public static final double FIELD_EDGE_DIM = 0.22;
+
+    public static String fieldInk(String color, double edge) {
+        if (color == null) {
+            return null;
+        }
+        return mixHex(color, FLOOR_DIM, FIELD_EDGE_DIM * Math.max(0, Math.min(1, edge)));
+    }
+
     public static FieldTone fieldCell(int distance, int maxDistance) {
         if (distance < 0) {
             return null;
