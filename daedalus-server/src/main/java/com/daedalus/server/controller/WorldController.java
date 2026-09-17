@@ -7,6 +7,8 @@ import com.daedalus.api.dto.BlockMutationResponse;
 import com.daedalus.api.dto.ChunkInspectResponse;
 import com.daedalus.api.dto.DoorInspectResponse;
 import com.daedalus.api.dto.DoorMutationResponse;
+import com.daedalus.api.dto.NpcInspectResponse;
+import com.daedalus.api.dto.NpcMutationResponse;
 import com.daedalus.api.dto.PortalInspectResponse;
 import com.daedalus.api.dto.PortalMutationResponse;
 import com.daedalus.api.dto.TrapInspectResponse;
@@ -29,6 +31,8 @@ import com.daedalus.world.BlockType;
 import com.daedalus.world.Chunk;
 import com.daedalus.world.Door;
 import com.daedalus.world.DoorResult;
+import com.daedalus.world.Npc;
+import com.daedalus.world.NpcResult;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
 import com.daedalus.world.Trap;
@@ -280,6 +284,43 @@ public class WorldController {
         World world = mounted(id);
         return ResponseEntity.ok(new PortalMutationResponse(
                 portal.id(), portal.state().name(), result.name(), world.revision().value()));
+    }
+
+    @GetMapping("/world/{id}/npc")
+    @Operation(summary = "Inspect the programmable NPC.")
+    public ResponseEntity<NpcInspectResponse> inspectNpc(@PathVariable String id) {
+        mounted(id);
+        Npc npc = worlds.inspectNpc(id);
+        if (npc == null) {
+            throw ResourceNotFoundException.world(id);
+        }
+        return ResponseEntity.ok(new NpcInspectResponse(
+                npc.id(), npc.worldId().value(),
+                npc.at().x(), npc.at().y(), npc.at().z(), npc.state().name()));
+    }
+
+    @PostMapping("/world/{id}/npc/talk")
+    @Operation(summary = "Talk to the NPC. ALREADY_SPEAKING is a result, not silence.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<NpcMutationResponse> talkNpc(@PathVariable String id) {
+        mounted(id);
+        NpcResult result = worlds.talkNpc(id);
+        Npc npc = worlds.inspectNpc(id);
+        World world = mounted(id);
+        return ResponseEntity.ok(new NpcMutationResponse(
+                npc.id(), npc.state().name(), result.name(), world.revision().value()));
+    }
+
+    @PostMapping("/world/{id}/npc/hush")
+    @Operation(summary = "Hush the NPC. ALREADY_IDLE is a result, not silence.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<NpcMutationResponse> hushNpc(@PathVariable String id) {
+        mounted(id);
+        NpcResult result = worlds.hushNpc(id);
+        Npc npc = worlds.inspectNpc(id);
+        World world = mounted(id);
+        return ResponseEntity.ok(new NpcMutationResponse(
+                npc.id(), npc.state().name(), result.name(), world.revision().value()));
     }
 
     private World mounted(String id) {

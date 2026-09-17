@@ -38,6 +38,9 @@ public final class WorldZeroCapabilities {
         registry.register("portal.inspect");
         registry.register("portal.open");
         registry.register("portal.seal");
+        registry.register("npc.inspect");
+        registry.register("npc.talk");
+        registry.register("npc.hush");
         if (extras != null) {
             for (String extra : extras) {
                 registry.register(extra);

@@ -8,6 +8,8 @@ import com.daedalus.world.Chunk;
 import com.daedalus.world.ChunkCoordinate;
 import com.daedalus.world.Door;
 import com.daedalus.world.DoorResult;
+import com.daedalus.world.Npc;
+import com.daedalus.world.NpcResult;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
 import com.daedalus.world.Trap;
@@ -45,6 +47,9 @@ public final class WorldOps {
             case "portal.inspect" -> inspectPortal(world);
             case "portal.open" -> world.openPortal();
             case "portal.seal" -> world.sealPortal();
+            case "npc.inspect" -> inspectNpc(world);
+            case "npc.talk" -> world.talkNpc();
+            case "npc.hush" -> world.hushNpc();
             default -> throw new IllegalArgumentException("Unknown capability " + capability);
         };
     }
@@ -123,5 +128,20 @@ public final class WorldOps {
 
     public static PortalResult asPortalResult(Object value) {
         return (PortalResult) value;
+    }
+
+    private static Map<String, Object> inspectNpc(World world) {
+        Npc npc = world.npc();
+        if (npc == null) {
+            throw new IllegalStateException("This world has no npc");
+        }
+        Map<String, Object> out = new LinkedHashMap<>();
+        out.put("id", npc.id());
+        out.put("state", npc.state().name());
+        return out;
+    }
+
+    public static NpcResult asNpcResult(Object value) {
+        return (NpcResult) value;
     }
 }

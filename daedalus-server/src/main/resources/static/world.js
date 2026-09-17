@@ -14,8 +14,9 @@
       const door = await host.api("/world/" + WORLD + "/door");
       const trap = await host.api("/world/" + WORLD + "/trap");
       const portal = await host.api("/world/" + WORLD + "/portal");
+      const npc = await host.api("/world/" + WORLD + "/npc");
       const chunk = await host.api("/world/" + WORLD + "/chunk?x=0&y=0&z=0");
-      paint(box, world, door, trap, portal, chunk);
+      paint(box, world, door, trap, portal, npc, chunk);
     } catch (e) {
       box.textContent = "world inspect unavailable — " + (e && e.message ? e.message : e);
     }
@@ -32,7 +33,7 @@
     inspect(host);
   }
 
-  function paint(box, world, door, trap, portal, chunk) {
+  function paint(box, world, door, trap, portal, npc, chunk) {
     box.replaceChildren();
     row(box, "world", world && world.id ? world.id : WORLD);
     row(box, "revision", world && world.revision != null ? String(world.revision) : "—");
@@ -40,6 +41,7 @@
     row(box, "door", door && door.state ? door.state : "—");
     row(box, "trap", trap && trap.state ? trap.state : "—");
     row(box, "portal", portal && portal.state ? portal.state : "—");
+    row(box, "npc", npc && npc.state ? npc.state : "—");
     const slice = chunk && chunk.present
         ? "0,0,0 occupied " + chunk.occupied
         : "0,0,0 empty";

@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World npc-zero.**
+  `npc-zero` talks and hushes with named results (`SPOKE`,
+  `ALREADY_SPEAKING`, `HUSHED`, `ALREADY_IDLE`). Inspect is quiet;
+  a real talk/hush bumps revision and persists on DAEW v6. Human REST
+  and `WorldOps` share `npc.inspect` / `npc.talk` / `npc.hush`.
+  The well world panel names the state. Door, trap, and portal stay first.
+
 - **World portal-zero.**
   `portal-zero` opens and seals with named results (`OPENED`,
   `ALREADY_OPEN`, `SEALED`, `ALREADY_SEALED`). Inspect is quiet;

@@ -34,6 +34,8 @@ public final class World {
     private final Trap trap;
     /** Assigned once; open/seal mutate {@link Portal} under {@link #lock}. */
     private final Portal portal;
+    /** Assigned once; talk/hush mutate {@link Npc} under {@link #lock}. */
+    private final Npc npc;
     private final List<Parcel> parcels = new ArrayList<>();
     private final ConcurrentHashMap<ParcelId, ParcelAcl> acls = new ConcurrentHashMap<>();
     private int nextParcelNumber;
@@ -44,15 +46,17 @@ public final class World {
                 : null,
                 WorldId.ZERO.equals(id) ? Trap.zero() : null,
                 WorldId.ZERO.equals(id) ? Portal.zero() : null,
+                WorldId.ZERO.equals(id) ? Npc.zero() : null,
                 0L, Map.of(), List.of());
     }
 
-    private World(WorldId id, Door door, Trap trap, Portal portal, long revision,
+    private World(WorldId id, Door door, Trap trap, Portal portal, Npc npc, long revision,
             Map<ChunkCoordinate, Chunk> seeded, List<Parcel> seededParcels) {
         this.id = Objects.requireNonNull(id, "WorldId is required");
         this.door = door;
         this.trap = trap;
         this.portal = portal;
+        this.npc = npc;
         this.revision.set(revision);
         for (Map.Entry<ChunkCoordinate, Chunk> e : seeded.entrySet()) {
             this.chunks.put(e.getKey(), e.getValue().copy());
@@ -244,6 +248,38 @@ public final class World {
         }
     }
 
+    public Npc npc() {
+        synchronized (lock) {
+            return npc == null ? null : npc.copy();
+        }
+    }
+
+    public NpcResult talkNpc() {
+        synchronized (lock) {
+            if (npc == null) {
+                throw new IllegalStateException("This world has no npc");
+            }
+            NpcResult result = npc.talk();
+            if (result == NpcResult.SPOKE) {
+                revision.incrementAndGet();
+            }
+            return result;
+        }
+    }
+
+    public NpcResult hushNpc() {
+        synchronized (lock) {
+            if (npc == null) {
+                throw new IllegalStateException("This world has no npc");
+            }
+            NpcResult result = npc.hush();
+            if (result == NpcResult.HUSHED) {
+                revision.incrementAndGet();
+            }
+            return result;
+        }
+    }
+
     /**
      * Deep copy for a snapshot. Inspect: revision does not move.
      */
@@ -257,6 +293,7 @@ public final class World {
                     door == null ? null : door.copy(),
                     trap == null ? null : trap.copy(),
                     portal == null ? null : portal.copy(),
+                    npc == null ? null : npc.copy(),
                     List.copyOf(parcels));
         }
     }
@@ -362,6 +399,7 @@ public final class World {
                 snapshot.door() == null ? null : snapshot.door().copy(),
                 snapshot.trap() == null ? null : snapshot.trap().copy(),
                 snapshot.portal() == null ? null : snapshot.portal().copy(),
+                snapshot.npc() == null ? null : snapshot.npc().copy(),
                 snapshot.revision().value(),
                 snapshot.chunks(),
                 snapshot.parcels());

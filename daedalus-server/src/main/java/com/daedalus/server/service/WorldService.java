@@ -9,6 +9,8 @@ import com.daedalus.world.Chunk;
 import com.daedalus.world.ChunkCoordinate;
 import com.daedalus.world.Door;
 import com.daedalus.world.DoorResult;
+import com.daedalus.world.Npc;
+import com.daedalus.world.NpcResult;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
 import com.daedalus.world.Trap;
@@ -87,6 +89,11 @@ public class WorldService {
     public Portal inspectPortal(String id) {
         World live = require(id);
         return live == null ? null : live.portal();
+    }
+
+    public Npc inspectNpc(String id) {
+        World live = require(id);
+        return live == null ? null : live.npc();
     }
 
     public BlockType place(String id, int x, int y, int z, BlockType type) {
@@ -170,6 +177,26 @@ public class WorldService {
             PortalResult result = live.sealPortal();
             persist();
             log.append("portal.seal", result, live.revision().value());
+            return result;
+        }
+    }
+
+    public NpcResult talkNpc(String id) {
+        World live = require(id);
+        synchronized (lock) {
+            NpcResult result = live.talkNpc();
+            persist();
+            log.append("npc.talk", result, live.revision().value());
+            return result;
+        }
+    }
+
+    public NpcResult hushNpc(String id) {
+        World live = require(id);
+        synchronized (lock) {
+            NpcResult result = live.hushNpc();
+            persist();
+            log.append("npc.hush", result, live.revision().value());
             return result;
         }
     }

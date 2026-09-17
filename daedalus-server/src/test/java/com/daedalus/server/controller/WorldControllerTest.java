@@ -53,7 +53,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.worldId", equalTo("world-zero")))
                 .andExpect(jsonPath("$.capabilities", org.hamcrest.Matchers.hasItems(
                         "world.inspect", "block.place", "door.open", "door.close",
-                        "trap.arm", "trap.disarm", "portal.open", "portal.seal")));
+                        "trap.arm", "trap.disarm", "portal.open", "portal.seal",
+                        "npc.talk", "npc.hush")));
 
         mvc.perform(get("/api/v1/world/world-zero/observe")
                         .param("x", "1").param("y", "2").param("z", "3"))
@@ -160,6 +161,20 @@ class WorldControllerTest {
         mvc.perform(post("/api/v1/world/world-zero/portal/open"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("ALREADY_OPEN")));
+
+        mvc.perform(get("/api/v1/world/world-zero/npc"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", equalTo("npc-zero")))
+                .andExpect(jsonPath("$.state", equalTo("IDLE")));
+
+        mvc.perform(post("/api/v1/world/world-zero/npc/talk"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("SPOKE")))
+                .andExpect(jsonPath("$.state", equalTo("SPEAKING")));
+
+        mvc.perform(post("/api/v1/world/world-zero/npc/talk"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("ALREADY_SPEAKING")));
     }
 
     @Test

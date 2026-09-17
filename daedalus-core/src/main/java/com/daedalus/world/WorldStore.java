@@ -23,11 +23,12 @@ import java.util.Map;
 public final class WorldStore {
 
     static final byte[] MAGIC = "DAEW".getBytes(StandardCharsets.US_ASCII);
-    static final int VERSION = 5;
+    static final int VERSION = 6;
     static final int VERSION_CHUNKS_ONLY = 1;
     static final int VERSION_WITH_DOOR = 2;
     static final int VERSION_WITH_PARCELS = 3;
     static final int VERSION_WITH_TRAP = 4;
+    static final int VERSION_WITH_PORTAL = 5;
 
     private WorldStore() {
     }
@@ -123,6 +124,15 @@ public final class WorldStore {
             out.writeInt(portal.at().z());
             out.writeUTF(portal.state().name());
         }
+        Npc npc = snapshot.npc();
+        out.writeBoolean(npc != null);
+        if (npc != null) {
+            out.writeUTF(npc.id());
+            out.writeInt(npc.at().x());
+            out.writeInt(npc.at().y());
+            out.writeInt(npc.at().z());
+            out.writeUTF(npc.state().name());
+        }
     }
 
     static WorldSnapshot read(DataInputStream in) throws IOException {
@@ -131,7 +141,8 @@ public final class WorldStore {
             throw new IOException("Not a Daedalus world snapshot");
         }
         int version = in.readUnsignedByte();
-        if (version != VERSION && version != VERSION_WITH_TRAP
+        if (version != VERSION && version != VERSION_WITH_PORTAL
+                && version != VERSION_WITH_TRAP
                 && version != VERSION_WITH_PARCELS
                 && version != VERSION_WITH_DOOR && version != VERSION_CHUNKS_ONLY) {
             throw new IOException("Unsupported world snapshot version " + version);
@@ -190,7 +201,7 @@ public final class WorldStore {
             trap = Trap.zero();
         }
         Portal portal = null;
-        if (version >= VERSION) {
+        if (version >= VERSION_WITH_PORTAL) {
             if (in.readBoolean()) {
                 String portalId = in.readUTF();
                 BlockCoordinate at = new BlockCoordinate(in.readInt(), in.readInt(), in.readInt());
@@ -200,7 +211,18 @@ public final class WorldStore {
         } else if (WorldId.ZERO.equals(id)) {
             portal = Portal.zero();
         }
-        return new WorldSnapshot(id, revision, chunks, door, trap, portal, parcels);
+        Npc npc = null;
+        if (version >= VERSION) {
+            if (in.readBoolean()) {
+                String npcId = in.readUTF();
+                BlockCoordinate at = new BlockCoordinate(in.readInt(), in.readInt(), in.readInt());
+                NpcState state = NpcState.valueOf(in.readUTF());
+                npc = new Npc(npcId, id, at, state);
+            }
+        } else if (WorldId.ZERO.equals(id)) {
+            npc = Npc.zero();
+        }
+        return new WorldSnapshot(id, revision, chunks, door, trap, portal, npc, parcels);
     }
 
     private static void requirePath(Path file) {

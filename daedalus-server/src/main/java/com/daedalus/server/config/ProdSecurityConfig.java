@@ -172,6 +172,7 @@ public class ProdSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/door").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/trap").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/portal").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/npc").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/capabilities").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/observe").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/trace").permitAll()

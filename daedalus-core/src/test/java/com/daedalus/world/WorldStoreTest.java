@@ -87,6 +87,17 @@ class WorldStoreTest {
     }
 
     @Test
+    void aSpeakingNpcSurvivesRestart() throws Exception {
+        World live = World.zero();
+        live.talkNpc();
+        Path file = tmp.resolve("npc.daew");
+        WorldStore.save(live, file);
+        World reloaded = WorldStore.load(file);
+        assertThat(reloaded.npc().state()).isEqualTo(NpcState.SPEAKING);
+        assertThat(reloaded.npc().id()).isEqualTo(Npc.ZERO_ID);
+    }
+
+    @Test
     void snapshotDoesNotShareStorageWithTheLiveWorld() {
         World live = World.zero();
         live.place(new BlockCoordinate(0, 0, 0), BlockType.STONE);

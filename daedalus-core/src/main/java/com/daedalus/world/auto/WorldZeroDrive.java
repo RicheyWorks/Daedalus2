@@ -24,7 +24,10 @@ public final class WorldZeroDrive {
             "trap.disarm",
             "portal.inspect",
             "portal.open",
-            "portal.seal");
+            "portal.seal",
+            "npc.inspect",
+            "npc.talk",
+            "npc.hush");
 
     private WorldZeroDrive() {
     }
