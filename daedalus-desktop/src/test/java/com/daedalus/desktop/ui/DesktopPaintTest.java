@@ -914,6 +914,11 @@ class DesktopPaintTest {
         DesktopPaint.Marker goal = DesktopPaint.endpointMarker(layout, new Point(0, 0));
         assertThat(ring).isNotNull();
         assertThat(DesktopPaint.VICTORY_GOLD).isEqualTo("#f0b429");
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.VICTORY_GOLD, 0))
+                .isEqualTo(DesktopPaint.VICTORY_GOLD);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.VICTORY_GOLD, 1))
+                .as("victory gold falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.VICTORY_GOLD);
         assertThat(ring.radius())
                 .as("web strokes 0.7·cell around the goal")
                 .isEqualTo(layout.cellSize() * 0.7);

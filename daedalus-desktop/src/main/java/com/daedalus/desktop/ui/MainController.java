@@ -2468,9 +2468,13 @@ public class MainController {
     }
 
     private static void paintVictory(GraphicsContext g, DesktopPaint.Layout layout, Point goal) {
+        if (layout == null || goal == null) {
+            return;
+        }
         double wave = DesktopPaint.victoryBreathWave(System.nanoTime());
         DesktopPaint.Marker glow = DesktopPaint.victoryGlow(layout, goal, wave);
-        Color ink = Color.web(DesktopPaint.VICTORY_GOLD);
+        Color ink = Color.web(DesktopPaint.walkTrailInk(DesktopPaint.VICTORY_GOLD,
+                DesktopPaint.floorEdge(layout, 2 * goal.row() + 1, 2 * goal.col() + 1)));
         if (glow != null) {
             g.setGlobalAlpha(DesktopPaint.victoryGlowAlpha(wave));
             g.setFill(ink);
