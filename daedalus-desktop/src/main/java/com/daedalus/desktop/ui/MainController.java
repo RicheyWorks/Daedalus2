@@ -1752,6 +1752,7 @@ public class MainController {
 
         Theme theme = themeManager.active();
         GraphicsContext g = canvas.getGraphicsContext2D();
+        g.setImageSmoothing(DesktopPaint.CANVAS_IMAGE_SMOOTHING);
         g.setTransform(store.scaleX(), 0, 0, store.scaleY(), 0, 0);
 
         if (fogOn()) {

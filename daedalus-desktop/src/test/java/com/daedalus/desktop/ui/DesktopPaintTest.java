@@ -897,6 +897,7 @@ class DesktopPaintTest {
         assertThat(store.pixelH()).isEqualTo(1200);
         assertThat(DesktopPaint.Backing.of(800, 600, 0, 2).scaleX()).isEqualTo(1);
         assertThat(DesktopPaint.Backing.of(0, 600, 2, 2)).isNull();
+        assertThat(DesktopPaint.CANVAS_IMAGE_SMOOTHING).isFalse();
     }
 
     @Test

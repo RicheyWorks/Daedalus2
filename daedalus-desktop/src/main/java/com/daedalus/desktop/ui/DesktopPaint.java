@@ -1934,6 +1934,12 @@ public final class DesktopPaint {
      * so a large window does not blow the mark up into a real dungeon.
      */
     /**
+     * Well bitmap stays crisp — leftover bilinear smear is not torch stone.
+     * Same lamp as web {@code image-rendering: pixelated}.
+     */
+    public static final boolean CANVAS_IMAGE_SMOOTHING = false;
+
+    /**
      * Backing store for a HiDPI canvas. JavaFX {@code Canvas} is a bitmap
      * in its own width×height; painting in CSS pixels on a 2× display
      * smears the same corridors the web used to.
