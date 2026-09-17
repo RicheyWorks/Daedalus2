@@ -700,6 +700,7 @@ under the `_migration/` portfolios.
   The well canvas wears a lamp cursor so leftover OS I-beam ice does not sit on torch stone.
   Start-gate lede sits on lamp wrap so leftover OS ragged ice does not break khaki on torch stone.
   Start-gate door copy sits on lamp wrap so leftover OS ragged ice does not break khaki on torch stone.
+  Header tagline sits on lamp wrap so leftover OS ragged ice does not break khaki beside the brand.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
