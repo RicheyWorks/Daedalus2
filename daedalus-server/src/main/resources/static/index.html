@@ -170,11 +170,15 @@
     0%, 100% { border-top-color: rgba(184, 133, 56, 0.28); }
     50% { border-top-color: rgba(184, 133, 56, 0.48); }
   }
+  @keyframes chevronBreath {
+    0%, 100% { color: rgba(184, 133, 56, 0.55); }
+    50% { color: rgba(184, 133, 56, 0.85); }
+  }
   @media (prefers-reduced-motion: reduce) {
     #gate .gate-brand, #gate .lede, #gate .gate-enter, #gate article, #gate .gate-veil,
     header h1 button, #stage, .board-panel, .panel, header, #legend,
     .exports button, .exports a, #asciiOut, #gate pre, .info, #stats, details,
-    #compareBox > div, kbd {
+    #compareBox > div, kbd, summary::after {
       animation: none;
     }
     #gate .gate-brand {
@@ -244,7 +248,8 @@
             letter-spacing: .12em; color: #b09a72; margin: 4px 0 2px;
             list-style: none; }
   summary::-webkit-details-marker { display: none; }
-  summary::after { content: " ▸"; color: rgba(184, 133, 56, 0.55); }
+  summary::after { content: " ▸"; color: rgba(184, 133, 56, 0.55);
+                  animation: chevronBreath 4.5s ease-in-out infinite; }
   details[open] summary::after { content: " ▾"; }
   .panel { background: var(--panel); border: 1px solid rgba(184, 133, 56, 0.36);
            border-radius: 10px; padding: 14px 16px;
