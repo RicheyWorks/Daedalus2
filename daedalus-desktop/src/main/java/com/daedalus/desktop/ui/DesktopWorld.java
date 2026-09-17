@@ -42,7 +42,7 @@ public final class DesktopWorld {
         if (world == null) {
             return ID + " · unavailable";
         }
-        return inspectLine(world.revision().value(), world.parcels().size(), firstPlace(world),
+        return inspectLine(world.revision().value(), world.parcels().size(), lastPlace(world),
                 lastLease(world), lastMaze(world), last);
     }
 
@@ -97,6 +97,20 @@ public final class DesktopWorld {
             }
         }
         return "";
+    }
+
+    /** Newest inspired toponym on inspect — not GIS. */
+    public static String lastPlace(World world) {
+        if (world == null) {
+            return "";
+        }
+        String found = "";
+        for (Parcel parcel : world.parcels()) {
+            if (parcel != null && !parcel.placeName().isEmpty()) {
+                found = parcel.placeName();
+            }
+        }
+        return found;
     }
 
     /** Newest lease string on inspect — account key, not a wallet. */

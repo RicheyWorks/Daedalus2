@@ -119,6 +119,7 @@
     const first = list[0];
     let newest = first;
     let rented = first;
+    let named = first;
     for (let i = 0; i < list.length; i++) {
       if (list[i] && list[i].mazeRef) {
         newest = list[i];
@@ -126,9 +127,12 @@
       if (list[i] && list[i].leaseId) {
         rented = list[i];
       }
+      if (list[i] && list[i].placeName) {
+        named = list[i];
+      }
     }
     row(box, "plots", String(list.length));
-    row(box, "place", first && first.placeName ? first.placeName : "—");
+    row(box, "place", named && named.placeName ? named.placeName : "—");
     row(box, "lease", rented && rented.leaseId ? rented.leaseId : "—");
     row(box, "maze", newest && newest.mazeRef ? newest.mazeRef : "—");
     const occupied = chunk && chunk.present && chunk.occupied > 0;

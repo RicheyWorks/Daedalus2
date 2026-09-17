@@ -12,7 +12,9 @@ import com.daedalus.world.DoorResult;
 import com.daedalus.world.Npc;
 import com.daedalus.world.NpcResult;
 import com.daedalus.world.Parcel;
+import com.daedalus.world.ParcelId;
 import com.daedalus.world.ParcelLeaseResult;
+import com.daedalus.world.PlaceNames;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
 import com.daedalus.world.stamp.StampOps;
@@ -22,8 +24,10 @@ import com.daedalus.world.Trap;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.World;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Shared drive table for human REST and automation. Discovery lives on
@@ -189,6 +193,20 @@ public final class WorldOps {
         return found;
     }
 
+    /** Newest inspired toponym on the street. Not GIS. */
+    public static String lastPlaceName(World world) {
+        if (world == null) {
+            return "";
+        }
+        String found = "";
+        for (Parcel parcel : world.parcels()) {
+            if (parcel != null && !parcel.placeName().isEmpty()) {
+                found = parcel.placeName();
+            }
+        }
+        return found;
+    }
+
     public static ParcelLeaseResult asLeaseResult(Object value) {
         return (ParcelLeaseResult) value;
     }
@@ -199,13 +217,27 @@ public final class WorldOps {
         MazeGrid slab = maze == null ? new MazeGrid(1, 1) : maze;
         StampResult result = StampOps.apply(world, new StampRequest(world.id(), origin,
                 slab, origin.y(), 1));
-        if (result.ok() && mazeRef != null && !mazeRef.isBlank() && result.parcelId() != null) {
-            world.bindMaze(result.parcelId(), mazeRef);
+        if (result.ok() && result.parcelId() != null) {
+            if (mazeRef != null && !mazeRef.isBlank()) {
+                world.bindMaze(result.parcelId(), mazeRef);
+            }
+            nameStampedPlot(world, result.parcelId(), mazeRef);
         }
         return result;
     }
 
     public static StampResult asStampResult(Object value) {
         return (StampResult) value;
+    }
+
+    private static void nameStampedPlot(World world, ParcelId id, String mazeRef) {
+        Set<String> taken = new HashSet<>();
+        for (Parcel parcel : world.parcels()) {
+            if (parcel != null && !parcel.placeName().isEmpty()) {
+                taken.add(parcel.placeName());
+            }
+        }
+        String key = mazeRef != null && !mazeRef.isBlank() ? mazeRef.trim() : id.value();
+        world.nameParcel(id, PlaceNames.of(key, taken));
     }
 }

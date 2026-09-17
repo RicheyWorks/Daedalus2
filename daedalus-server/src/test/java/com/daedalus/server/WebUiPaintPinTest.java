@@ -423,7 +423,8 @@ class WebUiPaintPinTest {
                     .contains("newest.mazeRef")
                     .contains("row(box, \"plots\"")
                     .contains("newest && newest.mazeRef")
-                    .contains("rented && rented.leaseId");
+                    .contains("rented && rented.leaseId")
+                    .contains("named && named.placeName");
             assertThat(html).contains("#worldBox .place { color: #94612e; -webkit-user-drag: none")
                     .contains("#worldBox .slab { color: #94612e; -webkit-user-drag: none");
             assertThat(world).contains("ink.className = named ? \"place\" : \"slab\"")

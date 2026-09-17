@@ -384,7 +384,7 @@ public class MainController {
         World world = worlds == null ? null : worlds.inspect(DesktopWorld.ID);
         worldLabel.setText(DesktopWorld.inspectLine(world, lastWorldEvent));
         worldLabel.getStyleClass().remove(DesktopWorld.PLACE_CLASS);
-        if (!DesktopWorld.firstPlace(world).isEmpty()) {
+        if (!DesktopWorld.lastPlace(world).isEmpty()) {
             worldLabel.getStyleClass().add(DesktopWorld.PLACE_CLASS);
         }
     }

@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World stamp place names.**
+  stamp.apply names the new slab from an inspired street list.
+  A second plot skips a taken name. Well and desktop inspect
+  show the newest toponym. Not GIS.
+
 - **World vacant-plot lease.**
   parcel.lease rents the first empty slab on the street, not only
   plot 0. Well and desktop inspect show the newest lease string.

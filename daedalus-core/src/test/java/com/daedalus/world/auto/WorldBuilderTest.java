@@ -8,6 +8,7 @@ import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelLeaseResult;
+import com.daedalus.world.PlaceNames;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.TrapState;
 import com.daedalus.world.World;
@@ -56,6 +57,7 @@ class WorldBuilderTest {
                 new BlockCoordinate(0, 0, 0), "stamp.apply", null))).outcome())
                 .isEqualTo("APPLIED");
         assertThat(world.parcels()).hasSize(1);
+        assertThat(world.parcels().get(0).placeName()).isIn(PlaceNames.STREETS);
         assertThat(builder.run(new WorldBuilder.Step(
                 new BlockCoordinate(0, 0, 0), "parcel.lease", null)))
                 .isEqualTo(ParcelLeaseResult.LEASED);
@@ -74,6 +76,11 @@ class WorldBuilderTest {
                 world, new MazeGrid(1, 1), new BlockCoordinate(0, 0, 0), 1);
         builder.run(new WorldBuilder.Step(next, "stamp.apply", null));
         assertThat(world.parcels()).hasSize(2);
+        assertThat(world.parcels().get(0).placeName()).isIn(PlaceNames.STREETS);
+        assertThat(world.parcels().get(1).placeName()).isIn(PlaceNames.STREETS);
+        assertThat(world.parcels().get(1).placeName())
+                .isNotEqualTo(world.parcels().get(0).placeName());
+        assertThat(WorldOps.lastPlaceName(world)).isEqualTo(world.parcels().get(1).placeName());
         assertThat(builder.run(new WorldBuilder.Step(next, "parcel.lease", null)))
                 .isEqualTo(ParcelLeaseResult.LEASED);
         assertThat(world.parcels().get(0).leaseId()).isEqualTo(Parcel.SYSTEM_TENANT);
@@ -100,6 +107,8 @@ class WorldBuilderTest {
         assertThat(stamped.bounds().maxZ()).isEqualTo(6);
         assertThat(world.parcels()).hasSize(1);
         assertThat(world.parcels().get(0).mazeRef()).isEqualTo(mazeRef);
+        assertThat(world.parcels().get(0).placeName()).isIn(PlaceNames.STREETS);
+        assertThat(WorldOps.lastPlaceName(world)).isEqualTo(world.parcels().get(0).placeName());
     }
 
     @Test

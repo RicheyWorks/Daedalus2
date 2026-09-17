@@ -13,6 +13,7 @@ import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelBounds;
+import com.daedalus.world.PlaceNames;
 import com.daedalus.world.World;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -103,8 +104,12 @@ class DesktopWorldTest {
         assertThat(two.parcels()).hasSize(2);
         assertThat(DesktopWorld.firstMaze(two)).isEqualTo(cached.metadata().id().toString());
         assertThat(DesktopWorld.lastMaze(two)).isEqualTo(second.metadata().id().toString());
+        assertThat(DesktopWorld.firstPlace(two)).isIn(PlaceNames.STREETS);
+        assertThat(DesktopWorld.lastPlace(two)).isIn(PlaceNames.STREETS);
+        assertThat(DesktopWorld.lastPlace(two)).isNotEqualTo(DesktopWorld.firstPlace(two));
         assertThat(DesktopWorld.inspectLine(two, null))
                 .contains("2 plots")
-                .contains(second.metadata().id().toString());
+                .contains(second.metadata().id().toString())
+                .contains(DesktopWorld.lastPlace(two));
     }
 }
