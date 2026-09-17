@@ -179,6 +179,7 @@ class WebUiSmokeTest {
                 .contains("user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;")
                 .contains("-webkit-user-drag: none;")
                 .contains("-webkit-user-drag: none; cursor: default; touch-action: none")
+                .contains("-webkit-tap-highlight-color: transparent;")
                 .contains("id=\"pngExport\" class=\"hint\" href=\"#\" download=\"maze.png\"")
                 .contains(".exports a:focus-visible { outline: 2px solid rgba(184, 133, 56, 0.85); outline-offset: 1px; }")
                 .contains(".exports button, .exports a, .exports a:visited, .exports a:active { width: auto")

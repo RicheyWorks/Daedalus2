@@ -722,6 +722,7 @@ under the `_migration/` portfolios.
   Host chrome stays torch void in light mode so leftover OS ice does not rim the well.
   Highlighted maze copy wears a gold wash so leftover UA yellow does not stain torch stone.
   Unfocused maze selection stays gold so leftover OS gray ice does not stain torch stone.
+  The well canvas refuses leftover tap wash so torch stone is not stained.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
