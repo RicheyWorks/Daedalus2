@@ -819,6 +819,7 @@ under the `_migration/` portfolios.
   Lab-table gold rows refuse leftover drag ice so cream news is not ghosted.
   Compare-table gold rows refuse leftover drag ice so cream news is not ghosted.
   Tour-table khaki headers refuse leftover drag ice so khaki labels are not ghosted.
+  Lab-table khaki headers refuse leftover drag ice so khaki labels are not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
