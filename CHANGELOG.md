@@ -248,6 +248,8 @@ under the `_migration/` portfolios.
   triangle over still stone.
   Explore wall–ceiling contact softens the crown so tunnels have a lid, not a
   hard join between flat ceiling and wall.
+  Explore automap stone wears corridor floor / wall tints and breathes with the
+  gold frame so the earned map is the same maze, not a separate admin brown.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

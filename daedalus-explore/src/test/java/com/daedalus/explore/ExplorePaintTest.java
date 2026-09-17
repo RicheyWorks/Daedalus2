@@ -171,6 +171,29 @@ class ExplorePaintTest {
     }
 
     @Test
+    void automapStoneMatchesCorridorAndBreathes() {
+        assertThat(ExplorePaint.MAP_FLOOR_R).isEqualTo(0.34f);
+        assertThat(ExplorePaint.MAP_FLOOR_G).isEqualTo(0.24f);
+        assertThat(ExplorePaint.MAP_FLOOR_B).isEqualTo(0.14f);
+        assertThat(ExplorePaint.MAP_WALL_R).isEqualTo(0.64f);
+        assertThat(ExplorePaint.MAP_WALL_G).isEqualTo(0.40f);
+        assertThat(ExplorePaint.MAP_WALL_B).isEqualTo(0.22f);
+        assertThat(ExplorePaint.MAP_STONE_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
+        assertThat(ExplorePaint.mapStoneBreath(0.1))
+                .isNotEqualTo(ExplorePaint.mapStoneBreath(0.8));
+        float[] floor = new float[3];
+        float[] wall = new float[3];
+        ExplorePaint.mapStoneTint(ExplorePaint.MapKind.FLOOR, 0, floor);
+        ExplorePaint.mapStoneTint(ExplorePaint.MapKind.WALL, 0, wall);
+        assertThat(wall[0]).isGreaterThan(floor[0]);
+        assertThat(floor[0]).isGreaterThan(floor[2]);
+        float[] later = new float[3];
+        ExplorePaint.mapStoneTint(ExplorePaint.MapKind.FLOOR, 0.7, later);
+        assertThat(later[0]).isNotEqualTo(floor[0]);
+        ExplorePaint.mapStoneTint(ExplorePaint.MapKind.WALL, 0, null);
+    }
+
+    @Test
     void wainscotDarkensTheBoot() {
         float[] boot = new float[3];
         float[] high = new float[3];

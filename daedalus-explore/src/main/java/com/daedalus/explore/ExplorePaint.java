@@ -54,6 +54,34 @@ public final class ExplorePaint {
     public static final float MAP_MARK_R = 0.78f;
     public static final float MAP_MARK_G = 0.22f;
     public static final float MAP_MARK_B = 0.16f;
+    /** Earned-map stone — same corridor tints, not a separate admin brown. */
+    public static final float MAP_FLOOR_R = 0.34f;
+    public static final float MAP_FLOOR_G = 0.24f;
+    public static final float MAP_FLOOR_B = 0.14f;
+    public static final float MAP_WALL_R = 0.64f;
+    public static final float MAP_WALL_G = 0.40f;
+    public static final float MAP_WALL_B = 0.22f;
+    /** Map stone breath — same cadence as the gold frame. */
+    public static final float MAP_STONE_BREATH_MS = MAP_HERE_BREATH_MS;
+
+    public static float mapStoneBreath(double seconds) {
+        double t = ((seconds * 1000.0) % MAP_STONE_BREATH_MS) / MAP_STONE_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return (float) (0.90 + 0.12 * wave);
+    }
+
+    public static void mapStoneTint(MapKind kind, double seconds, float[] rgb) {
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        float breath = mapStoneBreath(seconds);
+        if (kind == MapKind.WALL) {
+            set(rgb, MAP_WALL_R * breath, MAP_WALL_G * breath, MAP_WALL_B * breath);
+        } else {
+            set(rgb, MAP_FLOOR_R * breath, MAP_FLOOR_G * breath, MAP_FLOOR_B * breath);
+        }
+    }
+
     /** Automap gold frame — same ink as the status lip. */
     public static final float MAP_FRAME_OUT = 0.022f;
     public static final float MAP_FRAME_IN = 0.014f;
