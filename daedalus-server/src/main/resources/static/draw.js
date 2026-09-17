@@ -767,26 +767,33 @@
     const w0 = wave == null ? 0 : wave;
     g.save();
     g.translate(ox, oy);
+    const idleRows = tiles.length, idleCols = tiles[0].length;
+    const idleCx = (idleCols - 1) / 2, idleCy = (idleRows - 1) / 2;
     g.globalAlpha = 0.22 + 0.08 * w0;
-    g.fillStyle = COLORS.wallWarm;
+    const idleWall = mixHex(COLORS.wall, COLORS.wallWarm, 0.28);
+    const idleWallHi = mixHex(COLORS.wallHi, COLORS.wallWarm, 0.28);
     for (let r = 0; r < tiles.length; r++) {
       for (let c = 0; c < tiles[r].length; c++) {
         if (tiles[r][c] !== "#") continue;
+        const dx = (c - idleCx) / Math.max(1, idleCols / 2);
+        const dy = (r - idleCy) / Math.max(1, idleRows / 2);
+        const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+        g.fillStyle = mixHex(idleWall, COLORS.unseen, 0.28 * edge);
         g.fillRect(geom.offX[c], geom.offY[r],
                    geom.offX[c + 1] - geom.offX[c], geom.offY[r + 1] - geom.offY[r]);
       }
     }
-    g.fillStyle = mixHex(COLORS.wallHi, COLORS.wallWarm, 0.28);
     for (let r = 0; r < tiles.length; r++) {
       for (let c = 0; c < tiles[r].length; c++) {
         if (tiles[r][c] !== "#") continue;
-        paintWallHi(g, geom, r, c, mixHex(COLORS.wallHi, COLORS.wallWarm, 0.28));
+        const dx = (c - idleCx) / Math.max(1, idleCols / 2);
+        const dy = (r - idleCy) / Math.max(1, idleRows / 2);
+        const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+        paintWallHi(g, geom, r, c, mixHex(idleWallHi, COLORS.unseen, 0.28 * edge));
       }
     }
     g.globalAlpha = 0.36 + 0.10 * w0;
     const idleFloor = mixHex(COLORS.floor, COLORS.floorWarm, 0.28);
-    const idleRows = tiles.length, idleCols = tiles[0].length;
-    const idleCx = (idleCols - 1) / 2, idleCy = (idleRows - 1) / 2;
     for (let r = 0; r < tiles.length; r++) {
       for (let c = 0; c < tiles[r].length; c++) {
         if (tiles[r][c] === "#") continue;

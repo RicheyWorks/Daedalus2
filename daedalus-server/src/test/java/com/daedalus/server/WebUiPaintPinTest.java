@@ -140,7 +140,10 @@ class WebUiPaintPinTest {
                     .contains("(r === 1 && c === 1) ? \"S\" : (r === 5 && c === 9) ? \"G\"")
                     .contains("endFloorInk(mixHex(idleFloor, COLORS.floorDim, 0.22 * edge), end)")
                     .contains("const idleHi = mixHex(COLORS.floorHi, COLORS.floorWarm, 0.28)")
-                    .contains("endFloorInk(mixHex(idleHi, COLORS.floorDim, 0.22 * edge), end)");
+                    .contains("endFloorInk(mixHex(idleHi, COLORS.floorDim, 0.22 * edge), end)")
+                    .contains("const idleWall = mixHex(COLORS.wall, COLORS.wallWarm, 0.28)")
+                    .contains("mixHex(idleWall, COLORS.unseen, 0.28 * edge)")
+                    .contains("mixHex(idleWallHi, COLORS.unseen, 0.28 * edge)");
         }
     }
 

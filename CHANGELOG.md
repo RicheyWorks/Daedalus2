@@ -10,6 +10,16 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Idle well wall depth.**
+  Empty-well posts and hairlines fall off toward unseen at the rim
+  with the same 0.28 edge as live stone, so leftover flat wallWarm is
+  not the last word on the invitation maze.
+
+- **Idle desktop wall depth.**
+  Empty-stage posts and hairlines fall off toward unseen at the rim
+  with the same 0.28 edge as live stone, so leftover flat wallWarm is
+  not the last word on the invitation maze.
+
 - **Idle desktop floor depth.**
   The empty-stage mark floors and hairlines fall off toward the rim
   with the same 0.22 edge as live stone, so leftover flat slate is

@@ -1050,6 +1050,13 @@ class DesktopPaintTest {
                 .as("idle corridors wear the same 1px shine as the live board")
                 .isNotEmpty();
         assertThat(DesktopPaint.emptyMarkHairlines(null)).isEmpty();
+        assertThat(DesktopPaint.emptyMarkWallInk(0, 0))
+                .as("idle rim posts fall off toward unseen like live stone")
+                .isNotEqualTo(DesktopPaint.emptyMarkWallInk(3, 5));
+        assertThat(DesktopPaint.emptyMarkWallInk(0, 0))
+                .isEqualTo(DesktopPaint.wallInk(DesktopPaint.emptyMarkEdge(0, 0)));
+        assertThat(DesktopPaint.emptyMarkWallHiInk(0, 0))
+                .isEqualTo(DesktopPaint.clearWallHiInk(DesktopPaint.emptyMarkEdge(0, 0)));
         assertThat(DesktopPaint.emptyMarkWallHairlines(mark))
                 .as("idle posts wear the same 1px shine as live walls")
                 .isNotEmpty();

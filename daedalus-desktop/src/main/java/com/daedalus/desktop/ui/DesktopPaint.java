@@ -2127,6 +2127,14 @@ public final class DesktopPaint {
         return Math.min(1, Math.hypot(dx, dy));
     }
 
+    public static String emptyMarkWallInk(int tileRow, int tileCol) {
+        return wallInk(emptyMarkEdge(tileRow, tileCol));
+    }
+
+    public static String emptyMarkWallHiInk(int tileRow, int tileCol) {
+        return clearWallHiInk(emptyMarkEdge(tileRow, tileCol));
+    }
+
     public static String emptyMarkFloorInk(int tileRow, int tileCol) {
         return endFloorInk(clearFloorInk(emptyMarkEdge(tileRow, tileCol)),
                 emptyMarkTile(tileRow, tileCol));

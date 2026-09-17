@@ -1821,14 +1821,17 @@ public class MainController {
             DesktopPaint.Layout mark = DesktopPaint.emptyMarkLayout(w, h);
             if (mark != null && theme != null) {
                 g.setGlobalAlpha(DesktopPaint.emptyMarkWallAlpha(wave));
-                g.setFill(Color.web(DesktopPaint.EMPTY_MARK_WALL));
                 for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkWalls()) {
+                    g.setFill(Color.web(DesktopPaint.emptyMarkWallInk(
+                            tile.tileRow(), tile.tileCol())));
                     g.fillRect(mark.x(tile.tileCol()), mark.y(tile.tileRow()),
                             mark.w(tile.tileCol()), mark.h(tile.tileRow()));
                 }
-                Color wallHi = Color.web(DesktopPaint.clearWallHiInk(0));
-                for (DesktopPaint.Hairline stroke : DesktopPaint.emptyMarkWallHairlines(mark)) {
-                    paintHairline(g, stroke, wallHi);
+                for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkWalls()) {
+                    paintHairline(g, DesktopPaint.wallHiStroke(
+                            mark, tile.tileRow(), tile.tileCol()),
+                            Color.web(DesktopPaint.emptyMarkWallHiInk(
+                                    tile.tileRow(), tile.tileCol())));
                 }
                 g.setGlobalAlpha(DesktopPaint.emptyMarkFloorAlpha(wave));
                 for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkFloors()) {
