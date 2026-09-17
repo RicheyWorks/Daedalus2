@@ -13,6 +13,7 @@ import com.daedalus.explore.XrRuntime;
 import com.daedalus.explore.XrRuntimes;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWGamepadState;
+import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
@@ -61,6 +62,7 @@ import static org.lwjgl.glfw.GLFW.glfwJoystickIsGamepad;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwSetInputMode;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowIcon;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.lwjgl.glfw.GLFW.glfwShowWindow;
@@ -154,6 +156,16 @@ public final class ExploreHost {
         if (window == NULL) {
             glfwTerminate();
             throw new IllegalStateException("Failed to create the explore window");
+        }
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            byte[] rgba = ExplorePaint.windowIconRgba();
+            ByteBuffer pixels = stack.malloc(rgba.length);
+            pixels.put(rgba).flip();
+            GLFWImage.Buffer icons = GLFWImage.malloc(1, stack);
+            icons.width(ExplorePaint.WINDOW_ICON_SIZE);
+            icons.height(ExplorePaint.WINDOW_ICON_SIZE);
+            icons.pixels(pixels);
+            glfwSetWindowIcon(window, icons);
         }
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer w = stack.mallocInt(1);

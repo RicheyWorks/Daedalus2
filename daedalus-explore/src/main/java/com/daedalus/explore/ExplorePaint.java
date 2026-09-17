@@ -17,6 +17,23 @@ public final class ExplorePaint {
     public static final float SKY_R = 0.10f;
     public static final float SKY_G = 0.08f;
     public static final float SKY_B = 0.07f;
+
+    /** Window icon void — leftover OS chrome is not the lamp on the taskbar. */
+    public static final int WINDOW_ICON_SIZE = 32;
+    public static final int WINDOW_ICON_R = 12;
+    public static final int WINDOW_ICON_G = 9;
+    public static final int WINDOW_ICON_B = 8;
+
+    public static byte[] windowIconRgba() {
+        byte[] px = new byte[WINDOW_ICON_SIZE * WINDOW_ICON_SIZE * 4];
+        for (int i = 0; i < px.length; i += 4) {
+            px[i] = (byte) WINDOW_ICON_R;
+            px[i + 1] = (byte) WINDOW_ICON_G;
+            px[i + 2] = (byte) WINDOW_ICON_B;
+            px[i + 3] = (byte) 0xFF;
+        }
+        return px;
+    }
     /** Fog silhouette — same warm dark for every unseen face, not a dusk hole. */
     public static final float UNSEEN_R = 0.09f;
     public static final float UNSEEN_G = 0.07f;
