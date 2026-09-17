@@ -789,6 +789,7 @@ under the `_migration/` portfolios.
   The start-gate hero wears a lamp cursor so leftover OS I-beam ice does not sit on the wordmark pocket.
   The start-gate well wears a lamp cursor so leftover OS I-beam ice does not sit on the void around the cards.
   The well desk pocket wears a lamp cursor so leftover OS I-beam ice does not sit around the board.
+  Well side-rail pockets wear a lamp cursor so leftover OS I-beam ice does not sit around the desk.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

@@ -326,7 +326,7 @@
   summary::after { content: " ▸"; color: rgba(184, 133, 56, 0.55);
                   animation: chevronBreath 4.5s ease-in-out infinite; }
   details[open] summary::after { content: " ▾"; }
-  .panel { background: var(--panel); border: 1px solid rgba(184, 133, 56, 0.36);
+  .panel { background: var(--panel); cursor: default; border: 1px solid rgba(184, 133, 56, 0.36);
            border-radius: 10px; padding: 14px 16px;
            box-shadow: 0 0 0 1px rgba(16, 11, 8, 0.85);
            animation: panelRimBreath 4.5s ease-in-out infinite; }
@@ -467,6 +467,7 @@
   #status, #compareBox, #pluginBox, #campaignBox {
     font-variant-numeric: tabular-nums;
   }
+  #log, #lb, #tourBox, #labOut, #pluginBox, #campaignBox, details .hint { cursor: text; }
   .exports { position: absolute; top: 8px; right: 10px; z-index: 2;
              margin: 0; display: flex; gap: 8px; align-items: center; }
   .exports button, .exports a, .exports a:visited, .exports a:active { width: auto; margin: 0; padding: 4px 10px; font-size: 11px;

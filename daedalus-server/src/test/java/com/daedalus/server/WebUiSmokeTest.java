@@ -175,6 +175,8 @@ class WebUiSmokeTest {
                 .contains("#log, #lb, #stats, #asciiOut, #gate pre, #tourBox, #labOut,")
                 .contains("#status, #compareBox, #pluginBox, #campaignBox {")
                 .contains("font-variant-numeric: tabular-nums;")
+                .contains("var(--panel); cursor: default;")
+                .contains("details .hint { cursor: text; }")
                 .contains("font: 11px/1.2 ui-monospace, monospace; overflow: auto; overscroll-behavior: none;")
                 .contains("animation: panelRimBreath 4.5s ease-in-out infinite; }")
                 .contains(".exports button, .exports a, #asciiOut, #gate pre, .info, #stats, details,")
