@@ -27,7 +27,6 @@ import com.daedalus.world.auto.Observation;
 import com.daedalus.world.auto.WorldAddress;
 import com.daedalus.world.auto.WorldOps;
 import com.daedalus.world.living.LivingSlab;
-import com.daedalus.world.stamp.StampOps;
 import com.daedalus.world.stamp.StampRequest;
 import com.daedalus.world.stamp.StampResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -250,9 +249,8 @@ public class WorldService {
     public StampResult stamp(String id, BlockCoordinate at, MazeGrid maze, UUID mazeId) {
         World live = require(id);
         synchronized (lock) {
-            StampResult result = maze == null
-                    ? WorldOps.asStampResult(WorldOps.drive(live, "stamp.apply", at, null))
-                    : StampOps.apply(live, new StampRequest(live.id(), at, maze, at.y(), 1));
+            StampResult result = WorldOps.asStampResult(
+                    WorldOps.drive(live, "stamp.apply", at, null, maze));
             if (result.ok() && maze != null && mazeId != null && result.parcelId() != null) {
                 live.bindMaze(result.parcelId(), mazeId.toString());
                 rebindSlabs();

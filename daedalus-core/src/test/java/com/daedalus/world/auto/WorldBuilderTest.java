@@ -2,6 +2,8 @@
 
 package com.daedalus.world.auto;
 
+import com.daedalus.engine.MazeGrid;
+import com.daedalus.model.Direction;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.Parcel;
@@ -9,6 +11,7 @@ import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.TrapState;
 import com.daedalus.world.World;
+import com.daedalus.world.stamp.StampResult;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -59,6 +62,21 @@ class WorldBuilderTest {
         assertThat(builder.run(new WorldBuilder.Step(
                 new BlockCoordinate(0, 0, 0), "parcel.lease", null)))
                 .isEqualTo(ParcelLeaseResult.ALREADY_LEASED);
+    }
+
+    @Test
+    void aRecipeStampsALabMazeThroughWorldOps() {
+        World world = World.zero();
+        WorldBuilder builder = new WorldBuilder(world);
+        MazeGrid maze = new MazeGrid(3, 3);
+        maze.carve(maze.cell(0, 0), Direction.EAST);
+        StampResult stamped = WorldOps.asStampResult(builder.run(new WorldBuilder.Step(
+                new BlockCoordinate(0, 0, 0), "stamp.apply", null, maze)));
+        assertThat(stamped.ok()).isTrue();
+        assertThat(stamped.outcome()).isEqualTo("APPLIED");
+        assertThat(stamped.bounds().maxX()).isEqualTo(6);
+        assertThat(stamped.bounds().maxZ()).isEqualTo(6);
+        assertThat(world.parcels()).hasSize(1);
     }
 
     @Test

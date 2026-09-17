@@ -2,6 +2,7 @@
 
 package com.daedalus.world.auto;
 
+import com.daedalus.engine.MazeGrid;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.World;
@@ -16,10 +17,14 @@ import java.util.Set;
  */
 public final class WorldBuilder {
 
-    public record Step(BlockCoordinate at, String capability, BlockType type) {
+    public record Step(BlockCoordinate at, String capability, BlockType type, MazeGrid maze) {
         public Step {
             Objects.requireNonNull(at, "BlockCoordinate is required");
             Objects.requireNonNull(capability, "capability is required");
+        }
+
+        public Step(BlockCoordinate at, String capability, BlockType type) {
+            this(at, capability, type, null);
         }
     }
 
@@ -47,7 +52,7 @@ public final class WorldBuilder {
             throw new IllegalArgumentException("Unknown capability " + step.capability());
         }
         session.address(step.at());
-        return session.drive(step.capability(), step.type());
+        return session.drive(step.capability(), step.type(), step.maze());
     }
 
     public List<DriveTrace.Step> run(List<Step> recipe) {

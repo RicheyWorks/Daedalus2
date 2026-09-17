@@ -35,6 +35,11 @@ public final class WorldOps {
     }
 
     public static Object drive(World world, String capability, BlockCoordinate at, BlockType type) {
+        return drive(world, capability, at, type, null);
+    }
+
+    public static Object drive(World world, String capability, BlockCoordinate at, BlockType type,
+                               MazeGrid maze) {
         if (world == null || capability == null) {
             throw new IllegalArgumentException("World and capability are required");
         }
@@ -57,7 +62,7 @@ public final class WorldOps {
             case "npc.talk" -> world.talkNpc();
             case "npc.hush" -> world.hushNpc();
             case "parcel.lease" -> leaseParcel(world);
-            case "stamp.apply" -> stampApply(world, at);
+            case "stamp.apply" -> stampApply(world, at, maze);
             default -> throw new IllegalArgumentException("Unknown capability " + capability);
         };
     }
@@ -164,10 +169,10 @@ public final class WorldOps {
         return (ParcelLeaseResult) value;
     }
 
-    private static StampResult stampApply(World world, BlockCoordinate at) {
+    private static StampResult stampApply(World world, BlockCoordinate at, MazeGrid maze) {
         BlockCoordinate origin = at == null ? new BlockCoordinate(0, 0, 0) : at;
-        return StampOps.apply(world, new StampRequest(world.id(), origin,
-                new MazeGrid(1, 1), origin.y(), 1));
+        MazeGrid slab = maze == null ? new MazeGrid(1, 1) : maze;
+        return StampOps.apply(world, new StampRequest(world.id(), origin, slab, origin.y(), 1));
     }
 
     public static StampResult asStampResult(Object value) {

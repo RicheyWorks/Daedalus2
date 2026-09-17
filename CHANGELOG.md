@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **WorldOps stamp.apply maze.**
+  A builder recipe can project a lab MazeGrid, not only the 1×1 stub.
+  REST stamp still binds mazeRef. No wallet type.
+
 - **Well stamp.apply mazeId.**
   The world fold sends the generated lab maze id with stamp.apply
   so the slab is maze DNA, not a 1×1 stub. No `/maze/` fetch from

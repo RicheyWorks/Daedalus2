@@ -2,6 +2,7 @@
 
 package com.daedalus.world.auto;
 
+import com.daedalus.engine.MazeGrid;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.World;
@@ -34,10 +35,14 @@ public final class AutomationSession {
     }
 
     public Object drive(String capability, BlockType type) {
+        return drive(capability, type, null);
+    }
+
+    public Object drive(String capability, BlockType type, MazeGrid maze) {
         if (address == null) {
             throw new IllegalStateException("Address a block before driving");
         }
-        Object result = WorldOps.drive(world, capability, address.at(), type);
+        Object result = WorldOps.drive(world, capability, address.at(), type, maze);
         log.append(capability, result, world.revision().value());
         return result;
     }
