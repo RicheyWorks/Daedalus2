@@ -59,6 +59,20 @@ class ExplorePaintTest {
     }
 
     @Test
+    void startAndGoalCeilingsNameTheEnds() {
+        float[] passage = new float[3];
+        float[] gate = new float[3];
+        float[] exit = new float[3];
+        ExplorePaint.tint(face(ExploreMesh.Face.CEILING, 2.8, 3, 3), true, passage);
+        ExplorePaint.tint(endCeiling(TileType.START), true, gate);
+        ExplorePaint.tint(endCeiling(TileType.GOAL), true, exit);
+        assertThat(ExplorePaint.CEILING_END_WEIGHT).isEqualTo(ExplorePaint.FLOOR_END_WEIGHT);
+        assertThat(gate[1]).as("start lid lifts toward well mint").isGreaterThan(passage[1]);
+        assertThat(exit[0]).as("goal lid lifts toward well coral").isGreaterThan(passage[0]);
+        assertThat(gate[1]).isGreaterThan(gate[0]);
+    }
+
+    @Test
     void unseenWallsStayASilhouette() {
         float[] rgb = new float[3];
         ExplorePaint.tint(nsWall(0, 1.4, 0), false, rgb);
@@ -651,6 +665,11 @@ class ExplorePaintTest {
     private static ExploreMesh.Triangle endFloor(TileType tile) {
         return new ExploreMesh.Triangle(0, 0, 0, 1, 0, 0, 1, 0, 1,
                 ExploreMesh.Face.FLOOR, 3, 3, tile);
+    }
+
+    private static ExploreMesh.Triangle endCeiling(TileType tile) {
+        return new ExploreMesh.Triangle(0, 2.8, 0, 1, 2.8, 0, 1, 2.8, 1,
+                ExploreMesh.Face.CEILING, 3, 3, tile);
     }
 
     private static ExploreMesh.Triangle ceilingAt(double z) {

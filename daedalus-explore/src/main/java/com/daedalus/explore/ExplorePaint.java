@@ -1174,28 +1174,38 @@ public final class ExplorePaint {
 
     /** Start / goal floor wash — names the ends, still stone, not a neon slab. */
     public static final float FLOOR_END_WEIGHT = 0.42f;
+    /** Same wash on the lid so looking up names the ends. */
+    public static final float CEILING_END_WEIGHT = FLOOR_END_WEIGHT;
 
     private static void floor(ExploreMesh.Triangle tri, float[] rgb) {
         float check = ((tri.tr() + tri.tc()) & 1) == 0 ? 1f : 0.82f;
         float skirt = floorContactShade(tri);
-        float r = 0.34f;
-        float g = 0.24f;
-        float b = 0.14f;
-        if (tri.tile() == TileType.START) {
-            r += (MAP_START_R - r) * FLOOR_END_WEIGHT;
-            g += (MAP_START_G - g) * FLOOR_END_WEIGHT;
-            b += (MAP_START_B - b) * FLOOR_END_WEIGHT;
-        } else if (tri.tile() == TileType.GOAL) {
-            r += (MAP_GOAL_R - r) * FLOOR_END_WEIGHT;
-            g += (MAP_GOAL_G - g) * FLOOR_END_WEIGHT;
-            b += (MAP_GOAL_B - b) * FLOOR_END_WEIGHT;
-        }
-        set(rgb, r * check * skirt, g * check * skirt, b * check * skirt);
+        float[] ink = endStone(0.34f, 0.24f, 0.14f, tri.tile(), FLOOR_END_WEIGHT);
+        set(rgb, ink[0] * check * skirt, ink[1] * check * skirt, ink[2] * check * skirt);
     }
 
     private static void ceiling(ExploreMesh.Triangle tri, float[] rgb) {
         float crown = ceilingContactShade(tri);
-        set(rgb, CEILING_R * crown, CEILING_G * crown, CEILING_B * crown);
+        float[] ink = endStone(CEILING_R, CEILING_G, CEILING_B, tri.tile(), CEILING_END_WEIGHT);
+        set(rgb, ink[0] * crown, ink[1] * crown, ink[2] * crown);
+    }
+
+    private static float[] endStone(float r, float g, float b, TileType tile, float weight) {
+        if (tile == TileType.START) {
+            return new float[] {
+                    r + (MAP_START_R - r) * weight,
+                    g + (MAP_START_G - g) * weight,
+                    b + (MAP_START_B - b) * weight
+            };
+        }
+        if (tile == TileType.GOAL) {
+            return new float[] {
+                    r + (MAP_GOAL_R - r) * weight,
+                    g + (MAP_GOAL_G - g) * weight,
+                    b + (MAP_GOAL_B - b) * weight
+            };
+        }
+        return new float[] {r, g, b};
     }
 
     private static void wall(ExploreMesh.Triangle tri, float[] rgb) {
