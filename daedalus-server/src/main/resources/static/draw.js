@@ -466,7 +466,11 @@
       const tr = 2 * h.row + 1, tc = 2 * h.col + 1;
       if (tiles[tr][tc] === "#" || isRock(tiles, tr, tc)) return;
       hot.set(h.row + "," + h.col, h.cost);
-      g.fillStyle = "#e5484d";
+      const hx = (tw - 1) / 2, hy = (th - 1) / 2;
+      const hdx = (tc - hx) / Math.max(1, tw / 2);
+      const hdy = (tr - hy) / Math.max(1, th / 2);
+      const hedge = Math.min(1, Math.sqrt(hdx * hdx + hdy * hdy));
+      g.fillStyle = mixHex("#e5484d", COLORS.floorDim, 0.22 * hedge);
       g.globalAlpha = Math.min(0.7, 0.2 + h.cost / 200) * (0.88 + 0.24 * hotWave);
       g.fillRect(geom.offX[tc], geom.offY[tr], geom.cell, geom.cell);
     });

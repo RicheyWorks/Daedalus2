@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well heat cell depth.**
+  Hotspot cells fall off toward floor-dim at the board rim with the
+  same 0.22 edge as halls, so leftover even heat is not the last
+  word on a lamp-warm tile. Start mint and goal coral stay.
+
 - **Explore automap gate depth.**
   Revealed start mint and goal coral fall off toward floor-dim at
   the pocket rim with the same 0.22 edge as halls, so leftover even

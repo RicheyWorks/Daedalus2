@@ -169,6 +169,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellHeatCellsHaveRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("mixHex(\"#e5484d\", COLORS.floorDim, 0.22 * hedge)")
+                    .contains("const hedge = Math.min(1, Math.sqrt(hdx * hdx + hdy * hdy))");
+        }
+    }
+
+    @Test
     void wellFogWallsHaveRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
