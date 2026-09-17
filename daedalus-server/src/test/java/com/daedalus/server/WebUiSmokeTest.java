@@ -538,5 +538,7 @@ class WebUiSmokeTest {
                 .doesNotContain("positions[state.session.primary]")
                 .doesNotContain("move(state.session.primary")
                 .doesNotContain("move(state.seat || state.session.primary");
+        assertThat(html).contains(
+                "#compareBox table { width: 100%; margin-top: 8px; border-collapse: collapse; -webkit-user-drag: none");
     }
 }
