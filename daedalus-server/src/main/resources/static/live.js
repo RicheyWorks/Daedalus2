@@ -105,6 +105,11 @@
       // still on the Plugins panel is the failure buried in server logs.
       host.refreshPlugins();
     }));
+    // World events stay on their own topic. Maze /state frames stay maze-shaped.
+    state.subs.push(state.stomp.subscribe("/topic/world/world-zero/events", f => {
+      const m = JSON.parse(f.body);
+      if (host.onWorldEvent) host.onWorldEvent(m);
+    }));
   }
 
   /**

@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World One W1.4 well world panel.**
+  A rail fold inspects `world-zero` (revision, chunk 0,0,0, door) and
+  listens on `/topic/world/world-zero/events`. `/` stays the maze well;
+  the panel does not mint a `#world` hash that would drop a loaded maze.
+
 - **World One W1.3 second observer.**
   Two STOMP clients subscribe to `/topic/world/world-zero/events`. A place
   on the live world reaches observer B as `BLOCK_PLACED` with the same

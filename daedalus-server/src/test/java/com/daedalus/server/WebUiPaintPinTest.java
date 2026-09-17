@@ -143,4 +143,30 @@ class WebUiPaintPinTest {
                     .contains("endFloorInk(idleHi, end)");
         }
     }
+
+    @Test
+    void wellWorldPanelListensBesideTheMaze() throws Exception {
+        try (InputStream htmlIn = getClass().getResourceAsStream("/static/index.html");
+             InputStream worldIn = getClass().getResourceAsStream("/static/world.js");
+             InputStream liveIn = getClass().getResourceAsStream("/static/live.js")) {
+            assertThat(htmlIn).as("static well page").isNotNull();
+            assertThat(worldIn).as("world panel").isNotNull();
+            assertThat(liveIn).as("stomp subscribe").isNotNull();
+            String html = new String(htmlIn.readAllBytes(), StandardCharsets.UTF_8);
+            String world = new String(worldIn.readAllBytes(), StandardCharsets.UTF_8);
+            String live = new String(liveIn.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html).contains("id=\"world\"")
+                    .contains("id=\"worldBox\"")
+                    .contains("<script src=\"/world.js\" defer></script>")
+                    .contains("id=\"stage\"");
+            assertThat(html).doesNotContain("location.hash = \"#world\"");
+            assertThat(world).contains("const WORLD = \"world-zero\"")
+                    .contains("host.api(\"/world/\" + WORLD)")
+                    .contains("/world/\" + WORLD + \"/door")
+                    .contains("/world/\" + WORLD + \"/chunk?x=0&y=0&z=0");
+            assertThat(world).doesNotContain("/maze/");
+            assertThat(live).contains("/topic/world/world-zero/events")
+                    .contains("host.onWorldEvent");
+        }
+    }
 }

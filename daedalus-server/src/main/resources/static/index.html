@@ -272,7 +272,7 @@
          padding-right: calc(20px + env(safe-area-inset-right, 0px));
          padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px)); }
   main > * { min-width: 0; }
-  .hint, .info, #labOut, #tourBox, #campaignBox, #pluginBox, #lb {
+  .hint, .info, #labOut, #tourBox, #campaignBox, #pluginBox, #worldBox, #lb {
     overflow-wrap: break-word; hyphens: none; line-height: 1.5; }
   #labOut, #tourBox, #campaignBox { color: #f2ead8; }
   #campaignBox { padding: 8px; background: #16120e;
@@ -288,6 +288,13 @@
                border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 6px;
                animation: panelRimBreath 4.5s ease-in-out infinite; }
   #pluginBox b { color: #f2ead8; -webkit-user-drag: none; }
+  #worldBox { color: #b09a72; padding: 8px; background: #16120e;
+              border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 6px;
+              animation: panelRimBreath 4.5s ease-in-out infinite; }
+  #worldBox b { color: #f2ead8; -webkit-user-drag: none; }
+  #worldBox .hint { color: #b09a72; -webkit-user-drag: none; }
+  #worldBox div { border-bottom: 1px solid rgba(184, 133, 56, 0.28); padding: 2px 0;
+                  -webkit-user-drag: none; }
   #tourBox table { width: 100%; border-collapse: collapse; -webkit-user-drag: none;
                    font: 12px/1.7 ui-monospace, monospace; }
   #tourBox th { text-align: left; color: #b09a72; font-weight: 600; -webkit-user-drag: none;
@@ -475,10 +482,10 @@
   #asciiOut .gate { color: #3ee08f; -webkit-user-drag: none; }
   #asciiOut .exit { color: #ff5a5f; -webkit-user-drag: none; }
   #log, #lb, #stats, #asciiOut, #gate pre, #tourBox, #labOut,
-  #status, #compareBox, #pluginBox, #campaignBox {
+  #status, #compareBox, #pluginBox, #worldBox, #campaignBox {
     font-variant-numeric: tabular-nums;
   }
-  #log, #lb, #tourBox, #labOut, #pluginBox, #campaignBox, details .hint { cursor: text; }
+  #log, #lb, #tourBox, #labOut, #pluginBox, #worldBox, #campaignBox, details .hint { cursor: text; }
   details .hint { cursor: text; -webkit-user-drag: none; }
   .exports { position: absolute; top: 8px; right: 10px; z-index: 2;
              margin: 0; display: flex; gap: 8px; align-items: center; -webkit-user-drag: none; }
@@ -764,6 +771,10 @@ powershell -File daedalus-explore\run-explore.ps1</pre>
       <h2>Plugins</h2>
       <div id="pluginBox" class="hint">loading…</div>
     </section>
+    <section id="world" class="panel">
+      <h2>World</h2>
+      <div id="worldBox" class="hint">inspecting world-zero…</div>
+    </section>
     <section class="panel">
       <h2>Live frames</h2>
       <div id="log"></div>
@@ -786,6 +797,7 @@ powershell -File daedalus-explore\run-explore.ps1</pre>
 <script src="/living.js" defer></script>
 <script src="/ghost.js" defer></script>
 <script src="/tournament.js" defer></script>
+<script src="/world.js" defer></script>
 <script src="/live.js" defer></script>
 <script src="/session.js" defer></script>
 <script src="/fogwalk.js" defer></script>

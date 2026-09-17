@@ -94,9 +94,14 @@ function liveHost() {
   return {
     $, log,
     startSpectatePolling, startTrafficPolling, onTrafficPulse,
-    applyMove, refreshPlugins, refreshLivingMaze,
+    applyMove, refreshPlugins, refreshLivingMaze, onWorldEvent,
   };
 }
+function worldHost() {
+  return {$, api};
+}
+function refreshWorld() { return DaedalusWorld.inspect(worldHost()); }
+function onWorldEvent(m) { return DaedalusWorld.onEvent(worldHost(), m); }
 function sessionHost() {
   return {
     $, api, log, esc, draw,
@@ -488,6 +493,7 @@ DaedalusStage.watch(stageHost(), () => state);
 drawEmpty();
 refreshLeaderboard();
 refreshPlugins();
+refreshWorld();
 loadLabMetrics();
 loadAlgorithms().then(connectStomp).then(loadFromHash).then(() => {
   if (permalinkOnBar()) showGate(false);

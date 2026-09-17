@@ -293,7 +293,7 @@ Phase 0 already ordered the post-7 work. This audit keeps it:
 | W1.1 | Stamp + one parcel | `MazeGrid` → slab; overlap fails; world restart still identical | core (+ store fields if parcel must persist) |
 | W1.2 | Living slab | Maze tick changes only dirty cubes; inspect-only is quiet | core |
 | W1.3 | Second observer | Two STOMP clients; B sees A's place | **shipped** — `WorldSecondObserverTest` |
-| W1.4 | Well panel | Listen + inspect; `/` maze well unchanged | well static + changelog |
+| W1.4 | Well panel | Listen + inspect; `/` maze well unchanged | **shipped** — `#world` rail + `world.js` |
 | W1.5 | Explore voxel view | Second mesh; corridor path still smokes | explore |
 
 Permissions, desktop inspect, trap, agents, WebGL, terrain: after W1.5, each as its own audit.
