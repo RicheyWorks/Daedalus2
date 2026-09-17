@@ -925,7 +925,13 @@ class DesktopPaintTest {
         int mid = DesktopPaint.STAGE_ICON_SIZE / 2;
         assertThat(icon[mid * DesktopPaint.STAGE_ICON_SIZE + mid])
                 .as("idle maze floors sit at the icon center")
-                .isEqualTo(DesktopPaint.STAGE_ICON_FLOOR_ARGB);
+                .isEqualTo(DesktopPaint.hexArgb(
+                        DesktopPaint.clearFloorInk(DesktopPaint.emptyMarkEdge(3, 5))));
+        assertThat(icon[11 * DesktopPaint.STAGE_ICON_SIZE + 23])
+                .as("idle icon rim slate falls off like the live well")
+                .isEqualTo(DesktopPaint.hexArgb(
+                        DesktopPaint.clearFloorInk(DesktopPaint.emptyMarkEdge(1, 9))))
+                .isNotEqualTo(icon[mid * DesktopPaint.STAGE_ICON_SIZE + mid]);
         assertThat(icon[11 * DesktopPaint.STAGE_ICON_SIZE + 7])
                 .as("start mint sits on the idle gate cell")
                 .isEqualTo(DesktopPaint.STAGE_ICON_START_ARGB);

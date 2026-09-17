@@ -2005,7 +2005,7 @@ public final class DesktopPaint {
                 } else if (EMPTY_MARK[r].charAt(c) == '#') {
                     ink = hexArgb(emptyMarkWallInk(r, c));
                 } else {
-                    ink = STAGE_ICON_FLOOR_ARGB;
+                    ink = hexArgb(clearFloorInk(emptyMarkEdge(r, c)));
                 }
                 fillStageIconCell(px, ox + c * STAGE_ICON_CELL, oy + r * STAGE_ICON_CELL, ink);
             }

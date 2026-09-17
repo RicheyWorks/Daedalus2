@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop stage icon floor depth.**
+  Idle-maze halls on the 32px stage icon fall off toward the rim with
+  the same 0.22 edge as live stone, so leftover flat slate is not the
+  last word on the taskbar mark. Start mint and goal coral stay.
+
 - **Well share-icon wall depth.**
   Apple-touch, Open Graph, and the installed-well PNG wear the same
   0.28 rim posts as the tab icon, so leftover flat wallWarm is not the
