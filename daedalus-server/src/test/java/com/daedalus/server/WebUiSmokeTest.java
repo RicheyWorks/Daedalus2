@@ -541,6 +541,7 @@ class WebUiSmokeTest {
         assertThat(html).contains(
                 "#compareBox table { width: 100%; margin-top: 8px; border-collapse: collapse; -webkit-user-drag: none")
                 .contains("#pluginBox b { color: #f2ead8; -webkit-user-drag: none")
-                .contains("#pluginBox .rank { color: #b09a72; -webkit-user-drag: none");
+                .contains("#pluginBox .rank { color: #b09a72; -webkit-user-drag: none")
+                .contains("#compareBox .best { color: #f0b429; font-weight: 700; -webkit-user-drag: none");
     }
 }
