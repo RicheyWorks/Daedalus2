@@ -483,12 +483,13 @@ public final class ExploreHost {
         float bob = ExplorePaint.handBob(seconds, stride);
         List<ExplorePaint.HandTri> mesh = ExplorePaint.handMesh(aspect, bob);
         float[] rgb = new float[3];
-        ExplorePaint.TorchBloom bloom = ExplorePaint.torchBloom(aspect, bob, seconds);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glColor4f(ExplorePaint.BLOOM_R, ExplorePaint.BLOOM_G, ExplorePaint.BLOOM_B, bloom.a());
-        fill(bloom.x() - bloom.rx(), bloom.y() - bloom.ry(),
-                bloom.x() + bloom.rx(), bloom.y() + bloom.ry());
+        for (ExplorePaint.TorchBloom bloom : ExplorePaint.torchBloomWash(aspect, bob, seconds)) {
+            glColor4f(ExplorePaint.BLOOM_R, ExplorePaint.BLOOM_G, ExplorePaint.BLOOM_B, bloom.a());
+            fill(bloom.x() - bloom.rx(), bloom.y() - bloom.ry(),
+                    bloom.x() + bloom.rx(), bloom.y() + bloom.ry());
+        }
         glDisable(GL_BLEND);
         glBegin(GL_TRIANGLES);
         for (ExplorePaint.HandTri tri : mesh) {

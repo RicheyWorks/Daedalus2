@@ -518,6 +518,12 @@ class ExplorePaintTest {
         assertThat(bobbed.y()).isGreaterThan(bloom.y());
         assertThat(ExplorePaint.BLOOM_R).isGreaterThan(ExplorePaint.BLOOM_G);
         assertThat(ExplorePaint.BLOOM_G).isGreaterThan(ExplorePaint.BLOOM_B);
+        List<ExplorePaint.TorchBloom> wash = ExplorePaint.torchBloomWash(1.6, 0, 0.1);
+        assertThat(wash).hasSize(ExplorePaint.BLOOM_RINGS);
+        assertThat(wash.get(0).rx()).isGreaterThan(wash.get(2).rx());
+        assertThat(wash.get(0).a()).isLessThan(wash.get(2).a());
+        assertThat(wash.get(0).y() - wash.get(0).ry()).isGreaterThan(strip - 0.02f);
+        assertThat(wash.get(0).a()).isNotEqualTo(ExplorePaint.torchBloomWash(1.6, 0, 0.2).get(0).a());
     }
 
     private static ExploreMesh.Triangle nsWall(double x, double y, double z) {

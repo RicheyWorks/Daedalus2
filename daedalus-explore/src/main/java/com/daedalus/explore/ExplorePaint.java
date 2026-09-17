@@ -227,6 +227,18 @@ public final class ExplorePaint {
         return new TorchBloom(ox + 0.07f, oy + 0.34f, BLOOM_RX, BLOOM_RY, a);
     }
 
+    public static final int BLOOM_RINGS = 3;
+
+    /** Concentric wash — a lamp fade, not one hard gold stamp. */
+    public static List<TorchBloom> torchBloomWash(double aspect, float bob, double seconds) {
+        TorchBloom core = torchBloom(aspect, bob, seconds);
+        return List.of(
+                new TorchBloom(core.x(), core.y(), core.rx() * 1.50f, core.ry() * 1.50f,
+                        core.a() * 0.22f),
+                new TorchBloom(core.x(), core.y(), core.rx(), core.ry(), core.a() * 0.55f),
+                new TorchBloom(core.x(), core.y(), core.rx() * 0.55f, core.ry() * 0.55f, core.a()));
+    }
+
     public static final int DUST_COUNT = 8;
     public static final float DUST_HALF = 0.006f;
     public static final float DUST_R = 0.98f;

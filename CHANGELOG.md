@@ -274,6 +274,8 @@ under the `_migration/` portfolios.
   same lamp, not a cool lid over a firelit tunnel.
   Explore torch grip and shaft catch the flame so the HUD hand is lit, not
   static leather beside a flickering lamp.
+  Explore torch bloom fades in three rings so the HUD lamp is a wash, not one
+  hard gold stamp behind the flame.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
