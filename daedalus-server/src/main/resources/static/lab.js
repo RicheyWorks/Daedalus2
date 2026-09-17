@@ -5,9 +5,8 @@
 (function (global) {
   // One series (the measurements) plus a de-emphasised model overlay (the fitted curve), on
   // log-log axes so a power law reads as a straight line and its slope IS the exponent.
-  // Colour: a single in-band step of the app's blue, validated against this panel's surface
-  // (#1a2026) — the app's lighter #82b1ff sits outside the dark-mode lightness band.
-  const LAB_SERIES = "#4f83d6";
+  // Colour: torch amber on the lamp panel, not leftover cool blue on the old navy surface.
+  const LAB_SERIES = "#d4a04c";
 
   function chartSvg(fit, seriesColor, escapeHtml) {
     const W = 288, H = 150, L = 38, R = 8, T = 10, B = 22;
