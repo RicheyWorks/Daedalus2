@@ -32,7 +32,8 @@ class WebUiPaintPinTest {
                     .contains("#compareBox .gave-up { color: var(--warn); -webkit-user-drag: none")
                     .contains("#compareBox tr.pinned { background: #1a1610; -webkit-user-drag: none")
                     .contains("#compareBox tr.solver-row { cursor: pointer; -webkit-user-drag: none")
-                    .contains("#compareBox tr.solver-row:hover { background: #1a1610; -webkit-user-drag: none");
+                    .contains("#compareBox tr.solver-row:hover { background: #1a1610; -webkit-user-drag: none")
+                    .contains("#compareBox tr.pinned:hover { box-shadow: inset 3px 0 0 rgba(184, 133, 56, 0.95); -webkit-user-drag: none");
         }
     }
 }
