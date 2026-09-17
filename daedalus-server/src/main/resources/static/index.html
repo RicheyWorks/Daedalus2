@@ -64,6 +64,9 @@
   @media print {
     html, body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
   }
+  @media (forced-colors: active) {
+    html, body, #gate, #stage, canvas { forced-color-adjust: none; }
+  }
   body { margin: 0; background:
            radial-gradient(1200px 700px at 50% -10%, #16120e 0%, var(--bg) 55%);
          color: #f2ead8;

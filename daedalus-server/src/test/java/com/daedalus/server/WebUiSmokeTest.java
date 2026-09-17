@@ -81,6 +81,8 @@ class WebUiSmokeTest {
                 .contains("::search-text:current { background: rgba(184, 133, 56, 0.55); color: #f2ead8; }")
                 .contains("@media print {")
                 .contains("print-color-adjust: exact; -webkit-print-color-adjust: exact;")
+                .contains("@media (forced-colors: active) {")
+                .contains("html, body, #gate, #stage, canvas { forced-color-adjust: none; }")
                 .contains("#gate article h3")
                 .contains("letter-spacing: .04em; color: #f2ead8")
                 .contains("#gate .lede { color: #b09a72")
