@@ -1199,6 +1199,11 @@ class DesktopPaintTest {
         assertThat(Integer.parseInt(DesktopPaint.TOUR.substring(1, 3), 16))
                 .isGreaterThan(Integer.parseInt(DesktopPaint.TOUR.substring(5, 7), 16));
         assertThat(DesktopPaint.TOUR_ALPHA).isEqualTo(0.38);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.TOUR, 0))
+                .isEqualTo(DesktopPaint.TOUR);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.TOUR, 1))
+                .as("tour ribbon falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.TOUR);
         assertThat(DesktopPaint.walkHead(List.of(new Point(0, 0), cell))).isEqualTo(cell);
         assertThat(DesktopPaint.endpointRing(null, cell)).isNull();
         assertThat(DesktopPaint.pathHeadHalo(layout, null)).isNull();

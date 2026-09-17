@@ -2165,7 +2165,7 @@ public class MainController {
 
         if (currentHunt != null && currentHunt.path() != null && !currentHunt.path().isEmpty()) {
             paintPathRibbon(g, layout, currentHunt.path(), Color.web(DesktopPaint.TOUR),
-                    DesktopPaint.TOUR_ALPHA, null, null);
+                    DesktopPaint.TOUR_ALPHA, null, null, DesktopPaint.TOUR);
             Point tip = DesktopPaint.walkHead(currentHunt.path());
             double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
             Color ice = Color.web(DesktopPaint.TOUR);
