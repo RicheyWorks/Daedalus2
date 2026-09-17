@@ -107,6 +107,7 @@ class ProdAuthPostureTest {
         EXPECTED.put("GET /api/v1/world/" + ID + "/trap", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/portal", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/npc", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/parcels", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/capabilities", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/observe", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/trace", Posture.PUBLIC);

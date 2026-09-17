@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well world place line.**
+  The world rail inspects `/parcels` and names the first parcel's
+  `placeName`. Empty worlds stay `—`. `/` is still the maze well.
+
 - **World parcel place names.**
   A stamped parcel can wear an inspired `placeName` string (`Willow Walk`).
   The same name is `ALREADY_NAMED` and does not bump revision. Not GIS,

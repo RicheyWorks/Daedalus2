@@ -48,6 +48,11 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.revision", equalTo(0)))
                 .andExpect(jsonPath("$.chunkCount", equalTo(0)));
 
+        mvc.perform(get("/api/v1/world/world-zero/parcels"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.worldId", equalTo("world-zero")))
+                .andExpect(jsonPath("$.parcels.length()", equalTo(0)));
+
         mvc.perform(get("/api/v1/world/world-zero/capabilities"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.worldId", equalTo("world-zero")))

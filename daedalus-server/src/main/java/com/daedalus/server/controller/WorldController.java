@@ -9,14 +9,16 @@ import com.daedalus.api.dto.DoorInspectResponse;
 import com.daedalus.api.dto.DoorMutationResponse;
 import com.daedalus.api.dto.NpcInspectResponse;
 import com.daedalus.api.dto.NpcMutationResponse;
+import com.daedalus.api.dto.PlaceBlockRequest;
 import com.daedalus.api.dto.PortalInspectResponse;
 import com.daedalus.api.dto.PortalMutationResponse;
 import com.daedalus.api.dto.TrapInspectResponse;
 import com.daedalus.api.dto.TrapMutationResponse;
-import com.daedalus.api.dto.PlaceBlockRequest;
 import com.daedalus.api.dto.WorldCapabilitiesResponse;
 import com.daedalus.api.dto.WorldInspectResponse;
 import com.daedalus.api.dto.WorldObserveResponse;
+import com.daedalus.api.dto.WorldParcelRow;
+import com.daedalus.api.dto.WorldParcelsResponse;
 import com.daedalus.api.dto.WorldTraceResponse;
 import com.daedalus.api.dto.WorldTraceStepResponse;
 import com.daedalus.world.auto.DriveTrace;
@@ -33,6 +35,7 @@ import com.daedalus.world.Door;
 import com.daedalus.world.DoorResult;
 import com.daedalus.world.Npc;
 import com.daedalus.world.NpcResult;
+import com.daedalus.world.Parcel;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
 import com.daedalus.world.Trap;
@@ -80,6 +83,18 @@ public class WorldController {
         World world = mounted(id);
         return ResponseEntity.ok(new WorldInspectResponse(
                 world.id().value(), world.revision().value(), world.chunkCount()));
+    }
+
+    @GetMapping("/world/{id}/parcels")
+    @Operation(summary = "Inspect parcels and their place names.")
+    public ResponseEntity<WorldParcelsResponse> inspectParcels(@PathVariable String id) {
+        World world = mounted(id);
+        List<WorldParcelRow> rows = new ArrayList<>();
+        for (Parcel parcel : world.parcels()) {
+            rows.add(new WorldParcelRow(
+                    parcel.id().value(), parcel.ownerId(), parcel.placeName(), parcel.version()));
+        }
+        return ResponseEntity.ok(new WorldParcelsResponse(world.id().value(), rows));
     }
 
     @GetMapping("/world/{id}/capabilities")
