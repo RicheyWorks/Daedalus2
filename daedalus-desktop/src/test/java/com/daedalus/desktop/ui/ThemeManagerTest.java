@@ -96,6 +96,9 @@ class ThemeManagerTest {
             assertThat(fxml).contains("legendRace");
             assertThat(fxml).contains("legendLens");
             assertThat(fxml).contains("legendCompare");
+            assertThat(fxml).contains("width=\"6\" height=\"10\" fill=\"#8aaa50\"");
+            assertThat(fxml).contains("width=\"6\" height=\"10\" fill=\"#c07850\"");
+            assertThat(fxml).contains("width=\"6\" height=\"10\" fill=\"#d4b06a\"");
             assertThat(fxml).contains("legendPlayer");
             assertThat(fxml).contains("fill=\"#e88868\"");
             assertThat(fxml).contains("fill=\"#e8a060\"");
