@@ -514,6 +514,8 @@ under the `_migration/` portfolios.
   lamp, not leftover cool slate on torch stone.
   Live-frame timestamps wear khaki on a gold hairline so maze news sits in the
   lamp, not leftover cool slate on torch stone.
+  Leaderboard ranks wear the same warm khaki so place numbers sit in the lamp,
+  not leftover cool slate on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
