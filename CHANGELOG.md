@@ -742,6 +742,7 @@ under the `_migration/` portfolios.
   The well pocket refuses leftover OS selection ice so torch stone is not smeared.
   Well keys refuse leftover OS selection ice so khaki on the chips is not smeared.
   Well keys refuse leftover callout ice so khaki on the chips is not ballooned.
+  Well desk folds refuse leftover OS selection ice so khaki on the rail is not smeared.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
