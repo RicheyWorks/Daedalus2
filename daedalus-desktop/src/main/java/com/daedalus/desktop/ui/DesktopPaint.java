@@ -13,6 +13,7 @@ import com.daedalus.theory.MazeMetrics;
 import com.daedalus.theory.WaypointTour;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -1941,6 +1942,16 @@ public final class DesktopPaint {
 
     /** Scene void — leftover Modena white is not the lamp around the well. */
     public static final String SCENE_FILL = "#0c0908";
+
+    /** Stage icon void — leftover Java chrome is not the lamp on the taskbar. */
+    public static final int STAGE_ICON_SIZE = 32;
+    public static final int STAGE_ICON_ARGB = 0xFF0C0908;
+
+    public static int[] stageIconPixels() {
+        int[] px = new int[STAGE_ICON_SIZE * STAGE_ICON_SIZE];
+        Arrays.fill(px, STAGE_ICON_ARGB);
+        return px;
+    }
 
     /**
      * Backing store for a HiDPI canvas. JavaFX {@code Canvas} is a bitmap

@@ -8,6 +8,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.PixelFormat;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -49,6 +51,12 @@ public class DaedalusPrimaryStage extends Application {
 
         themeManager.applyDefault(scene);
 
+        WritableImage icon = new WritableImage(DesktopPaint.STAGE_ICON_SIZE,
+                DesktopPaint.STAGE_ICON_SIZE);
+        icon.getPixelWriter().setPixels(0, 0, DesktopPaint.STAGE_ICON_SIZE,
+                DesktopPaint.STAGE_ICON_SIZE, PixelFormat.getIntArgbInstance(),
+                DesktopPaint.stageIconPixels(), 0, DesktopPaint.STAGE_ICON_SIZE);
+        stage.getIcons().setAll(icon);
         stage.setTitle("DAEDALUS");
         stage.setScene(scene);
         stage.setMinWidth(960);

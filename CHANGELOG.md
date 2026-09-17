@@ -652,6 +652,8 @@ under the `_migration/` portfolios.
   not leftover OS ice on torch stone.
   Chromium gutter thumbs drag gold so the well is lamp,
   not leftover OS ice on torch stone.
+  Desktop stage icon wears torch void so the host sits in the lamp,
+  not leftover Java chrome around the well.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
