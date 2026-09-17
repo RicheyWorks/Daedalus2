@@ -51,7 +51,8 @@ class WebUiPaintPinTest {
                     .contains("#pluginBox .hint { color: #b09a72; -webkit-user-drag: none")
                     .contains("#lb .hint { color: #b09a72; -webkit-user-drag: none")
                     .contains("#compareBox b { -webkit-user-drag: none")
-                    .contains("#labOut b { -webkit-user-drag: none");
+                    .contains("#labOut b { -webkit-user-drag: none")
+                    .contains("#campaignBox b { -webkit-user-drag: none");
         }
     }
 }

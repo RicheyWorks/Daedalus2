@@ -100,6 +100,7 @@ under the `_migration/` portfolios.
 - Leaderboard khaki empty notes refuse leftover drag ice so board captions are not ghosted.
 - Compare theory names refuse leftover drag ice so verdict emphasis is not ghosted.
 - Lab theory names refuse leftover drag ice so growth emphasis is not ghosted.
+- Campaign grade names refuse leftover drag ice so stage emphasis is not ghosted.
 
 - **World One city look bar.**
   Distant voxels stay the real stamp (or culled), never a six-cube
