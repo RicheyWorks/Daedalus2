@@ -428,7 +428,7 @@ class WebUiPaintPinTest {
                     .contains("row(box, \"street\"")
                     .contains("names.join(\" · \")")
                     .contains("row(box, \"lot\"")
-                    .contains("lot.minX + \",\" + lot.minZ");
+                    .contains("lots.join(\" · \")");
             assertThat(html).contains("#worldBox .place { color: #94612e; -webkit-user-drag: none")
                     .contains("#worldBox .slab { color: #94612e; -webkit-user-drag: none");
             assertThat(world).contains("ink.className = named ? \"place\" : \"slab\"")

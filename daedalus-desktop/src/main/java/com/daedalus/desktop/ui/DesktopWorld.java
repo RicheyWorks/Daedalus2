@@ -49,9 +49,9 @@ public final class DesktopWorld {
         }
         String place = streetLine(world);
         if (world.parcels().size() > 1) {
-            String lot = lastLot(world);
-            if (!lot.isEmpty()) {
-                place = place.isEmpty() ? lot : place + " · " + lot;
+            String lots = streetLots(world);
+            if (!lots.isEmpty()) {
+                place = place.isEmpty() ? lots : place + " · " + lots;
             }
         }
         return inspectLine(world.revision().value(), world.parcels().size(), place,
@@ -119,6 +119,11 @@ public final class DesktopWorld {
     /** Newest slab origin as {@code x,z}. */
     public static String lastLot(World world) {
         return WorldOps.lastLot(world);
+    }
+
+    /** All slab origins as {@code x,z}, oldest first. */
+    public static String streetLots(World world) {
+        return WorldOps.streetLots(world);
     }
 
     /** Newest inspired toponym on inspect — not GIS. */

@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World street of lots.**
+  Well lot row and desktop inspect list every slab origin,
+  oldest first. Newest lot stays the last x,z.
+
 - **Explore newest lot address.**
   Off a slab the caption adds the newest x,z lot after the
   street name. Stood-on start / goal still lead.

@@ -209,6 +209,20 @@ public final class WorldOps {
         return String.join(" · ", names);
     }
 
+    /** All slab origins as {@code x,z}, oldest first. */
+    public static String streetLots(World world) {
+        if (world == null) {
+            return "";
+        }
+        List<String> lots = new ArrayList<>();
+        for (Parcel parcel : world.parcels()) {
+            if (parcel != null) {
+                lots.add(parcel.bounds().minX() + "," + parcel.bounds().minZ());
+            }
+        }
+        return String.join(" · ", lots);
+    }
+
     /** Newest slab origin as {@code x,z}. Empty when the street has no plots. */
     public static String lastLot(World world) {
         if (world == null || world.parcels().isEmpty()) {

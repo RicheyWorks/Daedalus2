@@ -145,9 +145,13 @@
     row(box, "plots", String(list.length));
     row(box, "street", names.length ? names.join(" · ") : "—");
     row(box, "place", named && named.placeName ? named.placeName : "—");
-    const lot = list.length ? list[list.length - 1] : null;
-    row(box, "lot", lot && lot.minX != null && lot.minZ != null
-        ? lot.minX + "," + lot.minZ : "—");
+    const lots = [];
+    for (let i = 0; i < list.length; i++) {
+      if (list[i] && list[i].minX != null && list[i].minZ != null) {
+        lots.push(list[i].minX + "," + list[i].minZ);
+      }
+    }
+    row(box, "lot", lots.length ? lots.join(" · ") : "—");
     row(box, "lease", rented && rented.leaseId ? rented.leaseId : "—");
     row(box, "maze", newest && newest.mazeRef ? newest.mazeRef : "—");
     const occupied = chunk && chunk.present && chunk.occupied > 0;
