@@ -479,6 +479,12 @@ class DesktopPaintTest {
                 .isNotEqualTo(DesktopPaint.GHOST);
         assertThat(DesktopPaint.GHOST_WALK_ALPHA).isEqualTo(0.28);
         assertThat(DesktopPaint.WALK_TRAIL_ALPHA).isEqualTo(0.32);
+        assertThat(DesktopPaint.PLAYER).isEqualTo("#f5c14a");
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.PLAYER, 0))
+                .isEqualTo(DesktopPaint.PLAYER);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.PLAYER, 1))
+                .as("player trail falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.PLAYER);
         assertThat(DesktopPaint.walkTrailAlpha(0.32, 0, 4))
                 .isLessThan(DesktopPaint.walkTrailAlpha(0.32, 3, 4));
         assertThat(DesktopPaint.walkTrailAlpha(0.32, 0, 1)).isEqualTo(0.32);

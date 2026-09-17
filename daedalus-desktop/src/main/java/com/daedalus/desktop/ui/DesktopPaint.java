@@ -395,6 +395,8 @@ public final class DesktopPaint {
     }
     /** Solver ribbon — same alpha as {@code draw.js} {@code paintWalk}. */
     public static final double PATH_ALPHA = 0.85;
+    /** Same torch gold as {@code draw.js} {@code PLAYER_COLORS[0]}. */
+    public static final String PLAYER = "#f5c14a";
     /** Same radius as {@code draw.js} session / fog player. */
     public static final double PLAYER_RADIUS = 0.42;
     /** Walker glow breath — same gate cadence as ghost / endpoints. */

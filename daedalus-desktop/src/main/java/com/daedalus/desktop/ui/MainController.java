@@ -2069,12 +2069,13 @@ public class MainController {
             }
         }
         if (!playerWalk.isEmpty() && theme != null) {
-            paintWalkTrail(g, layout, playerWalk, theme.player(), DesktopPaint.WALK_TRAIL_ALPHA);
+            paintWalkTrail(g, layout, playerWalk, theme.player(), DesktopPaint.WALK_TRAIL_ALPHA,
+                    DesktopPaint.PLAYER);
         }
         List<Point> ghostWalk = ghostWalkNow();
         if (!ghostWalk.isEmpty()) {
             paintWalkTrail(g, layout, ghostWalk, Color.web(DesktopPaint.GHOST),
-                    DesktopPaint.GHOST_WALK_ALPHA, true);
+                    DesktopPaint.GHOST_WALK_ALPHA, DesktopPaint.GHOST);
         }
         if (currentPath != null && !currentPath.isEmpty() && theme != null) {
             paintPathRibbon(g, layout, currentPath, theme.path(), DesktopPaint.PATH_ALPHA,
@@ -2307,7 +2308,8 @@ public class MainController {
             }
         }
         if (!playerWalk.isEmpty() && theme != null) {
-            paintWalkTrail(g, layout, playerWalk, theme.player(), DesktopPaint.WALK_TRAIL_ALPHA);
+            paintWalkTrail(g, layout, playerWalk, theme.player(), DesktopPaint.WALK_TRAIL_ALPHA,
+                    DesktopPaint.PLAYER);
         }
         Point start = current.metadata().start();
         if (theme != null && start != null && fog.seen(start.row(), start.col())) {
@@ -2540,12 +2542,12 @@ public class MainController {
 
     private static void paintWalkTrail(GraphicsContext g, DesktopPaint.Layout layout,
                                        List<Point> walk, Color color, double baseAlpha) {
-        paintWalkTrail(g, layout, walk, color, baseAlpha, false);
+        paintWalkTrail(g, layout, walk, color, baseAlpha, null);
     }
 
     private static void paintWalkTrail(GraphicsContext g, DesktopPaint.Layout layout,
                                        List<Point> walk, Color color, double baseAlpha,
-                                       boolean rim) {
+                                       String rimHex) {
         if (g == null || layout == null || walk == null || walk.isEmpty() || color == null) {
             return;
         }
@@ -2555,10 +2557,9 @@ public class MainController {
             Point p = walk.get(i);
             int tc = 2 * p.col() + 1;
             int tr = 2 * p.row() + 1;
-            g.setFill(rim
-                    ? Color.web(DesktopPaint.walkTrailInk(DesktopPaint.GHOST,
-                            DesktopPaint.floorEdge(layout, tr, tc)))
-                    : color);
+            g.setFill(rimHex == null ? color
+                    : Color.web(DesktopPaint.walkTrailInk(rimHex,
+                            DesktopPaint.floorEdge(layout, tr, tc))));
             g.fillRect(layout.x(tc), layout.y(tr), layout.w(tc), layout.h(tr));
             if (i == 0) {
                 continue;
@@ -2569,10 +2570,9 @@ public class MainController {
             }
             int otc = prev.col() + p.col() + 1;
             int otr = prev.row() + p.row() + 1;
-            g.setFill(rim
-                    ? Color.web(DesktopPaint.walkTrailInk(DesktopPaint.GHOST,
-                            DesktopPaint.floorEdge(layout, otr, otc)))
-                    : color);
+            g.setFill(rimHex == null ? color
+                    : Color.web(DesktopPaint.walkTrailInk(rimHex,
+                            DesktopPaint.floorEdge(layout, otr, otc))));
             g.fillRect(layout.x(otc), layout.y(otr), layout.w(otc), layout.h(otr));
         }
         g.setGlobalAlpha(1);

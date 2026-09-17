@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop player-walk depth.**
+  Torch-gold steps fall off toward floor-dim at the board rim with
+  the same 0.22 edge as halls, so leftover even breath is not the
+  last word on a lived-in corridor. KEEP ice stays.
+
 - **Well session trail depth.**
   Lived-in player steps fall off toward floor-dim at the board rim
   with the same 0.22 edge as halls, so leftover even torch gold is
