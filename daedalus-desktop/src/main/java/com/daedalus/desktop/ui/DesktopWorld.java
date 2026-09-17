@@ -26,15 +26,16 @@ public final class DesktopWorld {
     }
 
     /**
-     * Project a generated lab maze into world-zero. First stamp wins.
-     * Later overlap is a named result. Daily / campaign stay inspect-only.
+     * Project a generated lab maze into world-zero. Occupied origin
+     * walks +X. Daily / campaign stay inspect-only.
      */
     public static StampResult projectLab(WorldService worlds, MazeGenerationService.Cached maze) {
         if (worlds == null || maze == null || maze.grid() == null
                 || maze.metadata() == null || maze.metadata().id() == null) {
             return null;
         }
-        return worlds.stamp(ID, new BlockCoordinate(0, 0, 0), maze.grid(), maze.metadata().id());
+        return worlds.stamp(ID, new BlockCoordinate(0, 0, 0), maze.grid(),
+                maze.metadata().id(), true);
     }
 
     public static String inspectLine(World world, WorldEventFrame last) {

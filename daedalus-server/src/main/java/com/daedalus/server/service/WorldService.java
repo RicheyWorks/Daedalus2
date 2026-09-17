@@ -27,6 +27,7 @@ import com.daedalus.world.auto.Observation;
 import com.daedalus.world.auto.WorldAddress;
 import com.daedalus.world.auto.WorldOps;
 import com.daedalus.world.living.LivingSlab;
+import com.daedalus.world.stamp.StampOps;
 import com.daedalus.world.stamp.StampRequest;
 import com.daedalus.world.stamp.StampResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -247,10 +248,23 @@ public class WorldService {
      * not look up the maze cache.
      */
     public StampResult stamp(String id, BlockCoordinate at, MazeGrid maze, UUID mazeId) {
+        return stamp(id, at, maze, mazeId, false);
+    }
+
+    /**
+     * {@code nextFree} walks +X past overlapping parcels. An explicit
+     * address without that flag still returns {@code PARCEL_OVERLAP}.
+     */
+    public StampResult stamp(String id, BlockCoordinate at, MazeGrid maze, UUID mazeId,
+                             boolean nextFree) {
         World live = require(id);
         synchronized (lock) {
+            BlockCoordinate origin = at;
+            if (nextFree) {
+                origin = StampOps.nextOrigin(live, maze, at, 1);
+            }
             StampResult result = WorldOps.asStampResult(
-                    WorldOps.drive(live, "stamp.apply", at, null, maze,
+                    WorldOps.drive(live, "stamp.apply", origin, null, maze,
                             mazeId == null ? null : mazeId.toString()));
             if (result.ok() && mazeId != null && result.parcelId() != null) {
                 rebindSlabs();

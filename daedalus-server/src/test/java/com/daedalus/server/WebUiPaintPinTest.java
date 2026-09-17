@@ -420,7 +420,8 @@ class WebUiPaintPinTest {
             assertThat(world).contains("row(box, \"lease\"")
                     .contains("first.leaseId")
                     .contains("row(box, \"maze\"")
-                    .contains("first.mazeRef");
+                    .contains("first.mazeRef")
+                    .contains("row(box, \"plots\"");
             assertThat(html).contains("#worldBox .place { color: #94612e; -webkit-user-drag: none")
                     .contains("#worldBox .slab { color: #94612e; -webkit-user-drag: none");
             assertThat(world).contains("ink.className = named ? \"place\" : \"slab\"")
@@ -449,6 +450,7 @@ class WebUiPaintPinTest {
                     .contains("builder — WorldOps only")
                     .contains("host.state && host.state.maze && host.state.maze.id")
                     .contains("body.mazeId = mazeId")
+                    .contains("body.next = true")
                     .contains("async function projectLab")
                     .contains("drive(host, \"stamp.apply\")");
             assertThat(js).doesNotContain("\"agent.build\"");

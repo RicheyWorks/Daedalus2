@@ -129,7 +129,8 @@ public class WorldController {
         mounted(id);
         BlockCoordinate at = new BlockCoordinate(body.x(), body.y(), body.z());
         UUID mazeId = mazeKey(body.mazeId());
-        StampResult result = worlds.stamp(id, at, mazeId == null ? null : mazeGrid(mazeId), mazeId);
+        StampResult result = worlds.stamp(id, at, mazeId == null ? null : mazeGrid(mazeId), mazeId,
+                Boolean.TRUE.equals(body.next()));
         String parcelId = result.parcelId() == null ? "" : result.parcelId().value();
         int minX = 0;
         int maxX = 0;

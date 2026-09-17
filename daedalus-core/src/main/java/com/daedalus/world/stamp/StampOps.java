@@ -2,6 +2,7 @@
 
 package com.daedalus.world.stamp;
 
+import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.TileType;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
@@ -19,7 +20,57 @@ import java.util.Objects;
  */
 public final class StampOps {
 
+    /** One empty cube between plots — not a merge. */
+    public static final int STREET = 1;
+    /** Cap on +X walks when every probe overlaps. */
+    public static final int NEXT_TRIES = 32;
+
     private StampOps() {
+    }
+
+    public static ParcelBounds boundsOf(BlockCoordinate origin, MazeGrid maze, int wallHeight) {
+        Objects.requireNonNull(origin, "Stamp origin is required");
+        Objects.requireNonNull(maze, "MazeGrid is required");
+        if (wallHeight < 1) {
+            throw new IllegalArgumentException("wallHeight must be at least 1");
+        }
+        TileType[][] tiles = maze.toTileGrid();
+        int rows = tiles.length;
+        int cols = tiles[0].length;
+        return new ParcelBounds(
+                origin.x(),
+                origin.y(),
+                origin.z(),
+                origin.x() + cols - 1,
+                origin.y() + wallHeight,
+                origin.z() + rows - 1);
+    }
+
+    /**
+     * First +X origin whose AABB misses every parcel. Explicit
+     * {@link #apply} at a colliding address still refuses.
+     */
+    public static BlockCoordinate nextOrigin(World world, MazeGrid maze, BlockCoordinate prefer,
+                                             int wallHeight) {
+        Objects.requireNonNull(world, "World is required");
+        MazeGrid slab = maze == null ? new MazeGrid(1, 1) : maze;
+        BlockCoordinate at = prefer == null ? new BlockCoordinate(0, 0, 0) : prefer;
+        for (int i = 0; i < NEXT_TRIES; i++) {
+            ParcelBounds box = boundsOf(at, slab, wallHeight);
+            boolean hits = false;
+            for (Parcel parcel : world.parcels()) {
+                if (parcel.bounds().overlaps(box)) {
+                    hits = true;
+                    break;
+                }
+            }
+            if (!hits) {
+                return at;
+            }
+            int width = box.maxX() - box.minX() + 1;
+            at = new BlockCoordinate(at.x() + width + STREET, at.y(), at.z());
+        }
+        return at;
     }
 
     public static StampResult apply(World world, StampRequest request) {
@@ -34,13 +85,7 @@ public final class StampOps {
         BlockCoordinate origin = request.origin();
         int floorY = request.floorY();
         int wallHeight = request.wallHeight();
-        ParcelBounds bounds = new ParcelBounds(
-                origin.x(),
-                floorY,
-                origin.z(),
-                origin.x() + cols - 1,
-                floorY + wallHeight,
-                origin.z() + rows - 1);
+        ParcelBounds bounds = boundsOf(origin, request.maze(), wallHeight);
         List<BlockCoordinate> positions = new ArrayList<>();
         List<BlockType> types = new ArrayList<>();
         for (int r = 0; r < rows; r++) {

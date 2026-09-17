@@ -34,6 +34,7 @@
         const body = {x: at.x, y: at.y, z: at.z};
         if (mazeId) {
           body.mazeId = mazeId;
+          body.next = true;
         }
         return body;
       }},
@@ -87,8 +88,8 @@
   }
 
   /**
-   * Project the generated lab maze into world-zero. First stamp wins.
-   * Later overlap is a named result. Daily / campaign stay inspect-only.
+   * Project the generated lab maze into world-zero. Occupied origin
+   * walks +X. Daily / campaign stay inspect-only.
    */
   async function projectLab(host) {
     if (!host || !host.api) {
@@ -114,7 +115,9 @@
     row(box, "trap", trap && trap.state ? trap.state : "—");
     row(box, "portal", portal && portal.state ? portal.state : "—");
     row(box, "npc", npc && npc.state ? npc.state : "—");
-    const first = parcels && parcels.parcels && parcels.parcels[0];
+    const list = parcels && parcels.parcels ? parcels.parcels : [];
+    const first = list[0];
+    row(box, "plots", String(list.length));
     row(box, "place", first && first.placeName ? first.placeName : "—");
     row(box, "lease", first && first.leaseId ? first.leaseId : "—");
     row(box, "maze", first && first.mazeRef ? first.mazeRef : "—");

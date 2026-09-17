@@ -272,5 +272,18 @@ class WorldControllerTest {
         extra.perform(get("/api/v1/world/world-zero/parcels"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.parcels[0].mazeRef", equalTo(cached.metadata().id().toString())));
+        MazeGenerationService.Cached again = gen.generate("recursive-backtracker", 3, 3, 8L);
+        extra.perform(post("/api/v1/world/world-zero/stamp")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"x\":0,\"y\":0,\"z\":0,\"mazeId\":\""
+                                + again.metadata().id() + "\",\"next\":true}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.ok", equalTo(true)))
+                .andExpect(jsonPath("$.result", equalTo("APPLIED")))
+                .andExpect(jsonPath("$.minX", equalTo(8)));
+        extra.perform(get("/api/v1/world/world-zero/parcels"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.parcels.length()", equalTo(2)))
+                .andExpect(jsonPath("$.parcels[1].mazeRef", equalTo(again.metadata().id().toString())));
     }
 }

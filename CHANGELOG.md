@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World next-plot stamp.**
+  Generate walks +X past an occupied slab so a second maze is a
+  second plot. Explicit stamp at a colliding address still overlaps.
+  Well inspect shows the plot count.
+
 - **Explore host block toggle.**
   B shows or hides the voxel mesh. Corridor KEEP stays attached.
   Sample and stored worlds still boot with blocks on.

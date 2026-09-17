@@ -95,7 +95,11 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.projectLab(worlds, cached).ok()).isTrue();
         World live = worlds.inspect(DesktopWorld.ID);
         assertThat(DesktopWorld.firstMaze(live)).isEqualTo(cached.metadata().id().toString());
-        assertThat(DesktopWorld.projectLab(worlds, cached).ok()).isFalse();
+        MazeGenerationService.Cached second = new MazeGenerationService.Cached(
+                MazeMetadata.of(3, 3, 8L, "test", maze.start(), maze.goal()),
+                maze, new MazeStats());
+        assertThat(DesktopWorld.projectLab(worlds, second).ok()).isTrue();
+        assertThat(worlds.inspect(DesktopWorld.ID).parcels()).hasSize(2);
         assertThat(DesktopWorld.firstMaze(worlds.inspect(DesktopWorld.ID)))
                 .isEqualTo(cached.metadata().id().toString());
     }

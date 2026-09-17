@@ -98,6 +98,21 @@ class StampOpsTest {
     }
 
     @Test
+    void nextOriginWalksEastPastAnOccupiedSlab() {
+        World world = World.zero();
+        StampOps.apply(world, request(world, oneByOne(), 0, 0, 0, 1));
+        BlockCoordinate next = StampOps.nextOrigin(world, oneByOne(),
+                new BlockCoordinate(0, 0, 0), 1);
+        assertThat(next).isEqualTo(new BlockCoordinate(4, 0, 0));
+        StampResult second = StampOps.apply(world, request(world, oneByOne(),
+                next.x(), next.y(), next.z(), 1));
+        assertThat(second.ok()).isTrue();
+        assertThat(world.parcels()).hasSize(2);
+        assertThat(StampOps.nextOrigin(world, oneByOne(), new BlockCoordinate(0, 0, 0), 1)
+                .x()).isGreaterThan(next.x());
+    }
+
+    @Test
     void adjacentNonOverlappingStampIsAllowed() {
         World world = World.zero();
         StampOps.apply(world, request(world, oneByOne(), 0, 0, 0, 1));
