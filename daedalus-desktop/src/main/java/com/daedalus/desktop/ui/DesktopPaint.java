@@ -113,6 +113,11 @@ public final class DesktopPaint {
         return 0.06 + 0.08 * wave;
     }
 
+    /** Legend fade ink — same warm void as the stage lip, not cool fog-black. */
+    public static final int LEGEND_FADE_R = 16;
+    public static final int LEGEND_FADE_G = 11;
+    public static final int LEGEND_FADE_B = 8;
+
     /** Legend fade — same cadence as web {@code legendFadeBreath}. */
     public static double legendFadeMidAlpha(double wave) {
         return 0.50 + 0.12 * wave;

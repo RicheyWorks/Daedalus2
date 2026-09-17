@@ -280,6 +280,8 @@ under the `_migration/` portfolios.
   the lamp, not cool gray stone over a firelit floor.
   Well stage void warms toward torch-brown on web and desktop so letterboxed
   stone sits in the same lamp, not a cool blue pit.
+  Well legend fade wears the same warm void as the stage lip so overlay keys
+  sit in the lamp, not a cool fog-black wash over torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

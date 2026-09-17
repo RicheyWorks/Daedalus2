@@ -113,6 +113,8 @@ class WebUiSmokeTest {
                 .contains("panelRimBreath")
                 .contains("headerRimBreath")
                 .contains("legendFadeBreath")
+                .contains("rgba(16, 11, 8, .50)")
+                .contains("rgba(16, 11, 8, .88)")
                 .contains("exportsRimBreath")
                 .contains("ghost:")
                 .contains("ghostDisc")

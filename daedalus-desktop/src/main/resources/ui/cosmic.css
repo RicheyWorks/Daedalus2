@@ -135,7 +135,7 @@
 
 .legend {
     -fx-padding: 20 14 10 14;
-    -fx-background-color: linear-gradient(to bottom, transparent, rgba(5, 7, 10, 0.55) 35%, rgba(5, 7, 10, 0.92));
+    -fx-background-color: linear-gradient(to bottom, transparent, rgba(16, 11, 8, 0.55) 35%, rgba(16, 11, 8, 0.92));
 }
 .legend .label {
     -fx-text-fill: #9aa3ad;

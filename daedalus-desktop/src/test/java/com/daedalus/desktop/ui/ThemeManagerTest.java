@@ -58,6 +58,8 @@ class ThemeManagerTest {
                     .contains("innershadow(gaussian, rgba(0, 0, 0, 0.35), 48");
             assertThat(css).contains("#16120e");
             assertThat(css).contains("#0c0908");
+            assertThat(css).contains("rgba(16, 11, 8, 0.55)");
+            assertThat(css).contains("rgba(16, 11, 8, 0.92)");
         }
         try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
             assertThat(in).as("main.fxml is on the classpath").isNotNull();
