@@ -45,7 +45,8 @@ class WebUiPaintPinTest {
                     .contains(".info b { color: #f2ead8; font-weight: 600; -webkit-user-drag: none")
                     .contains("\"Trebuchet MS\", sans-serif; letter-spacing: .22em; -webkit-user-drag: none")
                     .contains("mark { background: rgba(184, 133, 56, 0.35); color: #f2ead8; -webkit-user-drag: none")
-                    .contains("#labOut .hint { color: #b09a72; -webkit-user-drag: none");
+                    .contains("#labOut .hint { color: #b09a72; -webkit-user-drag: none")
+                    .contains("#tourBox .hint { color: #b09a72; -webkit-user-drag: none");
         }
     }
 }
