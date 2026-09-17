@@ -164,7 +164,7 @@ class WebUiSmokeTest {
                 .contains("id=\"pngExport\" class=\"hint\" href=\"#\" download=\"maze.png\"")
                 .contains(".exports a:focus-visible { outline: 2px solid rgba(184, 133, 56, 0.85); outline-offset: 1px; }")
                 .contains(".exports button, .exports a, .exports a:visited { width: auto")
-                .contains("letter-spacing: .03em; color: #b09a72")
+                .contains("letter-spacing: .03em; color: #b09a72; text-decoration: none")
                 .contains("style=\"display:none\">download as PNG")
                 .contains("color: #b09a72")
                 .contains("background: rgba(16, 11, 8, .78)")
