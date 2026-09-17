@@ -264,6 +264,11 @@ class DesktopPaintTest {
         assertThat(halo.radius()).isGreaterThan(ring.radius());
         assertThat(DesktopPaint.CHOKE_CORE).isEqualTo(0.55);
         assertThat(DesktopPaint.DEAD_END).isEqualTo("#c8a878");
+        assertThat(DesktopPaint.DEAD_END_EDGE_DIM).isEqualTo(0.22);
+        assertThat(DesktopPaint.deadEndInk(0)).isEqualTo(DesktopPaint.DEAD_END);
+        assertThat(DesktopPaint.deadEndInk(1))
+                .as("dead-end rim falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.DEAD_END);
         assertThat(Integer.parseInt(DesktopPaint.DEAD_END.substring(1, 3), 16))
                 .isGreaterThan(Integer.parseInt(DesktopPaint.DEAD_END.substring(5, 7), 16));
         DesktopPaint.Marker speck = DesktopPaint.deadEndMarker(layout, new Point(0, 0));

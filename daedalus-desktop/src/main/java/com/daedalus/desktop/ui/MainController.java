@@ -2098,7 +2098,8 @@ public class MainController {
                         choke.deriveColor(0, 1, 1, DesktopPaint.chokeRingAlpha(cutsWave)));
             }
             for (Point end : currentCuts.deadEnds()) {
-                Color ink = Color.web(DesktopPaint.DEAD_END);
+                Color ink = Color.web(DesktopPaint.deadEndInk(
+                        DesktopPaint.floorEdge(layout, 2 * end.row() + 1, 2 * end.col() + 1)));
                 DesktopPaint.Marker soft = DesktopPaint.deadEndHalo(layout, end, cutsWave);
                 if (soft != null) {
                     g.setGlobalAlpha(DesktopPaint.deadEndHaloAlpha(cutsWave));

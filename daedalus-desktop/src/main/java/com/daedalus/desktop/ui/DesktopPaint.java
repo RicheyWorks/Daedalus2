@@ -543,6 +543,13 @@ public final class DesktopPaint {
     public static final String CHOKE = "#c07850";
     /** Dead-end speck — same ice as {@code draw.js}. */
     public static final String DEAD_END = "#c8a878";
+    /** Same 0.22 rim as halls — leftover even khaki is not the last word on a cul-de-sac. */
+    public static final double DEAD_END_EDGE_DIM = 0.22;
+
+    public static String deadEndInk(double edge) {
+        return mixHex(DEAD_END, FLOOR_DIM, DEAD_END_EDGE_DIM * Math.max(0, Math.min(1, edge)));
+    }
+
     public static final double DEAD_END_RADIUS = 0.14;
     public static final double DEAD_END_HALO = 0.28;
     public static final double DEAD_END_HALO_ALPHA = 0.22;
