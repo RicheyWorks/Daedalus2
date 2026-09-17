@@ -51,6 +51,7 @@ class WebUiSmokeTest {
         assertThat(html).contains("DAEDALUS").contains("id=\"gate\"").contains("id=\"gateWell\"")
                 .contains("id=\"gateExploreCmd\"").contains("id=\"home\"")
                 .contains("gate-brand").contains("gate-veil").contains("Other hosts")
+                .contains("color: #f2ead8")
                 .contains("gateBreath").contains("gateVeil")
                 .contains("rgba(245, 193, 74, .05)")
                 .contains("rgba(184, 133, 56, 0.28)")
