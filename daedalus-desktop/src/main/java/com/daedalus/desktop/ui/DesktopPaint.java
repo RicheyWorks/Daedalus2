@@ -262,6 +262,20 @@ public final class DesktopPaint {
         return mixHex(FLOOR_HI, FLOOR_DIM, FLOOR_EDGE_DIM * Math.max(0, Math.min(1, edge)));
     }
 
+    /**
+     * Clear-board floor — same 0.28 torch mix as fog underfoot, then edge falloff.
+     */
+    public static String clearFloorInk(double edge) {
+        String warm = mixHex(FOG_FLOOR, FOG_FLOOR_WARM, 0.28);
+        return mixHex(warm, FLOOR_DIM, FLOOR_EDGE_DIM * Math.max(0, Math.min(1, edge)));
+    }
+
+    /** Clear-board hairline — warm shine, then the same edge falloff. */
+    public static String clearFloorHiInk(double edge) {
+        String hi = mixHex(FLOOR_HI, FOG_FLOOR_WARM, 0.28);
+        return mixHex(hi, FLOOR_DIM, FLOOR_EDGE_DIM * Math.max(0, Math.min(1, edge)));
+    }
+
     /** Fog corridor shine warms with the lamp — same 0.28 weight as underfoot. */
     public static String fogFloorHiInk(double intensity) {
         return mixHex(FLOOR_HI, FOG_FLOOR_WARM,

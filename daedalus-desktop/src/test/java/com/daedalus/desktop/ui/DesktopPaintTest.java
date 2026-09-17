@@ -537,6 +537,14 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.floorHiInk(0)).isEqualTo(DesktopPaint.FLOOR_HI);
         assertThat(DesktopPaint.floorHiInk(1))
                 .isNotEqualTo(DesktopPaint.FLOOR_HI);
+        assertThat(DesktopPaint.clearFloorInk(0)).isEqualTo(DesktopPaint.EMPTY_MARK_FLOOR);
+        assertThat(DesktopPaint.clearFloorInk(1))
+                .isNotEqualTo(DesktopPaint.clearFloorInk(0));
+        assertThat(DesktopPaint.clearFloorHiInk(0))
+                .isEqualTo(DesktopPaint.mixHex(DesktopPaint.FLOOR_HI,
+                        DesktopPaint.FOG_FLOOR_WARM, 0.28));
+        assertThat(DesktopPaint.clearFloorHiInk(1))
+                .isNotEqualTo(DesktopPaint.clearFloorHiInk(0));
         assertThat(DesktopPaint.fogFloorHiInk(0)).isEqualTo(DesktopPaint.FLOOR_HI);
         assertThat(DesktopPaint.fogFloorHiInk(1))
                 .isEqualTo(DesktopPaint.mixHex(DesktopPaint.FLOOR_HI,

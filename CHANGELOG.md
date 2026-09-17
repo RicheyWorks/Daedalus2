@@ -262,6 +262,8 @@ under the `_migration/` portfolios.
   the skirting, not as even furniture sticks.
   Empty-well captions wear gold chrome on web and desktop so idle copy matches
   the warm miniature, not cool slate under DAEDALUS.
+  Clear-board floors warm toward torch-brown with fog underfoot so the live well
+  is the same stone as the idle mark, not cold slate corridors.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

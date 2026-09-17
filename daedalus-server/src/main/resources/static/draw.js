@@ -394,11 +394,13 @@
           const dx = (col - cx) / Math.max(1, tw / 2);
           const dy = (r - cy) / Math.max(1, th / 2);
           const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
-          g.fillStyle = mixHex(COLORS.floor, COLORS.floorDim, 0.22 * edge);
+          const warm = mixHex(COLORS.floor, COLORS.floorWarm, 0.28);
+          g.fillStyle = mixHex(warm, COLORS.floorDim, 0.22 * edge);
           g.fillRect(geom.offX[col], geom.offY[r],
                      geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
           if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
-            g.fillStyle = mixHex(COLORS.floorHi, COLORS.floorDim, 0.22 * edge);
+            const hi = mixHex(COLORS.floorHi, COLORS.floorWarm, 0.28);
+            g.fillStyle = mixHex(hi, COLORS.floorDim, 0.22 * edge);
             g.fillRect(geom.offX[col] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
           }
         }
