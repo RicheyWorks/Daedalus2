@@ -382,6 +382,28 @@ class ExplorePaintTest {
         ExplorePaint.handTint(ExplorePaint.HandPart.GRIP, 0, null);
     }
 
+    @Test
+    void torchDustLoftsInTheBeam() {
+        assertThat(ExplorePaint.DUST_COUNT).isEqualTo(8);
+        assertThat(ExplorePaint.DUST_HALF).isEqualTo(0.006f);
+        List<ExplorePaint.DustMote> a = ExplorePaint.dustMotes(1.6, 0, 0);
+        List<ExplorePaint.DustMote> b = ExplorePaint.dustMotes(1.6, 0, 2);
+        assertThat(a).hasSize(ExplorePaint.DUST_COUNT);
+        float strip = -1f + ExplorePaint.STATUS_H;
+        float meanY = 0;
+        for (ExplorePaint.DustMote mote : a) {
+            assertThat(mote.y()).isGreaterThan(strip);
+            assertThat(mote.a()).isBetween(0.08f, 0.45f);
+            meanY += mote.y();
+        }
+        meanY /= a.size();
+        float oy = -1f + ExplorePaint.STATUS_H + 0.06f;
+        assertThat(meanY).isGreaterThan(oy + 0.22f);
+        assertThat(meanY).isLessThan(oy + 0.55f);
+        assertThat(a.get(0).x()).isNotEqualTo(b.get(0).x());
+        assertThat(a.get(3).a()).isNotEqualTo(ExplorePaint.dustMotes(1.6, 0, 0.18).get(3).a());
+    }
+
     private static ExploreMesh.Triangle nsWall(double x, double y, double z) {
         return new ExploreMesh.Triangle(x, y, z, x + 1, y, z, x + 1, y + 0.4, z,
                 ExploreMesh.Face.WALL, 2, 3);

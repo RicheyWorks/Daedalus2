@@ -244,6 +244,8 @@ under the `_migration/` portfolios.
   feels held over the maze.
   Empty-well captions breathe under the wordmark so idle copy still feels held,
   not stuck slate under DAEDALUS.
+  Explore torch ash lofts in the beam so the flame has air, not a pasted
+  triangle over still stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

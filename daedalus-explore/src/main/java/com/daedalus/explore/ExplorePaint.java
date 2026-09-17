@@ -155,6 +155,16 @@ public final class ExplorePaint {
     public record HandTri(float x1, float y1, float x2, float y2, float x3, float y3, HandPart part) {
     }
 
+    /** Soft ash in the torch beam — GLFW fills tiny quads; tests lock drift. */
+    public record DustMote(float x, float y, float half, float a) {
+    }
+
+    public static final int DUST_COUNT = 8;
+    public static final float DUST_HALF = 0.006f;
+    public static final float DUST_R = 0.98f;
+    public static final float DUST_G = 0.82f;
+    public static final float DUST_B = 0.42f;
+
     private ExplorePaint() {
     }
 
@@ -460,6 +470,27 @@ public final class ExplorePaint {
         // Flame
         tri(out, ox + 0.02f, oy + 0.26f, ox + 0.12f, oy + 0.26f, ox + 0.07f, oy + 0.42f, HandPart.FLAME);
         tri(out, ox + 0.04f, oy + 0.26f, ox + 0.10f, oy + 0.26f, ox + 0.07f, oy + 0.36f, HandPart.FLAME);
+        return List.copyOf(out);
+    }
+
+    /** Sparse ash lofting in the torch beam — same hand anchor as {@link #handMesh}. */
+    public static List<DustMote> dustMotes(double aspect, float bob, double seconds) {
+        float ox = (float) (Math.max(0.55, aspect) * 0.48);
+        float oy = -1f + STATUS_H + 0.06f + bob;
+        List<DustMote> out = new ArrayList<>(DUST_COUNT);
+        for (int i = 0; i < DUST_COUNT; i++) {
+            float bx = ox + 0.02f + 0.14f * (((hash(i, 1) & 255) / 255f) - 0.15f);
+            float by = oy + 0.22f + 0.28f * ((hash(i, 2) & 255) / 255f);
+            float dx = (float) (0.012 * Math.sin(seconds * (1.1 + 0.17 * i) + i));
+            float dy = (float) (0.018 * ((seconds * (0.08 + 0.01 * i)) % 1.0));
+            if (dy < 0) {
+                dy += 0.018f;
+            }
+            float a = 0.18f + 0.22f * flameFlicker(seconds + i * 0.07)
+                    * (0.55f + 0.45f * ((hash(i, 3) & 255) / 255f));
+            a = Math.max(0.08f, Math.min(0.45f, a));
+            out.add(new DustMote(bx + dx, by + dy, DUST_HALF, a));
+        }
         return List.copyOf(out);
     }
 

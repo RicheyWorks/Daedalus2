@@ -487,6 +487,14 @@ public final class ExploreHost {
             glVertex2f(tri.x3(), tri.y3());
         }
         glEnd();
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        for (ExplorePaint.DustMote mote : ExplorePaint.dustMotes(aspect, bob, seconds)) {
+            glColor4f(ExplorePaint.DUST_R, ExplorePaint.DUST_G, ExplorePaint.DUST_B, mote.a());
+            fill(mote.x() - mote.half(), mote.y() - mote.half(),
+                    mote.x() + mote.half(), mote.y() + mote.half());
+        }
+        glDisable(GL_BLEND);
     }
 
     private static void status(double aspect, ExplorePaint.Status line, int[] faceTex,
