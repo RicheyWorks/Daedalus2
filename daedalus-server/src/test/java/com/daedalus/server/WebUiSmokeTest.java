@@ -57,6 +57,7 @@ class WebUiSmokeTest {
                 .contains("name=\"msapplication-TileImage\" content=\"data:image/png;base64,")
                 .contains("name=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\"")
                 .contains("name=\"color-scheme\" content=\"dark\"")
+                .contains("name=\"format-detection\" content=\"telephone=no\"")
                 .contains("rel=\"icon\" type=\"image/svg+xml\"")
                 .contains("fill='%230c0908'")
                 .contains("stroke='%23b88538'")
