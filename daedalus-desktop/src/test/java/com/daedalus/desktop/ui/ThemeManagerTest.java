@@ -93,6 +93,8 @@ class ThemeManagerTest {
             assertThat(fxml).contains("fill=\"#d4b06a\"");
             assertThat(fxml).contains("legendPath");
             assertThat(fxml).contains("fill=\"#8fb8ff\" arcWidth=\"3\" arcHeight=\"3\"");
+            assertThat(fxml).contains("legendRace");
+            assertThat(fxml).contains("fill=\"#82b1ff\"");
             assertThat(fxml).contains("stroke=\"#2a2218\"");
         }
         assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.PASSAGE_INK).isEqualTo("#484339");
