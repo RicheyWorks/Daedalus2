@@ -798,6 +798,7 @@ under the `_migration/` portfolios.
   Start-gate card titles refuse leftover drag ice so cream on the cards is not ghosted.
   Start-gate cards refuse leftover drag ice so the card pocket is not ghosted.
   The start-gate hero refuses leftover drag ice so the wordmark pocket is not ghosted.
+  The start-gate well refuses leftover drag ice so the void around the cards is not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

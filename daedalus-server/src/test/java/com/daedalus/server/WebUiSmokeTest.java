@@ -100,6 +100,7 @@ class WebUiSmokeTest {
                 .contains("rgba(22, 18, 14, .88); cursor: default; -webkit-user-drag: none")
                 .contains("#gate { position: fixed; inset: 0; z-index: 20; overflow: auto; overscroll-behavior: none;")
                 .contains("overflow: auto; overscroll-behavior: none; cursor: default")
+                .contains("overflow: auto; overscroll-behavior: none; cursor: default; -webkit-user-drag: none")
                 .contains("padding-top: calc(48px + env(safe-area-inset-top, 0px));")
                 .contains("padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));")
                 .contains("padding-left: calc(20px + env(safe-area-inset-left, 0px));")
