@@ -74,9 +74,19 @@ class ExplorePaintTest {
         assertThat(icon[3] & 0xFF).isEqualTo(255);
         int mid = (ExplorePaint.WINDOW_ICON_SIZE / 2 * ExplorePaint.WINDOW_ICON_SIZE
                 + ExplorePaint.WINDOW_ICON_SIZE / 2) * 4;
-        assertThat(icon[mid] & 0xFF).isEqualTo(ExplorePaint.WINDOW_ICON_R);
-        assertThat(icon[mid + 1] & 0xFF).isEqualTo(ExplorePaint.WINDOW_ICON_G);
-        assertThat(icon[mid + 2] & 0xFF).isEqualTo(ExplorePaint.WINDOW_ICON_B);
+        assertThat(icon[mid] & 0xFF)
+                .as("idle maze floors sit at the icon center")
+                .isEqualTo(ExplorePaint.WINDOW_ICON_FLOOR_R);
+        assertThat(icon[mid + 1] & 0xFF).isEqualTo(ExplorePaint.WINDOW_ICON_FLOOR_G);
+        assertThat(icon[mid + 2] & 0xFF).isEqualTo(ExplorePaint.WINDOW_ICON_FLOOR_B);
+        int start = (11 * ExplorePaint.WINDOW_ICON_SIZE + 7) * 4;
+        assertThat(icon[start] & 0xFF)
+                .as("start mint sits on the idle gate cell")
+                .isEqualTo(ExplorePaint.WINDOW_ICON_START_R);
+        int goal = (19 * ExplorePaint.WINDOW_ICON_SIZE + 23) * 4;
+        assertThat(icon[goal] & 0xFF)
+                .as("exit coral sits on the idle goal cell")
+                .isEqualTo(ExplorePaint.WINDOW_ICON_GOAL_R);
     }
 
     @Test

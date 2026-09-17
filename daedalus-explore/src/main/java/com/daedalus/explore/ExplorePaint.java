@@ -27,6 +27,37 @@ public final class ExplorePaint {
     public static final int WINDOW_ICON_LIP_R = 184;
     public static final int WINDOW_ICON_LIP_G = 133;
     public static final int WINDOW_ICON_LIP_B = 56;
+    /** Idle-maze stamp — same 2px tiles as the well tab / desktop stage icons. */
+    public static final int WINDOW_ICON_CELL = 2;
+    public static final String[] WINDOW_ICON_MARK = {
+            "###########",
+            "# #   #   #",
+            "# ### ### #",
+            "#   #   # #",
+            "### ### # #",
+            "#     #   #",
+            "###########",
+    };
+    public static final int WINDOW_ICON_START_ROW = 0;
+    public static final int WINDOW_ICON_START_COL = 0;
+    public static final int WINDOW_ICON_GOAL_ROW = 2;
+    public static final int WINDOW_ICON_GOAL_COL = 4;
+    /** Torch-warm posts — same as well {@code wallWarm}. */
+    public static final int WINDOW_ICON_WALL_R = 0x2a;
+    public static final int WINDOW_ICON_WALL_G = 0x22;
+    public static final int WINDOW_ICON_WALL_B = 0x18;
+    /** Idle floors — same 0.28 mix as the well idle mark. */
+    public static final int WINDOW_ICON_FLOOR_R = 0x48;
+    public static final int WINDOW_ICON_FLOOR_G = 0x43;
+    public static final int WINDOW_ICON_FLOOR_B = 0x39;
+    /** Start mint — KEEP, same as the well tab gate. */
+    public static final int WINDOW_ICON_START_R = 0x3e;
+    public static final int WINDOW_ICON_START_G = 0xe0;
+    public static final int WINDOW_ICON_START_B = 0x8f;
+    /** Exit coral — same as the well tab goal. */
+    public static final int WINDOW_ICON_GOAL_R = 0xff;
+    public static final int WINDOW_ICON_GOAL_G = 0x5a;
+    public static final int WINDOW_ICON_GOAL_B = 0x5f;
 
     public static byte[] windowIconRgba() {
         byte[] px = new byte[WINDOW_ICON_SIZE * WINDOW_ICON_SIZE * 4];
@@ -36,6 +67,40 @@ public final class ExplorePaint {
             px[i + 2] = (byte) WINDOW_ICON_B;
             px[i + 3] = (byte) 0xFF;
         }
+        int rows = WINDOW_ICON_MARK.length;
+        int cols = WINDOW_ICON_MARK[0].length();
+        int ox = (WINDOW_ICON_SIZE - cols * WINDOW_ICON_CELL) / 2;
+        int oy = (WINDOW_ICON_SIZE - rows * WINDOW_ICON_CELL) / 2;
+        int startTr = 2 * WINDOW_ICON_START_ROW + 1;
+        int startTc = 2 * WINDOW_ICON_START_COL + 1;
+        int goalTr = 2 * WINDOW_ICON_GOAL_ROW + 1;
+        int goalTc = 2 * WINDOW_ICON_GOAL_COL + 1;
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                int red;
+                int green;
+                int blue;
+                if (r == startTr && c == startTc) {
+                    red = WINDOW_ICON_START_R;
+                    green = WINDOW_ICON_START_G;
+                    blue = WINDOW_ICON_START_B;
+                } else if (r == goalTr && c == goalTc) {
+                    red = WINDOW_ICON_GOAL_R;
+                    green = WINDOW_ICON_GOAL_G;
+                    blue = WINDOW_ICON_GOAL_B;
+                } else if (WINDOW_ICON_MARK[r].charAt(c) == '#') {
+                    red = WINDOW_ICON_WALL_R;
+                    green = WINDOW_ICON_WALL_G;
+                    blue = WINDOW_ICON_WALL_B;
+                } else {
+                    red = WINDOW_ICON_FLOOR_R;
+                    green = WINDOW_ICON_FLOOR_G;
+                    blue = WINDOW_ICON_FLOOR_B;
+                }
+                fillWindowIconCell(px, ox + c * WINDOW_ICON_CELL, oy + r * WINDOW_ICON_CELL,
+                        red, green, blue);
+            }
+        }
         int last = WINDOW_ICON_SIZE - 1;
         for (int i = 0; i < WINDOW_ICON_SIZE; i++) {
             putIconPixel(px, i, 0, WINDOW_ICON_LIP_R, WINDOW_ICON_LIP_G, WINDOW_ICON_LIP_B);
@@ -44,6 +109,18 @@ public final class ExplorePaint {
             putIconPixel(px, last, i, WINDOW_ICON_LIP_R, WINDOW_ICON_LIP_G, WINDOW_ICON_LIP_B);
         }
         return px;
+    }
+
+    private static void fillWindowIconCell(byte[] px, int x, int y, int r, int g, int b) {
+        for (int dy = 0; dy < WINDOW_ICON_CELL; dy++) {
+            for (int dx = 0; dx < WINDOW_ICON_CELL; dx++) {
+                int xx = x + dx;
+                int yy = y + dy;
+                if (xx >= 0 && yy >= 0 && xx < WINDOW_ICON_SIZE && yy < WINDOW_ICON_SIZE) {
+                    putIconPixel(px, xx, yy, r, g, b);
+                }
+            }
+        }
     }
 
     private static void putIconPixel(byte[] px, int x, int y, int r, int g, int b) {
