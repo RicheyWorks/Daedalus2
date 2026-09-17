@@ -355,7 +355,7 @@ class WebUiSmokeTest {
                 .contains(".info b { color: #f2ead8; font-weight: 600; }")
                 .contains("#stats { font: 12px/1.7 ui-monospace, monospace; color: #f2ead8;")
                 .contains("#stats span { color: #b09a72; }")
-                .contains("#status { font-size: 12px; color: #b09a72; margin-top: 8px;")
+                .contains("#status { font-size: 12px; color: #b09a72; cursor: default; margin-top: 8px;")
                 .contains("exportsRimBreath")
                 .contains("border-color: rgba(184, 133, 56, 0.85); color: #f2ead8")
                 .contains("ghost: \"#e8e0d4\"")
