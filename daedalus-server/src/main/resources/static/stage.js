@@ -92,6 +92,7 @@
       deadend: !!(snap.analysis && snap.analysis.deadEnds
           && snap.analysis.deadEnds.length),
       hardest: !!(snap.hardest && snap.hardest.path && snap.hardest.path.length),
+      tour: !!(snap.tourPath && snap.tourPath.length),
       sanctuary: !!(snap.sanctuaries && snap.sanctuaries.placements
           && snap.sanctuaries.placements.length),
       lens: !!snap.lens,
