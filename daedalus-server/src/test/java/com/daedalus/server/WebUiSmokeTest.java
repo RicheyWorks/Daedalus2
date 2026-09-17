@@ -84,6 +84,7 @@ class WebUiSmokeTest {
                 .contains("padding-left: calc(22px + env(safe-area-inset-left, 0px));")
                 .contains("padding-right: calc(22px + env(safe-area-inset-right, 0px));")
                 .contains("all: unset; cursor: pointer; letter-spacing: .22em;")
+                .contains("-webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; -webkit-user-drag: none")
                 .contains("color: #f2ead8; user-select: none; -webkit-user-select: none")
                 .contains("-webkit-tap-highlight-color: transparent; -webkit-touch-callout: none")
                 .contains("header .tag { color: #b09a72")
