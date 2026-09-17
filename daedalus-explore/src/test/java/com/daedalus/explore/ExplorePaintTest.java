@@ -63,12 +63,20 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.WINDOW_ICON_R).isEqualTo(12);
         assertThat(ExplorePaint.WINDOW_ICON_G).isEqualTo(9);
         assertThat(ExplorePaint.WINDOW_ICON_B).isEqualTo(8);
+        assertThat(ExplorePaint.WINDOW_ICON_LIP_R).isEqualTo(184);
+        assertThat(ExplorePaint.WINDOW_ICON_LIP_G).isEqualTo(133);
+        assertThat(ExplorePaint.WINDOW_ICON_LIP_B).isEqualTo(56);
         byte[] icon = ExplorePaint.windowIconRgba();
         assertThat(icon).hasSize(ExplorePaint.WINDOW_ICON_SIZE * ExplorePaint.WINDOW_ICON_SIZE * 4);
-        assertThat(icon[0] & 0xFF).isEqualTo(ExplorePaint.WINDOW_ICON_R);
-        assertThat(icon[1] & 0xFF).isEqualTo(ExplorePaint.WINDOW_ICON_G);
-        assertThat(icon[2] & 0xFF).isEqualTo(ExplorePaint.WINDOW_ICON_B);
+        assertThat(icon[0] & 0xFF).isEqualTo(ExplorePaint.WINDOW_ICON_LIP_R);
+        assertThat(icon[1] & 0xFF).isEqualTo(ExplorePaint.WINDOW_ICON_LIP_G);
+        assertThat(icon[2] & 0xFF).isEqualTo(ExplorePaint.WINDOW_ICON_LIP_B);
         assertThat(icon[3] & 0xFF).isEqualTo(255);
+        int mid = (ExplorePaint.WINDOW_ICON_SIZE / 2 * ExplorePaint.WINDOW_ICON_SIZE
+                + ExplorePaint.WINDOW_ICON_SIZE / 2) * 4;
+        assertThat(icon[mid] & 0xFF).isEqualTo(ExplorePaint.WINDOW_ICON_R);
+        assertThat(icon[mid + 1] & 0xFF).isEqualTo(ExplorePaint.WINDOW_ICON_G);
+        assertThat(icon[mid + 2] & 0xFF).isEqualTo(ExplorePaint.WINDOW_ICON_B);
     }
 
     @Test

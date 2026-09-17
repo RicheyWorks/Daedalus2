@@ -23,6 +23,10 @@ public final class ExplorePaint {
     public static final int WINDOW_ICON_R = 12;
     public static final int WINDOW_ICON_G = 9;
     public static final int WINDOW_ICON_B = 8;
+    /** Same gold lip as the well rim — leftover unrimmed void is not the lamp. */
+    public static final int WINDOW_ICON_LIP_R = 184;
+    public static final int WINDOW_ICON_LIP_G = 133;
+    public static final int WINDOW_ICON_LIP_B = 56;
 
     public static byte[] windowIconRgba() {
         byte[] px = new byte[WINDOW_ICON_SIZE * WINDOW_ICON_SIZE * 4];
@@ -32,7 +36,22 @@ public final class ExplorePaint {
             px[i + 2] = (byte) WINDOW_ICON_B;
             px[i + 3] = (byte) 0xFF;
         }
+        int last = WINDOW_ICON_SIZE - 1;
+        for (int i = 0; i < WINDOW_ICON_SIZE; i++) {
+            putIconPixel(px, i, 0, WINDOW_ICON_LIP_R, WINDOW_ICON_LIP_G, WINDOW_ICON_LIP_B);
+            putIconPixel(px, i, last, WINDOW_ICON_LIP_R, WINDOW_ICON_LIP_G, WINDOW_ICON_LIP_B);
+            putIconPixel(px, 0, i, WINDOW_ICON_LIP_R, WINDOW_ICON_LIP_G, WINDOW_ICON_LIP_B);
+            putIconPixel(px, last, i, WINDOW_ICON_LIP_R, WINDOW_ICON_LIP_G, WINDOW_ICON_LIP_B);
+        }
         return px;
+    }
+
+    private static void putIconPixel(byte[] px, int x, int y, int r, int g, int b) {
+        int i = (y * WINDOW_ICON_SIZE + x) * 4;
+        px[i] = (byte) r;
+        px[i + 1] = (byte) g;
+        px[i + 2] = (byte) b;
+        px[i + 3] = (byte) 0xFF;
     }
     /** Fog silhouette — same warm dark for every unseen face, not a dusk hole. */
     public static final float UNSEEN_R = 0.09f;
