@@ -385,6 +385,8 @@ under the `_migration/` portfolios.
   Well-key choke and dead-end swatches wear the same cream rim as other place
   marks so cuts and cul-de-sacs sit in the lamp, not leftover unrimmed on torch
   stone.
+  Well captions name sanctuaries and a matching classifier in the same warm moss
+  as the discs so those notes sit in the lamp, not leftover mint on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

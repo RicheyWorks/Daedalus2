@@ -9,7 +9,7 @@
   function fingerprintHtml(f, escapeHtml) {
     const pct = Math.round(f.confidence * 100);
     const verdict = f.agrees
-        ? `<b style="color:#4cc38a">${escapeHtml(f.predictedGeneratorId)}</b> — matches the record`
+        ? `<b style="color:#8aaa50">${escapeHtml(f.predictedGeneratorId)}</b> — matches the record`
         : `<b style="color:#f0b429">${escapeHtml(f.predictedGeneratorId)}</b> — record says `
           + `${escapeHtml(f.recordedGeneratorId)}`;
     const sig = f.signature;
@@ -65,7 +65,7 @@
 
   function sanctuariesHtml(s) {
     return `<div style="margin-top:8px">`
-        + `<b style="color:#4cc38a">${s.placements.length} sanctuaries</b> &middot; `
+        + `<b style="color:#8aaa50">${s.placements.length} sanctuaries</b> &middot; `
         + `nobody is more than <b>${s.coveringRadius} steps</b> from one &middot; `
         + `serving ${s.servedCells} of ${s.habitableCells} walkable cells`
         + `<div class="hint" style="margin-top:4px">The ring marks the worst-served cell — the `
