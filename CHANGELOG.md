@@ -370,6 +370,8 @@ under the `_migration/` portfolios.
   the lamp, not leftover cool white on torch stone.
   Desktop toolbar brand wears the same warm cream so the name above the well sits
   in the lamp, not leftover cool white on torch stone.
+  Start-gate way cards sit in the stage void so the doors on the well are not
+  leftover cool navy on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
