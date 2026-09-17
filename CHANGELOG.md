@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well tour trail depth.**
+  Held-Karp amber falls off toward floor-dim at the board rim with
+  the same 0.22 edge as halls, so leftover even ribbon is not the
+  last word on a hunt corridor. The legend tour chip stays leftover
+  even. KEEP path ice stays. Start mint and goal coral stay.
+
 - **Desktop hardest trail depth.**
   Longest-route gold falls off toward floor-dim at the board rim
   with the same 0.22 edge as halls, so leftover even ribbon is not

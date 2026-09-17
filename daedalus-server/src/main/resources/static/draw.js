@@ -393,6 +393,13 @@
     return mixHex("#f2c94c", COLORS.floorDim, 0.22 * edge);
   }
 
+  function tourTileInk(tr, tc, th, tw) {
+    const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
+    const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
+    const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+    return mixHex("#d4b06a", COLORS.floorDim, 0.22 * edge);
+  }
+
   function chokeInk(tr, tc, th, tw) {
     const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
     const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
@@ -724,7 +731,8 @@
       pathHead(g, geom, walkHead(scene.hardest.path, 1), "#f2c94c");
     }
     if (scene.tourPath && scene.tourPath.length) {
-      paintWalk(g, geom, scene.tourPath, "#d4b06a", 1, 0.38, "ribbon");
+      paintWalk(g, geom, scene.tourPath, "#d4b06a", 1, 0.38, "ribbon",
+          (tr, tc) => tourTileInk(tr, tc, th, tw));
       pathHead(g, geom, walkHead(scene.tourPath, 1), "#d4b06a");
     }
     if (scene.tour && scene.tour.waypoints) {
