@@ -747,6 +747,7 @@ under the `_migration/` portfolios.
   The header bar refuses leftover OS selection ice so torch chrome is not smeared.
   The header bar refuses leftover callout ice so torch chrome is not ballooned.
   The well pocket refuses leftover drag ice so torch stone is not ghosted.
+  The header bar refuses leftover drag ice so torch chrome is not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
