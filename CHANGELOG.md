@@ -528,6 +528,8 @@ under the `_migration/` portfolios.
   lamp, not leftover cool slate on torch stone.
   Desktop generation-frontier tiles wear torch amber so search edges sit in
   the lamp, not leftover ice beside torch stone.
+  Live-frame solver lines wear torch amber so maze news sits in the lamp, not
+  leftover ice on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

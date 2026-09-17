@@ -174,6 +174,7 @@ class WebUiSmokeTest {
                 .contains("#log { height: 240px; overflow-y: auto; font: 12px/1.6 ui-monospace, monospace;")
                 .contains("color: #f2ead8;")
                 .contains("#log .t { color: #b09a72; margin-right: 6px; }")
+                .contains("#log .solver { color: #d4a04c; }")
                 .contains("#log div { border-bottom: 1px solid rgba(184, 133, 56, 0.28); padding: 2px 0; }")
                 .contains("#lb .rank { display: inline-block; width: 18px; color: #b09a72; }")
                 .contains("details { margin-top: 10px; border-top: 1px solid rgba(184, 133, 56, 0.28); padding-top: 6px; }")
