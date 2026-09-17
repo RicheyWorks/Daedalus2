@@ -186,6 +186,7 @@ class WebUiSmokeTest {
                 .contains("#labOut td { padding: 2px 8px; border-bottom: 1px solid rgba(184, 133, 56, 0.28); }")
                 .contains("#pluginBox .rank { color: #b09a72; }")
                 .contains("#pluginBox div { border-bottom: 1px solid rgba(184, 133, 56, 0.28); padding: 2px 0; }")
+                .contains("#campaignBox div { border-bottom: 1px solid rgba(184, 133, 56, 0.28); }")
                 .contains("const LAB_SERIES = \"#d4a04c\"")
                 .contains("stroke=\"#8c764e\" stroke-width=\"2\"")
                 .contains("stroke=\"#16120e\" stroke-width=\"2\"")
