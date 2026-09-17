@@ -333,7 +333,7 @@
   .panel h2 { margin: 0 0 8px; font-size: 11px; text-transform: uppercase;
               letter-spacing: .14em; color: #b09a72; font-weight: 600; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none; cursor: default; }
   .rail { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-  .board-panel { display: flex; flex-direction: column; min-height: calc(100vh - 88px);
+  .board-panel { display: flex; flex-direction: column; min-height: calc(100vh - 88px); cursor: default;
                  position: sticky; top: 60px; padding: 12px;
                  background: #16120e;
                  border-color: rgba(184, 133, 56, 0.42);
@@ -425,7 +425,7 @@
   #compareBox:empty { display: none; }
   #compareBox { max-height: 22vh; overflow: auto; overscroll-behavior: none; min-width: 0;
                 scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent;
-                color: #f2ead8; padding: 8px; background: #16120e;
+                color: #f2ead8; cursor: text; padding: 8px; background: #16120e;
                 border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 6px;
                 animation: panelRimBreath 4.5s ease-in-out infinite; }
   #compareBox table { width: 100%; margin-top: 8px; border-collapse: collapse;
@@ -457,7 +457,7 @@
   #asciiOut { margin: 10px 0 0; padding: 8px; background: #16120e;
               border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 6px;
               font: 11px/1.2 ui-monospace, monospace; overflow: auto; overscroll-behavior: none;
-              max-height: 22vh; color: #d4c4a8;
+              max-height: 22vh; color: #d4c4a8; cursor: text;
               scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent;
               animation: panelRimBreath 4.5s ease-in-out infinite; }
   #asciiOut .rock { color: #8c764e; }
