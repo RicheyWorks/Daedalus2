@@ -502,7 +502,10 @@ class DesktopPaintTest {
                 .isGreaterThan(Integer.parseInt(DesktopPaint.WELL_VOID_CENTER.substring(5, 7), 16));
         assertThat(DesktopPaint.wellVoidCenterInk(0)).isEqualTo(DesktopPaint.WELL_VOID_CENTER);
         assertThat(DesktopPaint.wellVoidCenterInk(1)).isEqualTo(DesktopPaint.WELL_VOID_CENTER_LIT);
-        assertThat(DesktopPaint.FLOOR_DIM).isEqualTo("#2a333c");
+        assertThat(DesktopPaint.FLOOR_DIM).isEqualTo("#2a2218");
+        assertThat(DesktopPaint.FOG_FLOOR_DIM).isEqualTo(DesktopPaint.FOG_WALL_WARM);
+        assertThat(Integer.parseInt(DesktopPaint.FLOOR_DIM.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.FLOOR_DIM.substring(5, 7), 16));
         assertThat(DesktopPaint.FLOOR_EDGE_DIM).isEqualTo(0.22);
         assertThat(DesktopPaint.WALL_EDGE_DIM).isEqualTo(0.28);
         assertThat(DesktopPaint.wallInk(0)).isEqualTo(DesktopPaint.mixHex(

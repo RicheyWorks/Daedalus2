@@ -4,7 +4,7 @@
 (function (global) {
   const COLORS = {
     wall: "#0b0f14", wallWarm: "#2a2218", unseen: "#05070a",
-    floor: "#3d4a58", floorHi: "#765834", floorDim: "#2a333c",
+    floor: "#3d4a58", floorHi: "#765834", floorDim: "#2a2218",
     floorWarm: "#5c4a32",
     start: "#3ee08f", goal: "#ff5a5f", path: "#8fb8ff",
     ghost: "#e6edf3",

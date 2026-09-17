@@ -233,8 +233,8 @@ public final class DesktopPaint {
     public static String wellVoidCenterInk(double wave) {
         return mixHex(WELL_VOID_CENTER, WELL_VOID_CENTER_LIT, Math.max(0, Math.min(1, wave)));
     }
-    public static final String FOG_FLOOR_DIM = "#2a333c";
-    /** Clear-board edge falloff toward dim slate — same ink as fog dim. */
+    public static final String FOG_FLOOR_DIM = "#2a2218";
+    /** Clear-board edge falloff toward dim torch stone — same ink as fog dim. */
     public static final String FLOOR_DIM = FOG_FLOOR_DIM;
     public static final double FLOOR_EDGE_DIM = 0.22;
     /** Clear-board wall rim toward unseen void — same depth idea as floors. */
