@@ -546,6 +546,8 @@ under the `_migration/` portfolios.
   one ice, not leftover ice beside KEEP ice.
   Tournament headers wear khaki on gold hairlines so those ranks sit in the lamp,
   not leftover cream slabs on torch stone.
+  Complexity-lab point tables wear khaki on gold hairlines so those measures sit
+  in the lamp, not leftover cream slabs on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
