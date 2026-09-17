@@ -382,6 +382,9 @@ under the `_migration/` portfolios.
   key so maze news sits in the lamp, not leftover cool slate on torch stone.
   Compare rows under the well sit in torch void on hover and pin so the table is
   not leftover cool navy on torch stone.
+  Well-key choke and dead-end swatches wear the same cream rim as other place
+  marks so cuts and cul-de-sacs sit in the lamp, not leftover unrimmed on torch
+  stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

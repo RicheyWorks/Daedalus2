@@ -223,6 +223,7 @@ class WebUiSmokeTest {
                 .contains("data-key=\"lens\"")
                 .contains("data-key=\"hardest\"")
                 .contains("data-key=\"deadend\"")
+                .contains("#legend [data-key=\"choke\"] i, #legend [data-key=\"deadend\"] i")
                 .contains("sanctuary: !!(snap.sanctuaries")
                 .contains("lens: !!snap.lens")
                 .contains("hardest: !!(snap.hardest")
