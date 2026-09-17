@@ -93,6 +93,8 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- Lab khaki notes refuse leftover drag ice so growth captions are not ghosted.
+
 - **First-person explore paints a Doom-like corridor.** Fog now keeps
   the enclosing wall posts, walkable tiles have a ceiling, and faces
   keep a tan/brown palette so looking up is stone, not a void. Xbox
