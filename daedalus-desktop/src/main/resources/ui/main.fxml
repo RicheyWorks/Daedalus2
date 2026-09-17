@@ -160,6 +160,11 @@
                         <Rectangle width="10" height="10" fill="#c07850" arcWidth="3" arcHeight="3"/>
                     </graphic>
                 </Label>
+                <Label fx:id="legendDeadend" text="dead end" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="10" height="10" fill="#c8a878" arcWidth="3" arcHeight="3"/>
+                    </graphic>
+                </Label>
                 <Label fx:id="legendHardest" text="hardest" managed="false" visible="false">
                     <graphic>
                         <Rectangle width="10" height="10" fill="#f2c94c" arcWidth="3" arcHeight="3"/>

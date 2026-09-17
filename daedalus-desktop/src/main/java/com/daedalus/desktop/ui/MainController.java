@@ -140,6 +140,7 @@ public class MainController {
     @FXML private Label legendHotspot;
     @FXML private Label legendFog;
     @FXML private Label legendChoke;
+    @FXML private Label legendDeadend;
     @FXML private Label legendHardest;
     @FXML private Label legendSanctuary;
     @FXML private Label legendLens;
@@ -2160,7 +2161,9 @@ public class MainController {
                         && !currentHunt.waypoints().isEmpty(),
                 !ghostWalkNow().isEmpty(),
                 currentCompare != null && currentCompare.lanes() != null
-                        && !currentCompare.lanes().isEmpty());
+                        && !currentCompare.lanes().isEmpty(),
+                currentCuts != null && currentCuts.deadEnds() != null
+                        && !currentCuts.deadEnds().isEmpty());
         legendBox.setVisible(!keys.isEmpty());
         if (exportBox != null) {
             exportBox.setVisible(current != null);
@@ -2172,6 +2175,7 @@ public class MainController {
         showLegendKey(legendHotspot, keys.contains("hotspot"));
         showLegendKey(legendFog, keys.contains("fog"));
         showLegendKey(legendChoke, keys.contains("choke"));
+        showLegendKey(legendDeadend, keys.contains("deadend"));
         showLegendKey(legendHardest, keys.contains("hardest"));
         showLegendKey(legendSanctuary, keys.contains("sanctuary"));
         showLegendKey(legendLens, keys.contains("lens"));

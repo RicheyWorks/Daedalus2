@@ -866,6 +866,15 @@ public final class DesktopPaint {
                                           boolean hardest, boolean sanctuary, boolean lens,
                                           boolean race, boolean waypoint, boolean ghost,
                                           boolean compare) {
+        return legendKeys(maze, path, walk, hotspot, fog, choke, hardest, sanctuary, lens, race,
+                waypoint, ghost, compare, false);
+    }
+
+    public static List<String> legendKeys(boolean maze, boolean path, boolean walk,
+                                          boolean hotspot, Fog fog, boolean choke,
+                                          boolean hardest, boolean sanctuary, boolean lens,
+                                          boolean race, boolean waypoint, boolean ghost,
+                                          boolean compare, boolean deadend) {
         if (!maze) {
             return List.of();
         }
@@ -887,6 +896,9 @@ public final class DesktopPaint {
         }
         if (choke && fog == null) {
             keys.add("choke");
+        }
+        if (deadend && fog == null) {
+            keys.add("deadend");
         }
         if (hardest && fog == null) {
             keys.add("hardest");

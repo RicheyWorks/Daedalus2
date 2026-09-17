@@ -362,6 +362,8 @@ under the `_migration/` portfolios.
   so the detour is keyed, not leftover unnamed on torch stone.
   Web overlay legend names dead ends when those khaki specks are on the well so
   cul-de-sacs are keyed, not leftover unnamed on torch stone.
+  Desktop overlay legend names dead ends when those khaki specks are on the well
+  so cul-de-sacs are keyed, not leftover unnamed on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
