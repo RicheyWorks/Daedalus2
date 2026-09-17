@@ -303,7 +303,8 @@ inspect, lab-maze stamp (`mazeId` on `/stamp`), living-slab
 subscribe, parcel `mazeRef` persist (DAEW v9), and mazeRef /
 lease inspect on well, desktop, and explore, explore remesh
 on living-slab revision, well stamp.apply mazeId, and WorldOps
-stamp.apply with a MazeGrid and mazeRef are shipped.
+stamp.apply with a MazeGrid and mazeRef, and explore load of
+the persisted DAEW file are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
 

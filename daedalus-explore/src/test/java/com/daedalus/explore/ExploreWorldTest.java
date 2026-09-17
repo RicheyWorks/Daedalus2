@@ -11,12 +11,15 @@ import com.daedalus.model.Point;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.World;
+import com.daedalus.world.WorldStore;
 import com.daedalus.world.living.LivingSlab;
 import com.daedalus.world.stamp.StampOps;
 import com.daedalus.world.stamp.StampRequest;
 import com.daedalus.world.stamp.StampResult;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
+import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -171,6 +174,28 @@ class ExploreWorldTest {
     }
 
     @Test
+    void aStoredWorldWalksInsteadOfTheSample(@TempDir Path tmp) throws Exception {
+        MazeGrid grid = new MazeGrid(1, 2);
+        grid.carve(grid.cell(0, 0), Direction.EAST);
+        ExploreWorld world = new ExploreWorld("test", 1L, grid);
+        World live = World.zero();
+        live.place(new BlockCoordinate(2, 0, 2), BlockType.WOOD);
+        Path file = tmp.resolve("world-zero.daew");
+        WorldStore.save(live, file);
+        world.attachStoredOrSample(file);
+        assertThat(world.showingBlocks()).isTrue();
+        assertThat(world.blocks().triangles()).extracting(WorldMesh.Triangle::type)
+                .contains(BlockType.WOOD)
+                .doesNotContain(BlockType.GLASS);
+        world.attachStoredOrSample(tmp.resolve("missing.daew"));
+        assertThat(world.blocks().world().parcels().get(0).placeName())
+                .isEqualTo(ExploreWorld.SAMPLE_PLACE);
+        world.attachStoredOrSample(null);
+        assertThat(world.blocks().world().parcels().get(0).placeName())
+                .isEqualTo(ExploreWorld.SAMPLE_PLACE);
+    }
+
+    @Test
     void launcherStaysHeadlessWithoutTheFlag() {
         assertThat(ExploreLauncher.windowRequested(new String[] {})).isFalse();
         assertThat(ExploreLauncher.windowRequested(new String[] {ExploreLauncher.WINDOW_FLAG}))
@@ -178,6 +203,11 @@ class ExploreWorldTest {
         assertThat(ExploreLauncher.flag(new String[] {ExploreLauncher.SMOKE_FLAG},
                 ExploreLauncher.SMOKE_FLAG)).isTrue();
         assertThat(ExploreLauncher.flag(null, ExploreLauncher.SMOKE_FLAG)).isFalse();
+        assertThat(ExploreLauncher.STORE_ENV).isEqualTo("DAEDALUS_WORLD_FILE");
+        if (System.getenv(ExploreLauncher.STORE_ENV) == null) {
+            assertThat(ExploreLauncher.storeFile().getFileName().toString())
+                    .isEqualTo("world-zero.daew");
+        }
     }
 
     private static int openCount(MazeGrid grid) {

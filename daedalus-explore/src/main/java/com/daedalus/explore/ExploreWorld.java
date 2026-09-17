@@ -13,7 +13,11 @@ import com.daedalus.world.BlockType;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.World;
+import com.daedalus.world.WorldStore;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -128,6 +132,25 @@ public final class ExploreWorld {
         slab.nameParcel(slab.parcels().get(0).id(), SAMPLE_PLACE);
         attachBlocks(slab);
         showBlocks(true);
+    }
+
+    /**
+     * Walk the same DAEW file the well persists. Missing or unreadable
+     * files keep the sample landmark. Corridor {@link #mesh()} stays.
+     */
+    public void attachStoredOrSample(Path file) {
+        if (file != null) {
+            try {
+                if (Files.isRegularFile(file)) {
+                    attachBlocks(WorldStore.load(file));
+                    showBlocks(true);
+                    return;
+                }
+            } catch (IOException e) {
+                // sample landmark still walks
+            }
+        }
+        attachSampleBlocks();
     }
 
     public ExploreBody body() {

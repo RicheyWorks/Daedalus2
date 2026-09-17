@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore walks the persisted world.**
+  Explore loads `world-zero.daew` (same file as the well) when present.
+  A missing file keeps the sample landmark. Corridor KEEP stays.
+
 - **WorldOps stamp.apply mazeRef.**
   A builder recipe can bind the lab maze id on the stamped parcel
   so living slabs rebind. Same string REST already writes. Not a wallet.
