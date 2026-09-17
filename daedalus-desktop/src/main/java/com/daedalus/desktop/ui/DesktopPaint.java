@@ -229,6 +229,8 @@ public final class DesktopPaint {
     public static final String FOG_FLOOR = "#3d4a58";
     /** Torch-warm stone underfoot — same mix as {@code draw.js} floorWarm. */
     public static final String FOG_FLOOR_WARM = "#5c4a32";
+    /** Idle lattice floors — same 0.28 warm mix as fog underfoot. */
+    public static final String EMPTY_MARK_FLOOR = mixHex(FOG_FLOOR, FOG_FLOOR_WARM, 0.28);
     /** Soft rim at the memory edge — same falloff as {@code draw.js} FOG_FRONTIER. */
     public static final double FOG_FRONTIER = 0.72;
     /** Same 4.5s cadence as empty / gate place breath. */

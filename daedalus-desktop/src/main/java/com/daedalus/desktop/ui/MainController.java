@@ -1780,7 +1780,7 @@ public class MainController {
                             mark.w(tile.tileCol()), mark.h(tile.tileRow()));
                 }
                 g.setGlobalAlpha(DesktopPaint.emptyMarkFloorAlpha(wave));
-                g.setFill(theme.passage());
+                g.setFill(Color.web(DesktopPaint.EMPTY_MARK_FLOOR));
                 for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkFloors()) {
                     g.fillRect(mark.x(tile.tileCol()), mark.y(tile.tileRow()),
                             mark.w(tile.tileCol()), mark.h(tile.tileRow()));
