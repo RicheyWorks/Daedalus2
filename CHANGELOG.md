@@ -372,6 +372,8 @@ under the `_migration/` portfolios.
   in the lamp, not leftover cool white on torch stone.
   Start-gate way cards sit in the stage void so the doors on the well are not
   leftover cool navy on torch stone.
+  Start-gate way titles wear the same warm cream so door names sit in the lamp,
+  not leftover cool white on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
