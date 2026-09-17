@@ -117,6 +117,11 @@ public final class ExploreWorld {
         this.showBlocks = show && blocks != null;
     }
 
+    /** W1.5 host toggle — voxels stay attached; corridor {@link #mesh()} stays. */
+    public void toggleBlocks() {
+        showBlocks(!showBlocks);
+    }
+
     public boolean showingBlocks() {
         return showBlocks;
     }

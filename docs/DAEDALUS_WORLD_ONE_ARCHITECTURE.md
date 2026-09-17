@@ -294,7 +294,7 @@ Phase 0 already ordered the post-7 work. This audit keeps it:
 | W1.2 | Living slab | Maze tick changes only dirty cubes; inspect-only is quiet | core |
 | W1.3 | Second observer | Two STOMP clients; B sees A's place | **shipped** — `WorldSecondObserverTest` |
 | W1.4 | Well panel | Listen + inspect; `/` maze well unchanged | **shipped** — `#world` rail + `world.js` |
-| W1.5 | Explore voxel view | Second mesh; corridor path still smokes | **shipped** — `WorldMesh` (host toggle later) |
+| W1.5 | Explore voxel view | Second mesh; corridor path still smokes | **shipped** — `WorldMesh` (B toggles voxels) |
 
 Permissions and desktop inspect shipped after W1.5. Trap, portal, NPC,
 `WorldBuilder`, the well agent fold, plot lease strings,
@@ -305,8 +305,8 @@ lease inspect on well, desktop, and explore, explore remesh
 on living-slab revision, well stamp.apply mazeId, and WorldOps
 stamp.apply with a MazeGrid and mazeRef, explore load of
 the persisted DAEW file, explore remesh on DAEW mtime,
-well Generate → stamp.apply, and desktop Generate → stamp.apply
-are shipped.
+well Generate → stamp.apply, desktop Generate → stamp.apply,
+and explore B voxel toggle are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
 

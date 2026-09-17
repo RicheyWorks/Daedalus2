@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore host block toggle.**
+  B shows or hides the voxel mesh. Corridor KEEP stays attached.
+  Sample and stored worlds still boot with blocks on.
+
 - **Desktop generate stamps the lab maze.**
   Desktop Generate projects the maze into world-zero via stamp.apply.
   First slab wins; later overlap is a named result. Maze generate /

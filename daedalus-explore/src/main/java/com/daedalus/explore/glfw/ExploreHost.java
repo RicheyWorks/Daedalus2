@@ -38,6 +38,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_GAMEPAD_BUTTON_DPAD_LEFT;
 import static org.lwjgl.glfw.GLFW.GLFW_GAMEPAD_BUTTON_DPAD_RIGHT;
 import static org.lwjgl.glfw.GLFW.GLFW_JOYSTICK_1;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_B;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_H;
@@ -214,6 +215,7 @@ public final class ExploreHost {
         double[] cursor = {0, 0};
         boolean liveDown = false;
         boolean jamDown = false;
+        boolean blocksDown = false;
         boolean harden = false;
         GLFWGamepadState pad = GLFWGamepadState.create();
         boolean[] snapHeld = {false, false};
@@ -248,6 +250,11 @@ public final class ExploreHost {
                 world.occupyHere();
             }
             jamDown = j;
+            boolean b = glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS;
+            if (b && !blocksDown) {
+                world.toggleBlocks();
+            }
+            blocksDown = b;
             harden = glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS;
 
             draw(window, world, wallTex, floorTex, ceilTex, skyTex, faceTex, stride);

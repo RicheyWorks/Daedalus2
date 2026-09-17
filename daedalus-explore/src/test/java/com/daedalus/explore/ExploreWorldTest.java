@@ -130,6 +130,15 @@ class ExploreWorldTest {
         world.attachBlocks(null);
         assertThat(world.showingBlocks()).isFalse();
         assertThat(world.mesh()).isSameAs(corridor);
+        world.toggleBlocks();
+        assertThat(world.showingBlocks()).isFalse();
+        world.attachBlocks(volume);
+        world.showBlocks(true);
+        world.toggleBlocks();
+        assertThat(world.showingBlocks()).isFalse();
+        world.toggleBlocks();
+        assertThat(world.showingBlocks()).isTrue();
+        assertThat(world.mesh()).isSameAs(corridor);
     }
 
     @Test
