@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore block cube draw.**
+  When blocks are shown, GLFW paints the second mesh with torch
+  materials: stone, dirt, wood, and lamp-green glass (not leftover well
+  ice). The corridor mesh stays. Window / smoke attach a small landmark
+  slab; story JSON export does not.
+
 - **Well world place line.**
   The world rail inspects `/parcels` and names the first parcel's
   `placeName`. Empty worlds stay `—`. `/` is still the maze well.

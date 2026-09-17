@@ -6,6 +6,7 @@ import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.Direction;
 import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
+import com.daedalus.world.BlockType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -42,6 +43,28 @@ class ExplorePaintTest {
         assertThat(floor[0]).isGreaterThan(floor[2]);
         assertThat(ceil[0]).isGreaterThan(ceil[2]);
         assertThat(ceil[0]).isLessThan(floor[0]);
+    }
+
+    @Test
+    void occupiedCubesWearTorchMaterialsNotIce() {
+        float[] stone = new float[3];
+        float[] dirt = new float[3];
+        float[] wood = new float[3];
+        float[] glass = new float[3];
+        float[] lid = new float[3];
+        float[] boot = new float[3];
+        ExplorePaint.blockTint(BlockType.STONE, WorldMesh.Face.POS_Z, stone);
+        ExplorePaint.blockTint(BlockType.DIRT, WorldMesh.Face.POS_Z, dirt);
+        ExplorePaint.blockTint(BlockType.WOOD, WorldMesh.Face.POS_Z, wood);
+        ExplorePaint.blockTint(BlockType.GLASS, WorldMesh.Face.POS_Z, glass);
+        ExplorePaint.blockTint(BlockType.STONE, WorldMesh.Face.POS_Y, lid);
+        ExplorePaint.blockTint(BlockType.STONE, WorldMesh.Face.NEG_Y, boot);
+        assertThat(wood[0]).as("wood is warmer than stone").isGreaterThan(stone[0]);
+        assertThat(dirt[0]).isGreaterThan(stone[0]);
+        assertThat(glass[1]).as("glass stays lamp-green, not leftover well ice")
+                .isGreaterThan(glass[2]);
+        assertThat(glass[2]).isLessThan(0.72f);
+        assertThat(lid[0]).as("top face reads the lamp").isGreaterThan(boot[0]);
     }
 
     @Test

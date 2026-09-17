@@ -8,6 +8,7 @@ import com.daedalus.explore.ExploreMarker;
 import com.daedalus.explore.ExploreMesh;
 import com.daedalus.explore.ExplorePaint;
 import com.daedalus.explore.ExploreWorld;
+import com.daedalus.explore.WorldMesh;
 import com.daedalus.explore.XrFrame;
 import com.daedalus.explore.XrRuntime;
 import com.daedalus.explore.XrRuntimes;
@@ -357,6 +358,7 @@ public final class ExploreHost {
         faces(world, ExploreMesh.Face.CEILING, ceilTex, rgb, uv, seconds);
         glBindTexture(GL_TEXTURE_2D, 0);
         glDisable(GL_TEXTURE_2D);
+        blockFaces(world, rgb);
         glBegin(GL_TRIANGLES);
         float[] pad = new float[3];
         for (ExploreMarker marker : world.markers()) {
@@ -420,6 +422,21 @@ public final class ExploreHost {
         glEnd();
         glBindTexture(GL_TEXTURE_2D, 0);
         glDisable(GL_TEXTURE_2D);
+    }
+
+    private static void blockFaces(ExploreWorld world, float[] rgb) {
+        if (!world.showingBlocks() || world.blocks() == null) {
+            return;
+        }
+        glBegin(GL_TRIANGLES);
+        for (WorldMesh.Triangle tri : world.blocks().triangles()) {
+            ExplorePaint.blockTint(tri.type(), tri.face(), rgb);
+            glColor3f(rgb[0], rgb[1], rgb[2]);
+            glVertex3d(tri.x1(), tri.y1(), tri.z1());
+            glVertex3d(tri.x2(), tri.y2(), tri.z2());
+            glVertex3d(tri.x3(), tri.y3(), tri.z3());
+        }
+        glEnd();
     }
 
     private static void faces(ExploreWorld world, ExploreMesh.Face face, int tex,

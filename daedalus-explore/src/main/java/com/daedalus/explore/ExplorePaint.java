@@ -4,6 +4,7 @@ package com.daedalus.explore;
 
 import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
+import com.daedalus.world.BlockType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1299,6 +1300,56 @@ public final class ExplorePaint {
             }
         }
         return out;
+    }
+
+    /** Occupied-cube materials — torch lamp, not leftover well ice. */
+    public static final float BLOCK_STONE_R = 0.40f;
+    public static final float BLOCK_STONE_G = 0.30f;
+    public static final float BLOCK_STONE_B = 0.20f;
+    public static final float BLOCK_DIRT_R = 0.50f;
+    public static final float BLOCK_DIRT_G = 0.32f;
+    public static final float BLOCK_DIRT_B = 0.16f;
+    public static final float BLOCK_WOOD_R = 0.58f;
+    public static final float BLOCK_WOOD_G = 0.38f;
+    public static final float BLOCK_WOOD_B = 0.18f;
+    public static final float BLOCK_GLASS_R = 0.55f;
+    public static final float BLOCK_GLASS_G = 0.64f;
+    public static final float BLOCK_GLASS_B = 0.58f;
+
+    public static void blockTint(BlockType type, WorldMesh.Face face, float[] rgb) {
+        BlockType kind = type == null ? BlockType.STONE : type;
+        float r;
+        float g;
+        float b;
+        switch (kind) {
+            case DIRT -> {
+                r = BLOCK_DIRT_R;
+                g = BLOCK_DIRT_G;
+                b = BLOCK_DIRT_B;
+            }
+            case WOOD -> {
+                r = BLOCK_WOOD_R;
+                g = BLOCK_WOOD_G;
+                b = BLOCK_WOOD_B;
+            }
+            case GLASS -> {
+                r = BLOCK_GLASS_R;
+                g = BLOCK_GLASS_G;
+                b = BLOCK_GLASS_B;
+            }
+            default -> {
+                r = BLOCK_STONE_R;
+                g = BLOCK_STONE_G;
+                b = BLOCK_STONE_B;
+            }
+        }
+        float shade = face == null ? 1f : switch (face) {
+            case POS_Y -> 1.12f;
+            case NEG_Y -> 0.72f;
+            case POS_X, NEG_X -> 0.88f;
+            case POS_Z, NEG_Z -> 1.00f;
+        };
+        set(rgb, Math.min(1f, r * shade), Math.min(1f, g * shade), Math.min(1f, b * shade));
     }
 
     /** Start / goal floor wash — names the ends, still stone, not a neon slab. */

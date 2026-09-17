@@ -124,6 +124,20 @@ class ExploreWorldTest {
     }
 
     @Test
+    void sampleBlocksSitBesideTheCorridor() {
+        MazeGrid grid = new MazeGrid(1, 2);
+        grid.carve(grid.cell(0, 0), Direction.EAST);
+        ExploreWorld world = new ExploreWorld("test", 1L, grid);
+        ExploreMesh corridor = world.mesh();
+        world.attachSampleBlocks();
+        assertThat(world.showingBlocks()).isTrue();
+        assertThat(world.mesh()).isSameAs(corridor);
+        assertThat(world.blocks().triangles()).isNotEmpty();
+        assertThat(world.blocks().triangles()).extracting(WorldMesh.Triangle::type)
+                .contains(BlockType.STONE, BlockType.DIRT, BlockType.WOOD, BlockType.GLASS);
+    }
+
+    @Test
     void launcherStaysHeadlessWithoutTheFlag() {
         assertThat(ExploreLauncher.windowRequested(new String[] {})).isFalse();
         assertThat(ExploreLauncher.windowRequested(new String[] {ExploreLauncher.WINDOW_FLAG}))

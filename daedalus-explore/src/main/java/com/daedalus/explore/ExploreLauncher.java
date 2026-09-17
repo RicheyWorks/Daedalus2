@@ -19,6 +19,7 @@ public final class ExploreLauncher {
         ExploreWorld world = ExploreWorld.dungeon();
         boolean smoke = flag(args, SMOKE_FLAG);
         if (windowRequested(args) || smoke) {
+            world.attachSampleBlocks();
             runWindow(world, smoke);
             if (smoke) {
                 System.out.println("DAEDALUS_EXPLORE_SMOKE_OK");

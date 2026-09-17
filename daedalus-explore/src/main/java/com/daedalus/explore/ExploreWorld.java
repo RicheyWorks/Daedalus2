@@ -8,6 +8,8 @@ import com.daedalus.engine.generators.DungeonGenerator;
 import com.daedalus.model.Direction;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
+import com.daedalus.world.BlockCoordinate;
+import com.daedalus.world.BlockType;
 import com.daedalus.world.World;
 
 import java.util.List;
@@ -89,6 +91,20 @@ public final class ExploreWorld {
 
     public boolean showingBlocks() {
         return showBlocks;
+    }
+
+    /**
+     * In-memory landmark slab beside the corridor. Not the server file store.
+     * Maze {@link #mesh()} stays loaded.
+     */
+    public void attachSampleBlocks() {
+        World slab = World.zero();
+        slab.place(new BlockCoordinate(8, 0, 8), BlockType.STONE);
+        slab.place(new BlockCoordinate(9, 0, 8), BlockType.DIRT);
+        slab.place(new BlockCoordinate(8, 0, 9), BlockType.WOOD);
+        slab.place(new BlockCoordinate(8, 1, 8), BlockType.GLASS);
+        attachBlocks(slab);
+        showBlocks(true);
     }
 
     public ExploreBody body() {
