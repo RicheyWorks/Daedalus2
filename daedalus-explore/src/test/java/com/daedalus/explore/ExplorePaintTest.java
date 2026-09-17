@@ -504,6 +504,21 @@ class ExplorePaintTest {
                 .as("a visible story mark still leads")
                 .isEqualTo("ENTRANCE");
         assertThat(ExplorePaint.endPlaceName(body, null)).isEqualTo("HALL");
+        float[] hallInk = new float[3];
+        float[] startInk = new float[3];
+        float[] goalInk = new float[3];
+        ExplorePaint.captionPlaceTint("HALL", hallInk);
+        ExplorePaint.captionPlaceTint("START", startInk);
+        ExplorePaint.captionPlaceTint("GOAL", goalInk);
+        assertThat(hallInk[0]).isEqualTo(ExplorePaint.AIM_BRIGHT_R);
+        assertThat(startInk[1]).as("START glyphs lift toward well mint")
+                .isGreaterThan(hallInk[1]);
+        assertThat(goalInk[0]).as("GOAL glyphs lift toward well coral")
+                .isGreaterThan(hallInk[0]);
+        float[] startSoft = new float[3];
+        ExplorePaint.captionPlaceSoftTint("START", startSoft);
+        assertThat(startSoft[1]).as("START underglow lifts toward mint")
+                .isGreaterThan(ExplorePaint.CAPTION_SOFT_G);
     }
 
     @Test

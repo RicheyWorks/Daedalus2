@@ -575,6 +575,36 @@ public final class ExplorePaint {
                 ? "HALL" : status.place();
     }
 
+    /** START / GOAL glyphs — same well mint and coral, not leftover gold letters. */
+    public static void captionPlaceTint(String place, float[] rgb) {
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        if ("START".equals(place)) {
+            set(rgb, MAP_START_R, MAP_START_G, MAP_START_B);
+        } else if ("GOAL".equals(place)) {
+            set(rgb, MAP_GOAL_R, MAP_GOAL_G, MAP_GOAL_B);
+        } else {
+            set(rgb, AIM_BRIGHT_R, AIM_BRIGHT_G, AIM_BRIGHT_B);
+        }
+    }
+
+    public static void captionPlaceSoftTint(String place, float[] rgb) {
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        set(rgb, CAPTION_SOFT_R, CAPTION_SOFT_G, CAPTION_SOFT_B);
+        if ("START".equals(place)) {
+            rgb[0] += (MAP_START_R - rgb[0]) * FLOOR_END_WEIGHT;
+            rgb[1] += (MAP_START_G - rgb[1]) * FLOOR_END_WEIGHT;
+            rgb[2] += (MAP_START_B - rgb[2]) * FLOOR_END_WEIGHT;
+        } else if ("GOAL".equals(place)) {
+            rgb[0] += (MAP_GOAL_R - rgb[0]) * FLOOR_END_WEIGHT;
+            rgb[1] += (MAP_GOAL_G - rgb[1]) * FLOOR_END_WEIGHT;
+            rgb[2] += (MAP_GOAL_B - rgb[2]) * FLOOR_END_WEIGHT;
+        }
+    }
+
     public static String captionMeta(Status status) {
         if (status == null) {
             return "";
