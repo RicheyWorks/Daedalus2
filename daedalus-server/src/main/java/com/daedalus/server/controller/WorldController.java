@@ -9,6 +9,7 @@ import com.daedalus.api.dto.DoorInspectResponse;
 import com.daedalus.api.dto.DoorMutationResponse;
 import com.daedalus.api.dto.NpcInspectResponse;
 import com.daedalus.api.dto.NpcMutationResponse;
+import com.daedalus.api.dto.ParcelLeaseResponse;
 import com.daedalus.api.dto.PlaceBlockRequest;
 import com.daedalus.api.dto.PortalInspectResponse;
 import com.daedalus.api.dto.PortalMutationResponse;
@@ -36,6 +37,7 @@ import com.daedalus.world.DoorResult;
 import com.daedalus.world.Npc;
 import com.daedalus.world.NpcResult;
 import com.daedalus.world.Parcel;
+import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
 import com.daedalus.world.Trap;
@@ -96,6 +98,18 @@ public class WorldController {
                     parcel.leaseId(), parcel.version()));
         }
         return ResponseEntity.ok(new WorldParcelsResponse(world.id().value(), rows));
+    }
+
+    @PostMapping("/world/{id}/parcels/lease")
+    @Operation(summary = "Lease the first parcel as tenant-zero. NO_PARCEL is a result, not silence.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<ParcelLeaseResponse> leaseParcel(@PathVariable String id) {
+        mounted(id);
+        ParcelLeaseResult result = worlds.leaseParcel(id);
+        World world = mounted(id);
+        String leaseId = world.parcels().isEmpty() ? "" : world.parcels().get(0).leaseId();
+        return ResponseEntity.ok(new ParcelLeaseResponse(
+                result.name(), leaseId, world.revision().value()));
     }
 
     @GetMapping("/world/{id}/capabilities")

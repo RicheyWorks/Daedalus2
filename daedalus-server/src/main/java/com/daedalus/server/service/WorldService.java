@@ -11,6 +11,7 @@ import com.daedalus.world.Door;
 import com.daedalus.world.DoorResult;
 import com.daedalus.world.Npc;
 import com.daedalus.world.NpcResult;
+import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
 import com.daedalus.world.Trap;
@@ -21,6 +22,7 @@ import com.daedalus.world.WorldStore;
 import com.daedalus.world.auto.DriveTrace;
 import com.daedalus.world.auto.Observation;
 import com.daedalus.world.auto.WorldAddress;
+import com.daedalus.world.auto.WorldOps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -197,6 +199,17 @@ public class WorldService {
             NpcResult result = live.hushNpc();
             persist();
             log.append("npc.hush", result, live.revision().value());
+            return result;
+        }
+    }
+
+    public ParcelLeaseResult leaseParcel(String id) {
+        World live = require(id);
+        synchronized (lock) {
+            ParcelLeaseResult result = WorldOps.asLeaseResult(
+                    WorldOps.drive(live, "parcel.lease", new BlockCoordinate(0, 0, 0), null));
+            persist();
+            log.append("parcel.lease", result, live.revision().value());
             return result;
         }
     }

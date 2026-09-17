@@ -148,6 +148,7 @@ class ProdAuthPostureTest {
         EXPECTED.put("POST /api/v1/world/" + ID + "/portal/seal", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/world/" + ID + "/npc/talk", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/world/" + ID + "/npc/hush", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/parcels/lease", Posture.AUTHENTICATED);
     }
 
     @LocalServerPort

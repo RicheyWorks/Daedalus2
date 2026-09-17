@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well parcel.lease fold.**
+  The world panel drives `parcel.lease` onto
+  `POST /world/{id}/parcels/lease`. No parcel is a named result.
+  No wallet types. `/` stays the maze well.
+
 - **World parcel.lease drive.**
   `WorldOps` / `WorldZeroDrive` lease the first parcel as
   `tenant-zero`. No parcel is a named result. No wallet types.

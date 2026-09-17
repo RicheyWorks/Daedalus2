@@ -180,6 +180,11 @@ class WorldControllerTest {
         mvc.perform(post("/api/v1/world/world-zero/npc/talk"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("ALREADY_SPEAKING")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/lease"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("NO_PARCEL")))
+                .andExpect(jsonPath("$.leaseId", equalTo("")));
     }
 
     @Test

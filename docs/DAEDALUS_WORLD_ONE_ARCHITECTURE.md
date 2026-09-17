@@ -297,9 +297,9 @@ Phase 0 already ordered the post-7 work. This audit keeps it:
 | W1.5 | Explore voxel view | Second mesh; corridor path still smokes | **shipped** — `WorldMesh` (host toggle later) |
 
 Permissions and desktop inspect shipped after W1.5. Trap, portal, NPC,
-`WorldBuilder`, the well agent fold, plot lease strings, and
-`parcel.lease` on WorldOps are shipped. Next: WebGL / terrain
-(NOT NOW). Market provider on those strings later. REST lease later.
+`WorldBuilder`, the well agent fold, plot lease strings,
+`parcel.lease` on WorldOps, and REST `/parcels/lease` are shipped.
+Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 
 ---
 

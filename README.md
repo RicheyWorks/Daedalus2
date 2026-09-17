@@ -226,7 +226,8 @@ public consumers).
 | `GET` | `/api/v1/world/{id}/portal` | public | Inspect the programmable portal |
 | `POST` | `/api/v1/world/{id}/portal/open` | required | Open the portal. Already-open is a named result |
 | `POST` | `/api/v1/world/{id}/portal/seal` | required | Seal the portal. Already-sealed is a named result |
-| `GET` | `/api/v1/world/{id}/parcels` | public | Inspect parcels and place names |
+| `GET` | `/api/v1/world/{id}/parcels` | public | Inspect parcels, place names, and lease strings |
+| `POST` | `/api/v1/world/{id}/parcels/lease` | required | Lease the first parcel as tenant-zero. No parcel is a named result |
 | `GET` | `/api/v1/world/{id}/npc` | public | Inspect the programmable NPC |
 | `POST` | `/api/v1/world/{id}/npc/talk` | required | Talk to the NPC. Already-speaking is a named result |
 | `POST` | `/api/v1/world/{id}/npc/hush` | required | Hush the NPC. Already-idle is a named result |

@@ -28,6 +28,7 @@
     "npc.inspect": {method: "GET", path: () => "/world/" + WORLD + "/npc"},
     "npc.talk": {method: "POST", path: () => "/world/" + WORLD + "/npc/talk"},
     "npc.hush": {method: "POST", path: () => "/world/" + WORLD + "/npc/hush"},
+    "parcel.lease": {method: "POST", path: () => "/world/" + WORLD + "/parcels/lease"},
   };
 
   async function inspect(host) {
