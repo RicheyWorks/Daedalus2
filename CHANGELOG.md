@@ -648,6 +648,8 @@ under the `_migration/` portfolios.
   not leftover OS smear on the board.
   Desktop scene void wears torch stone so the host sits in the lamp,
   not leftover Modena white around the well.
+  Chromium gutter thumbs hover gold so the well is lamp,
+  not leftover OS ice on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
