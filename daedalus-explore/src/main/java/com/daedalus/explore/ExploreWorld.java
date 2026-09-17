@@ -126,7 +126,8 @@ public final class ExploreWorld {
     public ExploreWalk.Outcome apply(ExploreInput.Intent intent, double dt) {
         ExploreInput.applyLook(body, intent);
         double[] move = ExploreInput.moveVector(body, intent, WALK_SPEED * dt);
-        ExploreWalk.Outcome out = ExploreWalk.step(mesh, body, move[0], move[1]);
+        ExploreWalk.Outcome out = ExploreWalk.step(mesh, showingBlocks() ? blocks : null,
+                body, move[0], move[1]);
         if (out.moved()) {
             fog.stand(body.cell());
         }

@@ -5,6 +5,9 @@ package com.daedalus.explore;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.Direction;
 import com.daedalus.model.Point;
+import com.daedalus.world.BlockCoordinate;
+import com.daedalus.world.BlockType;
+import com.daedalus.world.World;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,5 +62,24 @@ class ExploreWalkTest {
         assertThat(ExploreWalk.legalCellStep(grid, new Point(0, 0), new Point(9, 9))).isFalse();
         assertThat(ExploreWalk.step(null, ExploreBody.atCell(new Point(0, 0)), 1, 0).moved())
                 .isFalse();
+    }
+
+    @Test
+    void anOccupiedCubeRefusesTheBodyAndTheCorridorStillOpens() {
+        MazeGrid grid = new MazeGrid(2, 5);
+        grid.carve(grid.cell(1, 3), Direction.EAST);
+        ExploreMesh mesh = ExploreMesh.of(grid);
+        World volume = World.zero();
+        volume.place(new BlockCoordinate(7, 0, 2), BlockType.STONE);
+        WorldMesh cubes = WorldMesh.of(volume);
+        ExploreBody open = ExploreBody.atCell(new Point(1, 3));
+        ExploreWalk.step(mesh, null, open, 2.2, 0);
+        assertThat(open.cell()).isEqualTo(new Point(1, 4));
+
+        ExploreBody blocked = ExploreBody.atCell(new Point(1, 3));
+        ExploreWalk.step(mesh, cubes, blocked, 2.2, 0);
+        assertThat(ExploreWalk.cubeBlocked(cubes, blocked.x(), blocked.z())).isFalse();
+        assertThat(blocked.x()).isLessThan(7.0);
+        assertThat(blocked.cell()).isEqualTo(new Point(1, 3));
     }
 }

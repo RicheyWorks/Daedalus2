@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore block collision.**
+  Occupied cubes refuse the body the same way corridor walls do:
+  discrete `World.contains`, sampled at boot and eye. An opening still
+  walks when the second mesh is off. No new key.
+
 - **Explore block lamp dim.**
   Occupied cubes take torch reach as brightness only. Wood stays wood
   in the dark; leftover brown hue-mix does not wash the slab.
