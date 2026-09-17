@@ -524,6 +524,8 @@ under the `_migration/` portfolios.
   leftover cool navy on torch stone.
   Live-frame copy wears warm cream so maze news sits in the lamp, not leftover
   cool white on torch stone.
+  Web desk summaries wear khaki and a gold chevron so those names sit in the
+  lamp, not leftover cool slate on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
