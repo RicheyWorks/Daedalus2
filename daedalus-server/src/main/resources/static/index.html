@@ -326,7 +326,7 @@
   summary::after { content: " ▸"; color: rgba(184, 133, 56, 0.55);
                   animation: chevronBreath 4.5s ease-in-out infinite; }
   details[open] summary::after { content: " ▾"; }
-  .panel { background: var(--panel); cursor: default; border: 1px solid rgba(184, 133, 56, 0.36);
+  .panel { background: var(--panel); cursor: default; -webkit-user-drag: none; border: 1px solid rgba(184, 133, 56, 0.36);
            border-radius: 10px; padding: 14px 16px;
            box-shadow: 0 0 0 1px rgba(16, 11, 8, 0.85);
            animation: panelRimBreath 4.5s ease-in-out infinite; }
