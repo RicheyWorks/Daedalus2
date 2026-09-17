@@ -2173,10 +2173,12 @@ public class MainController {
                     DesktopPaint.TOUR_ALPHA, null, null, DesktopPaint.TOUR);
             Point tip = DesktopPaint.walkHead(currentHunt.path());
             double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
-            Color ice = Color.web(DesktopPaint.TOUR);
+            Color amber = Color.web(tip == null ? DesktopPaint.TOUR
+                    : DesktopPaint.walkTrailInk(DesktopPaint.TOUR,
+                            DesktopPaint.floorEdge(layout, 2 * tip.row() + 1, 2 * tip.col() + 1)));
             paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
-                    ice.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
-            paintPathHeadDisc(g, DesktopPaint.disc(layout, tip, 0.3), ice, tipWave);
+                    amber.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
+            paintPathHeadDisc(g, DesktopPaint.disc(layout, tip, 0.3), amber, tipWave);
         }
         if (currentHunt != null && currentHunt.waypoints() != null) {
             for (Point coin : currentHunt.waypoints()) {

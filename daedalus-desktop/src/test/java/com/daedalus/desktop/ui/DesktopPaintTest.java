@@ -1213,7 +1213,7 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.walkTrailInk(DesktopPaint.TOUR, 0))
                 .isEqualTo(DesktopPaint.TOUR);
         assertThat(DesktopPaint.walkTrailInk(DesktopPaint.TOUR, 1))
-                .as("tour ribbon falls off toward floor-dim")
+                .as("tour ribbon and tip fall off toward floor-dim")
                 .isNotEqualTo(DesktopPaint.TOUR);
         assertThat(DesktopPaint.walkHead(List.of(new Point(0, 0), cell))).isEqualTo(cell);
         assertThat(DesktopPaint.endpointRing(null, cell)).isNull();
