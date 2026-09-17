@@ -825,6 +825,7 @@ under the `_migration/` portfolios.
   Lab-table chrome refuses leftover drag ice so cream news is not ghosted.
   Compare-table chrome refuses leftover drag ice so cream news is not ghosted.
   Plugin cream names refuse leftover drag ice so cream news is not ghosted.
+  Plugin khaki ranks refuse leftover drag ice so khaki news is not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

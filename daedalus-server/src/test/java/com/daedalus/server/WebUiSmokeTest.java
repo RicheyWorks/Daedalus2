@@ -344,7 +344,7 @@ class WebUiSmokeTest {
                 .contains("#labOut th { text-align: left; color: #b09a72; font-weight: 600; -webkit-user-drag: none")
                 .contains("#labOut td { padding: 2px 8px; border-bottom: 1px solid rgba(184, 133, 56, 0.28);")
                 .contains("#labOut td { padding: 2px 8px; border-bottom: 1px solid rgba(184, 133, 56, 0.28); -webkit-user-drag: none")
-                .contains("#pluginBox .rank { color: #b09a72; }")
+                .contains("#pluginBox .rank { color: #b09a72;")
                 .contains("#pluginBox div { border-bottom: 1px solid rgba(184, 133, 56, 0.28); padding: 2px 0;")
                 .contains("#pluginBox div { border-bottom: 1px solid rgba(184, 133, 56, 0.28); padding: 2px 0; -webkit-user-drag: none")
                 .contains("#campaignBox div { border-bottom: 1px solid rgba(184, 133, 56, 0.28);")
@@ -540,6 +540,7 @@ class WebUiSmokeTest {
                 .doesNotContain("move(state.seat || state.session.primary");
         assertThat(html).contains(
                 "#compareBox table { width: 100%; margin-top: 8px; border-collapse: collapse; -webkit-user-drag: none")
-                .contains("#pluginBox b { color: #f2ead8; -webkit-user-drag: none");
+                .contains("#pluginBox b { color: #f2ead8; -webkit-user-drag: none")
+                .contains("#pluginBox .rank { color: #b09a72; -webkit-user-drag: none");
     }
 }
