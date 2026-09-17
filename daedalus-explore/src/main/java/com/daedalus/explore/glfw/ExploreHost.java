@@ -809,7 +809,7 @@ public final class ExploreHost {
             ExplorePaint.mapBlockSoftTint(ink);
             glColor3f(ink[0], ink[1], ink[2]);
             fill(x0 - padX, y0 - padY, x0 + sx + padX, y0 + sy + padY);
-            ExplorePaint.mapStoneTint(ExplorePaint.MapKind.BLOCK, seconds, ink);
+            ExplorePaint.mapStoneTint(ExplorePaint.MapKind.BLOCK, seconds, dot.edge(), ink);
             glColor3f(ink[0], ink[1], ink[2]);
             fill(x0, y0, x0 + sx, y0 + sy);
         }

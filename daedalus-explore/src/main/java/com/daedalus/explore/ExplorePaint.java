@@ -277,6 +277,8 @@ public final class ExplorePaint {
     public static final float MAP_BLOCK_R = 0.58f;
     public static final float MAP_BLOCK_G = 0.38f;
     public static final float MAP_BLOCK_B = 0.18f;
+    /** Occupied-cube rim — same 0.22 as halls so leftover even wood is not the last word. */
+    public static final float MAP_BLOCK_EDGE_DIM = 0.22f;
     /** Soft pad under an earned cube — presence, not a flat wood pixel. */
     public static final float MAP_BLOCK_HALO = MAP_MARK_HALO;
     public static final float MAP_BLOCK_BREATH_MS = MAP_HERE_BREATH_MS;
@@ -321,7 +323,11 @@ public final class ExplorePaint {
                     (MAP_WALL_G + (UNSEEN_G - MAP_WALL_G) * t) * breath,
                     (MAP_WALL_B + (UNSEEN_B - MAP_WALL_B) * t) * breath);
         } else if (kind == MapKind.BLOCK) {
-            set(rgb, MAP_BLOCK_R * breath, MAP_BLOCK_G * breath, MAP_BLOCK_B * breath);
+            float t = MAP_BLOCK_EDGE_DIM * (float) Math.max(0, Math.min(1, edge));
+            set(rgb,
+                    (MAP_BLOCK_R + (MAP_FLOOR_DIM_R - MAP_BLOCK_R) * t) * breath,
+                    (MAP_BLOCK_G + (MAP_FLOOR_DIM_G - MAP_BLOCK_G) * t) * breath,
+                    (MAP_BLOCK_B + (MAP_FLOOR_DIM_B - MAP_BLOCK_B) * t) * breath);
         } else {
             float t = MAP_FLOOR_EDGE_DIM * (float) Math.max(0, Math.min(1, edge));
             set(rgb,
@@ -1242,7 +1248,8 @@ public final class ExplorePaint {
                     continue;
                 }
                 out.add(new MapDot(project(tc, minC, maxC),
-                        MAP - 1 - project(tr, minR, maxR), MapKind.BLOCK));
+                        MAP - 1 - project(tr, minR, maxR), MapKind.BLOCK, "",
+                        mapEdge(tr, tc, minR, maxR, minC, maxC)));
             }
         }
         for (int tr = minR; tr <= maxR; tr++) {

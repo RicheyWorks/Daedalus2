@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore automap cube depth.**
+  Occupied wood on the pocket falls off toward the rim with the same
+  0.22 edge as halls, so leftover even MAP_BLOCK is not the last word
+  on a slab. Start mint and goal coral stay.
+
 - **Explore status well depth.**
   The crosshair strip falls off from HUD void to pocket mid so leftover
   flat chrome is not the last word under the face. Start mint and goal
