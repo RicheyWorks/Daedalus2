@@ -403,6 +403,16 @@ class ExplorePaintTest {
                 .isGreaterThan(hereHall[1]);
         assertThat(hereGoal[0]).as("HERE on goal lifts toward well coral")
                 .isGreaterThan(hereHall[0]);
+        World street = World.zero();
+        street.applyStamp(new ParcelBounds(8, 0, 8, 9, 1, 9), Parcel.SYSTEM_OWNER,
+                List.of(new BlockCoordinate(8, 0, 8)), List.of(BlockType.WOOD));
+        street.nameParcel(street.parcels().get(0).id(), "Willow Walk");
+        float[] hereStreet = new float[3];
+        ExplorePaint.mapHereTint(new ExploreBody(8.4, 8.4, 0, 0), mesh,
+                WorldMesh.of(street), hereStreet);
+        assertThat(hereStreet[0]).as("HERE on a named street lifts toward torch wood")
+                .isGreaterThan(hereHall[2]);
+        assertThat(hereStreet[2]).isLessThan(hereStreet[0]);
         ExplorePaint.mapHereTint(null, mesh, null);
         assertThat(ExplorePaint.mapHereHalo(0.1))
                 .isNotEqualTo(ExplorePaint.mapHereHalo(0.8));

@@ -166,15 +166,25 @@ public final class ExplorePaint {
 
     /** HERE on start / goal — gold you-are-here, washed toward well mint / coral. */
     public static void mapHereTint(ExploreBody body, ExploreMesh mesh, float[] rgb) {
-        washHere(body, mesh, rgb, MAP_HERE_R, MAP_HERE_G, MAP_HERE_B);
+        mapHereTint(body, mesh, null, rgb);
+    }
+
+    public static void mapHereTint(ExploreBody body, ExploreMesh mesh, WorldMesh blocks,
+                                  float[] rgb) {
+        washHere(body, mesh, blocks, rgb, MAP_HERE_R, MAP_HERE_G, MAP_HERE_B);
     }
 
     public static void mapHereSoftTint(ExploreBody body, ExploreMesh mesh, float[] rgb) {
-        washHere(body, mesh, rgb, MAP_HERE_SOFT_R, MAP_HERE_SOFT_G, MAP_HERE_SOFT_B);
+        mapHereSoftTint(body, mesh, null, rgb);
     }
 
-    private static void washHere(ExploreBody body, ExploreMesh mesh, float[] rgb,
-                                float r, float g, float b) {
+    public static void mapHereSoftTint(ExploreBody body, ExploreMesh mesh, WorldMesh blocks,
+                                      float[] rgb) {
+        washHere(body, mesh, blocks, rgb, MAP_HERE_SOFT_R, MAP_HERE_SOFT_G, MAP_HERE_SOFT_B);
+    }
+
+    private static void washHere(ExploreBody body, ExploreMesh mesh, WorldMesh blocks,
+                                float[] rgb, float r, float g, float b) {
         if (rgb == null || rgb.length < 3) {
             return;
         }
@@ -188,6 +198,10 @@ public final class ExplorePaint {
             rgb[0] += (MAP_GOAL_R - rgb[0]) * FLOOR_END_WEIGHT;
             rgb[1] += (MAP_GOAL_G - rgb[1]) * FLOOR_END_WEIGHT;
             rgb[2] += (MAP_GOAL_B - rgb[2]) * FLOOR_END_WEIGHT;
+        } else if (parcelPlaceName(blocks, body) != null) {
+            rgb[0] += (MAP_BLOCK_R - rgb[0]) * FLOOR_END_WEIGHT;
+            rgb[1] += (MAP_BLOCK_G - rgb[1]) * FLOOR_END_WEIGHT;
+            rgb[2] += (MAP_BLOCK_B - rgb[2]) * FLOOR_END_WEIGHT;
         }
     }
     /** Soft pad under automap story marks — presence, not a flat red pixel. */

@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore automap HERE street wash.**
+  You-are-here on a named parcel lifts toward torch wood so the pocket
+  names the street, not leftover gold on Willow Walk. Start and goal
+  still wash mint and coral.
+
 - **Explore street HUD name.**
   Standing in a named parcel prints the inspired toponym (`Willow Walk`)
   on the status strip. Caption glyphs now spell the whole alphabet so
