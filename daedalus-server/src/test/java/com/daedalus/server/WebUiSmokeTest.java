@@ -325,6 +325,7 @@ class WebUiSmokeTest {
                 .contains("kbd { background: #16120e; border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 3px;")
                 .contains("padding: 0 4px; font-size: 11px; color: #b09a72; user-select: none")
                 .contains("font-size: 11px; color: #b09a72; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none")
+                .contains("font-size: 11px; color: #b09a72; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none")
                 .contains("background: rgba(12, 9, 8, 0.92)")
                 .contains("boardRimBreath")
                 .contains("panelRimBreath")
