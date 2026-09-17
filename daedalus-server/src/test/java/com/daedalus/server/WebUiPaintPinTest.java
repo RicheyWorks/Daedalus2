@@ -68,7 +68,8 @@ class WebUiPaintPinTest {
                     "rel=\"icon\" type=\"image/svg+xml\"")
                     .contains("fill='%230c0908'")
                     .contains("stroke='%23b88538'")
-                    .contains("x='5' y='9' width='22' height='2' fill='%232a2218'")
+                    .contains("x='5' y='9' width='2' height='2' fill='%2315110d'")
+                    .contains("x='13' y='13' width='2' height='2' fill='%2318130e'")
                     .contains("fill='%23484339'")
                     .contains("x='7' y='11' width='2' height='2' fill='%233ee08f'")
                     .contains("x='23' y='19' width='2' height='2' fill='%23ff5a5f'");

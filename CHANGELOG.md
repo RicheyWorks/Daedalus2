@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well tab icon wall depth.**
+  Idle-maze posts on the 32px favicon fall off toward unseen at the
+  rim with the same 0.28 edge as live stone, so leftover flat wallWarm
+  is not the last word on the well tab. Start mint and goal coral stay.
+
 - **Explore cube lid rim.**
   Occupied cube tops split a torch rim at the same fraction as corridor
   crowns, so looking down names the slab edge and leftover even wood is
