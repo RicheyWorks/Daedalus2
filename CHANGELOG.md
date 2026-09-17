@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well ASCII rock depth.**
+  Dump rock glyphs keep leftover khaki and pick up a torch-dim
+  hairline so leftover flat ink is not the last word on the text
+  maze. Start-gate mint and exit coral stay.
+
 - **Desktop legend stone depth.**
   Overlay floor and wall chips fall off toward floor-dim / unseen so
   leftover flat swatches are not the last word on the key. Start mint
