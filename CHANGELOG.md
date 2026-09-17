@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore living-slab remesh.**
+  The voxel mesh rebuilds when the attached world revision moves,
+  so a living tick drops wall posts in explore. Corridor KEEP stays.
+  Collision already read live occupancy.
+
 - **World mazeRef on the three clients.**
   Well, desktop, and explore inspect show the lab maze id and
   the lease string on a stamped parcel. Not a wallet. `/` stays

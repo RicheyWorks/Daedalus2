@@ -38,6 +38,7 @@ public final class ExploreWorld {
     private final ExploreSession session = new ExploreSession();
     private WorldMesh blocks;
     private boolean showBlocks;
+    private long blocksRevision = Long.MIN_VALUE;
 
     public ExploreWorld(String generatorId, long seed, MazeGrid grid) {
         this.generatorId = generatorId == null ? "dungeon" : generatorId;
@@ -84,9 +85,26 @@ public final class ExploreWorld {
 
     public void attachBlocks(World world) {
         this.blocks = world == null ? null : WorldMesh.of(world);
+        this.blocksRevision = world == null ? Long.MIN_VALUE : world.revision().value();
         if (this.blocks == null) {
             this.showBlocks = false;
         }
+    }
+
+    /**
+     * Rebuild the voxel mesh when the live world revision moved.
+     * Corridor {@link #mesh()} stays. Collision already reads {@link World#contains}.
+     */
+    public void syncBlocks() {
+        if (blocks == null || blocks.world() == null) {
+            return;
+        }
+        long revision = blocks.world().revision().value();
+        if (revision == blocksRevision) {
+            return;
+        }
+        this.blocks = WorldMesh.of(blocks.world());
+        this.blocksRevision = revision;
     }
 
     public void showBlocks(boolean show) {
@@ -129,6 +147,7 @@ public final class ExploreWorld {
     }
 
     public ExploreWalk.Outcome apply(ExploreInput.Intent intent, double dt) {
+        syncBlocks();
         ExploreInput.applyLook(body, intent);
         double[] move = ExploreInput.moveVector(body, intent, WALK_SPEED * dt);
         ExploreWalk.Outcome out = ExploreWalk.step(mesh, showingBlocks() ? blocks : null,

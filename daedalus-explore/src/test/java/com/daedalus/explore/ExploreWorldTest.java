@@ -11,6 +11,10 @@ import com.daedalus.model.Point;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.World;
+import com.daedalus.world.living.LivingSlab;
+import com.daedalus.world.stamp.StampOps;
+import com.daedalus.world.stamp.StampRequest;
+import com.daedalus.world.stamp.StampResult;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -121,6 +125,32 @@ class ExploreWorldTest {
         world.attachBlocks(null);
         assertThat(world.showingBlocks()).isFalse();
         assertThat(world.mesh()).isSameAs(corridor);
+    }
+
+    @Test
+    void aLivingSlabWriteRemeshesExposedCubes() {
+        MazeGrid maze = new MazeGrid(2, 2);
+        maze.carve(maze.cell(0, 0), Direction.EAST);
+        ExploreWorld world = new ExploreWorld("test", 1L, maze);
+        World volume = World.zero();
+        StampRequest request = new StampRequest(volume.id(), new BlockCoordinate(4, 2, 8), maze, 2, 1);
+        StampResult stamped = StampOps.apply(volume, request);
+        world.attachBlocks(volume);
+        world.showBlocks(true);
+        BlockCoordinate post = new BlockCoordinate(5, 3, 10);
+        assertThat(world.blocks().triangles()).anyMatch(t -> post.equals(t.at()));
+        maze.carve(maze.cell(0, 0), Direction.SOUTH);
+        assertThat(new LivingSlab(volume, request, stamped.bounds()).sync()).isGreaterThan(0);
+        assertThat(world.blocks().triangles())
+                .as("triangles stay stale until remesh")
+                .anyMatch(t -> post.equals(t.at()));
+        world.apply(ExploreInput.Intent.none(), 0.016);
+        assertThat(world.blocks().triangles()).noneMatch(t -> post.equals(t.at()));
+        assertThat(world.mesh().grid()).isSameAs(world.grid());
+        world.syncBlocks();
+        WorldMesh again = world.blocks();
+        world.syncBlocks();
+        assertThat(world.blocks()).isSameAs(again);
     }
 
     @Test
