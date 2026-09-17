@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop world lease inspect.**
+  The desktop world line shows the first parcel `leaseId` beside
+  the place name. Not a wallet. Maze generate / solve stay.
+
 - **World stamp.apply drive.**
   `WorldOps` projects a 1×1 maze slab at the addressed cube.
   Overlap is `PARCEL_OVERLAP`, not a merge. The well drives

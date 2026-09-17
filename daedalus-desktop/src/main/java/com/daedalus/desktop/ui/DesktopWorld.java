@@ -25,7 +25,7 @@ public final class DesktopWorld {
         if (world == null) {
             return ID + " · unavailable";
         }
-        return inspectLine(world.revision().value(), firstPlace(world), last);
+        return inspectLine(world.revision().value(), firstPlace(world), firstLease(world), last);
     }
 
     public static String inspectLine(long revision, WorldEventFrame last) {
@@ -33,9 +33,16 @@ public final class DesktopWorld {
     }
 
     public static String inspectLine(long revision, String place, WorldEventFrame last) {
+        return inspectLine(revision, place, "", last);
+    }
+
+    public static String inspectLine(long revision, String place, String lease, WorldEventFrame last) {
         String head = ID + " r=" + revision;
         if (place != null && !place.isBlank()) {
             head += " · " + place;
+        }
+        if (lease != null && !lease.isBlank()) {
+            head += " · " + lease;
         }
         if (last == null) {
             return head + " · listening";
@@ -53,6 +60,19 @@ public final class DesktopWorld {
         for (Parcel parcel : world.parcels()) {
             if (parcel != null && !parcel.placeName().isEmpty()) {
                 return parcel.placeName();
+            }
+        }
+        return "";
+    }
+
+    /** First lease string on inspect — account key, not a wallet. */
+    public static String firstLease(World world) {
+        if (world == null) {
+            return "";
+        }
+        for (Parcel parcel : world.parcels()) {
+            if (parcel != null && !parcel.leaseId().isEmpty()) {
+                return parcel.leaseId();
             }
         }
         return "";

@@ -42,6 +42,12 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.PLACE_INK).isEqualTo("#94612e");
         assertThat(DesktopWorld.PLACE_CLASS).isEqualTo("world-place");
         assertThat(DesktopWorld.firstPlace(World.zero())).isEmpty();
+        named.leaseParcel(named.parcels().get(0).id(), Parcel.SYSTEM_TENANT);
+        assertThat(DesktopWorld.firstLease(named)).isEqualTo(Parcel.SYSTEM_TENANT);
+        assertThat(DesktopWorld.inspectLine(named, null))
+                .isEqualTo("world-zero r=" + named.revision().value()
+                        + " · Willow Walk · " + Parcel.SYSTEM_TENANT + " · listening");
+        assertThat(DesktopWorld.firstLease(World.zero())).isEmpty();
     }
 
     @Test

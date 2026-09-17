@@ -298,7 +298,8 @@ Phase 0 already ordered the post-7 work. This audit keeps it:
 
 Permissions and desktop inspect shipped after W1.5. Trap, portal, NPC,
 `WorldBuilder`, the well agent fold, plot lease strings,
-`parcel.lease`, REST `/parcels/lease`, and `stamp.apply` are shipped.
+`parcel.lease`, REST `/parcels/lease`, `stamp.apply`, and desktop
+lease inspect are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 A later stamp may take a cached maze id; WorldService still does not
 touch the maze Caffeine cache.
