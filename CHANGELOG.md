@@ -598,6 +598,8 @@ under the `_migration/` portfolios.
   not a leftover unrimmed pit on torch stone.
   Complexity-lab well wears a breathing gold lip so those charts sit in the lamp,
   not a leftover unrimmed pit on torch stone.
+  Compare-box well wears a breathing gold lip so those races sit in the lamp,
+  not a leftover unrimmed pit on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

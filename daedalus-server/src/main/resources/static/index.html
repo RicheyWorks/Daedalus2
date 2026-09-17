@@ -179,7 +179,7 @@
     header h1 button, #stage, .board-panel, .panel, header, #legend,
     .exports button, .exports a, #asciiOut, #gate pre, .info, #stats, details,
     #compareBox > div, kbd, summary::after, #log, #lb, #pluginBox, #campaignBox,
-    #tourBox, #labOut {
+    #tourBox, #labOut, #compareBox {
       animation: none;
     }
     #gate .gate-brand {
@@ -357,7 +357,9 @@
   #compareBox:empty { display: none; }
   #compareBox { max-height: 22vh; overflow: auto; min-width: 0;
                 scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent;
-                color: #f2ead8; }
+                color: #f2ead8; padding: 8px; background: #16120e;
+                border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 6px;
+                animation: panelRimBreath 4.5s ease-in-out infinite; }
   #compareBox table { width: 100%; margin-top: 8px; border-collapse: collapse;
                       font: 12px/1.7 ui-monospace, monospace; }
   #compareBox th { text-align: left; color: #b09a72; font-weight: 600;
