@@ -440,6 +440,8 @@ under the `_migration/` portfolios.
   keyed, not leftover unnamed on torch stone.
   Desktop well-key player swatches wear gold and torch rose so the second
   walker is keyed, not leftover unnamed on torch stone.
+  Well-caption distance swatches wear the same cream rim as other place marks
+  so the field ramp is keyed, not leftover unrimmed on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

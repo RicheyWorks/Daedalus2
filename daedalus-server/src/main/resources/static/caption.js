@@ -48,7 +48,8 @@
 
   function fieldHtml(f) {
     const swatches = DISTANCE_RAMP
-        .map(c => `<span style="display:inline-block;width:16px;height:10px;background:${c}"></span>`)
+        .map(c => `<span style="display:inline-block;width:16px;height:10px;background:${c};`
+            + `margin-right:1px;box-shadow:0 0 0 1.5px rgba(242, 234, 216, .28)"></span>`)
         .join("");
     return `<div style="margin-top:8px">`
         + `<b style="color:#d4a04c">Distance from the ${f.from.toLowerCase()}</b> — the `

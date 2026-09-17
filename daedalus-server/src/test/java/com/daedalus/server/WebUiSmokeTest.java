@@ -206,6 +206,8 @@ class WebUiSmokeTest {
                 .contains("\"#4a2210\"")
                 .contains("\"#f2d8a0\"")
                 .contains("color:#d4a04c")
+                .contains("width:16px;height:10px;background:${c};")
+                .contains("box-shadow:0 0 0 1.5px rgba(242, 234, 216, .28)")
                 .contains("0.88 + 0.24")
                 .contains("0.85 + 0.30")
                 .contains("LENS_BREATH_MS")
