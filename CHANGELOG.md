@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop stage icon wall depth.**
+  Idle-maze posts on the 32px stage icon fall off toward unseen at the
+  rim with the same 0.28 edge as live stone, so leftover flat wallWarm
+  is not the last word on the taskbar mark.
+
 - **Explore pillar crown.**
   Story posts split a torch lid band at the same fraction as corridor
   walls, so a mark meets the ceiling and is not leftover even wood up

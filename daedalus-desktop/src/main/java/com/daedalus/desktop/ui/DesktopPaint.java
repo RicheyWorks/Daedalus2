@@ -1912,6 +1912,11 @@ public final class DesktopPaint {
         return new Hairline(layout.x(tileCol) + 1, layout.y(tileRow) + 1, Math.max(1, w - 2), 1);
     }
 
+    public static int hexArgb(String hex) {
+        int[] c = rgb(hex);
+        return 0xFF000000 | (c[0] << 16) | (c[1] << 8) | c[2];
+    }
+
     static String mixHex(String from, String to, double t) {
         int[] a = rgb(from);
         int[] b = rgb(to);
@@ -1998,7 +2003,7 @@ public final class DesktopPaint {
                 } else if (r == goalTr && c == goalTc) {
                     ink = STAGE_ICON_GOAL_ARGB;
                 } else if (EMPTY_MARK[r].charAt(c) == '#') {
-                    ink = STAGE_ICON_WALL_ARGB;
+                    ink = hexArgb(emptyMarkWallInk(r, c));
                 } else {
                     ink = STAGE_ICON_FLOOR_ARGB;
                 }
