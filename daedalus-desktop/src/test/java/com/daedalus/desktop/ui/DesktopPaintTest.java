@@ -429,6 +429,14 @@ class DesktopPaintTest {
                 .isGreaterThan(Integer.parseInt(DesktopPaint.TOUR.substring(5, 7), 16));
         assertThat(DesktopPaint.WAYPOINT).isEqualTo("#f2c94c");
         assertThat(DesktopPaint.WAYPOINT_GOT).isEqualTo("#8aaa50");
+        assertThat(DesktopPaint.waypointInk(false, 0)).isEqualTo(DesktopPaint.WAYPOINT);
+        assertThat(DesktopPaint.waypointInk(true, 0)).isEqualTo(DesktopPaint.WAYPOINT_GOT);
+        assertThat(DesktopPaint.waypointInk(false, 1))
+                .as("uncollected coin falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.WAYPOINT);
+        assertThat(DesktopPaint.waypointInk(true, 1))
+                .as("collected coin falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.WAYPOINT_GOT);
         assertThat(Integer.parseInt(DesktopPaint.WAYPOINT_GOT.substring(1, 3), 16))
                 .isGreaterThan(Integer.parseInt(DesktopPaint.WAYPOINT_GOT.substring(5, 7), 16));
         assertThat(coin.radius())

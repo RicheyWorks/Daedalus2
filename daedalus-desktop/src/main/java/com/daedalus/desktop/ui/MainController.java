@@ -2175,7 +2175,7 @@ public class MainController {
         }
         if (currentHunt != null && currentHunt.waypoints() != null) {
             for (Point coin : currentHunt.waypoints()) {
-                paintDiamond(g, DesktopPaint.waypointDiamond(layout, coin), huntGot.contains(coin));
+                paintDiamond(g, layout, coin, huntGot.contains(coin));
             }
         }
 
@@ -2419,11 +2419,14 @@ public class MainController {
         }
     }
 
-    private static void paintDiamond(GraphicsContext g, DesktopPaint.Diamond diamond,
+    private static void paintDiamond(GraphicsContext g, DesktopPaint.Layout layout, Point cell,
                                      boolean collected) {
-        if (diamond == null) {
+        DesktopPaint.Diamond diamond = DesktopPaint.waypointDiamond(layout, cell);
+        if (diamond == null || layout == null || cell == null) {
             return;
         }
+        Color ink = Color.web(DesktopPaint.waypointInk(collected,
+                DesktopPaint.floorEdge(layout, 2 * cell.row() + 1, 2 * cell.col() + 1)));
         double cx = diamond.cx();
         double cy = diamond.cy();
         double r = diamond.radius();
@@ -2434,12 +2437,12 @@ public class MainController {
         double[] softYs = {cy - soft, cy, cy + soft, cy};
         if (collected) {
             g.setGlobalAlpha(DesktopPaint.waypointGotGlowAlpha(wave));
-            g.setFill(Color.web(DesktopPaint.WAYPOINT_GOT));
+            g.setFill(ink);
             g.fillPolygon(softXs, softYs, 4);
             g.setGlobalAlpha(1);
         } else {
             g.setGlobalAlpha(DesktopPaint.waypointGlowAlpha(wave));
-            g.setFill(Color.web(DesktopPaint.WAYPOINT));
+            g.setFill(ink);
             g.fillPolygon(softXs, softYs, 4);
             g.setGlobalAlpha(1);
         }
@@ -2447,12 +2450,12 @@ public class MainController {
         double[] ys = {cy - r, cy, cy + r, cy};
         if (collected) {
             g.setGlobalAlpha(DesktopPaint.waypointGotStrokeAlpha(wave));
-            g.setStroke(Color.web(DesktopPaint.WAYPOINT_GOT));
+            g.setStroke(ink);
             g.setLineWidth(diamond.stroke());
             g.strokePolygon(xs, ys, 4);
             g.setGlobalAlpha(1);
         } else {
-            g.setFill(Color.web(DesktopPaint.WAYPOINT));
+            g.setFill(ink);
             g.fillPolygon(xs, ys, 4);
         }
     }

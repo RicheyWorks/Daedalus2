@@ -584,6 +584,13 @@ public final class DesktopPaint {
     /** Uncollected coin — same gold diamond as {@code draw.js}. */
     public static final String WAYPOINT = "#f2c94c";
     public static final String WAYPOINT_GOT = "#8aaa50";
+    /** Same 0.22 rim as halls — leftover even gold/moss is not the last word on a stop. */
+    public static final double WAYPOINT_EDGE_DIM = 0.22;
+
+    public static String waypointInk(boolean collected, double edge) {
+        return mixHex(collected ? WAYPOINT_GOT : WAYPOINT, FLOOR_DIM,
+                WAYPOINT_EDGE_DIM * Math.max(0, Math.min(1, edge)));
+    }
     /** Same k as the web Hunt button. */
     public static final int WAYPOINT_K = 5;
     /** Recorded racer — warm parchment, not leftover cool white on torch stone. */
