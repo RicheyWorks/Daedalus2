@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore cube HUD name.**
+  A lamp-facing occupied cube names the status strip (`WOOD`, `STONE`)
+  when the hall has no story mark and you are not on start or goal.
+  Glyphs wear torch wood, not leftover gold. No new key.
+
 - **Explore automap cubes.**
   Occupied cubes that fog has earned paint as torch-wood `BLOCK` dots
   on the automap. Unseen slabs stay off the page. Not leftover well ice.

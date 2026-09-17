@@ -597,6 +597,44 @@ class ExplorePaintTest {
     }
 
     @Test
+    void statusNamesTheLampFacingCube() {
+        ExploreFog fog = new ExploreFog();
+        fog.stand(new Point(0, 0));
+        ExploreBody body = ExploreBody.atCell(new Point(0, 0));
+        body.look(Math.PI, 0);
+        World volume = World.zero();
+        volume.place(new BlockCoordinate(0, 0, 2), BlockType.WOOD);
+        volume.place(new BlockCoordinate(4, 0, 2), BlockType.WOOD);
+        WorldMesh cubes = WorldMesh.of(volume);
+        assertThat(ExplorePaint.blockPlaceName(cubes, body)).isEqualTo("WOOD");
+        assertThat(ExplorePaint.blockPlaceName(null, body)).isNull();
+        MazeGrid grid = new MazeGrid(1, 2);
+        grid.carve(grid.cell(0, 0), Direction.EAST);
+        ExploreMesh mesh = ExploreMesh.of(grid);
+        assertThat(ExplorePaint.status(fog, body, List.of(), mesh, cubes).place())
+                .as("stood-on start still leads")
+                .isEqualTo("START");
+        ExploreBody hall = new ExploreBody(4, 0, Math.PI, 0);
+        assertThat(ExplorePaint.endPlaceName(hall, mesh)).isEqualTo("HALL");
+        assertThat(ExplorePaint.status(fog, hall, List.of(), mesh, cubes).place())
+                .as("a lamp-facing cube names the hall")
+                .isEqualTo("WOOD");
+        List<ExploreMarker> marks = List.of(
+                new ExploreMarker("door", new Point(0, 1), 0, "ENTRANCE"));
+        fog.stand(new Point(0, 1));
+        assertThat(ExplorePaint.status(fog, hall, marks, mesh, cubes).place())
+                .as("a visible story mark still leads")
+                .isEqualTo("ENTRANCE");
+        float[] wood = new float[3];
+        float[] hallInk = new float[3];
+        ExplorePaint.captionPlaceTint("WOOD", wood);
+        ExplorePaint.captionPlaceTint("HALL", hallInk);
+        assertThat(wood[0]).as("WOOD glyphs wear torch wood, not leftover gold")
+                .isGreaterThan(hallInk[2]);
+        assertThat(wood[2]).isLessThan(wood[0]);
+    }
+
+    @Test
     void facingCompassFollowsYaw() {
         assertThat(ExplorePaint.facing(0)).isEqualTo("N");
         assertThat(ExplorePaint.facing(Math.PI / 2)).isEqualTo("E");

@@ -476,7 +476,8 @@ public final class ExploreHost {
         glLoadIdentity();
         vignette(aspect, seconds);
         ExplorePaint.Status line = ExplorePaint.status(
-                world.fog(), world.body(), world.markers(), world.mesh());
+                world.fog(), world.body(), world.markers(), world.mesh(),
+                world.showingBlocks() ? world.blocks() : null);
         status(aspect, line, faceTex, seconds);
         paintHand(aspect, line.mood(), stride);
         float aim = ExplorePaint.aimY();

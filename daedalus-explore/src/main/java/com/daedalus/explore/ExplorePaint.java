@@ -581,6 +581,11 @@ public final class ExplorePaint {
 
     public static Status status(ExploreFog fog, ExploreBody body, List<ExploreMarker> markers,
                                 ExploreMesh mesh) {
+        return status(fog, body, markers, mesh, null);
+    }
+
+    public static Status status(ExploreFog fog, ExploreBody body, List<ExploreMarker> markers,
+                                ExploreMesh mesh, WorldMesh blocks) {
         String facing = facing(body == null ? 0 : body.yaw());
         int stood = fog == null ? 0 : fog.memorySize();
         ExploreMarker near = nearestVisible(fog, body, markers);
@@ -588,11 +593,51 @@ public final class ExplorePaint {
         boolean startSeen = endSeen(fog, mesh, TileType.START);
         boolean goalSeen = endSeen(fog, mesh, TileType.GOAL);
         if (near == null) {
-            return new Status(endPlaceName(body, mesh), facing, stood, marks, 0,
+            return new Status(placeOrBlock(body, mesh, blocks), facing, stood, marks, 0,
                     startSeen, goalSeen);
         }
         return new Status(placeName(near.kind()), facing, stood, marks, mood(near.kind()),
                 startSeen, goalSeen);
+    }
+
+    /**
+     * Story and start/goal still lead. A lamp-facing cube names the hall
+     * so leftover HALL is not the last word on a slab.
+     */
+    static String placeOrBlock(ExploreBody body, ExploreMesh mesh, WorldMesh blocks) {
+        String end = endPlaceName(body, mesh);
+        if (!"HALL".equals(end)) {
+            return end;
+        }
+        String cube = blockPlaceName(blocks, body);
+        return cube == null ? "HALL" : cube;
+    }
+
+    /**
+     * First occupied cube in the torch beam. Discrete occupancy, not a hull.
+     */
+    public static String blockPlaceName(WorldMesh blocks, ExploreBody body) {
+        if (blocks == null || body == null || blocks.world() == null) {
+            return null;
+        }
+        double yaw = body.yaw();
+        double sx = Math.sin(yaw);
+        double sz = -Math.cos(yaw);
+        for (double d = 0.45; d <= 4.0; d += 0.25) {
+            double x = body.x() + sx * d;
+            double z = body.z() + sz * d;
+            for (double y : new double[] {0.45, ExploreBody.EYE_Y}) {
+                if (!blocks.blocked(x, y, z)) {
+                    continue;
+                }
+                BlockType type = blocks.world().get(new BlockCoordinate(
+                        (int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z)));
+                if (type.solid()) {
+                    return type.name();
+                }
+            }
+        }
+        return null;
     }
 
     /** Visible start / goal — same well key, not leftover empty HUD on the ends. */
@@ -648,6 +693,14 @@ public final class ExplorePaint {
             set(rgb, MAP_START_R, MAP_START_G, MAP_START_B);
         } else if ("GOAL".equals(place)) {
             set(rgb, MAP_GOAL_R, MAP_GOAL_G, MAP_GOAL_B);
+        } else if ("WOOD".equals(place)) {
+            set(rgb, MAP_BLOCK_R, MAP_BLOCK_G, MAP_BLOCK_B);
+        } else if ("DIRT".equals(place)) {
+            set(rgb, MAP_BLOCK_R * 0.86f, MAP_BLOCK_G * 0.84f, MAP_BLOCK_B * 0.90f);
+        } else if ("GLASS".equals(place)) {
+            set(rgb, BLOCK_GLASS_R, BLOCK_GLASS_G, BLOCK_GLASS_B);
+        } else if ("STONE".equals(place)) {
+            set(rgb, MAP_WALL_R, MAP_WALL_G, MAP_WALL_B);
         } else {
             set(rgb, AIM_BRIGHT_R, AIM_BRIGHT_G, AIM_BRIGHT_B);
         }
