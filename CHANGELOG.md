@@ -693,6 +693,7 @@ under the `_migration/` portfolios.
   Marked maze copy wears a gold wash so leftover UA yellow does not stain torch stone.
   Maze news sits on lamp figures so leftover OS proportional ice does not jitter cream on torch stone.
   Status, compare, plugin, and campaign numbers sit on lamp figures so leftover OS ice does not jitter those wells.
+  The well canvas refuses leftover OS selection ice so torch stone is not smeared.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
