@@ -21,7 +21,8 @@ class WebUiPaintPinTest {
             assertThat(in).as("static well page").isNotNull();
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html).contains(
-                    "#log .t { color: #b09a72; margin-right: 6px; -webkit-user-drag: none");
+                    "#log .t { color: #b09a72; margin-right: 6px; -webkit-user-drag: none")
+                    .contains("#log .solver { color: #d4a04c; -webkit-user-drag: none");
         }
     }
 }
