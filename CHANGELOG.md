@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World One W1.5 explore block mesh.**
+  `WorldMesh` is a second explore mesher: occupied cubes emit exposed
+  faces, hidden faces against a neighbor are culled, and collision is
+  `World.contains`. Corridor `ExploreMesh` stays the KEEP path.
+
 - **World One W1.4 well world panel.**
   A rail fold inspects `world-zero` (revision, chunk 0,0,0, door) and
   listens on `/topic/world/world-zero/events`. `/` stays the maze well;
