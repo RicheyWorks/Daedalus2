@@ -82,6 +82,7 @@ class ThemeManagerTest {
             assertThat(css).contains("rgba(16, 11, 8, 0.92)");
             assertThat(css).contains("rgba(16, 11, 8, 0.92));\n    -fx-cursor: default;");
             assertThat(css).contains(".legend .label");
+            assertThat(css).contains("-fx-font-weight: bold;\n    -fx-cursor: default;");
             assertThat(css).contains("#b09a72");
             assertThat(css).contains(".exports .button");
             assertThat(css).contains("rgba(16, 11, 8, 0.78)");

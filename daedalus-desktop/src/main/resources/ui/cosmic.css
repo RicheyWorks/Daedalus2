@@ -153,6 +153,7 @@
     -fx-font-family: "Bahnschrift", "Segoe UI", sans-serif;
     -fx-font-size: 11px;
     -fx-font-weight: bold;
+    -fx-cursor: default;
 }
 
 .status-bar {
