@@ -103,6 +103,7 @@ under the `_migration/` portfolios.
 - Campaign grade names refuse leftover drag ice so stage emphasis is not ghosted.
 - Tournament theory names refuse leftover drag ice so ranking emphasis is not ghosted.
 - Maze-figure no-route names refuse leftover drag ice so solver emphasis is not ghosted.
+- Compare lens chips refuse leftover drag ice so overlay names are not ghosted.
 
 - **World One city look bar.**
   Distant voxels stay the real stamp (or culled), never a six-cube

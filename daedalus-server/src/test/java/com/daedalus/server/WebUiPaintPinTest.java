@@ -54,7 +54,8 @@ class WebUiPaintPinTest {
                     .contains("#labOut b { -webkit-user-drag: none")
                     .contains("#campaignBox b { -webkit-user-drag: none")
                     .contains("#tourBox b { -webkit-user-drag: none")
-                    .contains("#stats b { -webkit-user-drag: none");
+                    .contains("#stats b { -webkit-user-drag: none")
+                    .contains("#compareBox span { -webkit-user-drag: none");
         }
     }
 }
