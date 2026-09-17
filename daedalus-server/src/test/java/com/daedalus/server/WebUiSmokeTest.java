@@ -139,6 +139,7 @@ class WebUiSmokeTest {
                 .contains("#gate article h3")
                 .contains("letter-spacing: .04em; color: #f2ead8; cursor: default")
                 .contains("color: #f2ead8; cursor: default; -webkit-touch-callout: none")
+                .contains("color: #f2ead8; cursor: default; -webkit-touch-callout: none; -webkit-user-drag: none")
                 .contains("letter-spacing: .04em; color: #f2ead8")
                 .contains("#gate .lede { color: #b09a72")
                 .contains("max-width: 40rem; cursor: default")

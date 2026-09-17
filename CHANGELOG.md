@@ -795,6 +795,7 @@ under the `_migration/` portfolios.
   Well status refuses leftover drag ice so khaki beside the board is not ghosted.
   Well maze figures refuse leftover drag ice so cream beside the board is not ghosted.
   Well desk captions refuse leftover drag ice so khaki beside the rail is not ghosted.
+  Start-gate card titles refuse leftover drag ice so cream on the cards is not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
