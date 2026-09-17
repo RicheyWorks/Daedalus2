@@ -30,7 +30,13 @@
     "npc.hush": {method: "POST", path: () => "/world/" + WORLD + "/npc/hush"},
     "parcel.lease": {method: "POST", path: () => "/world/" + WORLD + "/parcels/lease"},
     "stamp.apply": {method: "POST", path: () => "/world/" + WORLD + "/stamp",
-      body: at => ({x: at.x, y: at.y, z: at.z})},
+      body: (at, type, mazeId) => {
+        const body = {x: at.x, y: at.y, z: at.z};
+        if (mazeId) {
+          body.mazeId = mazeId;
+        }
+        return body;
+      }},
   };
 
   async function inspect(host) {
@@ -74,7 +80,8 @@
     const opts = {method: step.method};
     if (step.body) {
       opts.headers = {"Content-Type": "application/json"};
-      opts.body = JSON.stringify(step.body(cell, type));
+      const mazeId = host.state && host.state.maze && host.state.maze.id;
+      opts.body = JSON.stringify(step.body(cell, type, mazeId));
     }
     return host.api(step.path(cell), opts);
   }

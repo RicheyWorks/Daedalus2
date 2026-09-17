@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well stamp.apply mazeId.**
+  The world fold sends the generated lab maze id with stamp.apply
+  so the slab is maze DNA, not a 1×1 stub. No `/maze/` fetch from
+  world.js. `/` stays the maze well.
+
 - **Explore living-slab remesh.**
   The voxel mesh rebuilds when the attached world revision moves,
   so a living tick drops wall posts in explore. Corridor KEEP stays.

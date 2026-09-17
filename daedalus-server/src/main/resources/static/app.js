@@ -98,7 +98,7 @@ function liveHost() {
   };
 }
 function worldHost() {
-  return {$, api};
+  return {$, api, state};
 }
 function refreshWorld() { return DaedalusWorld.inspect(worldHost()); }
 function onWorldEvent(m) { return DaedalusWorld.onEvent(worldHost(), m); }

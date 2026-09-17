@@ -301,8 +301,8 @@ Permissions and desktop inspect shipped after W1.5. Trap, portal, NPC,
 `parcel.lease`, REST `/parcels/lease`, `stamp.apply`, desktop lease
 inspect, lab-maze stamp (`mazeId` on `/stamp`), living-slab
 subscribe, parcel `mazeRef` persist (DAEW v9), and mazeRef /
-lease inspect on well, desktop, and explore, and explore remesh
-on living-slab revision are shipped.
+lease inspect on well, desktop, and explore, explore remesh
+on living-slab revision, and well stamp.apply mazeId are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
 

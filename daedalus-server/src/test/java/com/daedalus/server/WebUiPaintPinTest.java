@@ -446,9 +446,17 @@ class WebUiPaintPinTest {
                     .contains("/world/\" + WORLD + \"/stamp")
                     .contains("/world/\" + WORLD + \"/trace")
                     .contains("throw new Error(\"Unknown capability \" + capability)")
-                    .contains("builder — WorldOps only");
+                    .contains("builder — WorldOps only")
+                    .contains("host.state && host.state.maze && host.state.maze.id")
+                    .contains("body.mazeId = mazeId");
             assertThat(js).doesNotContain("\"agent.build\"");
             assertThat(js).doesNotContain("/maze/");
+        }
+        try (InputStream app = getClass().getResourceAsStream("/static/app.js")) {
+            assertThat(app).as("well host").isNotNull();
+            String js = new String(app.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js).contains("function worldHost()")
+                    .contains("return {$, api, state};");
         }
     }
 }
