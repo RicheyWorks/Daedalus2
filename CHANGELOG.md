@@ -578,6 +578,8 @@ under the `_migration/` portfolios.
   not a leftover still frame on torch stone.
   Maze stats wear a breathing gold hairline so those counts sit in the lamp,
   not a leftover still frame on torch stone.
+  Desk section folds wear a breathing gold hairline so those cuts sit in the lamp,
+  not leftover still frames on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

@@ -173,7 +173,7 @@
   @media (prefers-reduced-motion: reduce) {
     #gate .gate-brand, #gate .lede, #gate .gate-enter, #gate article, #gate .gate-veil,
     header h1 button, #stage, .board-panel, .panel, header, #legend,
-    .exports button, .exports a, #asciiOut, #gate pre, .info, #stats {
+    .exports button, .exports a, #asciiOut, #gate pre, .info, #stats, details {
       animation: none;
     }
     #gate .gate-brand {
@@ -236,7 +236,8 @@
     .board-panel { position: static; min-height: auto; }
     #stage { min-height: 360px; }
   }
-  details { margin-top: 10px; border-top: 1px solid rgba(184, 133, 56, 0.28); padding-top: 6px; }
+  details { margin-top: 10px; border-top: 1px solid rgba(184, 133, 56, 0.28); padding-top: 6px;
+            animation: statsRimBreath 4.5s ease-in-out infinite; }
   details:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
   summary { cursor: pointer; font-size: 11px; text-transform: uppercase;
             letter-spacing: .12em; color: #b09a72; margin: 4px 0 2px;
