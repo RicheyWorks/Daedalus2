@@ -669,6 +669,7 @@ under the `_migration/` portfolios.
   Desktop well PNG sits on torch void so leftover JavaFX white does not wash the export.
   Forced-contrast maze pages keep torch void so leftover OS ice does not wash the well.
   Spell-marked maze copy wears a gold wave so leftover UA ice does not underline the well.
+  Page canvas sits on torch void so leftover UA paper does not flash around the well.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
