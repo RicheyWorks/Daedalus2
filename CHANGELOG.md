@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well ASCII dump pocket.**
+  The text-maze well falls off from void-center to the rim so leftover
+  flat panel is not the last word under the dump. Rock khaki and
+  start-gate mint stay.
+
 - **Desktop legend fog depth.**
   Unseen chip falls off from well-void center to the rim so leftover
   flat void is not the last word on the key. Floor and wall stone stay.
