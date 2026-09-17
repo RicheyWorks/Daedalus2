@@ -170,3 +170,6 @@
     -fx-font-size: 12px;
     -fx-cursor: default;
 }
+.status-bar .label.world-place {
+    -fx-text-fill: #94612e;
+}

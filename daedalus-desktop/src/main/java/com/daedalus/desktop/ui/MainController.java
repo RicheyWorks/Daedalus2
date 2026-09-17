@@ -17,6 +17,7 @@ import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
 import com.daedalus.server.service.TrafficService;
 import com.daedalus.server.service.WorldService;
+import com.daedalus.world.World;
 import com.daedalus.theory.LongestPath;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
@@ -380,8 +381,12 @@ public class MainController {
         if (worldLabel == null) {
             return;
         }
-        worldLabel.setText(DesktopWorld.inspectLine(
-                worlds == null ? null : worlds.inspect(DesktopWorld.ID), lastWorldEvent));
+        World world = worlds == null ? null : worlds.inspect(DesktopWorld.ID);
+        worldLabel.setText(DesktopWorld.inspectLine(world, lastWorldEvent));
+        worldLabel.getStyleClass().remove(DesktopWorld.PLACE_CLASS);
+        if (!DesktopWorld.firstPlace(world).isEmpty()) {
+            worldLabel.getStyleClass().add(DesktopWorld.PLACE_CLASS);
+        }
     }
 
     /** Wired from the FXML's Generate button. */

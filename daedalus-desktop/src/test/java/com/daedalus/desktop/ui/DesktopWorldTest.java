@@ -39,6 +39,9 @@ class DesktopWorldTest {
                 .isEqualTo("world-zero r=" + named.revision().value()
                         + " · Willow Walk · BLOCK_PLACED 1,2,3 STONE");
         assertThat(DesktopWorld.ID).isEqualTo("world-zero");
+        assertThat(DesktopWorld.PLACE_INK).isEqualTo("#94612e");
+        assertThat(DesktopWorld.PLACE_CLASS).isEqualTo("world-place");
+        assertThat(DesktopWorld.firstPlace(World.zero())).isEmpty();
     }
 
     @Test
@@ -50,6 +53,12 @@ class DesktopWorldTest {
                     .contains("fx:id=\"statusLabel\"")
                     .contains("fx:id=\"generateButton\"")
                     .contains("fx:id=\"solveButton\"");
+        }
+        try (InputStream cssIn = getClass().getResourceAsStream("/ui/cosmic.css")) {
+            assertThat(cssIn).as("desktop cosmic shell").isNotNull();
+            String css = new String(cssIn.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(css).contains(".status-bar .label.world-place")
+                    .contains(DesktopWorld.PLACE_INK);
         }
     }
 }

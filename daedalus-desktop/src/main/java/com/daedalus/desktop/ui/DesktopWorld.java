@@ -14,6 +14,9 @@ import com.daedalus.world.WorldId;
 public final class DesktopWorld {
 
     public static final String ID = WorldId.ZERO.value();
+    /** Torch wood — same as well {@code #worldBox .place} / explore MAP_BLOCK. */
+    public static final String PLACE_INK = "#94612e";
+    public static final String PLACE_CLASS = "world-place";
 
     private DesktopWorld() {
     }
@@ -43,7 +46,7 @@ public final class DesktopWorld {
     }
 
     /** First inspired toponym on inspect — same well place row, not GIS. */
-    static String firstPlace(World world) {
+    public static String firstPlace(World world) {
         if (world == null) {
             return "";
         }
