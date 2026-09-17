@@ -534,6 +534,8 @@ under the `_migration/` portfolios.
   cool white on torch stone.
   Campaign rungs wear torch amber on a warm wash so stage names sit in the lamp,
   not leftover ice on cool navy.
+  Lab, tour, campaign, and plugin notes wear warm cream so desk news sits in the
+  lamp, not leftover cool white on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
