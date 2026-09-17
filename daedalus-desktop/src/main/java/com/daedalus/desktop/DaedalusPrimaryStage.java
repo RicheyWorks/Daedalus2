@@ -2,11 +2,13 @@
 
 package com.daedalus.desktop;
 
+import com.daedalus.desktop.ui.DesktopPaint;
 import com.daedalus.desktop.ui.ThemeManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -42,7 +44,8 @@ public class DaedalusPrimaryStage extends Application {
         loader.setControllerFactory(spring::getBean);
 
         Parent root = loader.load();
-        Scene scene = new Scene(root, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        Scene scene = new Scene(root, DEFAULT_WIDTH, DEFAULT_HEIGHT,
+                Color.web(DesktopPaint.SCENE_FILL));
 
         themeManager.applyDefault(scene);
 

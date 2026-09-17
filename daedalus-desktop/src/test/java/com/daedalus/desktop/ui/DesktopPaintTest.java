@@ -898,6 +898,9 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.Backing.of(800, 600, 0, 2).scaleX()).isEqualTo(1);
         assertThat(DesktopPaint.Backing.of(0, 600, 2, 2)).isNull();
         assertThat(DesktopPaint.CANVAS_IMAGE_SMOOTHING).isFalse();
+        assertThat(DesktopPaint.SCENE_FILL).isEqualTo("#0c0908");
+        assertThat(DesktopPaint.SCENE_FILL).isEqualTo(
+                com.daedalus.desktop.ui.themes.CosmicTheme.BACKGROUND_INK);
     }
 
     @Test

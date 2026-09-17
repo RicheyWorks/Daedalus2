@@ -1939,6 +1939,9 @@ public final class DesktopPaint {
      */
     public static final boolean CANVAS_IMAGE_SMOOTHING = false;
 
+    /** Scene void — leftover Modena white is not the lamp around the well. */
+    public static final String SCENE_FILL = "#0c0908";
+
     /**
      * Backing store for a HiDPI canvas. JavaFX {@code Canvas} is a bitmap
      * in its own width×height; painting in CSS pixels on a 2× display
