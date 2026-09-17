@@ -306,7 +306,8 @@ on living-slab revision, well stamp.apply mazeId, and WorldOps
 stamp.apply with a MazeGrid and mazeRef, explore load of
 the persisted DAEW file, explore remesh on DAEW mtime,
 well Generate → stamp.apply, desktop Generate → stamp.apply,
-explore B voxel toggle, and next-plot stamp (+X street) are shipped.
+explore B voxel toggle, next-plot stamp (+X street), and plot-street
+inspect (newest maze + N plots) are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
 

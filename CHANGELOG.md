@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World plot street inspect.**
+  Well maze row names the newest stamped lab id. Desktop inspect
+  says N plots when a second slab lands. First place / lease stay.
+
 - **World next-plot stamp.**
   Generate walks +X past an occupied slab so a second maze is a
   second plot. Explicit stamp at a colliding address still overlaps.

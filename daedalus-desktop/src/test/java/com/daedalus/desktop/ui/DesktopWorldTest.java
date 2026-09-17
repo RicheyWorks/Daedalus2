@@ -99,8 +99,12 @@ class DesktopWorldTest {
                 MazeMetadata.of(3, 3, 8L, "test", maze.start(), maze.goal()),
                 maze, new MazeStats());
         assertThat(DesktopWorld.projectLab(worlds, second).ok()).isTrue();
-        assertThat(worlds.inspect(DesktopWorld.ID).parcels()).hasSize(2);
-        assertThat(DesktopWorld.firstMaze(worlds.inspect(DesktopWorld.ID)))
-                .isEqualTo(cached.metadata().id().toString());
+        World two = worlds.inspect(DesktopWorld.ID);
+        assertThat(two.parcels()).hasSize(2);
+        assertThat(DesktopWorld.firstMaze(two)).isEqualTo(cached.metadata().id().toString());
+        assertThat(DesktopWorld.lastMaze(two)).isEqualTo(second.metadata().id().toString());
+        assertThat(DesktopWorld.inspectLine(two, null))
+                .contains("2 plots")
+                .contains(second.metadata().id().toString());
     }
 }
