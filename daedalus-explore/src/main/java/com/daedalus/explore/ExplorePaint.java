@@ -602,6 +602,16 @@ public final class ExplorePaint {
     public static final int BRICK_TEX_HI_R = 196;
     public static final int BRICK_TEX_HI_G = 118;
     public static final int BRICK_TEX_HI_B = 64;
+    /** Same 0.22 rim as floor tiles — leftover even clay is not the last word on a post. */
+    public static final float BRICK_TEX_EDGE_DIM = 0.22f;
+
+    public static float brickTexShade(int x, int y) {
+        int lx = (x + ((y / 8) & 1) * 16) & 15;
+        int ly = y & 7;
+        int dist = Math.min(Math.min(lx, 15 - lx), Math.min(ly, 7 - ly));
+        float t = Math.max(0f, 1f - dist / 3f);
+        return 1f - BRICK_TEX_EDGE_DIM * t;
+    }
 
     public static byte[] brickRgba() {
         return raster((x, y) -> {
@@ -610,10 +620,20 @@ public final class ExplorePaint {
             if (mortar) {
                 return rgbBytes(46, 34, 26);
             }
+            int r;
+            int g;
+            int b;
             if ((y & 7) == 1) {
-                return rgbBytes(BRICK_TEX_HI_R + n / 2, BRICK_TEX_HI_G + n / 3, BRICK_TEX_HI_B);
+                r = BRICK_TEX_HI_R + n / 2;
+                g = BRICK_TEX_HI_G + n / 3;
+                b = BRICK_TEX_HI_B;
+            } else {
+                r = 170 + n;
+                g = 98 + (n / 2);
+                b = 54;
             }
-            return rgbBytes(170 + n, 98 + (n / 2), 54);
+            float s = brickTexShade(x, y);
+            return rgbBytes(Math.round(r * s), Math.round(g * s), Math.round(b * s));
         });
     }
 

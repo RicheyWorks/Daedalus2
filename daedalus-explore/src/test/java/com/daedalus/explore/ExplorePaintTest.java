@@ -343,6 +343,10 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.ceilingTexShade(0, 3))
                 .as("ceiling tile rim falls off like floor tiles")
                 .isLessThan(ExplorePaint.ceilingTexShade(3, 3));
+        assertThat(ExplorePaint.BRICK_TEX_EDGE_DIM).isEqualTo(0.22f);
+        assertThat(ExplorePaint.brickTexShade(1, 3))
+                .as("brick face rim falls off toward grout")
+                .isLessThan(ExplorePaint.brickTexShade(8, 4));
     }
 
     @Test

@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick face depth.**
+  Corridor brick faces fall off toward grout with the same 0.22
+  edge as floor tiles, so leftover even clay is not the last word
+  on a post. Mortar stays. Start mint and goal coral stay.
+
 - **Explore ceiling tile depth.**
   Corridor vault texels fall off toward the 8×8 rim with the same
   0.22 edge as floor tiles, so leftover even overhead is not the last
