@@ -316,7 +316,7 @@ class WebUiSmokeTest {
                 .contains("letter-spacing: .12em; color: #b09a72; margin: 4px 0 2px;")
                 .contains("summary::after { content: \" ▸\"; color: rgba(184, 133, 56, 0.55);")
                 .contains("kbd { background: #16120e; border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 3px;")
-                .contains("padding: 0 4px; font-size: 11px; color: #b09a72;")
+                .contains("padding: 0 4px; font-size: 11px; color: #b09a72; user-select: none; -webkit-user-select: none")
                 .contains("background: rgba(12, 9, 8, 0.92)")
                 .contains("boardRimBreath")
                 .contains("panelRimBreath")
