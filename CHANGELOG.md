@@ -344,6 +344,8 @@ under the `_migration/` portfolios.
   the lamp, not dusk wash on torch stone.
   Hunt tour ribbon on web and desktop wears warm amber so the collection route
   sits in the lamp, not leftover ice on torch stone.
+  The third session walker wears warm apricot so multiplayer presence sits in
+  the lamp, not leftover ice on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
