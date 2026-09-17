@@ -385,9 +385,13 @@ public final class ExploreHost {
                 glVertex3d(tri.x3(), tri.y3(), tri.z3());
             }
         }
+        var endTiles = world.mesh() == null ? null : world.mesh().tiles();
+        int endH = endTiles == null ? 1 : endTiles.length;
+        int endW = endTiles == null || endTiles[0] == null ? 1 : endTiles[0].length;
         for (ExplorePaint.EndPlace end : ExplorePaint.endPlaces(world.fog(), world.mesh())) {
             ExplorePaint.mapEndTint(end.kind(), rgb);
-            ExplorePaint.placePadTint(rgb, pad, seconds);
+            ExplorePaint.placePadTint(rgb, pad, seconds,
+                    ExplorePaint.mapEdge(end.tileRow(), end.tileCol(), 0, endH - 1, 0, endW - 1));
             placePad(end.x(), end.z(), pad[0], pad[1], pad[2]);
         }
         if (world.showingBlocks() && world.blocks() != null) {

@@ -514,7 +514,7 @@ public final class ExplorePaint {
     }
 
     /** Corridor disc at a revealed start / goal — same place as the well endpoint. */
-    public record EndPlace(double x, double z, MapKind kind) {
+    public record EndPlace(double x, double z, MapKind kind, int tileRow, int tileCol) {
     }
 
     /**
@@ -1428,7 +1428,7 @@ public final class ExplorePaint {
                     continue;
                 }
                 out.add(new EndPlace(ExploreMesh.tileCenterX(tc), ExploreMesh.tileCenterZ(tr),
-                        tile == TileType.START ? MapKind.START : MapKind.GOAL));
+                        tile == TileType.START ? MapKind.START : MapKind.GOAL, tr, tc));
             }
         }
         return List.copyOf(out);

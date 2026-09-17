@@ -510,6 +510,15 @@ class ExplorePaintTest {
                 .filter(p -> p.kind() == ExplorePaint.MapKind.START).findFirst().orElseThrow();
         assertThat(gatePad.x()).isEqualTo(ExploreMesh.tileCenterX(1));
         assertThat(gatePad.z()).isEqualTo(ExploreMesh.tileCenterZ(1));
+        assertThat(gatePad.tileRow()).isEqualTo(1);
+        assertThat(gatePad.tileCol()).isEqualTo(1);
+        float[] endPad = new float[3];
+        float[] endRim = new float[3];
+        ExplorePaint.placePadTint(gate, endPad, 0, 0);
+        ExplorePaint.placePadTint(gate, endRim, 0, 1);
+        assertThat(endRim[1])
+                .as("start pad falls off toward floor-dim at the board rim")
+                .isLessThan(endPad[1]);
         assertThat(dots.stream().filter(d -> d.kind() == ExplorePaint.MapKind.MARK)
                 .map(ExplorePaint.MapDot::story))
                 .as("automap diamonds keep the story kind so vault teal is not leftover red")
