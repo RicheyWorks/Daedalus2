@@ -1204,7 +1204,7 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.walkTrailInk(DesktopPaint.HARDEST, 0))
                 .isEqualTo(DesktopPaint.HARDEST);
         assertThat(DesktopPaint.walkTrailInk(DesktopPaint.HARDEST, 1))
-                .as("hardest ribbon falls off toward floor-dim")
+                .as("hardest ribbon and tip fall off toward floor-dim")
                 .isNotEqualTo(DesktopPaint.HARDEST);
         assertThat(DesktopPaint.TOUR).isEqualTo("#d4b06a");
         assertThat(Integer.parseInt(DesktopPaint.TOUR.substring(1, 3), 16))

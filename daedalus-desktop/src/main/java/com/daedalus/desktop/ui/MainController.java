@@ -2160,7 +2160,9 @@ public class MainController {
                     DesktopPaint.HARDEST_ALPHA, null, null, DesktopPaint.HARDEST);
             Point tip = DesktopPaint.walkHead(currentHardest.path());
             double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
-            Color gold = Color.web(DesktopPaint.HARDEST);
+            Color gold = Color.web(tip == null ? DesktopPaint.HARDEST
+                    : DesktopPaint.walkTrailInk(DesktopPaint.HARDEST,
+                            DesktopPaint.floorEdge(layout, 2 * tip.row() + 1, 2 * tip.col() + 1)));
             paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
                     gold.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
             paintPathHeadDisc(g, DesktopPaint.disc(layout, tip, 0.3), gold, tipWave);
