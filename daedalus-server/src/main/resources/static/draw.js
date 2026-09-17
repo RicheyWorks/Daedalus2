@@ -372,6 +372,13 @@
     return mixHex("#c8a878", COLORS.floorDim, 0.22 * edge);
   }
 
+  function chokeInk(tr, tc, th, tw) {
+    const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
+    const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
+    const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+    return mixHex("#c07850", COLORS.floorDim, 0.22 * edge);
+  }
+
   function paint(canvas, scene) {
     const tiles = scene.tiles;
     const th = tiles.length, tw = tiles[0].length;
@@ -619,13 +626,14 @@
         const cy = (geom.offY[tr] + geom.offY[tr + 1]) / 2;
         const core = Math.max(geom.cell, geom.offX[tc + 1] - geom.offX[tc],
             geom.offY[tr + 1] - geom.offY[tr]) * 0.55;
-        g.fillStyle = "#c07850";
+        const cutInk = chokeInk(tr, tc, th, tw);
+        g.fillStyle = cutInk;
         g.globalAlpha = 0.16 + 0.12 * cutsWave;
         g.beginPath();
         g.arc(cx, cy, core + geom.cell * (0.18 + 0.05 * cutsWave), 0, 2 * Math.PI);
         g.fill();
         g.globalAlpha = 1;
-        g.strokeStyle = "#c07850";
+        g.strokeStyle = cutInk;
         g.globalAlpha = 0.72 + 0.18 * cutsWave;
         g.lineWidth = Math.max(1.5, geom.cell * 0.1);
         g.beginPath();

@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well choke depth.**
+  Min-cut marks fall off toward floor-dim at the board rim with
+  the same 0.22 edge as halls, so leftover even clay is not the
+  last word on a pinch. Start mint and goal coral stay.
+
 - **Desktop dead-end depth.**
   Dead-end discs fall off toward floor-dim at the board rim with
   the same 0.22 edge as halls, so leftover even khaki is not the

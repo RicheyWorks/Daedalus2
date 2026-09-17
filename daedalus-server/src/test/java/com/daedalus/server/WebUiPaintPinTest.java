@@ -193,6 +193,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellChokeMarksHaveRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("mixHex(\"#c07850\", COLORS.floorDim, 0.22 * edge)")
+                    .contains("const cutInk = chokeInk(tr, tc, th, tw)");
+        }
+    }
+
+    @Test
     void wellFogWallsHaveRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
