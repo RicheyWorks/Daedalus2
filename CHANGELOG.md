@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World One W1.3 second observer.**
+  Two STOMP clients subscribe to `/topic/world/world-zero/events`. A place
+  on the live world reaches observer B as `BLOCK_PLACED` with the same
+  revision the volume reports. Same JVM, existing broker — not a new bus.
+
 - **World One W1.2 living slab.**
   `LivingSlab` is a maze-sourced subscriber: braid / sealer / carve stay on
   the `MazeGrid`, then `sync()` re-projects only cubes whose desired type
