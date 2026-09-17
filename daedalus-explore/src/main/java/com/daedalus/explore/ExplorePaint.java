@@ -315,6 +315,10 @@ public final class ExplorePaint {
         }
     }
 
+    /** Corridor disc at a revealed start / goal — same place as the well endpoint. */
+    public record EndPlace(double x, double z, MapKind kind) {
+    }
+
     /**
      * Bottom strip: named place, compass, how much stone is earned.
      * GLFW only paints this; tests lock the words so the bar cannot lie.
@@ -876,6 +880,28 @@ public final class ExplorePaint {
             int tr = (int) Math.round(body.z() / ExploreMesh.TILE + 1);
             out.add(new MapDot(project(tc, minC, maxC),
                     MAP - 1 - project(tr, minR, maxR), MapKind.HERE));
+        }
+        return List.copyOf(out);
+    }
+
+    public static List<EndPlace> endPlaces(ExploreFog fog, ExploreMesh mesh) {
+        if (fog == null || mesh == null || mesh.tiles() == null) {
+            return List.of();
+        }
+        TileType[][] tiles = mesh.tiles();
+        List<EndPlace> out = new ArrayList<>();
+        for (int tr = 0; tr < tiles.length; tr++) {
+            for (int tc = 0; tc < tiles[tr].length; tc++) {
+                TileType tile = tiles[tr][tc];
+                if (tile != TileType.START && tile != TileType.GOAL) {
+                    continue;
+                }
+                if (!fog.tileVisible(tr, tc)) {
+                    continue;
+                }
+                out.add(new EndPlace(ExploreMesh.tileCenterX(tc), ExploreMesh.tileCenterZ(tr),
+                        tile == TileType.START ? MapKind.START : MapKind.GOAL));
+            }
         }
         return List.copyOf(out);
     }

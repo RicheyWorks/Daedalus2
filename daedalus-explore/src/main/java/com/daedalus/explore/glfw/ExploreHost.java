@@ -378,6 +378,11 @@ public final class ExploreHost {
                 glVertex3d(tri.x3(), tri.y3(), tri.z3());
             }
         }
+        for (ExplorePaint.EndPlace end : ExplorePaint.endPlaces(world.fog(), world.mesh())) {
+            ExplorePaint.mapEndTint(end.kind(), rgb);
+            ExplorePaint.placePadTint(rgb, pad, seconds);
+            placePad(end.x(), end.z(), pad[0], pad[1], pad[2]);
+        }
         glEnd();
         hud(aspect, world, faceTex, stride, seconds);
     }

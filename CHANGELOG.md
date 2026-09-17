@@ -93,6 +93,7 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- Explore corridor start and goal wear well mint and coral floor discs so the ends of the maze are places, not leftover bare stone.
 - Explore corridor start and goal lids wash toward well mint and coral so looking up names the ends of the maze, not leftover plaster brown.
 - Explore corridor start and goal floors wash toward well mint and coral so looking down names the ends of the maze, not leftover floor brown.
 - Explore automap start and goal wear well mint and coral so the earned map names the ends of the maze, not leftover floor brown.

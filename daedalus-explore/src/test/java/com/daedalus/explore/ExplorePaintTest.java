@@ -278,6 +278,16 @@ class ExplorePaintTest {
                 .isNotEqualTo(ExplorePaint.mapEndHalo(0.8));
         ExplorePaint.mapEndTint(ExplorePaint.MapKind.START, null);
         ExplorePaint.mapEndSoftTint(ExplorePaint.MapKind.GOAL, null);
+        assertThat(ExplorePaint.endPlaces(null, mesh)).isEmpty();
+        assertThat(ExplorePaint.endPlaces(new ExploreFog(), mesh)).isEmpty();
+        List<ExplorePaint.EndPlace> pads = ExplorePaint.endPlaces(fog, mesh);
+        assertThat(pads).hasSize(2);
+        assertThat(pads.stream().map(ExplorePaint.EndPlace::kind))
+                .containsExactlyInAnyOrder(ExplorePaint.MapKind.START, ExplorePaint.MapKind.GOAL);
+        ExplorePaint.EndPlace gatePad = pads.stream()
+                .filter(p -> p.kind() == ExplorePaint.MapKind.START).findFirst().orElseThrow();
+        assertThat(gatePad.x()).isEqualTo(ExploreMesh.tileCenterX(1));
+        assertThat(gatePad.z()).isEqualTo(ExploreMesh.tileCenterZ(1));
         assertThat(dots.stream().filter(d -> d.kind() == ExplorePaint.MapKind.MARK)
                 .map(ExplorePaint.MapDot::story))
                 .as("automap diamonds keep the story kind so vault teal is not leftover red")
