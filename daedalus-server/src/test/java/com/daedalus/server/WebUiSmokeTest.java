@@ -226,6 +226,8 @@ class WebUiSmokeTest {
                 .contains("data-key=\"hardest\"")
                 .contains("data-key=\"deadend\"")
                 .contains("#legend [data-key=\"choke\"] i, #legend [data-key=\"deadend\"] i")
+                .contains("#legend [data-key=\"hotspot\"] i")
+                .contains("rgba(229, 72, 77, .35)")
                 .contains("sanctuary: !!(snap.sanctuaries")
                 .contains("lens: !!snap.lens")
                 .contains("hardest: !!(snap.hardest")

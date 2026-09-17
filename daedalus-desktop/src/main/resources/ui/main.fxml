@@ -146,7 +146,8 @@
                 <Label fx:id="legendHotspot" text="hot spot" managed="false" visible="false">
                     <graphic>
                         <Rectangle width="10" height="10" fill="#e5484d" opacity="0.5"
-                                   arcWidth="3" arcHeight="3"/>
+                                   arcWidth="3" arcHeight="3"
+                                   stroke="rgba(229,72,77,0.35)" strokeWidth="1.5"/>
                     </graphic>
                 </Label>
                 <Label fx:id="legendFog" text="unseen (fog)" managed="false" visible="false">
