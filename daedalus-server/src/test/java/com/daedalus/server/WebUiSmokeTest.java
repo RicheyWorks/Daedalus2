@@ -176,6 +176,7 @@ class WebUiSmokeTest {
                 .contains("color: #f2ead8")
                 .contains("#compareBox th { text-align: left; color: #b09a72")
                 .contains("#compareBox td { padding: 2px 8px; border-bottom: 1px solid rgba(184, 133, 56, 0.28)")
+                .contains("#compareBox td { padding: 2px 8px; border-bottom: 1px solid rgba(184, 133, 56, 0.28); -webkit-user-drag: none")
                 .contains("#compareBox .hint { color: #b09a72")
                 .contains("#compareBox > div { border-top: 1px solid rgba(184, 133, 56, 0.28); padding-top: 6px;")
                 .contains("#compareBox > div { border-top: 1px solid rgba(184, 133, 56, 0.28); padding-top: 6px; -webkit-user-drag: none")
