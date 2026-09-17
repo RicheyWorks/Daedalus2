@@ -1995,9 +1995,10 @@ public class MainController {
                             layout.w(2 * c + 1), layout.h(2 * r + 1));
                 }
             }
-            g.setFill(Color.web(DesktopPaint.LENS_COLORS[2]));
             g.setGlobalAlpha(DesktopPaint.lensOpeningPaintAlpha(lensWave));
             for (DesktopPaint.TileRect tile : DesktopPaint.lensOpenings(bands, tiles)) {
+                g.setFill(Color.web(DesktopPaint.fieldInk(DesktopPaint.LENS_COLORS[2],
+                        DesktopPaint.floorEdge(layout, tile.tileRow(), tile.tileCol()))));
                 g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                         layout.w(tile.tileCol()), layout.h(tile.tileRow()));
             }

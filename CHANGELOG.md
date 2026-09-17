@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop lens opening depth.**
+  Heuristic-band corridors fall off toward floor-dim at the board
+  rim with the same 0.22 edge as halls, so leftover even grout is
+  not the last word between must/never tiles. Start mint and goal
+  coral stay.
+
 - **Well lens opening depth.**
   Heuristic-band corridors fall off toward floor-dim at the board
   rim with the same 0.22 edge as halls, so leftover even grout is

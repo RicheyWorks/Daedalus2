@@ -354,6 +354,9 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.lensColor(2)).isEqualTo("#8aaa50");
         assertThat(Integer.parseInt(DesktopPaint.LENS_COLORS[2].substring(1, 3), 16))
                 .isGreaterThan(Integer.parseInt(DesktopPaint.LENS_COLORS[2].substring(5, 7), 16));
+        assertThat(DesktopPaint.fieldInk(DesktopPaint.LENS_COLORS[2], 1))
+                .as("lens openings share the cell rim")
+                .isNotEqualTo(DesktopPaint.LENS_COLORS[2]);
         assertThat(DesktopPaint.lensColor(-1)).isNull();
         assertThat(DesktopPaint.lensAlpha(0)).isEqualTo(0.42);
         assertThat(DesktopPaint.lensAlpha(2)).isEqualTo(0.16);
