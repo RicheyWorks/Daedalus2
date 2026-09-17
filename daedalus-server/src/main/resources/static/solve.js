@@ -166,7 +166,7 @@
       // null tour (N17).
       host.$("stats").innerHTML = DaedalusCaption.mazeStats(state.maze, host.esc);
       state.race = { lanes: [
-        {id: a, color: "#82b1ff", expansions: ra.expansions || [], path: ra.path,
+        {id: a, color: "#8fb8ff", expansions: ra.expansions || [], path: ra.path,
          success: ra.success, front: 0, pathProg: 0},
         {id: b, color: "#f0b429", expansions: rb.expansions || [], path: rb.path,
          success: rb.success, front: 0, pathProg: 0},

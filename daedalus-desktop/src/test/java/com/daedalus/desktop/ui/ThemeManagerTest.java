@@ -107,7 +107,7 @@ class ThemeManagerTest {
             assertThat(fxml).contains("fill=\"#b8a058\"");
             assertThat(fxml).contains("legendGhost");
             assertThat(fxml).contains("fill=\"#e8e0d4\"");
-            assertThat(fxml).contains("fill=\"#82b1ff\"");
+            assertThat(fxml).contains("fill=\"#8fb8ff\"");
             assertThat(fxml).contains("fill=\"#19140f\"")
                     .doesNotContain("stroke=\"#2a2218\"");
             assertThat(fxml).contains("fill=\"#0c0908\"")

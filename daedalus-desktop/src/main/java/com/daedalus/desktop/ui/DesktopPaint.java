@@ -446,8 +446,8 @@ public final class DesktopPaint {
     public static double lensOpeningPaintAlpha(double wave) {
         return LENS_OPENING_ALPHA * (0.85 + 0.30 * wave);
     }
-    /** Arena lanes — same tokens as {@code solve.js}. */
-    public static final String RACE_A = "#82b1ff";
+    /** Arena lanes — KEEP overlay ice, same as the solver ribbon, not leftover ice. */
+    public static final String RACE_A = "#8fb8ff";
     public static final String RACE_B = "#f0b429";
     public static final double RACE_WASH = 0.13;
     /** Openings louder than cells — same idea as search wash, quieter than the ribbon. */
