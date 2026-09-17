@@ -64,6 +64,7 @@ class ThemeManagerTest {
             assertThat(css).contains("-fx-highlight-fill: rgba(184, 133, 56, 0.35)");
             assertThat(css).contains("-fx-highlight-text-fill: #f2ead8");
             assertThat(css).contains("-fx-font-smoothing-type: gray");
+            assertThat(css).contains("-fx-font-smoothing-type: gray;\n    -fx-text-fill: #f2ead8;");
             assertThat(css).contains(".toolbar");
             assertThat(css).contains(".toolbar .brand");
             assertThat(css).contains(".toolbar .label");

@@ -689,6 +689,7 @@ under the `_migration/` portfolios.
   Windows browser buttons wear torch void so leftover OS ice does not sit beside the well.
   Maze copy keeps lamp size so leftover iOS ice does not inflate cream on torch stone.
   Maze numbers stay cream so leftover UA ice does not turn seeds and sizes into phone links.
+  Desktop maze copy inherits cream so leftover Modena ink does not sit on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
