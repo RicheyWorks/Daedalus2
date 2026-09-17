@@ -812,6 +812,7 @@ under the `_migration/` portfolios.
   Well export chrome refuses leftover drag ice so the overlay strip is not ghosted.
   The compare-box gold hairline refuses leftover drag ice so the pad above the arena is not ghosted.
   Live-log gold rows refuse leftover drag ice so khaki news is not ghosted.
+  Campaign gold rows refuse leftover drag ice so cream news is not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
