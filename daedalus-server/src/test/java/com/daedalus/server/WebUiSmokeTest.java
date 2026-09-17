@@ -60,6 +60,8 @@ class WebUiSmokeTest {
                 .contains("stroke='%23b88538'")
                 .contains("rel=\"mask-icon\" color=\"#b88538\"")
                 .contains("fill-rule='evenodd' d='M0 0h32v32H0zM4 4h24v24H4z'")
+                .contains("rel=\"apple-touch-icon\"")
+                .contains("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2j")
                 .contains("color: #f2ead8")
                 .contains("header h1 button")
                 .contains("header .tag { color: #b09a72")
