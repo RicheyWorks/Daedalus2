@@ -321,7 +321,8 @@ class ExplorePaintTest {
         int ceilR = Byte.toUnsignedInt(ceil[0]);
         int ceilB = Byte.toUnsignedInt(ceil[2]);
         assertThat(ceilR).isGreaterThan(ceilB);
-        assertThat(ceilR).isGreaterThanOrEqualTo(ExplorePaint.CEILING_TEX_R);
+        int ceilMid = Byte.toUnsignedInt(ceil[(3 * ExplorePaint.TEX + 3) * 4]);
+        assertThat(ceilMid).isGreaterThanOrEqualTo(ExplorePaint.CEILING_TEX_R);
         assertThat(ExplorePaint.CEILING_TEX_R).isGreaterThan(ExplorePaint.CEILING_TEX_B);
         assertThat(ExplorePaint.CEILING_TEX_R).isLessThan(92);
         int ceilShine = Byte.toUnsignedInt(ceil[(1 * ExplorePaint.TEX + 2) * 4]);
@@ -338,6 +339,10 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.floorTexShade(0, 3))
                 .as("floor tile rim falls off like live halls")
                 .isLessThan(ExplorePaint.floorTexShade(3, 3));
+        assertThat(ExplorePaint.CEILING_TEX_EDGE_DIM).isEqualTo(0.22f);
+        assertThat(ExplorePaint.ceilingTexShade(0, 3))
+                .as("ceiling tile rim falls off like floor tiles")
+                .isLessThan(ExplorePaint.ceilingTexShade(3, 3));
     }
 
     @Test

@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore ceiling tile depth.**
+  Corridor vault texels fall off toward the 8×8 rim with the same
+  0.22 edge as floor tiles, so leftover even overhead is not the last
+  word on the lid. Start mint and goal coral stay.
+
 - **Explore floor tile depth.**
   Corridor floor texels fall off toward the 8×8 rim with the same
   0.22 edge as live halls, so leftover even checker is not the last

@@ -664,14 +664,34 @@ public final class ExplorePaint {
     public static final int CEILING_TEX_HI_R = 92;
     public static final int CEILING_TEX_HI_G = 68;
     public static final int CEILING_TEX_HI_B = 42;
+    /** Same 0.22 rim as floor tiles — leftover even vault is not the last word overhead. */
+    public static final float CEILING_TEX_EDGE_DIM = 0.22f;
+
+    public static float ceilingTexShade(int x, int y) {
+        int lx = x & 7;
+        int ly = y & 7;
+        int dist = Math.min(Math.min(lx, 7 - lx), Math.min(ly, 7 - ly));
+        float t = Math.max(0f, 1f - dist / 3f);
+        return 1f - CEILING_TEX_EDGE_DIM * t;
+    }
 
     public static byte[] ceilingRgba() {
         return raster((x, y) -> {
             int n = hash(x, y) & 19;
+            int r;
+            int g;
+            int b;
             if ((y & 7) == 1) {
-                return rgbBytes(CEILING_TEX_HI_R + n / 2, CEILING_TEX_HI_G + n / 3, CEILING_TEX_HI_B);
+                r = CEILING_TEX_HI_R + n / 2;
+                g = CEILING_TEX_HI_G + n / 3;
+                b = CEILING_TEX_HI_B;
+            } else {
+                r = CEILING_TEX_R + n / 2;
+                g = CEILING_TEX_G + n / 3;
+                b = CEILING_TEX_B;
             }
-            return rgbBytes(CEILING_TEX_R + n / 2, CEILING_TEX_G + n / 3, CEILING_TEX_B);
+            float s = ceilingTexShade(x, y);
+            return rgbBytes(Math.round(r * s), Math.round(g * s), Math.round(b * s));
         });
     }
 
