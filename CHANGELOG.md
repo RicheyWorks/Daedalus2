@@ -298,6 +298,8 @@ under the `_migration/` portfolios.
   sits in the lamp, not cool white over torch stone.
   Explore brick walls wear a 1px torch shine so posts have the same stone
   depth as the floor, not flat clay under the lamp.
+  Desktop Cosmic wall and passage wear the live well's torch mixes so leftover
+  theme stone matches the board, not cool ink beside warm corridors.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

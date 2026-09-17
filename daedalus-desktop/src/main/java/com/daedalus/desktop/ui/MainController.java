@@ -1760,7 +1760,7 @@ public class MainController {
         }
 
         if (current == null) {
-            g.setFill(theme != null ? theme.wall() : Color.web("#0b0f14"));
+            g.setFill(theme != null ? theme.wall() : Color.web(DesktopPaint.LEGEND_WALL));
             g.fillRect(0, 0, w, h);
             double cx = w / 2.0;
             double cy = h / 2.0;

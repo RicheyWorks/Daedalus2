@@ -73,6 +73,8 @@ class ThemeManagerTest {
             assertThat(fxml).contains("fill=\"#464a4d\"");
             assertThat(fxml).contains("fill=\"#141415\"");
         }
+        assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.PASSAGE_INK).isEqualTo("#464a4d");
+        assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.WALL_INK).isEqualTo("#141415");
     }
 
     @Test

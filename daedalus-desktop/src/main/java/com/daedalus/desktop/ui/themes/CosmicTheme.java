@@ -22,9 +22,14 @@ public class CosmicTheme implements Theme {
     @Override public String displayName()     { return "Cosmic"; }
     @Override public String stylesheetPath()  { return "/ui/cosmic.css"; }
 
+    /** Same 0.28 torch mix as the live well / legend wall swatch. */
+    public static final String WALL_INK = "#141415";
+    /** Same 0.28 torch mix as the live well / legend floor swatch. */
+    public static final String PASSAGE_INK = "#464a4d";
+
     @Override public Color background()       { return Color.web("#07090c"); }
-    @Override public Color wall()             { return Color.web("#0b0f14"); }
-    @Override public Color passage()          { return Color.web("#3d4a58"); }
+    @Override public Color wall()             { return Color.web(WALL_INK); }
+    @Override public Color passage()          { return Color.web(PASSAGE_INK); }
     @Override public Color start()            { return Color.web("#3ee08f"); }
     @Override public Color goal()             { return Color.web("#ff5a5f"); }
     @Override public Color path()             { return Color.web("#8fb8ff"); }

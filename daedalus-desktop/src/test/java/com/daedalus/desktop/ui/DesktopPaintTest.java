@@ -2,6 +2,7 @@
 
 package com.daedalus.desktop.ui;
 
+import com.daedalus.desktop.ui.themes.CosmicTheme;
 import com.daedalus.api.dto.Hotspot;
 import com.daedalus.model.GameSession;
 import com.daedalus.model.Point;
@@ -491,6 +492,8 @@ class DesktopPaintTest {
                 DesktopPaint.FOG_WALL, DesktopPaint.FOG_WALL_WARM, 0.28));
         assertThat(DesktopPaint.LEGEND_WALL).isEqualTo("#141415");
         assertThat(DesktopPaint.LEGEND_WALL).isNotEqualTo(DesktopPaint.FOG_WALL);
+        assertThat(CosmicTheme.PASSAGE_INK).isEqualTo(DesktopPaint.LEGEND_FLOOR);
+        assertThat(CosmicTheme.WALL_INK).isEqualTo(DesktopPaint.LEGEND_WALL);
         assertThat(DesktopPaint.fogWall(fog, 1, 0))
                 .as("a touching wall near the lamp is warmer than cold ink")
                 .isNotEqualTo(DesktopPaint.FOG_WALL);
