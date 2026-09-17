@@ -230,6 +230,7 @@ class WebUiSmokeTest {
                 .contains("0 0 18px rgba(62, 224, 143")
                 .contains("animation: gateBreath 4.5s ease-in-out infinite")
                 .contains("board-panel")
+                .contains("gap: 12px; min-width: 0; -webkit-user-drag: none")
                 .contains(".board-panel { display: flex; flex-direction: column; min-height: calc(100vh - 88px);")
                 .contains("min-height: calc(100vh - 88px); cursor: default")
                 .contains("min-height: calc(100vh - 88px); cursor: default; -webkit-user-drag: none")
