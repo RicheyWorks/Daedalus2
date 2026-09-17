@@ -74,4 +74,17 @@ class WebUiPaintPinTest {
                     .contains("x='23' y='19' width='2' height='2' fill='%23ff5a5f'");
         }
     }
+
+    @Test
+    void homeScreenPngWearsTheIdleMazeMark() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html).contains(
+                    "LdBSkqAQDQ4L7B70AxGE7eFsiYbwiw8OC5A1ICNixAeTBcQHy+CzgNRg")
+                    .contains("rel=\"apple-touch-icon\"")
+                    .contains("property=\"og:image\"")
+                    .contains("name=\"twitter:image\"");
+        }
+    }
 }

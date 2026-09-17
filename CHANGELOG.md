@@ -93,6 +93,7 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- Home-screen and share PNGs wear the idle maze mark so a saved well is a miniature dungeon, not an empty gold box.
 - Explore window icon wears the idle maze mark so the taskbar is a miniature dungeon, not an empty gold box.
 - Desktop stage icon wears the idle maze mark so the taskbar is a miniature dungeon, not an empty gold box.
 - Well tab icon wears the idle maze mark so the lamp is a miniature dungeon, not an empty gold box.
