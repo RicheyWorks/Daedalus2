@@ -622,6 +622,8 @@ under the `_migration/` portfolios.
   not leftover OS ice around torch stone.
   iOS status chrome goes translucent so the well sits in the lamp,
   not leftover OS ice around torch stone.
+  Hash-target maze copy wears a gold wash so jumped news sits in the lamp,
+  not leftover OS ice on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

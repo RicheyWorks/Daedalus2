@@ -65,6 +65,7 @@ class WebUiSmokeTest {
                 .contains("::-webkit-scrollbar-track { background: transparent; }")
                 .contains("::selection { background: rgba(184, 133, 56, 0.35); color: #f2ead8; }")
                 .contains("::-moz-selection { background: rgba(184, 133, 56, 0.35); color: #f2ead8; }")
+                .contains("::target-text { background: rgba(184, 133, 56, 0.35); color: #f2ead8; }")
                 .contains("#gate article h3")
                 .contains("letter-spacing: .04em; color: #f2ead8")
                 .contains("#gate .lede { color: #b09a72")
