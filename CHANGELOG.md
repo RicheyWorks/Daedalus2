@@ -696,6 +696,7 @@ under the `_migration/` portfolios.
   The well canvas refuses leftover OS selection ice so torch stone is not smeared.
   The well key refuses leftover OS selection ice so overlay names are not smeared on torch stone.
   Maze news refuses leftover OS hyphens so cream sits in the lamp, not ice-broken mid-word.
+  The well canvas refuses leftover OS drag ghost so torch stone is not smeared.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
