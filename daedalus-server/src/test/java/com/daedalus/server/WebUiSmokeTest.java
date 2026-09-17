@@ -332,6 +332,7 @@ class WebUiSmokeTest {
                 .contains("padding: 0 4px; font-size: 11px; color: #b09a72; user-select: none")
                 .contains("font-size: 11px; color: #b09a72; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none")
                 .contains("font-size: 11px; color: #b09a72; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none")
+                .contains("4px; font-size: 11px; color: #b09a72; user-select: none; -webkit-user-select: none")
                 .contains("background: rgba(12, 9, 8, 0.92)")
                 .contains("boardRimBreath")
                 .contains("panelRimBreath")
