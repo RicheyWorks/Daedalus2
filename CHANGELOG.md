@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop world inspect.**
+  The desktop status bar names `world-zero` revision and the last world
+  event. Maze Generate / Solve stay. Not a voxel viewport.
+
 - **World parcel permissions.**
   `ParcelGate` allows or denies `(ownerId, verb)` — `block.place`,
   `door.open`, `stamp.apply`. Owner is allowed unless denied; a listed

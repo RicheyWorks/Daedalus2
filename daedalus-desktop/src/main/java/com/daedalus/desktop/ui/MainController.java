@@ -9,11 +9,14 @@ import com.daedalus.model.Direction;
 import com.daedalus.model.GameSession;
 import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
+import com.daedalus.api.dto.WorldEventFrame;
+import com.daedalus.plugin.events.WorldBlockEvent;
 import com.daedalus.server.service.HeuristicLensService;
 import com.daedalus.server.service.LivingMazeService;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
 import com.daedalus.server.service.TrafficService;
+import com.daedalus.server.service.WorldService;
 import com.daedalus.theory.LongestPath;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
@@ -47,6 +50,8 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.awt.image.BufferedImage;
@@ -151,6 +156,11 @@ public class MainController {
     @FXML private Label legendGhost;
     @FXML private Label legendCompare;
     @FXML private Label statusLabel;
+    @FXML private Label worldLabel;
+
+    @Autowired(required = false)
+    private WorldService worlds;
+    private WorldEventFrame lastWorldEvent;
 
     /** Last successfully-generated maze; held so resize events can re-render it. */
     private MazeGenerationService.Cached current;
@@ -348,6 +358,30 @@ public class MainController {
             }
         };
         emptyBreath.start();
+        refreshWorldLine();
+    }
+
+    @EventListener
+    public void onWorldBlock(WorldBlockEvent event) {
+        if (event == null || !DesktopWorld.ID.equals(event.worldId())) {
+            return;
+        }
+        lastWorldEvent = new WorldEventFrame(event.worldId(), event.kind().name(),
+                event.x(), event.y(), event.z(), event.type(), event.previous(),
+                event.revision());
+        if (Platform.isFxApplicationThread()) {
+            refreshWorldLine();
+        } else {
+            Platform.runLater(this::refreshWorldLine);
+        }
+    }
+
+    private void refreshWorldLine() {
+        if (worldLabel == null) {
+            return;
+        }
+        worldLabel.setText(DesktopWorld.inspectLine(
+                worlds == null ? null : worlds.inspect(DesktopWorld.ID), lastWorldEvent));
     }
 
     /** Wired from the FXML's Generate button. */
