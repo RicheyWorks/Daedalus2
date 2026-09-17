@@ -715,6 +715,18 @@ public final class ExplorePaint {
         });
     }
 
+    /** Same 0.22 rim as halls — leftover even sky bands are not the last word at the horizon. */
+    public static final float SKY_TEX_EDGE_DIM = 0.22f;
+
+    public static float skyTexShade(int x, int y) {
+        float cx = (TEX - 1) * 0.5f;
+        float cy = (TEX - 1) * 0.45f;
+        float dx = (x - cx) / (TEX * 0.5f);
+        float dy = (y - cy) / (TEX * 0.5f);
+        float edge = Math.min(1f, (float) Math.sqrt(dx * dx + dy * dy));
+        return 1f - SKY_TEX_EDGE_DIM * edge;
+    }
+
     public static byte[] skyRgba() {
         return raster((x, y) -> {
             int n = hash(x, y) & 31;
@@ -722,20 +734,35 @@ public final class ExplorePaint {
             if (star) {
                 return rgbBytes(220, 196, 140);
             }
+            int r;
+            int g;
+            int b;
             if (y < 18) {
-                return rgbBytes(78 + n / 3, 30 + n / 6, 24);
+                r = 78 + n / 3;
+                g = 30 + n / 6;
+                b = 24;
+            } else if (y < 36) {
+                r = 148 + n / 2;
+                g = 56 + n / 4;
+                b = 30;
+            } else if (y < 46) {
+                r = 196 + n / 3;
+                g = 88 + n / 5;
+                b = 34;
+            } else {
+                boolean hill = y > 50 && ((hash(x / 6, 3) & 15) > (64 - y));
+                if (hill) {
+                    r = 30 + n / 4;
+                    g = 16;
+                    b = 14;
+                } else {
+                    r = 52 + n / 3;
+                    g = 24;
+                    b = 20;
+                }
             }
-            if (y < 36) {
-                return rgbBytes(148 + n / 2, 56 + n / 4, 30);
-            }
-            if (y < 46) {
-                return rgbBytes(196 + n / 3, 88 + n / 5, 34);
-            }
-            boolean hill = y > 50 && ((hash(x / 6, 3) & 15) > (64 - y));
-            if (hill) {
-                return rgbBytes(30 + n / 4, 16, 14);
-            }
-            return rgbBytes(52 + n / 3, 24, 20);
+            float s = skyTexShade(x, y);
+            return rgbBytes(Math.round(r * s), Math.round(g * s), Math.round(b * s));
         });
     }
 

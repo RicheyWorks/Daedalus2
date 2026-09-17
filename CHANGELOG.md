@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore sky pocket depth.**
+  Horizon texels fall off toward the atlas rim with the same 0.22
+  edge as halls, so leftover even sky bands are not the last word
+  at the far wall. Stars stay. Start mint and goal coral stay.
+
 - **Well clear void pocket.**
   Clear-board letterbox uses the same `#16120e`→unseen radial as
   fog, so leftover even warm-wall grout is not the last word under
