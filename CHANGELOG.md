@@ -698,6 +698,7 @@ under the `_migration/` portfolios.
   Maze news refuses leftover OS hyphens so cream sits in the lamp, not ice-broken mid-word.
   The well canvas refuses leftover OS drag ghost so torch stone is not smeared.
   The well canvas wears a lamp cursor so leftover OS I-beam ice does not sit on torch stone.
+  Start-gate lede sits on lamp wrap so leftover OS ragged ice does not break khaki on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
