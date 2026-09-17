@@ -162,10 +162,14 @@
     0%, 100% { border-color: rgba(184, 133, 56, 0.36); }
     50% { border-color: rgba(184, 133, 56, 0.55); }
   }
+  @keyframes infoRimBreath {
+    0%, 100% { border-left-color: rgba(184, 133, 56, 0.28); }
+    50% { border-left-color: rgba(184, 133, 56, 0.48); }
+  }
   @media (prefers-reduced-motion: reduce) {
     #gate .gate-brand, #gate .lede, #gate .gate-enter, #gate article, #gate .gate-veil,
     header h1 button, #stage, .board-panel, .panel, header, #legend,
-    .exports button, .exports a, #asciiOut, #gate pre {
+    .exports button, .exports a, #asciiOut, #gate pre, .info {
       animation: none;
     }
     #gate .gate-brand {
@@ -292,7 +296,8 @@
   #lb .score { color: var(--accent); font-weight: 700; }
   #lb b { color: #f2ead8; }
   .info { font-size: 11px; color: #b09a72; line-height: 1.45; margin-top: 4px;
-          border-left: 2px solid rgba(184, 133, 56, 0.28); padding-left: 8px; }
+          border-left: 2px solid rgba(184, 133, 56, 0.28); padding-left: 8px;
+          animation: infoRimBreath 4.5s ease-in-out infinite; }
   .info b { color: #f2ead8; font-weight: 600; }
   #stats { font: 12px/1.7 ui-monospace, monospace; color: #f2ead8;
            border-top: 1px solid rgba(184, 133, 56, 0.28); margin-top: 12px; padding-top: 8px; }

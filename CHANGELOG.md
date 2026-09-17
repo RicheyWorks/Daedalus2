@@ -574,6 +574,8 @@ under the `_migration/` portfolios.
   not leftover cool navy on torch stone.
   Desk page gutters wear the same gold lip as the well so the host is lamp,
   not leftover cool navy on torch stone.
+  Theory captions wear a breathing gold hairline so maze news sits in the lamp,
+  not a leftover still frame on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
