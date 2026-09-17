@@ -354,6 +354,21 @@ public final class ExplorePaint {
     public static final float HUD_VOID_R = 0.12f;
     public static final float HUD_VOID_G = 0.08f;
     public static final float HUD_VOID_B = 0.06f;
+    /** Status rim — same pocket mid so the strip sits in a well, not leftover flat. */
+    public static final float HUD_VOID_RIM_R = 0.06f;
+    public static final float HUD_VOID_RIM_G = 0.04f;
+    public static final float HUD_VOID_RIM_B = 0.03f;
+
+    /** Mid strip at 0, pocket rim at 1 so leftover flat HUD is not the last word. */
+    public static void hudVoidTint(float edge, float[] rgb) {
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        float t = Math.max(0f, Math.min(1f, edge));
+        rgb[0] = HUD_VOID_R + (HUD_VOID_RIM_R - HUD_VOID_R) * t;
+        rgb[1] = HUD_VOID_G + (HUD_VOID_RIM_G - HUD_VOID_G) * t;
+        rgb[2] = HUD_VOID_B + (HUD_VOID_RIM_B - HUD_VOID_B) * t;
+    }
     /** Automap inset — a shade deeper than the strip, same brown family. */
     public static final float MAP_POCKET_R = 0.06f;
     public static final float MAP_POCKET_G = 0.04f;

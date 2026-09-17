@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore status well depth.**
+  The crosshair strip falls off from HUD void to pocket mid so leftover
+  flat chrome is not the last word under the face. Start mint and goal
+  coral stay.
+
 - **Explore automap pocket depth.**
   The earned-map well falls off from pocket mid to well-void rim so
   leftover flat inset is not the last word under the stone. Start mint

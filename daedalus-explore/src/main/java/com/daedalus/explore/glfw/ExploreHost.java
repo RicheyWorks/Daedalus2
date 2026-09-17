@@ -558,8 +558,7 @@ public final class ExploreHost {
                                double seconds) {
         float bot = -1f;
         float top = bot + ExplorePaint.STATUS_H;
-        glColor3f(ExplorePaint.HUD_VOID_R, ExplorePaint.HUD_VOID_G, ExplorePaint.HUD_VOID_B);
-        fill(-aspect, bot, aspect, top);
+        fillHud(-aspect, bot, aspect, top);
         glColor3f(ExplorePaint.STATUS_GOLD_UNDER_R, ExplorePaint.STATUS_GOLD_UNDER_G,
                 ExplorePaint.STATUS_GOLD_UNDER_B);
         fill(-aspect, top - ExplorePaint.statusGoldUnderH(seconds), aspect, top);
@@ -852,11 +851,24 @@ public final class ExploreHost {
         }
     }
 
+    private static void fillHud(double x0, double y0, double x1, double y1) {
+        float[] mid = new float[3];
+        float[] rim = new float[3];
+        ExplorePaint.hudVoidTint(0, mid);
+        ExplorePaint.hudVoidTint(1, rim);
+        fillWell(x0, y0, x1, y1, mid, rim);
+    }
+
     private static void fillPocket(double x0, double y0, double x1, double y1) {
         float[] mid = new float[3];
         float[] rim = new float[3];
         ExplorePaint.mapPocketTint(0, mid);
         ExplorePaint.mapPocketTint(1, rim);
+        fillWell(x0, y0, x1, y1, mid, rim);
+    }
+
+    private static void fillWell(double x0, double y0, double x1, double y1,
+                                 float[] mid, float[] rim) {
         float cx = (float) ((x0 + x1) * 0.5);
         float cy = (float) ((y0 + y1) * 0.5);
         glBegin(GL_TRIANGLE_FAN);
