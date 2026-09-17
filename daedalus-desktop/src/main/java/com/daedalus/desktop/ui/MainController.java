@@ -1862,7 +1862,8 @@ public class MainController {
                             Color.web(DesktopPaint.clearWallHiInk(edge)));
                     continue;
                 } else if (role == TileType.PASSAGE) {
-                    ink = Color.web(DesktopPaint.clearFloorInk(edge));
+                    ink = Color.web(DesktopPaint.endFloorInk(
+                            DesktopPaint.clearFloorInk(edge), tiles[r][c]));
                 } else if (ink != null) {
                     ink = ink.interpolate(Color.web(DesktopPaint.FLOOR_DIM),
                             DesktopPaint.FLOOR_EDGE_DIM * edge);
@@ -2234,7 +2235,8 @@ public class MainController {
                             Color.web(DesktopPaint.fogWallHiInk(lamp)));
                     continue;
                 }
-                g.setFill(Color.web(DesktopPaint.fogFloor(fog, r, c)));
+                g.setFill(Color.web(DesktopPaint.endFloorInk(
+                        DesktopPaint.fogFloor(fog, r, c), tiles[r][c])));
                 g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
                 double intensity = DesktopPaint.fogFloorIntensity(fog, r, c);
                 paintHairline(g, DesktopPaint.floorHiStroke(layout, r, c, intensity),

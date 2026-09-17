@@ -93,6 +93,7 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- Well start and goal floors wash toward mint and coral on web and desktop so the ends of the maze sit in the corridor, not leftover bare stone.
 - Explore status names stood-on start and goal so the strip says START / GOAL, not leftover HALL on the ends of the maze.
 - Explore corridor start and goal wear well mint and coral floor discs so the ends of the maze are places, not leftover bare stone.
 - Explore corridor start and goal lids wash toward well mint and coral so looking up names the ends of the maze, not leftover plaster brown.

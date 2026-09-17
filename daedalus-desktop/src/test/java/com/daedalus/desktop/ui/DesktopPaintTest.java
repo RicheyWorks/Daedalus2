@@ -872,6 +872,16 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.floorRole(TileType.GOAL)).isEqualTo(TileType.PASSAGE);
         assertThat(DesktopPaint.floorRole(TileType.WALL)).isEqualTo(TileType.WALL);
         assertThat(DesktopPaint.floorRole(null)).isEqualTo(TileType.PASSAGE);
+        assertThat(DesktopPaint.FLOOR_END_WEIGHT).isEqualTo(0.42);
+        assertThat(DesktopPaint.START_INK).isEqualTo("#3ee08f");
+        assertThat(DesktopPaint.GOAL_INK).isEqualTo("#ff5a5f");
+        String stone = DesktopPaint.clearFloorInk(0);
+        String gate = DesktopPaint.endFloorInk(stone, TileType.START);
+        String exit = DesktopPaint.endFloorInk(stone, TileType.GOAL);
+        assertThat(gate).as("start floor lifts toward well mint").isNotEqualTo(stone);
+        assertThat(exit).as("goal floor lifts toward well coral").isNotEqualTo(stone);
+        assertThat(DesktopPaint.endFloorInk(stone, TileType.PASSAGE)).isEqualTo(stone);
+        assertThat(DesktopPaint.endFloorInk(null, TileType.START)).isNull();
     }
 
     @Test

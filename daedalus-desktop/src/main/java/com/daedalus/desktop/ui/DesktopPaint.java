@@ -292,6 +292,24 @@ public final class DesktopPaint {
         return mixHex(warm, FLOOR_DIM, FLOOR_EDGE_DIM * Math.max(0, Math.min(1, edge)));
     }
 
+    /** KEEP start mint / goal coral — same wash as explore {@code FLOOR_END_WEIGHT}. */
+    public static final String START_INK = "#3ee08f";
+    public static final String GOAL_INK = "#ff5a5f";
+    public static final double FLOOR_END_WEIGHT = 0.42;
+
+    public static String endFloorInk(String base, TileType tile) {
+        if (base == null) {
+            return null;
+        }
+        if (tile == TileType.START) {
+            return mixHex(base, START_INK, FLOOR_END_WEIGHT);
+        }
+        if (tile == TileType.GOAL) {
+            return mixHex(base, GOAL_INK, FLOOR_END_WEIGHT);
+        }
+        return base;
+    }
+
     /** Clear-board hairline — warm shine, then the same edge falloff. */
     public static String clearFloorHiInk(double edge) {
         String hi = mixHex(FLOOR_HI, FOG_FLOOR_WARM, 0.28);

@@ -115,4 +115,17 @@ class WebUiPaintPinTest {
                     .contains("LdBSkqAQDQ4L7B70AxGE7eFsiYbwiw8OC5A1ICNixAeTBcQHy%2BCzgNRg");
         }
     }
+
+    @Test
+    void wellStartAndGoalFloorsWashTowardTheEnds() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js).contains("const END_FLOOR_W = 0.42")
+                    .contains("mixHex(base, COLORS.start, END_FLOOR_W)")
+                    .contains("mixHex(base, COLORS.goal, END_FLOOR_W)")
+                    .contains("endFloorInk(mixHex(COLORS.floorDim, lit, lamp), t)")
+                    .contains("endFloorInk(mixHex(warm, COLORS.floorDim, 0.22 * edge), t)");
+        }
+    }
 }

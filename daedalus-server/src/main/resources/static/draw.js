@@ -265,6 +265,13 @@
         || seenCell(fog, r, c - 1) || seenCell(fog, r, c);
   }
 
+  const END_FLOOR_W = 0.42;
+  function endFloorInk(base, t) {
+    if (t === "S") return mixHex(base, COLORS.start, END_FLOOR_W);
+    if (t === "G") return mixHex(base, COLORS.goal, END_FLOOR_W);
+    return base;
+  }
+
   function mixHex(a, b, t) {
     const n = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
     const A = n(a), B = n(b);
@@ -396,7 +403,7 @@
             ? fogLamp(scene.fog, r, col) * fogFrontier(scene.fog, r, col) : 1;
         if (scene.fog) {
           const lit = mixHex(COLORS.floor, COLORS.floorWarm, lamp * 0.28);
-          g.fillStyle = mixHex(COLORS.floorDim, lit, lamp);
+          g.fillStyle = endFloorInk(mixHex(COLORS.floorDim, lit, lamp), t);
           g.fillRect(geom.offX[col], geom.offY[r],
                      geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
           if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
@@ -410,7 +417,7 @@
           const dy = (r - cy) / Math.max(1, th / 2);
           const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
           const warm = mixHex(COLORS.floor, COLORS.floorWarm, 0.28);
-          g.fillStyle = mixHex(warm, COLORS.floorDim, 0.22 * edge);
+          g.fillStyle = endFloorInk(mixHex(warm, COLORS.floorDim, 0.22 * edge), t);
           g.fillRect(geom.offX[col], geom.offY[r],
                      geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
           if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
