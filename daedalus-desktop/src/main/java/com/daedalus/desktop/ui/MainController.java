@@ -2154,7 +2154,7 @@ public class MainController {
         if (currentHardest != null && currentHardest.path() != null
                 && !currentHardest.path().isEmpty()) {
             paintPathRibbon(g, layout, currentHardest.path(), Color.web(DesktopPaint.HARDEST),
-                    DesktopPaint.HARDEST_ALPHA, null, null);
+                    DesktopPaint.HARDEST_ALPHA, null, null, DesktopPaint.HARDEST);
             Point tip = DesktopPaint.walkHead(currentHardest.path());
             double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
             Color gold = Color.web(DesktopPaint.HARDEST);
@@ -2546,11 +2546,16 @@ public class MainController {
     private static void paintPathRibbon(GraphicsContext g, DesktopPaint.Layout layout,
                                         List<Point> path, Color color, double baseAlpha,
                                         Point start, Point goal) {
+        paintPathRibbon(g, layout, path, color, baseAlpha, start, goal, null);
+    }
+
+    private static void paintPathRibbon(GraphicsContext g, DesktopPaint.Layout layout,
+                                        List<Point> path, Color color, double baseAlpha,
+                                        Point start, Point goal, String rimHex) {
         if (g == null || layout == null || path == null || path.isEmpty() || color == null) {
             return;
         }
         int n = path.size();
-        g.setFill(color);
         for (int i = 0; i < n; i++) {
             g.setGlobalAlpha(DesktopPaint.pathRibbonAlpha(baseAlpha, i, n));
             Point p = path.get(i);
@@ -2559,6 +2564,9 @@ public class MainController {
             if (!endpoint) {
                 int tc = 2 * p.col() + 1;
                 int tr = 2 * p.row() + 1;
+                g.setFill(rimHex == null ? color
+                        : Color.web(DesktopPaint.walkTrailInk(rimHex,
+                                DesktopPaint.floorEdge(layout, tr, tc))));
                 g.fillRect(layout.x(tc), layout.y(tr), layout.w(tc), layout.h(tr));
             }
             if (i == 0) {
@@ -2570,6 +2578,9 @@ public class MainController {
             }
             int otc = prev.col() + p.col() + 1;
             int otr = prev.row() + p.row() + 1;
+            g.setFill(rimHex == null ? color
+                    : Color.web(DesktopPaint.walkTrailInk(rimHex,
+                            DesktopPaint.floorEdge(layout, otr, otc))));
             g.fillRect(layout.x(otc), layout.y(otr), layout.w(otc), layout.h(otr));
         }
         g.setGlobalAlpha(1);

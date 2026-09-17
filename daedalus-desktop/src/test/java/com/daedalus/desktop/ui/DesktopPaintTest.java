@@ -1190,6 +1190,11 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.PATH_HEAD_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
         assertThat(DesktopPaint.HARDEST).isEqualTo("#f2c94c");
         assertThat(DesktopPaint.HARDEST_ALPHA).isEqualTo(0.75);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.HARDEST, 0))
+                .isEqualTo(DesktopPaint.HARDEST);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.HARDEST, 1))
+                .as("hardest ribbon falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.HARDEST);
         assertThat(DesktopPaint.TOUR).isEqualTo("#d4b06a");
         assertThat(Integer.parseInt(DesktopPaint.TOUR.substring(1, 3), 16))
                 .isGreaterThan(Integer.parseInt(DesktopPaint.TOUR.substring(5, 7), 16));
