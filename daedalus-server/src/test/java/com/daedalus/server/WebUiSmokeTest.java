@@ -168,6 +168,8 @@ class WebUiSmokeTest {
                 .contains("--bg: #0c0908")
                 .contains("--panel: #16120e")
                 .doesNotContain("--panel: #10151b")
+                .contains(".panel h2 { margin: 0 0 8px; font-size: 11px; text-transform: uppercase;")
+                .contains("letter-spacing: .14em; color: #b09a72; font-weight: 600; }")
                 .contains("background: rgba(12, 9, 8, 0.92)")
                 .contains("boardRimBreath")
                 .contains("panelRimBreath")
