@@ -2269,11 +2269,12 @@ public class MainController {
                 }
                 TileType role = DesktopPaint.floorRole(tiles[r][c]);
                 if (role == TileType.WALL) {
-                    g.setFill(Color.web(DesktopPaint.fogWall(fog, r, c)));
+                    double edge = DesktopPaint.floorEdge(layout, r, c);
+                    g.setFill(Color.web(DesktopPaint.fogWall(fog, r, c, edge)));
                     g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
                     double lamp = DesktopPaint.fogFloorIntensity(fog, r, c);
                     paintHairline(g, DesktopPaint.wallHiStroke(layout, r, c),
-                            Color.web(DesktopPaint.fogWallHiInk(lamp)));
+                            Color.web(DesktopPaint.fogWallHiInk(lamp, edge)));
                     continue;
                 }
                 g.setFill(Color.web(DesktopPaint.endFloorInk(

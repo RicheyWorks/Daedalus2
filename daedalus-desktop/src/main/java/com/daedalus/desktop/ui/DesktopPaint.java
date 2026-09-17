@@ -1843,8 +1843,13 @@ public final class DesktopPaint {
 
     /** Revealed wall near the lamp warms toward torch-brown — same as {@code draw.js}. */
     public static String fogWall(Fog fog, int tileRow, int tileCol) {
+        return fogWall(fog, tileRow, tileCol, 0);
+    }
+
+    public static String fogWall(Fog fog, int tileRow, int tileCol, double edge) {
         double lamp = fogLamp(fog, tileRow, tileCol) * fogFrontier(fog, tileRow, tileCol);
-        return mixHex(FOG_WALL, FOG_WALL_WARM, 0.45 * lamp);
+        String lampWall = mixHex(FOG_WALL, FOG_WALL_WARM, 0.45 * lamp);
+        return mixHex(lampWall, FOG_UNSEEN, WALL_EDGE_DIM * Math.max(0, Math.min(1, edge)));
     }
 
     public static boolean floorHi(Layout layout, int tileRow, int tileCol) {
@@ -1905,7 +1910,12 @@ public final class DesktopPaint {
     }
 
     public static String fogWallHiInk(double lamp) {
-        return mixHex(WALL_HI, FOG_WALL_WARM, 0.28 * Math.max(0, Math.min(1, lamp)));
+        return fogWallHiInk(lamp, 0);
+    }
+
+    public static String fogWallHiInk(double lamp, double edge) {
+        String hi = mixHex(WALL_HI, FOG_WALL_WARM, 0.28 * Math.max(0, Math.min(1, lamp)));
+        return mixHex(hi, FOG_UNSEEN, WALL_EDGE_DIM * Math.max(0, Math.min(1, edge)));
     }
 
     public static Hairline wallHiStroke(Layout layout, int tileRow, int tileCol) {
