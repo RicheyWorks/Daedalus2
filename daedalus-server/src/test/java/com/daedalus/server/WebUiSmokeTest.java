@@ -59,6 +59,7 @@ class WebUiSmokeTest {
                 .contains("letter-spacing: .04em; color: #f2ead8")
                 .contains("#gate .lede { color: #b09a72")
                 .contains("#gate article p { margin: 0; color: #b09a72")
+                .contains("animation: gateRise .55s ease both, panelRimBreath 4.5s ease-in-out infinite")
                 .contains("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #d4c4a8;")
                 .contains("font: 11px/1.45 ui-monospace, monospace; overflow: auto")
                 .contains("gateBreath").contains("gateVeil")
