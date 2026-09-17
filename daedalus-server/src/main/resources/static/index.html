@@ -162,7 +162,7 @@
   @media (prefers-reduced-motion: reduce) {
     #gate .gate-brand, #gate .lede, #gate .gate-enter, #gate article, #gate .gate-veil,
     header h1 button, #stage, .board-panel, .panel, header, #legend,
-    .exports button, .exports a {
+    .exports button, .exports a, #asciiOut {
       animation: none;
     }
     #gate .gate-brand {
@@ -348,7 +348,8 @@
               border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 6px;
               font: 11px/1.2 ui-monospace, monospace; overflow: auto;
               max-height: 22vh; color: #d4c4a8;
-              scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent; }
+              scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent;
+              animation: panelRimBreath 4.5s ease-in-out infinite; }
   #asciiOut .rock { color: #8c764e; }
   #asciiOut .gate { color: #3ee08f; }
   #asciiOut .exit { color: #ff5a5f; }

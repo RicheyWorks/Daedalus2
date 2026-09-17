@@ -566,6 +566,8 @@ under the `_migration/` portfolios.
   cream slabs on torch stone.
   Gate host cards breathe the gold lip so other hosts sit in the lamp, not leftover
   still frames on torch stone.
+  ASCII maze dump wears a breathing gold lip so the text well sits in the lamp,
+  not a leftover still frame on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
