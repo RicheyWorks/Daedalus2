@@ -479,7 +479,9 @@ class DesktopPaintTest {
         String underfoot = DesktopPaint.mixHex(DesktopPaint.FOG_FLOOR,
                 DesktopPaint.FOG_FLOOR_WARM, 0.28);
         assertThat(underfoot).isNotEqualTo(DesktopPaint.FOG_FLOOR);
-        assertThat(DesktopPaint.FOG_WALL).isEqualTo("#0b0f14");
+        assertThat(DesktopPaint.FOG_WALL).isEqualTo("#120e0c");
+        assertThat(Integer.parseInt(DesktopPaint.FOG_WALL.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.FOG_WALL.substring(5, 7), 16));
         assertThat(DesktopPaint.FOG_WALL_WARM).isEqualTo("#2a2218");
         assertThat(DesktopPaint.EMPTY_MARK_WALL).isEqualTo(DesktopPaint.FOG_WALL_WARM);
         assertThat(DesktopPaint.EMPTY_MARK_WALL).isNotEqualTo(DesktopPaint.WELL_VOID_CENTER);
@@ -490,7 +492,7 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.LEGEND_FLOOR).isEqualTo("#464a4d");
         assertThat(DesktopPaint.LEGEND_WALL).isEqualTo(DesktopPaint.mixHex(
                 DesktopPaint.FOG_WALL, DesktopPaint.FOG_WALL_WARM, 0.28));
-        assertThat(DesktopPaint.LEGEND_WALL).isEqualTo("#141415");
+        assertThat(DesktopPaint.LEGEND_WALL).isEqualTo("#19140f");
         assertThat(DesktopPaint.LEGEND_WALL).isNotEqualTo(DesktopPaint.FOG_WALL);
         assertThat(CosmicTheme.PASSAGE_INK).isEqualTo(DesktopPaint.LEGEND_FLOOR);
         assertThat(CosmicTheme.WALL_INK).isEqualTo(DesktopPaint.LEGEND_WALL);

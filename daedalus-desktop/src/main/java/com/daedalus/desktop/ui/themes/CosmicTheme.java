@@ -23,7 +23,7 @@ public class CosmicTheme implements Theme {
     @Override public String stylesheetPath()  { return "/ui/cosmic.css"; }
 
     /** Same 0.28 torch mix as the live well / legend wall swatch. */
-    public static final String WALL_INK = "#141415";
+    public static final String WALL_INK = "#19140f";
     /** Same 0.28 torch mix as the live well / legend floor swatch. */
     public static final String PASSAGE_INK = "#464a4d";
 

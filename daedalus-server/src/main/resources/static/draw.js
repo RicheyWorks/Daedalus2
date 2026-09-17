@@ -3,7 +3,7 @@
 "use strict";
 (function (global) {
   const COLORS = {
-    wall: "#0b0f14", wallWarm: "#2a2218", wallHi: "#4a3824", unseen: "#0c0908",
+    wall: "#120e0c", wallWarm: "#2a2218", wallHi: "#4a3824", unseen: "#0c0908",
     floor: "#3d4a58", floorHi: "#765834", floorDim: "#2a2218",
     floorWarm: "#5c4a32",
     start: "#3ee08f", goal: "#ff5a5f", path: "#8fb8ff",

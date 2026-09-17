@@ -310,6 +310,8 @@ under the `_migration/` portfolios.
   the idle lattice has stone depth, not flat warm walls beside lit floors.
   Fog unseen void warms to the stage-well edge on web and desktop so unrevealed
   tiles sit in the lamp, not a cool blue pit beside torch stone.
+  Leftover wall ink warms toward torch-brown on web and desktop so distant posts
+  and legend chips sit in the lamp, not cool blue stone beside the well.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

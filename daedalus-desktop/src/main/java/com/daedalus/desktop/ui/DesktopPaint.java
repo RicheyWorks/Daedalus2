@@ -258,8 +258,8 @@ public final class DesktopPaint {
     public static double fogFrontierDim(double wave) {
         return FOG_FRONTIER * (0.92 + 0.16 * wave);
     }
-    /** Cold wall ink — same token as {@code draw.js} wall. */
-    public static final String FOG_WALL = "#0b0f14";
+    /** Torch-dark wall ink — same token as {@code draw.js} wall. */
+    public static final String FOG_WALL = "#120e0c";
     /** Torch-warm wall — same mix as {@code draw.js} wallWarm. */
     public static final String FOG_WALL_WARM = "#2a2218";
     /** Idle lattice walls — torch-warm stone, not the void color. */

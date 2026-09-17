@@ -119,8 +119,8 @@
                 </Label>
                 <Label text="wall / rock">
                     <graphic>
-                        <Rectangle width="10" height="10" fill="#141415"
-                                   stroke="#1e2832" arcWidth="3" arcHeight="3"/>
+                        <Rectangle width="10" height="10" fill="#19140f"
+                                   stroke="#2a2218" arcWidth="3" arcHeight="3"/>
                     </graphic>
                 </Label>
                 <Label fx:id="legendStart" text="start">
