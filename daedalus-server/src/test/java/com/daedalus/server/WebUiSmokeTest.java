@@ -73,7 +73,7 @@ class WebUiSmokeTest {
                 .contains("fill='%230c0908'")
                 .contains("stroke='%23b88538'")
                 .contains("rel=\"mask-icon\" color=\"#b88538\"")
-                .contains("fill-rule='evenodd' d='M0 0h32v32H0zM4 4h24v24H4z'")
+                .contains("fill-rule='evenodd' d='M0 0h32v32H0zM1 1h30v30H1z'")
                 .contains("rel=\"apple-touch-icon\"")
                 .contains("rel=\"apple-touch-startup-image\"")
                 .contains("property=\"og:image\"")

@@ -87,4 +87,18 @@ class WebUiPaintPinTest {
                     .contains("name=\"twitter:image\"");
         }
     }
+
+    @Test
+    void maskIconWearsTheIdleMazeMark() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html).contains(
+                    "rel=\"mask-icon\" color=\"#b88538\"")
+                    .contains("fill-rule='evenodd' d='M0 0h32v32H0zM1 1h30v30H1z'")
+                    .contains("x='5' y='9' width='22' height='2' fill='black'")
+                    .contains("x='7' y='11' width='2' height='2' fill='black'")
+                    .contains("x='23' y='19' width='2' height='2' fill='black'");
+        }
+    }
 }
