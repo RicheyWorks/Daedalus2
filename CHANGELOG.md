@@ -808,6 +808,7 @@ under the `_migration/` portfolios.
   The start-gate card grid refuses leftover drag ice so the gutters between cards are not ghosted.
   Well signed-in mint refuses leftover drag ice so the who-you-are chip is not ghosted.
   The header auth pocket refuses leftover drag ice so the pad around sign-in is not ghosted.
+  Well fold pockets refuse leftover drag ice so the gold hairline around the fold is not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
