@@ -1014,28 +1014,33 @@ class DesktopPaintTest {
                 .contains(
                         new DesktopPaint.TileRect(1, 1),
                         new DesktopPaint.TileRect(5, 9));
-        String idleStone = DesktopPaint.EMPTY_MARK_FLOOR;
+        assertThat(DesktopPaint.emptyMarkEdge(1, 9))
+                .as("a rim cell is farther from center than a mid hall")
+                .isGreaterThan(DesktopPaint.emptyMarkEdge(5, 3));
+        assertThat(DesktopPaint.emptyMarkFloorInk(1, 9))
+                .as("idle rim stone falls off like the live well")
+                .isNotEqualTo(DesktopPaint.emptyMarkFloorInk(5, 3));
+        String startBase = DesktopPaint.clearFloorInk(DesktopPaint.emptyMarkEdge(1, 1));
         assertThat(DesktopPaint.emptyMarkFloorInk(1, 1))
                 .as("idle start floor lifts toward well mint")
-                .isEqualTo(DesktopPaint.endFloorInk(idleStone, TileType.START));
+                .isEqualTo(DesktopPaint.endFloorInk(startBase, TileType.START));
+        String goalBase = DesktopPaint.clearFloorInk(DesktopPaint.emptyMarkEdge(5, 9));
         assertThat(DesktopPaint.emptyMarkFloorInk(5, 9))
                 .as("idle goal floor lifts toward well coral")
-                .isEqualTo(DesktopPaint.endFloorInk(idleStone, TileType.GOAL));
-        assertThat(DesktopPaint.emptyMarkFloorInk(1, 3))
-                .as("idle mid-corridor stays leftover-warm stone")
-                .isEqualTo(idleStone);
-        String idleHi = DesktopPaint.fogFloorHiInk(1);
+                .isEqualTo(DesktopPaint.endFloorInk(goalBase, TileType.GOAL));
+        String startHi = DesktopPaint.clearFloorHiInk(DesktopPaint.emptyMarkEdge(1, 1));
         assertThat(DesktopPaint.emptyMarkTile(1, 1)).isEqualTo(TileType.START);
         assertThat(DesktopPaint.emptyMarkTile(5, 9)).isEqualTo(TileType.GOAL);
         assertThat(DesktopPaint.emptyMarkFloorHiInk(1, 1))
                 .as("idle start shine lifts toward well mint")
-                .isEqualTo(DesktopPaint.endFloorInk(idleHi, TileType.START));
+                .isEqualTo(DesktopPaint.endFloorInk(startHi, TileType.START));
+        String goalHi = DesktopPaint.clearFloorHiInk(DesktopPaint.emptyMarkEdge(5, 9));
         assertThat(DesktopPaint.emptyMarkFloorHiInk(5, 9))
                 .as("idle goal shine lifts toward well coral")
-                .isEqualTo(DesktopPaint.endFloorInk(idleHi, TileType.GOAL));
-        assertThat(DesktopPaint.emptyMarkFloorHiInk(1, 3))
-                .as("idle mid-corridor shine stays leftover torch")
-                .isEqualTo(idleHi);
+                .isEqualTo(DesktopPaint.endFloorInk(goalHi, TileType.GOAL));
+        assertThat(DesktopPaint.emptyMarkFloorHiInk(1, 9))
+                .as("idle rim shine falls off like the live well")
+                .isNotEqualTo(DesktopPaint.emptyMarkFloorHiInk(5, 3));
         DesktopPaint.Layout mark = DesktopPaint.emptyMarkLayout(400, 300);
         assertThat(mark).isNotNull();
         assertThat(mark.cellSize())

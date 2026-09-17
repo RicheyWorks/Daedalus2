@@ -2114,13 +2114,28 @@ public final class DesktopPaint {
         return TileType.PASSAGE;
     }
 
+    /**
+     * Rim distance on the idle mark — same falloff the live well uses.
+     */
+    public static double emptyMarkEdge(int tileRow, int tileCol) {
+        int rows = EMPTY_MARK.length;
+        int cols = EMPTY_MARK[0].length();
+        double cx = (cols - 1) / 2.0;
+        double cy = (rows - 1) / 2.0;
+        double dx = (tileCol - cx) / Math.max(1, cols / 2.0);
+        double dy = (tileRow - cy) / Math.max(1, rows / 2.0);
+        return Math.min(1, Math.hypot(dx, dy));
+    }
+
     public static String emptyMarkFloorInk(int tileRow, int tileCol) {
-        return endFloorInk(EMPTY_MARK_FLOOR, emptyMarkTile(tileRow, tileCol));
+        return endFloorInk(clearFloorInk(emptyMarkEdge(tileRow, tileCol)),
+                emptyMarkTile(tileRow, tileCol));
     }
 
     /** Idle corridor shine — same mint / coral wash as the live hairline. */
     public static String emptyMarkFloorHiInk(int tileRow, int tileCol) {
-        return endFloorInk(fogFloorHiInk(1), emptyMarkTile(tileRow, tileCol));
+        return endFloorInk(clearFloorHiInk(emptyMarkEdge(tileRow, tileCol)),
+                emptyMarkTile(tileRow, tileCol));
     }
 
     /** Passage tiles of the idle mark. */

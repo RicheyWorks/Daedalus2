@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Idle desktop floor depth.**
+  The empty-stage mark floors and hairlines fall off toward the rim
+  with the same 0.22 edge as live stone, so leftover flat slate is
+  not the last word on the invitation maze. Start and goal still wash.
+
 - **Idle well floor depth.**
   The empty-well mark floors and hairlines fall off toward the rim
   with the same 0.22 edge as live stone, so leftover flat slate is
