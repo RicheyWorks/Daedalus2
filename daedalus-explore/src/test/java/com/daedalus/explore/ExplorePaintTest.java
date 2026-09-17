@@ -83,15 +83,26 @@ class ExplorePaintTest {
                 0, 0, 1, 1, 0, 1, 1, WorldMesh.BOOT_FRAC, 1,
                 WorldMesh.Face.POS_Z, BlockType.WOOD, at);
         WorldMesh.Triangle shaftFace = new WorldMesh.Triangle(
-                0, WorldMesh.BOOT_FRAC, 1, 1, WorldMesh.BOOT_FRAC, 1, 1, 1, 1,
+                0, WorldMesh.BOOT_FRAC, 1, 1, WorldMesh.BOOT_FRAC, 1,
+                1, 1.0 - WorldMesh.CROWN_FRAC, 1,
+                WorldMesh.Face.POS_Z, BlockType.WOOD, at);
+        WorldMesh.Triangle crownFace = new WorldMesh.Triangle(
+                0, 1.0 - WorldMesh.CROWN_FRAC, 1, 1, 1.0 - WorldMesh.CROWN_FRAC, 1,
+                1, 1, 1,
                 WorldMesh.Face.POS_Z, BlockType.WOOD, at);
         float[] bootInk = new float[3];
         float[] shaftInk = new float[3];
+        float[] crownInk = new float[3];
         ExplorePaint.blockTint(bootFace, bootInk, Double.NaN, Double.NaN, 0, 0);
         ExplorePaint.blockTint(shaftFace, shaftInk, Double.NaN, Double.NaN, 0, 0);
+        ExplorePaint.blockTint(crownFace, crownInk, Double.NaN, Double.NaN, 0, 0);
         assertThat(bootInk[0]).as("cube boot is darker skirting, not leftover even wood")
                 .isLessThan(shaftInk[0]);
+        assertThat(crownInk[0]).as("cube crown is darker lid contact, not leftover even wood")
+                .isLessThan(shaftInk[0]);
         assertThat(ExplorePaint.blockContactShade(bootFace))
+                .isLessThan(ExplorePaint.blockContactShade(shaftFace));
+        assertThat(ExplorePaint.blockContactShade(crownFace))
                 .isLessThan(ExplorePaint.blockContactShade(shaftFace));
         assertThat(ExplorePaint.blockContactShade(null)).isEqualTo(1f);
     }

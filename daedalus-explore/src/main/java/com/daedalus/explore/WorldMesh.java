@@ -39,6 +39,8 @@ public final class WorldMesh {
 
     /** Same boot fraction as corridor wall skirting — cube sits, not floats. */
     public static final double BOOT_FRAC = 0.28;
+    /** Same crown band as corridor lid contact — cube meets the ceiling. */
+    public static final double CROWN_FRAC = BOOT_FRAC;
 
     private static final int[][] DIRS = {
             {1, 0, 0}, {-1, 0, 0},
@@ -150,9 +152,16 @@ public final class WorldMesh {
                              double dx, double dy, double dz,
                              Face face, BlockType type, BlockCoordinate at) {
         double y0 = Math.min(ay, Math.min(by, Math.min(cy, dy)));
+        double y1 = Math.max(ay, Math.max(by, Math.max(cy, dy)));
         double yb = y0 + BOOT_FRAC;
+        double yc = y1 - CROWN_FRAC;
         quad(out, ax, y0, az, bx, yb, bz, cx, yb, cz, dx, y0, dz, face, type, at);
-        quad(out, ax, yb, az, bx, by, bz, cx, cy, cz, dx, yb, dz, face, type, at);
+        if (yc > yb) {
+            quad(out, ax, yb, az, bx, yc, bz, cx, yc, cz, dx, yb, dz, face, type, at);
+            quad(out, ax, yc, az, bx, y1, bz, cx, y1, cz, dx, yc, dz, face, type, at);
+        } else {
+            quad(out, ax, yb, az, bx, by, bz, cx, cy, cz, dx, yb, dz, face, type, at);
+        }
     }
 
     private static void quad(List<Triangle> out,

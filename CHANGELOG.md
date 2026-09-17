@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore cube crown.**
+  Occupied cube side faces split a torch lid band at the same
+  fraction as corridor posts, so a slab meets the ceiling and is not
+  leftover even wood up to the crown.
+
 - **Idle well wall depth.**
   Empty-well posts and hairlines fall off toward unseen at the rim
   with the same 0.28 edge as live stone, so leftover flat wallWarm is
