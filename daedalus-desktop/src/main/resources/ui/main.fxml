@@ -120,7 +120,8 @@
                 <Label text="wall / rock">
                     <graphic>
                         <Rectangle width="10" height="10" fill="#19140f"
-                                   stroke="#2a2218" arcWidth="3" arcHeight="3"/>
+                                   stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"
+                                   arcWidth="3" arcHeight="3"/>
                     </graphic>
                 </Label>
                 <Label fx:id="legendStart" text="start">
@@ -159,7 +160,8 @@
                 <Label fx:id="legendFog" text="unseen (fog)" managed="false" visible="false">
                     <graphic>
                         <Rectangle width="10" height="10" fill="#0c0908"
-                                   stroke="#2a2218" arcWidth="3" arcHeight="3"/>
+                                   stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"
+                                   arcWidth="3" arcHeight="3"/>
                     </graphic>
                 </Label>
                 <Label fx:id="legendChoke" text="chokepoint" managed="false" visible="false">
