@@ -98,10 +98,12 @@ class ThemeManagerTest {
             assertThat(fxml).contains("stroke=\"rgba(242,234,216,0.28)\"");
             assertThat(fxml).contains("stroke=\"rgba(245,193,74,0.35)\"");
             assertThat(fxml).contains("stroke=\"rgba(229,72,77,0.35)\"");
-            assertThat(fxml).contains("fill=\"#484339\" stroke=\"rgba(242,234,216,0.28)\"");
+            assertThat(fxml).contains("color=\"#484339\"");
+            assertThat(fxml).contains("color=\"#2a2218\"");
             assertThat(fxml).contains("legendStart");
-            assertThat(fxml).contains("fill=\"#484339\"");
-            assertThat(fxml).contains("fill=\"#19140f\"");
+            assertThat(fxml).contains("<RadialGradient centerX=\"0.45\" centerY=\"0.40\" radius=\"1.0\"");
+            assertThat(fxml).contains("color=\"#19140f\"");
+            assertThat(fxml).contains("color=\"#15110d\"");
             assertThat(fxml).contains("fill=\"#0c0908\"");
             assertThat(fxml).contains("fill=\"#c07850\"");
             assertThat(fxml).contains("fill=\"#c8a878\"");
@@ -124,7 +126,7 @@ class ThemeManagerTest {
             assertThat(fxml).contains("legendGhost");
             assertThat(fxml).contains("fill=\"#e8e0d4\"");
             assertThat(fxml).contains("fill=\"#8fb8ff\"");
-            assertThat(fxml).contains("fill=\"#19140f\"")
+            assertThat(fxml).contains("color=\"#19140f\"")
                     .doesNotContain("stroke=\"#2a2218\"");
             assertThat(fxml).contains("fill=\"#0c0908\"")
                     .contains("stroke=\"rgba(242,234,216,0.28)\"");

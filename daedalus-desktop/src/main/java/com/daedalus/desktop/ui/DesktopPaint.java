@@ -273,6 +273,10 @@ public final class DesktopPaint {
     public static final String LEGEND_FLOOR = EMPTY_MARK_FLOOR;
     /** Overlay legend wall — same 0.28 warm mix as clear-board posts. */
     public static final String LEGEND_WALL = mixHex(FOG_WALL, FOG_WALL_WARM, 0.28);
+    /** Legend floor chip rim — same dim as live hall edge. */
+    public static final String LEGEND_FLOOR_RIM = FLOOR_DIM;
+    /** Legend wall chip rim — same unseen mix as live post edge. */
+    public static final String LEGEND_WALL_RIM = mixHex(LEGEND_WALL, FOG_UNSEEN, WALL_EDGE_DIM);
     /** Same 1px corridor highlight as {@code draw.js} {@code floorHi}. */
     public static final String FLOOR_HI = "#765834";
     /** Post shine — same 1px torch hairline as {@code draw.js} {@code wallHi}. */

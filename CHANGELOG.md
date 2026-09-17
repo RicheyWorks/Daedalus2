@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend stone depth.**
+  Overlay floor and wall chips fall off toward floor-dim / unseen so
+  leftover flat swatches are not the last word on the key. Start mint
+  and goal coral stay.
+
 - **Well legend stone depth.**
   Overlay floor and wall chips fall off toward floor-dim / unseen so
   leftover flat swatches are not the last word on the key. Start mint

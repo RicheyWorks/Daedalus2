@@ -13,6 +13,8 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 
@@ -113,15 +115,35 @@
                   managed="false" mouseTransparent="true" visible="false">
                 <Label text="floor">
                     <graphic>
-                        <Rectangle width="10" height="10" fill="#484339" stroke="rgba(242,234,216,0.28)"
-                                   strokeWidth="1.5" arcWidth="3" arcHeight="3"/>
+                        <Rectangle width="10" height="10" stroke="rgba(242,234,216,0.28)"
+                                   strokeWidth="1.5" arcWidth="3" arcHeight="3">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#484339"/>
+                                        <Stop offset="1.0" color="#2a2218"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
                     </graphic>
                 </Label>
                 <Label text="wall / rock">
                     <graphic>
-                        <Rectangle width="10" height="10" fill="#19140f"
+                        <Rectangle width="10" height="10"
                                    stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"
-                                   arcWidth="3" arcHeight="3"/>
+                                   arcWidth="3" arcHeight="3">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#19140f"/>
+                                        <Stop offset="1.0" color="#15110d"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
                     </graphic>
                 </Label>
                 <Label fx:id="legendStart" text="start">

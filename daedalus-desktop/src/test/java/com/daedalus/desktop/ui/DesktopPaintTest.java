@@ -537,6 +537,12 @@ class DesktopPaintTest {
                 DesktopPaint.FOG_WALL, DesktopPaint.FOG_WALL_WARM, 0.28));
         assertThat(DesktopPaint.LEGEND_WALL).isEqualTo("#19140f");
         assertThat(DesktopPaint.LEGEND_WALL).isNotEqualTo(DesktopPaint.FOG_WALL);
+        assertThat(DesktopPaint.LEGEND_FLOOR_RIM).isEqualTo(DesktopPaint.FLOOR_DIM);
+        assertThat(DesktopPaint.LEGEND_FLOOR_RIM).isEqualTo("#2a2218");
+        assertThat(DesktopPaint.LEGEND_WALL_RIM).isEqualTo(DesktopPaint.mixHex(
+                DesktopPaint.LEGEND_WALL, DesktopPaint.FOG_UNSEEN, DesktopPaint.WALL_EDGE_DIM));
+        assertThat(DesktopPaint.LEGEND_WALL_RIM).isEqualTo("#15110d");
+        assertThat(DesktopPaint.LEGEND_WALL_RIM).isNotEqualTo(DesktopPaint.LEGEND_WALL);
         assertThat(CosmicTheme.PASSAGE_INK).isEqualTo(DesktopPaint.LEGEND_FLOOR);
         assertThat(CosmicTheme.WALL_INK).isEqualTo(DesktopPaint.LEGEND_WALL);
         assertThat(DesktopPaint.fogWall(fog, 1, 0))
