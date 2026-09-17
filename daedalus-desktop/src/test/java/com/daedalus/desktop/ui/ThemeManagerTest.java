@@ -98,6 +98,8 @@ class ThemeManagerTest {
             assertThat(fxml).contains("legendCompare");
             assertThat(fxml).contains("legendPlayer");
             assertThat(fxml).contains("fill=\"#e88868\"");
+            assertThat(fxml).contains("fill=\"#e8a060\"");
+            assertThat(fxml).contains("fill=\"#b8a058\"");
             assertThat(fxml).contains("fill=\"#82b1ff\"");
             assertThat(fxml).contains("stroke=\"#2a2218\"");
         }

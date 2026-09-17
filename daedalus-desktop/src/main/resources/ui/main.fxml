@@ -144,6 +144,8 @@
                         <HBox spacing="1">
                             <Circle radius="5" fill="#f5c14a" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"/>
                             <Circle radius="5" fill="#e88868" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"/>
+                            <Circle radius="5" fill="#e8a060" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"/>
+                            <Circle radius="5" fill="#b8a058" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"/>
                         </HBox>
                     </graphic>
                 </Label>
