@@ -260,6 +260,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellWaypointMarksHaveRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("mixHex(got ? \"#8aaa50\" : \"#f2c94c\", COLORS.floorDim, 0.22 * edge)")
+                    .contains("const coinInk = waypointInk(w, th, tw, got)");
+        }
+    }
+
+    @Test
     void wellFieldCellsHaveRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

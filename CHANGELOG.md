@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well waypoint mark depth.**
+  Hunt coins fall off toward floor-dim at the board rim with the
+  same 0.22 edge as halls, so leftover even gold and moss are not
+  the last word on a stop. The legend waypoint chip stays leftover
+  even. Start mint and goal coral stay.
+
 - **Desktop tour trail depth.**
   Held-Karp amber falls off toward floor-dim at the board rim with
   the same 0.22 edge as halls, so leftover even ribbon is not the

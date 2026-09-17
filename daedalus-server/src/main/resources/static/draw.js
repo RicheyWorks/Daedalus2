@@ -400,6 +400,14 @@
     return mixHex("#d4b06a", COLORS.floorDim, 0.22 * edge);
   }
 
+  function waypointInk(p, th, tw, got) {
+    const tr = 2 * p.row + 1, tc = 2 * p.col + 1;
+    const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
+    const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
+    const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+    return mixHex(got ? "#8aaa50" : "#f2c94c", COLORS.floorDim, 0.22 * edge);
+  }
+
   function chokeInk(tr, tc, th, tw) {
     const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
     const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
@@ -742,11 +750,12 @@
       const wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
       scene.tour.waypoints.forEach(w => {
         const got = (scene.tourGot || []).some(p => p.row === w.row && p.col === w.col);
+        const coinInk = waypointInk(w, th, tw, got);
         const [x, y] = cellCenter(geom, w);
         const rad = geom.cell * 0.3;
         const soft = rad + geom.cell * (0.14 + 0.05 * wave);
         if (got) {
-          g.fillStyle = "#8aaa50";
+          g.fillStyle = coinInk;
           g.globalAlpha = 0.10 + 0.10 * wave;
           g.beginPath();
           g.moveTo(x, y - soft); g.lineTo(x + soft, y); g.lineTo(x, y + soft); g.lineTo(x - soft, y);
@@ -754,7 +763,7 @@
           g.fill();
           g.globalAlpha = 1;
         } else {
-          g.fillStyle = "#f2c94c";
+          g.fillStyle = coinInk;
           g.globalAlpha = 0.16 + 0.14 * wave;
           g.beginPath();
           g.moveTo(x, y - soft); g.lineTo(x + soft, y); g.lineTo(x, y + soft); g.lineTo(x - soft, y);
@@ -766,13 +775,13 @@
         g.moveTo(x, y - rad); g.lineTo(x + rad, y); g.lineTo(x, y + rad); g.lineTo(x - rad, y);
         g.closePath();
         if (got) {
-          g.strokeStyle = "#8aaa50";
+          g.strokeStyle = coinInk;
           g.globalAlpha = 0.72 + 0.28 * wave;
           g.lineWidth = Math.max(1.5, geom.cell * 0.09);
           g.stroke();
           g.globalAlpha = 1;
         } else {
-          g.fillStyle = "#f2c94c"; g.fill();
+          g.fillStyle = coinInk; g.fill();
         }
       });
     }
