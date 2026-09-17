@@ -68,6 +68,7 @@ class WebUiSmokeTest {
                 .contains("#compareBox tr.solver-row:hover { background: #1a1610")
                 .contains("#compareBox tr.pinned { background: #1a1610")
                 .contains("#compareBox { max-height: 22vh")
+                .contains("scrollbar-color: rgba(184, 133, 56, 0.45) transparent")
                 .contains("color: #f2ead8")
                 .contains("#compareBox th { text-align: left; color: #b09a72")
                 .contains("#compareBox td { padding: 2px 8px; border-bottom: 1px solid rgba(184, 133, 56, 0.28)")
