@@ -72,6 +72,7 @@ class WebUiSmokeTest {
                 .contains("overscroll-behavior: none;")
                 .contains("-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;")
                 .contains("text-rendering: optimizeLegibility;")
+                .contains("font-synthesis: none;")
                 .contains("-webkit-tap-highlight-color: rgba(184, 133, 56, 0.25);")
                 .contains("::-webkit-scrollbar { width: 8px; height: 8px; }")
                 .contains("::-webkit-scrollbar-thumb { background: rgba(184, 133, 56, 0.45); border-radius: 4px; }")

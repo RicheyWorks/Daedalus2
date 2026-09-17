@@ -683,6 +683,7 @@ under the `_migration/` portfolios.
   Maze copy sits on grayscale lamp AA so leftover OS ice does not fringe cream on torch stone.
   Desktop maze copy sits on grayscale lamp AA so leftover Modena ice does not fringe cream on torch stone.
   Maze copy sits on lamp kerning so leftover OS ice does not fringe cream on torch stone.
+  Maze copy refuses leftover OS fake-bold so cream sits in the lamp, not ice-fringed synthetic weight.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
