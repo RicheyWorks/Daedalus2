@@ -1942,6 +1942,8 @@ public final class DesktopPaint {
 
     /** Scene void — leftover Modena white is not the lamp around the well. */
     public static final String SCENE_FILL = "#0c0908";
+    /** PNG snapshot void — leftover JavaFX white is not the lamp under the well. */
+    public static final String SNAPSHOT_FILL = SCENE_FILL;
 
     /** Stage icon void — leftover Java chrome is not the lamp on the taskbar. */
     public static final int STAGE_ICON_SIZE = 32;

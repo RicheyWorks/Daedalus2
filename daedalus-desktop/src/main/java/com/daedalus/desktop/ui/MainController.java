@@ -23,6 +23,7 @@ import javafx.concurrent.Task;
 import com.daedalus.solver.MazeSolver;
 import com.daedalus.solver.solvers.SolverRegistry;
 import javafx.fxml.FXML;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -1345,7 +1346,9 @@ public class MainController {
         var saved = List.copyOf(canvas.getTransforms());
         canvas.getTransforms().clear();
         WritableImage snap = new WritableImage(Math.max(1, pw), Math.max(1, ph));
-        canvas.snapshot(null, snap);
+        SnapshotParameters params = new SnapshotParameters();
+        params.setFill(Color.web(DesktopPaint.SNAPSHOT_FILL));
+        canvas.snapshot(params, snap);
         canvas.getTransforms().setAll(saved);
         return snap;
     }

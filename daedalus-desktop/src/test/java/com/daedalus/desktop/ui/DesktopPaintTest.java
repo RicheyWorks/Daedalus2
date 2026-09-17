@@ -901,6 +901,8 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.SCENE_FILL).isEqualTo("#0c0908");
         assertThat(DesktopPaint.SCENE_FILL).isEqualTo(
                 com.daedalus.desktop.ui.themes.CosmicTheme.BACKGROUND_INK);
+        assertThat(DesktopPaint.SNAPSHOT_FILL).isEqualTo(DesktopPaint.SCENE_FILL);
+        assertThat(DesktopPaint.SNAPSHOT_FILL).isNotEqualTo("#ffffff");
         assertThat(DesktopPaint.STAGE_ICON_ARGB).isEqualTo(0xFF0C0908);
         assertThat(DesktopPaint.STAGE_ICON_LIP_ARGB).isEqualTo(0xFFB88538);
         int[] icon = DesktopPaint.stageIconPixels();
