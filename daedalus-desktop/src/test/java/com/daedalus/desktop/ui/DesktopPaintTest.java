@@ -550,6 +550,24 @@ class DesktopPaintTest {
         DesktopPaint.Hairline stripe = DesktopPaint.floorHiStroke(roomy, 1, 1);
         assertThat(roomy.cellSize()).isEqualTo(20.0);
         assertThat(DesktopPaint.FLOOR_HI).isEqualTo("#765834");
+        assertThat(DesktopPaint.WALL_HI).isEqualTo("#4a3824");
+        assertThat(Integer.parseInt(DesktopPaint.WALL_HI.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.WALL_HI.substring(5, 7), 16));
+        DesktopPaint.Hairline wallStripe = DesktopPaint.wallHiStroke(roomy, 0, 1);
+        assertThat(wallStripe).isNotNull();
+        assertThat(wallStripe.h()).isEqualTo(1.0);
+        assertThat(DesktopPaint.clearWallHiInk(0))
+                .isEqualTo(DesktopPaint.mixHex(DesktopPaint.WALL_HI,
+                        DesktopPaint.FOG_WALL_WARM, 0.28));
+        assertThat(DesktopPaint.clearWallHiInk(1))
+                .isNotEqualTo(DesktopPaint.clearWallHiInk(0));
+        assertThat(DesktopPaint.fogWallHiInk(0)).isEqualTo(DesktopPaint.WALL_HI);
+        assertThat(DesktopPaint.fogWallHiInk(1))
+                .isEqualTo(DesktopPaint.mixHex(DesktopPaint.WALL_HI,
+                        DesktopPaint.FOG_WALL_WARM, 0.28));
+        assertThat(DesktopPaint.wallHiStroke(DesktopPaint.Layout.fit(5, 5, 20, 20), 0, 1))
+                .as("web skips the wall shine when the cell is under 10px")
+                .isNull();
         assertThat(Integer.parseInt(DesktopPaint.FLOOR_HI.substring(1, 3), 16))
                 .isGreaterThan(Integer.parseInt(DesktopPaint.FLOOR_HI.substring(5, 7), 16));
         assertThat(DesktopPaint.floorHiInk(0)).isEqualTo(DesktopPaint.FLOOR_HI);

@@ -304,6 +304,8 @@ under the `_migration/` portfolios.
   as floor and brick, not flat plaster over a firelit tunnel.
   Well canvas backing wears the same torch wall mix as painted posts so
   skipped interior joints stay in the lamp, not cool ink in the crossings.
+  Well walls wear a 1px torch shine on web and desktop so posts have the same
+  stone depth as corridors, not flat ink beside lit floors.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

@@ -270,6 +270,8 @@ public final class DesktopPaint {
     public static final String LEGEND_WALL = mixHex(FOG_WALL, FOG_WALL_WARM, 0.28);
     /** Same 1px corridor highlight as {@code draw.js} {@code floorHi}. */
     public static final String FLOOR_HI = "#765834";
+    /** Post shine — same 1px torch hairline as {@code draw.js} {@code wallHi}. */
+    public static final String WALL_HI = "#4a3824";
     public static final String FOG_FLOOR_HI = FLOOR_HI;
 
     /** Corridor shine softens toward the board edge with the floor wash. */
@@ -1851,6 +1853,27 @@ public final class DesktopPaint {
                 layout.y(tileRow) + 1,
                 Math.max(0, layout.cellSize() - 2),
                 1);
+    }
+
+    public static String clearWallHiInk(double edge) {
+        String hi = mixHex(WALL_HI, FOG_WALL_WARM, 0.28);
+        return mixHex(hi, FOG_UNSEEN, WALL_EDGE_DIM * Math.max(0, Math.min(1, edge)));
+    }
+
+    public static String fogWallHiInk(double lamp) {
+        return mixHex(WALL_HI, FOG_WALL_WARM, 0.28 * Math.max(0, Math.min(1, lamp)));
+    }
+
+    public static Hairline wallHiStroke(Layout layout, int tileRow, int tileCol) {
+        if (layout == null || layout.cellSize() < 10) {
+            return null;
+        }
+        double w = layout.w(tileCol);
+        double h = layout.h(tileRow);
+        if (w < 3 || h < 3) {
+            return null;
+        }
+        return new Hairline(layout.x(tileCol) + 1, layout.y(tileRow) + 1, Math.max(1, w - 2), 1);
     }
 
     static String mixHex(String from, String to, double t) {

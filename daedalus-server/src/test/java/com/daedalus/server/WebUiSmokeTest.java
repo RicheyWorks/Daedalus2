@@ -92,6 +92,8 @@ class WebUiSmokeTest {
                 .contains("floorDim: \"#2a2218\"")
                 .contains("mixHex(COLORS.floorHi, COLORS.floorWarm, lamp * 0.28)")
                 .contains("floorHi: \"#765834\"")
+                .contains("wallHi: \"#4a3824\"")
+                .contains("mixHex(COLORS.wallHi, COLORS.wallWarm, 0.28)")
                 .contains("mixHex(COLORS.wall, COLORS.wallWarm, 0.28)")
                 .contains("scene.fog")
                 .contains("COLORS.unseen")

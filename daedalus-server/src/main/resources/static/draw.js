@@ -3,7 +3,7 @@
 "use strict";
 (function (global) {
   const COLORS = {
-    wall: "#0b0f14", wallWarm: "#2a2218", unseen: "#05070a",
+    wall: "#0b0f14", wallWarm: "#2a2218", wallHi: "#4a3824", unseen: "#05070a",
     floor: "#3d4a58", floorHi: "#765834", floorDim: "#2a2218",
     floorWarm: "#5c4a32",
     start: "#3ee08f", goal: "#ff5a5f", path: "#8fb8ff",
@@ -59,6 +59,15 @@
     return r > 0 && c > 0 && r < tiles.length - 1 && c < tiles[0].length - 1
         && tiles[r - 1][c] !== "#" && tiles[r + 1][c] !== "#"
         && tiles[r][c - 1] !== "#" && tiles[r][c + 1] !== "#";
+  }
+
+  function paintWallHi(g, geom, r, col, ink) {
+    if (!geom || geom.cell < 10) return;
+    const x = geom.offX[col], y = geom.offY[r];
+    const w = geom.offX[col + 1] - x, h = geom.offY[r + 1] - y;
+    if (w < 3 || h < 3) return;
+    g.fillStyle = ink;
+    g.fillRect(x + 1, y + 1, Math.max(1, w - 2), 1);
   }
 
   function cellCenter(geom, p) {
@@ -367,6 +376,7 @@
             g.fillStyle = mixHex(COLORS.wall, COLORS.wallWarm, lamp * 0.45);
             g.fillRect(geom.offX[col], geom.offY[r],
                        geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
+            paintWallHi(g, geom, r, col, mixHex(COLORS.wallHi, COLORS.wallWarm, lamp * 0.28));
           } else {
             const cx = (tw - 1) / 2, cy = (th - 1) / 2;
             const dx = (col - cx) / Math.max(1, tw / 2);
@@ -376,6 +386,8 @@
             g.fillStyle = mixHex(warmWall, COLORS.unseen, 0.28 * edge);
             g.fillRect(geom.offX[col], geom.offY[r],
                        geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
+            const hi = mixHex(COLORS.wallHi, COLORS.wallWarm, 0.28);
+            paintWallHi(g, geom, r, col, mixHex(hi, COLORS.unseen, 0.28 * edge));
           }
           continue;
         }
