@@ -388,10 +388,16 @@
         if (wallTile) {
           if (scene.fog) {
             const lamp = fogLamp(scene.fog, r, col) * fogFrontier(scene.fog, r, col);
-            g.fillStyle = mixHex(COLORS.wall, COLORS.wallWarm, lamp * 0.45);
+            const cx = (tw - 1) / 2, cy = (th - 1) / 2;
+            const dx = (col - cx) / Math.max(1, tw / 2);
+            const dy = (r - cy) / Math.max(1, th / 2);
+            const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+            const lampWall = mixHex(COLORS.wall, COLORS.wallWarm, lamp * 0.45);
+            g.fillStyle = mixHex(lampWall, COLORS.unseen, 0.28 * edge);
             g.fillRect(geom.offX[col], geom.offY[r],
                        geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
-            paintWallHi(g, geom, r, col, mixHex(COLORS.wallHi, COLORS.wallWarm, lamp * 0.28));
+            const lampHi = mixHex(COLORS.wallHi, COLORS.wallWarm, lamp * 0.28);
+            paintWallHi(g, geom, r, col, mixHex(lampHi, COLORS.unseen, 0.28 * edge));
           } else {
             const cx = (tw - 1) / 2, cy = (th - 1) / 2;
             const dx = (col - cx) / Math.max(1, tw / 2);

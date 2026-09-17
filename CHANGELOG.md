@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well fog wall depth.**
+  Revealed posts under the lamp fall off toward unseen at the rim with
+  the same 0.28 edge as clear stone, so leftover even fog walls are
+  not the last word on memory. Start mint and goal coral stay.
+
 - **Desktop fog void pocket.**
   Unseen fog falls off from well-void center to the rim so leftover
   flat #0c0908 is not the last word under memory. Revealed stone and
