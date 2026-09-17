@@ -607,6 +607,12 @@ public final class ExplorePaint {
 
     public static void tint(ExploreMesh.Triangle tri, boolean visible, float[] rgb,
                             double eyeX, double eyeZ, double yaw, double seconds) {
+        tint(tri, visible, rgb, eyeX, eyeZ, yaw, seconds, 0);
+    }
+
+    public static void tint(ExploreMesh.Triangle tri, boolean visible, float[] rgb,
+                            double eyeX, double eyeZ, double yaw, double seconds,
+                            double edge) {
         if (rgb == null || rgb.length < 3 || tri == null || tri.face() == null) {
             return;
         }
@@ -619,6 +625,9 @@ public final class ExplorePaint {
             case CEILING -> ceiling(tri, rgb);
             case WALL -> wall(tri, rgb);
             default -> set(rgb, SKY_R, SKY_G, SKY_B);
+        }
+        if (tri.face() == ExploreMesh.Face.FLOOR) {
+            mixHereEdge(edge, rgb);
         }
         if (!Double.isNaN(eyeX)) {
             torch(tri, eyeX, eyeZ, yaw, rgb, seconds);

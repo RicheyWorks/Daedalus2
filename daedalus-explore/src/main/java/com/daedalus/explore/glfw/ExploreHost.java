@@ -468,6 +468,9 @@ public final class ExploreHost {
 
     private static void faces(ExploreWorld world, ExploreMesh.Face face, int tex,
                               float[] rgb, float[] uv, double seconds) {
+        var tiles = world.mesh().tiles();
+        int th = tiles == null ? 1 : tiles.length;
+        int tw = tiles == null || tiles[0] == null ? 1 : tiles[0].length;
         glBindTexture(GL_TEXTURE_2D, tex);
         glBegin(GL_TRIANGLES);
         for (ExploreMesh.Triangle tri : world.mesh().triangles()) {
@@ -476,7 +479,8 @@ public final class ExploreHost {
             }
             ExploreBody body = world.body();
             ExplorePaint.tint(tri, world.fog().tileVisible(tri.tr(), tri.tc()), rgb,
-                    body.x(), body.z(), body.yaw(), seconds);
+                    body.x(), body.z(), body.yaw(), seconds,
+                    ExplorePaint.mapEdge(tri.tr(), tri.tc(), 0, th - 1, 0, tw - 1));
             glColor3f(rgb[0], rgb[1], rgb[2]);
             ExplorePaint.uv(tri, tri.x1(), tri.y1(), tri.z1(), uv);
             glTexCoord2f(uv[0], uv[1]);
