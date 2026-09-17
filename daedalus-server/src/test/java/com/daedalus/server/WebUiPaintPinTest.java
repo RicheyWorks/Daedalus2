@@ -38,7 +38,8 @@ class WebUiPaintPinTest {
                     .contains("#gate article p { margin: 0; color: #b09a72; cursor: text; font-size: 13px; flex: 1; -webkit-user-drag: none")
                     .contains("details .hint { cursor: text; -webkit-user-drag: none")
                     .contains("#lb span { color: #b09a72; -webkit-user-drag: none")
-                    .contains("#lb .rank { display: inline-block; width: 18px; color: #b09a72; -webkit-user-drag: none");
+                    .contains("#lb .rank { display: inline-block; width: 18px; color: #b09a72; -webkit-user-drag: none")
+                    .contains("#lb b { color: #f2ead8; -webkit-user-drag: none");
         }
     }
 }
