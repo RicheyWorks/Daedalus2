@@ -1678,10 +1678,10 @@ public final class ExplorePaint {
      * not leftover even wood down to the floor.
      */
     public static float blockContactShade(WorldMesh.Triangle tri) {
-        if (tri == null || tri.face() == WorldMesh.Face.NEG_Y) {
+        if (tri == null) {
             return 1f;
         }
-        if (tri.face() == WorldMesh.Face.POS_Y) {
+        if (tri.face() == WorldMesh.Face.POS_Y || tri.face() == WorldMesh.Face.NEG_Y) {
             return blockLidContactShade(tri);
         }
         double midY = (tri.y1() + tri.y2() + tri.y3()) / 3.0;
@@ -1691,7 +1691,8 @@ public final class ExplorePaint {
 
     /** Soft lid rim — dark toward the cube edge so the top meets the posts. */
     public static float blockLidContactShade(WorldMesh.Triangle tri) {
-        if (tri == null || tri.face() != WorldMesh.Face.POS_Y) {
+        if (tri == null || (tri.face() != WorldMesh.Face.POS_Y
+                && tri.face() != WorldMesh.Face.NEG_Y)) {
             return 1f;
         }
         double cx = (tri.x1() + tri.x2() + tri.x3()) / 3.0;

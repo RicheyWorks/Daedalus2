@@ -117,7 +117,7 @@ class ExploreWorldTest {
         world.showBlocks(true);
         assertThat(world.showingBlocks()).isTrue();
         assertThat(world.mesh()).isSameAs(corridor);
-        assertThat(world.blocks().triangles()).hasSize(36);
+        assertThat(world.blocks().triangles()).hasSize(44);
         world.attachBlocks(null);
         assertThat(world.showingBlocks()).isFalse();
         assertThat(world.mesh()).isSameAs(corridor);

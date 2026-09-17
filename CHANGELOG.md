@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore cube boot rim.**
+  Occupied cube undersides split a torch rim at the same fraction as
+  the lid, so looking under names the slab edge and leftover even wood
+  is not the last word on the boot.
+
 - **Explore automap floor depth.**
   Earned halls on the pocket fall off toward the rim with the same
   0.22 edge as live stone, so leftover flat MAP_FLOOR is not the last

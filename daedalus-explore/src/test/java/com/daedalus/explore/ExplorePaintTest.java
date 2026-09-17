@@ -117,6 +117,15 @@ class ExplorePaintTest {
                 .isLessThan(ExplorePaint.blockLidContactShade(lidMid));
         assertThat(ExplorePaint.blockContactShade(lidRim))
                 .isLessThan(ExplorePaint.blockContactShade(lidMid));
+        WorldMesh.Triangle bootMid = new WorldMesh.Triangle(
+                0.28, 0, 0.28, 0.72, 0, 0.28, 0.72, 0, 0.72,
+                WorldMesh.Face.NEG_Y, BlockType.WOOD, lidAt);
+        WorldMesh.Triangle bootRim = new WorldMesh.Triangle(
+                0, 0, 0, 1, 0, 0, 1, 0, 0.28,
+                WorldMesh.Face.NEG_Y, BlockType.WOOD, lidAt);
+        assertThat(ExplorePaint.blockLidContactShade(bootRim))
+                .as("cube boot rim is darker contact, not leftover even wood")
+                .isLessThan(ExplorePaint.blockLidContactShade(bootMid));
     }
 
     @Test

@@ -131,7 +131,7 @@ public final class WorldMesh {
                 lid(out, x, y1, z, x1, z1, face, type, at);
             }
             case NEG_Y -> {
-                quad(out, x, y, z1, x, y, z, x1, y, z, x1, y, z1, face, type, at);
+                lid(out, x, y, z, x1, z1, face, type, at);
             }
             case POS_Z -> {
                 side(out, x1, y, z1, x1, y1, z1, x, y1, z1, x, y, z1, face, type, at);
