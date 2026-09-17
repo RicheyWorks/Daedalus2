@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well icon floor depth.**
+  Tab, apple-touch, and share PNGs fall off toward the rim with the
+  same 0.22 edge as live stone, so leftover flat slate is not the last
+  word on a home-screen maze. Start mint and goal coral stay.
+
 - **Explore window icon floor depth.**
   Idle-maze halls on the 32px explore icon fall off toward the rim
   with the same 0.22 edge as live stone, so leftover flat slate is

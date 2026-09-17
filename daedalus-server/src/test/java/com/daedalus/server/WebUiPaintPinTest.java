@@ -70,7 +70,8 @@ class WebUiPaintPinTest {
                     .contains("stroke='%23b88538'")
                     .contains("x='5' y='9' width='2' height='2' fill='%2315110d'")
                     .contains("x='13' y='13' width='2' height='2' fill='%2318130e'")
-                    .contains("fill='%23484339'")
+                    .contains("x='15' y='15' width='2' height='2' fill='%23484339'")
+                    .contains("x='23' y='11' width='2' height='2' fill='%23423c32'")
                     .contains("x='7' y='11' width='2' height='2' fill='%233ee08f'")
                     .contains("x='23' y='19' width='2' height='2' fill='%23ff5a5f'");
         }
@@ -82,7 +83,7 @@ class WebUiPaintPinTest {
             assertThat(in).as("static well page").isNotNull();
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html).contains(
-                    "LRAV5EVDYngRpvrBYYHdg34gEhPiBSIPZ0s0JC7EB0SY4oPDAojHkQ0SFw")
+                    "g34gEhPiBSIXOxMQsjeFI3EhPiCCiDvbGgORk40REA0OCyAeh2iD")
                     .contains("rel=\"apple-touch-icon\"")
                     .contains("property=\"og:image\"")
                     .contains("name=\"twitter:image\"");
@@ -113,7 +114,7 @@ class WebUiPaintPinTest {
                     .contains("%22icons%22%3A%5B")
                     .contains("%2232x32%22")
                     .contains("%22purpose%22%3A%22any%22")
-                    .contains("LRAV5EVDYngRpvrBYYHdg34gEhPiBSIPZ0s0JC7EB0SY4oPDAojHkQ0SFw");
+                    .contains("g34gEhPiBSIXOxMQsjeFI3EhPiCCiDvbGgORk40REA0OCyAeh2iD");
         }
     }
 
