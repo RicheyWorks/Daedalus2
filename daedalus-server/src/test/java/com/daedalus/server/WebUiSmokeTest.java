@@ -124,7 +124,7 @@ class WebUiSmokeTest {
                 .contains("::-moz-selection:window-inactive { background: rgba(184, 133, 56, 0.22); color: #f2ead8; }")
                 .contains("@media print {")
                 .contains("print-color-adjust: exact; -webkit-print-color-adjust: exact;")
-                .contains("@page { background-color: #0c0908; }")
+                .contains("@page { background-color: #0c0908; color: #f2ead8; }")
                 .contains("@media (forced-colors: active) {")
                 .contains("html, body, #gate, #stage, canvas { forced-color-adjust: none; }")
                 .contains("mark { background: rgba(184, 133, 56, 0.35); color: #f2ead8; }")
