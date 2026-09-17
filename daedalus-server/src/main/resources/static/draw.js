@@ -400,6 +400,14 @@
     return mixHex("#d4b06a", COLORS.floorDim, 0.22 * edge);
   }
 
+  function victoryInk(p, th, tw) {
+    const tr = 2 * p.row + 1, tc = 2 * p.col + 1;
+    const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
+    const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
+    const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+    return mixHex("#f0b429", COLORS.floorDim, 0.22 * edge);
+  }
+
   function waypointInk(p, th, tw, got) {
     const tr = 2 * p.row + 1, tc = 2 * p.col + 1;
     const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
@@ -851,13 +859,14 @@
       const padR = 0.85 + 0.08 * wave;
       const padA = 0.14 + 0.16 * wave;
       const ringR = 0.70 + 0.04 * wave;
-      g.fillStyle = "#f0b429";
+      const winInk = victoryInk(goal, th, tw);
+      g.fillStyle = winInk;
       g.globalAlpha = padA;
       g.beginPath();
       g.arc(x, y, geom.cell * padR, 0, 2 * Math.PI);
       g.fill();
       g.globalAlpha = 1;
-      g.strokeStyle = "#f0b429";
+      g.strokeStyle = winInk;
       g.lineWidth = Math.max(2, geom.wall);
       g.beginPath();
       g.arc(x, y, geom.cell * ringR, 0, 2 * Math.PI);

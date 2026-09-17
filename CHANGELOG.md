@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well victory mark depth.**
+  Win gold falls off toward floor-dim at the board rim with the
+  same 0.22 edge as halls, so leftover even torch is not the last
+  word on a finish. Goal coral stays.
+
 - **Desktop tour tip depth.**
   Held-Karp amber tip falls off toward floor-dim at the board rim
   with the same 0.22 edge as halls, so leftover even disc is not

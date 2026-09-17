@@ -275,6 +275,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellVictoryMarksHaveRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("mixHex(\"#f0b429\", COLORS.floorDim, 0.22 * edge)")
+                    .contains("const winInk = victoryInk(goal, th, tw)");
+        }
+    }
+
+    @Test
     void wellFieldCellsHaveRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
