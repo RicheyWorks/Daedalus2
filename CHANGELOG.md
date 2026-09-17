@@ -302,6 +302,8 @@ under the `_migration/` portfolios.
   theme stone matches the board, not cool ink beside warm corridors.
   Explore ceilings wear a 1px torch shine so the lid has the same stone depth
   as floor and brick, not flat plaster over a firelit tunnel.
+  Well canvas backing wears the same torch wall mix as painted posts so
+  skipped interior joints stay in the lamp, not cool ink in the crossings.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

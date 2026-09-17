@@ -350,7 +350,9 @@
     const g = canvas.getContext("2d");
     g.imageSmoothingEnabled = false;
 
-    g.fillStyle = scene.fog ? COLORS.unseen : COLORS.wall;
+    g.fillStyle = scene.fog
+        ? COLORS.unseen
+        : mixHex(COLORS.wall, COLORS.wallWarm, 0.28);
     g.fillRect(0, 0, canvas.width, canvas.height);
     let start = null, goal = null;
     for (let r = 0; r < th; r++) {
