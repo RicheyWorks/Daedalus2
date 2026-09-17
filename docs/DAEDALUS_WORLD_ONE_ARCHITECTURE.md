@@ -64,6 +64,8 @@ No blockchain. No microservices. No seventh reactor module until a boundary is f
 | Plots bought or rented | **DEFER — after parcel + permissions** | A plot **is** a `Parcel`. Buy/rent is a later market provider on `ownerId` / lease strings — not a second spatial type, not a chain. |
 | Wearables | **NOT NOW — item provider** | Equipped looks bind to an avatar later. No clothing types in `daedalus-core` this streak. |
 | NFT art display | **NOT NOW — display provider** | A framed surface on a parcel wall binds an item id (string). The world *shows*; a later provider proves ownership. No wallet type, no ledger, no mint in core. |
+| City-scale look | **NOT NOW — later renderer** | Street-scale materials and skyline after W1.5. Distant voxels stay the **real stamp** (or culled). Never a six-cube placeholder LOD. |
+| Street / place names | **DEFER — labels on parcels** | Inspired toponyms as strings. Not GIS imports, not official street registries, not trademarked venues as if affiliated. |
 
 `DEPRECATE` / `REMOVE`: still nothing in production.
 
@@ -236,9 +238,18 @@ Last of the client trio.
 - Collision for voxels is discrete occupancy (`World.contains`), not maze wall bits.
 - OpenXR stays a plugin on the maze host until a later audit says otherwise.
 
+### 4.7 City look (later — better than stub voxels)
+
+The product bar is a maze-native city people want to walk, not a distant 6-cube prop.
+
+- A far parcel is still its stamped cubes, or it is not drawn. **No stub LOD** that swaps a building for a handful of blocks.
+- Street-scale look (facades, sidewalks, skyline) is a later mesher/material pass after the explore voxel view exists.
+- Maze DNA is the city plan: stamps and living slabs stay the source. Do not replace generators with a city-builder.
+- Place names are optional strings on a parcel later (`placeName`). Inspired street flavor is welcome. Do not import OpenStreetMap / Google as official streets. Do not sell a trademarked venue as if the product is affiliated.
+
 Shared meshing with `ExploreMesh` stays UNKNOWN. Server remains authoritative on blocks.
 
-### 4.7 Plugin objects and agents
+### 4.8 Plugin objects and agents
 
 Door is the template: named results, same domain method for human REST and `WorldOps`, capability id on the registry, drive row or UNACCOUNTED.
 
@@ -251,7 +262,7 @@ Next objects (order when we get there): trap → portal → NPC. Each adds:
 
 Agent builders call `WorldOps`. They do not get a parallel verb set.
 
-### 4.8 Terrain / WebGL / shops
+### 4.9 Terrain / WebGL / shops
 
 Out of World One. Compatible, not designed here beyond “not now.”
 
@@ -354,7 +365,7 @@ Forbidden in W1.1:
 2. **What stays.** Everything KEEP. World Zero APIs stay. Door and accounting stay.
 3. **What is adapted.** Core stamp + parcel; living as a slab writer; STOMP proof; well panel; explore second mesh.
 4. **What is retired.** Nothing.
-5. **What is not now.** WebGL client, shops, terrain, permission engine, trap/portal/NPC, wearables, NFT display, plot market. Those last three are later **Ethereum** providers on `Parcel` / item ids — still no wallet or web3 in core.
+5. **What is not now.** WebGL client, shops, terrain, permission engine, trap/portal/NPC, wearables, NFT display, plot market, photoreal cities. Those last three providers stay Ethereum-on-strings. City look is a later renderer: honest distant stamps, inspired place names — no stub LOD, no GIS import.
 6. **Smallest path.** §6 W1.1 → W1.5.
 7. **Exact first code slice.** §8 file list. Stop there until the next ask.
 

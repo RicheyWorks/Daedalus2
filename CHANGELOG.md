@@ -95,6 +95,11 @@ under the `_migration/` portfolios.
 
 - Lab khaki notes refuse leftover drag ice so growth captions are not ghosted.
 
+- **World One city look bar.**
+  Distant voxels stay the real stamp (or culled), never a six-cube
+  placeholder. Inspired street names may label parcels later; no GIS
+  import and no trademarked venues as if affiliated.
+
 - **First-person explore paints a Doom-like corridor.** Fog now keeps
   the enclosing wall posts, walkable tiles have a ceiling, and faces
   keep a tan/brown palette so looking up is stone, not a void. Xbox
