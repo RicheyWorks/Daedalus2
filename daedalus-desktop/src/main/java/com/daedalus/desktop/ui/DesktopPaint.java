@@ -541,6 +541,13 @@ public final class DesktopPaint {
     public static final double COMPARE_HEAD_RADIUS = 0.28;
     /** Min-cut passage — same purple as {@code draw.js} chokepoints. */
     public static final String CHOKE = "#c07850";
+    /** Same 0.22 rim as halls — leftover even clay is not the last word on a pinch. */
+    public static final double CHOKE_EDGE_DIM = 0.22;
+
+    public static String chokeInk(double edge) {
+        return mixHex(CHOKE, FLOOR_DIM, CHOKE_EDGE_DIM * Math.max(0, Math.min(1, edge)));
+    }
+
     /** Dead-end speck — same ice as {@code draw.js}. */
     public static final String DEAD_END = "#c8a878";
     /** Same 0.22 rim as halls — leftover even khaki is not the last word on a cul-de-sac. */

@@ -255,6 +255,11 @@ class DesktopPaintTest {
         assertThat(mark).isNotNull();
         assertThat(mark.haloW()).isGreaterThan(mark.w());
         assertThat(DesktopPaint.CHOKE).isEqualTo("#c07850");
+        assertThat(DesktopPaint.CHOKE_EDGE_DIM).isEqualTo(0.22);
+        assertThat(DesktopPaint.chokeInk(0)).isEqualTo(DesktopPaint.CHOKE);
+        assertThat(DesktopPaint.chokeInk(1))
+                .as("choke rim falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.CHOKE);
         assertThat(Integer.parseInt(DesktopPaint.CHOKE.substring(1, 3), 16))
                 .isGreaterThan(Integer.parseInt(DesktopPaint.CHOKE.substring(5, 7), 16));
         DesktopPaint.Ring halo = DesktopPaint.chokeHalo(layout, east);

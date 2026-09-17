@@ -2084,8 +2084,11 @@ public class MainController {
 
         if (currentCuts != null) {
             double cutsWave = DesktopPaint.cutsBreathWave(System.nanoTime());
-            Color choke = Color.web(DesktopPaint.CHOKE);
             for (var passage : currentCuts.chokepoints()) {
+                DesktopPaint.TileRect cut = DesktopPaint.chokeTile(passage);
+                Color choke = Color.web(cut == null ? DesktopPaint.CHOKE
+                        : DesktopPaint.chokeInk(DesktopPaint.floorEdge(
+                                layout, cut.tileRow(), cut.tileCol())));
                 DesktopPaint.Ring halo = DesktopPaint.chokeHalo(layout, passage, cutsWave);
                 if (halo != null) {
                     g.setGlobalAlpha(DesktopPaint.chokeHaloAlpha(cutsWave));
