@@ -544,6 +544,8 @@ under the `_migration/` portfolios.
   lamp, not leftover cool white on torch stone.
   Arena race A wears the same overlay ice as the solver ribbon so the well is
   one ice, not leftover ice beside KEEP ice.
+  Tournament headers wear khaki on gold hairlines so those ranks sit in the lamp,
+  not leftover cream slabs on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

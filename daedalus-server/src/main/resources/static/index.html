@@ -198,6 +198,11 @@
   .hint, .info, #labOut, #tourBox, #campaignBox, #pluginBox, #lb {
     overflow-wrap: break-word; hyphens: auto; line-height: 1.5; }
   #labOut, #tourBox, #campaignBox, #pluginBox { color: #f2ead8; }
+  #tourBox table { width: 100%; border-collapse: collapse;
+                   font: 12px/1.7 ui-monospace, monospace; }
+  #tourBox th { text-align: left; color: #b09a72; font-weight: 600;
+                border-bottom: 1px solid rgba(184, 133, 56, 0.28); padding: 2px 8px; }
+  #tourBox td { padding: 2px 8px; border-bottom: 1px solid rgba(184, 133, 56, 0.28); }
   #pluginBox .rank { color: #b09a72; }
   @media (max-width: 1440px) {
     main { grid-template-columns: minmax(220px, 260px) minmax(0, 1fr); }

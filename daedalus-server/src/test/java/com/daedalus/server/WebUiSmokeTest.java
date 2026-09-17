@@ -177,6 +177,8 @@ class WebUiSmokeTest {
                 .contains("#log .solver { color: #d4a04c; }")
                 .contains("#log div { border-bottom: 1px solid rgba(184, 133, 56, 0.28); padding: 2px 0; }")
                 .contains("#labOut, #tourBox, #campaignBox, #pluginBox { color: #f2ead8; }")
+                .contains("#tourBox th { text-align: left; color: #b09a72; font-weight: 600;")
+                .contains("#tourBox td { padding: 2px 8px; border-bottom: 1px solid rgba(184, 133, 56, 0.28); }")
                 .contains("#pluginBox .rank { color: #b09a72; }")
                 .contains("const LAB_SERIES = \"#d4a04c\"")
                 .contains("stroke=\"#8c764e\" stroke-width=\"2\"")
