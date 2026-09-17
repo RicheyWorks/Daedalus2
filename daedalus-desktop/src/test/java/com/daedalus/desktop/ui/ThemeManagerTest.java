@@ -67,6 +67,7 @@ class ThemeManagerTest {
             assertThat(css).contains("-fx-font-smoothing-type: gray");
             assertThat(css).contains("-fx-font-smoothing-type: gray;\n    -fx-text-fill: #f2ead8;");
             assertThat(css).contains(".toolbar");
+            assertThat(css).contains("-fx-border-width: 0 0 1 0;\n    -fx-cursor: default;");
             assertThat(css).contains(".toolbar .brand");
             assertThat(css).contains(".toolbar .label");
             assertThat(css).contains(".toolbar .label {\n    -fx-text-fill: #b09a72;");

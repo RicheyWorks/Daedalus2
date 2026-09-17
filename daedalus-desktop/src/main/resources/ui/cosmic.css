@@ -18,6 +18,7 @@
     -fx-background-color: #16120e;
     -fx-border-color: transparent transparent rgba(184, 133, 56, 0.45) transparent;
     -fx-border-width: 0 0 1 0;
+    -fx-cursor: default;
 }
 .toolbar .brand {
     -fx-font-family: "Bahnschrift", "Avenir Next Condensed", "Trebuchet MS", "Segoe UI";
