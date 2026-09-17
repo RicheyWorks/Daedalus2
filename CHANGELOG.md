@@ -759,6 +759,7 @@ under the `_migration/` portfolios.
   Printed page boxes wear cream so leftover UA ink does not sit on torch void.
   The desktop well wears a lamp cursor so leftover Modena I-beam ice does not sit on torch stone.
   The desktop well key wears a lamp cursor so leftover Modena I-beam ice does not sit on overlay names.
+  The desktop status bar wears a lamp cursor so leftover Modena I-beam ice does not sit on khaki chrome.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
