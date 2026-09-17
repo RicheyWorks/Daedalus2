@@ -248,6 +248,7 @@ class WebUiSmokeTest {
                 .contains("#log .solver { color: #d4a04c; }")
                 .contains("#log div { border-bottom: 1px solid rgba(184, 133, 56, 0.28); padding: 2px 0; }")
                 .contains("#labOut, #tourBox, #campaignBox { color: #f2ead8; }")
+                .contains("overflow-wrap: break-word; hyphens: none; line-height: 1.5;")
                 .contains("#pluginBox { color: #b09a72; padding: 8px; background: #16120e;")
                 .contains("#pluginBox b { color: #f2ead8; }")
                 .contains("#tourBox th { text-align: left; color: #b09a72; font-weight: 600;")
