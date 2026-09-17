@@ -10,6 +10,7 @@
     -fx-highlight-text-fill: #f2ead8;
     -fx-font-smoothing-type: gray;
     -fx-text-fill: #f2ead8;
+    -fx-cursor: default;
 }
 
 /* ---------- toolbar ---------- */

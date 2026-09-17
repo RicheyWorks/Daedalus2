@@ -765,6 +765,7 @@ under the `_migration/` portfolios.
   The desktop toolbar tagline wears a lamp cursor so leftover Modena I-beam ice does not sit on khaki beside the brand.
   The desktop well-key labels wear a lamp cursor so leftover Modena I-beam ice does not sit on overlay names.
   Desktop status copy wears a lamp cursor so leftover Modena I-beam ice does not sit on khaki chrome.
+  The desktop shell wears a lamp cursor so leftover Modena I-beam ice does not sit on torch chrome.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
