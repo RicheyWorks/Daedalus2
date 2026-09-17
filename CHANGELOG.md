@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore reloads a living DAEW file.**
+  When the well's world-zero file mtime moves, explore remeshes the
+  voxels. Corridor KEEP stays. A quiet file is not reread.
+
 - **Explore walks the persisted world.**
   Explore loads `world-zero.daew` (same file as the well) when present.
   A missing file keeps the sample landmark. Corridor KEEP stays.

@@ -43,6 +43,8 @@ public final class ExploreWorld {
     private WorldMesh blocks;
     private boolean showBlocks;
     private long blocksRevision = Long.MIN_VALUE;
+    private Path storeFile;
+    private long storeMtime = Long.MIN_VALUE;
 
     public ExploreWorld(String generatorId, long seed, MazeGrid grid) {
         this.generatorId = generatorId == null ? "dungeon" : generatorId;
@@ -139,18 +141,48 @@ public final class ExploreWorld {
      * files keep the sample landmark. Corridor {@link #mesh()} stays.
      */
     public void attachStoredOrSample(Path file) {
-        if (file != null) {
-            try {
-                if (Files.isRegularFile(file)) {
-                    attachBlocks(WorldStore.load(file));
-                    showBlocks(true);
-                    return;
-                }
-            } catch (IOException e) {
-                // sample landmark still walks
-            }
+        this.storeFile = file;
+        this.storeMtime = Long.MIN_VALUE;
+        if (loadStored(file)) {
+            return;
         }
         attachSampleBlocks();
+    }
+
+    /**
+     * Reload the DAEW file when its mtime moves — a well stamp while
+     * walking. Live {@link #syncBlocks()} still covers an in-memory World.
+     */
+    public void syncStoredBlocks() {
+        if (storeFile == null || !Files.isRegularFile(storeFile)) {
+            return;
+        }
+        try {
+            long mtime = Files.getLastModifiedTime(storeFile).toMillis();
+            if (mtime == storeMtime) {
+                return;
+            }
+            loadStored(storeFile);
+        } catch (IOException e) {
+            // keep the mesh that is already walking
+        }
+    }
+
+    private boolean loadStored(Path file) {
+        if (file == null) {
+            return false;
+        }
+        try {
+            if (Files.isRegularFile(file)) {
+                attachBlocks(WorldStore.load(file));
+                showBlocks(true);
+                storeMtime = Files.getLastModifiedTime(file).toMillis();
+                return true;
+            }
+        } catch (IOException e) {
+            // sample landmark still walks
+        }
+        return false;
     }
 
     public ExploreBody body() {
@@ -170,6 +202,7 @@ public final class ExploreWorld {
     }
 
     public ExploreWalk.Outcome apply(ExploreInput.Intent intent, double dt) {
+        syncStoredBlocks();
         syncBlocks();
         ExploreInput.applyLook(body, intent);
         double[] move = ExploreInput.moveVector(body, intent, WALK_SPEED * dt);

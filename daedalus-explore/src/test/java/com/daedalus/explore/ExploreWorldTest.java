@@ -19,7 +19,9 @@ import com.daedalus.world.stamp.StampResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileTime;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -193,6 +195,29 @@ class ExploreWorldTest {
         world.attachStoredOrSample(null);
         assertThat(world.blocks().world().parcels().get(0).placeName())
                 .isEqualTo(ExploreWorld.SAMPLE_PLACE);
+    }
+
+    @Test
+    void aStoredWorldRemeshesWhenTheFileMoves(@TempDir Path tmp) throws Exception {
+        MazeGrid grid = new MazeGrid(1, 2);
+        grid.carve(grid.cell(0, 0), Direction.EAST);
+        ExploreWorld world = new ExploreWorld("test", 1L, grid);
+        World live = World.zero();
+        live.place(new BlockCoordinate(2, 0, 2), BlockType.WOOD);
+        Path file = tmp.resolve("world-zero.daew");
+        WorldStore.save(live, file);
+        world.attachStoredOrSample(file);
+        WorldMesh first = world.blocks();
+        world.apply(ExploreInput.Intent.none(), 0.016);
+        assertThat(world.blocks()).isSameAs(first);
+        live.place(new BlockCoordinate(3, 0, 3), BlockType.GLASS);
+        WorldStore.save(live, file);
+        Files.setLastModifiedTime(file, FileTime.fromMillis(
+                Files.getLastModifiedTime(file).toMillis() + 1000));
+        world.apply(ExploreInput.Intent.none(), 0.016);
+        assertThat(world.blocks().triangles()).extracting(WorldMesh.Triangle::type)
+                .contains(BlockType.WOOD, BlockType.GLASS);
+        assertThat(world.mesh().grid()).isSameAs(world.grid());
     }
 
     @Test
