@@ -729,6 +729,7 @@ under the `_migration/` portfolios.
   The well canvas refuses leftover focus ice so torch stone is not rimmed.
   The well pocket refuses leftover focus ice so torch stone is not rimmed.
   The start-gate brand refuses leftover callout ice so cream on the wordmark is not ballooned.
+  The header brand refuses leftover callout ice so cream on the wordmark is not ballooned.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
