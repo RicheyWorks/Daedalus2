@@ -582,6 +582,8 @@ under the `_migration/` portfolios.
   not leftover still frames on torch stone.
   Compare-box rules wear a breathing gold hairline so those cuts sit in the lamp,
   not leftover still frames on torch stone.
+  Key chips wear a breathing gold lip so those glyphs sit in the lamp,
+  not leftover still frames on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
