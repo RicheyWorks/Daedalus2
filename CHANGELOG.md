@@ -432,6 +432,8 @@ under the `_migration/` portfolios.
   in the lamp, not leftover cool pink on torch stone.
   ASCII dump walls wear torch khaki so the maze text reads as stone, not leftover
   flat parchment on torch stone.
+  ASCII dump start and goal wear mint and coral so those doors are keyed in the
+  text well, not leftover parchment on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

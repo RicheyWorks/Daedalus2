@@ -156,7 +156,10 @@
     if (!state.maze || state.maze.id !== mazeId) return;
     const out = host.$("asciiOut");
     out.hidden = false;
-    out.innerHTML = host.esc(art).replace(/#/g, "<span class=\"rock\">#</span>");
+    out.innerHTML = host.esc(art)
+        .replace(/#/g, "<span class=\"rock\">#</span>")
+        .replace(/S/g, "<span class=\"gate\">S</span>")
+        .replace(/G/g, "<span class=\"exit\">G</span>");
     host.log("state", `ASCII via Accept: text/plain (${art.length} chars)`);
   }
 
