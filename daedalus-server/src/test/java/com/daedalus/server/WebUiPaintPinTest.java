@@ -287,6 +287,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellFogWalkerHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("const fogWalker = scene.fog.position")
+                    .contains("playerTileInk(2 * fogWalker.row + 1, 2 * fogWalker.col + 1, th, tw)");
+        }
+    }
+
+    @Test
     void wellSessionTrailsHaveRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

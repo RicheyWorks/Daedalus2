@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well fog-walker depth.**
+  The torch-gold disc falls off toward floor-dim at the board rim
+  with the same 0.22 edge as halls, so leftover even breath is not
+  the last word on a remembered stand. KEEP ice stays.
+
 - **Desktop player-walk depth.**
   Torch-gold steps fall off toward floor-dim at the board rim with
   the same 0.22 edge as halls, so leftover even breath is not the

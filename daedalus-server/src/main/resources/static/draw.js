@@ -566,7 +566,10 @@
         endpoint(g, geom, start, COLORS.start);
       }
       if (scene.fog.goal) endpoint(g, geom, scene.fog.goal, COLORS.goal);
-      walker(g, geom, scene.fog.position, PLAYER_COLORS[0]);
+      const fogWalker = scene.fog.position;
+      walker(g, geom, fogWalker, fogWalker
+          ? playerTileInk(2 * fogWalker.row + 1, 2 * fogWalker.col + 1, th, tw)
+          : PLAYER_COLORS[0]);
       return geom;
     }
 
