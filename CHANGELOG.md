@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop heat glow depth.**
+  Hotspot pads and rims fall off toward floor-dim at the board
+  rim with the same 0.22 edge as halls, so leftover even coral is
+  not the last word on a pulse. The legend heat chip stays leftover
+  even. Start mint and goal coral stay.
+
 - **Well heat glow depth.**
   Hotspot pads and rims fall off toward floor-dim at the board
   rim with the same 0.22 edge as halls, so leftover even coral is

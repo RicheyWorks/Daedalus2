@@ -792,7 +792,7 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.HOTSPOT).isEqualTo("#e5484d");
         assertThat(DesktopPaint.HOTSPOT_EDGE_DIM).isEqualTo(0.22);
         assertThat(DesktopPaint.hotspotInk(1))
-                .as("heat rim falls off toward floor-dim")
+                .as("heat glow shares the cell rim toward floor-dim")
                 .isNotEqualTo(DesktopPaint.hotspotInk(0));
         assertThat(DesktopPaint.hotspotInk(0)).isEqualTo(DesktopPaint.HOTSPOT);
         assertThat(DesktopPaint.hotspotInk(0.5))

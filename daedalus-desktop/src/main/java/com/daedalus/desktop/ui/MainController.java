@@ -1921,7 +1921,6 @@ public class MainController {
         if (current.hotspots() != null && !current.hotspots().isEmpty()) {
             DesktopPaint.HotWash wash = DesktopPaint.hotspotWash(current.hotspots(), tiles);
             double hotWave = DesktopPaint.hotspotBreathWave(System.nanoTime());
-            Color hotInk = Color.web(DesktopPaint.HOTSPOT);
             for (var spot : wash.cells()) {
                 g.setGlobalAlpha(DesktopPaint.hotspotCellPaintAlpha(spot.cost(), hotWave));
                 int tr = 2 * spot.row() + 1;
@@ -1940,15 +1939,17 @@ public class MainController {
             g.setGlobalAlpha(1);
             for (var spot : wash.cells()) {
                 Point cell = new Point(spot.row(), spot.col());
+                Color glow = Color.web(DesktopPaint.hotspotInk(
+                        DesktopPaint.floorEdge(layout, 2 * cell.row() + 1, 2 * cell.col() + 1)));
                 DesktopPaint.Marker pad = DesktopPaint.hotspotPad(layout, cell, hotWave);
                 if (pad != null) {
                     g.setGlobalAlpha(DesktopPaint.hotspotPadAlpha(hotWave));
-                    g.setFill(hotInk);
+                    g.setFill(glow);
                     g.fillOval(pad.x(), pad.y(), pad.size(), pad.size());
                     g.setGlobalAlpha(1);
                 }
                 paintRing(g, DesktopPaint.hotspotRim(layout, cell),
-                        hotInk.deriveColor(0, 1, 1, DesktopPaint.hotspotRimAlpha(hotWave)));
+                        glow.deriveColor(0, 1, 1, DesktopPaint.hotspotRimAlpha(hotWave)));
             }
         }
 
