@@ -227,6 +227,28 @@ class ExplorePaintTest {
         assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.HERE)).isTrue();
         assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.WALL)).isTrue();
         assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.MARK)).isTrue();
+        assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.START))
+                .as("earned map names the revealed start mint")
+                .isTrue();
+        assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.GOAL))
+                .as("earned map names the revealed goal coral")
+                .isTrue();
+        float[] gate = new float[3];
+        ExplorePaint.mapEndTint(ExplorePaint.MapKind.START, gate);
+        assertThat(gate[1]).isGreaterThan(gate[0]);
+        assertThat(ExplorePaint.MAP_START_G).isEqualTo(0xe0 / 255f);
+        float[] exit = new float[3];
+        ExplorePaint.mapEndTint(ExplorePaint.MapKind.GOAL, exit);
+        assertThat(exit[0]).isGreaterThan(exit[1]);
+        assertThat(ExplorePaint.MAP_GOAL_R).isEqualTo(1f);
+        float[] gateSoft = new float[3];
+        ExplorePaint.mapEndSoftTint(ExplorePaint.MapKind.START, gateSoft);
+        assertThat(gateSoft[1]).isLessThan(gate[1]);
+        assertThat(ExplorePaint.MAP_END_HALO).isEqualTo(ExplorePaint.MAP_MARK_HALO);
+        assertThat(ExplorePaint.mapEndHalo(0.1))
+                .isNotEqualTo(ExplorePaint.mapEndHalo(0.8));
+        ExplorePaint.mapEndTint(ExplorePaint.MapKind.START, null);
+        ExplorePaint.mapEndSoftTint(ExplorePaint.MapKind.GOAL, null);
         assertThat(dots.stream().filter(d -> d.kind() == ExplorePaint.MapKind.MARK)
                 .map(ExplorePaint.MapDot::story))
                 .as("automap diamonds keep the story kind so vault teal is not leftover red")

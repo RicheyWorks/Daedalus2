@@ -677,7 +677,9 @@ public final class ExploreHost {
         glBegin(GL_QUADS);
         for (ExplorePaint.MapDot dot : dots) {
             if (dot.kind() == ExplorePaint.MapKind.HERE
-                    || dot.kind() == ExplorePaint.MapKind.MARK) {
+                    || dot.kind() == ExplorePaint.MapKind.MARK
+                    || dot.kind() == ExplorePaint.MapKind.START
+                    || dot.kind() == ExplorePaint.MapKind.GOAL) {
                 continue;
             }
             mapColor(dot.kind(), seconds);
@@ -689,6 +691,24 @@ public final class ExploreHost {
             glVertex2f((float) x0, (float) (y0 + sy));
         }
         glEnd();
+        float endHalo = ExplorePaint.mapEndHalo(seconds);
+        for (ExplorePaint.MapDot dot : dots) {
+            if (dot.kind() != ExplorePaint.MapKind.START
+                    && dot.kind() != ExplorePaint.MapKind.GOAL) {
+                continue;
+            }
+            double x0 = left + dot.x() * sx;
+            double y0 = bot + dot.y() * sy;
+            double padX = sx * endHalo;
+            double padY = sy * endHalo;
+            float[] ink = new float[3];
+            ExplorePaint.mapEndSoftTint(dot.kind(), ink);
+            glColor3f(ink[0], ink[1], ink[2]);
+            fill(x0 - padX, y0 - padY, x0 + sx + padX, y0 + sy + padY);
+            ExplorePaint.mapEndTint(dot.kind(), ink);
+            glColor3f(ink[0], ink[1], ink[2]);
+            fill(x0, y0, x0 + sx, y0 + sy);
+        }
         float markHalo = ExplorePaint.mapMarkHalo(seconds);
         for (ExplorePaint.MapDot dot : dots) {
             if (dot.kind() != ExplorePaint.MapKind.MARK) {
@@ -730,6 +750,10 @@ public final class ExploreHost {
                     ExplorePaint.MAP_HERE_B);
             case MARK -> glColor3f(ExplorePaint.MAP_MARK_R, ExplorePaint.MAP_MARK_G,
                     ExplorePaint.MAP_MARK_B);
+            case START -> glColor3f(ExplorePaint.MAP_START_R, ExplorePaint.MAP_START_G,
+                    ExplorePaint.MAP_START_B);
+            case GOAL -> glColor3f(ExplorePaint.MAP_GOAL_R, ExplorePaint.MAP_GOAL_G,
+                    ExplorePaint.MAP_GOAL_B);
             default -> {
                 ExplorePaint.mapStoneTint(kind, seconds, rgb);
                 glColor3f(rgb[0], rgb[1], rgb[2]);

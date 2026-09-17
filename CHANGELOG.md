@@ -93,6 +93,7 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- Explore automap start and goal wear well mint and coral so the earned map names the ends of the maze, not leftover floor brown.
 - Installed-well manifest wears the idle maze mark so a home-screen tile is a miniature dungeon, not a generic lamp.
 - Safari pinned-tab mask wears the idle maze mark so a gold silhouette is a miniature dungeon, not an empty frame.
 - Home-screen and share PNGs wear the idle maze mark so a saved well is a miniature dungeon, not an empty gold box.

@@ -302,7 +302,11 @@ public final class ExplorePaint {
         FLOOR,
         WALL,
         HERE,
-        MARK
+        MARK,
+        /** Revealed start — same mint as the well gate. */
+        START,
+        /** Revealed goal — same coral as the well exit. */
+        GOAL
     }
 
     public record MapDot(int x, int y, MapKind kind, String story) {
@@ -839,6 +843,20 @@ public final class ExplorePaint {
                 out.add(new MapDot(x, y, mesh.solidTile(tr, tc) ? MapKind.WALL : MapKind.FLOOR));
             }
         }
+        for (int tr = minR; tr <= maxR; tr++) {
+            for (int tc = minC; tc <= maxC; tc++) {
+                if (!fog.tileVisible(tr, tc)) {
+                    continue;
+                }
+                TileType tile = tiles[tr][tc];
+                if (tile != TileType.START && tile != TileType.GOAL) {
+                    continue;
+                }
+                out.add(new MapDot(project(tc, minC, maxC),
+                        MAP - 1 - project(tr, minR, maxR),
+                        tile == TileType.START ? MapKind.START : MapKind.GOAL));
+            }
+        }
         if (markers != null) {
             for (ExploreMarker mark : markers) {
                 if (mark == null || mark.cell() == null) {
@@ -860,6 +878,43 @@ public final class ExplorePaint {
                     MAP - 1 - project(tr, minR, maxR), MapKind.HERE));
         }
         return List.copyOf(out);
+    }
+
+    /** Automap gate — KEEP start mint, same as the well disc. */
+    public static final float MAP_START_R = 0x3e / 255f;
+    public static final float MAP_START_G = 0xe0 / 255f;
+    public static final float MAP_START_B = 0x8f / 255f;
+    /** Automap exit — same coral as the well goal. */
+    public static final float MAP_GOAL_R = 0xff / 255f;
+    public static final float MAP_GOAL_G = 0x5a / 255f;
+    public static final float MAP_GOAL_B = 0x5f / 255f;
+    /** End-pad breath — same cadence as story marks. */
+    public static final float MAP_END_BREATH_MS = MAP_MARK_BREATH_MS;
+    public static final float MAP_END_HALO = MAP_MARK_HALO;
+
+    public static float mapEndHalo(double seconds) {
+        return mapMarkHalo(seconds);
+    }
+
+    public static void mapEndTint(MapKind kind, float[] rgb) {
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        if (kind == MapKind.GOAL) {
+            set(rgb, MAP_GOAL_R, MAP_GOAL_G, MAP_GOAL_B);
+        } else {
+            set(rgb, MAP_START_R, MAP_START_G, MAP_START_B);
+        }
+    }
+
+    public static void mapEndSoftTint(MapKind kind, float[] rgb) {
+        mapEndTint(kind, rgb);
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        rgb[0] *= MAP_MARK_SOFT_WEIGHT;
+        rgb[1] *= MAP_MARK_SOFT_WEIGHT;
+        rgb[2] *= MAP_MARK_SOFT_WEIGHT;
     }
 
     /** Automap diamond — same inks as the HUD key, not leftover red on every mark. */
