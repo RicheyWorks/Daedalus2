@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Idle well floor depth.**
+  The empty-well mark floors and hairlines fall off toward the rim
+  with the same 0.22 edge as live stone, so leftover flat slate is
+  not the last word on the invitation maze. Start and goal still wash.
+
 - **Well world slab ink.**
   An occupied chunk on the well world rail wears torch wood `#94612e`,
   same as the street, so leftover khaki is not the last word on a

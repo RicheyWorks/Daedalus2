@@ -138,9 +138,9 @@ class WebUiPaintPinTest {
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js).contains("const idleFloor = mixHex(COLORS.floor, COLORS.floorWarm, 0.28)")
                     .contains("(r === 1 && c === 1) ? \"S\" : (r === 5 && c === 9) ? \"G\"")
-                    .contains("endFloorInk(idleFloor, end)")
+                    .contains("endFloorInk(mixHex(idleFloor, COLORS.floorDim, 0.22 * edge), end)")
                     .contains("const idleHi = mixHex(COLORS.floorHi, COLORS.floorWarm, 0.28)")
-                    .contains("endFloorInk(idleHi, end)");
+                    .contains("endFloorInk(mixHex(idleHi, COLORS.floorDim, 0.22 * edge), end)");
         }
     }
 

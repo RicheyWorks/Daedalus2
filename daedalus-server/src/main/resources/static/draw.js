@@ -785,11 +785,16 @@
     }
     g.globalAlpha = 0.36 + 0.10 * w0;
     const idleFloor = mixHex(COLORS.floor, COLORS.floorWarm, 0.28);
+    const idleRows = tiles.length, idleCols = tiles[0].length;
+    const idleCx = (idleCols - 1) / 2, idleCy = (idleRows - 1) / 2;
     for (let r = 0; r < tiles.length; r++) {
       for (let c = 0; c < tiles[r].length; c++) {
         if (tiles[r][c] === "#") continue;
         const end = (r === 1 && c === 1) ? "S" : (r === 5 && c === 9) ? "G" : " ";
-        g.fillStyle = endFloorInk(idleFloor, end);
+        const dx = (c - idleCx) / Math.max(1, idleCols / 2);
+        const dy = (r - idleCy) / Math.max(1, idleRows / 2);
+        const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+        g.fillStyle = endFloorInk(mixHex(idleFloor, COLORS.floorDim, 0.22 * edge), end);
         g.fillRect(geom.offX[c], geom.offY[r],
                    geom.offX[c + 1] - geom.offX[c], geom.offY[r + 1] - geom.offY[r]);
       }
@@ -799,7 +804,10 @@
       for (let c = 0; c < tiles[r].length; c++) {
         if (tiles[r][c] === "#" || r % 2 !== 1 || c % 2 !== 1 || geom.cell < 10) continue;
         const end = (r === 1 && c === 1) ? "S" : (r === 5 && c === 9) ? "G" : " ";
-        g.fillStyle = endFloorInk(idleHi, end);
+        const dx = (c - idleCx) / Math.max(1, idleCols / 2);
+        const dy = (r - idleCy) / Math.max(1, idleRows / 2);
+        const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+        g.fillStyle = endFloorInk(mixHex(idleHi, COLORS.floorDim, 0.22 * edge), end);
         g.fillRect(geom.offX[c] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
       }
     }
