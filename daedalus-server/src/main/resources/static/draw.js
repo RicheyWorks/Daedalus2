@@ -881,7 +881,10 @@
     if (goal)  endpoint(g, geom, goal,  COLORS.goal);
     if (scene.session) {
       Object.entries(scene.session.positions).forEach(([name, p], i) => {
-        walker(g, geom, p, PLAYER_COLORS[i % PLAYER_COLORS.length]);
+        const standHex = PLAYER_COLORS[i % PLAYER_COLORS.length];
+        walker(g, geom, p, p
+            ? trailTileInk(standHex, 2 * p.row + 1, 2 * p.col + 1, th, tw)
+            : standHex);
       });
     }
     if (scene.session && scene.ghost && scene.ghost.pos) {

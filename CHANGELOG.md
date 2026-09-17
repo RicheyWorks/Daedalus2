@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well session-walker depth.**
+  Lived-in stand discs fall off toward floor-dim at the board rim
+  with the same 0.22 edge as halls, so leftover even torch gold is
+  not the last word on a body. KEEP ice stays.
+
 - **Well fog-walker depth.**
   The torch-gold disc falls off toward floor-dim at the board rim
   with the same 0.22 edge as halls, so leftover even breath is not
