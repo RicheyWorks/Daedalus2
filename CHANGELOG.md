@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend fog depth.**
+  Unseen chip falls off from well-void center to the rim so leftover
+  flat void is not the last word on the key. Floor and wall stone stay.
+
 - **Well legend fog depth.**
   Unseen chip falls off from well-void center to the rim so leftover
   flat void is not the last word on the key. Floor and wall stone stay.

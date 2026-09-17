@@ -104,7 +104,8 @@ class ThemeManagerTest {
             assertThat(fxml).contains("<RadialGradient centerX=\"0.45\" centerY=\"0.40\" radius=\"1.0\"");
             assertThat(fxml).contains("color=\"#19140f\"");
             assertThat(fxml).contains("color=\"#15110d\"");
-            assertThat(fxml).contains("fill=\"#0c0908\"");
+            assertThat(fxml).contains("color=\"#16120e\"");
+            assertThat(fxml).contains("color=\"#0c0908\"");
             assertThat(fxml).contains("fill=\"#c07850\"");
             assertThat(fxml).contains("fill=\"#c8a878\"");
             assertThat(fxml).contains("fill=\"#8aaa50\"");
@@ -128,7 +129,7 @@ class ThemeManagerTest {
             assertThat(fxml).contains("fill=\"#8fb8ff\"");
             assertThat(fxml).contains("color=\"#19140f\"")
                     .doesNotContain("stroke=\"#2a2218\"");
-            assertThat(fxml).contains("fill=\"#0c0908\"")
+            assertThat(fxml).contains("color=\"#0c0908\"")
                     .contains("stroke=\"rgba(242,234,216,0.28)\"");
         }
         assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.PASSAGE_INK).isEqualTo("#484339");

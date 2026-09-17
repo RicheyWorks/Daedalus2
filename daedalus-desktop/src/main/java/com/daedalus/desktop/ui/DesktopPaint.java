@@ -277,6 +277,10 @@ public final class DesktopPaint {
     public static final String LEGEND_FLOOR_RIM = FLOOR_DIM;
     /** Legend wall chip rim — same unseen mix as live post edge. */
     public static final String LEGEND_WALL_RIM = mixHex(LEGEND_WALL, FOG_UNSEEN, WALL_EDGE_DIM);
+    /** Legend fog chip rim — same unseen as the well void edge. */
+    public static final String LEGEND_FOG = WELL_VOID_EDGE;
+    /** Legend fog chip core — same pocket as the well void center. */
+    public static final String LEGEND_FOG_CORE = WELL_VOID_CENTER;
     /** Same 1px corridor highlight as {@code draw.js} {@code floorHi}. */
     public static final String FLOOR_HI = "#765834";
     /** Post shine — same 1px torch hairline as {@code draw.js} {@code wallHi}. */

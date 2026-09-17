@@ -181,9 +181,19 @@
                 </Label>
                 <Label fx:id="legendFog" text="unseen (fog)" managed="false" visible="false">
                     <graphic>
-                        <Rectangle width="10" height="10" fill="#0c0908"
+                        <Rectangle width="10" height="10"
                                    stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"
-                                   arcWidth="3" arcHeight="3"/>
+                                   arcWidth="3" arcHeight="3">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#16120e"/>
+                                        <Stop offset="1.0" color="#0c0908"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
                     </graphic>
                 </Label>
                 <Label fx:id="legendChoke" text="chokepoint" managed="false" visible="false">
