@@ -97,6 +97,7 @@ class WebUiSmokeTest {
                 .contains("pretty; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none; cursor: default")
                 .contains("rgba(22, 18, 14, .88)")
                 .contains("rgba(22, 18, 14, .88); cursor: default")
+                .contains("rgba(22, 18, 14, .88); cursor: default; -webkit-user-drag: none")
                 .contains("#gate { position: fixed; inset: 0; z-index: 20; overflow: auto; overscroll-behavior: none;")
                 .contains("overflow: auto; overscroll-behavior: none; cursor: default")
                 .contains("padding-top: calc(48px + env(safe-area-inset-top, 0px));")
