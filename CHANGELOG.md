@@ -768,6 +768,7 @@ under the `_migration/` portfolios.
   The desktop shell wears a lamp cursor so leftover Modena I-beam ice does not sit on torch chrome.
   The well key refuses leftover drag ice so overlay names are not ghosted.
   The well pocket wears a lamp cursor so leftover OS I-beam ice does not sit on torch stone.
+  The header bar wears a lamp cursor so leftover OS I-beam ice does not sit on torch chrome.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

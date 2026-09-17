@@ -336,6 +336,7 @@ class WebUiSmokeTest {
                 .contains("animation: headerRimBreath 4.5s ease-in-out infinite; user-select: none")
                 .contains("headerRimBreath 4.5s ease-in-out infinite; user-select: none; -webkit-user-select: none")
                 .contains("-webkit-touch-callout: none; -webkit-user-drag: none")
+                .contains("-webkit-touch-callout: none; -webkit-user-drag: none; cursor: default")
                 .contains("legendFadeBreath")
                 .contains("#legend { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;")
                 .contains("color: #b09a72; pointer-events: none; text-wrap: pretty;")
