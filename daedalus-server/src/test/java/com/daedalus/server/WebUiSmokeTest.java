@@ -64,7 +64,7 @@ class WebUiSmokeTest {
                 .contains("header h1 button")
                 .contains("header .tag { color: #b09a72")
                 .contains("rgba(22, 18, 14, .88)")
-                .contains("#gate { position: fixed; inset: 0; z-index: 20; overflow: auto;")
+                .contains("#gate { position: fixed; inset: 0; z-index: 20; overflow: auto; overscroll-behavior: none;")
                 .contains("html, body { min-height: 100%; color-scheme: dark; background-color: #0c0908;")
                 .contains("overscroll-behavior: none;")
                 .contains("-webkit-tap-highlight-color: rgba(184, 133, 56, 0.25);")

@@ -671,6 +671,7 @@ under the `_migration/` portfolios.
   Spell-marked maze copy wears a gold wave so leftover UA ice does not underline the well.
   Page canvas sits on torch void so leftover UA paper does not flash around the well.
   Overscroll stays in the lamp so leftover OS ice does not rubber-band past the well.
+  Gate overscroll stays in the lamp so leftover OS ice does not rubber-band past the start well.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
