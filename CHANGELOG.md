@@ -834,6 +834,7 @@ under the `_migration/` portfolios.
   Live-log mint state lines refuse leftover drag ice so mint news is not ghosted.
   Live-log warn lines refuse leftover drag ice so coral news is not ghosted.
   ASCII rock glyphs refuse leftover drag ice so khaki walls are not ghosted.
+  ASCII start-gate glyphs refuse leftover drag ice so mint doors are not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
