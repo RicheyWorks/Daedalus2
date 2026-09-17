@@ -10,6 +10,8 @@ import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
+import com.daedalus.world.Parcel;
+import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.World;
 
 import java.util.List;
@@ -23,6 +25,8 @@ public final class ExploreWorld {
     public static final int DEFAULT_COLS = 31;
     public static final long DEFAULT_SEED = 7L;
     public static final double WALK_SPEED = 4.2;
+    /** Inspired toponym on the sample landmark — same letters as the well. */
+    public static final String SAMPLE_PLACE = "Willow Walk";
 
     private final String generatorId;
     private final long seed;
@@ -99,10 +103,11 @@ public final class ExploreWorld {
      */
     public void attachSampleBlocks() {
         World slab = World.zero();
-        slab.place(new BlockCoordinate(8, 0, 8), BlockType.STONE);
-        slab.place(new BlockCoordinate(9, 0, 8), BlockType.DIRT);
-        slab.place(new BlockCoordinate(8, 0, 9), BlockType.WOOD);
-        slab.place(new BlockCoordinate(8, 1, 8), BlockType.GLASS);
+        slab.applyStamp(new ParcelBounds(8, 0, 8, 9, 1, 9), Parcel.SYSTEM_OWNER,
+                List.of(new BlockCoordinate(8, 0, 8), new BlockCoordinate(9, 0, 8),
+                        new BlockCoordinate(8, 0, 9), new BlockCoordinate(8, 1, 8)),
+                List.of(BlockType.STONE, BlockType.DIRT, BlockType.WOOD, BlockType.GLASS));
+        slab.nameParcel(slab.parcels().get(0).id(), SAMPLE_PLACE);
         attachBlocks(slab);
         showBlocks(true);
     }

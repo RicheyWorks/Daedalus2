@@ -6,6 +6,7 @@ import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
+import com.daedalus.world.Parcel;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -616,8 +617,32 @@ public final class ExplorePaint {
         if (!"HALL".equals(end)) {
             return end;
         }
+        String street = parcelPlaceName(blocks, body);
+        if (street != null) {
+            return street;
+        }
         String cube = blockPlaceName(blocks, body);
         return cube == null ? "HALL" : cube;
+    }
+
+    /**
+     * Named parcel under the boots. Inspired toponym, not GIS.
+     */
+    public static String parcelPlaceName(WorldMesh blocks, ExploreBody body) {
+        if (blocks == null || body == null || blocks.world() == null) {
+            return null;
+        }
+        BlockCoordinate at = new BlockCoordinate(
+                (int) Math.floor(body.x()), 0, (int) Math.floor(body.z()));
+        for (Parcel parcel : blocks.world().parcels()) {
+            if (parcel == null || parcel.placeName().isEmpty()) {
+                continue;
+            }
+            if (parcel.bounds().contains(at)) {
+                return parcel.placeName();
+            }
+        }
+        return null;
     }
 
     /**
@@ -1391,18 +1416,29 @@ public final class ExplorePaint {
             case 'A' -> bits(".###.#...##...#######...##...##...#");
             case 'B' -> bits("####.#...##...#####.#...##...#####.");
             case 'C' -> bits(".###.#...##....#....#....#...#.###.");
+            case 'D' -> bits("####.#...##...##...##...##...#####.");
             case 'E' -> bits("######....#....####.#....#....#####");
+            case 'F' -> bits("######....#....####.#....#....#....");
             case 'G' -> bits(".###.#....#....#.##.#...##...#.###.");
             case 'H' -> bits("#...##...##...#######...##...##...#");
+            case 'I' -> bits("#####..#....#....#....#....#..#####");
+            case 'J' -> bits(".####...#....#....#....#.#..#..##..");
+            case 'K' -> bits("#...##..#.#.#..##...#.#..#..#.#...#");
             case 'L' -> bits("#....#....#....#....#....#....#####");
+            case 'M' -> bits("#...###.###.#.##.#.##...##...##...#");
             case 'N' -> bits("#...###..##.#.##.#.##..###...##...#");
             case 'O' -> bits(".###.#...##...##...##...##...#.###.");
+            case 'P' -> bits("####.#...##...#####.#....#....#....");
+            case 'Q' -> bits(".###.#...##...##...##.#.##..#..##.#");
             case 'R' -> bits("####.#...##...#####.#.#.##..##...#.");
             case 'S' -> bits(".####.#....#....###.....#....#####.");
             case 'T' -> bits("#####..#....#....#....#....#....#..");
             case 'U' -> bits("#...##...##...##...##...##...#.###.");
             case 'V' -> bits("#...##...##...##...##...#.#.#...#..");
             case 'W' -> bits("#...##...##...##.#.##.#.##.#.#.#.#.");
+            case 'X' -> bits("#...##...#.#.#...#...#.#.#...##...#");
+            case 'Y' -> bits("#...##...#.#.#...#....#....#....#..");
+            case 'Z' -> bits("#####....#...#...#...#...#....#####");
             case '-' -> bits("....................#####..........");
             default -> 0L;
         };

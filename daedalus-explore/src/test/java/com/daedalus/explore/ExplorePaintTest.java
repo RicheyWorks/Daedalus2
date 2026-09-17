@@ -8,6 +8,8 @@ import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
+import com.daedalus.world.Parcel;
+import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.World;
 import org.junit.jupiter.api.Test;
 
@@ -685,6 +687,44 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.glyphDot('G', 2, 0))
                 .as("GOAL can paint on the strip")
                 .isTrue();
+        assertThat(ExplorePaint.glyphDot('D', 0, 0))
+                .as("WOOD and DIRT can paint on the strip")
+                .isTrue();
+        assertThat(ExplorePaint.glyphDot('I', 2, 0)).isTrue();
+        assertThat(ExplorePaint.glyphDot('M', 0, 0)).isTrue();
+        assertThat(ExplorePaint.glyphDot('P', 0, 0)).isTrue();
+        assertThat(ExplorePaint.glyphDot('K', 0, 0)).isTrue();
+        assertThat(ExplorePaint.glyphDot('W', 0, 0)).isTrue();
+    }
+
+    @Test
+    void statusNamesTheParcelYouStandIn() {
+        ExploreFog fog = new ExploreFog();
+        fog.stand(new Point(0, 0));
+        MazeGrid grid = new MazeGrid(1, 2);
+        grid.carve(grid.cell(0, 0), Direction.EAST);
+        ExploreMesh mesh = ExploreMesh.of(grid);
+        World volume = World.zero();
+        volume.applyStamp(new ParcelBounds(8, 0, 8, 9, 1, 9), Parcel.SYSTEM_OWNER,
+                List.of(new BlockCoordinate(8, 0, 8)), List.of(BlockType.WOOD));
+        volume.nameParcel(volume.parcels().get(0).id(), "Willow Walk");
+        WorldMesh cubes = WorldMesh.of(volume);
+        ExploreBody onStreet = new ExploreBody(8.4, 8.4, 0, 0);
+        assertThat(ExplorePaint.parcelPlaceName(cubes, onStreet)).isEqualTo("Willow Walk");
+        assertThat(ExplorePaint.parcelPlaceName(null, onStreet)).isNull();
+        assertThat(ExplorePaint.status(fog, onStreet, List.of(), mesh, cubes).place())
+                .as("a named street leads leftover HALL")
+                .isEqualTo("Willow Walk");
+        ExploreBody atStart = ExploreBody.atCell(new Point(0, 0));
+        assertThat(ExplorePaint.status(fog, atStart, List.of(), mesh, cubes).place())
+                .as("stood-on start still leads")
+                .isEqualTo("START");
+        List<ExploreMarker> marks = List.of(
+                new ExploreMarker("door", new Point(0, 1), 0, "ENTRANCE"));
+        fog.stand(new Point(0, 1));
+        assertThat(ExplorePaint.status(fog, onStreet, marks, mesh, cubes).place())
+                .as("a visible story mark still leads")
+                .isEqualTo("ENTRANCE");
     }
 
     @Test

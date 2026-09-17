@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore street HUD name.**
+  Standing in a named parcel prints the inspired toponym (`Willow Walk`)
+  on the status strip. Caption glyphs now spell the whole alphabet so
+  `WOOD`, `DIRT`, and street names are letters, not leftover holes.
+  Story marks and start/goal still lead. No new key.
+
 - **Explore cube floor pad.**
   Occupied cubes sit on a torch-wood disc that spills past the 1×1
   boot onto the corridor. Stacked lids share the ground pad. Not

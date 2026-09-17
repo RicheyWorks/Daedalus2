@@ -135,6 +135,9 @@ class ExploreWorldTest {
         assertThat(world.blocks().triangles()).isNotEmpty();
         assertThat(world.blocks().triangles()).extracting(WorldMesh.Triangle::type)
                 .contains(BlockType.STONE, BlockType.DIRT, BlockType.WOOD, BlockType.GLASS);
+        assertThat(world.blocks().world().parcels().get(0).placeName())
+                .as("sample landmark wears the well street name")
+                .isEqualTo(ExploreWorld.SAMPLE_PLACE);
     }
 
     @Test
