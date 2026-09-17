@@ -76,6 +76,7 @@ class ThemeManagerTest {
             assertThat(css).contains("-fx-text-fill: #f2ead8");
             assertThat(css).contains(".status-bar");
             assertThat(css).contains(".status-bar .label");
+            assertThat(css).contains("-fx-font-size: 12px;\n    -fx-cursor: default;");
             assertThat(css).contains("-fx-border-width: 1 0 0 0;\n    -fx-cursor: default;");
             assertThat(css).contains("-fx-background-color: #16120e");
             assertThat(css).contains("rgba(16, 11, 8, 0.55)");

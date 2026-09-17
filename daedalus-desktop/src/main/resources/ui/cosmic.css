@@ -166,4 +166,5 @@
     -fx-text-fill: #b09a72;
     -fx-font-family: "Cascadia Code", "Consolas", "Menlo", monospace;
     -fx-font-size: 12px;
+    -fx-cursor: default;
 }
