@@ -510,6 +510,8 @@ under the `_migration/` portfolios.
   board is lamp, not leftover cool navy on torch stone.
   Web rail titles wear the same warm khaki as the well key so desk names sit in
   the lamp, not leftover cool slate on torch stone.
+  Web rail hints wear the same warm khaki so lab and campaign notes sit in the
+  lamp, not leftover cool slate on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
