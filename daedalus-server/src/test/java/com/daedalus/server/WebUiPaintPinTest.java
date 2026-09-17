@@ -58,4 +58,20 @@ class WebUiPaintPinTest {
                     .contains("#compareBox span { -webkit-user-drag: none");
         }
     }
+
+    @Test
+    void faviconWearsTheIdleMazeMark() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html).contains(
+                    "rel=\"icon\" type=\"image/svg+xml\"")
+                    .contains("fill='%230c0908'")
+                    .contains("stroke='%23b88538'")
+                    .contains("x='5' y='9' width='22' height='2' fill='%232a2218'")
+                    .contains("fill='%23484339'")
+                    .contains("x='7' y='11' width='2' height='2' fill='%233ee08f'")
+                    .contains("x='23' y='19' width='2' height='2' fill='%23ff5a5f'");
+        }
+    }
 }

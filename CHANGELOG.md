@@ -93,6 +93,7 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- Well tab icon wears the idle maze mark so the lamp is a miniature dungeon, not an empty gold box.
 - Lab khaki notes refuse leftover drag ice so growth captions are not ghosted.
 - Tournament khaki notes refuse leftover drag ice so ranking captions are not ghosted.
 - Campaign khaki notes refuse leftover drag ice so stage captions are not ghosted.
