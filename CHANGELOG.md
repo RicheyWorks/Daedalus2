@@ -504,6 +504,8 @@ under the `_migration/` portfolios.
   the map matches the key, not leftover red on every diamond.
   Web maze stats and status wear cream and khaki so maze news sits in the lamp,
   not leftover cool slate on torch stone.
+  Web generator and solver notes wear khaki and cream so those hints sit in the
+  lamp, not leftover cool slate on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
