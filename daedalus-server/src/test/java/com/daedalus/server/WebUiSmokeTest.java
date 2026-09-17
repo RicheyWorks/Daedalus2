@@ -82,6 +82,8 @@ class WebUiSmokeTest {
                 .contains("text-transform: lowercase; text-wrap: pretty; user-select: none; -webkit-user-select: none")
                 .contains("rgba(22, 18, 14, .88)")
                 .contains("#gate { position: fixed; inset: 0; z-index: 20; overflow: auto; overscroll-behavior: none;")
+                .contains("padding-top: calc(48px + env(safe-area-inset-top, 0px));")
+                .contains("padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));")
                 .contains("html, body { min-height: 100%; color-scheme: dark; background-color: #0c0908;")
                 .contains("overscroll-behavior: none;")
                 .contains("-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;")

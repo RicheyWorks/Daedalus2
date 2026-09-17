@@ -717,6 +717,7 @@ under the `_migration/` portfolios.
   Installed Android chrome sits fullscreen in the lamp so leftover UA ice does not rim the well.
   The well paints under the notch so leftover OS ice does not letterbox torch stone.
   Header brand sits below the notch so leftover OS ice does not cover cream on the wordmark.
+  Start-gate brand sits below the notch so leftover OS ice does not cover cream on the wordmark.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
