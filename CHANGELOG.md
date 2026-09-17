@@ -588,6 +588,8 @@ under the `_migration/` portfolios.
   not leftover still frames on torch stone.
   Live-frame well wears a breathing gold lip so those ticks sit in the lamp,
   not a leftover unrimmed pit on torch stone.
+  Leaderboard well wears a breathing gold lip so those seats sit in the lamp,
+  not a leftover unrimmed pit on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
