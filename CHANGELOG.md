@@ -522,6 +522,8 @@ under the `_migration/` portfolios.
   above the board sit in the lamp, not leftover cool slate on torch stone.
   Walk-key chips wear khaki on torch void so those glyphs sit in the lamp, not
   leftover cool navy on torch stone.
+  Live-frame copy wears warm cream so maze news sits in the lamp, not leftover
+  cool white on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

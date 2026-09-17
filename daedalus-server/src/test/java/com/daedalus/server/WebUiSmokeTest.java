@@ -171,6 +171,8 @@ class WebUiSmokeTest {
                 .contains(".panel h2 { margin: 0 0 8px; font-size: 11px; text-transform: uppercase;")
                 .contains("letter-spacing: .14em; color: #b09a72; font-weight: 600; }")
                 .contains(".hint { font-size: 11px; color: #b09a72; margin-top: 10px; }")
+                .contains("#log { height: 240px; overflow-y: auto; font: 12px/1.6 ui-monospace, monospace;")
+                .contains("color: #f2ead8;")
                 .contains("#log .t { color: #b09a72; margin-right: 6px; }")
                 .contains("#log div { border-bottom: 1px solid rgba(184, 133, 56, 0.28); padding: 2px 0; }")
                 .contains("#lb .rank { display: inline-block; width: 18px; color: #b09a72; }")
