@@ -281,12 +281,19 @@ public final class ExplorePaint {
         }
     }
 
+    public static final int BRICK_TEX_HI_R = 196;
+    public static final int BRICK_TEX_HI_G = 118;
+    public static final int BRICK_TEX_HI_B = 64;
+
     public static byte[] brickRgba() {
         return raster((x, y) -> {
             boolean mortar = (y % 8 == 0) || (((x + ((y / 8) & 1) * 16) % 16) == 0);
             int n = hash(x, y) & 15;
             if (mortar) {
                 return rgbBytes(46, 34, 26);
+            }
+            if ((y & 7) == 1) {
+                return rgbBytes(BRICK_TEX_HI_R + n / 2, BRICK_TEX_HI_G + n / 3, BRICK_TEX_HI_B);
             }
             return rgbBytes(170 + n, 98 + (n / 2), 54);
         });
