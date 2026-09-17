@@ -66,4 +66,33 @@ class LivingSlabServiceTest {
                 new MazeMutatedEvent(this, mazeId, 1, 1, 0, false, next));
         assertThat(restarted.inspectBlock(WorldId.ZERO.value(), 5, 3, 10)).isEqualTo(BlockType.AIR);
     }
+
+    @Test
+    void aSecondPlotKeepsItsOwnLivingBind() {
+        WorldService worlds = new WorldService(tmp.resolve("live-street.daew"));
+        LivingSlabService listener = new LivingSlabService(worlds);
+        MazeGrid maze = new MazeGrid(2, 2);
+        maze.carve(new Point(0, 0), new Point(0, 1));
+        UUID firstId = UUID.fromString("00000000-0000-4000-8000-000000000007");
+        UUID secondId = UUID.fromString("00000000-0000-4000-8000-000000000008");
+        BlockCoordinate origin = new BlockCoordinate(0, 0, 0);
+        assertThat(worlds.stamp(WorldId.ZERO.value(), origin, maze, firstId).ok()).isTrue();
+        assertThat(worlds.stamp(WorldId.ZERO.value(), origin, maze, secondId, true).ok()).isTrue();
+        assertThat(worlds.inspect("world-zero").parcels()).hasSize(2);
+        BlockCoordinate firstPost = new BlockCoordinate(1, 1, 2);
+        BlockCoordinate secondPost = new BlockCoordinate(7, 1, 2);
+        assertThat(worlds.inspectBlock(WorldId.ZERO.value(), firstPost.x(), firstPost.y(),
+                firstPost.z())).isEqualTo(BlockType.STONE);
+        assertThat(worlds.inspectBlock(WorldId.ZERO.value(), secondPost.x(), secondPost.y(),
+                secondPost.z())).isEqualTo(BlockType.STONE);
+
+        MazeGrid next = maze.copy();
+        next.carve(new Point(0, 0), new Point(1, 0));
+        listener.onMazeMutated(new MazeMutatedEvent(this, secondId, 1, 1, 0, false, next));
+
+        assertThat(worlds.inspectBlock(WorldId.ZERO.value(), firstPost.x(), firstPost.y(),
+                firstPost.z())).isEqualTo(BlockType.STONE);
+        assertThat(worlds.inspectBlock(WorldId.ZERO.value(), secondPost.x(), secondPost.y(),
+                secondPost.z())).isEqualTo(BlockType.AIR);
+    }
 }

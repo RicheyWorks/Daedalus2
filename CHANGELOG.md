@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World living street.**
+  A living tick on the second stamped maze rewrites only that
+  slab. Plot one stays put. rebindSlabs already walks every
+  mazeRef.
+
 - **World street of lots.**
   Well lot row and desktop inspect list every slab origin,
   oldest first. Newest lot stays the last x,z.
