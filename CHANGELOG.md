@@ -414,6 +414,8 @@ under the `_migration/` portfolios.
   the contest is keyed, not leftover unnamed on torch stone.
   Well PNG export wears the same khaki as Show ASCII so the download chip sits
   in the lamp, not leftover gold on torch stone.
+  Start-gate command dumps wear the same gold scroll lip as the ASCII dump so
+  those lines are not leftover cool navy on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

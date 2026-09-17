@@ -60,6 +60,7 @@ class WebUiSmokeTest {
                 .contains("#gate .lede { color: #b09a72")
                 .contains("#gate article p { margin: 0; color: #b09a72")
                 .contains("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #d4c4a8;")
+                .contains("font: 11px/1.45 ui-monospace, monospace; overflow: auto")
                 .contains("gateBreath").contains("gateVeil")
                 .contains("rgba(245, 193, 74, .05)")
                 .contains("rgba(184, 133, 56, 0.28)")
