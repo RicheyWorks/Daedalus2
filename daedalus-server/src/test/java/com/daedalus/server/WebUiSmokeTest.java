@@ -156,6 +156,7 @@ class WebUiSmokeTest {
                 .contains("image-rendering: crisp-edges; image-rendering: pixelated;")
                 .contains("user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;")
                 .contains("-webkit-user-drag: none;")
+                .contains("-webkit-user-drag: none; cursor: default;")
                 .contains("id=\"pngExport\" class=\"hint\" href=\"#\" download=\"maze.png\"")
                 .contains(".exports a:focus-visible { outline: 2px solid rgba(184, 133, 56, 0.85); outline-offset: 1px; }")
                 .contains("style=\"display:none\">download as PNG")
