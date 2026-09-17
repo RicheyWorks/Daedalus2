@@ -185,6 +185,8 @@ class WebUiSmokeTest {
                 .contains("0.4 * (0.88 + 0.24")
                 .contains("g.globalAlpha = 0.20")
                 .contains("CUTS_BREATH_MS")
+                .contains("g.fillStyle = \"#c8a878\"")
+                .contains("g.strokeStyle = \"#c8a878\"")
                 .contains("0.18 + 0.05")
                 .contains("PLAYER_BREATH_MS")
                 .contains("function walker")

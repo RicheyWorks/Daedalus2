@@ -552,7 +552,7 @@
       const cutsWave = 0.5 - 0.5 * Math.cos(cutsT * Math.PI * 2);
       (scene.analysis.deadEnds || []).forEach(p => {
         const [x, y] = cellCenter(geom, p);
-        g.fillStyle = "#9ecbff";
+        g.fillStyle = "#c8a878";
         g.globalAlpha = 0.16 + 0.12 * cutsWave;
         g.beginPath();
         g.arc(x, y, geom.cell * (0.28 + 0.04 * cutsWave), 0, 2 * Math.PI);
@@ -561,7 +561,7 @@
         g.beginPath();
         g.arc(x, y, geom.cell * 0.14, 0, 2 * Math.PI);
         g.fill();
-        g.strokeStyle = "#9ecbff";
+        g.strokeStyle = "#c8a878";
         g.globalAlpha = 0.65 + 0.15 * cutsWave;
         g.lineWidth = Math.max(1, geom.cell * 0.06);
         g.beginPath();

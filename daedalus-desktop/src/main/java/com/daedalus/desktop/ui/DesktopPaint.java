@@ -499,7 +499,7 @@ public final class DesktopPaint {
     /** Min-cut passage — same purple as {@code draw.js} chokepoints. */
     public static final String CHOKE = "#c084fc";
     /** Dead-end speck — same ice as {@code draw.js}. */
-    public static final String DEAD_END = "#9ecbff";
+    public static final String DEAD_END = "#c8a878";
     public static final double DEAD_END_RADIUS = 0.14;
     public static final double DEAD_END_HALO = 0.28;
     public static final double DEAD_END_HALO_ALPHA = 0.22;

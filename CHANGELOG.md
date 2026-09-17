@@ -332,6 +332,8 @@ under the `_migration/` portfolios.
   well are not leftover cool chrome on torch stone.
   Distance heat on web and desktop is a torch-amber ramp so the field sits in
   the lamp, not leftover ice-blue wash on torch stone.
+  Dead-end marks on web and desktop wear warm khaki so cul-de-sacs sit in the
+  lamp, not leftover ice-blue discs on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

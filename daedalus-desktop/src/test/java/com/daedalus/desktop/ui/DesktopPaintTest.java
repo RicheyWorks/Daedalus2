@@ -243,7 +243,9 @@ class DesktopPaintTest {
         assertThat(ring).isNotNull();
         assertThat(halo.radius()).isGreaterThan(ring.radius());
         assertThat(DesktopPaint.CHOKE_CORE).isEqualTo(0.55);
-        assertThat(DesktopPaint.DEAD_END).isEqualTo("#9ecbff");
+        assertThat(DesktopPaint.DEAD_END).isEqualTo("#c8a878");
+        assertThat(Integer.parseInt(DesktopPaint.DEAD_END.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.DEAD_END.substring(5, 7), 16));
         DesktopPaint.Marker speck = DesktopPaint.deadEndMarker(layout, new Point(0, 0));
         assertThat(speck.size())
                 .as("web dead-end core is 0.14·cell")
