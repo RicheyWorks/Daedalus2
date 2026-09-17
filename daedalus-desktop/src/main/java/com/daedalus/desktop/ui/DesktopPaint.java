@@ -241,7 +241,7 @@ public final class DesktopPaint {
     public static final double FLOOR_EDGE_DIM = 0.22;
     /** Clear-board wall rim toward unseen void — same depth idea as floors. */
     public static final double WALL_EDGE_DIM = 0.28;
-    public static final String FOG_FLOOR = "#3d4a58";
+    public static final String FOG_FLOOR = "#40403c";
     /** Torch-warm stone underfoot — same mix as {@code draw.js} floorWarm. */
     public static final String FOG_FLOOR_WARM = "#5c4a32";
     /** Idle lattice floors — same 0.28 warm mix as fog underfoot. */

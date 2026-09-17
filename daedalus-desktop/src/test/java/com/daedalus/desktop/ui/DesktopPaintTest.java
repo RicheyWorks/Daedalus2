@@ -489,7 +489,12 @@ class DesktopPaintTest {
                 DesktopPaint.FOG_FLOOR, DesktopPaint.FOG_FLOOR_WARM, 0.28));
         assertThat(DesktopPaint.EMPTY_MARK_FLOOR).isNotEqualTo(DesktopPaint.FOG_FLOOR);
         assertThat(DesktopPaint.LEGEND_FLOOR).isEqualTo(DesktopPaint.EMPTY_MARK_FLOOR);
-        assertThat(DesktopPaint.LEGEND_FLOOR).isEqualTo("#464a4d");
+        assertThat(DesktopPaint.FOG_FLOOR).isEqualTo("#40403c");
+        assertThat(Integer.parseInt(DesktopPaint.FOG_FLOOR.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.FOG_FLOOR.substring(5, 7), 16));
+        assertThat(DesktopPaint.LEGEND_FLOOR).isEqualTo("#484339");
+        assertThat(Integer.parseInt(DesktopPaint.LEGEND_FLOOR.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.LEGEND_FLOOR.substring(5, 7), 16));
         assertThat(DesktopPaint.LEGEND_WALL).isEqualTo(DesktopPaint.mixHex(
                 DesktopPaint.FOG_WALL, DesktopPaint.FOG_WALL_WARM, 0.28));
         assertThat(DesktopPaint.LEGEND_WALL).isEqualTo("#19140f");

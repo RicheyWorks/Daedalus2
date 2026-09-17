@@ -312,6 +312,8 @@ under the `_migration/` portfolios.
   tiles sit in the lamp, not a cool blue pit beside torch stone.
   Leftover wall ink warms toward torch-brown on web and desktop so distant posts
   and legend chips sit in the lamp, not cool blue stone beside the well.
+  Well floors warm past leftover slate on web and desktop so corridors sit in
+  the lamp, not cool gray stone beside torch posts.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

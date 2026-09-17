@@ -70,12 +70,12 @@ class ThemeManagerTest {
             String fxml = new String(in.readAllBytes());
             assertThat(fxml).contains("stroke=\"rgba(232,238,244,0.28)\"");
             assertThat(fxml).contains("legendStart");
-            assertThat(fxml).contains("fill=\"#464a4d\"");
+            assertThat(fxml).contains("fill=\"#484339\"");
             assertThat(fxml).contains("fill=\"#19140f\"");
             assertThat(fxml).contains("fill=\"#0c0908\"");
             assertThat(fxml).contains("stroke=\"#2a2218\"");
         }
-        assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.PASSAGE_INK).isEqualTo("#464a4d");
+        assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.PASSAGE_INK).isEqualTo("#484339");
         assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.WALL_INK).isEqualTo("#19140f");
     }
 

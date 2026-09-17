@@ -113,7 +113,7 @@
                   managed="false" mouseTransparent="true" visible="false">
                 <Label text="floor">
                     <graphic>
-                        <Rectangle width="10" height="10" fill="#464a4d" stroke="rgba(255,255,255,0.06)"
+                        <Rectangle width="10" height="10" fill="#484339" stroke="rgba(255,255,255,0.06)"
                                    strokeWidth="1" arcWidth="3" arcHeight="3"/>
                     </graphic>
                 </Label>

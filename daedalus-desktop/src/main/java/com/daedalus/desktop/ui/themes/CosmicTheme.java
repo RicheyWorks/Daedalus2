@@ -25,7 +25,7 @@ public class CosmicTheme implements Theme {
     /** Same 0.28 torch mix as the live well / legend wall swatch. */
     public static final String WALL_INK = "#19140f";
     /** Same 0.28 torch mix as the live well / legend floor swatch. */
-    public static final String PASSAGE_INK = "#464a4d";
+    public static final String PASSAGE_INK = "#484339";
 
     @Override public Color background()       { return Color.web("#07090c"); }
     @Override public Color wall()             { return Color.web(WALL_INK); }
