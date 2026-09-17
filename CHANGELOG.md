@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World One W1.2 living slab.**
+  `LivingSlab` is a maze-sourced subscriber: braid / sealer / carve stay on
+  the `MazeGrid`, then `sync()` re-projects only cubes whose desired type
+  changed. Inspect and a quiet second sync do not bump world revision.
+
 - **World One W1.1 stamp + one parcel.**
   `StampOps` projects a `MazeGrid` `toTileGrid()` into `world-zero` as
   `STONE` (walkable floor at `floorY`, walls through `floorY + wallHeight`).
