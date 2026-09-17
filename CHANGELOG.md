@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore pillar crown.**
+  Story posts split a torch lid band at the same fraction as corridor
+  walls, so a mark meets the ceiling and is not leftover even wood up
+  to the crown.
+
 - **Explore cube crown.**
   Occupied cube side faces split a torch lid band at the same
   fraction as corridor posts, so a slab meets the ceiling and is not

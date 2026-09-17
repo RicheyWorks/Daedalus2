@@ -373,7 +373,7 @@ public final class ExploreHost {
             ExplorePaint.placePadTint(rgb, pad, seconds);
             placePad(wx, wz, pad[0], pad[1], pad[2]);
             for (ExplorePaint.PillarTri tri : ExplorePaint.pillarMesh(wx, wz)) {
-                ExplorePaint.pillarTint(rgb, tri.boot(), pad);
+                ExplorePaint.pillarTint(rgb, tri.boot(), tri.crown(), pad);
                 glColor3f(pad[0], pad[1], pad[2]);
                 glVertex3d(tri.x1(), tri.y1(), tri.z1());
                 glVertex3d(tri.x2(), tri.y2(), tri.z2());

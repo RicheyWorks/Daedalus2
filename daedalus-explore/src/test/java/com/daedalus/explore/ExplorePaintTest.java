@@ -241,13 +241,19 @@ class ExplorePaintTest {
         List<ExplorePaint.PillarTri> mesh = ExplorePaint.pillarMesh(0, 0);
         assertThat(mesh).isNotEmpty();
         assertThat(mesh.stream().anyMatch(ExplorePaint.PillarTri::boot)).isTrue();
-        assertThat(mesh.stream().anyMatch(t -> !t.boot())).isTrue();
+        assertThat(mesh.stream().anyMatch(ExplorePaint.PillarTri::crown)).isTrue();
+        assertThat(mesh.stream().anyMatch(t -> !t.boot() && !t.crown())).isTrue();
         assertThat(ExplorePaint.PILLAR_BOOT_FRAC).isEqualTo((float) ExplorePaint.CONTACT_BOOT_FRAC);
+        assertThat(ExplorePaint.PILLAR_CROWN_FRAC).isEqualTo(ExplorePaint.PILLAR_BOOT_FRAC);
         float[] boot = new float[3];
         float[] shaft = new float[3];
+        float[] crown = new float[3];
         ExplorePaint.pillarTint(rgb, true, boot);
         ExplorePaint.pillarTint(rgb, false, shaft);
+        ExplorePaint.pillarTint(rgb, false, true, crown);
         assertThat(boot[0]).isLessThan(shaft[0]);
+        assertThat(crown[0]).as("pillar crown is darker lid contact, not leftover even wood")
+                .isLessThan(shaft[0]);
         ExplorePaint.pillarTint(null, true, boot);
         ExplorePaint.pillarTint(rgb, false, null);
     }
