@@ -57,7 +57,7 @@ No blockchain. No microservices. No seventh reactor module until a boundary is f
 | Parcel permissions | **DEFER** | Allow/deny lists on the parcel, still no wallet. After one stamped parcel works. |
 | Desktop world inspect | **DEFER** | After REST/STOMP proof. Maze generate/solve stay. |
 | Plugin objects (trap, portal, NPC) | **DEFER** | SPI already advertises ids. New ops + drive rows come one object at a time. Door is the template. |
-| Agent builders | **DEFER** | `AutomationSession` / `WorldOps` are the API. A builder UI is a client, not a new capability language. |
+| Agent builders | **SHIPPED — first client** | `WorldBuilder` recipes call `WorldOps` / `AutomationSession`. No parallel verb set. Well fold later. |
 | Browser WebGL voxel client | **NOT NOW** | Well panel is 2D/REST first. WebGL is a fourth client. |
 | Inventories, shops | **NOT NOW** | Plugin-shaped later. No economy types in core. |
 | Large procedural terrain | **NOT NOW** | World Zero scale stays tiny until stamp + observers are honest. |
@@ -296,7 +296,9 @@ Phase 0 already ordered the post-7 work. This audit keeps it:
 | W1.4 | Well panel | Listen + inspect; `/` maze well unchanged | **shipped** — `#world` rail + `world.js` |
 | W1.5 | Explore voxel view | Second mesh; corridor path still smokes | **shipped** — `WorldMesh` (host toggle later) |
 
-Permissions and desktop inspect shipped after W1.5. Trap, portal, and NPC are shipped. Next: agents, WebGL, terrain — each as its own audit.
+Permissions and desktop inspect shipped after W1.5. Trap, portal, NPC, and
+`WorldBuilder` (agent client on `WorldOps`) are shipped. Next: well agent
+fold, then WebGL / terrain (NOT NOW).
 
 ---
 
@@ -309,7 +311,7 @@ Permissions and desktop inspect shipped after W1.5. Trap, portal, and NPC are sh
 - [x] Second observer is a proof of existing STOMP, not a new bus
 - [x] Well panel does not replace `/`
 - [x] Explore voxel view does not replace extrusion
-- [x] Permissions / plugins / agents / WebGL / terrain slotted, not built
+- [x] Permissions / plugins / agents / WebGL / terrain slotted; agent client shipped
 - [x] First code slice named in §8
 - [ ] World One **code** — not this audit
 

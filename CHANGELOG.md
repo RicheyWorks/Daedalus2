@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World agent builder.**
+  `WorldBuilder` is a client on `WorldOps` / `AutomationSession`.
+  Recipes place, inspect, and arm with the same capability ids
+  humans drive. Invented `agent.*` verbs are rejected. No wallet
+  types. UNACCOUNTED stays zero.
+
 - **Explore corridor lid depth.**
   Vault slate falls off toward floor-dim at the board rim with the
   same 0.22 edge as halls, so leftover even breath is not the last
