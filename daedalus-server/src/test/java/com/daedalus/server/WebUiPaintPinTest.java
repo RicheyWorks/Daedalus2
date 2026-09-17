@@ -221,7 +221,8 @@ class WebUiPaintPinTest {
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js)
                     .contains("mixHex(color, COLORS.floorDim, 0.22 * edge)")
-                    .contains("g.fillStyle = fieldInk(s.color, r, c, th, tw)");
+                    .contains("g.fillStyle = fieldInk(s.color, r, c, th, tw)")
+                    .contains("(tr, tc) => fieldOpenInk(tr, tc, th, tw, openColor)");
         }
     }
 

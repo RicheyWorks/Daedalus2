@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well field opening depth.**
+  Distance-wash corridors fall off toward floor-dim at the board
+  rim with the same 0.22 edge as halls, so leftover even grout is
+  not the last word between topography tiles. Start mint and goal
+  coral stay.
+
 - **Desktop field cell depth.**
   Distance-wash cells fall off toward floor-dim at the board rim
   with the same 0.22 edge as halls, so leftover even ramp is not

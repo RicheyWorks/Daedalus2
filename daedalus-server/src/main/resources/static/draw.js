@@ -396,6 +396,13 @@
     return mixHex(color, COLORS.floorDim, 0.22 * edge);
   }
 
+  function fieldOpenInk(tr, tc, th, tw, color) {
+    const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
+    const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
+    const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+    return mixHex(color, COLORS.floorDim, 0.22 * edge);
+  }
+
   function paint(canvas, scene) {
     const tiles = scene.tiles;
     const th = tiles.length, tw = tiles[0].length;
@@ -559,9 +566,10 @@
           paintWashCell(g, geom, r, c);
         }
       }
-      g.fillStyle = ramp[Math.min(ramp.length - 1, Math.round(0.55 * (ramp.length - 1)))];
+      const openColor = ramp[Math.min(ramp.length - 1, Math.round(0.55 * (ramp.length - 1)))];
       g.globalAlpha = 0.42 * (0.85 + 0.30 * fieldWave);
-      paintWashOpenings(g, geom, tiles, (r, c) => scene.field.distances[r][c] >= 0);
+      paintWashOpenings(g, geom, tiles, (r, c) => scene.field.distances[r][c] >= 0,
+          (tr, tc) => fieldOpenInk(tr, tc, th, tw, openColor));
       g.globalAlpha = 1;
     }
     if (scene.lens) {
