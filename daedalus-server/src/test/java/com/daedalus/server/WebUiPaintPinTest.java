@@ -439,7 +439,9 @@ class WebUiPaintPinTest {
                     .contains("\"block.place\"")
                     .contains("\"trap.arm\"")
                     .contains("\"parcel.lease\"")
+                    .contains("\"stamp.apply\"")
                     .contains("/world/\" + WORLD + \"/parcels/lease")
+                    .contains("/world/\" + WORLD + \"/stamp")
                     .contains("/world/\" + WORLD + \"/trace")
                     .contains("throw new Error(\"Unknown capability \" + capability)")
                     .contains("builder — WorldOps only");

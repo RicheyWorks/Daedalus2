@@ -2,6 +2,7 @@
 
 package com.daedalus.world.auto;
 
+import com.daedalus.engine.MazeGrid;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.Chunk;
@@ -14,6 +15,9 @@ import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
+import com.daedalus.world.stamp.StampOps;
+import com.daedalus.world.stamp.StampRequest;
+import com.daedalus.world.stamp.StampResult;
 import com.daedalus.world.Trap;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.World;
@@ -53,6 +57,7 @@ public final class WorldOps {
             case "npc.talk" -> world.talkNpc();
             case "npc.hush" -> world.hushNpc();
             case "parcel.lease" -> leaseParcel(world);
+            case "stamp.apply" -> stampApply(world, at);
             default -> throw new IllegalArgumentException("Unknown capability " + capability);
         };
     }
@@ -157,5 +162,15 @@ public final class WorldOps {
 
     public static ParcelLeaseResult asLeaseResult(Object value) {
         return (ParcelLeaseResult) value;
+    }
+
+    private static StampResult stampApply(World world, BlockCoordinate at) {
+        BlockCoordinate origin = at == null ? new BlockCoordinate(0, 0, 0) : at;
+        return StampOps.apply(world, new StampRequest(world.id(), origin,
+                new MazeGrid(1, 1), origin.y(), 1));
+    }
+
+    public static StampResult asStampResult(Object value) {
+        return (StampResult) value;
     }
 }

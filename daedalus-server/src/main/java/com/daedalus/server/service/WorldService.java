@@ -23,6 +23,7 @@ import com.daedalus.world.auto.DriveTrace;
 import com.daedalus.world.auto.Observation;
 import com.daedalus.world.auto.WorldAddress;
 import com.daedalus.world.auto.WorldOps;
+import com.daedalus.world.stamp.StampResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -210,6 +211,17 @@ public class WorldService {
                     WorldOps.drive(live, "parcel.lease", new BlockCoordinate(0, 0, 0), null));
             persist();
             log.append("parcel.lease", result, live.revision().value());
+            return result;
+        }
+    }
+
+    public StampResult stamp(String id, BlockCoordinate at) {
+        World live = require(id);
+        synchronized (lock) {
+            StampResult result = WorldOps.asStampResult(
+                    WorldOps.drive(live, "stamp.apply", at, null));
+            persist();
+            log.append("stamp.apply", result, live.revision().value());
             return result;
         }
     }

@@ -2,6 +2,8 @@
 
 package com.daedalus.world.auto;
 
+import com.daedalus.world.stamp.StampResult;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,7 +27,9 @@ public final class DriveTrace {
     private final List<Step> steps = new ArrayList<>();
 
     public void append(String capability, Object result, long revisionAfter) {
-        String rendered = result == null ? "null" : result.toString();
+        String rendered = result == null ? "null"
+                : result instanceof StampResult stamp ? stamp.outcome()
+                : result.toString();
         steps.add(new Step(capability, rendered, revisionAfter));
     }
 

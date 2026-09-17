@@ -13,6 +13,8 @@ import com.daedalus.api.dto.ParcelLeaseResponse;
 import com.daedalus.api.dto.PlaceBlockRequest;
 import com.daedalus.api.dto.PortalInspectResponse;
 import com.daedalus.api.dto.PortalMutationResponse;
+import com.daedalus.api.dto.StampMutationResponse;
+import com.daedalus.api.dto.StampWorldRequest;
 import com.daedalus.api.dto.TrapInspectResponse;
 import com.daedalus.api.dto.TrapMutationResponse;
 import com.daedalus.api.dto.WorldCapabilitiesResponse;
@@ -40,6 +42,7 @@ import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
+import com.daedalus.world.stamp.StampResult;
 import com.daedalus.world.Trap;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.World;
@@ -110,6 +113,18 @@ public class WorldController {
         String leaseId = world.parcels().isEmpty() ? "" : world.parcels().get(0).leaseId();
         return ResponseEntity.ok(new ParcelLeaseResponse(
                 result.name(), leaseId, world.revision().value()));
+    }
+
+    @PostMapping("/world/{id}/stamp")
+    @Operation(summary = "Stamp a 1×1 maze slab. PARCEL_OVERLAP is a result, not a merge.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<StampMutationResponse> stamp(
+            @PathVariable String id, @Valid @RequestBody StampWorldRequest body) {
+        mounted(id);
+        StampResult result = worlds.stamp(id, new BlockCoordinate(body.x(), body.y(), body.z()));
+        String parcelId = result.parcelId() == null ? "" : result.parcelId().value();
+        return ResponseEntity.ok(new StampMutationResponse(
+                result.ok(), result.outcome(), parcelId, result.revision().value()));
     }
 
     @GetMapping("/world/{id}/capabilities")

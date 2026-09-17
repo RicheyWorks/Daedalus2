@@ -59,7 +59,7 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.capabilities", org.hamcrest.Matchers.hasItems(
                         "world.inspect", "block.place", "door.open", "door.close",
                         "trap.arm", "trap.disarm", "portal.open", "portal.seal",
-                        "npc.talk", "npc.hush", "parcel.lease")));
+                        "npc.talk", "npc.hush", "parcel.lease", "stamp.apply")));
 
         mvc.perform(get("/api/v1/world/world-zero/observe")
                         .param("x", "1").param("y", "2").param("z", "3"))
@@ -185,6 +185,26 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("NO_PARCEL")))
                 .andExpect(jsonPath("$.leaseId", equalTo("")));
+
+        mvc.perform(post("/api/v1/world/world-zero/stamp")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"x\":0,\"y\":0,\"z\":0}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.ok", equalTo(true)))
+                .andExpect(jsonPath("$.result", equalTo("APPLIED")))
+                .andExpect(jsonPath("$.parcelId", equalTo("parcel-1")));
+
+        mvc.perform(post("/api/v1/world/world-zero/stamp")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"x\":0,\"y\":0,\"z\":0}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.ok", equalTo(false)))
+                .andExpect(jsonPath("$.result", equalTo("PARCEL_OVERLAP")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/lease"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("LEASED")))
+                .andExpect(jsonPath("$.leaseId", equalTo("tenant-zero")));
     }
 
     @Test

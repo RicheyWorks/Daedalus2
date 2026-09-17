@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World stamp.apply drive.**
+  `WorldOps` projects a 1×1 maze slab at the addressed cube.
+  Overlap is `PARCEL_OVERLAP`, not a merge. The well drives
+  `POST /world/{id}/stamp`. Generators stay on `/maze/**`.
+
 - **Well parcel.lease fold.**
   The world panel drives `parcel.lease` onto
   `POST /world/{id}/parcels/lease`. No parcel is a named result.

@@ -57,8 +57,10 @@ class WorldAccountingTest {
                 .isEqualTo(NpcResult.HUSHED);
         assertThat(WorldOps.asLeaseResult(session.drive("parcel.lease", null)))
                 .isEqualTo(ParcelLeaseResult.NO_PARCEL);
+        assertThat(WorldOps.asStampResult(session.drive("stamp.apply", null)).outcome())
+                .isEqualTo("APPLIED");
         assertThat(session.observe().doorState()).isEqualTo("CLOSED");
-        assertThat(session.trace()).hasSize(18);
+        assertThat(session.trace()).hasSize(19);
     }
 
     @Test

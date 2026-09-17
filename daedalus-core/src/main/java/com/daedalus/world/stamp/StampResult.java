@@ -25,4 +25,9 @@ public record StampResult(
     public static StampResult overlap(WorldRevision revision) {
         return new StampResult(false, PARCEL_OVERLAP, null, null, revision);
     }
+
+    /** Named outcome for traces. Silence is not success. */
+    public String outcome() {
+        return ok ? "APPLIED" : reason;
+    }
 }
