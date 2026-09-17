@@ -2,6 +2,7 @@
 
 package com.daedalus.server.service;
 
+import com.daedalus.engine.MazeGrid;
 import com.daedalus.plugin.events.WorldBlockEvent;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
@@ -23,6 +24,8 @@ import com.daedalus.world.auto.DriveTrace;
 import com.daedalus.world.auto.Observation;
 import com.daedalus.world.auto.WorldAddress;
 import com.daedalus.world.auto.WorldOps;
+import com.daedalus.world.stamp.StampOps;
+import com.daedalus.world.stamp.StampRequest;
 import com.daedalus.world.stamp.StampResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -216,10 +219,19 @@ public class WorldService {
     }
 
     public StampResult stamp(String id, BlockCoordinate at) {
+        return stamp(id, at, null);
+    }
+
+    /**
+     * Project {@code maze} at {@code at}. A null maze is the WorldOps 1×1 slab.
+     * This method does not look up the maze cache.
+     */
+    public StampResult stamp(String id, BlockCoordinate at, MazeGrid maze) {
         World live = require(id);
         synchronized (lock) {
-            StampResult result = WorldOps.asStampResult(
-                    WorldOps.drive(live, "stamp.apply", at, null));
+            StampResult result = maze == null
+                    ? WorldOps.asStampResult(WorldOps.drive(live, "stamp.apply", at, null))
+                    : StampOps.apply(live, new StampRequest(live.id(), at, maze, at.y(), 1));
             persist();
             log.append("stamp.apply", result, live.revision().value());
             return result;

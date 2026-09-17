@@ -2,11 +2,15 @@
 
 package com.daedalus.server.controller;
 
+import com.daedalus.engine.generators.GeneratorRegistry;
+import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
 import com.daedalus.plugin.MazePlugin;
 import com.daedalus.plugin.PluginManifest;
 import com.daedalus.plugin.runtime.PluginRegistry;
+import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.WorldService;
 import com.daedalus.server.web.ApiExceptionHandler;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -15,6 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.nio.file.Path;
+import java.util.List;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
@@ -35,9 +41,15 @@ class WorldControllerTest {
     @BeforeEach
     void setUp() {
         WorldService worlds = new WorldService(tmp.resolve("world-zero.daew"));
-        mvc = MockMvcBuilders.standaloneSetup(new WorldController(worlds, new PluginRegistry()))
+        mvc = MockMvcBuilders.standaloneSetup(new WorldController(worlds, new PluginRegistry(), mazes()))
                 .setControllerAdvice(new ApiExceptionHandler())
                 .build();
+    }
+
+    private static MazeGenerationService mazes() {
+        return new MazeGenerationService(
+                new GeneratorRegistry(List.of(new RecursiveBacktrackerGenerator())),
+                event -> { }, new SimpleMeterRegistry());
     }
 
     @Test
@@ -192,7 +204,9 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.ok", equalTo(true)))
                 .andExpect(jsonPath("$.result", equalTo("APPLIED")))
-                .andExpect(jsonPath("$.parcelId", equalTo("parcel-1")));
+                .andExpect(jsonPath("$.parcelId", equalTo("parcel-1")))
+                .andExpect(jsonPath("$.maxX", equalTo(2)))
+                .andExpect(jsonPath("$.maxZ", equalTo(2)));
 
         mvc.perform(post("/api/v1/world/world-zero/stamp")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -222,12 +236,38 @@ class WorldControllerTest {
                 return java.util.List.of("trap.arm");
             }
         });
-        MockMvc extra = MockMvcBuilders.standaloneSetup(new WorldController(worlds, plugins))
+        MockMvc extra = MockMvcBuilders.standaloneSetup(new WorldController(worlds, plugins, mazes()))
                 .setControllerAdvice(new ApiExceptionHandler())
                 .build();
         extra.perform(get("/api/v1/world/world-zero/capabilities"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.capabilities", org.hamcrest.Matchers.hasItems(
                         "door.open", "trap.arm")));
+    }
+
+    @Test
+    void aGeneratedMazeStampsALargerSlabThanTheOneByOneDefault() throws Exception {
+        MazeGenerationService gen = mazes();
+        MazeGenerationService.Cached cached = gen.generate("recursive-backtracker", 3, 3, 7L);
+        WorldService worlds = new WorldService(tmp.resolve("lab-stamp.daew"));
+        MockMvc extra = MockMvcBuilders.standaloneSetup(
+                        new WorldController(worlds, new PluginRegistry(), gen))
+                .setControllerAdvice(new ApiExceptionHandler())
+                .build();
+        extra.perform(post("/api/v1/world/world-zero/stamp")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"x\":0,\"y\":0,\"z\":0,\"mazeId\":\""
+                                + UUID.randomUUID() + "\"}"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.kind", equalTo("maze")));
+        extra.perform(post("/api/v1/world/world-zero/stamp")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"x\":0,\"y\":0,\"z\":0,\"mazeId\":\""
+                                + cached.metadata().id() + "\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.ok", equalTo(true)))
+                .andExpect(jsonPath("$.result", equalTo("APPLIED")))
+                .andExpect(jsonPath("$.maxX", equalTo(6)))
+                .andExpect(jsonPath("$.maxZ", equalTo(6)));
     }
 }

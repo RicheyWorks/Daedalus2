@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World stamp from a lab maze.**
+  `POST /world/{id}/stamp` takes an optional `mazeId` from the
+  generation cache and projects that grid. Missing maze is 404.
+  WorldService still does not open Caffeine. The 1×1 WorldOps
+  slab stays when mazeId is absent.
+
 - **Desktop world lease inspect.**
   The desktop world line shows the first parcel `leaseId` beside
   the place name. Not a wallet. Maze generate / solve stay.

@@ -28,6 +28,8 @@ import com.daedalus.world.auto.DriveTrace;
 import com.daedalus.world.auto.Observation;
 import com.daedalus.plugin.runtime.PluginRegistry;
 import com.daedalus.server.ratelimit.PerKeyRateLimit;
+import com.daedalus.engine.MazeGrid;
+import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.WorldService;
 import com.daedalus.world.auto.WorldZeroCapabilities;
 import com.daedalus.server.web.ResourceNotFoundException;
@@ -64,6 +66,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Persistent voxel volume. Maze routes stay on {@code /api/v1/maze/**}.
@@ -76,10 +79,13 @@ public class WorldController {
 
     private final WorldService worlds;
     private final PluginRegistry plugins;
+    private final MazeGenerationService mazes;
 
-    public WorldController(WorldService worlds, PluginRegistry plugins) {
+    public WorldController(WorldService worlds, PluginRegistry plugins,
+            MazeGenerationService mazes) {
         this.worlds = worlds;
         this.plugins = plugins;
+        this.mazes = mazes;
     }
 
     @GetMapping("/world/{id}")
@@ -116,15 +122,27 @@ public class WorldController {
     }
 
     @PostMapping("/world/{id}/stamp")
-    @Operation(summary = "Stamp a 1×1 maze slab. PARCEL_OVERLAP is a result, not a merge.")
+    @Operation(summary = "Stamp a maze slab. Optional mazeId from the lab cache. Overlap is a named result.")
     @PerKeyRateLimit("mazeGenerate")
     public ResponseEntity<StampMutationResponse> stamp(
             @PathVariable String id, @Valid @RequestBody StampWorldRequest body) {
         mounted(id);
-        StampResult result = worlds.stamp(id, new BlockCoordinate(body.x(), body.y(), body.z()));
+        BlockCoordinate at = new BlockCoordinate(body.x(), body.y(), body.z());
+        StampResult result = worlds.stamp(id, at, mazeGrid(body.mazeId()));
         String parcelId = result.parcelId() == null ? "" : result.parcelId().value();
+        int minX = 0;
+        int maxX = 0;
+        int minZ = 0;
+        int maxZ = 0;
+        if (result.bounds() != null) {
+            minX = result.bounds().minX();
+            maxX = result.bounds().maxX();
+            minZ = result.bounds().minZ();
+            maxZ = result.bounds().maxZ();
+        }
         return ResponseEntity.ok(new StampMutationResponse(
-                result.ok(), result.outcome(), parcelId, result.revision().value()));
+                result.ok(), result.outcome(), parcelId, result.revision().value(),
+                minX, maxX, minZ, maxZ));
     }
 
     @GetMapping("/world/{id}/capabilities")
@@ -366,6 +384,23 @@ public class WorldController {
         World world = mounted(id);
         return ResponseEntity.ok(new NpcMutationResponse(
                 npc.id(), npc.state().name(), result.name(), world.revision().value()));
+    }
+
+    private MazeGrid mazeGrid(String mazeId) {
+        if (mazeId == null || mazeId.isBlank()) {
+            return null;
+        }
+        UUID id;
+        try {
+            id = UUID.fromString(mazeId.trim());
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException("mazeId must be a UUID");
+        }
+        MazeGenerationService.Cached cached = mazes.find(id);
+        if (cached == null) {
+            throw ResourceNotFoundException.maze(id);
+        }
+        return cached.grid();
     }
 
     private World mounted(String id) {
