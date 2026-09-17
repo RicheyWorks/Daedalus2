@@ -95,6 +95,7 @@ class ThemeManagerTest {
             assertThat(fxml).contains("fill=\"#8fb8ff\" arcWidth=\"3\" arcHeight=\"3\"");
             assertThat(fxml).contains("legendRace");
             assertThat(fxml).contains("legendLens");
+            assertThat(fxml).contains("legendCompare");
             assertThat(fxml).contains("fill=\"#82b1ff\"");
             assertThat(fxml).contains("stroke=\"#2a2218\"");
         }
