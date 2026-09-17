@@ -830,6 +830,7 @@ under the `_migration/` portfolios.
   Compare khaki captions refuse leftover drag ice so khaki news is not ghosted.
   Live-log khaki timestamps refuse leftover drag ice so khaki news is not ghosted.
   Live-log torch solver lines refuse leftover drag ice so torch news is not ghosted.
+  Live-log gold player lines refuse leftover drag ice so gold news is not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
