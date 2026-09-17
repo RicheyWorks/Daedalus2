@@ -704,6 +704,7 @@ under the `_migration/` portfolios.
   Tournament and campaign rungs keep torch amber after a visit so leftover UA purple does not name the ladder.
   The well key sits on lamp wrap so leftover OS ragged ice does not break khaki overlay names.
   Well export chips keep khaki after a visit so leftover UA purple does not sit on torch stone.
+  Tournament and campaign rungs refuse leftover UA underline ice so torch amber sits in the lamp.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
