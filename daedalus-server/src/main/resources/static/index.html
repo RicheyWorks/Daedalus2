@@ -42,6 +42,9 @@
   * { box-sizing: border-box; }
   html, body { min-height: 100%;
                scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: rgba(184, 133, 56, 0.45); border-radius: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
   body { margin: 0; background:
            radial-gradient(1200px 700px at 50% -10%, #16120e 0%, var(--bg) 55%);
          color: #f2ead8;
