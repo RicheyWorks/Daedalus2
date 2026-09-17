@@ -76,6 +76,7 @@ class ThemeManagerTest {
             assertThat(css).contains("-fx-background-color: #16120e");
             assertThat(css).contains("rgba(16, 11, 8, 0.55)");
             assertThat(css).contains("rgba(16, 11, 8, 0.92)");
+            assertThat(css).contains("rgba(16, 11, 8, 0.92));\n    -fx-cursor: default;");
             assertThat(css).contains(".legend .label");
             assertThat(css).contains("#b09a72");
             assertThat(css).contains(".exports .button");
