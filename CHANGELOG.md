@@ -733,6 +733,7 @@ under the `_migration/` portfolios.
   The iOS launch splash wears torch void so leftover white is not the lamp.
   Shared well preview wears torch void so leftover white is not the lamp.
   Twitter well preview wears torch void so leftover white is not the lamp.
+  The header tagline refuses leftover callout ice so khaki on the line is not ballooned.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
