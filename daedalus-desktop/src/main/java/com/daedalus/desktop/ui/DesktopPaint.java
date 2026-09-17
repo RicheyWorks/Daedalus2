@@ -33,6 +33,8 @@ public final class DesktopPaint {
 
     /** Copy for an empty canvas — the well should speak, not stay a blank void. */
     public static final String EMPTY_WORDMARK = "DAEDALUS";
+    /** Idle wordmark fill — warm cream, not cool slate on torch stone. */
+    public static final String EMPTY_WORDMARK_INK = "#f2ead8";
     public static final String EMPTY_TITLE = "Pick a generator and click Generate";
     public static final String EMPTY_DETAIL = "then Solve to watch a route";
     public static final String EMPTY_HINT = "or walk with arrows or a click";

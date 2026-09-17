@@ -83,6 +83,7 @@ class WebUiSmokeTest {
                 .contains("border-color: var(--gold)")
                 .contains("backdrop-filter")
                 .contains("floorWarm")
+                .contains("g.fillStyle = \"#f2ead8\"")
                 .contains("wallWarm")
                 .contains("0.22 * edge")
                 .contains("mixHex(COLORS.floor, COLORS.floorWarm, 0.28)")

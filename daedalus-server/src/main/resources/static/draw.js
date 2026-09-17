@@ -811,7 +811,7 @@
     g.textBaseline = "alphabetic";
     g.font = "700 28px Bahnschrift, \"Avenir Next Condensed\", \"Trebuchet MS\", sans-serif";
     g.letterSpacing = "0.22em";
-    g.fillStyle = "#e8eef4";
+    g.fillStyle = "#f2ead8";
     const mintA = 0.16 + 0.16 * wave;
     const goldA = 0.08 + 0.10 * wave;
     const mintBlur = 22 + 14 * wave;

@@ -294,6 +294,8 @@ under the `_migration/` portfolios.
   letterbox rim stays in the lamp, not cool slate around warm corridors.
   ASCII maze dump sits in the warm stage void with parchment ink so the
   text well is the same lamp, not a cool terminal under torch stone.
+  Empty-well DAEDALUS wears warm cream on web and desktop so the idle brand
+  sits in the lamp, not cool white over torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
