@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore cube and street caption wash.**
+  WOOD / STONE / DIRT / GLASS underglow lifts toward their lamp inks,
+  and a named street underglow lifts toward torch wood, so leftover
+  gold pad is not the last glow under those words. HALL stays gold.
+
 - **Explore HUD cube key.**
   An earned occupied cube sits as a torch-wood diamond on the status
   key, same rule as automap `BLOCK`. Unseen slabs stay off the strip.

@@ -675,6 +675,16 @@ class ExplorePaintTest {
         assertThat(wood[0]).as("WOOD glyphs wear torch wood, not leftover gold")
                 .isGreaterThan(hallInk[2]);
         assertThat(wood[2]).isLessThan(wood[0]);
+        float[] woodSoft = new float[3];
+        float[] hallSoft = new float[3];
+        float[] streetSoft = new float[3];
+        ExplorePaint.captionPlaceSoftTint("WOOD", woodSoft);
+        ExplorePaint.captionPlaceSoftTint("HALL", hallSoft);
+        ExplorePaint.captionPlaceSoftTint("Willow Walk", streetSoft);
+        assertThat(woodSoft[0]).as("WOOD underglow lifts toward torch wood")
+                .isGreaterThan(hallSoft[0]);
+        assertThat(streetSoft[0]).as("a named street underglow lifts toward torch wood")
+                .isGreaterThan(hallSoft[0]);
     }
 
     @Test

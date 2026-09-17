@@ -807,6 +807,17 @@ public final class ExplorePaint {
             rgb[0] += (MAP_GOAL_R - rgb[0]) * FLOOR_END_WEIGHT;
             rgb[1] += (MAP_GOAL_G - rgb[1]) * FLOOR_END_WEIGHT;
             rgb[2] += (MAP_GOAL_B - rgb[2]) * FLOOR_END_WEIGHT;
+        } else if ("WOOD".equals(place) || "DIRT".equals(place)
+                || "GLASS".equals(place) || "STONE".equals(place)) {
+            float[] ink = new float[3];
+            captionPlaceTint(place, ink);
+            rgb[0] += (ink[0] - rgb[0]) * FLOOR_END_WEIGHT;
+            rgb[1] += (ink[1] - rgb[1]) * FLOOR_END_WEIGHT;
+            rgb[2] += (ink[2] - rgb[2]) * FLOOR_END_WEIGHT;
+        } else if (place != null && !place.isBlank() && !"HALL".equals(place)) {
+            rgb[0] += (MAP_BLOCK_R - rgb[0]) * FLOOR_END_WEIGHT;
+            rgb[1] += (MAP_BLOCK_G - rgb[1]) * FLOOR_END_WEIGHT;
+            rgb[2] += (MAP_BLOCK_B - rgb[2]) * FLOOR_END_WEIGHT;
         }
     }
 
