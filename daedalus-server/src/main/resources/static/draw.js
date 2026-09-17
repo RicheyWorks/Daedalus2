@@ -587,9 +587,9 @@
           paintWashCell(g, geom, r, c);
         }
       }
-      g.fillStyle = lensColors[2];
       g.globalAlpha = 0.2 * (0.85 + 0.30 * lensWave);
-      paintWashOpenings(g, geom, tiles, (r, c) => scene.lens.bands[r][c] >= 0);
+      paintWashOpenings(g, geom, tiles, (r, c) => scene.lens.bands[r][c] >= 0,
+          (tr, tc) => fieldOpenInk(tr, tc, th, tw, lensColors[2]));
       g.globalAlpha = 1;
     }
     if (scene.expansions && scene.expansions.length && (scene.searchProgress ?? 1) > 0) {

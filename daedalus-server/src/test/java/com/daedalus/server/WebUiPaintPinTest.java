@@ -232,7 +232,8 @@ class WebUiPaintPinTest {
             assertThat(in).as("well painter").isNotNull();
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js)
-                    .contains("g.fillStyle = fieldInk(lensColors[band], r, c, th, tw)");
+                    .contains("g.fillStyle = fieldInk(lensColors[band], r, c, th, tw)")
+                    .contains("(tr, tc) => fieldOpenInk(tr, tc, th, tw, lensColors[2])");
         }
     }
 
