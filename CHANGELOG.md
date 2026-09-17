@@ -286,6 +286,8 @@ under the `_migration/` portfolios.
   the stone, not cool slate on a torch-brown board.
   Well export chips wear khaki ink and the warm stage void so PNG / ASCII sit
   in the lamp, not cool slate stickers on torch stone.
+  Explore floors wear a 1px torch shine so corridor stone has the same depth as
+  the 2D well, not a flat checker under the lamp.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

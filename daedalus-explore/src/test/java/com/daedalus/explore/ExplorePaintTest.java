@@ -112,6 +112,11 @@ class ExplorePaintTest {
         assertThat(ceilR).isGreaterThanOrEqualTo(ExplorePaint.CEILING_TEX_R);
         assertThat(ExplorePaint.CEILING_TEX_R).isGreaterThan(ExplorePaint.CEILING_TEX_B);
         assertThat(ExplorePaint.CEILING_TEX_R).isLessThan(92);
+        int shine = Byte.toUnsignedInt(floor[(1 * ExplorePaint.TEX + 2) * 4]);
+        int body = Byte.toUnsignedInt(floor[(4 * ExplorePaint.TEX + 2) * 4]);
+        assertThat(shine).isGreaterThan(body);
+        assertThat(ExplorePaint.FLOOR_TEX_HI_R).isGreaterThan(92);
+        assertThat(ExplorePaint.FLOOR_TEX_HI_R).isGreaterThan(ExplorePaint.FLOOR_TEX_HI_B);
     }
 
     @Test

@@ -292,10 +292,17 @@ public final class ExplorePaint {
         });
     }
 
+    public static final int FLOOR_TEX_HI_R = 118;
+    public static final int FLOOR_TEX_HI_G = 88;
+    public static final int FLOOR_TEX_HI_B = 52;
+
     public static byte[] floorRgba() {
         return raster((x, y) -> {
-            int cell = ((x / 8) + (y / 8)) & 1;
             int n = hash(x, y) & 11;
+            if ((y & 7) == 1) {
+                return rgbBytes(FLOOR_TEX_HI_R + n / 2, FLOOR_TEX_HI_G + n / 3, FLOOR_TEX_HI_B);
+            }
+            int cell = ((x / 8) + (y / 8)) & 1;
             if (cell == 0) {
                 return rgbBytes(92 + n, 64 + n / 2, 38);
             }
