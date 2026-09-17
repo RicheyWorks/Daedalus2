@@ -380,6 +380,8 @@ under the `_migration/` portfolios.
   the lamp, not leftover cool navy on torch stone.
   Desktop status-bar copy under the well wears the same warm khaki as the well
   key so maze news sits in the lamp, not leftover cool slate on torch stone.
+  Compare rows under the well sit in torch void on hover and pin so the table is
+  not leftover cool navy on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
