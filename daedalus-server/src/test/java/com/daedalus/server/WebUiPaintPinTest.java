@@ -28,7 +28,8 @@ class WebUiPaintPinTest {
                     .contains("#log .err    { color: var(--warn); -webkit-user-drag: none")
                     .contains("#asciiOut .rock { color: #8c764e; -webkit-user-drag: none")
                     .contains("#asciiOut .gate { color: #3ee08f; -webkit-user-drag: none")
-                    .contains("#asciiOut .exit { color: #ff5a5f; -webkit-user-drag: none");
+                    .contains("#asciiOut .exit { color: #ff5a5f; -webkit-user-drag: none")
+                    .contains("#compareBox .gave-up { color: var(--warn); -webkit-user-drag: none");
         }
     }
 }

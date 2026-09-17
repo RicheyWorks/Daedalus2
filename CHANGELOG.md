@@ -836,6 +836,7 @@ under the `_migration/` portfolios.
   ASCII rock glyphs refuse leftover drag ice so khaki walls are not ghosted.
   ASCII start-gate glyphs refuse leftover drag ice so mint doors are not ghosted.
   ASCII exit glyphs refuse leftover drag ice so coral vaults are not ghosted.
+  Compare gave-up lines refuse leftover drag ice so coral news is not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
