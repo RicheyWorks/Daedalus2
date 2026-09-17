@@ -736,6 +736,7 @@ under the `_migration/` portfolios.
   The header tagline refuses leftover callout ice so khaki on the line is not ballooned.
   The well pocket refuses leftover callout ice so torch stone is not ballooned.
   Start-gate host chrome refuses leftover OS selection ice so khaki on the line is not smeared.
+  Start-gate host chrome refuses leftover callout ice so khaki on the line is not ballooned.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
