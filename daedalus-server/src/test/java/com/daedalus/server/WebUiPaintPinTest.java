@@ -281,7 +281,8 @@ class WebUiPaintPinTest {
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js)
                     .contains("mixHex(\"#f0b429\", COLORS.floorDim, 0.22 * edge)")
-                    .contains("const winInk = victoryInk(goal, th, tw)");
+                    .contains("const winInk = victoryInk(goal, th, tw)")
+                    .contains("li === 0 ? null : (tr, tc) => victoryTileInk(tr, tc, th, tw)");
         }
     }
 

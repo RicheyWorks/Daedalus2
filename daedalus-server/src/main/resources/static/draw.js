@@ -400,12 +400,15 @@
     return mixHex("#d4b06a", COLORS.floorDim, 0.22 * edge);
   }
 
-  function victoryInk(p, th, tw) {
-    const tr = 2 * p.row + 1, tc = 2 * p.col + 1;
+  function victoryTileInk(tr, tc, th, tw) {
     const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
     const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
     const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
     return mixHex("#f0b429", COLORS.floorDim, 0.22 * edge);
+  }
+
+  function victoryInk(p, th, tw) {
+    return victoryTileInk(2 * p.row + 1, 2 * p.col + 1, th, tw);
   }
 
   function waypointInk(p, th, tw, got) {
@@ -815,13 +818,22 @@
         g.fillStyle = lane.color;
         g.globalAlpha = 0.13 * (0.88 + 0.24 * raceWave);
         for (let i = 0; i < shown; i++) {
-          paintWashCell(g, geom, lane.expansions[i].row, lane.expansions[i].col);
+          const p = lane.expansions[i];
+          if (li !== 0) {
+            g.fillStyle = victoryTileInk(2 * p.row + 1, 2 * p.col + 1, th, tw);
+          }
+          paintWashCell(g, geom, p.row, p.col);
         }
         g.globalAlpha = 0.20 * (0.85 + 0.30 * raceWave);
-        paintWashOpenings(g, geom, tiles, (r, c) => live.has(r + "," + c));
+        paintWashOpenings(g, geom, tiles, (r, c) => live.has(r + "," + c),
+            li === 0 ? null : (tr, tc) => victoryTileInk(tr, tc, th, tw));
         g.globalAlpha = 0.4 * (0.88 + 0.24 * raceWave);
         for (let i = Math.max(0, shown - 5); i < shown; i++) {
-          paintWashCell(g, geom, lane.expansions[i].row, lane.expansions[i].col);
+          const p = lane.expansions[i];
+          if (li !== 0) {
+            g.fillStyle = victoryTileInk(2 * p.row + 1, 2 * p.col + 1, th, tw);
+          }
+          paintWashCell(g, geom, p.row, p.col);
         }
         g.globalAlpha = 1;
         if (!(lane.pathProg > 0) && shown > 0) {
