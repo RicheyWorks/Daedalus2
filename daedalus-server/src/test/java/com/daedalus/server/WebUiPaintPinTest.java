@@ -424,11 +424,14 @@ class WebUiPaintPinTest {
                     .contains("row(box, \"plots\"")
                     .contains("newest && newest.mazeRef")
                     .contains("rented && rented.leaseId")
-                    .contains("named && named.placeName");
+                    .contains("named && named.placeName")
+                    .contains("row(box, \"street\"")
+                    .contains("names.join(\" · \")");
             assertThat(html).contains("#worldBox .place { color: #94612e; -webkit-user-drag: none")
                     .contains("#worldBox .slab { color: #94612e; -webkit-user-drag: none");
             assertThat(world).contains("ink.className = named ? \"place\" : \"slab\"")
                     .contains("label === \"place\"")
+                    .contains("label === \"street\"")
                     .contains("chunk.occupied > 0");
             assertThat(world).doesNotContain("/maze/");
             assertThat(live).contains("/topic/world/world-zero/events")

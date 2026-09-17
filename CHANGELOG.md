@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World street directory.**
+  Well street row and desktop inspect list every inspired
+  toponym, oldest first. Newest place row stays. Not GIS.
+
 - **Explore newest street name.**
   Off a slab the caption names the newest inspired toponym, not
   leftover HALL. Stood-on start / goal and underfoot place still

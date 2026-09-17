@@ -129,6 +129,7 @@
     let newest = first;
     let rented = first;
     let named = first;
+    const names = [];
     for (let i = 0; i < list.length; i++) {
       if (list[i] && list[i].mazeRef) {
         newest = list[i];
@@ -138,9 +139,11 @@
       }
       if (list[i] && list[i].placeName) {
         named = list[i];
+        names.push(list[i].placeName);
       }
     }
     row(box, "plots", String(list.length));
+    row(box, "street", names.length ? names.join(" · ") : "—");
     row(box, "place", named && named.placeName ? named.placeName : "—");
     row(box, "lease", rented && rented.leaseId ? rented.leaseId : "—");
     row(box, "maze", newest && newest.mazeRef ? newest.mazeRef : "—");
@@ -173,7 +176,7 @@
     const name = document.createElement("b");
     name.textContent = label;
     line.appendChild(name);
-    const named = label === "place" && value && value !== "—";
+    const named = (label === "place" || label === "street") && value && value !== "—";
     if (named || wood) {
       const ink = document.createElement("span");
       ink.className = named ? "place" : "slab";

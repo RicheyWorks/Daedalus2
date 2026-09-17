@@ -9,6 +9,7 @@ import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.World;
 import com.daedalus.world.WorldId;
+import com.daedalus.world.auto.WorldOps;
 import com.daedalus.world.stamp.StampResult;
 
 /**
@@ -46,7 +47,7 @@ public final class DesktopWorld {
         if (world == null) {
             return ID + " · unavailable";
         }
-        return inspectLine(world.revision().value(), world.parcels().size(), lastPlace(world),
+        return inspectLine(world.revision().value(), world.parcels().size(), streetLine(world),
                 lastLease(world), lastMaze(world), last);
     }
 
@@ -101,6 +102,11 @@ public final class DesktopWorld {
             }
         }
         return "";
+    }
+
+    /** All inspired toponyms on inspect — not GIS. */
+    public static String streetLine(World world) {
+        return WorldOps.streetLine(world);
     }
 
     /** Newest inspired toponym on inspect — not GIS. */

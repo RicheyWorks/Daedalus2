@@ -310,7 +310,8 @@ explore B voxel toggle, next-plot stamp (+X street), and plot-street
 inspect (newest maze + N plots), vacant-plot lease, and
 inspired place names on stamp.apply, and
 Generate → parcel.lease after a successful stamp, and
-explore caption of the newest street name
+explore caption of the newest street name, and
+a street directory of every plot name
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

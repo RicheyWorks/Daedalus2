@@ -110,9 +110,12 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.firstPlace(two)).isIn(PlaceNames.STREETS);
         assertThat(DesktopWorld.lastPlace(two)).isIn(PlaceNames.STREETS);
         assertThat(DesktopWorld.lastPlace(two)).isNotEqualTo(DesktopWorld.firstPlace(two));
+        assertThat(DesktopWorld.streetLine(two))
+                .isEqualTo(DesktopWorld.firstPlace(two) + " · " + DesktopWorld.lastPlace(two));
         assertThat(DesktopWorld.inspectLine(two, null))
                 .contains("2 plots")
                 .contains(second.metadata().id().toString())
+                .contains(DesktopWorld.firstPlace(two))
                 .contains(DesktopWorld.lastPlace(two));
     }
 }

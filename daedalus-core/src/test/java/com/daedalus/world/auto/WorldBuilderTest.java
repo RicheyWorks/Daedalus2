@@ -81,6 +81,9 @@ class WorldBuilderTest {
         assertThat(world.parcels().get(1).placeName())
                 .isNotEqualTo(world.parcels().get(0).placeName());
         assertThat(WorldOps.lastPlaceName(world)).isEqualTo(world.parcels().get(1).placeName());
+        assertThat(WorldOps.streetLine(world))
+                .isEqualTo(world.parcels().get(0).placeName() + " · "
+                        + world.parcels().get(1).placeName());
         assertThat(builder.run(new WorldBuilder.Step(next, "parcel.lease", null)))
                 .isEqualTo(ParcelLeaseResult.LEASED);
         assertThat(world.parcels().get(0).leaseId()).isEqualTo(Parcel.SYSTEM_TENANT);

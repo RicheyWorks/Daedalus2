@@ -24,8 +24,10 @@ import com.daedalus.world.Trap;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.World;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -191,6 +193,20 @@ public final class WorldOps {
             }
         }
         return found;
+    }
+
+    /** All inspired toponyms on the street, oldest first. Not GIS. */
+    public static String streetLine(World world) {
+        if (world == null) {
+            return "";
+        }
+        List<String> names = new ArrayList<>();
+        for (Parcel parcel : world.parcels()) {
+            if (parcel != null && !parcel.placeName().isEmpty()) {
+                names.add(parcel.placeName());
+            }
+        }
+        return String.join(" · ", names);
     }
 
     /** Newest inspired toponym on the street. Not GIS. */
