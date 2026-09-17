@@ -316,6 +316,9 @@ class DesktopPaintTest {
         assertThat(Integer.parseInt(DesktopPaint.SANCTUARY.substring(1, 3), 16))
                 .isGreaterThan(Integer.parseInt(DesktopPaint.SANCTUARY.substring(5, 7), 16));
         assertThat(DesktopPaint.WORST_SERVED).isEqualTo("#e5484d");
+        assertThat(DesktopPaint.hotspotInk(1))
+                .as("worst-served ring shares the heat rim")
+                .isNotEqualTo(DesktopPaint.WORST_SERVED);
         assertThat(disc.size())
                 .as("web sanctuary radius is 0.32·cell")
                 .isEqualTo(layout.cellSize() * 0.64);

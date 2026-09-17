@@ -2146,9 +2146,11 @@ public class MainController {
                 paintRing(g, DesktopPaint.sanctuaryRing(layout, safe, safeWave),
                         mint.deriveColor(0, 1, 1, DesktopPaint.sanctuaryRingAlpha(safeWave)));
             }
-            paintRing(g, DesktopPaint.worstServedRing(layout, currentSanctuaries.worstServed(),
-                            safeWave),
-                    Color.web(DesktopPaint.WORST_SERVED)
+            Point lonely = currentSanctuaries.worstServed();
+            paintRing(g, DesktopPaint.worstServedRing(layout, lonely, safeWave),
+                    Color.web(lonely == null ? DesktopPaint.WORST_SERVED
+                                    : DesktopPaint.hotspotInk(DesktopPaint.floorEdge(layout,
+                                            2 * lonely.row() + 1, 2 * lonely.col() + 1)))
                             .deriveColor(0, 1, 1, DesktopPaint.worstServedRingAlpha(safeWave)));
         }
 
