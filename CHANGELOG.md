@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore cube floor pad.**
+  Occupied cubes sit on a torch-wood disc that spills past the 1×1
+  boot onto the corridor. Stacked lids share the ground pad. Not
+  leftover bare stone under a furniture stick.
+
 - **Explore cube HUD name.**
   A lamp-facing occupied cube names the status strip (`WOOD`, `STONE`)
   when the hall has no story mark and you are not on start or goal.

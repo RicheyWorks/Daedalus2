@@ -359,6 +359,13 @@ public final class ExplorePaint {
     }
 
     /**
+     * Occupied cube boot — pad center is the cube middle so the disc
+     * can stain the corridor around a 1×1 slab.
+     */
+    public record BlockPlace(double x, double z, BlockType type) {
+    }
+
+    /**
      * Bottom strip: named place, compass, how much stone is earned.
      * GLFW only paints this; tests lock the words so the bar cannot lie.
      */
@@ -1095,6 +1102,28 @@ public final class ExplorePaint {
         return List.copyOf(out);
     }
 
+    /**
+     * Ground-facing occupied cubes. Stacked lids share the boot pad.
+     * Discrete occupancy, not a hull.
+     */
+    public static List<BlockPlace> blockPlaces(WorldMesh blocks) {
+        if (blocks == null) {
+            return List.of();
+        }
+        List<BlockPlace> out = new ArrayList<>();
+        Set<BlockCoordinate> seen = new HashSet<>();
+        for (WorldMesh.Triangle tri : blocks.triangles()) {
+            if (tri == null || tri.face() != WorldMesh.Face.NEG_Y || tri.at() == null) {
+                continue;
+            }
+            if (!seen.add(tri.at())) {
+                continue;
+            }
+            out.add(new BlockPlace(tri.at().x() + 0.5, tri.at().z() + 0.5, tri.type()));
+        }
+        return List.copyOf(out);
+    }
+
     /** Automap gate — KEEP start mint, same as the well disc. */
     public static final float MAP_START_R = 0x3e / 255f;
     public static final float MAP_START_G = 0xe0 / 255f;
@@ -1213,6 +1242,11 @@ public final class ExplorePaint {
 
     /** Soft floor disc under corridor story pillars — place, not a furniture stick. */
     public static final float PLACE_PAD_R = 0.42f;
+    /**
+     * Wider than half a cube so the disc stains the corridor around the
+     * slab, not leftover bare stone under a 1×1 boot.
+     */
+    public static final float BLOCK_PAD_R = 0.72f;
     public static final float PLACE_PAD_Y = 0.02f;
     public static final int PLACE_PAD_SEGS = 12;
     public static final float PLACE_PAD_DIM = 0.42f;
@@ -1401,6 +1435,13 @@ public final class ExplorePaint {
     public static final float BLOCK_GLASS_R = 0.55f;
     public static final float BLOCK_GLASS_G = 0.64f;
     public static final float BLOCK_GLASS_B = 0.58f;
+
+    public static void blockPlaceTint(BlockType type, float[] rgb) {
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        blockTint(type == null ? BlockType.STONE : type, WorldMesh.Face.POS_Y, rgb);
+    }
 
     public static void blockTint(BlockType type, WorldMesh.Face face, float[] rgb) {
         BlockType kind = type == null ? BlockType.STONE : type;

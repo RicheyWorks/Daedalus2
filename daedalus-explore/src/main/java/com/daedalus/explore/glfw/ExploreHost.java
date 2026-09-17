@@ -385,6 +385,13 @@ public final class ExploreHost {
             ExplorePaint.placePadTint(rgb, pad, seconds);
             placePad(end.x(), end.z(), pad[0], pad[1], pad[2]);
         }
+        if (world.showingBlocks() && world.blocks() != null) {
+            for (ExplorePaint.BlockPlace cube : ExplorePaint.blockPlaces(world.blocks())) {
+                ExplorePaint.blockPlaceTint(cube.type(), rgb);
+                ExplorePaint.placePadTint(rgb, pad, seconds);
+                placePad(cube.x(), cube.z(), pad[0], pad[1], pad[2], ExplorePaint.BLOCK_PAD_R);
+            }
+        }
         glEnd();
         hud(aspect, world, faceTex, stride, seconds);
     }
@@ -821,7 +828,10 @@ public final class ExploreHost {
     }
 
     private static void placePad(double x, double z, float r, float g, float b) {
-        double rad = ExplorePaint.PLACE_PAD_R;
+        placePad(x, z, r, g, b, ExplorePaint.PLACE_PAD_R);
+    }
+
+    private static void placePad(double x, double z, float r, float g, float b, float rad) {
         double y = ExplorePaint.PLACE_PAD_Y;
         int segs = ExplorePaint.PLACE_PAD_SEGS;
         glColor3f(r, g, b);

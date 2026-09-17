@@ -79,6 +79,37 @@ class ExplorePaintTest {
     }
 
     @Test
+    void occupiedCubesSitOnATorchFloorPad() {
+        assertThat(ExplorePaint.BLOCK_PAD_R)
+                .as("pad spills past a 1x1 cube onto the corridor")
+                .isGreaterThan(0.5f);
+        assertThat(ExplorePaint.blockPlaces(null)).isEmpty();
+        World volume = World.zero();
+        volume.place(new BlockCoordinate(4, 0, 2), BlockType.WOOD);
+        volume.place(new BlockCoordinate(8, 0, 8), BlockType.STONE);
+        volume.place(new BlockCoordinate(8, 1, 8), BlockType.GLASS);
+        List<ExplorePaint.BlockPlace> pads = ExplorePaint.blockPlaces(WorldMesh.of(volume));
+        assertThat(pads).hasSize(2);
+        assertThat(pads.stream().map(ExplorePaint.BlockPlace::type))
+                .containsExactlyInAnyOrder(BlockType.WOOD, BlockType.STONE);
+        ExplorePaint.BlockPlace wood = pads.stream()
+                .filter(p -> p.type() == BlockType.WOOD).findFirst().orElseThrow();
+        assertThat(wood.x()).isEqualTo(4.5);
+        assertThat(wood.z()).isEqualTo(2.5);
+        float[] woodInk = new float[3];
+        float[] stoneInk = new float[3];
+        float[] gold = new float[3];
+        ExplorePaint.blockPlaceTint(BlockType.WOOD, woodInk);
+        ExplorePaint.blockPlaceTint(BlockType.STONE, stoneInk);
+        ExplorePaint.blockPlaceTint(null, stoneInk);
+        ExplorePaint.captionPlaceTint("HALL", gold);
+        assertThat(woodInk[0]).as("WOOD pad wears torch wood, not leftover gold")
+                .isGreaterThan(gold[2]);
+        assertThat(woodInk[2]).isLessThan(woodInk[0]);
+        ExplorePaint.blockPlaceTint(BlockType.WOOD, null);
+    }
+
+    @Test
     void startAndGoalFloorsNameTheEnds() {
         float[] passage = new float[3];
         float[] gate = new float[3];
