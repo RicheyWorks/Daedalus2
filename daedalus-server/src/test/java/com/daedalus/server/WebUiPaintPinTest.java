@@ -287,6 +287,19 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellRaceRibbonHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("pathHead(g, geom, raceTip, li === 0 ? lane.color")
+                    .contains("victoryTileInk(2 * raceTip.row + 1, 2 * raceTip.col + 1, th, tw)")
+                    .contains("const raceHead = walkHead(lane.path, lane.pathProg)")
+                    .contains("victoryTileInk(2 * raceHead.row + 1, 2 * raceHead.col + 1, th, tw)");
+        }
+    }
+
+    @Test
     void wellFieldCellsHaveRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

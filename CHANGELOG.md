@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well race-B ribbon depth.**
+  Challenger path and tip fall off toward floor-dim at the board
+  rim with the same 0.22 edge as halls, so leftover even torch
+  gold is not the last word on a finish. KEEP ice lane A stays.
+
 - **Explore cube pad depth.**
   Occupied-cube discs fall off toward floor-dim at the board rim
   with the same 0.22 edge as halls, so leftover even wood is not
