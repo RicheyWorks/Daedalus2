@@ -105,7 +105,8 @@ public class WorldController {
         for (Parcel parcel : world.parcels()) {
             rows.add(new WorldParcelRow(
                     parcel.id().value(), parcel.ownerId(), parcel.placeName(),
-                    parcel.leaseId(), parcel.mazeRef(), parcel.version()));
+                    parcel.leaseId(), parcel.mazeRef(),
+                    parcel.bounds().minX(), parcel.bounds().minZ(), parcel.version()));
         }
         return ResponseEntity.ok(new WorldParcelsResponse(world.id().value(), rows));
     }

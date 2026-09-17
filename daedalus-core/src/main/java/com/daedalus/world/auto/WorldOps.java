@@ -209,6 +209,15 @@ public final class WorldOps {
         return String.join(" · ", names);
     }
 
+    /** Newest slab origin as {@code x,z}. Empty when the street has no plots. */
+    public static String lastLot(World world) {
+        if (world == null || world.parcels().isEmpty()) {
+            return "";
+        }
+        Parcel last = world.parcels().get(world.parcels().size() - 1);
+        return last.bounds().minX() + "," + last.bounds().minZ();
+    }
+
     /** Newest inspired toponym on the street. Not GIS. */
     public static String lastPlaceName(World world) {
         if (world == null) {

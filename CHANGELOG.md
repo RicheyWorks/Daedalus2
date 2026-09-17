@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World lot address.**
+  Newest slab origin is an x,z lot on well and desktop inspect.
+  Parcel rows carry minX/minZ. Not GIS.
+
 - **World street directory.**
   Well street row and desktop inspect list every inspired
   toponym, oldest first. Newest place row stays. Not GIS.

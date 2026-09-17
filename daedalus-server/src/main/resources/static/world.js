@@ -145,6 +145,9 @@
     row(box, "plots", String(list.length));
     row(box, "street", names.length ? names.join(" · ") : "—");
     row(box, "place", named && named.placeName ? named.placeName : "—");
+    const lot = list.length ? list[list.length - 1] : null;
+    row(box, "lot", lot && lot.minX != null && lot.minZ != null
+        ? lot.minX + "," + lot.minZ : "—");
     row(box, "lease", rented && rented.leaseId ? rented.leaseId : "—");
     row(box, "maze", newest && newest.mazeRef ? newest.mazeRef : "—");
     const occupied = chunk && chunk.present && chunk.occupied > 0;

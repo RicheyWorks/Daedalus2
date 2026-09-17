@@ -47,7 +47,14 @@ public final class DesktopWorld {
         if (world == null) {
             return ID + " · unavailable";
         }
-        return inspectLine(world.revision().value(), world.parcels().size(), streetLine(world),
+        String place = streetLine(world);
+        if (world.parcels().size() > 1) {
+            String lot = lastLot(world);
+            if (!lot.isEmpty()) {
+                place = place.isEmpty() ? lot : place + " · " + lot;
+            }
+        }
+        return inspectLine(world.revision().value(), world.parcels().size(), place,
                 lastLease(world), lastMaze(world), last);
     }
 
@@ -107,6 +114,11 @@ public final class DesktopWorld {
     /** All inspired toponyms on inspect — not GIS. */
     public static String streetLine(World world) {
         return WorldOps.streetLine(world);
+    }
+
+    /** Newest slab origin as {@code x,z}. */
+    public static String lastLot(World world) {
+        return WorldOps.lastLot(world);
     }
 
     /** Newest inspired toponym on inspect — not GIS. */
