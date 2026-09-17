@@ -701,6 +701,7 @@ under the `_migration/` portfolios.
   Start-gate lede sits on lamp wrap so leftover OS ragged ice does not break khaki on torch stone.
   Start-gate door copy sits on lamp wrap so leftover OS ragged ice does not break khaki on torch stone.
   Header tagline sits on lamp wrap so leftover OS ragged ice does not break khaki beside the brand.
+  Tournament and campaign rungs keep torch amber after a visit so leftover UA purple does not name the ladder.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
