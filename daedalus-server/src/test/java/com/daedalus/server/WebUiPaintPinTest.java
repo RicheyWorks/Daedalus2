@@ -159,7 +159,9 @@ class WebUiPaintPinTest {
                     .contains("#legend [data-key=\"floor\"] i {")
                     .contains("radial-gradient(circle at 45% 40%, #484339 28%, #2a2218)")
                     .contains("#legend [data-key=\"wall\"] i {")
-                    .contains("radial-gradient(circle at 45% 40%, #19140f 28%, #15110d)");
+                    .contains("radial-gradient(circle at 45% 40%, #19140f 28%, #15110d)")
+                    .contains("#legend [data-key=\"fog\"] i {")
+                    .contains("radial-gradient(circle at 45% 40%, #16120e 28%, #0c0908)");
         }
     }
 

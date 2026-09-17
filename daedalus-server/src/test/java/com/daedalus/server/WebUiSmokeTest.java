@@ -274,7 +274,7 @@ class WebUiSmokeTest {
                 .contains("scene.fog")
                 .contains("COLORS.unseen")
                 .contains("unseen: \"#0c0908\"")
-                .contains("<span data-key=\"fog\"><i style=\"background:#0c0908\"></i>unseen (fog)</span>")
+                .contains("<span data-key=\"fog\"><i></i>unseen (fog)</span>")
                 .contains(": mixHex(COLORS.wall, COLORS.wallWarm, 0.28)")
                 .contains("mixHex(warmWall, COLORS.unseen, 0.28 * edge)")
                 .contains("FOG_FRONTIER")
