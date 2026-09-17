@@ -34,8 +34,12 @@ public final class DesktopWorld {
                 || maze.metadata() == null || maze.metadata().id() == null) {
             return null;
         }
-        return worlds.stamp(ID, new BlockCoordinate(0, 0, 0), maze.grid(),
+        StampResult stamped = worlds.stamp(ID, new BlockCoordinate(0, 0, 0), maze.grid(),
                 maze.metadata().id(), true);
+        if (stamped != null && stamped.ok()) {
+            worlds.leaseParcel(ID);
+        }
+        return stamped;
     }
 
     public static String inspectLine(World world, WorldEventFrame last) {

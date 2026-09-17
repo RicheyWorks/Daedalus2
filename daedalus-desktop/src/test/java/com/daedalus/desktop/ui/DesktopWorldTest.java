@@ -96,6 +96,7 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.projectLab(worlds, cached).ok()).isTrue();
         World live = worlds.inspect(DesktopWorld.ID);
         assertThat(DesktopWorld.firstMaze(live)).isEqualTo(cached.metadata().id().toString());
+        assertThat(DesktopWorld.lastLease(live)).isEqualTo(Parcel.SYSTEM_TENANT);
         MazeGenerationService.Cached second = new MazeGenerationService.Cached(
                 MazeMetadata.of(3, 3, 8L, "test", maze.start(), maze.goal()),
                 maze, new MazeStats());
@@ -104,6 +105,8 @@ class DesktopWorldTest {
         assertThat(two.parcels()).hasSize(2);
         assertThat(DesktopWorld.firstMaze(two)).isEqualTo(cached.metadata().id().toString());
         assertThat(DesktopWorld.lastMaze(two)).isEqualTo(second.metadata().id().toString());
+        assertThat(two.parcels().get(0).leaseId()).isEqualTo(Parcel.SYSTEM_TENANT);
+        assertThat(two.parcels().get(1).leaseId()).isEqualTo(Parcel.SYSTEM_TENANT);
         assertThat(DesktopWorld.firstPlace(two)).isIn(PlaceNames.STREETS);
         assertThat(DesktopWorld.lastPlace(two)).isIn(PlaceNames.STREETS);
         assertThat(DesktopWorld.lastPlace(two)).isNotEqualTo(DesktopWorld.firstPlace(two));

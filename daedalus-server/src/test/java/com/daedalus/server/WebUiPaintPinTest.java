@@ -455,7 +455,9 @@ class WebUiPaintPinTest {
                     .contains("body.mazeId = mazeId")
                     .contains("body.next = true")
                     .contains("async function projectLab")
-                    .contains("drive(host, \"stamp.apply\")");
+                    .contains("drive(host, \"stamp.apply\")")
+                    .contains("drive(host, \"parcel.lease\")")
+                    .contains("stamped = result && result.ok");
             assertThat(js).doesNotContain("\"agent.build\"");
             assertThat(js).doesNotContain("/maze/");
         }

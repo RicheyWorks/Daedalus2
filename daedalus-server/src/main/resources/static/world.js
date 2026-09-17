@@ -98,10 +98,19 @@
     if (!host.state || !host.state.maze || !host.state.maze.id) {
       return inspect(host);
     }
+    let stamped = false;
     try {
-      await drive(host, "stamp.apply");
+      const result = await drive(host, "stamp.apply");
+      stamped = result && result.ok;
     } catch (e) {
       // named overlap is 200; a missing maze is a race
+    }
+    if (stamped) {
+      try {
+        await drive(host, "parcel.lease");
+      } catch (e) {
+        // lease is best-effort after a named stamp
+      }
     }
     return inspect(host);
   }
