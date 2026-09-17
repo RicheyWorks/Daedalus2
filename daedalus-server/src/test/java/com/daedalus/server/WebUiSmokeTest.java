@@ -58,6 +58,8 @@ class WebUiSmokeTest {
                 .contains("/auth/login").contains("id=\"login\"").contains("id=\"fog\"")
                 .contains("id=\"legend\"").contains("id=\"labMetric\"").contains("class=\"rail\"")
                 .contains("id=\"compareBox\"").contains("id=\"genInfo\"").contains("id=\"asciiOut\"")
+                .contains("#asciiOut { margin: 10px 0 0; padding: 8px; background: #16120e;")
+                .contains("color: #d4c4a8;")
                 .contains("class=\"exports\"").contains("EXPORT_RESERVE")
                 .contains("color: #b09a72")
                 .contains("background: rgba(16, 11, 8, .78)")
