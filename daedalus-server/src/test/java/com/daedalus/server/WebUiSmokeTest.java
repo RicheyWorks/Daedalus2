@@ -81,6 +81,7 @@ class WebUiSmokeTest {
                 .contains("font-synthesis: none;")
                 .contains("text-size-adjust: 100%; -webkit-text-size-adjust: 100%;")
                 .contains("-webkit-tap-highlight-color: rgba(184, 133, 56, 0.25);")
+                .contains("touch-action: manipulation;")
                 .contains("::-webkit-scrollbar { width: 8px; height: 8px; }")
                 .contains("::-webkit-scrollbar-thumb { background: rgba(184, 133, 56, 0.45); border-radius: 4px; }")
                 .contains("::-webkit-scrollbar-thumb:hover { background: rgba(184, 133, 56, 0.65); }")
