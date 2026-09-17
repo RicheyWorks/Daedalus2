@@ -2126,7 +2126,8 @@ public class MainController {
         if (currentSanctuaries != null && currentSanctuaries.placements() != null) {
             double safeWave = DesktopPaint.sanctuaryBreathWave(System.nanoTime());
             for (Point safe : currentSanctuaries.placements()) {
-                Color mint = Color.web(DesktopPaint.SANCTUARY);
+                Color mint = Color.web(DesktopPaint.sanctuaryInk(
+                        DesktopPaint.floorEdge(layout, 2 * safe.row() + 1, 2 * safe.col() + 1)));
                 DesktopPaint.Marker glow = DesktopPaint.sanctuaryGlow(layout, safe, safeWave);
                 if (glow != null) {
                     g.setFill(mint.deriveColor(0, 1, 1, DesktopPaint.sanctuaryGlowAlpha(safeWave)));

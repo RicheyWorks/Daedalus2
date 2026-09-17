@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop sanctuary depth.**
+  Safe-place discs fall off toward floor-dim at the board rim with
+  the same 0.22 edge as halls, so leftover even moss is not the
+  last word on a hold. Start mint and goal coral stay.
+
 - **Well sanctuary depth.**
   Safe-place discs fall off toward floor-dim at the board rim with
   the same 0.22 edge as halls, so leftover even moss is not the

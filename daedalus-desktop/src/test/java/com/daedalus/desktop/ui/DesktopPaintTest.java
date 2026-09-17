@@ -308,6 +308,11 @@ class DesktopPaintTest {
         DesktopPaint.Marker disc = DesktopPaint.sanctuaryMarker(layout, new Point(0, 0));
         DesktopPaint.Ring lonely = DesktopPaint.worstServedRing(layout, new Point(0, 0));
         assertThat(DesktopPaint.SANCTUARY).isEqualTo("#8aaa50");
+        assertThat(DesktopPaint.SANCTUARY_EDGE_DIM).isEqualTo(0.22);
+        assertThat(DesktopPaint.sanctuaryInk(0)).isEqualTo(DesktopPaint.SANCTUARY);
+        assertThat(DesktopPaint.sanctuaryInk(1))
+                .as("sanctuary rim falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.SANCTUARY);
         assertThat(Integer.parseInt(DesktopPaint.SANCTUARY.substring(1, 3), 16))
                 .isGreaterThan(Integer.parseInt(DesktopPaint.SANCTUARY.substring(5, 7), 16));
         assertThat(DesktopPaint.WORST_SERVED).isEqualTo("#e5484d");

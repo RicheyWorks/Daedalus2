@@ -567,6 +567,13 @@ public final class DesktopPaint {
     public static final double HARDEST_ALPHA = 0.75;
     /** Sanctuary disc — same moss as {@code draw.js}. */
     public static final String SANCTUARY = "#8aaa50";
+    /** Same 0.22 rim as halls — leftover even moss is not the last word on a hold. */
+    public static final double SANCTUARY_EDGE_DIM = 0.22;
+
+    public static String sanctuaryInk(double edge) {
+        return mixHex(SANCTUARY, FLOOR_DIM, SANCTUARY_EDGE_DIM * Math.max(0, Math.min(1, edge)));
+    }
+
     /** Loneliest cell — same coral stroke as {@code draw.js}. */
     public static final String WORST_SERVED = "#e5484d";
     /** Same k as the web Place sanctuaries button. */
