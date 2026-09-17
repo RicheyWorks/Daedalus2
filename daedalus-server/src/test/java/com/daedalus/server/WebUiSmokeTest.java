@@ -128,6 +128,7 @@ class WebUiSmokeTest {
                 .contains("stageRimBreath")
                 .contains("#1a1510 0%")
                 .contains("#16120e 0%")
+                .contains("radial-gradient(1200px 700px at 50% -10%, #16120e 0%")
                 .contains("#1a1510 0%")
                 .contains("--void: #0c0908")
                 .contains("boardRimBreath")

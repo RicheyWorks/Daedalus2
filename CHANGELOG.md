@@ -320,6 +320,8 @@ under the `_migration/` portfolios.
   lamp as the board, not a cool blue pit before you enter.
   Desktop search-memory wash warms to torch-brown so visited cells sit in the
   lamp, not leftover cool slate on the well.
+  Web page wash behind the well warms to the stage void so the board is not a
+  warm island on a leftover cool pit.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
