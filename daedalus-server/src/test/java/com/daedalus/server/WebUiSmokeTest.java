@@ -53,6 +53,7 @@ class WebUiSmokeTest {
                 .contains("gate-brand").contains("gate-veil").contains("Other hosts")
                 .contains("color: #f2ead8")
                 .contains("header h1 button")
+                .contains("header .tag { color: #b09a72")
                 .contains("rgba(22, 18, 14, .88)")
                 .contains("#gate article h3")
                 .contains("letter-spacing: .04em; color: #f2ead8")
