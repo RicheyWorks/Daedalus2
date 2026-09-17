@@ -556,6 +556,8 @@ under the `_migration/` portfolios.
   cream slabs on torch stone.
   Leaderboard meta wears khaki so moves and time sit in the lamp, not leftover
   cream beside torch ranks.
+  Plugin rows wear gold hairlines so those names sit in the lamp, not leftover
+  cream slabs on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
