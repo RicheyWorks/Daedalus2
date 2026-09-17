@@ -568,6 +568,8 @@ under the `_migration/` portfolios.
   still frames on torch stone.
   ASCII maze dump wears a breathing gold lip so the text well sits in the lamp,
   not a leftover still frame on torch stone.
+  Gate command blocks wear a breathing gold lip so those hosts sit in the lamp,
+  not leftover still frames on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
