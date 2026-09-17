@@ -94,12 +94,12 @@
     if (ok(A) && ok(B)) {
       const [w, l] = A.expansions.length <= B.expansions.length ? [A, B] : [B, A];
       const ratio = (l.expansions.length / Math.max(1, w.expansions.length)).toFixed(1);
-      text = `<b style="color:${w.color}">${escapeHtml(w.id)}</b> wins the arena — route found after `
+      text = `<b style="color:#f0b429">${escapeHtml(w.id)}</b> wins the arena — route found after `
           + `${w.expansions.length} expansions vs ${l.expansions.length} (${ratio}&times; less work). `
           + `Path lengths: ${escapeHtml(A.id)} ${A.path.length}, ${escapeHtml(B.id)} ${B.path.length}.`;
     } else if (ok(A) || ok(B)) {
       const w = ok(A) ? A : B, l = w === A ? B : A;
-      text = `<b style="color:${w.color}">${escapeHtml(w.id)}</b> wins by default — `
+      text = `<b style="color:#f0b429">${escapeHtml(w.id)}</b> wins by default — `
           + `${escapeHtml(l.id)} legitimately gave up (no route under its rules).`;
     } else {
       text = "neither solver found a route.";
