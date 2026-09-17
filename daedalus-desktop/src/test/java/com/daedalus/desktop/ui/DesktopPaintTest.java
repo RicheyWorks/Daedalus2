@@ -861,6 +861,8 @@ class DesktopPaintTest {
                 .isGreaterThan(DesktopPaint.legendFadeMidAlpha(0));
         assertThat(DesktopPaint.legendFadeBotAlpha(1))
                 .isGreaterThan(DesktopPaint.legendFadeBotAlpha(0));
+        assertThat(DesktopPaint.LEGEND_INK).isEqualTo("#b09a72");
+        assertThat(DesktopPaint.LEGEND_INK).isNotEqualTo("#9aa3ad");
         assertThat(DesktopPaint.LEGEND_FADE_R).isEqualTo(16);
         assertThat(DesktopPaint.LEGEND_FADE_G).isEqualTo(11);
         assertThat(DesktopPaint.LEGEND_FADE_B).isEqualTo(8);

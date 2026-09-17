@@ -60,6 +60,8 @@ class ThemeManagerTest {
             assertThat(css).contains("#0c0908");
             assertThat(css).contains("rgba(16, 11, 8, 0.55)");
             assertThat(css).contains("rgba(16, 11, 8, 0.92)");
+            assertThat(css).contains(".legend .label");
+            assertThat(css).contains("#b09a72");
         }
         try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
             assertThat(in).as("main.fxml is on the classpath").isNotNull();

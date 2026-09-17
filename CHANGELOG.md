@@ -282,6 +282,8 @@ under the `_migration/` portfolios.
   stone sits in the same lamp, not a cool blue pit.
   Well legend fade wears the same warm void as the stage lip so overlay keys
   sit in the lamp, not a cool fog-black wash over torch stone.
+  Well legend labels wear warm khaki on web and desktop so key copy matches
+  the stone, not cool slate on a torch-brown board.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

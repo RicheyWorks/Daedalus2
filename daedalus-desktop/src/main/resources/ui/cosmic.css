@@ -138,7 +138,7 @@
     -fx-background-color: linear-gradient(to bottom, transparent, rgba(16, 11, 8, 0.55) 35%, rgba(16, 11, 8, 0.92));
 }
 .legend .label {
-    -fx-text-fill: #9aa3ad;
+    -fx-text-fill: #b09a72;
     -fx-font-family: "Bahnschrift", "Segoe UI", sans-serif;
     -fx-font-size: 11px;
     -fx-font-weight: bold;

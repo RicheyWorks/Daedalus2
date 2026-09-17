@@ -115,6 +115,7 @@ class WebUiSmokeTest {
                 .contains("legendFadeBreath")
                 .contains("rgba(16, 11, 8, .50)")
                 .contains("rgba(16, 11, 8, .88)")
+                .contains("color: #b09a72")
                 .contains("exportsRimBreath")
                 .contains("ghost:")
                 .contains("ghostDisc")

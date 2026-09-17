@@ -113,6 +113,8 @@ public final class DesktopPaint {
         return 0.06 + 0.08 * wave;
     }
 
+    /** Overlay legend labels — warm khaki, not cool slate on torch stone. */
+    public static final String LEGEND_INK = "#b09a72";
     /** Legend fade ink — same warm void as the stage lip, not cool fog-black. */
     public static final int LEGEND_FADE_R = 16;
     public static final int LEGEND_FADE_G = 11;
