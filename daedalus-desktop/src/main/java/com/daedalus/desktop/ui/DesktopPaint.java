@@ -253,6 +253,10 @@ public final class DesktopPaint {
     public static final String FOG_WALL_WARM = "#2a2218";
     /** Idle lattice walls — torch-warm stone, not the void color. */
     public static final String EMPTY_MARK_WALL = FOG_WALL_WARM;
+    /** Overlay legend floor — same 0.28 warm mix the live well paints. */
+    public static final String LEGEND_FLOOR = EMPTY_MARK_FLOOR;
+    /** Overlay legend wall — same 0.28 warm mix as clear-board posts. */
+    public static final String LEGEND_WALL = mixHex(FOG_WALL, FOG_WALL_WARM, 0.28);
     /** Same 1px corridor highlight as {@code draw.js} {@code floorHi}. */
     public static final String FLOOR_HI = "#536272";
     public static final String FOG_FLOOR_HI = FLOOR_HI;
