@@ -157,6 +157,11 @@ public final class ExplorePaint {
     public static final float TORCH_WALL_WARM_B = 0x18 / 255f;
     public static final float TORCH_FLOOR_WARM_WEIGHT = 0.28f;
     public static final float TORCH_WALL_WARM_WEIGHT = 0.45f;
+    /** Lid catches the lamp a little harder so looking up is fire, not a cool slate. */
+    public static final float TORCH_CEILING_WARM_WEIGHT = 0.36f;
+    public static final float CEILING_R = 0.26f;
+    public static final float CEILING_G = 0.18f;
+    public static final float CEILING_B = 0.12f;
     /** Soft wall–floor contact — dark near the skirting, full by this height fraction. */
     public static final double CONTACT_BOOT_FRAC = 0.28;
     public static final float CONTACT_BOOT_MIN = 0.55f;
@@ -930,7 +935,7 @@ public final class ExplorePaint {
 
     private static void ceiling(ExploreMesh.Triangle tri, float[] rgb) {
         float crown = ceilingContactShade(tri);
-        set(rgb, 0.20f * crown, 0.14f * crown, 0.11f * crown);
+        set(rgb, CEILING_R * crown, CEILING_G * crown, CEILING_B * crown);
     }
 
     private static void wall(ExploreMesh.Triangle tri, float[] rgb) {
@@ -1029,14 +1034,13 @@ public final class ExplorePaint {
         float lamp = (float) (0.40 + 0.60 * Math.max(0, facing)
                 * Math.max(0, 1.0 - dist / TORCH_REACH));
         lamp *= torchBreath(seconds);
-        float weight = tri.face() == ExploreMesh.Face.WALL
-                ? TORCH_WALL_WARM_WEIGHT : TORCH_FLOOR_WARM_WEIGHT;
-        float warmR = tri.face() == ExploreMesh.Face.WALL
-                ? TORCH_WALL_WARM_R : TORCH_FLOOR_WARM_R;
-        float warmG = tri.face() == ExploreMesh.Face.WALL
-                ? TORCH_WALL_WARM_G : TORCH_FLOOR_WARM_G;
-        float warmB = tri.face() == ExploreMesh.Face.WALL
-                ? TORCH_WALL_WARM_B : TORCH_FLOOR_WARM_B;
+        boolean wall = tri.face() == ExploreMesh.Face.WALL;
+        boolean lid = tri.face() == ExploreMesh.Face.CEILING;
+        float weight = wall ? TORCH_WALL_WARM_WEIGHT
+                : lid ? TORCH_CEILING_WARM_WEIGHT : TORCH_FLOOR_WARM_WEIGHT;
+        float warmR = wall ? TORCH_WALL_WARM_R : TORCH_FLOOR_WARM_R;
+        float warmG = wall ? TORCH_WALL_WARM_G : TORCH_FLOOR_WARM_G;
+        float warmB = wall ? TORCH_WALL_WARM_B : TORCH_FLOOR_WARM_B;
         float mix = Math.max(0f, Math.min(1f, lamp * weight));
         rgb[0] = rgb[0] + (warmR - rgb[0]) * mix;
         rgb[1] = rgb[1] + (warmG - rgb[1]) * mix;

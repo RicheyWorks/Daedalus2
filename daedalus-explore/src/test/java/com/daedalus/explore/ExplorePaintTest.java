@@ -137,12 +137,22 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.TORCH_BREATH_SPAN).isLessThan(0.2f);
         assertThat(ExplorePaint.TORCH_FLOOR_WARM_WEIGHT).isEqualTo(0.28f);
         assertThat(ExplorePaint.TORCH_WALL_WARM_WEIGHT).isEqualTo(0.45f);
+        assertThat(ExplorePaint.TORCH_CEILING_WARM_WEIGHT).isEqualTo(0.36f);
         assertThat(ExplorePaint.TORCH_FLOOR_WARM_R).isEqualTo(0x5c / 255f);
         assertThat(ExplorePaint.TORCH_WALL_WARM_R).isEqualTo(0x2a / 255f);
+        assertThat(ExplorePaint.CEILING_R).isGreaterThan(ExplorePaint.CEILING_B);
+        assertThat(ExplorePaint.CEILING_R).isLessThan(0.34f);
         // Lit stone shifts toward torch-brown — R share drops vs a dim cold wall.
         float aheadShare = ahead[0] / Math.max(1e-6f, ahead[0] + ahead[1] + ahead[2]);
         float behindShare = behind[0] / Math.max(1e-6f, behind[0] + behind[1] + behind[2]);
         assertThat(aheadShare).isLessThan(behindShare);
+        float[] lidAhead = new float[3];
+        float[] lidBehind = new float[3];
+        ExplorePaint.tint(ceilingAt(-3), true, lidAhead, 0, 0, 0);
+        ExplorePaint.tint(ceilingAt(3), true, lidBehind, 0, 0, 0);
+        assertThat(lidAhead[0]).isGreaterThan(lidBehind[0]);
+        float lidShare = lidAhead[0] / Math.max(1e-6f, lidAhead[0] + lidAhead[1] + lidAhead[2]);
+        assertThat(lidShare).isGreaterThan(0.40f);
     }
 
     @Test
@@ -513,5 +523,10 @@ class ExplorePaintTest {
 
     private static ExploreMesh.Triangle face(ExploreMesh.Face kind, double y, int tr, int tc) {
         return new ExploreMesh.Triangle(0, y, 0, 1, y, 0, 1, y, 1, kind, tr, tc);
+    }
+
+    private static ExploreMesh.Triangle ceilingAt(double z) {
+        return new ExploreMesh.Triangle(0, 2.8, z, 1, 2.8, z, 1, 2.8, z + 1,
+                ExploreMesh.Face.CEILING, 3, 3);
     }
 }

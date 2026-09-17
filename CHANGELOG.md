@@ -270,6 +270,8 @@ under the `_migration/` portfolios.
   bar, not a pasted sticker on a dark strip.
   Desktop legend floor and wall swatches wear the same torch-warm mixes as the
   live well so the overlay key names the stone you see, not cold ink.
+  Explore ceilings warm toward torch-brown with the floor so looking up is the
+  same lamp, not a cool lid over a firelit tunnel.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
