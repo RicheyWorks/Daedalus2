@@ -65,6 +65,15 @@ class ExplorePaintTest {
         assertThat(rim[0] + rim[1] + rim[2])
                 .as("corridor floor falls off toward floor-dim at the board rim")
                 .isLessThan(mid[0] + mid[1] + mid[2]);
+        float[] lidMid = new float[3];
+        float[] lidRim = new float[3];
+        ExplorePaint.tint(face(ExploreMesh.Face.CEILING, 2.8, 3, 3), true, lidMid,
+                Double.NaN, Double.NaN, 0, 0, 0);
+        ExplorePaint.tint(face(ExploreMesh.Face.CEILING, 2.8, 3, 3), true, lidRim,
+                Double.NaN, Double.NaN, 0, 0, 1);
+        assertThat(lidRim[0] + lidRim[1] + lidRim[2])
+                .as("corridor lid falls off toward floor-dim at the board rim")
+                .isLessThan(lidMid[0] + lidMid[1] + lidMid[2]);
     }
 
     @Test

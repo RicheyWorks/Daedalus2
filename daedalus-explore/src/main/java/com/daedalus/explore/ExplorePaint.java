@@ -636,7 +636,7 @@ public final class ExplorePaint {
             case WALL -> wall(tri, rgb);
             default -> set(rgb, SKY_R, SKY_G, SKY_B);
         }
-        if (tri.face() == ExploreMesh.Face.FLOOR) {
+        if (tri.face() == ExploreMesh.Face.FLOOR || tri.face() == ExploreMesh.Face.CEILING) {
             mixHereEdge(edge, rgb);
         } else if (tri.face() == ExploreMesh.Face.WALL) {
             mixWallEdge(edge, rgb);

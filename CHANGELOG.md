@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore corridor lid depth.**
+  Vault slate falls off toward floor-dim at the board rim with the
+  same 0.22 edge as halls, so leftover even breath is not the last
+  word overhead. Start mint and goal coral stay.
+
 - **Explore corridor wall depth.**
   Posts fall off toward unseen at the board rim with the same 0.28
   edge as well walls, so leftover even clay is not the last word
