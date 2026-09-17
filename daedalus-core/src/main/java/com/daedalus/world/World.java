@@ -358,6 +358,35 @@ public final class World {
     }
 
     /**
+     * Inspired place label on a parcel. Not a GIS street and not a trademarked venue.
+     * The same name is {@link ParcelNameResult#ALREADY_NAMED} and does not bump revision.
+     */
+    public ParcelNameResult nameParcel(ParcelId id, String placeName) {
+        Objects.requireNonNull(id, "ParcelId is required");
+        Objects.requireNonNull(placeName, "placeName is required");
+        String trimmed = placeName.trim();
+        if (trimmed.isEmpty()) {
+            throw new IllegalArgumentException("placeName is required");
+        }
+        synchronized (lock) {
+            for (int i = 0; i < parcels.size(); i++) {
+                Parcel parcel = parcels.get(i);
+                if (!parcel.id().equals(id)) {
+                    continue;
+                }
+                if (trimmed.equals(parcel.placeName())) {
+                    return ParcelNameResult.ALREADY_NAMED;
+                }
+                parcels.set(i, new Parcel(parcel.id(), parcel.worldId(), parcel.ownerId(),
+                        parcel.bounds(), parcel.version() + 1, trimmed));
+                revision.incrementAndGet();
+                return ParcelNameResult.NAMED;
+            }
+        }
+        throw new IllegalArgumentException("Unknown parcel " + id.value());
+    }
+
+    /**
      * Atomically refuse overlapping parcels, then place cubes and register one parcel.
      * Overlap does not call {@link #place} and does not bump revision.
      */

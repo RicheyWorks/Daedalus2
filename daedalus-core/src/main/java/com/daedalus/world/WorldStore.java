@@ -23,12 +23,13 @@ import java.util.Map;
 public final class WorldStore {
 
     static final byte[] MAGIC = "DAEW".getBytes(StandardCharsets.US_ASCII);
-    static final int VERSION = 6;
+    static final int VERSION = 7;
     static final int VERSION_CHUNKS_ONLY = 1;
     static final int VERSION_WITH_DOOR = 2;
     static final int VERSION_WITH_PARCELS = 3;
     static final int VERSION_WITH_TRAP = 4;
     static final int VERSION_WITH_PORTAL = 5;
+    static final int VERSION_WITH_NPC = 6;
 
     private WorldStore() {
     }
@@ -105,6 +106,7 @@ public final class WorldStore {
             out.writeInt(bounds.maxY());
             out.writeInt(bounds.maxZ());
             out.writeLong(parcel.version());
+            out.writeUTF(parcel.placeName());
         }
         Trap trap = snapshot.trap();
         out.writeBoolean(trap != null);
@@ -141,7 +143,8 @@ public final class WorldStore {
             throw new IOException("Not a Daedalus world snapshot");
         }
         int version = in.readUnsignedByte();
-        if (version != VERSION && version != VERSION_WITH_PORTAL
+        if (version != VERSION && version != VERSION_WITH_NPC
+                && version != VERSION_WITH_PORTAL
                 && version != VERSION_WITH_TRAP
                 && version != VERSION_WITH_PARCELS
                 && version != VERSION_WITH_DOOR && version != VERSION_CHUNKS_ONLY) {
@@ -186,7 +189,9 @@ public final class WorldStore {
                         in.readInt(), in.readInt(), in.readInt(),
                         in.readInt(), in.readInt(), in.readInt());
                 long parcelVersion = in.readLong();
-                parcels.add(new Parcel(parcelId, parcelWorld, ownerId, bounds, parcelVersion));
+                String placeName = version >= VERSION ? in.readUTF() : "";
+                parcels.add(new Parcel(parcelId, parcelWorld, ownerId, bounds,
+                        parcelVersion, placeName));
             }
         }
         Trap trap = null;
@@ -212,7 +217,7 @@ public final class WorldStore {
             portal = Portal.zero();
         }
         Npc npc = null;
-        if (version >= VERSION) {
+        if (version >= VERSION_WITH_NPC) {
             if (in.readBoolean()) {
                 String npcId = in.readUTF();
                 BlockCoordinate at = new BlockCoordinate(in.readInt(), in.readInt(), in.readInt());

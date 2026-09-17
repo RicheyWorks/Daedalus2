@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World parcel place names.**
+  A stamped parcel can wear an inspired `placeName` string (`Willow Walk`).
+  The same name is `ALREADY_NAMED` and does not bump revision. Not GIS,
+  not an official street registry, not a trademarked venue. DAEW v7
+  persists the label.
+
 - **World npc-zero.**
   `npc-zero` talks and hushes with named results (`SPOKE`,
   `ALREADY_SPEAKING`, `HUSHED`, `ALREADY_IDLE`). Inspect is quiet;

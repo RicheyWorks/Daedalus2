@@ -65,7 +65,7 @@ No blockchain. No microservices. No seventh reactor module until a boundary is f
 | Wearables | **NOT NOW — item provider** | Equipped looks bind to an avatar later. No clothing types in `daedalus-core` this streak. |
 | NFT art display | **NOT NOW — display provider** | A framed surface on a parcel wall binds an item id (string). The world *shows*; a later provider proves ownership. No wallet type, no ledger, no mint in core. |
 | City-scale look | **NOT NOW — later renderer** | Street-scale materials and skyline after W1.5. Distant voxels stay the **real stamp** (or culled). Never a six-cube placeholder LOD. |
-| Street / place names | **DEFER — labels on parcels** | Inspired toponyms as strings. Not GIS imports, not official street registries, not trademarked venues as if affiliated. |
+| Street / place names | **SHIPPED — labels on parcels** | Inspired toponyms as `placeName` strings. Not GIS imports, not official street registries, not trademarked venues as if affiliated. |
 
 `DEPRECATE` / `REMOVE`: still nothing in production.
 

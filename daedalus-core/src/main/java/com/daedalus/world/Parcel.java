@@ -13,7 +13,8 @@ public record Parcel(
         WorldId worldId,
         String ownerId,
         ParcelBounds bounds,
-        long version) {
+        long version,
+        String placeName) {
 
     public static final String SYSTEM_OWNER = "system";
 
@@ -28,5 +29,10 @@ public record Parcel(
         if (version < 1) {
             throw new IllegalArgumentException("Parcel version must be at least 1");
         }
+        placeName = placeName == null ? "" : placeName.trim();
+    }
+
+    public Parcel(ParcelId id, WorldId worldId, String ownerId, ParcelBounds bounds, long version) {
+        this(id, worldId, ownerId, bounds, version, "");
     }
 }
