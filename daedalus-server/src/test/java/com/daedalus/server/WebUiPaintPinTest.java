@@ -227,6 +227,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellGhostTrailsHaveRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("function ghostTileInk(tr, tc, th, tw)")
+                    .contains("(tr, tc) => ghostTileInk(tr, tc, th, tw)");
+        }
+    }
+
+    @Test
     void wellFieldCellsHaveRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

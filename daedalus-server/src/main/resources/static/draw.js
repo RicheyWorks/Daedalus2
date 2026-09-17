@@ -82,7 +82,7 @@
    * walked through walls. Desktop already paints connector tiles; this matches that.
    * A non-adjacent pair is a teleport: we refuse the chord rather than draw through a wall.
    */
-  function paintWalk(g, geom, points, color, progress, alpha, ageFade) {
+  function paintWalk(g, geom, points, color, progress, alpha, ageFade, ink) {
     if (!points || !points.length || progress <= 0) return;
     const visible = Math.max(1, Math.ceil(points.length * Math.min(1, progress)));
     const base = alpha == null ? 0.85 : alpha;
@@ -95,11 +95,13 @@
           : ageFade ? (0.35 + 0.65 * ((i + 1) / visible)) : 1;
       g.globalAlpha = base * fade;
       const p = points[i];
+      if (ink) g.fillStyle = ink(2 * p.row + 1, 2 * p.col + 1);
       g.fillRect(geom.offX[2 * p.col + 1], geom.offY[2 * p.row + 1], geom.cell, geom.cell);
       if (i === 0) continue;
       const prev = points[i - 1];
       if (Math.abs(p.row - prev.row) + Math.abs(p.col - prev.col) !== 1) continue;
       const tr = prev.row + p.row + 1, tc = prev.col + p.col + 1;
+      if (ink) g.fillStyle = ink(tr, tc);
       g.fillRect(geom.offX[tc], geom.offY[tr],
                  geom.offX[tc + 1] - geom.offX[tc],
                  geom.offY[tr + 1] - geom.offY[tr]);
@@ -373,12 +375,15 @@
     return mixHex("#c8a878", COLORS.floorDim, 0.22 * edge);
   }
 
-  function ghostInk(p, th, tw) {
-    const tr = 2 * p.row + 1, tc = 2 * p.col + 1;
+  function ghostTileInk(tr, tc, th, tw) {
     const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
     const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
     const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
     return mixHex(COLORS.ghost, COLORS.floorDim, 0.22 * edge);
+  }
+
+  function ghostInk(p, th, tw) {
+    return ghostTileInk(2 * p.row + 1, 2 * p.col + 1, th, tw);
   }
 
   function chokeInk(tr, tc, th, tw) {
@@ -792,7 +797,8 @@
       paintWalk(g, geom, points, PLAYER_COLORS[i % PLAYER_COLORS.length], 1, 0.32, true);
     });
     if (scene.session && scene.ghostWalk && scene.ghostWalk.length) {
-      paintWalk(g, geom, scene.ghostWalk, COLORS.ghost, 1, 0.28, true);
+      paintWalk(g, geom, scene.ghostWalk, COLORS.ghost, 1, 0.28, true,
+          (tr, tc) => ghostTileInk(tr, tc, th, tw));
     }
     if (start) endpoint(g, geom, start, COLORS.start);
     if (goal)  endpoint(g, geom, goal,  COLORS.goal);
