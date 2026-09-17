@@ -52,6 +52,7 @@ class WebUiSmokeTest {
                 .contains("id=\"gateExploreCmd\"").contains("id=\"home\"")
                 .contains("gate-brand").contains("gate-veil").contains("Other hosts")
                 .contains("name=\"theme-color\" content=\"#0c0908\"")
+                .contains("name=\"msapplication-TileColor\" content=\"#0c0908\"")
                 .contains("name=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\"")
                 .contains("color: #f2ead8")
                 .contains("header h1 button")
