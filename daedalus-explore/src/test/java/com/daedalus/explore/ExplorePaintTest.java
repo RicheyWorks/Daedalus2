@@ -217,6 +217,14 @@ class ExplorePaintTest {
         assertThat(icon[goal] & 0xFF)
                 .as("exit coral sits on the idle goal cell")
                 .isEqualTo(ExplorePaint.WINDOW_ICON_GOAL_R);
+        int rim = (9 * ExplorePaint.WINDOW_ICON_SIZE + 5) * 4;
+        int midWall = (13 * ExplorePaint.WINDOW_ICON_SIZE + 13) * 4;
+        assertThat(icon[rim] & 0xFF)
+                .as("idle icon rim posts fall off toward unseen")
+                .isEqualTo(ExplorePaint.windowIconWallRgb(0, 0)[0])
+                .isNotEqualTo(icon[midWall] & 0xFF);
+        assertThat(icon[midWall] & 0xFF)
+                .isEqualTo(ExplorePaint.windowIconWallRgb(2, 4)[0]);
     }
 
     @Test

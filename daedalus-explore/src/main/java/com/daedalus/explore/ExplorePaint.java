@@ -64,6 +64,31 @@ public final class ExplorePaint {
     public static final int WINDOW_ICON_GOAL_G = 0x5a;
     public static final int WINDOW_ICON_GOAL_B = 0x5f;
 
+    /** Same 0.28 rim as live / idle well posts. */
+    public static double windowIconEdge(int tileRow, int tileCol) {
+        int rows = WINDOW_ICON_MARK.length;
+        int cols = WINDOW_ICON_MARK[0].length();
+        double cx = (cols - 1) / 2.0;
+        double cy = (rows - 1) / 2.0;
+        double dx = (tileCol - cx) / Math.max(1, cols / 2.0);
+        double dy = (tileRow - cy) / Math.max(1, rows / 2.0);
+        return Math.min(1, Math.hypot(dx, dy));
+    }
+
+    public static int[] windowIconWallRgb(int tileRow, int tileCol) {
+        double edge = windowIconEdge(tileRow, tileCol);
+        return new int[] {
+                mixByte(mixByte(0x12, WINDOW_ICON_WALL_R, 0.28), WINDOW_ICON_R, 0.28 * edge),
+                mixByte(mixByte(0x0e, WINDOW_ICON_WALL_G, 0.28), WINDOW_ICON_G, 0.28 * edge),
+                mixByte(mixByte(0x0c, WINDOW_ICON_WALL_B, 0.28), WINDOW_ICON_B, 0.28 * edge)
+        };
+    }
+
+    private static int mixByte(int from, int to, double t) {
+        double u = Math.max(0, Math.min(1, t));
+        return (int) Math.round(from + (to - from) * u);
+    }
+
     public static byte[] windowIconRgba() {
         byte[] px = new byte[WINDOW_ICON_SIZE * WINDOW_ICON_SIZE * 4];
         for (int i = 0; i < px.length; i += 4) {
@@ -94,9 +119,10 @@ public final class ExplorePaint {
                     green = WINDOW_ICON_GOAL_G;
                     blue = WINDOW_ICON_GOAL_B;
                 } else if (WINDOW_ICON_MARK[r].charAt(c) == '#') {
-                    red = WINDOW_ICON_WALL_R;
-                    green = WINDOW_ICON_WALL_G;
-                    blue = WINDOW_ICON_WALL_B;
+                    int[] wall = windowIconWallRgb(r, c);
+                    red = wall[0];
+                    green = wall[1];
+                    blue = wall[2];
                 } else {
                     red = WINDOW_ICON_FLOOR_R;
                     green = WINDOW_ICON_FLOOR_G;
