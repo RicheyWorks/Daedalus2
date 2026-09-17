@@ -411,6 +411,13 @@
     return victoryTileInk(2 * p.row + 1, 2 * p.col + 1, th, tw);
   }
 
+  function playerTileInk(tr, tc, th, tw) {
+    const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
+    const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
+    const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+    return mixHex("#f5c14a", COLORS.floorDim, 0.22 * edge);
+  }
+
   function waypointInk(p, th, tw, got) {
     const tr = 2 * p.row + 1, tc = 2 * p.col + 1;
     const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
@@ -546,7 +553,8 @@
     }
 
     if (scene.fog) {
-      paintWalk(g, geom, scene.fog.walk, PLAYER_COLORS[0], 1, 0.32, true);
+      paintWalk(g, geom, scene.fog.walk, PLAYER_COLORS[0], 1, 0.32, true,
+          (tr, tc) => playerTileInk(tr, tc, th, tw));
       if (start && seenCell(scene.fog, start.row, start.col)) {
         endpoint(g, geom, start, COLORS.start);
       }

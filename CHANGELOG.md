@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well fog-walk depth.**
+  Torch-gold steps fall off toward floor-dim at the board rim with
+  the same 0.22 edge as halls, so leftover even breath is not the
+  last word on a remembered corridor. KEEP ice stays.
+
 - **Desktop race-B ribbon depth.**
   Challenger path and tip fall off toward floor-dim at the board
   rim with the same 0.22 edge as halls, so leftover even torch
