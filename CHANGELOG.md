@@ -246,6 +246,8 @@ under the `_migration/` portfolios.
   not stuck slate under DAEDALUS.
   Explore torch ash lofts in the beam so the flame has air, not a pasted
   triangle over still stone.
+  Explore wall–ceiling contact softens the crown so tunnels have a lid, not a
+  hard join between flat ceiling and wall.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

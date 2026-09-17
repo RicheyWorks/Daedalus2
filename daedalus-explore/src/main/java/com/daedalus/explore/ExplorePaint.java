@@ -124,9 +124,15 @@ public final class ExplorePaint {
     /** Soft wall–floor contact — dark near the skirting, full by this height fraction. */
     public static final double CONTACT_BOOT_FRAC = 0.28;
     public static final float CONTACT_BOOT_MIN = 0.55f;
+    /** Soft wall–ceiling contact — dark near the crown, same band as the boot. */
+    public static final double CONTACT_CROWN_FRAC = CONTACT_BOOT_FRAC;
+    public static final float CONTACT_CROWN_MIN = CONTACT_BOOT_MIN;
     /** Floor skirting — darken toward the tile rim where walls meet. */
     public static final float FLOOR_CONTACT_START = 0.55f;
     public static final float FLOOR_CONTACT_DIM = 0.16f;
+    /** Ceiling crown — same rim falloff as the floor so the lid has weight. */
+    public static final float CEILING_CONTACT_START = FLOOR_CONTACT_START;
+    public static final float CEILING_CONTACT_DIM = FLOOR_CONTACT_DIM;
 
     public enum MapKind {
         FLOOR,
@@ -192,7 +198,7 @@ public final class ExplorePaint {
         }
         switch (tri.face()) {
             case FLOOR -> floor(tri, rgb);
-            case CEILING -> set(rgb, 0.20f, 0.14f, 0.11f);
+            case CEILING -> ceiling(tri, rgb);
             case WALL -> wall(tri, rgb);
             default -> set(rgb, SKY_R, SKY_G, SKY_B);
         }
@@ -817,6 +823,11 @@ public final class ExplorePaint {
         set(rgb, 0.34f * check * skirt, 0.24f * check * skirt, 0.14f * check * skirt);
     }
 
+    private static void ceiling(ExploreMesh.Triangle tri, float[] rgb) {
+        float crown = ceilingContactShade(tri);
+        set(rgb, 0.20f * crown, 0.14f * crown, 0.11f * crown);
+    }
+
     private static void wall(ExploreMesh.Triangle tri, float[] rgb) {
         double nx = (tri.y2() - tri.y1()) * (tri.z3() - tri.z1())
                 - (tri.z2() - tri.z1()) * (tri.y3() - tri.y1());
@@ -834,14 +845,21 @@ public final class ExplorePaint {
         }
     }
 
-    /** Soft skirting on the wall — dark at the floor, full by {@link #CONTACT_BOOT_FRAC}. */
+    /**
+     * Soft skirting on the wall — dark at the floor and the crown, full in the
+     * mid-band so the tunnel has a boot and a lid.
+     */
     public static float wallContactShade(double midY) {
         double yFrac = Math.max(0, Math.min(1, midY / ExploreMesh.WALL_HEIGHT));
-        if (yFrac >= CONTACT_BOOT_FRAC) {
-            return 1f;
+        if (yFrac < CONTACT_BOOT_FRAC) {
+            float t = (float) (yFrac / CONTACT_BOOT_FRAC);
+            return CONTACT_BOOT_MIN + (1f - CONTACT_BOOT_MIN) * t;
         }
-        float t = (float) (yFrac / CONTACT_BOOT_FRAC);
-        return CONTACT_BOOT_MIN + (1f - CONTACT_BOOT_MIN) * t;
+        if (yFrac > 1.0 - CONTACT_CROWN_FRAC) {
+            float t = (float) ((1.0 - yFrac) / CONTACT_CROWN_FRAC);
+            return CONTACT_CROWN_MIN + (1f - CONTACT_CROWN_MIN) * t;
+        }
+        return 1f;
     }
 
     /** Soft skirting on the floor — dark toward the tile rim where walls meet. */
@@ -862,6 +880,26 @@ public final class ExplorePaint {
         }
         float t = (float) ((rim - FLOOR_CONTACT_START) / (1.0 - FLOOR_CONTACT_START));
         return 1f - FLOOR_CONTACT_DIM * t;
+    }
+
+    /** Soft crown on the ceiling — dark toward the tile rim where walls meet. */
+    public static float ceilingContactShade(ExploreMesh.Triangle tri) {
+        if (tri == null || tri.face() != ExploreMesh.Face.CEILING) {
+            return 1f;
+        }
+        double cx = (tri.x1() + tri.x2() + tri.x3()) / 3.0;
+        double cz = (tri.z1() + tri.z2() + tri.z3()) / 3.0;
+        double tcx = ExploreMesh.tileCenterX(tri.tc());
+        double tcz = ExploreMesh.tileCenterZ(tri.tr());
+        double half = ExploreMesh.TILE / 2.0;
+        double lx = Math.abs(cx - tcx) / half;
+        double lz = Math.abs(cz - tcz) / half;
+        double rim = Math.max(0, Math.min(1, Math.max(lx, lz)));
+        if (rim <= CEILING_CONTACT_START) {
+            return 1f;
+        }
+        float t = (float) ((rim - CEILING_CONTACT_START) / (1.0 - CEILING_CONTACT_START));
+        return 1f - CEILING_CONTACT_DIM * t;
     }
 
     private static float stripe(ExploreMesh.Triangle tri, boolean eastWest) {
