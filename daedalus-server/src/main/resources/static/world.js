@@ -66,7 +66,14 @@
     const name = document.createElement("b");
     name.textContent = label;
     line.appendChild(name);
-    line.appendChild(document.createTextNode(" " + value));
+    if (label === "place" && value && value !== "—") {
+      const street = document.createElement("span");
+      street.className = "place";
+      street.textContent = " " + value;
+      line.appendChild(street);
+    } else {
+      line.appendChild(document.createTextNode(" " + value));
+    }
     box.appendChild(line);
   }
 

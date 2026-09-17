@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well world street ink.**
+  A named parcel on the well world rail wears torch wood `#94612e`,
+  same as explore `MAP_BLOCK`, so leftover khaki is not the last word
+  on Willow Walk. Empty place stays `—`. `/` is still the maze well.
+
 - **Explore cube boot.**
   Occupied cube side faces split a torch skirting band at the same
   fraction as corridor posts, so a slab sits on the floor and is not
