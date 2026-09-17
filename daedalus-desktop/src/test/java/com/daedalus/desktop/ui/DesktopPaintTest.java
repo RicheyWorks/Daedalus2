@@ -558,6 +558,11 @@ class DesktopPaintTest {
                 .isNotEqualTo(DesktopPaint.fogWall(fog, 1, 0, 0));
         assertThat(DesktopPaint.fogWallHiInk(1, 1))
                 .isNotEqualTo(DesktopPaint.fogWallHiInk(1, 0));
+        assertThat(DesktopPaint.fogFloor(fog, 1, 1, 1))
+                .as("fog rim halls fall off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.fogFloor(fog, 1, 1, 0));
+        assertThat(DesktopPaint.fogFloorHiInk(1, 1))
+                .isNotEqualTo(DesktopPaint.fogFloorHiInk(1, 0));
         assertThat(DesktopPaint.FOG_UNSEEN).isEqualTo("#0c0908");
         assertThat(DesktopPaint.FOG_UNSEEN).isEqualTo(DesktopPaint.WELL_VOID_EDGE);
         assertThat(DesktopPaint.WELL_VOID_CENTER).isEqualTo("#16120e");

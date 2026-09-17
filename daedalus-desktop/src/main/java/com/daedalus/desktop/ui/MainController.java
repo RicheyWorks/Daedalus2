@@ -2277,13 +2277,14 @@ public class MainController {
                             Color.web(DesktopPaint.fogWallHiInk(lamp, edge)));
                     continue;
                 }
+                double edge = DesktopPaint.floorEdge(layout, r, c);
                 g.setFill(Color.web(DesktopPaint.endFloorInk(
-                        DesktopPaint.fogFloor(fog, r, c), tiles[r][c])));
+                        DesktopPaint.fogFloor(fog, r, c, edge), tiles[r][c])));
                 g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
                 double intensity = DesktopPaint.fogFloorIntensity(fog, r, c);
                 paintHairline(g, DesktopPaint.floorHiStroke(layout, r, c, intensity),
                         Color.web(DesktopPaint.endFloorInk(
-                                DesktopPaint.fogFloorHiInk(intensity), tiles[r][c])));
+                                DesktopPaint.fogFloorHiInk(intensity, edge), tiles[r][c])));
             }
         }
         if (!playerWalk.isEmpty() && theme != null) {

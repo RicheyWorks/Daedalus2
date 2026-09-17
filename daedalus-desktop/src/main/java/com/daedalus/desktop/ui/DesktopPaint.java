@@ -326,8 +326,13 @@ public final class DesktopPaint {
 
     /** Fog corridor shine warms with the lamp — same 0.28 weight as underfoot. */
     public static String fogFloorHiInk(double intensity) {
-        return mixHex(FLOOR_HI, FOG_FLOOR_WARM,
+        return fogFloorHiInk(intensity, 0);
+    }
+
+    public static String fogFloorHiInk(double intensity, double edge) {
+        String hi = mixHex(FLOOR_HI, FOG_FLOOR_WARM,
                 0.28 * Math.max(0, Math.min(1, intensity)));
+        return mixHex(hi, FLOOR_DIM, FLOOR_EDGE_DIM * Math.max(0, Math.min(1, edge)));
     }
 
     /** Clear wall ink — torch-warm posts, then darker toward unseen at the rim. */
@@ -1836,9 +1841,14 @@ public final class DesktopPaint {
     }
 
     public static String fogFloor(Fog fog, int tileRow, int tileCol) {
+        return fogFloor(fog, tileRow, tileCol, 0);
+    }
+
+    public static String fogFloor(Fog fog, int tileRow, int tileCol, double edge) {
         double lamp = fogLamp(fog, tileRow, tileCol) * fogFrontier(fog, tileRow, tileCol);
         String lit = mixHex(FOG_FLOOR, FOG_FLOOR_WARM, 0.28 * lamp);
-        return mixHex(FOG_FLOOR_DIM, lit, lamp);
+        String lampFloor = mixHex(FOG_FLOOR_DIM, lit, lamp);
+        return mixHex(lampFloor, FLOOR_DIM, FLOOR_EDGE_DIM * Math.max(0, Math.min(1, edge)));
     }
 
     /** Revealed wall near the lamp warms toward torch-brown — same as {@code draw.js}. */
