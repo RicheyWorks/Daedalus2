@@ -157,7 +157,7 @@
                 </Label>
                 <Label fx:id="legendChoke" text="chokepoint" managed="false" visible="false">
                     <graphic>
-                        <Rectangle width="10" height="10" fill="#c084fc" arcWidth="3" arcHeight="3"/>
+                        <Rectangle width="10" height="10" fill="#c07850" arcWidth="3" arcHeight="3"/>
                     </graphic>
                 </Label>
                 <Label fx:id="legendHardest" text="hardest" managed="false" visible="false">

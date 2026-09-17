@@ -236,7 +236,9 @@ class DesktopPaintTest {
         DesktopPaint.ChokeMark mark = DesktopPaint.chokeMark(layout, east);
         assertThat(mark).isNotNull();
         assertThat(mark.haloW()).isGreaterThan(mark.w());
-        assertThat(DesktopPaint.CHOKE).isEqualTo("#c084fc");
+        assertThat(DesktopPaint.CHOKE).isEqualTo("#c07850");
+        assertThat(Integer.parseInt(DesktopPaint.CHOKE.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.CHOKE.substring(5, 7), 16));
         DesktopPaint.Ring halo = DesktopPaint.chokeHalo(layout, east);
         DesktopPaint.Ring ring = DesktopPaint.chokeRing(layout, east);
         assertThat(halo).isNotNull();

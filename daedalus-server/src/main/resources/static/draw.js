@@ -575,13 +575,13 @@
         const cy = (geom.offY[tr] + geom.offY[tr + 1]) / 2;
         const core = Math.max(geom.cell, geom.offX[tc + 1] - geom.offX[tc],
             geom.offY[tr + 1] - geom.offY[tr]) * 0.55;
-        g.fillStyle = "#c084fc";
+        g.fillStyle = "#c07850";
         g.globalAlpha = 0.16 + 0.12 * cutsWave;
         g.beginPath();
         g.arc(cx, cy, core + geom.cell * (0.18 + 0.05 * cutsWave), 0, 2 * Math.PI);
         g.fill();
         g.globalAlpha = 1;
-        g.strokeStyle = "#c084fc";
+        g.strokeStyle = "#c07850";
         g.globalAlpha = 0.72 + 0.18 * cutsWave;
         g.lineWidth = Math.max(1.5, geom.cell * 0.1);
         g.beginPath();
