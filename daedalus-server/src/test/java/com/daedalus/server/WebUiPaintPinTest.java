@@ -23,7 +23,8 @@ class WebUiPaintPinTest {
             assertThat(html).contains(
                     "#log .t { color: #b09a72; margin-right: 6px; -webkit-user-drag: none")
                     .contains("#log .solver { color: #d4a04c; -webkit-user-drag: none")
-                    .contains("#log .player { color: var(--gold); -webkit-user-drag: none");
+                    .contains("#log .player { color: var(--gold); -webkit-user-drag: none")
+                    .contains("#log .state  { color: var(--accent); -webkit-user-drag: none");
         }
     }
 }
