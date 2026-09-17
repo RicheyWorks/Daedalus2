@@ -4,10 +4,13 @@ package com.daedalus.explore;
 
 import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
+import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Flat Doom-like tints for extruded faces. GLFW only applies these;
@@ -212,6 +215,10 @@ public final class ExplorePaint {
     public static final float MAP_WALL_R = 0.64f;
     public static final float MAP_WALL_G = 0.40f;
     public static final float MAP_WALL_B = 0.22f;
+    /** Occupied cube on the earned map — torch wood, not leftover ice. */
+    public static final float MAP_BLOCK_R = 0.58f;
+    public static final float MAP_BLOCK_G = 0.38f;
+    public static final float MAP_BLOCK_B = 0.18f;
     /** Map stone breath — same cadence as the gold frame. */
     public static final float MAP_STONE_BREATH_MS = MAP_HERE_BREATH_MS;
 
@@ -228,6 +235,8 @@ public final class ExplorePaint {
         float breath = mapStoneBreath(seconds);
         if (kind == MapKind.WALL) {
             set(rgb, MAP_WALL_R * breath, MAP_WALL_G * breath, MAP_WALL_B * breath);
+        } else if (kind == MapKind.BLOCK) {
+            set(rgb, MAP_BLOCK_R * breath, MAP_BLOCK_G * breath, MAP_BLOCK_B * breath);
         } else {
             set(rgb, MAP_FLOOR_R * breath, MAP_FLOOR_G * breath, MAP_FLOOR_B * breath);
         }
@@ -334,7 +343,9 @@ public final class ExplorePaint {
         /** Revealed start — same mint as the well gate. */
         START,
         /** Revealed goal — same coral as the well exit. */
-        GOAL
+        GOAL,
+        /** Occupied cube — torch wood, not leftover well ice. */
+        BLOCK
     }
 
     public record MapDot(int x, int y, MapKind kind, String story) {
@@ -917,6 +928,11 @@ public final class ExplorePaint {
 
     public static List<MapDot> automap(ExploreFog fog, ExploreMesh mesh, ExploreBody body,
                                       List<ExploreMarker> markers) {
+        return automap(fog, mesh, body, markers, null);
+    }
+
+    public static List<MapDot> automap(ExploreFog fog, ExploreMesh mesh, ExploreBody body,
+                                      List<ExploreMarker> markers, WorldMesh blocks) {
         if (fog == null || mesh == null || mesh.tiles() == null) {
             return List.of();
         }
@@ -948,6 +964,23 @@ public final class ExplorePaint {
                 int x = project(tc, minC, maxC);
                 int y = MAP - 1 - project(tr, minR, maxR);
                 out.add(new MapDot(x, y, mesh.solidTile(tr, tc) ? MapKind.WALL : MapKind.FLOOR));
+            }
+        }
+        if (blocks != null) {
+            Set<BlockCoordinate> seen = new HashSet<>();
+            for (WorldMesh.Triangle tri : blocks.triangles()) {
+                if (tri == null || tri.at() == null || !seen.add(tri.at())) {
+                    continue;
+                }
+                int col = ExploreMesh.cellCol(tri.at().x() + 0.5);
+                int row = ExploreMesh.cellRow(tri.at().z() + 0.5);
+                int tr = 2 * row + 1;
+                int tc = 2 * col + 1;
+                if (!fog.tileVisible(tr, tc)) {
+                    continue;
+                }
+                out.add(new MapDot(project(tc, minC, maxC),
+                        MAP - 1 - project(tr, minR, maxR), MapKind.BLOCK));
             }
         }
         for (int tr = minR; tr <= maxR; tr++) {

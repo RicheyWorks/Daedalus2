@@ -8,6 +8,7 @@ import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
+import com.daedalus.world.World;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -305,6 +306,18 @@ class ExplorePaintTest {
         float[] gate = new float[3];
         ExplorePaint.mapEndTint(ExplorePaint.MapKind.START, gate);
         assertThat(gate[1]).isGreaterThan(gate[0]);
+        World volume = World.zero();
+        volume.place(new BlockCoordinate(2, 0, 0), BlockType.WOOD);
+        List<ExplorePaint.MapDot> withBlocks = ExplorePaint.automap(fog, mesh,
+                ExploreBody.atCell(new Point(0, 0)), null, WorldMesh.of(volume));
+        assertThat(withBlocks.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.BLOCK))
+                .as("earned map names an occupied cube")
+                .isTrue();
+        float[] cube = new float[3];
+        ExplorePaint.mapStoneTint(ExplorePaint.MapKind.BLOCK, 0, cube);
+        assertThat(cube[0]).as("block ink is torch wood, not leftover ice")
+                .isGreaterThan(ExplorePaint.MAP_FLOOR_R);
+        assertThat(cube[2]).isLessThan(cube[0]);
         assertThat(ExplorePaint.MAP_START_G).isEqualTo(0xe0 / 255f);
         float[] exit = new float[3];
         ExplorePaint.mapEndTint(ExplorePaint.MapKind.GOAL, exit);

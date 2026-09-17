@@ -700,7 +700,8 @@ public final class ExploreHost {
 
     private static void automap(double aspect, ExploreWorld world, double seconds) {
         List<ExplorePaint.MapDot> dots = ExplorePaint.automap(
-                world.fog(), world.mesh(), world.body(), world.markers());
+                world.fog(), world.mesh(), world.body(), world.markers(),
+                world.showingBlocks() ? world.blocks() : null);
         if (dots.isEmpty()) {
             return;
         }

@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore automap cubes.**
+  Occupied cubes that fog has earned paint as torch-wood `BLOCK` dots
+  on the automap. Unseen slabs stay off the page. Not leftover well ice.
+
 - **Explore block collision.**
   Occupied cubes refuse the body the same way corridor walls do:
   discrete `World.contains`, sampled at boot and eye. An opening still
