@@ -101,6 +101,14 @@ public final class ExplorePaint {
     }
     /** Ortho strip under the crosshair — Doom status height in NDC. */
     public static final float STATUS_H = 0.28f;
+    /** Warm HUD void — status fill and automap pocket share this well. */
+    public static final float HUD_VOID_R = 0.12f;
+    public static final float HUD_VOID_G = 0.08f;
+    public static final float HUD_VOID_B = 0.06f;
+    /** Automap inset — a shade deeper than the strip, same brown family. */
+    public static final float MAP_POCKET_R = 0.06f;
+    public static final float MAP_POCKET_G = 0.04f;
+    public static final float MAP_POCKET_B = 0.03f;
     /** Gold lip — same ink as the automap frame. */
     public static final float STATUS_GOLD_R = 0.72f;
     public static final float STATUS_GOLD_G = 0.52f;

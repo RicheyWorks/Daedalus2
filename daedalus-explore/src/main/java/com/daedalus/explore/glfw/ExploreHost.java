@@ -501,7 +501,7 @@ public final class ExploreHost {
                                double seconds) {
         float bot = -1f;
         float top = bot + ExplorePaint.STATUS_H;
-        glColor3f(0.12f, 0.08f, 0.06f);
+        glColor3f(ExplorePaint.HUD_VOID_R, ExplorePaint.HUD_VOID_G, ExplorePaint.HUD_VOID_B);
         fill(-aspect, bot, aspect, top);
         glColor3f(ExplorePaint.STATUS_GOLD_UNDER_R, ExplorePaint.STATUS_GOLD_UNDER_G,
                 ExplorePaint.STATUS_GOLD_UNDER_B);
@@ -645,7 +645,7 @@ public final class ExploreHost {
         glColor3f(ExplorePaint.STATUS_GOLD_UNDER_R, ExplorePaint.STATUS_GOLD_UNDER_G,
                 ExplorePaint.STATUS_GOLD_UNDER_B);
         fill(left - frameIn, bot - frameIn, right + frameIn, top + frameIn);
-        glColor3f(0.04f, 0.03f, 0.03f);
+        glColor3f(ExplorePaint.MAP_POCKET_R, ExplorePaint.MAP_POCKET_G, ExplorePaint.MAP_POCKET_B);
         fill(left, bot, right, top);
         double sx = (right - left) / ExplorePaint.MAP;
         double sy = (top - bot) / ExplorePaint.MAP;
