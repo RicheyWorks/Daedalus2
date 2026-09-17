@@ -105,6 +105,18 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.blockContactShade(crownFace))
                 .isLessThan(ExplorePaint.blockContactShade(shaftFace));
         assertThat(ExplorePaint.blockContactShade(null)).isEqualTo(1f);
+        BlockCoordinate lidAt = new BlockCoordinate(0, 0, 0);
+        WorldMesh.Triangle lidMid = new WorldMesh.Triangle(
+                0.28, 1, 0.28, 0.72, 1, 0.28, 0.72, 1, 0.72,
+                WorldMesh.Face.POS_Y, BlockType.WOOD, lidAt);
+        WorldMesh.Triangle lidRim = new WorldMesh.Triangle(
+                0, 1, 0, 1, 1, 0, 1, 1, 0.28,
+                WorldMesh.Face.POS_Y, BlockType.WOOD, lidAt);
+        assertThat(ExplorePaint.blockLidContactShade(lidRim))
+                .as("cube lid rim is darker contact, not leftover even wood")
+                .isLessThan(ExplorePaint.blockLidContactShade(lidMid));
+        assertThat(ExplorePaint.blockContactShade(lidRim))
+                .isLessThan(ExplorePaint.blockContactShade(lidMid));
     }
 
     @Test

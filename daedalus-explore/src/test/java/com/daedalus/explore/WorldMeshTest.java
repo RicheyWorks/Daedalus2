@@ -26,7 +26,7 @@ class WorldMeshTest {
         World world = World.zero();
         world.place(new BlockCoordinate(3, 1, -2), BlockType.STONE);
         WorldMesh mesh = WorldMesh.of(world);
-        assertThat(mesh.triangles()).hasSize(28);
+        assertThat(mesh.triangles()).hasSize(36);
         assertThat(mesh.triangles().stream()
                 .filter(t -> t.face() == WorldMesh.Face.POS_Z)
                 .anyMatch(t -> (t.y1() + t.y2() + t.y3()) / 3.0 < t.at().y() + WorldMesh.BOOT_FRAC))
@@ -55,7 +55,7 @@ class WorldMeshTest {
         world.place(new BlockCoordinate(0, 0, 0), BlockType.DIRT);
         world.place(new BlockCoordinate(1, 0, 0), BlockType.WOOD);
         WorldMesh mesh = WorldMesh.of(world);
-        assertThat(mesh.triangles()).hasSize(44);
+        assertThat(mesh.triangles()).hasSize(60);
         long shared = mesh.triangles().stream()
                 .filter(t -> t.at().equals(new BlockCoordinate(0, 0, 0))
                         && t.face() == WorldMesh.Face.POS_X)

@@ -1643,13 +1643,28 @@ public final class ExplorePaint {
      * not leftover even wood down to the floor.
      */
     public static float blockContactShade(WorldMesh.Triangle tri) {
-        if (tri == null || tri.face() == WorldMesh.Face.POS_Y
-                || tri.face() == WorldMesh.Face.NEG_Y) {
+        if (tri == null || tri.face() == WorldMesh.Face.NEG_Y) {
             return 1f;
+        }
+        if (tri.face() == WorldMesh.Face.POS_Y) {
+            return blockLidContactShade(tri);
         }
         double midY = (tri.y1() + tri.y2() + tri.y3()) / 3.0;
         double base = tri.at() == null ? Math.floor(midY) : tri.at().y();
         return wallContactShade((midY - base) * ExploreMesh.WALL_HEIGHT);
+    }
+
+    /** Soft lid rim — dark toward the cube edge so the top meets the posts. */
+    public static float blockLidContactShade(WorldMesh.Triangle tri) {
+        if (tri == null || tri.face() != WorldMesh.Face.POS_Y) {
+            return 1f;
+        }
+        double cx = (tri.x1() + tri.x2() + tri.x3()) / 3.0;
+        double cz = (tri.z1() + tri.z2() + tri.z3()) / 3.0;
+        double bx = tri.at() == null ? Math.floor(cx) + 0.5 : tri.at().x() + 0.5;
+        double bz = tri.at() == null ? Math.floor(cz) + 0.5 : tri.at().z() + 0.5;
+        double edge = Math.min(1, Math.hypot(cx - bx, cz - bz) / 0.5);
+        return CONTACT_CROWN_MIN + (1f - CONTACT_CROWN_MIN) * (1f - (float) edge);
     }
 
     /**

@@ -128,7 +128,7 @@ public final class WorldMesh {
                 side(out, x, y, z1, x, y1, z1, x, y1, z, x, y, z, face, type, at);
             }
             case POS_Y -> {
-                quad(out, x, y1, z, x, y1, z1, x1, y1, z1, x1, y1, z, face, type, at);
+                lid(out, x, y1, z, x1, z1, face, type, at);
             }
             case NEG_Y -> {
                 quad(out, x, y, z1, x, y, z, x1, y, z, x1, y, z1, face, type, at);
@@ -162,6 +162,27 @@ public final class WorldMesh {
         } else {
             quad(out, ax, yb, az, bx, by, bz, cx, cy, cz, dx, yb, dz, face, type, at);
         }
+    }
+
+    /** Inset lid plus rim — leftover even wood is not the last word on the top. */
+    private static void lid(List<Triangle> out,
+                            double x0, double y, double z0,
+                            double x1, double z1,
+                            Face face, BlockType type, BlockCoordinate at) {
+        double m = CROWN_FRAC;
+        double xi0 = x0 + m;
+        double xi1 = x1 - m;
+        double zi0 = z0 + m;
+        double zi1 = z1 - m;
+        if (xi1 <= xi0 || zi1 <= zi0) {
+            quad(out, x0, y, z0, x0, y, z1, x1, y, z1, x1, y, z0, face, type, at);
+            return;
+        }
+        quad(out, xi0, y, zi0, xi0, y, zi1, xi1, y, zi1, xi1, y, zi0, face, type, at);
+        quad(out, x0, y, z0, x1, y, z0, x1, y, zi0, x0, y, zi0, face, type, at);
+        quad(out, x0, y, zi1, x1, y, zi1, x1, y, z1, x0, y, z1, face, type, at);
+        quad(out, x0, y, zi0, x0, y, zi1, xi0, y, zi1, xi0, y, zi0, face, type, at);
+        quad(out, xi1, y, zi0, xi1, y, zi1, x1, y, zi1, x1, y, zi0, face, type, at);
     }
 
     private static void quad(List<Triangle> out,
