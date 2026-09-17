@@ -155,6 +155,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellFogUnseenHasVoidPocket() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js).contains("if (scene.fog) {")
+                    .contains("fogWash.addColorStop(0, \"#16120e\")")
+                    .contains("fogWash.addColorStop(1, COLORS.unseen)");
+        }
+    }
+
+    @Test
     void wellLegendStoneChipsHaveRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
             assertThat(in).as("static well page").isNotNull();

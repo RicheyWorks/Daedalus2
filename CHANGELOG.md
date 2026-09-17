@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well fog void pocket.**
+  Unseen fog falls off from well-void center to the rim so leftover
+  flat #0c0908 is not the last word under memory. Revealed stone and
+  start/goal stay.
+
 - **Explore automap cube pad depth.**
   Soft wood pads under occupied cubes fall off toward the rim with the
   same 0.22 edge as the slab, so leftover even halo is not the last
