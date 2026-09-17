@@ -288,7 +288,8 @@
   #legend [data-key="ghost"] i, #legend [data-key="sanctuary"] i,
   #legend [data-key="choke"] i, #legend [data-key="deadend"] i,
   #legend [data-key="path"] i, #legend [data-key="race"] i,
-  #legend [data-key="lens"] i, #legend [data-key="floor"] i {
+  #legend [data-key="lens"] i, #legend [data-key="floor"] i,
+  #legend [data-key="wall"] i, #legend [data-key="fog"] i {
     box-shadow: 0 0 0 1.5px rgba(242, 234, 216, .28); }
   #legend [data-key="waypoint"] i, #legend [data-key="hardest"] i,
   #legend [data-key="tour"] i {
@@ -535,7 +536,7 @@ powershell -File daedalus-explore\run-explore.ps1</pre>
       <canvas id="maze" width="640" height="480"></canvas>
       <div id="legend" hidden>
         <span data-key="floor"><i style="background:#484339"></i>floor</span>
-        <span data-key="wall"><i style="background:#19140f;border:1px solid #2a2218"></i>wall / rock</span>
+        <span data-key="wall"><i style="background:#19140f"></i>wall / rock</span>
         <span data-key="start"><i style="background:#3ee08f;border-radius:50%"></i>start</span>
         <span data-key="goal"><i style="background:#ff5a5f;border-radius:50%"></i>goal</span>
         <span data-key="path"><i style="background:#8fb8ff"></i>solver path</span>
@@ -550,7 +551,7 @@ powershell -File daedalus-explore\run-explore.ps1</pre>
         <span data-key="waypoint"><i style="background:#f2c94c;transform:rotate(45deg)"></i>waypoint</span>
         <span data-key="race"><i style="background:#82b1ff;width:6px"></i><i style="background:#f0b429;width:6px;margin-right:0"></i>arena</span>
         <span data-key="ghost"><i style="background:#e6edf3;border-radius:50%;opacity:.6"></i>ghost</span>
-        <span data-key="fog"><i style="background:#0c0908;border:1px solid #2a2218"></i>unseen (fog)</span>
+        <span data-key="fog"><i style="background:#0c0908"></i>unseen (fog)</span>
       </div>
       <div class="exports">
         <a id="pngExport" class="hint" href="#" download="maze.png"

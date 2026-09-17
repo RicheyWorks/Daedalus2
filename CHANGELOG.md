@@ -454,6 +454,8 @@ under the `_migration/` portfolios.
   routes sit in the lamp, not leftover mint and purple on torch stone.
   Desktop well-key compare swatches name those leftover lanes so extra routes
   are keyed, not leftover unnamed on torch stone.
+  Well-key wall and fog swatches wear the same cream rim as other place marks
+  so stone and unseen are keyed, not leftover unrimmed on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
