@@ -546,6 +546,15 @@ class ExplorePaintTest {
                 ExplorePaint.mapEdge(3, 5, 0, 6, 0, 10), mid);
         assertThat(rim[0]).as("automap rim posts fall off toward unseen")
                 .isLessThan(mid[0]);
+        assertThat(ExplorePaint.MAP_FLOOR_EDGE_DIM).isEqualTo(0.22f);
+        float[] rimHall = new float[3];
+        float[] midHall = new float[3];
+        ExplorePaint.mapStoneTint(ExplorePaint.MapKind.FLOOR, 0,
+                ExplorePaint.mapEdge(0, 0, 0, 6, 0, 10), rimHall);
+        ExplorePaint.mapStoneTint(ExplorePaint.MapKind.FLOOR, 0,
+                ExplorePaint.mapEdge(3, 5, 0, 6, 0, 10), midHall);
+        assertThat(rimHall[0]).as("automap rim slate falls off like the live well")
+                .isLessThan(midHall[0]);
     }
 
     @Test

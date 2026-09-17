@@ -263,6 +263,11 @@ public final class ExplorePaint {
     public static final float MAP_FLOOR_R = 0.34f;
     public static final float MAP_FLOOR_G = 0.24f;
     public static final float MAP_FLOOR_B = 0.14f;
+    /** Same 0.22 rim as live / idle well halls. */
+    public static final float MAP_FLOOR_EDGE_DIM = 0.22f;
+    public static final float MAP_FLOOR_DIM_R = 0x2a / 255f;
+    public static final float MAP_FLOOR_DIM_G = 0x22 / 255f;
+    public static final float MAP_FLOOR_DIM_B = 0x18 / 255f;
     public static final float MAP_WALL_R = 0.64f;
     public static final float MAP_WALL_G = 0.40f;
     public static final float MAP_WALL_B = 0.22f;
@@ -318,7 +323,11 @@ public final class ExplorePaint {
         } else if (kind == MapKind.BLOCK) {
             set(rgb, MAP_BLOCK_R * breath, MAP_BLOCK_G * breath, MAP_BLOCK_B * breath);
         } else {
-            set(rgb, MAP_FLOOR_R * breath, MAP_FLOOR_G * breath, MAP_FLOOR_B * breath);
+            float t = MAP_FLOOR_EDGE_DIM * (float) Math.max(0, Math.min(1, edge));
+            set(rgb,
+                    (MAP_FLOOR_R + (MAP_FLOOR_DIM_R - MAP_FLOOR_R) * t) * breath,
+                    (MAP_FLOOR_G + (MAP_FLOOR_DIM_G - MAP_FLOOR_G) * t) * breath,
+                    (MAP_FLOOR_B + (MAP_FLOOR_DIM_B - MAP_FLOOR_B) * t) * breath);
         }
     }
 
