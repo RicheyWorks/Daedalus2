@@ -3,15 +3,23 @@
 package com.daedalus.desktop.ui;
 
 import com.daedalus.api.dto.WorldEventFrame;
+import com.daedalus.engine.MazeGrid;
+import com.daedalus.model.Direction;
+import com.daedalus.model.MazeMetadata;
+import com.daedalus.model.MazeStats;
+import com.daedalus.server.service.MazeGenerationService;
+import com.daedalus.server.service.WorldService;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.World;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -72,5 +80,23 @@ class DesktopWorldTest {
             assertThat(css).contains(".status-bar .label.world-place")
                     .contains(DesktopWorld.PLACE_INK);
         }
+    }
+
+    @Test
+    void generateProjectsTheLabMaze(@TempDir Path tmp) {
+        WorldService worlds = new WorldService(tmp.resolve("world-zero.daew"));
+        MazeGrid maze = new MazeGrid(3, 3);
+        maze.carve(maze.cell(0, 0), Direction.EAST);
+        MazeGenerationService.Cached cached = new MazeGenerationService.Cached(
+                MazeMetadata.of(3, 3, 7L, "test", maze.start(), maze.goal()),
+                maze, new MazeStats());
+        assertThat(DesktopWorld.projectLab(null, cached)).isNull();
+        assertThat(DesktopWorld.projectLab(worlds, null)).isNull();
+        assertThat(DesktopWorld.projectLab(worlds, cached).ok()).isTrue();
+        World live = worlds.inspect(DesktopWorld.ID);
+        assertThat(DesktopWorld.firstMaze(live)).isEqualTo(cached.metadata().id().toString());
+        assertThat(DesktopWorld.projectLab(worlds, cached).ok()).isFalse();
+        assertThat(DesktopWorld.firstMaze(worlds.inspect(DesktopWorld.ID)))
+                .isEqualTo(cached.metadata().id().toString());
     }
 }

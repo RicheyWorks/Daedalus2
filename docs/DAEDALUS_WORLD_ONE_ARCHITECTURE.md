@@ -305,7 +305,8 @@ lease inspect on well, desktop, and explore, explore remesh
 on living-slab revision, well stamp.apply mazeId, and WorldOps
 stamp.apply with a MazeGrid and mazeRef, explore load of
 the persisted DAEW file, explore remesh on DAEW mtime,
-and well Generate → stamp.apply are shipped.
+well Generate → stamp.apply, and desktop Generate → stamp.apply
+are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
 

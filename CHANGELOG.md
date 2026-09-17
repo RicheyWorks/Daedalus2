@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop generate stamps the lab maze.**
+  Desktop Generate projects the maze into world-zero via stamp.apply.
+  First slab wins; later overlap is a named result. Maze generate /
+  solve stay on their own controls.
+
 - **Well generate stamps the lab maze.**
   Generate projects the maze into world-zero via stamp.apply.
   First slab wins; later overlap is a named result. Daily /

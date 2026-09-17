@@ -3,9 +3,13 @@
 package com.daedalus.desktop.ui;
 
 import com.daedalus.api.dto.WorldEventFrame;
+import com.daedalus.server.service.MazeGenerationService;
+import com.daedalus.server.service.WorldService;
+import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.World;
 import com.daedalus.world.WorldId;
+import com.daedalus.world.stamp.StampResult;
 
 /**
  * Desktop world inspect line — revision and last event, not a voxel viewport.
@@ -19,6 +23,18 @@ public final class DesktopWorld {
     public static final String PLACE_CLASS = "world-place";
 
     private DesktopWorld() {
+    }
+
+    /**
+     * Project a generated lab maze into world-zero. First stamp wins.
+     * Later overlap is a named result. Daily / campaign stay inspect-only.
+     */
+    public static StampResult projectLab(WorldService worlds, MazeGenerationService.Cached maze) {
+        if (worlds == null || maze == null || maze.grid() == null
+                || maze.metadata() == null || maze.metadata().id() == null) {
+            return null;
+        }
+        return worlds.stamp(ID, new BlockCoordinate(0, 0, 0), maze.grid(), maze.metadata().id());
     }
 
     public static String inspectLine(World world, WorldEventFrame last) {

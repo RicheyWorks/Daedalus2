@@ -466,6 +466,8 @@ public class MainController {
             statusLabel.setText(String.format(
                     "Drew %d×%d via %s, seed=%d%s, %dms%s — arrows / WASD or a click to walk.",
                     rows, cols, actualId, seed, braidNote, elapsedMs, genNote));
+            DesktopWorld.projectLab(worlds, current);
+            refreshWorldLine();
             busy(false);
         });
         task.setOnFailed(e ->
