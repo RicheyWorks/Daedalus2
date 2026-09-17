@@ -346,6 +346,8 @@ under the `_migration/` portfolios.
   sits in the lamp, not leftover ice on torch stone.
   The third session walker wears warm apricot so multiplayer presence sits in
   the lamp, not leftover ice on torch stone.
+  The fourth session walker wears warm olive so multiplayer presence sits in
+  the lamp, not leftover mint on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
