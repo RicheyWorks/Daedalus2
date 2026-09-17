@@ -229,6 +229,7 @@ class WebUiSmokeTest {
                 .contains("board-panel")
                 .contains(".board-panel { display: flex; flex-direction: column; min-height: calc(100vh - 88px);")
                 .contains("min-height: calc(100vh - 88px); cursor: default")
+                .contains("min-height: calc(100vh - 88px); cursor: default; -webkit-user-drag: none")
                 .contains("background: #16120e;")
                 .contains("0 0 0 1px rgba(16, 11, 8, 0.85)")
                 .contains("inset 3px 0 0 rgba(184, 133, 56")
