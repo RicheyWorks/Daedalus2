@@ -88,6 +88,9 @@
          color: #f2ead8;
          font: 14px/1.5 system-ui, "Segoe UI", sans-serif; }
   header { padding: 10px 22px; border-bottom: 1px solid rgba(184, 133, 56, 0.45);
+           padding-top: calc(10px + env(safe-area-inset-top, 0px));
+           padding-left: calc(22px + env(safe-area-inset-left, 0px));
+           padding-right: calc(22px + env(safe-area-inset-right, 0px));
            display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
            background: rgba(12, 9, 8, 0.92); position: sticky; top: 0; z-index: 4;
            animation: headerRimBreath 4.5s ease-in-out infinite; }
