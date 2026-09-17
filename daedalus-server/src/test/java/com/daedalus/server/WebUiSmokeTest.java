@@ -81,6 +81,8 @@ class WebUiSmokeTest {
                 .contains("#asciiOut { margin: 10px 0 0; padding: 8px; background: #16120e;")
                 .contains("color: #d4c4a8;")
                 .contains("max-height: 22vh; color: #d4c4a8")
+                .contains("#asciiOut .rock { color: #8c764e")
+                .contains("replace(/#/g, \"<span class=\\\"rock\\\">#</span>\")")
                 .contains("scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent; }")
                 .contains("class=\"exports\"").contains("EXPORT_RESERVE")
                 .contains("id=\"pngExport\" class=\"hint\" href=\"#\" download=\"maze.png\"")
