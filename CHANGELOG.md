@@ -399,6 +399,8 @@ under the `_migration/` portfolios.
   leftover cool navy on torch stone.
   ASCII dump under the well wears the same gold scroll lip so the maze text is
   not leftover cool navy on torch stone.
+  The well frame under the maze wears the same torch void as the stage so the
+  gutter is not leftover cool navy on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

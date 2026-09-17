@@ -89,6 +89,8 @@ class WebUiSmokeTest {
                 .contains("0 0 18px rgba(62, 224, 143")
                 .contains("animation: gateBreath 4.5s ease-in-out infinite")
                 .contains("board-panel")
+                .contains(".board-panel { display: flex; flex-direction: column; min-height: calc(100vh - 88px);")
+                .contains("background: #16120e;")
                 .contains("0 0 0 1px rgba(16, 11, 8, 0.85)")
                 .contains("inset 3px 0 0 rgba(184, 133, 56")
                 .contains("inset 3px 0 0 rgba(184, 133, 56, 0.55)")
