@@ -1950,10 +1950,43 @@ public final class DesktopPaint {
     public static final int STAGE_ICON_ARGB = 0xFF0C0908;
     /** Same gold lip as the well rim — leftover unrimmed void is not the lamp. */
     public static final int STAGE_ICON_LIP_ARGB = 0xFFB88538;
+    /** Idle-maze stamp — same 2px tiles as the well tab icon. */
+    public static final int STAGE_ICON_CELL = 2;
+    /** Torch-warm posts — same as {@code EMPTY_MARK_WALL}. */
+    public static final int STAGE_ICON_WALL_ARGB = 0xFF2A2218;
+    /** Idle floors — same 0.28 mix as {@code EMPTY_MARK_FLOOR}. */
+    public static final int STAGE_ICON_FLOOR_ARGB = 0xFF484339;
+    /** Start mint — KEEP, same as the well tab gate. */
+    public static final int STAGE_ICON_START_ARGB = 0xFF3EE08F;
+    /** Exit coral — same as the well tab goal. */
+    public static final int STAGE_ICON_GOAL_ARGB = 0xFFFF5A5F;
 
     public static int[] stageIconPixels() {
         int[] px = new int[STAGE_ICON_SIZE * STAGE_ICON_SIZE];
         Arrays.fill(px, STAGE_ICON_ARGB);
+        int rows = EMPTY_MARK.length;
+        int cols = EMPTY_MARK[0].length();
+        int ox = (STAGE_ICON_SIZE - cols * STAGE_ICON_CELL) / 2;
+        int oy = (STAGE_ICON_SIZE - rows * STAGE_ICON_CELL) / 2;
+        int startTr = 2 * EMPTY_MARK_START.row() + 1;
+        int startTc = 2 * EMPTY_MARK_START.col() + 1;
+        int goalTr = 2 * EMPTY_MARK_GOAL.row() + 1;
+        int goalTc = 2 * EMPTY_MARK_GOAL.col() + 1;
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                int ink;
+                if (r == startTr && c == startTc) {
+                    ink = STAGE_ICON_START_ARGB;
+                } else if (r == goalTr && c == goalTc) {
+                    ink = STAGE_ICON_GOAL_ARGB;
+                } else if (EMPTY_MARK[r].charAt(c) == '#') {
+                    ink = STAGE_ICON_WALL_ARGB;
+                } else {
+                    ink = STAGE_ICON_FLOOR_ARGB;
+                }
+                fillStageIconCell(px, ox + c * STAGE_ICON_CELL, oy + r * STAGE_ICON_CELL, ink);
+            }
+        }
         int last = STAGE_ICON_SIZE - 1;
         for (int i = 0; i < STAGE_ICON_SIZE; i++) {
             px[i] = STAGE_ICON_LIP_ARGB;
@@ -1962,6 +1995,18 @@ public final class DesktopPaint {
             px[i * STAGE_ICON_SIZE + last] = STAGE_ICON_LIP_ARGB;
         }
         return px;
+    }
+
+    private static void fillStageIconCell(int[] px, int x, int y, int argb) {
+        for (int dy = 0; dy < STAGE_ICON_CELL; dy++) {
+            for (int dx = 0; dx < STAGE_ICON_CELL; dx++) {
+                int xx = x + dx;
+                int yy = y + dy;
+                if (xx >= 0 && yy >= 0 && xx < STAGE_ICON_SIZE && yy < STAGE_ICON_SIZE) {
+                    px[yy * STAGE_ICON_SIZE + xx] = argb;
+                }
+            }
+        }
     }
 
     /**

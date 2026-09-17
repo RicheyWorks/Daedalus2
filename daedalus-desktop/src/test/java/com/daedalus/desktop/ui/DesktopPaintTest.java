@@ -905,12 +905,23 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.SNAPSHOT_FILL).isNotEqualTo("#ffffff");
         assertThat(DesktopPaint.STAGE_ICON_ARGB).isEqualTo(0xFF0C0908);
         assertThat(DesktopPaint.STAGE_ICON_LIP_ARGB).isEqualTo(0xFFB88538);
+        assertThat(DesktopPaint.STAGE_ICON_WALL_ARGB).isEqualTo(0xFF2A2218);
+        assertThat(DesktopPaint.STAGE_ICON_FLOOR_ARGB).isEqualTo(0xFF484339);
+        assertThat(DesktopPaint.STAGE_ICON_START_ARGB).isEqualTo(0xFF3EE08F);
+        assertThat(DesktopPaint.STAGE_ICON_GOAL_ARGB).isEqualTo(0xFFFF5A5F);
         int[] icon = DesktopPaint.stageIconPixels();
         assertThat(icon).hasSize(DesktopPaint.STAGE_ICON_SIZE * DesktopPaint.STAGE_ICON_SIZE);
         assertThat(icon[0]).isEqualTo(DesktopPaint.STAGE_ICON_LIP_ARGB);
         int mid = DesktopPaint.STAGE_ICON_SIZE / 2;
         assertThat(icon[mid * DesktopPaint.STAGE_ICON_SIZE + mid])
-                .isEqualTo(DesktopPaint.STAGE_ICON_ARGB);
+                .as("idle maze floors sit at the icon center")
+                .isEqualTo(DesktopPaint.STAGE_ICON_FLOOR_ARGB);
+        assertThat(icon[11 * DesktopPaint.STAGE_ICON_SIZE + 7])
+                .as("start mint sits on the idle gate cell")
+                .isEqualTo(DesktopPaint.STAGE_ICON_START_ARGB);
+        assertThat(icon[19 * DesktopPaint.STAGE_ICON_SIZE + 23])
+                .as("exit coral sits on the idle goal cell")
+                .isEqualTo(DesktopPaint.STAGE_ICON_GOAL_ARGB);
     }
 
     @Test
