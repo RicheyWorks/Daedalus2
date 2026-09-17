@@ -64,6 +64,7 @@ class WebUiSmokeTest {
                 .contains("::-webkit-scrollbar-thumb { background: rgba(184, 133, 56, 0.45); border-radius: 4px; }")
                 .contains("::-webkit-scrollbar-track { background: transparent; }")
                 .contains("::-webkit-scrollbar-corner { background: transparent; }")
+                .contains("::-webkit-scrollbar-button { display: none; width: 0; height: 0; }")
                 .contains("::selection { background: rgba(184, 133, 56, 0.35); color: #f2ead8; }")
                 .contains("::-moz-selection { background: rgba(184, 133, 56, 0.35); color: #f2ead8; }")
                 .contains("::target-text { background: rgba(184, 133, 56, 0.35); color: #f2ead8; }")

@@ -632,6 +632,8 @@ under the `_migration/` portfolios.
   not leftover OS ice on torch stone.
   Chromium gutter corners sit in torch void so the well is lamp,
   not leftover OS ice on torch stone.
+  Chromium gutter arrows stay off so the well is lamp,
+  not leftover OS ice on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
