@@ -606,6 +606,8 @@ under the `_migration/` portfolios.
   not leftover cool navy on torch stone.
   Unused overlay ice remounts to KEEP path ice so leftover cool ice is not sitting
   in the lamp stylesheet.
+  Unused hairline ink remounts to torch so leftover cool navy is not sitting
+  in the lamp stylesheet.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

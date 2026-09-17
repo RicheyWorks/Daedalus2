@@ -190,6 +190,8 @@ class WebUiSmokeTest {
                 .doesNotContain("--panel: #10151b")
                 .doesNotContain("--accent2: #7eb6ff")
                 .contains("--accent2: #8fb8ff")
+                .doesNotContain("--line: #1e2832")
+                .contains("--line: #2a2218")
                 .contains(".panel h2 { margin: 0 0 8px; font-size: 11px; text-transform: uppercase;")
                 .contains("letter-spacing: .14em; color: #b09a72; font-weight: 600; }")
                 .contains(".hint { font-size: 11px; color: #b09a72; margin-top: 10px; }")
