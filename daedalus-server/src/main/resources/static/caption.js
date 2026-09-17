@@ -75,7 +75,8 @@
 
   function lensHtml(l) {
     const chip = (i, label, n) => `<span style="display:inline-block;width:10px;height:10px;`
-        + `background:${LENS_COLORS[i]};margin-right:4px"></span>${label} <b>${n}</b>`;
+        + `background:${LENS_COLORS[i]};margin-right:4px;`
+        + `box-shadow:0 0 0 1.5px rgba(242, 234, 216, .28)"></span>${label} <b>${n}</b>`;
     return `<div style="margin-top:8px">`
         + `${chip(0, "must expand", l.mustExpand)} &middot; ${chip(1, "tie decides", l.tie)} `
         + `&middot; ${chip(2, "never touched", l.never)}`

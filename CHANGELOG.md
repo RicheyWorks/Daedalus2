@@ -442,6 +442,8 @@ under the `_migration/` portfolios.
   walker is keyed, not leftover unnamed on torch stone.
   Well-caption distance swatches wear the same cream rim as other place marks
   so the field ramp is keyed, not leftover unrimmed on torch stone.
+  Well-caption lens chips wear the same cream rim as other place marks so the
+  three bands are keyed, not leftover unrimmed on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
