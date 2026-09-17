@@ -489,6 +489,21 @@ class ExplorePaintTest {
         assertThat(near.marks()).isGreaterThanOrEqualTo(1);
         assertThat(ExplorePaint.status(null, null, null).place()).isEqualTo("HALL");
         assertThat(ExplorePaint.caption(null)).isEqualTo("HALL");
+        MazeGrid grid = new MazeGrid(1, 2);
+        grid.carve(grid.cell(0, 0), Direction.EAST);
+        ExploreMesh mesh = ExploreMesh.of(grid);
+        assertThat(ExplorePaint.endPlaceName(body, mesh)).isEqualTo("START");
+        assertThat(ExplorePaint.status(fog, body, List.of(), mesh).place())
+                .as("stood-on start is START, not leftover HALL")
+                .isEqualTo("START");
+        ExploreBody atGoal = ExploreBody.atCell(new Point(0, 1));
+        assertThat(ExplorePaint.endPlaceName(atGoal, mesh)).isEqualTo("GOAL");
+        assertThat(ExplorePaint.status(fog, atGoal, List.of(), mesh).place())
+                .isEqualTo("GOAL");
+        assertThat(ExplorePaint.status(fog, body, marks, mesh).place())
+                .as("a visible story mark still leads")
+                .isEqualTo("ENTRANCE");
+        assertThat(ExplorePaint.endPlaceName(body, null)).isEqualTo("HALL");
     }
 
     @Test
@@ -507,6 +522,10 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.glyphDot('H', -1, 0)).isFalse();
         assertThat(ExplorePaint.glyphDot('H', 0, 9)).isFalse();
         assertThat(ExplorePaint.glyphDot('1', 2, 0)).isTrue();
+        assertThat(ExplorePaint.glyphDot('S', 2, 0)).isTrue();
+        assertThat(ExplorePaint.glyphDot('G', 2, 0))
+                .as("GOAL can paint on the strip")
+                .isTrue();
     }
 
     @Test

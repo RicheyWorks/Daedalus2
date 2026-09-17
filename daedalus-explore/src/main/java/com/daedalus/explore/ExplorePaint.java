@@ -533,14 +533,34 @@ public final class ExplorePaint {
     }
 
     public static Status status(ExploreFog fog, ExploreBody body, List<ExploreMarker> markers) {
+        return status(fog, body, markers, null);
+    }
+
+    public static Status status(ExploreFog fog, ExploreBody body, List<ExploreMarker> markers,
+                                ExploreMesh mesh) {
         String facing = facing(body == null ? 0 : body.yaw());
         int stood = fog == null ? 0 : fog.memorySize();
         ExploreMarker near = nearestVisible(fog, body, markers);
         int marks = countVisible(fog, markers);
         if (near == null) {
-            return new Status("HALL", facing, stood, marks, 0);
+            return new Status(endPlaceName(body, mesh), facing, stood, marks, 0);
         }
         return new Status(placeName(near.kind()), facing, stood, marks, mood(near.kind()));
+    }
+
+    /** Stood-on start / goal — same well names, not leftover HALL on the ends. */
+    public static String endPlaceName(ExploreBody body, ExploreMesh mesh) {
+        if (body == null || mesh == null || mesh.grid() == null || body.cell() == null) {
+            return "HALL";
+        }
+        Point here = body.cell();
+        if (here.equals(mesh.grid().start())) {
+            return "START";
+        }
+        if (here.equals(mesh.grid().goal())) {
+            return "GOAL";
+        }
+        return "HALL";
     }
 
     public static String caption(Status status) {
@@ -1169,6 +1189,7 @@ public final class ExplorePaint {
             case 'B' -> bits("####.#...##...#####.#...##...#####.");
             case 'C' -> bits(".###.#...##....#....#....#...#.###.");
             case 'E' -> bits("######....#....####.#....#....#####");
+            case 'G' -> bits(".###.#....#....#.##.#...##...#.###.");
             case 'H' -> bits("#...##...##...#######...##...##...#");
             case 'L' -> bits("#....#....#....#....#....#....#####");
             case 'N' -> bits("#...###..##.#.##.#.##..###...##...#");
