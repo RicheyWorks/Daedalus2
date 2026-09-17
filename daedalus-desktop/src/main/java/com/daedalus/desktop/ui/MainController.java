@@ -1988,7 +1988,8 @@ public class MainController {
                     if (color == null) {
                         continue;
                     }
-                    g.setFill(Color.web(color));
+                    g.setFill(Color.web(DesktopPaint.fieldInk(color,
+                            DesktopPaint.floorEdge(layout, 2 * r + 1, 2 * c + 1))));
                     g.setGlobalAlpha(DesktopPaint.lensPaintAlpha(bands[r][c], lensWave));
                     g.fillRect(layout.x(2 * c + 1), layout.y(2 * r + 1),
                             layout.w(2 * c + 1), layout.h(2 * r + 1));

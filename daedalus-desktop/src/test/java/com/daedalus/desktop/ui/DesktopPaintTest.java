@@ -347,6 +347,9 @@ class DesktopPaintTest {
     void aLensWashesMustTieAndNeverWithTheWebAlphas() {
         assertThat(DesktopPaint.LENS_COLORS).containsExactly("#e5484d", "#f2c94c", "#8aaa50");
         assertThat(DesktopPaint.lensColor(0)).isEqualTo("#e5484d");
+        assertThat(DesktopPaint.fieldInk(DesktopPaint.lensColor(0), 1))
+                .as("lens rim falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.lensColor(0));
         assertThat(DesktopPaint.lensColor(1)).isEqualTo("#f2c94c");
         assertThat(DesktopPaint.lensColor(2)).isEqualTo("#8aaa50");
         assertThat(Integer.parseInt(DesktopPaint.LENS_COLORS[2].substring(1, 3), 16))
