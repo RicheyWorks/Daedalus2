@@ -342,6 +342,13 @@ public final class DesktopPaint {
     }
     /** Coral wash — same token as {@code draw.js} hot spots. */
     public static final String HOTSPOT = "#e5484d";
+    /** Same 0.22 rim as halls — leftover even heat is not the last word on a lamp-warm tile. */
+    public static final double HOTSPOT_EDGE_DIM = 0.22;
+
+    public static String hotspotInk(double edge) {
+        return mixHex(HOTSPOT, FLOOR_DIM, HOTSPOT_EDGE_DIM * Math.max(0, Math.min(1, edge)));
+    }
+
     /** Opening wash between adjacent spots — same alpha as {@code draw.js}. */
     public static final double HOTSPOT_OPENING_ALPHA = 0.35;
     /** Congestion pulse — same cadence as victory / hunt loot. */

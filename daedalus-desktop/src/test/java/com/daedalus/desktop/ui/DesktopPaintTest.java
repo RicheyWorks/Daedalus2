@@ -743,6 +743,11 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.hotspotCellAlpha(200)).isEqualTo(0.7);
         assertThat(DesktopPaint.HOTSPOT_OPENING_ALPHA).isEqualTo(0.35);
         assertThat(DesktopPaint.HOTSPOT).isEqualTo("#e5484d");
+        assertThat(DesktopPaint.HOTSPOT_EDGE_DIM).isEqualTo(0.22);
+        assertThat(DesktopPaint.hotspotInk(1))
+                .as("heat rim falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.hotspotInk(0));
+        assertThat(DesktopPaint.hotspotInk(0)).isEqualTo(DesktopPaint.HOTSPOT);
         assertThat(DesktopPaint.HOTSPOT_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
         assertThat(DesktopPaint.hotspotCellPaintAlpha(25, 1))
                 .isGreaterThan(DesktopPaint.hotspotCellPaintAlpha(25, 0));

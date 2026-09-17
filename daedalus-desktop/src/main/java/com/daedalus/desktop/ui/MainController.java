@@ -1922,11 +1922,12 @@ public class MainController {
             DesktopPaint.HotWash wash = DesktopPaint.hotspotWash(current.hotspots(), tiles);
             double hotWave = DesktopPaint.hotspotBreathWave(System.nanoTime());
             Color hotInk = Color.web(DesktopPaint.HOTSPOT);
-            g.setFill(hotInk);
             for (var spot : wash.cells()) {
                 g.setGlobalAlpha(DesktopPaint.hotspotCellPaintAlpha(spot.cost(), hotWave));
                 int tr = 2 * spot.row() + 1;
                 int tc = 2 * spot.col() + 1;
+                g.setFill(Color.web(DesktopPaint.hotspotInk(
+                        DesktopPaint.floorEdge(layout, tr, tc))));
                 g.fillRect(layout.x(tc), layout.y(tr), layout.w(tc), layout.h(tr));
             }
             g.setGlobalAlpha(DesktopPaint.hotspotOpeningPaintAlpha(hotWave));
