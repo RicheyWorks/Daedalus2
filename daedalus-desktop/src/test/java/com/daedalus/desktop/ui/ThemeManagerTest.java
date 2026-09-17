@@ -164,6 +164,14 @@ class ThemeManagerTest {
         assertThat(mgr.byId("cosmic")).isNull();
     }
 
+    @Test
+    void fogBackdropUsesTheWellVoidPocket() throws Exception {
+        String src = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/java/com/daedalus/desktop/ui/MainController.java"));
+        assertThat(src).contains("paintWellVoid(g, w, h);")
+                .doesNotContain("g.setFill(Color.web(DesktopPaint.FOG_UNSEEN));");
+    }
+
     private static Theme fakeTheme(String id) {
         return new Theme() {
             @Override public String id()             { return id; }

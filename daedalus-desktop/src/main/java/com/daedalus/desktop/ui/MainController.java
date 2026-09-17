@@ -1797,12 +1797,7 @@ public class MainController {
         g.setImageSmoothing(DesktopPaint.CANVAS_IMAGE_SMOOTHING);
         g.setTransform(store.scaleX(), 0, 0, store.scaleY(), 0, 0);
 
-        if (fogOn()) {
-            g.setFill(Color.web(DesktopPaint.FOG_UNSEEN));
-            g.fillRect(0, 0, w, h);
-        } else {
-            paintWellVoid(g, w, h);
-        }
+        paintWellVoid(g, w, h);
 
         if (current == null) {
             double cx = w / 2.0;

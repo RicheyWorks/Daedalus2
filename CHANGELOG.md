@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop fog void pocket.**
+  Unseen fog falls off from well-void center to the rim so leftover
+  flat #0c0908 is not the last word under memory. Revealed stone and
+  start/goal stay.
+
 - **Well fog void pocket.**
   Unseen fog falls off from well-void center to the rim so leftover
   flat #0c0908 is not the last word under memory. Revealed stone and
