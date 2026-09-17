@@ -2196,7 +2196,9 @@ public class MainController {
         // ---- 4) player marker, then the web victory ring ----
         DesktopPaint.Marker mark = DesktopPaint.playerMarker(layout, playerPos);
         if (mark != null && theme != null) {
-            paintWalker(g, mark, theme.player());
+            paintWalker(g, mark, playerPos == null ? theme.player()
+                    : Color.web(DesktopPaint.playerInk(DesktopPaint.floorEdge(layout,
+                            2 * playerPos.row() + 1, 2 * playerPos.col() + 1))));
         }
         paintGhostDisc(g, layout, DesktopPaint.ghostHead(ghostWalkNow()));
         if (reachedGoal) {
@@ -2320,7 +2322,10 @@ public class MainController {
         }
         DesktopPaint.Marker mark = DesktopPaint.playerMarker(layout, fog.position());
         if (mark != null && theme != null) {
-            paintWalker(g, mark, theme.player());
+            Point stand = fog.position();
+            paintWalker(g, mark, stand == null ? theme.player()
+                    : Color.web(DesktopPaint.playerInk(DesktopPaint.floorEdge(layout,
+                            2 * stand.row() + 1, 2 * stand.col() + 1))));
         }
         if (reachedGoal) {
             paintVictory(g, layout, current.metadata().goal());

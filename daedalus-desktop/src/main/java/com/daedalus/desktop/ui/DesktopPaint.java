@@ -397,6 +397,10 @@ public final class DesktopPaint {
     public static final double PATH_ALPHA = 0.85;
     /** Same torch gold as {@code draw.js} {@code PLAYER_COLORS[0]}. */
     public static final String PLAYER = "#f5c14a";
+
+    public static String playerInk(double edge) {
+        return walkTrailInk(PLAYER, edge);
+    }
     /** Same radius as {@code draw.js} session / fog player. */
     public static final double PLAYER_RADIUS = 0.42;
     /** Walker glow breath — same gate cadence as ghost / endpoints. */
