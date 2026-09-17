@@ -545,6 +545,16 @@ public final class DesktopPaint {
     }
     /** Tip disc on each finished route — smaller than race so washes stay readable. */
     public static final double COMPARE_HEAD_RADIUS = 0.28;
+
+    /**
+     * Ice lane stays leftover even. Other seats share the 0.22 hall rim.
+     */
+    public static String compareWashInk(String color, double edge) {
+        if (color == null || COMPARE[0].equals(color)) {
+            return color;
+        }
+        return walkTrailInk(color, edge);
+    }
     /** Min-cut passage — same purple as {@code draw.js} chokepoints. */
     public static final String CHOKE = "#c07850";
     /** Same 0.22 rim as halls — leftover even clay is not the last word on a pinch. */

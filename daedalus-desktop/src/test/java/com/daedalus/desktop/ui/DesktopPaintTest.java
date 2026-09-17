@@ -229,6 +229,14 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.expansionOpenings(lane, tiles))
                 .contains(new DesktopPaint.TileRect(1, 2));
         assertThat(DesktopPaint.COMPARE[0]).isEqualTo("#8fb8ff");
+        assertThat(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[0], 1))
+                .as("compare ice stays leftover even")
+                .isEqualTo(DesktopPaint.COMPARE[0]);
+        assertThat(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[1], 0))
+                .isEqualTo(DesktopPaint.COMPARE[1]);
+        assertThat(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[1], 1))
+                .as("compare gold falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.COMPARE[1]);
         assertThat(DesktopPaint.COMPARE[3]).isEqualTo("#8aaa50");
         assertThat(DesktopPaint.COMPARE[4]).isEqualTo("#c07850");
         assertThat(DesktopPaint.COMPARE[5]).isEqualTo("#d4b06a");

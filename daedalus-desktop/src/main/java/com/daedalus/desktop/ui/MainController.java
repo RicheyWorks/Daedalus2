@@ -2044,12 +2044,16 @@ public class MainController {
                 g.setFill(Color.web(lane.color()));
                 g.setGlobalAlpha(DesktopPaint.comparePaintAlpha(compareWave));
                 for (DesktopPaint.TileRect tile : DesktopPaint.expansionCells(lane.path())) {
+                    g.setFill(Color.web(DesktopPaint.compareWashInk(lane.color(),
+                            DesktopPaint.floorEdge(layout, tile.tileRow(), tile.tileCol()))));
                     g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                             layout.w(tile.tileCol()), layout.h(tile.tileRow()));
                 }
                 g.setGlobalAlpha(DesktopPaint.compareOpeningPaintAlpha(compareWave));
                 for (DesktopPaint.TileRect tile : DesktopPaint.expansionOpenings(
                         lane.path(), tiles)) {
+                    g.setFill(Color.web(DesktopPaint.compareWashInk(lane.color(),
+                            DesktopPaint.floorEdge(layout, tile.tileRow(), tile.tileCol()))));
                     g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                             layout.w(tile.tileCol()), layout.h(tile.tileRow()));
                 }
