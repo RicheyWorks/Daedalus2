@@ -582,7 +582,7 @@
         for (let c = 0; c < scene.lens.cols; c++) {
           const band = scene.lens.bands[r][c];
           if (band < 0) continue;
-          g.fillStyle = lensColors[band];
+          g.fillStyle = fieldInk(lensColors[band], r, c, th, tw);
           g.globalAlpha = (band === 2 ? 0.16 : 0.42) * (0.88 + 0.24 * lensWave);
           paintWashCell(g, geom, r, c);
         }

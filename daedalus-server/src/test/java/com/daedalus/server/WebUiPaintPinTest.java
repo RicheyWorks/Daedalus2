@@ -227,6 +227,16 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellLensCellsHaveRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("g.fillStyle = fieldInk(lensColors[band], r, c, th, tw)");
+        }
+    }
+
+    @Test
     void wellFogWallsHaveRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

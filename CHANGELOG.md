@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well lens cell depth.**
+  Heuristic-band cells fall off toward floor-dim at the board rim
+  with the same 0.22 edge as halls, so leftover even lens is not
+  the last word on a must/never tile. Start mint and goal coral stay.
+
 - **Desktop field opening depth.**
   Distance-wash corridors fall off toward floor-dim at the board
   rim with the same 0.22 edge as halls, so leftover even grout is
