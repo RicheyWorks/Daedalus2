@@ -118,15 +118,18 @@
     const list = parcels && parcels.parcels ? parcels.parcels : [];
     const first = list[0];
     let newest = first;
-    for (let i = list.length - 1; i >= 0; i--) {
+    let rented = first;
+    for (let i = 0; i < list.length; i++) {
       if (list[i] && list[i].mazeRef) {
         newest = list[i];
-        break;
+      }
+      if (list[i] && list[i].leaseId) {
+        rented = list[i];
       }
     }
     row(box, "plots", String(list.length));
     row(box, "place", first && first.placeName ? first.placeName : "—");
-    row(box, "lease", first && first.leaseId ? first.leaseId : "—");
+    row(box, "lease", rented && rented.leaseId ? rented.leaseId : "—");
     row(box, "maze", newest && newest.mazeRef ? newest.mazeRef : "—");
     const occupied = chunk && chunk.present && chunk.occupied > 0;
     const slice = occupied

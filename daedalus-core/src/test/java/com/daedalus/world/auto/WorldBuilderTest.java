@@ -11,6 +11,7 @@ import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.TrapState;
 import com.daedalus.world.World;
+import com.daedalus.world.stamp.StampOps;
 import com.daedalus.world.stamp.StampResult;
 import org.junit.jupiter.api.Test;
 
@@ -61,6 +62,26 @@ class WorldBuilderTest {
         assertThat(world.parcels().get(0).leaseId()).isEqualTo(Parcel.SYSTEM_TENANT);
         assertThat(builder.run(new WorldBuilder.Step(
                 new BlockCoordinate(0, 0, 0), "parcel.lease", null)))
+                .isEqualTo(ParcelLeaseResult.ALREADY_LEASED);
+    }
+
+    @Test
+    void aSecondPlotLeasesWhenTheFirstIsTaken() {
+        World world = World.zero();
+        WorldBuilder builder = new WorldBuilder(world);
+        builder.run(new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "stamp.apply", null));
+        BlockCoordinate next = StampOps.nextOrigin(
+                world, new MazeGrid(1, 1), new BlockCoordinate(0, 0, 0), 1);
+        builder.run(new WorldBuilder.Step(next, "stamp.apply", null));
+        assertThat(world.parcels()).hasSize(2);
+        assertThat(builder.run(new WorldBuilder.Step(next, "parcel.lease", null)))
+                .isEqualTo(ParcelLeaseResult.LEASED);
+        assertThat(world.parcels().get(0).leaseId()).isEqualTo(Parcel.SYSTEM_TENANT);
+        assertThat(builder.run(new WorldBuilder.Step(next, "parcel.lease", null)))
+                .isEqualTo(ParcelLeaseResult.LEASED);
+        assertThat(world.parcels().get(1).leaseId()).isEqualTo(Parcel.SYSTEM_TENANT);
+        assertThat(WorldOps.lastLeaseId(world)).isEqualTo(Parcel.SYSTEM_TENANT);
+        assertThat(builder.run(new WorldBuilder.Step(next, "parcel.lease", null)))
                 .isEqualTo(ParcelLeaseResult.ALREADY_LEASED);
     }
 

@@ -167,7 +167,26 @@ public final class WorldOps {
         if (world.parcels().isEmpty()) {
             return ParcelLeaseResult.NO_PARCEL;
         }
+        for (Parcel parcel : world.parcels()) {
+            if (parcel.leaseId().isEmpty()) {
+                return world.leaseParcel(parcel.id(), Parcel.SYSTEM_TENANT);
+            }
+        }
         return world.leaseParcel(world.parcels().get(0).id(), Parcel.SYSTEM_TENANT);
+    }
+
+    /** Newest non-empty lease string on the street. Not a wallet. */
+    public static String lastLeaseId(World world) {
+        if (world == null) {
+            return "";
+        }
+        String found = "";
+        for (Parcel parcel : world.parcels()) {
+            if (parcel != null && !parcel.leaseId().isEmpty()) {
+                found = parcel.leaseId();
+            }
+        }
+        return found;
     }
 
     public static ParcelLeaseResult asLeaseResult(Object value) {

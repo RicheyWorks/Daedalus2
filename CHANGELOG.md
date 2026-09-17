@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World vacant-plot lease.**
+  parcel.lease rents the first empty slab on the street, not only
+  plot 0. Well and desktop inspect show the newest lease string.
+  Not a wallet.
+
 - **World plot street inspect.**
   Well maze row names the newest stamped lab id. Desktop inspect
   says N plots when a second slab lands. First place / lease stay.

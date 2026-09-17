@@ -43,7 +43,7 @@ public final class DesktopWorld {
             return ID + " · unavailable";
         }
         return inspectLine(world.revision().value(), world.parcels().size(), firstPlace(world),
-                firstLease(world), lastMaze(world), last);
+                lastLease(world), lastMaze(world), last);
     }
 
     public static String inspectLine(long revision, WorldEventFrame last) {
@@ -97,6 +97,20 @@ public final class DesktopWorld {
             }
         }
         return "";
+    }
+
+    /** Newest lease string on inspect — account key, not a wallet. */
+    public static String lastLease(World world) {
+        if (world == null) {
+            return "";
+        }
+        String found = "";
+        for (Parcel parcel : world.parcels()) {
+            if (parcel != null && !parcel.leaseId().isEmpty()) {
+                found = parcel.leaseId();
+            }
+        }
+        return found;
     }
 
     /** First lease string on inspect — account key, not a wallet. */

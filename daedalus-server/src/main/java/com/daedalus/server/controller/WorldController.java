@@ -31,6 +31,7 @@ import com.daedalus.server.ratelimit.PerKeyRateLimit;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.WorldService;
+import com.daedalus.world.auto.WorldOps;
 import com.daedalus.world.auto.WorldZeroCapabilities;
 import com.daedalus.server.web.ResourceNotFoundException;
 import com.daedalus.world.BlockCoordinate;
@@ -110,15 +111,14 @@ public class WorldController {
     }
 
     @PostMapping("/world/{id}/parcels/lease")
-    @Operation(summary = "Lease the first parcel as tenant-zero. NO_PARCEL is a result, not silence.")
+    @Operation(summary = "Lease the first vacant parcel as tenant-zero. NO_PARCEL is a result, not silence.")
     @PerKeyRateLimit("mazeGenerate")
     public ResponseEntity<ParcelLeaseResponse> leaseParcel(@PathVariable String id) {
         mounted(id);
         ParcelLeaseResult result = worlds.leaseParcel(id);
         World world = mounted(id);
-        String leaseId = world.parcels().isEmpty() ? "" : world.parcels().get(0).leaseId();
         return ResponseEntity.ok(new ParcelLeaseResponse(
-                result.name(), leaseId, world.revision().value()));
+                result.name(), WorldOps.lastLeaseId(world), world.revision().value()));
     }
 
     @PostMapping("/world/{id}/stamp")
