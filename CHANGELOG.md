@@ -738,6 +738,7 @@ under the `_migration/` portfolios.
   Start-gate host chrome refuses leftover OS selection ice so khaki on the line is not smeared.
   Start-gate host chrome refuses leftover callout ice so khaki on the line is not ballooned.
   Well desk titles refuse leftover OS selection ice so khaki on the rail is not smeared.
+  Well desk titles refuse leftover callout ice so khaki on the rail is not ballooned.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
