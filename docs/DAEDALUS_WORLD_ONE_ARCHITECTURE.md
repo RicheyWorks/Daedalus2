@@ -1,0 +1,344 @@
+# Daedalus World One — Architecture (post–World Zero)
+
+**Status:** Audit. No World One production code in this document's scope.
+**Date:** 2026-09-17
+**Branch:** `cursor/living-maze-hardening-and-capacitated-flow`
+**Depends on:** `docs/DAEDALUS_WORLD_ARCHITECTURE.md` (Phase 0–7, shipped)
+**Decision:** Design the next ambitions at new seams. Do not implement them in this audit. Do not rewrite World Zero, the reactor, or KEEP clients.
+
+This is an engineering decision record for everything Phase 0 listed as “after World Zero” or “do not implement yet.” World Zero stays the tiny correct volume. World One is composition: maze DNA inside that volume, plus observers and clients that do not retire the laboratory.
+
+---
+
+## 0. Why this document exists
+
+World Zero acceptance (§8 of the Phase 0 record) is checked. The host already has:
+
+- one process, one `world-zero`, 16³ chunks, five block types
+- place / remove / inspect, file restart identity, revision on mutation
+- STOMP `BLOCK_*` / `WORLD_REVISION_CHANGED`
+- one door (`door-zero`) with inspect / open / close
+- discover ≠ drive; harness fails if `UNACCOUNTED > 0`
+- `MazePlugin.worldCapabilities()` default empty; runtime unions extras
+
+Phase 0 §10 left the rest unscheduled. That list is now the subject, not the backlog dump. Viewing polish on the well is a different streak. Do not mix leftover-drag CSS into World One commits.
+
+---
+
+## 1. Non-negotiable KEEP
+
+Same rule as Phase 0: **KEEP means reachable and tested.** A World One slice that hides `/`, deletes a generator, or replaces explore extrusion to “make voxels easier” is wrong.
+
+| Surface | World One must not |
+|---|---|
+| 23 generators / 10 solvers | Become voxel fillers. They still emit / walk `MazeGrid` / `Graph`. |
+| Living mazes, traffic, theory | Lose their maze ids. Stamp is a projection *from* them. |
+| Well at `/` | Stop being the 2D laboratory. A world panel is beside it. |
+| Desktop generate/solve | Become a voxel editor in the first World One slices. |
+| Explore + OpenXR | Lose corridor extrusion. Voxel mesh is a second path. |
+| Plugins | Break `META-INF/services` or rename `MazePlugin`. |
+| JWT / prod table / RFC 7807 / bounded stores / goldens | Skip the three-file contract on new routes. |
+| Single instance (ADR-005) | Grow a voxel Redis or a second JVM for “multiplayer.” |
+
+No blockchain. No microservices. No seventh reactor module until a boundary is forced (it is not forced). No wallet type in `daedalus-core`.
+
+---
+
+## 2. Ambition classification
+
+| Ambition | Class | Why |
+|---|---|---|
+| Maze-stamped parcel | **ADAPT — first World One code after this audit** | Phase 0 UNKNOWN is now decidable: stamp is a **core** projection, not a plugin. Plugins may later *trigger* a stamp. |
+| Living slab updates | **ADAPT — immediately after stamp** | Living ticks already exist on mazes. The slab is a write-through of those ticks into voxels. |
+| Second observer | **ADAPT — proof, not a broker** | STOMP world topics already exist. Missing is a second subscriber test + a well/desktop fold that listens. |
+| Well world panel | **ADAPT — after second-observer proof** | New panel or hash route. `/` stays the maze well. |
+| Explore voxel view | **ADAPT — last of the client trio** | Second mesh in the same window. Do not stretch `ExploreMesh` over chunks. |
+| Parcel record + `ownerId` string | **ADAPT — with stamp** | Phase 0 designed `Parcel`. World Zero is one implicit parcel (`system`). Stamp needs bounds. |
+| Parcel permissions | **DEFER** | Allow/deny lists on the parcel, still no wallet. After one stamped parcel works. |
+| Desktop world inspect | **DEFER** | After REST/STOMP proof. Maze generate/solve stay. |
+| Plugin objects (trap, portal, NPC) | **DEFER** | SPI already advertises ids. New ops + drive rows come one object at a time. Door is the template. |
+| Agent builders | **DEFER** | `AutomationSession` / `WorldOps` are the API. A builder UI is a client, not a new capability language. |
+| Browser WebGL voxel client | **NOT NOW** | Well panel is 2D/REST first. WebGL is a fourth client. |
+| Inventories, shops | **NOT NOW** | Plugin-shaped later. No economy types in core. |
+| Large procedural terrain | **NOT NOW** | World Zero scale stays tiny until stamp + observers are honest. |
+
+`DEPRECATE` / `REMOVE`: still nothing in production.
+
+---
+
+## 3. What World Zero already is (do not rebuild)
+
+```
+MazeGrid / Graph / living / theory     KEEP
+        \                         /
+         \                       /
+          REST + STOMP /ws  (maze topics stay)
+                    |
+              WorldService
+                    |
+         World + WorldStore (DAEW file)
+                    |
+         door-zero + CapabilityRegistry
+                    |
+         AutomationSession (discover / drive / observe / trace)
+```
+
+Facts this audit will not reopen:
+
+- Voxels are not `MazeGrid`. Dual spatial models stay.
+- World persistence is not the maze Caffeine cache.
+- Inspect does not bump revision; place / remove / door open-close do (door results stay named, not silent).
+- Extra `worldCapabilities()` ids are UNACCOUNTED until driven.
+- Unknown `generatorId` still 404s; world writes must not call `MazeGenerationService` unless a stamp slice *explicitly* does, and then only to obtain a `MazeGrid`.
+
+---
+
+## 4. Proposed World One seams
+
+Additive. Same process.
+
+```
+                    KEEP clients
+           well /  desktop /  explore /  agents
+              |        |          |         |
+              +--------+----------+---------+
+                         /ws + REST
+                            |
+                     WorldService
+                            |
+              +-------------+-------------+
+              |             |             |
+           World        ParcelHost     StampOps
+           (voxels)     (bounds,       (MazeGrid →
+            door)        ownerId)       slab writes)
+              |             |             |
+              +------+------+------+------+
+                     |             |
+              WorldStore      LivingSlab
+              (DAEW)          (tick → voxels)
+```
+
+### 4.1 Stamp is a core operation
+
+**Decision:** `StampOps` lives in `com.daedalus.world` (or `com.daedalus.world.stamp`). It is not a `MazePlugin`.
+
+Reason: generators already have a stable contract (`MazeGrid`). A plugin stamp would force every algorithm JAR to know voxels. Core already owns both types.
+
+```
+StampRequest
+  worldId
+  origin          // BlockCoordinate of slab corner (inclusive)
+  maze            // MazeGrid from a generator (already built)
+  floorY          // one layer of walkable floor
+  wallHeight      // posts above floor; World One starts at 1
+
+StampResult
+  parcelId
+  bounds          // AABB in block coordinates
+  mazeId          // existing maze identity if the grid was hosted; optional
+  revision        // world revision after writes
+```
+
+Projection rules (pin in tests, do not invent lighting):
+
+| Maze fact | Voxel write |
+|---|---|
+| Carved passage | `STONE` (or existing floor type) at `floorY` |
+| Wall / uncarved | `STONE` from `floorY` through `floorY + wallHeight` |
+| Start | Same as passage; door occupancy may sit on this cell later — not in first stamp |
+| Goal | Same as passage; no vault block type until a later palette slice |
+| Out of maze rectangle | Untouched (AIR stays AIR) |
+
+Forbidden in first stamp:
+
+- Rewriting generators to emit chunks
+- Deleting the source `MazeGrid`
+- Living ticks
+- Permissions
+- Explore mesh
+- Well UI
+
+### 4.2 Parcel
+
+World Zero’s implicit parcel becomes an explicit record when the first stamp lands:
+
+```
+Parcel
+  parcelId
+  worldId
+  ownerId          // string; "system" until accounts; never a wallet type
+  bounds           // block AABB
+  mazeRef          // optional mazeId
+  version
+  createdAt / updatedAt
+```
+
+One world may hold many parcels later. World One first slice: **one** stamped parcel inside `world-zero`. Overlap is a named error (`PARCEL_OVERLAP`), not a silent merge.
+
+Permissions stay off this slice. When they arrive: allow/deny on `(ownerId, verb)` — `block.place`, `door.open`, `stamp.apply`. No tokens, no chain.
+
+### 4.3 Living slab
+
+After a stamp exists:
+
+- Living / braid / sealer keep running on the **maze**.
+- `LivingSlab` is a subscriber: maze mutation → re-project dirty cells into the parcel AABB.
+- Inspect-only maze reads do not write voxels.
+- World revision bumps only when a projected cube *changes*.
+
+Do not run living ticks on raw voxels. That would fork the living engine.
+
+### 4.4 Second observer
+
+Server work is already done (`/topic/world/{id}/events`). World One proves it:
+
+1. **Test:** two STOMP sessions; place on A; B receives `BLOCK_PLACED` + matching revision. Same JVM.
+2. **Well (later):** a fold or panel that only *listens* (no generate controls required).
+3. **Desktop (later):** revision + last event line. Not a voxel viewport.
+
+Do not add Redis pub/sub or a broker relay for this proof.
+
+### 4.5 Well world panel
+
+New UI beside the maze well, not instead:
+
+- Suggested: `#world` fold or `/#world` hash. Default `/` paint stays maze.
+- Talks only to `/api/v1/world/**` and world STOMP topics.
+- First panel: revision, one chunk slice (text or existing ASCII well style), door state, last events.
+- Stamp controls are **controls** — viewing autopilot does not own them. Architecture still names them: seed + generatorId → server stamps; the panel displays the slab.
+
+Prod: same README + `ProdAuthPostureTest` + problem JSON if any new route appears. Prefer **no** new routes if existing inspect/events suffice.
+
+### 4.6 Explore voxel view
+
+Last of the client trio.
+
+- Keep `ExploreMesh` / fog / story marks for extruded mazes.
+- Add a **second** mesher that greedy-meshes occupied cubes in a parcel (or a camera AABB).
+- Host may show maze corridor **or** voxel parcel; toggling must not unload the other world’s KEEP path.
+- Collision for voxels is discrete occupancy (`World.contains`), not maze wall bits.
+- OpenXR stays a plugin on the maze host until a later audit says otherwise.
+
+Shared meshing with `ExploreMesh` stays UNKNOWN. Server remains authoritative on blocks.
+
+### 4.7 Plugin objects and agents
+
+Door is the template: named results, same domain method for human REST and `WorldOps`, capability id on the registry, drive row or UNACCOUNTED.
+
+Next objects (order when we get there): trap → portal → NPC. Each adds:
+
+- core state + results
+- `worldCapabilities()` ids
+- REST/STOMP beside existing world routes
+- one drive row
+
+Agent builders call `WorldOps`. They do not get a parallel verb set.
+
+### 4.8 Terrain / WebGL / shops
+
+Out of World One. Compatible, not designed here beyond “not now.”
+
+---
+
+## 5. Module boundaries (World One)
+
+| Module | First stamp slice | Later |
+|---|---|---|
+| `daedalus-core` | `StampOps`, `Parcel`, tests | `LivingSlab` |
+| `daedalus-plugin-api` | Untouched | New default methods only when trap exists |
+| `daedalus-plugin-runtime` | Untouched | Union stays as today |
+| `daedalus-server` | Optional: stamp REST **after** core tests; posture triple | Observer proof test; well static only when panel ships |
+| `daedalus-desktop` | Untouched | Revision line |
+| `daedalus-explore` | Untouched | Second mesher last |
+
+Well JS is untouched until the observer proof or panel slice, whichever the sequence reaches.
+
+---
+
+## 6. Sequence (locked)
+
+Phase 0 already ordered the post-7 work. This audit keeps it:
+
+| Step | Name | Success | Code? |
+|---|---|---|---|
+| W1.0 | This document | Classification + first slice named | Docs only |
+| W1.1 | Stamp + one parcel | `MazeGrid` → slab; overlap fails; world restart still identical | core (+ store fields if parcel must persist) |
+| W1.2 | Living slab | Maze tick changes only dirty cubes; inspect-only is quiet | core |
+| W1.3 | Second observer | Two STOMP clients; B sees A's place | server test |
+| W1.4 | Well panel | Listen + inspect; `/` maze well unchanged | well static + changelog |
+| W1.5 | Explore voxel view | Second mesh; corridor path still smokes | explore |
+
+Permissions, desktop inspect, trap, agents, WebGL, terrain: after W1.5, each as its own audit.
+
+---
+
+## 7. Acceptance — architecture (this audit)
+
+- [x] World Zero KEEP / dual model restated
+- [x] Stamp vs plugin decided (core `StampOps`)
+- [x] Parcel vs implicit world-zero decided (explicit record at first stamp)
+- [x] Living slab is maze-sourced, not a second living engine
+- [x] Second observer is a proof of existing STOMP, not a new bus
+- [x] Well panel does not replace `/`
+- [x] Explore voxel view does not replace extrusion
+- [x] Permissions / plugins / agents / WebGL / terrain slotted, not built
+- [x] First code slice named in §8
+- [ ] World One **code** — not this audit
+
+---
+
+## 8. First implementation slice (after the user asks)
+
+**Do not start this slice in the architecture goal.** When implementation is requested, add only:
+
+- `daedalus-core/src/main/java/com/daedalus/world/Parcel.java`
+- `daedalus-core/src/main/java/com/daedalus/world/ParcelId.java`
+- `daedalus-core/src/main/java/com/daedalus/world/stamp/StampOps.java`
+- `daedalus-core/src/main/java/com/daedalus/world/stamp/StampRequest.java`
+- `daedalus-core/src/main/java/com/daedalus/world/stamp/StampResult.java`
+- `daedalus-core/src/test/java/com/daedalus/world/stamp/StampOpsTest.java`
+
+Prove:
+
+1. A tiny generated (or fixture) `MazeGrid` writes floor + wall posts into `world-zero` at a chosen origin
+2. Cubes outside the maze rectangle stay AIR
+3. A second overlapping stamp returns `PARCEL_OVERLAP` and does not mutate
+4. Restart via `WorldStore` reloads the same occupied cubes (extend DAEW only if needed; if the current snapshot already stores all chunks, parcel metadata may be derived or version-bumped in the same slice)
+5. Stamp bumps revision; a no-op overlap failure does not
+6. Generators and solvers are not edited
+
+Forbidden in W1.1:
+
+- Living slab
+- REST stamp route (unless tests cannot host a grid without it — prefer core fixture)
+- Well / desktop / explore edits
+- Permissions, door-on-start, new block types
+- Blockchain, WebGL, terrain
+
+---
+
+## 9. Risks
+
+| Risk | Mitigation |
+|---|---|
+| Stamp rewrites `MazeGrid` into 3D | Forbidden. Projection only. |
+| Living ticks on voxels fork the engine | Slab is a subscriber. |
+| Well panel becomes the homepage | `/` stays maze. |
+| Explore mesh reuse “to save time” | Second mesher. |
+| Observer work rebuilds messaging | Use existing world topics. |
+| Viewing CSS mixed into stamp commits | Do not stage `index.html` paint on W1 slices. |
+| Scope jump to NPCs / shops | §2 NOT NOW / DEFER. |
+
+---
+
+## 10. Audit answers
+
+1. **What World One is.** Composition: maze DNA stamped into the World Zero volume, then observers and clients that already exist learn to watch it.
+2. **What stays.** Everything KEEP. World Zero APIs stay. Door and accounting stay.
+3. **What is adapted.** Core stamp + parcel; living as a slab writer; STOMP proof; well panel; explore second mesh.
+4. **What is retired.** Nothing.
+5. **What is not now.** WebGL client, shops, terrain, permission engine, trap/portal/NPC.
+6. **Smallest path.** §6 W1.1 → W1.5.
+7. **Exact first code slice.** §8 file list. Stop there until the next ask.
+
+Phase 0 remains the World Zero record. This file is the World One record. Do not merge them; World Zero acceptance must stay auditable.

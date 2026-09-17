@@ -453,7 +453,10 @@ Multiplayer "second client sees the block" is Phase 4+. Not a Phase 1 claim.
 
 ## 10. Long-term vision — do not implement yet
 
-Compatible, not scheduled:
+Compatible items below are now classified in
+`docs/DAEDALUS_WORLD_ONE_ARCHITECTURE.md` (World One audit, 2026-09-17).
+This Phase 0 file stays the World Zero record. Do not implement World One
+from this list; implement only after that audit’s §8 slice is requested.
 
 - Maze-stamped parcels and living slab updates
 - Parcel permissions (still no blockchain)

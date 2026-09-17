@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Daedalus World One audit.**
+  `docs/DAEDALUS_WORLD_ONE_ARCHITECTURE.md` classifies post–World Zero
+  ambitions: stamp is a core `StampOps` (not a plugin), living is a slab
+  subscriber, second observer proves existing STOMP, well panel does not
+  replace `/`, explore voxel mesh does not replace corridors. Permissions,
+  WebGL, shops, and terrain stay not-now. No World One production code in
+  this slice.
+
 - **Daedalus World Phase 0 audit.**
   `docs/DAEDALUS_WORLD_ARCHITECTURE.md` records the pivot to a
   persistent programmable voxel world *beside* the existing maze
