@@ -711,6 +711,7 @@ under the `_migration/` portfolios.
   Well export chips keep khaki on press so leftover UA red does not sit on torch stone.
   Maze copy refuses leftover OS double-tap zoom ice so cream sits in the lamp on torch stone.
   The header tagline refuses leftover OS selection ice so khaki beside the brand is not smeared.
+  The header brand refuses leftover OS selection ice so cream on the wordmark is not smeared.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

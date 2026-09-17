@@ -70,6 +70,7 @@ class WebUiSmokeTest {
                 .contains("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2j")
                 .contains("color: #f2ead8")
                 .contains("header h1 button")
+                .contains("color: #f2ead8; user-select: none; -webkit-user-select: none;")
                 .contains("header .tag { color: #b09a72")
                 .contains("text-transform: lowercase; text-wrap: pretty; user-select: none; -webkit-user-select: none")
                 .contains("rgba(22, 18, 14, .88)")
