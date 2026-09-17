@@ -101,4 +101,18 @@ class WebUiPaintPinTest {
                     .contains("x='23' y='19' width='2' height='2' fill='black'");
         }
     }
+
+    @Test
+    void installedWellManifestWearsTheIdleMazeMark() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html).contains(
+                    "rel=\"manifest\" href=\"data:application/manifest+json,")
+                    .contains("%22icons%22%3A%5B")
+                    .contains("%2232x32%22")
+                    .contains("%22purpose%22%3A%22any%22")
+                    .contains("LdBSkqAQDQ4L7B70AxGE7eFsiYbwiw8OC5A1ICNixAeTBcQHy%2BCzgNRg");
+        }
+    }
 }

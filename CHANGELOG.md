@@ -93,6 +93,7 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- Installed-well manifest wears the idle maze mark so a home-screen tile is a miniature dungeon, not a generic lamp.
 - Safari pinned-tab mask wears the idle maze mark so a gold silhouette is a miniature dungeon, not an empty frame.
 - Home-screen and share PNGs wear the idle maze mark so a saved well is a miniature dungeon, not an empty gold box.
 - Explore window icon wears the idle maze mark so the taskbar is a miniature dungeon, not an empty gold box.
