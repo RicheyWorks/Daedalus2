@@ -149,6 +149,7 @@ class WebUiSmokeTest {
                 .contains("max-width: 40rem; cursor: default")
                 .contains("max-width: 40rem; cursor: default; -webkit-user-drag: none")
                 .contains("max-width: 980px; margin: 0 auto; -webkit-user-drag: none")
+                .contains("gap: 12px; -webkit-user-drag: none")
                 .contains("color: #b09a72; cursor: text; margin: 0 0 22px")
                 .contains("text-wrap: pretty; animation: gateRise .7s .1s ease both;")
                 .contains("#gate article p { margin: 0; color: #b09a72")

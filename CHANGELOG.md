@@ -805,6 +805,7 @@ under the `_migration/` portfolios.
   The well desk refuses leftover drag ice so the gutter between rails is not ghosted.
   Well side rails refuse leftover drag ice so the column gutters are not ghosted.
   The start-gate inner well refuses leftover drag ice so the column around the cards is not ghosted.
+  The start-gate card grid refuses leftover drag ice so the gutters between cards are not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
