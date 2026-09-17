@@ -506,6 +506,8 @@ under the `_migration/` portfolios.
   not leftover cool slate on torch stone.
   Web generator and solver notes wear khaki and cream so those hints sit in the
   lamp, not leftover cool slate on torch stone.
+  Web rail panels sit in the same torch void as the well so the desk beside the
+  board is lamp, not leftover cool navy on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
