@@ -842,6 +842,7 @@ under the `_migration/` portfolios.
   Compare solver hover gold inset refuses leftover drag ice so torch rows are not ghosted.
   Compare pinned hover gold inset refuses leftover drag ice so torch rows are not ghosted.
   Start-gate lede refuses leftover drag ice so khaki news is not ghosted.
+  Start-gate card copy refuses leftover drag ice so khaki news is not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

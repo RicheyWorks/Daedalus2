@@ -34,7 +34,8 @@ class WebUiPaintPinTest {
                     .contains("#compareBox tr.solver-row { cursor: pointer; -webkit-user-drag: none")
                     .contains("#compareBox tr.solver-row:hover { background: #1a1610; -webkit-user-drag: none")
                     .contains("#compareBox tr.pinned:hover { box-shadow: inset 3px 0 0 rgba(184, 133, 56, 0.95); -webkit-user-drag: none")
-                    .contains("#gate .lede { color: #b09a72; cursor: text; margin: 0 0 22px; max-width: 34rem; font-size: 15px; -webkit-user-drag: none");
+                    .contains("#gate .lede { color: #b09a72; cursor: text; margin: 0 0 22px; max-width: 34rem; font-size: 15px; -webkit-user-drag: none")
+                    .contains("#gate article p { margin: 0; color: #b09a72; cursor: text; font-size: 13px; flex: 1; -webkit-user-drag: none");
         }
     }
 }
