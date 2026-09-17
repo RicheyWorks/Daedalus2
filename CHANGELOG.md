@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well generate stamps the lab maze.**
+  Generate projects the maze into world-zero via stamp.apply.
+  First slab wins; later overlap is a named result. Daily /
+  campaign stay inspect-only. `/` stays the maze well.
+
 - **Explore reloads a living DAEW file.**
   When the well's world-zero file mtime moves, explore remeshes the
   voxels. Corridor KEEP stays. A quiet file is not reread.

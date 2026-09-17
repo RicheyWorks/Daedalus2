@@ -448,7 +448,9 @@ class WebUiPaintPinTest {
                     .contains("throw new Error(\"Unknown capability \" + capability)")
                     .contains("builder — WorldOps only")
                     .contains("host.state && host.state.maze && host.state.maze.id")
-                    .contains("body.mazeId = mazeId");
+                    .contains("body.mazeId = mazeId")
+                    .contains("async function projectLab")
+                    .contains("drive(host, \"stamp.apply\")");
             assertThat(js).doesNotContain("\"agent.build\"");
             assertThat(js).doesNotContain("/maze/");
         }
@@ -456,7 +458,14 @@ class WebUiPaintPinTest {
             assertThat(app).as("well host").isNotNull();
             String js = new String(app.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js).contains("function worldHost()")
-                    .contains("return {$, api, state};");
+                    .contains("return {$, api, state};")
+                    .contains("projectWorld() { return DaedalusWorld.projectLab(worldHost()); }");
+        }
+        try (InputStream mint = getClass().getResourceAsStream("/static/mint.js")) {
+            assertThat(mint).as("generate mint").isNotNull();
+            String js = new String(mint.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js).contains("if (host.projectWorld)")
+                    .contains("await host.projectWorld()");
         }
     }
 }

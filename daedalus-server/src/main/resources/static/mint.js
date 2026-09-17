@@ -137,6 +137,9 @@
     if (state.fog) return;
     adopt(state, host, maze, performance.now() - t0);
     host.pinHash();
+    if (host.projectWorld) {
+      await host.projectWorld();
+    }
   }
 
   /** The shared daily challenge — same maze for everyone until midnight UTC (ADR-006). */

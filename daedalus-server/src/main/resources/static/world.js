@@ -86,6 +86,25 @@
     return host.api(step.path(cell), opts);
   }
 
+  /**
+   * Project the generated lab maze into world-zero. First stamp wins.
+   * Later overlap is a named result. Daily / campaign stay inspect-only.
+   */
+  async function projectLab(host) {
+    if (!host || !host.api) {
+      return;
+    }
+    if (!host.state || !host.state.maze || !host.state.maze.id) {
+      return inspect(host);
+    }
+    try {
+      await drive(host, "stamp.apply");
+    } catch (e) {
+      // named overlap is 200; a missing maze is a race
+    }
+    return inspect(host);
+  }
+
   function paint(box, world, door, trap, portal, npc, parcels, chunk, trace) {
     box.replaceChildren();
     row(box, "world", world && world.id ? world.id : WORLD);
@@ -140,5 +159,5 @@
     box.appendChild(line);
   }
 
-  global.DaedalusWorld = {inspect, onEvent, drive, DRIVEN, WORLD};
+  global.DaedalusWorld = {inspect, onEvent, drive, projectLab, DRIVEN, WORLD};
 })(window);

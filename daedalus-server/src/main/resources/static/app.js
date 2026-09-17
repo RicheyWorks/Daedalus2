@@ -182,6 +182,7 @@ function mintHost() {
     refreshLeaderboard, updateInfo, syncBraid,
     bumpAnim() { DaedalusSolve.bump(); },
     clearStatusFlash() { clearTimeout(statusFlashTimer); statusFlashTimer = null; },
+    projectWorld() { return DaedalusWorld.projectLab(worldHost()); },
   };
 }
 function campaignHost() {
