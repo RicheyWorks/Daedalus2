@@ -351,7 +351,7 @@ class WebUiSmokeTest {
                 .contains("rgba(16, 11, 8, .50)")
                 .contains("rgba(16, 11, 8, .88)")
                 .contains("color: #b09a72")
-                .contains(".info { font-size: 11px; color: #b09a72;")
+                .contains(".info { font-size: 11px; color: #b09a72; cursor: default;")
                 .contains(".info b { color: #f2ead8; font-weight: 600; }")
                 .contains("#stats { font: 12px/1.7 ui-monospace, monospace; color: #f2ead8; cursor: default;")
                 .contains("#stats span { color: #b09a72; }")

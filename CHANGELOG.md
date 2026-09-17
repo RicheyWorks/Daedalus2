@@ -777,6 +777,7 @@ under the `_migration/` portfolios.
   The header tagline wears a lamp cursor so leftover OS I-beam ice does not sit on khaki on the line.
   Well status copy wears a lamp cursor so leftover OS I-beam ice does not sit on khaki beside the board.
   Well maze figures wear a lamp cursor so leftover OS I-beam ice does not sit on cream beside the board.
+  Well desk captions wear a lamp cursor so leftover OS I-beam ice does not sit on khaki beside the controls.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
