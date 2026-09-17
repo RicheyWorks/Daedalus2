@@ -526,8 +526,8 @@ public final class DesktopPaint {
     public static final String WAYPOINT_GOT = "#8aaa50";
     /** Same k as the web Hunt button. */
     public static final int WAYPOINT_K = 5;
-    /** Recorded racer — same tokens as {@code draw.js} ghost walk / disc. */
-    public static final String GHOST = "#e6edf3";
+    /** Recorded racer — warm parchment, not leftover cool white on torch stone. */
+    public static final String GHOST = "#e8e0d4";
     public static final double GHOST_WALK_ALPHA = 0.28;
     /** Fog / session / ghost trail base — same as {@code draw.js}. */
     public static final double WALK_TRAIL_ALPHA = 0.32;

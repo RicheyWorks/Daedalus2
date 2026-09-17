@@ -7,7 +7,7 @@
     floor: "#40403c", floorHi: "#765834", floorDim: "#2a2218",
     floorWarm: "#5c4a32",
     start: "#3ee08f", goal: "#ff5a5f", path: "#8fb8ff",
-    ghost: "#e6edf3",
+    ghost: "#e8e0d4",
   };
   const PLAYER_COLORS = ["#f5c14a", "#e88868", "#e8a060", "#b8a058"];
   /** Overlay legend sits on the well — reserve so the last row is not under the key. */

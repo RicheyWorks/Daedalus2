@@ -223,7 +223,7 @@
                 </Label>
                 <Label fx:id="legendGhost" text="ghost" managed="false" visible="false">
                     <graphic>
-                        <Circle radius="5" fill="#e6edf3" opacity="0.6"
+                        <Circle radius="5" fill="#e8e0d4" opacity="0.6"
                                 stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"/>
                     </graphic>
                 </Label>

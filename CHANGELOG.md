@@ -498,6 +498,8 @@ under the `_migration/` portfolios.
   so stone and unseen are keyed, not leftover unrimmed on torch stone.
   Desktop well-key wall and fog swatches wear the same cream rim as other place
   marks so stone and unseen are keyed, not leftover unrimmed on torch stone.
+  Ghost disc and trail wear warm parchment on web and desktop so the recorded
+  racer sits in the lamp, not leftover cool white on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
