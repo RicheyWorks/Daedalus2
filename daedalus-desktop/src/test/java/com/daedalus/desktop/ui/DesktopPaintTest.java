@@ -275,11 +275,13 @@ class DesktopPaintTest {
     }
 
     @Test
-    void aSanctuaryPaintsAMintDiscAndTheLoneliestCellGetsACoralRing() {
+    void aSanctuaryPaintsAMossDiscAndTheLoneliestCellGetsACoralRing() {
         DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 100, 100);
         DesktopPaint.Marker disc = DesktopPaint.sanctuaryMarker(layout, new Point(0, 0));
         DesktopPaint.Ring lonely = DesktopPaint.worstServedRing(layout, new Point(0, 0));
-        assertThat(DesktopPaint.SANCTUARY).isEqualTo("#4cc38a");
+        assertThat(DesktopPaint.SANCTUARY).isEqualTo("#8aaa50");
+        assertThat(Integer.parseInt(DesktopPaint.SANCTUARY.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.SANCTUARY.substring(5, 7), 16));
         assertThat(DesktopPaint.WORST_SERVED).isEqualTo("#e5484d");
         assertThat(disc.size())
                 .as("web sanctuary radius is 0.32·cell")

@@ -162,6 +162,7 @@ class WebUiSmokeTest {
                 .contains("0.22 + 0.10")
                 .contains("0.65 + 0.15")
                 .contains("SANCTUARY_BREATH_MS")
+                .contains("marker(g, geom, p, \"#8aaa50\", 0.32)")
                 .contains("0.48 + 0.05")
                 .contains("MARKER_BREATH_MS")
                 .contains("0.16 + 0.12 * wave")

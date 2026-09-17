@@ -596,10 +596,10 @@
       const t = (now % SANCTUARY_BREATH_MS) / SANCTUARY_BREATH_MS;
       const wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
       scene.sanctuaries.placements.forEach(p => {
-        marker(g, geom, p, "#4cc38a", 0.32);
+        marker(g, geom, p, "#8aaa50", 0.32);
         if (!p) return;
         const [x, y] = cellCenter(geom, p);
-        g.strokeStyle = "#4cc38a";
+        g.strokeStyle = "#8aaa50";
         g.globalAlpha = 0.26 + 0.16 * wave;
         g.lineWidth = Math.max(1.5, geom.cell * 0.08);
         g.beginPath();

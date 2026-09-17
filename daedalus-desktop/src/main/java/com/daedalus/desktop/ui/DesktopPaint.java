@@ -508,8 +508,8 @@ public final class DesktopPaint {
     /** Hardest simple route — same gold as {@code draw.js}. */
     public static final String HARDEST = "#f2c94c";
     public static final double HARDEST_ALPHA = 0.75;
-    /** Sanctuary disc — same mint as {@code draw.js}. */
-    public static final String SANCTUARY = "#4cc38a";
+    /** Sanctuary disc — same moss as {@code draw.js}. */
+    public static final String SANCTUARY = "#8aaa50";
     /** Loneliest cell — same coral stroke as {@code draw.js}. */
     public static final String WORST_SERVED = "#e5484d";
     /** Same k as the web Place sanctuaries button. */
