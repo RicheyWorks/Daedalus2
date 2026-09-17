@@ -830,6 +830,9 @@ class DesktopPaintTest {
                 .isGreaterThan(DesktopPaint.emptyCaptionDetailAlpha(0));
         assertThat(DesktopPaint.emptyCaptionTitleAlpha(0)).isEqualTo(0.72);
         assertThat(DesktopPaint.emptyCaptionDetailAlpha(0)).isEqualTo(0.55);
+        assertThat(DesktopPaint.EMPTY_CAPTION_TITLE).isEqualTo("#b88538");
+        assertThat(DesktopPaint.EMPTY_CAPTION_DETAIL).isEqualTo("#8c764e");
+        assertThat(DesktopPaint.EMPTY_CAPTION_TITLE).isNotEqualTo("#7d8894");
         assertThat(DesktopPaint.canvasRimAlpha(1))
                 .isGreaterThan(DesktopPaint.canvasRimAlpha(0));
         assertThat(DesktopPaint.canvasRimGlowRadius(1))

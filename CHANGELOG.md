@@ -260,6 +260,8 @@ under the `_migration/` portfolios.
   board so the miniature has stone depth, not flat warm fills.
   Explore story pillars wear a wall-boot so vault / boss / entrance posts sit in
   the skirting, not as even furniture sticks.
+  Empty-well captions wear gold chrome on web and desktop so idle copy matches
+  the warm miniature, not cool slate under DAEDALUS.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

@@ -87,6 +87,10 @@ public final class DesktopPaint {
         return 0.22 + 0.08 * wave;
     }
 
+    /** Idle caption ink — gold chrome, not cool slate under the wordmark. */
+    public static final String EMPTY_CAPTION_TITLE = "#b88538";
+    public static final String EMPTY_CAPTION_DETAIL = "#8c764e";
+
     /** Idle caption under the wordmark — soft gate pulse, not stuck slate. */
     public static double emptyCaptionTitleAlpha(double wave) {
         return 0.72 + 0.18 * wave;
