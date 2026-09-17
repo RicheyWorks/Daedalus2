@@ -381,7 +381,9 @@ class DesktopPaintTest {
     void aWaypointIsAGoldDiamondOnThePassage() {
         DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 100, 100);
         DesktopPaint.Diamond coin = DesktopPaint.waypointDiamond(layout, new Point(0, 0));
-        assertThat(DesktopPaint.TOUR).isEqualTo("#9ecbff");
+        assertThat(DesktopPaint.TOUR).isEqualTo("#d4b06a");
+        assertThat(Integer.parseInt(DesktopPaint.TOUR.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.TOUR.substring(5, 7), 16));
         assertThat(DesktopPaint.WAYPOINT).isEqualTo("#f2c94c");
         assertThat(DesktopPaint.WAYPOINT_GOT).isEqualTo("#4cc38a");
         assertThat(coin.radius())
@@ -1010,7 +1012,9 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.PATH_HEAD_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
         assertThat(DesktopPaint.HARDEST).isEqualTo("#f2c94c");
         assertThat(DesktopPaint.HARDEST_ALPHA).isEqualTo(0.75);
-        assertThat(DesktopPaint.TOUR).isEqualTo("#9ecbff");
+        assertThat(DesktopPaint.TOUR).isEqualTo("#d4b06a");
+        assertThat(Integer.parseInt(DesktopPaint.TOUR.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.TOUR.substring(5, 7), 16));
         assertThat(DesktopPaint.TOUR_ALPHA).isEqualTo(0.38);
         assertThat(DesktopPaint.walkHead(List.of(new Point(0, 0), cell))).isEqualTo(cell);
         assertThat(DesktopPaint.endpointRing(null, cell)).isNull();

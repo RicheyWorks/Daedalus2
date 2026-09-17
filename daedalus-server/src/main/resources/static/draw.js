@@ -624,8 +624,8 @@
       pathHead(g, geom, walkHead(scene.hardest.path, 1), "#f2c94c");
     }
     if (scene.tourPath && scene.tourPath.length) {
-      paintWalk(g, geom, scene.tourPath, "#9ecbff", 1, 0.38, "ribbon");
-      pathHead(g, geom, walkHead(scene.tourPath, 1), "#9ecbff");
+      paintWalk(g, geom, scene.tourPath, "#d4b06a", 1, 0.38, "ribbon");
+      pathHead(g, geom, walkHead(scene.tourPath, 1), "#d4b06a");
     }
     if (scene.tour && scene.tour.waypoints) {
       const WAYPOINT_BREATH_MS = 2800;

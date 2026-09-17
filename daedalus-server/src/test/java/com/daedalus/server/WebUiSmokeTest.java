@@ -195,6 +195,8 @@ class WebUiSmokeTest {
                 .contains("function walker")
                 .contains("walkHead(scene.hardest.path, 1)")
                 .contains("walkHead(scene.tourPath, 1)")
+                .contains("paintWalk(g, geom, scene.tourPath, \"#d4b06a\"")
+                .contains("walkHead(scene.tourPath, 1), \"#d4b06a\"")
                 .contains("endpoint(g, geom, {row: 0, col: 0}")
                 .contains("VICTORY_BREATH_MS")
                 .contains("0.85 + 0.08")

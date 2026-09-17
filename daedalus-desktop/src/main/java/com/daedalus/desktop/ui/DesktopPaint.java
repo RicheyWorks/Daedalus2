@@ -514,8 +514,8 @@ public final class DesktopPaint {
     public static final String WORST_SERVED = "#e5484d";
     /** Same k as the web Place sanctuaries button. */
     public static final int SANCTUARY_K = 5;
-    /** Held-Karp corridor — same ice as {@code draw.js} {@code tourPath}. */
-    public static final String TOUR = "#9ecbff";
+    /** Held-Karp corridor — same amber as {@code draw.js} {@code tourPath}. */
+    public static final String TOUR = "#d4b06a";
     public static final double TOUR_ALPHA = 0.38;
     /** Uncollected coin — same gold diamond as {@code draw.js}. */
     public static final String WAYPOINT = "#f2c94c";
