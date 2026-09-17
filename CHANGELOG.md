@@ -847,6 +847,7 @@ under the `_migration/` portfolios.
   Leaderboard khaki meta refuses leftover drag ice so torch ranks are not ghosted.
   Leaderboard khaki ranks refuse leftover drag ice so torch numbers are not ghosted.
   Leaderboard cream names refuse leftover drag ice so torch rows are not ghosted.
+  Leaderboard mint scores refuse leftover drag ice so torch numbers are not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

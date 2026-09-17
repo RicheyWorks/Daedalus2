@@ -39,7 +39,8 @@ class WebUiPaintPinTest {
                     .contains("details .hint { cursor: text; -webkit-user-drag: none")
                     .contains("#lb span { color: #b09a72; -webkit-user-drag: none")
                     .contains("#lb .rank { display: inline-block; width: 18px; color: #b09a72; -webkit-user-drag: none")
-                    .contains("#lb b { color: #f2ead8; -webkit-user-drag: none");
+                    .contains("#lb b { color: #f2ead8; -webkit-user-drag: none")
+                    .contains("#lb .score { color: var(--accent); font-weight: 700; -webkit-user-drag: none");
         }
     }
 }
