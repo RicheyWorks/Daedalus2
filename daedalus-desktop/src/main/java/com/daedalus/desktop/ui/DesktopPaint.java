@@ -595,6 +595,14 @@ public final class DesktopPaint {
         return mixHex(GHOST, FLOOR_DIM, GHOST_EDGE_DIM * Math.max(0, Math.min(1, edge)));
     }
 
+    /** Ghost trail tiles share the disc rim toward floor-dim. */
+    public static String walkTrailInk(String color, double edge) {
+        if (color == null) {
+            return null;
+        }
+        return mixHex(color, FLOOR_DIM, GHOST_EDGE_DIM * Math.max(0, Math.min(1, edge)));
+    }
+
     public static final double GHOST_WALK_ALPHA = 0.28;
     /** Fog / session / ghost trail base — same as {@code draw.js}. */
     public static final double WALK_TRAIL_ALPHA = 0.32;

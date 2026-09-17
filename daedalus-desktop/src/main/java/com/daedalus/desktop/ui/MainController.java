@@ -2073,7 +2073,7 @@ public class MainController {
         List<Point> ghostWalk = ghostWalkNow();
         if (!ghostWalk.isEmpty()) {
             paintWalkTrail(g, layout, ghostWalk, Color.web(DesktopPaint.GHOST),
-                    DesktopPaint.GHOST_WALK_ALPHA);
+                    DesktopPaint.GHOST_WALK_ALPHA, true);
         }
         if (currentPath != null && !currentPath.isEmpty() && theme != null) {
             paintPathRibbon(g, layout, currentPath, theme.path(), DesktopPaint.PATH_ALPHA,
@@ -2504,16 +2504,25 @@ public class MainController {
 
     private static void paintWalkTrail(GraphicsContext g, DesktopPaint.Layout layout,
                                        List<Point> walk, Color color, double baseAlpha) {
+        paintWalkTrail(g, layout, walk, color, baseAlpha, false);
+    }
+
+    private static void paintWalkTrail(GraphicsContext g, DesktopPaint.Layout layout,
+                                       List<Point> walk, Color color, double baseAlpha,
+                                       boolean rim) {
         if (g == null || layout == null || walk == null || walk.isEmpty() || color == null) {
             return;
         }
         int n = walk.size();
-        g.setFill(color);
         for (int i = 0; i < n; i++) {
             g.setGlobalAlpha(DesktopPaint.walkTrailAlpha(baseAlpha, i, n));
             Point p = walk.get(i);
             int tc = 2 * p.col() + 1;
             int tr = 2 * p.row() + 1;
+            g.setFill(rim
+                    ? Color.web(DesktopPaint.walkTrailInk(DesktopPaint.GHOST,
+                            DesktopPaint.floorEdge(layout, tr, tc)))
+                    : color);
             g.fillRect(layout.x(tc), layout.y(tr), layout.w(tc), layout.h(tr));
             if (i == 0) {
                 continue;
@@ -2524,6 +2533,10 @@ public class MainController {
             }
             int otc = prev.col() + p.col() + 1;
             int otr = prev.row() + p.row() + 1;
+            g.setFill(rim
+                    ? Color.web(DesktopPaint.walkTrailInk(DesktopPaint.GHOST,
+                            DesktopPaint.floorEdge(layout, otr, otc)))
+                    : color);
             g.fillRect(layout.x(otc), layout.y(otr), layout.w(otc), layout.h(otr));
         }
         g.setGlobalAlpha(1);

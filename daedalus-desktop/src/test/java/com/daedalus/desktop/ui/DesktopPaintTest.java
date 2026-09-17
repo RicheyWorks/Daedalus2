@@ -453,6 +453,11 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.ghostInk(1))
                 .as("ghost rim falls off toward floor-dim")
                 .isNotEqualTo(DesktopPaint.GHOST);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.GHOST, 0))
+                .isEqualTo(DesktopPaint.GHOST);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.GHOST, 1))
+                .as("ghost trail shares the disc rim")
+                .isNotEqualTo(DesktopPaint.GHOST);
         assertThat(DesktopPaint.GHOST_WALK_ALPHA).isEqualTo(0.28);
         assertThat(DesktopPaint.WALK_TRAIL_ALPHA).isEqualTo(0.32);
         assertThat(DesktopPaint.walkTrailAlpha(0.32, 0, 4))
