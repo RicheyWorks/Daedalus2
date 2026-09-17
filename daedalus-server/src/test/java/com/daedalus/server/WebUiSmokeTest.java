@@ -71,6 +71,7 @@ class WebUiSmokeTest {
                 .contains("fill-rule='evenodd' d='M0 0h32v32H0zM4 4h24v24H4z'")
                 .contains("rel=\"apple-touch-icon\"")
                 .contains("rel=\"apple-touch-startup-image\"")
+                .contains("property=\"og:image\"")
                 .contains("rel=\"manifest\" href=\"data:application/manifest+json,")
                 .contains("%22background_color%22%3A%22%230c0908%22")
                 .contains("%22theme_color%22%3A%22%230c0908%22")
