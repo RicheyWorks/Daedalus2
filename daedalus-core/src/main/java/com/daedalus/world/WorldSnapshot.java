@@ -2,6 +2,7 @@
 
 package com.daedalus.world;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -13,16 +14,22 @@ public record WorldSnapshot(
         WorldId id,
         WorldRevision revision,
         Map<ChunkCoordinate, Chunk> chunks,
-        Door door) {
+        Door door,
+        List<Parcel> parcels) {
 
     public WorldSnapshot {
         Objects.requireNonNull(id, "WorldId is required");
         Objects.requireNonNull(revision, "WorldRevision is required");
         Objects.requireNonNull(chunks, "chunks are required");
         chunks = Map.copyOf(chunks);
+        parcels = parcels == null ? List.of() : List.copyOf(parcels);
     }
 
     public WorldSnapshot(WorldId id, WorldRevision revision, Map<ChunkCoordinate, Chunk> chunks) {
-        this(id, revision, chunks, null);
+        this(id, revision, chunks, null, List.of());
+    }
+
+    public WorldSnapshot(WorldId id, WorldRevision revision, Map<ChunkCoordinate, Chunk> chunks, Door door) {
+        this(id, revision, chunks, door, List.of());
     }
 }

@@ -10,6 +10,16 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World One W1.1 stamp + one parcel.**
+  `StampOps` projects a `MazeGrid` `toTileGrid()` into `world-zero` as
+  `STONE` (walkable floor at `floorY`, walls through `floorY + wallHeight`).
+  The first stamp allocates `parcel-1` with an inclusive AABB. A second
+  overlapping stamp returns `PARCEL_OVERLAP` and does not bump revision.
+  DAEW v3 persists parcels so restart still refuses overlap. Plots that
+  can later be bought or rented **are** these parcels; wearables and NFT
+  art display stay later Ethereum providers (item / frame ids, no wallet
+  or web3 in `daedalus-core`).
+
 - **Daedalus World One audit.**
   `docs/DAEDALUS_WORLD_ONE_ARCHITECTURE.md` classifies post–World Zero
   ambitions: stamp is a core `StampOps` (not a plugin), living is a slab

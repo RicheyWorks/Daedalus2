@@ -2,8 +2,12 @@
 
 package com.daedalus.world;
 
+import com.daedalus.world.stamp.StampResult;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -26,19 +30,26 @@ public final class World {
     private final Object lock = new Object();
     /** Assigned once; open/close mutate {@link Door} under {@link #lock}. */
     private final Door door;
+    private final List<Parcel> parcels = new ArrayList<>();
+    private int nextParcelNumber;
 
     public World(WorldId id) {
         this(id, WorldId.ZERO.equals(Objects.requireNonNull(id, "WorldId is required"))
                 ? Door.zero()
-                : null, 0L, Map.of());
+                : null, 0L, Map.of(), List.of());
     }
 
-    private World(WorldId id, Door door, long revision, Map<ChunkCoordinate, Chunk> seeded) {
+    private World(WorldId id, Door door, long revision, Map<ChunkCoordinate, Chunk> seeded,
+            List<Parcel> seededParcels) {
         this.id = Objects.requireNonNull(id, "WorldId is required");
         this.door = door;
         this.revision.set(revision);
         for (Map.Entry<ChunkCoordinate, Chunk> e : seeded.entrySet()) {
             this.chunks.put(e.getKey(), e.getValue().copy());
+        }
+        if (seededParcels != null) {
+            this.parcels.addAll(seededParcels);
+            this.nextParcelNumber = maxParcelNumber(this.parcels);
         }
     }
 
@@ -169,7 +180,44 @@ public final class World {
                 copy.put(e.getKey(), e.getValue().copy());
             }
             return new WorldSnapshot(id, revision(), Map.copyOf(copy),
-                    door == null ? null : door.copy());
+                    door == null ? null : door.copy(), List.copyOf(parcels));
+        }
+    }
+
+    public List<Parcel> parcels() {
+        synchronized (lock) {
+            return List.copyOf(parcels);
+        }
+    }
+
+    /**
+     * Atomically refuse overlapping parcels, then place cubes and register one parcel.
+     * Overlap does not call {@link #place} and does not bump revision.
+     */
+    public StampResult applyStamp(ParcelBounds bounds, String ownerId,
+            List<BlockCoordinate> positions, List<BlockType> types) {
+        Objects.requireNonNull(bounds, "ParcelBounds is required");
+        Objects.requireNonNull(ownerId, "ownerId is required");
+        Objects.requireNonNull(positions, "stamp positions are required");
+        Objects.requireNonNull(types, "stamp types are required");
+        if (ownerId.isBlank()) {
+            throw new IllegalArgumentException("ownerId is required");
+        }
+        if (positions.size() != types.size()) {
+            throw new IllegalArgumentException("stamp positions and types must match");
+        }
+        synchronized (lock) {
+            for (Parcel existing : parcels) {
+                if (existing.bounds().overlaps(bounds)) {
+                    return StampResult.overlap(revision());
+                }
+            }
+            for (int i = 0; i < positions.size(); i++) {
+                place(positions.get(i), types.get(i));
+            }
+            ParcelId id = new ParcelId("parcel-" + (++nextParcelNumber));
+            parcels.add(new Parcel(id, this.id, ownerId, bounds, 1L));
+            return StampResult.applied(id, bounds, revision());
         }
     }
 
@@ -183,6 +231,22 @@ public final class World {
                 snapshot.id(),
                 snapshot.door() == null ? null : snapshot.door().copy(),
                 snapshot.revision().value(),
-                snapshot.chunks());
+                snapshot.chunks(),
+                snapshot.parcels());
+    }
+
+    private static int maxParcelNumber(List<Parcel> existing) {
+        int max = 0;
+        for (Parcel parcel : existing) {
+            String value = parcel.id().value();
+            if (value.startsWith("parcel-")) {
+                try {
+                    max = Math.max(max, Integer.parseInt(value.substring("parcel-".length())));
+                } catch (NumberFormatException ignored) {
+                    // keep going; non-numeric ids do not advance the sequence
+                }
+            }
+        }
+        return max;
     }
 }

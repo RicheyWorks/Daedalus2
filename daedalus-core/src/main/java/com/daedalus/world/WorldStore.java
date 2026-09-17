@@ -23,8 +23,9 @@ import java.util.Map;
 public final class WorldStore {
 
     static final byte[] MAGIC = "DAEW".getBytes(StandardCharsets.US_ASCII);
-    static final int VERSION = 2;
+    static final int VERSION = 3;
     static final int VERSION_CHUNKS_ONLY = 1;
+    static final int VERSION_WITH_DOOR = 2;
 
     private WorldStore() {
     }
@@ -86,6 +87,22 @@ public final class WorldStore {
             out.writeInt(door.at().z());
             out.writeUTF(door.state().name());
         }
+        List<Parcel> parcels = new ArrayList<>(snapshot.parcels());
+        parcels.sort(Comparator.comparing(p -> p.id().value()));
+        out.writeInt(parcels.size());
+        for (Parcel parcel : parcels) {
+            out.writeUTF(parcel.id().value());
+            out.writeUTF(parcel.worldId().value());
+            out.writeUTF(parcel.ownerId());
+            ParcelBounds bounds = parcel.bounds();
+            out.writeInt(bounds.minX());
+            out.writeInt(bounds.minY());
+            out.writeInt(bounds.minZ());
+            out.writeInt(bounds.maxX());
+            out.writeInt(bounds.maxY());
+            out.writeInt(bounds.maxZ());
+            out.writeLong(parcel.version());
+        }
     }
 
     static WorldSnapshot read(DataInputStream in) throws IOException {
@@ -94,7 +111,7 @@ public final class WorldStore {
             throw new IOException("Not a Daedalus world snapshot");
         }
         int version = in.readUnsignedByte();
-        if (version != VERSION && version != VERSION_CHUNKS_ONLY) {
+        if (version != VERSION && version != VERSION_WITH_DOOR && version != VERSION_CHUNKS_ONLY) {
             throw new IOException("Unsupported world snapshot version " + version);
         }
         WorldId id = new WorldId(in.readUTF());
@@ -114,7 +131,7 @@ public final class WorldStore {
             chunks.put(coord, Chunk.ofPayload(payload, chunkRevision));
         }
         Door door = null;
-        if (version >= VERSION) {
+        if (version >= VERSION_WITH_DOOR) {
             if (in.readBoolean()) {
                 String doorId = in.readUTF();
                 BlockCoordinate at = new BlockCoordinate(in.readInt(), in.readInt(), in.readInt());
@@ -122,7 +139,24 @@ public final class WorldStore {
                 door = new Door(doorId, id, at, state);
             }
         }
-        return new WorldSnapshot(id, revision, chunks, door);
+        List<Parcel> parcels = new ArrayList<>();
+        if (version >= VERSION) {
+            int parcelCount = in.readInt();
+            if (parcelCount < 0) {
+                throw new IOException("Negative parcel count");
+            }
+            for (int i = 0; i < parcelCount; i++) {
+                ParcelId parcelId = new ParcelId(in.readUTF());
+                WorldId parcelWorld = new WorldId(in.readUTF());
+                String ownerId = in.readUTF();
+                ParcelBounds bounds = new ParcelBounds(
+                        in.readInt(), in.readInt(), in.readInt(),
+                        in.readInt(), in.readInt(), in.readInt());
+                long parcelVersion = in.readLong();
+                parcels.add(new Parcel(parcelId, parcelWorld, ownerId, bounds, parcelVersion));
+            }
+        }
+        return new WorldSnapshot(id, revision, chunks, door, parcels);
     }
 
     private static void requirePath(Path file) {

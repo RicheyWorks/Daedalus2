@@ -61,6 +61,9 @@ No blockchain. No microservices. No seventh reactor module until a boundary is f
 | Browser WebGL voxel client | **NOT NOW** | Well panel is 2D/REST first. WebGL is a fourth client. |
 | Inventories, shops | **NOT NOW** | Plugin-shaped later. No economy types in core. |
 | Large procedural terrain | **NOT NOW** | World Zero scale stays tiny until stamp + observers are honest. |
+| Plots bought or rented | **DEFER — after parcel + permissions** | A plot **is** a `Parcel`. Buy/rent is a later market provider on `ownerId` / lease strings — not a second spatial type, not a chain. |
+| Wearables | **NOT NOW — item provider** | Equipped looks bind to an avatar later. No clothing types in `daedalus-core` this streak. |
+| NFT art display | **NOT NOW — display provider** | A framed surface on a parcel wall binds an item id (string). The world *shows*; a later provider proves ownership. No wallet type, no ledger, no mint in core. |
 
 `DEPRECATE` / `REMOVE`: still nothing in production.
 
@@ -177,6 +180,8 @@ One world may hold many parcels later. World One first slice: **one** stamped pa
 
 Permissions stay off this slice. When they arrive: allow/deny on `(ownerId, verb)` — `block.place`, `door.open`, `stamp.apply`. No tokens, no chain.
 
+Buy and rent are **lease verbs on this record**, not new cubes. `ownerId` stays a string account key; a later market provider may set `ownerId` or a `tenantId` string. Do not add `Wei`, `Wallet`, or listing books to `daedalus-core`.
+
 ### 4.3 Living slab
 
 After a stamp exists:
@@ -197,6 +202,18 @@ Server work is already done (`/topic/world/{id}/events`). World One proves it:
 3. **Desktop (later):** revision + last event line. Not a voxel viewport.
 
 Do not add Redis pub/sub or a broker relay for this proof.
+
+### 4.5 Metaverse providers (not this streak)
+
+The product is a maze-native world that can later wear, hang, and lease. **Settlement is Ethereum** — a later provider module, never `daedalus-core`. Core keeps `ownerId` / `itemId` / lease as strings. The provider maps those strings to an Ethereum address, ERC-721 / ERC-1155 token, or listing. World Zero and World One do not import web3, do not hold keys, and do not mint.
+
+| Later surface | Hosts on | Ethereum later | Forbidden in core |
+|---|---|---|---|
+| Plot buy / rent | `Parcel` + `ownerId` / lease strings | ERC-721 (or equivalent) deed / lease | `Wei`, `Wallet`, listing books |
+| Wearables | Avatar / inventory item ids | ERC-1155 (or equivalent) | Clothing enums, SKUs |
+| NFT art display | Framed wall bind (`itemId` string) | Existing ERC-721 shown, not reminted | Ledger, wallet verify, mint |
+
+OpenXR stays the VR plugin. A later world view may show the same voxels; it does not become a chain client.
 
 ### 4.5 Well world panel
 
@@ -337,7 +354,7 @@ Forbidden in W1.1:
 2. **What stays.** Everything KEEP. World Zero APIs stay. Door and accounting stay.
 3. **What is adapted.** Core stamp + parcel; living as a slab writer; STOMP proof; well panel; explore second mesh.
 4. **What is retired.** Nothing.
-5. **What is not now.** WebGL client, shops, terrain, permission engine, trap/portal/NPC.
+5. **What is not now.** WebGL client, shops, terrain, permission engine, trap/portal/NPC, wearables, NFT display, plot market. Those last three are later **Ethereum** providers on `Parcel` / item ids — still no wallet or web3 in core.
 6. **Smallest path.** §6 W1.1 → W1.5.
 7. **Exact first code slice.** §8 file list. Stop there until the next ask.
 
