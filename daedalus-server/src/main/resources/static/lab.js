@@ -24,26 +24,26 @@
     const e = fit.exponent;
     const modelY = v => ys[0] + e * (v - xs[0]);
     const model = `<line x1="${px(x0)}" y1="${py(modelY(x0))}" x2="${px(x1)}" `
-        + `y2="${py(Math.max(y0, Math.min(y1, modelY(x1))))}" stroke="#8a949e" stroke-width="2" `
+        + `y2="${py(Math.max(y0, Math.min(y1, modelY(x1))))}" stroke="#8c764e" stroke-width="2" `
         + `stroke-dasharray="4 3" opacity="0.8"/>`;
     const path = pts.map((m, i) => `${i ? "L" : "M"}${px(lx(m)).toFixed(1)},${py(ly(m)).toFixed(1)}`).join("");
     const dots = pts.map((m, i) =>
         `<circle class="labdot" data-i="${i}" cx="${px(lx(m)).toFixed(1)}" cy="${py(ly(m)).toFixed(1)}" `
-        + `r="4.5" fill="${seriesColor}" stroke="#1a2026" stroke-width="2"/>`).join("");
+        + `r="4.5" fill="${seriesColor}" stroke="#16120e" stroke-width="2"/>`).join("");
     const last = pts[pts.length - 1];
 
     return `<svg id="labChart" viewBox="0 0 ${W} ${H}" width="100%" height="${H}"
        role="img" aria-label="${escapeHtml(fit.metric)} against cell count, log-log">
-    <line x1="${L}" y1="${T}" x2="${L}" y2="${H-B}" stroke="#2a323b"/>
-    <line x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}" stroke="#2a323b"/>
+    <line x1="${L}" y1="${T}" x2="${L}" y2="${H-B}" stroke="rgba(184, 133, 56, 0.28)"/>
+    <line x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}" stroke="rgba(184, 133, 56, 0.28)"/>
     ${model}
     <path d="${path}" fill="none" stroke="${seriesColor}" stroke-width="2"
           stroke-linejoin="round" stroke-linecap="round"/>
     ${dots}
-    <text x="${L}" y="${H-6}" fill="#8a949e" font-size="9">${pts[0].cells} cells</text>
-    <text x="${W-R}" y="${H-6}" fill="#8a949e" font-size="9" text-anchor="end">${last.cells}</text>
-    <text x="4" y="${T+8}" fill="#8a949e" font-size="9">${last.value}</text>
-    <text x="4" y="${H-B}" fill="#8a949e" font-size="9">${pts[0].value}</text>
+    <text x="${L}" y="${H-6}" fill="#b09a72" font-size="9">${pts[0].cells} cells</text>
+    <text x="${W-R}" y="${H-6}" fill="#b09a72" font-size="9" text-anchor="end">${last.cells}</text>
+    <text x="4" y="${T+8}" fill="#b09a72" font-size="9">${last.value}</text>
+    <text x="4" y="${H-B}" fill="#b09a72" font-size="9">${pts[0].value}</text>
     <title>log-log: a straight line means a power law, and its slope is the exponent</title>
   </svg>
   <div id="labTip" class="hint" style="min-height:14px"></div>`;

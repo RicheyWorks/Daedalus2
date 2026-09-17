@@ -538,6 +538,8 @@ under the `_migration/` portfolios.
   lamp, not leftover cool white on torch stone.
   Complexity-lab series wear torch amber so the fit sits in the lamp, not leftover
   cool blue on torch stone.
+  Complexity-lab axes wear gold hairlines and khaki ticks so the chart sits in the
+  lamp, not leftover cool navy on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
