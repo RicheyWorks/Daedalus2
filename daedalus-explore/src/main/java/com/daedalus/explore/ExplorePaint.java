@@ -620,18 +620,41 @@ public final class ExplorePaint {
     public static final int FLOOR_TEX_HI_R = 118;
     public static final int FLOOR_TEX_HI_G = 88;
     public static final int FLOOR_TEX_HI_B = 52;
+    /** Same 0.22 rim as live / automap halls — leftover even slate is not the last word. */
+    public static final float FLOOR_TEX_EDGE_DIM = 0.22f;
+
+    public static float floorTexShade(int x, int y) {
+        int lx = x & 7;
+        int ly = y & 7;
+        int dist = Math.min(Math.min(lx, 7 - lx), Math.min(ly, 7 - ly));
+        float t = Math.max(0f, 1f - dist / 3f);
+        return 1f - FLOOR_TEX_EDGE_DIM * t;
+    }
 
     public static byte[] floorRgba() {
         return raster((x, y) -> {
             int n = hash(x, y) & 11;
+            int r;
+            int g;
+            int b;
             if ((y & 7) == 1) {
-                return rgbBytes(FLOOR_TEX_HI_R + n / 2, FLOOR_TEX_HI_G + n / 3, FLOOR_TEX_HI_B);
+                r = FLOOR_TEX_HI_R + n / 2;
+                g = FLOOR_TEX_HI_G + n / 3;
+                b = FLOOR_TEX_HI_B;
+            } else {
+                int cell = ((x / 8) + (y / 8)) & 1;
+                if (cell == 0) {
+                    r = 92 + n;
+                    g = 64 + n / 2;
+                    b = 38;
+                } else {
+                    r = 74 + n;
+                    g = 52 + n / 2;
+                    b = 30;
+                }
             }
-            int cell = ((x / 8) + (y / 8)) & 1;
-            if (cell == 0) {
-                return rgbBytes(92 + n, 64 + n / 2, 38);
-            }
-            return rgbBytes(74 + n, 52 + n / 2, 30);
+            float s = floorTexShade(x, y);
+            return rgbBytes(Math.round(r * s), Math.round(g * s), Math.round(b * s));
         });
     }
 

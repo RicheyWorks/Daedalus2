@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore floor tile depth.**
+  Corridor floor texels fall off toward the 8×8 rim with the same
+  0.22 edge as live halls, so leftover even checker is not the last
+  word underfoot. Start mint and goal coral stay.
+
 - **Desktop fog floor depth.**
   Revealed halls under the lamp fall off toward floor-dim at the rim
   with the same 0.22 edge as clear stone, so leftover even fog slate
