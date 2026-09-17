@@ -403,6 +403,9 @@ under the `_migration/` portfolios.
   gutter is not leftover cool navy on torch stone.
   Web header tagline wears the same warm khaki as the well key so the line
   beside the brand sits in the lamp, not leftover cool slate on torch stone.
+  Start-gate command dumps wear the same torch void and cream as the ASCII
+  dump so those lines sit in the lamp, not leftover cool page ink on torch
+  stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
