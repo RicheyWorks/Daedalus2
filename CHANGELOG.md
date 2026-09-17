@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore automap wall depth.**
+  Earned posts on the pocket fall off toward unseen at the rim with
+  the same 0.28 edge as live stone, so leftover flat MAP_WALL is not
+  the last word on the map. Start mint and goal coral stay.
+
 - **Well icon floor depth.**
   Tab, apple-touch, and share PNGs fall off toward the rim with the
   same 0.22 edge as live stone, so leftover flat slate is not the last

@@ -753,7 +753,7 @@ public final class ExploreHost {
                     || dot.kind() == ExplorePaint.MapKind.BLOCK) {
                 continue;
             }
-            mapColor(dot.kind(), seconds);
+            mapColor(dot.kind(), seconds, dot.edge());
             double x0 = left + dot.x() * sx;
             double y0 = bot + dot.y() * sy;
             glVertex2f((float) x0, (float) y0);
@@ -834,7 +834,7 @@ public final class ExploreHost {
         }
     }
 
-    private static void mapColor(ExplorePaint.MapKind kind, double seconds) {
+    private static void mapColor(ExplorePaint.MapKind kind, double seconds, double edge) {
         float[] rgb = new float[3];
         switch (kind) {
             case HERE -> glColor3f(ExplorePaint.MAP_HERE_R, ExplorePaint.MAP_HERE_G,
@@ -846,7 +846,7 @@ public final class ExploreHost {
             case GOAL -> glColor3f(ExplorePaint.MAP_GOAL_R, ExplorePaint.MAP_GOAL_G,
                     ExplorePaint.MAP_GOAL_B);
             default -> {
-                ExplorePaint.mapStoneTint(kind, seconds, rgb);
+                ExplorePaint.mapStoneTint(kind, seconds, edge, rgb);
                 glColor3f(rgb[0], rgb[1], rgb[2]);
             }
         }

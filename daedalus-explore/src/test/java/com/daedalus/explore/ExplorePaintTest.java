@@ -388,6 +388,12 @@ class ExplorePaintTest {
                 List.of(new ExploreMarker("door", new Point(0, 0), 0, "ENTRANCE")));
         assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.HERE)).isTrue();
         assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.WALL)).isTrue();
+        assertThat(dots.stream()
+                .filter(d -> d.kind() == ExplorePaint.MapKind.WALL)
+                .mapToDouble(ExplorePaint.MapDot::edge)
+                .max().orElse(0))
+                .as("earned walls carry pocket-rim falloff")
+                .isGreaterThan(0);
         assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.MARK)).isTrue();
         assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.START))
                 .as("earned map names the revealed start mint")
@@ -528,6 +534,18 @@ class ExplorePaintTest {
         ExplorePaint.mapStoneTint(ExplorePaint.MapKind.FLOOR, 0.7, later);
         assertThat(later[0]).isNotEqualTo(floor[0]);
         ExplorePaint.mapStoneTint(ExplorePaint.MapKind.WALL, 0, null);
+        assertThat(ExplorePaint.MAP_WALL_EDGE_DIM).isEqualTo(0.28f);
+        assertThat(ExplorePaint.mapEdge(0, 0, 0, 6, 0, 10))
+                .as("a rim cell is farther from the pocket center than a mid post")
+                .isGreaterThan(ExplorePaint.mapEdge(3, 5, 0, 6, 0, 10));
+        float[] rim = new float[3];
+        float[] mid = new float[3];
+        ExplorePaint.mapStoneTint(ExplorePaint.MapKind.WALL, 0,
+                ExplorePaint.mapEdge(0, 0, 0, 6, 0, 10), rim);
+        ExplorePaint.mapStoneTint(ExplorePaint.MapKind.WALL, 0,
+                ExplorePaint.mapEdge(3, 5, 0, 6, 0, 10), mid);
+        assertThat(rim[0]).as("automap rim posts fall off toward unseen")
+                .isLessThan(mid[0]);
     }
 
     @Test

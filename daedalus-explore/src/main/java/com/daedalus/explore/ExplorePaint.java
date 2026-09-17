@@ -266,6 +266,8 @@ public final class ExplorePaint {
     public static final float MAP_WALL_R = 0.64f;
     public static final float MAP_WALL_G = 0.40f;
     public static final float MAP_WALL_B = 0.22f;
+    /** Same 0.28 rim as live / idle well posts. */
+    public static final float MAP_WALL_EDGE_DIM = 0.28f;
     /** Occupied cube on the earned map — torch wood, not leftover ice. */
     public static final float MAP_BLOCK_R = 0.58f;
     public static final float MAP_BLOCK_G = 0.38f;
@@ -299,12 +301,20 @@ public final class ExplorePaint {
     }
 
     public static void mapStoneTint(MapKind kind, double seconds, float[] rgb) {
+        mapStoneTint(kind, seconds, 0, rgb);
+    }
+
+    public static void mapStoneTint(MapKind kind, double seconds, double edge, float[] rgb) {
         if (rgb == null || rgb.length < 3) {
             return;
         }
         float breath = mapStoneBreath(seconds);
         if (kind == MapKind.WALL) {
-            set(rgb, MAP_WALL_R * breath, MAP_WALL_G * breath, MAP_WALL_B * breath);
+            float t = MAP_WALL_EDGE_DIM * (float) Math.max(0, Math.min(1, edge));
+            set(rgb,
+                    (MAP_WALL_R + (UNSEEN_R - MAP_WALL_R) * t) * breath,
+                    (MAP_WALL_G + (UNSEEN_G - MAP_WALL_G) * t) * breath,
+                    (MAP_WALL_B + (UNSEEN_B - MAP_WALL_B) * t) * breath);
         } else if (kind == MapKind.BLOCK) {
             set(rgb, MAP_BLOCK_R * breath, MAP_BLOCK_G * breath, MAP_BLOCK_B * breath);
         } else {
@@ -418,9 +428,13 @@ public final class ExplorePaint {
         BLOCK
     }
 
-    public record MapDot(int x, int y, MapKind kind, String story) {
+    public record MapDot(int x, int y, MapKind kind, String story, double edge) {
         public MapDot(int x, int y, MapKind kind) {
-            this(x, y, kind, "");
+            this(x, y, kind, "", 0);
+        }
+
+        public MapDot(int x, int y, MapKind kind, String story) {
+            this(x, y, kind, story, 0);
         }
     }
 
@@ -1170,7 +1184,9 @@ public final class ExplorePaint {
                 }
                 int x = project(tc, minC, maxC);
                 int y = MAP - 1 - project(tr, minR, maxR);
-                out.add(new MapDot(x, y, mesh.solidTile(tr, tc) ? MapKind.WALL : MapKind.FLOOR));
+                MapKind kind = mesh.solidTile(tr, tc) ? MapKind.WALL : MapKind.FLOOR;
+                out.add(new MapDot(x, y, kind, "",
+                        mapEdge(tr, tc, minR, maxR, minC, maxC)));
             }
         }
         if (blocks != null) {
@@ -1863,6 +1879,14 @@ public final class ExplorePaint {
         rgb[0] = Math.min(1f, rgb[0] * lamp);
         rgb[1] = Math.min(1f, rgb[1] * lamp);
         rgb[2] = Math.min(1f, rgb[2] * lamp);
+    }
+
+    public static double mapEdge(int tr, int tc, int minR, int maxR, int minC, int maxC) {
+        double cx = (minC + maxC) / 2.0;
+        double cy = (minR + maxR) / 2.0;
+        double dx = (tc - cx) / Math.max(1, (maxC - minC + 1) / 2.0);
+        double dy = (tr - cy) / Math.max(1, (maxR - minR + 1) / 2.0);
+        return Math.min(1, Math.hypot(dx, dy));
     }
 
     private static int project(int value, int min, int max) {
