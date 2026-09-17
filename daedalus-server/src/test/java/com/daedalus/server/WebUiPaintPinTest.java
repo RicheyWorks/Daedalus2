@@ -211,7 +211,8 @@ class WebUiPaintPinTest {
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js)
                     .contains("mixHex(\"#8aaa50\", COLORS.floorDim, 0.22 * edge)")
-                    .contains("const safeInk = sanctuaryInk(p, th, tw)");
+                    .contains("const safeInk = sanctuaryInk(p, th, tw)")
+                    .contains("g.strokeStyle = heatInk(2 * w.row + 1, 2 * w.col + 1, th, tw)");
         }
     }
 

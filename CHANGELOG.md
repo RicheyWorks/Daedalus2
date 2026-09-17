@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well worst-served ring depth.**
+  Loneliest-cell coral falls off toward floor-dim at the board
+  rim with the same 0.22 edge as halls, so leftover even stroke is
+  not the last word on a hold gap. The legend sanctuary chip stays
+  leftover even. Start mint and goal coral stay.
+
 - **Desktop heat glow depth.**
   Hotspot pads and rims fall off toward floor-dim at the board
   rim with the same 0.22 edge as halls, so leftover even coral is

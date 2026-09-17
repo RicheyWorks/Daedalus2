@@ -725,7 +725,7 @@
       const w = scene.sanctuaries.worstServed;
       if (w) {
         const [x, y] = cellCenter(geom, w);
-        g.strokeStyle = "#e5484d";
+        g.strokeStyle = heatInk(2 * w.row + 1, 2 * w.col + 1, th, tw);
         g.globalAlpha = 0.72 + 0.28 * wave;
         g.lineWidth = Math.max(1.5, geom.cell * 0.16);
         g.beginPath();
