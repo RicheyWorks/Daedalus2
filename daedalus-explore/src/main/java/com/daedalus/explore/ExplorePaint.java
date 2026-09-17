@@ -191,6 +191,8 @@ public final class ExplorePaint {
     public static final float MAP_HERE_R = 0.95f;
     public static final float MAP_HERE_G = 0.86f;
     public static final float MAP_HERE_B = 0.28f;
+    /** Same 0.22 rim as halls — leftover even gold is not the last word on you-are-here. */
+    public static final float MAP_HERE_EDGE_DIM = 0.22f;
     /** HERE pad breath — same cadence idea as victory (~2.8s). */
     public static final float MAP_HERE_BREATH_MS = 2800f;
 
@@ -207,7 +209,13 @@ public final class ExplorePaint {
 
     public static void mapHereTint(ExploreBody body, ExploreMesh mesh, WorldMesh blocks,
                                   float[] rgb) {
+        mapHereTint(body, mesh, blocks, rgb, 0);
+    }
+
+    public static void mapHereTint(ExploreBody body, ExploreMesh mesh, WorldMesh blocks,
+                                  float[] rgb, double edge) {
         washHere(body, mesh, blocks, rgb, MAP_HERE_R, MAP_HERE_G, MAP_HERE_B);
+        mixHereEdge(edge, rgb);
     }
 
     public static void mapHereSoftTint(ExploreBody body, ExploreMesh mesh, float[] rgb) {
@@ -216,7 +224,23 @@ public final class ExplorePaint {
 
     public static void mapHereSoftTint(ExploreBody body, ExploreMesh mesh, WorldMesh blocks,
                                       float[] rgb) {
+        mapHereSoftTint(body, mesh, blocks, rgb, 0);
+    }
+
+    public static void mapHereSoftTint(ExploreBody body, ExploreMesh mesh, WorldMesh blocks,
+                                      float[] rgb, double edge) {
         washHere(body, mesh, blocks, rgb, MAP_HERE_SOFT_R, MAP_HERE_SOFT_G, MAP_HERE_SOFT_B);
+        mixHereEdge(edge, rgb);
+    }
+
+    public static void mixHereEdge(double edge, float[] rgb) {
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        float t = (float) (MAP_HERE_EDGE_DIM * Math.min(1, Math.max(0, edge)));
+        rgb[0] += (MAP_FLOOR_DIM_R - rgb[0]) * t;
+        rgb[1] += (MAP_FLOOR_DIM_G - rgb[1]) * t;
+        rgb[2] += (MAP_FLOOR_DIM_B - rgb[2]) * t;
     }
 
     private static void washHere(ExploreBody body, ExploreMesh mesh, WorldMesh blocks,
@@ -1378,7 +1402,8 @@ public final class ExplorePaint {
             int tc = (int) Math.round(body.x() / ExploreMesh.TILE + 1);
             int tr = (int) Math.round(body.z() / ExploreMesh.TILE + 1);
             out.add(new MapDot(project(tc, minC, maxC),
-                    MAP - 1 - project(tr, minR, maxR), MapKind.HERE));
+                    MAP - 1 - project(tr, minR, maxR), MapKind.HERE, "",
+                    mapEdge(tr, tc, minR, maxR, minC, maxC)));
         }
         return List.copyOf(out);
     }

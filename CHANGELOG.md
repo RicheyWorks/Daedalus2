@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore automap HERE depth.**
+  You-are-here gold falls off toward floor-dim at the pocket rim
+  with the same 0.22 edge as halls, so leftover even lamp is not
+  the last word on the walker. Start mint and goal coral stay.
+
 - **Explore sky pocket depth.**
   Horizon texels fall off toward the atlas rim with the same 0.22
   edge as halls, so leftover even sky bands are not the last word

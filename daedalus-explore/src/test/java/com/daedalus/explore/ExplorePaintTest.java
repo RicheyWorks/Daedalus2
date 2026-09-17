@@ -409,6 +409,12 @@ class ExplorePaintTest {
                 ExploreBody.atCell(new Point(0, 0)),
                 List.of(new ExploreMarker("door", new Point(0, 0), 0, "ENTRANCE")));
         assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.HERE)).isTrue();
+        assertThat(dots.stream()
+                .filter(d -> d.kind() == ExplorePaint.MapKind.HERE)
+                .mapToDouble(ExplorePaint.MapDot::edge)
+                .findFirst().orElse(-1))
+                .as("HERE carries pocket-rim falloff")
+                .isBetween(0.0, 1.0);
         assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.WALL)).isTrue();
         assertThat(dots.stream()
                 .filter(d -> d.kind() == ExplorePaint.MapKind.WALL)
@@ -499,6 +505,11 @@ class ExplorePaintTest {
         ExplorePaint.mapHereTint(ExploreBody.atCell(new Point(0, 0)), mesh, hereStart);
         ExplorePaint.mapHereTint(ExploreBody.atCell(new Point(0, 1)), mesh, hereGoal);
         assertThat(hereHall[0]).isEqualTo(ExplorePaint.MAP_HERE_R);
+        assertThat(ExplorePaint.MAP_HERE_EDGE_DIM).isEqualTo(0.22f);
+        float[] hereRim = new float[3];
+        ExplorePaint.mapHereTint(ExploreBody.atCell(new Point(0, 0)), null, null, hereRim, 1);
+        assertThat(hereRim[0]).as("HERE rim falls off like live halls")
+                .isLessThan(hereHall[0]);
         assertThat(hereStart[1]).as("HERE on start lifts toward well mint")
                 .isGreaterThan(hereHall[1]);
         assertThat(hereGoal[0]).as("HERE on goal lifts toward well coral")
