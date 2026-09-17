@@ -56,6 +56,8 @@ class WebUiSmokeTest {
                 .contains("rgba(22, 18, 14, .88)")
                 .contains("#gate article h3")
                 .contains("letter-spacing: .04em; color: #f2ead8")
+                .contains("#gate .lede { color: #b09a72")
+                .contains("#gate article p { margin: 0; color: #b09a72")
                 .contains("gateBreath").contains("gateVeil")
                 .contains("rgba(245, 193, 74, .05)")
                 .contains("rgba(184, 133, 56, 0.28)")
