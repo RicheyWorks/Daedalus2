@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World slab mazeRef persist.**
+  A stamped lab maze keeps its maze id on the parcel (DAEW v9).
+  Restart rebinds the living slab. Not a wallet.
+
 - **World living slab subscribe.**
   A stamped lab maze re-projects when `MazeMutatedEvent` fires.
   Quiet ticks write nothing. WorldService still does not open

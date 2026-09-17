@@ -12,6 +12,7 @@ import com.daedalus.world.Door;
 import com.daedalus.world.DoorResult;
 import com.daedalus.world.Npc;
 import com.daedalus.world.NpcResult;
+import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.Portal;
@@ -65,6 +66,7 @@ public class WorldService {
         this.file = file;
         this.events = event -> { };
         this.world = open(file);
+        rebindSlabs();
     }
 
     @Autowired
@@ -73,6 +75,7 @@ public class WorldService {
         this.file = file;
         this.events = publisher::publishEvent;
         this.world = open(file);
+        rebindSlabs();
     }
 
     public Path file() {
@@ -250,8 +253,9 @@ public class WorldService {
             StampResult result = maze == null
                     ? WorldOps.asStampResult(WorldOps.drive(live, "stamp.apply", at, null))
                     : StampOps.apply(live, new StampRequest(live.id(), at, maze, at.y(), 1));
-            if (result.ok() && maze != null && mazeId != null && result.bounds() != null) {
-                slabs.put(mazeId, new SlabBind(at, at.y(), 1, result.bounds()));
+            if (result.ok() && maze != null && mazeId != null && result.parcelId() != null) {
+                live.bindMaze(result.parcelId(), mazeId.toString());
+                rebindSlabs();
             }
             persist();
             log.append("stamp.apply", result, live.revision().value());
@@ -313,6 +317,25 @@ public class WorldService {
             return null;
         }
         return world;
+    }
+
+    private void rebindSlabs() {
+        slabs.clear();
+        for (Parcel parcel : world.parcels()) {
+            if (parcel == null || parcel.mazeRef().isEmpty()) {
+                continue;
+            }
+            try {
+                UUID mazeId = UUID.fromString(parcel.mazeRef());
+                ParcelBounds box = parcel.bounds();
+                int height = Math.max(1, box.maxY() - box.minY());
+                slabs.put(mazeId, new SlabBind(
+                        new BlockCoordinate(box.minX(), box.minY(), box.minZ()),
+                        box.minY(), height, box));
+            } catch (IllegalArgumentException ignored) {
+                // mazeRef is a lab id string; junk refs do not bind.
+            }
+        }
     }
 
     private void persist() {

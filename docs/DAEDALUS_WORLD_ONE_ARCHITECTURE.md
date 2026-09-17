@@ -299,8 +299,8 @@ Phase 0 already ordered the post-7 work. This audit keeps it:
 Permissions and desktop inspect shipped after W1.5. Trap, portal, NPC,
 `WorldBuilder`, the well agent fold, plot lease strings,
 `parcel.lease`, REST `/parcels/lease`, `stamp.apply`, desktop lease
-inspect, lab-maze stamp (`mazeId` on `/stamp`), and living-slab
-subscribe (`MazeMutatedEvent` → `LivingSlab.sync`) are shipped.
+inspect, lab-maze stamp (`mazeId` on `/stamp`), living-slab
+subscribe, and parcel `mazeRef` persist (DAEW v9) are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
 

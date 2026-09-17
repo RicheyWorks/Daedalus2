@@ -23,7 +23,7 @@ import java.util.Map;
 public final class WorldStore {
 
     static final byte[] MAGIC = "DAEW".getBytes(StandardCharsets.US_ASCII);
-    static final int VERSION = 8;
+    static final int VERSION = 9;
     static final int VERSION_CHUNKS_ONLY = 1;
     static final int VERSION_WITH_DOOR = 2;
     static final int VERSION_WITH_PARCELS = 3;
@@ -31,6 +31,7 @@ public final class WorldStore {
     static final int VERSION_WITH_PORTAL = 5;
     static final int VERSION_WITH_NPC = 6;
     static final int VERSION_WITH_PLACE_NAME = 7;
+    static final int VERSION_WITH_LEASE = 8;
 
     private WorldStore() {
     }
@@ -109,6 +110,7 @@ public final class WorldStore {
             out.writeLong(parcel.version());
             out.writeUTF(parcel.placeName());
             out.writeUTF(parcel.leaseId());
+            out.writeUTF(parcel.mazeRef());
         }
         Trap trap = snapshot.trap();
         out.writeBoolean(trap != null);
@@ -150,6 +152,7 @@ public final class WorldStore {
                 && version != VERSION_WITH_TRAP
                 && version != VERSION_WITH_PARCELS
                 && version != VERSION_WITH_PLACE_NAME
+                && version != VERSION_WITH_LEASE
                 && version != VERSION_WITH_DOOR && version != VERSION_CHUNKS_ONLY) {
             throw new IOException("Unsupported world snapshot version " + version);
         }
@@ -193,9 +196,10 @@ public final class WorldStore {
                         in.readInt(), in.readInt(), in.readInt());
                 long parcelVersion = in.readLong();
                 String placeName = version >= VERSION_WITH_PLACE_NAME ? in.readUTF() : "";
-                String leaseId = version >= VERSION ? in.readUTF() : "";
+                String leaseId = version >= VERSION_WITH_LEASE ? in.readUTF() : "";
+                String mazeRef = version >= VERSION ? in.readUTF() : "";
                 parcels.add(new Parcel(parcelId, parcelWorld, ownerId, bounds,
-                        parcelVersion, placeName, leaseId));
+                        parcelVersion, placeName, leaseId, mazeRef));
             }
         }
         Trap trap = null;

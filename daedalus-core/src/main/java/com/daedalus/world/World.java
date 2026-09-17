@@ -378,7 +378,8 @@ public final class World {
                     return ParcelNameResult.ALREADY_NAMED;
                 }
                 parcels.set(i, new Parcel(parcel.id(), parcel.worldId(), parcel.ownerId(),
-                        parcel.bounds(), parcel.version() + 1, trimmed, parcel.leaseId()));
+                        parcel.bounds(), parcel.version() + 1, trimmed, parcel.leaseId(),
+                        parcel.mazeRef()));
                 revision.incrementAndGet();
                 return ParcelNameResult.NAMED;
             }
@@ -408,9 +409,40 @@ public final class World {
                     return ParcelLeaseResult.ALREADY_LEASED;
                 }
                 parcels.set(i, new Parcel(parcel.id(), parcel.worldId(), parcel.ownerId(),
-                        parcel.bounds(), parcel.version() + 1, parcel.placeName(), trimmed));
+                        parcel.bounds(), parcel.version() + 1, parcel.placeName(), trimmed,
+                        parcel.mazeRef()));
                 revision.incrementAndGet();
                 return ParcelLeaseResult.LEASED;
+            }
+        }
+        throw new IllegalArgumentException("Unknown parcel " + id.value());
+    }
+
+    /**
+     * Lab maze id on a parcel. Not a wallet. The same ref is
+     * {@link ParcelMazeResult#ALREADY_BOUND} and does not bump revision.
+     */
+    public ParcelMazeResult bindMaze(ParcelId id, String mazeRef) {
+        Objects.requireNonNull(id, "ParcelId is required");
+        Objects.requireNonNull(mazeRef, "mazeRef is required");
+        String trimmed = mazeRef.trim();
+        if (trimmed.isEmpty()) {
+            throw new IllegalArgumentException("mazeRef is required");
+        }
+        synchronized (lock) {
+            for (int i = 0; i < parcels.size(); i++) {
+                Parcel parcel = parcels.get(i);
+                if (!parcel.id().equals(id)) {
+                    continue;
+                }
+                if (trimmed.equals(parcel.mazeRef())) {
+                    return ParcelMazeResult.ALREADY_BOUND;
+                }
+                parcels.set(i, new Parcel(parcel.id(), parcel.worldId(), parcel.ownerId(),
+                        parcel.bounds(), parcel.version() + 1, parcel.placeName(),
+                        parcel.leaseId(), trimmed));
+                revision.incrementAndGet();
+                return ParcelMazeResult.BOUND;
             }
         }
         throw new IllegalArgumentException("Unknown parcel " + id.value());

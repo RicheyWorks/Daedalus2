@@ -46,4 +46,24 @@ class LivingSlabServiceTest {
         assertThat(worlds.syncSlab(WorldId.ZERO.value(), mazeId, next)).isZero();
         assertThat(worlds.syncSlab(WorldId.ZERO.value(), UUID.randomUUID(), next)).isZero();
     }
+
+    @Test
+    void aBoundSlabSurvivesRestartAndStillSyncs() {
+        Path file = tmp.resolve("live-slab-restart.daew");
+        UUID mazeId = UUID.fromString("00000000-0000-4000-8000-000000000007");
+        MazeGrid maze = new MazeGrid(2, 2);
+        maze.carve(new Point(0, 0), new Point(0, 1));
+        BlockCoordinate origin = new BlockCoordinate(4, 2, 8);
+        WorldService live = new WorldService(file);
+        assertThat(live.stamp(WorldId.ZERO.value(), origin, maze, mazeId).ok()).isTrue();
+        assertThat(live.inspect("world-zero").parcels().get(0).mazeRef())
+                .isEqualTo(mazeId.toString());
+
+        WorldService restarted = new WorldService(file);
+        MazeGrid next = maze.copy();
+        next.carve(new Point(0, 0), new Point(1, 0));
+        new LivingSlabService(restarted).onMazeMutated(
+                new MazeMutatedEvent(this, mazeId, 1, 1, 0, false, next));
+        assertThat(restarted.inspectBlock(WorldId.ZERO.value(), 5, 3, 10)).isEqualTo(BlockType.AIR);
+    }
 }
