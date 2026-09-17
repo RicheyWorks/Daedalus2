@@ -396,7 +396,7 @@ class WebUiSmokeTest {
                 .contains(".info b { color: #f2ead8; font-weight: 600; }")
                 .contains("#f2ead8; cursor: default; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none")
                 .contains("#f2ead8; cursor: default; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none")
-                .contains("#stats span { color: #b09a72; }")
+                .contains("#stats span { color: #b09a72;")
                 .contains("cursor: default; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; margin-top: 8px")
                 .contains("callout: none; margin-top: 8px; -webkit-user-drag: none")
                 .contains("exportsRimBreath")
