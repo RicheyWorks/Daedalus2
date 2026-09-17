@@ -245,6 +245,8 @@ public final class DesktopPaint {
     public static final String FOG_WALL = "#0b0f14";
     /** Torch-warm wall — same mix as {@code draw.js} wallWarm. */
     public static final String FOG_WALL_WARM = "#2a2218";
+    /** Idle lattice walls — torch-warm stone, not the void color. */
+    public static final String EMPTY_MARK_WALL = FOG_WALL_WARM;
     /** Same 1px corridor highlight as {@code draw.js} {@code floorHi}. */
     public static final String FLOOR_HI = "#536272";
     public static final String FOG_FLOOR_HI = FLOOR_HI;

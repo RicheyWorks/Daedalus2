@@ -1774,7 +1774,7 @@ public class MainController {
             DesktopPaint.Layout mark = DesktopPaint.emptyMarkLayout(w, h);
             if (mark != null && theme != null) {
                 g.setGlobalAlpha(DesktopPaint.emptyMarkWallAlpha(wave));
-                g.setFill(Color.web(DesktopPaint.WELL_VOID_CENTER));
+                g.setFill(Color.web(DesktopPaint.EMPTY_MARK_WALL));
                 for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkWalls()) {
                     g.fillRect(mark.x(tile.tileCol()), mark.y(tile.tileRow()),
                             mark.w(tile.tileCol()), mark.h(tile.tileRow()));

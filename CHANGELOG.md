@@ -252,6 +252,8 @@ under the `_migration/` portfolios.
   gold frame so the earned map is the same maze, not a separate admin brown.
   Explore status strip and automap pocket share one warm HUD void so chrome sits
   in the same well, not a cold black inset beside a brown bar.
+  Empty-well idle lattice walls wear torch-warm stone on web and desktop so the
+  miniature silhouettes, not the same slate as the void.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

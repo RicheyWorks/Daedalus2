@@ -744,7 +744,7 @@
     g.save();
     g.translate(ox, oy);
     g.globalAlpha = 0.22 + 0.08 * w0;
-    g.fillStyle = "#121821";
+    g.fillStyle = COLORS.wallWarm;
     for (let r = 0; r < tiles.length; r++) {
       for (let c = 0; c < tiles[r].length; c++) {
         if (tiles[r][c] !== "#") continue;
