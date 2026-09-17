@@ -106,6 +106,12 @@ class ExplorePaintTest {
         int face = Byte.toUnsignedInt(brick[(2 * ExplorePaint.TEX + 2) * 4]);
         assertThat(face).isGreaterThan(mortar);
         assertThat(Byte.toUnsignedInt(floor[0])).isNotEqualTo(Byte.toUnsignedInt(brick[0]));
+        int ceilR = Byte.toUnsignedInt(ceil[0]);
+        int ceilB = Byte.toUnsignedInt(ceil[2]);
+        assertThat(ceilR).isGreaterThan(ceilB);
+        assertThat(ceilR).isGreaterThanOrEqualTo(ExplorePaint.CEILING_TEX_R);
+        assertThat(ExplorePaint.CEILING_TEX_R).isGreaterThan(ExplorePaint.CEILING_TEX_B);
+        assertThat(ExplorePaint.CEILING_TEX_R).isLessThan(92);
     }
 
     @Test

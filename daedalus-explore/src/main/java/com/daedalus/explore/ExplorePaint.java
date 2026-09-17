@@ -303,10 +303,14 @@ public final class ExplorePaint {
         });
     }
 
+    public static final int CEILING_TEX_R = 72;
+    public static final int CEILING_TEX_G = 52;
+    public static final int CEILING_TEX_B = 36;
+
     public static byte[] ceilingRgba() {
         return raster((x, y) -> {
             int n = hash(x, y) & 19;
-            return rgbBytes(58 + n / 2, 42 + n / 3, 34);
+            return rgbBytes(CEILING_TEX_R + n / 2, CEILING_TEX_G + n / 3, CEILING_TEX_B);
         });
     }
 

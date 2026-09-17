@@ -276,6 +276,8 @@ under the `_migration/` portfolios.
   static leather beside a flickering lamp.
   Explore torch bloom fades in three rings so the HUD lamp is a wash, not one
   hard gold stamp behind the flame.
+  Explore ceiling plaster warms toward torch-brown so the lid texture matches
+  the lamp, not cool gray stone over a firelit floor.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
