@@ -660,6 +660,8 @@ under the `_migration/` portfolios.
   not leftover unrimmed void around the well.
   Explore window icon wears a gold lip so the host sits in the lamp,
   not leftover unrimmed void around the corridor.
+  Web tab icon wears torch void with a gold lip so the host sits in the lamp,
+  not leftover browser chrome around the well.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
