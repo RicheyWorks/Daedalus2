@@ -422,6 +422,8 @@ under the `_migration/` portfolios.
   so the ice ribbon is keyed, not leftover unrimmed on torch stone.
   Well-key race-arena swatches wear the same cream rim as other place marks so
   the contest is keyed, not leftover unrimmed on torch stone.
+  Well-key lens swatches wear the same cream rim as other place marks so the
+  three bands are keyed, not leftover unrimmed on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
