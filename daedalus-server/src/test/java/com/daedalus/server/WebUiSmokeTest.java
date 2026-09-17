@@ -116,6 +116,8 @@ class WebUiSmokeTest {
                 .contains("0.55 + 0.06")
                 .contains("shadowBlur")
                 .contains("EMPTY_BREATH_MS")
+                .contains("mixHex(\"#16120e\", \"#1a1510\", wave)")
+                .contains("voidWash.addColorStop(1, COLORS.unseen)")
                 .contains("0.36 + 0.10")
                 .contains("0.22 + 0.08")
                 .contains("0.72 + 0.18")

@@ -812,8 +812,6 @@
     const g = canvas.getContext("2d");
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
     g.imageSmoothingEnabled = false;
-    g.fillStyle = COLORS.wall;
-    g.fillRect(0, 0, cssW, cssH);
     const cx = cssW / 2;
     const cy = cssH / 2;
     // Same 4.5s mint/gold breath as #gate .gate-brand — idle well still feels held.
@@ -821,6 +819,12 @@
     const t = ((nowMs == null ? (typeof performance !== "undefined" ? performance.now() : 0)
         : nowMs) % EMPTY_BREATH_MS) / EMPTY_BREATH_MS;
     const wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
+    const voidWash = g.createRadialGradient(cx, cssH * 0.45, 0, cx, cssH * 0.45,
+        Math.max(cssW, cssH) * 0.72);
+    voidWash.addColorStop(0, mixHex("#16120e", "#1a1510", wave));
+    voidWash.addColorStop(1, COLORS.unseen);
+    g.fillStyle = voidWash;
+    g.fillRect(0, 0, cssW, cssH);
     const glow = g.createRadialGradient(cx, cy - 36, 12, cx, cy - 36, Math.min(cssW, cssH) * 0.42);
     glow.addColorStop(0, "rgba(62, 224, 143, " + (0.08 + 0.04 * wave) + ")");
     glow.addColorStop(0.55, "rgba(245, 193, 74, " + (0.04 + 0.03 * wave) + ")");

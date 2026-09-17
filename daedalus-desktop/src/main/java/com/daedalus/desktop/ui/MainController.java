@@ -1760,8 +1760,6 @@ public class MainController {
         }
 
         if (current == null) {
-            g.setFill(theme != null ? theme.wall() : Color.web(DesktopPaint.LEGEND_WALL));
-            g.fillRect(0, 0, w, h);
             double cx = w / 2.0;
             double cy = h / 2.0;
             double wave = DesktopPaint.emptyBreathWave(System.nanoTime());

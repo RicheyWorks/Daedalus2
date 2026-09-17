@@ -314,6 +314,8 @@ under the `_migration/` portfolios.
   and legend chips sit in the lamp, not cool blue stone beside the well.
   Well floors warm past leftover slate on web and desktop so corridors sit in
   the lamp, not cool gray stone beside torch posts.
+  Empty-well canvas sits in the same breathing void pocket as the live board so
+  the idle miniature is letterboxed in the lamp, not a flat wall slab.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
