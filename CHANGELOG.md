@@ -810,6 +810,7 @@ under the `_migration/` portfolios.
   The header auth pocket refuses leftover drag ice so the pad around sign-in is not ghosted.
   Well fold pockets refuse leftover drag ice so the gold hairline around the fold is not ghosted.
   Well export chrome refuses leftover drag ice so the overlay strip is not ghosted.
+  The compare-box gold hairline refuses leftover drag ice so the pad above the arena is not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

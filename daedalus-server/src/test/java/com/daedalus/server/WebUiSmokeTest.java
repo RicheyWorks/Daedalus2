@@ -178,6 +178,7 @@ class WebUiSmokeTest {
                 .contains("#compareBox td { padding: 2px 8px; border-bottom: 1px solid rgba(184, 133, 56, 0.28)")
                 .contains("#compareBox .hint { color: #b09a72")
                 .contains("#compareBox > div { border-top: 1px solid rgba(184, 133, 56, 0.28); padding-top: 6px;")
+                .contains("#compareBox > div { border-top: 1px solid rgba(184, 133, 56, 0.28); padding-top: 6px; -webkit-user-drag: none")
                 .contains("#compareBox .best { color: #f0b429")
                 .contains("color:#f0b429\">${escapeHtml(w.id)}</b> wins the arena")
                 .contains("color:#f0b429\">${escapeHtml(w.id)}</b> wins by default")
