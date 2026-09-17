@@ -554,6 +554,8 @@ under the `_migration/` portfolios.
   leftover cool white on torch stone.
   Leaderboard rows wear gold hairlines so those seats sit in the lamp, not leftover
   cream slabs on torch stone.
+  Leaderboard meta wears khaki so moves and time sit in the lamp, not leftover
+  cream beside torch ranks.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
