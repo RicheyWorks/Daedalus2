@@ -175,6 +175,7 @@ class WebUiSmokeTest {
                 .contains("scrollbar-color: rgba(184, 133, 56, 0.45) transparent")
                 .contains("color: #f2ead8")
                 .contains("#compareBox th { text-align: left; color: #b09a72")
+                .contains("#compareBox th { text-align: left; color: #b09a72; font-weight: 600; -webkit-user-drag: none")
                 .contains("#compareBox td { padding: 2px 8px; border-bottom: 1px solid rgba(184, 133, 56, 0.28)")
                 .contains("#compareBox td { padding: 2px 8px; border-bottom: 1px solid rgba(184, 133, 56, 0.28); -webkit-user-drag: none")
                 .contains("#compareBox .hint { color: #b09a72")
