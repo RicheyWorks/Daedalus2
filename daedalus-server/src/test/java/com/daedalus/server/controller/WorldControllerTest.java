@@ -269,5 +269,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.result", equalTo("APPLIED")))
                 .andExpect(jsonPath("$.maxX", equalTo(6)))
                 .andExpect(jsonPath("$.maxZ", equalTo(6)));
+        extra.perform(get("/api/v1/world/world-zero/parcels"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.parcels[0].mazeRef", equalTo(cached.metadata().id().toString())));
     }
 }

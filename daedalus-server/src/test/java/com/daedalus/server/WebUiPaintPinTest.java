@@ -418,7 +418,9 @@ class WebUiPaintPinTest {
                     .contains("/world/\" + WORLD + \"/parcels")
                     .contains("/world/\" + WORLD + \"/chunk?x=0&y=0&z=0");
             assertThat(world).contains("row(box, \"lease\"")
-                    .contains("first.leaseId");
+                    .contains("first.leaseId")
+                    .contains("row(box, \"maze\"")
+                    .contains("first.mazeRef");
             assertThat(html).contains("#worldBox .place { color: #94612e; -webkit-user-drag: none")
                     .contains("#worldBox .slab { color: #94612e; -webkit-user-drag: none");
             assertThat(world).contains("ink.className = named ? \"place\" : \"slab\"")

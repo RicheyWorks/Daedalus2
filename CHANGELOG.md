@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World mazeRef on the three clients.**
+  Well, desktop, and explore inspect show the lab maze id and
+  the lease string on a stamped parcel. Not a wallet. `/` stays
+  the maze well. Generate / solve stay.
+
 - **World slab mazeRef persist.**
   A stamped lab maze keeps its maze id on the parcel (DAEW v9).
   Restart rebinds the living slab. Not a wallet.

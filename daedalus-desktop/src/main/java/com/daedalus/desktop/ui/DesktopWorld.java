@@ -25,7 +25,8 @@ public final class DesktopWorld {
         if (world == null) {
             return ID + " · unavailable";
         }
-        return inspectLine(world.revision().value(), firstPlace(world), firstLease(world), last);
+        return inspectLine(world.revision().value(), firstPlace(world), firstLease(world),
+                firstMaze(world), last);
     }
 
     public static String inspectLine(long revision, WorldEventFrame last) {
@@ -37,12 +38,20 @@ public final class DesktopWorld {
     }
 
     public static String inspectLine(long revision, String place, String lease, WorldEventFrame last) {
+        return inspectLine(revision, place, lease, "", last);
+    }
+
+    public static String inspectLine(long revision, String place, String lease, String maze,
+            WorldEventFrame last) {
         String head = ID + " r=" + revision;
         if (place != null && !place.isBlank()) {
             head += " · " + place;
         }
         if (lease != null && !lease.isBlank()) {
             head += " · " + lease;
+        }
+        if (maze != null && !maze.isBlank()) {
+            head += " · " + maze;
         }
         if (last == null) {
             return head + " · listening";
@@ -73,6 +82,19 @@ public final class DesktopWorld {
         for (Parcel parcel : world.parcels()) {
             if (parcel != null && !parcel.leaseId().isEmpty()) {
                 return parcel.leaseId();
+            }
+        }
+        return "";
+    }
+
+    /** First lab maze id on inspect — not a wallet. */
+    public static String firstMaze(World world) {
+        if (world == null) {
+            return "";
+        }
+        for (Parcel parcel : world.parcels()) {
+            if (parcel != null && !parcel.mazeRef().isEmpty()) {
+                return parcel.mazeRef();
             }
         }
         return "";

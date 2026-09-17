@@ -48,6 +48,12 @@ class DesktopWorldTest {
                 .isEqualTo("world-zero r=" + named.revision().value()
                         + " · Willow Walk · " + Parcel.SYSTEM_TENANT + " · listening");
         assertThat(DesktopWorld.firstLease(World.zero())).isEmpty();
+        named.bindMaze(named.parcels().get(0).id(), "00000000-0000-4000-8000-000000000007");
+        assertThat(DesktopWorld.firstMaze(named))
+                .isEqualTo("00000000-0000-4000-8000-000000000007");
+        assertThat(DesktopWorld.inspectLine(named, null))
+                .contains("00000000-0000-4000-8000-000000000007");
+        assertThat(DesktopWorld.firstMaze(World.zero())).isEmpty();
     }
 
     @Test

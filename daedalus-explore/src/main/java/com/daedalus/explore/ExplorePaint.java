@@ -896,6 +896,10 @@ public final class ExplorePaint {
         if (street != null) {
             return street;
         }
+        String lease = parcelLeaseName(blocks, body);
+        if (lease != null) {
+            return lease;
+        }
         String cube = blockPlaceName(blocks, body);
         return cube == null ? "HALL" : cube;
     }
@@ -915,6 +919,26 @@ public final class ExplorePaint {
             }
             if (parcel.bounds().contains(at)) {
                 return parcel.placeName();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Lease string under the boots. Account key, not a wallet.
+     */
+    public static String parcelLeaseName(WorldMesh blocks, ExploreBody body) {
+        if (blocks == null || body == null || blocks.world() == null) {
+            return null;
+        }
+        BlockCoordinate at = new BlockCoordinate(
+                (int) Math.floor(body.x()), 0, (int) Math.floor(body.z()));
+        for (Parcel parcel : blocks.world().parcels()) {
+            if (parcel == null || parcel.leaseId().isEmpty()) {
+                continue;
+            }
+            if (parcel.bounds().contains(at)) {
+                return parcel.leaseId();
             }
         }
         return null;
