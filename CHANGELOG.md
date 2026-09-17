@@ -784,6 +784,7 @@ under the `_migration/` portfolios.
   Well status copy refuses leftover callout ice so khaki beside the board is not ballooned.
   Well maze figures refuse leftover callout ice so cream beside the board is not ballooned.
   Well desk captions refuse leftover callout ice so khaki beside the rail is not ballooned.
+  Start-gate card titles refuse leftover callout ice so cream on the cards is not ballooned.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

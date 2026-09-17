@@ -135,6 +135,7 @@ class WebUiSmokeTest {
                 .contains("::grammar-error { text-decoration: underline wavy rgba(176, 154, 114, 0.85); }")
                 .contains("#gate article h3")
                 .contains("letter-spacing: .04em; color: #f2ead8; cursor: default")
+                .contains("color: #f2ead8; cursor: default; -webkit-touch-callout: none")
                 .contains("letter-spacing: .04em; color: #f2ead8")
                 .contains("#gate .lede { color: #b09a72")
                 .contains("text-wrap: pretty; animation: gateRise .7s .1s ease both;")
