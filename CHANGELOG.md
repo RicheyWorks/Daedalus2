@@ -532,6 +532,8 @@ under the `_migration/` portfolios.
   leftover ice on torch stone.
   Leaderboard names wear warm cream so those seats sit in the lamp, not leftover
   cool white on torch stone.
+  Campaign rungs wear torch amber on a warm wash so stage names sit in the lamp,
+  not leftover ice on cool navy.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

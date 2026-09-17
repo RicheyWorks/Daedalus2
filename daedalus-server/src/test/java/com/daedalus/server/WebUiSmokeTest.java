@@ -178,6 +178,8 @@ class WebUiSmokeTest {
                 .contains("#log div { border-bottom: 1px solid rgba(184, 133, 56, 0.28); padding: 2px 0; }")
                 .contains("#lb { font: 12px/1.9 ui-monospace, monospace; color: #f2ead8; }")
                 .contains("#lb .rank { display: inline-block; width: 18px; color: #b09a72; }")
+                .contains("${active ? \"background:#1a1610;\" : \"\"}")
+                .contains("color:${done ? \"#4cc38a\" : \"#d4a04c\"}")
                 .contains("details { margin-top: 10px; border-top: 1px solid rgba(184, 133, 56, 0.28); padding-top: 6px; }")
                 .contains("letter-spacing: .12em; color: #b09a72; margin: 4px 0 2px;")
                 .contains("summary::after { content: \" ▸\"; color: rgba(184, 133, 56, 0.55); }")
