@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop compare tip depth.**
+  Non-ice compare heads fall off toward floor-dim at the board rim
+  with the same 0.22 edge as halls, so leftover even gold is not
+  the last word on a finish. KEEP ice lane 0 stays.
+
 - **Desktop compare wash depth.**
   Non-ice compare seats fall off toward floor-dim at the board rim
   with the same 0.22 edge as halls, so leftover even gold is not

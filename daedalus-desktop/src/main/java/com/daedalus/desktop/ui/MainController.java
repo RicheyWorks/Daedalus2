@@ -2064,7 +2064,10 @@ public class MainController {
                     continue;
                 }
                 Point tip = DesktopPaint.walkHead(lane.path());
-                Color ink = Color.web(lane.color());
+                Color ink = Color.web(tip == null ? lane.color()
+                        : DesktopPaint.compareWashInk(lane.color(),
+                                DesktopPaint.floorEdge(layout,
+                                        2 * tip.row() + 1, 2 * tip.col() + 1)));
                 double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
                 paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
                         ink.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
