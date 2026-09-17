@@ -253,7 +253,7 @@ Shared meshing with `ExploreMesh` stays UNKNOWN. Server remains authoritative on
 
 Door is the template: named results, same domain method for human REST and `WorldOps`, capability id on the registry, drive row or UNACCOUNTED.
 
-Trap is shipped (`trap-zero`, door template). Next objects: portal → NPC. Each adds:
+Trap and portal are shipped (`trap-zero`, `portal-zero`, door template). Next object: NPC. Each adds:
 
 - core state + results
 - `worldCapabilities()` ids
@@ -296,7 +296,7 @@ Phase 0 already ordered the post-7 work. This audit keeps it:
 | W1.4 | Well panel | Listen + inspect; `/` maze well unchanged | **shipped** — `#world` rail + `world.js` |
 | W1.5 | Explore voxel view | Second mesh; corridor path still smokes | **shipped** — `WorldMesh` (host toggle later) |
 
-Permissions and desktop inspect shipped after W1.5. Trap is shipped (`trap-zero`). Next: portal, agents, WebGL, terrain — each as its own audit.
+Permissions and desktop inspect shipped after W1.5. Trap and portal are shipped. Next: NPC, agents, WebGL, terrain — each as its own audit.
 
 ---
 

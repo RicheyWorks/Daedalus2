@@ -5,6 +5,7 @@ package com.daedalus.world.auto;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.DoorResult;
+import com.daedalus.world.PortalResult;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.World;
 import org.junit.jupiter.api.Test;
@@ -42,16 +43,21 @@ class WorldAccountingTest {
                 .isEqualTo(TrapResult.ARMED);
         assertThat(WorldOps.asTrapResult(session.drive("trap.disarm", null)))
                 .isEqualTo(TrapResult.DISARMED);
+        session.drive("portal.inspect", null);
+        assertThat(WorldOps.asPortalResult(session.drive("portal.open", null)))
+                .isEqualTo(PortalResult.OPENED);
+        assertThat(WorldOps.asPortalResult(session.drive("portal.seal", null)))
+                .isEqualTo(PortalResult.SEALED);
         assertThat(session.observe().doorState()).isEqualTo("CLOSED");
-        assertThat(session.trace()).hasSize(11);
+        assertThat(session.trace()).hasSize(14);
     }
 
     @Test
     void anUndrivenCapabilityFailsTheHarness() {
-        CapabilityRegistry discovered = WorldZeroCapabilities.registry(java.util.List.of("portal.open"));
+        CapabilityRegistry discovered = WorldZeroCapabilities.registry(java.util.List.of("npc.talk"));
         AccountingReport report = AccountingHarness.account(discovered, WorldZeroDrive.DRIVEN);
         assertThat(report.unaccountedCount()).isEqualTo(1);
-        assertThat(report.unaccounted()).containsExactly("portal.open");
+        assertThat(report.unaccounted()).containsExactly("npc.talk");
         assertThatThrownBy(() -> AccountingHarness.requireAccounted(report))
                 .isInstanceOf(AssertionError.class)
                 .hasMessageContaining("UNACCOUNTED=1");

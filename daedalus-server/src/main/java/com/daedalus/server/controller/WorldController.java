@@ -7,6 +7,8 @@ import com.daedalus.api.dto.BlockMutationResponse;
 import com.daedalus.api.dto.ChunkInspectResponse;
 import com.daedalus.api.dto.DoorInspectResponse;
 import com.daedalus.api.dto.DoorMutationResponse;
+import com.daedalus.api.dto.PortalInspectResponse;
+import com.daedalus.api.dto.PortalMutationResponse;
 import com.daedalus.api.dto.TrapInspectResponse;
 import com.daedalus.api.dto.TrapMutationResponse;
 import com.daedalus.api.dto.PlaceBlockRequest;
@@ -27,6 +29,8 @@ import com.daedalus.world.BlockType;
 import com.daedalus.world.Chunk;
 import com.daedalus.world.Door;
 import com.daedalus.world.DoorResult;
+import com.daedalus.world.Portal;
+import com.daedalus.world.PortalResult;
 import com.daedalus.world.Trap;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.World;
@@ -239,6 +243,43 @@ public class WorldController {
         World world = mounted(id);
         return ResponseEntity.ok(new TrapMutationResponse(
                 trap.id(), trap.state().name(), result.name(), world.revision().value()));
+    }
+
+    @GetMapping("/world/{id}/portal")
+    @Operation(summary = "Inspect the programmable portal.")
+    public ResponseEntity<PortalInspectResponse> inspectPortal(@PathVariable String id) {
+        mounted(id);
+        Portal portal = worlds.inspectPortal(id);
+        if (portal == null) {
+            throw ResourceNotFoundException.world(id);
+        }
+        return ResponseEntity.ok(new PortalInspectResponse(
+                portal.id(), portal.worldId().value(),
+                portal.at().x(), portal.at().y(), portal.at().z(), portal.state().name()));
+    }
+
+    @PostMapping("/world/{id}/portal/open")
+    @Operation(summary = "Open the portal. ALREADY_OPEN is a result, not silence.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<PortalMutationResponse> openPortal(@PathVariable String id) {
+        mounted(id);
+        PortalResult result = worlds.openPortal(id);
+        Portal portal = worlds.inspectPortal(id);
+        World world = mounted(id);
+        return ResponseEntity.ok(new PortalMutationResponse(
+                portal.id(), portal.state().name(), result.name(), world.revision().value()));
+    }
+
+    @PostMapping("/world/{id}/portal/seal")
+    @Operation(summary = "Seal the portal. ALREADY_SEALED is a result, not silence.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<PortalMutationResponse> sealPortal(@PathVariable String id) {
+        mounted(id);
+        PortalResult result = worlds.sealPortal(id);
+        Portal portal = worlds.inspectPortal(id);
+        World world = mounted(id);
+        return ResponseEntity.ok(new PortalMutationResponse(
+                portal.id(), portal.state().name(), result.name(), world.revision().value()));
     }
 
     private World mounted(String id) {

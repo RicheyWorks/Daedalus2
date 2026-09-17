@@ -16,6 +16,7 @@ public record WorldSnapshot(
         Map<ChunkCoordinate, Chunk> chunks,
         Door door,
         Trap trap,
+        Portal portal,
         List<Parcel> parcels) {
 
     public WorldSnapshot {
@@ -27,10 +28,10 @@ public record WorldSnapshot(
     }
 
     public WorldSnapshot(WorldId id, WorldRevision revision, Map<ChunkCoordinate, Chunk> chunks) {
-        this(id, revision, chunks, null, null, List.of());
+        this(id, revision, chunks, null, null, null, List.of());
     }
 
     public WorldSnapshot(WorldId id, WorldRevision revision, Map<ChunkCoordinate, Chunk> chunks, Door door) {
-        this(id, revision, chunks, door, null, List.of());
+        this(id, revision, chunks, door, null, null, List.of());
     }
 }

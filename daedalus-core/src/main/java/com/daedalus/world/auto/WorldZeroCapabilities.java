@@ -35,6 +35,9 @@ public final class WorldZeroCapabilities {
         registry.register("trap.inspect");
         registry.register("trap.arm");
         registry.register("trap.disarm");
+        registry.register("portal.inspect");
+        registry.register("portal.open");
+        registry.register("portal.seal");
         if (extras != null) {
             for (String extra : extras) {
                 registry.register(extra);

@@ -76,6 +76,17 @@ class WorldStoreTest {
     }
 
     @Test
+    void anOpenedPortalSurvivesRestart() throws Exception {
+        World live = World.zero();
+        live.openPortal();
+        Path file = tmp.resolve("portal.daew");
+        WorldStore.save(live, file);
+        World reloaded = WorldStore.load(file);
+        assertThat(reloaded.portal().state()).isEqualTo(PortalState.OPEN);
+        assertThat(reloaded.portal().id()).isEqualTo(Portal.ZERO_ID);
+    }
+
+    @Test
     void snapshotDoesNotShareStorageWithTheLiveWorld() {
         World live = World.zero();
         live.place(new BlockCoordinate(0, 0, 0), BlockType.STONE);

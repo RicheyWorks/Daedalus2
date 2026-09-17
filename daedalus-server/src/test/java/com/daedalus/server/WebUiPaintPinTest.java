@@ -164,6 +164,7 @@ class WebUiPaintPinTest {
                     .contains("host.api(\"/world/\" + WORLD)")
                     .contains("/world/\" + WORLD + \"/door")
                     .contains("/world/\" + WORLD + \"/trap")
+                    .contains("/world/\" + WORLD + \"/portal")
                     .contains("/world/\" + WORLD + \"/chunk?x=0&y=0&z=0");
             assertThat(world).doesNotContain("/maze/");
             assertThat(live).contains("/topic/world/world-zero/events")

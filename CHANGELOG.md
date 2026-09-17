@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World portal-zero.**
+  `portal-zero` opens and seals with named results (`OPENED`,
+  `ALREADY_OPEN`, `SEALED`, `ALREADY_SEALED`). Inspect is quiet;
+  a real open/seal bumps revision and persists on DAEW v5. Human REST
+  and `WorldOps` share `portal.inspect` / `portal.open` / `portal.seal`.
+  The well world panel names the state. Door and trap stay first.
+
 - **World trap-zero.**
   `trap-zero` arms and disarms with named results (`ARMED`,
   `ALREADY_ARMED`, `DISARMED`, `ALREADY_DISARMED`). Inspect is quiet;

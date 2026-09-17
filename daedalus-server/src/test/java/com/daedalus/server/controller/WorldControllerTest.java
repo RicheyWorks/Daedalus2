@@ -53,7 +53,7 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.worldId", equalTo("world-zero")))
                 .andExpect(jsonPath("$.capabilities", org.hamcrest.Matchers.hasItems(
                         "world.inspect", "block.place", "door.open", "door.close",
-                        "trap.arm", "trap.disarm")));
+                        "trap.arm", "trap.disarm", "portal.open", "portal.seal")));
 
         mvc.perform(get("/api/v1/world/world-zero/observe")
                         .param("x", "1").param("y", "2").param("z", "3"))
@@ -146,6 +146,20 @@ class WorldControllerTest {
         mvc.perform(post("/api/v1/world/world-zero/trap/arm"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("ALREADY_ARMED")));
+
+        mvc.perform(get("/api/v1/world/world-zero/portal"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", equalTo("portal-zero")))
+                .andExpect(jsonPath("$.state", equalTo("SEALED")));
+
+        mvc.perform(post("/api/v1/world/world-zero/portal/open"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("OPENED")))
+                .andExpect(jsonPath("$.state", equalTo("OPEN")));
+
+        mvc.perform(post("/api/v1/world/world-zero/portal/open"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("ALREADY_OPEN")));
     }
 
     @Test

@@ -32,6 +32,8 @@ public final class World {
     private final Door door;
     /** Assigned once; arm/disarm mutate {@link Trap} under {@link #lock}. */
     private final Trap trap;
+    /** Assigned once; open/seal mutate {@link Portal} under {@link #lock}. */
+    private final Portal portal;
     private final List<Parcel> parcels = new ArrayList<>();
     private final ConcurrentHashMap<ParcelId, ParcelAcl> acls = new ConcurrentHashMap<>();
     private int nextParcelNumber;
@@ -41,14 +43,16 @@ public final class World {
                 ? Door.zero()
                 : null,
                 WorldId.ZERO.equals(id) ? Trap.zero() : null,
+                WorldId.ZERO.equals(id) ? Portal.zero() : null,
                 0L, Map.of(), List.of());
     }
 
-    private World(WorldId id, Door door, Trap trap, long revision,
+    private World(WorldId id, Door door, Trap trap, Portal portal, long revision,
             Map<ChunkCoordinate, Chunk> seeded, List<Parcel> seededParcels) {
         this.id = Objects.requireNonNull(id, "WorldId is required");
         this.door = door;
         this.trap = trap;
+        this.portal = portal;
         this.revision.set(revision);
         for (Map.Entry<ChunkCoordinate, Chunk> e : seeded.entrySet()) {
             this.chunks.put(e.getKey(), e.getValue().copy());
@@ -208,6 +212,38 @@ public final class World {
         }
     }
 
+    public Portal portal() {
+        synchronized (lock) {
+            return portal == null ? null : portal.copy();
+        }
+    }
+
+    public PortalResult openPortal() {
+        synchronized (lock) {
+            if (portal == null) {
+                throw new IllegalStateException("This world has no portal");
+            }
+            PortalResult result = portal.open();
+            if (result == PortalResult.OPENED) {
+                revision.incrementAndGet();
+            }
+            return result;
+        }
+    }
+
+    public PortalResult sealPortal() {
+        synchronized (lock) {
+            if (portal == null) {
+                throw new IllegalStateException("This world has no portal");
+            }
+            PortalResult result = portal.seal();
+            if (result == PortalResult.SEALED) {
+                revision.incrementAndGet();
+            }
+            return result;
+        }
+    }
+
     /**
      * Deep copy for a snapshot. Inspect: revision does not move.
      */
@@ -220,6 +256,7 @@ public final class World {
             return new WorldSnapshot(id, revision(), Map.copyOf(copy),
                     door == null ? null : door.copy(),
                     trap == null ? null : trap.copy(),
+                    portal == null ? null : portal.copy(),
                     List.copyOf(parcels));
         }
     }
@@ -324,6 +361,7 @@ public final class World {
                 snapshot.id(),
                 snapshot.door() == null ? null : snapshot.door().copy(),
                 snapshot.trap() == null ? null : snapshot.trap().copy(),
+                snapshot.portal() == null ? null : snapshot.portal().copy(),
                 snapshot.revision().value(),
                 snapshot.chunks(),
                 snapshot.parcels());

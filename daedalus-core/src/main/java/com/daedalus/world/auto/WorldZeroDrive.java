@@ -21,7 +21,10 @@ public final class WorldZeroDrive {
             "door.close",
             "trap.inspect",
             "trap.arm",
-            "trap.disarm");
+            "trap.disarm",
+            "portal.inspect",
+            "portal.open",
+            "portal.seal");
 
     private WorldZeroDrive() {
     }
