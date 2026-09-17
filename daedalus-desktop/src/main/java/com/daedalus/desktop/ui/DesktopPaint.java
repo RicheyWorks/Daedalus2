@@ -519,7 +519,7 @@ public final class DesktopPaint {
     public static final double TOUR_ALPHA = 0.38;
     /** Uncollected coin — same gold diamond as {@code draw.js}. */
     public static final String WAYPOINT = "#f2c94c";
-    public static final String WAYPOINT_GOT = "#4cc38a";
+    public static final String WAYPOINT_GOT = "#8aaa50";
     /** Same k as the web Hunt button. */
     public static final int WAYPOINT_K = 5;
     /** Recorded racer — same tokens as {@code draw.js} ghost walk / disc. */

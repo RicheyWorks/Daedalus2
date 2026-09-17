@@ -385,7 +385,9 @@ class DesktopPaintTest {
         assertThat(Integer.parseInt(DesktopPaint.TOUR.substring(1, 3), 16))
                 .isGreaterThan(Integer.parseInt(DesktopPaint.TOUR.substring(5, 7), 16));
         assertThat(DesktopPaint.WAYPOINT).isEqualTo("#f2c94c");
-        assertThat(DesktopPaint.WAYPOINT_GOT).isEqualTo("#4cc38a");
+        assertThat(DesktopPaint.WAYPOINT_GOT).isEqualTo("#8aaa50");
+        assertThat(Integer.parseInt(DesktopPaint.WAYPOINT_GOT.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.WAYPOINT_GOT.substring(5, 7), 16));
         assertThat(coin.radius())
                 .as("web waypoint radius is 0.3·cell")
                 .isEqualTo(layout.cellSize() * 0.3);
