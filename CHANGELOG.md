@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore newest street name.**
+  Off a slab the caption names the newest inspired toponym, not
+  leftover HALL. Stood-on start / goal and underfoot place still
+  lead. Not GIS.
+
 - **World generate leases the vacant plot.**
   Generate stamps then rents the first empty slab. Well and
   desktop both drive parcel.lease after a successful stamp.

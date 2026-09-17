@@ -7,6 +7,7 @@ import com.daedalus.model.TileType;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.Parcel;
+import com.daedalus.world.auto.WorldOps;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -900,8 +901,24 @@ public final class ExplorePaint {
         if (lease != null) {
             return lease;
         }
+        String last = lastParcelPlaceName(blocks);
+        if (last != null) {
+            return last;
+        }
         String cube = blockPlaceName(blocks, body);
         return cube == null ? "HALL" : cube;
+    }
+
+    /**
+     * Newest inspired toponym on the street. Not GIS. Used when the
+     * boots are off the slab so a Generate name still reads in the hall.
+     */
+    public static String lastParcelPlaceName(WorldMesh blocks) {
+        if (blocks == null || blocks.world() == null) {
+            return null;
+        }
+        String found = WorldOps.lastPlaceName(blocks.world());
+        return found.isEmpty() ? null : found;
     }
 
     /**

@@ -1034,6 +1034,16 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.status(fog, onStreet, marks, mesh, cubes).place())
                 .as("a visible story mark still leads")
                 .isEqualTo("ENTRANCE");
+        MazeGrid hall = new MazeGrid(3, 3);
+        hall.carve(hall.cell(0, 0), Direction.EAST);
+        hall.carve(hall.cell(0, 1), Direction.SOUTH);
+        ExploreMesh longHall = ExploreMesh.of(hall);
+        ExploreBody offPlot = ExploreBody.atCell(new Point(0, 1));
+        assertThat(ExplorePaint.lastParcelPlaceName(cubes)).isEqualTo("Willow Walk");
+        assertThat(ExplorePaint.lastParcelPlaceName(null)).isNull();
+        assertThat(ExplorePaint.status(fog, offPlot, List.of(), longHall, cubes).place())
+                .as("newest street name leads leftover HALL off the slab")
+                .isEqualTo("Willow Walk");
     }
 
     @Test
