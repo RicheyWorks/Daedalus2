@@ -23,9 +23,10 @@ import java.util.Map;
 public final class WorldStore {
 
     static final byte[] MAGIC = "DAEW".getBytes(StandardCharsets.US_ASCII);
-    static final int VERSION = 3;
+    static final int VERSION = 4;
     static final int VERSION_CHUNKS_ONLY = 1;
     static final int VERSION_WITH_DOOR = 2;
+    static final int VERSION_WITH_PARCELS = 3;
 
     private WorldStore() {
     }
@@ -103,6 +104,15 @@ public final class WorldStore {
             out.writeInt(bounds.maxZ());
             out.writeLong(parcel.version());
         }
+        Trap trap = snapshot.trap();
+        out.writeBoolean(trap != null);
+        if (trap != null) {
+            out.writeUTF(trap.id());
+            out.writeInt(trap.at().x());
+            out.writeInt(trap.at().y());
+            out.writeInt(trap.at().z());
+            out.writeUTF(trap.state().name());
+        }
     }
 
     static WorldSnapshot read(DataInputStream in) throws IOException {
@@ -111,7 +121,8 @@ public final class WorldStore {
             throw new IOException("Not a Daedalus world snapshot");
         }
         int version = in.readUnsignedByte();
-        if (version != VERSION && version != VERSION_WITH_DOOR && version != VERSION_CHUNKS_ONLY) {
+        if (version != VERSION && version != VERSION_WITH_PARCELS
+                && version != VERSION_WITH_DOOR && version != VERSION_CHUNKS_ONLY) {
             throw new IOException("Unsupported world snapshot version " + version);
         }
         WorldId id = new WorldId(in.readUTF());
@@ -140,7 +151,7 @@ public final class WorldStore {
             }
         }
         List<Parcel> parcels = new ArrayList<>();
-        if (version >= VERSION) {
+        if (version >= VERSION_WITH_PARCELS) {
             int parcelCount = in.readInt();
             if (parcelCount < 0) {
                 throw new IOException("Negative parcel count");
@@ -156,7 +167,18 @@ public final class WorldStore {
                 parcels.add(new Parcel(parcelId, parcelWorld, ownerId, bounds, parcelVersion));
             }
         }
-        return new WorldSnapshot(id, revision, chunks, door, parcels);
+        Trap trap = null;
+        if (version >= VERSION) {
+            if (in.readBoolean()) {
+                String trapId = in.readUTF();
+                BlockCoordinate at = new BlockCoordinate(in.readInt(), in.readInt(), in.readInt());
+                TrapState state = TrapState.valueOf(in.readUTF());
+                trap = new Trap(trapId, id, at, state);
+            }
+        } else if (WorldId.ZERO.equals(id)) {
+            trap = Trap.zero();
+        }
+        return new WorldSnapshot(id, revision, chunks, door, trap, parcels);
     }
 
     private static void requirePath(Path file) {

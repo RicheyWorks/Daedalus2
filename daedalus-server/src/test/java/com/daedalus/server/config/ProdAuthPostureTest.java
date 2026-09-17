@@ -104,6 +104,7 @@ class ProdAuthPostureTest {
         EXPECTED.put("GET /api/v1/world/" + ID + "/block", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/chunk", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/door", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/trap", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/capabilities", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/observe", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/trace", Posture.PUBLIC);
@@ -138,6 +139,8 @@ class ProdAuthPostureTest {
         EXPECTED.put("DELETE /api/v1/world/" + ID + "/block", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/world/" + ID + "/door/open", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/world/" + ID + "/door/close", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/trap/arm", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/trap/disarm", Posture.AUTHENTICATED);
     }
 
     @LocalServerPort

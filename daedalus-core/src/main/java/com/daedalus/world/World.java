@@ -30,6 +30,8 @@ public final class World {
     private final Object lock = new Object();
     /** Assigned once; open/close mutate {@link Door} under {@link #lock}. */
     private final Door door;
+    /** Assigned once; arm/disarm mutate {@link Trap} under {@link #lock}. */
+    private final Trap trap;
     private final List<Parcel> parcels = new ArrayList<>();
     private final ConcurrentHashMap<ParcelId, ParcelAcl> acls = new ConcurrentHashMap<>();
     private int nextParcelNumber;
@@ -37,13 +39,16 @@ public final class World {
     public World(WorldId id) {
         this(id, WorldId.ZERO.equals(Objects.requireNonNull(id, "WorldId is required"))
                 ? Door.zero()
-                : null, 0L, Map.of(), List.of());
+                : null,
+                WorldId.ZERO.equals(id) ? Trap.zero() : null,
+                0L, Map.of(), List.of());
     }
 
-    private World(WorldId id, Door door, long revision, Map<ChunkCoordinate, Chunk> seeded,
-            List<Parcel> seededParcels) {
+    private World(WorldId id, Door door, Trap trap, long revision,
+            Map<ChunkCoordinate, Chunk> seeded, List<Parcel> seededParcels) {
         this.id = Objects.requireNonNull(id, "WorldId is required");
         this.door = door;
+        this.trap = trap;
         this.revision.set(revision);
         for (Map.Entry<ChunkCoordinate, Chunk> e : seeded.entrySet()) {
             this.chunks.put(e.getKey(), e.getValue().copy());
@@ -171,6 +176,38 @@ public final class World {
         }
     }
 
+    public Trap trap() {
+        synchronized (lock) {
+            return trap == null ? null : trap.copy();
+        }
+    }
+
+    public TrapResult armTrap() {
+        synchronized (lock) {
+            if (trap == null) {
+                throw new IllegalStateException("This world has no trap");
+            }
+            TrapResult result = trap.arm();
+            if (result == TrapResult.ARMED) {
+                revision.incrementAndGet();
+            }
+            return result;
+        }
+    }
+
+    public TrapResult disarmTrap() {
+        synchronized (lock) {
+            if (trap == null) {
+                throw new IllegalStateException("This world has no trap");
+            }
+            TrapResult result = trap.disarm();
+            if (result == TrapResult.DISARMED) {
+                revision.incrementAndGet();
+            }
+            return result;
+        }
+    }
+
     /**
      * Deep copy for a snapshot. Inspect: revision does not move.
      */
@@ -181,7 +218,9 @@ public final class World {
                 copy.put(e.getKey(), e.getValue().copy());
             }
             return new WorldSnapshot(id, revision(), Map.copyOf(copy),
-                    door == null ? null : door.copy(), List.copyOf(parcels));
+                    door == null ? null : door.copy(),
+                    trap == null ? null : trap.copy(),
+                    List.copyOf(parcels));
         }
     }
 
@@ -284,6 +323,7 @@ public final class World {
         return new World(
                 snapshot.id(),
                 snapshot.door() == null ? null : snapshot.door().copy(),
+                snapshot.trap() == null ? null : snapshot.trap().copy(),
                 snapshot.revision().value(),
                 snapshot.chunks(),
                 snapshot.parcels());

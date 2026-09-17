@@ -7,6 +7,8 @@ import com.daedalus.api.dto.BlockMutationResponse;
 import com.daedalus.api.dto.ChunkInspectResponse;
 import com.daedalus.api.dto.DoorInspectResponse;
 import com.daedalus.api.dto.DoorMutationResponse;
+import com.daedalus.api.dto.TrapInspectResponse;
+import com.daedalus.api.dto.TrapMutationResponse;
 import com.daedalus.api.dto.PlaceBlockRequest;
 import com.daedalus.api.dto.WorldCapabilitiesResponse;
 import com.daedalus.api.dto.WorldInspectResponse;
@@ -25,6 +27,8 @@ import com.daedalus.world.BlockType;
 import com.daedalus.world.Chunk;
 import com.daedalus.world.Door;
 import com.daedalus.world.DoorResult;
+import com.daedalus.world.Trap;
+import com.daedalus.world.TrapResult;
 import com.daedalus.world.World;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -198,6 +202,43 @@ public class WorldController {
         World world = mounted(id);
         return ResponseEntity.ok(new DoorMutationResponse(
                 door.id(), door.state().name(), result.name(), world.revision().value()));
+    }
+
+    @GetMapping("/world/{id}/trap")
+    @Operation(summary = "Inspect the programmable trap.")
+    public ResponseEntity<TrapInspectResponse> inspectTrap(@PathVariable String id) {
+        mounted(id);
+        Trap trap = worlds.inspectTrap(id);
+        if (trap == null) {
+            throw ResourceNotFoundException.world(id);
+        }
+        return ResponseEntity.ok(new TrapInspectResponse(
+                trap.id(), trap.worldId().value(),
+                trap.at().x(), trap.at().y(), trap.at().z(), trap.state().name()));
+    }
+
+    @PostMapping("/world/{id}/trap/arm")
+    @Operation(summary = "Arm the trap. ALREADY_ARMED is a result, not silence.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<TrapMutationResponse> armTrap(@PathVariable String id) {
+        mounted(id);
+        TrapResult result = worlds.armTrap(id);
+        Trap trap = worlds.inspectTrap(id);
+        World world = mounted(id);
+        return ResponseEntity.ok(new TrapMutationResponse(
+                trap.id(), trap.state().name(), result.name(), world.revision().value()));
+    }
+
+    @PostMapping("/world/{id}/trap/disarm")
+    @Operation(summary = "Disarm the trap. ALREADY_DISARMED is a result, not silence.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<TrapMutationResponse> disarmTrap(@PathVariable String id) {
+        mounted(id);
+        TrapResult result = worlds.disarmTrap(id);
+        Trap trap = worlds.inspectTrap(id);
+        World world = mounted(id);
+        return ResponseEntity.ok(new TrapMutationResponse(
+                trap.id(), trap.state().name(), result.name(), world.revision().value()));
     }
 
     private World mounted(String id) {

@@ -65,6 +65,17 @@ class WorldStoreTest {
     }
 
     @Test
+    void anArmedTrapSurvivesRestart() throws Exception {
+        World live = World.zero();
+        live.armTrap();
+        Path file = tmp.resolve("trap.daew");
+        WorldStore.save(live, file);
+        World reloaded = WorldStore.load(file);
+        assertThat(reloaded.trap().state()).isEqualTo(TrapState.ARMED);
+        assertThat(reloaded.trap().id()).isEqualTo(Trap.ZERO_ID);
+    }
+
+    @Test
     void snapshotDoesNotShareStorageWithTheLiveWorld() {
         World live = World.zero();
         live.place(new BlockCoordinate(0, 0, 0), BlockType.STONE);

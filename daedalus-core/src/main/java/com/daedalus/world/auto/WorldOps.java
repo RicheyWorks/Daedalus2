@@ -8,6 +8,8 @@ import com.daedalus.world.Chunk;
 import com.daedalus.world.ChunkCoordinate;
 import com.daedalus.world.Door;
 import com.daedalus.world.DoorResult;
+import com.daedalus.world.Trap;
+import com.daedalus.world.TrapResult;
 import com.daedalus.world.World;
 
 import java.util.LinkedHashMap;
@@ -35,6 +37,9 @@ public final class WorldOps {
             case "door.inspect" -> inspectDoor(world);
             case "door.open" -> world.openDoor();
             case "door.close" -> world.closeDoor();
+            case "trap.inspect" -> inspectTrap(world);
+            case "trap.arm" -> world.armTrap();
+            case "trap.disarm" -> world.disarmTrap();
             default -> throw new IllegalArgumentException("Unknown capability " + capability);
         };
     }
@@ -81,7 +86,22 @@ public final class WorldOps {
         return out;
     }
 
+    private static Map<String, Object> inspectTrap(World world) {
+        Trap trap = world.trap();
+        if (trap == null) {
+            throw new IllegalStateException("This world has no trap");
+        }
+        Map<String, Object> out = new LinkedHashMap<>();
+        out.put("id", trap.id());
+        out.put("state", trap.state().name());
+        return out;
+    }
+
     public static DoorResult asDoorResult(Object value) {
         return (DoorResult) value;
+    }
+
+    public static TrapResult asTrapResult(Object value) {
+        return (TrapResult) value;
     }
 }

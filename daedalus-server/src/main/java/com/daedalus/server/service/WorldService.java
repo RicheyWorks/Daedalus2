@@ -9,6 +9,8 @@ import com.daedalus.world.Chunk;
 import com.daedalus.world.ChunkCoordinate;
 import com.daedalus.world.Door;
 import com.daedalus.world.DoorResult;
+import com.daedalus.world.Trap;
+import com.daedalus.world.TrapResult;
 import com.daedalus.world.World;
 import com.daedalus.world.WorldId;
 import com.daedalus.world.WorldStore;
@@ -75,6 +77,11 @@ public class WorldService {
         return live == null ? null : live.door();
     }
 
+    public Trap inspectTrap(String id) {
+        World live = require(id);
+        return live == null ? null : live.trap();
+    }
+
     public BlockType place(String id, int x, int y, int z, BlockType type) {
         World live = require(id);
         synchronized (lock) {
@@ -116,6 +123,26 @@ public class WorldService {
             DoorResult result = live.closeDoor();
             persist();
             log.append("door.close", result, live.revision().value());
+            return result;
+        }
+    }
+
+    public TrapResult armTrap(String id) {
+        World live = require(id);
+        synchronized (lock) {
+            TrapResult result = live.armTrap();
+            persist();
+            log.append("trap.arm", result, live.revision().value());
+            return result;
+        }
+    }
+
+    public TrapResult disarmTrap(String id) {
+        World live = require(id);
+        synchronized (lock) {
+            TrapResult result = live.disarmTrap();
+            persist();
+            log.append("trap.disarm", result, live.revision().value());
             return result;
         }
     }

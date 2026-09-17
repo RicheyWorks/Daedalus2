@@ -12,8 +12,9 @@
     try {
       const world = await host.api("/world/" + WORLD);
       const door = await host.api("/world/" + WORLD + "/door");
+      const trap = await host.api("/world/" + WORLD + "/trap");
       const chunk = await host.api("/world/" + WORLD + "/chunk?x=0&y=0&z=0");
-      paint(box, world, door, chunk);
+      paint(box, world, door, trap, chunk);
     } catch (e) {
       box.textContent = "world inspect unavailable — " + (e && e.message ? e.message : e);
     }
@@ -30,12 +31,13 @@
     inspect(host);
   }
 
-  function paint(box, world, door, chunk) {
+  function paint(box, world, door, trap, chunk) {
     box.replaceChildren();
     row(box, "world", world && world.id ? world.id : WORLD);
     row(box, "revision", world && world.revision != null ? String(world.revision) : "—");
     row(box, "chunks", world && world.chunkCount != null ? String(world.chunkCount) : "—");
     row(box, "door", door && door.state ? door.state : "—");
+    row(box, "trap", trap && trap.state ? trap.state : "—");
     const slice = chunk && chunk.present
         ? "0,0,0 occupied " + chunk.occupied
         : "0,0,0 empty";

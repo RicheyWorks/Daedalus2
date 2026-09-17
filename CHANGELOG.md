@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World trap-zero.**
+  `trap-zero` arms and disarms with named results (`ARMED`,
+  `ALREADY_ARMED`, `DISARMED`, `ALREADY_DISARMED`). Inspect is quiet;
+  a real arm/disarm bumps revision and persists on DAEW v4. Human REST
+  and `WorldOps` share `trap.inspect` / `trap.arm` / `trap.disarm`.
+  The well world panel names the state. Door stays the first object.
+
 - **Desktop world inspect.**
   The desktop status bar names `world-zero` revision and the last world
   event. Maze Generate / Solve stay. Not a voxel viewport.

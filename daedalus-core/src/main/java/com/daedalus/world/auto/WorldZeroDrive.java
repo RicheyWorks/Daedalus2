@@ -18,7 +18,10 @@ public final class WorldZeroDrive {
             "block.remove",
             "door.inspect",
             "door.open",
-            "door.close");
+            "door.close",
+            "trap.inspect",
+            "trap.arm",
+            "trap.disarm");
 
     private WorldZeroDrive() {
     }

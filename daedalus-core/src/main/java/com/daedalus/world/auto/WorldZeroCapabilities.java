@@ -18,7 +18,7 @@ public final class WorldZeroCapabilities {
     }
 
     /**
-     * Same eight World Zero ids, plus extras a plugin advertised via
+     * Same World Zero ids, plus extras a plugin advertised via
      * {@code MazePlugin.worldCapabilities()}. Extra ids stay UNACCOUNTED
      * until the drive script names them.
      */
@@ -32,6 +32,9 @@ public final class WorldZeroCapabilities {
         registry.register("door.inspect");
         registry.register("door.open");
         registry.register("door.close");
+        registry.register("trap.inspect");
+        registry.register("trap.arm");
+        registry.register("trap.disarm");
         if (extras != null) {
             for (String extra : extras) {
                 registry.register(extra);
