@@ -636,6 +636,8 @@ under the `_migration/` portfolios.
   not leftover OS ice on torch stone.
   Pinned Windows tiles wear torch void so the well sits in the lamp,
   not leftover OS ice around torch stone.
+  Find-in-page maze copy wears a gold wash so hunted news sits in the lamp,
+  not leftover OS ice on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
