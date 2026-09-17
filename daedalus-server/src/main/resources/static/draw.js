@@ -333,23 +333,35 @@
   }
 
   /** Openings between live cells so a wash reads as a field, not graph paper. */
-  function paintWashOpenings(g, geom, tiles, live) {
+  function paintWashOpenings(g, geom, tiles, live, ink) {
     const rows = (tiles.length - 1) / 2, cols = (tiles[0].length - 1) / 2;
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         if (!live(r, c)) continue;
         if (c + 1 < cols && live(r, c + 1) && tiles[2 * r + 1][2 * c + 2] !== "#") {
           const tc = 2 * c + 2;
-          g.fillRect(geom.offX[tc], geom.offY[2 * r + 1],
+          const tr = 2 * r + 1;
+          if (ink) g.fillStyle = ink(tr, tc);
+          g.fillRect(geom.offX[tc], geom.offY[tr],
                      geom.offX[tc + 1] - geom.offX[tc], geom.cell);
         }
         if (r + 1 < rows && live(r + 1, c) && tiles[2 * r + 2][2 * c + 1] !== "#") {
           const tr = 2 * r + 2;
-          g.fillRect(geom.offX[2 * c + 1], geom.offY[tr],
+          const tc = 2 * c + 1;
+          if (ink) g.fillStyle = ink(tr, tc);
+          g.fillRect(geom.offX[tc], geom.offY[tr],
                      geom.cell, geom.offY[tr + 1] - geom.offY[tr]);
         }
       }
     }
+  }
+
+  function heatInk(tr, tc, th, tw) {
+    const hx = (tw - 1) / 2, hy = (th - 1) / 2;
+    const hdx = (tc - hx) / Math.max(1, tw / 2);
+    const hdy = (tr - hy) / Math.max(1, th / 2);
+    const hedge = Math.min(1, Math.sqrt(hdx * hdx + hdy * hdy));
+    return mixHex("#e5484d", COLORS.floorDim, 0.22 * hedge);
   }
 
   function paint(canvas, scene) {
@@ -466,18 +478,14 @@
       const tr = 2 * h.row + 1, tc = 2 * h.col + 1;
       if (tiles[tr][tc] === "#" || isRock(tiles, tr, tc)) return;
       hot.set(h.row + "," + h.col, h.cost);
-      const hx = (tw - 1) / 2, hy = (th - 1) / 2;
-      const hdx = (tc - hx) / Math.max(1, tw / 2);
-      const hdy = (tr - hy) / Math.max(1, th / 2);
-      const hedge = Math.min(1, Math.sqrt(hdx * hdx + hdy * hdy));
-      g.fillStyle = mixHex("#e5484d", COLORS.floorDim, 0.22 * hedge);
+      g.fillStyle = heatInk(tr, tc, th, tw);
       g.globalAlpha = Math.min(0.7, 0.2 + h.cost / 200) * (0.88 + 0.24 * hotWave);
       g.fillRect(geom.offX[tc], geom.offY[tr], geom.cell, geom.cell);
     });
     if (hot.size) {
-      g.fillStyle = "#e5484d";
       g.globalAlpha = 0.35 * (0.85 + 0.30 * hotWave);
-      paintWashOpenings(g, geom, tiles, (r, c) => hot.has(r + "," + c));
+      paintWashOpenings(g, geom, tiles, (r, c) => hot.has(r + "," + c),
+          (tr, tc) => heatInk(tr, tc, th, tw));
       g.globalAlpha = 1;
       (scene.hotspots || []).forEach(h => {
         if (!hot.has(h.row + "," + h.col)) return;

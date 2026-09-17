@@ -175,7 +175,9 @@ class WebUiPaintPinTest {
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js)
                     .contains("mixHex(\"#e5484d\", COLORS.floorDim, 0.22 * hedge)")
-                    .contains("const hedge = Math.min(1, Math.sqrt(hdx * hdx + hdy * hdy))");
+                    .contains("const hedge = Math.min(1, Math.sqrt(hdx * hdx + hdy * hdy))")
+                    .contains("paintWashOpenings(g, geom, tiles, (r, c) => hot.has(r + \",\" + c),")
+                    .contains("(tr, tc) => heatInk(tr, tc, th, tw)");
         }
     }
 
