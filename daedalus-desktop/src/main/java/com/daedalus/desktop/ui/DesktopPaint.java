@@ -2099,6 +2099,21 @@ public final class DesktopPaint {
         return List.copyOf(out);
     }
 
+    /** Idle start / goal floors — same 0.42 wash as the live well. */
+    public static String emptyMarkFloorInk(int tileRow, int tileCol) {
+        int startRow = 2 * EMPTY_MARK_START.row() + 1;
+        int startCol = 2 * EMPTY_MARK_START.col() + 1;
+        int goalRow = 2 * EMPTY_MARK_GOAL.row() + 1;
+        int goalCol = 2 * EMPTY_MARK_GOAL.col() + 1;
+        if (tileRow == startRow && tileCol == startCol) {
+            return endFloorInk(EMPTY_MARK_FLOOR, TileType.START);
+        }
+        if (tileRow == goalRow && tileCol == goalCol) {
+            return endFloorInk(EMPTY_MARK_FLOOR, TileType.GOAL);
+        }
+        return EMPTY_MARK_FLOOR;
+    }
+
     /** Passage tiles of the idle mark. */
     public static List<TileRect> emptyMarkFloors() {
         List<TileRect> out = new ArrayList<>();

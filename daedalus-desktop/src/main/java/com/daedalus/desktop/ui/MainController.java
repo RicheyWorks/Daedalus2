@@ -1792,8 +1792,9 @@ public class MainController {
                     paintHairline(g, stroke, wallHi);
                 }
                 g.setGlobalAlpha(DesktopPaint.emptyMarkFloorAlpha(wave));
-                g.setFill(Color.web(DesktopPaint.EMPTY_MARK_FLOOR));
                 for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkFloors()) {
+                    g.setFill(Color.web(DesktopPaint.emptyMarkFloorInk(
+                            tile.tileRow(), tile.tileCol())));
                     g.fillRect(mark.x(tile.tileCol()), mark.y(tile.tileRow()),
                             mark.w(tile.tileCol()), mark.h(tile.tileRow()));
                 }

@@ -128,4 +128,15 @@ class WebUiPaintPinTest {
                     .contains("endFloorInk(mixHex(warm, COLORS.floorDim, 0.22 * edge), t)");
         }
     }
+
+    @Test
+    void idleMarkStartAndGoalFloorsWashTowardTheEnds() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js).contains("const idleFloor = mixHex(COLORS.floor, COLORS.floorWarm, 0.28)")
+                    .contains("(r === 1 && c === 1) ? \"S\" : (r === 5 && c === 9) ? \"G\"")
+                    .contains("endFloorInk(idleFloor, end)");
+        }
+    }
 }
