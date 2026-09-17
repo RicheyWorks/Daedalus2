@@ -258,6 +258,8 @@ under the `_migration/` portfolios.
   miniature is one light, not cold slate passages beside warm posts.
   Empty-well idle lattice floors wear the same 1px corridor shine as the live
   board so the miniature has stone depth, not flat warm fills.
+  Explore story pillars wear a wall-boot so vault / boss / entrance posts sit in
+  the skirting, not as even furniture sticks.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

@@ -358,8 +358,13 @@ public final class ExploreHost {
             double wz = ExploreMesh.worldZ(marker.cell().row());
             ExplorePaint.placePadTint(rgb, pad, seconds);
             placePad(wx, wz, pad[0], pad[1], pad[2]);
-            glColor3f(rgb[0], rgb[1], rgb[2]);
-            pillar(wx, wz);
+            for (ExplorePaint.PillarTri tri : ExplorePaint.pillarMesh(wx, wz)) {
+                ExplorePaint.pillarTint(rgb, tri.boot(), pad);
+                glColor3f(pad[0], pad[1], pad[2]);
+                glVertex3d(tri.x1(), tri.y1(), tri.z1());
+                glVertex3d(tri.x2(), tri.y2(), tri.z2());
+                glVertex3d(tri.x3(), tri.y3(), tri.z3());
+            }
         }
         glEnd();
         hud(aspect, world, faceTex, stride, seconds);
@@ -733,42 +738,4 @@ public final class ExploreHost {
         }
     }
 
-    private static void pillar(double x, double z) {
-        double h = 0.16;
-        double y1 = 0.95;
-        double x0 = x - h;
-        double x1 = x + h;
-        double z0 = z - h;
-        double z1 = z + h;
-        glVertex3d(x0, 0, z0);
-        glVertex3d(x1, 0, z0);
-        glVertex3d(x1, y1, z0);
-        glVertex3d(x0, 0, z0);
-        glVertex3d(x1, y1, z0);
-        glVertex3d(x0, y1, z0);
-        glVertex3d(x0, 0, z1);
-        glVertex3d(x1, y1, z1);
-        glVertex3d(x1, 0, z1);
-        glVertex3d(x0, 0, z1);
-        glVertex3d(x0, y1, z1);
-        glVertex3d(x1, y1, z1);
-        glVertex3d(x0, 0, z0);
-        glVertex3d(x0, y1, z0);
-        glVertex3d(x0, y1, z1);
-        glVertex3d(x0, 0, z0);
-        glVertex3d(x0, y1, z1);
-        glVertex3d(x0, 0, z1);
-        glVertex3d(x1, 0, z0);
-        glVertex3d(x1, 0, z1);
-        glVertex3d(x1, y1, z1);
-        glVertex3d(x1, 0, z0);
-        glVertex3d(x1, y1, z1);
-        glVertex3d(x1, y1, z0);
-        glVertex3d(x0, y1, z0);
-        glVertex3d(x1, y1, z0);
-        glVertex3d(x1, y1, z1);
-        glVertex3d(x0, y1, z0);
-        glVertex3d(x1, y1, z1);
-        glVertex3d(x0, y1, z1);
-    }
 }

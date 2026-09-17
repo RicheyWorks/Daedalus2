@@ -71,6 +71,18 @@ class ExplorePaintTest {
                 .isNotEqualTo(ExplorePaint.placePadDim(0.8));
         ExplorePaint.placePadTint(null, pad);
         ExplorePaint.placePadTint(rgb, null);
+        List<ExplorePaint.PillarTri> mesh = ExplorePaint.pillarMesh(0, 0);
+        assertThat(mesh).isNotEmpty();
+        assertThat(mesh.stream().anyMatch(ExplorePaint.PillarTri::boot)).isTrue();
+        assertThat(mesh.stream().anyMatch(t -> !t.boot())).isTrue();
+        assertThat(ExplorePaint.PILLAR_BOOT_FRAC).isEqualTo((float) ExplorePaint.CONTACT_BOOT_FRAC);
+        float[] boot = new float[3];
+        float[] shaft = new float[3];
+        ExplorePaint.pillarTint(rgb, true, boot);
+        ExplorePaint.pillarTint(rgb, false, shaft);
+        assertThat(boot[0]).isLessThan(shaft[0]);
+        ExplorePaint.pillarTint(null, true, boot);
+        ExplorePaint.pillarTint(rgb, false, null);
     }
 
     @Test

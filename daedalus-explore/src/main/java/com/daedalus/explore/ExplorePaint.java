@@ -677,6 +677,57 @@ public final class ExplorePaint {
         }
     }
 
+    /** Story pillar — short post; boot matches wall skirting so it sits, not floats. */
+    public static final float PILLAR_HALF = 0.16f;
+    public static final float PILLAR_H = 0.95f;
+    public static final float PILLAR_BOOT_FRAC = (float) CONTACT_BOOT_FRAC;
+    public static final float PILLAR_BOOT_MIN = CONTACT_BOOT_MIN;
+
+    public record PillarTri(float x1, float y1, float z1,
+                            float x2, float y2, float z2,
+                            float x3, float y3, float z3,
+                            boolean boot) {
+    }
+
+    public static List<PillarTri> pillarMesh(double cx, double cz) {
+        float x0 = (float) (cx - PILLAR_HALF);
+        float x1 = (float) (cx + PILLAR_HALF);
+        float z0 = (float) (cz - PILLAR_HALF);
+        float z1 = (float) (cz + PILLAR_HALF);
+        float yb = PILLAR_H * PILLAR_BOOT_FRAC;
+        List<PillarTri> out = new ArrayList<>();
+        addPillarBox(out, x0, x1, 0, yb, z0, z1, true);
+        addPillarBox(out, x0, x1, yb, PILLAR_H, z0, z1, false);
+        return List.copyOf(out);
+    }
+
+    public static void pillarTint(float[] markerRgb, boolean boot, float[] out) {
+        if (out == null || out.length < 3) {
+            return;
+        }
+        float s = boot ? PILLAR_BOOT_MIN : 1f;
+        if (markerRgb == null || markerRgb.length < 3) {
+            set(out, 0.4f * s, 0.28f * s, 0.14f * s);
+            return;
+        }
+        set(out, markerRgb[0] * s, markerRgb[1] * s, markerRgb[2] * s);
+    }
+
+    private static void addPillarBox(List<PillarTri> out, float x0, float x1,
+                                    float y0, float y1, float z0, float z1, boolean boot) {
+        // +Z / −Z / −X / +X / lid
+        out.add(new PillarTri(x0, y0, z0, x1, y0, z0, x1, y1, z0, boot));
+        out.add(new PillarTri(x0, y0, z0, x1, y1, z0, x0, y1, z0, boot));
+        out.add(new PillarTri(x0, y0, z1, x1, y1, z1, x1, y0, z1, boot));
+        out.add(new PillarTri(x0, y0, z1, x0, y1, z1, x1, y1, z1, boot));
+        out.add(new PillarTri(x0, y0, z0, x0, y1, z0, x0, y1, z1, boot));
+        out.add(new PillarTri(x0, y0, z0, x0, y1, z1, x0, y0, z1, boot));
+        out.add(new PillarTri(x1, y0, z0, x1, y0, z1, x1, y1, z1, boot));
+        out.add(new PillarTri(x1, y0, z0, x1, y1, z1, x1, y1, z0, boot));
+        out.add(new PillarTri(x0, y1, z0, x1, y1, z0, x1, y1, z1, boot));
+        out.add(new PillarTri(x0, y1, z0, x1, y1, z1, x0, y1, z1, boot));
+    }
+
     /** Soft floor disc under corridor story pillars — place, not a furniture stick. */
     public static final float PLACE_PAD_R = 0.42f;
     public static final float PLACE_PAD_Y = 0.02f;
