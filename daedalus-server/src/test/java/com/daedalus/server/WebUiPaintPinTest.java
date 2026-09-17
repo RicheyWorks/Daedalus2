@@ -246,7 +246,8 @@ class WebUiPaintPinTest {
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js)
                     .contains("mixHex(\"#f2c94c\", COLORS.floorDim, 0.22 * edge)")
-                    .contains("(tr, tc) => hardestTileInk(tr, tc, th, tw)");
+                    .contains("(tr, tc) => hardestTileInk(tr, tc, th, tw)")
+                    .contains("hardestTileInk(2 * hardTip.row + 1, 2 * hardTip.col + 1, th, tw)");
         }
     }
 
