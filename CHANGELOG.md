@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well ASCII hall depth.**
+  Dump passage glyphs keep leftover cream and pick up a torch-dim
+  hairline so leftover flat ink is not the last word on the halls.
+  Start-gate mint and exit coral stay unshaded.
+
 - **Explore automap cube depth.**
   Occupied wood on the pocket falls off toward the rim with the same
   0.22 edge as halls, so leftover even MAP_BLOCK is not the last word
