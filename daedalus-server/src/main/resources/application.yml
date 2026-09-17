@@ -175,6 +175,10 @@ daedalus:
   ghost:
     max-mazes: ${DAEDALUS_GHOST_MAX:1000}
     idle-ttl: ${DAEDALUS_GHOST_IDLE_TTL:24h}
+  # ----- World Zero -----
+  # One persistent volume beside the maze cache. Not Caffeine. A restart reloads this file.
+  world:
+    file: ${DAEDALUS_WORLD_FILE:${user.home}/.daedalus/world-zero.daew}
   # ----- Per-key rate limiting -----
   # The Resilience4j instances below are treated as *templates*: PerKeyRateLimitInterceptor
   # clones each into an independent bucket per caller (authenticated subject, else client IP),

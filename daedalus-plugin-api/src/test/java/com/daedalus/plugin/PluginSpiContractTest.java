@@ -10,6 +10,7 @@ import com.daedalus.plugin.events.PlayerMovedEvent;
 import com.daedalus.plugin.events.PluginFailedEvent;
 import com.daedalus.plugin.events.SessionCompletedEvent;
 import com.daedalus.plugin.events.TrafficPulseEvent;
+import com.daedalus.plugin.events.WorldBlockEvent;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.GameSession;
 import com.daedalus.model.MazeMetadata;
@@ -36,6 +37,19 @@ class PluginSpiContractTest {
         plugin.start(null);
         plugin.stop(null);
         assertThat(plugin.contributedAlgorithms()).isEmpty();
+        assertThat(plugin.worldCapabilities()).isEmpty();
+        MazePlugin trap = new MazePlugin() {
+            @Override
+            public PluginManifest manifest() {
+                return new PluginManifest("trap", "Trap", "1.0", null, null);
+            }
+
+            @Override
+            public java.util.List<String> worldCapabilities() {
+                return java.util.List.of("trap.arm");
+            }
+        };
+        assertThat(trap.worldCapabilities()).containsExactly("trap.arm");
         assertThat(plugin.version()).isEqualTo("1.0");
     }
 
@@ -177,5 +191,23 @@ class PluginSpiContractTest {
         assertThat(event.agentId()).isEqualTo(agentId);
         assertThat(event.from()).isSameAs(from);
         assertThat(event.to()).isSameAs(to);
+    }
+
+    @Test
+    void worldBlockEventNamesPlaceRemoveAndRevision() {
+        WorldBlockEvent event = new WorldBlockEvent(this, "world-zero",
+                WorldBlockEvent.Kind.BLOCK_PLACED, 1, 2, 3, "STONE", "AIR", 7);
+        assertThat(event.worldId()).isEqualTo("world-zero");
+        assertThat(event.kind()).isEqualTo(WorldBlockEvent.Kind.BLOCK_PLACED);
+        assertThat(event.x()).isEqualTo(1);
+        assertThat(event.y()).isEqualTo(2);
+        assertThat(event.z()).isEqualTo(3);
+        assertThat(event.type()).isEqualTo("STONE");
+        assertThat(event.previous()).isEqualTo("AIR");
+        assertThat(event.revision()).isEqualTo(7);
+        assertThat(WorldBlockEvent.Kind.values()).containsExactly(
+                WorldBlockEvent.Kind.BLOCK_PLACED,
+                WorldBlockEvent.Kind.BLOCK_REMOVED,
+                WorldBlockEvent.Kind.WORLD_REVISION_CHANGED);
     }
 }

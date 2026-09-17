@@ -49,6 +49,23 @@ public class PluginRegistry {
 
     public int size() { return entries.size(); }
 
+    /**
+     * Capability ids advertised by loaded plugins via
+     * {@link MazePlugin#worldCapabilities()}. Order is first-seen.
+     * A plugin that returns {@code null} contributes nothing.
+     */
+    public List<String> worldCapabilities() {
+        LinkedHashSet<String> ids = new LinkedHashSet<>();
+        for (Entry e : entries.values()) {
+            List<String> advertised = e.plugin().worldCapabilities();
+            if (advertised == null) {
+                continue;
+            }
+            ids.addAll(advertised);
+        }
+        return List.copyOf(ids);
+    }
+
     public List<Entry> sortedByDependencies() {
         // Topological sort: plugins listed in `requires` come first.
         List<Entry> all = new ArrayList<>(entries.values());

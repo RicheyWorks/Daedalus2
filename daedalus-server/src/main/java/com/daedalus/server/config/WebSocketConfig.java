@@ -28,6 +28,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
  *   <li>{@code /topic/maze/{mazeId}/solver}       — solver finished a run</li>
  *   <li>{@code /topic/session/{sessionId}/player} — player moved</li>
  *   <li>{@code /topic/plugins/failures}           — a plugin threw in any lifecycle phase</li>
+ *   <li>{@code /topic/world/{id}/events}          — block place/remove and revision</li>
  * </ul>
  *
  * <p>This list previously named {@code /topic/maze/{id}/player} (the player topic is keyed by

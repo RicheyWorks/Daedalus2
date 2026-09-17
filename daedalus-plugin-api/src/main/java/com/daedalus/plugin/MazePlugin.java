@@ -16,6 +16,8 @@ import java.util.List;
  *   <li>Expose REST endpoints, themes, or controllers — anything Spring can wire.
  *       Plugin classpath JARs are added to the classloader before the
  *       Spring context refreshes.</li>
+ *   <li>Advertise world-object capabilities (see {@link #worldCapabilities}).
+ *       Existing algorithm plugins keep the empty default.</li>
  * </ol>
  *
  * <p>Discovery: built-in plugins are listed in
@@ -136,4 +138,15 @@ public interface MazePlugin {
      * @since 1.0
      */
     default List<AlgorithmDescriptor> contributedAlgorithms() { return List.of(); }
+
+    /**
+     * Capability ids this plugin adds to world discovery (for example
+     * {@code door.open}). Default is empty so algorithm-only plugins stay valid.
+     * A newly advertised id that nobody drives fails the accounting harness.
+     *
+     * @return capability ids; never {@code null}
+     */
+    default List<String> worldCapabilities() {
+        return List.of();
+    }
 }

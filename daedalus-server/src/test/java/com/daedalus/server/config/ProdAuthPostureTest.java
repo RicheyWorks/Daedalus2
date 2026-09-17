@@ -100,6 +100,13 @@ class ProdAuthPostureTest {
         EXPECTED.put("GET /api/v1/session/" + ID + "/tour", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/maze/" + ID + "/ghost", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/agent/" + ID, Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID, Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/block", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/chunk", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/door", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/capabilities", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/observe", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/trace", Posture.PUBLIC);
 
         // --- everything that costs work or touches state ---
         EXPECTED.put("POST /api/v1/maze/generate", Posture.AUTHENTICATED);
@@ -127,6 +134,10 @@ class ProdAuthPostureTest {
         // scanner below, and therefore the one endpoint in the API with no posture on record.
         EXPECTED.put("GET /api/v1/plugins", Posture.AUTHENTICATED);
         EXPECTED.put("GET /api/v1/plugins/describe", Posture.AUTHENTICATED);
+        EXPECTED.put("PUT /api/v1/world/" + ID + "/block", Posture.AUTHENTICATED);
+        EXPECTED.put("DELETE /api/v1/world/" + ID + "/block", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/door/open", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/door/close", Posture.AUTHENTICATED);
     }
 
     @LocalServerPort

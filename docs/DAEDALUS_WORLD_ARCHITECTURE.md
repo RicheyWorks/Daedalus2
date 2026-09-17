@@ -315,7 +315,7 @@ DISCOVER → ADDRESS → DRIVE → OBSERVE → TRACE → ACCOUNT
 UNACCOUNTED = 0
 ```
 
-Discovery must not be the same list as the drive table. A newly registered capability that nobody drives must fail the harness.
+`AutomationSession` is the World Zero runner: address a cube, drive a capability through `WorldOps`, observe the cube/door (inspect does not bump revision), append a `DriveTrace` step. Discovery must not be the same list as the drive table. A newly registered capability that nobody drives must fail the harness.
 
 World Zero registry minimum:
 
@@ -418,18 +418,19 @@ After Phase 7, *then* maze-stamp, well panel, second observer, explore voxel vie
 
 A tiny boring world that is architecturally correct.
 
-- [ ] One authoritative server process (existing Spring Boot host)
-- [ ] One persistent world (`world-zero`)
-- [ ] Chunked storage, 16³
-- [ ] Five block types
-- [ ] Place block, remove block, inspect block/chunk/world
-- [ ] Save; stop; start; world identical
-- [ ] Revision increments on mutation
-- [ ] STOMP world events (Phase 4)
-- [ ] One door with open/close/inspect (Phase 5)
-- [ ] Automation discovers and drives those capabilities (Phase 6)
-- [ ] Accounting report; harness fails if `UNACCOUNTED > 0` (Phase 7)
-- [ ] **Every KEEP row still works:** well generate/live/solve, daily, campaign, theory routes, plugins, desktop, explore smoke, prod auth table, determinism goldens
+- [x] One authoritative server process (existing Spring Boot host)
+- [x] One persistent world (`world-zero`)
+- [x] Chunked storage, 16³
+- [x] Five block types
+- [x] Place block, remove block, inspect block/chunk/world
+- [x] Save; stop; start; world identical
+- [x] Revision increments on mutation
+- [x] STOMP world events (Phase 4)
+- [x] One door with open/close/inspect (Phase 5)
+- [x] Automation discovers and drives those capabilities (Phase 6)
+- [x] Accounting report; harness fails if `UNACCOUNTED > 0` (Phase 7)
+- [x] **Every KEEP row still works:** well generate/live/solve, daily, campaign, theory routes, plugins, desktop, explore smoke, prod auth table, determinism goldens
+  (evidenced 2026-09-16: generate/live/solve, daily, campaign, insight, plugin SPI, desktop paint, explore world, ProdAuth world rows, goldens, and unknown-`generatorId` 404 after the fallback rethrow)
 
 Multiplayer "second client sees the block" is Phase 4+. Not a Phase 1 claim.
 

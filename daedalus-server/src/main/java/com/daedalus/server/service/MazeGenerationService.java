@@ -7,6 +7,7 @@ import com.daedalus.engine.Braider;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.engine.WeightedMazeGrid;
 import com.daedalus.engine.MazeGenerator;
+import com.daedalus.engine.UnknownAlgorithmException;
 import com.daedalus.engine.generators.GeneratorRegistry;
 import com.daedalus.model.MazeMetadata;
 import com.daedalus.model.MazeStats;
@@ -300,6 +301,9 @@ public class MazeGenerationService {
         }
         if (t instanceof IllegalArgumentException iae) {
             throw iae;
+        }
+        if (t instanceof UnknownAlgorithmException unknown) {
+            throw unknown;
         }
         // Minimal recovery: deterministic baseline using BinaryTree (always succeeds).
         return generate("binary-tree", rows, cols, seed, hotspots, braid);

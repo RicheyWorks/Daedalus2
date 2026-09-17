@@ -166,6 +166,13 @@ public class ProdSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/session/*/tour").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/maze/*/ghost").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/agent/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/block").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/chunk").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/door").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/capabilities").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/observe").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/trace").permitAll()
 
                         // ---- Protected API surface ----
                         // Write operations.

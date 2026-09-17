@@ -197,6 +197,21 @@ class MazeGenerationContractTest {
     }
 
     @Test
+    void theFallbackRethrowsAnUnknownAlgorithmInsteadOfServingBinaryTree() throws Exception {
+        var svc = service();
+        Method fallback = MazeGenerationService.class.getDeclaredMethod(
+                "fallback", String.class, int.class, int.class, long.class,
+                java.util.List.class, double.class, Throwable.class);
+        fallback.setAccessible(true);
+        var unknown = new com.daedalus.engine.UnknownAlgorithmException(
+                "generator", "nope", java.util.List.of("binary-tree"));
+
+        assertThatThrownBy(() -> fallback.invoke(svc, "nope", 9, 9, 1L, null, 0.0, unknown))
+                .isInstanceOf(InvocationTargetException.class)
+                .cause().isSameAs(unknown);
+    }
+
+    @Test
     void theFallbackRethrowsCapacityInsteadOfServingADifferentMaze() throws Exception {
         var svc = service();
         Method fallback = MazeGenerationService.class.getDeclaredMethod(

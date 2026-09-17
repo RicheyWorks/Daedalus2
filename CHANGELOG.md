@@ -18,6 +18,38 @@ under the `_migration/` portfolios.
   prod security. First code slice is `com.daedalus.world` primitives
   only; no reactor restructure.
 
+- **World Zero primitives (`com.daedalus.world`).**
+  `daedalus-core` now has a sparse 16³ chunk volume beside `MazeGrid`:
+  five block types, signed `floorDiv` coordinates, place / remove /
+  inspect, and a monotonic revision. Two worlds do not share storage.
+
+- **World Zero file store.**
+  `WorldStore` snapshots a world to a deterministic binary file and
+  reloads an identical volume after the live object is gone. Place,
+  remove, save, restart, same blocks and revision. Not the maze
+  Caffeine cache.
+
+- **World Zero REST.**
+  `/api/v1/world/{id}` inspects the volume; block and chunk reads are
+  public. Place and remove are authenticated writes that persist
+  world-zero. Maze routes are unchanged. README and
+  `ProdAuthPostureTest` name the new rows.
+
+- **World Zero events, door, and accounting.**
+  Place and remove publish `BLOCK_PLACED` / `BLOCK_REMOVED` /
+  `WORLD_REVISION_CHANGED` on `/topic/world/{id}/events`. One door
+  (`door-zero`) opens and closes with named results. Automation
+  discovers eight capabilities on a list that is not the drive
+  script; the harness fails if `UNACCOUNTED > 0`.
+  A session then addresses a cube, drives those ops, observes the
+  cube and door without moving revision, and appends a trace so
+  account can see every drive. {@code MazePlugin.worldCapabilities()}
+  is the empty default so a later door or trap plugin can advertise
+  ids without breaking algorithm plugins.   The runtime unions those
+  ids; `GET /api/v1/world/{id}/capabilities` is the discover surface.
+  Observe and trace are the same host: a cube read that does not
+  bump revision, and the append-only drive log.
+
 - **First-person explore extrudes the dungeon.** A new `daedalus-explore`
   host walks the same `MazeGrid` the 2D well paints — WASD, mouse, and
   Xbox pads share one intent, fog keeps unseen stone dark, living ticks
@@ -27,6 +59,14 @@ under the `_migration/` portfolios.
   `target/daedalus-explore-*.jar` plus `target/dist/lib`;
   `daedalus-explore/run-explore.ps1` opens the window. `--smoke` draws
   three frames and exits so a deploy can be proven without a hang.
+
+### Fixed
+
+- **Generate circuit-breaker fallback no longer swallows a typo.**
+  An unregistered `generatorId` is a caller error, not a generator
+  outage. The fallback now rethrows `UnknownAlgorithmException` so
+  the house 404 still names the known algorithms instead of serving
+  a silent binary-tree maze.
 
 ### Changed
 

@@ -209,6 +209,17 @@ public consumers).
 | `GET` | `/api/v1/leaderboard?n=20&maze={id}&generator={id}` | public | Top-N leaderboard — `maze=` scopes to one maze's board (the daily's partition), `generator=` to one algorithm's; `maze` wins if both are given |
 | `GET` | `/api/v1/plugins` | required | Currently-loaded plugins (`PluginInfo`) |
 | `GET` | `/api/v1/plugins/describe` | required | Human-readable plugin tree |
+| `GET` | `/api/v1/world/{id}` | public | Inspect world-zero: revision and occupied chunk count. Other ids 404. |
+| `GET` | `/api/v1/world/{id}/capabilities` | public | Discover world ops. Not the drive script; plugin extras appear here. |
+| `GET` | `/api/v1/world/{id}/observe?x=&y=&z=` | public | Observe a cube and the door. Does not bump revision. |
+| `GET` | `/api/v1/world/{id}/trace` | public | Trace driven world ops since this process opened the file. |
+| `GET` | `/api/v1/world/{id}/block?x=&y=&z=` | public | Inspect one cube |
+| `GET` | `/api/v1/world/{id}/chunk?x=&y=&z=` | public | Inspect one 16³ chunk |
+| `PUT` | `/api/v1/world/{id}/block` | required | Place a cube (`PlaceBlockRequest`). AIR is remove. Survives restart. |
+| `DELETE` | `/api/v1/world/{id}/block?x=&y=&z=` | required | Remove a cube (set AIR) |
+| `GET` | `/api/v1/world/{id}/door` | public | Inspect the programmable door |
+| `POST` | `/api/v1/world/{id}/door/open` | required | Open the door. Already-open is a named result |
+| `POST` | `/api/v1/world/{id}/door/close` | required | Close the door. Already-closed is a named result |
 
 In dev / test profiles every endpoint is open. The "Auth (prod)" column applies when
 `spring.profiles.active=prod` (see `ProdSecurityConfig`), and it is **executable**:

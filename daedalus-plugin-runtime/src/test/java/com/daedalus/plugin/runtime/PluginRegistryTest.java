@@ -58,6 +58,25 @@ class PluginRegistryTest {
     }
 
     @Test
+    void worldCapabilitiesUnionsWhatLoadedPluginsAdvertise() {
+        PluginRegistry registry = new PluginRegistry();
+        registry.put(plugin("algo"));
+        registry.put(new MazePlugin() {
+            @Override
+            public PluginManifest manifest() {
+                return new PluginManifest("trap", "Trap", "1.0", "test", "test");
+            }
+
+            @Override
+            public java.util.List<String> worldCapabilities() {
+                return java.util.List.of("trap.arm");
+            }
+        });
+
+        assertThat(registry.worldCapabilities()).containsExactly("trap.arm");
+    }
+
+    @Test
     void aSatisfiedRequireStillBootsParentFirst() {
         PluginRegistry registry = new PluginRegistry();
         registry.put(plugin("child", "parent"));

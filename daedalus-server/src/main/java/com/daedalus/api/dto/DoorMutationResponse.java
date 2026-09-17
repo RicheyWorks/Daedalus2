@@ -1,0 +1,7 @@
+// SPDX-License-Identifier: MIT
+
+package com.daedalus.api.dto;
+
+/** Result of open or close. {@code result} is never silent success. */
+public record DoorMutationResponse(String id, String state, String result, long revision) {
+}
