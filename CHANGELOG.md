@@ -675,6 +675,7 @@ under the `_migration/` portfolios.
   Event-log overscroll stays in the lamp so leftover OS ice does not rubber-band past the well news.
   ASCII dump overscroll stays in the lamp so leftover OS ice does not rubber-band past the maze text.
   Gate command dump overscroll stays in the lamp so leftover OS ice does not rubber-band past the start well.
+  Compare table overscroll stays in the lamp so leftover OS ice does not rubber-band past the arena.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
