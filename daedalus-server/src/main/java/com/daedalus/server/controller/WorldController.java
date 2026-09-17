@@ -128,7 +128,8 @@ public class WorldController {
             @PathVariable String id, @Valid @RequestBody StampWorldRequest body) {
         mounted(id);
         BlockCoordinate at = new BlockCoordinate(body.x(), body.y(), body.z());
-        StampResult result = worlds.stamp(id, at, mazeGrid(body.mazeId()));
+        UUID mazeId = mazeKey(body.mazeId());
+        StampResult result = worlds.stamp(id, at, mazeId == null ? null : mazeGrid(mazeId), mazeId);
         String parcelId = result.parcelId() == null ? "" : result.parcelId().value();
         int minX = 0;
         int maxX = 0;
@@ -386,19 +387,21 @@ public class WorldController {
                 npc.id(), npc.state().name(), result.name(), world.revision().value()));
     }
 
-    private MazeGrid mazeGrid(String mazeId) {
+    private static UUID mazeKey(String mazeId) {
         if (mazeId == null || mazeId.isBlank()) {
             return null;
         }
-        UUID id;
         try {
-            id = UUID.fromString(mazeId.trim());
+            return UUID.fromString(mazeId.trim());
         } catch (IllegalArgumentException ex) {
             throw new IllegalArgumentException("mazeId must be a UUID");
         }
-        MazeGenerationService.Cached cached = mazes.find(id);
+    }
+
+    private MazeGrid mazeGrid(UUID mazeId) {
+        MazeGenerationService.Cached cached = mazes.find(mazeId);
         if (cached == null) {
-            throw ResourceNotFoundException.maze(id);
+            throw ResourceNotFoundException.maze(mazeId);
         }
         return cached.grid();
     }

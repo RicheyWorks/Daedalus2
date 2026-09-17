@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World living slab subscribe.**
+  A stamped lab maze re-projects when `MazeMutatedEvent` fires.
+  Quiet ticks write nothing. WorldService still does not open
+  Caffeine — the event carries the snapshot.
+
 - **World stamp from a lab maze.**
   `POST /world/{id}/stamp` takes an optional `mazeId` from the
   generation cache and projects that grid. Missing maze is 404.

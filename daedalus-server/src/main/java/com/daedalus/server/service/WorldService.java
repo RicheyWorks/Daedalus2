@@ -12,6 +12,7 @@ import com.daedalus.world.Door;
 import com.daedalus.world.DoorResult;
 import com.daedalus.world.Npc;
 import com.daedalus.world.NpcResult;
+import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
@@ -24,6 +25,7 @@ import com.daedalus.world.auto.DriveTrace;
 import com.daedalus.world.auto.Observation;
 import com.daedalus.world.auto.WorldAddress;
 import com.daedalus.world.auto.WorldOps;
+import com.daedalus.world.living.LivingSlab;
 import com.daedalus.world.stamp.StampOps;
 import com.daedalus.world.stamp.StampRequest;
 import com.daedalus.world.stamp.StampResult;
@@ -37,6 +39,9 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 /**
@@ -51,6 +56,10 @@ public class WorldService {
     private final Consumer<WorldBlockEvent> events;
     private final DriveTrace log = new DriveTrace();
     private final Object lock = new Object();
+    private final Map<UUID, SlabBind> slabs = new ConcurrentHashMap<>();
+
+    private record SlabBind(BlockCoordinate origin, int floorY, int wallHeight, ParcelBounds bounds) {
+    }
 
     public WorldService(Path file) {
         this.file = file;
@@ -227,14 +236,51 @@ public class WorldService {
      * This method does not look up the maze cache.
      */
     public StampResult stamp(String id, BlockCoordinate at, MazeGrid maze) {
+        return stamp(id, at, maze, null);
+    }
+
+    /**
+     * Project {@code maze} at {@code at}. When {@code mazeId} is present the
+     * slab listens for later living snapshots of that maze. This method does
+     * not look up the maze cache.
+     */
+    public StampResult stamp(String id, BlockCoordinate at, MazeGrid maze, UUID mazeId) {
         World live = require(id);
         synchronized (lock) {
             StampResult result = maze == null
                     ? WorldOps.asStampResult(WorldOps.drive(live, "stamp.apply", at, null))
                     : StampOps.apply(live, new StampRequest(live.id(), at, maze, at.y(), 1));
+            if (result.ok() && maze != null && mazeId != null && result.bounds() != null) {
+                slabs.put(mazeId, new SlabBind(at, at.y(), 1, result.bounds()));
+            }
             persist();
             log.append("stamp.apply", result, live.revision().value());
             return result;
+        }
+    }
+
+    /**
+     * Re-project a living maze snapshot into its stamped AABB. Unknown maze
+     * ids and inspect-quiet grids write nothing.
+     */
+    public int syncSlab(String id, UUID mazeId, MazeGrid snapshot) {
+        World live = require(id);
+        if (live == null || mazeId == null || snapshot == null) {
+            return 0;
+        }
+        synchronized (lock) {
+            SlabBind bind = slabs.get(mazeId);
+            if (bind == null) {
+                return 0;
+            }
+            LivingSlab slab = new LivingSlab(live, new StampRequest(
+                    live.id(), bind.origin(), snapshot, bind.floorY(), bind.wallHeight()),
+                    bind.bounds());
+            int written = slab.sync();
+            if (written > 0) {
+                persist();
+            }
+            return written;
         }
     }
 
