@@ -502,6 +502,8 @@ under the `_migration/` portfolios.
   racer sits in the lamp, not leftover cool white on torch stone.
   Explore automap story marks wear entrance gold, vault teal, and boss red so
   the map matches the key, not leftover red on every diamond.
+  Web maze stats and status wear cream and khaki so maze news sits in the lamp,
+  not leftover cool slate on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
