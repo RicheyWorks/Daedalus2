@@ -360,7 +360,7 @@ class WebUiSmokeTest {
                 .contains("#lb div { border-bottom: 1px solid rgba(184, 133, 56, 0.28); padding: 2px 0;")
                 .contains("#lb div { border-bottom: 1px solid rgba(184, 133, 56, 0.28); padding: 2px 0; -webkit-user-drag: none")
                 .contains("#lb span { color: #b09a72;")
-                .contains("#lb .rank { display: inline-block; width: 18px; color: #b09a72; }")
+                .contains("#lb .rank { display: inline-block; width: 18px; color: #b09a72;")
                 .contains("#lb b { color: #f2ead8; }")
                 .contains("${active ? \"background:#1a1610;\" : \"\"}")
                 .contains("color:${done ? \"#4cc38a\" : \"#d4a04c\"}")

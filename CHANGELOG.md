@@ -845,6 +845,7 @@ under the `_migration/` portfolios.
   Start-gate card copy refuses leftover drag ice so khaki news is not ghosted.
   Desk fold captions refuse leftover drag ice so khaki hints are not ghosted.
   Leaderboard khaki meta refuses leftover drag ice so torch ranks are not ghosted.
+  Leaderboard khaki ranks refuse leftover drag ice so torch numbers are not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
