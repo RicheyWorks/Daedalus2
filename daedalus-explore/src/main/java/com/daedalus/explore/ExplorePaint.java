@@ -1920,8 +1920,15 @@ public final class ExplorePaint {
      */
     public static void blockTint(WorldMesh.Triangle tri, float[] rgb,
                                  double eyeX, double eyeZ, double yaw, double seconds) {
+        blockTint(tri, rgb, eyeX, eyeZ, yaw, seconds, 0);
+    }
+
+    public static void blockTint(WorldMesh.Triangle tri, float[] rgb,
+                                 double eyeX, double eyeZ, double yaw, double seconds,
+                                 double edge) {
         if (tri == null) {
             blockTint(BlockType.STONE, null, rgb);
+            mixHereEdge(edge, rgb);
             return;
         }
         blockTint(tri.type(), tri.face(), rgb);
@@ -1931,6 +1938,7 @@ public final class ExplorePaint {
             rgb[1] *= boot;
             rgb[2] *= boot;
         }
+        mixHereEdge(edge, rgb);
         if (Double.isNaN(eyeX) || Double.isNaN(eyeZ)) {
             return;
         }

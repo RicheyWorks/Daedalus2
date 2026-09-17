@@ -446,9 +446,18 @@ public final class ExploreHost {
             return;
         }
         ExploreBody body = world.body();
+        var tiles = world.mesh() == null ? null : world.mesh().tiles();
+        int th = tiles == null ? 1 : tiles.length;
+        int tw = tiles == null || tiles[0] == null ? 1 : tiles[0].length;
         glBegin(GL_TRIANGLES);
         for (WorldMesh.Triangle tri : world.blocks().triangles()) {
-            ExplorePaint.blockTint(tri, rgb, body.x(), body.z(), body.yaw(), seconds);
+            double edge = 0;
+            if (tri != null && tri.at() != null) {
+                int col = ExploreMesh.cellCol(tri.at().x() + 0.5);
+                int row = ExploreMesh.cellRow(tri.at().z() + 0.5);
+                edge = ExplorePaint.mapEdge(2 * row + 1, 2 * col + 1, 0, th - 1, 0, tw - 1);
+            }
+            ExplorePaint.blockTint(tri, rgb, body.x(), body.z(), body.yaw(), seconds, edge);
             glColor3f(rgb[0], rgb[1], rgb[2]);
             glVertex3d(tri.x1(), tri.y1(), tri.z1());
             glVertex3d(tri.x2(), tri.y2(), tri.z2());

@@ -76,6 +76,13 @@ class ExplorePaintTest {
                 WorldMesh.Face.POS_Z, BlockType.WOOD, new BlockCoordinate(0, 0, 1));
         ExplorePaint.blockTint(woodFace, near, 0.5, 0.2, Math.PI, 0);
         ExplorePaint.blockTint(woodFace, far, 0.5, 20, Math.PI, 0);
+        float[] midBoard = new float[3];
+        float[] rimBoard = new float[3];
+        ExplorePaint.blockTint(woodFace, midBoard, Double.NaN, Double.NaN, 0, 0, 0);
+        ExplorePaint.blockTint(woodFace, rimBoard, Double.NaN, Double.NaN, 0, 0, 1);
+        assertThat(rimBoard[0] + rimBoard[1] + rimBoard[2])
+                .as("cube face falls off toward floor-dim at the board rim")
+                .isLessThan(midBoard[0] + midBoard[1] + midBoard[2]);
         assertThat(near[0]).as("near cube keeps wood under the lamp").isGreaterThan(far[0]);
         assertThat(near[0]).isGreaterThan(near[2]);
         BlockCoordinate at = new BlockCoordinate(0, 0, 1);

@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore cube face depth.**
+  Occupied-cube sides fall off toward floor-dim at the board rim
+  with the same 0.22 edge as halls, so leftover even wood is not
+  the last word on a slab. Torch wood stays.
+
 - **Desktop compare tip depth.**
   Non-ice compare heads fall off toward floor-dim at the board rim
   with the same 0.22 edge as halls, so leftover even gold is not
