@@ -754,6 +754,7 @@ under the `_migration/` portfolios.
   Start-gate host chrome refuses leftover drag ice so khaki on the line is not ghosted.
   Well desk titles refuse leftover drag ice so khaki on the rail is not ghosted.
   Well keys refuse leftover drag ice so khaki on the chips is not ghosted.
+  Well desk folds refuse leftover drag ice so khaki on the rail is not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
