@@ -340,6 +340,8 @@ under the `_migration/` portfolios.
   posts so the tunnel stays dark stone, not a dusk hole.
   Chokepoint rings on web and desktop wear torch copper so cuts sit in the lamp,
   not leftover cool purple on torch stone.
+  Explore distance fog fades to the unseen silhouette so far corridors stay in
+  the lamp, not dusk wash on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

@@ -178,7 +178,7 @@ public final class ExploreHost {
         glFogf(GL_FOG_END, 14f);
         try (MemoryStack stack = MemoryStack.stackPush()) {
             FloatBuffer fog = stack.mallocFloat(4);
-            fog.put(ExplorePaint.SKY_R).put(ExplorePaint.SKY_G).put(ExplorePaint.SKY_B).put(1f);
+            fog.put(ExplorePaint.FOG_R).put(ExplorePaint.FOG_G).put(ExplorePaint.FOG_B).put(1f);
             fog.flip();
             glFogfv(GL_FOG_COLOR, fog);
         }

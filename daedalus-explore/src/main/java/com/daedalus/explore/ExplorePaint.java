@@ -21,6 +21,10 @@ public final class ExplorePaint {
     public static final float UNSEEN_R = 0.09f;
     public static final float UNSEEN_G = 0.07f;
     public static final float UNSEEN_B = 0.06f;
+    /** Linear distance fog — same warm dark as unseen faces, not dusk. */
+    public static final float FOG_R = UNSEEN_R;
+    public static final float FOG_G = UNSEEN_G;
+    public static final float FOG_B = UNSEEN_B;
     public static final int TEX = 64;
     public static final int MAP = 36;
     public static final int GLYPH_W = 5;
