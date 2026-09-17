@@ -913,6 +913,7 @@ public final class DesktopPaint {
             keys.add("race");
         }
         if (waypoint && fog == null) {
+            keys.add("tour");
             keys.add("waypoint");
         }
         if (ghost && fog == null) {

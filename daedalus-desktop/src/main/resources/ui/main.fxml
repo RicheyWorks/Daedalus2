@@ -196,6 +196,12 @@
                         </HBox>
                     </graphic>
                 </Label>
+                <Label fx:id="legendTour" text="tour" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="10" height="10" fill="#d4b06a" arcWidth="3" arcHeight="3"
+                                   stroke="rgba(245,193,74,0.35)" strokeWidth="1.5"/>
+                    </graphic>
+                </Label>
                 <Label fx:id="legendWaypoint" text="waypoint" managed="false" visible="false">
                     <graphic>
                         <Rectangle width="8" height="8" fill="#f2c94c" rotate="45"

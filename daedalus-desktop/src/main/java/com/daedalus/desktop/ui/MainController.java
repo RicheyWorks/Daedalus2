@@ -145,6 +145,7 @@ public class MainController {
     @FXML private Label legendSanctuary;
     @FXML private Label legendLens;
     @FXML private Label legendRace;
+    @FXML private Label legendTour;
     @FXML private Label legendWaypoint;
     @FXML private Label legendGhost;
     @FXML private Label legendCompare;
@@ -2180,6 +2181,7 @@ public class MainController {
         showLegendKey(legendSanctuary, keys.contains("sanctuary"));
         showLegendKey(legendLens, keys.contains("lens"));
         showLegendKey(legendRace, keys.contains("race"));
+        showLegendKey(legendTour, keys.contains("tour"));
         showLegendKey(legendWaypoint, keys.contains("waypoint"));
         showLegendKey(legendGhost, keys.contains("ghost"));
         showLegendKey(legendCompare, keys.contains("compare"));

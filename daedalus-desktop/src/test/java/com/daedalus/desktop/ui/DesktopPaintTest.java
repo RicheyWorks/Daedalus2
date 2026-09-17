@@ -174,7 +174,7 @@ class DesktopPaintTest {
                 .containsExactly("floor", "wall", "start", "fog");
         assertThat(DesktopPaint.legendKeys(
                 true, false, false, false, null, false, false, false, false, false, true))
-                .containsExactly("floor", "wall", "start", "goal", "waypoint");
+                .containsExactly("floor", "wall", "start", "goal", "tour", "waypoint");
         assertThat(DesktopPaint.legendKeys(
                 true, false, false, false, fog, false, false, false, false, false, true))
                 .as("fog swallows the coins")
