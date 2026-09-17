@@ -141,7 +141,10 @@
                 </Label>
                 <Label fx:id="legendPlayer" text="walk" managed="false" visible="false">
                     <graphic>
-                        <Circle radius="5" fill="#f5c14a" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"/>
+                        <HBox spacing="1">
+                            <Circle radius="5" fill="#f5c14a" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"/>
+                            <Circle radius="5" fill="#e88868" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"/>
+                        </HBox>
                     </graphic>
                 </Label>
                 <Label fx:id="legendHotspot" text="hot spot" managed="false" visible="false">

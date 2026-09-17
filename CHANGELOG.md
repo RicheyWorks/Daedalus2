@@ -438,6 +438,8 @@ under the `_migration/` portfolios.
   not the well.
   Well-key player swatches wear gold and torch rose so the second walker is
   keyed, not leftover unnamed on torch stone.
+  Desktop well-key player swatches wear gold and torch rose so the second
+  walker is keyed, not leftover unnamed on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
