@@ -339,6 +339,7 @@ class WebUiSmokeTest {
                 .contains("#legend { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;")
                 .contains("color: #b09a72; pointer-events: none; text-wrap: pretty;")
                 .contains("user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;")
+                .contains("user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none")
                 .contains("rgba(16, 11, 8, .50)")
                 .contains("rgba(16, 11, 8, .88)")
                 .contains("color: #b09a72")
