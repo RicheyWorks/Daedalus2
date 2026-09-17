@@ -440,6 +440,10 @@
     box-shadow: 0 0 0 1.5px rgba(245, 193, 74, .35); }
   #legend [data-key="hotspot"] i {
     box-shadow: 0 0 0 1.5px rgba(229, 72, 77, .35); }
+  #legend [data-key="floor"] i {
+    background: radial-gradient(circle at 45% 40%, #484339 28%, #2a2218); }
+  #legend [data-key="wall"] i {
+    background: radial-gradient(circle at 45% 40%, #19140f 28%, #15110d); }
   #compareBox:empty { display: none; }
   #compareBox { max-height: 22vh; overflow: auto; overscroll-behavior: none; min-width: 0;
                 scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent;
@@ -696,8 +700,8 @@ powershell -File daedalus-explore\run-explore.ps1</pre>
     <div id="stage">
       <canvas id="maze" width="640" height="480"></canvas>
       <div id="legend" hidden>
-        <span data-key="floor"><i style="background:#484339"></i>floor</span>
-        <span data-key="wall"><i style="background:#19140f"></i>wall / rock</span>
+        <span data-key="floor"><i></i>floor</span>
+        <span data-key="wall"><i></i>wall / rock</span>
         <span data-key="start"><i style="background:#3ee08f;border-radius:50%"></i>start</span>
         <span data-key="goal"><i style="background:#ff5a5f;border-radius:50%"></i>goal</span>
         <span data-key="path"><i style="background:#8fb8ff"></i>solver path</span>

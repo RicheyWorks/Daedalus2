@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well legend stone depth.**
+  Overlay floor and wall chips fall off toward floor-dim / unseen so
+  leftover flat swatches are not the last word on the key. Start mint
+  and goal coral stay.
+
 - **Explore cube boot rim.**
   Occupied cube undersides split a torch rim at the same fraction as
   the lid, so looking under names the slab edge and leftover even wood
