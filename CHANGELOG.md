@@ -849,6 +849,7 @@ under the `_migration/` portfolios.
   Leaderboard cream names refuse leftover drag ice so torch rows are not ghosted.
   Leaderboard mint scores refuse leftover drag ice so torch numbers are not ghosted.
   Well maze figures refuse leftover drag ice so khaki labels are not ghosted.
+  Well desk captions refuse leftover drag ice so cream emphasis is not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
