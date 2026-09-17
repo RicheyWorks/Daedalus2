@@ -268,6 +268,7 @@ class WebUiSmokeTest {
                 .contains("-webkit-tap-highlight-color: transparent; outline: none; -webkit-touch-callout: none")
                 .contains("outline: none; -webkit-touch-callout: none; user-select: none; -webkit-user-select: none")
                 .contains("user-select: none; -webkit-user-select: none; -webkit-user-drag: none")
+                .contains("user-select: none; -webkit-user-select: none; -webkit-user-drag: none; cursor: default")
                 .contains("#1a1510 0%")
                 .contains("#16120e 0%")
                 .contains("radial-gradient(1200px 700px at 50% -10%, #16120e 0%")
