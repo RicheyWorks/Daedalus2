@@ -393,6 +393,8 @@ under the `_migration/` portfolios.
   leftover unrimmed on torch stone.
   Compare-box copy under the well wears cream and khaki so those notes sit in the
   lamp, not leftover cool slate on torch stone.
+  Compare-box rules under the well wear the same gold lip as the stage so the
+  table is not leftover cool navy on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
