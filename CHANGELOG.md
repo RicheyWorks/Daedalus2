@@ -516,6 +516,8 @@ under the `_migration/` portfolios.
   lamp, not leftover cool slate on torch stone.
   Leaderboard ranks wear the same warm khaki so place numbers sit in the lamp,
   not leftover cool slate on torch stone.
+  Web desk section hairlines wear the same gold lip as the well so those cuts
+  sit in the lamp, not leftover cool navy on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
