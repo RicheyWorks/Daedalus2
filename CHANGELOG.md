@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well tour tip depth.**
+  Held-Karp amber tip falls off toward floor-dim at the board rim
+  with the same 0.22 edge as halls, so leftover even disc is not
+  the last word on a hunt head. KEEP path ice stays. Start mint
+  and goal coral stay.
+
 - **Desktop hardest tip depth.**
   Longest-route gold tip falls off toward floor-dim at the board
   rim with the same 0.22 edge as halls, so leftover even disc is

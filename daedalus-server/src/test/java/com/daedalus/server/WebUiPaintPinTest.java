@@ -258,7 +258,8 @@ class WebUiPaintPinTest {
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js)
                     .contains("mixHex(\"#d4b06a\", COLORS.floorDim, 0.22 * edge)")
-                    .contains("(tr, tc) => tourTileInk(tr, tc, th, tw)");
+                    .contains("(tr, tc) => tourTileInk(tr, tc, th, tw)")
+                    .contains("tourTileInk(2 * tourTip.row + 1, 2 * tourTip.col + 1, th, tw)");
         }
     }
 

@@ -745,7 +745,10 @@
     if (scene.tourPath && scene.tourPath.length) {
       paintWalk(g, geom, scene.tourPath, "#d4b06a", 1, 0.38, "ribbon",
           (tr, tc) => tourTileInk(tr, tc, th, tw));
-      pathHead(g, geom, walkHead(scene.tourPath, 1), "#d4b06a");
+      const tourTip = walkHead(scene.tourPath, 1);
+      pathHead(g, geom, tourTip, tourTip
+          ? tourTileInk(2 * tourTip.row + 1, 2 * tourTip.col + 1, th, tw)
+          : "#d4b06a");
     }
     if (scene.tour && scene.tour.waypoints) {
       const WAYPOINT_BREATH_MS = 2800;
