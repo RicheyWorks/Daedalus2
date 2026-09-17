@@ -11,7 +11,7 @@
 /* ---------- toolbar ---------- */
 
 .toolbar {
-    -fx-background-color: #10151b;
+    -fx-background-color: #16120e;
     -fx-border-color: transparent transparent rgba(184, 133, 56, 0.45) transparent;
     -fx-border-width: 0 0 1 0;
 }
@@ -145,7 +145,7 @@
 }
 
 .status-bar {
-    -fx-background-color: #10151b;
+    -fx-background-color: #16120e;
     -fx-border-color: rgba(184, 133, 56, 0.45) transparent transparent transparent;
     -fx-border-width: 1 0 0 0;
 }

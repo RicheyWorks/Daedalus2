@@ -59,6 +59,9 @@ class ThemeManagerTest {
             assertThat(css).contains("#16120e");
             assertThat(css).contains("#0c0908");
             assertThat(css).contains("-fx-background-color: #0c0908");
+            assertThat(css).contains(".toolbar");
+            assertThat(css).contains(".status-bar");
+            assertThat(css).contains("-fx-background-color: #16120e");
             assertThat(css).contains("rgba(16, 11, 8, 0.55)");
             assertThat(css).contains("rgba(16, 11, 8, 0.92)");
             assertThat(css).contains(".legend .label");
