@@ -323,6 +323,7 @@ class WebUiSmokeTest {
                 .contains("boardRimBreath")
                 .contains("panelRimBreath")
                 .contains("headerRimBreath")
+                .contains("animation: headerRimBreath 4.5s ease-in-out infinite; user-select: none; -webkit-user-select: none")
                 .contains("legendFadeBreath")
                 .contains("#legend { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;")
                 .contains("color: #b09a72; pointer-events: none; text-wrap: pretty;")
