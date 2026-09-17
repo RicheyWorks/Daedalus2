@@ -300,6 +300,8 @@ under the `_migration/` portfolios.
   depth as the floor, not flat clay under the lamp.
   Desktop Cosmic wall and passage wear the live well's torch mixes so leftover
   theme stone matches the board, not cool ink beside warm corridors.
+  Explore ceilings wear a 1px torch shine so the lid has the same stone depth
+  as floor and brick, not flat plaster over a firelit tunnel.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
