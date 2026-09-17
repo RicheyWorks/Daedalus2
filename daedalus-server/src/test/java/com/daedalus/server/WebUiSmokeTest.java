@@ -56,6 +56,7 @@ class WebUiSmokeTest {
                 .contains("name=\"msapplication-TileColor\" content=\"#0c0908\"")
                 .contains("name=\"msapplication-navbutton-color\" content=\"#0c0908\"")
                 .contains("name=\"msapplication-TileImage\" content=\"data:image/png;base64,")
+                .contains("name=\"mobile-web-app-capable\" content=\"yes\"")
                 .contains("name=\"apple-mobile-web-app-capable\" content=\"yes\"")
                 .contains("name=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\"")
                 .contains("name=\"color-scheme\" content=\"dark\"")
