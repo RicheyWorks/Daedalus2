@@ -90,6 +90,7 @@ class WebUiSmokeTest {
                 .contains("-webkit-tap-highlight-color: transparent; -webkit-touch-callout: none")
                 .contains("header .tag { color: #b09a72")
                 .contains("text-transform: lowercase; text-wrap: pretty; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none")
+                .contains("text-wrap: pretty; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none")
                 .contains("rgba(22, 18, 14, .88)")
                 .contains("#gate { position: fixed; inset: 0; z-index: 20; overflow: auto; overscroll-behavior: none;")
                 .contains("padding-top: calc(48px + env(safe-area-inset-top, 0px));")

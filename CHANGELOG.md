@@ -750,6 +750,7 @@ under the `_migration/` portfolios.
   The header bar refuses leftover drag ice so torch chrome is not ghosted.
   The header brand refuses leftover drag ice so cream on the wordmark is not ghosted.
   The start-gate brand refuses leftover drag ice so cream on the wordmark is not ghosted.
+  The header tagline refuses leftover drag ice so khaki on the line is not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
