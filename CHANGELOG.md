@@ -678,6 +678,8 @@ under the `_migration/` portfolios.
   Compare table overscroll stays in the lamp so leftover OS ice does not rubber-band past the arena.
   iOS home-screen icon wears torch void with a gold lip so the host sits in the lamp,
   not leftover OS chrome around the well.
+  Pinned Windows tile image wears torch void with a gold lip so the host sits in the lamp,
+  not leftover OS chrome around the well.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
