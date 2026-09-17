@@ -212,6 +212,7 @@ class WebUiSmokeTest {
                 .contains("#tourBox th { text-align: left; color: #b09a72; font-weight: 600;")
                 .contains("#tourBox td { padding: 2px 8px; border-bottom: 1px solid rgba(184, 133, 56, 0.28); }")
                 .contains("#tourBox a { color: #d4a04c; }")
+                .contains("#tourBox a:focus-visible { outline: 2px solid rgba(184, 133, 56, 0.85); outline-offset: 1px; }")
                 .contains("#labOut th { text-align: left; color: #b09a72; font-weight: 600;")
                 .contains("#labOut td { padding: 2px 8px; border-bottom: 1px solid rgba(184, 133, 56, 0.28); }")
                 .contains("#pluginBox .rank { color: #b09a72; }")
