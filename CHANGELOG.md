@@ -450,6 +450,8 @@ under the `_migration/` portfolios.
   not leftover unnamed on torch stone.
   Desktop well-key walk swatches wear the four walker inks so every seat is
   keyed, not leftover unnamed on torch stone.
+  Desktop leftover compare lanes wear moss, terracotta, and tour amber so extra
+  routes sit in the lamp, not leftover mint and purple on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

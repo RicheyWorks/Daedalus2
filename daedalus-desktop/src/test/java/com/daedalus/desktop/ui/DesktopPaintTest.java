@@ -229,6 +229,15 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.expansionOpenings(lane, tiles))
                 .contains(new DesktopPaint.TileRect(1, 2));
         assertThat(DesktopPaint.COMPARE[0]).isEqualTo("#8fb8ff");
+        assertThat(DesktopPaint.COMPARE[3]).isEqualTo("#8aaa50");
+        assertThat(DesktopPaint.COMPARE[4]).isEqualTo("#c07850");
+        assertThat(DesktopPaint.COMPARE[5]).isEqualTo("#d4b06a");
+        assertThat(Integer.parseInt(DesktopPaint.COMPARE[3].substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.COMPARE[3].substring(5, 7), 16));
+        assertThat(Integer.parseInt(DesktopPaint.COMPARE[4].substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.COMPARE[4].substring(5, 7), 16));
+        assertThat(Integer.parseInt(DesktopPaint.COMPARE[5].substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.COMPARE[5].substring(5, 7), 16));
         assertThat(DesktopPaint.COMPARE_HEAD_RADIUS)
                 .as("compare tips stay smaller than race heads")
                 .isLessThan(0.36);

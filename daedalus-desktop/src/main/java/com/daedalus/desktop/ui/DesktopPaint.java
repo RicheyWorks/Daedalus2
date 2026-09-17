@@ -475,11 +475,11 @@ public final class DesktopPaint {
     public static final double RACE_PATH_A = 0.85;
     public static final double RACE_PATH_B = 0.58;
     /**
-     * Compare-all routes — same tokens the web table hover would paint,
-     * stacked so agreement reads brighter than a lone corridor.
+     * Compare-all routes — first three stay overlay ice / gold / coral;
+     * leftover seats wear named lamp inks, not leftover mint and purple.
      */
     public static final String[] COMPARE = {
-            "#8fb8ff", "#f0b429", "#e5484d", "#4cc38a", "#c084fc", "#9ecbff"
+            "#8fb8ff", "#f0b429", "#e5484d", "#8aaa50", "#c07850", "#d4b06a"
     };
     public static final double COMPARE_ALPHA = 0.22;
     /** Opening wash between adjacent compare cells — louder than the cell wash. */
