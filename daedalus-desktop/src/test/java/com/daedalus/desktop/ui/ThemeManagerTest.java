@@ -87,6 +87,7 @@ class ThemeManagerTest {
             assertThat(css).contains("-fx-font-weight: bold;\n    -fx-cursor: default;");
             assertThat(css).contains("#b09a72");
             assertThat(css).contains(".exports .button");
+            assertThat(css).contains("-fx-padding: 0;\n    -fx-cursor: default;");
             assertThat(css).contains("rgba(16, 11, 8, 0.78)");
             assertThat(css).contains(".exports .button:hover");
             assertThat(css).contains("-fx-background-color: #1a1610");

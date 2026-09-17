@@ -127,6 +127,7 @@
 
 .exports {
     -fx-padding: 0;
+    -fx-cursor: default;
 }
 .exports .button {
     -fx-background-color: rgba(16, 11, 8, 0.78);

@@ -791,6 +791,7 @@ under the `_migration/` portfolios.
   The well desk pocket wears a lamp cursor so leftover OS I-beam ice does not sit around the board.
   Well side-rail pockets wear a lamp cursor so leftover OS I-beam ice does not sit around the desk.
   The well page void wears a lamp cursor so leftover OS I-beam ice does not sit around the desk.
+  Desktop well export chrome wears a lamp cursor so leftover Modena I-beam ice does not sit on the overlay strip.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
