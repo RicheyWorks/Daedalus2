@@ -72,6 +72,7 @@ class ThemeManagerTest {
             assertThat(css).contains(".toolbar .brand");
             assertThat(css).contains(".toolbar .label");
             assertThat(css).contains(".toolbar .label {\n    -fx-text-fill: #b09a72;");
+            assertThat(css).contains(".toolbar .label {\n    -fx-text-fill: #b09a72;\n    -fx-cursor: default;");
             assertThat(css).contains("-fx-text-fill: #f2ead8");
             assertThat(css).contains(".status-bar");
             assertThat(css).contains(".status-bar .label");

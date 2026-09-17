@@ -31,6 +31,7 @@
 }
 .toolbar .label {
     -fx-text-fill: #b09a72;
+    -fx-cursor: default;
 }
 .toolbar .separator .line {
     -fx-border-color: rgba(184, 133, 56, 0.28);
