@@ -126,7 +126,7 @@ class WebUiSmokeTest {
                 .contains("0.04 + 0.03")
                 .contains("prefers-reduced-motion")
                 .contains("stageRimBreath")
-                .contains("#151c26 0%")
+                .contains("#1a1510 0%")
                 .contains("#16120e 0%")
                 .contains("#1a1510 0%")
                 .contains("--void: #0c0908")

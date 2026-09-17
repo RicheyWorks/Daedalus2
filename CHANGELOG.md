@@ -316,6 +316,8 @@ under the `_migration/` portfolios.
   the lamp, not cool gray stone beside torch posts.
   Empty-well canvas sits in the same breathing void pocket as the live board so
   the idle miniature is letterboxed in the lamp, not a flat wall slab.
+  Start-gate stage warms to the well's lit void so the landing sits in the same
+  lamp as the board, not a cool blue pit before you enter.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
