@@ -726,6 +726,7 @@ under the `_migration/` portfolios.
   The well pocket refuses leftover tap wash so torch stone is not stained.
   The start-gate brand refuses leftover tap wash so cream on the wordmark is not stained.
   The header brand refuses leftover tap wash so cream on the wordmark is not stained.
+  The well canvas refuses leftover focus ice so torch stone is not rimmed.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
