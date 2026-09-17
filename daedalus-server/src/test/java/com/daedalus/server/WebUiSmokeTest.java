@@ -243,6 +243,7 @@ class WebUiSmokeTest {
                 .contains("data-key=\"tour\"")
                 .contains("data-key=\"deadend\"")
                 .contains("#legend [data-key=\"choke\"] i, #legend [data-key=\"deadend\"] i")
+                .contains("#legend [data-key=\"path\"] i")
                 .contains("#legend [data-key=\"tour\"] i")
                 .contains("background:#d4b06a")
                 .contains("#legend [data-key=\"hotspot\"] i")

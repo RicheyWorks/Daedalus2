@@ -135,7 +135,8 @@
                 </Label>
                 <Label fx:id="legendPath" text="solver path" managed="false" visible="false">
                     <graphic>
-                        <Rectangle width="10" height="10" fill="#8fb8ff" arcWidth="3" arcHeight="3"/>
+                        <Rectangle width="10" height="10" fill="#8fb8ff" arcWidth="3" arcHeight="3"
+                                   stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"/>
                     </graphic>
                 </Label>
                 <Label fx:id="legendPlayer" text="walk" managed="false" visible="false">

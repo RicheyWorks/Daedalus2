@@ -418,6 +418,8 @@ under the `_migration/` portfolios.
   those lines are not leftover cool navy on torch stone.
   Compare-box winners under the well wear victory gold so the best path sits
   in the lamp, not leftover mint on torch stone.
+  Well-key solver-path swatches wear the same cream rim as other place marks
+  so the ice ribbon is keyed, not leftover unrimmed on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
