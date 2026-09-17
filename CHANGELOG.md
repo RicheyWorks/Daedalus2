@@ -851,6 +851,7 @@ under the `_migration/` portfolios.
   Well maze figures refuse leftover drag ice so khaki labels are not ghosted.
   Well desk captions refuse leftover drag ice so cream emphasis is not ghosted.
   Header wordmark wrap refuses leftover drag ice so cream brand is not ghosted.
+  Gold mark highlight refuses leftover drag ice so torch wash is not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

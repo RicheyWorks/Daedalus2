@@ -139,7 +139,7 @@ class WebUiSmokeTest {
                 .contains("@page { background-color: #0c0908; color: #f2ead8; }")
                 .contains("@media (forced-colors: active) {")
                 .contains("html, body, #gate, #stage, canvas { forced-color-adjust: none; }")
-                .contains("mark { background: rgba(184, 133, 56, 0.35); color: #f2ead8; }")
+                .contains("mark { background: rgba(184, 133, 56, 0.35); color: #f2ead8;")
                 .contains("::spelling-error { text-decoration: underline wavy rgba(184, 133, 56, 0.85); }")
                 .contains("::grammar-error { text-decoration: underline wavy rgba(176, 154, 114, 0.85); }")
                 .contains("#gate article h3")
