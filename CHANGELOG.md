@@ -706,6 +706,7 @@ under the `_migration/` portfolios.
   Well export chips keep khaki after a visit so leftover UA purple does not sit on torch stone.
   Tournament and campaign rungs refuse leftover UA underline ice so torch amber sits in the lamp.
   Well export chips refuse leftover UA underline ice so khaki sits in the lamp on torch stone.
+  The well canvas refuses leftover OS pinch ice so torch stone is not smeared.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
