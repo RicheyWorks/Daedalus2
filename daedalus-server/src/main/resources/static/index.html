@@ -166,10 +166,14 @@
     0%, 100% { border-left-color: rgba(184, 133, 56, 0.28); }
     50% { border-left-color: rgba(184, 133, 56, 0.48); }
   }
+  @keyframes statsRimBreath {
+    0%, 100% { border-top-color: rgba(184, 133, 56, 0.28); }
+    50% { border-top-color: rgba(184, 133, 56, 0.48); }
+  }
   @media (prefers-reduced-motion: reduce) {
     #gate .gate-brand, #gate .lede, #gate .gate-enter, #gate article, #gate .gate-veil,
     header h1 button, #stage, .board-panel, .panel, header, #legend,
-    .exports button, .exports a, #asciiOut, #gate pre, .info {
+    .exports button, .exports a, #asciiOut, #gate pre, .info, #stats {
       animation: none;
     }
     #gate .gate-brand {
@@ -300,7 +304,8 @@
           animation: infoRimBreath 4.5s ease-in-out infinite; }
   .info b { color: #f2ead8; font-weight: 600; }
   #stats { font: 12px/1.7 ui-monospace, monospace; color: #f2ead8;
-           border-top: 1px solid rgba(184, 133, 56, 0.28); margin-top: 12px; padding-top: 8px; }
+           border-top: 1px solid rgba(184, 133, 56, 0.28); margin-top: 12px; padding-top: 8px;
+           animation: statsRimBreath 4.5s ease-in-out infinite; }
   #stats span { color: #b09a72; }
   #legend { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
             position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
