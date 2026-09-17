@@ -66,6 +66,7 @@ class WebUiSmokeTest {
                 .contains("rgba(22, 18, 14, .88)")
                 .contains("#gate { position: fixed; inset: 0; z-index: 20; overflow: auto;")
                 .contains("html, body { min-height: 100%; color-scheme: dark; background-color: #0c0908;")
+                .contains("overscroll-behavior: none;")
                 .contains("-webkit-tap-highlight-color: rgba(184, 133, 56, 0.25);")
                 .contains("::-webkit-scrollbar { width: 8px; height: 8px; }")
                 .contains("::-webkit-scrollbar-thumb { background: rgba(184, 133, 56, 0.45); border-radius: 4px; }")
