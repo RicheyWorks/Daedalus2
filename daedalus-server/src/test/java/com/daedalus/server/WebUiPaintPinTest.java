@@ -204,6 +204,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellSanctuaryMarksHaveRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("mixHex(\"#8aaa50\", COLORS.floorDim, 0.22 * edge)")
+                    .contains("const safeInk = sanctuaryInk(p, th, tw)");
+        }
+    }
+
+    @Test
     void wellFogWallsHaveRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

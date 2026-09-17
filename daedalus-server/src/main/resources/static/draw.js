@@ -379,6 +379,15 @@
     return mixHex("#c07850", COLORS.floorDim, 0.22 * edge);
   }
 
+  function sanctuaryInk(p, th, tw) {
+    if (!p) return "#8aaa50";
+    const tr = 2 * p.row + 1, tc = 2 * p.col + 1;
+    const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
+    const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
+    const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+    return mixHex("#8aaa50", COLORS.floorDim, 0.22 * edge);
+  }
+
   function paint(canvas, scene) {
     const tiles = scene.tiles;
     const th = tiles.length, tw = tiles[0].length;
@@ -648,10 +657,11 @@
       const t = (now % SANCTUARY_BREATH_MS) / SANCTUARY_BREATH_MS;
       const wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
       scene.sanctuaries.placements.forEach(p => {
-        marker(g, geom, p, "#8aaa50", 0.32);
+        const safeInk = sanctuaryInk(p, th, tw);
+        marker(g, geom, p, safeInk, 0.32);
         if (!p) return;
         const [x, y] = cellCenter(geom, p);
-        g.strokeStyle = "#8aaa50";
+        g.strokeStyle = safeInk;
         g.globalAlpha = 0.26 + 0.16 * wave;
         g.lineWidth = Math.max(1.5, geom.cell * 0.08);
         g.beginPath();
