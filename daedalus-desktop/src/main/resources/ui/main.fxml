@@ -169,7 +169,8 @@
                 </Label>
                 <Label fx:id="legendHardest" text="hardest" managed="false" visible="false">
                     <graphic>
-                        <Rectangle width="10" height="10" fill="#f2c94c" arcWidth="3" arcHeight="3"/>
+                        <Rectangle width="10" height="10" fill="#f2c94c" arcWidth="3" arcHeight="3"
+                                   stroke="rgba(245,193,74,0.35)" strokeWidth="1.5"/>
                     </graphic>
                 </Label>
                 <Label fx:id="legendSanctuary" text="sanctuary" managed="false" visible="false">
@@ -196,7 +197,8 @@
                 </Label>
                 <Label fx:id="legendWaypoint" text="waypoint" managed="false" visible="false">
                     <graphic>
-                        <Rectangle width="8" height="8" fill="#f2c94c" rotate="45"/>
+                        <Rectangle width="8" height="8" fill="#f2c94c" rotate="45"
+                                   stroke="rgba(245,193,74,0.35)" strokeWidth="1.5"/>
                     </graphic>
                 </Label>
                 <Label fx:id="legendGhost" text="ghost" managed="false" visible="false">

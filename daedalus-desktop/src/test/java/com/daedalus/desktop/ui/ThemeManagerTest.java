@@ -78,6 +78,7 @@ class ThemeManagerTest {
             assertThat(in).as("main.fxml is on the classpath").isNotNull();
             String fxml = new String(in.readAllBytes());
             assertThat(fxml).contains("stroke=\"rgba(242,234,216,0.28)\"");
+            assertThat(fxml).contains("stroke=\"rgba(245,193,74,0.35)\"");
             assertThat(fxml).contains("stroke=\"rgba(242,234,216,0.06)\"");
             assertThat(fxml).contains("legendStart");
             assertThat(fxml).contains("fill=\"#484339\"");
