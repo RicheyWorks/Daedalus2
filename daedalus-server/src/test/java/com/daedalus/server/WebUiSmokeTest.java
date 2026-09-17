@@ -246,6 +246,7 @@ class WebUiSmokeTest {
                 .contains("#legend [data-key=\"path\"] i")
                 .contains("#legend [data-key=\"path\"] i, #legend [data-key=\"race\"] i")
                 .contains("#legend [data-key=\"lens\"] i")
+                .contains("#legend [data-key=\"lens\"] i, #legend [data-key=\"floor\"] i")
                 .contains("#legend [data-key=\"tour\"] i")
                 .contains("background:#d4b06a")
                 .contains("#legend [data-key=\"hotspot\"] i")

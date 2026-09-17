@@ -113,8 +113,8 @@
                   managed="false" mouseTransparent="true" visible="false">
                 <Label text="floor">
                     <graphic>
-                        <Rectangle width="10" height="10" fill="#484339" stroke="rgba(242,234,216,0.06)"
-                                   strokeWidth="1" arcWidth="3" arcHeight="3"/>
+                        <Rectangle width="10" height="10" fill="#484339" stroke="rgba(242,234,216,0.28)"
+                                   strokeWidth="1.5" arcWidth="3" arcHeight="3"/>
                     </graphic>
                 </Label>
                 <Label text="wall / rock">

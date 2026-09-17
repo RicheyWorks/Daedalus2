@@ -80,7 +80,7 @@ class ThemeManagerTest {
             assertThat(fxml).contains("stroke=\"rgba(242,234,216,0.28)\"");
             assertThat(fxml).contains("stroke=\"rgba(245,193,74,0.35)\"");
             assertThat(fxml).contains("stroke=\"rgba(229,72,77,0.35)\"");
-            assertThat(fxml).contains("stroke=\"rgba(242,234,216,0.06)\"");
+            assertThat(fxml).contains("fill=\"#484339\" stroke=\"rgba(242,234,216,0.28)\"");
             assertThat(fxml).contains("legendStart");
             assertThat(fxml).contains("fill=\"#484339\"");
             assertThat(fxml).contains("fill=\"#19140f\"");
