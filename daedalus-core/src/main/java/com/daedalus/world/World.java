@@ -31,6 +31,7 @@ public final class World {
     /** Assigned once; open/close mutate {@link Door} under {@link #lock}. */
     private final Door door;
     private final List<Parcel> parcels = new ArrayList<>();
+    private final ConcurrentHashMap<ParcelId, ParcelAcl> acls = new ConcurrentHashMap<>();
     private int nextParcelNumber;
 
     public World(WorldId id) {
@@ -188,6 +189,59 @@ public final class World {
         synchronized (lock) {
             return List.copyOf(parcels);
         }
+    }
+
+    /**
+     * Unparceled cubes stay open (World Zero place). A stamped parcel uses
+     * {@link ParcelGate}: owner allowed, listed deny wins, grants for others.
+     */
+    public ParcelAccess may(String actorId, ParcelVerb verb, BlockCoordinate at) {
+        Objects.requireNonNull(at, "BlockCoordinate is required");
+        Objects.requireNonNull(verb, "verb is required");
+        Parcel parcel = parcelAt(at);
+        if (parcel == null) {
+            return ParcelAccess.ALLOWED;
+        }
+        return ParcelGate.check(parcel, acls.get(parcel.id()), actorId, verb);
+    }
+
+    public void grant(ParcelId id, String actorId, ParcelVerb verb) {
+        requireParcel(id);
+        synchronized (lock) {
+            acls.merge(id, ParcelAcl.empty().grant(actorId, verb),
+                    (old, ignored) -> old.grant(actorId, verb));
+        }
+    }
+
+    public void deny(ParcelId id, String actorId, ParcelVerb verb) {
+        requireParcel(id);
+        synchronized (lock) {
+            acls.merge(id, ParcelAcl.empty().deny(actorId, verb),
+                    (old, ignored) -> old.deny(actorId, verb));
+        }
+    }
+
+    private Parcel parcelAt(BlockCoordinate at) {
+        synchronized (lock) {
+            for (Parcel parcel : parcels) {
+                if (parcel.bounds().contains(at)) {
+                    return parcel;
+                }
+            }
+            return null;
+        }
+    }
+
+    private void requireParcel(ParcelId id) {
+        Objects.requireNonNull(id, "ParcelId is required");
+        synchronized (lock) {
+            for (Parcel parcel : parcels) {
+                if (parcel.id().equals(id)) {
+                    return;
+                }
+            }
+        }
+        throw new IllegalArgumentException("Unknown parcel " + id.value());
     }
 
     /**

@@ -13,6 +13,15 @@ public record ParcelBounds(int minX, int minY, int minZ, int maxX, int maxY, int
         }
     }
 
+    public boolean contains(BlockCoordinate at) {
+        if (at == null) {
+            throw new IllegalArgumentException("BlockCoordinate is required");
+        }
+        return at.x() >= minX && at.x() <= maxX
+                && at.y() >= minY && at.y() <= maxY
+                && at.z() >= minZ && at.z() <= maxZ;
+    }
+
     public boolean overlaps(ParcelBounds other) {
         if (other == null) {
             throw new IllegalArgumentException("ParcelBounds is required");

@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World parcel permissions.**
+  `ParcelGate` allows or denies `(ownerId, verb)` — `block.place`,
+  `door.open`, `stamp.apply`. Owner is allowed unless denied; a listed
+  deny wins. Unparceled cubes stay open. Grants do not bump world
+  revision and are not a wallet type.
+
 - **World One W1.5 explore block mesh.**
   `WorldMesh` is a second explore mesher: occupied cubes emit exposed
   faces, hidden faces against a neighbor are culled, and collision is
