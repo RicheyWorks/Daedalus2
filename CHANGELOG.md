@@ -306,6 +306,8 @@ under the `_migration/` portfolios.
   skipped interior joints stay in the lamp, not cool ink in the crossings.
   Well walls wear a 1px torch shine on web and desktop so posts have the same
   stone depth as corridors, not flat ink beside lit floors.
+  Empty-well miniature posts wear the same 1px torch shine as the live board so
+  the idle lattice has stone depth, not flat warm walls beside lit floors.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

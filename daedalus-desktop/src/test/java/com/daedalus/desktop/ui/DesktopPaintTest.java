@@ -938,6 +938,10 @@ class DesktopPaintTest {
                 .as("idle corridors wear the same 1px shine as the live board")
                 .isNotEmpty();
         assertThat(DesktopPaint.emptyMarkHairlines(null)).isEmpty();
+        assertThat(DesktopPaint.emptyMarkWallHairlines(mark))
+                .as("idle posts wear the same 1px shine as live walls")
+                .isNotEmpty();
+        assertThat(DesktopPaint.emptyMarkWallHairlines(null)).isEmpty();
         assertThat(DesktopPaint.EMPTY_MARK_BUDGET_W).isEqualTo(200.0);
         assertThat(DesktopPaint.EMPTY_MARK_BUDGET_H).isEqualTo(140.0);
         assertThat(DesktopPaint.EMPTY_MARK_LIFT).isEqualTo(48.0);

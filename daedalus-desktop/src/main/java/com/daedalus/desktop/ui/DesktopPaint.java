@@ -1973,6 +1973,21 @@ public final class DesktopPaint {
         return List.copyOf(out);
     }
 
+    /** Post shine on the idle mark — same 1px hairline as live walls. */
+    public static List<Hairline> emptyMarkWallHairlines(Layout mark) {
+        if (mark == null) {
+            return List.of();
+        }
+        List<Hairline> out = new ArrayList<>();
+        for (TileRect tile : emptyMarkWalls()) {
+            Hairline stroke = wallHiStroke(mark, tile.tileRow(), tile.tileCol());
+            if (stroke != null) {
+                out.add(stroke);
+            }
+        }
+        return List.copyOf(out);
+    }
+
     /** Passage tiles of the idle mark. */
     public static List<TileRect> emptyMarkFloors() {
         List<TileRect> out = new ArrayList<>();

@@ -769,6 +769,13 @@
                    geom.offX[c + 1] - geom.offX[c], geom.offY[r + 1] - geom.offY[r]);
       }
     }
+    g.fillStyle = mixHex(COLORS.wallHi, COLORS.wallWarm, 0.28);
+    for (let r = 0; r < tiles.length; r++) {
+      for (let c = 0; c < tiles[r].length; c++) {
+        if (tiles[r][c] !== "#") continue;
+        paintWallHi(g, geom, r, c, mixHex(COLORS.wallHi, COLORS.wallWarm, 0.28));
+      }
+    }
     g.globalAlpha = 0.36 + 0.10 * w0;
     g.fillStyle = mixHex(COLORS.floor, COLORS.floorWarm, 0.28);
     for (let r = 0; r < tiles.length; r++) {
