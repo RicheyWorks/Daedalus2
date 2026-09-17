@@ -118,6 +118,7 @@
     -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.35), 48, 0.0, 0, 0);
     -fx-focus-color: rgba(184, 133, 56, 0.85);
     -fx-faint-focus-color: rgba(184, 133, 56, 0.25);
+    -fx-cursor: default;
 }
 
 .exports {

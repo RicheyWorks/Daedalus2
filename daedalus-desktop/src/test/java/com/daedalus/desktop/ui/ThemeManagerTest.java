@@ -58,6 +58,7 @@ class ThemeManagerTest {
                     .contains("innershadow(gaussian, rgba(0, 0, 0, 0.35), 48");
             assertThat(css).contains("-fx-focus-color: rgba(184, 133, 56, 0.85)");
             assertThat(css).contains("-fx-faint-focus-color: rgba(184, 133, 56, 0.25)");
+            assertThat(css).contains("-fx-faint-focus-color: rgba(184, 133, 56, 0.25);\n    -fx-cursor: default;");
             assertThat(css).contains("#16120e");
             assertThat(css).contains("#0c0908");
             assertThat(css).contains("-fx-background-color: #0c0908");

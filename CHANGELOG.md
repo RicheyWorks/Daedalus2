@@ -757,6 +757,7 @@ under the `_migration/` portfolios.
   Well desk folds refuse leftover drag ice so khaki on the rail is not ghosted.
   Printed page boxes sit on torch void so leftover UA paper does not halo the well.
   Printed page boxes wear cream so leftover UA ink does not sit on torch void.
+  The desktop well wears a lamp cursor so leftover Modena I-beam ice does not sit on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
