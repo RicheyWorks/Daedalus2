@@ -416,12 +416,18 @@
         const lamp = scene.fog
             ? fogLamp(scene.fog, r, col) * fogFrontier(scene.fog, r, col) : 1;
         if (scene.fog) {
+          const cx = (tw - 1) / 2, cy = (th - 1) / 2;
+          const dx = (col - cx) / Math.max(1, tw / 2);
+          const dy = (r - cy) / Math.max(1, th / 2);
+          const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
           const lit = mixHex(COLORS.floor, COLORS.floorWarm, lamp * 0.28);
-          g.fillStyle = endFloorInk(mixHex(COLORS.floorDim, lit, lamp), t);
+          const lampFloor = mixHex(COLORS.floorDim, lit, lamp);
+          g.fillStyle = endFloorInk(mixHex(lampFloor, COLORS.floorDim, 0.22 * edge), t);
           g.fillRect(geom.offX[col], geom.offY[r],
                      geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
           if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
-            g.fillStyle = endFloorInk(mixHex(COLORS.floorHi, COLORS.floorWarm, lamp * 0.28), t);
+            const lampHi = mixHex(COLORS.floorHi, COLORS.floorWarm, lamp * 0.28);
+            g.fillStyle = endFloorInk(mixHex(lampHi, COLORS.floorDim, 0.22 * edge), t);
             g.fillRect(geom.offX[col] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
           }
         } else {

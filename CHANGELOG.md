@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well fog floor depth.**
+  Revealed halls under the lamp fall off toward floor-dim at the rim
+  with the same 0.22 edge as clear stone, so leftover even fog slate
+  is not the last word on memory. Start mint and goal coral stay.
+
 - **Well fog wall depth.**
   Revealed posts under the lamp fall off toward unseen at the rim with
   the same 0.28 edge as clear stone, so leftover even fog walls are

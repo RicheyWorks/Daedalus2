@@ -131,9 +131,11 @@ class WebUiPaintPinTest {
             assertThat(js).contains("const END_FLOOR_W = 0.42")
                     .contains("mixHex(base, COLORS.start, END_FLOOR_W)")
                     .contains("mixHex(base, COLORS.goal, END_FLOOR_W)")
-                    .contains("endFloorInk(mixHex(COLORS.floorDim, lit, lamp), t)")
+                    .contains("mixHex(COLORS.floorDim, lit, lamp)")
+                    .contains("endFloorInk(mixHex(lampFloor, COLORS.floorDim, 0.22 * edge), t)")
                     .contains("endFloorInk(mixHex(warm, COLORS.floorDim, 0.22 * edge), t)")
-                    .contains("endFloorInk(mixHex(COLORS.floorHi, COLORS.floorWarm, lamp * 0.28), t)")
+                    .contains("mixHex(COLORS.floorHi, COLORS.floorWarm, lamp * 0.28)")
+                    .contains("endFloorInk(mixHex(lampHi, COLORS.floorDim, 0.22 * edge), t)")
                     .contains("endFloorInk(mixHex(hi, COLORS.floorDim, 0.22 * edge), t)");
         }
     }
