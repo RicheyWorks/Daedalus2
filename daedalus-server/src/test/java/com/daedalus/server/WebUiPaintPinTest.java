@@ -48,7 +48,8 @@ class WebUiPaintPinTest {
                     .contains("#labOut .hint { color: #b09a72; -webkit-user-drag: none")
                     .contains("#tourBox .hint { color: #b09a72; -webkit-user-drag: none")
                     .contains("#campaignBox .hint { color: #b09a72; -webkit-user-drag: none")
-                    .contains("#pluginBox .hint { color: #b09a72; -webkit-user-drag: none");
+                    .contains("#pluginBox .hint { color: #b09a72; -webkit-user-drag: none")
+                    .contains("#lb .hint { color: #b09a72; -webkit-user-drag: none");
         }
     }
 }
