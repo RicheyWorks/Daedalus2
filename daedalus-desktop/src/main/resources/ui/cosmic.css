@@ -8,6 +8,7 @@
     -fx-font-size: 13px;
     -fx-highlight-fill: rgba(184, 133, 56, 0.35);
     -fx-highlight-text-fill: #f2ead8;
+    -fx-font-smoothing-type: gray;
 }
 
 /* ---------- toolbar ---------- */

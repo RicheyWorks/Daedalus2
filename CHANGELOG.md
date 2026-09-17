@@ -681,6 +681,7 @@ under the `_migration/` portfolios.
   Pinned Windows tile image wears torch void with a gold lip so the host sits in the lamp,
   not leftover OS chrome around the well.
   Maze copy sits on grayscale lamp AA so leftover OS ice does not fringe cream on torch stone.
+  Desktop maze copy sits on grayscale lamp AA so leftover Modena ice does not fringe cream on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
