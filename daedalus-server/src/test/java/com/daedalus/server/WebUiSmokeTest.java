@@ -387,6 +387,7 @@ class WebUiSmokeTest {
                 .contains("cursor: default; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; margin-top: 8px")
                 .contains("callout: none; margin-top: 8px; -webkit-user-drag: none")
                 .contains("exportsRimBreath")
+                .contains("gap: 8px; align-items: center; -webkit-user-drag: none")
                 .contains("border-color: rgba(184, 133, 56, 0.85); color: #f2ead8")
                 .contains("ghost: \"#e8e0d4\"")
                 .contains("background:#e8e0d4;border-radius:50%;opacity:.6")
