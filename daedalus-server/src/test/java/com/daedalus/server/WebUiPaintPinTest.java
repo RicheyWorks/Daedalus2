@@ -177,7 +177,8 @@ class WebUiPaintPinTest {
                     .contains("mixHex(\"#e5484d\", COLORS.floorDim, 0.22 * hedge)")
                     .contains("const hedge = Math.min(1, Math.sqrt(hdx * hdx + hdy * hdy))")
                     .contains("paintWashOpenings(g, geom, tiles, (r, c) => hot.has(r + \",\" + c),")
-                    .contains("(tr, tc) => heatInk(tr, tc, th, tw)");
+                    .contains("(tr, tc) => heatInk(tr, tc, th, tw)")
+                    .contains("const glowInk = heatInk(2 * h.row + 1, 2 * h.col + 1, th, tw)");
         }
     }
 

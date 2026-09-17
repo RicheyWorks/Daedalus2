@@ -565,12 +565,13 @@
       (scene.hotspots || []).forEach(h => {
         if (!hot.has(h.row + "," + h.col)) return;
         const [x, y] = cellCenter(geom, h);
-        g.fillStyle = "#e5484d";
+        const glowInk = heatInk(2 * h.row + 1, 2 * h.col + 1, th, tw);
+        g.fillStyle = glowInk;
         g.globalAlpha = 0.16 + 0.12 * hotWave;
         g.beginPath();
         g.arc(x, y, geom.cell * (0.28 + 0.04 * hotWave), 0, 2 * Math.PI);
         g.fill();
-        g.strokeStyle = "#e5484d";
+        g.strokeStyle = glowInk;
         g.globalAlpha = 0.45 + 0.20 * hotWave;
         g.lineWidth = Math.max(1, geom.cell * 0.06);
         g.beginPath();
