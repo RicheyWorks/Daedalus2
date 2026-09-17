@@ -350,7 +350,11 @@ public final class ExplorePaint {
      * Bottom strip: named place, compass, how much stone is earned.
      * GLFW only paints this; tests lock the words so the bar cannot lie.
      */
-    public record Status(String place, String facing, int stood, int marks, int mood) {
+    public record Status(String place, String facing, int stood, int marks, int mood,
+                         boolean startSeen, boolean goalSeen) {
+        public Status(String place, String facing, int stood, int marks, int mood) {
+            this(place, facing, stood, marks, mood, false, false);
+        }
     }
 
     public enum HandPart {
@@ -569,10 +573,31 @@ public final class ExplorePaint {
         int stood = fog == null ? 0 : fog.memorySize();
         ExploreMarker near = nearestVisible(fog, body, markers);
         int marks = countVisible(fog, markers);
+        boolean startSeen = endSeen(fog, mesh, TileType.START);
+        boolean goalSeen = endSeen(fog, mesh, TileType.GOAL);
         if (near == null) {
-            return new Status(endPlaceName(body, mesh), facing, stood, marks, 0);
+            return new Status(endPlaceName(body, mesh), facing, stood, marks, 0,
+                    startSeen, goalSeen);
         }
-        return new Status(placeName(near.kind()), facing, stood, marks, mood(near.kind()));
+        return new Status(placeName(near.kind()), facing, stood, marks, mood(near.kind()),
+                startSeen, goalSeen);
+    }
+
+    /** Visible start / goal — same well key, not leftover empty HUD on the ends. */
+    public static boolean endSeen(ExploreFog fog, ExploreMesh mesh, TileType end) {
+        if (fog == null || mesh == null || mesh.tiles() == null
+                || (end != TileType.START && end != TileType.GOAL)) {
+            return false;
+        }
+        TileType[][] tiles = mesh.tiles();
+        for (int tr = 0; tr < tiles.length; tr++) {
+            for (int tc = 0; tc < tiles[tr].length; tc++) {
+                if (tiles[tr][tc] == end && fog.tileVisible(tr, tc)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /** Stood-on start / goal — same well names, not leftover HALL on the ends. */

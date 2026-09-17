@@ -573,7 +573,9 @@ public final class ExploreHost {
 
     private static void paintKeys(double aspect, ExplorePaint.Status line, double seconds) {
         int marks = Math.max(0, Math.min(8, line.marks()));
-        if (marks == 0) {
+        boolean startSeen = line != null && line.startSeen();
+        boolean goalSeen = line != null && line.goalSeen();
+        if (marks == 0 && !startSeen && !goalSeen) {
             return;
         }
         float[] rgb = new float[3];
@@ -588,6 +590,23 @@ public final class ExploreHost {
             diamond(x, cy, 0.028f);
             x -= 0.07f;
         }
+        if (goalSeen) {
+            x = keyEnd(x, cy, softPad, ExplorePaint.MapKind.GOAL);
+        }
+        if (startSeen) {
+            keyEnd(x, cy, softPad, ExplorePaint.MapKind.START);
+        }
+    }
+
+    private static float keyEnd(float x, float cy, float softPad, ExplorePaint.MapKind kind) {
+        float[] rgb = new float[3];
+        ExplorePaint.mapEndSoftTint(kind, rgb);
+        glColor3f(rgb[0], rgb[1], rgb[2]);
+        diamond(x, cy, 0.028f * softPad);
+        ExplorePaint.mapEndTint(kind, rgb);
+        glColor3f(rgb[0], rgb[1], rgb[2]);
+        diamond(x, cy, 0.028f);
+        return x - 0.07f;
     }
 
     private static void diamond(float cx, float cy, float r) {

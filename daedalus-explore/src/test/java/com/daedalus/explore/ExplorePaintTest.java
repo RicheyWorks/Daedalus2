@@ -515,6 +515,16 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.status(fog, body, marks, mesh).place())
                 .as("a visible story mark still leads")
                 .isEqualTo("ENTRANCE");
+        assertThat(ExplorePaint.status(fog, body, List.of(), mesh).startSeen())
+                .as("earned start sits on the HUD key")
+                .isTrue();
+        assertThat(ExplorePaint.status(fog, body, List.of(), mesh).goalSeen())
+                .as("earned goal sits on the HUD key")
+                .isTrue();
+        assertThat(ExplorePaint.status(fog, body, List.of()).startSeen()).isFalse();
+        assertThat(ExplorePaint.endSeen(fog, mesh, TileType.START)).isTrue();
+        assertThat(ExplorePaint.endSeen(null, mesh, TileType.START)).isFalse();
+        assertThat(ExplorePaint.endSeen(fog, mesh, TileType.WALL)).isFalse();
         assertThat(ExplorePaint.endPlaceName(body, null)).isEqualTo("HALL");
         float[] hallInk = new float[3];
         float[] startInk = new float[3];
