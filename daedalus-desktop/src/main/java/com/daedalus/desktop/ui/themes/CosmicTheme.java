@@ -29,7 +29,10 @@ public class CosmicTheme implements Theme {
     /** Search-memory wash — torch-brown, not leftover cool slate on the well. */
     public static final String VISITED_INK = "#3a3024";
 
-    @Override public Color background()       { return Color.web("#07090c"); }
+    /** Window void — same well edge as web {@code --void}, not leftover cool page ink. */
+    public static final String BACKGROUND_INK = "#0c0908";
+
+    @Override public Color background()       { return Color.web(BACKGROUND_INK); }
     @Override public Color wall()             { return Color.web(WALL_INK); }
     @Override public Color passage()          { return Color.web(PASSAGE_INK); }
     @Override public Color start()            { return Color.web("#3ee08f"); }

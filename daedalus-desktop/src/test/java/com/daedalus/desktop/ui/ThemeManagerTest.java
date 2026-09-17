@@ -58,6 +58,7 @@ class ThemeManagerTest {
                     .contains("innershadow(gaussian, rgba(0, 0, 0, 0.35), 48");
             assertThat(css).contains("#16120e");
             assertThat(css).contains("#0c0908");
+            assertThat(css).contains("-fx-background-color: #0c0908");
             assertThat(css).contains("rgba(16, 11, 8, 0.55)");
             assertThat(css).contains("rgba(16, 11, 8, 0.92)");
             assertThat(css).contains(".legend .label");
@@ -77,6 +78,7 @@ class ThemeManagerTest {
         }
         assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.PASSAGE_INK).isEqualTo("#484339");
         assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.WALL_INK).isEqualTo("#19140f");
+        assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.BACKGROUND_INK).isEqualTo("#0c0908");
         assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.VISITED_INK).isEqualTo("#3a3024");
         assertThat(Integer.parseInt(com.daedalus.desktop.ui.themes.CosmicTheme.VISITED_INK.substring(1, 3), 16))
                 .isGreaterThan(Integer.parseInt(

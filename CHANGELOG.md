@@ -322,6 +322,8 @@ under the `_migration/` portfolios.
   lamp, not leftover cool slate on the well.
   Web page wash behind the well warms to the stage void so the board is not a
   warm island on a leftover cool pit.
+  Desktop window void matches the well edge so the board is not a warm island
+  on leftover cool page ink.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
