@@ -61,7 +61,7 @@ No blockchain. No microservices. No seventh reactor module until a boundary is f
 | Browser WebGL voxel client | **NOT NOW** | Well panel is 2D/REST first. WebGL is a fourth client. |
 | Inventories, shops | **NOT NOW** | Plugin-shaped later. No economy types in core. |
 | Large procedural terrain | **NOT NOW** | World Zero scale stays tiny until stamp + observers are honest. |
-| Plots bought or rented | **DEFER — after parcel + permissions** | A plot **is** a `Parcel`. Buy/rent is a later market provider on `ownerId` / lease strings — not a second spatial type, not a chain. |
+| Plots bought or rented | **SHIPPED — lease strings on parcels** | A plot **is** a `Parcel`. `leaseId` is an account key string beside `ownerId`. Buy/rent is a later market provider — not a second spatial type, not a chain, no wallet types in core. |
 | Wearables | **NOT NOW — item provider** | Equipped looks bind to an avatar later. No clothing types in `daedalus-core` this streak. |
 | NFT art display | **NOT NOW — display provider** | A framed surface on a parcel wall binds an item id (string). The world *shows*; a later provider proves ownership. No wallet type, no ledger, no mint in core. |
 | City-scale look | **NOT NOW — later renderer** | Street-scale materials and skyline after W1.5. Distant voxels stay the **real stamp** (or culled). Never a six-cube placeholder LOD. |
@@ -297,8 +297,8 @@ Phase 0 already ordered the post-7 work. This audit keeps it:
 | W1.5 | Explore voxel view | Second mesh; corridor path still smokes | **shipped** — `WorldMesh` (host toggle later) |
 
 Permissions and desktop inspect shipped after W1.5. Trap, portal, NPC,
-`WorldBuilder`, and the well agent fold are shipped. Next: WebGL / terrain
-(NOT NOW), then plot lease strings after permissions.
+`WorldBuilder`, the well agent fold, and plot lease strings are shipped.
+Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 
 ---
 

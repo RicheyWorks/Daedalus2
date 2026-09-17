@@ -5,8 +5,9 @@ package com.daedalus.world;
 import java.util.Objects;
 
 /**
- * One stamped slab inside a world. {@code ownerId} is a string account key —
- * never a wallet type. NFT binding is a later provider, not this record.
+ * One stamped slab inside a world. {@code ownerId} and {@code leaseId} are
+ * string account keys — never wallet types. Buy/rent is a later market
+ * provider on these strings. NFT binding is a later provider, not this record.
  */
 public record Parcel(
         ParcelId id,
@@ -14,7 +15,8 @@ public record Parcel(
         String ownerId,
         ParcelBounds bounds,
         long version,
-        String placeName) {
+        String placeName,
+        String leaseId) {
 
     public static final String SYSTEM_OWNER = "system";
 
@@ -30,9 +32,15 @@ public record Parcel(
             throw new IllegalArgumentException("Parcel version must be at least 1");
         }
         placeName = placeName == null ? "" : placeName.trim();
+        leaseId = leaseId == null ? "" : leaseId.trim();
     }
 
     public Parcel(ParcelId id, WorldId worldId, String ownerId, ParcelBounds bounds, long version) {
-        this(id, worldId, ownerId, bounds, version, "");
+        this(id, worldId, ownerId, bounds, version, "", "");
+    }
+
+    public Parcel(ParcelId id, WorldId worldId, String ownerId, ParcelBounds bounds,
+            long version, String placeName) {
+        this(id, worldId, ownerId, bounds, version, placeName, "");
     }
 }

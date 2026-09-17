@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World plot lease string.**
+  A parcel carries an optional `leaseId` account key — not a wallet
+  type, not a chain receipt. The same lease is already-leased and
+  does not bump revision. DAEW v8 keeps the string across restart.
+
 - **Well world agent fold.**
   The world panel maps `WorldZeroDrive` ids onto existing REST and
   shows the last builder step from `/trace`. Invented `agent.*`

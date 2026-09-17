@@ -87,6 +87,7 @@
     row(box, "npc", npc && npc.state ? npc.state : "—");
     const first = parcels && parcels.parcels && parcels.parcels[0];
     row(box, "place", first && first.placeName ? first.placeName : "—");
+    row(box, "lease", first && first.leaseId ? first.leaseId : "—");
     const occupied = chunk && chunk.present && chunk.occupied > 0;
     const slice = occupied
         ? "0,0,0 occupied " + chunk.occupied

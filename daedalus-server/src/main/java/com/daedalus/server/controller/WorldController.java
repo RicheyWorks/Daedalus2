@@ -92,7 +92,8 @@ public class WorldController {
         List<WorldParcelRow> rows = new ArrayList<>();
         for (Parcel parcel : world.parcels()) {
             rows.add(new WorldParcelRow(
-                    parcel.id().value(), parcel.ownerId(), parcel.placeName(), parcel.version()));
+                    parcel.id().value(), parcel.ownerId(), parcel.placeName(),
+                    parcel.leaseId(), parcel.version()));
         }
         return ResponseEntity.ok(new WorldParcelsResponse(world.id().value(), rows));
     }

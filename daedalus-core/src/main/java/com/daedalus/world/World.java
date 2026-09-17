@@ -378,9 +378,39 @@ public final class World {
                     return ParcelNameResult.ALREADY_NAMED;
                 }
                 parcels.set(i, new Parcel(parcel.id(), parcel.worldId(), parcel.ownerId(),
-                        parcel.bounds(), parcel.version() + 1, trimmed));
+                        parcel.bounds(), parcel.version() + 1, trimmed, parcel.leaseId()));
                 revision.incrementAndGet();
                 return ParcelNameResult.NAMED;
+            }
+        }
+        throw new IllegalArgumentException("Unknown parcel " + id.value());
+    }
+
+    /**
+     * Lease string on a parcel. Not a wallet, not a chain, not a second
+     * spatial type. The same lease is {@link ParcelLeaseResult#ALREADY_LEASED}
+     * and does not bump revision.
+     */
+    public ParcelLeaseResult leaseParcel(ParcelId id, String leaseId) {
+        Objects.requireNonNull(id, "ParcelId is required");
+        Objects.requireNonNull(leaseId, "leaseId is required");
+        String trimmed = leaseId.trim();
+        if (trimmed.isEmpty()) {
+            throw new IllegalArgumentException("leaseId is required");
+        }
+        synchronized (lock) {
+            for (int i = 0; i < parcels.size(); i++) {
+                Parcel parcel = parcels.get(i);
+                if (!parcel.id().equals(id)) {
+                    continue;
+                }
+                if (trimmed.equals(parcel.leaseId())) {
+                    return ParcelLeaseResult.ALREADY_LEASED;
+                }
+                parcels.set(i, new Parcel(parcel.id(), parcel.worldId(), parcel.ownerId(),
+                        parcel.bounds(), parcel.version() + 1, parcel.placeName(), trimmed));
+                revision.incrementAndGet();
+                return ParcelLeaseResult.LEASED;
             }
         }
         throw new IllegalArgumentException("Unknown parcel " + id.value());
