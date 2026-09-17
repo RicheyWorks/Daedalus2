@@ -2389,20 +2389,33 @@ public class MainController {
         }
         List<Point> shown = DesktopPaint.pathPrefix(lane.expansions(), front);
         double raceWave = DesktopPaint.raceBreathWave(System.nanoTime());
+        boolean rimB = DesktopPaint.RACE_B.equals(lane.color());
         g.setFill(Color.web(lane.color()));
         g.setGlobalAlpha(DesktopPaint.raceWashPaintAlpha(raceWave));
         for (DesktopPaint.TileRect tile : DesktopPaint.expansionCells(shown)) {
+            if (rimB) {
+                g.setFill(Color.web(DesktopPaint.walkTrailInk(DesktopPaint.RACE_B,
+                        DesktopPaint.floorEdge(layout, tile.tileRow(), tile.tileCol()))));
+            }
             g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                     layout.w(tile.tileCol()), layout.h(tile.tileRow()));
         }
         g.setGlobalAlpha(DesktopPaint.raceOpeningPaintAlpha(raceWave));
         for (DesktopPaint.TileRect tile : DesktopPaint.expansionOpenings(shown, tiles)) {
+            if (rimB) {
+                g.setFill(Color.web(DesktopPaint.walkTrailInk(DesktopPaint.RACE_B,
+                        DesktopPaint.floorEdge(layout, tile.tileRow(), tile.tileCol()))));
+            }
             g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                     layout.w(tile.tileCol()), layout.h(tile.tileRow()));
         }
         g.setGlobalAlpha(DesktopPaint.raceFrontPaintAlpha(raceWave));
         for (DesktopPaint.TileRect tile : DesktopPaint.expansionCells(
                 DesktopPaint.raceFront(shown))) {
+            if (rimB) {
+                g.setFill(Color.web(DesktopPaint.walkTrailInk(DesktopPaint.RACE_B,
+                        DesktopPaint.floorEdge(layout, tile.tileRow(), tile.tileCol()))));
+            }
             g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                     layout.w(tile.tileCol()), layout.h(tile.tileRow()));
         }
