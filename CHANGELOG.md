@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore automap pocket depth.**
+  The earned-map well falls off from pocket mid to well-void rim so
+  leftover flat inset is not the last word under the stone. Start mint
+  and goal coral stay.
+
 - **Well ASCII dump pocket.**
   The text-maze well falls off from void-center to the rim so leftover
   flat panel is not the last word under the dump. Rock khaki and

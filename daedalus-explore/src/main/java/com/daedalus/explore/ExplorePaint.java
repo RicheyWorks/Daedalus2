@@ -358,6 +358,21 @@ public final class ExplorePaint {
     public static final float MAP_POCKET_R = 0.06f;
     public static final float MAP_POCKET_G = 0.04f;
     public static final float MAP_POCKET_B = 0.03f;
+    /** Pocket rim — same well-void edge as legend fog / ASCII dump. */
+    public static final float MAP_POCKET_RIM_R = 0x0c / 255f;
+    public static final float MAP_POCKET_RIM_G = 0x09 / 255f;
+    public static final float MAP_POCKET_RIM_B = 0x08 / 255f;
+
+    /** Mid pocket at 0, well-void rim at 1 so leftover flat inset is not the last word. */
+    public static void mapPocketTint(float edge, float[] rgb) {
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        float t = Math.max(0f, Math.min(1f, edge));
+        rgb[0] = MAP_POCKET_R + (MAP_POCKET_RIM_R - MAP_POCKET_R) * t;
+        rgb[1] = MAP_POCKET_G + (MAP_POCKET_RIM_G - MAP_POCKET_G) * t;
+        rgb[2] = MAP_POCKET_B + (MAP_POCKET_RIM_B - MAP_POCKET_B) * t;
+    }
     /** Gold lip — same ink as the automap frame. */
     public static final float STATUS_GOLD_R = 0.72f;
     public static final float STATUS_GOLD_G = 0.52f;

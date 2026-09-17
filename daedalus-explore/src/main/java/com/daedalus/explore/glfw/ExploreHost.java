@@ -98,6 +98,7 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_S;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_T;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLE_FAN;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL11.glBegin;
@@ -740,8 +741,7 @@ public final class ExploreHost {
         glColor3f(ExplorePaint.STATUS_GOLD_UNDER_R, ExplorePaint.STATUS_GOLD_UNDER_G,
                 ExplorePaint.STATUS_GOLD_UNDER_B);
         fill(left - frameIn, bot - frameIn, right + frameIn, top + frameIn);
-        glColor3f(ExplorePaint.MAP_POCKET_R, ExplorePaint.MAP_POCKET_G, ExplorePaint.MAP_POCKET_B);
-        fill(left, bot, right, top);
+        fillPocket(left, bot, right, top);
         double sx = (right - left) / ExplorePaint.MAP;
         double sy = (top - bot) / ExplorePaint.MAP;
         glBegin(GL_QUADS);
@@ -850,6 +850,25 @@ public final class ExploreHost {
                 glColor3f(rgb[0], rgb[1], rgb[2]);
             }
         }
+    }
+
+    private static void fillPocket(double x0, double y0, double x1, double y1) {
+        float[] mid = new float[3];
+        float[] rim = new float[3];
+        ExplorePaint.mapPocketTint(0, mid);
+        ExplorePaint.mapPocketTint(1, rim);
+        float cx = (float) ((x0 + x1) * 0.5);
+        float cy = (float) ((y0 + y1) * 0.5);
+        glBegin(GL_TRIANGLE_FAN);
+        glColor3f(mid[0], mid[1], mid[2]);
+        glVertex2f(cx, cy);
+        glColor3f(rim[0], rim[1], rim[2]);
+        glVertex2f((float) x0, (float) y0);
+        glVertex2f((float) x1, (float) y0);
+        glVertex2f((float) x1, (float) y1);
+        glVertex2f((float) x0, (float) y1);
+        glVertex2f((float) x0, (float) y0);
+        glEnd();
     }
 
     private static void fill(double x0, double y0, double x1, double y1) {

@@ -514,6 +514,18 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.MAP_POCKET_G).isLessThan(ExplorePaint.HUD_VOID_G);
         assertThat(ExplorePaint.MAP_POCKET_B).isLessThan(ExplorePaint.HUD_VOID_B);
         assertThat(ExplorePaint.MAP_POCKET_R).isGreaterThan(ExplorePaint.MAP_POCKET_B);
+        float[] pocketMid = new float[3];
+        float[] pocketRim = new float[3];
+        ExplorePaint.mapPocketTint(0, pocketMid);
+        ExplorePaint.mapPocketTint(1, pocketRim);
+        assertThat(pocketMid[0]).isEqualTo(ExplorePaint.MAP_POCKET_R);
+        assertThat(pocketMid[1]).isEqualTo(ExplorePaint.MAP_POCKET_G);
+        assertThat(pocketMid[2]).isEqualTo(ExplorePaint.MAP_POCKET_B);
+        assertThat(pocketRim[0]).isEqualTo(ExplorePaint.MAP_POCKET_RIM_R);
+        assertThat(pocketRim[1]).isEqualTo(ExplorePaint.MAP_POCKET_RIM_G);
+        assertThat(pocketRim[2]).isEqualTo(ExplorePaint.MAP_POCKET_RIM_B);
+        assertThat(pocketRim[0]).isLessThan(pocketMid[0]);
+        ExplorePaint.mapPocketTint(1, null);
         assertThat(ExplorePaint.MAP_FRAME_OUT).isGreaterThan(ExplorePaint.MAP_FRAME_IN);
         assertThat(ExplorePaint.MAP_FRAME_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
         assertThat(ExplorePaint.mapFrameOut(0.1))
