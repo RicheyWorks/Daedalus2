@@ -146,6 +146,8 @@ class ExplorePaintTest {
                 .filter(p -> p.type() == BlockType.WOOD).findFirst().orElseThrow();
         assertThat(wood.x()).isEqualTo(4.5);
         assertThat(wood.z()).isEqualTo(2.5);
+        assertThat(wood.tileRow()).isEqualTo(3);
+        assertThat(wood.tileCol()).isEqualTo(5);
         float[] woodInk = new float[3];
         float[] stoneInk = new float[3];
         float[] gold = new float[3];
@@ -156,6 +158,13 @@ class ExplorePaintTest {
         assertThat(woodInk[0]).as("WOOD pad wears torch wood, not leftover gold")
                 .isGreaterThan(gold[2]);
         assertThat(woodInk[2]).isLessThan(woodInk[0]);
+        float[] woodPad = new float[3];
+        float[] woodRim = new float[3];
+        ExplorePaint.placePadTint(woodInk, woodPad, 0, 0);
+        ExplorePaint.placePadTint(woodInk, woodRim, 0, 1);
+        assertThat(woodRim[0] + woodRim[1] + woodRim[2])
+                .as("cube pad falls off toward floor-dim at the board rim")
+                .isLessThan(woodPad[0] + woodPad[1] + woodPad[2]);
         ExplorePaint.blockPlaceTint(BlockType.WOOD, null);
     }
 

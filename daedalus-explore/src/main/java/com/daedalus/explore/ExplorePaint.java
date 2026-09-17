@@ -521,7 +521,7 @@ public final class ExplorePaint {
      * Occupied cube boot — pad center is the cube middle so the disc
      * can stain the corridor around a 1×1 slab.
      */
-    public record BlockPlace(double x, double z, BlockType type) {
+    public record BlockPlace(double x, double z, BlockType type, int tileRow, int tileCol) {
     }
 
     /**
@@ -1451,7 +1451,10 @@ public final class ExplorePaint {
             if (!seen.add(tri.at())) {
                 continue;
             }
-            out.add(new BlockPlace(tri.at().x() + 0.5, tri.at().z() + 0.5, tri.type()));
+            int col = ExploreMesh.cellCol(tri.at().x() + 0.5);
+            int row = ExploreMesh.cellRow(tri.at().z() + 0.5);
+            out.add(new BlockPlace(tri.at().x() + 0.5, tri.at().z() + 0.5, tri.type(),
+                    2 * row + 1, 2 * col + 1));
         }
         return List.copyOf(out);
     }

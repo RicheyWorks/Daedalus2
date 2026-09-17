@@ -397,7 +397,8 @@ public final class ExploreHost {
         if (world.showingBlocks() && world.blocks() != null) {
             for (ExplorePaint.BlockPlace cube : ExplorePaint.blockPlaces(world.blocks())) {
                 ExplorePaint.blockPlaceTint(cube.type(), rgb);
-                ExplorePaint.placePadTint(rgb, pad, seconds);
+                ExplorePaint.placePadTint(rgb, pad, seconds,
+                        ExplorePaint.mapEdge(cube.tileRow(), cube.tileCol(), 0, endH - 1, 0, endW - 1));
                 placePad(cube.x(), cube.z(), pad[0], pad[1], pad[2], ExplorePaint.BLOCK_PAD_R);
             }
         }

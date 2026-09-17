@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore cube pad depth.**
+  Occupied-cube discs fall off toward floor-dim at the board rim
+  with the same 0.22 edge as halls, so leftover even wood is not
+  the last word on a slab. Torch wood stays.
+
 - **Explore start/goal pad depth.**
   Gate discs fall off toward floor-dim at the board rim with the
   same 0.22 edge as halls, so leftover even breath is not the last
