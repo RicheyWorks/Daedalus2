@@ -8,6 +8,7 @@ import com.daedalus.engine.generators.DungeonGenerator;
 import com.daedalus.model.Direction;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
+import com.daedalus.world.World;
 
 import java.util.List;
 
@@ -29,6 +30,8 @@ public final class ExploreWorld {
     private final ExploreFog fog = new ExploreFog();
     private List<ExploreMarker> markers;
     private final ExploreSession session = new ExploreSession();
+    private WorldMesh blocks;
+    private boolean showBlocks;
 
     public ExploreWorld(String generatorId, long seed, MazeGrid grid) {
         this.generatorId = generatorId == null ? "dungeon" : generatorId;
@@ -64,6 +67,28 @@ public final class ExploreWorld {
 
     public ExploreMesh mesh() {
         return mesh;
+    }
+
+    /**
+     * Second mesh. Does not replace {@link #mesh()} — corridor KEEP stays loaded.
+     */
+    public WorldMesh blocks() {
+        return blocks;
+    }
+
+    public void attachBlocks(World world) {
+        this.blocks = world == null ? null : WorldMesh.of(world);
+        if (this.blocks == null) {
+            this.showBlocks = false;
+        }
+    }
+
+    public void showBlocks(boolean show) {
+        this.showBlocks = show && blocks != null;
+    }
+
+    public boolean showingBlocks() {
+        return showBlocks;
     }
 
     public ExploreBody body() {

@@ -8,6 +8,9 @@ import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
 import com.daedalus.model.Direction;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
+import com.daedalus.world.BlockCoordinate;
+import com.daedalus.world.BlockType;
+import com.daedalus.world.World;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -100,6 +103,24 @@ class ExploreWorldTest {
         assertThat(json).contains("\"pose\":");
         assertThat(ExploreStory.escape("a\"b")).isEqualTo("a\\\"b");
         assertThat(ExploreStory.export((ExploreWorld) null)).isEqualTo("{}");
+    }
+
+    @Test
+    void attachingBlocksDoesNotUnloadTheCorridor() {
+        MazeGrid grid = new MazeGrid(1, 2);
+        grid.carve(grid.cell(0, 0), Direction.EAST);
+        ExploreWorld world = new ExploreWorld("test", 1L, grid);
+        ExploreMesh corridor = world.mesh();
+        World volume = World.zero();
+        volume.place(new BlockCoordinate(0, 0, 0), BlockType.STONE);
+        world.attachBlocks(volume);
+        world.showBlocks(true);
+        assertThat(world.showingBlocks()).isTrue();
+        assertThat(world.mesh()).isSameAs(corridor);
+        assertThat(world.blocks().triangles()).hasSize(12);
+        world.attachBlocks(null);
+        assertThat(world.showingBlocks()).isFalse();
+        assertThat(world.mesh()).isSameAs(corridor);
     }
 
     @Test

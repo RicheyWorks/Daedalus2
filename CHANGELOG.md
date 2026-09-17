@@ -13,7 +13,9 @@ under the `_migration/` portfolios.
 - **World One W1.5 explore block mesh.**
   `WorldMesh` is a second explore mesher: occupied cubes emit exposed
   faces, hidden faces against a neighbor are culled, and collision is
-  `World.contains`. Corridor `ExploreMesh` stays the KEEP path.
+  `World.contains`. `ExploreWorld.attachBlocks` holds that mesh beside
+  the corridor; `mesh()` still returns `ExploreMesh`. GLFW draw of the
+  cubes is a later host pass.
 
 - **World One W1.4 well world panel.**
   A rail fold inspects `world-zero` (revision, chunk 0,0,0, door) and
