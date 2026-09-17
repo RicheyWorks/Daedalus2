@@ -526,6 +526,8 @@ under the `_migration/` portfolios.
   cool white on torch stone.
   Web desk summaries wear khaki and a gold chevron so those names sit in the
   lamp, not leftover cool slate on torch stone.
+  Desktop generation-frontier tiles wear torch amber so search edges sit in
+  the lamp, not leftover ice beside torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

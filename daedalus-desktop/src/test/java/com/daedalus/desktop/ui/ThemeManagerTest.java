@@ -120,6 +120,10 @@ class ThemeManagerTest {
         assertThat(Integer.parseInt(com.daedalus.desktop.ui.themes.CosmicTheme.VISITED_INK.substring(1, 3), 16))
                 .isGreaterThan(Integer.parseInt(
                         com.daedalus.desktop.ui.themes.CosmicTheme.VISITED_INK.substring(5, 7), 16));
+        assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.FRONTIER_INK).isEqualTo("#d4a04c");
+        assertThat(Integer.parseInt(com.daedalus.desktop.ui.themes.CosmicTheme.FRONTIER_INK.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(
+                        com.daedalus.desktop.ui.themes.CosmicTheme.FRONTIER_INK.substring(5, 7), 16));
     }
 
     @Test
