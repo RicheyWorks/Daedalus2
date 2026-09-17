@@ -272,6 +272,8 @@ under the `_migration/` portfolios.
   live well so the overlay key names the stone you see, not cold ink.
   Explore ceilings warm toward torch-brown with the floor so looking up is the
   same lamp, not a cool lid over a firelit tunnel.
+  Explore torch grip and shaft catch the flame so the HUD hand is lit, not
+  static leather beside a flickering lamp.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

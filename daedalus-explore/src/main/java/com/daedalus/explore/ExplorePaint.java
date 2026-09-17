@@ -215,6 +215,9 @@ public final class ExplorePaint {
     public static final float BLOOM_B = 0.22f;
     public static final float BLOOM_RX = 0.18f;
     public static final float BLOOM_RY = 0.22f;
+    /** Fist and shaft catch the flame so the HUD lamp lights the hand, not just the air. */
+    public static final float GRIP_CATCH = 0.16f;
+    public static final float SHAFT_CATCH = 0.10f;
 
     public static TorchBloom torchBloom(double aspect, float bob, double seconds) {
         float ox = (float) (Math.max(0.55, aspect) * 0.48);
@@ -569,8 +572,14 @@ public final class ExplorePaint {
         }
         int grim = Math.max(0, Math.min(2, mood));
         switch (part) {
-            case GRIP -> set(rgb, 0.72f, 0.48f, 0.30f);
-            case SHAFT -> set(rgb, 0.28f, 0.18f, 0.12f);
+            case GRIP -> {
+                set(rgb, 0.72f, 0.48f, 0.30f);
+                catchFlame(rgb, seconds, GRIP_CATCH);
+            }
+            case SHAFT -> {
+                set(rgb, 0.28f, 0.18f, 0.12f);
+                catchFlame(rgb, seconds, SHAFT_CATCH);
+            }
             case FLAME -> {
                 if (grim >= 2) {
                     set(rgb, 0.95f, 0.28f, 0.12f);
@@ -586,6 +595,14 @@ public final class ExplorePaint {
             }
             default -> set(rgb, 0.5f, 0.5f, 0.5f);
         }
+    }
+
+    private static void catchFlame(float[] rgb, double seconds, float weight) {
+        float flick = flameFlicker(seconds);
+        float mix = Math.max(0f, Math.min(1f, weight * flick));
+        rgb[0] = rgb[0] + (BLOOM_R - rgb[0]) * mix;
+        rgb[1] = rgb[1] + (BLOOM_G - rgb[1]) * mix;
+        rgb[2] = rgb[2] + (BLOOM_B - rgb[2]) * mix;
     }
 
     /** Uneven torch breath — not a metronome sine. */

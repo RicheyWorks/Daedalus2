@@ -469,6 +469,15 @@ class ExplorePaintTest {
         ExplorePaint.handTint(ExplorePaint.HandPart.FLAME, 0, flickA, 0.05);
         ExplorePaint.handTint(ExplorePaint.HandPart.FLAME, 0, flickB, 0.18);
         assertThat(flickA[0]).isNotEqualTo(flickB[0]);
+        float[] gripA = new float[3];
+        float[] gripB = new float[3];
+        ExplorePaint.handTint(ExplorePaint.HandPart.GRIP, 0, gripA, 0.05);
+        ExplorePaint.handTint(ExplorePaint.HandPart.GRIP, 0, gripB, 0.18);
+        assertThat(gripA[0]).isNotEqualTo(gripB[0]);
+        assertThat(ExplorePaint.GRIP_CATCH).isGreaterThan(ExplorePaint.SHAFT_CATCH);
+        float[] shaft = new float[3];
+        ExplorePaint.handTint(ExplorePaint.HandPart.SHAFT, 0, shaft, 0.05);
+        assertThat(gripA[0]).isGreaterThan(shaft[0]);
         ExplorePaint.handTint(null, 0, calm);
         ExplorePaint.handTint(ExplorePaint.HandPart.GRIP, 0, null);
     }
