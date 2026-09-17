@@ -70,13 +70,15 @@ class WorldBuilderTest {
         WorldBuilder builder = new WorldBuilder(world);
         MazeGrid maze = new MazeGrid(3, 3);
         maze.carve(maze.cell(0, 0), Direction.EAST);
+        String mazeRef = "00000000-0000-4000-8000-000000000007";
         StampResult stamped = WorldOps.asStampResult(builder.run(new WorldBuilder.Step(
-                new BlockCoordinate(0, 0, 0), "stamp.apply", null, maze)));
+                new BlockCoordinate(0, 0, 0), "stamp.apply", null, maze, mazeRef)));
         assertThat(stamped.ok()).isTrue();
         assertThat(stamped.outcome()).isEqualTo("APPLIED");
         assertThat(stamped.bounds().maxX()).isEqualTo(6);
         assertThat(stamped.bounds().maxZ()).isEqualTo(6);
         assertThat(world.parcels()).hasSize(1);
+        assertThat(world.parcels().get(0).mazeRef()).isEqualTo(mazeRef);
     }
 
     @Test

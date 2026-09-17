@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **WorldOps stamp.apply mazeRef.**
+  A builder recipe can bind the lab maze id on the stamped parcel
+  so living slabs rebind. Same string REST already writes. Not a wallet.
+
 - **WorldOps stamp.apply maze.**
   A builder recipe can project a lab MazeGrid, not only the 1×1 stub.
   REST stamp still binds mazeRef. No wallet type.

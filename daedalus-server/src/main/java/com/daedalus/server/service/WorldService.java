@@ -250,9 +250,9 @@ public class WorldService {
         World live = require(id);
         synchronized (lock) {
             StampResult result = WorldOps.asStampResult(
-                    WorldOps.drive(live, "stamp.apply", at, null, maze));
-            if (result.ok() && maze != null && mazeId != null && result.parcelId() != null) {
-                live.bindMaze(result.parcelId(), mazeId.toString());
+                    WorldOps.drive(live, "stamp.apply", at, null, maze,
+                            mazeId == null ? null : mazeId.toString()));
+            if (result.ok() && mazeId != null && result.parcelId() != null) {
                 rebindSlabs();
             }
             persist();

@@ -40,6 +40,11 @@ public final class WorldOps {
 
     public static Object drive(World world, String capability, BlockCoordinate at, BlockType type,
                                MazeGrid maze) {
+        return drive(world, capability, at, type, maze, null);
+    }
+
+    public static Object drive(World world, String capability, BlockCoordinate at, BlockType type,
+                               MazeGrid maze, String mazeRef) {
         if (world == null || capability == null) {
             throw new IllegalArgumentException("World and capability are required");
         }
@@ -62,7 +67,7 @@ public final class WorldOps {
             case "npc.talk" -> world.talkNpc();
             case "npc.hush" -> world.hushNpc();
             case "parcel.lease" -> leaseParcel(world);
-            case "stamp.apply" -> stampApply(world, at, maze);
+            case "stamp.apply" -> stampApply(world, at, maze, mazeRef);
             default -> throw new IllegalArgumentException("Unknown capability " + capability);
         };
     }
@@ -169,10 +174,16 @@ public final class WorldOps {
         return (ParcelLeaseResult) value;
     }
 
-    private static StampResult stampApply(World world, BlockCoordinate at, MazeGrid maze) {
+    private static StampResult stampApply(World world, BlockCoordinate at, MazeGrid maze,
+                                         String mazeRef) {
         BlockCoordinate origin = at == null ? new BlockCoordinate(0, 0, 0) : at;
         MazeGrid slab = maze == null ? new MazeGrid(1, 1) : maze;
-        return StampOps.apply(world, new StampRequest(world.id(), origin, slab, origin.y(), 1));
+        StampResult result = StampOps.apply(world, new StampRequest(world.id(), origin,
+                slab, origin.y(), 1));
+        if (result.ok() && mazeRef != null && !mazeRef.isBlank() && result.parcelId() != null) {
+            world.bindMaze(result.parcelId(), mazeRef);
+        }
+        return result;
     }
 
     public static StampResult asStampResult(Object value) {
