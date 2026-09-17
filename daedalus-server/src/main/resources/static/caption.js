@@ -2,8 +2,8 @@
 // Theory-overlay captions. app.js owns leftover-state wiring; this file does not read `state`.
 "use strict";
 (function (global) {
-  const DISTANCE_RAMP = ["#1c5cab", "#2a78d6", "#3987e5", "#5598e7",
-                         "#6da7ec", "#86b6ef", "#9ec5f4", "#cde2fb"];
+  const DISTANCE_RAMP = ["#4a2210", "#6e3014", "#943c18", "#b85a20",
+                         "#d47828", "#e09840", "#e8b868", "#f2d8a0"];
   const LENS_COLORS = ["#e5484d", "#f2c94c", "#4cc38a"];
 
   function fingerprintHtml(f, escapeHtml) {
@@ -51,7 +51,7 @@
         .map(c => `<span style="display:inline-block;width:16px;height:10px;background:${c}"></span>`)
         .join("");
     return `<div style="margin-top:8px">`
-        + `<b style="color:#9ec5f4">Distance from the ${f.from.toLowerCase()}</b> — the `
+        + `<b style="color:#d4a04c">Distance from the ${f.from.toLowerCase()}</b> — the `
         + `breadth-first field, shaded. `
         + `<div style="margin-top:6px">0 ${swatches} ${f.maxDistance} steps</div>`
         + `<div class="hint" style="margin-top:4px">This is maze distance, not distance across `

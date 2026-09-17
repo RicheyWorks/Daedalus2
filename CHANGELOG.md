@@ -330,6 +330,8 @@ under the `_migration/` portfolios.
   well is not leftover cool ink on torch stone.
   Desktop toolbar and status bar sit in the stage void so the bars around the
   well are not leftover cool chrome on torch stone.
+  Distance heat on web and desktop is a torch-amber ramp so the field sits in
+  the lamp, not leftover ice-blue wash on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

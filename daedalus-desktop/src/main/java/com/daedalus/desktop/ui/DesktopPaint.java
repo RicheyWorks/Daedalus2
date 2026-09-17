@@ -398,11 +398,11 @@ public final class DesktopPaint {
     }
     /**
      * Sequential distance ramp — bit-identical to {@code caption.js}
-     * {@code DISTANCE_RAMP}. One hue, monotone in lightness.
+     * {@code DISTANCE_RAMP}. Torch amber, monotone in lightness.
      */
     public static final String[] DISTANCE_RAMP = {
-            "#1c5cab", "#2a78d6", "#3987e5", "#5598e7",
-            "#6da7ec", "#86b6ef", "#9ec5f4", "#cde2fb"
+            "#4a2210", "#6e3014", "#943c18", "#b85a20",
+            "#d47828", "#e09840", "#e8b868", "#f2d8a0"
     };
     /** Opening wash for the field — same alpha as {@code draw.js}. */
     public static final double FIELD_OPENING_ALPHA = 0.42;

@@ -617,16 +617,20 @@ class DesktopPaintTest {
     @Test
     void theDistanceFieldUsesTheWebRampAndSkipsRock() {
         assertThat(DesktopPaint.DISTANCE_RAMP).containsExactly(
-                "#1c5cab", "#2a78d6", "#3987e5", "#5598e7",
-                "#6da7ec", "#86b6ef", "#9ec5f4", "#cde2fb");
+                "#4a2210", "#6e3014", "#943c18", "#b85a20",
+                "#d47828", "#e09840", "#e8b868", "#f2d8a0");
+        assertThat(Integer.parseInt(DesktopPaint.DISTANCE_RAMP[0].substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.DISTANCE_RAMP[0].substring(5, 7), 16));
+        assertThat(Integer.parseInt(DesktopPaint.DISTANCE_RAMP[7].substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.DISTANCE_RAMP[7].substring(5, 7), 16));
         DesktopPaint.FieldTone near = DesktopPaint.fieldCell(0, 10);
         DesktopPaint.FieldTone far = DesktopPaint.fieldCell(10, 10);
-        assertThat(near.color()).isEqualTo("#1c5cab");
+        assertThat(near.color()).isEqualTo("#4a2210");
         assertThat(near.alpha()).isEqualTo(0.12);
-        assertThat(far.color()).isEqualTo("#cde2fb");
+        assertThat(far.color()).isEqualTo("#f2d8a0");
         assertThat(far.alpha()).isEqualTo(0.80);
         assertThat(DesktopPaint.fieldCell(-1, 10)).isNull();
-        assertThat(DesktopPaint.fieldOpeningColor()).isEqualTo("#6da7ec");
+        assertThat(DesktopPaint.fieldOpeningColor()).isEqualTo("#d47828");
         assertThat(DesktopPaint.FIELD_OPENING_ALPHA).isEqualTo(0.42);
         assertThat(DesktopPaint.FIELD_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
         assertThat(DesktopPaint.fieldPaintAlpha(0.80, 0.0)).isEqualTo(0.80 * 0.88);
