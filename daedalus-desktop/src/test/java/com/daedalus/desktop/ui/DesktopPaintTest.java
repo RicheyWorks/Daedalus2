@@ -543,7 +543,9 @@ class DesktopPaintTest {
         DesktopPaint.Layout roomy = DesktopPaint.Layout.fit(3, 3, 30, 30);
         DesktopPaint.Hairline stripe = DesktopPaint.floorHiStroke(roomy, 1, 1);
         assertThat(roomy.cellSize()).isEqualTo(20.0);
-        assertThat(DesktopPaint.FLOOR_HI).isEqualTo("#536272");
+        assertThat(DesktopPaint.FLOOR_HI).isEqualTo("#765834");
+        assertThat(Integer.parseInt(DesktopPaint.FLOOR_HI.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.FLOOR_HI.substring(5, 7), 16));
         assertThat(DesktopPaint.floorHiInk(0)).isEqualTo(DesktopPaint.FLOOR_HI);
         assertThat(DesktopPaint.floorHiInk(1))
                 .isNotEqualTo(DesktopPaint.FLOOR_HI);

@@ -267,7 +267,7 @@ public final class DesktopPaint {
     /** Overlay legend wall — same 0.28 warm mix as clear-board posts. */
     public static final String LEGEND_WALL = mixHex(FOG_WALL, FOG_WALL_WARM, 0.28);
     /** Same 1px corridor highlight as {@code draw.js} {@code floorHi}. */
-    public static final String FLOOR_HI = "#536272";
+    public static final String FLOOR_HI = "#765834";
     public static final String FOG_FLOOR_HI = FLOOR_HI;
 
     /** Corridor shine softens toward the board edge with the floor wash. */
