@@ -93,6 +93,7 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- Explore start and goal stone keep mint and coral under the torch so looking down still names the ends of the maze, not leftover lamp brown on the gate.
 - Explore HUD key wears mint and coral diamonds for visible start and goal so the strip names the ends of the maze, not leftover empty chrome on the gate.
 - Explore automap HERE washes toward well mint and coral when you stand on start or goal so the pocket names the ends of the maze, not leftover gold on the gate.
 - Explore status START / GOAL glyphs wash toward well mint and coral so the strip names the ends of the maze, not leftover gold letters.

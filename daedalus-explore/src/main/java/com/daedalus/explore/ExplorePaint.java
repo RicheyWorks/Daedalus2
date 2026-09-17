@@ -1440,10 +1440,13 @@ public final class ExplorePaint {
         float warmR = wall ? TORCH_WALL_WARM_R : TORCH_FLOOR_WARM_R;
         float warmG = wall ? TORCH_WALL_WARM_G : TORCH_FLOOR_WARM_G;
         float warmB = wall ? TORCH_WALL_WARM_B : TORCH_FLOOR_WARM_B;
-        float mix = Math.max(0f, Math.min(1f, lamp * weight));
-        rgb[0] = rgb[0] + (warmR - rgb[0]) * mix;
-        rgb[1] = rgb[1] + (warmG - rgb[1]) * mix;
-        rgb[2] = rgb[2] + (warmB - rgb[2]) * mix;
+        boolean endStone = !wall && (tri.tile() == TileType.START || tri.tile() == TileType.GOAL);
+        if (!endStone) {
+            float mix = Math.max(0f, Math.min(1f, lamp * weight));
+            rgb[0] = rgb[0] + (warmR - rgb[0]) * mix;
+            rgb[1] = rgb[1] + (warmG - rgb[1]) * mix;
+            rgb[2] = rgb[2] + (warmB - rgb[2]) * mix;
+        }
         rgb[0] = Math.min(1f, rgb[0] * lamp);
         rgb[1] = Math.min(1f, rgb[1] * lamp);
         rgb[2] = Math.min(1f, rgb[2] * lamp);

@@ -56,6 +56,13 @@ class ExplorePaintTest {
         assertThat(gate[1]).as("start floor lifts toward well mint").isGreaterThan(passage[1]);
         assertThat(exit[0]).as("goal floor lifts toward well coral").isGreaterThan(passage[0]);
         assertThat(gate[1]).isGreaterThan(gate[0]);
+        float[] litGate = new float[3];
+        float[] litHall = new float[3];
+        ExplorePaint.tint(endFloor(TileType.START), true, litGate, 0.67, 2.0, 0);
+        ExplorePaint.tint(face(ExploreMesh.Face.FLOOR, 0, 3, 3), true, litHall, 0.67, 2.0, 0);
+        assertThat(litGate[1]).as("start floor stays mint under the lamp, not leftover torch brown")
+                .isGreaterThan(litHall[1]);
+        assertThat(litGate[1]).isGreaterThan(litGate[0]);
     }
 
     @Test
