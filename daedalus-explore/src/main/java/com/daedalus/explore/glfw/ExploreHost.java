@@ -772,10 +772,10 @@ public final class ExploreHost {
             double padX = sx * endHalo;
             double padY = sy * endHalo;
             float[] ink = new float[3];
-            ExplorePaint.mapEndSoftTint(dot.kind(), ink);
+            ExplorePaint.mapEndSoftTint(dot.kind(), ink, dot.edge());
             glColor3f(ink[0], ink[1], ink[2]);
             fill(x0 - padX, y0 - padY, x0 + sx + padX, y0 + sy + padY);
-            ExplorePaint.mapEndTint(dot.kind(), ink);
+            ExplorePaint.mapEndTint(dot.kind(), ink, dot.edge());
             glColor3f(ink[0], ink[1], ink[2]);
             fill(x0, y0, x0 + sx, y0 + sy);
         }

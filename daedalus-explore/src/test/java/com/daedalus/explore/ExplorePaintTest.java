@@ -445,6 +445,18 @@ class ExplorePaintTest {
         float[] gate = new float[3];
         ExplorePaint.mapEndTint(ExplorePaint.MapKind.START, gate);
         assertThat(gate[1]).isGreaterThan(gate[0]);
+        assertThat(ExplorePaint.MAP_END_EDGE_DIM).isEqualTo(0.22f);
+        float[] gateRim = new float[3];
+        ExplorePaint.mapEndTint(ExplorePaint.MapKind.START, gateRim, 1);
+        assertThat(gateRim[1]).as("start gate rim falls off like live halls")
+                .isLessThan(gate[1]);
+        assertThat(dots.stream()
+                .filter(d -> d.kind() == ExplorePaint.MapKind.START
+                        || d.kind() == ExplorePaint.MapKind.GOAL)
+                .mapToDouble(ExplorePaint.MapDot::edge)
+                .allMatch(e -> e >= 0 && e <= 1))
+                .as("earned gates carry pocket-rim falloff")
+                .isTrue();
         World volume = World.zero();
         volume.place(new BlockCoordinate(2, 0, 0), BlockType.WOOD);
         List<ExplorePaint.MapDot> withBlocks = ExplorePaint.automap(fog, mesh,

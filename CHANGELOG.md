@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore automap gate depth.**
+  Revealed start mint and goal coral fall off toward floor-dim at
+  the pocket rim with the same 0.22 edge as halls, so leftover even
+  lamp is not the last word on a gate. HUD keys stay.
+
 - **Explore automap mark depth.**
   Story-mark pads fall off toward floor-dim at the pocket rim with
   the same 0.22 edge as halls, so leftover even ink is not the last

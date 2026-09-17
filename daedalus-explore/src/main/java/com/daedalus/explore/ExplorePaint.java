@@ -1383,7 +1383,8 @@ public final class ExplorePaint {
                 }
                 out.add(new MapDot(project(tc, minC, maxC),
                         MAP - 1 - project(tr, minR, maxR),
-                        tile == TileType.START ? MapKind.START : MapKind.GOAL));
+                        tile == TileType.START ? MapKind.START : MapKind.GOAL, "",
+                        mapEdge(tr, tc, minR, maxR, minC, maxC)));
             }
         }
         if (markers != null) {
@@ -1466,12 +1467,18 @@ public final class ExplorePaint {
     /** End-pad breath — same cadence as story marks. */
     public static final float MAP_END_BREATH_MS = MAP_MARK_BREATH_MS;
     public static final float MAP_END_HALO = MAP_MARK_HALO;
+    /** Same 0.22 rim as halls — leftover even mint/coral is not the last word on a gate. */
+    public static final float MAP_END_EDGE_DIM = 0.22f;
 
     public static float mapEndHalo(double seconds) {
         return mapMarkHalo(seconds);
     }
 
     public static void mapEndTint(MapKind kind, float[] rgb) {
+        mapEndTint(kind, rgb, 0);
+    }
+
+    public static void mapEndTint(MapKind kind, float[] rgb, double edge) {
         if (rgb == null || rgb.length < 3) {
             return;
         }
@@ -1480,16 +1487,32 @@ public final class ExplorePaint {
         } else {
             set(rgb, MAP_START_R, MAP_START_G, MAP_START_B);
         }
+        mixEndEdge(edge, rgb);
     }
 
     public static void mapEndSoftTint(MapKind kind, float[] rgb) {
-        mapEndTint(kind, rgb);
+        mapEndSoftTint(kind, rgb, 0);
+    }
+
+    public static void mapEndSoftTint(MapKind kind, float[] rgb, double edge) {
+        mapEndTint(kind, rgb, 0);
         if (rgb == null || rgb.length < 3) {
             return;
         }
         rgb[0] *= MAP_MARK_SOFT_WEIGHT;
         rgb[1] *= MAP_MARK_SOFT_WEIGHT;
         rgb[2] *= MAP_MARK_SOFT_WEIGHT;
+        mixEndEdge(edge, rgb);
+    }
+
+    public static void mixEndEdge(double edge, float[] rgb) {
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        float t = (float) (MAP_END_EDGE_DIM * Math.min(1, Math.max(0, edge)));
+        rgb[0] += (MAP_FLOOR_DIM_R - rgb[0]) * t;
+        rgb[1] += (MAP_FLOOR_DIM_G - rgb[1]) * t;
+        rgb[2] += (MAP_FLOOR_DIM_B - rgb[2]) * t;
     }
 
     /** Automap diamond — same inks as the HUD key, not leftover red on every mark. */
