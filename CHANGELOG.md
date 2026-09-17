@@ -446,6 +446,8 @@ under the `_migration/` portfolios.
   three bands are keyed, not leftover unrimmed on torch stone.
   Well-caption race winners wear victory gold so the arena result sits in the
   lamp, not leftover ice on torch stone.
+  Well-key player swatches wear the four walker inks so every seat is keyed,
+  not leftover unnamed on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
