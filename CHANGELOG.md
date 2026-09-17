@@ -687,6 +687,7 @@ under the `_migration/` portfolios.
   Installed web chrome wears torch void so the host sits in the lamp, not leftover OS ice around the well.
   Campaign rungs under the well wear torch amber so leftover UA ice does not name the ladder.
   Windows browser buttons wear torch void so leftover OS ice does not sit beside the well.
+  Maze copy keeps lamp size so leftover iOS ice does not inflate cream on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
