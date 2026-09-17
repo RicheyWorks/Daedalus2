@@ -902,9 +902,13 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.SCENE_FILL).isEqualTo(
                 com.daedalus.desktop.ui.themes.CosmicTheme.BACKGROUND_INK);
         assertThat(DesktopPaint.STAGE_ICON_ARGB).isEqualTo(0xFF0C0908);
-        assertThat(DesktopPaint.stageIconPixels()).containsOnly(DesktopPaint.STAGE_ICON_ARGB);
-        assertThat(DesktopPaint.stageIconPixels()).hasSize(
-                DesktopPaint.STAGE_ICON_SIZE * DesktopPaint.STAGE_ICON_SIZE);
+        assertThat(DesktopPaint.STAGE_ICON_LIP_ARGB).isEqualTo(0xFFB88538);
+        int[] icon = DesktopPaint.stageIconPixels();
+        assertThat(icon).hasSize(DesktopPaint.STAGE_ICON_SIZE * DesktopPaint.STAGE_ICON_SIZE);
+        assertThat(icon[0]).isEqualTo(DesktopPaint.STAGE_ICON_LIP_ARGB);
+        int mid = DesktopPaint.STAGE_ICON_SIZE / 2;
+        assertThat(icon[mid * DesktopPaint.STAGE_ICON_SIZE + mid])
+                .isEqualTo(DesktopPaint.STAGE_ICON_ARGB);
     }
 
     @Test

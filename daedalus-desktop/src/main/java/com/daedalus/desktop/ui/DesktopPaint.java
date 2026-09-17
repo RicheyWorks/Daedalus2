@@ -1946,10 +1946,19 @@ public final class DesktopPaint {
     /** Stage icon void — leftover Java chrome is not the lamp on the taskbar. */
     public static final int STAGE_ICON_SIZE = 32;
     public static final int STAGE_ICON_ARGB = 0xFF0C0908;
+    /** Same gold lip as the well rim — leftover unrimmed void is not the lamp. */
+    public static final int STAGE_ICON_LIP_ARGB = 0xFFB88538;
 
     public static int[] stageIconPixels() {
         int[] px = new int[STAGE_ICON_SIZE * STAGE_ICON_SIZE];
         Arrays.fill(px, STAGE_ICON_ARGB);
+        int last = STAGE_ICON_SIZE - 1;
+        for (int i = 0; i < STAGE_ICON_SIZE; i++) {
+            px[i] = STAGE_ICON_LIP_ARGB;
+            px[last * STAGE_ICON_SIZE + i] = STAGE_ICON_LIP_ARGB;
+            px[i * STAGE_ICON_SIZE] = STAGE_ICON_LIP_ARGB;
+            px[i * STAGE_ICON_SIZE + last] = STAGE_ICON_LIP_ARGB;
+        }
         return px;
     }
 
