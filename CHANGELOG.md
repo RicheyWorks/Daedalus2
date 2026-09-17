@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well share-icon wall depth.**
+  Apple-touch, Open Graph, and the installed-well PNG wear the same
+  0.28 rim posts as the tab icon, so leftover flat wallWarm is not the
+  last word on a home-screen maze. Start mint and goal coral stay.
+
 - **Well tab icon wall depth.**
   Idle-maze posts on the 32px favicon fall off toward unseen at the
   rim with the same 0.28 edge as live stone, so leftover flat wallWarm
