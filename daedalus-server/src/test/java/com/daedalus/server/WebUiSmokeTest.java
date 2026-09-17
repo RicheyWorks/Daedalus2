@@ -225,7 +225,7 @@ class WebUiSmokeTest {
                 .contains("background:#c07850")
                 .contains("0.18 + 0.05")
                 .contains("PLAYER_BREATH_MS")
-                .contains("PLAYER_COLORS = [\"#f5c14a\", \"#ff8fa3\", \"#e8a060\", \"#b8a058\"]")
+                .contains("PLAYER_COLORS = [\"#f5c14a\", \"#e88868\", \"#e8a060\", \"#b8a058\"]")
                 .contains("function walker")
                 .contains("walkHead(scene.hardest.path, 1)")
                 .contains("walkHead(scene.tourPath, 1)")

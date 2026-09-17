@@ -428,6 +428,8 @@ under the `_migration/` portfolios.
   marks so the leftover lanes are keyed, not leftover unrimmed on torch stone.
   Well-key floor swatches wear the same cream rim as other place marks so
   corridors are keyed, not leftover unrimmed on torch stone.
+  The second session walker wears warm torch rose so multiplayer presence sits
+  in the lamp, not leftover cool pink on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

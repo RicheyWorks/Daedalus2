@@ -9,7 +9,7 @@
     start: "#3ee08f", goal: "#ff5a5f", path: "#8fb8ff",
     ghost: "#e6edf3",
   };
-  const PLAYER_COLORS = ["#f5c14a", "#ff8fa3", "#e8a060", "#b8a058"];
+  const PLAYER_COLORS = ["#f5c14a", "#e88868", "#e8a060", "#b8a058"];
   /** Overlay legend sits on the well — reserve so the last row is not under the key. */
   const LEGEND_RESERVE = 40;
   /** Show ASCII / PNG sit on the well — reserve so the first row is not under them. */
