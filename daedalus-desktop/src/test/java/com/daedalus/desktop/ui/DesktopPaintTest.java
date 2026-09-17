@@ -501,6 +501,8 @@ class DesktopPaintTest {
                 DesktopPaint.FOG_FLOOR_WARM, 0.28);
         assertThat(underfoot).isNotEqualTo(DesktopPaint.FOG_FLOOR);
         assertThat(DesktopPaint.FOG_WALL).isEqualTo("#120e0c");
+        assertThat(DesktopPaint.THEMELESS_WALL).isEqualTo(DesktopPaint.FOG_WALL);
+        assertThat(DesktopPaint.THEMELESS_FLOOR).isEqualTo(DesktopPaint.FOG_FLOOR);
         assertThat(Integer.parseInt(DesktopPaint.FOG_WALL.substring(1, 3), 16))
                 .isGreaterThan(Integer.parseInt(DesktopPaint.FOG_WALL.substring(5, 7), 16));
         assertThat(DesktopPaint.FOG_WALL_WARM).isEqualTo("#2a2218");

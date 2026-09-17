@@ -2582,7 +2582,9 @@ public class MainController {
     /** Resolve a tile glyph to a theme color. Defensive — unknown enum cases fall back to passage. */
     private static Color colorFor(TileType tile, Theme theme) {
         if (theme == null) {
-            return tile == TileType.WALL ? Color.web("#222222") : Color.web("#cccccc");
+            return tile == TileType.WALL
+                    ? Color.web(DesktopPaint.THEMELESS_WALL)
+                    : Color.web(DesktopPaint.THEMELESS_FLOOR);
         }
         return switch (tile) {
             case WALL     -> theme.wall();

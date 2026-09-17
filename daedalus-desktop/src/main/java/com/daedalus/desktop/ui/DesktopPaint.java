@@ -260,6 +260,10 @@ public final class DesktopPaint {
     }
     /** Torch-dark wall ink — same token as {@code draw.js} wall. */
     public static final String FOG_WALL = "#120e0c";
+    /** Theme-less fallback — same torch wall as the live well, not cool gray. */
+    public static final String THEMELESS_WALL = FOG_WALL;
+    /** Theme-less fallback — same torch floor as the live well, not cool gray. */
+    public static final String THEMELESS_FLOOR = FOG_FLOOR;
     /** Torch-warm wall — same mix as {@code draw.js} wallWarm. */
     public static final String FOG_WALL_WARM = "#2a2218";
     /** Idle lattice walls — torch-warm stone, not the void color. */
