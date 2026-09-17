@@ -610,6 +610,8 @@ under the `_migration/` portfolios.
   in the lamp stylesheet.
   Selected maze copy wears a gold wash so highlighted news sits in the lamp,
   not leftover cool ice on torch stone.
+  Desktop selected chrome wears a gold wash so highlighted news sits in the lamp,
+  not leftover Modena ice on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
