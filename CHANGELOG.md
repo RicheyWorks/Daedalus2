@@ -718,6 +718,7 @@ under the `_migration/` portfolios.
   The well paints under the notch so leftover OS ice does not letterbox torch stone.
   Header brand sits below the notch so leftover OS ice does not cover cream on the wordmark.
   Start-gate brand sits below the notch so leftover OS ice does not cover cream on the wordmark.
+  The well desk sits above the home indicator so leftover OS ice does not cover torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
