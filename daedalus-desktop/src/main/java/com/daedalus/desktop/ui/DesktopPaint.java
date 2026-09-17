@@ -424,7 +424,7 @@ public final class DesktopPaint {
      * Heuristic lens bands — bit-identical to {@code caption.js} {@code LENS_COLORS}.
      * Must, tie, never.
      */
-    public static final String[] LENS_COLORS = {"#e5484d", "#f2c94c", "#4cc38a"};
+    public static final String[] LENS_COLORS = {"#e5484d", "#f2c94c", "#8aaa50"};
     public static final double LENS_MUST_ALPHA = 0.42;
     public static final double LENS_NEVER_ALPHA = 0.16;
     public static final double LENS_OPENING_ALPHA = 0.2;

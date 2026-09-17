@@ -352,6 +352,8 @@ under the `_migration/` portfolios.
   in the lamp, not leftover mint on torch stone.
   Sanctuary discs on web and desktop wear the same warm moss so safe rooms sit
   in the lamp, not leftover mint on torch stone.
+  Heuristic lens never-band on web and desktop wears the same warm moss so the
+  wash sits in the lamp, not leftover mint on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

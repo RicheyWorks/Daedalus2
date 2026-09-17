@@ -176,6 +176,7 @@ class WebUiSmokeTest {
                 .contains("0.88 + 0.24")
                 .contains("0.85 + 0.30")
                 .contains("LENS_BREATH_MS")
+                .contains("LENS_COLORS = [\"#e5484d\", \"#f2c94c\", \"#8aaa50\"]")
                 .contains("0.88 + 0.24 * lensWave")
                 .contains("0.85 + 0.30 * lensWave")
                 .contains("EXPANSION_BREATH_MS")

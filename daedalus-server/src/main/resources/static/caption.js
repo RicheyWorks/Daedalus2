@@ -4,7 +4,7 @@
 (function (global) {
   const DISTANCE_RAMP = ["#4a2210", "#6e3014", "#943c18", "#b85a20",
                          "#d47828", "#e09840", "#e8b868", "#f2d8a0"];
-  const LENS_COLORS = ["#e5484d", "#f2c94c", "#4cc38a"];
+  const LENS_COLORS = ["#e5484d", "#f2c94c", "#8aaa50"];
 
   function fingerprintHtml(f, escapeHtml) {
     const pct = Math.round(f.confidence * 100);
