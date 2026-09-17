@@ -353,7 +353,7 @@ class WebUiSmokeTest {
                 .contains("color: #b09a72")
                 .contains(".info { font-size: 11px; color: #b09a72; cursor: default;")
                 .contains(".info b { color: #f2ead8; font-weight: 600; }")
-                .contains("#stats { font: 12px/1.7 ui-monospace, monospace; color: #f2ead8; cursor: default;")
+                .contains("#stats { font: 12px/1.7 ui-monospace, monospace; color: #f2ead8; cursor: default; user-select: none; -webkit-user-select: none;")
                 .contains("#stats span { color: #b09a72; }")
                 .contains("#status { font-size: 12px; color: #b09a72; cursor: default; user-select: none; -webkit-user-select: none; margin-top: 8px;")
                 .contains("exportsRimBreath")
