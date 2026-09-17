@@ -224,8 +224,8 @@ public final class DesktopPaint {
     public static double victoryRingRadius(double wave) {
         return 0.70 + 0.04 * wave;
     }
-    /** ADR-006 unseen void — same tokens as {@code draw.js}. */
-    public static final String FOG_UNSEEN = "#05070a";
+    /** Unseen void — same warm well edge as {@code draw.js} and {@link #WELL_VOID_EDGE}. */
+    public static final String FOG_UNSEEN = "#0c0908";
     /** Soft well pocket behind a letterboxed maze — same band as web {@code #stage}. */
     public static final String WELL_VOID_CENTER = "#16120e";
     public static final String WELL_VOID_EDGE = "#0c0908";

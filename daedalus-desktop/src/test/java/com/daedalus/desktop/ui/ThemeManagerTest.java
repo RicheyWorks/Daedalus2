@@ -72,6 +72,8 @@ class ThemeManagerTest {
             assertThat(fxml).contains("legendStart");
             assertThat(fxml).contains("fill=\"#464a4d\"");
             assertThat(fxml).contains("fill=\"#141415\"");
+            assertThat(fxml).contains("fill=\"#0c0908\"");
+            assertThat(fxml).contains("stroke=\"#2a2218\"");
         }
         assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.PASSAGE_INK).isEqualTo("#464a4d");
         assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.WALL_INK).isEqualTo("#141415");

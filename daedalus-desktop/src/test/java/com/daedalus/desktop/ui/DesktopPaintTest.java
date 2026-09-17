@@ -497,7 +497,8 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.fogWall(fog, 1, 0))
                 .as("a touching wall near the lamp is warmer than cold ink")
                 .isNotEqualTo(DesktopPaint.FOG_WALL);
-        assertThat(DesktopPaint.FOG_UNSEEN).isEqualTo("#05070a");
+        assertThat(DesktopPaint.FOG_UNSEEN).isEqualTo("#0c0908");
+        assertThat(DesktopPaint.FOG_UNSEEN).isEqualTo(DesktopPaint.WELL_VOID_EDGE);
         assertThat(DesktopPaint.WELL_VOID_CENTER).isEqualTo("#16120e");
         assertThat(DesktopPaint.WELL_VOID_EDGE).isEqualTo("#0c0908");
         assertThat(DesktopPaint.WELL_VOID_CENTER_LIT).isEqualTo("#1a1510");

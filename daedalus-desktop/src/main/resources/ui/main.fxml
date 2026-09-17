@@ -151,8 +151,8 @@
                 </Label>
                 <Label fx:id="legendFog" text="unseen (fog)" managed="false" visible="false">
                     <graphic>
-                        <Rectangle width="10" height="10" fill="#05070a"
-                                   stroke="#1e2832" arcWidth="3" arcHeight="3"/>
+                        <Rectangle width="10" height="10" fill="#0c0908"
+                                   stroke="#2a2218" arcWidth="3" arcHeight="3"/>
                     </graphic>
                 </Label>
                 <Label fx:id="legendChoke" text="chokepoint" managed="false" visible="false">
