@@ -281,6 +281,8 @@ public final class ExplorePaint {
     public static final float MAP_MARK_R = 0.78f;
     public static final float MAP_MARK_G = 0.22f;
     public static final float MAP_MARK_B = 0.16f;
+    /** Same 0.22 rim as halls — leftover even story ink is not the last word on a mark. */
+    public static final float MAP_MARK_EDGE_DIM = 0.22f;
     /** Halo under a story mark — same dim as the old leftover-red pad. */
     public static final float MAP_MARK_SOFT_WEIGHT = 0.58f;
     /** Earned-map stone — same corridor tints, not a separate admin brown. */
@@ -1395,7 +1397,8 @@ public final class ExplorePaint {
                     continue;
                 }
                 out.add(new MapDot(project(tc, minC, maxC),
-                        MAP - 1 - project(tr, minR, maxR), MapKind.MARK, mark.kind()));
+                        MAP - 1 - project(tr, minR, maxR), MapKind.MARK, mark.kind(),
+                        mapEdge(tr, tc, minR, maxR, minC, maxC)));
             }
         }
         if (body != null) {
@@ -1491,17 +1494,37 @@ public final class ExplorePaint {
 
     /** Automap diamond — same inks as the HUD key, not leftover red on every mark. */
     public static void mapMarkTint(String kind, float[] rgb) {
+        mapMarkTint(kind, rgb, 0);
+    }
+
+    public static void mapMarkTint(String kind, float[] rgb, double edge) {
         marker(kind, rgb);
+        mixMarkEdge(edge, rgb);
     }
 
     public static void mapMarkSoftTint(String kind, float[] rgb) {
-        mapMarkTint(kind, rgb);
+        mapMarkSoftTint(kind, rgb, 0);
+    }
+
+    public static void mapMarkSoftTint(String kind, float[] rgb, double edge) {
+        mapMarkTint(kind, rgb, 0);
         if (rgb == null || rgb.length < 3) {
             return;
         }
         rgb[0] *= MAP_MARK_SOFT_WEIGHT;
         rgb[1] *= MAP_MARK_SOFT_WEIGHT;
         rgb[2] *= MAP_MARK_SOFT_WEIGHT;
+        mixMarkEdge(edge, rgb);
+    }
+
+    public static void mixMarkEdge(double edge, float[] rgb) {
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        float t = (float) (MAP_MARK_EDGE_DIM * Math.min(1, Math.max(0, edge)));
+        rgb[0] += (MAP_FLOOR_DIM_R - rgb[0]) * t;
+        rgb[1] += (MAP_FLOOR_DIM_G - rgb[1]) * t;
+        rgb[2] += (MAP_FLOOR_DIM_B - rgb[2]) * t;
     }
 
     public static void marker(String kind, float[] rgb) {

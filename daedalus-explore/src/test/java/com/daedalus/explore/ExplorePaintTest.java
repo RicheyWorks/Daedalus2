@@ -423,6 +423,19 @@ class ExplorePaintTest {
                 .as("earned walls carry pocket-rim falloff")
                 .isGreaterThan(0);
         assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.MARK)).isTrue();
+        assertThat(dots.stream()
+                .filter(d -> d.kind() == ExplorePaint.MapKind.MARK)
+                .mapToDouble(ExplorePaint.MapDot::edge)
+                .findFirst().orElse(-1))
+                .as("story marks carry pocket-rim falloff")
+                .isBetween(0.0, 1.0);
+        assertThat(ExplorePaint.MAP_MARK_EDGE_DIM).isEqualTo(0.22f);
+        float[] markMid = new float[3];
+        float[] markRim = new float[3];
+        ExplorePaint.mapMarkTint("ENTRANCE", markMid);
+        ExplorePaint.mapMarkTint("ENTRANCE", markRim, 1);
+        assertThat(markRim[0]).as("story-mark rim falls off like live halls")
+                .isLessThan(markMid[0]);
         assertThat(dots.stream().anyMatch(d -> d.kind() == ExplorePaint.MapKind.START))
                 .as("earned map names the revealed start mint")
                 .isTrue();

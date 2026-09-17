@@ -789,10 +789,10 @@ public final class ExploreHost {
             double padX = sx * markHalo;
             double padY = sy * markHalo;
             float[] ink = new float[3];
-            ExplorePaint.mapMarkSoftTint(dot.story(), ink);
+            ExplorePaint.mapMarkSoftTint(dot.story(), ink, dot.edge());
             glColor3f(ink[0], ink[1], ink[2]);
             fill(x0 - padX, y0 - padY, x0 + sx + padX, y0 + sy + padY);
-            ExplorePaint.mapMarkTint(dot.story(), ink);
+            ExplorePaint.mapMarkTint(dot.story(), ink, dot.edge());
             glColor3f(ink[0], ink[1], ink[2]);
             fill(x0, y0, x0 + sx, y0 + sy);
         }
