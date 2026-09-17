@@ -59,7 +59,7 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.capabilities", org.hamcrest.Matchers.hasItems(
                         "world.inspect", "block.place", "door.open", "door.close",
                         "trap.arm", "trap.disarm", "portal.open", "portal.seal",
-                        "npc.talk", "npc.hush")));
+                        "npc.talk", "npc.hush", "parcel.lease")));
 
         mvc.perform(get("/api/v1/world/world-zero/observe")
                         .param("x", "1").param("y", "2").param("z", "3"))

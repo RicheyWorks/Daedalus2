@@ -27,7 +27,8 @@ public final class WorldZeroDrive {
             "portal.seal",
             "npc.inspect",
             "npc.talk",
-            "npc.hush");
+            "npc.hush",
+            "parcel.lease");
 
     private WorldZeroDrive() {
     }

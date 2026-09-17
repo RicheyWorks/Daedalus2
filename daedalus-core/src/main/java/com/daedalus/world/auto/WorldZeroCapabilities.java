@@ -41,6 +41,7 @@ public final class WorldZeroCapabilities {
         registry.register("npc.inspect");
         registry.register("npc.talk");
         registry.register("npc.hush");
+        registry.register("parcel.lease");
         if (extras != null) {
             for (String extra : extras) {
                 registry.register(extra);

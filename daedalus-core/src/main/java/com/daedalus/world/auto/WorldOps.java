@@ -10,6 +10,8 @@ import com.daedalus.world.Door;
 import com.daedalus.world.DoorResult;
 import com.daedalus.world.Npc;
 import com.daedalus.world.NpcResult;
+import com.daedalus.world.Parcel;
+import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
 import com.daedalus.world.Trap;
@@ -50,6 +52,7 @@ public final class WorldOps {
             case "npc.inspect" -> inspectNpc(world);
             case "npc.talk" -> world.talkNpc();
             case "npc.hush" -> world.hushNpc();
+            case "parcel.lease" -> leaseParcel(world);
             default -> throw new IllegalArgumentException("Unknown capability " + capability);
         };
     }
@@ -143,5 +146,16 @@ public final class WorldOps {
 
     public static NpcResult asNpcResult(Object value) {
         return (NpcResult) value;
+    }
+
+    private static ParcelLeaseResult leaseParcel(World world) {
+        if (world.parcels().isEmpty()) {
+            return ParcelLeaseResult.NO_PARCEL;
+        }
+        return world.leaseParcel(world.parcels().get(0).id(), Parcel.SYSTEM_TENANT);
+    }
+
+    public static ParcelLeaseResult asLeaseResult(Object value) {
+        return (ParcelLeaseResult) value;
     }
 }

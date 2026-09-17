@@ -19,6 +19,7 @@ public record Parcel(
         String leaseId) {
 
     public static final String SYSTEM_OWNER = "system";
+    public static final String SYSTEM_TENANT = "tenant-zero";
 
     public Parcel {
         Objects.requireNonNull(id, "ParcelId is required");

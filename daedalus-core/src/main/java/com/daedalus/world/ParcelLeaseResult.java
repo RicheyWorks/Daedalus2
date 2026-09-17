@@ -8,5 +8,6 @@ package com.daedalus.world;
  */
 public enum ParcelLeaseResult {
     LEASED,
-    ALREADY_LEASED
+    ALREADY_LEASED,
+    NO_PARCEL
 }

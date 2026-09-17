@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World parcel.lease drive.**
+  `WorldOps` / `WorldZeroDrive` lease the first parcel as
+  `tenant-zero`. No parcel is a named result. No wallet types.
+
 - **World plot lease string.**
   A parcel carries an optional `leaseId` account key — not a wallet
   type, not a chain receipt. The same lease is already-leased and

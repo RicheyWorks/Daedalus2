@@ -6,6 +6,7 @@ import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.DoorResult;
 import com.daedalus.world.NpcResult;
+import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.PortalResult;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.World;
@@ -54,8 +55,10 @@ class WorldAccountingTest {
                 .isEqualTo(NpcResult.SPOKE);
         assertThat(WorldOps.asNpcResult(session.drive("npc.hush", null)))
                 .isEqualTo(NpcResult.HUSHED);
+        assertThat(WorldOps.asLeaseResult(session.drive("parcel.lease", null)))
+                .isEqualTo(ParcelLeaseResult.NO_PARCEL);
         assertThat(session.observe().doorState()).isEqualTo("CLOSED");
-        assertThat(session.trace()).hasSize(17);
+        assertThat(session.trace()).hasSize(18);
     }
 
     @Test
