@@ -334,6 +334,8 @@ under the `_migration/` portfolios.
   the lamp, not leftover ice-blue wash on torch stone.
   Dead-end marks on web and desktop wear warm khaki so cul-de-sacs sit in the
   lamp, not leftover ice-blue discs on torch stone.
+  Well legend place-mark rims wear cream so start / goal / walk keys sit in the
+  lamp, not leftover cool white on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
