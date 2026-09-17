@@ -55,6 +55,7 @@ class WebUiSmokeTest {
                 .contains("-webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; -webkit-user-drag: none; cursor: default")
                 .contains("text-transform: uppercase; color: #b09a72; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none")
                 .contains("color: #b09a72; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none")
+                .contains("color: #b09a72; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none; cursor: default")
                 .contains("-webkit-tap-highlight-color: transparent; -webkit-touch-callout: none")
                 .contains("-webkit-user-select: none; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; -webkit-user-drag: none")
                 .contains("name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\"")
