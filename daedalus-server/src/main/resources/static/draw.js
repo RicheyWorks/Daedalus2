@@ -388,6 +388,14 @@
     return mixHex("#8aaa50", COLORS.floorDim, 0.22 * edge);
   }
 
+  function fieldInk(color, r, c, th, tw) {
+    const tr = 2 * r + 1, tc = 2 * c + 1;
+    const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
+    const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
+    const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+    return mixHex(color, COLORS.floorDim, 0.22 * edge);
+  }
+
   function paint(canvas, scene) {
     const tiles = scene.tiles;
     const th = tiles.length, tw = tiles[0].length;
@@ -546,7 +554,7 @@
         for (let c = 0; c < scene.field.cols; c++) {
           const s = tone(r, c);
           if (!s) continue;
-          g.fillStyle = s.color;
+          g.fillStyle = fieldInk(s.color, r, c, th, tw);
           g.globalAlpha = s.alpha;
           paintWashCell(g, geom, r, c);
         }

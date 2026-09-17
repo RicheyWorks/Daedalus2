@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well field cell depth.**
+  Distance-wash cells fall off toward floor-dim at the board rim
+  with the same 0.22 edge as halls, so leftover even ramp is not
+  the last word on a topography tile. Start mint and goal coral stay.
+
 - **Desktop sanctuary depth.**
   Safe-place discs fall off toward floor-dim at the board rim with
   the same 0.22 edge as halls, so leftover even moss is not the
