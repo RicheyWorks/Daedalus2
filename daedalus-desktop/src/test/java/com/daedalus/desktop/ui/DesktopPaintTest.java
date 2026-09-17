@@ -708,6 +708,9 @@ class DesktopPaintTest {
         assertThat(far.alpha()).isEqualTo(0.80);
         assertThat(DesktopPaint.fieldCell(-1, 10)).isNull();
         assertThat(DesktopPaint.fieldOpeningColor()).isEqualTo("#d47828");
+        assertThat(DesktopPaint.fieldInk(DesktopPaint.fieldOpeningColor(), 1))
+                .as("field openings share the cell rim")
+                .isNotEqualTo(DesktopPaint.fieldOpeningColor());
         assertThat(DesktopPaint.FIELD_OPENING_ALPHA).isEqualTo(0.42);
         assertThat(DesktopPaint.FIELD_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
         assertThat(DesktopPaint.fieldPaintAlpha(0.80, 0.0)).isEqualTo(0.80 * 0.88);

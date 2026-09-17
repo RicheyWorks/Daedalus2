@@ -1969,9 +1969,10 @@ public class MainController {
                             layout.w(2 * c + 1), layout.h(2 * r + 1));
                 }
             }
-            g.setFill(Color.web(DesktopPaint.fieldOpeningColor()));
             g.setGlobalAlpha(DesktopPaint.fieldOpeningPaintAlpha(fieldWave));
             for (DesktopPaint.TileRect tile : DesktopPaint.fieldOpenings(dist, tiles)) {
+                g.setFill(Color.web(DesktopPaint.fieldInk(DesktopPaint.fieldOpeningColor(),
+                        DesktopPaint.floorEdge(layout, tile.tileRow(), tile.tileCol()))));
                 g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                         layout.w(tile.tileCol()), layout.h(tile.tileRow()));
             }
