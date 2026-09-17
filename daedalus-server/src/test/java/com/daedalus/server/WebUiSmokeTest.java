@@ -53,6 +53,7 @@ class WebUiSmokeTest {
                 .contains("gate-brand").contains("gate-veil").contains("Other hosts")
                 .contains("text-indent: .22em; color: #f2ead8; user-select: none; -webkit-user-select: none")
                 .contains("text-transform: uppercase; color: #b09a72; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none")
+                .contains("color: #b09a72; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none")
                 .contains("-webkit-tap-highlight-color: transparent; -webkit-touch-callout: none")
                 .contains("-webkit-user-select: none; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; -webkit-user-drag: none")
                 .contains("name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\"")
