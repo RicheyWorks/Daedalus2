@@ -306,6 +306,18 @@ class ExplorePaintTest {
                 .as("HERE wears a soft pad wider than the cell")
                 .isGreaterThan(0.5f);
         assertThat(ExplorePaint.MAP_HERE_R).isGreaterThan(ExplorePaint.MAP_HERE_SOFT_R);
+        float[] hereHall = new float[3];
+        float[] hereStart = new float[3];
+        float[] hereGoal = new float[3];
+        ExplorePaint.mapHereTint(ExploreBody.atCell(new Point(0, 0)), null, hereHall);
+        ExplorePaint.mapHereTint(ExploreBody.atCell(new Point(0, 0)), mesh, hereStart);
+        ExplorePaint.mapHereTint(ExploreBody.atCell(new Point(0, 1)), mesh, hereGoal);
+        assertThat(hereHall[0]).isEqualTo(ExplorePaint.MAP_HERE_R);
+        assertThat(hereStart[1]).as("HERE on start lifts toward well mint")
+                .isGreaterThan(hereHall[1]);
+        assertThat(hereGoal[0]).as("HERE on goal lifts toward well coral")
+                .isGreaterThan(hereHall[0]);
+        ExplorePaint.mapHereTint(null, mesh, null);
         assertThat(ExplorePaint.mapHereHalo(0.1))
                 .isNotEqualTo(ExplorePaint.mapHereHalo(0.8));
         assertThat(ExplorePaint.MAP_HERE_BREATH_MS).isEqualTo(2800f);

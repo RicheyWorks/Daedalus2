@@ -744,10 +744,12 @@ public final class ExploreHost {
             double y0 = bot + dot.y() * sy;
             double padX = sx * hereHalo;
             double padY = sy * hereHalo;
-            glColor3f(ExplorePaint.MAP_HERE_SOFT_R, ExplorePaint.MAP_HERE_SOFT_G,
-                    ExplorePaint.MAP_HERE_SOFT_B);
+            float[] hereInk = new float[3];
+            ExplorePaint.mapHereSoftTint(world.body(), world.mesh(), hereInk);
+            glColor3f(hereInk[0], hereInk[1], hereInk[2]);
             fill(x0 - padX, y0 - padY, x0 + sx + padX, y0 + sy + padY);
-            glColor3f(ExplorePaint.MAP_HERE_R, ExplorePaint.MAP_HERE_G, ExplorePaint.MAP_HERE_B);
+            ExplorePaint.mapHereTint(world.body(), world.mesh(), hereInk);
+            glColor3f(hereInk[0], hereInk[1], hereInk[2]);
             fill(x0, y0, x0 + sx, y0 + sy);
         }
     }

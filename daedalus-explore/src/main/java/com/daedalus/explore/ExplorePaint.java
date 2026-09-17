@@ -158,6 +158,33 @@ public final class ExplorePaint {
         double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
         return MAP_HERE_HALO * (float) (0.85 + 0.30 * wave);
     }
+
+    /** HERE on start / goal — gold you-are-here, washed toward well mint / coral. */
+    public static void mapHereTint(ExploreBody body, ExploreMesh mesh, float[] rgb) {
+        washHere(body, mesh, rgb, MAP_HERE_R, MAP_HERE_G, MAP_HERE_B);
+    }
+
+    public static void mapHereSoftTint(ExploreBody body, ExploreMesh mesh, float[] rgb) {
+        washHere(body, mesh, rgb, MAP_HERE_SOFT_R, MAP_HERE_SOFT_G, MAP_HERE_SOFT_B);
+    }
+
+    private static void washHere(ExploreBody body, ExploreMesh mesh, float[] rgb,
+                                float r, float g, float b) {
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        set(rgb, r, g, b);
+        String place = endPlaceName(body, mesh);
+        if ("START".equals(place)) {
+            rgb[0] += (MAP_START_R - rgb[0]) * FLOOR_END_WEIGHT;
+            rgb[1] += (MAP_START_G - rgb[1]) * FLOOR_END_WEIGHT;
+            rgb[2] += (MAP_START_B - rgb[2]) * FLOOR_END_WEIGHT;
+        } else if ("GOAL".equals(place)) {
+            rgb[0] += (MAP_GOAL_R - rgb[0]) * FLOOR_END_WEIGHT;
+            rgb[1] += (MAP_GOAL_G - rgb[1]) * FLOOR_END_WEIGHT;
+            rgb[2] += (MAP_GOAL_B - rgb[2]) * FLOOR_END_WEIGHT;
+        }
+    }
     /** Soft pad under automap story marks — presence, not a flat red pixel. */
     public static final float MAP_MARK_HALO = 0.55f;
     /** Story-mark pad breath — same cadence as HERE. */

@@ -93,6 +93,7 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- Explore automap HERE washes toward well mint and coral when you stand on start or goal so the pocket names the ends of the maze, not leftover gold on the gate.
 - Explore status START / GOAL glyphs wash toward well mint and coral so the strip names the ends of the maze, not leftover gold letters.
 - Well start and goal corridor shine washes toward mint and coral on web and desktop so the 1px hairline names the ends of the maze, not leftover torch on mint and coral stone.
 - Idle-well start and goal floors wash toward mint and coral on web and desktop so the empty mark names the ends of the maze, not leftover bare stone.
