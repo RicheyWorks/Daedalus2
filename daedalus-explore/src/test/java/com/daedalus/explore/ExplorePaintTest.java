@@ -5,6 +5,7 @@ package com.daedalus.explore;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.Direction;
 import com.daedalus.model.Point;
+import com.daedalus.model.TileType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -41,6 +42,20 @@ class ExplorePaintTest {
         assertThat(floor[0]).isGreaterThan(floor[2]);
         assertThat(ceil[0]).isGreaterThan(ceil[2]);
         assertThat(ceil[0]).isLessThan(floor[0]);
+    }
+
+    @Test
+    void startAndGoalFloorsNameTheEnds() {
+        float[] passage = new float[3];
+        float[] gate = new float[3];
+        float[] exit = new float[3];
+        ExplorePaint.tint(face(ExploreMesh.Face.FLOOR, 0, 3, 3), true, passage);
+        ExplorePaint.tint(endFloor(TileType.START), true, gate);
+        ExplorePaint.tint(endFloor(TileType.GOAL), true, exit);
+        assertThat(ExplorePaint.FLOOR_END_WEIGHT).isEqualTo(0.42f);
+        assertThat(gate[1]).as("start floor lifts toward well mint").isGreaterThan(passage[1]);
+        assertThat(exit[0]).as("goal floor lifts toward well coral").isGreaterThan(passage[0]);
+        assertThat(gate[1]).isGreaterThan(gate[0]);
     }
 
     @Test
@@ -631,6 +646,11 @@ class ExplorePaintTest {
 
     private static ExploreMesh.Triangle face(ExploreMesh.Face kind, double y, int tr, int tc) {
         return new ExploreMesh.Triangle(0, y, 0, 1, y, 0, 1, y, 1, kind, tr, tc);
+    }
+
+    private static ExploreMesh.Triangle endFloor(TileType tile) {
+        return new ExploreMesh.Triangle(0, 0, 0, 1, 0, 0, 1, 0, 1,
+                ExploreMesh.Face.FLOOR, 3, 3, tile);
     }
 
     private static ExploreMesh.Triangle ceilingAt(double z) {

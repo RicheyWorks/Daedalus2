@@ -41,7 +41,18 @@ public final class ExploreMesh {
     public record Triangle(double x1, double y1, double z1,
                            double x2, double y2, double z2,
                            double x3, double y3, double z3,
-                           Face face, int tr, int tc) {
+                           Face face, int tr, int tc, TileType tile) {
+        public Triangle {
+            tile = tile == null ? TileType.PASSAGE : tile;
+        }
+
+        public Triangle(double x1, double y1, double z1,
+                        double x2, double y2, double z2,
+                        double x3, double y3, double z3,
+                        Face face, int tr, int tc) {
+            this(x1, y1, z1, x2, y2, z2, x3, y3, z3, face, tr, tc, TileType.PASSAGE);
+        }
+
         public boolean wall() {
             return face == Face.WALL;
         }
@@ -76,7 +87,7 @@ public final class ExploreMesh {
                     hulls.add(new Hull(cx - h, cx + h, cz - h, cz + h));
                     addBox(triangles, cx, cz, h, tr, tc);
                 } else {
-                    addFloor(triangles, cx, cz, h, tr, tc);
+                    addFloor(triangles, cx, cz, h, tr, tc, tiles[tr][tc]);
                 }
             }
         }
@@ -144,16 +155,16 @@ public final class ExploreMesh {
     }
 
     private static void addFloor(List<Triangle> out, double cx, double cz, double h,
-                                int tr, int tc) {
+                                int tr, int tc, TileType tile) {
         out.add(new Triangle(cx - h, 0, cz - h, cx + h, 0, cz - h, cx + h, 0, cz + h,
-                Face.FLOOR, tr, tc));
+                Face.FLOOR, tr, tc, tile));
         out.add(new Triangle(cx - h, 0, cz - h, cx + h, 0, cz + h, cx - h, 0, cz + h,
-                Face.FLOOR, tr, tc));
+                Face.FLOOR, tr, tc, tile));
         double y1 = WALL_HEIGHT;
         out.add(new Triangle(cx - h, y1, cz - h, cx + h, y1, cz + h, cx + h, y1, cz - h,
-                Face.CEILING, tr, tc));
+                Face.CEILING, tr, tc, tile));
         out.add(new Triangle(cx - h, y1, cz - h, cx - h, y1, cz + h, cx + h, y1, cz + h,
-                Face.CEILING, tr, tc));
+                Face.CEILING, tr, tc, tile));
     }
 
     private static void addBox(List<Triangle> out, double cx, double cz, double h,

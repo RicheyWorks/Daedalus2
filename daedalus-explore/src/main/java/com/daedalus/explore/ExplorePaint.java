@@ -1172,10 +1172,25 @@ public final class ExplorePaint {
         return out;
     }
 
+    /** Start / goal floor wash — names the ends, still stone, not a neon slab. */
+    public static final float FLOOR_END_WEIGHT = 0.42f;
+
     private static void floor(ExploreMesh.Triangle tri, float[] rgb) {
         float check = ((tri.tr() + tri.tc()) & 1) == 0 ? 1f : 0.82f;
         float skirt = floorContactShade(tri);
-        set(rgb, 0.34f * check * skirt, 0.24f * check * skirt, 0.14f * check * skirt);
+        float r = 0.34f;
+        float g = 0.24f;
+        float b = 0.14f;
+        if (tri.tile() == TileType.START) {
+            r += (MAP_START_R - r) * FLOOR_END_WEIGHT;
+            g += (MAP_START_G - g) * FLOOR_END_WEIGHT;
+            b += (MAP_START_B - b) * FLOOR_END_WEIGHT;
+        } else if (tri.tile() == TileType.GOAL) {
+            r += (MAP_GOAL_R - r) * FLOOR_END_WEIGHT;
+            g += (MAP_GOAL_G - g) * FLOOR_END_WEIGHT;
+            b += (MAP_GOAL_B - b) * FLOOR_END_WEIGHT;
+        }
+        set(rgb, r * check * skirt, g * check * skirt, b * check * skirt);
     }
 
     private static void ceiling(ExploreMesh.Triangle tri, float[] rgb) {

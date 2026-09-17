@@ -93,6 +93,7 @@ under the `_migration/` portfolios.
 
 ### Changed
 
+- Explore corridor start and goal floors wash toward well mint and coral so looking down names the ends of the maze, not leftover floor brown.
 - Explore automap start and goal wear well mint and coral so the earned map names the ends of the maze, not leftover floor brown.
 - Installed-well manifest wears the idle maze mark so a home-screen tile is a miniature dungeon, not a generic lamp.
 - Safari pinned-tab mask wears the idle maze mark so a gold silhouette is a miniature dungeon, not an empty frame.
