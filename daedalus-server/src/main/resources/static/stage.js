@@ -89,6 +89,9 @@
       player: seats > 0,
       choke: !!(snap.analysis && snap.analysis.chokepoints
           && snap.analysis.chokepoints.length),
+      sanctuary: !!(snap.sanctuaries && snap.sanctuaries.placements
+          && snap.sanctuaries.placements.length),
+      lens: !!snap.lens,
       waypoint: !!(snap.tour && snap.tour.waypoints && snap.tour.waypoints.length),
       ghost: !!(snap.ghostWalk && snap.ghostWalk.length),
       fog: !!snap.fog,
