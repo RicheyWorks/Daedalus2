@@ -550,6 +550,8 @@ under the `_migration/` portfolios.
   in the lamp, not leftover cream slabs on torch stone.
   Tournament load-it links wear torch amber so those invites sit in the lamp,
   not leftover cream on torch stone.
+  Page copy inherits warm cream so leftover maze news sits in the lamp, not
+  leftover cool white on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
