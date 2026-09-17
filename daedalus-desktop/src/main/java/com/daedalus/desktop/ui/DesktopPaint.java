@@ -588,6 +588,13 @@ public final class DesktopPaint {
     public static final int WAYPOINT_K = 5;
     /** Recorded racer — warm parchment, not leftover cool white on torch stone. */
     public static final String GHOST = "#e8e0d4";
+    /** Same 0.22 rim as halls — leftover even parchment is not the last word on a replay head. */
+    public static final double GHOST_EDGE_DIM = 0.22;
+
+    public static String ghostInk(double edge) {
+        return mixHex(GHOST, FLOOR_DIM, GHOST_EDGE_DIM * Math.max(0, Math.min(1, edge)));
+    }
+
     public static final double GHOST_WALK_ALPHA = 0.28;
     /** Fog / session / ghost trail base — same as {@code draw.js}. */
     public static final double WALK_TRAIL_ALPHA = 0.32;

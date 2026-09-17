@@ -2475,7 +2475,8 @@ public class MainController {
         if (mark == null) {
             return;
         }
-        Color ink = Color.web(DesktopPaint.GHOST);
+        Color ink = Color.web(DesktopPaint.ghostInk(
+                DesktopPaint.floorEdge(layout, 2 * cell.row() + 1, 2 * cell.col() + 1)));
         double wave = DesktopPaint.ghostBreathWave(System.nanoTime());
         double pad = mark.size() * DesktopPaint.ghostGlowPadFraction(wave);
         g.setGlobalAlpha(DesktopPaint.ghostGlowAlpha(wave));
