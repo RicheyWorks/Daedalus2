@@ -243,6 +243,16 @@ public final class ExplorePaint {
         rgb[2] += (MAP_FLOOR_DIM_B - rgb[2]) * t;
     }
 
+    public static void mixWallEdge(double edge, float[] rgb) {
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        float t = (float) (MAP_WALL_EDGE_DIM * Math.min(1, Math.max(0, edge)));
+        rgb[0] += (UNSEEN_R - rgb[0]) * t;
+        rgb[1] += (UNSEEN_G - rgb[1]) * t;
+        rgb[2] += (UNSEEN_B - rgb[2]) * t;
+    }
+
     private static void washHere(ExploreBody body, ExploreMesh mesh, WorldMesh blocks,
                                 float[] rgb, float r, float g, float b) {
         if (rgb == null || rgb.length < 3) {
@@ -628,6 +638,8 @@ public final class ExplorePaint {
         }
         if (tri.face() == ExploreMesh.Face.FLOOR) {
             mixHereEdge(edge, rgb);
+        } else if (tri.face() == ExploreMesh.Face.WALL) {
+            mixWallEdge(edge, rgb);
         }
         if (!Double.isNaN(eyeX)) {
             torch(tri, eyeX, eyeZ, yaw, rgb, seconds);

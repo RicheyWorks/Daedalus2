@@ -27,6 +27,15 @@ class ExplorePaintTest {
         assertThat(rgb[0]).isGreaterThan(0.4f);
         assertThat(rgb[0]).isGreaterThan(rgb[2]);
         assertThat(rgb[1]).isGreaterThan(rgb[2]);
+        float[] mid = new float[3];
+        float[] rim = new float[3];
+        ExplorePaint.tint(nsWall(0, 1.4, 0), true, mid,
+                Double.NaN, Double.NaN, 0, 0, 0);
+        ExplorePaint.tint(nsWall(0, 1.4, 0), true, rim,
+                Double.NaN, Double.NaN, 0, 0, 1);
+        assertThat(rim[0] + rim[1] + rim[2])
+                .as("corridor wall falls off toward unseen at the board rim")
+                .isLessThan(mid[0] + mid[1] + mid[2]);
     }
 
     @Test

@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore corridor wall depth.**
+  Posts fall off toward unseen at the board rim with the same 0.28
+  edge as well walls, so leftover even clay is not the last word
+  on a tunnel. Unseen silhouette stays.
+
 - **Explore corridor floor depth.**
   Passage slate falls off toward floor-dim at the board rim with
   the same 0.22 edge as halls, so leftover even breath is not the
