@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well dead-end depth.**
+  Dead-end discs fall off toward floor-dim at the board rim with
+  the same 0.22 edge as halls, so leftover even khaki is not the
+  last word on a cul-de-sac. Start mint and goal coral stay.
+
 - **Desktop heat opening depth.**
   Heat corridors between spots fall off toward floor-dim at the
   board rim with the same 0.22 edge as halls, so leftover even
