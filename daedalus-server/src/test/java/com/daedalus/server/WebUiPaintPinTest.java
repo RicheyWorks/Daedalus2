@@ -215,6 +215,18 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellGhostDiscsHaveRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("mixHex(COLORS.ghost, COLORS.floorDim, 0.22 * edge)")
+                    .contains("const ink = ghostInk(p, th, tw)")
+                    .contains("ghostDisc(g, geom, scene.ghost.pos, th, tw)");
+        }
+    }
+
+    @Test
     void wellFieldCellsHaveRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

@@ -166,7 +166,7 @@
   }
 
   /** Recorded racer — soft glow + rim like a walker, translucent core so it stays a ghost. */
-  function ghostDisc(g, geom, p) {
+  function ghostDisc(g, geom, p, th, tw) {
     if (!p) return;
     const [x, y] = cellCenter(geom, p);
     const GHOST_BREATH_MS = 4500;
@@ -174,7 +174,8 @@
     const t = (now % GHOST_BREATH_MS) / GHOST_BREATH_MS;
     const wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
     const r = geom.cell * 0.3;
-    g.fillStyle = COLORS.ghost;
+    const ink = ghostInk(p, th, tw);
+    g.fillStyle = ink;
     g.globalAlpha = 0.18 + 0.08 * wave;
     g.beginPath();
     g.arc(x, y, r + geom.cell * (0.18 + 0.04 * wave), 0, 2 * Math.PI);
@@ -183,7 +184,7 @@
     g.beginPath();
     g.arc(x, y, r, 0, 2 * Math.PI);
     g.fill();
-    g.strokeStyle = COLORS.ghost;
+    g.strokeStyle = ink;
     g.globalAlpha = 0.65 + 0.1 * wave;
     g.lineWidth = Math.max(1, geom.cell * 0.07);
     g.beginPath();
@@ -370,6 +371,14 @@
     const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
     const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
     return mixHex("#c8a878", COLORS.floorDim, 0.22 * edge);
+  }
+
+  function ghostInk(p, th, tw) {
+    const tr = 2 * p.row + 1, tc = 2 * p.col + 1;
+    const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
+    const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
+    const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+    return mixHex(COLORS.ghost, COLORS.floorDim, 0.22 * edge);
   }
 
   function chokeInk(tr, tc, th, tw) {
@@ -793,7 +802,7 @@
       });
     }
     if (scene.session && scene.ghost && scene.ghost.pos) {
-      ghostDisc(g, geom, scene.ghost.pos);
+      ghostDisc(g, geom, scene.ghost.pos, th, tw);
     }
     if (scene.won && goal) {
       const [x, y] = cellCenter(geom, goal);
