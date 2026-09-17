@@ -173,7 +173,8 @@
   @media (prefers-reduced-motion: reduce) {
     #gate .gate-brand, #gate .lede, #gate .gate-enter, #gate article, #gate .gate-veil,
     header h1 button, #stage, .board-panel, .panel, header, #legend,
-    .exports button, .exports a, #asciiOut, #gate pre, .info, #stats, details {
+    .exports button, .exports a, #asciiOut, #gate pre, .info, #stats, details,
+    #compareBox > div {
       animation: none;
     }
     #gate .gate-brand {
@@ -347,7 +348,8 @@
                           box-shadow: inset 3px 0 0 rgba(184, 133, 56, 0.85); }
   #compareBox tr.pinned:hover { box-shadow: inset 3px 0 0 rgba(184, 133, 56, 0.95); }
   #compareBox .hint { color: #b09a72; }
-  #compareBox > div { border-top: 1px solid rgba(184, 133, 56, 0.28); padding-top: 6px; }
+  #compareBox > div { border-top: 1px solid rgba(184, 133, 56, 0.28); padding-top: 6px;
+                      animation: statsRimBreath 4.5s ease-in-out infinite; }
   #compareBox .best { color: #f0b429; font-weight: 700; }
   #compareBox .gave-up { color: var(--warn); }
   #log div { border-bottom: 1px solid rgba(184, 133, 56, 0.28); padding: 2px 0; }
