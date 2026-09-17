@@ -47,9 +47,15 @@ class ExplorePaintTest {
     void unseenWallsStayASilhouette() {
         float[] rgb = new float[3];
         ExplorePaint.tint(nsWall(0, 1.4, 0), false, rgb);
-        assertThat(rgb[0]).isCloseTo(0.09f, within(0.001f));
+        assertThat(rgb[0]).isEqualTo(ExplorePaint.UNSEEN_R);
+        assertThat(rgb[1]).isEqualTo(ExplorePaint.UNSEEN_G);
+        assertThat(rgb[2]).isEqualTo(ExplorePaint.UNSEEN_B);
+        assertThat(ExplorePaint.UNSEEN_R).isGreaterThan(ExplorePaint.UNSEEN_B);
         ExplorePaint.tint(face(ExploreMesh.Face.FLOOR, 0, 0, 0), false, rgb);
-        assertThat(rgb[0]).isEqualTo(ExplorePaint.SKY_R);
+        assertThat(rgb[0]).isEqualTo(ExplorePaint.UNSEEN_R);
+        ExplorePaint.tint(face(ExploreMesh.Face.CEILING, 2.8, 3, 3), false, rgb);
+        assertThat(rgb[0]).isEqualTo(ExplorePaint.UNSEEN_R);
+        assertThat(ExplorePaint.UNSEEN_R).isNotEqualTo(ExplorePaint.SKY_R);
     }
 
     @Test

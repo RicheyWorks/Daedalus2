@@ -17,6 +17,10 @@ public final class ExplorePaint {
     public static final float SKY_R = 0.10f;
     public static final float SKY_G = 0.08f;
     public static final float SKY_B = 0.07f;
+    /** Fog silhouette — same warm dark for every unseen face, not a dusk hole. */
+    public static final float UNSEEN_R = 0.09f;
+    public static final float UNSEEN_G = 0.07f;
+    public static final float UNSEEN_B = 0.06f;
     public static final int TEX = 64;
     public static final int MAP = 36;
     public static final int GLYPH_W = 5;
@@ -263,11 +267,7 @@ public final class ExplorePaint {
             return;
         }
         if (!visible) {
-            if (tri.face() == ExploreMesh.Face.WALL) {
-                set(rgb, 0.09f, 0.07f, 0.06f);
-            } else {
-                set(rgb, SKY_R, SKY_G, SKY_B);
-            }
+            set(rgb, UNSEEN_R, UNSEEN_G, UNSEEN_B);
             return;
         }
         switch (tri.face()) {

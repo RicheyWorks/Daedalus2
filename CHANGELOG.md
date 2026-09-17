@@ -336,6 +336,8 @@ under the `_migration/` portfolios.
   lamp, not leftover ice-blue discs on torch stone.
   Well legend place-mark rims wear cream so start / goal / walk keys sit in the
   lamp, not leftover cool white on torch stone.
+  Explore fog keeps unseen floors and ceilings in the same warm silhouette as
+  posts so the tunnel stays dark stone, not a dusk hole.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
