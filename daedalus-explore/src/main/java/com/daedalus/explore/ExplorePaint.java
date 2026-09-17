@@ -1649,6 +1649,10 @@ public final class ExplorePaint {
     }
 
     public static void placePadTint(float[] markerRgb, float[] out, double seconds) {
+        placePadTint(markerRgb, out, seconds, 0);
+    }
+
+    public static void placePadTint(float[] markerRgb, float[] out, double seconds, double edge) {
         if (out == null || out.length < 3) {
             return;
         }
@@ -1656,9 +1660,11 @@ public final class ExplorePaint {
         if (markerRgb == null || markerRgb.length < 3) {
             set(out, 0.2f * (dim / PLACE_PAD_DIM), 0.14f * (dim / PLACE_PAD_DIM),
                     0.08f * (dim / PLACE_PAD_DIM));
+            mixHereEdge(edge, out);
             return;
         }
         set(out, markerRgb[0] * dim, markerRgb[1] * dim, markerRgb[2] * dim);
+        mixHereEdge(edge, out);
     }
 
     static String facing(double yaw) {

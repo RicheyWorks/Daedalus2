@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore story pad depth.**
+  Marker discs fall off toward floor-dim at the board rim with the
+  same 0.22 edge as halls, so leftover even breath is not the last
+  word on a place. Start mint and goal coral stay.
+
 - **Desktop race-B wash depth.**
   Second-lane gold falls off toward floor-dim at the board rim
   with the same 0.22 edge as halls, so leftover even torch is not

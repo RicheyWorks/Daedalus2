@@ -266,6 +266,11 @@ class ExplorePaintTest {
         float[] pad = new float[3];
         ExplorePaint.placePadTint(rgb, pad);
         assertThat(pad[2]).isLessThan(rgb[2]);
+        float[] rim = new float[3];
+        ExplorePaint.placePadTint(rgb, rim, 0, 1);
+        assertThat(rim[0] + rim[1] + rim[2])
+                .as("story pad falls off toward floor-dim at the board rim")
+                .isLessThan(pad[0] + pad[1] + pad[2]);
         assertThat(ExplorePaint.PLACE_PAD_R).isGreaterThan(0.3f);
         assertThat(ExplorePaint.PLACE_PAD_SEGS).isGreaterThanOrEqualTo(8);
         assertThat(ExplorePaint.PLACE_PAD_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);

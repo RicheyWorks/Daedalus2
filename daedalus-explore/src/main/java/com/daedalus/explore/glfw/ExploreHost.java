@@ -371,7 +371,11 @@ public final class ExploreHost {
             ExplorePaint.marker(marker.kind(), rgb);
             double wx = ExploreMesh.worldX(marker.cell().col());
             double wz = ExploreMesh.worldZ(marker.cell().row());
-            ExplorePaint.placePadTint(rgb, pad, seconds);
+            var tiles = world.mesh() == null ? null : world.mesh().tiles();
+            int th = tiles == null ? 1 : tiles.length;
+            int tw = tiles == null || tiles[0] == null ? 1 : tiles[0].length;
+            ExplorePaint.placePadTint(rgb, pad, seconds,
+                    ExplorePaint.mapEdge(tr, tc, 0, th - 1, 0, tw - 1));
             placePad(wx, wz, pad[0], pad[1], pad[2]);
             for (ExplorePaint.PillarTri tri : ExplorePaint.pillarMesh(wx, wz)) {
                 ExplorePaint.pillarTint(rgb, tri.boot(), tri.crown(), pad);
