@@ -108,6 +108,7 @@ class WebUiSmokeTest {
                 .contains("padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));")
                 .contains("html, body { min-height: 100%; color-scheme: dark; background-color: #0c0908;")
                 .contains("color-scheme: dark; background-color: #0c0908; cursor: default")
+                .contains("color-scheme: dark; background-color: #0c0908; cursor: default; -webkit-user-drag: none")
                 .contains("overscroll-behavior: none;")
                 .contains("-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;")
                 .contains("text-rendering: optimizeLegibility;")

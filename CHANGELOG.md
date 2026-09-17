@@ -801,6 +801,7 @@ under the `_migration/` portfolios.
   The start-gate well refuses leftover drag ice so the void around the cards is not ghosted.
   The well desk pocket refuses leftover drag ice so the pad around the board is not ghosted.
   Well side-rail pockets refuse leftover drag ice so the pad around the desk is not ghosted.
+  The well page void refuses leftover drag ice so the pad around the desk is not ghosted.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
