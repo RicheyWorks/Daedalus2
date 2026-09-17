@@ -1,0 +1,27 @@
+// SPDX-License-Identifier: MIT
+
+package com.daedalus.server;
+
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+/**
+ * Pins leftover-drag paint on the static well without extending
+ * {@link WebUiSmokeTest}'s fluent chain (javac overflows that tree).
+ */
+class WebUiPaintPinTest {
+
+    @Test
+    void leftoverDragPinsStayOnGoldNews() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html).contains(
+                    "#log .t { color: #b09a72; margin-right: 6px; -webkit-user-drag: none");
+        }
+    }
+}
