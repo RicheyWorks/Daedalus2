@@ -604,6 +604,8 @@ under the `_migration/` portfolios.
   not leftover unrimmed copy on torch stone.
   Chromium page gutters wear the same gold lip as the well so those hosts are lamp,
   not leftover cool navy on torch stone.
+  Unused overlay ice remounts to KEEP path ice so leftover cool ice is not sitting
+  in the lamp stylesheet.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
