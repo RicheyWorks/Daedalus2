@@ -168,9 +168,11 @@ class WebUiPaintPinTest {
                     .contains("/world/\" + WORLD + \"/npc")
                     .contains("/world/\" + WORLD + \"/parcels")
                     .contains("/world/\" + WORLD + \"/chunk?x=0&y=0&z=0");
-            assertThat(html).contains("#worldBox .place { color: #94612e; -webkit-user-drag: none");
-            assertThat(world).contains("street.className = \"place\"")
-                    .contains("label === \"place\"");
+            assertThat(html).contains("#worldBox .place { color: #94612e; -webkit-user-drag: none")
+                    .contains("#worldBox .slab { color: #94612e; -webkit-user-drag: none");
+            assertThat(world).contains("ink.className = named ? \"place\" : \"slab\"")
+                    .contains("label === \"place\"")
+                    .contains("chunk.occupied > 0");
             assertThat(world).doesNotContain("/maze/");
             assertThat(live).contains("/topic/world/world-zero/events")
                     .contains("host.onWorldEvent");

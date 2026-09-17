@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well world slab ink.**
+  An occupied chunk on the well world rail wears torch wood `#94612e`,
+  same as the street, so leftover khaki is not the last word on a
+  present slice. Empty chunks stay `empty`.
+
 - **Desktop world street ink.**
   A named parcel on the desktop world line wears torch wood `#94612e`,
   same as the well place row. Empty worlds stay leftover khaki listening.

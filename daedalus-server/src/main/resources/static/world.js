@@ -45,10 +45,11 @@
     row(box, "npc", npc && npc.state ? npc.state : "—");
     const first = parcels && parcels.parcels && parcels.parcels[0];
     row(box, "place", first && first.placeName ? first.placeName : "—");
-    const slice = chunk && chunk.present
+    const occupied = chunk && chunk.present && chunk.occupied > 0;
+    const slice = occupied
         ? "0,0,0 occupied " + chunk.occupied
         : "0,0,0 empty";
-    row(box, "chunk", slice);
+    row(box, "chunk", slice, occupied);
     const last = document.createElement("div");
     last.className = "hint";
     last.textContent = events.length ? "last events" : "listening — no world events yet";
@@ -61,16 +62,17 @@
     });
   }
 
-  function row(box, label, value) {
+  function row(box, label, value, wood) {
     const line = document.createElement("div");
     const name = document.createElement("b");
     name.textContent = label;
     line.appendChild(name);
-    if (label === "place" && value && value !== "—") {
-      const street = document.createElement("span");
-      street.className = "place";
-      street.textContent = " " + value;
-      line.appendChild(street);
+    const named = label === "place" && value && value !== "—";
+    if (named || wood) {
+      const ink = document.createElement("span");
+      ink.className = named ? "place" : "slab";
+      ink.textContent = " " + value;
+      line.appendChild(ink);
     } else {
       line.appendChild(document.createTextNode(" " + value));
     }
