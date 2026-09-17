@@ -2424,18 +2424,27 @@ public class MainController {
         if (pathProg <= 0 && !shown.isEmpty()) {
             Point tip = DesktopPaint.walkHead(shown);
             double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
+            Color tipInk = rimB && tip != null
+                    ? Color.web(DesktopPaint.walkTrailInk(DesktopPaint.RACE_B,
+                            DesktopPaint.floorEdge(layout, 2 * tip.row() + 1, 2 * tip.col() + 1)))
+                    : laneColor;
             paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
-                    laneColor.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
-            paintPathHeadDisc(g, DesktopPaint.disc(layout, tip, 0.3), laneColor, tipWave);
+                    tipInk.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
+            paintPathHeadDisc(g, DesktopPaint.disc(layout, tip, 0.3), tipInk, tipWave);
         }
         if (pathProg > 0 && !lane.path().isEmpty()) {
             List<Point> ribbon = DesktopPaint.pathPrefix(lane.path(), pathProg);
-            paintPathRibbon(g, layout, ribbon, laneColor, pathAlpha, null, null);
+            paintPathRibbon(g, layout, ribbon, laneColor, pathAlpha, null, null,
+                    rimB ? DesktopPaint.RACE_B : null);
             Point head = DesktopPaint.walkHead(ribbon);
             double headWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
+            Color headInk = rimB && head != null
+                    ? Color.web(DesktopPaint.walkTrailInk(DesktopPaint.RACE_B,
+                            DesktopPaint.floorEdge(layout, 2 * head.row() + 1, 2 * head.col() + 1)))
+                    : laneColor;
             paintRing(g, DesktopPaint.pathHeadHalo(layout, head, headWave),
-                    laneColor.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(headWave)));
-            paintPathHeadDisc(g, DesktopPaint.raceHeadMarker(layout, ribbon), laneColor, headWave);
+                    headInk.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(headWave)));
+            paintPathHeadDisc(g, DesktopPaint.raceHeadMarker(layout, ribbon), headInk, headWave);
         }
     }
 
