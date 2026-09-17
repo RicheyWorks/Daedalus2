@@ -745,6 +745,7 @@ under the `_migration/` portfolios.
   Well desk folds refuse leftover OS selection ice so khaki on the rail is not smeared.
   Well desk folds refuse leftover callout ice so khaki on the rail is not ballooned.
   The header bar refuses leftover OS selection ice so torch chrome is not smeared.
+  The header bar refuses leftover callout ice so torch chrome is not ballooned.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
