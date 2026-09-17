@@ -51,7 +51,7 @@ class WebUiSmokeTest {
         assertThat(html).contains("DAEDALUS").contains("id=\"gate\"").contains("id=\"gateWell\"")
                 .contains("id=\"gateExploreCmd\"").contains("id=\"home\"")
                 .contains("gate-brand").contains("gate-veil").contains("Other hosts")
-                .contains("text-indent: .22em; color: #f2ead8; user-select: none; -webkit-user-select: none")
+                .contains("text-indent: .22em; color: #f2ead8; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent")
                 .contains("name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\"")
                 .contains("name=\"theme-color\" content=\"#0c0908\"")
                 .contains("name=\"theme-color\" content=\"#0c0908\" media=\"(prefers-color-scheme: light)\"")

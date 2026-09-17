@@ -724,6 +724,7 @@ under the `_migration/` portfolios.
   Unfocused maze selection stays gold so leftover OS gray ice does not stain torch stone.
   The well canvas refuses leftover tap wash so torch stone is not stained.
   The well pocket refuses leftover tap wash so torch stone is not stained.
+  The start-gate brand refuses leftover tap wash so cream on the wordmark is not stained.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
