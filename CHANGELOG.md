@@ -780,6 +780,7 @@ under the `_migration/` portfolios.
   Well desk captions wear a lamp cursor so leftover OS I-beam ice does not sit on khaki beside the controls.
   Well status copy refuses leftover OS selection ice so khaki beside the board is not smeared.
   Well maze figures refuse leftover OS selection ice so cream beside the board is not smeared.
+  Well desk captions refuse leftover OS selection ice so khaki beside the rail is not smeared.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
