@@ -312,7 +312,8 @@ inspired place names on stamp.apply, and
 Generate → parcel.lease after a successful stamp, and
 explore caption of the newest street name, and
 a street directory of every plot name, and
-newest-lot x,z on inspect
+newest-lot x,z on inspect, and
+explore caption of that lot
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

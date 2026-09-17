@@ -1040,10 +1040,12 @@ class ExplorePaintTest {
         ExploreMesh longHall = ExploreMesh.of(hall);
         ExploreBody offPlot = ExploreBody.atCell(new Point(0, 1));
         assertThat(ExplorePaint.lastParcelPlaceName(cubes)).isEqualTo("Willow Walk");
+        assertThat(ExplorePaint.lastParcelLot(cubes)).isEqualTo("8,8");
         assertThat(ExplorePaint.lastParcelPlaceName(null)).isNull();
+        assertThat(ExplorePaint.lastParcelLot(null)).isNull();
         assertThat(ExplorePaint.status(fog, offPlot, List.of(), longHall, cubes).place())
-                .as("newest street name leads leftover HALL off the slab")
-                .isEqualTo("Willow Walk");
+                .as("newest street name and lot lead leftover HALL off the slab")
+                .isEqualTo("Willow Walk 8,8");
     }
 
     @Test

@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore newest lot address.**
+  Off a slab the caption adds the newest x,z lot after the
+  street name. Stood-on start / goal still lead.
+
 - **World lot address.**
   Newest slab origin is an x,z lot on well and desktop inspect.
   Parcel rows carry minX/minZ. Not GIS.
