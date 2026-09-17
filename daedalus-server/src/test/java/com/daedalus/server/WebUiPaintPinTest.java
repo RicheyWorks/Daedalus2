@@ -287,6 +287,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellSessionTrailsHaveRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("mixHex(hex, COLORS.floorDim, 0.22 * edge)")
+                    .contains("(tr, tc) => trailTileInk(trailHex, tr, tc, th, tw)");
+        }
+    }
+
+    @Test
     void wellFogWalkHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

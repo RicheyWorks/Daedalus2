@@ -418,6 +418,13 @@
     return mixHex("#f5c14a", COLORS.floorDim, 0.22 * edge);
   }
 
+  function trailTileInk(hex, tr, tc, th, tw) {
+    const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
+    const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
+    const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+    return mixHex(hex, COLORS.floorDim, 0.22 * edge);
+  }
+
   function waypointInk(p, th, tw, got) {
     const tr = 2 * p.row + 1, tc = 2 * p.col + 1;
     const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
@@ -859,7 +866,9 @@
       });
     }
     Object.entries(scene.trails || {}).forEach(([name, points], i) => {
-      paintWalk(g, geom, points, PLAYER_COLORS[i % PLAYER_COLORS.length], 1, 0.32, true);
+      const trailHex = PLAYER_COLORS[i % PLAYER_COLORS.length];
+      paintWalk(g, geom, points, trailHex, 1, 0.32, true,
+          (tr, tc) => trailTileInk(trailHex, tr, tc, th, tw));
     });
     if (scene.session && scene.ghostWalk && scene.ghostWalk.length) {
       paintWalk(g, geom, scene.ghostWalk, COLORS.ghost, 1, 0.28, true,
