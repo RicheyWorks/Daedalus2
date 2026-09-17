@@ -114,6 +114,7 @@ class WebUiSmokeTest {
                 .contains("color:#f0b429\">${escapeHtml(w.id)}</b> wins by default")
                 .contains("id=\"genInfo\"").contains("id=\"asciiOut\"")
                 .contains("#asciiOut { margin: 10px 0 0; padding: 8px; background: #16120e;")
+                .contains("font: 11px/1.2 ui-monospace, monospace; overflow: auto; overscroll-behavior: none;")
                 .contains("animation: panelRimBreath 4.5s ease-in-out infinite; }")
                 .contains(".exports button, .exports a, #asciiOut, #gate pre, .info, #stats, details,")
                 .contains("#compareBox > div, kbd, summary::after, #log, #lb, #pluginBox, #campaignBox,")
