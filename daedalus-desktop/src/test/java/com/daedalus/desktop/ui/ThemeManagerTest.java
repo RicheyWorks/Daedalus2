@@ -70,6 +70,8 @@ class ThemeManagerTest {
             assertThat(css).contains("#b09a72");
             assertThat(css).contains(".exports .button");
             assertThat(css).contains("rgba(16, 11, 8, 0.78)");
+            assertThat(css).contains(".exports .button:hover");
+            assertThat(css).contains("-fx-background-color: #1a1610");
         }
         try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
             assertThat(in).as("main.fxml is on the classpath").isNotNull();

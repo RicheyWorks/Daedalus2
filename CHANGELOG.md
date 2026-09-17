@@ -376,6 +376,8 @@ under the `_migration/` portfolios.
   not leftover cool white on torch stone.
   Start-gate way copy wears the same warm khaki as the well key so door text sits
   in the lamp, not leftover cool slate on torch stone.
+  Well export chips hover in warm cream on torch void so Show ASCII / PNG sit in
+  the lamp, not leftover cool navy on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

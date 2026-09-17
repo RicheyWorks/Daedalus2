@@ -148,6 +148,7 @@ class WebUiSmokeTest {
                 .contains("rgba(16, 11, 8, .88)")
                 .contains("color: #b09a72")
                 .contains("exportsRimBreath")
+                .contains("border-color: rgba(184, 133, 56, 0.85); color: #f2ead8")
                 .contains("ghost:")
                 .contains("ghostDisc")
                 .contains("ageFade")

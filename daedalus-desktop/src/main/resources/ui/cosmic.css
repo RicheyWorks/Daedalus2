@@ -127,9 +127,9 @@
     -fx-border-radius: 6;
 }
 .exports .button:hover {
-    -fx-background-color: #1a222b;
+    -fx-background-color: #1a1610;
     -fx-border-color: rgba(184, 133, 56, 0.85);
-    -fx-text-fill: #e8eef4;
+    -fx-text-fill: #f2ead8;
     -fx-effect: dropshadow(one-pass-box, rgba(184, 133, 56, 0.22), 10, 0.4, 0, 0);
 }
 
