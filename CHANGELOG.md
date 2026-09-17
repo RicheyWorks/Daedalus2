@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore automap cube pad depth.**
+  Soft wood pads under occupied cubes fall off toward the rim with the
+  same 0.22 edge as the slab, so leftover even halo is not the last
+  word on a pocket cube. Start mint and goal coral stay.
+
 - **Well ASCII hall depth.**
   Dump passage glyphs keep leftover cream and pick up a torch-dim
   hairline so leftover flat ink is not the last word on the halls.

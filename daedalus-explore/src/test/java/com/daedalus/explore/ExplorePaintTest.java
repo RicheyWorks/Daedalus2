@@ -431,6 +431,10 @@ class ExplorePaintTest {
         float[] cubeSoft = new float[3];
         ExplorePaint.mapBlockSoftTint(cubeSoft);
         assertThat(cubeSoft[0]).isLessThan(cube[0]);
+        float[] cubeSoftRim = new float[3];
+        ExplorePaint.mapBlockSoftTint(1, cubeSoftRim);
+        assertThat(cubeSoftRim[0]).as("rim cube pads fall off like the wood")
+                .isLessThan(cubeSoft[0]);
         assertThat(ExplorePaint.mapBlockHalo(0.1))
                 .isNotEqualTo(ExplorePaint.mapBlockHalo(0.8));
         ExplorePaint.mapBlockSoftTint(null);

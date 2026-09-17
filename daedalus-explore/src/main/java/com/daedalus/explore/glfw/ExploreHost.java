@@ -806,7 +806,7 @@ public final class ExploreHost {
             double padX = sx * blockHalo;
             double padY = sy * blockHalo;
             float[] ink = new float[3];
-            ExplorePaint.mapBlockSoftTint(ink);
+            ExplorePaint.mapBlockSoftTint(dot.edge(), ink);
             glColor3f(ink[0], ink[1], ink[2]);
             fill(x0 - padX, y0 - padY, x0 + sx + padX, y0 + sy + padY);
             ExplorePaint.mapStoneTint(ExplorePaint.MapKind.BLOCK, seconds, dot.edge(), ink);

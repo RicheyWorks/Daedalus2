@@ -290,7 +290,11 @@ public final class ExplorePaint {
     }
 
     public static void mapBlockSoftTint(float[] rgb) {
-        mapStoneTint(MapKind.BLOCK, 0, rgb);
+        mapBlockSoftTint(0, rgb);
+    }
+
+    public static void mapBlockSoftTint(double edge, float[] rgb) {
+        mapStoneTint(MapKind.BLOCK, 0, edge, rgb);
         if (rgb == null || rgb.length < 3) {
             return;
         }
