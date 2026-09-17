@@ -109,6 +109,8 @@ class WebUiSmokeTest {
                 .contains("::search-text { background: rgba(184, 133, 56, 0.35); color: #f2ead8; }")
                 .contains("::search-text:current { background: rgba(184, 133, 56, 0.55); color: #f2ead8; }")
                 .contains("::highlight { background: rgba(184, 133, 56, 0.35); color: #f2ead8; }")
+                .contains("::selection:window-inactive { background: rgba(184, 133, 56, 0.22); color: #f2ead8; }")
+                .contains("::-moz-selection:window-inactive { background: rgba(184, 133, 56, 0.22); color: #f2ead8; }")
                 .contains("@media print {")
                 .contains("print-color-adjust: exact; -webkit-print-color-adjust: exact;")
                 .contains("@media (forced-colors: active) {")
