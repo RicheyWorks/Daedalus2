@@ -331,7 +331,7 @@ class WebUiSmokeTest {
                 .contains("#labOut, #tourBox, #campaignBox { color: #f2ead8; }")
                 .contains("overflow-wrap: break-word; hyphens: none; line-height: 1.5;")
                 .contains("#pluginBox { color: #b09a72; padding: 8px; background: #16120e;")
-                .contains("#pluginBox b { color: #f2ead8; }")
+                .contains("#pluginBox b { color: #f2ead8;")
                 .contains("#tourBox table { width: 100%; border-collapse: collapse; -webkit-user-drag: none")
                 .contains("#tourBox th { text-align: left; color: #b09a72; font-weight: 600;")
                 .contains("#tourBox th { text-align: left; color: #b09a72; font-weight: 600; -webkit-user-drag: none")
@@ -539,6 +539,7 @@ class WebUiSmokeTest {
                 .doesNotContain("move(state.session.primary")
                 .doesNotContain("move(state.seat || state.session.primary");
         assertThat(html).contains(
-                "#compareBox table { width: 100%; margin-top: 8px; border-collapse: collapse; -webkit-user-drag: none");
+                "#compareBox table { width: 100%; margin-top: 8px; border-collapse: collapse; -webkit-user-drag: none")
+                .contains("#pluginBox b { color: #f2ead8; -webkit-user-drag: none");
     }
 }
