@@ -678,6 +678,37 @@ class ExplorePaintTest {
     }
 
     @Test
+    void statusKeysAnEarnedOccupiedCube() {
+        ExploreFog fog = new ExploreFog();
+        fog.stand(new Point(0, 0));
+        MazeGrid grid = new MazeGrid(1, 2);
+        grid.carve(grid.cell(0, 0), Direction.EAST);
+        ExploreMesh mesh = ExploreMesh.of(grid);
+        World volume = World.zero();
+        volume.place(new BlockCoordinate(2, 0, 0), BlockType.WOOD);
+        WorldMesh cubes = WorldMesh.of(volume);
+        assertThat(ExplorePaint.blockSeen(fog, cubes))
+                .as("earned cube sits on the HUD key")
+                .isTrue();
+        assertThat(ExplorePaint.blockSeen(new ExploreFog(), cubes)).isFalse();
+        assertThat(ExplorePaint.blockSeen(fog, null)).isFalse();
+        assertThat(ExplorePaint.status(fog, ExploreBody.atCell(new Point(0, 0)),
+                List.of(), mesh, cubes).blockSeen()).isTrue();
+        assertThat(ExplorePaint.status(fog, ExploreBody.atCell(new Point(0, 0)),
+                List.of(), mesh).blockSeen()).isFalse();
+        float[] wood = new float[3];
+        float[] soft = new float[3];
+        ExplorePaint.keyBlockTint(wood);
+        ExplorePaint.keyBlockSoftTint(soft);
+        assertThat(wood[0]).as("cube key wears torch wood, not leftover gold")
+                .isGreaterThan(ExplorePaint.MAP_FLOOR_R);
+        assertThat(wood[2]).isLessThan(wood[0]);
+        assertThat(soft[0]).isLessThan(wood[0]);
+        ExplorePaint.keyBlockTint(null);
+        ExplorePaint.keyBlockSoftTint(null);
+    }
+
+    @Test
     void facingCompassFollowsYaw() {
         assertThat(ExplorePaint.facing(0)).isEqualTo("N");
         assertThat(ExplorePaint.facing(Math.PI / 2)).isEqualTo("E");

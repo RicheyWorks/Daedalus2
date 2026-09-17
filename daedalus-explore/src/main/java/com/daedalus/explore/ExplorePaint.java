@@ -385,9 +385,14 @@ public final class ExplorePaint {
      * GLFW only paints this; tests lock the words so the bar cannot lie.
      */
     public record Status(String place, String facing, int stood, int marks, int mood,
-                         boolean startSeen, boolean goalSeen) {
+                         boolean startSeen, boolean goalSeen, boolean blockSeen) {
         public Status(String place, String facing, int stood, int marks, int mood) {
-            this(place, facing, stood, marks, mood, false, false);
+            this(place, facing, stood, marks, mood, false, false, false);
+        }
+
+        public Status(String place, String facing, int stood, int marks, int mood,
+                      boolean startSeen, boolean goalSeen) {
+            this(place, facing, stood, marks, mood, startSeen, goalSeen, false);
         }
     }
 
@@ -614,12 +619,13 @@ public final class ExplorePaint {
         int marks = countVisible(fog, markers);
         boolean startSeen = endSeen(fog, mesh, TileType.START);
         boolean goalSeen = endSeen(fog, mesh, TileType.GOAL);
+        boolean cubeSeen = blockSeen(fog, blocks);
         if (near == null) {
             return new Status(placeOrBlock(body, mesh, blocks), facing, stood, marks, 0,
-                    startSeen, goalSeen);
+                    startSeen, goalSeen, cubeSeen);
         }
         return new Status(placeName(near.kind()), facing, stood, marks, mood(near.kind()),
-                startSeen, goalSeen);
+                startSeen, goalSeen, cubeSeen);
     }
 
     /**
@@ -684,6 +690,42 @@ public final class ExplorePaint {
             }
         }
         return null;
+    }
+
+    /**
+     * Earned occupied cube — same automap BLOCK rule, not leftover empty HUD
+     * on a slab the pocket already named.
+     */
+    public static boolean blockSeen(ExploreFog fog, WorldMesh blocks) {
+        if (fog == null || blocks == null) {
+            return false;
+        }
+        Set<BlockCoordinate> seen = new HashSet<>();
+        for (WorldMesh.Triangle tri : blocks.triangles()) {
+            if (tri == null || tri.at() == null || !seen.add(tri.at())) {
+                continue;
+            }
+            int col = ExploreMesh.cellCol(tri.at().x() + 0.5);
+            int row = ExploreMesh.cellRow(tri.at().z() + 0.5);
+            if (fog.tileVisible(2 * row + 1, 2 * col + 1)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void keyBlockTint(float[] rgb) {
+        mapStoneTint(MapKind.BLOCK, 0, rgb);
+    }
+
+    public static void keyBlockSoftTint(float[] rgb) {
+        keyBlockTint(rgb);
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        rgb[0] *= MAP_MARK_SOFT_WEIGHT;
+        rgb[1] *= MAP_MARK_SOFT_WEIGHT;
+        rgb[2] *= MAP_MARK_SOFT_WEIGHT;
     }
 
     /** Visible start / goal — same well key, not leftover empty HUD on the ends. */

@@ -601,7 +601,8 @@ public final class ExploreHost {
         int marks = Math.max(0, Math.min(8, line.marks()));
         boolean startSeen = line != null && line.startSeen();
         boolean goalSeen = line != null && line.goalSeen();
-        if (marks == 0 && !startSeen && !goalSeen) {
+        boolean blockSeen = line != null && line.blockSeen();
+        if (marks == 0 && !startSeen && !goalSeen && !blockSeen) {
             return;
         }
         float[] rgb = new float[3];
@@ -616,12 +617,26 @@ public final class ExploreHost {
             diamond(x, cy, 0.028f);
             x -= 0.07f;
         }
+        if (blockSeen) {
+            x = keyBlock(x, cy, softPad);
+        }
         if (goalSeen) {
             x = keyEnd(x, cy, softPad, ExplorePaint.MapKind.GOAL);
         }
         if (startSeen) {
             keyEnd(x, cy, softPad, ExplorePaint.MapKind.START);
         }
+    }
+
+    private static float keyBlock(float x, float cy, float softPad) {
+        float[] rgb = new float[3];
+        ExplorePaint.keyBlockSoftTint(rgb);
+        glColor3f(rgb[0], rgb[1], rgb[2]);
+        diamond(x, cy, 0.028f * softPad);
+        ExplorePaint.keyBlockTint(rgb);
+        glColor3f(rgb[0], rgb[1], rgb[2]);
+        diamond(x, cy, 0.028f);
+        return x - 0.07f;
     }
 
     private static float keyEnd(float x, float cy, float softPad, ExplorePaint.MapKind kind) {

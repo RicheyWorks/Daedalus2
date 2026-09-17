@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore HUD cube key.**
+  An earned occupied cube sits as a torch-wood diamond on the status
+  key, same rule as automap `BLOCK`. Unseen slabs stay off the strip.
+  Start and goal mint/coral diamonds stay. No new key.
+
 - **Desktop world street inspect.**
   The desktop world line names the first parcel place (`Willow Walk`)
   beside revision, same as the well place row. Empty worlds stay
