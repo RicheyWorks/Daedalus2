@@ -365,6 +365,7 @@ class WebUiSmokeTest {
                 .contains("rgba(16, 11, 8, .88)")
                 .contains("color: #b09a72")
                 .contains("none; -webkit-touch-callout: none; line-height: 1.45")
+                .contains("line-height: 1.45; -webkit-user-drag: none")
                 .contains(".info b { color: #f2ead8; font-weight: 600; }")
                 .contains("#f2ead8; cursor: default; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none")
                 .contains("#f2ead8; cursor: default; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none")
