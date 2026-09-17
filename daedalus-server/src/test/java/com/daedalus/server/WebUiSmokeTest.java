@@ -191,6 +191,7 @@ class WebUiSmokeTest {
                 .contains("stroke=\"rgba(184, 133, 56, 0.28)\"")
                 .contains("fill=\"#b09a72\" font-size=\"9\"")
                 .contains("#lb { font: 12px/1.9 ui-monospace, monospace; color: #f2ead8; }")
+                .contains("#lb div { border-bottom: 1px solid rgba(184, 133, 56, 0.28); padding: 2px 0; }")
                 .contains("#lb .rank { display: inline-block; width: 18px; color: #b09a72; }")
                 .contains("${active ? \"background:#1a1610;\" : \"\"}")
                 .contains("color:${done ? \"#4cc38a\" : \"#d4a04c\"}")
