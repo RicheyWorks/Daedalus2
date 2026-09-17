@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Daedalus World Phase 0 audit.**
+  `docs/DAEDALUS_WORLD_ARCHITECTURE.md` records the pivot to a
+  persistent programmable voxel world *beside* the existing maze
+  laboratory — not instead of it. Keep list is the well, 23/10
+  algorithms, living mazes, theory, plugins, desktop, explore, and
+  prod security. First code slice is `com.daedalus.world` primitives
+  only; no reactor restructure.
+
 - **First-person explore extrudes the dungeon.** A new `daedalus-explore`
   host walks the same `MazeGrid` the 2D well paints — WASD, mouse, and
   Xbox pads share one intent, fog keeps unseen stone dark, living ticks
