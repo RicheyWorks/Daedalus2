@@ -24,7 +24,7 @@
     -fx-effect: dropshadow(one-pass-box, rgba(62, 224, 143, 0.28), 14, 0.45, 0, 0);
 }
 .toolbar .label {
-    -fx-text-fill: #7d8894;
+    -fx-text-fill: #b09a72;
 }
 .toolbar .separator .line {
     -fx-border-color: rgba(184, 133, 56, 0.28);
