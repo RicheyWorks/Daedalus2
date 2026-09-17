@@ -115,6 +115,8 @@ public final class DesktopPaint {
 
     /** Overlay legend labels — warm khaki, not cool slate on torch stone. */
     public static final String LEGEND_INK = "#b09a72";
+    /** Export chip labels — same khaki as the legend so overlay copy is one lamp. */
+    public static final String EXPORT_INK = LEGEND_INK;
     /** Legend fade ink — same warm void as the stage lip, not cool fog-black. */
     public static final int LEGEND_FADE_R = 16;
     public static final int LEGEND_FADE_G = 11;

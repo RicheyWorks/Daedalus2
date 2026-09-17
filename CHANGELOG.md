@@ -284,6 +284,8 @@ under the `_migration/` portfolios.
   sit in the lamp, not a cool fog-black wash over torch stone.
   Well legend labels wear warm khaki on web and desktop so key copy matches
   the stone, not cool slate on a torch-brown board.
+  Well export chips wear khaki ink and the warm stage void so PNG / ASCII sit
+  in the lamp, not cool slate stickers on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

@@ -59,6 +59,8 @@ class WebUiSmokeTest {
                 .contains("id=\"legend\"").contains("id=\"labMetric\"").contains("class=\"rail\"")
                 .contains("id=\"compareBox\"").contains("id=\"genInfo\"").contains("id=\"asciiOut\"")
                 .contains("class=\"exports\"").contains("EXPORT_RESERVE")
+                .contains("color: #b09a72")
+                .contains("background: rgba(16, 11, 8, .78)")
                 .contains("Pick a generator and press Generate")
                 .contains("Bahnschrift")
                 .contains("radial-gradient(80% 70% at 50% 45%")
