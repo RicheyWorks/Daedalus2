@@ -773,6 +773,7 @@ under the `_migration/` portfolios.
   Start-gate host chrome wears a lamp cursor so leftover OS I-beam ice does not sit on khaki on the line.
   Well desk titles wear a lamp cursor so leftover OS I-beam ice does not sit on khaki on the rail.
   Well keys wear a lamp cursor so leftover OS I-beam ice does not sit on khaki on the chips.
+  Start-gate card titles wear a lamp cursor so leftover OS I-beam ice does not sit on cream on the cards.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
