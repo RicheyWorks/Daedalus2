@@ -97,6 +97,7 @@
           && snap.sanctuaries.placements.length),
       lens: !!snap.lens,
       waypoint: !!(snap.tour && snap.tour.waypoints && snap.tour.waypoints.length),
+      race: !!(snap.race && snap.race.lanes && snap.race.lanes.length),
       ghost: !!(snap.ghostWalk && snap.ghostWalk.length),
       fog: !!snap.fog,
     };

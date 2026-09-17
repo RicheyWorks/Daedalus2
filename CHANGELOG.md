@@ -410,6 +410,8 @@ under the `_migration/` portfolios.
   so the corridor is keyed, not leftover unnamed on torch stone.
   Desktop overlay legend names the hunt tour when that amber ribbon is on the
   well so the corridor is keyed, not leftover unnamed on torch stone.
+  Web overlay legend names the race arena when those lanes are on the well so
+  the contest is keyed, not leftover unnamed on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
