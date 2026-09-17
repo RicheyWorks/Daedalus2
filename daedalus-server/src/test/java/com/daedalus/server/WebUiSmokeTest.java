@@ -116,6 +116,7 @@ class WebUiSmokeTest {
                 .contains("scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent; }")
                 .contains("class=\"exports\"").contains("EXPORT_RESERVE")
                 .contains("id=\"pngExport\" class=\"hint\" href=\"#\" download=\"maze.png\"")
+                .contains(".exports a:focus-visible { outline: 2px solid rgba(184, 133, 56, 0.85); outline-offset: 1px; }")
                 .contains("style=\"display:none\">download as PNG")
                 .contains("color: #b09a72")
                 .contains("background: rgba(16, 11, 8, .78)")

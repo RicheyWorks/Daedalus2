@@ -628,6 +628,8 @@ under the `_migration/` portfolios.
   not leftover OS ice on torch stone.
   Campaign rung focus wears a gold ring so those stages sit in the lamp,
   not leftover OS ice on torch stone.
+  Well PNG-chip focus wears a gold ring so that export sits in the lamp,
+  not leftover OS ice on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
