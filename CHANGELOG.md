@@ -397,6 +397,8 @@ under the `_migration/` portfolios.
   table is not leftover cool navy on torch stone.
   Compare-box scroll under the well wears the same gold lip so the thumb is not
   leftover cool navy on torch stone.
+  ASCII dump under the well wears the same gold scroll lip so the maze text is
+  not leftover cool navy on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
