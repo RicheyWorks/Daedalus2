@@ -216,10 +216,10 @@ public final class DesktopPaint {
     /** ADR-006 unseen void — same tokens as {@code draw.js}. */
     public static final String FOG_UNSEEN = "#05070a";
     /** Soft well pocket behind a letterboxed maze — same band as web {@code #stage}. */
-    public static final String WELL_VOID_CENTER = "#121821";
-    public static final String WELL_VOID_EDGE = "#0b0f14";
+    public static final String WELL_VOID_CENTER = "#16120e";
+    public static final String WELL_VOID_EDGE = "#0c0908";
     /** Peak mid-glow of the void pocket — same lift as web {@code stageRimBreath}. */
-    public static final String WELL_VOID_CENTER_LIT = "#151c26";
+    public static final String WELL_VOID_CENTER_LIT = "#1a1510";
 
     public static String wellVoidCenterInk(double wave) {
         return mixHex(WELL_VOID_CENTER, WELL_VOID_CENTER_LIT, Math.max(0, Math.min(1, wave)));

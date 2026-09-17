@@ -278,6 +278,8 @@ under the `_migration/` portfolios.
   hard gold stamp behind the flame.
   Explore ceiling plaster warms toward torch-brown so the lid texture matches
   the lamp, not cool gray stone over a firelit floor.
+  Well stage void warms toward torch-brown on web and desktop so letterboxed
+  stone sits in the same lamp, not a cool blue pit.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already

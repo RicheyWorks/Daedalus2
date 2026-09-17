@@ -495,9 +495,11 @@ class DesktopPaintTest {
                 .as("a touching wall near the lamp is warmer than cold ink")
                 .isNotEqualTo(DesktopPaint.FOG_WALL);
         assertThat(DesktopPaint.FOG_UNSEEN).isEqualTo("#05070a");
-        assertThat(DesktopPaint.WELL_VOID_CENTER).isEqualTo("#121821");
-        assertThat(DesktopPaint.WELL_VOID_EDGE).isEqualTo("#0b0f14");
-        assertThat(DesktopPaint.WELL_VOID_CENTER_LIT).isEqualTo("#151c26");
+        assertThat(DesktopPaint.WELL_VOID_CENTER).isEqualTo("#16120e");
+        assertThat(DesktopPaint.WELL_VOID_EDGE).isEqualTo("#0c0908");
+        assertThat(DesktopPaint.WELL_VOID_CENTER_LIT).isEqualTo("#1a1510");
+        assertThat(Integer.parseInt(DesktopPaint.WELL_VOID_CENTER.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.WELL_VOID_CENTER.substring(5, 7), 16));
         assertThat(DesktopPaint.wellVoidCenterInk(0)).isEqualTo(DesktopPaint.WELL_VOID_CENTER);
         assertThat(DesktopPaint.wellVoidCenterInk(1)).isEqualTo(DesktopPaint.WELL_VOID_CENTER_LIT);
         assertThat(DesktopPaint.FLOOR_DIM).isEqualTo("#2a333c");

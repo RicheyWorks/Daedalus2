@@ -56,6 +56,8 @@ class ThemeManagerTest {
             assertThat(css)
                     .as("desktop well wears the same inset void shade as web #stage")
                     .contains("innershadow(gaussian, rgba(0, 0, 0, 0.35), 48");
+            assertThat(css).contains("#16120e");
+            assertThat(css).contains("#0c0908");
         }
         try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
             assertThat(in).as("main.fxml is on the classpath").isNotNull();
