@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore cube boot.**
+  Occupied cube side faces split a torch skirting band at the same
+  fraction as corridor posts, so a slab sits on the floor and is not
+  leftover even wood down to the boots.
+
 - **Explore automap cube pad.**
   Earned occupied cubes wear a torch-wood halo on the pocket, same
   width as story marks, so the slab is a place on the page and not a

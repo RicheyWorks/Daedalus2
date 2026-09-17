@@ -78,6 +78,22 @@ class ExplorePaintTest {
         ExplorePaint.blockTint(woodFace, far, 0.5, 20, Math.PI, 0);
         assertThat(near[0]).as("near cube keeps wood under the lamp").isGreaterThan(far[0]);
         assertThat(near[0]).isGreaterThan(near[2]);
+        BlockCoordinate at = new BlockCoordinate(0, 0, 1);
+        WorldMesh.Triangle bootFace = new WorldMesh.Triangle(
+                0, 0, 1, 1, 0, 1, 1, WorldMesh.BOOT_FRAC, 1,
+                WorldMesh.Face.POS_Z, BlockType.WOOD, at);
+        WorldMesh.Triangle shaftFace = new WorldMesh.Triangle(
+                0, WorldMesh.BOOT_FRAC, 1, 1, WorldMesh.BOOT_FRAC, 1, 1, 1, 1,
+                WorldMesh.Face.POS_Z, BlockType.WOOD, at);
+        float[] bootInk = new float[3];
+        float[] shaftInk = new float[3];
+        ExplorePaint.blockTint(bootFace, bootInk, Double.NaN, Double.NaN, 0, 0);
+        ExplorePaint.blockTint(shaftFace, shaftInk, Double.NaN, Double.NaN, 0, 0);
+        assertThat(bootInk[0]).as("cube boot is darker skirting, not leftover even wood")
+                .isLessThan(shaftInk[0]);
+        assertThat(ExplorePaint.blockContactShade(bootFace))
+                .isLessThan(ExplorePaint.blockContactShade(shaftFace));
+        assertThat(ExplorePaint.blockContactShade(null)).isEqualTo(1f);
     }
 
     @Test

@@ -1602,6 +1602,20 @@ public final class ExplorePaint {
     }
 
     /**
+     * Side-face boot — same skirting as corridor posts so a slab sits,
+     * not leftover even wood down to the floor.
+     */
+    public static float blockContactShade(WorldMesh.Triangle tri) {
+        if (tri == null || tri.face() == WorldMesh.Face.POS_Y
+                || tri.face() == WorldMesh.Face.NEG_Y) {
+            return 1f;
+        }
+        double midY = (tri.y1() + tri.y2() + tri.y3()) / 3.0;
+        double base = tri.at() == null ? Math.floor(midY) : tri.at().y();
+        return wallContactShade((midY - base) * ExploreMesh.WALL_HEIGHT);
+    }
+
+    /**
      * Lamp brightness only — materials already name the cube; do not hue-mix
      * leftover torch brown over wood or glass.
      */
@@ -1612,6 +1626,12 @@ public final class ExplorePaint {
             return;
         }
         blockTint(tri.type(), tri.face(), rgb);
+        float boot = blockContactShade(tri);
+        if (rgb != null && rgb.length >= 3) {
+            rgb[0] *= boot;
+            rgb[1] *= boot;
+            rgb[2] *= boot;
+        }
         if (Double.isNaN(eyeX) || Double.isNaN(eyeZ)) {
             return;
         }

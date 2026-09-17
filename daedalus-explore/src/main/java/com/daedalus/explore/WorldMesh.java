@@ -37,6 +37,9 @@ public final class WorldMesh {
         }
     }
 
+    /** Same boot fraction as corridor wall skirting — cube sits, not floats. */
+    public static final double BOOT_FRAC = 0.28;
+
     private static final int[][] DIRS = {
             {1, 0, 0}, {-1, 0, 0},
             {0, 1, 0}, {0, -1, 0},
@@ -117,10 +120,10 @@ public final class WorldMesh {
         double z1 = z + 1;
         switch (face) {
             case POS_X -> {
-                quad(out, x1, y, z, x1, y1, z, x1, y1, z1, x1, y, z1, face, type, at);
+                side(out, x1, y, z, x1, y1, z, x1, y1, z1, x1, y, z1, face, type, at);
             }
             case NEG_X -> {
-                quad(out, x, y, z1, x, y1, z1, x, y1, z, x, y, z, face, type, at);
+                side(out, x, y, z1, x, y1, z1, x, y1, z, x, y, z, face, type, at);
             }
             case POS_Y -> {
                 quad(out, x, y1, z, x, y1, z1, x1, y1, z1, x1, y1, z, face, type, at);
@@ -129,15 +132,27 @@ public final class WorldMesh {
                 quad(out, x, y, z1, x, y, z, x1, y, z, x1, y, z1, face, type, at);
             }
             case POS_Z -> {
-                quad(out, x1, y, z1, x1, y1, z1, x, y1, z1, x, y, z1, face, type, at);
+                side(out, x1, y, z1, x1, y1, z1, x, y1, z1, x, y, z1, face, type, at);
             }
             case NEG_Z -> {
-                quad(out, x, y, z, x, y1, z, x1, y1, z, x1, y, z, face, type, at);
+                side(out, x, y, z, x, y1, z, x1, y1, z, x1, y, z, face, type, at);
             }
             default -> {
                 // Face is exhaustive; keep checkstyle happy if the enum grows.
             }
         }
+    }
+
+    private static void side(List<Triangle> out,
+                             double ax, double ay, double az,
+                             double bx, double by, double bz,
+                             double cx, double cy, double cz,
+                             double dx, double dy, double dz,
+                             Face face, BlockType type, BlockCoordinate at) {
+        double y0 = Math.min(ay, Math.min(by, Math.min(cy, dy)));
+        double yb = y0 + BOOT_FRAC;
+        quad(out, ax, y0, az, bx, yb, bz, cx, yb, cz, dx, y0, dz, face, type, at);
+        quad(out, ax, yb, az, bx, by, bz, cx, cy, cz, dx, yb, dz, face, type, at);
     }
 
     private static void quad(List<Triangle> out,
