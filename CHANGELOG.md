@@ -560,6 +560,8 @@ under the `_migration/` portfolios.
   cream slabs on torch stone.
   Campaign rungs wear gold hairlines so those stages sit in the lamp, not leftover
   cream slabs on torch stone.
+  Plugin version and error copy wear khaki so those notes sit in the lamp, not
+  leftover cream beside torch ranks.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
