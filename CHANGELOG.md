@@ -10,11 +10,16 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore block lamp dim.**
+  Occupied cubes take torch reach as brightness only. Wood stays wood
+  in the dark; leftover brown hue-mix does not wash the slab.
+
 - **Explore block cube draw.**
   When blocks are shown, GLFW paints the second mesh with torch
   materials: stone, dirt, wood, and lamp-green glass (not leftover well
-  ice). The corridor mesh stays. Window / smoke attach a small landmark
-  slab; story JSON export does not.
+  ice). Distance dims brightness only so wood stays wood. The corridor
+  mesh stays. Window / smoke attach a small landmark slab; story JSON
+  export does not.
 
 - **Well world place line.**
   The world rail inspects `/parcels` and names the first parcel's

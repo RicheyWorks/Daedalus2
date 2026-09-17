@@ -6,6 +6,7 @@ import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.Direction;
 import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
+import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import org.junit.jupiter.api.Test;
 
@@ -65,6 +66,15 @@ class ExplorePaintTest {
                 .isGreaterThan(glass[2]);
         assertThat(glass[2]).isLessThan(0.72f);
         assertThat(lid[0]).as("top face reads the lamp").isGreaterThan(boot[0]);
+        float[] near = new float[3];
+        float[] far = new float[3];
+        WorldMesh.Triangle woodFace = new WorldMesh.Triangle(
+                0, 0, 1, 1, 0, 1, 1, 1, 1,
+                WorldMesh.Face.POS_Z, BlockType.WOOD, new BlockCoordinate(0, 0, 1));
+        ExplorePaint.blockTint(woodFace, near, 0.5, 0.2, Math.PI, 0);
+        ExplorePaint.blockTint(woodFace, far, 0.5, 20, Math.PI, 0);
+        assertThat(near[0]).as("near cube keeps wood under the lamp").isGreaterThan(far[0]);
+        assertThat(near[0]).isGreaterThan(near[2]);
     }
 
     @Test

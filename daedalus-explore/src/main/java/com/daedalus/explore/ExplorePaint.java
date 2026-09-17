@@ -1352,6 +1352,37 @@ public final class ExplorePaint {
         set(rgb, Math.min(1f, r * shade), Math.min(1f, g * shade), Math.min(1f, b * shade));
     }
 
+    /**
+     * Lamp brightness only — materials already name the cube; do not hue-mix
+     * leftover torch brown over wood or glass.
+     */
+    public static void blockTint(WorldMesh.Triangle tri, float[] rgb,
+                                 double eyeX, double eyeZ, double yaw, double seconds) {
+        if (tri == null) {
+            blockTint(BlockType.STONE, null, rgb);
+            return;
+        }
+        blockTint(tri.type(), tri.face(), rgb);
+        if (Double.isNaN(eyeX) || Double.isNaN(eyeZ)) {
+            return;
+        }
+        double cx = (tri.x1() + tri.x2() + tri.x3()) / 3.0;
+        double cz = (tri.z1() + tri.z2() + tri.z3()) / 3.0;
+        double dx = cx - eyeX;
+        double dz = cz - eyeZ;
+        double dist = Math.hypot(dx, dz);
+        double facing = 1;
+        if (dist > 1e-6) {
+            facing = (dx * Math.sin(yaw) + dz * (-Math.cos(yaw))) / dist;
+        }
+        float lamp = (float) (0.40 + 0.60 * Math.max(0, facing)
+                * Math.max(0, 1.0 - dist / TORCH_REACH));
+        lamp *= torchBreath(seconds);
+        rgb[0] = Math.min(1f, rgb[0] * lamp);
+        rgb[1] = Math.min(1f, rgb[1] * lamp);
+        rgb[2] = Math.min(1f, rgb[2] * lamp);
+    }
+
     /** Start / goal floor wash — names the ends, still stone, not a neon slab. */
     public static final float FLOOR_END_WEIGHT = 0.42f;
     /** Same wash on the lid so looking up names the ends. */

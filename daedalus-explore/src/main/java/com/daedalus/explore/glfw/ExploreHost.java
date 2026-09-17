@@ -358,7 +358,7 @@ public final class ExploreHost {
         faces(world, ExploreMesh.Face.CEILING, ceilTex, rgb, uv, seconds);
         glBindTexture(GL_TEXTURE_2D, 0);
         glDisable(GL_TEXTURE_2D);
-        blockFaces(world, rgb);
+        blockFaces(world, rgb, seconds);
         glBegin(GL_TRIANGLES);
         float[] pad = new float[3];
         for (ExploreMarker marker : world.markers()) {
@@ -424,13 +424,14 @@ public final class ExploreHost {
         glDisable(GL_TEXTURE_2D);
     }
 
-    private static void blockFaces(ExploreWorld world, float[] rgb) {
+    private static void blockFaces(ExploreWorld world, float[] rgb, double seconds) {
         if (!world.showingBlocks() || world.blocks() == null) {
             return;
         }
+        ExploreBody body = world.body();
         glBegin(GL_TRIANGLES);
         for (WorldMesh.Triangle tri : world.blocks().triangles()) {
-            ExplorePaint.blockTint(tri.type(), tri.face(), rgb);
+            ExplorePaint.blockTint(tri, rgb, body.x(), body.z(), body.yaw(), seconds);
             glColor3f(rgb[0], rgb[1], rgb[2]);
             glVertex3d(tri.x1(), tri.y1(), tri.z1());
             glVertex3d(tri.x2(), tri.y2(), tri.z2());
