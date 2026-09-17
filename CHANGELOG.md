@@ -618,6 +618,8 @@ under the `_migration/` portfolios.
   not leftover cool ice on torch stone.
   Tap flashes wear a gold wash so the gate and well sit in the lamp,
   not leftover cool ice on torch stone.
+  Mobile browser chrome wears torch void so the well sits in the lamp,
+  not leftover OS ice around torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
