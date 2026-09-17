@@ -530,6 +530,8 @@ under the `_migration/` portfolios.
   the lamp, not leftover ice beside torch stone.
   Live-frame solver lines wear torch amber so maze news sits in the lamp, not
   leftover ice on torch stone.
+  Leaderboard names wear warm cream so those seats sit in the lamp, not leftover
+  cool white on torch stone.
   `run-daedalus.ps1` launches those hosts from the repo root.
 
 - **Desktop Live and Jam keep the solver ribbon.** The web already
