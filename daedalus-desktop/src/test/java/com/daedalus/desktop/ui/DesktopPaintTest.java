@@ -748,6 +748,9 @@ class DesktopPaintTest {
                 .as("heat rim falls off toward floor-dim")
                 .isNotEqualTo(DesktopPaint.hotspotInk(0));
         assertThat(DesktopPaint.hotspotInk(0)).isEqualTo(DesktopPaint.HOTSPOT);
+        assertThat(DesktopPaint.hotspotInk(0.5))
+                .as("heat openings share the cell rim")
+                .isNotEqualTo(DesktopPaint.HOTSPOT);
         assertThat(DesktopPaint.HOTSPOT_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
         assertThat(DesktopPaint.hotspotCellPaintAlpha(25, 1))
                 .isGreaterThan(DesktopPaint.hotspotCellPaintAlpha(25, 0));

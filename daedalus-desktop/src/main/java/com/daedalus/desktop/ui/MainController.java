@@ -1932,6 +1932,8 @@ public class MainController {
             }
             g.setGlobalAlpha(DesktopPaint.hotspotOpeningPaintAlpha(hotWave));
             for (DesktopPaint.TileRect tile : wash.openings()) {
+                g.setFill(Color.web(DesktopPaint.hotspotInk(
+                        DesktopPaint.floorEdge(layout, tile.tileRow(), tile.tileCol()))));
                 g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                         layout.w(tile.tileCol()), layout.h(tile.tileRow()));
             }

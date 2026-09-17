@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop heat opening depth.**
+  Heat corridors between spots fall off toward floor-dim at the
+  board rim with the same 0.22 edge as halls, so leftover even
+  wash is not the last word between lamp-warm tiles. Start mint
+  and goal coral stay.
+
 - **Well heat opening depth.**
   Heat corridors between spots fall off toward floor-dim at the
   board rim with the same 0.22 edge as halls, so leftover even
