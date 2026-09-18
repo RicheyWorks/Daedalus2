@@ -145,6 +145,7 @@ class ThemeManagerTest {
             assertThat(fxml).contains("color=\"#f0b429\"");
             assertThat(fxml).contains("color=\"#8a6018\"");
             assertThat(fxml).contains("legendLens");
+            assertThat(fxml).doesNotContain("fill=\"#f2c94c\"");
             assertThat(fxml).contains("legendCompare");
             assertThat(fxml).contains("width=\"6\" height=\"10\" fill=\"#8aaa50\"");
             assertThat(fxml).contains("width=\"6\" height=\"10\" fill=\"#c07850\"");
