@@ -757,6 +757,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellScrollbarThumbHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("::-webkit-scrollbar-thumb { background: rgba(153, 111, 49, 0.45); border-radius: 4px; }")
+                    .doesNotContain("::-webkit-scrollbar-thumb { background: rgba(184, 133, 56, 0.45); border-radius: 4px; }");
+        }
+    }
+
+    @Test
     void wellHardestRibbonHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
