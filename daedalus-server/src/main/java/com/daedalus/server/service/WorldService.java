@@ -16,6 +16,7 @@ import com.daedalus.world.NpcResult;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.ParcelDenyResult;
+import com.daedalus.world.ParcelForgiveResult;
 import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.ParcelRevokeResult;
@@ -360,6 +361,24 @@ public class WorldService {
                             at == null ? new BlockCoordinate(0, 0, 0) : at, null, null, actorId, verb));
             persist();
             log.append("parcel.revoke", result, live.revision().value());
+            return result;
+        }
+    }
+
+    public ParcelForgiveResult forgiveParcel(String id, BlockCoordinate at, String actorId) {
+        return forgiveParcel(id, at, actorId, null);
+    }
+
+    public ParcelForgiveResult forgiveParcel(String id, BlockCoordinate at, String actorId,
+            String verb) {
+        World live = require(id);
+        synchronized (lock) {
+            ParcelForgiveResult result = WorldOps.asForgiveResult(
+                    WorldOps.drive(live, "parcel.forgive",
+                            at == null ? new BlockCoordinate(0, 0, 0) : at, null, null, actorId,
+                            verb));
+            persist();
+            log.append("parcel.forgive", result, live.revision().value());
             return result;
         }
     }

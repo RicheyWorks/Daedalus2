@@ -87,6 +87,11 @@ class ParcelGateTest {
         assertThat(WorldOps.aclLine(world)).isEqualTo("!bob block.place");
         assertThat(WorldOps.revokeParcel(world, inside, "bob"))
                 .isEqualTo(ParcelRevokeResult.NOT_GRANTED);
+        assertThat(WorldOps.forgiveParcel(world, inside, "bob"))
+                .isEqualTo(ParcelForgiveResult.FORGIVEN);
+        assertThat(WorldOps.aclLine(world)).isEmpty();
+        assertThat(WorldOps.forgiveParcel(world, inside, "bob"))
+                .isEqualTo(ParcelForgiveResult.NOT_DENIED);
         assertThat(world.revision().value()).isEqualTo(revision + 1);
         assertThatThrownBy(() -> world.grant(new ParcelId("parcel-missing"), "bob",
                 ParcelVerb.DOOR_OPEN)).isInstanceOf(IllegalArgumentException.class);

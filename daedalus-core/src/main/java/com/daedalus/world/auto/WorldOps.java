@@ -17,6 +17,7 @@ import com.daedalus.world.ParcelAccess;
 import com.daedalus.world.ParcelAcl;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.ParcelDenyResult;
+import com.daedalus.world.ParcelForgiveResult;
 import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelId;
 import com.daedalus.world.ParcelLeaseResult;
@@ -92,6 +93,7 @@ public final class WorldOps {
             case "parcel.grant" -> grantParcel(world, at, mazeRef, actorId);
             case "parcel.deny" -> denyParcel(world, at, mazeRef, actorId);
             case "parcel.revoke" -> revokeParcel(world, at, mazeRef, actorId);
+            case "parcel.forgive" -> forgiveParcel(world, at, mazeRef, actorId);
             case "stamp.apply" -> stampApply(world, at, maze, mazeRef, actorId);
             default -> throw new IllegalArgumentException("Unknown capability " + capability);
         };
@@ -161,7 +163,8 @@ public final class WorldOps {
 
     private static String actorFor(String capability, String mazeRef, String actorId) {
         if ("parcel.grant".equals(capability) || "parcel.deny".equals(capability)
-                || "parcel.revoke".equals(capability)) {
+                || "parcel.revoke".equals(capability)
+                || "parcel.forgive".equals(capability)) {
             return mazeRef == null || mazeRef.isBlank() ? GUEST_ACTOR : mazeRef.trim();
         }
         if ("stamp.apply".equals(capability)) {
@@ -874,6 +877,41 @@ public final class WorldOps {
 
     public static ParcelRevokeResult asRevokeResult(Object value) {
         return (ParcelRevokeResult) value;
+    }
+
+    /**
+     * Drop an extra denial on the slab under {@code at}, or the first plot.
+     * Empty actor becomes {@link #GUEST_ACTOR}. Empty verb is block.place.
+     * Grants stay.
+     */
+    public static ParcelForgiveResult forgiveParcel(World world, BlockCoordinate at,
+            String actorId) {
+        return forgiveParcel(world, at, actorId, null);
+    }
+
+    public static ParcelForgiveResult forgiveParcel(World world, BlockCoordinate at,
+            String actorId, String verbName) {
+        if (world == null || world.parcels().isEmpty()) {
+            return ParcelForgiveResult.NO_PARCEL;
+        }
+        ParcelVerb verb = parseVerb(verbName);
+        if (verb == null) {
+            return ParcelForgiveResult.UNKNOWN_VERB;
+        }
+        String actor = actorId == null || actorId.isBlank() ? GUEST_ACTOR : actorId.trim();
+        Parcel parcel = at == null ? null : world.parcelAt(at);
+        if (parcel == null) {
+            parcel = world.parcels().get(0);
+        }
+        if (!world.acl(parcel.id()).denies(actor, verb)) {
+            return ParcelForgiveResult.NOT_DENIED;
+        }
+        world.forgive(parcel.id(), actor, verb);
+        return ParcelForgiveResult.FORGIVEN;
+    }
+
+    public static ParcelForgiveResult asForgiveResult(Object value) {
+        return (ParcelForgiveResult) value;
     }
 
     /**

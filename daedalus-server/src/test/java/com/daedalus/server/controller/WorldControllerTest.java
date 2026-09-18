@@ -85,7 +85,7 @@ class WorldControllerTest {
                         "world.inspect", "block.place", "door.open", "door.close",
                         "trap.arm", "trap.disarm", "portal.open", "portal.seal",
                         "npc.talk", "npc.hush", "parcel.lease", "parcel.grant",
-                        "parcel.deny", "parcel.revoke", "stamp.apply")));
+                        "parcel.deny", "parcel.revoke", "parcel.forgive", "stamp.apply")));
 
         mvc.perform(get("/api/v1/world/world-zero/observe")
                         .param("x", "1").param("y", "2").param("z", "3"))
@@ -534,6 +534,26 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.result", equalTo("NOT_GRANTED")));
 
         mvc.perform(post("/api/v1/world/world-zero/parcels/revoke")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0,\"verb\":\"shop.open\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("UNKNOWN_VERB")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/forgive")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("FORGIVEN")))
+                .andExpect(jsonPath("$.acl", equalTo(
+                        "bob door.open · bob trap.arm · bob portal.open · bob npc.talk")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/forgive")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("NOT_DENIED")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/forgive")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0,\"verb\":\"shop.open\"}"))
                 .andExpect(status().isOk())

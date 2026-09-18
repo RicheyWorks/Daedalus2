@@ -12,6 +12,7 @@ import com.daedalus.world.Npc;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.ParcelDenyResult;
+import com.daedalus.world.ParcelForgiveResult;
 import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.ParcelRevokeResult;
@@ -168,6 +169,22 @@ class WorldBuilderTest {
                 .isEqualTo(ParcelRevokeResult.NO_PARCEL);
         assertThat(WorldOps.revokeParcel(world, new BlockCoordinate(0, 0, 0), "bob", "shop.open"))
                 .isEqualTo(ParcelRevokeResult.UNKNOWN_VERB);
+        assertThat(builder.run(new WorldBuilder.Step(
+                new BlockCoordinate(0, 0, 0), "parcel.forgive", null, null, "bob")))
+                .isEqualTo(ParcelForgiveResult.FORGIVEN);
+        assertThat(WorldOps.aclLine(world))
+                .isEqualTo("bob door.open · !bob door.open");
+        assertThat(builder.run(new WorldBuilder.Step(
+                new BlockCoordinate(0, 0, 0), "parcel.forgive", null, null, "bob")))
+                .isEqualTo(ParcelForgiveResult.NOT_DENIED);
+        assertThat(new WorldBuilder(World.zero()).run(new WorldBuilder.Step(
+                new BlockCoordinate(0, 0, 0), "parcel.forgive", null, null, "bob")))
+                .isEqualTo(ParcelForgiveResult.NO_PARCEL);
+        assertThat(WorldOps.forgiveParcel(null, null, "bob"))
+                .isEqualTo(ParcelForgiveResult.NO_PARCEL);
+        assertThat(WorldOps.forgiveParcel(world, new BlockCoordinate(0, 0, 0), "bob",
+                "shop.open"))
+                .isEqualTo(ParcelForgiveResult.UNKNOWN_VERB);
         assertThat(builder.run(new WorldBuilder.Step(next, "parcel.lease", null)))
                 .isEqualTo(ParcelLeaseResult.LEASED);
         assertThat(world.parcels().get(0).leaseId()).isEqualTo(Parcel.SYSTEM_TENANT);

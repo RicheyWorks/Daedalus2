@@ -45,6 +45,7 @@ public final class WorldZeroCapabilities {
         registry.register("parcel.grant");
         registry.register("parcel.deny");
         registry.register("parcel.revoke");
+        registry.register("parcel.forgive");
         registry.register("stamp.apply");
         if (extras != null) {
             for (String extra : extras) {

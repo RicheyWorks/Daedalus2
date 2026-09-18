@@ -7,6 +7,7 @@ import com.daedalus.world.BlockType;
 import com.daedalus.world.DoorResult;
 import com.daedalus.world.NpcResult;
 import com.daedalus.world.ParcelDenyResult;
+import com.daedalus.world.ParcelForgiveResult;
 import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.ParcelRevokeResult;
@@ -68,8 +69,10 @@ class WorldAccountingTest {
                 .isEqualTo(ParcelDenyResult.DENIED);
         assertThat(WorldOps.asRevokeResult(session.drive("parcel.revoke", null)))
                 .isEqualTo(ParcelRevokeResult.REVOKED);
+        assertThat(WorldOps.asForgiveResult(session.drive("parcel.forgive", null)))
+                .isEqualTo(ParcelForgiveResult.FORGIVEN);
         assertThat(session.observe().doorState()).isEqualTo("CLOSED");
-        assertThat(session.trace()).hasSize(22);
+        assertThat(session.trace()).hasSize(23);
     }
 
     @Test

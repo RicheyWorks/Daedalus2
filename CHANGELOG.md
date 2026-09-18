@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcel forgive drive.**
+  parcel.forgive drops an extra denial
+  on the slab under the cube. Named
+  results are FORGIVEN, NOT_DENIED,
+  NO_PARCEL, and UNKNOWN_VERB. Grants
+  stay. Well POST /parcels/forgive.
+  No wallet types.
+
 - **Parcel revoke drive.**
   parcel.revoke drops an extra grant on
   the slab under the cube. Named results

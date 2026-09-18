@@ -8,10 +8,12 @@ import com.daedalus.api.dto.ChunkInspectResponse;
 import com.daedalus.api.dto.DoorInspectResponse;
 import com.daedalus.api.dto.DenyParcelRequest;
 import com.daedalus.api.dto.DoorMutationResponse;
+import com.daedalus.api.dto.ForgiveParcelRequest;
 import com.daedalus.api.dto.GrantParcelRequest;
 import com.daedalus.api.dto.NpcInspectResponse;
 import com.daedalus.api.dto.NpcMutationResponse;
 import com.daedalus.api.dto.ParcelDenyResponse;
+import com.daedalus.api.dto.ParcelForgiveResponse;
 import com.daedalus.api.dto.ParcelGrantResponse;
 import com.daedalus.api.dto.ParcelLeaseResponse;
 import com.daedalus.api.dto.ParcelRevokeResponse;
@@ -50,6 +52,7 @@ import com.daedalus.world.Npc;
 import com.daedalus.world.NpcResult;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelDenyResult;
+import com.daedalus.world.ParcelForgiveResult;
 import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.ParcelRevokeResult;
@@ -183,6 +186,22 @@ public class WorldController {
         ParcelRevokeResult result = worlds.revokeParcel(id, at, body.actorId(), body.verb());
         World world = mounted(id);
         return ResponseEntity.ok(new ParcelRevokeResponse(
+                result.name(), WorldOps.aclLine(world), world.revision().value()));
+    }
+
+    @PostMapping("/world/{id}/parcels/forgive")
+    @Operation(summary = "Forgive an extra denial on the slab under the cube, or the first plot.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<ParcelForgiveResponse> forgiveParcel(
+            @PathVariable String id, @Valid @RequestBody ForgiveParcelRequest body) {
+        mounted(id);
+        BlockCoordinate at = new BlockCoordinate(
+                body.x() == null ? 0 : body.x(),
+                body.y() == null ? 0 : body.y(),
+                body.z() == null ? 0 : body.z());
+        ParcelForgiveResult result = worlds.forgiveParcel(id, at, body.actorId(), body.verb());
+        World world = mounted(id);
+        return ResponseEntity.ok(new ParcelForgiveResponse(
                 result.name(), WorldOps.aclLine(world), world.revision().value()));
     }
 
