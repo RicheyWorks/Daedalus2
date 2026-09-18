@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well compare footer depth.**
+  Solver-footer gold falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP leftover
+  even log lips stay.
+
 - **Well compare frame depth.**
   Solver-panel gold falls off toward
   floor-dim with the same 0.22 as halls,
