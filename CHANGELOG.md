@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well door actor.**
+  well door.open and door.close send optional actorId
+  (drive type) on the query. Blank stays the system
+  owner. No wallet types.
+
 - **Well grant verb.**
   The well parcel.grant and parcel.deny bodies send verb
   (type or block.place) so alice can extra-list door.open

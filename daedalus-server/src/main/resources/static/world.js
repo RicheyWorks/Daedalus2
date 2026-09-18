@@ -17,8 +17,10 @@
     "block.remove": {method: "DELETE", path: at =>
         "/world/" + WORLD + "/block?x=" + at.x + "&y=" + at.y + "&z=" + at.z},
     "door.inspect": {method: "GET", path: () => "/world/" + WORLD + "/door"},
-    "door.open": {method: "POST", path: () => "/world/" + WORLD + "/door/open"},
-    "door.close": {method: "POST", path: () => "/world/" + WORLD + "/door/close"},
+    "door.open": {method: "POST", path: (at, actor) =>
+        "/world/" + WORLD + "/door/open" + actorQuery(actor)},
+    "door.close": {method: "POST", path: (at, actor) =>
+        "/world/" + WORLD + "/door/close" + actorQuery(actor)},
     "trap.inspect": {method: "GET", path: () => "/world/" + WORLD + "/trap"},
     "trap.arm": {method: "POST", path: () => "/world/" + WORLD + "/trap/arm"},
     "trap.disarm": {method: "POST", path: () => "/world/" + WORLD + "/trap/disarm"},
@@ -45,6 +47,10 @@
         return body;
       }},
   };
+
+  function actorQuery(actor) {
+    return actor ? "?actorId=" + encodeURIComponent(actor) : "";
+  }
 
   async function inspect(host) {
     const box = host && host.$ && host.$("worldBox");
@@ -89,7 +95,7 @@
       const mazeId = host.state && host.state.maze && host.state.maze.id;
       opts.body = JSON.stringify(step.body(cell, type, mazeId));
     }
-    return host.api(step.path(cell), opts);
+    return host.api(step.path(cell, type), opts);
   }
 
   /**
