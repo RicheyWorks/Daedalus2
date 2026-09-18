@@ -2,11 +2,11 @@
 
 package com.daedalus.api.dto;
 
-/** Portal inspect — same facts automation reads. Place, lot, box, and maze are empty off a slab. */
+/** Portal inspect — same facts automation reads. Place, lot, box, maze, and lease are empty off a slab. */
 public record PortalInspectResponse(
         String id, String worldId, int x, int y, int z, String state,
         String place, String lot, String acl, String drive, String driveActor, String driveAt,
-        String box, String maze) {
+        String box, String maze, String lease) {
 
     public PortalInspectResponse {
         place = place == null ? "" : place;
@@ -17,40 +17,48 @@ public record PortalInspectResponse(
         driveAt = driveAt == null ? "" : driveAt;
         box = box == null ? "" : box;
         maze = maze == null ? "" : maze;
+        lease = lease == null ? "" : lease;
+    }
+
+    public PortalInspectResponse(
+            String id, String worldId, int x, int y, int z, String state,
+            String place, String lot, String acl, String drive, String driveActor, String driveAt,
+            String box, String maze) {
+        this(id, worldId, x, y, z, state, place, lot, acl, drive, driveActor, driveAt, box, maze, "");
     }
 
     public PortalInspectResponse(
             String id, String worldId, int x, int y, int z, String state,
             String place, String lot, String acl, String drive, String driveActor, String driveAt,
             String box) {
-        this(id, worldId, x, y, z, state, place, lot, acl, drive, driveActor, driveAt, box, "");
+        this(id, worldId, x, y, z, state, place, lot, acl, drive, driveActor, driveAt, box, "", "");
     }
 
     public PortalInspectResponse(
             String id, String worldId, int x, int y, int z, String state,
             String place, String lot, String acl, String drive, String driveActor, String driveAt) {
-        this(id, worldId, x, y, z, state, place, lot, acl, drive, driveActor, driveAt, "", "");
+        this(id, worldId, x, y, z, state, place, lot, acl, drive, driveActor, driveAt, "", "", "");
     }
 
     public PortalInspectResponse(
             String id, String worldId, int x, int y, int z, String state,
             String place, String lot, String acl, String drive, String driveActor) {
-        this(id, worldId, x, y, z, state, place, lot, acl, drive, driveActor, "", "", "");
+        this(id, worldId, x, y, z, state, place, lot, acl, drive, driveActor, "", "", "", "");
     }
 
     public PortalInspectResponse(
             String id, String worldId, int x, int y, int z, String state,
             String place, String lot, String acl) {
-        this(id, worldId, x, y, z, state, place, lot, acl, "", "", "", "", "");
+        this(id, worldId, x, y, z, state, place, lot, acl, "", "", "", "", "", "");
     }
 
     public PortalInspectResponse(
             String id, String worldId, int x, int y, int z, String state,
             String place, String lot) {
-        this(id, worldId, x, y, z, state, place, lot, "", "", "", "", "", "");
+        this(id, worldId, x, y, z, state, place, lot, "", "", "", "", "", "", "");
     }
 
     public PortalInspectResponse(String id, String worldId, int x, int y, int z, String state) {
-        this(id, worldId, x, y, z, state, "", "", "", "", "", "", "", "");
+        this(id, worldId, x, y, z, state, "", "", "", "", "", "", "", "", "");
     }
 }

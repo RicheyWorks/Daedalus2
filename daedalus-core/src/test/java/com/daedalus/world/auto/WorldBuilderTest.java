@@ -277,6 +277,7 @@ class WorldBuilderTest {
         assertThat(portal.get("lot")).isEqualTo("0,0");
         assertThat(portal.get("box")).isEqualTo("0,0,0-2,1,2");
         assertThat(portal.get("maze")).isEqualTo("");
+        assertThat(portal.get("lease")).isEqualTo(Parcel.SYSTEM_TENANT);
         assertThat(portal.get("acl")).isEqualTo("");
         @SuppressWarnings("unchecked")
         Map<String, Object> npc = (Map<String, Object>) builder.run(

@@ -685,6 +685,7 @@ public final class WorldOps {
         out.put("lot", lotAt(world, portal.at()));
         out.put("box", boxAt(world, portal.at()));
         out.put("maze", mazeAt(world, portal.at()));
+        out.put("lease", leaseAt(world, portal.at()));
         out.put("acl", aclAt(world, portal.at()));
         out.put("drive", driveOn(world, portal.at()));
         out.put("driveActor", actorOn(world, portal.at()));
