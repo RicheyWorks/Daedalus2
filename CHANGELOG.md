@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well caption fingerprint mismatch depth.**
+  Clash gold falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP arena-win
+  gold stays.
+
 - **Well caption fingerprint depth.**
   Match moss falls off toward
   floor-dim with the same 0.22 as halls,

@@ -10,7 +10,7 @@
     const pct = Math.round(f.confidence * 100);
     const verdict = f.agrees
         ? `<b style="color:#758c44">${escapeHtml(f.predictedGeneratorId)}</b> — matches the record`
-        : `<b style="color:#f0b429">${escapeHtml(f.predictedGeneratorId)}</b> — record says `
+        : `<b style="color:#c49425">${escapeHtml(f.predictedGeneratorId)}</b> — record says `
           + `${escapeHtml(f.recordedGeneratorId)}`;
     const sig = f.signature;
     return `<div style="margin-top:8px">Structure says ${verdict} `
