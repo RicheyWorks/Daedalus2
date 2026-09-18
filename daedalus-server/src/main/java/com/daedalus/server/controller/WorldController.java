@@ -110,7 +110,7 @@ public class WorldController {
         World world = mounted(id);
         return ResponseEntity.ok(new WorldInspectResponse(
                 world.id().value(), world.revision().value(), world.chunkCount(),
-                world.parcels().size(), WorldOps.streetLine(world), WorldOps.streetLots(world),
+                world.parcels().size(), WorldOps.streetLine(world), WorldOps.lastLot(world),
                 WorldOps.lastMaze(world), WorldOps.lastLeaseId(world),
                 WorldOps.lastPlaceName(world), WorldOps.occupantsLine(world),
                 WorldOps.standsLine(world), WorldOps.aclLine(world),

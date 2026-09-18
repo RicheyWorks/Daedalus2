@@ -185,7 +185,7 @@ public final class WorldOps {
         out.put("chunkCount", world.chunkCount());
         out.put("plots", world.parcels().size());
         out.put("street", streetLine(world));
-        out.put("lot", streetLots(world));
+        out.put("lot", lastLot(world));
         out.put("lots", streetLots(world));
         out.put("maze", lastMaze(world));
         out.put("mazes", streetMazes(world));

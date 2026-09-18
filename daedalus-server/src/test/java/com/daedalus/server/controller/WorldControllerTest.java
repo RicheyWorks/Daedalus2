@@ -1049,7 +1049,7 @@ class WorldControllerTest {
         extra.perform(get("/api/v1/world/world-zero"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.plots", equalTo(2)))
-                .andExpect(jsonPath("$.lot", equalTo("0,0 · 8,0")))
+                .andExpect(jsonPath("$.lot", equalTo("8,0")))
                 .andExpect(jsonPath("$.lots", equalTo("0,0 · 8,0")))
                 .andExpect(jsonPath("$.maze", equalTo(again.metadata().id().toString())))
                 .andExpect(jsonPath("$.mazes", equalTo(
