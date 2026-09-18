@@ -323,6 +323,20 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellInfoRimHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("@keyframes infoRimBreath")
+                    .contains("0%, 100% { border-left-color: rgba(153, 111, 49, 0.28); }")
+                    .contains("50% { border-left-color: rgba(153, 111, 49, 0.48); }")
+                    .contains("margin-top: 4px;\n          border-left: 2px solid rgba(153, 111, 49, 0.28)")
+                    .doesNotContain("0%, 100% { border-left-color: rgba(184, 133, 56, 0.28); }");
+        }
+    }
+
+    @Test
     void wellAsciiRockHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
             assertThat(in).as("static well page").isNotNull();
