@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well builder result.**
+  The world fold paints the last /trace result after
+  the capability so DENIED is visible. No wallet types.
+
 - **Well NPC actor.**
   well npc.talk and npc.hush send optional actorId
   (drive type) on the query. Blank stays the system

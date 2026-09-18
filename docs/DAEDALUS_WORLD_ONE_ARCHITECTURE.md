@@ -375,7 +375,8 @@ well portal actor, and
 ParcelGate on npc.talk and
 npc.hush, and
 NPC REST actor, and
-well NPC actor
+well NPC actor, and
+well builder result
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

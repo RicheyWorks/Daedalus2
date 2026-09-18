@@ -489,6 +489,7 @@ class WebUiPaintPinTest {
                     .contains("/world/\" + WORLD + \"/trace")
                     .contains("throw new Error(\"Unknown capability \" + capability)")
                     .contains("builder — WorldOps only")
+                    .contains("lastStep.result")
                     .contains("host.state && host.state.maze && host.state.maze.id")
                     .contains("body.mazeId = mazeId")
                     .contains("body.next = true")

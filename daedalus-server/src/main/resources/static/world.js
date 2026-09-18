@@ -186,8 +186,10 @@
     const built = document.createElement("div");
     built.className = "hint";
     const steps = trace && trace.steps ? trace.steps : [];
-    built.textContent = steps.length
-        ? "builder " + steps[steps.length - 1].capability
+    const lastStep = steps.length ? steps[steps.length - 1] : null;
+    built.textContent = lastStep
+        ? "builder " + lastStep.capability
+            + (lastStep.result ? " " + lastStep.result : "")
         : "builder — WorldOps only";
     box.appendChild(built);
   }
