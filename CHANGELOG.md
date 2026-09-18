@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **GET /world names every slab maze.**
+  Inspect lists every lab maze UUID,
+  oldest first. Empty until a mazeRef
+  is bound. No wallet types.
+
 - **Explore names every ACL.**
   Off a slab the hall caption names
   every extra-list, oldest first.
