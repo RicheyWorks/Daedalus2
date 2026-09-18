@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Trap inspect last drive.**
+  GET /trap names the last driven result
+  and account key only when that cube
+  was driven. The well occupancy line
+  paints it. No wallet types.
+
 - **Observe last drive.**
   GET /observe names the last driven
   result and account key only on that

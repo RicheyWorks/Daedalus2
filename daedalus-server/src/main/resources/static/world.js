@@ -206,7 +206,8 @@
     if (!obj || !obj.state) {
       return "—";
     }
-    const at = [obj.place, obj.lot, obj.acl].filter(Boolean).join(" ");
+    const at = [obj.place, obj.lot, obj.acl, obj.drive, obj.driveActor]
+        .filter(Boolean).join(" ");
     return at ? obj.state + " " + at : obj.state;
   }
 

@@ -8,6 +8,8 @@ import com.daedalus.world.stamp.StampOps;
 import com.daedalus.world.stamp.StampRequest;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -139,6 +141,11 @@ class ParcelGateTest {
         assertThat(WorldOps.actorOn(world, Trap.ZERO_AT)).isEqualTo("carol");
         assertThat(WorldOps.driveOn(world, new BlockCoordinate(0, 0, 0))).isEmpty();
         assertThat(WorldOps.actorOn(world, new BlockCoordinate(0, 0, 0))).isEmpty();
+        @SuppressWarnings("unchecked")
+        Map<String, Object> trapSeen = (Map<String, Object>) WorldOps.drive(
+                world, "trap.inspect", Trap.ZERO_AT, null);
+        assertThat(trapSeen.get("drive")).isEqualTo("trap.arm DENIED");
+        assertThat(trapSeen.get("driveActor")).isEqualTo("carol");
         assertThat(world.trap().state()).isEqualTo(TrapState.DISARMED);
         assertThat(world.revision().value()).isEqualTo(revision);
         assertThat(WorldOps.grantParcel(world, Trap.ZERO_AT, "bob", "trap.arm"))
