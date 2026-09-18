@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop last-event occupant.**
+  When the last world event is the door, trap, portal, or NPC
+  cell, inspect names that occupant. Off-object stays lot-only.
+
 - **Explore occupancy cubes.**
   Door, trap, portal, and NPC cells that are still AIR mesh
   as glass. Collision stays World.contains — a look, not a

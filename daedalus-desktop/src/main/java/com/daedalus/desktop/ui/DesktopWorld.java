@@ -168,7 +168,8 @@ public final class DesktopWorld {
     }
 
     /**
-     * Place and lot under the last event cube. Empty off a slab.
+     * Place, lot, and occupant under the last event cube.
+     * Empty off a slab unless that cell is door, trap, portal, or NPC.
      */
     public static String eventLot(World world, WorldEventFrame last) {
         if (world == null || last == null) {
@@ -177,10 +178,12 @@ public final class DesktopWorld {
         BlockCoordinate cell = new BlockCoordinate(last.x(), last.y(), last.z());
         String named = WorldOps.placeAt(world, cell);
         String lot = WorldOps.lotAt(world, cell);
-        if (named.isEmpty()) {
-            return lot;
+        String who = WorldOps.occupantAt(world, cell);
+        String at = named.isEmpty() ? lot : (lot.isEmpty() ? named : named + " " + lot);
+        if (at.isEmpty()) {
+            return who;
         }
-        return lot.isEmpty() ? named : named + " " + lot;
+        return who.isEmpty() ? at : at + " " + who;
     }
 
     /** All inspired toponyms on inspect — not GIS. */

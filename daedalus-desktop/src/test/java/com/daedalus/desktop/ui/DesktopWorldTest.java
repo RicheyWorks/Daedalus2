@@ -11,6 +11,7 @@ import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.WorldService;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
+import com.daedalus.world.Door;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.PlaceNames;
@@ -78,6 +79,11 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.eventLot(named, onLot)).isEqualTo("Willow Walk 8,8");
         assertThat(DesktopWorld.eventLot(named, placed)).isEmpty();
         assertThat(DesktopWorld.eventLot(null, onLot)).isEmpty();
+        WorldEventFrame onDoor = new WorldEventFrame(
+                DesktopWorld.ID, "BLOCK_PLACED", Door.ZERO_AT.x(), Door.ZERO_AT.y(),
+                Door.ZERO_AT.z(), "STONE", "AIR", 1);
+        assertThat(DesktopWorld.eventLot(World.zero(), onDoor)).isEqualTo("door");
+        assertThat(DesktopWorld.inspectLine(World.zero(), onDoor)).contains("door");
         assertThat(DesktopWorld.inspectLine(named, onLot))
                 .contains("BLOCK_PLACED 8,0,8 WOOD")
                 .contains("Willow Walk 8,8");
