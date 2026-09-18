@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **NPC inspect last drive.**
+  GET /npc names the last driven result
+  and account key only when that cube
+  was driven. The well occupancy line
+  already paints it. No wallet types.
+
 - **Portal inspect last drive.**
   GET /portal names the last driven
   result and account key only when that

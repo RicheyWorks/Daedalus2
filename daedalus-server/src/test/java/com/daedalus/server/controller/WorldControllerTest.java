@@ -240,7 +240,9 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo("npc-zero")))
                 .andExpect(jsonPath("$.state", equalTo("IDLE")))
-                .andExpect(jsonPath("$.acl", equalTo("")));
+                .andExpect(jsonPath("$.acl", equalTo("")))
+                .andExpect(jsonPath("$.drive", equalTo("")))
+                .andExpect(jsonPath("$.driveActor", equalTo("")));
 
         mvc.perform(post("/api/v1/world/world-zero/npc/talk"))
                 .andExpect(status().isOk())
@@ -463,6 +465,11 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("DENIED")))
                 .andExpect(jsonPath("$.state", equalTo("SPEAKING")));
+
+        mvc.perform(get("/api/v1/world/world-zero/npc"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.drive", equalTo("npc.talk DENIED")))
+                .andExpect(jsonPath("$.driveActor", equalTo("carol")));
 
         mvc.perform(post("/api/v1/world/world-zero/npc/hush").param("actorId", "carol"))
                 .andExpect(status().isOk())

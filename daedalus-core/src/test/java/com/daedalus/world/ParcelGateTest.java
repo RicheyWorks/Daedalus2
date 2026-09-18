@@ -220,6 +220,11 @@ class ParcelGateTest {
         long revision = world.revision().value();
         assertThat(WorldOps.drive(world, "npc.talk", Npc.ZERO_AT, null, null, "carol"))
                 .isEqualTo(NpcResult.DENIED);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> npcSeen = (Map<String, Object>) WorldOps.drive(
+                world, "npc.inspect", Npc.ZERO_AT, null);
+        assertThat(npcSeen.get("drive")).isEqualTo("npc.talk DENIED");
+        assertThat(npcSeen.get("driveActor")).isEqualTo("carol");
         assertThat(world.npc().state()).isEqualTo(NpcState.IDLE);
         assertThat(world.revision().value()).isEqualTo(revision);
         assertThat(WorldOps.grantParcel(world, Npc.ZERO_AT, "bob", "npc.talk"))

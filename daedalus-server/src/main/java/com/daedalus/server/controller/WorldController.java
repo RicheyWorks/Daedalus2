@@ -439,7 +439,8 @@ public class WorldController {
                 npc.id(), npc.worldId().value(),
                 npc.at().x(), npc.at().y(), npc.at().z(), npc.state().name(),
                 WorldOps.placeAt(world, npc.at()), WorldOps.lotAt(world, npc.at()),
-                WorldOps.aclAt(world, npc.at())));
+                WorldOps.aclAt(world, npc.at()),
+                WorldOps.driveOn(world, npc.at()), WorldOps.actorOn(world, npc.at())));
     }
 
     @PostMapping("/world/{id}/npc/talk")
