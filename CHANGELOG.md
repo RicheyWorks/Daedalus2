@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well highlight depth.**
+  Highlight-wash gold falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP leftover
+  even window-inactive gold stays.
+
 - **Well search-current depth.**
   Search-current gold falls off toward
   floor-dim with the same 0.22 as halls,
