@@ -45,6 +45,9 @@
           body.mazeId = mazeId;
           body.next = true;
         }
+        if (type) {
+          body.actorId = type;
+        }
         return body;
       }},
   };

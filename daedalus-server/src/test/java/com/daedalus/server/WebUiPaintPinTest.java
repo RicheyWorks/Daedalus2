@@ -485,6 +485,7 @@ class WebUiPaintPinTest {
                     .contains("host.state && host.state.maze && host.state.maze.id")
                     .contains("body.mazeId = mazeId")
                     .contains("body.next = true")
+                    .contains("body.actorId = type")
                     .contains("async function projectLab")
                     .contains("drive(host, \"stamp.apply\")")
                     .contains("drive(host, \"parcel.lease\")")

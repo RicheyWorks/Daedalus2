@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well stamp actor.**
+  well stamp.apply sends optional actorId (drive type).
+  Generate still stamps as the system owner. No wallet
+  types.
+
 - **Well remove actor.**
   well block.remove sends optional actorId (drive type)
   on the query. Blank stays the system owner. No wallet
