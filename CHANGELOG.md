@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Portal inspect ACL.**
+  portal.inspect lists extra grants and denials on the slab
+  under portal-zero. Off a plot stays empty. The well portal
+  row appends that string. Owner stays implicit.
+
 - **Trap inspect ACL.**
   trap.inspect lists extra grants and denials on the slab
   under trap-zero. Off a plot stays empty. The well trap

@@ -346,7 +346,8 @@ explore hall ACL, and
 block.inspect ACL, and
 observe ACL, and
 door.inspect ACL, and
-trap.inspect ACL
+trap.inspect ACL, and
+portal.inspect ACL
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
