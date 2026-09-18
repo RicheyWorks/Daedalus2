@@ -63,6 +63,10 @@ public final class DesktopWorld {
         String occ = occupancyLine(world);
         if (occ.isEmpty()) {
             occ = chunkOccupants(world, last);
+            String stands = chunkStands(world, last);
+            if (!stands.isEmpty()) {
+                occ = occ.isEmpty() ? stands : occ + " · " + stands;
+            }
         }
         if (!occ.isEmpty()) {
             line = line + " · " + occ;
@@ -136,6 +140,20 @@ public final class DesktopWorld {
                 ? new ChunkCoordinate(0, 0, 0)
                 : new BlockCoordinate(last.x(), last.y(), last.z()).chunk();
         return WorldOps.occupantsInChunk(world, cc);
+    }
+
+    /**
+     * Occupancy cells in the live 16³ as kind + x,y,z.
+     * Occupants stay names-only. Empty far off the volume.
+     */
+    public static String chunkStands(World world, WorldEventFrame last) {
+        if (world == null) {
+            return "";
+        }
+        ChunkCoordinate cc = last == null
+                ? new ChunkCoordinate(0, 0, 0)
+                : new BlockCoordinate(last.x(), last.y(), last.z()).chunk();
+        return WorldOps.standsInChunk(world, cc);
     }
 
     /**

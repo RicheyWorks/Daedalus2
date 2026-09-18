@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop chunk stands.**
+  Inspect lists door, trap, portal, and NPC in the live 16³
+  as kind + x,y,z after the names. Occupants stay names-only.
+  A last-event far off origin stays silent.
+
 - **Chunk inspect stands.**
   chunk.inspect lists door, trap, portal, and NPC in that
   16³ as kind + x,y,z. Occupants stay names-only. The well
