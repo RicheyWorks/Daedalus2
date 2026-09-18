@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **NPC talk names the slab box.**
+  POST /npc/talk and /npc/hush name
+  the inclusive AABB under that cube.
+  Empty when the NPC sits off a
+  stamped plot. No wallet types.
+
 - **Portal open names the slab box.**
   POST /portal/open and /portal/seal
   name the inclusive AABB under that
