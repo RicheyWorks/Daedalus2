@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Block place names the slab place.**
+  PUT /block and DELETE /block name
+  the inspired street under that cube.
+  Empty when the cube sits off a
+  stamped plot. No wallet types.
+
 - **Block place names the slab lease.**
   PUT /block and DELETE /block name
   the account key on the plot under
