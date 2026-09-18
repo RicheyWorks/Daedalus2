@@ -1067,6 +1067,7 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.acl", equalTo("bob block.place")))
                 .andExpect(jsonPath("$.acls", equalTo("bob block.place")))
                 .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))))
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString(" · "))))
                 .andExpect(jsonPath("$.places", org.hamcrest.Matchers.containsString(" · ")));
         extra.perform(post("/api/v1/world/world-zero/parcels/grant")
                         .contentType(MediaType.APPLICATION_JSON)
