@@ -299,6 +299,28 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("ALREADY_GRANTED")));
 
+        mvc.perform(post("/api/v1/world/world-zero/parcels/grant")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0,\"verb\":\"door.open\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("GRANTED")))
+                .andExpect(jsonPath("$.acl", equalTo("bob block.place · bob door.open")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/grant")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0,\"verb\":\"shop.open\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("UNKNOWN_VERB")));
+
+        mvc.perform(post("/api/v1/world/world-zero/door/close"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("CLOSED")));
+
+        mvc.perform(post("/api/v1/world/world-zero/door/open").param("actorId", "bob"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("OPENED")))
+                .andExpect(jsonPath("$.state", equalTo("OPEN")));
+
         mvc.perform(put("/api/v1/world/world-zero/block")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"x\":0,\"y\":0,\"z\":0,\"type\":\"STONE\",\"actorId\":\"carol\"}"))
@@ -324,7 +346,8 @@ class WorldControllerTest {
                         .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("DENIED")))
-                .andExpect(jsonPath("$.acl", equalTo("bob block.place · !bob block.place")));
+                .andExpect(jsonPath("$.acl",
+                        equalTo("bob block.place · bob door.open · !bob block.place")));
 
         mvc.perform(post("/api/v1/world/world-zero/parcels/deny")
                         .contentType(MediaType.APPLICATION_JSON)

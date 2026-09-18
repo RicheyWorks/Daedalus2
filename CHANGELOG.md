@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcel grant verb.**
+  parcel.grant and parcel.deny take an optional verb:
+  block.place (default), door.open, or stamp.apply.
+  Unknown verbs are UNKNOWN_VERB. No wallet types.
+
 - **Parcel gate on stamp.apply.**
   stamp.apply asks ParcelGate for stamp.apply. Empty
   actor is the system owner. DENIED does not add a plot.

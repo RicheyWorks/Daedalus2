@@ -9,5 +9,6 @@ package com.daedalus.world;
 public enum ParcelGrantResult {
     GRANTED,
     ALREADY_GRANTED,
-    NO_PARCEL
+    NO_PARCEL,
+    UNKNOWN_VERB
 }

@@ -12,5 +12,10 @@ public record GrantParcelRequest(
         @NotBlank(message = "actorId is required") String actorId,
         Integer x,
         Integer y,
-        Integer z) {
+        Integer z,
+        String verb) {
+
+    public GrantParcelRequest(String actorId, Integer x, Integer y, Integer z) {
+        this(actorId, x, y, z, null);
+    }
 }

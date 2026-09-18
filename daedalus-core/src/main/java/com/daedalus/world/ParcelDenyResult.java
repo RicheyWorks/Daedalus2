@@ -9,5 +9,6 @@ package com.daedalus.world;
 public enum ParcelDenyResult {
     DENIED,
     ALREADY_DENIED,
-    NO_PARCEL
+    NO_PARCEL,
+    UNKNOWN_VERB
 }

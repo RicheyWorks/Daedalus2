@@ -143,7 +143,7 @@ public class WorldController {
                 body.x() == null ? 0 : body.x(),
                 body.y() == null ? 0 : body.y(),
                 body.z() == null ? 0 : body.z());
-        ParcelGrantResult result = worlds.grantParcel(id, at, body.actorId());
+        ParcelGrantResult result = worlds.grantParcel(id, at, body.actorId(), body.verb());
         World world = mounted(id);
         return ResponseEntity.ok(new ParcelGrantResponse(
                 result.name(), WorldOps.aclLine(world), world.revision().value()));
@@ -159,7 +159,7 @@ public class WorldController {
                 body.x() == null ? 0 : body.x(),
                 body.y() == null ? 0 : body.y(),
                 body.z() == null ? 0 : body.z());
-        ParcelDenyResult result = worlds.denyParcel(id, at, body.actorId());
+        ParcelDenyResult result = worlds.denyParcel(id, at, body.actorId(), body.verb());
         World world = mounted(id);
         return ResponseEntity.ok(new ParcelDenyResponse(
                 result.name(), WorldOps.aclLine(world), world.revision().value()));

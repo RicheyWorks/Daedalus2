@@ -126,10 +126,24 @@ class WorldBuilderTest {
                 .isEqualTo(ParcelGrantResult.NO_PARCEL);
         assertThat(WorldOps.grantParcel(null, null, "bob"))
                 .isEqualTo(ParcelGrantResult.NO_PARCEL);
+        assertThat(WorldOps.grantParcel(world, new BlockCoordinate(0, 0, 0), "bob", "door.open"))
+                .isEqualTo(ParcelGrantResult.GRANTED);
+        assertThat(WorldOps.aclLine(world)).isEqualTo("bob block.place · bob door.open");
+        assertThat(WorldOps.grantParcel(world, new BlockCoordinate(0, 0, 0), "bob", "door.open"))
+                .isEqualTo(ParcelGrantResult.ALREADY_GRANTED);
+        assertThat(WorldOps.grantParcel(world, new BlockCoordinate(0, 0, 0), "bob", "shop.open"))
+                .isEqualTo(ParcelGrantResult.UNKNOWN_VERB);
         assertThat(builder.run(new WorldBuilder.Step(
                 new BlockCoordinate(0, 0, 0), "parcel.deny", null, null, "bob")))
                 .isEqualTo(ParcelDenyResult.DENIED);
-        assertThat(WorldOps.aclLine(world)).isEqualTo("bob block.place · !bob block.place");
+        assertThat(WorldOps.aclLine(world))
+                .isEqualTo("bob block.place · bob door.open · !bob block.place");
+        assertThat(WorldOps.denyParcel(world, new BlockCoordinate(0, 0, 0), "bob", "door.open"))
+                .isEqualTo(ParcelDenyResult.DENIED);
+        assertThat(WorldOps.aclLine(world))
+                .isEqualTo("bob block.place · bob door.open · !bob block.place · !bob door.open");
+        assertThat(WorldOps.denyParcel(world, new BlockCoordinate(0, 0, 0), "bob", "shop.open"))
+                .isEqualTo(ParcelDenyResult.UNKNOWN_VERB);
         assertThat(builder.run(new WorldBuilder.Step(
                 new BlockCoordinate(0, 0, 0), "parcel.deny", null, null, "bob")))
                 .isEqualTo(ParcelDenyResult.ALREADY_DENIED);

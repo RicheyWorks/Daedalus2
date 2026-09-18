@@ -88,8 +88,8 @@ public final class WorldOps {
             case "npc.talk" -> world.talkNpc();
             case "npc.hush" -> world.hushNpc();
             case "parcel.lease" -> leaseParcel(world);
-            case "parcel.grant" -> grantParcel(world, at, mazeRef);
-            case "parcel.deny" -> denyParcel(world, at, mazeRef);
+            case "parcel.grant" -> grantParcel(world, at, mazeRef, actorId);
+            case "parcel.deny" -> denyParcel(world, at, mazeRef, actorId);
             case "stamp.apply" -> stampApply(world, at, maze, mazeRef, actorId);
             default -> throw new IllegalArgumentException("Unknown capability " + capability);
         };
@@ -155,6 +155,22 @@ public final class WorldOps {
             case BLOCK_PLACE -> "block.place";
             case DOOR_OPEN -> "door.open";
             case STAMP_APPLY -> "stamp.apply";
+        };
+    }
+
+    /**
+     * Named parcel verbs. Blank is {@link ParcelVerb#BLOCK_PLACE}.
+     * Unknown names stay unknown — not a silent default.
+     */
+    public static ParcelVerb parseVerb(String name) {
+        if (name == null || name.isBlank()) {
+            return ParcelVerb.BLOCK_PLACE;
+        }
+        return switch (name.trim()) {
+            case "block.place" -> ParcelVerb.BLOCK_PLACE;
+            case "door.open" -> ParcelVerb.DOOR_OPEN;
+            case "stamp.apply" -> ParcelVerb.STAMP_APPLY;
+            default -> null;
         };
     }
 
@@ -493,22 +509,31 @@ public final class WorldOps {
     }
 
     /**
-     * Extra BLOCK_PLACE grant on the slab under {@code at}, or the first
-     * plot. Empty actor becomes {@link #GUEST_ACTOR}.
+     * Extra grant on the slab under {@code at}, or the first plot.
+     * Empty actor becomes {@link #GUEST_ACTOR}. Empty verb is block.place.
      */
     public static ParcelGrantResult grantParcel(World world, BlockCoordinate at, String actorId) {
+        return grantParcel(world, at, actorId, null);
+    }
+
+    public static ParcelGrantResult grantParcel(World world, BlockCoordinate at, String actorId,
+            String verbName) {
         if (world == null || world.parcels().isEmpty()) {
             return ParcelGrantResult.NO_PARCEL;
+        }
+        ParcelVerb verb = parseVerb(verbName);
+        if (verb == null) {
+            return ParcelGrantResult.UNKNOWN_VERB;
         }
         String actor = actorId == null || actorId.isBlank() ? GUEST_ACTOR : actorId.trim();
         Parcel parcel = at == null ? null : world.parcelAt(at);
         if (parcel == null) {
             parcel = world.parcels().get(0);
         }
-        if (world.acl(parcel.id()).grants(actor, ParcelVerb.BLOCK_PLACE)) {
+        if (world.acl(parcel.id()).grants(actor, verb)) {
             return ParcelGrantResult.ALREADY_GRANTED;
         }
-        world.grant(parcel.id(), actor, ParcelVerb.BLOCK_PLACE);
+        world.grant(parcel.id(), actor, verb);
         return ParcelGrantResult.GRANTED;
     }
 
@@ -517,22 +542,32 @@ public final class WorldOps {
     }
 
     /**
-     * Extra BLOCK_PLACE deny on the slab under {@code at}, or the first
-     * plot. Empty actor becomes {@link #GUEST_ACTOR}. Deny wins.
+     * Extra deny on the slab under {@code at}, or the first plot.
+     * Empty actor becomes {@link #GUEST_ACTOR}. Empty verb is block.place.
+     * Deny wins.
      */
     public static ParcelDenyResult denyParcel(World world, BlockCoordinate at, String actorId) {
+        return denyParcel(world, at, actorId, null);
+    }
+
+    public static ParcelDenyResult denyParcel(World world, BlockCoordinate at, String actorId,
+            String verbName) {
         if (world == null || world.parcels().isEmpty()) {
             return ParcelDenyResult.NO_PARCEL;
+        }
+        ParcelVerb verb = parseVerb(verbName);
+        if (verb == null) {
+            return ParcelDenyResult.UNKNOWN_VERB;
         }
         String actor = actorId == null || actorId.isBlank() ? GUEST_ACTOR : actorId.trim();
         Parcel parcel = at == null ? null : world.parcelAt(at);
         if (parcel == null) {
             parcel = world.parcels().get(0);
         }
-        if (world.acl(parcel.id()).denies(actor, ParcelVerb.BLOCK_PLACE)) {
+        if (world.acl(parcel.id()).denies(actor, verb)) {
             return ParcelDenyResult.ALREADY_DENIED;
         }
-        world.deny(parcel.id(), actor, ParcelVerb.BLOCK_PLACE);
+        world.deny(parcel.id(), actor, verb);
         return ParcelDenyResult.DENIED;
     }
 

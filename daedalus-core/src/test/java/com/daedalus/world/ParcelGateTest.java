@@ -90,17 +90,18 @@ class ParcelGateTest {
         World world = World.zero();
         StampOps.apply(world, new StampRequest(world.id(), new BlockCoordinate(0, 0, 0),
                 new MazeGrid(1, 1), 0, 1));
-        ParcelId id = world.parcels().get(0).id();
         long revision = world.revision().value();
         assertThat(WorldOps.drive(world, "door.open", Door.ZERO_AT, null, null, "carol"))
                 .isEqualTo(DoorResult.DENIED);
         assertThat(world.door().state()).isEqualTo(DoorState.CLOSED);
         assertThat(world.revision().value()).isEqualTo(revision);
-        world.grant(id, "bob", ParcelVerb.DOOR_OPEN);
+        assertThat(WorldOps.grantParcel(world, Door.ZERO_AT, "bob", "door.open"))
+                .isEqualTo(ParcelGrantResult.GRANTED);
         assertThat(WorldOps.drive(world, "door.open", Door.ZERO_AT, null, null, "bob"))
                 .isEqualTo(DoorResult.OPENED);
         assertThat(world.door().state()).isEqualTo(DoorState.OPEN);
-        world.deny(id, "bob", ParcelVerb.DOOR_OPEN);
+        assertThat(WorldOps.denyParcel(world, Door.ZERO_AT, "bob", "door.open"))
+                .isEqualTo(ParcelDenyResult.DENIED);
         assertThat(WorldOps.drive(world, "door.open", Door.ZERO_AT, null, null, "bob"))
                 .isEqualTo(DoorResult.DENIED);
         assertThat(WorldOps.drive(world, "door.close", Door.ZERO_AT, null, null, "carol"))
@@ -113,6 +114,11 @@ class ParcelGateTest {
         assertThat(WorldOps.asStampResult(WorldOps.drive(
                 world, "stamp.apply", new BlockCoordinate(0, 0, 0), null, null, null, "carol"))
                 .outcome()).isEqualTo("DENIED");
+        assertThat(WorldOps.grantParcel(world, new BlockCoordinate(0, 0, 0), "carol", "stamp.apply"))
+                .isEqualTo(ParcelGrantResult.GRANTED);
+        assertThat(WorldOps.asStampResult(WorldOps.drive(
+                world, "stamp.apply", new BlockCoordinate(0, 0, 0), null, null, null, "carol"))
+                .outcome()).isEqualTo("PARCEL_OVERLAP");
         assertThat(world.parcels()).hasSize(1);
         assertThat(WorldOps.asStampResult(WorldOps.drive(
                 world, "stamp.apply", new BlockCoordinate(0, 0, 0), null))

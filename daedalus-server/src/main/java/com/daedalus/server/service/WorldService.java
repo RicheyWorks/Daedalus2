@@ -276,11 +276,15 @@ public class WorldService {
     }
 
     public ParcelGrantResult grantParcel(String id, BlockCoordinate at, String actorId) {
+        return grantParcel(id, at, actorId, null);
+    }
+
+    public ParcelGrantResult grantParcel(String id, BlockCoordinate at, String actorId, String verb) {
         World live = require(id);
         synchronized (lock) {
             ParcelGrantResult result = WorldOps.asGrantResult(
                     WorldOps.drive(live, "parcel.grant",
-                            at == null ? new BlockCoordinate(0, 0, 0) : at, null, null, actorId));
+                            at == null ? new BlockCoordinate(0, 0, 0) : at, null, null, actorId, verb));
             persist();
             log.append("parcel.grant", result, live.revision().value());
             return result;
@@ -288,11 +292,15 @@ public class WorldService {
     }
 
     public ParcelDenyResult denyParcel(String id, BlockCoordinate at, String actorId) {
+        return denyParcel(id, at, actorId, null);
+    }
+
+    public ParcelDenyResult denyParcel(String id, BlockCoordinate at, String actorId, String verb) {
         World live = require(id);
         synchronized (lock) {
             ParcelDenyResult result = WorldOps.asDenyResult(
                     WorldOps.drive(live, "parcel.deny",
-                            at == null ? new BlockCoordinate(0, 0, 0) : at, null, null, actorId));
+                            at == null ? new BlockCoordinate(0, 0, 0) : at, null, null, actorId, verb));
             persist();
             log.append("parcel.deny", result, live.revision().value());
             return result;
