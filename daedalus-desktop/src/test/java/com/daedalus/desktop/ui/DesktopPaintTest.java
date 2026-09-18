@@ -402,6 +402,11 @@ class DesktopPaintTest {
     @Test
     void aRaceFrontIsTheLastFiveExpandedCells() {
         assertThat(DesktopPaint.RACE_A).isEqualTo("#8fb8ff");
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.RACE_A, 0))
+                .isEqualTo(DesktopPaint.RACE_A);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.RACE_A, 1))
+                .as("race-A wash falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.RACE_A);
         assertThat(DesktopPaint.RACE_B).isEqualTo("#f0b429");
         assertThat(DesktopPaint.walkTrailInk(DesktopPaint.RACE_B, 0))
                 .isEqualTo(DesktopPaint.RACE_B);

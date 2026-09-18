@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop race-A wash depth.**
+  First-lane ice falls off toward
+  floor-dim at the board rim with the
+  same 0.22 edge as halls, so leftover
+  even ice is not the last word on a
+  finish. KEEP gold lane B stays.
+
 - **Well race-A wash depth.**
   First-lane ice falls off toward
   floor-dim at the board rim with the
