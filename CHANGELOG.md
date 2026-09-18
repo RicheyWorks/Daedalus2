@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore hall last drive at.**
+  The hall caption after leftover HALL
+  names the cube of the last mutation.
+  Stood-on START still leads. No wallet
+  types.
+
 - **DAEW last drive at.**
   World snapshots copy the cube address
   of the last mutation. DAEW v13 writes

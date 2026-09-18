@@ -986,6 +986,17 @@ public final class ExplorePaint {
         return found.isEmpty() ? null : found;
     }
 
+    /**
+     * Cube address of the last mutation. Empty until a mutation.
+     */
+    public static String atName(WorldMesh blocks) {
+        if (blocks == null || blocks.world() == null) {
+            return null;
+        }
+        String found = WorldOps.atLine(blocks.world());
+        return found.isEmpty() ? null : found;
+    }
+
     private static String withAcl(String place, WorldMesh blocks) {
         String acl = aclName(blocks);
         String named = acl == null ? place : place + " · " + acl;
@@ -1000,10 +1011,16 @@ public final class ExplorePaint {
 
     private static String withActor(String place, WorldMesh blocks) {
         String actor = actorName(blocks);
-        if (actor == null) {
+        String named = actor == null ? place : place + " · " + actor;
+        return withAt(named, blocks);
+    }
+
+    private static String withAt(String place, WorldMesh blocks) {
+        String at = atName(blocks);
+        if (at == null) {
             return place;
         }
-        return place + " · " + actor;
+        return place + " · " + at;
     }
 
     private static String withOccupants(String place, WorldMesh blocks) {

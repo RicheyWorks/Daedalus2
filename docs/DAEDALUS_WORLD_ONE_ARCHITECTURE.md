@@ -388,7 +388,8 @@ desktop last drive actor, and
 DAEW last drive actor, and
 well builder last actor, and
 well inspect drive at, and
-DAEW last drive at
+DAEW last drive at, and
+explore hall last drive at
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

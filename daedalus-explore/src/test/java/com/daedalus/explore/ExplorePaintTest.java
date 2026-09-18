@@ -1143,11 +1143,14 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.driveName(null)).isNull();
         assertThat(ExplorePaint.actorName(denied)).isEqualTo("carol");
         assertThat(ExplorePaint.actorName(null)).isNull();
+        assertThat(ExplorePaint.atName(denied)).isEqualTo("1,1,0");
+        assertThat(ExplorePaint.atName(null)).isNull();
         fog.stand(new Point(0, 1));
         assertThat(ExplorePaint.status(fog, offPlot, List.of(), longHall, denied).place())
                 .as("last drive follows leftover HALL so DENIED is visible")
                 .contains("trap.arm DENIED")
-                .contains("carol");
+                .contains("carol")
+                .contains("1,1,0");
         assertThat(ExplorePaint.status(fog, atStart, List.of(), mesh, denied).place())
                 .as("stood-on start still leads last drive")
                 .isEqualTo("START");
