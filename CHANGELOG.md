@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Grant names the slab box.**
+  POST /parcels/grant names the
+  inclusive AABB under that cube.
+  Empty off a plot. No wallet types.
+
 - **Forgive names the slab lot.**
   POST /parcels/forgive names the
   street index under that cube.
