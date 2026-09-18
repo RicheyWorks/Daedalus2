@@ -1278,6 +1278,8 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.lastParcelAcl(gatedTwo)).isEqualTo("carol door.open");
         assertThat(ExplorePaint.lastParcelAcls(gatedTwo))
                 .isEqualTo("bob block.place · carol door.open");
+        assertThat(ExplorePaint.lastParcelAcls(gatedTwo))
+                .isNotEqualTo(ExplorePaint.lastParcelAcl(gatedTwo));
     }
 
     @Test

@@ -947,9 +947,13 @@ public final class ExplorePaint {
             if (rent != null) {
                 named = named + " " + rent;
             }
+            String extra = lastParcelAcl(blocks);
             String extras = lastParcelAcls(blocks);
-            if (extras != null) {
-                named = named + " " + extras;
+            if (extra != null) {
+                named = named + " " + extra;
+                if (extras != null && !extras.equals(extra)) {
+                    named = named + " " + extras;
+                }
                 return withOccupants(named, blocks);
             }
             return withAcl(withOccupants(named, blocks), blocks);

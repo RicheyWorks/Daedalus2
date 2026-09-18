@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore names the last slab ACL.**
+  Off a slab the hall caption names
+  the newest extra-list. Empty until
+  a grant or deny. No wallet types.
+
 - **Desktop inspect names the last slab ACL.**
   Inspect names the newest extra-list.
   Empty until a grant or deny. No
