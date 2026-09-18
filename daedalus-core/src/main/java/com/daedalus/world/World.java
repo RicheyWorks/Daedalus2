@@ -41,6 +41,7 @@ public final class World {
     private int nextParcelNumber;
     private String lastDriveCapability = "";
     private String lastDriveResult = "";
+    private String lastDriveActor = "";
 
     public World(WorldId id) {
         this(id, WorldId.ZERO.equals(Objects.requireNonNull(id, "WorldId is required"))
@@ -49,13 +50,13 @@ public final class World {
                 WorldId.ZERO.equals(id) ? Trap.zero() : null,
                 WorldId.ZERO.equals(id) ? Portal.zero() : null,
                 WorldId.ZERO.equals(id) ? Npc.zero() : null,
-                0L, Map.of(), List.of(), Map.of(), "", "");
+                0L, Map.of(), List.of(), Map.of(), "", "", "");
     }
 
     private World(WorldId id, Door door, Trap trap, Portal portal, Npc npc, long revision,
             Map<ChunkCoordinate, Chunk> seeded, List<Parcel> seededParcels,
             Map<ParcelId, ParcelAcl> seededAcls, String lastDriveCapability,
-            String lastDriveResult) {
+            String lastDriveResult, String lastDriveActor) {
         this.id = Objects.requireNonNull(id, "WorldId is required");
         this.door = door;
         this.trap = trap;
@@ -74,6 +75,7 @@ public final class World {
         }
         this.lastDriveCapability = lastDriveCapability == null ? "" : lastDriveCapability;
         this.lastDriveResult = lastDriveResult == null ? "" : lastDriveResult;
+        this.lastDriveActor = lastDriveActor == null ? "" : lastDriveActor;
     }
 
     public static World zero() {
@@ -103,10 +105,21 @@ public final class World {
         }
     }
 
+    public String lastDriveActor() {
+        synchronized (lock) {
+            return lastDriveActor;
+        }
+    }
+
     public void recordDrive(String capability, String result) {
+        recordDrive(capability, result, "");
+    }
+
+    public void recordDrive(String capability, String result, String actor) {
         synchronized (lock) {
             lastDriveCapability = capability == null ? "" : capability;
             lastDriveResult = result == null ? "" : result;
+            lastDriveActor = actor == null ? "" : actor;
         }
     }
 
@@ -332,7 +345,8 @@ public final class World {
                     List.copyOf(parcels),
                     Map.copyOf(copiedAcls),
                     lastDriveCapability,
-                    lastDriveResult);
+                    lastDriveResult,
+                    lastDriveActor);
         }
     }
 
@@ -544,7 +558,8 @@ public final class World {
                 snapshot.parcels(),
                 snapshot.acls(),
                 snapshot.lastDriveCapability(),
-                snapshot.lastDriveResult());
+                snapshot.lastDriveResult(),
+                snapshot.lastDriveActor());
     }
 
     private static int maxParcelNumber(List<Parcel> existing) {

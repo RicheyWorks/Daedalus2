@@ -133,6 +133,7 @@ class ParcelGateTest {
         long revision = world.revision().value();
         assertThat(WorldOps.drive(world, "trap.arm", Trap.ZERO_AT, null, null, "carol"))
                 .isEqualTo(TrapResult.DENIED);
+        assertThat(WorldOps.actorLine(world)).isEqualTo("carol");
         assertThat(world.trap().state()).isEqualTo(TrapState.DISARMED);
         assertThat(world.revision().value()).isEqualTo(revision);
         assertThat(WorldOps.grantParcel(world, Trap.ZERO_AT, "bob", "trap.arm"))
@@ -154,7 +155,9 @@ class ParcelGateTest {
                 .isEqualTo(TrapResult.DISARMED);
         assertThat(world.trap().state()).isEqualTo(TrapState.DISARMED);
         assertThat(WorldOps.driveLine(world)).isEqualTo("trap.disarm DISARMED");
+        assertThat(WorldOps.actorLine(world)).isEqualTo(Parcel.SYSTEM_OWNER);
         assertThat(WorldOps.driveLine((World) null)).isEmpty();
+        assertThat(WorldOps.actorLine((World) null)).isEmpty();
     }
 
     @Test

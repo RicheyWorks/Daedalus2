@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well inspect drive actor.**
+  GET /world carries the account key that
+  last drove a mutation. The fold paints
+  an actor row. Inspect does not overwrite
+  it. No wallet types.
+
 - **Persist denied drive.**
   WorldService writes the DAEW file after
   DENIED so a remesh still shows trap.arm

@@ -69,7 +69,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.stands",
                         equalTo("door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0")))
                 .andExpect(jsonPath("$.acl", equalTo("")))
-                .andExpect(jsonPath("$.drive", equalTo("")));
+                .andExpect(jsonPath("$.drive", equalTo("")))
+                .andExpect(jsonPath("$.driveActor", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero/parcels"))
                 .andExpect(status().isOk())
@@ -251,7 +252,8 @@ class WorldControllerTest {
 
         mvc.perform(get("/api/v1/world/world-zero"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.drive", equalTo("stamp.apply APPLIED")));
+                .andExpect(jsonPath("$.drive", equalTo("stamp.apply APPLIED")))
+                .andExpect(jsonPath("$.driveActor", equalTo("system")));
 
         mvc.perform(post("/api/v1/world/world-zero/stamp")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -259,6 +261,11 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.ok", equalTo(false)))
                 .andExpect(jsonPath("$.result", equalTo("DENIED")));
+
+        mvc.perform(get("/api/v1/world/world-zero"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.drive", equalTo("stamp.apply DENIED")))
+                .andExpect(jsonPath("$.driveActor", equalTo("carol")));
 
         mvc.perform(post("/api/v1/world/world-zero/stamp")
                         .contentType(MediaType.APPLICATION_JSON)

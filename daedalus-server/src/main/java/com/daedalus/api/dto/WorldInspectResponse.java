@@ -19,7 +19,8 @@ public record WorldInspectResponse(
         String occupants,
         String stands,
         String acl,
-        String drive) {
+        String drive,
+        String driveActor) {
 
     public WorldInspectResponse {
         street = street == null ? "" : street;
@@ -31,6 +32,7 @@ public record WorldInspectResponse(
         stands = stands == null ? "" : stands;
         acl = acl == null ? "" : acl;
         drive = drive == null ? "" : drive;
+        driveActor = driveActor == null ? "" : driveActor;
         if (plots < 0) {
             throw new IllegalArgumentException("plots must be at least 0");
         }
@@ -39,9 +41,17 @@ public record WorldInspectResponse(
     public WorldInspectResponse(
             String id, long revision, int chunkCount, int plots,
             String street, String lot, String maze, String lease, String place,
+            String occupants, String stands, String acl, String drive) {
+        this(id, revision, chunkCount, plots, street, lot, maze, lease, place,
+                occupants, stands, acl, drive, "");
+    }
+
+    public WorldInspectResponse(
+            String id, long revision, int chunkCount, int plots,
+            String street, String lot, String maze, String lease, String place,
             String occupants, String stands, String acl) {
         this(id, revision, chunkCount, plots, street, lot, maze, lease, place,
-                occupants, stands, acl, "");
+                occupants, stands, acl, "", "");
     }
 
     public WorldInspectResponse(
@@ -49,7 +59,7 @@ public record WorldInspectResponse(
             String street, String lot, String maze, String lease, String place,
             String occupants, String stands) {
         this(id, revision, chunkCount, plots, street, lot, maze, lease, place,
-                occupants, stands, "", "");
+                occupants, stands, "", "", "");
     }
 
     public WorldInspectResponse(
@@ -57,6 +67,6 @@ public record WorldInspectResponse(
             String street, String lot, String maze, String lease, String place,
             String occupants) {
         this(id, revision, chunkCount, plots, street, lot, maze, lease, place,
-                occupants, "", "", "");
+                occupants, "", "", "", "");
     }
 }

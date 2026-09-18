@@ -94,7 +94,7 @@ public final class WorldOps {
             default -> throw new IllegalArgumentException("Unknown capability " + capability);
         };
         if (!(out instanceof Map)) {
-            recordDrive(world, capability, out);
+            recordDrive(world, capability, out, actorFor(capability, mazeRef, actorId));
         }
         return out;
     }
@@ -126,11 +126,36 @@ public final class WorldOps {
         return driveLine(last.capability(), last.result());
     }
 
-    private static void recordDrive(World world, String capability, Object result) {
+    /**
+     * Account key that last drove a mutation. Empty until a mutation.
+     * Never a wallet type.
+     */
+    public static String actorLine(World world) {
+        if (world == null) {
+            return "";
+        }
+        String actor = world.lastDriveActor();
+        return actor == null ? "" : actor;
+    }
+
+    private static void recordDrive(World world, String capability, Object result, String actor) {
         String rendered = result == null ? "null"
                 : result instanceof StampResult stamp ? stamp.outcome()
                 : result.toString();
-        world.recordDrive(capability, rendered);
+        world.recordDrive(capability, rendered, actor);
+    }
+
+    private static String actorFor(String capability, String mazeRef, String actorId) {
+        if ("parcel.grant".equals(capability) || "parcel.deny".equals(capability)) {
+            return mazeRef == null || mazeRef.isBlank() ? GUEST_ACTOR : mazeRef.trim();
+        }
+        if ("stamp.apply".equals(capability)) {
+            return actorId == null || actorId.isBlank() ? Parcel.SYSTEM_OWNER : actorId.trim();
+        }
+        if (mazeRef == null || mazeRef.isBlank()) {
+            return Parcel.SYSTEM_OWNER;
+        }
+        return mazeRef.trim();
     }
 
     private static Map<String, Object> inspectWorld(World world) {
@@ -148,6 +173,7 @@ public final class WorldOps {
         out.put("stands", standsLine(world));
         out.put("acl", aclLine(world));
         out.put("drive", driveLine(world));
+        out.put("driveActor", actorLine(world));
         return out;
     }
 

@@ -21,7 +21,8 @@ public record WorldSnapshot(
         List<Parcel> parcels,
         Map<ParcelId, ParcelAcl> acls,
         String lastDriveCapability,
-        String lastDriveResult) {
+        String lastDriveResult,
+        String lastDriveActor) {
 
     public WorldSnapshot {
         Objects.requireNonNull(id, "WorldId is required");
@@ -32,19 +33,27 @@ public record WorldSnapshot(
         acls = acls == null ? Map.of() : Map.copyOf(acls);
         lastDriveCapability = lastDriveCapability == null ? "" : lastDriveCapability;
         lastDriveResult = lastDriveResult == null ? "" : lastDriveResult;
+        lastDriveActor = lastDriveActor == null ? "" : lastDriveActor;
+    }
+
+    public WorldSnapshot(WorldId id, WorldRevision revision, Map<ChunkCoordinate, Chunk> chunks,
+            Door door, Trap trap, Portal portal, Npc npc, List<Parcel> parcels,
+            Map<ParcelId, ParcelAcl> acls, String lastDriveCapability, String lastDriveResult) {
+        this(id, revision, chunks, door, trap, portal, npc, parcels, acls,
+                lastDriveCapability, lastDriveResult, "");
     }
 
     public WorldSnapshot(WorldId id, WorldRevision revision, Map<ChunkCoordinate, Chunk> chunks,
             Door door, Trap trap, Portal portal, Npc npc, List<Parcel> parcels,
             Map<ParcelId, ParcelAcl> acls) {
-        this(id, revision, chunks, door, trap, portal, npc, parcels, acls, "", "");
+        this(id, revision, chunks, door, trap, portal, npc, parcels, acls, "", "", "");
     }
 
     public WorldSnapshot(WorldId id, WorldRevision revision, Map<ChunkCoordinate, Chunk> chunks) {
-        this(id, revision, chunks, null, null, null, null, List.of(), Map.of(), "", "");
+        this(id, revision, chunks, null, null, null, null, List.of(), Map.of(), "", "", "");
     }
 
     public WorldSnapshot(WorldId id, WorldRevision revision, Map<ChunkCoordinate, Chunk> chunks, Door door) {
-        this(id, revision, chunks, door, null, null, null, List.of(), Map.of(), "", "");
+        this(id, revision, chunks, door, null, null, null, List.of(), Map.of(), "", "", "");
     }
 }

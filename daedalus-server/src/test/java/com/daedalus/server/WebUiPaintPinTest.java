@@ -434,7 +434,9 @@ class WebUiPaintPinTest {
                     .contains("world.acl")
                     .contains("row(box, \"acl\"")
                     .contains("world.drive")
-                    .contains("row(box, \"drive\"");
+                    .contains("row(box, \"drive\"")
+                    .contains("world.driveActor")
+                    .contains("row(box, \"actor\"");
             assertThat(world).doesNotContain("/world/\" + WORLD + \"/parcels\"");
             assertThat(html).contains("#worldBox .place { color: #94612e; -webkit-user-drag: none")
                     .contains("#worldBox .slab { color: #94612e; -webkit-user-drag: none");
