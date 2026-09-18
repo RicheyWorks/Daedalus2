@@ -233,9 +233,14 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.expansionOpenings(lane, tiles))
                 .contains(new DesktopPaint.TileRect(1, 2));
         assertThat(DesktopPaint.COMPARE[0]).isEqualTo("#8fb8ff");
-        assertThat(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[0], 1))
-                .as("compare ice stays leftover even")
+        assertThat(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[0], 0))
                 .isEqualTo(DesktopPaint.COMPARE[0]);
+        assertThat(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[0], 1))
+                .as("compare ice falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.COMPARE[0]);
+        assertThat(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[0], 1))
+                .as("compare ice tip shares the wash rim")
+                .isNotEqualTo(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[0], 0));
         assertThat(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[1], 0))
                 .isEqualTo(DesktopPaint.COMPARE[1]);
         assertThat(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[1], 1))

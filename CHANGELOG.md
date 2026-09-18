@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop compare ice wash depth.**
+  First-lane ice falls off toward
+  floor-dim at the board rim with the
+  same 0.22 edge as halls, so leftover
+  even ice is not the last word on a
+  split. Gold, rust, moss, and sand
+  seats stay.
+
 - **Desktop race-A ribbon depth.**
   First-lane ice path and tip fall off
   toward floor-dim at the board rim with

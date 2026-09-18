@@ -553,10 +553,11 @@ public final class DesktopPaint {
     public static final double COMPARE_HEAD_RADIUS = 0.28;
 
     /**
-     * Ice lane stays leftover even. Other seats share the 0.22 hall rim.
+     * Every compare seat shares the 0.22 hall rim — leftover even ice
+     * is not the last word on a split.
      */
     public static String compareWashInk(String color, double edge) {
-        if (color == null || COMPARE[0].equals(color)) {
+        if (color == null) {
             return color;
         }
         return walkTrailInk(color, edge);

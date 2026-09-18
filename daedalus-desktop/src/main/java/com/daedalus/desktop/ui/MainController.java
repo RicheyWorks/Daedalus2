@@ -2056,7 +2056,6 @@ public class MainController {
                 if (lane.path() == null || lane.path().isEmpty()) {
                     continue;
                 }
-                g.setFill(Color.web(lane.color()));
                 g.setGlobalAlpha(DesktopPaint.comparePaintAlpha(compareWave));
                 for (DesktopPaint.TileRect tile : DesktopPaint.expansionCells(lane.path())) {
                     g.setFill(Color.web(DesktopPaint.compareWashInk(lane.color(),
