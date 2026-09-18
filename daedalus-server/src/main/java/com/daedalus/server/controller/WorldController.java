@@ -188,7 +188,8 @@ public class WorldController {
         ParcelDenyResult result = worlds.denyParcel(id, at, body.actorId(), body.verb());
         World world = mounted(id);
         return ResponseEntity.ok(new ParcelDenyResponse(
-                result.name(), WorldOps.aclLine(world), world.revision().value()));
+                result.name(), WorldOps.aclLine(world), world.revision().value(),
+                WorldOps.mazeAt(world, at)));
     }
 
     @PostMapping("/world/{id}/parcels/revoke")

@@ -457,7 +457,8 @@ parcel list names each plot ACL, and
 stamp names the slab maze, and
 lease names the slab maze, and
 release names the remaining maze, and
-grant names the slab maze
+grant names the slab maze, and
+deny names the slab maze
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
