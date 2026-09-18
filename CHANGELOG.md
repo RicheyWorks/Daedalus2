@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Deny names the slab lease.**
+  POST /parcels/deny names the
+  account key on the plot under
+  that cube. Empty until
+  parcel.lease. No wallet types.
+
 - **Grant names the slab lease.**
   POST /parcels/grant names the
   account key on the plot under
