@@ -900,12 +900,16 @@ public final class ExplorePaint {
             String lot = parcelLotName(blocks, body);
             String box = parcelBoxName(blocks, body);
             String maze = parcelMazeName(blocks, body);
+            String lease = parcelLeaseName(blocks, body);
             String named = lot == null ? street : street + " " + lot;
             if (box != null) {
                 named = named + " " + box;
             }
             if (maze != null) {
                 named = named + " " + maze;
+            }
+            if (lease != null) {
+                named = named + " " + lease;
             }
             return withAcl(withOccupancy(occ, named), blocks);
         }

@@ -1083,6 +1083,15 @@ class ExplorePaintTest {
                 .as("a lease leads leftover HALL when the street is unnamed")
                 .isEqualTo(Parcel.SYSTEM_TENANT + " 8,8 8,0,8-9,1,9");
         assertThat(ExplorePaint.parcelLeaseName(null, onStreet)).isNull();
+        World namedLease = World.zero();
+        namedLease.applyStamp(new ParcelBounds(8, 0, 8, 9, 1, 9), Parcel.SYSTEM_OWNER,
+                List.of(new BlockCoordinate(8, 0, 8)), List.of(BlockType.WOOD));
+        namedLease.nameParcel(namedLease.parcels().get(0).id(), "Willow Walk");
+        namedLease.leaseParcel(namedLease.parcels().get(0).id(), Parcel.SYSTEM_TENANT);
+        WorldMesh rentedStreet = WorldMesh.of(namedLease);
+        assertThat(ExplorePaint.status(fog, onStreet, List.of(), mesh, rentedStreet).place())
+                .as("a lease follows the named street under the boots")
+                .isEqualTo("Willow Walk 8,8 8,0,8-9,1,9 " + Parcel.SYSTEM_TENANT);
         ExploreBody atStart = ExploreBody.atCell(new Point(0, 0));
         assertThat(ExplorePaint.status(fog, atStart, List.of(), mesh, cubes).place())
                 .as("stood-on start still leads")
