@@ -202,6 +202,8 @@ class WebUiSmokeTest {
                 .contains("#tourBox, #labOut, #compareBox, #status {")
                 .contains("#campaignBox { padding: 8px; background: #16120e;")
                 .contains("#tourBox { padding: 8px; background: #16120e;")
+                .contains("#tourBox { padding: 8px; background: #16120e;\n"
+                        + "             border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
                 .contains("#labOut { padding: 8px; background: #16120e;")
                 .contains("#compareBox { max-height: 22vh; overflow: auto; overscroll-behavior: none; min-width: 0;")
                 .contains("color: #f2ead8; cursor: text; padding: 8px; background: #16120e;\n"
