@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **NPC inspect names the slab box.**
+  GET /npc names the inclusive AABB
+  living stays inside when npc-zero
+  sits on a plot. Empty off the street
+  — the default 1×1 slab misses 3,1,0.
+  No wallet types.
+
 - **Portal inspect names the slab box.**
   GET /portal names the inclusive AABB
   living stays inside when portal-zero

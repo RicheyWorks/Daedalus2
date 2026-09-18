@@ -503,7 +503,7 @@ public class WorldController {
                 WorldOps.placeAt(world, npc.at()), WorldOps.lotAt(world, npc.at()),
                 WorldOps.aclAt(world, npc.at()),
                 WorldOps.driveOn(world, npc.at()), WorldOps.actorOn(world, npc.at()),
-                WorldOps.atOn(world, npc.at())));
+                WorldOps.atOn(world, npc.at()), WorldOps.boxAt(world, npc.at())));
     }
 
     @PostMapping("/world/{id}/npc/talk")
