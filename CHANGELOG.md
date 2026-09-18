@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Revoke names the slab box.**
+  POST /parcels/revoke names the
+  inclusive AABB under that cube.
+  Empty off a plot. No wallet types.
+
 - **Deny names the slab box.**
   POST /parcels/deny names the
   inclusive AABB under that cube.

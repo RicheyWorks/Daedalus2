@@ -4,7 +4,7 @@ package com.daedalus.api.dto;
 
 /** Result of dropping an extra parcel grant. {@code result} is never silent success. */
 public record ParcelRevokeResponse(String result, String acl, long revision, String maze,
-                                  String lease, String place, String lot) {
+                                  String lease, String place, String lot, String box) {
 
     public ParcelRevokeResponse {
         result = result == null ? "" : result;
@@ -13,23 +13,29 @@ public record ParcelRevokeResponse(String result, String acl, long revision, Str
         lease = lease == null ? "" : lease;
         place = place == null ? "" : place;
         lot = lot == null ? "" : lot;
+        box = box == null ? "" : box;
+    }
+
+    public ParcelRevokeResponse(String result, String acl, long revision, String maze,
+                               String lease, String place, String lot) {
+        this(result, acl, revision, maze, lease, place, lot, "");
     }
 
     public ParcelRevokeResponse(String result, String acl, long revision, String maze,
                                String lease, String place) {
-        this(result, acl, revision, maze, lease, place, "");
+        this(result, acl, revision, maze, lease, place, "", "");
     }
 
     public ParcelRevokeResponse(String result, String acl, long revision, String maze,
                                String lease) {
-        this(result, acl, revision, maze, lease, "", "");
+        this(result, acl, revision, maze, lease, "", "", "");
     }
 
     public ParcelRevokeResponse(String result, String acl, long revision, String maze) {
-        this(result, acl, revision, maze, "", "", "");
+        this(result, acl, revision, maze, "", "", "", "");
     }
 
     public ParcelRevokeResponse(String result, String acl, long revision) {
-        this(result, acl, revision, "", "", "", "");
+        this(result, acl, revision, "", "", "", "", "");
     }
 }
