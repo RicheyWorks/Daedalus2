@@ -487,6 +487,7 @@ public final class WorldOps {
         out.put("acl", lastAclInChunk(world, cc));
         out.put("acls", aclInChunk(world, cc));
         out.put("box", boxInChunk(world, cc));
+        out.put("boxes", boxesInChunk(world, cc));
         return out;
     }
 
@@ -640,6 +641,22 @@ public final class WorldOps {
             found = boxLine(parcel.bounds());
         }
         return found;
+    }
+
+    /** Inclusive AABBs whose slab overlaps this 16³. Oldest first. */
+    public static String boxesInChunk(World world, ChunkCoordinate cc) {
+        if (world == null || cc == null) {
+            return "";
+        }
+        ParcelBounds box = chunkBox(cc);
+        List<String> rows = new ArrayList<>();
+        for (Parcel parcel : world.parcels()) {
+            if (parcel == null || !parcel.bounds().overlaps(box)) {
+                continue;
+            }
+            rows.add(boxLine(parcel.bounds()));
+        }
+        return String.join(" · ", rows);
     }
 
     /**

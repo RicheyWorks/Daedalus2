@@ -11,7 +11,7 @@ public record ChunkInspectResponse(
         int plots, String street, String lot, String occupants, String stands,
         String drive, String driveActor, String driveAt, String maze, String lease,
         String acl, String place, String lots, String mazes, String leases, String acls,
-        String box) {
+        String box, String boxes) {
 
     public ChunkInspectResponse {
         street = street == null ? "" : street;
@@ -30,6 +30,7 @@ public record ChunkInspectResponse(
         leases = leases == null ? "" : leases;
         acls = acls == null ? "" : acls;
         box = box == null ? "" : box;
+        boxes = boxes == null ? "" : boxes;
         if (plots < 0) {
             throw new IllegalArgumentException("plots must be at least 0");
         }
@@ -39,10 +40,21 @@ public record ChunkInspectResponse(
             int x, int y, int z, boolean present, Long revision, int occupied,
             int plots, String street, String lot, String occupants, String stands,
             String drive, String driveActor, String driveAt, String maze, String lease,
+            String acl, String place, String lots, String mazes, String leases, String acls,
+            String box) {
+        this(x, y, z, present, revision, occupied, plots, street, lot, occupants, stands,
+                drive, driveActor, driveAt, maze, lease, acl, place, lots, mazes, leases, acls,
+                box, "");
+    }
+
+    public ChunkInspectResponse(
+            int x, int y, int z, boolean present, Long revision, int occupied,
+            int plots, String street, String lot, String occupants, String stands,
+            String drive, String driveActor, String driveAt, String maze, String lease,
             String acl, String place, String lots, String mazes, String leases, String acls) {
         this(x, y, z, present, revision, occupied, plots, street, lot, occupants, stands,
                 drive, driveActor, driveAt, maze, lease, acl, place, lots, mazes, leases, acls,
-                "");
+                "", "");
     }
 
     public ChunkInspectResponse(
@@ -52,7 +64,7 @@ public record ChunkInspectResponse(
             String acl, String place, String lots, String mazes, String leases) {
         this(x, y, z, present, revision, occupied, plots, street, lot, occupants, stands,
                 drive, driveActor, driveAt, maze, lease, acl, place, lots, mazes, leases, "",
-                "");
+                "", "");
     }
 
     public ChunkInspectResponse(
@@ -62,7 +74,7 @@ public record ChunkInspectResponse(
             String acl, String place, String lots, String mazes) {
         this(x, y, z, present, revision, occupied, plots, street, lot, occupants, stands,
                 drive, driveActor, driveAt, maze, lease, acl, place, lots, mazes, "", "",
-                "");
+                "", "");
     }
 
     public ChunkInspectResponse(
@@ -72,7 +84,7 @@ public record ChunkInspectResponse(
             String acl, String place, String lots) {
         this(x, y, z, present, revision, occupied, plots, street, lot, occupants, stands,
                 drive, driveActor, driveAt, maze, lease, acl, place, lots, "", "", "",
-                "");
+                "", "");
     }
 
     public ChunkInspectResponse(
@@ -82,7 +94,7 @@ public record ChunkInspectResponse(
             String acl, String place) {
         this(x, y, z, present, revision, occupied, plots, street, lot, occupants, stands,
                 drive, driveActor, driveAt, maze, lease, acl, place, "", "", "", "",
-                "");
+                "", "");
     }
 
     public ChunkInspectResponse(
@@ -92,7 +104,7 @@ public record ChunkInspectResponse(
             String acl) {
         this(x, y, z, present, revision, occupied, plots, street, lot, occupants, stands,
                 drive, driveActor, driveAt, maze, lease, acl, "", "", "", "", "",
-                "");
+                "", "");
     }
 
     public ChunkInspectResponse(
@@ -101,7 +113,7 @@ public record ChunkInspectResponse(
             String drive, String driveActor, String driveAt, String maze, String lease) {
         this(x, y, z, present, revision, occupied, plots, street, lot, occupants, stands,
                 drive, driveActor, driveAt, maze, lease, "", "", "", "", "", "",
-                "");
+                "", "");
     }
 
     public ChunkInspectResponse(
@@ -110,7 +122,7 @@ public record ChunkInspectResponse(
             String drive, String driveActor, String driveAt, String maze) {
         this(x, y, z, present, revision, occupied, plots, street, lot, occupants, stands,
                 drive, driveActor, driveAt, maze, "", "", "", "", "", "", "",
-                "");
+                "", "");
     }
 
     public ChunkInspectResponse(
@@ -119,7 +131,7 @@ public record ChunkInspectResponse(
             String drive, String driveActor, String driveAt) {
         this(x, y, z, present, revision, occupied, plots, street, lot, occupants, stands,
                 drive, driveActor, driveAt, "", "", "", "", "", "", "", "",
-                "");
+                "", "");
     }
 
     public ChunkInspectResponse(
@@ -128,7 +140,7 @@ public record ChunkInspectResponse(
             String drive, String driveActor) {
         this(x, y, z, present, revision, occupied, plots, street, lot, occupants, stands,
                 drive, driveActor, "", "", "", "", "", "", "", "", "",
-                "");
+                "", "");
     }
 
     public ChunkInspectResponse(
@@ -136,7 +148,7 @@ public record ChunkInspectResponse(
             int plots, String street, String lot, String occupants, String stands) {
         this(x, y, z, present, revision, occupied, plots, street, lot, occupants, stands,
                 "", "", "", "", "", "", "", "", "", "", "",
-                "");
+                "", "");
     }
 
     public ChunkInspectResponse(
@@ -144,11 +156,11 @@ public record ChunkInspectResponse(
             int plots, String street, String lot, String occupants) {
         this(x, y, z, present, revision, occupied, plots, street, lot, occupants,
                 "", "", "", "", "", "", "", "", "", "", "", "",
-                "");
+                "", "");
     }
 
     public ChunkInspectResponse(int x, int y, int z, boolean present, Long revision, int occupied) {
         this(x, y, z, present, revision, occupied, 0, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
-                "");
+                "", "");
     }
 }

@@ -420,6 +420,7 @@ class WorldBuilderTest {
         assertThat(both.get("acls")).isEqualTo(WorldOps.aclLine(near));
         assertThat(both.get("box")).isEqualTo(WorldOps.lastBox(near));
         assertThat(both.get("box")).isNotEqualTo(WorldOps.streetBoxes(near));
+        assertThat(both.get("boxes")).isEqualTo(WorldOps.streetBoxes(near));
     }
 
     @Test

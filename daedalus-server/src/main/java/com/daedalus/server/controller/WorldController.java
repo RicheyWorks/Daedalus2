@@ -357,16 +357,17 @@ public class WorldController {
         String acl = WorldOps.lastAclInChunk(world, cc);
         String acls = WorldOps.aclInChunk(world, cc);
         String box = WorldOps.boxInChunk(world, cc);
+        String boxes = WorldOps.boxesInChunk(world, cc);
         if (chunk == null) {
             return ResponseEntity.ok(new ChunkInspectResponse(
                     x, y, z, false, null, 0, plots, street, lot, occupants, stands,
                     drive, driveActor, driveAt, maze, lease, acl, place, lots, mazes, leases,
-                    acls, box));
+                    acls, box, boxes));
         }
         return ResponseEntity.ok(new ChunkInspectResponse(
                 x, y, z, true, chunk.revision(), chunk.occupied(), plots, street, lot,
                 occupants, stands, drive, driveActor, driveAt, maze, lease, acl, place, lots,
-                mazes, leases, acls, box));
+                mazes, leases, acls, box, boxes));
     }
 
     @PutMapping("/world/{id}/block")

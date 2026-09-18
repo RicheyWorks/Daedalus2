@@ -598,7 +598,8 @@ well chunk names last and every lease, and
 chunk inspect names the last ACL, and
 chunk inspect names every ACL, and
 well chunk names last and every ACL, and
-chunk inspect names the last box
+chunk inspect names the last box, and
+chunk inspect names every box
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
