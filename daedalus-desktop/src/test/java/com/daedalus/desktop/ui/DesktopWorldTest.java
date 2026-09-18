@@ -138,6 +138,9 @@ class DesktopWorldTest {
                 "00000000-0000-4000-8000-00000000000d");
         assertThat(DesktopWorld.occupancyLine(onOrigin))
                 .contains("00000000-0000-4000-8000-00000000000d");
+        onOrigin.leaseParcel(onOrigin.parcels().get(0).id(), Parcel.SYSTEM_TENANT);
+        assertThat(DesktopWorld.occupancyLine(onOrigin))
+                .contains(Parcel.SYSTEM_TENANT);
         assertThat(DesktopWorld.inspectLine(onOrigin, null))
                 .contains("door")
                 .contains("0,0")

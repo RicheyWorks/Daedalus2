@@ -301,6 +301,10 @@ public final class DesktopWorld {
         if (!maze.isEmpty()) {
             label = label + " " + maze;
         }
+        String lease = WorldOps.leaseAt(world, at);
+        if (!lease.isEmpty()) {
+            label = label + " " + lease;
+        }
         rows.add(kind + " " + label);
     }
 

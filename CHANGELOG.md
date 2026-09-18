@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop occupancy names the slab lease.**
+  Door, trap, and portal on a slab
+  name the account key. Empty until
+  parcel.lease. No wallet types.
+
 - **Desktop occupancy names the slab maze.**
   Door, trap, and portal on a slab
   name the lab maze UUID. Empty off
