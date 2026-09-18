@@ -300,10 +300,19 @@ public class WorldService {
     }
 
     public NpcResult hushNpc(String id) {
+        return hushNpc(id, null);
+    }
+
+    public NpcResult hushNpc(String id, String actorId) {
         World live = require(id);
         synchronized (lock) {
-            NpcResult result = live.hushNpc();
-            persist();
+            NpcResult result = WorldOps.asNpcResult(
+                    WorldOps.drive(live, "npc.hush",
+                            live.npc() == null ? new BlockCoordinate(0, 0, 0) : live.npc().at(),
+                            null, null, actorId));
+            if (result != NpcResult.DENIED) {
+                persist();
+            }
             log.append("npc.hush", result, live.revision().value());
             return result;
         }

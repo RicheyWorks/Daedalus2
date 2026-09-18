@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcel gate on npc.hush.**
+  npc.hush asks the same npc.talk gate. Empty actor is
+  the system owner. DENIED leaves the NPC. No wallet
+  types.
+
 - **Parcel gate on npc.talk.**
   npc.talk asks ParcelGate for npc.talk. Empty actor is
   the system owner. DENIED leaves the NPC. A 1×2 stamp

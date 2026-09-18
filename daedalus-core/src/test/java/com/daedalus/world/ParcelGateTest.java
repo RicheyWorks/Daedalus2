@@ -207,6 +207,12 @@ class ParcelGateTest {
         assertThat(world.npc().state()).isEqualTo(NpcState.SPEAKING);
         assertThat(WorldOps.drive(world, "npc.talk", Npc.ZERO_AT, null, null, null))
                 .isEqualTo(NpcResult.ALREADY_SPEAKING);
+        assertThat(WorldOps.drive(world, "npc.hush", Npc.ZERO_AT, null, null, "carol"))
+                .isEqualTo(NpcResult.DENIED);
+        assertThat(world.npc().state()).isEqualTo(NpcState.SPEAKING);
+        assertThat(WorldOps.drive(world, "npc.hush", Npc.ZERO_AT, null, null, null))
+                .isEqualTo(NpcResult.HUSHED);
+        assertThat(world.npc().state()).isEqualTo(NpcState.IDLE);
     }
 
     @Test

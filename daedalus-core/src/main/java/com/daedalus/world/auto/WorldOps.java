@@ -86,7 +86,7 @@ public final class WorldOps {
             case "portal.seal" -> sealPortal(world, mazeRef);
             case "npc.inspect" -> inspectNpc(world);
             case "npc.talk" -> talkNpc(world, mazeRef);
-            case "npc.hush" -> world.hushNpc();
+            case "npc.hush" -> hushNpc(world, mazeRef);
             case "parcel.lease" -> leaseParcel(world);
             case "parcel.grant" -> grantParcel(world, at, mazeRef, actorId);
             case "parcel.deny" -> denyParcel(world, at, mazeRef, actorId);
@@ -571,6 +571,21 @@ public final class WorldOps {
             return NpcResult.DENIED;
         }
         return world.talkNpc();
+    }
+
+    /**
+     * Hush through the same {@link ParcelVerb#NPC_TALK} gate.
+     * Empty actor is the system owner. DENIED leaves the NPC.
+     */
+    public static NpcResult hushNpc(World world, String actorId) {
+        if (world.npc() == null) {
+            throw new IllegalStateException("This world has no npc");
+        }
+        String actor = actorId == null || actorId.isBlank() ? Parcel.SYSTEM_OWNER : actorId.trim();
+        if (world.may(actor, ParcelVerb.NPC_TALK, world.npc().at()) == ParcelAccess.DENIED) {
+            return NpcResult.DENIED;
+        }
+        return world.hushNpc();
     }
 
     public static NpcResult asNpcResult(Object value) {
