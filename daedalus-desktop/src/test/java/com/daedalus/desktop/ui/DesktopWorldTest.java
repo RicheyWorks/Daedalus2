@@ -260,6 +260,7 @@ class DesktopWorldTest {
                 .contains(DesktopWorld.lastPlace(two))
                 .contains("0,0")
                 .contains("8,0")
+                .contains(DesktopWorld.lastBox(two))
                 .contains("0,0,0-6,1,6")
                 .contains("8,0,0-14,1,6")
                 .contains(Parcel.SYSTEM_TENANT + " · " + Parcel.SYSTEM_TENANT);
