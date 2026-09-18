@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well last-event names the slab lease.**
+  STOMP last-event paints the account
+  key under that cube. Empty until
+  parcel.lease. No wallet types.
+
 - **Well last-event names the slab maze.**
   STOMP last-event paints the lab
   maze UUID under that cube. Empty
