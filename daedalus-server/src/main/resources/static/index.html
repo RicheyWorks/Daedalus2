@@ -482,6 +482,8 @@
   #legend [data-key="waypoint"] i {
     transform: rotate(45deg);
     background: radial-gradient(circle at 45% 40%, #f2c94c 28%, #8a6820); }
+  #legend [data-key="hotspot"] i {
+    background: radial-gradient(circle at 45% 40%, rgba(229,72,77,.5) 28%, rgba(106,32,36,.5)); }
   #compareBox:empty { display: none; }
   #compareBox { max-height: 22vh; overflow: auto; overscroll-behavior: none; min-width: 0;
                 scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent;
@@ -744,7 +746,7 @@ powershell -File daedalus-explore\run-explore.ps1</pre>
         <span data-key="start"><i></i>start</span>
         <span data-key="goal"><i></i>goal</span>
         <span data-key="path"><i></i>solver path</span>
-        <span data-key="hotspot"><i style="background:rgba(229,72,77,.5)"></i>hot spot</span>
+        <span data-key="hotspot"><i></i>hot spot</span>
         <span data-key="player"><i></i><i></i><i></i><i></i>players</span>
         <span data-key="choke"><i></i>chokepoint</span>
         <span data-key="deadend"><i></i>dead end</span>

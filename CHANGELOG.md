@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well legend hotspot depth.**
+  Overlay hot-spot chips fall off
+  toward deeper rust so leftover flat
+  swatches are not the last word on a
+  heat.
+
 - **Desktop legend waypoint depth.**
   Overlay waypoint diamonds fall off
   toward deeper gold so leftover flat
