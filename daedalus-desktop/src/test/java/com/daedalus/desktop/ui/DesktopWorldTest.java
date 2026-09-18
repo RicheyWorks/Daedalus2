@@ -17,6 +17,7 @@ import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.ParcelVerb;
 import com.daedalus.world.PlaceNames;
 import com.daedalus.world.World;
+import com.daedalus.world.auto.DriveTrace;
 import com.daedalus.world.auto.WorldOps;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -114,6 +115,12 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.aclLine(World.zero())).isEmpty();
         assertThat(DesktopWorld.aclLine(null)).isEmpty();
         assertThat(DesktopWorld.inspectLine(onOrigin, null)).contains("bob block.place");
+        DriveTrace.Step denied = new DriveTrace.Step("npc.talk", "DENIED", 1);
+        assertThat(DesktopWorld.driveLine(denied)).isEqualTo("npc.talk DENIED");
+        assertThat(DesktopWorld.driveLine(null)).isEmpty();
+        assertThat(DesktopWorld.inspectLine(onOrigin, null, denied)).contains("npc.talk DENIED");
+        assertThat(DesktopWorld.inspectLine(onOrigin, null, null))
+                .isEqualTo(DesktopWorld.inspectLine(onOrigin, null));
     }
 
     @Test

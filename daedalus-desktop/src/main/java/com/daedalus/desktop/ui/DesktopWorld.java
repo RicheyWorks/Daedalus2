@@ -10,6 +10,7 @@ import com.daedalus.world.ChunkCoordinate;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.World;
 import com.daedalus.world.WorldId;
+import com.daedalus.world.auto.DriveTrace;
 import com.daedalus.world.auto.WorldOps;
 import com.daedalus.world.stamp.StampResult;
 
@@ -45,6 +46,23 @@ public final class DesktopWorld {
             worlds.leaseParcel(ID);
         }
         return stamped;
+    }
+
+    public static String inspectLine(World world, WorldEventFrame last, DriveTrace.Step lastDrive) {
+        String line = inspectLine(world, last);
+        String driven = driveLine(lastDrive);
+        return driven.isEmpty() ? line : line + " · " + driven;
+    }
+
+    /** Last driven capability and named result — same well builder line. */
+    public static String driveLine(DriveTrace.Step last) {
+        if (last == null || last.capability() == null || last.capability().isBlank()) {
+            return "";
+        }
+        if (last.result() == null || last.result().isBlank()) {
+            return last.capability();
+        }
+        return last.capability() + " " + last.result();
     }
 
     public static String inspectLine(World world, WorldEventFrame last) {

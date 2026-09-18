@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop builder result.**
+  Desktop inspect appends the last driven capability
+  and named result so DENIED is visible. No wallet
+  types.
+
 - **Well builder result.**
   The world fold paints the last /trace result after
   the capability so DENIED is visible. No wallet types.

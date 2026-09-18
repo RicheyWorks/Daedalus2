@@ -18,6 +18,7 @@ import com.daedalus.server.service.MazeSolverService;
 import com.daedalus.server.service.TrafficService;
 import com.daedalus.server.service.WorldService;
 import com.daedalus.world.World;
+import com.daedalus.world.auto.DriveTrace;
 import com.daedalus.theory.LongestPath;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
@@ -382,7 +383,14 @@ public class MainController {
             return;
         }
         World world = worlds == null ? null : worlds.inspect(DesktopWorld.ID);
-        worldLabel.setText(DesktopWorld.inspectLine(world, lastWorldEvent));
+        DriveTrace.Step lastDrive = null;
+        if (worlds != null) {
+            List<DriveTrace.Step> steps = worlds.trace(DesktopWorld.ID);
+            if (steps != null && !steps.isEmpty()) {
+                lastDrive = steps.get(steps.size() - 1);
+            }
+        }
+        worldLabel.setText(DesktopWorld.inspectLine(world, lastWorldEvent, lastDrive));
         worldLabel.getStyleClass().remove(DesktopWorld.PLACE_CLASS);
         if (!DesktopWorld.lastPlace(world).isEmpty()) {
             worldLabel.getStyleClass().add(DesktopWorld.PLACE_CLASS);
