@@ -109,6 +109,34 @@ class WorldBuilderTest {
     }
 
     @Test
+    void occupancyInspectNamesTheSlab() {
+        World world = World.zero();
+        WorldBuilder builder = new WorldBuilder(world);
+        builder.run(new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "stamp.apply", null));
+        String place = world.parcels().get(0).placeName();
+        @SuppressWarnings("unchecked")
+        Map<String, Object> door = (Map<String, Object>) builder.run(
+                new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "door.inspect", null));
+        assertThat(door.get("place")).isEqualTo(place);
+        assertThat(door.get("lot")).isEqualTo("0,0");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> trap = (Map<String, Object>) builder.run(
+                new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "trap.inspect", null));
+        assertThat(trap.get("place")).isEqualTo(place);
+        assertThat(trap.get("lot")).isEqualTo("0,0");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> portal = (Map<String, Object>) builder.run(
+                new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "portal.inspect", null));
+        assertThat(portal.get("place")).isEqualTo(place);
+        assertThat(portal.get("lot")).isEqualTo("0,0");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> npc = (Map<String, Object>) builder.run(
+                new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "npc.inspect", null));
+        assertThat(npc.get("place")).isEqualTo("");
+        assertThat(npc.get("lot")).isEqualTo("");
+    }
+
+    @Test
     void chunkInspectNamesOverlappingPlots() {
         World world = World.zero();
         WorldBuilder builder = new WorldBuilder(world);

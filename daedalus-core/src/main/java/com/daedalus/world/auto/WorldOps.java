@@ -206,6 +206,8 @@ public final class WorldOps {
         Map<String, Object> out = new LinkedHashMap<>();
         out.put("id", door.id());
         out.put("state", door.state().name());
+        out.put("place", placeAt(world, door.at()));
+        out.put("lot", lotAt(world, door.at()));
         return out;
     }
 
@@ -217,6 +219,8 @@ public final class WorldOps {
         Map<String, Object> out = new LinkedHashMap<>();
         out.put("id", trap.id());
         out.put("state", trap.state().name());
+        out.put("place", placeAt(world, trap.at()));
+        out.put("lot", lotAt(world, trap.at()));
         return out;
     }
 
@@ -236,6 +240,8 @@ public final class WorldOps {
         Map<String, Object> out = new LinkedHashMap<>();
         out.put("id", portal.id());
         out.put("state", portal.state().name());
+        out.put("place", placeAt(world, portal.at()));
+        out.put("lot", lotAt(world, portal.at()));
         return out;
     }
 
@@ -251,6 +257,8 @@ public final class WorldOps {
         Map<String, Object> out = new LinkedHashMap<>();
         out.put("id", npc.id());
         out.put("state", npc.state().name());
+        out.put("place", placeAt(world, npc.at()));
+        out.put("lot", lotAt(world, npc.at()));
         return out;
     }
 

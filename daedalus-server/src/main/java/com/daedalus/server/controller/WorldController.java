@@ -257,14 +257,15 @@ public class WorldController {
     @GetMapping("/world/{id}/door")
     @Operation(summary = "Inspect the programmable door.")
     public ResponseEntity<DoorInspectResponse> inspectDoor(@PathVariable String id) {
-        mounted(id);
+        World world = mounted(id);
         Door door = worlds.inspectDoor(id);
         if (door == null) {
             throw ResourceNotFoundException.world(id);
         }
         return ResponseEntity.ok(new DoorInspectResponse(
                 door.id(), door.worldId().value(),
-                door.at().x(), door.at().y(), door.at().z(), door.state().name()));
+                door.at().x(), door.at().y(), door.at().z(), door.state().name(),
+                WorldOps.placeAt(world, door.at()), WorldOps.lotAt(world, door.at())));
     }
 
     @PostMapping("/world/{id}/door/open")
@@ -294,14 +295,15 @@ public class WorldController {
     @GetMapping("/world/{id}/trap")
     @Operation(summary = "Inspect the programmable trap.")
     public ResponseEntity<TrapInspectResponse> inspectTrap(@PathVariable String id) {
-        mounted(id);
+        World world = mounted(id);
         Trap trap = worlds.inspectTrap(id);
         if (trap == null) {
             throw ResourceNotFoundException.world(id);
         }
         return ResponseEntity.ok(new TrapInspectResponse(
                 trap.id(), trap.worldId().value(),
-                trap.at().x(), trap.at().y(), trap.at().z(), trap.state().name()));
+                trap.at().x(), trap.at().y(), trap.at().z(), trap.state().name(),
+                WorldOps.placeAt(world, trap.at()), WorldOps.lotAt(world, trap.at())));
     }
 
     @PostMapping("/world/{id}/trap/arm")
@@ -331,14 +333,15 @@ public class WorldController {
     @GetMapping("/world/{id}/portal")
     @Operation(summary = "Inspect the programmable portal.")
     public ResponseEntity<PortalInspectResponse> inspectPortal(@PathVariable String id) {
-        mounted(id);
+        World world = mounted(id);
         Portal portal = worlds.inspectPortal(id);
         if (portal == null) {
             throw ResourceNotFoundException.world(id);
         }
         return ResponseEntity.ok(new PortalInspectResponse(
                 portal.id(), portal.worldId().value(),
-                portal.at().x(), portal.at().y(), portal.at().z(), portal.state().name()));
+                portal.at().x(), portal.at().y(), portal.at().z(), portal.state().name(),
+                WorldOps.placeAt(world, portal.at()), WorldOps.lotAt(world, portal.at())));
     }
 
     @PostMapping("/world/{id}/portal/open")
@@ -368,14 +371,15 @@ public class WorldController {
     @GetMapping("/world/{id}/npc")
     @Operation(summary = "Inspect the programmable NPC.")
     public ResponseEntity<NpcInspectResponse> inspectNpc(@PathVariable String id) {
-        mounted(id);
+        World world = mounted(id);
         Npc npc = worlds.inspectNpc(id);
         if (npc == null) {
             throw ResourceNotFoundException.world(id);
         }
         return ResponseEntity.ok(new NpcInspectResponse(
                 npc.id(), npc.worldId().value(),
-                npc.at().x(), npc.at().y(), npc.at().z(), npc.state().name()));
+                npc.at().x(), npc.at().y(), npc.at().z(), npc.state().name(),
+                WorldOps.placeAt(world, npc.at()), WorldOps.lotAt(world, npc.at())));
     }
 
     @PostMapping("/world/{id}/npc/talk")

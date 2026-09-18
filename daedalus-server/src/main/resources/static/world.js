@@ -119,10 +119,10 @@
     row(box, "world", world && world.id ? world.id : WORLD);
     row(box, "revision", world && world.revision != null ? String(world.revision) : "—");
     row(box, "chunks", world && world.chunkCount != null ? String(world.chunkCount) : "—");
-    row(box, "door", door && door.state ? door.state : "—");
-    row(box, "trap", trap && trap.state ? trap.state : "—");
-    row(box, "portal", portal && portal.state ? portal.state : "—");
-    row(box, "npc", npc && npc.state ? npc.state : "—");
+    row(box, "door", occupancy(door), door && door.place);
+    row(box, "trap", occupancy(trap), trap && trap.place);
+    row(box, "portal", occupancy(portal), portal && portal.place);
+    row(box, "npc", occupancy(npc), npc && npc.place);
     row(box, "plots", world && world.plots != null ? String(world.plots) : "—");
     row(box, "street", world && world.street ? world.street : "—");
     row(box, "place", world && world.place ? world.place : "—");
@@ -153,6 +153,14 @@
         ? "builder " + steps[steps.length - 1].capability
         : "builder — WorldOps only";
     box.appendChild(built);
+  }
+
+  function occupancy(obj) {
+    if (!obj || !obj.state) {
+      return "—";
+    }
+    const at = [obj.place, obj.lot].filter(Boolean).join(" ");
+    return at ? obj.state + " " + at : obj.state;
   }
 
   function row(box, label, value, wood) {

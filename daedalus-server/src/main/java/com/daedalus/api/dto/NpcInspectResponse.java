@@ -2,7 +2,17 @@
 
 package com.daedalus.api.dto;
 
-/** NPC inspect — same facts automation reads. */
+/** NPC inspect — same facts automation reads. Place and lot are empty off a slab. */
 public record NpcInspectResponse(
-        String id, String worldId, int x, int y, int z, String state) {
+        String id, String worldId, int x, int y, int z, String state,
+        String place, String lot) {
+
+    public NpcInspectResponse {
+        place = place == null ? "" : place;
+        lot = lot == null ? "" : lot;
+    }
+
+    public NpcInspectResponse(String id, String worldId, int x, int y, int z, String state) {
+        this(id, worldId, x, y, z, state, "", "");
+    }
 }

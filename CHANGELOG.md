@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Occupancy inspect lot.**
+  Door, trap, portal, and NPC inspect name the slab under
+  that cell. A 1×1 stamp covers door-zero but not npc-zero.
+  The well occupancy rows print place and x,z.
+
 - **Chunk street of overlapping plots.**
   chunk.inspect names the place and x,z of slabs that share
   that 16³. A far plot is not listed on origin. The well
