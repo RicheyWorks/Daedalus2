@@ -87,15 +87,9 @@ public final class DesktopWorld {
             return ID + " · unavailable";
         }
         String place = streetLine(world);
-        if (world.parcels().size() > 1) {
-            String lots = streetLots(world);
-            if (!lots.isEmpty()) {
-                place = place.isEmpty() ? lots : place + " · " + lots;
-            }
-        }
         String line = inspectLine(world.revision().value(), world.parcels().size(), place,
-                streetLeases(world), lastMaze(world), streetMazes(world), streetBoxes(world),
-                last);
+                lastLot(world), streetLots(world), streetLeases(world), lastMaze(world),
+                streetMazes(world), streetBoxes(world), last);
         String occ = occupancyLine(world);
         if (occ.isEmpty()) {
             occ = chunkOccupants(world, last);
@@ -175,12 +169,23 @@ public final class DesktopWorld {
 
     public static String inspectLine(long revision, int plots, String place, String lease, String maze,
             String mazes, String box, WorldEventFrame last) {
+        return inspectLine(revision, plots, place, "", "", lease, maze, mazes, box, last);
+    }
+
+    public static String inspectLine(long revision, int plots, String place, String lot, String lots,
+            String lease, String maze, String mazes, String box, WorldEventFrame last) {
         String head = ID + " r=" + revision;
         if (plots > 1) {
             head += " · " + plots + " plots";
         }
         if (place != null && !place.isBlank()) {
             head += " · " + place;
+        }
+        if (lot != null && !lot.isBlank()) {
+            head += " · " + lot;
+        }
+        if (lots != null && !lots.isBlank() && !lots.equals(lot)) {
+            head += " · " + lots;
         }
         if (lease != null && !lease.isBlank()) {
             head += " · " + lease;

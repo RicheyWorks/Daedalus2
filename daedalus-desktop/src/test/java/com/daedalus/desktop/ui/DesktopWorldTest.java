@@ -80,9 +80,10 @@ class DesktopWorldTest {
         named.nameParcel(named.parcels().get(0).id(), "Willow Walk");
         assertThat(DesktopWorld.firstPlace(named)).isEqualTo("Willow Walk");
         assertThat(DesktopWorld.lastBox(named)).isEqualTo("8,0,8-9,1,9");
+        assertThat(DesktopWorld.lastLot(named)).isEqualTo("8,8");
         assertThat(DesktopWorld.inspectLine(named, null))
                 .isEqualTo("world-zero r=" + named.revision().value()
-                        + " · Willow Walk · 8,0,8-9,1,9 · listening · door · trap · portal · npc"
+                        + " · Willow Walk · 8,8 · 8,0,8-9,1,9 · listening · door · trap · portal · npc"
                         + " · door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0");
         assertThat(DesktopWorld.inspectLine(named.revision().value(), "Willow Walk", placed))
                 .isEqualTo("world-zero r=" + named.revision().value()
@@ -92,12 +93,14 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.PLACE_CLASS).isEqualTo("world-place");
         assertThat(DesktopWorld.firstPlace(World.zero())).isEmpty();
         assertThat(DesktopWorld.lastBox(World.zero())).isEmpty();
+        assertThat(DesktopWorld.lastLot(World.zero())).isEmpty();
+        assertThat(DesktopWorld.streetLots(World.zero())).isEmpty();
         assertThat(DesktopWorld.streetBoxes(World.zero())).isEmpty();
         named.leaseParcel(named.parcels().get(0).id(), Parcel.SYSTEM_TENANT);
         assertThat(DesktopWorld.firstLease(named)).isEqualTo(Parcel.SYSTEM_TENANT);
         assertThat(DesktopWorld.inspectLine(named, null))
                 .isEqualTo("world-zero r=" + named.revision().value()
-                        + " · Willow Walk · " + Parcel.SYSTEM_TENANT
+                        + " · Willow Walk · 8,8 · " + Parcel.SYSTEM_TENANT
                         + " · 8,0,8-9,1,9 · listening · door · trap · portal · npc"
                         + " · door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0");
         assertThat(DesktopWorld.firstLease(World.zero())).isEmpty();
@@ -247,6 +250,7 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.streetBoxes(two)).isEqualTo("0,0,0-6,1,6 · 8,0,0-14,1,6");
         assertThat(DesktopWorld.inspectLine(two, null))
                 .contains("2 plots")
+                .contains(DesktopWorld.lastLot(two))
                 .contains(DesktopWorld.lastMaze(two))
                 .contains(cached.metadata().id().toString())
                 .contains(second.metadata().id().toString())
