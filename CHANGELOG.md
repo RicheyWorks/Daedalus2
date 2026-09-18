@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Trap arm names the slab lease.**
+  POST /trap/arm and /trap/disarm name
+  the account key on the plot under
+  that cube. Empty when the trap sits
+  off a rented slab. No wallet types.
+
 - **Door open names the slab lease.**
   POST /door/open and /door/close name
   the account key on the plot under

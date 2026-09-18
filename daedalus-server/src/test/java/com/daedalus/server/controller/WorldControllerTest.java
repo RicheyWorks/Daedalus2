@@ -245,7 +245,8 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("ARMED")))
                 .andExpect(jsonPath("$.state", equalTo("ARMED")))
-                .andExpect(jsonPath("$.maze", equalTo("")));
+                .andExpect(jsonPath("$.maze", equalTo("")))
+                .andExpect(jsonPath("$.lease", equalTo("")));
 
         mvc.perform(post("/api/v1/world/world-zero/trap/arm"))
                 .andExpect(status().isOk())
@@ -560,7 +561,8 @@ class WorldControllerTest {
         mvc.perform(post("/api/v1/world/world-zero/trap/arm").param("actorId", "carol"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("DENIED")))
-                .andExpect(jsonPath("$.state", equalTo("ARMED")));
+                .andExpect(jsonPath("$.state", equalTo("ARMED")))
+                .andExpect(jsonPath("$.lease", equalTo("tenant-zero")));
 
         mvc.perform(get("/api/v1/world/world-zero/trap"))
                 .andExpect(status().isOk())
@@ -861,7 +863,8 @@ class WorldControllerTest {
         extra.perform(post("/api/v1/world/world-zero/trap/arm"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("ARMED")))
-                .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())));
+                .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())))
+                .andExpect(jsonPath("$.lease", equalTo("tenant-zero")));
         extra.perform(get("/api/v1/world/world-zero/portal"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())));
