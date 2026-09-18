@@ -132,6 +132,7 @@ class DesktopWorldTest {
                 .contains("trap")
                 .contains("portal")
                 .contains("0,0")
+                .contains(DesktopWorld.lastBox(onOrigin))
                 .doesNotContain("npc");
         assertThat(DesktopWorld.inspectLine(onOrigin, null))
                 .contains("door")

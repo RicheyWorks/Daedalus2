@@ -533,7 +533,8 @@ desktop inspect names every lease, and
 explore names the slab box, and
 explore names the last box, and
 explore names every box, and
-well occupancy names the slab box
+well occupancy names the slab box, and
+desktop occupancy names the slab box
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

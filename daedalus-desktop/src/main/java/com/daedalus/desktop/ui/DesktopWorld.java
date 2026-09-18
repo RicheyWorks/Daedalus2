@@ -293,6 +293,10 @@ public final class DesktopWorld {
             return;
         }
         String label = named.isEmpty() ? lot : (lot.isEmpty() ? named : named + " " + lot);
+        String box = WorldOps.boxAt(world, at);
+        if (!box.isEmpty()) {
+            label = label + " " + box;
+        }
         rows.add(kind + " " + label);
     }
 
