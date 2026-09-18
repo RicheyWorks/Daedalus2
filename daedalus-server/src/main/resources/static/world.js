@@ -34,8 +34,10 @@
     "trap.disarm": {method: "POST", path: (at, actor) =>
         "/world/" + WORLD + "/trap/disarm" + actorQuery(actor)},
     "portal.inspect": {method: "GET", path: () => "/world/" + WORLD + "/portal"},
-    "portal.open": {method: "POST", path: () => "/world/" + WORLD + "/portal/open"},
-    "portal.seal": {method: "POST", path: () => "/world/" + WORLD + "/portal/seal"},
+    "portal.open": {method: "POST", path: (at, actor) =>
+        "/world/" + WORLD + "/portal/open" + actorQuery(actor)},
+    "portal.seal": {method: "POST", path: (at, actor) =>
+        "/world/" + WORLD + "/portal/seal" + actorQuery(actor)},
     "npc.inspect": {method: "GET", path: () => "/world/" + WORLD + "/npc"},
     "npc.talk": {method: "POST", path: () => "/world/" + WORLD + "/npc/talk"},
     "npc.hush": {method: "POST", path: () => "/world/" + WORLD + "/npc/hush"},

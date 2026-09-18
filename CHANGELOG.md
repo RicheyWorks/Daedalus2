@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well portal actor.**
+  well portal.open and portal.seal send optional actorId
+  (drive type) on the query. Blank stays the system
+  owner. No wallet types.
+
 - **Portal REST actor.**
   POST portal/open and portal/seal take optional actorId.
   Blank stays the system owner. DENIED is a named
