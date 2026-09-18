@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop last-event names the slab box.**
+  The last-event cube names the
+  inclusive AABB under that cell.
+  Empty off a stamped plot. No wallet
+  types.
+
 - **Desktop occupancy names the slab box.**
   Door, trap, and portal on a slab
   name the inclusive AABB. Empty off

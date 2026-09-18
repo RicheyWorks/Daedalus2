@@ -311,8 +311,12 @@ public final class DesktopWorld {
         BlockCoordinate cell = new BlockCoordinate(last.x(), last.y(), last.z());
         String named = WorldOps.placeAt(world, cell);
         String lot = WorldOps.lotAt(world, cell);
+        String box = WorldOps.boxAt(world, cell);
         String who = WorldOps.occupantAt(world, cell);
         String at = named.isEmpty() ? lot : (lot.isEmpty() ? named : named + " " + lot);
+        if (!box.isEmpty()) {
+            at = at.isEmpty() ? box : at + " " + box;
+        }
         if (at.isEmpty()) {
             return who;
         }
