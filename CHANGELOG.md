@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well stage rim depth.**
+  Maze-well gold lip falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even chrome is not the last
+  word on the well frame. KEEP board and
+  panel lips stay.
+
 - **Desktop empty caption detail depth.**
   Idle khaki lines fall off toward
   floor-dim with the same 0.22 as halls,
