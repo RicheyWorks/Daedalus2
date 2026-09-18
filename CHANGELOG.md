@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well ASCII gate depth.**
+  Dump start mint falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even mint is not the last
+  word on the maze page. KEEP exit coral
+  stays.
+
 - **Well ASCII rock depth.**
   Dump stone falls off toward
   floor-dim with the same 0.22 as halls,

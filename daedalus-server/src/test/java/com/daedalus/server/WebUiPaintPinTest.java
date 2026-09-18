@@ -29,10 +29,10 @@ class WebUiPaintPinTest {
                     .contains("#asciiOut .rock { color: #766442; -webkit-user-drag: none")
                     .contains("#asciiOut .rock { color: #766442; -webkit-user-drag: none; text-shadow: 0 1px 0 #2a2218")
                     .contains("max-height: 22vh; color: #d4c4a8; cursor: text; text-shadow: 0 1px 0 #2a2218")
-                    .contains("#asciiOut .gate { color: #3ee08f; -webkit-user-drag: none; text-shadow: none")
+                    .contains("#asciiOut .gate { color: #3ab675; -webkit-user-drag: none; text-shadow: none")
                     .contains("#asciiOut .exit { color: #ff5a5f; -webkit-user-drag: none; text-shadow: none")
                     .contains("background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908)")
-                    .contains("#asciiOut .gate { color: #3ee08f; -webkit-user-drag: none")
+                    .contains("#asciiOut .gate { color: #3ab675; -webkit-user-drag: none")
                     .contains("#asciiOut .exit { color: #ff5a5f; -webkit-user-drag: none")
                     .contains("#compareBox .gave-up { color: var(--warn); -webkit-user-drag: none")
                     .contains("#compareBox tr.pinned { background: #1a1610; -webkit-user-drag: none")
@@ -242,6 +242,17 @@ class WebUiPaintPinTest {
             assertThat(html)
                     .contains("#asciiOut .rock { color: #766442")
                     .doesNotContain("#asciiOut .rock { color: #8c764e");
+        }
+    }
+
+    @Test
+    void wellAsciiGateHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("#asciiOut .gate { color: #3ab675")
+                    .doesNotContain("#asciiOut .gate { color: #3ee08f");
         }
     }
 
