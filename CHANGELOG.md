@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well occupancy names the slab maze.**
+  Door, trap, portal, and NPC rows
+  paint the lab maze UUID from
+  inspect. Empty off a stamped plot.
+  No wallet types.
+
 - **Desktop last-event names the slab box.**
   The last-event cube names the
   inclusive AABB under that cell.

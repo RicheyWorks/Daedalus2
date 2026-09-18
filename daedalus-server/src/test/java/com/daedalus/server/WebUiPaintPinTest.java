@@ -451,6 +451,7 @@ class WebUiPaintPinTest {
             assertThat(world).contains("ink.className = named ? \"place\" : \"slab\"")
                     .contains("function occupancy")
                     .contains("obj.box")
+                    .contains("obj.maze")
                     .contains("obj.acl")
                     .contains("obj.drive")
                     .contains("obj.driveActor")

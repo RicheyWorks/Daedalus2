@@ -220,7 +220,8 @@
     if (!obj || !obj.state) {
       return "—";
     }
-    const at = [obj.place, obj.lot, obj.box, obj.acl, obj.drive, obj.driveActor, obj.driveAt]
+    const at = [obj.place, obj.lot, obj.box, obj.maze, obj.acl, obj.drive, obj.driveActor,
+        obj.driveAt]
         .filter(Boolean).join(" ");
     return at ? obj.state + " " + at : obj.state;
   }
