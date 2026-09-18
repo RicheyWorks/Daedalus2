@@ -6,7 +6,7 @@
   // One series (the measurements) plus a de-emphasised model overlay (the fitted curve), on
   // log-log axes so a power law reads as a straight line and its slope IS the exponent.
   // Colour: torch amber on the lamp panel, not leftover cool blue on the old navy surface.
-  const LAB_SERIES = "#d4a04c";
+  const LAB_SERIES = "#af8441";
 
   function chartSvg(fit, seriesColor, escapeHtml) {
     const W = 288, H = 150, L = 38, R = 8, T = 10, B = 22;

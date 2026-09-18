@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well lab series depth.**
+  Measured amber falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze plot. KEEP tour and
+  log amber stay.
+
 - **Well lab axes depth.**
   Plot gold lips fall off toward
   floor-dim with the same 0.22 as halls,
