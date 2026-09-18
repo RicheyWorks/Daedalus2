@@ -162,8 +162,20 @@ class WebUiPaintPinTest {
                     .contains("function emptyWordmarkMintInk")
                     .contains("mixHex(COLORS.start, COLORS.floorDim, 0.22)")
                     .contains("glow.addColorStop(0, emptyWordmarkMintGlow(0.08 + 0.04 * wave))")
-                    .contains("g.shadowColor = emptyWordmarkMintGlow(mintA)")
-                    .contains("g.shadowColor = \"rgba(245, 193, 74, \" + goldA + \")\"");
+                    .contains("g.shadowColor = emptyWordmarkMintGlow(mintA)");
+        }
+    }
+
+    @Test
+    void wellEmptyWordmarkGoldHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("function emptyWordmarkGoldInk")
+                    .contains("mixHex(\"#f5c14a\", COLORS.floorDim, 0.22)")
+                    .contains("glow.addColorStop(0.55, emptyWordmarkGoldGlow(0.04 + 0.03 * wave))")
+                    .contains("g.shadowColor = emptyWordmarkGoldGlow(goldA)");
         }
     }
 

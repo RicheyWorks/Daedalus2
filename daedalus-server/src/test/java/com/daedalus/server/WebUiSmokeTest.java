@@ -477,7 +477,7 @@ class WebUiSmokeTest {
                 .contains("endpoint(g, geom, {row: 0, col: 0}")
                 .contains("VICTORY_BREATH_MS")
                 .contains("0.85 + 0.08")
-                .contains("rgba(245, 193, 74, \" + (0.04 + 0.03")
+                .contains("emptyWordmarkGoldGlow(0.04 + 0.03 * wave)")
                 .contains("data-key=\"path\"").contains("data-key=\"floor\"")
                 .contains("data-key=\"fog\"")
                 .contains("data-key=\"sanctuary\"")

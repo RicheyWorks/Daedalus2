@@ -387,6 +387,14 @@
     return emptyWordmarkMintInk().replace("rgb(", "rgba(").replace(")", "," + alpha + ")");
   }
 
+  function emptyWordmarkGoldInk() {
+    return mixHex("#f5c14a", COLORS.floorDim, 0.22);
+  }
+
+  function emptyWordmarkGoldGlow(alpha) {
+    return emptyWordmarkGoldInk().replace("rgb(", "rgba(").replace(")", "," + alpha + ")");
+  }
+
   function startTileInk(tr, tc, th, tw) {
     const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
     const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
@@ -1069,7 +1077,7 @@
     g.fillRect(0, 0, cssW, cssH);
     const glow = g.createRadialGradient(cx, cy - 36, 12, cx, cy - 36, Math.min(cssW, cssH) * 0.42);
     glow.addColorStop(0, emptyWordmarkMintGlow(0.08 + 0.04 * wave));
-    glow.addColorStop(0.55, "rgba(245, 193, 74, " + (0.04 + 0.03 * wave) + ")");
+    glow.addColorStop(0.55, emptyWordmarkGoldGlow(0.04 + 0.03 * wave));
     glow.addColorStop(1, "rgba(0, 0, 0, 0)");
     g.fillStyle = glow;
     g.fillRect(0, 0, cssW, cssH);
@@ -1086,7 +1094,7 @@
     g.shadowColor = emptyWordmarkMintGlow(mintA);
     g.shadowBlur = mintBlur;
     g.fillText("DAEDALUS", cx, cy + 48);
-    g.shadowColor = "rgba(245, 193, 74, " + goldA + ")";
+    g.shadowColor = emptyWordmarkGoldGlow(goldA);
     g.shadowBlur = goldBlur;
     g.fillText("DAEDALUS", cx, cy + 48);
     g.shadowColor = "transparent";

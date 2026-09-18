@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well empty wordmark gold depth.**
+  Idle gold aura falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on an empty well.
+
 - **Desktop empty wordmark mint depth.**
   Idle mint aura falls off toward
   floor-dim with the same 0.22 as halls,
