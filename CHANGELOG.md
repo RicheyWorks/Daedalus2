@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Portal open names the slab lease.**
+  POST /portal/open and /portal/seal
+  name the account key on the plot
+  under that cube. Empty when the
+  portal sits off a rented slab. No
+  wallet types.
+
 - **Trap arm names the slab lease.**
   POST /trap/arm and /trap/disarm name
   the account key on the plot under
