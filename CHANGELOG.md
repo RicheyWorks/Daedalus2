@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well legend start and goal depth.**
+  Overlay start and goal chips fall off
+  toward deeper mint and coral so
+  leftover flat discs are not the last
+  word on the ends of the maze.
+
 - **Desktop inspect names every slab place.**
   Desktop inspect lists every inspired
   toponym, oldest first. Street stays

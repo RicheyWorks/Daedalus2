@@ -446,6 +446,12 @@
     background: radial-gradient(circle at 45% 40%, #19140f 28%, #15110d); }
   #legend [data-key="fog"] i {
     background: radial-gradient(circle at 45% 40%, #16120e 28%, #0c0908); }
+  #legend [data-key="start"] i {
+    border-radius: 50%;
+    background: radial-gradient(circle at 45% 40%, #3ee08f 28%, #1e8a58); }
+  #legend [data-key="goal"] i {
+    border-radius: 50%;
+    background: radial-gradient(circle at 45% 40%, #ff5a5f 28%, #c4383c); }
   #compareBox:empty { display: none; }
   #compareBox { max-height: 22vh; overflow: auto; overscroll-behavior: none; min-width: 0;
                 scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent;
@@ -705,8 +711,8 @@ powershell -File daedalus-explore\run-explore.ps1</pre>
       <div id="legend" hidden>
         <span data-key="floor"><i></i>floor</span>
         <span data-key="wall"><i></i>wall / rock</span>
-        <span data-key="start"><i style="background:#3ee08f;border-radius:50%"></i>start</span>
-        <span data-key="goal"><i style="background:#ff5a5f;border-radius:50%"></i>goal</span>
+        <span data-key="start"><i></i>start</span>
+        <span data-key="goal"><i></i>goal</span>
         <span data-key="path"><i style="background:#8fb8ff"></i>solver path</span>
         <span data-key="hotspot"><i style="background:rgba(229,72,77,.5)"></i>hot spot</span>
         <span data-key="player"><i style="background:#f5c14a;border-radius:50%"></i><i style="background:#e88868;border-radius:50%"></i><i style="background:#e8a060;border-radius:50%"></i><i style="background:#b8a058;border-radius:50%;margin-right:0"></i>players</span>
