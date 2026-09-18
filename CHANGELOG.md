@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcel grant drive.**
+  parcel.grant extra-grants block.place on the slab under
+  the cube, or the first plot. Empty actor is alice. Named
+  results: GRANTED, ALREADY_GRANTED, NO_PARCEL. REST
+  POST /parcels/grant. No wallet types.
+
 - **NPC inspect ACL.**
   npc.inspect lists extra grants and denials on the slab
   under npc-zero. Off a plot stays empty — a 1×1 stamp

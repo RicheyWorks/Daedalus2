@@ -81,7 +81,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.capabilities", org.hamcrest.Matchers.hasItems(
                         "world.inspect", "block.place", "door.open", "door.close",
                         "trap.arm", "trap.disarm", "portal.open", "portal.seal",
-                        "npc.talk", "npc.hush", "parcel.lease", "stamp.apply")));
+                        "npc.talk", "npc.hush", "parcel.lease", "parcel.grant",
+                        "stamp.apply")));
 
         mvc.perform(get("/api/v1/world/world-zero/observe")
                         .param("x", "1").param("y", "2").param("z", "3"))
@@ -256,6 +257,19 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("LEASED")))
                 .andExpect(jsonPath("$.leaseId", equalTo("tenant-zero")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/grant")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("GRANTED")))
+                .andExpect(jsonPath("$.acl", equalTo("bob block.place")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/grant")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("ALREADY_GRANTED")));
     }
 
     @Test

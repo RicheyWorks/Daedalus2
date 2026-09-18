@@ -14,6 +14,7 @@ import com.daedalus.world.NpcResult;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelAcl;
 import com.daedalus.world.ParcelBounds;
+import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelId;
 import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.ParcelVerb;
@@ -39,6 +40,9 @@ import java.util.Set;
  * {@link CapabilityRegistry}, not here.
  */
 public final class WorldOps {
+
+    /** First extra account on a grant with no actor string. Not a wallet. */
+    public static final String GUEST_ACTOR = "alice";
 
     private WorldOps() {
     }
@@ -76,6 +80,7 @@ public final class WorldOps {
             case "npc.talk" -> world.talkNpc();
             case "npc.hush" -> world.hushNpc();
             case "parcel.lease" -> leaseParcel(world);
+            case "parcel.grant" -> grantParcel(world, at, mazeRef);
             case "stamp.apply" -> stampApply(world, at, maze, mazeRef);
             default -> throw new IllegalArgumentException("Unknown capability " + capability);
         };
@@ -446,6 +451,30 @@ public final class WorldOps {
             }
         }
         return world.leaseParcel(world.parcels().get(0).id(), Parcel.SYSTEM_TENANT);
+    }
+
+    /**
+     * Extra BLOCK_PLACE grant on the slab under {@code at}, or the first
+     * plot. Empty actor becomes {@link #GUEST_ACTOR}.
+     */
+    public static ParcelGrantResult grantParcel(World world, BlockCoordinate at, String actorId) {
+        if (world == null || world.parcels().isEmpty()) {
+            return ParcelGrantResult.NO_PARCEL;
+        }
+        String actor = actorId == null || actorId.isBlank() ? GUEST_ACTOR : actorId.trim();
+        Parcel parcel = at == null ? null : world.parcelAt(at);
+        if (parcel == null) {
+            parcel = world.parcels().get(0);
+        }
+        if (world.acl(parcel.id()).grants(actor, ParcelVerb.BLOCK_PLACE)) {
+            return ParcelGrantResult.ALREADY_GRANTED;
+        }
+        world.grant(parcel.id(), actor, ParcelVerb.BLOCK_PLACE);
+        return ParcelGrantResult.GRANTED;
+    }
+
+    public static ParcelGrantResult asGrantResult(Object value) {
+        return (ParcelGrantResult) value;
     }
 
     /** Newest non-empty lease string on the street. Not a wallet. */

@@ -11,6 +11,7 @@ import com.daedalus.world.Door;
 import com.daedalus.world.Npc;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelBounds;
+import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.ParcelVerb;
 import com.daedalus.world.PlaceNames;
@@ -112,6 +113,18 @@ class WorldBuilderTest {
         assertThat(WorldOps.standsLine(null)).isEmpty();
         assertThat(snap.get("acl")).isEqualTo("");
         assertThat(WorldOps.aclLine(world)).isEmpty();
+        assertThat(builder.run(new WorldBuilder.Step(
+                new BlockCoordinate(0, 0, 0), "parcel.grant", null, null, "bob")))
+                .isEqualTo(ParcelGrantResult.GRANTED);
+        assertThat(WorldOps.aclLine(world)).isEqualTo("bob block.place");
+        assertThat(builder.run(new WorldBuilder.Step(
+                new BlockCoordinate(0, 0, 0), "parcel.grant", null, null, "bob")))
+                .isEqualTo(ParcelGrantResult.ALREADY_GRANTED);
+        assertThat(new WorldBuilder(World.zero()).run(new WorldBuilder.Step(
+                new BlockCoordinate(0, 0, 0), "parcel.grant", null, null, "bob")))
+                .isEqualTo(ParcelGrantResult.NO_PARCEL);
+        assertThat(WorldOps.grantParcel(null, null, "bob"))
+                .isEqualTo(ParcelGrantResult.NO_PARCEL);
         assertThat(builder.run(new WorldBuilder.Step(next, "parcel.lease", null)))
                 .isEqualTo(ParcelLeaseResult.LEASED);
         assertThat(world.parcels().get(0).leaseId()).isEqualTo(Parcel.SYSTEM_TENANT);

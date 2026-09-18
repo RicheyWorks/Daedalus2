@@ -29,6 +29,7 @@ public final class WorldZeroDrive {
             "npc.talk",
             "npc.hush",
             "parcel.lease",
+            "parcel.grant",
             "stamp.apply");
 
     private WorldZeroDrive() {

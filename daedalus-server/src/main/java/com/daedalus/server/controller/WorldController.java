@@ -7,8 +7,10 @@ import com.daedalus.api.dto.BlockMutationResponse;
 import com.daedalus.api.dto.ChunkInspectResponse;
 import com.daedalus.api.dto.DoorInspectResponse;
 import com.daedalus.api.dto.DoorMutationResponse;
+import com.daedalus.api.dto.GrantParcelRequest;
 import com.daedalus.api.dto.NpcInspectResponse;
 import com.daedalus.api.dto.NpcMutationResponse;
+import com.daedalus.api.dto.ParcelGrantResponse;
 import com.daedalus.api.dto.ParcelLeaseResponse;
 import com.daedalus.api.dto.PlaceBlockRequest;
 import com.daedalus.api.dto.PortalInspectResponse;
@@ -43,6 +45,7 @@ import com.daedalus.world.DoorResult;
 import com.daedalus.world.Npc;
 import com.daedalus.world.NpcResult;
 import com.daedalus.world.Parcel;
+import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
@@ -125,6 +128,22 @@ public class WorldController {
         World world = mounted(id);
         return ResponseEntity.ok(new ParcelLeaseResponse(
                 result.name(), WorldOps.lastLeaseId(world), world.revision().value()));
+    }
+
+    @PostMapping("/world/{id}/parcels/grant")
+    @Operation(summary = "Grant block.place on the slab under the cube, or the first plot.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<ParcelGrantResponse> grantParcel(
+            @PathVariable String id, @Valid @RequestBody GrantParcelRequest body) {
+        mounted(id);
+        BlockCoordinate at = new BlockCoordinate(
+                body.x() == null ? 0 : body.x(),
+                body.y() == null ? 0 : body.y(),
+                body.z() == null ? 0 : body.z());
+        ParcelGrantResult result = worlds.grantParcel(id, at, body.actorId());
+        World world = mounted(id);
+        return ResponseEntity.ok(new ParcelGrantResponse(
+                result.name(), WorldOps.aclLine(world), world.revision().value()));
     }
 
     @PostMapping("/world/{id}/stamp")
