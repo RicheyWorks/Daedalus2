@@ -179,6 +179,7 @@
     row(box, "place", world && world.place ? world.place : "—");
     row(box, "lot", world && world.lot ? world.lot : "—");
     row(box, "box", world && world.box ? world.box : "—");
+    row(box, "boxes", world && world.boxes ? world.boxes : "—");
     row(box, "lease", world && world.lease ? world.lease : "—");
     row(box, "maze", world && world.maze ? world.maze : "—");
     const occupied = chunk && chunk.present && chunk.occupied > 0;

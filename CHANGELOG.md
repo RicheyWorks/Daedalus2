@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well inspect names every box.**
+  The world well paints every inclusive
+  AABB from GET /world, oldest first.
+  Empty until stamp.apply. No wallet types.
+
 - **Well inspect names the last box.**
   The world well paints the newest
   slab AABB from GET /world. Empty

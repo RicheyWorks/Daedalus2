@@ -428,6 +428,8 @@ class WebUiPaintPinTest {
                     .contains("world.lot")
                     .contains("row(box, \"box\"")
                     .contains("world.box")
+                    .contains("row(box, \"boxes\"")
+                    .contains("world.boxes")
                     .contains("world.place")
                     .contains("world.occupants")
                     .contains("row(box, \"occupants\"")
