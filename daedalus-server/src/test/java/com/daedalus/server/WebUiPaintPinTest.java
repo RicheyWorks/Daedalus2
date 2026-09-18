@@ -345,6 +345,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellCaptionSanctuaryHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/caption.js")) {
+            assertThat(in).as("well caption painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("color:#758c44\">${s.placements.length} sanctuaries")
+                    .doesNotContain("color:#8aaa50\">${s.placements.length} sanctuaries");
+        }
+    }
+
+    @Test
     void wellStartDiscHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

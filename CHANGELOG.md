@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well caption sanctuary depth.**
+  Refuge moss falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even mint is not the last
+  word on the maze page. KEEP fingerprint
+  moss stays.
+
 - **Well caption hardest depth.**
   Cruel-route gold falls off toward
   floor-dim with the same 0.22 as halls,
