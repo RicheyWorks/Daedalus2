@@ -423,6 +423,7 @@ public final class WorldOps {
         out.put("drive", driveInChunk(world, cc));
         out.put("driveActor", actorInChunk(world, cc));
         out.put("driveAt", atInChunk(world, cc));
+        out.put("maze", mazesInChunk(world, cc));
         return out;
     }
 
@@ -518,6 +519,24 @@ public final class WorldOps {
     /** Slab origins whose AABB overlaps this 16³, as {@code x,z}. Oldest first. */
     public static String lotsInChunk(World world, ChunkCoordinate cc) {
         return joinInChunk(world, cc, false);
+    }
+
+    /** Lab maze ids whose slab overlaps this 16³. Oldest first. Not a wallet. */
+    public static String mazesInChunk(World world, ChunkCoordinate cc) {
+        if (world == null || cc == null) {
+            return "";
+        }
+        ParcelBounds box = chunkBox(cc);
+        List<String> refs = new ArrayList<>();
+        for (Parcel parcel : world.parcels()) {
+            if (parcel == null || !parcel.bounds().overlaps(box)) {
+                continue;
+            }
+            if (!parcel.mazeRef().isEmpty()) {
+                refs.add(parcel.mazeRef());
+            }
+        }
+        return String.join(" · ", refs);
     }
 
     /** Plots whose AABB overlaps this 16³. */

@@ -151,7 +151,8 @@ class WorldControllerTest {
                         equalTo("door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0")))
                 .andExpect(jsonPath("$.drive", equalTo("block.place AIR")))
                 .andExpect(jsonPath("$.driveActor", equalTo("system")))
-                .andExpect(jsonPath("$.driveAt", equalTo("1,2,3")));
+                .andExpect(jsonPath("$.driveAt", equalTo("1,2,3")))
+                .andExpect(jsonPath("$.maze", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero/chunk").param("x", "4").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
@@ -162,7 +163,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.stands", equalTo("")))
                 .andExpect(jsonPath("$.drive", equalTo("")))
                 .andExpect(jsonPath("$.driveActor", equalTo("")))
-                .andExpect(jsonPath("$.driveAt", equalTo("")));
+                .andExpect(jsonPath("$.driveAt", equalTo("")))
+                .andExpect(jsonPath("$.maze", equalTo("")));
 
         mvc.perform(delete("/api/v1/world/world-zero/block")
                         .param("x", "1").param("y", "2").param("z", "3"))
@@ -704,6 +706,10 @@ class WorldControllerTest {
                         .param("x", "0").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())));
+        extra.perform(get("/api/v1/world/world-zero/chunk")
+                        .param("x", "0").param("y", "0").param("z", "0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())));
         extra.perform(get("/api/v1/world/world-zero/npc"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.box", equalTo("0,0,0-6,1,6")))
@@ -760,5 +766,14 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))))
                 .andExpect(jsonPath("$.lease", equalTo("")))
                 .andExpect(jsonPath("$.maze", equalTo(again.metadata().id().toString())));
+        extra.perform(get("/api/v1/world/world-zero/chunk")
+                        .param("x", "0").param("y", "0").param("z", "0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.maze", equalTo(
+                        cached.metadata().id() + " · " + again.metadata().id())));
+        extra.perform(get("/api/v1/world/world-zero/chunk")
+                        .param("x", "4").param("y", "0").param("z", "0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.maze", equalTo("")));
     }
 }

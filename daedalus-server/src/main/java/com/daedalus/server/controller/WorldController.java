@@ -320,14 +320,15 @@ public class WorldController {
         String drive = WorldOps.driveInChunk(world, cc);
         String driveActor = WorldOps.actorInChunk(world, cc);
         String driveAt = WorldOps.atInChunk(world, cc);
+        String maze = WorldOps.mazesInChunk(world, cc);
         if (chunk == null) {
             return ResponseEntity.ok(new ChunkInspectResponse(
                     x, y, z, false, null, 0, plots, street, lot, occupants, stands,
-                    drive, driveActor, driveAt));
+                    drive, driveActor, driveAt, maze));
         }
         return ResponseEntity.ok(new ChunkInspectResponse(
                 x, y, z, true, chunk.revision(), chunk.occupied(), plots, street, lot,
-                occupants, stands, drive, driveActor, driveAt));
+                occupants, stands, drive, driveActor, driveAt, maze));
     }
 
     @PutMapping("/world/{id}/block")

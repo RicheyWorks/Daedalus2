@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Chunk inspect names overlapping mazes.**
+  GET /chunk lists lab maze UUIDs
+  whose plots overlap that 16³.
+  Empty off the street or on a
+  default slab. No wallet types.
+
 - **Observe names the slab maze.**
   GET /observe names the lab maze UUID
   the plot was stamped from. Empty
