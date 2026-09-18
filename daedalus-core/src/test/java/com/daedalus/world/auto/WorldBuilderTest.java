@@ -479,6 +479,21 @@ class WorldBuilderTest {
         Observation offObserve = Observation.take(world,
                 new WorldAddress(world.id(), new BlockCoordinate(99, 0, 99)));
         assertThat(offObserve.maze()).isEmpty();
+        MazeGrid other = new MazeGrid(3, 3);
+        other.carve(other.cell(0, 0), Direction.EAST);
+        String mazeTwo = "00000000-0000-4000-8000-000000000008";
+        BlockCoordinate nextLot = StampOps.nextOrigin(world, other, new BlockCoordinate(0, 0, 0), 1);
+        assertThat(WorldOps.asStampResult(builder.run(new WorldBuilder.Step(
+                nextLot, "stamp.apply", null, other, mazeTwo))).ok()).isTrue();
+        assertThat(builder.run(new WorldBuilder.Step(nextLot, "parcel.lease", null)))
+                .isEqualTo(ParcelLeaseResult.LEASED);
+        assertThat(WorldOps.lastLeaseMaze(world)).isEqualTo(mazeTwo);
+        assertThat(builder.run(new WorldBuilder.Step(nextLot, "parcel.release", null)))
+                .isEqualTo(ParcelReleaseResult.RELEASED);
+        assertThat(WorldOps.lastLeaseMaze(world)).isEqualTo(mazeTwo);
+        assertThat(builder.run(new WorldBuilder.Step(nextLot, "parcel.release", null)))
+                .isEqualTo(ParcelReleaseResult.RELEASED);
+        assertThat(WorldOps.lastLeaseMaze(world)).isEmpty();
     }
 
     @Test

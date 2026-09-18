@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Release names the remaining maze.**
+  POST /parcels/release names the
+  lab maze UUID still rented after
+  the first lease drops. Empty when
+  the street is vacant. No wallet types.
+
 - **Lease names the slab maze.**
   POST /parcels/lease names the lab
   maze UUID on the plot just rented.

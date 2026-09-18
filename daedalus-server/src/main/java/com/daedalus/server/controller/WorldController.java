@@ -154,7 +154,8 @@ public class WorldController {
         ParcelReleaseResult result = worlds.releaseParcel(id);
         World world = mounted(id);
         return ResponseEntity.ok(new ParcelReleaseResponse(
-                result.name(), WorldOps.lastLeaseId(world), world.revision().value()));
+                result.name(), WorldOps.lastLeaseId(world), world.revision().value(),
+                WorldOps.lastLeaseMaze(world)));
     }
 
     @PostMapping("/world/{id}/parcels/grant")
