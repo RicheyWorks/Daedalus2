@@ -117,6 +117,26 @@ class LivingSlabTest {
     }
 
     @Test
+    void aSyncClearsCubesOutsideTheMazeGrid() {
+        World world = World.zero();
+        MazeGrid wide = corridor();
+        StampRequest wideReq = request(world, wide);
+        StampResult stamped = StampOps.apply(world, wideReq);
+        BlockCoordinate leftover = new BlockCoordinate(8, 2, 8);
+        assertThat(stamped.bounds().contains(leftover)).isTrue();
+        assertThat(world.get(leftover)).isEqualTo(BlockType.STONE);
+
+        MazeGrid small = new MazeGrid(1, 1);
+        StampRequest smallReq = new StampRequest(world.id(), new BlockCoordinate(4, 2, 8),
+                small, 2, 1);
+        LivingSlab slab = new LivingSlab(world, smallReq, stamped.bounds());
+        assertThat(slab.sync()).isGreaterThan(0);
+        assertThat(world.get(leftover)).isEqualTo(BlockType.AIR);
+        assertThat(world.get(new BlockCoordinate(5, 2, 9))).isEqualTo(BlockType.STONE);
+        assertThat(stamped.bounds().contains(slab.lastWritten())).isTrue();
+    }
+
+    @Test
     void sealingAPassageRestoresWallPosts() {
         World world = World.zero();
         MazeGrid maze = corridor();

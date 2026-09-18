@@ -94,6 +94,25 @@ public final class LivingSlab {
                 }
             }
         }
+        written += clearOutsideGrid(rows, cols);
+        return written;
+    }
+
+    /** Drop leftover stone that sits in the AABB but not on this maze. */
+    private int clearOutsideGrid(int rows, int cols) {
+        int written = 0;
+        for (int x = bounds.minX(); x <= bounds.maxX(); x++) {
+            for (int z = bounds.minZ(); z <= bounds.maxZ(); z++) {
+                int c = x - origin.x();
+                int r = z - origin.z();
+                if (c >= 0 && c < cols && r >= 0 && r < rows) {
+                    continue;
+                }
+                for (int y = bounds.minY(); y <= bounds.maxY(); y++) {
+                    written += ensure(new BlockCoordinate(x, y, z), BlockType.AIR);
+                }
+            }
+        }
         return written;
     }
 

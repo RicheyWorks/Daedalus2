@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Living slab clears leftover.**
+  A living re-project airs cubes in
+  the stamped AABB that the current
+  maze no longer covers. Occupancy
+  and bounds skip stay. No wallet
+  types.
+
 - **Block inspect names the slab box.**
   GET /block names the inclusive AABB
   living stays inside when the cube
