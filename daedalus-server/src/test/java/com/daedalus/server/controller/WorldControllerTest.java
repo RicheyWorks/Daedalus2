@@ -668,7 +668,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.acl", equalTo(
                         "bob door.open · bob trap.arm · bob portal.open · bob npc.talk")))
                 .andExpect(jsonPath("$.maze", equalTo("")))
-                .andExpect(jsonPath("$.lease", equalTo("tenant-zero")));
+                .andExpect(jsonPath("$.lease", equalTo("tenant-zero")))
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))));
 
         mvc.perform(post("/api/v1/world/world-zero/parcels/forgive")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -676,7 +677,8 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("NOT_DENIED")))
                 .andExpect(jsonPath("$.maze", equalTo("")))
-                .andExpect(jsonPath("$.lease", equalTo("tenant-zero")));
+                .andExpect(jsonPath("$.lease", equalTo("tenant-zero")))
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))));
 
         mvc.perform(post("/api/v1/world/world-zero/parcels/forgive")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -895,6 +897,7 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("FORGIVEN")))
                 .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())))
-                .andExpect(jsonPath("$.lease", equalTo("")));
+                .andExpect(jsonPath("$.lease", equalTo("")))
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))));
     }
 }

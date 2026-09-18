@@ -226,7 +226,8 @@ public class WorldController {
         World world = mounted(id);
         return ResponseEntity.ok(new ParcelForgiveResponse(
                 result.name(), WorldOps.aclLine(world), world.revision().value(),
-                WorldOps.mazeAt(world, at), WorldOps.leaseAt(world, at)));
+                WorldOps.mazeAt(world, at), WorldOps.leaseAt(world, at),
+                WorldOps.placeAt(world, at)));
     }
 
     @PostMapping("/world/{id}/stamp")

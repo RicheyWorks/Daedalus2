@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Forgive names the slab place.**
+  POST /parcels/forgive names the
+  inspired street under that cube.
+  Empty off a plot. No wallet types.
+
 - **Revoke names the slab place.**
   POST /parcels/revoke names the
   inspired street under that cube.
