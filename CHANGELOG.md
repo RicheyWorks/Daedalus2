@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well chunk last and every place.**
+  The well chunk row paints the newest
+  toponym on 0,0,0, then every
+  overlapping toponym when they differ.
+  Street stays the older alias. Empty
+  until a stamp. No wallet types.
+
 - **GET /chunk names every slab place.**
   Chunk inspect lists every inspired
   toponym whose slab overlaps this 16³,

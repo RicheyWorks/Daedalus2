@@ -472,6 +472,7 @@ class WebUiPaintPinTest {
                     .contains("label === \"street\"")
                     .contains("chunk.occupied > 0")
                     .contains("chunk.place")
+                    .contains("chunk.places")
                     .contains("chunk.street")
                     .contains("chunk.lot")
                     .contains("chunk.lots")

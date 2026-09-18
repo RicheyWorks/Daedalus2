@@ -189,7 +189,10 @@
     row(box, "maze", world && world.maze ? world.maze : "—");
     row(box, "mazes", world && world.mazes ? world.mazes : "—");
     const occupied = chunk && chunk.present && chunk.occupied > 0;
+    const places = chunk && chunk.place && chunk.places !== chunk.place
+        ? chunk.places : "";
     const street = chunk && chunk.place && chunk.street !== chunk.place
+        && chunk.street !== chunk.places
         ? chunk.street : "";
     const lots = chunk && chunk.lot && chunk.lots !== chunk.lot
         ? chunk.lots : "";
@@ -201,7 +204,7 @@
         ? chunk.acls : "";
     const boxes = chunk && chunk.box && chunk.boxes !== chunk.box
         ? chunk.boxes : "";
-    const at = chunk && [chunk.place, street, chunk.lot, lots, chunk.maze, mazes,
+    const at = chunk && [chunk.place, places, street, chunk.lot, lots, chunk.maze, mazes,
         chunk.lease, leases, chunk.acl, acls, chunk.box, boxes, chunk.occupants, chunk.stands, chunk.drive,
         chunk.driveActor, chunk.driveAt]
         .filter(Boolean).join(" ");
