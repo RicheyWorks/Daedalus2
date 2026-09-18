@@ -199,8 +199,10 @@
         ? chunk.leases : "";
     const acls = chunk && chunk.acl && chunk.acls !== chunk.acl
         ? chunk.acls : "";
+    const boxes = chunk && chunk.box && chunk.boxes !== chunk.box
+        ? chunk.boxes : "";
     const at = chunk && [chunk.place, street, chunk.lot, lots, chunk.maze, mazes,
-        chunk.lease, leases, chunk.acl, acls, chunk.occupants, chunk.stands, chunk.drive,
+        chunk.lease, leases, chunk.acl, acls, chunk.box, boxes, chunk.occupants, chunk.stands, chunk.drive,
         chunk.driveActor, chunk.driveAt]
         .filter(Boolean).join(" ");
     const slice = occupied

@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well chunk last and every box.**
+  The well chunk row paints the newest
+  inclusive AABB on 0,0,0, then every
+  overlapping AABB when they differ.
+  Empty until a stamp. No wallet types.
+
 - **GET /chunk names every slab box.**
   Chunk inspect lists every inclusive
   AABB whose slab overlaps this 16³,
