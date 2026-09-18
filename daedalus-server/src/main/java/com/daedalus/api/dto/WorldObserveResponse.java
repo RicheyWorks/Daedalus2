@@ -4,12 +4,12 @@ package com.daedalus.api.dto;
 
 /**
  * Read-back after a drive. Inspect: does not bump revision.
- * {@code place} and {@code lot} are empty off a slab.
+ * {@code place}, {@code lot}, and {@code lease} are empty off a slab.
  */
 public record WorldObserveResponse(String worldId, long revision, int x, int y, int z,
                                    String blockType, String doorState, String place, String lot,
                                    String occupant, String acl, String drive, String driveActor,
-                                   String driveAt) {
+                                   String driveAt, String lease) {
 
     public WorldObserveResponse {
         place = place == null ? "" : place;
@@ -19,24 +19,35 @@ public record WorldObserveResponse(String worldId, long revision, int x, int y, 
         drive = drive == null ? "" : drive;
         driveActor = driveActor == null ? "" : driveActor;
         driveAt = driveAt == null ? "" : driveAt;
+        lease = lease == null ? "" : lease;
+    }
+
+    public WorldObserveResponse(String worldId, long revision, int x, int y, int z,
+                                String blockType, String doorState, String place, String lot,
+                                String occupant, String acl, String drive, String driveActor,
+                                String driveAt) {
+        this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, acl,
+                drive, driveActor, driveAt, "");
     }
 
     public WorldObserveResponse(String worldId, long revision, int x, int y, int z,
                                 String blockType, String doorState, String place, String lot,
                                 String occupant, String acl, String drive, String driveActor) {
         this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, acl,
-                drive, driveActor, "");
+                drive, driveActor, "", "");
     }
 
     public WorldObserveResponse(String worldId, long revision, int x, int y, int z,
                                 String blockType, String doorState, String place, String lot,
                                 String occupant, String acl) {
-        this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, acl, "", "", "");
+        this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, acl,
+                "", "", "", "");
     }
 
     public WorldObserveResponse(String worldId, long revision, int x, int y, int z,
                                 String blockType, String doorState, String place, String lot,
                                 String occupant) {
-        this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, "", "", "", "");
+        this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant,
+                "", "", "", "", "");
     }
 }

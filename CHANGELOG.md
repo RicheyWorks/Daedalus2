@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Observe names the slab lease.**
+  GET /observe names the account key
+  on the plot under the cube. Empty
+  off the street or before
+  parcel.lease. No wallet types.
+
 - **NPC inspect names the slab lease.**
   GET /npc names the account key
   on the plot under npc-zero. Empty

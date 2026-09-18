@@ -97,6 +97,7 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.lot", equalTo("")))
                 .andExpect(jsonPath("$.occupant", equalTo("")))
                 .andExpect(jsonPath("$.acl", equalTo("")))
+                .andExpect(jsonPath("$.lease", equalTo("")))
                 .andExpect(jsonPath("$.drive", equalTo("")))
                 .andExpect(jsonPath("$.driveActor", equalTo("")))
                 .andExpect(jsonPath("$.driveAt", equalTo("")))
@@ -365,7 +366,8 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.drive", equalTo("stamp.apply DENIED")))
                 .andExpect(jsonPath("$.driveActor", equalTo("carol")))
-                .andExpect(jsonPath("$.driveAt", equalTo("0,0,0")));
+                .andExpect(jsonPath("$.driveAt", equalTo("0,0,0")))
+                .andExpect(jsonPath("$.lease", equalTo("")));
 
         mvc.perform(post("/api/v1/world/world-zero/stamp")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -378,6 +380,11 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("LEASED")))
                 .andExpect(jsonPath("$.leaseId", equalTo("tenant-zero")));
+
+        mvc.perform(get("/api/v1/world/world-zero/observe")
+                        .param("x", "0").param("y", "0").param("z", "0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.lease", equalTo("tenant-zero")));
 
         mvc.perform(post("/api/v1/world/world-zero/door/close"))
                 .andExpect(status().isOk())
@@ -743,6 +750,7 @@ class WorldControllerTest {
                         .param("x", "8").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.lot", equalTo("8,0")))
-                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))));
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))))
+                .andExpect(jsonPath("$.lease", equalTo("")));
     }
 }

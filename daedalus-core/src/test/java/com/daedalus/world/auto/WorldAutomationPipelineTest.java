@@ -8,6 +8,7 @@ import com.daedalus.world.Door;
 import com.daedalus.world.DoorResult;
 import com.daedalus.world.Npc;
 import com.daedalus.world.Parcel;
+import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.ParcelVerb;
 import com.daedalus.world.Portal;
 import com.daedalus.world.Trap;
@@ -102,6 +103,13 @@ class WorldAutomationPipelineTest {
         WorldOps.drive(world, "stamp.apply", new BlockCoordinate(0, 0, 0), null);
         session.address(Door.ZERO_AT);
         assertThat(session.observe().acl()).isEmpty();
+        assertThat(session.observe().lease()).isEmpty();
+        assertThat(WorldOps.drive(world, "parcel.lease", Door.ZERO_AT, null))
+                .isEqualTo(ParcelLeaseResult.LEASED);
+        assertThat(session.observe().lease()).isEqualTo(Parcel.SYSTEM_TENANT);
+        session.address(Npc.ZERO_AT);
+        assertThat(session.observe().lease()).isEmpty();
+        session.address(Door.ZERO_AT);
         world.grant(world.parcels().get(0).id(), "bob", ParcelVerb.BLOCK_PLACE);
         assertThat(session.observe().acl()).isEqualTo("bob block.place");
         session.address(new BlockCoordinate(9, 0, 9));
