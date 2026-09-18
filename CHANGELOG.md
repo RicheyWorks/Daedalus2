@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Block place names the slab ACL.**
+  PUT /block and DELETE /block name
+  the extra-list under that cube.
+  Empty when the cube sits off a
+  stamped plot. No wallet types.
+
 - **NPC talk names the slab ACL.**
   POST /npc/talk and /npc/hush name
   the extra-list under that cube.

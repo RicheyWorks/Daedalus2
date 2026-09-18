@@ -369,7 +369,7 @@ public class WorldController {
                 write.now().name(), write.revision(), write.result(),
                 WorldOps.mazeAt(world, at), WorldOps.leaseAt(world, at),
                 WorldOps.placeAt(world, at), WorldOps.lotAt(world, at),
-                WorldOps.boxAt(world, at)));
+                WorldOps.boxAt(world, at), WorldOps.aclAt(world, at)));
     }
 
     @DeleteMapping("/world/{id}/block")
@@ -390,7 +390,7 @@ public class WorldController {
                 write.revision(), write.result(),
                 WorldOps.mazeAt(world, at), WorldOps.leaseAt(world, at),
                 WorldOps.placeAt(world, at), WorldOps.lotAt(world, at),
-                WorldOps.boxAt(world, at)));
+                WorldOps.boxAt(world, at), WorldOps.aclAt(world, at)));
     }
 
     @GetMapping("/world/{id}/door")

@@ -8,7 +8,7 @@ package com.daedalus.api.dto;
  */
 public record BlockMutationResponse(
         int x, int y, int z, String previous, String type, long revision, String result,
-        String maze, String lease, String place, String lot, String box) {
+        String maze, String lease, String place, String lot, String box, String acl) {
 
     public BlockMutationResponse {
         maze = maze == null ? "" : maze;
@@ -16,35 +16,42 @@ public record BlockMutationResponse(
         place = place == null ? "" : place;
         lot = lot == null ? "" : lot;
         box = box == null ? "" : box;
+        acl = acl == null ? "" : acl;
+    }
+
+    public BlockMutationResponse(int x, int y, int z, String previous, String type, long revision,
+                                 String result, String maze, String lease, String place,
+                                 String lot, String box) {
+        this(x, y, z, previous, type, revision, result, maze, lease, place, lot, box, "");
     }
 
     public BlockMutationResponse(int x, int y, int z, String previous, String type, long revision,
                                  String result, String maze, String lease, String place,
                                  String lot) {
-        this(x, y, z, previous, type, revision, result, maze, lease, place, lot, "");
+        this(x, y, z, previous, type, revision, result, maze, lease, place, lot, "", "");
     }
 
     public BlockMutationResponse(int x, int y, int z, String previous, String type, long revision,
                                  String result, String maze, String lease, String place) {
-        this(x, y, z, previous, type, revision, result, maze, lease, place, "", "");
+        this(x, y, z, previous, type, revision, result, maze, lease, place, "", "", "");
     }
 
     public BlockMutationResponse(int x, int y, int z, String previous, String type, long revision,
                                  String result, String maze, String lease) {
-        this(x, y, z, previous, type, revision, result, maze, lease, "", "", "");
+        this(x, y, z, previous, type, revision, result, maze, lease, "", "", "", "");
     }
 
     public BlockMutationResponse(int x, int y, int z, String previous, String type, long revision,
                                  String result, String maze) {
-        this(x, y, z, previous, type, revision, result, maze, "", "", "", "");
+        this(x, y, z, previous, type, revision, result, maze, "", "", "", "", "");
     }
 
     public BlockMutationResponse(int x, int y, int z, String previous, String type, long revision,
                                  String result) {
-        this(x, y, z, previous, type, revision, result, "", "", "", "", "");
+        this(x, y, z, previous, type, revision, result, "", "", "", "", "", "");
     }
 
     public BlockMutationResponse(int x, int y, int z, String previous, String type, long revision) {
-        this(x, y, z, previous, type, revision, "PLACED", "", "", "", "", "");
+        this(x, y, z, previous, type, revision, "PLACED", "", "", "", "", "", "");
     }
 }
