@@ -279,6 +279,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellGateSampleHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #afa088;")
+                    .doesNotContain("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #d4c4a8;");
+        }
+    }
+
+    @Test
     void wellStartDiscHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
