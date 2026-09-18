@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well start disc depth.**
+  Start mint falls off toward floor-dim
+  at the board rim with the same 0.22
+  edge as halls, so leftover even mint
+  is not the last word on a begin. KEEP
+  goal coral stays.
+
 - **Desktop compare ice wash depth.**
   First-lane ice falls off toward
   floor-dim at the board rim with the

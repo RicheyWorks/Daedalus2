@@ -141,6 +141,20 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellStartDiscHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("function startTileInk")
+                    .contains("mixHex(COLORS.start, COLORS.floorDim, 0.22 * edge)")
+                    .contains("endpoint(g, geom, start, startTileInk(2 * start.row + 1, 2 * start.col + 1, th, tw))")
+                    .contains("endpoint(g, geom, {row: 0, col: 0}, startTileInk(1, 1, idleRows, idleCols))")
+                    .contains("endpoint(g, geom, goal,  COLORS.goal)");
+        }
+    }
+
+    @Test
     void idleMarkStartAndGoalFloorsWashTowardTheEnds() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
