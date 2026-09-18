@@ -835,7 +835,7 @@
       const hardTip = walkHead(scene.hardest.path, 1);
       pathHead(g, geom, hardTip, hardTip
           ? hardestTileInk(2 * hardTip.row + 1, 2 * hardTip.col + 1, th, tw)
-          : "#f2c94c");
+          : "#c6a441");
     }
     if (scene.tourPath && scene.tourPath.length) {
       paintWalk(g, geom, scene.tourPath, "#d4b06a", 1, 0.38, "ribbon",

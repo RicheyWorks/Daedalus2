@@ -481,6 +481,8 @@ class WebUiSmokeTest {
                 .contains("function walker")
                 .contains("walkHead(scene.hardest.path, 1)")
                 .contains("paintWalk(g, geom, scene.hardest.path, \"#c6a441\", 1, 0.75, \"ribbon\"")
+                .contains("hardestTileInk(2 * hardTip.row + 1, 2 * hardTip.col + 1, th, tw)\n"
+                        + "          : \"#c6a441\")")
                 .contains("walkHead(scene.tourPath, 1)")
                 .contains("paintWalk(g, geom, scene.tourPath, \"#d4b06a\"")
                 .contains("walkHead(scene.tourPath, 1), \"#d4b06a\"")
