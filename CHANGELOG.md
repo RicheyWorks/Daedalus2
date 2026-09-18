@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well inspect names the last box.**
+  The world well paints the newest
+  slab AABB from GET /world. Empty
+  until stamp.apply. No wallet types.
+
 - **World inspect names every lease.**
   GET /world names every rented
   account key, oldest first. Empty
