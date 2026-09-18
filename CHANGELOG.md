@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Block inspect ACL.**
+  block.inspect lists extra grants and denials on the slab
+  under that cube. Off a plot stays empty. Owner stays
+  implicit. No wallet types.
+
 - **Explore hall ACL.**
   Off leftover HALL the caption lists extra parcel grants
   and denials after the street. Owner stays implicit.

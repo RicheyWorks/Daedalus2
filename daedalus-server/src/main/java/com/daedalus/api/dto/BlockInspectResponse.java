@@ -8,7 +8,7 @@ package com.daedalus.api.dto;
  */
 public record BlockInspectResponse(int x, int y, int z, String type, boolean present,
                                    String place, String lot, String lease, String maze,
-                                   String occupant) {
+                                   String occupant, String acl) {
 
     public BlockInspectResponse {
         place = place == null ? "" : place;
@@ -16,5 +16,12 @@ public record BlockInspectResponse(int x, int y, int z, String type, boolean pre
         lease = lease == null ? "" : lease;
         maze = maze == null ? "" : maze;
         occupant = occupant == null ? "" : occupant;
+        acl = acl == null ? "" : acl;
+    }
+
+    public BlockInspectResponse(int x, int y, int z, String type, boolean present,
+                                String place, String lot, String lease, String maze,
+                                String occupant) {
+        this(x, y, z, type, present, place, lot, lease, maze, occupant, "");
     }
 }

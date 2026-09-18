@@ -115,7 +115,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.type", equalTo("STONE")))
                 .andExpect(jsonPath("$.present", equalTo(true)))
                 .andExpect(jsonPath("$.place", equalTo("")))
-                .andExpect(jsonPath("$.lot", equalTo("")));
+                .andExpect(jsonPath("$.lot", equalTo("")))
+                .andExpect(jsonPath("$.acl", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero/chunk").param("x", "0").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())

@@ -11,6 +11,7 @@ import com.daedalus.world.Door;
 import com.daedalus.world.Npc;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelLeaseResult;
+import com.daedalus.world.ParcelVerb;
 import com.daedalus.world.PlaceNames;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.TrapState;
@@ -151,6 +152,7 @@ class WorldBuilderTest {
         Map<String, Object> onDoor = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(Door.ZERO_AT, "block.inspect", null));
         assertThat(onDoor.get("occupant")).isEqualTo("door");
+        assertThat(onDoor.get("acl")).isEqualTo("");
         @SuppressWarnings("unchecked")
         Map<String, Object> onNpc = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(Npc.ZERO_AT, "block.inspect", null));
@@ -159,6 +161,16 @@ class WorldBuilderTest {
         Map<String, Object> empty = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(new BlockCoordinate(9, 0, 9), "block.inspect", null));
         assertThat(empty.get("occupant")).isEqualTo("");
+        assertThat(empty.get("acl")).isEqualTo("");
+        world.grant(world.parcels().get(0).id(), "bob", ParcelVerb.BLOCK_PLACE);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> granted = (Map<String, Object>) builder.run(
+                new WorldBuilder.Step(Door.ZERO_AT, "block.inspect", null));
+        assertThat(granted.get("acl")).isEqualTo("bob block.place");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> off = (Map<String, Object>) builder.run(
+                new WorldBuilder.Step(new BlockCoordinate(9, 0, 9), "block.inspect", null));
+        assertThat(off.get("acl")).isEqualTo("");
     }
 
     @Test

@@ -200,6 +200,7 @@ public final class WorldOps {
         out.put("lease", leaseAt(world, cell));
         out.put("maze", mazeAt(world, cell));
         out.put("occupant", occupantAt(world, cell));
+        out.put("acl", aclAt(world, cell));
         return out;
     }
 
