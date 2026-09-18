@@ -287,7 +287,8 @@ class WorldControllerTest {
         mvc.perform(post("/api/v1/world/world-zero/npc/talk"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("SPOKE")))
-                .andExpect(jsonPath("$.state", equalTo("SPEAKING")));
+                .andExpect(jsonPath("$.state", equalTo("SPEAKING")))
+                .andExpect(jsonPath("$.maze", equalTo("")));
 
         mvc.perform(post("/api/v1/world/world-zero/npc/talk"))
                 .andExpect(status().isOk())
@@ -815,6 +816,10 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.box", equalTo("0,0,0-6,1,6")))
                 .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())))
                 .andExpect(jsonPath("$.lease", equalTo("")));
+        extra.perform(post("/api/v1/world/world-zero/npc/talk"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("SPOKE")))
+                .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())));
         extra.perform(post("/api/v1/world/world-zero/parcels/lease"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("LEASED")))
