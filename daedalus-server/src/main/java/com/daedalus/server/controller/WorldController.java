@@ -457,7 +457,8 @@ public class WorldController {
         Trap trap = worlds.inspectTrap(id);
         World world = mounted(id);
         return ResponseEntity.ok(new TrapMutationResponse(
-                trap.id(), trap.state().name(), result.name(), world.revision().value()));
+                trap.id(), trap.state().name(), result.name(), world.revision().value(),
+                WorldOps.mazeAt(world, trap.at())));
     }
 
     @PostMapping("/world/{id}/trap/disarm")
@@ -470,7 +471,8 @@ public class WorldController {
         Trap trap = worlds.inspectTrap(id);
         World world = mounted(id);
         return ResponseEntity.ok(new TrapMutationResponse(
-                trap.id(), trap.state().name(), result.name(), world.revision().value()));
+                trap.id(), trap.state().name(), result.name(), world.revision().value(),
+                WorldOps.mazeAt(world, trap.at())));
     }
 
     @GetMapping("/world/{id}/portal")
