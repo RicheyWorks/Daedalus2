@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop empty caption title depth.**
+  Idle gold line falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even chrome is not the last
+  word on an empty well. KEEP detail
+  khaki stays.
+
 - **Well empty caption title depth.**
   Idle gold line falls off toward
   floor-dim with the same 0.22 as halls,

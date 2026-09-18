@@ -1879,7 +1879,7 @@ public class MainController {
             g.setEffect(null);
             g.fillText(DesktopPaint.EMPTY_WORDMARK, cx, cy + 48);
             g.setGlobalAlpha(DesktopPaint.emptyCaptionTitleAlpha(wave));
-            g.setFill(Color.web(DesktopPaint.EMPTY_CAPTION_TITLE));
+            g.setFill(Color.web(DesktopPaint.emptyCaptionTitleInk()));
             g.setFont(Font.font("Bahnschrift", FontWeight.SEMI_BOLD, 13));
             g.fillText(DesktopPaint.EMPTY_TITLE, cx, cy + 78);
             g.setGlobalAlpha(DesktopPaint.emptyCaptionDetailAlpha(wave));

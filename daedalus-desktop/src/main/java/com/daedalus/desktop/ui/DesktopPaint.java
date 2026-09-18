@@ -108,6 +108,11 @@ public final class DesktopPaint {
     public static final String EMPTY_CAPTION_TITLE = "#b88538";
     public static final String EMPTY_CAPTION_DETAIL = "#8c764e";
 
+    /** Same 0.22 as halls — leftover even chrome is not the last word on an empty well. */
+    public static String emptyCaptionTitleInk() {
+        return mixHex(EMPTY_CAPTION_TITLE, FLOOR_DIM, 0.22);
+    }
+
     /** Idle caption under the wordmark — soft gate pulse, not stuck slate. */
     public static double emptyCaptionTitleAlpha(double wave) {
         return 0.72 + 0.18 * wave;

@@ -1130,6 +1130,9 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.emptyCaptionTitleAlpha(0)).isEqualTo(0.72);
         assertThat(DesktopPaint.emptyCaptionDetailAlpha(0)).isEqualTo(0.55);
         assertThat(DesktopPaint.EMPTY_CAPTION_TITLE).isEqualTo("#b88538");
+        assertThat(DesktopPaint.emptyCaptionTitleInk())
+                .as("idle gold line falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.EMPTY_CAPTION_TITLE);
         assertThat(DesktopPaint.EMPTY_CAPTION_DETAIL).isEqualTo("#8c764e");
         assertThat(DesktopPaint.EMPTY_CAPTION_TITLE).isNotEqualTo("#7d8894");
         assertThat(DesktopPaint.canvasRimAlpha(1))
