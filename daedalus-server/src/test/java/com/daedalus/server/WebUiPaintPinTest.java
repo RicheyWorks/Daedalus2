@@ -413,6 +413,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellTourRibbonHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("paintWalk(g, geom, scene.tourPath, \"#af9158\", 1, 0.38, \"ribbon\"")
+                    .doesNotContain("paintWalk(g, geom, scene.tourPath, \"#d4b06a\", 1, 0.38, \"ribbon\"");
+        }
+    }
+
+    @Test
     void wellAsciiRockHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
             assertThat(in).as("static well page").isNotNull();

@@ -838,7 +838,7 @@
           : "#c6a441");
     }
     if (scene.tourPath && scene.tourPath.length) {
-      paintWalk(g, geom, scene.tourPath, "#d4b06a", 1, 0.38, "ribbon",
+      paintWalk(g, geom, scene.tourPath, "#af9158", 1, 0.38, "ribbon",
           (tr, tc) => tourTileInk(tr, tc, th, tw));
       const tourTip = walkHead(scene.tourPath, 1);
       pathHead(g, geom, tourTip, tourTip
