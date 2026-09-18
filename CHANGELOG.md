@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Forgive names the slab lease.**
+  POST /parcels/forgive names the
+  account key on the plot under
+  that cube. Empty until
+  parcel.lease. No wallet types.
+
 - **Revoke names the slab lease.**
   POST /parcels/revoke names the
   account key on the plot under
