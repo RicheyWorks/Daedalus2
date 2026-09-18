@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **GET /chunk names the last slab ACL.**
+  Chunk inspect names the newest
+  extra-list whose slab overlaps this
+  16³. Empty until a grant or deny. No
+  wallet types.
+
 - **Well chunk last and every lease.**
   The well chunk row paints the newest
   account key on 0,0,0, then every

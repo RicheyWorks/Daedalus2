@@ -367,6 +367,7 @@ class WorldBuilderTest {
         assertThat(origin.get("lease")).isEqualTo("");
         assertThat(origin.get("acl")).isEqualTo("");
         assertThat(WorldOps.aclInChunk(null, null)).isEmpty();
+        assertThat(WorldOps.lastAclInChunk(null, null)).isEmpty();
         world.grant(world.parcels().get(0).id(), "bob", ParcelVerb.BLOCK_PLACE);
         @SuppressWarnings("unchecked")
         Map<String, Object> granted = (Map<String, Object>) builder.run(
@@ -412,6 +413,7 @@ class WorldBuilderTest {
         assertThat(both.get("mazes")).isEqualTo(WorldOps.streetMazes(near));
         assertThat(both.get("lease")).isEqualTo(WorldOps.lastLeaseId(near));
         assertThat(both.get("leases")).isEqualTo(WorldOps.streetLeases(near));
+        assertThat(both.get("acl")).isEqualTo(WorldOps.lastAcl(near));
     }
 
     @Test

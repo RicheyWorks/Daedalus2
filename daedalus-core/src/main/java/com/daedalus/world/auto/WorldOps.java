@@ -484,7 +484,7 @@ public final class WorldOps {
         out.put("mazes", mazesInChunk(world, cc));
         out.put("lease", leaseInChunk(world, cc));
         out.put("leases", leasesInChunk(world, cc));
-        out.put("acl", aclInChunk(world, cc));
+        out.put("acl", lastAclInChunk(world, cc));
         return out;
     }
 
@@ -698,6 +698,28 @@ public final class WorldOps {
             }
         }
         return String.join(" · ", keys);
+    }
+
+    /**
+     * Newest extra-list whose slab overlaps this 16³. Empty until a grant or deny.
+     * Owner implicit.
+     */
+    public static String lastAclInChunk(World world, ChunkCoordinate cc) {
+        if (world == null || cc == null) {
+            return "";
+        }
+        ParcelBounds box = chunkBox(cc);
+        String found = "";
+        for (Parcel parcel : world.parcels()) {
+            if (parcel == null || !parcel.bounds().overlaps(box)) {
+                continue;
+            }
+            String one = aclOf(world, parcel.id());
+            if (!one.isEmpty()) {
+                found = one;
+            }
+        }
+        return found;
     }
 
     /** Extra grants and denials whose slab overlaps this 16³. Owner implicit. */

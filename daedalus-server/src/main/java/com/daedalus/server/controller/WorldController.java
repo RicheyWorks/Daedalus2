@@ -354,7 +354,7 @@ public class WorldController {
         String mazes = WorldOps.mazesInChunk(world, cc);
         String lease = WorldOps.leaseInChunk(world, cc);
         String leases = WorldOps.leasesInChunk(world, cc);
-        String acl = WorldOps.aclInChunk(world, cc);
+        String acl = WorldOps.lastAclInChunk(world, cc);
         if (chunk == null) {
             return ResponseEntity.ok(new ChunkInspectResponse(
                     x, y, z, false, null, 0, plots, street, lot, occupants, stands,
