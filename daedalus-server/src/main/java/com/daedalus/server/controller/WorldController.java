@@ -302,7 +302,8 @@ public class WorldController {
                     WorldOps.leaseOn(world, step.at()),
                     WorldOps.placeOn(world, step.at()),
                     WorldOps.lotOn(world, step.at()),
-                    WorldOps.boxOn(world, step.at())));
+                    WorldOps.boxOn(world, step.at()),
+                    WorldOps.aclOn(world, step.at())));
         }
         return ResponseEntity.ok(new WorldTraceResponse(id, steps));
     }

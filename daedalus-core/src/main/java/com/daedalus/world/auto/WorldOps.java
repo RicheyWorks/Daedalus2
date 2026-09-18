@@ -422,6 +422,11 @@ public final class WorldOps {
         return boxAt(world, parseAt(atLine));
     }
 
+    /** Extra-list under a driven {@code x,y,z} line. Empty off a stamped plot. */
+    public static String aclOn(World world, String atLine) {
+        return aclAt(world, parseAt(atLine));
+    }
+
     public static BlockCoordinate parseAt(String line) {
         if (line == null || line.isBlank()) {
             return null;
