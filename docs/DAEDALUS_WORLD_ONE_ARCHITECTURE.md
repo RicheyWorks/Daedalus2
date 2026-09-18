@@ -332,7 +332,8 @@ chunk.inspect occupants, and
 desktop chunk occupants, and
 world.inspect occupants, and
 explore hall occupants, and
-STOMP / well last-event occupant
+STOMP / well last-event occupant, and
+explore occupancy cubes
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

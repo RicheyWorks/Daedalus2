@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore occupancy cubes.**
+  Door, trap, portal, and NPC cells that are still AIR mesh
+  as glass. Collision stays World.contains — a look, not a
+  wall. A solid already on that cell keeps its type.
+
 - **Well last-event occupant.**
   STOMP world frames carry occupant when the cube is door,
   trap, portal, or NPC. The well last-events line prints it.

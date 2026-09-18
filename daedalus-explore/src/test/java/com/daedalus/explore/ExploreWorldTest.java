@@ -126,7 +126,9 @@ class ExploreWorldTest {
         world.showBlocks(true);
         assertThat(world.showingBlocks()).isTrue();
         assertThat(world.mesh()).isSameAs(corridor);
-        assertThat(world.blocks().triangles()).hasSize(44);
+        assertThat(world.blocks().triangles().stream()
+                .filter(t -> t.at().equals(new BlockCoordinate(0, 0, 0))))
+                .hasSize(44);
         world.attachBlocks(null);
         assertThat(world.showingBlocks()).isFalse();
         assertThat(world.mesh()).isSameAs(corridor);
@@ -196,8 +198,10 @@ class ExploreWorldTest {
         world.attachStoredOrSample(file);
         assertThat(world.showingBlocks()).isTrue();
         assertThat(world.blocks().triangles()).extracting(WorldMesh.Triangle::type)
-                .contains(BlockType.WOOD)
-                .doesNotContain(BlockType.GLASS);
+                .contains(BlockType.WOOD, BlockType.GLASS);
+        assertThat(world.blocks().world().parcels())
+                .as("stored wood is not the sample landmark")
+                .isEmpty();
         world.attachStoredOrSample(tmp.resolve("missing.daew"));
         assertThat(world.blocks().world().parcels().get(0).placeName())
                 .isEqualTo(ExploreWorld.SAMPLE_PLACE);

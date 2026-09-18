@@ -7,6 +7,7 @@ import com.daedalus.world.BlockType;
 import com.daedalus.world.Chunk;
 import com.daedalus.world.ChunkCoordinate;
 import com.daedalus.world.World;
+import com.daedalus.world.auto.WorldOps;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,12 +76,31 @@ public final class WorldMesh {
                             continue;
                         }
                         BlockCoordinate at = new BlockCoordinate(ox + lx, oy + ly, oz + lz);
-                        addExposed(world, out, at, type);
+                        addExposed(world, out, at, type, false);
                     }
                 }
             }
         }
+        addOccupancyCubes(world, out);
         return new WorldMesh(world, List.copyOf(out));
+    }
+
+    /**
+     * Occupancy cells that are still AIR get a glass cube. Collision
+     * stays {@link World#contains} — a look, not a wall.
+     */
+    private static void addOccupancyCubes(World world, List<Triangle> out) {
+        addOccupancyCube(world, out, world.door() == null ? null : world.door().at());
+        addOccupancyCube(world, out, world.trap() == null ? null : world.trap().at());
+        addOccupancyCube(world, out, world.portal() == null ? null : world.portal().at());
+        addOccupancyCube(world, out, world.npc() == null ? null : world.npc().at());
+    }
+
+    private static void addOccupancyCube(World world, List<Triangle> out, BlockCoordinate at) {
+        if (at == null || world.contains(at)) {
+            return;
+        }
+        addExposed(world, out, at, BlockType.GLASS, true);
     }
 
     public World world() {
@@ -100,13 +120,15 @@ public final class WorldMesh {
     }
 
     private static void addExposed(World world, List<Triangle> out,
-                                   BlockCoordinate at, BlockType type) {
+                                   BlockCoordinate at, BlockType type, boolean occupancy) {
         Face[] faces = Face.values();
         for (int i = 0; i < faces.length; i++) {
-            int nx = at.x() + DIRS[i][0];
-            int ny = at.y() + DIRS[i][1];
-            int nz = at.z() + DIRS[i][2];
-            if (world.contains(new BlockCoordinate(nx, ny, nz))) {
+            BlockCoordinate next = new BlockCoordinate(
+                    at.x() + DIRS[i][0], at.y() + DIRS[i][1], at.z() + DIRS[i][2]);
+            if (world.contains(next)) {
+                continue;
+            }
+            if (occupancy && !WorldOps.occupantAt(world, next).isEmpty()) {
                 continue;
             }
             emitFace(out, at, type, faces[i]);

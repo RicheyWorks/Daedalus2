@@ -1602,6 +1602,9 @@ public final class ExplorePaint {
             if (tri == null || tri.face() != WorldMesh.Face.NEG_Y || tri.at() == null) {
                 continue;
             }
+            if (blocks.world() != null && !blocks.world().contains(tri.at())) {
+                continue;
+            }
             if (!seen.add(tri.at())) {
                 continue;
             }
