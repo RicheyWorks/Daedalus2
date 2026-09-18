@@ -282,7 +282,9 @@ class WebUiPaintPinTest {
             assertThat(js)
                     .contains("mixHex(\"#f0b429\", COLORS.floorDim, 0.22 * edge)")
                     .contains("const winInk = victoryInk(goal, th, tw)")
-                    .contains("li === 0 ? null : (tr, tc) => victoryTileInk(tr, tc, th, tw)");
+                    .contains("li === 0")
+                    .contains("(tr, tc) => expansionTileInk(tr, tc, th, tw)")
+                    .contains("(tr, tc) => victoryTileInk(tr, tc, th, tw)");
         }
     }
 
@@ -327,6 +329,20 @@ class WebUiPaintPinTest {
             assertThat(js)
                     .contains("mixHex(\"#f5c14a\", COLORS.floorDim, 0.22 * edge)")
                     .contains("(tr, tc) => playerTileInk(tr, tc, th, tw)");
+        }
+    }
+
+    @Test
+    void wellRaceAWashHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("g.fillStyle = li === 0")
+                    .contains("? expansionTileInk(2 * p.row + 1, 2 * p.col + 1, th, tw)")
+                    .contains("li === 0")
+                    .contains("(tr, tc) => expansionTileInk(tr, tc, th, tw)")
+                    .doesNotContain("g.fillStyle = lane.color;");
         }
     }
 

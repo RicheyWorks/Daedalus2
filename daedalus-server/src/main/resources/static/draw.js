@@ -848,24 +848,25 @@
           const p = lane.expansions[i];
           live.add(p.row + "," + p.col);
         }
-        g.fillStyle = lane.color;
         g.globalAlpha = 0.13 * (0.88 + 0.24 * raceWave);
         for (let i = 0; i < shown; i++) {
           const p = lane.expansions[i];
-          if (li !== 0) {
-            g.fillStyle = victoryTileInk(2 * p.row + 1, 2 * p.col + 1, th, tw);
-          }
+          g.fillStyle = li === 0
+              ? expansionTileInk(2 * p.row + 1, 2 * p.col + 1, th, tw)
+              : victoryTileInk(2 * p.row + 1, 2 * p.col + 1, th, tw);
           paintWashCell(g, geom, p.row, p.col);
         }
         g.globalAlpha = 0.20 * (0.85 + 0.30 * raceWave);
         paintWashOpenings(g, geom, tiles, (r, c) => live.has(r + "," + c),
-            li === 0 ? null : (tr, tc) => victoryTileInk(tr, tc, th, tw));
+            li === 0
+                ? (tr, tc) => expansionTileInk(tr, tc, th, tw)
+                : (tr, tc) => victoryTileInk(tr, tc, th, tw));
         g.globalAlpha = 0.4 * (0.88 + 0.24 * raceWave);
         for (let i = Math.max(0, shown - 5); i < shown; i++) {
           const p = lane.expansions[i];
-          if (li !== 0) {
-            g.fillStyle = victoryTileInk(2 * p.row + 1, 2 * p.col + 1, th, tw);
-          }
+          g.fillStyle = li === 0
+              ? expansionTileInk(2 * p.row + 1, 2 * p.col + 1, th, tw)
+              : victoryTileInk(2 * p.row + 1, 2 * p.col + 1, th, tw);
           paintWashCell(g, geom, p.row, p.col);
         }
         g.globalAlpha = 1;
