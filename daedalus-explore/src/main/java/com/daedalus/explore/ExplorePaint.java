@@ -7,6 +7,7 @@ import com.daedalus.model.TileType;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.Parcel;
+import com.daedalus.world.World;
 import com.daedalus.world.auto.WorldOps;
 
 import java.util.ArrayList;
@@ -893,23 +894,67 @@ public final class ExplorePaint {
         if (!"HALL".equals(end)) {
             return end;
         }
+        String occ = occupancyName(blocks, body);
         String street = parcelPlaceName(blocks, body);
         if (street != null) {
             String lot = parcelLotName(blocks, body);
-            return lot == null ? street : street + " " + lot;
+            String named = lot == null ? street : street + " " + lot;
+            return withOccupancy(occ, named);
         }
         String lease = parcelLeaseName(blocks, body);
         if (lease != null) {
             String lot = parcelLotName(blocks, body);
-            return lot == null ? lease : lease + " " + lot;
+            String named = lot == null ? lease : lease + " " + lot;
+            return withOccupancy(occ, named);
         }
         String last = lastParcelPlaceName(blocks);
         if (last != null) {
             String lot = lastParcelLot(blocks);
-            return lot == null ? last : last + " " + lot;
+            String named = lot == null ? last : last + " " + lot;
+            return withOccupancy(occ, named);
         }
         String cube = blockPlaceName(blocks, body);
-        return cube == null ? "HALL" : cube;
+        return withOccupancy(occ, cube == null ? "HALL" : cube);
+    }
+
+    /**
+     * Occupancy cell under the boots when that x,z sits on a slab.
+     * Start and goal still lead.
+     */
+    public static String occupancyName(WorldMesh blocks, ExploreBody body) {
+        if (blocks == null || body == null || blocks.world() == null) {
+            return null;
+        }
+        World world = blocks.world();
+        int x = (int) Math.floor(body.x());
+        int z = (int) Math.floor(body.z());
+        if (occupancyAt(world.door() == null ? null : world.door().at(), world, x, z)) {
+            return "DOOR";
+        }
+        if (occupancyAt(world.trap() == null ? null : world.trap().at(), world, x, z)) {
+            return "TRAP";
+        }
+        if (occupancyAt(world.portal() == null ? null : world.portal().at(), world, x, z)) {
+            return "PORTAL";
+        }
+        if (occupancyAt(world.npc() == null ? null : world.npc().at(), world, x, z)) {
+            return "NPC";
+        }
+        return null;
+    }
+
+    private static boolean occupancyAt(BlockCoordinate at, World world, int x, int z) {
+        if (at == null || at.x() != x || at.z() != z) {
+            return false;
+        }
+        return !WorldOps.lotAt(world, at).isEmpty();
+    }
+
+    private static String withOccupancy(String occ, String place) {
+        if (occ == null || occ.isEmpty()) {
+            return place;
+        }
+        return occ + " " + place;
     }
 
     /**

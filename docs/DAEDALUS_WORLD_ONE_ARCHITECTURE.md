@@ -325,7 +325,8 @@ desktop last-event lot, and
 STOMP / well last-event lot, and
 chunk.inspect street of overlapping plots, and
 occupancy inspect lot, and
-desktop occupancy lot
+desktop occupancy lot, and
+explore occupancy under the boots
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

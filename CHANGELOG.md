@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore occupancy under the boots.**
+  Standing on a door, trap, or portal cell that sits on a
+  slab prefixes that name before the street. Start and goal
+  still lead. npc-zero stays off a 1×1 stamp.
+
 - **Desktop occupancy lot.**
   Inspect names door, trap, portal, and NPC when that cell
   sits on a slab. Off-plot door-zero stays silent.

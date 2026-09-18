@@ -11,6 +11,7 @@ import com.daedalus.world.BlockType;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.World;
+import com.daedalus.world.auto.WorldOps;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -1048,6 +1049,26 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.status(fog, offPlot, List.of(), longHall, cubes).place())
                 .as("newest street name and lot lead leftover HALL off the slab")
                 .isEqualTo("Willow Walk 8,8");
+        World stamped = World.zero();
+        WorldOps.drive(stamped, "stamp.apply", new BlockCoordinate(0, 0, 0), null);
+        WorldMesh origin = WorldMesh.of(stamped);
+        ExploreBody atTrap = new ExploreBody(1.4, 0.4, 0, 0);
+        assertThat(ExplorePaint.occupancyName(origin, atTrap)).isEqualTo("TRAP");
+        assertThat(ExplorePaint.occupancyName(origin, new ExploreBody(3.4, 0.4, 0, 0))).isNull();
+        assertThat(ExplorePaint.occupancyName(null, atTrap)).isNull();
+        MazeGrid trapHall = new MazeGrid(3, 3);
+        trapHall.carve(trapHall.cell(0, 0), Direction.EAST);
+        trapHall.carve(trapHall.cell(0, 1), Direction.SOUTH);
+        ExploreMesh trapMesh = ExploreMesh.of(trapHall);
+        fog.stand(new Point(1, 0));
+        assertThat(ExplorePaint.status(fog, atTrap, List.of(), trapMesh, origin).place())
+                .startsWith("TRAP")
+                .contains("0,0");
+        ExploreBody atStartDoor = new ExploreBody(0.4, 0.4, 0, 0);
+        fog.stand(new Point(0, 0));
+        assertThat(ExplorePaint.status(fog, atStartDoor, List.of(), trapMesh, origin).place())
+                .as("stood-on start still leads occupancy")
+                .isEqualTo("START");
     }
 
     @Test
