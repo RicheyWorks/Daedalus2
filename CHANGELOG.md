@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Block inspect names the slab box.**
+  GET /block names the inclusive AABB
+  living stays inside when the cube
+  sits on a plot. Empty off the street.
+  No wallet types.
+
 - **Stamp apply keeps occupancy.**
   World.applyStamp skips door, trap,
   portal, and NPC cubes so a raw

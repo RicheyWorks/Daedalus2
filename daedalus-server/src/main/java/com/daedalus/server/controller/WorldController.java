@@ -299,7 +299,7 @@ public class WorldController {
                 WorldOps.leaseAt(world, at), WorldOps.mazeAt(world, at),
                 WorldOps.occupantAt(world, at), WorldOps.aclAt(world, at),
                 WorldOps.driveOn(world, at), WorldOps.actorOn(world, at),
-                WorldOps.atOn(world, at)));
+                WorldOps.atOn(world, at), WorldOps.boxAt(world, at)));
     }
 
     @GetMapping("/world/{id}/chunk")

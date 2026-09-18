@@ -386,12 +386,14 @@ class WorldBuilderTest {
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "block.inspect", null));
         assertThat(onLot.get("place")).isEqualTo(world.parcels().get(0).placeName());
         assertThat(onLot.get("lot")).isEqualTo("0,0");
+        assertThat(onLot.get("box")).isEqualTo("0,0,0-6,1,6");
         assertThat(onLot.get("maze")).isEqualTo(mazeRef);
         @SuppressWarnings("unchecked")
         Map<String, Object> offLot = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(new BlockCoordinate(99, 0, 99), "block.inspect", null));
         assertThat(offLot.get("place")).isEqualTo("");
         assertThat(offLot.get("lot")).isEqualTo("");
+        assertThat(offLot.get("box")).isEqualTo("");
         assertThat(offLot.get("maze")).isEqualTo("");
     }
 

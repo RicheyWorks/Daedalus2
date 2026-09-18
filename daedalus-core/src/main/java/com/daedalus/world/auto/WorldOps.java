@@ -319,6 +319,7 @@ public final class WorldOps {
         out.put("type", type.name());
         out.put("place", placeAt(world, cell));
         out.put("lot", lotAt(world, cell));
+        out.put("box", boxAt(world, cell));
         out.put("lease", leaseAt(world, cell));
         out.put("maze", mazeAt(world, cell));
         out.put("occupant", occupantAt(world, cell));

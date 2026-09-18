@@ -9,7 +9,7 @@ package com.daedalus.api.dto;
 public record BlockInspectResponse(int x, int y, int z, String type, boolean present,
                                    String place, String lot, String lease, String maze,
                                    String occupant, String acl, String drive, String driveActor,
-                                   String driveAt) {
+                                   String driveAt, String box) {
 
     public BlockInspectResponse {
         place = place == null ? "" : place;
@@ -21,23 +21,33 @@ public record BlockInspectResponse(int x, int y, int z, String type, boolean pre
         drive = drive == null ? "" : drive;
         driveActor = driveActor == null ? "" : driveActor;
         driveAt = driveAt == null ? "" : driveAt;
+        box = box == null ? "" : box;
+    }
+
+    public BlockInspectResponse(int x, int y, int z, String type, boolean present,
+                                String place, String lot, String lease, String maze,
+                                String occupant, String acl, String drive, String driveActor,
+                                String driveAt) {
+        this(x, y, z, type, present, place, lot, lease, maze, occupant, acl, drive, driveActor,
+                driveAt, "");
     }
 
     public BlockInspectResponse(int x, int y, int z, String type, boolean present,
                                 String place, String lot, String lease, String maze,
                                 String occupant, String acl, String drive, String driveActor) {
-        this(x, y, z, type, present, place, lot, lease, maze, occupant, acl, drive, driveActor, "");
+        this(x, y, z, type, present, place, lot, lease, maze, occupant, acl, drive, driveActor,
+                "", "");
     }
 
     public BlockInspectResponse(int x, int y, int z, String type, boolean present,
                                 String place, String lot, String lease, String maze,
                                 String occupant, String acl) {
-        this(x, y, z, type, present, place, lot, lease, maze, occupant, acl, "", "", "");
+        this(x, y, z, type, present, place, lot, lease, maze, occupant, acl, "", "", "", "");
     }
 
     public BlockInspectResponse(int x, int y, int z, String type, boolean present,
                                 String place, String lot, String lease, String maze,
                                 String occupant) {
-        this(x, y, z, type, present, place, lot, lease, maze, occupant, "", "", "", "");
+        this(x, y, z, type, present, place, lot, lease, maze, occupant, "", "", "", "", "");
     }
 }

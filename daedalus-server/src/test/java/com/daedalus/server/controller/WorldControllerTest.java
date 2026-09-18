@@ -666,6 +666,7 @@ class WorldControllerTest {
                         .param("x", "0").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.lot", equalTo("0,0")))
+                .andExpect(jsonPath("$.box", equalTo("0,0,0-6,1,6")))
                 .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())))
                 .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))));
         extra.perform(get("/api/v1/world/world-zero/observe")
