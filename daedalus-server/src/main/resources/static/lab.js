@@ -24,7 +24,7 @@
     const e = fit.exponent;
     const modelY = v => ys[0] + e * (v - xs[0]);
     const model = `<line x1="${px(x0)}" y1="${py(modelY(x0))}" x2="${px(x1)}" `
-        + `y2="${py(Math.max(y0, Math.min(y1, modelY(x1))))}" stroke="#8c764e" stroke-width="2" `
+        + `y2="${py(Math.max(y0, Math.min(y1, modelY(x1))))}" stroke="#766442" stroke-width="2" `
         + `stroke-dasharray="4 3" opacity="0.8"/>`;
     const path = pts.map((m, i) => `${i ? "L" : "M"}${px(lx(m)).toFixed(1)},${py(ly(m)).toFixed(1)}`).join("");
     const dots = pts.map((m, i) =>

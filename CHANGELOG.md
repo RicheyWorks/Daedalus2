@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well lab model depth.**
+  Fitted khaki falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even sand is not the last
+  word on the maze plot. KEEP axis gold
+  stays.
+
 - **Well gate sample depth.**
   Landing-maze parchment falls off toward
   floor-dim with the same 0.22 as halls,

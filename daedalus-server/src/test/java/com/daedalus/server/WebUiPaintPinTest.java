@@ -290,6 +290,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellLabModelHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/lab.js")) {
+            assertThat(in).as("well lab painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("stroke=\"#766442\" stroke-width=\"2\"")
+                    .doesNotContain("stroke=\"#8c764e\" stroke-width=\"2\"");
+        }
+    }
+
+    @Test
     void wellStartDiscHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
