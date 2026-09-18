@@ -53,6 +53,7 @@ class WorldWebSocketBridgeTest {
         assertThat(cap.getValue().box()).isEqualTo("0,0,0-2,1,2");
         assertThat(cap.getValue().maze()).isEqualTo("00000000-0000-4000-8000-000000000007");
         assertThat(cap.getValue().lease()).isEmpty();
+        assertThat(cap.getValue().acl()).isEmpty();
         assertThat(cap.getValue().place()).isIn(PlaceNames.STREETS);
         assertThat(cap.getValue().occupant()).isEmpty();
         assertThat(cap.getValue().drive()).isEqualTo("stamp.apply APPLIED");
@@ -74,6 +75,24 @@ class WorldWebSocketBridgeTest {
         bridge.onWorldBlock(event);
         verify(stomp).convertAndSend(eq("/topic/world/world-zero/events"), cap.capture());
         assertThat(cap.getValue().lease()).isEqualTo(Parcel.SYSTEM_TENANT);
+        assertThat(cap.getValue().acl()).isEmpty();
+    }
+
+    @Test
+    void aBlockOnAGrantedSlabCarriesAcl(@TempDir Path tmp) {
+        SimpMessagingTemplate stomp = mock(SimpMessagingTemplate.class);
+        WorldService worlds = new WorldService(tmp.resolve("ws-acl.daew"));
+        worlds.stamp(WorldId.ZERO.value(), new BlockCoordinate(0, 0, 0), new MazeGrid(1, 1),
+                UUID.fromString("00000000-0000-4000-8000-000000000007"));
+        worlds.grantParcel(WorldId.ZERO.value(), new BlockCoordinate(0, 0, 0), "bob",
+                "block.place");
+        WorldWebSocketController bridge = new WorldWebSocketController(stomp, worlds);
+        WorldBlockEvent event = new WorldBlockEvent(this, "world-zero",
+                WorldBlockEvent.Kind.BLOCK_PLACED, 0, 0, 0, "STONE", "AIR", 3);
+        ArgumentCaptor<WorldEventFrame> cap = ArgumentCaptor.forClass(WorldEventFrame.class);
+        bridge.onWorldBlock(event);
+        verify(stomp).convertAndSend(eq("/topic/world/world-zero/events"), cap.capture());
+        assertThat(cap.getValue().acl()).isEqualTo("bob block.place");
     }
 
     @Test
@@ -91,6 +110,7 @@ class WorldWebSocketBridgeTest {
         assertThat(cap.getValue().box()).isEmpty();
         assertThat(cap.getValue().maze()).isEmpty();
         assertThat(cap.getValue().lease()).isEmpty();
+        assertThat(cap.getValue().acl()).isEmpty();
         assertThat(cap.getValue().drive()).isEmpty();
         assertThat(cap.getValue().driveActor()).isEmpty();
         assertThat(cap.getValue().driveAt()).isEmpty();

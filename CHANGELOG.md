@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well last-event names the slab ACL.**
+  STOMP last-event paints the extra-list
+  under that cube. Empty until a grant
+  or deny. No wallet types.
+
 - **Well last-event names the slab lease.**
   STOMP last-event paints the account
   key under that cube. Empty until

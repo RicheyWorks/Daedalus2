@@ -475,6 +475,7 @@ class WebUiPaintPinTest {
                     .contains("frame.box")
                     .contains("frame.maze")
                     .contains("frame.lease")
+                    .contains("frame.acl")
                     .contains("frame.occupant")
                     .contains("frame.drive")
                     .contains("frame.driveActor")
