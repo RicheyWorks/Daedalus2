@@ -223,7 +223,9 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo("portal-zero")))
                 .andExpect(jsonPath("$.state", equalTo("SEALED")))
-                .andExpect(jsonPath("$.acl", equalTo("")));
+                .andExpect(jsonPath("$.acl", equalTo("")))
+                .andExpect(jsonPath("$.drive", equalTo("")))
+                .andExpect(jsonPath("$.driveActor", equalTo("")));
 
         mvc.perform(post("/api/v1/world/world-zero/portal/open"))
                 .andExpect(status().isOk())
@@ -429,6 +431,11 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("DENIED")))
                 .andExpect(jsonPath("$.state", equalTo("OPEN")));
+
+        mvc.perform(get("/api/v1/world/world-zero/portal"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.drive", equalTo("portal.open DENIED")))
+                .andExpect(jsonPath("$.driveActor", equalTo("carol")));
 
         mvc.perform(post("/api/v1/world/world-zero/portal/seal").param("actorId", "carol"))
                 .andExpect(status().isOk())

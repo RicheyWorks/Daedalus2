@@ -612,6 +612,8 @@ public final class WorldOps {
         out.put("place", placeAt(world, portal.at()));
         out.put("lot", lotAt(world, portal.at()));
         out.put("acl", aclAt(world, portal.at()));
+        out.put("drive", driveOn(world, portal.at()));
+        out.put("driveActor", actorOn(world, portal.at()));
         return out;
     }
 

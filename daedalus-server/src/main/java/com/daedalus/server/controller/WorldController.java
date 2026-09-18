@@ -397,7 +397,8 @@ public class WorldController {
                 portal.id(), portal.worldId().value(),
                 portal.at().x(), portal.at().y(), portal.at().z(), portal.state().name(),
                 WorldOps.placeAt(world, portal.at()), WorldOps.lotAt(world, portal.at()),
-                WorldOps.aclAt(world, portal.at())));
+                WorldOps.aclAt(world, portal.at()),
+                WorldOps.driveOn(world, portal.at()), WorldOps.actorOn(world, portal.at())));
     }
 
     @PostMapping("/world/{id}/portal/open")

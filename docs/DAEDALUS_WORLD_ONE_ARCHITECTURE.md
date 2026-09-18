@@ -395,9 +395,11 @@ well builder last at, and
 block inspect last drive, and
 observe last drive, and
 trap inspect last drive, and
-door inspect last drive
+door inspect last drive, and
+portal inspect last drive
 are shipped.
-Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
+Next occupancy inspect: npc.
+Then WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
 
 ---

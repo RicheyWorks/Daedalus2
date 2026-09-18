@@ -185,6 +185,11 @@ class ParcelGateTest {
         long revision = world.revision().value();
         assertThat(WorldOps.drive(world, "portal.open", Portal.ZERO_AT, null, null, "carol"))
                 .isEqualTo(PortalResult.DENIED);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> portalSeen = (Map<String, Object>) WorldOps.drive(
+                world, "portal.inspect", Portal.ZERO_AT, null);
+        assertThat(portalSeen.get("drive")).isEqualTo("portal.open DENIED");
+        assertThat(portalSeen.get("driveActor")).isEqualTo("carol");
         assertThat(world.portal().state()).isEqualTo(PortalState.SEALED);
         assertThat(world.revision().value()).isEqualTo(revision);
         assertThat(WorldOps.grantParcel(world, Portal.ZERO_AT, "bob", "portal.open"))
