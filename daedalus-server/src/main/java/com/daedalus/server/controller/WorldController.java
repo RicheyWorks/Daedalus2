@@ -310,7 +310,8 @@ public class WorldController {
         return ResponseEntity.ok(new TrapInspectResponse(
                 trap.id(), trap.worldId().value(),
                 trap.at().x(), trap.at().y(), trap.at().z(), trap.state().name(),
-                WorldOps.placeAt(world, trap.at()), WorldOps.lotAt(world, trap.at())));
+                WorldOps.placeAt(world, trap.at()), WorldOps.lotAt(world, trap.at()),
+                WorldOps.aclAt(world, trap.at())));
     }
 
     @PostMapping("/world/{id}/trap/arm")

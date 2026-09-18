@@ -188,7 +188,8 @@ class WorldControllerTest {
         mvc.perform(get("/api/v1/world/world-zero/trap"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo("trap-zero")))
-                .andExpect(jsonPath("$.state", equalTo("DISARMED")));
+                .andExpect(jsonPath("$.state", equalTo("DISARMED")))
+                .andExpect(jsonPath("$.acl", equalTo("")));
 
         mvc.perform(post("/api/v1/world/world-zero/trap/arm"))
                 .andExpect(status().isOk())
