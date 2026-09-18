@@ -524,7 +524,7 @@ public class WorldController {
                 portal.id(), portal.state().name(), result.name(), world.revision().value(),
                 WorldOps.mazeAt(world, portal.at()), WorldOps.leaseAt(world, portal.at()),
                 WorldOps.placeAt(world, portal.at()), WorldOps.lotAt(world, portal.at()),
-                WorldOps.boxAt(world, portal.at())));
+                WorldOps.boxAt(world, portal.at()), WorldOps.aclAt(world, portal.at())));
     }
 
     @PostMapping("/world/{id}/portal/seal")
@@ -540,7 +540,7 @@ public class WorldController {
                 portal.id(), portal.state().name(), result.name(), world.revision().value(),
                 WorldOps.mazeAt(world, portal.at()), WorldOps.leaseAt(world, portal.at()),
                 WorldOps.placeAt(world, portal.at()), WorldOps.lotAt(world, portal.at()),
-                WorldOps.boxAt(world, portal.at())));
+                WorldOps.boxAt(world, portal.at()), WorldOps.aclAt(world, portal.at())));
     }
 
     @GetMapping("/world/{id}/npc")

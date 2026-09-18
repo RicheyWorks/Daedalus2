@@ -511,7 +511,8 @@ block place names the slab place, and
 block place names the slab lot, and
 block place names the slab box, and
 door open names the slab ACL, and
-trap arm names the slab ACL
+trap arm names the slab ACL, and
+portal open names the slab ACL
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

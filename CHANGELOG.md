@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Portal open names the slab ACL.**
+  POST /portal/open and /portal/seal
+  name the extra-list under that cube.
+  Empty when the portal sits off a
+  stamped plot. No wallet types.
+
 - **Trap arm names the slab ACL.**
   POST /trap/arm and /trap/disarm name
   the extra-list under that cube.
