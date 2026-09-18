@@ -207,6 +207,7 @@ class WebUiSmokeTest {
                 .contains("animation: infoRimBreath 4.5s ease-in-out infinite; }")
                 .contains("0%, 100% { border-left-color: rgba(153, 111, 49, 0.28); }")
                 .contains("animation: statsRimBreath 4.5s ease-in-out infinite; }")
+                .contains("0%, 100% { border-top-color: rgba(153, 111, 49, 0.28); }")
                 .contains("color: #afa088;")
                 .contains("max-height: 22vh; color: #afa088")
                 .contains("max-height: 22vh; color: #afa088; cursor: text")
