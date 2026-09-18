@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Living slab last drive.**
+  A living re-project that writes
+  cubes records living.sync, the cube
+  count, system, and the last dirty
+  cube. Quiet sync stays off the
+  account log. No wallet types.
+
 - **Seed trace from last drive.**
   Opening a DAEW file seeds GET /trace
   with the last driven step so the

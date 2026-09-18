@@ -423,7 +423,8 @@ World builder actor, and
 builder trace actor, and
 REST trace actor, and
 REST trace at, and
-seed trace from last drive
+seed trace from last drive, and
+living slab last drive
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

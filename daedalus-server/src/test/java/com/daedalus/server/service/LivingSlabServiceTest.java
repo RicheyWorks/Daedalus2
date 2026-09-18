@@ -8,6 +8,7 @@ import com.daedalus.plugin.events.MazeMutatedEvent;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.WorldId;
+import com.daedalus.world.auto.WorldOps;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -43,6 +44,13 @@ class LivingSlabServiceTest {
         assertThat(worlds.inspectBlock(WorldId.ZERO.value(), 5, 2, 10)).isEqualTo(BlockType.STONE);
         assertThat(worlds.inspectBlock(WorldId.ZERO.value(), post.x(), post.y(), post.z()))
                 .isEqualTo(BlockType.AIR);
+        assertThat(WorldOps.driveLine(worlds.inspect(WorldId.ZERO.value())))
+                .startsWith("living.sync ");
+        assertThat(worlds.inspect(WorldId.ZERO.value()).lastDriveActor()).isEqualTo("system");
+        assertThat(WorldOps.atLine(worlds.inspect(WorldId.ZERO.value()))).isNotEmpty();
+        assertThat(worlds.trace(WorldId.ZERO.value()).get(
+                worlds.trace(WorldId.ZERO.value()).size() - 1).capability())
+                .isEqualTo("living.sync");
         assertThat(worlds.syncSlab(WorldId.ZERO.value(), mazeId, next)).isZero();
         assertThat(worlds.syncSlab(WorldId.ZERO.value(), UUID.randomUUID(), next)).isZero();
     }

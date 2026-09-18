@@ -466,7 +466,10 @@ public class WorldService {
                     bind.bounds());
             int written = slab.sync();
             if (written > 0) {
+                live.recordDrive("living.sync", Integer.toString(written),
+                        Parcel.SYSTEM_OWNER, slab.lastWritten());
                 persist();
+                account(live, "living.sync", written);
             }
             return written;
         }

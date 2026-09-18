@@ -24,6 +24,7 @@ public final class LivingSlab {
     private final int floorY;
     private final int wallHeight;
     private final ParcelBounds bounds;
+    private BlockCoordinate lastWritten;
 
     public LivingSlab(World world, StampRequest request, ParcelBounds bounds) {
         this.world = Objects.requireNonNull(world, "World is required");
@@ -44,6 +45,11 @@ public final class LivingSlab {
 
     public ParcelBounds bounds() {
         return bounds;
+    }
+
+    /** Last cube this sync wrote. Null when the maze was quiet. */
+    public BlockCoordinate lastWritten() {
+        return lastWritten;
     }
 
     /**
@@ -88,6 +94,7 @@ public final class LivingSlab {
         } else {
             world.place(at, desired);
         }
+        lastWritten = at;
         return 1;
     }
 }
