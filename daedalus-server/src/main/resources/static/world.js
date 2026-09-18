@@ -197,6 +197,7 @@
         ? "builder " + lastStep.capability
             + (lastStep.result ? " " + lastStep.result : "")
             + (world && world.driveActor ? " " + world.driveActor : "")
+            + (world && world.driveAt ? " " + world.driveAt : "")
         : "builder — WorldOps only";
     box.appendChild(built);
   }

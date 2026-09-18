@@ -497,6 +497,7 @@ class WebUiPaintPinTest {
                     .contains("builder — WorldOps only")
                     .contains("lastStep.result")
                     .contains("world && world.driveActor")
+                    .contains("world && world.driveAt")
                     .contains("host.state && host.state.maze && host.state.maze.id")
                     .contains("body.mazeId = mazeId")
                     .contains("body.next = true")

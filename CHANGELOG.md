@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well builder last at.**
+  The well builder hint names the cube
+  from GET /world after the last driven
+  account key. No wallet types.
+
 - **Desktop last drive at.**
   The desktop world line names the cube
   of the last mutation after the last
