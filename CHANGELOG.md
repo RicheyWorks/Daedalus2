@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **GET /chunk names every slab place.**
+  Chunk inspect lists every inspired
+  toponym whose slab overlaps this 16³,
+  oldest first. Street stays the older
+  alias. Empty until a stamp. No wallet
+  types.
+
 - **Well chunk last and every box.**
   The well chunk row paints the newest
   inclusive AABB on 0,0,0, then every

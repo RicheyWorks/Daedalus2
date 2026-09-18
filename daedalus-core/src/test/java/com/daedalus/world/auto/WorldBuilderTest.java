@@ -358,6 +358,7 @@ class WorldBuilderTest {
         assertThat(origin.get("plots")).isEqualTo(1);
         assertThat(origin.get("street")).isEqualTo(world.parcels().get(0).placeName());
         assertThat(origin.get("place")).isEqualTo(world.parcels().get(0).placeName());
+        assertThat(origin.get("places")).isEqualTo(world.parcels().get(0).placeName());
         assertThat(origin.get("lot")).isEqualTo("0,0");
         assertThat(WorldOps.placeInChunk(null, null)).isEmpty();
         assertThat(WorldOps.lotInChunk(null, null)).isEmpty();
@@ -409,6 +410,7 @@ class WorldBuilderTest {
         assertThat(both.get("street")).isEqualTo(WorldOps.streetLine(near));
         assertThat(both.get("place")).isEqualTo(near.parcels().get(1).placeName());
         assertThat(both.get("place")).isNotEqualTo(both.get("street"));
+        assertThat(both.get("places")).isEqualTo(WorldOps.streetLine(near));
         assertThat(both.get("lot")).isEqualTo(WorldOps.lastLot(near));
         assertThat(both.get("lot")).isNotEqualTo(WorldOps.streetLots(near));
         assertThat(both.get("lots")).isEqualTo(WorldOps.streetLots(near));
