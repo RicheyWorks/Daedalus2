@@ -426,7 +426,8 @@ REST trace at, and
 seed trace from last drive, and
 living slab last drive, and
 living slab last event, and
-living slab keeps occupancy
+living slab keeps occupancy, and
+living persist moves the store
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -550,7 +551,14 @@ public class WorldService {
 
     private void persist() {
         try {
+            long before = Files.exists(file)
+                    ? Files.getLastModifiedTime(file).toMillis()
+                    : Long.MIN_VALUE;
             WorldStore.save(world, file);
+            long after = Files.getLastModifiedTime(file).toMillis();
+            if (after <= before) {
+                Files.setLastModifiedTime(file, FileTime.fromMillis(before + 1));
+            }
         } catch (IOException e) {
             throw new UncheckedIOException("Cannot persist " + WorldId.ZERO, e);
         }

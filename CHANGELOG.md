@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Living persist moves the store.**
+  A living write that persists DAEW
+  bumps the file mtime when the clock
+  did not, so explore remesh sees the
+  slab. Quiet sync stays put. No
+  wallet types.
+
 - **Living slab keeps occupancy.**
   Stamp and living re-project skip door,
   trap, and portal cubes so maze stone

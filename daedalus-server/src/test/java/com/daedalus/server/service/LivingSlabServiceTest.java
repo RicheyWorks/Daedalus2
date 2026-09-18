@@ -14,7 +14,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.springframework.context.ApplicationEventPublisher;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -84,6 +86,25 @@ class LivingSlabServiceTest {
         WorldBlockEvent last = seen.get(seen.size() - 1);
         assertThat(last.x() + "," + last.y() + "," + last.z())
                 .isEqualTo(WorldOps.atLine(worlds.inspect(WorldId.ZERO.value())));
+    }
+
+    @Test
+    void aLivingWriteMovesTheStoreMtime() throws Exception {
+        Path file = tmp.resolve("live-slab-mtime.daew");
+        WorldService worlds = new WorldService(file);
+        LivingSlabService listener = new LivingSlabService(worlds);
+        MazeGrid maze = new MazeGrid(2, 2);
+        maze.carve(new Point(0, 0), new Point(0, 1));
+        UUID mazeId = UUID.fromString("00000000-0000-4000-8000-000000000007");
+        assertThat(worlds.stamp(WorldId.ZERO.value(), new BlockCoordinate(4, 2, 8), maze, mazeId)
+                .ok()).isTrue();
+        long frozen = Files.getLastModifiedTime(file).toMillis() + 5_000;
+        Files.setLastModifiedTime(file, FileTime.fromMillis(frozen));
+        MazeGrid next = maze.copy();
+        next.carve(new Point(0, 0), new Point(1, 0));
+        listener.onMazeMutated(new MazeMutatedEvent(this, mazeId, 1, 1, 0, false, next));
+        assertThat(Files.getLastModifiedTime(file).toMillis()).isGreaterThan(frozen);
+        assertThat(worlds.inspectBlock(WorldId.ZERO.value(), 5, 3, 10)).isEqualTo(BlockType.AIR);
     }
 
     @Test
