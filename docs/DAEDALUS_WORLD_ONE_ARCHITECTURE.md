@@ -556,7 +556,9 @@ well last-event names the slab ACL, and
 desktop last-event names the slab ACL, and
 desktop occupancy names the slab ACL, and
 explore names the slab ACL, and
-explore names the lease ACL
+explore names the lease ACL, and
+explore names the last ACL, and
+explore names every ACL
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

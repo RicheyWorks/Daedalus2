@@ -10,6 +10,17 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore names every ACL.**
+  Off a slab the hall caption names
+  every extra-list, oldest first.
+  Empty until a grant or deny. No
+  wallet types.
+
+- **Explore names the last ACL.**
+  Off a slab the hall caption names
+  the newest extra-list. Empty until
+  a grant or deny. No wallet types.
+
 - **Explore names the lease ACL.**
   An unnamed rented slab also names
   the extra-list under the boots.

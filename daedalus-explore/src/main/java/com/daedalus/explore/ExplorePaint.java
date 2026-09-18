@@ -943,6 +943,11 @@ public final class ExplorePaint {
             if (rent != null) {
                 named = named + " " + rent;
             }
+            String extras = lastParcelAcls(blocks);
+            if (extras != null) {
+                named = named + " " + extras;
+                return withOccupants(named, blocks);
+            }
             return withAcl(withOccupants(named, blocks), blocks);
         }
         String cube = blockPlaceName(blocks, body);
@@ -1188,6 +1193,33 @@ public final class ExplorePaint {
             return null;
         }
         String found = WorldOps.lastLeaseId(blocks.world());
+        return found.isEmpty() ? null : found;
+    }
+
+    /** Newest extra-list on the street. Empty until a grant or deny. */
+    public static String lastParcelAcl(WorldMesh blocks) {
+        if (blocks == null || blocks.world() == null) {
+            return null;
+        }
+        String found = "";
+        for (Parcel parcel : blocks.world().parcels()) {
+            if (parcel == null) {
+                continue;
+            }
+            String one = WorldOps.aclOf(blocks.world(), parcel.id());
+            if (!one.isEmpty()) {
+                found = one;
+            }
+        }
+        return found.isEmpty() ? null : found;
+    }
+
+    /** All extra-lists, oldest first. Empty until a grant or deny. */
+    public static String lastParcelAcls(WorldMesh blocks) {
+        if (blocks == null || blocks.world() == null) {
+            return null;
+        }
+        String found = WorldOps.aclLine(blocks.world());
         return found.isEmpty() ? null : found;
     }
 

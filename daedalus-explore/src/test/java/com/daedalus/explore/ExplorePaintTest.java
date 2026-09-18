@@ -1199,6 +1199,8 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.aclName(null)).isNull();
         assertThat(ExplorePaint.parcelAclName(cubes, onStreet)).isNull();
         assertThat(ExplorePaint.parcelAclName(null, onStreet)).isNull();
+        assertThat(ExplorePaint.lastParcelAcl(cubes)).isNull();
+        assertThat(ExplorePaint.lastParcelAcls(cubes)).isNull();
         volume.grant(volume.parcels().get(0).id(), "bob", ParcelVerb.BLOCK_PLACE);
         WorldMesh gated = WorldMesh.of(volume);
         assertThat(ExplorePaint.aclName(gated)).isEqualTo("bob block.place");
@@ -1207,6 +1209,16 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.status(fog, onStreet, List.of(), mesh, gated).place())
                 .as("ACL follows the street under the boots")
                 .isEqualTo("Willow Walk 8,8 8,0,8-9,1,9 bob block.place");
+        assertThat(ExplorePaint.lastParcelAcl(gated)).isEqualTo("bob block.place");
+        assertThat(ExplorePaint.lastParcelAcls(gated)).isEqualTo("bob block.place");
+        assertThat(ExplorePaint.lastParcelAcl(null)).isNull();
+        assertThat(ExplorePaint.lastParcelAcls(null)).isNull();
+        fog.stand(new Point(0, 1));
+        assertThat(ExplorePaint.status(fog, offPlot, List.of(), longHall, gated).place())
+                .as("newest ACL follows leftover HALL off the slab")
+                .isEqualTo("Willow Walk 8,8 8,0,8-9,1,9 bob block.place"
+                        + " · door · trap · portal · npc"
+                        + " · door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0");
         assertThat(ExplorePaint.status(fog, atStart, List.of(), mesh, gated).place())
                 .as("stood-on start still leads ACL")
                 .isEqualTo("START");
@@ -1254,6 +1266,12 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.lastParcelLease(rentedTwo)).isEqualTo(Parcel.SYSTEM_TENANT);
         assertThat(ExplorePaint.lastParcelLeases(rentedTwo))
                 .isEqualTo(Parcel.SYSTEM_TENANT + " · " + Parcel.SYSTEM_TENANT);
+        two.grant(two.parcels().get(0).id(), "bob", ParcelVerb.BLOCK_PLACE);
+        two.grant(two.parcels().get(1).id(), "carol", ParcelVerb.DOOR_OPEN);
+        WorldMesh gatedTwo = WorldMesh.of(two);
+        assertThat(ExplorePaint.lastParcelAcl(gatedTwo)).isEqualTo("carol door.open");
+        assertThat(ExplorePaint.lastParcelAcls(gatedTwo))
+                .isEqualTo("bob block.place · carol door.open");
     }
 
     @Test
