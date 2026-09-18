@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well ASCII exit depth.**
+  Dump goal coral falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even coral is not the last
+  word on the maze page.
+
 - **Well ASCII gate depth.**
   Dump start mint falls off toward
   floor-dim with the same 0.22 as halls,
