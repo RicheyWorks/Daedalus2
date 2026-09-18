@@ -102,6 +102,14 @@ public final class DesktopWorld {
             if (!stands.isEmpty()) {
                 occ = occ.isEmpty() ? stands : occ + " · " + stands;
             }
+            String driven = chunkDrive(world, last);
+            if (!driven.isEmpty()) {
+                occ = occ.isEmpty() ? driven : occ + " · " + driven;
+            }
+            String actor = chunkActor(world, last);
+            if (!actor.isEmpty()) {
+                occ = occ.isEmpty() ? actor : occ + " · " + actor;
+            }
         }
         if (!occ.isEmpty()) {
             line = line + " · " + occ;
@@ -182,10 +190,7 @@ public final class DesktopWorld {
         if (world == null) {
             return "";
         }
-        ChunkCoordinate cc = last == null
-                ? new ChunkCoordinate(0, 0, 0)
-                : new BlockCoordinate(last.x(), last.y(), last.z()).chunk();
-        return WorldOps.occupantsInChunk(world, cc);
+        return WorldOps.occupantsInChunk(world, liveChunk(last));
     }
 
     /**
@@ -196,10 +201,35 @@ public final class DesktopWorld {
         if (world == null) {
             return "";
         }
-        ChunkCoordinate cc = last == null
+        return WorldOps.standsInChunk(world, liveChunk(last));
+    }
+
+    /**
+     * Last driven result when that cube sits in the live 16³.
+     * Empty far off the volume.
+     */
+    public static String chunkDrive(World world, WorldEventFrame last) {
+        if (world == null) {
+            return "";
+        }
+        return WorldOps.driveInChunk(world, liveChunk(last));
+    }
+
+    /**
+     * Account key that last drove a mutation in the live 16³.
+     * Empty far off the volume. Never a wallet type.
+     */
+    public static String chunkActor(World world, WorldEventFrame last) {
+        if (world == null) {
+            return "";
+        }
+        return WorldOps.actorInChunk(world, liveChunk(last));
+    }
+
+    private static ChunkCoordinate liveChunk(WorldEventFrame last) {
+        return last == null
                 ? new ChunkCoordinate(0, 0, 0)
                 : new BlockCoordinate(last.x(), last.y(), last.z()).chunk();
-        return WorldOps.standsInChunk(world, cc);
     }
 
     /**
