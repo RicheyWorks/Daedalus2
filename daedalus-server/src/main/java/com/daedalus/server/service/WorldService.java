@@ -470,6 +470,12 @@ public class WorldService {
                         Parcel.SYSTEM_OWNER, slab.lastWritten());
                 persist();
                 account(live, "living.sync", written);
+                BlockCoordinate at = slab.lastWritten();
+                emit(id, slab.lastWrittenNow().solid()
+                                ? WorldBlockEvent.Kind.BLOCK_PLACED
+                                : WorldBlockEvent.Kind.BLOCK_REMOVED,
+                        at.x(), at.y(), at.z(), slab.lastWrittenNow(),
+                        slab.lastWrittenPrevious(), live);
             }
             return written;
         }

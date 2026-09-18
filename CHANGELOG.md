@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Living slab last event.**
+  A living re-project that writes
+  cubes fires BLOCK_* and
+  WORLD_REVISION_CHANGED on the last
+  dirty cube. Quiet sync stays silent.
+  No wallet types.
+
 - **Living slab last drive.**
   A living re-project that writes
   cubes records living.sync, the cube

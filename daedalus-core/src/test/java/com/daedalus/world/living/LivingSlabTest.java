@@ -63,6 +63,9 @@ class LivingSlabTest {
 
         assertThat(written).isGreaterThan(0);
         assertThat(slab.lastWritten()).isNotNull();
+        assertThat(slab.lastWrittenNow()).isNotNull();
+        assertThat(slab.lastWrittenPrevious()).isNotNull()
+                .isNotEqualTo(slab.lastWrittenNow());
         assertThat(world.get(new BlockCoordinate(5, 2, 10))).isEqualTo(BlockType.STONE);
         assertThat(world.get(post)).isEqualTo(BlockType.AIR);
         assertThat(slab.sync()).isZero();
