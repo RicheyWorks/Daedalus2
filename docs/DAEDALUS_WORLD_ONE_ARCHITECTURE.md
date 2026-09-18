@@ -319,7 +319,8 @@ a living bind per mazeRef on the street, and
 a street of every mazeRef, and
 world.inspect street directory, and
 well paint from that inspect, and
-block.inspect / observe lot under a cube
+block.inspect / observe lot under a cube, and
+explore lot under the boots
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

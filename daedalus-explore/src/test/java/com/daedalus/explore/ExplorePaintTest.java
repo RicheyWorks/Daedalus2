@@ -1010,10 +1010,12 @@ class ExplorePaintTest {
         WorldMesh cubes = WorldMesh.of(volume);
         ExploreBody onStreet = new ExploreBody(8.4, 8.4, 0, 0);
         assertThat(ExplorePaint.parcelPlaceName(cubes, onStreet)).isEqualTo("Willow Walk");
+        assertThat(ExplorePaint.parcelLotName(cubes, onStreet)).isEqualTo("8,8");
         assertThat(ExplorePaint.parcelPlaceName(null, onStreet)).isNull();
+        assertThat(ExplorePaint.parcelLotName(null, onStreet)).isNull();
         assertThat(ExplorePaint.status(fog, onStreet, List.of(), mesh, cubes).place())
                 .as("a named street leads leftover HALL")
-                .isEqualTo("Willow Walk");
+                .isEqualTo("Willow Walk 8,8");
         World rented = World.zero();
         rented.applyStamp(new ParcelBounds(8, 0, 8, 9, 1, 9), Parcel.SYSTEM_OWNER,
                 List.of(new BlockCoordinate(8, 0, 8)), List.of(BlockType.WOOD));
@@ -1022,7 +1024,7 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.parcelLeaseName(leased, onStreet)).isEqualTo(Parcel.SYSTEM_TENANT);
         assertThat(ExplorePaint.status(fog, onStreet, List.of(), mesh, leased).place())
                 .as("a lease leads leftover HALL when the street is unnamed")
-                .isEqualTo(Parcel.SYSTEM_TENANT);
+                .isEqualTo(Parcel.SYSTEM_TENANT + " 8,8");
         assertThat(ExplorePaint.parcelLeaseName(null, onStreet)).isNull();
         ExploreBody atStart = ExploreBody.atCell(new Point(0, 0));
         assertThat(ExplorePaint.status(fog, atStart, List.of(), mesh, cubes).place())

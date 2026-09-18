@@ -895,11 +895,13 @@ public final class ExplorePaint {
         }
         String street = parcelPlaceName(blocks, body);
         if (street != null) {
-            return street;
+            String lot = parcelLotName(blocks, body);
+            return lot == null ? street : street + " " + lot;
         }
         String lease = parcelLeaseName(blocks, body);
         if (lease != null) {
-            return lease;
+            String lot = parcelLotName(blocks, body);
+            return lot == null ? lease : lease + " " + lot;
         }
         String last = lastParcelPlaceName(blocks);
         if (last != null) {
@@ -928,6 +930,17 @@ public final class ExplorePaint {
             return null;
         }
         String found = WorldOps.lastLot(blocks.world());
+        return found.isEmpty() ? null : found;
+    }
+
+    /** Slab origin under the boots as {@code x,z}. */
+    public static String parcelLotName(WorldMesh blocks, ExploreBody body) {
+        if (blocks == null || body == null || blocks.world() == null) {
+            return null;
+        }
+        BlockCoordinate at = new BlockCoordinate(
+                (int) Math.floor(body.x()), 0, (int) Math.floor(body.z()));
+        String found = WorldOps.lotAt(blocks.world(), at);
         return found.isEmpty() ? null : found;
     }
 

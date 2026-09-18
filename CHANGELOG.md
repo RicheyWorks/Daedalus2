@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore lot under the boots.**
+  Standing on a slab the caption adds that plot's x,z after
+  the place or lease. Start and goal still lead.
+
 - **World lot under a cube.**
   block.inspect and observe name the parcel place and x,z lot
   when the coordinate sits on a slab. Off-plot stays empty.
