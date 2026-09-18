@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore names the slab box.**
+  The hall caption names the inclusive
+  AABB under the boots. Empty off a
+  stamped plot. No wallet types.
+
 - **Desktop inspect names every lease.**
   The desktop world line names every
   rented account key, oldest first.

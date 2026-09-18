@@ -898,13 +898,21 @@ public final class ExplorePaint {
         String street = parcelPlaceName(blocks, body);
         if (street != null) {
             String lot = parcelLotName(blocks, body);
+            String box = parcelBoxName(blocks, body);
             String named = lot == null ? street : street + " " + lot;
+            if (box != null) {
+                named = named + " " + box;
+            }
             return withAcl(withOccupancy(occ, named), blocks);
         }
         String lease = parcelLeaseName(blocks, body);
         if (lease != null) {
             String lot = parcelLotName(blocks, body);
+            String box = parcelBoxName(blocks, body);
             String named = lot == null ? lease : lease + " " + lot;
+            if (box != null) {
+                named = named + " " + box;
+            }
             return withAcl(withOccupancy(occ, named), blocks);
         }
         String last = lastParcelPlaceName(blocks);
@@ -1107,6 +1115,17 @@ public final class ExplorePaint {
         BlockCoordinate at = new BlockCoordinate(
                 (int) Math.floor(body.x()), 0, (int) Math.floor(body.z()));
         String found = WorldOps.lotAt(blocks.world(), at);
+        return found.isEmpty() ? null : found;
+    }
+
+    /** Inclusive AABB under the boots. Empty off a stamped plot. */
+    public static String parcelBoxName(WorldMesh blocks, ExploreBody body) {
+        if (blocks == null || body == null || blocks.world() == null) {
+            return null;
+        }
+        BlockCoordinate at = new BlockCoordinate(
+                (int) Math.floor(body.x()), 0, (int) Math.floor(body.z()));
+        String found = WorldOps.boxAt(blocks.world(), at);
         return found.isEmpty() ? null : found;
     }
 
