@@ -206,7 +206,7 @@ public class WorldController {
         World world = mounted(id);
         return ResponseEntity.ok(new ParcelRevokeResponse(
                 result.name(), WorldOps.aclLine(world), world.revision().value(),
-                WorldOps.mazeAt(world, at)));
+                WorldOps.mazeAt(world, at), WorldOps.leaseAt(world, at)));
     }
 
     @PostMapping("/world/{id}/parcels/forgive")
