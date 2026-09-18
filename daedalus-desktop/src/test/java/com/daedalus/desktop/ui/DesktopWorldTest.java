@@ -32,7 +32,13 @@ class DesktopWorldTest {
     void inspectLineNamesRevisionAndLastEvent() {
         assertThat(DesktopWorld.inspectLine(null, null)).isEqualTo("world-zero · unavailable");
         assertThat(DesktopWorld.inspectLine(World.zero(), null))
-                .isEqualTo("world-zero r=0 · listening");
+                .isEqualTo("world-zero r=0 · listening · door · trap · portal · npc");
+        assertThat(DesktopWorld.chunkOccupants(World.zero(), null))
+                .isEqualTo("door · trap · portal · npc");
+        assertThat(DesktopWorld.chunkOccupants(null, null)).isEmpty();
+        WorldEventFrame far = new WorldEventFrame(
+                DesktopWorld.ID, "BLOCK_PLACED", 64, 0, 0, "STONE", "AIR", 1);
+        assertThat(DesktopWorld.chunkOccupants(World.zero(), far)).isEmpty();
         WorldEventFrame placed = new WorldEventFrame(
                 DesktopWorld.ID, "BLOCK_PLACED", 1, 2, 3, "STONE", "AIR", 4);
         assertThat(DesktopWorld.inspectLine(4, placed))
@@ -44,7 +50,8 @@ class DesktopWorldTest {
         named.nameParcel(named.parcels().get(0).id(), "Willow Walk");
         assertThat(DesktopWorld.firstPlace(named)).isEqualTo("Willow Walk");
         assertThat(DesktopWorld.inspectLine(named, null))
-                .isEqualTo("world-zero r=" + named.revision().value() + " · Willow Walk · listening");
+                .isEqualTo("world-zero r=" + named.revision().value()
+                        + " · Willow Walk · listening · door · trap · portal · npc");
         assertThat(DesktopWorld.inspectLine(named.revision().value(), "Willow Walk", placed))
                 .isEqualTo("world-zero r=" + named.revision().value()
                         + " · Willow Walk · BLOCK_PLACED 1,2,3 STONE");
@@ -56,7 +63,8 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.firstLease(named)).isEqualTo(Parcel.SYSTEM_TENANT);
         assertThat(DesktopWorld.inspectLine(named, null))
                 .isEqualTo("world-zero r=" + named.revision().value()
-                        + " · Willow Walk · " + Parcel.SYSTEM_TENANT + " · listening");
+                        + " · Willow Walk · " + Parcel.SYSTEM_TENANT
+                        + " · listening · door · trap · portal · npc");
         assertThat(DesktopWorld.firstLease(World.zero())).isEmpty();
         named.bindMaze(named.parcels().get(0).id(), "00000000-0000-4000-8000-000000000007");
         assertThat(DesktopWorld.firstMaze(named))
@@ -85,7 +93,8 @@ class DesktopWorldTest {
                 .doesNotContain("npc");
         assertThat(DesktopWorld.inspectLine(onOrigin, null))
                 .contains("door")
-                .contains("0,0");
+                .contains("0,0")
+                .doesNotContain("npc");
     }
 
     @Test

@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop chunk occupants.**
+  Inspect lists door, trap, portal, and NPC when those cells
+  sit in the live 16³. A last-event far off origin stays
+  silent. On-slab occupancy lines still win.
+
 - **Chunk occupants.**
   chunk.inspect lists door, trap, portal, and NPC when those
   cells sit in that 16³. A far chunk stays plot-only. The well

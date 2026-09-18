@@ -6,6 +6,7 @@ import com.daedalus.api.dto.WorldEventFrame;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.WorldService;
 import com.daedalus.world.BlockCoordinate;
+import com.daedalus.world.ChunkCoordinate;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.World;
 import com.daedalus.world.WorldId;
@@ -60,6 +61,9 @@ public final class DesktopWorld {
         String line = inspectLine(world.revision().value(), world.parcels().size(), place,
                 lastLease(world), streetMazes(world), last);
         String occ = occupancyLine(world);
+        if (occ.isEmpty()) {
+            occ = chunkOccupants(world, last);
+        }
         if (!occ.isEmpty()) {
             line = line + " · " + occ;
         }
@@ -118,6 +122,20 @@ public final class DesktopWorld {
             }
         }
         return "";
+    }
+
+    /**
+     * Occupancy objects in the live 16³. Last-event chunk when
+     * a frame is present, otherwise origin. Empty far off the volume.
+     */
+    public static String chunkOccupants(World world, WorldEventFrame last) {
+        if (world == null) {
+            return "";
+        }
+        ChunkCoordinate cc = last == null
+                ? new ChunkCoordinate(0, 0, 0)
+                : new BlockCoordinate(last.x(), last.y(), last.z()).chunk();
+        return WorldOps.occupantsInChunk(world, cc);
     }
 
     /**

@@ -328,7 +328,8 @@ occupancy inspect lot, and
 desktop occupancy lot, and
 explore occupancy under the boots, and
 observe occupant on the aimed cube, and
-chunk.inspect occupants
+chunk.inspect occupants, and
+desktop chunk occupants
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
