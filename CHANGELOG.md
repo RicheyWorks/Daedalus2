@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Deny names the slab lot.**
+  POST /parcels/deny names the
+  street index under that cube.
+  Empty off a plot. No wallet types.
+
 - **Grant names the slab lot.**
   POST /parcels/grant names the
   street index under that cube.
