@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend choke depth.**
+  Overlay chokepoint chips fall off
+  toward deeper rust so leftover flat
+  swatches are not the last word on a
+  squeeze.
+
 - **Well legend choke depth.**
   Overlay chokepoint chips fall off
   toward deeper rust so leftover flat
