@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Portal open names the slab place.**
+  POST /portal/open and /portal/seal
+  name the inspired street under that
+  cube. Empty when the portal sits
+  off a stamped plot. No wallet
+  types.
+
 - **Trap arm names the slab place.**
   POST /trap/arm and /trap/disarm name
   the inspired street under that cube.

@@ -271,7 +271,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.result", equalTo("OPENED")))
                 .andExpect(jsonPath("$.state", equalTo("OPEN")))
                 .andExpect(jsonPath("$.maze", equalTo("")))
-                .andExpect(jsonPath("$.lease", equalTo("")));
+                .andExpect(jsonPath("$.lease", equalTo("")))
+                .andExpect(jsonPath("$.place", equalTo("")));
 
         mvc.perform(post("/api/v1/world/world-zero/portal/open"))
                 .andExpect(status().isOk())
@@ -596,7 +597,8 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("DENIED")))
                 .andExpect(jsonPath("$.state", equalTo("OPEN")))
-                .andExpect(jsonPath("$.lease", equalTo("tenant-zero")));
+                .andExpect(jsonPath("$.lease", equalTo("tenant-zero")))
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))));
 
         mvc.perform(get("/api/v1/world/world-zero/portal"))
                 .andExpect(status().isOk())
@@ -887,7 +889,8 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("OPENED")))
                 .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())))
-                .andExpect(jsonPath("$.lease", equalTo("tenant-zero")));
+                .andExpect(jsonPath("$.lease", equalTo("tenant-zero")))
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))));
         MazeGenerationService.Cached again = gen.generate("recursive-backtracker", 3, 3, 8L);
         extra.perform(post("/api/v1/world/world-zero/stamp")
                         .contentType(MediaType.APPLICATION_JSON)
