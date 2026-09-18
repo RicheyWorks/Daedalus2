@@ -23,7 +23,7 @@ import java.util.Map;
 public final class WorldStore {
 
     static final byte[] MAGIC = "DAEW".getBytes(StandardCharsets.US_ASCII);
-    static final int VERSION = 12;
+    static final int VERSION = 13;
     static final int VERSION_CHUNKS_ONLY = 1;
     static final int VERSION_WITH_DOOR = 2;
     static final int VERSION_WITH_PARCELS = 3;
@@ -36,6 +36,7 @@ public final class WorldStore {
     static final int VERSION_WITH_ACL = 10;
     static final int VERSION_WITH_DRIVE = 11;
     static final int VERSION_WITH_DRIVE_ACTOR = 12;
+    static final int VERSION_WITH_DRIVE_AT = 13;
 
     private WorldStore() {
     }
@@ -160,6 +161,7 @@ public final class WorldStore {
         out.writeUTF(snapshot.lastDriveCapability());
         out.writeUTF(snapshot.lastDriveResult());
         out.writeUTF(snapshot.lastDriveActor());
+        out.writeUTF(snapshot.lastDriveAt());
     }
 
     static WorldSnapshot read(DataInputStream in) throws IOException {
@@ -168,7 +170,8 @@ public final class WorldStore {
             throw new IOException("Not a Daedalus world snapshot");
         }
         int version = in.readUnsignedByte();
-        if (version != VERSION && version != VERSION_WITH_DRIVE
+        if (version != VERSION && version != VERSION_WITH_DRIVE_ACTOR
+                && version != VERSION_WITH_DRIVE
                 && version != VERSION_WITH_ACL
                 && version != VERSION_WITH_MAZE_REF
                 && version != VERSION_WITH_NPC
@@ -275,6 +278,7 @@ public final class WorldStore {
         String lastDriveCapability = "";
         String lastDriveResult = "";
         String lastDriveActor = "";
+        String lastDriveAt = "";
         if (version >= VERSION_WITH_DRIVE) {
             lastDriveCapability = in.readUTF();
             lastDriveResult = in.readUTF();
@@ -282,8 +286,11 @@ public final class WorldStore {
         if (version >= VERSION_WITH_DRIVE_ACTOR) {
             lastDriveActor = in.readUTF();
         }
+        if (version >= VERSION_WITH_DRIVE_AT) {
+            lastDriveAt = in.readUTF();
+        }
         return new WorldSnapshot(id, revision, chunks, door, trap, portal, npc, parcels, acls,
-                lastDriveCapability, lastDriveResult, lastDriveActor);
+                lastDriveCapability, lastDriveResult, lastDriveActor, lastDriveAt);
     }
 
     private static void writeGrants(DataOutputStream out, List<ParcelAcl.Grant> rows)

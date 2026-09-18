@@ -51,13 +51,13 @@ public final class World {
                 WorldId.ZERO.equals(id) ? Trap.zero() : null,
                 WorldId.ZERO.equals(id) ? Portal.zero() : null,
                 WorldId.ZERO.equals(id) ? Npc.zero() : null,
-                0L, Map.of(), List.of(), Map.of(), "", "", "");
+                0L, Map.of(), List.of(), Map.of(), "", "", "", null);
     }
 
     private World(WorldId id, Door door, Trap trap, Portal portal, Npc npc, long revision,
             Map<ChunkCoordinate, Chunk> seeded, List<Parcel> seededParcels,
             Map<ParcelId, ParcelAcl> seededAcls, String lastDriveCapability,
-            String lastDriveResult, String lastDriveActor) {
+            String lastDriveResult, String lastDriveActor, BlockCoordinate lastDriveAt) {
         this.id = Objects.requireNonNull(id, "WorldId is required");
         this.door = door;
         this.trap = trap;
@@ -77,6 +77,7 @@ public final class World {
         this.lastDriveCapability = lastDriveCapability == null ? "" : lastDriveCapability;
         this.lastDriveResult = lastDriveResult == null ? "" : lastDriveResult;
         this.lastDriveActor = lastDriveActor == null ? "" : lastDriveActor;
+        this.lastDriveAt = lastDriveAt;
     }
 
     public static World zero() {
@@ -358,7 +359,8 @@ public final class World {
                     Map.copyOf(copiedAcls),
                     lastDriveCapability,
                     lastDriveResult,
-                    lastDriveActor);
+                    lastDriveActor,
+                    formatDriveAt(lastDriveAt));
         }
     }
 
@@ -571,7 +573,33 @@ public final class World {
                 snapshot.acls(),
                 snapshot.lastDriveCapability(),
                 snapshot.lastDriveResult(),
-                snapshot.lastDriveActor());
+                snapshot.lastDriveActor(),
+                parseDriveAt(snapshot.lastDriveAt()));
+    }
+
+    private static String formatDriveAt(BlockCoordinate at) {
+        if (at == null) {
+            return "";
+        }
+        return at.x() + "," + at.y() + "," + at.z();
+    }
+
+    private static BlockCoordinate parseDriveAt(String line) {
+        if (line == null || line.isBlank()) {
+            return null;
+        }
+        String[] parts = line.split(",");
+        if (parts.length != 3) {
+            return null;
+        }
+        try {
+            return new BlockCoordinate(
+                    Integer.parseInt(parts[0].trim()),
+                    Integer.parseInt(parts[1].trim()),
+                    Integer.parseInt(parts[2].trim()));
+        } catch (NumberFormatException ignored) {
+            return null;
+        }
     }
 
     private static int maxParcelNumber(List<Parcel> existing) {

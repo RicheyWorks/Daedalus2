@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **DAEW last drive at.**
+  World snapshots copy the cube address
+  of the last mutation. DAEW v13 writes
+  that string after last drive actor. A
+  v12 file loads an empty address. No
+  wallet types.
+
 - **Well inspect drive at.**
   GET /world carries the cube address of
   the last mutation. The fold paints an
