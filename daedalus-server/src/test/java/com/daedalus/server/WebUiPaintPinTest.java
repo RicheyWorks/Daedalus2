@@ -400,6 +400,18 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellCaptionLensGoldHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/caption.js")) {
+            assertThat(in).as("well caption painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("background:${i === 1 ? \"#c6a441\" : LENS_COLORS[i]}")
+                    .contains("LENS_COLORS = [\"#e5484d\", \"#f2c94c\", \"#8aaa50\"]")
+                    .doesNotContain("background:${LENS_COLORS[i]};margin-right:4px;");
+        }
+    }
+
+    @Test
     void wellStartDiscHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
