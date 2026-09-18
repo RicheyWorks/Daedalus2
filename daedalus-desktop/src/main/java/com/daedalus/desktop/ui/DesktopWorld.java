@@ -309,7 +309,7 @@ public final class DesktopWorld {
     }
 
     /**
-     * Place, lot, and occupant under the last event cube.
+     * Place, lot, box, maze, lease, ACL, and occupant under the last event cube.
      * Empty off a slab unless that cell is door, trap, portal, or NPC.
      */
     public static String eventLot(World world, WorldEventFrame last) {
@@ -332,6 +332,10 @@ public final class DesktopWorld {
         String lease = WorldOps.leaseAt(world, cell);
         if (!lease.isEmpty()) {
             at = at.isEmpty() ? lease : at + " " + lease;
+        }
+        String extra = WorldOps.aclAt(world, cell);
+        if (!extra.isEmpty()) {
+            at = at.isEmpty() ? extra : at + " " + extra;
         }
         if (at.isEmpty()) {
             return who;

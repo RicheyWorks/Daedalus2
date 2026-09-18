@@ -161,6 +161,7 @@ class DesktopWorldTest {
                 .contains("system")
                 .contains("0,0,0");
         onOrigin.grant(onOrigin.parcels().get(0).id(), "bob", ParcelVerb.BLOCK_PLACE);
+        assertThat(DesktopWorld.eventLot(onOrigin, onStamp)).contains("bob block.place");
         assertThat(DesktopWorld.aclLine(onOrigin)).isEqualTo("bob block.place");
         assertThat(DesktopWorld.aclLine(World.zero())).isEmpty();
         assertThat(DesktopWorld.aclLine(null)).isEmpty();

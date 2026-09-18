@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop last-event names the slab ACL.**
+  The last-event cube names the
+  extra-list under that cell. Empty
+  until a grant or deny. No wallet
+  types.
+
 - **Well last-event names the slab ACL.**
   STOMP last-event paints the extra-list
   under that cube. Empty until a grant
