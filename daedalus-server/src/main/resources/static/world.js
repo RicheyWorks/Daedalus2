@@ -195,8 +195,11 @@
         ? chunk.lots : "";
     const mazes = chunk && chunk.maze && chunk.mazes !== chunk.maze
         ? chunk.mazes : "";
+    const leases = chunk && chunk.lease && chunk.leases !== chunk.lease
+        ? chunk.leases : "";
     const at = chunk && [chunk.place, street, chunk.lot, lots, chunk.maze, mazes,
-        chunk.occupants, chunk.stands, chunk.drive, chunk.driveActor, chunk.driveAt]
+        chunk.lease, leases, chunk.occupants, chunk.stands, chunk.drive, chunk.driveActor,
+        chunk.driveAt]
         .filter(Boolean).join(" ");
     const slice = occupied
         ? "0,0,0 occupied " + chunk.occupied + (at ? " " + at : "")

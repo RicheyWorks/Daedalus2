@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well chunk last and every lease.**
+  The well chunk row paints the newest
+  account key on 0,0,0, then every
+  overlapping lease when they differ.
+  Empty until a lease. No wallet
+  types.
+
 - **GET /chunk names every slab lease.**
   Chunk inspect lists every account
   key whose slab overlaps this 16³,
