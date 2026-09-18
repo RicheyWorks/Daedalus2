@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well lab axes depth.**
+  Plot gold lips fall off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even chrome is not the last
+  word on the maze plot.
+
 - **Well lab model depth.**
   Fitted khaki falls off toward
   floor-dim with the same 0.22 as halls,

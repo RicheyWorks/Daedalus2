@@ -34,8 +34,8 @@
 
     return `<svg id="labChart" viewBox="0 0 ${W} ${H}" width="100%" height="${H}"
        role="img" aria-label="${escapeHtml(fit.metric)} against cell count, log-log">
-    <line x1="${L}" y1="${T}" x2="${L}" y2="${H-B}" stroke="rgba(184, 133, 56, 0.28)"/>
-    <line x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}" stroke="rgba(184, 133, 56, 0.28)"/>
+    <line x1="${L}" y1="${T}" x2="${L}" y2="${H-B}" stroke="rgba(153, 111, 49, 0.28)"/>
+    <line x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}" stroke="rgba(153, 111, 49, 0.28)"/>
     ${model}
     <path d="${path}" fill="none" stroke="${seriesColor}" stroke-width="2"
           stroke-linejoin="round" stroke-linecap="round"/>
