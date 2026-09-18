@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Lease names the slab lot.**
+  POST /parcels/lease names the
+  street index of the newest rented
+  plot. Empty until parcel.lease.
+  No wallet types.
+
 - **Stamp names the slab lot.**
   POST /stamp names the street
   index of the new plot. Empty on
