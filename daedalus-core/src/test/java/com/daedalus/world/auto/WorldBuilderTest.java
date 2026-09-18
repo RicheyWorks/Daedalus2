@@ -447,12 +447,15 @@ class WorldBuilderTest {
         assertThat(WorldOps.lastLeaseMaze(world)).isEqualTo(mazeRef);
         assertThat(WorldOps.lastLeasePlace(world)).isEqualTo(world.parcels().get(0).placeName());
         assertThat(WorldOps.lastLeaseLot(world)).isEqualTo("0,0");
+        assertThat(WorldOps.lastLeaseBox(world)).isEqualTo("0,0,0-6,1,6");
         assertThat(WorldOps.lastLeaseMaze(World.zero())).isEmpty();
         assertThat(WorldOps.lastLeasePlace(World.zero())).isEmpty();
         assertThat(WorldOps.lastLeaseLot(World.zero())).isEmpty();
+        assertThat(WorldOps.lastLeaseBox(World.zero())).isEmpty();
         assertThat(WorldOps.lastLeaseMaze(null)).isEmpty();
         assertThat(WorldOps.lastLeasePlace(null)).isEmpty();
         assertThat(WorldOps.lastLeaseLot(null)).isEmpty();
+        assertThat(WorldOps.lastLeaseBox(null)).isEmpty();
         @SuppressWarnings("unchecked")
         Map<String, Object> chunkLeased = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "chunk.inspect", null));
@@ -496,14 +499,17 @@ class WorldBuilderTest {
         assertThat(WorldOps.lastLeaseMaze(world)).isEqualTo(mazeTwo);
         assertThat(WorldOps.lastLeasePlace(world)).isEqualTo(world.parcels().get(1).placeName());
         assertThat(WorldOps.lastLeaseLot(world)).isEqualTo(nextLot.x() + "," + nextLot.z());
+        assertThat(WorldOps.lastLeaseBox(world)).isEqualTo(WorldOps.boxLine(world.parcels().get(1).bounds()));
         assertThat(builder.run(new WorldBuilder.Step(nextLot, "parcel.release", null)))
                 .isEqualTo(ParcelReleaseResult.RELEASED);
         assertThat(WorldOps.lastLeaseMaze(world)).isEqualTo(mazeTwo);
         assertThat(WorldOps.lastLeasePlace(world)).isEqualTo(world.parcels().get(1).placeName());
         assertThat(WorldOps.lastLeaseLot(world)).isEqualTo(nextLot.x() + "," + nextLot.z());
+        assertThat(WorldOps.lastLeaseBox(world)).isEqualTo(WorldOps.boxLine(world.parcels().get(1).bounds()));
         assertThat(builder.run(new WorldBuilder.Step(nextLot, "parcel.release", null)))
                 .isEqualTo(ParcelReleaseResult.RELEASED);
         assertThat(WorldOps.lastLeaseMaze(world)).isEmpty();
+        assertThat(WorldOps.lastLeaseBox(world)).isEmpty();
         assertThat(WorldOps.lastLeasePlace(world)).isEmpty();
         assertThat(WorldOps.lastLeaseLot(world)).isEmpty();
     }

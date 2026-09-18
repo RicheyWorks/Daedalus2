@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Lease names the slab box.**
+  POST /parcels/lease names the
+  inclusive AABB of the newest
+  rented plot. Empty until
+  parcel.lease. No wallet types.
+
 - **Forgive names the slab box.**
   POST /parcels/forgive names the
   inclusive AABB under that cube.

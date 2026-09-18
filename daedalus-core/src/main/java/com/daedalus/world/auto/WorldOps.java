@@ -1074,6 +1074,20 @@ public final class WorldOps {
         return found;
     }
 
+    /** Inclusive AABB of the newest leased slab. Empty until parcel.lease. */
+    public static String lastLeaseBox(World world) {
+        if (world == null) {
+            return "";
+        }
+        String found = "";
+        for (Parcel parcel : world.parcels()) {
+            if (parcel != null && !parcel.leaseId().isEmpty()) {
+                found = boxLine(parcel.bounds());
+            }
+        }
+        return found;
+    }
+
     /** Inspired toponym of the newest leased slab. Empty until parcel.lease. */
     public static String lastLeasePlace(World world) {
         if (world == null) {
