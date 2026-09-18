@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well caption not-optimal depth.**
+  Lens miss rust falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even rust is not the last
+  word on the maze page. KEEP leftover
+  even hall lens brands stay.
+
 - **Well caption choke depth.**
   Cut rust falls off toward
   floor-dim with the same 0.22 as halls,

@@ -82,7 +82,7 @@
         + `&middot; ${chip(2, "never touched", l.never)}`
         + `<div style="margin-top:4px">A* really expanded <b>${l.actualExpansions}</b> of `
         + `${l.reachable} reachable cells; route ${l.routeLength} steps against an optimum of `
-        + `${l.optimalCost}${l.routeOptimal ? "" : " — <b style='color:#e5484d'>not optimal</b>"}`
+        + `${l.optimalCost}${l.routeOptimal ? "" : " — <b style='color:#bc4041'>not optimal</b>"}`
         + `</div><div class="hint" style="margin-top:4px">${l.note}</div></div>`;
   }
 
