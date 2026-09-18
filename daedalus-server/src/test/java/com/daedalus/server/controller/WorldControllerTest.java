@@ -301,7 +301,8 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("NO_PARCEL")))
                 .andExpect(jsonPath("$.leaseId", equalTo("")))
-                .andExpect(jsonPath("$.maze", equalTo("")));
+                .andExpect(jsonPath("$.maze", equalTo("")))
+                .andExpect(jsonPath("$.place", equalTo("")));
 
         mvc.perform(post("/api/v1/world/world-zero/stamp")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -681,13 +682,15 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("RELEASED")))
                 .andExpect(jsonPath("$.leaseId", equalTo("")))
-                .andExpect(jsonPath("$.maze", equalTo("")));
+                .andExpect(jsonPath("$.maze", equalTo("")))
+                .andExpect(jsonPath("$.place", equalTo("")));
 
         mvc.perform(post("/api/v1/world/world-zero/parcels/release"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("NOT_LEASED")))
                 .andExpect(jsonPath("$.leaseId", equalTo("")))
-                .andExpect(jsonPath("$.maze", equalTo("")));
+                .andExpect(jsonPath("$.maze", equalTo("")))
+                .andExpect(jsonPath("$.place", equalTo("")));
     }
 
     @Test
@@ -855,11 +858,13 @@ class WorldControllerTest {
         extra.perform(post("/api/v1/world/world-zero/parcels/release"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("RELEASED")))
-                .andExpect(jsonPath("$.maze", equalTo(again.metadata().id().toString())));
+                .andExpect(jsonPath("$.maze", equalTo(again.metadata().id().toString())))
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))));
         extra.perform(post("/api/v1/world/world-zero/parcels/release"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("RELEASED")))
-                .andExpect(jsonPath("$.maze", equalTo("")));
+                .andExpect(jsonPath("$.maze", equalTo("")))
+                .andExpect(jsonPath("$.place", equalTo("")));
         extra.perform(post("/api/v1/world/world-zero/parcels/deny")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"actorId\":\"carol\",\"x\":0,\"y\":0,\"z\":0}"))

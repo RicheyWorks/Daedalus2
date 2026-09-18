@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Release names the remaining place.**
+  POST /parcels/release names the
+  inspired street still rented
+  after that drop. Empty when
+  none remain. No wallet types.
+
 - **Lease names the slab place.**
   POST /parcels/lease names the
   inspired street on the newest
