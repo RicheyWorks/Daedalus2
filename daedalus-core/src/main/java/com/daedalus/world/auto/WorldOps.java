@@ -90,7 +90,29 @@ public final class WorldOps {
         out.put("maze", streetMazes(world));
         out.put("lease", lastLeaseId(world));
         out.put("place", lastPlaceName(world));
+        out.put("occupants", occupantsLine(world));
         return out;
+    }
+
+    /** Occupancy objects that exist on this world. Not a chunk cut. */
+    public static String occupantsLine(World world) {
+        if (world == null) {
+            return "";
+        }
+        List<String> rows = new ArrayList<>();
+        if (world.door() != null) {
+            rows.add("door");
+        }
+        if (world.trap() != null) {
+            rows.add("trap");
+        }
+        if (world.portal() != null) {
+            rows.add("portal");
+        }
+        if (world.npc() != null) {
+            rows.add("npc");
+        }
+        return String.join(" · ", rows);
     }
 
     private static Map<String, Object> inspectBlock(World world, BlockCoordinate at) {

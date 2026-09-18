@@ -64,7 +64,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.lot", equalTo("")))
                 .andExpect(jsonPath("$.maze", equalTo("")))
                 .andExpect(jsonPath("$.lease", equalTo("")))
-                .andExpect(jsonPath("$.place", equalTo("")));
+                .andExpect(jsonPath("$.place", equalTo("")))
+                .andExpect(jsonPath("$.occupants", equalTo("door · trap · portal · npc")));
 
         mvc.perform(get("/api/v1/world/world-zero/parcels"))
                 .andExpect(status().isOk())

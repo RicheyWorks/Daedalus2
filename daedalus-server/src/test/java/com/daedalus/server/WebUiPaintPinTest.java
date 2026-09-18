@@ -426,7 +426,9 @@ class WebUiPaintPinTest {
                     .contains("world.street")
                     .contains("row(box, \"lot\"")
                     .contains("world.lot")
-                    .contains("world.place");
+                    .contains("world.place")
+                    .contains("world.occupants")
+                    .contains("row(box, \"occupants\"");
             assertThat(world).doesNotContain("/world/\" + WORLD + \"/parcels\"");
             assertThat(html).contains("#worldBox .place { color: #94612e; -webkit-user-drag: none")
                     .contains("#worldBox .slab { color: #94612e; -webkit-user-drag: none");

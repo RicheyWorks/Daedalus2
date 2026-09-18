@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World inspect occupants.**
+  world.inspect lists door, trap, portal, and NPC. The well
+  paints that row from inspect, not a second chunk join.
+
 - **Desktop chunk occupants.**
   Inspect lists door, trap, portal, and NPC when those cells
   sit in the live 16³. A last-event far off origin stays

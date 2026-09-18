@@ -15,7 +15,8 @@ public record WorldInspectResponse(
         String lot,
         String maze,
         String lease,
-        String place) {
+        String place,
+        String occupants) {
 
     public WorldInspectResponse {
         street = street == null ? "" : street;
@@ -23,6 +24,7 @@ public record WorldInspectResponse(
         maze = maze == null ? "" : maze;
         lease = lease == null ? "" : lease;
         place = place == null ? "" : place;
+        occupants = occupants == null ? "" : occupants;
         if (plots < 0) {
             throw new IllegalArgumentException("plots must be at least 0");
         }

@@ -123,6 +123,8 @@
     row(box, "trap", occupancy(trap), trap && trap.place);
     row(box, "portal", occupancy(portal), portal && portal.place);
     row(box, "npc", occupancy(npc), npc && npc.place);
+    row(box, "occupants", world && world.occupants ? world.occupants : "—",
+        world && world.occupants);
     row(box, "plots", world && world.plots != null ? String(world.plots) : "—");
     row(box, "street", world && world.street ? world.street : "—");
     row(box, "place", world && world.place ? world.place : "—");
