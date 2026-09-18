@@ -398,7 +398,8 @@ trap inspect last drive, and
 door inspect last drive, and
 portal inspect last drive, and
 npc inspect last drive, and
-chunk inspect last drive
+chunk inspect last drive, and
+well chunk last drive
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

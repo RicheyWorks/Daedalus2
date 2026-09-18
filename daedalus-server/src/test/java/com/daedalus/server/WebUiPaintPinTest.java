@@ -455,7 +455,9 @@ class WebUiPaintPinTest {
                     .contains("chunk.street")
                     .contains("chunk.lot")
                     .contains("chunk.occupants")
-                    .contains("chunk.stands");
+                    .contains("chunk.stands")
+                    .contains("chunk.drive")
+                    .contains("chunk.driveActor");
             assertThat(world).doesNotContain("/maze/");
             assertThat(world).contains("frame.place")
                     .contains("frame.lot")

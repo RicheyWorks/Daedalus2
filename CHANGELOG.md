@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well chunk last drive.**
+  The well chunk row paints the last
+  driven result and account key when
+  that cube sits in 0,0,0. Empty on
+  every other slice. No wallet types.
+
 - **Chunk inspect last drive.**
   GET /chunk names the last driven
   result and account key only when that
