@@ -330,9 +330,13 @@ class ExplorePaintTest {
         assertThat(icon[start + 1] & 0xFF).isEqualTo(startInk[1]);
         assertThat(icon[start + 2] & 0xFF).isEqualTo(startInk[2]);
         int goal = (19 * ExplorePaint.WINDOW_ICON_SIZE + 23) * 4;
+        int[] goalInk = ExplorePaint.windowIconGoalRgb(5, 9);
         assertThat(icon[goal] & 0xFF)
-                .as("exit coral sits on the idle goal cell")
-                .isEqualTo(ExplorePaint.WINDOW_ICON_GOAL_R);
+                .as("exit coral falls off toward floor-dim")
+                .isEqualTo(goalInk[0])
+                .isNotEqualTo(ExplorePaint.WINDOW_ICON_GOAL_R);
+        assertThat(icon[goal + 1] & 0xFF).isEqualTo(goalInk[1]);
+        assertThat(icon[goal + 2] & 0xFF).isEqualTo(goalInk[2]);
         int rim = (9 * ExplorePaint.WINDOW_ICON_SIZE + 5) * 4;
         int midWall = (13 * ExplorePaint.WINDOW_ICON_SIZE + 13) * 4;
         assertThat(icon[rim] & 0xFF)

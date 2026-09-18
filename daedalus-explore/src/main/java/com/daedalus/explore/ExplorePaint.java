@@ -96,6 +96,16 @@ public final class ExplorePaint {
         };
     }
 
+    /** Same 0.22 rim as halls — leftover even coral is not the last word on a finish. */
+    public static int[] windowIconGoalRgb(int tileRow, int tileCol) {
+        double edge = windowIconEdge(tileRow, tileCol);
+        return new int[] {
+                mixByte(WINDOW_ICON_GOAL_R, 0x2a, 0.22 * edge),
+                mixByte(WINDOW_ICON_GOAL_G, 0x22, 0.22 * edge),
+                mixByte(WINDOW_ICON_GOAL_B, 0x18, 0.22 * edge)
+        };
+    }
+
     public static int[] windowIconWallRgb(int tileRow, int tileCol) {
         double edge = windowIconEdge(tileRow, tileCol);
         return new int[] {
@@ -137,9 +147,10 @@ public final class ExplorePaint {
                     green = start[1];
                     blue = start[2];
                 } else if (r == goalTr && c == goalTc) {
-                    red = WINDOW_ICON_GOAL_R;
-                    green = WINDOW_ICON_GOAL_G;
-                    blue = WINDOW_ICON_GOAL_B;
+                    int[] goal = windowIconGoalRgb(r, c);
+                    red = goal[0];
+                    green = goal[1];
+                    blue = goal[2];
                 } else if (WINDOW_ICON_MARK[r].charAt(c) == '#') {
                     int[] wall = windowIconWallRgb(r, c);
                     red = wall[0];
