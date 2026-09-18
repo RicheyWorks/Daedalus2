@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop last-event last drive.**
+  The desktop world line names the last
+  driven result, account key, and cube
+  only when the last event cell is the
+  one that was driven. Empty on every
+  other event. No wallet types.
+
 - **Well last-event last drive.**
   The well last-event line paints the
   last driven result, account key, and

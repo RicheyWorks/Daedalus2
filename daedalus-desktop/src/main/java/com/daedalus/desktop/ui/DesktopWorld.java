@@ -122,6 +122,18 @@ public final class DesktopWorld {
         if (!at.isEmpty()) {
             line = line + " · " + at;
         }
+        String driven = eventDrive(world, last);
+        if (!driven.isEmpty()) {
+            line = line + " · " + driven;
+        }
+        String actor = eventActor(world, last);
+        if (!actor.isEmpty()) {
+            line = line + " · " + actor;
+        }
+        String drivenAt = eventAt(world, last);
+        if (!drivenAt.isEmpty()) {
+            line = line + " · " + drivenAt;
+        }
         String acl = aclLine(world);
         return acl.isEmpty() ? line : line + " · " + acl;
     }
@@ -293,6 +305,39 @@ public final class DesktopWorld {
             return who;
         }
         return who.isEmpty() ? at : at + " " + who;
+    }
+
+    /**
+     * Last driven result when the last event cube is that cell.
+     * Empty on every other event.
+     */
+    public static String eventDrive(World world, WorldEventFrame last) {
+        if (world == null || last == null) {
+            return "";
+        }
+        return WorldOps.driveOn(world, new BlockCoordinate(last.x(), last.y(), last.z()));
+    }
+
+    /**
+     * Account key that last drove a mutation on the last event cube.
+     * Empty otherwise. Never a wallet type.
+     */
+    public static String eventActor(World world, WorldEventFrame last) {
+        if (world == null || last == null) {
+            return "";
+        }
+        return WorldOps.actorOn(world, new BlockCoordinate(last.x(), last.y(), last.z()));
+    }
+
+    /**
+     * Cube address of the last mutation when the last event is that cell.
+     * Empty otherwise.
+     */
+    public static String eventAt(World world, WorldEventFrame last) {
+        if (world == null || last == null) {
+            return "";
+        }
+        return WorldOps.atOn(world, new BlockCoordinate(last.x(), last.y(), last.z()));
     }
 
     /** All inspired toponyms on inspect — not GIS. */

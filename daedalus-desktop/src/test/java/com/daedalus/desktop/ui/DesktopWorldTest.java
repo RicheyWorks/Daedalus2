@@ -132,6 +132,19 @@ class DesktopWorldTest {
                 .contains("door")
                 .contains("0,0")
                 .doesNotContain("npc");
+        WorldEventFrame onStamp = new WorldEventFrame(
+                DesktopWorld.ID, "BLOCK_PLACED", 0, 0, 0, "WOOD", "AIR",
+                onOrigin.revision().value());
+        assertThat(DesktopWorld.eventDrive(onOrigin, onStamp)).isEqualTo("stamp.apply APPLIED");
+        assertThat(DesktopWorld.eventActor(onOrigin, onStamp)).isEqualTo("system");
+        assertThat(DesktopWorld.eventAt(onOrigin, onStamp)).isEqualTo("0,0,0");
+        assertThat(DesktopWorld.eventDrive(onOrigin, far)).isEmpty();
+        assertThat(DesktopWorld.eventActor(null, onStamp)).isEmpty();
+        assertThat(DesktopWorld.eventAt(onOrigin, null)).isEmpty();
+        assertThat(DesktopWorld.inspectLine(onOrigin, onStamp))
+                .contains("stamp.apply APPLIED")
+                .contains("system")
+                .contains("0,0,0");
         onOrigin.grant(onOrigin.parcels().get(0).id(), "bob", ParcelVerb.BLOCK_PLACE);
         assertThat(DesktopWorld.aclLine(onOrigin)).isEqualTo("bob block.place");
         assertThat(DesktopWorld.aclLine(World.zero())).isEmpty();

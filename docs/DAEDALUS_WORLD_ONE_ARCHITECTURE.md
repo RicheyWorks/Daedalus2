@@ -412,7 +412,8 @@ portal inspect last at, and
 npc inspect last at, and
 well occupancy last at, and
 STOMP last-event last drive, and
-well last-event last drive
+well last-event last drive, and
+desktop last-event last drive
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
