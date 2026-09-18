@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Release names the remaining lot.**
+  POST /parcels/release names the
+  street index still rented after
+  that drop. Empty when none
+  remain. No wallet types.
+
 - **Lease names the slab lot.**
   POST /parcels/lease names the
   street index of the newest rented
