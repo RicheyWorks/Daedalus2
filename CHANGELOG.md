@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well caption lens-moss depth.**
+  Never-touched moss falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even mint is not the last
+  word on the maze page. KEEP leftover
+  even hall lens brands stay.
+
 - **Well caption lens-rust depth.**
   Must-expand rust falls off toward
   floor-dim with the same 0.22 as halls,
