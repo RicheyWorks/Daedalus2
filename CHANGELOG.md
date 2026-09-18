@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore hall ACL.**
+  Off leftover HALL the caption lists extra parcel grants
+  and denials after the street. Owner stays implicit.
+  Start and goal still lead.
+
 - **Desktop inspect ACL.**
   Inspect lists extra parcel grants and denials as
   account-id + verb after the street. Owner stays implicit.

@@ -10,6 +10,7 @@ import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.Door;
 import com.daedalus.world.Parcel;
+import com.daedalus.world.ParcelVerb;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.World;
 import com.daedalus.world.auto.WorldOps;
@@ -1118,6 +1119,18 @@ class ExplorePaintTest {
         fog.stand(new Point(0, 0));
         assertThat(ExplorePaint.status(fog, atStartDoor, List.of(), trapMesh, origin).place())
                 .as("stood-on start still leads occupancy")
+                .isEqualTo("START");
+        assertThat(ExplorePaint.aclName(cubes)).isNull();
+        assertThat(ExplorePaint.aclName(null)).isNull();
+        volume.grant(volume.parcels().get(0).id(), "bob", ParcelVerb.BLOCK_PLACE);
+        WorldMesh gated = WorldMesh.of(volume);
+        assertThat(ExplorePaint.aclName(gated)).isEqualTo("bob block.place");
+        fog.stand(new Point(0, 0));
+        assertThat(ExplorePaint.status(fog, onStreet, List.of(), mesh, gated).place())
+                .as("ACL follows the street when extras exist")
+                .isEqualTo("Willow Walk 8,8 · bob block.place");
+        assertThat(ExplorePaint.status(fog, atStart, List.of(), mesh, gated).place())
+                .as("stood-on start still leads ACL")
                 .isEqualTo("START");
     }
 

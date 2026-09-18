@@ -899,33 +899,33 @@ public final class ExplorePaint {
         if (street != null) {
             String lot = parcelLotName(blocks, body);
             String named = lot == null ? street : street + " " + lot;
-            return withOccupancy(occ, named);
+            return withAcl(withOccupancy(occ, named), blocks);
         }
         String lease = parcelLeaseName(blocks, body);
         if (lease != null) {
             String lot = parcelLotName(blocks, body);
             String named = lot == null ? lease : lease + " " + lot;
-            return withOccupancy(occ, named);
+            return withAcl(withOccupancy(occ, named), blocks);
         }
         String last = lastParcelPlaceName(blocks);
         if (last != null) {
             String lot = lastParcelLot(blocks);
             String named = lot == null ? last : last + " " + lot;
-            return withOccupants(named, blocks);
+            return withAcl(withOccupants(named, blocks), blocks);
         }
         String cube = blockPlaceName(blocks, body);
         if (cube != null) {
-            return withOccupancy(occ, cube);
+            return withAcl(withOccupancy(occ, cube), blocks);
         }
         String who = occupantsName(blocks);
         String stands = standsName(blocks);
         if (who != null && stands != null) {
-            return who + " · " + stands;
+            return withAcl(who + " · " + stands, blocks);
         }
         if (who != null) {
-            return who;
+            return withAcl(who, blocks);
         }
-        return stands != null ? stands : "HALL";
+        return withAcl(stands != null ? stands : "HALL", blocks);
     }
 
     /**
@@ -949,6 +949,25 @@ public final class ExplorePaint {
         }
         String found = WorldOps.standsLine(blocks.world());
         return found.isEmpty() ? null : found;
+    }
+
+    /**
+     * Extra grants and denials. Owner stays implicit. Empty with no extras.
+     */
+    public static String aclName(WorldMesh blocks) {
+        if (blocks == null || blocks.world() == null) {
+            return null;
+        }
+        String found = WorldOps.aclLine(blocks.world());
+        return found.isEmpty() ? null : found;
+    }
+
+    private static String withAcl(String place, WorldMesh blocks) {
+        String acl = aclName(blocks);
+        if (acl == null) {
+            return place;
+        }
+        return place + " · " + acl;
     }
 
     private static String withOccupants(String place, WorldMesh blocks) {
