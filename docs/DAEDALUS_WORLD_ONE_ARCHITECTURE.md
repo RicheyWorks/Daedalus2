@@ -479,7 +479,8 @@ grant names the slab lot, and
 deny names the slab lot, and
 revoke names the slab lot, and
 forgive names the slab lot, and
-grant names the slab box
+grant names the slab box, and
+deny names the slab box
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

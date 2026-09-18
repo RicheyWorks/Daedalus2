@@ -4,7 +4,7 @@ package com.daedalus.api.dto;
 
 /** Result of an extra parcel deny. {@code result} is never silent success. */
 public record ParcelDenyResponse(String result, String acl, long revision, String maze,
-                                String lease, String place, String lot) {
+                                String lease, String place, String lot, String box) {
 
     public ParcelDenyResponse {
         result = result == null ? "" : result;
@@ -13,23 +13,29 @@ public record ParcelDenyResponse(String result, String acl, long revision, Strin
         lease = lease == null ? "" : lease;
         place = place == null ? "" : place;
         lot = lot == null ? "" : lot;
+        box = box == null ? "" : box;
+    }
+
+    public ParcelDenyResponse(String result, String acl, long revision, String maze,
+                             String lease, String place, String lot) {
+        this(result, acl, revision, maze, lease, place, lot, "");
     }
 
     public ParcelDenyResponse(String result, String acl, long revision, String maze,
                              String lease, String place) {
-        this(result, acl, revision, maze, lease, place, "");
+        this(result, acl, revision, maze, lease, place, "", "");
     }
 
     public ParcelDenyResponse(String result, String acl, long revision, String maze,
                              String lease) {
-        this(result, acl, revision, maze, lease, "", "");
+        this(result, acl, revision, maze, lease, "", "", "");
     }
 
     public ParcelDenyResponse(String result, String acl, long revision, String maze) {
-        this(result, acl, revision, maze, "", "", "");
+        this(result, acl, revision, maze, "", "", "", "");
     }
 
     public ParcelDenyResponse(String result, String acl, long revision) {
-        this(result, acl, revision, "", "", "", "");
+        this(result, acl, revision, "", "", "", "", "");
     }
 }
