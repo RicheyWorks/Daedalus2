@@ -481,6 +481,7 @@ public final class WorldOps {
         out.put("driveActor", actorInChunk(world, cc));
         out.put("driveAt", atInChunk(world, cc));
         out.put("maze", mazeInChunk(world, cc));
+        out.put("mazes", mazesInChunk(world, cc));
         out.put("lease", leasesInChunk(world, cc));
         out.put("acl", aclInChunk(world, cc));
         return out;

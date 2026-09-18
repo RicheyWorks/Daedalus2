@@ -169,7 +169,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.lease", equalTo("")))
                 .andExpect(jsonPath("$.acl", equalTo("")))
                 .andExpect(jsonPath("$.place", equalTo("")))
-                .andExpect(jsonPath("$.lots", equalTo("")));
+                .andExpect(jsonPath("$.lots", equalTo("")))
+                .andExpect(jsonPath("$.mazes", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero/chunk").param("x", "4").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
@@ -185,7 +186,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.lease", equalTo("")))
                 .andExpect(jsonPath("$.acl", equalTo("")))
                 .andExpect(jsonPath("$.place", equalTo("")))
-                .andExpect(jsonPath("$.lots", equalTo("")));
+                .andExpect(jsonPath("$.lots", equalTo("")))
+                .andExpect(jsonPath("$.mazes", equalTo("")));
 
         mvc.perform(delete("/api/v1/world/world-zero/block")
                         .param("x", "1").param("y", "2").param("z", "3"))
@@ -1100,6 +1102,8 @@ class WorldControllerTest {
                         .param("x", "0").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.maze", equalTo(again.metadata().id().toString())))
+                .andExpect(jsonPath("$.mazes", equalTo(
+                        cached.metadata().id() + " · " + again.metadata().id())))
                 .andExpect(jsonPath("$.lease", equalTo("tenant-zero")))
                 .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))))
                 .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString(" · "))))
@@ -1110,6 +1114,7 @@ class WorldControllerTest {
                         .param("x", "4").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.maze", equalTo("")))
+                .andExpect(jsonPath("$.mazes", equalTo("")))
                 .andExpect(jsonPath("$.lease", equalTo("")))
                 .andExpect(jsonPath("$.place", equalTo("")))
                 .andExpect(jsonPath("$.lot", equalTo("")))

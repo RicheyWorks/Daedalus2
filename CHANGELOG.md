@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **GET /chunk names every slab maze.**
+  Chunk inspect lists every lab maze
+  UUID whose slab overlaps this 16³,
+  oldest first. Empty until a mazeRef
+  is bound. No wallet types.
+
 - **GET /chunk names the last slab maze.**
   Chunk inspect names the newest lab
   maze UUID whose slab overlaps this
