@@ -186,6 +186,7 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.place", equalTo("")))
                 .andExpect(jsonPath("$.lot", equalTo("")))
                 .andExpect(jsonPath("$.box", equalTo("")))
+                .andExpect(jsonPath("$.maze", equalTo("")))
                 .andExpect(jsonPath("$.acl", equalTo("")))
                 .andExpect(jsonPath("$.drive", equalTo("")))
                 .andExpect(jsonPath("$.driveActor", equalTo("")))
@@ -297,7 +298,8 @@ class WorldControllerTest {
 
         mvc.perform(get("/api/v1/world/world-zero/door"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.box", equalTo("0,0,0-2,1,2")));
+                .andExpect(jsonPath("$.box", equalTo("0,0,0-2,1,2")))
+                .andExpect(jsonPath("$.maze", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero/trap"))
                 .andExpect(status().isOk())
@@ -664,6 +666,9 @@ class WorldControllerTest {
         extra.perform(get("/api/v1/world/world-zero/npc"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.box", equalTo("0,0,0-6,1,6")));
+        extra.perform(get("/api/v1/world/world-zero/door"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())));
         MazeGenerationService.Cached again = gen.generate("recursive-backtracker", 3, 3, 8L);
         extra.perform(post("/api/v1/world/world-zero/stamp")
                         .contentType(MediaType.APPLICATION_JSON)
