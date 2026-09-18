@@ -197,6 +197,7 @@ public final class WorldOps {
         out.put("occupants", occupantsLine(world));
         out.put("stands", standsLine(world));
         out.put("acl", aclLine(world));
+        out.put("acls", aclLine(world));
         out.put("drive", driveLine(world));
         out.put("driveActor", actorLine(world));
         out.put("driveAt", atLine(world));

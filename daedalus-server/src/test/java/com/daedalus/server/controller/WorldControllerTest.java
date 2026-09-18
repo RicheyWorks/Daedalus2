@@ -76,7 +76,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.boxes", equalTo("")))
                 .andExpect(jsonPath("$.leases", equalTo("")))
                 .andExpect(jsonPath("$.mazes", equalTo("")))
-                .andExpect(jsonPath("$.lots", equalTo("")));
+                .andExpect(jsonPath("$.lots", equalTo("")))
+                .andExpect(jsonPath("$.acls", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero/parcels"))
                 .andExpect(status().isOk())
@@ -402,7 +403,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.boxes", equalTo("0,0,0-2,1,2")))
                 .andExpect(jsonPath("$.leases", equalTo("")))
                 .andExpect(jsonPath("$.mazes", equalTo("")))
-                .andExpect(jsonPath("$.lots", equalTo("0,0")));
+                .andExpect(jsonPath("$.lots", equalTo("0,0")))
+                .andExpect(jsonPath("$.acls", equalTo("")));
 
         mvc.perform(post("/api/v1/world/world-zero/stamp")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -890,7 +892,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())))
                 .andExpect(jsonPath("$.mazes", equalTo(cached.metadata().id().toString())))
                 .andExpect(jsonPath("$.lot", equalTo("0,0")))
-                .andExpect(jsonPath("$.lots", equalTo("0,0")));
+                .andExpect(jsonPath("$.lots", equalTo("0,0")))
+                .andExpect(jsonPath("$.acls", equalTo("")));
         extra.perform(post("/api/v1/world/world-zero/parcels/grant")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0}"))
@@ -1057,7 +1060,16 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.box", equalTo("8,0,0-14,1,6")))
                 .andExpect(jsonPath("$.boxes", equalTo("0,0,0-6,1,6 · 8,0,0-14,1,6")))
                 .andExpect(jsonPath("$.lease", equalTo("tenant-zero")))
-                .andExpect(jsonPath("$.leases", equalTo("tenant-zero")));
+                .andExpect(jsonPath("$.leases", equalTo("tenant-zero")))
+                .andExpect(jsonPath("$.acls", equalTo("bob block.place")));
+        extra.perform(post("/api/v1/world/world-zero/parcels/grant")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"actorId\":\"carol\",\"x\":8,\"y\":0,\"z\":0,\"verb\":\"door.open\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("GRANTED")));
+        extra.perform(get("/api/v1/world/world-zero"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.acls", equalTo("bob block.place · carol door.open")));
         extra.perform(get("/api/v1/world/world-zero/block")
                         .param("x", "0").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
