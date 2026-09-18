@@ -193,8 +193,10 @@
         ? chunk.street : "";
     const lots = chunk && chunk.lot && chunk.lots !== chunk.lot
         ? chunk.lots : "";
-    const at = chunk && [chunk.place, street, chunk.lot, lots, chunk.occupants, chunk.stands,
-        chunk.drive, chunk.driveActor, chunk.driveAt]
+    const mazes = chunk && chunk.maze && chunk.mazes !== chunk.maze
+        ? chunk.mazes : "";
+    const at = chunk && [chunk.place, street, chunk.lot, lots, chunk.maze, mazes,
+        chunk.occupants, chunk.stands, chunk.drive, chunk.driveActor, chunk.driveAt]
         .filter(Boolean).join(" ");
     const slice = occupied
         ? "0,0,0 occupied " + chunk.occupied + (at ? " " + at : "")

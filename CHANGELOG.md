@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well chunk last and every maze.**
+  The well chunk row paints the newest
+  lab maze UUID on 0,0,0, then every
+  overlapping bind when they differ.
+  Empty until a mazeRef. No wallet
+  types.
+
 - **GET /chunk names every slab maze.**
   Chunk inspect lists every lab maze
   UUID whose slab overlaps this 16³,
