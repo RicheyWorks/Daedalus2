@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **NPC inspect names the slab maze.**
+  GET /npc names the lab maze UUID
+  the plot was stamped from. Empty
+  off the street — the default 1×1
+  slab misses 3,1,0. No wallet types.
+
 - **Portal inspect names the slab maze.**
   GET /portal names the lab maze UUID
   the plot was stamped from. Empty

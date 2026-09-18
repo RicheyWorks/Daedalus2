@@ -275,6 +275,7 @@ class WorldBuilderTest {
         assertThat(npc.get("place")).isEqualTo("");
         assertThat(npc.get("lot")).isEqualTo("");
         assertThat(npc.get("box")).isEqualTo("");
+        assertThat(npc.get("maze")).isEqualTo("");
         assertThat(npc.get("acl")).isEqualTo("");
         @SuppressWarnings("unchecked")
         Map<String, Object> onDoor = (Map<String, Object>) builder.run(
@@ -399,6 +400,7 @@ class WorldBuilderTest {
         Map<String, Object> npcOnLot = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "npc.inspect", null));
         assertThat(npcOnLot.get("box")).isEqualTo("0,0,0-6,1,6");
+        assertThat(npcOnLot.get("maze")).isEqualTo(mazeRef);
         @SuppressWarnings("unchecked")
         Map<String, Object> doorOnLot = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "door.inspect", null));

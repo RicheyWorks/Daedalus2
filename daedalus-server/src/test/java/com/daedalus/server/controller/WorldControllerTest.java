@@ -263,6 +263,7 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.id", equalTo("npc-zero")))
                 .andExpect(jsonPath("$.state", equalTo("IDLE")))
                 .andExpect(jsonPath("$.box", equalTo("")))
+                .andExpect(jsonPath("$.maze", equalTo("")))
                 .andExpect(jsonPath("$.acl", equalTo("")))
                 .andExpect(jsonPath("$.drive", equalTo("")))
                 .andExpect(jsonPath("$.driveActor", equalTo("")))
@@ -315,7 +316,8 @@ class WorldControllerTest {
 
         mvc.perform(get("/api/v1/world/world-zero/npc"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.box", equalTo("")));
+                .andExpect(jsonPath("$.box", equalTo("")))
+                .andExpect(jsonPath("$.maze", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero"))
                 .andExpect(status().isOk())
@@ -669,7 +671,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.parcels[0].box", equalTo("0,0,0-6,1,6")));
         extra.perform(get("/api/v1/world/world-zero/npc"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.box", equalTo("0,0,0-6,1,6")));
+                .andExpect(jsonPath("$.box", equalTo("0,0,0-6,1,6")))
+                .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())));
         extra.perform(get("/api/v1/world/world-zero/door"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())));
