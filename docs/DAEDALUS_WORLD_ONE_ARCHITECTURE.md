@@ -330,7 +330,8 @@ explore occupancy under the boots, and
 observe occupant on the aimed cube, and
 chunk.inspect occupants, and
 desktop chunk occupants, and
-world.inspect occupants
+world.inspect occupants, and
+explore hall occupants
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

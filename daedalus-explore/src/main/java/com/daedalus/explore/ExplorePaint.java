@@ -911,10 +911,34 @@ public final class ExplorePaint {
         if (last != null) {
             String lot = lastParcelLot(blocks);
             String named = lot == null ? last : last + " " + lot;
-            return withOccupancy(occ, named);
+            return withOccupants(named, blocks);
         }
         String cube = blockPlaceName(blocks, body);
-        return withOccupancy(occ, cube == null ? "HALL" : cube);
+        if (cube != null) {
+            return withOccupancy(occ, cube);
+        }
+        String who = occupantsName(blocks);
+        return who != null ? who : "HALL";
+    }
+
+    /**
+     * Occupancy objects on this world. Used off a slab so leftover HALL
+     * is not the last word when door-zero still exists.
+     */
+    public static String occupantsName(WorldMesh blocks) {
+        if (blocks == null || blocks.world() == null) {
+            return null;
+        }
+        String found = WorldOps.occupantsLine(blocks.world());
+        return found.isEmpty() ? null : found;
+    }
+
+    private static String withOccupants(String place, WorldMesh blocks) {
+        String who = occupantsName(blocks);
+        if (who == null) {
+            return place;
+        }
+        return place + " · " + who;
     }
 
     /**

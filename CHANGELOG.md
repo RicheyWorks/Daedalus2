@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore hall occupants.**
+  Off a slab the caption lists door, trap, portal, and NPC
+  after the newest street, or instead of leftover HALL when
+  the world has no plots. Start and goal still lead.
+
 - **World inspect occupants.**
   world.inspect lists door, trap, portal, and NPC. The well
   paints that row from inspect, not a second chunk join.
