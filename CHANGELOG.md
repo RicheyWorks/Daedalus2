@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Door open names the slab maze.**
+  POST /door/open and /door/close name
+  the lab maze UUID under that cube.
+  Empty when the door sits off a
+  stamped plot. No wallet types.
+
 - **Release names the remaining box.**
   POST /parcels/release names the
   inclusive AABB still rented after
