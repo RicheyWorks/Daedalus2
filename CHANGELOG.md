@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well world row depth.**
+  Street-list gold falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP leftover
+  even world frame gold stays.
+
 - **Well campaign frame depth.**
   Run-panel gold falls off toward
   floor-dim with the same 0.22 as halls,
