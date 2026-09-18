@@ -473,7 +473,7 @@ public final class WorldOps {
         out.put("plots", plotsInChunk(world, cc));
         out.put("street", streetInChunk(world, cc));
         out.put("place", placeInChunk(world, cc));
-        out.put("lot", lotsInChunk(world, cc));
+        out.put("lot", lotInChunk(world, cc));
         out.put("occupants", occupantsInChunk(world, cc));
         out.put("stands", standsInChunk(world, cc));
         out.put("drive", driveInChunk(world, cc));
@@ -598,6 +598,25 @@ public final class WorldOps {
     /** Slab origins whose AABB overlaps this 16³, as {@code x,z}. Oldest first. */
     public static String lotsInChunk(World world, ChunkCoordinate cc) {
         return joinInChunk(world, cc, false);
+    }
+
+    /**
+     * Newest slab origin whose AABB overlaps this 16³, as {@code x,z}.
+     * Empty off a stamp.
+     */
+    public static String lotInChunk(World world, ChunkCoordinate cc) {
+        if (world == null || cc == null) {
+            return "";
+        }
+        ParcelBounds box = chunkBox(cc);
+        String found = "";
+        for (Parcel parcel : world.parcels()) {
+            if (parcel == null || !parcel.bounds().overlaps(box)) {
+                continue;
+            }
+            found = parcel.bounds().minX() + "," + parcel.bounds().minZ();
+        }
+        return found;
     }
 
     /** Lab maze ids whose slab overlaps this 16³. Oldest first. Not a wallet. */

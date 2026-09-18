@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **GET /chunk names the last slab lot.**
+  Chunk inspect names the newest slab
+  origin whose AABB overlaps this 16³,
+  as x,z. Empty until a stamp. No
+  wallet types.
+
 - **Well chunk last place.**
   The well chunk row paints the newest
   inspired toponym whose slab overlaps

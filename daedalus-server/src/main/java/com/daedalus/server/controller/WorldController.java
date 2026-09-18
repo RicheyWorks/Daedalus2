@@ -343,7 +343,7 @@ public class WorldController {
         int plots = WorldOps.plotsInChunk(world, cc);
         String street = WorldOps.streetInChunk(world, cc);
         String place = WorldOps.placeInChunk(world, cc);
-        String lot = WorldOps.lotsInChunk(world, cc);
+        String lot = WorldOps.lotInChunk(world, cc);
         String occupants = WorldOps.occupantsInChunk(world, cc);
         String stands = WorldOps.standsInChunk(world, cc);
         String drive = WorldOps.driveInChunk(world, cc);
