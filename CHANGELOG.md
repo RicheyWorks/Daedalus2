@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcel directory names the slab box.**
+  GET /parcels names the inclusive
+  AABB living stays inside, not only
+  the lot origin. Empty until a stamp.
+  No wallet types.
+
 - **Living slab stays in bounds.**
   A living re-project skips cubes
   outside the stamped AABB so a wider

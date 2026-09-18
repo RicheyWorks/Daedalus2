@@ -371,6 +371,10 @@ class WorldBuilderTest {
         assertThat(stamped.outcome()).isEqualTo("APPLIED");
         assertThat(stamped.bounds().maxX()).isEqualTo(6);
         assertThat(stamped.bounds().maxZ()).isEqualTo(6);
+        assertThat(WorldOps.boxLine(stamped.bounds())).isEqualTo("0,0,0-6,1,6");
+        assertThat(WorldOps.boxAt(world, new BlockCoordinate(0, 0, 0))).isEqualTo("0,0,0-6,1,6");
+        assertThat(WorldOps.boxAt(world, new BlockCoordinate(99, 0, 99))).isEmpty();
+        assertThat(WorldOps.boxLine(null)).isEmpty();
         assertThat(world.parcels()).hasSize(1);
         assertThat(world.parcels().get(0).mazeRef()).isEqualTo(mazeRef);
         assertThat(world.parcels().get(0).placeName()).isIn(PlaceNames.STREETS);

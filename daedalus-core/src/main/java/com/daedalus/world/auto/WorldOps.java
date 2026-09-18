@@ -371,6 +371,21 @@ public final class WorldOps {
         return parcel == null ? "" : parcel.bounds().minX() + "," + parcel.bounds().minZ();
     }
 
+    /** Inclusive slab AABB. Empty when the cube is off every plot. */
+    public static String boxAt(World world, BlockCoordinate at) {
+        Parcel parcel = world == null || at == null ? null : world.parcelAt(at);
+        return parcel == null ? "" : boxLine(parcel.bounds());
+    }
+
+    /** Inclusive slab AABB as {@code min-max}. Empty when bounds is null. */
+    public static String boxLine(ParcelBounds bounds) {
+        if (bounds == null) {
+            return "";
+        }
+        return bounds.minX() + "," + bounds.minY() + "," + bounds.minZ()
+                + "-" + bounds.maxX() + "," + bounds.maxY() + "," + bounds.maxZ();
+    }
+
     public static String leaseAt(World world, BlockCoordinate at) {
         Parcel parcel = world == null || at == null ? null : world.parcelAt(at);
         return parcel == null ? "" : parcel.leaseId();

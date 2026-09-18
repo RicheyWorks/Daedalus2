@@ -636,7 +636,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.maxZ", equalTo(6)));
         extra.perform(get("/api/v1/world/world-zero/parcels"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.parcels[0].mazeRef", equalTo(cached.metadata().id().toString())));
+                .andExpect(jsonPath("$.parcels[0].mazeRef", equalTo(cached.metadata().id().toString())))
+                .andExpect(jsonPath("$.parcels[0].box", equalTo("0,0,0-6,1,6")));
         MazeGenerationService.Cached again = gen.generate("recursive-backtracker", 3, 3, 8L);
         extra.perform(post("/api/v1/world/world-zero/stamp")
                         .contentType(MediaType.APPLICATION_JSON)
