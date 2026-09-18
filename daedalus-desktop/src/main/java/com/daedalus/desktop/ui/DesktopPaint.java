@@ -395,6 +395,12 @@ public final class DesktopPaint {
     }
     /** Solver ribbon — same alpha as {@code draw.js} {@code paintWalk}. */
     public static final double PATH_ALPHA = 0.85;
+    /** Same ice as well {@code COLORS.path}. */
+    public static final String PATH = "#8fb8ff";
+
+    public static String expansionInk(double edge) {
+        return fieldInk(PATH, edge);
+    }
     /** Same torch gold as {@code draw.js} {@code PLAYER_COLORS[0]}. */
     public static final String PLAYER = "#f5c14a";
 

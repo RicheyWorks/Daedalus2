@@ -874,6 +874,11 @@ class DesktopPaintTest {
                 {TileType.WALL, TileType.PASSAGE, TileType.PASSAGE, TileType.PASSAGE, TileType.WALL},
                 {TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL},
         };
+        assertThat(DesktopPaint.PATH).isEqualTo("#8fb8ff");
+        assertThat(DesktopPaint.expansionInk(0)).isEqualTo(DesktopPaint.PATH);
+        assertThat(DesktopPaint.expansionInk(1))
+                .as("search wash falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.PATH);
         assertThat(DesktopPaint.expansionCells(shown))
                 .containsExactly(
                         new DesktopPaint.TileRect(1, 1),
