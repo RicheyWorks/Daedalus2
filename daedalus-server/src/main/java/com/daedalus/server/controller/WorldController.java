@@ -115,7 +115,7 @@ public class WorldController {
                 WorldOps.lastPlaceName(world), WorldOps.occupantsLine(world),
                 WorldOps.standsLine(world), WorldOps.aclLine(world),
                 WorldOps.driveLine(world), WorldOps.actorLine(world),
-                WorldOps.atLine(world)));
+                WorldOps.atLine(world), WorldOps.lastBox(world)));
     }
 
     @GetMapping("/world/{id}/parcels")

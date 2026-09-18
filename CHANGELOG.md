@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World inspect names the last box.**
+  GET /world names the inclusive AABB
+  of the newest slab. Empty until
+  stamp.apply. No wallet types.
+
 - **Trace names the slab ACL.**
   GET /trace names the extra-list
   under each driven cube. Empty when

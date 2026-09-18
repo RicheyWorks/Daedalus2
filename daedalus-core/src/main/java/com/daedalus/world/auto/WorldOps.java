@@ -189,6 +189,7 @@ public final class WorldOps {
         out.put("maze", streetMazes(world));
         out.put("lease", lastLeaseId(world));
         out.put("place", lastPlaceName(world));
+        out.put("box", lastBox(world));
         out.put("occupants", occupantsLine(world));
         out.put("stands", standsLine(world));
         out.put("acl", aclLine(world));
@@ -1185,6 +1186,15 @@ public final class WorldOps {
         }
         Parcel last = world.parcels().get(world.parcels().size() - 1);
         return last.bounds().minX() + "," + last.bounds().minZ();
+    }
+
+    /** Inclusive AABB of the newest slab. Empty when the street has no plots. */
+    public static String lastBox(World world) {
+        if (world == null || world.parcels().isEmpty()) {
+            return "";
+        }
+        Parcel last = world.parcels().get(world.parcels().size() - 1);
+        return last == null ? "" : boxLine(last.bounds());
     }
 
     /** All lab maze ids on the street, oldest first. Not a wallet. */
