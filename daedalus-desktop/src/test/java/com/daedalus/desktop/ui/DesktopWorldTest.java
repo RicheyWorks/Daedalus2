@@ -92,6 +92,8 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.PLACE_INK).isEqualTo("#94612e");
         assertThat(DesktopWorld.PLACE_CLASS).isEqualTo("world-place");
         assertThat(DesktopWorld.firstPlace(World.zero())).isEmpty();
+        assertThat(DesktopWorld.places(World.zero())).isEmpty();
+        assertThat(DesktopWorld.places(null)).isEmpty();
         assertThat(DesktopWorld.lastBox(World.zero())).isEmpty();
         assertThat(DesktopWorld.lastLot(World.zero())).isEmpty();
         assertThat(DesktopWorld.streetLots(World.zero())).isEmpty();
@@ -246,6 +248,8 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.lastPlace(two)).isNotEqualTo(DesktopWorld.firstPlace(two));
         assertThat(DesktopWorld.streetLine(two))
                 .isEqualTo(DesktopWorld.firstPlace(two) + " · " + DesktopWorld.lastPlace(two));
+        assertThat(DesktopWorld.places(two)).isEqualTo(DesktopWorld.streetLine(two));
+        assertThat(DesktopWorld.places(two)).isNotEqualTo(DesktopWorld.lastPlace(two));
         assertThat(DesktopWorld.lastLot(two)).isEqualTo("8,0");
         assertThat(DesktopWorld.streetLots(two)).isEqualTo("0,0 · 8,0");
         assertThat(DesktopWorld.lastBox(two)).isEqualTo("8,0,0-14,1,6");
@@ -258,6 +262,7 @@ class DesktopWorldTest {
                 .contains(second.metadata().id().toString())
                 .contains(DesktopWorld.firstPlace(two))
                 .contains(DesktopWorld.lastPlace(two))
+                .contains(DesktopWorld.places(two))
                 .contains(DesktopWorld.streetLine(two))
                 .contains("0,0")
                 .contains("8,0")

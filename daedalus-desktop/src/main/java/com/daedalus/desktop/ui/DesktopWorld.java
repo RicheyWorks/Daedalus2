@@ -87,9 +87,9 @@ public final class DesktopWorld {
             return ID + " · unavailable";
         }
         String line = inspectLine(world.revision().value(), world.parcels().size(),
-                lastPlace(world), streetLine(world), lastLot(world), streetLots(world),
-                lastLease(world), streetLeases(world), lastMaze(world), streetMazes(world),
-                lastBox(world), streetBoxes(world), last);
+                lastPlace(world), streetLine(world), places(world), lastLot(world),
+                streetLots(world), lastLease(world), streetLeases(world), lastMaze(world),
+                streetMazes(world), lastBox(world), streetBoxes(world), last);
         String occ = occupancyLine(world);
         if (occ.isEmpty()) {
             occ = chunkOccupants(world, last);
@@ -206,6 +206,13 @@ public final class DesktopWorld {
     public static String inspectLine(long revision, int plots, String place, String street,
             String lot, String lots, String lease, String leases, String maze, String mazes,
             String box, String boxes, WorldEventFrame last) {
+        return inspectLine(revision, plots, place, street, "", lot, lots, lease, leases, maze,
+                mazes, box, boxes, last);
+    }
+
+    public static String inspectLine(long revision, int plots, String place, String street,
+            String places, String lot, String lots, String lease, String leases, String maze,
+            String mazes, String box, String boxes, WorldEventFrame last) {
         String head = ID + " r=" + revision;
         if (plots > 1) {
             head += " · " + plots + " plots";
@@ -213,7 +220,11 @@ public final class DesktopWorld {
         if (place != null && !place.isBlank()) {
             head += " · " + place;
         }
-        if (street != null && !street.isBlank() && !street.equals(place)) {
+        if (places != null && !places.isBlank() && !places.equals(place)) {
+            head += " · " + places;
+        }
+        if (street != null && !street.isBlank() && !street.equals(place)
+                && !street.equals(places)) {
             head += " · " + street;
         }
         if (lot != null && !lot.isBlank()) {
@@ -438,6 +449,11 @@ public final class DesktopWorld {
     /** All inspired toponyms on inspect — not GIS. */
     public static String streetLine(World world) {
         return WorldOps.streetLine(world);
+    }
+
+    /** All inspired toponyms on inspect — same well places row, not GIS. */
+    public static String places(World world) {
+        return streetLine(world);
     }
 
     /** Newest slab origin as {@code x,z}. */

@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop inspect names every slab place.**
+  Desktop inspect lists every inspired
+  toponym, oldest first. Street stays
+  the older alias. Empty until a stamp.
+  No wallet types.
+
 - **Well chunk last and every place.**
   The well chunk row paints the newest
   toponym on 0,0,0, then every
