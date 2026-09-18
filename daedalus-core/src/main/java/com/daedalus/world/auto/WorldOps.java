@@ -412,6 +412,11 @@ public final class WorldOps {
         return placeAt(world, parseAt(atLine));
     }
 
+    /** minX,minZ under a driven {@code x,y,z} line. Empty off a stamped plot. */
+    public static String lotOn(World world, String atLine) {
+        return lotAt(world, parseAt(atLine));
+    }
+
     public static BlockCoordinate parseAt(String line) {
         if (line == null || line.isBlank()) {
             return null;

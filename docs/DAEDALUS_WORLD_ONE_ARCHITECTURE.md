@@ -517,7 +517,8 @@ npc talk names the slab ACL, and
 block place names the slab ACL, and
 trace names the slab maze, and
 trace names the slab lease, and
-trace names the slab place
+trace names the slab place, and
+trace names the slab lot
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
