@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well empty caption detail depth.**
+  Idle khaki lines fall off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even sand is not the last
+  word on an empty well.
+
 - **Desktop empty caption title depth.**
   Idle gold line falls off toward
   floor-dim with the same 0.22 as halls,

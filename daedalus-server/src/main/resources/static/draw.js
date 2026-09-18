@@ -403,6 +403,14 @@
     return emptyCaptionTitleInk().replace("rgb(", "rgba(").replace(")", "," + alpha + ")");
   }
 
+  function emptyCaptionDetailInk() {
+    return mixHex("#8c764e", COLORS.floorDim, 0.22);
+  }
+
+  function emptyCaptionDetailGlow(alpha) {
+    return emptyCaptionDetailInk().replace("rgb(", "rgba(").replace(")", "," + alpha + ")");
+  }
+
   function startTileInk(tr, tc, th, tw) {
     const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
     const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
@@ -1112,7 +1120,7 @@
     g.fillStyle = emptyCaptionTitleGlow(0.72 + 0.18 * wave);
     g.font = "13px Bahnschrift, \"Segoe UI\", sans-serif";
     g.fillText("Pick a generator and press Generate", cx, cy + 78);
-    g.fillStyle = "rgba(140, 118, 78, " + (0.55 + 0.20 * wave) + ")";
+    g.fillStyle = emptyCaptionDetailGlow(0.55 + 0.20 * wave);
     g.fillText("then Solve to watch a route unfold", cx, cy + 98);
     g.fillText("or open a session and play", cx, cy + 116);
   }
