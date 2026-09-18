@@ -872,15 +872,20 @@
         g.globalAlpha = 1;
         if (!(lane.pathProg > 0) && shown > 0) {
           const raceTip = lane.expansions[shown - 1];
-          pathHead(g, geom, raceTip, li === 0 ? lane.color
+          pathHead(g, geom, raceTip, li === 0
+              ? expansionTileInk(2 * raceTip.row + 1, 2 * raceTip.col + 1, th, tw)
               : victoryTileInk(2 * raceTip.row + 1, 2 * raceTip.col + 1, th, tw));
         }
         if (lane.pathProg > 0 && lane.path && lane.path.length) {
           paintWalk(g, geom, lane.path, lane.color, lane.pathProg, li === 0 ? 0.85 : 0.58, "ribbon",
-              li === 0 ? null : (tr, tc) => victoryTileInk(tr, tc, th, tw));
+              li === 0
+                  ? (tr, tc) => expansionTileInk(tr, tc, th, tw)
+                  : (tr, tc) => victoryTileInk(tr, tc, th, tw));
           const raceHead = walkHead(lane.path, lane.pathProg);
-          pathHead(g, geom, raceHead, li === 0 || !raceHead ? lane.color
-              : victoryTileInk(2 * raceHead.row + 1, 2 * raceHead.col + 1, th, tw));
+          pathHead(g, geom, raceHead, !raceHead ? lane.color
+              : li === 0
+                  ? expansionTileInk(2 * raceHead.row + 1, 2 * raceHead.col + 1, th, tw)
+                  : victoryTileInk(2 * raceHead.row + 1, 2 * raceHead.col + 1, th, tw));
         }
       });
     }
