@@ -375,7 +375,7 @@ public class WorldController {
                 WorldOps.aclAt(world, door.at()),
                 WorldOps.driveOn(world, door.at()), WorldOps.actorOn(world, door.at()),
                 WorldOps.atOn(world, door.at()), WorldOps.boxAt(world, door.at()),
-                WorldOps.mazeAt(world, door.at())));
+                WorldOps.mazeAt(world, door.at()), WorldOps.leaseAt(world, door.at())));
     }
 
     @PostMapping("/world/{id}/door/open")

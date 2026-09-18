@@ -252,7 +252,15 @@ class WorldBuilderTest {
         assertThat(door.get("lot")).isEqualTo("0,0");
         assertThat(door.get("box")).isEqualTo("0,0,0-2,1,2");
         assertThat(door.get("maze")).isEqualTo("");
+        assertThat(door.get("lease")).isEqualTo("");
         assertThat(door.get("acl")).isEqualTo("");
+        assertThat(builder.run(new WorldBuilder.Step(
+                new BlockCoordinate(0, 0, 0), "parcel.lease", null)))
+                .isEqualTo(ParcelLeaseResult.LEASED);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> leased = (Map<String, Object>) builder.run(
+                new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "door.inspect", null));
+        assertThat(leased.get("lease")).isEqualTo(Parcel.SYSTEM_TENANT);
         @SuppressWarnings("unchecked")
         Map<String, Object> trap = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "trap.inspect", null));
