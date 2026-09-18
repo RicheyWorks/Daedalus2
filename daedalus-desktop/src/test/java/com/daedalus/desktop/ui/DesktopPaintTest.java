@@ -407,6 +407,9 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.walkTrailInk(DesktopPaint.RACE_A, 1))
                 .as("race-A wash falls off toward floor-dim")
                 .isNotEqualTo(DesktopPaint.RACE_A);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.RACE_A, 1))
+                .as("race-A ribbon and tip fall off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.walkTrailInk(DesktopPaint.RACE_A, 0));
         assertThat(DesktopPaint.RACE_B).isEqualTo("#f0b429");
         assertThat(DesktopPaint.walkTrailInk(DesktopPaint.RACE_B, 0))
                 .isEqualTo(DesktopPaint.RACE_B);
