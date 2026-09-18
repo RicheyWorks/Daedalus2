@@ -45,6 +45,11 @@ public final class DesktopPaint {
     public static String emptyWordmarkMintInk() {
         return mixHex(EMPTY_WORDMARK_GLOW, FLOOR_DIM, 0.22);
     }
+
+    /** Same 0.22 as halls — leftover even torch is not the last word on an empty well. */
+    public static String emptyWordmarkGoldInk() {
+        return mixHex(EMPTY_WORDMARK_GOLD, FLOOR_DIM, 0.22);
+    }
     public static final String EMPTY_TITLE = "Pick a generator and click Generate";
     public static final String EMPTY_DETAIL = "then Solve to watch a route";
     public static final String EMPTY_HINT = "or walk with arrows or a click";

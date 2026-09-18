@@ -1106,6 +1106,9 @@ class DesktopPaintTest {
                 .as("idle mint aura falls off toward floor-dim")
                 .isNotEqualTo(DesktopPaint.EMPTY_WORDMARK_GLOW);
         assertThat(DesktopPaint.EMPTY_WORDMARK_GOLD).isEqualTo("#f5c14a");
+        assertThat(DesktopPaint.emptyWordmarkGoldInk())
+                .as("idle gold aura falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.EMPTY_WORDMARK_GOLD);
         assertThat(DesktopPaint.EMPTY_WORDMARK_GLOW_RADIUS).isEqualTo(28);
         assertThat(DesktopPaint.EMPTY_WORDMARK_GOLD_RADIUS).isEqualTo(48);
         assertThat(DesktopPaint.EMPTY_BREATH_MS).isEqualTo(4500);
