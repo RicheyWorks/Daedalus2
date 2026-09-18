@@ -1046,6 +1046,20 @@ public final class WorldOps {
         return found;
     }
 
+    /** Lab maze id on the newest leased slab. Empty if vacant. Not a wallet. */
+    public static String lastLeaseMaze(World world) {
+        if (world == null) {
+            return "";
+        }
+        String found = "";
+        for (Parcel parcel : world.parcels()) {
+            if (parcel != null && !parcel.leaseId().isEmpty()) {
+                found = parcel.mazeRef();
+            }
+        }
+        return found;
+    }
+
     /** All inspired toponyms on the street, oldest first. Not GIS. */
     public static String streetLine(World world) {
         if (world == null) {

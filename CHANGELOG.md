@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Lease names the slab maze.**
+  POST /parcels/lease names the lab
+  maze UUID on the plot just rented.
+  Empty on NO_PARCEL or a default
+  slab. No wallet types.
+
 - **Stamp names the slab maze.**
   POST /stamp names the lab maze
   UUID the new plot was carved

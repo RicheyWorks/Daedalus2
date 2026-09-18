@@ -444,6 +444,9 @@ class WorldBuilderTest {
         Map<String, Object> npcLeased = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "npc.inspect", null));
         assertThat(npcLeased.get("lease")).isEqualTo(Parcel.SYSTEM_TENANT);
+        assertThat(WorldOps.lastLeaseMaze(world)).isEqualTo(mazeRef);
+        assertThat(WorldOps.lastLeaseMaze(World.zero())).isEmpty();
+        assertThat(WorldOps.lastLeaseMaze(null)).isEmpty();
         @SuppressWarnings("unchecked")
         Map<String, Object> chunkLeased = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "chunk.inspect", null));
