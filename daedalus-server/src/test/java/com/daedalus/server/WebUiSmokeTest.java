@@ -128,7 +128,7 @@ class WebUiSmokeTest {
                 .contains("::-webkit-scrollbar-button { display: none; width: 0; height: 0; }")
                 .contains("::selection { background: rgba(153, 111, 49, 0.35); color: #f2ead8; }")
                 .contains("::-moz-selection { background: rgba(153, 111, 49, 0.35); color: #f2ead8; }")
-                .contains("::target-text { background: rgba(184, 133, 56, 0.35); color: #f2ead8; }")
+                .contains("::target-text { background: rgba(153, 111, 49, 0.35); color: #f2ead8; }")
                 .contains("::search-text { background: rgba(184, 133, 56, 0.35); color: #f2ead8; }")
                 .contains("::search-text:current { background: rgba(184, 133, 56, 0.55); color: #f2ead8; }")
                 .contains("::highlight { background: rgba(184, 133, 56, 0.35); color: #f2ead8; }")
