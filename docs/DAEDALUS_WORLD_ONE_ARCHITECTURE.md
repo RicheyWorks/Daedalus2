@@ -467,7 +467,8 @@ revoke names the slab lease, and
 forgive names the slab lease, and
 stamp names the slab place, and
 lease names the slab place, and
-release names the remaining place
+release names the remaining place, and
+grant names the slab place
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

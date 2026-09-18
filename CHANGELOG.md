@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Grant names the slab place.**
+  POST /parcels/grant names the
+  inspired street under that cube.
+  Empty off a plot. No wallet types.
+
 - **Release names the remaining place.**
   POST /parcels/release names the
   inspired street still rented
