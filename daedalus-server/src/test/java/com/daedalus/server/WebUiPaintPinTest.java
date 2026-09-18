@@ -38,7 +38,7 @@ class WebUiPaintPinTest {
                     .contains("#compareBox tr.pinned { background: #1a1610; -webkit-user-drag: none")
                     .contains("#compareBox tr.solver-row { cursor: pointer; -webkit-user-drag: none")
                     .contains("#compareBox tr.solver-row:hover { background: #1a1610; -webkit-user-drag: none")
-                    .contains("#compareBox tr.pinned:hover { box-shadow: inset 3px 0 0 rgba(184, 133, 56, 0.95); -webkit-user-drag: none")
+                    .contains("#compareBox tr.pinned:hover { box-shadow: inset 3px 0 0 rgba(153, 111, 49, 0.95); -webkit-user-drag: none")
                     .contains("#gate .lede { color: #b09a72; cursor: text; margin: 0 0 22px; max-width: 34rem; font-size: 15px; -webkit-user-drag: none")
                     .contains("#gate article p { margin: 0; color: #b09a72; cursor: text; font-size: 13px; flex: 1; -webkit-user-drag: none")
                     .contains("details .hint { cursor: text; -webkit-user-drag: none")
@@ -716,6 +716,17 @@ class WebUiPaintPinTest {
                             + "                          box-shadow: inset 3px 0 0 rgba(153, 111, 49, 0.85);")
                     .doesNotContain("#compareBox tr.pinned { background: #1a1610; -webkit-user-drag: none;\n"
                             + "                          box-shadow: inset 3px 0 0 rgba(184, 133, 56, 0.85);");
+        }
+    }
+
+    @Test
+    void wellComparePinnedHoverHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("#compareBox tr.pinned:hover { box-shadow: inset 3px 0 0 rgba(153, 111, 49, 0.95); -webkit-user-drag: none; }")
+                    .doesNotContain("#compareBox tr.pinned:hover { box-shadow: inset 3px 0 0 rgba(184, 133, 56, 0.95); -webkit-user-drag: none; }");
         }
     }
 
