@@ -493,6 +493,24 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellLegendPlayerChipsHaveRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("#legend [data-key=\"player\"] i:nth-child(1) {")
+                    .contains("radial-gradient(circle at 45% 40%, #f5c14a 28%, #8a6418)")
+                    .contains("radial-gradient(circle at 45% 40%, #e88868 28%, #8a3828)")
+                    .contains("radial-gradient(circle at 45% 40%, #e8a060 28%, #8a5020)")
+                    .contains("radial-gradient(circle at 45% 40%, #b8a058 28%, #6a5420)")
+                    .doesNotContain("background:#f5c14a;border-radius:50%")
+                    .doesNotContain("background:#e88868;border-radius:50%")
+                    .doesNotContain("background:#e8a060;border-radius:50%")
+                    .doesNotContain("background:#b8a058;border-radius:50%;margin-right:0");
+        }
+    }
+
+    @Test
     void wellWorldPanelListensBesideTheMaze() throws Exception {
         try (InputStream htmlIn = getClass().getResourceAsStream("/static/index.html");
              InputStream worldIn = getClass().getResourceAsStream("/static/world.js");

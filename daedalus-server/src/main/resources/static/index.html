@@ -469,6 +469,16 @@
     background: radial-gradient(circle at 45% 40%, #d4b06a 28%, #6a5428); }
   #legend [data-key="hardest"] i {
     background: radial-gradient(circle at 45% 40%, #f2c94c 28%, #8a6820); }
+  #legend [data-key="player"] i { border-radius: 50%; }
+  #legend [data-key="player"] i:nth-child(1) {
+    background: radial-gradient(circle at 45% 40%, #f5c14a 28%, #8a6418); }
+  #legend [data-key="player"] i:nth-child(2) {
+    background: radial-gradient(circle at 45% 40%, #e88868 28%, #8a3828); }
+  #legend [data-key="player"] i:nth-child(3) {
+    background: radial-gradient(circle at 45% 40%, #e8a060 28%, #8a5020); }
+  #legend [data-key="player"] i:nth-child(4) {
+    margin-right: 0;
+    background: radial-gradient(circle at 45% 40%, #b8a058 28%, #6a5420); }
   #compareBox:empty { display: none; }
   #compareBox { max-height: 22vh; overflow: auto; overscroll-behavior: none; min-width: 0;
                 scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent;
@@ -732,7 +742,7 @@ powershell -File daedalus-explore\run-explore.ps1</pre>
         <span data-key="goal"><i></i>goal</span>
         <span data-key="path"><i></i>solver path</span>
         <span data-key="hotspot"><i style="background:rgba(229,72,77,.5)"></i>hot spot</span>
-        <span data-key="player"><i style="background:#f5c14a;border-radius:50%"></i><i style="background:#e88868;border-radius:50%"></i><i style="background:#e8a060;border-radius:50%"></i><i style="background:#b8a058;border-radius:50%;margin-right:0"></i>players</span>
+        <span data-key="player"><i></i><i></i><i></i><i></i>players</span>
         <span data-key="choke"><i></i>chokepoint</span>
         <span data-key="deadend"><i></i>dead end</span>
         <span data-key="hardest"><i></i>hardest</span>
