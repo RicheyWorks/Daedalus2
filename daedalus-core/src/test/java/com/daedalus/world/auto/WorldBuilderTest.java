@@ -445,8 +445,11 @@ class WorldBuilderTest {
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "npc.inspect", null));
         assertThat(npcLeased.get("lease")).isEqualTo(Parcel.SYSTEM_TENANT);
         assertThat(WorldOps.lastLeaseMaze(world)).isEqualTo(mazeRef);
+        assertThat(WorldOps.lastLeasePlace(world)).isEqualTo(world.parcels().get(0).placeName());
         assertThat(WorldOps.lastLeaseMaze(World.zero())).isEmpty();
+        assertThat(WorldOps.lastLeasePlace(World.zero())).isEmpty();
         assertThat(WorldOps.lastLeaseMaze(null)).isEmpty();
+        assertThat(WorldOps.lastLeasePlace(null)).isEmpty();
         @SuppressWarnings("unchecked")
         Map<String, Object> chunkLeased = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "chunk.inspect", null));
@@ -488,12 +491,15 @@ class WorldBuilderTest {
         assertThat(builder.run(new WorldBuilder.Step(nextLot, "parcel.lease", null)))
                 .isEqualTo(ParcelLeaseResult.LEASED);
         assertThat(WorldOps.lastLeaseMaze(world)).isEqualTo(mazeTwo);
+        assertThat(WorldOps.lastLeasePlace(world)).isEqualTo(world.parcels().get(1).placeName());
         assertThat(builder.run(new WorldBuilder.Step(nextLot, "parcel.release", null)))
                 .isEqualTo(ParcelReleaseResult.RELEASED);
         assertThat(WorldOps.lastLeaseMaze(world)).isEqualTo(mazeTwo);
+        assertThat(WorldOps.lastLeasePlace(world)).isEqualTo(world.parcels().get(1).placeName());
         assertThat(builder.run(new WorldBuilder.Step(nextLot, "parcel.release", null)))
                 .isEqualTo(ParcelReleaseResult.RELEASED);
         assertThat(WorldOps.lastLeaseMaze(world)).isEmpty();
+        assertThat(WorldOps.lastLeasePlace(world)).isEmpty();
     }
 
     @Test
