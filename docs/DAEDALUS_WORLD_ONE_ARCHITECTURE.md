@@ -507,7 +507,8 @@ portal open names the slab box, and
 npc talk names the slab box, and
 block place names the slab maze, and
 block place names the slab lease, and
-block place names the slab place
+block place names the slab place, and
+block place names the slab lot
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
