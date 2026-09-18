@@ -250,6 +250,7 @@ class WorldBuilderTest {
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "door.inspect", null));
         assertThat(door.get("place")).isEqualTo(place);
         assertThat(door.get("lot")).isEqualTo("0,0");
+        assertThat(door.get("box")).isEqualTo("0,0,0-2,1,2");
         assertThat(door.get("acl")).isEqualTo("");
         @SuppressWarnings("unchecked")
         Map<String, Object> trap = (Map<String, Object>) builder.run(

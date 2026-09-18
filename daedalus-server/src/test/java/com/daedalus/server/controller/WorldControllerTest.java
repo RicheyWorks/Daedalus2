@@ -185,6 +185,7 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.state", equalTo("CLOSED")))
                 .andExpect(jsonPath("$.place", equalTo("")))
                 .andExpect(jsonPath("$.lot", equalTo("")))
+                .andExpect(jsonPath("$.box", equalTo("")))
                 .andExpect(jsonPath("$.acl", equalTo("")))
                 .andExpect(jsonPath("$.drive", equalTo("")))
                 .andExpect(jsonPath("$.driveActor", equalTo("")))
@@ -289,6 +290,10 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.parcelId", equalTo("parcel-1")))
                 .andExpect(jsonPath("$.maxX", equalTo(2)))
                 .andExpect(jsonPath("$.maxZ", equalTo(2)))
+                .andExpect(jsonPath("$.box", equalTo("0,0,0-2,1,2")));
+
+        mvc.perform(get("/api/v1/world/world-zero/door"))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.box", equalTo("0,0,0-2,1,2")));
 
         mvc.perform(get("/api/v1/world/world-zero"))

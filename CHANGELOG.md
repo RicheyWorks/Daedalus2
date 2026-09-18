@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Door inspect names the slab box.**
+  GET /door names the inclusive AABB
+  living stays inside when door-zero
+  sits on a plot. Empty off the street.
+  No wallet types.
+
 - **Living slab clears leftover height.**
   A living re-project airs posts in
   the stamped AABB above or below
