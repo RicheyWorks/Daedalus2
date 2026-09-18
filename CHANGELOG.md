@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcel list names each plot ACL.**
+  GET /parcels carries extra grants
+  and denials on that slab. Owner
+  stays implicit. Empty until
+  parcel.grant. No wallet types.
+
 - **Chunk inspect names overlapping ACLs.**
   GET /chunk lists extra grants and
   denials whose plots overlap that

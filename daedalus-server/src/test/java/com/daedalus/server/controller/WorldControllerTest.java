@@ -446,6 +446,9 @@ class WorldControllerTest {
         mvc.perform(get("/api/v1/world/world-zero/chunk").param("x", "4").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.acl", equalTo("")));
+        mvc.perform(get("/api/v1/world/world-zero/parcels"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.parcels[0].acl", equalTo("bob block.place")));
 
         mvc.perform(post("/api/v1/world/world-zero/parcels/grant")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -712,7 +715,8 @@ class WorldControllerTest {
         extra.perform(get("/api/v1/world/world-zero/parcels"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.parcels[0].mazeRef", equalTo(cached.metadata().id().toString())))
-                .andExpect(jsonPath("$.parcels[0].box", equalTo("0,0,0-6,1,6")));
+                .andExpect(jsonPath("$.parcels[0].box", equalTo("0,0,0-6,1,6")))
+                .andExpect(jsonPath("$.parcels[0].acl", equalTo("")));
         extra.perform(get("/api/v1/world/world-zero/observe")
                         .param("x", "0").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
@@ -762,7 +766,9 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.parcels.length()", equalTo(2)))
                 .andExpect(jsonPath("$.parcels[1].mazeRef", equalTo(again.metadata().id().toString())))
                 .andExpect(jsonPath("$.parcels[1].minX", equalTo(8)))
-                .andExpect(jsonPath("$.parcels[1].minZ", equalTo(0)));
+                .andExpect(jsonPath("$.parcels[1].minZ", equalTo(0)))
+                .andExpect(jsonPath("$.parcels[0].acl", equalTo("")))
+                .andExpect(jsonPath("$.parcels[1].acl", equalTo("")));
         extra.perform(get("/api/v1/world/world-zero"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.plots", equalTo(2)))

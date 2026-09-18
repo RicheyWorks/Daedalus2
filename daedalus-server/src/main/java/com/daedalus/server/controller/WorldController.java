@@ -128,7 +128,8 @@ public class WorldController {
                     parcel.id().value(), parcel.ownerId(), parcel.placeName(),
                     parcel.leaseId(), parcel.mazeRef(),
                     parcel.bounds().minX(), parcel.bounds().minZ(), parcel.version(),
-                    WorldOps.boxLine(parcel.bounds())));
+                    WorldOps.boxLine(parcel.bounds()),
+                    WorldOps.aclOf(world, parcel.id())));
         }
         return ResponseEntity.ok(new WorldParcelsResponse(world.id().value(), rows));
     }
