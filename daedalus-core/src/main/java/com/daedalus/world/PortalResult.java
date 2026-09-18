@@ -9,5 +9,6 @@ public enum PortalResult {
     OPENED,
     SEALED,
     ALREADY_OPEN,
-    ALREADY_SEALED
+    ALREADY_SEALED,
+    DENIED
 }

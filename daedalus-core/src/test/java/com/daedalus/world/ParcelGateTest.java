@@ -156,6 +156,30 @@ class ParcelGateTest {
     }
 
     @Test
+    void aStampedPortalUsesTheGate() {
+        World world = World.zero();
+        StampOps.apply(world, new StampRequest(world.id(), new BlockCoordinate(0, 0, 0),
+                new MazeGrid(1, 1), 0, 1));
+        long revision = world.revision().value();
+        assertThat(WorldOps.drive(world, "portal.open", Portal.ZERO_AT, null, null, "carol"))
+                .isEqualTo(PortalResult.DENIED);
+        assertThat(world.portal().state()).isEqualTo(PortalState.SEALED);
+        assertThat(world.revision().value()).isEqualTo(revision);
+        assertThat(WorldOps.grantParcel(world, Portal.ZERO_AT, "bob", "portal.open"))
+                .isEqualTo(ParcelGrantResult.GRANTED);
+        assertThat(WorldOps.drive(world, "portal.open", Portal.ZERO_AT, null, null, "bob"))
+                .isEqualTo(PortalResult.OPENED);
+        assertThat(world.portal().state()).isEqualTo(PortalState.OPEN);
+        assertThat(WorldOps.denyParcel(world, Portal.ZERO_AT, "bob", "portal.open"))
+                .isEqualTo(ParcelDenyResult.DENIED);
+        assertThat(WorldOps.drive(world, "portal.open", Portal.ZERO_AT, null, null, "bob"))
+                .isEqualTo(PortalResult.DENIED);
+        assertThat(world.portal().state()).isEqualTo(PortalState.OPEN);
+        assertThat(WorldOps.drive(world, "portal.open", Portal.ZERO_AT, null, null, null))
+                .isEqualTo(PortalResult.ALREADY_OPEN);
+    }
+
+    @Test
     void boundsContainInclusiveCubes() {
         ParcelBounds box = new ParcelBounds(0, 0, 0, 2, 1, 2);
         assertThat(box.contains(new BlockCoordinate(0, 0, 0))).isTrue();

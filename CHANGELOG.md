@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcel gate on portal.open.**
+  portal.open asks ParcelGate for portal.open. Empty
+  actor is the system owner. DENIED leaves the portal.
+  No wallet types.
+
 - **Well trap actor.**
   well trap.arm and trap.disarm send optional actorId
   (drive type) on the query. Blank stays the system

@@ -82,7 +82,7 @@ public final class WorldOps {
             case "trap.arm" -> armTrap(world, mazeRef);
             case "trap.disarm" -> disarmTrap(world, mazeRef);
             case "portal.inspect" -> inspectPortal(world);
-            case "portal.open" -> world.openPortal();
+            case "portal.open" -> openPortal(world, mazeRef);
             case "portal.seal" -> world.sealPortal();
             case "npc.inspect" -> inspectNpc(world);
             case "npc.talk" -> world.talkNpc();
@@ -156,6 +156,7 @@ public final class WorldOps {
             case DOOR_OPEN -> "door.open";
             case STAMP_APPLY -> "stamp.apply";
             case TRAP_ARM -> "trap.arm";
+            case PORTAL_OPEN -> "portal.open";
         };
     }
 
@@ -172,6 +173,7 @@ public final class WorldOps {
             case "door.open" -> ParcelVerb.DOOR_OPEN;
             case "stamp.apply" -> ParcelVerb.STAMP_APPLY;
             case "trap.arm" -> ParcelVerb.TRAP_ARM;
+            case "portal.open" -> ParcelVerb.PORTAL_OPEN;
             default -> null;
         };
     }
@@ -504,6 +506,21 @@ public final class WorldOps {
         out.put("lot", lotAt(world, portal.at()));
         out.put("acl", aclAt(world, portal.at()));
         return out;
+    }
+
+    /**
+     * Open through {@link ParcelVerb#PORTAL_OPEN}. Empty actor is the
+     * system owner. A stranger needs a grant. DENIED leaves the portal.
+     */
+    public static PortalResult openPortal(World world, String actorId) {
+        if (world.portal() == null) {
+            throw new IllegalStateException("This world has no portal");
+        }
+        String actor = actorId == null || actorId.isBlank() ? Parcel.SYSTEM_OWNER : actorId.trim();
+        if (world.may(actor, ParcelVerb.PORTAL_OPEN, world.portal().at()) == ParcelAccess.DENIED) {
+            return PortalResult.DENIED;
+        }
+        return world.openPortal();
     }
 
     public static PortalResult asPortalResult(Object value) {

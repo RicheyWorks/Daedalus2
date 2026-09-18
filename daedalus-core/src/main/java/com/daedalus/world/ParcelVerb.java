@@ -9,5 +9,6 @@ public enum ParcelVerb {
     BLOCK_PLACE,
     DOOR_OPEN,
     STAMP_APPLY,
-    TRAP_ARM
+    TRAP_ARM,
+    PORTAL_OPEN
 }

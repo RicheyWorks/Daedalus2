@@ -243,10 +243,19 @@ public class WorldService {
     }
 
     public PortalResult openPortal(String id) {
+        return openPortal(id, null);
+    }
+
+    public PortalResult openPortal(String id, String actorId) {
         World live = require(id);
         synchronized (lock) {
-            PortalResult result = live.openPortal();
-            persist();
+            PortalResult result = WorldOps.asPortalResult(
+                    WorldOps.drive(live, "portal.open",
+                            live.portal() == null ? new BlockCoordinate(0, 0, 0) : live.portal().at(),
+                            null, null, actorId));
+            if (result != PortalResult.DENIED) {
+                persist();
+            }
             log.append("portal.open", result, live.revision().value());
             return result;
         }
