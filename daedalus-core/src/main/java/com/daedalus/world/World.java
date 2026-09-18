@@ -49,12 +49,13 @@ public final class World {
                 WorldId.ZERO.equals(id) ? Trap.zero() : null,
                 WorldId.ZERO.equals(id) ? Portal.zero() : null,
                 WorldId.ZERO.equals(id) ? Npc.zero() : null,
-                0L, Map.of(), List.of(), Map.of());
+                0L, Map.of(), List.of(), Map.of(), "", "");
     }
 
     private World(WorldId id, Door door, Trap trap, Portal portal, Npc npc, long revision,
             Map<ChunkCoordinate, Chunk> seeded, List<Parcel> seededParcels,
-            Map<ParcelId, ParcelAcl> seededAcls) {
+            Map<ParcelId, ParcelAcl> seededAcls, String lastDriveCapability,
+            String lastDriveResult) {
         this.id = Objects.requireNonNull(id, "WorldId is required");
         this.door = door;
         this.trap = trap;
@@ -71,6 +72,8 @@ public final class World {
         if (seededAcls != null) {
             this.acls.putAll(seededAcls);
         }
+        this.lastDriveCapability = lastDriveCapability == null ? "" : lastDriveCapability;
+        this.lastDriveResult = lastDriveResult == null ? "" : lastDriveResult;
     }
 
     public static World zero() {
@@ -327,7 +330,9 @@ public final class World {
                     portal == null ? null : portal.copy(),
                     npc == null ? null : npc.copy(),
                     List.copyOf(parcels),
-                    Map.copyOf(copiedAcls));
+                    Map.copyOf(copiedAcls),
+                    lastDriveCapability,
+                    lastDriveResult);
         }
     }
 
@@ -537,7 +542,9 @@ public final class World {
                 snapshot.revision().value(),
                 snapshot.chunks(),
                 snapshot.parcels(),
-                snapshot.acls());
+                snapshot.acls(),
+                snapshot.lastDriveCapability(),
+                snapshot.lastDriveResult());
     }
 
     private static int maxParcelNumber(List<Parcel> existing) {

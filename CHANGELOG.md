@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **DAEW last drive.**
+  World snapshots copy the last driven
+  capability and named result. DAEW v11
+  writes those two strings after the ACL
+  table. A v10 file loads an empty drive.
+  No wallet types.
+
 - **Well inspect drive.**
   GET /world carries the last driven capability and
   named result. The fold paints a drive row. Inspect

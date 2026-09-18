@@ -23,7 +23,7 @@ import java.util.Map;
 public final class WorldStore {
 
     static final byte[] MAGIC = "DAEW".getBytes(StandardCharsets.US_ASCII);
-    static final int VERSION = 10;
+    static final int VERSION = 11;
     static final int VERSION_CHUNKS_ONLY = 1;
     static final int VERSION_WITH_DOOR = 2;
     static final int VERSION_WITH_PARCELS = 3;
@@ -34,6 +34,7 @@ public final class WorldStore {
     static final int VERSION_WITH_LEASE = 8;
     static final int VERSION_WITH_MAZE_REF = 9;
     static final int VERSION_WITH_ACL = 10;
+    static final int VERSION_WITH_DRIVE = 11;
 
     private WorldStore() {
     }
@@ -155,6 +156,8 @@ public final class WorldStore {
             writeGrants(out, e.getValue().grants());
             writeGrants(out, e.getValue().denials());
         }
+        out.writeUTF(snapshot.lastDriveCapability());
+        out.writeUTF(snapshot.lastDriveResult());
     }
 
     static WorldSnapshot read(DataInputStream in) throws IOException {
@@ -266,7 +269,14 @@ public final class WorldStore {
                 acls.put(parcelId, new ParcelAcl(grants, denials));
             }
         }
-        return new WorldSnapshot(id, revision, chunks, door, trap, portal, npc, parcels, acls);
+        String lastDriveCapability = "";
+        String lastDriveResult = "";
+        if (version >= VERSION_WITH_DRIVE) {
+            lastDriveCapability = in.readUTF();
+            lastDriveResult = in.readUTF();
+        }
+        return new WorldSnapshot(id, revision, chunks, door, trap, portal, npc, parcels, acls,
+                lastDriveCapability, lastDriveResult);
     }
 
     private static void writeGrants(DataOutputStream out, List<ParcelAcl.Grant> rows)

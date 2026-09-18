@@ -54,7 +54,7 @@ No blockchain. No microservices. No seventh reactor module until a boundary is f
 | Well world panel | **ADAPT — after second-observer proof** | New panel or hash route. `/` stays the maze well. |
 | Explore voxel view | **ADAPT — last of the client trio** | Second mesh in the same window. Do not stretch `ExploreMesh` over chunks. |
 | Parcel record + `ownerId` string | **ADAPT — with stamp** | Phase 0 designed `Parcel`. World Zero is one implicit parcel (`system`). Stamp needs bounds. |
-| Parcel permissions | **SHIPPED — inspect + grant/deny + gate** | Allow/deny lists exist on the parcel. REST grant/deny extra-list actors. `block.place` asks ParcelGate. DAEW v10 persists extras. No wallet. |
+| Parcel permissions | **SHIPPED — inspect + grant/deny + gate** | Allow/deny lists exist on the parcel. REST grant/deny extra-list actors. `block.place` asks ParcelGate. DAEW v10 persists extras. Last drive persists as DAEW v11. No wallet. |
 | Desktop world inspect | **DEFER** | After REST/STOMP proof. Maze generate/solve stay. |
 | Plugin objects (trap, portal, NPC) | **DEFER** | SPI already advertises ids. New ops + drive rows come one object at a time. Door is the template. |
 | Agent builders | **SHIPPED** | `WorldBuilder` recipes call `WorldOps`. Well `#worldBox` maps the same ids onto existing REST and reads `/trace`. |
@@ -379,7 +379,8 @@ well NPC actor, and
 well builder result, and
 desktop builder result, and
 explore hall last drive, and
-well inspect drive
+well inspect drive, and
+DAEW last drive
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

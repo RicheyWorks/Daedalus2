@@ -19,7 +19,9 @@ public record WorldSnapshot(
         Portal portal,
         Npc npc,
         List<Parcel> parcels,
-        Map<ParcelId, ParcelAcl> acls) {
+        Map<ParcelId, ParcelAcl> acls,
+        String lastDriveCapability,
+        String lastDriveResult) {
 
     public WorldSnapshot {
         Objects.requireNonNull(id, "WorldId is required");
@@ -28,13 +30,21 @@ public record WorldSnapshot(
         chunks = Map.copyOf(chunks);
         parcels = parcels == null ? List.of() : List.copyOf(parcels);
         acls = acls == null ? Map.of() : Map.copyOf(acls);
+        lastDriveCapability = lastDriveCapability == null ? "" : lastDriveCapability;
+        lastDriveResult = lastDriveResult == null ? "" : lastDriveResult;
+    }
+
+    public WorldSnapshot(WorldId id, WorldRevision revision, Map<ChunkCoordinate, Chunk> chunks,
+            Door door, Trap trap, Portal portal, Npc npc, List<Parcel> parcels,
+            Map<ParcelId, ParcelAcl> acls) {
+        this(id, revision, chunks, door, trap, portal, npc, parcels, acls, "", "");
     }
 
     public WorldSnapshot(WorldId id, WorldRevision revision, Map<ChunkCoordinate, Chunk> chunks) {
-        this(id, revision, chunks, null, null, null, null, List.of(), Map.of());
+        this(id, revision, chunks, null, null, null, null, List.of(), Map.of(), "", "");
     }
 
     public WorldSnapshot(WorldId id, WorldRevision revision, Map<ChunkCoordinate, Chunk> chunks, Door door) {
-        this(id, revision, chunks, door, null, null, null, List.of(), Map.of());
+        this(id, revision, chunks, door, null, null, null, List.of(), Map.of(), "", "");
     }
 }

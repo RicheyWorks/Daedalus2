@@ -3,6 +3,7 @@
 package com.daedalus.world;
 
 import com.daedalus.engine.MazeGrid;
+import com.daedalus.world.auto.WorldOps;
 import com.daedalus.world.stamp.StampOps;
 import com.daedalus.world.stamp.StampRequest;
 import org.junit.jupiter.api.Test;
@@ -115,6 +116,23 @@ class WorldStoreTest {
         assertThat(reloaded.acl(id).denies("alice", ParcelVerb.BLOCK_PLACE)).isTrue();
         assertThat(reloaded.acl(id).grants("alice", ParcelVerb.BLOCK_PLACE)).isFalse();
         Path again = tmp.resolve("acl-again.daew");
+        WorldStore.save(reloaded, again);
+        assertThat(Files.readAllBytes(again)).isEqualTo(Files.readAllBytes(file));
+    }
+
+    @Test
+    void lastDriveSurvivesRestart() throws Exception {
+        World live = World.zero();
+        StampOps.apply(live, new StampRequest(live.id(),
+                new BlockCoordinate(0, 0, 0), new MazeGrid(1, 1), 0, 1));
+        assertThat(WorldOps.drive(live, "trap.arm", Trap.ZERO_AT, null, null, "carol"))
+                .isEqualTo(TrapResult.DENIED);
+        assertThat(WorldOps.driveLine(live)).isEqualTo("trap.arm DENIED");
+        Path file = tmp.resolve("drive.daew");
+        WorldStore.save(live, file);
+        World reloaded = WorldStore.load(file);
+        assertThat(WorldOps.driveLine(reloaded)).isEqualTo("trap.arm DENIED");
+        Path again = tmp.resolve("drive-again.daew");
         WorldStore.save(reloaded, again);
         assertThat(Files.readAllBytes(again)).isEqualTo(Files.readAllBytes(file));
     }
