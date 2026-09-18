@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **NPC inspect names the slab lease.**
+  GET /npc names the account key
+  on the plot under npc-zero. Empty
+  off the street — the default 1×1
+  slab misses 3,1,0 even after
+  origin parcel.lease. No wallet types.
+
 - **Portal inspect names the slab lease.**
   GET /portal names the account key
   on the plot under portal-zero.

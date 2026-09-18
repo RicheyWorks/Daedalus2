@@ -286,6 +286,7 @@ class WorldBuilderTest {
         assertThat(npc.get("lot")).isEqualTo("");
         assertThat(npc.get("box")).isEqualTo("");
         assertThat(npc.get("maze")).isEqualTo("");
+        assertThat(npc.get("lease")).isEqualTo("");
         assertThat(npc.get("acl")).isEqualTo("");
         @SuppressWarnings("unchecked")
         Map<String, Object> onDoor = (Map<String, Object>) builder.run(
@@ -411,6 +412,14 @@ class WorldBuilderTest {
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "npc.inspect", null));
         assertThat(npcOnLot.get("box")).isEqualTo("0,0,0-6,1,6");
         assertThat(npcOnLot.get("maze")).isEqualTo(mazeRef);
+        assertThat(npcOnLot.get("lease")).isEqualTo("");
+        assertThat(builder.run(new WorldBuilder.Step(
+                new BlockCoordinate(0, 0, 0), "parcel.lease", null)))
+                .isEqualTo(ParcelLeaseResult.LEASED);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> npcLeased = (Map<String, Object>) builder.run(
+                new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "npc.inspect", null));
+        assertThat(npcLeased.get("lease")).isEqualTo(Parcel.SYSTEM_TENANT);
         @SuppressWarnings("unchecked")
         Map<String, Object> doorOnLot = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "door.inspect", null));

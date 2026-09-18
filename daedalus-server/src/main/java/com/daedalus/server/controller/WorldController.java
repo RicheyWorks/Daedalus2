@@ -507,7 +507,7 @@ public class WorldController {
                 WorldOps.aclAt(world, npc.at()),
                 WorldOps.driveOn(world, npc.at()), WorldOps.actorOn(world, npc.at()),
                 WorldOps.atOn(world, npc.at()), WorldOps.boxAt(world, npc.at()),
-                WorldOps.mazeAt(world, npc.at())));
+                WorldOps.mazeAt(world, npc.at()), WorldOps.leaseAt(world, npc.at())));
     }
 
     @PostMapping("/world/{id}/npc/talk")
