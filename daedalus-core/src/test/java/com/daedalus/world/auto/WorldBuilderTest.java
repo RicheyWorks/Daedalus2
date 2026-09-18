@@ -162,12 +162,14 @@ class WorldBuilderTest {
         assertThat(origin.get("plots")).isEqualTo(1);
         assertThat(origin.get("street")).isEqualTo(world.parcels().get(0).placeName());
         assertThat(origin.get("lot")).isEqualTo("0,0");
+        assertThat(origin.get("occupants")).isEqualTo("door · trap · portal · npc");
         @SuppressWarnings("unchecked")
         Map<String, Object> far = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(new BlockCoordinate(32, 0, 0), "chunk.inspect", null));
         assertThat(far.get("plots")).isEqualTo(1);
         assertThat(far.get("street")).isEqualTo(world.parcels().get(1).placeName());
         assertThat(far.get("lot")).isEqualTo("32,0");
+        assertThat(far.get("occupants")).isEqualTo("");
         World near = World.zero();
         WorldBuilder two = new WorldBuilder(near);
         two.run(new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "stamp.apply", null));

@@ -218,12 +218,13 @@ public class WorldController {
         int plots = WorldOps.plotsInChunk(world, cc);
         String street = WorldOps.streetInChunk(world, cc);
         String lot = WorldOps.lotsInChunk(world, cc);
+        String occupants = WorldOps.occupantsInChunk(world, cc);
         if (chunk == null) {
             return ResponseEntity.ok(new ChunkInspectResponse(
-                    x, y, z, false, null, 0, plots, street, lot));
+                    x, y, z, false, null, 0, plots, street, lot, occupants));
         }
         return ResponseEntity.ok(new ChunkInspectResponse(
-                x, y, z, true, chunk.revision(), chunk.occupied(), plots, street, lot));
+                x, y, z, true, chunk.revision(), chunk.occupied(), plots, street, lot, occupants));
     }
 
     @PutMapping("/world/{id}/block")

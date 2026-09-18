@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Chunk occupants.**
+  chunk.inspect lists door, trap, portal, and NPC when those
+  cells sit in that 16³. A far chunk stays plot-only. The well
+  chunk line prints them.
+
 - **Observe occupant on the aimed cube.**
   Observe and block.inspect name door, trap, portal, or NPC
   when that cell is the occupancy object. A look at 1,2,3

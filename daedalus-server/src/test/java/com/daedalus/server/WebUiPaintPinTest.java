@@ -438,7 +438,8 @@ class WebUiPaintPinTest {
                     .contains("label === \"street\"")
                     .contains("chunk.occupied > 0")
                     .contains("chunk.street")
-                    .contains("chunk.lot");
+                    .contains("chunk.lot")
+                    .contains("chunk.occupants");
             assertThat(world).doesNotContain("/maze/");
             assertThat(world).contains("frame.place")
                     .contains("frame.lot");

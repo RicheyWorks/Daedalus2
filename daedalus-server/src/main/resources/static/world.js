@@ -130,7 +130,7 @@
     row(box, "lease", world && world.lease ? world.lease : "—");
     row(box, "maze", world && world.maze ? world.maze : "—");
     const occupied = chunk && chunk.present && chunk.occupied > 0;
-    const at = chunk && [chunk.street, chunk.lot].filter(Boolean).join(" ");
+    const at = chunk && [chunk.street, chunk.lot, chunk.occupants].filter(Boolean).join(" ");
     const slice = occupied
         ? "0,0,0 occupied " + chunk.occupied + (at ? " " + at : "")
         : (at ? "0,0,0 " + at : "0,0,0 empty");

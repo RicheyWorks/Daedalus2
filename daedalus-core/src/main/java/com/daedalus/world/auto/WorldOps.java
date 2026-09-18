@@ -165,7 +165,29 @@ public final class WorldOps {
         out.put("plots", plotsInChunk(world, cc));
         out.put("street", streetInChunk(world, cc));
         out.put("lot", lotsInChunk(world, cc));
+        out.put("occupants", occupantsInChunk(world, cc));
         return out;
+    }
+
+    /** Occupancy objects whose cell sits in this 16³. Oldest object first. */
+    public static String occupantsInChunk(World world, ChunkCoordinate cc) {
+        if (world == null || cc == null) {
+            return "";
+        }
+        ParcelBounds box = chunkBox(cc);
+        List<String> rows = new ArrayList<>();
+        addOccupantInBox(rows, "door", world.door() == null ? null : world.door().at(), box);
+        addOccupantInBox(rows, "trap", world.trap() == null ? null : world.trap().at(), box);
+        addOccupantInBox(rows, "portal", world.portal() == null ? null : world.portal().at(), box);
+        addOccupantInBox(rows, "npc", world.npc() == null ? null : world.npc().at(), box);
+        return String.join(" · ", rows);
+    }
+
+    private static void addOccupantInBox(List<String> rows, String kind, BlockCoordinate at,
+                                         ParcelBounds box) {
+        if (at != null && box.contains(at)) {
+            rows.add(kind);
+        }
     }
 
     /** Inspired toponyms whose slab overlaps this 16³. Oldest first. */
