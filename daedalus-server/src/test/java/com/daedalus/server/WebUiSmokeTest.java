@@ -375,7 +375,7 @@ class WebUiSmokeTest {
                 .contains("margin: 4px 0 2px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none")
                 .contains("margin: 4px 0 2px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none")
                 .contains("summary::after { content: \" ▸\"; color: rgba(153, 111, 49, 0.55);")
-                .contains("kbd { background: #16120e; border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 3px;")
+                .contains("kbd { background: #16120e; border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 3px;")
                 .contains("padding: 0 4px; font-size: 11px; color: #b09a72; user-select: none")
                 .contains("font-size: 11px; color: #b09a72; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none")
                 .contains("font-size: 11px; color: #b09a72; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none")
