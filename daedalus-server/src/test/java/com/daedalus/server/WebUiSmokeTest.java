@@ -208,7 +208,7 @@ class WebUiSmokeTest {
                 .contains("color: #d4c4a8;")
                 .contains("max-height: 22vh; color: #d4c4a8")
                 .contains("max-height: 22vh; color: #d4c4a8; cursor: text")
-                .contains("#asciiOut .rock { color: #8c764e")
+                .contains("#asciiOut .rock { color: #766442")
                 .contains("#asciiOut .gate { color: #3ee08f")
                 .contains("#asciiOut .exit { color: #ff5a5f")
                 .contains("replace(/#/g, \"<span class=\\\"rock\\\">#</span>\")")

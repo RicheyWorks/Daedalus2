@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well ASCII rock depth.**
+  Dump stone falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even sand is not the last
+  word on the maze page. KEEP gate mint
+  and exit coral stay.
+
 - **Explore automap frame depth.**
   Automap gold lip falls off toward
   floor-dim with the same 0.22 as halls,
