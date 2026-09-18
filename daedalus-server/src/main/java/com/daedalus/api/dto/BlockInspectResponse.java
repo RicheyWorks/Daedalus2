@@ -8,7 +8,8 @@ package com.daedalus.api.dto;
  */
 public record BlockInspectResponse(int x, int y, int z, String type, boolean present,
                                    String place, String lot, String lease, String maze,
-                                   String occupant, String acl, String drive, String driveActor) {
+                                   String occupant, String acl, String drive, String driveActor,
+                                   String driveAt) {
 
     public BlockInspectResponse {
         place = place == null ? "" : place;
@@ -19,17 +20,24 @@ public record BlockInspectResponse(int x, int y, int z, String type, boolean pre
         acl = acl == null ? "" : acl;
         drive = drive == null ? "" : drive;
         driveActor = driveActor == null ? "" : driveActor;
+        driveAt = driveAt == null ? "" : driveAt;
+    }
+
+    public BlockInspectResponse(int x, int y, int z, String type, boolean present,
+                                String place, String lot, String lease, String maze,
+                                String occupant, String acl, String drive, String driveActor) {
+        this(x, y, z, type, present, place, lot, lease, maze, occupant, acl, drive, driveActor, "");
     }
 
     public BlockInspectResponse(int x, int y, int z, String type, boolean present,
                                 String place, String lot, String lease, String maze,
                                 String occupant, String acl) {
-        this(x, y, z, type, present, place, lot, lease, maze, occupant, acl, "", "");
+        this(x, y, z, type, present, place, lot, lease, maze, occupant, acl, "", "", "");
     }
 
     public BlockInspectResponse(int x, int y, int z, String type, boolean present,
                                 String place, String lot, String lease, String maze,
                                 String occupant) {
-        this(x, y, z, type, present, place, lot, lease, maze, occupant, "", "", "");
+        this(x, y, z, type, present, place, lot, lease, maze, occupant, "", "", "", "");
     }
 }

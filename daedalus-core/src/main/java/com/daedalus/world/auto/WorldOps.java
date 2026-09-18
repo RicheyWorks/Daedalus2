@@ -317,6 +317,7 @@ public final class WorldOps {
         out.put("acl", aclAt(world, cell));
         out.put("drive", driveOn(world, cell));
         out.put("driveActor", actorOn(world, cell));
+        out.put("driveAt", atOn(world, cell));
         return out;
     }
 
