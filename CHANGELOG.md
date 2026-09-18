@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World lot under a cube.**
+  block.inspect and observe name the parcel place and x,z lot
+  when the coordinate sits on a slab. Off-plot stays empty.
+
 - **Well paints inspect street.**
   The world panel reads plots, street, lot, maze, lease, and
   place from world.inspect. It no longer joins /parcels by hand.

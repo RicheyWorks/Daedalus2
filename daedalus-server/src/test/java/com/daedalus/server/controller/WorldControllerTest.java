@@ -84,6 +84,8 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.blockType", equalTo("AIR")))
                 .andExpect(jsonPath("$.doorState", equalTo("CLOSED")))
+                .andExpect(jsonPath("$.place", equalTo("")))
+                .andExpect(jsonPath("$.lot", equalTo("")))
                 .andExpect(jsonPath("$.revision", equalTo(0)));
 
         mvc.perform(get("/api/v1/world/world-zero/trace"))
@@ -101,7 +103,9 @@ class WorldControllerTest {
         mvc.perform(get("/api/v1/world/world-zero/block").param("x", "1").param("y", "2").param("z", "3"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.type", equalTo("STONE")))
-                .andExpect(jsonPath("$.present", equalTo(true)));
+                .andExpect(jsonPath("$.present", equalTo(true)))
+                .andExpect(jsonPath("$.place", equalTo("")))
+                .andExpect(jsonPath("$.lot", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero/chunk").param("x", "0").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
@@ -299,5 +303,16 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.lot", equalTo("0,0 · 8,0")))
                 .andExpect(jsonPath("$.maze", equalTo(
                         cached.metadata().id() + " · " + again.metadata().id())));
+        extra.perform(get("/api/v1/world/world-zero/block")
+                        .param("x", "0").param("y", "0").param("z", "0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.lot", equalTo("0,0")))
+                .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())))
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))));
+        extra.perform(get("/api/v1/world/world-zero/observe")
+                        .param("x", "8").param("y", "0").param("z", "0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.lot", equalTo("8,0")))
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))));
     }
 }

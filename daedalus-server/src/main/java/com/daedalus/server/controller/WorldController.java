@@ -171,7 +171,7 @@ public class WorldController {
         Observation seen = worlds.observe(id, x, y, z);
         return ResponseEntity.ok(new WorldObserveResponse(
                 seen.worldId(), seen.revision(), seen.x(), seen.y(), seen.z(),
-                seen.blockType(), seen.doorState()));
+                seen.blockType(), seen.doorState(), seen.place(), seen.lot()));
     }
 
     @GetMapping("/world/{id}/trace")
@@ -193,9 +193,13 @@ public class WorldController {
             @RequestParam @NotNull Integer x,
             @RequestParam @NotNull Integer y,
             @RequestParam @NotNull Integer z) {
-        mounted(id);
-        BlockType type = worlds.inspectBlock(id, x, y, z);
-        return ResponseEntity.ok(new BlockInspectResponse(x, y, z, type.name(), type.solid()));
+        World world = mounted(id);
+        BlockCoordinate at = new BlockCoordinate(x, y, z);
+        BlockType type = world.get(at);
+        return ResponseEntity.ok(new BlockInspectResponse(
+                x, y, z, type.name(), type.solid(),
+                WorldOps.placeAt(world, at), WorldOps.lotAt(world, at),
+                WorldOps.leaseAt(world, at), WorldOps.mazeAt(world, at)));
     }
 
     @GetMapping("/world/{id}/chunk")

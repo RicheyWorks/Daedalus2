@@ -12,11 +12,13 @@ import java.util.Objects;
  * Read-back after a drive. Inspect: taking an observation does not mutate revision.
  */
 public record Observation(String worldId, long revision, int x, int y, int z,
-                          String blockType, String doorState) {
+                          String blockType, String doorState, String place, String lot) {
 
     public Observation {
         Objects.requireNonNull(worldId, "worldId is required");
         Objects.requireNonNull(blockType, "blockType is required");
+        place = place == null ? "" : place;
+        lot = lot == null ? "" : lot;
     }
 
     public static Observation take(World world, WorldAddress address) {
@@ -35,6 +37,8 @@ public record Observation(String worldId, long revision, int x, int y, int z,
                 address.at().y(),
                 address.at().z(),
                 type.name(),
-                door == null ? null : door.state().name());
+                door == null ? null : door.state().name(),
+                WorldOps.placeAt(world, address.at()),
+                WorldOps.lotAt(world, address.at()));
     }
 }

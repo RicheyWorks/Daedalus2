@@ -334,7 +334,8 @@ public final class World {
         }
     }
 
-    private Parcel parcelAt(BlockCoordinate at) {
+    public Parcel parcelAt(BlockCoordinate at) {
+        Objects.requireNonNull(at, "BlockCoordinate is required");
         synchronized (lock) {
             for (Parcel parcel : parcels) {
                 if (parcel.bounds().contains(at)) {

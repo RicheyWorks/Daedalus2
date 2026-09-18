@@ -100,7 +100,31 @@ public final class WorldOps {
         out.put("y", cell.y());
         out.put("z", cell.z());
         out.put("type", type.name());
+        out.put("place", placeAt(world, cell));
+        out.put("lot", lotAt(world, cell));
+        out.put("lease", leaseAt(world, cell));
+        out.put("maze", mazeAt(world, cell));
         return out;
+    }
+
+    public static String placeAt(World world, BlockCoordinate at) {
+        Parcel parcel = world == null || at == null ? null : world.parcelAt(at);
+        return parcel == null ? "" : parcel.placeName();
+    }
+
+    public static String lotAt(World world, BlockCoordinate at) {
+        Parcel parcel = world == null || at == null ? null : world.parcelAt(at);
+        return parcel == null ? "" : parcel.bounds().minX() + "," + parcel.bounds().minZ();
+    }
+
+    public static String leaseAt(World world, BlockCoordinate at) {
+        Parcel parcel = world == null || at == null ? null : world.parcelAt(at);
+        return parcel == null ? "" : parcel.leaseId();
+    }
+
+    public static String mazeAt(World world, BlockCoordinate at) {
+        Parcel parcel = world == null || at == null ? null : world.parcelAt(at);
+        return parcel == null ? "" : parcel.mazeRef();
     }
 
     private static Map<String, Object> inspectChunk(World world, BlockCoordinate at) {

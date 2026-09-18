@@ -34,6 +34,8 @@ class WorldAutomationPipelineTest {
         assertThat(afterPlace.worldId()).isEqualTo("world-zero");
         assertThat(afterPlace.blockType()).isEqualTo("STONE");
         assertThat(afterPlace.doorState()).isEqualTo("CLOSED");
+        assertThat(afterPlace.place()).isEmpty();
+        assertThat(afterPlace.lot()).isEmpty();
         assertThat(afterPlace.x()).isEqualTo(2);
         assertThat(afterPlace.y()).isZero();
         assertThat(afterPlace.z()).isEqualTo(1);

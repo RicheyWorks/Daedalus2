@@ -4,6 +4,15 @@ package com.daedalus.api.dto;
 
 /**
  * One cube. {@code present} is false when the cell is AIR (missing chunk or removed).
+ * Street fields are empty off a slab.
  */
-public record BlockInspectResponse(int x, int y, int z, String type, boolean present) {
+public record BlockInspectResponse(int x, int y, int z, String type, boolean present,
+                                   String place, String lot, String lease, String maze) {
+
+    public BlockInspectResponse {
+        place = place == null ? "" : place;
+        lot = lot == null ? "" : lot;
+        lease = lease == null ? "" : lease;
+        maze = maze == null ? "" : maze;
+    }
 }
