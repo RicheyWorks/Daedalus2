@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend player depth.**
+  Overlay player discs fall off toward
+  deeper gold so leftover flat swatches
+  are not the last word on a walk.
+
 - **Well legend player depth.**
   Overlay player discs fall off toward
   deeper gold so leftover flat swatches

@@ -196,10 +196,50 @@
                 <Label fx:id="legendPlayer" text="walk" managed="false" visible="false">
                     <graphic>
                         <HBox spacing="1">
-                            <Circle radius="5" fill="#f5c14a" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"/>
-                            <Circle radius="5" fill="#e88868" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"/>
-                            <Circle radius="5" fill="#e8a060" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"/>
-                            <Circle radius="5" fill="#b8a058" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"/>
+                            <Circle radius="5" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#f5c14a"/>
+                                            <Stop offset="1.0" color="#8a6418"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Circle>
+                            <Circle radius="5" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#e88868"/>
+                                            <Stop offset="1.0" color="#8a3828"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Circle>
+                            <Circle radius="5" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#e8a060"/>
+                                            <Stop offset="1.0" color="#8a5020"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Circle>
+                            <Circle radius="5" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#b8a058"/>
+                                            <Stop offset="1.0" color="#6a5420"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Circle>
                         </HBox>
                     </graphic>
                 </Label>
