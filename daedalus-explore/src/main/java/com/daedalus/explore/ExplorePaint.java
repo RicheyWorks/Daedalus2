@@ -929,7 +929,7 @@ public final class ExplorePaint {
         }
         String last = lastParcelPlaceName(blocks);
         if (last != null) {
-            String lot = lastParcelLot(blocks);
+            String lot = lastParcelLots(blocks);
             String box = lastParcelBoxes(blocks);
             String maze = lastParcelMazes(blocks);
             String rent = lastParcelLeases(blocks);
@@ -1143,6 +1143,15 @@ public final class ExplorePaint {
             return null;
         }
         String found = WorldOps.lastLot(blocks.world());
+        return found.isEmpty() ? null : found;
+    }
+
+    /** All slab origins as {@code x,z}, oldest first. Empty worlds stay null. */
+    public static String lastParcelLots(WorldMesh blocks) {
+        if (blocks == null || blocks.world() == null) {
+            return null;
+        }
+        String found = WorldOps.streetLots(blocks.world());
         return found.isEmpty() ? null : found;
     }
 

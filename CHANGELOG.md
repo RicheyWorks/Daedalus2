@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore names every slab lot.**
+  Off a slab the hall caption names
+  every slab origin as x,z, oldest
+  first. Empty until a stamp. No
+  wallet types.
+
 - **Desktop inspect names the last slab lot.**
   Inspect names the newest slab
   origin as x,z. Empty until a

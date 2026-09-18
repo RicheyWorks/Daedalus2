@@ -1130,6 +1130,7 @@ class ExplorePaintTest {
         ExploreBody offPlot = ExploreBody.atCell(new Point(0, 1));
         assertThat(ExplorePaint.lastParcelPlaceName(cubes)).isEqualTo("Willow Walk");
         assertThat(ExplorePaint.lastParcelLot(cubes)).isEqualTo("8,8");
+        assertThat(ExplorePaint.lastParcelLots(cubes)).isEqualTo("8,8");
         assertThat(ExplorePaint.lastParcelBox(cubes)).isEqualTo("8,0,8-9,1,9");
         assertThat(ExplorePaint.lastParcelBoxes(cubes)).isEqualTo("8,0,8-9,1,9");
         assertThat(ExplorePaint.lastParcelMaze(cubes)).isNull();
@@ -1140,6 +1141,7 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.lastParcelMazes(cubes)).isNull();
         assertThat(ExplorePaint.lastParcelPlaceName(null)).isNull();
         assertThat(ExplorePaint.lastParcelLot(null)).isNull();
+        assertThat(ExplorePaint.lastParcelLots(null)).isNull();
         assertThat(ExplorePaint.lastParcelBox(null)).isNull();
         assertThat(ExplorePaint.lastParcelBoxes(null)).isNull();
         assertThat(ExplorePaint.lastParcelMaze(null)).isNull();
@@ -1252,6 +1254,8 @@ class ExplorePaintTest {
         two.bindMaze(two.parcels().get(0).id(), "00000000-0000-4000-8000-000000000011");
         two.bindMaze(two.parcels().get(1).id(), "00000000-0000-4000-8000-000000000012");
         WorldMesh street = WorldMesh.of(two);
+        assertThat(ExplorePaint.lastParcelLot(street)).isEqualTo("8,8");
+        assertThat(ExplorePaint.lastParcelLots(street)).isEqualTo("0,0 · 8,8");
         assertThat(ExplorePaint.lastParcelBoxes(street))
                 .isEqualTo("0,0,0-2,1,2 · 8,0,8-9,1,9");
         assertThat(ExplorePaint.lastParcelBox(street)).isEqualTo("8,0,8-9,1,9");
