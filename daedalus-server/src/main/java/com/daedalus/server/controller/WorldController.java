@@ -298,7 +298,8 @@ public class WorldController {
         for (DriveTrace.Step step : worlds.trace(id)) {
             steps.add(new WorldTraceStepResponse(
                     step.capability(), step.result(), step.revisionAfter(), step.actor(),
-                    step.at(), WorldOps.mazeOn(world, step.at())));
+                    step.at(), WorldOps.mazeOn(world, step.at()),
+                    WorldOps.leaseOn(world, step.at())));
         }
         return ResponseEntity.ok(new WorldTraceResponse(id, steps));
     }

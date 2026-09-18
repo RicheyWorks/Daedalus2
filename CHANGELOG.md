@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Trace names the slab lease.**
+  GET /trace names the account key
+  under each driven cube. Empty when
+  that step sits off a rented slab.
+  No wallet types.
+
 - **Trace names the slab maze.**
   GET /trace names the lab maze UUID
   under each driven cube. Empty when

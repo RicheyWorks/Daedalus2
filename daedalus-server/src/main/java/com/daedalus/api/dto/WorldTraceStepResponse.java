@@ -4,25 +4,31 @@ package com.daedalus.api.dto;
 
 /** One driven capability and the revision after it returned. */
 public record WorldTraceStepResponse(String capability, String result, long revisionAfter,
-                                    String actor, String at, String maze) {
+                                    String actor, String at, String maze, String lease) {
 
     public WorldTraceStepResponse {
         actor = actor == null ? "" : actor;
         at = at == null ? "" : at;
         maze = maze == null ? "" : maze;
+        lease = lease == null ? "" : lease;
+    }
+
+    public WorldTraceStepResponse(String capability, String result, long revisionAfter,
+            String actor, String at, String maze) {
+        this(capability, result, revisionAfter, actor, at, maze, "");
     }
 
     public WorldTraceStepResponse(String capability, String result, long revisionAfter,
             String actor, String at) {
-        this(capability, result, revisionAfter, actor, at, "");
+        this(capability, result, revisionAfter, actor, at, "", "");
     }
 
     public WorldTraceStepResponse(String capability, String result, long revisionAfter) {
-        this(capability, result, revisionAfter, "", "", "");
+        this(capability, result, revisionAfter, "", "", "", "");
     }
 
     public WorldTraceStepResponse(String capability, String result, long revisionAfter,
             String actor) {
-        this(capability, result, revisionAfter, actor, "", "");
+        this(capability, result, revisionAfter, actor, "", "", "");
     }
 }

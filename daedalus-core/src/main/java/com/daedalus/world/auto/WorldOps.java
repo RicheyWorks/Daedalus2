@@ -402,6 +402,11 @@ public final class WorldOps {
         return mazeAt(world, parseAt(atLine));
     }
 
+    /** Lease under a driven {@code x,y,z} line. Empty off a rented slab. */
+    public static String leaseOn(World world, String atLine) {
+        return leaseAt(world, parseAt(atLine));
+    }
+
     public static BlockCoordinate parseAt(String line) {
         if (line == null || line.isBlank()) {
             return null;
