@@ -923,9 +923,13 @@ public final class ExplorePaint {
         if (last != null) {
             String lot = lastParcelLot(blocks);
             String box = lastParcelBoxes(blocks);
+            String maze = lastParcelMaze(blocks);
             String named = lot == null ? last : last + " " + lot;
             if (box != null) {
                 named = named + " " + box;
+            }
+            if (maze != null) {
+                named = named + " " + maze;
             }
             return withAcl(withOccupants(named, blocks), blocks);
         }
@@ -1130,6 +1134,20 @@ public final class ExplorePaint {
             return null;
         }
         String found = WorldOps.streetBoxes(blocks.world());
+        return found.isEmpty() ? null : found;
+    }
+
+    /** Newest lab maze id on the street. Empty worlds stay null. Not a wallet. */
+    public static String lastParcelMaze(WorldMesh blocks) {
+        if (blocks == null || blocks.world() == null) {
+            return null;
+        }
+        String found = "";
+        for (Parcel parcel : blocks.world().parcels()) {
+            if (parcel != null && !parcel.mazeRef().isEmpty()) {
+                found = parcel.mazeRef();
+            }
+        }
         return found.isEmpty() ? null : found;
     }
 
