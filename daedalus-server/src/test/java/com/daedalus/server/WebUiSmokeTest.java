@@ -383,6 +383,9 @@ class WebUiSmokeTest {
                 .contains("stroke=\"rgba(153, 111, 49, 0.28)\"")
                 .contains("fill=\"#b09a72\" font-size=\"9\"")
                 .contains("#lb { font: 12px/1.9 ui-monospace, monospace; color: #f2ead8;")
+                .contains("#lb { font: 12px/1.9 ui-monospace, monospace; color: #f2ead8;\n"
+                        + "        padding: 8px; background: #16120e;\n"
+                        + "        border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
                 .contains("#lb div { border-bottom: 1px solid rgba(153, 111, 49, 0.28); padding: 2px 0;")
                 .contains("#lb div { border-bottom: 1px solid rgba(153, 111, 49, 0.28); padding: 2px 0; -webkit-user-drag: none")
                 .contains("#lb span { color: #b09a72;")
