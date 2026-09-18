@@ -257,6 +257,7 @@ class WorldBuilderTest {
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "trap.inspect", null));
         assertThat(trap.get("place")).isEqualTo(place);
         assertThat(trap.get("lot")).isEqualTo("0,0");
+        assertThat(trap.get("box")).isEqualTo("0,0,0-2,1,2");
         assertThat(trap.get("acl")).isEqualTo("");
         @SuppressWarnings("unchecked")
         Map<String, Object> portal = (Map<String, Object>) builder.run(

@@ -608,6 +608,7 @@ public final class WorldOps {
         out.put("state", trap.state().name());
         out.put("place", placeAt(world, trap.at()));
         out.put("lot", lotAt(world, trap.at()));
+        out.put("box", boxAt(world, trap.at()));
         out.put("acl", aclAt(world, trap.at()));
         out.put("drive", driveOn(world, trap.at()));
         out.put("driveActor", actorOn(world, trap.at()));

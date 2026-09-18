@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Trap inspect names the slab box.**
+  GET /trap names the inclusive AABB
+  living stays inside when trap-zero
+  sits on a plot. Empty off the street.
+  No wallet types.
+
 - **Door inspect names the slab box.**
   GET /door names the inclusive AABB
   living stays inside when door-zero

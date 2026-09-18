@@ -435,7 +435,8 @@ stamp apply keeps occupancy, and
 block inspect names the slab box, and
 living slab clears leftover, and
 living slab clears leftover height, and
-door inspect names the slab box
+door inspect names the slab box, and
+trap inspect names the slab box
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
