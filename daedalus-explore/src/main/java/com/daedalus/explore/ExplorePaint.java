@@ -929,11 +929,15 @@ public final class ExplorePaint {
         }
         String last = lastParcelPlaceName(blocks);
         if (last != null) {
-            String lot = lastParcelLots(blocks);
+            String lot = lastParcelLot(blocks);
+            String lots = lastParcelLots(blocks);
             String box = lastParcelBoxes(blocks);
             String maze = lastParcelMazes(blocks);
             String rent = lastParcelLeases(blocks);
             String named = lot == null ? last : last + " " + lot;
+            if (lots != null && !lots.equals(lot)) {
+                named = named + " " + lots;
+            }
             if (box != null) {
                 named = named + " " + box;
             }

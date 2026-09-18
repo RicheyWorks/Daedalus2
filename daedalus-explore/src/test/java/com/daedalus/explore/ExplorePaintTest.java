@@ -1256,6 +1256,8 @@ class ExplorePaintTest {
         WorldMesh street = WorldMesh.of(two);
         assertThat(ExplorePaint.lastParcelLot(street)).isEqualTo("8,8");
         assertThat(ExplorePaint.lastParcelLots(street)).isEqualTo("0,0 · 8,8");
+        assertThat(ExplorePaint.lastParcelLots(street))
+                .isNotEqualTo(ExplorePaint.lastParcelLot(street));
         assertThat(ExplorePaint.lastParcelBoxes(street))
                 .isEqualTo("0,0,0-2,1,2 · 8,0,8-9,1,9");
         assertThat(ExplorePaint.lastParcelBox(street)).isEqualTo("8,0,8-9,1,9");
