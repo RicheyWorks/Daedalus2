@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well chunk last place.**
+  The well chunk row paints the newest
+  inspired toponym whose slab overlaps
+  0,0,0. Empty until a stamp. No
+  wallet types.
+
 - **GET /chunk names the last slab place.**
   Chunk inspect names the newest
   inspired toponym whose slab

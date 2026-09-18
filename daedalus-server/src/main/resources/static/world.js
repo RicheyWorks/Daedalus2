@@ -189,7 +189,9 @@
     row(box, "maze", world && world.maze ? world.maze : "—");
     row(box, "mazes", world && world.mazes ? world.mazes : "—");
     const occupied = chunk && chunk.present && chunk.occupied > 0;
-    const at = chunk && [chunk.street, chunk.lot, chunk.occupants, chunk.stands,
+    const street = chunk && chunk.place && chunk.street !== chunk.place
+        ? chunk.street : "";
+    const at = chunk && [chunk.place, street, chunk.lot, chunk.occupants, chunk.stands,
         chunk.drive, chunk.driveActor, chunk.driveAt]
         .filter(Boolean).join(" ");
     const slice = occupied
