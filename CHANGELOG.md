@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well tap-highlight depth.**
+  Tap-flash gold falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP leftover
+  even thumb gold stays.
+
 - **Well body scrollbar depth.**
   Page-scroll gold falls off toward
   floor-dim with the same 0.22 as halls,

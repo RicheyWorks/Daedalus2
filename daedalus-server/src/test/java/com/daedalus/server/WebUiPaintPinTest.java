@@ -737,9 +737,22 @@ class WebUiPaintPinTest {
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
                     .contains("scrollbar-width: thin; scrollbar-color: rgba(153, 111, 49, 0.45) transparent;\n"
-                            + "               -webkit-tap-highlight-color: rgba(184, 133, 56, 0.25);")
+                            + "               -webkit-tap-highlight-color: rgba(153, 111, 49, 0.25);")
                     .doesNotContain("scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent;\n"
                             + "               -webkit-tap-highlight-color: rgba(184, 133, 56, 0.25);");
+        }
+    }
+
+    @Test
+    void wellTapHighlightHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("-webkit-tap-highlight-color: rgba(153, 111, 49, 0.25);\n"
+                            + "               touch-action: manipulation;")
+                    .doesNotContain("-webkit-tap-highlight-color: rgba(184, 133, 56, 0.25);\n"
+                            + "               touch-action: manipulation;");
         }
     }
 
