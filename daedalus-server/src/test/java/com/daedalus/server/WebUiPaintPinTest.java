@@ -49,7 +49,7 @@ class WebUiPaintPinTest {
                     .contains("#stats span { color: #b09a72; -webkit-user-drag: none")
                     .contains(".info b { color: #f2ead8; font-weight: 600; -webkit-user-drag: none")
                     .contains("\"Trebuchet MS\", sans-serif; letter-spacing: .22em; -webkit-user-drag: none")
-                    .contains("mark { background: rgba(184, 133, 56, 0.35); color: #f2ead8; -webkit-user-drag: none")
+                    .contains("mark { background: rgba(153, 111, 49, 0.35); color: #f2ead8; -webkit-user-drag: none")
                     .contains("#labOut .hint { color: #b09a72; -webkit-user-drag: none")
                     .contains("#tourBox .hint { color: #b09a72; -webkit-user-drag: none")
                     .contains("#campaignBox .hint { color: #b09a72; -webkit-user-drag: none")
@@ -874,6 +874,17 @@ class WebUiPaintPinTest {
             assertThat(html)
                     .contains("::-moz-selection:window-inactive { background: rgba(153, 111, 49, 0.22); color: #f2ead8; }")
                     .doesNotContain("::-moz-selection:window-inactive { background: rgba(184, 133, 56, 0.22); color: #f2ead8; }");
+        }
+    }
+
+    @Test
+    void wellMarkHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("mark { background: rgba(153, 111, 49, 0.35); color: #f2ead8; -webkit-user-drag: none; }")
+                    .doesNotContain("mark { background: rgba(184, 133, 56, 0.35); color: #f2ead8; -webkit-user-drag: none; }");
         }
     }
 
