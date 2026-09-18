@@ -335,7 +335,7 @@ class WebUiSmokeTest {
                 .contains("color: #f2ead8;")
                 .contains("#log .t { color: #b09a72; margin-right: 6px;")
                 .contains("#log .solver { color: #d4a04c;")
-                .contains("#log div { border-bottom: 1px solid rgba(184, 133, 56, 0.28); padding: 2px 0;")
+                .contains("#log div { border-bottom: 1px solid rgba(153, 111, 49, 0.28); padding: 2px 0;")
                 .contains("padding: 2px 0; -webkit-user-drag: none")
                 .contains("#labOut, #tourBox, #campaignBox { color: #f2ead8; }")
                 .contains("overflow-wrap: break-word; hyphens: none; line-height: 1.5;")
