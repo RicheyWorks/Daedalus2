@@ -14,8 +14,13 @@ public record StampWorldRequest(
         @NotNull(message = "y is required") Integer y,
         @NotNull(message = "z is required") Integer z,
         String mazeId,
-        Boolean next) {
+        Boolean next,
+        String actorId) {
     public StampWorldRequest(Integer x, Integer y, Integer z, String mazeId) {
-        this(x, y, z, mazeId, null);
+        this(x, y, z, mazeId, null, null);
+    }
+
+    public StampWorldRequest(Integer x, Integer y, Integer z, String mazeId, Boolean next) {
+        this(x, y, z, mazeId, next, null);
     }
 }

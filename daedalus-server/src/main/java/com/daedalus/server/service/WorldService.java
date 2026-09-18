@@ -326,6 +326,11 @@ public class WorldService {
      */
     public StampResult stamp(String id, BlockCoordinate at, MazeGrid maze, UUID mazeId,
                              boolean nextFree) {
+        return stamp(id, at, maze, mazeId, nextFree, null);
+    }
+
+    public StampResult stamp(String id, BlockCoordinate at, MazeGrid maze, UUID mazeId,
+                             boolean nextFree, String actorId) {
         World live = require(id);
         synchronized (lock) {
             BlockCoordinate origin = at;
@@ -334,11 +339,13 @@ public class WorldService {
             }
             StampResult result = WorldOps.asStampResult(
                     WorldOps.drive(live, "stamp.apply", origin, null, maze,
-                            mazeId == null ? null : mazeId.toString()));
+                            mazeId == null ? null : mazeId.toString(), actorId));
             if (result.ok() && mazeId != null && result.parcelId() != null) {
                 rebindSlabs();
             }
-            persist();
+            if (result.ok() || !StampResult.DENIED.equals(result.reason())) {
+                persist();
+            }
             log.append("stamp.apply", result, live.revision().value());
             return result;
         }

@@ -110,6 +110,13 @@ class ParcelGateTest {
                 .isEqualTo(DoorResult.ALREADY_OPEN);
         assertThat(WorldOps.drive(world, "door.close", Door.ZERO_AT, null, null, null))
                 .isEqualTo(DoorResult.CLOSED);
+        assertThat(WorldOps.asStampResult(WorldOps.drive(
+                world, "stamp.apply", new BlockCoordinate(0, 0, 0), null, null, null, "carol"))
+                .outcome()).isEqualTo("DENIED");
+        assertThat(world.parcels()).hasSize(1);
+        assertThat(WorldOps.asStampResult(WorldOps.drive(
+                world, "stamp.apply", new BlockCoordinate(0, 0, 0), null))
+                .outcome()).isEqualTo("PARCEL_OVERLAP");
     }
 
     @Test

@@ -61,6 +61,11 @@ public final class WorldOps {
 
     public static Object drive(World world, String capability, BlockCoordinate at, BlockType type,
                                MazeGrid maze, String mazeRef) {
+        return drive(world, capability, at, type, maze, mazeRef, null);
+    }
+
+    public static Object drive(World world, String capability, BlockCoordinate at, BlockType type,
+                               MazeGrid maze, String mazeRef, String actorId) {
         if (world == null || capability == null) {
             throw new IllegalArgumentException("World and capability are required");
         }
@@ -85,7 +90,7 @@ public final class WorldOps {
             case "parcel.lease" -> leaseParcel(world);
             case "parcel.grant" -> grantParcel(world, at, mazeRef);
             case "parcel.deny" -> denyParcel(world, at, mazeRef);
-            case "stamp.apply" -> stampApply(world, at, maze, mazeRef);
+            case "stamp.apply" -> stampApply(world, at, maze, mazeRef, actorId);
             default -> throw new IllegalArgumentException("Unknown capability " + capability);
         };
     }
@@ -644,8 +649,12 @@ public final class WorldOps {
     }
 
     private static StampResult stampApply(World world, BlockCoordinate at, MazeGrid maze,
-                                         String mazeRef) {
+                                         String mazeRef, String actorId) {
         BlockCoordinate origin = at == null ? new BlockCoordinate(0, 0, 0) : at;
+        String actor = actorId == null || actorId.isBlank() ? Parcel.SYSTEM_OWNER : actorId.trim();
+        if (world.may(actor, ParcelVerb.STAMP_APPLY, origin) == ParcelAccess.DENIED) {
+            return StampResult.denied(world.revision());
+        }
         MazeGrid slab = maze == null ? new MazeGrid(1, 1) : maze;
         StampResult result = StampOps.apply(world, new StampRequest(world.id(), origin,
                 slab, origin.y(), 1));

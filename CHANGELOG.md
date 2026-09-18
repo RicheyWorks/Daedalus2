@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcel gate on stamp.apply.**
+  stamp.apply asks ParcelGate for stamp.apply. Empty
+  actor is the system owner. DENIED does not add a plot.
+  mazeRef stays the lab maze id. No wallet types.
+
 - **Parcel gate on door.close.**
   door.close asks the same door.open gate. Empty actor
   is the system owner. DENIED leaves the door. No wallet

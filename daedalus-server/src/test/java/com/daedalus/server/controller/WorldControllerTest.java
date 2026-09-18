@@ -250,6 +250,13 @@ class WorldControllerTest {
 
         mvc.perform(post("/api/v1/world/world-zero/stamp")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"x\":0,\"y\":0,\"z\":0,\"actorId\":\"carol\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.ok", equalTo(false)))
+                .andExpect(jsonPath("$.result", equalTo("DENIED")));
+
+        mvc.perform(post("/api/v1/world/world-zero/stamp")
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"x\":0,\"y\":0,\"z\":0}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.ok", equalTo(false)))
