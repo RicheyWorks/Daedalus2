@@ -13,7 +13,7 @@ import java.util.Objects;
  */
 public record Observation(String worldId, long revision, int x, int y, int z,
                           String blockType, String doorState, String place, String lot,
-                          String occupant) {
+                          String occupant, String acl) {
 
     public Observation {
         Objects.requireNonNull(worldId, "worldId is required");
@@ -21,6 +21,13 @@ public record Observation(String worldId, long revision, int x, int y, int z,
         place = place == null ? "" : place;
         lot = lot == null ? "" : lot;
         occupant = occupant == null ? "" : occupant;
+        acl = acl == null ? "" : acl;
+    }
+
+    public Observation(String worldId, long revision, int x, int y, int z,
+                       String blockType, String doorState, String place, String lot,
+                       String occupant) {
+        this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, "");
     }
 
     public static Observation take(World world, WorldAddress address) {
@@ -42,6 +49,7 @@ public record Observation(String worldId, long revision, int x, int y, int z,
                 door == null ? null : door.state().name(),
                 WorldOps.placeAt(world, address.at()),
                 WorldOps.lotAt(world, address.at()),
-                WorldOps.occupantAt(world, address.at()));
+                WorldOps.occupantAt(world, address.at()),
+                WorldOps.aclAt(world, address.at()));
     }
 }

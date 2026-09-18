@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Observe ACL.**
+  Observe lists extra grants and denials on the slab under
+  the aimed cube. Off a plot stays empty. Owner stays
+  implicit. No wallet types.
+
 - **Block inspect ACL.**
   block.inspect lists extra grants and denials on the slab
   under that cube. Off a plot stays empty. Owner stays

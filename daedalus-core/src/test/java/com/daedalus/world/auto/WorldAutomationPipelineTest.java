@@ -7,6 +7,7 @@ import com.daedalus.world.BlockType;
 import com.daedalus.world.Door;
 import com.daedalus.world.DoorResult;
 import com.daedalus.world.Npc;
+import com.daedalus.world.ParcelVerb;
 import com.daedalus.world.Portal;
 import com.daedalus.world.Trap;
 import com.daedalus.world.World;
@@ -41,6 +42,7 @@ class WorldAutomationPipelineTest {
         assertThat(afterPlace.place()).isEmpty();
         assertThat(afterPlace.lot()).isEmpty();
         assertThat(afterPlace.occupant()).isEmpty();
+        assertThat(afterPlace.acl()).isEmpty();
         assertThat(afterPlace.x()).isEqualTo(2);
         assertThat(afterPlace.y()).isZero();
         assertThat(afterPlace.z()).isEqualTo(1);
@@ -84,8 +86,16 @@ class WorldAutomationPipelineTest {
         assertThat(session.observe().occupant()).isEqualTo("npc");
         session.address(new BlockCoordinate(9, 0, 9));
         assertThat(session.observe().occupant()).isEmpty();
+        assertThat(session.observe().acl()).isEmpty();
         assertThat(WorldOps.occupantAt(world, Door.ZERO_AT)).isEqualTo("door");
         assertThat(WorldOps.occupantAt(null, Door.ZERO_AT)).isEmpty();
+        WorldOps.drive(world, "stamp.apply", new BlockCoordinate(0, 0, 0), null);
+        session.address(Door.ZERO_AT);
+        assertThat(session.observe().acl()).isEmpty();
+        world.grant(world.parcels().get(0).id(), "bob", ParcelVerb.BLOCK_PLACE);
+        assertThat(session.observe().acl()).isEqualTo("bob block.place");
+        session.address(new BlockCoordinate(9, 0, 9));
+        assertThat(session.observe().acl()).isEmpty();
     }
 
     @Test

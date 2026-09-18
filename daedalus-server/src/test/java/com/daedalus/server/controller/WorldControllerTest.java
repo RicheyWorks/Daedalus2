@@ -91,6 +91,7 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.place", equalTo("")))
                 .andExpect(jsonPath("$.lot", equalTo("")))
                 .andExpect(jsonPath("$.occupant", equalTo("")))
+                .andExpect(jsonPath("$.acl", equalTo("")))
                 .andExpect(jsonPath("$.revision", equalTo(0)));
 
         mvc.perform(get("/api/v1/world/world-zero/observe")
