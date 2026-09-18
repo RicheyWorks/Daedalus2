@@ -1130,6 +1130,11 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.lease", equalTo("tenant-zero")))
                 .andExpect(jsonPath("$.leases", equalTo("tenant-zero · tenant-zero")));
+        extra.perform(get("/api/v1/world/world-zero/chunk")
+                        .param("x", "0").param("y", "0").param("z", "0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.lease", equalTo("tenant-zero")))
+                .andExpect(jsonPath("$.lease", org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString(" · "))));
         extra.perform(post("/api/v1/world/world-zero/parcels/release"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("RELEASED")))

@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **GET /chunk names the last slab lease.**
+  Chunk inspect names the newest
+  account key whose slab overlaps this
+  16³. Empty until a lease. No wallet
+  types.
+
 - **Well chunk last and every maze.**
   The well chunk row paints the newest
   lab maze UUID on 0,0,0, then every

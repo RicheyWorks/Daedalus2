@@ -352,7 +352,7 @@ public class WorldController {
         String driveAt = WorldOps.atInChunk(world, cc);
         String maze = WorldOps.mazeInChunk(world, cc);
         String mazes = WorldOps.mazesInChunk(world, cc);
-        String lease = WorldOps.leasesInChunk(world, cc);
+        String lease = WorldOps.leaseInChunk(world, cc);
         String acl = WorldOps.aclInChunk(world, cc);
         if (chunk == null) {
             return ResponseEntity.ok(new ChunkInspectResponse(
