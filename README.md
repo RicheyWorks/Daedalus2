@@ -229,6 +229,7 @@ public consumers).
 | `GET` | `/api/v1/world/{id}/parcels` | public | Inspect parcels, place names, and lease strings |
 | `POST` | `/api/v1/world/{id}/parcels/lease` | required | Lease the first parcel as tenant-zero. No parcel is a named result |
 | `POST` | `/api/v1/world/{id}/parcels/grant` | required | Extra-grant block.place on the slab. Already-granted and no-parcel are named results |
+| `POST` | `/api/v1/world/{id}/parcels/deny` | required | Extra-deny block.place on the slab. Already-denied and no-parcel are named results |
 | `POST` | `/api/v1/world/{id}/stamp` | required | Stamp a maze slab. Optional `mazeId` from the lab cache. Overlap is a named result |
 | `GET` | `/api/v1/world/{id}/npc` | public | Inspect the programmable NPC |
 | `POST` | `/api/v1/world/{id}/npc/talk` | required | Talk to the NPC. Already-speaking is a named result |

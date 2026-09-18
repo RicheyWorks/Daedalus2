@@ -82,7 +82,7 @@ class WorldControllerTest {
                         "world.inspect", "block.place", "door.open", "door.close",
                         "trap.arm", "trap.disarm", "portal.open", "portal.seal",
                         "npc.talk", "npc.hush", "parcel.lease", "parcel.grant",
-                        "stamp.apply")));
+                        "parcel.deny", "stamp.apply")));
 
         mvc.perform(get("/api/v1/world/world-zero/observe")
                         .param("x", "1").param("y", "2").param("z", "3"))
@@ -270,6 +270,19 @@ class WorldControllerTest {
                         .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("ALREADY_GRANTED")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/deny")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("DENIED")))
+                .andExpect(jsonPath("$.acl", equalTo("bob block.place · !bob block.place")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/deny")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("ALREADY_DENIED")));
     }
 
     @Test

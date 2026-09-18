@@ -14,6 +14,7 @@ import com.daedalus.world.NpcResult;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelAcl;
 import com.daedalus.world.ParcelBounds;
+import com.daedalus.world.ParcelDenyResult;
 import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelId;
 import com.daedalus.world.ParcelLeaseResult;
@@ -81,6 +82,7 @@ public final class WorldOps {
             case "npc.hush" -> world.hushNpc();
             case "parcel.lease" -> leaseParcel(world);
             case "parcel.grant" -> grantParcel(world, at, mazeRef);
+            case "parcel.deny" -> denyParcel(world, at, mazeRef);
             case "stamp.apply" -> stampApply(world, at, maze, mazeRef);
             default -> throw new IllegalArgumentException("Unknown capability " + capability);
         };
@@ -475,6 +477,30 @@ public final class WorldOps {
 
     public static ParcelGrantResult asGrantResult(Object value) {
         return (ParcelGrantResult) value;
+    }
+
+    /**
+     * Extra BLOCK_PLACE deny on the slab under {@code at}, or the first
+     * plot. Empty actor becomes {@link #GUEST_ACTOR}. Deny wins.
+     */
+    public static ParcelDenyResult denyParcel(World world, BlockCoordinate at, String actorId) {
+        if (world == null || world.parcels().isEmpty()) {
+            return ParcelDenyResult.NO_PARCEL;
+        }
+        String actor = actorId == null || actorId.isBlank() ? GUEST_ACTOR : actorId.trim();
+        Parcel parcel = at == null ? null : world.parcelAt(at);
+        if (parcel == null) {
+            parcel = world.parcels().get(0);
+        }
+        if (world.acl(parcel.id()).denies(actor, ParcelVerb.BLOCK_PLACE)) {
+            return ParcelDenyResult.ALREADY_DENIED;
+        }
+        world.deny(parcel.id(), actor, ParcelVerb.BLOCK_PLACE);
+        return ParcelDenyResult.DENIED;
+    }
+
+    public static ParcelDenyResult asDenyResult(Object value) {
+        return (ParcelDenyResult) value;
     }
 
     /** Newest non-empty lease string on the street. Not a wallet. */

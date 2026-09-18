@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcel deny drive.**
+  parcel.deny extra-denies block.place on the slab under
+  the cube, or the first plot. Empty actor is alice. Named
+  results: DENIED, ALREADY_DENIED, NO_PARCEL. REST
+  POST /parcels/deny. Deny wins. No wallet types.
+
 - **Parcel grant drive.**
   parcel.grant extra-grants block.place on the slab under
   the cube, or the first plot. Empty actor is alice. Named

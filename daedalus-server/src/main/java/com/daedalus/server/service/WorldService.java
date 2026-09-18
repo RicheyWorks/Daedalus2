@@ -14,6 +14,7 @@ import com.daedalus.world.Npc;
 import com.daedalus.world.NpcResult;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelBounds;
+import com.daedalus.world.ParcelDenyResult;
 import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.Portal;
@@ -239,6 +240,18 @@ public class WorldService {
                             at == null ? new BlockCoordinate(0, 0, 0) : at, null, null, actorId));
             persist();
             log.append("parcel.grant", result, live.revision().value());
+            return result;
+        }
+    }
+
+    public ParcelDenyResult denyParcel(String id, BlockCoordinate at, String actorId) {
+        World live = require(id);
+        synchronized (lock) {
+            ParcelDenyResult result = WorldOps.asDenyResult(
+                    WorldOps.drive(live, "parcel.deny",
+                            at == null ? new BlockCoordinate(0, 0, 0) : at, null, null, actorId));
+            persist();
+            log.append("parcel.deny", result, live.revision().value());
             return result;
         }
     }
