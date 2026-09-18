@@ -129,8 +129,15 @@ public final class DesktopWorld {
         if (!drivenAt.isEmpty()) {
             line = line + " · " + drivenAt;
         }
-        String acl = aclLine(world);
-        return acl.isEmpty() ? line : line + " · " + acl;
+        String acl = lastAcl(world);
+        String acls = aclLine(world);
+        if (!acl.isEmpty()) {
+            line = line + " · " + acl;
+        }
+        if (!acls.isEmpty() && !acls.equals(acl)) {
+            line = line + " · " + acls;
+        }
+        return line;
     }
 
     /**
@@ -138,6 +145,11 @@ public final class DesktopWorld {
      */
     public static String aclLine(World world) {
         return WorldOps.aclLine(world);
+    }
+
+    /** Newest extra-list on the street. Empty until a grant or deny. */
+    public static String lastAcl(World world) {
+        return WorldOps.lastAcl(world);
     }
 
     public static String inspectLine(long revision, WorldEventFrame last) {

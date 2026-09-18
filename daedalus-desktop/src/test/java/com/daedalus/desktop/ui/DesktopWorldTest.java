@@ -95,6 +95,8 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.lastBox(World.zero())).isEmpty();
         assertThat(DesktopWorld.lastLot(World.zero())).isEmpty();
         assertThat(DesktopWorld.streetLots(World.zero())).isEmpty();
+        assertThat(DesktopWorld.lastAcl(World.zero())).isEmpty();
+        assertThat(DesktopWorld.lastAcl(null)).isEmpty();
         assertThat(DesktopWorld.streetBoxes(World.zero())).isEmpty();
         named.leaseParcel(named.parcels().get(0).id(), Parcel.SYSTEM_TENANT);
         assertThat(DesktopWorld.firstLease(named)).isEqualTo(Parcel.SYSTEM_TENANT);
@@ -261,5 +263,13 @@ class DesktopWorldTest {
                 .contains("0,0,0-6,1,6")
                 .contains("8,0,0-14,1,6")
                 .contains(Parcel.SYSTEM_TENANT + " · " + Parcel.SYSTEM_TENANT);
+        two.grant(two.parcels().get(0).id(), "bob", ParcelVerb.BLOCK_PLACE);
+        two.grant(two.parcels().get(1).id(), "carol", ParcelVerb.DOOR_OPEN);
+        assertThat(DesktopWorld.lastAcl(two)).isEqualTo("carol door.open");
+        assertThat(DesktopWorld.aclLine(two)).isEqualTo("bob block.place · carol door.open");
+        assertThat(DesktopWorld.inspectLine(two, null))
+                .contains(DesktopWorld.lastAcl(two))
+                .contains("bob block.place")
+                .contains("carol door.open");
     }
 }
