@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World builder actor.**
+  A recipe step can pass actorId so
+  stamp.apply names the driver and
+  parcel.grant names the verb. Empty
+  actor stays the system owner. No
+  wallet types.
+
 - **Parcel release drive.**
   parcel.release vacates the first
   leased slab. Named results are

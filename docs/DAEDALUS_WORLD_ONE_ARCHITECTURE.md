@@ -57,7 +57,7 @@ No blockchain. No microservices. No seventh reactor module until a boundary is f
 | Parcel permissions | **SHIPPED — inspect + grant/deny/revoke/forgive + gate** | Allow/deny lists exist on the parcel. REST grant/deny/revoke/forgive extra-list actors. `block.place` asks ParcelGate. DAEW v10 persists extras. Last drive persists as DAEW v11. Last drive actor persists as DAEW v12. Last drive at persists as DAEW v13. No wallet. |
 | Desktop world inspect | **DEFER** | After REST/STOMP proof. Maze generate/solve stay. |
 | Plugin objects (trap, portal, NPC) | **DEFER** | SPI already advertises ids. New ops + drive rows come one object at a time. Door is the template. |
-| Agent builders | **SHIPPED** | `WorldBuilder` recipes call `WorldOps`. Well `#worldBox` maps the same ids onto existing REST and reads `/trace`. |
+| Agent builders | **SHIPPED** | `WorldBuilder` recipes call `WorldOps`. A step may pass `actorId` (stamp driver or grant/deny verb). Well `#worldBox` maps the same ids onto existing REST and reads `/trace`. |
 | Browser WebGL voxel client | **NOT NOW** | Well panel is 2D/REST first. WebGL is a fourth client. |
 | Inventories, shops | **NOT NOW** | Plugin-shaped later. No economy types in core. |
 | Large procedural terrain | **NOT NOW** | World Zero scale stays tiny until stamp + observers are honest. |
@@ -418,7 +418,8 @@ well last-event last drive, and
 desktop last-event last drive, and
 parcel.revoke, and
 parcel.forgive, and
-parcel.release
+parcel.release, and
+World builder actor
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

@@ -43,10 +43,16 @@ public final class AutomationSession {
     }
 
     public Object drive(String capability, BlockType type, MazeGrid maze, String mazeRef) {
+        return drive(capability, type, maze, mazeRef, null);
+    }
+
+    public Object drive(String capability, BlockType type, MazeGrid maze, String mazeRef,
+            String actorId) {
         if (address == null) {
             throw new IllegalStateException("Address a block before driving");
         }
-        Object result = WorldOps.drive(world, capability, address.at(), type, maze, mazeRef);
+        Object result = WorldOps.drive(world, capability, address.at(), type, maze, mazeRef,
+                actorId);
         log.append(capability, result, world.revision().value());
         return result;
     }

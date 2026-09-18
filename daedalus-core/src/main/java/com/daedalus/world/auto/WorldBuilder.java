@@ -18,19 +18,25 @@ import java.util.Set;
 public final class WorldBuilder {
 
     public record Step(BlockCoordinate at, String capability, BlockType type, MazeGrid maze,
-                       String mazeRef) {
+                       String mazeRef, String actorId) {
         public Step {
             Objects.requireNonNull(at, "BlockCoordinate is required");
             Objects.requireNonNull(capability, "capability is required");
             mazeRef = mazeRef == null ? "" : mazeRef.trim();
+            actorId = actorId == null ? "" : actorId.trim();
         }
 
         public Step(BlockCoordinate at, String capability, BlockType type) {
-            this(at, capability, type, null, "");
+            this(at, capability, type, null, "", "");
         }
 
         public Step(BlockCoordinate at, String capability, BlockType type, MazeGrid maze) {
-            this(at, capability, type, maze, "");
+            this(at, capability, type, maze, "", "");
+        }
+
+        public Step(BlockCoordinate at, String capability, BlockType type, MazeGrid maze,
+                    String mazeRef) {
+            this(at, capability, type, maze, mazeRef, "");
         }
     }
 
@@ -58,7 +64,8 @@ public final class WorldBuilder {
             throw new IllegalArgumentException("Unknown capability " + step.capability());
         }
         session.address(step.at());
-        return session.drive(step.capability(), step.type(), step.maze(), step.mazeRef());
+        return session.drive(step.capability(), step.type(), step.maze(), step.mazeRef(),
+                step.actorId());
     }
 
     public List<DriveTrace.Step> run(List<Step> recipe) {

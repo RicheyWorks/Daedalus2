@@ -90,6 +90,25 @@ class WorldBuilderTest {
     }
 
     @Test
+    void aRecipePassesActorAndVerb() {
+        World world = World.zero();
+        WorldBuilder builder = new WorldBuilder(world);
+        BlockCoordinate origin = new BlockCoordinate(0, 0, 0);
+        assertThat(WorldOps.asStampResult(builder.run(new WorldBuilder.Step(
+                origin, "stamp.apply", null))).outcome())
+                .isEqualTo("APPLIED");
+        assertThat(builder.run(new WorldBuilder.Step(
+                origin, "parcel.grant", null, null, "bob", "door.open")))
+                .isEqualTo(ParcelGrantResult.GRANTED);
+        assertThat(WorldOps.aclLine(world)).isEqualTo("bob door.open");
+        assertThat(WorldOps.asStampResult(builder.run(new WorldBuilder.Step(
+                origin, "stamp.apply", null, null, "", "carol"))).outcome())
+                .isEqualTo("DENIED");
+        assertThat(WorldOps.actorLine(world)).isEqualTo("carol");
+        assertThat(world.parcels()).hasSize(1);
+    }
+
+    @Test
     void aSecondPlotLeasesWhenTheFirstIsTaken() {
         World world = World.zero();
         WorldBuilder builder = new WorldBuilder(world);
