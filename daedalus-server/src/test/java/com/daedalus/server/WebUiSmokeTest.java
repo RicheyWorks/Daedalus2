@@ -201,6 +201,8 @@ class WebUiSmokeTest {
                 .contains("#compareBox > div, kbd, summary::after, #log, #lb, #pluginBox, #campaignBox,")
                 .contains("#tourBox, #labOut, #compareBox, #status {")
                 .contains("#campaignBox { padding: 8px; background: #16120e;")
+                .contains("#campaignBox { padding: 8px; background: #16120e;\n"
+                        + "                 border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
                 .contains("#tourBox { padding: 8px; background: #16120e;")
                 .contains("#tourBox { padding: 8px; background: #16120e;\n"
                         + "             border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
