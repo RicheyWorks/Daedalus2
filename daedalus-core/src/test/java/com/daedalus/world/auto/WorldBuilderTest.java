@@ -10,6 +10,7 @@ import com.daedalus.world.ChunkCoordinate;
 import com.daedalus.world.Door;
 import com.daedalus.world.Npc;
 import com.daedalus.world.Parcel;
+import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.ParcelVerb;
 import com.daedalus.world.PlaceNames;
@@ -151,6 +152,7 @@ class WorldBuilderTest {
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "npc.inspect", null));
         assertThat(npc.get("place")).isEqualTo("");
         assertThat(npc.get("lot")).isEqualTo("");
+        assertThat(npc.get("acl")).isEqualTo("");
         @SuppressWarnings("unchecked")
         Map<String, Object> onDoor = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(Door.ZERO_AT, "block.inspect", null));
@@ -186,6 +188,18 @@ class WorldBuilderTest {
         Map<String, Object> portalGranted = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(Door.ZERO_AT, "portal.inspect", null));
         assertThat(portalGranted.get("acl")).isEqualTo("bob block.place");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> npcOff = (Map<String, Object>) builder.run(
+                new WorldBuilder.Step(Npc.ZERO_AT, "npc.inspect", null));
+        assertThat(npcOff.get("acl")).isEqualTo("");
+        World wide = World.zero();
+        wide.applyStamp(new ParcelBounds(0, 0, 0, 4, 1, 2), Parcel.SYSTEM_OWNER,
+                List.of(new BlockCoordinate(0, 0, 0)), List.of(BlockType.STONE));
+        wide.grant(wide.parcels().get(0).id(), "bob", ParcelVerb.BLOCK_PLACE);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> npcOn = (Map<String, Object>) new WorldBuilder(wide).run(
+                new WorldBuilder.Step(Npc.ZERO_AT, "npc.inspect", null));
+        assertThat(npcOn.get("acl")).isEqualTo("bob block.place");
     }
 
     @Test

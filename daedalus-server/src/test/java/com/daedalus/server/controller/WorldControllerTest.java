@@ -218,7 +218,8 @@ class WorldControllerTest {
         mvc.perform(get("/api/v1/world/world-zero/npc"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo("npc-zero")))
-                .andExpect(jsonPath("$.state", equalTo("IDLE")));
+                .andExpect(jsonPath("$.state", equalTo("IDLE")))
+                .andExpect(jsonPath("$.acl", equalTo("")));
 
         mvc.perform(post("/api/v1/world/world-zero/npc/talk"))
                 .andExpect(status().isOk())

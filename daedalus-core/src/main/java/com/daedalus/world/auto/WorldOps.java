@@ -428,6 +428,7 @@ public final class WorldOps {
         out.put("state", npc.state().name());
         out.put("place", placeAt(world, npc.at()));
         out.put("lot", lotAt(world, npc.at()));
+        out.put("acl", aclAt(world, npc.at()));
         return out;
     }
 

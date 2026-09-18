@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **NPC inspect ACL.**
+  npc.inspect lists extra grants and denials on the slab
+  under npc-zero. Off a plot stays empty — a 1×1 stamp
+  does not cover that cell. The well NPC row appends the
+  string. Owner stays implicit.
+
 - **Portal inspect ACL.**
   portal.inspect lists extra grants and denials on the slab
   under portal-zero. Off a plot stays empty. The well portal
