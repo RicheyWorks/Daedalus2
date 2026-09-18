@@ -190,6 +190,7 @@ public final class WorldOps {
         out.put("lease", lastLeaseId(world));
         out.put("place", lastPlaceName(world));
         out.put("box", lastBox(world));
+        out.put("boxes", streetBoxes(world));
         out.put("occupants", occupantsLine(world));
         out.put("stands", standsLine(world));
         out.put("acl", aclLine(world));
@@ -1177,6 +1178,20 @@ public final class WorldOps {
             }
         }
         return String.join(" · ", lots);
+    }
+
+    /** All inclusive AABBs, oldest first. Empty when the street has no plots. */
+    public static String streetBoxes(World world) {
+        if (world == null) {
+            return "";
+        }
+        List<String> boxes = new ArrayList<>();
+        for (Parcel parcel : world.parcels()) {
+            if (parcel != null) {
+                boxes.add(boxLine(parcel.bounds()));
+            }
+        }
+        return String.join(" · ", boxes);
     }
 
     /** Newest slab origin as {@code x,z}. Empty when the street has no plots. */

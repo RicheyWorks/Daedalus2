@@ -22,7 +22,8 @@ public record WorldInspectResponse(
         String drive,
         String driveActor,
         String driveAt,
-        String box) {
+        String box,
+        String boxes) {
 
     public WorldInspectResponse {
         street = street == null ? "" : street;
@@ -37,6 +38,7 @@ public record WorldInspectResponse(
         driveActor = driveActor == null ? "" : driveActor;
         driveAt = driveAt == null ? "" : driveAt;
         box = box == null ? "" : box;
+        boxes = boxes == null ? "" : boxes;
         if (plots < 0) {
             throw new IllegalArgumentException("plots must be at least 0");
         }
@@ -46,9 +48,18 @@ public record WorldInspectResponse(
             String id, long revision, int chunkCount, int plots,
             String street, String lot, String maze, String lease, String place,
             String occupants, String stands, String acl, String drive, String driveActor,
+            String driveAt, String box) {
+        this(id, revision, chunkCount, plots, street, lot, maze, lease, place,
+                occupants, stands, acl, drive, driveActor, driveAt, box, "");
+    }
+
+    public WorldInspectResponse(
+            String id, long revision, int chunkCount, int plots,
+            String street, String lot, String maze, String lease, String place,
+            String occupants, String stands, String acl, String drive, String driveActor,
             String driveAt) {
         this(id, revision, chunkCount, plots, street, lot, maze, lease, place,
-                occupants, stands, acl, drive, driveActor, driveAt, "");
+                occupants, stands, acl, drive, driveActor, driveAt, "", "");
     }
 
     public WorldInspectResponse(
@@ -56,7 +67,7 @@ public record WorldInspectResponse(
             String street, String lot, String maze, String lease, String place,
             String occupants, String stands, String acl, String drive, String driveActor) {
         this(id, revision, chunkCount, plots, street, lot, maze, lease, place,
-                occupants, stands, acl, drive, driveActor, "", "");
+                occupants, stands, acl, drive, driveActor, "", "", "");
     }
 
     public WorldInspectResponse(
@@ -64,7 +75,7 @@ public record WorldInspectResponse(
             String street, String lot, String maze, String lease, String place,
             String occupants, String stands, String acl, String drive) {
         this(id, revision, chunkCount, plots, street, lot, maze, lease, place,
-                occupants, stands, acl, drive, "", "", "");
+                occupants, stands, acl, drive, "", "", "", "");
     }
 
     public WorldInspectResponse(
@@ -72,7 +83,7 @@ public record WorldInspectResponse(
             String street, String lot, String maze, String lease, String place,
             String occupants, String stands, String acl) {
         this(id, revision, chunkCount, plots, street, lot, maze, lease, place,
-                occupants, stands, acl, "", "", "", "");
+                occupants, stands, acl, "", "", "", "", "");
     }
 
     public WorldInspectResponse(
@@ -80,7 +91,7 @@ public record WorldInspectResponse(
             String street, String lot, String maze, String lease, String place,
             String occupants, String stands) {
         this(id, revision, chunkCount, plots, street, lot, maze, lease, place,
-                occupants, stands, "", "", "", "", "");
+                occupants, stands, "", "", "", "", "", "");
     }
 
     public WorldInspectResponse(
@@ -88,6 +99,6 @@ public record WorldInspectResponse(
             String street, String lot, String maze, String lease, String place,
             String occupants) {
         this(id, revision, chunkCount, plots, street, lot, maze, lease, place,
-                occupants, "", "", "", "", "", "");
+                occupants, "", "", "", "", "", "", "");
     }
 }

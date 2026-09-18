@@ -72,7 +72,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.drive", equalTo("")))
                 .andExpect(jsonPath("$.driveActor", equalTo("")))
                 .andExpect(jsonPath("$.driveAt", equalTo("")))
-                .andExpect(jsonPath("$.box", equalTo("")));
+                .andExpect(jsonPath("$.box", equalTo("")))
+                .andExpect(jsonPath("$.boxes", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero/parcels"))
                 .andExpect(status().isOk())
@@ -394,7 +395,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.drive", equalTo("stamp.apply APPLIED")))
                 .andExpect(jsonPath("$.driveActor", equalTo("system")))
                 .andExpect(jsonPath("$.driveAt", equalTo("0,0,0")))
-                .andExpect(jsonPath("$.box", equalTo("0,0,0-2,1,2")));
+                .andExpect(jsonPath("$.box", equalTo("0,0,0-2,1,2")))
+                .andExpect(jsonPath("$.boxes", equalTo("0,0,0-2,1,2")));
 
         mvc.perform(post("/api/v1/world/world-zero/stamp")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -1038,7 +1040,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.lot", equalTo("0,0 · 8,0")))
                 .andExpect(jsonPath("$.maze", equalTo(
                         cached.metadata().id() + " · " + again.metadata().id())))
-                .andExpect(jsonPath("$.box", equalTo("8,0,0-14,1,6")));
+                .andExpect(jsonPath("$.box", equalTo("8,0,0-14,1,6")))
+                .andExpect(jsonPath("$.boxes", equalTo("0,0,0-6,1,6 · 8,0,0-14,1,6")));
         extra.perform(get("/api/v1/world/world-zero/block")
                         .param("x", "0").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())

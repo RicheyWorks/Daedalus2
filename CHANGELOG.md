@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World inspect names every box.**
+  GET /world names every inclusive
+  AABB, oldest first. Empty until
+  stamp.apply. No wallet types.
+
 - **World inspect names the last box.**
   GET /world names the inclusive AABB
   of the newest slab. Empty until
