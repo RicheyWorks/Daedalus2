@@ -433,7 +433,9 @@ class WebUiPaintPinTest {
             assertThat(world).contains("ink.className = named ? \"place\" : \"slab\"")
                     .contains("label === \"place\"")
                     .contains("label === \"street\"")
-                    .contains("chunk.occupied > 0");
+                    .contains("chunk.occupied > 0")
+                    .contains("chunk.street")
+                    .contains("chunk.lot");
             assertThat(world).doesNotContain("/maze/");
             assertThat(world).contains("frame.place")
                     .contains("frame.lot");

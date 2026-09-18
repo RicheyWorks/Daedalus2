@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Chunk street of overlapping plots.**
+  chunk.inspect names the place and x,z of slabs that share
+  that 16³. A far plot is not listed on origin. The well
+  chunk line prints them.
+
 - **Well last-event lot.**
   STOMP world frames carry place and lot when the cube sits on
   a slab. The well last-events line prints them. Off-plot stays

@@ -12,6 +12,7 @@ import com.daedalus.world.DoorResult;
 import com.daedalus.world.Npc;
 import com.daedalus.world.NpcResult;
 import com.daedalus.world.Parcel;
+import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.ParcelId;
 import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.PlaceNames;
@@ -136,7 +137,65 @@ public final class WorldOps {
         out.put("y", cc.y());
         out.put("z", cc.z());
         out.put("present", chunk != null);
+        out.put("plots", plotsInChunk(world, cc));
+        out.put("street", streetInChunk(world, cc));
+        out.put("lot", lotsInChunk(world, cc));
         return out;
+    }
+
+    /** Inspired toponyms whose slab overlaps this 16³. Oldest first. */
+    public static String streetInChunk(World world, ChunkCoordinate cc) {
+        return joinInChunk(world, cc, true);
+    }
+
+    /** Slab origins whose AABB overlaps this 16³, as {@code x,z}. Oldest first. */
+    public static String lotsInChunk(World world, ChunkCoordinate cc) {
+        return joinInChunk(world, cc, false);
+    }
+
+    /** Plots whose AABB overlaps this 16³. */
+    public static int plotsInChunk(World world, ChunkCoordinate cc) {
+        if (world == null || cc == null) {
+            return 0;
+        }
+        ParcelBounds box = chunkBox(cc);
+        int n = 0;
+        for (Parcel parcel : world.parcels()) {
+            if (parcel != null && parcel.bounds().overlaps(box)) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    private static String joinInChunk(World world, ChunkCoordinate cc, boolean names) {
+        if (world == null || cc == null) {
+            return "";
+        }
+        ParcelBounds box = chunkBox(cc);
+        List<String> rows = new ArrayList<>();
+        for (Parcel parcel : world.parcels()) {
+            if (parcel == null || !parcel.bounds().overlaps(box)) {
+                continue;
+            }
+            if (names) {
+                if (!parcel.placeName().isEmpty()) {
+                    rows.add(parcel.placeName());
+                }
+            } else {
+                rows.add(parcel.bounds().minX() + "," + parcel.bounds().minZ());
+            }
+        }
+        return String.join(" · ", rows);
+    }
+
+    private static ParcelBounds chunkBox(ChunkCoordinate cc) {
+        int size = Chunk.SIZE;
+        int minX = cc.x() * size;
+        int minY = cc.y() * size;
+        int minZ = cc.z() * size;
+        return new ParcelBounds(minX, minY, minZ,
+                minX + size - 1, minY + size - 1, minZ + size - 1);
     }
 
     private static Map<String, Object> inspectDoor(World world) {

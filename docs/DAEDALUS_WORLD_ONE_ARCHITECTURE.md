@@ -322,7 +322,8 @@ well paint from that inspect, and
 block.inspect / observe lot under a cube, and
 explore lot under the boots, and
 desktop last-event lot, and
-STOMP / well last-event lot
+STOMP / well last-event lot, and
+chunk.inspect street of overlapping plots
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

@@ -37,6 +37,7 @@ import com.daedalus.server.web.ResourceNotFoundException;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.Chunk;
+import com.daedalus.world.ChunkCoordinate;
 import com.daedalus.world.Door;
 import com.daedalus.world.DoorResult;
 import com.daedalus.world.Npc;
@@ -209,13 +210,18 @@ public class WorldController {
             @RequestParam @NotNull Integer x,
             @RequestParam @NotNull Integer y,
             @RequestParam @NotNull Integer z) {
-        mounted(id);
+        World world = mounted(id);
         Chunk chunk = worlds.inspectChunk(id, x, y, z);
+        ChunkCoordinate cc = new ChunkCoordinate(x, y, z);
+        int plots = WorldOps.plotsInChunk(world, cc);
+        String street = WorldOps.streetInChunk(world, cc);
+        String lot = WorldOps.lotsInChunk(world, cc);
         if (chunk == null) {
-            return ResponseEntity.ok(new ChunkInspectResponse(x, y, z, false, null, 0));
+            return ResponseEntity.ok(new ChunkInspectResponse(
+                    x, y, z, false, null, 0, plots, street, lot));
         }
         return ResponseEntity.ok(new ChunkInspectResponse(
-                x, y, z, true, chunk.revision(), chunk.occupied()));
+                x, y, z, true, chunk.revision(), chunk.occupied(), plots, street, lot));
     }
 
     @PutMapping("/world/{id}/block")

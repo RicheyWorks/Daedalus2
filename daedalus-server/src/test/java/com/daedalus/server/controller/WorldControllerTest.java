@@ -110,12 +110,16 @@ class WorldControllerTest {
         mvc.perform(get("/api/v1/world/world-zero/chunk").param("x", "0").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.present", equalTo(true)))
-                .andExpect(jsonPath("$.occupied", equalTo(1)));
+                .andExpect(jsonPath("$.occupied", equalTo(1)))
+                .andExpect(jsonPath("$.street", equalTo("")))
+                .andExpect(jsonPath("$.lot", equalTo("")))
+                .andExpect(jsonPath("$.plots", equalTo(0)));
 
         mvc.perform(get("/api/v1/world/world-zero/chunk").param("x", "4").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.present", equalTo(false)))
-                .andExpect(jsonPath("$.revision", nullValue()));
+                .andExpect(jsonPath("$.revision", nullValue()))
+                .andExpect(jsonPath("$.street", equalTo("")));
 
         mvc.perform(delete("/api/v1/world/world-zero/block")
                         .param("x", "1").param("y", "2").param("z", "3"))

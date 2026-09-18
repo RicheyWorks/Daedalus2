@@ -109,6 +109,38 @@ class WorldBuilderTest {
     }
 
     @Test
+    void chunkInspectNamesOverlappingPlots() {
+        World world = World.zero();
+        WorldBuilder builder = new WorldBuilder(world);
+        builder.run(new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "stamp.apply", null));
+        builder.run(new WorldBuilder.Step(new BlockCoordinate(32, 0, 0), "stamp.apply", null));
+        @SuppressWarnings("unchecked")
+        Map<String, Object> origin = (Map<String, Object>) builder.run(
+                new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "chunk.inspect", null));
+        assertThat(origin.get("plots")).isEqualTo(1);
+        assertThat(origin.get("street")).isEqualTo(world.parcels().get(0).placeName());
+        assertThat(origin.get("lot")).isEqualTo("0,0");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> far = (Map<String, Object>) builder.run(
+                new WorldBuilder.Step(new BlockCoordinate(32, 0, 0), "chunk.inspect", null));
+        assertThat(far.get("plots")).isEqualTo(1);
+        assertThat(far.get("street")).isEqualTo(world.parcels().get(1).placeName());
+        assertThat(far.get("lot")).isEqualTo("32,0");
+        World near = World.zero();
+        WorldBuilder two = new WorldBuilder(near);
+        two.run(new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "stamp.apply", null));
+        BlockCoordinate next = StampOps.nextOrigin(
+                near, new MazeGrid(1, 1), new BlockCoordinate(0, 0, 0), 1);
+        two.run(new WorldBuilder.Step(next, "stamp.apply", null));
+        @SuppressWarnings("unchecked")
+        Map<String, Object> both = (Map<String, Object>) two.run(
+                new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "chunk.inspect", null));
+        assertThat(both.get("plots")).isEqualTo(2);
+        assertThat(both.get("street")).isEqualTo(WorldOps.streetLine(near));
+        assertThat(both.get("lot")).isEqualTo(WorldOps.streetLots(near));
+    }
+
+    @Test
     void aRecipeStampsALabMazeThroughWorldOps() {
         World world = World.zero();
         WorldBuilder builder = new WorldBuilder(world);
