@@ -531,7 +531,8 @@ desktop inspect names the last box, and
 desktop inspect names every box, and
 desktop inspect names every lease, and
 explore names the slab box, and
-explore names the last box
+explore names the last box, and
+explore names every box
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

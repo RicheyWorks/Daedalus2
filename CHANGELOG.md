@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore names every box.**
+  Off a slab the hall caption names
+  every inclusive AABB, oldest first.
+  Empty until stamp.apply. No wallet
+  types.
+
 - **Explore names the last box.**
   Off a slab the hall caption names
   the newest inclusive AABB. Empty

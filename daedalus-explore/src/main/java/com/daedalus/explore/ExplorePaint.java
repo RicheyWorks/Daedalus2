@@ -918,7 +918,7 @@ public final class ExplorePaint {
         String last = lastParcelPlaceName(blocks);
         if (last != null) {
             String lot = lastParcelLot(blocks);
-            String box = lastParcelBox(blocks);
+            String box = lastParcelBoxes(blocks);
             String named = lot == null ? last : last + " " + lot;
             if (box != null) {
                 named = named + " " + box;
@@ -1117,6 +1117,15 @@ public final class ExplorePaint {
             return null;
         }
         String found = WorldOps.lastBox(blocks.world());
+        return found.isEmpty() ? null : found;
+    }
+
+    /** All inclusive AABBs, oldest first. Empty worlds stay null. */
+    public static String lastParcelBoxes(WorldMesh blocks) {
+        if (blocks == null || blocks.world() == null) {
+            return null;
+        }
+        String found = WorldOps.streetBoxes(blocks.world());
         return found.isEmpty() ? null : found;
     }
 
