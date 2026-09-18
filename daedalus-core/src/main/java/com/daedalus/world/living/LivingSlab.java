@@ -95,6 +95,7 @@ public final class LivingSlab {
             }
         }
         written += clearOutsideGrid(rows, cols);
+        written += clearOutsideHeight(rows, cols);
         return written;
     }
 
@@ -109,6 +110,25 @@ public final class LivingSlab {
                     continue;
                 }
                 for (int y = bounds.minY(); y <= bounds.maxY(); y++) {
+                    written += ensure(new BlockCoordinate(x, y, z), BlockType.AIR);
+                }
+            }
+        }
+        return written;
+    }
+
+    /** Drop leftover posts above or below this wallHeight. */
+    private int clearOutsideHeight(int rows, int cols) {
+        int written = 0;
+        int top = floorY + wallHeight;
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                int x = origin.x() + c;
+                int z = origin.z() + r;
+                for (int y = bounds.minY(); y <= bounds.maxY(); y++) {
+                    if (y >= floorY && y <= top) {
+                        continue;
+                    }
                     written += ensure(new BlockCoordinate(x, y, z), BlockType.AIR);
                 }
             }

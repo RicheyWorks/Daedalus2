@@ -137,6 +137,27 @@ class LivingSlabTest {
     }
 
     @Test
+    void aSyncClearsPostsAboveTheWallHeight() {
+        World world = World.zero();
+        MazeGrid maze = corridor();
+        StampRequest tall = new StampRequest(world.id(), new BlockCoordinate(4, 2, 8),
+                maze, 2, 2);
+        StampResult stamped = StampOps.apply(world, tall);
+        BlockCoordinate crown = new BlockCoordinate(4, 4, 8);
+        assertThat(stamped.bounds().contains(crown)).isTrue();
+        assertThat(world.get(crown)).isEqualTo(BlockType.STONE);
+
+        StampRequest shortWall = new StampRequest(world.id(), new BlockCoordinate(4, 2, 8),
+                maze, 2, 1);
+        LivingSlab slab = new LivingSlab(world, shortWall, stamped.bounds());
+        assertThat(slab.sync()).isGreaterThan(0);
+        assertThat(world.get(crown)).isEqualTo(BlockType.AIR);
+        assertThat(world.get(new BlockCoordinate(4, 2, 8))).isEqualTo(BlockType.STONE);
+        assertThat(world.get(new BlockCoordinate(4, 3, 8))).isEqualTo(BlockType.STONE);
+        assertThat(stamped.bounds().contains(slab.lastWritten())).isTrue();
+    }
+
+    @Test
     void sealingAPassageRestoresWallPosts() {
         World world = World.zero();
         MazeGrid maze = corridor();

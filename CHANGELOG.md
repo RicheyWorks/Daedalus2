@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Living slab clears leftover height.**
+  A living re-project airs posts in
+  the stamped AABB above or below
+  this wallHeight. Occupancy and
+  bounds skip stay. No wallet types.
+
 - **Living slab clears leftover.**
   A living re-project airs cubes in
   the stamped AABB that the current
