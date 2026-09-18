@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Stamp apply keeps occupancy.**
+  World.applyStamp skips door, trap,
+  portal, and NPC cubes so a raw
+  position list cannot bury the
+  landmark. StampOps skip stays. No
+  wallet types.
+
 - **Stamp apply names the slab box.**
   POST /stamp returns the inclusive
   AABB living stays inside. Denied and

@@ -7,6 +7,8 @@ import com.daedalus.model.Point;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.Door;
+import com.daedalus.world.Parcel;
+import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.Portal;
 import com.daedalus.world.Trap;
 import com.daedalus.world.World;
@@ -16,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -62,6 +65,20 @@ class StampOpsTest {
         assertThat(WorldOps.occupantAt(world, Portal.ZERO_AT)).isEqualTo("portal");
         assertThat(world.get(new BlockCoordinate(0, 0, 0))).isEqualTo(BlockType.STONE);
         assertThat(world.get(new BlockCoordinate(0, 1, 2))).isEqualTo(BlockType.STONE);
+    }
+
+    @Test
+    void aDirectStampKeepsOccupancyCubes() {
+        World world = World.zero();
+        StampResult result = world.applyStamp(new ParcelBounds(0, 0, 0, 2, 1, 2),
+                Parcel.SYSTEM_OWNER,
+                List.of(Door.ZERO_AT, new BlockCoordinate(0, 0, 0)),
+                List.of(BlockType.STONE, BlockType.STONE));
+
+        assertThat(result.ok()).isTrue();
+        assertThat(world.get(Door.ZERO_AT)).isEqualTo(BlockType.AIR);
+        assertThat(world.get(new BlockCoordinate(0, 0, 0))).isEqualTo(BlockType.STONE);
+        assertThat(WorldOps.occupantAt(world, Door.ZERO_AT)).isEqualTo("door");
     }
 
     @Test

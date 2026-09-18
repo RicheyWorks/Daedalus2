@@ -430,7 +430,8 @@ living slab keeps occupancy, and
 living persist moves the store, and
 living slab stays in bounds, and
 parcel directory names the slab box, and
-stamp apply names the slab box
+stamp apply names the slab box, and
+stamp apply keeps occupancy
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

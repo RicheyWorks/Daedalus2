@@ -590,7 +590,11 @@ public final class World {
                 }
             }
             for (int i = 0; i < positions.size(); i++) {
-                place(positions.get(i), types.get(i));
+                BlockCoordinate at = positions.get(i);
+                if (occupancy(at)) {
+                    continue;
+                }
+                place(at, types.get(i));
             }
             ParcelId id = new ParcelId("parcel-" + (++nextParcelNumber));
             parcels.add(new Parcel(id, this.id, ownerId, bounds, 1L));
@@ -658,5 +662,16 @@ public final class World {
             }
         }
         return max;
+    }
+
+    /** Door / trap / portal / NPC cubes stay occupancy, not maze stone. */
+    private boolean occupancy(BlockCoordinate at) {
+        if (at == null) {
+            return false;
+        }
+        return (door != null && at.equals(door.at()))
+                || (trap != null && at.equals(trap.at()))
+                || (portal != null && at.equals(portal.at()))
+                || (npc != null && at.equals(npc.at()));
     }
 }
