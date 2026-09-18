@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop inspect names the last slab lease.**
+  Inspect names the newest account
+  key. Empty until a lease. No
+  wallet types.
+
 - **Desktop inspect names the last slab box.**
   Inspect names the newest inclusive
   AABB. Empty until a stamp. No

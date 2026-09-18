@@ -263,6 +263,7 @@ class DesktopWorldTest {
                 .contains(DesktopWorld.lastBox(two))
                 .contains("0,0,0-6,1,6")
                 .contains("8,0,0-14,1,6")
+                .contains(DesktopWorld.lastLease(two))
                 .contains(Parcel.SYSTEM_TENANT + " · " + Parcel.SYSTEM_TENANT);
         two.grant(two.parcels().get(0).id(), "bob", ParcelVerb.BLOCK_PLACE);
         two.grant(two.parcels().get(1).id(), "carol", ParcelVerb.DOOR_OPEN);

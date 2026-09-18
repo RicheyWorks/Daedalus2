@@ -577,7 +577,8 @@ explore names the last ACL, and
 explore names the last maze, and
 explore names the last box, and
 explore names the last lease, and
-desktop inspect names the last box
+desktop inspect names the last box, and
+desktop inspect names the last lease
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
