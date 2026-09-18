@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well lab frame depth.**
+  Plot-panel gold falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP leftover
+  even plugin row lips stay.
+
 - **Well lab header depth.**
   Plot-header gold falls off toward
   floor-dim with the same 0.22 as halls,
