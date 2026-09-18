@@ -122,6 +122,10 @@ class ThemeManagerTest {
             assertThat(fxml).contains("color=\"#8aaa50\"");
             assertThat(fxml).contains("color=\"#4e6a28\"");
             assertThat(fxml).contains("legendDeadend");
+            assertThat(fxml).contains("legendHardest");
+            assertThat(fxml).contains("color=\"#f2c94c\"");
+            assertThat(fxml).contains("color=\"#8a6820\"");
+            assertThat(fxml).doesNotContain("fill=\"#f2c94c\" arcWidth=\"3\" arcHeight=\"3\"");
             assertThat(fxml).contains("legendTour");
             assertThat(fxml).contains("fill=\"#d4b06a\"");
             assertThat(fxml).contains("color=\"#d4b06a\"");
