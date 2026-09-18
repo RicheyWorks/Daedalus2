@@ -204,6 +204,8 @@ class WebUiSmokeTest {
                 .contains("#tourBox { padding: 8px; background: #16120e;")
                 .contains("#labOut { padding: 8px; background: #16120e;")
                 .contains("#compareBox { max-height: 22vh; overflow: auto; overscroll-behavior: none; min-width: 0;")
+                .contains("color: #f2ead8; cursor: text; padding: 8px; background: #16120e;\n"
+                        + "                border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
                 .contains("color: #f2ead8; cursor: text; padding: 8px")
                 .contains("animation: chevronBreath 4.5s ease-in-out infinite; }")
                 .contains("animation: infoRimBreath 4.5s ease-in-out infinite; }")
