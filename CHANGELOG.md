@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **NPC inspect last at.**
+  GET /npc names the last driven cube
+  only when that cell is the one that
+  was driven. Empty on every other
+  cube. No wallet types.
+
 - **Portal inspect last at.**
   GET /portal names the last driven
   cube only when that cell is the one

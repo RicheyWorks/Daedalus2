@@ -722,6 +722,7 @@ public final class WorldOps {
         out.put("acl", aclAt(world, npc.at()));
         out.put("drive", driveOn(world, npc.at()));
         out.put("driveActor", actorOn(world, npc.at()));
+        out.put("driveAt", atOn(world, npc.at()));
         return out;
     }
 

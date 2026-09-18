@@ -240,6 +240,7 @@ class ParcelGateTest {
                 world, "npc.inspect", Npc.ZERO_AT, null);
         assertThat(npcSeen.get("drive")).isEqualTo("npc.talk DENIED");
         assertThat(npcSeen.get("driveActor")).isEqualTo("carol");
+        assertThat(npcSeen.get("driveAt")).isEqualTo("3,1,0");
         assertThat(world.npc().state()).isEqualTo(NpcState.IDLE);
         assertThat(world.revision().value()).isEqualTo(revision);
         assertThat(WorldOps.grantParcel(world, Npc.ZERO_AT, "bob", "npc.talk"))
