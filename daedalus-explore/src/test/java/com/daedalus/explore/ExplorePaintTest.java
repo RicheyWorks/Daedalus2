@@ -1114,11 +1114,15 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.lastParcelMaze(cubes)).isNull();
         assertThat(ExplorePaint.lastParcelMaze(bound))
                 .isEqualTo("00000000-0000-4000-8000-00000000000e");
+        assertThat(ExplorePaint.lastParcelMazes(bound))
+                .isEqualTo("00000000-0000-4000-8000-00000000000e");
+        assertThat(ExplorePaint.lastParcelMazes(cubes)).isNull();
         assertThat(ExplorePaint.lastParcelPlaceName(null)).isNull();
         assertThat(ExplorePaint.lastParcelLot(null)).isNull();
         assertThat(ExplorePaint.lastParcelBox(null)).isNull();
         assertThat(ExplorePaint.lastParcelBoxes(null)).isNull();
         assertThat(ExplorePaint.lastParcelMaze(null)).isNull();
+        assertThat(ExplorePaint.lastParcelMazes(null)).isNull();
         assertThat(ExplorePaint.occupantsName(cubes))
                 .isEqualTo("door · trap · portal · npc");
         assertThat(ExplorePaint.standsName(cubes))
@@ -1206,10 +1210,17 @@ class ExplorePaintTest {
         two.applyStamp(new ParcelBounds(8, 0, 8, 9, 1, 9), Parcel.SYSTEM_OWNER,
                 List.of(new BlockCoordinate(8, 0, 8)), List.of(BlockType.WOOD));
         two.nameParcel(two.parcels().get(1).id(), "Oak Lane");
+        two.bindMaze(two.parcels().get(0).id(), "00000000-0000-4000-8000-000000000011");
+        two.bindMaze(two.parcels().get(1).id(), "00000000-0000-4000-8000-000000000012");
         WorldMesh street = WorldMesh.of(two);
         assertThat(ExplorePaint.lastParcelBoxes(street))
                 .isEqualTo("0,0,0-2,1,2 · 8,0,8-9,1,9");
         assertThat(ExplorePaint.lastParcelBox(street)).isEqualTo("8,0,8-9,1,9");
+        assertThat(ExplorePaint.lastParcelMaze(street))
+                .isEqualTo("00000000-0000-4000-8000-000000000012");
+        assertThat(ExplorePaint.lastParcelMazes(street))
+                .isEqualTo("00000000-0000-4000-8000-000000000011"
+                        + " · 00000000-0000-4000-8000-000000000012");
     }
 
     @Test

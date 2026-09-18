@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore names every maze.**
+  Off a slab the hall caption names
+  every lab maze UUID, oldest first.
+  Empty until a mazeRef is bound. No
+  wallet types.
+
 - **Explore names the last lease.**
   Off a slab the hall caption names
   the newest account key. Empty until
