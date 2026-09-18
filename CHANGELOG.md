@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop inspect names every lease.**
+  The desktop world line names every
+  rented account key, oldest first.
+  Empty until parcel.lease. No wallet
+  types.
+
 - **Desktop inspect names every box.**
   The desktop world line names every
   inclusive AABB, oldest first. Empty

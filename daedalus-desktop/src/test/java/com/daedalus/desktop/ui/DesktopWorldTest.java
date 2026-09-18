@@ -101,6 +101,8 @@ class DesktopWorldTest {
                         + " · 8,0,8-9,1,9 · listening · door · trap · portal · npc"
                         + " · door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0");
         assertThat(DesktopWorld.firstLease(World.zero())).isEmpty();
+        assertThat(DesktopWorld.streetLeases(World.zero())).isEmpty();
+        assertThat(DesktopWorld.streetLeases(named)).isEqualTo(Parcel.SYSTEM_TENANT);
         named.bindMaze(named.parcels().get(0).id(), "00000000-0000-4000-8000-000000000007");
         assertThat(DesktopWorld.firstMaze(named))
                 .isEqualTo("00000000-0000-4000-8000-000000000007");
@@ -220,6 +222,8 @@ class DesktopWorldTest {
                 .isEqualTo(cached.metadata().id() + " · " + second.metadata().id());
         assertThat(two.parcels().get(0).leaseId()).isEqualTo(Parcel.SYSTEM_TENANT);
         assertThat(two.parcels().get(1).leaseId()).isEqualTo(Parcel.SYSTEM_TENANT);
+        assertThat(DesktopWorld.streetLeases(two))
+                .isEqualTo(Parcel.SYSTEM_TENANT + " · " + Parcel.SYSTEM_TENANT);
         assertThat(DesktopWorld.firstPlace(two)).isIn(PlaceNames.STREETS);
         assertThat(DesktopWorld.lastPlace(two)).isIn(PlaceNames.STREETS);
         assertThat(DesktopWorld.lastPlace(two)).isNotEqualTo(DesktopWorld.firstPlace(two));
@@ -238,6 +242,7 @@ class DesktopWorldTest {
                 .contains("0,0")
                 .contains("8,0")
                 .contains("0,0,0-6,1,6")
-                .contains("8,0,0-14,1,6");
+                .contains("8,0,0-14,1,6")
+                .contains(Parcel.SYSTEM_TENANT + " · " + Parcel.SYSTEM_TENANT);
     }
 }

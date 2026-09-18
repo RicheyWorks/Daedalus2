@@ -94,7 +94,7 @@ public final class DesktopWorld {
             }
         }
         String line = inspectLine(world.revision().value(), world.parcels().size(), place,
-                lastLease(world), streetMazes(world), streetBoxes(world), last);
+                streetLeases(world), streetMazes(world), streetBoxes(world), last);
         String occ = occupancyLine(world);
         if (occ.isEmpty()) {
             occ = chunkOccupants(world, last);
@@ -385,6 +385,11 @@ public final class DesktopWorld {
             }
         }
         return found;
+    }
+
+    /** All account keys on rented slabs, oldest first. Empty when none are rented. */
+    public static String streetLeases(World world) {
+        return WorldOps.streetLeases(world);
     }
 
     /** Newest lease string on inspect — account key, not a wallet. */
