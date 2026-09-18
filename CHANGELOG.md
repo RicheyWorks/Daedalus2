@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well inspect drive at.**
+  GET /world carries the cube address of
+  the last mutation. The fold paints an
+  at row. Inspect does not overwrite it.
+  A file remesh does not keep it yet.
+
 - **Well builder last actor.**
   The well builder hint names the
   account key from GET /world after

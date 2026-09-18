@@ -163,6 +163,8 @@
         world && world.drive);
     row(box, "actor", world && world.driveActor ? world.driveActor : "—",
         world && world.driveActor);
+    row(box, "at", world && world.driveAt ? world.driveAt : "—",
+        world && world.driveAt);
     row(box, "plots", world && world.plots != null ? String(world.plots) : "—");
     row(box, "street", world && world.street ? world.street : "—");
     row(box, "place", world && world.place ? world.place : "—");

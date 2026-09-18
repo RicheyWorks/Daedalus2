@@ -94,7 +94,7 @@ public final class WorldOps {
             default -> throw new IllegalArgumentException("Unknown capability " + capability);
         };
         if (!(out instanceof Map)) {
-            recordDrive(world, capability, out, actorFor(capability, mazeRef, actorId));
+            recordDrive(world, capability, out, actorFor(capability, mazeRef, actorId), at);
         }
         return out;
     }
@@ -138,11 +138,23 @@ public final class WorldOps {
         return actor == null ? "" : actor;
     }
 
-    private static void recordDrive(World world, String capability, Object result, String actor) {
+    /**
+     * Cube address of the last mutation. Empty until a mutation.
+     */
+    public static String atLine(World world) {
+        if (world == null || world.lastDriveAt() == null) {
+            return "";
+        }
+        BlockCoordinate at = world.lastDriveAt();
+        return at.x() + "," + at.y() + "," + at.z();
+    }
+
+    private static void recordDrive(World world, String capability, Object result, String actor,
+            BlockCoordinate at) {
         String rendered = result == null ? "null"
                 : result instanceof StampResult stamp ? stamp.outcome()
                 : result.toString();
-        world.recordDrive(capability, rendered, actor);
+        world.recordDrive(capability, rendered, actor, at);
     }
 
     private static String actorFor(String capability, String mazeRef, String actorId) {
@@ -174,6 +186,7 @@ public final class WorldOps {
         out.put("acl", aclLine(world));
         out.put("drive", driveLine(world));
         out.put("driveActor", actorLine(world));
+        out.put("driveAt", atLine(world));
         return out;
     }
 

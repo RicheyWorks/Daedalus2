@@ -42,6 +42,7 @@ public final class World {
     private String lastDriveCapability = "";
     private String lastDriveResult = "";
     private String lastDriveActor = "";
+    private BlockCoordinate lastDriveAt;
 
     public World(WorldId id) {
         this(id, WorldId.ZERO.equals(Objects.requireNonNull(id, "WorldId is required"))
@@ -111,15 +112,26 @@ public final class World {
         }
     }
 
+    public BlockCoordinate lastDriveAt() {
+        synchronized (lock) {
+            return lastDriveAt;
+        }
+    }
+
     public void recordDrive(String capability, String result) {
         recordDrive(capability, result, "");
     }
 
     public void recordDrive(String capability, String result, String actor) {
+        recordDrive(capability, result, actor, null);
+    }
+
+    public void recordDrive(String capability, String result, String actor, BlockCoordinate at) {
         synchronized (lock) {
             lastDriveCapability = capability == null ? "" : capability;
             lastDriveResult = result == null ? "" : result;
             lastDriveActor = actor == null ? "" : actor;
+            lastDriveAt = at;
         }
     }
 
