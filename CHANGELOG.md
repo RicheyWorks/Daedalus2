@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Trap arm names the slab ACL.**
+  POST /trap/arm and /trap/disarm name
+  the extra-list under that cube.
+  Empty when the trap sits off a
+  stamped plot. No wallet types.
+
 - **Door open names the slab ACL.**
   POST /door/open and /door/close name
   the extra-list under that cube.
