@@ -357,9 +357,10 @@ public class WorldController {
     @PostMapping("/world/{id}/trap/arm")
     @Operation(summary = "Arm the trap. ALREADY_ARMED is a result, not silence.")
     @PerKeyRateLimit("mazeGenerate")
-    public ResponseEntity<TrapMutationResponse> armTrap(@PathVariable String id) {
+    public ResponseEntity<TrapMutationResponse> armTrap(
+            @PathVariable String id, @RequestParam(required = false) String actorId) {
         mounted(id);
-        TrapResult result = worlds.armTrap(id);
+        TrapResult result = worlds.armTrap(id, actorId);
         Trap trap = worlds.inspectTrap(id);
         World world = mounted(id);
         return ResponseEntity.ok(new TrapMutationResponse(
@@ -369,9 +370,10 @@ public class WorldController {
     @PostMapping("/world/{id}/trap/disarm")
     @Operation(summary = "Disarm the trap. ALREADY_DISARMED is a result, not silence.")
     @PerKeyRateLimit("mazeGenerate")
-    public ResponseEntity<TrapMutationResponse> disarmTrap(@PathVariable String id) {
+    public ResponseEntity<TrapMutationResponse> disarmTrap(
+            @PathVariable String id, @RequestParam(required = false) String actorId) {
         mounted(id);
-        TrapResult result = worlds.disarmTrap(id);
+        TrapResult result = worlds.disarmTrap(id, actorId);
         Trap trap = worlds.inspectTrap(id);
         World world = mounted(id);
         return ResponseEntity.ok(new TrapMutationResponse(

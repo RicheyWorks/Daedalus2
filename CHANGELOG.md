@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Trap REST actor.**
+  POST trap/arm and trap/disarm take optional actorId.
+  Blank stays the system owner. DENIED is a named
+  result. No wallet types.
+
 - **Parcel gate on trap.disarm.**
   trap.disarm asks the same trap.arm gate. Empty actor
   is the system owner. DENIED leaves the trap. No wallet

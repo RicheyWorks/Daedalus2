@@ -365,7 +365,8 @@ well stamp actor, and
 well place actor, and
 well grant actor, and
 ParcelGate on trap.arm and
-trap.disarm
+trap.disarm, and
+trap REST actor
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

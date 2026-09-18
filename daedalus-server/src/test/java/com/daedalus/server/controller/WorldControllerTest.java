@@ -354,6 +354,27 @@ class WorldControllerTest {
                         .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("ALREADY_DENIED")));
+
+        mvc.perform(post("/api/v1/world/world-zero/trap/arm").param("actorId", "carol"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("DENIED")))
+                .andExpect(jsonPath("$.state", equalTo("ARMED")));
+
+        mvc.perform(post("/api/v1/world/world-zero/trap/disarm").param("actorId", "carol"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("DENIED")))
+                .andExpect(jsonPath("$.state", equalTo("ARMED")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/grant")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0,\"verb\":\"trap.arm\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("GRANTED")));
+
+        mvc.perform(post("/api/v1/world/world-zero/trap/disarm").param("actorId", "bob"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("DISARMED")))
+                .andExpect(jsonPath("$.state", equalTo("DISARMED")));
     }
 
     @Test
