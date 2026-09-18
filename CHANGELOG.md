@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop empty wordmark depth.**
+  Idle parchment falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even cream is not the last
+  word on an empty well.
+
 - **Well empty wordmark depth.**
   Idle parchment falls off toward
   floor-dim with the same 0.22 as halls,

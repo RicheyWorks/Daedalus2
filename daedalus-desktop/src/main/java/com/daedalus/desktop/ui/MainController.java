@@ -1864,7 +1864,7 @@ public class MainController {
             }
             g.setTextAlign(TextAlignment.CENTER);
             g.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 28));
-            g.setFill(Color.web(DesktopPaint.EMPTY_WORDMARK_INK));
+            g.setFill(Color.web(DesktopPaint.emptyWordmarkInk()));
             var mint = new javafx.scene.effect.DropShadow(
                     DesktopPaint.emptyMintRadius(wave), 0, 0,
                     Color.web(DesktopPaint.EMPTY_WORDMARK_GLOW,
