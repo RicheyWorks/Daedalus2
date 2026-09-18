@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore names the last slab maze.**
+  Off a slab the hall caption names
+  the newest lab maze UUID. Empty
+  until a mazeRef is bound. No
+  wallet types.
+
 - **Explore names the last slab ACL.**
   Off a slab the hall caption names
   the newest extra-list. Empty until

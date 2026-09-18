@@ -1266,6 +1266,8 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.lastParcelMazes(street))
                 .isEqualTo("00000000-0000-4000-8000-000000000011"
                         + " · 00000000-0000-4000-8000-000000000012");
+        assertThat(ExplorePaint.lastParcelMazes(street))
+                .isNotEqualTo(ExplorePaint.lastParcelMaze(street));
         two.leaseParcel(two.parcels().get(0).id(), Parcel.SYSTEM_TENANT);
         two.leaseParcel(two.parcels().get(1).id(), Parcel.SYSTEM_TENANT);
         WorldMesh rentedTwo = WorldMesh.of(two);
