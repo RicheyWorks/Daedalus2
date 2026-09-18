@@ -2,6 +2,9 @@
 
 package com.daedalus.world;
 
+import com.daedalus.engine.MazeGrid;
+import com.daedalus.world.stamp.StampOps;
+import com.daedalus.world.stamp.StampRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -95,6 +98,25 @@ class WorldStoreTest {
         World reloaded = WorldStore.load(file);
         assertThat(reloaded.npc().state()).isEqualTo(NpcState.SPEAKING);
         assertThat(reloaded.npc().id()).isEqualTo(Npc.ZERO_ID);
+    }
+
+    @Test
+    void extraGrantsAndDenialsSurviveRestart() throws Exception {
+        World live = World.zero();
+        StampOps.apply(live, new StampRequest(live.id(),
+                new BlockCoordinate(0, 0, 0), new MazeGrid(1, 1), 0, 1));
+        ParcelId id = live.parcels().get(0).id();
+        live.grant(id, "bob", ParcelVerb.BLOCK_PLACE);
+        live.deny(id, "alice", ParcelVerb.BLOCK_PLACE);
+        Path file = tmp.resolve("acl.daew");
+        WorldStore.save(live, file);
+        World reloaded = WorldStore.load(file);
+        assertThat(reloaded.acl(id).grants("bob", ParcelVerb.BLOCK_PLACE)).isTrue();
+        assertThat(reloaded.acl(id).denies("alice", ParcelVerb.BLOCK_PLACE)).isTrue();
+        assertThat(reloaded.acl(id).grants("alice", ParcelVerb.BLOCK_PLACE)).isFalse();
+        Path again = tmp.resolve("acl-again.daew");
+        WorldStore.save(reloaded, again);
+        assertThat(Files.readAllBytes(again)).isEqualTo(Files.readAllBytes(file));
     }
 
     @Test

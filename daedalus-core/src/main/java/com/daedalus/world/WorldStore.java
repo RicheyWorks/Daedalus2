@@ -23,7 +23,7 @@ import java.util.Map;
 public final class WorldStore {
 
     static final byte[] MAGIC = "DAEW".getBytes(StandardCharsets.US_ASCII);
-    static final int VERSION = 9;
+    static final int VERSION = 10;
     static final int VERSION_CHUNKS_ONLY = 1;
     static final int VERSION_WITH_DOOR = 2;
     static final int VERSION_WITH_PARCELS = 3;
@@ -32,6 +32,8 @@ public final class WorldStore {
     static final int VERSION_WITH_NPC = 6;
     static final int VERSION_WITH_PLACE_NAME = 7;
     static final int VERSION_WITH_LEASE = 8;
+    static final int VERSION_WITH_MAZE_REF = 9;
+    static final int VERSION_WITH_ACL = 10;
 
     private WorldStore() {
     }
@@ -139,6 +141,20 @@ public final class WorldStore {
             out.writeInt(npc.at().z());
             out.writeUTF(npc.state().name());
         }
+        List<Map.Entry<ParcelId, ParcelAcl>> acls = new ArrayList<>();
+        for (Map.Entry<ParcelId, ParcelAcl> e : snapshot.acls().entrySet()) {
+            ParcelAcl acl = e.getValue();
+            if (acl != null && (!acl.grants().isEmpty() || !acl.denials().isEmpty())) {
+                acls.add(e);
+            }
+        }
+        acls.sort(Comparator.comparing(e -> e.getKey().value()));
+        out.writeInt(acls.size());
+        for (Map.Entry<ParcelId, ParcelAcl> e : acls) {
+            out.writeUTF(e.getKey().value());
+            writeGrants(out, e.getValue().grants());
+            writeGrants(out, e.getValue().denials());
+        }
     }
 
     static WorldSnapshot read(DataInputStream in) throws IOException {
@@ -147,7 +163,9 @@ public final class WorldStore {
             throw new IOException("Not a Daedalus world snapshot");
         }
         int version = in.readUnsignedByte();
-        if (version != VERSION && version != VERSION_WITH_NPC
+        if (version != VERSION && version != VERSION_WITH_ACL
+                && version != VERSION_WITH_MAZE_REF
+                && version != VERSION_WITH_NPC
                 && version != VERSION_WITH_PORTAL
                 && version != VERSION_WITH_TRAP
                 && version != VERSION_WITH_PARCELS
@@ -197,7 +215,7 @@ public final class WorldStore {
                 long parcelVersion = in.readLong();
                 String placeName = version >= VERSION_WITH_PLACE_NAME ? in.readUTF() : "";
                 String leaseId = version >= VERSION_WITH_LEASE ? in.readUTF() : "";
-                String mazeRef = version >= VERSION ? in.readUTF() : "";
+                String mazeRef = version >= VERSION_WITH_MAZE_REF ? in.readUTF() : "";
                 parcels.add(new Parcel(parcelId, parcelWorld, ownerId, bounds,
                         parcelVersion, placeName, leaseId, mazeRef));
             }
@@ -235,7 +253,41 @@ public final class WorldStore {
         } else if (WorldId.ZERO.equals(id)) {
             npc = Npc.zero();
         }
-        return new WorldSnapshot(id, revision, chunks, door, trap, portal, npc, parcels);
+        Map<ParcelId, ParcelAcl> acls = new LinkedHashMap<>();
+        if (version >= VERSION_WITH_ACL) {
+            int aclCount = in.readInt();
+            if (aclCount < 0) {
+                throw new IOException("Negative ACL count");
+            }
+            for (int i = 0; i < aclCount; i++) {
+                ParcelId parcelId = new ParcelId(in.readUTF());
+                List<ParcelAcl.Grant> grants = readGrants(in);
+                List<ParcelAcl.Grant> denials = readGrants(in);
+                acls.put(parcelId, new ParcelAcl(grants, denials));
+            }
+        }
+        return new WorldSnapshot(id, revision, chunks, door, trap, portal, npc, parcels, acls);
+    }
+
+    private static void writeGrants(DataOutputStream out, List<ParcelAcl.Grant> rows)
+            throws IOException {
+        out.writeInt(rows.size());
+        for (ParcelAcl.Grant row : rows) {
+            out.writeUTF(row.actorId());
+            out.writeUTF(row.verb().name());
+        }
+    }
+
+    private static List<ParcelAcl.Grant> readGrants(DataInputStream in) throws IOException {
+        int count = in.readInt();
+        if (count < 0) {
+            throw new IOException("Negative grant count");
+        }
+        List<ParcelAcl.Grant> rows = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            rows.add(new ParcelAcl.Grant(in.readUTF(), ParcelVerb.valueOf(in.readUTF())));
+        }
+        return rows;
     }
 
     private static void requirePath(Path file) {

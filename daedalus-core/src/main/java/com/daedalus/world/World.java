@@ -47,11 +47,12 @@ public final class World {
                 WorldId.ZERO.equals(id) ? Trap.zero() : null,
                 WorldId.ZERO.equals(id) ? Portal.zero() : null,
                 WorldId.ZERO.equals(id) ? Npc.zero() : null,
-                0L, Map.of(), List.of());
+                0L, Map.of(), List.of(), Map.of());
     }
 
     private World(WorldId id, Door door, Trap trap, Portal portal, Npc npc, long revision,
-            Map<ChunkCoordinate, Chunk> seeded, List<Parcel> seededParcels) {
+            Map<ChunkCoordinate, Chunk> seeded, List<Parcel> seededParcels,
+            Map<ParcelId, ParcelAcl> seededAcls) {
         this.id = Objects.requireNonNull(id, "WorldId is required");
         this.door = door;
         this.trap = trap;
@@ -64,6 +65,9 @@ public final class World {
         if (seededParcels != null) {
             this.parcels.addAll(seededParcels);
             this.nextParcelNumber = maxParcelNumber(this.parcels);
+        }
+        if (seededAcls != null) {
+            this.acls.putAll(seededAcls);
         }
     }
 
@@ -289,12 +293,17 @@ public final class World {
             for (Map.Entry<ChunkCoordinate, Chunk> e : chunks.entrySet()) {
                 copy.put(e.getKey(), e.getValue().copy());
             }
+            Map<ParcelId, ParcelAcl> copiedAcls = new LinkedHashMap<>();
+            for (Map.Entry<ParcelId, ParcelAcl> e : acls.entrySet()) {
+                copiedAcls.put(e.getKey(), e.getValue());
+            }
             return new WorldSnapshot(id, revision(), Map.copyOf(copy),
                     door == null ? null : door.copy(),
                     trap == null ? null : trap.copy(),
                     portal == null ? null : portal.copy(),
                     npc == null ? null : npc.copy(),
-                    List.copyOf(parcels));
+                    List.copyOf(parcels),
+                    Map.copyOf(copiedAcls));
         }
     }
 
@@ -503,7 +512,8 @@ public final class World {
                 snapshot.npc() == null ? null : snapshot.npc().copy(),
                 snapshot.revision().value(),
                 snapshot.chunks(),
-                snapshot.parcels());
+                snapshot.parcels(),
+                snapshot.acls());
     }
 
     private static int maxParcelNumber(List<Parcel> existing) {

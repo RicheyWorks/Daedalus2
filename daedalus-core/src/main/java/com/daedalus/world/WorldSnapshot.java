@@ -18,7 +18,8 @@ public record WorldSnapshot(
         Trap trap,
         Portal portal,
         Npc npc,
-        List<Parcel> parcels) {
+        List<Parcel> parcels,
+        Map<ParcelId, ParcelAcl> acls) {
 
     public WorldSnapshot {
         Objects.requireNonNull(id, "WorldId is required");
@@ -26,13 +27,14 @@ public record WorldSnapshot(
         Objects.requireNonNull(chunks, "chunks are required");
         chunks = Map.copyOf(chunks);
         parcels = parcels == null ? List.of() : List.copyOf(parcels);
+        acls = acls == null ? Map.of() : Map.copyOf(acls);
     }
 
     public WorldSnapshot(WorldId id, WorldRevision revision, Map<ChunkCoordinate, Chunk> chunks) {
-        this(id, revision, chunks, null, null, null, null, List.of());
+        this(id, revision, chunks, null, null, null, null, List.of(), Map.of());
     }
 
     public WorldSnapshot(WorldId id, WorldRevision revision, Map<ChunkCoordinate, Chunk> chunks, Door door) {
-        this(id, revision, chunks, door, null, null, null, List.of());
+        this(id, revision, chunks, door, null, null, null, List.of(), Map.of());
     }
 }

@@ -350,7 +350,8 @@ trap.inspect ACL, and
 portal.inspect ACL, and
 npc.inspect ACL, and
 parcel.grant, and
-parcel.deny
+parcel.deny, and
+DAEW v10 ACL persist
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
