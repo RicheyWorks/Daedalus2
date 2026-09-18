@@ -191,6 +191,8 @@ class WebUiSmokeTest {
                 .contains("#log, #lb, #stats, #asciiOut, #gate pre, #tourBox, #labOut,")
                 .contains("#status, #compareBox, #pluginBox, #worldBox, #campaignBox {")
                 .contains("#worldBox div { border-bottom: 1px solid rgba(153, 111, 49, 0.28); padding: 2px 0;")
+                .contains("#worldBox { color: #b09a72; padding: 8px; background: #16120e;\n"
+                        + "              border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
                 .contains("font-variant-numeric: tabular-nums;")
                 .contains("var(--panel); cursor: default;")
                 .contains("var(--panel); cursor: default; -webkit-user-drag: none")
