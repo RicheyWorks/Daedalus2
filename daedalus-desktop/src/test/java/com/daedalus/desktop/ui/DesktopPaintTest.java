@@ -1014,6 +1014,10 @@ class DesktopPaintTest {
                 .as("start disc falls off toward floor-dim")
                 .isNotEqualTo(DesktopPaint.START_INK);
         assertThat(DesktopPaint.GOAL_INK).isEqualTo("#ff5a5f");
+        assertThat(DesktopPaint.goalInk(0)).isEqualTo(DesktopPaint.GOAL_INK);
+        assertThat(DesktopPaint.goalInk(1))
+                .as("goal disc falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.GOAL_INK);
         String stone = DesktopPaint.clearFloorInk(0);
         String gate = DesktopPaint.endFloorInk(stone, TileType.START);
         String exit = DesktopPaint.endFloorInk(stone, TileType.GOAL);

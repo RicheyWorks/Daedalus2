@@ -310,6 +310,11 @@ public final class DesktopPaint {
         return walkTrailInk(START_INK, edge);
     }
 
+    /** Same 0.22 rim as halls — leftover even coral is not the last word on a finish. */
+    public static String goalInk(double edge) {
+        return walkTrailInk(GOAL_INK, edge);
+    }
+
     public static String endFloorInk(String base, TileType tile) {
         if (base == null) {
             return null;

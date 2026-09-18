@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop goal disc depth.**
+  Goal coral falls off toward floor-dim
+  at the board rim with the same 0.22
+  edge as halls, so leftover even coral
+  is not the last word on a finish.
+
 - **Well goal disc depth.**
   Goal coral falls off toward floor-dim
   at the board rim with the same 0.22

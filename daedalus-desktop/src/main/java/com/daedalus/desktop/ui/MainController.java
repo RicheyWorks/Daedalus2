@@ -1856,7 +1856,10 @@ public class MainController {
                         Color.web(DesktopPaint.startInk(DesktopPaint.floorEdge(mark,
                                 2 * DesktopPaint.EMPTY_MARK_START.row() + 1,
                                 2 * DesktopPaint.EMPTY_MARK_START.col() + 1))));
-                paintEndpoint(g, mark, DesktopPaint.EMPTY_MARK_GOAL, theme.goal());
+                paintEndpoint(g, mark, DesktopPaint.EMPTY_MARK_GOAL,
+                        Color.web(DesktopPaint.goalInk(DesktopPaint.floorEdge(mark,
+                                2 * DesktopPaint.EMPTY_MARK_GOAL.row() + 1,
+                                2 * DesktopPaint.EMPTY_MARK_GOAL.col() + 1))));
                 g.setGlobalAlpha(1);
             }
             g.setTextAlign(TextAlignment.CENTER);
@@ -2220,7 +2223,10 @@ public class MainController {
             paintEndpoint(g, layout, start, start == null ? theme.start()
                     : Color.web(DesktopPaint.startInk(DesktopPaint.floorEdge(layout,
                             2 * start.row() + 1, 2 * start.col() + 1))));
-            paintEndpoint(g, layout, current.metadata().goal(), theme.goal());
+            Point goal = current.metadata().goal();
+            paintEndpoint(g, layout, goal, goal == null ? theme.goal()
+                    : Color.web(DesktopPaint.goalInk(DesktopPaint.floorEdge(layout,
+                            2 * goal.row() + 1, 2 * goal.col() + 1))));
         }
 
         // ---- 4) player marker, then the web victory ring ----
@@ -2349,7 +2355,10 @@ public class MainController {
                     DesktopPaint.floorEdge(layout, 2 * start.row() + 1, 2 * start.col() + 1))));
         }
         if (theme != null && fog.goal() != null) {
-            paintEndpoint(g, layout, fog.goal(), theme.goal());
+            Point fogGoal = fog.goal();
+            paintEndpoint(g, layout, fogGoal, fogGoal == null ? theme.goal()
+                    : Color.web(DesktopPaint.goalInk(DesktopPaint.floorEdge(layout,
+                            2 * fogGoal.row() + 1, 2 * fogGoal.col() + 1))));
         }
         DesktopPaint.Marker mark = DesktopPaint.playerMarker(layout, fog.position());
         if (mark != null && theme != null) {
