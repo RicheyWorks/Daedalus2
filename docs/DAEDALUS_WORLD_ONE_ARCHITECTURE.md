@@ -401,7 +401,8 @@ npc inspect last drive, and
 chunk inspect last drive, and
 well chunk last drive, and
 desktop chunk last drive, and
-chunk inspect last at
+chunk inspect last at, and
+well chunk last at
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

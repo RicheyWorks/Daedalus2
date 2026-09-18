@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well chunk last at.**
+  The well chunk row paints the last
+  driven cube when that address sits
+  in 0,0,0. Empty on every other
+  slice. No wallet types.
+
 - **Chunk inspect last at.**
   GET /chunk names the last driven cube
   only when that address sits in the
