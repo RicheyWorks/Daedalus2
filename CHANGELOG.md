@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well log frame depth.**
+  Event-panel gold falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP leftover
+  even tour table lips stay.
+
 - **Well log row depth.**
   Event-row gold falls off toward
   floor-dim with the same 0.22 as halls,
