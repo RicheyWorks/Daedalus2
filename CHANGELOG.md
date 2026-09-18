@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Door inspect last at.**
+  GET /door names the last driven cube
+  only when that cell is the one that
+  was driven. Empty on every other
+  cube. No wallet types.
+
 - **Block inspect last at.**
   GET /block names the last driven cube
   only when that cell is the one that

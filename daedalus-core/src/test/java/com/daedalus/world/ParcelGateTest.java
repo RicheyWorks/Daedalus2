@@ -100,6 +100,7 @@ class ParcelGateTest {
                 world, "door.inspect", Door.ZERO_AT, null);
         assertThat(doorSeen.get("drive")).isEqualTo("door.open DENIED");
         assertThat(doorSeen.get("driveActor")).isEqualTo("carol");
+        assertThat(doorSeen.get("driveAt")).isEqualTo("0,1,0");
         assertThat(world.door().state()).isEqualTo(DoorState.CLOSED);
         assertThat(world.revision().value()).isEqualTo(revision);
         assertThat(WorldOps.grantParcel(world, Door.ZERO_AT, "bob", "door.open"))
