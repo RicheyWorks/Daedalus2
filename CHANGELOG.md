@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Revoke names the slab maze.**
+  POST /parcels/revoke names the lab
+  maze UUID under that cube. Empty
+  off the street or on a default
+  slab. No wallet types.
+
 - **Deny names the slab maze.**
   POST /parcels/deny names the lab
   maze UUID under that cube. Empty
