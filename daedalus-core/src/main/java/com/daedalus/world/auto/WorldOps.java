@@ -85,7 +85,7 @@ public final class WorldOps {
             case "portal.open" -> openPortal(world, mazeRef);
             case "portal.seal" -> sealPortal(world, mazeRef);
             case "npc.inspect" -> inspectNpc(world);
-            case "npc.talk" -> world.talkNpc();
+            case "npc.talk" -> talkNpc(world, mazeRef);
             case "npc.hush" -> world.hushNpc();
             case "parcel.lease" -> leaseParcel(world);
             case "parcel.grant" -> grantParcel(world, at, mazeRef, actorId);
@@ -157,6 +157,7 @@ public final class WorldOps {
             case STAMP_APPLY -> "stamp.apply";
             case TRAP_ARM -> "trap.arm";
             case PORTAL_OPEN -> "portal.open";
+            case NPC_TALK -> "npc.talk";
         };
     }
 
@@ -174,6 +175,7 @@ public final class WorldOps {
             case "stamp.apply" -> ParcelVerb.STAMP_APPLY;
             case "trap.arm" -> ParcelVerb.TRAP_ARM;
             case "portal.open" -> ParcelVerb.PORTAL_OPEN;
+            case "npc.talk" -> ParcelVerb.NPC_TALK;
             default -> null;
         };
     }
@@ -554,6 +556,21 @@ public final class WorldOps {
         out.put("lot", lotAt(world, npc.at()));
         out.put("acl", aclAt(world, npc.at()));
         return out;
+    }
+
+    /**
+     * Talk through {@link ParcelVerb#NPC_TALK}. Empty actor is the
+     * system owner. A stranger needs a grant. DENIED leaves the NPC.
+     */
+    public static NpcResult talkNpc(World world, String actorId) {
+        if (world.npc() == null) {
+            throw new IllegalStateException("This world has no npc");
+        }
+        String actor = actorId == null || actorId.isBlank() ? Parcel.SYSTEM_OWNER : actorId.trim();
+        if (world.may(actor, ParcelVerb.NPC_TALK, world.npc().at()) == ParcelAccess.DENIED) {
+            return NpcResult.DENIED;
+        }
+        return world.talkNpc();
     }
 
     public static NpcResult asNpcResult(Object value) {

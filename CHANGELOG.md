@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcel gate on npc.talk.**
+  npc.talk asks ParcelGate for npc.talk. Empty actor is
+  the system owner. DENIED leaves the NPC. A 1×2 stamp
+  covers npc-zero. No wallet types.
+
 - **Well portal actor.**
   well portal.open and portal.seal send optional actorId
   (drive type) on the query. Blank stays the system

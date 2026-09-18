@@ -186,6 +186,30 @@ class ParcelGateTest {
     }
 
     @Test
+    void aStampedNpcUsesTheGate() {
+        World world = World.zero();
+        StampOps.apply(world, new StampRequest(world.id(), new BlockCoordinate(0, 0, 0),
+                new MazeGrid(1, 2), 0, 1));
+        long revision = world.revision().value();
+        assertThat(WorldOps.drive(world, "npc.talk", Npc.ZERO_AT, null, null, "carol"))
+                .isEqualTo(NpcResult.DENIED);
+        assertThat(world.npc().state()).isEqualTo(NpcState.IDLE);
+        assertThat(world.revision().value()).isEqualTo(revision);
+        assertThat(WorldOps.grantParcel(world, Npc.ZERO_AT, "bob", "npc.talk"))
+                .isEqualTo(ParcelGrantResult.GRANTED);
+        assertThat(WorldOps.drive(world, "npc.talk", Npc.ZERO_AT, null, null, "bob"))
+                .isEqualTo(NpcResult.SPOKE);
+        assertThat(world.npc().state()).isEqualTo(NpcState.SPEAKING);
+        assertThat(WorldOps.denyParcel(world, Npc.ZERO_AT, "bob", "npc.talk"))
+                .isEqualTo(ParcelDenyResult.DENIED);
+        assertThat(WorldOps.drive(world, "npc.talk", Npc.ZERO_AT, null, null, "bob"))
+                .isEqualTo(NpcResult.DENIED);
+        assertThat(world.npc().state()).isEqualTo(NpcState.SPEAKING);
+        assertThat(WorldOps.drive(world, "npc.talk", Npc.ZERO_AT, null, null, null))
+                .isEqualTo(NpcResult.ALREADY_SPEAKING);
+    }
+
+    @Test
     void boundsContainInclusiveCubes() {
         ParcelBounds box = new ParcelBounds(0, 0, 0, 2, 1, 2);
         assertThat(box.contains(new BlockCoordinate(0, 0, 0))).isTrue();

@@ -371,7 +371,8 @@ well trap actor, and
 ParcelGate on portal.open and
 portal.seal, and
 portal REST actor, and
-well portal actor
+well portal actor, and
+ParcelGate on npc.talk
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

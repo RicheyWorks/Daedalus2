@@ -281,10 +281,19 @@ public class WorldService {
     }
 
     public NpcResult talkNpc(String id) {
+        return talkNpc(id, null);
+    }
+
+    public NpcResult talkNpc(String id, String actorId) {
         World live = require(id);
         synchronized (lock) {
-            NpcResult result = live.talkNpc();
-            persist();
+            NpcResult result = WorldOps.asNpcResult(
+                    WorldOps.drive(live, "npc.talk",
+                            live.npc() == null ? new BlockCoordinate(0, 0, 0) : live.npc().at(),
+                            null, null, actorId));
+            if (result != NpcResult.DENIED) {
+                persist();
+            }
             log.append("npc.talk", result, live.revision().value());
             return result;
         }

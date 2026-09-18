@@ -9,5 +9,6 @@ public enum NpcResult {
     SPOKE,
     HUSHED,
     ALREADY_SPEAKING,
-    ALREADY_IDLE
+    ALREADY_IDLE,
+    DENIED
 }

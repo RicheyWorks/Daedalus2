@@ -10,5 +10,6 @@ public enum ParcelVerb {
     DOOR_OPEN,
     STAMP_APPLY,
     TRAP_ARM,
-    PORTAL_OPEN
+    PORTAL_OPEN,
+    NPC_TALK
 }
