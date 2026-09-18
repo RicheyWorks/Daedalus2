@@ -36,6 +36,6 @@ public class WorldWebSocketController {
                         WorldOps.placeAt(live, at), WorldOps.lotAt(live, at),
                         WorldOps.occupantAt(live, at),
                         WorldOps.driveOn(live, at), WorldOps.actorOn(live, at),
-                        WorldOps.atOn(live, at)));
+                        WorldOps.atOn(live, at), WorldOps.boxAt(live, at)));
     }
 }

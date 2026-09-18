@@ -472,6 +472,7 @@ class WebUiPaintPinTest {
             assertThat(world).doesNotContain("/maze/");
             assertThat(world).contains("frame.place")
                     .contains("frame.lot")
+                    .contains("frame.box")
                     .contains("frame.occupant")
                     .contains("frame.drive")
                     .contains("frame.driveActor")

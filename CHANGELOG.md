@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well last-event names the slab box.**
+  STOMP last-event paints the inclusive
+  AABB under that cube. Empty off a
+  stamped plot. No wallet types.
+
 - **Desktop last-event names the slab lease.**
   The last-event cube names the
   account key under that cell. Empty
