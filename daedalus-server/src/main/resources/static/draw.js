@@ -382,6 +382,13 @@
     return mixHex(COLORS.start, COLORS.floorDim, 0.22 * edge);
   }
 
+  function goalTileInk(tr, tc, th, tw) {
+    const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
+    const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
+    const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+    return mixHex(COLORS.goal, COLORS.floorDim, 0.22 * edge);
+  }
+
   function ghostTileInk(tr, tc, th, tw) {
     const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
     const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
@@ -579,7 +586,8 @@
       if (start && seenCell(scene.fog, start.row, start.col)) {
         endpoint(g, geom, start, startTileInk(2 * start.row + 1, 2 * start.col + 1, th, tw));
       }
-      if (scene.fog.goal) endpoint(g, geom, scene.fog.goal, COLORS.goal);
+      if (scene.fog.goal) endpoint(g, geom, scene.fog.goal,
+          goalTileInk(2 * scene.fog.goal.row + 1, 2 * scene.fog.goal.col + 1, th, tw));
       const fogWalker = scene.fog.position;
       walker(g, geom, fogWalker, fogWalker
           ? playerTileInk(2 * fogWalker.row + 1, 2 * fogWalker.col + 1, th, tw)
@@ -906,7 +914,8 @@
           (tr, tc) => ghostTileInk(tr, tc, th, tw));
     }
     if (start) endpoint(g, geom, start, startTileInk(2 * start.row + 1, 2 * start.col + 1, th, tw));
-    if (goal)  endpoint(g, geom, goal,  COLORS.goal);
+    if (goal)  endpoint(g, geom, goal,
+        goalTileInk(2 * goal.row + 1, 2 * goal.col + 1, th, tw));
     if (scene.session) {
       Object.entries(scene.session.positions).forEach(([name, p], i) => {
         const standHex = PLAYER_COLORS[i % PLAYER_COLORS.length];
@@ -1015,7 +1024,7 @@
     }
     g.globalAlpha = 0.78;
     endpoint(g, geom, {row: 0, col: 0}, startTileInk(1, 1, idleRows, idleCols));
-    endpoint(g, geom, {row: 2, col: 4}, COLORS.goal);
+    endpoint(g, geom, {row: 2, col: 4}, goalTileInk(5, 9, idleRows, idleCols));
     g.restore();
   }
 

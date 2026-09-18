@@ -149,8 +149,21 @@ class WebUiPaintPinTest {
                     .contains("function startTileInk")
                     .contains("mixHex(COLORS.start, COLORS.floorDim, 0.22 * edge)")
                     .contains("endpoint(g, geom, start, startTileInk(2 * start.row + 1, 2 * start.col + 1, th, tw))")
-                    .contains("endpoint(g, geom, {row: 0, col: 0}, startTileInk(1, 1, idleRows, idleCols))")
-                    .contains("endpoint(g, geom, goal,  COLORS.goal)");
+                    .contains("endpoint(g, geom, {row: 0, col: 0}, startTileInk(1, 1, idleRows, idleCols))");
+        }
+    }
+
+    @Test
+    void wellGoalDiscHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("function goalTileInk")
+                    .contains("mixHex(COLORS.goal, COLORS.floorDim, 0.22 * edge)")
+                    .contains("goalTileInk(2 * scene.fog.goal.row + 1, 2 * scene.fog.goal.col + 1, th, tw)")
+                    .contains("goalTileInk(2 * goal.row + 1, 2 * goal.col + 1, th, tw)")
+                    .contains("endpoint(g, geom, {row: 2, col: 4}, goalTileInk(5, 9, idleRows, idleCols))");
         }
     }
 
