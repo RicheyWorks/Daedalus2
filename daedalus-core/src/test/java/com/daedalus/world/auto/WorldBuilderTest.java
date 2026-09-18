@@ -414,6 +414,7 @@ class WorldBuilderTest {
         assertThat(both.get("lease")).isEqualTo(WorldOps.lastLeaseId(near));
         assertThat(both.get("leases")).isEqualTo(WorldOps.streetLeases(near));
         assertThat(both.get("acl")).isEqualTo(WorldOps.lastAcl(near));
+        assertThat(both.get("acls")).isEqualTo(WorldOps.aclLine(near));
     }
 
     @Test

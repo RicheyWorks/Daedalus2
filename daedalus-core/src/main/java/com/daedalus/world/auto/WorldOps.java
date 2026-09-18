@@ -485,6 +485,7 @@ public final class WorldOps {
         out.put("lease", leaseInChunk(world, cc));
         out.put("leases", leasesInChunk(world, cc));
         out.put("acl", lastAclInChunk(world, cc));
+        out.put("acls", aclInChunk(world, cc));
         return out;
     }
 

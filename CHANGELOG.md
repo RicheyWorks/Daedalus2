@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **GET /chunk names every slab ACL.**
+  Chunk inspect lists every extra-list
+  whose slab overlaps this 16³, oldest
+  first. Empty until a grant or deny.
+  No wallet types.
+
 - **GET /chunk names the last slab ACL.**
   Chunk inspect names the newest
   extra-list whose slab overlaps this
