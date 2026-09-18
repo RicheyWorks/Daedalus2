@@ -338,7 +338,8 @@ desktop last-event occupant, and
 explore occupancy tint, and
 world.inspect stands, and
 chunk.inspect stands, and
-desktop chunk stands
+desktop chunk stands, and
+explore hall stands
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

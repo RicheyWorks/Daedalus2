@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore hall stands.**
+  Off a slab the caption lists door, trap, portal, and NPC
+  as kind + x,y,z after the names. Occupants stay names-only.
+  Start and goal still lead.
+
 - **Desktop chunk stands.**
   Inspect lists door, trap, portal, and NPC in the live 16³
   as kind + x,y,z after the names. Occupants stay names-only.

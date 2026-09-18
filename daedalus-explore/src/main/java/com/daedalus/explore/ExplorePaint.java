@@ -918,7 +918,14 @@ public final class ExplorePaint {
             return withOccupancy(occ, cube);
         }
         String who = occupantsName(blocks);
-        return who != null ? who : "HALL";
+        String stands = standsName(blocks);
+        if (who != null && stands != null) {
+            return who + " · " + stands;
+        }
+        if (who != null) {
+            return who;
+        }
+        return stands != null ? stands : "HALL";
     }
 
     /**
@@ -933,12 +940,30 @@ public final class ExplorePaint {
         return found.isEmpty() ? null : found;
     }
 
+    /**
+     * Occupancy cells as kind + x,y,z. Occupants stay names-only.
+     */
+    public static String standsName(WorldMesh blocks) {
+        if (blocks == null || blocks.world() == null) {
+            return null;
+        }
+        String found = WorldOps.standsLine(blocks.world());
+        return found.isEmpty() ? null : found;
+    }
+
     private static String withOccupants(String place, WorldMesh blocks) {
         String who = occupantsName(blocks);
-        if (who == null) {
+        String stands = standsName(blocks);
+        if (who == null && stands == null) {
             return place;
         }
-        return place + " · " + who;
+        if (who == null) {
+            return place + " · " + stands;
+        }
+        if (stands == null) {
+            return place + " · " + who;
+        }
+        return place + " · " + who + " · " + stands;
     }
 
     /**

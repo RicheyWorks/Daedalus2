@@ -1086,14 +1086,19 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.lastParcelLot(null)).isNull();
         assertThat(ExplorePaint.occupantsName(cubes))
                 .isEqualTo("door · trap · portal · npc");
+        assertThat(ExplorePaint.standsName(cubes))
+                .isEqualTo("door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0");
         assertThat(ExplorePaint.occupantsName(null)).isNull();
+        assertThat(ExplorePaint.standsName(null)).isNull();
         assertThat(ExplorePaint.status(fog, offPlot, List.of(), longHall, cubes).place())
                 .as("newest street name and occupants lead leftover HALL off the slab")
-                .isEqualTo("Willow Walk 8,8 · door · trap · portal · npc");
+                .isEqualTo("Willow Walk 8,8 · door · trap · portal · npc"
+                        + " · door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0");
         WorldMesh empty = WorldMesh.of(World.zero());
         assertThat(ExplorePaint.status(fog, offPlot, List.of(), longHall, empty).place())
                 .as("occupants lead leftover HALL when the street is empty")
-                .isEqualTo("door · trap · portal · npc");
+                .isEqualTo("door · trap · portal · npc"
+                        + " · door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0");
         World stamped = World.zero();
         WorldOps.drive(stamped, "stamp.apply", new BlockCoordinate(0, 0, 0), null);
         WorldMesh origin = WorldMesh.of(stamped);
