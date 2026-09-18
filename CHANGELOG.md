@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Portal open names the slab box.**
+  POST /portal/open and /portal/seal
+  name the inclusive AABB under that
+  cube. Empty when the portal sits
+  off a stamped plot. No wallet types.
+
 - **Trap arm names the slab box.**
   POST /trap/arm and /trap/disarm name
   the inclusive AABB under that cube.
