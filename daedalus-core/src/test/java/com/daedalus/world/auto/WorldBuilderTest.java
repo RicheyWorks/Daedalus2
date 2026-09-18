@@ -117,6 +117,8 @@ class WorldBuilderTest {
         assertThat(world.parcels().get(0).mazeRef()).isEqualTo(mazeRef);
         assertThat(world.parcels().get(0).placeName()).isIn(PlaceNames.STREETS);
         assertThat(WorldOps.lastPlaceName(world)).isEqualTo(world.parcels().get(0).placeName());
+        assertThat(WorldOps.streetMazes(world)).isEqualTo(mazeRef);
+        assertThat(WorldOps.streetMazes(World.zero())).isEmpty();
     }
 
     @Test

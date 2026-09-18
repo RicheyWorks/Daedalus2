@@ -232,6 +232,20 @@ public final class WorldOps {
         return last.bounds().minX() + "," + last.bounds().minZ();
     }
 
+    /** All lab maze ids on the street, oldest first. Not a wallet. */
+    public static String streetMazes(World world) {
+        if (world == null) {
+            return "";
+        }
+        List<String> refs = new ArrayList<>();
+        for (Parcel parcel : world.parcels()) {
+            if (parcel != null && !parcel.mazeRef().isEmpty()) {
+                refs.add(parcel.mazeRef());
+            }
+        }
+        return String.join(" · ", refs);
+    }
+
     /** Newest inspired toponym on the street. Not GIS. */
     public static String lastPlaceName(World world) {
         if (world == null) {

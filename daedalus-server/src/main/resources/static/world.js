@@ -126,13 +126,13 @@
     row(box, "npc", npc && npc.state ? npc.state : "—");
     const list = parcels && parcels.parcels ? parcels.parcels : [];
     const first = list[0];
-    let newest = first;
     let rented = first;
     let named = first;
     const names = [];
+    const mazes = [];
     for (let i = 0; i < list.length; i++) {
       if (list[i] && list[i].mazeRef) {
-        newest = list[i];
+        mazes.push(list[i].mazeRef);
       }
       if (list[i] && list[i].leaseId) {
         rented = list[i];
@@ -153,7 +153,7 @@
     }
     row(box, "lot", lots.length ? lots.join(" · ") : "—");
     row(box, "lease", rented && rented.leaseId ? rented.leaseId : "—");
-    row(box, "maze", newest && newest.mazeRef ? newest.mazeRef : "—");
+    row(box, "maze", mazes.length ? mazes.join(" · ") : "—");
     const occupied = chunk && chunk.present && chunk.occupied > 0;
     const slice = occupied
         ? "0,0,0 occupied " + chunk.occupied

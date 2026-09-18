@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World street of maze ids.**
+  Well maze row and desktop inspect list every lab mazeRef,
+  oldest first. Newest maze stays the last id. Not a wallet.
+
 - **World living street.**
   A living tick on the second stamped maze rewrites only that
   slab. Plot one stays put. rebindSlabs already walks every

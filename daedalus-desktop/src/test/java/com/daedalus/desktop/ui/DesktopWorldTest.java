@@ -105,6 +105,8 @@ class DesktopWorldTest {
         assertThat(two.parcels()).hasSize(2);
         assertThat(DesktopWorld.firstMaze(two)).isEqualTo(cached.metadata().id().toString());
         assertThat(DesktopWorld.lastMaze(two)).isEqualTo(second.metadata().id().toString());
+        assertThat(DesktopWorld.streetMazes(two))
+                .isEqualTo(cached.metadata().id() + " · " + second.metadata().id());
         assertThat(two.parcels().get(0).leaseId()).isEqualTo(Parcel.SYSTEM_TENANT);
         assertThat(two.parcels().get(1).leaseId()).isEqualTo(Parcel.SYSTEM_TENANT);
         assertThat(DesktopWorld.firstPlace(two)).isIn(PlaceNames.STREETS);
@@ -116,6 +118,7 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.streetLots(two)).isEqualTo("0,0 · 8,0");
         assertThat(DesktopWorld.inspectLine(two, null))
                 .contains("2 plots")
+                .contains(cached.metadata().id().toString())
                 .contains(second.metadata().id().toString())
                 .contains(DesktopWorld.firstPlace(two))
                 .contains(DesktopWorld.lastPlace(two))

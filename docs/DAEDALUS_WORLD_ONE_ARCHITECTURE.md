@@ -315,7 +315,8 @@ a street directory of every plot name, and
 newest-lot x,z on inspect, and
 explore caption of that lot, and
 a street of every lot origin, and
-a living bind per mazeRef on the street
+a living bind per mazeRef on the street, and
+a street of every mazeRef
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

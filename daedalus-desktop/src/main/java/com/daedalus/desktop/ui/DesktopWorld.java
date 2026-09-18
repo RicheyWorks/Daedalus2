@@ -55,7 +55,7 @@ public final class DesktopWorld {
             }
         }
         return inspectLine(world.revision().value(), world.parcels().size(), place,
-                lastLease(world), lastMaze(world), last);
+                lastLease(world), streetMazes(world), last);
     }
 
     public static String inspectLine(long revision, WorldEventFrame last) {
@@ -165,6 +165,11 @@ public final class DesktopWorld {
             }
         }
         return "";
+    }
+
+    /** All lab maze ids on inspect — not a wallet. */
+    public static String streetMazes(World world) {
+        return WorldOps.streetMazes(world);
     }
 
     /** Newest lab maze id on inspect — not a wallet. */
