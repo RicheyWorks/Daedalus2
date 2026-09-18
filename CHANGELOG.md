@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well inspect names every slab place.**
+  The well lists every inspired
+  toponym, oldest first. Empty until
+  a stamp. No wallet types.
+
 - **GET /world names every slab place.**
   Inspect lists every inspired
   toponym, oldest first. Empty until

@@ -179,6 +179,7 @@
     row(box, "plots", world && world.plots != null ? String(world.plots) : "—");
     row(box, "street", world && world.street ? world.street : "—");
     row(box, "place", world && world.place ? world.place : "—");
+    row(box, "places", world && world.places ? world.places : "—");
     row(box, "lot", world && world.lot ? world.lot : "—");
     row(box, "lots", world && world.lots ? world.lots : "—");
     row(box, "box", world && world.box ? world.box : "—");
@@ -236,7 +237,8 @@
     const name = document.createElement("b");
     name.textContent = label;
     line.appendChild(name);
-    const named = (label === "place" || label === "street") && value && value !== "—";
+    const named = (label === "place" || label === "places" || label === "street")
+        && value && value !== "—";
     if (named || wood) {
       const ink = document.createElement("span");
       ink.className = named ? "place" : "slab";
