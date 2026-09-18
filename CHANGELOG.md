@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **NPC talk names the slab lease.**
+  POST /npc/talk and /npc/hush name
+  the account key on the plot under
+  that cube. Empty when the NPC sits
+  off a rented slab. No wallet types.
+
 - **Portal open names the slab lease.**
   POST /portal/open and /portal/seal
   name the account key on the plot

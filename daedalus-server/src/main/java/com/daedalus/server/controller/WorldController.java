@@ -550,7 +550,7 @@ public class WorldController {
         World world = mounted(id);
         return ResponseEntity.ok(new NpcMutationResponse(
                 npc.id(), npc.state().name(), result.name(), world.revision().value(),
-                WorldOps.mazeAt(world, npc.at())));
+                WorldOps.mazeAt(world, npc.at()), WorldOps.leaseAt(world, npc.at())));
     }
 
     @PostMapping("/world/{id}/npc/hush")
@@ -564,7 +564,7 @@ public class WorldController {
         World world = mounted(id);
         return ResponseEntity.ok(new NpcMutationResponse(
                 npc.id(), npc.state().name(), result.name(), world.revision().value(),
-                WorldOps.mazeAt(world, npc.at())));
+                WorldOps.mazeAt(world, npc.at()), WorldOps.leaseAt(world, npc.at())));
     }
 
     private static UUID mazeKey(String mazeId) {

@@ -491,7 +491,8 @@ portal open names the slab maze, and
 npc talk names the slab maze, and
 door open names the slab lease, and
 trap arm names the slab lease, and
-portal open names the slab lease
+portal open names the slab lease, and
+npc talk names the slab lease
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
