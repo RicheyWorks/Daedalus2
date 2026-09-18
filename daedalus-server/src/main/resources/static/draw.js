@@ -379,6 +379,14 @@
     return mixHex("#f2ead8", COLORS.floorDim, 0.22);
   }
 
+  function emptyWordmarkMintInk() {
+    return mixHex(COLORS.start, COLORS.floorDim, 0.22);
+  }
+
+  function emptyWordmarkMintGlow(alpha) {
+    return emptyWordmarkMintInk().replace("rgb(", "rgba(").replace(")", "," + alpha + ")");
+  }
+
   function startTileInk(tr, tc, th, tw) {
     const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
     const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
@@ -1060,7 +1068,7 @@
     g.fillStyle = voidWash;
     g.fillRect(0, 0, cssW, cssH);
     const glow = g.createRadialGradient(cx, cy - 36, 12, cx, cy - 36, Math.min(cssW, cssH) * 0.42);
-    glow.addColorStop(0, "rgba(62, 224, 143, " + (0.08 + 0.04 * wave) + ")");
+    glow.addColorStop(0, emptyWordmarkMintGlow(0.08 + 0.04 * wave));
     glow.addColorStop(0.55, "rgba(245, 193, 74, " + (0.04 + 0.03 * wave) + ")");
     glow.addColorStop(1, "rgba(0, 0, 0, 0)");
     g.fillStyle = glow;
@@ -1075,7 +1083,7 @@
     const goldA = 0.08 + 0.10 * wave;
     const mintBlur = 22 + 14 * wave;
     const goldBlur = 48 + 24 * wave;
-    g.shadowColor = "rgba(62, 224, 143, " + mintA + ")";
+    g.shadowColor = emptyWordmarkMintGlow(mintA);
     g.shadowBlur = mintBlur;
     g.fillText("DAEDALUS", cx, cy + 48);
     g.shadowColor = "rgba(245, 193, 74, " + goldA + ")";

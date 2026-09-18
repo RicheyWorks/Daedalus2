@@ -154,6 +154,20 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellEmptyWordmarkMintHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("function emptyWordmarkMintInk")
+                    .contains("mixHex(COLORS.start, COLORS.floorDim, 0.22)")
+                    .contains("glow.addColorStop(0, emptyWordmarkMintGlow(0.08 + 0.04 * wave))")
+                    .contains("g.shadowColor = emptyWordmarkMintGlow(mintA)")
+                    .contains("g.shadowColor = \"rgba(245, 193, 74, \" + goldA + \")\"");
+        }
+    }
+
+    @Test
     void wellStartDiscHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
