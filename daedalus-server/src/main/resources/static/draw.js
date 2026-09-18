@@ -395,6 +395,14 @@
     return emptyWordmarkGoldInk().replace("rgb(", "rgba(").replace(")", "," + alpha + ")");
   }
 
+  function emptyCaptionTitleInk() {
+    return mixHex("#b88538", COLORS.floorDim, 0.22);
+  }
+
+  function emptyCaptionTitleGlow(alpha) {
+    return emptyCaptionTitleInk().replace("rgb(", "rgba(").replace(")", "," + alpha + ")");
+  }
+
   function startTileInk(tr, tc, th, tw) {
     const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
     const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
@@ -1101,7 +1109,7 @@
     g.shadowBlur = 0;
     g.fillText("DAEDALUS", cx, cy + 48);
     g.letterSpacing = "0";
-    g.fillStyle = "rgba(184, 133, 56, " + (0.72 + 0.18 * wave) + ")";
+    g.fillStyle = emptyCaptionTitleGlow(0.72 + 0.18 * wave);
     g.font = "13px Bahnschrift, \"Segoe UI\", sans-serif";
     g.fillText("Pick a generator and press Generate", cx, cy + 78);
     g.fillStyle = "rgba(140, 118, 78, " + (0.55 + 0.20 * wave) + ")";

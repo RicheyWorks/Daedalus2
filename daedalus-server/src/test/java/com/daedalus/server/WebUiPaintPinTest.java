@@ -180,6 +180,19 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellEmptyCaptionTitleHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("function emptyCaptionTitleInk")
+                    .contains("mixHex(\"#b88538\", COLORS.floorDim, 0.22)")
+                    .contains("g.fillStyle = emptyCaptionTitleGlow(0.72 + 0.18 * wave)")
+                    .contains("g.fillStyle = \"rgba(140, 118, 78, \" + (0.55 + 0.20 * wave) + \")\"");
+        }
+    }
+
+    @Test
     void wellStartDiscHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
