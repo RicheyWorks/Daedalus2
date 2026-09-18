@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well search-current depth.**
+  Search-current gold falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP leftover
+  even highlight gold stays.
+
 - **Well search-text depth.**
   Search-text gold falls off toward
   floor-dim with the same 0.22 as halls,
