@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Portal REST actor.**
+  POST portal/open and portal/seal take optional actorId.
+  Blank stays the system owner. DENIED is a named
+  result. No wallet types.
+
 - **Parcel gate on portal.seal.**
   portal.seal asks the same portal.open gate. Empty
   actor is the system owner. DENIED leaves the portal.

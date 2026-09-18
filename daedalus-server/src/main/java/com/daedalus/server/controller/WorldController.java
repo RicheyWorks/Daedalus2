@@ -398,9 +398,10 @@ public class WorldController {
     @PostMapping("/world/{id}/portal/open")
     @Operation(summary = "Open the portal. ALREADY_OPEN is a result, not silence.")
     @PerKeyRateLimit("mazeGenerate")
-    public ResponseEntity<PortalMutationResponse> openPortal(@PathVariable String id) {
+    public ResponseEntity<PortalMutationResponse> openPortal(
+            @PathVariable String id, @RequestParam(required = false) String actorId) {
         mounted(id);
-        PortalResult result = worlds.openPortal(id);
+        PortalResult result = worlds.openPortal(id, actorId);
         Portal portal = worlds.inspectPortal(id);
         World world = mounted(id);
         return ResponseEntity.ok(new PortalMutationResponse(
@@ -410,9 +411,10 @@ public class WorldController {
     @PostMapping("/world/{id}/portal/seal")
     @Operation(summary = "Seal the portal. ALREADY_SEALED is a result, not silence.")
     @PerKeyRateLimit("mazeGenerate")
-    public ResponseEntity<PortalMutationResponse> sealPortal(@PathVariable String id) {
+    public ResponseEntity<PortalMutationResponse> sealPortal(
+            @PathVariable String id, @RequestParam(required = false) String actorId) {
         mounted(id);
-        PortalResult result = worlds.sealPortal(id);
+        PortalResult result = worlds.sealPortal(id, actorId);
         Portal portal = worlds.inspectPortal(id);
         World world = mounted(id);
         return ResponseEntity.ok(new PortalMutationResponse(

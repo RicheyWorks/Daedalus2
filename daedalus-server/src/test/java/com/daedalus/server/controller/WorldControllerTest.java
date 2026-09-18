@@ -375,6 +375,27 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("DISARMED")))
                 .andExpect(jsonPath("$.state", equalTo("DISARMED")));
+
+        mvc.perform(post("/api/v1/world/world-zero/portal/open").param("actorId", "carol"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("DENIED")))
+                .andExpect(jsonPath("$.state", equalTo("OPEN")));
+
+        mvc.perform(post("/api/v1/world/world-zero/portal/seal").param("actorId", "carol"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("DENIED")))
+                .andExpect(jsonPath("$.state", equalTo("OPEN")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/grant")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0,\"verb\":\"portal.open\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("GRANTED")));
+
+        mvc.perform(post("/api/v1/world/world-zero/portal/seal").param("actorId", "bob"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("SEALED")))
+                .andExpect(jsonPath("$.state", equalTo("SEALED")));
     }
 
     @Test

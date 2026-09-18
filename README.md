@@ -224,8 +224,8 @@ public consumers).
 | `POST` | `/api/v1/world/{id}/trap/arm` | required | Arm the trap. Already-armed and deny are named results. Optional actorId uses the parcel gate |
 | `POST` | `/api/v1/world/{id}/trap/disarm` | required | Disarm the trap. Already-disarmed and deny are named results. Optional actorId uses the parcel gate |
 | `GET` | `/api/v1/world/{id}/portal` | public | Inspect the programmable portal |
-| `POST` | `/api/v1/world/{id}/portal/open` | required | Open the portal. Already-open is a named result |
-| `POST` | `/api/v1/world/{id}/portal/seal` | required | Seal the portal. Already-sealed is a named result |
+| `POST` | `/api/v1/world/{id}/portal/open` | required | Open the portal. Already-open and deny are named results. Optional actorId uses the parcel gate |
+| `POST` | `/api/v1/world/{id}/portal/seal` | required | Seal the portal. Already-sealed and deny are named results. Optional actorId uses the parcel gate |
 | `GET` | `/api/v1/world/{id}/parcels` | public | Inspect parcels, place names, and lease strings |
 | `POST` | `/api/v1/world/{id}/parcels/lease` | required | Lease the first parcel as tenant-zero. No parcel is a named result |
 | `POST` | `/api/v1/world/{id}/parcels/grant` | required | Extra-grant a named verb on the slab (`block.place` default). Already-granted, no-parcel, and unknown-verb are named results |
