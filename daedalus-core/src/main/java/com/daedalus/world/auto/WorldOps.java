@@ -186,7 +186,7 @@ public final class WorldOps {
         out.put("plots", world.parcels().size());
         out.put("street", streetLine(world));
         out.put("lot", streetLots(world));
-        out.put("maze", streetMazes(world));
+        out.put("maze", lastMaze(world));
         out.put("mazes", streetMazes(world));
         out.put("lease", lastLeaseId(world));
         out.put("leases", streetLeases(world));
@@ -1226,6 +1226,20 @@ public final class WorldOps {
         }
         Parcel last = world.parcels().get(world.parcels().size() - 1);
         return last == null ? "" : boxLine(last.bounds());
+    }
+
+    /** Newest lab maze id on the street. Empty until a mazeRef is bound. */
+    public static String lastMaze(World world) {
+        if (world == null) {
+            return "";
+        }
+        String found = "";
+        for (Parcel parcel : world.parcels()) {
+            if (parcel != null && !parcel.mazeRef().isEmpty()) {
+                found = parcel.mazeRef();
+            }
+        }
+        return found;
     }
 
     /** All lab maze ids on the street, oldest first. Not a wallet. */

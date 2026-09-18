@@ -139,7 +139,7 @@ class WorldBuilderTest {
         assertThat(snap.get("plots")).isEqualTo(2);
         assertThat(snap.get("street")).isEqualTo(WorldOps.streetLine(world));
         assertThat(snap.get("lot")).isEqualTo(WorldOps.streetLots(world));
-        assertThat(snap.get("maze")).isEqualTo(WorldOps.streetMazes(world));
+        assertThat(snap.get("maze")).isEqualTo(WorldOps.lastMaze(world));
         assertThat(snap.get("mazes")).isEqualTo(WorldOps.streetMazes(world));
         assertThat(snap.get("occupants")).isEqualTo("door · trap · portal · npc");
         assertThat(snap.get("stands"))
@@ -414,7 +414,9 @@ class WorldBuilderTest {
         assertThat(world.parcels().get(0).placeName()).isIn(PlaceNames.STREETS);
         assertThat(WorldOps.lastPlaceName(world)).isEqualTo(world.parcels().get(0).placeName());
         assertThat(WorldOps.streetMazes(world)).isEqualTo(mazeRef);
+        assertThat(WorldOps.lastMaze(world)).isEqualTo(mazeRef);
         assertThat(WorldOps.streetMazes(World.zero())).isEmpty();
+        assertThat(WorldOps.lastMaze(World.zero())).isEmpty();
         assertThat(WorldOps.mazesInChunk(world, new ChunkCoordinate(0, 0, 0))).isEqualTo(mazeRef);
         assertThat(WorldOps.mazesInChunk(world, new ChunkCoordinate(4, 0, 0))).isEmpty();
         assertThat(WorldOps.mazesInChunk(null, null)).isEmpty();

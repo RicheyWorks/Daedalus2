@@ -111,7 +111,7 @@ public class WorldController {
         return ResponseEntity.ok(new WorldInspectResponse(
                 world.id().value(), world.revision().value(), world.chunkCount(),
                 world.parcels().size(), WorldOps.streetLine(world), WorldOps.streetLots(world),
-                WorldOps.streetMazes(world), WorldOps.lastLeaseId(world),
+                WorldOps.lastMaze(world), WorldOps.lastLeaseId(world),
                 WorldOps.lastPlaceName(world), WorldOps.occupantsLine(world),
                 WorldOps.standsLine(world), WorldOps.aclLine(world),
                 WorldOps.driveLine(world), WorldOps.actorLine(world),
