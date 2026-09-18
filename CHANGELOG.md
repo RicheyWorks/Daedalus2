@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Builder trace actor.**
+  A driven builder step names the
+  account key that last mutated the
+  world. Empty until a mutation.
+  Never a wallet type.
+
 - **World builder actor.**
   A recipe step can pass actorId so
   stamp.apply names the driver and
