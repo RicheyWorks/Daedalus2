@@ -441,7 +441,8 @@ portal inspect names the slab box, and
 npc inspect names the slab box, and
 stamp skip and inspect share occupants, and
 door inspect names the slab maze, and
-trap inspect names the slab maze
+trap inspect names the slab maze, and
+portal inspect names the slab maze
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
