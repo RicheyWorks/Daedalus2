@@ -899,9 +899,13 @@ public final class ExplorePaint {
         if (street != null) {
             String lot = parcelLotName(blocks, body);
             String box = parcelBoxName(blocks, body);
+            String maze = parcelMazeName(blocks, body);
             String named = lot == null ? street : street + " " + lot;
             if (box != null) {
                 named = named + " " + box;
+            }
+            if (maze != null) {
+                named = named + " " + maze;
             }
             return withAcl(withOccupancy(occ, named), blocks);
         }
@@ -1137,6 +1141,17 @@ public final class ExplorePaint {
         BlockCoordinate at = new BlockCoordinate(
                 (int) Math.floor(body.x()), 0, (int) Math.floor(body.z()));
         String found = WorldOps.lotAt(blocks.world(), at);
+        return found.isEmpty() ? null : found;
+    }
+
+    /** Lab maze id under the boots. Empty off a stamped plot. Not a wallet. */
+    public static String parcelMazeName(WorldMesh blocks, ExploreBody body) {
+        if (blocks == null || body == null || blocks.world() == null) {
+            return null;
+        }
+        BlockCoordinate at = new BlockCoordinate(
+                (int) Math.floor(body.x()), 0, (int) Math.floor(body.z()));
+        String found = WorldOps.mazeAt(blocks.world(), at);
         return found.isEmpty() ? null : found;
     }
 

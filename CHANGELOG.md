@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore names the slab maze.**
+  The hall caption names the lab maze
+  UUID under the boots. Empty off a
+  stamped plot. No wallet types.
+
 - **Desktop occupancy names the slab lease.**
   Door, trap, and portal on a slab
   name the account key. Empty until

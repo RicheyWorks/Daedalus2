@@ -1060,6 +1060,19 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.status(fog, onStreet, List.of(), mesh, cubes).place())
                 .as("a named street leads leftover HALL")
                 .isEqualTo("Willow Walk 8,8 8,0,8-9,1,9");
+        World withRef = World.zero();
+        withRef.applyStamp(new ParcelBounds(8, 0, 8, 9, 1, 9), Parcel.SYSTEM_OWNER,
+                List.of(new BlockCoordinate(8, 0, 8)), List.of(BlockType.WOOD));
+        withRef.nameParcel(withRef.parcels().get(0).id(), "Willow Walk");
+        withRef.bindMaze(withRef.parcels().get(0).id(),
+                "00000000-0000-4000-8000-00000000000e");
+        WorldMesh bound = WorldMesh.of(withRef);
+        assertThat(ExplorePaint.parcelMazeName(bound, onStreet))
+                .isEqualTo("00000000-0000-4000-8000-00000000000e");
+        assertThat(ExplorePaint.parcelMazeName(null, onStreet)).isNull();
+        assertThat(ExplorePaint.status(fog, onStreet, List.of(), mesh, bound).place())
+                .as("a bound maze follows the street under the boots")
+                .isEqualTo("Willow Walk 8,8 8,0,8-9,1,9 00000000-0000-4000-8000-00000000000e");
         World rented = World.zero();
         rented.applyStamp(new ParcelBounds(8, 0, 8, 9, 1, 9), Parcel.SYSTEM_OWNER,
                 List.of(new BlockCoordinate(8, 0, 8)), List.of(BlockType.WOOD));
