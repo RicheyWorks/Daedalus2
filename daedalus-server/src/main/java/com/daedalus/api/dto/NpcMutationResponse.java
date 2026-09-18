@@ -5,7 +5,7 @@ package com.daedalus.api.dto;
 /** Result of talk or hush. {@code result} is never silent success. */
 public record NpcMutationResponse(String id, String state, String result, long revision,
                                   String maze, String lease, String place, String lot,
-                                  String box) {
+                                  String box, String acl) {
 
     public NpcMutationResponse {
         maze = maze == null ? "" : maze;
@@ -13,29 +13,36 @@ public record NpcMutationResponse(String id, String state, String result, long r
         place = place == null ? "" : place;
         lot = lot == null ? "" : lot;
         box = box == null ? "" : box;
+        acl = acl == null ? "" : acl;
+    }
+
+    public NpcMutationResponse(String id, String state, String result, long revision,
+                               String maze, String lease, String place, String lot,
+                               String box) {
+        this(id, state, result, revision, maze, lease, place, lot, box, "");
     }
 
     public NpcMutationResponse(String id, String state, String result, long revision,
                                String maze, String lease, String place, String lot) {
-        this(id, state, result, revision, maze, lease, place, lot, "");
+        this(id, state, result, revision, maze, lease, place, lot, "", "");
     }
 
     public NpcMutationResponse(String id, String state, String result, long revision,
                                String maze, String lease, String place) {
-        this(id, state, result, revision, maze, lease, place, "", "");
+        this(id, state, result, revision, maze, lease, place, "", "", "");
     }
 
     public NpcMutationResponse(String id, String state, String result, long revision,
                                String maze, String lease) {
-        this(id, state, result, revision, maze, lease, "", "", "");
+        this(id, state, result, revision, maze, lease, "", "", "", "");
     }
 
     public NpcMutationResponse(String id, String state, String result, long revision,
                                String maze) {
-        this(id, state, result, revision, maze, "", "", "", "");
+        this(id, state, result, revision, maze, "", "", "", "", "");
     }
 
     public NpcMutationResponse(String id, String state, String result, long revision) {
-        this(id, state, result, revision, "", "", "", "", "");
+        this(id, state, result, revision, "", "", "", "", "", "");
     }
 }

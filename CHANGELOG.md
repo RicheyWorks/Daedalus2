@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **NPC talk names the slab ACL.**
+  POST /npc/talk and /npc/hush name
+  the extra-list under that cube.
+  Empty when the NPC sits off a
+  stamped plot. No wallet types.
+
 - **Portal open names the slab ACL.**
   POST /portal/open and /portal/seal
   name the extra-list under that cube.

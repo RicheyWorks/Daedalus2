@@ -574,7 +574,7 @@ public class WorldController {
                 npc.id(), npc.state().name(), result.name(), world.revision().value(),
                 WorldOps.mazeAt(world, npc.at()), WorldOps.leaseAt(world, npc.at()),
                 WorldOps.placeAt(world, npc.at()), WorldOps.lotAt(world, npc.at()),
-                WorldOps.boxAt(world, npc.at())));
+                WorldOps.boxAt(world, npc.at()), WorldOps.aclAt(world, npc.at())));
     }
 
     @PostMapping("/world/{id}/npc/hush")
@@ -590,7 +590,7 @@ public class WorldController {
                 npc.id(), npc.state().name(), result.name(), world.revision().value(),
                 WorldOps.mazeAt(world, npc.at()), WorldOps.leaseAt(world, npc.at()),
                 WorldOps.placeAt(world, npc.at()), WorldOps.lotAt(world, npc.at()),
-                WorldOps.boxAt(world, npc.at())));
+                WorldOps.boxAt(world, npc.at()), WorldOps.aclAt(world, npc.at())));
     }
 
     private static UUID mazeKey(String mazeId) {
