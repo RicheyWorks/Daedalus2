@@ -473,6 +473,7 @@ class WebUiPaintPinTest {
                     .contains("/world/\" + WORLD + \"/parcels/grant")
                     .contains("/world/\" + WORLD + \"/parcels/deny")
                     .contains("verb: type || \"block.place\"")
+                    .contains("actorId: actor || \"alice\"")
                     .contains("/world/\" + WORLD + \"/stamp")
                     .contains("/world/\" + WORLD + \"/door/open\" + actorQuery(actor)")
                     .contains("/world/\" + WORLD + \"/door/close\" + actorQuery(actor)")

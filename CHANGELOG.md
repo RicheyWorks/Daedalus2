@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well grant actor.**
+  well parcel.grant and parcel.deny send actorId from
+  the fifth drive argument. Blank stays alice. Type
+  stays the verb. No wallet types.
+
 - **Well place actor.**
   well block.place sends optional actorId as a fifth
   drive argument so STONE stays the cube. Blank stays
