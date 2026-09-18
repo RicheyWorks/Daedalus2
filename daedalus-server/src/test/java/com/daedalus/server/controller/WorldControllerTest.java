@@ -652,7 +652,8 @@ class WorldControllerTest {
                                 + " · bob npc.talk")))
                 .andExpect(jsonPath("$.maze", equalTo("")))
                 .andExpect(jsonPath("$.lease", equalTo("tenant-zero")))
-                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))));
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))))
+                .andExpect(jsonPath("$.lot", equalTo("0,0")));
 
         mvc.perform(post("/api/v1/world/world-zero/parcels/revoke")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -661,7 +662,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.result", equalTo("NOT_GRANTED")))
                 .andExpect(jsonPath("$.maze", equalTo("")))
                 .andExpect(jsonPath("$.lease", equalTo("tenant-zero")))
-                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))));
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))))
+                .andExpect(jsonPath("$.lot", equalTo("0,0")));
 
         mvc.perform(post("/api/v1/world/world-zero/parcels/revoke")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -910,7 +912,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.result", equalTo("REVOKED")))
                 .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())))
                 .andExpect(jsonPath("$.lease", equalTo("")))
-                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))));
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))))
+                .andExpect(jsonPath("$.lot", equalTo("0,0")));
         extra.perform(post("/api/v1/world/world-zero/parcels/forgive")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"actorId\":\"carol\",\"x\":0,\"y\":0,\"z\":0}"))
