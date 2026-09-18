@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore names every lease.**
+  Off a slab the hall caption names
+  every rented account key, oldest
+  first. Empty until parcel.lease.
+  No wallet types.
+
 - **Explore names every maze.**
   Off a slab the hall caption names
   every lab maze UUID, oldest first.

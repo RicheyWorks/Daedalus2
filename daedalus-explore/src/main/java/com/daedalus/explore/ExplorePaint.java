@@ -928,7 +928,7 @@ public final class ExplorePaint {
             String lot = lastParcelLot(blocks);
             String box = lastParcelBoxes(blocks);
             String maze = lastParcelMazes(blocks);
-            String rent = lastParcelLease(blocks);
+            String rent = lastParcelLeases(blocks);
             String named = lot == null ? last : last + " " + lot;
             if (box != null) {
                 named = named + " " + box;
@@ -1174,6 +1174,15 @@ public final class ExplorePaint {
             return null;
         }
         String found = WorldOps.lastLeaseId(blocks.world());
+        return found.isEmpty() ? null : found;
+    }
+
+    /** All account keys on rented slabs, oldest first. Empty worlds stay null. */
+    public static String lastParcelLeases(WorldMesh blocks) {
+        if (blocks == null || blocks.world() == null) {
+            return null;
+        }
+        String found = WorldOps.streetLeases(blocks.world());
         return found.isEmpty() ? null : found;
     }
 

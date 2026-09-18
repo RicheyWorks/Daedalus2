@@ -1140,7 +1140,10 @@ class ExplorePaintTest {
                         + " · door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0");
         assertThat(ExplorePaint.lastParcelLease(cubes)).isNull();
         assertThat(ExplorePaint.lastParcelLease(rentedStreet)).isEqualTo(Parcel.SYSTEM_TENANT);
+        assertThat(ExplorePaint.lastParcelLeases(rentedStreet)).isEqualTo(Parcel.SYSTEM_TENANT);
+        assertThat(ExplorePaint.lastParcelLeases(cubes)).isNull();
         assertThat(ExplorePaint.lastParcelLease(null)).isNull();
+        assertThat(ExplorePaint.lastParcelLeases(null)).isNull();
         assertThat(ExplorePaint.status(fog, offPlot, List.of(), longHall, rentedStreet).place())
                 .as("newest lease follows leftover HALL off the slab")
                 .isEqualTo("Willow Walk 8,8 8,0,8-9,1,9 " + Parcel.SYSTEM_TENANT
@@ -1221,6 +1224,12 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.lastParcelMazes(street))
                 .isEqualTo("00000000-0000-4000-8000-000000000011"
                         + " · 00000000-0000-4000-8000-000000000012");
+        two.leaseParcel(two.parcels().get(0).id(), Parcel.SYSTEM_TENANT);
+        two.leaseParcel(two.parcels().get(1).id(), Parcel.SYSTEM_TENANT);
+        WorldMesh rentedTwo = WorldMesh.of(two);
+        assertThat(ExplorePaint.lastParcelLease(rentedTwo)).isEqualTo(Parcel.SYSTEM_TENANT);
+        assertThat(ExplorePaint.lastParcelLeases(rentedTwo))
+                .isEqualTo(Parcel.SYSTEM_TENANT + " · " + Parcel.SYSTEM_TENANT);
     }
 
     @Test
