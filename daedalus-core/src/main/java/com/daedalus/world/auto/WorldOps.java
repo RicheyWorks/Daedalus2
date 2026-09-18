@@ -586,6 +586,7 @@ public final class WorldOps {
         out.put("acl", aclAt(world, trap.at()));
         out.put("drive", driveOn(world, trap.at()));
         out.put("driveActor", actorOn(world, trap.at()));
+        out.put("driveAt", atOn(world, trap.at()));
         return out;
     }
 

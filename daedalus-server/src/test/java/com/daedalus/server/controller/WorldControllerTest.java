@@ -218,7 +218,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.state", equalTo("DISARMED")))
                 .andExpect(jsonPath("$.acl", equalTo("")))
                 .andExpect(jsonPath("$.drive", equalTo("")))
-                .andExpect(jsonPath("$.driveActor", equalTo("")));
+                .andExpect(jsonPath("$.driveActor", equalTo("")))
+                .andExpect(jsonPath("$.driveAt", equalTo("")));
 
         mvc.perform(post("/api/v1/world/world-zero/trap/arm"))
                 .andExpect(status().isOk())
@@ -424,7 +425,8 @@ class WorldControllerTest {
         mvc.perform(get("/api/v1/world/world-zero/trap"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.drive", equalTo("trap.arm DENIED")))
-                .andExpect(jsonPath("$.driveActor", equalTo("carol")));
+                .andExpect(jsonPath("$.driveActor", equalTo("carol")))
+                .andExpect(jsonPath("$.driveAt", equalTo("1,1,0")));
 
         mvc.perform(post("/api/v1/world/world-zero/trap/disarm").param("actorId", "carol"))
                 .andExpect(status().isOk())
