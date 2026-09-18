@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **REST trace actor.**
+  GET /trace names the account key on
+  each driven step. Empty until a
+  mutation. Never a wallet type.
+
 - **Builder trace actor.**
   A driven builder step names the
   account key that last mutated the

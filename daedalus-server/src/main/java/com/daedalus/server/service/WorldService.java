@@ -132,14 +132,14 @@ public class WorldService {
             BlockType now = live.get(at);
             if (driven == BlockPlaceResult.DENIED) {
                 persist();
-                log.append("block.place", driven, live.revision().value());
+                account(live, "block.place", driven);
                 return new BlockWrite(now, now, live.revision().value(), "DENIED");
             }
             BlockType previous = (BlockType) driven;
             persist();
             emit(id, now.solid() ? WorldBlockEvent.Kind.BLOCK_PLACED
                     : WorldBlockEvent.Kind.BLOCK_REMOVED, x, y, z, now, previous, live);
-            log.append(now.solid() ? "block.place" : "block.remove", previous, live.revision().value());
+            account(live, now.solid() ? "block.place" : "block.remove", previous);
             return new BlockWrite(previous, now, live.revision().value(), "PLACED");
         }
     }
@@ -160,13 +160,13 @@ public class WorldService {
             BlockType now = live.get(at);
             if (driven == BlockPlaceResult.DENIED) {
                 persist();
-                log.append("block.remove", driven, live.revision().value());
+                account(live, "block.remove", driven);
                 return new BlockWrite(now, now, live.revision().value(), "DENIED");
             }
             BlockType previous = (BlockType) driven;
             persist();
             emit(id, WorldBlockEvent.Kind.BLOCK_REMOVED, x, y, z, BlockType.AIR, previous, live);
-            log.append("block.remove", previous, live.revision().value());
+            account(live, "block.remove", previous);
             return new BlockWrite(previous, now, live.revision().value(), "REMOVED");
         }
     }
@@ -183,7 +183,7 @@ public class WorldService {
                             live.door() == null ? new BlockCoordinate(0, 0, 0) : live.door().at(),
                             null, null, actorId));
             persist();
-            log.append("door.open", result, live.revision().value());
+            account(live, "door.open", result);
             return result;
         }
     }
@@ -200,7 +200,7 @@ public class WorldService {
                             live.door() == null ? new BlockCoordinate(0, 0, 0) : live.door().at(),
                             null, null, actorId));
             persist();
-            log.append("door.close", result, live.revision().value());
+            account(live, "door.close", result);
             return result;
         }
     }
@@ -217,7 +217,7 @@ public class WorldService {
                             live.trap() == null ? new BlockCoordinate(0, 0, 0) : live.trap().at(),
                             null, null, actorId));
             persist();
-            log.append("trap.arm", result, live.revision().value());
+            account(live, "trap.arm", result);
             return result;
         }
     }
@@ -234,7 +234,7 @@ public class WorldService {
                             live.trap() == null ? new BlockCoordinate(0, 0, 0) : live.trap().at(),
                             null, null, actorId));
             persist();
-            log.append("trap.disarm", result, live.revision().value());
+            account(live, "trap.disarm", result);
             return result;
         }
     }
@@ -251,7 +251,7 @@ public class WorldService {
                             live.portal() == null ? new BlockCoordinate(0, 0, 0) : live.portal().at(),
                             null, null, actorId));
             persist();
-            log.append("portal.open", result, live.revision().value());
+            account(live, "portal.open", result);
             return result;
         }
     }
@@ -268,7 +268,7 @@ public class WorldService {
                             live.portal() == null ? new BlockCoordinate(0, 0, 0) : live.portal().at(),
                             null, null, actorId));
             persist();
-            log.append("portal.seal", result, live.revision().value());
+            account(live, "portal.seal", result);
             return result;
         }
     }
@@ -285,7 +285,7 @@ public class WorldService {
                             live.npc() == null ? new BlockCoordinate(0, 0, 0) : live.npc().at(),
                             null, null, actorId));
             persist();
-            log.append("npc.talk", result, live.revision().value());
+            account(live, "npc.talk", result);
             return result;
         }
     }
@@ -302,7 +302,7 @@ public class WorldService {
                             live.npc() == null ? new BlockCoordinate(0, 0, 0) : live.npc().at(),
                             null, null, actorId));
             persist();
-            log.append("npc.hush", result, live.revision().value());
+            account(live, "npc.hush", result);
             return result;
         }
     }
@@ -313,7 +313,7 @@ public class WorldService {
             ParcelLeaseResult result = WorldOps.asLeaseResult(
                     WorldOps.drive(live, "parcel.lease", new BlockCoordinate(0, 0, 0), null));
             persist();
-            log.append("parcel.lease", result, live.revision().value());
+            account(live, "parcel.lease", result);
             return result;
         }
     }
@@ -324,7 +324,7 @@ public class WorldService {
             ParcelReleaseResult result = WorldOps.asReleaseResult(
                     WorldOps.drive(live, "parcel.release", new BlockCoordinate(0, 0, 0), null));
             persist();
-            log.append("parcel.release", result, live.revision().value());
+            account(live, "parcel.release", result);
             return result;
         }
     }
@@ -340,7 +340,7 @@ public class WorldService {
                     WorldOps.drive(live, "parcel.grant",
                             at == null ? new BlockCoordinate(0, 0, 0) : at, null, null, actorId, verb));
             persist();
-            log.append("parcel.grant", result, live.revision().value());
+            account(live, "parcel.grant", result);
             return result;
         }
     }
@@ -356,7 +356,7 @@ public class WorldService {
                     WorldOps.drive(live, "parcel.deny",
                             at == null ? new BlockCoordinate(0, 0, 0) : at, null, null, actorId, verb));
             persist();
-            log.append("parcel.deny", result, live.revision().value());
+            account(live, "parcel.deny", result);
             return result;
         }
     }
@@ -372,7 +372,7 @@ public class WorldService {
                     WorldOps.drive(live, "parcel.revoke",
                             at == null ? new BlockCoordinate(0, 0, 0) : at, null, null, actorId, verb));
             persist();
-            log.append("parcel.revoke", result, live.revision().value());
+            account(live, "parcel.revoke", result);
             return result;
         }
     }
@@ -390,7 +390,7 @@ public class WorldService {
                             at == null ? new BlockCoordinate(0, 0, 0) : at, null, null, actorId,
                             verb));
             persist();
-            log.append("parcel.forgive", result, live.revision().value());
+            account(live, "parcel.forgive", result);
             return result;
         }
     }
@@ -440,7 +440,7 @@ public class WorldService {
                 rebindSlabs();
             }
             persist();
-            log.append("stamp.apply", result, live.revision().value());
+            account(live, "stamp.apply", result);
             return result;
         }
     }
@@ -518,6 +518,10 @@ public class WorldService {
                 // mazeRef is a lab id string; junk refs do not bind.
             }
         }
+    }
+
+    private void account(World live, String capability, Object result) {
+        log.append(capability, result, live.revision().value(), live.lastDriveActor());
     }
 
     private void persist() {

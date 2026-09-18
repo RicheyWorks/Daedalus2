@@ -420,7 +420,8 @@ parcel.revoke, and
 parcel.forgive, and
 parcel.release, and
 World builder actor, and
-builder trace actor
+builder trace actor, and
+REST trace actor
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
