@@ -407,6 +407,11 @@ public final class WorldOps {
         return leaseAt(world, parseAt(atLine));
     }
 
+    /** Inspired street under a driven {@code x,y,z} line. Empty off a stamped plot. */
+    public static String placeOn(World world, String atLine) {
+        return placeAt(world, parseAt(atLine));
+    }
+
     public static BlockCoordinate parseAt(String line) {
         if (line == null || line.isBlank()) {
             return null;

@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Trace names the slab place.**
+  GET /trace names the inspired street
+  under each driven cube. Empty when
+  that step sits off a stamped plot.
+  No wallet types.
+
 - **Trace names the slab lease.**
   GET /trace names the account key
   under each driven cube. Empty when
