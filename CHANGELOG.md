@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well caption choke depth.**
+  Cut rust falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even rust is not the last
+  word on the maze page. KEEP leftover
+  even not-optimal rust stays.
+
 - **Well caption lens-moss depth.**
   Never-touched moss falls off toward
   floor-dim with the same 0.22 as halls,

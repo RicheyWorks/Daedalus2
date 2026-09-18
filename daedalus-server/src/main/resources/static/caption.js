@@ -25,7 +25,7 @@
   function analysisHtml(a) {
     const cp = a.cutSize === 1 ? "1 chokepoint" : `${a.cutSize} chokepoints`;
     return `<div style="margin-top:8px">`
-        + `<b style="color:#c07850">${cp}</b> — sever ${a.cutSize === 1 ? "it" : "them"} and `
+        + `<b style="color:#9f6544">${cp}</b> — sever ${a.cutSize === 1 ? "it" : "them"} and `
         + `start and goal split into different worlds &middot; `
         + `${a.deadEndCount} dead ends &middot; shortest route ${a.routeLength} cells`
         + (a.cutSize === 1

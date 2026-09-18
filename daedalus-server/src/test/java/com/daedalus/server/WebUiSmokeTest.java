@@ -448,6 +448,7 @@ class WebUiSmokeTest {
                 .contains("color:#758c44\">${escapeHtml(f.predictedGeneratorId)}")
                 .contains("color:#c49425\">${escapeHtml(f.predictedGeneratorId)}")
                 .contains("color:#758c44\">${s.placements.length} sanctuaries")
+                .contains("color:#9f6544\">${cp}")
                 .contains("0.88 + 0.24 * lensWave")
                 .contains("0.85 + 0.30 * lensWave")
                 .contains("EXPANSION_BREATH_MS")
