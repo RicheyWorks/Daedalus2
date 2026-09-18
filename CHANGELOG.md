@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World inspect street directory.**
+  world.inspect carries plots, street, lot, maze, lease, and
+  place. Empty worlds stay empty strings. Not a wallet.
+
 - **World street of maze ids.**
   Well maze row and desktop inspect list every lab mazeRef,
   oldest first. Newest maze stays the last id. Not a wallet.

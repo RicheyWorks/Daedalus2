@@ -58,7 +58,13 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo("world-zero")))
                 .andExpect(jsonPath("$.revision", equalTo(0)))
-                .andExpect(jsonPath("$.chunkCount", equalTo(0)));
+                .andExpect(jsonPath("$.chunkCount", equalTo(0)))
+                .andExpect(jsonPath("$.plots", equalTo(0)))
+                .andExpect(jsonPath("$.street", equalTo("")))
+                .andExpect(jsonPath("$.lot", equalTo("")))
+                .andExpect(jsonPath("$.maze", equalTo("")))
+                .andExpect(jsonPath("$.lease", equalTo("")))
+                .andExpect(jsonPath("$.place", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero/parcels"))
                 .andExpect(status().isOk())
@@ -287,5 +293,11 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.parcels[1].mazeRef", equalTo(again.metadata().id().toString())))
                 .andExpect(jsonPath("$.parcels[1].minX", equalTo(8)))
                 .andExpect(jsonPath("$.parcels[1].minZ", equalTo(0)));
+        extra.perform(get("/api/v1/world/world-zero"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.plots", equalTo(2)))
+                .andExpect(jsonPath("$.lot", equalTo("0,0 · 8,0")))
+                .andExpect(jsonPath("$.maze", equalTo(
+                        cached.metadata().id() + " · " + again.metadata().id())));
     }
 }

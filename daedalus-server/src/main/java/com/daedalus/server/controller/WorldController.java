@@ -90,11 +90,14 @@ public class WorldController {
     }
 
     @GetMapping("/world/{id}")
-    @Operation(summary = "Inspect a world: id, revision, occupied chunk count.")
+    @Operation(summary = "Inspect a world: id, revision, street directory.")
     public ResponseEntity<WorldInspectResponse> inspect(@PathVariable String id) {
         World world = mounted(id);
         return ResponseEntity.ok(new WorldInspectResponse(
-                world.id().value(), world.revision().value(), world.chunkCount()));
+                world.id().value(), world.revision().value(), world.chunkCount(),
+                world.parcels().size(), WorldOps.streetLine(world), WorldOps.streetLots(world),
+                WorldOps.streetMazes(world), WorldOps.lastLeaseId(world),
+                WorldOps.lastPlaceName(world)));
     }
 
     @GetMapping("/world/{id}/parcels")

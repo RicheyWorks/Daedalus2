@@ -17,6 +17,7 @@ import com.daedalus.world.stamp.StampResult;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -89,6 +90,13 @@ class WorldBuilderTest {
                 .isEqualTo("0,0 · " + next.x() + "," + next.z());
         assertThat(WorldOps.lastLot(World.zero())).isEmpty();
         assertThat(WorldOps.streetLots(World.zero())).isEmpty();
+        @SuppressWarnings("unchecked")
+        Map<String, Object> snap = (Map<String, Object>) builder.run(
+                new WorldBuilder.Step(next, "world.inspect", null));
+        assertThat(snap.get("plots")).isEqualTo(2);
+        assertThat(snap.get("street")).isEqualTo(WorldOps.streetLine(world));
+        assertThat(snap.get("lot")).isEqualTo(WorldOps.streetLots(world));
+        assertThat(snap.get("maze")).isEqualTo(WorldOps.streetMazes(world));
         assertThat(builder.run(new WorldBuilder.Step(next, "parcel.lease", null)))
                 .isEqualTo(ParcelLeaseResult.LEASED);
         assertThat(world.parcels().get(0).leaseId()).isEqualTo(Parcel.SYSTEM_TENANT);

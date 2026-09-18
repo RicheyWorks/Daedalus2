@@ -83,6 +83,12 @@ public final class WorldOps {
         out.put("id", world.id().value());
         out.put("revision", world.revision().value());
         out.put("chunkCount", world.chunkCount());
+        out.put("plots", world.parcels().size());
+        out.put("street", streetLine(world));
+        out.put("lot", streetLots(world));
+        out.put("maze", streetMazes(world));
+        out.put("lease", lastLeaseId(world));
+        out.put("place", lastPlaceName(world));
         return out;
     }
 
