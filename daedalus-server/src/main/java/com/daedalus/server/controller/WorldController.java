@@ -242,7 +242,7 @@ public class WorldController {
         }
         return ResponseEntity.ok(new StampMutationResponse(
                 result.ok(), result.outcome(), parcelId, result.revision().value(),
-                minX, maxX, minZ, maxZ));
+                minX, maxX, minZ, maxZ, WorldOps.boxLine(result.bounds())));
     }
 
     @GetMapping("/world/{id}/capabilities")

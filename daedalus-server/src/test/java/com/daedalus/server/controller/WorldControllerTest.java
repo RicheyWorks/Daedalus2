@@ -288,7 +288,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.result", equalTo("APPLIED")))
                 .andExpect(jsonPath("$.parcelId", equalTo("parcel-1")))
                 .andExpect(jsonPath("$.maxX", equalTo(2)))
-                .andExpect(jsonPath("$.maxZ", equalTo(2)));
+                .andExpect(jsonPath("$.maxZ", equalTo(2)))
+                .andExpect(jsonPath("$.box", equalTo("0,0,0-2,1,2")));
 
         mvc.perform(get("/api/v1/world/world-zero"))
                 .andExpect(status().isOk())
@@ -301,7 +302,8 @@ class WorldControllerTest {
                         .content("{\"x\":0,\"y\":0,\"z\":0,\"actorId\":\"carol\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.ok", equalTo(false)))
-                .andExpect(jsonPath("$.result", equalTo("DENIED")));
+                .andExpect(jsonPath("$.result", equalTo("DENIED")))
+                .andExpect(jsonPath("$.box", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero"))
                 .andExpect(status().isOk())
@@ -633,7 +635,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.ok", equalTo(true)))
                 .andExpect(jsonPath("$.result", equalTo("APPLIED")))
                 .andExpect(jsonPath("$.maxX", equalTo(6)))
-                .andExpect(jsonPath("$.maxZ", equalTo(6)));
+                .andExpect(jsonPath("$.maxZ", equalTo(6)))
+                .andExpect(jsonPath("$.box", equalTo("0,0,0-6,1,6")));
         extra.perform(get("/api/v1/world/world-zero/parcels"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.parcels[0].mazeRef", equalTo(cached.metadata().id().toString())))

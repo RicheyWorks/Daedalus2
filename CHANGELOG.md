@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Stamp apply names the slab box.**
+  POST /stamp returns the inclusive
+  AABB living stays inside. Denied and
+  overlap stay empty. Same string GET
+  /parcels already names. No wallet
+  types.
+
 - **Parcel directory names the slab box.**
   GET /parcels names the inclusive
   AABB living stays inside, not only
