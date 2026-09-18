@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well paints inspect street.**
+  The world panel reads plots, street, lot, maze, lease, and
+  place from world.inspect. It no longer joins /parcels by hand.
+
 - **World inspect street directory.**
   world.inspect carries plots, street, lot, maze, lease, and
   place. Empty worlds stay empty strings. Not a wallet.

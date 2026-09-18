@@ -415,20 +415,19 @@ class WebUiPaintPinTest {
                     .contains("/world/\" + WORLD + \"/trap")
                     .contains("/world/\" + WORLD + \"/portal")
                     .contains("/world/\" + WORLD + \"/npc")
-                    .contains("/world/\" + WORLD + \"/parcels")
                     .contains("/world/\" + WORLD + \"/chunk?x=0&y=0&z=0");
             assertThat(world).contains("row(box, \"lease\"")
-                    .contains("rented.leaseId")
+                    .contains("world.lease")
                     .contains("row(box, \"maze\"")
-                    .contains("list[i].mazeRef")
+                    .contains("world.maze")
                     .contains("row(box, \"plots\"")
-                    .contains("mazes.join(\" · \")")
-                    .contains("rented && rented.leaseId")
-                    .contains("named && named.placeName")
+                    .contains("world.plots")
                     .contains("row(box, \"street\"")
-                    .contains("names.join(\" · \")")
+                    .contains("world.street")
                     .contains("row(box, \"lot\"")
-                    .contains("lots.join(\" · \")");
+                    .contains("world.lot")
+                    .contains("world.place");
+            assertThat(world).doesNotContain("/world/\" + WORLD + \"/parcels\"");
             assertThat(html).contains("#worldBox .place { color: #94612e; -webkit-user-drag: none")
                     .contains("#worldBox .slab { color: #94612e; -webkit-user-drag: none");
             assertThat(world).contains("ink.className = named ? \"place\" : \"slab\"")

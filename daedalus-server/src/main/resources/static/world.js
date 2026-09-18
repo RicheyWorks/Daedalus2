@@ -49,10 +49,9 @@
       const trap = await host.api("/world/" + WORLD + "/trap");
       const portal = await host.api("/world/" + WORLD + "/portal");
       const npc = await host.api("/world/" + WORLD + "/npc");
-      const parcels = await host.api("/world/" + WORLD + "/parcels");
       const chunk = await host.api("/world/" + WORLD + "/chunk?x=0&y=0&z=0");
       const trace = await host.api("/world/" + WORLD + "/trace");
-      paint(box, world, door, trap, portal, npc, parcels, chunk, trace);
+      paint(box, world, door, trap, portal, npc, chunk, trace);
     } catch (e) {
       box.textContent = "world inspect unavailable — " + (e && e.message ? e.message : e);
     }
@@ -115,7 +114,7 @@
     return inspect(host);
   }
 
-  function paint(box, world, door, trap, portal, npc, parcels, chunk, trace) {
+  function paint(box, world, door, trap, portal, npc, chunk, trace) {
     box.replaceChildren();
     row(box, "world", world && world.id ? world.id : WORLD);
     row(box, "revision", world && world.revision != null ? String(world.revision) : "—");
@@ -124,36 +123,12 @@
     row(box, "trap", trap && trap.state ? trap.state : "—");
     row(box, "portal", portal && portal.state ? portal.state : "—");
     row(box, "npc", npc && npc.state ? npc.state : "—");
-    const list = parcels && parcels.parcels ? parcels.parcels : [];
-    const first = list[0];
-    let rented = first;
-    let named = first;
-    const names = [];
-    const mazes = [];
-    for (let i = 0; i < list.length; i++) {
-      if (list[i] && list[i].mazeRef) {
-        mazes.push(list[i].mazeRef);
-      }
-      if (list[i] && list[i].leaseId) {
-        rented = list[i];
-      }
-      if (list[i] && list[i].placeName) {
-        named = list[i];
-        names.push(list[i].placeName);
-      }
-    }
-    row(box, "plots", String(list.length));
-    row(box, "street", names.length ? names.join(" · ") : "—");
-    row(box, "place", named && named.placeName ? named.placeName : "—");
-    const lots = [];
-    for (let i = 0; i < list.length; i++) {
-      if (list[i] && list[i].minX != null && list[i].minZ != null) {
-        lots.push(list[i].minX + "," + list[i].minZ);
-      }
-    }
-    row(box, "lot", lots.length ? lots.join(" · ") : "—");
-    row(box, "lease", rented && rented.leaseId ? rented.leaseId : "—");
-    row(box, "maze", mazes.length ? mazes.join(" · ") : "—");
+    row(box, "plots", world && world.plots != null ? String(world.plots) : "—");
+    row(box, "street", world && world.street ? world.street : "—");
+    row(box, "place", world && world.place ? world.place : "—");
+    row(box, "lot", world && world.lot ? world.lot : "—");
+    row(box, "lease", world && world.lease ? world.lease : "—");
+    row(box, "maze", world && world.maze ? world.maze : "—");
     const occupied = chunk && chunk.present && chunk.occupied > 0;
     const slice = occupied
         ? "0,0,0 occupied " + chunk.occupied
