@@ -790,6 +790,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellSelectionHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("::selection { background: rgba(153, 111, 49, 0.35); color: #f2ead8; }")
+                    .doesNotContain("::selection { background: rgba(184, 133, 56, 0.35); color: #f2ead8; }");
+        }
+    }
+
+    @Test
     void wellHardestRibbonHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

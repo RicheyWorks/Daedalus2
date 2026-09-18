@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well selection depth.**
+  Selection-wash gold falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP leftover
+  even moz-selection gold stays.
+
 - **Well scrollbar thumb-active depth.**
   Thumb-active gold falls off toward
   floor-dim with the same 0.22 as halls,
