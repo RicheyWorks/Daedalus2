@@ -192,6 +192,7 @@ class ParcelGateTest {
                 world, "portal.inspect", Portal.ZERO_AT, null);
         assertThat(portalSeen.get("drive")).isEqualTo("portal.open DENIED");
         assertThat(portalSeen.get("driveActor")).isEqualTo("carol");
+        assertThat(portalSeen.get("driveAt")).isEqualTo("2,1,0");
         @SuppressWarnings("unchecked")
         Map<String, Object> chunkSeen = (Map<String, Object>) WorldOps.drive(
                 world, "chunk.inspect", Portal.ZERO_AT, null);

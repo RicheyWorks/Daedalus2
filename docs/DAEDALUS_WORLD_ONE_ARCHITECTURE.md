@@ -407,7 +407,8 @@ desktop chunk last at, and
 observe last drive at, and
 block inspect last at, and
 door inspect last at, and
-trap inspect last at
+trap inspect last at, and
+portal inspect last at
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
