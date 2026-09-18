@@ -55,7 +55,11 @@ public final class DesktopWorld {
             line = line + " · " + driven;
         }
         String actor = actorLine(world);
-        return actor.isEmpty() ? line : line + " · " + actor;
+        if (!actor.isEmpty()) {
+            line = line + " · " + actor;
+        }
+        String at = atLine(world);
+        return at.isEmpty() ? line : line + " · " + at;
     }
 
     /** Last driven capability and named result — same well builder line. */
@@ -69,6 +73,13 @@ public final class DesktopWorld {
      */
     public static String actorLine(World world) {
         return WorldOps.actorLine(world);
+    }
+
+    /**
+     * Cube address of the last mutation. Empty until a mutation.
+     */
+    public static String atLine(World world) {
+        return WorldOps.atLine(world);
     }
 
     public static String inspectLine(World world, WorldEventFrame last) {

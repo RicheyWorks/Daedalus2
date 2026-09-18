@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop last drive at.**
+  The desktop world line names the cube
+  of the last mutation after the last
+  driven account key. No wallet types.
+
 - **Explore hall last drive at.**
   The hall caption after leftover HALL
   names the cube of the last mutation.

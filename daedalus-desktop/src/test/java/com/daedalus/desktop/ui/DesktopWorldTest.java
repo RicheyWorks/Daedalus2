@@ -127,12 +127,17 @@ class DesktopWorldTest {
         assertThat(WorldOps.drive(onOrigin, "trap.arm", Trap.ZERO_AT, null, null, "carol"))
                 .isEqualTo(TrapResult.DENIED);
         assertThat(DesktopWorld.actorLine(onOrigin)).isEqualTo("carol");
+        assertThat(DesktopWorld.atLine(onOrigin)).isEqualTo("1,1,0");
+        assertThat(DesktopWorld.atLine(World.zero())).isEmpty();
+        assertThat(DesktopWorld.atLine(null)).isEmpty();
         assertThat(DesktopWorld.inspectLine(onOrigin, null, denied))
                 .contains("npc.talk DENIED")
-                .contains("carol");
+                .contains("carol")
+                .contains("1,1,0");
         assertThat(DesktopWorld.inspectLine(onOrigin, null, null))
                 .startsWith(DesktopWorld.inspectLine(onOrigin, null))
-                .contains("carol");
+                .contains("carol")
+                .contains("1,1,0");
     }
 
     @Test
