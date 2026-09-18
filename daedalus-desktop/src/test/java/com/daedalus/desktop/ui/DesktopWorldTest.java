@@ -247,6 +247,7 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.streetBoxes(two)).isEqualTo("0,0,0-6,1,6 · 8,0,0-14,1,6");
         assertThat(DesktopWorld.inspectLine(two, null))
                 .contains("2 plots")
+                .contains(DesktopWorld.lastMaze(two))
                 .contains(cached.metadata().id().toString())
                 .contains(second.metadata().id().toString())
                 .contains(DesktopWorld.firstPlace(two))
