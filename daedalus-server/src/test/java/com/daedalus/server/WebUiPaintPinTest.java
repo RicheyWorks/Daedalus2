@@ -889,6 +889,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellSpellingErrorHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("::spelling-error { text-decoration: underline wavy rgba(153, 111, 49, 0.85); }")
+                    .doesNotContain("::spelling-error { text-decoration: underline wavy rgba(184, 133, 56, 0.85); }");
+        }
+    }
+
+    @Test
     void wellHardestRibbonHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
