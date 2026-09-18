@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop inspect names the last box.**
+  The desktop world line names the
+  newest slab AABB. Empty until
+  stamp.apply. No wallet types.
+
 - **Well inspect names every lease.**
   The world well paints every rented
   account key from GET /world, oldest
