@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well last-event last drive.**
+  The well last-event line paints the
+  last driven result, account key, and
+  cube only when that cell is the one
+  that was driven. Empty on every
+  other event. No wallet types.
+
 - **STOMP last-event last drive.**
   A world event names the last driven
   result, account key, and cube only

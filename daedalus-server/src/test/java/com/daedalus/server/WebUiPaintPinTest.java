@@ -463,7 +463,10 @@ class WebUiPaintPinTest {
             assertThat(world).doesNotContain("/maze/");
             assertThat(world).contains("frame.place")
                     .contains("frame.lot")
-                    .contains("frame.occupant");
+                    .contains("frame.occupant")
+                    .contains("frame.drive")
+                    .contains("frame.driveActor")
+                    .contains("frame.driveAt");
             assertThat(live).contains("/topic/world/world-zero/events")
                     .contains("host.onWorldEvent");
         }
