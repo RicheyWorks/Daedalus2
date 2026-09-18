@@ -357,7 +357,8 @@ block.remove, and
 door.open and
 door.close, and
 stamp.apply, and
-grant/deny verbs
+grant/deny verbs, and
+well grant verb
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

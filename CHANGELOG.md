@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well grant verb.**
+  The well parcel.grant and parcel.deny bodies send verb
+  (type or block.place) so alice can extra-list door.open
+  or stamp.apply. No wallet types.
+
 - **Parcel grant verb.**
   parcel.grant and parcel.deny take an optional verb:
   block.place (default), door.open, or stamp.apply.

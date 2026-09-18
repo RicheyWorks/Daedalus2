@@ -30,9 +30,11 @@
     "npc.hush": {method: "POST", path: () => "/world/" + WORLD + "/npc/hush"},
     "parcel.lease": {method: "POST", path: () => "/world/" + WORLD + "/parcels/lease"},
     "parcel.grant": {method: "POST", path: () => "/world/" + WORLD + "/parcels/grant",
-      body: at => ({x: at.x, y: at.y, z: at.z, actorId: "alice"})},
+      body: (at, type) => ({x: at.x, y: at.y, z: at.z, actorId: "alice",
+        verb: type || "block.place"})},
     "parcel.deny": {method: "POST", path: () => "/world/" + WORLD + "/parcels/deny",
-      body: at => ({x: at.x, y: at.y, z: at.z, actorId: "alice"})},
+      body: (at, type) => ({x: at.x, y: at.y, z: at.z, actorId: "alice",
+        verb: type || "block.place"})},
     "stamp.apply": {method: "POST", path: () => "/world/" + WORLD + "/stamp",
       body: (at, type, mazeId) => {
         const body = {x: at.x, y: at.y, z: at.z};

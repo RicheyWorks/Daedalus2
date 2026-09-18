@@ -472,6 +472,7 @@ class WebUiPaintPinTest {
                     .contains("/world/\" + WORLD + \"/parcels/lease")
                     .contains("/world/\" + WORLD + \"/parcels/grant")
                     .contains("/world/\" + WORLD + \"/parcels/deny")
+                    .contains("verb: type || \"block.place\"")
                     .contains("/world/\" + WORLD + \"/stamp")
                     .contains("/world/\" + WORLD + \"/trace")
                     .contains("throw new Error(\"Unknown capability \" + capability)")
