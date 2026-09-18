@@ -483,6 +483,7 @@ public final class WorldOps {
         out.put("maze", mazeInChunk(world, cc));
         out.put("mazes", mazesInChunk(world, cc));
         out.put("lease", leaseInChunk(world, cc));
+        out.put("leases", leasesInChunk(world, cc));
         out.put("acl", aclInChunk(world, cc));
         return out;
     }

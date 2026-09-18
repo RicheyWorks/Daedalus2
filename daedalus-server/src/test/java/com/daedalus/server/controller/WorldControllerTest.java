@@ -170,7 +170,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.acl", equalTo("")))
                 .andExpect(jsonPath("$.place", equalTo("")))
                 .andExpect(jsonPath("$.lots", equalTo("")))
-                .andExpect(jsonPath("$.mazes", equalTo("")));
+                .andExpect(jsonPath("$.mazes", equalTo("")))
+                .andExpect(jsonPath("$.leases", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero/chunk").param("x", "4").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
@@ -187,7 +188,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.acl", equalTo("")))
                 .andExpect(jsonPath("$.place", equalTo("")))
                 .andExpect(jsonPath("$.lots", equalTo("")))
-                .andExpect(jsonPath("$.mazes", equalTo("")));
+                .andExpect(jsonPath("$.mazes", equalTo("")))
+                .andExpect(jsonPath("$.leases", equalTo("")));
 
         mvc.perform(delete("/api/v1/world/world-zero/block")
                         .param("x", "1").param("y", "2").param("z", "3"))
@@ -1116,6 +1118,7 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.maze", equalTo("")))
                 .andExpect(jsonPath("$.mazes", equalTo("")))
                 .andExpect(jsonPath("$.lease", equalTo("")))
+                .andExpect(jsonPath("$.leases", equalTo("")))
                 .andExpect(jsonPath("$.place", equalTo("")))
                 .andExpect(jsonPath("$.lot", equalTo("")))
                 .andExpect(jsonPath("$.lots", equalTo("")));
@@ -1134,7 +1137,8 @@ class WorldControllerTest {
                         .param("x", "0").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.lease", equalTo("tenant-zero")))
-                .andExpect(jsonPath("$.lease", org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString(" · "))));
+                .andExpect(jsonPath("$.lease", org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString(" · "))))
+                .andExpect(jsonPath("$.leases", equalTo("tenant-zero · tenant-zero")));
         extra.perform(post("/api/v1/world/world-zero/parcels/release"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("RELEASED")))

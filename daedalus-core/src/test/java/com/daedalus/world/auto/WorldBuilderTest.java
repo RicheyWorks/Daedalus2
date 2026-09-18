@@ -410,6 +410,8 @@ class WorldBuilderTest {
         assertThat(both.get("lots")).isEqualTo(WorldOps.streetLots(near));
         assertThat(both.get("maze")).isEqualTo(WorldOps.lastMaze(near));
         assertThat(both.get("mazes")).isEqualTo(WorldOps.streetMazes(near));
+        assertThat(both.get("lease")).isEqualTo(WorldOps.lastLeaseId(near));
+        assertThat(both.get("leases")).isEqualTo(WorldOps.streetLeases(near));
     }
 
     @Test
