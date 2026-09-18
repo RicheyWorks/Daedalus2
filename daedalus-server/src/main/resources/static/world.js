@@ -183,6 +183,7 @@
     row(box, "lease", world && world.lease ? world.lease : "—");
     row(box, "leases", world && world.leases ? world.leases : "—");
     row(box, "maze", world && world.maze ? world.maze : "—");
+    row(box, "mazes", world && world.mazes ? world.mazes : "—");
     const occupied = chunk && chunk.present && chunk.occupied > 0;
     const at = chunk && [chunk.street, chunk.lot, chunk.occupants, chunk.stands,
         chunk.drive, chunk.driveActor, chunk.driveAt]

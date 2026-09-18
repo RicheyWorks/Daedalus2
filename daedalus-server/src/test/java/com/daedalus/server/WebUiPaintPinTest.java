@@ -422,6 +422,8 @@ class WebUiPaintPinTest {
                     .contains("world.leases")
                     .contains("row(box, \"maze\"")
                     .contains("world.maze")
+                    .contains("row(box, \"mazes\"")
+                    .contains("world.mazes")
                     .contains("row(box, \"plots\"")
                     .contains("world.plots")
                     .contains("row(box, \"street\"")

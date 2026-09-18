@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well inspect names every slab maze.**
+  The well lists every lab maze UUID,
+  oldest first. Empty until a mazeRef
+  is bound. No wallet types.
+
 - **GET /world names the last slab maze.**
   Inspect names the newest lab maze
   UUID. Empty until a mazeRef is
