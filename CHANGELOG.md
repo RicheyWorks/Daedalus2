@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World inspect stands.**
+  world.inspect lists door, trap, portal, and NPC as
+  kind + x,y,z. Occupants stay names-only. The well paints
+  that stands row from inspect.
+
 - **Explore occupancy tint.**
   Door, trap, portal, and NPC glass cubes keep mesh type
   glass. Paint warms the door, dirties the trap, cools the

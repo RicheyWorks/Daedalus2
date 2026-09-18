@@ -91,6 +91,7 @@ public final class WorldOps {
         out.put("lease", lastLeaseId(world));
         out.put("place", lastPlaceName(world));
         out.put("occupants", occupantsLine(world));
+        out.put("stands", standsLine(world));
         return out;
     }
 
@@ -113,6 +114,28 @@ public final class WorldOps {
             rows.add("npc");
         }
         return String.join(" · ", rows);
+    }
+
+    /**
+     * Occupancy cells as kind + x,y,z. Occupants stay names-only.
+     */
+    public static String standsLine(World world) {
+        if (world == null) {
+            return "";
+        }
+        List<String> rows = new ArrayList<>();
+        addStand(rows, "door", world.door() == null ? null : world.door().at());
+        addStand(rows, "trap", world.trap() == null ? null : world.trap().at());
+        addStand(rows, "portal", world.portal() == null ? null : world.portal().at());
+        addStand(rows, "npc", world.npc() == null ? null : world.npc().at());
+        return String.join(" · ", rows);
+    }
+
+    private static void addStand(List<String> rows, String kind, BlockCoordinate at) {
+        if (at == null) {
+            return;
+        }
+        rows.add(kind + " " + at.x() + "," + at.y() + "," + at.z());
     }
 
     private static Map<String, Object> inspectBlock(World world, BlockCoordinate at) {

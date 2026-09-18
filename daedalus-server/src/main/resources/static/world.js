@@ -125,6 +125,8 @@
     row(box, "npc", occupancy(npc), npc && npc.place);
     row(box, "occupants", world && world.occupants ? world.occupants : "—",
         world && world.occupants);
+    row(box, "stands", world && world.stands ? world.stands : "—",
+        world && world.stands);
     row(box, "plots", world && world.plots != null ? String(world.plots) : "—");
     row(box, "street", world && world.street ? world.street : "—");
     row(box, "place", world && world.place ? world.place : "—");

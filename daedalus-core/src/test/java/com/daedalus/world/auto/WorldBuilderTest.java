@@ -100,8 +100,13 @@ class WorldBuilderTest {
         assertThat(snap.get("lot")).isEqualTo(WorldOps.streetLots(world));
         assertThat(snap.get("maze")).isEqualTo(WorldOps.streetMazes(world));
         assertThat(snap.get("occupants")).isEqualTo("door · trap · portal · npc");
+        assertThat(snap.get("stands"))
+                .isEqualTo("door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0");
         assertThat(WorldOps.occupantsLine(World.zero())).isEqualTo("door · trap · portal · npc");
         assertThat(WorldOps.occupantsLine(null)).isEmpty();
+        assertThat(WorldOps.standsLine(World.zero()))
+                .isEqualTo("door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0");
+        assertThat(WorldOps.standsLine(null)).isEmpty();
         assertThat(builder.run(new WorldBuilder.Step(next, "parcel.lease", null)))
                 .isEqualTo(ParcelLeaseResult.LEASED);
         assertThat(world.parcels().get(0).leaseId()).isEqualTo(Parcel.SYSTEM_TENANT);
