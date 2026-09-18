@@ -145,13 +145,24 @@ public class WorldService {
     }
 
     public BlockType remove(String id, int x, int y, int z) {
+        return remove(id, x, y, z, null).previous();
+    }
+
+    public BlockWrite remove(String id, int x, int y, int z, String actorId) {
         World live = require(id);
         synchronized (lock) {
-            BlockType previous = live.remove(new BlockCoordinate(x, y, z));
+            BlockCoordinate at = new BlockCoordinate(x, y, z);
+            Object driven = WorldOps.drive(live, "block.remove", at, null, null, actorId);
+            BlockType now = live.get(at);
+            if (driven == BlockPlaceResult.DENIED) {
+                log.append("block.remove", driven, live.revision().value());
+                return new BlockWrite(now, now, live.revision().value(), "DENIED");
+            }
+            BlockType previous = (BlockType) driven;
             persist();
             emit(id, WorldBlockEvent.Kind.BLOCK_REMOVED, x, y, z, BlockType.AIR, previous, live);
             log.append("block.remove", previous, live.revision().value());
-            return previous;
+            return new BlockWrite(previous, now, live.revision().value(), "REMOVED");
         }
     }
 

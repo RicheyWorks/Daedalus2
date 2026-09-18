@@ -144,7 +144,8 @@ class WorldControllerTest {
                         .param("x", "1").param("y", "2").param("z", "3"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.previous", equalTo("STONE")))
-                .andExpect(jsonPath("$.type", equalTo("AIR")));
+                .andExpect(jsonPath("$.type", equalTo("AIR")))
+                .andExpect(jsonPath("$.result", equalTo("REMOVED")));
 
         mvc.perform(get("/api/v1/world/other"))
                 .andExpect(status().isNotFound())
@@ -283,6 +284,13 @@ class WorldControllerTest {
                         .content("{\"x\":0,\"y\":0,\"z\":0,\"type\":\"STONE\",\"actorId\":\"bob\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("PLACED")))
+                .andExpect(jsonPath("$.type", equalTo("STONE")));
+
+        mvc.perform(delete("/api/v1/world/world-zero/block")
+                        .param("x", "0").param("y", "0").param("z", "0")
+                        .param("actorId", "carol"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("DENIED")))
                 .andExpect(jsonPath("$.type", equalTo("STONE")));
 
         mvc.perform(post("/api/v1/world/world-zero/parcels/deny")

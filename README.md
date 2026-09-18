@@ -216,7 +216,7 @@ public consumers).
 | `GET` | `/api/v1/world/{id}/block?x=&y=&z=` | public | Inspect one cube |
 | `GET` | `/api/v1/world/{id}/chunk?x=&y=&z=` | public | Inspect one 16³ chunk |
 | `PUT` | `/api/v1/world/{id}/block` | required | Place a cube (`PlaceBlockRequest`). AIR is remove. Survives restart. |
-| `DELETE` | `/api/v1/world/{id}/block?x=&y=&z=` | required | Remove a cube (set AIR) |
+| `DELETE` | `/api/v1/world/{id}/block?x=&y=&z=` | required | Remove a cube (set AIR). Optional actorId uses the parcel gate |
 | `GET` | `/api/v1/world/{id}/door` | public | Inspect the programmable door |
 | `POST` | `/api/v1/world/{id}/door/open` | required | Open the door. Already-open is a named result |
 | `POST` | `/api/v1/world/{id}/door/close` | required | Close the door. Already-closed is a named result |

@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcel gate on remove.**
+  block.remove asks the same ParcelGate as place.
+  Empty actor is the system owner. DENIED leaves the
+  cube. No wallet types.
+
 - **Parcel gate on place.**
   block.place asks ParcelGate. Empty actor is the system
   owner. A stranger needs parcel.grant. DENIED does not

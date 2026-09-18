@@ -69,7 +69,7 @@ public final class WorldOps {
             case "chunk.inspect" -> inspectChunk(world, at);
             case "block.inspect" -> inspectBlock(world, at);
             case "block.place" -> placeBlock(world, at, type, mazeRef);
-            case "block.remove" -> world.remove(at);
+            case "block.remove" -> removeBlock(world, at, mazeRef);
             case "door.inspect" -> inspectDoor(world);
             case "door.open" -> world.openDoor();
             case "door.close" -> world.closeDoor();
@@ -516,6 +516,18 @@ public final class WorldOps {
             return BlockPlaceResult.DENIED;
         }
         return world.place(at, type == null ? BlockType.STONE : type);
+    }
+
+    /**
+     * Remove through the same {@link ParcelVerb#BLOCK_PLACE} gate.
+     * Empty actor is the system owner.
+     */
+    public static Object removeBlock(World world, BlockCoordinate at, String actorId) {
+        String actor = actorId == null || actorId.isBlank() ? Parcel.SYSTEM_OWNER : actorId.trim();
+        if (world.may(actor, ParcelVerb.BLOCK_PLACE, at) == ParcelAccess.DENIED) {
+            return BlockPlaceResult.DENIED;
+        }
+        return world.remove(at);
     }
 
     /** Newest non-empty lease string on the street. Not a wallet. */

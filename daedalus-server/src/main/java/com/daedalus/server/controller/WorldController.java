@@ -289,12 +289,13 @@ public class WorldController {
             @PathVariable String id,
             @RequestParam @NotNull Integer x,
             @RequestParam @NotNull Integer y,
-            @RequestParam @NotNull Integer z) {
+            @RequestParam @NotNull Integer z,
+            @RequestParam(required = false) String actorId) {
         mounted(id);
-        BlockType previous = worlds.remove(id, x, y, z);
-        World world = mounted(id);
+        WorldService.BlockWrite write = worlds.remove(id, x, y, z, actorId);
         return ResponseEntity.ok(new BlockMutationResponse(
-                x, y, z, previous.name(), BlockType.AIR.name(), world.revision().value()));
+                x, y, z, write.previous().name(), write.now().name(),
+                write.revision(), write.result()));
     }
 
     @GetMapping("/world/{id}/door")
