@@ -974,6 +974,18 @@ public final class ExplorePaint {
         return found.isEmpty() ? null : found;
     }
 
+    /**
+     * Account key that last drove a mutation. Empty until a mutation.
+     * Never a wallet type.
+     */
+    public static String actorName(WorldMesh blocks) {
+        if (blocks == null || blocks.world() == null) {
+            return null;
+        }
+        String found = WorldOps.actorLine(blocks.world());
+        return found.isEmpty() ? null : found;
+    }
+
     private static String withAcl(String place, WorldMesh blocks) {
         String acl = aclName(blocks);
         String named = acl == null ? place : place + " · " + acl;
@@ -982,10 +994,16 @@ public final class ExplorePaint {
 
     private static String withDrive(String place, WorldMesh blocks) {
         String drive = driveName(blocks);
-        if (drive == null) {
+        String named = drive == null ? place : place + " · " + drive;
+        return withActor(named, blocks);
+    }
+
+    private static String withActor(String place, WorldMesh blocks) {
+        String actor = actorName(blocks);
+        if (actor == null) {
             return place;
         }
-        return place + " · " + drive;
+        return place + " · " + actor;
     }
 
     private static String withOccupants(String place, WorldMesh blocks) {

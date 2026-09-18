@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore hall last drive actor.**
+  The hall caption after leftover HALL
+  names the account key that last drove
+  a mutation. Stood-on START still leads.
+  No wallet types.
+
 - **Well inspect drive actor.**
   GET /world carries the account key that
   last drove a mutation. The fold paints

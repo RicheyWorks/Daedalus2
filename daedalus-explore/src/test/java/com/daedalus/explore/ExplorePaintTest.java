@@ -1141,10 +1141,13 @@ class ExplorePaintTest {
         WorldMesh denied = WorldMesh.of(refused);
         assertThat(ExplorePaint.driveName(denied)).isEqualTo("trap.arm DENIED");
         assertThat(ExplorePaint.driveName(null)).isNull();
+        assertThat(ExplorePaint.actorName(denied)).isEqualTo("carol");
+        assertThat(ExplorePaint.actorName(null)).isNull();
         fog.stand(new Point(0, 1));
         assertThat(ExplorePaint.status(fog, offPlot, List.of(), longHall, denied).place())
                 .as("last drive follows leftover HALL so DENIED is visible")
-                .contains("trap.arm DENIED");
+                .contains("trap.arm DENIED")
+                .contains("carol");
         assertThat(ExplorePaint.status(fog, atStart, List.of(), mesh, denied).place())
                 .as("stood-on start still leads last drive")
                 .isEqualTo("START");
