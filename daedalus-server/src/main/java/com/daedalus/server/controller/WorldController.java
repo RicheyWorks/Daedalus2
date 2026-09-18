@@ -275,12 +275,11 @@ public class WorldController {
             @PathVariable String id, @Valid @RequestBody PlaceBlockRequest body) {
         mounted(id);
         BlockType type = parseType(body.type());
-        BlockType previous = worlds.place(id, body.x(), body.y(), body.z(), type);
-        World world = mounted(id);
+        WorldService.BlockWrite write = worlds.place(id, body.x(), body.y(), body.z(), type,
+                body.actorId());
         return ResponseEntity.ok(new BlockMutationResponse(
-                body.x(), body.y(), body.z(), previous.name(),
-                world.get(new BlockCoordinate(body.x(), body.y(), body.z())).name(),
-                world.revision().value()));
+                body.x(), body.y(), body.z(), write.previous().name(),
+                write.now().name(), write.revision(), write.result()));
     }
 
     @DeleteMapping("/world/{id}/block")

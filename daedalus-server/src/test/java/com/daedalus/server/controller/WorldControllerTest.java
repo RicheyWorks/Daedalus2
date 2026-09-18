@@ -110,6 +110,7 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.previous", equalTo("AIR")))
                 .andExpect(jsonPath("$.type", equalTo("STONE")))
+                .andExpect(jsonPath("$.result", equalTo("PLACED")))
                 .andExpect(jsonPath("$.revision", equalTo(1)));
 
         mvc.perform(get("/api/v1/world/world-zero/block").param("x", "1").param("y", "2").param("z", "3"))
@@ -270,6 +271,19 @@ class WorldControllerTest {
                         .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("ALREADY_GRANTED")));
+
+        mvc.perform(put("/api/v1/world/world-zero/block")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"x\":0,\"y\":0,\"z\":0,\"type\":\"STONE\",\"actorId\":\"carol\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("DENIED")));
+
+        mvc.perform(put("/api/v1/world/world-zero/block")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"x\":0,\"y\":0,\"z\":0,\"type\":\"STONE\",\"actorId\":\"bob\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("PLACED")))
+                .andExpect(jsonPath("$.type", equalTo("STONE")));
 
         mvc.perform(post("/api/v1/world/world-zero/parcels/deny")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -16,5 +16,10 @@ public record PlaceBlockRequest(
         @NotNull(message = "z is required") Integer z,
         @NotBlank(message = "type is required")
         @Size(max = 16, message = "type must be at most 16 chars")
-        String type) {
+        String type,
+        String actorId) {
+
+    public PlaceBlockRequest(Integer x, Integer y, Integer z, String type) {
+        this(x, y, z, type, null);
+    }
 }

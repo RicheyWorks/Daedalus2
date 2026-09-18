@@ -4,6 +4,7 @@ package com.daedalus.world.auto;
 
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.world.BlockCoordinate;
+import com.daedalus.world.BlockPlaceResult;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.Chunk;
 import com.daedalus.world.ChunkCoordinate;
@@ -12,6 +13,7 @@ import com.daedalus.world.DoorResult;
 import com.daedalus.world.Npc;
 import com.daedalus.world.NpcResult;
 import com.daedalus.world.Parcel;
+import com.daedalus.world.ParcelAccess;
 import com.daedalus.world.ParcelAcl;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.ParcelDenyResult;
@@ -66,7 +68,7 @@ public final class WorldOps {
             case "world.inspect" -> inspectWorld(world);
             case "chunk.inspect" -> inspectChunk(world, at);
             case "block.inspect" -> inspectBlock(world, at);
-            case "block.place" -> world.place(at, type == null ? BlockType.STONE : type);
+            case "block.place" -> placeBlock(world, at, type, mazeRef);
             case "block.remove" -> world.remove(at);
             case "door.inspect" -> inspectDoor(world);
             case "door.open" -> world.openDoor();
@@ -501,6 +503,19 @@ public final class WorldOps {
 
     public static ParcelDenyResult asDenyResult(Object value) {
         return (ParcelDenyResult) value;
+    }
+
+    /**
+     * Place through {@link World#may}. Empty actor is the system owner so
+     * existing owner recipes stay allowed. A stranger needs a grant.
+     */
+    public static Object placeBlock(World world, BlockCoordinate at, BlockType type,
+            String actorId) {
+        String actor = actorId == null || actorId.isBlank() ? Parcel.SYSTEM_OWNER : actorId.trim();
+        if (world.may(actor, ParcelVerb.BLOCK_PLACE, at) == ParcelAccess.DENIED) {
+            return BlockPlaceResult.DENIED;
+        }
+        return world.place(at, type == null ? BlockType.STONE : type);
     }
 
     /** Newest non-empty lease string on the street. Not a wallet. */

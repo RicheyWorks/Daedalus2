@@ -5,6 +5,7 @@ package com.daedalus.server.service;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.plugin.events.WorldBlockEvent;
 import com.daedalus.world.BlockCoordinate;
+import com.daedalus.world.BlockPlaceResult;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.Chunk;
 import com.daedalus.world.ChunkCoordinate;
@@ -117,17 +118,30 @@ public class WorldService {
     }
 
     public BlockType place(String id, int x, int y, int z, BlockType type) {
+        return place(id, x, y, z, type, null).previous();
+    }
+
+    public BlockWrite place(String id, int x, int y, int z, BlockType type, String actorId) {
         World live = require(id);
         synchronized (lock) {
             BlockCoordinate at = new BlockCoordinate(x, y, z);
-            BlockType previous = live.place(at, type);
-            persist();
+            Object driven = WorldOps.drive(live, "block.place", at, type, null, actorId);
             BlockType now = live.get(at);
+            if (driven == BlockPlaceResult.DENIED) {
+                log.append("block.place", driven, live.revision().value());
+                return new BlockWrite(now, now, live.revision().value(), "DENIED");
+            }
+            BlockType previous = (BlockType) driven;
+            persist();
             emit(id, now.solid() ? WorldBlockEvent.Kind.BLOCK_PLACED
                     : WorldBlockEvent.Kind.BLOCK_REMOVED, x, y, z, now, previous, live);
             log.append(now.solid() ? "block.place" : "block.remove", previous, live.revision().value());
-            return previous;
+            return new BlockWrite(previous, now, live.revision().value(), "PLACED");
         }
+    }
+
+    /** Place outcome. {@code result} is never silent success. */
+    public record BlockWrite(BlockType previous, BlockType now, long revision, String result) {
     }
 
     public BlockType remove(String id, int x, int y, int z) {

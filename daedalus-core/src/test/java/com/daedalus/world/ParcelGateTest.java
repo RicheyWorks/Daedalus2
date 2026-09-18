@@ -59,6 +59,13 @@ class ParcelGateTest {
         world.grant(id, "bob", ParcelVerb.BLOCK_PLACE);
         assertThat(world.may("bob", ParcelVerb.BLOCK_PLACE, inside))
                 .isEqualTo(ParcelAccess.ALLOWED);
+        BlockType before = world.get(inside);
+        assertThat(WorldOps.drive(world, "block.place", inside, BlockType.STONE, null, "carol"))
+                .isEqualTo(BlockPlaceResult.DENIED);
+        assertThat(world.get(inside)).isEqualTo(before);
+        assertThat(WorldOps.drive(world, "block.place", inside, BlockType.STONE, null, "bob"))
+                .isEqualTo(before);
+        assertThat(world.get(inside)).isEqualTo(BlockType.STONE);
         assertThat(WorldOps.aclLine(world)).isEqualTo("bob block.place");
         assertThat(WorldOps.aclAt(world, inside)).isEqualTo("bob block.place");
         assertThat(WorldOps.aclLine(World.zero())).isEmpty();
@@ -67,7 +74,7 @@ class ParcelGateTest {
         assertThat(WorldOps.aclLine(world)).isEqualTo("bob block.place · !bob block.place");
         assertThat(world.may("bob", ParcelVerb.BLOCK_PLACE, inside))
                 .isEqualTo(ParcelAccess.DENIED);
-        assertThat(world.revision().value()).isEqualTo(revision);
+        assertThat(world.revision().value()).isEqualTo(revision + 1);
         assertThatThrownBy(() -> world.grant(new ParcelId("parcel-missing"), "bob",
                 ParcelVerb.DOOR_OPEN)).isInstanceOf(IllegalArgumentException.class);
     }

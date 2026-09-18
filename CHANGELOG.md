@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcel gate on place.**
+  block.place asks ParcelGate. Empty actor is the system
+  owner. A stranger needs parcel.grant. DENIED does not
+  write a cube. No wallet types.
+
 - **Parcel ACL persist.**
   Extra grants and denials ride DAEW v10. A v9 file still
   loads with an empty ACL. Actor ids stay account keys —
