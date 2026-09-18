@@ -259,6 +259,7 @@ class WorldBuilderTest {
         assertThat(trap.get("place")).isEqualTo(place);
         assertThat(trap.get("lot")).isEqualTo("0,0");
         assertThat(trap.get("box")).isEqualTo("0,0,0-2,1,2");
+        assertThat(trap.get("maze")).isEqualTo("");
         assertThat(trap.get("acl")).isEqualTo("");
         @SuppressWarnings("unchecked")
         Map<String, Object> portal = (Map<String, Object>) builder.run(
@@ -401,6 +402,10 @@ class WorldBuilderTest {
         Map<String, Object> doorOnLot = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "door.inspect", null));
         assertThat(doorOnLot.get("maze")).isEqualTo(mazeRef);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> trapOnLot = (Map<String, Object>) builder.run(
+                new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "trap.inspect", null));
+        assertThat(trapOnLot.get("maze")).isEqualTo(mazeRef);
         @SuppressWarnings("unchecked")
         Map<String, Object> offLot = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(new BlockCoordinate(99, 0, 99), "block.inspect", null));

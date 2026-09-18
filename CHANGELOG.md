@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Trap inspect names the slab maze.**
+  GET /trap names the lab maze UUID
+  the plot was stamped from. Empty
+  off the street or on a default
+  slab with no mazeId. No wallet types.
+
 - **Door inspect names the slab maze.**
   GET /door names the lab maze UUID
   the plot was stamped from. Empty

@@ -2,11 +2,11 @@
 
 package com.daedalus.api.dto;
 
-/** Trap inspect — same facts automation reads. Place, lot, and box are empty off a slab. */
+/** Trap inspect — same facts automation reads. Place, lot, box, and maze are empty off a slab. */
 public record TrapInspectResponse(
         String id, String worldId, int x, int y, int z, String state,
         String place, String lot, String acl, String drive, String driveActor, String driveAt,
-        String box) {
+        String box, String maze) {
 
     public TrapInspectResponse {
         place = place == null ? "" : place;
@@ -16,33 +16,41 @@ public record TrapInspectResponse(
         driveActor = driveActor == null ? "" : driveActor;
         driveAt = driveAt == null ? "" : driveAt;
         box = box == null ? "" : box;
+        maze = maze == null ? "" : maze;
+    }
+
+    public TrapInspectResponse(
+            String id, String worldId, int x, int y, int z, String state,
+            String place, String lot, String acl, String drive, String driveActor, String driveAt,
+            String box) {
+        this(id, worldId, x, y, z, state, place, lot, acl, drive, driveActor, driveAt, box, "");
     }
 
     public TrapInspectResponse(
             String id, String worldId, int x, int y, int z, String state,
             String place, String lot, String acl, String drive, String driveActor, String driveAt) {
-        this(id, worldId, x, y, z, state, place, lot, acl, drive, driveActor, driveAt, "");
+        this(id, worldId, x, y, z, state, place, lot, acl, drive, driveActor, driveAt, "", "");
     }
 
     public TrapInspectResponse(
             String id, String worldId, int x, int y, int z, String state,
             String place, String lot, String acl, String drive, String driveActor) {
-        this(id, worldId, x, y, z, state, place, lot, acl, drive, driveActor, "", "");
+        this(id, worldId, x, y, z, state, place, lot, acl, drive, driveActor, "", "", "");
     }
 
     public TrapInspectResponse(
             String id, String worldId, int x, int y, int z, String state,
             String place, String lot, String acl) {
-        this(id, worldId, x, y, z, state, place, lot, acl, "", "", "", "");
+        this(id, worldId, x, y, z, state, place, lot, acl, "", "", "", "", "");
     }
 
     public TrapInspectResponse(
             String id, String worldId, int x, int y, int z, String state,
             String place, String lot) {
-        this(id, worldId, x, y, z, state, place, lot, "", "", "", "", "");
+        this(id, worldId, x, y, z, state, place, lot, "", "", "", "", "", "");
     }
 
     public TrapInspectResponse(String id, String worldId, int x, int y, int z, String state) {
-        this(id, worldId, x, y, z, state, "", "", "", "", "", "", "");
+        this(id, worldId, x, y, z, state, "", "", "", "", "", "", "", "");
     }
 }
