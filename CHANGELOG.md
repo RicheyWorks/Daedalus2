@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well moz-inactive depth.**
+  Moz inactive-selection gold falls off
+  toward floor-dim with the same 0.22
+  as halls, so leftover even torch is
+  not the last word on the maze page.
+  KEEP leftover even mark gold stays.
+
 - **Well selection-inactive depth.**
   Inactive-selection gold falls off
   toward floor-dim with the same 0.22
