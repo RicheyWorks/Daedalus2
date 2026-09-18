@@ -12,6 +12,9 @@ import com.daedalus.world.WorldId;
 import com.daedalus.world.auto.WorldOps;
 import com.daedalus.world.stamp.StampResult;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Desktop world inspect line — revision and last event, not a voxel viewport.
  * Maze generate / solve stay on their own controls.
@@ -56,6 +59,10 @@ public final class DesktopWorld {
         }
         String line = inspectLine(world.revision().value(), world.parcels().size(), place,
                 lastLease(world), streetMazes(world), last);
+        String occ = occupancyLine(world);
+        if (!occ.isEmpty()) {
+            line = line + " · " + occ;
+        }
         String at = eventLot(world, last);
         return at.isEmpty() ? line : line + " · " + at;
     }
@@ -111,6 +118,35 @@ public final class DesktopWorld {
             }
         }
         return "";
+    }
+
+    /**
+     * Occupancy cells that sit on a slab, oldest object first.
+     * Off-plot door-zero stays silent.
+     */
+    public static String occupancyLine(World world) {
+        if (world == null) {
+            return "";
+        }
+        List<String> rows = new ArrayList<>();
+        addOccupancy(rows, "door", world.door() == null ? null : world.door().at(), world);
+        addOccupancy(rows, "trap", world.trap() == null ? null : world.trap().at(), world);
+        addOccupancy(rows, "portal", world.portal() == null ? null : world.portal().at(), world);
+        addOccupancy(rows, "npc", world.npc() == null ? null : world.npc().at(), world);
+        return String.join(" · ", rows);
+    }
+
+    private static void addOccupancy(List<String> rows, String kind, BlockCoordinate at, World world) {
+        if (at == null) {
+            return;
+        }
+        String named = WorldOps.placeAt(world, at);
+        String lot = WorldOps.lotAt(world, at);
+        if (named.isEmpty() && lot.isEmpty()) {
+            return;
+        }
+        String label = named.isEmpty() ? lot : (lot.isEmpty() ? named : named + " " + lot);
+        rows.add(kind + " " + label);
     }
 
     /**

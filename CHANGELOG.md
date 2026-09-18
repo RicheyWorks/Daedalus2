@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop occupancy lot.**
+  Inspect names door, trap, portal, and NPC when that cell
+  sits on a slab. Off-plot door-zero stays silent.
+
 - **Occupancy inspect lot.**
   Door, trap, portal, and NPC inspect name the slab under
   that cell. A 1×1 stamp covers door-zero but not npc-zero.

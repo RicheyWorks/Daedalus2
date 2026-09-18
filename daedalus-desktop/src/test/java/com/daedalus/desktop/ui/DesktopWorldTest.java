@@ -15,6 +15,7 @@ import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.PlaceNames;
 import com.daedalus.world.World;
+import com.daedalus.world.auto.WorldOps;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -72,6 +73,19 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.inspectLine(named, onLot))
                 .contains("BLOCK_PLACED 8,0,8 WOOD")
                 .contains("Willow Walk 8,8");
+        assertThat(DesktopWorld.occupancyLine(World.zero())).isEmpty();
+        assertThat(DesktopWorld.occupancyLine(named)).isEmpty();
+        World onOrigin = World.zero();
+        WorldOps.drive(onOrigin, "stamp.apply", new BlockCoordinate(0, 0, 0), null);
+        assertThat(DesktopWorld.occupancyLine(onOrigin))
+                .contains("door")
+                .contains("trap")
+                .contains("portal")
+                .contains("0,0")
+                .doesNotContain("npc");
+        assertThat(DesktopWorld.inspectLine(onOrigin, null))
+                .contains("door")
+                .contains("0,0");
     }
 
     @Test
