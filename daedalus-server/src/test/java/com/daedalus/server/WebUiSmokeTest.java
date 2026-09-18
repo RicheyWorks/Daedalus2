@@ -403,7 +403,7 @@ class WebUiSmokeTest {
                 .contains("callout: none; margin-top: 8px; -webkit-user-drag: none")
                 .contains("exportsRimBreath")
                 .contains("gap: 8px; align-items: center; -webkit-user-drag: none")
-                .contains("border-color: rgba(184, 133, 56, 0.85); color: #f2ead8")
+                .contains("border-color: rgba(153, 111, 49, 0.85); color: #f2ead8")
                 .contains("ghost: \"#e8e0d4\"")
                 .contains("radial-gradient(circle at 45% 40%, #e8e0d4 28%, #6a6258)")
                 .contains("ghostDisc")
