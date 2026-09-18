@@ -315,7 +315,30 @@ public final class WorldOps {
         out.put("maze", mazeAt(world, cell));
         out.put("occupant", occupantAt(world, cell));
         out.put("acl", aclAt(world, cell));
+        out.put("drive", driveOn(world, cell));
+        out.put("driveActor", actorOn(world, cell));
         return out;
+    }
+
+    /**
+     * Last driven result when {@code at} is that cube. Empty on every other cell.
+     */
+    public static String driveOn(World world, BlockCoordinate at) {
+        if (world == null || at == null || !sameCell(world.lastDriveAt(), at)) {
+            return "";
+        }
+        return driveLine(world);
+    }
+
+    /**
+     * Account key that last drove a mutation on this cube. Empty otherwise.
+     * Never a wallet type.
+     */
+    public static String actorOn(World world, BlockCoordinate at) {
+        if (world == null || at == null || !sameCell(world.lastDriveAt(), at)) {
+            return "";
+        }
+        return actorLine(world);
     }
 
     public static String placeAt(World world, BlockCoordinate at) {

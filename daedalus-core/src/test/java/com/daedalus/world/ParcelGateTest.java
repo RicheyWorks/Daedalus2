@@ -135,6 +135,10 @@ class ParcelGateTest {
                 .isEqualTo(TrapResult.DENIED);
         assertThat(WorldOps.actorLine(world)).isEqualTo("carol");
         assertThat(WorldOps.atLine(world)).isEqualTo("1,1,0");
+        assertThat(WorldOps.driveOn(world, Trap.ZERO_AT)).isEqualTo("trap.arm DENIED");
+        assertThat(WorldOps.actorOn(world, Trap.ZERO_AT)).isEqualTo("carol");
+        assertThat(WorldOps.driveOn(world, new BlockCoordinate(0, 0, 0))).isEmpty();
+        assertThat(WorldOps.actorOn(world, new BlockCoordinate(0, 0, 0))).isEmpty();
         assertThat(world.trap().state()).isEqualTo(TrapState.DISARMED);
         assertThat(world.revision().value()).isEqualTo(revision);
         assertThat(WorldOps.grantParcel(world, Trap.ZERO_AT, "bob", "trap.arm"))

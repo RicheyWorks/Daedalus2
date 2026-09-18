@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Block inspect last drive.**
+  GET /block names the last driven result
+  and account key only on that cube.
+  Other cells stay empty. No wallet types.
+
 - **Well builder last at.**
   The well builder hint names the cube
   from GET /world after the last driven

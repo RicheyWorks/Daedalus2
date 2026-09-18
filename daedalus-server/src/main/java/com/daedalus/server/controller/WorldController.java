@@ -243,7 +243,8 @@ public class WorldController {
                 x, y, z, type.name(), type.solid(),
                 WorldOps.placeAt(world, at), WorldOps.lotAt(world, at),
                 WorldOps.leaseAt(world, at), WorldOps.mazeAt(world, at),
-                WorldOps.occupantAt(world, at), WorldOps.aclAt(world, at)));
+                WorldOps.occupantAt(world, at), WorldOps.aclAt(world, at),
+                WorldOps.driveOn(world, at), WorldOps.actorOn(world, at)));
     }
 
     @GetMapping("/world/{id}/chunk")
