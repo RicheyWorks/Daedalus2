@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Door open names the slab box.**
+  POST /door/open and /door/close name
+  the inclusive AABB under that cube.
+  Empty when the door sits off a
+  stamped plot. No wallet types.
+
 - **NPC talk names the slab lot.**
   POST /npc/talk and /npc/hush name
   the minX,minZ corner under that
