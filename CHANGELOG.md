@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore names every slab place.**
+  Off a slab the hall caption names
+  every inspired toponym, oldest
+  first. Empty until a stamp. No
+  wallet types.
+
 - **Desktop inspect names the last slab place.**
   Inspect names the newest inspired
   toponym. Empty until a stamp. No

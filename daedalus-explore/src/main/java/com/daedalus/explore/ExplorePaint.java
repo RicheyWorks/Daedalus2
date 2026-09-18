@@ -929,6 +929,7 @@ public final class ExplorePaint {
         }
         String last = lastParcelPlaceName(blocks);
         if (last != null) {
+            String places = lastParcelPlaces(blocks);
             String lot = lastParcelLot(blocks);
             String lots = lastParcelLots(blocks);
             String box = lastParcelBox(blocks);
@@ -937,7 +938,13 @@ public final class ExplorePaint {
             String mazes = lastParcelMazes(blocks);
             String rent = lastParcelLease(blocks);
             String rents = lastParcelLeases(blocks);
-            String named = lot == null ? last : last + " " + lot;
+            String named = last;
+            if (places != null && !places.equals(last)) {
+                named = named + " " + places;
+            }
+            if (lot != null) {
+                named = named + " " + lot;
+            }
             if (lots != null && !lots.equals(lot)) {
                 named = named + " " + lots;
             }
@@ -1154,6 +1161,15 @@ public final class ExplorePaint {
             return null;
         }
         String found = WorldOps.lastPlaceName(blocks.world());
+        return found.isEmpty() ? null : found;
+    }
+
+    /** All inspired toponyms, oldest first. Empty worlds stay null. Not GIS. */
+    public static String lastParcelPlaces(WorldMesh blocks) {
+        if (blocks == null || blocks.world() == null) {
+            return null;
+        }
+        String found = WorldOps.streetLine(blocks.world());
         return found.isEmpty() ? null : found;
     }
 

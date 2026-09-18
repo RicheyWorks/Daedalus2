@@ -1129,6 +1129,7 @@ class ExplorePaintTest {
         ExploreMesh longHall = ExploreMesh.of(hall);
         ExploreBody offPlot = ExploreBody.atCell(new Point(0, 1));
         assertThat(ExplorePaint.lastParcelPlaceName(cubes)).isEqualTo("Willow Walk");
+        assertThat(ExplorePaint.lastParcelPlaces(cubes)).isEqualTo("Willow Walk");
         assertThat(ExplorePaint.lastParcelLot(cubes)).isEqualTo("8,8");
         assertThat(ExplorePaint.lastParcelLots(cubes)).isEqualTo("8,8");
         assertThat(ExplorePaint.lastParcelBox(cubes)).isEqualTo("8,0,8-9,1,9");
@@ -1140,6 +1141,7 @@ class ExplorePaintTest {
                 .isEqualTo("00000000-0000-4000-8000-00000000000e");
         assertThat(ExplorePaint.lastParcelMazes(cubes)).isNull();
         assertThat(ExplorePaint.lastParcelPlaceName(null)).isNull();
+        assertThat(ExplorePaint.lastParcelPlaces(null)).isNull();
         assertThat(ExplorePaint.lastParcelLot(null)).isNull();
         assertThat(ExplorePaint.lastParcelLots(null)).isNull();
         assertThat(ExplorePaint.lastParcelBox(null)).isNull();
@@ -1254,6 +1256,10 @@ class ExplorePaintTest {
         two.bindMaze(two.parcels().get(0).id(), "00000000-0000-4000-8000-000000000011");
         two.bindMaze(two.parcels().get(1).id(), "00000000-0000-4000-8000-000000000012");
         WorldMesh street = WorldMesh.of(two);
+        assertThat(ExplorePaint.lastParcelPlaceName(street)).isEqualTo("Oak Lane");
+        assertThat(ExplorePaint.lastParcelPlaces(street)).isEqualTo("Willow Walk · Oak Lane");
+        assertThat(ExplorePaint.lastParcelPlaces(street))
+                .isNotEqualTo(ExplorePaint.lastParcelPlaceName(street));
         assertThat(ExplorePaint.lastParcelLot(street)).isEqualTo("8,8");
         assertThat(ExplorePaint.lastParcelLots(street)).isEqualTo("0,0 · 8,8");
         assertThat(ExplorePaint.lastParcelLots(street))
