@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well legend ghost depth.**
+  Overlay ghost chips fall off toward
+  deeper parchment so leftover flat
+  discs are not the last word on a
+  replay walk.
+
 - **Desktop legend sanctuary depth.**
   Overlay sanctuary chips fall off
   toward deeper olive so leftover flat
