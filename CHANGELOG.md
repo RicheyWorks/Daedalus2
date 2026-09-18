@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well status rim depth.**
+  Hall-status gold falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP leftover
+  even hardest ribbon brand stays.
+
 - **Well chevron depth.**
   Fold-mark gold falls off toward
   floor-dim with the same 0.22 as halls,

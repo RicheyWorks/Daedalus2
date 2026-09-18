@@ -205,6 +205,8 @@ class WebUiSmokeTest {
                 .contains("color: #f2ead8; cursor: text; padding: 8px")
                 .contains("animation: chevronBreath 4.5s ease-in-out infinite; }")
                 .contains("animation: infoRimBreath 4.5s ease-in-out infinite; }")
+                .contains("margin-top: 8px; -webkit-user-drag: none;")
+                .contains("border-left: 2px solid rgba(153, 111, 49, 0.28); padding-left: 8px;")
                 .contains("0%, 100% { border-left-color: rgba(153, 111, 49, 0.28); }")
                 .contains("animation: statsRimBreath 4.5s ease-in-out infinite; }")
                 .contains("0%, 100% { border-top-color: rgba(153, 111, 49, 0.28); }")
