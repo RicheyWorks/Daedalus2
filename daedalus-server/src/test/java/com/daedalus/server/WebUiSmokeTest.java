@@ -155,6 +155,8 @@ class WebUiSmokeTest {
                 .contains("color: #b09a72; cursor: text; margin: 0 0 22px")
                 .contains("text-wrap: pretty; animation: gateRise .7s .1s ease both;")
                 .contains("#gate article p { margin: 0; color: #b09a72")
+                .contains("#gate article { background: rgba(22, 18, 14, .88); cursor: default; -webkit-user-drag: none;\n"
+                        + "                  border: 1px solid rgba(153, 111, 49, 0.28);")
                 .contains("color: #b09a72; cursor: text; font-size: 13px")
                 .contains("font-size: 13px; flex: 1;")
                 .contains("text-wrap: pretty;")
