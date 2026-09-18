@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop inspect names the last slab place.**
+  Inspect names the newest inspired
+  toponym. Empty until a stamp. No
+  wallet types.
+
 - **Desktop inspect names the last slab lease.**
   Inspect names the newest account
   key. Empty until a lease. No

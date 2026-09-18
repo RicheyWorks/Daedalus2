@@ -258,6 +258,7 @@ class DesktopWorldTest {
                 .contains(second.metadata().id().toString())
                 .contains(DesktopWorld.firstPlace(two))
                 .contains(DesktopWorld.lastPlace(two))
+                .contains(DesktopWorld.streetLine(two))
                 .contains("0,0")
                 .contains("8,0")
                 .contains(DesktopWorld.lastBox(two))
