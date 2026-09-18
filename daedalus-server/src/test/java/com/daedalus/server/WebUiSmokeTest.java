@@ -483,6 +483,7 @@ class WebUiSmokeTest {
                 .contains("data-key=\"sanctuary\"")
                 .contains("data-key=\"lens\"")
                 .contains("data-key=\"hardest\"")
+                .contains("radial-gradient(circle at 45% 40%, #f2c94c 28%, #8a6820)")
                 .contains("data-key=\"tour\"")
                 .contains("data-key=\"deadend\"")
                 .contains("#legend [data-key=\"choke\"] i, #legend [data-key=\"deadend\"] i")

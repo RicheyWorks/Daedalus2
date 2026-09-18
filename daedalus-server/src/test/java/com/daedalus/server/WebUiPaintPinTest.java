@@ -481,6 +481,18 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellLegendHardestChipHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("#legend [data-key=\"hardest\"] i {")
+                    .contains("radial-gradient(circle at 45% 40%, #f2c94c 28%, #8a6820)")
+                    .doesNotContain("data-key=\"hardest\"><i style=\"background:#f2c94c\"");
+        }
+    }
+
+    @Test
     void wellWorldPanelListensBesideTheMaze() throws Exception {
         try (InputStream htmlIn = getClass().getResourceAsStream("/static/index.html");
              InputStream worldIn = getClass().getResourceAsStream("/static/world.js");

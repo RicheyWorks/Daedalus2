@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well legend hardest depth.**
+  Overlay hardest-route chips fall off
+  toward deeper gold so leftover flat
+  swatches are not the last word on a
+  hard walk.
+
 - **Desktop legend tour depth.**
   Overlay tour chips fall off toward
   deeper sand so leftover flat swatches
