@@ -501,6 +501,7 @@ class WebUiSmokeTest {
                 .contains("tour: !!(snap.tourPath && snap.tourPath.length)")
                 .contains("data-key=\"race\"")
                 .contains("background:#8fb8ff")
+                .contains("radial-gradient(circle at 45% 40%, #8fb8ff 28%, #3a5888)")
                 .contains("color: \"#8fb8ff\"")
                 .contains(">arena</span>")
                 .contains("data-key=\"player\"")

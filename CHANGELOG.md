@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well legend path depth.**
+  Overlay solver-path chips fall off
+  toward deeper ice so leftover flat
+  swatches are not the last word on a
+  walk.
+
 - **Desktop legend deadend depth.**
   Overlay dead-end chips fall off
   toward deeper sand so leftover flat
