@@ -367,7 +367,7 @@ public class WorldController {
         return ResponseEntity.ok(new BlockMutationResponse(
                 body.x(), body.y(), body.z(), write.previous().name(),
                 write.now().name(), write.revision(), write.result(),
-                WorldOps.mazeAt(world, at)));
+                WorldOps.mazeAt(world, at), WorldOps.leaseAt(world, at)));
     }
 
     @DeleteMapping("/world/{id}/block")
@@ -386,7 +386,7 @@ public class WorldController {
         return ResponseEntity.ok(new BlockMutationResponse(
                 x, y, z, write.previous().name(), write.now().name(),
                 write.revision(), write.result(),
-                WorldOps.mazeAt(world, at)));
+                WorldOps.mazeAt(world, at), WorldOps.leaseAt(world, at)));
     }
 
     @GetMapping("/world/{id}/door")

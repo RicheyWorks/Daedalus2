@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Block place names the slab lease.**
+  PUT /block and DELETE /block name
+  the account key on the plot under
+  that cube. Empty when the cube sits
+  off a rented slab. No wallet types.
+
 - **Block place names the slab maze.**
   PUT /block and DELETE /block name
   the lab maze UUID under that cube.
