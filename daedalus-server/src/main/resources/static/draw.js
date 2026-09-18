@@ -694,8 +694,12 @@
       g.globalAlpha = 1;
     }
     if (scene.path && scene.path.length && scene.pathProgress > 0) {
-      paintWalk(g, geom, scene.path, COLORS.path, scene.pathProgress, 0.85, "ribbon");
-      pathHead(g, geom, walkHead(scene.path, scene.pathProgress), COLORS.path);
+      paintWalk(g, geom, scene.path, COLORS.path, scene.pathProgress, 0.85, "ribbon",
+          (tr, tc) => expansionTileInk(tr, tc, th, tw));
+      const pathTip = walkHead(scene.path, scene.pathProgress);
+      pathHead(g, geom, pathTip, pathTip
+          ? expansionTileInk(2 * pathTip.row + 1, 2 * pathTip.col + 1, th, tw)
+          : COLORS.path);
     }
     if (scene.analysis) {
       const CUTS_BREATH_MS = 4500;

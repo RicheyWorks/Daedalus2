@@ -344,6 +344,19 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellPathRibbonHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("paintWalk(g, geom, scene.path, COLORS.path, scene.pathProgress, 0.85, \"ribbon\",")
+                    .contains("(tr, tc) => expansionTileInk(tr, tc, th, tw)")
+                    .contains("const pathTip = walkHead(scene.path, scene.pathProgress)")
+                    .contains("expansionTileInk(2 * pathTip.row + 1, 2 * pathTip.col + 1, th, tw)");
+        }
+    }
+
+    @Test
     void wellExpansionWashHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
