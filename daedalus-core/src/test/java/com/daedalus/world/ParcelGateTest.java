@@ -95,6 +95,11 @@ class ParcelGateTest {
         long revision = world.revision().value();
         assertThat(WorldOps.drive(world, "door.open", Door.ZERO_AT, null, null, "carol"))
                 .isEqualTo(DoorResult.DENIED);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> doorSeen = (Map<String, Object>) WorldOps.drive(
+                world, "door.inspect", Door.ZERO_AT, null);
+        assertThat(doorSeen.get("drive")).isEqualTo("door.open DENIED");
+        assertThat(doorSeen.get("driveActor")).isEqualTo("carol");
         assertThat(world.door().state()).isEqualTo(DoorState.CLOSED);
         assertThat(world.revision().value()).isEqualTo(revision);
         assertThat(WorldOps.grantParcel(world, Door.ZERO_AT, "bob", "door.open"))
