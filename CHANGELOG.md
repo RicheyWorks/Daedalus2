@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend race depth.**
+  Overlay arena bars fall off toward
+  deeper ice and gold so leftover flat
+  swatches are not the last word on a
+  race.
+
 - **Well legend race depth.**
   Overlay arena bars fall off toward
   deeper ice and gold so leftover flat
