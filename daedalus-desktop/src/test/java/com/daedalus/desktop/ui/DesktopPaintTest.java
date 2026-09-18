@@ -1081,8 +1081,10 @@ class DesktopPaintTest {
                         DesktopPaint.startInk(DesktopPaint.emptyMarkEdge(1, 1))))
                 .isNotEqualTo(DesktopPaint.STAGE_ICON_START_ARGB);
         assertThat(icon[19 * DesktopPaint.STAGE_ICON_SIZE + 23])
-                .as("exit coral sits on the idle goal cell")
-                .isEqualTo(DesktopPaint.STAGE_ICON_GOAL_ARGB);
+                .as("exit coral falls off toward floor-dim")
+                .isEqualTo(DesktopPaint.hexArgb(
+                        DesktopPaint.goalInk(DesktopPaint.emptyMarkEdge(5, 9))))
+                .isNotEqualTo(DesktopPaint.STAGE_ICON_GOAL_ARGB);
         assertThat(icon[9 * DesktopPaint.STAGE_ICON_SIZE + 5])
                 .as("idle icon rim posts fall off toward unseen")
                 .isEqualTo(DesktopPaint.hexArgb(DesktopPaint.emptyMarkWallInk(0, 0)))

@@ -2101,7 +2101,7 @@ public final class DesktopPaint {
     public static final int STAGE_ICON_FLOOR_ARGB = 0xFF484339;
     /** Start mint — same brand as the well tab gate; stamp uses startInk. */
     public static final int STAGE_ICON_START_ARGB = 0xFF3EE08F;
-    /** Exit coral — same as the well tab goal. */
+    /** Exit coral — same brand as the well tab goal; stamp uses goalInk. */
     public static final int STAGE_ICON_GOAL_ARGB = 0xFFFF5A5F;
 
     public static int[] stageIconPixels() {
@@ -2121,7 +2121,7 @@ public final class DesktopPaint {
                 if (r == startTr && c == startTc) {
                     ink = hexArgb(startInk(emptyMarkEdge(r, c)));
                 } else if (r == goalTr && c == goalTc) {
-                    ink = STAGE_ICON_GOAL_ARGB;
+                    ink = hexArgb(goalInk(emptyMarkEdge(r, c)));
                 } else if (EMPTY_MARK[r].charAt(c) == '#') {
                     ink = hexArgb(emptyMarkWallInk(r, c));
                 } else {

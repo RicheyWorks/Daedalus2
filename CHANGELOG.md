@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop stage-icon goal depth.**
+  Idle-maze goal coral falls off toward
+  floor-dim at the stamp rim with the
+  same 0.22 edge as halls, so leftover
+  even coral is not the last word on a
+  finish.
+
 - **Explore window-icon goal depth.**
   Idle-maze goal coral falls off toward
   floor-dim at the stamp rim with the
