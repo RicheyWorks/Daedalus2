@@ -121,7 +121,7 @@ class WebUiSmokeTest {
                 .contains("touch-action: manipulation;")
                 .contains("::-webkit-scrollbar { width: 8px; height: 8px; }")
                 .contains("::-webkit-scrollbar-thumb { background: rgba(153, 111, 49, 0.45); border-radius: 4px; }")
-                .contains("::-webkit-scrollbar-thumb:hover { background: rgba(184, 133, 56, 0.65); }")
+                .contains("::-webkit-scrollbar-thumb:hover { background: rgba(153, 111, 49, 0.65); }")
                 .contains("::-webkit-scrollbar-thumb:active { background: rgba(184, 133, 56, 0.85); }")
                 .contains("::-webkit-scrollbar-track { background: transparent; }")
                 .contains("::-webkit-scrollbar-corner { background: transparent; }")
