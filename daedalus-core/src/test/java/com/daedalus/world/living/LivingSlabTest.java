@@ -6,7 +6,11 @@ import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.Point;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
+import com.daedalus.world.Door;
+import com.daedalus.world.Portal;
+import com.daedalus.world.Trap;
 import com.daedalus.world.World;
+import com.daedalus.world.auto.WorldOps;
 import com.daedalus.world.stamp.StampOps;
 import com.daedalus.world.stamp.StampRequest;
 import com.daedalus.world.stamp.StampResult;
@@ -69,6 +73,25 @@ class LivingSlabTest {
         assertThat(world.get(new BlockCoordinate(5, 2, 10))).isEqualTo(BlockType.STONE);
         assertThat(world.get(post)).isEqualTo(BlockType.AIR);
         assertThat(slab.sync()).isZero();
+    }
+
+    @Test
+    void aSyncKeepsOccupancyCubes() {
+        World world = World.zero();
+        MazeGrid maze = new MazeGrid(1, 1);
+        StampRequest request = new StampRequest(world.id(), new BlockCoordinate(0, 0, 0),
+                maze, 0, 1);
+        StampResult stamped = StampOps.apply(world, request);
+        LivingSlab slab = new LivingSlab(world, request, stamped.bounds());
+
+        assertThat(world.get(Door.ZERO_AT)).isEqualTo(BlockType.AIR);
+        assertThat(slab.sync()).isZero();
+        assertThat(world.get(Door.ZERO_AT)).isEqualTo(BlockType.AIR);
+        assertThat(world.get(Trap.ZERO_AT)).isEqualTo(BlockType.AIR);
+        assertThat(world.get(Portal.ZERO_AT)).isEqualTo(BlockType.AIR);
+        assertThat(WorldOps.occupantAt(world, Door.ZERO_AT)).isEqualTo("door");
+        assertThat(WorldOps.occupantAt(world, Trap.ZERO_AT)).isEqualTo("trap");
+        assertThat(WorldOps.occupantAt(world, Portal.ZERO_AT)).isEqualTo("portal");
     }
 
     @Test

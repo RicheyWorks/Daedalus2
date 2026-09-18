@@ -8,6 +8,7 @@ import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.World;
+import com.daedalus.world.auto.WorldOps;
 import com.daedalus.world.stamp.StampRequest;
 
 import java.util.Objects;
@@ -97,6 +98,9 @@ public final class LivingSlab {
     }
 
     private int ensure(BlockCoordinate at, BlockType desired) {
+        if (!WorldOps.occupantAt(world, at).isEmpty()) {
+            return 0;
+        }
         BlockType current = world.get(at);
         if (current == desired) {
             return 0;

@@ -425,7 +425,8 @@ REST trace actor, and
 REST trace at, and
 seed trace from last drive, and
 living slab last drive, and
-living slab last event
+living slab last event, and
+living slab keeps occupancy
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

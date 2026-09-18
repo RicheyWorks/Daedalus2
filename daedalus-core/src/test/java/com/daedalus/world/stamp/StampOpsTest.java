@@ -6,8 +6,12 @@ import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.Point;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
+import com.daedalus.world.Door;
+import com.daedalus.world.Portal;
+import com.daedalus.world.Trap;
 import com.daedalus.world.World;
 import com.daedalus.world.WorldStore;
+import com.daedalus.world.auto.WorldOps;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -34,14 +38,30 @@ class StampOpsTest {
         assertThat(world.parcels()).hasSize(1);
 
         // 3×3 tiles: walls occupy floorY..floorY+1; the GOAL cell is floor only.
+        // (0,1,0) is door-zero — occupancy stays AIR, not this post.
         assertThat(world.get(new BlockCoordinate(0, 0, 0))).isEqualTo(BlockType.STONE);
-        assertThat(world.get(new BlockCoordinate(0, 1, 0))).isEqualTo(BlockType.STONE);
+        assertThat(world.get(new BlockCoordinate(0, 1, 2))).isEqualTo(BlockType.STONE);
         assertThat(world.get(new BlockCoordinate(1, 0, 1))).isEqualTo(BlockType.STONE);
         assertThat(world.get(new BlockCoordinate(1, 1, 1))).isEqualTo(BlockType.AIR);
         assertThat(world.get(new BlockCoordinate(2, 1, 2))).isEqualTo(BlockType.STONE);
         assertThat(world.get(new BlockCoordinate(3, 0, 0))).isEqualTo(BlockType.AIR);
         assertThat(world.get(new BlockCoordinate(-1, 0, 0))).isEqualTo(BlockType.AIR);
         assertThat(world.get(new BlockCoordinate(1, 0, 3))).isEqualTo(BlockType.AIR);
+    }
+
+    @Test
+    void aStampKeepsOccupancyCubes() {
+        World world = World.zero();
+        StampOps.apply(world, request(world, oneByOne(), 0, 0, 0, 1));
+
+        assertThat(world.get(Door.ZERO_AT)).isEqualTo(BlockType.AIR);
+        assertThat(world.get(Trap.ZERO_AT)).isEqualTo(BlockType.AIR);
+        assertThat(world.get(Portal.ZERO_AT)).isEqualTo(BlockType.AIR);
+        assertThat(WorldOps.occupantAt(world, Door.ZERO_AT)).isEqualTo("door");
+        assertThat(WorldOps.occupantAt(world, Trap.ZERO_AT)).isEqualTo("trap");
+        assertThat(WorldOps.occupantAt(world, Portal.ZERO_AT)).isEqualTo("portal");
+        assertThat(world.get(new BlockCoordinate(0, 0, 0))).isEqualTo(BlockType.STONE);
+        assertThat(world.get(new BlockCoordinate(0, 1, 2))).isEqualTo(BlockType.STONE);
     }
 
     @Test

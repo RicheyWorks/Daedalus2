@@ -9,6 +9,7 @@ import com.daedalus.world.BlockType;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.World;
+import com.daedalus.world.auto.WorldOps;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,15 +95,24 @@ public final class StampOps {
                 int z = origin.z() + r;
                 if (tiles[r][c] == TileType.WALL) {
                     for (int y = floorY; y <= floorY + wallHeight; y++) {
-                        positions.add(new BlockCoordinate(x, y, z));
-                        types.add(BlockType.STONE);
+                        remember(world, positions, types, x, y, z);
                     }
                 } else {
-                    positions.add(new BlockCoordinate(x, floorY, z));
-                    types.add(BlockType.STONE);
+                    remember(world, positions, types, x, floorY, z);
                 }
             }
         }
         return world.applyStamp(bounds, Parcel.SYSTEM_OWNER, positions, types);
+    }
+
+    /** Door / trap / portal / NPC cubes stay occupancy, not maze stone. */
+    private static void remember(World world, List<BlockCoordinate> positions,
+            List<BlockType> types, int x, int y, int z) {
+        BlockCoordinate at = new BlockCoordinate(x, y, z);
+        if (!WorldOps.occupantAt(world, at).isEmpty()) {
+            return;
+        }
+        positions.add(at);
+        types.add(BlockType.STONE);
     }
 }

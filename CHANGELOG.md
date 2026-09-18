@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Living slab keeps occupancy.**
+  Stamp and living re-project skip door,
+  trap, and portal cubes so maze stone
+  does not bury the landmark. Glass
+  occupancy stays. No wallet types.
+
 - **Living slab last event.**
   A living re-project that writes
   cubes fires BLOCK_* and
