@@ -464,7 +464,8 @@ public final class ExploreHost {
                 int row = ExploreMesh.cellRow(tri.at().z() + 0.5);
                 edge = ExplorePaint.mapEdge(2 * row + 1, 2 * col + 1, 0, th - 1, 0, tw - 1);
             }
-            ExplorePaint.blockTint(tri, rgb, body.x(), body.z(), body.yaw(), seconds, edge);
+            ExplorePaint.blockTint(tri, rgb, body.x(), body.z(), body.yaw(), seconds, edge,
+                    world.blocks().world());
             glColor3f(rgb[0], rgb[1], rgb[2]);
             glVertex3d(tri.x1(), tri.y1(), tri.z1());
             glVertex3d(tri.x2(), tri.y2(), tri.z2());

@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore occupancy tint.**
+  Door, trap, portal, and NPC glass cubes keep mesh type
+  glass. Paint warms the door, dirties the trap, cools the
+  portal, and mints the NPC so they do not share one lamp.
+
 - **Desktop last-event occupant.**
   When the last world event is the door, trap, portal, or NPC
   cell, inspect names that occupant. Off-object stays lot-only.

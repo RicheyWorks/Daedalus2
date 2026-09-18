@@ -8,6 +8,7 @@ import com.daedalus.model.Point;
 import com.daedalus.model.TileType;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
+import com.daedalus.world.Door;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.World;
@@ -161,6 +162,43 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.blockLidContactShade(bootRim))
                 .as("cube boot rim is darker contact, not leftover even wood")
                 .isLessThan(ExplorePaint.blockLidContactShade(bootMid));
+    }
+
+    @Test
+    void occupancyGlassWearsOccupantHue() {
+        float[] glass = new float[3];
+        ExplorePaint.blockTint(BlockType.GLASS, WorldMesh.Face.POS_Z, glass);
+        float[] door = glass.clone();
+        float[] trap = glass.clone();
+        float[] portal = glass.clone();
+        float[] npc = glass.clone();
+        float[] idle = glass.clone();
+        ExplorePaint.occupancyTint("door", door);
+        ExplorePaint.occupancyTint("trap", trap);
+        ExplorePaint.occupancyTint("portal", portal);
+        ExplorePaint.occupancyTint("npc", npc);
+        ExplorePaint.occupancyTint("", idle);
+        ExplorePaint.occupancyTint(null, idle);
+        ExplorePaint.occupancyTint("door", null);
+        assertThat(door[0]).as("door glass is warmer than lamp glass").isGreaterThan(glass[0]);
+        assertThat(trap[1]).as("trap glass is dirtier than door").isLessThan(door[1]);
+        assertThat(portal[2]).as("portal glass is cooler than lamp glass").isGreaterThan(glass[2]);
+        assertThat(npc[1]).as("npc glass is mintier than door").isGreaterThan(door[1]);
+        assertThat(idle).containsExactly(glass);
+        WorldMesh.Triangle doorFace = new WorldMesh.Triangle(
+                0, 1, 1, 1, 1, 1, 1, 2, 1,
+                WorldMesh.Face.POS_Z, BlockType.GLASS, Door.ZERO_AT);
+        float[] painted = new float[3];
+        float[] bare = new float[3];
+        ExplorePaint.blockTint(doorFace, painted, Double.NaN, Double.NaN, 0, 0, 0,
+                World.zero());
+        ExplorePaint.blockTint(doorFace, bare, Double.NaN, Double.NaN, 0, 0, 0, null);
+        assertThat(painted[0]).as("door occupancy tints glass without changing type")
+                .isGreaterThan(bare[0]);
+        assertThat(doorFace.type()).isEqualTo(BlockType.GLASS);
+        assertThat(WorldMesh.of(World.zero()).triangles())
+                .extracting(WorldMesh.Triangle::type)
+                .containsOnly(BlockType.GLASS);
     }
 
     @Test

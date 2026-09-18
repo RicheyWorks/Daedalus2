@@ -2080,15 +2080,57 @@ public final class ExplorePaint {
         blockTint(tri, rgb, eyeX, eyeZ, yaw, seconds, 0);
     }
 
+    /**
+     * Occupancy glass hue — door, trap, portal, NPC. Mesh type stays glass.
+     */
+    public static void occupancyTint(String who, float[] rgb) {
+        if (who == null || who.isEmpty() || rgb == null || rgb.length < 3) {
+            return;
+        }
+        switch (who) {
+            case "door" -> {
+                rgb[0] = Math.min(1f, rgb[0] * 1.18f);
+                rgb[1] *= 0.82f;
+                rgb[2] *= 0.72f;
+            }
+            case "trap" -> {
+                rgb[0] = Math.min(1f, rgb[0] * 1.08f);
+                rgb[1] *= 0.70f;
+                rgb[2] *= 0.55f;
+            }
+            case "portal" -> {
+                rgb[0] *= 0.78f;
+                rgb[1] *= 0.88f;
+                rgb[2] = Math.min(1f, rgb[2] * 1.22f);
+            }
+            case "npc" -> {
+                rgb[0] *= 0.88f;
+                rgb[1] = Math.min(1f, rgb[1] * 1.12f);
+                rgb[2] *= 0.90f;
+            }
+            default -> {
+            }
+        }
+    }
+
     public static void blockTint(WorldMesh.Triangle tri, float[] rgb,
                                  double eyeX, double eyeZ, double yaw, double seconds,
                                  double edge) {
+        blockTint(tri, rgb, eyeX, eyeZ, yaw, seconds, edge, null);
+    }
+
+    public static void blockTint(WorldMesh.Triangle tri, float[] rgb,
+                                 double eyeX, double eyeZ, double yaw, double seconds,
+                                 double edge, World world) {
         if (tri == null) {
             blockTint(BlockType.STONE, null, rgb);
             mixHereEdge(edge, rgb);
             return;
         }
         blockTint(tri.type(), tri.face(), rgb);
+        if (tri.type() == BlockType.GLASS) {
+            occupancyTint(WorldOps.occupantAt(world, tri.at()), rgb);
+        }
         float boot = blockContactShade(tri);
         if (rgb != null && rgb.length >= 3) {
             rgb[0] *= boot;
