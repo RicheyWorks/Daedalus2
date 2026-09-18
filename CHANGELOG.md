@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well last-event occupant.**
+  STOMP world frames carry occupant when the cube is door,
+  trap, portal, or NPC. The well last-events line prints it.
+
 - **Explore hall occupants.**
   Off a slab the caption lists door, trap, portal, and NPC
   after the newest street, or instead of leftover HALL when

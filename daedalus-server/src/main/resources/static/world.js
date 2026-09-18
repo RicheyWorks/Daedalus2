@@ -143,7 +143,7 @@
     box.appendChild(last);
     events.forEach(frame => {
       const line = document.createElement("div");
-      const at = [frame.place, frame.lot].filter(Boolean).join(" ");
+      const at = [frame.place, frame.lot, frame.occupant].filter(Boolean).join(" ");
       line.textContent = frame.kind + " " + frame.x + "," + frame.y + "," + frame.z
           + " " + (frame.type || "") + (at ? " " + at : "") + " r=" + frame.revision;
       box.appendChild(line);

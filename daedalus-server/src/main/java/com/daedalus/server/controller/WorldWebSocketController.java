@@ -33,6 +33,7 @@ public class WorldWebSocketController {
         stomp.convertAndSend("/topic/world/" + e.worldId() + "/events",
                 new WorldEventFrame(e.worldId(), e.kind().name(),
                         e.x(), e.y(), e.z(), e.type(), e.previous(), e.revision(),
-                        WorldOps.placeAt(live, at), WorldOps.lotAt(live, at)));
+                        WorldOps.placeAt(live, at), WorldOps.lotAt(live, at),
+                        WorldOps.occupantAt(live, at)));
     }
 }

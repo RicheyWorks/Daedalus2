@@ -444,7 +444,8 @@ class WebUiPaintPinTest {
                     .contains("chunk.occupants");
             assertThat(world).doesNotContain("/maze/");
             assertThat(world).contains("frame.place")
-                    .contains("frame.lot");
+                    .contains("frame.lot")
+                    .contains("frame.occupant");
             assertThat(live).contains("/topic/world/world-zero/events")
                     .contains("host.onWorldEvent");
         }
