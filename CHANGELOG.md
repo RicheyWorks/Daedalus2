@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **GET /world names every slab lot.**
+  Inspect lists every slab origin as
+  x,z, oldest first. Empty until a
+  stamp. No wallet types.
+
 - **Desktop inspect names the last slab maze.**
   Inspect names the newest lab maze
   UUID. Empty until a mazeRef is

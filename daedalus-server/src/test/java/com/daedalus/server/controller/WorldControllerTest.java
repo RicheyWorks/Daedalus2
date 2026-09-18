@@ -75,7 +75,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.box", equalTo("")))
                 .andExpect(jsonPath("$.boxes", equalTo("")))
                 .andExpect(jsonPath("$.leases", equalTo("")))
-                .andExpect(jsonPath("$.mazes", equalTo("")));
+                .andExpect(jsonPath("$.mazes", equalTo("")))
+                .andExpect(jsonPath("$.lots", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero/parcels"))
                 .andExpect(status().isOk())
@@ -400,7 +401,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.box", equalTo("0,0,0-2,1,2")))
                 .andExpect(jsonPath("$.boxes", equalTo("0,0,0-2,1,2")))
                 .andExpect(jsonPath("$.leases", equalTo("")))
-                .andExpect(jsonPath("$.mazes", equalTo("")));
+                .andExpect(jsonPath("$.mazes", equalTo("")))
+                .andExpect(jsonPath("$.lots", equalTo("0,0")));
 
         mvc.perform(post("/api/v1/world/world-zero/stamp")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -886,7 +888,9 @@ class WorldControllerTest {
         extra.perform(get("/api/v1/world/world-zero"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())))
-                .andExpect(jsonPath("$.mazes", equalTo(cached.metadata().id().toString())));
+                .andExpect(jsonPath("$.mazes", equalTo(cached.metadata().id().toString())))
+                .andExpect(jsonPath("$.lot", equalTo("0,0")))
+                .andExpect(jsonPath("$.lots", equalTo("0,0")));
         extra.perform(post("/api/v1/world/world-zero/parcels/grant")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0}"))
@@ -1046,6 +1050,7 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.plots", equalTo(2)))
                 .andExpect(jsonPath("$.lot", equalTo("0,0 · 8,0")))
+                .andExpect(jsonPath("$.lots", equalTo("0,0 · 8,0")))
                 .andExpect(jsonPath("$.maze", equalTo(again.metadata().id().toString())))
                 .andExpect(jsonPath("$.mazes", equalTo(
                         cached.metadata().id() + " · " + again.metadata().id())))

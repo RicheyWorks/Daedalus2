@@ -117,7 +117,7 @@ public class WorldController {
                 WorldOps.driveLine(world), WorldOps.actorLine(world),
                 WorldOps.atLine(world), WorldOps.lastBox(world),
                 WorldOps.streetBoxes(world), WorldOps.streetLeases(world),
-                WorldOps.streetMazes(world)));
+                WorldOps.streetMazes(world), WorldOps.streetLots(world)));
     }
 
     @GetMapping("/world/{id}/parcels")
