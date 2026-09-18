@@ -479,6 +479,8 @@ class WebUiPaintPinTest {
                     .contains("chunk.mazes")
                     .contains("chunk.lease")
                     .contains("chunk.leases")
+                    .contains("chunk.acl")
+                    .contains("chunk.acls")
                     .contains("chunk.occupants")
                     .contains("chunk.stands")
                     .contains("chunk.drive")

@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well chunk last and every ACL.**
+  The well chunk row paints the newest
+  extra-list on 0,0,0, then every
+  overlapping extra-list when they
+  differ. Empty until a grant or deny.
+  No wallet types.
+
 - **GET /chunk names every slab ACL.**
   Chunk inspect lists every extra-list
   whose slab overlaps this 16³, oldest
