@@ -525,7 +525,8 @@ world inspect names the last box, and
 world inspect names every box, and
 world inspect names every lease, and
 well inspect names the last box, and
-well inspect names every box
+well inspect names every box, and
+well inspect names every lease
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

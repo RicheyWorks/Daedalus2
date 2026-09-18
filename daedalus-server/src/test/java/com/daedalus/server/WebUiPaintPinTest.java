@@ -418,6 +418,8 @@ class WebUiPaintPinTest {
                     .contains("/world/\" + WORLD + \"/chunk?x=0&y=0&z=0");
             assertThat(world).contains("row(box, \"lease\"")
                     .contains("world.lease")
+                    .contains("row(box, \"leases\"")
+                    .contains("world.leases")
                     .contains("row(box, \"maze\"")
                     .contains("world.maze")
                     .contains("row(box, \"plots\"")
