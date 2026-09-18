@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well occupancy names the slab lease.**
+  Door, trap, portal, and NPC rows
+  paint the account key from inspect.
+  Empty until parcel.lease. No wallet
+  types.
+
 - **Well occupancy names the slab maze.**
   Door, trap, portal, and NPC rows
   paint the lab maze UUID from

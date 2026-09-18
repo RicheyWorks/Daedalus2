@@ -452,6 +452,7 @@ class WebUiPaintPinTest {
                     .contains("function occupancy")
                     .contains("obj.box")
                     .contains("obj.maze")
+                    .contains("obj.lease")
                     .contains("obj.acl")
                     .contains("obj.drive")
                     .contains("obj.driveActor")

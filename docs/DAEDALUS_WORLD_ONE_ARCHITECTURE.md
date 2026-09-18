@@ -536,7 +536,8 @@ explore names every box, and
 well occupancy names the slab box, and
 desktop occupancy names the slab box, and
 desktop last-event names the slab box, and
-well occupancy names the slab maze
+well occupancy names the slab maze, and
+well occupancy names the slab lease
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
