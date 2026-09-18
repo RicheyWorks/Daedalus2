@@ -356,6 +356,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellCaptionFingerprintHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/caption.js")) {
+            assertThat(in).as("well caption painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("color:#758c44\">${escapeHtml(f.predictedGeneratorId)}")
+                    .doesNotContain("color:#8aaa50\">${escapeHtml(f.predictedGeneratorId)}");
+        }
+    }
+
+    @Test
     void wellStartDiscHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

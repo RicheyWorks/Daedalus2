@@ -445,7 +445,7 @@ class WebUiSmokeTest {
                 .contains("LENS_COLORS = [\"#e5484d\", \"#f2c94c\", \"#8aaa50\"]")
                 .contains("background:${LENS_COLORS[i]};margin-right:4px;")
                 .contains("box-shadow:0 0 0 1.5px rgba(242, 234, 216, .28)\"></span>${label}")
-                .contains("color:#8aaa50\">${escapeHtml(f.predictedGeneratorId)}")
+                .contains("color:#758c44\">${escapeHtml(f.predictedGeneratorId)}")
                 .contains("color:#758c44\">${s.placements.length} sanctuaries")
                 .contains("0.88 + 0.24 * lensWave")
                 .contains("0.85 + 0.30 * lensWave")
