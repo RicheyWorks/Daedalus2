@@ -928,12 +928,16 @@ public final class ExplorePaint {
             String lot = lastParcelLot(blocks);
             String box = lastParcelBoxes(blocks);
             String maze = lastParcelMaze(blocks);
+            String rent = lastParcelLease(blocks);
             String named = lot == null ? last : last + " " + lot;
             if (box != null) {
                 named = named + " " + box;
             }
             if (maze != null) {
                 named = named + " " + maze;
+            }
+            if (rent != null) {
+                named = named + " " + rent;
             }
             return withAcl(withOccupants(named, blocks), blocks);
         }
@@ -1152,6 +1156,15 @@ public final class ExplorePaint {
                 found = parcel.mazeRef();
             }
         }
+        return found.isEmpty() ? null : found;
+    }
+
+    /** Newest account key on the street. Empty worlds stay null. Not a wallet. */
+    public static String lastParcelLease(WorldMesh blocks) {
+        if (blocks == null || blocks.world() == null) {
+            return null;
+        }
+        String found = WorldOps.lastLeaseId(blocks.world());
         return found.isEmpty() ? null : found;
     }
 

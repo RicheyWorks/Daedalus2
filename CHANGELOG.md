@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore names the last lease.**
+  Off a slab the hall caption names
+  the newest account key. Empty until
+  parcel.lease. No wallet types.
+
 - **Explore names the slab lease.**
   A named street caption also names
   the account key under the boots.

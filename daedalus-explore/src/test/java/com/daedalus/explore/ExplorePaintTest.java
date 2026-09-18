@@ -1134,6 +1134,14 @@ class ExplorePaintTest {
                 .isEqualTo("Willow Walk 8,8 8,0,8-9,1,9 00000000-0000-4000-8000-00000000000e"
                         + " · door · trap · portal · npc"
                         + " · door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0");
+        assertThat(ExplorePaint.lastParcelLease(cubes)).isNull();
+        assertThat(ExplorePaint.lastParcelLease(rentedStreet)).isEqualTo(Parcel.SYSTEM_TENANT);
+        assertThat(ExplorePaint.lastParcelLease(null)).isNull();
+        assertThat(ExplorePaint.status(fog, offPlot, List.of(), longHall, rentedStreet).place())
+                .as("newest lease follows leftover HALL off the slab")
+                .isEqualTo("Willow Walk 8,8 8,0,8-9,1,9 " + Parcel.SYSTEM_TENANT
+                        + " · door · trap · portal · npc"
+                        + " · door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0");
         WorldMesh empty = WorldMesh.of(World.zero());
         assertThat(ExplorePaint.status(fog, offPlot, List.of(), longHall, empty).place())
                 .as("occupants lead leftover HALL when the street is empty")

@@ -542,7 +542,8 @@ desktop occupancy names the slab maze, and
 desktop occupancy names the slab lease, and
 explore names the slab maze, and
 explore names the last maze, and
-explore names the slab lease
+explore names the slab lease, and
+explore names the last lease
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
