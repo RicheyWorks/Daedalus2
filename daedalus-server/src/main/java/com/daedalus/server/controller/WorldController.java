@@ -362,9 +362,12 @@ public class WorldController {
         BlockType type = parseType(body.type());
         WorldService.BlockWrite write = worlds.place(id, body.x(), body.y(), body.z(), type,
                 body.actorId());
+        World world = mounted(id);
+        BlockCoordinate at = new BlockCoordinate(body.x(), body.y(), body.z());
         return ResponseEntity.ok(new BlockMutationResponse(
                 body.x(), body.y(), body.z(), write.previous().name(),
-                write.now().name(), write.revision(), write.result()));
+                write.now().name(), write.revision(), write.result(),
+                WorldOps.mazeAt(world, at)));
     }
 
     @DeleteMapping("/world/{id}/block")
@@ -378,9 +381,12 @@ public class WorldController {
             @RequestParam(required = false) String actorId) {
         mounted(id);
         WorldService.BlockWrite write = worlds.remove(id, x, y, z, actorId);
+        World world = mounted(id);
+        BlockCoordinate at = new BlockCoordinate(x, y, z);
         return ResponseEntity.ok(new BlockMutationResponse(
                 x, y, z, write.previous().name(), write.now().name(),
-                write.revision(), write.result()));
+                write.revision(), write.result(),
+                WorldOps.mazeAt(world, at)));
     }
 
     @GetMapping("/world/{id}/door")

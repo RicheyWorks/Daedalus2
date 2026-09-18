@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Block place names the slab maze.**
+  PUT /block and DELETE /block name
+  the lab maze UUID under that cube.
+  Empty when the cube sits off a
+  stamped plot. No wallet types.
+
 - **NPC talk names the slab box.**
   POST /npc/talk and /npc/hush name
   the inclusive AABB under that cube.

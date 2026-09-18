@@ -120,7 +120,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.previous", equalTo("AIR")))
                 .andExpect(jsonPath("$.type", equalTo("STONE")))
                 .andExpect(jsonPath("$.result", equalTo("PLACED")))
-                .andExpect(jsonPath("$.revision", equalTo(1)));
+                .andExpect(jsonPath("$.revision", equalTo(1)))
+                .andExpect(jsonPath("$.maze", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero/block").param("x", "1").param("y", "2").param("z", "3"))
                 .andExpect(status().isOk())
@@ -175,7 +176,8 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.previous", equalTo("STONE")))
                 .andExpect(jsonPath("$.type", equalTo("AIR")))
-                .andExpect(jsonPath("$.result", equalTo("REMOVED")));
+                .andExpect(jsonPath("$.result", equalTo("REMOVED")))
+                .andExpect(jsonPath("$.maze", equalTo("")));
 
         mvc.perform(get("/api/v1/world/other"))
                 .andExpect(status().isNotFound())
@@ -814,6 +816,17 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())))
                 .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))))
                 .andExpect(jsonPath("$.lot", equalTo("0,0")));
+        extra.perform(put("/api/v1/world/world-zero/block")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"x\":5,\"y\":1,\"z\":5,\"type\":\"STONE\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("PLACED")))
+                .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())));
+        extra.perform(delete("/api/v1/world/world-zero/block")
+                        .param("x", "5").param("y", "1").param("z", "5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("REMOVED")))
+                .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())));
         extra.perform(get("/api/v1/world/world-zero/parcels"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.parcels[0].mazeRef", equalTo(cached.metadata().id().toString())))

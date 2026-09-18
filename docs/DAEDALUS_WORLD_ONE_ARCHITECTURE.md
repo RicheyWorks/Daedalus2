@@ -504,7 +504,8 @@ npc talk names the slab lot, and
 door open names the slab box, and
 trap arm names the slab box, and
 portal open names the slab box, and
-npc talk names the slab box
+npc talk names the slab box, and
+block place names the slab maze
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
