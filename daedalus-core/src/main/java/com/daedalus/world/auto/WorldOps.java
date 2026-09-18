@@ -425,6 +425,7 @@ public final class WorldOps {
         out.put("driveAt", atInChunk(world, cc));
         out.put("maze", mazesInChunk(world, cc));
         out.put("lease", leasesInChunk(world, cc));
+        out.put("acl", aclInChunk(world, cc));
         return out;
     }
 
@@ -556,6 +557,25 @@ public final class WorldOps {
             }
         }
         return String.join(" · ", keys);
+    }
+
+    /** Extra grants and denials whose slab overlaps this 16³. Owner implicit. */
+    public static String aclInChunk(World world, ChunkCoordinate cc) {
+        if (world == null || cc == null) {
+            return "";
+        }
+        ParcelBounds box = chunkBox(cc);
+        List<String> rows = new ArrayList<>();
+        for (Parcel parcel : world.parcels()) {
+            if (parcel == null || !parcel.bounds().overlaps(box)) {
+                continue;
+            }
+            String one = aclOf(world, parcel.id());
+            if (!one.isEmpty()) {
+                rows.add(one);
+            }
+        }
+        return String.join(" · ", rows);
     }
 
     /** Plots whose AABB overlaps this 16³. */

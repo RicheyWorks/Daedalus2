@@ -451,7 +451,8 @@ npc inspect names the slab lease, and
 observe names the slab lease, and
 observe names the slab maze, and
 chunk inspect names overlapping mazes, and
-chunk inspect names overlapping leases
+chunk inspect names overlapping leases, and
+chunk inspect names overlapping ACLs
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

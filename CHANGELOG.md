@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Chunk inspect names overlapping ACLs.**
+  GET /chunk lists extra grants and
+  denials whose plots overlap that
+  16³. Owner stays implicit. Empty
+  off the street. No wallet types.
+
 - **Chunk inspect names overlapping leases.**
   GET /chunk lists account keys
   whose plots overlap that 16³.

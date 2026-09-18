@@ -322,14 +322,15 @@ public class WorldController {
         String driveAt = WorldOps.atInChunk(world, cc);
         String maze = WorldOps.mazesInChunk(world, cc);
         String lease = WorldOps.leasesInChunk(world, cc);
+        String acl = WorldOps.aclInChunk(world, cc);
         if (chunk == null) {
             return ResponseEntity.ok(new ChunkInspectResponse(
                     x, y, z, false, null, 0, plots, street, lot, occupants, stands,
-                    drive, driveActor, driveAt, maze, lease));
+                    drive, driveActor, driveAt, maze, lease, acl));
         }
         return ResponseEntity.ok(new ChunkInspectResponse(
                 x, y, z, true, chunk.revision(), chunk.occupied(), plots, street, lot,
-                occupants, stands, drive, driveActor, driveAt, maze, lease));
+                occupants, stands, drive, driveActor, driveAt, maze, lease, acl));
     }
 
     @PutMapping("/world/{id}/block")

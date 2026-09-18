@@ -351,6 +351,16 @@ class WorldBuilderTest {
         assertThat(origin.get("lot")).isEqualTo("0,0");
         assertThat(origin.get("maze")).isEqualTo("");
         assertThat(origin.get("lease")).isEqualTo("");
+        assertThat(origin.get("acl")).isEqualTo("");
+        assertThat(WorldOps.aclInChunk(null, null)).isEmpty();
+        world.grant(world.parcels().get(0).id(), "bob", ParcelVerb.BLOCK_PLACE);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> granted = (Map<String, Object>) builder.run(
+                new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "chunk.inspect", null));
+        assertThat(granted.get("acl")).isEqualTo("bob block.place");
+        assertThat(WorldOps.aclInChunk(world, new ChunkCoordinate(0, 0, 0)))
+                .isEqualTo("bob block.place");
+        assertThat(WorldOps.aclInChunk(world, new ChunkCoordinate(2, 0, 0))).isEmpty();
         assertThat(origin.get("occupants")).isEqualTo("door · trap · portal · npc");
         assertThat(origin.get("stands"))
                 .isEqualTo("door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0");
@@ -364,6 +374,7 @@ class WorldBuilderTest {
         assertThat(far.get("street")).isEqualTo(world.parcels().get(1).placeName());
         assertThat(far.get("lot")).isEqualTo("32,0");
         assertThat(far.get("maze")).isEqualTo("");
+        assertThat(far.get("acl")).isEqualTo("");
         assertThat(far.get("occupants")).isEqualTo("");
         assertThat(far.get("stands")).isEqualTo("");
         World near = World.zero();
