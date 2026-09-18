@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Chunk inspect last drive.**
+  GET /chunk names the last driven
+  result and account key only when that
+  cube sits in the 16³. Empty on every
+  other slice. No wallet types.
+
 - **NPC inspect last drive.**
   GET /npc names the last driven result
   and account key only when that cube

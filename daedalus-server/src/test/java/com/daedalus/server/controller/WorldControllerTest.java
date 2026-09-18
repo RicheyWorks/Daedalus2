@@ -142,7 +142,9 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.plots", equalTo(0)))
                 .andExpect(jsonPath("$.occupants", equalTo("door · trap · portal · npc")))
                 .andExpect(jsonPath("$.stands",
-                        equalTo("door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0")));
+                        equalTo("door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0")))
+                .andExpect(jsonPath("$.drive", equalTo("block.place AIR")))
+                .andExpect(jsonPath("$.driveActor", equalTo("system")));
 
         mvc.perform(get("/api/v1/world/world-zero/chunk").param("x", "4").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
@@ -150,7 +152,9 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.revision", nullValue()))
                 .andExpect(jsonPath("$.street", equalTo("")))
                 .andExpect(jsonPath("$.occupants", equalTo("")))
-                .andExpect(jsonPath("$.stands", equalTo("")));
+                .andExpect(jsonPath("$.stands", equalTo("")))
+                .andExpect(jsonPath("$.drive", equalTo("")))
+                .andExpect(jsonPath("$.driveActor", equalTo("")));
 
         mvc.perform(delete("/api/v1/world/world-zero/block")
                         .param("x", "1").param("y", "2").param("z", "3"))
@@ -438,6 +442,16 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.drive", equalTo("portal.open DENIED")))
                 .andExpect(jsonPath("$.driveActor", equalTo("carol")));
+
+        mvc.perform(get("/api/v1/world/world-zero/chunk").param("x", "0").param("y", "0").param("z", "0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.drive", equalTo("portal.open DENIED")))
+                .andExpect(jsonPath("$.driveActor", equalTo("carol")));
+
+        mvc.perform(get("/api/v1/world/world-zero/chunk").param("x", "4").param("y", "0").param("z", "0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.drive", equalTo("")))
+                .andExpect(jsonPath("$.driveActor", equalTo("")));
 
         mvc.perform(post("/api/v1/world/world-zero/portal/seal").param("actorId", "carol"))
                 .andExpect(status().isOk())

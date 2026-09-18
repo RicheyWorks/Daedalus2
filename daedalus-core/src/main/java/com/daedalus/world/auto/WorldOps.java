@@ -399,7 +399,36 @@ public final class WorldOps {
         out.put("lot", lotsInChunk(world, cc));
         out.put("occupants", occupantsInChunk(world, cc));
         out.put("stands", standsInChunk(world, cc));
+        out.put("drive", driveInChunk(world, cc));
+        out.put("driveActor", actorInChunk(world, cc));
         return out;
+    }
+
+    /**
+     * Last driven result when that cube sits in this 16³. Empty otherwise.
+     */
+    public static String driveInChunk(World world, ChunkCoordinate cc) {
+        if (world == null || cc == null || world.lastDriveAt() == null) {
+            return "";
+        }
+        if (!chunkBox(cc).contains(world.lastDriveAt())) {
+            return "";
+        }
+        return driveLine(world);
+    }
+
+    /**
+     * Account key that last drove a mutation in this 16³. Empty otherwise.
+     * Never a wallet type.
+     */
+    public static String actorInChunk(World world, ChunkCoordinate cc) {
+        if (world == null || cc == null || world.lastDriveAt() == null) {
+            return "";
+        }
+        if (!chunkBox(cc).contains(world.lastDriveAt())) {
+            return "";
+        }
+        return actorLine(world);
     }
 
     /** Occupancy objects whose cell sits in this 16³. Oldest object first. */

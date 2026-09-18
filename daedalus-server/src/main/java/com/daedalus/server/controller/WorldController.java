@@ -262,13 +262,16 @@ public class WorldController {
         String lot = WorldOps.lotsInChunk(world, cc);
         String occupants = WorldOps.occupantsInChunk(world, cc);
         String stands = WorldOps.standsInChunk(world, cc);
+        String drive = WorldOps.driveInChunk(world, cc);
+        String driveActor = WorldOps.actorInChunk(world, cc);
         if (chunk == null) {
             return ResponseEntity.ok(new ChunkInspectResponse(
-                    x, y, z, false, null, 0, plots, street, lot, occupants, stands));
+                    x, y, z, false, null, 0, plots, street, lot, occupants, stands,
+                    drive, driveActor));
         }
         return ResponseEntity.ok(new ChunkInspectResponse(
                 x, y, z, true, chunk.revision(), chunk.occupied(), plots, street, lot,
-                occupants, stands));
+                occupants, stands, drive, driveActor));
     }
 
     @PutMapping("/world/{id}/block")
