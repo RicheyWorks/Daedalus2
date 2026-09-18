@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **GET /chunk names every slab lot.**
+  Chunk inspect lists every slab origin
+  whose AABB overlaps this 16³, oldest
+  first, as x,z. Empty until a stamp.
+  No wallet types.
+
 - **GET /chunk names the last slab lot.**
   Chunk inspect names the newest slab
   origin whose AABB overlaps this 16³,

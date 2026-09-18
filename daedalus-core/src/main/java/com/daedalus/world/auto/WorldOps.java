@@ -474,6 +474,7 @@ public final class WorldOps {
         out.put("street", streetInChunk(world, cc));
         out.put("place", placeInChunk(world, cc));
         out.put("lot", lotInChunk(world, cc));
+        out.put("lots", lotsInChunk(world, cc));
         out.put("occupants", occupantsInChunk(world, cc));
         out.put("stands", standsInChunk(world, cc));
         out.put("drive", driveInChunk(world, cc));

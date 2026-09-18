@@ -344,6 +344,7 @@ public class WorldController {
         String street = WorldOps.streetInChunk(world, cc);
         String place = WorldOps.placeInChunk(world, cc);
         String lot = WorldOps.lotInChunk(world, cc);
+        String lots = WorldOps.lotsInChunk(world, cc);
         String occupants = WorldOps.occupantsInChunk(world, cc);
         String stands = WorldOps.standsInChunk(world, cc);
         String drive = WorldOps.driveInChunk(world, cc);
@@ -355,11 +356,11 @@ public class WorldController {
         if (chunk == null) {
             return ResponseEntity.ok(new ChunkInspectResponse(
                     x, y, z, false, null, 0, plots, street, lot, occupants, stands,
-                    drive, driveActor, driveAt, maze, lease, acl, place));
+                    drive, driveActor, driveAt, maze, lease, acl, place, lots));
         }
         return ResponseEntity.ok(new ChunkInspectResponse(
                 x, y, z, true, chunk.revision(), chunk.occupied(), plots, street, lot,
-                occupants, stands, drive, driveActor, driveAt, maze, lease, acl, place));
+                occupants, stands, drive, driveActor, driveAt, maze, lease, acl, place, lots));
     }
 
     @PutMapping("/world/{id}/block")

@@ -405,6 +405,7 @@ class WorldBuilderTest {
         assertThat(both.get("place")).isNotEqualTo(both.get("street"));
         assertThat(both.get("lot")).isEqualTo(WorldOps.lastLot(near));
         assertThat(both.get("lot")).isNotEqualTo(WorldOps.streetLots(near));
+        assertThat(both.get("lots")).isEqualTo(WorldOps.streetLots(near));
     }
 
     @Test
