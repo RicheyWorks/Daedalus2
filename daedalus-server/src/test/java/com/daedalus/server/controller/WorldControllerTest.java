@@ -649,13 +649,15 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("FORGIVEN")))
                 .andExpect(jsonPath("$.acl", equalTo(
-                        "bob door.open · bob trap.arm · bob portal.open · bob npc.talk")));
+                        "bob door.open · bob trap.arm · bob portal.open · bob npc.talk")))
+                .andExpect(jsonPath("$.maze", equalTo("")));
 
         mvc.perform(post("/api/v1/world/world-zero/parcels/forgive")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0}"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result", equalTo("NOT_DENIED")));
+                .andExpect(jsonPath("$.result", equalTo("NOT_DENIED")))
+                .andExpect(jsonPath("$.maze", equalTo("")));
 
         mvc.perform(post("/api/v1/world/world-zero/parcels/forgive")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -845,6 +847,12 @@ class WorldControllerTest {
                         .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("REVOKED")))
+                .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())));
+        extra.perform(post("/api/v1/world/world-zero/parcels/forgive")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"actorId\":\"carol\",\"x\":0,\"y\":0,\"z\":0}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("FORGIVEN")))
                 .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())));
     }
 }
