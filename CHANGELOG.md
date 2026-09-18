@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop last-event names the slab lease.**
+  The last-event cube names the
+  account key under that cell. Empty
+  until parcel.lease. No wallet types.
+
 - **Desktop last-event names the slab maze.**
   The last-event cube names the lab
   maze UUID under that cell. Empty

@@ -113,7 +113,8 @@ class DesktopWorldTest {
                 DesktopWorld.ID, "BLOCK_PLACED", 8, 0, 8, "WOOD", "AIR",
                 named.revision().value());
         assertThat(DesktopWorld.eventLot(named, onLot))
-                .isEqualTo("Willow Walk 8,8 8,0,8-9,1,9 00000000-0000-4000-8000-000000000007");
+                .isEqualTo("Willow Walk 8,8 8,0,8-9,1,9 00000000-0000-4000-8000-000000000007"
+                        + " " + Parcel.SYSTEM_TENANT);
         assertThat(DesktopWorld.eventLot(named, placed)).isEmpty();
         assertThat(DesktopWorld.eventLot(null, onLot)).isEmpty();
         WorldEventFrame onDoor = new WorldEventFrame(

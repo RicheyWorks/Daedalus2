@@ -329,6 +329,10 @@ public final class DesktopWorld {
         if (!maze.isEmpty()) {
             at = at.isEmpty() ? maze : at + " " + maze;
         }
+        String lease = WorldOps.leaseAt(world, cell);
+        if (!lease.isEmpty()) {
+            at = at.isEmpty() ? lease : at + " " + lease;
+        }
         if (at.isEmpty()) {
             return who;
         }
