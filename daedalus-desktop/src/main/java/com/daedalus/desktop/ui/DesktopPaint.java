@@ -2099,7 +2099,7 @@ public final class DesktopPaint {
     public static final int STAGE_ICON_WALL_ARGB = 0xFF2A2218;
     /** Idle floors — same 0.28 mix as {@code EMPTY_MARK_FLOOR}. */
     public static final int STAGE_ICON_FLOOR_ARGB = 0xFF484339;
-    /** Start mint — KEEP, same as the well tab gate. */
+    /** Start mint — same brand as the well tab gate; stamp uses startInk. */
     public static final int STAGE_ICON_START_ARGB = 0xFF3EE08F;
     /** Exit coral — same as the well tab goal. */
     public static final int STAGE_ICON_GOAL_ARGB = 0xFFFF5A5F;
@@ -2119,7 +2119,7 @@ public final class DesktopPaint {
             for (int c = 0; c < cols; c++) {
                 int ink;
                 if (r == startTr && c == startTc) {
-                    ink = STAGE_ICON_START_ARGB;
+                    ink = hexArgb(startInk(emptyMarkEdge(r, c)));
                 } else if (r == goalTr && c == goalTc) {
                     ink = STAGE_ICON_GOAL_ARGB;
                 } else if (EMPTY_MARK[r].charAt(c) == '#') {
