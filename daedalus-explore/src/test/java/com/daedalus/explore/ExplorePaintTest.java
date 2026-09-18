@@ -1261,6 +1261,8 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.lastParcelBoxes(street))
                 .isEqualTo("0,0,0-2,1,2 · 8,0,8-9,1,9");
         assertThat(ExplorePaint.lastParcelBox(street)).isEqualTo("8,0,8-9,1,9");
+        assertThat(ExplorePaint.lastParcelBoxes(street))
+                .isNotEqualTo(ExplorePaint.lastParcelBox(street));
         assertThat(ExplorePaint.lastParcelMaze(street))
                 .isEqualTo("00000000-0000-4000-8000-000000000012");
         assertThat(ExplorePaint.lastParcelMazes(street))

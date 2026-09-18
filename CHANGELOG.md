@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore names the last slab box.**
+  Off a slab the hall caption names
+  the newest inclusive AABB. Empty
+  until a stamp. No wallet types.
+
 - **Explore names the last slab maze.**
   Off a slab the hall caption names
   the newest lab maze UUID. Empty
