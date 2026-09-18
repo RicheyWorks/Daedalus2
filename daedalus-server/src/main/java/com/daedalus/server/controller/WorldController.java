@@ -503,7 +503,8 @@ public class WorldController {
         Portal portal = worlds.inspectPortal(id);
         World world = mounted(id);
         return ResponseEntity.ok(new PortalMutationResponse(
-                portal.id(), portal.state().name(), result.name(), world.revision().value()));
+                portal.id(), portal.state().name(), result.name(), world.revision().value(),
+                WorldOps.mazeAt(world, portal.at())));
     }
 
     @PostMapping("/world/{id}/portal/seal")
@@ -516,7 +517,8 @@ public class WorldController {
         Portal portal = worlds.inspectPortal(id);
         World world = mounted(id);
         return ResponseEntity.ok(new PortalMutationResponse(
-                portal.id(), portal.state().name(), result.name(), world.revision().value()));
+                portal.id(), portal.state().name(), result.name(), world.revision().value(),
+                WorldOps.mazeAt(world, portal.at())));
     }
 
     @GetMapping("/world/{id}/npc")

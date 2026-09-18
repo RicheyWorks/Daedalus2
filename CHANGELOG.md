@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Portal open names the slab maze.**
+  POST /portal/open and /portal/seal
+  name the lab maze UUID under that
+  cube. Empty when the portal sits
+  off a stamped plot. No wallet
+  types.
+
 - **Trap arm names the slab maze.**
   POST /trap/arm and /trap/disarm name
   the lab maze UUID under that cube.

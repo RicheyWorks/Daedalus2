@@ -486,7 +486,8 @@ forgive names the slab box, and
 lease names the slab box, and
 release names the remaining box, and
 door open names the slab maze, and
-trap arm names the slab maze
+trap arm names the slab maze, and
+portal open names the slab maze
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

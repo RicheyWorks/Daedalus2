@@ -265,7 +265,8 @@ class WorldControllerTest {
         mvc.perform(post("/api/v1/world/world-zero/portal/open"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("OPENED")))
-                .andExpect(jsonPath("$.state", equalTo("OPEN")));
+                .andExpect(jsonPath("$.state", equalTo("OPEN")))
+                .andExpect(jsonPath("$.maze", equalTo("")));
 
         mvc.perform(post("/api/v1/world/world-zero/portal/open"))
                 .andExpect(status().isOk())
@@ -855,6 +856,10 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())));
         extra.perform(get("/api/v1/world/world-zero/portal"))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())));
+        extra.perform(post("/api/v1/world/world-zero/portal/open"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("OPENED")))
                 .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())));
         MazeGenerationService.Cached again = gen.generate("recursive-backtracker", 3, 3, 8L);
         extra.perform(post("/api/v1/world/world-zero/stamp")
