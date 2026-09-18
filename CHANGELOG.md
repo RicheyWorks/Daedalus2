@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Release names the remaining box.**
+  POST /parcels/release names the
+  inclusive AABB still rented after
+  that drop. Empty when none
+  remain. No wallet types.
+
 - **Lease names the slab box.**
   POST /parcels/lease names the
   inclusive AABB of the newest
