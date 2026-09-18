@@ -486,6 +486,7 @@ public final class WorldOps {
         out.put("leases", leasesInChunk(world, cc));
         out.put("acl", lastAclInChunk(world, cc));
         out.put("acls", aclInChunk(world, cc));
+        out.put("box", boxInChunk(world, cc));
         return out;
     }
 
@@ -619,6 +620,24 @@ public final class WorldOps {
                 continue;
             }
             found = parcel.bounds().minX() + "," + parcel.bounds().minZ();
+        }
+        return found;
+    }
+
+    /**
+     * Newest inclusive AABB whose slab overlaps this 16³. Empty off a stamp.
+     */
+    public static String boxInChunk(World world, ChunkCoordinate cc) {
+        if (world == null || cc == null) {
+            return "";
+        }
+        ParcelBounds box = chunkBox(cc);
+        String found = "";
+        for (Parcel parcel : world.parcels()) {
+            if (parcel == null || !parcel.bounds().overlaps(box)) {
+                continue;
+            }
+            found = boxLine(parcel.bounds());
         }
         return found;
     }

@@ -363,6 +363,8 @@ class WorldBuilderTest {
         assertThat(WorldOps.lotInChunk(null, null)).isEmpty();
         assertThat(WorldOps.mazeInChunk(null, null)).isEmpty();
         assertThat(WorldOps.leaseInChunk(null, null)).isEmpty();
+        assertThat(WorldOps.boxInChunk(null, null)).isEmpty();
+        assertThat(origin.get("box")).isEqualTo(WorldOps.boxLine(world.parcels().get(0).bounds()));
         assertThat(origin.get("maze")).isEqualTo("");
         assertThat(origin.get("lease")).isEqualTo("");
         assertThat(origin.get("acl")).isEqualTo("");
@@ -389,6 +391,7 @@ class WorldBuilderTest {
         assertThat(far.get("street")).isEqualTo(world.parcels().get(1).placeName());
         assertThat(far.get("place")).isEqualTo(world.parcels().get(1).placeName());
         assertThat(far.get("lot")).isEqualTo("32,0");
+        assertThat(far.get("box")).isEqualTo(WorldOps.boxLine(world.parcels().get(1).bounds()));
         assertThat(far.get("maze")).isEqualTo("");
         assertThat(far.get("acl")).isEqualTo("");
         assertThat(far.get("occupants")).isEqualTo("");
@@ -415,6 +418,8 @@ class WorldBuilderTest {
         assertThat(both.get("leases")).isEqualTo(WorldOps.streetLeases(near));
         assertThat(both.get("acl")).isEqualTo(WorldOps.lastAcl(near));
         assertThat(both.get("acls")).isEqualTo(WorldOps.aclLine(near));
+        assertThat(both.get("box")).isEqualTo(WorldOps.lastBox(near));
+        assertThat(both.get("box")).isNotEqualTo(WorldOps.streetBoxes(near));
     }
 
     @Test

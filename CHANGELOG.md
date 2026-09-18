@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **GET /chunk names the last slab box.**
+  Chunk inspect names the newest
+  inclusive AABB whose slab overlaps
+  this 16³. Empty until a stamp. No
+  wallet types.
+
 - **Well chunk last and every ACL.**
   The well chunk row paints the newest
   extra-list on 0,0,0, then every
