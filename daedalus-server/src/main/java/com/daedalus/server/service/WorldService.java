@@ -19,6 +19,7 @@ import com.daedalus.world.ParcelDenyResult;
 import com.daedalus.world.ParcelForgiveResult;
 import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelLeaseResult;
+import com.daedalus.world.ParcelReleaseResult;
 import com.daedalus.world.ParcelRevokeResult;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
@@ -313,6 +314,17 @@ public class WorldService {
                     WorldOps.drive(live, "parcel.lease", new BlockCoordinate(0, 0, 0), null));
             persist();
             log.append("parcel.lease", result, live.revision().value());
+            return result;
+        }
+    }
+
+    public ParcelReleaseResult releaseParcel(String id) {
+        World live = require(id);
+        synchronized (lock) {
+            ParcelReleaseResult result = WorldOps.asReleaseResult(
+                    WorldOps.drive(live, "parcel.release", new BlockCoordinate(0, 0, 0), null));
+            persist();
+            log.append("parcel.release", result, live.revision().value());
             return result;
         }
     }

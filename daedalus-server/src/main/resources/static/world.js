@@ -44,6 +44,7 @@
     "npc.hush": {method: "POST", path: (at, actor) =>
         "/world/" + WORLD + "/npc/hush" + actorQuery(actor)},
     "parcel.lease": {method: "POST", path: () => "/world/" + WORLD + "/parcels/lease"},
+    "parcel.release": {method: "POST", path: () => "/world/" + WORLD + "/parcels/release"},
     "parcel.grant": {method: "POST", path: () => "/world/" + WORLD + "/parcels/grant",
       body: (at, type, mazeId, actor) => ({x: at.x, y: at.y, z: at.z,
         actorId: actor || "alice",

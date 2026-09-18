@@ -21,6 +21,7 @@ import com.daedalus.world.ParcelForgiveResult;
 import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelId;
 import com.daedalus.world.ParcelLeaseResult;
+import com.daedalus.world.ParcelReleaseResult;
 import com.daedalus.world.ParcelRevokeResult;
 import com.daedalus.world.ParcelVerb;
 import com.daedalus.world.PlaceNames;
@@ -90,6 +91,7 @@ public final class WorldOps {
             case "npc.talk" -> talkNpc(world, mazeRef);
             case "npc.hush" -> hushNpc(world, mazeRef);
             case "parcel.lease" -> leaseParcel(world);
+            case "parcel.release" -> releaseParcel(world);
             case "parcel.grant" -> grantParcel(world, at, mazeRef, actorId);
             case "parcel.deny" -> denyParcel(world, at, mazeRef, actorId);
             case "parcel.revoke" -> revokeParcel(world, at, mazeRef, actorId);
@@ -764,6 +766,26 @@ public final class WorldOps {
 
     public static NpcResult asNpcResult(Object value) {
         return (NpcResult) value;
+    }
+
+    /**
+     * Vacate the first leased slab. Empty street is NO_PARCEL.
+     * Every plot already vacant is NOT_LEASED.
+     */
+    public static ParcelReleaseResult releaseParcel(World world) {
+        if (world == null || world.parcels().isEmpty()) {
+            return ParcelReleaseResult.NO_PARCEL;
+        }
+        for (Parcel parcel : world.parcels()) {
+            if (parcel != null && !parcel.leaseId().isEmpty()) {
+                return world.releaseParcel(parcel.id());
+            }
+        }
+        return ParcelReleaseResult.NOT_LEASED;
+    }
+
+    public static ParcelReleaseResult asReleaseResult(Object value) {
+        return (ParcelReleaseResult) value;
     }
 
     private static ParcelLeaseResult leaseParcel(World world) {

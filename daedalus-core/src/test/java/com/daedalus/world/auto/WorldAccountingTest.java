@@ -10,6 +10,7 @@ import com.daedalus.world.ParcelDenyResult;
 import com.daedalus.world.ParcelForgiveResult;
 import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelLeaseResult;
+import com.daedalus.world.ParcelReleaseResult;
 import com.daedalus.world.ParcelRevokeResult;
 import com.daedalus.world.PortalResult;
 import com.daedalus.world.TrapResult;
@@ -71,8 +72,10 @@ class WorldAccountingTest {
                 .isEqualTo(ParcelRevokeResult.REVOKED);
         assertThat(WorldOps.asForgiveResult(session.drive("parcel.forgive", null)))
                 .isEqualTo(ParcelForgiveResult.FORGIVEN);
+        assertThat(WorldOps.asReleaseResult(session.drive("parcel.release", null)))
+                .isEqualTo(ParcelReleaseResult.NOT_LEASED);
         assertThat(session.observe().doorState()).isEqualTo("CLOSED");
-        assertThat(session.trace()).hasSize(23);
+        assertThat(session.trace()).hasSize(24);
     }
 
     @Test

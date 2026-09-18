@@ -16,6 +16,7 @@ import com.daedalus.api.dto.ParcelDenyResponse;
 import com.daedalus.api.dto.ParcelForgiveResponse;
 import com.daedalus.api.dto.ParcelGrantResponse;
 import com.daedalus.api.dto.ParcelLeaseResponse;
+import com.daedalus.api.dto.ParcelReleaseResponse;
 import com.daedalus.api.dto.ParcelRevokeResponse;
 import com.daedalus.api.dto.PlaceBlockRequest;
 import com.daedalus.api.dto.PortalInspectResponse;
@@ -55,6 +56,7 @@ import com.daedalus.world.ParcelDenyResult;
 import com.daedalus.world.ParcelForgiveResult;
 import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelLeaseResult;
+import com.daedalus.world.ParcelReleaseResult;
 import com.daedalus.world.ParcelRevokeResult;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
@@ -138,6 +140,17 @@ public class WorldController {
         ParcelLeaseResult result = worlds.leaseParcel(id);
         World world = mounted(id);
         return ResponseEntity.ok(new ParcelLeaseResponse(
+                result.name(), WorldOps.lastLeaseId(world), world.revision().value()));
+    }
+
+    @PostMapping("/world/{id}/parcels/release")
+    @Operation(summary = "Release the first leased parcel. NOT_LEASED and NO_PARCEL are named results.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<ParcelReleaseResponse> releaseParcel(@PathVariable String id) {
+        mounted(id);
+        ParcelReleaseResult result = worlds.releaseParcel(id);
+        World world = mounted(id);
+        return ResponseEntity.ok(new ParcelReleaseResponse(
                 result.name(), WorldOps.lastLeaseId(world), world.revision().value()));
     }
 

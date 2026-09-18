@@ -42,6 +42,7 @@ public final class WorldZeroCapabilities {
         registry.register("npc.talk");
         registry.register("npc.hush");
         registry.register("parcel.lease");
+        registry.register("parcel.release");
         registry.register("parcel.grant");
         registry.register("parcel.deny");
         registry.register("parcel.revoke");

@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcel release drive.**
+  parcel.release vacates the first
+  leased slab. Named results are
+  RELEASED, NOT_LEASED, and NO_PARCEL.
+  Well POST /parcels/release. No wallet
+  types.
+
 - **Parcel forgive drive.**
   parcel.forgive drops an extra denial
   on the slab under the cube. Named

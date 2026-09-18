@@ -511,6 +511,33 @@ public final class World {
     }
 
     /**
+     * Clear the lease string on a parcel. Already-empty is
+     * {@link ParcelReleaseResult#NOT_LEASED} and does not bump revision.
+     * Not a wallet and not a chain receipt.
+     */
+    public ParcelReleaseResult releaseParcel(ParcelId id) {
+        Objects.requireNonNull(id, "ParcelId is required");
+        requireParcel(id);
+        synchronized (lock) {
+            for (int i = 0; i < parcels.size(); i++) {
+                Parcel parcel = parcels.get(i);
+                if (!parcel.id().equals(id)) {
+                    continue;
+                }
+                if (parcel.leaseId().isEmpty()) {
+                    return ParcelReleaseResult.NOT_LEASED;
+                }
+                parcels.set(i, new Parcel(parcel.id(), parcel.worldId(), parcel.ownerId(),
+                        parcel.bounds(), parcel.version() + 1, parcel.placeName(), "",
+                        parcel.mazeRef()));
+                revision.incrementAndGet();
+                return ParcelReleaseResult.RELEASED;
+            }
+        }
+        throw new IllegalArgumentException("Unknown parcel " + id.value());
+    }
+
+    /**
      * Lab maze id on a parcel. Not a wallet. The same ref is
      * {@link ParcelMazeResult#ALREADY_BOUND} and does not bump revision.
      */

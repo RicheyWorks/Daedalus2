@@ -84,7 +84,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.capabilities", org.hamcrest.Matchers.hasItems(
                         "world.inspect", "block.place", "door.open", "door.close",
                         "trap.arm", "trap.disarm", "portal.open", "portal.seal",
-                        "npc.talk", "npc.hush", "parcel.lease", "parcel.grant",
+                        "npc.talk", "npc.hush", "parcel.lease", "parcel.release",
+                        "parcel.grant",
                         "parcel.deny", "parcel.revoke", "parcel.forgive", "stamp.apply")));
 
         mvc.perform(get("/api/v1/world/world-zero/observe")
@@ -267,6 +268,11 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.result", equalTo("ALREADY_SPEAKING")));
 
         mvc.perform(post("/api/v1/world/world-zero/parcels/lease"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("NO_PARCEL")))
+                .andExpect(jsonPath("$.leaseId", equalTo("")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/release"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("NO_PARCEL")))
                 .andExpect(jsonPath("$.leaseId", equalTo("")));
@@ -558,6 +564,16 @@ class WorldControllerTest {
                         .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0,\"verb\":\"shop.open\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("UNKNOWN_VERB")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/release"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("RELEASED")))
+                .andExpect(jsonPath("$.leaseId", equalTo("")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/release"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("NOT_LEASED")))
+                .andExpect(jsonPath("$.leaseId", equalTo("")));
     }
 
     @Test

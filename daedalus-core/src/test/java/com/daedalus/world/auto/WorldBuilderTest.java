@@ -15,6 +15,7 @@ import com.daedalus.world.ParcelDenyResult;
 import com.daedalus.world.ParcelForgiveResult;
 import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelLeaseResult;
+import com.daedalus.world.ParcelReleaseResult;
 import com.daedalus.world.ParcelRevokeResult;
 import com.daedalus.world.ParcelVerb;
 import com.daedalus.world.PlaceNames;
@@ -75,6 +76,17 @@ class WorldBuilderTest {
         assertThat(builder.run(new WorldBuilder.Step(
                 new BlockCoordinate(0, 0, 0), "parcel.lease", null)))
                 .isEqualTo(ParcelLeaseResult.ALREADY_LEASED);
+        assertThat(builder.run(new WorldBuilder.Step(
+                new BlockCoordinate(0, 0, 0), "parcel.release", null)))
+                .isEqualTo(ParcelReleaseResult.RELEASED);
+        assertThat(world.parcels().get(0).leaseId()).isEmpty();
+        assertThat(builder.run(new WorldBuilder.Step(
+                new BlockCoordinate(0, 0, 0), "parcel.release", null)))
+                .isEqualTo(ParcelReleaseResult.NOT_LEASED);
+        assertThat(new WorldBuilder(World.zero()).run(new WorldBuilder.Step(
+                new BlockCoordinate(0, 0, 0), "parcel.release", null)))
+                .isEqualTo(ParcelReleaseResult.NO_PARCEL);
+        assertThat(WorldOps.releaseParcel(null)).isEqualTo(ParcelReleaseResult.NO_PARCEL);
     }
 
     @Test
@@ -194,6 +206,15 @@ class WorldBuilderTest {
         assertThat(WorldOps.lastLeaseId(world)).isEqualTo(Parcel.SYSTEM_TENANT);
         assertThat(builder.run(new WorldBuilder.Step(next, "parcel.lease", null)))
                 .isEqualTo(ParcelLeaseResult.ALREADY_LEASED);
+        assertThat(builder.run(new WorldBuilder.Step(next, "parcel.release", null)))
+                .isEqualTo(ParcelReleaseResult.RELEASED);
+        assertThat(world.parcels().get(0).leaseId()).isEmpty();
+        assertThat(WorldOps.lastLeaseId(world)).isEqualTo(Parcel.SYSTEM_TENANT);
+        assertThat(builder.run(new WorldBuilder.Step(next, "parcel.release", null)))
+                .isEqualTo(ParcelReleaseResult.RELEASED);
+        assertThat(WorldOps.lastLeaseId(world)).isEmpty();
+        assertThat(builder.run(new WorldBuilder.Step(next, "parcel.release", null)))
+                .isEqualTo(ParcelReleaseResult.NOT_LEASED);
     }
 
     @Test

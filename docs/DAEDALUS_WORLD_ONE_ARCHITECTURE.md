@@ -61,7 +61,7 @@ No blockchain. No microservices. No seventh reactor module until a boundary is f
 | Browser WebGL voxel client | **NOT NOW** | Well panel is 2D/REST first. WebGL is a fourth client. |
 | Inventories, shops | **NOT NOW** | Plugin-shaped later. No economy types in core. |
 | Large procedural terrain | **NOT NOW** | World Zero scale stays tiny until stamp + observers are honest. |
-| Plots bought or rented | **SHIPPED — lease strings on parcels** | A plot **is** a `Parcel`. `leaseId` is an account key string beside `ownerId`. Buy/rent is a later market provider — not a second spatial type, not a chain, no wallet types in core. |
+| Plots bought or rented | **SHIPPED — lease + release strings on parcels** | A plot **is** a `Parcel`. `leaseId` is an account key string beside `ownerId`. `parcel.release` clears it. Buy/rent is a later market provider — not a second spatial type, not a chain, no wallet types in core. |
 | Wearables | **NOT NOW — item provider** | Equipped looks bind to an avatar later. No clothing types in `daedalus-core` this streak. |
 | NFT art display | **NOT NOW — display provider** | A framed surface on a parcel wall binds an item id (string). The world *shows*; a later provider proves ownership. No wallet type, no ledger, no mint in core. |
 | City-scale look | **NOT NOW — later renderer** | Street-scale materials and skyline after W1.5. Distant voxels stay the **real stamp** (or culled). Never a six-cube placeholder LOD. |
@@ -417,7 +417,8 @@ STOMP last-event last drive, and
 well last-event last drive, and
 desktop last-event last drive, and
 parcel.revoke, and
-parcel.forgive
+parcel.forgive, and
+parcel.release
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

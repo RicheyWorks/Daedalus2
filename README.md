@@ -228,6 +228,7 @@ public consumers).
 | `POST` | `/api/v1/world/{id}/portal/seal` | required | Seal the portal. Already-sealed and deny are named results. Optional actorId uses the parcel gate |
 | `GET` | `/api/v1/world/{id}/parcels` | public | Inspect parcels, place names, and lease strings |
 | `POST` | `/api/v1/world/{id}/parcels/lease` | required | Lease the first parcel as tenant-zero. No parcel is a named result |
+| `POST` | `/api/v1/world/{id}/parcels/release` | required | Vacate the first leased parcel. Not-leased and no-parcel are named results |
 | `POST` | `/api/v1/world/{id}/parcels/grant` | required | Extra-grant a named verb on the slab (`block.place` default). Already-granted, no-parcel, and unknown-verb are named results |
 | `POST` | `/api/v1/world/{id}/parcels/deny` | required | Extra-deny a named verb on the slab (`block.place` default). Already-denied, no-parcel, and unknown-verb are named results |
 | `POST` | `/api/v1/world/{id}/parcels/revoke` | required | Drop an extra grant on the slab (`block.place` default). Not-granted, no-parcel, and unknown-verb are named results. Denials stay |
