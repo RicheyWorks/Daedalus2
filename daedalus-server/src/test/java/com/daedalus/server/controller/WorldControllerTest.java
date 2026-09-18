@@ -240,6 +240,7 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo("portal-zero")))
                 .andExpect(jsonPath("$.state", equalTo("SEALED")))
+                .andExpect(jsonPath("$.box", equalTo("")))
                 .andExpect(jsonPath("$.acl", equalTo("")))
                 .andExpect(jsonPath("$.drive", equalTo("")))
                 .andExpect(jsonPath("$.driveActor", equalTo("")))
@@ -298,6 +299,10 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.box", equalTo("0,0,0-2,1,2")));
 
         mvc.perform(get("/api/v1/world/world-zero/trap"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.box", equalTo("0,0,0-2,1,2")));
+
+        mvc.perform(get("/api/v1/world/world-zero/portal"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.box", equalTo("0,0,0-2,1,2")));
 

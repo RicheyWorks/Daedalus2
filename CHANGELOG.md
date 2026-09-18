@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Portal inspect names the slab box.**
+  GET /portal names the inclusive AABB
+  living stays inside when portal-zero
+  sits on a plot. Empty off the street.
+  No wallet types.
+
 - **Trap inspect names the slab box.**
   GET /trap names the inclusive AABB
   living stays inside when trap-zero
