@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **NPC talk names the slab place.**
+  POST /npc/talk and /npc/hush name
+  the inspired street under that cube.
+  Empty when the NPC sits off a
+  stamped plot. No wallet types.
+
 - **Portal open names the slab place.**
   POST /portal/open and /portal/seal
   name the inspired street under that
