@@ -644,6 +644,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellCompareBestHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("#compareBox .best { color: #c49425; font-weight: 700; -webkit-user-drag: none")
+                    .doesNotContain("#compareBox .best { color: #f0b429; font-weight: 700; -webkit-user-drag: none");
+        }
+    }
+
+    @Test
     void wellHardestRibbonHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
