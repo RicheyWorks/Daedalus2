@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop inspect names every box.**
+  The desktop world line names every
+  inclusive AABB, oldest first. Empty
+  until stamp.apply. No wallet types.
+
 - **Desktop inspect names the last box.**
   The desktop world line names the
   newest slab AABB. Empty until

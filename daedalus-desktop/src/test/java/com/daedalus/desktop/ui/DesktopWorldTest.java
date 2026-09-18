@@ -92,6 +92,7 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.PLACE_CLASS).isEqualTo("world-place");
         assertThat(DesktopWorld.firstPlace(World.zero())).isEmpty();
         assertThat(DesktopWorld.lastBox(World.zero())).isEmpty();
+        assertThat(DesktopWorld.streetBoxes(World.zero())).isEmpty();
         named.leaseParcel(named.parcels().get(0).id(), Parcel.SYSTEM_TENANT);
         assertThat(DesktopWorld.firstLease(named)).isEqualTo(Parcel.SYSTEM_TENANT);
         assertThat(DesktopWorld.inspectLine(named, null))
@@ -227,6 +228,7 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.lastLot(two)).isEqualTo("8,0");
         assertThat(DesktopWorld.streetLots(two)).isEqualTo("0,0 · 8,0");
         assertThat(DesktopWorld.lastBox(two)).isEqualTo("8,0,0-14,1,6");
+        assertThat(DesktopWorld.streetBoxes(two)).isEqualTo("0,0,0-6,1,6 · 8,0,0-14,1,6");
         assertThat(DesktopWorld.inspectLine(two, null))
                 .contains("2 plots")
                 .contains(cached.metadata().id().toString())
@@ -235,6 +237,7 @@ class DesktopWorldTest {
                 .contains(DesktopWorld.lastPlace(two))
                 .contains("0,0")
                 .contains("8,0")
+                .contains("0,0,0-6,1,6")
                 .contains("8,0,0-14,1,6");
     }
 }

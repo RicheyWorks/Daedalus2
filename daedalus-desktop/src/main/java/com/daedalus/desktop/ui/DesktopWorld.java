@@ -94,7 +94,7 @@ public final class DesktopWorld {
             }
         }
         String line = inspectLine(world.revision().value(), world.parcels().size(), place,
-                lastLease(world), streetMazes(world), lastBox(world), last);
+                lastLease(world), streetMazes(world), streetBoxes(world), last);
         String occ = occupancyLine(world);
         if (occ.isEmpty()) {
             occ = chunkOccupants(world, last);
@@ -361,6 +361,11 @@ public final class DesktopWorld {
     /** Inclusive AABB of the newest slab. Empty when the street has no plots. */
     public static String lastBox(World world) {
         return WorldOps.lastBox(world);
+    }
+
+    /** All inclusive AABBs, oldest first. Empty when the street has no plots. */
+    public static String streetBoxes(World world) {
+        return WorldOps.streetBoxes(world);
     }
 
     /** All slab origins as {@code x,z}, oldest first. */
