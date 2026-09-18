@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **DAEW last drive actor.**
+  World snapshots copy the account key
+  that last drove a mutation. DAEW v12
+  writes that string after last drive.
+  A v11 file loads an empty actor. No
+  wallet types.
+
 - **Desktop last drive actor.**
   The desktop world line names the
   account key that last drove a mutation

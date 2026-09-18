@@ -128,10 +128,12 @@ class WorldStoreTest {
         assertThat(WorldOps.drive(live, "trap.arm", Trap.ZERO_AT, null, null, "carol"))
                 .isEqualTo(TrapResult.DENIED);
         assertThat(WorldOps.driveLine(live)).isEqualTo("trap.arm DENIED");
+        assertThat(WorldOps.actorLine(live)).isEqualTo("carol");
         Path file = tmp.resolve("drive.daew");
         WorldStore.save(live, file);
         World reloaded = WorldStore.load(file);
         assertThat(WorldOps.driveLine(reloaded)).isEqualTo("trap.arm DENIED");
+        assertThat(WorldOps.actorLine(reloaded)).isEqualTo("carol");
         Path again = tmp.resolve("drive-again.daew");
         WorldStore.save(reloaded, again);
         assertThat(Files.readAllBytes(again)).isEqualTo(Files.readAllBytes(file));
