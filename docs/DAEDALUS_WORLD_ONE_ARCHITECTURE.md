@@ -353,7 +353,8 @@ parcel.grant, and
 parcel.deny, and
 DAEW v10 ACL persist, and
 ParcelGate on block.place and
-block.remove
+block.remove, and
+door.open
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

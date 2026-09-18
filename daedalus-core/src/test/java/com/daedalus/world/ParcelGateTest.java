@@ -86,6 +86,29 @@ class ParcelGateTest {
     }
 
     @Test
+    void aStampedDoorUsesTheGate() {
+        World world = World.zero();
+        StampOps.apply(world, new StampRequest(world.id(), new BlockCoordinate(0, 0, 0),
+                new MazeGrid(1, 1), 0, 1));
+        ParcelId id = world.parcels().get(0).id();
+        long revision = world.revision().value();
+        assertThat(WorldOps.drive(world, "door.open", Door.ZERO_AT, null, null, "carol"))
+                .isEqualTo(DoorResult.DENIED);
+        assertThat(world.door().state()).isEqualTo(DoorState.CLOSED);
+        assertThat(world.revision().value()).isEqualTo(revision);
+        world.grant(id, "bob", ParcelVerb.DOOR_OPEN);
+        assertThat(WorldOps.drive(world, "door.open", Door.ZERO_AT, null, null, "bob"))
+                .isEqualTo(DoorResult.OPENED);
+        assertThat(world.door().state()).isEqualTo(DoorState.OPEN);
+        world.deny(id, "bob", ParcelVerb.DOOR_OPEN);
+        assertThat(WorldOps.drive(world, "door.open", Door.ZERO_AT, null, null, "bob"))
+                .isEqualTo(DoorResult.DENIED);
+        assertThat(world.door().state()).isEqualTo(DoorState.OPEN);
+        assertThat(WorldOps.drive(world, "door.open", Door.ZERO_AT, null, null, null))
+                .isEqualTo(DoorResult.ALREADY_OPEN);
+    }
+
+    @Test
     void boundsContainInclusiveCubes() {
         ParcelBounds box = new ParcelBounds(0, 0, 0, 2, 1, 2);
         assertThat(box.contains(new BlockCoordinate(0, 0, 0))).isTrue();

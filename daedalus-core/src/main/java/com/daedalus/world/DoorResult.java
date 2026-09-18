@@ -9,5 +9,6 @@ public enum DoorResult {
     OPENED,
     CLOSED,
     ALREADY_OPEN,
-    ALREADY_CLOSED
+    ALREADY_CLOSED,
+    DENIED
 }
