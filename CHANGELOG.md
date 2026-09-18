@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Deny names the slab place.**
+  POST /parcels/deny names the
+  inspired street under that cube.
+  Empty off a plot. No wallet types.
+
 - **Grant names the slab place.**
   POST /parcels/grant names the
   inspired street under that cube.
