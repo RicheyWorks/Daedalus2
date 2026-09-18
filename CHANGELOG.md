@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well tour focus depth.**
+  Tour-link focus gold falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP leftover
+  even campaign focus gold stays.
+
 - **Well exports focus depth.**
   Dump-chip focus gold falls off toward
   floor-dim with the same 0.22 as halls,
