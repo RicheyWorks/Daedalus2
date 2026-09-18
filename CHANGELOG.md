@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well tour header depth.**
+  Guided-header gold falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP leftover
+  even tour frame gold stays.
+
 - **Well tour cell depth.**
   Guided-table gold falls off toward
   floor-dim with the same 0.22 as halls,

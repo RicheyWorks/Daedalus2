@@ -346,6 +346,8 @@ class WebUiSmokeTest {
                 .contains("#tourBox table { width: 100%; border-collapse: collapse; -webkit-user-drag: none")
                 .contains("#tourBox th { text-align: left; color: #b09a72; font-weight: 600;")
                 .contains("#tourBox th { text-align: left; color: #b09a72; font-weight: 600; -webkit-user-drag: none")
+                .contains("font-weight: 600; -webkit-user-drag: none;\n"
+                        + "                border-bottom: 1px solid rgba(153, 111, 49, 0.28); padding: 2px 8px;")
                 .contains("#tourBox td { padding: 2px 8px; border-bottom: 1px solid rgba(153, 111, 49, 0.28);")
                 .contains("#tourBox td { padding: 2px 8px; border-bottom: 1px solid rgba(153, 111, 49, 0.28); -webkit-user-drag: none")
                 .contains("#tourBox a, #tourBox a:visited, #tourBox a:active { color: #d4a04c; text-decoration: none; }")
