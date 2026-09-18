@@ -103,9 +103,13 @@ class ParcelGateTest {
         world.deny(id, "bob", ParcelVerb.DOOR_OPEN);
         assertThat(WorldOps.drive(world, "door.open", Door.ZERO_AT, null, null, "bob"))
                 .isEqualTo(DoorResult.DENIED);
+        assertThat(WorldOps.drive(world, "door.close", Door.ZERO_AT, null, null, "carol"))
+                .isEqualTo(DoorResult.DENIED);
         assertThat(world.door().state()).isEqualTo(DoorState.OPEN);
         assertThat(WorldOps.drive(world, "door.open", Door.ZERO_AT, null, null, null))
                 .isEqualTo(DoorResult.ALREADY_OPEN);
+        assertThat(WorldOps.drive(world, "door.close", Door.ZERO_AT, null, null, null))
+                .isEqualTo(DoorResult.CLOSED);
     }
 
     @Test

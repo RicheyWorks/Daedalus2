@@ -186,10 +186,19 @@ public class WorldService {
     }
 
     public DoorResult closeDoor(String id) {
+        return closeDoor(id, null);
+    }
+
+    public DoorResult closeDoor(String id, String actorId) {
         World live = require(id);
         synchronized (lock) {
-            DoorResult result = live.closeDoor();
-            persist();
+            DoorResult result = WorldOps.asDoorResult(
+                    WorldOps.drive(live, "door.close",
+                            live.door() == null ? new BlockCoordinate(0, 0, 0) : live.door().at(),
+                            null, null, actorId));
+            if (result != DoorResult.DENIED) {
+                persist();
+            }
             log.append("door.close", result, live.revision().value());
             return result;
         }

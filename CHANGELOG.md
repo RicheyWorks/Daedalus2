@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcel gate on door.close.**
+  door.close asks the same door.open gate. Empty actor
+  is the system owner. DENIED leaves the door. No wallet
+  types.
+
 - **Parcel gate on door.open.**
   door.open asks ParcelGate for door.open. Empty actor
   is the system owner. DENIED leaves the door. No wallet

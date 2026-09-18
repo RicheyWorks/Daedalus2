@@ -329,9 +329,10 @@ public class WorldController {
     @PostMapping("/world/{id}/door/close")
     @Operation(summary = "Close the door. ALREADY_CLOSED is a result, not silence.")
     @PerKeyRateLimit("mazeGenerate")
-    public ResponseEntity<DoorMutationResponse> closeDoor(@PathVariable String id) {
+    public ResponseEntity<DoorMutationResponse> closeDoor(
+            @PathVariable String id, @RequestParam(required = false) String actorId) {
         mounted(id);
-        DoorResult result = worlds.closeDoor(id);
+        DoorResult result = worlds.closeDoor(id, actorId);
         Door door = worlds.inspectDoor(id);
         World world = mounted(id);
         return ResponseEntity.ok(new DoorMutationResponse(

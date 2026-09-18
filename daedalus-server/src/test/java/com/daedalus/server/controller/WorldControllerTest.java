@@ -274,6 +274,11 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.result", equalTo("OPENED")))
                 .andExpect(jsonPath("$.state", equalTo("OPEN")));
 
+        mvc.perform(post("/api/v1/world/world-zero/door/close").param("actorId", "carol"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("DENIED")))
+                .andExpect(jsonPath("$.state", equalTo("OPEN")));
+
         mvc.perform(post("/api/v1/world/world-zero/parcels/grant")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0}"))
