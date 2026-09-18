@@ -344,6 +344,19 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellExpansionWashHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("mixHex(COLORS.path, COLORS.floorDim, 0.22 * edge)")
+                    .contains("g.fillStyle = expansionTileInk(2 * p.row + 1, 2 * p.col + 1, th, tw)")
+                    .contains("(tr, tc) => expansionTileInk(tr, tc, th, tw)")
+                    .doesNotContain("g.fillStyle = COLORS.path;");
+        }
+    }
+
+    @Test
     void wellFieldCellsHaveRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

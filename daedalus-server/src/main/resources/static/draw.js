@@ -400,6 +400,13 @@
     return mixHex("#d4b06a", COLORS.floorDim, 0.22 * edge);
   }
 
+  function expansionTileInk(tr, tc, th, tw) {
+    const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
+    const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
+    const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+    return mixHex(COLORS.path, COLORS.floorDim, 0.22 * edge);
+  }
+
   function victoryTileInk(tr, tc, th, tw) {
     const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
     const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
@@ -669,16 +676,20 @@
         const p = scene.expansions[i];
         live.add(p.row + "," + p.col);
       }
-      g.fillStyle = COLORS.path;
       g.globalAlpha = 0.16 * (0.88 + 0.24 * expansionWave);
       for (let i = 0; i < shown; i++) {
-        paintWashCell(g, geom, scene.expansions[i].row, scene.expansions[i].col);
+        const p = scene.expansions[i];
+        g.fillStyle = expansionTileInk(2 * p.row + 1, 2 * p.col + 1, th, tw);
+        paintWashCell(g, geom, p.row, p.col);
       }
       g.globalAlpha = 0.26 * (0.85 + 0.30 * expansionWave);
-      paintWashOpenings(g, geom, tiles, (r, c) => live.has(r + "," + c));
+      paintWashOpenings(g, geom, tiles, (r, c) => live.has(r + "," + c),
+          (tr, tc) => expansionTileInk(tr, tc, th, tw));
       g.globalAlpha = 0.45 * (0.88 + 0.24 * expansionWave);
       for (let i = Math.max(0, shown - 6); i < shown; i++) {
-        paintWashCell(g, geom, scene.expansions[i].row, scene.expansions[i].col);
+        const p = scene.expansions[i];
+        g.fillStyle = expansionTileInk(2 * p.row + 1, 2 * p.col + 1, th, tw);
+        paintWashCell(g, geom, p.row, p.col);
       }
       g.globalAlpha = 1;
     }

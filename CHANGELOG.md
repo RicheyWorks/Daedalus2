@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well expansion wash depth.**
+  Recorded search cells fall off toward
+  floor-dim at the board rim with the
+  same 0.22 edge as halls, so leftover
+  even ice is not the last word on a
+  hunt. KEEP path ribbon stays.
+
 - **Desktop legend compare depth.**
   Overlay compare bars fall off toward
   deeper ice, gold, rust, moss, and sand
