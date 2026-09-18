@@ -8,18 +8,26 @@ package com.daedalus.api.dto;
  */
 public record WorldObserveResponse(String worldId, long revision, int x, int y, int z,
                                    String blockType, String doorState, String place, String lot,
-                                   String occupant, String acl) {
+                                   String occupant, String acl, String drive, String driveActor) {
 
     public WorldObserveResponse {
         place = place == null ? "" : place;
         lot = lot == null ? "" : lot;
         occupant = occupant == null ? "" : occupant;
         acl = acl == null ? "" : acl;
+        drive = drive == null ? "" : drive;
+        driveActor = driveActor == null ? "" : driveActor;
+    }
+
+    public WorldObserveResponse(String worldId, long revision, int x, int y, int z,
+                                String blockType, String doorState, String place, String lot,
+                                String occupant, String acl) {
+        this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, acl, "", "");
     }
 
     public WorldObserveResponse(String worldId, long revision, int x, int y, int z,
                                 String blockType, String doorState, String place, String lot,
                                 String occupant) {
-        this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, "");
+        this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, "", "", "");
     }
 }

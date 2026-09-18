@@ -7,6 +7,7 @@ import com.daedalus.world.BlockType;
 import com.daedalus.world.Door;
 import com.daedalus.world.DoorResult;
 import com.daedalus.world.Npc;
+import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelVerb;
 import com.daedalus.world.Portal;
 import com.daedalus.world.Trap;
@@ -43,6 +44,8 @@ class WorldAutomationPipelineTest {
         assertThat(afterPlace.lot()).isEmpty();
         assertThat(afterPlace.occupant()).isEmpty();
         assertThat(afterPlace.acl()).isEmpty();
+        assertThat(afterPlace.drive()).isEqualTo("block.place AIR");
+        assertThat(afterPlace.driveActor()).isEqualTo(Parcel.SYSTEM_OWNER);
         assertThat(afterPlace.x()).isEqualTo(2);
         assertThat(afterPlace.y()).isZero();
         assertThat(afterPlace.z()).isEqualTo(1);

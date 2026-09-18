@@ -13,7 +13,7 @@ import java.util.Objects;
  */
 public record Observation(String worldId, long revision, int x, int y, int z,
                           String blockType, String doorState, String place, String lot,
-                          String occupant, String acl) {
+                          String occupant, String acl, String drive, String driveActor) {
 
     public Observation {
         Objects.requireNonNull(worldId, "worldId is required");
@@ -22,12 +22,20 @@ public record Observation(String worldId, long revision, int x, int y, int z,
         lot = lot == null ? "" : lot;
         occupant = occupant == null ? "" : occupant;
         acl = acl == null ? "" : acl;
+        drive = drive == null ? "" : drive;
+        driveActor = driveActor == null ? "" : driveActor;
+    }
+
+    public Observation(String worldId, long revision, int x, int y, int z,
+                       String blockType, String doorState, String place, String lot,
+                       String occupant, String acl) {
+        this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, acl, "", "");
     }
 
     public Observation(String worldId, long revision, int x, int y, int z,
                        String blockType, String doorState, String place, String lot,
                        String occupant) {
-        this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, "");
+        this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, "", "", "");
     }
 
     public static Observation take(World world, WorldAddress address) {
@@ -50,6 +58,8 @@ public record Observation(String worldId, long revision, int x, int y, int z,
                 WorldOps.placeAt(world, address.at()),
                 WorldOps.lotAt(world, address.at()),
                 WorldOps.occupantAt(world, address.at()),
-                WorldOps.aclAt(world, address.at()));
+                WorldOps.aclAt(world, address.at()),
+                WorldOps.driveOn(world, address.at()),
+                WorldOps.actorOn(world, address.at()));
     }
 }

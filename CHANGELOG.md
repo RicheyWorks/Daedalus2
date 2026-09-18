@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Observe last drive.**
+  GET /observe names the last driven
+  result and account key only on that
+  cube. Other cells stay empty. Inspect
+  does not overwrite it. No wallet types.
+
 - **Block inspect last drive.**
   GET /block names the last driven result
   and account key only on that cube.

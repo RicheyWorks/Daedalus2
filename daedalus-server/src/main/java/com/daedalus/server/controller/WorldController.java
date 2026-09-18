@@ -214,7 +214,7 @@ public class WorldController {
         return ResponseEntity.ok(new WorldObserveResponse(
                 seen.worldId(), seen.revision(), seen.x(), seen.y(), seen.z(),
                 seen.blockType(), seen.doorState(), seen.place(), seen.lot(),
-                seen.occupant(), seen.acl()));
+                seen.occupant(), seen.acl(), seen.drive(), seen.driveActor()));
     }
 
     @GetMapping("/world/{id}/trace")
