@@ -655,6 +655,19 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellAsciiFrameHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
+                            + "              border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
+                    .doesNotContain("background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
+                            + "              border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 6px;");
+        }
+    }
+
+    @Test
     void wellHardestRibbonHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

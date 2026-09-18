@@ -188,6 +188,8 @@ class WebUiSmokeTest {
                 .contains("color:#c49425\">${escapeHtml(w.id)}</b> wins by default")
                 .contains("id=\"genInfo\"").contains("id=\"asciiOut\"")
                 .contains("#asciiOut { margin: 10px 0 0; padding: 8px; background: #16120e;")
+                .contains("background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
+                        + "              border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
                 .contains("#log, #lb, #stats, #asciiOut, #gate pre, #tourBox, #labOut,")
                 .contains("#status, #compareBox, #pluginBox, #worldBox, #campaignBox {")
                 .contains("#worldBox div { border-bottom: 1px solid rgba(153, 111, 49, 0.28); padding: 2px 0;")
