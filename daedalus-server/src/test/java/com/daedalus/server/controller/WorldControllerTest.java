@@ -309,7 +309,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.parcelId", equalTo("parcel-1")))
                 .andExpect(jsonPath("$.maxX", equalTo(2)))
                 .andExpect(jsonPath("$.maxZ", equalTo(2)))
-                .andExpect(jsonPath("$.box", equalTo("0,0,0-2,1,2")));
+                .andExpect(jsonPath("$.box", equalTo("0,0,0-2,1,2")))
+                .andExpect(jsonPath("$.maze", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero/door"))
                 .andExpect(status().isOk())
@@ -347,7 +348,8 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.ok", equalTo(false)))
                 .andExpect(jsonPath("$.result", equalTo("DENIED")))
-                .andExpect(jsonPath("$.box", equalTo("")));
+                .andExpect(jsonPath("$.box", equalTo("")))
+                .andExpect(jsonPath("$.maze", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero"))
                 .andExpect(status().isOk())
@@ -711,7 +713,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.result", equalTo("APPLIED")))
                 .andExpect(jsonPath("$.maxX", equalTo(6)))
                 .andExpect(jsonPath("$.maxZ", equalTo(6)))
-                .andExpect(jsonPath("$.box", equalTo("0,0,0-6,1,6")));
+                .andExpect(jsonPath("$.box", equalTo("0,0,0-6,1,6")))
+                .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())));
         extra.perform(get("/api/v1/world/world-zero/parcels"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.parcels[0].mazeRef", equalTo(cached.metadata().id().toString())))
@@ -760,7 +763,8 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.ok", equalTo(true)))
                 .andExpect(jsonPath("$.result", equalTo("APPLIED")))
-                .andExpect(jsonPath("$.minX", equalTo(8)));
+                .andExpect(jsonPath("$.minX", equalTo(8)))
+                .andExpect(jsonPath("$.maze", equalTo(again.metadata().id().toString())));
         extra.perform(get("/api/v1/world/world-zero/parcels"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.parcels.length()", equalTo(2)))

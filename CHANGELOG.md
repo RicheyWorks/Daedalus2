@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Stamp names the slab maze.**
+  POST /stamp names the lab maze
+  UUID the new plot was carved
+  from. Empty on a default slab or
+  a named refusal. No wallet types.
+
 - **Parcel list names each plot ACL.**
   GET /parcels carries extra grants
   and denials on that slab. Owner
