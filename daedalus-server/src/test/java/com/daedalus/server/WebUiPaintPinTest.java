@@ -435,6 +435,8 @@ class WebUiPaintPinTest {
                     .contains("label === \"street\"")
                     .contains("chunk.occupied > 0");
             assertThat(world).doesNotContain("/maze/");
+            assertThat(world).contains("frame.place")
+                    .contains("frame.lot");
             assertThat(live).contains("/topic/world/world-zero/events")
                     .contains("host.onWorldEvent");
         }

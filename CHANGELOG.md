@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well last-event lot.**
+  STOMP world frames carry place and lot when the cube sits on
+  a slab. The well last-events line prints them. Off-plot stays
+  type-only.
+
 - **Desktop last-event lot.**
   When the last world event sits on a slab, inspect names that
   place and x,z. Off-plot events stay type-only.

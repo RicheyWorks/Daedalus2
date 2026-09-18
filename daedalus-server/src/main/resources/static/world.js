@@ -140,8 +140,9 @@
     box.appendChild(last);
     events.forEach(frame => {
       const line = document.createElement("div");
+      const at = [frame.place, frame.lot].filter(Boolean).join(" ");
       line.textContent = frame.kind + " " + frame.x + "," + frame.y + "," + frame.z
-          + " " + (frame.type || "") + " r=" + frame.revision;
+          + " " + (frame.type || "") + (at ? " " + at : "") + " r=" + frame.revision;
       box.appendChild(line);
     });
     const built = document.createElement("div");
