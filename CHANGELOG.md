@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well occupancy last at.**
+  The well occupancy line paints the
+  last driven cube when that object
+  is the one that was driven. Empty
+  on every other stand. No wallet
+  types.
+
 - **NPC inspect last at.**
   GET /npc names the last driven cube
   only when that cell is the one that

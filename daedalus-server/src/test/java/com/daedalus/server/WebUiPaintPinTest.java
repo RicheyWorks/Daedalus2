@@ -447,6 +447,7 @@ class WebUiPaintPinTest {
                     .contains("obj.acl")
                     .contains("obj.drive")
                     .contains("obj.driveActor")
+                    .contains("obj.driveAt")
                     .contains("door.place")
                     .contains("npc.place")
                     .contains("label === \"place\"")

@@ -409,7 +409,8 @@ block inspect last at, and
 door inspect last at, and
 trap inspect last at, and
 portal inspect last at, and
-npc inspect last at
+npc inspect last at, and
+well occupancy last at
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
