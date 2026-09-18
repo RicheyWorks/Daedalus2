@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore automap frame depth.**
+  Automap gold lip falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even chrome is not the last
+  word on the maze page. KEEP status gold
+  stays.
+
 - **Well board rim depth.**
   Maze-board gold lip falls off toward
   floor-dim with the same 0.22 as halls,

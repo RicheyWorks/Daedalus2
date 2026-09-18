@@ -418,6 +418,15 @@ public final class ExplorePaint {
         double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
         return MAP_FRAME_IN * (float) (0.88 + 0.24 * wave);
     }
+
+    /** Same 0.22 as halls — leftover even gold is not the last word on the automap frame. */
+    public static void mapFrameTint(float[] rgb) {
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        set(rgb, STATUS_GOLD_R, STATUS_GOLD_G, STATUS_GOLD_B);
+        mixEndEdge(1, rgb);
+    }
     /** Ortho strip under the crosshair — Doom status height in NDC. */
     public static final float STATUS_H = 0.28f;
     /** Warm HUD void — status fill and automap pocket share this well. */

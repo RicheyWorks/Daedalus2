@@ -764,8 +764,9 @@ public final class ExploreHost {
         double bot = top - 0.40;
         float frameOut = ExplorePaint.mapFrameOut(seconds);
         float frameIn = ExplorePaint.mapFrameIn(seconds);
-        glColor3f(ExplorePaint.STATUS_GOLD_R, ExplorePaint.STATUS_GOLD_G,
-                ExplorePaint.STATUS_GOLD_B);
+        float[] frameInk = new float[3];
+        ExplorePaint.mapFrameTint(frameInk);
+        glColor3f(frameInk[0], frameInk[1], frameInk[2]);
         fill(left - frameOut, bot - frameOut, right + frameOut, top + frameOut);
         glColor3f(ExplorePaint.STATUS_GOLD_UNDER_R, ExplorePaint.STATUS_GOLD_UNDER_G,
                 ExplorePaint.STATUS_GOLD_UNDER_B);

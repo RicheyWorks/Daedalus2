@@ -703,6 +703,13 @@ class ExplorePaintTest {
                 .isNotEqualTo(ExplorePaint.mapFrameOut(0.8));
         assertThat(ExplorePaint.mapFrameIn(0.1))
                 .isNotEqualTo(ExplorePaint.mapFrameIn(0.8));
+        float[] frameInk = new float[3];
+        ExplorePaint.mapFrameTint(frameInk);
+        assertThat(frameInk[0])
+                .as("automap gold lip falls off toward floor-dim")
+                .isNotEqualTo(ExplorePaint.STATUS_GOLD_R)
+                .isLessThan(ExplorePaint.STATUS_GOLD_R);
+        ExplorePaint.mapFrameTint(null);
     }
 
     @Test
