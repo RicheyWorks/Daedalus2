@@ -962,12 +962,30 @@ public final class ExplorePaint {
         return found.isEmpty() ? null : found;
     }
 
+    /**
+     * Last driven capability and named result. DENIED stays visible
+     * after inspect. Empty until a mutation.
+     */
+    public static String driveName(WorldMesh blocks) {
+        if (blocks == null || blocks.world() == null) {
+            return null;
+        }
+        String found = WorldOps.driveLine(blocks.world());
+        return found.isEmpty() ? null : found;
+    }
+
     private static String withAcl(String place, WorldMesh blocks) {
         String acl = aclName(blocks);
-        if (acl == null) {
+        String named = acl == null ? place : place + " · " + acl;
+        return withDrive(named, blocks);
+    }
+
+    private static String withDrive(String place, WorldMesh blocks) {
+        String drive = driveName(blocks);
+        if (drive == null) {
             return place;
         }
-        return place + " · " + acl;
+        return place + " · " + drive;
     }
 
     private static String withOccupants(String place, WorldMesh blocks) {

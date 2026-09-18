@@ -39,6 +39,8 @@ public final class World {
     private final List<Parcel> parcels = new ArrayList<>();
     private final ConcurrentHashMap<ParcelId, ParcelAcl> acls = new ConcurrentHashMap<>();
     private int nextParcelNumber;
+    private String lastDriveCapability = "";
+    private String lastDriveResult = "";
 
     public World(WorldId id) {
         this(id, WorldId.ZERO.equals(Objects.requireNonNull(id, "WorldId is required"))
@@ -81,6 +83,28 @@ public final class World {
 
     public WorldRevision revision() {
         return new WorldRevision(revision.get());
+    }
+
+    /**
+     * Last driven capability. Inspect does not record. Empty until a mutation.
+     */
+    public String lastDriveCapability() {
+        synchronized (lock) {
+            return lastDriveCapability;
+        }
+    }
+
+    public String lastDriveResult() {
+        synchronized (lock) {
+            return lastDriveResult;
+        }
+    }
+
+    public void recordDrive(String capability, String result) {
+        synchronized (lock) {
+            lastDriveCapability = capability == null ? "" : capability;
+            lastDriveResult = result == null ? "" : result;
+        }
     }
 
     public BlockType get(BlockCoordinate at) {

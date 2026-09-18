@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore hall last drive.**
+  The hall caption appends the last driven capability
+  and named result so DENIED is visible. Inspect does
+  not overwrite it. No wallet types.
+
 - **Desktop builder result.**
   Desktop inspect appends the last driven capability
   and named result so DENIED is visible. No wallet

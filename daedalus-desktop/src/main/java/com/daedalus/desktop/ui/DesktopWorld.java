@@ -56,13 +56,7 @@ public final class DesktopWorld {
 
     /** Last driven capability and named result — same well builder line. */
     public static String driveLine(DriveTrace.Step last) {
-        if (last == null || last.capability() == null || last.capability().isBlank()) {
-            return "";
-        }
-        if (last.result() == null || last.result().isBlank()) {
-            return last.capability();
-        }
-        return last.capability() + " " + last.result();
+        return WorldOps.driveLine(last);
     }
 
     public static String inspectLine(World world, WorldEventFrame last) {

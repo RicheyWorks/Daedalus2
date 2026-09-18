@@ -69,7 +69,7 @@ public final class WorldOps {
         if (world == null || capability == null) {
             throw new IllegalArgumentException("World and capability are required");
         }
-        return switch (capability) {
+        Object out = switch (capability) {
             case "world.inspect" -> inspectWorld(world);
             case "chunk.inspect" -> inspectChunk(world, at);
             case "block.inspect" -> inspectBlock(world, at);
@@ -93,6 +93,44 @@ public final class WorldOps {
             case "stamp.apply" -> stampApply(world, at, maze, mazeRef, actorId);
             default -> throw new IllegalArgumentException("Unknown capability " + capability);
         };
+        if (!(out instanceof Map)) {
+            recordDrive(world, capability, out);
+        }
+        return out;
+    }
+
+    /**
+     * Last driven capability and named result. Inspect stays off this line.
+     */
+    public static String driveLine(World world) {
+        if (world == null) {
+            return "";
+        }
+        return driveLine(world.lastDriveCapability(), world.lastDriveResult());
+    }
+
+    public static String driveLine(String capability, String result) {
+        if (capability == null || capability.isBlank()) {
+            return "";
+        }
+        if (result == null || result.isBlank()) {
+            return capability;
+        }
+        return capability + " " + result;
+    }
+
+    public static String driveLine(DriveTrace.Step last) {
+        if (last == null) {
+            return "";
+        }
+        return driveLine(last.capability(), last.result());
+    }
+
+    private static void recordDrive(World world, String capability, Object result) {
+        String rendered = result == null ? "null"
+                : result instanceof StampResult stamp ? stamp.outcome()
+                : result.toString();
+        world.recordDrive(capability, rendered);
     }
 
     private static Map<String, Object> inspectWorld(World world) {
@@ -109,6 +147,7 @@ public final class WorldOps {
         out.put("occupants", occupantsLine(world));
         out.put("stands", standsLine(world));
         out.put("acl", aclLine(world));
+        out.put("drive", driveLine(world));
         return out;
     }
 

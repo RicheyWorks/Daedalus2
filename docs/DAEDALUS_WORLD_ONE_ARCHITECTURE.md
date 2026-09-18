@@ -377,7 +377,8 @@ npc.hush, and
 NPC REST actor, and
 well NPC actor, and
 well builder result, and
-desktop builder result
+desktop builder result, and
+explore hall last drive
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

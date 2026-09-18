@@ -10,6 +10,8 @@ import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
 import com.daedalus.world.Door;
 import com.daedalus.world.Parcel;
+import com.daedalus.world.Trap;
+import com.daedalus.world.TrapResult;
 import com.daedalus.world.ParcelVerb;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.World;
@@ -1131,6 +1133,20 @@ class ExplorePaintTest {
                 .isEqualTo("Willow Walk 8,8 · bob block.place");
         assertThat(ExplorePaint.status(fog, atStart, List.of(), mesh, gated).place())
                 .as("stood-on start still leads ACL")
+                .isEqualTo("START");
+        World refused = World.zero();
+        WorldOps.drive(refused, "stamp.apply", new BlockCoordinate(0, 0, 0), null);
+        assertThat(WorldOps.drive(refused, "trap.arm", Trap.ZERO_AT, null, null, "carol"))
+                .isEqualTo(TrapResult.DENIED);
+        WorldMesh denied = WorldMesh.of(refused);
+        assertThat(ExplorePaint.driveName(denied)).isEqualTo("trap.arm DENIED");
+        assertThat(ExplorePaint.driveName(null)).isNull();
+        fog.stand(new Point(0, 1));
+        assertThat(ExplorePaint.status(fog, offPlot, List.of(), longHall, denied).place())
+                .as("last drive follows leftover HALL so DENIED is visible")
+                .contains("trap.arm DENIED");
+        assertThat(ExplorePaint.status(fog, atStart, List.of(), mesh, denied).place())
+                .as("stood-on start still leads last drive")
                 .isEqualTo("START");
     }
 
