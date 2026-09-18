@@ -264,14 +264,15 @@ public class WorldController {
         String stands = WorldOps.standsInChunk(world, cc);
         String drive = WorldOps.driveInChunk(world, cc);
         String driveActor = WorldOps.actorInChunk(world, cc);
+        String driveAt = WorldOps.atInChunk(world, cc);
         if (chunk == null) {
             return ResponseEntity.ok(new ChunkInspectResponse(
                     x, y, z, false, null, 0, plots, street, lot, occupants, stands,
-                    drive, driveActor));
+                    drive, driveActor, driveAt));
         }
         return ResponseEntity.ok(new ChunkInspectResponse(
                 x, y, z, true, chunk.revision(), chunk.occupied(), plots, street, lot,
-                occupants, stands, drive, driveActor));
+                occupants, stands, drive, driveActor, driveAt));
     }
 
     @PutMapping("/world/{id}/block")

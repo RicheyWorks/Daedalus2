@@ -401,6 +401,7 @@ public final class WorldOps {
         out.put("stands", standsInChunk(world, cc));
         out.put("drive", driveInChunk(world, cc));
         out.put("driveActor", actorInChunk(world, cc));
+        out.put("driveAt", atInChunk(world, cc));
         return out;
     }
 
@@ -429,6 +430,19 @@ public final class WorldOps {
             return "";
         }
         return actorLine(world);
+    }
+
+    /**
+     * Cube address of the last mutation in this 16³. Empty otherwise.
+     */
+    public static String atInChunk(World world, ChunkCoordinate cc) {
+        if (world == null || cc == null || world.lastDriveAt() == null) {
+            return "";
+        }
+        if (!chunkBox(cc).contains(world.lastDriveAt())) {
+            return "";
+        }
+        return atLine(world);
     }
 
     /** Occupancy objects whose cell sits in this 16³. Oldest object first. */

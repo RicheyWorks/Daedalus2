@@ -195,11 +195,13 @@ class ParcelGateTest {
                 world, "chunk.inspect", Portal.ZERO_AT, null);
         assertThat(chunkSeen.get("drive")).isEqualTo("portal.open DENIED");
         assertThat(chunkSeen.get("driveActor")).isEqualTo("carol");
+        assertThat(chunkSeen.get("driveAt")).isEqualTo("2,1,0");
         @SuppressWarnings("unchecked")
         Map<String, Object> farChunk = (Map<String, Object>) WorldOps.drive(
                 world, "chunk.inspect", new BlockCoordinate(32, 0, 0), null);
         assertThat(farChunk.get("drive")).isEqualTo("");
         assertThat(farChunk.get("driveActor")).isEqualTo("");
+        assertThat(farChunk.get("driveAt")).isEqualTo("");
         assertThat(world.portal().state()).isEqualTo(PortalState.SEALED);
         assertThat(world.revision().value()).isEqualTo(revision);
         assertThat(WorldOps.grantParcel(world, Portal.ZERO_AT, "bob", "portal.open"))
