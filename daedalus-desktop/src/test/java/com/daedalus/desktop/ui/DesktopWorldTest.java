@@ -134,6 +134,10 @@ class DesktopWorldTest {
                 .contains("0,0")
                 .contains(DesktopWorld.lastBox(onOrigin))
                 .doesNotContain("npc");
+        onOrigin.bindMaze(onOrigin.parcels().get(0).id(),
+                "00000000-0000-4000-8000-00000000000d");
+        assertThat(DesktopWorld.occupancyLine(onOrigin))
+                .contains("00000000-0000-4000-8000-00000000000d");
         assertThat(DesktopWorld.inspectLine(onOrigin, null))
                 .contains("door")
                 .contains("0,0")

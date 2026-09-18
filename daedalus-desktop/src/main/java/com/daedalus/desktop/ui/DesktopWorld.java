@@ -297,6 +297,10 @@ public final class DesktopWorld {
         if (!box.isEmpty()) {
             label = label + " " + box;
         }
+        String maze = WorldOps.mazeAt(world, at);
+        if (!maze.isEmpty()) {
+            label = label + " " + maze;
+        }
         rows.add(kind + " " + label);
     }
 
