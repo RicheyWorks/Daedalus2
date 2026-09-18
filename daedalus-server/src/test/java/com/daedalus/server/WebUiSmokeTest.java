@@ -443,7 +443,7 @@ class WebUiSmokeTest {
                 .contains("0.85 + 0.30")
                 .contains("LENS_BREATH_MS")
                 .contains("LENS_COLORS = [\"#e5484d\", \"#f2c94c\", \"#8aaa50\"]")
-                .contains("background:${i === 1 ? \"#c6a441\" : LENS_COLORS[i]};margin-right:4px;")
+                .contains("background:${i === 0 ? \"#bc4041\" : i === 1 ? \"#c6a441\" : LENS_COLORS[i]};margin-right:4px;")
                 .contains("box-shadow:0 0 0 1.5px rgba(242, 234, 216, .28)\"></span>${label}")
                 .contains("color:#758c44\">${escapeHtml(f.predictedGeneratorId)}")
                 .contains("color:#c49425\">${escapeHtml(f.predictedGeneratorId)}")

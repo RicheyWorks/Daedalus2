@@ -405,9 +405,21 @@ class WebUiPaintPinTest {
             assertThat(in).as("well caption painter").isNotNull();
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js)
-                    .contains("background:${i === 1 ? \"#c6a441\" : LENS_COLORS[i]}")
+                    .contains("i === 1 ? \"#c6a441\"")
                     .contains("LENS_COLORS = [\"#e5484d\", \"#f2c94c\", \"#8aaa50\"]")
                     .doesNotContain("background:${LENS_COLORS[i]};margin-right:4px;");
+        }
+    }
+
+    @Test
+    void wellCaptionLensRustHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/caption.js")) {
+            assertThat(in).as("well caption painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("background:${i === 0 ? \"#bc4041\" : i === 1 ? \"#c6a441\" : LENS_COLORS[i]}")
+                    .contains("LENS_COLORS = [\"#e5484d\", \"#f2c94c\", \"#8aaa50\"]")
+                    .doesNotContain("background:${i === 1 ? \"#c6a441\" : LENS_COLORS[i]}");
         }
     }
 

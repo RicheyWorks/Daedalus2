@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well caption lens-rust depth.**
+  Must-expand rust falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even rust is not the last
+  word on the maze page. KEEP leftover
+  even lens moss stays.
+
 - **Well caption lens-gold depth.**
   Tie-decides gold falls off toward
   floor-dim with the same 0.22 as halls,
