@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend deadend depth.**
+  Overlay dead-end chips fall off
+  toward deeper sand so leftover flat
+  swatches are not the last word on a
+  stop.
+
 - **Well legend deadend depth.**
   Overlay dead-end chips fall off
   toward deeper sand so leftover flat
