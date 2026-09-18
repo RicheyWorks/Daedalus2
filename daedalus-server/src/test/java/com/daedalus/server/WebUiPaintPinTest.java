@@ -389,6 +389,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellCaptionDefaultWinHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/caption.js")) {
+            assertThat(in).as("well caption painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("color:#c49425\">${escapeHtml(w.id)}</b> wins by default")
+                    .doesNotContain("color:#f0b429\">${escapeHtml(w.id)}</b> wins by default");
+        }
+    }
+
+    @Test
     void wellStartDiscHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

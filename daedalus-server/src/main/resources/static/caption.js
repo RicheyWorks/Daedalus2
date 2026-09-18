@@ -99,7 +99,7 @@
           + `Path lengths: ${escapeHtml(A.id)} ${A.path.length}, ${escapeHtml(B.id)} ${B.path.length}.`;
     } else if (ok(A) || ok(B)) {
       const w = ok(A) ? A : B, l = w === A ? B : A;
-      text = `<b style="color:#f0b429">${escapeHtml(w.id)}</b> wins by default — `
+      text = `<b style="color:#c49425">${escapeHtml(w.id)}</b> wins by default — `
           + `${escapeHtml(l.id)} legitimately gave up (no route under its rules).`;
     } else {
       text = "neither solver found a route.";
