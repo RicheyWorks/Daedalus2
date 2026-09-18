@@ -115,6 +115,8 @@ class ThemeManagerTest {
             assertThat(fxml).contains("fill=\"#c07850\"");
             assertThat(fxml).contains("fill=\"#c8a878\"");
             assertThat(fxml).contains("fill=\"#8aaa50\"");
+            assertThat(fxml).contains("color=\"#8aaa50\"");
+            assertThat(fxml).contains("color=\"#4e6a28\"");
             assertThat(fxml).contains("legendDeadend");
             assertThat(fxml).contains("legendTour");
             assertThat(fxml).contains("fill=\"#d4b06a\"");

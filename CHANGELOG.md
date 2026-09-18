@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend sanctuary depth.**
+  Overlay sanctuary chips fall off
+  toward deeper olive so leftover flat
+  discs are not the last word on a hold
+  gap.
+
 - **Well legend sanctuary depth.**
   Overlay sanctuary chips fall off
   toward deeper olive so leftover flat

@@ -236,7 +236,17 @@
                 </Label>
                 <Label fx:id="legendSanctuary" text="sanctuary" managed="false" visible="false">
                     <graphic>
-                        <Circle radius="5" fill="#8aaa50" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"/>
+                        <Circle radius="5" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#8aaa50"/>
+                                        <Stop offset="1.0" color="#4e6a28"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Circle>
                     </graphic>
                 </Label>
                 <Label fx:id="legendLens" text="lens" managed="false" visible="false">
