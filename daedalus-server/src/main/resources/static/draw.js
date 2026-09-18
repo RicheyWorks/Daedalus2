@@ -843,7 +843,7 @@
       const tourTip = walkHead(scene.tourPath, 1);
       pathHead(g, geom, tourTip, tourTip
           ? tourTileInk(2 * tourTip.row + 1, 2 * tourTip.col + 1, th, tw)
-          : "#d4b06a");
+          : "#af9158");
     }
     if (scene.tour && scene.tour.waypoints) {
       const WAYPOINT_BREATH_MS = 2800;

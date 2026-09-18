@@ -485,7 +485,8 @@ class WebUiSmokeTest {
                         + "          : \"#c6a441\")")
                 .contains("walkHead(scene.tourPath, 1)")
                 .contains("paintWalk(g, geom, scene.tourPath, \"#af9158\"")
-                .contains("walkHead(scene.tourPath, 1), \"#d4b06a\"")
+                .contains("tourTileInk(2 * tourTip.row + 1, 2 * tourTip.col + 1, th, tw)\n"
+                        + "          : \"#af9158\")")
                 .contains("endpoint(g, geom, {row: 0, col: 0}")
                 .contains("VICTORY_BREATH_MS")
                 .contains("0.85 + 0.08")

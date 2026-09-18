@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well tour tip depth.**
+  Guided-route empty-tip gold falls off
+  toward floor-dim with the same 0.22
+  as halls, so leftover even torch is
+  not the last word on the maze page.
+  KEEP leftover even kbd gold stays.
+
 - **Well tour ribbon depth.**
   Guided-route gold falls off toward
   floor-dim with the same 0.22 as halls,

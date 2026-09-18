@@ -424,6 +424,19 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellTourTipHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("tourTileInk(2 * tourTip.row + 1, 2 * tourTip.col + 1, th, tw)\n"
+                            + "          : \"#af9158\")")
+                    .doesNotContain("tourTileInk(2 * tourTip.row + 1, 2 * tourTip.col + 1, th, tw)\n"
+                            + "          : \"#d4b06a\")");
+        }
+    }
+
+    @Test
     void wellAsciiRockHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
             assertThat(in).as("static well page").isNotNull();
