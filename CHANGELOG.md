@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Stamp names the slab place.**
+  POST /stamp names the inspired
+  street on the new plot. Empty on
+  a named refusal. No wallet types.
+
 - **Forgive names the slab lease.**
   POST /parcels/forgive names the
   account key on the plot under

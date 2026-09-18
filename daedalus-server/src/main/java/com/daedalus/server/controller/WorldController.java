@@ -248,9 +248,10 @@ public class WorldController {
             maxZ = result.bounds().maxZ();
         }
         String maze = result.ok() && mazeId != null ? mazeId.toString() : "";
+        String place = result.ok() ? WorldOps.lastPlaceName(mounted(id)) : "";
         return ResponseEntity.ok(new StampMutationResponse(
                 result.ok(), result.outcome(), parcelId, result.revision().value(),
-                minX, maxX, minZ, maxZ, WorldOps.boxLine(result.bounds()), maze));
+                minX, maxX, minZ, maxZ, WorldOps.boxLine(result.bounds()), maze, place));
     }
 
     @GetMapping("/world/{id}/capabilities")
