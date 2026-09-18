@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well occupancy names the slab box.**
+  Door, trap, portal, and NPC rows
+  paint the inclusive AABB from
+  inspect. Empty off a stamped plot.
+  No wallet types.
+
 - **Explore names every box.**
   Off a slab the hall caption names
   every inclusive AABB, oldest first.

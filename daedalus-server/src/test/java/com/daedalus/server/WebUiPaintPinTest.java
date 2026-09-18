@@ -450,6 +450,7 @@ class WebUiPaintPinTest {
                     .contains("#worldBox .slab { color: #94612e; -webkit-user-drag: none");
             assertThat(world).contains("ink.className = named ? \"place\" : \"slab\"")
                     .contains("function occupancy")
+                    .contains("obj.box")
                     .contains("obj.acl")
                     .contains("obj.drive")
                     .contains("obj.driveActor")
