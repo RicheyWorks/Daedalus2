@@ -306,8 +306,19 @@
                 </Label>
                 <Label fx:id="legendTour" text="tour" managed="false" visible="false">
                     <graphic>
-                        <Rectangle width="10" height="10" fill="#d4b06a" arcWidth="3" arcHeight="3"
-                                   stroke="rgba(245,193,74,0.35)" strokeWidth="1.5"/>
+                        <Rectangle width="10" height="10"
+                                   stroke="rgba(245,193,74,0.35)" strokeWidth="1.5"
+                                   arcWidth="3" arcHeight="3">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#d4b06a"/>
+                                        <Stop offset="1.0" color="#6a5428"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
                     </graphic>
                 </Label>
                 <Label fx:id="legendWaypoint" text="waypoint" managed="false" visible="false">

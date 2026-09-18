@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend tour depth.**
+  Overlay tour chips fall off toward
+  deeper sand so leftover flat swatches
+  are not the last word on a hunt.
+
 - **Well legend tour depth.**
   Overlay tour chips fall off toward
   deeper sand so leftover flat swatches
