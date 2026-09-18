@@ -83,7 +83,7 @@ public final class WorldOps {
             case "trap.disarm" -> disarmTrap(world, mazeRef);
             case "portal.inspect" -> inspectPortal(world);
             case "portal.open" -> openPortal(world, mazeRef);
-            case "portal.seal" -> world.sealPortal();
+            case "portal.seal" -> sealPortal(world, mazeRef);
             case "npc.inspect" -> inspectNpc(world);
             case "npc.talk" -> world.talkNpc();
             case "npc.hush" -> world.hushNpc();
@@ -521,6 +521,21 @@ public final class WorldOps {
             return PortalResult.DENIED;
         }
         return world.openPortal();
+    }
+
+    /**
+     * Seal through the same {@link ParcelVerb#PORTAL_OPEN} gate.
+     * Empty actor is the system owner. DENIED leaves the portal.
+     */
+    public static PortalResult sealPortal(World world, String actorId) {
+        if (world.portal() == null) {
+            throw new IllegalStateException("This world has no portal");
+        }
+        String actor = actorId == null || actorId.isBlank() ? Parcel.SYSTEM_OWNER : actorId.trim();
+        if (world.may(actor, ParcelVerb.PORTAL_OPEN, world.portal().at()) == ParcelAccess.DENIED) {
+            return PortalResult.DENIED;
+        }
+        return world.sealPortal();
     }
 
     public static PortalResult asPortalResult(Object value) {

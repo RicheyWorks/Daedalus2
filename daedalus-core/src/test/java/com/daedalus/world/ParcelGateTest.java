@@ -177,6 +177,12 @@ class ParcelGateTest {
         assertThat(world.portal().state()).isEqualTo(PortalState.OPEN);
         assertThat(WorldOps.drive(world, "portal.open", Portal.ZERO_AT, null, null, null))
                 .isEqualTo(PortalResult.ALREADY_OPEN);
+        assertThat(WorldOps.drive(world, "portal.seal", Portal.ZERO_AT, null, null, "carol"))
+                .isEqualTo(PortalResult.DENIED);
+        assertThat(world.portal().state()).isEqualTo(PortalState.OPEN);
+        assertThat(WorldOps.drive(world, "portal.seal", Portal.ZERO_AT, null, null, null))
+                .isEqualTo(PortalResult.SEALED);
+        assertThat(world.portal().state()).isEqualTo(PortalState.SEALED);
     }
 
     @Test

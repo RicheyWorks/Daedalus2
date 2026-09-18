@@ -262,10 +262,19 @@ public class WorldService {
     }
 
     public PortalResult sealPortal(String id) {
+        return sealPortal(id, null);
+    }
+
+    public PortalResult sealPortal(String id, String actorId) {
         World live = require(id);
         synchronized (lock) {
-            PortalResult result = live.sealPortal();
-            persist();
+            PortalResult result = WorldOps.asPortalResult(
+                    WorldOps.drive(live, "portal.seal",
+                            live.portal() == null ? new BlockCoordinate(0, 0, 0) : live.portal().at(),
+                            null, null, actorId));
+            if (result != PortalResult.DENIED) {
+                persist();
+            }
             log.append("portal.seal", result, live.revision().value());
             return result;
         }

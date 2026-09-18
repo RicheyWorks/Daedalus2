@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcel gate on portal.seal.**
+  portal.seal asks the same portal.open gate. Empty
+  actor is the system owner. DENIED leaves the portal.
+  No wallet types.
+
 - **Parcel gate on portal.open.**
   portal.open asks ParcelGate for portal.open. Empty
   actor is the system owner. DENIED leaves the portal.
