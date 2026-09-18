@@ -63,6 +63,15 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.inspectLine(named, null))
                 .contains("00000000-0000-4000-8000-000000000007");
         assertThat(DesktopWorld.firstMaze(World.zero())).isEmpty();
+        WorldEventFrame onLot = new WorldEventFrame(
+                DesktopWorld.ID, "BLOCK_PLACED", 8, 0, 8, "WOOD", "AIR",
+                named.revision().value());
+        assertThat(DesktopWorld.eventLot(named, onLot)).isEqualTo("Willow Walk 8,8");
+        assertThat(DesktopWorld.eventLot(named, placed)).isEmpty();
+        assertThat(DesktopWorld.eventLot(null, onLot)).isEmpty();
+        assertThat(DesktopWorld.inspectLine(named, onLot))
+                .contains("BLOCK_PLACED 8,0,8 WOOD")
+                .contains("Willow Walk 8,8");
     }
 
     @Test

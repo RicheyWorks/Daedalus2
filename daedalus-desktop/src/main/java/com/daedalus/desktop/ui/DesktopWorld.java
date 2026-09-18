@@ -54,8 +54,10 @@ public final class DesktopWorld {
                 place = place.isEmpty() ? lots : place + " · " + lots;
             }
         }
-        return inspectLine(world.revision().value(), world.parcels().size(), place,
+        String line = inspectLine(world.revision().value(), world.parcels().size(), place,
                 lastLease(world), streetMazes(world), last);
+        String at = eventLot(world, last);
+        return at.isEmpty() ? line : line + " · " + at;
     }
 
     public static String inspectLine(long revision, WorldEventFrame last) {
@@ -109,6 +111,22 @@ public final class DesktopWorld {
             }
         }
         return "";
+    }
+
+    /**
+     * Place and lot under the last event cube. Empty off a slab.
+     */
+    public static String eventLot(World world, WorldEventFrame last) {
+        if (world == null || last == null) {
+            return "";
+        }
+        BlockCoordinate cell = new BlockCoordinate(last.x(), last.y(), last.z());
+        String named = WorldOps.placeAt(world, cell);
+        String lot = WorldOps.lotAt(world, cell);
+        if (named.isEmpty()) {
+            return lot;
+        }
+        return lot.isEmpty() ? named : named + " " + lot;
     }
 
     /** All inspired toponyms on inspect — not GIS. */

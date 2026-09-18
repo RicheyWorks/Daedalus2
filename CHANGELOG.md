@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop last-event lot.**
+  When the last world event sits on a slab, inspect names that
+  place and x,z. Off-plot events stay type-only.
+
 - **Explore lot under the boots.**
   Standing on a slab the caption adds that plot's x,z after
   the place or lease. Start and goal still lead.
