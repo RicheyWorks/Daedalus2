@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well gate-sample scrollbar depth.**
+  Gate-sample scroll gold falls off
+  toward floor-dim with the same 0.22
+  as halls, so leftover even torch is
+  not the last word on the maze page.
+  KEEP leftover even log scrollbar gold
+  stays.
+
 - **Well gate scrollbar depth.**
   Gate-page scroll gold falls off toward
   floor-dim with the same 0.22 as halls,

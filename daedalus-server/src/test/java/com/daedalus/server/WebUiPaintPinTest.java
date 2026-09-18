@@ -913,6 +913,23 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellGateSampleScrollbarHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #afa088; cursor: text;\n"
+                            + "              border: 1px solid rgba(153, 111, 49, 0.28);\n"
+                            + "              border-radius: 6px; font: 11px/1.45 ui-monospace, monospace; overflow: auto; overscroll-behavior: none;\n"
+                            + "              scrollbar-width: thin; scrollbar-color: rgba(153, 111, 49, 0.45) transparent;")
+                    .doesNotContain("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #afa088; cursor: text;\n"
+                            + "              border: 1px solid rgba(153, 111, 49, 0.28);\n"
+                            + "              border-radius: 6px; font: 11px/1.45 ui-monospace, monospace; overflow: auto; overscroll-behavior: none;\n"
+                            + "              scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent;");
+        }
+    }
+
+    @Test
     void wellHardestRibbonHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
