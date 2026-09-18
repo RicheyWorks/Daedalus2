@@ -553,7 +553,8 @@ well last-event names the slab box, and
 well last-event names the slab maze, and
 well last-event names the slab lease, and
 well last-event names the slab ACL, and
-desktop last-event names the slab ACL
+desktop last-event names the slab ACL, and
+desktop occupancy names the slab ACL
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

@@ -305,6 +305,10 @@ public final class DesktopWorld {
         if (!lease.isEmpty()) {
             label = label + " " + lease;
         }
+        String extra = WorldOps.aclAt(world, at);
+        if (!extra.isEmpty()) {
+            label = label + " " + extra;
+        }
         rows.add(kind + " " + label);
     }
 

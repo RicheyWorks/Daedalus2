@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop occupancy names the slab ACL.**
+  Occupancy rows name the extra-list
+  under that cell. Empty until a grant
+  or deny. No wallet types.
+
 - **Desktop last-event names the slab ACL.**
   The last-event cube names the
   extra-list under that cell. Empty
