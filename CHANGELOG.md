@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend waypoint depth.**
+  Overlay waypoint diamonds fall off
+  toward deeper gold so leftover flat
+  swatches are not the last word on a
+  coin.
+
 - **Well legend waypoint depth.**
   Overlay waypoint diamonds fall off
   toward deeper gold so leftover flat

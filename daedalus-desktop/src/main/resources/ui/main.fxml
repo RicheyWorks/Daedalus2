@@ -374,8 +374,18 @@
                 </Label>
                 <Label fx:id="legendWaypoint" text="waypoint" managed="false" visible="false">
                     <graphic>
-                        <Rectangle width="8" height="8" fill="#f2c94c" rotate="45"
-                                   stroke="rgba(245,193,74,0.35)" strokeWidth="1.5"/>
+                        <Rectangle width="8" height="8" rotate="45"
+                                   stroke="rgba(245,193,74,0.35)" strokeWidth="1.5">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#f2c94c"/>
+                                        <Stop offset="1.0" color="#8a6820"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
                     </graphic>
                 </Label>
                 <Label fx:id="legendGhost" text="ghost" managed="false" visible="false">
