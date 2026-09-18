@@ -2101,12 +2101,15 @@ public class MainController {
         }
         if (currentPath != null && !currentPath.isEmpty() && theme != null) {
             paintPathRibbon(g, layout, currentPath, theme.path(), DesktopPaint.PATH_ALPHA,
-                    current.metadata().start(), current.metadata().goal());
+                    current.metadata().start(), current.metadata().goal(), DesktopPaint.PATH);
             Point tip = DesktopPaint.walkHead(currentPath);
             double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
+            Color ice = Color.web(tip == null ? DesktopPaint.PATH
+                    : DesktopPaint.walkTrailInk(DesktopPaint.PATH,
+                            DesktopPaint.floorEdge(layout, 2 * tip.row() + 1, 2 * tip.col() + 1)));
             paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
-                    theme.path().deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
-            paintPathHeadDisc(g, DesktopPaint.pathHeadMarker(layout, currentPath), theme.path(),
+                    ice.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
+            paintPathHeadDisc(g, DesktopPaint.pathHeadMarker(layout, currentPath), ice,
                     tipWave);
         }
 

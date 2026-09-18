@@ -100,6 +100,10 @@ class DesktopPaintTest {
                 .isEqualTo(new Point(0, 1));
         assertThat(DesktopPaint.walkHead(List.of())).isNull();
         assertThat(DesktopPaint.PATH_ALPHA).isEqualTo(0.85);
+        assertThat(DesktopPaint.PATH).isEqualTo("#8fb8ff");
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.PATH, 1))
+                .as("solver ribbon falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.PATH);
         DesktopPaint.Layout layout = DesktopPaint.Layout.fit(3, 3, 30, 30);
         DesktopPaint.Marker head = DesktopPaint.pathHeadMarker(layout, List.of(new Point(0, 0)));
         DesktopPaint.Marker player = DesktopPaint.playerMarker(layout, new Point(0, 0));
