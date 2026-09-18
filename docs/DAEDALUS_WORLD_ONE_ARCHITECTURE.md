@@ -385,7 +385,8 @@ persist denied drive, and
 well inspect drive actor, and
 explore hall last drive actor, and
 desktop last drive actor, and
-DAEW last drive actor
+DAEW last drive actor, and
+well builder last actor
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well builder last actor.**
+  The well builder hint names the
+  account key from GET /world after
+  the last /trace result. No wallet
+  types.
+
 - **DAEW last drive actor.**
   World snapshots copy the account key
   that last drove a mutation. DAEW v12
