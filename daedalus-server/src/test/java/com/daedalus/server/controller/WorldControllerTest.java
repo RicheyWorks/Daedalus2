@@ -167,7 +167,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.driveAt", equalTo("1,2,3")))
                 .andExpect(jsonPath("$.maze", equalTo("")))
                 .andExpect(jsonPath("$.lease", equalTo("")))
-                .andExpect(jsonPath("$.acl", equalTo("")));
+                .andExpect(jsonPath("$.acl", equalTo("")))
+                .andExpect(jsonPath("$.place", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero/chunk").param("x", "4").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
@@ -181,7 +182,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.driveAt", equalTo("")))
                 .andExpect(jsonPath("$.maze", equalTo("")))
                 .andExpect(jsonPath("$.lease", equalTo("")))
-                .andExpect(jsonPath("$.acl", equalTo("")));
+                .andExpect(jsonPath("$.acl", equalTo("")))
+                .andExpect(jsonPath("$.place", equalTo("")));
 
         mvc.perform(delete("/api/v1/world/world-zero/block")
                         .param("x", "1").param("y", "2").param("z", "3"))
@@ -1097,12 +1099,16 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.maze", equalTo(
                         cached.metadata().id() + " · " + again.metadata().id())))
-                .andExpect(jsonPath("$.lease", equalTo("tenant-zero")));
+                .andExpect(jsonPath("$.lease", equalTo("tenant-zero")))
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))))
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString(" · "))))
+                .andExpect(jsonPath("$.street", org.hamcrest.Matchers.containsString(" · ")));
         extra.perform(get("/api/v1/world/world-zero/chunk")
                         .param("x", "4").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.maze", equalTo("")))
-                .andExpect(jsonPath("$.lease", equalTo("")));
+                .andExpect(jsonPath("$.lease", equalTo("")))
+                .andExpect(jsonPath("$.place", equalTo("")));
         extra.perform(post("/api/v1/world/world-zero/parcels/lease"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("LEASED")))

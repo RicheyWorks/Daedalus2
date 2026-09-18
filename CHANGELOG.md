@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **GET /chunk names the last slab place.**
+  Chunk inspect names the newest
+  inspired toponym whose slab
+  overlaps this 16³. Empty until a
+  stamp. No wallet types.
+
 - **GET /world names the last slab place.**
   Inspect names the newest inspired
   toponym. Empty until a stamp. No

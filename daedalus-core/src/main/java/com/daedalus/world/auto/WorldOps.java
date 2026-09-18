@@ -472,6 +472,7 @@ public final class WorldOps {
         out.put("present", chunk != null);
         out.put("plots", plotsInChunk(world, cc));
         out.put("street", streetInChunk(world, cc));
+        out.put("place", placeInChunk(world, cc));
         out.put("lot", lotsInChunk(world, cc));
         out.put("occupants", occupantsInChunk(world, cc));
         out.put("stands", standsInChunk(world, cc));
@@ -571,6 +572,27 @@ public final class WorldOps {
     /** Inspired toponyms whose slab overlaps this 16³. Oldest first. */
     public static String streetInChunk(World world, ChunkCoordinate cc) {
         return joinInChunk(world, cc, true);
+    }
+
+    /**
+     * Newest inspired toponym whose slab overlaps this 16³. Empty off a stamp.
+     * Not GIS.
+     */
+    public static String placeInChunk(World world, ChunkCoordinate cc) {
+        if (world == null || cc == null) {
+            return "";
+        }
+        ParcelBounds box = chunkBox(cc);
+        String found = "";
+        for (Parcel parcel : world.parcels()) {
+            if (parcel == null || !parcel.bounds().overlaps(box)) {
+                continue;
+            }
+            if (!parcel.placeName().isEmpty()) {
+                found = parcel.placeName();
+            }
+        }
+        return found;
     }
 
     /** Slab origins whose AABB overlaps this 16³, as {@code x,z}. Oldest first. */

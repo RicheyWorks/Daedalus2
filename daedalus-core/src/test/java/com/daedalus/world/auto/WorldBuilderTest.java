@@ -357,7 +357,9 @@ class WorldBuilderTest {
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "chunk.inspect", null));
         assertThat(origin.get("plots")).isEqualTo(1);
         assertThat(origin.get("street")).isEqualTo(world.parcels().get(0).placeName());
+        assertThat(origin.get("place")).isEqualTo(world.parcels().get(0).placeName());
         assertThat(origin.get("lot")).isEqualTo("0,0");
+        assertThat(WorldOps.placeInChunk(null, null)).isEmpty();
         assertThat(origin.get("maze")).isEqualTo("");
         assertThat(origin.get("lease")).isEqualTo("");
         assertThat(origin.get("acl")).isEqualTo("");
@@ -381,6 +383,7 @@ class WorldBuilderTest {
                 new WorldBuilder.Step(new BlockCoordinate(32, 0, 0), "chunk.inspect", null));
         assertThat(far.get("plots")).isEqualTo(1);
         assertThat(far.get("street")).isEqualTo(world.parcels().get(1).placeName());
+        assertThat(far.get("place")).isEqualTo(world.parcels().get(1).placeName());
         assertThat(far.get("lot")).isEqualTo("32,0");
         assertThat(far.get("maze")).isEqualTo("");
         assertThat(far.get("acl")).isEqualTo("");
@@ -397,6 +400,8 @@ class WorldBuilderTest {
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "chunk.inspect", null));
         assertThat(both.get("plots")).isEqualTo(2);
         assertThat(both.get("street")).isEqualTo(WorldOps.streetLine(near));
+        assertThat(both.get("place")).isEqualTo(near.parcels().get(1).placeName());
+        assertThat(both.get("place")).isNotEqualTo(both.get("street"));
         assertThat(both.get("lot")).isEqualTo(WorldOps.streetLots(near));
     }
 
