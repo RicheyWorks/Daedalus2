@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well panel rim depth.**
+  Side-rail gold falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP leftover
+  even header gold stays.
+
 - **Well caption not-optimal depth.**
   Lens miss rust falls off toward
   floor-dim with the same 0.22 as halls,

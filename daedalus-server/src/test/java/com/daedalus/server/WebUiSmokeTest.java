@@ -194,6 +194,7 @@ class WebUiSmokeTest {
                 .contains("details .hint { cursor: text; }")
                 .contains("font: 11px/1.2 ui-monospace, monospace; overflow: auto; overscroll-behavior: none;")
                 .contains("animation: panelRimBreath 4.5s ease-in-out infinite; }")
+                .contains("0%, 100% { border-color: rgba(153, 111, 49, 0.30); }")
                 .contains(".exports button, .exports a, #asciiOut, #gate pre, .info, #stats, details,")
                 .contains("#compareBox > div, kbd, summary::after, #log, #lb, #pluginBox, #campaignBox,")
                 .contains("#tourBox, #labOut, #compareBox, #status {")
