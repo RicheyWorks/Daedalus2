@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend start and goal depth.**
+  Overlay start and goal chips fall off
+  toward deeper mint and coral so
+  leftover flat discs are not the last
+  word on the ends of the maze.
+
 - **Well legend start and goal depth.**
   Overlay start and goal chips fall off
   toward deeper mint and coral so

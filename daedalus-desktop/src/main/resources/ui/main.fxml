@@ -148,12 +148,32 @@
                 </Label>
                 <Label fx:id="legendStart" text="start">
                     <graphic>
-                        <Circle radius="5" fill="#3ee08f" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"/>
+                        <Circle radius="5" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#3ee08f"/>
+                                        <Stop offset="1.0" color="#1e8a58"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Circle>
                     </graphic>
                 </Label>
                 <Label fx:id="legendGoal" text="goal">
                     <graphic>
-                        <Circle radius="5" fill="#ff5a5f" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5"/>
+                        <Circle radius="5" stroke="rgba(242,234,216,0.28)" strokeWidth="1.5">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#ff5a5f"/>
+                                        <Stop offset="1.0" color="#c4383c"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Circle>
                     </graphic>
                 </Label>
                 <Label fx:id="legendPath" text="solver path" managed="false" visible="false">
