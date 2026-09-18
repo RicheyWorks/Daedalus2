@@ -133,7 +133,9 @@ class ThemeManagerTest {
             assertThat(fxml).contains("fill=\"#e8a060\"");
             assertThat(fxml).contains("fill=\"#b8a058\"");
             assertThat(fxml).contains("legendGhost");
-            assertThat(fxml).contains("fill=\"#e8e0d4\"");
+            assertThat(fxml).contains("color=\"#e8e0d4\"");
+            assertThat(fxml).contains("color=\"#6a6258\"");
+            assertThat(fxml).doesNotContain("fill=\"#e8e0d4\"");
             assertThat(fxml).contains("fill=\"#8fb8ff\"");
             assertThat(fxml).contains("color=\"#19140f\"")
                     .doesNotContain("stroke=\"#2a2218\"");
