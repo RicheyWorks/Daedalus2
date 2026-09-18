@@ -412,7 +412,7 @@ public class WorldController {
         World world = mounted(id);
         return ResponseEntity.ok(new DoorMutationResponse(
                 door.id(), door.state().name(), result.name(), world.revision().value(),
-                WorldOps.mazeAt(world, door.at())));
+                WorldOps.mazeAt(world, door.at()), WorldOps.leaseAt(world, door.at())));
     }
 
     @PostMapping("/world/{id}/door/close")
@@ -426,7 +426,7 @@ public class WorldController {
         World world = mounted(id);
         return ResponseEntity.ok(new DoorMutationResponse(
                 door.id(), door.state().name(), result.name(), world.revision().value(),
-                WorldOps.mazeAt(world, door.at())));
+                WorldOps.mazeAt(world, door.at()), WorldOps.leaseAt(world, door.at())));
     }
 
     @GetMapping("/world/{id}/trap")

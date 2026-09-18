@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Door open names the slab lease.**
+  POST /door/open and /door/close name
+  the account key on the plot under
+  that cube. Empty when the door sits
+  off a rented slab. No wallet types.
+
 - **NPC talk names the slab maze.**
   POST /npc/talk and /npc/hush name
   the lab maze UUID under that cube.
