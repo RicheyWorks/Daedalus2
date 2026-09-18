@@ -443,6 +443,8 @@ class WebUiPaintPinTest {
                     .contains("row(box, \"stands\"")
                     .contains("world.acl")
                     .contains("row(box, \"acl\"")
+                    .contains("world.acls")
+                    .contains("row(box, \"acls\"")
                     .contains("world.drive")
                     .contains("row(box, \"drive\"")
                     .contains("world.driveActor")

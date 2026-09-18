@@ -168,6 +168,8 @@
         world && world.stands);
     row(box, "acl", world && world.acl ? world.acl : "—",
         world && world.acl);
+    row(box, "acls", world && world.acls ? world.acls : "—",
+        world && world.acls);
     row(box, "drive", world && world.drive ? world.drive : "—",
         world && world.drive);
     row(box, "actor", world && world.driveActor ? world.driveActor : "—",
