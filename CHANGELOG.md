@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **NPC talk names the slab lot.**
+  POST /npc/talk and /npc/hush name
+  the minX,minZ corner under that
+  cube. Empty when the NPC sits off
+  a stamped plot. No wallet types.
+
 - **Portal open names the slab lot.**
   POST /portal/open and /portal/seal
   name the minX,minZ corner under
