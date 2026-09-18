@@ -110,6 +110,10 @@ public final class DesktopWorld {
             if (!actor.isEmpty()) {
                 occ = occ.isEmpty() ? actor : occ + " · " + actor;
             }
+            String at = chunkAt(world, last);
+            if (!at.isEmpty()) {
+                occ = occ.isEmpty() ? at : occ + " · " + at;
+            }
         }
         if (!occ.isEmpty()) {
             line = line + " · " + occ;
@@ -224,6 +228,17 @@ public final class DesktopWorld {
             return "";
         }
         return WorldOps.actorInChunk(world, liveChunk(last));
+    }
+
+    /**
+     * Cube address of the last mutation in the live 16³.
+     * Empty far off the volume.
+     */
+    public static String chunkAt(World world, WorldEventFrame last) {
+        if (world == null) {
+            return "";
+        }
+        return WorldOps.atInChunk(world, liveChunk(last));
     }
 
     private static ChunkCoordinate liveChunk(WorldEventFrame last) {

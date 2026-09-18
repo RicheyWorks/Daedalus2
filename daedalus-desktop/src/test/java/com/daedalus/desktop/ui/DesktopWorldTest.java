@@ -51,18 +51,23 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.chunkStands(World.zero(), far)).isEmpty();
         assertThat(DesktopWorld.chunkDrive(World.zero(), null)).isEmpty();
         assertThat(DesktopWorld.chunkActor(World.zero(), null)).isEmpty();
+        assertThat(DesktopWorld.chunkAt(World.zero(), null)).isEmpty();
         assertThat(DesktopWorld.chunkDrive(null, null)).isEmpty();
         assertThat(DesktopWorld.chunkActor(null, null)).isEmpty();
+        assertThat(DesktopWorld.chunkAt(null, null)).isEmpty();
         World gated = World.zero();
         assertThat(WorldOps.drive(gated, "trap.arm", Trap.ZERO_AT, null, null, "carol"))
                 .isEqualTo(TrapResult.ARMED);
         assertThat(DesktopWorld.chunkDrive(gated, null)).isEqualTo("trap.arm ARMED");
         assertThat(DesktopWorld.chunkActor(gated, null)).isEqualTo("carol");
+        assertThat(DesktopWorld.chunkAt(gated, null)).isEqualTo("1,1,0");
         assertThat(DesktopWorld.chunkDrive(gated, far)).isEmpty();
         assertThat(DesktopWorld.chunkActor(gated, far)).isEmpty();
+        assertThat(DesktopWorld.chunkAt(gated, far)).isEmpty();
         assertThat(DesktopWorld.inspectLine(gated, null))
                 .contains("trap.arm ARMED")
-                .contains("carol");
+                .contains("carol")
+                .contains("1,1,0");
         assertThat(DesktopWorld.inspectLine(gated, far)).doesNotContain("trap.arm ARMED");
         WorldEventFrame placed = new WorldEventFrame(
                 DesktopWorld.ID, "BLOCK_PLACED", 1, 2, 3, "STONE", "AIR", 4);

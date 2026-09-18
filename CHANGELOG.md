@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop chunk last at.**
+  The desktop world line names the last
+  driven cube only when that address
+  sits in the live 16³. Empty far off
+  the volume. No wallet types.
+
 - **Well chunk last at.**
   The well chunk row paints the last
   driven cube when that address sits
