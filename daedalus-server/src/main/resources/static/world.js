@@ -39,8 +39,10 @@
     "portal.seal": {method: "POST", path: (at, actor) =>
         "/world/" + WORLD + "/portal/seal" + actorQuery(actor)},
     "npc.inspect": {method: "GET", path: () => "/world/" + WORLD + "/npc"},
-    "npc.talk": {method: "POST", path: () => "/world/" + WORLD + "/npc/talk"},
-    "npc.hush": {method: "POST", path: () => "/world/" + WORLD + "/npc/hush"},
+    "npc.talk": {method: "POST", path: (at, actor) =>
+        "/world/" + WORLD + "/npc/talk" + actorQuery(actor)},
+    "npc.hush": {method: "POST", path: (at, actor) =>
+        "/world/" + WORLD + "/npc/hush" + actorQuery(actor)},
     "parcel.lease": {method: "POST", path: () => "/world/" + WORLD + "/parcels/lease"},
     "parcel.grant": {method: "POST", path: () => "/world/" + WORLD + "/parcels/grant",
       body: (at, type, mazeId, actor) => ({x: at.x, y: at.y, z: at.z,

@@ -481,6 +481,8 @@ class WebUiPaintPinTest {
                     .contains("/world/\" + WORLD + \"/trap/disarm\" + actorQuery(actor)")
                     .contains("/world/\" + WORLD + \"/portal/open\" + actorQuery(actor)")
                     .contains("/world/\" + WORLD + \"/portal/seal\" + actorQuery(actor)")
+                    .contains("/world/\" + WORLD + \"/npc/talk\" + actorQuery(actor)")
+                    .contains("/world/\" + WORLD + \"/npc/hush\" + actorQuery(actor)")
                     .contains("actorId=\" + encodeURIComponent(actor)")
                     .contains("actorQuery(actor, \"&\")")
                     .contains("step.path(cell, type)")

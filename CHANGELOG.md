@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well NPC actor.**
+  well npc.talk and npc.hush send optional actorId
+  (drive type) on the query. Blank stays the system
+  owner. No wallet types.
+
 - **NPC REST actor.**
   POST npc/talk and npc/hush take optional actorId.
   Blank stays the system owner. DENIED is a named
