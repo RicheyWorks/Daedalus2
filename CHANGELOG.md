@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well compare pin depth.**
+  Pinned-solver gold falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP leftover
+  even compare pin-hover gold stays.
+
 - **Well compare hover depth.**
   Solver-hover gold falls off toward
   floor-dim with the same 0.22 as halls,
