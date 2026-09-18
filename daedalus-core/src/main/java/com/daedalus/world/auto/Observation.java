@@ -14,7 +14,7 @@ import java.util.Objects;
 public record Observation(String worldId, long revision, int x, int y, int z,
                           String blockType, String doorState, String place, String lot,
                           String occupant, String acl, String drive, String driveActor,
-                          String driveAt, String lease) {
+                          String driveAt, String lease, String maze) {
 
     public Observation {
         Objects.requireNonNull(worldId, "worldId is required");
@@ -27,6 +27,15 @@ public record Observation(String worldId, long revision, int x, int y, int z,
         driveActor = driveActor == null ? "" : driveActor;
         driveAt = driveAt == null ? "" : driveAt;
         lease = lease == null ? "" : lease;
+        maze = maze == null ? "" : maze;
+    }
+
+    public Observation(String worldId, long revision, int x, int y, int z,
+                       String blockType, String doorState, String place, String lot,
+                       String occupant, String acl, String drive, String driveActor,
+                       String driveAt, String lease) {
+        this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, acl,
+                drive, driveActor, driveAt, lease, "");
     }
 
     public Observation(String worldId, long revision, int x, int y, int z,
@@ -34,28 +43,28 @@ public record Observation(String worldId, long revision, int x, int y, int z,
                        String occupant, String acl, String drive, String driveActor,
                        String driveAt) {
         this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, acl,
-                drive, driveActor, driveAt, "");
+                drive, driveActor, driveAt, "", "");
     }
 
     public Observation(String worldId, long revision, int x, int y, int z,
                        String blockType, String doorState, String place, String lot,
                        String occupant, String acl, String drive, String driveActor) {
         this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, acl,
-                drive, driveActor, "", "");
+                drive, driveActor, "", "", "");
     }
 
     public Observation(String worldId, long revision, int x, int y, int z,
                        String blockType, String doorState, String place, String lot,
                        String occupant, String acl) {
         this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, acl,
-                "", "", "", "");
+                "", "", "", "", "");
     }
 
     public Observation(String worldId, long revision, int x, int y, int z,
                        String blockType, String doorState, String place, String lot,
                        String occupant) {
         this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant,
-                "", "", "", "", "");
+                "", "", "", "", "", "");
     }
 
     public static Observation take(World world, WorldAddress address) {
@@ -82,6 +91,7 @@ public record Observation(String worldId, long revision, int x, int y, int z,
                 WorldOps.driveOn(world, address.at()),
                 WorldOps.actorOn(world, address.at()),
                 WorldOps.atOn(world, address.at()),
-                WorldOps.leaseAt(world, address.at()));
+                WorldOps.leaseAt(world, address.at()),
+                WorldOps.mazeAt(world, address.at()));
     }
 }

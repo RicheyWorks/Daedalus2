@@ -104,6 +104,7 @@ class WorldAutomationPipelineTest {
         session.address(Door.ZERO_AT);
         assertThat(session.observe().acl()).isEmpty();
         assertThat(session.observe().lease()).isEmpty();
+        assertThat(session.observe().maze()).isEmpty();
         assertThat(WorldOps.drive(world, "parcel.lease", Door.ZERO_AT, null))
                 .isEqualTo(ParcelLeaseResult.LEASED);
         assertThat(session.observe().lease()).isEqualTo(Parcel.SYSTEM_TENANT);

@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Observe names the slab maze.**
+  GET /observe names the lab maze UUID
+  the plot was stamped from. Empty
+  off the street or on a default
+  slab with no mazeId. No wallet types.
+
 - **Observe names the slab lease.**
   GET /observe names the account key
   on the plot under the cube. Empty

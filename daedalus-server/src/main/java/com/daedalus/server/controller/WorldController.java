@@ -267,7 +267,7 @@ public class WorldController {
                 seen.worldId(), seen.revision(), seen.x(), seen.y(), seen.z(),
                 seen.blockType(), seen.doorState(), seen.place(), seen.lot(),
                 seen.occupant(), seen.acl(), seen.drive(), seen.driveActor(),
-                seen.driveAt(), seen.lease()));
+                seen.driveAt(), seen.lease(), seen.maze()));
     }
 
     @GetMapping("/world/{id}/trace")

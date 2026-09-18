@@ -439,6 +439,12 @@ class WorldBuilderTest {
         assertThat(offLot.get("lot")).isEqualTo("");
         assertThat(offLot.get("box")).isEqualTo("");
         assertThat(offLot.get("maze")).isEqualTo("");
+        Observation onObserve = Observation.take(world,
+                new WorldAddress(world.id(), new BlockCoordinate(0, 0, 0)));
+        assertThat(onObserve.maze()).isEqualTo(mazeRef);
+        Observation offObserve = Observation.take(world,
+                new WorldAddress(world.id(), new BlockCoordinate(99, 0, 99)));
+        assertThat(offObserve.maze()).isEmpty();
     }
 
     @Test
