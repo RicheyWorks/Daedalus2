@@ -271,7 +271,8 @@ public class WorldController {
         return ResponseEntity.ok(new DoorInspectResponse(
                 door.id(), door.worldId().value(),
                 door.at().x(), door.at().y(), door.at().z(), door.state().name(),
-                WorldOps.placeAt(world, door.at()), WorldOps.lotAt(world, door.at())));
+                WorldOps.placeAt(world, door.at()), WorldOps.lotAt(world, door.at()),
+                WorldOps.aclAt(world, door.at())));
     }
 
     @PostMapping("/world/{id}/door/open")

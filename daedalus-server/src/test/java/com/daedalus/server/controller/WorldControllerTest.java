@@ -159,7 +159,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.id", equalTo("door-zero")))
                 .andExpect(jsonPath("$.state", equalTo("CLOSED")))
                 .andExpect(jsonPath("$.place", equalTo("")))
-                .andExpect(jsonPath("$.lot", equalTo("")));
+                .andExpect(jsonPath("$.lot", equalTo("")))
+                .andExpect(jsonPath("$.acl", equalTo("")));
 
         mvc.perform(post("/api/v1/world/world-zero/door/open"))
                 .andExpect(status().isOk())

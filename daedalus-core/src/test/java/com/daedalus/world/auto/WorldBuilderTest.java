@@ -133,6 +133,7 @@ class WorldBuilderTest {
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "door.inspect", null));
         assertThat(door.get("place")).isEqualTo(place);
         assertThat(door.get("lot")).isEqualTo("0,0");
+        assertThat(door.get("acl")).isEqualTo("");
         @SuppressWarnings("unchecked")
         Map<String, Object> trap = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "trap.inspect", null));
@@ -171,6 +172,10 @@ class WorldBuilderTest {
         Map<String, Object> off = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(new BlockCoordinate(9, 0, 9), "block.inspect", null));
         assertThat(off.get("acl")).isEqualTo("");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> doorGranted = (Map<String, Object>) builder.run(
+                new WorldBuilder.Step(Door.ZERO_AT, "door.inspect", null));
+        assertThat(doorGranted.get("acl")).isEqualTo("bob block.place");
     }
 
     @Test

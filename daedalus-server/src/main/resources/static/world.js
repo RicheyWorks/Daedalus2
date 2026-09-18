@@ -166,7 +166,7 @@
     if (!obj || !obj.state) {
       return "—";
     }
-    const at = [obj.place, obj.lot].filter(Boolean).join(" ");
+    const at = [obj.place, obj.lot, obj.acl].filter(Boolean).join(" ");
     return at ? obj.state + " " + at : obj.state;
   }
 

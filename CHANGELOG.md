@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Door inspect ACL.**
+  door.inspect lists extra grants and denials on the slab
+  under door-zero. Off a plot stays empty. The well door
+  row appends that string. Owner stays implicit.
+
 - **Observe ACL.**
   Observe lists extra grants and denials on the slab under
   the aimed cube. Off a plot stays empty. Owner stays
