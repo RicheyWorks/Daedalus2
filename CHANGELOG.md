@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well last-event names the slab maze.**
+  STOMP last-event paints the lab
+  maze UUID under that cube. Empty
+  until a mazeRef is bound. No wallet
+  types.
+
 - **Well last-event names the slab box.**
   STOMP last-event paints the inclusive
   AABB under that cube. Empty off a

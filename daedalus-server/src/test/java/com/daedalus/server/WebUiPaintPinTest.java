@@ -473,6 +473,7 @@ class WebUiPaintPinTest {
             assertThat(world).contains("frame.place")
                     .contains("frame.lot")
                     .contains("frame.box")
+                    .contains("frame.maze")
                     .contains("frame.occupant")
                     .contains("frame.drive")
                     .contains("frame.driveActor")

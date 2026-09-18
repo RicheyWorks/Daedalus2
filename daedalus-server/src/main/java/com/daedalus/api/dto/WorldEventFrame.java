@@ -20,7 +20,8 @@ public record WorldEventFrame(
         String drive,
         String driveActor,
         String driveAt,
-        String box) {
+        String box,
+        String maze) {
 
     public WorldEventFrame {
         place = place == null ? "" : place;
@@ -30,29 +31,40 @@ public record WorldEventFrame(
         driveActor = driveActor == null ? "" : driveActor;
         driveAt = driveAt == null ? "" : driveAt;
         box = box == null ? "" : box;
+        maze = maze == null ? "" : maze;
+    }
+
+    public WorldEventFrame(String worldId, String kind, int x, int y, int z,
+            String type, String previous, long revision, String place, String lot,
+            String occupant, String drive, String driveActor, String driveAt,
+            String box) {
+        this(worldId, kind, x, y, z, type, previous, revision, place, lot, occupant,
+                drive, driveActor, driveAt, box, "");
     }
 
     public WorldEventFrame(String worldId, String kind, int x, int y, int z,
             String type, String previous, long revision, String place, String lot,
             String occupant, String drive, String driveActor, String driveAt) {
         this(worldId, kind, x, y, z, type, previous, revision, place, lot, occupant,
-                drive, driveActor, driveAt, "");
+                drive, driveActor, driveAt, "", "");
     }
 
     public WorldEventFrame(String worldId, String kind, int x, int y, int z,
             String type, String previous, long revision, String place, String lot,
             String occupant) {
         this(worldId, kind, x, y, z, type, previous, revision, place, lot, occupant,
-                "", "", "", "");
+                "", "", "", "", "");
     }
 
     public WorldEventFrame(String worldId, String kind, int x, int y, int z,
             String type, String previous, long revision) {
-        this(worldId, kind, x, y, z, type, previous, revision, "", "", "", "", "", "", "");
+        this(worldId, kind, x, y, z, type, previous, revision, "", "", "", "", "", "",
+                "", "");
     }
 
     public WorldEventFrame(String worldId, String kind, int x, int y, int z,
             String type, String previous, long revision, String place, String lot) {
-        this(worldId, kind, x, y, z, type, previous, revision, place, lot, "", "", "", "", "");
+        this(worldId, kind, x, y, z, type, previous, revision, place, lot, "", "", "",
+                "", "", "");
     }
 }

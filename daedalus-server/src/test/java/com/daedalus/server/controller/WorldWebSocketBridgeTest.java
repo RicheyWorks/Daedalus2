@@ -50,6 +50,7 @@ class WorldWebSocketBridgeTest {
         verify(stomp).convertAndSend(eq("/topic/world/world-zero/events"), cap.capture());
         assertThat(cap.getValue().lot()).isEqualTo("0,0");
         assertThat(cap.getValue().box()).isEqualTo("0,0,0-2,1,2");
+        assertThat(cap.getValue().maze()).isEqualTo("00000000-0000-4000-8000-000000000007");
         assertThat(cap.getValue().place()).isIn(PlaceNames.STREETS);
         assertThat(cap.getValue().occupant()).isEmpty();
         assertThat(cap.getValue().drive()).isEqualTo("stamp.apply APPLIED");
@@ -70,6 +71,7 @@ class WorldWebSocketBridgeTest {
         verify(stomp).convertAndSend(eq("/topic/world/world-zero/events"), cap.capture());
         assertThat(cap.getValue().occupant()).isEqualTo("door");
         assertThat(cap.getValue().box()).isEmpty();
+        assertThat(cap.getValue().maze()).isEmpty();
         assertThat(cap.getValue().drive()).isEmpty();
         assertThat(cap.getValue().driveActor()).isEmpty();
         assertThat(cap.getValue().driveAt()).isEmpty();
