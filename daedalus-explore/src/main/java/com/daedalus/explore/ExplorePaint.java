@@ -911,7 +911,7 @@ public final class ExplorePaint {
             if (lease != null) {
                 named = named + " " + lease;
             }
-            return withAcl(withOccupancy(occ, named), blocks);
+            return withCellAcl(occ, named, blocks, body);
         }
         String lease = parcelLeaseName(blocks, body);
         if (lease != null) {
@@ -925,7 +925,7 @@ public final class ExplorePaint {
             if (maze != null) {
                 named = named + " " + maze;
             }
-            return withAcl(withOccupancy(occ, named), blocks);
+            return withCellAcl(occ, named, blocks, body);
         }
         String last = lastParcelPlaceName(blocks);
         if (last != null) {
@@ -1027,6 +1027,16 @@ public final class ExplorePaint {
         }
         String found = WorldOps.atLine(blocks.world());
         return found.isEmpty() ? null : found;
+    }
+
+    /** Cell extra-list under the boots. Street ACL stays for leftover HALL. */
+    private static String withCellAcl(String occ, String named, WorldMesh blocks,
+            ExploreBody body) {
+        String extra = parcelAclName(blocks, body);
+        if (extra != null) {
+            return withOccupancy(occ, named + " " + extra);
+        }
+        return withAcl(withOccupancy(occ, named), blocks);
     }
 
     private static String withAcl(String place, WorldMesh blocks) {
@@ -1209,6 +1219,17 @@ public final class ExplorePaint {
         BlockCoordinate at = new BlockCoordinate(
                 (int) Math.floor(body.x()), 0, (int) Math.floor(body.z()));
         String found = WorldOps.mazeAt(blocks.world(), at);
+        return found.isEmpty() ? null : found;
+    }
+
+    /** Extra-list under the boots. Empty off a granted slab. */
+    public static String parcelAclName(WorldMesh blocks, ExploreBody body) {
+        if (blocks == null || body == null || blocks.world() == null) {
+            return null;
+        }
+        BlockCoordinate at = new BlockCoordinate(
+                (int) Math.floor(body.x()), 0, (int) Math.floor(body.z()));
+        String found = WorldOps.aclAt(blocks.world(), at);
         return found.isEmpty() ? null : found;
     }
 

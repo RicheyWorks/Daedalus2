@@ -1187,13 +1187,16 @@ class ExplorePaintTest {
                 .isEqualTo("START");
         assertThat(ExplorePaint.aclName(cubes)).isNull();
         assertThat(ExplorePaint.aclName(null)).isNull();
+        assertThat(ExplorePaint.parcelAclName(cubes, onStreet)).isNull();
+        assertThat(ExplorePaint.parcelAclName(null, onStreet)).isNull();
         volume.grant(volume.parcels().get(0).id(), "bob", ParcelVerb.BLOCK_PLACE);
         WorldMesh gated = WorldMesh.of(volume);
         assertThat(ExplorePaint.aclName(gated)).isEqualTo("bob block.place");
+        assertThat(ExplorePaint.parcelAclName(gated, onStreet)).isEqualTo("bob block.place");
         fog.stand(new Point(0, 0));
         assertThat(ExplorePaint.status(fog, onStreet, List.of(), mesh, gated).place())
-                .as("ACL follows the street when extras exist")
-                .isEqualTo("Willow Walk 8,8 8,0,8-9,1,9 · bob block.place");
+                .as("ACL follows the street under the boots")
+                .isEqualTo("Willow Walk 8,8 8,0,8-9,1,9 bob block.place");
         assertThat(ExplorePaint.status(fog, atStart, List.of(), mesh, gated).place())
                 .as("stood-on start still leads ACL")
                 .isEqualTo("START");
