@@ -1713,7 +1713,7 @@ public class MainController {
         double wave = DesktopPaint.emptyBreathWave(System.nanoTime());
         double rimA = DesktopPaint.canvasRimAlpha(wave);
         canvasParent.setBorder(new javafx.scene.layout.Border(new javafx.scene.layout.BorderStroke(
-                Color.rgb(184, 133, 56, rimA),
+                Color.web(DesktopPaint.canvasRimInk(), rimA),
                 javafx.scene.layout.BorderStrokeStyle.SOLID,
                 new javafx.scene.layout.CornerRadii(10),
                 new javafx.scene.layout.BorderWidths(1))));
@@ -1722,7 +1722,8 @@ public class MainController {
         inset.setColor(Color.rgb(0, 0, 0, 0.35));
         var glow = new javafx.scene.effect.DropShadow();
         glow.setRadius(DesktopPaint.canvasRimGlowRadius(wave));
-        glow.setColor(Color.rgb(184, 133, 56, DesktopPaint.canvasRimGlowAlpha(wave)));
+        glow.setColor(Color.web(DesktopPaint.canvasRimInk(),
+                DesktopPaint.canvasRimGlowAlpha(wave)));
         glow.setInput(inset);
         canvasParent.setEffect(glow);
         pulseShellChrome(wave);

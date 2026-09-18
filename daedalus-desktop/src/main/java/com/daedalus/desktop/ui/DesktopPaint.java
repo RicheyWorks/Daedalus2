@@ -127,6 +127,14 @@ public final class DesktopPaint {
         return 0.55 + 0.20 * wave;
     }
 
+    /** Same gold as the well caption title — leftover even rim is not the last word. */
+    public static final String CANVAS_RIM = EMPTY_CAPTION_TITLE;
+
+    /** Same 0.22 as halls — leftover even gold is not the last word on the maze frame. */
+    public static String canvasRimInk() {
+        return mixHex(CANVAS_RIM, FLOOR_DIM, 0.22);
+    }
+
     /** Desktop well gold rim — same 0.48↔0.72 band as web {@code stageRimBreath}. */
     public static double canvasRimAlpha(double wave) {
         return 0.48 + 0.24 * wave;

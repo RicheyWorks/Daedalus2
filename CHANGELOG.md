@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop canvas rim depth.**
+  Maze-well gold lip falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even chrome is not the last
+  word on the well frame. KEEP toolbar and
+  status lips stay.
+
 - **Well stage rim depth.**
   Maze-well gold lip falls off toward
   floor-dim with the same 0.22 as halls,
