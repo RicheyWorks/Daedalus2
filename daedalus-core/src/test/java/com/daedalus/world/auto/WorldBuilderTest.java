@@ -361,6 +361,7 @@ class WorldBuilderTest {
         assertThat(origin.get("lot")).isEqualTo("0,0");
         assertThat(WorldOps.placeInChunk(null, null)).isEmpty();
         assertThat(WorldOps.lotInChunk(null, null)).isEmpty();
+        assertThat(WorldOps.mazeInChunk(null, null)).isEmpty();
         assertThat(origin.get("maze")).isEqualTo("");
         assertThat(origin.get("lease")).isEqualTo("");
         assertThat(origin.get("acl")).isEqualTo("");

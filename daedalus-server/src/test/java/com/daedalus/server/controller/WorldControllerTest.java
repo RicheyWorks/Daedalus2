@@ -1099,8 +1099,7 @@ class WorldControllerTest {
         extra.perform(get("/api/v1/world/world-zero/chunk")
                         .param("x", "0").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.maze", equalTo(
-                        cached.metadata().id() + " · " + again.metadata().id())))
+                .andExpect(jsonPath("$.maze", equalTo(again.metadata().id().toString())))
                 .andExpect(jsonPath("$.lease", equalTo("tenant-zero")))
                 .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))))
                 .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString(" · "))))

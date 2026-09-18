@@ -350,7 +350,7 @@ public class WorldController {
         String drive = WorldOps.driveInChunk(world, cc);
         String driveActor = WorldOps.actorInChunk(world, cc);
         String driveAt = WorldOps.atInChunk(world, cc);
-        String maze = WorldOps.mazesInChunk(world, cc);
+        String maze = WorldOps.mazeInChunk(world, cc);
         String lease = WorldOps.leasesInChunk(world, cc);
         String acl = WorldOps.aclInChunk(world, cc);
         if (chunk == null) {

@@ -480,7 +480,7 @@ public final class WorldOps {
         out.put("drive", driveInChunk(world, cc));
         out.put("driveActor", actorInChunk(world, cc));
         out.put("driveAt", atInChunk(world, cc));
-        out.put("maze", mazesInChunk(world, cc));
+        out.put("maze", mazeInChunk(world, cc));
         out.put("lease", leasesInChunk(world, cc));
         out.put("acl", aclInChunk(world, cc));
         return out;
@@ -616,6 +616,27 @@ public final class WorldOps {
                 continue;
             }
             found = parcel.bounds().minX() + "," + parcel.bounds().minZ();
+        }
+        return found;
+    }
+
+    /**
+     * Newest lab maze id whose slab overlaps this 16³. Empty off a bind.
+     * Not a wallet.
+     */
+    public static String mazeInChunk(World world, ChunkCoordinate cc) {
+        if (world == null || cc == null) {
+            return "";
+        }
+        ParcelBounds box = chunkBox(cc);
+        String found = "";
+        for (Parcel parcel : world.parcels()) {
+            if (parcel == null || !parcel.bounds().overlaps(box)) {
+                continue;
+            }
+            if (!parcel.mazeRef().isEmpty()) {
+                found = parcel.mazeRef();
+            }
         }
         return found;
     }
