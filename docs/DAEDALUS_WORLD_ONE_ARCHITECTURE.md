@@ -380,7 +380,8 @@ well builder result, and
 desktop builder result, and
 explore hall last drive, and
 well inspect drive, and
-DAEW last drive
+DAEW last drive, and
+persist denied drive
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

@@ -2,8 +2,12 @@
 
 package com.daedalus.server.service;
 
+import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
+import com.daedalus.world.TrapResult;
+import com.daedalus.world.TrapState;
 import com.daedalus.world.WorldId;
+import com.daedalus.world.auto.WorldOps;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -54,5 +58,17 @@ class WorldServiceTest {
                 .contains("block.place", "block.remove");
         assertThat(live.observe("missing", 0, 0, 0)).isNull();
         assertThat(live.trace("missing")).isNull();
+    }
+
+    @Test
+    void aDeniedDriveSurvivesRestart() {
+        Path file = tmp.resolve("world-zero.daew");
+        WorldService live = new WorldService(file);
+        live.stamp("world-zero", new BlockCoordinate(0, 0, 0));
+        assertThat(live.armTrap("world-zero", "carol")).isEqualTo(TrapResult.DENIED);
+        assertThat(WorldOps.driveLine(live.inspect("world-zero"))).isEqualTo("trap.arm DENIED");
+        WorldService restarted = new WorldService(file);
+        assertThat(WorldOps.driveLine(restarted.inspect("world-zero"))).isEqualTo("trap.arm DENIED");
+        assertThat(restarted.inspect("world-zero").trap().state()).isEqualTo(TrapState.DISARMED);
     }
 }

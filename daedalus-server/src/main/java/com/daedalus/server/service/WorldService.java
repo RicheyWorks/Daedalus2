@@ -128,6 +128,7 @@ public class WorldService {
             Object driven = WorldOps.drive(live, "block.place", at, type, null, actorId);
             BlockType now = live.get(at);
             if (driven == BlockPlaceResult.DENIED) {
+                persist();
                 log.append("block.place", driven, live.revision().value());
                 return new BlockWrite(now, now, live.revision().value(), "DENIED");
             }
@@ -155,6 +156,7 @@ public class WorldService {
             Object driven = WorldOps.drive(live, "block.remove", at, null, null, actorId);
             BlockType now = live.get(at);
             if (driven == BlockPlaceResult.DENIED) {
+                persist();
                 log.append("block.remove", driven, live.revision().value());
                 return new BlockWrite(now, now, live.revision().value(), "DENIED");
             }
@@ -177,9 +179,7 @@ public class WorldService {
                     WorldOps.drive(live, "door.open",
                             live.door() == null ? new BlockCoordinate(0, 0, 0) : live.door().at(),
                             null, null, actorId));
-            if (result != DoorResult.DENIED) {
-                persist();
-            }
+            persist();
             log.append("door.open", result, live.revision().value());
             return result;
         }
@@ -196,9 +196,7 @@ public class WorldService {
                     WorldOps.drive(live, "door.close",
                             live.door() == null ? new BlockCoordinate(0, 0, 0) : live.door().at(),
                             null, null, actorId));
-            if (result != DoorResult.DENIED) {
-                persist();
-            }
+            persist();
             log.append("door.close", result, live.revision().value());
             return result;
         }
@@ -215,9 +213,7 @@ public class WorldService {
                     WorldOps.drive(live, "trap.arm",
                             live.trap() == null ? new BlockCoordinate(0, 0, 0) : live.trap().at(),
                             null, null, actorId));
-            if (result != TrapResult.DENIED) {
-                persist();
-            }
+            persist();
             log.append("trap.arm", result, live.revision().value());
             return result;
         }
@@ -234,9 +230,7 @@ public class WorldService {
                     WorldOps.drive(live, "trap.disarm",
                             live.trap() == null ? new BlockCoordinate(0, 0, 0) : live.trap().at(),
                             null, null, actorId));
-            if (result != TrapResult.DENIED) {
-                persist();
-            }
+            persist();
             log.append("trap.disarm", result, live.revision().value());
             return result;
         }
@@ -253,9 +247,7 @@ public class WorldService {
                     WorldOps.drive(live, "portal.open",
                             live.portal() == null ? new BlockCoordinate(0, 0, 0) : live.portal().at(),
                             null, null, actorId));
-            if (result != PortalResult.DENIED) {
-                persist();
-            }
+            persist();
             log.append("portal.open", result, live.revision().value());
             return result;
         }
@@ -272,9 +264,7 @@ public class WorldService {
                     WorldOps.drive(live, "portal.seal",
                             live.portal() == null ? new BlockCoordinate(0, 0, 0) : live.portal().at(),
                             null, null, actorId));
-            if (result != PortalResult.DENIED) {
-                persist();
-            }
+            persist();
             log.append("portal.seal", result, live.revision().value());
             return result;
         }
@@ -291,9 +281,7 @@ public class WorldService {
                     WorldOps.drive(live, "npc.talk",
                             live.npc() == null ? new BlockCoordinate(0, 0, 0) : live.npc().at(),
                             null, null, actorId));
-            if (result != NpcResult.DENIED) {
-                persist();
-            }
+            persist();
             log.append("npc.talk", result, live.revision().value());
             return result;
         }
@@ -310,9 +298,7 @@ public class WorldService {
                     WorldOps.drive(live, "npc.hush",
                             live.npc() == null ? new BlockCoordinate(0, 0, 0) : live.npc().at(),
                             null, null, actorId));
-            if (result != NpcResult.DENIED) {
-                persist();
-            }
+            persist();
             log.append("npc.hush", result, live.revision().value());
             return result;
         }
@@ -405,9 +391,7 @@ public class WorldService {
             if (result.ok() && mazeId != null && result.parcelId() != null) {
                 rebindSlabs();
             }
-            if (result.ok() || !StampResult.DENIED.equals(result.reason())) {
-                persist();
-            }
+            persist();
             log.append("stamp.apply", result, live.revision().value());
             return result;
         }

@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Persist denied drive.**
+  WorldService writes the DAEW file after
+  DENIED so a remesh still shows trap.arm
+  DENIED. The cube does not change. No
+  wallet types.
+
 - **DAEW last drive.**
   World snapshots copy the last driven
   capability and named result. DAEW v11
