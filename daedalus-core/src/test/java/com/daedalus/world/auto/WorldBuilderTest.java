@@ -108,6 +108,8 @@ class WorldBuilderTest {
         assertThat(WorldOps.standsLine(World.zero()))
                 .isEqualTo("door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0");
         assertThat(WorldOps.standsLine(null)).isEmpty();
+        assertThat(snap.get("acl")).isEqualTo("");
+        assertThat(WorldOps.aclLine(world)).isEmpty();
         assertThat(builder.run(new WorldBuilder.Step(next, "parcel.lease", null)))
                 .isEqualTo(ParcelLeaseResult.LEASED);
         assertThat(world.parcels().get(0).leaseId()).isEqualTo(Parcel.SYSTEM_TENANT);

@@ -3,6 +3,7 @@
 package com.daedalus.world;
 
 import com.daedalus.engine.MazeGrid;
+import com.daedalus.world.auto.WorldOps;
 import com.daedalus.world.stamp.StampOps;
 import com.daedalus.world.stamp.StampRequest;
 import org.junit.jupiter.api.Test;
@@ -58,7 +59,12 @@ class ParcelGateTest {
         world.grant(id, "bob", ParcelVerb.BLOCK_PLACE);
         assertThat(world.may("bob", ParcelVerb.BLOCK_PLACE, inside))
                 .isEqualTo(ParcelAccess.ALLOWED);
+        assertThat(WorldOps.aclLine(world)).isEqualTo("bob block.place");
+        assertThat(WorldOps.aclAt(world, inside)).isEqualTo("bob block.place");
+        assertThat(WorldOps.aclLine(World.zero())).isEmpty();
+        assertThat(WorldOps.aclLine(null)).isEmpty();
         world.deny(id, "bob", ParcelVerb.BLOCK_PLACE);
+        assertThat(WorldOps.aclLine(world)).isEqualTo("bob block.place · !bob block.place");
         assertThat(world.may("bob", ParcelVerb.BLOCK_PLACE, inside))
                 .isEqualTo(ParcelAccess.DENIED);
         assertThat(world.revision().value()).isEqualTo(revision);

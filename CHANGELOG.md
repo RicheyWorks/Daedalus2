@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World inspect ACL.**
+  world.inspect lists extra parcel grants and denials as
+  account-id + verb. Owner stays implicit. Deny is marked
+  with !. No wallet types. The well paints that row.
+
 - **Explore hall stands.**
   Off a slab the caption lists door, trap, portal, and NPC
   as kind + x,y,z after the names. Occupants stay names-only.

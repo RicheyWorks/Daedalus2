@@ -334,6 +334,15 @@ public final class World {
         }
     }
 
+    /**
+     * Extra grants and denials. Empty when the owner list is implicit only.
+     */
+    public ParcelAcl acl(ParcelId id) {
+        requireParcel(id);
+        ParcelAcl found = acls.get(id);
+        return found == null ? ParcelAcl.empty() : found;
+    }
+
     public Parcel parcelAt(BlockCoordinate at) {
         Objects.requireNonNull(at, "BlockCoordinate is required");
         synchronized (lock) {

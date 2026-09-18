@@ -99,7 +99,7 @@ public class WorldController {
                 world.parcels().size(), WorldOps.streetLine(world), WorldOps.streetLots(world),
                 WorldOps.streetMazes(world), WorldOps.lastLeaseId(world),
                 WorldOps.lastPlaceName(world), WorldOps.occupantsLine(world),
-                WorldOps.standsLine(world)));
+                WorldOps.standsLine(world), WorldOps.aclLine(world)));
     }
 
     @GetMapping("/world/{id}/parcels")

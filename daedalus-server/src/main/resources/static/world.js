@@ -127,6 +127,8 @@
         world && world.occupants);
     row(box, "stands", world && world.stands ? world.stands : "—",
         world && world.stands);
+    row(box, "acl", world && world.acl ? world.acl : "—",
+        world && world.acl);
     row(box, "plots", world && world.plots != null ? String(world.plots) : "—");
     row(box, "street", world && world.street ? world.street : "—");
     row(box, "place", world && world.place ? world.place : "—");

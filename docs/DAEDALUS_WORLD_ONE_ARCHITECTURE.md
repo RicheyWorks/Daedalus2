@@ -54,7 +54,7 @@ No blockchain. No microservices. No seventh reactor module until a boundary is f
 | Well world panel | **ADAPT — after second-observer proof** | New panel or hash route. `/` stays the maze well. |
 | Explore voxel view | **ADAPT — last of the client trio** | Second mesh in the same window. Do not stretch `ExploreMesh` over chunks. |
 | Parcel record + `ownerId` string | **ADAPT — with stamp** | Phase 0 designed `Parcel`. World Zero is one implicit parcel (`system`). Stamp needs bounds. |
-| Parcel permissions | **DEFER** | Allow/deny lists on the parcel, still no wallet. After one stamped parcel works. |
+| Parcel permissions | **SHIPPED — inspect strings** | Allow/deny lists exist on the parcel. world.inspect paints them. Grant/deny REST later. No wallet. |
 | Desktop world inspect | **DEFER** | After REST/STOMP proof. Maze generate/solve stay. |
 | Plugin objects (trap, portal, NPC) | **DEFER** | SPI already advertises ids. New ops + drive rows come one object at a time. Door is the template. |
 | Agent builders | **SHIPPED** | `WorldBuilder` recipes call `WorldOps`. Well `#worldBox` maps the same ids onto existing REST and reads `/trace`. |
@@ -339,7 +339,8 @@ explore occupancy tint, and
 world.inspect stands, and
 chunk.inspect stands, and
 desktop chunk stands, and
-explore hall stands
+explore hall stands, and
+world.inspect ACL
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

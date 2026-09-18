@@ -12,9 +12,11 @@ import com.daedalus.world.DoorResult;
 import com.daedalus.world.Npc;
 import com.daedalus.world.NpcResult;
 import com.daedalus.world.Parcel;
+import com.daedalus.world.ParcelAcl;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.ParcelId;
 import com.daedalus.world.ParcelLeaseResult;
+import com.daedalus.world.ParcelVerb;
 import com.daedalus.world.PlaceNames;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
@@ -92,7 +94,54 @@ public final class WorldOps {
         out.put("place", lastPlaceName(world));
         out.put("occupants", occupantsLine(world));
         out.put("stands", standsLine(world));
+        out.put("acl", aclLine(world));
         return out;
+    }
+
+    /**
+     * Extra grants and denials on every plot. Owner stays implicit.
+     * Actor ids are account keys — never a wallet type.
+     */
+    public static String aclLine(World world) {
+        if (world == null) {
+            return "";
+        }
+        List<String> rows = new ArrayList<>();
+        for (Parcel parcel : world.parcels()) {
+            String one = aclOf(world, parcel.id());
+            if (!one.isEmpty()) {
+                rows.add(one);
+            }
+        }
+        return String.join(" · ", rows);
+    }
+
+    public static String aclAt(World world, BlockCoordinate at) {
+        Parcel parcel = world == null || at == null ? null : world.parcelAt(at);
+        return parcel == null ? "" : aclOf(world, parcel.id());
+    }
+
+    public static String aclOf(World world, ParcelId id) {
+        if (world == null || id == null) {
+            return "";
+        }
+        ParcelAcl acl = world.acl(id);
+        List<String> rows = new ArrayList<>();
+        for (ParcelAcl.Grant row : acl.grants()) {
+            rows.add(row.actorId() + " " + verbName(row.verb()));
+        }
+        for (ParcelAcl.Grant row : acl.denials()) {
+            rows.add("!" + row.actorId() + " " + verbName(row.verb()));
+        }
+        return String.join(" · ", rows);
+    }
+
+    private static String verbName(ParcelVerb verb) {
+        return switch (verb) {
+            case BLOCK_PLACE -> "block.place";
+            case DOOR_OPEN -> "door.open";
+            case STAMP_APPLY -> "stamp.apply";
+        };
     }
 
     /** Occupancy objects that exist on this world. Not a chunk cut. */
