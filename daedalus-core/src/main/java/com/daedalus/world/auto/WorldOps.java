@@ -417,6 +417,11 @@ public final class WorldOps {
         return lotAt(world, parseAt(atLine));
     }
 
+    /** Inclusive AABB under a driven {@code x,y,z} line. Empty off a stamped plot. */
+    public static String boxOn(World world, String atLine) {
+        return boxAt(world, parseAt(atLine));
+    }
+
     public static BlockCoordinate parseAt(String line) {
         if (line == null || line.isBlank()) {
             return null;

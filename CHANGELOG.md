@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Trace names the slab box.**
+  GET /trace names the inclusive AABB
+  under each driven cube. Empty when
+  that step sits off a stamped plot.
+  No wallet types.
+
 - **Trace names the slab lot.**
   GET /trace names the minX,minZ
   corner under each driven cube.

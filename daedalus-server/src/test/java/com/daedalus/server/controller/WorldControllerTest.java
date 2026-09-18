@@ -244,6 +244,7 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.steps[0].lease", equalTo("")))
                 .andExpect(jsonPath("$.steps[0].place", equalTo("")))
                 .andExpect(jsonPath("$.steps[0].lot", equalTo("")))
+                .andExpect(jsonPath("$.steps[0].box", equalTo("")))
                 .andExpect(jsonPath("$.steps[1].capability", equalTo("block.remove")))
                 .andExpect(jsonPath("$.steps[2].capability", equalTo("door.open")))
                 .andExpect(jsonPath("$.steps[3].capability", equalTo("door.open")))
@@ -844,7 +845,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.steps[-1].maze", equalTo(cached.metadata().id().toString())))
                 .andExpect(jsonPath("$.steps[-1].lease", equalTo("")))
                 .andExpect(jsonPath("$.steps[-1].place", org.hamcrest.Matchers.not(equalTo(""))))
-                .andExpect(jsonPath("$.steps[-1].lot", equalTo("0,0")));
+                .andExpect(jsonPath("$.steps[-1].lot", equalTo("0,0")))
+                .andExpect(jsonPath("$.steps[-1].box", equalTo("0,0,0-6,1,6")));
         extra.perform(put("/api/v1/world/world-zero/block")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"x\":5,\"y\":1,\"z\":5,\"type\":\"STONE\"}"))
@@ -919,7 +921,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.steps[-1].maze", equalTo(cached.metadata().id().toString())))
                 .andExpect(jsonPath("$.steps[-1].lease", equalTo("tenant-zero")))
                 .andExpect(jsonPath("$.steps[-1].place", org.hamcrest.Matchers.not(equalTo(""))))
-                .andExpect(jsonPath("$.steps[-1].lot", equalTo("0,0")));
+                .andExpect(jsonPath("$.steps[-1].lot", equalTo("0,0")))
+                .andExpect(jsonPath("$.steps[-1].box", equalTo("0,0,0-6,1,6")));
         extra.perform(put("/api/v1/world/world-zero/block")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"x\":5,\"y\":1,\"z\":5,\"type\":\"STONE\",\"actorId\":\"bob\"}"))

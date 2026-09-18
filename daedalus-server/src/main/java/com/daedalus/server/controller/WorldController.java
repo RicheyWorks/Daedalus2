@@ -301,7 +301,8 @@ public class WorldController {
                     step.at(), WorldOps.mazeOn(world, step.at()),
                     WorldOps.leaseOn(world, step.at()),
                     WorldOps.placeOn(world, step.at()),
-                    WorldOps.lotOn(world, step.at())));
+                    WorldOps.lotOn(world, step.at()),
+                    WorldOps.boxOn(world, step.at())));
         }
         return ResponseEntity.ok(new WorldTraceResponse(id, steps));
     }
