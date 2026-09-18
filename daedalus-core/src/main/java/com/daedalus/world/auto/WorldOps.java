@@ -424,6 +424,7 @@ public final class WorldOps {
         out.put("driveActor", actorInChunk(world, cc));
         out.put("driveAt", atInChunk(world, cc));
         out.put("maze", mazesInChunk(world, cc));
+        out.put("lease", leasesInChunk(world, cc));
         return out;
     }
 
@@ -537,6 +538,24 @@ public final class WorldOps {
             }
         }
         return String.join(" · ", refs);
+    }
+
+    /** Account keys whose slab overlaps this 16³. Oldest first. Never a wallet. */
+    public static String leasesInChunk(World world, ChunkCoordinate cc) {
+        if (world == null || cc == null) {
+            return "";
+        }
+        ParcelBounds box = chunkBox(cc);
+        List<String> keys = new ArrayList<>();
+        for (Parcel parcel : world.parcels()) {
+            if (parcel == null || !parcel.bounds().overlaps(box)) {
+                continue;
+            }
+            if (!parcel.leaseId().isEmpty()) {
+                keys.add(parcel.leaseId());
+            }
+        }
+        return String.join(" · ", keys);
     }
 
     /** Plots whose AABB overlaps this 16³. */

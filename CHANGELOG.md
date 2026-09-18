@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Chunk inspect names overlapping leases.**
+  GET /chunk lists account keys
+  whose plots overlap that 16³.
+  Empty off the street or on a
+  vacant slab. No wallet types.
+
 - **Chunk inspect names overlapping mazes.**
   GET /chunk lists lab maze UUIDs
   whose plots overlap that 16³.
