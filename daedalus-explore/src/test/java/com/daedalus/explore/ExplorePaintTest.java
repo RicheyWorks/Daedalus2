@@ -1276,6 +1276,8 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.lastParcelLease(rentedTwo)).isEqualTo(Parcel.SYSTEM_TENANT);
         assertThat(ExplorePaint.lastParcelLeases(rentedTwo))
                 .isEqualTo(Parcel.SYSTEM_TENANT + " · " + Parcel.SYSTEM_TENANT);
+        assertThat(ExplorePaint.lastParcelLeases(rentedTwo))
+                .isNotEqualTo(ExplorePaint.lastParcelLease(rentedTwo));
         two.grant(two.parcels().get(0).id(), "bob", ParcelVerb.BLOCK_PLACE);
         two.grant(two.parcels().get(1).id(), "carol", ParcelVerb.DOOR_OPEN);
         WorldMesh gatedTwo = WorldMesh.of(two);
