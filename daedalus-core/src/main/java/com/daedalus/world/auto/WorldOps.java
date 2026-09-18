@@ -192,6 +192,7 @@ public final class WorldOps {
         out.put("lease", lastLeaseId(world));
         out.put("leases", streetLeases(world));
         out.put("place", lastPlaceName(world));
+        out.put("places", streetLine(world));
         out.put("box", lastBox(world));
         out.put("boxes", streetBoxes(world));
         out.put("occupants", occupantsLine(world));

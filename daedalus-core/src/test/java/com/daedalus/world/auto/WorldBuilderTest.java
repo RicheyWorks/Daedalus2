@@ -138,6 +138,9 @@ class WorldBuilderTest {
                 new WorldBuilder.Step(next, "world.inspect", null));
         assertThat(snap.get("plots")).isEqualTo(2);
         assertThat(snap.get("street")).isEqualTo(WorldOps.streetLine(world));
+        assertThat(snap.get("place")).isEqualTo(WorldOps.lastPlaceName(world));
+        assertThat(snap.get("places")).isEqualTo(WorldOps.streetLine(world));
+        assertThat(snap.get("places")).isNotEqualTo(snap.get("place"));
         assertThat(snap.get("lot")).isEqualTo(WorldOps.lastLot(world));
         assertThat(snap.get("lots")).isEqualTo(WorldOps.streetLots(world));
         assertThat(snap.get("maze")).isEqualTo(WorldOps.lastMaze(world));

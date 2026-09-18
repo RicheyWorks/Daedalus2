@@ -77,7 +77,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.leases", equalTo("")))
                 .andExpect(jsonPath("$.mazes", equalTo("")))
                 .andExpect(jsonPath("$.lots", equalTo("")))
-                .andExpect(jsonPath("$.acls", equalTo("")));
+                .andExpect(jsonPath("$.acls", equalTo("")))
+                .andExpect(jsonPath("$.places", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero/parcels"))
                 .andExpect(status().isOk())
@@ -404,7 +405,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.leases", equalTo("")))
                 .andExpect(jsonPath("$.mazes", equalTo("")))
                 .andExpect(jsonPath("$.lots", equalTo("0,0")))
-                .andExpect(jsonPath("$.acls", equalTo("")));
+                .andExpect(jsonPath("$.acls", equalTo("")))
+                .andExpect(jsonPath("$.places", org.hamcrest.Matchers.not(equalTo(""))));
 
         mvc.perform(post("/api/v1/world/world-zero/stamp")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -893,7 +895,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.mazes", equalTo(cached.metadata().id().toString())))
                 .andExpect(jsonPath("$.lot", equalTo("0,0")))
                 .andExpect(jsonPath("$.lots", equalTo("0,0")))
-                .andExpect(jsonPath("$.acls", equalTo("")));
+                .andExpect(jsonPath("$.acls", equalTo("")))
+                .andExpect(jsonPath("$.places", org.hamcrest.Matchers.not(equalTo(""))));
         extra.perform(post("/api/v1/world/world-zero/parcels/grant")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0}"))
@@ -1062,7 +1065,9 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.lease", equalTo("tenant-zero")))
                 .andExpect(jsonPath("$.leases", equalTo("tenant-zero")))
                 .andExpect(jsonPath("$.acl", equalTo("bob block.place")))
-                .andExpect(jsonPath("$.acls", equalTo("bob block.place")));
+                .andExpect(jsonPath("$.acls", equalTo("bob block.place")))
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))))
+                .andExpect(jsonPath("$.places", org.hamcrest.Matchers.containsString(" · ")));
         extra.perform(post("/api/v1/world/world-zero/parcels/grant")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"actorId\":\"carol\",\"x\":8,\"y\":0,\"z\":0,\"verb\":\"door.open\"}"))
