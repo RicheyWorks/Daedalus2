@@ -38,8 +38,8 @@
     const flat = h.loops === 0 || h.hardestLength === h.shortestLength;
     return `<div style="margin-top:8px">`
         + (flat
-            ? `<b style="color:#f2c94c">One route only</b> — ${h.hardestLength} steps. `
-            : `<b style="color:#f2c94c">${h.hardestLength} steps</b> the cruel way against `
+            ? `<b style="color:#c6a441">One route only</b> — ${h.hardestLength} steps. `
+            : `<b style="color:#c6a441">${h.hardestLength} steps</b> the cruel way against `
               + `<b>${h.shortestLength}</b> direct — a <b>&times;${h.detour.toFixed(2)}</b> detour. `)
         + `${h.loops} independent loop${h.loops === 1 ? "" : "s"} &middot; `
         + (h.exact ? `proven optimal` : `lower bound (search budget spent)`)
