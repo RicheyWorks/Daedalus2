@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well header rim depth.**
+  Wordmark gold falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP leftover
+  even exports gold stays.
+
 - **Well panel rim depth.**
   Side-rail gold falls off toward
   floor-dim with the same 0.22 as halls,

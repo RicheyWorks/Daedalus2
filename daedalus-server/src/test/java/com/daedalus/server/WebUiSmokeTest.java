@@ -381,6 +381,7 @@ class WebUiSmokeTest {
                 .contains("panelRimBreath")
                 .contains("headerRimBreath")
                 .contains("animation: headerRimBreath 4.5s ease-in-out infinite; user-select: none")
+                .contains("0%, 100% { border-bottom-color: rgba(153, 111, 49, 0.38); }")
                 .contains("headerRimBreath 4.5s ease-in-out infinite; user-select: none; -webkit-user-select: none")
                 .contains("-webkit-touch-callout: none; -webkit-user-drag: none")
                 .contains("-webkit-touch-callout: none; -webkit-user-drag: none; cursor: default")
