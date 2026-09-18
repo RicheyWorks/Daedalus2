@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Grant names the slab lot.**
+  POST /parcels/grant names the
+  street index under that cube.
+  Empty off a plot. No wallet types.
+
 - **Release names the remaining lot.**
   POST /parcels/release names the
   street index still rented after
