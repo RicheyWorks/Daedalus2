@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend compare depth.**
+  Overlay compare bars fall off toward
+  deeper ice, gold, rust, moss, and sand
+  so leftover flat swatches are not the
+  last word on a split.
+
 - **Desktop legend lens depth.**
   Overlay lens bars fall off toward
   deeper rust, gold, and moss so leftover

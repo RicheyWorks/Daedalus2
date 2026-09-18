@@ -112,13 +112,13 @@ class ThemeManagerTest {
             assertThat(fxml).contains("color=\"#c4383c\"");
             assertThat(fxml).doesNotContain("fill=\"#3ee08f\"");
             assertThat(fxml).doesNotContain("fill=\"#ff5a5f\"");
-            assertThat(fxml).contains("fill=\"#c07850\"");
+            assertThat(fxml).doesNotContain("fill=\"#c07850\"");
             assertThat(fxml).contains("color=\"#c07850\"");
             assertThat(fxml).contains("color=\"#6a4030\"");
             assertThat(fxml).contains("color=\"#c8a878\"");
             assertThat(fxml).contains("color=\"#6a5438\"");
             assertThat(fxml).doesNotContain("fill=\"#c8a878\"");
-            assertThat(fxml).contains("fill=\"#8aaa50\"");
+            assertThat(fxml).doesNotContain("fill=\"#8aaa50\"");
             assertThat(fxml).contains("color=\"#8aaa50\"");
             assertThat(fxml).contains("color=\"#4e6a28\"");
             assertThat(fxml).contains("legendDeadend");
@@ -133,7 +133,7 @@ class ThemeManagerTest {
             assertThat(fxml).contains("color=\"#6a2024\"");
             assertThat(fxml).doesNotContain("fill=\"#e5484d\" opacity=\"0.5\"");
             assertThat(fxml).contains("legendTour");
-            assertThat(fxml).contains("fill=\"#d4b06a\"");
+            assertThat(fxml).doesNotContain("fill=\"#d4b06a\"");
             assertThat(fxml).contains("color=\"#d4b06a\"");
             assertThat(fxml).contains("color=\"#6a5428\"");
             assertThat(fxml).doesNotContain("fill=\"#d4b06a\" arcWidth=\"3\" arcHeight=\"3\"");
@@ -147,9 +147,9 @@ class ThemeManagerTest {
             assertThat(fxml).contains("legendLens");
             assertThat(fxml).doesNotContain("fill=\"#f2c94c\"");
             assertThat(fxml).contains("legendCompare");
-            assertThat(fxml).contains("width=\"6\" height=\"10\" fill=\"#8aaa50\"");
-            assertThat(fxml).contains("width=\"6\" height=\"10\" fill=\"#c07850\"");
-            assertThat(fxml).contains("width=\"6\" height=\"10\" fill=\"#d4b06a\"");
+            assertThat(fxml).doesNotContain("width=\"6\" height=\"10\" fill=\"#8aaa50\"");
+            assertThat(fxml).doesNotContain("width=\"6\" height=\"10\" fill=\"#c07850\"");
+            assertThat(fxml).doesNotContain("width=\"6\" height=\"10\" fill=\"#d4b06a\"");
             assertThat(fxml).contains("legendPlayer");
             assertThat(fxml).contains("color=\"#f5c14a\"");
             assertThat(fxml).contains("color=\"#8a6418\"");
@@ -167,7 +167,7 @@ class ThemeManagerTest {
             assertThat(fxml).contains("color=\"#e8e0d4\"");
             assertThat(fxml).contains("color=\"#6a6258\"");
             assertThat(fxml).doesNotContain("fill=\"#e8e0d4\"");
-            assertThat(fxml).contains("fill=\"#8fb8ff\"");
+            assertThat(fxml).doesNotContain("fill=\"#8fb8ff\"");
             assertThat(fxml).contains("color=\"#19140f\"")
                     .doesNotContain("stroke=\"#2a2218\"");
             assertThat(fxml).contains("color=\"#0c0908\"")
