@@ -419,7 +419,7 @@ public class WorldController {
                 WorldOps.aclAt(world, trap.at()),
                 WorldOps.driveOn(world, trap.at()), WorldOps.actorOn(world, trap.at()),
                 WorldOps.atOn(world, trap.at()), WorldOps.boxAt(world, trap.at()),
-                WorldOps.mazeAt(world, trap.at())));
+                WorldOps.mazeAt(world, trap.at()), WorldOps.leaseAt(world, trap.at())));
     }
 
     @PostMapping("/world/{id}/trap/arm")

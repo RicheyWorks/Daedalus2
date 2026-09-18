@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Trap inspect names the slab lease.**
+  GET /trap names the account key
+  on the plot under trap-zero.
+  Empty off the street or before
+  parcel.lease. No wallet types.
+
 - **Door inspect names the slab lease.**
   GET /door names the account key
   on the plot under door-zero.

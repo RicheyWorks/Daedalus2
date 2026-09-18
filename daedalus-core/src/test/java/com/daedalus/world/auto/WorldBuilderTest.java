@@ -268,6 +268,7 @@ class WorldBuilderTest {
         assertThat(trap.get("lot")).isEqualTo("0,0");
         assertThat(trap.get("box")).isEqualTo("0,0,0-2,1,2");
         assertThat(trap.get("maze")).isEqualTo("");
+        assertThat(trap.get("lease")).isEqualTo(Parcel.SYSTEM_TENANT);
         assertThat(trap.get("acl")).isEqualTo("");
         @SuppressWarnings("unchecked")
         Map<String, Object> portal = (Map<String, Object>) builder.run(
