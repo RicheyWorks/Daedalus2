@@ -474,6 +474,7 @@ class WebUiPaintPinTest {
                     .contains("chunk.place")
                     .contains("chunk.street")
                     .contains("chunk.lot")
+                    .contains("chunk.lots")
                     .contains("chunk.occupants")
                     .contains("chunk.stands")
                     .contains("chunk.drive")

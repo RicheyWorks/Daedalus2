@@ -587,7 +587,8 @@ world inspect names the last place, and
 chunk inspect names the last place, and
 well chunk names the last place, and
 chunk inspect names the last lot, and
-chunk inspect names every lot
+chunk inspect names every lot, and
+well chunk names last and every lot
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

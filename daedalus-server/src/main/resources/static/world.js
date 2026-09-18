@@ -191,7 +191,9 @@
     const occupied = chunk && chunk.present && chunk.occupied > 0;
     const street = chunk && chunk.place && chunk.street !== chunk.place
         ? chunk.street : "";
-    const at = chunk && [chunk.place, street, chunk.lot, chunk.occupants, chunk.stands,
+    const lots = chunk && chunk.lot && chunk.lots !== chunk.lot
+        ? chunk.lots : "";
+    const at = chunk && [chunk.place, street, chunk.lot, lots, chunk.occupants, chunk.stands,
         chunk.drive, chunk.driveActor, chunk.driveAt]
         .filter(Boolean).join(" ");
     const slice = occupied

@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well chunk last and every lot.**
+  The well chunk row paints the newest
+  slab origin on 0,0,0, then every
+  overlapping origin when they differ.
+  Empty until a stamp. No wallet types.
+
 - **GET /chunk names every slab lot.**
   Chunk inspect lists every slab origin
   whose AABB overlaps this 16³, oldest
