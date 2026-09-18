@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Grant names the slab maze.**
+  POST /parcels/grant names the lab
+  maze UUID under that cube. Empty
+  off the street or on a default
+  slab. No wallet types.
+
 - **Release names the remaining maze.**
   POST /parcels/release names the
   lab maze UUID still rented after
