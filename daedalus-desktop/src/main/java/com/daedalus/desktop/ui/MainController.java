@@ -1852,7 +1852,10 @@ public class MainController {
                                     tile.tileRow(), tile.tileCol())));
                 }
                 g.setGlobalAlpha(0.78);
-                paintEndpoint(g, mark, DesktopPaint.EMPTY_MARK_START, theme.start());
+                paintEndpoint(g, mark, DesktopPaint.EMPTY_MARK_START,
+                        Color.web(DesktopPaint.startInk(DesktopPaint.floorEdge(mark,
+                                2 * DesktopPaint.EMPTY_MARK_START.row() + 1,
+                                2 * DesktopPaint.EMPTY_MARK_START.col() + 1))));
                 paintEndpoint(g, mark, DesktopPaint.EMPTY_MARK_GOAL, theme.goal());
                 g.setGlobalAlpha(1);
             }
@@ -2213,7 +2216,10 @@ public class MainController {
 
         // ---- 3) start / goal discs (floor + marker + ring, same as the web) ----
         if (theme != null) {
-            paintEndpoint(g, layout, current.metadata().start(), theme.start());
+            Point start = current.metadata().start();
+            paintEndpoint(g, layout, start, start == null ? theme.start()
+                    : Color.web(DesktopPaint.startInk(DesktopPaint.floorEdge(layout,
+                            2 * start.row() + 1, 2 * start.col() + 1))));
             paintEndpoint(g, layout, current.metadata().goal(), theme.goal());
         }
 
@@ -2339,7 +2345,8 @@ public class MainController {
         }
         Point start = current.metadata().start();
         if (theme != null && start != null && fog.seen(start.row(), start.col())) {
-            paintEndpoint(g, layout, start, theme.start());
+            paintEndpoint(g, layout, start, Color.web(DesktopPaint.startInk(
+                    DesktopPaint.floorEdge(layout, 2 * start.row() + 1, 2 * start.col() + 1))));
         }
         if (theme != null && fog.goal() != null) {
             paintEndpoint(g, layout, fog.goal(), theme.goal());

@@ -1009,6 +1009,10 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.floorRole(null)).isEqualTo(TileType.PASSAGE);
         assertThat(DesktopPaint.FLOOR_END_WEIGHT).isEqualTo(0.42);
         assertThat(DesktopPaint.START_INK).isEqualTo("#3ee08f");
+        assertThat(DesktopPaint.startInk(0)).isEqualTo(DesktopPaint.START_INK);
+        assertThat(DesktopPaint.startInk(1))
+                .as("start disc falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.START_INK);
         assertThat(DesktopPaint.GOAL_INK).isEqualTo("#ff5a5f");
         String stone = DesktopPaint.clearFloorInk(0);
         String gate = DesktopPaint.endFloorInk(stone, TileType.START);

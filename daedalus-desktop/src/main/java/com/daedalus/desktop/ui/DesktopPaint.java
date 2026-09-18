@@ -305,6 +305,11 @@ public final class DesktopPaint {
     public static final String GOAL_INK = "#ff5a5f";
     public static final double FLOOR_END_WEIGHT = 0.42;
 
+    /** Same 0.22 rim as halls — leftover even mint is not the last word on a begin. */
+    public static String startInk(double edge) {
+        return walkTrailInk(START_INK, edge);
+    }
+
     public static String endFloorInk(String base, TileType tile) {
         if (base == null) {
             return null;
