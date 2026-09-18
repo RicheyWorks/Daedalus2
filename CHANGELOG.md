@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well inspect names every slab lot.**
+  The well lists every slab origin as
+  x,z, oldest first. Empty until a
+  stamp. No wallet types.
+
 - **GET /world names the last slab lot.**
   Inspect names the newest slab
   origin as x,z. Empty until a stamp.

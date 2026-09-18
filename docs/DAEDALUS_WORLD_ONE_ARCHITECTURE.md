@@ -564,7 +564,8 @@ world inspect names the last maze, and
 well inspect names every maze, and
 desktop inspect names the last maze, and
 world inspect names every lot, and
-world inspect names the last lot
+world inspect names the last lot, and
+well inspect names every lot
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
