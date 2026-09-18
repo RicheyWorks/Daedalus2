@@ -98,6 +98,9 @@ public final class LivingSlab {
     }
 
     private int ensure(BlockCoordinate at, BlockType desired) {
+        if (!bounds.contains(at)) {
+            return 0;
+        }
         if (!WorldOps.occupantAt(world, at).isEmpty()) {
             return 0;
         }

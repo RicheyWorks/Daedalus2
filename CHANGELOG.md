@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Living slab stays in bounds.**
+  A living re-project skips cubes
+  outside the stamped AABB so a wider
+  maze snapshot cannot leak onto the
+  street. Occupancy skip stays. No
+  wallet types.
+
 - **Living persist moves the store.**
   A living write that persists DAEW
   bumps the file mtime when the clock

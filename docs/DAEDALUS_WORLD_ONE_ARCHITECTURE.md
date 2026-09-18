@@ -427,7 +427,8 @@ seed trace from last drive, and
 living slab last drive, and
 living slab last event, and
 living slab keeps occupancy, and
-living persist moves the store
+living persist moves the store, and
+living slab stays in bounds
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
