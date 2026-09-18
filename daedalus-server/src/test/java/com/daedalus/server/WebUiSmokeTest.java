@@ -491,6 +491,8 @@ class WebUiSmokeTest {
                 .contains("#legend [data-key=\"path\"] i, #legend [data-key=\"race\"] i")
                 .contains("#legend [data-key=\"lens\"] i")
                 .contains("#legend [data-key=\"lens\"] i, #legend [data-key=\"floor\"] i")
+                .contains("radial-gradient(circle at 45% 40%, #e5484d 28%, #6a2024)")
+                .contains("radial-gradient(circle at 45% 40%, #8aaa50 28%, #4e6a28)")
                 .contains("#legend [data-key=\"wall\"] i, #legend [data-key=\"fog\"] i")
                 .contains("#legend [data-key=\"tour\"] i")
                 .contains("radial-gradient(circle at 45% 40%, #d4b06a 28%, #6a5428)")

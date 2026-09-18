@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well legend lens depth.**
+  Overlay lens bars fall off toward
+  deeper rust, gold, and moss so leftover
+  flat swatches are not the last word
+  on a split.
+
 - **Desktop legend race depth.**
   Overlay arena bars fall off toward
   deeper ice and gold so leftover flat
