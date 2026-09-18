@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World inspect names every lease.**
+  GET /world names every rented
+  account key, oldest first. Empty
+  until parcel.lease. No wallet types.
+
 - **World inspect names every box.**
   GET /world names every inclusive
   AABB, oldest first. Empty until

@@ -522,7 +522,8 @@ trace names the slab lot, and
 trace names the slab box, and
 trace names the slab ACL, and
 world inspect names the last box, and
-world inspect names every box
+world inspect names every box, and
+world inspect names every lease
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

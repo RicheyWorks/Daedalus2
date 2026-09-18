@@ -188,6 +188,7 @@ public final class WorldOps {
         out.put("lot", streetLots(world));
         out.put("maze", streetMazes(world));
         out.put("lease", lastLeaseId(world));
+        out.put("leases", streetLeases(world));
         out.put("place", lastPlaceName(world));
         out.put("box", lastBox(world));
         out.put("boxes", streetBoxes(world));
@@ -1080,6 +1081,20 @@ public final class WorldOps {
             return BlockPlaceResult.DENIED;
         }
         return world.remove(at);
+    }
+
+    /** All account keys on rented slabs, oldest first. Empty when none are rented. */
+    public static String streetLeases(World world) {
+        if (world == null) {
+            return "";
+        }
+        List<String> keys = new ArrayList<>();
+        for (Parcel parcel : world.parcels()) {
+            if (parcel != null && !parcel.leaseId().isEmpty()) {
+                keys.add(parcel.leaseId());
+            }
+        }
+        return String.join(" · ", keys);
     }
 
     /** Newest non-empty lease string on the street. Not a wallet. */
