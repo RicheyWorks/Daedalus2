@@ -219,7 +219,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.lease", equalTo("")))
                 .andExpect(jsonPath("$.place", equalTo("")))
                 .andExpect(jsonPath("$.lot", equalTo("")))
-                .andExpect(jsonPath("$.box", equalTo("")));
+                .andExpect(jsonPath("$.box", equalTo("")))
+                .andExpect(jsonPath("$.acl", equalTo("")));
 
         mvc.perform(post("/api/v1/world/world-zero/door/open"))
                 .andExpect(status().isOk())
@@ -948,7 +949,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.lease", equalTo("tenant-zero")))
                 .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))))
                 .andExpect(jsonPath("$.lot", equalTo("0,0")))
-                .andExpect(jsonPath("$.box", equalTo("0,0,0-6,1,6")));
+                .andExpect(jsonPath("$.box", equalTo("0,0,0-6,1,6")))
+                .andExpect(jsonPath("$.acl", equalTo("bob block.place")));
         extra.perform(get("/api/v1/world/world-zero/trap"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())));

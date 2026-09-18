@@ -424,7 +424,7 @@ public class WorldController {
                 door.id(), door.state().name(), result.name(), world.revision().value(),
                 WorldOps.mazeAt(world, door.at()), WorldOps.leaseAt(world, door.at()),
                 WorldOps.placeAt(world, door.at()), WorldOps.lotAt(world, door.at()),
-                WorldOps.boxAt(world, door.at())));
+                WorldOps.boxAt(world, door.at()), WorldOps.aclAt(world, door.at())));
     }
 
     @PostMapping("/world/{id}/door/close")
@@ -440,7 +440,7 @@ public class WorldController {
                 door.id(), door.state().name(), result.name(), world.revision().value(),
                 WorldOps.mazeAt(world, door.at()), WorldOps.leaseAt(world, door.at()),
                 WorldOps.placeAt(world, door.at()), WorldOps.lotAt(world, door.at()),
-                WorldOps.boxAt(world, door.at())));
+                WorldOps.boxAt(world, door.at()), WorldOps.aclAt(world, door.at())));
     }
 
     @GetMapping("/world/{id}/trap")

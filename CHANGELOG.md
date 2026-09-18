@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Door open names the slab ACL.**
+  POST /door/open and /door/close name
+  the extra-list under that cube.
+  Empty when the door sits off a
+  stamped plot. No wallet types.
+
 - **Block place names the slab box.**
   PUT /block and DELETE /block name
   the inclusive AABB under that cube.
