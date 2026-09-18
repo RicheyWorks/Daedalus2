@@ -1087,8 +1087,10 @@ class ExplorePaintTest {
         ExploreBody offPlot = ExploreBody.atCell(new Point(0, 1));
         assertThat(ExplorePaint.lastParcelPlaceName(cubes)).isEqualTo("Willow Walk");
         assertThat(ExplorePaint.lastParcelLot(cubes)).isEqualTo("8,8");
+        assertThat(ExplorePaint.lastParcelBox(cubes)).isEqualTo("8,0,8-9,1,9");
         assertThat(ExplorePaint.lastParcelPlaceName(null)).isNull();
         assertThat(ExplorePaint.lastParcelLot(null)).isNull();
+        assertThat(ExplorePaint.lastParcelBox(null)).isNull();
         assertThat(ExplorePaint.occupantsName(cubes))
                 .isEqualTo("door · trap · portal · npc");
         assertThat(ExplorePaint.standsName(cubes))
@@ -1097,7 +1099,7 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.standsName(null)).isNull();
         assertThat(ExplorePaint.status(fog, offPlot, List.of(), longHall, cubes).place())
                 .as("newest street name and occupants lead leftover HALL off the slab")
-                .isEqualTo("Willow Walk 8,8 · door · trap · portal · npc"
+                .isEqualTo("Willow Walk 8,8 8,0,8-9,1,9 · door · trap · portal · npc"
                         + " · door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0");
         WorldMesh empty = WorldMesh.of(World.zero());
         assertThat(ExplorePaint.status(fog, offPlot, List.of(), longHall, empty).place())

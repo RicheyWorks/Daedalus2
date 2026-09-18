@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore names the last box.**
+  Off a slab the hall caption names
+  the newest inclusive AABB. Empty
+  until stamp.apply. No wallet types.
+
 - **Explore names the slab box.**
   The hall caption names the inclusive
   AABB under the boots. Empty off a

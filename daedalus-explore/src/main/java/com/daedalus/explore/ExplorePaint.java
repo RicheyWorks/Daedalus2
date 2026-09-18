@@ -918,7 +918,11 @@ public final class ExplorePaint {
         String last = lastParcelPlaceName(blocks);
         if (last != null) {
             String lot = lastParcelLot(blocks);
+            String box = lastParcelBox(blocks);
             String named = lot == null ? last : last + " " + lot;
+            if (box != null) {
+                named = named + " " + box;
+            }
             return withAcl(withOccupants(named, blocks), blocks);
         }
         String cube = blockPlaceName(blocks, body);
@@ -1104,6 +1108,15 @@ public final class ExplorePaint {
             return null;
         }
         String found = WorldOps.lastLot(blocks.world());
+        return found.isEmpty() ? null : found;
+    }
+
+    /** Inclusive AABB of the newest slab. Empty worlds stay null. */
+    public static String lastParcelBox(WorldMesh blocks) {
+        if (blocks == null || blocks.world() == null) {
+            return null;
+        }
+        String found = WorldOps.lastBox(blocks.world());
         return found.isEmpty() ? null : found;
     }
 
