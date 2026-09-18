@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well inspect drive.**
+  GET /world carries the last driven capability and
+  named result. The fold paints a drive row. Inspect
+  does not overwrite it. No wallet types.
+
 - **Explore hall last drive.**
   The hall caption appends the last driven capability
   and named result so DENIED is visible. Inspect does
