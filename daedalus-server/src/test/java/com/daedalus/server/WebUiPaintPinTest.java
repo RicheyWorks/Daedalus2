@@ -141,6 +141,19 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellEmptyWordmarkHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("function emptyWordmarkInk")
+                    .contains("mixHex(\"#f2ead8\", COLORS.floorDim, 0.22)")
+                    .contains("g.fillStyle = emptyWordmarkInk()")
+                    .doesNotContain("g.fillStyle = \"#f2ead8\"");
+        }
+    }
+
+    @Test
     void wellStartDiscHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

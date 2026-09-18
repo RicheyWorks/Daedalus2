@@ -375,6 +375,10 @@
     return mixHex("#c8a878", COLORS.floorDim, 0.22 * edge);
   }
 
+  function emptyWordmarkInk() {
+    return mixHex("#f2ead8", COLORS.floorDim, 0.22);
+  }
+
   function startTileInk(tr, tc, th, tw) {
     const dx = (tc - (tw - 1) / 2) / Math.max(1, tw / 2);
     const dy = (tr - (th - 1) / 2) / Math.max(1, th / 2);
@@ -1066,7 +1070,7 @@
     g.textBaseline = "alphabetic";
     g.font = "700 28px Bahnschrift, \"Avenir Next Condensed\", \"Trebuchet MS\", sans-serif";
     g.letterSpacing = "0.22em";
-    g.fillStyle = "#f2ead8";
+    g.fillStyle = emptyWordmarkInk();
     const mintA = 0.16 + 0.16 * wave;
     const goldA = 0.08 + 0.10 * wave;
     const mintBlur = 22 + 14 * wave;

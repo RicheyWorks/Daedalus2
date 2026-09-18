@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well empty wordmark depth.**
+  Idle parchment falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even cream is not the last
+  word on an empty well.
+
 - **Desktop stage-icon goal depth.**
   Idle-maze goal coral falls off toward
   floor-dim at the stamp rim with the

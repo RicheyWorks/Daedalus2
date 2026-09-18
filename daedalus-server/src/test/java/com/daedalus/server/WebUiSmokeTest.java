@@ -254,7 +254,7 @@ class WebUiSmokeTest {
                 .contains("border-color: var(--gold)")
                 .contains("backdrop-filter")
                 .contains("floorWarm")
-                .contains("g.fillStyle = \"#f2ead8\"")
+                .contains("g.fillStyle = emptyWordmarkInk()")
                 .contains("wallWarm")
                 .contains("0.22 * edge")
                 .contains("floor: \"#40403c\"")
