@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Grant names the slab lease.**
+  POST /parcels/grant names the
+  account key on the plot under
+  that cube. Empty until
+  parcel.lease. No wallet types.
+
 - **Forgive names the slab maze.**
   POST /parcels/forgive names the
   lab maze UUID under that cube.
