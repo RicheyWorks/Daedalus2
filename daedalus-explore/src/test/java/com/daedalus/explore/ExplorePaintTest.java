@@ -1094,6 +1094,16 @@ class ExplorePaintTest {
                 .as("a bound maze follows an unnamed lease under the boots")
                 .isEqualTo(Parcel.SYSTEM_TENANT + " 8,8 8,0,8-9,1,9"
                         + " 00000000-0000-4000-8000-00000000000f");
+        World rentGated = World.zero();
+        rentGated.applyStamp(new ParcelBounds(8, 0, 8, 9, 1, 9), Parcel.SYSTEM_OWNER,
+                List.of(new BlockCoordinate(8, 0, 8)), List.of(BlockType.WOOD));
+        rentGated.leaseParcel(rentGated.parcels().get(0).id(), Parcel.SYSTEM_TENANT);
+        rentGated.grant(rentGated.parcels().get(0).id(), "bob", ParcelVerb.BLOCK_PLACE);
+        WorldMesh leasedGated = WorldMesh.of(rentGated);
+        assertThat(ExplorePaint.parcelAclName(leasedGated, onStreet)).isEqualTo("bob block.place");
+        assertThat(ExplorePaint.status(fog, onStreet, List.of(), mesh, leasedGated).place())
+                .as("ACL follows an unnamed lease under the boots")
+                .isEqualTo(Parcel.SYSTEM_TENANT + " 8,8 8,0,8-9,1,9 bob block.place");
         World namedLease = World.zero();
         namedLease.applyStamp(new ParcelBounds(8, 0, 8, 9, 1, 9), Parcel.SYSTEM_OWNER,
                 List.of(new BlockCoordinate(8, 0, 8)), List.of(BlockType.WOOD));

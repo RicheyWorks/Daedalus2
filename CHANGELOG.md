@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore names the lease ACL.**
+  An unnamed rented slab also names
+  the extra-list under the boots.
+  Empty until a grant or deny. No
+  wallet types.
+
 - **Explore names the slab ACL.**
   A named street also names the
   extra-list under the boots. Empty
