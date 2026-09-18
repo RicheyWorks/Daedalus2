@@ -113,6 +113,11 @@ public final class DesktopPaint {
         return mixHex(EMPTY_CAPTION_TITLE, FLOOR_DIM, 0.22);
     }
 
+    /** Same 0.22 as halls — leftover even sand is not the last word on an empty well. */
+    public static String emptyCaptionDetailInk() {
+        return mixHex(EMPTY_CAPTION_DETAIL, FLOOR_DIM, 0.22);
+    }
+
     /** Idle caption under the wordmark — soft gate pulse, not stuck slate. */
     public static double emptyCaptionTitleAlpha(double wave) {
         return 0.72 + 0.18 * wave;

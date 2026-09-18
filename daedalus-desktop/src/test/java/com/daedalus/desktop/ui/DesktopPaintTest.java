@@ -1134,6 +1134,9 @@ class DesktopPaintTest {
                 .as("idle gold line falls off toward floor-dim")
                 .isNotEqualTo(DesktopPaint.EMPTY_CAPTION_TITLE);
         assertThat(DesktopPaint.EMPTY_CAPTION_DETAIL).isEqualTo("#8c764e");
+        assertThat(DesktopPaint.emptyCaptionDetailInk())
+                .as("idle khaki lines fall off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.EMPTY_CAPTION_DETAIL);
         assertThat(DesktopPaint.EMPTY_CAPTION_TITLE).isNotEqualTo("#7d8894");
         assertThat(DesktopPaint.canvasRimAlpha(1))
                 .isGreaterThan(DesktopPaint.canvasRimAlpha(0));
