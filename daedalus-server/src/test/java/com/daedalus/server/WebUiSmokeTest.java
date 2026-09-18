@@ -480,6 +480,7 @@ class WebUiSmokeTest {
                 .contains("PLAYER_COLORS = [\"#f5c14a\", \"#e88868\", \"#e8a060\", \"#b8a058\"]")
                 .contains("function walker")
                 .contains("walkHead(scene.hardest.path, 1)")
+                .contains("paintWalk(g, geom, scene.hardest.path, \"#c6a441\", 1, 0.75, \"ribbon\"")
                 .contains("walkHead(scene.tourPath, 1)")
                 .contains("paintWalk(g, geom, scene.tourPath, \"#d4b06a\"")
                 .contains("walkHead(scene.tourPath, 1), \"#d4b06a\"")
