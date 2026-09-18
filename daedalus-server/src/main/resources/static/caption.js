@@ -52,7 +52,7 @@
             + `margin-right:1px;box-shadow:0 0 0 1.5px rgba(242, 234, 216, .28)"></span>`)
         .join("");
     return `<div style="margin-top:8px">`
-        + `<b style="color:#d4a04c">Distance from the ${f.from.toLowerCase()}</b> — the `
+        + `<b style="color:#af8441">Distance from the ${f.from.toLowerCase()}</b> — the `
         + `breadth-first field, shaded. `
         + `<div style="margin-top:6px">0 ${swatches} ${f.maxDistance} steps</div>`
         + `<div class="hint" style="margin-top:4px">This is maze distance, not distance across `

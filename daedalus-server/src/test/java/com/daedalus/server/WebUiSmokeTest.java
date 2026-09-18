@@ -436,7 +436,7 @@ class WebUiSmokeTest {
                 .contains("FIELD_BREATH_MS")
                 .contains("\"#4a2210\"")
                 .contains("\"#f2d8a0\"")
-                .contains("color:#d4a04c")
+                .contains("color:#af8441")
                 .contains("width:16px;height:10px;background:${c};")
                 .contains("box-shadow:0 0 0 1.5px rgba(242, 234, 216, .28)")
                 .contains("0.88 + 0.24")

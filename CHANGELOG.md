@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well caption distance depth.**
+  Field amber falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP hardest
+  gold stays.
+
 - **Well lab series depth.**
   Measured amber falls off toward
   floor-dim with the same 0.22 as halls,
