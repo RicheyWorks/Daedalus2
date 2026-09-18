@@ -56,6 +56,10 @@ class WorldServiceTest {
         assertThat(live.observe("world-zero", 3, -2, 8).blockType()).isEqualTo("GLASS");
         assertThat(live.trace("world-zero")).extracting(s -> s.capability())
                 .contains("block.place", "block.remove");
+        assertThat(restarted.trace("world-zero")).hasSize(1);
+        assertThat(restarted.trace("world-zero").get(0).capability()).isEqualTo("block.remove");
+        assertThat(restarted.trace("world-zero").get(0).actor()).isEqualTo("system");
+        assertThat(restarted.trace("world-zero").get(0).at()).isEqualTo("16,0,0");
         assertThat(live.observe("missing", 0, 0, 0)).isNull();
         assertThat(live.trace("missing")).isNull();
     }
@@ -70,5 +74,10 @@ class WorldServiceTest {
         WorldService restarted = new WorldService(file);
         assertThat(WorldOps.driveLine(restarted.inspect("world-zero"))).isEqualTo("trap.arm DENIED");
         assertThat(restarted.inspect("world-zero").trap().state()).isEqualTo(TrapState.DISARMED);
+        assertThat(restarted.trace("world-zero")).hasSize(1);
+        assertThat(restarted.trace("world-zero").get(0).capability()).isEqualTo("trap.arm");
+        assertThat(restarted.trace("world-zero").get(0).result()).isEqualTo("DENIED");
+        assertThat(restarted.trace("world-zero").get(0).actor()).isEqualTo("carol");
+        assertThat(restarted.trace("world-zero").get(0).at()).isEqualTo("1,1,0");
     }
 }

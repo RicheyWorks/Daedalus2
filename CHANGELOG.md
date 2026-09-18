@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Seed trace from last drive.**
+  Opening a DAEW file seeds GET /trace
+  with the last driven step so the
+  account log is not empty after
+  restart. Fresh worlds stay empty.
+  No wallet types.
+
 - **REST trace at.**
   GET /trace names the driven cube on
   each step. Empty until a mutation.

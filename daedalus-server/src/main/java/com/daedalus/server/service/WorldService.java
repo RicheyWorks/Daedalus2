@@ -72,6 +72,7 @@ public class WorldService {
         this.file = file;
         this.events = event -> { };
         this.world = open(file);
+        seedTrace(this.world);
         rebindSlabs();
     }
 
@@ -81,6 +82,7 @@ public class WorldService {
         this.file = file;
         this.events = publisher::publishEvent;
         this.world = open(file);
+        seedTrace(this.world);
         rebindSlabs();
     }
 
@@ -518,6 +520,18 @@ public class WorldService {
                 // mazeRef is a lab id string; junk refs do not bind.
             }
         }
+    }
+
+    /**
+     * Last drive survives the DAEW file. The in-memory account log does
+     * not. Seed one step so GET /trace is not empty after restart.
+     */
+    private void seedTrace(World live) {
+        if (live == null || live.lastDriveCapability().isBlank()) {
+            return;
+        }
+        log.append(live.lastDriveCapability(), live.lastDriveResult(),
+                live.revision().value(), live.lastDriveActor(), WorldOps.atLine(live));
     }
 
     private void account(World live, String capability, Object result) {
