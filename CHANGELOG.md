@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop last drive actor.**
+  The desktop world line names the
+  account key that last drove a mutation
+  after the last driven result. No wallet
+  types.
+
 - **Explore hall last drive actor.**
   The hall caption after leftover HALL
   names the account key that last drove

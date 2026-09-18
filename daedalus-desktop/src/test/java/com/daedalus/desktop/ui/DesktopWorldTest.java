@@ -16,6 +16,8 @@ import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.ParcelVerb;
 import com.daedalus.world.PlaceNames;
+import com.daedalus.world.Trap;
+import com.daedalus.world.TrapResult;
 import com.daedalus.world.World;
 import com.daedalus.world.auto.DriveTrace;
 import com.daedalus.world.auto.WorldOps;
@@ -119,8 +121,18 @@ class DesktopWorldTest {
         assertThat(DesktopWorld.driveLine(denied)).isEqualTo("npc.talk DENIED");
         assertThat(DesktopWorld.driveLine(null)).isEmpty();
         assertThat(DesktopWorld.inspectLine(onOrigin, null, denied)).contains("npc.talk DENIED");
+        assertThat(DesktopWorld.actorLine(onOrigin)).isEqualTo("system");
+        assertThat(DesktopWorld.actorLine(World.zero())).isEmpty();
+        assertThat(DesktopWorld.actorLine(null)).isEmpty();
+        assertThat(WorldOps.drive(onOrigin, "trap.arm", Trap.ZERO_AT, null, null, "carol"))
+                .isEqualTo(TrapResult.DENIED);
+        assertThat(DesktopWorld.actorLine(onOrigin)).isEqualTo("carol");
+        assertThat(DesktopWorld.inspectLine(onOrigin, null, denied))
+                .contains("npc.talk DENIED")
+                .contains("carol");
         assertThat(DesktopWorld.inspectLine(onOrigin, null, null))
-                .isEqualTo(DesktopWorld.inspectLine(onOrigin, null));
+                .startsWith(DesktopWorld.inspectLine(onOrigin, null))
+                .contains("carol");
     }
 
     @Test

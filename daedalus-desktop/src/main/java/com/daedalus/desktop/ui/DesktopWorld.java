@@ -51,12 +51,24 @@ public final class DesktopWorld {
     public static String inspectLine(World world, WorldEventFrame last, DriveTrace.Step lastDrive) {
         String line = inspectLine(world, last);
         String driven = driveLine(lastDrive);
-        return driven.isEmpty() ? line : line + " · " + driven;
+        if (!driven.isEmpty()) {
+            line = line + " · " + driven;
+        }
+        String actor = actorLine(world);
+        return actor.isEmpty() ? line : line + " · " + actor;
     }
 
     /** Last driven capability and named result — same well builder line. */
     public static String driveLine(DriveTrace.Step last) {
         return WorldOps.driveLine(last);
+    }
+
+    /**
+     * Account key that last drove a mutation. Empty until a mutation.
+     * Never a wallet type.
+     */
+    public static String actorLine(World world) {
+        return WorldOps.actorLine(world);
     }
 
     public static String inspectLine(World world, WorldEventFrame last) {
