@@ -322,9 +322,13 @@ class ExplorePaintTest {
                 .isEqualTo(ExplorePaint.windowIconFloorRgb(1, 9)[0])
                 .isNotEqualTo(icon[mid] & 0xFF);
         int start = (11 * ExplorePaint.WINDOW_ICON_SIZE + 7) * 4;
+        int[] startInk = ExplorePaint.windowIconStartRgb(1, 1);
         assertThat(icon[start] & 0xFF)
-                .as("start mint sits on the idle gate cell")
-                .isEqualTo(ExplorePaint.WINDOW_ICON_START_R);
+                .as("start mint falls off toward floor-dim")
+                .isEqualTo(startInk[0])
+                .isNotEqualTo(ExplorePaint.WINDOW_ICON_START_R);
+        assertThat(icon[start + 1] & 0xFF).isEqualTo(startInk[1]);
+        assertThat(icon[start + 2] & 0xFF).isEqualTo(startInk[2]);
         int goal = (19 * ExplorePaint.WINDOW_ICON_SIZE + 23) * 4;
         assertThat(icon[goal] & 0xFF)
                 .as("exit coral sits on the idle goal cell")

@@ -57,7 +57,7 @@ public final class ExplorePaint {
     public static final int WINDOW_ICON_FLOOR_R = 0x48;
     public static final int WINDOW_ICON_FLOOR_G = 0x43;
     public static final int WINDOW_ICON_FLOOR_B = 0x39;
-    /** Start mint — KEEP, same as the well tab gate. */
+    /** Start mint — same brand as the well tab gate; stamp uses windowIconStartRgb. */
     public static final int WINDOW_ICON_START_R = 0x3e;
     public static final int WINDOW_ICON_START_G = 0xe0;
     public static final int WINDOW_ICON_START_B = 0x8f;
@@ -83,6 +83,16 @@ public final class ExplorePaint {
                 mixByte(WINDOW_ICON_FLOOR_R, 0x2a, 0.22 * edge),
                 mixByte(WINDOW_ICON_FLOOR_G, 0x22, 0.22 * edge),
                 mixByte(WINDOW_ICON_FLOOR_B, 0x18, 0.22 * edge)
+        };
+    }
+
+    /** Same 0.22 rim as halls — leftover even mint is not the last word on a begin. */
+    public static int[] windowIconStartRgb(int tileRow, int tileCol) {
+        double edge = windowIconEdge(tileRow, tileCol);
+        return new int[] {
+                mixByte(WINDOW_ICON_START_R, 0x2a, 0.22 * edge),
+                mixByte(WINDOW_ICON_START_G, 0x22, 0.22 * edge),
+                mixByte(WINDOW_ICON_START_B, 0x18, 0.22 * edge)
         };
     }
 
@@ -122,9 +132,10 @@ public final class ExplorePaint {
                 int green;
                 int blue;
                 if (r == startTr && c == startTc) {
-                    red = WINDOW_ICON_START_R;
-                    green = WINDOW_ICON_START_G;
-                    blue = WINDOW_ICON_START_B;
+                    int[] start = windowIconStartRgb(r, c);
+                    red = start[0];
+                    green = start[1];
+                    blue = start[2];
                 } else if (r == goalTr && c == goalTc) {
                     red = WINDOW_ICON_GOAL_R;
                     green = WINDOW_ICON_GOAL_G;

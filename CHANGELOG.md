@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore window-icon start depth.**
+  Idle-maze start mint falls off toward
+  floor-dim at the stamp rim with the
+  same 0.22 edge as halls, so leftover
+  even mint is not the last word on a
+  begin. KEEP goal coral stays.
+
 - **Desktop goal disc depth.**
   Goal coral falls off toward floor-dim
   at the board rim with the same 0.22
