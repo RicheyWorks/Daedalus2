@@ -1102,6 +1102,9 @@ class DesktopPaintTest {
                 .as("idle parchment falls off toward floor-dim")
                 .isNotEqualTo(DesktopPaint.EMPTY_WORDMARK_INK);
         assertThat(DesktopPaint.EMPTY_WORDMARK_GLOW).isEqualTo("#3ee08f");
+        assertThat(DesktopPaint.emptyWordmarkMintInk())
+                .as("idle mint aura falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.EMPTY_WORDMARK_GLOW);
         assertThat(DesktopPaint.EMPTY_WORDMARK_GOLD).isEqualTo("#f5c14a");
         assertThat(DesktopPaint.EMPTY_WORDMARK_GLOW_RADIUS).isEqualTo(28);
         assertThat(DesktopPaint.EMPTY_WORDMARK_GOLD_RADIUS).isEqualTo(48);

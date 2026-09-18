@@ -1816,7 +1816,7 @@ public class MainController {
             var glow = new javafx.scene.paint.RadialGradient(
                     0, 0, cx, cy - 36, Math.min(w, h) * 0.42, false,
                     javafx.scene.paint.CycleMethod.NO_CYCLE,
-                    new javafx.scene.paint.Stop(0, Color.web("#3ee08f",
+                    new javafx.scene.paint.Stop(0, Color.web(DesktopPaint.emptyWordmarkMintInk(),
                             DesktopPaint.emptyGlowMintAlpha(wave))),
                     new javafx.scene.paint.Stop(0.55, Color.web("#f5c14a",
                             DesktopPaint.emptyGlowGoldAlpha(wave))),
@@ -1867,7 +1867,7 @@ public class MainController {
             g.setFill(Color.web(DesktopPaint.emptyWordmarkInk()));
             var mint = new javafx.scene.effect.DropShadow(
                     DesktopPaint.emptyMintRadius(wave), 0, 0,
-                    Color.web(DesktopPaint.EMPTY_WORDMARK_GLOW,
+                    Color.web(DesktopPaint.emptyWordmarkMintInk(),
                             DesktopPaint.emptyMintAlpha(wave)));
             var gold = new javafx.scene.effect.DropShadow(
                     DesktopPaint.emptyGoldRadius(wave), 0, 0,

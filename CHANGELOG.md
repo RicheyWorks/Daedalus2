@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop empty wordmark mint depth.**
+  Idle mint aura falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even mint is not the last
+  word on an empty well. KEEP gold glow
+  stays.
+
 - **Well empty wordmark mint depth.**
   Idle mint aura falls off toward
   floor-dim with the same 0.22 as halls,
