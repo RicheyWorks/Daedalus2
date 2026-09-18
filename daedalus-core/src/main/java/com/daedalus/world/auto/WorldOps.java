@@ -196,7 +196,7 @@ public final class WorldOps {
         out.put("boxes", streetBoxes(world));
         out.put("occupants", occupantsLine(world));
         out.put("stands", standsLine(world));
-        out.put("acl", aclLine(world));
+        out.put("acl", lastAcl(world));
         out.put("acls", aclLine(world));
         out.put("drive", driveLine(world));
         out.put("driveActor", actorLine(world));
@@ -1228,6 +1228,24 @@ public final class WorldOps {
         }
         Parcel last = world.parcels().get(world.parcels().size() - 1);
         return last == null ? "" : boxLine(last.bounds());
+    }
+
+    /** Newest extra-list on the street. Empty until a grant or deny. */
+    public static String lastAcl(World world) {
+        if (world == null) {
+            return "";
+        }
+        String found = "";
+        for (Parcel parcel : world.parcels()) {
+            if (parcel == null) {
+                continue;
+            }
+            String one = aclOf(world, parcel.id());
+            if (!one.isEmpty()) {
+                found = one;
+            }
+        }
+        return found;
     }
 
     /** Newest lab maze id on the street. Empty until a mazeRef is bound. */

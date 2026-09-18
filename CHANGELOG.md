@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **GET /world names the last slab ACL.**
+  Inspect names the newest extra-list.
+  Empty until a grant or deny. No
+  wallet types.
+
 - **Well inspect names every slab ACL.**
   The well lists every extra-list,
   oldest first. Empty until a grant

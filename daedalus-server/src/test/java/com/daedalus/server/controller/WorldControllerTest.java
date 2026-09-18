@@ -1061,6 +1061,7 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.boxes", equalTo("0,0,0-6,1,6 · 8,0,0-14,1,6")))
                 .andExpect(jsonPath("$.lease", equalTo("tenant-zero")))
                 .andExpect(jsonPath("$.leases", equalTo("tenant-zero")))
+                .andExpect(jsonPath("$.acl", equalTo("bob block.place")))
                 .andExpect(jsonPath("$.acls", equalTo("bob block.place")));
         extra.perform(post("/api/v1/world/world-zero/parcels/grant")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -1069,6 +1070,7 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.result", equalTo("GRANTED")));
         extra.perform(get("/api/v1/world/world-zero"))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.acl", equalTo("carol door.open")))
                 .andExpect(jsonPath("$.acls", equalTo("bob block.place · carol door.open")));
         extra.perform(get("/api/v1/world/world-zero/block")
                         .param("x", "0").param("y", "0").param("z", "0"))

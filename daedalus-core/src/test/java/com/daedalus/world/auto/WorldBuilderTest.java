@@ -142,7 +142,10 @@ class WorldBuilderTest {
         assertThat(snap.get("lots")).isEqualTo(WorldOps.streetLots(world));
         assertThat(snap.get("maze")).isEqualTo(WorldOps.lastMaze(world));
         assertThat(snap.get("mazes")).isEqualTo(WorldOps.streetMazes(world));
+        assertThat(snap.get("acl")).isEqualTo(WorldOps.lastAcl(world));
         assertThat(snap.get("acls")).isEqualTo(WorldOps.aclLine(world));
+        assertThat(WorldOps.lastAcl(World.zero())).isEmpty();
+        assertThat(WorldOps.lastAcl(null)).isEmpty();
         assertThat(snap.get("occupants")).isEqualTo("door · trap · portal · npc");
         assertThat(snap.get("stands"))
                 .isEqualTo("door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0");
