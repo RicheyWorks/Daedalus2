@@ -1083,6 +1083,17 @@ class ExplorePaintTest {
                 .as("a lease leads leftover HALL when the street is unnamed")
                 .isEqualTo(Parcel.SYSTEM_TENANT + " 8,8 8,0,8-9,1,9");
         assertThat(ExplorePaint.parcelLeaseName(null, onStreet)).isNull();
+        World rentBound = World.zero();
+        rentBound.applyStamp(new ParcelBounds(8, 0, 8, 9, 1, 9), Parcel.SYSTEM_OWNER,
+                List.of(new BlockCoordinate(8, 0, 8)), List.of(BlockType.WOOD));
+        rentBound.leaseParcel(rentBound.parcels().get(0).id(), Parcel.SYSTEM_TENANT);
+        rentBound.bindMaze(rentBound.parcels().get(0).id(),
+                "00000000-0000-4000-8000-00000000000f");
+        WorldMesh leasedBound = WorldMesh.of(rentBound);
+        assertThat(ExplorePaint.status(fog, onStreet, List.of(), mesh, leasedBound).place())
+                .as("a bound maze follows an unnamed lease under the boots")
+                .isEqualTo(Parcel.SYSTEM_TENANT + " 8,8 8,0,8-9,1,9"
+                        + " 00000000-0000-4000-8000-00000000000f");
         World namedLease = World.zero();
         namedLease.applyStamp(new ParcelBounds(8, 0, 8, 9, 1, 9), Parcel.SYSTEM_OWNER,
                 List.of(new BlockCoordinate(8, 0, 8)), List.of(BlockType.WOOD));

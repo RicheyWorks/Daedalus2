@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore names the lease maze.**
+  An unnamed rented slab also names
+  the lab maze UUID under the boots.
+  Empty until a mazeRef is bound. No
+  wallet types.
+
 - **Explore names every lease.**
   Off a slab the hall caption names
   every rented account key, oldest
