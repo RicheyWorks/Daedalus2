@@ -126,6 +126,30 @@ class ParcelGateTest {
     }
 
     @Test
+    void aStampedTrapUsesTheGate() {
+        World world = World.zero();
+        StampOps.apply(world, new StampRequest(world.id(), new BlockCoordinate(0, 0, 0),
+                new MazeGrid(1, 1), 0, 1));
+        long revision = world.revision().value();
+        assertThat(WorldOps.drive(world, "trap.arm", Trap.ZERO_AT, null, null, "carol"))
+                .isEqualTo(TrapResult.DENIED);
+        assertThat(world.trap().state()).isEqualTo(TrapState.DISARMED);
+        assertThat(world.revision().value()).isEqualTo(revision);
+        assertThat(WorldOps.grantParcel(world, Trap.ZERO_AT, "bob", "trap.arm"))
+                .isEqualTo(ParcelGrantResult.GRANTED);
+        assertThat(WorldOps.drive(world, "trap.arm", Trap.ZERO_AT, null, null, "bob"))
+                .isEqualTo(TrapResult.ARMED);
+        assertThat(world.trap().state()).isEqualTo(TrapState.ARMED);
+        assertThat(WorldOps.denyParcel(world, Trap.ZERO_AT, "bob", "trap.arm"))
+                .isEqualTo(ParcelDenyResult.DENIED);
+        assertThat(WorldOps.drive(world, "trap.arm", Trap.ZERO_AT, null, null, "bob"))
+                .isEqualTo(TrapResult.DENIED);
+        assertThat(world.trap().state()).isEqualTo(TrapState.ARMED);
+        assertThat(WorldOps.drive(world, "trap.arm", Trap.ZERO_AT, null, null, null))
+                .isEqualTo(TrapResult.ALREADY_ARMED);
+    }
+
+    @Test
     void boundsContainInclusiveCubes() {
         ParcelBounds box = new ParcelBounds(0, 0, 0, 2, 1, 2);
         assertThat(box.contains(new BlockCoordinate(0, 0, 0))).isTrue();

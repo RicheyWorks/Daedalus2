@@ -9,5 +9,6 @@ public enum TrapResult {
     ARMED,
     DISARMED,
     ALREADY_ARMED,
-    ALREADY_DISARMED
+    ALREADY_DISARMED,
+    DENIED
 }

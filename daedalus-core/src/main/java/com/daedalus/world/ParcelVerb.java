@@ -8,5 +8,6 @@ package com.daedalus.world;
 public enum ParcelVerb {
     BLOCK_PLACE,
     DOOR_OPEN,
-    STAMP_APPLY
+    STAMP_APPLY,
+    TRAP_ARM
 }

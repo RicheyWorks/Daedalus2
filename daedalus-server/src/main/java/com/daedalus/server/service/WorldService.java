@@ -205,10 +205,19 @@ public class WorldService {
     }
 
     public TrapResult armTrap(String id) {
+        return armTrap(id, null);
+    }
+
+    public TrapResult armTrap(String id, String actorId) {
         World live = require(id);
         synchronized (lock) {
-            TrapResult result = live.armTrap();
-            persist();
+            TrapResult result = WorldOps.asTrapResult(
+                    WorldOps.drive(live, "trap.arm",
+                            live.trap() == null ? new BlockCoordinate(0, 0, 0) : live.trap().at(),
+                            null, null, actorId));
+            if (result != TrapResult.DENIED) {
+                persist();
+            }
             log.append("trap.arm", result, live.revision().value());
             return result;
         }

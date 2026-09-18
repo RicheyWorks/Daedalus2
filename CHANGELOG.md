@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcel gate on trap.arm.**
+  trap.arm asks ParcelGate for trap.arm. Empty actor is
+  the system owner. DENIED leaves the trap. No wallet
+  types.
+
 - **Well grant actor.**
   well parcel.grant and parcel.deny send actorId from
   the fifth drive argument. Blank stays alice. Type
