@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcel gate on trap.disarm.**
+  trap.disarm asks the same trap.arm gate. Empty actor
+  is the system owner. DENIED leaves the trap. No wallet
+  types.
+
 - **Parcel gate on trap.arm.**
   trap.arm asks ParcelGate for trap.arm. Empty actor is
   the system owner. DENIED leaves the trap. No wallet

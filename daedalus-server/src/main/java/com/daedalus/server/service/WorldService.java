@@ -224,10 +224,19 @@ public class WorldService {
     }
 
     public TrapResult disarmTrap(String id) {
+        return disarmTrap(id, null);
+    }
+
+    public TrapResult disarmTrap(String id, String actorId) {
         World live = require(id);
         synchronized (lock) {
-            TrapResult result = live.disarmTrap();
-            persist();
+            TrapResult result = WorldOps.asTrapResult(
+                    WorldOps.drive(live, "trap.disarm",
+                            live.trap() == null ? new BlockCoordinate(0, 0, 0) : live.trap().at(),
+                            null, null, actorId));
+            if (result != TrapResult.DENIED) {
+                persist();
+            }
             log.append("trap.disarm", result, live.revision().value());
             return result;
         }

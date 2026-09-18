@@ -80,7 +80,7 @@ public final class WorldOps {
             case "door.close" -> closeDoor(world, mazeRef);
             case "trap.inspect" -> inspectTrap(world);
             case "trap.arm" -> armTrap(world, mazeRef);
-            case "trap.disarm" -> world.disarmTrap();
+            case "trap.disarm" -> disarmTrap(world, mazeRef);
             case "portal.inspect" -> inspectPortal(world);
             case "portal.open" -> world.openPortal();
             case "portal.seal" -> world.sealPortal();
@@ -471,6 +471,21 @@ public final class WorldOps {
             return TrapResult.DENIED;
         }
         return world.armTrap();
+    }
+
+    /**
+     * Disarm through the same {@link ParcelVerb#TRAP_ARM} gate.
+     * Empty actor is the system owner. DENIED leaves the trap.
+     */
+    public static TrapResult disarmTrap(World world, String actorId) {
+        if (world.trap() == null) {
+            throw new IllegalStateException("This world has no trap");
+        }
+        String actor = actorId == null || actorId.isBlank() ? Parcel.SYSTEM_OWNER : actorId.trim();
+        if (world.may(actor, ParcelVerb.TRAP_ARM, world.trap().at()) == ParcelAccess.DENIED) {
+            return TrapResult.DENIED;
+        }
+        return world.disarmTrap();
     }
 
     public static TrapResult asTrapResult(Object value) {

@@ -147,6 +147,12 @@ class ParcelGateTest {
         assertThat(world.trap().state()).isEqualTo(TrapState.ARMED);
         assertThat(WorldOps.drive(world, "trap.arm", Trap.ZERO_AT, null, null, null))
                 .isEqualTo(TrapResult.ALREADY_ARMED);
+        assertThat(WorldOps.drive(world, "trap.disarm", Trap.ZERO_AT, null, null, "carol"))
+                .isEqualTo(TrapResult.DENIED);
+        assertThat(world.trap().state()).isEqualTo(TrapState.ARMED);
+        assertThat(WorldOps.drive(world, "trap.disarm", Trap.ZERO_AT, null, null, null))
+                .isEqualTo(TrapResult.DISARMED);
+        assertThat(world.trap().state()).isEqualTo(TrapState.DISARMED);
     }
 
     @Test
