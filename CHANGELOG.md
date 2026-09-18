@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop inspect ACL.**
+  Inspect lists extra parcel grants and denials as
+  account-id + verb after the street. Owner stays implicit.
+  Empty when the owner list is the only rule.
+
 - **World inspect ACL.**
   world.inspect lists extra parcel grants and denials as
   account-id + verb. Owner stays implicit. Deny is marked

@@ -72,7 +72,18 @@ public final class DesktopWorld {
             line = line + " · " + occ;
         }
         String at = eventLot(world, last);
-        return at.isEmpty() ? line : line + " · " + at;
+        if (!at.isEmpty()) {
+            line = line + " · " + at;
+        }
+        String acl = aclLine(world);
+        return acl.isEmpty() ? line : line + " · " + acl;
+    }
+
+    /**
+     * Extra grants and denials. Owner stays implicit. Empty with no extras.
+     */
+    public static String aclLine(World world) {
+        return WorldOps.aclLine(world);
     }
 
     public static String inspectLine(long revision, WorldEventFrame last) {

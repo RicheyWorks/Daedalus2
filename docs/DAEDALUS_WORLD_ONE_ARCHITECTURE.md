@@ -340,7 +340,8 @@ world.inspect stands, and
 chunk.inspect stands, and
 desktop chunk stands, and
 explore hall stands, and
-world.inspect ACL
+world.inspect ACL, and
+desktop inspect ACL
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

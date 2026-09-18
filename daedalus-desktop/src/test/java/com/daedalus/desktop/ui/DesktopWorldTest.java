@@ -14,6 +14,7 @@ import com.daedalus.world.BlockType;
 import com.daedalus.world.Door;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelBounds;
+import com.daedalus.world.ParcelVerb;
 import com.daedalus.world.PlaceNames;
 import com.daedalus.world.World;
 import com.daedalus.world.auto.WorldOps;
@@ -108,6 +109,11 @@ class DesktopWorldTest {
                 .contains("door")
                 .contains("0,0")
                 .doesNotContain("npc");
+        onOrigin.grant(onOrigin.parcels().get(0).id(), "bob", ParcelVerb.BLOCK_PLACE);
+        assertThat(DesktopWorld.aclLine(onOrigin)).isEqualTo("bob block.place");
+        assertThat(DesktopWorld.aclLine(World.zero())).isEmpty();
+        assertThat(DesktopWorld.aclLine(null)).isEmpty();
+        assertThat(DesktopWorld.inspectLine(onOrigin, null)).contains("bob block.place");
     }
 
     @Test
