@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **NPC REST actor.**
+  POST npc/talk and npc/hush take optional actorId.
+  Blank stays the system owner. DENIED is a named
+  result. No wallet types.
+
 - **Parcel gate on npc.hush.**
   npc.hush asks the same npc.talk gate. Empty actor is
   the system owner. DENIED leaves the NPC. No wallet

@@ -439,9 +439,10 @@ public class WorldController {
     @PostMapping("/world/{id}/npc/talk")
     @Operation(summary = "Talk to the NPC. ALREADY_SPEAKING is a result, not silence.")
     @PerKeyRateLimit("mazeGenerate")
-    public ResponseEntity<NpcMutationResponse> talkNpc(@PathVariable String id) {
+    public ResponseEntity<NpcMutationResponse> talkNpc(
+            @PathVariable String id, @RequestParam(required = false) String actorId) {
         mounted(id);
-        NpcResult result = worlds.talkNpc(id);
+        NpcResult result = worlds.talkNpc(id, actorId);
         Npc npc = worlds.inspectNpc(id);
         World world = mounted(id);
         return ResponseEntity.ok(new NpcMutationResponse(
@@ -451,9 +452,10 @@ public class WorldController {
     @PostMapping("/world/{id}/npc/hush")
     @Operation(summary = "Hush the NPC. ALREADY_IDLE is a result, not silence.")
     @PerKeyRateLimit("mazeGenerate")
-    public ResponseEntity<NpcMutationResponse> hushNpc(@PathVariable String id) {
+    public ResponseEntity<NpcMutationResponse> hushNpc(
+            @PathVariable String id, @RequestParam(required = false) String actorId) {
         mounted(id);
-        NpcResult result = worlds.hushNpc(id);
+        NpcResult result = worlds.hushNpc(id, actorId);
         Npc npc = worlds.inspectNpc(id);
         World world = mounted(id);
         return ResponseEntity.ok(new NpcMutationResponse(

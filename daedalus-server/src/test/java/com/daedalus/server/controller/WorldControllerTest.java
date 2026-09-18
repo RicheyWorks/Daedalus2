@@ -396,6 +396,33 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("SEALED")))
                 .andExpect(jsonPath("$.state", equalTo("SEALED")));
+
+        mvc.perform(post("/api/v1/world/world-zero/stamp")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"x\":3,\"y\":0,\"z\":0}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.ok", equalTo(true)));
+
+        mvc.perform(post("/api/v1/world/world-zero/npc/talk").param("actorId", "carol"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("DENIED")))
+                .andExpect(jsonPath("$.state", equalTo("SPEAKING")));
+
+        mvc.perform(post("/api/v1/world/world-zero/npc/hush").param("actorId", "carol"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("DENIED")))
+                .andExpect(jsonPath("$.state", equalTo("SPEAKING")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/grant")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"actorId\":\"bob\",\"x\":3,\"y\":1,\"z\":0,\"verb\":\"npc.talk\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("GRANTED")));
+
+        mvc.perform(post("/api/v1/world/world-zero/npc/hush").param("actorId", "bob"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("HUSHED")))
+                .andExpect(jsonPath("$.state", equalTo("IDLE")));
     }
 
     @Test

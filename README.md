@@ -232,8 +232,8 @@ public consumers).
 | `POST` | `/api/v1/world/{id}/parcels/deny` | required | Extra-deny a named verb on the slab (`block.place` default). Already-denied, no-parcel, and unknown-verb are named results |
 | `POST` | `/api/v1/world/{id}/stamp` | required | Stamp a maze slab. Optional `mazeId` from the lab cache. Overlap and deny are named results. Optional actorId uses the parcel gate |
 | `GET` | `/api/v1/world/{id}/npc` | public | Inspect the programmable NPC |
-| `POST` | `/api/v1/world/{id}/npc/talk` | required | Talk to the NPC. Already-speaking is a named result |
-| `POST` | `/api/v1/world/{id}/npc/hush` | required | Hush the NPC. Already-idle is a named result |
+| `POST` | `/api/v1/world/{id}/npc/talk` | required | Talk to the NPC. Already-speaking and deny are named results. Optional actorId uses the parcel gate |
+| `POST` | `/api/v1/world/{id}/npc/hush` | required | Hush the NPC. Already-idle and deny are named results. Optional actorId uses the parcel gate |
 
 In dev / test profiles every endpoint is open. The "Auth (prod)" column applies when
 `spring.profiles.active=prod` (see `ProdSecurityConfig`), and it is **executable**:
