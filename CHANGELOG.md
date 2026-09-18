@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop last-event names the slab maze.**
+  The last-event cube names the lab
+  maze UUID under that cell. Empty
+  until a mazeRef is bound. No wallet
+  types.
+
 - **Explore names the lease maze.**
   An unnamed rented slab also names
   the lab maze UUID under the boots.

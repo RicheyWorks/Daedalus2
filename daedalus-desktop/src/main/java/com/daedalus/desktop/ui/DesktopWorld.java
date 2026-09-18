@@ -320,10 +320,14 @@ public final class DesktopWorld {
         String named = WorldOps.placeAt(world, cell);
         String lot = WorldOps.lotAt(world, cell);
         String box = WorldOps.boxAt(world, cell);
+        String maze = WorldOps.mazeAt(world, cell);
         String who = WorldOps.occupantAt(world, cell);
         String at = named.isEmpty() ? lot : (lot.isEmpty() ? named : named + " " + lot);
         if (!box.isEmpty()) {
             at = at.isEmpty() ? box : at + " " + box;
+        }
+        if (!maze.isEmpty()) {
+            at = at.isEmpty() ? maze : at + " " + maze;
         }
         if (at.isEmpty()) {
             return who;

@@ -546,7 +546,8 @@ explore names the slab lease, and
 explore names the last lease, and
 explore names every maze, and
 explore names every lease, and
-explore names the lease maze
+explore names the lease maze, and
+desktop last-event names the slab maze
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.
