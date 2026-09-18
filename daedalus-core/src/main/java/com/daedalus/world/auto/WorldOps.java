@@ -211,6 +211,7 @@ public final class WorldOps {
         out.put("street", streetInChunk(world, cc));
         out.put("lot", lotsInChunk(world, cc));
         out.put("occupants", occupantsInChunk(world, cc));
+        out.put("stands", standsInChunk(world, cc));
         return out;
     }
 
@@ -232,6 +233,29 @@ public final class WorldOps {
                                          ParcelBounds box) {
         if (at != null && box.contains(at)) {
             rows.add(kind);
+        }
+    }
+
+    /**
+     * Occupancy cells in this 16³ as kind + x,y,z. Occupants stay names-only.
+     */
+    public static String standsInChunk(World world, ChunkCoordinate cc) {
+        if (world == null || cc == null) {
+            return "";
+        }
+        ParcelBounds box = chunkBox(cc);
+        List<String> rows = new ArrayList<>();
+        addStandInBox(rows, "door", world.door() == null ? null : world.door().at(), box);
+        addStandInBox(rows, "trap", world.trap() == null ? null : world.trap().at(), box);
+        addStandInBox(rows, "portal", world.portal() == null ? null : world.portal().at(), box);
+        addStandInBox(rows, "npc", world.npc() == null ? null : world.npc().at(), box);
+        return String.join(" · ", rows);
+    }
+
+    private static void addStandInBox(List<String> rows, String kind, BlockCoordinate at,
+                                      ParcelBounds box) {
+        if (at != null && box.contains(at)) {
+            addStand(rows, kind, at);
         }
     }
 

@@ -336,7 +336,8 @@ STOMP / well last-event occupant, and
 explore occupancy cubes, and
 desktop last-event occupant, and
 explore occupancy tint, and
-world.inspect stands
+world.inspect stands, and
+chunk.inspect stands
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

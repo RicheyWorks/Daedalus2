@@ -220,12 +220,14 @@ public class WorldController {
         String street = WorldOps.streetInChunk(world, cc);
         String lot = WorldOps.lotsInChunk(world, cc);
         String occupants = WorldOps.occupantsInChunk(world, cc);
+        String stands = WorldOps.standsInChunk(world, cc);
         if (chunk == null) {
             return ResponseEntity.ok(new ChunkInspectResponse(
-                    x, y, z, false, null, 0, plots, street, lot, occupants));
+                    x, y, z, false, null, 0, plots, street, lot, occupants, stands));
         }
         return ResponseEntity.ok(new ChunkInspectResponse(
-                x, y, z, true, chunk.revision(), chunk.occupied(), plots, street, lot, occupants));
+                x, y, z, true, chunk.revision(), chunk.occupied(), plots, street, lot,
+                occupants, stands));
     }
 
     @PutMapping("/world/{id}/block")

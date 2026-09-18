@@ -6,6 +6,7 @@ import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.Direction;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
+import com.daedalus.world.ChunkCoordinate;
 import com.daedalus.world.Door;
 import com.daedalus.world.Npc;
 import com.daedalus.world.Parcel;
@@ -171,6 +172,11 @@ class WorldBuilderTest {
         assertThat(origin.get("street")).isEqualTo(world.parcels().get(0).placeName());
         assertThat(origin.get("lot")).isEqualTo("0,0");
         assertThat(origin.get("occupants")).isEqualTo("door · trap · portal · npc");
+        assertThat(origin.get("stands"))
+                .isEqualTo("door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0");
+        assertThat(WorldOps.standsInChunk(World.zero(), new ChunkCoordinate(0, 0, 0)))
+                .isEqualTo("door 0,1,0 · trap 1,1,0 · portal 2,1,0 · npc 3,1,0");
+        assertThat(WorldOps.standsInChunk(null, null)).isEmpty();
         @SuppressWarnings("unchecked")
         Map<String, Object> far = (Map<String, Object>) builder.run(
                 new WorldBuilder.Step(new BlockCoordinate(32, 0, 0), "chunk.inspect", null));
@@ -178,6 +184,7 @@ class WorldBuilderTest {
         assertThat(far.get("street")).isEqualTo(world.parcels().get(1).placeName());
         assertThat(far.get("lot")).isEqualTo("32,0");
         assertThat(far.get("occupants")).isEqualTo("");
+        assertThat(far.get("stands")).isEqualTo("");
         World near = World.zero();
         WorldBuilder two = new WorldBuilder(near);
         two.run(new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "stamp.apply", null));

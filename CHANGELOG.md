@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Chunk inspect stands.**
+  chunk.inspect lists door, trap, portal, and NPC in that
+  16³ as kind + x,y,z. Occupants stay names-only. The well
+  chunk line appends stands.
+
 - **World inspect stands.**
   world.inspect lists door, trap, portal, and NPC as
   kind + x,y,z. Occupants stay names-only. The well paints
