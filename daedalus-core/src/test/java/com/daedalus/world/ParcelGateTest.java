@@ -82,6 +82,11 @@ class ParcelGateTest {
         assertThat(WorldOps.drive(world, "block.remove", inside, null, null, "bob"))
                 .isEqualTo(BlockPlaceResult.DENIED);
         assertThat(world.get(inside)).isEqualTo(BlockType.STONE);
+        assertThat(WorldOps.revokeParcel(world, inside, "bob"))
+                .isEqualTo(ParcelRevokeResult.REVOKED);
+        assertThat(WorldOps.aclLine(world)).isEqualTo("!bob block.place");
+        assertThat(WorldOps.revokeParcel(world, inside, "bob"))
+                .isEqualTo(ParcelRevokeResult.NOT_GRANTED);
         assertThat(world.revision().value()).isEqualTo(revision + 1);
         assertThatThrownBy(() -> world.grant(new ParcelId("parcel-missing"), "bob",
                 ParcelVerb.DOOR_OPEN)).isInstanceOf(IllegalArgumentException.class);

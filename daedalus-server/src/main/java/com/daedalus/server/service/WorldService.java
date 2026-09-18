@@ -18,6 +18,7 @@ import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.ParcelDenyResult;
 import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelLeaseResult;
+import com.daedalus.world.ParcelRevokeResult;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
 import com.daedalus.world.Trap;
@@ -343,6 +344,22 @@ public class WorldService {
                             at == null ? new BlockCoordinate(0, 0, 0) : at, null, null, actorId, verb));
             persist();
             log.append("parcel.deny", result, live.revision().value());
+            return result;
+        }
+    }
+
+    public ParcelRevokeResult revokeParcel(String id, BlockCoordinate at, String actorId) {
+        return revokeParcel(id, at, actorId, null);
+    }
+
+    public ParcelRevokeResult revokeParcel(String id, BlockCoordinate at, String actorId, String verb) {
+        World live = require(id);
+        synchronized (lock) {
+            ParcelRevokeResult result = WorldOps.asRevokeResult(
+                    WorldOps.drive(live, "parcel.revoke",
+                            at == null ? new BlockCoordinate(0, 0, 0) : at, null, null, actorId, verb));
+            persist();
+            log.append("parcel.revoke", result, live.revision().value());
             return result;
         }
     }

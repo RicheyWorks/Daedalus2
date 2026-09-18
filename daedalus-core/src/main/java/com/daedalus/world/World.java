@@ -400,6 +400,14 @@ public final class World {
         }
     }
 
+    public void revoke(ParcelId id, String actorId, ParcelVerb verb) {
+        requireParcel(id);
+        synchronized (lock) {
+            acls.merge(id, ParcelAcl.empty(),
+                    (old, ignored) -> old.revoke(actorId, verb));
+        }
+    }
+
     /**
      * Extra grants and denials. Empty when the owner list is implicit only.
      */

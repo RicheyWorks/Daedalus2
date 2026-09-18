@@ -151,6 +151,7 @@ class ProdAuthPostureTest {
         EXPECTED.put("POST /api/v1/world/" + ID + "/parcels/lease", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/world/" + ID + "/parcels/grant", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/world/" + ID + "/parcels/deny", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/parcels/revoke", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/world/" + ID + "/stamp", Posture.AUTHENTICATED);
     }
 

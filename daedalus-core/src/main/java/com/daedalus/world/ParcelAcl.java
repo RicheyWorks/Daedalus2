@@ -59,6 +59,19 @@ public record ParcelAcl(List<Grant> grants, List<Grant> denials) {
         return new ParcelAcl(grants, next);
     }
 
+    /**
+     * Drop one extra grant. Denials stay. Missing grant is a no-op.
+     */
+    public ParcelAcl revoke(String actorId, ParcelVerb verb) {
+        Grant row = new Grant(actorId, verb);
+        if (!grants.contains(row)) {
+            return this;
+        }
+        List<Grant> next = new ArrayList<>(grants);
+        next.remove(row);
+        return new ParcelAcl(next, denials);
+    }
+
     private static boolean contains(List<Grant> rows, String actorId, ParcelVerb verb) {
         if (actorId == null || verb == null) {
             return false;

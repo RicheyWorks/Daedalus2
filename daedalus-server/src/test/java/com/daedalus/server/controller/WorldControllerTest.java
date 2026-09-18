@@ -85,7 +85,7 @@ class WorldControllerTest {
                         "world.inspect", "block.place", "door.open", "door.close",
                         "trap.arm", "trap.disarm", "portal.open", "portal.seal",
                         "npc.talk", "npc.hush", "parcel.lease", "parcel.grant",
-                        "parcel.deny", "stamp.apply")));
+                        "parcel.deny", "parcel.revoke", "stamp.apply")));
 
         mvc.perform(get("/api/v1/world/world-zero/observe")
                         .param("x", "1").param("y", "2").param("z", "3"))
@@ -517,6 +517,27 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", equalTo("HUSHED")))
                 .andExpect(jsonPath("$.state", equalTo("IDLE")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/revoke")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("REVOKED")))
+                .andExpect(jsonPath("$.acl", equalTo(
+                        "bob door.open · bob trap.arm · bob portal.open · !bob block.place"
+                                + " · bob npc.talk")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/revoke")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("NOT_GRANTED")));
+
+        mvc.perform(post("/api/v1/world/world-zero/parcels/revoke")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"actorId\":\"bob\",\"x\":0,\"y\":0,\"z\":0,\"verb\":\"shop.open\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("UNKNOWN_VERB")));
     }
 
     @Test

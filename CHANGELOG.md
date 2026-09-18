@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcel revoke drive.**
+  parcel.revoke drops an extra grant on
+  the slab under the cube. Named results
+  are REVOKED, NOT_GRANTED, NO_PARCEL,
+  and UNKNOWN_VERB. Denials stay. Well
+  POST /parcels/revoke. No wallet types.
+
 - **Desktop last-event last drive.**
   The desktop world line names the last
   driven result, account key, and cube

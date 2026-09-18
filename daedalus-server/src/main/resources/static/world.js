@@ -52,6 +52,10 @@
       body: (at, type, mazeId, actor) => ({x: at.x, y: at.y, z: at.z,
         actorId: actor || "alice",
         verb: type || "block.place"})},
+    "parcel.revoke": {method: "POST", path: () => "/world/" + WORLD + "/parcels/revoke",
+      body: (at, type, mazeId, actor) => ({x: at.x, y: at.y, z: at.z,
+        actorId: actor || "alice",
+        verb: type || "block.place"})},
     "stamp.apply": {method: "POST", path: () => "/world/" + WORLD + "/stamp",
       body: (at, type, mazeId) => {
         const body = {x: at.x, y: at.y, z: at.z};

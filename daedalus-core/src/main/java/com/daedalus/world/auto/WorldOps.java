@@ -20,6 +20,7 @@ import com.daedalus.world.ParcelDenyResult;
 import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelId;
 import com.daedalus.world.ParcelLeaseResult;
+import com.daedalus.world.ParcelRevokeResult;
 import com.daedalus.world.ParcelVerb;
 import com.daedalus.world.PlaceNames;
 import com.daedalus.world.Portal;
@@ -90,6 +91,7 @@ public final class WorldOps {
             case "parcel.lease" -> leaseParcel(world);
             case "parcel.grant" -> grantParcel(world, at, mazeRef, actorId);
             case "parcel.deny" -> denyParcel(world, at, mazeRef, actorId);
+            case "parcel.revoke" -> revokeParcel(world, at, mazeRef, actorId);
             case "stamp.apply" -> stampApply(world, at, maze, mazeRef, actorId);
             default -> throw new IllegalArgumentException("Unknown capability " + capability);
         };
@@ -158,7 +160,8 @@ public final class WorldOps {
     }
 
     private static String actorFor(String capability, String mazeRef, String actorId) {
-        if ("parcel.grant".equals(capability) || "parcel.deny".equals(capability)) {
+        if ("parcel.grant".equals(capability) || "parcel.deny".equals(capability)
+                || "parcel.revoke".equals(capability)) {
             return mazeRef == null || mazeRef.isBlank() ? GUEST_ACTOR : mazeRef.trim();
         }
         if ("stamp.apply".equals(capability)) {
@@ -837,6 +840,40 @@ public final class WorldOps {
 
     public static ParcelDenyResult asDenyResult(Object value) {
         return (ParcelDenyResult) value;
+    }
+
+    /**
+     * Drop an extra grant on the slab under {@code at}, or the first plot.
+     * Empty actor becomes {@link #GUEST_ACTOR}. Empty verb is block.place.
+     * Denials stay.
+     */
+    public static ParcelRevokeResult revokeParcel(World world, BlockCoordinate at, String actorId) {
+        return revokeParcel(world, at, actorId, null);
+    }
+
+    public static ParcelRevokeResult revokeParcel(World world, BlockCoordinate at, String actorId,
+            String verbName) {
+        if (world == null || world.parcels().isEmpty()) {
+            return ParcelRevokeResult.NO_PARCEL;
+        }
+        ParcelVerb verb = parseVerb(verbName);
+        if (verb == null) {
+            return ParcelRevokeResult.UNKNOWN_VERB;
+        }
+        String actor = actorId == null || actorId.isBlank() ? GUEST_ACTOR : actorId.trim();
+        Parcel parcel = at == null ? null : world.parcelAt(at);
+        if (parcel == null) {
+            parcel = world.parcels().get(0);
+        }
+        if (!world.acl(parcel.id()).grants(actor, verb)) {
+            return ParcelRevokeResult.NOT_GRANTED;
+        }
+        world.revoke(parcel.id(), actor, verb);
+        return ParcelRevokeResult.REVOKED;
+    }
+
+    public static ParcelRevokeResult asRevokeResult(Object value) {
+        return (ParcelRevokeResult) value;
     }
 
     /**

@@ -14,9 +14,11 @@ import com.daedalus.api.dto.NpcMutationResponse;
 import com.daedalus.api.dto.ParcelDenyResponse;
 import com.daedalus.api.dto.ParcelGrantResponse;
 import com.daedalus.api.dto.ParcelLeaseResponse;
+import com.daedalus.api.dto.ParcelRevokeResponse;
 import com.daedalus.api.dto.PlaceBlockRequest;
 import com.daedalus.api.dto.PortalInspectResponse;
 import com.daedalus.api.dto.PortalMutationResponse;
+import com.daedalus.api.dto.RevokeParcelRequest;
 import com.daedalus.api.dto.StampMutationResponse;
 import com.daedalus.api.dto.StampWorldRequest;
 import com.daedalus.api.dto.TrapInspectResponse;
@@ -50,6 +52,7 @@ import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelDenyResult;
 import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelLeaseResult;
+import com.daedalus.world.ParcelRevokeResult;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
 import com.daedalus.world.stamp.StampResult;
@@ -164,6 +167,22 @@ public class WorldController {
         ParcelDenyResult result = worlds.denyParcel(id, at, body.actorId(), body.verb());
         World world = mounted(id);
         return ResponseEntity.ok(new ParcelDenyResponse(
+                result.name(), WorldOps.aclLine(world), world.revision().value()));
+    }
+
+    @PostMapping("/world/{id}/parcels/revoke")
+    @Operation(summary = "Revoke an extra grant on the slab under the cube, or the first plot.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<ParcelRevokeResponse> revokeParcel(
+            @PathVariable String id, @Valid @RequestBody RevokeParcelRequest body) {
+        mounted(id);
+        BlockCoordinate at = new BlockCoordinate(
+                body.x() == null ? 0 : body.x(),
+                body.y() == null ? 0 : body.y(),
+                body.z() == null ? 0 : body.z());
+        ParcelRevokeResult result = worlds.revokeParcel(id, at, body.actorId(), body.verb());
+        World world = mounted(id);
+        return ResponseEntity.ok(new ParcelRevokeResponse(
                 result.name(), WorldOps.aclLine(world), world.revision().value()));
     }
 

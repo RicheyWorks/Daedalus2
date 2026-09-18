@@ -14,6 +14,7 @@ import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.ParcelDenyResult;
 import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelLeaseResult;
+import com.daedalus.world.ParcelRevokeResult;
 import com.daedalus.world.ParcelVerb;
 import com.daedalus.world.PlaceNames;
 import com.daedalus.world.TrapResult;
@@ -152,6 +153,21 @@ class WorldBuilderTest {
                 .isEqualTo(ParcelDenyResult.NO_PARCEL);
         assertThat(WorldOps.denyParcel(null, null, "bob"))
                 .isEqualTo(ParcelDenyResult.NO_PARCEL);
+        assertThat(builder.run(new WorldBuilder.Step(
+                new BlockCoordinate(0, 0, 0), "parcel.revoke", null, null, "bob")))
+                .isEqualTo(ParcelRevokeResult.REVOKED);
+        assertThat(WorldOps.aclLine(world))
+                .isEqualTo("bob door.open · !bob block.place · !bob door.open");
+        assertThat(builder.run(new WorldBuilder.Step(
+                new BlockCoordinate(0, 0, 0), "parcel.revoke", null, null, "bob")))
+                .isEqualTo(ParcelRevokeResult.NOT_GRANTED);
+        assertThat(new WorldBuilder(World.zero()).run(new WorldBuilder.Step(
+                new BlockCoordinate(0, 0, 0), "parcel.revoke", null, null, "bob")))
+                .isEqualTo(ParcelRevokeResult.NO_PARCEL);
+        assertThat(WorldOps.revokeParcel(null, null, "bob"))
+                .isEqualTo(ParcelRevokeResult.NO_PARCEL);
+        assertThat(WorldOps.revokeParcel(world, new BlockCoordinate(0, 0, 0), "bob", "shop.open"))
+                .isEqualTo(ParcelRevokeResult.UNKNOWN_VERB);
         assertThat(builder.run(new WorldBuilder.Step(next, "parcel.lease", null)))
                 .isEqualTo(ParcelLeaseResult.LEASED);
         assertThat(world.parcels().get(0).leaseId()).isEqualTo(Parcel.SYSTEM_TENANT);

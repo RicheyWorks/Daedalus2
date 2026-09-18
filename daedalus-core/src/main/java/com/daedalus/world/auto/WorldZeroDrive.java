@@ -31,6 +31,7 @@ public final class WorldZeroDrive {
             "parcel.lease",
             "parcel.grant",
             "parcel.deny",
+            "parcel.revoke",
             "stamp.apply");
 
     private WorldZeroDrive() {
