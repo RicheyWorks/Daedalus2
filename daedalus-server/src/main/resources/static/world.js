@@ -13,7 +13,13 @@
     "block.inspect": {method: "GET", path: at =>
         "/world/" + WORLD + "/block?x=" + at.x + "&y=" + at.y + "&z=" + at.z},
     "block.place": {method: "PUT", path: () => "/world/" + WORLD + "/block",
-      body: (at, type) => ({x: at.x, y: at.y, z: at.z, type: type || "STONE"})},
+      body: (at, type, mazeId, actor) => {
+        const body = {x: at.x, y: at.y, z: at.z, type: type || "STONE"};
+        if (actor) {
+          body.actorId = actor;
+        }
+        return body;
+      }},
     "block.remove": {method: "DELETE", path: (at, actor) =>
         "/world/" + WORLD + "/block?x=" + at.x + "&y=" + at.y + "&z=" + at.z
             + actorQuery(actor, "&")},
@@ -84,7 +90,7 @@
     inspect(host);
   }
 
-  async function drive(host, capability, at, type) {
+  async function drive(host, capability, at, type, actor) {
     if (!host || !host.api) {
       throw new Error("World host is required");
     }
@@ -97,7 +103,7 @@
     if (step.body) {
       opts.headers = {"Content-Type": "application/json"};
       const mazeId = host.state && host.state.maze && host.state.maze.id;
-      opts.body = JSON.stringify(step.body(cell, type, mazeId));
+      opts.body = JSON.stringify(step.body(cell, type, mazeId, actor));
     }
     return host.api(step.path(cell, type), opts);
   }

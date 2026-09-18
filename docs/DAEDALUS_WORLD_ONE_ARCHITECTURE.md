@@ -361,7 +361,8 @@ grant/deny verbs, and
 well grant verb, and
 well door actor, and
 well remove actor, and
-well stamp actor
+well stamp actor, and
+well place actor
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

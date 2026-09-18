@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well place actor.**
+  well block.place sends optional actorId as a fifth
+  drive argument so STONE stays the cube. Blank stays
+  the system owner. No wallet types.
+
 - **Well stamp actor.**
   well stamp.apply sends optional actorId (drive type).
   Generate still stamps as the system owner. No wallet
