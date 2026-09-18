@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Trace names the slab maze.**
+  GET /trace names the lab maze UUID
+  under each driven cube. Empty when
+  that step sits off a stamped plot.
+  No wallet types.
+
 - **Block place names the slab ACL.**
   PUT /block and DELETE /block name
   the extra-list under that cube.

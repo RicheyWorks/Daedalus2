@@ -293,12 +293,12 @@ public class WorldController {
     @GetMapping("/world/{id}/trace")
     @Operation(summary = "Trace driven world ops. Discover does not write this.")
     public ResponseEntity<WorldTraceResponse> trace(@PathVariable String id) {
-        mounted(id);
+        World world = mounted(id);
         List<WorldTraceStepResponse> steps = new ArrayList<>();
         for (DriveTrace.Step step : worlds.trace(id)) {
             steps.add(new WorldTraceStepResponse(
                     step.capability(), step.result(), step.revisionAfter(), step.actor(),
-                    step.at()));
+                    step.at(), WorldOps.mazeOn(world, step.at())));
         }
         return ResponseEntity.ok(new WorldTraceResponse(id, steps));
     }

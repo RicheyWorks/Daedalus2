@@ -397,6 +397,29 @@ public final class WorldOps {
         return parcel == null ? "" : parcel.mazeRef();
     }
 
+    /** Maze under a driven {@code x,y,z} line. Empty off a stamped plot. */
+    public static String mazeOn(World world, String atLine) {
+        return mazeAt(world, parseAt(atLine));
+    }
+
+    public static BlockCoordinate parseAt(String line) {
+        if (line == null || line.isBlank()) {
+            return null;
+        }
+        String[] parts = line.split(",");
+        if (parts.length != 3) {
+            return null;
+        }
+        try {
+            return new BlockCoordinate(
+                    Integer.parseInt(parts[0].trim()),
+                    Integer.parseInt(parts[1].trim()),
+                    Integer.parseInt(parts[2].trim()));
+        } catch (NumberFormatException ignored) {
+            return null;
+        }
+    }
+
     /** Occupancy object on this cube. Empty when the cell is not door/trap/portal/npc. */
     public static String occupantAt(World world, BlockCoordinate at) {
         return world == null ? "" : world.occupantAt(at);
