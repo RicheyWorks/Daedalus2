@@ -4,7 +4,11 @@ package com.daedalus.world.auto;
 
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
+import com.daedalus.world.Door;
 import com.daedalus.world.DoorResult;
+import com.daedalus.world.Npc;
+import com.daedalus.world.Portal;
+import com.daedalus.world.Trap;
 import com.daedalus.world.World;
 import com.daedalus.world.WorldId;
 import org.junit.jupiter.api.Test;
@@ -36,6 +40,7 @@ class WorldAutomationPipelineTest {
         assertThat(afterPlace.doorState()).isEqualTo("CLOSED");
         assertThat(afterPlace.place()).isEmpty();
         assertThat(afterPlace.lot()).isEmpty();
+        assertThat(afterPlace.occupant()).isEmpty();
         assertThat(afterPlace.x()).isEqualTo(2);
         assertThat(afterPlace.y()).isZero();
         assertThat(afterPlace.z()).isEqualTo(1);
@@ -63,6 +68,24 @@ class WorldAutomationPipelineTest {
         assertThatThrownBy(session::observe)
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Address");
+    }
+
+    @Test
+    void observeNamesTheOccupantOnThatCube() {
+        World world = World.zero();
+        AutomationSession session = new AutomationSession(world);
+        session.address(Door.ZERO_AT);
+        assertThat(session.observe().occupant()).isEqualTo("door");
+        session.address(Trap.ZERO_AT);
+        assertThat(session.observe().occupant()).isEqualTo("trap");
+        session.address(Portal.ZERO_AT);
+        assertThat(session.observe().occupant()).isEqualTo("portal");
+        session.address(Npc.ZERO_AT);
+        assertThat(session.observe().occupant()).isEqualTo("npc");
+        session.address(new BlockCoordinate(9, 0, 9));
+        assertThat(session.observe().occupant()).isEmpty();
+        assertThat(WorldOps.occupantAt(world, Door.ZERO_AT)).isEqualTo("door");
+        assertThat(WorldOps.occupantAt(null, Door.ZERO_AT)).isEmpty();
     }
 
     @Test

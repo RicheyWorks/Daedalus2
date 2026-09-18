@@ -6,6 +6,8 @@ import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.Direction;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
+import com.daedalus.world.Door;
+import com.daedalus.world.Npc;
 import com.daedalus.world.Parcel;
 import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.PlaceNames;
@@ -134,6 +136,18 @@ class WorldBuilderTest {
                 new WorldBuilder.Step(new BlockCoordinate(0, 0, 0), "npc.inspect", null));
         assertThat(npc.get("place")).isEqualTo("");
         assertThat(npc.get("lot")).isEqualTo("");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> onDoor = (Map<String, Object>) builder.run(
+                new WorldBuilder.Step(Door.ZERO_AT, "block.inspect", null));
+        assertThat(onDoor.get("occupant")).isEqualTo("door");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> onNpc = (Map<String, Object>) builder.run(
+                new WorldBuilder.Step(Npc.ZERO_AT, "block.inspect", null));
+        assertThat(onNpc.get("occupant")).isEqualTo("npc");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> empty = (Map<String, Object>) builder.run(
+                new WorldBuilder.Step(new BlockCoordinate(9, 0, 9), "block.inspect", null));
+        assertThat(empty.get("occupant")).isEqualTo("");
     }
 
     @Test

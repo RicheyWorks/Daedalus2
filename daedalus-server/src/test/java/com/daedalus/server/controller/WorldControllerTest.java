@@ -86,7 +86,13 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.doorState", equalTo("CLOSED")))
                 .andExpect(jsonPath("$.place", equalTo("")))
                 .andExpect(jsonPath("$.lot", equalTo("")))
+                .andExpect(jsonPath("$.occupant", equalTo("")))
                 .andExpect(jsonPath("$.revision", equalTo(0)));
+
+        mvc.perform(get("/api/v1/world/world-zero/observe")
+                        .param("x", "0").param("y", "1").param("z", "0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.occupant", equalTo("door")));
 
         mvc.perform(get("/api/v1/world/world-zero/trace"))
                 .andExpect(status().isOk())

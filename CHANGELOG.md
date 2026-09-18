@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Observe occupant on the aimed cube.**
+  Observe and block.inspect name door, trap, portal, or NPC
+  when that cell is the occupancy object. A look at 1,2,3
+  stays type-only.
+
 - **Explore occupancy under the boots.**
   Standing on a door, trap, or portal cell that sits on a
   slab prefixes that name before the street. Start and goal

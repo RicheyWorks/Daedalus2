@@ -172,7 +172,8 @@ public class WorldController {
         Observation seen = worlds.observe(id, x, y, z);
         return ResponseEntity.ok(new WorldObserveResponse(
                 seen.worldId(), seen.revision(), seen.x(), seen.y(), seen.z(),
-                seen.blockType(), seen.doorState(), seen.place(), seen.lot()));
+                seen.blockType(), seen.doorState(), seen.place(), seen.lot(),
+                seen.occupant()));
     }
 
     @GetMapping("/world/{id}/trace")
@@ -200,7 +201,8 @@ public class WorldController {
         return ResponseEntity.ok(new BlockInspectResponse(
                 x, y, z, type.name(), type.solid(),
                 WorldOps.placeAt(world, at), WorldOps.lotAt(world, at),
-                WorldOps.leaseAt(world, at), WorldOps.mazeAt(world, at)));
+                WorldOps.leaseAt(world, at), WorldOps.mazeAt(world, at),
+                WorldOps.occupantAt(world, at)));
     }
 
     @GetMapping("/world/{id}/chunk")

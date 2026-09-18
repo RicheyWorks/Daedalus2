@@ -105,6 +105,7 @@ public final class WorldOps {
         out.put("lot", lotAt(world, cell));
         out.put("lease", leaseAt(world, cell));
         out.put("maze", mazeAt(world, cell));
+        out.put("occupant", occupantAt(world, cell));
         return out;
     }
 
@@ -126,6 +127,30 @@ public final class WorldOps {
     public static String mazeAt(World world, BlockCoordinate at) {
         Parcel parcel = world == null || at == null ? null : world.parcelAt(at);
         return parcel == null ? "" : parcel.mazeRef();
+    }
+
+    /** Occupancy object on this cube. Empty when the cell is not door/trap/portal/npc. */
+    public static String occupantAt(World world, BlockCoordinate at) {
+        if (world == null || at == null) {
+            return "";
+        }
+        if (sameCell(world.door() == null ? null : world.door().at(), at)) {
+            return "door";
+        }
+        if (sameCell(world.trap() == null ? null : world.trap().at(), at)) {
+            return "trap";
+        }
+        if (sameCell(world.portal() == null ? null : world.portal().at(), at)) {
+            return "portal";
+        }
+        if (sameCell(world.npc() == null ? null : world.npc().at(), at)) {
+            return "npc";
+        }
+        return "";
+    }
+
+    private static boolean sameCell(BlockCoordinate a, BlockCoordinate b) {
+        return a != null && a.equals(b);
     }
 
     private static Map<String, Object> inspectChunk(World world, BlockCoordinate at) {

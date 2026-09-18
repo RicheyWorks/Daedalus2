@@ -7,12 +7,14 @@ package com.daedalus.api.dto;
  * Street fields are empty off a slab.
  */
 public record BlockInspectResponse(int x, int y, int z, String type, boolean present,
-                                   String place, String lot, String lease, String maze) {
+                                   String place, String lot, String lease, String maze,
+                                   String occupant) {
 
     public BlockInspectResponse {
         place = place == null ? "" : place;
         lot = lot == null ? "" : lot;
         lease = lease == null ? "" : lease;
         maze = maze == null ? "" : maze;
+        occupant = occupant == null ? "" : occupant;
     }
 }

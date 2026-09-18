@@ -7,10 +7,12 @@ package com.daedalus.api.dto;
  * {@code place} and {@code lot} are empty off a slab.
  */
 public record WorldObserveResponse(String worldId, long revision, int x, int y, int z,
-                                   String blockType, String doorState, String place, String lot) {
+                                   String blockType, String doorState, String place, String lot,
+                                   String occupant) {
 
     public WorldObserveResponse {
         place = place == null ? "" : place;
         lot = lot == null ? "" : lot;
+        occupant = occupant == null ? "" : occupant;
     }
 }
