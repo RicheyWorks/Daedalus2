@@ -315,7 +315,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.maxZ", equalTo(2)))
                 .andExpect(jsonPath("$.box", equalTo("0,0,0-2,1,2")))
                 .andExpect(jsonPath("$.maze", equalTo("")))
-                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))));
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))))
+                .andExpect(jsonPath("$.lot", equalTo("0,0")));
 
         mvc.perform(get("/api/v1/world/world-zero/door"))
                 .andExpect(status().isOk())
@@ -355,7 +356,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.result", equalTo("DENIED")))
                 .andExpect(jsonPath("$.box", equalTo("")))
                 .andExpect(jsonPath("$.maze", equalTo("")))
-                .andExpect(jsonPath("$.place", equalTo("")));
+                .andExpect(jsonPath("$.place", equalTo("")))
+                .andExpect(jsonPath("$.lot", equalTo("")));
 
         mvc.perform(get("/api/v1/world/world-zero"))
                 .andExpect(status().isOk())
@@ -751,7 +753,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.maxZ", equalTo(6)))
                 .andExpect(jsonPath("$.box", equalTo("0,0,0-6,1,6")))
                 .andExpect(jsonPath("$.maze", equalTo(cached.metadata().id().toString())))
-                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))));
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))))
+                .andExpect(jsonPath("$.lot", equalTo("0,0")));
         extra.perform(get("/api/v1/world/world-zero/parcels"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.parcels[0].mazeRef", equalTo(cached.metadata().id().toString())))
@@ -820,7 +823,8 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.result", equalTo("APPLIED")))
                 .andExpect(jsonPath("$.minX", equalTo(8)))
                 .andExpect(jsonPath("$.maze", equalTo(again.metadata().id().toString())))
-                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))));
+                .andExpect(jsonPath("$.place", org.hamcrest.Matchers.not(equalTo(""))))
+                .andExpect(jsonPath("$.lot", equalTo("8,0")));
         extra.perform(get("/api/v1/world/world-zero/parcels"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.parcels.length()", equalTo(2)))
