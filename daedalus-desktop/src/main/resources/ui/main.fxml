@@ -245,9 +245,19 @@
                 </Label>
                 <Label fx:id="legendHotspot" text="hot spot" managed="false" visible="false">
                     <graphic>
-                        <Rectangle width="10" height="10" fill="#e5484d" opacity="0.5"
-                                   arcWidth="3" arcHeight="3"
-                                   stroke="rgba(229,72,77,0.35)" strokeWidth="1.5"/>
+                        <Rectangle width="10" height="10" opacity="0.5"
+                                   stroke="rgba(229,72,77,0.35)" strokeWidth="1.5"
+                                   arcWidth="3" arcHeight="3">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#e5484d"/>
+                                        <Stop offset="1.0" color="#6a2024"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
                     </graphic>
                 </Label>
                 <Label fx:id="legendFog" text="unseen (fog)" managed="false" visible="false">

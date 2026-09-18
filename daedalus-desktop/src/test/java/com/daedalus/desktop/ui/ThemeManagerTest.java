@@ -128,6 +128,10 @@ class ThemeManagerTest {
             assertThat(fxml).doesNotContain("fill=\"#f2c94c\" arcWidth=\"3\" arcHeight=\"3\"");
             assertThat(fxml).contains("legendWaypoint");
             assertThat(fxml).doesNotContain("fill=\"#f2c94c\" rotate=\"45\"");
+            assertThat(fxml).contains("legendHotspot");
+            assertThat(fxml).contains("color=\"#e5484d\"");
+            assertThat(fxml).contains("color=\"#6a2024\"");
+            assertThat(fxml).doesNotContain("fill=\"#e5484d\" opacity=\"0.5\"");
             assertThat(fxml).contains("legendTour");
             assertThat(fxml).contains("fill=\"#d4b06a\"");
             assertThat(fxml).contains("color=\"#d4b06a\"");

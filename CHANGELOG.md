@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend hotspot depth.**
+  Overlay hot-spot chips fall off
+  toward deeper rust so leftover flat
+  swatches are not the last word on a
+  heat.
+
 - **Well legend hotspot depth.**
   Overlay hot-spot chips fall off
   toward deeper rust so leftover flat
