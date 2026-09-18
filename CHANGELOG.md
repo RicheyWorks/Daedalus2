@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well legend race depth.**
+  Overlay arena bars fall off toward
+  deeper ice and gold so leftover flat
+  swatches are not the last word on a
+  race.
+
 - **Desktop legend hotspot depth.**
   Overlay hot-spot chips fall off
   toward deeper rust so leftover flat
