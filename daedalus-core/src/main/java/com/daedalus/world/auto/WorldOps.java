@@ -341,6 +341,17 @@ public final class WorldOps {
         return actorLine(world);
     }
 
+    /**
+     * Cube address of the last mutation when {@code at} is that cube.
+     * Empty on every other cell.
+     */
+    public static String atOn(World world, BlockCoordinate at) {
+        if (world == null || at == null || !sameCell(world.lastDriveAt(), at)) {
+            return "";
+        }
+        return atLine(world);
+    }
+
     public static String placeAt(World world, BlockCoordinate at) {
         Parcel parcel = world == null || at == null ? null : world.parcelAt(at);
         return parcel == null ? "" : parcel.placeName();

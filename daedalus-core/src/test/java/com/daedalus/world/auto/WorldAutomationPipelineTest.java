@@ -46,6 +46,7 @@ class WorldAutomationPipelineTest {
         assertThat(afterPlace.acl()).isEmpty();
         assertThat(afterPlace.drive()).isEqualTo("block.place AIR");
         assertThat(afterPlace.driveActor()).isEqualTo(Parcel.SYSTEM_OWNER);
+        assertThat(afterPlace.driveAt()).isEqualTo("2,0,1");
         assertThat(afterPlace.x()).isEqualTo(2);
         assertThat(afterPlace.y()).isZero();
         assertThat(afterPlace.z()).isEqualTo(1);

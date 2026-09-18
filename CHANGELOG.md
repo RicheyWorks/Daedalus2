@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Observe last drive at.**
+  GET /observe names the last driven
+  cube only when that cell is the one
+  that was driven. Empty on every
+  other cube. No wallet types.
+
 - **Desktop chunk last at.**
   The desktop world line names the last
   driven cube only when that address

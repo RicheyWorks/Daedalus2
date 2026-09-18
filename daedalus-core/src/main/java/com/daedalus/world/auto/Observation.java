@@ -13,7 +13,8 @@ import java.util.Objects;
  */
 public record Observation(String worldId, long revision, int x, int y, int z,
                           String blockType, String doorState, String place, String lot,
-                          String occupant, String acl, String drive, String driveActor) {
+                          String occupant, String acl, String drive, String driveActor,
+                          String driveAt) {
 
     public Observation {
         Objects.requireNonNull(worldId, "worldId is required");
@@ -24,18 +25,26 @@ public record Observation(String worldId, long revision, int x, int y, int z,
         acl = acl == null ? "" : acl;
         drive = drive == null ? "" : drive;
         driveActor = driveActor == null ? "" : driveActor;
+        driveAt = driveAt == null ? "" : driveAt;
+    }
+
+    public Observation(String worldId, long revision, int x, int y, int z,
+                       String blockType, String doorState, String place, String lot,
+                       String occupant, String acl, String drive, String driveActor) {
+        this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, acl,
+                drive, driveActor, "");
     }
 
     public Observation(String worldId, long revision, int x, int y, int z,
                        String blockType, String doorState, String place, String lot,
                        String occupant, String acl) {
-        this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, acl, "", "");
+        this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, acl, "", "", "");
     }
 
     public Observation(String worldId, long revision, int x, int y, int z,
                        String blockType, String doorState, String place, String lot,
                        String occupant) {
-        this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, "", "", "");
+        this(worldId, revision, x, y, z, blockType, doorState, place, lot, occupant, "", "", "", "");
     }
 
     public static Observation take(World world, WorldAddress address) {
@@ -60,6 +69,7 @@ public record Observation(String worldId, long revision, int x, int y, int z,
                 WorldOps.occupantAt(world, address.at()),
                 WorldOps.aclAt(world, address.at()),
                 WorldOps.driveOn(world, address.at()),
-                WorldOps.actorOn(world, address.at()));
+                WorldOps.actorOn(world, address.at()),
+                WorldOps.atOn(world, address.at()));
     }
 }
