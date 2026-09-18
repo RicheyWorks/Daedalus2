@@ -53,7 +53,8 @@ public final class AutomationSession {
         }
         Object result = WorldOps.drive(world, capability, address.at(), type, maze, mazeRef,
                 actorId);
-        log.append(capability, result, world.revision().value(), world.lastDriveActor());
+        log.append(capability, result, world.revision().value(), world.lastDriveActor(),
+                WorldOps.atLine(world));
         return result;
     }
 

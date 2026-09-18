@@ -210,6 +210,7 @@ class WorldControllerTest {
                 .andExpect(jsonPath("$.steps.length()", equalTo(4)))
                 .andExpect(jsonPath("$.steps[0].capability", equalTo("block.place")))
                 .andExpect(jsonPath("$.steps[0].actor", equalTo("system")))
+                .andExpect(jsonPath("$.steps[0].at", equalTo("1,2,3")))
                 .andExpect(jsonPath("$.steps[1].capability", equalTo("block.remove")))
                 .andExpect(jsonPath("$.steps[2].capability", equalTo("door.open")))
                 .andExpect(jsonPath("$.steps[3].capability", equalTo("door.open")))
@@ -312,7 +313,8 @@ class WorldControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.steps[-1].capability", equalTo("stamp.apply")))
                 .andExpect(jsonPath("$.steps[-1].result", equalTo("DENIED")))
-                .andExpect(jsonPath("$.steps[-1].actor", equalTo("carol")));
+                .andExpect(jsonPath("$.steps[-1].actor", equalTo("carol")))
+                .andExpect(jsonPath("$.steps[-1].at", equalTo("0,0,0")));
 
         mvc.perform(get("/api/v1/world/world-zero/block").param("x", "0").param("y", "0").param("z", "0"))
                 .andExpect(status().isOk())

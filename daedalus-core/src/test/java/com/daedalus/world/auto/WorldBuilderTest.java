@@ -107,6 +107,7 @@ class WorldBuilderTest {
         assertThat(WorldOps.actorLine(world)).isEqualTo("carol");
         List<DriveTrace.Step> driven = builder.session().trace();
         assertThat(driven.get(driven.size() - 1).actor()).isEqualTo("carol");
+        assertThat(driven.get(driven.size() - 1).at()).isEqualTo("0,0,0");
         assertThat(world.parcels()).hasSize(1);
     }
 

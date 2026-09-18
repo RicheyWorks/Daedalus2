@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **REST trace at.**
+  GET /trace names the driven cube on
+  each step. Empty until a mutation.
+  Never a wallet type.
+
 - **REST trace actor.**
   GET /trace names the account key on
   each driven step. Empty until a

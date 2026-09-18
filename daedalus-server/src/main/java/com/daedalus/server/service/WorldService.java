@@ -521,7 +521,8 @@ public class WorldService {
     }
 
     private void account(World live, String capability, Object result) {
-        log.append(capability, result, live.revision().value(), live.lastDriveActor());
+        log.append(capability, result, live.revision().value(), live.lastDriveActor(),
+                WorldOps.atLine(live));
     }
 
     private void persist() {

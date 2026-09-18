@@ -276,7 +276,8 @@ public class WorldController {
         List<WorldTraceStepResponse> steps = new ArrayList<>();
         for (DriveTrace.Step step : worlds.trace(id)) {
             steps.add(new WorldTraceStepResponse(
-                    step.capability(), step.result(), step.revisionAfter(), step.actor()));
+                    step.capability(), step.result(), step.revisionAfter(), step.actor(),
+                    step.at()));
         }
         return ResponseEntity.ok(new WorldTraceResponse(id, steps));
     }
