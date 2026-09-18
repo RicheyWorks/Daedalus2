@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well remove actor.**
+  well block.remove sends optional actorId (drive type)
+  on the query. Blank stays the system owner. No wallet
+  types.
+
 - **Well door actor.**
   well door.open and door.close send optional actorId
   (drive type) on the query. Blank stays the system

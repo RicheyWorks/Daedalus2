@@ -359,7 +359,8 @@ door.close, and
 stamp.apply, and
 grant/deny verbs, and
 well grant verb, and
-well door actor
+well door actor, and
+well remove actor
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

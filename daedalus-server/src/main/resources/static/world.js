@@ -14,8 +14,9 @@
         "/world/" + WORLD + "/block?x=" + at.x + "&y=" + at.y + "&z=" + at.z},
     "block.place": {method: "PUT", path: () => "/world/" + WORLD + "/block",
       body: (at, type) => ({x: at.x, y: at.y, z: at.z, type: type || "STONE"})},
-    "block.remove": {method: "DELETE", path: at =>
-        "/world/" + WORLD + "/block?x=" + at.x + "&y=" + at.y + "&z=" + at.z},
+    "block.remove": {method: "DELETE", path: (at, actor) =>
+        "/world/" + WORLD + "/block?x=" + at.x + "&y=" + at.y + "&z=" + at.z
+            + actorQuery(actor, "&")},
     "door.inspect": {method: "GET", path: () => "/world/" + WORLD + "/door"},
     "door.open": {method: "POST", path: (at, actor) =>
         "/world/" + WORLD + "/door/open" + actorQuery(actor)},
@@ -48,8 +49,8 @@
       }},
   };
 
-  function actorQuery(actor) {
-    return actor ? "?actorId=" + encodeURIComponent(actor) : "";
+  function actorQuery(actor, sep) {
+    return actor ? (sep || "?") + "actorId=" + encodeURIComponent(actor) : "";
   }
 
   async function inspect(host) {
