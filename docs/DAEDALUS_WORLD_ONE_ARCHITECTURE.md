@@ -438,7 +438,8 @@ living slab clears leftover height, and
 door inspect names the slab box, and
 trap inspect names the slab box, and
 portal inspect names the slab box, and
-npc inspect names the slab box
+npc inspect names the slab box, and
+stamp skip and inspect share occupants
 are shipped.
 Next: WebGL / terrain (NOT NOW). Market provider on those strings later.
 WorldService still does not open the maze Caffeine cache.

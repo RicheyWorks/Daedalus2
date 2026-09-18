@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Stamp skip and inspect share occupants.**
+  applyStamp and WorldOps.occupantAt
+  read one World list so a new landmark
+  cannot drift. No wallet types.
+
 - **NPC inspect names the slab box.**
   GET /npc names the inclusive AABB
   living stays inside when npc-zero

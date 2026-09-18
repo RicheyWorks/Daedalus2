@@ -399,22 +399,7 @@ public final class WorldOps {
 
     /** Occupancy object on this cube. Empty when the cell is not door/trap/portal/npc. */
     public static String occupantAt(World world, BlockCoordinate at) {
-        if (world == null || at == null) {
-            return "";
-        }
-        if (sameCell(world.door() == null ? null : world.door().at(), at)) {
-            return "door";
-        }
-        if (sameCell(world.trap() == null ? null : world.trap().at(), at)) {
-            return "trap";
-        }
-        if (sameCell(world.portal() == null ? null : world.portal().at(), at)) {
-            return "portal";
-        }
-        if (sameCell(world.npc() == null ? null : world.npc().at(), at)) {
-            return "npc";
-        }
-        return "";
+        return world == null ? "" : world.occupantAt(at);
     }
 
     private static boolean sameCell(BlockCoordinate a, BlockCoordinate b) {

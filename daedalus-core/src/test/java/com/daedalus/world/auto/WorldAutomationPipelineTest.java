@@ -91,7 +91,13 @@ class WorldAutomationPipelineTest {
         session.address(new BlockCoordinate(9, 0, 9));
         assertThat(session.observe().occupant()).isEmpty();
         assertThat(session.observe().acl()).isEmpty();
-        assertThat(WorldOps.occupantAt(world, Door.ZERO_AT)).isEqualTo("door");
+        assertThat(world.occupantAt(Door.ZERO_AT)).isEqualTo("door");
+        assertThat(world.occupantAt(Trap.ZERO_AT)).isEqualTo("trap");
+        assertThat(world.occupantAt(Portal.ZERO_AT)).isEqualTo("portal");
+        assertThat(world.occupantAt(Npc.ZERO_AT)).isEqualTo("npc");
+        assertThat(world.occupantAt(new BlockCoordinate(99, 0, 99))).isEmpty();
+        assertThat(world.occupantAt(null)).isEmpty();
+        assertThat(WorldOps.occupantAt(world, Door.ZERO_AT)).isEqualTo(world.occupantAt(Door.ZERO_AT));
         assertThat(WorldOps.occupantAt(null, Door.ZERO_AT)).isEmpty();
         WorldOps.drive(world, "stamp.apply", new BlockCoordinate(0, 0, 0), null);
         session.address(Door.ZERO_AT);

@@ -664,14 +664,33 @@ public final class World {
         return max;
     }
 
+    /**
+     * Occupancy object on this cube. Empty when the cell is not
+     * door / trap / portal / NPC. applyStamp skips these cubes.
+     */
+    public String occupantAt(BlockCoordinate at) {
+        if (at == null) {
+            return "";
+        }
+        synchronized (lock) {
+            if (door != null && at.equals(door.at())) {
+                return "door";
+            }
+            if (trap != null && at.equals(trap.at())) {
+                return "trap";
+            }
+            if (portal != null && at.equals(portal.at())) {
+                return "portal";
+            }
+            if (npc != null && at.equals(npc.at())) {
+                return "npc";
+            }
+            return "";
+        }
+    }
+
     /** Door / trap / portal / NPC cubes stay occupancy, not maze stone. */
     private boolean occupancy(BlockCoordinate at) {
-        if (at == null) {
-            return false;
-        }
-        return (door != null && at.equals(door.at()))
-                || (trap != null && at.equals(trap.at()))
-                || (portal != null && at.equals(portal.at()))
-                || (npc != null && at.equals(npc.at()));
+        return !occupantAt(at).isEmpty();
     }
 }
