@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well trap actor.**
+  well trap.arm and trap.disarm send optional actorId
+  (drive type) on the query. Blank stays the system
+  owner. No wallet types.
+
 - **Trap REST actor.**
   POST trap/arm and trap/disarm take optional actorId.
   Blank stays the system owner. DENIED is a named

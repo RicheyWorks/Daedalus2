@@ -477,6 +477,8 @@ class WebUiPaintPinTest {
                     .contains("/world/\" + WORLD + \"/stamp")
                     .contains("/world/\" + WORLD + \"/door/open\" + actorQuery(actor)")
                     .contains("/world/\" + WORLD + \"/door/close\" + actorQuery(actor)")
+                    .contains("/world/\" + WORLD + \"/trap/arm\" + actorQuery(actor)")
+                    .contains("/world/\" + WORLD + \"/trap/disarm\" + actorQuery(actor)")
                     .contains("actorId=\" + encodeURIComponent(actor)")
                     .contains("actorQuery(actor, \"&\")")
                     .contains("step.path(cell, type)")

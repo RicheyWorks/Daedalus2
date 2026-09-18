@@ -29,8 +29,10 @@
     "door.close": {method: "POST", path: (at, actor) =>
         "/world/" + WORLD + "/door/close" + actorQuery(actor)},
     "trap.inspect": {method: "GET", path: () => "/world/" + WORLD + "/trap"},
-    "trap.arm": {method: "POST", path: () => "/world/" + WORLD + "/trap/arm"},
-    "trap.disarm": {method: "POST", path: () => "/world/" + WORLD + "/trap/disarm"},
+    "trap.arm": {method: "POST", path: (at, actor) =>
+        "/world/" + WORLD + "/trap/arm" + actorQuery(actor)},
+    "trap.disarm": {method: "POST", path: (at, actor) =>
+        "/world/" + WORLD + "/trap/disarm" + actorQuery(actor)},
     "portal.inspect": {method: "GET", path: () => "/world/" + WORLD + "/portal"},
     "portal.open": {method: "POST", path: () => "/world/" + WORLD + "/portal/open"},
     "portal.seal": {method: "POST", path: () => "/world/" + WORLD + "/portal/seal"},
