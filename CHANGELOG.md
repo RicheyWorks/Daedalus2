@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well ASCII dump floor depth.**
+  Dump corridor parchment falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even cream is not the last
+  word on the maze page. KEEP gate sample
+  parchment stays.
+
 - **Well ASCII exit depth.**
   Dump goal coral falls off toward
   floor-dim with the same 0.22 as halls,

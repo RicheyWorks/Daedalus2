@@ -28,7 +28,7 @@ class WebUiPaintPinTest {
                     .contains("#log .err    { color: var(--warn); -webkit-user-drag: none")
                     .contains("#asciiOut .rock { color: #766442; -webkit-user-drag: none")
                     .contains("#asciiOut .rock { color: #766442; -webkit-user-drag: none; text-shadow: 0 1px 0 #2a2218")
-                    .contains("max-height: 22vh; color: #d4c4a8; cursor: text; text-shadow: 0 1px 0 #2a2218")
+                    .contains("max-height: 22vh; color: #afa088; cursor: text; text-shadow: 0 1px 0 #2a2218")
                     .contains("#asciiOut .gate { color: #3ab675; -webkit-user-drag: none; text-shadow: none")
                     .contains("#asciiOut .exit { color: #d04e4f; -webkit-user-drag: none; text-shadow: none")
                     .contains("background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908)")
@@ -264,6 +264,17 @@ class WebUiPaintPinTest {
             assertThat(html)
                     .contains("#asciiOut .exit { color: #d04e4f")
                     .doesNotContain("#asciiOut .exit { color: #ff5a5f");
+        }
+    }
+
+    @Test
+    void wellAsciiFloorHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("max-height: 22vh; color: #afa088; cursor: text")
+                    .doesNotContain("max-height: 22vh; color: #d4c4a8");
         }
     }
 
