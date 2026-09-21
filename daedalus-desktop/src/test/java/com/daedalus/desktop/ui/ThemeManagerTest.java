@@ -160,13 +160,17 @@ class ThemeManagerTest {
             assertThat(fxml).doesNotContain("width=\"6\" height=\"10\" fill=\"#c07850\"");
             assertThat(fxml).doesNotContain("width=\"6\" height=\"10\" fill=\"#d4b06a\"");
             assertThat(fxml).contains("legendPlayer");
-            assertThat(fxml).contains("color=\"#f5c14a\"");
+            assertThat(fxml).contains("color=\"#c89e3f\"");
+            assertThat(fxml).doesNotContain("color=\"#f5c14a\"");
             assertThat(fxml).contains("color=\"#8a6418\"");
-            assertThat(fxml).contains("color=\"#e88868\"");
+            assertThat(fxml).contains("color=\"#be7256\"");
+            assertThat(fxml).doesNotContain("color=\"#e88868\"");
             assertThat(fxml).contains("color=\"#8a3828\"");
-            assertThat(fxml).contains("color=\"#e8a060\"");
+            assertThat(fxml).contains("color=\"#be8450\"");
+            assertThat(fxml).doesNotContain("color=\"#e8a060\"");
             assertThat(fxml).contains("color=\"#8a5020\"");
-            assertThat(fxml).contains("color=\"#b8a058\"");
+            assertThat(fxml).contains("color=\"#99844a\"");
+            assertThat(fxml).doesNotContain("color=\"#b8a058\"");
             assertThat(fxml).contains("color=\"#6a5420\"");
             assertThat(fxml).doesNotContain("fill=\"#f5c14a\"");
             assertThat(fxml).doesNotContain("fill=\"#e88868\"");
@@ -277,6 +281,28 @@ class ThemeManagerTest {
                 .contains("walkTrailInk(DesktopPaint.TOUR,")
                 .doesNotContain("Color.web(DesktopPaint.HARDEST)")
                 .doesNotContain("Color.web(DesktopPaint.TOUR)");
+    }
+
+    @Test
+    void leftoverEvenPlayerChipsFallOffTowardFloorDim() throws Exception {
+        try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
+            assertThat(in).as("main.fxml is on the classpath").isNotNull();
+            String fxml = new String(in.readAllBytes());
+            assertThat(fxml)
+                    .as("player-chip gold falls off toward floor-dim")
+                    .contains("fx:id=\"legendPlayer\"")
+                    .contains("color=\"#c89e3f\"")
+                    .contains("color=\"#be7256\"")
+                    .contains("color=\"#be8450\"")
+                    .contains("color=\"#99844a\"")
+                    .doesNotContain("color=\"#f5c14a\"")
+                    .doesNotContain("color=\"#e88868\"")
+                    .doesNotContain("color=\"#e8a060\"")
+                    .doesNotContain("color=\"#b8a058\"");
+        }
+        assertThat(com.daedalus.desktop.ui.DesktopPaint.PLAYER)
+                .as("KEEP leftover even hall player gold stays")
+                .isEqualTo("#f5c14a");
     }
 
     private static Theme fakeTheme(String id) {
