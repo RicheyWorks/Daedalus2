@@ -32,7 +32,7 @@ public class CosmicTheme implements Theme {
     /** Window void — same well edge as web {@code --void}, not leftover cool page ink. */
     public static final String BACKGROUND_INK = "#0c0908";
     /** Generation / search-frontier tiles — torch amber, not leftover ice on the well. */
-    public static final String FRONTIER_INK = "#d4a04c";
+    public static final String FRONTIER_INK = "#af8441";
 
     @Override public Color background()       { return Color.web(BACKGROUND_INK); }
     @Override public Color wall()             { return Color.web(WALL_INK); }

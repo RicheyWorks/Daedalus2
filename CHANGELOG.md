@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop frontier gold family.**
+  Generation-frontier gold falls off
+  toward floor-dim with the same 0.22
+  as halls, so leftover even torch is
+  not the last word on the maze page.
+  KEEP leftover even hall player gold
+  stays.
+
 - **Race-B lane gold family.**
   Arena lane-B gold falls off toward
   floor-dim with the same 0.22 as halls,
