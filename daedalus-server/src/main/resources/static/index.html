@@ -106,7 +106,7 @@
            "Trebuchet MS", sans-serif; letter-spacing: .22em; -webkit-user-drag: none; }
   header h1 button { all: unset; cursor: pointer; letter-spacing: .22em;
            color: #f2ead8; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; -webkit-user-drag: none;
-           text-shadow: 0 0 18px rgba(62, 224, 143, 0.22), 0 0 36px rgba(245, 193, 74, 0.10);
+           text-shadow: 0 0 18px rgba(62, 224, 143, 0.22), 0 0 36px rgba(200, 158, 63, 0.10);
            animation: gateBreath 4.5s ease-in-out infinite; }
   header h1 button:hover { color: var(--accent); }
   #gate { position: fixed; inset: 0; z-index: 20; overflow: auto; overscroll-behavior: none; cursor: default; -webkit-user-drag: none;
@@ -121,8 +121,8 @@
   #gate .gate-veil { position: absolute; inset: 0; pointer-events: none; opacity: .28;
           background:
             linear-gradient(90deg, transparent 23px, rgba(62, 224, 143, .08) 24px, transparent 25px),
-            linear-gradient(transparent 23px, rgba(245, 193, 74, .05) 24px, transparent 25px),
-            radial-gradient(70% 45% at 50% 0%, rgba(245, 193, 74, .06), transparent 70%);
+            linear-gradient(transparent 23px, rgba(200, 158, 63, .05) 24px, transparent 25px),
+            radial-gradient(70% 45% at 50% 0%, rgba(200, 158, 63, .06), transparent 70%);
           background-size: 48px 48px, 48px 48px, auto;
           mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 92%);
           animation: gateVeil 8s ease-in-out infinite; }
@@ -131,7 +131,7 @@
   #gate .gate-brand { margin: 0 0 14px; font: 700 clamp(2.8rem, 9vw, 5.4rem)/.95
           "Bahnschrift", "Avenir Next Condensed", "Trebuchet MS", sans-serif;
           letter-spacing: .22em; text-indent: .22em; color: #f2ead8; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; -webkit-user-drag: none; cursor: default;
-          text-shadow: 0 0 22px rgba(62, 224, 143, 0.16), 0 0 48px rgba(245, 193, 74, 0.08);
+          text-shadow: 0 0 22px rgba(62, 224, 143, 0.16), 0 0 48px rgba(200, 158, 63, 0.08);
           animation: gateRise .7s ease both, gateBreath 4.5s ease-in-out .7s infinite; }
   #gate .lede { color: #b09a72; cursor: text; margin: 0 0 22px; max-width: 34rem; font-size: 15px; -webkit-user-drag: none;
           text-wrap: pretty; animation: gateRise .7s .1s ease both; }
@@ -167,10 +167,10 @@
   }
   @keyframes gateBreath {
     0%, 100% {
-      text-shadow: 0 0 22px rgba(62, 224, 143, 0.16), 0 0 48px rgba(245, 193, 74, 0.08);
+      text-shadow: 0 0 22px rgba(62, 224, 143, 0.16), 0 0 48px rgba(200, 158, 63, 0.08);
     }
     50% {
-      text-shadow: 0 0 36px rgba(62, 224, 143, 0.32), 0 0 72px rgba(245, 193, 74, 0.18);
+      text-shadow: 0 0 36px rgba(62, 224, 143, 0.32), 0 0 72px rgba(200, 158, 63, 0.18);
     }
   }
   @keyframes gateVeil {
@@ -240,10 +240,10 @@
       animation: none;
     }
     #gate .gate-brand {
-      text-shadow: 0 0 22px rgba(62, 224, 143, 0.16), 0 0 48px rgba(245, 193, 74, 0.08);
+      text-shadow: 0 0 22px rgba(62, 224, 143, 0.16), 0 0 48px rgba(200, 158, 63, 0.08);
     }
     header h1 button {
-      text-shadow: 0 0 18px rgba(62, 224, 143, 0.22), 0 0 36px rgba(245, 193, 74, 0.10);
+      text-shadow: 0 0 18px rgba(62, 224, 143, 0.22), 0 0 36px rgba(200, 158, 63, 0.10);
     }
     #gate .gate-veil { opacity: .28; }
     #stage {

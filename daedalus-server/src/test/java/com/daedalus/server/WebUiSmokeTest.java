@@ -167,7 +167,7 @@ class WebUiSmokeTest {
                 .contains("background: #16120e; color: #afa088; cursor: text")
                 .contains("font: 11px/1.45 ui-monospace, monospace; overflow: auto; overscroll-behavior: none;")
                 .contains("gateBreath").contains("gateVeil")
-                .contains("rgba(245, 193, 74, .05)")
+                .contains("rgba(200, 158, 63, .05)")
                 .contains("rgba(184, 133, 56, 0.28)")
                 .contains("/api/v1").contains("/ws")
                 .contains("/auth/login").contains("id=\"login\"").contains("id=\"fog\"")

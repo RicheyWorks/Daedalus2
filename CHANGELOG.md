@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well wordmark gold-glow family.**
+  Header, gate-brand, and gate-veil
+  gold fall off toward floor-dim with
+  the same 0.22 as halls, so leftover
+  even torch is not the last word on
+  the maze page. KEEP leftover even
+  hall player gold stays.
+
 - **Well tab-chrome gold family.**
   Mask-icon and favicon gold fall off
   toward floor-dim with the same 0.22
