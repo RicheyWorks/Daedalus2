@@ -22,7 +22,7 @@ class WebUiPaintPinTest {
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html).contains(
                     "#log .t { color: #b09a72; margin-right: 6px; -webkit-user-drag: none")
-                    .contains("#log .solver { color: #d4a04c; -webkit-user-drag: none")
+                    .contains("#log .solver { color: #af8441; -webkit-user-drag: none")
                     .contains("#log .player { color: var(--gold); -webkit-user-drag: none")
                     .contains("#log .state  { color: var(--accent); -webkit-user-drag: none")
                     .contains("#log .err    { color: var(--warn); -webkit-user-drag: none")
@@ -991,6 +991,17 @@ class WebUiPaintPinTest {
             assertThat(html)
                     .contains("#campaignBox a, #campaignBox a:visited, #campaignBox a:active { color: #af8441; text-decoration: none; }")
                     .doesNotContain("#campaignBox a, #campaignBox a:visited, #campaignBox a:active { color: #d4a04c; text-decoration: none; }");
+        }
+    }
+
+    @Test
+    void wellLogSolverHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("#log .solver { color: #af8441; -webkit-user-drag: none; }")
+                    .doesNotContain("#log .solver { color: #d4a04c; -webkit-user-drag: none; }");
         }
     }
 
