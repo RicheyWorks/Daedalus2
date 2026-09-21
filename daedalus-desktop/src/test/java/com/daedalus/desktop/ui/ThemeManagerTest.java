@@ -101,7 +101,8 @@ class ThemeManagerTest {
         try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
             assertThat(in).as("main.fxml is on the classpath").isNotNull();
             String fxml = new String(in.readAllBytes());
-            assertThat(fxml).contains("stroke=\"rgba(242,234,216,0.28)\"");
+            assertThat(fxml).contains("stroke=\"rgba(198,190,174,0.28)\"");
+            assertThat(fxml).doesNotContain("stroke=\"rgba(242,234,216,0.28)\"");
             assertThat(fxml).contains("stroke=\"rgba(245,193,74,0.35)\"");
             assertThat(fxml).contains("stroke=\"rgba(229,72,77,0.35)\"");
             assertThat(fxml).contains("color=\"#484339\"");
@@ -184,7 +185,7 @@ class ThemeManagerTest {
             assertThat(fxml).contains("color=\"#19140f\"")
                     .doesNotContain("stroke=\"#2a2218\"");
             assertThat(fxml).contains("color=\"#0c0908\"")
-                    .contains("stroke=\"rgba(242,234,216,0.28)\"");
+                    .contains("stroke=\"rgba(198,190,174,0.28)\"");
         }
         assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.PASSAGE_INK).isEqualTo("#484339");
         assertThat(com.daedalus.desktop.ui.themes.CosmicTheme.WALL_INK).isEqualTo("#19140f");
@@ -303,6 +304,18 @@ class ThemeManagerTest {
         assertThat(com.daedalus.desktop.ui.DesktopPaint.PLAYER)
                 .as("KEEP leftover even hall player gold stays")
                 .isEqualTo("#f5c14a");
+    }
+
+    @Test
+    void leftoverEvenCreamRimsFallOffTowardFloorDim() throws Exception {
+        try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
+            assertThat(in).as("main.fxml is on the classpath").isNotNull();
+            String fxml = new String(in.readAllBytes());
+            assertThat(fxml)
+                    .as("chip-rim cream falls off toward floor-dim")
+                    .contains("stroke=\"rgba(198,190,174,0.28)\"")
+                    .doesNotContain("stroke=\"rgba(242,234,216,0.28)\"");
+        }
     }
 
     private static Theme fakeTheme(String id) {
