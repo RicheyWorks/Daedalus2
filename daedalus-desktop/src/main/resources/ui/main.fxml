@@ -314,7 +314,7 @@
                 <Label fx:id="legendHardest" text="hardest" managed="false" visible="false">
                     <graphic>
                         <Rectangle width="10" height="10"
-                                   stroke="rgba(245,193,74,0.35)" strokeWidth="1.5"
+                                   stroke="rgba(200,158,63,0.35)" strokeWidth="1.5"
                                    arcWidth="3" arcHeight="3">
                             <fill>
                                 <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
@@ -418,7 +418,7 @@
                 <Label fx:id="legendTour" text="tour" managed="false" visible="false">
                     <graphic>
                         <Rectangle width="10" height="10"
-                                   stroke="rgba(245,193,74,0.35)" strokeWidth="1.5"
+                                   stroke="rgba(200,158,63,0.35)" strokeWidth="1.5"
                                    arcWidth="3" arcHeight="3">
                             <fill>
                                 <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
@@ -435,7 +435,7 @@
                 <Label fx:id="legendWaypoint" text="waypoint" managed="false" visible="false">
                     <graphic>
                         <Rectangle width="8" height="8" rotate="45"
-                                   stroke="rgba(245,193,74,0.35)" strokeWidth="1.5">
+                                   stroke="rgba(200,158,63,0.35)" strokeWidth="1.5">
                             <fill>
                                 <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
                                                 proportional="true">

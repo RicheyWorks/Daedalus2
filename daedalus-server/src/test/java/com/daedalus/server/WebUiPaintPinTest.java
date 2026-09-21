@@ -1747,6 +1747,18 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellLegendGoldRimsHaveRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("#legend [data-key=\"waypoint\"] i, #legend [data-key=\"hardest\"] i,")
+                    .contains("box-shadow: 0 0 0 1.5px rgba(200, 158, 63, .35); }")
+                    .doesNotContain("box-shadow: 0 0 0 1.5px rgba(245, 193, 74, .35); }");
+        }
+    }
+
+    @Test
     void wellLegendWaypointChipHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
             assertThat(in).as("static well page").isNotNull();

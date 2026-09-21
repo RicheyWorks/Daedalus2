@@ -103,7 +103,8 @@ class ThemeManagerTest {
             String fxml = new String(in.readAllBytes());
             assertThat(fxml).contains("stroke=\"rgba(198,190,174,0.28)\"");
             assertThat(fxml).doesNotContain("stroke=\"rgba(242,234,216,0.28)\"");
-            assertThat(fxml).contains("stroke=\"rgba(245,193,74,0.35)\"");
+            assertThat(fxml).contains("stroke=\"rgba(200,158,63,0.35)\"");
+            assertThat(fxml).doesNotContain("stroke=\"rgba(245,193,74,0.35)\"");
             assertThat(fxml).contains("stroke=\"rgba(229,72,77,0.35)\"");
             assertThat(fxml).contains("color=\"#484339\"");
             assertThat(fxml).contains("color=\"#2a2218\"");
@@ -315,6 +316,21 @@ class ThemeManagerTest {
                     .as("chip-rim cream falls off toward floor-dim")
                     .contains("stroke=\"rgba(198,190,174,0.28)\"")
                     .doesNotContain("stroke=\"rgba(242,234,216,0.28)\"");
+        }
+    }
+
+    @Test
+    void leftoverEvenGoldRimsFallOffTowardFloorDim() throws Exception {
+        try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
+            assertThat(in).as("main.fxml is on the classpath").isNotNull();
+            String fxml = new String(in.readAllBytes());
+            assertThat(fxml)
+                    .as("hardest / tour / waypoint gold rims fall off toward floor-dim")
+                    .contains("fx:id=\"legendHardest\"")
+                    .contains("fx:id=\"legendTour\"")
+                    .contains("fx:id=\"legendWaypoint\"")
+                    .contains("stroke=\"rgba(200,158,63,0.35)\"")
+                    .doesNotContain("stroke=\"rgba(245,193,74,0.35)\"");
         }
     }
 

@@ -559,7 +559,7 @@ class WebUiSmokeTest {
                 .contains(">players</span>")
                 .contains("race: !!(snap.race && snap.race.lanes && snap.race.lanes.length)")
                 .contains("deadend: !!(snap.analysis && snap.analysis.deadEnds")
-                .contains("rgba(245, 193, 74, .35)")
+                .contains("rgba(200, 158, 63, .35)")
                 .contains("rgba(242,234,216,.06)")
                 .contains("rgba(198, 190, 174, .28)")
                 .contains("Authorization").contains("text/plain").contains("id=\"ascii\"")
