@@ -1451,6 +1451,24 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellRaceBLaneHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/solve.js")) {
+            assertThat(in).as("well race starter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("{id: b, color: \"#c49425\", expansions: rb.expansions || [], path: rb.path,")
+                    .doesNotContain("{id: b, color: \"#f0b429\", expansions: rb.expansions || [], path: rb.path,");
+        }
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .as("KEEP leftover even mixHex race gold stays")
+                    .contains("mixHex(\"#f0b429\", COLORS.floorDim, 0.22 * edge)");
+        }
+    }
+
+    @Test
     void wellVictoryMarksHaveRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

@@ -216,7 +216,10 @@ class DesktopWorkTest {
         assertThat(race.first().id()).isEqualTo("astar");
         assertThat(race.first().color()).isEqualTo(DesktopPaint.RACE_A);
         assertThat(race.second().id()).isEqualTo("bfs");
-        assertThat(race.second().color()).isEqualTo(DesktopPaint.RACE_B);
+        assertThat(race.second().color()).isEqualTo("#c49425");
+        assertThat(DesktopPaint.RACE_B)
+                .as("KEEP leftover even mixHex race gold stays")
+                .isEqualTo("#f0b429");
         assertThat(race.first().expansions()).isNotEmpty();
         assertThat(race.second().expansions()).isNotEmpty();
         assertThat(race.first().path().getLast()).isEqualTo(cached.grid().goal());

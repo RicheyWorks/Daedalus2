@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Race-B lane gold family.**
+  Arena lane-B gold falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP leftover
+  even mixHex race gold stays.
+
 - **Well wordmark gold-glow family.**
   Header, gate-brand, and gate-veil
   gold fall off toward floor-dim with

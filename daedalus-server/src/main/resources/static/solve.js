@@ -168,7 +168,7 @@
       state.race = { lanes: [
         {id: a, color: "#8fb8ff", expansions: ra.expansions || [], path: ra.path,
          success: ra.success, front: 0, pathProg: 0},
-        {id: b, color: "#f0b429", expansions: rb.expansions || [], path: rb.path,
+        {id: b, color: "#c49425", expansions: rb.expansions || [], path: rb.path,
          success: rb.success, front: 0, pathProg: 0},
       ]};
       host.log("solver", `arena: ${a} (${(ra.expansions || []).length} expansions) vs `

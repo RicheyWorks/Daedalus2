@@ -288,7 +288,7 @@ public class DesktopWork {
             return new DesktopPaint.Race(
                     new DesktopPaint.RaceLane(firstId, DesktopPaint.RACE_A,
                             first.expansions(), first.path()),
-                    new DesktopPaint.RaceLane(secondId, DesktopPaint.RACE_B,
+                    new DesktopPaint.RaceLane(secondId, "#c49425",
                             second.expansions(), second.path()));
         };
     }
