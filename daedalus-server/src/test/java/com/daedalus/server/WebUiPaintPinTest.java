@@ -72,7 +72,8 @@ class WebUiPaintPinTest {
             assertThat(html).contains(
                     "rel=\"icon\" type=\"image/svg+xml\"")
                     .contains("fill='%230c0908'")
-                    .contains("stroke='%23b88538'")
+                    .contains("stroke='%23996f31'")
+                    .doesNotContain("stroke='%23b88538'")
                     .contains("x='5' y='9' width='2' height='2' fill='%2315110d'")
                     .contains("x='13' y='13' width='2' height='2' fill='%2318130e'")
                     .contains("x='15' y='15' width='2' height='2' fill='%23484339'")
@@ -101,7 +102,8 @@ class WebUiPaintPinTest {
             assertThat(in).as("static well page").isNotNull();
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html).contains(
-                    "rel=\"mask-icon\" color=\"#b88538\"")
+                    "rel=\"mask-icon\" color=\"#996f31\"")
+                    .doesNotContain("rel=\"mask-icon\" color=\"#b88538\"")
                     .contains("fill-rule='evenodd' d='M0 0h32v32H0zM1 1h30v30H1z'")
                     .contains("x='5' y='9' width='22' height='2' fill='black'")
                     .contains("x='7' y='11' width='2' height='2' fill='black'")
