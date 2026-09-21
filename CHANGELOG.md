@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Legend hotspot-rim family.**
+  Hotspot coral rims fall off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP leftover
+  even lens coral stays.
+
 - **Well legend faint-cream family.**
   Chip-rim faint cream falls off toward
   floor-dim with the same 0.22 as halls,

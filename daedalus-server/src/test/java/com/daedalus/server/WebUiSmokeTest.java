@@ -541,7 +541,7 @@ class WebUiSmokeTest {
                 .contains("radial-gradient(circle at 45% 40%, #af9158 28%, #6a5428)")
                 .contains("#legend [data-key=\"hotspot\"] i")
                 .contains("radial-gradient(circle at 45% 40%, rgba(229,72,77,.5) 28%, rgba(106,32,36,.5))")
-                .contains("rgba(229, 72, 77, .35)")
+                .contains("rgba(188, 64, 65, .35)")
                 .contains("sanctuary: !!(snap.sanctuaries")
                 .contains("lens: !!snap.lens")
                 .contains("hardest: !!(snap.hardest")

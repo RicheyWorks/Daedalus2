@@ -1729,6 +1729,20 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellLegendHotspotRimsHaveRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("#legend [data-key=\"hotspot\"] i {")
+                    .contains("box-shadow: 0 0 0 1.5px rgba(188, 64, 65, .35); }")
+                    .doesNotContain("box-shadow: 0 0 0 1.5px rgba(229, 72, 77, .35); }")
+                    .as("KEEP leftover even lens coral stays")
+                    .contains("radial-gradient(circle at 45% 40%, #e5484d 28%, #6a2024)");
+        }
+    }
+
+    @Test
     void wellLegendFaintCreamRimsHaveRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
             assertThat(in).as("static well page").isNotNull();
