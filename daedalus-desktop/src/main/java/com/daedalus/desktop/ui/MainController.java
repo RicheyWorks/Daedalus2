@@ -2188,11 +2188,11 @@ public class MainController {
 
         if (currentHardest != null && currentHardest.path() != null
                 && !currentHardest.path().isEmpty()) {
-            paintPathRibbon(g, layout, currentHardest.path(), Color.web(DesktopPaint.HARDEST),
+            paintPathRibbon(g, layout, currentHardest.path(), Color.web("#c6a441"),
                     DesktopPaint.HARDEST_ALPHA, null, null, DesktopPaint.HARDEST);
             Point tip = DesktopPaint.walkHead(currentHardest.path());
             double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
-            Color gold = Color.web(tip == null ? DesktopPaint.HARDEST
+            Color gold = Color.web(tip == null ? "#c6a441"
                     : DesktopPaint.walkTrailInk(DesktopPaint.HARDEST,
                             DesktopPaint.floorEdge(layout, 2 * tip.row() + 1, 2 * tip.col() + 1)));
             paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
@@ -2201,11 +2201,11 @@ public class MainController {
         }
 
         if (currentHunt != null && currentHunt.path() != null && !currentHunt.path().isEmpty()) {
-            paintPathRibbon(g, layout, currentHunt.path(), Color.web(DesktopPaint.TOUR),
+            paintPathRibbon(g, layout, currentHunt.path(), Color.web("#af9158"),
                     DesktopPaint.TOUR_ALPHA, null, null, DesktopPaint.TOUR);
             Point tip = DesktopPaint.walkHead(currentHunt.path());
             double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
-            Color amber = Color.web(tip == null ? DesktopPaint.TOUR
+            Color amber = Color.web(tip == null ? "#af9158"
                     : DesktopPaint.walkTrailInk(DesktopPaint.TOUR,
                             DesktopPaint.floorEdge(layout, 2 * tip.row() + 1, 2 * tip.col() + 1)));
             paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),

@@ -320,7 +320,7 @@
                                 <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
                                                 proportional="true">
                                     <stops>
-                                        <Stop offset="0.28" color="#f2c94c"/>
+                                        <Stop offset="0.28" color="#c6a441"/>
                                         <Stop offset="1.0" color="#8a6820"/>
                                     </stops>
                                 </RadialGradient>
@@ -406,7 +406,7 @@
                                     <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
                                                     proportional="true">
                                         <stops>
-                                            <Stop offset="0.28" color="#f0b429"/>
+                                            <Stop offset="0.28" color="#c49425"/>
                                             <Stop offset="1.0" color="#8a6018"/>
                                         </stops>
                                     </RadialGradient>
@@ -424,7 +424,7 @@
                                 <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
                                                 proportional="true">
                                     <stops>
-                                        <Stop offset="0.28" color="#d4b06a"/>
+                                        <Stop offset="0.28" color="#af9158"/>
                                         <Stop offset="1.0" color="#6a5428"/>
                                     </stops>
                                 </RadialGradient>
@@ -440,7 +440,7 @@
                                 <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
                                                 proportional="true">
                                     <stops>
-                                        <Stop offset="0.28" color="#f2c94c"/>
+                                        <Stop offset="0.28" color="#c6a441"/>
                                         <Stop offset="1.0" color="#8a6820"/>
                                     </stops>
                                 </RadialGradient>
@@ -485,7 +485,7 @@
                                     <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
                                                     proportional="true">
                                         <stops>
-                                            <Stop offset="0.28" color="#f0b429"/>
+                                            <Stop offset="0.28" color="#c49425"/>
                                             <Stop offset="1.0" color="#8a6018"/>
                                         </stops>
                                     </RadialGradient>
@@ -533,7 +533,7 @@
                                     <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
                                                     proportional="true">
                                         <stops>
-                                            <Stop offset="0.28" color="#d4b06a"/>
+                                            <Stop offset="0.28" color="#af9158"/>
                                             <Stop offset="1.0" color="#6a5428"/>
                                         </stops>
                                     </RadialGradient>

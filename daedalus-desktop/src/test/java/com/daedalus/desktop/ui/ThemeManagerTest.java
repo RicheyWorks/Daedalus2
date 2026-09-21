@@ -129,6 +129,7 @@ class ThemeManagerTest {
             assertThat(fxml).contains("color=\"#4e6a28\"");
             assertThat(fxml).contains("legendDeadend");
             assertThat(fxml).contains("legendHardest");
+            assertThat(fxml).contains("color=\"#c6a441\"");
             assertThat(fxml).contains("color=\"#f2c94c\"");
             assertThat(fxml).contains("color=\"#8a6820\"");
             assertThat(fxml).doesNotContain("fill=\"#f2c94c\" arcWidth=\"3\" arcHeight=\"3\"");
@@ -140,7 +141,8 @@ class ThemeManagerTest {
             assertThat(fxml).doesNotContain("fill=\"#e5484d\" opacity=\"0.5\"");
             assertThat(fxml).contains("legendTour");
             assertThat(fxml).doesNotContain("fill=\"#d4b06a\"");
-            assertThat(fxml).contains("color=\"#d4b06a\"");
+            assertThat(fxml).contains("color=\"#af9158\"");
+            assertThat(fxml).doesNotContain("color=\"#d4b06a\"");
             assertThat(fxml).contains("color=\"#6a5428\"");
             assertThat(fxml).doesNotContain("fill=\"#d4b06a\" arcWidth=\"3\" arcHeight=\"3\"");
             assertThat(fxml).contains("legendPath");
@@ -148,7 +150,8 @@ class ThemeManagerTest {
             assertThat(fxml).contains("color=\"#3a5888\"");
             assertThat(fxml).doesNotContain("fill=\"#8fb8ff\" arcWidth=\"3\" arcHeight=\"3\"");
             assertThat(fxml).contains("legendRace");
-            assertThat(fxml).contains("color=\"#f0b429\"");
+            assertThat(fxml).contains("color=\"#c49425\"");
+            assertThat(fxml).doesNotContain("color=\"#f0b429\"");
             assertThat(fxml).contains("color=\"#8a6018\"");
             assertThat(fxml).contains("legendLens");
             assertThat(fxml).doesNotContain("fill=\"#f2c94c\"");
@@ -243,6 +246,37 @@ class ThemeManagerTest {
                     .contains("-fx-border-color: rgba(184, 133, 56, 0.32);\n    -fx-border-radius: 7;")
                     .contains(".check-box .box {\n    -fx-background-color: #07090c;\n    -fx-border-color: rgba(184, 133, 56, 0.28);");
         }
+    }
+
+    @Test
+    void leftoverEvenGoldChipsFallOffTowardFloorDim() throws Exception {
+        try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
+            assertThat(in).as("main.fxml is on the classpath").isNotNull();
+            String fxml = new String(in.readAllBytes());
+            assertThat(fxml)
+                    .as("tour / hardest / waypoint / race-B chip gold fall off toward floor-dim")
+                    .contains("fx:id=\"legendHardest\"")
+                    .contains("color=\"#c6a441\"")
+                    .contains("fx:id=\"legendTour\"")
+                    .contains("color=\"#af9158\"")
+                    .contains("fx:id=\"legendWaypoint\"")
+                    .contains("fx:id=\"legendRace\"")
+                    .contains("color=\"#c49425\"")
+                    .doesNotContain("color=\"#d4b06a\"")
+                    .doesNotContain("color=\"#f0b429\"")
+                    .as("KEEP leftover even lens gold stays")
+                    .contains("fx:id=\"legendLens\"")
+                    .contains("color=\"#f2c94c\"");
+        }
+        String src = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/java/com/daedalus/desktop/ui/MainController.java"));
+        assertThat(src)
+                .contains("Color.web(\"#c6a441\")")
+                .contains("Color.web(\"#af9158\")")
+                .contains("walkTrailInk(DesktopPaint.HARDEST,")
+                .contains("walkTrailInk(DesktopPaint.TOUR,")
+                .doesNotContain("Color.web(DesktopPaint.HARDEST)")
+                .doesNotContain("Color.web(DesktopPaint.TOUR)");
     }
 
     private static Theme fakeTheme(String id) {
