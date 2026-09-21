@@ -960,6 +960,19 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellAsciiScrollbarHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("max-height: 22vh; color: #afa088; cursor: text; text-shadow: 0 1px 0 #2a2218;\n"
+                            + "              scrollbar-width: thin; scrollbar-color: rgba(153, 111, 49, 0.45) transparent;")
+                    .doesNotContain("max-height: 22vh; color: #afa088; cursor: text; text-shadow: 0 1px 0 #2a2218;\n"
+                            + "              scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent;");
+        }
+    }
+
+    @Test
     void wellHardestRibbonHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

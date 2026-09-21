@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well ASCII scrollbar depth.**
+  ASCII-dump scroll gold falls off
+  toward floor-dim with the same 0.22
+  as halls, so leftover even torch is
+  not the last word on the maze page.
+  KEEP leftover even tour-link gold
+  stays.
+
 - **Well compare scrollbar depth.**
   Compare-table scroll gold falls off
   toward floor-dim with the same 0.22
