@@ -1729,6 +1729,24 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellLegendCreamRimsHaveRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("box-shadow: 0 0 0 1.5px rgba(198, 190, 174, .28); }")
+                    .doesNotContain("box-shadow: 0 0 0 1.5px rgba(242, 234, 216, .28); }");
+        }
+        try (InputStream in = getClass().getResourceAsStream("/static/caption.js")) {
+            assertThat(in).as("well caption painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("box-shadow:0 0 0 1.5px rgba(198, 190, 174, .28)")
+                    .doesNotContain("box-shadow:0 0 0 1.5px rgba(242, 234, 216, .28)");
+        }
+    }
+
+    @Test
     void wellLegendWaypointChipHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
             assertThat(in).as("static well page").isNotNull();

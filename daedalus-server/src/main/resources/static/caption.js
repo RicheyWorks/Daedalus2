@@ -49,7 +49,7 @@
   function fieldHtml(f) {
     const swatches = DISTANCE_RAMP
         .map(c => `<span style="display:inline-block;width:16px;height:10px;background:${c};`
-            + `margin-right:1px;box-shadow:0 0 0 1.5px rgba(242, 234, 216, .28)"></span>`)
+            + `margin-right:1px;box-shadow:0 0 0 1.5px rgba(198, 190, 174, .28)"></span>`)
         .join("");
     return `<div style="margin-top:8px">`
         + `<b style="color:#af8441">Distance from the ${f.from.toLowerCase()}</b> — the `
@@ -76,7 +76,7 @@
   function lensHtml(l) {
     const chip = (i, label, n) => `<span style="display:inline-block;width:10px;height:10px;`
         + `background:${i === 0 ? "#bc4041" : i === 1 ? "#c6a441" : "#758c44"};margin-right:4px;`
-        + `box-shadow:0 0 0 1.5px rgba(242, 234, 216, .28)"></span>${label} <b>${n}</b>`;
+        + `box-shadow:0 0 0 1.5px rgba(198, 190, 174, .28)"></span>${label} <b>${n}</b>`;
     return `<div style="margin-top:8px">`
         + `${chip(0, "must expand", l.mustExpand)} &middot; ${chip(1, "tie decides", l.tie)} `
         + `&middot; ${chip(2, "never touched", l.never)}`
