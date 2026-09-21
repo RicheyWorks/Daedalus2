@@ -381,7 +381,7 @@ class WebUiSmokeTest {
                 .contains("#pluginBox div { border-bottom: 1px solid rgba(153, 111, 49, 0.28); padding: 2px 0; -webkit-user-drag: none")
                 .contains("#campaignBox div { border-bottom: 1px solid rgba(153, 111, 49, 0.28);")
                 .contains("#campaignBox div { border-bottom: 1px solid rgba(153, 111, 49, 0.28); -webkit-user-drag: none")
-                .contains("#campaignBox a, #campaignBox a:visited, #campaignBox a:active { color: #d4a04c; text-decoration: none; }")
+                .contains("#campaignBox a, #campaignBox a:visited, #campaignBox a:active { color: #af8441; text-decoration: none; }")
                 .contains("#campaignBox a:focus-visible { outline: 2px solid rgba(153, 111, 49, 0.85); outline-offset: 1px; }")
                 .contains("const LAB_SERIES = \"#af8441\"")
                 .contains("stroke=\"#766442\" stroke-width=\"2\"")
