@@ -1729,6 +1729,18 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellLegendFaintCreamRimsHaveRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("#legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px;")
+                    .contains("box-shadow: 0 0 0 1px rgba(198,190,174,.06); }")
+                    .doesNotContain("box-shadow: 0 0 0 1px rgba(242,234,216,.06); }");
+        }
+    }
+
+    @Test
     void wellLegendCreamRimsHaveRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
             assertThat(in).as("static well page").isNotNull();
