@@ -49,7 +49,7 @@
       const hazards = s.hazards.length ? ` · ${host.esc(s.hazards.join(" + "))}` : "";
       return `<div style="margin:4px 0;padding:4px 6px;border-radius:4px;`
           + `${active ? "background:#1a1610;" : ""}">`
-          + `<a href="#" data-stage="${s.index}" style="color:${done ? "#4cc38a" : "#d4a04c"}">`
+          + `<a href="#" data-stage="${s.index}" style="color:${done ? "#4cc38a" : "#af8441"}">`
           + `${done ? "✓" : s.index + 1}. ${host.esc(s.name)}</a> `
           + `<span class="hint">${s.rows}×${s.cols} ${host.esc(s.generatorId)} · `
           + `<b>${host.esc(s.grade.label)}</b> ${s.grade.score}${hazards}</span></div>`;

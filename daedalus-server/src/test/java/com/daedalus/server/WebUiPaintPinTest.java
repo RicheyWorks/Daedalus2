@@ -1006,6 +1006,17 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellCampaignStageHasRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/campaign.js")) {
+            assertThat(in).as("well campaign painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("color:${done ? \"#4cc38a\" : \"#af8441\"}")
+                    .doesNotContain("color:${done ? \"#4cc38a\" : \"#d4a04c\"}");
+        }
+    }
+
+    @Test
     void wellHardestRibbonHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

@@ -398,7 +398,7 @@ class WebUiSmokeTest {
                 .contains("#lb .rank { display: inline-block; width: 18px; color: #b09a72;")
                 .contains("#lb b { color: #f2ead8;")
                 .contains("${active ? \"background:#1a1610;\" : \"\"}")
-                .contains("color:${done ? \"#4cc38a\" : \"#d4a04c\"}")
+                .contains("color:${done ? \"#4cc38a\" : \"#af8441\"}")
                 .contains("details { margin-top: 10px; border-top: 1px solid rgba(153, 111, 49, 0.28); padding-top: 6px;")
                 .contains("0.28); padding-top: 6px; -webkit-user-drag: none")
                 .contains("letter-spacing: .12em; color: #b09a72; margin: 4px 0 2px; user-select: none")
