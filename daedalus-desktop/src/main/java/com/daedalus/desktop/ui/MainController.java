@@ -1756,7 +1756,7 @@ public class MainController {
                 && statusLabel.getParent() instanceof javafx.scene.layout.Region statusBar) {
             statusBar.setBorder(new javafx.scene.layout.Border(
                     new javafx.scene.layout.BorderStroke(
-                            Color.rgb(184, 133, 56, lip),
+                            Color.rgb(153, 111, 49, lip),
                             javafx.scene.layout.BorderStrokeStyle.SOLID,
                             javafx.scene.layout.CornerRadii.EMPTY,
                             new javafx.scene.layout.BorderWidths(1, 0, 0, 0))));
@@ -1765,7 +1765,7 @@ public class MainController {
                 && generateButton.getParent() instanceof javafx.scene.layout.Region toolbar) {
             toolbar.setBorder(new javafx.scene.layout.Border(
                     new javafx.scene.layout.BorderStroke(
-                            Color.rgb(184, 133, 56, lip),
+                            Color.rgb(153, 111, 49, lip),
                             javafx.scene.layout.BorderStrokeStyle.SOLID,
                             javafx.scene.layout.CornerRadii.EMPTY,
                             new javafx.scene.layout.BorderWidths(0, 0, 1, 0))));
@@ -1785,7 +1785,7 @@ public class MainController {
                 if (child instanceof javafx.scene.layout.Region chipNode) {
                     chipNode.setBorder(new javafx.scene.layout.Border(
                             new javafx.scene.layout.BorderStroke(
-                                    Color.rgb(184, 133, 56, chip),
+                                    Color.rgb(153, 111, 49, chip),
                                     javafx.scene.layout.BorderStrokeStyle.SOLID,
                                     new javafx.scene.layout.CornerRadii(6),
                                     new javafx.scene.layout.BorderWidths(1))));

@@ -6,7 +6,7 @@
     -fx-background-color: #0c0908;
     -fx-font-family: "Segoe UI", "SF Pro Display", "Helvetica Neue", sans-serif;
     -fx-font-size: 13px;
-    -fx-highlight-fill: rgba(184, 133, 56, 0.35);
+    -fx-highlight-fill: rgba(153, 111, 49, 0.35);
     -fx-highlight-text-fill: #f2ead8;
     -fx-font-smoothing-type: gray;
     -fx-text-fill: #f2ead8;
@@ -17,7 +17,7 @@
 
 .toolbar {
     -fx-background-color: #16120e;
-    -fx-border-color: transparent transparent rgba(184, 133, 56, 0.45) transparent;
+    -fx-border-color: transparent transparent rgba(153, 111, 49, 0.45) transparent;
     -fx-border-width: 0 0 1 0;
     -fx-cursor: default;
 }
@@ -35,7 +35,7 @@
     -fx-cursor: default;
 }
 .toolbar .separator .line {
-    -fx-border-color: rgba(184, 133, 56, 0.28);
+    -fx-border-color: rgba(153, 111, 49, 0.28);
     -fx-border-width: 0 0 0 1;
 }
 
@@ -115,13 +115,13 @@
 .canvas-pane {
     -fx-background-color: radial-gradient(center 50% 45%, radius 72%, #16120e, #0c0908);
     -fx-background-radius: 10;
-    -fx-border-color: rgba(184, 133, 56, 0.55);
+    -fx-border-color: rgba(153, 111, 49, 0.55);
     -fx-border-width: 1;
     -fx-border-radius: 10;
     /* Same inset void shade as web #stage — the board sinks into the well. */
     -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.35), 48, 0.0, 0, 0);
-    -fx-focus-color: rgba(184, 133, 56, 0.85);
-    -fx-faint-focus-color: rgba(184, 133, 56, 0.25);
+    -fx-focus-color: rgba(153, 111, 49, 0.85);
+    -fx-faint-focus-color: rgba(153, 111, 49, 0.25);
     -fx-cursor: default;
 }
 
@@ -135,14 +135,14 @@
     -fx-font-size: 11px;
     -fx-padding: 4 10 4 10;
     -fx-background-radius: 6;
-    -fx-border-color: rgba(184, 133, 56, 0.36);
+    -fx-border-color: rgba(153, 111, 49, 0.36);
     -fx-border-radius: 6;
 }
 .exports .button:hover {
     -fx-background-color: #1a1610;
-    -fx-border-color: rgba(184, 133, 56, 0.85);
+    -fx-border-color: rgba(153, 111, 49, 0.85);
     -fx-text-fill: #f2ead8;
-    -fx-effect: dropshadow(one-pass-box, rgba(184, 133, 56, 0.22), 10, 0.4, 0, 0);
+    -fx-effect: dropshadow(one-pass-box, rgba(153, 111, 49, 0.22), 10, 0.4, 0, 0);
 }
 
 .legend {
@@ -160,7 +160,7 @@
 
 .status-bar {
     -fx-background-color: #16120e;
-    -fx-border-color: rgba(184, 133, 56, 0.45) transparent transparent transparent;
+    -fx-border-color: rgba(153, 111, 49, 0.45) transparent transparent transparent;
     -fx-border-width: 1 0 0 0;
     -fx-cursor: default;
 }

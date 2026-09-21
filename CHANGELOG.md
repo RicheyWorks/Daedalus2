@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop chrome gold family.**
+  Toolbar, status, export, and
+  canvas-pane gold fall off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP leftover
+  even field gold stays.
+
 - **Well legend cream-rim family.**
   Chip-rim cream falls off toward
   floor-dim with the same 0.22 as halls,

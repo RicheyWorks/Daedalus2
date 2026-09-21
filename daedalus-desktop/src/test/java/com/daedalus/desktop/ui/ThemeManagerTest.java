@@ -45,25 +45,31 @@ class ThemeManagerTest {
         try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/cosmic.css")) {
             assertThat(in).as("cosmic.css is on the classpath").isNotNull();
             String css = new String(in.readAllBytes());
-            assertThat(css).contains("rgba(184, 133, 56, 0.45)");
+            assertThat(css).contains("rgba(153, 111, 49, 0.45)");
+            assertThat(css).doesNotContain("rgba(184, 133, 56, 0.45)");
             assertThat(css).contains("dropshadow(one-pass-box, rgba(62, 224, 143, 0.28)");
             assertThat(css).contains("rgba(62, 224, 143, 0.28), 14, 0.45, 0, 0);\n    -fx-cursor: default;");
-            assertThat(css).contains("dropshadow(one-pass-box, rgba(184, 133, 56, 0.22)");
+            assertThat(css).contains("dropshadow(one-pass-box, rgba(153, 111, 49, 0.22)");
+            assertThat(css).doesNotContain("dropshadow(one-pass-box, rgba(184, 133, 56, 0.22)");
             assertThat(css).contains("-fx-border-color: rgba(184, 133, 56, 0.85)");
             assertThat(css).contains("-fx-border-color: rgba(184, 133, 56, 0.28)");
             assertThat(css).contains("-fx-border-color: rgba(184, 133, 56, 0.32)");
-            assertThat(css).contains("-fx-border-color: rgba(184, 133, 56, 0.36)");
+            assertThat(css).contains("-fx-border-color: rgba(153, 111, 49, 0.36)");
+            assertThat(css).doesNotContain("-fx-border-color: rgba(184, 133, 56, 0.36)");
             assertThat(css).contains(".status-bar");
             assertThat(css)
                     .as("desktop well wears the same inset void shade as web #stage")
                     .contains("innershadow(gaussian, rgba(0, 0, 0, 0.35), 48");
-            assertThat(css).contains("-fx-focus-color: rgba(184, 133, 56, 0.85)");
-            assertThat(css).contains("-fx-faint-focus-color: rgba(184, 133, 56, 0.25)");
-            assertThat(css).contains("-fx-faint-focus-color: rgba(184, 133, 56, 0.25);\n    -fx-cursor: default;");
+            assertThat(css).contains("-fx-focus-color: rgba(153, 111, 49, 0.85)");
+            assertThat(css).doesNotContain("-fx-focus-color: rgba(184, 133, 56, 0.85)");
+            assertThat(css).contains("-fx-faint-focus-color: rgba(153, 111, 49, 0.25)");
+            assertThat(css).contains("-fx-faint-focus-color: rgba(153, 111, 49, 0.25);\n    -fx-cursor: default;");
+            assertThat(css).doesNotContain("-fx-faint-focus-color: rgba(184, 133, 56, 0.25)");
             assertThat(css).contains("#16120e");
             assertThat(css).contains("#0c0908");
             assertThat(css).contains("-fx-background-color: #0c0908");
-            assertThat(css).contains("-fx-highlight-fill: rgba(184, 133, 56, 0.35)");
+            assertThat(css).contains("-fx-highlight-fill: rgba(153, 111, 49, 0.35)");
+            assertThat(css).doesNotContain("-fx-highlight-fill: rgba(184, 133, 56, 0.35)");
             assertThat(css).contains("-fx-highlight-text-fill: #f2ead8");
             assertThat(css).contains("-fx-font-smoothing-type: gray");
             assertThat(css).contains("-fx-font-smoothing-type: gray;\n    -fx-text-fill: #f2ead8;");
@@ -211,6 +217,32 @@ class ThemeManagerTest {
                 "src/main/java/com/daedalus/desktop/ui/MainController.java"));
         assertThat(src).contains("paintWellVoid(g, w, h);")
                 .doesNotContain("g.setFill(Color.web(DesktopPaint.FOG_UNSEEN));");
+    }
+
+    @Test
+    void leftoverEvenChromeFallsOffTowardFloorDim() throws Exception {
+        String src = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/java/com/daedalus/desktop/ui/MainController.java"));
+        assertThat(src).contains("Color.rgb(153, 111, 49, lip)")
+                .contains("Color.rgb(153, 111, 49, chip)")
+                .doesNotContain("Color.rgb(184, 133, 56, lip)")
+                .doesNotContain("Color.rgb(184, 133, 56, chip)");
+        try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/cosmic.css")) {
+            assertThat(in).as("cosmic.css is on the classpath").isNotNull();
+            String css = new String(in.readAllBytes());
+            assertThat(css)
+                    .as("toolbar / status / export / canvas gold fall off toward floor-dim")
+                    .contains("transparent transparent rgba(153, 111, 49, 0.45) transparent")
+                    .contains(".toolbar .separator .line {\n    -fx-border-color: rgba(153, 111, 49, 0.28);")
+                    .contains("-fx-border-color: rgba(153, 111, 49, 0.55)")
+                    .contains("rgba(153, 111, 49, 0.45) transparent transparent transparent")
+                    .contains(".exports .button:hover {\n    -fx-background-color: #1a1610;\n    -fx-border-color: rgba(153, 111, 49, 0.85);")
+                    .as("KEEP leftover even field gold stays")
+                    .contains("-fx-border-color: rgba(184, 133, 56, 0.28);\n    -fx-border-radius: 6;")
+                    .contains("-fx-border-color: rgba(184, 133, 56, 0.85);\n}")
+                    .contains("-fx-border-color: rgba(184, 133, 56, 0.32);\n    -fx-border-radius: 7;")
+                    .contains(".check-box .box {\n    -fx-background-color: #07090c;\n    -fx-border-color: rgba(184, 133, 56, 0.28);");
+        }
     }
 
     private static Theme fakeTheme(String id) {
