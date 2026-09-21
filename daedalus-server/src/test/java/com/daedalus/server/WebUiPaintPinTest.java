@@ -1693,7 +1693,7 @@ class WebUiPaintPinTest {
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
                     .contains("#legend [data-key=\"tour\"] i {")
-                    .contains("radial-gradient(circle at 45% 40%, #d4b06a 28%, #6a5428)")
+                    .contains("radial-gradient(circle at 45% 40%, #af9158 28%, #6a5428)")
                     .doesNotContain("data-key=\"tour\"><i style=\"background:#d4b06a\"");
         }
     }
@@ -1705,7 +1705,7 @@ class WebUiPaintPinTest {
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
                     .contains("#legend [data-key=\"hardest\"] i {")
-                    .contains("radial-gradient(circle at 45% 40%, #f2c94c 28%, #8a6820)")
+                    .contains("#legend [data-key=\"hardest\"] i {\n    background: radial-gradient(circle at 45% 40%, #c6a441 28%, #8a6820); }")
                     .doesNotContain("data-key=\"hardest\"><i style=\"background:#f2c94c\"");
         }
     }
@@ -1736,7 +1736,7 @@ class WebUiPaintPinTest {
             assertThat(html)
                     .contains("#legend [data-key=\"waypoint\"] i {")
                     .contains("transform: rotate(45deg)")
-                    .contains("radial-gradient(circle at 45% 40%, #f2c94c 28%, #8a6820)")
+                    .contains("radial-gradient(circle at 45% 40%, #c6a441 28%, #8a6820)")
                     .doesNotContain("data-key=\"waypoint\"><i style=\"background:#f2c94c;transform:rotate(45deg)\"");
         }
     }
@@ -1761,7 +1761,7 @@ class WebUiPaintPinTest {
             assertThat(html)
                     .contains("#legend [data-key=\"race\"] i:nth-child(1) {")
                     .contains("radial-gradient(circle at 45% 40%, #8fb8ff 28%, #3a5888)")
-                    .contains("radial-gradient(circle at 45% 40%, #f0b429 28%, #8a6018)")
+                    .contains("radial-gradient(circle at 45% 40%, #c49425 28%, #8a6018)")
                     .doesNotContain("data-key=\"race\"><i style=\"background:#8fb8ff;width:6px\"");
         }
     }

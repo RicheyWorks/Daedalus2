@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well legend gold-chip family.**
+  Tour, hardest, waypoint, and race-B
+  chip gold fall off toward floor-dim
+  with the same 0.22 as halls, so leftover
+  even torch is not the last word on the
+  maze page. KEEP leftover even lens gold
+  stays.
+
 - **Well campaign-stage depth.**
   Campaign-row gold falls off toward
   floor-dim with the same 0.22 as halls,
