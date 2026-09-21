@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop compare-gold family.**
+  Compare lane-gold and lane-tour fall
+  off toward floor-dim with the same
+  0.22 as halls, so leftover even torch
+  is not the last word on the maze page.
+  KEEP leftover even mixHex compare gold
+  stays.
+
 - **Desktop frontier gold family.**
   Generation-frontier gold falls off
   toward floor-dim with the same 0.22

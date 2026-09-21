@@ -266,7 +266,11 @@ public class DesktopWork {
                 if (id == null || id.isBlank()) {
                     continue;
                 }
-                String ink = DesktopPaint.COMPARE[color % DesktopPaint.COMPARE.length];
+                String ink = switch (color % DesktopPaint.COMPARE.length) {
+                    case 1 -> "#c49425";
+                    case 5 -> "#af9158";
+                    default -> DesktopPaint.COMPARE[color % DesktopPaint.COMPARE.length];
+                };
                 color++;
                 try {
                     var result = solving.solve(id, grid, grid.start(), grid.goal(), mazeId, false);

@@ -234,7 +234,13 @@ class DesktopWorkTest {
         assertThat(compared.lanes()).hasSize(3);
         assertThat(compared.lanes().get(0).id()).isEqualTo("astar");
         assertThat(compared.lanes().get(0).color()).isEqualTo(DesktopPaint.COMPARE[0]);
-        assertThat(compared.lanes().get(1).color()).isEqualTo(DesktopPaint.COMPARE[1]);
+        assertThat(compared.lanes().get(1).color()).isEqualTo("#c49425");
+        assertThat(DesktopPaint.COMPARE[1])
+                .as("KEEP leftover even mixHex compare gold stays")
+                .isEqualTo("#f0b429");
+        assertThat(DesktopPaint.COMPARE[5])
+                .as("KEEP leftover even mixHex compare tour stays")
+                .isEqualTo("#d4b06a");
         for (DesktopPaint.CompareLane lane : compared.lanes()) {
             assertThat(lane.ok()).isTrue();
             assertThat(lane.path().getFirst()).isEqualTo(cached.grid().start());
