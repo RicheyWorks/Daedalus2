@@ -23,7 +23,7 @@
 }
 .toolbar .brand {
     -fx-font-family: "Bahnschrift", "Avenir Next Condensed", "Trebuchet MS", "Segoe UI";
-    -fx-font-size: 14px;
+    -fx-font-size: 18px;
     -fx-font-weight: bold;
     -fx-text-fill: #f2ead8;
     -fx-padding: 0 8 0 2;

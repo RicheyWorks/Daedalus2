@@ -84,6 +84,8 @@ class ThemeManagerTest {
             assertThat(css).contains(".toolbar");
             assertThat(css).contains("-fx-border-width: 0 0 1 0;\n    -fx-cursor: default;");
             assertThat(css).contains(".toolbar .brand");
+            assertThat(css).contains("-fx-font-size: 18px;\n    -fx-font-weight: bold;");
+            assertThat(css).doesNotContain("-fx-font-size: 14px;");
             assertThat(css).contains(".toolbar .label");
             assertThat(css).contains(".toolbar .label {\n    -fx-text-fill: #b09a72;");
             assertThat(css).contains(".toolbar .label {\n    -fx-text-fill: #b09a72;\n    -fx-cursor: default;");

@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop wordmark size.**
+  The toolbar name is 18px,
+  the same size as the well header.
+
 - **Explore aim-core family.**
   The crosshair and hall titles
   share a fallen-off aim gold.
