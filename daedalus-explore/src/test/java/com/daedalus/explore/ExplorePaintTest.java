@@ -1104,6 +1104,16 @@ class ExplorePaintTest {
                 .isGreaterThan(ExplorePaint.MAP_FLOOR_R);
         assertThat(wood[2]).isLessThan(wood[0]);
         assertThat(soft[0]).isLessThan(wood[0]);
+        float[] caption = new float[3];
+        float[] captionSoft = new float[3];
+        ExplorePaint.captionPlaceTint("WOOD", caption);
+        ExplorePaint.captionPlaceSoftTint("WOOD", captionSoft);
+        assertThat(wood).as("cube diamond matches the WOOD caption")
+                .containsExactly(caption);
+        assertThat(soft).containsExactly(captionSoft);
+        assertThat(ExplorePaint.MAP_BLOCK_R)
+                .as("KEEP leftover even torch wood stays")
+                .isEqualTo(0.58f);
         ExplorePaint.keyBlockTint(null);
         ExplorePaint.keyBlockSoftTint(null);
     }

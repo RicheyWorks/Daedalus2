@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore cube-key family.**
+  The occupied-cube diamond uses
+  the same torch wood as the WOOD
+  caption, and the same underglow.
+  The automap stone still breathes.
+
 - **Explore story-key pad family.**
   The pad under a story diamond
   picks up that key's ink, the same

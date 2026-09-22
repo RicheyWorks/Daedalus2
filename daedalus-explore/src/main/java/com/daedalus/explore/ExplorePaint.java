@@ -1442,18 +1442,14 @@ public final class ExplorePaint {
         return false;
     }
 
+    /** HUD occupied-cube diamond — same torch wood as the WOOD caption. */
     public static void keyBlockTint(float[] rgb) {
-        mapStoneTint(MapKind.BLOCK, 0, rgb);
+        captionPlaceTint("WOOD", rgb);
     }
 
+    /** Soft pad under that diamond — same underglow as the WOOD caption. */
     public static void keyBlockSoftTint(float[] rgb) {
-        keyBlockTint(rgb);
-        if (rgb == null || rgb.length < 3) {
-            return;
-        }
-        rgb[0] *= MAP_MARK_SOFT_WEIGHT;
-        rgb[1] *= MAP_MARK_SOFT_WEIGHT;
-        rgb[2] *= MAP_MARK_SOFT_WEIGHT;
+        captionPlaceSoftTint("WOOD", rgb);
     }
 
     /** Visible start / goal — same well key, not leftover empty HUD on the ends. */
