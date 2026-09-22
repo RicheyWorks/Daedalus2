@@ -48,7 +48,7 @@
       const done = state.cleared[s.index];
       const hazards = s.hazards.length ? ` · ${host.esc(s.hazards.join(" + "))}` : "";
       return `<div style="margin:4px 0;padding:4px 6px;border-radius:4px;`
-          + `${active ? "background:#1a1610;" : ""}">`
+          + `${active ? "background:rgba(26,22,16,0.62);" : ""}">`
           + `<a href="#" data-stage="${s.index}" style="color:${done ? "#45a071" : "#af8441"}">`
           + `${done ? "✓" : s.index + 1}. ${host.esc(s.name)}</a> `
           + `<span class="hint">${s.rows}×${s.cols} ${host.esc(s.generatorId)} · `

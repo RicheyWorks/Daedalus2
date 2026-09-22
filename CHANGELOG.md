@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well selection-wash family.**
+  Compare hover, a pinned solver, and
+  the active campaign rung wash the
+  radial well, so a flat slab is not
+  the last word on a chosen row.
+  Accent-button hover stays solid.
+
 - **Well gate-sample ink.**
   The desktop command sample wears the
   same floor shadow as the ASCII dump,

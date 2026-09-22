@@ -35,9 +35,9 @@ class WebUiPaintPinTest {
                     .contains("#asciiOut .gate { color: #3ab675; -webkit-user-drag: none")
                     .contains("#asciiOut .exit { color: #d04e4f; -webkit-user-drag: none")
                     .contains("#compareBox .gave-up { color: #d04e4f; -webkit-user-drag: none")
-                    .contains("#compareBox tr.pinned { background: #1a1610; -webkit-user-drag: none")
+                    .contains("#compareBox tr.pinned { background: rgba(26, 22, 16, 0.62); -webkit-user-drag: none")
                     .contains("#compareBox tr.solver-row { cursor: pointer; -webkit-user-drag: none")
-                    .contains("#compareBox tr.solver-row:hover { background: #1a1610; -webkit-user-drag: none")
+                    .contains("#compareBox tr.solver-row:hover { background: rgba(26, 22, 16, 0.62); -webkit-user-drag: none")
                     .contains("#compareBox tr.pinned:hover { box-shadow: inset 3px 0 0 rgba(153, 111, 49, 0.95); -webkit-user-drag: none")
                     .contains("#gate .lede { color: #b09a72; cursor: text; margin: 0 0 22px; max-width: 34rem; font-size: 15px; -webkit-user-drag: none")
                     .contains("#gate article p { margin: 0; color: #b09a72; cursor: text; font-size: 13px; flex: 1; -webkit-user-drag: none")
@@ -752,7 +752,9 @@ class WebUiPaintPinTest {
             assertThat(in).as("static well page").isNotNull();
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
-                    .contains("#compareBox tr.solver-row:hover { background: #1a1610; -webkit-user-drag: none;\n"
+                    .contains("#compareBox tr.solver-row:hover { background: rgba(26, 22, 16, 0.62); -webkit-user-drag: none;\n"
+                            + "                                   box-shadow: inset 3px 0 0 rgba(153, 111, 49, 0.55);")
+                    .doesNotContain("#compareBox tr.solver-row:hover { background: #1a1610; -webkit-user-drag: none;\n"
                             + "                                   box-shadow: inset 3px 0 0 rgba(153, 111, 49, 0.55);")
                     .doesNotContain("#compareBox tr.solver-row:hover { background: #1a1610; -webkit-user-drag: none;\n"
                             + "                                   box-shadow: inset 3px 0 0 rgba(184, 133, 56, 0.55);");
@@ -765,7 +767,9 @@ class WebUiPaintPinTest {
             assertThat(in).as("static well page").isNotNull();
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
-                    .contains("#compareBox tr.pinned { background: #1a1610; -webkit-user-drag: none;\n"
+                    .contains("#compareBox tr.pinned { background: rgba(26, 22, 16, 0.62); -webkit-user-drag: none;\n"
+                            + "                          box-shadow: inset 3px 0 0 rgba(153, 111, 49, 0.85);")
+                    .doesNotContain("#compareBox tr.pinned { background: #1a1610; -webkit-user-drag: none;\n"
                             + "                          box-shadow: inset 3px 0 0 rgba(153, 111, 49, 0.85);")
                     .doesNotContain("#compareBox tr.pinned { background: #1a1610; -webkit-user-drag: none;\n"
                             + "                          box-shadow: inset 3px 0 0 rgba(184, 133, 56, 0.85);");
@@ -1068,6 +1072,8 @@ class WebUiPaintPinTest {
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js)
                     .contains("color:${done ? \"#45a071\" : \"#af8441\"}")
+                    .contains("${active ? \"background:rgba(26,22,16,0.62);\" : \"\"}")
+                    .doesNotContain("${active ? \"background:#1a1610;\" : \"\"}")
                     .doesNotContain("color:${done ? \"#4cc38a\" : \"#af8441\"}")
                     .doesNotContain("color:${done ? \"#4cc38a\" : \"#d4a04c\"}");
         }
