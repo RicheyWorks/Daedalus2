@@ -368,6 +368,28 @@ class ThemeManagerTest {
         }
     }
 
+    @Test
+    void legendChipClustersMatchTheWellGap() throws Exception {
+        try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
+            assertThat(in).as("main.fxml is on the classpath").isNotNull();
+            String fxml = new String(in.readAllBytes());
+            assertThat(fxml)
+                    .as("walk, lens, arena, and compare swatches share the well's 5px gap")
+                    .contains("fx:id=\"legendPlayer\"")
+                    .contains("fx:id=\"legendLens\"")
+                    .contains("fx:id=\"legendRace\"")
+                    .contains("fx:id=\"legendCompare\"")
+                    .contains("<HBox spacing=\"5\">");
+            assertThat(fxml.split("<HBox spacing=\"5\">", -1)).hasSize(5);
+            assertThat(fxml).doesNotContain("<HBox spacing=\"1\">");
+            assertThat(fxml)
+                    .as("KEEP leftover even lens colors stay")
+                    .contains("color=\"#e5484d\"")
+                    .contains("color=\"#f2c94c\"")
+                    .contains("color=\"#8aaa50\"");
+        }
+    }
+
     private static Theme fakeTheme(String id) {
         return new Theme() {
             @Override public String id()             { return id; }

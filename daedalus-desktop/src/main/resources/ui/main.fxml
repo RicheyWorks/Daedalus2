@@ -195,7 +195,7 @@
                 </Label>
                 <Label fx:id="legendPlayer" text="walk" managed="false" visible="false">
                     <graphic>
-                        <HBox spacing="1">
+                        <HBox spacing="5">
                             <Circle radius="5" stroke="rgba(198,190,174,0.28)" strokeWidth="1.5">
                                 <fill>
                                     <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
@@ -345,7 +345,7 @@
                 </Label>
                 <Label fx:id="legendLens" text="lens" managed="false" visible="false">
                     <graphic>
-                        <HBox spacing="1">
+                        <HBox spacing="5">
                             <Rectangle width="6" height="10"
                                        stroke="rgba(198,190,174,0.28)" strokeWidth="1.5">
                                 <fill>
@@ -387,7 +387,7 @@
                 </Label>
                 <Label fx:id="legendRace" text="arena" managed="false" visible="false">
                     <graphic>
-                        <HBox spacing="1">
+                        <HBox spacing="5">
                             <Rectangle width="6" height="10"
                                        stroke="rgba(198,190,174,0.28)" strokeWidth="1.5">
                                 <fill>
@@ -466,7 +466,7 @@
                 </Label>
                 <Label fx:id="legendCompare" text="compare" managed="false" visible="false">
                     <graphic>
-                        <HBox spacing="1">
+                        <HBox spacing="5">
                             <Rectangle width="6" height="10"
                                        stroke="rgba(198,190,174,0.28)" strokeWidth="1.5">
                                 <fill>

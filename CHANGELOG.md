@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend-chip spacing.**
+  Walk, lens, arena, and compare swatches
+  keep the same 5px gap as the well, so
+  the last chip closes with the cluster.
+  KEEP leftover even lens colors stay.
+
 - **Explore HERE end-wash family.**
   Standing on start or goal washes
   you-are-here toward the same fallen-off
