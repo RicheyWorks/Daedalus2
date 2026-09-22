@@ -714,9 +714,10 @@ public final class ExploreHost {
             paintCaptionPass(meta, metaX, metaY, metaCell, gap, metaPad,
                     ExplorePaint.CAPTION_SOFT_R * 0.7f, ExplorePaint.CAPTION_SOFT_G * 0.7f,
                     ExplorePaint.CAPTION_SOFT_B * 0.7f);
+            float[] metaInk = new float[3];
+            ExplorePaint.captionMetaTint(metaInk);
             paintCaptionPass(meta, metaX, metaY, metaCell, gap, 0,
-                    ExplorePaint.CAPTION_META_R, ExplorePaint.CAPTION_META_G,
-                    ExplorePaint.CAPTION_META_B);
+                    metaInk[0], metaInk[1], metaInk[2]);
         }
     }
 

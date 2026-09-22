@@ -929,6 +929,18 @@ class ExplorePaintTest {
                 .as("place glyphs lead the strip")
                 .isGreaterThan(ExplorePaint.CAPTION_META_CELL);
         assertThat(ExplorePaint.AIM_BRIGHT_R).isGreaterThan(ExplorePaint.CAPTION_META_R);
+        float[] metaInk = new float[3];
+        ExplorePaint.captionMetaTint(metaInk);
+        float[] metaFallen = new float[] {
+                ExplorePaint.CAPTION_META_R, ExplorePaint.CAPTION_META_G, ExplorePaint.CAPTION_META_B};
+        ExplorePaint.mixEndEdge(1, metaFallen);
+        assertThat(metaInk).as("facing glyphs fall off toward floor-dim")
+                .containsExactly(metaFallen);
+        assertThat(metaInk[0]).isLessThan(ExplorePaint.CAPTION_META_R);
+        assertThat(ExplorePaint.CAPTION_META_R)
+                .as("KEEP leftover even caption gold stays")
+                .isEqualTo(0.62f);
+        ExplorePaint.captionMetaTint(null);
         assertThat(ExplorePaint.captionWidth("AB", 0.02f, 0.008f))
                 .isGreaterThan(ExplorePaint.captionAdvance(0.02f, 0.008f));
         List<ExploreMarker> marks = List.of(

@@ -1599,6 +1599,15 @@ public final class ExplorePaint {
     public static final float CAPTION_META_R = 0.62f;
     public static final float CAPTION_META_G = 0.52f;
     public static final float CAPTION_META_B = 0.28f;
+
+    /** Facing / stood glyphs — leftover even gold is not the last word on the meta line. */
+    public static void captionMetaTint(float[] rgb) {
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        set(rgb, CAPTION_META_R, CAPTION_META_G, CAPTION_META_B);
+        mixEndEdge(1, rgb);
+    }
     /** Caption glyph underglow — readable chrome on the dark strip. */
     public static final float CAPTION_SOFT_R = 0.42f;
     public static final float CAPTION_SOFT_G = 0.30f;

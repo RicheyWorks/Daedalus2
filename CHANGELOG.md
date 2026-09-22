@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore caption-meta family.**
+  Facing and stood glyphs fall off
+  toward floor-dim. The caption gold
+  stays the mix input.
+
 - **Desktop stage hairline.**
   A void hairline wraps the gold
   lip, the same ring as the well
