@@ -735,6 +735,21 @@ class ExplorePaintTest {
     }
 
     @Test
+    void statusLipUsesTheFallenFrameInk() {
+        float[] lip = new float[3];
+        float[] frame = new float[3];
+        ExplorePaint.statusLipTint(lip);
+        ExplorePaint.mapFrameTint(frame);
+        assertThat(lip).as("status lip matches the fallen automap frame")
+                .containsExactly(frame);
+        assertThat(lip[0]).isLessThan(ExplorePaint.STATUS_GOLD_R);
+        assertThat(ExplorePaint.STATUS_GOLD_R)
+                .as("KEEP leftover even torch gold stays")
+                .isEqualTo(0.72f);
+        ExplorePaint.statusLipTint(null);
+    }
+
+    @Test
     void automapStoneMatchesCorridorAndBreathes() {
         assertThat(ExplorePaint.MAP_FLOOR_R).isEqualTo(0.34f);
         assertThat(ExplorePaint.MAP_FLOOR_G).isEqualTo(0.24f);

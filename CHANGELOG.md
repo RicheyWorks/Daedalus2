@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore status-lip family.**
+  The status strip and face frame
+  use the same fallen-off gold as
+  the automap frame. The torch brand
+  stays the lip's mix input.
+
 - **Desktop legend corners.**
   Square keys, narrow chips, and the
   waypoint diamond use a 3px corner,

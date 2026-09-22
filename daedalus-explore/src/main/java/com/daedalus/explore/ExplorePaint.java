@@ -423,6 +423,11 @@ public final class ExplorePaint {
         set(rgb, STATUS_GOLD_R, STATUS_GOLD_G, STATUS_GOLD_B);
         mixEndEdge(1, rgb);
     }
+
+    /** Status lip and face frame — same fallen gold as the automap frame. */
+    public static void statusLipTint(float[] rgb) {
+        mapFrameTint(rgb);
+    }
     /** Ortho strip under the crosshair — Doom status height in NDC. */
     public static final float STATUS_H = 0.28f;
     /** Warm HUD void — status fill and automap pocket share this well. */

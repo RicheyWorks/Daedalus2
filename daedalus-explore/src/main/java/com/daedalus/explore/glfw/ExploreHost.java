@@ -589,11 +589,12 @@ public final class ExploreHost {
         float bot = -1f;
         float top = bot + ExplorePaint.STATUS_H;
         fillHud(-aspect, bot, aspect, top);
+        float[] lipInk = new float[3];
+        ExplorePaint.statusLipTint(lipInk);
         glColor3f(ExplorePaint.STATUS_GOLD_UNDER_R, ExplorePaint.STATUS_GOLD_UNDER_G,
                 ExplorePaint.STATUS_GOLD_UNDER_B);
         fill(-aspect, top - ExplorePaint.statusGoldUnderH(seconds), aspect, top);
-        glColor3f(ExplorePaint.STATUS_GOLD_R, ExplorePaint.STATUS_GOLD_G,
-                ExplorePaint.STATUS_GOLD_B);
+        glColor3f(lipInk[0], lipInk[1], lipInk[2]);
         fill(-aspect, top - ExplorePaint.statusGoldH(seconds), aspect, top);
         float faceLeft = (float) (-aspect + 0.04);
         float faceRight = faceLeft + 0.22f;
@@ -604,8 +605,7 @@ public final class ExploreHost {
         glColor3f(ExplorePaint.STATUS_GOLD_UNDER_R, ExplorePaint.STATUS_GOLD_UNDER_G,
                 ExplorePaint.STATUS_GOLD_UNDER_B);
         fill(faceLeft - lip, faceBot - lip, faceRight + lip, faceTop + lip);
-        glColor3f(ExplorePaint.STATUS_GOLD_R, ExplorePaint.STATUS_GOLD_G,
-                ExplorePaint.STATUS_GOLD_B);
+        glColor3f(lipInk[0], lipInk[1], lipInk[2]);
         fill(faceLeft - core, faceBot - core, faceRight + core, faceTop + core);
         int mood = Math.max(0, Math.min(faceTex.length - 1, line.mood()));
         glEnable(GL_TEXTURE_2D);
