@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop stage hairline.**
+  A void hairline wraps the gold
+  lip, the same ring as the well
+  stage.
+
 - **Desktop legend weight.**
   The key words are weight 600,
   the same weight as the well legend.

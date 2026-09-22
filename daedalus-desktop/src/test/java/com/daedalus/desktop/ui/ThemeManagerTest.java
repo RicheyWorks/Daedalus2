@@ -61,6 +61,12 @@ class ThemeManagerTest {
             assertThat(css)
                     .as("desktop well wears the same inset void shade as web #stage")
                     .contains("innershadow(gaussian, rgba(0, 0, 0, 0.35), 48");
+            assertThat(css)
+                    .as("void hairline wraps the gold lip, same ring as the well stage")
+                    .contains("-fx-border-color: rgba(16, 11, 8, 0.95), rgba(153, 111, 49, 0.55);")
+                    .contains("-fx-border-width: 1, 1;")
+                    .contains("-fx-border-insets: 0, 1;")
+                    .contains("-fx-border-radius: 10, 9;");
             assertThat(css).contains("-fx-focus-color: rgba(153, 111, 49, 0.85)");
             assertThat(css).doesNotContain("-fx-focus-color: rgba(184, 133, 56, 0.85)");
             assertThat(css).contains("-fx-faint-focus-color: rgba(153, 111, 49, 0.25)");
@@ -265,7 +271,7 @@ class ThemeManagerTest {
                     .as("toolbar / status / export / canvas gold fall off toward floor-dim")
                     .contains("transparent transparent rgba(153, 111, 49, 0.45) transparent")
                     .contains(".toolbar .separator .line {\n    -fx-border-color: rgba(153, 111, 49, 0.28);")
-                    .contains("-fx-border-color: rgba(153, 111, 49, 0.55)")
+                    .contains("-fx-border-color: rgba(16, 11, 8, 0.95), rgba(153, 111, 49, 0.55);")
                     .contains("rgba(153, 111, 49, 0.45) transparent transparent transparent")
                     .contains(".exports .button:hover {\n    -fx-background-color: #1a1610;\n    -fx-border-color: rgba(153, 111, 49, 0.85);")
                     .as("KEEP leftover even field gold stays")

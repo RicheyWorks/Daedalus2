@@ -115,9 +115,10 @@
 .canvas-pane {
     -fx-background-color: radial-gradient(center 50% 45%, radius 72%, #16120e, #0c0908);
     -fx-background-radius: 10;
-    -fx-border-color: rgba(153, 111, 49, 0.55);
-    -fx-border-width: 1;
-    -fx-border-radius: 10;
+    -fx-border-color: rgba(16, 11, 8, 0.95), rgba(153, 111, 49, 0.55);
+    -fx-border-width: 1, 1;
+    -fx-border-insets: 0, 1;
+    -fx-border-radius: 10, 9;
     /* Same inset void shade as web #stage — the board sinks into the well. */
     -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.35), 48, 0.0, 0, 0);
     -fx-focus-color: rgba(153, 111, 49, 0.85);
