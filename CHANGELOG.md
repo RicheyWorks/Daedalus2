@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend swatch gap.**
+  The word sits 5px after the swatch,
+  the same gap as the well key.
+
 - **Explore HUD end-key family.**
   Start and goal diamonds on the
   status strip use the same fallen-off

@@ -156,6 +156,7 @@
     -fx-font-size: 11px;
     -fx-font-weight: bold;
     -fx-cursor: default;
+    -fx-graphic-text-gap: 5px;
 }
 
 .status-bar {
