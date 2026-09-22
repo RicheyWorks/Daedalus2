@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well lens-chip spacing.**
+  The last lens swatch closes the gap
+  before the label, so the three chips
+  sit evenly the way arena and player
+  do. KEEP leftover even lens colors stay.
+
 - **Wordmark mint-glow family.**
   Gate, header, and desktop brand mint
   fall off toward floor-dim with the same

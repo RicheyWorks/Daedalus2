@@ -1919,8 +1919,16 @@ class WebUiPaintPinTest {
             assertThat(html)
                     .contains("#legend [data-key=\"lens\"] i:nth-child(1) {")
                     .contains("radial-gradient(circle at 45% 40%, #e5484d 28%, #6a2024)")
-                    .contains("radial-gradient(circle at 45% 40%, #f2c94c 28%, #8a6820)")
-                    .contains("radial-gradient(circle at 45% 40%, #8aaa50 28%, #4e6a28)")
+                    .contains("#legend [data-key=\"lens\"] i:nth-child(2) {\n"
+                            + "    width: 6px;\n"
+                            + "    background: radial-gradient(circle at 45% 40%, #f2c94c 28%, #8a6820); }")
+                    .contains("#legend [data-key=\"lens\"] i:nth-child(3) {\n"
+                            + "    width: 6px;\n"
+                            + "    margin-right: 0;\n"
+                            + "    background: radial-gradient(circle at 45% 40%, #8aaa50 28%, #4e6a28); }")
+                    .doesNotContain("#legend [data-key=\"lens\"] i:nth-child(2) {\n"
+                            + "    width: 6px;\n"
+                            + "    margin-right: 0;")
                     .doesNotContain("data-key=\"lens\"><i style=\"background:#e5484d;width:6px\"");
         }
     }
