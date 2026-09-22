@@ -258,7 +258,10 @@ class ThemeManagerTest {
     void leftoverEvenChromeFallsOffTowardFloorDim() throws Exception {
         String src = java.nio.file.Files.readString(java.nio.file.Path.of(
                 "src/main/java/com/daedalus/desktop/ui/MainController.java"));
-        assertThat(src).contains("Color.rgb(153, 111, 49, lip)")
+        assertThat(src).contains("Color.rgb(16, 11, 8, 0.95)")
+                .contains("new javafx.scene.layout.CornerRadii(9)")
+                .contains("new javafx.geometry.Insets(1)")
+                .contains("Color.rgb(153, 111, 49, lip)")
                 .contains("Color.rgb(153, 111, 49, chip)")
                 .contains("Color.web(\"#3ab675\", DesktopPaint.brandMintAlpha(wave))")
                 .doesNotContain("Color.web(\"#3ee08f\"")

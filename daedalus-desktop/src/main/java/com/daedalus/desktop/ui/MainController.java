@@ -1712,11 +1712,19 @@ public class MainController {
         }
         double wave = DesktopPaint.emptyBreathWave(System.nanoTime());
         double rimA = DesktopPaint.canvasRimAlpha(wave);
-        canvasParent.setBorder(new javafx.scene.layout.Border(new javafx.scene.layout.BorderStroke(
-                Color.web(DesktopPaint.canvasRimInk(), rimA),
-                javafx.scene.layout.BorderStrokeStyle.SOLID,
-                new javafx.scene.layout.CornerRadii(10),
-                new javafx.scene.layout.BorderWidths(1))));
+        canvasParent.setBorder(new javafx.scene.layout.Border(
+                new javafx.scene.layout.BorderStroke(
+                        Color.rgb(16, 11, 8, 0.95),
+                        javafx.scene.layout.BorderStrokeStyle.SOLID,
+                        new javafx.scene.layout.CornerRadii(10),
+                        new javafx.scene.layout.BorderWidths(1),
+                        javafx.geometry.Insets.EMPTY),
+                new javafx.scene.layout.BorderStroke(
+                        Color.web(DesktopPaint.canvasRimInk(), rimA),
+                        javafx.scene.layout.BorderStrokeStyle.SOLID,
+                        new javafx.scene.layout.CornerRadii(9),
+                        new javafx.scene.layout.BorderWidths(1),
+                        new javafx.geometry.Insets(1))));
         var inset = new javafx.scene.effect.InnerShadow();
         inset.setRadius(48);
         inset.setColor(Color.rgb(0, 0, 0, 0.35));

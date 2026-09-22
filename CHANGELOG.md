@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop stage-hairline pulse.**
+  The breathing gold lip keeps
+  the void ring around it, the
+  same pair the well stage holds.
+
 - **Explore caption-meta family.**
   Facing and stood glyphs fall off
   toward floor-dim. The caption gold
