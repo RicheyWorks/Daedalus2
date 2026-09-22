@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend weight.**
+  The key words are weight 600,
+  the same weight as the well legend.
+
 - **Explore cube-key family.**
   The occupied-cube diamond uses
   the same torch wood as the WOOD

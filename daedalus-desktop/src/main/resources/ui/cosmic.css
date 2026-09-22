@@ -154,7 +154,7 @@
     -fx-text-fill: #b09a72;
     -fx-font-family: "Bahnschrift", "Segoe UI", sans-serif;
     -fx-font-size: 11px;
-    -fx-font-weight: bold;
+    -fx-font-weight: 600;
     -fx-cursor: default;
     -fx-graphic-text-gap: 5px;
 }

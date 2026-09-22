@@ -93,7 +93,8 @@ class ThemeManagerTest {
             assertThat(css).doesNotContain("-fx-padding: 20 14 10 14;");
             assertThat(css).contains("rgba(16, 11, 8, 0.92));\n    -fx-cursor: default;");
             assertThat(css).contains(".legend .label");
-            assertThat(css).contains("-fx-font-weight: bold;\n    -fx-cursor: default;");
+            assertThat(css).contains("-fx-font-weight: 600;\n    -fx-cursor: default;");
+            assertThat(css).doesNotContain("-fx-font-weight: bold;\n    -fx-cursor: default;");
             assertThat(css).contains("-fx-cursor: default;\n    -fx-graphic-text-gap: 5px;");
             assertThat(css).doesNotContain("-fx-graphic-text-gap: 4px;");
             assertThat(css).contains("#b09a72");
