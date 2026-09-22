@@ -981,6 +981,40 @@ class ExplorePaintTest {
     }
 
     @Test
+    void keyEndUsesTheFallenCaptionInk() {
+        float[] key = new float[3];
+        float[] caption = new float[3];
+        ExplorePaint.keyEndTint(ExplorePaint.MapKind.START, key);
+        ExplorePaint.captionPlaceTint("START", caption);
+        assertThat(key).as("HUD start diamond matches the fallen caption")
+                .containsExactly(caption);
+        assertThat(key[1]).isLessThan(ExplorePaint.MAP_START_G);
+        float[] map = new float[3];
+        ExplorePaint.mapEndTint(ExplorePaint.MapKind.START, map);
+        assertThat(map[1]).as("automap center keeps the raw start brand")
+                .isEqualTo(ExplorePaint.MAP_START_G);
+        assertThat(ExplorePaint.MAP_START_R)
+                .as("KEEP leftover even start mint stays")
+                .isEqualTo(0x3e / 255f);
+        float[] goalKey = new float[3];
+        float[] goalCaption = new float[3];
+        ExplorePaint.keyEndTint(ExplorePaint.MapKind.GOAL, goalKey);
+        ExplorePaint.captionPlaceTint("GOAL", goalCaption);
+        assertThat(goalKey).containsExactly(goalCaption);
+        assertThat(goalKey[0]).isLessThan(ExplorePaint.MAP_GOAL_R);
+        assertThat(ExplorePaint.MAP_GOAL_R)
+                .as("KEEP leftover even goal coral stays")
+                .isEqualTo(0xff / 255f);
+        float[] soft = new float[3];
+        float[] captionSoft = new float[3];
+        ExplorePaint.keyEndSoftTint(ExplorePaint.MapKind.START, soft);
+        ExplorePaint.captionPlaceSoftTint("START", captionSoft);
+        assertThat(soft).containsExactly(captionSoft);
+        ExplorePaint.keyEndTint(null, null);
+        ExplorePaint.keyEndSoftTint(ExplorePaint.MapKind.GOAL, null);
+    }
+
+    @Test
     void statusNamesTheLampFacingCube() {
         ExploreFog fog = new ExploreFog();
         fog.stand(new Point(0, 0));

@@ -1495,6 +1495,16 @@ public final class ExplorePaint {
                 ? "HALL" : status.place();
     }
 
+    /** HUD start / goal diamonds — same fallen-off chips as the caption glyphs. */
+    public static void keyEndTint(MapKind kind, float[] rgb) {
+        captionPlaceTint(kind == MapKind.GOAL ? "GOAL" : "START", rgb);
+    }
+
+    /** Soft pad under those diamonds — same underglow as the caption. */
+    public static void keyEndSoftTint(MapKind kind, float[] rgb) {
+        captionPlaceSoftTint(kind == MapKind.GOAL ? "GOAL" : "START", rgb);
+    }
+
     /** START / GOAL glyphs — same fallen-off well chips, not leftover raw brands. */
     public static void captionPlaceTint(String place, float[] rgb) {
         if (rgb == null || rgb.length < 3) {

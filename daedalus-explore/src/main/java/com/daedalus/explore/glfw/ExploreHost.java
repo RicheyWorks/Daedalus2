@@ -671,10 +671,10 @@ public final class ExploreHost {
 
     private static float keyEnd(float x, float cy, float softPad, ExplorePaint.MapKind kind) {
         float[] rgb = new float[3];
-        ExplorePaint.mapEndSoftTint(kind, rgb);
+        ExplorePaint.keyEndSoftTint(kind, rgb);
         glColor3f(rgb[0], rgb[1], rgb[2]);
         diamond(x, cy, 0.028f * softPad);
-        ExplorePaint.mapEndTint(kind, rgb);
+        ExplorePaint.keyEndTint(kind, rgb);
         glColor3f(rgb[0], rgb[1], rgb[2]);
         diamond(x, cy, 0.028f);
         return x - 0.07f;

@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore HUD end-key family.**
+  Start and goal diamonds on the
+  status strip use the same fallen-off
+  chips as the caption glyphs. The
+  automap center keeps the raw brands.
+
 - **Well waypoint diamond.**
   The waypoint swatch is an 8px
   diamond, the same size as the
