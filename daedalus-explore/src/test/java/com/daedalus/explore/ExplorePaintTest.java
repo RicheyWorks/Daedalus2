@@ -934,10 +934,24 @@ class ExplorePaintTest {
         ExplorePaint.captionPlaceTint("START", startInk);
         ExplorePaint.captionPlaceTint("GOAL", goalInk);
         assertThat(hallInk[0]).isEqualTo(ExplorePaint.AIM_BRIGHT_R);
-        assertThat(startInk[1]).as("START glyphs lift toward well mint")
-                .isGreaterThan(hallInk[1]);
-        assertThat(goalInk[0]).as("GOAL glyphs lift toward well coral")
-                .isGreaterThan(hallInk[0]);
+        assertThat(startInk[1]).as("START glyphs fall off from raw mint")
+                .isLessThan(ExplorePaint.MAP_START_G);
+        assertThat(goalInk[0]).as("GOAL glyphs fall off from raw coral")
+                .isLessThan(ExplorePaint.MAP_GOAL_R);
+        float[] startFallen = new float[] {
+                ExplorePaint.MAP_START_R, ExplorePaint.MAP_START_G, ExplorePaint.MAP_START_B};
+        ExplorePaint.mixEndEdge(1, startFallen);
+        assertThat(startInk).containsExactly(startFallen);
+        assertThat(ExplorePaint.MAP_START_R)
+                .as("KEEP leftover even start mint stays")
+                .isEqualTo(0x3e / 255f);
+        float[] goalFallen = new float[] {
+                ExplorePaint.MAP_GOAL_R, ExplorePaint.MAP_GOAL_G, ExplorePaint.MAP_GOAL_B};
+        ExplorePaint.mixEndEdge(1, goalFallen);
+        assertThat(goalInk).containsExactly(goalFallen);
+        assertThat(ExplorePaint.MAP_GOAL_R)
+                .as("KEEP leftover even goal coral stays")
+                .isEqualTo(0xff / 255f);
         float[] startSoft = new float[3];
         ExplorePaint.captionPlaceSoftTint("START", startSoft);
         assertThat(startSoft[1]).as("START underglow lifts toward mint")

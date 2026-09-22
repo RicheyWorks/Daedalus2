@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore caption end-ink family.**
+  Stood-on start and goal glyphs fall
+  off toward floor-dim with the same
+  0.22 as halls, so leftover even torch
+  is not the last word on the maze page.
+  KEEP leftover even end brands stay.
+
 - **Well lens-chip spacing.**
   The last lens swatch closes the gap
   before the label, so the three chips
