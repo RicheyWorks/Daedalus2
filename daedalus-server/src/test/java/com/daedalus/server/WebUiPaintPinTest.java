@@ -1638,9 +1638,16 @@ class WebUiPaintPinTest {
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
                     .contains("#legend [data-key=\"start\"] i {")
-                    .contains("radial-gradient(circle at 45% 40%, #3ee08f 28%, #1e8a58)")
-                    .contains("#legend [data-key=\"goal\"] i {")
-                    .contains("radial-gradient(circle at 45% 40%, #ff5a5f 28%, #c4383c)")
+                    .contains("#legend [data-key=\"start\"] i {\n"
+                            + "    border-radius: 50%;\n"
+                            + "    background: radial-gradient(circle at 45% 40%, #3ab675 28%, #1e8a58); }")
+                    .contains("#legend [data-key=\"goal\"] i {\n"
+                            + "    border-radius: 50%;\n"
+                            + "    background: radial-gradient(circle at 45% 40%, #d04e4f 28%, #c4383c); }")
+                    .contains("--accent: #3ee08f")
+                    .contains("--warn: #ff5a5f")
+                    .doesNotContain("radial-gradient(circle at 45% 40%, #3ee08f 28%, #1e8a58)")
+                    .doesNotContain("radial-gradient(circle at 45% 40%, #ff5a5f 28%, #c4383c)")
                     .doesNotContain("background:#3ee08f;border-radius:50%")
                     .doesNotContain("background:#ff5a5f;border-radius:50%");
         }
