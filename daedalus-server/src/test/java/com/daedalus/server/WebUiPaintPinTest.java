@@ -454,9 +454,12 @@ class WebUiPaintPinTest {
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
                     .contains("color: #f2ead8; cursor: text; padding: 8px; background: #16120e;\n"
+                            + "                background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
                             + "                border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
                     .doesNotContain("color: #f2ead8; cursor: text; padding: 8px; background: #16120e;\n"
-                            + "                border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 6px;");
+                            + "                border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
+                    .doesNotContain("border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 6px;\n"
+                            + "                animation: panelRimBreath 4.5s ease-in-out infinite; }");
         }
     }
 
