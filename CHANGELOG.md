@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well news-brand family.**
+  Log state, player, and error, the
+  score, and a gave-up line fall off
+  toward floor-dim with the same 0.22
+  as halls, so leftover even torch is
+  not the last word on the maze page.
+  KEEP leftover even accent, gold, and
+  warn tokens stay.
+
 - **Campaign cleared-mint family.**
   A cleared stage falls off toward
   floor-dim with the same 0.22 as halls,

@@ -23,9 +23,9 @@ class WebUiPaintPinTest {
             assertThat(html).contains(
                     "#log .t { color: #b09a72; margin-right: 6px; -webkit-user-drag: none")
                     .contains("#log .solver { color: #af8441; -webkit-user-drag: none")
-                    .contains("#log .player { color: var(--gold); -webkit-user-drag: none")
-                    .contains("#log .state  { color: var(--accent); -webkit-user-drag: none")
-                    .contains("#log .err    { color: var(--warn); -webkit-user-drag: none")
+                    .contains("#log .player { color: #c89e3f; -webkit-user-drag: none")
+                    .contains("#log .state  { color: #3ab675; -webkit-user-drag: none")
+                    .contains("#log .err    { color: #d04e4f; -webkit-user-drag: none")
                     .contains("#asciiOut .rock { color: #766442; -webkit-user-drag: none")
                     .contains("#asciiOut .rock { color: #766442; -webkit-user-drag: none; text-shadow: 0 1px 0 #2a2218")
                     .contains("max-height: 22vh; color: #afa088; cursor: text; text-shadow: 0 1px 0 #2a2218")
@@ -34,7 +34,7 @@ class WebUiPaintPinTest {
                     .contains("background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908)")
                     .contains("#asciiOut .gate { color: #3ab675; -webkit-user-drag: none")
                     .contains("#asciiOut .exit { color: #d04e4f; -webkit-user-drag: none")
-                    .contains("#compareBox .gave-up { color: var(--warn); -webkit-user-drag: none")
+                    .contains("#compareBox .gave-up { color: #d04e4f; -webkit-user-drag: none")
                     .contains("#compareBox tr.pinned { background: #1a1610; -webkit-user-drag: none")
                     .contains("#compareBox tr.solver-row { cursor: pointer; -webkit-user-drag: none")
                     .contains("#compareBox tr.solver-row:hover { background: #1a1610; -webkit-user-drag: none")
@@ -45,7 +45,7 @@ class WebUiPaintPinTest {
                     .contains("#lb span { color: #b09a72; -webkit-user-drag: none")
                     .contains("#lb .rank { display: inline-block; width: 18px; color: #b09a72; -webkit-user-drag: none")
                     .contains("#lb b { color: #f2ead8; -webkit-user-drag: none")
-                    .contains("#lb .score { color: var(--accent); font-weight: 700; -webkit-user-drag: none")
+                    .contains("#lb .score { color: #3ab675; font-weight: 700; -webkit-user-drag: none")
                     .contains("#stats span { color: #b09a72; -webkit-user-drag: none")
                     .contains(".info b { color: #f2ead8; font-weight: 600; -webkit-user-drag: none")
                     .contains("\"Trebuchet MS\", sans-serif; letter-spacing: .22em; -webkit-user-drag: none")
@@ -61,6 +61,28 @@ class WebUiPaintPinTest {
                     .contains("#tourBox b { -webkit-user-drag: none")
                     .contains("#stats b { -webkit-user-drag: none")
                     .contains("#compareBox span { -webkit-user-drag: none");
+        }
+    }
+
+    @Test
+    void wellNewsBrandsHaveRimDepth() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html)
+                    .contains("#log .state  { color: #3ab675; -webkit-user-drag: none")
+                    .contains("#log .player { color: #c89e3f; -webkit-user-drag: none")
+                    .contains("#log .err    { color: #d04e4f; -webkit-user-drag: none")
+                    .contains("#lb .score { color: #3ab675; font-weight: 700; -webkit-user-drag: none")
+                    .contains("#compareBox .gave-up { color: #d04e4f; -webkit-user-drag: none")
+                    .contains("--accent: #3ee08f")
+                    .contains("--gold: #f5c14a")
+                    .contains("--warn: #ff5a5f")
+                    .doesNotContain("#log .state  { color: var(--accent)")
+                    .doesNotContain("#log .player { color: var(--gold)")
+                    .doesNotContain("#log .err    { color: var(--warn)")
+                    .doesNotContain("#lb .score { color: var(--accent)")
+                    .doesNotContain("#compareBox .gave-up { color: var(--warn)");
         }
     }
 
