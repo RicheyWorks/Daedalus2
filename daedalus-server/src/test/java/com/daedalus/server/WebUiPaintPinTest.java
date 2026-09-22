@@ -1845,8 +1845,10 @@ class WebUiPaintPinTest {
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
                     .contains("#legend [data-key=\"hotspot\"] i {")
-                    .contains("radial-gradient(circle at 45% 40%, rgba(229,72,77,.5) 28%, rgba(106,32,36,.5))")
-                    .doesNotContain("data-key=\"hotspot\"><i style=\"background:rgba(229,72,77,.5)\"");
+                    .contains("radial-gradient(circle at 45% 40%, rgba(188,64,65,.5) 28%, rgba(106,32,36,.5))")
+                    .doesNotContain("radial-gradient(circle at 45% 40%, rgba(229,72,77,.5) 28%, rgba(106,32,36,.5))")
+                    .as("KEEP leftover even lens coral stays")
+                    .contains("radial-gradient(circle at 45% 40%, #e5484d 28%, #6a2024)");
         }
     }
 
