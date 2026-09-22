@@ -532,6 +532,9 @@ class WebUiPaintPinTest {
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
                     .contains("#tourBox { padding: 8px; background: #16120e;\n"
+                            + "             background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
+                            + "             border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
+                    .doesNotContain("#tourBox { padding: 8px; background: #16120e;\n"
                             + "             border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
                     .doesNotContain("#tourBox { padding: 8px; background: #16120e;\n"
                             + "             border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 6px;");
@@ -569,6 +572,9 @@ class WebUiPaintPinTest {
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
                     .contains("#labOut { padding: 8px; background: #16120e;\n"
+                            + "            background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
+                            + "            border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
+                    .doesNotContain("#labOut { padding: 8px; background: #16120e;\n"
                             + "            border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
                     .doesNotContain("#labOut { padding: 8px; background: #16120e;\n"
                             + "            border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 6px;");
@@ -593,6 +599,9 @@ class WebUiPaintPinTest {
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
                     .contains("#pluginBox { color: #b09a72; padding: 8px; background: #16120e;\n"
+                            + "               background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
+                            + "               border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
+                    .doesNotContain("#pluginBox { color: #b09a72; padding: 8px; background: #16120e;\n"
                             + "               border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
                     .doesNotContain("#pluginBox { color: #b09a72; padding: 8px; background: #16120e;\n"
                             + "               border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 6px;");
@@ -617,6 +626,9 @@ class WebUiPaintPinTest {
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
                     .contains("#campaignBox { padding: 8px; background: #16120e;\n"
+                            + "                 background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
+                            + "                 border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
+                    .doesNotContain("#campaignBox { padding: 8px; background: #16120e;\n"
                             + "                 border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
                     .doesNotContain("#campaignBox { padding: 8px; background: #16120e;\n"
                             + "                 border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 6px;");
@@ -641,6 +653,9 @@ class WebUiPaintPinTest {
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
                     .contains("#worldBox { color: #b09a72; padding: 8px; background: #16120e;\n"
+                            + "              background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
+                            + "              border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
+                    .doesNotContain("#worldBox { color: #b09a72; padding: 8px; background: #16120e;\n"
                             + "              border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
                     .doesNotContain("#worldBox { color: #b09a72; padding: 8px; background: #16120e;\n"
                             + "              border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 6px;");

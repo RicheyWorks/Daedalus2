@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well rail-well family.**
+  Campaign, tournament, lab, plugins,
+  and world inspect sink into the same
+  radial well as the ASCII dump, so a
+  flat slab is not the last word beside
+  the maze.
+
 - **Well leaderboard-well family.**
   The score list sinks into the same
   radial well as the ASCII dump, so a

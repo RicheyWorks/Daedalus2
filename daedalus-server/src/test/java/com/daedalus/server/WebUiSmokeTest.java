@@ -198,6 +198,7 @@ class WebUiSmokeTest {
                 .contains("#status, #compareBox, #pluginBox, #worldBox, #campaignBox {")
                 .contains("#worldBox div { border-bottom: 1px solid rgba(153, 111, 49, 0.28); padding: 2px 0;")
                 .contains("#worldBox { color: #b09a72; padding: 8px; background: #16120e;\n"
+                        + "              background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
                         + "              border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
                 .contains("font-variant-numeric: tabular-nums;")
                 .contains("var(--panel); cursor: default;")
@@ -211,12 +212,15 @@ class WebUiSmokeTest {
                 .contains("#tourBox, #labOut, #compareBox, #status {")
                 .contains("#campaignBox { padding: 8px; background: #16120e;")
                 .contains("#campaignBox { padding: 8px; background: #16120e;\n"
+                        + "                 background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
                         + "                 border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
                 .contains("#tourBox { padding: 8px; background: #16120e;")
                 .contains("#tourBox { padding: 8px; background: #16120e;\n"
+                        + "             background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
                         + "             border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
                 .contains("#labOut { padding: 8px; background: #16120e;")
                 .contains("#labOut { padding: 8px; background: #16120e;\n"
+                        + "            background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
                         + "            border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
                 .contains("#compareBox { max-height: 22vh; overflow: auto; overscroll-behavior: none; min-width: 0;")
                 .contains("color: #f2ead8; cursor: text; padding: 8px; background: #16120e;\n"
@@ -360,6 +364,7 @@ class WebUiSmokeTest {
                 .contains("overflow-wrap: break-word; hyphens: none; line-height: 1.5;")
                 .contains("#pluginBox { color: #b09a72; padding: 8px; background: #16120e;")
                 .contains("#pluginBox { color: #b09a72; padding: 8px; background: #16120e;\n"
+                        + "               background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
                         + "               border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
                 .contains("#pluginBox b { color: #f2ead8;")
                 .contains("#tourBox table { width: 100%; border-collapse: collapse; -webkit-user-drag: none")
