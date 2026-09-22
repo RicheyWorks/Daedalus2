@@ -216,7 +216,10 @@ class DesktopWorkTest {
         DesktopPaint.Race race = work.raceJob(
                 "astar", "bfs", cached.grid(), cached.metadata().id()).call();
         assertThat(race.first().id()).isEqualTo("astar");
-        assertThat(race.first().color()).isEqualTo(DesktopPaint.RACE_A);
+        assertThat(race.first().color()).isEqualTo("#7997cc");
+        assertThat(DesktopPaint.RACE_A)
+                .as("KEEP leftover even race ice stays")
+                .isEqualTo("#8fb8ff");
         assertThat(race.second().id()).isEqualTo("bfs");
         assertThat(race.second().color()).isEqualTo("#c49425");
         assertThat(DesktopPaint.RACE_B)
@@ -239,7 +242,10 @@ class DesktopWorkTest {
                 cached.metadata().id()).call();
         assertThat(compared.lanes()).hasSize(5);
         assertThat(compared.lanes().get(0).id()).isEqualTo("astar");
-        assertThat(compared.lanes().get(0).color()).isEqualTo(DesktopPaint.COMPARE[0]);
+        assertThat(compared.lanes().get(0).color()).isEqualTo("#7997cc");
+        assertThat(DesktopPaint.COMPARE[0])
+                .as("KEEP leftover even mixHex compare ice stays")
+                .isEqualTo("#8fb8ff");
         assertThat(compared.lanes().get(1).color()).isEqualTo("#c49425");
         assertThat(compared.lanes().get(2).color()).isEqualTo("#bc4041");
         assertThat(compared.lanes().get(3).color()).isEqualTo("#758c44");

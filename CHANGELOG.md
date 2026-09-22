@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Path-ice family.**
+  Path, race-A, and compare-ice fall
+  off toward floor-dim with the same
+  0.22 as halls, so leftover even torch
+  is not the last word on the maze page.
+  KEEP leftover even path ink stays.
+
 - **Legend start and goal family.**
   Start mint and goal coral fall off
   toward floor-dim with the same 0.22

@@ -154,7 +154,8 @@ class ThemeManagerTest {
             assertThat(fxml).contains("color=\"#6a5428\"");
             assertThat(fxml).doesNotContain("fill=\"#d4b06a\" arcWidth=\"3\" arcHeight=\"3\"");
             assertThat(fxml).contains("legendPath");
-            assertThat(fxml).contains("color=\"#8fb8ff\"");
+            assertThat(fxml).contains("color=\"#7997cc\"");
+            assertThat(fxml).doesNotContain("color=\"#8fb8ff\"");
             assertThat(fxml).contains("color=\"#3a5888\"");
             assertThat(fxml).doesNotContain("fill=\"#8fb8ff\" arcWidth=\"3\" arcHeight=\"3\"");
             assertThat(fxml).contains("legendRace");

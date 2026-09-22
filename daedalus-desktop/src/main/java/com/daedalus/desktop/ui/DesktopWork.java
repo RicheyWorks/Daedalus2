@@ -267,6 +267,7 @@ public class DesktopWork {
                     continue;
                 }
                 String ink = switch (color % DesktopPaint.COMPARE.length) {
+                    case 0 -> "#7997cc";
                     case 1 -> "#c49425";
                     case 2 -> "#bc4041";
                     case 3 -> "#758c44";
@@ -293,7 +294,7 @@ public class DesktopWork {
             var first = solving.solve(firstId, grid, grid.start(), grid.goal(), mazeId, true);
             var second = solving.solve(secondId, grid, grid.start(), grid.goal(), mazeId, true);
             return new DesktopPaint.Race(
-                    new DesktopPaint.RaceLane(firstId, DesktopPaint.RACE_A,
+                    new DesktopPaint.RaceLane(firstId, "#7997cc",
                             first.expansions(), first.path()),
                     new DesktopPaint.RaceLane(secondId, "#c49425",
                             second.expansions(), second.path()));

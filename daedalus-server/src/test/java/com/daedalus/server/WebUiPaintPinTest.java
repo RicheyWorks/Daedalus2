@@ -1457,6 +1457,8 @@ class WebUiPaintPinTest {
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js)
                     .contains("{id: b, color: \"#c49425\", expansions: rb.expansions || [], path: rb.path,")
+                    .contains("{id: a, color: \"#7997cc\", expansions: ra.expansions || [], path: ra.path,")
+                    .doesNotContain("{id: a, color: \"#8fb8ff\", expansions: ra.expansions || [], path: ra.path,")
                     .doesNotContain("{id: b, color: \"#f0b429\", expansions: rb.expansions || [], path: rb.path,");
         }
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
@@ -1561,7 +1563,9 @@ class WebUiPaintPinTest {
             assertThat(in).as("well painter").isNotNull();
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js)
-                    .contains("paintWalk(g, geom, scene.path, COLORS.path, scene.pathProgress, 0.85, \"ribbon\",")
+                    .contains("paintWalk(g, geom, scene.path, \"#7997cc\", scene.pathProgress, 0.85, \"ribbon\",")
+                    .contains("path: \"#8fb8ff\"")
+                    .contains(": \"#7997cc\")")
                     .contains("(tr, tc) => expansionTileInk(tr, tc, th, tw)")
                     .contains("const pathTip = walkHead(scene.path, scene.pathProgress)")
                     .contains("expansionTileInk(2 * pathTip.row + 1, 2 * pathTip.col + 1, th, tw)");
@@ -1714,8 +1718,10 @@ class WebUiPaintPinTest {
             assertThat(in).as("static well page").isNotNull();
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
-                    .contains("#legend [data-key=\"path\"] i {")
-                    .contains("radial-gradient(circle at 45% 40%, #8fb8ff 28%, #3a5888)")
+                    .contains("#legend [data-key=\"path\"] i {\n"
+                            + "    background: radial-gradient(circle at 45% 40%, #7997cc 28%, #3a5888); }")
+                    .contains("--accent2: #8fb8ff")
+                    .doesNotContain("radial-gradient(circle at 45% 40%, #8fb8ff 28%, #3a5888)")
                     .doesNotContain("data-key=\"path\"><i style=\"background:#8fb8ff\"");
         }
     }
@@ -1873,7 +1879,7 @@ class WebUiPaintPinTest {
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
                     .contains("#legend [data-key=\"race\"] i:nth-child(1) {")
-                    .contains("radial-gradient(circle at 45% 40%, #8fb8ff 28%, #3a5888)")
+                    .contains("radial-gradient(circle at 45% 40%, #7997cc 28%, #3a5888)")
                     .contains("radial-gradient(circle at 45% 40%, #c49425 28%, #8a6018)")
                     .doesNotContain("data-key=\"race\"><i style=\"background:#8fb8ff;width:6px\"");
         }

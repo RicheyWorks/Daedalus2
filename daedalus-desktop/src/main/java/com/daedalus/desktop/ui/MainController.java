@@ -2106,11 +2106,11 @@ public class MainController {
                     DesktopPaint.GHOST_WALK_ALPHA, DesktopPaint.GHOST);
         }
         if (currentPath != null && !currentPath.isEmpty() && theme != null) {
-            paintPathRibbon(g, layout, currentPath, theme.path(), DesktopPaint.PATH_ALPHA,
+            paintPathRibbon(g, layout, currentPath, Color.web("#7997cc"), DesktopPaint.PATH_ALPHA,
                     current.metadata().start(), current.metadata().goal(), DesktopPaint.PATH);
             Point tip = DesktopPaint.walkHead(currentPath);
             double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
-            Color ice = Color.web(tip == null ? DesktopPaint.PATH
+            Color ice = Color.web(tip == null ? "#7997cc"
                     : DesktopPaint.walkTrailInk(DesktopPaint.PATH,
                             DesktopPaint.floorEdge(layout, 2 * tip.row() + 1, 2 * tip.col() + 1)));
             paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
