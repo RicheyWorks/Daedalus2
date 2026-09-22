@@ -249,6 +249,15 @@ class ThemeManagerTest {
     }
 
     @Test
+    void emptyCaptionUsesTheWellFace() throws Exception {
+        String src = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/java/com/daedalus/desktop/ui/MainController.java"));
+        assertThat(src).contains("Font.font(\"Bahnschrift\", FontWeight.NORMAL, 13)");
+        assertThat(src).doesNotContain("FontWeight.SEMI_BOLD, 13");
+        assertThat(src).doesNotContain("Font.font(\"Segoe UI\", 13)");
+    }
+
+    @Test
     void fogBackdropUsesTheWellVoidPocket() throws Exception {
         String src = java.nio.file.Files.readString(java.nio.file.Path.of(
                 "src/main/java/com/daedalus/desktop/ui/MainController.java"));

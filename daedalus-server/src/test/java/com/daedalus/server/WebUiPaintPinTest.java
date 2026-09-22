@@ -173,7 +173,8 @@ class WebUiPaintPinTest {
                     .contains("function emptyWordmarkInk")
                     .contains("mixHex(\"#f2ead8\", COLORS.floorDim, 0.22)")
                     .contains("g.fillStyle = emptyWordmarkInk()")
-                    .doesNotContain("g.fillStyle = \"#f2ead8\"");
+                    .doesNotContain("g.fillStyle = \"#f2ead8\"")
+                    .contains("g.font = \"13px Bahnschrift, \\\"Segoe UI\\\", sans-serif\";");
         }
     }
 

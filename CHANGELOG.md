@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop idle caption face.**
+  The lines under the empty
+  wordmark use Bahnschrift at
+  the well's regular 13px.
+
 - **Desktop wordmark size.**
   The toolbar name is 18px,
   the same size as the well header.
