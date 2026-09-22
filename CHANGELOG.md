@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore HERE end-wash family.**
+  Standing on start or goal washes
+  you-are-here toward the same fallen-off
+  chips as the caption glyphs, so leftover
+  even torch is not the last word on the
+  maze page. KEEP leftover even end brands
+  stay.
+
 - **Explore caption end-ink family.**
   Stood-on start and goal glyphs fall
   off toward floor-dim with the same

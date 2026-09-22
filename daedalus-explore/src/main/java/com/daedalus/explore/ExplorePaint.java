@@ -226,7 +226,7 @@ public final class ExplorePaint {
         return MAP_HERE_HALO * (float) (0.85 + 0.30 * wave);
     }
 
-    /** HERE on start / goal — gold you-are-here, washed toward well mint / coral. */
+    /** HERE on start / goal — gold you-are-here, washed toward the fallen-off well chips. */
     public static void mapHereTint(ExploreBody body, ExploreMesh mesh, float[] rgb) {
         mapHereTint(body, mesh, null, rgb);
     }
@@ -285,13 +285,9 @@ public final class ExplorePaint {
         set(rgb, r, g, b);
         String place = endPlaceName(body, mesh);
         if ("START".equals(place)) {
-            rgb[0] += (MAP_START_R - rgb[0]) * FLOOR_END_WEIGHT;
-            rgb[1] += (MAP_START_G - rgb[1]) * FLOOR_END_WEIGHT;
-            rgb[2] += (MAP_START_B - rgb[2]) * FLOOR_END_WEIGHT;
+            blendCaptionEnd(rgb, MAP_START_R, MAP_START_G, MAP_START_B);
         } else if ("GOAL".equals(place)) {
-            rgb[0] += (MAP_GOAL_R - rgb[0]) * FLOOR_END_WEIGHT;
-            rgb[1] += (MAP_GOAL_G - rgb[1]) * FLOOR_END_WEIGHT;
-            rgb[2] += (MAP_GOAL_B - rgb[2]) * FLOOR_END_WEIGHT;
+            blendCaptionEnd(rgb, MAP_GOAL_R, MAP_GOAL_G, MAP_GOAL_B);
         } else if (parcelPlaceName(blocks, body) != null) {
             rgb[0] += (MAP_BLOCK_R - rgb[0]) * FLOOR_END_WEIGHT;
             rgb[1] += (MAP_BLOCK_G - rgb[1]) * FLOOR_END_WEIGHT;
@@ -1546,7 +1542,7 @@ public final class ExplorePaint {
         }
     }
 
-    /** Soft underglow uses the same fallen-off end ink as the glyphs. */
+    /** Soft underglow and the HERE wash share the fallen-off end ink. */
     private static void blendCaptionEnd(float[] rgb, float brandR, float brandG, float brandB) {
         float[] end = new float[] { brandR, brandG, brandB };
         mixEndEdge(1, end);

@@ -642,10 +642,32 @@ class ExplorePaintTest {
         ExplorePaint.mapHereTint(ExploreBody.atCell(new Point(0, 0)), null, null, hereRim, 1);
         assertThat(hereRim[0]).as("HERE rim falls off like live halls")
                 .isLessThan(hereHall[0]);
-        assertThat(hereStart[1]).as("HERE on start lifts toward well mint")
-                .isGreaterThan(hereHall[1]);
-        assertThat(hereGoal[0]).as("HERE on goal lifts toward well coral")
-                .isGreaterThan(hereHall[0]);
+        float[] startFallen = new float[] {
+                ExplorePaint.MAP_START_R, ExplorePaint.MAP_START_G, ExplorePaint.MAP_START_B};
+        ExplorePaint.mixEndEdge(1, startFallen);
+        float[] expectStart = new float[] {
+                ExplorePaint.MAP_HERE_R, ExplorePaint.MAP_HERE_G, ExplorePaint.MAP_HERE_B};
+        expectStart[0] += (startFallen[0] - expectStart[0]) * ExplorePaint.FLOOR_END_WEIGHT;
+        expectStart[1] += (startFallen[1] - expectStart[1]) * ExplorePaint.FLOOR_END_WEIGHT;
+        expectStart[2] += (startFallen[2] - expectStart[2]) * ExplorePaint.FLOOR_END_WEIGHT;
+        assertThat(hereStart).as("HERE on start washes toward the fallen-off start chip")
+                .containsExactly(expectStart);
+        float[] goalFallen = new float[] {
+                ExplorePaint.MAP_GOAL_R, ExplorePaint.MAP_GOAL_G, ExplorePaint.MAP_GOAL_B};
+        ExplorePaint.mixEndEdge(1, goalFallen);
+        float[] expectGoal = new float[] {
+                ExplorePaint.MAP_HERE_R, ExplorePaint.MAP_HERE_G, ExplorePaint.MAP_HERE_B};
+        expectGoal[0] += (goalFallen[0] - expectGoal[0]) * ExplorePaint.FLOOR_END_WEIGHT;
+        expectGoal[1] += (goalFallen[1] - expectGoal[1]) * ExplorePaint.FLOOR_END_WEIGHT;
+        expectGoal[2] += (goalFallen[2] - expectGoal[2]) * ExplorePaint.FLOOR_END_WEIGHT;
+        assertThat(hereGoal).as("HERE on goal washes toward the fallen-off goal chip")
+                .containsExactly(expectGoal);
+        assertThat(ExplorePaint.MAP_START_R)
+                .as("KEEP leftover even start mint stays")
+                .isEqualTo(0x3e / 255f);
+        assertThat(ExplorePaint.MAP_GOAL_R)
+                .as("KEEP leftover even goal coral stays")
+                .isEqualTo(0xff / 255f);
         World street = World.zero();
         street.applyStamp(new ParcelBounds(8, 0, 8, 9, 1, 9), Parcel.SYSTEM_OWNER,
                 List.of(new BlockCoordinate(8, 0, 8)), List.of(BlockType.WOOD));
