@@ -492,6 +492,9 @@ class WebUiPaintPinTest {
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
                     .contains("color: #f2ead8; padding: 8px; background: #16120e;\n"
+                            + "         background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
+                            + "         border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
+                    .doesNotContain("color: #f2ead8; padding: 8px; background: #16120e;\n"
                             + "         border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;")
                     .doesNotContain("color: #f2ead8; padding: 8px; background: #16120e;\n"
                             + "         border: 1px solid rgba(184, 133, 56, 0.28); border-radius: 6px;");
@@ -964,6 +967,7 @@ class WebUiPaintPinTest {
             assertThat(html)
                     .contains("#log { height: 240px; overflow-y: auto; overscroll-behavior: none; font: 12px/1.6 ui-monospace, monospace;\n"
                             + "         color: #f2ead8; padding: 8px; background: #16120e;\n"
+                            + "         background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
                             + "         border: 1px solid rgba(153, 111, 49, 0.28); border-radius: 6px;\n"
                             + "         scrollbar-width: thin; scrollbar-color: rgba(153, 111, 49, 0.45) transparent;")
                     .doesNotContain("#log { height: 240px; overflow-y: auto; overscroll-behavior: none; font: 12px/1.6 ui-monospace, monospace;\n"

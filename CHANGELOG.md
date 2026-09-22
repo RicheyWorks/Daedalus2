@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well log-well family.**
+  The session log sinks into the same
+  radial well as the ASCII dump, so a
+  flat slab is not the last word beside
+  the maze.
+
 - **Well compare-well family.**
   The solver table sinks into the same
   radial well as the ASCII dump, so a
