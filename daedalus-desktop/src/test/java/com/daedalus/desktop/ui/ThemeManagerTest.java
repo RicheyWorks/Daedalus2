@@ -400,6 +400,8 @@ class ThemeManagerTest {
                 at = next;
             }
             assertThat(fxml)
+                    .contains("fx:id=\"legendWaypoint\"")
+                    .contains("width=\"8\" height=\"8\" rotate=\"45\"")
                     .contains("fx:id=\"legendPlayer\" text=\"players\"")
                     .doesNotContain("fx:id=\"legendPlayer\" text=\"walk\"")
                     .as("KEEP leftover even lens colors stay")

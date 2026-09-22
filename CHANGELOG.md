@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well waypoint diamond.**
+  The waypoint swatch is an 8px
+  diamond, the same size as the
+  desktop key, so the turn sits in
+  the legend line.
+
 - **Desktop legend player name.**
   The four walk chips read players,
   the same word as the well key.

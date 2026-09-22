@@ -1932,6 +1932,7 @@ class WebUiPaintPinTest {
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
                     .contains("#legend [data-key=\"waypoint\"] i {")
+                    .contains("width: 8px;\n    height: 8px;\n    transform: rotate(45deg)")
                     .contains("transform: rotate(45deg)")
                     .contains("radial-gradient(circle at 45% 40%, #c6a441 28%, #8a6820)")
                     .doesNotContain("data-key=\"waypoint\"><i style=\"background:#f2c94c;transform:rotate(45deg)\"");
