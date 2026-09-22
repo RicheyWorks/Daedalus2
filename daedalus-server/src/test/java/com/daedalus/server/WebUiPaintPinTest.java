@@ -1652,7 +1652,9 @@ class WebUiPaintPinTest {
             assertThat(in).as("static well page").isNotNull();
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
-                    .contains("#legend [data-key=\"sanctuary\"] i {")
+                    .contains("#legend [data-key=\"sanctuary\"] i {\n"
+                            + "    border-radius: 50%;\n"
+                            + "    background: radial-gradient(circle at 45% 40%, #758c44 28%, #4e6a28); }")
                     .contains("radial-gradient(circle at 45% 40%, #8aaa50 28%, #4e6a28)")
                     .doesNotContain("background:#8aaa50;border-radius:50%");
         }
@@ -1676,8 +1678,9 @@ class WebUiPaintPinTest {
             assertThat(in).as("static well page").isNotNull();
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
-                    .contains("#legend [data-key=\"choke\"] i {")
-                    .contains("radial-gradient(circle at 45% 40%, #c07850 28%, #6a4030)")
+                    .contains("#legend [data-key=\"choke\"] i {\n"
+                            + "    background: radial-gradient(circle at 45% 40%, #9f6544 28%, #6a4030); }")
+                    .doesNotContain("radial-gradient(circle at 45% 40%, #c07850 28%, #6a4030)")
                     .doesNotContain("background:#c07850\"");
         }
     }

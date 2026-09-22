@@ -286,7 +286,7 @@
                                 <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
                                                 proportional="true">
                                     <stops>
-                                        <Stop offset="0.28" color="#c07850"/>
+                                        <Stop offset="0.28" color="#9f6544"/>
                                         <Stop offset="1.0" color="#6a4030"/>
                                     </stops>
                                 </RadialGradient>
@@ -335,7 +335,7 @@
                                 <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
                                                 proportional="true">
                                     <stops>
-                                        <Stop offset="0.28" color="#8aaa50"/>
+                                        <Stop offset="0.28" color="#758c44"/>
                                         <Stop offset="1.0" color="#4e6a28"/>
                                     </stops>
                                 </RadialGradient>

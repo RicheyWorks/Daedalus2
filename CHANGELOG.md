@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Legend sanctuary and choke family.**
+  Sanctuary moss and choke clay fall
+  off toward floor-dim with the same
+  0.22 as halls, so leftover even torch
+  is not the last word on the maze page.
+  KEEP leftover even lens moss stays.
+
 - **Desktop compare-lamp family.**
   Compare lane-moss and lane-clay fall
   off toward floor-dim with the same

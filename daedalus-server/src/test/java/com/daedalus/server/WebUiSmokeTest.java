@@ -504,7 +504,7 @@ class WebUiSmokeTest {
                 .contains("const cutInk = chokeInk(tr, tc, th, tw)")
                 .contains("g.fillStyle = cutInk")
                 .contains("g.strokeStyle = cutInk")
-                .contains("radial-gradient(circle at 45% 40%, #c07850 28%, #6a4030)")
+                .contains("radial-gradient(circle at 45% 40%, #9f6544 28%, #6a4030)")
                 .contains("0.18 + 0.05")
                 .contains("PLAYER_BREATH_MS")
                 .contains("PLAYER_COLORS = [\"#f5c14a\", \"#e88868\", \"#e8a060\", \"#b8a058\"]")
