@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend player name.**
+  The four walk chips read players,
+  the same word as the well key.
+
 - **Desktop legend key order.**
   The desktop key follows the well:
   hot spot, then walk, tour, waypoint,

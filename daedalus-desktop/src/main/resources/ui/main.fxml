@@ -210,7 +210,7 @@
                         </Rectangle>
                     </graphic>
                 </Label>
-                <Label fx:id="legendPlayer" text="walk" managed="false" visible="false">
+                <Label fx:id="legendPlayer" text="players" managed="false" visible="false">
                     <graphic>
                         <HBox spacing="5">
                             <Circle radius="5" stroke="rgba(198,190,174,0.28)" strokeWidth="1.5">
