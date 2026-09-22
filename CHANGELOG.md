@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well distance-ramp bar.**
+  The field scale is one bar under one
+  rim, so the last swatch closes before
+  the step count. KEEP leftover even
+  distance ramp stays.
+
 - **Well selection-wash family.**
   Compare hover, a pinned solver, and
   the active campaign rung wash the

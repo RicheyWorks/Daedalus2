@@ -48,13 +48,14 @@
 
   function fieldHtml(f) {
     const swatches = DISTANCE_RAMP
-        .map(c => `<span style="display:inline-block;width:16px;height:10px;background:${c};`
-            + `margin-right:1px;box-shadow:0 0 0 1.5px rgba(198, 190, 174, .28)"></span>`)
+        .map(c => `<span style="display:inline-block;width:16px;height:10px;background:${c};"></span>`)
         .join("");
     return `<div style="margin-top:8px">`
         + `<b style="color:#af8441">Distance from the ${f.from.toLowerCase()}</b> — the `
         + `breadth-first field, shaded. `
-        + `<div style="margin-top:6px">0 ${swatches} ${f.maxDistance} steps</div>`
+        + `<div style="margin-top:6px">0 <span style="display:inline-block;line-height:0;`
+        + `vertical-align:-1px;box-shadow:0 0 0 1.5px rgba(198, 190, 174, .28)">${swatches}</span> `
+        + `${f.maxDistance} steps</div>`
         + `<div class="hint" style="margin-top:4px">This is maze distance, not distance across `
         + `the picture, so it will not look like a smooth halo: two cells touching on screen can `
         + `be 200 steps apart. Every abrupt jump in shade is a wall doing that work.</div>`

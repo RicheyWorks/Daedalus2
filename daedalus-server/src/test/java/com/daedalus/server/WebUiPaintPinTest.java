@@ -1868,6 +1868,22 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wellDistanceRampClosesBeforeTheCount() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/caption.js")) {
+            assertThat(in).as("well caption painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js)
+                    .contains("width:16px;height:10px;background:${c};")
+                    .contains("vertical-align:-1px;box-shadow:0 0 0 1.5px rgba(198, 190, 174, .28)")
+                    .contains("\"#4a2210\"")
+                    .contains("\"#f2d8a0\"")
+                    .doesNotContain("margin-right:1px;box-shadow:0 0 0 1.5px rgba(198, 190, 174, .28)")
+                    .as("KEEP leftover even distance ramp stays")
+                    .contains("DISTANCE_RAMP = [\"#4a2210\", \"#6e3014\", \"#943c18\", \"#b85a20\",");
+        }
+    }
+
+    @Test
     void wellLegendFaintCreamRimsHaveRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
             assertThat(in).as("static well page").isNotNull();
