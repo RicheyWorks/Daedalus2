@@ -524,7 +524,9 @@ public final class ExploreHost {
         glColor3f(ExplorePaint.AIM_SOFT_R, ExplorePaint.AIM_SOFT_G, ExplorePaint.AIM_SOFT_B);
         fill(-soft, aim - thick / 2f, soft, aim + thick / 2f);
         fill(-thick / 2f, aim - soft, thick / 2f, aim + soft);
-        glColor3f(ExplorePaint.AIM_BRIGHT_R, ExplorePaint.AIM_BRIGHT_G, ExplorePaint.AIM_BRIGHT_B);
+        float[] aimInk = new float[3];
+        ExplorePaint.aimCoreTint(aimInk);
+        glColor3f(aimInk[0], aimInk[1], aimInk[2]);
         float arm = ExplorePaint.AIM_ARM;
         glBegin(GL_LINES);
         glVertex2f(-arm, aim);

@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore aim-core family.**
+  The crosshair and hall titles
+  share a fallen-off aim gold.
+  The aim brand stays the mix input.
+
 - **Desktop stage-hairline pulse.**
   The breathing gold lip keeps
   the void ring around it, the

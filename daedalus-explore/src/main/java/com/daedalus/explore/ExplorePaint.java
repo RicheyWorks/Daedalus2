@@ -1526,7 +1526,7 @@ public final class ExplorePaint {
         } else if ("STONE".equals(place)) {
             set(rgb, MAP_WALL_R, MAP_WALL_G, MAP_WALL_B);
         } else {
-            set(rgb, AIM_BRIGHT_R, AIM_BRIGHT_G, AIM_BRIGHT_B);
+            aimCoreTint(rgb);
         }
     }
 
@@ -1593,6 +1593,15 @@ public final class ExplorePaint {
     public static final float AIM_BRIGHT_R = 0.94f;
     public static final float AIM_BRIGHT_G = 0.78f;
     public static final float AIM_BRIGHT_B = 0.32f;
+
+    /** Crosshair and hall titles — leftover even gold is not the last word on the aim. */
+    public static void aimCoreTint(float[] rgb) {
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        set(rgb, AIM_BRIGHT_R, AIM_BRIGHT_G, AIM_BRIGHT_B);
+        mixEndEdge(1, rgb);
+    }
     /** Place name leads the strip — slightly larger than facing / stood. */
     public static final float CAPTION_PLACE_CELL = 0.026f;
     public static final float CAPTION_META_CELL = 0.018f;

@@ -915,6 +915,33 @@ class ExplorePaintTest {
     }
 
     @Test
+    void aimCoreUsesTheFallenCaptionGold() {
+        float[] aim = new float[3];
+        float[] hall = new float[3];
+        ExplorePaint.aimCoreTint(aim);
+        ExplorePaint.captionPlaceTint("HALL", hall);
+        assertThat(hall).as("hall title matches the fallen crosshair")
+                .containsExactly(aim);
+        float[] entrance = new float[3];
+        ExplorePaint.captionPlaceTint("ENTRANCE", entrance);
+        assertThat(entrance).containsExactly(aim);
+        assertThat(aim[0]).isLessThan(ExplorePaint.AIM_BRIGHT_R);
+        float[] fallen = new float[] {
+                ExplorePaint.AIM_BRIGHT_R, ExplorePaint.AIM_BRIGHT_G, ExplorePaint.AIM_BRIGHT_B};
+        ExplorePaint.mixEndEdge(1, fallen);
+        assertThat(aim).containsExactly(fallen);
+        assertThat(ExplorePaint.AIM_BRIGHT_R)
+                .as("KEEP leftover even aim gold stays")
+                .isEqualTo(0.94f);
+        float[] wood = new float[3];
+        ExplorePaint.captionPlaceTint("WOOD", wood);
+        assertThat(wood[0])
+                .as("KEEP leftover even torch wood stays")
+                .isEqualTo(ExplorePaint.MAP_BLOCK_R);
+        ExplorePaint.aimCoreTint(null);
+    }
+
+    @Test
     void statusNamesTheNearestVisibleMark() {
         ExploreFog fog = new ExploreFog();
         fog.stand(new Point(0, 0));
@@ -982,7 +1009,8 @@ class ExplorePaintTest {
         ExplorePaint.captionPlaceTint("HALL", hallInk);
         ExplorePaint.captionPlaceTint("START", startInk);
         ExplorePaint.captionPlaceTint("GOAL", goalInk);
-        assertThat(hallInk[0]).isEqualTo(ExplorePaint.AIM_BRIGHT_R);
+        assertThat(hallInk[0]).as("HALL glyphs fall off from raw aim gold")
+                .isLessThan(ExplorePaint.AIM_BRIGHT_R);
         assertThat(startInk[1]).as("START glyphs fall off from raw mint")
                 .isLessThan(ExplorePaint.MAP_START_G);
         assertThat(goalInk[0]).as("GOAL glyphs fall off from raw coral")
