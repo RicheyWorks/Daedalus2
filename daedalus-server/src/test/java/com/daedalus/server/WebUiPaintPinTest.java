@@ -723,6 +723,7 @@ class WebUiPaintPinTest {
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
                     .contains("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #afa088; cursor: text;\n"
+                            + "              text-shadow: 0 1px 0 #2a2218;\n"
                             + "              background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
                             + "              border: 1px solid rgba(153, 111, 49, 0.28);")
                     .doesNotContain("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #afa088; cursor: text;\n"
@@ -971,6 +972,7 @@ class WebUiPaintPinTest {
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
                     .contains("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #afa088; cursor: text;\n"
+                            + "              text-shadow: 0 1px 0 #2a2218;\n"
                             + "              background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
                             + "              border: 1px solid rgba(153, 111, 49, 0.28);\n"
                             + "              border-radius: 6px; font: 11px/1.45 ui-monospace, monospace; overflow: auto; overscroll-behavior: none;\n"

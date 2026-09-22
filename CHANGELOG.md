@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well gate-sample ink.**
+  The desktop command sample wears the
+  same floor shadow as the ASCII dump,
+  so leftover flat parchment is not the
+  last word on the gate.
+
 - **Well gate-sample well.**
   The desktop command sample sinks
   into the same radial well as the
