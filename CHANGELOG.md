@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend inset.**
+  The key strip's top pad is 22px,
+  the same inset as the well legend.
+
 - **Desktop legend swatch gap.**
   The word sits 5px after the swatch,
   the same gap as the well key.

@@ -89,6 +89,8 @@ class ThemeManagerTest {
             assertThat(css).contains("-fx-background-color: #16120e");
             assertThat(css).contains("rgba(16, 11, 8, 0.55)");
             assertThat(css).contains("rgba(16, 11, 8, 0.92)");
+            assertThat(css).contains("-fx-padding: 22 14 10 14;");
+            assertThat(css).doesNotContain("-fx-padding: 20 14 10 14;");
             assertThat(css).contains("rgba(16, 11, 8, 0.92));\n    -fx-cursor: default;");
             assertThat(css).contains(".legend .label");
             assertThat(css).contains("-fx-font-weight: bold;\n    -fx-cursor: default;");
