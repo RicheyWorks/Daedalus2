@@ -269,6 +269,8 @@ public class DesktopWork {
                 String ink = switch (color % DesktopPaint.COMPARE.length) {
                     case 1 -> "#c49425";
                     case 2 -> "#bc4041";
+                    case 3 -> "#758c44";
+                    case 4 -> "#9f6544";
                     case 5 -> "#af9158";
                     default -> DesktopPaint.COMPARE[color % DesktopPaint.COMPARE.length];
                 };

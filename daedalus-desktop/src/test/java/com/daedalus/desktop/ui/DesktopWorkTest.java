@@ -17,6 +17,8 @@ import com.daedalus.server.service.MazeSolverService;
 import com.daedalus.solver.SolverBudgetExceededException;
 import com.daedalus.solver.solvers.AStarSolver;
 import com.daedalus.solver.solvers.BfsSolver;
+import com.daedalus.solver.solvers.DfsSolver;
+import com.daedalus.solver.solvers.DijkstraSolver;
 import com.daedalus.solver.solvers.IDAStarSolver;
 import com.daedalus.solver.solvers.SolverRegistry;
 import com.daedalus.server.service.GameSessionService;
@@ -228,20 +230,32 @@ class DesktopWorkTest {
     @Test
     void aComparePaintsEveryRegisteredSolverRoute() throws Exception {
         var cached = work.generateJob("recursive-backtracker", 11, 11, 7L).call();
-        DesktopPaint.Compare compared = work.compareJob(
-                List.of("astar", "bfs", "ida-star"), cached.grid(),
+        var wide = new DesktopWork(generation, new MazeSolverService(
+                new SolverRegistry(List.of(new AStarSolver(), new BfsSolver(),
+                        new IDAStarSolver(), new DijkstraSolver(), new DfsSolver())),
+                event -> { }, new SimpleMeterRegistry()));
+        DesktopPaint.Compare compared = wide.compareJob(
+                List.of("astar", "bfs", "ida-star", "dijkstra", "dfs"), cached.grid(),
                 cached.metadata().id()).call();
-        assertThat(compared.lanes()).hasSize(3);
+        assertThat(compared.lanes()).hasSize(5);
         assertThat(compared.lanes().get(0).id()).isEqualTo("astar");
         assertThat(compared.lanes().get(0).color()).isEqualTo(DesktopPaint.COMPARE[0]);
         assertThat(compared.lanes().get(1).color()).isEqualTo("#c49425");
         assertThat(compared.lanes().get(2).color()).isEqualTo("#bc4041");
+        assertThat(compared.lanes().get(3).color()).isEqualTo("#758c44");
+        assertThat(compared.lanes().get(4).color()).isEqualTo("#9f6544");
         assertThat(DesktopPaint.COMPARE[1])
                 .as("KEEP leftover even mixHex compare gold stays")
                 .isEqualTo("#f0b429");
         assertThat(DesktopPaint.COMPARE[2])
                 .as("KEEP leftover even mixHex compare coral stays")
                 .isEqualTo("#e5484d");
+        assertThat(DesktopPaint.COMPARE[3])
+                .as("KEEP leftover even mixHex compare moss stays")
+                .isEqualTo("#8aaa50");
+        assertThat(DesktopPaint.COMPARE[4])
+                .as("KEEP leftover even mixHex compare clay stays")
+                .isEqualTo("#c07850");
         assertThat(DesktopPaint.COMPARE[5])
                 .as("KEEP leftover even mixHex compare tour stays")
                 .isEqualTo("#d4b06a");

@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop compare-lamp family.**
+  Compare lane-moss and lane-clay fall
+  off toward floor-dim with the same
+  0.22 as halls, so leftover even torch
+  is not the last word on the maze page.
+  KEEP leftover even sanctuary, choke,
+  and lens moss stay.
+
 - **Desktop compare-coral family.**
   Compare lane-coral falls off toward
   floor-dim with the same 0.22 as halls,
