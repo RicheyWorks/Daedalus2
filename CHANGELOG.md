@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well gate-sample well.**
+  The desktop command sample sinks
+  into the same radial well as the
+  ASCII dump, so a flat slab is not
+  the last word on the gate.
+
 - **Well rail-well family.**
   Campaign, tournament, lab, plugins,
   and world inspect sink into the same

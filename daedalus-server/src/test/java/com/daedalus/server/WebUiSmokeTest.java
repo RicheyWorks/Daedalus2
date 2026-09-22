@@ -163,6 +163,7 @@ class WebUiSmokeTest {
                 .contains("animation: gateRise .55s ease both, panelRimBreath 4.5s ease-in-out infinite")
                 .contains("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #afa088;")
                 .contains("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #afa088; cursor: text;\n"
+                        + "              background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
                         + "              border: 1px solid rgba(153, 111, 49, 0.28);")
                 .contains("background: #16120e; color: #afa088; cursor: text")
                 .contains("font: 11px/1.45 ui-monospace, monospace; overflow: auto; overscroll-behavior: none;")
