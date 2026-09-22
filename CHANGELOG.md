@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend corners.**
+  Square keys, narrow chips, and the
+  waypoint diamond use a 3px corner,
+  the same round as the well.
+
 - **Desktop legend inset.**
   The key strip's top pad is 22px,
   the same inset as the well legend.

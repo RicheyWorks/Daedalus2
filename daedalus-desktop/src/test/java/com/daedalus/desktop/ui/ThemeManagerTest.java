@@ -416,6 +416,20 @@ class ThemeManagerTest {
     }
 
     @Test
+    void legendCornersMatchTheWell() throws Exception {
+        try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
+            assertThat(in).as("main.fxml is on the classpath").isNotNull();
+            String fxml = new String(in.readAllBytes());
+            assertThat(fxml.split("arcWidth=\"6\" arcHeight=\"6\"", -1))
+                    .as("JavaFX arc is a diameter, so 6 is the well's 3px corner")
+                    .hasSize(22);
+            assertThat(fxml).doesNotContain("arcWidth=\"3\"");
+            assertThat(fxml).contains("width=\"8\" height=\"8\" rotate=\"45\"");
+            assertThat(fxml).doesNotContain("<Circle radius=\"5\" stroke=\"rgba(198,190,174,0.28)\" strokeWidth=\"1.5\" arc");
+        }
+    }
+
+    @Test
     void legendChipClustersMatchTheWellGap() throws Exception {
         try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
             assertThat(in).as("main.fxml is on the classpath").isNotNull();
