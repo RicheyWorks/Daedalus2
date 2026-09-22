@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Wordmark mint-glow family.**
+  Gate, header, and desktop brand mint
+  fall off toward floor-dim with the same
+  0.22 as halls, so leftover even torch is
+  not the last word on the maze page.
+  KEEP leftover even accent mint stays.
+
 - **Well news-brand family.**
   Log state, player, and error, the
   score, and a gave-up line fall off

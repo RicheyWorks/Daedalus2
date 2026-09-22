@@ -258,7 +258,7 @@ class WebUiSmokeTest {
                 .contains("radial-gradient(80% 70% at 50% 45%")
                 .contains("inset 0 0 48px rgba(0, 0, 0, .35)")
                 .contains("rgba(184, 133, 56")
-                .contains("0 0 18px rgba(62, 224, 143")
+                .contains("0 0 18px rgba(58, 182, 117")
                 .contains("animation: gateBreath 4.5s ease-in-out infinite")
                 .contains("board-panel")
                 .contains("gap: 12px; min-width: 0; -webkit-user-drag: none")

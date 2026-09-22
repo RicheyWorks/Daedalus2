@@ -47,8 +47,9 @@ class ThemeManagerTest {
             String css = new String(in.readAllBytes());
             assertThat(css).contains("rgba(153, 111, 49, 0.45)");
             assertThat(css).doesNotContain("rgba(184, 133, 56, 0.45)");
-            assertThat(css).contains("dropshadow(one-pass-box, rgba(62, 224, 143, 0.28)");
-            assertThat(css).contains("rgba(62, 224, 143, 0.28), 14, 0.45, 0, 0);\n    -fx-cursor: default;");
+            assertThat(css).contains("dropshadow(one-pass-box, rgba(58, 182, 117, 0.28)");
+            assertThat(css).contains("rgba(58, 182, 117, 0.28), 14, 0.45, 0, 0);\n    -fx-cursor: default;");
+            assertThat(css).doesNotContain("rgba(62, 224, 143");
             assertThat(css).contains("dropshadow(one-pass-box, rgba(153, 111, 49, 0.22)");
             assertThat(css).doesNotContain("dropshadow(one-pass-box, rgba(184, 133, 56, 0.22)");
             assertThat(css).contains("-fx-border-color: rgba(184, 133, 56, 0.85)");
@@ -248,6 +249,8 @@ class ThemeManagerTest {
                 "src/main/java/com/daedalus/desktop/ui/MainController.java"));
         assertThat(src).contains("Color.rgb(153, 111, 49, lip)")
                 .contains("Color.rgb(153, 111, 49, chip)")
+                .contains("Color.web(\"#3ab675\", DesktopPaint.brandMintAlpha(wave))")
+                .doesNotContain("Color.web(\"#3ee08f\"")
                 .doesNotContain("Color.rgb(184, 133, 56, lip)")
                 .doesNotContain("Color.rgb(184, 133, 56, chip)");
         try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/cosmic.css")) {

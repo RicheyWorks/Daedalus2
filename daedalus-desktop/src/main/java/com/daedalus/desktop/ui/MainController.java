@@ -1773,7 +1773,7 @@ public class MainController {
                 if (child instanceof Label brand && brand.getStyleClass().contains("brand")) {
                     var mint = new javafx.scene.effect.DropShadow(
                             DesktopPaint.brandMintRadius(wave), 0, 0,
-                            Color.web("#3ee08f", DesktopPaint.brandMintAlpha(wave)));
+                            Color.web("#3ab675", DesktopPaint.brandMintAlpha(wave)));
                     brand.setEffect(mint);
                     break;
                 }

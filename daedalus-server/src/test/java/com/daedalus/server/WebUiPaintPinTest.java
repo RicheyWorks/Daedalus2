@@ -1797,18 +1797,21 @@ class WebUiPaintPinTest {
             assertThat(in).as("static well page").isNotNull();
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
-                    .contains("text-shadow: 0 0 18px rgba(62, 224, 143, 0.22), 0 0 36px rgba(200, 158, 63, 0.10);")
+                    .contains("text-shadow: 0 0 18px rgba(58, 182, 117, 0.22), 0 0 36px rgba(200, 158, 63, 0.10);")
+                    .contains("linear-gradient(90deg, transparent 23px, rgba(58, 182, 117, .08) 24px, transparent 25px),")
                     .contains("linear-gradient(transparent 23px, rgba(200, 158, 63, .05) 24px, transparent 25px),")
                     .contains("radial-gradient(70% 45% at 50% 0%, rgba(200, 158, 63, .06), transparent 70%);")
-                    .contains("text-shadow: 0 0 22px rgba(62, 224, 143, 0.16), 0 0 48px rgba(200, 158, 63, 0.08);")
-                    .contains("text-shadow: 0 0 36px rgba(62, 224, 143, 0.32), 0 0 72px rgba(200, 158, 63, 0.18);")
+                    .contains("text-shadow: 0 0 22px rgba(58, 182, 117, 0.16), 0 0 48px rgba(200, 158, 63, 0.08);")
+                    .contains("text-shadow: 0 0 36px rgba(58, 182, 117, 0.32), 0 0 72px rgba(200, 158, 63, 0.18);")
+                    .doesNotContain("rgba(62, 224, 143")
                     .doesNotContain("rgba(245, 193, 74, 0.10)")
                     .doesNotContain("rgba(245, 193, 74, .05)")
                     .doesNotContain("rgba(245, 193, 74, .06)")
                     .doesNotContain("rgba(245, 193, 74, 0.08)")
                     .doesNotContain("rgba(245, 193, 74, 0.18)")
                     .as("KEEP leftover even hall player gold stays")
-                    .contains("--gold: #f5c14a;");
+                    .contains("--gold: #f5c14a;")
+                    .contains("--accent: #3ee08f");
         }
     }
 
