@@ -1013,7 +1013,8 @@ class WebUiPaintPinTest {
             assertThat(in).as("well campaign painter").isNotNull();
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js)
-                    .contains("color:${done ? \"#4cc38a\" : \"#af8441\"}")
+                    .contains("color:${done ? \"#45a071\" : \"#af8441\"}")
+                    .doesNotContain("color:${done ? \"#4cc38a\" : \"#af8441\"}")
                     .doesNotContain("color:${done ? \"#4cc38a\" : \"#d4a04c\"}");
         }
     }
