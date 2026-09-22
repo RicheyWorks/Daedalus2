@@ -126,7 +126,8 @@ class ThemeManagerTest {
             assertThat(fxml).contains("fx:id=\"legendChoke\"");
             assertThat(fxml).contains("fx:id=\"legendSanctuary\"");
             assertThat(fxml).contains("color=\"#6a4030\"");
-            assertThat(fxml).contains("color=\"#c8a878\"");
+            assertThat(fxml).contains("color=\"#a58b63\"");
+            assertThat(fxml).doesNotContain("color=\"#c8a878\"");
             assertThat(fxml).contains("color=\"#6a5438\"");
             assertThat(fxml).doesNotContain("fill=\"#c8a878\"");
             assertThat(fxml).doesNotContain("fill=\"#8aaa50\"");
@@ -185,7 +186,8 @@ class ThemeManagerTest {
             assertThat(fxml).doesNotContain("fill=\"#e8a060\"");
             assertThat(fxml).doesNotContain("fill=\"#b8a058\"");
             assertThat(fxml).contains("legendGhost");
-            assertThat(fxml).contains("color=\"#e8e0d4\"");
+            assertThat(fxml).contains("color=\"#beb6ab\"");
+            assertThat(fxml).doesNotContain("color=\"#e8e0d4\"");
             assertThat(fxml).contains("color=\"#6a6258\"");
             assertThat(fxml).doesNotContain("fill=\"#e8e0d4\"");
             assertThat(fxml).doesNotContain("fill=\"#8fb8ff\"");

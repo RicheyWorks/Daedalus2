@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Legend dead-end and ghost family.**
+  Dead-end clay and ghost cream fall
+  off toward floor-dim with the same
+  0.22 as halls, so leftover even torch
+  is not the last word on the maze page.
+  KEEP leftover even ghost ink stays.
+
 - **Legend sanctuary and choke family.**
   Sanctuary moss and choke clay fall
   off toward floor-dim with the same

@@ -439,7 +439,7 @@ class WebUiSmokeTest {
                 .contains("gap: 8px; align-items: center; -webkit-user-drag: none")
                 .contains("border-color: rgba(153, 111, 49, 0.85); color: #f2ead8")
                 .contains("ghost: \"#e8e0d4\"")
-                .contains("radial-gradient(circle at 45% 40%, #e8e0d4 28%, #6a6258)")
+                .contains("radial-gradient(circle at 45% 40%, #beb6ab 28%, #6a6258)")
                 .contains("ghostDisc")
                 .contains("ageFade")
                 .contains("0.35 + 0.65")

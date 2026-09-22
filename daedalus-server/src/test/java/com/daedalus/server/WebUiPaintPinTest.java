@@ -1666,8 +1666,11 @@ class WebUiPaintPinTest {
             assertThat(in).as("static well page").isNotNull();
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
-                    .contains("#legend [data-key=\"ghost\"] i {")
-                    .contains("radial-gradient(circle at 45% 40%, #e8e0d4 28%, #6a6258)")
+                    .contains("#legend [data-key=\"ghost\"] i {\n"
+                            + "    border-radius: 50%;\n"
+                            + "    opacity: .6;\n"
+                            + "    background: radial-gradient(circle at 45% 40%, #beb6ab 28%, #6a6258); }")
+                    .doesNotContain("radial-gradient(circle at 45% 40%, #e8e0d4 28%, #6a6258)")
                     .doesNotContain("background:#e8e0d4;border-radius:50%;opacity:.6");
         }
     }
@@ -1691,8 +1694,9 @@ class WebUiPaintPinTest {
             assertThat(in).as("static well page").isNotNull();
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
-                    .contains("#legend [data-key=\"deadend\"] i {")
-                    .contains("radial-gradient(circle at 45% 40%, #c8a878 28%, #6a5438)")
+                    .contains("#legend [data-key=\"deadend\"] i {\n"
+                            + "    background: radial-gradient(circle at 45% 40%, #a58b63 28%, #6a5438); }")
+                    .doesNotContain("radial-gradient(circle at 45% 40%, #c8a878 28%, #6a5438)")
                     .doesNotContain("background:#c8a878\"");
         }
     }
