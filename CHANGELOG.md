@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop compare-coral family.**
+  Compare lane-coral falls off toward
+  floor-dim with the same 0.22 as halls,
+  so leftover even torch is not the last
+  word on the maze page. KEEP leftover
+  even mixHex compare coral stays.
+
 - **Legend hotspot-fill family.**
   Hotspot coral falls off toward
   floor-dim with the same 0.22 as halls,
