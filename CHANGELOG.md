@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore story-key pad family.**
+  The pad under a story diamond
+  picks up that key's ink, the same
+  underglow the start and goal keys
+  already use.
+
 - **Explore status-lip family.**
   The status strip and face frame
   use the same fallen-off gold as

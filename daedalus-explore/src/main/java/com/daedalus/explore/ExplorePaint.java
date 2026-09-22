@@ -1682,6 +1682,19 @@ public final class ExplorePaint {
         }
     }
 
+    /** Soft pad under story diamonds — the caption underglow pulled toward that key. */
+    public static void keySoftTint(int slot, int marks, int mood, float[] rgb) {
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        float[] ink = new float[3];
+        keyTint(slot, marks, mood, ink);
+        set(rgb, CAPTION_SOFT_R, CAPTION_SOFT_G, CAPTION_SOFT_B);
+        rgb[0] += (ink[0] - rgb[0]) * FLOOR_END_WEIGHT;
+        rgb[1] += (ink[1] - rgb[1]) * FLOOR_END_WEIGHT;
+        rgb[2] += (ink[2] - rgb[2]) * FLOOR_END_WEIGHT;
+    }
+
     /** Idle bob so the torch is not a pasted sticker. */
     public static float handBob(double seconds) {
         return handBob(seconds, 0);

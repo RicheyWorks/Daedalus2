@@ -1461,6 +1461,25 @@ class ExplorePaintTest {
     }
 
     @Test
+    void keySoftPullsTheCaptionUnderglowTowardTheDiamond() {
+        float[] soft = new float[3];
+        float[] ink = new float[3];
+        ExplorePaint.keySoftTint(0, 2, 0, soft);
+        ExplorePaint.keyTint(0, 2, 0, ink);
+        assertThat(soft[0]).isGreaterThan(ExplorePaint.CAPTION_SOFT_R);
+        assertThat(soft[0]).isLessThan(ink[0]);
+        ExplorePaint.keySoftTint(0, 1, 1, soft);
+        ExplorePaint.keyTint(0, 1, 1, ink);
+        assertThat(soft[2]).isGreaterThan(ExplorePaint.CAPTION_SOFT_B);
+        assertThat(soft[2]).isLessThan(ink[2]);
+        assertThat(ExplorePaint.KEY_SOFT_R)
+                .as("KEEP leftover even caption underglow stays")
+                .isEqualTo(ExplorePaint.CAPTION_SOFT_R);
+        ExplorePaint.keySoftTint(0, 1, 0, null);
+        ExplorePaint.keySoftTint(0, 1, 0, new float[1]);
+    }
+
+    @Test
     void torchHandSitsAboveTheStripAndBobs() {
         List<ExplorePaint.HandTri> a = ExplorePaint.handMesh(1.6, 0);
         List<ExplorePaint.HandTri> b = ExplorePaint.handMesh(1.6, ExplorePaint.handBob(0.3));

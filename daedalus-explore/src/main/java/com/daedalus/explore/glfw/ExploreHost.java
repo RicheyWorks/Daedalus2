@@ -640,9 +640,10 @@ public final class ExploreHost {
         float x = (float) (aspect - 0.08);
         float softPad = ExplorePaint.keySoftPad(seconds);
         for (int i = marks - 1; i >= 0; i--) {
-            ExplorePaint.keyTint(i, marks, line.mood(), rgb);
-            glColor3f(ExplorePaint.KEY_SOFT_R, ExplorePaint.KEY_SOFT_G, ExplorePaint.KEY_SOFT_B);
+            ExplorePaint.keySoftTint(i, marks, line.mood(), rgb);
+            glColor3f(rgb[0], rgb[1], rgb[2]);
             diamond(x, cy, 0.028f * softPad);
+            ExplorePaint.keyTint(i, marks, line.mood(), rgb);
             glColor3f(rgb[0], rgb[1], rgb[2]);
             diamond(x, cy, 0.028f);
             x -= 0.07f;
