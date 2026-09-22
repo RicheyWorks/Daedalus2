@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend key order.**
+  The desktop key follows the well:
+  hot spot, then walk, tour, waypoint,
+  arena, and unseen. Compare stays the
+  last seat. KEEP leftover even lens
+  colors stay.
+
 - **Well distance-ramp bar.**
   The field scale is one bar under one
   rim, so the last swatch closes before

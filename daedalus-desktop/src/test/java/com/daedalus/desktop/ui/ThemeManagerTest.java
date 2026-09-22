@@ -369,6 +369,45 @@ class ThemeManagerTest {
     }
 
     @Test
+    void legendKeyOrderMatchesTheWell() throws Exception {
+        try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
+            assertThat(in).as("main.fxml is on the classpath").isNotNull();
+            String fxml = new String(in.readAllBytes());
+            String[] keys = {
+                    "text=\"floor\"",
+                    "text=\"wall / rock\"",
+                    "fx:id=\"legendStart\"",
+                    "fx:id=\"legendGoal\"",
+                    "fx:id=\"legendPath\"",
+                    "fx:id=\"legendHotspot\"",
+                    "fx:id=\"legendPlayer\"",
+                    "fx:id=\"legendChoke\"",
+                    "fx:id=\"legendDeadend\"",
+                    "fx:id=\"legendHardest\"",
+                    "fx:id=\"legendTour\"",
+                    "fx:id=\"legendSanctuary\"",
+                    "fx:id=\"legendLens\"",
+                    "fx:id=\"legendWaypoint\"",
+                    "fx:id=\"legendRace\"",
+                    "fx:id=\"legendGhost\"",
+                    "fx:id=\"legendFog\"",
+                    "fx:id=\"legendCompare\""
+            };
+            int at = -1;
+            for (String key : keys) {
+                int next = fxml.indexOf(key);
+                assertThat(next).as(key).isGreaterThan(at);
+                at = next;
+            }
+            assertThat(fxml)
+                    .as("KEEP leftover even lens colors stay")
+                    .contains("color=\"#e5484d\"")
+                    .contains("color=\"#f2c94c\"")
+                    .contains("color=\"#8aaa50\"");
+        }
+    }
+
+    @Test
     void legendChipClustersMatchTheWellGap() throws Exception {
         try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
             assertThat(in).as("main.fxml is on the classpath").isNotNull();

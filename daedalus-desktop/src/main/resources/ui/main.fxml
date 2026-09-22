@@ -193,6 +193,23 @@
                         </Rectangle>
                     </graphic>
                 </Label>
+                <Label fx:id="legendHotspot" text="hot spot" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="10" height="10" opacity="0.5"
+                                   stroke="rgba(188,64,65,0.35)" strokeWidth="1.5"
+                                   arcWidth="3" arcHeight="3">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#bc4041"/>
+                                        <Stop offset="1.0" color="#6a2024"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
+                    </graphic>
+                </Label>
                 <Label fx:id="legendPlayer" text="walk" managed="false" visible="false">
                     <graphic>
                         <HBox spacing="5">
@@ -243,40 +260,6 @@
                         </HBox>
                     </graphic>
                 </Label>
-                <Label fx:id="legendHotspot" text="hot spot" managed="false" visible="false">
-                    <graphic>
-                        <Rectangle width="10" height="10" opacity="0.5"
-                                   stroke="rgba(188,64,65,0.35)" strokeWidth="1.5"
-                                   arcWidth="3" arcHeight="3">
-                            <fill>
-                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
-                                                proportional="true">
-                                    <stops>
-                                        <Stop offset="0.28" color="#bc4041"/>
-                                        <Stop offset="1.0" color="#6a2024"/>
-                                    </stops>
-                                </RadialGradient>
-                            </fill>
-                        </Rectangle>
-                    </graphic>
-                </Label>
-                <Label fx:id="legendFog" text="unseen (fog)" managed="false" visible="false">
-                    <graphic>
-                        <Rectangle width="10" height="10"
-                                   stroke="rgba(198,190,174,0.28)" strokeWidth="1.5"
-                                   arcWidth="3" arcHeight="3">
-                            <fill>
-                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
-                                                proportional="true">
-                                    <stops>
-                                        <Stop offset="0.28" color="#16120e"/>
-                                        <Stop offset="1.0" color="#0c0908"/>
-                                    </stops>
-                                </RadialGradient>
-                            </fill>
-                        </Rectangle>
-                    </graphic>
-                </Label>
                 <Label fx:id="legendChoke" text="chokepoint" managed="false" visible="false">
                     <graphic>
                         <Rectangle width="10" height="10"
@@ -322,6 +305,23 @@
                                     <stops>
                                         <Stop offset="0.28" color="#c6a441"/>
                                         <Stop offset="1.0" color="#8a6820"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendTour" text="tour" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="10" height="10"
+                                   stroke="rgba(200,158,63,0.35)" strokeWidth="1.5"
+                                   arcWidth="3" arcHeight="3">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#af9158"/>
+                                        <Stop offset="1.0" color="#6a5428"/>
                                     </stops>
                                 </RadialGradient>
                             </fill>
@@ -385,6 +385,22 @@
                         </HBox>
                     </graphic>
                 </Label>
+                <Label fx:id="legendWaypoint" text="waypoint" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="8" height="8" rotate="45"
+                                   stroke="rgba(200,158,63,0.35)" strokeWidth="1.5">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#c6a441"/>
+                                        <Stop offset="1.0" color="#8a6820"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
+                    </graphic>
+                </Label>
                 <Label fx:id="legendRace" text="arena" managed="false" visible="false">
                     <graphic>
                         <HBox spacing="5">
@@ -415,39 +431,6 @@
                         </HBox>
                     </graphic>
                 </Label>
-                <Label fx:id="legendTour" text="tour" managed="false" visible="false">
-                    <graphic>
-                        <Rectangle width="10" height="10"
-                                   stroke="rgba(200,158,63,0.35)" strokeWidth="1.5"
-                                   arcWidth="3" arcHeight="3">
-                            <fill>
-                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
-                                                proportional="true">
-                                    <stops>
-                                        <Stop offset="0.28" color="#af9158"/>
-                                        <Stop offset="1.0" color="#6a5428"/>
-                                    </stops>
-                                </RadialGradient>
-                            </fill>
-                        </Rectangle>
-                    </graphic>
-                </Label>
-                <Label fx:id="legendWaypoint" text="waypoint" managed="false" visible="false">
-                    <graphic>
-                        <Rectangle width="8" height="8" rotate="45"
-                                   stroke="rgba(200,158,63,0.35)" strokeWidth="1.5">
-                            <fill>
-                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
-                                                proportional="true">
-                                    <stops>
-                                        <Stop offset="0.28" color="#c6a441"/>
-                                        <Stop offset="1.0" color="#8a6820"/>
-                                    </stops>
-                                </RadialGradient>
-                            </fill>
-                        </Rectangle>
-                    </graphic>
-                </Label>
                 <Label fx:id="legendGhost" text="ghost" managed="false" visible="false">
                     <graphic>
                         <Circle radius="5" opacity="0.6"
@@ -462,6 +445,23 @@
                                 </RadialGradient>
                             </fill>
                         </Circle>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendFog" text="unseen (fog)" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="10" height="10"
+                                   stroke="rgba(198,190,174,0.28)" strokeWidth="1.5"
+                                   arcWidth="3" arcHeight="3">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#16120e"/>
+                                        <Stop offset="1.0" color="#0c0908"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
                     </graphic>
                 </Label>
                 <Label fx:id="legendCompare" text="compare" managed="false" visible="false">
