@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick joint.**
+  The catch mixes into
+  the vertical mortar.
+  The shine no longer
+  cuts the grout.
+
 - **Desktop legend clip.**
   The rounded stage
   clip follows the
