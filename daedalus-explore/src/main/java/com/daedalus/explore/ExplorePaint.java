@@ -430,14 +430,14 @@ public final class ExplorePaint {
     }
     /** Ortho strip under the crosshair — Doom status height in NDC. */
     public static final float STATUS_H = 0.28f;
-    /** Warm HUD void — status fill and automap pocket share this well. */
-    public static final float HUD_VOID_R = 0.12f;
-    public static final float HUD_VOID_G = 0.08f;
-    public static final float HUD_VOID_B = 0.06f;
-    /** Status rim — same pocket mid so the strip sits in a well, not leftover flat. */
-    public static final float HUD_VOID_RIM_R = 0.06f;
-    public static final float HUD_VOID_RIM_G = 0.04f;
-    public static final float HUD_VOID_RIM_B = 0.03f;
+    /** Warm HUD void — same well center as the stage pocket {@code #16120e}. */
+    public static final float HUD_VOID_R = 0x16 / 255f;
+    public static final float HUD_VOID_G = 0x12 / 255f;
+    public static final float HUD_VOID_B = 0x0e / 255f;
+    /** Status rim — same well edge as the page void {@code #0c0908}. */
+    public static final float HUD_VOID_RIM_R = 0x0c / 255f;
+    public static final float HUD_VOID_RIM_G = 0x09 / 255f;
+    public static final float HUD_VOID_RIM_B = 0x08 / 255f;
 
     /** Mid strip at 0, pocket rim at 1 so leftover flat HUD is not the last word. */
     public static void hudVoidTint(float edge, float[] rgb) {

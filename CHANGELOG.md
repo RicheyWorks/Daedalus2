@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore status void.**
+  The strip runs from the well center
+  #16120e to the page void #0c0908
+  so the HUD sits in the same pocket.
+
 - **Explore brick course.**
   The clay sits on the lit wall
   face so the courses share the
