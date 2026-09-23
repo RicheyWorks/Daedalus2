@@ -1890,7 +1890,8 @@ public class MainController {
                 }
                 for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkWalls()) {
                     paintHairline(g, DesktopPaint.wallHiStroke(
-                            mark, tile.tileRow(), tile.tileCol()),
+                            mark, tile.tileRow(), tile.tileCol(),
+                            store.scaleX(), store.scaleY()),
                             Color.web(DesktopPaint.emptyMarkWallHiInk(
                                     tile.tileRow(), tile.tileCol())));
                 }
@@ -1903,7 +1904,8 @@ public class MainController {
                 }
                 for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkFloors()) {
                     paintHairline(g, DesktopPaint.floorHiStroke(
-                            mark, tile.tileRow(), tile.tileCol()),
+                            mark, tile.tileRow(), tile.tileCol(),
+                            store.scaleX(), store.scaleY()),
                             Color.web(DesktopPaint.emptyMarkFloorHiInk(
                                     tile.tileRow(), tile.tileCol())));
                 }
@@ -1956,7 +1958,7 @@ public class MainController {
 
         DesktopPaint.Fog fog = fogScene();
         if (fog != null) {
-            paintFogDungeon(g, layout, tiles, theme, fog);
+            paintFogDungeon(g, layout, tiles, theme, fog, store.scaleX(), store.scaleY());
             syncLegend();
             return;
         }
@@ -1971,7 +1973,8 @@ public class MainController {
                     ink = Color.web(DesktopPaint.wallInk(edge));
                     g.setFill(ink);
                     g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
-                    paintHairline(g, DesktopPaint.wallHiStroke(layout, r, c),
+                    paintHairline(g, DesktopPaint.wallHiStroke(
+                            layout, r, c, store.scaleX(), store.scaleY()),
                             Color.web(DesktopPaint.clearWallHiInk(edge)));
                     continue;
                 } else if (role == TileType.PASSAGE) {
@@ -1984,7 +1987,8 @@ public class MainController {
                 g.setFill(ink);
                 g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
                 if (role != TileType.WALL) {
-                    paintHairline(g, DesktopPaint.floorHiStroke(layout, r, c),
+                    paintHairline(g, DesktopPaint.floorHiStroke(
+                            layout, r, c, store.scaleX(), store.scaleY()),
                             Color.web(DesktopPaint.endFloorInk(
                                     DesktopPaint.clearFloorHiInk(edge), tiles[r][c])));
                 }
@@ -2455,7 +2459,8 @@ public class MainController {
     }
 
     private void paintFogDungeon(GraphicsContext g, DesktopPaint.Layout layout,
-                                 TileType[][] tiles, Theme theme, DesktopPaint.Fog fog) {
+                                 TileType[][] tiles, Theme theme, DesktopPaint.Fog fog,
+                                 double scaleX, double scaleY) {
         for (int r = 0; r < layout.tileRows(); r++) {
             for (int c = 0; c < layout.tileCols(); c++) {
                 if (!DesktopPaint.fogRevealsTile(fog, r, c)) {
@@ -2467,7 +2472,7 @@ public class MainController {
                     g.setFill(Color.web(DesktopPaint.fogWall(fog, r, c, edge)));
                     g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
                     double lamp = DesktopPaint.fogFloorIntensity(fog, r, c);
-                    paintHairline(g, DesktopPaint.wallHiStroke(layout, r, c),
+                    paintHairline(g, DesktopPaint.wallHiStroke(layout, r, c, scaleX, scaleY),
                             Color.web(DesktopPaint.fogWallHiInk(lamp, edge)));
                     continue;
                 }
@@ -2476,7 +2481,7 @@ public class MainController {
                         DesktopPaint.fogFloor(fog, r, c, edge), tiles[r][c])));
                 g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
                 double intensity = DesktopPaint.fogFloorIntensity(fog, r, c);
-                paintHairline(g, DesktopPaint.floorHiStroke(layout, r, c, intensity),
+                paintHairline(g, DesktopPaint.floorHiStroke(layout, r, c, intensity, scaleX, scaleY),
                         Color.web(DesktopPaint.endFloorInk(
                                 DesktopPaint.fogFloorHiInk(intensity, edge), tiles[r][c])));
             }

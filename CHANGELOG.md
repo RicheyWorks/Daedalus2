@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop corridor shine.**
+  The floor and wall
+  hairline is one device
+  pixel, the same 1-bitmap
+  line as `draw.js`.
+
 - **Desktop status face.**
   The action line uses the
   page face at 12px on a

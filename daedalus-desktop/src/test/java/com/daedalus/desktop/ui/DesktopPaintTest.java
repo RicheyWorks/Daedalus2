@@ -782,6 +782,12 @@ class DesktopPaintTest {
         assertThat(stripe).isNotNull();
         assertThat(stripe.w()).isEqualTo(18.0);
         assertThat(stripe.h()).isEqualTo(1.0);
+        assertThat(DesktopPaint.devicePx(1)).isEqualTo(1.0);
+        assertThat(DesktopPaint.devicePx(2)).isEqualTo(0.5);
+        DesktopPaint.Hairline scaled = DesktopPaint.wallHiStroke(roomy, 0, 1, 2, 2);
+        assertThat(scaled.h()).isEqualTo(0.5);
+        assertThat(scaled.y()).isCloseTo(roomy.y(0) + 0.5, within(1e-9));
+        assertThat(DesktopPaint.floorHiStroke(roomy, 1, 1, 1, 2, 2).w()).isEqualTo(19.0);
         assertThat(DesktopPaint.floorHi(roomy, 0, 1))
                 .as("a wall tile is not a corridor")
                 .isFalse();

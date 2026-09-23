@@ -2161,14 +2161,37 @@ public final class DesktopPaint {
     }
 
     public static Hairline floorHiStroke(Layout layout, int tileRow, int tileCol, double lamp) {
+        return floorHiStroke(layout, tileRow, tileCol, lamp, 1, 1);
+    }
+
+    public static Hairline floorHiStroke(Layout layout, int tileRow, int tileCol,
+                                          double scaleX, double scaleY) {
+        return floorHiStroke(layout, tileRow, tileCol, 1, scaleX, scaleY);
+    }
+
+    /**
+     * Corridor shine — {@code draw.js} fills a 1-bitmap-pixel line, so a
+     * scaled window uses {@code 1/scale} CSS pixels.
+     */
+    public static double devicePx(double scale) {
+        if (scale <= 0) {
+            return 1.0;
+        }
+        return 1.0 / scale;
+    }
+
+    public static Hairline floorHiStroke(Layout layout, int tileRow, int tileCol, double lamp,
+                                          double scaleX, double scaleY) {
         if (!floorHi(layout, tileRow, tileCol, lamp)) {
             return null;
         }
+        double px = devicePx(scaleX);
+        double py = devicePx(scaleY);
         return new Hairline(
-                layout.x(tileCol) + 1,
-                layout.y(tileRow) + 1,
-                Math.max(0, layout.cellSize() - 2),
-                1);
+                layout.x(tileCol) + px,
+                layout.y(tileRow) + py,
+                Math.max(0, layout.cellSize() - 2 * px),
+                py);
     }
 
     public static String clearWallHiInk(double edge) {
@@ -2186,6 +2209,11 @@ public final class DesktopPaint {
     }
 
     public static Hairline wallHiStroke(Layout layout, int tileRow, int tileCol) {
+        return wallHiStroke(layout, tileRow, tileCol, 1, 1);
+    }
+
+    public static Hairline wallHiStroke(Layout layout, int tileRow, int tileCol,
+                                         double scaleX, double scaleY) {
         if (layout == null || layout.cellSize() < 10) {
             return null;
         }
@@ -2194,7 +2222,10 @@ public final class DesktopPaint {
         if (w < 3 || h < 3) {
             return null;
         }
-        return new Hairline(layout.x(tileCol) + 1, layout.y(tileRow) + 1, Math.max(1, w - 2), 1);
+        double px = devicePx(scaleX);
+        double py = devicePx(scaleY);
+        return new Hairline(layout.x(tileCol) + px, layout.y(tileRow) + py,
+                Math.max(px, w - 2 * px), py);
     }
 
     public static int hexArgb(String hex) {
