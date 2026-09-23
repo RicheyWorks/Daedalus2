@@ -418,6 +418,10 @@ class ExplorePaintTest {
         int brickShine = Byte.toUnsignedInt(brick[(1 * ExplorePaint.TEX + 2) * 4]);
         assertThat(face).isGreaterThan(mortar);
         assertThat(brickShine).isGreaterThan(face);
+        assertThat(ExplorePaint.BRICK_MORTAR_R).isEqualTo(0x2a);
+        assertThat(ExplorePaint.BRICK_MORTAR_G).isEqualTo(0x22);
+        assertThat(ExplorePaint.BRICK_MORTAR_B).isEqualTo(0x18);
+        assertThat(ExplorePaint.BRICK_MORTAR_R).isNotEqualTo(46);
         assertThat(ExplorePaint.BRICK_TEX_HI_R).isGreaterThan(170);
         assertThat(ExplorePaint.BRICK_TEX_HI_R).isGreaterThan(ExplorePaint.BRICK_TEX_HI_B);
         assertThat(Byte.toUnsignedInt(floor[0])).isNotEqualTo(Byte.toUnsignedInt(brick[0]));

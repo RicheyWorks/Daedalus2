@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick mortar.**
+  Mortar sits on the well wall-warm
+  #2a2218 so the courses share the
+  same stone as the maze posts.
+
 - **Well home-screen lip.**
   The tile, home-screen, and share
   stamps wear the #996f31 gold lip,

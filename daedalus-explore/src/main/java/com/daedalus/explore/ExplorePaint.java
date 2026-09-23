@@ -690,6 +690,10 @@ public final class ExplorePaint {
     public static final int BRICK_TEX_HI_R = 196;
     public static final int BRICK_TEX_HI_G = 118;
     public static final int BRICK_TEX_HI_B = 64;
+    /** Mortar — same wall-warm as the well {@code COLORS.wallWarm}. */
+    public static final int BRICK_MORTAR_R = 0x2a;
+    public static final int BRICK_MORTAR_G = 0x22;
+    public static final int BRICK_MORTAR_B = 0x18;
     /** Same 0.22 rim as floor tiles — leftover even clay is not the last word on a post. */
     public static final float BRICK_TEX_EDGE_DIM = 0.22f;
 
@@ -706,7 +710,7 @@ public final class ExplorePaint {
             boolean mortar = (y % 8 == 0) || (((x + ((y / 8) & 1) * 16) % 16) == 0);
             int n = hash(x, y) & 15;
             if (mortar) {
-                return rgbBytes(46, 34, 26);
+                return rgbBytes(BRICK_MORTAR_R, BRICK_MORTAR_G, BRICK_MORTAR_B);
             }
             int r;
             int g;
