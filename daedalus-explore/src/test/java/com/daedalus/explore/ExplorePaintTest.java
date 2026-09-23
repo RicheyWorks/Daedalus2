@@ -299,9 +299,9 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.WINDOW_ICON_R).isEqualTo(12);
         assertThat(ExplorePaint.WINDOW_ICON_G).isEqualTo(9);
         assertThat(ExplorePaint.WINDOW_ICON_B).isEqualTo(8);
-        assertThat(ExplorePaint.WINDOW_ICON_LIP_R).isEqualTo(184);
-        assertThat(ExplorePaint.WINDOW_ICON_LIP_G).isEqualTo(133);
-        assertThat(ExplorePaint.WINDOW_ICON_LIP_B).isEqualTo(56);
+        assertThat(ExplorePaint.WINDOW_ICON_LIP_R).isEqualTo(153);
+        assertThat(ExplorePaint.WINDOW_ICON_LIP_G).isEqualTo(111);
+        assertThat(ExplorePaint.WINDOW_ICON_LIP_B).isEqualTo(49);
         byte[] icon = ExplorePaint.windowIconRgba();
         assertThat(icon).hasSize(ExplorePaint.WINDOW_ICON_SIZE * ExplorePaint.WINDOW_ICON_SIZE * 4);
         assertThat(icon[0] & 0xFF).isEqualTo(ExplorePaint.WINDOW_ICON_LIP_R);

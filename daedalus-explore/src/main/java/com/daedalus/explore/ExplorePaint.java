@@ -30,10 +30,10 @@ public final class ExplorePaint {
     public static final int WINDOW_ICON_R = 12;
     public static final int WINDOW_ICON_G = 9;
     public static final int WINDOW_ICON_B = 8;
-    /** Same gold lip as the well rim — leftover unrimmed void is not the lamp. */
-    public static final int WINDOW_ICON_LIP_R = 184;
-    public static final int WINDOW_ICON_LIP_G = 133;
-    public static final int WINDOW_ICON_LIP_B = 56;
+    /** Same gold lip as the well tab stroke {@code #996f31}. */
+    public static final int WINDOW_ICON_LIP_R = 153;
+    public static final int WINDOW_ICON_LIP_G = 111;
+    public static final int WINDOW_ICON_LIP_B = 49;
     /** Idle-maze stamp — same 2px tiles as the well tab / desktop stage icons. */
     public static final int WINDOW_ICON_CELL = 2;
     public static final String[] WINDOW_ICON_MARK = {
