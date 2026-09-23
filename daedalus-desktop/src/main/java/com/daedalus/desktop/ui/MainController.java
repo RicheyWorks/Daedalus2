@@ -1890,8 +1890,7 @@ public class MainController {
                 }
                 for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkWalls()) {
                     paintHairline(g, DesktopPaint.wallHiStroke(
-                            mark, tile.tileRow(), tile.tileCol(),
-                            store.scaleX(), store.scaleY()),
+                            mark, tile.tileRow(), tile.tileCol()),
                             Color.web(DesktopPaint.emptyMarkWallHiInk(
                                     tile.tileRow(), tile.tileCol())));
                 }
@@ -1904,8 +1903,7 @@ public class MainController {
                 }
                 for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkFloors()) {
                     paintHairline(g, DesktopPaint.floorHiStroke(
-                            mark, tile.tileRow(), tile.tileCol(),
-                            store.scaleX(), store.scaleY()),
+                            mark, tile.tileRow(), tile.tileCol()),
                             Color.web(DesktopPaint.emptyMarkFloorHiInk(
                                     tile.tileRow(), tile.tileCol())));
                 }

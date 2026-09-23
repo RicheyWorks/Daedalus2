@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop idle shine.**
+  The empty-well
+  miniature keeps a
+  one CSS pixel
+  catch-light, the
+  same `dpr: 1` mark
+  as `draw.js`.
+
 - **Desktop legend rings.**
   Swatch rings sit
   outside the chip,

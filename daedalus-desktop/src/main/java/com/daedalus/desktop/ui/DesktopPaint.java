@@ -2465,7 +2465,7 @@ public final class DesktopPaint {
                 fitted.offY());
     }
 
-    /** Corridor shine on the idle mark — same 1px hairline as the live board. */
+    /** Corridor shine on the idle mark — 1 CSS px, {@code draw.js} forces dpr 1. */
     public static List<Hairline> emptyMarkHairlines(Layout mark) {
         if (mark == null) {
             return List.of();
@@ -2480,7 +2480,7 @@ public final class DesktopPaint {
         return List.copyOf(out);
     }
 
-    /** Post shine on the idle mark — same 1px hairline as live walls. */
+    /** Post shine on the idle mark — 1 CSS px, {@code draw.js} forces dpr 1. */
     public static List<Hairline> emptyMarkWallHairlines(Layout mark) {
         if (mark == null) {
             return List.of();

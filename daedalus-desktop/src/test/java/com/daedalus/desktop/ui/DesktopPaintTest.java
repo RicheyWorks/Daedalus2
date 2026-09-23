@@ -1277,7 +1277,7 @@ class DesktopPaintTest {
     }
 
     @Test
-    void theEmptyMarkIsTheSameMiniatureAsTheWebIdleTiles() {
+    void theEmptyMarkIsTheSameMiniatureAsTheWebIdleTiles() throws Exception {
         assertThat(DesktopPaint.EMPTY_MARK).hasSize(7);
         assertThat(DesktopPaint.EMPTY_MARK[0]).hasSize(11);
         assertThat(DesktopPaint.emptyMarkFloors()).hasSize(28);
@@ -1326,8 +1326,17 @@ class DesktopPaintTest {
                 .as("budget is 200×140 so a large window does not inflate the mark")
                 .isEqualTo(30.0);
         assertThat(DesktopPaint.emptyMarkHairlines(mark))
-                .as("idle corridors wear the same 1px shine as the live board")
+                .as("idle corridors wear a 1 CSS px shine, draw.js forces dpr 1")
                 .isNotEmpty();
+        assertThat(DesktopPaint.emptyMarkHairlines(mark).get(0).h()).isEqualTo(1.0);
+        assertThat(DesktopPaint.emptyMarkWallHairlines(mark).get(0).h()).isEqualTo(1.0);
+        String ctrl = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/java/com/daedalus/desktop/ui/MainController.java"));
+        assertThat(ctrl).contains(
+                "DesktopPaint.wallHiStroke(\n                            mark, tile.tileRow(), tile.tileCol())");
+        assertThat(ctrl).contains(
+                "DesktopPaint.floorHiStroke(\n                            mark, tile.tileRow(), tile.tileCol())");
+        assertThat(ctrl).contains("layout, r, c, store.scaleX(), store.scaleY())");
         assertThat(DesktopPaint.emptyMarkHairlines(null)).isEmpty();
         assertThat(DesktopPaint.emptyMarkWallInk(0, 0))
                 .as("idle rim posts fall off toward unseen like live stone")
@@ -1337,7 +1346,7 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.emptyMarkWallHiInk(0, 0))
                 .isEqualTo(DesktopPaint.clearWallHiInk(DesktopPaint.emptyMarkEdge(0, 0)));
         assertThat(DesktopPaint.emptyMarkWallHairlines(mark))
-                .as("idle posts wear the same 1px shine as live walls")
+                .as("idle posts wear a 1 CSS px shine, draw.js forces dpr 1")
                 .isNotEmpty();
         assertThat(DesktopPaint.emptyMarkWallHairlines(null)).isEmpty();
         assertThat(DesktopPaint.EMPTY_MARK_BUDGET_W).isEqualTo(200.0);
