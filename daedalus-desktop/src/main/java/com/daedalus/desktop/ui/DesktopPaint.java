@@ -746,8 +746,9 @@ public final class DesktopPaint {
         return GHOST_GLOW_ALPHA + 0.08 * wave;
     }
 
+    /** Halo beyond the ghost — same cell pad as the well racer. */
     public static double ghostGlowPadFraction(double wave) {
-        return 0.32 + 0.08 * wave;
+        return (0.18 + 0.04 * wave) / GHOST_RADIUS;
     }
 
     public static double ghostDiscAlpha(double wave) {

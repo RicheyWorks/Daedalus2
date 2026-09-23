@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop ghost halo.**
+  The recorded racer uses the
+  well pad `0.18 + 0.04·wave`,
+  so the ghost ring matches
+  the web disc.
+
 - **Desktop player halo.**
   The walker glow uses the
   well pad `0.22 + 0.04·wave`,

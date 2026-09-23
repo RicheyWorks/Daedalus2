@@ -533,6 +533,11 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.ghostGlowAlpha(1)).isGreaterThan(DesktopPaint.ghostGlowAlpha(0));
         assertThat(DesktopPaint.ghostGlowPadFraction(1))
                 .isGreaterThan(DesktopPaint.ghostGlowPadFraction(0));
+        assertThat(DesktopPaint.ghostGlowPadFraction(0))
+                .isCloseTo(0.18 / DesktopPaint.GHOST_RADIUS, within(1e-9));
+        assertThat(DesktopPaint.ghostGlowPadFraction(1))
+                .isCloseTo(0.22 / DesktopPaint.GHOST_RADIUS, within(1e-9));
+        assertThat(DesktopPaint.ghostGlowPadFraction(0)).isNotEqualTo(0.32);
         assertThat(DesktopPaint.ghostDiscAlpha(1)).isGreaterThan(DesktopPaint.ghostDiscAlpha(0));
         assertThat(DesktopPaint.ghostRimAlpha(1)).isGreaterThan(DesktopPaint.ghostRimAlpha(0));
         DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 100, 100);
