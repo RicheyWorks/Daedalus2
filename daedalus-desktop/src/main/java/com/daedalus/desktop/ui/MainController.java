@@ -1782,7 +1782,7 @@ public class MainController {
                 && generateButton.getParent() instanceof javafx.scene.layout.Region toolbar) {
             toolbar.setBorder(new javafx.scene.layout.Border(
                     new javafx.scene.layout.BorderStroke(
-                            Color.rgb(153, 111, 49, lip),
+                            Color.rgb(153, 111, 49, DesktopPaint.headerRimAlpha(wave)),
                             javafx.scene.layout.BorderStrokeStyle.SOLID,
                             javafx.scene.layout.CornerRadii.EMPTY,
                             new javafx.scene.layout.BorderWidths(0, 0, 1, 0))));

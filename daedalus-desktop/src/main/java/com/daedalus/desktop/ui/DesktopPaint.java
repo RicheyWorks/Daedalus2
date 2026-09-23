@@ -166,9 +166,14 @@ public final class DesktopPaint {
         return 0.88 + 0.08 * wave;
     }
 
-    /** Status / toolbar gold lip — same band as canvas rim. */
+    /** Status bar gold lip — same band as the stage rim. */
     public static double shellRimAlpha(double wave) {
         return canvasRimAlpha(wave);
+    }
+
+    /** Toolbar gold lip — same band as web {@code headerRimBreath}. */
+    public static double headerRimAlpha(double wave) {
+        return 0.38 + 0.24 * wave;
     }
 
     /** Toolbar brand mint — same band as web {@code gateBreath}. */

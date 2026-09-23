@@ -318,6 +318,7 @@ class ThemeManagerTest {
                 .contains("child.getStyleClass().contains(\"brand\")")
                 .contains("DesktopPaint.brandGoldRadius(wave)")
                 .contains("DesktopPaint.infoRimAlpha(wave)")
+                .contains("DesktopPaint.headerRimAlpha(wave)")
                 .contains("new javafx.scene.layout.BorderWidths(0, 0, 0, 2)")
                 .doesNotContain("instanceof Label brand")
                 .doesNotContain("Color.web(\"#3ee08f\"")
