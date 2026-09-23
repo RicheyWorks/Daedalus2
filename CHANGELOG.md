@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore clear color.**
+  The letterbox sits on the well
+  page wash #16120e, the same cap
+  as the sky zenith.
+
 - **Explore sky cap.**
   The zenith sits on the well page
   wash #16120e so looking up shares

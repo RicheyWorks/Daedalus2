@@ -292,6 +292,10 @@ class ExplorePaintTest {
         ExplorePaint.tint(face(ExploreMesh.Face.CEILING, 2.8, 3, 3), false, rgb);
         assertThat(rgb[0]).isEqualTo(ExplorePaint.UNSEEN_R);
         assertThat(ExplorePaint.UNSEEN_R).isNotEqualTo(ExplorePaint.SKY_R);
+        assertThat(ExplorePaint.SKY_R).isEqualTo(0x16 / 255f);
+        assertThat(ExplorePaint.SKY_G).isEqualTo(0x12 / 255f);
+        assertThat(ExplorePaint.SKY_B).isEqualTo(0x0e / 255f);
+        assertThat(ExplorePaint.SKY_R).isNotEqualTo(0.10f);
         assertThat(ExplorePaint.FOG_R).isEqualTo(ExplorePaint.UNSEEN_R);
         assertThat(ExplorePaint.FOG_G).isEqualTo(ExplorePaint.UNSEEN_G);
         assertThat(ExplorePaint.FOG_B).isEqualTo(ExplorePaint.UNSEEN_B);

@@ -21,9 +21,10 @@ import java.util.Set;
  */
 public final class ExplorePaint {
 
-    public static final float SKY_R = 0.10f;
-    public static final float SKY_G = 0.08f;
-    public static final float SKY_B = 0.07f;
+    /** Clear color — same warm cap as the well page wash {@code #16120e}. */
+    public static final float SKY_R = 0x16 / 255f;
+    public static final float SKY_G = 0x12 / 255f;
+    public static final float SKY_B = 0x0e / 255f;
 
     /** Window icon void — leftover OS chrome is not the lamp on the taskbar. */
     public static final int WINDOW_ICON_SIZE = 32;
