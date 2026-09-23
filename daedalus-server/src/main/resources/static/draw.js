@@ -1094,7 +1094,7 @@
     const glow = g.createRadialGradient(cx, cy - 36, 12, cx, cy - 36, Math.min(cssW, cssH) * 0.42);
     glow.addColorStop(0, emptyWordmarkMintGlow(0.08 + 0.04 * wave));
     glow.addColorStop(0.55, emptyWordmarkGoldGlow(0.04 + 0.03 * wave));
-    glow.addColorStop(1, "rgba(0, 0, 0, 0)");
+    glow.addColorStop(1, emptyWordmarkGoldGlow(0));
     g.fillStyle = glow;
     g.fillRect(0, 0, cssW, cssH);
     paintIdleMark(g, cx, cy - 48, wave);

@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well idle glow.**
+  The empty-well halo
+  fades the same gold.
+  A clear black stop
+  no longer muddies
+  the fringe.
+
 - **Well legend scrim.**
   The key fades in the
   same brown as the

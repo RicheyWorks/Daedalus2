@@ -2212,4 +2212,14 @@ class WebUiPaintPinTest {
                     "linear-gradient(transparent, rgba(16, 11, 8");
         }
     }
+
+    @Test
+    void theIdleGlowFadesTheSameGold() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js).contains("glow.addColorStop(1, emptyWordmarkGoldGlow(0))");
+            assertThat(js).doesNotContain("glow.addColorStop(1, \"rgba(0, 0, 0, 0)\")");
+        }
+    }
 }
