@@ -143,6 +143,7 @@ class ThemeManagerTest {
             assertThat(fxml).contains("<HBox styleClass=\"brand\" alignment=\"CENTER_LEFT\">");
             assertThat(fxml).contains("<StackPane fx:id=\"boardPane\" styleClass=\"board\">");
             assertThat(fxml).contains("<Insets top=\"12\" right=\"12\" bottom=\"12\" left=\"12\"/>");
+            assertThat(fxml).contains("<Insets top=\"16\" right=\"20\" bottom=\"28\" left=\"20\"/>");
             assertThat(fxml).contains("<Insets right=\"10\"/>");
             assertThat(fxml).contains("<Insets top=\"8\" right=\"10\" bottom=\"4\" left=\"10\"/>");
             assertThat(fxml).contains("styleClass=\"status-line\"");

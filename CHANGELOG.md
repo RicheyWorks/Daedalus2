@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop page gutter.**
+  The board sits 16px under the
+  toolbar, 20px in from the sides,
+  and 28px above the status bar,
+  the same pad as the well page.
+
 - **Desktop board breath.**
   The board's gold lip breathes
   from 0.36 to 0.55, the same band
