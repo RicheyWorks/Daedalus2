@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop export weight.**
+  The PNG chip is semibold, the
+  same 600 weight as the well
+  export buttons.
+
 - **Desktop export hover.**
   The PNG chip's hover glow is a
   12px gold wash at 0.18, the same

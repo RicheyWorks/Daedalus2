@@ -70,7 +70,8 @@ class WebUiPaintPinTest {
                     .contains("#tourBox b { -webkit-user-drag: none")
                     .contains("#stats b { -webkit-user-drag: none")
                     .contains("#compareBox span { -webkit-user-drag: none")
-                    .contains("letter-spacing: .03em; color: #b09a72; text-decoration: none;");
+                    .contains("letter-spacing: .03em; color: #b09a72; text-decoration: none;")
+                    .contains("cursor: pointer; font-weight: 600; }");
         }
     }
 

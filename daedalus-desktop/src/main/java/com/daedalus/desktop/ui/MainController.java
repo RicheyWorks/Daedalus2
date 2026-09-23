@@ -2639,7 +2639,7 @@ public class MainController {
         double em = 11 * 0.03;
         var word = new HBox(em);
         word.setAlignment(Pos.CENTER);
-        Font font = Font.font("Segoe UI", 11);
+        Font font = Font.font("Segoe UI", FontWeight.SEMI_BOLD, 11);
         for (int i = 0; i < text.length(); i++) {
             Text ch = new Text(String.valueOf(text.charAt(i)));
             ch.setFont(font);

@@ -290,6 +290,7 @@ class ThemeManagerTest {
         assertThat(src).contains("trackExportChip();");
         assertThat(src).contains("double em = 11 * 0.03;");
         assertThat(src).contains("ch.getStyleClass().add(\"export-glyph\");");
+        assertThat(src).contains("Font.font(\"Segoe UI\", FontWeight.SEMI_BOLD, 11)");
     }
 
     @Test
