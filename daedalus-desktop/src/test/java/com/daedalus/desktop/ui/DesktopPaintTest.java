@@ -257,6 +257,21 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[1], 1))
                 .as("compare tip shares the wash rim")
                 .isNotEqualTo(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[1], 0));
+        assertThat(DesktopPaint.compareWashBase("#7997cc")).isEqualTo("#8fb8ff");
+        assertThat(DesktopPaint.compareWashInk("#7997cc", 0))
+                .as("compare ice center is the raw seat, not the rim swatch")
+                .isEqualTo("#8fb8ff");
+        assertThat(DesktopPaint.compareWashInk("#7997cc", 1)).isEqualTo("#7997cc");
+        assertThat(DesktopPaint.compareWashBase("#c49425")).isEqualTo("#f0b429");
+        assertThat(DesktopPaint.compareWashInk("#c49425", 1)).isEqualTo("#c49425");
+        assertThat(DesktopPaint.compareWashBase("#bc4041")).isEqualTo("#e5484d");
+        assertThat(DesktopPaint.compareWashInk("#bc4041", 1)).isEqualTo("#bc4041");
+        assertThat(DesktopPaint.compareWashBase("#758c44")).isEqualTo("#8aaa50");
+        assertThat(DesktopPaint.compareWashInk("#758c44", 1)).isEqualTo("#758c44");
+        assertThat(DesktopPaint.compareWashBase("#9f6544")).isEqualTo("#c07850");
+        assertThat(DesktopPaint.compareWashInk("#9f6544", 1)).isEqualTo("#9f6544");
+        assertThat(DesktopPaint.compareWashBase("#af9158")).isEqualTo("#d4b06a");
+        assertThat(DesktopPaint.compareWashInk("#af9158", 1)).isEqualTo("#af9158");
         assertThat(DesktopPaint.COMPARE[3]).isEqualTo("#8aaa50");
         assertThat(DesktopPaint.COMPARE[4]).isEqualTo("#c07850");
         assertThat(DesktopPaint.COMPARE[5]).isEqualTo("#d4b06a");

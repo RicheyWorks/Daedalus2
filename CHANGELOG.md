@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop compare ink.**
+  The split wash starts
+  from the raw seat
+  colors, so the hall
+  rim falls off once.
+
 - **Desktop arena ink.**
   The race wash starts
   from path ice and

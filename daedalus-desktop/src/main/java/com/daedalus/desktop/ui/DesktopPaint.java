@@ -810,14 +810,30 @@ public final class DesktopPaint {
     public static final double COMPARE_HEAD_RADIUS = 0.3;
 
     /**
+     * Stored compare seats are the rim swatches. The wash starts from
+     * the raw ink so the hall rim is applied once.
+     */
+    public static String compareWashBase(String color) {
+        if (color == null) {
+            return null;
+        }
+        return switch (color) {
+            case "#7997cc" -> COMPARE[0];
+            case "#c49425" -> COMPARE[1];
+            case "#bc4041" -> COMPARE[2];
+            case "#758c44" -> COMPARE[3];
+            case "#9f6544" -> COMPARE[4];
+            case "#af9158" -> COMPARE[5];
+            default -> color;
+        };
+    }
+
+    /**
      * Every compare seat shares the 0.22 hall rim — leftover even ice
      * is not the last word on a split.
      */
     public static String compareWashInk(String color, double edge) {
-        if (color == null) {
-            return color;
-        }
-        return walkTrailInk(color, edge);
+        return walkTrailInk(compareWashBase(color), edge);
     }
     /** Min-cut passage — same purple as {@code draw.js} chokepoints. */
     public static final String CHOKE = "#c07850";
