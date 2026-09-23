@@ -328,6 +328,8 @@ public final class ExplorePaint {
     public static final float MAP_WALL_R = 0.64f;
     public static final float MAP_WALL_G = 0.40f;
     public static final float MAP_WALL_B = 0.22f;
+    /** Shadow face — same clay as the lit wall, three quarters of the lamp. */
+    public static final float WALL_SHADE = 0.75f;
     /** Same 0.28 rim as live / idle well posts. */
     public static final float MAP_WALL_EDGE_DIM = 0.28f;
     /** Occupied cube on the earned map — torch wood, not leftover ice. */
@@ -2654,9 +2656,11 @@ public final class ExplorePaint {
         float stripe = stripe(tri, eastWest);
         float shade = boot * stripe;
         if (eastWest) {
-            set(rgb, 0.48f * shade, 0.28f * shade, 0.16f * shade);
+            set(rgb, MAP_WALL_R * WALL_SHADE * shade,
+                    MAP_WALL_G * WALL_SHADE * shade,
+                    MAP_WALL_B * WALL_SHADE * shade);
         } else {
-            set(rgb, 0.64f * shade, 0.40f * shade, 0.22f * shade);
+            set(rgb, MAP_WALL_R * shade, MAP_WALL_G * shade, MAP_WALL_B * shade);
         }
     }
 

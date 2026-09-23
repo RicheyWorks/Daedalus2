@@ -50,6 +50,10 @@ class ExplorePaintTest {
         ExplorePaint.tint(nsWall(0, 1.4, 0), true, ns);
         ExplorePaint.tint(ewWall(0, 1.4, 0), true, ew);
         assertThat(ew[0]).isLessThan(ns[0]);
+        assertThat(ExplorePaint.WALL_SHADE).isEqualTo(0.75f);
+        assertThat(ExplorePaint.MAP_WALL_R * ExplorePaint.WALL_SHADE).isEqualTo(0.48f);
+        assertThat(ExplorePaint.MAP_WALL_G * ExplorePaint.WALL_SHADE).isEqualTo(0.30f);
+        assertThat(ExplorePaint.MAP_WALL_G * ExplorePaint.WALL_SHADE).isNotEqualTo(0.28f);
     }
 
     @Test

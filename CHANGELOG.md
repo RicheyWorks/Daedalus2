@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore shadow walls.**
+  East-west faces are the lit wall
+  at three quarters, so the shade
+  keeps that clay instead of a
+  greener brown.
+
 - **Explore sky stars.**
   The points sit on the well torch
   gold #f5c14a so the night lamp
