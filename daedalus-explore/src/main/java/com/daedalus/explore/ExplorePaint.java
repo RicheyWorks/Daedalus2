@@ -196,10 +196,10 @@ public final class ExplorePaint {
         px[i + 2] = (byte) b;
         px[i + 3] = (byte) 0xFF;
     }
-    /** Fog silhouette — same warm dark for every unseen face, not a dusk hole. */
-    public static final float UNSEEN_R = 0.09f;
-    public static final float UNSEEN_G = 0.07f;
-    public static final float UNSEEN_B = 0.06f;
+    /** Fog silhouette — same void edge as the well {@code COLORS.unseen}. */
+    public static final float UNSEEN_R = 0x0c / 255f;
+    public static final float UNSEEN_G = 0x09 / 255f;
+    public static final float UNSEEN_B = 0x08 / 255f;
     /** Linear distance fog — same warm dark as unseen faces, not dusk. */
     public static final float FOG_R = UNSEEN_R;
     public static final float FOG_G = UNSEEN_G;

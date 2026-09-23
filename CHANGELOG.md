@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore fog silhouette.**
+  Unseen faces and distance fog
+  use the void edge `#0c0908`,
+  the same unseen as the well.
+
 - **Explore portrait smile.**
   The resting mouth uses the
   floor-warm `#5c4a32`, so the
