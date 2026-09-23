@@ -1627,7 +1627,8 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.VIGNETTE_G).isEqualTo(ExplorePaint.HUD_VOID_RIM_G);
         assertThat(ExplorePaint.VIGNETTE_B).isEqualTo(ExplorePaint.HUD_VOID_RIM_B);
         assertThat(ExplorePaint.VIGNETTE_R).isNotEqualTo(0.02f);
-        assertThat(ExplorePaint.VIGNETTE_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
+        assertThat(ExplorePaint.VIGNETTE_BREATH_MS).isEqualTo(ExplorePaint.HUD_VOID_BREATH_MS);
+        assertThat(ExplorePaint.VIGNETTE_BREATH_MS).isNotEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
         assertThat(ExplorePaint.vignetteAlpha(0.1))
                 .isNotEqualTo(ExplorePaint.vignetteAlpha(0.8));
         assertThat(ExplorePaint.vignetteAlpha(0.1))

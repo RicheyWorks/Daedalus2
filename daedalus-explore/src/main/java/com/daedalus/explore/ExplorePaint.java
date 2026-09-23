@@ -524,7 +524,8 @@ public final class ExplorePaint {
     public static final float VIGNETTE_R = HUD_VOID_RIM_R;
     public static final float VIGNETTE_G = HUD_VOID_RIM_G;
     public static final float VIGNETTE_B = HUD_VOID_RIM_B;
-    public static final float VIGNETTE_BREATH_MS = MAP_HERE_BREATH_MS;
+    /** Edge shade breath — same 4.5s wash as the status void. */
+    public static final float VIGNETTE_BREATH_MS = HUD_VOID_BREATH_MS;
 
     public static float vignetteAlpha(double seconds) {
         double t = ((seconds * 1000.0) % VIGNETTE_BREATH_MS) / VIGNETTE_BREATH_MS;
