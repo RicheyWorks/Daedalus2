@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well ASCII rock ink.**
+  Maze walls in the ASCII dump
+  use the floor shine `#765834`,
+  so the rock glyphs share that
+  torch brown.
+
 - **Explore portrait hairline.**
   The brow band uses the well
   wall highlight `#4a3824`, so
