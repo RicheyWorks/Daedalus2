@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore screen-edge shade.**
+  The vignette uses the well void
+  edge `#0c0908`, so the corners
+  share that page dark.
+
 - **Explore status lip seat.**
   The dark band under the gold
   lip uses the automap pocket

@@ -486,12 +486,12 @@ public final class ExplorePaint {
     /** Status lip breath — same cadence as automap frame chrome. */
     public static final float STATUS_BREATH_MS = MAP_HERE_BREATH_MS;
 
-    /** Soft screen-edge shade — corridor tunnel, not a flat ortho box. */
+    /** Soft screen-edge shade — same well edge as the page void {@code #0c0908}. */
     public static final float VIGNETTE_INSET = 0.16f;
     public static final float VIGNETTE_ALPHA = 0.26f;
-    public static final float VIGNETTE_R = 0.02f;
-    public static final float VIGNETTE_G = 0.015f;
-    public static final float VIGNETTE_B = 0.01f;
+    public static final float VIGNETTE_R = HUD_VOID_RIM_R;
+    public static final float VIGNETTE_G = HUD_VOID_RIM_G;
+    public static final float VIGNETTE_B = HUD_VOID_RIM_B;
     public static final float VIGNETTE_BREATH_MS = MAP_HERE_BREATH_MS;
 
     public static float vignetteAlpha(double seconds) {
