@@ -1057,7 +1057,8 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.SNAPSHOT_FILL).isEqualTo(DesktopPaint.SCENE_FILL);
         assertThat(DesktopPaint.SNAPSHOT_FILL).isNotEqualTo("#ffffff");
         assertThat(DesktopPaint.STAGE_ICON_ARGB).isEqualTo(0xFF0C0908);
-        assertThat(DesktopPaint.STAGE_ICON_LIP_ARGB).isEqualTo(0xFFB88538);
+        assertThat(DesktopPaint.STAGE_ICON_LIP_ARGB).isEqualTo(0xFF996F31);
+        assertThat(DesktopPaint.STAGE_ICON_LIP_ARGB).isNotEqualTo(0xFFB88538);
         assertThat(DesktopPaint.STAGE_ICON_WALL_ARGB).isEqualTo(0xFF2A2218);
         assertThat(DesktopPaint.STAGE_ICON_FLOOR_ARGB).isEqualTo(0xFF484339);
         assertThat(DesktopPaint.STAGE_ICON_START_ARGB).isEqualTo(0xFF3EE08F);

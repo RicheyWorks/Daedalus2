@@ -2152,8 +2152,8 @@ public final class DesktopPaint {
     /** Stage icon void — leftover Java chrome is not the lamp on the taskbar. */
     public static final int STAGE_ICON_SIZE = 32;
     public static final int STAGE_ICON_ARGB = 0xFF0C0908;
-    /** Same gold lip as the well rim — leftover unrimmed void is not the lamp. */
-    public static final int STAGE_ICON_LIP_ARGB = 0xFFB88538;
+    /** Same gold lip as the well tab stroke {@code #996f31}. */
+    public static final int STAGE_ICON_LIP_ARGB = 0xFF996F31;
     /** Idle-maze stamp — same 2px tiles as the well tab icon. */
     public static final int STAGE_ICON_CELL = 2;
     /** Torch-warm posts — same as {@code EMPTY_MARK_WALL}. */

@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop stage-icon lip.**
+  The taskbar stamp's rim is
+  #996f31, the same stroke as
+  the well tab icon.
+
 - **Desktop page wash.**
   The window behind the board
   fades from #16120e at the top
