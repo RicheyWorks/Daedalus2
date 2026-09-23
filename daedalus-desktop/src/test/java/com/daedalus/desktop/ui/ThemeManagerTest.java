@@ -128,6 +128,12 @@ class ThemeManagerTest {
             assertThat(css).contains("-fx-background-color: #1a1610");
             assertThat(css).contains(".exports .button .export-glyph {\n    -fx-fill: #b09a72;");
             assertThat(css).contains(".exports .button:hover .export-glyph {\n    -fx-fill: #f2ead8;");
+            assertThat(css).contains(".scroll-bar:vertical {\n    -fx-pref-width: 8px;");
+            assertThat(css).contains(".scroll-bar:horizontal {\n    -fx-pref-height: 8px;");
+            assertThat(css).contains(
+                    "-fx-background-color: rgba(153, 111, 49, 0.45);\n    -fx-background-insets: 0;\n    -fx-background-radius: 4;");
+            assertThat(css).contains("-fx-background-color: rgba(153, 111, 49, 0.65);");
+            assertThat(css).contains("-fx-background-color: rgba(153, 111, 49, 0.85);");
         }
         try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
             assertThat(in).as("main.fxml is on the classpath").isNotNull();

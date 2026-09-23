@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop scroll thumb.**
+  The bar is 8px, the thumb is a
+  4px gold radius, and hover and
+  press climb 0.45 to 0.65 to 0.85,
+  the same thumb as the well.
+
 - **Desktop export weight.**
   The PNG chip is semibold, the
   same 600 weight as the well
