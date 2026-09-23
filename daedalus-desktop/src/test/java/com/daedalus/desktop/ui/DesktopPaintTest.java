@@ -958,6 +958,11 @@ class DesktopPaintTest {
                 .isGreaterThan(DesktopPaint.playerGlowAlpha(0));
         assertThat(DesktopPaint.playerGlowPadFraction(1))
                 .isGreaterThan(DesktopPaint.playerGlowPadFraction(0));
+        assertThat(DesktopPaint.playerGlowPadFraction(0))
+                .isCloseTo(0.22 / DesktopPaint.PLAYER_RADIUS, within(1e-9));
+        assertThat(DesktopPaint.playerGlowPadFraction(1))
+                .isCloseTo(0.26 / DesktopPaint.PLAYER_RADIUS, within(1e-9));
+        assertThat(DesktopPaint.playerGlowPadFraction(0)).isNotEqualTo(0.32);
         assertThat(DesktopPaint.playerRimAlpha(1))
                 .isGreaterThan(DesktopPaint.playerRimAlpha(0));
         assertThat(DesktopPaint.playerMarker(layout, null)).isNull();

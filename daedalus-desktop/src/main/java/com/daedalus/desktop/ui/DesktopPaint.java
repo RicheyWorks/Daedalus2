@@ -496,8 +496,9 @@ public final class DesktopPaint {
         return 0.16 + 0.12 * wave;
     }
 
+    /** Halo beyond the disc — same cell pad as the well walker. */
     public static double playerGlowPadFraction(double wave) {
-        return 0.32 + 0.08 * wave;
+        return (0.22 + 0.04 * wave) / PLAYER_RADIUS;
     }
 
     public static double playerRimAlpha(double wave) {

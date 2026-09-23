@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop player halo.**
+  The walker glow uses the
+  well pad `0.22 + 0.04·wave`,
+  so the disc wears the same
+  soft ring as the web player.
+
 - **Explore you-are-here cadence.**
   The automap player, story marks,
   and place pads breathe on the
