@@ -2735,7 +2735,9 @@ public class MainController {
             ch.setFill(ink);
             word.getChildren().add(ch);
         }
-        var row = new HBox(5);
+        // Last swatch in a cluster has margin-right: 0 on the well.
+        boolean cluster = label.getStyleClass().contains("legend-cluster");
+        var row = new HBox(cluster ? 0 : 5);
         row.setAlignment(Pos.CENTER_LEFT);
         var swatch = label.getGraphic();
         if (swatch != null) {

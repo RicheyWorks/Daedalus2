@@ -308,7 +308,8 @@ class ThemeManagerTest {
         assertThat(src).doesNotContain(
                 "subtract(legendBox.heightProperty()).subtract(4)");
         assertThat(src).contains("Font.font(\"Bahnschrift\", FontWeight.SEMI_BOLD, 11)");
-        assertThat(src).contains("new HBox(5)");
+        assertThat(src).contains("label.getStyleClass().contains(\"legend-cluster\")");
+        assertThat(src).contains("new HBox(cluster ? 0 : 5)");
         assertThat(src).contains("trackExportChip();");
         assertThat(src).contains("double em = 11 * 0.03;");
         assertThat(src).contains("ch.getStyleClass().add(\"export-glyph\");");

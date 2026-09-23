@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend cluster word.**
+  Tracked cluster keys
+  sit flush with the
+  last swatch, the
+  same zero margin as
+  the well.
+
 - **Desktop hotspot rim.**
   The jam ring floors
   at one bitmap pixel,
