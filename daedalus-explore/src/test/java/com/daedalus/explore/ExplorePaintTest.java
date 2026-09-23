@@ -511,6 +511,10 @@ class ExplorePaintTest {
         assertThat(seam[0]).isEqualTo((paver[0] + neighbor[0]) / 2);
         assertThat(ExplorePaint.floorTexColor(4, 4)).containsExactly(ExplorePaint.floorPaver(4, 4));
         assertThat(ExplorePaint.floorTexColor(2, 1)).containsExactly(ExplorePaint.floorPaver(2, 1));
+        int[] catchPaver = ExplorePaint.floorPaver(7, 1);
+        int[] catchNeighbor = ExplorePaint.floorPaver(8, 1);
+        assertThat(ExplorePaint.floorTexColor(7, 1)[0])
+                .isEqualTo((catchPaver[0] + catchNeighbor[0]) / 2);
         int[] underCatch = ExplorePaint.floorPaver(4, 2);
         int[] catchRow = ExplorePaint.floorPaver(4, 1);
         assertThat(ExplorePaint.floorTexColor(4, 2)[0])

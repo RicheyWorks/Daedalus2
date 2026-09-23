@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore floor joint.**
+  The paver catch mixes
+  where warm meets dark.
+  The shine no longer
+  cuts the seam.
+
 - **Explore brick joint.**
   The catch mixes into
   the vertical mortar.
