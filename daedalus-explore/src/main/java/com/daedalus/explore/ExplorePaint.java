@@ -736,6 +736,10 @@ public final class ExplorePaint {
     public static final int FLOOR_TEX_WARM_R = 0x5c;
     public static final int FLOOR_TEX_WARM_G = 0x4a;
     public static final int FLOOR_TEX_WARM_B = 0x32;
+    /** Dark paver — same 0.28 floor mix the well paints as #484339. */
+    public static final int FLOOR_TEX_R = 0x48;
+    public static final int FLOOR_TEX_G = 0x43;
+    public static final int FLOOR_TEX_B = 0x39;
     /** Same 0.22 rim as live / automap halls — leftover even slate is not the last word. */
     public static final float FLOOR_TEX_EDGE_DIM = 0.22f;
 
@@ -764,9 +768,9 @@ public final class ExplorePaint {
                     g = FLOOR_TEX_WARM_G + n / 2;
                     b = FLOOR_TEX_WARM_B;
                 } else {
-                    r = 74 + n;
-                    g = 52 + n / 2;
-                    b = 30;
+                    r = FLOOR_TEX_R + n;
+                    g = FLOOR_TEX_G + n / 2;
+                    b = FLOOR_TEX_B;
                 }
             }
             float s = floorTexShade(x, y);

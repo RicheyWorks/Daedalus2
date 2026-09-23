@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore floor course.**
+  The dark paver sits on #484339,
+  the same 0.28 floor mix the well
+  paints underfoot.
+
 - **Explore floor paver.**
   The light course sits on the well
   floor-warm #5c4a32 so the halls
