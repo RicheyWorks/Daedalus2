@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop maze wash.**
+  Unrevealed cells sit on
+  the well's maze circle,
+  `max(w, h) * 0.72` at
+  45% of the maze, while
+  the letterbox stays the
+  stage ellipse.
+
 - **Desktop stage corner.**
   The maze, legend, and export
   clip to the well's 10px

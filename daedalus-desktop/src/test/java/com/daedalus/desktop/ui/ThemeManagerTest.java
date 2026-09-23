@@ -328,6 +328,8 @@ class ThemeManagerTest {
                 .doesNotContain("g.setFill(Color.web(DesktopPaint.FOG_UNSEEN));");
         assertThat(src).contains("clipStage();");
         assertThat(src).contains("DesktopPaint.stageCornerArc()");
+        assertThat(src).contains("paintMazeWash(g, layout);");
+        assertThat(src).contains("Color.web(DesktopPaint.WELL_VOID_CENTER)");
     }
 
     @Test

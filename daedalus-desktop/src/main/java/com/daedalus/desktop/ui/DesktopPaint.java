@@ -354,6 +354,21 @@ public final class DesktopPaint {
     public static double stageCornerArc() {
         return STAGE_CORNER * 2;
     }
+
+    /**
+     * Maze bitmap wash — {@code draw.js} fills the maze canvas with a circle
+     * of {@code max(w, h) * 0.72}, centered at 45% of the maze height.
+     */
+    public static final double MAZE_WASH_RADIUS = 0.72;
+    public static final double MAZE_WASH_CENTER_Y = 0.45;
+
+    public static double mazeWashRadius(double mazeW, double mazeH) {
+        return Math.max(mazeW, mazeH) * MAZE_WASH_RADIUS;
+    }
+
+    public static double mazeWashCenterY(double mazeY, double mazeH) {
+        return mazeY + mazeH * MAZE_WASH_CENTER_Y;
+    }
     public static final String FOG_FLOOR_DIM = "#2a2218";
     /** Clear-board edge falloff toward dim torch stone — same ink as fog dim. */
     public static final String FLOOR_DIM = FOG_FLOOR_DIM;

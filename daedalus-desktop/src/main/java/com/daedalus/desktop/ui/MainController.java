@@ -1950,6 +1950,8 @@ public class MainController {
                 tiles.length, tiles[0].length, w, h);
         if (layout == null) return;
 
+        paintMazeWash(g, layout);
+
         DesktopPaint.Fog fog = fogScene();
         if (fog != null) {
             paintFogDungeon(g, layout, tiles, theme, fog);
@@ -2392,6 +2394,31 @@ public class MainController {
                 new javafx.scene.paint.Stop(1, Color.web(DesktopPaint.WELL_VOID_EDGE)));
         g.setFill(wash);
         g.fillOval(cx - rx, cy - ry, rx * 2, ry * 2);
+    }
+
+    /** Unrevealed cells show the maze-local circle, same as {@code draw.js} {@code paint}. */
+    private static void paintMazeWash(GraphicsContext g, DesktopPaint.Layout layout) {
+        double mazeW = layout.offX()[layout.tileCols()];
+        double mazeH = layout.offY()[layout.tileRows()];
+        double x = layout.offsetX();
+        double y = layout.offsetY();
+        double radius = DesktopPaint.mazeWashRadius(mazeW, mazeH);
+        double cx = x + mazeW / 2.0;
+        double cy = DesktopPaint.mazeWashCenterY(y, mazeH);
+        g.save();
+        g.beginPath();
+        g.rect(x, y, mazeW, mazeH);
+        g.clip();
+        g.setFill(Color.web(DesktopPaint.WELL_VOID_EDGE));
+        g.fillRect(x, y, mazeW, mazeH);
+        var wash = new javafx.scene.paint.RadialGradient(
+                0, 0, 0.5, 0.5, 0.5, true,
+                javafx.scene.paint.CycleMethod.NO_CYCLE,
+                new javafx.scene.paint.Stop(0, Color.web(DesktopPaint.WELL_VOID_CENTER)),
+                new javafx.scene.paint.Stop(1, Color.web(DesktopPaint.WELL_VOID_EDGE)));
+        g.setFill(wash);
+        g.fillOval(cx - radius, cy - radius, radius * 2, radius * 2);
+        g.restore();
     }
 
     private boolean fogOn() {

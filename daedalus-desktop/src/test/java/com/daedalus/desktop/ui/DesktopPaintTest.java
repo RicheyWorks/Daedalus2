@@ -690,6 +690,13 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.STAGE_CORNER).isEqualTo(10);
         assertThat(DesktopPaint.stageCornerArc()).isEqualTo(20);
         assertThat(DesktopPaint.stageCornerArc()).isNotEqualTo(10);
+        assertThat(DesktopPaint.MAZE_WASH_RADIUS).isEqualTo(0.72);
+        assertThat(DesktopPaint.MAZE_WASH_CENTER_Y).isEqualTo(0.45);
+        assertThat(DesktopPaint.mazeWashRadius(100, 40)).isCloseTo(72, within(1e-9));
+        assertThat(DesktopPaint.mazeWashRadius(40, 100)).isCloseTo(72, within(1e-9));
+        assertThat(DesktopPaint.mazeWashRadius(100, 100)).isGreaterThan(
+                DesktopPaint.stageWashRadiusX(100));
+        assertThat(DesktopPaint.mazeWashCenterY(20, 80)).isCloseTo(56, within(1e-9));
         assertThat(DesktopPaint.FLOOR_DIM).isEqualTo("#2a2218");
         assertThat(DesktopPaint.FOG_FLOOR_DIM).isEqualTo(DesktopPaint.FOG_WALL_WARM);
         assertThat(Integer.parseInt(DesktopPaint.FLOOR_DIM.substring(1, 3), 16))
