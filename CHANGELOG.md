@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop page cap.**
+  The window wash is
+  a 1200×700 ellipse
+  seated above the
+  top edge, the same
+  body gradient as
+  the well.
+
 - **Desktop maze clip.**
   Discs and victory
   wash stop at the

@@ -339,6 +339,37 @@ public final class DesktopPaint {
     public static final double STAGE_WASH_RX = 0.80 * 0.72;
     public static final double STAGE_WASH_RY = 0.70 * 0.72;
 
+    /**
+     * Page cap — web {@code body} is {@code radial-gradient(1200px 700px at 50% -10%)}.
+     * Void arrives at 55% of that ellipse.
+     */
+    public static final double PAGE_WASH_W = 1200;
+    public static final double PAGE_WASH_H = 700;
+    public static final double PAGE_WASH_CX = 0.50;
+    public static final double PAGE_WASH_CY = -0.10;
+    public static final double PAGE_WASH_END = 0.55;
+
+    public static double pageWashRadiusX() {
+        return PAGE_WASH_W / 2.0;
+    }
+
+    public static double pageWashRadiusY() {
+        return PAGE_WASH_H / 2.0;
+    }
+
+    /** Squash a circle of {@link #pageWashRadiusX()} into the well's ellipse. */
+    public static double pageWashScaleY() {
+        return pageWashRadiusY() / pageWashRadiusX();
+    }
+
+    public static double pageWashCenterX(double width) {
+        return width * PAGE_WASH_CX;
+    }
+
+    public static double pageWashCenterY(double height) {
+        return height * PAGE_WASH_CY;
+    }
+
     public static double stageWashRadiusX(double width) {
         return width * STAGE_WASH_RX;
     }

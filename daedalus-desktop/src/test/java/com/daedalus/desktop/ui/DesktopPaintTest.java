@@ -1121,7 +1121,7 @@ class DesktopPaintTest {
     }
 
     @Test
-    void aHiDpiCanvasHasADevicePixelBackingStore() {
+    void aHiDpiCanvasHasADevicePixelBackingStore() throws Exception {
         DesktopPaint.Backing store = DesktopPaint.Backing.of(800, 600, 2, 2);
         assertThat(store).isNotNull();
         assertThat(store.cssW()).isEqualTo(800);
@@ -1131,6 +1131,17 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.Backing.of(0, 600, 2, 2)).isNull();
         assertThat(DesktopPaint.CANVAS_IMAGE_SMOOTHING).isFalse();
         assertThat(DesktopPaint.SCENE_FILL).isEqualTo("#0c0908");
+        assertThat(DesktopPaint.pageWashRadiusX()).isEqualTo(600);
+        assertThat(DesktopPaint.pageWashRadiusY()).isEqualTo(350);
+        assertThat(DesktopPaint.pageWashScaleY()).isCloseTo(350 / 600.0, within(1e-9));
+        assertThat(DesktopPaint.PAGE_WASH_END).isEqualTo(0.55);
+        assertThat(DesktopPaint.pageWashCenterX(1280)).isEqualTo(640);
+        assertThat(DesktopPaint.pageWashCenterY(800)).isEqualTo(-80);
+        String stage = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/java/com/daedalus/desktop/DaedalusPrimaryStage.java"));
+        assertThat(stage).contains("pageWash(shell)");
+        assertThat(stage).contains("cap.setScaleY(DesktopPaint.pageWashScaleY())");
+        assertThat(stage).contains("new Stop(DesktopPaint.PAGE_WASH_END, Color.web(DesktopPaint.SCENE_FILL))");
         assertThat(DesktopPaint.SCENE_FILL).isEqualTo(
                 com.daedalus.desktop.ui.themes.CosmicTheme.BACKGROUND_INK);
         assertThat(DesktopPaint.SNAPSHOT_FILL).isEqualTo(DesktopPaint.SCENE_FILL);
