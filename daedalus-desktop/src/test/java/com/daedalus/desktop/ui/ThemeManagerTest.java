@@ -125,6 +125,8 @@ class ThemeManagerTest {
             assertThat(in).as("main.fxml is on the classpath").isNotNull();
             String fxml = new String(in.readAllBytes());
             assertThat(fxml).contains("<HBox styleClass=\"brand\" alignment=\"CENTER_LEFT\">");
+            assertThat(fxml).contains("<Insets top=\"10\" right=\"8\" bottom=\"10\" left=\"8\"/>");
+            assertThat(fxml).doesNotContain("<Insets top=\"6\" right=\"8\" bottom=\"6\" left=\"8\"/>");
             assertThat(fxml).doesNotContain("<Label text=\"DAEDALUS\" styleClass=\"brand\"/>");
             assertThat(fxml).contains("stroke=\"rgba(198,190,174,0.28)\"");
             assertThat(fxml).doesNotContain("stroke=\"rgba(242,234,216,0.28)\"");

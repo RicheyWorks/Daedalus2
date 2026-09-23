@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop toolbar inset.**
+  The bar's vertical pad is 10px,
+  the same block inset as the well header.
+
 - **Desktop status line.**
   The status words sit in a 1.7 line,
   the same box as the well stats.

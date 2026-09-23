@@ -38,7 +38,7 @@
     <top>
         <HBox spacing="4" alignment="CENTER_LEFT" styleClass="toolbar">
             <padding>
-                <Insets top="6" right="8" bottom="6" left="8"/>
+                <Insets top="10" right="8" bottom="10" left="8"/>
             </padding>
 
             <HBox styleClass="brand" alignment="CENTER_LEFT">
