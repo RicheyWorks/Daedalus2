@@ -830,6 +830,10 @@ public final class ExplorePaint {
     public static final int SKY_DUSK_R = 0x5c;
     public static final int SKY_DUSK_G = 0x4a;
     public static final int SKY_DUSK_B = 0x32;
+    /** Horizon glow — same floor shine as the well {@code #765834}. */
+    public static final int SKY_GLOW_R = 0x76;
+    public static final int SKY_GLOW_G = 0x58;
+    public static final int SKY_GLOW_B = 0x34;
     /** Horizon hills — same wall as the well posts. */
     public static final int SKY_HILL_R = 0x12;
     public static final int SKY_HILL_G = 0x0e;
@@ -869,9 +873,9 @@ public final class ExplorePaint {
                 g = SKY_DUSK_G + n / 4;
                 b = SKY_DUSK_B;
             } else if (y < 46) {
-                r = 196 + n / 3;
-                g = 88 + n / 5;
-                b = 34;
+                r = SKY_GLOW_R + n / 3;
+                g = SKY_GLOW_G + n / 5;
+                b = SKY_GLOW_B;
             } else {
                 boolean hill = y > 50 && ((hash(x / 6, 3) & 15) > (64 - y));
                 if (hill) {

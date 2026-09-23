@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore horizon glow.**
+  The bright band sits on the well
+  floor shine #765834 so the
+  horizon shares the torch line.
+
 - **Explore dusk band.**
   The mid sky sits on the well
   floor-warm #5c4a32, the same

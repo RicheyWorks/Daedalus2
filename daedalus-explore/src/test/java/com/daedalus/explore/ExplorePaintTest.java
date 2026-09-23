@@ -938,6 +938,11 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.SKY_DUSK_B).isEqualTo(0x32);
         assertThat(ExplorePaint.SKY_DUSK_R).isEqualTo(ExplorePaint.FLOOR_TEX_WARM_R);
         assertThat(ExplorePaint.SKY_DUSK_R).isNotEqualTo(148);
+        assertThat(ExplorePaint.SKY_GLOW_R).isEqualTo(0x76);
+        assertThat(ExplorePaint.SKY_GLOW_G).isEqualTo(0x58);
+        assertThat(ExplorePaint.SKY_GLOW_B).isEqualTo(0x34);
+        assertThat(ExplorePaint.SKY_GLOW_R).isEqualTo(ExplorePaint.FLOOR_TEX_HI_R);
+        assertThat(ExplorePaint.SKY_GLOW_R).isNotEqualTo(196);
         assertThat(ExplorePaint.skyTexShade(0, 28))
                 .as("sky rim falls off like the well void pocket")
                 .isLessThan(ExplorePaint.skyTexShade(32, 28));
