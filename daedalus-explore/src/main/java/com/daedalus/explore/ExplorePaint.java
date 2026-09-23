@@ -781,9 +781,10 @@ public final class ExplorePaint {
     public static final int CEILING_TEX_R = 72;
     public static final int CEILING_TEX_G = 52;
     public static final int CEILING_TEX_B = 36;
-    public static final int CEILING_TEX_HI_R = 92;
-    public static final int CEILING_TEX_HI_G = 68;
-    public static final int CEILING_TEX_HI_B = 42;
+    /** Vault shine — same floor-warm as the light paver. */
+    public static final int CEILING_TEX_HI_R = FLOOR_TEX_WARM_R;
+    public static final int CEILING_TEX_HI_G = FLOOR_TEX_WARM_G;
+    public static final int CEILING_TEX_HI_B = FLOOR_TEX_WARM_B;
     /** Same 0.22 rim as floor tiles — leftover even vault is not the last word overhead. */
     public static final float CEILING_TEX_EDGE_DIM = 0.22f;
 

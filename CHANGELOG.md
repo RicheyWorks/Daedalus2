@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore vault shine.**
+  The ceiling course sits on the well
+  floor-warm #5c4a32, the same torch
+  stone as the light paver.
+
 - **Explore floor course.**
   The dark paver sits on #484339,
   the same 0.28 floor mix the well
