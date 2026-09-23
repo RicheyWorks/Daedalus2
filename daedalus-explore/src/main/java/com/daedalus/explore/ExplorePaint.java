@@ -970,6 +970,13 @@ public final class ExplorePaint {
         return (float) (0.90 + 0.10 * (0.55 + 0.45 * a + 0.2 * b));
     }
 
+    /**
+     * Sky-quad grade — neutral so the well bands are not warmed again.
+     * Brightness stays on {@link #skyTwinkle}.
+     */
+    public static final float SKY_GRADE_G = 1f;
+    public static final float SKY_GRADE_B = 1f;
+
     public static Status status(ExploreFog fog, ExploreBody body, List<ExploreMarker> markers) {
         return status(fog, body, markers, null);
     }

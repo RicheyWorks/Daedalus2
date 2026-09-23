@@ -1036,6 +1036,9 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.SKY_DRIFT).isGreaterThan(0f);
         assertThat(ExplorePaint.skyTwinkle(0.1)).isGreaterThan(0.85f);
         assertThat(ExplorePaint.skyTwinkle(0.1)).isNotEqualTo(ExplorePaint.skyTwinkle(0.4));
+        assertThat(ExplorePaint.SKY_GRADE_G).isEqualTo(1f);
+        assertThat(ExplorePaint.SKY_GRADE_B).isEqualTo(ExplorePaint.SKY_GRADE_G);
+        assertThat(ExplorePaint.SKY_GRADE_B).isNotEqualTo(0.90f);
         ExplorePaint.skyUv(0, 0, 0, 0, null);
         ExplorePaint.skyUv(0, 0, 0, 0, new float[1]);
     }

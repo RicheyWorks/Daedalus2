@@ -424,7 +424,7 @@ public final class ExploreHost {
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, skyTex);
         float twinkle = ExplorePaint.skyTwinkle(seconds);
-        glColor3f(twinkle, twinkle * 0.96f, twinkle * 0.90f);
+        glColor3f(twinkle, twinkle * ExplorePaint.SKY_GRADE_G, twinkle * ExplorePaint.SKY_GRADE_B);
         float span = (float) (1.15 * aspect);
         float[] bl = new float[2];
         float[] br = new float[2];

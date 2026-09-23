@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore sky grade.**
+  The sky quad keeps a neutral
+  tint, so the well bands are
+  not warmed a second time.
+
 - **Explore fog silhouette.**
   Unseen faces and distance fog
   use the void edge `#0c0908`,
