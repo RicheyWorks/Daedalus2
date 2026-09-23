@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore caption underglow.**
+  The crosshair, caption, and
+  key pads use the aim gold at
+  the story-mark weight, so the
+  glow keeps that hue.
+
 - **Explore brick catch-light.**
   The course shine mixes the
   lit wall toward torch gold

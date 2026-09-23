@@ -1562,6 +1562,10 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.aimSoftThick(0.1))
                 .isNotEqualTo(ExplorePaint.aimSoftThick(0.8));
         assertThat(ExplorePaint.AIM_BRIGHT_R).isGreaterThan(ExplorePaint.AIM_SOFT_R);
+        assertThat(ExplorePaint.AIM_SOFT_R).isEqualTo(ExplorePaint.CAPTION_SOFT_R);
+        assertThat(ExplorePaint.CAPTION_SOFT_G)
+                .isEqualTo(ExplorePaint.AIM_BRIGHT_G * ExplorePaint.MAP_MARK_SOFT_WEIGHT);
+        assertThat(ExplorePaint.CAPTION_SOFT_G).isNotEqualTo(0.30f);
         assertThat(ExplorePaint.CAPTION_SOFT_PAD).isGreaterThan(0f);
         assertThat(ExplorePaint.CAPTION_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
         assertThat(ExplorePaint.captionSoftPad(0.1))

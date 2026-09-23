@@ -1675,10 +1675,10 @@ public final class ExplorePaint {
         set(rgb, CAPTION_META_R, CAPTION_META_G, CAPTION_META_B);
         mixEndEdge(1, rgb);
     }
-    /** Caption glyph underglow — readable chrome on the dark strip. */
-    public static final float CAPTION_SOFT_R = 0.42f;
-    public static final float CAPTION_SOFT_G = 0.30f;
-    public static final float CAPTION_SOFT_B = 0.10f;
+    /** Caption glyph underglow — aim gold at the story-mark weight. */
+    public static final float CAPTION_SOFT_R = AIM_BRIGHT_R * MAP_MARK_SOFT_WEIGHT;
+    public static final float CAPTION_SOFT_G = AIM_BRIGHT_G * MAP_MARK_SOFT_WEIGHT;
+    public static final float CAPTION_SOFT_B = AIM_BRIGHT_B * MAP_MARK_SOFT_WEIGHT;
     public static final float CAPTION_SOFT_PAD = 0.35f;
     /** Caption soft breath — same cadence as status / key chrome. */
     public static final float CAPTION_BREATH_MS = MAP_HERE_BREATH_MS;
@@ -1688,10 +1688,10 @@ public final class ExplorePaint {
         double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
         return CAPTION_SOFT_PAD * (float) (0.88 + 0.24 * wave);
     }
-    /** Dim underglow so the cross reads as chrome, not a hairline. */
-    public static final float AIM_SOFT_R = 0.45f;
-    public static final float AIM_SOFT_G = 0.32f;
-    public static final float AIM_SOFT_B = 0.10f;
+    /** Dim underglow — same aim gold as the caption pad. */
+    public static final float AIM_SOFT_R = CAPTION_SOFT_R;
+    public static final float AIM_SOFT_G = CAPTION_SOFT_G;
+    public static final float AIM_SOFT_B = CAPTION_SOFT_B;
     public static final float AIM_ARM = 0.03f;
     public static final float AIM_SOFT_ARM = 0.048f;
     public static final float AIM_SOFT_THICK = 0.012f;
@@ -1710,9 +1710,9 @@ public final class ExplorePaint {
         return AIM_SOFT_THICK * (float) (0.88 + 0.24 * wave);
     }
     /** Soft gold pad under key diamonds — same language as caption underglow. */
-    public static final float KEY_SOFT_R = 0.42f;
-    public static final float KEY_SOFT_G = 0.30f;
-    public static final float KEY_SOFT_B = 0.10f;
+    public static final float KEY_SOFT_R = CAPTION_SOFT_R;
+    public static final float KEY_SOFT_G = CAPTION_SOFT_G;
+    public static final float KEY_SOFT_B = CAPTION_SOFT_B;
     public static final float KEY_SOFT_PAD = 1.55f;
     /** Key pad breath — same cadence as automap HERE / story marks. */
     public static final float KEY_BREATH_MS = MAP_HERE_BREATH_MS;
