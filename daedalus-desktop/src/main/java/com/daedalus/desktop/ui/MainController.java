@@ -2213,6 +2213,11 @@ public class MainController {
                 if (core != null) {
                     g.setFill(mint);
                     g.fillOval(core.x(), core.y(), core.size(), core.size());
+                    g.setStroke(mint.deriveColor(0, 1, 1,
+                            DesktopPaint.sanctuaryCoreRimAlpha(safeWave)));
+                    g.setLineWidth(DesktopPaint.discStroke(
+                            core.size(), DesktopPaint.SANCTUARY_RADIUS));
+                    g.strokeOval(core.x(), core.y(), core.size(), core.size());
                 }
                 paintRing(g, DesktopPaint.sanctuaryRing(layout, safe, safeWave),
                         mint.deriveColor(0, 1, 1, DesktopPaint.sanctuaryRingAlpha(safeWave)));

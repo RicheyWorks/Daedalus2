@@ -1582,8 +1582,11 @@ public final class DesktopPaint {
                 Math.max(1.5, layout.cellSize() * 0.09));
     }
 
+    /** Sanctuary disc — same 0.32·cell as the well marker. */
+    public static final double SANCTUARY_RADIUS = 0.32;
+
     public static Marker sanctuaryMarker(Layout layout, Point cell) {
-        return disc(layout, cell, 0.32);
+        return disc(layout, cell, SANCTUARY_RADIUS);
     }
 
     /** Same 4.5s cadence as empty / gate / endpoint breath. */
@@ -1610,8 +1613,13 @@ public final class DesktopPaint {
         return 0.22 + 0.04 * wave;
     }
 
+    /** Core rim — same 0.55 + 0.20·wave as the well marker stroke. */
+    public static double sanctuaryCoreRimAlpha(double wave) {
+        return 0.55 + 0.20 * wave;
+    }
+
     public static Marker sanctuaryGlow(Layout layout, Point cell, double wave) {
-        return disc(layout, cell, 0.32 + sanctuaryGlowPad(wave));
+        return disc(layout, cell, SANCTUARY_RADIUS + sanctuaryGlowPad(wave));
     }
 
     public static double worstServedRingRadius(double wave) {

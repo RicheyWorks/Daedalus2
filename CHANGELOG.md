@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop sanctuary rim.**
+  The moss disc wears the
+  well marker stroke,
+  `0.07·cell` at `0.55 + 0.20·wave`.
+
 - **Desktop dead-end rim.**
   The cul-de-sac stroke is
   `0.06·cell`, the same line

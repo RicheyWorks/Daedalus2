@@ -360,6 +360,11 @@ class DesktopPaintTest {
                 .isGreaterThan(DesktopPaint.sanctuaryGlowAlpha(0));
         assertThat(DesktopPaint.sanctuaryGlowPad(1))
                 .isGreaterThan(DesktopPaint.sanctuaryGlowPad(0));
+        assertThat(DesktopPaint.sanctuaryCoreRimAlpha(0)).isCloseTo(0.55, within(1e-9));
+        assertThat(DesktopPaint.sanctuaryCoreRimAlpha(1)).isCloseTo(0.75, within(1e-9));
+        assertThat(DesktopPaint.discStroke(12.8, DesktopPaint.SANCTUARY_RADIUS))
+                .as("sanctuary core rim is 0.07·cell")
+                .isCloseTo(1.4, within(1e-9));
         assertThat(DesktopPaint.sanctuaryGlow(
                 DesktopPaint.Layout.fit(5, 5, 100, 100), new Point(0, 0), 1))
                 .isNotNull();
