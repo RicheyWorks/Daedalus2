@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop path corners.**
+  The solve ribbon
+  paints the start and
+  goal cells, so the
+  corners around the
+  discs match the well.
+
 - **Desktop page wash.**
   The window cap uses
   the well’s 1200px

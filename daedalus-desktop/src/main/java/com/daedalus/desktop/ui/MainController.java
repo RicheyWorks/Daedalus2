@@ -2173,7 +2173,7 @@ public class MainController {
         }
         if (currentPath != null && !currentPath.isEmpty() && theme != null) {
             paintPathRibbon(g, layout, currentPath, Color.web("#7997cc"), DesktopPaint.PATH_ALPHA,
-                    current.metadata().start(), current.metadata().goal(), DesktopPaint.PATH);
+                    DesktopPaint.PATH);
             Point tip = DesktopPaint.walkHead(currentPath);
             double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
             Color ice = Color.web(tip == null ? "#7997cc"
@@ -2261,7 +2261,7 @@ public class MainController {
         if (currentHardest != null && currentHardest.path() != null
                 && !currentHardest.path().isEmpty()) {
             paintPathRibbon(g, layout, currentHardest.path(), Color.web("#c6a441"),
-                    DesktopPaint.HARDEST_ALPHA, null, null, DesktopPaint.HARDEST);
+                    DesktopPaint.HARDEST_ALPHA, DesktopPaint.HARDEST);
             Point tip = DesktopPaint.walkHead(currentHardest.path());
             double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
             Color gold = Color.web(tip == null ? "#c6a441"
@@ -2274,7 +2274,7 @@ public class MainController {
 
         if (currentHunt != null && currentHunt.path() != null && !currentHunt.path().isEmpty()) {
             paintPathRibbon(g, layout, currentHunt.path(), Color.web("#af9158"),
-                    DesktopPaint.TOUR_ALPHA, null, null, DesktopPaint.TOUR);
+                    DesktopPaint.TOUR_ALPHA, DesktopPaint.TOUR);
             Point tip = DesktopPaint.walkHead(currentHunt.path());
             double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
             Color amber = Color.web(tip == null ? "#af9158"
@@ -2634,8 +2634,7 @@ public class MainController {
         }
         if (pathProg > 0 && !lane.path().isEmpty()) {
             List<Point> ribbon = DesktopPaint.pathPrefix(lane.path(), pathProg);
-            paintPathRibbon(g, layout, ribbon, laneColor, pathAlpha, null, null,
-                    lane.color());
+            paintPathRibbon(g, layout, ribbon, laneColor, pathAlpha, lane.color());
             Point head = DesktopPaint.walkHead(ribbon);
             double headWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
             Color headInk = head == null ? laneColor
@@ -2882,14 +2881,17 @@ public class MainController {
 
     /** Solver / race / tour ribbon — softens toward the start, tip stays full. */
     private static void paintPathRibbon(GraphicsContext g, DesktopPaint.Layout layout,
-                                        List<Point> path, Color color, double baseAlpha,
-                                        Point start, Point goal) {
-        paintPathRibbon(g, layout, path, color, baseAlpha, start, goal, null);
+                                        List<Point> path, Color color, double baseAlpha) {
+        paintPathRibbon(g, layout, path, color, baseAlpha, null);
     }
 
+    /**
+     * Stood-on cells include the ends. {@code draw.js} paints them, then the
+     * discs, so the cell corners keep the ribbon.
+     */
     private static void paintPathRibbon(GraphicsContext g, DesktopPaint.Layout layout,
                                         List<Point> path, Color color, double baseAlpha,
-                                        Point start, Point goal, String rimHex) {
+                                        String rimHex) {
         if (g == null || layout == null || path == null || path.isEmpty() || color == null) {
             return;
         }
@@ -2897,16 +2899,12 @@ public class MainController {
         for (int i = 0; i < n; i++) {
             g.setGlobalAlpha(DesktopPaint.pathRibbonAlpha(baseAlpha, i, n));
             Point p = path.get(i);
-            boolean endpoint = (start != null && p.equals(start))
-                    || (goal != null && p.equals(goal));
-            if (!endpoint) {
-                int tc = 2 * p.col() + 1;
-                int tr = 2 * p.row() + 1;
-                g.setFill(rimHex == null ? color
-                        : Color.web(DesktopPaint.walkTrailInk(rimHex,
-                                DesktopPaint.floorEdge(layout, tr, tc))));
-                g.fillRect(layout.x(tc), layout.y(tr), layout.w(tc), layout.h(tr));
-            }
+            int tc = 2 * p.col() + 1;
+            int tr = 2 * p.row() + 1;
+            g.setFill(rimHex == null ? color
+                    : Color.web(DesktopPaint.walkTrailInk(rimHex,
+                            DesktopPaint.floorEdge(layout, tr, tc))));
+            g.fillRect(layout.x(tc), layout.y(tr), layout.w(tc), layout.h(tr));
             if (i == 0) {
                 continue;
             }

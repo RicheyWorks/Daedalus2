@@ -56,18 +56,20 @@ class DesktopPaintTest {
     }
 
     @Test
-    void thePathSkipsEndpointsAndPaintsTheOpeningBetweenCells() {
+    void thePathPaintsTheEndsAndTheOpeningBetweenCells() {
         Point start = new Point(0, 0);
         Point mid = new Point(0, 1);
         Point goal = new Point(0, 2);
         List<DesktopPaint.TileRect> tiles = DesktopPaint.pathOverlay(
-                List.of(start, mid, goal), start, goal);
+                List.of(start, mid, goal));
 
         assertThat(tiles)
-                .as("start and goal stay their own colors; mid and both connectors paint")
+                .as("start, goal, the middle cell, and both connectors paint")
                 .containsExactly(
+                        new DesktopPaint.TileRect(1, 1),
                         new DesktopPaint.TileRect(1, 3),
                         new DesktopPaint.TileRect(1, 2),
+                        new DesktopPaint.TileRect(1, 5),
                         new DesktopPaint.TileRect(1, 4));
     }
 
@@ -75,9 +77,11 @@ class DesktopPaintTest {
     void aNonAdjacentStepDoesNotPaintAChordThroughAWall() {
         Point a = new Point(0, 0);
         Point b = new Point(2, 2);
-        assertThat(DesktopPaint.pathOverlay(List.of(a, b), a, b))
-                .as("a teleport pair is two endpoints — no connector tile")
-                .isEmpty();
+        assertThat(DesktopPaint.pathOverlay(List.of(a, b)))
+                .as("a teleport pair paints both cells and no connector")
+                .containsExactly(
+                        new DesktopPaint.TileRect(1, 1),
+                        new DesktopPaint.TileRect(5, 5));
     }
 
     @Test
@@ -994,10 +998,8 @@ class DesktopPaintTest {
 
     @Test
     void aMissingPathIsNoOverlay() {
-        assertThat(DesktopPaint.pathOverlay(null, new Point(0, 0), new Point(1, 1)))
-                .isEmpty();
-        assertThat(DesktopPaint.pathOverlay(List.of(), new Point(0, 0), new Point(1, 1)))
-                .isEmpty();
+        assertThat(DesktopPaint.pathOverlay(null)).isEmpty();
+        assertThat(DesktopPaint.pathOverlay(List.of())).isEmpty();
     }
 
     @Test

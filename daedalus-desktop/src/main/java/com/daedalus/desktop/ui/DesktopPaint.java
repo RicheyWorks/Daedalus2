@@ -1116,21 +1116,17 @@ public final class DesktopPaint {
     }
 
     /**
-     * Solve-path tiles, skipping start and goal cells so those keep their
-     * endpoint discs. Adjacent steps also paint the carved wall between them.
+     * Solve-path tiles, including the start and goal cells the discs sit on.
+     * Adjacent steps also paint the carved wall between them.
      */
-    public static List<TileRect> pathOverlay(List<Point> path, Point start, Point goal) {
+    public static List<TileRect> pathOverlay(List<Point> path) {
         if (path == null || path.isEmpty()) {
             return List.of();
         }
         List<TileRect> out = new ArrayList<>();
         for (int i = 0; i < path.size(); i++) {
             Point p = path.get(i);
-            boolean endpoint = (start != null && p.equals(start))
-                    || (goal != null && p.equals(goal));
-            if (!endpoint) {
-                out.add(new TileRect(2 * p.row() + 1, 2 * p.col() + 1));
-            }
+            out.add(new TileRect(2 * p.row() + 1, 2 * p.col() + 1));
             if (i > 0) {
                 Point prev = path.get(i - 1);
                 if (Math.abs(prev.row() - p.row()) + Math.abs(prev.col() - p.col()) == 1) {
@@ -1143,11 +1139,10 @@ public final class DesktopPaint {
 
     /**
      * Player memory — every stood-on cell and the opening between adjacent
-     * steps. A solve ribbon skips start/goal; a walk that hid those cells
-     * looked like the explorer had never been there.
+     * steps, the same cells a solve ribbon paints.
      */
     public static List<TileRect> walkOverlay(List<Point> walk) {
-        return pathOverlay(walk, null, null);
+        return pathOverlay(walk);
     }
 
     /**
