@@ -2394,7 +2394,6 @@ public class MainController {
         g.setFill(Color.web(DesktopPaint.WELL_VOID_EDGE));
         g.fillRect(0, 0, w, h);
         double rx = DesktopPaint.stageWashRadiusX(w);
-        double ry = DesktopPaint.stageWashRadiusY(h);
         double cx = w / 2.0;
         double cy = h * 0.45;
         var wash = new javafx.scene.paint.RadialGradient(
@@ -2403,8 +2402,12 @@ public class MainController {
                 new javafx.scene.paint.Stop(0,
                         Color.web(DesktopPaint.wellVoidCenterInk(wave))),
                 new javafx.scene.paint.Stop(1, Color.web(DesktopPaint.WELL_VOID_EDGE)));
+        g.save();
+        g.translate(cx, cy);
+        g.scale(1, DesktopPaint.stageWashScaleY(w, h));
         g.setFill(wash);
-        g.fillOval(cx - rx, cy - ry, rx * 2, ry * 2);
+        g.fillOval(-rx, -rx, rx * 2, rx * 2);
+        g.restore();
     }
 
     /** Maze ink stays inside the bitmap, the same clip as the well canvas. */

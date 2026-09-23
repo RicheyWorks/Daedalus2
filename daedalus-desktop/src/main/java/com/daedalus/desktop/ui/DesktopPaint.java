@@ -395,6 +395,15 @@ public final class DesktopPaint {
         return height * STAGE_WASH_RY;
     }
 
+    /**
+     * A proportional radial stays round. Squash a circle of
+     * {@link #stageWashRadiusX} so the void follows the well ellipse.
+     */
+    public static double stageWashScaleY(double width, double height) {
+        double rx = stageWashRadiusX(width);
+        return rx > 0 ? stageWashRadiusY(height) / rx : 1;
+    }
+
     /** Stage corner — same 10px radius as web {@code #stage}. */
     public static final double STAGE_CORNER = 10;
 

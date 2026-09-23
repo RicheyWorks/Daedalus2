@@ -691,6 +691,8 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.STAGE_WASH_RY).isCloseTo(0.70 * 0.72, within(1e-9));
         assertThat(DesktopPaint.stageWashRadiusX(100)).isCloseTo(57.6, within(1e-9));
         assertThat(DesktopPaint.stageWashRadiusY(100)).isCloseTo(50.4, within(1e-9));
+        assertThat(DesktopPaint.stageWashScaleY(1000, 800)).isCloseTo(403.2 / 576.0, within(1e-9));
+        assertThat(DesktopPaint.stageWashScaleY(0, 800)).isEqualTo(1);
         assertThat(DesktopPaint.STAGE_WASH_RY).isLessThan(0.72);
         assertThat(DesktopPaint.STAGE_CORNER).isEqualTo(10);
         assertThat(DesktopPaint.stageCornerArc()).isEqualTo(20);

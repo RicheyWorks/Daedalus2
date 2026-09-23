@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop stage wash.**
+  The letterbox void
+  follows the well’s
+  ellipse, so the
+  color reaches the
+  rim on every side.
+
 - **Desktop legend wash.**
   Each key’s radial
   ends at the far

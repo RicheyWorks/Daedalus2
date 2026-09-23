@@ -357,6 +357,8 @@ class ThemeManagerTest {
         assertThat(src).contains("clipMaze(g, layout);");
         assertThat(src).contains("g.rect(layout.offsetX(), layout.offsetY(), mazeW, mazeH);");
         assertThat(src).contains("Color.web(DesktopPaint.WELL_VOID_CENTER)");
+        assertThat(src).contains("g.scale(1, DesktopPaint.stageWashScaleY(w, h))");
+        assertThat(src).contains("g.fillOval(-rx, -rx, rx * 2, rx * 2)");
     }
 
     @Test
