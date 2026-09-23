@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore marker family.**
+  World posts use the same fallen
+  story diamonds as the HUD keys.
+
 - **Explore story-key family.**
   Story diamonds fall off toward
   floor-dim. The mark, boss, and

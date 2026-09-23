@@ -2106,16 +2106,17 @@ public final class ExplorePaint {
         rgb[2] += (MAP_FLOOR_DIM_B - rgb[2]) * t;
     }
 
+    /** World posts — same fallen story diamonds as the HUD keys. */
     public static void marker(String kind, float[] rgb) {
         if (rgb == null || rgb.length < 3) {
             return;
         }
         if ("BOSS".equals(kind)) {
-            set(rgb, 0.72f, 0.18f, 0.12f);
+            keyTint(0, 1, 2, rgb);
         } else if ("ENTRANCE".equals(kind)) {
-            set(rgb, 0.82f, 0.62f, 0.18f);
+            keyTint(0, 2, 0, rgb);
         } else {
-            set(rgb, 0.28f, 0.52f, 0.58f);
+            keyTint(0, 1, 1, rgb);
         }
     }
 

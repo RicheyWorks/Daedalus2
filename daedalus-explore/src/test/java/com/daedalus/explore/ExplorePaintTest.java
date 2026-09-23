@@ -356,6 +356,11 @@ class ExplorePaintTest {
         assertThat(rgb[0]).isGreaterThan(rgb[1]);
         ExplorePaint.marker("VAULT", rgb);
         assertThat(rgb[2]).isGreaterThan(rgb[0]);
+        float[] mark = new float[3];
+        ExplorePaint.keyTint(0, 2, 0, mark);
+        ExplorePaint.marker("ENTRANCE", rgb);
+        assertThat(rgb).as("entrance post matches the fallen story diamond")
+                .containsExactly(mark);
         float[] pad = new float[3];
         ExplorePaint.placePadTint(rgb, pad);
         assertThat(pad[2]).isLessThan(rgb[2]);
