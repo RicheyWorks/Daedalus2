@@ -2025,7 +2025,7 @@ public class MainController {
                     g.fillOval(pad.x(), pad.y(), pad.size(), pad.size());
                     g.setGlobalAlpha(1);
                 }
-                paintRing(g, DesktopPaint.hotspotRim(layout, cell),
+                paintRing(g, DesktopPaint.hotspotRim(layout, cell, g.getTransform().getMyy()),
                         glow.deriveColor(0, 1, 1, DesktopPaint.hotspotRimAlpha(hotWave)));
             }
         }

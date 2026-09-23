@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop hotspot rim.**
+  The jam ring floors
+  at one bitmap pixel,
+  the same minimum as
+  `draw.js`.
+
 - **Desktop victory ring.**
   The win stroke floors
   at two bitmap pixels,

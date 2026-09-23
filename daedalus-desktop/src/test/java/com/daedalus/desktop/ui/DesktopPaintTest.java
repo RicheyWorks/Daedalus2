@@ -914,6 +914,11 @@ class DesktopPaintTest {
         DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 100, 100);
         assertThat(DesktopPaint.hotspotRim(layout, new Point(0, 0)).radius())
                 .isEqualTo(layout.cellSize() * DesktopPaint.HOTSPOT_RIM_RADIUS);
+        DesktopPaint.Layout crisp = DesktopPaint.Layout.fit(3, 3, 9, 9);
+        assertThat(DesktopPaint.hotspotRim(crisp, new Point(0, 0)).width()).isEqualTo(1.0);
+        assertThat(DesktopPaint.hotspotRim(crisp, new Point(0, 0), 2).width())
+                .as("one bitmap pixel is half a CSS pixel at scale 2")
+                .isEqualTo(0.5);
         DesktopPaint.HotWash wash = DesktopPaint.hotspotWash(
                 List.of(new Hotspot(0, 0, 10), new Hotspot(0, 1, 80)), tiles);
         assertThat(wash.cells()).hasSize(1);

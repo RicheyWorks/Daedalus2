@@ -528,13 +528,17 @@ public final class DesktopPaint {
     }
 
     public static Ring hotspotRim(Layout layout, Point cell) {
+        return hotspotRim(layout, cell, 1);
+    }
+
+    public static Ring hotspotRim(Layout layout, Point cell, double scale) {
         if (layout == null || cell == null) {
             return null;
         }
         double cx = layout.x(2 * cell.col() + 1) + layout.cellSize() / 2.0;
         double cy = layout.y(2 * cell.row() + 1) + layout.cellSize() / 2.0;
         return new Ring(cx, cy, layout.cellSize() * HOTSPOT_RIM_RADIUS,
-                Math.max(1.0, layout.cellSize() * 0.06));
+                cellStroke(layout.cellSize(), 0.06, scale));
     }
     /** Solver ribbon — same alpha as {@code draw.js} {@code paintWalk}. */
     public static final double PATH_ALPHA = 0.85;
@@ -602,6 +606,11 @@ public final class DesktopPaint {
 
     public static double ringStroke(double cell, double fraction, double scale) {
         return Math.max(1.5 * devicePx(scale), cell * fraction);
+    }
+
+    /** One-pixel rim — {@code Math.max(1, geom.cell * fraction)} in bitmap pixels. */
+    public static double cellStroke(double cell, double fraction, double scale) {
+        return Math.max(devicePx(scale), cell * fraction);
     }
 
     /** Search wash — same alphas as {@code draw.js} expansions. */
