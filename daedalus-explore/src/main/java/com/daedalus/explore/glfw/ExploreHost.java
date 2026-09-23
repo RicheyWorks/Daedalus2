@@ -638,6 +638,9 @@ public final class ExploreHost {
         float faceTop = top - 0.03f;
         float lip = ExplorePaint.faceLip(seconds);
         float core = ExplorePaint.faceLipCore(seconds);
+        frameGlow(faceLeft - lip, faceBot - lip, faceRight + lip, faceTop + lip,
+                lipInk[0], lipInk[1], lipInk[2],
+                ExplorePaint.faceLipGlow(seconds), ExplorePaint.faceLipGlowAlpha(seconds));
         glColor3f(underInk[0], underInk[1], underInk[2]);
         fill(faceLeft - lip, faceBot - lip, faceRight + lip, faceTop + lip);
         glColor3f(lipInk[0], lipInk[1], lipInk[2]);

@@ -1839,6 +1839,21 @@ public final class ExplorePaint {
         return FACE_LIP_CORE * (float) (0.88 + 0.24 * wave);
     }
 
+    /** Soft gold outside the portrait lip — same 0.06↔0.14 band as the well stage glow. */
+    public static final float FACE_LIP_GLOW = FACE_LIP * 2f;
+
+    public static float faceLipGlow(double seconds) {
+        double t = ((seconds * 1000.0) % FACE_BREATH_MS) / FACE_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return FACE_LIP_GLOW * (float) ((18.0 + 10.0 * wave) / 18.0);
+    }
+
+    public static float faceLipGlowAlpha(double seconds) {
+        double t = ((seconds * 1000.0) % FACE_BREATH_MS) / FACE_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return (float) (0.06 + 0.08 * wave);
+    }
+
     /** Story-mark brands — mix inputs. The diamonds fall toward floor-dim. */
     public static final float KEY_MARK_R = 0.82f;
     public static final float KEY_MARK_G = 0.62f;

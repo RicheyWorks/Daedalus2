@@ -1700,6 +1700,14 @@ class ExplorePaintTest {
                 .isNotEqualTo(ExplorePaint.faceLip(0.8));
         assertThat(ExplorePaint.faceLipCore(0.1))
                 .isNotEqualTo(ExplorePaint.faceLipCore(0.8));
+        assertThat(ExplorePaint.FACE_LIP_GLOW).isEqualTo(ExplorePaint.FACE_LIP * 2f);
+        assertThat(ExplorePaint.faceLipGlow(0)).isEqualTo(ExplorePaint.FACE_LIP_GLOW);
+        assertThat(ExplorePaint.faceLipGlowAlpha(0)).isEqualTo(0.06f);
+        double facePeak = ExplorePaint.FACE_BREATH_MS / 2000.0;
+        assertThat(ExplorePaint.faceLipGlow(facePeak))
+                .isCloseTo(ExplorePaint.FACE_LIP_GLOW * (28f / 18f), within(1e-5f));
+        assertThat(host).contains("ExplorePaint.faceLipGlow(seconds)");
+        assertThat(host).contains("ExplorePaint.faceLipGlowAlpha(seconds)");
         assertThat(ExplorePaint.KEY_SOFT_R).isEqualTo(ExplorePaint.CAPTION_SOFT_R);
     }
 

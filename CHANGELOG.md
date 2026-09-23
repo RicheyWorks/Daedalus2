@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore portrait halo.**
+  The mood face wears
+  the same soft gold
+  as the well stage.
+  The bezel fades out
+  past the lip.
+
 - **Explore pocket wash.**
   The automap pocket
   and the status strip
