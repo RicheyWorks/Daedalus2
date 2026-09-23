@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore portrait smile.**
+  The resting mouth uses the
+  floor-warm `#5c4a32`, so the
+  lip shares the light paver.
+
 - **Explore stone cubes.**
   Placed stone uses the shadowed
   corridor wall, so a block is

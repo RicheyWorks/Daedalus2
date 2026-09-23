@@ -1010,6 +1010,11 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.FACE_EYE_G).isEqualTo(0x0e);
         assertThat(ExplorePaint.FACE_EYE_B).isEqualTo(0x0c);
         assertThat(ExplorePaint.FACE_EYE_G).isNotEqualTo(12);
+        assertThat(Byte.toUnsignedInt(calm[mouth + 1])).isEqualTo(ExplorePaint.FACE_MOUTH_G);
+        assertThat(ExplorePaint.FACE_MOUTH_R).isEqualTo(ExplorePaint.FLOOR_TEX_WARM_R);
+        assertThat(ExplorePaint.FACE_MOUTH_G).isEqualTo(0x4a);
+        assertThat(ExplorePaint.FACE_MOUTH_B).isEqualTo(0x32);
+        assertThat(ExplorePaint.FACE_MOUTH_G).isNotEqualTo(48);
     }
 
     @Test

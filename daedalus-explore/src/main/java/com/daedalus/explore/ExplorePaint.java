@@ -921,6 +921,10 @@ public final class ExplorePaint {
     public static final int FACE_EYE_R = 0x12;
     public static final int FACE_EYE_G = 0x0e;
     public static final int FACE_EYE_B = 0x0c;
+    /** Resting smile — same floor-warm as the well {@code COLORS.floorWarm}. */
+    public static final int FACE_MOUTH_R = 0x5c;
+    public static final int FACE_MOUTH_G = 0x4a;
+    public static final int FACE_MOUTH_B = 0x32;
 
     public static byte[] faceRgba(int mood) {
         int grim = Math.max(0, Math.min(2, mood));
@@ -2395,7 +2399,7 @@ public final class ExplorePaint {
             return rgbBytes(48, 22, 18);
         }
         if (grim == 0 && (px == 3 || px == 4)) {
-            return rgbBytes(92, 48, 36);
+            return rgbBytes(FACE_MOUTH_R, FACE_MOUTH_G, FACE_MOUTH_B);
         }
         return rgbBytes(186, 128, 78);
     }
