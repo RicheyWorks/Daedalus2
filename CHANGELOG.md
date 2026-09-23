@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop export tracking.**
+  The PNG chip tracks at 0.03em,
+  the same spacing as the well
+  export chips. Hover still lifts
+  the glyphs to cream.
+
 - **Explore hand-wood family.**
   The grip and shaft fall toward
   floor-dim. The wood brands stay

@@ -155,6 +155,12 @@
     -fx-text-fill: #f2ead8;
     -fx-effect: dropshadow(one-pass-box, rgba(153, 111, 49, 0.22), 10, 0.4, 0, 0);
 }
+.exports .button .export-glyph {
+    -fx-fill: #b09a72;
+}
+.exports .button:hover .export-glyph {
+    -fx-fill: #f2ead8;
+}
 
 .legend {
     -fx-padding: 22 14 10 14;

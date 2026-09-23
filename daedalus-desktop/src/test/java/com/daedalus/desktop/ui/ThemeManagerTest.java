@@ -125,6 +125,8 @@ class ThemeManagerTest {
             assertThat(css).contains("rgba(16, 11, 8, 0.78)");
             assertThat(css).contains(".exports .button:hover");
             assertThat(css).contains("-fx-background-color: #1a1610");
+            assertThat(css).contains(".exports .button .export-glyph {\n    -fx-fill: #b09a72;");
+            assertThat(css).contains(".exports .button:hover .export-glyph {\n    -fx-fill: #f2ead8;");
         }
         try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
             assertThat(in).as("main.fxml is on the classpath").isNotNull();
@@ -284,6 +286,9 @@ class ThemeManagerTest {
                 "subtract(legendBox.heightProperty()).subtract(4)");
         assertThat(src).contains("Font.font(\"Bahnschrift\", FontWeight.SEMI_BOLD, 11)");
         assertThat(src).contains("new HBox(5)");
+        assertThat(src).contains("trackExportChip();");
+        assertThat(src).contains("double em = 11 * 0.03;");
+        assertThat(src).contains("ch.getStyleClass().add(\"export-glyph\");");
     }
 
     @Test

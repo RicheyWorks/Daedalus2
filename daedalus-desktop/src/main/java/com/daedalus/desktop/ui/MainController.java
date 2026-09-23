@@ -123,6 +123,7 @@ public class MainController {
     @FXML private Spinner<Integer> hotspotCostSpinner;
     @FXML private ComboBox<Double> braidChoice;
     @FXML private TextField seedField;
+    @FXML private Button pngButton;
     @FXML private Button generateButton;     // referenced from FXML, kept for future enable/disable
     @FXML private ComboBox<String> solverChoice;
     @FXML private Button solveButton;        // ditto
@@ -279,6 +280,7 @@ public class MainController {
     @FXML
     public void initialize() {
         trackLegendKeys();
+        trackExportChip();
         // Generator choices — sorted so the dropdown order is stable across runs.
         List<String> genIds = generatorRegistry.all().stream()
                 .map(MazeGenerator::id)
@@ -2623,6 +2625,29 @@ public class MainController {
         row.getChildren().add(word);
         label.setText("");
         label.setGraphic(row);
+    }
+
+    /** Same 0.03em tracking as the well export chips. */
+    private void trackExportChip() {
+        if (pngButton == null) {
+            return;
+        }
+        String text = pngButton.getText();
+        if (text == null || text.length() < 2) {
+            return;
+        }
+        double em = 11 * 0.03;
+        var word = new HBox(em);
+        word.setAlignment(Pos.CENTER);
+        Font font = Font.font("Segoe UI", 11);
+        for (int i = 0; i < text.length(); i++) {
+            Text ch = new Text(String.valueOf(text.charAt(i)));
+            ch.setFont(font);
+            ch.getStyleClass().add("export-glyph");
+            word.getChildren().add(ch);
+        }
+        pngButton.setText("");
+        pngButton.setGraphic(word);
     }
 
     /** Same 0.22em tracking as the well idle wordmark. */
