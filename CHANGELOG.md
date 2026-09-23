@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop export hover.**
+  The PNG chip's hover glow is a
+  12px gold wash at 0.18, the same
+  bloom as the well export chips.
+
 - **Desktop export tracking.**
   The PNG chip tracks at 0.03em,
   the same spacing as the well

@@ -50,7 +50,8 @@ class ThemeManagerTest {
             assertThat(css).contains("dropshadow(one-pass-box, rgba(58, 182, 117, 0.28)");
             assertThat(css).contains("rgba(58, 182, 117, 0.28), 14, 0.45, 0, 0);\n    -fx-cursor: default;");
             assertThat(css).doesNotContain("rgba(62, 224, 143");
-            assertThat(css).contains("dropshadow(one-pass-box, rgba(153, 111, 49, 0.22)");
+            assertThat(css).contains("dropshadow(one-pass-box, rgba(153, 111, 49, 0.18), 12, 0.4, 0, 0);");
+            assertThat(css).doesNotContain("dropshadow(one-pass-box, rgba(153, 111, 49, 0.22)");
             assertThat(css).doesNotContain("dropshadow(one-pass-box, rgba(184, 133, 56, 0.22)");
             assertThat(css).contains("-fx-border-color: rgba(184, 133, 56, 0.85)");
             assertThat(css).contains("-fx-border-color: rgba(184, 133, 56, 0.28)");
