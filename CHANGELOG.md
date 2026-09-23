@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore sky stars.**
+  The points sit on the well torch
+  gold #f5c14a so the night lamp
+  matches the maze gold.
+
 - **Explore horizon glow.**
   The bright band sits on the well
   floor shine #765834 so the

@@ -919,7 +919,13 @@ class ExplorePaintTest {
         byte[] grim = ExplorePaint.faceRgba(2);
         assertThat(sky).hasSize(ExplorePaint.TEX * ExplorePaint.TEX * 4);
         assertThat(calm).hasSize(sky.length);
-        assertThat(Byte.toUnsignedInt(sky[0])).isNotEqualTo(0);
+        assertThat(Byte.toUnsignedInt(sky[0])).isEqualTo(ExplorePaint.SKY_STAR_R);
+        assertThat(Byte.toUnsignedInt(sky[1])).isEqualTo(ExplorePaint.SKY_STAR_G);
+        assertThat(Byte.toUnsignedInt(sky[2])).isEqualTo(ExplorePaint.SKY_STAR_B);
+        assertThat(ExplorePaint.SKY_STAR_R).isEqualTo(0xf5);
+        assertThat(ExplorePaint.SKY_STAR_G).isEqualTo(0xc1);
+        assertThat(ExplorePaint.SKY_STAR_B).isEqualTo(0x4a);
+        assertThat(ExplorePaint.SKY_STAR_R).isNotEqualTo(220);
         assertThat(ExplorePaint.SKY_TEX_EDGE_DIM).isEqualTo(0.22f);
         assertThat(ExplorePaint.SKY_HILL_R).isEqualTo(0x12);
         assertThat(ExplorePaint.SKY_HILL_G).isEqualTo(0x0e);

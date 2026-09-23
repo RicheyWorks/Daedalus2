@@ -834,6 +834,10 @@ public final class ExplorePaint {
     public static final int SKY_GLOW_R = 0x76;
     public static final int SKY_GLOW_G = 0x58;
     public static final int SKY_GLOW_B = 0x34;
+    /** Stars — same torch gold as the well lamp {@code #f5c14a}. */
+    public static final int SKY_STAR_R = 0xf5;
+    public static final int SKY_STAR_G = 0xc1;
+    public static final int SKY_STAR_B = 0x4a;
     /** Horizon hills — same wall as the well posts. */
     public static final int SKY_HILL_R = 0x12;
     public static final int SKY_HILL_G = 0x0e;
@@ -859,7 +863,7 @@ public final class ExplorePaint {
             int n = hash(x, y) & 31;
             boolean star = y < 20 && (hash(x, y) & 63) == 0;
             if (star) {
-                return rgbBytes(220, 196, 140);
+                return rgbBytes(SKY_STAR_R, SKY_STAR_G, SKY_STAR_B);
             }
             int r;
             int g;
