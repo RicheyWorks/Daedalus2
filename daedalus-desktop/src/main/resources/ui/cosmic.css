@@ -124,7 +124,8 @@
 /* ---------- canvas pane + status bar ---------- */
 
 .canvas-pane {
-    -fx-background-color: radial-gradient(center 50% 45%, radius 72%, #16120e, #0c0908);
+    /* Void seat. The stage ellipse is painted on the canvas. */
+    -fx-background-color: #0c0908;
     -fx-background-radius: 10;
     -fx-border-color: rgba(16, 11, 8, 0.95), rgba(153, 111, 49, 0.55);
     -fx-border-width: 1, 1;

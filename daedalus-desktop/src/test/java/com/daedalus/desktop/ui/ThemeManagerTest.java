@@ -80,7 +80,9 @@ class ThemeManagerTest {
                     "/* Body wash is the 1200×700 ellipse painted behind the shell. */");
             assertThat(css).contains("-fx-background-color: transparent;");
             assertThat(css).doesNotContain("radius 100%");
-            assertThat(css).doesNotContain("-fx-background-color: #0c0908;");
+            assertThat(css).doesNotContain("radius 72%");
+            assertThat(css).contains("/* Void seat. The stage ellipse is painted on the canvas. */");
+            assertThat(css).contains("-fx-background-color: #0c0908;");
             assertThat(css).contains("-fx-highlight-fill: rgba(153, 111, 49, 0.35)");
             assertThat(css).doesNotContain("-fx-highlight-fill: rgba(184, 133, 56, 0.35)");
             assertThat(css).contains("-fx-highlight-text-fill: #f2ead8");
@@ -171,7 +173,9 @@ class ThemeManagerTest {
             assertThat(fxml).contains("color=\"#484339\"");
             assertThat(fxml).contains("color=\"#2a2218\"");
             assertThat(fxml).contains("legendStart");
-            assertThat(fxml).contains("<RadialGradient centerX=\"0.45\" centerY=\"0.40\" radius=\"1.0\"");
+            assertThat(fxml).contains("<RadialGradient centerX=\"0.45\" centerY=\"0.40\" radius=\"0.813941\"");
+            assertThat(fxml).contains("radius=\"1.141271\"");
+            assertThat(fxml).doesNotContain("radius=\"1.0\"");
             assertThat(fxml).contains("color=\"#19140f\"");
             assertThat(fxml).contains("color=\"#15110d\"");
             assertThat(fxml).contains("color=\"#16120e\"");
@@ -361,6 +365,7 @@ class ThemeManagerTest {
         assertThat(src).contains("Color.web(DesktopPaint.WELL_VOID_CENTER)");
         assertThat(src).contains("g.scale(1, DesktopPaint.stageWashScaleY(w, h))");
         assertThat(src).contains("g.fillOval(-rx, -rx, rx * 2, rx * 2)");
+        assertThat(src).contains("g.fillRect(0, 0, w + 1, h + 1)");
     }
 
     @Test

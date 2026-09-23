@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop stage seat.**
+  The pane under the
+  maze is the well
+  void, so a rounding
+  sliver stays the
+  same dark edge.
+
 - **Desktop idle glow.**
   The empty-well halo
   fades in its own

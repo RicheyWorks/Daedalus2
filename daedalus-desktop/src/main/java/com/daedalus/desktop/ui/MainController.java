@@ -2395,7 +2395,7 @@ public class MainController {
     private static void paintWellVoid(GraphicsContext g, double w, double h) {
         double wave = DesktopPaint.emptyBreathWave(System.nanoTime());
         g.setFill(Color.web(DesktopPaint.WELL_VOID_EDGE));
-        g.fillRect(0, 0, w, h);
+        g.fillRect(0, 0, w + 1, h + 1);
         double rx = DesktopPaint.stageWashRadiusX(w);
         double cx = w / 2.0;
         double cy = h * 0.45;
@@ -2453,7 +2453,7 @@ public class MainController {
         double cx = w / 2.0;
         double cy = DesktopPaint.mazeWashCenterY(0, h);
         g.setFill(Color.web(DesktopPaint.WELL_VOID_EDGE));
-        g.fillRect(0, 0, w, h);
+        g.fillRect(0, 0, w + 1, h + 1);
         var wash = new javafx.scene.paint.RadialGradient(
                 0, 0, 0.5, 0.5, 0.5, true,
                 javafx.scene.paint.CycleMethod.NO_CYCLE,
