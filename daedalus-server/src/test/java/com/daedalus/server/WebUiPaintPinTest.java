@@ -1894,6 +1894,7 @@ class WebUiPaintPinTest {
                     .contains("font: 600 11px/1.4 Bahnschrift, \"Segoe UI\", sans-serif;")
                     .contains("letter-spacing: .04em; color: #b09a72; pointer-events: none;")
                     .contains("#legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px;")
+                    .contains("vertical-align: -1px;")
                     .contains("box-shadow: 0 0 0 1px rgba(198,190,174,.06); }")
                     .doesNotContain("box-shadow: 0 0 0 1px rgba(242,234,216,.06); }");
         }

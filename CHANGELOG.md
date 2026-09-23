@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend swatch sit.**
+  The chip sits 1px lower,
+  the same nudge as the well key.
+
 - **Desktop legend line.**
   The key words sit in a 1.4 line,
   the same box as the well legend.

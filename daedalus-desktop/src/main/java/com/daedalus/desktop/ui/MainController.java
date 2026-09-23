@@ -2606,8 +2606,10 @@ public class MainController {
         }
         var row = new HBox(5);
         row.setAlignment(Pos.CENTER_LEFT);
-        if (label.getGraphic() != null) {
-            row.getChildren().add(label.getGraphic());
+        var swatch = label.getGraphic();
+        if (swatch != null) {
+            swatch.setTranslateY(1);
+            row.getChildren().add(swatch);
         }
         row.getChildren().add(word);
         label.setText("");
