@@ -72,7 +72,8 @@ class WebUiPaintPinTest {
                     .contains("#compareBox span { -webkit-user-drag: none")
                     .contains("letter-spacing: .03em; color: #b09a72; text-decoration: none;")
                     .contains("cursor: pointer; font-weight: 600; }")
-                    .contains("padding: 16px 20px 28px; align-items: start;");
+                    .contains("padding: 16px 20px 28px; align-items: start;")
+                    .contains("radial-gradient(1200px 700px at 50% -10%, #16120e 0%, var(--bg) 55%)");
         }
     }
 

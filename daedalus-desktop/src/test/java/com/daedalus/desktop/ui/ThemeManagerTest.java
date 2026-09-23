@@ -75,7 +75,9 @@ class ThemeManagerTest {
             assertThat(css).doesNotContain("-fx-faint-focus-color: rgba(184, 133, 56, 0.25)");
             assertThat(css).contains("#16120e");
             assertThat(css).contains("#0c0908");
-            assertThat(css).contains("-fx-background-color: #0c0908");
+            assertThat(css).contains(
+                    "radial-gradient(center 50% -10%, radius 100%, #16120e 0%, #0c0908 55%)");
+            assertThat(css).doesNotContain("-fx-background-color: #0c0908;");
             assertThat(css).contains("-fx-highlight-fill: rgba(153, 111, 49, 0.35)");
             assertThat(css).doesNotContain("-fx-highlight-fill: rgba(184, 133, 56, 0.35)");
             assertThat(css).contains("-fx-highlight-text-fill: #f2ead8");

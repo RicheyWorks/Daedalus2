@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop page wash.**
+  The window behind the board
+  fades from #16120e at the top
+  to void at 55%, the same wash
+  as the well page.
+
 - **Desktop page gutter.**
   The board sits 16px under the
   toolbar, 20px in from the sides,

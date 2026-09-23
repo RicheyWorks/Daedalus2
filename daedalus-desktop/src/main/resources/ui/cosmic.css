@@ -3,7 +3,8 @@
    are one product. */
 
 .root {
-    -fx-background-color: #0c0908;
+    /* Same top wash as the well page — warm cap, void by 55%. */
+    -fx-background-color: radial-gradient(center 50% -10%, radius 100%, #16120e 0%, #0c0908 55%);
     -fx-font-family: "Segoe UI", "SF Pro Display", "Helvetica Neue", sans-serif;
     -fx-font-size: 13px;
     -fx-highlight-fill: rgba(153, 111, 49, 0.35);
