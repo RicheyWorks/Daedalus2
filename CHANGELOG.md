@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend wrap.**
+  The key band wraps like
+  the well legend, with the
+  same 14px gap, so a full
+  set of keys stays inside
+  the stage.
+
 - **Desktop idle mark seat.**
   The empty miniature rounds
   onto the canvas the way

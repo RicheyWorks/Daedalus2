@@ -11,6 +11,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
@@ -132,8 +133,8 @@
             </padding>
             <Pane fx:id="canvasParent" styleClass="canvas-pane">
             <Canvas fx:id="canvas"/>
-            <HBox fx:id="legendBox" spacing="14" alignment="CENTER" styleClass="legend"
-                  managed="false" mouseTransparent="true" visible="false">
+            <FlowPane fx:id="legendBox" hgap="14" vgap="14" alignment="CENTER" styleClass="legend"
+                      managed="false" mouseTransparent="true" visible="false">
                 <Label text="floor">
                     <graphic>
                         <Rectangle width="10" height="10" stroke="rgba(198,190,174,0.28)"
@@ -563,7 +564,7 @@
                         </HBox>
                     </graphic>
                 </Label>
-            </HBox>
+            </FlowPane>
             <HBox fx:id="exportBox" spacing="8" alignment="CENTER_RIGHT" styleClass="exports"
                   managed="false" visible="false">
                 <CheckBox fx:id="liveToggle" text="Live" onAction="#onLive">

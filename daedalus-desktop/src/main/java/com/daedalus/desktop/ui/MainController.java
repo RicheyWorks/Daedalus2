@@ -42,6 +42,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -145,7 +146,7 @@ public class MainController {
     @FXML private StackPane boardPane;
     @FXML private Pane canvasParent;
     @FXML private Canvas canvas;
-    @FXML private HBox legendBox;
+    @FXML private FlowPane legendBox;
     @FXML private Label legendStart;
     @FXML private Label legendGoal;
     @FXML private Label legendPath;
@@ -2362,6 +2363,7 @@ public class MainController {
         double width = Math.max(0, canvasParent.getWidth());
         double height = legendBox.prefHeight(width);
         legendBox.resize(width, height);
+        legendBox.layout();
         legendBox.relocate(0, DesktopPaint.legendScrimY(canvasParent.getHeight(), height));
     }
 
