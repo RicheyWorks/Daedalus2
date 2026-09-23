@@ -319,7 +319,8 @@ class ThemeManagerTest {
         try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
             assertThat(in).isNotNull();
             String fxml = new String(in.readAllBytes());
-            assertThat(fxml).contains("FlowPane fx:id=\"legendBox\" hgap=\"14\" vgap=\"14\"");
+            assertThat(fxml).contains("FlowPane fx:id=\"legendBox\" hgap=\"12.5\" vgap=\"14\"");
+            assertThat(fxml).doesNotContain("hgap=\"14\"");
             assertThat(fxml).doesNotContain("HBox fx:id=\"legendBox\"");
             assertThat(fxml).contains("fx:id=\"legendPlayer\" text=\"players\" styleClass=\"legend-cluster\"");
             assertThat(fxml).contains("fx:id=\"legendLens\" text=\"lens\" styleClass=\"legend-cluster\"");

@@ -133,7 +133,7 @@
             </padding>
             <Pane fx:id="canvasParent" styleClass="canvas-pane">
             <Canvas fx:id="canvas"/>
-            <FlowPane fx:id="legendBox" hgap="14" vgap="14" alignment="CENTER" styleClass="legend"
+            <FlowPane fx:id="legendBox" hgap="12.5" vgap="14" alignment="CENTER" styleClass="legend"
                       managed="false" mouseTransparent="true" visible="false">
                 <Label text="floor">
                     <graphic>
