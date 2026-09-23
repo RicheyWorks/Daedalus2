@@ -776,6 +776,11 @@ class DesktopPaintTest {
         int discs = ctrl.indexOf("start / goal discs");
         int win = ctrl.indexOf("paintVictory(g, layout, current.metadata().goal())");
         assertThat(win).isGreaterThan(discs);
+        int scene = ctrl.indexOf("private DesktopPaint.Fog fogScene()");
+        int dungeon = ctrl.indexOf("private void paintFogDungeon");
+        String fogBody = ctrl.substring(scene, dungeon);
+        assertThat(fogBody).contains("current.metadata().goal()");
+        assertThat(fogBody).doesNotContain("reachedGoal");
     }
 
     @Test

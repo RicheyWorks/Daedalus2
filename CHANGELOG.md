@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop fog exit.**
+  The fog well keeps
+  the goal disc up.
+  The exit stays marked
+  the same way as the
+  well.
+
 - **Desktop fog win.**
   The fog well ends on
   the walker. The win

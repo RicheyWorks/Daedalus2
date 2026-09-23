@@ -2476,10 +2476,9 @@ public class MainController {
         if (!fogOn()) {
             return null;
         }
-        Point target = current.metadata().goal();
-        Point goal = reachedGoal || (playerPos != null && playerPos.equals(target))
-                ? target : null;
-        return DesktopPaint.Fog.of(playerWalk, playerPos, goal);
+        // The agent view always carries the exit, so the well paints the goal
+        // disc through the fog. Arrival is the win ring, and that stays off this path.
+        return DesktopPaint.Fog.of(playerWalk, playerPos, current.metadata().goal());
     }
 
     private void paintFogDungeon(GraphicsContext g, DesktopPaint.Layout layout,
