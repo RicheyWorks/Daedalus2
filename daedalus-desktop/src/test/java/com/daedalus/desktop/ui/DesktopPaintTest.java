@@ -1153,6 +1153,13 @@ class DesktopPaintTest {
                 .isGreaterThan(DesktopPaint.emptyGlowMintAlpha(0));
         assertThat(DesktopPaint.emptyGlowGoldAlpha(1))
                 .isGreaterThan(DesktopPaint.emptyGlowGoldAlpha(0));
+        assertThat(DesktopPaint.emptyGlowOuter(200, 140)).isCloseTo(58.8, within(1e-9));
+        assertThat(DesktopPaint.emptyGlowMintEnd(168))
+                .as("mint holds out to the well's 12px core")
+                .isCloseTo(12.0 / 168, within(1e-9));
+        assertThat(DesktopPaint.emptyGlowGoldAt(168))
+                .isCloseTo((12 + 0.55 * (168 - 12)) / 168, within(1e-9));
+        assertThat(DesktopPaint.emptyGlowGoldAt(168)).isGreaterThan(0.55);
         assertThat(DesktopPaint.emptyMarkFloorAlpha(1))
                 .isGreaterThan(DesktopPaint.emptyMarkFloorAlpha(0));
         assertThat(DesktopPaint.emptyMarkFloorAlpha(0)).isEqualTo(0.36);

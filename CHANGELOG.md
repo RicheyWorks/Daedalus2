@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop idle wash.**
+  The empty well holds mint
+  out to the same 12px core
+  as the web `paintEmpty`
+  glow, then falls through gold.
+
 - **Desktop compare tip.**
   A hovered route head uses
   the well path-head disc,

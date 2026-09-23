@@ -94,6 +94,30 @@ public final class DesktopPaint {
         return 0.04 + 0.03 * wave;
     }
 
+    /** Solid mint core of the idle wash — same inner radius as {@code paintEmpty}. */
+    public static final double EMPTY_GLOW_INNER = 12;
+
+    /** Outer reach of the idle wash — same {@code 0.42·min(side)} as {@code paintEmpty}. */
+    public static double emptyGlowOuter(double canvasW, double canvasH) {
+        return Math.min(canvasW, canvasH) * 0.42;
+    }
+
+    /** Where the mint disc ends, as a fraction of {@link #emptyGlowOuter}. */
+    public static double emptyGlowMintEnd(double outer) {
+        if (outer <= EMPTY_GLOW_INNER) {
+            return 0;
+        }
+        return EMPTY_GLOW_INNER / outer;
+    }
+
+    /** Where the gold stop sits, as a fraction of {@link #emptyGlowOuter}. */
+    public static double emptyGlowGoldAt(double outer) {
+        if (outer <= EMPTY_GLOW_INNER) {
+            return 0.55;
+        }
+        return (EMPTY_GLOW_INNER + 0.55 * (outer - EMPTY_GLOW_INNER)) / outer;
+    }
+
     /** Idle lattice floors — same gate wave as the wordmark. */
     public static double emptyMarkFloorAlpha(double wave) {
         return 0.36 + 0.10 * wave;

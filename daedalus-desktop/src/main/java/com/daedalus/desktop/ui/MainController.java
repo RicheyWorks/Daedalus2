@@ -1853,14 +1853,24 @@ public class MainController {
             double cx = w / 2.0;
             double cy = h / 2.0;
             double wave = DesktopPaint.emptyBreathWave(System.nanoTime());
+            double outer = DesktopPaint.emptyGlowOuter(w, h);
+            double mintEnd = DesktopPaint.emptyGlowMintEnd(outer);
+            double goldAt = DesktopPaint.emptyGlowGoldAt(outer);
+            Color washMint = Color.web(DesktopPaint.emptyWordmarkMintInk(),
+                    DesktopPaint.emptyGlowMintAlpha(wave));
+            Color washGold = Color.web(DesktopPaint.emptyWordmarkGoldInk(),
+                    DesktopPaint.emptyGlowGoldAlpha(wave));
+            var stops = new java.util.ArrayList<javafx.scene.paint.Stop>();
+            stops.add(new javafx.scene.paint.Stop(0, washMint));
+            if (mintEnd > 0) {
+                stops.add(new javafx.scene.paint.Stop(mintEnd, washMint));
+            }
+            stops.add(new javafx.scene.paint.Stop(goldAt, washGold));
+            stops.add(new javafx.scene.paint.Stop(1, Color.web("#000000", 0)));
             var glow = new javafx.scene.paint.RadialGradient(
-                    0, 0, cx, cy - 36, Math.min(w, h) * 0.42, false,
+                    0, 0, cx, cy - 36, outer, false,
                     javafx.scene.paint.CycleMethod.NO_CYCLE,
-                    new javafx.scene.paint.Stop(0, Color.web(DesktopPaint.emptyWordmarkMintInk(),
-                            DesktopPaint.emptyGlowMintAlpha(wave))),
-                    new javafx.scene.paint.Stop(0.55, Color.web(DesktopPaint.emptyWordmarkGoldInk(),
-                            DesktopPaint.emptyGlowGoldAlpha(wave))),
-                    new javafx.scene.paint.Stop(1, Color.web("#000000", 0)));
+                    stops);
             g.setFill(glow);
             g.fillRect(0, 0, w, h);
             DesktopPaint.Layout mark = DesktopPaint.emptyMarkLayout(w, h);
