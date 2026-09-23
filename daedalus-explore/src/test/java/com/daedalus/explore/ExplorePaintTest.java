@@ -1642,6 +1642,13 @@ class ExplorePaintTest {
                 .isNotEqualTo(ExplorePaint.statusGoldH(0.8));
         assertThat(ExplorePaint.statusGoldUnderH(0.1))
                 .isNotEqualTo(ExplorePaint.statusGoldUnderH(0.8));
+        assertThat(ExplorePaint.STATUS_GOLD_GLOW).isEqualTo(ExplorePaint.MAP_FRAME_GLOW);
+        assertThat(ExplorePaint.statusGoldGlow(0)).isEqualTo(ExplorePaint.STATUS_GOLD_GLOW);
+        assertThat(ExplorePaint.statusGoldGlowAlpha(0)).isEqualTo(0.06f);
+        double lipPeak = ExplorePaint.STATUS_BREATH_MS / 2000.0;
+        assertThat(ExplorePaint.statusGoldGlow(lipPeak))
+                .isCloseTo(ExplorePaint.STATUS_GOLD_GLOW * (28f / 18f), within(1e-5f));
+        assertThat(ExplorePaint.statusGoldGlowAlpha(lipPeak)).isEqualTo(0.14f);
         assertThat(ExplorePaint.VIGNETTE_INSET).isGreaterThan(0f);
         assertThat(ExplorePaint.VIGNETTE_ALPHA).isGreaterThan(0f);
         assertThat(ExplorePaint.VIGNETTE_R).isEqualTo(ExplorePaint.HUD_VOID_RIM_R);
@@ -1661,6 +1668,8 @@ class ExplorePaintTest {
                 .isEqualTo(ExplorePaint.vignetteAlpha(0.4) * 0.5f);
         String host = Files.readString(Path.of(
                 "src/main/java/com/daedalus/explore/glfw/ExploreHost.java"));
+        assertThat(host).contains("ExplorePaint.statusGoldGlow(seconds)");
+        assertThat(host).contains("ExplorePaint.statusGoldGlowAlpha(seconds)");
         assertThat(host).contains("ExplorePaint.vignetteEdgeAlpha(seconds, 1f)");
         assertThat(host).contains("ExplorePaint.vignetteEdgeAlpha(seconds, 0f)");
         assertThat(host).doesNotContain(

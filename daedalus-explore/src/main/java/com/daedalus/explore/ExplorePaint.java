@@ -572,6 +572,22 @@ public final class ExplorePaint {
         double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
         return STATUS_GOLD_UNDER_H * (float) (0.88 + 0.24 * wave);
     }
+
+    /** Soft gold above the status lip — same reach as the automap halo. */
+    public static final float STATUS_GOLD_GLOW = MAP_FRAME_GLOW;
+
+    public static float statusGoldGlow(double seconds) {
+        double t = ((seconds * 1000.0) % STATUS_BREATH_MS) / STATUS_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return STATUS_GOLD_GLOW * (float) ((18.0 + 10.0 * wave) / 18.0);
+    }
+
+    /** Same 0.06↔0.14 band as the well stage glow. */
+    public static float statusGoldGlowAlpha(double seconds) {
+        double t = ((seconds * 1000.0) % STATUS_BREATH_MS) / STATUS_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return (float) (0.06 + 0.08 * wave);
+    }
     public static final double TORCH_REACH = 11.0;
     /** Torch-brown mix — same tokens as 2D fog {@code floorWarm} / {@code wallWarm}. */
     public static final float TORCH_FLOOR_WARM_R = 0x5c / 255f;

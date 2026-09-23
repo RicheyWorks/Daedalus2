@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore status halo.**
+  The status lip
+  fades in the same
+  gold as the well
+  stage. The corridor
+  meets the strip
+  without a hard cut.
+
 - **Explore portrait halo.**
   The mood face wears
   the same soft gold

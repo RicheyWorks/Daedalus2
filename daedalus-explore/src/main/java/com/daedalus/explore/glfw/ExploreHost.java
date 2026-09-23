@@ -632,6 +632,14 @@ public final class ExploreHost {
         fill(-aspect, top - ExplorePaint.statusGoldUnderH(seconds), aspect, top);
         glColor3f(lipInk[0], lipInk[1], lipInk[2]);
         fill(-aspect, top - ExplorePaint.statusGoldH(seconds), aspect, top);
+        float span = (float) aspect;
+        float glow = ExplorePaint.statusGoldGlow(seconds);
+        float glowA = ExplorePaint.statusGoldGlowAlpha(seconds);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        shadeBand(-span, top, span, top + glow, lipInk[0], lipInk[1], lipInk[2],
+                glowA, glowA, 0f, 0f);
+        glDisable(GL_BLEND);
         float faceLeft = (float) (-aspect + 0.04);
         float faceRight = faceLeft + 0.22f;
         float faceBot = bot + 0.03f;
