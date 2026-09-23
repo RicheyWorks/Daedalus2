@@ -642,8 +642,8 @@ public final class DesktopPaint {
     public static double compareOpeningPaintAlpha(double wave) {
         return COMPARE_OPENING_ALPHA * (0.85 + 0.30 * wave);
     }
-    /** Tip disc on each finished route — smaller than race so washes stay readable. */
-    public static final double COMPARE_HEAD_RADIUS = 0.28;
+    /** Tip disc on each finished route — same 0.3·cell as the well path head. */
+    public static final double COMPARE_HEAD_RADIUS = 0.3;
 
     /**
      * Every compare seat shares the 0.22 hall rim — leftover even ice

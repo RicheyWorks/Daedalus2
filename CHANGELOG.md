@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop compare tip.**
+  A hovered route head uses
+  the well path-head disc,
+  `0.3·cell`, so the tip
+  matches the solver.
+
 - **Desktop sanctuary rim.**
   The moss disc wears the
   well marker stroke,

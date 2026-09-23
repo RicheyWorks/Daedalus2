@@ -261,8 +261,9 @@ class DesktopPaintTest {
         assertThat(Integer.parseInt(DesktopPaint.COMPARE[5].substring(1, 3), 16))
                 .isGreaterThan(Integer.parseInt(DesktopPaint.COMPARE[5].substring(5, 7), 16));
         assertThat(DesktopPaint.COMPARE_HEAD_RADIUS)
-                .as("compare tips stay smaller than race heads")
-                .isLessThan(0.36);
+                .as("compare tips use the well path-head disc")
+                .isEqualTo(DesktopPaint.PATH_HEAD_RADIUS);
+        assertThat(DesktopPaint.COMPARE_HEAD_RADIUS).isNotEqualTo(0.28);
         assertThat(DesktopPaint.walkHead(List.of(new Point(0, 0), new Point(1, 2))))
                 .isEqualTo(new Point(1, 2));
     }
