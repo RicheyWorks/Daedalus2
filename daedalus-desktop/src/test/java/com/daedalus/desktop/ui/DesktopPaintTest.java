@@ -109,8 +109,10 @@ class DesktopPaintTest {
         DesktopPaint.Marker player = DesktopPaint.playerMarker(layout, new Point(0, 0));
         assertThat(head).isNotNull();
         assertThat(head.size())
-                .as("web head radius is 0.38·cell")
-                .isCloseTo(15.2, within(1e-9));
+                .as("web head radius is 0.3·cell")
+                .isCloseTo(12.0, within(1e-9));
+        assertThat(DesktopPaint.raceHeadMarker(layout, List.of(new Point(0, 0))).size())
+                .isEqualTo(head.size());
         assertThat(head.size()).isLessThan(player.size());
     }
 
@@ -1318,6 +1320,11 @@ class DesktopPaintTest {
                 .isGreaterThan(DesktopPaint.pathHeadGlowAlpha(0));
         assertThat(DesktopPaint.pathHeadGlowPadFraction(1))
                 .isGreaterThan(DesktopPaint.pathHeadGlowPadFraction(0));
+        assertThat(DesktopPaint.pathHeadGlowPadFraction(0))
+                .isCloseTo(0.22 / DesktopPaint.PATH_HEAD_RADIUS, within(1e-9));
+        assertThat(DesktopPaint.pathHeadGlowPadFraction(1))
+                .isCloseTo(0.26 / DesktopPaint.PATH_HEAD_RADIUS, within(1e-9));
+        assertThat(DesktopPaint.pathHeadGlowPadFraction(0)).isNotEqualTo(0.32);
         assertThat(DesktopPaint.pathHeadRimAlpha(1))
                 .isGreaterThan(DesktopPaint.pathHeadRimAlpha(0));
         assertThat(DesktopPaint.PATH_HEAD_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);

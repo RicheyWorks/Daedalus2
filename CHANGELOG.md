@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop route tip.**
+  Solver, tour, and race heads
+  use the well disc `0.3·cell`
+  and the pad `0.22 + 0.04·wave`.
+
 - **Desktop endpoint halo.**
   Start and goal use the
   well pad `0.22 + 0.04·wave`,

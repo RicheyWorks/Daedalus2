@@ -1774,11 +1774,11 @@ public final class DesktopPaint {
     }
 
     public static Marker pathHeadMarker(Layout layout, List<Point> path) {
-        return disc(layout, walkHead(path), 0.38);
+        return disc(layout, walkHead(path), PATH_HEAD_RADIUS);
     }
 
     public static Marker raceHeadMarker(Layout layout, List<Point> path) {
-        return disc(layout, walkHead(path), 0.36);
+        return pathHeadMarker(layout, path);
     }
 
     public static Marker playerMarker(Layout layout, Point player) {
@@ -1867,6 +1867,9 @@ public final class DesktopPaint {
     /** Living tip pulse — same cadence as victory / hunt loot. */
     public static final double PATH_HEAD_BREATH_MS = VICTORY_BREATH_MS;
 
+    /** Route tip disc — same 0.3·cell as the well path head. */
+    public static final double PATH_HEAD_RADIUS = 0.3;
+
     public static double pathHeadBreathWave(long nanos) {
         return victoryBreathWave(nanos);
     }
@@ -1884,7 +1887,7 @@ public final class DesktopPaint {
     }
 
     public static double pathHeadGlowPadFraction(double wave) {
-        return 0.32 + 0.08 * wave;
+        return (0.22 + 0.04 * wave) / PATH_HEAD_RADIUS;
     }
 
     public static double pathHeadRimAlpha(double wave) {
