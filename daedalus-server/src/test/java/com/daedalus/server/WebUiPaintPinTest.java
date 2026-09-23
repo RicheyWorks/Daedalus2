@@ -113,8 +113,10 @@ class WebUiPaintPinTest {
                     .contains("x='13' y='13' width='2' height='2' fill='%2318130e'")
                     .contains("x='15' y='15' width='2' height='2' fill='%23484339'")
                     .contains("x='23' y='11' width='2' height='2' fill='%23423c32'")
-                    .contains("x='7' y='11' width='2' height='2' fill='%233ee08f'")
-                    .contains("x='23' y='19' width='2' height='2' fill='%23ff5a5f'");
+                    .contains("x='7' y='11' width='2' height='2' fill='%233ab977'")
+                    .contains("x='23' y='19' width='2' height='2' fill='%23d44f51'")
+                    .doesNotContain("x='7' y='11' width='2' height='2' fill='%233ee08f'")
+                    .doesNotContain("x='23' y='19' width='2' height='2' fill='%23ff5a5f'");
         }
     }
 

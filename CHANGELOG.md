@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well tab gate.**
+  The tab icon's begin and exit
+  fall to #3ab977 and #d44f51,
+  the same chips as the taskbar
+  stamps. The mint and coral brands
+  stay on the page.
+
 - **Explore window-icon lip.**
   The taskbar stamp's rim is
   #996f31, the same stroke as
