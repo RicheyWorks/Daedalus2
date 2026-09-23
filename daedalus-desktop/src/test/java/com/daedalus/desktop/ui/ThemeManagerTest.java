@@ -342,6 +342,8 @@ class ThemeManagerTest {
         assertThat(src).contains("fillTracked(g, DesktopPaint.EMPTY_WORDMARK, cx, cy + 48, 28 * 0.22)");
         assertThat(src).contains("Stop(1, Color.web(DesktopPaint.emptyWordmarkGoldInk(), 0))");
         assertThat(src).doesNotContain("Color.web(\"#000000\", 0)");
+        assertThat(src).contains("g.setGlobalAlpha(1);\n                paintEndpoint(g, mark, DesktopPaint.EMPTY_MARK_START,");
+        assertThat(src).doesNotContain("setGlobalAlpha(0.78)");
         assertThat(src).doesNotContain("g.fillText(DesktopPaint.EMPTY_WORDMARK, cx, cy + 48)");
         assertThat(src).contains("Font.font(\"Bahnschrift\", FontWeight.NORMAL, 13)");
         assertThat(src).contains("paintEmptyVoid(g, w, h, wave);");

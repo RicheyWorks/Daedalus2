@@ -1910,7 +1910,7 @@ public class MainController {
                             Color.web(DesktopPaint.emptyMarkFloorHiInk(
                                     tile.tileRow(), tile.tileCol())));
                 }
-                g.setGlobalAlpha(0.78);
+                g.setGlobalAlpha(1);
                 paintEndpoint(g, mark, DesktopPaint.EMPTY_MARK_START,
                         Color.web(DesktopPaint.startInk(DesktopPaint.floorEdge(mark,
                                 2 * DesktopPaint.EMPTY_MARK_START.row() + 1,

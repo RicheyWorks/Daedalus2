@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop idle discs.**
+  The empty-well start
+  and goal sit at the
+  marker’s own strength,
+  the same as the well.
+
 - **Desktop stage seat.**
   The pane under the
   maze is the well
