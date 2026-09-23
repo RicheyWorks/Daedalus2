@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore automap pocket breath.**
+  The inset center lifts toward
+  `#1a1510` on the same 4.5s
+  void wash as the status strip.
+  The rim stays `#0c0908`.
+
 - **Well gate wash.**
   The entry page rests on
   `#16120e`, the same void

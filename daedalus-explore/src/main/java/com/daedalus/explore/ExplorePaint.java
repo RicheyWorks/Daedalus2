@@ -484,6 +484,10 @@ public final class ExplorePaint {
 
     /** Mid pocket at 0, well-void rim at 1 so leftover flat inset is not the last word. */
     public static void mapPocketTint(float edge, float[] rgb) {
+        mapPocketTint(edge, rgb, 0);
+    }
+
+    public static void mapPocketTint(float edge, float[] rgb, double seconds) {
         if (rgb == null || rgb.length < 3) {
             return;
         }
@@ -491,6 +495,10 @@ public final class ExplorePaint {
         rgb[0] = MAP_POCKET_R + (MAP_POCKET_RIM_R - MAP_POCKET_R) * t;
         rgb[1] = MAP_POCKET_G + (MAP_POCKET_RIM_G - MAP_POCKET_G) * t;
         rgb[2] = MAP_POCKET_B + (MAP_POCKET_RIM_B - MAP_POCKET_B) * t;
+        float wave = hudVoidWave(seconds) * (1f - t);
+        rgb[0] += (HUD_VOID_LIT_R - rgb[0]) * wave;
+        rgb[1] += (HUD_VOID_LIT_G - rgb[1]) * wave;
+        rgb[2] += (HUD_VOID_LIT_B - rgb[2]) * wave;
     }
     /** Gold lip — same ink as the automap frame. */
     public static final float STATUS_GOLD_R = 0.72f;

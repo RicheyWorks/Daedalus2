@@ -776,7 +776,7 @@ public final class ExploreHost {
         glColor3f(ExplorePaint.STATUS_GOLD_UNDER_R, ExplorePaint.STATUS_GOLD_UNDER_G,
                 ExplorePaint.STATUS_GOLD_UNDER_B);
         fill(left - frameIn, bot - frameIn, right + frameIn, top + frameIn);
-        fillPocket(left, bot, right, top);
+        fillPocket(left, bot, right, top, seconds);
         double sx = (right - left) / ExplorePaint.MAP;
         double sy = (top - bot) / ExplorePaint.MAP;
         glBegin(GL_QUADS);
@@ -897,11 +897,11 @@ public final class ExploreHost {
         fillWell(x0, y0, x1, y1, mid, rim);
     }
 
-    private static void fillPocket(double x0, double y0, double x1, double y1) {
+    private static void fillPocket(double x0, double y0, double x1, double y1, double seconds) {
         float[] mid = new float[3];
         float[] rim = new float[3];
-        ExplorePaint.mapPocketTint(0, mid);
-        ExplorePaint.mapPocketTint(1, rim);
+        ExplorePaint.mapPocketTint(0, mid, seconds);
+        ExplorePaint.mapPocketTint(1, rim, seconds);
         fillWell(x0, y0, x1, y1, mid, rim);
     }
 
