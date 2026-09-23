@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well stage inset.**
+  The board's inner shade uses
+  the page void `#0c0908`, so
+  the maze sinks into that dark.
+
 - **Explore portrait pupils.**
   The eyes use the well wall
   `#120e0c`, so the gaze sits

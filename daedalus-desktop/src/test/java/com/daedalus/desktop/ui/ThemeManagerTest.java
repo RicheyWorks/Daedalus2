@@ -61,7 +61,8 @@ class ThemeManagerTest {
             assertThat(css).contains(".status-bar");
             assertThat(css)
                     .as("desktop well wears the same inset void shade as web #stage")
-                    .contains("innershadow(gaussian, rgba(0, 0, 0, 0.35), 48");
+                    .contains("innershadow(gaussian, rgba(12, 9, 8, 0.35), 48")
+                    .doesNotContain("innershadow(gaussian, rgba(0, 0, 0, 0.35), 48");
             assertThat(css)
                     .as("void hairline wraps the gold lip, same ring as the well stage")
                     .contains("-fx-border-color: rgba(16, 11, 8, 0.95), rgba(153, 111, 49, 0.55);")

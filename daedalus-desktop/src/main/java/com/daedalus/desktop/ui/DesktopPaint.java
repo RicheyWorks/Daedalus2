@@ -293,6 +293,11 @@ public final class DesktopPaint {
     public static final String WELL_VOID_EDGE = "#0c0908";
     /** Peak mid-glow of the void pocket — same lift as web {@code stageRimBreath}. */
     public static final String WELL_VOID_CENTER_LIT = "#1a1510";
+    /** Stage inset — same page void as {@link #WELL_VOID_EDGE}. */
+    public static final int CANVAS_INSET_R = 0x0c;
+    public static final int CANVAS_INSET_G = 0x09;
+    public static final int CANVAS_INSET_B = 0x08;
+    public static final double CANVAS_INSET_A = 0.35;
 
     public static String wellVoidCenterInk(double wave) {
         return mixHex(WELL_VOID_CENTER, WELL_VOID_CENTER_LIT, Math.max(0, Math.min(1, wave)));

@@ -655,6 +655,11 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.WELL_VOID_CENTER).isEqualTo("#16120e");
         assertThat(DesktopPaint.WELL_VOID_EDGE).isEqualTo("#0c0908");
         assertThat(DesktopPaint.WELL_VOID_CENTER_LIT).isEqualTo("#1a1510");
+        assertThat(DesktopPaint.CANVAS_INSET_R).isEqualTo(0x0c);
+        assertThat(DesktopPaint.CANVAS_INSET_G).isEqualTo(0x09);
+        assertThat(DesktopPaint.CANVAS_INSET_B).isEqualTo(0x08);
+        assertThat(DesktopPaint.CANVAS_INSET_A).isEqualTo(0.35);
+        assertThat(DesktopPaint.CANVAS_INSET_R).isNotEqualTo(0);
         assertThat(Integer.parseInt(DesktopPaint.WELL_VOID_CENTER.substring(1, 3), 16))
                 .isGreaterThan(Integer.parseInt(DesktopPaint.WELL_VOID_CENTER.substring(5, 7), 16));
         assertThat(DesktopPaint.wellVoidCenterInk(0)).isEqualTo(DesktopPaint.WELL_VOID_CENTER);

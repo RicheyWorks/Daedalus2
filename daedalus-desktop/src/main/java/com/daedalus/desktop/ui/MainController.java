@@ -1734,7 +1734,8 @@ public class MainController {
                         new javafx.geometry.Insets(1))));
         var inset = new javafx.scene.effect.InnerShadow();
         inset.setRadius(48);
-        inset.setColor(Color.rgb(0, 0, 0, 0.35));
+        inset.setColor(Color.rgb(DesktopPaint.CANVAS_INSET_R, DesktopPaint.CANVAS_INSET_G,
+                DesktopPaint.CANVAS_INSET_B, DesktopPaint.CANVAS_INSET_A));
         var glow = new javafx.scene.effect.DropShadow();
         glow.setRadius(DesktopPaint.canvasRimGlowRadius(wave));
         glow.setColor(Color.web(DesktopPaint.canvasRimInk(),

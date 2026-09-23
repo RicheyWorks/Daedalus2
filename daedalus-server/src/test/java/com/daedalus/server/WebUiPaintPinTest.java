@@ -257,6 +257,8 @@ class WebUiPaintPinTest {
                     .contains("0 0 18px rgba(153, 111, 49, 0.06)")
                     .contains("border-color: rgba(153, 111, 49, 0.72)")
                     .contains("0 0 28px rgba(153, 111, 49, 0.14)")
+                    .contains("inset 0 0 48px rgba(12, 9, 8, .35)")
+                    .doesNotContain("inset 0 0 48px rgba(0, 0, 0, .35)")
                     .contains("border: 1px solid rgba(153, 111, 49, 0.55)")
                     .doesNotContain("0 0 18px rgba(184, 133, 56, 0.06)")
                     .doesNotContain("0 0 28px rgba(184, 133, 56, 0.14)");
