@@ -354,6 +354,11 @@ class DesktopPaintTest {
                 .as("web worst-served ring is 0.36·cell")
                 .isEqualTo(layout.cellSize() * 0.36);
         assertThat(lonely.width()).isEqualTo(Math.max(1.5, layout.cellSize() * 0.16));
+        DesktopPaint.Layout crisp = DesktopPaint.Layout.fit(3, 3, 9, 9);
+        assertThat(DesktopPaint.ringStroke(6, 0.08)).isEqualTo(1.5);
+        assertThat(DesktopPaint.worstServedRing(crisp, new Point(0, 0), 0, 2).width())
+                .as("1.5 bitmap pixels is 0.75 CSS at scale 2, under the 0.16·cell stroke")
+                .isCloseTo(0.96, within(1e-9));
         assertThat(DesktopPaint.SANCTUARY_BREATH_MS).isEqualTo(DesktopPaint.EMPTY_BREATH_MS);
         assertThat(DesktopPaint.sanctuaryRing(layout, new Point(0, 0), 1).radius())
                 .isGreaterThan(DesktopPaint.sanctuaryRing(layout, new Point(0, 0)).radius());

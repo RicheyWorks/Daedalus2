@@ -2150,7 +2150,7 @@ public class MainController {
                                 DesktopPaint.floorEdge(layout,
                                         2 * tip.row() + 1, 2 * tip.col() + 1)));
                 double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
-                paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
+                paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave, g.getTransform().getMyy()),
                         ink.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
                 paintPathHeadDisc(g, DesktopPaint.disc(layout, tip, DesktopPaint.COMPARE_HEAD_RADIUS),
                         ink, tipWave);
@@ -2173,7 +2173,7 @@ public class MainController {
             Color ice = Color.web(tip == null ? "#7997cc"
                     : DesktopPaint.walkTrailInk(DesktopPaint.PATH,
                             DesktopPaint.floorEdge(layout, 2 * tip.row() + 1, 2 * tip.col() + 1)));
-            paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
+            paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave, g.getTransform().getMyy()),
                     ice.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
             paintPathHeadDisc(g, DesktopPaint.pathHeadMarker(layout, currentPath), ice,
                     tipWave);
@@ -2194,7 +2194,7 @@ public class MainController {
                             halo.radius() * 2, halo.radius() * 2);
                     g.setGlobalAlpha(1);
                 }
-                paintRing(g, DesktopPaint.chokeRing(layout, passage),
+                paintRing(g, DesktopPaint.chokeRing(layout, passage, g.getTransform().getMyy()),
                         choke.deriveColor(0, 1, 1, DesktopPaint.chokeRingAlpha(cutsWave)));
             }
             for (Point end : currentCuts.deadEnds()) {
@@ -2239,11 +2239,13 @@ public class MainController {
                     g.setLineWidth(discLine(g, core.size(), DesktopPaint.SANCTUARY_RADIUS));
                     g.strokeOval(core.x(), core.y(), core.size(), core.size());
                 }
-                paintRing(g, DesktopPaint.sanctuaryRing(layout, safe, safeWave),
+                paintRing(g, DesktopPaint.sanctuaryRing(layout, safe, safeWave,
+                        g.getTransform().getMyy()),
                         mint.deriveColor(0, 1, 1, DesktopPaint.sanctuaryRingAlpha(safeWave)));
             }
             Point lonely = currentSanctuaries.worstServed();
-            paintRing(g, DesktopPaint.worstServedRing(layout, lonely, safeWave),
+            paintRing(g, DesktopPaint.worstServedRing(layout, lonely, safeWave,
+                    g.getTransform().getMyy()),
                     Color.web(lonely == null ? DesktopPaint.WORST_SERVED
                                     : DesktopPaint.hotspotInk(DesktopPaint.floorEdge(layout,
                                             2 * lonely.row() + 1, 2 * lonely.col() + 1)))
@@ -2259,7 +2261,7 @@ public class MainController {
             Color gold = Color.web(tip == null ? "#c6a441"
                     : DesktopPaint.walkTrailInk(DesktopPaint.HARDEST,
                             DesktopPaint.floorEdge(layout, 2 * tip.row() + 1, 2 * tip.col() + 1)));
-            paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
+            paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave, g.getTransform().getMyy()),
                     gold.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
             paintPathHeadDisc(g, DesktopPaint.disc(layout, tip, 0.3), gold, tipWave);
         }
@@ -2272,7 +2274,7 @@ public class MainController {
             Color amber = Color.web(tip == null ? "#af9158"
                     : DesktopPaint.walkTrailInk(DesktopPaint.TOUR,
                             DesktopPaint.floorEdge(layout, 2 * tip.row() + 1, 2 * tip.col() + 1)));
-            paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
+            paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave, g.getTransform().getMyy()),
                     amber.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
             paintPathHeadDisc(g, DesktopPaint.disc(layout, tip, 0.3), amber, tipWave);
         }
@@ -2605,7 +2607,7 @@ public class MainController {
             Color tipInk = tip == null ? laneColor
                     : Color.web(DesktopPaint.walkTrailInk(lane.color(),
                             DesktopPaint.floorEdge(layout, 2 * tip.row() + 1, 2 * tip.col() + 1)));
-            paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave),
+            paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave, g.getTransform().getMyy()),
                     tipInk.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
             paintPathHeadDisc(g, DesktopPaint.disc(layout, tip, 0.3), tipInk, tipWave);
         }
@@ -2618,7 +2620,7 @@ public class MainController {
             Color headInk = head == null ? laneColor
                     : Color.web(DesktopPaint.walkTrailInk(lane.color(),
                             DesktopPaint.floorEdge(layout, 2 * head.row() + 1, 2 * head.col() + 1)));
-            paintRing(g, DesktopPaint.pathHeadHalo(layout, head, headWave),
+            paintRing(g, DesktopPaint.pathHeadHalo(layout, head, headWave, g.getTransform().getMyy()),
                     headInk.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(headWave)));
             paintPathHeadDisc(g, DesktopPaint.raceHeadMarker(layout, ribbon), headInk, headWave);
         }
@@ -2626,7 +2628,8 @@ public class MainController {
 
     private static void paintDiamond(GraphicsContext g, DesktopPaint.Layout layout, Point cell,
                                      boolean collected) {
-        DesktopPaint.Diamond diamond = DesktopPaint.waypointDiamond(layout, cell);
+        DesktopPaint.Diamond diamond = DesktopPaint.waypointDiamond(layout, cell,
+                g.getTransform().getMyy());
         if (diamond == null || layout == null || cell == null) {
             return;
         }
@@ -2811,7 +2814,7 @@ public class MainController {
         }
         double wave = DesktopPaint.endpointBreathWave(System.nanoTime());
         paintDisc(g, DesktopPaint.endpointMarker(layout, cell), color, wave);
-        paintRing(g, DesktopPaint.endpointRing(layout, cell, wave),
+        paintRing(g, DesktopPaint.endpointRing(layout, cell, wave, g.getTransform().getMyy()),
                 color.deriveColor(0, 1, 1, DesktopPaint.endpointRingAlpha(wave)));
     }
 

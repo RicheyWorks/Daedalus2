@@ -594,6 +594,16 @@ public final class DesktopPaint {
         }
         return Math.max(min, diameter * cellFraction / (2.0 * radiusFrac));
     }
+
+    /** Halo / place ring — {@code Math.max(1.5, geom.cell * fraction)} in bitmap pixels. */
+    public static double ringStroke(double cell, double fraction) {
+        return ringStroke(cell, fraction, 1);
+    }
+
+    public static double ringStroke(double cell, double fraction, double scale) {
+        return Math.max(1.5 * devicePx(scale), cell * fraction);
+    }
+
     /** Search wash — same alphas as {@code draw.js} expansions. */
     public static final double EXPANSION_ALPHA = 0.16;
     /** Openings louder than cells — same idea as Compare, quieter than the ribbon. */
@@ -1554,6 +1564,10 @@ public final class DesktopPaint {
     }
 
     public static Ring chokeRing(Layout layout, MazeFlow.Passage passage) {
+        return chokeRing(layout, passage, 1);
+    }
+
+    public static Ring chokeRing(Layout layout, MazeFlow.Passage passage, double scale) {
         ChokeMark mark = chokeMark(layout, passage);
         if (layout == null || mark == null) {
             return null;
@@ -1561,7 +1575,7 @@ public final class DesktopPaint {
         double cx = mark.x() + mark.w() / 2.0;
         double cy = mark.y() + mark.h() / 2.0;
         double core = Math.max(mark.w(), mark.h()) * CHOKE_CORE;
-        return new Ring(cx, cy, core, Math.max(1.5, layout.cellSize() * 0.1));
+        return new Ring(cx, cy, core, ringStroke(layout.cellSize(), 0.1, scale));
     }
 
     public static Marker deadEndMarker(Layout layout, Point cell) {
@@ -1647,13 +1661,17 @@ public final class DesktopPaint {
     }
 
     public static Diamond waypointDiamond(Layout layout, Point cell) {
+        return waypointDiamond(layout, cell, 1);
+    }
+
+    public static Diamond waypointDiamond(Layout layout, Point cell, double scale) {
         if (layout == null || cell == null) {
             return null;
         }
         double cx = layout.x(2 * cell.col() + 1) + layout.cellSize() / 2.0;
         double cy = layout.y(2 * cell.row() + 1) + layout.cellSize() / 2.0;
         return new Diamond(cx, cy, layout.cellSize() * 0.3,
-                Math.max(1.5, layout.cellSize() * 0.09));
+                ringStroke(layout.cellSize(), 0.09, scale));
     }
 
     /** Sanctuary disc — same 0.32·cell as the well marker. */
@@ -1709,13 +1727,17 @@ public final class DesktopPaint {
     }
 
     public static Ring sanctuaryRing(Layout layout, Point cell, double wave) {
+        return sanctuaryRing(layout, cell, wave, 1);
+    }
+
+    public static Ring sanctuaryRing(Layout layout, Point cell, double wave, double scale) {
         if (layout == null || cell == null) {
             return null;
         }
         double cx = layout.x(2 * cell.col() + 1) + layout.cellSize() / 2.0;
         double cy = layout.y(2 * cell.row() + 1) + layout.cellSize() / 2.0;
         return new Ring(cx, cy, layout.cellSize() * sanctuaryRingRadius(wave),
-                Math.max(1.5, layout.cellSize() * 0.08));
+                ringStroke(layout.cellSize(), 0.08, scale));
     }
 
     public static Ring worstServedRing(Layout layout, Point cell) {
@@ -1723,13 +1745,17 @@ public final class DesktopPaint {
     }
 
     public static Ring worstServedRing(Layout layout, Point cell, double wave) {
+        return worstServedRing(layout, cell, wave, 1);
+    }
+
+    public static Ring worstServedRing(Layout layout, Point cell, double wave, double scale) {
         if (layout == null || cell == null) {
             return null;
         }
         double cx = layout.x(2 * cell.col() + 1) + layout.cellSize() / 2.0;
         double cy = layout.y(2 * cell.row() + 1) + layout.cellSize() / 2.0;
         return new Ring(cx, cy, layout.cellSize() * worstServedRingRadius(wave),
-                Math.max(1.5, layout.cellSize() * 0.16));
+                ringStroke(layout.cellSize(), 0.16, scale));
     }
 
     /** The cell that owns the covering radius — same scan as the web topography note. */
@@ -1922,13 +1948,17 @@ public final class DesktopPaint {
     }
 
     public static Ring endpointRing(Layout layout, Point cell, double wave) {
+        return endpointRing(layout, cell, wave, 1);
+    }
+
+    public static Ring endpointRing(Layout layout, Point cell, double wave, double scale) {
         if (layout == null || cell == null) {
             return null;
         }
         double cx = layout.x(2 * cell.col() + 1) + layout.cellSize() / 2.0;
         double cy = layout.y(2 * cell.row() + 1) + layout.cellSize() / 2.0;
         return new Ring(cx, cy, layout.cellSize() * endpointRingRadius(wave),
-                Math.max(1.5, layout.cellSize() * 0.09));
+                ringStroke(layout.cellSize(), 0.09, scale));
     }
 
     /** Same 4.5s cadence as empty / gate breath. */
@@ -1998,13 +2028,17 @@ public final class DesktopPaint {
     }
 
     public static Ring pathHeadHalo(Layout layout, Point cell, double wave) {
+        return pathHeadHalo(layout, cell, wave, 1);
+    }
+
+    public static Ring pathHeadHalo(Layout layout, Point cell, double wave, double scale) {
         if (layout == null || cell == null) {
             return null;
         }
         double cx = layout.x(2 * cell.col() + 1) + layout.cellSize() / 2.0;
         double cy = layout.y(2 * cell.row() + 1) + layout.cellSize() / 2.0;
         return new Ring(cx, cy, layout.cellSize() * pathHeadHaloRadius(wave),
-                Math.max(1.5, layout.cellSize() * 0.1));
+                ringStroke(layout.cellSize(), 0.1, scale));
     }
 
     /** Soft gold wash under the victory stroke — same pad as {@code draw.js}. */

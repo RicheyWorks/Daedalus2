@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop ring stroke.**
+  Place rings, route
+  halos, choke rings,
+  and collected
+  waypoints floor at
+  1.5 bitmap pixels,
+  the same minimum as
+  `draw.js`.
+
 - **Desktop disc rim.**
   A thin disc stroke
   floors at one bitmap
