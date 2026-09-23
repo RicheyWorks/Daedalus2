@@ -1107,14 +1107,26 @@ public final class ExplorePaint {
     }
 
     /** Unshaded portrait texel. Cell edges mix so the bezel meets the skin. */
+    /** Unshaded portrait texel. Cell edges mix, and a corner meets both neighbors. */
     public static int[] faceTexColor(int x, int y, int mood) {
         int grim = Math.max(0, Math.min(2, mood));
         int[] here = faceCell(x, y, grim);
+        boolean east = (x & 7) == 7 && x + 1 < TEX;
+        boolean south = (y & 7) == 7 && y + 1 < TEX;
+        if (east && south) {
+            int[] right = faceCell(x + 1, y, grim);
+            int[] down = faceCell(x, y + 1, grim);
+            int[] diag = faceCell(x + 1, y + 1, grim);
+            return new int[] {
+                    (here[0] + right[0] + down[0] + diag[0]) / 4,
+                    (here[1] + right[1] + down[1] + diag[1]) / 4,
+                    (here[2] + right[2] + down[2] + diag[2]) / 4};
+        }
         int nx = x;
         int ny = y;
-        if ((x & 7) == 7 && x + 1 < TEX) {
+        if (east) {
             nx = x + 1;
-        } else if ((y & 7) == 7 && y + 1 < TEX) {
+        } else if (south) {
             ny = y + 1;
         } else {
             return here;

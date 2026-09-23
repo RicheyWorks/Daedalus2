@@ -1102,6 +1102,10 @@ class ExplorePaintTest {
         int[] bezel = ExplorePaint.faceTexColor(7, 16, 0);
         int[] cheek = ExplorePaint.faceTexColor(8, 16, 0);
         assertThat(bezel[0]).isEqualTo((ExplorePaint.FACE_FRAME_R + cheek[0]) / 2);
+        int[] corner = ExplorePaint.faceTexColor(7, 15, 0);
+        int cornerRed = (ExplorePaint.FACE_FRAME_R + ExplorePaint.FACE_BROW_R
+                + ExplorePaint.FACE_FRAME_R + 186) / 4;
+        assertThat(corner[0]).isEqualTo(cornerRed);
         assertThat(ExplorePaint.faceTexColor(24, 16, 0)[0]).isEqualTo(186);
         int eye = (24 * ExplorePaint.TEX + 16) * 4;
         assertThat(Byte.toUnsignedInt(calm[eye])).isEqualTo(ExplorePaint.FACE_EYE_R);

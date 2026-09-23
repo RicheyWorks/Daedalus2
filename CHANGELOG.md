@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore portrait corner.**
+  A bezel corner mixes
+  with both neighbors
+  and the diagonal.
+  The frame no longer
+  steps into the cheek.
+
 - **Explore floor lip.**
   The row above the
   paver shine mixes
