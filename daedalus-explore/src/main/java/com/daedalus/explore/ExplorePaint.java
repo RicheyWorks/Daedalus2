@@ -2380,7 +2380,8 @@ public final class ExplorePaint {
      */
     public static final float BLOCK_PAD_R = 0.72f;
     public static final float PLACE_PAD_Y = 0.02f;
-    public static final int PLACE_PAD_SEGS = 12;
+    /** Same roundness as the lamp wash, so the floor disc is not a 12-gon. */
+    public static final int PLACE_PAD_SEGS = BLOOM_SEGS;
     public static final float PLACE_PAD_DIM = 0.42f;
     /** Corridor place-pad breath — same cadence as automap HERE. */
     public static final float PLACE_PAD_BREATH_MS = MAP_HERE_BREATH_MS;

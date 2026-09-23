@@ -401,7 +401,7 @@ class ExplorePaintTest {
                 .as("story pad falls off toward floor-dim at the board rim")
                 .isLessThan(pad[0] + pad[1] + pad[2]);
         assertThat(ExplorePaint.PLACE_PAD_R).isGreaterThan(0.3f);
-        assertThat(ExplorePaint.PLACE_PAD_SEGS).isGreaterThanOrEqualTo(8);
+        assertThat(ExplorePaint.PLACE_PAD_SEGS).isEqualTo(ExplorePaint.BLOOM_SEGS);
         assertThat(ExplorePaint.PLACE_PAD_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
         assertThat(ExplorePaint.placePadDim(0.1))
                 .isNotEqualTo(ExplorePaint.placePadDim(0.8));

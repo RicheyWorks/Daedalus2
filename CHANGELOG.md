@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore floor pads.**
+  Story and cube pads
+  use the lamp's
+  round wash. The
+  disc on the stone
+  is no longer a
+  twelve-sided coin.
+
 - **Desktop stage halo.**
   The gold glow sits
   outside the rounded
