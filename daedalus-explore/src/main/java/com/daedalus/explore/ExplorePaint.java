@@ -896,20 +896,21 @@ public final class ExplorePaint {
     private static int[] floorSeam(int x, int y, int[] here) {
         int lx = Math.floorMod(x, 8);
         int ly = Math.floorMod(y, 8);
-        int nx = x;
-        int ny = y;
-        if (lx == 0) {
-            nx = x - 1;
-        } else if (lx == 7) {
-            nx = x + 1;
-        } else if (ly == 0) {
-            ny = y - 1;
-        } else if (ly == 7) {
-            ny = y + 1;
-        } else {
+        int hx = lx == 0 ? x - 1 : lx == 7 ? x + 1 : x;
+        int hy = ly == 0 ? y - 1 : ly == 7 ? y + 1 : y;
+        if (hx != x && hy != y) {
+            int[] side = floorPaver(hx, y);
+            int[] down = floorPaver(x, hy);
+            int[] diag = floorPaver(hx, hy);
+            return new int[] {
+                    (here[0] + side[0] + down[0] + diag[0]) / 4,
+                    (here[1] + side[1] + down[1] + diag[1]) / 4,
+                    (here[2] + side[2] + down[2] + diag[2]) / 4};
+        }
+        if (hx == x && hy == y) {
             return here;
         }
-        int[] next = floorPaver(nx, ny);
+        int[] next = floorPaver(hx, hy);
         return new int[] {
                 (here[0] + next[0]) / 2,
                 (here[1] + next[1]) / 2,

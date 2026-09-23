@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore paver corner.**
+  A floor corner mixes
+  with both neighbors
+  and the diagonal.
+  Warm stone no longer
+  steps into the next
+  paver.
+
 - **Explore portrait corner.**
   A bezel corner mixes
   with both neighbors
