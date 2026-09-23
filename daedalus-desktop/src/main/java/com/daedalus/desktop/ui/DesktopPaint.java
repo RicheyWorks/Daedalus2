@@ -2054,14 +2054,23 @@ public final class DesktopPaint {
         return victoryRing(layout, goal, 0);
     }
 
+    /** Victory ring — {@code Math.max(2, geom.wall)} in bitmap pixels. */
+    public static double victoryStroke(double wall, double scale) {
+        return Math.max(2.0 * devicePx(scale), wall);
+    }
+
     public static Ring victoryRing(Layout layout, Point goal, double wave) {
+        return victoryRing(layout, goal, wave, 1);
+    }
+
+    public static Ring victoryRing(Layout layout, Point goal, double wave, double scale) {
         if (layout == null || goal == null) {
             return null;
         }
         double cx = layout.x(2 * goal.col() + 1) + layout.cellSize() / 2.0;
         double cy = layout.y(2 * goal.row() + 1) + layout.cellSize() / 2.0;
         return new Ring(cx, cy, layout.cellSize() * victoryRingRadius(wave),
-                Math.max(2.0, layout.wall()));
+                victoryStroke(layout.wall(), scale));
     }
 
     /**

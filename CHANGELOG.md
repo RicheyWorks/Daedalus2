@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop victory ring.**
+  The win stroke floors
+  at two bitmap pixels,
+  the same minimum as
+  `draw.js`.
+
 - **Desktop ring stroke.**
   Place rings, route
   halos, choke rings,

@@ -1043,6 +1043,12 @@ class DesktopPaintTest {
                 .isEqualTo(layout.cellSize() * 0.7);
         assertThat(ring.radius() * 2).isGreaterThan(goal.size());
         assertThat(ring.width()).isEqualTo(Math.max(2.0, layout.wall()));
+        DesktopPaint.Layout thin = DesktopPaint.Layout.fit(3, 3, 6, 6);
+        assertThat(thin.wall()).isEqualTo(1.0);
+        assertThat(DesktopPaint.victoryRing(thin, new Point(0, 0)).width()).isEqualTo(2.0);
+        assertThat(DesktopPaint.victoryRing(thin, new Point(0, 0), 0, 2).width())
+                .as("two bitmap pixels is one CSS pixel at scale 2")
+                .isEqualTo(1.0);
         DesktopPaint.Marker glow = DesktopPaint.victoryGlow(layout, new Point(0, 0));
         assertThat(glow).isNotNull();
         assertThat(glow.size())

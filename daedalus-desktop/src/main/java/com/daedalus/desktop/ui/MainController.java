@@ -2682,7 +2682,7 @@ public class MainController {
             g.fillOval(glow.x(), glow.y(), glow.size(), glow.size());
             g.setGlobalAlpha(1);
         }
-        paintRing(g, DesktopPaint.victoryRing(layout, goal, wave), ink);
+        paintRing(g, DesktopPaint.victoryRing(layout, goal, wave, g.getTransform().getMyy()), ink);
     }
 
     private static void paintGhostDisc(GraphicsContext g, DesktopPaint.Layout layout, Point cell) {
