@@ -216,15 +216,15 @@
                 </Label>
                 <Label fx:id="legendHotspot" text="hot spot" managed="false" visible="false">
                     <graphic>
-                        <Rectangle width="10" height="10" opacity="0.5"
+                        <Rectangle width="10" height="10"
                                    stroke="rgba(188,64,65,0.35)" strokeWidth="1.5"
                                    arcWidth="6" arcHeight="6">
                             <fill>
                                 <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
                                                 proportional="true">
                                     <stops>
-                                        <Stop offset="0.28" color="#bc4041"/>
-                                        <Stop offset="1.0" color="#6a2024"/>
+                                        <Stop offset="0.28" color="rgba(188,64,65,0.5)"/>
+                                        <Stop offset="1.0" color="rgba(106,32,36,0.5)"/>
                                     </stops>
                                 </RadialGradient>
                             </fill>

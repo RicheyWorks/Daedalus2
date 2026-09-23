@@ -447,8 +447,9 @@ class ThemeManagerTest {
                     .as("hotspot coral rim falls off toward floor-dim")
                     .contains("fx:id=\"legendHotspot\"")
                     .contains("stroke=\"rgba(188,64,65,0.35)\"")
-                    .contains("opacity=\"0.5\"")
-                    .contains("color=\"#bc4041\"")
+                    .contains("color=\"rgba(188,64,65,0.5)\"")
+                    .contains("color=\"rgba(106,32,36,0.5)\"")
+                    .doesNotContain("opacity=\"0.5\"")
                     .doesNotContain("stroke=\"rgba(229,72,77,0.35)\"")
                     .as("KEEP leftover even lens coral stays")
                     .contains("color=\"#e5484d\"");

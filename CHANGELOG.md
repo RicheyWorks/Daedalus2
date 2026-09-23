@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop hotspot key.**
+  The hot-spot swatch keeps
+  a half-coral fill and a
+  full `0.35` coral ring,
+  the same chip as the well
+  legend.
+
 - **Desktop idle void.**
   The empty well breathes
   on the maze circle,
