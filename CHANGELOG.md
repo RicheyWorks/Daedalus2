@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore lamp wash.**
+  The bloom behind the torch
+  uses the calm flame, so the
+  wash and the resting fire
+  are one color.
+
 - **Explore portrait bezel.**
   The mood-face frame uses the
   well wall-warm `#2a2218`, the

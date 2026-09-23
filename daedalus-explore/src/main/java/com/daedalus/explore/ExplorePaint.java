@@ -607,9 +607,13 @@ public final class ExplorePaint {
     public record TorchBloom(float x, float y, float rx, float ry, float a) {
     }
 
-    public static final float BLOOM_R = 1.00f;
-    public static final float BLOOM_G = 0.62f;
-    public static final float BLOOM_B = 0.22f;
+    /** Resting lamp — calm hand flame, and the wash behind it. */
+    public static final float FLAME_CALM_R = 0.98f;
+    public static final float FLAME_CALM_G = 0.78f;
+    public static final float FLAME_CALM_B = 0.28f;
+    public static final float BLOOM_R = FLAME_CALM_R;
+    public static final float BLOOM_G = FLAME_CALM_G;
+    public static final float BLOOM_B = FLAME_CALM_B;
     public static final float BLOOM_RX = 0.18f;
     public static final float BLOOM_RY = 0.22f;
     /** Fist and shaft catch the flame so the HUD lamp lights the hand, not just the air. */
@@ -1867,7 +1871,7 @@ public final class ExplorePaint {
                 } else if (grim == 1) {
                     set(rgb, 0.95f, 0.62f, 0.22f);
                 } else {
-                    set(rgb, 0.98f, 0.78f, 0.28f);
+                    set(rgb, FLAME_CALM_R, FLAME_CALM_G, FLAME_CALM_B);
                 }
                 float flick = flameFlicker(seconds);
                 rgb[0] = Math.min(1f, rgb[0] * flick);

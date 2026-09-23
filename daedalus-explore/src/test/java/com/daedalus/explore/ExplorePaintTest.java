@@ -1723,6 +1723,10 @@ class ExplorePaintTest {
         assertThat(bobbed.y()).isGreaterThan(bloom.y());
         assertThat(ExplorePaint.BLOOM_R).isGreaterThan(ExplorePaint.BLOOM_G);
         assertThat(ExplorePaint.BLOOM_G).isGreaterThan(ExplorePaint.BLOOM_B);
+        assertThat(ExplorePaint.BLOOM_R).isEqualTo(ExplorePaint.FLAME_CALM_R);
+        assertThat(ExplorePaint.BLOOM_G).isEqualTo(ExplorePaint.FLAME_CALM_G);
+        assertThat(ExplorePaint.BLOOM_B).isEqualTo(ExplorePaint.FLAME_CALM_B);
+        assertThat(ExplorePaint.BLOOM_G).isNotEqualTo(0.62f);
         List<ExplorePaint.TorchBloom> wash = ExplorePaint.torchBloomWash(1.6, 0, 0.1);
         assertThat(wash).hasSize(ExplorePaint.BLOOM_RINGS);
         assertThat(wash.get(0).rx()).isGreaterThan(wash.get(2).rx());
