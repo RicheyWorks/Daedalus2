@@ -917,6 +917,10 @@ public final class ExplorePaint {
     public static final int FACE_BROW_R = 0x4a;
     public static final int FACE_BROW_G = 0x38;
     public static final int FACE_BROW_B = 0x24;
+    /** Pupils — same wall ink as the well {@code COLORS.wall}. */
+    public static final int FACE_EYE_R = 0x12;
+    public static final int FACE_EYE_G = 0x0e;
+    public static final int FACE_EYE_B = 0x0c;
 
     public static byte[] faceRgba(int mood) {
         int grim = Math.max(0, Math.min(2, mood));
@@ -930,7 +934,7 @@ public final class ExplorePaint {
                 return rgbBytes(FACE_BROW_R, FACE_BROW_G, FACE_BROW_B);
             }
             if (py == 3 && (px == 2 || px == 5)) {
-                return rgbBytes(18, 12, 10);
+                return rgbBytes(FACE_EYE_R, FACE_EYE_G, FACE_EYE_B);
             }
             if (py == 5) {
                 return mouth(grim, px);

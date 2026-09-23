@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore portrait pupils.**
+  The eyes use the well wall
+  `#120e0c`, so the gaze sits
+  in that corridor dark.
+
 - **Well ASCII floor ink.**
   Open cells and the gate sample
   use the legend parchment

@@ -985,6 +985,14 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.FACE_BROW_R).isNotEqualTo(62);
         int skin = (16 * ExplorePaint.TEX + 24) * 4;
         assertThat(Byte.toUnsignedInt(calm[skin])).isEqualTo(186);
+        int eye = (24 * ExplorePaint.TEX + 16) * 4;
+        assertThat(Byte.toUnsignedInt(calm[eye])).isEqualTo(ExplorePaint.FACE_EYE_R);
+        assertThat(Byte.toUnsignedInt(calm[eye + 1])).isEqualTo(ExplorePaint.FACE_EYE_G);
+        assertThat(Byte.toUnsignedInt(calm[eye + 2])).isEqualTo(ExplorePaint.FACE_EYE_B);
+        assertThat(ExplorePaint.FACE_EYE_R).isEqualTo(ExplorePaint.SKY_HILL_R);
+        assertThat(ExplorePaint.FACE_EYE_G).isEqualTo(0x0e);
+        assertThat(ExplorePaint.FACE_EYE_B).isEqualTo(0x0c);
+        assertThat(ExplorePaint.FACE_EYE_G).isNotEqualTo(12);
     }
 
     @Test
