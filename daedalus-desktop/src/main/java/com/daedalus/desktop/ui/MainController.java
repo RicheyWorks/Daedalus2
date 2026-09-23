@@ -2735,9 +2735,10 @@ public class MainController {
             ch.setFill(ink);
             word.getChildren().add(ch);
         }
-        // Last swatch in a cluster has margin-right: 0 on the well.
+        // Outside ring is 1.5px. Single keys keep a 5px fill-to-word gap.
+        // A cluster's last swatch has margin-right: 0, so the word meets the fill.
         boolean cluster = label.getStyleClass().contains("legend-cluster");
-        var row = new HBox(cluster ? 0 : 5);
+        var row = new HBox(cluster ? -1.5 : 3.5);
         row.setAlignment(Pos.CENTER_LEFT);
         var swatch = label.getGraphic();
         if (swatch != null) {

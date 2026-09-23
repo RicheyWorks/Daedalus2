@@ -183,11 +183,12 @@
     -fx-font-size: 11px;
     -fx-font-weight: 600;
     -fx-cursor: default;
-    -fx-graphic-text-gap: 5px;
+    /* Fill edge to the word is 5px; the outside ring occupies 1.5 of that. */
+    -fx-graphic-text-gap: 3.5px;
 }
 .legend .legend-cluster {
     /* Last swatch in a cluster has margin-right: 0 on the well. */
-    -fx-graphic-text-gap: 0;
+    -fx-graphic-text-gap: -1.5;
 }
 
 .status-bar {

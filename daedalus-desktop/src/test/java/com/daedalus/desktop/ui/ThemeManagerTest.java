@@ -123,10 +123,12 @@ class ThemeManagerTest {
             assertThat(css).contains(".legend .label");
             assertThat(css).contains("-fx-font-weight: 600;\n    -fx-cursor: default;");
             assertThat(css).doesNotContain("-fx-font-weight: bold;\n    -fx-cursor: default;");
-            assertThat(css).contains("-fx-cursor: default;\n    -fx-graphic-text-gap: 5px;");
+            assertThat(css).contains("-fx-cursor: default;");
+            assertThat(css).contains("-fx-graphic-text-gap: 3.5px;");
             assertThat(css).contains(".legend .legend-cluster {");
-            assertThat(css).contains("-fx-graphic-text-gap: 0;");
-            assertThat(css).doesNotContain("-fx-graphic-text-gap: 4px;");
+            assertThat(css).contains("-fx-graphic-text-gap: -1.5;");
+            assertThat(css).doesNotContain("-fx-graphic-text-gap: 5px;");
+            assertThat(css).doesNotContain("-fx-graphic-text-gap: 0;");
             assertThat(css).contains("#b09a72");
             assertThat(css).contains(".exports .button");
             assertThat(css).contains("-fx-padding: 0;\n    -fx-cursor: default;");
@@ -309,7 +311,7 @@ class ThemeManagerTest {
                 "subtract(legendBox.heightProperty()).subtract(4)");
         assertThat(src).contains("Font.font(\"Bahnschrift\", FontWeight.SEMI_BOLD, 11)");
         assertThat(src).contains("label.getStyleClass().contains(\"legend-cluster\")");
-        assertThat(src).contains("new HBox(cluster ? 0 : 5)");
+        assertThat(src).contains("new HBox(cluster ? -1.5 : 3.5)");
         assertThat(src).contains("trackExportChip();");
         assertThat(src).contains("double em = 11 * 0.03;");
         assertThat(src).contains("ch.getStyleClass().add(\"export-glyph\");");
@@ -551,14 +553,21 @@ class ThemeManagerTest {
             assertThat(in).as("main.fxml is on the classpath").isNotNull();
             String fxml = new String(in.readAllBytes());
             assertThat(fxml)
-                    .as("walk, lens, arena, and compare swatches share the well's 5px gap")
+                    .as("outside rings leave a 5px fill-to-fill gap, so the box gap is 2")
                     .contains("fx:id=\"legendPlayer\"")
                     .contains("fx:id=\"legendLens\"")
                     .contains("fx:id=\"legendRace\"")
                     .contains("fx:id=\"legendCompare\"")
-                    .contains("<HBox spacing=\"5\">");
-            assertThat(fxml.split("<HBox spacing=\"5\">", -1)).hasSize(5);
-            assertThat(fxml).doesNotContain("<HBox spacing=\"1\">");
+                    .contains("strokeType=\"OUTSIDE\"")
+                    .contains("<HBox spacing=\"2\">");
+            assertThat(fxml.split("<HBox spacing=\"2\">", -1)).hasSize(5);
+            assertThat(fxml.split("strokeType=\"OUTSIDE\"", -1)).hasSize(30);
+            assertThat(fxml).doesNotContain("<HBox spacing=\"5\">");
+            var chip = new javafx.scene.shape.Rectangle(10, 10);
+            chip.setStroke(Color.WHITE);
+            chip.setStrokeWidth(1.5);
+            chip.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
+            assertThat(chip.getLayoutBounds().getWidth()).isEqualTo(13.0);
             assertThat(fxml)
                     .as("KEEP leftover even lens colors stay")
                     .contains("color=\"#e5484d\"")

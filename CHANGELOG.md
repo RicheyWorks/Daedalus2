@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend rings.**
+  Swatch rings sit
+  outside the chip,
+  the same spread as
+  the well's box
+  shadow, and the
+  word stays 5px
+  from the fill.
+
 - **Desktop legend cluster word.**
   Tracked cluster keys
   sit flush with the
