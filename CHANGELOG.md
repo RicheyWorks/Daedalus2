@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore horizon ground.**
+  The near skyline sits on the well
+  wall-warm #2a2218 so the earth
+  shares the post stone.
+
 - **Explore horizon hills.**
   The skyline sits on the well wall
   #120e0c so the far posts share

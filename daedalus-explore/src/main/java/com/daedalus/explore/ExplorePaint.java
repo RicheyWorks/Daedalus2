@@ -821,6 +821,10 @@ public final class ExplorePaint {
     public static final int SKY_HILL_R = 0x12;
     public static final int SKY_HILL_G = 0x0e;
     public static final int SKY_HILL_B = 0x0c;
+    /** Horizon ground — same wall-warm as the well posts. */
+    public static final int SKY_GROUND_R = 0x2a;
+    public static final int SKY_GROUND_G = 0x22;
+    public static final int SKY_GROUND_B = 0x18;
     /** Same 0.22 rim as halls — leftover even sky bands are not the last word at the horizon. */
     public static final float SKY_TEX_EDGE_DIM = 0.22f;
 
@@ -862,9 +866,9 @@ public final class ExplorePaint {
                     g = SKY_HILL_G;
                     b = SKY_HILL_B;
                 } else {
-                    r = 52 + n / 3;
-                    g = 24;
-                    b = 20;
+                    r = SKY_GROUND_R + n / 3;
+                    g = SKY_GROUND_G;
+                    b = SKY_GROUND_B;
                 }
             }
             float s = skyTexShade(x, y);
