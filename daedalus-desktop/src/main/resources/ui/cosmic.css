@@ -189,3 +189,8 @@
 .status-bar .label.world-place {
     -fx-text-fill: #94612e;
 }
+.status-bar .status-line {
+    -fx-border-color: transparent transparent transparent rgba(153, 111, 49, 0.28);
+    -fx-border-width: 0 0 0 2;
+    -fx-padding: 0 0 0 8;
+}

@@ -582,7 +582,7 @@
             <padding>
                 <Insets top="8" right="10" bottom="4" left="10"/>
             </padding>
-            <Label fx:id="statusLabel" text="Ready — pick a generator and click Generate."/>
+            <Label fx:id="statusLabel" styleClass="status-line" text="Ready — pick a generator and click Generate."/>
             <Label fx:id="worldLabel" text="world-zero · listening"/>
         </HBox>
     </bottom>

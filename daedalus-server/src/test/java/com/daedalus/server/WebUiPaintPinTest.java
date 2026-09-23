@@ -54,6 +54,7 @@ class WebUiPaintPinTest {
                     .contains("padding: 10px 22px; border-bottom: 1px solid rgba(153, 111, 49, 0.45);")
                     .contains("align-items: center; gap: 14px; flex-wrap: wrap;")
                     .contains("-webkit-touch-callout: none; margin-top: 8px; -webkit-user-drag: none;")
+                    .contains("border-left: 2px solid rgba(153, 111, 49, 0.28); padding-left: 8px;")
                     .contains("0 0 22px rgba(58, 182, 117, 0.16), 0 0 48px rgba(200, 158, 63, 0.08)")
                     .contains("0 0 36px rgba(58, 182, 117, 0.32), 0 0 72px rgba(200, 158, 63, 0.18)")
                     .contains("\"Trebuchet MS\", sans-serif; letter-spacing: .22em; -webkit-user-drag: none")

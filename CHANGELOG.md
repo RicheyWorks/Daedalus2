@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop status lip.**
+  The status words wear a 2px gold
+  hairline and an 8px pad, the same
+  mark as the well status.
+
 - **Desktop status inset.**
   The space above the status words
   is 8px, the same margin as the well status.

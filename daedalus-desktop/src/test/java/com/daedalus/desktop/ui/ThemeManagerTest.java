@@ -106,6 +106,8 @@ class ThemeManagerTest {
             assertThat(css).contains("-fx-pref-height: 20.4px;");
             assertThat(css).contains("-fx-border-width: 1 0 0 0;\n    -fx-cursor: default;");
             assertThat(css).contains(".status-bar {\n    -fx-background-color: rgba(12, 9, 8, 0.92);");
+            assertThat(css).contains("-fx-border-width: 0 0 0 2;");
+            assertThat(css).contains("-fx-padding: 0 0 0 8;");
             assertThat(css).doesNotContain(".status-bar {\n    -fx-background-color: #16120e;");
             assertThat(css).contains("rgba(16, 11, 8, 0.55)");
             assertThat(css).contains("rgba(16, 11, 8, 0.92)");
@@ -130,6 +132,7 @@ class ThemeManagerTest {
             assertThat(fxml).contains("<HBox styleClass=\"brand\" alignment=\"CENTER_LEFT\">");
             assertThat(fxml).contains("<Insets right=\"10\"/>");
             assertThat(fxml).contains("<Insets top=\"8\" right=\"10\" bottom=\"4\" left=\"10\"/>");
+            assertThat(fxml).contains("styleClass=\"status-line\"");
             assertThat(fxml).doesNotContain("<Insets top=\"4\" right=\"10\" bottom=\"4\" left=\"10\"/>");
             assertThat(fxml).contains("<Insets top=\"10\" right=\"8\" bottom=\"10\" left=\"8\"/>");
             assertThat(fxml).doesNotContain("<Insets top=\"6\" right=\"8\" bottom=\"6\" left=\"8\"/>");
