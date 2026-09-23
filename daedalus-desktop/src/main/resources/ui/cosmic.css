@@ -185,6 +185,10 @@
     -fx-cursor: default;
     -fx-graphic-text-gap: 5px;
 }
+.legend .legend-cluster {
+    /* Last swatch in a cluster has margin-right: 0 on the well. */
+    -fx-graphic-text-gap: 0;
+}
 
 .status-bar {
     -fx-background-color: rgba(12, 9, 8, 0.92);

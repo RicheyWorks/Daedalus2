@@ -122,6 +122,8 @@ class ThemeManagerTest {
             assertThat(css).contains("-fx-font-weight: 600;\n    -fx-cursor: default;");
             assertThat(css).doesNotContain("-fx-font-weight: bold;\n    -fx-cursor: default;");
             assertThat(css).contains("-fx-cursor: default;\n    -fx-graphic-text-gap: 5px;");
+            assertThat(css).contains(".legend .legend-cluster {");
+            assertThat(css).contains("-fx-graphic-text-gap: 0;");
             assertThat(css).doesNotContain("-fx-graphic-text-gap: 4px;");
             assertThat(css).contains("#b09a72");
             assertThat(css).contains(".exports .button");
@@ -314,6 +316,10 @@ class ThemeManagerTest {
             String fxml = new String(in.readAllBytes());
             assertThat(fxml).contains("FlowPane fx:id=\"legendBox\" hgap=\"14\" vgap=\"14\"");
             assertThat(fxml).doesNotContain("HBox fx:id=\"legendBox\"");
+            assertThat(fxml).contains("fx:id=\"legendPlayer\" text=\"players\" styleClass=\"legend-cluster\"");
+            assertThat(fxml).contains("fx:id=\"legendLens\" text=\"lens\" styleClass=\"legend-cluster\"");
+            assertThat(fxml).contains("fx:id=\"legendRace\" text=\"arena\" styleClass=\"legend-cluster\"");
+            assertThat(fxml).contains("fx:id=\"legendCompare\" text=\"compare\" styleClass=\"legend-cluster\"");
         }
     }
 

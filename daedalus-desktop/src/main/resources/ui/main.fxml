@@ -232,7 +232,8 @@
                         </Rectangle>
                     </graphic>
                 </Label>
-                <Label fx:id="legendPlayer" text="players" managed="false" visible="false">
+                <Label fx:id="legendPlayer" text="players" styleClass="legend-cluster"
+                       managed="false" visible="false">
                     <graphic>
                         <HBox spacing="5">
                             <Circle radius="5" stroke="rgba(198,190,174,0.28)" strokeWidth="1.5">
@@ -365,7 +366,8 @@
                         </Circle>
                     </graphic>
                 </Label>
-                <Label fx:id="legendLens" text="lens" managed="false" visible="false">
+                <Label fx:id="legendLens" text="lens" styleClass="legend-cluster"
+                       managed="false" visible="false">
                     <graphic>
                         <HBox spacing="5">
                             <Rectangle width="6" height="10"
@@ -423,7 +425,8 @@
                         </Rectangle>
                     </graphic>
                 </Label>
-                <Label fx:id="legendRace" text="arena" managed="false" visible="false">
+                <Label fx:id="legendRace" text="arena" styleClass="legend-cluster"
+                       managed="false" visible="false">
                     <graphic>
                         <HBox spacing="5">
                             <Rectangle width="6" height="10"
@@ -486,7 +489,8 @@
                         </Rectangle>
                     </graphic>
                 </Label>
-                <Label fx:id="legendCompare" text="compare" managed="false" visible="false">
+                <Label fx:id="legendCompare" text="compare" styleClass="legend-cluster"
+                       managed="false" visible="false">
                     <graphic>
                         <HBox spacing="5">
                             <Rectangle width="6" height="10"

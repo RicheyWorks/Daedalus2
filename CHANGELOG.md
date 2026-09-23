@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend clusters.**
+  Players, lens, arena, and
+  compare sit flush with
+  their last swatch, the
+  same closed gap as the
+  well legend.
+
 - **Desktop legend wrap.**
   The key band wraps like
   the well legend, with the
