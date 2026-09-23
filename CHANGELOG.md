@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop idle void.**
+  The empty well breathes
+  on the maze circle,
+  `max(w, h) * 0.72`,
+  the same wash as the
+  web idle canvas.
+
 - **Desktop maze wash.**
   Unrevealed cells sit on
   the well's maze circle,

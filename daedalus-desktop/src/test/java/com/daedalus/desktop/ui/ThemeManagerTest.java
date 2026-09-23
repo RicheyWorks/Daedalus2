@@ -316,6 +316,9 @@ class ThemeManagerTest {
         assertThat(src).contains("fillTracked(g, DesktopPaint.EMPTY_WORDMARK, cx, cy + 48, 28 * 0.22)");
         assertThat(src).doesNotContain("g.fillText(DesktopPaint.EMPTY_WORDMARK, cx, cy + 48)");
         assertThat(src).contains("Font.font(\"Bahnschrift\", FontWeight.NORMAL, 13)");
+        assertThat(src).contains("paintEmptyVoid(g, w, h, wave);");
+        assertThat(src).contains("DesktopPaint.mazeWashRadius(w, h)");
+        assertThat(src).contains("Color.web(DesktopPaint.wellVoidCenterInk(wave))");
         assertThat(src).doesNotContain("FontWeight.SEMI_BOLD, 13");
         assertThat(src).doesNotContain("Font.font(\"Segoe UI\", 13)");
     }

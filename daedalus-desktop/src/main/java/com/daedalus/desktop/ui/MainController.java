@@ -1857,6 +1857,7 @@ public class MainController {
             double cx = w / 2.0;
             double cy = h / 2.0;
             double wave = DesktopPaint.emptyBreathWave(System.nanoTime());
+            paintEmptyVoid(g, w, h, wave);
             double outer = DesktopPaint.emptyGlowOuter(w, h);
             double mintEnd = DesktopPaint.emptyGlowMintEnd(outer);
             double goldAt = DesktopPaint.emptyGlowGoldAt(outer);
@@ -2419,6 +2420,22 @@ public class MainController {
         g.setFill(wash);
         g.fillOval(cx - radius, cy - radius, radius * 2, radius * 2);
         g.restore();
+    }
+
+    /** Idle well — same breathing circle as {@code draw.js} {@code paintEmpty}. */
+    private static void paintEmptyVoid(GraphicsContext g, double w, double h, double wave) {
+        double radius = DesktopPaint.mazeWashRadius(w, h);
+        double cx = w / 2.0;
+        double cy = DesktopPaint.mazeWashCenterY(0, h);
+        g.setFill(Color.web(DesktopPaint.WELL_VOID_EDGE));
+        g.fillRect(0, 0, w, h);
+        var wash = new javafx.scene.paint.RadialGradient(
+                0, 0, 0.5, 0.5, 0.5, true,
+                javafx.scene.paint.CycleMethod.NO_CYCLE,
+                new javafx.scene.paint.Stop(0, Color.web(DesktopPaint.wellVoidCenterInk(wave))),
+                new javafx.scene.paint.Stop(1, Color.web(DesktopPaint.WELL_VOID_EDGE)));
+        g.setFill(wash);
+        g.fillOval(cx - radius, cy - radius, radius * 2, radius * 2);
     }
 
     private boolean fogOn() {
