@@ -849,29 +849,53 @@ public final class ExplorePaint {
 
     public static byte[] floorRgba() {
         return raster((x, y) -> {
-            int n = hash(x, y) & 11;
-            int r;
-            int g;
-            int b;
-            if ((y & 7) == 1) {
-                r = FLOOR_TEX_HI_R + n / 2;
-                g = FLOOR_TEX_HI_G + n / 3;
-                b = FLOOR_TEX_HI_B;
-            } else {
-                int cell = ((x / 8) + (y / 8)) & 1;
-                if (cell == 0) {
-                    r = FLOOR_TEX_WARM_R + n;
-                    g = FLOOR_TEX_WARM_G + n / 2;
-                    b = FLOOR_TEX_WARM_B;
-                } else {
-                    r = FLOOR_TEX_R + n;
-                    g = FLOOR_TEX_G + n / 2;
-                    b = FLOOR_TEX_B;
-                }
-            }
+            int[] rgb = floorTexColor(x, y);
             float s = floorTexShade(x, y);
-            return rgbBytes(Math.round(r * s), Math.round(g * s), Math.round(b * s));
+            return rgbBytes(Math.round(rgb[0] * s), Math.round(rgb[1] * s),
+                    Math.round(rgb[2] * s));
         });
+    }
+
+    /** Unshaded floor texel. Paver edges mix so warm and dark stone meet. */
+    public static int[] floorTexColor(int x, int y) {
+        int[] here = floorPaver(x, y);
+        if ((y & 7) == 1) {
+            return here;
+        }
+        int lx = Math.floorMod(x, 8);
+        int ly = Math.floorMod(y, 8);
+        int nx = x;
+        int ny = y;
+        if (lx == 0) {
+            nx = x - 1;
+        } else if (lx == 7) {
+            nx = x + 1;
+        } else if (ly == 0) {
+            ny = y - 1;
+        } else if (ly == 7) {
+            ny = y + 1;
+        } else {
+            return here;
+        }
+        int[] next = floorPaver(nx, ny);
+        return new int[] {
+                (here[0] + next[0]) / 2,
+                (here[1] + next[1]) / 2,
+                (here[2] + next[2]) / 2};
+    }
+
+    public static int[] floorPaver(int x, int y) {
+        int n = hash(x, y) & 11;
+        if (Math.floorMod(y, 8) == 1) {
+            return new int[] {
+                    FLOOR_TEX_HI_R + n / 2, FLOOR_TEX_HI_G + n / 3, FLOOR_TEX_HI_B};
+        }
+        int cell = (Math.floorDiv(x, 8) + Math.floorDiv(y, 8)) & 1;
+        if (cell == 0) {
+            return new int[] {
+                    FLOOR_TEX_WARM_R + n, FLOOR_TEX_WARM_G + n / 2, FLOOR_TEX_WARM_B};
+        }
+        return new int[] {FLOOR_TEX_R + n, FLOOR_TEX_G + n / 2, FLOOR_TEX_B};
     }
 
     /** Vault body — same wall highlight as the well {@code COLORS.wallHi}. */

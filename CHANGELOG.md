@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore floor seam.**
+  Warm and dark pavers
+  mix where they meet.
+  The stone joins
+  instead of cutting
+  on one texel.
+
 - **Explore sky wash.**
   Zenith, dusk, and
   the horizon glow
