@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop idle wordmark tracking.**
+  The empty name is tracked 0.22em,
+  the same spacing as the well.
+
 - **Desktop idle caption face.**
   The lines under the empty
   wordmark use Bahnschrift at

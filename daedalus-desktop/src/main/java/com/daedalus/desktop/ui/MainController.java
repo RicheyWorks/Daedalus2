@@ -48,6 +48,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
@@ -1884,9 +1885,9 @@ public class MainController {
                             DesktopPaint.emptyGoldAlpha(wave)));
             mint.setInput(gold);
             g.setEffect(mint);
-            g.fillText(DesktopPaint.EMPTY_WORDMARK, cx, cy + 48);
+            fillTracked(g, DesktopPaint.EMPTY_WORDMARK, cx, cy + 48, 28 * 0.22);
             g.setEffect(null);
-            g.fillText(DesktopPaint.EMPTY_WORDMARK, cx, cy + 48);
+            fillTracked(g, DesktopPaint.EMPTY_WORDMARK, cx, cy + 48, 28 * 0.22);
             g.setGlobalAlpha(DesktopPaint.emptyCaptionTitleAlpha(wave));
             g.setFill(Color.web(DesktopPaint.emptyCaptionTitleInk()));
             g.setFont(Font.font("Bahnschrift", FontWeight.NORMAL, 13));
@@ -2570,6 +2571,43 @@ public class MainController {
         g.setStroke(ink.deriveColor(0, 1, 1, DesktopPaint.ghostRimAlpha(wave)));
         g.setLineWidth(Math.max(1.0, mark.size() * 0.07));
         g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
+    }
+
+    /** Same 0.22em tracking as the well idle wordmark. */
+    private static void fillTracked(GraphicsContext g, String text, double cx, double baseline, double em) {
+        if (text == null || text.isEmpty()) {
+            return;
+        }
+        Font font = g.getFont();
+        int n = text.length();
+        double[] advances = new double[n];
+        double total = 0;
+        for (int i = 0; i < n; i++) {
+            Text probe = new Text(String.valueOf(text.charAt(i)));
+            probe.setFont(font);
+            advances[i] = probe.getLayoutBounds().getWidth();
+            total += advances[i];
+        }
+        if (n > 1) {
+            total += em * (n - 1);
+        }
+        TextAlignment saved = g.getTextAlign();
+        if (total <= 0) {
+            g.setTextAlign(TextAlignment.CENTER);
+            g.fillText(text, cx, baseline);
+            g.setTextAlign(saved);
+            return;
+        }
+        g.setTextAlign(TextAlignment.LEFT);
+        double x = cx - total / 2.0;
+        for (int i = 0; i < n; i++) {
+            g.fillText(String.valueOf(text.charAt(i)), x, baseline);
+            x += advances[i];
+            if (i + 1 < n) {
+                x += em;
+            }
+        }
+        g.setTextAlign(saved);
     }
 
     private static void paintEndpoint(GraphicsContext g, DesktopPaint.Layout layout,
