@@ -690,6 +690,10 @@ public final class ExplorePaint {
     public static final int BRICK_TEX_HI_R = 196;
     public static final int BRICK_TEX_HI_G = 118;
     public static final int BRICK_TEX_HI_B = 64;
+    /** Brick course — same lit face as the north-south wall. */
+    public static final int BRICK_TEX_R = 163;
+    public static final int BRICK_TEX_G = 102;
+    public static final int BRICK_TEX_B = 56;
     /** Mortar — same wall-warm as the well {@code COLORS.wallWarm}. */
     public static final int BRICK_MORTAR_R = 0x2a;
     public static final int BRICK_MORTAR_G = 0x22;
@@ -720,9 +724,9 @@ public final class ExplorePaint {
                 g = BRICK_TEX_HI_G + n / 3;
                 b = BRICK_TEX_HI_B;
             } else {
-                r = 170 + n;
-                g = 98 + (n / 2);
-                b = 54;
+                r = BRICK_TEX_R + n;
+                g = BRICK_TEX_G + (n / 2);
+                b = BRICK_TEX_B;
             }
             float s = brickTexShade(x, y);
             return rgbBytes(Math.round(r * s), Math.round(g * s), Math.round(b * s));

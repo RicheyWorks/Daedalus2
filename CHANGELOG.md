@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick course.**
+  The clay sits on the lit wall
+  face so the courses share the
+  north-south stone.
+
 - **Explore horizon ground.**
   The near skyline sits on the well
   wall-warm #2a2218 so the earth

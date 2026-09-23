@@ -422,7 +422,11 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.BRICK_MORTAR_G).isEqualTo(0x22);
         assertThat(ExplorePaint.BRICK_MORTAR_B).isEqualTo(0x18);
         assertThat(ExplorePaint.BRICK_MORTAR_R).isNotEqualTo(46);
-        assertThat(ExplorePaint.BRICK_TEX_HI_R).isGreaterThan(170);
+        assertThat(ExplorePaint.BRICK_TEX_HI_R).isGreaterThan(ExplorePaint.BRICK_TEX_R);
+        assertThat(ExplorePaint.BRICK_TEX_R).isEqualTo(163);
+        assertThat(ExplorePaint.BRICK_TEX_G).isEqualTo(102);
+        assertThat(ExplorePaint.BRICK_TEX_B).isEqualTo(56);
+        assertThat(ExplorePaint.BRICK_TEX_R).isNotEqualTo(170);
         assertThat(ExplorePaint.BRICK_TEX_HI_R).isGreaterThan(ExplorePaint.BRICK_TEX_HI_B);
         assertThat(Byte.toUnsignedInt(floor[0])).isNotEqualTo(Byte.toUnsignedInt(brick[0]));
         int ceilR = Byte.toUnsignedInt(ceil[0]);
