@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well home-screen stamp.**
+  The tile, home-screen, and share
+  images fall the gate and exit to
+  #3ab977 and #d44f51, the same chips
+  as the tab icon.
+
 - **Well tab gate.**
   The tab icon's begin and exit
   fall to #3ab977 and #d44f51,
