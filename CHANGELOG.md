@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore portrait lip cadence.**
+  The mood-face gold lip breathes
+  on the same 4.5s stage rim as
+  the status lip.
+
 - **Explore gold lip cadence.**
   The status lip and the automap
   frame breathe on the well’s

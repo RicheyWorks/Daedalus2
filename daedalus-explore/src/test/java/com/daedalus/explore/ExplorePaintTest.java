@@ -1662,7 +1662,8 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.keySoftPad(0.1))
                 .isGreaterThan(ExplorePaint.KEY_SOFT_PAD * 0.85f);
         assertThat(ExplorePaint.FACE_LIP).isGreaterThan(ExplorePaint.FACE_LIP_CORE);
-        assertThat(ExplorePaint.FACE_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
+        assertThat(ExplorePaint.FACE_BREATH_MS).isEqualTo(ExplorePaint.STATUS_BREATH_MS);
+        assertThat(ExplorePaint.FACE_BREATH_MS).isNotEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
         assertThat(ExplorePaint.faceLip(0.1))
                 .isNotEqualTo(ExplorePaint.faceLip(0.8));
         assertThat(ExplorePaint.faceLipCore(0.1))

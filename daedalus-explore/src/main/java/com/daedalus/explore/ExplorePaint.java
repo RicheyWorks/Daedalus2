@@ -1794,8 +1794,8 @@ public final class ExplorePaint {
     /** Thin gold lip around the mood face so the portrait matches strip chrome. */
     public static final float FACE_LIP = 0.008f;
     public static final float FACE_LIP_CORE = 0.004f;
-    /** Face lip breath — same cadence as aim / key presence. */
-    public static final float FACE_BREATH_MS = MAP_HERE_BREATH_MS;
+    /** Face lip breath — same 4.5s cadence as the status lip. */
+    public static final float FACE_BREATH_MS = STATUS_BREATH_MS;
 
     public static float faceLip(double seconds) {
         double t = ((seconds * 1000.0) % FACE_BREATH_MS) / FACE_BREATH_MS;
