@@ -106,8 +106,10 @@ class ThemeManagerTest {
             assertThat(css).contains(".status-bar");
             assertThat(css).contains(".status-bar .label");
             assertThat(css).contains("-fx-font-size: 12px;\n    -fx-cursor: default;");
-            assertThat(css).contains("-fx-min-height: 20.4px;");
-            assertThat(css).contains("-fx-pref-height: 20.4px;");
+            assertThat(css).contains("/* #status inherits the page face at 12px/1.5. */");
+            assertThat(css).contains("-fx-min-height: 18px;\n    -fx-pref-height: 18px;\n    -fx-alignment: center-left;");
+            assertThat(css).doesNotContain("Cascadia Code");
+            assertThat(css).doesNotContain("20.4px");
             assertThat(css).contains("-fx-border-width: 1 0 0 0;\n    -fx-cursor: default;");
             assertThat(css).contains(".status-bar {\n    -fx-background-color: rgba(12, 9, 8, 0.92);");
             assertThat(css).contains("-fx-border-width: 0 0 0 2;");

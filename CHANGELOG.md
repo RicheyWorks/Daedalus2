@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop status face.**
+  The action line uses the
+  page face at 12px on a
+  1.5 line, the same
+  sentence as `#status`.
+
 - **Desktop legend clusters.**
   Players, lens, arena, and
   compare sit flush with
