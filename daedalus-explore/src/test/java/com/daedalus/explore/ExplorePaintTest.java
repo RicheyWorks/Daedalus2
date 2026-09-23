@@ -442,6 +442,10 @@ class ExplorePaintTest {
         assertThat(shine).isGreaterThan(body);
         assertThat(ExplorePaint.FLOOR_TEX_HI_R).isGreaterThan(92);
         assertThat(ExplorePaint.FLOOR_TEX_HI_R).isGreaterThan(ExplorePaint.FLOOR_TEX_HI_B);
+        assertThat(ExplorePaint.FLOOR_TEX_WARM_R).isEqualTo(0x5c);
+        assertThat(ExplorePaint.FLOOR_TEX_WARM_G).isEqualTo(0x4a);
+        assertThat(ExplorePaint.FLOOR_TEX_WARM_B).isEqualTo(0x32);
+        assertThat(ExplorePaint.FLOOR_TEX_WARM_G).isNotEqualTo(64);
         assertThat(ExplorePaint.FLOOR_TEX_EDGE_DIM).isEqualTo(0.22f);
         assertThat(ExplorePaint.floorTexShade(0, 3))
                 .as("floor tile rim falls off like live halls")

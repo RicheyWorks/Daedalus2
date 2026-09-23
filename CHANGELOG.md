@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore floor paver.**
+  The light course sits on the well
+  floor-warm #5c4a32 so the halls
+  share the torch stone underfoot.
+
 - **Explore brick mortar.**
   Mortar sits on the well wall-warm
   #2a2218 so the courses share the

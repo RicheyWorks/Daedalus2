@@ -732,6 +732,10 @@ public final class ExplorePaint {
     public static final int FLOOR_TEX_HI_R = 118;
     public static final int FLOOR_TEX_HI_G = 88;
     public static final int FLOOR_TEX_HI_B = 52;
+    /** Light paver — same floor-warm as the well {@code COLORS.floorWarm}. */
+    public static final int FLOOR_TEX_WARM_R = 0x5c;
+    public static final int FLOOR_TEX_WARM_G = 0x4a;
+    public static final int FLOOR_TEX_WARM_B = 0x32;
     /** Same 0.22 rim as live / automap halls — leftover even slate is not the last word. */
     public static final float FLOOR_TEX_EDGE_DIM = 0.22f;
 
@@ -756,9 +760,9 @@ public final class ExplorePaint {
             } else {
                 int cell = ((x / 8) + (y / 8)) & 1;
                 if (cell == 0) {
-                    r = 92 + n;
-                    g = 64 + n / 2;
-                    b = 38;
+                    r = FLOOR_TEX_WARM_R + n;
+                    g = FLOOR_TEX_WARM_G + n / 2;
+                    b = FLOOR_TEX_WARM_B;
                 } else {
                     r = 74 + n;
                     g = 52 + n / 2;
