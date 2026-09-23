@@ -692,13 +692,17 @@ public final class ExplorePaint {
         }
     }
 
-    public static final int BRICK_TEX_HI_R = 196;
-    public static final int BRICK_TEX_HI_G = 118;
-    public static final int BRICK_TEX_HI_B = 64;
     /** Brick course — same lit face as the north-south wall. */
     public static final int BRICK_TEX_R = 163;
     public static final int BRICK_TEX_G = 102;
     public static final int BRICK_TEX_B = 56;
+    /** Course catch — body mixed toward torch gold {@code #f5c14a} at 0.28. */
+    public static final int BRICK_TEX_HI_R =
+            Math.round(BRICK_TEX_R + (0xf5 - BRICK_TEX_R) * 0.28f);
+    public static final int BRICK_TEX_HI_G =
+            Math.round(BRICK_TEX_G + (0xc1 - BRICK_TEX_G) * 0.28f);
+    public static final int BRICK_TEX_HI_B =
+            Math.round(BRICK_TEX_B + (0x4a - BRICK_TEX_B) * 0.28f);
     /** Mortar — same wall-warm as the well {@code COLORS.wallWarm}. */
     public static final int BRICK_MORTAR_R = 0x2a;
     public static final int BRICK_MORTAR_G = 0x22;

@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick catch-light.**
+  The course shine mixes the
+  lit wall toward torch gold
+  `#f5c14a` at 0.28, so the
+  stripe catches that lamp.
+
 - **Explore screen-edge shade.**
   The vignette uses the well void
   edge `#0c0908`, so the corners

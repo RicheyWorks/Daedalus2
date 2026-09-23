@@ -431,6 +431,8 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.BRICK_MORTAR_B).isEqualTo(0x18);
         assertThat(ExplorePaint.BRICK_MORTAR_R).isNotEqualTo(46);
         assertThat(ExplorePaint.BRICK_TEX_HI_R).isGreaterThan(ExplorePaint.BRICK_TEX_R);
+        assertThat(ExplorePaint.BRICK_TEX_HI_R).isNotEqualTo(196);
+        assertThat(ExplorePaint.BRICK_TEX_HI_G).isNotEqualTo(118);
         assertThat(ExplorePaint.BRICK_TEX_R).isEqualTo(163);
         assertThat(ExplorePaint.BRICK_TEX_G).isEqualTo(102);
         assertThat(ExplorePaint.BRICK_TEX_B).isEqualTo(56);
