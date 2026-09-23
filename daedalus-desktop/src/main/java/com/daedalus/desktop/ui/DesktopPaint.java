@@ -504,6 +504,17 @@ public final class DesktopPaint {
     public static double playerRimAlpha(double wave) {
         return 0.55 + 0.20 * wave;
     }
+
+    /**
+     * Disc rim — the well strokes {@code 0.07·cell}. The marker stores the
+     * diameter ({@code 2·radius·cell}), so the stroke is recovered from that.
+     */
+    public static double discStroke(double diameter, double radiusFrac) {
+        if (radiusFrac <= 0) {
+            return 1.0;
+        }
+        return Math.max(1.0, diameter * 0.07 / (2.0 * radiusFrac));
+    }
     /** Search wash — same alphas as {@code draw.js} expansions. */
     public static final double EXPANSION_ALPHA = 0.16;
     /** Openings louder than cells — same idea as Compare, quieter than the ribbon. */

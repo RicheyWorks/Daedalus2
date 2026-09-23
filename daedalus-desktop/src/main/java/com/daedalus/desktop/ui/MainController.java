@@ -2599,7 +2599,7 @@ public class MainController {
         g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
         g.setGlobalAlpha(1);
         g.setStroke(ink.deriveColor(0, 1, 1, DesktopPaint.ghostRimAlpha(wave)));
-        g.setLineWidth(Math.max(1.0, mark.size() * 0.07));
+        g.setLineWidth(DesktopPaint.discStroke(mark.size(), DesktopPaint.GHOST_RADIUS));
         g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
     }
 
@@ -2811,7 +2811,7 @@ public class MainController {
         g.setFill(color);
         g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
         g.setStroke(color.deriveColor(0, 1, 1, DesktopPaint.playerRimAlpha(wave)));
-        g.setLineWidth(Math.max(1.0, mark.size() * 0.07));
+        g.setLineWidth(DesktopPaint.discStroke(mark.size(), DesktopPaint.PLAYER_RADIUS));
         g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
     }
 
@@ -2832,7 +2832,7 @@ public class MainController {
         g.setFill(color);
         g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
         g.setStroke(color.deriveColor(0, 1, 1, DesktopPaint.endpointCoreRimAlpha(wave)));
-        g.setLineWidth(Math.max(1.0, mark.size() * 0.07));
+        g.setLineWidth(DesktopPaint.discStroke(mark.size(), DesktopPaint.ENDPOINT_RADIUS));
         g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
     }
 
@@ -2851,7 +2851,7 @@ public class MainController {
         g.setFill(color);
         g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
         g.setStroke(color.deriveColor(0, 1, 1, DesktopPaint.pathHeadRimAlpha(wave)));
-        g.setLineWidth(Math.max(1.0, mark.size() * 0.07));
+        g.setLineWidth(DesktopPaint.discStroke(mark.size(), DesktopPaint.PATH_HEAD_RADIUS));
         g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
     }
 

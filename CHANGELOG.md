@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop disc rims.**
+  Walker, ghost, endpoint, and
+  route-tip strokes are
+  `0.07·cell`, the same rim
+  the well paints.
+
 - **Desktop route tip.**
   Solver, tour, and race heads
   use the well disc `0.3·cell`
