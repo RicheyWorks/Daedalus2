@@ -126,7 +126,8 @@ class WebUiPaintPinTest {
             assertThat(in).as("static well page").isNotNull();
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html).contains(
-                    "AAQ52QOY3vQMAAAAASUVORK5CYII")
+                    "pggAug9ZMORnC2YAAAAASUVORK5CYII")
+                    .doesNotContain("AAQ52QOY3vQMAAAAASUVORK5CYII")
                     .contains("rel=\"apple-touch-icon\"")
                     .contains("property=\"og:image\"")
                     .contains("name=\"twitter:image\"");
@@ -158,7 +159,8 @@ class WebUiPaintPinTest {
                     .contains("%22icons%22%3A%5B")
                     .contains("%2232x32%22")
                     .contains("%22purpose%22%3A%22any%22")
-                    .contains("AAQ52QOY3vQMAAAAASUVORK5CYII");
+                    .contains("pggAug9ZMORnC2YAAAAASUVORK5CYII")
+                    .doesNotContain("AAQ52QOY3vQMAAAAASUVORK5CYII");
         }
     }
 

@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well home-screen lip.**
+  The tile, home-screen, and share
+  stamps wear the #996f31 gold lip,
+  the same stroke as the tab icon.
+
 - **Well home-screen stamp.**
   The tile, home-screen, and share
   images fall the gate and exit to
