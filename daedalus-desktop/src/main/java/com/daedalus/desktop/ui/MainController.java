@@ -2119,9 +2119,9 @@ public class MainController {
         }
         if (currentRace != null) {
             paintRaceLane(g, layout, tiles, currentRace.first(), raceFrontA, racePathA,
-                    DesktopPaint.RACE_PATH_A);
+                    DesktopPaint.RACE_PATH_A, true);
             paintRaceLane(g, layout, tiles, currentRace.second(), raceFrontB, racePathB,
-                    DesktopPaint.RACE_PATH_B);
+                    DesktopPaint.RACE_PATH_B, false);
         }
         if (currentCompare != null && currentCompare.lanes() != null) {
             double compareWave = DesktopPaint.compareBreathWave(System.nanoTime());
@@ -2592,22 +2592,24 @@ public class MainController {
 
     private void paintRaceLane(GraphicsContext g, DesktopPaint.Layout layout,
                                TileType[][] tiles, DesktopPaint.RaceLane lane,
-                               double front, double pathProg, double pathAlpha) {
+                               double front, double pathProg, double pathAlpha,
+                               boolean firstLane) {
         if (lane == null) {
             return;
         }
+        String wash = DesktopPaint.raceWashBase(firstLane);
         List<Point> shown = DesktopPaint.pathPrefix(lane.expansions(), front);
         double raceWave = DesktopPaint.raceBreathWave(System.nanoTime());
         g.setGlobalAlpha(DesktopPaint.raceWashPaintAlpha(raceWave));
         for (DesktopPaint.TileRect tile : DesktopPaint.expansionCells(shown)) {
-            g.setFill(Color.web(DesktopPaint.walkTrailInk(lane.color(),
+            g.setFill(Color.web(DesktopPaint.raceTileInk(firstLane,
                     DesktopPaint.floorEdge(layout, tile.tileRow(), tile.tileCol()))));
             g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                     layout.w(tile.tileCol()), layout.h(tile.tileRow()));
         }
         g.setGlobalAlpha(DesktopPaint.raceOpeningPaintAlpha(raceWave));
         for (DesktopPaint.TileRect tile : DesktopPaint.expansionOpenings(shown, tiles)) {
-            g.setFill(Color.web(DesktopPaint.walkTrailInk(lane.color(),
+            g.setFill(Color.web(DesktopPaint.raceTileInk(firstLane,
                     DesktopPaint.floorEdge(layout, tile.tileRow(), tile.tileCol()))));
             g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                     layout.w(tile.tileCol()), layout.h(tile.tileRow()));
@@ -2615,18 +2617,18 @@ public class MainController {
         g.setGlobalAlpha(DesktopPaint.raceFrontPaintAlpha(raceWave));
         for (DesktopPaint.TileRect tile : DesktopPaint.expansionCells(
                 DesktopPaint.raceFront(shown))) {
-            g.setFill(Color.web(DesktopPaint.walkTrailInk(lane.color(),
+            g.setFill(Color.web(DesktopPaint.raceTileInk(firstLane,
                     DesktopPaint.floorEdge(layout, tile.tileRow(), tile.tileCol()))));
             g.fillRect(layout.x(tile.tileCol()), layout.y(tile.tileRow()),
                     layout.w(tile.tileCol()), layout.h(tile.tileRow()));
         }
         g.setGlobalAlpha(1);
-        Color laneColor = Color.web(lane.color());
+        Color laneColor = Color.web(wash);
         if (pathProg <= 0 && !shown.isEmpty()) {
             Point tip = DesktopPaint.walkHead(shown);
             double tipWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
-            Color tipInk = tip == null ? laneColor
-                    : Color.web(DesktopPaint.walkTrailInk(lane.color(),
+            Color tipInk = tip == null ? Color.web(lane.color())
+                    : Color.web(DesktopPaint.raceTileInk(firstLane,
                             DesktopPaint.floorEdge(layout, 2 * tip.row() + 1, 2 * tip.col() + 1)));
             paintRing(g, DesktopPaint.pathHeadHalo(layout, tip, tipWave, g.getTransform().getMyy()),
                     tipInk.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(tipWave)));
@@ -2634,11 +2636,11 @@ public class MainController {
         }
         if (pathProg > 0 && !lane.path().isEmpty()) {
             List<Point> ribbon = DesktopPaint.pathPrefix(lane.path(), pathProg);
-            paintPathRibbon(g, layout, ribbon, laneColor, pathAlpha, lane.color());
+            paintPathRibbon(g, layout, ribbon, laneColor, pathAlpha, wash);
             Point head = DesktopPaint.walkHead(ribbon);
             double headWave = DesktopPaint.pathHeadBreathWave(System.nanoTime());
-            Color headInk = head == null ? laneColor
-                    : Color.web(DesktopPaint.walkTrailInk(lane.color(),
+            Color headInk = head == null ? Color.web(lane.color())
+                    : Color.web(DesktopPaint.raceTileInk(firstLane,
                             DesktopPaint.floorEdge(layout, 2 * head.row() + 1, 2 * head.col() + 1)));
             paintRing(g, DesktopPaint.pathHeadHalo(layout, head, headWave, g.getTransform().getMyy()),
                     headInk.deriveColor(0, 1, 1, DesktopPaint.pathHeadHaloAlpha(headWave)));

@@ -743,6 +743,20 @@ public final class DesktopPaint {
     /** Arena lanes — KEEP overlay ice, same as the solver ribbon, not leftover ice. */
     public static final String RACE_A = "#8fb8ff";
     public static final String RACE_B = "#f0b429";
+
+    /**
+     * Paint base for an arena lane. The stored color is the rim swatch.
+     * {@code draw.js} washes the first lane with path ice and the other
+     * with victory gold, then applies the hall rim once.
+     */
+    public static String raceWashBase(boolean firstLane) {
+        return firstLane ? RACE_A : RACE_B;
+    }
+
+    /** Arena tile — same single 0.22 rim as {@code expansionTileInk} / {@code victoryTileInk}. */
+    public static String raceTileInk(boolean firstLane, double edge) {
+        return walkTrailInk(raceWashBase(firstLane), edge);
+    }
     public static final double RACE_WASH = 0.13;
     /** Openings louder than cells — same idea as search wash, quieter than the ribbon. */
     public static final double RACE_OPENING_ALPHA = 0.20;

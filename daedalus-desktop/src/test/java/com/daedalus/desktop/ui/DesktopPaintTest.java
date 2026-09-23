@@ -427,7 +427,7 @@ class DesktopPaintTest {
     }
 
     @Test
-    void aRaceFrontIsTheLastFiveExpandedCells() {
+    void aRaceFrontIsTheLastFiveExpandedCells() throws Exception {
         assertThat(DesktopPaint.RACE_A).isEqualTo("#8fb8ff");
         assertThat(DesktopPaint.walkTrailInk(DesktopPaint.RACE_A, 0))
                 .isEqualTo(DesktopPaint.RACE_A);
@@ -446,6 +446,20 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.walkTrailInk(DesktopPaint.RACE_B, 1))
                 .as("race-B ribbon and tip fall off toward floor-dim")
                 .isNotEqualTo(DesktopPaint.walkTrailInk(DesktopPaint.RACE_B, 0));
+        assertThat(DesktopPaint.raceWashBase(true)).isEqualTo("#8fb8ff");
+        assertThat(DesktopPaint.raceTileInk(true, 0))
+                .as("first lane center is path ice, not the rim swatch")
+                .isEqualTo("#8fb8ff");
+        assertThat(DesktopPaint.raceTileInk(true, 1)).isEqualTo("#7997cc");
+        assertThat(DesktopPaint.raceWashBase(false)).isEqualTo("#f0b429");
+        assertThat(DesktopPaint.raceTileInk(false, 0))
+                .as("second lane center is victory gold, not the rim swatch")
+                .isEqualTo("#f0b429");
+        assertThat(DesktopPaint.raceTileInk(false, 1)).isEqualTo("#c49425");
+        String ctrl = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/java/com/daedalus/desktop/ui/MainController.java"));
+        assertThat(ctrl).contains("DesktopPaint.raceTileInk(firstLane,");
+        assertThat(ctrl).contains("paintPathRibbon(g, layout, ribbon, laneColor, pathAlpha, wash)");
         assertThat(DesktopPaint.RACE_WASH).isEqualTo(0.13);
         assertThat(DesktopPaint.raceRate(1)).isEqualTo(150.0);
         assertThat(DesktopPaint.raceRate(700)).isEqualTo(200.0);

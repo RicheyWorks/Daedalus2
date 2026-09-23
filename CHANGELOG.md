@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop arena ink.**
+  The race wash starts
+  from path ice and
+  victory gold, so the
+  hall rim falls off
+  once, the same as
+  the well.
+
 - **Desktop path corners.**
   The solve ribbon
   paints the start and
