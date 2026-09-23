@@ -365,6 +365,10 @@ class ThemeManagerTest {
         assertThat(src).contains("paintWellVoid(g, w, h);")
                 .doesNotContain("g.setFill(Color.web(DesktopPaint.FOG_UNSEEN));");
         assertThat(src).contains("clipStage();");
+        assertThat(src).contains("canvasParent.setClip(null)");
+        assertThat(src).contains("canvas.setClip(clip)");
+        assertThat(src).contains("legendBox.setClip(clip)");
+        assertThat(src).doesNotContain("canvasParent.setClip(clip)");
         assertThat(src).contains("DesktopPaint.stageCornerArc()");
         assertThat(src).contains("paintMazeWash(g, layout);");
         assertThat(src).contains("clipMaze(g, layout);");

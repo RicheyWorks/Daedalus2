@@ -412,6 +412,11 @@ public final class DesktopPaint {
         return STAGE_CORNER * 2;
     }
 
+    /** Canvas clip arc in local pixels. The node scale brings it back to CSS pixels. */
+    public static double stageClipArc(double cssArc, double nodeScale) {
+        return cssArc / Math.max(nodeScale, 1e-6);
+    }
+
     /**
      * Maze bitmap wash — {@code draw.js} fills the maze canvas with a circle
      * of {@code max(w, h) * 0.72}, centered at 45% of the maze height.

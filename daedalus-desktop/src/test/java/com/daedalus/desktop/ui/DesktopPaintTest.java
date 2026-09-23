@@ -747,6 +747,8 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.STAGE_CORNER).isEqualTo(10);
         assertThat(DesktopPaint.stageCornerArc()).isEqualTo(20);
         assertThat(DesktopPaint.stageCornerArc()).isNotEqualTo(10);
+        assertThat(DesktopPaint.stageClipArc(20, 1)).isEqualTo(20);
+        assertThat(DesktopPaint.stageClipArc(20, 0.5)).isEqualTo(40);
         assertThat(DesktopPaint.MAZE_WASH_RADIUS).isEqualTo(0.72);
         assertThat(DesktopPaint.MAZE_WASH_CENTER_Y).isEqualTo(0.45);
         assertThat(DesktopPaint.mazeWashRadius(100, 40)).isCloseTo(72, within(1e-9));

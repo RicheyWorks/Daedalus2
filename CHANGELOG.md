@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop stage halo.**
+  The gold glow sits
+  outside the rounded
+  lip. The maze and
+  the legend stay
+  clipped, the way
+  the well shadow does.
+
 - **Explore status halo.**
   The status lip
   fades in the same

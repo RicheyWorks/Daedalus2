@@ -2383,17 +2383,37 @@ public class MainController {
         legendBox.relocate(0, DesktopPaint.legendScrimY(canvasParent.getHeight(), height));
     }
 
-    /** Round the stage like web {@code #stage} {@code overflow: hidden}. */
+    /** Round the stage like web {@code #stage} {@code overflow: hidden}.
+     *  The clip stays on the maze and the legend so the gold halo on the
+     *  stage can paint outside the lip, the way {@code box-shadow} does. */
     private void clipStage() {
         if (canvasParent == null) {
             return;
         }
+        canvasParent.setClip(null);
         double arc = DesktopPaint.stageCornerArc();
-        var clip = new javafx.scene.shape.Rectangle(
-                0, 0, Math.max(0, canvasParent.getWidth()), Math.max(0, canvasParent.getHeight()));
-        clip.setArcWidth(arc);
-        clip.setArcHeight(arc);
-        canvasParent.setClip(clip);
+        double w = Math.max(0, canvasParent.getWidth());
+        double h = Math.max(0, canvasParent.getHeight());
+        if (canvas != null) {
+            double nodeScale = 1;
+            if (!canvas.getTransforms().isEmpty()
+                    && canvas.getTransforms().get(0) instanceof Scale scale) {
+                nodeScale = scale.getX();
+            }
+            double localArc = DesktopPaint.stageClipArc(arc, nodeScale);
+            var clip = new javafx.scene.shape.Rectangle(
+                    0, 0, Math.max(0, canvas.getWidth()), Math.max(0, canvas.getHeight()));
+            clip.setArcWidth(localArc);
+            clip.setArcHeight(localArc);
+            canvas.setClip(clip);
+        }
+        if (legendBox != null) {
+            var clip = new javafx.scene.shape.Rectangle(
+                    0, -legendBox.getLayoutY(), w, h);
+            clip.setArcWidth(arc);
+            clip.setArcHeight(arc);
+            legendBox.setClip(clip);
+        }
     }
 
     /** Letterbox pocket — same ellipse as web {@code #stage}, not a round wash. */
