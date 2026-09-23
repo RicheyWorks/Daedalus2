@@ -2162,15 +2162,6 @@ public class MainController {
                         ink, tipWave);
             }
         }
-        if (!playerWalk.isEmpty() && theme != null) {
-            paintWalkTrail(g, layout, playerWalk, theme.player(), DesktopPaint.WALK_TRAIL_ALPHA,
-                    DesktopPaint.PLAYER);
-        }
-        List<Point> ghostWalk = ghostWalkNow();
-        if (!ghostWalk.isEmpty()) {
-            paintWalkTrail(g, layout, ghostWalk, Color.web(DesktopPaint.GHOST),
-                    DesktopPaint.GHOST_WALK_ALPHA, DesktopPaint.GHOST);
-        }
         if (currentPath != null && !currentPath.isEmpty() && theme != null) {
             paintPathRibbon(g, layout, currentPath, Color.web("#7997cc"), DesktopPaint.PATH_ALPHA,
                     DesktopPaint.PATH);
@@ -2289,6 +2280,17 @@ public class MainController {
             for (Point coin : currentHunt.waypoints()) {
                 paintDiamond(g, layout, coin, huntGot.contains(coin));
             }
+        }
+
+        // Stood-on trail and ghost walk after the ribbons — draw.js paints trails last.
+        if (!playerWalk.isEmpty() && theme != null) {
+            paintWalkTrail(g, layout, playerWalk, theme.player(), DesktopPaint.WALK_TRAIL_ALPHA,
+                    DesktopPaint.PLAYER);
+        }
+        List<Point> ghostWalk = ghostWalkNow();
+        if (!ghostWalk.isEmpty()) {
+            paintWalkTrail(g, layout, ghostWalk, Color.web(DesktopPaint.GHOST),
+                    DesktopPaint.GHOST_WALK_ALPHA, DesktopPaint.GHOST);
         }
 
         // ---- 3) start / goal discs (floor + marker + ring, same as the web) ----

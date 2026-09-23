@@ -56,7 +56,7 @@ class DesktopPaintTest {
     }
 
     @Test
-    void thePathPaintsTheEndsAndTheOpeningBetweenCells() {
+    void thePathPaintsTheEndsAndTheOpeningBetweenCells() throws Exception {
         Point start = new Point(0, 0);
         Point mid = new Point(0, 1);
         Point goal = new Point(0, 2);
@@ -71,6 +71,17 @@ class DesktopPaintTest {
                         new DesktopPaint.TileRect(1, 2),
                         new DesktopPaint.TileRect(1, 5),
                         new DesktopPaint.TileRect(1, 4));
+        String ctrl = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/java/com/daedalus/desktop/ui/MainController.java"));
+        int ribbon = ctrl.indexOf(
+                "if (currentPath != null && !currentPath.isEmpty() && theme != null)");
+        int trail = ctrl.indexOf("if (!playerWalk.isEmpty() && theme != null)");
+        int ghost = ctrl.indexOf("paintWalkTrail(g, layout, ghostWalk");
+        int discs = ctrl.indexOf("start / goal discs");
+        assertThat(ribbon).isGreaterThan(0);
+        assertThat(trail).isGreaterThan(ribbon);
+        assertThat(ghost).isGreaterThan(trail);
+        assertThat(discs).isGreaterThan(ghost);
     }
 
     @Test

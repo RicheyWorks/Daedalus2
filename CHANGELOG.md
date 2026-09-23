@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop trail order.**
+  Stood-on cells and the
+  ghost walk paint after
+  the solver ribbon, so
+  the trail sits on the
+  route the same way as
+  the well.
+
 - **Desktop cut order.**
   Dead-end specks paint
   before the pinch rings,
