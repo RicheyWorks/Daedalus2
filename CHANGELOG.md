@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore vault catch.**
+  The row under the
+  ceiling shine mixes
+  toward the catch.
+  The vault hairline
+  feathers into the
+  lid.
+
 - **Explore portrait edge.**
   The mood face mixes
   where the bezel meets

@@ -941,22 +941,33 @@ public final class ExplorePaint {
 
     public static byte[] ceilingRgba() {
         return raster((x, y) -> {
-            int n = hash(x, y) & 19;
-            int r;
-            int g;
-            int b;
-            if ((y & 7) == 1) {
-                r = CEILING_TEX_HI_R + n / 2;
-                g = CEILING_TEX_HI_G + n / 3;
-                b = CEILING_TEX_HI_B;
-            } else {
-                r = CEILING_TEX_R + n / 2;
-                g = CEILING_TEX_G + n / 3;
-                b = CEILING_TEX_B;
-            }
+            int[] rgb = ceilingTexColor(x, y);
             float s = ceilingTexShade(x, y);
-            return rgbBytes(Math.round(r * s), Math.round(g * s), Math.round(b * s));
+            return rgbBytes(Math.round(rgb[0] * s), Math.round(rgb[1] * s),
+                    Math.round(rgb[2] * s));
         });
+    }
+
+    /** Unshaded vault texel. The row under the catch mixes toward the shine. */
+    public static int[] ceilingTexColor(int x, int y) {
+        int[] here = ceilingFace(x, y);
+        if ((y & 7) != 2) {
+            return here;
+        }
+        int[] shine = ceilingFace(x, y - 1);
+        return new int[] {
+                (here[0] + shine[0]) / 2,
+                (here[1] + shine[1]) / 2,
+                (here[2] + shine[2]) / 2};
+    }
+
+    public static int[] ceilingFace(int x, int y) {
+        int n = hash(x, y) & 19;
+        if ((y & 7) == 1) {
+            return new int[] {
+                    CEILING_TEX_HI_R + n / 2, CEILING_TEX_HI_G + n / 3, CEILING_TEX_HI_B};
+        }
+        return new int[] {CEILING_TEX_R + n / 2, CEILING_TEX_G + n / 3, CEILING_TEX_B};
     }
 
     /** Sky cap — same warm top as the well page wash {@code #16120e}. */
