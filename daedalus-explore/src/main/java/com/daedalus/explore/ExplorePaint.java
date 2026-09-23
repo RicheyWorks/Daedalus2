@@ -878,14 +878,15 @@ public final class ExplorePaint {
         });
     }
 
-    /** Unshaded floor texel. Paver edges mix, including the catch, and the row under it feathers. */
+    /** Unshaded floor texel. Paver edges mix, and both rows beside the catch feather. */
     public static int[] floorTexColor(int x, int y) {
         int[] here = floorPaver(x, y);
         int[] color = floorSeam(x, y, here);
-        if ((y & 7) != 2) {
+        int band = y & 7;
+        if (band != 0 && band != 2) {
             return color;
         }
-        int[] shine = floorPaver(x, y - 1);
+        int[] shine = floorPaver(x, band == 0 ? y + 1 : y - 1);
         return new int[] {
                 (color[0] + shine[0]) / 2,
                 (color[1] + shine[1]) / 2,

@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore floor lip.**
+  The row above the
+  paver shine mixes
+  toward the catch.
+  The floor hairline
+  feathers both ways.
+
 - **Explore vault lip.**
   The row above the
   ceiling shine mixes
