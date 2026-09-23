@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well gate wash.**
+  The entry page rests on
+  `#16120e`, the same void
+  center as the page and the
+  desktop root. The stage
+  breath still peaks at
+  `#1a1510`.
+
 - **Explore status void breath.**
   The strip center lifts toward
   `#1a1510` on the well’s 4.5s

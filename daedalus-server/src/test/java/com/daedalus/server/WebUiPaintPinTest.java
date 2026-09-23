@@ -73,7 +73,9 @@ class WebUiPaintPinTest {
                     .contains("letter-spacing: .03em; color: #b09a72; text-decoration: none;")
                     .contains("cursor: pointer; font-weight: 600; }")
                     .contains("padding: 16px 20px 28px; align-items: start;")
-                    .contains("radial-gradient(1200px 700px at 50% -10%, #16120e 0%, var(--bg) 55%)");
+                    .contains("radial-gradient(1200px 700px at 50% -10%, #16120e 0%, var(--bg) 55%)")
+                    .contains("radial-gradient(1100px 640px at 50% -8%, #16120e 0%, var(--bg) 58%)")
+                    .doesNotContain("radial-gradient(1100px 640px at 50% -8%, #1a1510 0%, var(--bg) 58%)");
         }
     }
 
