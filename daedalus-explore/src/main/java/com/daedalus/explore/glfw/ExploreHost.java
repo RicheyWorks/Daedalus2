@@ -945,17 +945,21 @@ public final class ExploreHost {
 
     private static void fillWell(double x0, double y0, double x1, double y1,
                                  float[] mid, float[] rim) {
+        glColor3f(rim[0], rim[1], rim[2]);
+        fill(x0, y0, x1, y1);
         float cx = (float) ((x0 + x1) * 0.5);
         float cy = (float) ((y0 + y1) * 0.5);
+        float rx = (float) ((x1 - x0) * 0.5);
+        float ry = (float) ((y1 - y0) * 0.5);
+        int segs = ExplorePaint.BLOOM_SEGS;
         glBegin(GL_TRIANGLE_FAN);
         glColor3f(mid[0], mid[1], mid[2]);
         glVertex2f(cx, cy);
         glColor3f(rim[0], rim[1], rim[2]);
-        glVertex2f((float) x0, (float) y0);
-        glVertex2f((float) x1, (float) y0);
-        glVertex2f((float) x1, (float) y1);
-        glVertex2f((float) x0, (float) y1);
-        glVertex2f((float) x0, (float) y0);
+        for (int i = 0; i <= segs; i++) {
+            double a = i * Math.PI * 2.0 / segs;
+            glVertex2f(cx + rx * (float) Math.cos(a), cy + ry * (float) Math.sin(a));
+        }
         glEnd();
     }
 

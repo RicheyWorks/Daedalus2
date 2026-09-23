@@ -830,6 +830,11 @@ class ExplorePaintTest {
                 "src/main/java/com/daedalus/explore/glfw/ExploreHost.java"));
         assertThat(host).contains("ExplorePaint.mapFrameGlow(seconds)");
         assertThat(host).contains("ExplorePaint.mapFrameGlowAlpha(seconds)");
+        int wellAt = host.indexOf("void fillWell");
+        int fillAt = host.indexOf("void fill(", wellAt);
+        assertThat(host.substring(wellAt, fillAt))
+                .contains("cy + ry * (float) Math.sin(a)")
+                .doesNotContain("glVertex2f((float) x0, (float) y0)");
         float[] frameInk = new float[3];
         ExplorePaint.mapFrameTint(frameInk);
         assertThat(frameInk[0])

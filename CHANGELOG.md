@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore pocket wash.**
+  The automap pocket
+  and the status strip
+  fall off in a round
+  wash. The void no
+  longer pulls to a
+  diamond.
+
 - **Explore map halo.**
   The automap lip
   wears the same soft
