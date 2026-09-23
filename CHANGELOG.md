@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore you-are-here cadence.**
+  The automap player, story marks,
+  and place pads breathe on the
+  well’s 4.5s player disc. The
+  crosshair, captions, and keys
+  stay on the 2.8s path head.
+
 - **Explore portrait lip cadence.**
   The mood-face gold lip breathes
   on the same 4.5s stage rim as

@@ -220,8 +220,10 @@ public final class ExplorePaint {
     public static final float MAP_HERE_B = 0x4a / 255f;
     /** Same 0.22 rim as halls — leftover even gold is not the last word on you-are-here. */
     public static final float MAP_HERE_EDGE_DIM = 0.22f;
-    /** HERE pad breath — same cadence idea as victory (~2.8s). */
-    public static final float MAP_HERE_BREATH_MS = 2800f;
+    /** You-are-here — same 4.5s cadence as the well player disc. */
+    public static final float MAP_HERE_BREATH_MS = 4500f;
+    /** Crosshair, captions, and keys — same 2.8s as the well path head. */
+    public static final float OVERLAY_BREATH_MS = 2800f;
 
     public static float mapHereHalo(double seconds) {
         double t = ((seconds * 1000.0) % MAP_HERE_BREATH_MS) / MAP_HERE_BREATH_MS;
@@ -1741,8 +1743,8 @@ public final class ExplorePaint {
     public static final float CAPTION_SOFT_G = AIM_BRIGHT_G * MAP_MARK_SOFT_WEIGHT;
     public static final float CAPTION_SOFT_B = AIM_BRIGHT_B * MAP_MARK_SOFT_WEIGHT;
     public static final float CAPTION_SOFT_PAD = 0.35f;
-    /** Caption soft breath — same cadence as status / key chrome. */
-    public static final float CAPTION_BREATH_MS = MAP_HERE_BREATH_MS;
+    /** Caption soft breath — same 2.8s as the crosshair and keys. */
+    public static final float CAPTION_BREATH_MS = OVERLAY_BREATH_MS;
 
     public static float captionSoftPad(double seconds) {
         double t = ((seconds * 1000.0) % CAPTION_BREATH_MS) / CAPTION_BREATH_MS;
@@ -1764,8 +1766,8 @@ public final class ExplorePaint {
     public static final float AIM_ARM = 0.03f;
     public static final float AIM_SOFT_ARM = 0.048f;
     public static final float AIM_SOFT_THICK = 0.012f;
-    /** Soft aim breath — same cadence as HUD key / automap presence. */
-    public static final float AIM_BREATH_MS = MAP_HERE_BREATH_MS;
+    /** Soft aim breath — same 2.8s as the well path head. */
+    public static final float AIM_BREATH_MS = OVERLAY_BREATH_MS;
 
     public static float aimSoftArm(double seconds) {
         double t = ((seconds * 1000.0) % AIM_BREATH_MS) / AIM_BREATH_MS;
@@ -1783,8 +1785,8 @@ public final class ExplorePaint {
     public static final float KEY_SOFT_G = CAPTION_SOFT_G;
     public static final float KEY_SOFT_B = CAPTION_SOFT_B;
     public static final float KEY_SOFT_PAD = 1.55f;
-    /** Key pad breath — same cadence as automap HERE / story marks. */
-    public static final float KEY_BREATH_MS = MAP_HERE_BREATH_MS;
+    /** Key pad breath — same 2.8s as the crosshair and captions. */
+    public static final float KEY_BREATH_MS = OVERLAY_BREATH_MS;
 
     public static float keySoftPad(double seconds) {
         double t = ((seconds * 1000.0) % KEY_BREATH_MS) / KEY_BREATH_MS;

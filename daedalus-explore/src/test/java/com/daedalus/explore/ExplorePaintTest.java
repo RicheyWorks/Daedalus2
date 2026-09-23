@@ -752,7 +752,9 @@ class ExplorePaintTest {
         ExplorePaint.mapHereTint(null, mesh, null);
         assertThat(ExplorePaint.mapHereHalo(0.1))
                 .isNotEqualTo(ExplorePaint.mapHereHalo(0.8));
-        assertThat(ExplorePaint.MAP_HERE_BREATH_MS).isEqualTo(2800f);
+        assertThat(ExplorePaint.MAP_HERE_BREATH_MS).isEqualTo(4500f);
+        assertThat(ExplorePaint.MAP_HERE_BREATH_MS).isEqualTo(ExplorePaint.HUD_VOID_BREATH_MS);
+        assertThat(ExplorePaint.MAP_HERE_BREATH_MS).isNotEqualTo(2800f);
         assertThat(ExplorePaint.MAP_MARK_HALO)
                 .as("story marks wear a soft pad like HERE")
                 .isGreaterThan(0.4f);
@@ -811,7 +813,7 @@ class ExplorePaintTest {
         ExplorePaint.mapPocketTint(1, null);
         assertThat(ExplorePaint.MAP_FRAME_OUT).isGreaterThan(ExplorePaint.MAP_FRAME_IN);
         assertThat(ExplorePaint.MAP_FRAME_BREATH_MS).isEqualTo(ExplorePaint.HUD_VOID_BREATH_MS);
-        assertThat(ExplorePaint.MAP_FRAME_BREATH_MS).isNotEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
+        assertThat(ExplorePaint.MAP_FRAME_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
         assertThat(ExplorePaint.mapFrameOut(0.1))
                 .isNotEqualTo(ExplorePaint.mapFrameOut(0.8));
         assertThat(ExplorePaint.mapFrameIn(0.1))
@@ -1630,7 +1632,7 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.VIGNETTE_B).isEqualTo(ExplorePaint.HUD_VOID_RIM_B);
         assertThat(ExplorePaint.VIGNETTE_R).isNotEqualTo(0.02f);
         assertThat(ExplorePaint.VIGNETTE_BREATH_MS).isEqualTo(ExplorePaint.HUD_VOID_BREATH_MS);
-        assertThat(ExplorePaint.VIGNETTE_BREATH_MS).isNotEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
+        assertThat(ExplorePaint.VIGNETTE_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
         assertThat(ExplorePaint.vignetteAlpha(0.1))
                 .isNotEqualTo(ExplorePaint.vignetteAlpha(0.8));
         assertThat(ExplorePaint.vignetteAlpha(0.1))
@@ -1638,7 +1640,9 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.AIM_SOFT_ARM)
                 .as("soft underglow is wider than the bright arm")
                 .isGreaterThan(ExplorePaint.AIM_ARM);
-        assertThat(ExplorePaint.AIM_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
+        assertThat(ExplorePaint.AIM_BREATH_MS).isEqualTo(ExplorePaint.OVERLAY_BREATH_MS);
+        assertThat(ExplorePaint.AIM_BREATH_MS).isEqualTo(2800f);
+        assertThat(ExplorePaint.AIM_BREATH_MS).isNotEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
         assertThat(ExplorePaint.aimSoftArm(0.1))
                 .isNotEqualTo(ExplorePaint.aimSoftArm(0.8));
         assertThat(ExplorePaint.aimSoftThick(0.1))
@@ -1649,21 +1653,21 @@ class ExplorePaintTest {
                 .isEqualTo(ExplorePaint.AIM_BRIGHT_G * ExplorePaint.MAP_MARK_SOFT_WEIGHT);
         assertThat(ExplorePaint.CAPTION_SOFT_G).isNotEqualTo(0.30f);
         assertThat(ExplorePaint.CAPTION_SOFT_PAD).isGreaterThan(0f);
-        assertThat(ExplorePaint.CAPTION_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
+        assertThat(ExplorePaint.CAPTION_BREATH_MS).isEqualTo(ExplorePaint.OVERLAY_BREATH_MS);
         assertThat(ExplorePaint.captionSoftPad(0.1))
                 .isNotEqualTo(ExplorePaint.captionSoftPad(0.8));
         assertThat(ExplorePaint.AIM_BRIGHT_R).isGreaterThan(ExplorePaint.CAPTION_SOFT_R);
         assertThat(ExplorePaint.KEY_SOFT_PAD)
                 .as("key soft pad is larger than the bright diamond")
                 .isGreaterThan(1f);
-        assertThat(ExplorePaint.KEY_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
+        assertThat(ExplorePaint.KEY_BREATH_MS).isEqualTo(ExplorePaint.OVERLAY_BREATH_MS);
         assertThat(ExplorePaint.keySoftPad(0.1))
                 .isNotEqualTo(ExplorePaint.keySoftPad(0.8));
         assertThat(ExplorePaint.keySoftPad(0.1))
                 .isGreaterThan(ExplorePaint.KEY_SOFT_PAD * 0.85f);
         assertThat(ExplorePaint.FACE_LIP).isGreaterThan(ExplorePaint.FACE_LIP_CORE);
         assertThat(ExplorePaint.FACE_BREATH_MS).isEqualTo(ExplorePaint.STATUS_BREATH_MS);
-        assertThat(ExplorePaint.FACE_BREATH_MS).isNotEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
+        assertThat(ExplorePaint.FACE_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
         assertThat(ExplorePaint.faceLip(0.1))
                 .isNotEqualTo(ExplorePaint.faceLip(0.8));
         assertThat(ExplorePaint.faceLipCore(0.1))
