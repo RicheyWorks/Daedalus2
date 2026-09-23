@@ -972,6 +972,11 @@ class ExplorePaintTest {
         int mouth = (44 * ExplorePaint.TEX + 28) * 4;
         assertThat(Byte.toUnsignedInt(grim[mouth]))
                 .isLessThan(Byte.toUnsignedInt(calm[mouth]));
+        assertThat(Byte.toUnsignedInt(calm[0])).isEqualTo(ExplorePaint.FACE_FRAME_R);
+        assertThat(ExplorePaint.FACE_FRAME_R).isEqualTo(ExplorePaint.BRICK_MORTAR_R);
+        assertThat(ExplorePaint.FACE_FRAME_G).isEqualTo(0x22);
+        assertThat(ExplorePaint.FACE_FRAME_B).isEqualTo(0x18);
+        assertThat(ExplorePaint.FACE_FRAME_R).isNotEqualTo(34);
     }
 
     @Test

@@ -905,13 +905,18 @@ public final class ExplorePaint {
         });
     }
 
+    /** Portrait bezel — same wall-warm as the well {@code COLORS.wallWarm}. */
+    public static final int FACE_FRAME_R = 0x2a;
+    public static final int FACE_FRAME_G = 0x22;
+    public static final int FACE_FRAME_B = 0x18;
+
     public static byte[] faceRgba(int mood) {
         int grim = Math.max(0, Math.min(2, mood));
         return raster((x, y) -> {
             int px = x / 8;
             int py = y / 8;
             if (px <= 0 || px >= 7 || py <= 0 || py >= 7) {
-                return rgbBytes(34, 22, 16);
+                return rgbBytes(FACE_FRAME_R, FACE_FRAME_G, FACE_FRAME_B);
             }
             if (py == 1) {
                 return rgbBytes(62, 36, 22);

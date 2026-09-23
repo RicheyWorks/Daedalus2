@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore portrait bezel.**
+  The mood-face frame uses the
+  well wall-warm `#2a2218`, the
+  same stone as the brick mortar.
+
 - **Explore caption underglow.**
   The crosshair, caption, and
   key pads use the aim gold at
