@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop status wash.**
+  The status bar uses the same
+  translucent void as the toolbar
+  and the well header.
+
 - **Desktop brand gap.**
   The space after the toolbar name
   is 14px, the same gap as the well header.

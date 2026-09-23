@@ -171,7 +171,7 @@
 }
 
 .status-bar {
-    -fx-background-color: #16120e;
+    -fx-background-color: rgba(12, 9, 8, 0.92);
     -fx-border-color: rgba(153, 111, 49, 0.45) transparent transparent transparent;
     -fx-border-width: 1 0 0 0;
     -fx-cursor: default;

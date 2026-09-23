@@ -105,7 +105,8 @@ class ThemeManagerTest {
             assertThat(css).contains("-fx-min-height: 20.4px;");
             assertThat(css).contains("-fx-pref-height: 20.4px;");
             assertThat(css).contains("-fx-border-width: 1 0 0 0;\n    -fx-cursor: default;");
-            assertThat(css).contains("-fx-background-color: #16120e");
+            assertThat(css).contains(".status-bar {\n    -fx-background-color: rgba(12, 9, 8, 0.92);");
+            assertThat(css).doesNotContain(".status-bar {\n    -fx-background-color: #16120e;");
             assertThat(css).contains("rgba(16, 11, 8, 0.55)");
             assertThat(css).contains("rgba(16, 11, 8, 0.92)");
             assertThat(css).contains("-fx-padding: 22 14 10 14;");
