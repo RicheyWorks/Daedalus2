@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore sky cap.**
+  The zenith sits on the well page
+  wash #16120e so looking up shares
+  the warm top of the well.
+
 - **Explore status void.**
   The strip runs from the well center
   #16120e to the page void #0c0908

@@ -821,6 +821,10 @@ public final class ExplorePaint {
         });
     }
 
+    /** Sky cap — same warm top as the well page wash {@code #16120e}. */
+    public static final int SKY_ZENITH_R = 0x16;
+    public static final int SKY_ZENITH_G = 0x12;
+    public static final int SKY_ZENITH_B = 0x0e;
     /** Horizon hills — same wall as the well posts. */
     public static final int SKY_HILL_R = 0x12;
     public static final int SKY_HILL_G = 0x0e;
@@ -852,9 +856,9 @@ public final class ExplorePaint {
             int g;
             int b;
             if (y < 18) {
-                r = 78 + n / 3;
-                g = 30 + n / 6;
-                b = 24;
+                r = SKY_ZENITH_R + n / 3;
+                g = SKY_ZENITH_G + n / 6;
+                b = SKY_ZENITH_B;
             } else if (y < 36) {
                 r = 148 + n / 2;
                 g = 56 + n / 4;
