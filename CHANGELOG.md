@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore facing halo.**
+  The stood-on line uses the
+  same caption underglow as
+  the place name.
+
 - **Explore sky grade.**
   The sky quad keeps a neutral
   tint, so the well bands are

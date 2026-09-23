@@ -1097,6 +1097,11 @@ class ExplorePaintTest {
                 .as("KEEP leftover even caption gold stays")
                 .isEqualTo(0.62f);
         ExplorePaint.captionMetaTint(null);
+        float[] metaSoft = new float[3];
+        ExplorePaint.captionMetaSoftTint(metaSoft);
+        assertThat(metaSoft[1]).isEqualTo(ExplorePaint.CAPTION_SOFT_G);
+        assertThat(metaSoft[1]).isNotEqualTo(ExplorePaint.CAPTION_SOFT_G * 0.7f);
+        ExplorePaint.captionMetaSoftTint(null);
         assertThat(ExplorePaint.captionWidth("AB", 0.02f, 0.008f))
                 .isGreaterThan(ExplorePaint.captionAdvance(0.02f, 0.008f));
         List<ExploreMarker> marks = List.of(

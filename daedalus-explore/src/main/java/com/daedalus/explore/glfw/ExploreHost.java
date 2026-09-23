@@ -713,9 +713,10 @@ public final class ExploreHost {
         float metaX = x0 + ExplorePaint.captionWidth(place, placeCell, gap) + 0.02f;
         float metaY = y0 + (placeCell - metaCell) * ExplorePaint.GLYPH_H * 0.5f;
         if (!meta.isEmpty()) {
+            float[] metaSoft = new float[3];
+            ExplorePaint.captionMetaSoftTint(metaSoft);
             paintCaptionPass(meta, metaX, metaY, metaCell, gap, metaPad,
-                    ExplorePaint.CAPTION_SOFT_R * 0.7f, ExplorePaint.CAPTION_SOFT_G * 0.7f,
-                    ExplorePaint.CAPTION_SOFT_B * 0.7f);
+                    metaSoft[0], metaSoft[1], metaSoft[2]);
             float[] metaInk = new float[3];
             ExplorePaint.captionMetaTint(metaInk);
             paintCaptionPass(meta, metaX, metaY, metaCell, gap, 0,

@@ -1716,6 +1716,14 @@ public final class ExplorePaint {
         double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
         return CAPTION_SOFT_PAD * (float) (0.88 + 0.24 * wave);
     }
+
+    /** Facing-line halo — same underglow as the place name. */
+    public static void captionMetaSoftTint(float[] rgb) {
+        if (rgb == null || rgb.length < 3) {
+            return;
+        }
+        set(rgb, CAPTION_SOFT_R, CAPTION_SOFT_G, CAPTION_SOFT_B);
+    }
     /** Dim underglow — same aim gold as the caption pad. */
     public static final float AIM_SOFT_R = CAPTION_SOFT_R;
     public static final float AIM_SOFT_G = CAPTION_SOFT_G;
