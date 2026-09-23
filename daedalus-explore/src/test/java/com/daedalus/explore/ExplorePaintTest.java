@@ -511,6 +511,10 @@ class ExplorePaintTest {
         assertThat(seam[0]).isEqualTo((paver[0] + neighbor[0]) / 2);
         assertThat(ExplorePaint.floorTexColor(4, 4)).containsExactly(ExplorePaint.floorPaver(4, 4));
         assertThat(ExplorePaint.floorTexColor(2, 1)).containsExactly(ExplorePaint.floorPaver(2, 1));
+        int[] underCatch = ExplorePaint.floorPaver(4, 2);
+        int[] catchRow = ExplorePaint.floorPaver(4, 1);
+        assertThat(ExplorePaint.floorTexColor(4, 2)[0])
+                .isEqualTo((underCatch[0] + catchRow[0]) / 2);
         assertThat(ExplorePaint.CEILING_TEX_EDGE_DIM).isEqualTo(0.22f);
         assertThat(ExplorePaint.ceilingTexShade(0, 3))
                 .as("ceiling tile rim falls off like floor tiles")

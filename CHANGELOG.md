@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore floor catch.**
+  The row under the
+  paver shine mixes
+  toward the catch.
+  The floor hairline
+  feathers into the
+  stone.
+
 - **Explore vault catch.**
   The row under the
   ceiling shine mixes

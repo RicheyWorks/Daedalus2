@@ -878,12 +878,24 @@ public final class ExplorePaint {
         });
     }
 
-    /** Unshaded floor texel. Paver edges mix so warm and dark stone meet. */
+    /** Unshaded floor texel. Paver edges mix, and the row under the catch feathers. */
     public static int[] floorTexColor(int x, int y) {
         int[] here = floorPaver(x, y);
         if ((y & 7) == 1) {
             return here;
         }
+        int[] color = floorSeam(x, y, here);
+        if ((y & 7) != 2) {
+            return color;
+        }
+        int[] shine = floorPaver(x, y - 1);
+        return new int[] {
+                (color[0] + shine[0]) / 2,
+                (color[1] + shine[1]) / 2,
+                (color[2] + shine[2]) / 2};
+    }
+
+    private static int[] floorSeam(int x, int y, int[] here) {
         int lx = Math.floorMod(x, 8);
         int ly = Math.floorMod(y, 8);
         int nx = x;
