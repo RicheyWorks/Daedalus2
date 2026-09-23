@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore portrait edge.**
+  The mood face mixes
+  where the bezel meets
+  the skin. The portrait
+  joins the frame
+  instead of cutting
+  on one texel.
+
 - **Explore brick grout.**
   Clay beside the
   mortar mixes toward

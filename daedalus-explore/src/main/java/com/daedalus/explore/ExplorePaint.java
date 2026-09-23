@@ -1079,22 +1079,47 @@ public final class ExplorePaint {
     public static byte[] faceRgba(int mood) {
         int grim = Math.max(0, Math.min(2, mood));
         return raster((x, y) -> {
-            int px = x / 8;
-            int py = y / 8;
-            if (px <= 0 || px >= 7 || py <= 0 || py >= 7) {
-                return rgbBytes(FACE_FRAME_R, FACE_FRAME_G, FACE_FRAME_B);
-            }
-            if (py == 1) {
-                return rgbBytes(FACE_BROW_R, FACE_BROW_G, FACE_BROW_B);
-            }
-            if (py == 3 && (px == 2 || px == 5)) {
-                return rgbBytes(FACE_EYE_R, FACE_EYE_G, FACE_EYE_B);
-            }
-            if (py == 5) {
-                return mouth(grim, px);
-            }
-            return rgbBytes(186, 128, 78);
+            int[] rgb = faceTexColor(x, y, grim);
+            return rgbBytes(rgb[0], rgb[1], rgb[2]);
         });
+    }
+
+    /** Unshaded portrait texel. Cell edges mix so the bezel meets the skin. */
+    public static int[] faceTexColor(int x, int y, int mood) {
+        int grim = Math.max(0, Math.min(2, mood));
+        int[] here = faceCell(x, y, grim);
+        int nx = x;
+        int ny = y;
+        if ((x & 7) == 7 && x + 1 < TEX) {
+            nx = x + 1;
+        } else if ((y & 7) == 7 && y + 1 < TEX) {
+            ny = y + 1;
+        } else {
+            return here;
+        }
+        int[] next = faceCell(nx, ny, grim);
+        return new int[] {
+                (here[0] + next[0]) / 2,
+                (here[1] + next[1]) / 2,
+                (here[2] + next[2]) / 2};
+    }
+
+    private static int[] faceCell(int x, int y, int grim) {
+        int px = x / 8;
+        int py = y / 8;
+        if (px <= 0 || px >= 7 || py <= 0 || py >= 7) {
+            return new int[] {FACE_FRAME_R, FACE_FRAME_G, FACE_FRAME_B};
+        }
+        if (py == 1) {
+            return new int[] {FACE_BROW_R, FACE_BROW_G, FACE_BROW_B};
+        }
+        if (py == 3 && (px == 2 || px == 5)) {
+            return new int[] {FACE_EYE_R, FACE_EYE_G, FACE_EYE_B};
+        }
+        if (py == 5) {
+            return mouth(grim, px);
+        }
+        return new int[] {186, 128, 78};
     }
 
     public static void skyUv(double yaw, double pitch, float sx, float sy, float[] out) {
