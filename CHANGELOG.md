@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore gold-seat breath.**
+  The lip under the status gold
+  and the automap frame lifts
+  with the pocket toward
+  `#1a1510`.
+
 - **Explore automap pocket breath.**
   The inset center lifts toward
   `#1a1510` on the same 4.5s

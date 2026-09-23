@@ -593,8 +593,9 @@ public final class ExploreHost {
         fillHud(-aspect, bot, aspect, top, seconds);
         float[] lipInk = new float[3];
         ExplorePaint.statusLipTint(lipInk);
-        glColor3f(ExplorePaint.STATUS_GOLD_UNDER_R, ExplorePaint.STATUS_GOLD_UNDER_G,
-                ExplorePaint.STATUS_GOLD_UNDER_B);
+        float[] underInk = new float[3];
+        ExplorePaint.statusUnderTint(underInk, seconds);
+        glColor3f(underInk[0], underInk[1], underInk[2]);
         fill(-aspect, top - ExplorePaint.statusGoldUnderH(seconds), aspect, top);
         glColor3f(lipInk[0], lipInk[1], lipInk[2]);
         fill(-aspect, top - ExplorePaint.statusGoldH(seconds), aspect, top);
@@ -604,8 +605,7 @@ public final class ExploreHost {
         float faceTop = top - 0.03f;
         float lip = ExplorePaint.faceLip(seconds);
         float core = ExplorePaint.faceLipCore(seconds);
-        glColor3f(ExplorePaint.STATUS_GOLD_UNDER_R, ExplorePaint.STATUS_GOLD_UNDER_G,
-                ExplorePaint.STATUS_GOLD_UNDER_B);
+        glColor3f(underInk[0], underInk[1], underInk[2]);
         fill(faceLeft - lip, faceBot - lip, faceRight + lip, faceTop + lip);
         glColor3f(lipInk[0], lipInk[1], lipInk[2]);
         fill(faceLeft - core, faceBot - core, faceRight + core, faceTop + core);
@@ -773,8 +773,9 @@ public final class ExploreHost {
         ExplorePaint.mapFrameTint(frameInk);
         glColor3f(frameInk[0], frameInk[1], frameInk[2]);
         fill(left - frameOut, bot - frameOut, right + frameOut, top + frameOut);
-        glColor3f(ExplorePaint.STATUS_GOLD_UNDER_R, ExplorePaint.STATUS_GOLD_UNDER_G,
-                ExplorePaint.STATUS_GOLD_UNDER_B);
+        float[] frameUnder = new float[3];
+        ExplorePaint.statusUnderTint(frameUnder, seconds);
+        glColor3f(frameUnder[0], frameUnder[1], frameUnder[2]);
         fill(left - frameIn, bot - frameIn, right + frameIn, top + frameIn);
         fillPocket(left, bot, right, top, seconds);
         double sx = (right - left) / ExplorePaint.MAP;

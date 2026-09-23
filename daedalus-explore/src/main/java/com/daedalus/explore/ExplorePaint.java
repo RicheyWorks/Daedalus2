@@ -510,6 +510,11 @@ public final class ExplorePaint {
     public static final float STATUS_GOLD_UNDER_G = MAP_POCKET_G;
     public static final float STATUS_GOLD_UNDER_B = MAP_POCKET_B;
     public static final float STATUS_GOLD_UNDER_H = 0.022f;
+
+    /** Lip seat — same breathing pocket center as the automap inset. */
+    public static void statusUnderTint(float[] rgb, double seconds) {
+        mapPocketTint(0, rgb, seconds);
+    }
     /** Status lip breath — same cadence as automap frame chrome. */
     public static final float STATUS_BREATH_MS = MAP_HERE_BREATH_MS;
 

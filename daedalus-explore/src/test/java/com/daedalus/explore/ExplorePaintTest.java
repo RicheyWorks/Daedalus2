@@ -1610,6 +1610,12 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.STATUS_GOLD_UNDER_G).isEqualTo(ExplorePaint.MAP_POCKET_G);
         assertThat(ExplorePaint.STATUS_GOLD_UNDER_B).isEqualTo(ExplorePaint.MAP_POCKET_B);
         assertThat(ExplorePaint.STATUS_GOLD_UNDER_R).isNotEqualTo(0.16f);
+        float[] underLit = new float[3];
+        ExplorePaint.statusUnderTint(underLit, ExplorePaint.HUD_VOID_BREATH_MS / 2000.0);
+        assertThat(underLit[0]).isCloseTo(ExplorePaint.HUD_VOID_LIT_R, within(1e-5f));
+        ExplorePaint.statusUnderTint(underLit, 0);
+        assertThat(underLit[0]).isEqualTo(ExplorePaint.STATUS_GOLD_UNDER_R);
+        ExplorePaint.statusUnderTint(null, 0);
         assertThat(ExplorePaint.STATUS_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
         assertThat(ExplorePaint.statusGoldH(0.1))
                 .isNotEqualTo(ExplorePaint.statusGoldH(0.8));
