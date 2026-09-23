@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop brand line.**
+  The toolbar name sits in a 1 line,
+  the same box as the well header.
+
 - **Explore marker family.**
   World posts use the same fallen
   story diamonds as the HUD keys.

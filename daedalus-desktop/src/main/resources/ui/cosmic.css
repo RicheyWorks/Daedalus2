@@ -27,6 +27,11 @@
     -fx-font-weight: bold;
     /* 0.22em of the 18px well header — same tracking as header h1. */
     -fx-spacing: 3.96px;
+    /* font: 700 18px/1 — the name sits in that line box. */
+    -fx-min-height: 18px;
+    -fx-pref-height: 18px;
+    -fx-max-height: 18px;
+    -fx-alignment: center-left;
     -fx-text-fill: #f2ead8;
     -fx-padding: 0 8 0 2;
     -fx-effect: dropshadow(one-pass-box, rgba(58, 182, 117, 0.28), 14, 0.45, 0, 0);

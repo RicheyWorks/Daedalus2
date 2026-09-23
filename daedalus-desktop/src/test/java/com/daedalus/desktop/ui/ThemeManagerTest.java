@@ -86,6 +86,9 @@ class ThemeManagerTest {
             assertThat(css).contains(".toolbar .brand");
             assertThat(css).contains("-fx-font-size: 18px;\n    -fx-font-weight: bold;");
             assertThat(css).contains("-fx-spacing: 3.96px;");
+            assertThat(css).contains("-fx-min-height: 18px;");
+            assertThat(css).contains("-fx-pref-height: 18px;");
+            assertThat(css).contains("-fx-max-height: 18px;");
             assertThat(css).contains(".toolbar .brand .text {\n    -fx-fill: #f2ead8;");
             assertThat(css).doesNotContain("-fx-font-size: 14px;");
             assertThat(css).contains(".toolbar .label");
