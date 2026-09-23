@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend seat.**
+  The key strip sits on the stage
+  bottom, the same seat as the well.
+
 - **Desktop legend swatch sit.**
   The chip sits 1px lower,
   the same nudge as the well key.

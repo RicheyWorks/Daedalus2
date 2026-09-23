@@ -260,6 +260,10 @@ class ThemeManagerTest {
         assertThat(src).contains("double em = 11 * 0.04;");
         assertThat(src).contains("word.setMinHeight(11 * 1.4);");
         assertThat(src).contains("swatch.setTranslateY(1);");
+        assertThat(src).contains(
+                "canvasParent.heightProperty().subtract(legendBox.heightProperty()))");
+        assertThat(src).doesNotContain(
+                "subtract(legendBox.heightProperty()).subtract(4)");
         assertThat(src).contains("Font.font(\"Bahnschrift\", FontWeight.SEMI_BOLD, 11)");
         assertThat(src).contains("new HBox(5)");
     }

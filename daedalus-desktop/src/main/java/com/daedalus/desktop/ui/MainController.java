@@ -348,7 +348,7 @@ public class MainController {
             legendBox.layoutXProperty().bind(
                     canvasParent.widthProperty().subtract(legendBox.widthProperty()).divide(2));
             legendBox.layoutYProperty().bind(
-                    canvasParent.heightProperty().subtract(legendBox.heightProperty()).subtract(4));
+                    canvasParent.heightProperty().subtract(legendBox.heightProperty()));
         }
         if (exportBox != null) {
             exportBox.layoutXProperty().bind(
