@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore horizon hills.**
+  The skyline sits on the well wall
+  #120e0c so the far posts share
+  the maze stone.
+
 - **Explore vault body.**
   The ceiling stone sits on the well
   wall highlight #4a3824 so the lid

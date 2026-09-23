@@ -912,6 +912,10 @@ class ExplorePaintTest {
         assertThat(calm).hasSize(sky.length);
         assertThat(Byte.toUnsignedInt(sky[0])).isNotEqualTo(0);
         assertThat(ExplorePaint.SKY_TEX_EDGE_DIM).isEqualTo(0.22f);
+        assertThat(ExplorePaint.SKY_HILL_R).isEqualTo(0x12);
+        assertThat(ExplorePaint.SKY_HILL_G).isEqualTo(0x0e);
+        assertThat(ExplorePaint.SKY_HILL_B).isEqualTo(0x0c);
+        assertThat(ExplorePaint.SKY_HILL_R).isNotEqualTo(30);
         assertThat(ExplorePaint.skyTexShade(0, 28))
                 .as("sky rim falls off like the well void pocket")
                 .isLessThan(ExplorePaint.skyTexShade(32, 28));

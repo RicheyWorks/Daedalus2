@@ -817,6 +817,10 @@ public final class ExplorePaint {
         });
     }
 
+    /** Horizon hills — same wall as the well posts. */
+    public static final int SKY_HILL_R = 0x12;
+    public static final int SKY_HILL_G = 0x0e;
+    public static final int SKY_HILL_B = 0x0c;
     /** Same 0.22 rim as halls — leftover even sky bands are not the last word at the horizon. */
     public static final float SKY_TEX_EDGE_DIM = 0.22f;
 
@@ -854,9 +858,9 @@ public final class ExplorePaint {
             } else {
                 boolean hill = y > 50 && ((hash(x / 6, 3) & 15) > (64 - y));
                 if (hill) {
-                    r = 30 + n / 4;
-                    g = 16;
-                    b = 14;
+                    r = SKY_HILL_R + n / 4;
+                    g = SKY_HILL_G;
+                    b = SKY_HILL_B;
                 } else {
                     r = 52 + n / 3;
                     g = 24;
