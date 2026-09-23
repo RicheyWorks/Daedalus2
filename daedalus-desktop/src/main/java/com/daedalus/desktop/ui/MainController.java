@@ -2594,6 +2594,7 @@ public class MainController {
         }
         double em = 11 * 0.04;
         var word = new HBox(em);
+        word.setMinHeight(11 * 1.4);
         word.setAlignment(Pos.CENTER_LEFT);
         Font font = Font.font("Bahnschrift", FontWeight.SEMI_BOLD, 11);
         Color ink = Color.web("#b09a72");

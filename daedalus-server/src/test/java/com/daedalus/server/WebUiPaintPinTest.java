@@ -1891,6 +1891,7 @@ class WebUiPaintPinTest {
             assertThat(in).as("static well page").isNotNull();
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
+                    .contains("font: 600 11px/1.4 Bahnschrift, \"Segoe UI\", sans-serif;")
                     .contains("letter-spacing: .04em; color: #b09a72; pointer-events: none;")
                     .contains("#legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px;")
                     .contains("box-shadow: 0 0 0 1px rgba(198,190,174,.06); }")

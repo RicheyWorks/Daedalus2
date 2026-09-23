@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend line.**
+  The key words sit in a 1.4 line,
+  the same box as the well legend.
+
 - **Desktop legend tracking.**
   The key words are tracked 0.04em,
   the same spacing as the well legend.
