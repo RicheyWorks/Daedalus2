@@ -405,8 +405,8 @@ public final class ExplorePaint {
     /** Automap gold frame — same ink as the status lip. */
     public static final float MAP_FRAME_OUT = 0.022f;
     public static final float MAP_FRAME_IN = 0.014f;
-    /** Frame breath — same cadence as HERE / story pads. */
-    public static final float MAP_FRAME_BREATH_MS = MAP_HERE_BREATH_MS;
+    /** Frame breath — same 4.5s cadence as the well stage rim. */
+    public static final float MAP_FRAME_BREATH_MS = 4500f;
 
     public static float mapFrameOut(double seconds) {
         double t = ((seconds * 1000.0) % MAP_FRAME_BREATH_MS) / MAP_FRAME_BREATH_MS;
@@ -515,8 +515,8 @@ public final class ExplorePaint {
     public static void statusUnderTint(float[] rgb, double seconds) {
         mapPocketTint(0, rgb, seconds);
     }
-    /** Status lip breath — same cadence as automap frame chrome. */
-    public static final float STATUS_BREATH_MS = MAP_HERE_BREATH_MS;
+    /** Status lip breath — same 4.5s cadence as the well stage rim. */
+    public static final float STATUS_BREATH_MS = HUD_VOID_BREATH_MS;
 
     /** Soft screen-edge shade — same well edge as the page void {@code #0c0908}. */
     public static final float VIGNETTE_INSET = 0.16f;

@@ -810,7 +810,8 @@ class ExplorePaintTest {
         assertThat(pocketRimHeld[0]).isEqualTo(ExplorePaint.MAP_POCKET_RIM_R);
         ExplorePaint.mapPocketTint(1, null);
         assertThat(ExplorePaint.MAP_FRAME_OUT).isGreaterThan(ExplorePaint.MAP_FRAME_IN);
-        assertThat(ExplorePaint.MAP_FRAME_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
+        assertThat(ExplorePaint.MAP_FRAME_BREATH_MS).isEqualTo(ExplorePaint.HUD_VOID_BREATH_MS);
+        assertThat(ExplorePaint.MAP_FRAME_BREATH_MS).isNotEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
         assertThat(ExplorePaint.mapFrameOut(0.1))
                 .isNotEqualTo(ExplorePaint.mapFrameOut(0.8));
         assertThat(ExplorePaint.mapFrameIn(0.1))
@@ -1616,7 +1617,8 @@ class ExplorePaintTest {
         ExplorePaint.statusUnderTint(underLit, 0);
         assertThat(underLit[0]).isEqualTo(ExplorePaint.STATUS_GOLD_UNDER_R);
         ExplorePaint.statusUnderTint(null, 0);
-        assertThat(ExplorePaint.STATUS_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
+        assertThat(ExplorePaint.STATUS_BREATH_MS).isEqualTo(ExplorePaint.HUD_VOID_BREATH_MS);
+        assertThat(ExplorePaint.STATUS_BREATH_MS).isEqualTo(ExplorePaint.MAP_FRAME_BREATH_MS);
         assertThat(ExplorePaint.statusGoldH(0.1))
                 .isNotEqualTo(ExplorePaint.statusGoldH(0.8));
         assertThat(ExplorePaint.statusGoldUnderH(0.1))

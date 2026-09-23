@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore gold lip cadence.**
+  The status lip and the automap
+  frame breathe on the well’s
+  4.5s stage rim.
+
 - **Explore edge shade.**
   The vignette breathes on the
   well’s 4.5s void wash, with
