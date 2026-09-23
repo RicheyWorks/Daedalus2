@@ -1595,7 +1595,7 @@ public final class ExplorePaint {
         } else if ("WOOD".equals(place)) {
             set(rgb, MAP_BLOCK_R, MAP_BLOCK_G, MAP_BLOCK_B);
         } else if ("DIRT".equals(place)) {
-            set(rgb, MAP_BLOCK_R * 0.86f, MAP_BLOCK_G * 0.84f, MAP_BLOCK_B * 0.90f);
+            set(rgb, BLOCK_DIRT_R, BLOCK_DIRT_G, BLOCK_DIRT_B);
         } else if ("GLASS".equals(place)) {
             set(rgb, BLOCK_GLASS_R, BLOCK_GLASS_G, BLOCK_GLASS_B);
         } else if ("STONE".equals(place)) {
@@ -2462,9 +2462,11 @@ public final class ExplorePaint {
     public static final float BLOCK_STONE_R = 0.40f;
     public static final float BLOCK_STONE_G = 0.30f;
     public static final float BLOCK_STONE_B = 0.20f;
-    public static final float BLOCK_DIRT_R = 0.50f;
-    public static final float BLOCK_DIRT_G = 0.32f;
-    public static final float BLOCK_DIRT_B = 0.16f;
+    /** Dirt — torch wood one course darker, so the cube keeps that hue. */
+    public static final float BLOCK_DIRT_SHADE = 0.84f;
+    public static final float BLOCK_DIRT_R = MAP_BLOCK_R * BLOCK_DIRT_SHADE;
+    public static final float BLOCK_DIRT_G = MAP_BLOCK_G * BLOCK_DIRT_SHADE;
+    public static final float BLOCK_DIRT_B = MAP_BLOCK_B * BLOCK_DIRT_SHADE;
     public static final float BLOCK_WOOD_R = 0.58f;
     public static final float BLOCK_WOOD_G = 0.38f;
     public static final float BLOCK_WOOD_B = 0.18f;

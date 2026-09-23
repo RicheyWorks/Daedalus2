@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore dirt cubes.**
+  Placed dirt and its caption
+  are the torch wood at 0.84,
+  so the cube keeps that hue.
+
 - **Well stage inset.**
   The board's inner shade uses
   the page void `#0c0908`, so

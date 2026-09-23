@@ -101,6 +101,16 @@ class ExplorePaintTest {
         ExplorePaint.blockTint(BlockType.STONE, WorldMesh.Face.NEG_Y, boot);
         assertThat(wood[0]).as("wood is warmer than stone").isGreaterThan(stone[0]);
         assertThat(dirt[0]).isGreaterThan(stone[0]);
+        assertThat(ExplorePaint.BLOCK_DIRT_R)
+                .isEqualTo(ExplorePaint.MAP_BLOCK_R * ExplorePaint.BLOCK_DIRT_SHADE);
+        assertThat(ExplorePaint.BLOCK_DIRT_G)
+                .isEqualTo(ExplorePaint.MAP_BLOCK_G * ExplorePaint.BLOCK_DIRT_SHADE);
+        assertThat(ExplorePaint.BLOCK_DIRT_B)
+                .isEqualTo(ExplorePaint.MAP_BLOCK_B * ExplorePaint.BLOCK_DIRT_SHADE);
+        assertThat(ExplorePaint.BLOCK_DIRT_R).isNotEqualTo(0.50f);
+        float[] dirtCaption = new float[3];
+        ExplorePaint.captionPlaceTint("DIRT", dirtCaption);
+        assertThat(dirtCaption[0]).isEqualTo(ExplorePaint.BLOCK_DIRT_R);
         assertThat(glass[1]).as("glass stays lamp-green, not leftover well ice")
                 .isGreaterThan(glass[2]);
         assertThat(glass[2]).isLessThan(0.72f);
