@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.paint.RadialGradient?>
 <?import javafx.scene.paint.Stop?>
@@ -122,7 +123,11 @@
     </top>
 
     <center>
-        <Pane fx:id="canvasParent" styleClass="canvas-pane">
+        <StackPane styleClass="board">
+            <padding>
+                <Insets top="12" right="12" bottom="12" left="12"/>
+            </padding>
+            <Pane fx:id="canvasParent" styleClass="canvas-pane">
             <Canvas fx:id="canvas"/>
             <HBox fx:id="legendBox" spacing="14" alignment="CENTER" styleClass="legend"
                   managed="false" mouseTransparent="true" visible="false">
@@ -575,6 +580,7 @@
                 </Button>
             </HBox>
         </Pane>
+        </StackPane>
     </center>
 
     <bottom>

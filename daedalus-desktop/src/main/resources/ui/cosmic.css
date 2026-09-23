@@ -136,6 +136,15 @@
     -fx-cursor: default;
 }
 
+.board {
+    -fx-background-color: #16120e;
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(16, 11, 8, 0.85), rgba(153, 111, 49, 0.42);
+    -fx-border-width: 1, 1;
+    -fx-border-insets: 0, 1;
+    -fx-border-radius: 10, 9;
+}
+
 .exports {
     -fx-padding: 0;
     -fx-cursor: default;

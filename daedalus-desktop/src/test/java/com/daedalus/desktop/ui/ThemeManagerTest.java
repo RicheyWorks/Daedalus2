@@ -134,11 +134,15 @@ class ThemeManagerTest {
                     "-fx-background-color: rgba(153, 111, 49, 0.45);\n    -fx-background-insets: 0;\n    -fx-background-radius: 4;");
             assertThat(css).contains("-fx-background-color: rgba(153, 111, 49, 0.65);");
             assertThat(css).contains("-fx-background-color: rgba(153, 111, 49, 0.85);");
+            assertThat(css).contains(".board {\n    -fx-background-color: #16120e;");
+            assertThat(css).contains("rgba(16, 11, 8, 0.85), rgba(153, 111, 49, 0.42);");
         }
         try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
             assertThat(in).as("main.fxml is on the classpath").isNotNull();
             String fxml = new String(in.readAllBytes());
             assertThat(fxml).contains("<HBox styleClass=\"brand\" alignment=\"CENTER_LEFT\">");
+            assertThat(fxml).contains("<StackPane styleClass=\"board\">");
+            assertThat(fxml).contains("<Insets top=\"12\" right=\"12\" bottom=\"12\" left=\"12\"/>");
             assertThat(fxml).contains("<Insets right=\"10\"/>");
             assertThat(fxml).contains("<Insets top=\"8\" right=\"10\" bottom=\"4\" left=\"10\"/>");
             assertThat(fxml).contains("styleClass=\"status-line\"");

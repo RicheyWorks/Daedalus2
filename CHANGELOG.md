@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop board seat.**
+  The stage sits in a 12px
+  #16120e board with a 0.42 gold
+  lip, the same pad as the well board.
+
 - **Desktop scroll thumb.**
   The bar is 8px, the thumb is a
   4px gold radius, and hover and
