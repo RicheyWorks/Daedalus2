@@ -2192,7 +2192,8 @@ public class MainController {
                     g.fillOval(core.x(), core.y(), core.size(), core.size());
                     g.setGlobalAlpha(1);
                     g.setStroke(ink.deriveColor(0, 1, 1, DesktopPaint.deadEndRimAlpha(cutsWave)));
-                    g.setLineWidth(Math.max(1.0, core.size() * 0.07));
+                    g.setLineWidth(DesktopPaint.discStroke(
+                            core.size(), DesktopPaint.DEAD_END_RADIUS, 0.06));
                     g.strokeOval(core.x(), core.y(), core.size(), core.size());
                 }
             }

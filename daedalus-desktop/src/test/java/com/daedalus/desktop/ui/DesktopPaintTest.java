@@ -320,6 +320,9 @@ class DesktopPaintTest {
                 .isGreaterThan(DesktopPaint.deadEndCoreAlpha(0));
         assertThat(DesktopPaint.deadEndRimAlpha(1))
                 .isGreaterThan(DesktopPaint.deadEndRimAlpha(0));
+        assertThat(DesktopPaint.discStroke(5.6, DesktopPaint.DEAD_END_RADIUS, 0.06))
+                .as("dead-end rim is 0.06·cell, not 0.07 of the disc")
+                .isCloseTo(1.2, within(1e-9));
         assertThat(DesktopPaint.chokeTile(null)).isNull();
         assertThat(DesktopPaint.chokeHalo(layout, null)).isNull();
     }

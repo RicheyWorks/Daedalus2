@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop dead-end rim.**
+  The cul-de-sac stroke is
+  `0.06·cell`, the same line
+  the well paints on the core.
+
 - **Desktop disc rims.**
   Walker, ghost, endpoint, and
   route-tip strokes are
