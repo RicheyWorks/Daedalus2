@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend fade.**
+  The scrim fades in
+  the seat’s own ink,
+  the same warm veil
+  as the well key.
+
 - **Desktop stage wash.**
   The letterbox void
   follows the well’s

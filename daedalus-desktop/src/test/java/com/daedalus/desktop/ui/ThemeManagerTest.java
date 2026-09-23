@@ -376,6 +376,8 @@ class ThemeManagerTest {
                 .contains("DesktopPaint.brandGoldRadius(wave)")
                 .contains("DesktopPaint.infoRimAlpha(wave)")
                 .contains("DesktopPaint.headerRimAlpha(wave)")
+                .contains("DesktopPaint.LEGEND_FADE_B, 0)")
+                .doesNotContain("Stop(0, Color.TRANSPARENT)")
                 .contains("new javafx.scene.layout.BorderWidths(0, 0, 0, 2)")
                 .doesNotContain("instanceof Label brand")
                 .doesNotContain("Color.web(\"#3ee08f\"")
@@ -386,6 +388,8 @@ class ThemeManagerTest {
             String css = new String(in.readAllBytes());
             assertThat(css)
                     .as("toolbar / status / export / canvas gold fall off toward floor-dim")
+                    .contains("rgba(16, 11, 8, 0), rgba(16, 11, 8, 0.55)")
+                    .doesNotContain("to bottom, transparent")
                     .contains("transparent transparent rgba(153, 111, 49, 0.45) transparent")
                     .contains(".toolbar .separator .line {\n    -fx-border-color: rgba(153, 111, 49, 0.28);")
                     .contains("-fx-border-color: rgba(16, 11, 8, 0.95), rgba(153, 111, 49, 0.55);")

@@ -174,7 +174,7 @@
 
 .legend {
     -fx-padding: 22 14 10 14;
-    -fx-background-color: linear-gradient(to bottom, transparent, rgba(16, 11, 8, 0.55) 35%, rgba(16, 11, 8, 0.92));
+    -fx-background-color: linear-gradient(to bottom, rgba(16, 11, 8, 0), rgba(16, 11, 8, 0.55) 35%, rgba(16, 11, 8, 0.92));
     -fx-cursor: default;
 }
 .legend .label {

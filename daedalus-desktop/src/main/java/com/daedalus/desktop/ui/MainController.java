@@ -1772,7 +1772,10 @@ public class MainController {
                             new javafx.scene.paint.LinearGradient(
                                     0, 0, 0, 1, true,
                                     javafx.scene.paint.CycleMethod.NO_CYCLE,
-                                    new javafx.scene.paint.Stop(0, Color.TRANSPARENT),
+                                    new javafx.scene.paint.Stop(0,
+                                            Color.rgb(DesktopPaint.LEGEND_FADE_R,
+                                                    DesktopPaint.LEGEND_FADE_G,
+                                                    DesktopPaint.LEGEND_FADE_B, 0)),
                                     new javafx.scene.paint.Stop(0.35,
                                             Color.rgb(DesktopPaint.LEGEND_FADE_R,
                                                     DesktopPaint.LEGEND_FADE_G,
