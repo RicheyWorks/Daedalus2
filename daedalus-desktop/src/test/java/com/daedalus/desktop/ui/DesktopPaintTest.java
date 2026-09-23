@@ -1301,6 +1301,11 @@ class DesktopPaintTest {
                 .isGreaterThan(DesktopPaint.endpointGlowAlpha(0));
         assertThat(DesktopPaint.endpointGlowPadFraction(1))
                 .isGreaterThan(DesktopPaint.endpointGlowPadFraction(0));
+        assertThat(DesktopPaint.endpointGlowPadFraction(0))
+                .isCloseTo(0.22 / DesktopPaint.ENDPOINT_RADIUS, within(1e-9));
+        assertThat(DesktopPaint.endpointGlowPadFraction(1))
+                .isCloseTo(0.26 / DesktopPaint.ENDPOINT_RADIUS, within(1e-9));
+        assertThat(DesktopPaint.endpointGlowPadFraction(0)).isNotEqualTo(0.32);
         assertThat(DesktopPaint.endpointCoreRimAlpha(1))
                 .isGreaterThan(DesktopPaint.endpointCoreRimAlpha(0));
         assertThat(DesktopPaint.ENDPOINT_BREATH_MS).isEqualTo(DesktopPaint.EMPTY_BREATH_MS);

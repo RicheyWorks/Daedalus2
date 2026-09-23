@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop endpoint halo.**
+  Start and goal use the
+  well pad `0.22 + 0.04·wave`,
+  so the discs wear the same
+  soft ring as the web markers.
+
 - **Desktop ghost halo.**
   The recorded racer uses the
   well pad `0.18 + 0.04·wave`,

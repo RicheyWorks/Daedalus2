@@ -1815,7 +1815,7 @@ public final class DesktopPaint {
     }
 
     public static Marker endpointMarker(Layout layout, Point cell) {
-        return disc(layout, cell, 0.34);
+        return disc(layout, cell, ENDPOINT_RADIUS);
     }
 
     /** Outer ring around start / goal — same 0.55·cell as {@code draw.js} endpoint. */
@@ -1848,13 +1848,16 @@ public final class DesktopPaint {
         return 0.32 + 0.18 * wave;
     }
 
+    /** Start and goal disc — same 0.34·cell as the well marker. */
+    public static final double ENDPOINT_RADIUS = 0.34;
+
     /** Soft pad under start / goal — same band as web {@code marker} glow. */
     public static double endpointGlowAlpha(double wave) {
         return 0.16 + 0.12 * wave;
     }
 
     public static double endpointGlowPadFraction(double wave) {
-        return 0.32 + 0.08 * wave;
+        return (0.22 + 0.04 * wave) / ENDPOINT_RADIUS;
     }
 
     public static double endpointCoreRimAlpha(double wave) {
