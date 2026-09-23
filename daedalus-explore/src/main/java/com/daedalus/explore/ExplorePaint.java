@@ -671,6 +671,8 @@ public final class ExplorePaint {
     }
 
     public static final int BLOOM_RINGS = 3;
+    /** Fan steps for the HUD lamp — a round wash, not the bounding box. */
+    public static final int BLOOM_SEGS = 24;
 
     /** Concentric wash — a lamp fade, not one hard gold stamp. */
     public static List<TorchBloom> torchBloomWash(double aspect, float bob, double seconds) {

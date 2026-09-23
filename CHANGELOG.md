@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore lamp wash.**
+  The torch bloom is
+  a round wash. The
+  gold no longer
+  stamps a box on
+  the corridor.
+
 - **Gate veil wash.**
   The gold wash and
   the veil lines fade

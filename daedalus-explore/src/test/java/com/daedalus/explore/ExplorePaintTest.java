@@ -18,6 +18,8 @@ import com.daedalus.world.World;
 import com.daedalus.world.auto.WorldOps;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -1792,7 +1794,7 @@ class ExplorePaintTest {
     }
 
     @Test
-    void torchBloomWashesBehindTheFlame() {
+    void torchBloomWashesBehindTheFlame() throws Exception {
         ExplorePaint.TorchBloom bloom = ExplorePaint.torchBloom(1.6, 0, 0.1);
         float strip = -1f + ExplorePaint.STATUS_H;
         assertThat(bloom.y() - bloom.ry()).isGreaterThan(strip);
@@ -1815,6 +1817,12 @@ class ExplorePaintTest {
         assertThat(wash.get(0).a()).isLessThan(wash.get(2).a());
         assertThat(wash.get(0).y() - wash.get(0).ry()).isGreaterThan(strip - 0.02f);
         assertThat(wash.get(0).a()).isNotEqualTo(ExplorePaint.torchBloomWash(1.6, 0, 0.2).get(0).a());
+        assertThat(ExplorePaint.BLOOM_SEGS).isGreaterThanOrEqualTo(16);
+        String host = Files.readString(Path.of(
+                "src/main/java/com/daedalus/explore/glfw/ExploreHost.java"));
+        assertThat(host).contains("fillEllipse(bloom.x(), bloom.y(), bloom.rx(), bloom.ry())");
+        assertThat(host).contains("ExplorePaint.BLOOM_SEGS");
+        assertThat(host).doesNotContain("fill(bloom.x() - bloom.rx()");
     }
 
     private static ExploreMesh.Triangle nsWall(double x, double y, double z) {

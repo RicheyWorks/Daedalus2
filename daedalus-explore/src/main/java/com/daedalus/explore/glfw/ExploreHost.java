@@ -563,8 +563,7 @@ public final class ExploreHost {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         for (ExplorePaint.TorchBloom bloom : ExplorePaint.torchBloomWash(aspect, bob, seconds)) {
             glColor4f(ExplorePaint.BLOOM_R, ExplorePaint.BLOOM_G, ExplorePaint.BLOOM_B, bloom.a());
-            fill(bloom.x() - bloom.rx(), bloom.y() - bloom.ry(),
-                    bloom.x() + bloom.rx(), bloom.y() + bloom.ry());
+            fillEllipse(bloom.x(), bloom.y(), bloom.rx(), bloom.ry());
         }
         glDisable(GL_BLEND);
         glBegin(GL_TRIANGLES);
@@ -928,6 +927,18 @@ public final class ExploreHost {
         glVertex2f((float) x1, (float) y0);
         glVertex2f((float) x1, (float) y1);
         glVertex2f((float) x0, (float) y1);
+        glEnd();
+    }
+
+    /** HUD lamp — rx/ry are radii, so the wash stays round on the corridor. */
+    private static void fillEllipse(float cx, float cy, float rx, float ry) {
+        int segs = ExplorePaint.BLOOM_SEGS;
+        glBegin(GL_TRIANGLE_FAN);
+        glVertex2f(cx, cy);
+        for (int i = 0; i <= segs; i++) {
+            double a = i * Math.PI * 2.0 / segs;
+            glVertex2f(cx + rx * (float) Math.cos(a), cy + ry * (float) Math.sin(a));
+        }
         glEnd();
     }
 
