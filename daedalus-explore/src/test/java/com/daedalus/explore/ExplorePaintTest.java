@@ -1820,9 +1820,13 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.BLOOM_SEGS).isGreaterThanOrEqualTo(16);
         String host = Files.readString(Path.of(
                 "src/main/java/com/daedalus/explore/glfw/ExploreHost.java"));
-        assertThat(host).contains("fillEllipse(bloom.x(), bloom.y(), bloom.rx(), bloom.ry())");
+        assertThat(host).contains(
+                "fillEllipse(bloom.x(), bloom.y(), bloom.rx(), bloom.ry(), bloom.a())");
         assertThat(host).contains("ExplorePaint.BLOOM_SEGS");
+        assertThat(host).contains(
+                "glColor4f(ExplorePaint.BLOOM_R, ExplorePaint.BLOOM_G, ExplorePaint.BLOOM_B, 0f)");
         assertThat(host).doesNotContain("fill(bloom.x() - bloom.rx()");
+        assertThat(host).doesNotContain("glColor4f(0f, 0f, 0f, 0f)");
     }
 
     private static ExploreMesh.Triangle nsWall(double x, double y, double z) {

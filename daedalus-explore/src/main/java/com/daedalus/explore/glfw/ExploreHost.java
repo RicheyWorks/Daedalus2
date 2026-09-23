@@ -562,8 +562,7 @@ public final class ExploreHost {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         for (ExplorePaint.TorchBloom bloom : ExplorePaint.torchBloomWash(aspect, bob, seconds)) {
-            glColor4f(ExplorePaint.BLOOM_R, ExplorePaint.BLOOM_G, ExplorePaint.BLOOM_B, bloom.a());
-            fillEllipse(bloom.x(), bloom.y(), bloom.rx(), bloom.ry());
+            fillEllipse(bloom.x(), bloom.y(), bloom.rx(), bloom.ry(), bloom.a());
         }
         glDisable(GL_BLEND);
         glBegin(GL_TRIANGLES);
@@ -930,11 +929,13 @@ public final class ExploreHost {
         glEnd();
     }
 
-    /** HUD lamp — rx/ry are radii, so the wash stays round on the corridor. */
-    private static void fillEllipse(float cx, float cy, float rx, float ry) {
+    /** HUD lamp — round wash that fades in its own gold at the rim. */
+    private static void fillEllipse(float cx, float cy, float rx, float ry, float alpha) {
         int segs = ExplorePaint.BLOOM_SEGS;
         glBegin(GL_TRIANGLE_FAN);
+        glColor4f(ExplorePaint.BLOOM_R, ExplorePaint.BLOOM_G, ExplorePaint.BLOOM_B, alpha);
         glVertex2f(cx, cy);
+        glColor4f(ExplorePaint.BLOOM_R, ExplorePaint.BLOOM_G, ExplorePaint.BLOOM_B, 0f);
         for (int i = 0; i <= segs; i++) {
             double a = i * Math.PI * 2.0 / segs;
             glVertex2f(cx + rx * (float) Math.cos(a), cy + ry * (float) Math.sin(a));

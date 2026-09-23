@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore lamp edge.**
+  The torch wash
+  fades in its own
+  gold. The rim of
+  the lamp meets the
+  corridor cleanly.
+
 - **Explore lamp wash.**
   The torch bloom is
   a round wash. The
