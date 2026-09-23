@@ -535,6 +535,12 @@ public final class ExplorePaint {
         return VIGNETTE_ALPHA * (float) (0.88 + 0.24 * wave);
     }
 
+    /** 0 at the inner edge of the shade, full {@link #vignetteAlpha} at the screen edge. */
+    public static float vignetteEdgeAlpha(double seconds, float along) {
+        float t = Math.max(0f, Math.min(1f, along));
+        return vignetteAlpha(seconds) * t;
+    }
+
     public static float statusGoldH(double seconds) {
         double t = ((seconds * 1000.0) % STATUS_BREATH_MS) / STATUS_BREATH_MS;
         double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);

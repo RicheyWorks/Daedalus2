@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore edge shade.**
+  The play-band rim
+  fades in the well
+  void. The corridor
+  meets the edge
+  without a hard stripe.
+
 - **Explore dust motes.**
   Ash in the torch
   beam is round.

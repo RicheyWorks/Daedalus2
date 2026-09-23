@@ -539,19 +539,39 @@ public final class ExploreHost {
         glEnable(GL_FOG);
     }
 
-    /** Soft edge shade over the playable band — tunnel presence, not a flat box. */
+    /** Soft edge shade over the playable band — same void fade as the well inset. */
     private static void vignette(double aspect, double seconds) {
         float inset = ExplorePaint.VIGNETTE_INSET;
         float top = 1f;
         float playBot = -1f + ExplorePaint.STATUS_H;
-        float a = ExplorePaint.vignetteAlpha(seconds);
+        float outer = ExplorePaint.vignetteEdgeAlpha(seconds, 1f);
+        float inner = ExplorePaint.vignetteEdgeAlpha(seconds, 0f);
+        float r = ExplorePaint.VIGNETTE_R;
+        float g = ExplorePaint.VIGNETTE_G;
+        float b = ExplorePaint.VIGNETTE_B;
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glColor4f(ExplorePaint.VIGNETTE_R, ExplorePaint.VIGNETTE_G, ExplorePaint.VIGNETTE_B, a);
-        fill(-aspect, top - inset, aspect, top);
-        fill(-aspect, playBot, -aspect + inset, top);
-        fill(aspect - inset, playBot, aspect, top);
+        float span = (float) aspect;
+        shadeBand(-span, top - inset, span, top, r, g, b, inner, inner, outer, outer);
+        shadeBand(-span, playBot, -span + inset, top, r, g, b, outer, inner, inner, outer);
+        shadeBand(span - inset, playBot, span, top, r, g, b, inner, outer, outer, inner);
         glDisable(GL_BLEND);
+    }
+
+    /** Quad with a color at each corner. Alphas follow the well inset, not a flat stripe. */
+    private static void shadeBand(float x0, float y0, float x1, float y1,
+                                  float r, float g, float b,
+                                  float a00, float a10, float a11, float a01) {
+        glBegin(GL_QUADS);
+        glColor4f(r, g, b, a00);
+        glVertex2f(x0, y0);
+        glColor4f(r, g, b, a10);
+        glVertex2f(x1, y0);
+        glColor4f(r, g, b, a11);
+        glVertex2f(x1, y1);
+        glColor4f(r, g, b, a01);
+        glVertex2f(x0, y1);
+        glEnd();
     }
 
     private static void paintHand(double aspect, int mood, double stride) {

@@ -1602,7 +1602,7 @@ class ExplorePaintTest {
     }
 
     @Test
-    void aimSitsAboveTheStatusStrip() {
+    void aimSitsAboveTheStatusStrip() throws Exception {
         assertThat(ExplorePaint.aimY()).isGreaterThan(0f);
         assertThat(ExplorePaint.aimY()).isEqualTo(ExplorePaint.STATUS_H * 0.5f);
         assertThat(ExplorePaint.STATUS_GOLD_R).isEqualTo(0.72f);
@@ -1639,6 +1639,17 @@ class ExplorePaintTest {
                 .isNotEqualTo(ExplorePaint.vignetteAlpha(0.8));
         assertThat(ExplorePaint.vignetteAlpha(0.1))
                 .isGreaterThan(ExplorePaint.VIGNETTE_ALPHA * 0.85f);
+        assertThat(ExplorePaint.vignetteEdgeAlpha(0.4, 0f)).isEqualTo(0f);
+        assertThat(ExplorePaint.vignetteEdgeAlpha(0.4, 1f))
+                .isEqualTo(ExplorePaint.vignetteAlpha(0.4));
+        assertThat(ExplorePaint.vignetteEdgeAlpha(0.4, 0.5f))
+                .isEqualTo(ExplorePaint.vignetteAlpha(0.4) * 0.5f);
+        String host = Files.readString(Path.of(
+                "src/main/java/com/daedalus/explore/glfw/ExploreHost.java"));
+        assertThat(host).contains("ExplorePaint.vignetteEdgeAlpha(seconds, 1f)");
+        assertThat(host).contains("ExplorePaint.vignetteEdgeAlpha(seconds, 0f)");
+        assertThat(host).doesNotContain(
+                "glColor4f(ExplorePaint.VIGNETTE_R, ExplorePaint.VIGNETTE_G, ExplorePaint.VIGNETTE_B, a)");
         assertThat(ExplorePaint.AIM_SOFT_ARM)
                 .as("soft underglow is wider than the bright arm")
                 .isGreaterThan(ExplorePaint.AIM_ARM);
