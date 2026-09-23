@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop stage wash.**
+  The letterbox is the well
+  stage ellipse, `80%` by `70%`
+  with void at `72%`, so the
+  margins sink the way the
+  web stage does.
+
 - **Desktop idle wash.**
   The empty well holds mint
   out to the same 12px core

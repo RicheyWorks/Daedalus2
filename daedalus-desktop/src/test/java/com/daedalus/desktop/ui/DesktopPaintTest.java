@@ -680,6 +680,11 @@ class DesktopPaintTest {
                 .isGreaterThan(Integer.parseInt(DesktopPaint.WELL_VOID_CENTER.substring(5, 7), 16));
         assertThat(DesktopPaint.wellVoidCenterInk(0)).isEqualTo(DesktopPaint.WELL_VOID_CENTER);
         assertThat(DesktopPaint.wellVoidCenterInk(1)).isEqualTo(DesktopPaint.WELL_VOID_CENTER_LIT);
+        assertThat(DesktopPaint.STAGE_WASH_RX).isCloseTo(0.80 * 0.72, within(1e-9));
+        assertThat(DesktopPaint.STAGE_WASH_RY).isCloseTo(0.70 * 0.72, within(1e-9));
+        assertThat(DesktopPaint.stageWashRadiusX(100)).isCloseTo(57.6, within(1e-9));
+        assertThat(DesktopPaint.stageWashRadiusY(100)).isCloseTo(50.4, within(1e-9));
+        assertThat(DesktopPaint.STAGE_WASH_RY).isLessThan(0.72);
         assertThat(DesktopPaint.FLOOR_DIM).isEqualTo("#2a2218");
         assertThat(DesktopPaint.FOG_FLOOR_DIM).isEqualTo(DesktopPaint.FOG_WALL_WARM);
         assertThat(Integer.parseInt(DesktopPaint.FLOOR_DIM.substring(1, 3), 16))

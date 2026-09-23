@@ -326,6 +326,21 @@ public final class DesktopPaint {
     public static String wellVoidCenterInk(double wave) {
         return mixHex(WELL_VOID_CENTER, WELL_VOID_CENTER_LIT, Math.max(0, Math.min(1, wave)));
     }
+
+    /**
+     * Letterbox ellipse — web {@code #stage} is {@code 80% 70%} and the void
+     * color arrives at {@code 72%} of that ellipse.
+     */
+    public static final double STAGE_WASH_RX = 0.80 * 0.72;
+    public static final double STAGE_WASH_RY = 0.70 * 0.72;
+
+    public static double stageWashRadiusX(double width) {
+        return width * STAGE_WASH_RX;
+    }
+
+    public static double stageWashRadiusY(double height) {
+        return height * STAGE_WASH_RY;
+    }
     public static final String FOG_FLOOR_DIM = "#2a2218";
     /** Clear-board edge falloff toward dim torch stone — same ink as fog dim. */
     public static final String FLOOR_DIM = FOG_FLOOR_DIM;

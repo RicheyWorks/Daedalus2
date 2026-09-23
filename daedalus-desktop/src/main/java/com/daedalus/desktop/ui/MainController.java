@@ -2346,17 +2346,23 @@ public class MainController {
         showLegendKey(legendCompare, keys.contains("compare"));
     }
 
-    /** Letterbox pocket — same soft radial as web {@code #stage}, not flat wall. */
+    /** Letterbox pocket — same ellipse as web {@code #stage}, not a round wash. */
     private static void paintWellVoid(GraphicsContext g, double w, double h) {
         double wave = DesktopPaint.emptyBreathWave(System.nanoTime());
-        var voidWash = new javafx.scene.paint.RadialGradient(
-                0, 0, w / 2.0, h * 0.45, Math.max(w, h) * 0.72, false,
+        g.setFill(Color.web(DesktopPaint.WELL_VOID_EDGE));
+        g.fillRect(0, 0, w, h);
+        double rx = DesktopPaint.stageWashRadiusX(w);
+        double ry = DesktopPaint.stageWashRadiusY(h);
+        double cx = w / 2.0;
+        double cy = h * 0.45;
+        var wash = new javafx.scene.paint.RadialGradient(
+                0, 0, 0.5, 0.5, 0.5, true,
                 javafx.scene.paint.CycleMethod.NO_CYCLE,
                 new javafx.scene.paint.Stop(0,
                         Color.web(DesktopPaint.wellVoidCenterInk(wave))),
                 new javafx.scene.paint.Stop(1, Color.web(DesktopPaint.WELL_VOID_EDGE)));
-        g.setFill(voidWash);
-        g.fillRect(0, 0, w, h);
+        g.setFill(wash);
+        g.fillOval(cx - rx, cy - ry, rx * 2, ry * 2);
     }
 
     private boolean fogOn() {
