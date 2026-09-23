@@ -2381,6 +2381,7 @@ public class MainController {
         legendBox.resize(width, height);
         legendBox.layout();
         legendBox.relocate(0, DesktopPaint.legendScrimY(canvasParent.getHeight(), height));
+        clipStage();
     }
 
     /** Round the stage like web {@code #stage} {@code overflow: hidden}.

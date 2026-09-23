@@ -368,6 +368,9 @@ class ThemeManagerTest {
         assertThat(src).contains("canvasParent.setClip(null)");
         assertThat(src).contains("canvas.setClip(clip)");
         assertThat(src).contains("legendBox.setClip(clip)");
+        assertThat(src).contains(
+                "legendBox.relocate(0, DesktopPaint.legendScrimY(canvasParent.getHeight(), height));\n"
+                        + "        clipStage();");
         assertThat(src).doesNotContain("canvasParent.setClip(clip)");
         assertThat(src).contains("DesktopPaint.stageCornerArc()");
         assertThat(src).contains("paintMazeWash(g, layout);");

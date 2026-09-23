@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend clip.**
+  The rounded stage
+  clip follows the
+  key band when its
+  height changes.
+  The scrim stays
+  inside the lip.
+
 - **Explore floor catch.**
   The row under the
   paver shine mixes
