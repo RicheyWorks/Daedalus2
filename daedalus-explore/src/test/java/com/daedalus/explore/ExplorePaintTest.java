@@ -1580,6 +1580,14 @@ class ExplorePaintTest {
         ExplorePaint.handTint(ExplorePaint.HandPart.GRIP, 0, gripA, 0.05);
         ExplorePaint.handTint(ExplorePaint.HandPart.GRIP, 0, gripB, 0.18);
         assertThat(gripA[0]).isNotEqualTo(gripB[0]);
+        assertThat(gripA[0]).as("grip falls off the wood brand")
+                .isLessThan(ExplorePaint.GRIP_R);
+        assertThat(ExplorePaint.GRIP_R)
+                .as("KEEP leftover even grip wood stays")
+                .isEqualTo(0.72f);
+        assertThat(ExplorePaint.SHAFT_R)
+                .as("KEEP leftover even shaft wood stays")
+                .isEqualTo(0.28f);
         assertThat(ExplorePaint.GRIP_CATCH).isGreaterThan(ExplorePaint.SHAFT_CATCH);
         float[] shaft = new float[3];
         ExplorePaint.handTint(ExplorePaint.HandPart.SHAFT, 0, shaft, 0.05);

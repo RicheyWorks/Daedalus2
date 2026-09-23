@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore hand-wood family.**
+  The grip and shaft fall toward
+  floor-dim. The wood brands stay
+  the mix inputs. The flame stays lit.
+
 - **Desktop stats lip.**
   The status bar's top lip breathes
   from 0.28 to 0.48, the same band

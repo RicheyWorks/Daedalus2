@@ -610,6 +610,13 @@ public final class ExplorePaint {
     /** Fist and shaft catch the flame so the HUD lamp lights the hand, not just the air. */
     public static final float GRIP_CATCH = 0.16f;
     public static final float SHAFT_CATCH = 0.10f;
+    /** Grip and shaft wood — mix inputs. The hand falls toward floor-dim. */
+    public static final float GRIP_R = 0.72f;
+    public static final float GRIP_G = 0.48f;
+    public static final float GRIP_B = 0.30f;
+    public static final float SHAFT_R = 0.28f;
+    public static final float SHAFT_G = 0.18f;
+    public static final float SHAFT_B = 0.12f;
 
     public static TorchBloom torchBloom(double aspect, float bob, double seconds) {
         float ox = (float) (Math.max(0.55, aspect) * 0.48);
@@ -1789,11 +1796,13 @@ public final class ExplorePaint {
         int grim = Math.max(0, Math.min(2, mood));
         switch (part) {
             case GRIP -> {
-                set(rgb, 0.72f, 0.48f, 0.30f);
+                set(rgb, GRIP_R, GRIP_G, GRIP_B);
+                mixEndEdge(1, rgb);
                 catchFlame(rgb, seconds, GRIP_CATCH);
             }
             case SHAFT -> {
-                set(rgb, 0.28f, 0.18f, 0.12f);
+                set(rgb, SHAFT_R, SHAFT_G, SHAFT_B);
+                mixEndEdge(1, rgb);
                 catchFlame(rgb, seconds, SHAFT_CATCH);
             }
             case FLAME -> {
