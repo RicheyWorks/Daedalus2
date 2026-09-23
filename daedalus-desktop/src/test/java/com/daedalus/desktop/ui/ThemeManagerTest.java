@@ -312,7 +312,7 @@ class ThemeManagerTest {
         assertThat(src).contains("Color.rgb(16, 11, 8, 0.95)")
                 .contains("new javafx.scene.layout.CornerRadii(9)")
                 .contains("new javafx.geometry.Insets(1)")
-                .contains("Color.rgb(153, 111, 49, lip)")
+                .contains("Color.rgb(153, 111, 49, DesktopPaint.statsRimAlpha(wave))")
                 .contains("Color.rgb(153, 111, 49, chip)")
                 .contains("Color.web(\"#3ab675\", DesktopPaint.brandMintAlpha(wave))")
                 .contains("child.getStyleClass().contains(\"brand\")")

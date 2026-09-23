@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop stats lip.**
+  The status bar's top lip breathes
+  from 0.28 to 0.48, the same band
+  as the well stats.
+
 - **Desktop header lip.**
   The toolbar gold lip breathes
   from 0.38 to 0.62, the same band

@@ -1179,6 +1179,8 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.infoRimAlpha(1)).isCloseTo(0.48, within(1e-9));
         assertThat(DesktopPaint.headerRimAlpha(0)).isEqualTo(0.38);
         assertThat(DesktopPaint.headerRimAlpha(1)).isCloseTo(0.62, within(1e-9));
+        assertThat(DesktopPaint.statsRimAlpha(0)).isEqualTo(0.28);
+        assertThat(DesktopPaint.statsRimAlpha(1)).isCloseTo(0.48, within(1e-9));
         assertThat(hi).isNotEqualTo(lo);
         assertThat(DesktopPaint.EMPTY_TITLE).contains("Generate");
         assertThat(DesktopPaint.EMPTY_DETAIL).contains("Solve");

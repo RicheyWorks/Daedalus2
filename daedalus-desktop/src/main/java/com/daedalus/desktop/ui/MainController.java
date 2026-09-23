@@ -1762,12 +1762,11 @@ public class MainController {
                             javafx.scene.layout.CornerRadii.EMPTY,
                             javafx.geometry.Insets.EMPTY)));
         }
-        double lip = DesktopPaint.shellRimAlpha(wave);
         if (statusLabel != null
                 && statusLabel.getParent() instanceof javafx.scene.layout.Region statusBar) {
             statusBar.setBorder(new javafx.scene.layout.Border(
                     new javafx.scene.layout.BorderStroke(
-                            Color.rgb(153, 111, 49, lip),
+                            Color.rgb(153, 111, 49, DesktopPaint.statsRimAlpha(wave)),
                             javafx.scene.layout.BorderStrokeStyle.SOLID,
                             javafx.scene.layout.CornerRadii.EMPTY,
                             new javafx.scene.layout.BorderWidths(1, 0, 0, 0))));
