@@ -306,6 +306,9 @@ class ThemeManagerTest {
                 .contains("Color.rgb(153, 111, 49, lip)")
                 .contains("Color.rgb(153, 111, 49, chip)")
                 .contains("Color.web(\"#3ab675\", DesktopPaint.brandMintAlpha(wave))")
+                .contains("child.getStyleClass().contains(\"brand\")")
+                .contains("DesktopPaint.brandGoldRadius(wave)")
+                .doesNotContain("instanceof Label brand")
                 .doesNotContain("Color.web(\"#3ee08f\"")
                 .doesNotContain("Color.rgb(184, 133, 56, lip)")
                 .doesNotContain("Color.rgb(184, 133, 56, chip)");

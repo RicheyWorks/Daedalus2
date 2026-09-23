@@ -1165,8 +1165,14 @@ class DesktopPaintTest {
                 .isGreaterThan(DesktopPaint.brandMintAlpha(0));
         assertThat(DesktopPaint.brandMintRadius(1))
                 .isGreaterThan(DesktopPaint.brandMintRadius(0));
-        assertThat(DesktopPaint.brandMintAlpha(0)).isEqualTo(0.20);
-        assertThat(DesktopPaint.brandMintRadius(0)).isEqualTo(12.0);
+        assertThat(DesktopPaint.brandMintAlpha(0)).isEqualTo(0.16);
+        assertThat(DesktopPaint.brandMintRadius(0)).isEqualTo(22.0);
+        assertThat(DesktopPaint.brandMintAlpha(1)).isEqualTo(0.32);
+        assertThat(DesktopPaint.brandMintRadius(1)).isEqualTo(36.0);
+        assertThat(DesktopPaint.brandGoldAlpha(0)).isEqualTo(0.08);
+        assertThat(DesktopPaint.brandGoldRadius(0)).isEqualTo(48.0);
+        assertThat(DesktopPaint.brandGoldAlpha(1)).isEqualTo(0.18);
+        assertThat(DesktopPaint.brandGoldRadius(1)).isEqualTo(72.0);
         assertThat(DesktopPaint.exportsRimAlpha(0)).isEqualTo(0.36);
         assertThat(DesktopPaint.exportsRimAlpha(1)).isEqualTo(0.55);
         assertThat(hi).isNotEqualTo(lo);

@@ -1781,11 +1781,15 @@ public class MainController {
                             javafx.scene.layout.CornerRadii.EMPTY,
                             new javafx.scene.layout.BorderWidths(0, 0, 1, 0))));
             for (javafx.scene.Node child : toolbar.getChildrenUnmodifiable()) {
-                if (child instanceof Label brand && brand.getStyleClass().contains("brand")) {
+                if (child.getStyleClass().contains("brand")) {
+                    var gold = new javafx.scene.effect.DropShadow(
+                            DesktopPaint.brandGoldRadius(wave), 0, 0,
+                            Color.web("#c89e3f", DesktopPaint.brandGoldAlpha(wave)));
                     var mint = new javafx.scene.effect.DropShadow(
                             DesktopPaint.brandMintRadius(wave), 0, 0,
                             Color.web("#3ab675", DesktopPaint.brandMintAlpha(wave)));
-                    brand.setEffect(mint);
+                    mint.setInput(gold);
+                    child.setEffect(mint);
                     break;
                 }
             }

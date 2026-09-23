@@ -171,13 +171,22 @@ public final class DesktopPaint {
         return canvasRimAlpha(wave);
     }
 
-    /** Toolbar brand mint — same soft band as cosmic.css brand glow. */
+    /** Toolbar brand mint — same band as web {@code gateBreath}. */
     public static double brandMintAlpha(double wave) {
-        return 0.20 + 0.16 * wave;
+        return 0.16 + 0.16 * wave;
     }
 
     public static double brandMintRadius(double wave) {
-        return 12 + 8 * wave;
+        return 22 + 14 * wave;
+    }
+
+    /** Toolbar brand gold — the wide shadow under the mint. */
+    public static double brandGoldAlpha(double wave) {
+        return 0.08 + 0.10 * wave;
+    }
+
+    public static double brandGoldRadius(double wave) {
+        return 48 + 24 * wave;
     }
 
     /** Well export chip gold lip — same band as web {@code exportsRimBreath}. */

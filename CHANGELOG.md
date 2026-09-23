@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop brand breath.**
+  The toolbar name breathes the
+  well's mint and gold shadows,
+  on the letter row.
+
 - **Desktop toolbar inset.**
   The bar's vertical pad is 10px,
   the same block inset as the well header.
