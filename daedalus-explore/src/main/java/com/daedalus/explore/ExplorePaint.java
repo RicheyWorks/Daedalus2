@@ -957,13 +957,14 @@ public final class ExplorePaint {
         });
     }
 
-    /** Unshaded vault texel. The row under the catch mixes toward the shine. */
+    /** Unshaded vault texel. The rows above and under the catch mix toward the shine. */
     public static int[] ceilingTexColor(int x, int y) {
         int[] here = ceilingFace(x, y);
-        if ((y & 7) != 2) {
+        int band = y & 7;
+        if (band != 0 && band != 2) {
             return here;
         }
-        int[] shine = ceilingFace(x, y - 1);
+        int[] shine = ceilingFace(x, band == 0 ? y + 1 : y - 1);
         return new int[] {
                 (here[0] + shine[0]) / 2,
                 (here[1] + shine[1]) / 2,

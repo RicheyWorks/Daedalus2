@@ -482,6 +482,9 @@ class ExplorePaintTest {
         assertThat(vaultFeather[0]).isEqualTo((vaultShine[0] + vaultBody[0]) / 2);
         assertThat(ExplorePaint.ceilingTexColor(2, 1)).containsExactly(vaultShine);
         assertThat(ExplorePaint.ceilingTexColor(2, 4)).containsExactly(ExplorePaint.ceilingFace(2, 4));
+        int[] vaultLid = ExplorePaint.ceilingFace(2, 0);
+        assertThat(ExplorePaint.ceilingTexColor(2, 0)[0])
+                .isEqualTo((vaultLid[0] + vaultShine[0]) / 2);
         assertThat(ExplorePaint.CEILING_TEX_HI_R).isGreaterThan(ExplorePaint.CEILING_TEX_R);
         assertThat(ExplorePaint.CEILING_TEX_HI_R).isGreaterThan(ExplorePaint.CEILING_TEX_HI_B);
         assertThat(ExplorePaint.CEILING_TEX_HI_R).isEqualTo(ExplorePaint.FLOOR_TEX_WARM_R);

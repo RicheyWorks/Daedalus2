@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore vault lip.**
+  The row above the
+  ceiling shine mixes
+  toward the catch.
+  The vault hairline
+  feathers both ways.
+
 - **Explore floor joint.**
   The paver catch mixes
   where warm meets dark.
