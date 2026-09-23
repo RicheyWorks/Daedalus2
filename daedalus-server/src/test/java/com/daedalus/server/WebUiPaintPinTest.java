@@ -2196,4 +2196,20 @@ class WebUiPaintPinTest {
                     .contains("await host.projectWorld()");
         }
     }
+
+    @Test
+    void theLegendScrimFadesTheWellVoid() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/index.html")) {
+            assertThat(in).as("static well page").isNotNull();
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(html).contains(
+                    "linear-gradient(rgba(16, 11, 8, 0), rgba(16, 11, 8, .50) 35%");
+            assertThat(html).contains(
+                    "linear-gradient(rgba(16, 11, 8, 0), rgba(16, 11, 8, .62) 35%");
+            assertThat(html).contains(
+                    "linear-gradient(rgba(16, 11, 8, 0), rgba(16, 11, 8, .55) 35%");
+            assertThat(html).doesNotContain(
+                    "linear-gradient(transparent, rgba(16, 11, 8");
+        }
+    }
 }

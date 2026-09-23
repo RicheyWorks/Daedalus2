@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well legend scrim.**
+  The key fades in the
+  same brown as the
+  well void. A clear
+  black stop no longer
+  muddies the top of
+  the fade.
+
 - **Desktop fog exit.**
   The fog well keeps
   the goal disc up.
