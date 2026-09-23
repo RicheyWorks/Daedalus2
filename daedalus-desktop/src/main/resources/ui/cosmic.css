@@ -33,7 +33,7 @@
     -fx-max-height: 18px;
     -fx-alignment: center-left;
     -fx-text-fill: #f2ead8;
-    -fx-padding: 0 8 0 2;
+    -fx-padding: 0 0 0 2;
     -fx-effect: dropshadow(one-pass-box, rgba(58, 182, 117, 0.28), 14, 0.45, 0, 0);
     -fx-cursor: default;
 }

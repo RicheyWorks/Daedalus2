@@ -42,6 +42,9 @@
             </padding>
 
             <HBox styleClass="brand" alignment="CENTER_LEFT">
+                <HBox.margin>
+                    <Insets right="10"/>
+                </HBox.margin>
                 <Text text="D"/>
                 <Text text="A"/>
                 <Text text="E"/>

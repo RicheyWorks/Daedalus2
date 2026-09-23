@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop brand gap.**
+  The space after the toolbar name
+  is 14px, the same gap as the well header.
+
 - **Desktop brand breath.**
   The toolbar name breathes the
   well's mint and gold shadows,

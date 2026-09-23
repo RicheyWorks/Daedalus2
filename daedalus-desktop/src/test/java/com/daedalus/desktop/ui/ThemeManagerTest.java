@@ -91,6 +91,8 @@ class ThemeManagerTest {
             assertThat(css).contains("-fx-min-height: 18px;");
             assertThat(css).contains("-fx-pref-height: 18px;");
             assertThat(css).contains("-fx-max-height: 18px;");
+            assertThat(css).contains("-fx-padding: 0 0 0 2;");
+            assertThat(css).doesNotContain("-fx-padding: 0 8 0 2;");
             assertThat(css).contains(".toolbar .brand .text {\n    -fx-fill: #f2ead8;");
             assertThat(css).doesNotContain("-fx-font-size: 14px;");
             assertThat(css).contains(".toolbar .label");
@@ -125,6 +127,7 @@ class ThemeManagerTest {
             assertThat(in).as("main.fxml is on the classpath").isNotNull();
             String fxml = new String(in.readAllBytes());
             assertThat(fxml).contains("<HBox styleClass=\"brand\" alignment=\"CENTER_LEFT\">");
+            assertThat(fxml).contains("<Insets right=\"10\"/>");
             assertThat(fxml).contains("<Insets top=\"10\" right=\"8\" bottom=\"10\" left=\"8\"/>");
             assertThat(fxml).doesNotContain("<Insets top=\"6\" right=\"8\" bottom=\"6\" left=\"8\"/>");
             assertThat(fxml).doesNotContain("<Label text=\"DAEDALUS\" styleClass=\"brand\"/>");
