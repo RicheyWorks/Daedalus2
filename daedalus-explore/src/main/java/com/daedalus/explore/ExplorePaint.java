@@ -1682,18 +1682,30 @@ public final class ExplorePaint {
         return FACE_LIP_CORE * (float) (0.88 + 0.24 * wave);
     }
 
+    /** Story-mark brands — mix inputs. The diamonds fall toward floor-dim. */
+    public static final float KEY_MARK_R = 0.82f;
+    public static final float KEY_MARK_G = 0.62f;
+    public static final float KEY_MARK_B = 0.18f;
+    public static final float KEY_BOSS_R = 0.78f;
+    public static final float KEY_BOSS_G = 0.22f;
+    public static final float KEY_BOSS_B = 0.16f;
+    public static final float KEY_VAULT_R = 0.28f;
+    public static final float KEY_VAULT_G = 0.52f;
+    public static final float KEY_VAULT_B = 0.58f;
+
     public static void keyTint(int slot, int marks, int mood, float[] rgb) {
         if (rgb == null || rgb.length < 3) {
             return;
         }
         boolean last = marks > 0 && slot == marks - 1;
         if (last && mood >= 2) {
-            set(rgb, 0.78f, 0.22f, 0.16f);
+            set(rgb, KEY_BOSS_R, KEY_BOSS_G, KEY_BOSS_B);
         } else if (last && mood == 1) {
-            set(rgb, 0.28f, 0.52f, 0.58f);
+            set(rgb, KEY_VAULT_R, KEY_VAULT_G, KEY_VAULT_B);
         } else {
-            set(rgb, 0.82f, 0.62f, 0.18f);
+            set(rgb, KEY_MARK_R, KEY_MARK_G, KEY_MARK_B);
         }
+        mixEndEdge(1, rgb);
     }
 
     /** Soft pad under story diamonds — the caption underglow pulled toward that key. */

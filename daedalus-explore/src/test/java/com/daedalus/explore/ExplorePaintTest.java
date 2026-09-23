@@ -1506,6 +1506,21 @@ class ExplorePaintTest {
         assertThat(rgb[2]).isGreaterThan(rgb[0]);
         ExplorePaint.keyTint(0, 2, 0, rgb);
         assertThat(rgb[0]).isGreaterThan(rgb[2]);
+        assertThat(rgb[0]).as("story gold falls off the mark brand")
+                .isLessThan(ExplorePaint.KEY_MARK_R);
+        float[] fallen = new float[] {
+                ExplorePaint.KEY_MARK_R, ExplorePaint.KEY_MARK_G, ExplorePaint.KEY_MARK_B};
+        ExplorePaint.mixEndEdge(1, fallen);
+        assertThat(rgb).containsExactly(fallen);
+        assertThat(ExplorePaint.KEY_MARK_R)
+                .as("KEEP leftover even story gold stays")
+                .isEqualTo(0.82f);
+        assertThat(ExplorePaint.KEY_BOSS_R)
+                .as("KEEP leftover even boss coral stays")
+                .isEqualTo(0.78f);
+        assertThat(ExplorePaint.KEY_VAULT_B)
+                .as("KEEP leftover even vault teal stays")
+                .isEqualTo(0.58f);
         ExplorePaint.keyTint(0, 1, 0, null);
         ExplorePaint.keyTint(0, 1, 0, new float[1]);
     }

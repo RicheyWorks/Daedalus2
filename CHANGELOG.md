@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore story-key family.**
+  Story diamonds fall off toward
+  floor-dim. The mark, boss, and
+  vault brands stay the mix inputs.
+
 - **Desktop legend seat.**
   The key strip sits on the stage
   bottom, the same seat as the well.
