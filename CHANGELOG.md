@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop status inset.**
+  The space above the status words
+  is 8px, the same margin as the well status.
+
 - **Desktop status wash.**
   The status bar uses the same
   translucent void as the toolbar

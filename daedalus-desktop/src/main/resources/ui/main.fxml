@@ -580,7 +580,7 @@
     <bottom>
         <HBox spacing="8" alignment="CENTER_LEFT" styleClass="status-bar">
             <padding>
-                <Insets top="4" right="10" bottom="4" left="10"/>
+                <Insets top="8" right="10" bottom="4" left="10"/>
             </padding>
             <Label fx:id="statusLabel" text="Ready — pick a generator and click Generate."/>
             <Label fx:id="worldLabel" text="world-zero · listening"/>
