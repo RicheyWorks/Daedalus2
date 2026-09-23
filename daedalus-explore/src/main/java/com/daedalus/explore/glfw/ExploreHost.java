@@ -590,7 +590,7 @@ public final class ExploreHost {
                                double seconds) {
         float bot = -1f;
         float top = bot + ExplorePaint.STATUS_H;
-        fillHud(-aspect, bot, aspect, top);
+        fillHud(-aspect, bot, aspect, top, seconds);
         float[] lipInk = new float[3];
         ExplorePaint.statusLipTint(lipInk);
         glColor3f(ExplorePaint.STATUS_GOLD_UNDER_R, ExplorePaint.STATUS_GOLD_UNDER_G,
@@ -889,11 +889,11 @@ public final class ExploreHost {
         }
     }
 
-    private static void fillHud(double x0, double y0, double x1, double y1) {
+    private static void fillHud(double x0, double y0, double x1, double y1, double seconds) {
         float[] mid = new float[3];
         float[] rim = new float[3];
-        ExplorePaint.hudVoidTint(0, mid);
-        ExplorePaint.hudVoidTint(1, rim);
+        ExplorePaint.hudVoidTint(0, mid, seconds);
+        ExplorePaint.hudVoidTint(1, rim, seconds);
         fillWell(x0, y0, x1, y1, mid, rim);
     }
 

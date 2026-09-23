@@ -443,9 +443,19 @@ public final class ExplorePaint {
     public static final float HUD_VOID_RIM_R = 0x0c / 255f;
     public static final float HUD_VOID_RIM_G = 0x09 / 255f;
     public static final float HUD_VOID_RIM_B = 0x08 / 255f;
+    /** Peak mid-glow — same lift as the well void wash {@code #1a1510}. */
+    public static final float HUD_VOID_LIT_R = 0x1a / 255f;
+    public static final float HUD_VOID_LIT_G = 0x15 / 255f;
+    public static final float HUD_VOID_LIT_B = 0x10 / 255f;
+    /** Same 4.5s cadence as the well void wash. */
+    public static final float HUD_VOID_BREATH_MS = 4500f;
 
     /** Mid strip at 0, pocket rim at 1 so leftover flat HUD is not the last word. */
     public static void hudVoidTint(float edge, float[] rgb) {
+        hudVoidTint(edge, rgb, 0);
+    }
+
+    public static void hudVoidTint(float edge, float[] rgb, double seconds) {
         if (rgb == null || rgb.length < 3) {
             return;
         }
@@ -453,6 +463,15 @@ public final class ExplorePaint {
         rgb[0] = HUD_VOID_R + (HUD_VOID_RIM_R - HUD_VOID_R) * t;
         rgb[1] = HUD_VOID_G + (HUD_VOID_RIM_G - HUD_VOID_G) * t;
         rgb[2] = HUD_VOID_B + (HUD_VOID_RIM_B - HUD_VOID_B) * t;
+        float wave = hudVoidWave(seconds) * (1f - t);
+        rgb[0] += (HUD_VOID_LIT_R - rgb[0]) * wave;
+        rgb[1] += (HUD_VOID_LIT_G - rgb[1]) * wave;
+        rgb[2] += (HUD_VOID_LIT_B - rgb[2]) * wave;
+    }
+
+    public static float hudVoidWave(double seconds) {
+        double t = ((seconds * 1000.0) % HUD_VOID_BREATH_MS) / HUD_VOID_BREATH_MS;
+        return (float) (0.5 - 0.5 * Math.cos(t * Math.PI * 2.0));
     }
     /** Automap inset — a shade deeper than the strip, same brown family. */
     public static final float MAP_POCKET_R = 0.06f;

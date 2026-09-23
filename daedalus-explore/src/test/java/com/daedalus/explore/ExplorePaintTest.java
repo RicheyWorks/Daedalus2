@@ -774,6 +774,17 @@ class ExplorePaintTest {
         assertThat(hudMid[0]).isEqualTo(ExplorePaint.HUD_VOID_R);
         assertThat(hudRim[0]).isEqualTo(ExplorePaint.HUD_VOID_RIM_R);
         assertThat(hudRim[0]).isLessThan(hudMid[0]);
+        float[] hudLit = new float[3];
+        ExplorePaint.hudVoidTint(0, hudLit, ExplorePaint.HUD_VOID_BREATH_MS / 2000.0);
+        assertThat(hudLit[0]).isCloseTo(ExplorePaint.HUD_VOID_LIT_R, within(1e-5f));
+        assertThat(hudLit[0]).isGreaterThan(ExplorePaint.HUD_VOID_R);
+        assertThat(ExplorePaint.HUD_VOID_LIT_R).isEqualTo(0x1a / 255f);
+        assertThat(ExplorePaint.HUD_VOID_LIT_G).isEqualTo(0x15 / 255f);
+        assertThat(ExplorePaint.HUD_VOID_LIT_B).isEqualTo(0x10 / 255f);
+        assertThat(ExplorePaint.HUD_VOID_BREATH_MS).isEqualTo(4500f);
+        float[] hudRimHeld = new float[3];
+        ExplorePaint.hudVoidTint(1, hudRimHeld, ExplorePaint.HUD_VOID_BREATH_MS / 2000.0);
+        assertThat(hudRimHeld[0]).isEqualTo(ExplorePaint.HUD_VOID_RIM_R);
         ExplorePaint.hudVoidTint(1, null);
         assertThat(ExplorePaint.MAP_POCKET_R).isLessThan(ExplorePaint.HUD_VOID_R);
         assertThat(ExplorePaint.MAP_POCKET_G).isLessThan(ExplorePaint.HUD_VOID_G);

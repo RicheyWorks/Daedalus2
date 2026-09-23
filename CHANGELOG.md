@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore status void breath.**
+  The strip center lifts toward
+  `#1a1510` on the well’s 4.5s
+  void wash.
+
 - **Explore facing halo.**
   The stood-on line uses the
   same caption underglow as
