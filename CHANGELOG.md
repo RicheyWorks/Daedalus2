@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop idle mark seat.**
+  The empty miniature rounds
+  onto the canvas the way
+  `draw.js` does, so a half
+  pixel does not sit a pixel
+  high and left.
+
 - **Desktop hotspot key.**
   The hot-spot swatch keeps
   a half-coral fill and a

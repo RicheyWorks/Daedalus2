@@ -2351,8 +2351,8 @@ public final class DesktopPaint {
         return new Layout(
                 fitted.cellSize(),
                 fitted.wall(),
-                Math.floor(canvasW / 2.0 - drawW / 2.0),
-                Math.floor(canvasH / 2.0 - EMPTY_MARK_LIFT - drawH / 2.0),
+                Math.round(canvasW / 2.0 - drawW / 2.0),
+                Math.round(canvasH / 2.0 - EMPTY_MARK_LIFT - drawH / 2.0),
                 fitted.tileRows(),
                 fitted.tileCols(),
                 fitted.offX(),

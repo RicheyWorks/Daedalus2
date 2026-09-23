@@ -1317,6 +1317,11 @@ class DesktopPaintTest {
                 .as("centered on the canvas, not left-aligned in the budget")
                 .isEqualTo(101.0);
         assertThat(mark.offsetY()).isEqualTo(41.0);
+        DesktopPaint.Layout half = DesktopPaint.emptyMarkLayout(199, 219);
+        assertThat(half.offsetX())
+                .as("draw.js rounds the idle mark, so a half pixel sits on 1")
+                .isEqualTo(1.0);
+        assertThat(half.offsetY()).isEqualTo(1.0);
         assertThat(DesktopPaint.endpointMarker(mark, DesktopPaint.EMPTY_MARK_START)).isNotNull();
         assertThat(DesktopPaint.endpointMarker(mark, DesktopPaint.EMPTY_MARK_GOAL)).isNotNull();
         assertThat(DesktopPaint.endpointRing(mark, DesktopPaint.EMPTY_MARK_START, 1).radius())
