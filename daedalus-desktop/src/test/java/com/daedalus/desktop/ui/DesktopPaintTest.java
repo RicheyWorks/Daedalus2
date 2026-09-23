@@ -629,7 +629,7 @@ class DesktopPaintTest {
     }
 
     @Test
-    void fogRevealsStoodOnCellsAndTheWallsThatTouchThem() {
+    void fogRevealsStoodOnCellsAndTheWallsThatTouchThem() throws Exception {
         DesktopPaint.Fog fog = DesktopPaint.Fog.of(
                 List.of(new Point(0, 0)), new Point(0, 0), null);
         assertThat(DesktopPaint.fogRevealsTile(fog, 1, 1))
@@ -767,6 +767,15 @@ class DesktopPaintTest {
         DesktopPaint.Layout edgeLayout = DesktopPaint.Layout.fit(5, 5, 100, 100);
         assertThat(DesktopPaint.floorEdge(edgeLayout, 0, 0))
                 .isGreaterThan(DesktopPaint.floorEdge(edgeLayout, 2, 2));
+        String ctrl = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/java/com/daedalus/desktop/ui/MainController.java"));
+        int fogPaint = ctrl.indexOf("private void paintFogDungeon");
+        int afterFog = ctrl.indexOf("private static void showLegendKey");
+        assertThat(fogPaint).isGreaterThan(0);
+        assertThat(ctrl.substring(fogPaint, afterFog)).doesNotContain("paintVictory");
+        int discs = ctrl.indexOf("start / goal discs");
+        int win = ctrl.indexOf("paintVictory(g, layout, current.metadata().goal())");
+        assertThat(win).isGreaterThan(discs);
     }
 
     @Test

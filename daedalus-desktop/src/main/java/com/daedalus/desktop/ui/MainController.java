@@ -2532,9 +2532,6 @@ public class MainController {
                     : Color.web(DesktopPaint.playerInk(DesktopPaint.floorEdge(layout,
                             2 * stand.row() + 1, 2 * stand.col() + 1))));
         }
-        if (reachedGoal) {
-            paintVictory(g, layout, current.metadata().goal());
-        }
     }
 
     private static void showLegendKey(Label key, boolean on) {

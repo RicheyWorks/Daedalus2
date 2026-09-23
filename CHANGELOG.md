@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop fog win.**
+  The fog well ends on
+  the walker. The win
+  ring stays on the
+  clear board, the same
+  as the well.
+
 - **Desktop trail order.**
   Stood-on cells and the
   ghost walk paint after
