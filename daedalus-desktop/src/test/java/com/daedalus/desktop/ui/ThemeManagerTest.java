@@ -82,6 +82,8 @@ class ThemeManagerTest {
             assertThat(css).contains("-fx-font-smoothing-type: gray;\n    -fx-text-fill: #f2ead8;");
             assertThat(css).contains("-fx-font-smoothing-type: gray;\n    -fx-text-fill: #f2ead8;\n    -fx-cursor: default;");
             assertThat(css).contains(".toolbar");
+            assertThat(css).contains(".toolbar {\n    -fx-background-color: rgba(12, 9, 8, 0.92);");
+            assertThat(css).doesNotContain(".toolbar {\n    -fx-background-color: #16120e;");
             assertThat(css).contains("-fx-border-width: 0 0 1 0;\n    -fx-cursor: default;");
             assertThat(css).contains(".toolbar .brand");
             assertThat(css).contains("-fx-font-size: 18px;\n    -fx-font-weight: bold;");

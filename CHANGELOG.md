@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop toolbar wash.**
+  The bar uses the well header's
+  translucent void, the same
+  rgba(12, 9, 8, 0.92) plate.
+
 - **Desktop brand line.**
   The toolbar name sits in a 1 line,
   the same box as the well header.
