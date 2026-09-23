@@ -346,6 +346,14 @@ public final class DesktopPaint {
     public static double stageWashRadiusY(double height) {
         return height * STAGE_WASH_RY;
     }
+
+    /** Stage corner — same 10px radius as web {@code #stage}. */
+    public static final double STAGE_CORNER = 10;
+
+    /** JavaFX arc is a diameter, so the well's 10px corner is 20. */
+    public static double stageCornerArc() {
+        return STAGE_CORNER * 2;
+    }
     public static final String FOG_FLOOR_DIM = "#2a2218";
     /** Clear-board edge falloff toward dim torch stone — same ink as fog dim. */
     public static final String FLOOR_DIM = FOG_FLOOR_DIM;

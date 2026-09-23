@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop stage corner.**
+  The maze, legend, and export
+  clip to the well's 10px
+  stage radius, so the
+  corners follow `#stage`.
+
 - **Desktop legend scrim.**
   The key band spans the
   stage, flush to the bottom,

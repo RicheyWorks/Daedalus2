@@ -326,6 +326,8 @@ class ThemeManagerTest {
                 "src/main/java/com/daedalus/desktop/ui/MainController.java"));
         assertThat(src).contains("paintWellVoid(g, w, h);")
                 .doesNotContain("g.setFill(Color.web(DesktopPaint.FOG_UNSEEN));");
+        assertThat(src).contains("clipStage();");
+        assertThat(src).contains("DesktopPaint.stageCornerArc()");
     }
 
     @Test

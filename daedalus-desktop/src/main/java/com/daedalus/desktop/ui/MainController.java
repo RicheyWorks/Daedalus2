@@ -348,11 +348,16 @@ public class MainController {
         canvas.setOnMouseClicked(this::onCanvasClicked);
         canvas.setOnKeyPressed(this::onKeyPressed);
 
-        if (legendBox != null) {
-            canvasParent.widthProperty().addListener((obs, prev, next) -> spanLegend());
-            canvasParent.heightProperty().addListener((obs, prev, next) -> spanLegend());
+        canvasParent.widthProperty().addListener((obs, prev, next) -> {
             spanLegend();
-        }
+            clipStage();
+        });
+        canvasParent.heightProperty().addListener((obs, prev, next) -> {
+            spanLegend();
+            clipStage();
+        });
+        spanLegend();
+        clipStage();
         if (exportBox != null) {
             exportBox.layoutXProperty().bind(
                     canvasParent.widthProperty().subtract(exportBox.widthProperty()).subtract(10));
@@ -2355,6 +2360,19 @@ public class MainController {
         double height = legendBox.prefHeight(width);
         legendBox.resize(width, height);
         legendBox.relocate(0, DesktopPaint.legendScrimY(canvasParent.getHeight(), height));
+    }
+
+    /** Round the stage like web {@code #stage} {@code overflow: hidden}. */
+    private void clipStage() {
+        if (canvasParent == null) {
+            return;
+        }
+        double arc = DesktopPaint.stageCornerArc();
+        var clip = new javafx.scene.shape.Rectangle(
+                0, 0, Math.max(0, canvasParent.getWidth()), Math.max(0, canvasParent.getHeight()));
+        clip.setArcWidth(arc);
+        clip.setArcHeight(arc);
+        canvasParent.setClip(clip);
     }
 
     /** Letterbox pocket — same ellipse as web {@code #stage}, not a round wash. */
