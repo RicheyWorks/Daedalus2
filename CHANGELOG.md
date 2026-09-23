@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore dust motes.**
+  Ash in the torch
+  beam is round.
+  The specks match
+  the lamp wash.
+
 - **Explore lamp edge.**
   The torch wash
   fades in its own

@@ -1772,7 +1772,7 @@ class ExplorePaintTest {
     }
 
     @Test
-    void torchDustLoftsInTheBeam() {
+    void torchDustLoftsInTheBeam() throws Exception {
         assertThat(ExplorePaint.DUST_COUNT).isEqualTo(8);
         assertThat(ExplorePaint.DUST_HALF).isEqualTo(0.006f);
         List<ExplorePaint.DustMote> a = ExplorePaint.dustMotes(1.6, 0, 0);
@@ -1791,6 +1791,11 @@ class ExplorePaintTest {
         assertThat(meanY).isLessThan(oy + 0.55f);
         assertThat(a.get(0).x()).isNotEqualTo(b.get(0).x());
         assertThat(a.get(3).a()).isNotEqualTo(ExplorePaint.dustMotes(1.6, 0, 0.18).get(3).a());
+        String host = Files.readString(Path.of(
+                "src/main/java/com/daedalus/explore/glfw/ExploreHost.java"));
+        assertThat(host).contains(
+                "fillDisc(mote.x(), mote.y(), mote.half(),");
+        assertThat(host).doesNotContain("mote.x() - mote.half()");
     }
 
     @Test

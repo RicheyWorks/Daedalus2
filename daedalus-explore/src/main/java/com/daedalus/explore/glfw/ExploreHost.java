@@ -577,9 +577,8 @@ public final class ExploreHost {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         for (ExplorePaint.DustMote mote : ExplorePaint.dustMotes(aspect, bob, seconds)) {
-            glColor4f(ExplorePaint.DUST_R, ExplorePaint.DUST_G, ExplorePaint.DUST_B, mote.a());
-            fill(mote.x() - mote.half(), mote.y() - mote.half(),
-                    mote.x() + mote.half(), mote.y() + mote.half());
+            fillDisc(mote.x(), mote.y(), mote.half(),
+                    ExplorePaint.DUST_R, ExplorePaint.DUST_G, ExplorePaint.DUST_B, mote.a());
         }
         glDisable(GL_BLEND);
     }
@@ -939,6 +938,20 @@ public final class ExploreHost {
         for (int i = 0; i <= segs; i++) {
             double a = i * Math.PI * 2.0 / segs;
             glVertex2f(cx + rx * (float) Math.cos(a), cy + ry * (float) Math.sin(a));
+        }
+        glEnd();
+    }
+
+    /** Ash in the torch beam — a round mote, the same radius as the old square. */
+    private static void fillDisc(float cx, float cy, float radius,
+                                 float r, float g, float b, float alpha) {
+        int segs = ExplorePaint.BLOOM_SEGS;
+        glBegin(GL_TRIANGLE_FAN);
+        glColor4f(r, g, b, alpha);
+        glVertex2f(cx, cy);
+        for (int i = 0; i <= segs; i++) {
+            double a = i * Math.PI * 2.0 / segs;
+            glVertex2f(cx + radius * (float) Math.cos(a), cy + radius * (float) Math.sin(a));
         }
         glEnd();
     }
