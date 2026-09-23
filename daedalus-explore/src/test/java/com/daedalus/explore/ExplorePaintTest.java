@@ -100,6 +100,13 @@ class ExplorePaintTest {
         ExplorePaint.blockTint(BlockType.STONE, WorldMesh.Face.POS_Y, lid);
         ExplorePaint.blockTint(BlockType.STONE, WorldMesh.Face.NEG_Y, boot);
         assertThat(wood[0]).as("wood is warmer than stone").isGreaterThan(stone[0]);
+        assertThat(ExplorePaint.BLOCK_STONE_R)
+                .isEqualTo(ExplorePaint.MAP_WALL_R * ExplorePaint.WALL_SHADE);
+        assertThat(ExplorePaint.BLOCK_STONE_G)
+                .isEqualTo(ExplorePaint.MAP_WALL_G * ExplorePaint.WALL_SHADE);
+        assertThat(ExplorePaint.BLOCK_STONE_B)
+                .isEqualTo(ExplorePaint.MAP_WALL_B * ExplorePaint.WALL_SHADE);
+        assertThat(ExplorePaint.BLOCK_STONE_R).isNotEqualTo(0.40f);
         assertThat(dirt[0]).isGreaterThan(stone[0]);
         assertThat(ExplorePaint.BLOCK_DIRT_R)
                 .isEqualTo(ExplorePaint.MAP_BLOCK_R * ExplorePaint.BLOCK_DIRT_SHADE);

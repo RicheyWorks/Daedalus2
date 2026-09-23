@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore stone cubes.**
+  Placed stone uses the shadowed
+  corridor wall, so a block is
+  that same clay.
+
 - **Explore dirt cubes.**
   Placed dirt and its caption
   are the torch wood at 0.84,

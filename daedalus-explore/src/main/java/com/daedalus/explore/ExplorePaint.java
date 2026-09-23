@@ -2459,9 +2459,10 @@ public final class ExplorePaint {
     }
 
     /** Occupied-cube materials — torch lamp, not leftover well ice. */
-    public static final float BLOCK_STONE_R = 0.40f;
-    public static final float BLOCK_STONE_G = 0.30f;
-    public static final float BLOCK_STONE_B = 0.20f;
+    /** Stone — same clay as the shadowed corridor wall. */
+    public static final float BLOCK_STONE_R = MAP_WALL_R * WALL_SHADE;
+    public static final float BLOCK_STONE_G = MAP_WALL_G * WALL_SHADE;
+    public static final float BLOCK_STONE_B = MAP_WALL_B * WALL_SHADE;
     /** Dirt — torch wood one course darker, so the cube keeps that hue. */
     public static final float BLOCK_DIRT_SHADE = 0.84f;
     public static final float BLOCK_DIRT_R = MAP_BLOCK_R * BLOCK_DIRT_SHADE;
