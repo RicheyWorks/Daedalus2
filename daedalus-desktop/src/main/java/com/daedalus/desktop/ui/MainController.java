@@ -44,6 +44,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
@@ -141,6 +142,7 @@ public class MainController {
     @FXML private CheckBox jamToggle;
     @FXML private CheckBox allToggle;
     @FXML private HBox exportBox;
+    @FXML private StackPane boardPane;
     @FXML private Pane canvasParent;
     @FXML private Canvas canvas;
     @FXML private HBox legendBox;
@@ -1744,6 +1746,20 @@ public class MainController {
 
     /** Legend fade + toolbar/status gold lips — same cadence as web shell chrome. */
     private void pulseShellChrome(double wave) {
+        if (boardPane != null) {
+            boardPane.setBorder(new javafx.scene.layout.Border(
+                    new javafx.scene.layout.BorderStroke(
+                            Color.rgb(16, 11, 8, 0.85),
+                            javafx.scene.layout.BorderStrokeStyle.SOLID,
+                            new javafx.scene.layout.CornerRadii(10),
+                            new javafx.scene.layout.BorderWidths(1)),
+                    new javafx.scene.layout.BorderStroke(
+                            Color.rgb(153, 111, 49, DesktopPaint.boardRimAlpha(wave)),
+                            javafx.scene.layout.BorderStrokeStyle.SOLID,
+                            new javafx.scene.layout.CornerRadii(9),
+                            new javafx.scene.layout.BorderWidths(1),
+                            new javafx.geometry.Insets(1))));
+        }
         if (legendBox != null) {
             legendBox.setBackground(new javafx.scene.layout.Background(
                     new javafx.scene.layout.BackgroundFill(

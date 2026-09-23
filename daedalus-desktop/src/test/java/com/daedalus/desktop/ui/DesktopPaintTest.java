@@ -1175,6 +1175,8 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.brandGoldRadius(1)).isEqualTo(72.0);
         assertThat(DesktopPaint.exportsRimAlpha(0)).isEqualTo(0.36);
         assertThat(DesktopPaint.exportsRimAlpha(1)).isEqualTo(0.55);
+        assertThat(DesktopPaint.boardRimAlpha(0)).isEqualTo(0.36);
+        assertThat(DesktopPaint.boardRimAlpha(1)).isEqualTo(0.55);
         assertThat(DesktopPaint.infoRimAlpha(0)).isEqualTo(0.28);
         assertThat(DesktopPaint.infoRimAlpha(1)).isCloseTo(0.48, within(1e-9));
         assertThat(DesktopPaint.headerRimAlpha(0)).isEqualTo(0.38);

@@ -141,7 +141,7 @@ class ThemeManagerTest {
             assertThat(in).as("main.fxml is on the classpath").isNotNull();
             String fxml = new String(in.readAllBytes());
             assertThat(fxml).contains("<HBox styleClass=\"brand\" alignment=\"CENTER_LEFT\">");
-            assertThat(fxml).contains("<StackPane styleClass=\"board\">");
+            assertThat(fxml).contains("<StackPane fx:id=\"boardPane\" styleClass=\"board\">");
             assertThat(fxml).contains("<Insets top=\"12\" right=\"12\" bottom=\"12\" left=\"12\"/>");
             assertThat(fxml).contains("<Insets right=\"10\"/>");
             assertThat(fxml).contains("<Insets top=\"8\" right=\"10\" bottom=\"4\" left=\"10\"/>");
@@ -330,6 +330,7 @@ class ThemeManagerTest {
                 .contains("new javafx.scene.layout.CornerRadii(9)")
                 .contains("new javafx.geometry.Insets(1)")
                 .contains("Color.rgb(153, 111, 49, DesktopPaint.statsRimAlpha(wave))")
+                .contains("Color.rgb(153, 111, 49, DesktopPaint.boardRimAlpha(wave))")
                 .contains("Color.rgb(153, 111, 49, chip)")
                 .contains("Color.web(\"#3ab675\", DesktopPaint.brandMintAlpha(wave))")
                 .contains("child.getStyleClass().contains(\"brand\")")

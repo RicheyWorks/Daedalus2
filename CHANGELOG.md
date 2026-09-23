@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop board breath.**
+  The board's gold lip breathes
+  from 0.36 to 0.55, the same band
+  as the well board.
+
 - **Desktop board seat.**
   The stage sits in a 12px
   #16120e board with a 0.42 gold

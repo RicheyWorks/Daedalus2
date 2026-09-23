@@ -204,6 +204,11 @@ public final class DesktopPaint {
         return 0.28 + 0.20 * wave;
     }
 
+    /** Well board gold lip — same band as web {@code boardRimBreath}. */
+    public static double boardRimAlpha(double wave) {
+        return 0.36 + 0.19 * wave;
+    }
+
     /** Well export chip gold lip — same band as web {@code exportsRimBreath}. */
     public static double exportsRimAlpha(double wave) {
         return 0.36 + 0.19 * wave;
