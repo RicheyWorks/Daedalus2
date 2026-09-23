@@ -826,6 +826,10 @@ public final class ExplorePaint {
     public static final int SKY_ZENITH_R = 0x16;
     public static final int SKY_ZENITH_G = 0x12;
     public static final int SKY_ZENITH_B = 0x0e;
+    /** Dusk band — same floor-warm as the light paver {@code #5c4a32}. */
+    public static final int SKY_DUSK_R = 0x5c;
+    public static final int SKY_DUSK_G = 0x4a;
+    public static final int SKY_DUSK_B = 0x32;
     /** Horizon hills — same wall as the well posts. */
     public static final int SKY_HILL_R = 0x12;
     public static final int SKY_HILL_G = 0x0e;
@@ -861,9 +865,9 @@ public final class ExplorePaint {
                 g = SKY_ZENITH_G + n / 6;
                 b = SKY_ZENITH_B;
             } else if (y < 36) {
-                r = 148 + n / 2;
-                g = 56 + n / 4;
-                b = 30;
+                r = SKY_DUSK_R + n / 2;
+                g = SKY_DUSK_G + n / 4;
+                b = SKY_DUSK_B;
             } else if (y < 46) {
                 r = 196 + n / 3;
                 g = 88 + n / 5;
