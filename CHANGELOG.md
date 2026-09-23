@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop idle glow.**
+  The empty-well halo
+  fades in its own
+  gold, the same
+  clear falloff as
+  the well.
+
 - **Desktop legend fade.**
   The scrim fades in
   the seat’s own ink,

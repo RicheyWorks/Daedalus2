@@ -1875,7 +1875,7 @@ public class MainController {
                 stops.add(new javafx.scene.paint.Stop(mintEnd, washMint));
             }
             stops.add(new javafx.scene.paint.Stop(goldAt, washGold));
-            stops.add(new javafx.scene.paint.Stop(1, Color.web("#000000", 0)));
+            stops.add(new javafx.scene.paint.Stop(1, Color.web(DesktopPaint.emptyWordmarkGoldInk(), 0)));
             var glow = new javafx.scene.paint.RadialGradient(
                     0, 0, cx, cy - 36, outer, false,
                     javafx.scene.paint.CycleMethod.NO_CYCLE,

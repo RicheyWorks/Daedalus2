@@ -336,6 +336,8 @@ class ThemeManagerTest {
         String src = java.nio.file.Files.readString(java.nio.file.Path.of(
                 "src/main/java/com/daedalus/desktop/ui/MainController.java"));
         assertThat(src).contains("fillTracked(g, DesktopPaint.EMPTY_WORDMARK, cx, cy + 48, 28 * 0.22)");
+        assertThat(src).contains("Stop(1, Color.web(DesktopPaint.emptyWordmarkGoldInk(), 0))");
+        assertThat(src).doesNotContain("Color.web(\"#000000\", 0)");
         assertThat(src).doesNotContain("g.fillText(DesktopPaint.EMPTY_WORDMARK, cx, cy + 48)");
         assertThat(src).contains("Font.font(\"Bahnschrift\", FontWeight.NORMAL, 13)");
         assertThat(src).contains("paintEmptyVoid(g, w, h, wave);");
