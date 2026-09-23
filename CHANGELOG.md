@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick corner.**
+  A clay corner sinks
+  further into the
+  mortar than a
+  straight joint.
+
 - **Explore paver corner.**
   A floor corner mixes
   with both neighbors

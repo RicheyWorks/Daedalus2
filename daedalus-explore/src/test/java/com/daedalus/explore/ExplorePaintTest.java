@@ -550,6 +550,10 @@ class ExplorePaintTest {
         int[] catchJoint = ExplorePaint.brickTexColor(1, 1);
         assertThat(catchJoint[0]).isEqualTo((catchFace[0] + ExplorePaint.BRICK_MORTAR_R) / 2);
         assertThat(ExplorePaint.brickTexColor(2, 1)).containsExactly(ExplorePaint.brickFace(2, 1));
+        int[] brickCorner = ExplorePaint.brickFace(1, 7);
+        assertThat(ExplorePaint.brickTexColor(1, 7)[0])
+                .isEqualTo((brickCorner[0] + ExplorePaint.BRICK_MORTAR_R
+                        + ExplorePaint.BRICK_MORTAR_R) / 3);
         assertThat(ExplorePaint.brickTexColor(0, 0)).containsExactly(ExplorePaint.brickFace(0, 0));
     }
 

@@ -813,15 +813,22 @@ public final class ExplorePaint {
         });
     }
 
-    /** Unshaded brick texel. Clay and the catch beside the grout mix toward mortar. */
+    /** Unshaded brick texel. Clay beside the grout mixes; a corner sinks further. */
     public static int[] brickTexColor(int x, int y) {
         int[] face = brickFace(x, y);
         if (brickMortar(x, y)) {
             return face;
         }
         int sx = x + ((y / 8) & 1) * 16;
-        boolean beside = (y % 8 == 7) || (sx % 16 == 1) || (sx % 16 == 15);
-        if (!beside) {
+        boolean course = y % 8 == 7;
+        boolean joint = (sx % 16 == 1) || (sx % 16 == 15);
+        if (course && joint) {
+            return new int[] {
+                    (face[0] + BRICK_MORTAR_R + BRICK_MORTAR_R) / 3,
+                    (face[1] + BRICK_MORTAR_G + BRICK_MORTAR_G) / 3,
+                    (face[2] + BRICK_MORTAR_B + BRICK_MORTAR_B) / 3};
+        }
+        if (!course && !joint) {
             return face;
         }
         return new int[] {
