@@ -20,6 +20,7 @@ import com.daedalus.server.service.WorldService;
 import com.daedalus.world.World;
 import com.daedalus.world.auto.DriveTrace;
 import com.daedalus.theory.LongestPath;
+import javafx.geometry.Pos;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -277,6 +278,7 @@ public class MainController {
      */
     @FXML
     public void initialize() {
+        trackLegendKeys();
         // Generator choices — sorted so the dropdown order is stable across runs.
         List<String> genIds = generatorRegistry.all().stream()
                 .map(MazeGenerator::id)
@@ -2571,6 +2573,44 @@ public class MainController {
         g.setStroke(ink.deriveColor(0, 1, 1, DesktopPaint.ghostRimAlpha(wave)));
         g.setLineWidth(Math.max(1.0, mark.size() * 0.07));
         g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
+    }
+
+    /** Same 0.04em tracking as the well legend. */
+    private void trackLegendKeys() {
+        if (legendBox == null) {
+            return;
+        }
+        for (var node : legendBox.getChildren()) {
+            if (node instanceof Label label) {
+                trackLegendLabel(label);
+            }
+        }
+    }
+
+    private static void trackLegendLabel(Label label) {
+        String text = label.getText();
+        if (text == null || text.length() < 2) {
+            return;
+        }
+        double em = 11 * 0.04;
+        var word = new HBox(em);
+        word.setAlignment(Pos.CENTER_LEFT);
+        Font font = Font.font("Bahnschrift", FontWeight.SEMI_BOLD, 11);
+        Color ink = Color.web("#b09a72");
+        for (int i = 0; i < text.length(); i++) {
+            Text ch = new Text(String.valueOf(text.charAt(i)));
+            ch.setFont(font);
+            ch.setFill(ink);
+            word.getChildren().add(ch);
+        }
+        var row = new HBox(5);
+        row.setAlignment(Pos.CENTER_LEFT);
+        if (label.getGraphic() != null) {
+            row.getChildren().add(label.getGraphic());
+        }
+        row.getChildren().add(word);
+        label.setText("");
+        label.setGraphic(row);
     }
 
     /** Same 0.22em tracking as the well idle wordmark. */

@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend tracking.**
+  The key words are tracked 0.04em,
+  the same spacing as the well legend.
+
 - **Desktop brand tracking.**
   The toolbar name is tracked 0.22em,
   the same spacing as the well header.

@@ -253,6 +253,16 @@ class ThemeManagerTest {
     }
 
     @Test
+    void legendTracksLikeTheWell() throws Exception {
+        String src = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/java/com/daedalus/desktop/ui/MainController.java"));
+        assertThat(src).contains("trackLegendKeys();");
+        assertThat(src).contains("double em = 11 * 0.04;");
+        assertThat(src).contains("Font.font(\"Bahnschrift\", FontWeight.SEMI_BOLD, 11)");
+        assertThat(src).contains("new HBox(5)");
+    }
+
+    @Test
     void emptyCaptionUsesTheWellFace() throws Exception {
         String src = java.nio.file.Files.readString(java.nio.file.Path.of(
                 "src/main/java/com/daedalus/desktop/ui/MainController.java"));
