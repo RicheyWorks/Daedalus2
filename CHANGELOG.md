@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore you-are-here gold.**
+  The automap HERE cell uses
+  `#f5c14a`, the same torch gold
+  as the well player.
+
 - **Explore shadow walls.**
   East-west faces are the lit wall
   at three quarters, so the shade

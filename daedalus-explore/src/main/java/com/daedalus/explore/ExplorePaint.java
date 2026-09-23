@@ -213,9 +213,10 @@ public final class ExplorePaint {
     public static final float MAP_HERE_SOFT_R = 0.55f;
     public static final float MAP_HERE_SOFT_G = 0.40f;
     public static final float MAP_HERE_SOFT_B = 0.12f;
-    public static final float MAP_HERE_R = 0.95f;
-    public static final float MAP_HERE_G = 0.86f;
-    public static final float MAP_HERE_B = 0.28f;
+    /** You-are-here — same torch gold as the well player {@code #f5c14a}. */
+    public static final float MAP_HERE_R = 0xf5 / 255f;
+    public static final float MAP_HERE_G = 0xc1 / 255f;
+    public static final float MAP_HERE_B = 0x4a / 255f;
     /** Same 0.22 rim as halls — leftover even gold is not the last word on you-are-here. */
     public static final float MAP_HERE_EDGE_DIM = 0.22f;
     /** HERE pad breath — same cadence idea as victory (~2.8s). */
