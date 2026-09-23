@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore portrait hairline.**
+  The brow band uses the well
+  wall highlight `#4a3824`, so
+  it sits with the vault stone.
+
 - **Explore lamp wash.**
   The bloom behind the torch
   uses the calm flame, so the

@@ -913,6 +913,10 @@ public final class ExplorePaint {
     public static final int FACE_FRAME_R = 0x2a;
     public static final int FACE_FRAME_G = 0x22;
     public static final int FACE_FRAME_B = 0x18;
+    /** Hairline — same wall highlight as the well {@code COLORS.wallHi}. */
+    public static final int FACE_BROW_R = 0x4a;
+    public static final int FACE_BROW_G = 0x38;
+    public static final int FACE_BROW_B = 0x24;
 
     public static byte[] faceRgba(int mood) {
         int grim = Math.max(0, Math.min(2, mood));
@@ -923,7 +927,7 @@ public final class ExplorePaint {
                 return rgbBytes(FACE_FRAME_R, FACE_FRAME_G, FACE_FRAME_B);
             }
             if (py == 1) {
-                return rgbBytes(62, 36, 22);
+                return rgbBytes(FACE_BROW_R, FACE_BROW_G, FACE_BROW_B);
             }
             if (py == 3 && (px == 2 || px == 5)) {
                 return rgbBytes(18, 12, 10);
