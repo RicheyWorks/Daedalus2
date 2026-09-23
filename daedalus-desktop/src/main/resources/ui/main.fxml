@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
 <?import javafx.scene.paint.RadialGradient?>
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
@@ -40,7 +41,16 @@
                 <Insets top="6" right="8" bottom="6" left="8"/>
             </padding>
 
-            <Label text="DAEDALUS" styleClass="brand"/>
+            <HBox styleClass="brand" alignment="CENTER_LEFT">
+                <Text text="D"/>
+                <Text text="A"/>
+                <Text text="E"/>
+                <Text text="D"/>
+                <Text text="A"/>
+                <Text text="L"/>
+                <Text text="U"/>
+                <Text text="S"/>
+            </HBox>
             <Separator orientation="VERTICAL"/>
 
             <ComboBox fx:id="generatorChoice" prefWidth="88" maxWidth="88">

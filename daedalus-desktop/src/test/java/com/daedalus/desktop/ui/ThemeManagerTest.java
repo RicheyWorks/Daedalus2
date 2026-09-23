@@ -85,6 +85,8 @@ class ThemeManagerTest {
             assertThat(css).contains("-fx-border-width: 0 0 1 0;\n    -fx-cursor: default;");
             assertThat(css).contains(".toolbar .brand");
             assertThat(css).contains("-fx-font-size: 18px;\n    -fx-font-weight: bold;");
+            assertThat(css).contains("-fx-spacing: 3.96px;");
+            assertThat(css).contains(".toolbar .brand .text {\n    -fx-fill: #f2ead8;");
             assertThat(css).doesNotContain("-fx-font-size: 14px;");
             assertThat(css).contains(".toolbar .label");
             assertThat(css).contains(".toolbar .label {\n    -fx-text-fill: #b09a72;");
@@ -115,6 +117,8 @@ class ThemeManagerTest {
         try (var in = ThemeManagerTest.class.getResourceAsStream("/ui/main.fxml")) {
             assertThat(in).as("main.fxml is on the classpath").isNotNull();
             String fxml = new String(in.readAllBytes());
+            assertThat(fxml).contains("<HBox styleClass=\"brand\" alignment=\"CENTER_LEFT\">");
+            assertThat(fxml).doesNotContain("<Label text=\"DAEDALUS\" styleClass=\"brand\"/>");
             assertThat(fxml).contains("stroke=\"rgba(198,190,174,0.28)\"");
             assertThat(fxml).doesNotContain("stroke=\"rgba(242,234,216,0.28)\"");
             assertThat(fxml).contains("stroke=\"rgba(200,158,63,0.35)\"");

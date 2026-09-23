@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop brand tracking.**
+  The toolbar name is tracked 0.22em,
+  the same spacing as the well header.
+
 - **Desktop idle wordmark tracking.**
   The empty name is tracked 0.22em,
   the same spacing as the well.
