@@ -352,6 +352,8 @@ class ThemeManagerTest {
         assertThat(src).contains("clipStage();");
         assertThat(src).contains("DesktopPaint.stageCornerArc()");
         assertThat(src).contains("paintMazeWash(g, layout);");
+        assertThat(src).contains("clipMaze(g, layout);");
+        assertThat(src).contains("g.rect(layout.offsetX(), layout.offsetY(), mazeW, mazeH);");
         assertThat(src).contains("Color.web(DesktopPaint.WELL_VOID_CENTER)");
     }
 

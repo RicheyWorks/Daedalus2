@@ -1954,6 +1954,9 @@ public class MainController {
 
         paintMazeWash(g, layout);
 
+        g.save();
+        clipMaze(g, layout);
+        try {
         DesktopPaint.Fog fog = fogScene();
         if (fog != null) {
             paintFogDungeon(g, layout, tiles, theme, fog, store.scaleX(), store.scaleY());
@@ -2306,6 +2309,9 @@ public class MainController {
             paintVictory(g, layout, current.metadata().goal());
         }
         syncLegend();
+        } finally {
+            g.restore();
+        }
     }
 
     private void syncLegend() {
@@ -2399,6 +2405,15 @@ public class MainController {
                 new javafx.scene.paint.Stop(1, Color.web(DesktopPaint.WELL_VOID_EDGE)));
         g.setFill(wash);
         g.fillOval(cx - rx, cy - ry, rx * 2, ry * 2);
+    }
+
+    /** Maze ink stays inside the bitmap, the same clip as the well canvas. */
+    private static void clipMaze(GraphicsContext g, DesktopPaint.Layout layout) {
+        double mazeW = layout.offX()[layout.tileCols()];
+        double mazeH = layout.offY()[layout.tileRows()];
+        g.beginPath();
+        g.rect(layout.offsetX(), layout.offsetY(), mazeW, mazeH);
+        g.clip();
     }
 
     /** Unrevealed cells show the maze-local circle, same as {@code draw.js} {@code paint}. */

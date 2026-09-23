@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop maze clip.**
+  Discs and victory
+  wash stop at the
+  maze edge, the same
+  canvas bounds as
+  the well.
+
 - **Desktop legend gap.**
   A key sits 14px
   from the previous
