@@ -73,7 +73,7 @@ public class DaedalusPrimaryStage extends Application {
         stage.show();
     }
 
-    /** Warm cap — same 1200×700 ellipse as the well {@code body} wash. */
+    /** Warm cap — same 1200px by 700px radii as the well {@code body} wash. */
     private static Group pageWash(StackPane shell) {
         Circle cap = new Circle(0, 0, DesktopPaint.pageWashRadiusX());
         cap.setScaleY(DesktopPaint.pageWashScaleY());

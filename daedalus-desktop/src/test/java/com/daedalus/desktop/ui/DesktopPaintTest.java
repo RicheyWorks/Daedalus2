@@ -1133,9 +1133,9 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.Backing.of(0, 600, 2, 2)).isNull();
         assertThat(DesktopPaint.CANVAS_IMAGE_SMOOTHING).isFalse();
         assertThat(DesktopPaint.SCENE_FILL).isEqualTo("#0c0908");
-        assertThat(DesktopPaint.pageWashRadiusX()).isEqualTo(600);
-        assertThat(DesktopPaint.pageWashRadiusY()).isEqualTo(350);
-        assertThat(DesktopPaint.pageWashScaleY()).isCloseTo(350 / 600.0, within(1e-9));
+        assertThat(DesktopPaint.pageWashRadiusX()).isEqualTo(1200);
+        assertThat(DesktopPaint.pageWashRadiusY()).isEqualTo(700);
+        assertThat(DesktopPaint.pageWashScaleY()).isCloseTo(700 / 1200.0, within(1e-9));
         assertThat(DesktopPaint.PAGE_WASH_END).isEqualTo(0.55);
         assertThat(DesktopPaint.pageWashCenterX(1280)).isEqualTo(640);
         assertThat(DesktopPaint.pageWashCenterY(800)).isEqualTo(-80);

@@ -358,7 +358,7 @@ public final class DesktopPaint {
 
     /**
      * Page cap — web {@code body} is {@code radial-gradient(1200px 700px at 50% -10%)}.
-     * Void arrives at 55% of that ellipse.
+     * Those two lengths are the horizontal and vertical radii. Void arrives at 55%.
      */
     public static final double PAGE_WASH_W = 1200;
     public static final double PAGE_WASH_H = 700;
@@ -367,11 +367,11 @@ public final class DesktopPaint {
     public static final double PAGE_WASH_END = 0.55;
 
     public static double pageWashRadiusX() {
-        return PAGE_WASH_W / 2.0;
+        return PAGE_WASH_W;
     }
 
     public static double pageWashRadiusY() {
-        return PAGE_WASH_H / 2.0;
+        return PAGE_WASH_H;
     }
 
     /** Squash a circle of {@link #pageWashRadiusX()} into the well's ellipse. */

@@ -3,7 +3,7 @@
    are one product. */
 
 .root {
-    /* Body wash is the 1200×700 ellipse painted behind the shell. */
+    /* Body wash uses the well's 1200px and 700px radii. */
     -fx-background-color: transparent;
     -fx-font-family: "Segoe UI", "SF Pro Display", "Helvetica Neue", sans-serif;
     -fx-font-size: 13px;

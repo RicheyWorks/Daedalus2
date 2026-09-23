@@ -77,7 +77,7 @@ class ThemeManagerTest {
             assertThat(css).contains("#16120e");
             assertThat(css).contains("#0c0908");
             assertThat(css).contains(
-                    "/* Body wash is the 1200×700 ellipse painted behind the shell. */");
+                    "/* Body wash uses the well's 1200px and 700px radii. */");
             assertThat(css).contains("-fx-background-color: transparent;");
             assertThat(css).doesNotContain("radius 100%");
             assertThat(css).doesNotContain("radius 72%");

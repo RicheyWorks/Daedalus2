@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop page wash.**
+  The window cap uses
+  the well’s 1200px
+  and 700px radii, so
+  the body glow matches
+  the page.
+
 - **Desktop idle wordmark.**
   The empty-well name
   lays mint, then gold,
