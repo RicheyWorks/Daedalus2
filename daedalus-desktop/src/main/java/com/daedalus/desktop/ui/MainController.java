@@ -2187,22 +2187,7 @@ public class MainController {
 
         if (currentCuts != null) {
             double cutsWave = DesktopPaint.cutsBreathWave(System.nanoTime());
-            for (var passage : currentCuts.chokepoints()) {
-                DesktopPaint.TileRect cut = DesktopPaint.chokeTile(passage);
-                Color choke = Color.web(cut == null ? DesktopPaint.CHOKE
-                        : DesktopPaint.chokeInk(DesktopPaint.floorEdge(
-                                layout, cut.tileRow(), cut.tileCol())));
-                DesktopPaint.Ring halo = DesktopPaint.chokeHalo(layout, passage, cutsWave);
-                if (halo != null) {
-                    g.setGlobalAlpha(DesktopPaint.chokeHaloAlpha(cutsWave));
-                    g.setFill(choke);
-                    g.fillOval(halo.cx() - halo.radius(), halo.cy() - halo.radius(),
-                            halo.radius() * 2, halo.radius() * 2);
-                    g.setGlobalAlpha(1);
-                }
-                paintRing(g, DesktopPaint.chokeRing(layout, passage, g.getTransform().getMyy()),
-                        choke.deriveColor(0, 1, 1, DesktopPaint.chokeRingAlpha(cutsWave)));
-            }
+            // Specks first, pinch rings after — draw.js paints dead ends, then chokes.
             for (Point end : currentCuts.deadEnds()) {
                 Color ink = Color.web(DesktopPaint.deadEndInk(
                         DesktopPaint.floorEdge(layout, 2 * end.row() + 1, 2 * end.col() + 1)));
@@ -2223,6 +2208,22 @@ public class MainController {
                     g.setLineWidth(discLine(g, core.size(), DesktopPaint.DEAD_END_RADIUS, 0.06));
                     g.strokeOval(core.x(), core.y(), core.size(), core.size());
                 }
+            }
+            for (var passage : currentCuts.chokepoints()) {
+                DesktopPaint.TileRect cut = DesktopPaint.chokeTile(passage);
+                Color choke = Color.web(cut == null ? DesktopPaint.CHOKE
+                        : DesktopPaint.chokeInk(DesktopPaint.floorEdge(
+                                layout, cut.tileRow(), cut.tileCol())));
+                DesktopPaint.Ring halo = DesktopPaint.chokeHalo(layout, passage, cutsWave);
+                if (halo != null) {
+                    g.setGlobalAlpha(DesktopPaint.chokeHaloAlpha(cutsWave));
+                    g.setFill(choke);
+                    g.fillOval(halo.cx() - halo.radius(), halo.cy() - halo.radius(),
+                            halo.radius() * 2, halo.radius() * 2);
+                    g.setGlobalAlpha(1);
+                }
+                paintRing(g, DesktopPaint.chokeRing(layout, passage, g.getTransform().getMyy()),
+                        choke.deriveColor(0, 1, 1, DesktopPaint.chokeRingAlpha(cutsWave)));
             }
         }
 

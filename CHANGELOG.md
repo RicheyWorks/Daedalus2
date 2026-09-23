@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop cut order.**
+  Dead-end specks paint
+  before the pinch rings,
+  so a choke halo sits
+  on the speck the same
+  way as the well.
+
 - **Desktop compare ink.**
   The split wash starts
   from the raw seat

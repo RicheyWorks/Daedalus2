@@ -290,7 +290,7 @@ class DesktopPaintTest {
     }
 
     @Test
-    void aChokepointPaintsTheOpeningBetweenTheTwoCells() {
+    void aChokepointPaintsTheOpeningBetweenTheTwoCells() throws Exception {
         MazeFlow.Passage east = new MazeFlow.Passage(new Point(0, 0), new Point(0, 1));
         assertThat(DesktopPaint.chokeTile(east))
                 .isEqualTo(new DesktopPaint.TileRect(1, 2));
@@ -347,6 +347,12 @@ class DesktopPaintTest {
                 .isCloseTo(1.2, within(1e-9));
         assertThat(DesktopPaint.chokeTile(null)).isNull();
         assertThat(DesktopPaint.chokeHalo(layout, null)).isNull();
+        String ctrl = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/java/com/daedalus/desktop/ui/MainController.java"));
+        int specks = ctrl.indexOf("for (Point end : currentCuts.deadEnds())");
+        int rings = ctrl.indexOf("for (var passage : currentCuts.chokepoints())");
+        assertThat(specks).isGreaterThan(0);
+        assertThat(rings).isGreaterThan(specks);
     }
 
     @Test
