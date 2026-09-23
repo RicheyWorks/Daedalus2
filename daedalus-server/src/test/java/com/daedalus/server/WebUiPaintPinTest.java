@@ -47,6 +47,7 @@ class WebUiPaintPinTest {
                     .contains("#lb b { color: #f2ead8; -webkit-user-drag: none")
                     .contains("#lb .score { color: #3ab675; font-weight: 700; -webkit-user-drag: none")
                     .contains("#stats span { color: #b09a72; -webkit-user-drag: none")
+                    .contains("font: 12px/1.7 ui-monospace, monospace;")
                     .contains(".info b { color: #f2ead8; font-weight: 600; -webkit-user-drag: none")
                     .contains("font: 700 18px/1 ")
                     .contains("background: rgba(12, 9, 8, 0.92); position: sticky;")

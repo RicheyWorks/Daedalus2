@@ -181,6 +181,10 @@
     -fx-font-family: "Cascadia Code", "Consolas", "Menlo", monospace;
     -fx-font-size: 12px;
     -fx-cursor: default;
+    /* font: 12px/1.7 — same line box as #stats. */
+    -fx-min-height: 20.4px;
+    -fx-pref-height: 20.4px;
+    -fx-alignment: center-left;
 }
 .status-bar .label.world-place {
     -fx-text-fill: #94612e;

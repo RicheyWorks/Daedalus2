@@ -10,6 +10,10 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop status line.**
+  The status words sit in a 1.7 line,
+  the same box as the well stats.
+
 - **Desktop toolbar wash.**
   The bar uses the well header's
   translucent void, the same

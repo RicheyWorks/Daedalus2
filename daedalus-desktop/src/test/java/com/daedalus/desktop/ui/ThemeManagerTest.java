@@ -100,6 +100,8 @@ class ThemeManagerTest {
             assertThat(css).contains(".status-bar");
             assertThat(css).contains(".status-bar .label");
             assertThat(css).contains("-fx-font-size: 12px;\n    -fx-cursor: default;");
+            assertThat(css).contains("-fx-min-height: 20.4px;");
+            assertThat(css).contains("-fx-pref-height: 20.4px;");
             assertThat(css).contains("-fx-border-width: 1 0 0 0;\n    -fx-cursor: default;");
             assertThat(css).contains("-fx-background-color: #16120e");
             assertThat(css).contains("rgba(16, 11, 8, 0.55)");
