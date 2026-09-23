@@ -1860,9 +1860,10 @@ class WebUiPaintPinTest {
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
                     .contains("text-shadow: 0 0 18px rgba(58, 182, 117, 0.22), 0 0 36px rgba(200, 158, 63, 0.10);")
-                    .contains("linear-gradient(90deg, transparent 23px, rgba(58, 182, 117, .08) 24px, transparent 25px),")
-                    .contains("linear-gradient(transparent 23px, rgba(200, 158, 63, .05) 24px, transparent 25px),")
-                    .contains("radial-gradient(70% 45% at 50% 0%, rgba(200, 158, 63, .06), transparent 70%);")
+                    .contains("linear-gradient(90deg, rgba(58, 182, 117, 0) 23px, rgba(58, 182, 117, .08) 24px, rgba(58, 182, 117, 0) 25px),")
+                    .contains("linear-gradient(rgba(200, 158, 63, 0) 23px, rgba(200, 158, 63, .05) 24px, rgba(200, 158, 63, 0) 25px),")
+                    .contains("radial-gradient(70% 45% at 50% 0%, rgba(200, 158, 63, .06), rgba(200, 158, 63, 0) 70%);")
+                    .doesNotContain("radial-gradient(70% 45% at 50% 0%, rgba(200, 158, 63, .06), transparent 70%)")
                     .contains("text-shadow: 0 0 22px rgba(58, 182, 117, 0.16), 0 0 48px rgba(200, 158, 63, 0.08);")
                     .contains("text-shadow: 0 0 36px rgba(58, 182, 117, 0.32), 0 0 72px rgba(200, 158, 63, 0.18);")
                     .doesNotContain("rgba(62, 224, 143")

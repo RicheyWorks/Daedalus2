@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Gate veil wash.**
+  The gold wash and
+  the veil lines fade
+  in their own color.
+  A clear black stop
+  no longer muddies
+  the top of the gate.
+
 - **Well idle glow.**
   The empty-well halo
   fades the same gold.
