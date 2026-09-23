@@ -210,9 +210,10 @@ public final class ExplorePaint {
     public static final int GLYPH_H = 7;
     /** Soft pad around the automap HERE cell — place, not a single pixel. */
     public static final float MAP_HERE_HALO = 0.7f;
-    public static final float MAP_HERE_SOFT_R = 0.55f;
-    public static final float MAP_HERE_SOFT_G = 0.40f;
-    public static final float MAP_HERE_SOFT_B = 0.12f;
+    /** Soft pad — torch gold at the story-mark weight. */
+    public static final float MAP_HERE_SOFT_R = (0xf5 / 255f) * 0.58f;
+    public static final float MAP_HERE_SOFT_G = (0xc1 / 255f) * 0.58f;
+    public static final float MAP_HERE_SOFT_B = (0x4a / 255f) * 0.58f;
     /** You-are-here — same torch gold as the well player {@code #f5c14a}. */
     public static final float MAP_HERE_R = 0xf5 / 255f;
     public static final float MAP_HERE_G = 0xc1 / 255f;

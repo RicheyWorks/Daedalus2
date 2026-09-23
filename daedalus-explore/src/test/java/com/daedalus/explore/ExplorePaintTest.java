@@ -667,6 +667,13 @@ class ExplorePaintTest {
                 .as("HERE wears a soft pad wider than the cell")
                 .isGreaterThan(0.5f);
         assertThat(ExplorePaint.MAP_HERE_R).isGreaterThan(ExplorePaint.MAP_HERE_SOFT_R);
+        assertThat(ExplorePaint.MAP_HERE_SOFT_R)
+                .isEqualTo(ExplorePaint.MAP_HERE_R * ExplorePaint.MAP_MARK_SOFT_WEIGHT);
+        assertThat(ExplorePaint.MAP_HERE_SOFT_G)
+                .isEqualTo(ExplorePaint.MAP_HERE_G * ExplorePaint.MAP_MARK_SOFT_WEIGHT);
+        assertThat(ExplorePaint.MAP_HERE_SOFT_B)
+                .isEqualTo(ExplorePaint.MAP_HERE_B * ExplorePaint.MAP_MARK_SOFT_WEIGHT);
+        assertThat(ExplorePaint.MAP_HERE_SOFT_G).isNotEqualTo(0.40f);
         assertThat(ExplorePaint.MAP_HERE_R).isEqualTo(ExplorePaint.SKY_STAR_R / 255f);
         assertThat(ExplorePaint.MAP_HERE_G).isEqualTo(ExplorePaint.SKY_STAR_G / 255f);
         assertThat(ExplorePaint.MAP_HERE_B).isEqualTo(ExplorePaint.SKY_STAR_B / 255f);

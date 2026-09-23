@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore you-are-here halo.**
+  The soft pad is the torch gold
+  at the story-mark weight, so
+  the ring matches the HERE cell.
+
 - **Explore you-are-here gold.**
   The automap HERE cell uses
   `#f5c14a`, the same torch gold
