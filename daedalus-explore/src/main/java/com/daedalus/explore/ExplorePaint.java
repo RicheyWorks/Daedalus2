@@ -803,26 +803,48 @@ public final class ExplorePaint {
 
     public static byte[] brickRgba() {
         return raster((x, y) -> {
-            boolean mortar = (y % 8 == 0) || (((x + ((y / 8) & 1) * 16) % 16) == 0);
-            int n = hash(x, y) & 15;
-            if (mortar) {
-                return rgbBytes(BRICK_MORTAR_R, BRICK_MORTAR_G, BRICK_MORTAR_B);
-            }
-            int r;
-            int g;
-            int b;
-            if ((y & 7) == 1) {
-                r = BRICK_TEX_HI_R + n / 2;
-                g = BRICK_TEX_HI_G + n / 3;
-                b = BRICK_TEX_HI_B;
-            } else {
-                r = BRICK_TEX_R + n;
-                g = BRICK_TEX_G + (n / 2);
-                b = BRICK_TEX_B;
+            int[] rgb = brickTexColor(x, y);
+            if (brickMortar(x, y)) {
+                return rgbBytes(rgb[0], rgb[1], rgb[2]);
             }
             float s = brickTexShade(x, y);
-            return rgbBytes(Math.round(r * s), Math.round(g * s), Math.round(b * s));
+            return rgbBytes(Math.round(rgb[0] * s), Math.round(rgb[1] * s),
+                    Math.round(rgb[2] * s));
         });
+    }
+
+    /** Unshaded brick texel. Clay beside the grout mixes toward mortar. */
+    public static int[] brickTexColor(int x, int y) {
+        int[] face = brickFace(x, y);
+        if (brickMortar(x, y) || (y & 7) == 1) {
+            return face;
+        }
+        int sx = x + ((y / 8) & 1) * 16;
+        boolean beside = (y % 8 == 7) || (sx % 16 == 1) || (sx % 16 == 15);
+        if (!beside) {
+            return face;
+        }
+        return new int[] {
+                (face[0] + BRICK_MORTAR_R) / 2,
+                (face[1] + BRICK_MORTAR_G) / 2,
+                (face[2] + BRICK_MORTAR_B) / 2};
+    }
+
+    public static boolean brickMortar(int x, int y) {
+        int sx = x + ((y / 8) & 1) * 16;
+        return (y % 8 == 0) || (sx % 16 == 0);
+    }
+
+    public static int[] brickFace(int x, int y) {
+        if (brickMortar(x, y)) {
+            return new int[] {BRICK_MORTAR_R, BRICK_MORTAR_G, BRICK_MORTAR_B};
+        }
+        int n = hash(x, y) & 15;
+        if ((y & 7) == 1) {
+            return new int[] {
+                    BRICK_TEX_HI_R + n / 2, BRICK_TEX_HI_G + n / 3, BRICK_TEX_HI_B};
+        }
+        return new int[] {BRICK_TEX_R + n, BRICK_TEX_G + n / 2, BRICK_TEX_B};
     }
 
     public static final int FLOOR_TEX_HI_R = 118;

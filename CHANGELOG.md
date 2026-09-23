@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick grout.**
+  Clay beside the
+  mortar mixes toward
+  the joint. The course
+  meets the grout
+  instead of cutting
+  on one texel.
+
 - **Explore floor seam.**
   Warm and dark pavers
   mix where they meet.

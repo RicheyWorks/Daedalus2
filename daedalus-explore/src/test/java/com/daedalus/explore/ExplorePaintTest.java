@@ -513,6 +513,13 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.brickTexShade(1, 3))
                 .as("brick face rim falls off toward grout")
                 .isLessThan(ExplorePaint.brickTexShade(8, 4));
+        int[] clay = ExplorePaint.brickFace(1, 2);
+        int[] grout = ExplorePaint.brickTexColor(1, 2);
+        assertThat(ExplorePaint.brickMortar(0, 2)).isTrue();
+        assertThat(grout[0]).isEqualTo((clay[0] + ExplorePaint.BRICK_MORTAR_R) / 2);
+        assertThat(ExplorePaint.brickTexColor(2, 2)).containsExactly(ExplorePaint.brickFace(2, 2));
+        assertThat(ExplorePaint.brickTexColor(2, 1)).containsExactly(ExplorePaint.brickFace(2, 1));
+        assertThat(ExplorePaint.brickTexColor(0, 0)).containsExactly(ExplorePaint.brickFace(0, 0));
     }
 
     @Test
