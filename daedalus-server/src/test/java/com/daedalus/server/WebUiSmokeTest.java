@@ -161,12 +161,12 @@ class WebUiSmokeTest {
                 .contains("font-size: 13px; flex: 1;")
                 .contains("text-wrap: pretty;")
                 .contains("animation: gateRise .55s ease both, panelRimBreath 4.5s ease-in-out infinite")
-                .contains("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #afa088;")
-                .contains("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #afa088; cursor: text;\n"
+                .contains("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #b09a72;")
+                .contains("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #b09a72; cursor: text;\n"
                         + "              text-shadow: 0 1px 0 #2a2218;\n"
                         + "              background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
                         + "              border: 1px solid rgba(153, 111, 49, 0.28);")
-                .contains("background: #16120e; color: #afa088; cursor: text")
+                .contains("background: #16120e; color: #b09a72; cursor: text")
                 .contains("font: 11px/1.45 ui-monospace, monospace; overflow: auto; overscroll-behavior: none;")
                 .contains("gateBreath").contains("gateVeil")
                 .contains("rgba(200, 158, 63, .05)")
@@ -236,9 +236,9 @@ class WebUiSmokeTest {
                 .contains("0%, 100% { border-left-color: rgba(153, 111, 49, 0.28); }")
                 .contains("animation: statsRimBreath 4.5s ease-in-out infinite; }")
                 .contains("0%, 100% { border-top-color: rgba(153, 111, 49, 0.28); }")
-                .contains("color: #afa088;")
-                .contains("max-height: 22vh; color: #afa088")
-                .contains("max-height: 22vh; color: #afa088; cursor: text")
+                .contains("color: #b09a72;")
+                .contains("max-height: 22vh; color: #b09a72")
+                .contains("max-height: 22vh; color: #b09a72; cursor: text")
                 .contains("#asciiOut .rock { color: #765834")
                 .contains("#asciiOut .gate { color: #3ab675")
                 .contains("#asciiOut .exit { color: #d04e4f")

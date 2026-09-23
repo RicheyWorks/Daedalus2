@@ -28,7 +28,7 @@ class WebUiPaintPinTest {
                     .contains("#log .err    { color: #d04e4f; -webkit-user-drag: none")
                     .contains("#asciiOut .rock { color: #765834; -webkit-user-drag: none")
                     .contains("#asciiOut .rock { color: #765834; -webkit-user-drag: none; text-shadow: 0 1px 0 #2a2218")
-                    .contains("max-height: 22vh; color: #afa088; cursor: text; text-shadow: 0 1px 0 #2a2218")
+                    .contains("max-height: 22vh; color: #b09a72; cursor: text; text-shadow: 0 1px 0 #2a2218")
                     .contains("#asciiOut .gate { color: #3ab675; -webkit-user-drag: none; text-shadow: none")
                     .contains("#asciiOut .exit { color: #d04e4f; -webkit-user-drag: none; text-shadow: none")
                     .contains("background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908)")
@@ -741,13 +741,13 @@ class WebUiPaintPinTest {
             assertThat(in).as("static well page").isNotNull();
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
-                    .contains("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #afa088; cursor: text;\n"
+                    .contains("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #b09a72; cursor: text;\n"
                             + "              text-shadow: 0 1px 0 #2a2218;\n"
                             + "              background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
                             + "              border: 1px solid rgba(153, 111, 49, 0.28);")
-                    .doesNotContain("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #afa088; cursor: text;\n"
+                    .doesNotContain("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #b09a72; cursor: text;\n"
                             + "              border: 1px solid rgba(153, 111, 49, 0.28);")
-                    .doesNotContain("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #afa088; cursor: text;\n"
+                    .doesNotContain("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #b09a72; cursor: text;\n"
                             + "              border: 1px solid rgba(184, 133, 56, 0.28);");
         }
     }
@@ -994,13 +994,13 @@ class WebUiPaintPinTest {
             assertThat(in).as("static well page").isNotNull();
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
-                    .contains("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #afa088; cursor: text;\n"
+                    .contains("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #b09a72; cursor: text;\n"
                             + "              text-shadow: 0 1px 0 #2a2218;\n"
                             + "              background: radial-gradient(circle at 50% 35%, #16120e 38%, #0c0908);\n"
                             + "              border: 1px solid rgba(153, 111, 49, 0.28);\n"
                             + "              border-radius: 6px; font: 11px/1.45 ui-monospace, monospace; overflow: auto; overscroll-behavior: none;\n"
                             + "              scrollbar-width: thin; scrollbar-color: rgba(153, 111, 49, 0.45) transparent;")
-                    .doesNotContain("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #afa088; cursor: text;\n"
+                    .doesNotContain("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #b09a72; cursor: text;\n"
                             + "              border: 1px solid rgba(153, 111, 49, 0.28);\n"
                             + "              border-radius: 6px; font: 11px/1.45 ui-monospace, monospace; overflow: auto; overscroll-behavior: none;\n"
                             + "              scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent;");
@@ -1044,9 +1044,9 @@ class WebUiPaintPinTest {
             assertThat(in).as("static well page").isNotNull();
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
-                    .contains("max-height: 22vh; color: #afa088; cursor: text; text-shadow: 0 1px 0 #2a2218;\n"
+                    .contains("max-height: 22vh; color: #b09a72; cursor: text; text-shadow: 0 1px 0 #2a2218;\n"
                             + "              scrollbar-width: thin; scrollbar-color: rgba(153, 111, 49, 0.45) transparent;")
-                    .doesNotContain("max-height: 22vh; color: #afa088; cursor: text; text-shadow: 0 1px 0 #2a2218;\n"
+                    .doesNotContain("max-height: 22vh; color: #b09a72; cursor: text; text-shadow: 0 1px 0 #2a2218;\n"
                             + "              scrollbar-width: thin; scrollbar-color: rgba(184, 133, 56, 0.45) transparent;");
         }
     }
@@ -1185,8 +1185,9 @@ class WebUiPaintPinTest {
             assertThat(in).as("static well page").isNotNull();
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
-                    .contains("max-height: 22vh; color: #afa088; cursor: text")
-                    .doesNotContain("max-height: 22vh; color: #d4c4a8");
+                    .contains("max-height: 22vh; color: #b09a72; cursor: text")
+                    .doesNotContain("max-height: 22vh; color: #d4c4a8")
+                    .doesNotContain("#afa088");
         }
     }
 
@@ -1196,7 +1197,7 @@ class WebUiPaintPinTest {
             assertThat(in).as("static well page").isNotNull();
             String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(html)
-                    .contains("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #afa088;")
+                    .contains("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #b09a72;")
                     .doesNotContain("#gate pre { margin: 0; padding: 8px; background: #16120e; color: #d4c4a8;");
         }
     }

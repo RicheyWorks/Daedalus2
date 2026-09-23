@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well ASCII floor ink.**
+  Open cells and the gate sample
+  use the legend parchment
+  `#b09a72`, so the dump shares
+  that secondary ink.
+
 - **Well ASCII rock ink.**
   Maze walls in the ASCII dump
   use the floor shine `#765834`,
