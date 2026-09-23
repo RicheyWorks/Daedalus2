@@ -431,6 +431,10 @@ class ExplorePaintTest {
         int ceilMid = Byte.toUnsignedInt(ceil[(3 * ExplorePaint.TEX + 3) * 4]);
         assertThat(ceilMid).isGreaterThanOrEqualTo(ExplorePaint.CEILING_TEX_R);
         assertThat(ExplorePaint.CEILING_TEX_R).isGreaterThan(ExplorePaint.CEILING_TEX_B);
+        assertThat(ExplorePaint.CEILING_TEX_R).isEqualTo(0x4a);
+        assertThat(ExplorePaint.CEILING_TEX_G).isEqualTo(0x38);
+        assertThat(ExplorePaint.CEILING_TEX_B).isEqualTo(0x24);
+        assertThat(ExplorePaint.CEILING_TEX_R).isNotEqualTo(72);
         assertThat(ExplorePaint.CEILING_TEX_R).isLessThan(92);
         int ceilShine = Byte.toUnsignedInt(ceil[(1 * ExplorePaint.TEX + 2) * 4]);
         int ceilBody = Byte.toUnsignedInt(ceil[(4 * ExplorePaint.TEX + 2) * 4]);

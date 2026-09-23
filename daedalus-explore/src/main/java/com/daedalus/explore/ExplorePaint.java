@@ -778,9 +778,10 @@ public final class ExplorePaint {
         });
     }
 
-    public static final int CEILING_TEX_R = 72;
-    public static final int CEILING_TEX_G = 52;
-    public static final int CEILING_TEX_B = 36;
+    /** Vault body — same wall highlight as the well {@code COLORS.wallHi}. */
+    public static final int CEILING_TEX_R = 0x4a;
+    public static final int CEILING_TEX_G = 0x38;
+    public static final int CEILING_TEX_B = 0x24;
     /** Vault shine — same floor-warm as the light paver. */
     public static final int CEILING_TEX_HI_R = FLOOR_TEX_WARM_R;
     public static final int CEILING_TEX_HI_G = FLOOR_TEX_WARM_G;

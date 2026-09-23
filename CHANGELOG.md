@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore vault body.**
+  The ceiling stone sits on the well
+  wall highlight #4a3824 so the lid
+  shares the post shine.
+
 - **Explore vault shine.**
   The ceiling course sits on the well
   floor-warm #5c4a32, the same torch
