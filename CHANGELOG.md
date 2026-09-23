@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop shine gate.**
+  The corridor line appears
+  once the cell is 10 bitmap
+  pixels, the same cutoff
+  as `draw.js`.
+
 - **Desktop corridor shine.**
   The floor and wall
   hairline is one device

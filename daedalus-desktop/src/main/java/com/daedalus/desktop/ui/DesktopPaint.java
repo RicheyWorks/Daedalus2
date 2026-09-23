@@ -2124,9 +2124,22 @@ public final class DesktopPaint {
     }
 
     public static boolean floorHi(Layout layout, int tileRow, int tileCol, double lamp) {
+        return floorHi(layout, tileRow, tileCol, lamp, 1);
+    }
+
+    /** Shine gate — {@code draw.js} compares {@code geom.cell} in bitmap pixels. */
+    public static double bitmapPx(double css, double scale) {
+        return css * (scale > 0 ? scale : 1);
+    }
+
+    public static boolean shineCell(double cellCss, double scale) {
+        return bitmapPx(cellCss, scale) >= 10;
+    }
+
+    public static boolean floorHi(Layout layout, int tileRow, int tileCol, double lamp, double scale) {
         return layout != null
                 && tileRow % 2 == 1 && tileCol % 2 == 1
-                && layout.cellSize() >= 10
+                && shineCell(layout.cellSize(), scale)
                 && lamp > 0.7;
     }
 
@@ -2182,7 +2195,8 @@ public final class DesktopPaint {
 
     public static Hairline floorHiStroke(Layout layout, int tileRow, int tileCol, double lamp,
                                           double scaleX, double scaleY) {
-        if (!floorHi(layout, tileRow, tileCol, lamp)) {
+        double gate = Math.min(scaleX > 0 ? scaleX : 1, scaleY > 0 ? scaleY : 1);
+        if (!floorHi(layout, tileRow, tileCol, lamp, gate)) {
             return null;
         }
         double px = devicePx(scaleX);
@@ -2214,12 +2228,14 @@ public final class DesktopPaint {
 
     public static Hairline wallHiStroke(Layout layout, int tileRow, int tileCol,
                                          double scaleX, double scaleY) {
-        if (layout == null || layout.cellSize() < 10) {
+        double sx = scaleX > 0 ? scaleX : 1;
+        double sy = scaleY > 0 ? scaleY : 1;
+        if (layout == null || !shineCell(layout.cellSize(), Math.min(sx, sy))) {
             return null;
         }
         double w = layout.w(tileCol);
         double h = layout.h(tileRow);
-        if (w < 3 || h < 3) {
+        if (bitmapPx(w, sx) < 3 || bitmapPx(h, sy) < 3) {
             return null;
         }
         double px = devicePx(scaleX);

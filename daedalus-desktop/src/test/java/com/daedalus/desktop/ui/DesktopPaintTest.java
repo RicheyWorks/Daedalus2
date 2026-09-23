@@ -796,6 +796,12 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.floorHiStroke(tight, 1, 1))
                 .as("web skips the highlight when the cell is under 10px")
                 .isNull();
+        DesktopPaint.Layout crisp = DesktopPaint.Layout.fit(3, 3, 9, 9);
+        assertThat(crisp.cellSize()).isEqualTo(6);
+        assertThat(DesktopPaint.floorHi(crisp, 1, 1)).isFalse();
+        assertThat(DesktopPaint.floorHi(crisp, 1, 1, 1, 2)).isTrue();
+        assertThat(DesktopPaint.wallHiStroke(crisp, 0, 1)).isNull();
+        assertThat(DesktopPaint.wallHiStroke(crisp, 0, 1, 2, 2)).isNotNull();
         assertThat(DesktopPaint.floorHi(roomy, 1, 1, 0.6))
                 .as("fog lamp below 0.7 leaves the floor dim")
                 .isFalse();
