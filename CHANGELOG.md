@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend wash.**
+  Each key’s radial
+  ends at the far
+  corner, the same
+  size as the well
+  swatch.
+
 - **Desktop page cap.**
   The window wash is
   a 1200×700 ellipse

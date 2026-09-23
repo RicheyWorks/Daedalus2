@@ -190,6 +190,23 @@ public final class DesktopPaint {
         return 0.88 + 0.08 * wave;
     }
 
+    /** Legend chip wash sits at the same point as the well swatch. */
+    public static final double LEGEND_WASH_CX = 0.45;
+    public static final double LEGEND_WASH_CY = 0.40;
+
+    /**
+     * CSS {@code radial-gradient} ends at the farthest corner.
+     * A JavaFX proportional radius is a fraction of the chip width.
+     */
+    public static double legendWashRadius(double width, double height) {
+        double cx = LEGEND_WASH_CX * width;
+        double cy = LEGEND_WASH_CY * height;
+        double far = Math.max(
+                Math.max(Math.hypot(cx, cy), Math.hypot(width - cx, cy)),
+                Math.max(Math.hypot(cx, height - cy), Math.hypot(width - cx, height - cy)));
+        return width > 0 ? far / width : 0;
+    }
+
     /** Status bar gold lip — same band as the stage rim. */
     public static double shellRimAlpha(double wave) {
         return canvasRimAlpha(wave);

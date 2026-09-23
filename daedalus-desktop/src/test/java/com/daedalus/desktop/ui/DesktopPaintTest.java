@@ -1442,4 +1442,20 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.endpointRing(null, cell)).isNull();
         assertThat(DesktopPaint.pathHeadHalo(layout, null)).isNull();
     }
+
+    @Test
+    void legendWashEndsAtTheFarthestCorner() throws Exception {
+        assertThat(DesktopPaint.legendWashRadius(10, 10))
+                .isCloseTo(Math.hypot(0.55, 0.60), within(1e-9));
+        assertThat(DesktopPaint.legendWashRadius(8, 8))
+                .isCloseTo(DesktopPaint.legendWashRadius(10, 10), within(1e-9));
+        assertThat(DesktopPaint.legendWashRadius(6, 10)).isGreaterThan(1.0);
+        String fxml = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/resources/ui/main.fxml"));
+        assertThat(fxml).contains("radius=\"0.813941\"");
+        assertThat(fxml).contains("radius=\"1.141271\"");
+        assertThat(fxml).doesNotContain("radius=\"1.0\"");
+        assertThat(fxml.split("radius=\"0.813941\"", -1)).hasSize(19);
+        assertThat(fxml.split("radius=\"1.141271\"", -1)).hasSize(12);
+    }
 }

@@ -140,7 +140,7 @@
                         <Rectangle width="10" height="10" stroke="rgba(198,190,174,0.28)"
                                    strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
                             <fill>
-                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
                                                 proportional="true">
                                     <stops>
                                         <Stop offset="0.28" color="#484339"/>
@@ -157,7 +157,7 @@
                                    stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5"
                                    arcWidth="6" arcHeight="6">
                             <fill>
-                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
                                                 proportional="true">
                                     <stops>
                                         <Stop offset="0.28" color="#19140f"/>
@@ -172,7 +172,7 @@
                     <graphic>
                         <Circle radius="5" stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5">
                             <fill>
-                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
                                                 proportional="true">
                                     <stops>
                                         <Stop offset="0.28" color="#3ab675"/>
@@ -187,7 +187,7 @@
                     <graphic>
                         <Circle radius="5" stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5">
                             <fill>
-                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
                                                 proportional="true">
                                     <stops>
                                         <Stop offset="0.28" color="#d04e4f"/>
@@ -204,7 +204,7 @@
                                    stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5"
                                    arcWidth="6" arcHeight="6">
                             <fill>
-                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
                                                 proportional="true">
                                     <stops>
                                         <Stop offset="0.28" color="#7997cc"/>
@@ -221,7 +221,7 @@
                                    stroke="rgba(188,64,65,0.35)" strokeType="OUTSIDE" strokeWidth="1.5"
                                    arcWidth="6" arcHeight="6">
                             <fill>
-                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
                                                 proportional="true">
                                     <stops>
                                         <Stop offset="0.28" color="rgba(188,64,65,0.5)"/>
@@ -238,7 +238,7 @@
                         <HBox spacing="2">
                             <Circle radius="5" stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5">
                                 <fill>
-                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
                                                     proportional="true">
                                         <stops>
                                             <Stop offset="0.28" color="#c89e3f"/>
@@ -249,7 +249,7 @@
                             </Circle>
                             <Circle radius="5" stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5">
                                 <fill>
-                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
                                                     proportional="true">
                                         <stops>
                                             <Stop offset="0.28" color="#be7256"/>
@@ -260,7 +260,7 @@
                             </Circle>
                             <Circle radius="5" stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5">
                                 <fill>
-                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
                                                     proportional="true">
                                         <stops>
                                             <Stop offset="0.28" color="#be8450"/>
@@ -271,7 +271,7 @@
                             </Circle>
                             <Circle radius="5" stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5">
                                 <fill>
-                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
                                                     proportional="true">
                                         <stops>
                                             <Stop offset="0.28" color="#99844a"/>
@@ -289,7 +289,7 @@
                                    stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5"
                                    arcWidth="6" arcHeight="6">
                             <fill>
-                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
                                                 proportional="true">
                                     <stops>
                                         <Stop offset="0.28" color="#9f6544"/>
@@ -306,7 +306,7 @@
                                    stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5"
                                    arcWidth="6" arcHeight="6">
                             <fill>
-                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
                                                 proportional="true">
                                     <stops>
                                         <Stop offset="0.28" color="#a58b63"/>
@@ -323,7 +323,7 @@
                                    stroke="rgba(200,158,63,0.35)" strokeType="OUTSIDE" strokeWidth="1.5"
                                    arcWidth="6" arcHeight="6">
                             <fill>
-                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
                                                 proportional="true">
                                     <stops>
                                         <Stop offset="0.28" color="#c6a441"/>
@@ -340,7 +340,7 @@
                                    stroke="rgba(200,158,63,0.35)" strokeType="OUTSIDE" strokeWidth="1.5"
                                    arcWidth="6" arcHeight="6">
                             <fill>
-                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
                                                 proportional="true">
                                     <stops>
                                         <Stop offset="0.28" color="#af9158"/>
@@ -355,7 +355,7 @@
                     <graphic>
                         <Circle radius="5" stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5">
                             <fill>
-                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
                                                 proportional="true">
                                     <stops>
                                         <Stop offset="0.28" color="#758c44"/>
@@ -373,7 +373,7 @@
                             <Rectangle width="6" height="10"
                                        stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
                                 <fill>
-                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
                                                     proportional="true">
                                         <stops>
                                             <Stop offset="0.28" color="#e5484d"/>
@@ -385,7 +385,7 @@
                             <Rectangle width="6" height="10"
                                        stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
                                 <fill>
-                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
                                                     proportional="true">
                                         <stops>
                                             <Stop offset="0.28" color="#f2c94c"/>
@@ -397,7 +397,7 @@
                             <Rectangle width="6" height="10"
                                        stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
                                 <fill>
-                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
                                                     proportional="true">
                                         <stops>
                                             <Stop offset="0.28" color="#8aaa50"/>
@@ -414,7 +414,7 @@
                         <Rectangle width="8" height="8" rotate="45"
                                    stroke="rgba(200,158,63,0.35)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
                             <fill>
-                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
                                                 proportional="true">
                                     <stops>
                                         <Stop offset="0.28" color="#c6a441"/>
@@ -432,7 +432,7 @@
                             <Rectangle width="6" height="10"
                                        stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
                                 <fill>
-                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
                                                     proportional="true">
                                         <stops>
                                             <Stop offset="0.28" color="#7997cc"/>
@@ -444,7 +444,7 @@
                             <Rectangle width="6" height="10"
                                        stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
                                 <fill>
-                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
                                                     proportional="true">
                                         <stops>
                                             <Stop offset="0.28" color="#c49425"/>
@@ -461,7 +461,7 @@
                         <Circle radius="5" opacity="0.6"
                                 stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5">
                             <fill>
-                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
                                                 proportional="true">
                                     <stops>
                                         <Stop offset="0.28" color="#beb6ab"/>
@@ -478,7 +478,7 @@
                                    stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5"
                                    arcWidth="6" arcHeight="6">
                             <fill>
-                                <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
                                                 proportional="true">
                                     <stops>
                                         <Stop offset="0.28" color="#16120e"/>
@@ -496,7 +496,7 @@
                             <Rectangle width="6" height="10"
                                        stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
                                 <fill>
-                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
                                                     proportional="true">
                                         <stops>
                                             <Stop offset="0.28" color="#7997cc"/>
@@ -508,7 +508,7 @@
                             <Rectangle width="6" height="10"
                                        stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
                                 <fill>
-                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
                                                     proportional="true">
                                         <stops>
                                             <Stop offset="0.28" color="#c49425"/>
@@ -520,7 +520,7 @@
                             <Rectangle width="6" height="10"
                                        stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
                                 <fill>
-                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
                                                     proportional="true">
                                         <stops>
                                             <Stop offset="0.28" color="#bc4041"/>
@@ -532,7 +532,7 @@
                             <Rectangle width="6" height="10"
                                        stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
                                 <fill>
-                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
                                                     proportional="true">
                                         <stops>
                                             <Stop offset="0.28" color="#758c44"/>
@@ -544,7 +544,7 @@
                             <Rectangle width="6" height="10"
                                        stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
                                 <fill>
-                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
                                                     proportional="true">
                                         <stops>
                                             <Stop offset="0.28" color="#9f6544"/>
@@ -556,7 +556,7 @@
                             <Rectangle width="6" height="10"
                                        stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
                                 <fill>
-                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.0"
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
                                                     proportional="true">
                                         <stops>
                                             <Stop offset="0.28" color="#af9158"/>
