@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop disc rim.**
+  A thin disc stroke
+  floors at one bitmap
+  pixel, the same rim
+  minimum as `draw.js`.
+
 - **Desktop shine gate.**
   The corridor line appears
   once the cell is 10 bitmap

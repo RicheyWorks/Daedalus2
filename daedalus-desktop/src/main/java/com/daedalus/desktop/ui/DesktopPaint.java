@@ -582,10 +582,17 @@ public final class DesktopPaint {
 
     /** Same recovery when the well uses a different cell fraction. */
     public static double discStroke(double diameter, double radiusFrac, double cellFraction) {
+        return discStroke(diameter, radiusFrac, cellFraction, 1);
+    }
+
+    /** Rim floor is one bitmap pixel, the same {@code Math.max(1, …)} as {@code draw.js}. */
+    public static double discStroke(double diameter, double radiusFrac, double cellFraction,
+                                     double scale) {
+        double min = devicePx(scale);
         if (radiusFrac <= 0) {
-            return 1.0;
+            return min;
         }
-        return Math.max(1.0, diameter * cellFraction / (2.0 * radiusFrac));
+        return Math.max(min, diameter * cellFraction / (2.0 * radiusFrac));
     }
     /** Search wash — same alphas as {@code draw.js} expansions. */
     public static final double EXPANSION_ALPHA = 0.16;

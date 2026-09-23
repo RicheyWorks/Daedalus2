@@ -1014,6 +1014,8 @@ class DesktopPaintTest {
         assertThat(DesktopPaint.discStroke(12.0, DesktopPaint.PATH_HEAD_RADIUS))
                 .isCloseTo(1.4, within(1e-9));
         assertThat(DesktopPaint.discStroke(1.0, DesktopPaint.PLAYER_RADIUS)).isEqualTo(1.0);
+        assertThat(DesktopPaint.discStroke(1.0, DesktopPaint.PLAYER_RADIUS, 0.07, 2))
+                .isEqualTo(0.5);
         assertThat(DesktopPaint.playerRimAlpha(1))
                 .isGreaterThan(DesktopPaint.playerRimAlpha(0));
         assertThat(DesktopPaint.playerMarker(layout, null)).isNull();

@@ -2214,8 +2214,7 @@ public class MainController {
                     g.fillOval(core.x(), core.y(), core.size(), core.size());
                     g.setGlobalAlpha(1);
                     g.setStroke(ink.deriveColor(0, 1, 1, DesktopPaint.deadEndRimAlpha(cutsWave)));
-                    g.setLineWidth(DesktopPaint.discStroke(
-                            core.size(), DesktopPaint.DEAD_END_RADIUS, 0.06));
+                    g.setLineWidth(discLine(g, core.size(), DesktopPaint.DEAD_END_RADIUS, 0.06));
                     g.strokeOval(core.x(), core.y(), core.size(), core.size());
                 }
             }
@@ -2237,8 +2236,7 @@ public class MainController {
                     g.fillOval(core.x(), core.y(), core.size(), core.size());
                     g.setStroke(mint.deriveColor(0, 1, 1,
                             DesktopPaint.sanctuaryCoreRimAlpha(safeWave)));
-                    g.setLineWidth(DesktopPaint.discStroke(
-                            core.size(), DesktopPaint.SANCTUARY_RADIUS));
+                    g.setLineWidth(discLine(g, core.size(), DesktopPaint.SANCTUARY_RADIUS));
                     g.strokeOval(core.x(), core.y(), core.size(), core.size());
                 }
                 paintRing(g, DesktopPaint.sanctuaryRing(layout, safe, safeWave),
@@ -2701,7 +2699,7 @@ public class MainController {
         g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
         g.setGlobalAlpha(1);
         g.setStroke(ink.deriveColor(0, 1, 1, DesktopPaint.ghostRimAlpha(wave)));
-        g.setLineWidth(DesktopPaint.discStroke(mark.size(), DesktopPaint.GHOST_RADIUS));
+        g.setLineWidth(discLine(g, mark.size(), DesktopPaint.GHOST_RADIUS));
         g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
     }
 
@@ -2913,7 +2911,7 @@ public class MainController {
         g.setFill(color);
         g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
         g.setStroke(color.deriveColor(0, 1, 1, DesktopPaint.playerRimAlpha(wave)));
-        g.setLineWidth(DesktopPaint.discStroke(mark.size(), DesktopPaint.PLAYER_RADIUS));
+        g.setLineWidth(discLine(g, mark.size(), DesktopPaint.PLAYER_RADIUS));
         g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
     }
 
@@ -2934,7 +2932,7 @@ public class MainController {
         g.setFill(color);
         g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
         g.setStroke(color.deriveColor(0, 1, 1, DesktopPaint.endpointCoreRimAlpha(wave)));
-        g.setLineWidth(DesktopPaint.discStroke(mark.size(), DesktopPaint.ENDPOINT_RADIUS));
+        g.setLineWidth(discLine(g, mark.size(), DesktopPaint.ENDPOINT_RADIUS));
         g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
     }
 
@@ -2953,8 +2951,19 @@ public class MainController {
         g.setFill(color);
         g.fillOval(mark.x(), mark.y(), mark.size(), mark.size());
         g.setStroke(color.deriveColor(0, 1, 1, DesktopPaint.pathHeadRimAlpha(wave)));
-        g.setLineWidth(DesktopPaint.discStroke(mark.size(), DesktopPaint.PATH_HEAD_RADIUS));
+        g.setLineWidth(discLine(g, mark.size(), DesktopPaint.PATH_HEAD_RADIUS));
         g.strokeOval(mark.x(), mark.y(), mark.size(), mark.size());
+    }
+
+    private static double discLine(GraphicsContext g, double diameter, double radiusFrac) {
+        return discLine(g, diameter, radiusFrac, 0.07);
+    }
+
+    /** Disc rim in the current bitmap scale — one device pixel at the floor. */
+    private static double discLine(GraphicsContext g, double diameter, double radiusFrac,
+                                    double cellFraction) {
+        return DesktopPaint.discStroke(diameter, radiusFrac, cellFraction,
+                g.getTransform().getMyy());
     }
 
     private static void paintHairline(GraphicsContext g, DesktopPaint.Hairline line) {
