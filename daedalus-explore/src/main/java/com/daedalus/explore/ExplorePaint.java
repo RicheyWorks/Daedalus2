@@ -422,6 +422,26 @@ public final class ExplorePaint {
         return MAP_FRAME_IN * (float) (0.88 + 0.24 * wave);
     }
 
+    /**
+     * Soft gold outside the automap lip. Rest reach matches the well stage
+     * glow's 18px in the same NDC as {@link #MAP_FRAME_OUT}; the breath
+     * stretches it the way 18px grows to 28px.
+     */
+    public static final float MAP_FRAME_GLOW = 0.036f;
+
+    public static float mapFrameGlow(double seconds) {
+        double t = ((seconds * 1000.0) % MAP_FRAME_BREATH_MS) / MAP_FRAME_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return MAP_FRAME_GLOW * (float) ((18.0 + 10.0 * wave) / 18.0);
+    }
+
+    /** Same 0.06↔0.14 band as the well stage glow. */
+    public static float mapFrameGlowAlpha(double seconds) {
+        double t = ((seconds * 1000.0) % MAP_FRAME_BREATH_MS) / MAP_FRAME_BREATH_MS;
+        double wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2.0);
+        return (float) (0.06 + 0.08 * wave);
+    }
+
     /** Same 0.22 as halls — leftover even gold is not the last word on the automap frame. */
     public static void mapFrameTint(float[] rgb) {
         if (rgb == null || rgb.length < 3) {

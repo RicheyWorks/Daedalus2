@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore map halo.**
+  The automap lip
+  wears the same soft
+  gold as the well
+  stage. The frame
+  fades out instead
+  of ending in a hard
+  edge.
+
 - **Explore edge shade.**
   The play-band rim
   fades in the well

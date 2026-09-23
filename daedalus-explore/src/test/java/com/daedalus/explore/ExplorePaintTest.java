@@ -557,7 +557,7 @@ class ExplorePaintTest {
     }
 
     @Test
-    void automapKeepsUnseenTilesOffThePage() {
+    void automapKeepsUnseenTilesOffThePage() throws Exception {
         MazeGrid grid = new MazeGrid(1, 2);
         grid.carve(grid.cell(0, 0), Direction.EAST);
         ExploreMesh mesh = ExploreMesh.of(grid);
@@ -820,6 +820,16 @@ class ExplorePaintTest {
                 .isNotEqualTo(ExplorePaint.mapFrameOut(0.8));
         assertThat(ExplorePaint.mapFrameIn(0.1))
                 .isNotEqualTo(ExplorePaint.mapFrameIn(0.8));
+        assertThat(ExplorePaint.mapFrameGlow(0)).isEqualTo(ExplorePaint.MAP_FRAME_GLOW);
+        assertThat(ExplorePaint.mapFrameGlowAlpha(0)).isEqualTo(0.06f);
+        double framePeak = ExplorePaint.MAP_FRAME_BREATH_MS / 2000.0;
+        assertThat(ExplorePaint.mapFrameGlow(framePeak))
+                .isCloseTo(ExplorePaint.MAP_FRAME_GLOW * (28f / 18f), within(1e-5f));
+        assertThat(ExplorePaint.mapFrameGlowAlpha(framePeak)).isEqualTo(0.14f);
+        String host = Files.readString(Path.of(
+                "src/main/java/com/daedalus/explore/glfw/ExploreHost.java"));
+        assertThat(host).contains("ExplorePaint.mapFrameGlow(seconds)");
+        assertThat(host).contains("ExplorePaint.mapFrameGlowAlpha(seconds)");
         float[] frameInk = new float[3];
         ExplorePaint.mapFrameTint(frameInk);
         assertThat(frameInk[0])

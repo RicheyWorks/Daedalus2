@@ -558,6 +558,22 @@ public final class ExploreHost {
         glDisable(GL_BLEND);
     }
 
+    /** Gold halo outside the automap lip — same fade as the well stage glow. */
+    private static void frameGlow(float x0, float y0, float x1, float y1,
+                                  float r, float g, float b, float reach, float alpha) {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        shadeBand(x0, y1, x1, y1 + reach, r, g, b, alpha, alpha, 0f, 0f);
+        shadeBand(x0, y0 - reach, x1, y0, r, g, b, 0f, 0f, alpha, alpha);
+        shadeBand(x0 - reach, y0, x0, y1, r, g, b, 0f, alpha, alpha, 0f);
+        shadeBand(x1, y0, x1 + reach, y1, r, g, b, alpha, 0f, 0f, alpha);
+        shadeBand(x0 - reach, y1, x0, y1 + reach, r, g, b, 0f, alpha, 0f, 0f);
+        shadeBand(x1, y1, x1 + reach, y1 + reach, r, g, b, alpha, 0f, 0f, 0f);
+        shadeBand(x0 - reach, y0 - reach, x0, y0, r, g, b, 0f, 0f, alpha, 0f);
+        shadeBand(x1, y0 - reach, x1 + reach, y0, r, g, b, 0f, 0f, 0f, alpha);
+        glDisable(GL_BLEND);
+    }
+
     /** Quad with a color at each corner. Alphas follow the well inset, not a flat stripe. */
     private static void shadeBand(float x0, float y0, float x1, float y1,
                                   float r, float g, float b,
@@ -788,6 +804,10 @@ public final class ExploreHost {
         float frameIn = ExplorePaint.mapFrameIn(seconds);
         float[] frameInk = new float[3];
         ExplorePaint.mapFrameTint(frameInk);
+        frameGlow((float) (left - frameOut), (float) (bot - frameOut),
+                (float) (right + frameOut), (float) (top + frameOut),
+                frameInk[0], frameInk[1], frameInk[2],
+                ExplorePaint.mapFrameGlow(seconds), ExplorePaint.mapFrameGlowAlpha(seconds));
         glColor3f(frameInk[0], frameInk[1], frameInk[2]);
         fill(left - frameOut, bot - frameOut, right + frameOut, top + frameOut);
         float[] frameUnder = new float[3];
