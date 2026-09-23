@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore sky wash.**
+  Zenith, dusk, and
+  the horizon glow
+  mix across the band
+  edge. The sky falls
+  off the way the well
+  wash does.
+
 - **Explore floor pads.**
   Story and cube pads
   use the lamp's

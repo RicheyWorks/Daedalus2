@@ -1015,6 +1015,23 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.SKY_ZENITH_G).isEqualTo(0x12);
         assertThat(ExplorePaint.SKY_ZENITH_B).isEqualTo(0x0e);
         assertThat(ExplorePaint.SKY_ZENITH_R).isNotEqualTo(78);
+        assertThat(ExplorePaint.SKY_BAND_BLEND).isEqualTo(4);
+        int skyX = 1;
+        for (int i = 0; i < ExplorePaint.TEX; i++) {
+            int[] atZenith = ExplorePaint.skyTexColor(i, 8);
+            int[] atSeam = ExplorePaint.skyTexColor(i, 18);
+            if (atZenith[0] != ExplorePaint.SKY_STAR_R && atSeam[0] != ExplorePaint.SKY_STAR_R) {
+                skyX = i;
+                break;
+            }
+        }
+        int[] zenith = ExplorePaint.skyTexColor(skyX, 8);
+        int[] seam = ExplorePaint.skyTexColor(skyX, 18);
+        int[] dusk = ExplorePaint.skyTexColor(skyX, 26);
+        assertThat(seam[0]).isGreaterThan(zenith[0]);
+        assertThat(seam[0]).isLessThan(dusk[0]);
+        assertThat(Math.abs(ExplorePaint.skyTexColor(skyX, 18)[0]
+                - ExplorePaint.skyTexColor(skyX, 17)[0])).isLessThan(24);
         assertThat(ExplorePaint.SKY_DUSK_R).isEqualTo(0x5c);
         assertThat(ExplorePaint.SKY_DUSK_G).isEqualTo(0x4a);
         assertThat(ExplorePaint.SKY_DUSK_B).isEqualTo(0x32);

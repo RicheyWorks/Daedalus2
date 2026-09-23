@@ -939,6 +939,8 @@ public final class ExplorePaint {
     public static final int SKY_GROUND_B = 0x18;
     /** Same 0.22 rim as halls — leftover even sky bands are not the last word at the horizon. */
     public static final float SKY_TEX_EDGE_DIM = 0.22f;
+    /** Texels of mix across each sky band, so the horizon is a wash. */
+    public static final int SKY_BAND_BLEND = 4;
 
     public static float skyTexShade(int x, int y) {
         float cx = (TEX - 1) * 0.5f;
@@ -949,42 +951,65 @@ public final class ExplorePaint {
         return 1f - SKY_TEX_EDGE_DIM * edge;
     }
 
+    /** Unshaded sky texel. Stars stay torch gold; band edges mix into the next color. */
+    public static int[] skyTexColor(int x, int y) {
+        int n = hash(x, y) & 31;
+        if (y < 20 && (hash(x, y) & 63) == 0) {
+            return new int[] {SKY_STAR_R, SKY_STAR_G, SKY_STAR_B};
+        }
+        int edge = skyBandEdge(y);
+        if (edge < 0) {
+            return skyBand(x, y, n);
+        }
+        float t = (y - (edge - SKY_BAND_BLEND)) / (float) (SKY_BAND_BLEND * 2);
+        t = Math.max(0f, Math.min(1f, t));
+        int[] above = skyBand(x, edge - 1, n);
+        int[] below = skyBand(x, edge, n);
+        return new int[] {
+                Math.round(above[0] + (below[0] - above[0]) * t),
+                Math.round(above[1] + (below[1] - above[1]) * t),
+                Math.round(above[2] + (below[2] - above[2]) * t)};
+    }
+
+    private static int skyBandEdge(int y) {
+        if (y >= 18 - SKY_BAND_BLEND && y < 18 + SKY_BAND_BLEND) {
+            return 18;
+        }
+        if (y >= 36 - SKY_BAND_BLEND && y < 36 + SKY_BAND_BLEND) {
+            return 36;
+        }
+        if (y >= 46 - SKY_BAND_BLEND && y < 46 + SKY_BAND_BLEND) {
+            return 46;
+        }
+        return -1;
+    }
+
+    private static int[] skyBand(int x, int y, int n) {
+        if (y < 18) {
+            return new int[] {SKY_ZENITH_R + n / 3, SKY_ZENITH_G + n / 6, SKY_ZENITH_B};
+        }
+        if (y < 36) {
+            return new int[] {SKY_DUSK_R + n / 2, SKY_DUSK_G + n / 4, SKY_DUSK_B};
+        }
+        if (y < 46) {
+            return new int[] {SKY_GLOW_R + n / 3, SKY_GLOW_G + n / 5, SKY_GLOW_B};
+        }
+        boolean hill = y > 50 && ((hash(x / 6, 3) & 15) > (64 - y));
+        if (hill) {
+            return new int[] {SKY_HILL_R + n / 4, SKY_HILL_G, SKY_HILL_B};
+        }
+        return new int[] {SKY_GROUND_R + n / 3, SKY_GROUND_G, SKY_GROUND_B};
+    }
+
     public static byte[] skyRgba() {
         return raster((x, y) -> {
-            int n = hash(x, y) & 31;
             boolean star = y < 20 && (hash(x, y) & 63) == 0;
+            int[] rgb = skyTexColor(x, y);
             if (star) {
-                return rgbBytes(SKY_STAR_R, SKY_STAR_G, SKY_STAR_B);
-            }
-            int r;
-            int g;
-            int b;
-            if (y < 18) {
-                r = SKY_ZENITH_R + n / 3;
-                g = SKY_ZENITH_G + n / 6;
-                b = SKY_ZENITH_B;
-            } else if (y < 36) {
-                r = SKY_DUSK_R + n / 2;
-                g = SKY_DUSK_G + n / 4;
-                b = SKY_DUSK_B;
-            } else if (y < 46) {
-                r = SKY_GLOW_R + n / 3;
-                g = SKY_GLOW_G + n / 5;
-                b = SKY_GLOW_B;
-            } else {
-                boolean hill = y > 50 && ((hash(x / 6, 3) & 15) > (64 - y));
-                if (hill) {
-                    r = SKY_HILL_R + n / 4;
-                    g = SKY_HILL_G;
-                    b = SKY_HILL_B;
-                } else {
-                    r = SKY_GROUND_R + n / 3;
-                    g = SKY_GROUND_G;
-                    b = SKY_GROUND_B;
-                }
+                return rgbBytes(rgb[0], rgb[1], rgb[2]);
             }
             float s = skyTexShade(x, y);
-            return rgbBytes(Math.round(r * s), Math.round(g * s), Math.round(b * s));
+            return rgbBytes(Math.round(rgb[0] * s), Math.round(rgb[1] * s), Math.round(rgb[2] * s));
         });
     }
 
