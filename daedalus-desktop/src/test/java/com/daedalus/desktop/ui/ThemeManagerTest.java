@@ -317,6 +317,8 @@ class ThemeManagerTest {
                 .contains("Color.web(\"#3ab675\", DesktopPaint.brandMintAlpha(wave))")
                 .contains("child.getStyleClass().contains(\"brand\")")
                 .contains("DesktopPaint.brandGoldRadius(wave)")
+                .contains("DesktopPaint.infoRimAlpha(wave)")
+                .contains("new javafx.scene.layout.BorderWidths(0, 0, 0, 2)")
                 .doesNotContain("instanceof Label brand")
                 .doesNotContain("Color.web(\"#3ee08f\"")
                 .doesNotContain("Color.rgb(184, 133, 56, lip)")

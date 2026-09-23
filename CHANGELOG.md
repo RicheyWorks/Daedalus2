@@ -10,6 +10,11 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop status breath.**
+  The status hairline breathes from
+  0.28 to 0.48, the same band as
+  the well status.
+
 - **Desktop status lip.**
   The status words wear a 2px gold
   hairline and an 8px pad, the same

@@ -1771,6 +1771,12 @@ public class MainController {
                             javafx.scene.layout.BorderStrokeStyle.SOLID,
                             javafx.scene.layout.CornerRadii.EMPTY,
                             new javafx.scene.layout.BorderWidths(1, 0, 0, 0))));
+            statusLabel.setBorder(new javafx.scene.layout.Border(
+                    new javafx.scene.layout.BorderStroke(
+                            Color.rgb(153, 111, 49, DesktopPaint.infoRimAlpha(wave)),
+                            javafx.scene.layout.BorderStrokeStyle.SOLID,
+                            javafx.scene.layout.CornerRadii.EMPTY,
+                            new javafx.scene.layout.BorderWidths(0, 0, 0, 2))));
         }
         if (generateButton != null
                 && generateButton.getParent() instanceof javafx.scene.layout.Region toolbar) {

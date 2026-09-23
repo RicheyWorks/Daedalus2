@@ -189,6 +189,11 @@ public final class DesktopPaint {
         return 48 + 24 * wave;
     }
 
+    /** Well status left hairline — same band as web {@code infoRimBreath}. */
+    public static double infoRimAlpha(double wave) {
+        return 0.28 + 0.20 * wave;
+    }
+
     /** Well export chip gold lip — same band as web {@code exportsRimBreath}. */
     public static double exportsRimAlpha(double wave) {
         return 0.36 + 0.19 * wave;
