@@ -339,7 +339,12 @@ class ThemeManagerTest {
     void emptyCaptionUsesTheWellFace() throws Exception {
         String src = java.nio.file.Files.readString(java.nio.file.Path.of(
                 "src/main/java/com/daedalus/desktop/ui/MainController.java"));
-        assertThat(src).contains("fillTracked(g, DesktopPaint.EMPTY_WORDMARK, cx, cy + 48, 28 * 0.22)");
+        assertThat(src).contains("g.setEffect(mint);\n"
+                + "            fillTracked(g, DesktopPaint.EMPTY_WORDMARK, cx, cy + 48, 28 * 0.22);\n"
+                + "            g.setEffect(gold);");
+        assertThat(src).contains("g.setEffect(null);\n"
+                + "            fillTracked(g, DesktopPaint.EMPTY_WORDMARK, cx, cy + 48, 28 * 0.22);");
+        assertThat(src).doesNotContain("mint.setInput(gold);\n            g.setEffect(mint);");
         assertThat(src).contains("Stop(1, Color.web(DesktopPaint.emptyWordmarkGoldInk(), 0))");
         assertThat(src).doesNotContain("Color.web(\"#000000\", 0)");
         assertThat(src).contains("g.setGlobalAlpha(1);\n                paintEndpoint(g, mark, DesktopPaint.EMPTY_MARK_START,");

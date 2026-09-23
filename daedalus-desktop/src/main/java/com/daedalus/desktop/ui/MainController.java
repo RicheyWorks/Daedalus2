@@ -1932,8 +1932,10 @@ public class MainController {
                     DesktopPaint.emptyGoldRadius(wave), 0, 0,
                     Color.web(DesktopPaint.emptyWordmarkGoldInk(),
                             DesktopPaint.emptyGoldAlpha(wave)));
-            mint.setInput(gold);
+            // Each canvas shadow is its own pass. Chaining would blur the gold into the mint.
             g.setEffect(mint);
+            fillTracked(g, DesktopPaint.EMPTY_WORDMARK, cx, cy + 48, 28 * 0.22);
+            g.setEffect(gold);
             fillTracked(g, DesktopPaint.EMPTY_WORDMARK, cx, cy + 48, 28 * 0.22);
             g.setEffect(null);
             fillTracked(g, DesktopPaint.EMPTY_WORDMARK, cx, cy + 48, 28 * 0.22);

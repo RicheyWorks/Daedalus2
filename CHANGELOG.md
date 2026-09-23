@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop idle wordmark.**
+  The empty-well name
+  lays mint, then gold,
+  then the letters, the
+  same three passes as
+  the well.
+
 - **Desktop idle discs.**
   The empty-well start
   and goal sit at the
