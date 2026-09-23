@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop legend scrim.**
+  The key band spans the
+  stage, flush to the bottom,
+  the same full-bleed fade
+  as the web legend.
+
 - **Desktop stage wash.**
   The letterbox is the well
   stage ellipse, `80%` by `70%`

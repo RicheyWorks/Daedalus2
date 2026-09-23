@@ -349,10 +349,9 @@ public class MainController {
         canvas.setOnKeyPressed(this::onKeyPressed);
 
         if (legendBox != null) {
-            legendBox.layoutXProperty().bind(
-                    canvasParent.widthProperty().subtract(legendBox.widthProperty()).divide(2));
-            legendBox.layoutYProperty().bind(
-                    canvasParent.heightProperty().subtract(legendBox.heightProperty()));
+            canvasParent.widthProperty().addListener((obs, prev, next) -> spanLegend());
+            canvasParent.heightProperty().addListener((obs, prev, next) -> spanLegend());
+            spanLegend();
         }
         if (exportBox != null) {
             exportBox.layoutXProperty().bind(
@@ -2344,6 +2343,18 @@ public class MainController {
         showLegendKey(legendWaypoint, keys.contains("waypoint"));
         showLegendKey(legendGhost, keys.contains("ghost"));
         showLegendKey(legendCompare, keys.contains("compare"));
+        spanLegend();
+    }
+
+    /** Full-bleed legend scrim — same left/right/bottom band as web {@code #legend}. */
+    private void spanLegend() {
+        if (legendBox == null || canvasParent == null) {
+            return;
+        }
+        double width = Math.max(0, canvasParent.getWidth());
+        double height = legendBox.prefHeight(width);
+        legendBox.resize(width, height);
+        legendBox.relocate(0, DesktopPaint.legendScrimY(canvasParent.getHeight(), height));
     }
 
     /** Letterbox pocket — same ellipse as web {@code #stage}, not a round wash. */

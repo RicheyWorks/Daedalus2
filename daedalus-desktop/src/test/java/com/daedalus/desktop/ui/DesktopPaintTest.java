@@ -121,6 +121,8 @@ class DesktopPaintTest {
         DesktopPaint.Layout full = DesktopPaint.Layout.fit(5, 5, 100, 100);
         DesktopPaint.Layout maze = DesktopPaint.Layout.fitMaze(5, 5, 100, 100);
         assertThat(DesktopPaint.LEGEND_RESERVE).isEqualTo(40);
+        assertThat(DesktopPaint.legendScrimY(400, 36)).isEqualTo(364);
+        assertThat(DesktopPaint.legendScrimY(20, 36)).isEqualTo(0);
         assertThat(DesktopPaint.EXPORT_RESERVE).isEqualTo(28);
         assertThat(full).isNotNull();
         assertThat(maze).isNotNull();

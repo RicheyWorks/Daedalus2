@@ -295,8 +295,10 @@ class ThemeManagerTest {
         assertThat(src).contains("double em = 11 * 0.04;");
         assertThat(src).contains("word.setMinHeight(11 * 1.4);");
         assertThat(src).contains("swatch.setTranslateY(1);");
-        assertThat(src).contains(
-                "canvasParent.heightProperty().subtract(legendBox.heightProperty()))");
+        assertThat(src).contains("spanLegend();");
+        assertThat(src).contains("legendBox.relocate(0, DesktopPaint.legendScrimY(");
+        assertThat(src).doesNotContain(
+                "subtract(legendBox.widthProperty()).divide(2)");
         assertThat(src).doesNotContain(
                 "subtract(legendBox.heightProperty()).subtract(4)");
         assertThat(src).contains("Font.font(\"Bahnschrift\", FontWeight.SEMI_BOLD, 11)");

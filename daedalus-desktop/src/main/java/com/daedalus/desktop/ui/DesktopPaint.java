@@ -258,6 +258,11 @@ public final class DesktopPaint {
     public static final double EMPTY_MARK_LIFT = 48;
     /** Overlay legend sits on the well — same reserve as {@code draw.js}. */
     public static final double LEGEND_RESERVE = 40;
+
+    /** Legend scrim Y — flush to the bottom of the stage, same as web {@code #legend}. */
+    public static double legendScrimY(double canvasH, double legendH) {
+        return Math.max(0, canvasH - legendH);
+    }
     /** PNG sits on the well — same reserve as {@code draw.js} so the first row is not under it. */
     public static final double EXPORT_RESERVE = 28;
     /** Same gold as the web victory ring ({@code --gold}). */
