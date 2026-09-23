@@ -1531,6 +1531,10 @@ class ExplorePaintTest {
         assertThat(ExplorePaint.STATUS_GOLD_H)
                 .as("gold lip sits inside the under-brown band")
                 .isLessThan(ExplorePaint.STATUS_GOLD_UNDER_H);
+        assertThat(ExplorePaint.STATUS_GOLD_UNDER_R).isEqualTo(ExplorePaint.MAP_POCKET_R);
+        assertThat(ExplorePaint.STATUS_GOLD_UNDER_G).isEqualTo(ExplorePaint.MAP_POCKET_G);
+        assertThat(ExplorePaint.STATUS_GOLD_UNDER_B).isEqualTo(ExplorePaint.MAP_POCKET_B);
+        assertThat(ExplorePaint.STATUS_GOLD_UNDER_R).isNotEqualTo(0.16f);
         assertThat(ExplorePaint.STATUS_BREATH_MS).isEqualTo(ExplorePaint.MAP_HERE_BREATH_MS);
         assertThat(ExplorePaint.statusGoldH(0.1))
                 .isNotEqualTo(ExplorePaint.statusGoldH(0.8));

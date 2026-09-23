@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore status lip seat.**
+  The dark band under the gold
+  lip uses the automap pocket
+  brown, so the hairline sits
+  in that inset.
+
 - **Explore you-are-here halo.**
   The soft pad is the torch gold
   at the story-mark weight, so

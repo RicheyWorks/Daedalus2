@@ -479,9 +479,9 @@ public final class ExplorePaint {
     public static final float STATUS_GOLD_B = 0.22f;
     public static final float STATUS_GOLD_H = 0.014f;
     /** Dark under the gold lip — same brown as the automap inset. */
-    public static final float STATUS_GOLD_UNDER_R = 0.16f;
-    public static final float STATUS_GOLD_UNDER_G = 0.11f;
-    public static final float STATUS_GOLD_UNDER_B = 0.08f;
+    public static final float STATUS_GOLD_UNDER_R = MAP_POCKET_R;
+    public static final float STATUS_GOLD_UNDER_G = MAP_POCKET_G;
+    public static final float STATUS_GOLD_UNDER_B = MAP_POCKET_B;
     public static final float STATUS_GOLD_UNDER_H = 0.022f;
     /** Status lip breath — same cadence as automap frame chrome. */
     public static final float STATUS_BREATH_MS = MAP_HERE_BREATH_MS;
