@@ -2354,6 +2354,14 @@ public final class DesktopPaint {
                 py);
     }
 
+    /** Row above a shine — half the tile, half the catch. */
+    public static Hairline catchLip(Hairline shine) {
+        if (shine == null) {
+            return null;
+        }
+        return new Hairline(shine.x(), shine.y() - shine.h(), shine.w(), shine.h());
+    }
+
     /** Row under the corridor shine — half the catch, half the paver. */
     public static Hairline floorHiFeather(Hairline shine) {
         return wallHiFeather(shine);

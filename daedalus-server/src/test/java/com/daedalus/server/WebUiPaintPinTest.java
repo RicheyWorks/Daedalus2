@@ -189,6 +189,7 @@ class WebUiPaintPinTest {
             assertThat(in).as("well painter").isNotNull();
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js).contains("g.fillRect(x + 1, y + 1, span, 1)")
+                    .contains("g.fillRect(x + 1, y, span, 1)")
                     .contains("g.fillRect(x + 1, y + 2, span, 1)")
                     .contains("paintWallHi(g, geom, r, col, mixHex(hi, COLORS.unseen, 0.28 * edge), wallInk)")
                     .contains("paintWallHi(g, geom, r, col, mixHex(lampHi, COLORS.unseen, 0.28 * edge), wallInk)");
@@ -200,10 +201,12 @@ class WebUiPaintPinTest {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
-            assertThat(js).contains("function halfMix(ink, body)")
-                    .contains("g.fillRect(geom.offX[col] + 1, geom.offY[r] + 2, geom.cell - 2, 1)")
-                    .contains("g.fillRect(geom.offX[c] + 1, geom.offY[r] + 2, geom.cell - 2, 1)")
-                    .contains("halfMix(hiInk, floorInk)");
+            assertThat(js).contains("function paintFloorCatch(g, x, y, w, ink, body)")
+                    .contains("g.fillRect(x, y, w, 1)")
+                    .contains("g.fillRect(x, y + 1, w, 1)")
+                    .contains("g.fillRect(x, y + 2, w, 1)")
+                    .contains("paintFloorCatch(g, geom.offX[col] + 1, geom.offY[r], geom.cell - 2, hiInk, floorInk)")
+                    .contains("paintFloorCatch(g, geom.offX[c] + 1, geom.offY[r], geom.cell - 2, hiInk, bodyInk)");
         }
     }
 

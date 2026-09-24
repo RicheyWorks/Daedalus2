@@ -826,6 +826,11 @@ class DesktopPaintTest {
         assertThat(feather.h()).isEqualTo(wallStripe.h());
         assertThat(feather.w()).isEqualTo(wallStripe.w());
         assertThat(DesktopPaint.wallHiFeather(null)).isNull();
+        DesktopPaint.Hairline lip = DesktopPaint.catchLip(wallStripe);
+        assertThat(lip.y()).isEqualTo(wallStripe.y() - wallStripe.h());
+        assertThat(lip.h()).isEqualTo(wallStripe.h());
+        assertThat(lip.w()).isEqualTo(wallStripe.w());
+        assertThat(DesktopPaint.catchLip(null)).isNull();
         assertThat(DesktopPaint.wallHiFeatherInk("#4a3824", "#120e0c"))
                 .isEqualTo(DesktopPaint.mixHex("#4a3824", "#120e0c", 0.5));
         assertThat(DesktopPaint.clearWallHiInk(0))
@@ -1423,6 +1428,7 @@ class DesktopPaintTest {
         assertThat(ctrl).contains(
                 "DesktopPaint.wallHiStroke(\n                            mark, tile.tileRow(), tile.tileCol())");
         assertThat(ctrl).contains("paintWallShine(g, DesktopPaint.wallHiStroke(");
+        assertThat(ctrl).contains("DesktopPaint.catchLip(shine)");
         assertThat(ctrl).contains(
                 "DesktopPaint.floorHiStroke(\n                            mark, tile.tileRow(), tile.tileCol())");
         assertThat(ctrl).contains("paintFloorShine(g, DesktopPaint.floorHiStroke(");

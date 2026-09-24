@@ -78,8 +78,19 @@
     g.fillStyle = ink;
     g.fillRect(x + 1, y + 1, span, 1);
     if (!wall) return;
+    g.fillStyle = halfMix(wall, ink);
+    g.fillRect(x + 1, y, span, 1);
     g.fillStyle = halfMix(ink, wall);
     g.fillRect(x + 1, y + 2, span, 1);
+  }
+
+  function paintFloorCatch(g, x, y, w, ink, body) {
+    g.fillStyle = halfMix(body, ink);
+    g.fillRect(x, y, w, 1);
+    g.fillStyle = ink;
+    g.fillRect(x, y + 1, w, 1);
+    g.fillStyle = halfMix(ink, body);
+    g.fillRect(x, y + 2, w, 1);
   }
 
   function cellCenter(geom, p) {
@@ -608,10 +619,7 @@
           if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
             const lampHi = mixHex(COLORS.floorHi, COLORS.floorWarm, lamp * 0.28);
             const hiInk = endFloorInk(mixHex(lampHi, COLORS.floorDim, 0.22 * edge), t);
-            g.fillStyle = hiInk;
-            g.fillRect(geom.offX[col] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
-            g.fillStyle = halfMix(hiInk, floorInk);
-            g.fillRect(geom.offX[col] + 1, geom.offY[r] + 2, geom.cell - 2, 1);
+            paintFloorCatch(g, geom.offX[col] + 1, geom.offY[r], geom.cell - 2, hiInk, floorInk);
           }
         } else {
           // Soft edge falloff — clear stone has depth, not flat slate.
@@ -627,10 +635,7 @@
           if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
             const hi = mixHex(COLORS.floorHi, COLORS.floorWarm, 0.28);
             const hiInk = endFloorInk(mixHex(hi, COLORS.floorDim, 0.22 * edge), t);
-            g.fillStyle = hiInk;
-            g.fillRect(geom.offX[col] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
-            g.fillStyle = halfMix(hiInk, floorInk);
-            g.fillRect(geom.offX[col] + 1, geom.offY[r] + 2, geom.cell - 2, 1);
+            paintFloorCatch(g, geom.offX[col] + 1, geom.offY[r], geom.cell - 2, hiInk, floorInk);
           }
         }
         if (t === "S") start = { row: (r - 1) / 2, col: (col - 1) / 2 };
@@ -1077,12 +1082,9 @@
         const dx = (c - idleCx) / Math.max(1, idleCols / 2);
         const dy = (r - idleCy) / Math.max(1, idleRows / 2);
         const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
-        const floorInk = endFloorInk(mixHex(idleHi, COLORS.floorDim, 0.22 * edge), end);
+        const hiInk = endFloorInk(mixHex(idleHi, COLORS.floorDim, 0.22 * edge), end);
         const bodyInk = endFloorInk(mixHex(idleFloor, COLORS.floorDim, 0.22 * edge), end);
-        g.fillStyle = floorInk;
-        g.fillRect(geom.offX[c] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
-        g.fillStyle = halfMix(floorInk, bodyInk);
-        g.fillRect(geom.offX[c] + 1, geom.offY[r] + 2, geom.cell - 2, 1);
+        paintFloorCatch(g, geom.offX[c] + 1, geom.offY[r], geom.cell - 2, hiInk, bodyInk);
       }
     }
     g.globalAlpha = 0.78;

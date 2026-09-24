@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well catch lip.**
+  The row above a
+  post or corridor
+  shine mixes halfway
+  into the catch.
+  The hairline
+  feathers both ways.
+
 - **Well floor catch.**
   The row under a
   corridor shine mixes

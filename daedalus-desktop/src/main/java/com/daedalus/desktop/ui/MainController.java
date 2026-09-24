@@ -3045,6 +3045,8 @@ public class MainController {
 
     private static void paintCatchShine(GraphicsContext g, DesktopPaint.Hairline shine,
                                          String shineInk, String bodyInk) {
+        paintHairline(g, DesktopPaint.catchLip(shine),
+                Color.web(DesktopPaint.wallHiFeatherInk(bodyInk, shineInk)));
         paintHairline(g, shine, Color.web(shineInk));
         paintHairline(g, DesktopPaint.wallHiFeather(shine),
                 Color.web(DesktopPaint.wallHiFeatherInk(shineInk, bodyInk)));
