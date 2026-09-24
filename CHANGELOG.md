@@ -10,6 +10,16 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well side heel.**
+  The bottom of an
+  open post side
+  mixes toward the
+  foot on the
+  paver below.
+  The catch join
+  at the top of
+  that side stays.
+
 - **Well side join.**
   The top of an
   open post side

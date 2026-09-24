@@ -2533,6 +2533,15 @@ public final class DesktopPaint {
         return mixHex(side, wallHiFeatherInk(shine, wall), 0.5);
     }
 
+    /** Bottom of an open side, halfway from the side paver into the foot. */
+    public static String wallSideHeelInk(String wall, String sideFloor, String footFloor) {
+        String side = wallFootInk(wall, sideFloor);
+        if (footFloor == null) {
+            return side;
+        }
+        return mixHex(side, wallFootInk(wall, footFloor), 0.5);
+    }
+
     /** Row under the post shine — half the catch, half the wall, same as the vault lip. */
     public static Hairline wallHiFeather(Hairline shine) {
         if (shine == null) {

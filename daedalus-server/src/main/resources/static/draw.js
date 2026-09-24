@@ -130,7 +130,7 @@
     g.fillRect(x + w - 1, yb, 1, 1);
   }
 
-  function paintWallSide(g, geom, r, col, tiles, wallInk, paverAt, shineInk) {
+  function paintWallSide(g, geom, r, col, tiles, wallInk, paverAt, shineInk, floorInk) {
     if (!geom || geom.cell < 10 || !tiles || !tiles[r] || !paverAt) return;
     const x = geom.offX[col], y = geom.offY[r];
     const w = geom.offX[col + 1] - x, h = geom.offY[r + 1] - y;
@@ -138,11 +138,16 @@
     const span = h - 4;
     const run = (sx, sideInk) => {
       const join = shineInk ? halfMix(sideInk, halfMix(shineInk, wallInk)) : sideInk;
+      const heel = floorInk ? halfMix(sideInk, halfMix(wallInk, floorInk)) : sideInk;
       g.fillStyle = join;
       g.fillRect(sx, y + 3, 1, 1);
-      if (span > 1) {
+      if (span > 2) {
         g.fillStyle = sideInk;
-        g.fillRect(sx, y + 4, 1, span - 1);
+        g.fillRect(sx, y + 4, 1, span - 2);
+      }
+      if (span > 1) {
+        g.fillStyle = heel;
+        g.fillRect(sx, y + 2 + span, 1, 1);
       }
     };
     if (col > 0 && tiles[r][col - 1] !== "#") {
@@ -726,7 +731,8 @@
             paintWallFoot(g, geom, r, col, tiles, wallInk,
                 r + 1 < th ? fogPaver(r + 1, col) : null, fogPaver);
             paintWallSide(g, geom, r, col, tiles, wallInk, fogPaver,
-                mixHex(lampHi, COLORS.unseen, 0.28 * edge));
+                mixHex(lampHi, COLORS.unseen, 0.28 * edge),
+                r + 1 < th ? fogPaver(r + 1, col) : null);
           } else {
             const cx = (tw - 1) / 2, cy = (th - 1) / 2;
             const dx = (col - cx) / Math.max(1, tw / 2);
@@ -743,7 +749,8 @@
             paintWallFoot(g, geom, r, col, tiles, wallInk,
                 r + 1 < th ? clearPaver(r + 1, col) : null, clearPaver);
             paintWallSide(g, geom, r, col, tiles, wallInk, clearPaver,
-                mixHex(hi, COLORS.unseen, 0.28 * edge));
+                mixHex(hi, COLORS.unseen, 0.28 * edge),
+                r + 1 < th ? clearPaver(r + 1, col) : null);
           }
           continue;
         }
@@ -1212,7 +1219,8 @@
         paintWallFoot(g, geom, r, c, tiles, idlePost,
             r + 1 < tiles.length ? idlePaver(r + 1, c) : null, idlePaver);
         paintWallSide(g, geom, r, c, tiles, idlePost, idlePaver,
-            mixHex(idleWallHi, COLORS.unseen, 0.28 * edge));
+            mixHex(idleWallHi, COLORS.unseen, 0.28 * edge),
+            r + 1 < tiles.length ? idlePaver(r + 1, c) : null);
       }
     }
     g.globalAlpha = 0.36 + 0.10 * w0;
