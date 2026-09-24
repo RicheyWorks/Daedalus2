@@ -862,6 +862,10 @@ class DesktopPaintTest {
         assertThat(stripe).isNotNull();
         assertThat(stripe.w()).isEqualTo(18.0);
         assertThat(stripe.h()).isEqualTo(1.0);
+        DesktopPaint.Hairline floorFeather = DesktopPaint.floorHiFeather(stripe);
+        assertThat(floorFeather.y()).isEqualTo(stripe.y() + stripe.h());
+        assertThat(floorFeather.h()).isEqualTo(stripe.h());
+        assertThat(floorFeather.w()).isEqualTo(stripe.w());
         assertThat(DesktopPaint.devicePx(1)).isEqualTo(1.0);
         assertThat(DesktopPaint.devicePx(2)).isEqualTo(0.5);
         DesktopPaint.Hairline scaled = DesktopPaint.wallHiStroke(roomy, 0, 1, 2, 2);
@@ -1421,6 +1425,7 @@ class DesktopPaintTest {
         assertThat(ctrl).contains("paintWallShine(g, DesktopPaint.wallHiStroke(");
         assertThat(ctrl).contains(
                 "DesktopPaint.floorHiStroke(\n                            mark, tile.tileRow(), tile.tileCol())");
+        assertThat(ctrl).contains("paintFloorShine(g, DesktopPaint.floorHiStroke(");
         assertThat(ctrl).contains("layout, r, c, store.scaleX(), store.scaleY())");
         assertThat(DesktopPaint.emptyMarkHairlines(null)).isEmpty();
         assertThat(DesktopPaint.emptyMarkWallInk(0, 0))

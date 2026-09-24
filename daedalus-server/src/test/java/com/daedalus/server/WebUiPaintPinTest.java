@@ -196,6 +196,18 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void floorShineFeathersIntoThePaver() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js).contains("function halfMix(ink, body)")
+                    .contains("g.fillRect(geom.offX[col] + 1, geom.offY[r] + 2, geom.cell - 2, 1)")
+                    .contains("g.fillRect(geom.offX[c] + 1, geom.offY[r] + 2, geom.cell - 2, 1)")
+                    .contains("halfMix(hiInk, floorInk)");
+        }
+    }
+
+    @Test
     void wellEmptyWordmarkHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

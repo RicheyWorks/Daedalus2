@@ -1905,10 +1905,10 @@ public class MainController {
                             mark.w(tile.tileCol()), mark.h(tile.tileRow()));
                 }
                 for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkFloors()) {
-                    paintHairline(g, DesktopPaint.floorHiStroke(
+                    paintFloorShine(g, DesktopPaint.floorHiStroke(
                             mark, tile.tileRow(), tile.tileCol()),
-                            Color.web(DesktopPaint.emptyMarkFloorHiInk(
-                                    tile.tileRow(), tile.tileCol())));
+                            DesktopPaint.emptyMarkFloorHiInk(tile.tileRow(), tile.tileCol()),
+                            DesktopPaint.emptyMarkFloorInk(tile.tileRow(), tile.tileCol()));
                 }
                 g.setGlobalAlpha(1);
                 paintEndpoint(g, mark, DesktopPaint.EMPTY_MARK_START,
@@ -1994,10 +1994,12 @@ public class MainController {
                 g.setFill(ink);
                 g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
                 if (role != TileType.WALL) {
-                    paintHairline(g, DesktopPaint.floorHiStroke(
+                    paintFloorShine(g, DesktopPaint.floorHiStroke(
                             layout, r, c, store.scaleX(), store.scaleY()),
-                            Color.web(DesktopPaint.endFloorInk(
-                                    DesktopPaint.clearFloorHiInk(edge), tiles[r][c])));
+                            DesktopPaint.endFloorInk(
+                                    DesktopPaint.clearFloorHiInk(edge), tiles[r][c]),
+                            DesktopPaint.endFloorInk(
+                                    DesktopPaint.clearFloorInk(edge), tiles[r][c]));
                 }
             }
         }
@@ -2527,9 +2529,11 @@ public class MainController {
                         DesktopPaint.fogFloor(fog, r, c, edge), tiles[r][c])));
                 g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
                 double intensity = DesktopPaint.fogFloorIntensity(fog, r, c);
-                paintHairline(g, DesktopPaint.floorHiStroke(layout, r, c, intensity, scaleX, scaleY),
-                        Color.web(DesktopPaint.endFloorInk(
-                                DesktopPaint.fogFloorHiInk(intensity, edge), tiles[r][c])));
+                paintFloorShine(g, DesktopPaint.floorHiStroke(layout, r, c, intensity, scaleX, scaleY),
+                        DesktopPaint.endFloorInk(
+                                DesktopPaint.fogFloorHiInk(intensity, edge), tiles[r][c]),
+                        DesktopPaint.endFloorInk(
+                                DesktopPaint.fogFloor(fog, r, c, edge), tiles[r][c]));
             }
         }
         if (!playerWalk.isEmpty() && theme != null) {
@@ -3030,9 +3034,20 @@ public class MainController {
     /** Post shine plus the row under it, so the catch feathers into the wall. */
     private static void paintWallShine(GraphicsContext g, DesktopPaint.Hairline shine,
                                         String shineInk, String wallInk) {
+        paintCatchShine(g, shine, shineInk, wallInk);
+    }
+
+    /** Corridor shine plus the row under it, so the catch feathers into the paver. */
+    private static void paintFloorShine(GraphicsContext g, DesktopPaint.Hairline shine,
+                                         String shineInk, String floorInk) {
+        paintCatchShine(g, shine, shineInk, floorInk);
+    }
+
+    private static void paintCatchShine(GraphicsContext g, DesktopPaint.Hairline shine,
+                                         String shineInk, String bodyInk) {
         paintHairline(g, shine, Color.web(shineInk));
         paintHairline(g, DesktopPaint.wallHiFeather(shine),
-                Color.web(DesktopPaint.wallHiFeatherInk(shineInk, wallInk)));
+                Color.web(DesktopPaint.wallHiFeatherInk(shineInk, bodyInk)));
     }
 
     private static void paintRing(GraphicsContext g, DesktopPaint.Ring ring, Color color) {

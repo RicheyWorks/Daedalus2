@@ -61,6 +61,14 @@
         && tiles[r][c - 1] !== "#" && tiles[r][c + 1] !== "#";
   }
 
+  function halfMix(ink, body) {
+    const rgb = h => h[0] === "#"
+        ? [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16))
+        : h.match(/\d+/g).slice(0, 3).map(Number);
+    const shine = rgb(ink), under = rgb(body);
+    return "rgb(" + shine.map((v, i) => Math.round(v + (under[i] - v) * 0.5)).join(",") + ")";
+  }
+
   function paintWallHi(g, geom, r, col, ink, wall) {
     if (!geom || geom.cell < 10) return;
     const x = geom.offX[col], y = geom.offY[r];
@@ -70,11 +78,7 @@
     g.fillStyle = ink;
     g.fillRect(x + 1, y + 1, span, 1);
     if (!wall) return;
-    const rgb = h => h[0] === "#"
-        ? [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16))
-        : h.match(/\d+/g).slice(0, 3).map(Number);
-    const shine = rgb(ink), body = rgb(wall);
-    g.fillStyle = "rgb(" + shine.map((v, i) => Math.round(v + (body[i] - v) * 0.5)).join(",") + ")";
+    g.fillStyle = halfMix(ink, wall);
     g.fillRect(x + 1, y + 2, span, 1);
   }
 
@@ -597,13 +601,17 @@
           const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
           const lit = mixHex(COLORS.floor, COLORS.floorWarm, lamp * 0.28);
           const lampFloor = mixHex(COLORS.floorDim, lit, lamp);
-          g.fillStyle = endFloorInk(mixHex(lampFloor, COLORS.floorDim, 0.22 * edge), t);
+          const floorInk = endFloorInk(mixHex(lampFloor, COLORS.floorDim, 0.22 * edge), t);
+          g.fillStyle = floorInk;
           g.fillRect(geom.offX[col], geom.offY[r],
                      geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
           if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
             const lampHi = mixHex(COLORS.floorHi, COLORS.floorWarm, lamp * 0.28);
-            g.fillStyle = endFloorInk(mixHex(lampHi, COLORS.floorDim, 0.22 * edge), t);
+            const hiInk = endFloorInk(mixHex(lampHi, COLORS.floorDim, 0.22 * edge), t);
+            g.fillStyle = hiInk;
             g.fillRect(geom.offX[col] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
+            g.fillStyle = halfMix(hiInk, floorInk);
+            g.fillRect(geom.offX[col] + 1, geom.offY[r] + 2, geom.cell - 2, 1);
           }
         } else {
           // Soft edge falloff — clear stone has depth, not flat slate.
@@ -612,13 +620,17 @@
           const dy = (r - cy) / Math.max(1, th / 2);
           const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
           const warm = mixHex(COLORS.floor, COLORS.floorWarm, 0.28);
-          g.fillStyle = endFloorInk(mixHex(warm, COLORS.floorDim, 0.22 * edge), t);
+          const floorInk = endFloorInk(mixHex(warm, COLORS.floorDim, 0.22 * edge), t);
+          g.fillStyle = floorInk;
           g.fillRect(geom.offX[col], geom.offY[r],
                      geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
           if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
             const hi = mixHex(COLORS.floorHi, COLORS.floorWarm, 0.28);
-            g.fillStyle = endFloorInk(mixHex(hi, COLORS.floorDim, 0.22 * edge), t);
+            const hiInk = endFloorInk(mixHex(hi, COLORS.floorDim, 0.22 * edge), t);
+            g.fillStyle = hiInk;
             g.fillRect(geom.offX[col] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
+            g.fillStyle = halfMix(hiInk, floorInk);
+            g.fillRect(geom.offX[col] + 1, geom.offY[r] + 2, geom.cell - 2, 1);
           }
         }
         if (t === "S") start = { row: (r - 1) / 2, col: (col - 1) / 2 };
@@ -1065,8 +1077,12 @@
         const dx = (c - idleCx) / Math.max(1, idleCols / 2);
         const dy = (r - idleCy) / Math.max(1, idleRows / 2);
         const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
-        g.fillStyle = endFloorInk(mixHex(idleHi, COLORS.floorDim, 0.22 * edge), end);
+        const floorInk = endFloorInk(mixHex(idleHi, COLORS.floorDim, 0.22 * edge), end);
+        const bodyInk = endFloorInk(mixHex(idleFloor, COLORS.floorDim, 0.22 * edge), end);
+        g.fillStyle = floorInk;
         g.fillRect(geom.offX[c] + 1, geom.offY[r] + 1, geom.cell - 2, 1);
+        g.fillStyle = halfMix(floorInk, bodyInk);
+        g.fillRect(geom.offX[c] + 1, geom.offY[r] + 2, geom.cell - 2, 1);
       }
     }
     g.globalAlpha = 0.78;

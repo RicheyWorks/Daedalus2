@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well floor catch.**
+  The row under a
+  corridor shine mixes
+  halfway into the
+  paver. The hairline
+  feathers into the
+  stone.
+
 - **Well wall catch.**
   The row under a
   post shine mixes

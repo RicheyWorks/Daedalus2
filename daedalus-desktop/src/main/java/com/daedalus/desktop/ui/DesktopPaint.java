@@ -2354,6 +2354,11 @@ public final class DesktopPaint {
                 py);
     }
 
+    /** Row under the corridor shine — half the catch, half the paver. */
+    public static Hairline floorHiFeather(Hairline shine) {
+        return wallHiFeather(shine);
+    }
+
     public static String clearWallHiInk(double edge) {
         String hi = mixHex(WALL_HI, FOG_WALL_WARM, 0.28);
         return mixHex(hi, FOG_UNSEEN, WALL_EDGE_DIM * Math.max(0, Math.min(1, edge)));
