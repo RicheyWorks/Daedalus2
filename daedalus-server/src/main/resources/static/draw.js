@@ -623,7 +623,6 @@
           }
           continue;
         }
-        if (r % 2 === 1 && col % 2 === 1 && isRock(tiles, r, col)) continue;
         const lamp = scene.fog
             ? fogLamp(scene.fog, r, col) * fogFrontier(scene.fog, r, col) : 1;
         if (scene.fog) {

@@ -229,6 +229,16 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void rockCellsWearTheFloor() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js).doesNotContain("isRock(tiles, r, col)) continue")
+                    .contains("if (tiles[tr][tc] === \"#\" || isRock(tiles, tr, tc)) return");
+        }
+    }
+
+    @Test
     void wellEmptyWordmarkHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

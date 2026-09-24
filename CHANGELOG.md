@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well rock cells.**
+  A sealed cell wears
+  the floor instead of
+  a hole in the wash.
+  Hotspots still skip
+  it.
+
 - **Well posts.**
   A crossing post
   stays stone in the
