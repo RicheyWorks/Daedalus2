@@ -2477,8 +2477,38 @@ public final class DesktopPaint {
         return new Hairline(x, y, px, h);
     }
 
+    /** Corner where two posts meet the paver. 0 northwest, 1 northeast, 2 southeast, 3 southwest. */
+    public static Hairline floorSkirtCorner(Layout layout, int tileRow, int tileCol,
+                                             double scaleX, double scaleY, int corner) {
+        double sx = scaleX > 0 ? scaleX : 1;
+        double sy = scaleY > 0 ? scaleY : 1;
+        if (layout == null || !shineCell(layout.cellSize(), Math.min(sx, sy))) {
+            return null;
+        }
+        double w = layout.w(tileCol);
+        double h = layout.h(tileRow);
+        if (bitmapPx(w, sx) < 3 || bitmapPx(h, sy) < 3) {
+            return null;
+        }
+        double px = devicePx(scaleX);
+        double py = devicePx(scaleY);
+        double x = layout.x(tileCol);
+        double y = layout.y(tileRow);
+        if (corner == 1 || corner == 2) {
+            x += w - px;
+        }
+        if (corner == 2 || corner == 3) {
+            y += h - py;
+        }
+        return new Hairline(x, y, px, py);
+    }
+
     public static String floorSkirtInk(String floor, String wall) {
         return mixHex(floor, wall, 0.5);
+    }
+
+    public static String floorSkirtCornerInk(String floor, String wallA, String wallB) {
+        return mixHex(floorSkirtInk(floor, wallA), floorSkirtInk(floor, wallB), 0.5);
     }
 
     public static String wallFootInk(String wall) {

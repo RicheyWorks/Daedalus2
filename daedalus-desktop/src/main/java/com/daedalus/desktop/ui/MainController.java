@@ -3187,6 +3187,22 @@ public class MainController {
             paintHairline(g, DesktopPaint.floorSkirtStroke(layout, r, c, scaleX, scaleY, 3),
                     Color.web(DesktopPaint.floorSkirtInk(floorInk, westWall)));
         }
+        if (northWall != null && westWall != null && !catchOn) {
+            paintHairline(g, DesktopPaint.floorSkirtCorner(layout, r, c, scaleX, scaleY, 0),
+                    Color.web(DesktopPaint.floorSkirtCornerInk(floorInk, northWall, westWall)));
+        }
+        if (northWall != null && eastWall != null && !catchOn) {
+            paintHairline(g, DesktopPaint.floorSkirtCorner(layout, r, c, scaleX, scaleY, 1),
+                    Color.web(DesktopPaint.floorSkirtCornerInk(floorInk, northWall, eastWall)));
+        }
+        if (southWall != null && eastWall != null) {
+            paintHairline(g, DesktopPaint.floorSkirtCorner(layout, r, c, scaleX, scaleY, 2),
+                    Color.web(DesktopPaint.floorSkirtCornerInk(floorInk, southWall, eastWall)));
+        }
+        if (southWall != null && westWall != null) {
+            paintHairline(g, DesktopPaint.floorSkirtCorner(layout, r, c, scaleX, scaleY, 3),
+                    Color.web(DesktopPaint.floorSkirtCornerInk(floorInk, southWall, westWall)));
+        }
     }
 
     /** Corridor shine plus the row under it, so the catch feathers into the paver. */

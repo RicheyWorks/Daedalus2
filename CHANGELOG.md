@@ -10,6 +10,16 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well skirt corner.**
+  Where two posts
+  meet a paver,
+  that corner mixes
+  both edges.
+  The catch on an
+  odd cell still
+  owns the north
+  corners.
+
 - **Well skirt post.**
   A mixed color can
   mix again, so the

@@ -237,6 +237,8 @@ class WebUiPaintPinTest {
                     .contains("function paintFloorSkirt(g, geom, r, col, tiles, floorInk, postAt)")
                     .contains("function postInk(rows, cols, r, col, fogLamp)")
                     .contains("halfMix(floorInk, postAt(r - 1, col))")
+                    .contains("g.fillRect(x, y + h - 1, 1, 1)")
+                    .contains("halfMix(floorInk, postAt(r, col - 1)))")
                     .contains("g.fillRect(x, y + h - 1, w, 1)")
                     .contains("g.fillRect(x, y, 1, h)")
                     .contains("postInk(th, tw, nr, nc, null)")

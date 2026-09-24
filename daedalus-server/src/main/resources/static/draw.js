@@ -159,6 +159,26 @@
       g.fillStyle = halfMix(floorInk, postAt(r, col + 1));
       g.fillRect(x + w - 1, y, 1, h);
     }
+    const north = !catchOn && r > 0 && tiles[r - 1][col] === "#";
+    const south = r + 1 < tiles.length && tiles[r + 1][col] === "#";
+    const west = col > 0 && tiles[r][col - 1] === "#";
+    const east = col + 1 < tiles[r].length && tiles[r][col + 1] === "#";
+    if (north && west) {
+      g.fillStyle = halfMix(halfMix(floorInk, postAt(r - 1, col)), halfMix(floorInk, postAt(r, col - 1)));
+      g.fillRect(x, y, 1, 1);
+    }
+    if (north && east) {
+      g.fillStyle = halfMix(halfMix(floorInk, postAt(r - 1, col)), halfMix(floorInk, postAt(r, col + 1)));
+      g.fillRect(x + w - 1, y, 1, 1);
+    }
+    if (south && west) {
+      g.fillStyle = halfMix(halfMix(floorInk, postAt(r + 1, col)), halfMix(floorInk, postAt(r, col - 1)));
+      g.fillRect(x, y + h - 1, 1, 1);
+    }
+    if (south && east) {
+      g.fillStyle = halfMix(halfMix(floorInk, postAt(r + 1, col)), halfMix(floorInk, postAt(r, col + 1)));
+      g.fillRect(x + w - 1, y + h - 1, 1, 1);
+    }
   }
 
   function paintFloorCatch(g, x, y, w, ink, body) {
