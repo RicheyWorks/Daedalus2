@@ -95,6 +95,23 @@
     g.fillRect(x + w - 1, y + 2, 1, 1);
   }
 
+  function paintWallFoot(g, geom, r, col, tiles, wallInk) {
+    if (!geom || geom.cell < 10 || !tiles || r + 1 >= tiles.length) return;
+    if (tiles[r + 1][col] === "#") return;
+    const x = geom.offX[col], y = geom.offY[r];
+    const w = geom.offX[col + 1] - x, h = geom.offY[r + 1] - y;
+    if (w < 3 || h < 4) return;
+    const span = Math.max(1, w - 2);
+    const foot = halfMix(wallInk, COLORS.floorDim);
+    const corner = halfMix(foot, wallInk);
+    const yb = y + h - 1;
+    g.fillStyle = foot;
+    g.fillRect(x + 1, yb, span, 1);
+    g.fillStyle = corner;
+    g.fillRect(x, yb, 1, 1);
+    g.fillRect(x + w - 1, yb, 1, 1);
+  }
+
   function paintFloorCatch(g, x, y, w, ink, body) {
     const edge = halfMix(ink, body);
     const corner = halfMix(edge, body);
@@ -608,6 +625,7 @@
                        geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
             const lampHi = mixHex(COLORS.wallHi, COLORS.wallWarm, lamp * 0.28);
             paintWallHi(g, geom, r, col, mixHex(lampHi, COLORS.unseen, 0.28 * edge), wallInk);
+            paintWallFoot(g, geom, r, col, tiles, wallInk);
           } else {
             const cx = (tw - 1) / 2, cy = (th - 1) / 2;
             const dx = (col - cx) / Math.max(1, tw / 2);
@@ -620,6 +638,7 @@
                        geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
             const hi = mixHex(COLORS.wallHi, COLORS.wallWarm, 0.28);
             paintWallHi(g, geom, r, col, mixHex(hi, COLORS.unseen, 0.28 * edge), wallInk);
+            paintWallFoot(g, geom, r, col, tiles, wallInk);
           }
           continue;
         }
@@ -1077,6 +1096,8 @@
         const dy = (r - idleCy) / Math.max(1, idleRows / 2);
         const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
         paintWallHi(g, geom, r, c, mixHex(idleWallHi, COLORS.unseen, 0.28 * edge),
+            mixHex(idleWall, COLORS.unseen, 0.28 * edge));
+        paintWallFoot(g, geom, r, c, tiles,
             mixHex(idleWall, COLORS.unseen, 0.28 * edge));
       }
     }

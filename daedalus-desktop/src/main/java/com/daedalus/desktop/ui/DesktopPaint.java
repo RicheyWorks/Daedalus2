@@ -2403,6 +2403,32 @@ public final class DesktopPaint {
                 Math.max(px, w - 2 * px), py);
     }
 
+    /** Bottom of a post that sits on a floor — the joint leans toward the paver. */
+    public static Hairline wallFootStroke(Layout layout, int tileRow, int tileCol,
+                                           double scaleX, double scaleY) {
+        double sx = scaleX > 0 ? scaleX : 1;
+        double sy = scaleY > 0 ? scaleY : 1;
+        if (layout == null || !shineCell(layout.cellSize(), Math.min(sx, sy))) {
+            return null;
+        }
+        double w = layout.w(tileCol);
+        double h = layout.h(tileRow);
+        if (bitmapPx(w, sx) < 3 || bitmapPx(h, sy) < 4) {
+            return null;
+        }
+        double px = devicePx(scaleX);
+        double py = devicePx(scaleY);
+        double y = layout.y(tileRow) + h - py;
+        if (y < layout.y(tileRow) + 3 * py) {
+            return null;
+        }
+        return new Hairline(layout.x(tileCol) + px, y, Math.max(px, w - 2 * px), py);
+    }
+
+    public static String wallFootInk(String wall) {
+        return mixHex(wall, FLOOR_DIM, 0.5);
+    }
+
     /** Row under the post shine — half the catch, half the wall, same as the vault lip. */
     public static Hairline wallHiFeather(Hairline shine) {
         if (shine == null) {

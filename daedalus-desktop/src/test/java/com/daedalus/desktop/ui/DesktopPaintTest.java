@@ -821,6 +821,14 @@ class DesktopPaintTest {
         DesktopPaint.Hairline wallStripe = DesktopPaint.wallHiStroke(roomy, 0, 1);
         assertThat(wallStripe).isNotNull();
         assertThat(wallStripe.h()).isEqualTo(1.0);
+        DesktopPaint.Hairline foot = DesktopPaint.wallFootStroke(roomy, 0, 1, 1, 1);
+        assertThat(foot).isNotNull();
+        assertThat(foot.h()).isEqualTo(1.0);
+        assertThat(foot.y()).isEqualTo(roomy.y(0) + roomy.h(0) - foot.h());
+        assertThat(foot.x()).isEqualTo(wallStripe.x());
+        assertThat(DesktopPaint.wallFootStroke(null, 0, 1, 1, 1)).isNull();
+        assertThat(DesktopPaint.wallFootInk("#120e0c"))
+                .isEqualTo(DesktopPaint.mixHex("#120e0c", DesktopPaint.FLOOR_DIM, 0.5));
         DesktopPaint.Hairline feather = DesktopPaint.wallHiFeather(wallStripe);
         assertThat(feather.y()).isEqualTo(wallStripe.y() + wallStripe.h());
         assertThat(feather.h()).isEqualTo(wallStripe.h());
@@ -1436,6 +1444,7 @@ class DesktopPaintTest {
         assertThat(ctrl).contains(
                 "DesktopPaint.wallHiStroke(\n                            mark, tile.tileRow(), tile.tileCol())");
         assertThat(ctrl).contains("paintWallShine(g, DesktopPaint.wallHiStroke(");
+        assertThat(ctrl).contains("paintWallFoot(g, DesktopPaint.wallFootStroke(");
         assertThat(ctrl).contains("DesktopPaint.catchLip(shine)");
         assertThat(ctrl).contains("DesktopPaint.catchEnds(shine)");
         assertThat(ctrl).contains("DesktopPaint.catchCornerInk(shineInk, bodyInk)");

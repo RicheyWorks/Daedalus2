@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well wall foot.**
+  A post that sits
+  on open floor
+  mixes its base
+  toward the paver.
+  The catch on the
+  top of the post
+  stays put.
+
 - **Explore brick catch.**
   The course under
   the brick shine
