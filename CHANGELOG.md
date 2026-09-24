@@ -10,6 +10,16 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick catch.**
+  The course under
+  the brick shine
+  leans a quarter
+  of the way toward
+  the catch.
+  The shine line
+  stays brighter
+  than that course.
+
 - **Explore vault lip seam.**
   The row above the
   catch mixes across
