@@ -821,6 +821,13 @@ class DesktopPaintTest {
         DesktopPaint.Hairline wallStripe = DesktopPaint.wallHiStroke(roomy, 0, 1);
         assertThat(wallStripe).isNotNull();
         assertThat(wallStripe.h()).isEqualTo(1.0);
+        DesktopPaint.Hairline feather = DesktopPaint.wallHiFeather(wallStripe);
+        assertThat(feather.y()).isEqualTo(wallStripe.y() + wallStripe.h());
+        assertThat(feather.h()).isEqualTo(wallStripe.h());
+        assertThat(feather.w()).isEqualTo(wallStripe.w());
+        assertThat(DesktopPaint.wallHiFeather(null)).isNull();
+        assertThat(DesktopPaint.wallHiFeatherInk("#4a3824", "#120e0c"))
+                .isEqualTo(DesktopPaint.mixHex("#4a3824", "#120e0c", 0.5));
         assertThat(DesktopPaint.clearWallHiInk(0))
                 .isEqualTo(DesktopPaint.mixHex(DesktopPaint.WALL_HI,
                         DesktopPaint.FOG_WALL_WARM, 0.28));
@@ -1411,6 +1418,7 @@ class DesktopPaintTest {
                 "src/main/java/com/daedalus/desktop/ui/MainController.java"));
         assertThat(ctrl).contains(
                 "DesktopPaint.wallHiStroke(\n                            mark, tile.tileRow(), tile.tileCol())");
+        assertThat(ctrl).contains("paintWallShine(g, DesktopPaint.wallHiStroke(");
         assertThat(ctrl).contains(
                 "DesktopPaint.floorHiStroke(\n                            mark, tile.tileRow(), tile.tileCol())");
         assertThat(ctrl).contains("layout, r, c, store.scaleX(), store.scaleY())");

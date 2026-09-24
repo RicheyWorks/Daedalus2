@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well wall catch.**
+  The row under a
+  post shine mixes
+  halfway into the
+  wall. The hairline
+  feathers into the
+  course.
+
 - **Explore brick corner.**
   A clay corner sinks
   further into the

@@ -61,13 +61,21 @@
         && tiles[r][c - 1] !== "#" && tiles[r][c + 1] !== "#";
   }
 
-  function paintWallHi(g, geom, r, col, ink) {
+  function paintWallHi(g, geom, r, col, ink, wall) {
     if (!geom || geom.cell < 10) return;
     const x = geom.offX[col], y = geom.offY[r];
     const w = geom.offX[col + 1] - x, h = geom.offY[r + 1] - y;
     if (w < 3 || h < 3) return;
+    const span = Math.max(1, w - 2);
     g.fillStyle = ink;
-    g.fillRect(x + 1, y + 1, Math.max(1, w - 2), 1);
+    g.fillRect(x + 1, y + 1, span, 1);
+    if (!wall) return;
+    const rgb = h => h[0] === "#"
+        ? [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16))
+        : h.match(/\d+/g).slice(0, 3).map(Number);
+    const shine = rgb(ink), body = rgb(wall);
+    g.fillStyle = "rgb(" + shine.map((v, i) => Math.round(v + (body[i] - v) * 0.5)).join(",") + ")";
+    g.fillRect(x + 1, y + 2, span, 1);
   }
 
   function cellCenter(geom, p) {
@@ -558,22 +566,24 @@
             const dy = (r - cy) / Math.max(1, th / 2);
             const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
             const lampWall = mixHex(COLORS.wall, COLORS.wallWarm, lamp * 0.45);
-            g.fillStyle = mixHex(lampWall, COLORS.unseen, 0.28 * edge);
+            const wallInk = mixHex(lampWall, COLORS.unseen, 0.28 * edge);
+            g.fillStyle = wallInk;
             g.fillRect(geom.offX[col], geom.offY[r],
                        geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
             const lampHi = mixHex(COLORS.wallHi, COLORS.wallWarm, lamp * 0.28);
-            paintWallHi(g, geom, r, col, mixHex(lampHi, COLORS.unseen, 0.28 * edge));
+            paintWallHi(g, geom, r, col, mixHex(lampHi, COLORS.unseen, 0.28 * edge), wallInk);
           } else {
             const cx = (tw - 1) / 2, cy = (th - 1) / 2;
             const dx = (col - cx) / Math.max(1, tw / 2);
             const dy = (r - cy) / Math.max(1, th / 2);
             const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
             const warmWall = mixHex(COLORS.wall, COLORS.wallWarm, 0.28);
-            g.fillStyle = mixHex(warmWall, COLORS.unseen, 0.28 * edge);
+            const wallInk = mixHex(warmWall, COLORS.unseen, 0.28 * edge);
+            g.fillStyle = wallInk;
             g.fillRect(geom.offX[col], geom.offY[r],
                        geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
             const hi = mixHex(COLORS.wallHi, COLORS.wallWarm, 0.28);
-            paintWallHi(g, geom, r, col, mixHex(hi, COLORS.unseen, 0.28 * edge));
+            paintWallHi(g, geom, r, col, mixHex(hi, COLORS.unseen, 0.28 * edge), wallInk);
           }
           continue;
         }
@@ -1029,7 +1039,8 @@
         const dx = (c - idleCx) / Math.max(1, idleCols / 2);
         const dy = (r - idleCy) / Math.max(1, idleRows / 2);
         const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
-        paintWallHi(g, geom, r, c, mixHex(idleWallHi, COLORS.unseen, 0.28 * edge));
+        paintWallHi(g, geom, r, c, mixHex(idleWallHi, COLORS.unseen, 0.28 * edge),
+            mixHex(idleWall, COLORS.unseen, 0.28 * edge));
       }
     }
     g.globalAlpha = 0.36 + 0.10 * w0;

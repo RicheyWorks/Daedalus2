@@ -184,6 +184,18 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wallShineFeathersIntoTheCourse() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js).contains("g.fillRect(x + 1, y + 1, span, 1)")
+                    .contains("g.fillRect(x + 1, y + 2, span, 1)")
+                    .contains("paintWallHi(g, geom, r, col, mixHex(hi, COLORS.unseen, 0.28 * edge), wallInk)")
+                    .contains("paintWallHi(g, geom, r, col, mixHex(lampHi, COLORS.unseen, 0.28 * edge), wallInk)");
+        }
+    }
+
+    @Test
     void wellEmptyWordmarkHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

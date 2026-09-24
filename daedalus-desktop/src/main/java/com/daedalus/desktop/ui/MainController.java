@@ -1892,10 +1892,10 @@ public class MainController {
                             mark.w(tile.tileCol()), mark.h(tile.tileRow()));
                 }
                 for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkWalls()) {
-                    paintHairline(g, DesktopPaint.wallHiStroke(
+                    paintWallShine(g, DesktopPaint.wallHiStroke(
                             mark, tile.tileRow(), tile.tileCol()),
-                            Color.web(DesktopPaint.emptyMarkWallHiInk(
-                                    tile.tileRow(), tile.tileCol())));
+                            DesktopPaint.emptyMarkWallHiInk(tile.tileRow(), tile.tileCol()),
+                            DesktopPaint.emptyMarkWallInk(tile.tileRow(), tile.tileCol()));
                 }
                 g.setGlobalAlpha(DesktopPaint.emptyMarkFloorAlpha(wave));
                 for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkFloors()) {
@@ -1979,9 +1979,10 @@ public class MainController {
                     ink = Color.web(DesktopPaint.wallInk(edge));
                     g.setFill(ink);
                     g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
-                    paintHairline(g, DesktopPaint.wallHiStroke(
+                    paintWallShine(g, DesktopPaint.wallHiStroke(
                             layout, r, c, store.scaleX(), store.scaleY()),
-                            Color.web(DesktopPaint.clearWallHiInk(edge)));
+                            DesktopPaint.clearWallHiInk(edge),
+                            DesktopPaint.wallInk(edge));
                     continue;
                 } else if (role == TileType.PASSAGE) {
                     ink = Color.web(DesktopPaint.endFloorInk(
@@ -2516,8 +2517,9 @@ public class MainController {
                     g.setFill(Color.web(DesktopPaint.fogWall(fog, r, c, edge)));
                     g.fillRect(layout.x(c), layout.y(r), layout.w(c), layout.h(r));
                     double lamp = DesktopPaint.fogFloorIntensity(fog, r, c);
-                    paintHairline(g, DesktopPaint.wallHiStroke(layout, r, c, scaleX, scaleY),
-                            Color.web(DesktopPaint.fogWallHiInk(lamp, edge)));
+                    paintWallShine(g, DesktopPaint.wallHiStroke(layout, r, c, scaleX, scaleY),
+                            DesktopPaint.fogWallHiInk(lamp, edge),
+                            DesktopPaint.fogWall(fog, r, c, edge));
                     continue;
                 }
                 double edge = DesktopPaint.floorEdge(layout, r, c);
@@ -3023,6 +3025,14 @@ public class MainController {
         }
         g.setFill(ink);
         g.fillRect(line.x(), line.y(), line.w(), line.h());
+    }
+
+    /** Post shine plus the row under it, so the catch feathers into the wall. */
+    private static void paintWallShine(GraphicsContext g, DesktopPaint.Hairline shine,
+                                        String shineInk, String wallInk) {
+        paintHairline(g, shine, Color.web(shineInk));
+        paintHairline(g, DesktopPaint.wallHiFeather(shine),
+                Color.web(DesktopPaint.wallHiFeatherInk(shineInk, wallInk)));
     }
 
     private static void paintRing(GraphicsContext g, DesktopPaint.Ring ring, Color color) {

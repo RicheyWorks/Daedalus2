@@ -2390,6 +2390,18 @@ public final class DesktopPaint {
                 Math.max(px, w - 2 * px), py);
     }
 
+    /** Row under the post shine — half the catch, half the wall, same as the vault lip. */
+    public static Hairline wallHiFeather(Hairline shine) {
+        if (shine == null) {
+            return null;
+        }
+        return new Hairline(shine.x(), shine.y() + shine.h(), shine.w(), shine.h());
+    }
+
+    public static String wallHiFeatherInk(String shine, String wall) {
+        return mixHex(shine, wall, 0.5);
+    }
+
     public static int hexArgb(String hex) {
         int[] c = rgb(hex);
         return 0xFF000000 | (c[0] << 16) | (c[1] << 8) | c[2];
