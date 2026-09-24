@@ -10,6 +10,20 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well skirt post.**
+  A mixed color can
+  mix again, so the
+  warm post and the
+  paver keep their
+  stone. Each paver
+  edge meets the
+  post it touches.
+  The skirt painter
+  sits with the
+  other well painters
+  so the live maze
+  can call it.
+
 - **Well floor skirt.**
   A paver against
   a post mixes that

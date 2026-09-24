@@ -124,30 +124,41 @@
       g.fillRect(x, y + 3, 1, span);
     }
     if (col + 1 < tiles[r].length && tiles[r][col + 1] !== "#") {
-    g.fillRect(x + w - 1, y + 3, 1, span);
+      g.fillRect(x + w - 1, y + 3, 1, span);
+    }
   }
 
-  function paintFloorSkirt(g, geom, r, col, tiles, floorInk) {
-    if (!geom || geom.cell < 10 || !tiles || !tiles[r]) return;
+  function postInk(rows, cols, r, col, fogLamp) {
+    const cx = (cols - 1) / 2, cy = (rows - 1) / 2;
+    const dx = (col - cx) / Math.max(1, cols / 2);
+    const dy = (r - cy) / Math.max(1, rows / 2);
+    const edge = Math.min(1, Math.sqrt(dx * dx + dy * dy));
+    const warm = mixHex(COLORS.wall, COLORS.wallWarm, fogLamp == null ? 0.28 : fogLamp * 0.45);
+    return mixHex(warm, COLORS.unseen, 0.28 * edge);
+  }
+
+  function paintFloorSkirt(g, geom, r, col, tiles, floorInk, postAt) {
+    if (!geom || geom.cell < 10 || !tiles || !tiles[r] || !postAt) return;
     const x = geom.offX[col], y = geom.offY[r];
     const w = geom.offX[col + 1] - x, h = geom.offY[r + 1] - y;
     if (w < 3 || h < 3) return;
-    const ink = halfMix(floorInk, COLORS.wall);
     const catchOn = r % 2 === 1 && col % 2 === 1;
-    g.fillStyle = ink;
     if (!catchOn && r > 0 && tiles[r - 1][col] === "#") {
+      g.fillStyle = halfMix(floorInk, postAt(r - 1, col));
       g.fillRect(x, y, w, 1);
     }
     if (r + 1 < tiles.length && tiles[r + 1][col] === "#") {
+      g.fillStyle = halfMix(floorInk, postAt(r + 1, col));
       g.fillRect(x, y + h - 1, w, 1);
     }
     if (col > 0 && tiles[r][col - 1] === "#") {
+      g.fillStyle = halfMix(floorInk, postAt(r, col - 1));
       g.fillRect(x, y, 1, h);
     }
     if (col + 1 < tiles[r].length && tiles[r][col + 1] === "#") {
+      g.fillStyle = halfMix(floorInk, postAt(r, col + 1));
       g.fillRect(x + w - 1, y, 1, h);
     }
-  }
   }
 
   function paintFloorCatch(g, x, y, w, ink, body) {
@@ -376,7 +387,9 @@
   }
 
   function mixHex(a, b, t) {
-    const n = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+    const n = h => h[0] === "#"
+        ? [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16))
+        : h.match(/\d+/g).slice(0, 3).map(Number);
     const A = n(a), B = n(b);
     const u = Math.max(0, Math.min(1, t));
     return "rgb(" + A.map((v, i) => Math.round(v + (B[i] - v) * u)).join(",") + ")";
@@ -695,7 +708,9 @@
           g.fillStyle = floorInk;
           g.fillRect(geom.offX[col], geom.offY[r],
                      geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
-          paintFloorSkirt(g, geom, r, col, tiles, floorInk);
+          paintFloorSkirt(g, geom, r, col, tiles, floorInk,
+              (nr, nc) => postInk(th, tw, nr, nc,
+                  fogLamp(scene.fog, nr, nc) * fogFrontier(scene.fog, nr, nc)));
           if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
             const lampHi = mixHex(COLORS.floorHi, COLORS.floorWarm, lamp * 0.28);
             const hiInk = endFloorInk(mixHex(lampHi, COLORS.floorDim, 0.22 * edge), t);
@@ -712,7 +727,8 @@
           g.fillStyle = floorInk;
           g.fillRect(geom.offX[col], geom.offY[r],
                      geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
-          paintFloorSkirt(g, geom, r, col, tiles, floorInk);
+          paintFloorSkirt(g, geom, r, col, tiles, floorInk,
+              (nr, nc) => postInk(th, tw, nr, nc, null));
           if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
             const hi = mixHex(COLORS.floorHi, COLORS.floorWarm, 0.28);
             const hiInk = endFloorInk(mixHex(hi, COLORS.floorDim, 0.22 * edge), t);
@@ -1158,7 +1174,8 @@
         g.fillStyle = bodyInk;
         g.fillRect(geom.offX[c], geom.offY[r],
                    geom.offX[c + 1] - geom.offX[c], geom.offY[r + 1] - geom.offY[r]);
-        paintFloorSkirt(g, geom, r, c, tiles, bodyInk);
+        paintFloorSkirt(g, geom, r, c, tiles, bodyInk,
+            (nr, nc) => postInk(idleRows, idleCols, nr, nc, null));
       }
     }
     const idleHi = mixHex(COLORS.floorHi, COLORS.floorWarm, 0.28);

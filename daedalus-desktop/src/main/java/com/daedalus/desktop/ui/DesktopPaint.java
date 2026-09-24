@@ -2477,8 +2477,8 @@ public final class DesktopPaint {
         return new Hairline(x, y, px, h);
     }
 
-    public static String floorSkirtInk(String floor) {
-        return mixHex(floor, FOG_WALL, 0.5);
+    public static String floorSkirtInk(String floor, String wall) {
+        return mixHex(floor, wall, 0.5);
     }
 
     public static String wallFootInk(String wall) {

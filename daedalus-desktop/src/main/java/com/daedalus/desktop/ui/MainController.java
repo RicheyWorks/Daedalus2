@@ -1930,11 +1930,15 @@ public class MainController {
                     String idleRow = DesktopPaint.EMPTY_MARK[ir];
                     paintFloorSkirts(g, mark, ir, ic, 1, 1,
                             DesktopPaint.emptyMarkFloorInk(ir, ic),
-                            ir > 0 && DesktopPaint.EMPTY_MARK[ir - 1].charAt(ic) == '#',
-                            ic + 1 < idleRow.length() && idleRow.charAt(ic + 1) == '#',
+                            ir > 0 && DesktopPaint.EMPTY_MARK[ir - 1].charAt(ic) == '#'
+                                    ? DesktopPaint.emptyMarkWallInk(ir - 1, ic) : null,
+                            ic + 1 < idleRow.length() && idleRow.charAt(ic + 1) == '#'
+                                    ? DesktopPaint.emptyMarkWallInk(ir, ic + 1) : null,
                             ir + 1 < DesktopPaint.EMPTY_MARK.length
-                                    && DesktopPaint.EMPTY_MARK[ir + 1].charAt(ic) == '#',
-                            ic > 0 && idleRow.charAt(ic - 1) == '#',
+                                    && DesktopPaint.EMPTY_MARK[ir + 1].charAt(ic) == '#'
+                                    ? DesktopPaint.emptyMarkWallInk(ir + 1, ic) : null,
+                            ic > 0 && idleRow.charAt(ic - 1) == '#'
+                                    ? DesktopPaint.emptyMarkWallInk(ir, ic - 1) : null,
                             DesktopPaint.floorHi(mark, ir, ic, 1, 1));
                     paintFloorShine(g, DesktopPaint.floorHiStroke(
                             mark, tile.tileRow(), tile.tileCol()),
@@ -2045,12 +2049,20 @@ public class MainController {
                     paintFloorSkirts(g, layout, r, c, store.scaleX(), store.scaleY(),
                             DesktopPaint.endFloorInk(
                                     DesktopPaint.clearFloorInk(edge), tiles[r][c]),
-                            r > 0 && DesktopPaint.floorRole(tiles[r - 1][c]) == TileType.WALL,
+                            r > 0 && DesktopPaint.floorRole(tiles[r - 1][c]) == TileType.WALL
+                                    ? DesktopPaint.wallInk(DesktopPaint.floorEdge(layout, r - 1, c))
+                                    : null,
                             c + 1 < layout.tileCols()
-                                    && DesktopPaint.floorRole(tiles[r][c + 1]) == TileType.WALL,
+                                    && DesktopPaint.floorRole(tiles[r][c + 1]) == TileType.WALL
+                                    ? DesktopPaint.wallInk(DesktopPaint.floorEdge(layout, r, c + 1))
+                                    : null,
                             r + 1 < layout.tileRows()
-                                    && DesktopPaint.floorRole(tiles[r + 1][c]) == TileType.WALL,
-                            c > 0 && DesktopPaint.floorRole(tiles[r][c - 1]) == TileType.WALL,
+                                    && DesktopPaint.floorRole(tiles[r + 1][c]) == TileType.WALL
+                                    ? DesktopPaint.wallInk(DesktopPaint.floorEdge(layout, r + 1, c))
+                                    : null,
+                            c > 0 && DesktopPaint.floorRole(tiles[r][c - 1]) == TileType.WALL
+                                    ? DesktopPaint.wallInk(DesktopPaint.floorEdge(layout, r, c - 1))
+                                    : null,
                             DesktopPaint.floorHi(layout, r, c, 1,
                                     Math.min(store.scaleX(), store.scaleY())));
                     paintFloorShine(g, DesktopPaint.floorHiStroke(
@@ -2607,12 +2619,20 @@ public class MainController {
                 paintFloorSkirts(g, layout, r, c, scaleX, scaleY,
                         DesktopPaint.endFloorInk(
                                 DesktopPaint.fogFloor(fog, r, c, edge), tiles[r][c]),
-                        r > 0 && DesktopPaint.floorRole(tiles[r - 1][c]) == TileType.WALL,
+                        r > 0 && DesktopPaint.floorRole(tiles[r - 1][c]) == TileType.WALL
+                                ? DesktopPaint.fogWall(fog, r - 1, c,
+                                        DesktopPaint.floorEdge(layout, r - 1, c)) : null,
                         c + 1 < layout.tileCols()
-                                && DesktopPaint.floorRole(tiles[r][c + 1]) == TileType.WALL,
+                                && DesktopPaint.floorRole(tiles[r][c + 1]) == TileType.WALL
+                                ? DesktopPaint.fogWall(fog, r, c + 1,
+                                        DesktopPaint.floorEdge(layout, r, c + 1)) : null,
                         r + 1 < layout.tileRows()
-                                && DesktopPaint.floorRole(tiles[r + 1][c]) == TileType.WALL,
-                        c > 0 && DesktopPaint.floorRole(tiles[r][c - 1]) == TileType.WALL,
+                                && DesktopPaint.floorRole(tiles[r + 1][c]) == TileType.WALL
+                                ? DesktopPaint.fogWall(fog, r + 1, c,
+                                        DesktopPaint.floorEdge(layout, r + 1, c)) : null,
+                        c > 0 && DesktopPaint.floorRole(tiles[r][c - 1]) == TileType.WALL
+                                ? DesktopPaint.fogWall(fog, r, c - 1,
+                                        DesktopPaint.floorEdge(layout, r, c - 1)) : null,
                         DesktopPaint.floorHi(layout, r, c, intensity, Math.min(scaleX, scaleY)));
                 paintFloorShine(g, DesktopPaint.floorHiStroke(layout, r, c, intensity, scaleX, scaleY),
                         DesktopPaint.endFloorInk(
@@ -3146,23 +3166,26 @@ public class MainController {
     /** Paver edge against a post. The north edge stays off when the catch owns that row. */
     private static void paintFloorSkirts(GraphicsContext g, DesktopPaint.Layout layout,
                                           int r, int c, double scaleX, double scaleY,
-                                          String floorInk, boolean north, boolean east,
-                                          boolean south, boolean west, boolean catchOn) {
+                                          String floorInk, String northWall, String eastWall,
+                                          String southWall, String westWall, boolean catchOn) {
         if (floorInk == null) {
             return;
         }
-        Color ink = Color.web(DesktopPaint.floorSkirtInk(floorInk));
-        if (north && !catchOn) {
-            paintHairline(g, DesktopPaint.floorSkirtStroke(layout, r, c, scaleX, scaleY, 0), ink);
+        if (northWall != null && !catchOn) {
+            paintHairline(g, DesktopPaint.floorSkirtStroke(layout, r, c, scaleX, scaleY, 0),
+                    Color.web(DesktopPaint.floorSkirtInk(floorInk, northWall)));
         }
-        if (east) {
-            paintHairline(g, DesktopPaint.floorSkirtStroke(layout, r, c, scaleX, scaleY, 1), ink);
+        if (eastWall != null) {
+            paintHairline(g, DesktopPaint.floorSkirtStroke(layout, r, c, scaleX, scaleY, 1),
+                    Color.web(DesktopPaint.floorSkirtInk(floorInk, eastWall)));
         }
-        if (south) {
-            paintHairline(g, DesktopPaint.floorSkirtStroke(layout, r, c, scaleX, scaleY, 2), ink);
+        if (southWall != null) {
+            paintHairline(g, DesktopPaint.floorSkirtStroke(layout, r, c, scaleX, scaleY, 2),
+                    Color.web(DesktopPaint.floorSkirtInk(floorInk, southWall)));
         }
-        if (west) {
-            paintHairline(g, DesktopPaint.floorSkirtStroke(layout, r, c, scaleX, scaleY, 3), ink);
+        if (westWall != null) {
+            paintHairline(g, DesktopPaint.floorSkirtStroke(layout, r, c, scaleX, scaleY, 3),
+                    Color.web(DesktopPaint.floorSkirtInk(floorInk, westWall)));
         }
     }
 

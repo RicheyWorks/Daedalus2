@@ -232,11 +232,16 @@ class WebUiPaintPinTest {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
-            assertThat(js).contains("function paintFloorSkirt(g, geom, r, col, tiles, floorInk)")
+            assertThat(js).contains("function mixHex(a, b, t) {\n"
+                            + "    const n = h => h[0] === \"#\"")
+                    .contains("function paintFloorSkirt(g, geom, r, col, tiles, floorInk, postAt)")
+                    .contains("function postInk(rows, cols, r, col, fogLamp)")
+                    .contains("halfMix(floorInk, postAt(r - 1, col))")
                     .contains("g.fillRect(x, y + h - 1, w, 1)")
                     .contains("g.fillRect(x, y, 1, h)")
-                    .contains("paintFloorSkirt(g, geom, r, col, tiles, floorInk)")
-                    .contains("paintFloorSkirt(g, geom, r, c, tiles, bodyInk)");
+                    .contains("postInk(th, tw, nr, nc, null)")
+                    .contains("postInk(idleRows, idleCols, nr, nc, null)")
+                    .doesNotContain("halfMix(floorInk, COLORS.wall)");
         }
     }
 
