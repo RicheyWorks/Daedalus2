@@ -3048,6 +3048,10 @@ public class MainController {
         paintHairline(g, DesktopPaint.catchLip(shine),
                 Color.web(DesktopPaint.wallHiFeatherInk(bodyInk, shineInk)));
         paintHairline(g, shine, Color.web(shineInk));
+        Color end = Color.web(DesktopPaint.wallHiFeatherInk(shineInk, bodyInk));
+        for (DesktopPaint.Hairline cap : DesktopPaint.catchEnds(shine)) {
+            paintHairline(g, cap, end);
+        }
         paintHairline(g, DesktopPaint.wallHiFeather(shine),
                 Color.web(DesktopPaint.wallHiFeatherInk(shineInk, bodyInk)));
     }

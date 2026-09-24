@@ -2415,6 +2415,17 @@ public final class DesktopPaint {
         return mixHex(shine, wall, 0.5);
     }
 
+    /** Pixels beside a shine — the catch fades into the tile instead of stopping square. */
+    public static Hairline[] catchEnds(Hairline shine) {
+        if (shine == null) {
+            return new Hairline[0];
+        }
+        double cap = shine.h();
+        return new Hairline[] {
+                new Hairline(shine.x() - cap, shine.y(), cap, cap),
+                new Hairline(shine.x() + shine.w(), shine.y(), cap, cap)};
+    }
+
     public static int hexArgb(String hex) {
         int[] c = rgb(hex);
         return 0xFF000000 | (c[0] << 16) | (c[1] << 8) | c[2];

@@ -78,6 +78,9 @@
     g.fillStyle = ink;
     g.fillRect(x + 1, y + 1, span, 1);
     if (!wall) return;
+    g.fillStyle = halfMix(ink, wall);
+    g.fillRect(x, y + 1, 1, 1);
+    g.fillRect(x + w - 1, y + 1, 1, 1);
     g.fillStyle = halfMix(wall, ink);
     g.fillRect(x + 1, y, span, 1);
     g.fillStyle = halfMix(ink, wall);
@@ -89,6 +92,9 @@
     g.fillRect(x, y, w, 1);
     g.fillStyle = ink;
     g.fillRect(x, y + 1, w, 1);
+    g.fillStyle = halfMix(ink, body);
+    g.fillRect(x - 1, y + 1, 1, 1);
+    g.fillRect(x + w, y + 1, 1, 1);
     g.fillStyle = halfMix(ink, body);
     g.fillRect(x, y + 2, w, 1);
   }

@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well catch ends.**
+  The pixels beside a
+  post or corridor
+  shine mix halfway
+  into the tile. The
+  hairline fades out
+  instead of stopping
+  square.
+
 - **Well catch lip.**
   The row above a
   post or corridor
