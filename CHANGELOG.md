@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well catch corners.**
+  The lip and the
+  row under a shine
+  mix again at each
+  end. The catch
+  corners sink into
+  the tile.
+
 - **Well catch ends.**
   The pixels beside a
   post or corridor

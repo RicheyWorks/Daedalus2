@@ -190,6 +190,8 @@ class WebUiPaintPinTest {
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js)                    .contains("g.fillRect(x + 1, y + 1, span, 1)")
                     .contains("g.fillRect(x, y + 1, 1, 1)")
+                    .contains("g.fillRect(x, y, 1, 1)")
+                    .contains("g.fillRect(x, y + 2, 1, 1)")
                     .contains("g.fillRect(x + w - 1, y + 1, 1, 1)")
                     .contains("g.fillRect(x + 1, y, span, 1)")
                     .contains("g.fillRect(x + 1, y + 2, span, 1)")
@@ -207,6 +209,8 @@ class WebUiPaintPinTest {
                     .contains("g.fillRect(x, y, w, 1)")
                     .contains("g.fillRect(x, y + 1, w, 1)")
                     .contains("g.fillRect(x - 1, y + 1, 1, 1)")
+                    .contains("g.fillRect(x - 1, y, 1, 1)")
+                    .contains("g.fillRect(x - 1, y + 2, 1, 1)")
                     .contains("g.fillRect(x + w, y + 1, 1, 1)")
                     .contains("g.fillRect(x, y + 2, w, 1)")
                     .contains("paintFloorCatch(g, geom.offX[col] + 1, geom.offY[r], geom.cell - 2, hiInk, floorInk)")

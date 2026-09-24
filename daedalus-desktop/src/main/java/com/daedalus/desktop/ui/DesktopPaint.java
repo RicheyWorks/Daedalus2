@@ -2415,6 +2415,11 @@ public final class DesktopPaint {
         return mixHex(shine, wall, 0.5);
     }
 
+    /** Corner of the lip — the feather mixed halfway toward the tile again. */
+    public static String catchCornerInk(String shine, String body) {
+        return wallHiFeatherInk(wallHiFeatherInk(shine, body), body);
+    }
+
     /** Pixels beside a shine — the catch fades into the tile instead of stopping square. */
     public static Hairline[] catchEnds(Hairline shine) {
         if (shine == null) {

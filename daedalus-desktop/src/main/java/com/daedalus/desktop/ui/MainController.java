@@ -3045,15 +3045,21 @@ public class MainController {
 
     private static void paintCatchShine(GraphicsContext g, DesktopPaint.Hairline shine,
                                          String shineInk, String bodyInk) {
-        paintHairline(g, DesktopPaint.catchLip(shine),
-                Color.web(DesktopPaint.wallHiFeatherInk(bodyInk, shineInk)));
+        String feather = DesktopPaint.wallHiFeatherInk(shineInk, bodyInk);
+        Color edge = Color.web(feather);
+        Color corner = Color.web(DesktopPaint.catchCornerInk(shineInk, bodyInk));
+        paintHairline(g, DesktopPaint.catchLip(shine), edge);
         paintHairline(g, shine, Color.web(shineInk));
-        Color end = Color.web(DesktopPaint.wallHiFeatherInk(shineInk, bodyInk));
         for (DesktopPaint.Hairline cap : DesktopPaint.catchEnds(shine)) {
-            paintHairline(g, cap, end);
+            paintHairline(g, cap, edge);
         }
-        paintHairline(g, DesktopPaint.wallHiFeather(shine),
-                Color.web(DesktopPaint.wallHiFeatherInk(shineInk, bodyInk)));
+        paintHairline(g, DesktopPaint.wallHiFeather(shine), edge);
+        for (DesktopPaint.Hairline cap : DesktopPaint.catchEnds(DesktopPaint.catchLip(shine))) {
+            paintHairline(g, cap, corner);
+        }
+        for (DesktopPaint.Hairline cap : DesktopPaint.catchEnds(DesktopPaint.wallHiFeather(shine))) {
+            paintHairline(g, cap, corner);
+        }
     }
 
     private static void paintRing(GraphicsContext g, DesktopPaint.Ring ring, Color color) {
