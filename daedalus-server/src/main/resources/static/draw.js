@@ -107,7 +107,7 @@
     return endFloorInk(body, tile);
   }
 
-  function paintWallFoot(g, geom, r, col, tiles, wallInk, floorInk) {
+  function paintWallFoot(g, geom, r, col, tiles, wallInk, floorInk, paverAt) {
     if (!geom || geom.cell < 10 || !tiles || !floorInk || r + 1 >= tiles.length) return;
     if (tiles[r + 1][col] === "#") return;
     const x = geom.offX[col], y = geom.offY[r];
@@ -115,12 +115,18 @@
     if (w < 3 || h < 4) return;
     const span = Math.max(1, w - 2);
     const foot = halfMix(wallInk, floorInk);
-    const corner = halfMix(foot, wallInk);
     const yb = y + h - 1;
+    const cap = side => side
+        ? halfMix(foot, halfMix(wallInk, side))
+        : halfMix(foot, wallInk);
+    const left = paverAt && col > 0 && tiles[r][col - 1] !== "#" ? paverAt(r, col - 1) : null;
+    const right = paverAt && col + 1 < tiles[r].length && tiles[r][col + 1] !== "#"
+        ? paverAt(r, col + 1) : null;
     g.fillStyle = foot;
     g.fillRect(x + 1, yb, span, 1);
-    g.fillStyle = corner;
+    g.fillStyle = cap(left);
     g.fillRect(x, yb, 1, 1);
+    g.fillStyle = cap(right);
     g.fillRect(x + w - 1, yb, 1, 1);
   }
 
@@ -708,12 +714,11 @@
                        geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
             const lampHi = mixHex(COLORS.wallHi, COLORS.wallWarm, lamp * 0.28);
             paintWallHi(g, geom, r, col, mixHex(lampHi, COLORS.unseen, 0.28 * edge), wallInk);
+            const fogPaver = (nr, nc) => paverInk(th, tw, nr, nc, tiles[nr][nc],
+                fogLamp(scene.fog, nr, nc) * fogFrontier(scene.fog, nr, nc));
             paintWallFoot(g, geom, r, col, tiles, wallInk,
-                r + 1 < th ? paverInk(th, tw, r + 1, col, tiles[r + 1][col],
-                    fogLamp(scene.fog, r + 1, col) * fogFrontier(scene.fog, r + 1, col)) : null);
-            paintWallSide(g, geom, r, col, tiles, wallInk,
-                (nr, nc) => paverInk(th, tw, nr, nc, tiles[nr][nc],
-                    fogLamp(scene.fog, nr, nc) * fogFrontier(scene.fog, nr, nc)));
+                r + 1 < th ? fogPaver(r + 1, col) : null, fogPaver);
+            paintWallSide(g, geom, r, col, tiles, wallInk, fogPaver);
           } else {
             const cx = (tw - 1) / 2, cy = (th - 1) / 2;
             const dx = (col - cx) / Math.max(1, tw / 2);
@@ -726,10 +731,10 @@
                        geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
             const hi = mixHex(COLORS.wallHi, COLORS.wallWarm, 0.28);
             paintWallHi(g, geom, r, col, mixHex(hi, COLORS.unseen, 0.28 * edge), wallInk);
+            const clearPaver = (nr, nc) => paverInk(th, tw, nr, nc, tiles[nr][nc], null);
             paintWallFoot(g, geom, r, col, tiles, wallInk,
-                r + 1 < th ? paverInk(th, tw, r + 1, col, tiles[r + 1][col], null) : null);
-            paintWallSide(g, geom, r, col, tiles, wallInk,
-                (nr, nc) => paverInk(th, tw, nr, nc, tiles[nr][nc], null));
+                r + 1 < th ? clearPaver(r + 1, col) : null, clearPaver);
+            paintWallSide(g, geom, r, col, tiles, wallInk, clearPaver);
           }
           continue;
         }
@@ -1194,10 +1199,10 @@
         paintWallHi(g, geom, r, c, mixHex(idleWallHi, COLORS.unseen, 0.28 * edge),
             mixHex(idleWall, COLORS.unseen, 0.28 * edge));
         const idlePost = mixHex(idleWall, COLORS.unseen, 0.28 * edge);
+        const idlePaver = (nr, nc) => paverInk(idleRows, idleCols, nr, nc, tiles[nr][nc], null);
         paintWallFoot(g, geom, r, c, tiles, idlePost,
-            r + 1 < tiles.length ? paverInk(idleRows, idleCols, r + 1, c, tiles[r + 1][c], null) : null);
-        paintWallSide(g, geom, r, c, tiles, idlePost,
-            (nr, nc) => paverInk(idleRows, idleCols, nr, nc, tiles[nr][nc], null));
+            r + 1 < tiles.length ? idlePaver(r + 1, c) : null, idlePaver);
+        paintWallSide(g, geom, r, c, tiles, idlePost, idlePaver);
       }
     }
     g.globalAlpha = 0.36 + 0.10 * w0;

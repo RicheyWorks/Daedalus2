@@ -2515,6 +2515,15 @@ public final class DesktopPaint {
         return mixHex(wall, floor, 0.5);
     }
 
+    /** Foot end. A closed side sinks into the post; an open side meets that paver too. */
+    public static String wallFootCornerInk(String wall, String floor, String side) {
+        String foot = wallFootInk(wall, floor);
+        if (side == null) {
+            return wallHiFeatherInk(foot, wall);
+        }
+        return mixHex(foot, wallFootInk(wall, side), 0.5);
+    }
+
     /** Row under the post shine — half the catch, half the wall, same as the vault lip. */
     public static Hairline wallHiFeather(Hairline shine) {
         if (shine == null) {

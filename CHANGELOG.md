@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well foot corner.**
+  An open side of
+  a post mixes the
+  foot corner with
+  that paver.
+  A closed side
+  still sinks into
+  the post.
+
 - **Well post paver.**
   The base and the
   open side of a
