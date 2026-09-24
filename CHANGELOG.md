@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well floor skirt.**
+  A paver against
+  a post mixes that
+  edge toward the
+  wall. The catch
+  on an odd cell
+  keeps the north
+  edge.
+
 - **Well wall sides.**
   A post open onto
   a passage mixes

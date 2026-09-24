@@ -2448,6 +2448,39 @@ public final class DesktopPaint {
         return new Hairline(x, layout.y(tileRow) + 3 * py, px, span);
     }
 
+    /** Floor edge against a post. Side 0 north, 1 east, 2 south, 3 west. */
+    public static Hairline floorSkirtStroke(Layout layout, int tileRow, int tileCol,
+                                             double scaleX, double scaleY, int side) {
+        double sx = scaleX > 0 ? scaleX : 1;
+        double sy = scaleY > 0 ? scaleY : 1;
+        if (layout == null || !shineCell(layout.cellSize(), Math.min(sx, sy))) {
+            return null;
+        }
+        double w = layout.w(tileCol);
+        double h = layout.h(tileRow);
+        if (bitmapPx(w, sx) < 3 || bitmapPx(h, sy) < 3) {
+            return null;
+        }
+        double px = devicePx(scaleX);
+        double py = devicePx(scaleY);
+        double x = layout.x(tileCol);
+        double y = layout.y(tileRow);
+        if (side == 0) {
+            return new Hairline(x, y, w, py);
+        }
+        if (side == 1) {
+            return new Hairline(x + w - px, y, px, h);
+        }
+        if (side == 2) {
+            return new Hairline(x, y + h - py, w, py);
+        }
+        return new Hairline(x, y, px, h);
+    }
+
+    public static String floorSkirtInk(String floor) {
+        return mixHex(floor, FOG_WALL, 0.5);
+    }
+
     public static String wallFootInk(String wall) {
         return mixHex(wall, FLOOR_DIM, 0.5);
     }
