@@ -10,6 +10,16 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well side join.**
+  The top of an
+  open post side
+  mixes toward the
+  catch under the
+  shine. The rest
+  of that side
+  stays with the
+  paver.
+
 - **Well foot corner.**
   An open side of
   a post mixes the

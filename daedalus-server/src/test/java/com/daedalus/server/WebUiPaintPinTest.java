@@ -224,10 +224,11 @@ class WebUiPaintPinTest {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
-            assertThat(js).contains("function paintWallSide(g, geom, r, col, tiles, wallInk, paverAt)")
+            assertThat(js).contains("function paintWallSide(g, geom, r, col, tiles, wallInk, paverAt, shineInk)")
                     .contains("halfMix(wallInk, paverAt(r, col - 1))")
-                    .contains("g.fillRect(x, y + 3, 1, span)")
-                    .contains("g.fillRect(x + w - 1, y + 3, 1, span)")
+                    .contains("halfMix(sideInk, halfMix(shineInk, wallInk))")
+                    .contains("g.fillRect(sx, y + 3, 1, 1)")
+                    .contains("g.fillRect(sx, y + 4, 1, span - 1)")
                     .contains("paintWallSide(g, geom, r, col, tiles, wallInk,")
                     .contains("paintWallSide(g, geom, r, c, tiles,");
         }
