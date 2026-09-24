@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well wall sides.**
+  A post open onto
+  a passage mixes
+  that side toward
+  the paver.
+  The catch and the
+  base stay clear
+  of that strip.
+
 - **Well wall foot.**
   A post that sits
   on open floor

@@ -1904,6 +1904,18 @@ public class MainController {
                                 DesktopPaint.emptyMarkWallInk(
                                         tile.tileRow(), tile.tileCol()));
                     }
+                    String idleRow = DesktopPaint.EMPTY_MARK[tile.tileRow()];
+                    String idleInk = DesktopPaint.emptyMarkWallInk(
+                            tile.tileRow(), tile.tileCol());
+                    if (tile.tileCol() > 0 && idleRow.charAt(tile.tileCol() - 1) != '#') {
+                        paintWallSide(g, DesktopPaint.wallSideStroke(
+                                mark, tile.tileRow(), tile.tileCol(), 1, 1, false), idleInk);
+                    }
+                    if (tile.tileCol() + 1 < idleRow.length()
+                            && idleRow.charAt(tile.tileCol() + 1) != '#') {
+                        paintWallSide(g, DesktopPaint.wallSideStroke(
+                                mark, tile.tileRow(), tile.tileCol(), 1, 1, true), idleInk);
+                    }
                 }
                 g.setGlobalAlpha(DesktopPaint.emptyMarkFloorAlpha(wave));
                 for (DesktopPaint.TileRect tile : DesktopPaint.emptyMarkFloors()) {
@@ -1995,6 +2007,17 @@ public class MainController {
                             && DesktopPaint.floorRole(tiles[r + 1][c]) != TileType.WALL) {
                         paintWallFoot(g, DesktopPaint.wallFootStroke(
                                 layout, r, c, store.scaleX(), store.scaleY()),
+                                DesktopPaint.wallInk(edge));
+                    }
+                    if (c > 0 && DesktopPaint.floorRole(tiles[r][c - 1]) != TileType.WALL) {
+                        paintWallSide(g, DesktopPaint.wallSideStroke(
+                                layout, r, c, store.scaleX(), store.scaleY(), false),
+                                DesktopPaint.wallInk(edge));
+                    }
+                    if (c + 1 < layout.tileCols()
+                            && DesktopPaint.floorRole(tiles[r][c + 1]) != TileType.WALL) {
+                        paintWallSide(g, DesktopPaint.wallSideStroke(
+                                layout, r, c, store.scaleX(), store.scaleY(), true),
                                 DesktopPaint.wallInk(edge));
                     }
                     continue;
@@ -2541,6 +2564,17 @@ public class MainController {
                         paintWallFoot(g, DesktopPaint.wallFootStroke(layout, r, c, scaleX, scaleY),
                                 DesktopPaint.fogWall(fog, r, c, edge));
                     }
+                    if (c > 0 && DesktopPaint.floorRole(tiles[r][c - 1]) != TileType.WALL) {
+                        paintWallSide(g, DesktopPaint.wallSideStroke(
+                                layout, r, c, scaleX, scaleY, false),
+                                DesktopPaint.fogWall(fog, r, c, edge));
+                    }
+                    if (c + 1 < layout.tileCols()
+                            && DesktopPaint.floorRole(tiles[r][c + 1]) != TileType.WALL) {
+                        paintWallSide(g, DesktopPaint.wallSideStroke(
+                                layout, r, c, scaleX, scaleY, true),
+                                DesktopPaint.fogWall(fog, r, c, edge));
+                    }
                     continue;
                 }
                 double edge = DesktopPaint.floorEdge(layout, r, c);
@@ -3067,6 +3101,14 @@ public class MainController {
         for (DesktopPaint.Hairline cap : DesktopPaint.catchEnds(foot)) {
             paintHairline(g, cap, corner);
         }
+    }
+
+    /** Open side of a post, so the wall meets the paver beside it. */
+    private static void paintWallSide(GraphicsContext g, DesktopPaint.Hairline side, String wallInk) {
+        if (side == null || wallInk == null) {
+            return;
+        }
+        paintHairline(g, side, Color.web(DesktopPaint.wallFootInk(wallInk)));
     }
 
     /** Corridor shine plus the row under it, so the catch feathers into the paver. */

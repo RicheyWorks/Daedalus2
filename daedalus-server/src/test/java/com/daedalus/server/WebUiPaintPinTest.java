@@ -215,6 +215,19 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wallSideMeetsTheFloor() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js).contains("function paintWallSide(g, geom, r, col, tiles, wallInk)")
+                    .contains("g.fillRect(x, y + 3, 1, span)")
+                    .contains("g.fillRect(x + w - 1, y + 3, 1, span)")
+                    .contains("paintWallSide(g, geom, r, col, tiles, wallInk)")
+                    .contains("paintWallSide(g, geom, r, c, tiles,");
+        }
+    }
+
+    @Test
     void floorShineFeathersIntoThePaver() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();

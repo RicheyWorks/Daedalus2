@@ -2425,6 +2425,29 @@ public final class DesktopPaint {
         return new Hairline(layout.x(tileCol) + px, y, Math.max(px, w - 2 * px), py);
     }
 
+    /** Open side of a post — the joint leans toward the paver, clear of the catch and the foot. */
+    public static Hairline wallSideStroke(Layout layout, int tileRow, int tileCol,
+                                           double scaleX, double scaleY, boolean right) {
+        double sx = scaleX > 0 ? scaleX : 1;
+        double sy = scaleY > 0 ? scaleY : 1;
+        if (layout == null || !shineCell(layout.cellSize(), Math.min(sx, sy))) {
+            return null;
+        }
+        double w = layout.w(tileCol);
+        double h = layout.h(tileRow);
+        if (bitmapPx(w, sx) < 4 || bitmapPx(h, sy) < 5) {
+            return null;
+        }
+        double px = devicePx(scaleX);
+        double py = devicePx(scaleY);
+        double span = h - 4 * py;
+        if (span < py) {
+            return null;
+        }
+        double x = right ? layout.x(tileCol) + w - px : layout.x(tileCol);
+        return new Hairline(x, layout.y(tileRow) + 3 * py, px, span);
+    }
+
     public static String wallFootInk(String wall) {
         return mixHex(wall, FLOOR_DIM, 0.5);
     }
