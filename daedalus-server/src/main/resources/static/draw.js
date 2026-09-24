@@ -167,7 +167,7 @@
     return mixHex(warm, COLORS.unseen, 0.28 * edge);
   }
 
-  function paintFloorSkirt(g, geom, r, col, tiles, floorInk, postAt) {
+  function paintFloorSkirt(g, geom, r, col, tiles, floorInk, postAt, shineInk) {
     if (!geom || geom.cell < 10 || !tiles || !tiles[r] || !postAt) return;
     const x = geom.offX[col], y = geom.offY[r];
     const w = geom.offX[col + 1] - x, h = geom.offY[r + 1] - y;
@@ -208,6 +208,17 @@
     if (south && east) {
       g.fillStyle = halfMix(halfMix(floorInk, postAt(r + 1, col)), halfMix(floorInk, postAt(r, col + 1)));
       g.fillRect(x + w - 1, y + h - 1, 1, 1);
+    }
+    if (catchOn && shineInk && h > 4) {
+      const corner = halfMix(halfMix(shineInk, floorInk), floorInk);
+      if (west) {
+        g.fillStyle = halfMix(halfMix(floorInk, postAt(r, col - 1)), corner);
+        g.fillRect(x, y + 3, 1, 1);
+      }
+      if (east) {
+        g.fillStyle = halfMix(halfMix(floorInk, postAt(r, col + 1)), corner);
+        g.fillRect(x + w - 1, y + 3, 1, 1);
+      }
     }
   }
 
@@ -767,12 +778,13 @@
           g.fillStyle = floorInk;
           g.fillRect(geom.offX[col], geom.offY[r],
                      geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
+          const lampHi = mixHex(COLORS.floorHi, COLORS.floorWarm, lamp * 0.28);
+          const hiInk = r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7
+              ? endFloorInk(mixHex(lampHi, COLORS.floorDim, 0.22 * edge), t) : null;
           paintFloorSkirt(g, geom, r, col, tiles, floorInk,
               (nr, nc) => postInk(th, tw, nr, nc,
-                  fogLamp(scene.fog, nr, nc) * fogFrontier(scene.fog, nr, nc)));
-          if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
-            const lampHi = mixHex(COLORS.floorHi, COLORS.floorWarm, lamp * 0.28);
-            const hiInk = endFloorInk(mixHex(lampHi, COLORS.floorDim, 0.22 * edge), t);
+                  fogLamp(scene.fog, nr, nc) * fogFrontier(scene.fog, nr, nc)), hiInk);
+          if (hiInk) {
             paintFloorCatch(g, geom.offX[col] + 1, geom.offY[r], geom.cell - 2, hiInk, floorInk);
           }
         } else {
@@ -786,11 +798,12 @@
           g.fillStyle = floorInk;
           g.fillRect(geom.offX[col], geom.offY[r],
                      geom.offX[col + 1] - geom.offX[col], geom.offY[r + 1] - geom.offY[r]);
+          const hi = mixHex(COLORS.floorHi, COLORS.floorWarm, 0.28);
+          const hiInk = r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7
+              ? endFloorInk(mixHex(hi, COLORS.floorDim, 0.22 * edge), t) : null;
           paintFloorSkirt(g, geom, r, col, tiles, floorInk,
-              (nr, nc) => postInk(th, tw, nr, nc, null));
-          if (r % 2 === 1 && col % 2 === 1 && geom.cell >= 10 && lamp > 0.7) {
-            const hi = mixHex(COLORS.floorHi, COLORS.floorWarm, 0.28);
-            const hiInk = endFloorInk(mixHex(hi, COLORS.floorDim, 0.22 * edge), t);
+              (nr, nc) => postInk(th, tw, nr, nc, null), hiInk);
+          if (hiInk) {
             paintFloorCatch(g, geom.offX[col] + 1, geom.offY[r], geom.cell - 2, hiInk, floorInk);
           }
         }
@@ -1236,8 +1249,11 @@
         g.fillStyle = bodyInk;
         g.fillRect(geom.offX[c], geom.offY[r],
                    geom.offX[c + 1] - geom.offX[c], geom.offY[r + 1] - geom.offY[r]);
+        const idleHi = endFloorInk(mixHex(mixHex(COLORS.floorHi, COLORS.floorWarm, 0.28),
+            COLORS.floorDim, 0.22 * edge), end);
         paintFloorSkirt(g, geom, r, c, tiles, bodyInk,
-            (nr, nc) => postInk(idleRows, idleCols, nr, nc, null));
+            (nr, nc) => postInk(idleRows, idleCols, nr, nc, null),
+            r % 2 === 1 && c % 2 === 1 && geom.cell >= 10 ? idleHi : null);
       }
     }
     const idleHi = mixHex(COLORS.floorHi, COLORS.floorWarm, 0.28);

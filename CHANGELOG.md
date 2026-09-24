@@ -10,6 +10,16 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well skirt join.**
+  The side of a
+  paver just under
+  the catch mixes
+  toward that catch
+  corner. The catch
+  itself stays on
+  the top of the
+  tile.
+
 - **Well side heel.**
   The bottom of an
   open post side

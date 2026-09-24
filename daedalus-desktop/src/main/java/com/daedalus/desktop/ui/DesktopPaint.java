@@ -2503,12 +2503,31 @@ public final class DesktopPaint {
         return new Hairline(x, y, px, py);
     }
 
+    /** Pixel under the catch on a side skirt. Null when the tile is too short to clear the south edge. */
+    public static Hairline floorSkirtJoin(Layout layout, int tileRow, int tileCol,
+                                           double scaleX, double scaleY, boolean east) {
+        Hairline side = floorSkirtStroke(layout, tileRow, tileCol, scaleX, scaleY, east ? 1 : 3);
+        if (side == null) {
+            return null;
+        }
+        double py = devicePx(scaleY);
+        if (side.h() <= 4 * py) {
+            return null;
+        }
+        return new Hairline(side.x(), side.y() + 3 * py, side.w(), py);
+    }
+
     public static String floorSkirtInk(String floor, String wall) {
         return mixHex(floor, wall, 0.5);
     }
 
     public static String floorSkirtCornerInk(String floor, String wallA, String wallB) {
         return mixHex(floorSkirtInk(floor, wallA), floorSkirtInk(floor, wallB), 0.5);
+    }
+
+    /** Side skirt just under the catch, halfway toward that catch corner. */
+    public static String floorSkirtJoinInk(String floor, String wall, String shine) {
+        return mixHex(floorSkirtInk(floor, wall), catchCornerInk(shine, floor), 0.5);
     }
 
     public static String wallFootInk(String wall, String floor) {

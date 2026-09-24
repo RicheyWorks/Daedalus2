@@ -1962,7 +1962,9 @@ public class MainController {
                                     ? DesktopPaint.emptyMarkWallInk(ir + 1, ic) : null,
                             ic > 0 && idleRow.charAt(ic - 1) == '#'
                                     ? DesktopPaint.emptyMarkWallInk(ir, ic - 1) : null,
-                            DesktopPaint.floorHi(mark, ir, ic, 1, 1));
+                            DesktopPaint.floorHi(mark, ir, ic, 1, 1),
+                            DesktopPaint.floorHi(mark, ir, ic, 1, 1)
+                                    ? DesktopPaint.emptyMarkFloorHiInk(ir, ic) : null);
                     paintFloorShine(g, DesktopPaint.floorHiStroke(
                             mark, tile.tileRow(), tile.tileCol()),
                             DesktopPaint.emptyMarkFloorHiInk(tile.tileRow(), tile.tileCol()),
@@ -2124,7 +2126,11 @@ public class MainController {
                                     ? DesktopPaint.wallInk(DesktopPaint.floorEdge(layout, r, c - 1))
                                     : null,
                             DesktopPaint.floorHi(layout, r, c, 1,
-                                    Math.min(store.scaleX(), store.scaleY())));
+                                    Math.min(store.scaleX(), store.scaleY())),
+                            DesktopPaint.floorHi(layout, r, c, 1,
+                                    Math.min(store.scaleX(), store.scaleY()))
+                                    ? DesktopPaint.endFloorInk(
+                                            DesktopPaint.clearFloorHiInk(edge), tiles[r][c]) : null);
                     paintFloorShine(g, DesktopPaint.floorHiStroke(
                             layout, r, c, store.scaleX(), store.scaleY()),
                             DesktopPaint.endFloorInk(
@@ -2730,7 +2736,11 @@ public class MainController {
                         c > 0 && DesktopPaint.floorRole(tiles[r][c - 1]) == TileType.WALL
                                 ? DesktopPaint.fogWall(fog, r, c - 1,
                                         DesktopPaint.floorEdge(layout, r, c - 1)) : null,
-                        DesktopPaint.floorHi(layout, r, c, intensity, Math.min(scaleX, scaleY)));
+                        DesktopPaint.floorHi(layout, r, c, intensity, Math.min(scaleX, scaleY)),
+                        DesktopPaint.floorHi(layout, r, c, intensity, Math.min(scaleX, scaleY))
+                                ? DesktopPaint.endFloorInk(
+                                        DesktopPaint.fogFloorHiInk(intensity, edge), tiles[r][c])
+                                : null);
                 paintFloorShine(g, DesktopPaint.floorHiStroke(layout, r, c, intensity, scaleX, scaleY),
                         DesktopPaint.endFloorInk(
                                 DesktopPaint.fogFloorHiInk(intensity, edge), tiles[r][c]),
@@ -3289,7 +3299,8 @@ public class MainController {
     private static void paintFloorSkirts(GraphicsContext g, DesktopPaint.Layout layout,
                                           int r, int c, double scaleX, double scaleY,
                                           String floorInk, String northWall, String eastWall,
-                                          String southWall, String westWall, boolean catchOn) {
+                                          String southWall, String westWall, boolean catchOn,
+                                          String shineInk) {
         if (floorInk == null) {
             return;
         }
@@ -3324,6 +3335,16 @@ public class MainController {
         if (southWall != null && westWall != null) {
             paintHairline(g, DesktopPaint.floorSkirtCorner(layout, r, c, scaleX, scaleY, 3),
                     Color.web(DesktopPaint.floorSkirtCornerInk(floorInk, southWall, westWall)));
+        }
+        if (catchOn && shineInk != null) {
+            if (westWall != null) {
+                paintHairline(g, DesktopPaint.floorSkirtJoin(layout, r, c, scaleX, scaleY, false),
+                        Color.web(DesktopPaint.floorSkirtJoinInk(floorInk, westWall, shineInk)));
+            }
+            if (eastWall != null) {
+                paintHairline(g, DesktopPaint.floorSkirtJoin(layout, r, c, scaleX, scaleY, true),
+                        Color.web(DesktopPaint.floorSkirtJoinInk(floorInk, eastWall, shineInk)));
+            }
         }
     }
 

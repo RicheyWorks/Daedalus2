@@ -243,7 +243,9 @@ class WebUiPaintPinTest {
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             assertThat(js).contains("function mixHex(a, b, t) {\n"
                             + "    const n = h => h[0] === \"#\"")
-                    .contains("function paintFloorSkirt(g, geom, r, col, tiles, floorInk, postAt)")
+                    .contains("function paintFloorSkirt(g, geom, r, col, tiles, floorInk, postAt, shineInk)")
+                    .contains("halfMix(halfMix(floorInk, postAt(r, col - 1)), corner)")
+                    .contains("g.fillRect(x, y + 3, 1, 1)")
                     .contains("function postInk(rows, cols, r, col, fogLamp)")
                     .contains("halfMix(floorInk, postAt(r - 1, col))")
                     .contains("g.fillRect(x, y + h - 1, 1, 1)")
