@@ -10,6 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore vault seam.**
+  Vault planks mix
+  where the lid meets
+  the next board,
+  including the corner.
+
 - **Well rock cells.**
   A sealed cell wears
   the floor instead of

@@ -485,6 +485,23 @@ class ExplorePaintTest {
         int[] vaultLid = ExplorePaint.ceilingFace(2, 0);
         assertThat(ExplorePaint.ceilingTexColor(2, 0)[0])
                 .isEqualTo((vaultLid[0] + vaultShine[0]) / 2);
+        int[] plank = ExplorePaint.ceilingFace(7, 4);
+        int[] plankNext = ExplorePaint.ceilingFace(8, 4);
+        assertThat(ExplorePaint.ceilingTexColor(7, 4)[0])
+                .isEqualTo((plank[0] + plankNext[0]) / 2);
+        assertThat(ExplorePaint.ceilingTexColor(4, 4))
+                .containsExactly(ExplorePaint.ceilingFace(4, 4));
+        int[] vaultCorner = ExplorePaint.ceilingFace(7, 7);
+        int[] vaultSide = ExplorePaint.ceilingFace(8, 7);
+        int[] vaultDown = ExplorePaint.ceilingFace(7, 8);
+        int[] vaultDiag = ExplorePaint.ceilingFace(8, 8);
+        assertThat(ExplorePaint.ceilingTexColor(7, 7)[0])
+                .isEqualTo((vaultCorner[0] + vaultSide[0] + vaultDown[0] + vaultDiag[0]) / 4);
+        int[] underPlank = ExplorePaint.ceilingFace(7, 2);
+        int[] underNext = ExplorePaint.ceilingFace(8, 2);
+        int underSeam = (underPlank[0] + underNext[0]) / 2;
+        assertThat(ExplorePaint.ceilingTexColor(7, 2)[0])
+                .isEqualTo((underSeam + ExplorePaint.ceilingFace(7, 1)[0]) / 2);
         assertThat(ExplorePaint.CEILING_TEX_HI_R).isGreaterThan(ExplorePaint.CEILING_TEX_R);
         assertThat(ExplorePaint.CEILING_TEX_HI_R).isGreaterThan(ExplorePaint.CEILING_TEX_HI_B);
         assertThat(ExplorePaint.CEILING_TEX_HI_R).isEqualTo(ExplorePaint.FLOOR_TEX_WARM_R);

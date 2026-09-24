@@ -966,18 +966,43 @@ public final class ExplorePaint {
         });
     }
 
-    /** Unshaded vault texel. The rows above and under the catch mix toward the shine. */
+    /** Unshaded vault texel. Plank edges mix, and the rows beside the catch feather. */
     public static int[] ceilingTexColor(int x, int y) {
         int[] here = ceilingFace(x, y);
         int band = y & 7;
+        int[] color = band == 0 ? here : ceilingSeam(x, y, here);
         if (band != 0 && band != 2) {
-            return here;
+            return color;
         }
         int[] shine = ceilingFace(x, band == 0 ? y + 1 : y - 1);
         return new int[] {
-                (here[0] + shine[0]) / 2,
-                (here[1] + shine[1]) / 2,
-                (here[2] + shine[2]) / 2};
+                (color[0] + shine[0]) / 2,
+                (color[1] + shine[1]) / 2,
+                (color[2] + shine[2]) / 2};
+    }
+
+    private static int[] ceilingSeam(int x, int y, int[] here) {
+        int lx = Math.floorMod(x, 8);
+        int ly = Math.floorMod(y, 8);
+        int hx = lx == 0 ? x - 1 : lx == 7 ? x + 1 : x;
+        int hy = ly == 0 ? y - 1 : ly == 7 ? y + 1 : y;
+        if (hx != x && hy != y) {
+            int[] side = ceilingFace(hx, y);
+            int[] down = ceilingFace(x, hy);
+            int[] diag = ceilingFace(hx, hy);
+            return new int[] {
+                    (here[0] + side[0] + down[0] + diag[0]) / 4,
+                    (here[1] + side[1] + down[1] + diag[1]) / 4,
+                    (here[2] + side[2] + down[2] + diag[2]) / 4};
+        }
+        if (hx == x && hy == y) {
+            return here;
+        }
+        int[] next = ceilingFace(hx, hy);
+        return new int[] {
+                (here[0] + next[0]) / 2,
+                (here[1] + next[1]) / 2,
+                (here[2] + next[2]) / 2};
     }
 
     public static int[] ceilingFace(int x, int y) {
