@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well north skirt.**
+  A dark floor
+  still meets the
+  post along its
+  north edge. The
+  catch keeps that
+  edge when it
+  paints.
+
 - **Well skirt join.**
   The side of a
   paver just under

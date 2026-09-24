@@ -172,7 +172,7 @@
     const x = geom.offX[col], y = geom.offY[r];
     const w = geom.offX[col + 1] - x, h = geom.offY[r + 1] - y;
     if (w < 3 || h < 3) return;
-    const catchOn = r % 2 === 1 && col % 2 === 1;
+    const catchOn = r % 2 === 1 && col % 2 === 1 && shineInk;
     if (!catchOn && r > 0 && tiles[r - 1][col] === "#") {
       g.fillStyle = halfMix(floorInk, postAt(r - 1, col));
       g.fillRect(x, y, w, 1);
