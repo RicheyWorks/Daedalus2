@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well posts.**
+  A crossing post
+  stays stone in the
+  live maze, the same
+  as the idle mark
+  and the desktop.
+
 - **Well catch corners.**
   The lip and the
   row under a shine

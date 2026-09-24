@@ -593,8 +593,7 @@
       for (let col = 0; col < tw; col++) {
         const t = tiles[r][col];
         if (!fogRevealsTile(scene.fog, r, col)) continue;
-        const wallTile = t === "#"
-            && !(r % 2 === 0 && col % 2 === 0 && isInteriorPost(tiles, r, col));
+        const wallTile = t === "#";
         if (wallTile) {
           if (scene.fog) {
             const lamp = fogLamp(scene.fog, r, col) * fogFrontier(scene.fog, r, col);

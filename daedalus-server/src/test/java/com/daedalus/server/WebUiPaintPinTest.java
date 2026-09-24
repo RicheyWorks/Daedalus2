@@ -219,6 +219,16 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void liveWellKeepsInteriorPosts() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js).contains("const wallTile = t === \"#\";")
+                    .doesNotContain("isInteriorPost(tiles, r, col)");
+        }
+    }
+
+    @Test
     void wellEmptyWordmarkHasRimDepth() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
