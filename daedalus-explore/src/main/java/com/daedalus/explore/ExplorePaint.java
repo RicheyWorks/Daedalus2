@@ -970,7 +970,7 @@ public final class ExplorePaint {
     public static int[] ceilingTexColor(int x, int y) {
         int[] here = ceilingFace(x, y);
         int band = y & 7;
-        int[] color = band == 0 ? here : ceilingSeam(x, y, here);
+        int[] color = band == 0 ? ceilingSeamX(x, y, here) : ceilingSeam(x, y, here);
         if (band != 0 && band != 2) {
             return color;
         }
@@ -999,6 +999,19 @@ public final class ExplorePaint {
             return here;
         }
         int[] next = ceilingFace(hx, hy);
+        return new int[] {
+                (here[0] + next[0]) / 2,
+                (here[1] + next[1]) / 2,
+                (here[2] + next[2]) / 2};
+    }
+
+    /** Vertical plank joint on the lip row, leaving the shine mix alone. */
+    private static int[] ceilingSeamX(int x, int y, int[] here) {
+        int lx = Math.floorMod(x, 8);
+        if (lx != 0 && lx != 7) {
+            return here;
+        }
+        int[] next = ceilingFace(lx == 0 ? x - 1 : x + 1, y);
         return new int[] {
                 (here[0] + next[0]) / 2,
                 (here[1] + next[1]) / 2,

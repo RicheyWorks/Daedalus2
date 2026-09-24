@@ -485,6 +485,11 @@ class ExplorePaintTest {
         int[] vaultLid = ExplorePaint.ceilingFace(2, 0);
         assertThat(ExplorePaint.ceilingTexColor(2, 0)[0])
                 .isEqualTo((vaultLid[0] + vaultShine[0]) / 2);
+        int[] vaultLipPlank = ExplorePaint.ceilingFace(7, 0);
+        int[] vaultLipNext = ExplorePaint.ceilingFace(8, 0);
+        int vaultLipSeam = (vaultLipPlank[0] + vaultLipNext[0]) / 2;
+        assertThat(ExplorePaint.ceilingTexColor(7, 0)[0])
+                .isEqualTo((vaultLipSeam + ExplorePaint.ceilingFace(7, 1)[0]) / 2);
         int[] plank = ExplorePaint.ceilingFace(7, 4);
         int[] plankNext = ExplorePaint.ceilingFace(8, 4);
         assertThat(ExplorePaint.ceilingTexColor(7, 4)[0])

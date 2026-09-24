@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore vault lip seam.**
+  The row above the
+  catch mixes across
+  the plank joint.
+  The shine line stays
+  on that row.
+
 - **Explore vault seam.**
   Vault planks mix
   where the lid meets
