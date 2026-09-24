@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well post paver.**
+  The base and the
+  open side of a
+  post mix toward
+  the paver they
+  touch, the same
+  stone that floor
+  is painted.
+
 - **Well skirt corner.**
   Where two posts
   meet a paver,

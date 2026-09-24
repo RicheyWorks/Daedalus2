@@ -827,7 +827,9 @@ class DesktopPaintTest {
         assertThat(foot.y()).isEqualTo(roomy.y(0) + roomy.h(0) - foot.h());
         assertThat(foot.x()).isEqualTo(wallStripe.x());
         assertThat(DesktopPaint.wallFootStroke(null, 0, 1, 1, 1)).isNull();
-        assertThat(DesktopPaint.wallFootInk("#120e0c"))
+        assertThat(DesktopPaint.wallFootInk("#120e0c", "#484339"))
+                .isEqualTo(DesktopPaint.mixHex("#120e0c", "#484339", 0.5));
+        assertThat(DesktopPaint.wallFootInk("#120e0c", DesktopPaint.FLOOR_DIM))
                 .isEqualTo(DesktopPaint.mixHex("#120e0c", DesktopPaint.FLOOR_DIM, 0.5));
         DesktopPaint.Hairline side = DesktopPaint.wallSideStroke(roomy, 0, 1, 1, 1, false);
         assertThat(side).isNotNull();

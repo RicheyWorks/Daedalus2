@@ -2511,8 +2511,8 @@ public final class DesktopPaint {
         return mixHex(floorSkirtInk(floor, wallA), floorSkirtInk(floor, wallB), 0.5);
     }
 
-    public static String wallFootInk(String wall) {
-        return mixHex(wall, FLOOR_DIM, 0.5);
+    public static String wallFootInk(String wall, String floor) {
+        return mixHex(wall, floor, 0.5);
     }
 
     /** Row under the post shine — half the catch, half the wall, same as the vault lip. */

@@ -205,11 +205,14 @@ class WebUiPaintPinTest {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
-            assertThat(js).contains("function paintWallFoot(g, geom, r, col, tiles, wallInk)")
+            assertThat(js).contains("function paintWallFoot(g, geom, r, col, tiles, wallInk, floorInk)")
+                    .contains("function paverInk(rows, cols, r, col, tile, fogLamp)")
+                    .contains("halfMix(wallInk, floorInk)")
+                    .doesNotContain("halfMix(wallInk, COLORS.floorDim)")
                     .contains("g.fillRect(x + 1, yb, span, 1)")
                     .contains("g.fillRect(x, yb, 1, 1)")
                     .contains("g.fillRect(x + w - 1, yb, 1, 1)")
-                    .contains("paintWallFoot(g, geom, r, col, tiles, wallInk)")
+                    .contains("paintWallFoot(g, geom, r, col, tiles, wallInk,")
                     .contains("paintWallFoot(g, geom, r, c, tiles,");
         }
     }
@@ -219,10 +222,11 @@ class WebUiPaintPinTest {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
             String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
-            assertThat(js).contains("function paintWallSide(g, geom, r, col, tiles, wallInk)")
+            assertThat(js).contains("function paintWallSide(g, geom, r, col, tiles, wallInk, paverAt)")
+                    .contains("halfMix(wallInk, paverAt(r, col - 1))")
                     .contains("g.fillRect(x, y + 3, 1, span)")
                     .contains("g.fillRect(x + w - 1, y + 3, 1, span)")
-                    .contains("paintWallSide(g, geom, r, col, tiles, wallInk)")
+                    .contains("paintWallSide(g, geom, r, col, tiles, wallInk,")
                     .contains("paintWallSide(g, geom, r, c, tiles,");
         }
     }
