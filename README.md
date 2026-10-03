@@ -7,6 +7,14 @@ A multi-module Java engine for procedural maze and graph generation, with a
 plugin runtime, a Spring Boot server (REST + WebSocket), and an optional
 JavaFX desktop client.
 
+Generate a maze, watch a solver explore it, or embed the engine in another JVM
+application. The server includes a browser client at `/`; the desktop client is
+an optional host.
+
+[Start the web client](#build--run) · [Engine features](#at-a-glance) ·
+[REST API](#rest-api) · [Plugin guide](#writing-a-plugin) ·
+[Test strategy](TESTING.md) · [Release notes](CHANGELOG.md)
+
 The core is intentionally framework-free — `daedalus-core` has no Spring, JPA,
 Jackson, or web dependencies — so the engine can be embedded in anything from
 a load balancer to a research notebook without dragging Tomcat along. The
@@ -102,21 +110,27 @@ Requires Java 21+ and Maven 3.9+. From the project root:
 mvn clean verify          # build all modules, run tests
 ```
 
-To run the server headless:
+To run the server headless, install the reactor artifacts first, then invoke
+the application goal on the server module:
 
 ```bash
-mvn -pl daedalus-server -am spring-boot:run
+mvn -DskipTests install
+mvn -pl daedalus-server spring-boot:run
 # or after a build:
-java -jar daedalus-server/target/daedalus-server-1.0.0-SNAPSHOT-exec.jar
+java -jar daedalus-server/target/daedalus-server-1.2.0-SNAPSHOT-exec.jar
 ```
 
 (Note the `-exec` classifier — see `CHANGELOG.md` for why this matters in
 multi-module Spring Boot setups.)
 
+Open `http://localhost:8080` for the bundled browser client. Installation
+populates Maven's local repository for the sibling modules; `-am` belongs on
+the build step, rather than running an application goal across the reactor.
+
 To run the JavaFX desktop client (boots Spring first, then opens the UI):
 
 ```bash
-mvn -pl daedalus-desktop -am javafx:run
+mvn -pl daedalus-desktop javafx:run
 ```
 
 Default server port is `8080` (override with `SERVER_PORT`). Default profile
@@ -125,7 +139,7 @@ deploying:
 
 ```bash
 SPRING_PROFILES_ACTIVE=prod DAEDALUS_REDIS_ENABLED=true \
-  mvn -pl daedalus-server -am spring-boot:run
+  mvn -pl daedalus-server spring-boot:run
 ```
 
 ## REST API
@@ -393,4 +407,4 @@ working tree.
 
 MIT — see [`LICENSE`](./LICENSE) for the full text. Permissive: anyone can
 use, modify, distribute, or sell the software, including in proprietary work,
-provided the copyright notice and license 
+provided the copyright notice and license
