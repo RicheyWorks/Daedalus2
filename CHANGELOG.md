@@ -10,6 +10,17 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Island life, live (ADR-024).**
+  Ecology frames on
+  `/topic/world/{id}/ecology`
+  (DAY, LANDED, BOARDED)
+  and a Life panel in
+  the realm: kinds per
+  island, diversity,
+  every kind by count,
+  and what each ark
+  carries.
+
 - **Arks carry life (ADR-023).**
   Every ark launches
   with founder pairs

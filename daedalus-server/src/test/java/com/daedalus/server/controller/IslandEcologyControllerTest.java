@@ -4,6 +4,7 @@ package com.daedalus.server.controller;
 
 import com.daedalus.engine.generators.GeneratorRegistry;
 import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
+import com.daedalus.plugin.events.IslandLifeEvent;
 import com.daedalus.plugin.runtime.PluginRegistry;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.WorldService;
@@ -23,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -47,6 +49,7 @@ class IslandEcologyControllerTest {
 
     private final ObjectMapper json = new ObjectMapper();
     private final long[] clock = {5_000_000L};
+    private final List<IslandLifeEvent> life = new ArrayList<>();
     private Path file;
     private MockMvc mvc;
     private WorldService worlds;
@@ -58,7 +61,11 @@ class IslandEcologyControllerTest {
     }
 
     private MockMvc boot(long dayMs) {
-        WorldService w = new WorldService(file, event -> { });
+        WorldService w = new WorldService(file, event -> {
+            if (event instanceof IslandLifeEvent e) {
+                life.add(e);
+            }
+        });
         w.useClock(() -> clock[0]);
         w.useDayLength(dayMs);
         this.worlds = w;
@@ -211,6 +218,54 @@ class IslandEcologyControllerTest {
         mvc = boot(1_000);
         assertThat(ecology(1)).isEqualTo(life);
         assertThat(ark(0).get("hold")).isEqualTo(hold);
+    }
+
+    @Test
+    void lifeIsAnnouncedLandingsStowawaysAndDays() throws Exception {
+        mvc = boot(1_000);
+        raise(11);
+        raise(42);
+        ecology(1);
+        Map<String, Double> founders = counts(ark(0).get("hold"));
+        voyage("ark-0", 1);
+
+        IslandLifeEvent landed = only(IslandLifeEvent.Kind.LANDED);
+        assertThat(landed.arkId()).isEqualTo("ark-0");
+        assertThat(landed.slot()).isEqualTo(1);
+        assertThat(founders.keySet()).containsAll(landed.keys());
+        assertThat(landed.richness().get(1)).isEqualTo(landed.keys().size());
+        assertThat(landed.richness().get(0)).isZero();
+
+        life.clear();
+        clock[0] += 5_000;
+        worlds.tickEcology("world-zero");
+        IslandLifeEvent day = only(IslandLifeEvent.Kind.DAY);
+        assertThat(day.day()).isEqualTo(ecology(1).get("day").asLong());
+        assertThat(day.richness()).containsOnlyKeys(0, 1);
+        assertThat(day.richness().get(1)).isEqualTo(ecology(1).get("richness").asInt());
+        life.clear();
+        assertThat(worlds.tickEcology("world-zero")).isEmpty();
+        assertThat(life).as("no day passed, no frame").isEmpty();
+
+        clock[0] += 120_000;
+        while (!worlds.tickEcology("world-zero").isEmpty()) {
+            assertThat(life).isNotEmpty();
+        }
+        life.clear();
+        Map<String, Double> holdBefore = counts(ark(1).get("hold"));
+        mvc.perform(post(W + "/arks/ark-1/voyage").contentType(MediaType.APPLICATION_JSON).content("{\"toSlot\":0}"))
+                .andExpect(status().isOk());
+        IslandLifeEvent boarded = only(IslandLifeEvent.Kind.BOARDED);
+        assertThat(boarded.slot()).isEqualTo(1);
+        for (String key : boarded.keys()) {
+            assertThat(counts(ark(1).get("hold")).get(key)).isGreaterThan(holdBefore.getOrDefault(key, 0.0));
+        }
+    }
+
+    private IslandLifeEvent only(IslandLifeEvent.Kind kind) {
+        List<IslandLifeEvent> of = life.stream().filter(e -> e.kind() == kind).toList();
+        assertThat(of).as("exactly one %s", kind).hasSize(1);
+        return of.get(0);
     }
 
     @Test

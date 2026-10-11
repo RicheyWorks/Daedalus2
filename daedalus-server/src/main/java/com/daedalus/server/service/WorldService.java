@@ -33,6 +33,7 @@ import com.daedalus.world.ark.ArkFleet;
 import com.daedalus.world.ark.Voyage;
 import com.daedalus.world.ark.VoyageResult;
 import com.daedalus.plugin.events.ArkVoyageEvent;
+import com.daedalus.plugin.events.IslandLifeEvent;
 import com.daedalus.world.ecology.Community;
 import com.daedalus.world.ecology.Diversity;
 import com.daedalus.world.ecology.EcologyLedger;
@@ -670,8 +671,12 @@ public class WorldService {
                 Voyage v = out.voyage();
                 Community leaving = eco.community(v.fromSlot());
                 if (leaving != null) {
-                    holdOf(arkId).board(leaving, v.departAt() * 31 + v.fromSlot());
+                    List<String> boarded = holdOf(arkId).board(leaving, v.departAt() * 31 + v.fromSlot());
                     persistEcology();
+                    if (!boarded.isEmpty()) {
+                        published.accept(new IslandLifeEvent(this, id, IslandLifeEvent.Kind.BOARDED, eco.day(),
+                                v.fromSlot(), arkId, boarded, richness()));
+                    }
                 }
                 published.accept(new ArkVoyageEvent(this, id, ArkVoyageEvent.Kind.DEPARTED, arkId,
                         v.fromSlot(), v.toSlot(), v.departAt(), v.arriveAt()));
@@ -689,13 +694,19 @@ public class WorldService {
             List<Voyage> arrived = fleet.settle(now());
             if (!arrived.isEmpty()) {
                 persistFleet();
+                List<IslandLifeEvent> landings = new ArrayList<>();
                 for (Voyage v : arrived) {
                     Community landing = eco.community(v.toSlot());
                     if (landing != null) {
-                        holdOf(v.arkId()).land(landing, eco.isle(v.toSlot()).habitat(), canon);
+                        List<String> landed = holdOf(v.arkId()).land(landing, eco.isle(v.toSlot()).habitat(), canon);
+                        if (!landed.isEmpty()) {
+                            landings.add(new IslandLifeEvent(this, id, IslandLifeEvent.Kind.LANDED, eco.day(),
+                                    v.toSlot(), v.arkId(), landed, richness()));
+                        }
                     }
                 }
                 persistEcology();
+                landings.forEach(published);
                 for (Voyage v : arrived) {
                     published.accept(new ArkVoyageEvent(this, id, ArkVoyageEvent.Kind.ARRIVED,
                             v.arkId(), v.fromSlot(), v.toSlot(), v.departAt(), v.arriveAt()));
@@ -712,6 +723,13 @@ public class WorldService {
             }
         }
         return null;
+    }
+
+    /** Kinds living on every island, by slot. Caller holds the lock. */
+    private Map<Integer, Integer> richness() {
+        Map<Integer, Integer> out = new TreeMap<>();
+        eco.communities().forEach((slot, c) -> out.put(slot, c.abundance().size()));
+        return out;
     }
 
     private Hold holdOf(String arkId) {
@@ -761,6 +779,8 @@ public class WorldService {
             }
             if (!reports.isEmpty()) {
                 persistEcology();
+                published.accept(new IslandLifeEvent(this, id, IslandLifeEvent.Kind.DAY, eco.day(), -1, null,
+                        List.of(), richness()));
             }
             return reports;
         }

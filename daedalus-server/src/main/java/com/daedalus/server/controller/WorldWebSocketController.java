@@ -3,6 +3,8 @@
 package com.daedalus.server.controller;
 
 import com.daedalus.api.dto.ArkFrame;
+import com.daedalus.api.dto.EcologyFrame;
+import com.daedalus.plugin.events.IslandLifeEvent;
 import com.daedalus.plugin.events.ArkVoyageEvent;
 
 import com.daedalus.api.dto.WorldEventFrame;
@@ -14,6 +16,9 @@ import com.daedalus.world.auto.WorldOps;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * World events on their own topic. Maze {@code /state} frames stay maze-shaped.
@@ -50,5 +55,15 @@ public class WorldWebSocketController {
         stomp.convertAndSend("/topic/world/" + e.worldId() + "/arks",
                 new ArkFrame(e.worldId(), e.kind().name(), e.arkId(), e.fromSlot(), e.toSlot(),
                         e.departAt(), e.arriveAt(), worlds == null ? System.currentTimeMillis() : worlds.now()));
+    }
+
+    /** Island life on its own topic (ADR-024): days, landings and stowaways. */
+    @EventListener
+    public void onIslandLife(IslandLifeEvent e) {
+        Map<String, Integer> richness = new TreeMap<>();
+        e.richness().forEach((slot, n) -> richness.put(String.valueOf(slot), n));
+        stomp.convertAndSend("/topic/world/" + e.worldId() + "/ecology",
+                new EcologyFrame(e.worldId(), e.kind().name(), e.day(), e.slot(), e.arkId(), e.keys(),
+                        richness, worlds == null ? System.currentTimeMillis() : worlds.now()));
     }
 }

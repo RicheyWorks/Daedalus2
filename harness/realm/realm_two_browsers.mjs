@@ -37,6 +37,7 @@ async function open(name) {
 }
 const A = await open("A");
 const B = await open("B");
+B.canon = Object.fromEntries((await (await fetch(BASE + "/api/v1/species")).json()).species.map(s => [s.key, s]));
 check("both pages load and go live over STOMP", true);
 const gl = await A.page.evaluate(() => !!document.getElementById("view").getContext("webgl2") || !!document.getElementById("view").getContext("webgl"));
 check("WebGL context available", gl);
@@ -81,7 +82,7 @@ check("the ark's berth is open air over a pier plank", berthPlank[0] === "AIR" &
 await A.page.evaluate(() => { const a = window.daedalusRealm.arks[0]; document.querySelector("#arks button").click(); });
 await A.page.waitForTimeout(1300);
 await A.page.screenshot({ path: path.join(OUT, "realm_ark.png") });
-await A.page.evaluate(() => document.querySelector("#islands button").click());
+await A.page.evaluate(() => document.querySelector("#islands button.go").click());
 await A.page.waitForTimeout(1300);
 const meshes = await A.page.evaluate(() => window.daedalusRealm.meshes.size);
 check("island meshed into chunk groups", meshes > 10, `${meshes} chunk meshes`);
@@ -176,6 +177,35 @@ const end = await B.page.evaluate(() => {
 check("the moored model sits off Isle 1's pier", Math.abs(end.x - (end.dockX + 0.5)) < 1 && Math.abs(end.z - (end.dockZ + 9)) < 1, JSON.stringify(end));
 const serverArk = (await (await fetch(BASE + "/api/v1/world/world-zero/arks")).json()).arks[0];
 check("the server agrees: ark-0 moored at slot 1", serverArk.state === "MOORED" && serverArk.slot === 1);
+
+// --- Life (ADR-023/024): the ark put its founders ashore; B hears it and can open Isle 1's Life panel.
+const landedLabel = await B.page.waitForFunction(() => {
+  const el = document.querySelector('.kinds-count[data-slot="1"]');
+  return el && /^\d+ kinds? living$/.test(el.textContent) ? el.textContent : false;
+}, null, { timeout: 15000 }).then(h => h.jsonValue(), () => null);
+const life1 = await (await fetch(BASE + "/api/v1/world/world-zero/islands/1/ecology")).json();
+check("B's lane shows the kinds now living on Isle 1", landedLabel === `${life1.richness} kind${life1.richness === 1 ? "" : "s"} living`, `${landedLabel} / server ${life1.richness}`);
+const life0 = await (await fetch(BASE + "/api/v1/world/world-zero/islands/0/ecology")).json();
+const walkers0 = life0.species.filter(sp => !(B.canon[sp.key] || {}).disperses).length;
+check("Isle 0 holds no ark-bound kind: only wings and spores reach it", walkers0 === 0,
+  `${life0.richness} kinds, ${walkers0} ark-bound`);
+check("the server's ark-0 hold shrank by what landed", serverArk.hold.length < 6 && life1.richness >= 6 - serverArk.hold.length,
+  `${serverArk.hold.length} kinds still aboard`);
+await B.page.click('.life-btn[data-slot="1"]');
+const rows = await B.page.waitForFunction(() => document.querySelectorAll("#life .life-row").length, null, { timeout: 10000 })
+  .then(h => h.jsonValue(), () => 0);
+const life1b = await (await fetch(BASE + "/api/v1/world/world-zero/islands/1/ecology")).json();
+check("tapping Life lists every kind on Isle 1", rows === life1b.richness || rows === life1.richness, `${rows} rows, server ${life1b.richness}`);
+const day0 = await B.page.evaluate(() => window.daedalusRealm.day);
+const dayMoved = await B.page.waitForFunction(d => window.daedalusRealm.day > d, day0, { timeout: 12000 }).then(() => true, () => false);
+check("B hears a DAY frame and the day advances", dayMoved, `from day ${day0}`);
+const panelDay = await B.page.waitForFunction(() => {
+  const head = document.querySelector("#life .life-head");
+  return head && Number(head.dataset.day) === window.daedalusRealm.day;
+}, null, { timeout: 8000 }).then(() => true, () => false);
+check("the open Life panel follows the day", panelDay, await B.page.evaluate(() =>
+  `panel day ${document.querySelector("#life .life-head")?.dataset.day}, state day ${window.daedalusRealm.day}`));
+await B.page.screenshot({ path: path.join(OUT, "realm_life.png") });
 
 // --- Reload: a fresh page rebuilds the same world from REST alone.
 const C = await open("C");

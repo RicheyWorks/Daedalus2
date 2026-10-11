@@ -35,6 +35,9 @@ const state = {
   arkModels: new Map(),      // ark id → THREE.Group placed at its berth
   species: [],               // the canon, from GET /species (ADR-021)
   clockOffset: 0,            // server epoch − local epoch, from /arks and ark frames (ADR-020)
+  richness: new Map(),       // island slot → kinds living there (ADR-024)
+  day: 0,                    // the ecology's latest day
+  lifeSlot: null,            // the island whose Life panel is open
   mode: "look",
   block: "GRASS",
   token: safeGet(TOKEN_KEY),
@@ -265,17 +268,108 @@ async function loadIslands(focusSlot) {
     info.innerHTML = `<b>Isle ${isle.slot}</b> · seed ${isle.seed}<br>` +
       `${isle.trees} trees (${isle.blossomTrees} blossom) · ${isle.columns} cols` +
       (isle.waterfall ? " · waterfall" : "") + ` · ${isle.crystals} crystals`;
+    const kinds = document.createElement("span");
+    kinds.className = "kinds-count";
+    kinds.dataset.slot = isle.slot;
+    info.append(document.createElement("br"), kinds);
     const go = document.createElement("button");
+    go.className = "go";
     go.textContent = "Go";
     go.onclick = () => { if (RIDE.id) toggleRide(RIDE.id); flyTo(isle); };
-    row.append(info, go);
+    const life = document.createElement("button");
+    life.className = "life-btn" + (state.lifeSlot === isle.slot ? " on" : "");
+    life.dataset.slot = isle.slot;
+    life.textContent = "Life";
+    life.onclick = () => toggleLife(isle.slot);
+    row.append(info, life, go);
     host.appendChild(row);
   }
+  renderRichness();
+  Promise.all(state.islands.map(i => api(`${API}/islands/${i.slot}/ecology`)
+    .then(r => { state.richness.set(i.slot, r.richness); state.day = Math.max(state.day, r.day); })
+    .catch(() => {}))).then(renderRichness);
   status();
   if (focusSlot !== undefined) {
     const isle = state.islands.find(i => i.slot === focusSlot);
     if (isle) flyTo(isle);
   }
+}
+
+// ---------------------------------------------------------------- island life (ADR-023/024)
+const GUILD_COLORS = { MEADOW: "#7ccf52", CANOPY: "#2f9e5a", POND: "#3a8ee6", DECOMPOSER: "#a3784c",
+  STARBORN: "#a070ff", MARINE: "#2bc6c6", UNKNOWN: "#888" };
+function renderRichness() {
+  document.querySelectorAll(".kinds-count").forEach(el => {
+    const n = state.richness.get(Number(el.dataset.slot));
+    el.textContent = n === undefined ? "" : (n ? `${n} kind${n === 1 ? "" : "s"} living` : "barren — waiting for an ark");
+  });
+}
+function toggleLife(slot) {
+  state.lifeSlot = state.lifeSlot === slot ? null : slot;
+  document.querySelectorAll(".life-btn").forEach(b => b.classList.toggle("on", Number(b.dataset.slot) === state.lifeSlot));
+  loadLife();
+}
+let lifeSeq = 0;
+async function loadLife() {
+  const host = document.getElementById("life");
+  const seq = ++lifeSeq;                         // frames can overlap fetches; only the newest renders
+  if (state.lifeSlot === null) { host.textContent = ""; host.style.display = "none"; return; }
+  const slot = state.lifeSlot;
+  let res;
+  try { res = await api(`${API}/islands/${slot}/ecology`); } catch (e) { handleError(e); return; }
+  if (seq !== lifeSeq || state.lifeSlot !== slot) return;
+  state.richness.set(slot, res.richness);
+  state.day = Math.max(state.day, res.day);
+  renderRichness();
+  host.style.display = "block";
+  host.textContent = "";
+  const head = document.createElement("div");
+  head.className = "life-head";
+  head.dataset.day = res.day;
+  head.innerHTML = `<b>Isle ${slot}</b> · day <span class="day">${res.day}</span><br>` +
+    `<span>${res.richness} kinds · ${Math.round(res.total)} individuals · H′ ${res.shannon.toFixed(2)} · ` +
+    `evenness ${res.evenness.toFixed(2)}</span>`;
+  host.appendChild(head);
+  if (!res.species.length) {
+    const p = document.createElement("div");
+    p.className = "note";
+    p.textContent = "Nothing lives here yet. Sail an ark in — or wait for wings and spores on the wind.";
+    host.appendChild(p);
+    return;
+  }
+  const top = Math.log10(1 + res.species[0].count);
+  for (const sp of res.species) {
+    const row = document.createElement("div");
+    row.className = "kind life-row";
+    row.dataset.key = sp.key;
+    const pct = Math.max(4, Math.round(100 * Math.log10(1 + sp.count) / top));
+    row.innerHTML = `<b>${sp.name}</b> <span>${sp.guild.toLowerCase()} · ${Math.round(sp.count)}</span>` +
+      `<i style="width:${pct}%;background:${GUILD_COLORS[sp.guild] || GUILD_COLORS.UNKNOWN}"></i>`;
+    host.appendChild(row);
+  }
+}
+function speciesName(key) {
+  const sp = state.species.find(s => s.key === key);
+  return sp ? sp.name : key;
+}
+function namesOf(keys) {
+  const names = keys.map(speciesName);
+  return names.length > 3 ? `${names.slice(0, 3).join(", ")} and ${names.length - 3} more` : names.join(", ");
+}
+function onLifeFrame(f) {
+  state.clockOffset = f.now - Date.now();
+  state.day = Math.max(state.day, f.day);
+  for (const [slot, n] of Object.entries(f.richness || {})) state.richness.set(Number(slot), n);
+  renderRichness();
+  const ark = state.arks.find(a => a.id === f.arkId);
+  if (f.kind === "LANDED") {
+    toast(`${ark ? ark.name : f.arkId} put ${namesOf(f.keys)} ashore on Isle ${f.slot}`);
+    loadArks();
+  } else if (f.kind === "BOARDED") {
+    toast(`Stowaways aboard ${ark ? ark.name : f.arkId}: ${namesOf(f.keys)}`);
+    loadArks();
+  }
+  if (state.lifeSlot !== null && (f.kind === "DAY" || f.slot === state.lifeSlot)) loadLife();
 }
 
 // ---------------------------------------------------------------- bestiary (ADR-021)
@@ -430,7 +524,10 @@ function renderArkList() {
     row.dataset.ark = ark.id;
     const info = document.createElement("div");
     const where = ark.state === "SAILING" ? `sailing Isle ${ark.fromSlot} → Isle ${ark.toSlot}` : `moored at Isle ${ark.slot}`;
-    info.innerHTML = `<b>${ark.name}</b><br><span class="where">${where}</span>`;
+    const held = (ark.hold || []).length;
+    info.innerHTML = `<b>${ark.name}</b><br><span class="where">${where}</span><br>` +
+      `<span class="hold">${held ? `carrying ${held} kind${held === 1 ? "" : "s"}` : "hold empty"}</span>`;
+    if (held) info.title = ark.hold.map(h => `${h.name} ×${Math.round(h.count)}`).join("\n");
     const controls = document.createElement("div");
     controls.style.cssText = "flex:0 0 auto;display:flex;gap:6px;align-items:center";
     const pick = document.createElement("select");
@@ -612,6 +709,7 @@ function connectLive() {
     status();
     client.subscribe(`/topic/world/${WORLD}/events`, f => onFrame(JSON.parse(f.body)));
     client.subscribe(`/topic/world/${WORLD}/arks`, f => onArkFrame(JSON.parse(f.body)));
+    client.subscribe(`/topic/world/${WORLD}/ecology`, f => onLifeFrame(JSON.parse(f.body)));
   }, () => {
     state.live = false;
     status();
