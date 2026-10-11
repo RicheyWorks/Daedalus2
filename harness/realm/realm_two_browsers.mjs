@@ -484,6 +484,51 @@ if (RPC) {
   await page.close();
 }
 
+// --- World Package (ADR-032): the world, exported once, loads in another engine exactly as the realm draws it.
+{
+  const page = await context.newPage();
+  const errors = [];
+  page.on("pageerror", e => errors.push(String(e)));
+  await page.goto(BASE + "/realm.html?world=world-zero");
+  await page.waitForFunction(() => window.daedalusRealm && window.daedalusRealm.live && window.daedalusRealm.gates.length === 1, null, { timeout: 30000 });
+  const pkg = await page.evaluate(async () => {
+    const { GLTFLoader } = await import("three/addons/loaders/GLTFLoader.js");
+    const manifest = await (await fetch("/api/v1/world/world-zero/package/manifest")).json();
+    const gltf = await new GLTFLoader().loadAsync("/api/v1/world/world-zero/package/world.glb");
+    let tris = 0, nodes = 0, translucent = 0, outOfRange = 0;
+    gltf.scene.traverse(o => {
+      if (o.isMesh) {
+        tris += o.geometry.index.count / 3;
+        if (o.material.transparent) translucent++;
+        const c = o.geometry.attributes.color.array;
+        for (let i = 0; i < c.length; i++) if (c[i] < 0 || c[i] > 1) outOfRange++;
+      }
+    });
+    // A one-primitive node loads as a Mesh, a two-primitive node as a Group of two: count the scene's nodes.
+    nodes = gltf.scene.children.filter(o => o.name.startsWith("chunk_")).length;
+    // What the realm itself drew: its chunk meshes' triangles.
+    let realmTris = 0;
+    for (const group of window.daedalusRealm.meshes.values()) {
+      for (const m of group.children) if (m.isMesh && m.geometry.index) realmTris += m.geometry.index.count / 3;
+    }
+    const zip = await fetch("/api/v1/world/world-zero/package");
+    return { manifest, tris, nodes, translucent, outOfRange, realmTris, zipType: zip.headers.get("content-type"),
+             zipName: zip.headers.get("content-disposition"), zipBytes: (await zip.arrayBuffer()).byteLength };
+  });
+  check("the World Package manifest names the world, its gate and its arks", pkg.manifest.format === "daedalus-world-package"
+      && pkg.manifest.world.id === "world-zero" && pkg.manifest.gates.length === 1 && pkg.manifest.gates[0].toWorld === "isle-two"
+      && pkg.manifest.arks.length === 2, JSON.stringify({ world: pkg.manifest.world, gates: pkg.manifest.gates.length, arks: pkg.manifest.arks.length }));
+  check("three.js loads world.glb: one node per chunk, the manifest's triangles, blended glass and rainbow",
+      pkg.nodes === pkg.manifest.geometry.chunks && pkg.tris === pkg.manifest.geometry.triangles && pkg.translucent > 0 && pkg.outOfRange === 0,
+      `${pkg.nodes} nodes / ${pkg.manifest.geometry.chunks} chunks, ${pkg.tris} / ${pkg.manifest.geometry.triangles} triangles, ${pkg.translucent} blended, ${pkg.outOfRange} colours out of 0..1`);
+  check("the exported world has exactly the triangles the realm draws", pkg.realmTris === pkg.tris,
+      `realm ${pkg.realmTris}, package ${pkg.tris}`);
+  check("the whole package downloads as a named zip", pkg.zipType === "application/zip" && /world-zero-r\d+\.daedalus\.zip/.test(pkg.zipName) && pkg.zipBytes > 100000,
+      `${pkg.zipType} ${pkg.zipName} ${pkg.zipBytes} bytes`);
+  check("no page errors loading the package", errors.length === 0, errors.slice(0, 3).join(" | "));
+  await page.close();
+}
+
 // --- Reload: a fresh page rebuilds the same world from REST alone.
 const C = await open("C");
 await C.page.waitForFunction(() => window.daedalusRealm.islands.length === 2, null, { timeout: 30000 });

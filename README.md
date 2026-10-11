@@ -170,6 +170,14 @@ powershell -File daedalus-explore/run-explore.ps1
 powershell -File daedalus-explore/run-explore.ps1 --smoke
 ```
 
+In Unreal Engine 5 (ADR-032): `engines/unreal/setup-unreal.ps1` installs the
+DaedalusLink plugin into a project and imports a World Package; the plugin's
+**Daedalus World** actor streams a live world. See `engines/unreal/README.md`.
+
+```powershell
+.\engines\unreal\setup-unreal.ps1 -Project C:\Unreal\DaedalusRealm\DaedalusRealm.uproject -InstallLauncher -Build -Import
+```
+
 A start page at `/` lists the well, daily, campaign, living, theory,
 desktop, and first-person. From the repo root:
 
@@ -241,6 +249,9 @@ public consumers).
 | `GET` | `/api/v1/world/{id}/chunk/blocks?x=&y=&z=` | public | One chunk's cubes as a base64 ordinal payload plus the palette, for meshing (ADR-018) |
 | `GET` | `/api/v1/worlds` | public | Every mounted world (id, style, seed, title, islands) and every world style with whether it is ready (ADR-030) |
 | `POST` | `/api/v1/worlds` | required | Mount a new world of a ready style, grown from a seed (`CreateWorldRequest`); exists, bad id, style-not-ready and full are named results (ADR-030) |
+| `GET` | `/api/v1/world/{id}/package` | public | The world as a Daedalus World Package (zip): `manifest.json`, `world.glb` (glTF 2.0, a node per chunk), `assets/ark.glb`. Load it in Blender, Unreal, Godot or three.js (ADR-032) |
+| `GET` | `/api/v1/world/{id}/package/manifest` | public | The package manifest alone: islands, sky gates, arks, palette, mount, live API, deed contract (ADR-032) |
+| `GET` | `/api/v1/world/{id}/package/world.glb` | public | The package geometry alone, glTF 2.0 binary (ADR-032) |
 | `GET` | `/api/v1/world/{id}/gates` | public | The world's sky gates: in the clouds past the rainbow, where each leads, its cloud berth, and the mount that flies there (ADR-031) |
 | `POST` | `/api/v1/world/{id}/gates` | required | Open a pair of sky gates between this world and `toWorld`; same-world, no-such-world, already-linked and full are named results (ADR-031) |
 | `GET` | `/api/v1/world/{id}/islands` | public | Raised islands: lane slot, origin, seed and traits (ADR-018), and who owns each and whom they let build (ADR-026) |

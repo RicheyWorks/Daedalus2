@@ -197,6 +197,9 @@ public class ProdSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/worlds").permitAll()
                         // Sky gates (ADR-031): where they are and where they lead. Opening one needs a token.
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/gates").permitAll()
+                        // World Packages (ADR-032): the same public cubes, packed for an engine.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/package", "/api/v1/world/*/package/manifest",
+                                "/api/v1/world/*/package/world.glb").permitAll()
                         // An island's living community (ADR-023): read-only, steps the clock it reads.
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands/*/ecology").permitAll()
                         // Token metadata and its image (ADR-027): a marketplace fetches these unsigned.

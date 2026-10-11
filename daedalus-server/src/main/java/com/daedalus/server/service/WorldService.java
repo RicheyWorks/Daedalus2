@@ -181,6 +181,31 @@ public class WorldService {
         return id;
     }
 
+    /** The world's current revision, or -1 when {@code id} is not this world (ADR-032). */
+    public long revision(String id) {
+        World live = require(id);
+        if (live == null) {
+            return -1;
+        }
+        synchronized (lock) {
+            return live.revision().value();
+        }
+    }
+
+    /**
+     * A private copy of the world taken under the world lock (ADR-032): an exporter can mesh it for
+     * seconds while players keep building, and still see one consistent revision.
+     */
+    public World copy(String id) {
+        World live = require(id);
+        if (live == null) {
+            return null;
+        }
+        synchronized (lock) {
+            return World.from(live.snapshot());
+        }
+    }
+
     /** Each world's ecology replays from its own seed; World Zero keeps the one it always had. */
     private long ecologySeed() {
         return WorldId.ZERO.equals(id) ? ECOLOGY_SEED : ECOLOGY_SEED ^ (id.value().hashCode() * 0x9E3779B97F4A7C15L);

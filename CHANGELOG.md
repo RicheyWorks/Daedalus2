@@ -10,6 +10,22 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **World Packages and Unreal Engine 5 (ADR-032).**
+  `GET /api/v1/world/{id}/package`:
+  manifest.json + world.glb
+  (glTF 2.0, a node per
+  chunk) + the ark. Loads
+  as is in Blender, Unreal,
+  three.js. `engines/unreal`:
+  the DaedalusLink plugin
+  (a live "Daedalus World"
+  actor), an import script,
+  and `setup-unreal.ps1`
+  (launcher via winget,
+  plugin, package, build,
+  import). C++ mesher
+  matches Java to the bit.
+
 - **Sky gates (ADR-031).**
   Portals in the clouds
   past a rainbow, out of

@@ -1,0 +1,65 @@
+# SPDX-License-Identifier: MIT
+#
+# Engines (ADR-032): the Unreal plugin's engine-free mesher must agree with the Java mesher bit for bit
+# (the committed fixture, written by MeshFixtureTest), the import script must check packages, and the
+# PowerShell setup must run its plan on Windows. No Unreal Engine here: that is checked on a real install.
+
+name: Engines
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ "engines/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+  pull_request:
+    branches: [ main ]
+    paths: [ "engines/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+
+concurrency:
+  group: engines-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  mesh-parity:
+    name: C++ mesher parity (gcc, clang)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: engines/unreal/core-test
+    steps:
+      - uses: actions/checkout@v4
+      - name: gcc
+        run: g++ -std=c++17 -O2 -Wall -Wextra -Werror -I../DaedalusLink/Source/DaedalusLink/Public mesh_core_test.cpp -o mesh_core_test && ./mesh_core_test isle8.mesh.txt
+      - name: clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public mesh_core_test.cpp -o mesh_core_test && ./mesh_core_test isle8.mesh.txt
+      - name: import script compiles and refuses a non-package
+        run: |
+          python3 -m py_compile ../DaedalusLink/Content/Python/import_world_package.py live_parity.py
+          echo nope > bad.zip
+          if python3 ../DaedalusLink/Content/Python/import_world_package.py bad.zip; then exit 1; fi
+
+  setup-plan:
+    name: setup-unreal.ps1 plan (Windows)
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: parse
+        shell: pwsh
+        run: |
+          $e = $null
+          [System.Management.Automation.Language.Parser]::ParseFile("$PWD\engines\unreal\setup-unreal.ps1", [ref]$null, [ref]$e) | Out-Null
+          if ($e.Count) { $e; exit 1 }
+      - name: plan only
+        shell: pwsh
+        run: .\engines\unreal\setup-unreal.ps1 -Project "$env:RUNNER_TEMP\Realm\Realm.uproject" -SkipPackage -WhatIfOnly
+      - name: project and plugin, for real
+        shell: powershell
+        run: |
+          .\engines\unreal\setup-unreal.ps1 -Project "$env:RUNNER_TEMP\Realm\Realm.uproject" -SkipPackage
+          $up = Get-Content "$env:RUNNER_TEMP\Realm\Realm.uproject" -Raw | ConvertFrom-Json
+          if (-not ($up.Plugins | Where-Object { $_.Name -eq "DaedalusLink" -and $_.Enabled })) { throw "plugin not enabled" }
+          if (-not (Test-Path "$env:RUNNER_TEMP\Realm\Plugins\DaedalusLink\DaedalusLink.uplugin")) { throw "plugin not copied" }

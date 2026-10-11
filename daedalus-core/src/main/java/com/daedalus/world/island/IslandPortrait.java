@@ -13,7 +13,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.EnumMap;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
@@ -35,24 +34,6 @@ public final class IslandPortrait {
 
     public static final int SIZE = 512;
     private static final int MARGIN = 24;
-
-    private static final Map<BlockType, Integer> COLORS = new EnumMap<>(BlockType.class);
-
-    static {
-        COLORS.put(BlockType.STONE, 0x7d7b84);
-        COLORS.put(BlockType.DIRT, 0x7a5230);
-        COLORS.put(BlockType.WOOD, 0x9a6b3f);
-        COLORS.put(BlockType.GLASS, 0xa8d8e8);
-        COLORS.put(BlockType.GRASS, 0x6cc046);
-        COLORS.put(BlockType.SAND, 0xe2d08c);
-        COLORS.put(BlockType.WATER, 0x2f80d8);
-        COLORS.put(BlockType.LOG, 0x7a5232);
-        COLORS.put(BlockType.LEAVES, 0x4aa44f);
-        COLORS.put(BlockType.BLOSSOM, 0xf29bc0);
-        COLORS.put(BlockType.GRAVEL, 0x9b9387);
-        COLORS.put(BlockType.CRYSTAL, 0xa070ff);
-        COLORS.put(BlockType.CLOUD, 0xf4f6fb);
-    }
 
     private final int[] argb;
 
@@ -123,7 +104,7 @@ public final class IslandPortrait {
         for (Map.Entry<BlockCoordinate, BlockType> e : order) {
             BlockCoordinate c = e.getKey();
             BlockType t = e.getValue();
-            int base = COLORS.getOrDefault(t, 0x888888);
+            int base = com.daedalus.world.export.BlockColors.rgb(t);
             double j = jitter(c.x(), c.y(), c.z());
             boolean blend = t == BlockType.WATER || t == BlockType.GLASS;
             int left = ox + (c.x() - c.z()) * a - a;
@@ -208,9 +189,7 @@ public final class IslandPortrait {
 
     /** The realm mesher's per-cube brightness, so the portrait has the same grain. */
     static double jitter(int x, int y, int z) {
-        int h = x * 374761393 + y * 668265263 + z * 2147483647;
-        h = (h ^ (h >>> 13)) * 1274126177;
-        return 0.94 + Integer.toUnsignedLong(h ^ (h >>> 16)) % 1000 / 1000.0 * 0.12;
+        return com.daedalus.world.export.BlockColors.jitter(x, y, z);
     }
 
     /** SHA-256 over the ARGB pixels: the same island, the same picture, on any JVM. */
