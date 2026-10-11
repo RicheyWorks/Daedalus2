@@ -219,7 +219,8 @@ public consumers).
 | `GET` | `/api/v1/world/{id}/chunks` | public | List every non-empty chunk (coords, revision, occupied) for a renderer (ADR-018) |
 | `GET` | `/api/v1/world/{id}/chunk/blocks?x=&y=&z=` | public | One chunk's cubes as a base64 ordinal payload plus the palette, for meshing (ADR-018) |
 | `GET` | `/api/v1/world/{id}/islands` | public | Raised islands: lane slot, origin, seed and traits (ADR-018) |
-| `GET` | `/api/v1/world/{id}/arks` | public | The arks: one per island, named from its seed, moored at a pier or sailing (with voyage times and the server clock) (ADR-019/020) |
+| `GET` | `/api/v1/world/{id}/arks` | public | The arks: one per island, named from its seed, moored at a pier or sailing (with voyage times and the server clock), and what each carries in its hold (ADR-019/020/023) |
+| `GET` | `/api/v1/world/{id}/islands/{slot}/ecology` | public | One island's living community: ecological day, habitat by guild, diversity indices and every kind there by count; unknown slot 404 (ADR-023) |
 | `POST` | `/api/v1/world/{id}/arks/{arkId}/voyage` | required | Order an ark to another island (`VoyageRequest`). Already-there, underway and no-such-island are named results; unknown ark 404 (ADR-020) |
 | `GET` | `/api/v1/species` | public | The species canon: 221 kinds from ComputerPets with guild, size, r/K strategy and whether they cross open sky alone (ADR-021) |
 | `POST` | `/api/v1/world/{id}/islands` | required | Raise a seeded floating island into the next free lane slot (`RaiseIslandRequest`). Lane-full is a named result (ADR-018) |

@@ -179,6 +179,10 @@ daedalus:
   # One persistent volume beside the maze cache. Not Caffeine. A restart reloads this file.
   world:
     file: ${DAEDALUS_WORLD_FILE:${user.home}/.daedalus/world-zero.daew}
+  # ----- The Realm (ADR-023) -----
+  # One ecological day of server time, in ms: how often island communities grow, drift and fade.
+  realm:
+    day-ms: ${DAEDALUS_REALM_DAY_MS:10000}
   # ----- Per-key rate limiting -----
   # The Resilience4j instances below are treated as *templates*: PerKeyRateLimitInterceptor
   # clones each into an independent bucket per caller (authenticated subject, else client IP),

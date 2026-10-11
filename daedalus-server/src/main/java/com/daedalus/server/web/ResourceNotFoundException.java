@@ -95,6 +95,11 @@ public class ResourceNotFoundException extends RuntimeException {
                 "No ark " + id + " sails here. Each raised island launches ark-<slot>.");
     }
 
+    public static ResourceNotFoundException island(Object slot) {
+        return new ResourceNotFoundException("island", String.valueOf(slot),
+                "No island is raised in slot " + slot + ". GET /islands lists the lane.");
+    }
+
     public static ResourceNotFoundException world(Object id) {
         return new ResourceNotFoundException("world", String.valueOf(id),
                 "No world " + id + " is mounted. This host serves world-zero.");

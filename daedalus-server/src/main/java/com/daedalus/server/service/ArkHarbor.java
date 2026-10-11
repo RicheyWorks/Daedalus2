@@ -14,7 +14,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * The harbour clock (ADR-020): a single daemon thread that ties up arks whose voyages are due, so
- * the ARRIVED frame goes out when the ark arrives rather than when someone next asks. Bounded by
+ * the ARRIVED frame goes out when the ark arrives rather than when someone next asks — and, since
+ * ADR-023, steps the islands' ecology one day per {@code daedalus.realm.day-ms}. Bounded by
  * construction — one thread, one world, a 250 ms period — and stopped with the context.
  */
 @Component
@@ -34,6 +35,7 @@ public class ArkHarbor {
         clock.scheduleWithFixedDelay(() -> {
             try {
                 worlds.settleArrivals(WorldId.ZERO.value());
+                worlds.tickEcology(WorldId.ZERO.value());
             } catch (RuntimeException e) {
                 LOG.warn("Ark harbour tick failed: {}", e.toString());
             }

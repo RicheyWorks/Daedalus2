@@ -33,6 +33,13 @@ import com.daedalus.world.ark.ArkFleet;
 import com.daedalus.world.ark.Voyage;
 import com.daedalus.world.ark.VoyageResult;
 import com.daedalus.plugin.events.ArkVoyageEvent;
+import com.daedalus.world.ecology.Community;
+import com.daedalus.world.ecology.Diversity;
+import com.daedalus.world.ecology.EcologyLedger;
+import com.daedalus.world.ecology.Ecosystem;
+import com.daedalus.world.ecology.Habitat;
+import com.daedalus.world.ecology.Hold;
+import com.daedalus.world.ecology.SpeciesCanon;
 import com.daedalus.world.island.IslandGenerator;
 import com.daedalus.world.island.IslandOps;
 import com.daedalus.world.island.IslandPlan;
@@ -83,6 +90,20 @@ public class WorldService {
     /** Server clock for voyages; tests drive it. */
     private LongSupplier clock = System::currentTimeMillis;
     private ArkFleet fleet = new ArkFleet();
+
+    /** Live ecology (ADR-023): every island's community and every ark's hold, under {@link #lock}. */
+    private final SpeciesCanon canon = SpeciesCanon.get();
+    private Ecosystem eco = new Ecosystem(canon);
+    private final TreeMap<String, Hold> holds = new TreeMap<>();
+    /** Server time ecological day 0 began; -1 until the first tick reads the clock. */
+    private long ecoEpoch = -1;
+    private volatile long dayMs = DEFAULT_DAY_MS;
+    /** One ecological day of real time, unless {@code daedalus.realm.day-ms} says otherwise. */
+    public static final long DEFAULT_DAY_MS = 10_000;
+    /** Days stepped per tick at most, so a long-stopped server catches up over seconds, not at once. */
+    public static final int MAX_CATCH_UP = 64;
+    /** World Zero's ecology seed: drift, rain and catastrophe replay from it. */
+    public static final long ECOLOGY_SEED = 0x5EEDL;
     private final DriveTrace log = new DriveTrace();
     private final Object lock = new Object();
     private final Map<UUID, SlabBind> slabs = new ConcurrentHashMap<>();
@@ -120,6 +141,7 @@ public class WorldService {
         rebindSlabs();
         loadIslands();
         loadFleet();
+        loadEcology();
     }
 
     @Autowired
@@ -133,6 +155,7 @@ public class WorldService {
         rebindSlabs();
         loadIslands();
         loadFleet();
+        loadEcology();
     }
 
     public Path file() {
@@ -554,8 +577,11 @@ public class WorldService {
             }
             IslandEntry entry = new IslandEntry(slot, seed, radius);
             islands.put(slot, entry);
+            eco.addIsle(isleOf(entry));
+            holds.put(Ark.idFor(slot), Hold.founders(seed, canon));
             persist();
             persistIslands();
+            persistEcology();
             long revision = live.revision().value();
             events.accept(new WorldBlockEvent(this, id, WorldBlockEvent.Kind.WORLD_REVISION_CHANGED,
                     origin.x(), origin.y(), origin.z(), "ISLAND", BlockType.AIR.name(), revision));
@@ -583,7 +609,12 @@ public class WorldService {
     }
 
     /** An ark where it is now, with its voyage when underway (ADR-020). */
-    public record ArkView(Ark ark, Voyage voyage) {
+    public record ArkView(Ark ark, Voyage voyage, Map<String, Double> hold) {
+
+        /** Copy on construct: a view is what the hold carried when it was taken. */
+        public ArkView {
+            hold = hold == null ? Map.of() : Map.copyOf(hold);
+        }
     }
 
     /** Outcome of an order to sail; {@code view} is the ark after the order, null if no such ark. */
@@ -615,7 +646,8 @@ public class WorldService {
         Ark launched = ArkOps.launch(home.slot(), home.traits());
         Ark placed = new Ark(arkId, launched.name(), home.slot(), at,
                 where == null ? launched.berth() : ArkOps.berth(at, where.traits()));
-        return new ArkView(placed, fleet.voyageOf(arkId));
+        Hold hold = holds.get(arkId);
+        return new ArkView(placed, fleet.voyageOf(arkId), hold == null ? Map.of() : hold.cargo());
     }
 
     /** Order an ark to the island in {@code toSlot}. Null result means the world is unknown. */
@@ -636,6 +668,11 @@ public class WorldService {
             if (out.result() == VoyageResult.SAILING) {
                 persistFleet();
                 Voyage v = out.voyage();
+                Community leaving = eco.community(v.fromSlot());
+                if (leaving != null) {
+                    holdOf(arkId).board(leaving, v.departAt() * 31 + v.fromSlot());
+                    persistEcology();
+                }
                 published.accept(new ArkVoyageEvent(this, id, ArkVoyageEvent.Kind.DEPARTED, arkId,
                         v.fromSlot(), v.toSlot(), v.departAt(), v.arriveAt()));
             }
@@ -653,6 +690,13 @@ public class WorldService {
             if (!arrived.isEmpty()) {
                 persistFleet();
                 for (Voyage v : arrived) {
+                    Community landing = eco.community(v.toSlot());
+                    if (landing != null) {
+                        holdOf(v.arkId()).land(landing, eco.isle(v.toSlot()).habitat(), canon);
+                    }
+                }
+                persistEcology();
+                for (Voyage v : arrived) {
                     published.accept(new ArkVoyageEvent(this, id, ArkVoyageEvent.Kind.ARRIVED,
                             v.arkId(), v.fromSlot(), v.toSlot(), v.departAt(), v.arriveAt()));
                 }
@@ -668,6 +712,133 @@ public class WorldService {
             }
         }
         return null;
+    }
+
+    private Hold holdOf(String arkId) {
+        return holds.computeIfAbsent(arkId, k -> new Hold());
+    }
+
+    private static Ecosystem.Isle isleOf(IslandEntry e) {
+        BlockCoordinate o = e.origin();
+        return new Ecosystem.Isle(e.slot(), Habitat.of(e.traits()), o.x(), o.z());
+    }
+
+    /** Length of one ecological day in ms. Set from {@code daedalus.realm.day-ms}; tests shorten it. */
+    @Autowired(required = false)
+    public void useDayLength(@Value("${daedalus.realm.day-ms:10000}") long ms) {
+        if (ms < 1) {
+            throw new IllegalArgumentException("day length must be >= 1 ms");
+        }
+        synchronized (lock) {
+            this.dayMs = ms;
+        }
+    }
+
+    public long dayLength() {
+        return dayMs;
+    }
+
+    /**
+     * Step the ecology up to the server clock (ADR-023): one day per {@link #dayLength()} since the
+     * epoch, at most {@link #MAX_CATCH_UP} per call. Called by the harbour clock and before every
+     * ecology read. Returns the day reports stepped, oldest first; empty for an unknown world.
+     */
+    public List<Ecosystem.DayReport> tickEcology(String id) {
+        if (require(id) == null) {
+            return List.of();
+        }
+        synchronized (lock) {
+            long t = now();
+            if (ecoEpoch < 0) {
+                ecoEpoch = t;
+                persistEcology();
+                return List.of();
+            }
+            long due = Math.max(0, (t - ecoEpoch) / dayMs - eco.day());
+            List<Ecosystem.DayReport> reports = new ArrayList<>();
+            for (long d = 0; d < Math.min(due, MAX_CATCH_UP); d++) {
+                reports.add(eco.step(ECOLOGY_SEED));
+            }
+            if (!reports.isEmpty()) {
+                persistEcology();
+            }
+            return reports;
+        }
+    }
+
+    /** One island's life right now (ADR-023). */
+    public record IslandEcology(int slot, long day, Habitat habitat, Diversity diversity,
+                                Map<String, Double> abundance) {
+
+        /** Copy on construct: a snapshot, not a live view. */
+        public IslandEcology {
+            abundance = abundance == null ? Map.of() : Map.copyOf(abundance);
+        }
+    }
+
+    /** An island's community, stepped to now first; null if the world or the slot is unknown. */
+    public IslandEcology ecology(String id, int slot) {
+        if (require(id) == null) {
+            return null;
+        }
+        settleArrivals(id);
+        tickEcology(id);
+        synchronized (lock) {
+            Community c = eco.community(slot);
+            if (c == null) {
+                return null;
+            }
+            return new IslandEcology(slot, eco.day(), eco.isle(slot).habitat(), c.diversity(), c.abundance());
+        }
+    }
+
+    Path ecologyFile() {
+        return file.resolveSibling(file.getFileName() + ".ecology");
+    }
+
+    private void loadEcology() {
+        eco = new Ecosystem(canon);
+        holds.clear();
+        ecoEpoch = -1;
+        for (IslandEntry e : islands.values()) {
+            eco.addIsle(isleOf(e));
+        }
+        Path f = ecologyFile();
+        if (Files.exists(f)) {
+            try {
+                EcologyLedger.State state = EcologyLedger.fromLines(Files.readAllLines(f, StandardCharsets.UTF_8));
+                ecoEpoch = state.epoch();
+                eco.setDay(state.day());
+                state.isles().forEach((slot, counts) -> {
+                    Community c = eco.community(slot);
+                    if (c != null) {
+                        counts.forEach(c::put);
+                    }
+                });
+                state.holds().forEach((arkId, counts) -> {
+                    Hold h = new Hold();
+                    counts.forEach(h::put);
+                    holds.put(arkId, h);
+                });
+            } catch (IOException | RuntimeException e) {
+                throw new IllegalStateException("Cannot read ecology " + f, e);
+            }
+        }
+        // Islands raised before ADR-023 launched their arks empty; give them their founders now.
+        for (IslandEntry e : islands.values()) {
+            holds.computeIfAbsent(Ark.idFor(e.slot()), k -> Hold.founders(e.seed(), canon));
+        }
+    }
+
+    private void persistEcology() {
+        Path f = ecologyFile();
+        try {
+            Path tmp = f.resolveSibling(f.getFileName() + ".tmp");
+            Files.write(tmp, EcologyLedger.toLines(ecoEpoch, eco, holds), StandardCharsets.UTF_8);
+            Files.move(tmp, f, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+        } catch (IOException e) {
+            throw new UncheckedIOException("Cannot persist ecology " + f, e);
+        }
     }
 
     Path fleetFile() {

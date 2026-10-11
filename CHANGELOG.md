@@ -10,6 +10,20 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Arks carry life (ADR-023).**
+  Every ark launches
+  with founder pairs
+  drawn by its seed,
+  takes stowaways from
+  the island it leaves
+  and lands them where
+  it ties up. The
+  ecology runs on the
+  server clock and
+  survives restarts;
+  `GET /islands/{slot}/ecology`
+  shows who lives there.
+
 - **Island ecology core (ADR-022).**
   CSRBT's
   MacArthur–Wilson

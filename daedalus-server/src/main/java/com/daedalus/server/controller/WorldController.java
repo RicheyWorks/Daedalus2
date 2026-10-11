@@ -2,14 +2,21 @@
 
 package com.daedalus.server.controller;
 
+import com.daedalus.api.dto.ArkRow;
 import com.daedalus.api.dto.BlockInspectResponse;
 import com.daedalus.api.dto.BlockMutationResponse;
+import com.daedalus.api.dto.CargoRow;
+import com.daedalus.api.dto.ChunkBlocksResponse;
 import com.daedalus.api.dto.ChunkInspectResponse;
-import com.daedalus.api.dto.DoorInspectResponse;
+import com.daedalus.api.dto.ChunkRow;
 import com.daedalus.api.dto.DenyParcelRequest;
+import com.daedalus.api.dto.DoorInspectResponse;
 import com.daedalus.api.dto.DoorMutationResponse;
 import com.daedalus.api.dto.ForgiveParcelRequest;
 import com.daedalus.api.dto.GrantParcelRequest;
+import com.daedalus.api.dto.IslandEcologyResponse;
+import com.daedalus.api.dto.IslandRaiseResponse;
+import com.daedalus.api.dto.IslandRow;
 import com.daedalus.api.dto.NpcInspectResponse;
 import com.daedalus.api.dto.NpcMutationResponse;
 import com.daedalus.api.dto.ParcelDenyResponse;
@@ -21,27 +28,29 @@ import com.daedalus.api.dto.ParcelRevokeResponse;
 import com.daedalus.api.dto.PlaceBlockRequest;
 import com.daedalus.api.dto.PortalInspectResponse;
 import com.daedalus.api.dto.PortalMutationResponse;
+import com.daedalus.api.dto.RaiseIslandRequest;
 import com.daedalus.api.dto.RevokeParcelRequest;
 import com.daedalus.api.dto.StampMutationResponse;
 import com.daedalus.api.dto.StampWorldRequest;
 import com.daedalus.api.dto.TrapInspectResponse;
 import com.daedalus.api.dto.TrapMutationResponse;
+import com.daedalus.api.dto.VoyageRequest;
+import com.daedalus.api.dto.VoyageResponse;
+import com.daedalus.api.dto.WorldArksResponse;
 import com.daedalus.api.dto.WorldCapabilitiesResponse;
+import com.daedalus.api.dto.WorldChunksResponse;
 import com.daedalus.api.dto.WorldInspectResponse;
+import com.daedalus.api.dto.WorldIslandsResponse;
 import com.daedalus.api.dto.WorldObserveResponse;
 import com.daedalus.api.dto.WorldParcelRow;
 import com.daedalus.api.dto.WorldParcelsResponse;
 import com.daedalus.api.dto.WorldTraceResponse;
 import com.daedalus.api.dto.WorldTraceStepResponse;
-import com.daedalus.world.auto.DriveTrace;
-import com.daedalus.world.auto.Observation;
+import com.daedalus.engine.MazeGrid;
 import com.daedalus.plugin.runtime.PluginRegistry;
 import com.daedalus.server.ratelimit.PerKeyRateLimit;
-import com.daedalus.engine.MazeGrid;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.WorldService;
-import com.daedalus.world.auto.WorldOps;
-import com.daedalus.world.auto.WorldZeroCapabilities;
 import com.daedalus.server.web.ResourceNotFoundException;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
@@ -60,24 +69,21 @@ import com.daedalus.world.ParcelReleaseResult;
 import com.daedalus.world.ParcelRevokeResult;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
-import com.daedalus.world.stamp.StampResult;
 import com.daedalus.world.Trap;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.World;
-import com.daedalus.world.island.IslandTraits;
 import com.daedalus.world.ark.Ark;
-import com.daedalus.api.dto.ArkRow;
-import com.daedalus.api.dto.WorldArksResponse;
-import com.daedalus.api.dto.VoyageRequest;
-import com.daedalus.api.dto.VoyageResponse;
-import com.daedalus.api.dto.ChunkBlocksResponse;
-import com.daedalus.api.dto.ChunkRow;
-import com.daedalus.api.dto.IslandRaiseResponse;
-import com.daedalus.api.dto.IslandRow;
-import com.daedalus.api.dto.RaiseIslandRequest;
-import com.daedalus.api.dto.WorldChunksResponse;
-import com.daedalus.api.dto.WorldIslandsResponse;
+import com.daedalus.world.auto.DriveTrace;
+import com.daedalus.world.auto.Observation;
+import com.daedalus.world.auto.WorldOps;
+import com.daedalus.world.auto.WorldZeroCapabilities;
+import com.daedalus.world.ecology.Diversity;
+import com.daedalus.world.ecology.Guild;
+import com.daedalus.world.ecology.Species;
+import com.daedalus.world.ecology.SpeciesCanon;
 import com.daedalus.world.island.IslandGenerator;
+import com.daedalus.world.island.IslandTraits;
+import com.daedalus.world.stamp.StampResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -86,8 +92,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -98,6 +104,8 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 
 /**
@@ -736,11 +744,42 @@ public class WorldController {
         BlockCoordinate b = ark.berth();
         if (view.voyage() == null) {
             return new ArkRow(ark.id(), ark.name(), ark.homeSlot(), ark.slot(), b.x(), b.y(), b.z(),
-                    "MOORED", -1, -1, 0L, 0L);
+                    "MOORED", -1, -1, 0L, 0L, cargo(view.hold()));
         }
         return new ArkRow(ark.id(), ark.name(), ark.homeSlot(), ark.slot(), b.x(), b.y(), b.z(),
                 "SAILING", view.voyage().fromSlot(), view.voyage().toSlot(),
-                view.voyage().departAt(), view.voyage().arriveAt());
+                view.voyage().departAt(), view.voyage().arriveAt(), cargo(view.hold()));
+    }
+
+    /** Kinds by count, most numerous first, ties by key: the order a reader scans. */
+    private static List<CargoRow> cargo(Map<String, Double> counts) {
+        SpeciesCanon canon = SpeciesCanon.get();
+        List<CargoRow> rows = new ArrayList<>();
+        for (Map.Entry<String, Double> e : counts.entrySet()) {
+            Species s = canon.byKey(e.getKey());
+            rows.add(new CargoRow(e.getKey(), s == null ? e.getKey() : s.name(),
+                    s == null ? "UNKNOWN" : s.guild().name(), e.getValue()));
+        }
+        rows.sort(Comparator.comparingDouble(CargoRow::count).reversed().thenComparing(CargoRow::key));
+        return rows;
+    }
+
+    @GetMapping("/world/{id}/islands/{slot}/ecology")
+    @Operation(summary = "One island's living community: habitat, diversity and every kind there.")
+    public ResponseEntity<IslandEcologyResponse> islandEcology(@PathVariable String id, @PathVariable int slot) {
+        mounted(id);
+        WorldService.IslandEcology life = worlds.ecology(id, slot);
+        if (life == null) {
+            throw ResourceNotFoundException.island(slot);
+        }
+        Map<String, Double> habitat = new TreeMap<>();
+        for (Guild g : Guild.values()) {
+            habitat.put(g.name(), life.habitat().of(g));
+        }
+        Diversity d = life.diversity();
+        return ResponseEntity.ok(new IslandEcologyResponse(id, slot, life.day(), worlds.dayLength(),
+                life.habitat().area(), habitat, d.richness(), d.total(), d.shannon(), d.evenness(),
+                d.simpson(), cargo(life.abundance())));
     }
 
     private static IslandRow islandRow(WorldService.IslandEntry e, IslandTraits t) {

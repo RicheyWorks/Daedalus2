@@ -190,6 +190,8 @@ public class ProdSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/chunk/blocks").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/arks").permitAll()
+                        // An island's living community (ADR-023): read-only, steps the clock it reads.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands/*/ecology").permitAll()
                         // The species canon (ADR-021): reference data, read-only.
                         .requestMatchers(HttpMethod.GET, "/api/v1/species").permitAll()
 
