@@ -164,4 +164,22 @@
         </Or>
         <Bug pattern="MS_EXPOSE_REP"/>
     </Match>
+    <!--
+      World One carries the caller's live MazeGrid on purpose, the same contract as the
+      maze cache above: a stamp request projects that grid, a living slab re-projects it
+      on every tick, and a builder step hands it to WorldOps.stamp.apply. Copying the grid
+      would stamp a fork and leave the slab deaf to its own maze's ticks. The builder's
+      session() is the trace a caller reads after driving; returning it is the API.
+      (These classes landed after the exclusions above and failed spotbugs:check at HEAD
+      on 2026-10-10; ADR-018 recorded the fix.)
+    -->
+    <Match>
+        <Or>
+            <Class name="com.daedalus.world.stamp.StampRequest"/>
+            <Class name="com.daedalus.world.living.LivingSlab"/>
+            <Class name="com.daedalus.world.auto.WorldBuilder"/>
+            <Class name="com.daedalus.world.auto.WorldBuilder$Step"/>
+        </Or>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+    </Match>
 </FindBugsFilter>

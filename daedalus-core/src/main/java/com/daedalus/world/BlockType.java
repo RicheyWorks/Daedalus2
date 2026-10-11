@@ -3,17 +3,49 @@
 package com.daedalus.world;
 
 /**
- * Five solid-or-empty cubes. AIR is ordinal 0 so a fresh chunk payload reads empty.
+ * Solid-or-empty cubes. AIR is ordinal 0 so a fresh chunk payload reads empty.
  * Maze tiles are not these types — a later stamp projects WALL to STONE.
+ *
+ * <p><b>Ordinals are the save format.</b> {@link Chunk} stores each cube as its ordinal and
+ * {@link WorldStore} writes those bytes to disk, so a constant may only ever be <em>appended</em>.
+ * Reordering or removing one silently turns every saved world into different matter. The first
+ * five are World Zero's; the rest arrived with island terrain (ADR-018) and keep their place.
  */
 public enum BlockType {
     AIR,
     STONE,
     DIRT,
     WOOD,
-    GLASS;
+    GLASS,
+    // Island terrain (ADR-018). Appended — see the class note.
+    GRASS,
+    SAND,
+    WATER,
+    LOG,
+    LEAVES,
+    BLOSSOM,
+    GRAVEL,
+    CRYSTAL,
+    CLOUD;
 
     public boolean solid() {
         return this != AIR;
+    }
+
+    /** Light passes through: a renderer must not cull the face of a neighbour behind it. */
+    public boolean seeThrough() {
+        return this == AIR || this == GLASS || this == WATER || this == CLOUD;
+    }
+
+    /** Every name a client may send, in ordinal order — the error message and the palette. */
+    public static String names() {
+        StringBuilder out = new StringBuilder();
+        for (BlockType t : values()) {
+            if (out.length() > 0) {
+                out.append(", ");
+            }
+            out.append(t.name());
+        }
+        return out.toString();
     }
 }

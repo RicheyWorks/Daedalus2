@@ -77,17 +77,24 @@ public class ProdSecurityConfig {
      * because HTML cannot import this constant; the serve test fails if a path
      * is missing from the page.
      */
+    /**
+     * Pages beside the maze well. {@code /realm.html} is the WebGL world client (ADR-018); the
+     * well at {@code /} stays the default and is untouched by it.
+     */
+    public static final List<String> STATIC_PAGES = List.of("/realm.html", "/realm.js");
+
     public static final List<String> STATIC_SCRIPTS = List.of(
             "/draw.js", "/api.js", "/share.js", "/fog.js", "/seat.js",
             "/lab.js", "/caption.js", "/mint.js", "/campaign.js",
             "/spectate.js", "/hunt.js", "/solve.js", "/theory.js",
             "/living.js", "/ghost.js", "/tournament.js", "/live.js",
-            "/session.js", "/fogwalk.js", "/desk.js", "/stage.js", "/app.js");
+            "/session.js", "/fogwalk.js", "/desk.js", "/stage.js", "/world.js", "/app.js");
 
     private static String[] publicStaticGets() {
         List<String> paths = new ArrayList<>();
         paths.add("/");
         paths.add("/index.html");
+        paths.addAll(STATIC_PAGES);
         paths.addAll(STATIC_SCRIPTS);
         return paths.toArray(String[]::new);
     }
@@ -177,6 +184,11 @@ public class ProdSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/capabilities").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/observe").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/trace").permitAll()
+                        // Island lane + realm renderer reads (ADR-018): what matter exists, the
+                        // cubes in one chunk, and which seeds grew which islands. Read-only.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/chunks").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/chunk/blocks").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands").permitAll()
 
                         // ---- Protected API surface ----
                         // Write operations.

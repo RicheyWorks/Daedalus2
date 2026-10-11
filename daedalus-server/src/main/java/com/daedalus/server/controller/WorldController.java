@@ -64,6 +64,15 @@ import com.daedalus.world.stamp.StampResult;
 import com.daedalus.world.Trap;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.World;
+import com.daedalus.world.island.IslandTraits;
+import com.daedalus.api.dto.ChunkBlocksResponse;
+import com.daedalus.api.dto.ChunkRow;
+import com.daedalus.api.dto.IslandRaiseResponse;
+import com.daedalus.api.dto.IslandRow;
+import com.daedalus.api.dto.RaiseIslandRequest;
+import com.daedalus.api.dto.WorldChunksResponse;
+import com.daedalus.api.dto.WorldIslandsResponse;
+import com.daedalus.world.island.IslandGenerator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -81,6 +90,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -630,6 +641,74 @@ public class WorldController {
         return cached.grid();
     }
 
+    @GetMapping("/world/{id}/chunks")
+    @Operation(summary = "List every non-empty chunk, for a renderer to fetch.")
+    public ResponseEntity<WorldChunksResponse> listChunks(@PathVariable String id) {
+        World world = mounted(id);
+        List<ChunkRow> rows = new ArrayList<>();
+        List<ChunkCoordinate> keys = new ArrayList<>(world.chunkKeys());
+        keys.sort(Comparator.comparingInt(ChunkCoordinate::y)
+                .thenComparingInt(ChunkCoordinate::z)
+                .thenComparingInt(ChunkCoordinate::x));
+        for (ChunkCoordinate cc : keys) {
+            Chunk chunk = world.chunk(cc);
+            if (chunk != null && !chunk.isEmpty()) {
+                rows.add(new ChunkRow(cc.x(), cc.y(), cc.z(), chunk.revision(), chunk.occupied()));
+            }
+        }
+        return ResponseEntity.ok(new WorldChunksResponse(id, world.revision().value(), Chunk.SIZE, rows));
+    }
+
+    @GetMapping("/world/{id}/chunk/blocks")
+    @Operation(summary = "One chunk's cubes as a base64 ordinal payload, for meshing.")
+    public ResponseEntity<ChunkBlocksResponse> chunkBlocks(
+            @PathVariable String id,
+            @RequestParam @NotNull Integer x,
+            @RequestParam @NotNull Integer y,
+            @RequestParam @NotNull Integer z) {
+        mounted(id);
+        Chunk chunk = worlds.inspectChunk(id, x, y, z);
+        List<String> palette = new ArrayList<>();
+        for (BlockType t : BlockType.values()) {
+            palette.add(t.name());
+        }
+        if (chunk == null || chunk.isEmpty()) {
+            return ResponseEntity.ok(new ChunkBlocksResponse(x, y, z, false, 0L, palette, ""));
+        }
+        return ResponseEntity.ok(new ChunkBlocksResponse(x, y, z, true, chunk.revision(), palette,
+                Base64.getEncoder().encodeToString(chunk.ordinals())));
+    }
+
+    @GetMapping("/world/{id}/islands")
+    @Operation(summary = "List raised islands with their seeds and traits.")
+    public ResponseEntity<WorldIslandsResponse> listIslands(@PathVariable String id) {
+        mounted(id);
+        List<IslandRow> rows = new ArrayList<>();
+        for (WorldService.IslandEntry e : worlds.islands(id)) {
+            rows.add(islandRow(e, e.traits()));
+        }
+        return ResponseEntity.ok(new WorldIslandsResponse(id, rows));
+    }
+
+    @PostMapping("/world/{id}/islands")
+    @Operation(summary = "Raise a seeded floating island into the next free lane slot.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<IslandRaiseResponse> raiseIsland(
+            @PathVariable String id, @Valid @RequestBody RaiseIslandRequest body) {
+        mounted(id);
+        int radius = body.radius() == null ? IslandGenerator.DEFAULT_RADIUS : body.radius();
+        WorldService.IslandWrite write = worlds.raiseIsland(id, body.seed(), radius);
+        IslandRow row = write.island() == null ? null : islandRow(write.island(), write.traits());
+        return ResponseEntity.ok(new IslandRaiseResponse(write.result(), write.revision(), row));
+    }
+
+    private static IslandRow islandRow(WorldService.IslandEntry e, IslandTraits t) {
+        BlockCoordinate o = e.origin();
+        return new IslandRow(e.slot(), o.x(), o.y(), o.z(), e.seed(), e.radius(), t.columns(),
+                t.blocks(), t.trees(), t.blossomTrees(), t.pondColumns(), t.streamLength(),
+                t.waterfall(), t.crystals(), t.boulders(), t.top(), t.bottom());
+    }
+
     private World mounted(String id) {
         World world = worlds.inspect(id);
         if (world == null) {
@@ -643,7 +722,7 @@ public class WorldController {
             return BlockType.valueOf(raw.trim().toUpperCase());
         } catch (IllegalArgumentException ex) {
             throw new IllegalArgumentException(
-                    "Unknown block type '" + raw + "'. Use AIR, STONE, DIRT, WOOD, or GLASS.");
+                    "Unknown block type '" + raw + "'. Use one of " + BlockType.names() + ".");
         }
     }
 }

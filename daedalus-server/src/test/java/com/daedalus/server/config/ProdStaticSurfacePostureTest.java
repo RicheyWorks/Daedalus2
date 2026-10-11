@@ -70,6 +70,10 @@ class ProdStaticSurfacePostureTest {
         for (String path : ProdSecurityConfig.STATIC_SCRIPTS) {
             EXPECTED.put("GET " + path, Posture.PUBLIC);
         }
+        // The realm page and its script (ADR-018): the WebGL world client beside the well.
+        for (String path : ProdSecurityConfig.STATIC_PAGES) {
+            EXPECTED.put("GET " + path, Posture.PUBLIC);
+        }
 
         // SockJS info is the first request a browser makes. Closing /ws/** made that 401, so
         // a signed-in CONNECT never happened — the token was on a frame the handshake blocked.

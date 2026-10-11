@@ -62,6 +62,15 @@ public final class Chunk {
     }
 
     /**
+     * Dense ordinal payload, a copy: {@code index = x + 16 * (y + 16 * z)} in local coordinates,
+     * each byte a {@link BlockType} ordinal. This is what a renderer meshes from; the chunk's own
+     * array never leaves the class.
+     */
+    public byte[] ordinals() {
+        return blocks.clone();
+    }
+
+    /**
      * Dense ordinal payload for a later snapshot. Callers must not mutate the array.
      */
     byte[] payload() {

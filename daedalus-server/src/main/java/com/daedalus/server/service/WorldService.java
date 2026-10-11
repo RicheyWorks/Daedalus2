@@ -27,6 +27,11 @@ import com.daedalus.world.Trap;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.World;
 import com.daedalus.world.WorldId;
+import com.daedalus.world.island.IslandGenerator;
+import com.daedalus.world.island.IslandOps;
+import com.daedalus.world.island.IslandPlan;
+import com.daedalus.world.island.IslandRaiseResult;
+import com.daedalus.world.island.IslandTraits;
 import com.daedalus.world.WorldStore;
 import com.daedalus.world.auto.DriveTrace;
 import com.daedalus.world.auto.Observation;
@@ -43,11 +48,15 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.FileTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
@@ -65,6 +74,23 @@ public class WorldService {
     private final DriveTrace log = new DriveTrace();
     private final Object lock = new Object();
     private final Map<UUID, SlabBind> slabs = new ConcurrentHashMap<>();
+    /** Island lane: slot → (seed, radius). Persisted beside the DAEW file (ADR-018). */
+    private final TreeMap<Integer, IslandEntry> islands = new TreeMap<>();
+
+    /** A raised island as the lane remembers it. Traits are regrown from the seed on demand. */
+    public record IslandEntry(int slot, long seed, int radius) {
+        public BlockCoordinate origin() {
+            return IslandOps.slot(slot);
+        }
+
+        public IslandTraits traits() {
+            return IslandGenerator.generate(seed, radius).traits();
+        }
+    }
+
+    /** Outcome of {@link #raiseIsland}. {@code island} is null unless {@code result} is RAISED. */
+    public record IslandWrite(String result, long revision, IslandEntry island, IslandTraits traits) {
+    }
 
     private record SlabBind(BlockCoordinate origin, int floorY, int wallHeight, ParcelBounds bounds) {
     }
@@ -75,6 +101,7 @@ public class WorldService {
         this.world = open(file);
         seedTrace(this.world);
         rebindSlabs();
+        loadIslands();
     }
 
     @Autowired
@@ -85,6 +112,7 @@ public class WorldService {
         this.world = open(file);
         seedTrace(this.world);
         rebindSlabs();
+        loadIslands();
     }
 
     public Path file() {
@@ -479,6 +507,94 @@ public class WorldService {
                         slab.lastWrittenPrevious(), live);
             }
             return written;
+        }
+    }
+
+    /**
+     * Raise a seeded island into the first free slot of the island lane. All or nothing: the
+     * plan lands whole or the lane is full and nothing changes. One persist, one revision event
+     * for the whole island — not sixteen thousand block frames.
+     */
+    public IslandWrite raiseIsland(String id, long seed, int radius) {
+        World live = require(id);
+        if (live == null) {
+            return null;
+        }
+        IslandPlan plan = IslandGenerator.generate(seed, radius);
+        synchronized (lock) {
+            int slot = IslandOps.firstFreeSlot(live, plan);
+            if (slot < 0) {
+                return new IslandWrite("LANE_FULL", live.revision().value(), null, plan.traits());
+            }
+            BlockCoordinate origin = IslandOps.slot(slot);
+            IslandRaiseResult raised = IslandOps.raise(live, origin, plan);
+            if (raised != IslandRaiseResult.RAISED) {
+                // firstFreeSlot just said it fits and we hold the lock; anything else is a bug.
+                throw new IllegalStateException("Island slot " + slot + " stopped fitting: " + raised);
+            }
+            IslandEntry entry = new IslandEntry(slot, seed, radius);
+            islands.put(slot, entry);
+            persist();
+            persistIslands();
+            long revision = live.revision().value();
+            events.accept(new WorldBlockEvent(this, id, WorldBlockEvent.Kind.WORLD_REVISION_CHANGED,
+                    origin.x(), origin.y(), origin.z(), "ISLAND", BlockType.AIR.name(), revision));
+            return new IslandWrite("RAISED", revision, entry, plan.traits());
+        }
+    }
+
+    /** Islands in slot order, or null for an unknown world. */
+    public List<IslandEntry> islands(String id) {
+        if (require(id) == null) {
+            return null;
+        }
+        synchronized (lock) {
+            return List.copyOf(islands.values());
+        }
+    }
+
+    Path islandsFile() {
+        return file.resolveSibling(file.getFileName() + ".islands");
+    }
+
+    private void loadIslands() {
+        islands.clear();
+        Path lane = islandsFile();
+        if (!Files.exists(lane)) {
+            return;
+        }
+        try {
+            for (String line : Files.readAllLines(lane, StandardCharsets.UTF_8)) {
+                String trimmed = line.trim();
+                if (trimmed.isEmpty() || trimmed.startsWith("#")) {
+                    continue;
+                }
+                String[] f = trimmed.split("\\s+");
+                if (f.length != 3) {
+                    throw new IOException("Bad island lane row: " + trimmed);
+                }
+                IslandEntry e = new IslandEntry(Integer.parseInt(f[0]), Long.parseLong(f[1]),
+                        Integer.parseInt(f[2]));
+                islands.put(e.slot(), e);
+            }
+        } catch (IOException | NumberFormatException e) {
+            throw new IllegalStateException("Cannot read island lane " + lane, e);
+        }
+    }
+
+    private void persistIslands() {
+        Path lane = islandsFile();
+        List<String> rows = new ArrayList<>();
+        rows.add("# Daedalus island lane (ADR-018): slot seed radius. Terrain regrows from the seed.");
+        for (IslandEntry e : islands.values()) {
+            rows.add(e.slot() + " " + e.seed() + " " + e.radius());
+        }
+        try {
+            Path tmp = lane.resolveSibling(lane.getFileName() + ".tmp");
+            Files.write(tmp, rows, StandardCharsets.UTF_8);
+            Files.move(tmp, lane, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+        } catch (IOException e) {
+            throw new UncheckedIOException("Cannot persist island lane " + lane, e);
         }
     }
 

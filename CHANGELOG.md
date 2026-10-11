@@ -10,6 +10,31 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **The Realm (ADR-018).**
+  Seeded floating
+  islands and a
+  WebGL client.
+  `IslandGenerator`
+  grows an island
+  from one number;
+  the lane raises
+  it whole or not
+  at all. Nine
+  block types are
+  appended after
+  GLASS. New reads:
+  `/chunks`,
+  `/chunk/blocks`,
+  `/islands`; new
+  write: `POST
+  /islands`.
+  `/realm.html`
+  meshes chunks,
+  builds and breaks
+  by tap, and hears
+  other players over
+  STOMP.
+
 - **Well north skirt.**
   A dark floor
   still meets the
@@ -4924,6 +4949,31 @@ under the `_migration/` portfolios.
   three frames and exits so a deploy can be proven without a hang.
 
 ### Fixed
+
+- **SpotBugs at HEAD.**
+  Stamp request,
+  living slab and
+  builder step hold
+  the live maze on
+  purpose. They now
+  have a documented
+  exclusion.
+
+- **`world.js` in prod.**
+  The well's world
+  panel script had
+  no row in
+  `STATIC_SCRIPTS`,
+  so prod answered
+  401 for it.
+
+- **Smoke pins.**
+  Two
+  `WebUiSmokeTest`
+  pins still held
+  the colours the
+  2026-09-18 well
+  commits changed.
 
 - **Generate circuit-breaker fallback no longer swallows a typo.**
   An unregistered `generatorId` is a caller error, not a generator

@@ -53,6 +53,7 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   surface is broadcast-only — with a simple broker on `/topic`, anything less
   let any connected client forge a move frame into any session (found by
   sending one, 2026-07-31).
+- **A WebGL realm at `/realm.html`** (ADR-018) — floating voxel islands grown from a seed on an island lane, meshed per 16³ chunk in three.js; Look / Build / Break by tap (tablet-friendly), with every cube edit going through the same `PUT`/`DELETE /world/{id}/block` and arriving live on other screens over the `/topic/world/{id}/events` STOMP topic. No build step. The maze well at `/` is unchanged.
 - **A vanilla web UI at `/`** — markup in `index.html`, paint in `draw.js`, HTTP in `api.js`, hash/walk helpers in `share.js`, fog memory in `fog.js`, seat/trail helpers in `seat.js`, the complexity-lab panel in `lab.js`, theory captions in `caption.js`, mint in `mint.js`, campaign in `campaign.js`, spectate / hash in `spectate.js`, hunt in `hunt.js`, solve / race / compare in `solve.js`, theory writes in `theory.js`, living refresh / traffic in `living.js`, ghost races in `ghost.js`, tournament ranks in `tournament.js`, STOMP in `live.js`, seats in `session.js`, fog walks in `fogwalk.js`, operator desk in `desk.js`, paint snapshot / input in `stage.js`, leftover-state wiring in `app.js`, no npm, the same REST + STOMP
   an external integrator would use. Sign in attaches the JWT. Generate
   accepts `braid`; the tournament and that control stay one number. Fog
@@ -215,6 +216,10 @@ public consumers).
 | `GET` | `/api/v1/world/{id}/trace` | public | Trace driven world ops since this process opened the file. |
 | `GET` | `/api/v1/world/{id}/block?x=&y=&z=` | public | Inspect one cube |
 | `GET` | `/api/v1/world/{id}/chunk?x=&y=&z=` | public | Inspect one 16³ chunk |
+| `GET` | `/api/v1/world/{id}/chunks` | public | List every non-empty chunk (coords, revision, occupied) for a renderer (ADR-018) |
+| `GET` | `/api/v1/world/{id}/chunk/blocks?x=&y=&z=` | public | One chunk's cubes as a base64 ordinal payload plus the palette, for meshing (ADR-018) |
+| `GET` | `/api/v1/world/{id}/islands` | public | Raised islands: lane slot, origin, seed and traits (ADR-018) |
+| `POST` | `/api/v1/world/{id}/islands` | required | Raise a seeded floating island into the next free lane slot (`RaiseIslandRequest`). Lane-full is a named result (ADR-018) |
 | `PUT` | `/api/v1/world/{id}/block` | required | Place a cube (`PlaceBlockRequest`). AIR is remove. Survives restart. |
 | `DELETE` | `/api/v1/world/{id}/block?x=&y=&z=` | required | Remove a cube (set AIR). Optional actorId uses the parcel gate |
 | `GET` | `/api/v1/world/{id}/door` | public | Inspect the programmable door |

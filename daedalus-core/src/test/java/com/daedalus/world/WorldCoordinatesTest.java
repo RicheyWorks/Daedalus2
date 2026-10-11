@@ -64,9 +64,14 @@ class WorldCoordinatesTest {
     }
 
     @Test
-    void fiveBlockTypesAndAirIsNotSolid() {
+    void blockTypesKeepTheirSavedOrdinalsAndAirIsNotSolid() {
+        // Ordinals are the DAEW byte format: World Zero's five keep 0..4 forever, and island
+        // terrain (ADR-018) is appended after them. Reordering would rewrite every saved world.
         assertThat(BlockType.values()).containsExactly(
-                BlockType.AIR, BlockType.STONE, BlockType.DIRT, BlockType.WOOD, BlockType.GLASS);
+                BlockType.AIR, BlockType.STONE, BlockType.DIRT, BlockType.WOOD, BlockType.GLASS,
+                BlockType.GRASS, BlockType.SAND, BlockType.WATER, BlockType.LOG, BlockType.LEAVES,
+                BlockType.BLOSSOM, BlockType.GRAVEL, BlockType.CRYSTAL, BlockType.CLOUD);
+        assertThat(BlockType.GLASS.ordinal()).isEqualTo(4);
         assertThat(BlockType.AIR.solid()).isFalse();
         assertThat(BlockType.STONE.solid()).isTrue();
     }

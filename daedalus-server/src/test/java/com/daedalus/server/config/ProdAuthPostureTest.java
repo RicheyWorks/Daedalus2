@@ -111,6 +111,9 @@ class ProdAuthPostureTest {
         EXPECTED.put("GET /api/v1/world/" + ID + "/capabilities", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/observe", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/trace", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/chunks", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/chunk/blocks", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/islands", Posture.PUBLIC);
 
         // --- everything that costs work or touches state ---
         EXPECTED.put("POST /api/v1/maze/generate", Posture.AUTHENTICATED);
@@ -155,6 +158,7 @@ class ProdAuthPostureTest {
         EXPECTED.put("POST /api/v1/world/" + ID + "/parcels/revoke", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/world/" + ID + "/parcels/forgive", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/world/" + ID + "/stamp", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/islands", Posture.AUTHENTICATED);
     }
 
     @LocalServerPort
