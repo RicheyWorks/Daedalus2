@@ -26,9 +26,13 @@ const COLORS = {
   STONE: 0x7d7b84, DIRT: 0x7a5230, WOOD: 0x9a6b3f, GLASS: 0xa8d8e8, GRASS: 0x6cc046,
   SAND: 0xe2d08c, WATER: 0x2f80d8, LOG: 0x7a5232, LEAVES: 0x4aa44f, BLOSSOM: 0xf29bc0,
   GRAVEL: 0x9b9387, CRYSTAL: 0xa070ff, CLOUD: 0xf4f6fb,
+  // Sky gates (ADR-031): a rainbow's bands and the doorway in the clouds.
+  RAINBOW_RED: 0xff4d4d, RAINBOW_ORANGE: 0xff9a3c, RAINBOW_YELLOW: 0xffe25a, RAINBOW_GREEN: 0x5ee07a,
+  RAINBOW_BLUE: 0x4aa8ff, RAINBOW_VIOLET: 0xa66bff, PORTAL: 0xd7b8ff,
 };
-const SEE_THROUGH = new Set(["AIR", "GLASS", "WATER", "CLOUD"]);
-const TRANSLUCENT = new Set(["GLASS", "WATER"]);
+const RAINBOW = ["RAINBOW_RED", "RAINBOW_ORANGE", "RAINBOW_YELLOW", "RAINBOW_GREEN", "RAINBOW_BLUE", "RAINBOW_VIOLET"];
+const SEE_THROUGH = new Set(["AIR", "GLASS", "WATER", "CLOUD", "PORTAL", ...RAINBOW]);
+const TRANSLUCENT = new Set(["GLASS", "WATER", "PORTAL", ...RAINBOW]);
 const BUILDABLE = ["GRASS", "DIRT", "STONE", "WOOD", "LOG", "LEAVES", "BLOSSOM", "SAND",
   "GRAVEL", "GLASS", "WATER", "CRYSTAL", "CLOUD"];
 
@@ -39,6 +43,8 @@ const state = {
   revision: 0,
   islands: [],
   arks: [],                  // from GET /arks (ADR-019)
+  gates: [],                 // this world's sky gates (ADR-031)
+  hail: null,                // the ark coming up to the gate to meet you after a crossing
   arkModels: new Map(),      // ark id → THREE.Group placed at its berth
   species: [],               // the canon, from GET /species (ADR-021)
   clockOffset: 0,            // server epoch − local epoch, from /arks and ark frames (ADR-020)
@@ -322,6 +328,8 @@ async function loadIslands(focusSlot) {
 }
 
 // ---------------------------------------------------------------- ownership (ADR-026)
+/** A wallet address is shown short (0x7099…79c8); a name as it is. */
+function shortName(name) { return /^0x[0-9a-f]{40}$/.test(name) ? `${name.slice(0, 6)}…${name.slice(-4)}` : name; }
 function mine(isle) { return !!state.me && isle.owner === state.me; }
 function ownerRow(isle) {
   const row = document.createElement("div");
@@ -330,8 +338,8 @@ function ownerRow(isle) {
   const line = document.createElement("div");
   line.className = "owner-line";
   if (!isle.owner) line.textContent = "open — anyone may build";
-  else line.textContent = mine(isle) ? "yours" + (isle.builders.length ? ` · builders: ${isle.builders.join(", ")}` : "")
-    : `owned by ${isle.owner}` + (isle.builders.includes(state.me) ? " · you may build" : "");
+  else line.textContent = mine(isle) ? "yours" + (isle.builders.length ? ` · builders: ${isle.builders.map(shortName).join(", ")}` : "")
+    : `owned by ${shortName(isle.owner)}` + (isle.builders.includes(state.me) ? " · you may build" : "");
   row.appendChild(line);
   const act = document.createElement("div");
   act.className = "owner-act";
@@ -427,6 +435,15 @@ async function loadWorlds() {
       here.textContent = "you are here";
       row.appendChild(here);
     } else {
+      const linked = (state.gates || []).some(g => g.toWorld === w.id);
+      if (linked) {
+        const tag = document.createElement("span");
+        tag.className = "here gate-open";
+        tag.textContent = "gate open";
+        row.appendChild(tag);
+      } else {
+        row.appendChild(button("Open gate", "open-gate", () => openGateTo(w.id)));
+      }
       row.appendChild(button("Visit", "visit", () => { location.href = `/realm.html?world=${encodeURIComponent(w.id)}`; }));
     }
     host.appendChild(row);
@@ -449,6 +466,66 @@ async function createWorld() {
     toast(words[res.result] || res.result);
     if (res.result === "CREATED") location.href = `/realm.html?world=${encodeURIComponent(res.world.id)}`;
     else loadWorlds();
+  } catch (e) {
+    handleError(e);
+  }
+}
+
+// ---------------------------------------------------------------- sky gates (ADR-031)
+// Gates float in the clouds on the far side of the rainbow, far from every island: no one walks there.
+// Ride an ark to a gate and you cross into the world it opens on. There, that world's ark comes up to
+// its own gate to meet you and carries you down to an island.
+const GATE_BASE = 1000;
+function placeName(slot) {
+  if (slot >= GATE_BASE) {
+    const g = state.gates.find(x => x.slot === slot);
+    return g ? `the gate to ${g.toTitle}` : "a sky gate";
+  }
+  return `Isle ${slot}`;
+}
+async function loadGates() {
+  try {
+    const res = await api(`/api/v1/world/${encodeURIComponent(WORLD)}/gates`);
+    state.gates = res.gates;
+    state.mount = res.mount;
+  } catch (e) {
+    state.gates = [];
+  }
+  renderArkList();
+  if (state.worlds) loadWorlds();
+}
+function crossGate(gate) {
+  toast(`Through the clouds to ${gate.toTitle}…`);
+  state.crossing = gate;
+  setTimeout(() => {
+    location.href = `/realm.html?world=${encodeURIComponent(gate.toWorld)}&arrive=${gate.toGate}`;
+  }, 1200);
+}
+/** Arrived through a gate (?arrive=N): look at this world's gate and hail an ark to meet you there. */
+async function arriveThroughGate() {
+  let g;
+  try { g = Number(new URLSearchParams(location.search).get("arrive")); } catch (e) { return; }
+  if (!Number.isInteger(g) || g < 0) return;
+  const gate = state.gates.find(x => x.gate === g);
+  if (!gate) return;
+  flyTo({ x: gate.x, y: gate.y - 6, z: gate.z + 20 });
+  const ark = state.arks.find(a => a.state === "MOORED" && a.slot < GATE_BASE) || state.arks.find(a => a.state === "MOORED");
+  if (!ark) { toast("No ark is free to meet you — wait at the gate"); return; }
+  state.hail = { arkId: ark.id, gate: gate.gate };
+  state.lastHail = { arkId: ark.id, gate: gate.gate, at: Date.now() };   // stays after the meeting (harness, debugging)
+  toast(`Welcome to ${document.getElementById("worldTitle").textContent}. ${ark.name} is coming up to the gate for you`);
+  await sailArk(ark.id, gate.slot);
+}
+async function openGateTo(worldId) {
+  try {
+    const res = await api(`/api/v1/world/${encodeURIComponent(WORLD)}/gates`, { method: "POST", body: JSON.stringify({ toWorld: worldId }) });
+    const words = { OPENED: "A gate opens in the clouds past the rainbow", ALREADY_LINKED: "A gate there is already open",
+      FULL: "No sky left for another gate", NO_SUCH_WORLD: "No such world", SAME_WORLD: "That is this world" };
+    toast(words[res.result] || res.result);
+    if (res.result === "OPENED") {
+      const gate = { x: 48 + 96 * res.gate, y: 72, z: -210 };
+      flyTo({ x: gate.x, y: gate.y - 6, z: gate.z + 30 });
+    }
   } catch (e) {
     handleError(e);
   }
@@ -904,6 +981,8 @@ const RIDE = { id: null, last: null };
 const BERTH_SPACING = 26;
 const BERTH_STEPS = [0, 1, -1, 2, -2, 3, -3];
 function mooring(slot, arkId) {
+  const gate = state.gates.find(g => g.slot === slot);
+  if (gate) return new THREE.Vector3(gate.berthX + 0.5, gate.berthY, gate.berthZ + ARK_STANDOFF);
   const isle = state.islands.find(i => i.slot === slot);
   if (!isle) return null;
   const here = new Set(state.arks.filter(a => a.slot === slot).map(a => a.id));
@@ -972,7 +1051,7 @@ function renderArkList() {
     row.className = "isle ark";
     row.dataset.ark = ark.id;
     const info = document.createElement("div");
-    const where = ark.state === "SAILING" ? `sailing Isle ${ark.fromSlot} → Isle ${ark.toSlot}` : `moored at Isle ${ark.slot}`;
+    const where = ark.state === "SAILING" ? `sailing ${placeName(ark.fromSlot)} → ${placeName(ark.toSlot)}` : `moored at ${placeName(ark.slot)}`;
     const held = (ark.hold || []).length;
     info.innerHTML = `<b>${ark.name}</b><br><span class="where">${where}</span><br>` +
       `<span class="hold">${held ? `carrying ${held} kind${held === 1 ? "" : "s"}` : "hold empty"}</span>`;
@@ -986,6 +1065,12 @@ function renderArkList() {
       if (isle.slot === ark.slot) continue;
       const o = document.createElement("option");
       o.value = isle.slot; o.textContent = "Isle " + isle.slot;
+      pick.appendChild(o);
+    }
+    for (const g of state.gates) {
+      if (g.slot === ark.slot) continue;
+      const o = document.createElement("option");
+      o.value = g.slot; o.textContent = `Gate → ${g.toTitle}`;
       pick.appendChild(o);
     }
     const sail = document.createElement("button");
@@ -1005,10 +1090,12 @@ function renderArkList() {
 
 async function sailArk(arkId, toSlot) {
   try {
-    const res = await api(`${API}/arks/${arkId}/voyage`, { method: "POST", body: JSON.stringify({ toSlot }) });
+    const gate = toSlot >= GATE_BASE;
+    const body = gate ? { toGate: toSlot - GATE_BASE } : { toSlot };
+    const res = await api(`${API}/arks/${arkId}/voyage`, { method: "POST", body: JSON.stringify(body) });
     if (res.result === "SAILING") {
       applyArk(res.ark, res.now);
-      toast(`${res.ark.name} cast off for Isle ${toSlot}`);
+      toast(`${res.ark.name} cast off for ${placeName(toSlot)}`);
       if (!RIDE.id) toggleRide(arkId);
     } else {
       toast({ ALREADY_THERE: "Already moored there", UNDERWAY: "Already under way", NO_SUCH_ISLAND: "No island in that slot" }[res.result] || res.result);
@@ -1039,12 +1126,24 @@ function onArkFrame(f) {
   const ark = state.arks.find(a => a.id === f.arkId);
   if (!ark) { loadArks(); return; }
   const isle = state.islands.find(i => i.slot === f.toSlot);
+  const gate = state.gates.find(g => g.slot === f.toSlot);
   const row = Object.assign({}, ark, f.kind === "DEPARTED"
     ? { state: "SAILING", slot: f.toSlot, fromSlot: f.fromSlot, toSlot: f.toSlot, departAt: f.departAt, arriveAt: f.arriveAt }
     : { state: "MOORED", slot: f.toSlot, fromSlot: -1, toSlot: -1, departAt: 0, arriveAt: 0 });
   if (isle) { row.x = isle.dockX; row.y = isle.dockY + 1; row.z = isle.dockZ; }
+  if (gate) { row.x = gate.berthX; row.y = gate.berthY; row.z = gate.berthZ; }
   applyArk(row);
-  if (f.kind === "ARRIVED") toast(`${ark.name} tied up at Isle ${f.toSlot}`);
+  if (f.kind !== "ARRIVED") return;
+  toast(`${ark.name} tied up at ${placeName(f.toSlot)}`);
+  if (state.hail && state.hail.arkId === f.arkId && gate) {
+    // The ark that came to meet you at this world's gate now carries you to an island.
+    const ark2 = state.arks.find(a => a.id === f.arkId);
+    state.hail = null;
+    toast(`${ark2.name} met you at the gate — sailing for ${placeName(ark2.homeSlot)}`);
+    sailArk(ark2.id, ark2.homeSlot);
+  } else if (gate && RIDE.id === f.arkId) {
+    crossGate(gate);                                          // you rode it to the gate: through you go
+  }
 }
 
 function moveArks(t) {
@@ -1130,7 +1229,8 @@ async function writeBlock(x, y, z, name) {
       setLocal(x, y, z, before);
       remeshAround(x, y, z);
       const isle = islandAt(x, z);
-      toast(isle && isle.owner ? `Isle ${isle.slot} belongs to ${isle.owner}` : "That plot is not yours to change");
+      state.lastRefusal = isle && isle.owner ? `Isle ${isle.slot} belongs to ${shortName(isle.owner)}` : "That plot is not yours to change";
+      toast(state.lastRefusal);
       return;
     }
     state.revision = Math.max(state.revision, res.revision);
@@ -1179,6 +1279,8 @@ function onFrame(ev) {
     }
   } else if (ev.kind === "WORLD_REVISION_CHANGED" && ev.type === "CLAIM") {
     loadIslands();
+  } else if (ev.kind === "WORLD_REVISION_CHANGED" && ev.type === "GATE") {
+    loadWorld().then(loadGates);
   } else if (ev.kind === "WORLD_REVISION_CHANGED" && ev.type === "ISLAND" && !reloadQueued) {
     reloadQueued = true;
     setTimeout(async () => {
@@ -1358,6 +1460,7 @@ state.project = (x, y, z) => {  // screen pixel of a world point, for a harness 
   try {
     await loadWorld();
     await loadIslands();
+    await loadGates();
     await loadArks();
     await loadSpecies();
     await refreshCreatures();
@@ -1366,6 +1469,7 @@ state.project = (x, y, z) => {  // screen pixel of a world point, for a harness 
     const target = linked && state.islands.find(i => i.slot === Number(linked[1]));
     if (target) { flyTo(target); toggleLife(target.slot); }
     else if (state.islands.length) flyTo(state.islands[0]);
+    await arriveThroughGate();
     status();
   } catch (e) {
     handleError(e);

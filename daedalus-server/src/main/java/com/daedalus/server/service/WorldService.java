@@ -43,6 +43,7 @@ import com.daedalus.world.ecology.Ecosystem;
 import com.daedalus.world.ecology.Habitat;
 import com.daedalus.world.ecology.Hold;
 import com.daedalus.world.ecology.SpeciesCanon;
+import com.daedalus.world.gate.GateOps;
 import com.daedalus.world.island.IslandGenerator;
 import com.daedalus.world.island.IslandOps;
 import com.daedalus.world.island.IslandPlan;
@@ -112,6 +113,20 @@ public class WorldService {
     private final DriveTrace log = new DriveTrace();
     private final Object lock = new Object();
     private final Map<UUID, SlabBind> slabs = new ConcurrentHashMap<>();
+    /** Sky gates (ADR-031): gate index → where its portal leads. Persisted as {@code .gates}. */
+    private final TreeMap<Integer, GateLink> gates = new TreeMap<>();
+
+    /** A sky gate of this world and the gate it opens onto in another world. */
+    public record GateLink(int gate, String toWorld, int toGate) {
+        public BlockCoordinate center() {
+            return GateOps.center(gate);
+        }
+
+        public BlockCoordinate berth() {
+            return GateOps.berth(gate);
+        }
+    }
+
     /** Island lane: slot → (seed, radius). Persisted beside the DAEW file (ADR-018). */
     private final TreeMap<Integer, IslandEntry> islands = new TreeMap<>();
 
@@ -157,6 +172,7 @@ public class WorldService {
         seedTrace(this.world);
         rebindSlabs();
         loadIslands();
+        loadGates();
         loadFleet();
         loadEcology();
     }
@@ -830,10 +846,9 @@ public class WorldService {
     private ArkView view(IslandEntry home) {
         String arkId = Ark.idFor(home.slot());
         int at = fleet.slotOf(arkId, home.slot());
-        IslandEntry where = islands.get(at);
+        BlockCoordinate berth = berthOf(at);
         Ark launched = ArkOps.launch(home.slot(), home.traits());
-        Ark placed = new Ark(arkId, launched.name(), home.slot(), at,
-                where == null ? launched.berth() : ArkOps.berth(at, where.traits()));
+        Ark placed = new Ark(arkId, launched.name(), home.slot(), at, berth == null ? launched.berth() : berth);
         Hold hold = holds.get(arkId);
         return new ArkView(placed, fleet.voyageOf(arkId), hold == null ? Map.of() : hold.cargo());
     }
@@ -849,10 +864,7 @@ public class WorldService {
             if (home == null) {
                 return new SailWrite(null, null);
             }
-            ArkFleet.Outcome out = fleet.sail(arkId, home.slot(), toSlot, slot -> {
-                IslandEntry isle = islands.get(slot);
-                return isle == null ? null : ArkOps.berth(slot, isle.traits());
-            }, now());
+            ArkFleet.Outcome out = fleet.sail(arkId, home.slot(), toSlot, this::berthOf, now());
             if (out.result() == VoyageResult.SAILING) {
                 persistFleet();
                 Voyage v = out.voyage();
@@ -917,6 +929,149 @@ public class WorldService {
         Map<Integer, Integer> out = new TreeMap<>();
         eco.communities().forEach((slot, c) -> out.put(slot, c.abundance().size()));
         return out;
+    }
+
+    /**
+     * Where an ark ties up at a slot: an island's pier tip, or a sky gate's cloud berth when the slot is
+     * {@link GateOps#GATE_BASE} + gate (ADR-031). Null when there is nothing there. Caller holds the lock.
+     */
+    private BlockCoordinate berthOf(int slot) {
+        if (GateOps.isGateSlot(slot)) {
+            GateLink g = gates.get(GateOps.gateOfSlot(slot));
+            return g == null ? null : g.berth();
+        }
+        IslandEntry isle = islands.get(slot);
+        return isle == null ? null : ArkOps.berth(slot, isle.traits());
+    }
+
+    /** This world's sky gates in gate order, or null for an unknown world. */
+    public List<GateLink> gates(String id) {
+        if (require(id) == null) {
+            return null;
+        }
+        synchronized (lock) {
+            return List.copyOf(gates.values());
+        }
+    }
+
+    /** The first gate index free in the registry whose cubes are all free in the world; -1 if none. */
+    public int freeGate(String id) {
+        World live = require(id);
+        if (live == null) {
+            return -1;
+        }
+        synchronized (lock) {
+            for (int g = 0; g < GateOps.MAX_GATES; g++) {
+                if (!gates.containsKey(g) && GateOps.fits(live, g)) {
+                    return g;
+                }
+            }
+            return -1;
+        }
+    }
+
+    /** True when one of this world's gates already opens onto {@code toWorld}. */
+    public boolean hasGateTo(String id, String toWorld) {
+        if (require(id) == null) {
+            return false;
+        }
+        synchronized (lock) {
+            return gates.values().stream().anyMatch(g -> g.toWorld().equals(toWorld));
+        }
+    }
+
+    /**
+     * Build gate {@code g} in the clouds past the rainbow and link it to {@code toWorld}'s gate
+     * {@code toGate}. All or nothing: false (nothing placed) when the gate is taken or its cubes are not
+     * free. One persist and one revision frame typed {@code GATE}.
+     */
+    public boolean addGate(String id, int g, String toWorld, int toGate) {
+        World live = require(id);
+        if (live == null) {
+            return false;
+        }
+        synchronized (lock) {
+            if (gates.containsKey(g) || !GateOps.build(live, g)) {
+                return false;
+            }
+            gates.put(g, new GateLink(g, toWorld, toGate));
+            persist();
+            persistGates();
+            announceGate(id, live, g);
+            return true;
+        }
+    }
+
+    /** Undo {@link #addGate}: the link goes and the gate's cubes return to air (a failed pairing). */
+    public void dropGate(String id, int g) {
+        World live = require(id);
+        if (live == null) {
+            return;
+        }
+        synchronized (lock) {
+            if (gates.remove(g) == null) {
+                return;
+            }
+            GateOps.plan(g).forEach((at, type) -> {
+                if (live.get(at) == type) {
+                    live.remove(at);
+                }
+            });
+            persist();
+            persistGates();
+            announceGate(id, live, g);
+        }
+    }
+
+    private void announceGate(String id, World live, int g) {
+        BlockCoordinate c = GateOps.center(g);
+        events.accept(new WorldBlockEvent(this, id, WorldBlockEvent.Kind.WORLD_REVISION_CHANGED,
+                c.x(), c.y(), c.z(), "GATE", BlockType.AIR.name(), live.revision().value()));
+    }
+
+    Path gatesFile() {
+        return file.resolveSibling(file.getFileName() + ".gates");
+    }
+
+    private void loadGates() {
+        gates.clear();
+        Path f = gatesFile();
+        if (!Files.exists(f)) {
+            return;
+        }
+        try {
+            for (String line : Files.readAllLines(f, StandardCharsets.UTF_8)) {
+                String t = line.strip();
+                if (t.isEmpty() || t.startsWith("#")) {
+                    continue;
+                }
+                String[] p = t.split("\\s+");
+                if (p.length != 3) {
+                    throw new IOException("Bad gate row: " + t);
+                }
+                int g = Integer.parseInt(p[0]);
+                GateOps.center(g);
+                gates.put(g, new GateLink(g, p[1], Integer.parseInt(p[2])));
+            }
+        } catch (IOException | IllegalArgumentException e) {
+            throw new IllegalStateException("Cannot read sky gates " + f, e);
+        }
+    }
+
+    private void persistGates() {
+        Path f = gatesFile();
+        List<String> rows = new ArrayList<>();
+        rows.add("# Daedalus sky gates (ADR-031): gate toWorld toGate");
+        for (GateLink g : gates.values()) {
+            rows.add(g.gate() + " " + g.toWorld() + " " + g.toGate());
+        }
+        try {
+            Path tmp = f.resolveSibling(f.getFileName() + ".tmp");
+            Files.write(tmp, rows, StandardCharsets.UTF_8);
+            Files.move(tmp, f, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+        } catch (IOException e) {
+            throw new UncheckedIOException("Cannot persist sky gates " + f, e);
+        }
     }
 
     private Hold holdOf(String arkId) {

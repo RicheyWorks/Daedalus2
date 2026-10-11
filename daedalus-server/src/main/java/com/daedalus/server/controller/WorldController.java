@@ -759,7 +759,8 @@ public class WorldController {
     public ResponseEntity<VoyageResponse> sail(@PathVariable String id, @PathVariable String arkId,
                                                @Valid @RequestBody VoyageRequest body) {
         mounted(id);
-        WorldService.SailWrite write = world(id).sail(id, arkId, body.toSlot());
+        int to = body.toGate() != null ? com.daedalus.world.gate.GateOps.GATE_BASE + body.toGate() : body.toSlot();
+        WorldService.SailWrite write = world(id).sail(id, arkId, to);
         if (write.view() == null) {
             throw ResourceNotFoundException.ark(arkId);
         }

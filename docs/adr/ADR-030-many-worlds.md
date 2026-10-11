@@ -75,4 +75,4 @@ still coming.
   portal.
 - **Per-world ownership of world creation.** Any signed-in caller may mount a world, up to 16. Who
   owns a world, and whether creating one is a mint, waits for the world registry contract
-  (ADR-038).
+  (ADR-039).

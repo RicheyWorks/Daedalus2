@@ -66,12 +66,16 @@ class WorldCoordinatesTest {
     @Test
     void blockTypesKeepTheirSavedOrdinalsAndAirIsNotSolid() {
         // Ordinals are the DAEW byte format: World Zero's five keep 0..4 forever, and island
-        // terrain (ADR-018) is appended after them. Reordering would rewrite every saved world.
+        // terrain (ADR-018) is appended after them, then the sky gates' rainbow and doorway (ADR-031).
+        // Reordering would rewrite every saved world.
         assertThat(BlockType.values()).containsExactly(
                 BlockType.AIR, BlockType.STONE, BlockType.DIRT, BlockType.WOOD, BlockType.GLASS,
                 BlockType.GRASS, BlockType.SAND, BlockType.WATER, BlockType.LOG, BlockType.LEAVES,
-                BlockType.BLOSSOM, BlockType.GRAVEL, BlockType.CRYSTAL, BlockType.CLOUD);
+                BlockType.BLOSSOM, BlockType.GRAVEL, BlockType.CRYSTAL, BlockType.CLOUD,
+                BlockType.RAINBOW_RED, BlockType.RAINBOW_ORANGE, BlockType.RAINBOW_YELLOW, BlockType.RAINBOW_GREEN,
+                BlockType.RAINBOW_BLUE, BlockType.RAINBOW_VIOLET, BlockType.PORTAL);
         assertThat(BlockType.GLASS.ordinal()).isEqualTo(4);
+        assertThat(BlockType.CLOUD.ordinal()).as("island terrain did not move").isEqualTo(13);
         assertThat(BlockType.AIR.solid()).isFalse();
         assertThat(BlockType.STONE.solid()).isTrue();
     }

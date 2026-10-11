@@ -117,6 +117,60 @@ public class WorldHub {
         }
     }
 
+    /** Outcome of {@link #openGate}: OPENED with both gate indexes, or why not. */
+    public record GateWrite(String result, int fromGate, int toGate) {
+    }
+
+    /**
+     * Open a pair of sky gates between two worlds (ADR-031): one in each world's clouds, past its
+     * rainbow, each leading to the other. Results: OPENED, SAME_WORLD, NO_SUCH_WORLD, ALREADY_LINKED,
+     * FULL (a world has no free gate). Both gates are built or neither is.
+     */
+    public GateWrite openGate(String fromId, String toId) {
+        synchronized (lock) {
+            WorldService a = mounted.get(fromId);
+            WorldService b = mounted.get(toId);
+            if (a == null || b == null) {
+                return new GateWrite("NO_SUCH_WORLD", -1, -1);
+            }
+            if (fromId.equals(toId)) {
+                return new GateWrite("SAME_WORLD", -1, -1);
+            }
+            if (a.hasGateTo(fromId, toId) || b.hasGateTo(toId, fromId)) {
+                return new GateWrite("ALREADY_LINKED", -1, -1);
+            }
+            int ga = a.freeGate(fromId);
+            int gb = b.freeGate(toId);
+            if (ga < 0 || gb < 0) {
+                return new GateWrite("FULL", -1, -1);
+            }
+            if (!a.addGate(fromId, ga, toId, gb)) {
+                return new GateWrite("FULL", -1, -1);
+            }
+            if (!b.addGate(toId, gb, fromId, ga)) {
+                a.dropGate(fromId, ga);
+                return new GateWrite("FULL", -1, -1);
+            }
+            return new GateWrite("OPENED", ga, gb);
+        }
+    }
+
+    /** The title a world goes by, or its id when it is not mounted. */
+    public String title(String id) {
+        synchronized (lock) {
+            WorldEntry e = entries.get(id);
+            return e == null ? id : e.title();
+        }
+    }
+
+    /** The style of a mounted world, or null. */
+    public com.daedalus.world.WorldStyle style(String id) {
+        synchronized (lock) {
+            WorldEntry e = entries.get(id);
+            return e == null ? null : e.style();
+        }
+    }
+
     private WorldService mount(WorldEntry entry) {
         Path file = zero.file().resolveSibling(entry.id() + ".daew");
         WorldService world = new WorldService(file, new WorldId(entry.id()), publisher);

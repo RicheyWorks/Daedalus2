@@ -274,7 +274,7 @@ const refusal = await (await refused).json();
 check("bob's cube on alice's island is DENIED", refusal.result === "DENIED", refusal.result);
 check("B rolls the cube back and says whose island it is",
   await B.page.evaluate(p => window.daedalusRealm.nameAt(p.x, p.y, p.z) === "AIR" &&
-    document.getElementById("toast").textContent === "Isle 1 belongs to alice", spot));
+    window.daedalusRealm.lastRefusal === "Isle 1 belongs to alice", spot));
 await A.page.fill('.owner[data-slot="1"] input.builder-name', "bob");
 await A.page.click('.owner[data-slot="1"] button.let');
 await B.page.waitForFunction(() => (document.querySelector('.owner[data-slot="1"] .owner-line')?.textContent || "").endsWith("you may build"), null, { timeout: 10000 }).catch(() => {});
@@ -436,12 +436,62 @@ if (RPC) {
   await page.close();
 }
 
+// --- Sky gates (ADR-031): open a gate to Isle Two, ride an ark through the rainbow to it, cross over, and
+// let Isle Two's ark come up to its own gate to carry you down to its island.
+{
+  const page = await context.newPage();
+  const errors = [];
+  page.on("console", m => { if (m.type() === "error") errors.push(m.text()); });
+  page.on("pageerror", e => errors.push(String(e)));
+  await page.goto(BASE + "/realm.html?world=world-zero");
+  await page.waitForFunction(() => window.daedalusRealm && window.daedalusRealm.live && window.daedalusRealm.arks.length >= 2, null, { timeout: 30000 });
+  await page.waitForSelector('.world-row[data-world="isle-two"] button.open-gate', { timeout: 10000 });
+  await page.click('.world-row[data-world="isle-two"] button.open-gate');
+  const gateUp = await page.waitForFunction(() => {
+    const s = window.daedalusRealm;
+    if (s.gates.length !== 1) return false;
+    const g = s.gates[0];
+    return s.nameAt(g.x, g.y, g.z) === "PORTAL" && s.nameAt(g.x, g.y - 14 + 17, -170) === "RAINBOW_VIOLET";
+  }, null, { timeout: 20000 }).then(() => true, () => false);
+  check("Open gate builds a doorway in the clouds past a rainbow, and the page draws it", gateUp,
+    JSON.stringify(await page.evaluate(() => window.daedalusRealm.gates)));
+  await page.waitForTimeout(1500);
+  await page.screenshot({ path: path.join(OUT, "realm_rainbow_gate.png") });
+  const reach = await page.evaluate(() => {
+    const s = window.daedalusRealm, g = s.gates[0];
+    return { gateZ: g.z, islandsZ: s.islands.map(i => i.z) };
+  });
+  check("the gate is far from every island: no one walks there", reach.islandsZ.every(z => z - reach.gateZ > 100), JSON.stringify(reach));
+  await page.selectOption('.ark[data-ark="ark-0"] select.dest', "1000");
+  await page.click('.ark[data-ark="ark-0"] button.sail');
+  const crossed = await page.waitForURL(/realm\.html\?world=isle-two&arrive=0$/, { timeout: 90000 }).then(() => true, () => false);
+  check("riding ark-0 to the gate carries you through to Isle Two", crossed, page.url());
+  await page.waitForFunction(() => window.daedalusRealm && window.daedalusRealm.live && window.daedalusRealm.gates.length === 1, null, { timeout: 30000 });
+  const hailed = await page.waitForFunction(() => window.daedalusRealm.lastHail && window.daedalusRealm.lastHail.arkId === "ark-0", null, { timeout: 15000 })
+    .then(() => true, () => false);
+  check("on the far side, Isle Two's ark is hailed up to its gate", hailed, JSON.stringify(await page.evaluate(() => ({
+    url: location.href, lastHail: window.daedalusRealm.lastHail, gates: window.daedalusRealm.gates.length,
+    arks: window.daedalusRealm.arks.map(a => `${a.id}:${a.state}@${a.slot}`), toast: document.getElementById("toast").textContent }))));
+  await page.waitForTimeout(2500);
+  await page.screenshot({ path: path.join(OUT, "realm_gate_arrival.png") });
+  const home = await page.waitForFunction(() => {
+    const a = window.daedalusRealm.arks.find(x => x.id === "ark-0");
+    return a && a.state === "SAILING" && a.fromSlot === 1000 && a.toSlot === 0;
+  }, null, { timeout: 90000 }).then(() => true, () => false);
+  check("it meets you at the gate and sails you down to its island", home,
+    JSON.stringify(await page.evaluate(() => window.daedalusRealm.arks.find(x => x.id === "ark-0"))));
+  check("no console errors on the gate run", errors.length === 0, errors.slice(0, 3).join(" | "));
+  await page.close();
+}
+
 // --- Reload: a fresh page rebuilds the same world from REST alone.
 const C = await open("C");
 await C.page.waitForFunction(() => window.daedalusRealm.islands.length === 2, null, { timeout: 30000 });
 check("a fresh page rebuilds the same world", (await cubes(C.page)) === (await serverCubes()));
 await C.page.waitForFunction(() => window.daedalusRealm.arks.length === 2, null, { timeout: 15000 });
-check("a fresh page knows where every ark is", await C.page.evaluate(() => window.daedalusRealm.arks.find(a => a.id === "ark-0").slot === 1));
+const serverArks = (await (await fetch(BASE + "/api/v1/world/world-zero/arks")).json()).arks.map(a => `${a.id}@${a.slot}`).join(",");
+const pageArks = await C.page.evaluate(() => window.daedalusRealm.arks.map(a => `${a.id}@${a.slot}`).join(","));
+check("a fresh page knows where every ark is", pageArks === serverArks, `${pageArks} / server ${serverArks}`);
 
 for (const p of [A, B, C, D, ...(W ? [W] : [])]) check(`no console errors on page ${p.name}`, p.errors.length === 0, p.errors.slice(0, 3).join(" | "));
 await browser.close();

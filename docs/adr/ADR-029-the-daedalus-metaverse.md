@@ -70,23 +70,48 @@ testnet first, and mainnet only behind a Safe and an audit, as fast-food-punks d
 | Models and art | the Blender connector |
 | Arcades in-world | BlackJackPro, minesweeper-pro |
 
+## Engines (amended 2026-10-11)
+
+"Daedalus + Java + Claude + Blender + Unreal Engine 5 + blockchain. Generate a world once and deploy
+it into different game engines. That has always been the goal."
+
+**Daedalus is engine-independent.** The Java server owns the truth: worlds, cubes, islands, gates,
+ecology, claims and deeds. Engines are ways of drawing and playing that truth. A world is generated
+once and exported as a **Daedalus World Package**: a versioned manifest plus glTF 2.0 geometry and
+the world's entities. Every engine loads that package and follows the same live API and frames.
+
+| Component | Role |
+|---|---|
+| Daedalus (Java) | the world's truth and its rules: generation, persistence, ownership, frames |
+| Claude | lead developer, architect and orchestrator, driving every tool below |
+| Blender | the workhorse for 3D: models, animation, environments and textures (mounts, creatures, gate art); driven through the Blender connector |
+| Unreal Engine 5 | the high end: world, gameplay, physics and rendering, the engine Halo moved to; a Daedalus plugin loads World Packages and follows the live API |
+| The web realm (three.js) | the way in from anywhere: phone, tablet, browser and WebXR |
+| MCP servers | give Claude hands in Blender (built) and Unreal (to build) |
+| Python | automates the Blender and Unreal editors |
+| C++ / Blueprints | Unreal gameplay systems |
+| Blockchain | land, worlds, portals and items (above) |
+| GitHub | every change versioned, tested and pushed |
+| The RTX 4090 | local rendering, Unreal development and testing |
+
 ## The next slices, in order
 
 1. **ADR-030 Worlds.** Mount many worlds on one server: a world registry with id, style and seed;
    `GET /worlds`; each world gets its own sidecars. World Zero and the islands keep working as they
    are.
-2. **ADR-031 Portals between worlds.** Walk into a portal and arrive in another world; the realm
-   loads the destination and keeps your identity.
-3. **ADR-032 The Parcels world** (Decentraland look): generator, renderer theme, claims and deeds per
+2. **ADR-031 Sky gates.** Portals in the clouds past the rainbow, reached only by a mount (done).
+3. **ADR-032 The Daedalus World Package.** Export a world once (manifest + glTF); load it in Blender,
+   the realm and Unreal. The UE5 plugin and its PowerShell setup start here.
+4. **ADR-033 The Parcels world** (Decentraland look): generator, renderer theme, claims and deeds per
    parcel.
-4. **ADR-033 The Bricks world** (Roblox look) and blocky avatars.
-5. **ADR-034 The Gallery world** (Cryptovoxels look): streets, plots, height limits.
-6. **ADR-035 Mazes in every world.** A maze parcel in each style, entered by portal; solved runs
+5. **ADR-034 The Bricks world** (Roblox look) and blocky avatars.
+6. **ADR-035 The Gallery world** (Cryptovoxels look): streets, plots, height limits.
+7. **ADR-036 Mazes in every world.** A maze parcel in each style, entered by portal; solved runs
    recorded.
-7. **ADR-036 Presence.** See other players move, from SudokuPro's presence pieces.
-8. **ADR-037 VR.** WebXR in the realm; a portal into the OpenXR explore host.
-9. **ADR-038 The realm follows the chain.** Deed transfers move claims; a world registry contract.
-10. **ADR-039 Portals and items on chain.**
+8. **ADR-037 Presence.** See other players move, from SudokuPro's presence pieces.
+9. **ADR-038 VR.** WebXR in the realm; a portal into the OpenXR explore host.
+10. **ADR-039 The realm follows the chain.** Deed transfers move claims; a world registry contract.
+11. **ADR-040 Portals and items on chain.**
 
 Each slice ships the way the Realm's did: a gate-green build, a browser harness that drives the real
 pages, an ADR that says what it found, and a push to `main`.

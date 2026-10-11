@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Sky gates (ADR-031).**
+  Portals in the clouds
+  past a rainbow, out of
+  reach on foot. Ride an
+  ark through the rainbow
+  to a gate and cross to
+  another world, where
+  its ark meets you.
+
 - **Many worlds on one server (ADR-030).**
   `GET/POST /api/v1/worlds`;
   each world has its own

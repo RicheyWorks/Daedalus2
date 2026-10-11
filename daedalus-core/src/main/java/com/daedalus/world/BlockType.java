@@ -26,7 +26,15 @@ public enum BlockType {
     BLOSSOM,
     GRAVEL,
     CRYSTAL,
-    CLOUD;
+    CLOUD,
+    // Sky gates (ADR-031): a rainbow's bands and the doorway in the clouds. Appended.
+    RAINBOW_RED,
+    RAINBOW_ORANGE,
+    RAINBOW_YELLOW,
+    RAINBOW_GREEN,
+    RAINBOW_BLUE,
+    RAINBOW_VIOLET,
+    PORTAL;
 
     public boolean solid() {
         return this != AIR;
@@ -34,7 +42,8 @@ public enum BlockType {
 
     /** Light passes through: a renderer must not cull the face of a neighbour behind it. */
     public boolean seeThrough() {
-        return this == AIR || this == GLASS || this == WATER || this == CLOUD;
+        return this == AIR || this == GLASS || this == WATER || this == CLOUD || this == PORTAL
+                || name().startsWith("RAINBOW_");
     }
 
     /** Every name a client may send, in ordinal order — the error message and the palette. */
