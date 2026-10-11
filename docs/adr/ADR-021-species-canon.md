@@ -39,11 +39,14 @@ JSON dependency.
 **`GET /api/v1/species`** (public) serves the canon with guild counts. The realm gets a bestiary:
 one chip per guild, tap to list its kinds with size, strategy and whether they need an ark.
 
-## Open decision for the owner
+## License (resolved 2026-10-11)
 
-ComputerPets is "All rights reserved"; Daedalus is MIT. This slice copies species names and
-temperaments (not art, dialogue or code) into an MIT repository. That is the owner's call to make
-explicit — relicense the canon data, keep Daedalus private, or swap in neutral names.
+When this slice was written, the local ComputerPets checkout still carried an "All rights reserved"
+LICENSE. The owner's decision is that everything is open source. ComputerPets' code is MIT (its
+`main` already said so), so the species names and temperaments copied here are MIT on both sides.
+ComputerPets' third-party sounds keep their own Creative Commons and public-domain licenses; none
+of them are copied into Daedalus. The LICENSE file was trimmed to the exact MIT text so GitHub
+detects it; the note about third-party assets lives in README and THIRD_PARTY_NOTICES.
 
 ## Verified
 
