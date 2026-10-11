@@ -10,6 +10,16 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Island ownership (ADR-026).**
+  Claim an island and
+  only you, and the
+  builders you name,
+  change its cubes.
+  A signed-in caller is
+  who they are: a body
+  `actorId` no longer
+  speaks for them.
+
 - **Creatures on the islands (ADR-025).**
   Every kind living on
   an island is drawn

@@ -12,6 +12,7 @@ const WORLD = "world-zero";
 const API = "/api/v1/world/" + WORLD;
 const SIZE = 16;
 const TOKEN_KEY = "daedalus.token"; // shared with the well, so a sign-in there carries here
+const NAME_KEY = "daedalus.realm.name"; // the name an open dev server knows you by (ADR-026)
 
 // Display colours per BlockType name. The server sends the palette (names in ordinal order);
 // unknown names render as stone, so a newer server never breaks an older page.
@@ -39,9 +40,11 @@ const state = {
   day: 0,                    // the ecology's latest day
   lifeSlot: null,            // the island whose Life panel is open
   creatures: new Map(),      // island slot → { sig, group, list } of creature models (ADR-025)
+  loading: 0,                // world loads in flight; creatures are not placed during one
   mode: "look",
   block: "GRASS",
   token: safeGet(TOKEN_KEY),
+  me: safeGet(TOKEN_KEY) ? (safeGet("daedalus.user") || "") : (safeGet(NAME_KEY) || ""),  // who builds (ADR-026)
   stomp: null,
   live: false,
 };
@@ -230,6 +233,17 @@ function decode(b64) {
 }
 
 async function loadWorld() {
+  state.loading++;                   // creatures wait: a surface scanned mid-load would be cached half-built
+  try {
+    await fetchWorld();
+  } finally {
+    state.loading--;
+  }
+  surfaces.clear();
+  if (state.species.length) refreshCreatures();
+}
+
+async function fetchWorld() {
   const list = await api(API + "/chunks");
   state.revision = list.revision;
   const rows = list.chunks;
@@ -284,6 +298,7 @@ async function loadIslands(focusSlot) {
     life.onclick = () => toggleLife(isle.slot);
     row.append(info, life, go);
     host.appendChild(row);
+    host.appendChild(ownerRow(isle));
   }
   renderRichness();
   Promise.all(state.islands.map(i => api(`${API}/islands/${i.slot}/ecology`)
@@ -298,6 +313,77 @@ async function loadIslands(focusSlot) {
     const isle = state.islands.find(i => i.slot === focusSlot);
     if (isle) flyTo(isle);
   }
+}
+
+// ---------------------------------------------------------------- ownership (ADR-026)
+function mine(isle) { return !!state.me && isle.owner === state.me; }
+function ownerRow(isle) {
+  const row = document.createElement("div");
+  row.className = "owner";
+  row.dataset.slot = isle.slot;
+  const line = document.createElement("div");
+  line.className = "owner-line";
+  if (!isle.owner) line.textContent = "open — anyone may build";
+  else line.textContent = mine(isle) ? "yours" + (isle.builders.length ? ` · builders: ${isle.builders.join(", ")}` : "")
+    : `owned by ${isle.owner}` + (isle.builders.includes(state.me) ? " · you may build" : "");
+  row.appendChild(line);
+  const act = document.createElement("div");
+  act.className = "owner-act";
+  if (!isle.owner) {
+    act.appendChild(button("Claim", "claim", () => claimAct("claim", isle.slot)));
+  } else if (mine(isle)) {
+    const who = document.createElement("input");
+    who.className = "builder-name";
+    who.placeholder = "builder";
+    who.setAttribute("aria-label", `Let someone build on Isle ${isle.slot}`);
+    act.append(who, button("Let build", "let", () => who.value.trim() && claimAct("builders", isle.slot, { builder: who.value.trim(), allow: true })));
+    for (const b of isle.builders) {
+      act.appendChild(button(`${b} ×`, "unlet", () => claimAct("builders", isle.slot, { builder: b, allow: false })));
+    }
+    act.appendChild(button("Give up", "abandon", () => claimAct("abandon", isle.slot)));
+  }
+  row.appendChild(act);
+  return row;
+}
+function button(text, cls, onclick) {
+  const b = document.createElement("button");
+  b.textContent = text;
+  b.className = cls;
+  b.onclick = onclick;
+  return b;
+}
+const CLAIM_WORDS = {
+  CLAIMED: s => `Isle ${s} is yours`, ABANDONED: s => `You gave up Isle ${s}`,
+  GRANTED: () => "They may build there now", REVOKED: () => "They can no longer build there",
+  ALREADY_CLAIMED: s => `Isle ${s} already has an owner`, BLOCKED: () => "Another parcel is in the way",
+  BAD_OWNER: () => "Pick a name first (letters, digits, . _ @ -)", NOT_OWNER: s => `Isle ${s} is not yours`,
+  NOT_CLAIMED: s => `Isle ${s} has no owner`, BAD_BUILDER: () => "That name cannot be a builder",
+  NO_SUCH_ISLAND: s => `No island in slot ${s}`,
+};
+async function claimAct(verb, slot, extra = {}) {
+  if (!state.me && !state.token) { toast("Pick a name first"); document.getElementById("me").focus(); return; }
+  try {
+    const res = await api(`${API}/islands/${slot}/${verb}`, { method: "POST",
+      body: JSON.stringify(Object.assign({ actorId: state.me }, extra)) });
+    toast((CLAIM_WORDS[res.result] || (() => res.result))(slot));
+    await loadIslands();
+  } catch (e) {
+    handleError(e);
+  }
+}
+function islandAt(x, z) {
+  return state.islands.find(i => Math.abs(x - i.x) <= 47 && Math.abs(z - i.z) <= 47);
+}
+function setupMe() {
+  const field = document.getElementById("me");
+  field.value = state.me;
+  field.disabled = !!state.token;          // signed in: the server knows who you are
+  field.title = state.token ? "Signed in" : "The name this open server knows you by";
+  field.addEventListener("change", () => {
+    state.me = field.value.trim();
+    safeSet(NAME_KEY, state.me);
+    loadIslands();
+  });
 }
 
 // ---------------------------------------------------------------- island life (ADR-023/024)
@@ -499,6 +585,7 @@ function spotsFor(sp, surf) {
 }
 /** Redraw an island's creatures from its ecology answer, unless what is shown would not change. */
 function populate(isle, life) {
+  if (state.loading) return;           // loadWorld redraws every island when it finishes
   const plan = [];
   let budget = ISLAND_SHOW_CAP;
   for (const row of life.species) {
@@ -864,13 +951,15 @@ async function writeBlock(x, y, z, name) {
   setLocal(x, y, z, name);           // optimistic; the server answer or its frame corrects it
   remeshAround(x, y, z);
   try {
+    const who = state.me ? `&actorId=${encodeURIComponent(state.me)}` : "";
     const res = name === "AIR"
-      ? await api(`${API}/block?x=${x}&y=${y}&z=${z}`, { method: "DELETE" })
-      : await api(API + "/block", { method: "PUT", body: JSON.stringify({ x, y, z, type: name }) });
+      ? await api(`${API}/block?x=${x}&y=${y}&z=${z}${who}`, { method: "DELETE" })
+      : await api(API + "/block", { method: "PUT", body: JSON.stringify({ x, y, z, type: name, actorId: state.me || undefined }) });
     if (res.result === "DENIED") {
       setLocal(x, y, z, before);
       remeshAround(x, y, z);
-      toast("That plot is not yours to change");
+      const isle = islandAt(x, z);
+      toast(isle && isle.owner ? `Isle ${isle.slot} belongs to ${isle.owner}` : "That plot is not yours to change");
       return;
     }
     state.revision = Math.max(state.revision, res.revision);
@@ -917,6 +1006,8 @@ function onFrame(ev) {
       setLocal(ev.x, ev.y, ev.z, now);
       remeshAround(ev.x, ev.y, ev.z);
     }
+  } else if (ev.kind === "WORLD_REVISION_CHANGED" && ev.type === "CLAIM") {
+    loadIslands();
   } else if (ev.kind === "WORLD_REVISION_CHANGED" && ev.type === "ISLAND" && !reloadQueued) {
     reloadQueued = true;
     setTimeout(async () => {
@@ -1056,6 +1147,8 @@ document.getElementById("loginGo").onclick = async () => {
     state.token = body.token;
     safeSet(TOKEN_KEY, body.token);
     safeSet("daedalus.user", username);
+    state.me = username;
+    setupMe();
     document.getElementById("login").style.display = "none";
     toast("Signed in as " + username);
     if (state.stomp) { try { state.stomp.disconnect(); } catch (e) { /* closing */ } }
@@ -1074,11 +1167,13 @@ function frame(t) {
   requestAnimationFrame(frame);
 }
 buildPalette();
+setupMe();
 frame();
 window.daedalusRealm = state; // for the browser harness and curious operators
 state.pick = pick;           // the exact pick the pointer uses, so a harness can ask what a tap hits
 state.debugTarget = () => controls.target.clone();
 state.refreshCreatures = refreshCreatures;
+state.writeBlock = writeBlock;
 state.nameAt = nameAt;
 state.project = (x, y, z) => {  // screen pixel of a world point, for a harness to tap a cube
   const v = new THREE.Vector3(x, y, z).project(camera), r = canvas.getBoundingClientRect();

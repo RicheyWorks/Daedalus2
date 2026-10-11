@@ -14,6 +14,8 @@ import com.daedalus.api.dto.DoorInspectResponse;
 import com.daedalus.api.dto.DoorMutationResponse;
 import com.daedalus.api.dto.ForgiveParcelRequest;
 import com.daedalus.api.dto.GrantParcelRequest;
+import com.daedalus.api.dto.IslandClaimRequest;
+import com.daedalus.api.dto.IslandClaimResponse;
 import com.daedalus.api.dto.IslandEcologyResponse;
 import com.daedalus.api.dto.IslandRaiseResponse;
 import com.daedalus.api.dto.IslandRow;
@@ -100,6 +102,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Comparator;
@@ -399,11 +402,11 @@ public class WorldController {
     @Operation(summary = "Place a cube. AIR is remove.")
     @PerKeyRateLimit("mazeGenerate")
     public ResponseEntity<BlockMutationResponse> place(
-            @PathVariable String id, @Valid @RequestBody PlaceBlockRequest body) {
+            @PathVariable String id, @Valid @RequestBody PlaceBlockRequest body, Principal principal) {
         mounted(id);
         BlockType type = parseType(body.type());
         WorldService.BlockWrite write = worlds.place(id, body.x(), body.y(), body.z(), type,
-                body.actorId());
+                actor(principal, body.actorId()));
         World world = mounted(id);
         BlockCoordinate at = new BlockCoordinate(body.x(), body.y(), body.z());
         return ResponseEntity.ok(new BlockMutationResponse(
@@ -422,9 +425,9 @@ public class WorldController {
             @RequestParam @NotNull Integer x,
             @RequestParam @NotNull Integer y,
             @RequestParam @NotNull Integer z,
-            @RequestParam(required = false) String actorId) {
+            @RequestParam(required = false) String actorId, Principal principal) {
         mounted(id);
-        WorldService.BlockWrite write = worlds.remove(id, x, y, z, actorId);
+        WorldService.BlockWrite write = worlds.remove(id, x, y, z, actor(principal, actorId));
         World world = mounted(id);
         BlockCoordinate at = new BlockCoordinate(x, y, z);
         return ResponseEntity.ok(new BlockMutationResponse(
@@ -697,8 +700,9 @@ public class WorldController {
     public ResponseEntity<WorldIslandsResponse> listIslands(@PathVariable String id) {
         mounted(id);
         List<IslandRow> rows = new ArrayList<>();
+        Map<Integer, WorldService.IslandClaim> claims = worlds.claims(id);
         for (WorldService.IslandEntry e : worlds.islands(id)) {
-            rows.add(islandRow(e, e.traits()));
+            rows.add(islandRow(e, e.traits(), claims.get(e.slot())));
         }
         return ResponseEntity.ok(new WorldIslandsResponse(id, rows));
     }
@@ -711,7 +715,8 @@ public class WorldController {
         mounted(id);
         int radius = body.radius() == null ? IslandGenerator.DEFAULT_RADIUS : body.radius();
         WorldService.IslandWrite write = worlds.raiseIsland(id, body.seed(), radius);
-        IslandRow row = write.island() == null ? null : islandRow(write.island(), write.traits());
+        IslandRow row = write.island() == null ? null
+                : islandRow(write.island(), write.traits(), worlds.claims(id).get(write.island().slot()));
         return ResponseEntity.ok(new IslandRaiseResponse(write.result(), write.revision(), row));
     }
 
@@ -782,12 +787,58 @@ public class WorldController {
                 d.simpson(), cargo(life.abundance())));
     }
 
-    private static IslandRow islandRow(WorldService.IslandEntry e, IslandTraits t) {
+    private static IslandRow islandRow(WorldService.IslandEntry e, IslandTraits t, WorldService.IslandClaim claim) {
         BlockCoordinate o = e.origin();
         return new IslandRow(e.slot(), o.x(), o.y(), o.z(), e.seed(), e.radius(), t.columns(),
                 t.blocks(), t.trees(), t.blossomTrees(), t.pondColumns(), t.streamLength(),
                 t.waterfall(), t.crystals(), t.boulders(), t.top(), t.bottom(),
-                o.x() + t.dockX(), o.y() + t.dockY(), o.z() + t.dockZ());
+                o.x() + t.dockX(), o.y() + t.dockY(), o.z() + t.dockZ(),
+                claim == null ? "" : claim.owner(), claim == null ? List.of() : claim.builders());
+    }
+
+    /**
+     * Who is acting (ADR-026): the signed-in user when there is one — a body field cannot speak for
+     * someone else — otherwise the {@code actorId} the caller names, as World Zero always allowed.
+     */
+    private static String actor(Principal principal, String claimed) {
+        if (principal != null && principal.getName() != null && !principal.getName().isBlank()) {
+            return principal.getName();
+        }
+        return claimed;
+    }
+
+    @PostMapping("/world/{id}/islands/{slot}/claim")
+    @Operation(summary = "Claim an island: only its owner, and builders they name, can change its cubes.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<IslandClaimResponse> claimIsland(@PathVariable String id, @PathVariable int slot,
+            @Valid @RequestBody(required = false) IslandClaimRequest body, Principal principal) {
+        mounted(id);
+        return ResponseEntity.ok(claimResponse(worlds.claimIsland(id, slot,
+                actor(principal, body == null ? null : body.actorId()))));
+    }
+
+    @PostMapping("/world/{id}/islands/{slot}/abandon")
+    @Operation(summary = "Give an island back: its cubes stay, anyone may build there again.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<IslandClaimResponse> abandonIsland(@PathVariable String id, @PathVariable int slot,
+            @Valid @RequestBody(required = false) IslandClaimRequest body, Principal principal) {
+        mounted(id);
+        return ResponseEntity.ok(claimResponse(worlds.abandonIsland(id, slot,
+                actor(principal, body == null ? null : body.actorId()))));
+    }
+
+    @PostMapping("/world/{id}/islands/{slot}/builders")
+    @Operation(summary = "The owner lets someone build on their island (allow=true) or stops them.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<IslandClaimResponse> islandBuilder(@PathVariable String id, @PathVariable int slot,
+            @Valid @RequestBody IslandClaimRequest body, Principal principal) {
+        mounted(id);
+        return ResponseEntity.ok(claimResponse(worlds.setBuilder(id, slot, actor(principal, body.actorId()),
+                body.builder(), body.allow() == null || body.allow())));
+    }
+
+    private static IslandClaimResponse claimResponse(WorldService.IslandClaim c) {
+        return new IslandClaimResponse(c.result(), c.slot(), c.owner(), c.builders(), c.revision());
     }
 
     private World mounted(String id) {

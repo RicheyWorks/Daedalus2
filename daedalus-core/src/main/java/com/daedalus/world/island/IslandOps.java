@@ -4,6 +4,7 @@ package com.daedalus.world.island;
 
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
+import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.World;
 
 import java.util.Map;
@@ -24,6 +25,19 @@ public final class IslandOps {
     public static final int MAX_SLOTS = 64;
 
     private IslandOps() {
+    }
+
+    /** Half the claim box's width: a claim stops one cube short of halfway to each neighbour. */
+    public static final int CLAIM_HALF = SLOT_SPACING / 2 - 1;
+
+    /**
+     * The parcel an owner claims over slot {@code k} (ADR-026): the whole column of sky the island
+     * can reach, from 48 below the lane to 47 above, stopping short of the neighbours' boxes.
+     */
+    public static ParcelBounds claimBounds(int k) {
+        BlockCoordinate c = slot(k);
+        return new ParcelBounds(c.x() - CLAIM_HALF, c.y() - 48, c.z() - CLAIM_HALF,
+                c.x() + CLAIM_HALF, c.y() + 47, c.z() + CLAIM_HALF);
     }
 
     public static BlockCoordinate slot(int k) {

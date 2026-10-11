@@ -603,6 +603,45 @@ public final class World {
     }
 
     /**
+     * Register a parcel over existing terrain without placing a cube (ADR-026: claiming an island).
+     * Refuses, returning null, when the bounds overlap any parcel. Bumps revision when it lands.
+     */
+    public ParcelId claimParcel(ParcelBounds bounds, String ownerId, String placeName) {
+        Objects.requireNonNull(bounds, "ParcelBounds is required");
+        Objects.requireNonNull(ownerId, "ownerId is required");
+        if (ownerId.isBlank()) {
+            throw new IllegalArgumentException("ownerId is required");
+        }
+        synchronized (lock) {
+            for (Parcel existing : parcels) {
+                if (existing.bounds().overlaps(bounds)) {
+                    return null;
+                }
+            }
+            ParcelId id = new ParcelId("parcel-" + (++nextParcelNumber));
+            parcels.add(new Parcel(id, this.id, ownerId.trim(), bounds, 1L, placeName));
+            revision.incrementAndGet();
+            return id;
+        }
+    }
+
+    /**
+     * Remove a parcel and its grants and denials (ADR-026: abandoning an island). The cubes stay;
+     * the ground is open again. False when there is no such parcel.
+     */
+    public boolean dropParcel(ParcelId id) {
+        Objects.requireNonNull(id, "ParcelId is required");
+        synchronized (lock) {
+            boolean removed = parcels.removeIf(p -> p.id().equals(id));
+            if (removed) {
+                acls.remove(id);
+                revision.incrementAndGet();
+            }
+            return removed;
+        }
+    }
+
+    /**
      * Rebuild a world from a snapshot. The live map is a new copy — not the
      * snapshot's chunks and not another world's storage.
      */

@@ -228,7 +228,8 @@ check("every drawn kind lives on Isle 1 on the server", [...kindsDrawn].filter(k
 const grounded = (dB || []).filter(c => !c.flies && c.ground[1] > 30);
 check("walkers, swimmers and caps stand on a real surface", grounded.length > 0 &&
   grounded.every(c => (c.at === "AIR" || c.at === "CLOUD") && c.under !== "AIR"),
-  grounded.filter(c => c.under === "AIR").slice(0, 2).map(c => c.key).join(","));
+  grounded.filter(c => !((c.at === "AIR" || c.at === "CLOUD") && c.under !== "AIR")).slice(0, 3)
+    .map(c => `${c.key}@${c.ground.join(",")} in ${c.at} over ${c.under}`).join("; "));
 const pondKinds = (dB || []).filter(c => B.canon[c.key]?.guild === "POND");
 check("pond kinds are on the water", pondKinds.every(c => c.under === "WATER"), `${pondKinds.length} pond bodies`);
 const nth = list => { const seen = {}; return (list || []).map(c => [c.key + "#" + (seen[c.key] = (seen[c.key] || 0) + 1), c.home.join(",")]); };
@@ -237,6 +238,42 @@ const shared = nth(dB).filter(([k]) => homesA.has(k));
 const moved = shared.filter(([k, h]) => homesA.get(k) !== h);
 check("A and B draw each body in the same place", shared.length > 0 && moved.length === 0,
   `${shared.length} compared${moved.length ? ", differ: " + moved.slice(0, 2).map(m => m[0]).join(",") : ""}`);
+// --- Ownership (ADR-026): A claims Isle 1 as alice; B (bob) is refused until alice lets him build.
+const ownerLine = (p, slot) => p.evaluate(s => document.querySelector(`.owner[data-slot="${s}"] .owner-line`)?.textContent || "", slot);
+await A.page.fill("#me", "alice");
+await A.page.dispatchEvent("#me", "change");
+await B.page.fill("#me", "bob");
+await B.page.dispatchEvent("#me", "change");
+await A.page.waitForSelector('.owner[data-slot="1"] button.claim');
+await A.page.click('.owner[data-slot="1"] button.claim');
+const bSeesOwner = await B.page.waitForFunction(() =>
+  (document.querySelector('.owner[data-slot="1"] .owner-line')?.textContent || "") === "owned by alice", null, { timeout: 10000 })
+  .then(() => true, () => false);
+check("A claims Isle 1; B's lane says it is alice's", bSeesOwner && (await ownerLine(A.page, 1)) === "yours", await ownerLine(B.page, 1));
+const spot = await B.page.evaluate(() => { const i = window.daedalusRealm.islands[1]; return { x: i.x + 3, y: i.y + i.top + 2, z: i.z + 3 }; });
+const refused = B.page.waitForResponse(r => r.url().endsWith("/block") && r.request().method() === "PUT");
+await B.page.evaluate(p => window.daedalusRealm.writeBlock(p.x, p.y, p.z, "CRYSTAL"), spot);
+const refusal = await (await refused).json();
+check("bob's cube on alice's island is DENIED", refusal.result === "DENIED", refusal.result);
+check("B rolls the cube back and says whose island it is",
+  await B.page.evaluate(p => window.daedalusRealm.nameAt(p.x, p.y, p.z) === "AIR" &&
+    document.getElementById("toast").textContent === "Isle 1 belongs to alice", spot));
+await A.page.fill('.owner[data-slot="1"] input.builder-name', "bob");
+await A.page.click('.owner[data-slot="1"] button.let');
+await B.page.waitForFunction(() => (document.querySelector('.owner[data-slot="1"] .owner-line')?.textContent || "").endsWith("you may build"), null, { timeout: 10000 }).catch(() => {});
+const allowed = B.page.waitForResponse(r => r.url().endsWith("/block") && r.request().method() === "PUT");
+await B.page.evaluate(p => window.daedalusRealm.writeBlock(p.x, p.y, p.z, "CRYSTAL"), spot);
+const ok = await (await allowed).json();
+check("once alice lets bob build, his cube lands", ok.result === "PLACED", ok.result);
+const aSees = await A.page.waitForFunction(p => window.daedalusRealm.nameAt(p.x, p.y, p.z) === "CRYSTAL", spot, { timeout: 10000 }).then(() => true, () => false);
+check("A sees bob's cube on her island", aSees);
+await A.page.click('.owner[data-slot="1"] button.abandon');
+const reopened = await B.page.waitForFunction(() => (document.querySelector('.owner[data-slot="1"] .owner-line')?.textContent || "").startsWith("open"), null, { timeout: 10000 }).then(() => true, () => false);
+const serverIsle = (await (await fetch(BASE + "/api/v1/world/world-zero/islands")).json()).islands[1];
+check("alice gives Isle 1 up; it is open again everywhere", reopened && serverIsle.owner === "" && serverIsle.builders.length === 0);
+await A.page.click('.owner[data-slot="1"] button.claim');
+await A.page.waitForFunction(() => (document.querySelector('.owner[data-slot="1"] .owner-line')?.textContent || "") === "yours", null, { timeout: 10000 }).catch(() => {});
+
 await B.page.evaluate(() => document.querySelectorAll("#islands button.go")[1].click());
 await B.page.waitForTimeout(1500);
 await B.page.screenshot({ path: path.join(OUT, "realm_creatures.png") });

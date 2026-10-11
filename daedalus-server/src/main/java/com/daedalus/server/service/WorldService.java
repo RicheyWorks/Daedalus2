@@ -14,6 +14,7 @@ import com.daedalus.world.DoorResult;
 import com.daedalus.world.Npc;
 import com.daedalus.world.NpcResult;
 import com.daedalus.world.Parcel;
+import com.daedalus.world.ParcelAcl;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.ParcelDenyResult;
 import com.daedalus.world.ParcelForgiveResult;
@@ -21,6 +22,7 @@ import com.daedalus.world.ParcelGrantResult;
 import com.daedalus.world.ParcelLeaseResult;
 import com.daedalus.world.ParcelReleaseResult;
 import com.daedalus.world.ParcelRevokeResult;
+import com.daedalus.world.ParcelVerb;
 import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
 import com.daedalus.world.Trap;
@@ -411,6 +413,9 @@ public class WorldService {
     public ParcelGrantResult grantParcel(String id, BlockCoordinate at, String actorId, String verb) {
         World live = require(id);
         synchronized (lock) {
+            if (onClaimedIsland(live, at)) {
+                return ParcelGrantResult.NO_PARCEL; // islands answer to their owner: /islands/{slot}/builders
+            }
             ParcelGrantResult result = WorldOps.asGrantResult(
                     WorldOps.drive(live, "parcel.grant",
                             at == null ? new BlockCoordinate(0, 0, 0) : at, null, null, actorId, verb));
@@ -427,6 +432,9 @@ public class WorldService {
     public ParcelDenyResult denyParcel(String id, BlockCoordinate at, String actorId, String verb) {
         World live = require(id);
         synchronized (lock) {
+            if (onClaimedIsland(live, at)) {
+                return ParcelDenyResult.NO_PARCEL; // islands answer to their owner: /islands/{slot}/builders
+            }
             ParcelDenyResult result = WorldOps.asDenyResult(
                     WorldOps.drive(live, "parcel.deny",
                             at == null ? new BlockCoordinate(0, 0, 0) : at, null, null, actorId, verb));
@@ -443,6 +451,9 @@ public class WorldService {
     public ParcelRevokeResult revokeParcel(String id, BlockCoordinate at, String actorId, String verb) {
         World live = require(id);
         synchronized (lock) {
+            if (onClaimedIsland(live, at)) {
+                return ParcelRevokeResult.NO_PARCEL; // islands answer to their owner: /islands/{slot}/builders
+            }
             ParcelRevokeResult result = WorldOps.asRevokeResult(
                     WorldOps.drive(live, "parcel.revoke",
                             at == null ? new BlockCoordinate(0, 0, 0) : at, null, null, actorId, verb));
@@ -460,6 +471,9 @@ public class WorldService {
             String verb) {
         World live = require(id);
         synchronized (lock) {
+            if (onClaimedIsland(live, at)) {
+                return ParcelForgiveResult.NO_PARCEL;
+            }
             ParcelForgiveResult result = WorldOps.asForgiveResult(
                     WorldOps.drive(live, "parcel.forgive",
                             at == null ? new BlockCoordinate(0, 0, 0) : at, null, null, actorId,
@@ -588,6 +602,170 @@ public class WorldService {
                     origin.x(), origin.y(), origin.z(), "ISLAND", BlockType.AIR.name(), revision));
             return new IslandWrite("RAISED", revision, entry, plan.traits());
         }
+    }
+
+    /** Who holds an island (ADR-026): owner "" when the island is open to everyone. */
+    public record IslandClaim(String result, int slot, String owner, List<String> builders, long revision) {
+
+        /** Copy on construct. */
+        public IslandClaim {
+            builders = builders == null ? List.of() : List.copyOf(builders);
+        }
+    }
+
+    /** The claim parcel over a slot, or null when the island is unclaimed. Caller holds the lock. */
+    private Parcel claimOf(World live, int slot) {
+        ParcelBounds box = IslandOps.claimBounds(slot);
+        for (Parcel p : live.parcels()) {
+            if (p.bounds().equals(box)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * True when {@code at} lies in a claimed island's box (ADR-026). The generic parcel ACL routes
+     * act on whatever parcel is under a cube and never ask who is calling; on an owned island that
+     * would let anyone grant themselves the owner's rights, or deny the owner. Islands are managed
+     * only through their own routes, which check the owner.
+     */
+    private boolean onClaimedIsland(World live, BlockCoordinate at) {
+        if (at == null) {
+            return false;
+        }
+        for (IslandEntry e : islands.values()) {
+            if (IslandOps.claimBounds(e.slot()).contains(at) && claimOf(live, e.slot()) != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private IslandClaim claimView(World live, String result, int slot) {
+        Parcel p = claimOf(live, slot);
+        List<String> builders = new ArrayList<>();
+        if (p != null) {
+            for (ParcelAcl.Grant g : live.acl(p.id()).grants()) {
+                if (g.verb() == ParcelVerb.BLOCK_PLACE) {
+                    builders.add(g.actorId());
+                }
+            }
+        }
+        return new IslandClaim(result, slot, p == null ? "" : p.ownerId(), builders, live.revision().value());
+    }
+
+    /** Who holds every island, in slot order; empty for an unknown world. */
+    public Map<Integer, IslandClaim> claims(String id) {
+        World live = require(id);
+        if (live == null) {
+            return Map.of();
+        }
+        synchronized (lock) {
+            Map<Integer, IslandClaim> out = new TreeMap<>();
+            for (IslandEntry e : islands.values()) {
+                out.put(e.slot(), claimView(live, "", e.slot()));
+            }
+            return out;
+        }
+    }
+
+    private static boolean badActor(String actor) {
+        return actor == null || actor.isBlank() || actor.length() > 64
+                || Parcel.SYSTEM_OWNER.equals(actor.trim()) || !actor.trim().matches("[A-Za-z0-9._@-]+");
+    }
+
+    /**
+     * Claim an island for {@code owner} (ADR-026). Results: CLAIMED, ALREADY_CLAIMED (by anyone,
+     * including the caller), NO_SUCH_ISLAND, BAD_OWNER, BLOCKED (another parcel overlaps the box).
+     * Null for an unknown world.
+     */
+    public IslandClaim claimIsland(String id, int slot, String owner) {
+        World live = require(id);
+        if (live == null) {
+            return null;
+        }
+        synchronized (lock) {
+            if (!islands.containsKey(slot)) {
+                return claimView(live, "NO_SUCH_ISLAND", slot);
+            }
+            if (badActor(owner)) {
+                return claimView(live, "BAD_OWNER", slot);
+            }
+            if (claimOf(live, slot) != null) {
+                return claimView(live, "ALREADY_CLAIMED", slot);
+            }
+            if (live.claimParcel(IslandOps.claimBounds(slot), owner.trim(), "Isle " + slot) == null) {
+                return claimView(live, "BLOCKED", slot);
+            }
+            persist();
+            announceClaim(id, live, slot);
+            return claimView(live, "CLAIMED", slot);
+        }
+    }
+
+    /** Give an island back. Results: ABANDONED, NOT_OWNER, NOT_CLAIMED, NO_SUCH_ISLAND. */
+    public IslandClaim abandonIsland(String id, int slot, String actor) {
+        World live = require(id);
+        if (live == null) {
+            return null;
+        }
+        synchronized (lock) {
+            if (!islands.containsKey(slot)) {
+                return claimView(live, "NO_SUCH_ISLAND", slot);
+            }
+            Parcel p = claimOf(live, slot);
+            if (p == null) {
+                return claimView(live, "NOT_CLAIMED", slot);
+            }
+            if (actor == null || !p.ownerId().equals(actor.trim())) {
+                return claimView(live, "NOT_OWNER", slot);
+            }
+            live.dropParcel(p.id());
+            persist();
+            announceClaim(id, live, slot);
+            return claimView(live, "ABANDONED", slot);
+        }
+    }
+
+    /**
+     * The owner lets {@code builder} build on their island, or stops them. Results: GRANTED,
+     * REVOKED, NOT_OWNER, NOT_CLAIMED, NO_SUCH_ISLAND, BAD_BUILDER.
+     */
+    public IslandClaim setBuilder(String id, int slot, String actor, String builder, boolean allow) {
+        World live = require(id);
+        if (live == null) {
+            return null;
+        }
+        synchronized (lock) {
+            if (!islands.containsKey(slot)) {
+                return claimView(live, "NO_SUCH_ISLAND", slot);
+            }
+            Parcel p = claimOf(live, slot);
+            if (p == null) {
+                return claimView(live, "NOT_CLAIMED", slot);
+            }
+            if (actor == null || !p.ownerId().equals(actor.trim())) {
+                return claimView(live, "NOT_OWNER", slot);
+            }
+            if (badActor(builder) || p.ownerId().equals(builder.trim())) {
+                return claimView(live, "BAD_BUILDER", slot);
+            }
+            if (allow) {
+                live.grant(p.id(), builder.trim(), ParcelVerb.BLOCK_PLACE);
+            } else {
+                live.revoke(p.id(), builder.trim(), ParcelVerb.BLOCK_PLACE);
+            }
+            persist();
+            announceClaim(id, live, slot);
+            return claimView(live, allow ? "GRANTED" : "REVOKED", slot);
+        }
+    }
+
+    private void announceClaim(String id, World live, int slot) {
+        BlockCoordinate o = IslandOps.slot(slot);
+        events.accept(new WorldBlockEvent(this, id, WorldBlockEvent.Kind.WORLD_REVISION_CHANGED,
+                o.x(), o.y(), o.z(), "CLAIM", BlockType.AIR.name(), live.revision().value()));
     }
 
     /** Islands in slot order, or null for an unknown world. */
