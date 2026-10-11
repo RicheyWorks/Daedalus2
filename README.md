@@ -220,6 +220,8 @@ public consumers).
 | `GET` | `/api/v1/world/{id}/chunk/blocks?x=&y=&z=` | public | One chunk's cubes as a base64 ordinal payload plus the palette, for meshing (ADR-018) |
 | `GET` | `/api/v1/world/{id}/islands` | public | Raised islands: lane slot, origin, seed and traits (ADR-018), and who owns each and whom they let build (ADR-026) |
 | `GET` | `/api/v1/world/{id}/arks` | public | The arks: one per island, named from its seed, moored at a pier or sailing (with voyage times and the server clock), and what each carries in its hold (ADR-019/020/023) |
+| `GET` | `/api/v1/world/{id}/tokens/{tokenId}` | public | ERC-721 metadata for the island in lane slot `tokenId`: name, description, portrait, realm link and traits (seed, size, trees, crystals, waterfall, ark, kinds living); unknown slot 404 (ADR-027) |
+| `GET` | `/api/v1/world/{id}/islands/{slot}/portrait.png` | public | The island's 512×512 isometric portrait, grown from its seed; cacheable for a day (ADR-027) |
 | `GET` | `/api/v1/world/{id}/islands/{slot}/ecology` | public | One island's living community: ecological day, habitat by guild, diversity indices and every kind there by count; unknown slot 404 (ADR-023) |
 | `POST` | `/api/v1/world/{id}/arks/{arkId}/voyage` | required | Order an ark to another island (`VoyageRequest`). Already-there, underway and no-such-island are named results; unknown ark 404 (ADR-020) |
 | `GET` | `/api/v1/species` | public | The species canon: 221 kinds from ComputerPets with guild, size, r/K strategy and whether they cross open sky alone (ADR-021) |

@@ -19,6 +19,8 @@ import com.daedalus.api.dto.IslandClaimResponse;
 import com.daedalus.api.dto.IslandEcologyResponse;
 import com.daedalus.api.dto.IslandRaiseResponse;
 import com.daedalus.api.dto.IslandRow;
+import com.daedalus.api.dto.IslandTokenMetadata;
+import com.daedalus.api.dto.TokenAttribute;
 import com.daedalus.api.dto.NpcInspectResponse;
 import com.daedalus.api.dto.NpcMutationResponse;
 import com.daedalus.api.dto.ParcelDenyResponse;
@@ -84,12 +86,15 @@ import com.daedalus.world.ecology.Guild;
 import com.daedalus.world.ecology.Species;
 import com.daedalus.world.ecology.SpeciesCanon;
 import com.daedalus.world.island.IslandGenerator;
+import com.daedalus.world.island.IslandPortrait;
 import com.daedalus.world.island.IslandTraits;
 import com.daedalus.world.stamp.StampResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.http.CacheControl;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -101,6 +106,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -835,6 +841,61 @@ public class WorldController {
         mounted(id);
         return ResponseEntity.ok(claimResponse(worlds.setBuilder(id, slot, actor(principal, body.actorId()),
                 body.builder(), body.allow() == null || body.allow())));
+    }
+
+    /** Portraits by "seed/radius": a pure function of the seed, so one render serves forever. */
+    private static final Map<String, byte[]> PORTRAITS = new java.util.concurrent.ConcurrentHashMap<>();
+
+    @GetMapping(value = "/world/{id}/islands/{slot}/portrait.png", produces = MediaType.IMAGE_PNG_VALUE)
+    @Operation(summary = "The island's isometric portrait as its seed grows it: the token image.")
+    public ResponseEntity<byte[]> islandPortrait(@PathVariable String id, @PathVariable int slot) {
+        mounted(id);
+        WorldService.IslandEntry isle = island(id, slot);
+        byte[] png = PORTRAITS.computeIfAbsent(isle.seed() + "/" + isle.radius(), k ->
+                IslandPortrait.of(IslandGenerator.generate(isle.seed(), isle.radius())).png());
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(java.time.Duration.ofDays(1)).cachePublic())
+                .eTag("\"" + isle.seed() + "-" + isle.radius() + "\"")
+                .contentType(MediaType.IMAGE_PNG)
+                .body(png.clone());
+    }
+
+    @GetMapping("/world/{id}/tokens/{tokenId}")
+    @Operation(summary = "ERC-721 metadata for an island; the token id is the island's lane slot.")
+    public ResponseEntity<IslandTokenMetadata> islandToken(@PathVariable String id, @PathVariable int tokenId) {
+        mounted(id);
+        WorldService.IslandEntry isle = island(id, tokenId);
+        IslandTraits t = isle.traits();
+        String base = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        String arkName = com.daedalus.world.ark.ArkNames.of(isle.seed());
+        WorldService.IslandEcology life = worlds.ecology(id, tokenId);
+        List<TokenAttribute> attrs = new ArrayList<>();
+        attrs.add(TokenAttribute.of("Seed", Long.toString(isle.seed())));
+        attrs.add(TokenAttribute.number("Radius", isle.radius()));
+        attrs.add(TokenAttribute.number("Ground columns", t.columns()));
+        attrs.add(TokenAttribute.number("Trees", t.trees()));
+        attrs.add(TokenAttribute.number("Blossom trees", t.blossomTrees()));
+        attrs.add(TokenAttribute.number("Crystals", t.crystals()));
+        attrs.add(TokenAttribute.of("Waterfall", t.waterfall() ? "Yes" : "No"));
+        attrs.add(TokenAttribute.of("Pond", t.pondColumns() > 0 ? "Yes" : "No"));
+        attrs.add(TokenAttribute.of("Ark", arkName));
+        attrs.add(TokenAttribute.number("Kinds living", life == null ? 0 : life.diversity().richness()));
+        String name = "Isle " + tokenId + " · " + arkName;
+        String description = "A floating island in the Daedalus Realm, grown from seed " + isle.seed()
+                + ". The meteor broke the world into islands; " + arkName + " sails from this one's pier"
+                + " carrying life to the others. The same seed always grows the same island.";
+        return ResponseEntity.ok(new IslandTokenMetadata(name, description,
+                base + "/api/v1/world/" + id + "/islands/" + tokenId + "/portrait.png",
+                base + "/realm.html#isle=" + tokenId, attrs));
+    }
+
+    private WorldService.IslandEntry island(String id, int slot) {
+        for (WorldService.IslandEntry e : worlds.islands(id)) {
+            if (e.slot() == slot) {
+                return e;
+            }
+        }
+        throw ResourceNotFoundException.island(slot);
     }
 
     private static IslandClaimResponse claimResponse(WorldService.IslandClaim c) {

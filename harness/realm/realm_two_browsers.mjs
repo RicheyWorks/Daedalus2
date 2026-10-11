@@ -174,6 +174,12 @@ const end = await B.page.evaluate(() => {
   const s = window.daedalusRealm, m = s.arkModels.get("ark-0"), isle = s.islands.find(i => i.slot === 1);
   return { x: m.position.x, dockX: isle.dockX, z: m.position.z, dockZ: isle.dockZ };
 });
+const pair = await B.page.evaluate(() => {
+  const m = window.daedalusRealm.arkModels;
+  return [m.get("ark-0").position.x, m.get("ark-1").position.x];
+});
+check("two arks at one pier lie side by side, not inside each other", Math.abs(pair[0] - pair[1]) >= 20,
+  `x ${pair.map(v => v.toFixed(1)).join(" / ")}`);
 check("the moored model sits off Isle 1's pier", Math.abs(end.x - (end.dockX + 0.5)) < 1 && Math.abs(end.z - (end.dockZ + 9)) < 1, JSON.stringify(end));
 const serverArk = (await (await fetch(BASE + "/api/v1/world/world-zero/arks")).json()).arks[0];
 check("the server agrees: ark-0 moored at slot 1", serverArk.state === "MOORED" && serverArk.slot === 1);
@@ -278,6 +284,31 @@ await B.page.evaluate(() => document.querySelectorAll("#islands button.go")[1].c
 await B.page.waitForTimeout(1500);
 await B.page.screenshot({ path: path.join(OUT, "realm_creatures.png") });
 
+// --- Deeds (ADR-027): the Life panel shows the token portrait; a deed's link opens on its island.
+const deedImg = await B.page.waitForFunction(() => {
+  const img = document.querySelector("#life .deed img");
+  return img && img.complete && img.naturalWidth === 512 ? img.getAttribute("src") : false;
+}, null, { timeout: 10000 }).then(h => h.jsonValue(), () => null);
+check("the Life panel shows Isle 1's portrait", deedImg && deedImg.endsWith("/islands/1/portrait.png"), String(deedImg));
+const meta = await (await fetch(BASE + "/api/v1/world/world-zero/tokens/1")).json();
+const metaImg = await fetch(meta.image);
+check("token 1's metadata points at a real PNG", metaImg.ok && metaImg.headers.get("content-type") === "image/png",
+  `${meta.name} → ${meta.image}`);
+const D = await (async () => {
+  const page = await context.newPage();
+  const errors = [];
+  page.on("console", m => { if (m.type() === "error") errors.push(m.text()); });
+  page.on("pageerror", e => errors.push(String(e)));
+  await page.goto(meta.external_url);
+  await page.waitForFunction(() => window.daedalusRealm && window.daedalusRealm.live, null, { timeout: 30000 });
+  return { name: "D", page, errors };
+})();
+const opened = await D.page.waitForFunction(() => window.daedalusRealm.lifeSlot === 1 &&
+  document.querySelectorAll("#life .life-row").length > 0, null, { timeout: 15000 }).then(() => true, () => false);
+check("the deed's link opens the realm on Isle 1 with its Life panel", opened, meta.external_url);
+await D.page.waitForTimeout(1200);
+await D.page.screenshot({ path: path.join(OUT, "realm_deed.png") });
+
 // --- Reload: a fresh page rebuilds the same world from REST alone.
 const C = await open("C");
 await C.page.waitForFunction(() => window.daedalusRealm.islands.length === 2, null, { timeout: 30000 });
@@ -285,7 +316,7 @@ check("a fresh page rebuilds the same world", (await cubes(C.page)) === (await s
 await C.page.waitForFunction(() => window.daedalusRealm.arks.length === 2, null, { timeout: 15000 });
 check("a fresh page knows where every ark is", await C.page.evaluate(() => window.daedalusRealm.arks.find(a => a.id === "ark-0").slot === 1));
 
-for (const p of [A, B, C]) check(`no console errors on page ${p.name}`, p.errors.length === 0, p.errors.slice(0, 3).join(" | "));
+for (const p of [A, B, C, D]) check(`no console errors on page ${p.name}`, p.errors.length === 0, p.errors.slice(0, 3).join(" | "));
 await browser.close();
 console.log(failures.length ? `\n${failures.length} FAILED` : "\nALL PASS");
 process.exit(failures.length ? 1 : 0);

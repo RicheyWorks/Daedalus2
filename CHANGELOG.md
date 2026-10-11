@@ -10,6 +10,16 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Island deeds (ADR-027).**
+  ERC-721 metadata per
+  island at
+  `/tokens/{slot}` and a
+  512×512 isometric
+  portrait grown from
+  the seed in pure Java.
+  Arks sharing a pier
+  now moor side by side.
+
 - **Island ownership (ADR-026).**
   Claim an island and
   only you, and the

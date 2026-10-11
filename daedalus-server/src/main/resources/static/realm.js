@@ -417,6 +417,18 @@ async function loadLife() {
   const head = document.createElement("div");
   head.className = "life-head";
   head.dataset.day = res.day;
+  const deed = document.createElement("a");
+  deed.className = "deed";
+  deed.href = `${API}/tokens/${slot}`;
+  deed.target = "_blank";
+  deed.rel = "noopener";
+  deed.title = `Isle ${slot}'s deed (token metadata)`;
+  const pic = document.createElement("img");
+  pic.src = `${API}/islands/${slot}/portrait.png`;
+  pic.alt = `Portrait of Isle ${slot}`;
+  pic.width = 64; pic.height = 64;
+  deed.appendChild(pic);
+  host.appendChild(deed);
   head.innerHTML = `<b>Isle ${slot}</b> · day <span class="day">${res.day}</span><br>` +
     `<span>${res.richness} kinds · ${Math.round(res.total)} individuals · H′ ${res.shannon.toFixed(2)} · ` +
     `evenness ${res.evenness.toFixed(2)}</span>`;
@@ -736,10 +748,18 @@ function labelSprite(text) {
 const CRUISE = 16;           // cubes an ark climbs above the straight line between berths
 const RIDE = { id: null, last: null };
 
-function mooring(slot) {
+// Arks tied up at the same pier lie side by side along the rim, not inside each other: the
+// lowest id takes the berth, the next one a hull's length east, the next west, and so on.
+const BERTH_SPACING = 26;
+const BERTH_STEPS = [0, 1, -1, 2, -2, 3, -3];
+function mooring(slot, arkId) {
   const isle = state.islands.find(i => i.slot === slot);
   if (!isle) return null;
-  return new THREE.Vector3(isle.dockX + 0.5, isle.dockY + 1, isle.dockZ + ARK_STANDOFF);
+  const here = new Set(state.arks.filter(a => a.slot === slot).map(a => a.id));
+  if (arkId) here.add(arkId);
+  const rank = Math.max(0, [...here].sort().indexOf(arkId));
+  const step = BERTH_STEPS[rank % BERTH_STEPS.length];
+  return new THREE.Vector3(isle.dockX + 0.5 + step * BERTH_SPACING, isle.dockY + 1, isle.dockZ + ARK_STANDOFF);
 }
 
 function serverNow() { return Date.now() + state.clockOffset; }
@@ -747,9 +767,9 @@ function serverNow() { return Date.now() + state.clockOffset; }
 /** Where an ark is and which way it faces, on server time (ADR-020). */
 function arkPose(ark, now) {
   if (ark.state !== "SAILING") {
-    return { pos: mooring(ark.slot) || new THREE.Vector3(ark.x + 0.5, ark.y, ark.z + ARK_STANDOFF), yaw: 0, t: 1 };
+    return { pos: mooring(ark.slot, ark.id) || new THREE.Vector3(ark.x + 0.5, ark.y, ark.z + ARK_STANDOFF), yaw: 0, t: 1 };
   }
-  const a = mooring(ark.fromSlot), b = mooring(ark.toSlot);
+  const a = mooring(ark.fromSlot, ark.id), b = mooring(ark.toSlot, ark.id);
   if (!a || !b) return { pos: new THREE.Vector3(ark.x, ark.y, ark.z), yaw: 0, t: 1 };
   const t = Math.min(1, Math.max(0, (now - ark.departAt) / (ark.arriveAt - ark.departAt)));
   const e = t * t * (3 - 2 * t);
@@ -1186,7 +1206,11 @@ state.project = (x, y, z) => {  // screen pixel of a world point, for a harness 
     await loadArks();
     await loadSpecies();
     await refreshCreatures();
-    if (state.islands.length) flyTo(state.islands[0]);
+    // A deed's external_url is realm.html#isle=N (ADR-027): open on that island with its Life panel.
+    const linked = /^#isle=(\d+)$/.exec(location.hash);
+    const target = linked && state.islands.find(i => i.slot === Number(linked[1]));
+    if (target) { flyTo(target); toggleLife(target.slot); }
+    else if (state.islands.length) flyTo(state.islands[0]);
     status();
   } catch (e) {
     handleError(e);
