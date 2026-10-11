@@ -12,6 +12,7 @@ package com.daedalus.world.island;
  * @param streamLength stream columns carved from the pond to the rim
  * @param top         highest y in the plan, relative to the origin
  * @param bottom      lowest y in the plan, relative to the origin
+ * @param dockX       pier tip, relative to the origin: where an ark moors (ADR-019)
  */
 public record IslandTraits(
         long seed,
@@ -26,5 +27,8 @@ public record IslandTraits(
         int crystals,
         int boulders,
         int top,
-        int bottom) {
+        int bottom,
+        int dockX,
+        int dockY,
+        int dockZ) {
 }

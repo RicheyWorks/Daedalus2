@@ -33,6 +33,8 @@ public final class IslandGenerator {
     public static final int MIN_RADIUS = 8;
     public static final int MAX_RADIUS = 28;
     public static final int DEFAULT_RADIUS = 18;
+    /** Pier cubes past the rim column (ADR-019). */
+    public static final int PIER_LENGTH = 7;
 
     private static final int WATER_TOP = 3;
 
@@ -72,6 +74,11 @@ public final class IslandGenerator {
         int crystals;
         int boulders;
         int pondColumns;
+        // Pier tip (relative): the cube an ark moors beside. Set by dock().
+        int dockX;
+        int dockY;
+        int dockZ;
+        final Set<Long> reserved = new HashSet<>();
 
         Build(long seed, int radius) {
             this.seed = seed;
@@ -83,6 +90,7 @@ public final class IslandGenerator {
         IslandPlan run() {
             terrain();
             stream();
+            dock();
             int targetTrees = Math.max(3, (int) Math.round(9.0 * radius * radius / 361.0));
             trees(targetTrees);
             boulders(3 + rng.nextInt(3));
@@ -96,7 +104,7 @@ public final class IslandGenerator {
             }
             IslandTraits traits = new IslandTraits(seed, radius, heights.size(), blocks.size(),
                     trees, blossomTrees, pondColumns, streamLength, waterfall, crystals, boulders,
-                    top, bottom);
+                    top, bottom, dockX, dockY, dockZ);
             return new IslandPlan(traits, blocks);
         }
 
@@ -197,6 +205,68 @@ public final class IslandGenerator {
             }
         }
 
+        /**
+         * A plank pier off the +Z rim (the side facing the world origin), three cubes wide and
+         * {@link IslandGenerator#PIER_LENGTH} long, on log posts. An ark moors at its tip. The
+         * pier starts from the rim column nearest x = 0 that is dry, so the stream never floods it.
+         */
+        void dock() {
+            int bestX = 0;
+            int bestZ = Integer.MIN_VALUE;
+            for (int x = -2; x <= 2; x++) {
+                for (Map.Entry<Long, Integer> e : heights.entrySet()) {
+                    if (keyX(e.getKey()) != x || wet.contains(e.getKey())) {
+                        continue;
+                    }
+                    int z = keyZ(e.getKey());
+                    if (z > bestZ || (z == bestZ && Math.abs(x) < Math.abs(bestX))) {
+                        bestZ = z;
+                        bestX = x;
+                    }
+                }
+            }
+            int deck = heights.get(key(bestX, bestZ));
+            for (int z = bestZ - 1; z <= bestZ + PIER_LENGTH; z++) {
+                for (int x = bestX - 1; x <= bestX + 1; x++) {
+                    reserved.add(key(x, z));
+                    BlockCoordinate plank = new BlockCoordinate(x, deck, z);
+                    // On land the pier is a plank path laid into the grass; past the rim it floats.
+                    blocks.put(plank, BlockType.WOOD);
+                    for (int y = deck + 1; y <= deck + 3; y++) {
+                        blocks.remove(new BlockCoordinate(x, y, z));
+                    }
+                }
+                if (z > bestZ && (z - bestZ) % 3 == 0) {
+                    for (int x : new int[] {bestX - 1, bestX + 1}) {
+                        for (int y = deck - 3; y < deck; y++) {
+                            BlockCoordinate post = new BlockCoordinate(x, y, z);
+                            if (!blocks.containsKey(post)) {
+                                blocks.put(post, BlockType.LOG);
+                            }
+                        }
+                    }
+                }
+            }
+            int tip = bestZ + PIER_LENGTH;
+            // Mooring bollards at the tip: what a player sees as "the ark ties up here".
+            blocks.put(new BlockCoordinate(bestX - 1, deck + 1, tip), BlockType.LOG);
+            blocks.put(new BlockCoordinate(bestX + 1, deck + 1, tip), BlockType.LOG);
+            dockX = bestX;
+            dockY = deck;
+            dockZ = tip;
+        }
+
+        boolean nearReserved(int x, int z, int pad) {
+            for (int dx = -pad; dx <= pad; dx++) {
+                for (int dz = -pad; dz <= pad; dz++) {
+                    if (reserved.contains(key(x + dx, z + dz))) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         boolean nearWet(int x, int z, int pad) {
             for (int dx = -pad; dx <= pad; dx++) {
                 for (int dz = -pad; dz <= pad; dz++) {
@@ -213,7 +283,7 @@ public final class IslandGenerator {
             for (Map.Entry<Long, Double> e : dist.entrySet()) {
                 int x = keyX(e.getKey());
                 int z = keyZ(e.getKey());
-                if (e.getValue() < 0.72 && !nearWet(x, z, 3)) {
+                if (e.getValue() < 0.72 && !nearWet(x, z, 3) && !nearReserved(x, z, 3)) {
                     spots.add(e.getKey());
                 }
             }
@@ -278,7 +348,7 @@ public final class IslandGenerator {
             for (Map.Entry<Long, Double> e : dist.entrySet()) {
                 int x = keyX(e.getKey());
                 int z = keyZ(e.getKey());
-                if (e.getValue() > 0.45 && e.getValue() < 0.85 && !nearWet(x, z, 2)
+                if (e.getValue() > 0.45 && e.getValue() < 0.85 && !nearWet(x, z, 2) && !nearReserved(x, z, 2)
                         && !blocks.containsKey(new BlockCoordinate(x, heights.get(e.getKey()) + 1, z))) {
                     spots.add(e.getKey());
                 }

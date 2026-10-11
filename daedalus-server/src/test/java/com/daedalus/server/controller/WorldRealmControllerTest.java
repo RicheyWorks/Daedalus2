@@ -183,11 +183,41 @@ class WorldRealmControllerTest {
     }
 
     @Test
+    void everyIslandLaunchesAnArkMooredAtItsPier() throws Exception {
+        mvc.perform(get("/api/v1/world/world-zero/arks")).andExpect(jsonPath("$.arks", hasSize(0)));
+        for (String body : new String[] {"{\"seed\":11}", "{\"seed\":42,\"radius\":12}"}) {
+            mvc.perform(post("/api/v1/world/world-zero/islands").contentType(MediaType.APPLICATION_JSON)
+                    .content(body)).andExpect(status().isOk());
+        }
+        JsonNode islands = body(mvc.perform(get("/api/v1/world/world-zero/islands"))).get("islands");
+        JsonNode arks = body(mvc.perform(get("/api/v1/world/world-zero/arks"))).get("arks");
+        assertThat(arks.size()).isEqualTo(2);
+        for (int i = 0; i < 2; i++) {
+            JsonNode isle = islands.get(i);
+            JsonNode ark = arks.get(i);
+            assertThat(ark.get("id").asText()).isEqualTo("ark-" + isle.get("slot").asInt());
+            assertThat(ark.get("name").asText()).isEqualTo(
+                    com.daedalus.world.ark.ArkNames.of(isle.get("seed").asLong()));
+            assertThat(ark.get("state").asText()).isEqualTo("MOORED");
+            // The berth is one cube above the island's pier tip.
+            assertThat(ark.get("x").asInt()).isEqualTo(isle.get("dockX").asInt());
+            assertThat(ark.get("y").asInt()).isEqualTo(isle.get("dockY").asInt() + 1);
+            assertThat(ark.get("z").asInt()).isEqualTo(isle.get("dockZ").asInt());
+            // ...and the pier tip really is a plank in the world.
+            JsonNode plank = body(mvc.perform(get("/api/v1/world/world-zero/block")
+                    .param("x", isle.get("dockX").asText()).param("y", isle.get("dockY").asText())
+                    .param("z", isle.get("dockZ").asText())));
+            assertThat(plank.get("type").asText()).isEqualTo("WOOD");
+        }
+    }
+
+    @Test
     void unknownWorldsAre404OnEveryRealmRoute() throws Exception {
         mvc.perform(get("/api/v1/world/nope/chunks")).andExpect(status().isNotFound());
         mvc.perform(get("/api/v1/world/nope/chunk/blocks").param("x", "0").param("y", "0").param("z", "0"))
                 .andExpect(status().isNotFound());
         mvc.perform(get("/api/v1/world/nope/islands")).andExpect(status().isNotFound());
+        mvc.perform(get("/api/v1/world/nope/arks")).andExpect(status().isNotFound());
         mvc.perform(post("/api/v1/world/nope/islands").contentType(MediaType.APPLICATION_JSON)
                 .content("{\"seed\":1}")).andExpect(status().isNotFound());
     }

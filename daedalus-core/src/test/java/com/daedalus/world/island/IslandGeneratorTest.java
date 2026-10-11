@@ -19,9 +19,11 @@ class IslandGeneratorTest {
      * Seed 11 at the default radius, as SHA-256 over every cube. Changing the generator so this
      * moves is allowed — it is a decision, and the new digest goes in the same commit with a line
      * in the CHANGELOG saying which islands changed shape.
+     *
+     * <p>Moved once on purpose: ADR-019 gave every island a pier (old digest ed45f7d3…).
      */
     static final String GOLDEN_SEED_11 =
-            "ed45f7d3eceaaf8d132dad2d35cfbd0bdd14dc8a475709ae185e506cb5ee1670";
+            "bcd94a28cb5b3f744259568bc0039debd95db70c01d506bd56594f6987ef35d5";
 
     @Test
     void sameSeedSameIslandOnEveryCall() {
@@ -66,7 +68,8 @@ class IslandGeneratorTest {
     void theIslandStaysInsideItsFootprint() {
         for (int radius : new int[] {IslandGenerator.MIN_RADIUS, 18, IslandGenerator.MAX_RADIUS}) {
             IslandPlan plan = IslandGenerator.generate(7, radius);
-            int reach = radius + 6 + 3 + 3;
+            // The rim can sit 22% past the radius (noise) and the pier runs PIER_LENGTH beyond it.
+            int reach = (int) Math.ceil(radius * 1.22) + IslandGenerator.PIER_LENGTH + 2;
             for (BlockCoordinate c : plan.blocks().keySet()) {
                 assertThat(Math.abs(c.x())).as("x of %s at radius %d", c, radius)
                         .isLessThanOrEqualTo(reach);
@@ -94,6 +97,31 @@ class IslandGeneratorTest {
             checked++;
         }
         assertThat(checked).isGreaterThan(200);
+    }
+
+    @Test
+    void everyIslandHasAPierAnArkCanMoorAt() {
+        for (long seed : new long[] {1, 11, 42, 99, 2026}) {
+            IslandPlan plan = IslandGenerator.generate(seed);
+            IslandTraits t = plan.traits();
+            BlockCoordinate tip = new BlockCoordinate(t.dockX(), t.dockY(), t.dockZ());
+            assertThat(plan.blocks().get(tip)).as("plank at the pier tip, seed %d", seed)
+                    .isEqualTo(BlockType.WOOD);
+            // The tip is clear above — an ark's passengers step onto open planks.
+            assertThat(plan.blocks().get(new BlockCoordinate(t.dockX(), t.dockY() + 1, t.dockZ())))
+                    .isNull();
+            // Bollards stand either side of the tip.
+            assertThat(plan.blocks().get(new BlockCoordinate(t.dockX() - 1, t.dockY() + 1, t.dockZ())))
+                    .isEqualTo(BlockType.LOG);
+            // The pier reaches past the island's ground: nothing solid under the tip's far end.
+            assertThat(plan.blocks().get(new BlockCoordinate(t.dockX(), t.dockY() - 1, t.dockZ())))
+                    .isNull();
+            // No tree trunk stands on the pier.
+            for (int z = t.dockZ() - IslandGenerator.PIER_LENGTH; z <= t.dockZ(); z++) {
+                assertThat(plan.blocks().get(new BlockCoordinate(t.dockX(), t.dockY() + 1, z)))
+                        .as("cube above pier at z=%d, seed %d", z, seed).isNotEqualTo(BlockType.LOG);
+            }
+        }
     }
 
     @Test

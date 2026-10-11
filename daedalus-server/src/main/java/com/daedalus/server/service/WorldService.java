@@ -27,6 +27,8 @@ import com.daedalus.world.Trap;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.World;
 import com.daedalus.world.WorldId;
+import com.daedalus.world.ark.Ark;
+import com.daedalus.world.ark.ArkOps;
 import com.daedalus.world.island.IslandGenerator;
 import com.daedalus.world.island.IslandOps;
 import com.daedalus.world.island.IslandPlan;
@@ -77,6 +79,9 @@ public class WorldService {
     /** Island lane: slot → (seed, radius). Persisted beside the DAEW file (ADR-018). */
     private final TreeMap<Integer, IslandEntry> islands = new TreeMap<>();
 
+    /** Traits by "seed/radius". A pure function's answers; regrowing an island costs ~50 ms. */
+    private static final Map<String, IslandTraits> TRAITS = new ConcurrentHashMap<>();
+
     /** A raised island as the lane remembers it. Traits are regrown from the seed on demand. */
     public record IslandEntry(int slot, long seed, int radius) {
         public BlockCoordinate origin() {
@@ -84,7 +89,8 @@ public class WorldService {
         }
 
         public IslandTraits traits() {
-            return IslandGenerator.generate(seed, radius).traits();
+            return TRAITS.computeIfAbsent(seed + "/" + radius,
+                    k -> IslandGenerator.generate(seed, radius).traits());
         }
     }
 
@@ -551,6 +557,19 @@ public class WorldService {
         synchronized (lock) {
             return List.copyOf(islands.values());
         }
+    }
+
+    /** One ark per raised island, moored at its pier (ADR-019), or null for an unknown world. */
+    public List<Ark> arks(String id) {
+        List<IslandEntry> lane = islands(id);
+        if (lane == null) {
+            return null;
+        }
+        List<Ark> out = new ArrayList<>();
+        for (IslandEntry e : lane) {
+            out.add(ArkOps.launch(e.slot(), e.traits()));
+        }
+        return out;
     }
 
     Path islandsFile() {

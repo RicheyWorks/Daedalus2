@@ -219,6 +219,7 @@ public consumers).
 | `GET` | `/api/v1/world/{id}/chunks` | public | List every non-empty chunk (coords, revision, occupied) for a renderer (ADR-018) |
 | `GET` | `/api/v1/world/{id}/chunk/blocks?x=&y=&z=` | public | One chunk's cubes as a base64 ordinal payload plus the palette, for meshing (ADR-018) |
 | `GET` | `/api/v1/world/{id}/islands` | public | Raised islands: lane slot, origin, seed and traits (ADR-018) |
+| `GET` | `/api/v1/world/{id}/arks` | public | The arks: one per island, named from its seed, moored at its pier (ADR-019) |
 | `POST` | `/api/v1/world/{id}/islands` | required | Raise a seeded floating island into the next free lane slot (`RaiseIslandRequest`). Lane-full is a named result (ADR-018) |
 | `PUT` | `/api/v1/world/{id}/block` | required | Place a cube (`PlaceBlockRequest`). AIR is remove. Survives restart. |
 | `DELETE` | `/api/v1/world/{id}/block?x=&y=&z=` | required | Remove a cube (set AIR). Optional actorId uses the parcel gate |

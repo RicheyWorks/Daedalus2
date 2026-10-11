@@ -65,6 +65,9 @@ import com.daedalus.world.Trap;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.World;
 import com.daedalus.world.island.IslandTraits;
+import com.daedalus.world.ark.Ark;
+import com.daedalus.api.dto.ArkRow;
+import com.daedalus.api.dto.WorldArksResponse;
 import com.daedalus.api.dto.ChunkBlocksResponse;
 import com.daedalus.api.dto.ChunkRow;
 import com.daedalus.api.dto.IslandRaiseResponse;
@@ -702,11 +705,24 @@ public class WorldController {
         return ResponseEntity.ok(new IslandRaiseResponse(write.result(), write.revision(), row));
     }
 
+    @GetMapping("/world/{id}/arks")
+    @Operation(summary = "List the arks: one per island, moored at its pier.")
+    public ResponseEntity<WorldArksResponse> listArks(@PathVariable String id) {
+        mounted(id);
+        List<ArkRow> rows = new ArrayList<>();
+        for (Ark ark : worlds.arks(id)) {
+            BlockCoordinate b = ark.berth();
+            rows.add(new ArkRow(ark.id(), ark.name(), ark.homeSlot(), ark.slot(), b.x(), b.y(), b.z(), "MOORED"));
+        }
+        return ResponseEntity.ok(new WorldArksResponse(id, rows));
+    }
+
     private static IslandRow islandRow(WorldService.IslandEntry e, IslandTraits t) {
         BlockCoordinate o = e.origin();
         return new IslandRow(e.slot(), o.x(), o.y(), o.z(), e.seed(), e.radius(), t.columns(),
                 t.blocks(), t.trees(), t.blossomTrees(), t.pondColumns(), t.streamLength(),
-                t.waterfall(), t.crystals(), t.boulders(), t.top(), t.bottom());
+                t.waterfall(), t.crystals(), t.boulders(), t.top(), t.bottom(),
+                o.x() + t.dockX(), o.y() + t.dockY(), o.z() + t.dockZ());
     }
 
     private World mounted(String id) {

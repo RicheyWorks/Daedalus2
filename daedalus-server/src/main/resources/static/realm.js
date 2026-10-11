@@ -6,6 +6,7 @@
 // remeshes its chunk; a WORLD_REVISION_CHANGED frame typed ISLAND refetches the lane.
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 const WORLD = "world-zero";
 const API = "/api/v1/world/" + WORLD;
@@ -30,6 +31,8 @@ const state = {
   meshes: new Map(),         // "cx,cy,cz" → THREE.Group
   revision: 0,
   islands: [],
+  arks: [],                  // from GET /arks (ADR-019)
+  arkModels: new Map(),      // ark id → THREE.Group placed at its berth
   mode: "look",
   block: "GRASS",
   token: safeGet(TOKEN_KEY),
@@ -273,6 +276,106 @@ async function loadIslands(focusSlot) {
   }
 }
 
+// ---------------------------------------------------------------- arks (ADR-019)
+// One model, cloned per ark. Its origin is deck level with the bow on +X. At a berth it lies
+// side-on across the pier tip — beam toward the island, bow along +X, parallel to the rim — so a
+// 23-cube hull never reaches back into the terrain the way a pier-parallel mooring did.
+const ARK_SCALE = 0.6;
+const ARK_STANDOFF = 9;      // pier tip → hull centreline: half beam plus wing, scaled
+let arkTemplate = null;
+let arkTemplateLoad = null;
+function loadArkModel() {
+  if (!arkTemplateLoad) {
+    arkTemplateLoad = new GLTFLoader().loadAsync("/models/ark.glb").then(g => {
+      g.scene.traverse(o => {
+        if (o.isMesh) {
+          o.material = new THREE.MeshLambertMaterial({ vertexColors: true });
+          if (o.name.includes("Lamps")) o.material.emissive = new THREE.Color(0x6b4a12);
+        }
+      });
+      arkTemplate = g.scene;
+      return arkTemplate;
+    });
+  }
+  return arkTemplateLoad;
+}
+
+function labelSprite(text) {
+  const c = document.createElement("canvas");
+  c.width = 512; c.height = 96;
+  const g = c.getContext("2d");
+  g.font = "600 44px system-ui, sans-serif";
+  const w = Math.min(500, g.measureText(text).width + 40);
+  g.fillStyle = "rgba(22,18,14,0.78)";
+  g.beginPath(); g.roundRect((512 - w) / 2, 14, w, 68, 18); g.fill();
+  g.fillStyle = "#f5c14a"; g.textAlign = "center"; g.textBaseline = "middle";
+  g.fillText(text, 256, 49);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, depthTest: false }));
+  sprite.scale.set(16, 3, 1);
+  sprite.renderOrder = 5;
+  return sprite;
+}
+
+async function loadArks() {
+  const res = await api(API + "/arks");
+  state.arks = res.arks;
+  const template = await loadArkModel();
+  const seen = new Set();
+  for (const ark of state.arks) {
+    seen.add(ark.id);
+    let model = state.arkModels.get(ark.id);
+    if (!model) {
+      model = new THREE.Group();
+      const hull = template.clone(true);
+      hull.scale.setScalar(ARK_SCALE);
+      model.add(hull);
+      const label = labelSprite(ark.name);
+      label.position.set(0, 22, 0);
+      model.add(label);
+      model.name = ark.id;
+      scene.add(model);
+      state.arkModels.set(ark.id, model);
+    }
+    model.userData.ark = ark;
+    model.userData.base = new THREE.Vector3(ark.x + 0.5, ark.y, ark.z + ARK_STANDOFF);
+    model.position.copy(model.userData.base);
+  }
+  for (const [id, model] of state.arkModels) {
+    if (!seen.has(id)) { scene.remove(model); state.arkModels.delete(id); }
+  }
+  renderArkList();
+  status();
+}
+
+function renderArkList() {
+  const host = document.getElementById("arks");
+  if (!host) return;
+  host.textContent = "";
+  for (const ark of state.arks) {
+    const row = document.createElement("div");
+    row.className = "isle";
+    const info = document.createElement("div");
+    info.innerHTML = `<b>${ark.name}</b><br>moored at Isle ${ark.slot}`;
+    const go = document.createElement("button");
+    go.textContent = "Go";
+    go.onclick = () => flyTo({ x: ark.x, y: ark.y - 4, z: ark.z + ARK_STANDOFF });
+    row.append(info, go);
+    host.appendChild(row);
+  }
+}
+
+function bobArks(t) {
+  for (const model of state.arkModels.values()) {
+    const base = model.userData.base;
+    if (!base) continue;
+    const phase = model.name.length * 1.7 + (model.userData.ark ? model.userData.ark.homeSlot : 0);
+    model.position.y = base.y + Math.sin(t / 1400 + phase) * 0.35;
+    model.rotation.z = Math.sin(t / 1900 + phase) * 0.015;
+  }
+}
+
 function flyTo(isle) {
   const t = new THREE.Vector3(isle.x, isle.y + 4, isle.z);
   const from = camera.position.clone();
@@ -303,6 +406,7 @@ async function raiseIsland() {
     // The STOMP frame also triggers a reload; doing it here keeps a page without STOMP honest.
     await loadWorld();
     await loadIslands(res.island.slot);
+    await loadArks();
   } catch (e) {
     handleError(e);
   }
@@ -370,6 +474,7 @@ function onFrame(ev) {
       reloadQueued = false;
       await loadWorld();
       await loadIslands();
+      await loadArks();
     }, 150);
   }
   status();
@@ -486,7 +591,7 @@ function status() {
   const cubes = [...state.chunks.values()].reduce((a, d) => a + d.reduce((s, v) => s + (v ? 1 : 0), 0), 0);
   document.getElementById("statusText").textContent =
     `${state.live ? "live" : "offline"} · revision ${state.revision} · ${state.chunks.size} chunks · ` +
-    `${cubes.toLocaleString()} cubes · ${state.islands.length} islands`;
+    `${cubes.toLocaleString()} cubes · ${state.islands.length} islands · ${state.arks.length} arks`;
 }
 
 function showLogin() { document.getElementById("login").style.display = "block"; }
@@ -512,8 +617,9 @@ document.getElementById("loginGo").onclick = async () => {
 };
 
 // ---------------------------------------------------------------- go
-function frame() {
+function frame(t) {
   controls.update();
+  bobArks(t || 0);
   renderer.render(scene, camera);
   requestAnimationFrame(frame);
 }
@@ -525,6 +631,7 @@ state.pick = pick;           // the exact pick the pointer uses, so a harness ca
   try {
     await loadWorld();
     await loadIslands();
+    await loadArks();
     if (state.islands.length) flyTo(state.islands[0]);
     status();
   } catch (e) {

@@ -10,6 +10,18 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Arks and docks (ADR-019).**
+  Every island grows
+  a plank pier on log
+  posts. Every island
+  launches a named ark
+  moored at its tip.
+  `GET /arks`. The
+  realm moors the
+  Blender ark model.
+  Seed 11's golden
+  moved for the pier.
+
 - **The Realm (ADR-018).**
   Seeded floating
   islands and a

@@ -56,6 +56,26 @@ await B.page.waitForFunction(n => [...window.daedalusRealm.chunks.values()]
   .reduce((a, d) => a + d.reduce((s, v) => s + (v ? 1 : 0), 0), 0) === n, await serverCubes(), { timeout: 30000 });
 const [ca, cb, cs] = [await cubes(A.page), await cubes(B.page), await serverCubes()];
 check("island raised; A, B and server agree on every cube", ca === cs && cb === cs, `A=${ca} B=${cb} server=${cs}`);
+// --- Arks (ADR-019): the island launched one, both pages moor its model at the pier.
+await B.page.waitForFunction(() => window.daedalusRealm.arkModels.size === 1, null, { timeout: 30000 });
+const arkA = await A.page.evaluate(() => {
+  const s = window.daedalusRealm, ark = s.arks[0], m = s.arkModels.get(ark.id);
+  let meshes = 0; m.traverse(o => { if (o.isMesh) meshes++; });
+  return { n: s.arks.length, id: ark.id, name: ark.name, meshes };
+});
+check("one ark per island, model loaded on A", arkA.n === 1 && arkA.id === "ark-0" && arkA.meshes >= 3, JSON.stringify(arkA));
+check("B moored the same ark", await B.page.evaluate(n => window.daedalusRealm.arks[0].name === n, arkA.name));
+const berthPlank = await A.page.evaluate(() => {
+  const s = window.daedalusRealm, a = s.arks[0], S = 16, d = v => Math.floor(v / S), m = v => ((v % S) + S) % S;
+  const at = (x, y, z) => { const c = s.chunks.get(d(x) + "," + d(y) + "," + d(z)); return c ? s.palette[c[m(x) + S * (m(y) + S * m(z))]] : "AIR"; };
+  return [at(a.x, a.y, a.z), at(a.x, a.y - 1, a.z)];
+});
+check("the ark's berth is open air over a pier plank", berthPlank[0] === "AIR" && berthPlank[1] === "WOOD", berthPlank.join(" over "));
+await A.page.evaluate(() => { const a = window.daedalusRealm.arks[0]; document.querySelector("#arks button").click(); });
+await A.page.waitForTimeout(1300);
+await A.page.screenshot({ path: path.join(OUT, "realm_ark.png") });
+await A.page.evaluate(() => document.querySelector("#islands button").click());
+await A.page.waitForTimeout(1300);
 const meshes = await A.page.evaluate(() => window.daedalusRealm.meshes.size);
 check("island meshed into chunk groups", meshes > 10, `${meshes} chunk meshes`);
 await A.page.waitForTimeout(1300); // fly-to animation

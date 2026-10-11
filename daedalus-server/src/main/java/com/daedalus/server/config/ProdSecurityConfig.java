@@ -81,7 +81,7 @@ public class ProdSecurityConfig {
      * Pages beside the maze well. {@code /realm.html} is the WebGL world client (ADR-018); the
      * well at {@code /} stays the default and is untouched by it.
      */
-    public static final List<String> STATIC_PAGES = List.of("/realm.html", "/realm.js");
+    public static final List<String> STATIC_PAGES = List.of("/realm.html", "/realm.js", "/models/ark.glb");
 
     public static final List<String> STATIC_SCRIPTS = List.of(
             "/draw.js", "/api.js", "/share.js", "/fog.js", "/seat.js",
@@ -189,6 +189,7 @@ public class ProdSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/chunks").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/chunk/blocks").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/arks").permitAll()
 
                         // ---- Protected API surface ----
                         // Write operations.
