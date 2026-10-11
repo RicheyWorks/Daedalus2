@@ -33,6 +33,7 @@ const state = {
   islands: [],
   arks: [],                  // from GET /arks (ADR-019)
   arkModels: new Map(),      // ark id → THREE.Group placed at its berth
+  species: [],               // the canon, from GET /species (ADR-021)
   clockOffset: 0,            // server epoch − local epoch, from /arks and ark frames (ADR-020)
   mode: "look",
   block: "GRASS",
@@ -275,6 +276,47 @@ async function loadIslands(focusSlot) {
     const isle = state.islands.find(i => i.slot === focusSlot);
     if (isle) flyTo(isle);
   }
+}
+
+// ---------------------------------------------------------------- bestiary (ADR-021)
+const GUILD_NOTES = {
+  MEADOW: "grass and scrub", CANOPY: "trees", POND: "pond and stream", DECOMPOSER: "soil and deadwood",
+  STARBORN: "fell with the meteor; lives on the crystals", MARINE: "the sea fell away — no island holds them yet",
+};
+async function loadSpecies() {
+  const res = await api("/api/v1/species");
+  state.species = res.species;
+  const host = document.getElementById("bestiary");
+  host.textContent = "";
+  const chips = document.createElement("div");
+  chips.className = "chips";
+  const list = document.createElement("div");
+  list.className = "kinds";
+  for (const [guild, n] of Object.entries(res.guilds)) {
+    const chip = document.createElement("button");
+    chip.className = "chip";
+    chip.dataset.guild = guild;
+    chip.textContent = `${guild.toLowerCase()} ${n}`;
+    chip.onclick = () => {
+      const open = chip.classList.toggle("on");
+      chips.querySelectorAll(".chip").forEach(c => { if (c !== chip) c.classList.remove("on"); });
+      list.textContent = "";
+      if (!open) return;
+      const note = document.createElement("div");
+      note.className = "note";
+      note.textContent = GUILD_NOTES[guild] || "";
+      list.appendChild(note);
+      for (const sp of state.species.filter(x => x.guild === guild)) {
+        const row = document.createElement("div");
+        row.className = "kind";
+        row.innerHTML = `<b>${sp.name}</b> <span>${sp.size.toLowerCase()} · ${sp.strategy}-selected` +
+          `${sp.disperses ? " · flies or drifts" : " · needs an ark"}${sp.rarity === "LEGENDARY" ? " · legendary" : ""}</span>`;
+        list.appendChild(row);
+      }
+    };
+    chips.appendChild(chip);
+  }
+  host.append(chips, list);
 }
 
 // ---------------------------------------------------------------- arks (ADR-019)
@@ -755,6 +797,7 @@ state.project = (x, y, z) => {  // screen pixel of a world point, for a harness 
     await loadWorld();
     await loadIslands();
     await loadArks();
+    await loadSpecies();
     if (state.islands.length) flyTo(state.islands[0]);
     status();
   } catch (e) {

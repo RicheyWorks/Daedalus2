@@ -41,6 +41,13 @@ check("both pages load and go live over STOMP", true);
 const gl = await A.page.evaluate(() => !!document.getElementById("view").getContext("webgl2") || !!document.getElementById("view").getContext("webgl"));
 check("WebGL context available", gl);
 
+// --- The bestiary (ADR-021): the whole canon arrives, and a guild chip lists its kinds.
+await A.page.waitForFunction(() => window.daedalusRealm.species.length === 221, null, { timeout: 15000 });
+await A.page.click('.chip[data-guild="STARBORN"]');
+const starborn = await A.page.locator(".kinds .kind").count();
+check("bestiary lists the starborn guild", starborn === 22, `${starborn} kinds`);
+await A.page.click('.chip[data-guild="STARBORN"]');
+
 // --- A raises an island from the UI; B learns about it from the STOMP frame alone.
 await A.page.fill("#seed", "11");
 await A.page.click("#raise");

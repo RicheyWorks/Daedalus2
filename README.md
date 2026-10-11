@@ -221,6 +221,7 @@ public consumers).
 | `GET` | `/api/v1/world/{id}/islands` | public | Raised islands: lane slot, origin, seed and traits (ADR-018) |
 | `GET` | `/api/v1/world/{id}/arks` | public | The arks: one per island, named from its seed, moored at a pier or sailing (with voyage times and the server clock) (ADR-019/020) |
 | `POST` | `/api/v1/world/{id}/arks/{arkId}/voyage` | required | Order an ark to another island (`VoyageRequest`). Already-there, underway and no-such-island are named results; unknown ark 404 (ADR-020) |
+| `GET` | `/api/v1/species` | public | The species canon: 221 kinds from ComputerPets with guild, size, r/K strategy and whether they cross open sky alone (ADR-021) |
 | `POST` | `/api/v1/world/{id}/islands` | required | Raise a seeded floating island into the next free lane slot (`RaiseIslandRequest`). Lane-full is a named result (ADR-018) |
 | `PUT` | `/api/v1/world/{id}/block` | required | Place a cube (`PlaceBlockRequest`). AIR is remove. Survives restart. |
 | `DELETE` | `/api/v1/world/{id}/block?x=&y=&z=` | required | Remove a cube (set AIR). Optional actorId uses the parcel gate |

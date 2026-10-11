@@ -10,6 +10,17 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Species canon (ADR-021).**
+  221 kinds from
+  ComputerPets, each
+  in a guild with a
+  size, an r/K
+  strategy and
+  whether it needs an
+  ark. `GET /species`.
+  A bestiary in the
+  realm.
+
 - **Ark voyages (ADR-020).**
   An ark sails on
   two timestamps;

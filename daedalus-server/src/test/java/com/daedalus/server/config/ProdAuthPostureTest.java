@@ -115,6 +115,7 @@ class ProdAuthPostureTest {
         EXPECTED.put("GET /api/v1/world/" + ID + "/chunk/blocks", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/islands", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/arks", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/species", Posture.PUBLIC);
 
         // --- everything that costs work or touches state ---
         EXPECTED.put("POST /api/v1/maze/generate", Posture.AUTHENTICATED);

@@ -190,6 +190,8 @@ public class ProdSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/chunk/blocks").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/arks").permitAll()
+                        // The species canon (ADR-021): reference data, read-only.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/species").permitAll()
 
                         // ---- Protected API surface ----
                         // Write operations.
