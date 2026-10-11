@@ -10,6 +10,20 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Wallet sign-in and island deeds on chain (ADR-028).**
+  Sign in with Ethereum
+  (EIP-4361) and get the
+  same JWT as the admin,
+  named by your address.
+  An island's owner mints
+  its deed on the
+  RealmIslands ERC-721 by
+  a realm-signed voucher.
+  Built from ComputerPets'
+  wallet code and the
+  fast-food-punks deploy
+  pipeline.
+
 - **Island deeds (ADR-027).**
   ERC-721 metadata per
   island at

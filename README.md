@@ -98,16 +98,19 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
 daedalus/
 ├── daedalus-core/             pure-Java engine: generators, solvers, model
 ├── daedalus-plugin-api/       SPI types (Spring-free) for plugin authors
+├── daedalus-wallet/           Sign-In with Ethereum + island deed vouchers (optional; ADR-028)
 ├── daedalus-plugin-runtime/   PluginManager, PluginRegistry, JAR discovery
 ├── daedalus-server/           Spring Boot REST + WebSocket + Redis-optional
 ├── daedalus-desktop/          JavaFX desktop host (optional)
-└── daedalus-explore/          first-person host (optional; ADR-017)
+├── daedalus-explore/          first-person host (optional; ADR-017)
+└── chain/                     RealmIslands ERC-721 + deploy pipeline (Hardhat; ADR-028)
 ```
 
 | Module | Depends on | What lives here |
 |---|---|---|
 | `daedalus-core` | SLF4J only | `MazeGrid`, `MazeGenerator`/`MazeSolver` interfaces, all 23 + 10 algorithms, `Point`/`MazeMetadata`/`MazeStats` model. No Spring, no Jackson, no JPA. |
 | `daedalus-plugin-api` | core | `MazePlugin`, `PluginManifest`, `PluginLifecycle`, `PluginContext`, lifecycle events (`MazeGeneratedEvent`, `MazeSolvedEvent`, `PlayerMovedEvent`, `PluginFailedEvent`). What plugin authors implement against. |
+| `daedalus-wallet` | web3j `crypto` only | `SiweMessage`/`SiweVerifier`/`WalletNonces` (EIP-4361 sign-in), `WalletSignature` and `EthereumAddress` (ported from ComputerPets), `DeedVoucher`/`DeedSigner` (EIP-712 mint vouchers for `chain/` RealmIslands). No RPC client; the server uses it only with `daedalus.wallet.enabled=true`. |
 | `daedalus-plugin-runtime` | core, plugin-api, Spring | `PluginManager` (discovery, lifecycle), `PluginRegistry`, JAR `URLClassLoader` isolation. Spring is allowed here so events can be published into a Spring `ApplicationContext`. |
 | `daedalus-server` | plugin-runtime, Spring Boot, Redis (optional) | Controllers (`MazeController`, `SessionController`, `LeaderboardController`, `InsightController`, `AgentController`, `CampaignController`, `MazeWebSocketController`, `PluginController`), DTOs in `com.daedalus.api.dto`, services (`MazeGenerationService` with Resilience4j circuit breaker, `LeaderboardService` with optional Redis backing, `GameSessionService`). Web UI at `src/main/resources/static/index.html` plus enumerated scripts (`draw.js`, `api.js`, `share.js`, `fog.js`, `seat.js`, `lab.js`, `caption.js`, `mint.js`, `campaign.js`, `spectate.js`, `hunt.js`, `solve.js`, `theory.js`, `living.js`, `ghost.js`, `tournament.js`, `live.js`, `session.js`, `fogwalk.js`, `desk.js`, `stage.js`, `app.js`). |
 | `daedalus-desktop` | server, JavaFX | `DaedalusLauncher` (boots Spring + JavaFX), `DaedalusPrimaryStage`, `ThemeManager`. Loads `/ui/main.fxml`. |
@@ -179,6 +182,10 @@ public consumers).
 | Method | Path | Auth (prod) | Description |
 |---|---|---|---|
 | `POST` | `/api/v1/auth/login` | public | Exchange admin credentials for a JWT |
+| `GET` | `/api/v1/auth/wallet/config` | public | Wallet sign-in is on: the chain, the RealmIslands contract and the realm's voucher-signing address (ADR-028; only with `daedalus.wallet.enabled`) |
+| `GET` | `/api/v1/auth/wallet/nonce?address=` | public | The Sign-In with Ethereum message for that address to sign; single use, 10 minutes (ADR-028) |
+| `POST` | `/api/v1/auth/wallet` | public | A signed sign-in message → a JWT whose subject is the wallet address; refusals are 401 with a reason header (ADR-028) |
+| `POST` | `/api/v1/world/{id}/islands/{slot}/deed-voucher` | required | The island's owner (a signed-in wallet) gets a signed voucher to mint its deed on the RealmIslands contract (ADR-028) |
 | `GET` | `/api/v1/algorithms` | public | List every registered generator and solver |
 | `POST` | `/api/v1/maze/generate` | required | Generate a maze (`GenerateRequest` → `GenerateResponse`). Optional `braid` in `[0, 1]` opens that fraction of dead ends — the same pass the tournament already ran. The factor is echoed on the response and on `GET /maze/{id}` (omitted when zero) so a permalink can name it without guessing from a UI select |
 | `GET` | `/api/v1/maze/daily` | public | Today's shared challenge — same maze for everyone until midnight UTC (ADR-006) |

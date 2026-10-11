@@ -21,6 +21,9 @@ await context.route("https://cdnjs.cloudflare.com/**", r => {
   const file = u.includes("sockjs") ? `${NM}/sockjs-client/dist/sockjs.min.js` : `${NM}/stompjs/lib/stomp.min.js`;
   r.fulfill({ body: fs.readFileSync(file), contentType: "application/javascript", headers: { "access-control-allow-origin": "*" } });
 });
+await context.route("https://cdn.jsdelivr.net/npm/ethers@6.17.0/**", r => {
+  r.fulfill({ body: fs.readFileSync(`${NM}/ethers/dist/ethers.min.js`), contentType: "application/javascript", headers: { "access-control-allow-origin": "*" } });
+});
 await context.route("https://cdn.jsdelivr.net/npm/three@0.160.0/**", r => {
   const rel = new URL(r.request().url()).pathname.replace("/npm/three@0.160.0/", "");
   r.fulfill({ body: fs.readFileSync(`${NM}/three/${rel}`), contentType: "application/javascript", headers: { "access-control-allow-origin": "*" } });
@@ -189,8 +192,16 @@ const landedLabel = await B.page.waitForFunction(() => {
   const el = document.querySelector('.kinds-count[data-slot="1"]');
   return el && /^\d+ kinds? living$/.test(el.textContent) ? el.textContent : false;
 }, null, { timeout: 15000 }).then(h => h.jsonValue(), () => null);
-const life1 = await (await fetch(BASE + "/api/v1/world/world-zero/islands/1/ecology")).json();
-check("B's lane shows the kinds now living on Isle 1", landedLabel === `${life1.richness} kind${life1.richness === 1 ? "" : "s"} living`, `${landedLabel} / server ${life1.richness}`);
+// Days tick every 2 s, so the label and the server can be a frame apart: poll until they agree.
+let life1 = null, labelNow = landedLabel;
+for (let i = 0; i < 20; i++) {
+  life1 = await (await fetch(BASE + "/api/v1/world/world-zero/islands/1/ecology")).json();
+  labelNow = await B.page.evaluate(() => document.querySelector('.kinds-count[data-slot="1"]')?.textContent || "");
+  if (labelNow === `${life1.richness} kind${life1.richness === 1 ? "" : "s"} living`) break;
+  await B.page.waitForTimeout(300);
+}
+check("B's lane shows the kinds now living on Isle 1", !!landedLabel && labelNow === `${life1.richness} kind${life1.richness === 1 ? "" : "s"} living`,
+  `${labelNow} / server ${life1.richness}`);
 const life0 = await (await fetch(BASE + "/api/v1/world/world-zero/islands/0/ecology")).json();
 const walkers0 = life0.species.filter(sp => !(B.canon[sp.key] || {}).disperses).length;
 check("Isle 0 holds no ark-bound kind: only wings and spores reach it", walkers0 === 0,
@@ -309,6 +320,89 @@ check("the deed's link opens the realm on Isle 1 with its Life panel", opened, m
 await D.page.waitForTimeout(1200);
 await D.page.screenshot({ path: path.join(OUT, "realm_deed.png") });
 
+// --- Wallet (ADR-028): a page with a wallet signs in, claims Isle 0 and mints its deed on a local chain.
+// Runs when REALM_RPC points at a Hardhat node with RealmIslands deployed (chain/: npm run node, deploy:local)
+// and the server has DAEDALUS_WALLET_ENABLED=true with that contract and the matching deed key.
+const RPC = process.env.REALM_RPC;
+let W = null;
+if (RPC) {
+  const { Wallet, JsonRpcProvider, Contract, getBytes, isHexString } = await import("ethers");
+  const chain = new JsonRpcProvider(RPC);
+  // Hardhat test account 1: published, local chains only.
+  const player = new Wallet("0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d", chain);
+  const page = await context.newPage();
+  const errors = [];
+  page.on("console", m => { if (m.type() === "error") errors.push(m.text()); });
+  page.on("pageerror", e => errors.push(String(e)));
+  // window.ethereum, as a browser wallet exposes it: accounts and signing here, everything else to the node.
+  await page.exposeFunction("__walletRpc", async (method, paramsJson) => {
+    const params = JSON.parse(paramsJson || "[]");
+    try {
+      switch (method) {
+        case "eth_requestAccounts": case "eth_accounts": return JSON.stringify({ result: [player.address] });
+        case "personal_sign": {
+          const m = params[0];
+          return JSON.stringify({ result: await player.signMessage(isHexString(m) ? getBytes(m) : m) });
+        }
+        case "wallet_switchEthereumChain": return JSON.stringify({ result: null });
+        case "eth_sendTransaction": {
+          const t = params[0];
+          const sent = await player.sendTransaction({ to: t.to, data: t.data, value: t.value ?? 0n, gasLimit: t.gas });
+          return JSON.stringify({ result: sent.hash });
+        }
+        default: return JSON.stringify({ result: await chain.send(method, params) });
+      }
+    } catch (e) {
+      return JSON.stringify({ error: { code: e.code ?? -32603, message: e.shortMessage || e.message } });
+    }
+  });
+  await page.addInitScript(() => {
+    window.ethereum = {
+      isTestWallet: true,
+      async request({ method, params }) {
+        const o = JSON.parse(await window.__walletRpc(method, JSON.stringify(params || [])));
+        if (o.error) throw Object.assign(new Error(o.error.message), { code: o.error.code });
+        return o.result;
+      },
+      on() {}, removeListener() {},
+    };
+  });
+  await page.goto(BASE + "/realm.html");
+  await page.waitForFunction(() => window.daedalusRealm && window.daedalusRealm.live, null, { timeout: 30000 });
+  W = { name: "W", page, errors };
+  const cfg = await (await fetch(BASE + "/api/v1/auth/wallet/config")).json();
+  await page.waitForSelector("#wallet", { state: "visible", timeout: 10000 });
+  await page.click("#wallet");
+  const signedIn = await page.waitForFunction(a => window.daedalusRealm.me === a && !!window.daedalusRealm.token,
+    player.address.toLowerCase(), { timeout: 15000 }).then(() => true, () => false);
+  check("a wallet signs the server's message and the realm knows it by its address", signedIn,
+    await page.evaluate(() => document.getElementById("wallet").textContent));
+  await page.waitForSelector('.owner[data-slot="0"] button.claim', { timeout: 10000 });
+  await page.click('.owner[data-slot="0"] button.claim');
+  await page.waitForFunction(() => document.querySelector('.owner[data-slot="0"] .owner-line')?.textContent === "yours", null, { timeout: 10000 });
+  const claimed = (await (await fetch(BASE + "/api/v1/world/world-zero/islands")).json()).islands[0].owner;
+  check("the wallet claims Isle 0 under its address", claimed === player.address.toLowerCase(), claimed);
+  await page.waitForSelector('.owner[data-slot="0"] button.mint', { timeout: 10000 });
+  await page.click('.owner[data-slot="0"] button.mint');
+  const minted = await page.waitForFunction(() => window.daedalusRealm.lastMint && window.daedalusRealm.lastMint.slot === 0, null, { timeout: 60000 })
+    .then(() => true, () => false);
+  const islands = new Contract(cfg.deedContract, ["function ownerOf(uint256) view returns (address)", "function seedOf(uint256) view returns (uint64)", "function tokenURI(uint256) view returns (string)"], chain);
+  const onChain = minted ? { owner: await islands.ownerOf(0), seed: await islands.seedOf(0), uri: await islands.tokenURI(0) } : null;
+  check("Mint deed puts Isle 0 on chain: ownerOf(0) is the wallet and seedOf(0) is the island's seed",
+    !!onChain && onChain.owner === player.address && onChain.seed === 11n,
+    onChain ? `${onChain.owner} seed ${onChain.seed} ${onChain.uri}` : await page.evaluate(() => document.getElementById("toast").textContent));
+  const layout = await page.evaluate(() => {
+    const input = document.querySelector('.owner[data-slot="0"] input.builder-name').getBoundingClientRect();
+    const row = document.querySelector('.owner[data-slot="0"] .owner-act').getBoundingClientRect();
+    return { input: Math.round(input.width), row: Math.round(row.width), name: getComputedStyle(document.getElementById("me")).display };
+  });
+  check("the builder field gets a full row and the name box gives way to the wallet button",
+    layout.input >= layout.row - 2 && layout.name === "none", JSON.stringify(layout));
+  const noToken = await fetch(BASE + "/api/v1/world/world-zero/islands/0/deed-voucher", { method: "POST" });
+  check("no voucher without a signed-in wallet", noToken.status === 401, String(noToken.status));
+  await page.screenshot({ path: path.join(OUT, "realm_wallet.png") });
+}
+
 // --- Reload: a fresh page rebuilds the same world from REST alone.
 const C = await open("C");
 await C.page.waitForFunction(() => window.daedalusRealm.islands.length === 2, null, { timeout: 30000 });
@@ -316,7 +410,7 @@ check("a fresh page rebuilds the same world", (await cubes(C.page)) === (await s
 await C.page.waitForFunction(() => window.daedalusRealm.arks.length === 2, null, { timeout: 15000 });
 check("a fresh page knows where every ark is", await C.page.evaluate(() => window.daedalusRealm.arks.find(a => a.id === "ark-0").slot === 1));
 
-for (const p of [A, B, C, D]) check(`no console errors on page ${p.name}`, p.errors.length === 0, p.errors.slice(0, 3).join(" | "));
+for (const p of [A, B, C, D, ...(W ? [W] : [])]) check(`no console errors on page ${p.name}`, p.errors.length === 0, p.errors.slice(0, 3).join(" | "));
 await browser.close();
 console.log(failures.length ? `\n${failures.length} FAILED` : "\nALL PASS");
 process.exit(failures.length ? 1 : 0);

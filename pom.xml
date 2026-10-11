@@ -56,6 +56,7 @@
     <modules>
         <module>daedalus-plugin-api</module>
         <module>daedalus-core</module>
+        <module>daedalus-wallet</module>
         <module>daedalus-plugin-runtime</module>
         <module>daedalus-server</module>
         <module>daedalus-desktop</module>
@@ -74,6 +75,18 @@
                 <groupId>com.daedalus</groupId>
                 <artifactId>daedalus-core</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.daedalus</groupId>
+                <artifactId>daedalus-wallet</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- Ethereum signatures only (secp256k1, Keccak, EIP-55): the crypto module, not web3j core,
+                 so no OkHttp / RPC client comes along (ADR-028). -->
+            <dependency>
+                <groupId>org.web3j</groupId>
+                <artifactId>crypto</artifactId>
+                <version>4.12.0</version>
             </dependency>
             <dependency>
                 <groupId>com.daedalus</groupId>

@@ -41,6 +41,11 @@
             <groupId>com.daedalus</groupId>
             <artifactId>daedalus-plugin-runtime</artifactId>
         </dependency>
+        <!-- Wallet sign-in and island deed vouchers (ADR-028); inert unless daedalus.wallet.enabled=true. -->
+        <dependency>
+            <groupId>com.daedalus</groupId>
+            <artifactId>daedalus-wallet</artifactId>
+        </dependency>
 
         <!-- Spring Boot web stack -->
         <dependency>

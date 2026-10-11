@@ -134,6 +134,9 @@ public class ProdSecurityConfig {
                         // ---- Auth ----
                         // Login is the only way to obtain a token; must be reachable without one.
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                        // Wallet sign-in (ADR-028): how a player gets a token, so it cannot need one.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/auth/wallet/config", "/api/v1/auth/wallet/nonce").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/wallet").permitAll()
 
                         // ---- The web UI ----
                         // The other half of the share-a-link surface, and the half that was

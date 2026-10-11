@@ -68,6 +68,8 @@ import static org.assertj.core.api.Assertions.assertThat;
                 + "$2a$10$7EqJtq98hPqEX7fNZaFWoOhi5B0h6C1JcqIcnLmVjKobXAB9Zwmqu",
         "daedalus.redis.enabled=false",
         "daedalus.plugins.scan-on-startup=false",
+        // Mount the wallet routes (off by default) so their posture is probed, not assumed (ADR-028).
+        "daedalus.wallet.enabled=true",
 })
 @ActiveProfiles("prod")
 class ProdAuthPostureTest {
@@ -90,6 +92,10 @@ class ProdAuthPostureTest {
     static {
         // --- deliberately public ---
         EXPECTED.put("POST /api/v1/auth/login", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/auth/wallet/config", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/auth/wallet/nonce", Posture.PUBLIC);
+        EXPECTED.put("POST /api/v1/auth/wallet", Posture.PUBLIC);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/islands/" + ID + "/deed-voucher", Posture.AUTHENTICATED);
         EXPECTED.put("GET /api/v1/algorithms", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/maze/" + ID, Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/maze/daily", Posture.PUBLIC);

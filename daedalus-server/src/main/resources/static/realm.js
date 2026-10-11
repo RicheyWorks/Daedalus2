@@ -340,6 +340,9 @@ function ownerRow(isle) {
     for (const b of isle.builders) {
       act.appendChild(button(`${b} ×`, "unlet", () => claimAct("builders", isle.slot, { builder: b, allow: false })));
     }
+    if (wallet.config && wallet.config.deeds && /^0x[0-9a-f]{40}$/.test(state.me)) {
+      act.appendChild(button(wallet.minted.has(isle.slot) ? "Deed minted" : "Mint deed", "mint", () => mintDeed(isle)));
+    }
     act.appendChild(button("Give up", "abandon", () => claimAct("abandon", isle.slot)));
   }
   row.appendChild(act);
@@ -378,12 +381,97 @@ function setupMe() {
   const field = document.getElementById("me");
   field.value = state.me;
   field.disabled = !!state.token;          // signed in: the server knows who you are
+  // Signed in with a wallet, the Connect button already shows who you are.
+  field.style.display = state.token && /^0x[0-9a-f]{40}$/.test(state.me) ? "none" : "";
   field.title = state.token ? "Signed in" : "The name this open server knows you by";
   field.addEventListener("change", () => {
     state.me = field.value.trim();
     safeSet(NAME_KEY, state.me);
     loadIslands();
   });
+}
+
+// ---------------------------------------------------------------- wallet (ADR-028)
+// Sign in with Ethereum: the server writes the message, the wallet signs it unchanged, and the token
+// that comes back names the wallet address. Minting a deed: the owner asks the realm for a voucher and
+// redeems it on the RealmIslands contract from their own wallet (they pay the gas). ethers is loaded
+// only when a wallet is used, so the realm costs nothing extra for anyone else.
+const wallet = { config: null, minted: new Set() };
+let ethersLib = null;
+async function ethersOf() {
+  if (!ethersLib) ethersLib = await import("ethers");
+  return ethersLib;
+}
+const ISLANDS_ABI = [
+  "function mint((address to,uint256 slot,uint64 seed,uint8 radius,uint256 deadline) deed, bytes signature)",
+  "function ownerOf(uint256 slot) view returns (address)",
+];
+async function setupWallet() {
+  try {
+    const res = await fetch("/api/v1/auth/wallet/config");
+    if (!res.ok) return;                       // wallet sign-in is off on this server
+    wallet.config = await res.json();
+  } catch (e) { return; }
+  const b = document.getElementById("wallet");
+  b.style.display = "";
+  b.onclick = connectWallet;
+  showWallet();
+}
+function showWallet() {
+  const b = document.getElementById("wallet");
+  const signedIn = /^0x[0-9a-f]{40}$/.test(state.me) && state.token;
+  b.textContent = signedIn ? `${state.me.slice(0, 6)}…${state.me.slice(-4)}` : "Connect wallet";
+  b.classList.toggle("on", !!signedIn);
+}
+async function connectWallet() {
+  if (!window.ethereum) { toast("No wallet found: install one (MetaMask, Rabby…) to sign in"); return; }
+  try {
+    const [account] = await window.ethereum.request({ method: "eth_requestAccounts" });
+    const nonce = await api(`/api/v1/auth/wallet/nonce?address=${encodeURIComponent(account)}`);
+    const signature = await window.ethereum.request({ method: "personal_sign", params: [nonce.message, account] });
+    const res = await fetch("/api/v1/auth/wallet", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: nonce.message, signature }) });
+    if (!res.ok) { toast("Sign-in refused: " + (res.headers.get("X-Wallet-Refused") || res.status)); return; }
+    const body = await res.json();
+    state.token = body.token;
+    safeSet(TOKEN_KEY, body.token);
+    safeSet("daedalus.user", account.toLowerCase());
+    state.me = account.toLowerCase();
+    setupMe();
+    showWallet();
+    toast(`Signed in as ${state.me.slice(0, 6)}…${state.me.slice(-4)}`);
+    if (state.stomp) { try { state.stomp.disconnect(); } catch (e) { /* closing */ } }
+    connectLive();
+    await loadIslands();
+  } catch (e) {
+    toast(e && e.code === 4001 ? "Signature request was declined" : "Wallet sign-in failed: " + (e.message || e));
+  }
+}
+async function mintDeed(isle) {
+  if (wallet.minted.has(isle.slot)) { window.open(`${API}/tokens/${isle.slot}`, "_blank", "noopener"); return; }
+  try {
+    const v = await api(`${API}/islands/${isle.slot}/deed-voucher`, { method: "POST" });
+    const { BrowserProvider, Contract } = await ethersOf();
+    const provider = new BrowserProvider(window.ethereum);
+    const chain = Number((await provider.getNetwork()).chainId);
+    if (chain !== v.chainId) {
+      await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x" + v.chainId.toString(16) }] });
+    }
+    const signer = await provider.getSigner();
+    const islands = new Contract(v.contract, ISLANDS_ABI, signer);
+    toast(`Minting Isle ${isle.slot}'s deed — confirm in your wallet`);
+    const tx = await islands.mint({ to: v.to, slot: v.slot, seed: BigInt(v.seed), radius: v.radius, deadline: v.deadline }, v.signature);
+    await tx.wait();
+    wallet.minted.add(isle.slot);
+    state.lastMint = { slot: isle.slot, tx: tx.hash };
+    toast(`Isle ${isle.slot}'s deed is yours on chain`);
+    await loadIslands();
+  } catch (e) {
+    const why = e && e.code === "ACTION_REJECTED" ? "you declined the transaction"
+      : e && /ERC721InvalidSender/.test(String(e.message)) ? "this island's deed is already minted"
+      : (e && (e.shortMessage || e.message)) || String(e);
+    toast(`No deed: ${why}`);
+  }
 }
 
 // ---------------------------------------------------------------- island life (ADR-023/024)
@@ -1188,6 +1276,7 @@ function frame(t) {
 }
 buildPalette();
 setupMe();
+setupWallet();
 frame();
 window.daedalusRealm = state; // for the browser harness and curious operators
 state.pick = pick;           // the exact pick the pointer uses, so a harness can ask what a tap hits
