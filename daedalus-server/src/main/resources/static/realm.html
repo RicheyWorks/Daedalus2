@@ -86,6 +86,13 @@
   .world-row .here { color: var(--accent); font-size: 12px; flex: 0 0 auto; }
   .note-line { color: var(--dim); font-size: 11px; font-style: italic; margin: -4px 0 6px; }
   .owner { padding: 0 0 8px; }
+  #stick, #jumpBtn { display: none; position: fixed; bottom: max(18px, env(safe-area-inset-bottom)); z-index: 5; }
+  #stick { left: 18px; width: 120px; height: 120px; border-radius: 50%; touch-action: none; }
+  #knob { position: absolute; left: 38px; top: 38px; width: 44px; height: 44px; border-radius: 50%;
+    background: var(--gold); opacity: .85; pointer-events: none; }
+  #jumpBtn { right: 18px; width: 96px; height: 96px; border-radius: 50%; font-weight: 700; touch-action: none; }
+  body.playing #stick, body.playing #jumpBtn { display: block; }
+  body.playing #palette { display: none; }
   .plot-grid { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 3px; margin: 4px 0 6px; }
   .plot-grid .plot { min-height: 34px; min-width: 0; width: 100%; padding: 0; font-size: 11px; border-radius: 4px;
     background: #2f6b3a; color: #e9f5e6; }
@@ -120,6 +127,7 @@
   <button id="modeLook" class="on" title="Look (L)">Look</button>
   <button id="modeBuild" title="Build (B)">Build</button>
   <button id="modeBreak" title="Break (X)">Break</button>
+  <button id="modePlay" title="Play (P)">Play</button>
 </div>
 <div id="side" class="panel">
   <div class="row">
@@ -150,6 +158,8 @@
   <div id="bestiary"></div>
 </div>
 <div id="palette" class="panel" aria-label="Block palette"></div>
+<div id="stick" class="panel" aria-label="Move"><div id="knob"></div></div>
+<button id="jumpBtn" class="panel" aria-label="Jump">Jump</button>
 <div id="toast" class="panel"></div>
 <div id="login" class="panel">
   <h2 style="margin:0 0 6px;color:var(--gold);font-size:14px">Sign in to build</h2>

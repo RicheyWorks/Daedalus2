@@ -10,6 +10,19 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Bricks worlds and Play
+  mode (ADR-034).** The
+  Roblox look: a studded
+  baseplate, a spawn, an
+  obby of 18 jumps over
+  lava (always beatable,
+  checkpoints, a gold
+  finish) and a plane on
+  the runway. Play (P) in
+  any world: a blocky
+  avatar, WASD/Space or a
+  stick and Jump.
+
 - **Parcels worlds (ADR-033).**
   A Decentraland-style
   district: 60 plots of

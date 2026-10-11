@@ -119,6 +119,11 @@ def plan(manifest, names):
     lines.append("  islands: %d, plots: %d (%d claimed), sky gates: %d, vessels: %d, mount: %s" % (
         len(manifest.get("islands", [])), len(plots), sum(1 for p in plots if p.get("owner")),
         len(manifest.get("gates", [])), len(manifest.get("arks", [])), manifest["mount"]["kind"]))
+    obby = manifest.get("obby")
+    if obby:
+        steps = obby.get("steps", [])
+        lines.append("  obby: %d platforms over lava, %d checkpoints, spawn at %s" % (
+            len(steps) - 1, sum(1 for s in steps if s.get("checkpoint")), obby.get("spawn")))
     for gate in manifest.get("gates", []):
         lines.append("    gate %d -> %s (%s) gate %d" % (gate["gate"], gate["toTitle"], gate["toWorld"], gate["toGate"]))
     live = manifest.get("live", {})

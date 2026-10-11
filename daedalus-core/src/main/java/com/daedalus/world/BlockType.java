@@ -38,7 +38,16 @@ public enum BlockType {
     // Parcels worlds (ADR-033): asphalt, the light paving of sidewalks and plazas, a helipad's marking.
     ROAD,
     PAVING,
-    HELIPAD;
+    HELIPAD,
+    // Bricks worlds (ADR-034): the studded baseplate, bright bricks, a spawn pad and the obby's lava.
+    BASEPLATE,
+    BRICK_RED,
+    BRICK_BLUE,
+    BRICK_YELLOW,
+    BRICK_GREEN,
+    BRICK_WHITE,
+    SPAWN,
+    LAVA;
 
     public boolean solid() {
         return this != AIR;

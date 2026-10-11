@@ -121,6 +121,7 @@ class ProdAuthPostureTest {
         EXPECTED.put("GET /api/v1/world/" + ID + "/chunk/blocks", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/islands", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/plots", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/obby", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/arks", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/worlds", Posture.PUBLIC);
         EXPECTED.put("POST /api/v1/worlds", Posture.AUTHENTICATED);

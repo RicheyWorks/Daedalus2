@@ -31,7 +31,13 @@ const COLORS = {
   RAINBOW_BLUE: 0x4aa8ff, RAINBOW_VIOLET: 0xa66bff, PORTAL: 0xd7b8ff,
   // Parcels worlds (ADR-033): asphalt, sidewalks and plazas, the helipad.
   ROAD: 0x4a4d57, PAVING: 0xe4ddcf, HELIPAD: 0xf28c28,
+  // Bricks worlds (ADR-034): the baseplate, bright bricks, the spawn pad and the obby's lava.
+  BASEPLATE: 0xa3a2a5, BRICK_RED: 0xc4281c, BRICK_BLUE: 0x0d69ac, BRICK_YELLOW: 0xf5cd30,
+  BRICK_GREEN: 0x4b974b, BRICK_WHITE: 0xf2f3f3, SPAWN: 0x1fb5b0, LAVA: 0xff3b1f,
 };
+// Studded tops: these cubes wear the bricks' studs on their upper face (ADR-034). Renderer only: the
+// cubes, the export and the C++ mesher are unchanged, so a World Package's triangles still match.
+const STUDDED = new Set(["BASEPLATE", "BRICK_RED", "BRICK_BLUE", "BRICK_YELLOW", "BRICK_GREEN", "BRICK_WHITE", "SPAWN"]);
 const RAINBOW = ["RAINBOW_RED", "RAINBOW_ORANGE", "RAINBOW_YELLOW", "RAINBOW_GREEN", "RAINBOW_BLUE", "RAINBOW_VIOLET"];
 const SEE_THROUGH = new Set(["AIR", "GLASS", "WATER", "CLOUD", "PORTAL", ...RAINBOW]);
 const TRANSLUCENT = new Set(["GLASS", "WATER", "PORTAL", ...RAINBOW]);
@@ -87,6 +93,29 @@ scene.add(sun);
 const opaqueMat = new THREE.MeshLambertMaterial({ vertexColors: true });
 const glassMat = new THREE.MeshLambertMaterial({ vertexColors: true, transparent: true,
   opacity: 0.62, depthWrite: false });
+const studMat = new THREE.MeshLambertMaterial({ vertexColors: true, map: studTexture() });
+/** One stud on a cube's top, drawn once: a raised ring, lit from the top left, multiplied by the cube's colour. */
+function studTexture() {
+  const c = document.createElement("canvas");
+  c.width = c.height = 64;
+  const g = c.getContext("2d");
+  g.fillStyle = "#e6e6e6";
+  g.fillRect(0, 0, 64, 64);
+  g.strokeStyle = "rgba(0,0,0,0.18)";
+  g.strokeRect(0.5, 0.5, 63, 63);
+  const ring = g.createRadialGradient(26, 26, 4, 32, 32, 20);
+  ring.addColorStop(0, "#ffffff");
+  ring.addColorStop(0.75, "#f2f2f2");
+  ring.addColorStop(1, "#9a9a9a");
+  g.fillStyle = ring;
+  g.beginPath();
+  g.arc(32, 32, 18, 0, Math.PI * 2);
+  g.fill();
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 4;
+  return t;
+}
 const hover = new THREE.LineSegments(
   new THREE.EdgesGeometry(new THREE.BoxGeometry(1.02, 1.02, 1.02)),
   new THREE.LineBasicMaterial({ color: 0xf5c14a }));
@@ -163,15 +192,18 @@ function buildChunk(cx, cy, cz) {
   }
   const data = state.chunks.get(k);
   if (!data) return;
-  const buf = { solid: { p: [], n: [], c: [], i: [] }, glass: { p: [], n: [], c: [], i: [] } };
+  const buf = { solid: { p: [], n: [], c: [], i: [] }, glass: { p: [], n: [], c: [], i: [] },
+    studs: { p: [], n: [], c: [], i: [], uv: [] } };
   const col = new THREE.Color();
   const ox = cx * SIZE, oy = cy * SIZE, oz = cz * SIZE;
   for (let lz = 0; lz < SIZE; lz++) for (let ly = 0; ly < SIZE; ly++) for (let lx = 0; lx < SIZE; lx++) {
     const name = state.palette[data[idx(lx, ly, lz)]] || "STONE";
     if (name === "AIR") continue;
     const x = ox + lx, y = oy + ly, z = oz + lz;
-    const target = TRANSLUCENT.has(name) ? buf.glass : buf.solid;
+    const own = TRANSLUCENT.has(name) ? buf.glass : buf.solid;
+    const studded = STUDDED.has(name);
     for (const f of FACES) {
+      const target = studded && f.n[1] === 1 ? buf.studs : own;
       const nb = nameAt(x + f.n[0], y + f.n[1], z + f.n[2]);
       // A face is hidden by an opaque neighbour, or by more of the same see-through stuff.
       if (!SEE_THROUGH.has(nb) || nb === name) continue;
@@ -182,17 +214,19 @@ function buildChunk(cx, cy, cz) {
         target.p.push(x + v[0], y + v[1], z + v[2]);
         target.n.push(f.n[0], f.n[1], f.n[2]);
         target.c.push(col.r * s, col.g * s, col.b * s);
+        if (target.uv) target.uv.push(v[0], v[2]);
       }
       target.i.push(base, base + 1, base + 2, base, base + 2, base + 3);
     }
   }
   const group = new THREE.Group();
-  for (const [part, mat] of [[buf.solid, opaqueMat], [buf.glass, glassMat]]) {
+  for (const [part, mat] of [[buf.solid, opaqueMat], [buf.studs, studMat], [buf.glass, glassMat]]) {
     if (!part.i.length) continue;
     const g = new THREE.BufferGeometry();
     g.setAttribute("position", new THREE.Float32BufferAttribute(part.p, 3));
     g.setAttribute("normal", new THREE.Float32BufferAttribute(part.n, 3));
     g.setAttribute("color", new THREE.Float32BufferAttribute(part.c, 3));
+    if (part.uv) g.setAttribute("uv", new THREE.Float32BufferAttribute(part.uv, 2));
     g.setIndex(part.i);
     g.computeBoundingSphere();
     const mesh = new THREE.Mesh(g, mat);
@@ -281,6 +315,7 @@ async function fetchWorld() {
 
 async function loadIslands(focusSlot) {
   if (state.district) return loadPlots(focusSlot);
+  if (state.bricks) return showObby();
   const res = await api(API + "/islands");
   state.islands = res.islands;
   const host = document.getElementById("islands");
@@ -343,16 +378,27 @@ function plotNoun(slot) { return state.district ? `Plot ${slot}` : `Isle ${slot}
 async function detectDistrict() {
   // Ask the registry for this world's style first: a sky-islands world has no /plots to ask for.
   state.district = null;
+  state.bricks = null;
   try {
     const here = (await api("/api/v1/worlds")).worlds.find(w => w.id === WORLD);
-    if (here && here.style === "PARCELS") state.district = await api(API + "/plots");
+    state.style = here ? here.style : "SKY_ISLANDS";
+    if (state.style === "PARCELS") state.district = await api(API + "/plots");
+    if (state.style === "BRICKS") state.bricks = await api(API + "/obby");
   } catch (e) {
     state.district = null;
   }
-  const parcels = !!state.district;
-  document.getElementById("laneTitle").textContent = parcels ? "PLOTS" : "ISLAND LANE";
-  document.getElementById("raiseRow").style.display = parcels ? "none" : "";
-  document.getElementById("arksTitle").textContent = parcels ? "HELICOPTER" : "ARKS";
+  const parcels = !!state.district, bricks = !!state.bricks;
+  document.getElementById("laneTitle").textContent = parcels ? "PLOTS" : bricks ? "OBBY" : "ISLAND LANE";
+  document.getElementById("raiseRow").style.display = parcels || bricks ? "none" : "";
+  document.getElementById("arksTitle").textContent = parcels ? "HELICOPTER" : bricks ? "PLANE" : "ARKS";
+  if (bricks) {
+    BUILDABLE.splice(0, BUILDABLE.length, "BRICK_RED", "BRICK_BLUE", "BRICK_YELLOW", "BRICK_GREEN", "BRICK_WHITE",
+      "BASEPLATE", "GLASS", "WOOD", "CRYSTAL");
+    document.getElementById("palette").textContent = "";
+    buildPalette();
+    selectBlock("BRICK_RED");
+    setMode("look");
+  }
 }
 async function loadPlots(focusSlot) {
   const res = await api(API + "/plots");
@@ -500,6 +546,7 @@ async function loadWorlds() {
     info.innerHTML = `<b></b><br><span></span>`;
     info.querySelector("b").textContent = w.title;
     info.querySelector("span").textContent = w.style === "PARCELS" ? `${w.styleTitle} · 60 plots`
+      : w.style === "BRICKS" ? `${w.styleTitle} · obby and sandbox`
       : `${w.styleTitle} · ${w.islands} island${w.islands === 1 ? "" : "s"}`;
     row.appendChild(info);
     if (w.id === WORLD) {
@@ -558,7 +605,7 @@ async function createWorld() {
 // its own gate to meet you and carries you down to an island.
 const GATE_BASE = 1000;
 function placeName(slot) {
-  if (slot === PAD_SLOT) return "the helipad";
+  if (slot === PAD_SLOT) return state.bricks ? "the runway" : "the helipad";
   if (slot >= GATE_BASE) {
     const g = state.gates.find(x => x.slot === slot);
     return g ? `the gate to ${g.toTitle}` : "a sky gate";
@@ -1057,6 +1104,31 @@ function helicopterModel() {
   return g;
 }
 
+/** The Bricks world's plane (ADR-034): a stud-bright monoplane of boxes with a propeller that spins. */
+function planeModel() {
+  const g = new THREE.Group();
+  const blue = creatureMat(0x0d69ac), white = creatureMat(0xf2f3f3), red = creatureMat(0xc4281c),
+    yellow = creatureMat(0xf5cd30), dark = creatureMat(0x2b2d33);
+  const glass = new THREE.MeshLambertMaterial({ color: 0x9fd4ec, transparent: true, opacity: 0.7 });
+  box(g, blue, 9, 2, 2, 0, 2.2, 0);                  // fuselage, nose along +X
+  box(g, glass, 2, 1.2, 1.6, 1.6, 3.6, 0);           // canopy
+  box(g, white, 3, 0.4, 14, 0.6, 2.4, 0);            // wings
+  box(g, red, 0.4, 0.42, 14.1, 2.0, 2.4, 0);         // wing stripe
+  box(g, white, 2, 0.3, 5, -4, 2.6, 0);              // tailplane
+  box(g, red, 2, 2.4, 0.3, -4, 4, 0);                // fin
+  box(g, yellow, 0.6, 1, 1, 4.8, 2.2, 0);            // spinner
+  for (const side of [-1, 1]) {
+    box(g, dark, 0.3, 1.4, 0.3, 1.2, 0.9, side * 1.4);  // legs
+    box(g, dark, 1, 0.8, 0.5, 1.2, 0.4, side * 1.4);    // wheels
+  }
+  const prop = new THREE.Group();
+  prop.name = "prop";
+  prop.position.set(5.2, 2.2, 0);
+  box(prop, dark, 0.15, 5, 0.5, 0, 0, 0);
+  g.add(prop);
+  return g;
+}
+
 function loadArkModel() {
   if (!arkTemplateLoad) {
     arkTemplateLoad = new GLTFLoader().loadAsync("/models/ark.glb").then(g => {
@@ -1098,10 +1170,13 @@ const RIDE = { id: null, last: null };
 // lowest id takes the berth, the next one a hull's length east, the next west, and so on.
 const BERTH_SPACING = 26;
 const BERTH_STEPS = [0, 1, -1, 2, -2, 3, -3];
-function isHeli(arkId) { return /^heli-/.test(arkId || ""); }
+function isHeli(arkId) { return /^(heli|plane)-/.test(arkId || ""); }    // the world's own aircraft
 function mooring(slot, arkId) {
   if (slot === PAD_SLOT && state.district) {
     return new THREE.Vector3(state.district.padX, state.district.padY, state.district.padZ);
+  }
+  if (slot === PAD_SLOT && state.bricks) {
+    return new THREE.Vector3(state.bricks.hangarX + 0.5, state.bricks.hangarY, state.bricks.hangarZ + 0.5);
   }
   const gate = state.gates.find(g => g.slot === slot);
   if (gate) return new THREE.Vector3(gate.berthX + 0.5, gate.berthY, gate.berthZ + (isHeli(arkId) ? 0.5 : ARK_STANDOFF));
@@ -1144,7 +1219,7 @@ async function loadArks() {
     let model = state.arkModels.get(ark.id);
     if (!model) {
       model = new THREE.Group();
-      const hull = isHeli(ark.id) ? helicopterModel() : template.clone(true);
+      const hull = /^plane-/.test(ark.id) ? planeModel() : isHeli(ark.id) ? helicopterModel() : template.clone(true);
       if (!isHeli(ark.id)) hull.scale.setScalar(ARK_SCALE);
       hull.name = "hull";
       model.add(hull);
@@ -1192,7 +1267,7 @@ function renderArkList() {
     }
     if (ark.homeSlot === PAD_SLOT && ark.slot !== PAD_SLOT) {
       const o = document.createElement("option");
-      o.value = PAD_SLOT; o.textContent = "Helipad";
+      o.value = PAD_SLOT; o.textContent = state.bricks ? "Runway" : "Helipad";
       pick.appendChild(o);
     }
     for (const g of state.gates) {
@@ -1261,6 +1336,7 @@ function onArkFrame(f) {
   if (isle) { row.x = isle.dockX; row.y = isle.dockY + 1; row.z = isle.dockZ; }
   if (gate) { row.x = gate.berthX; row.y = gate.berthY; row.z = gate.berthZ; }
   if (f.toSlot === PAD_SLOT && state.district) { row.x = state.district.padX; row.y = state.district.padY; row.z = state.district.padZ; }
+  if (f.toSlot === PAD_SLOT && state.bricks) { row.x = state.bricks.hangarX; row.y = state.bricks.hangarY; row.z = state.bricks.hangarZ; }
   applyArk(row);
   if (f.kind !== "ARRIVED") return;
   toast(isHeli(ark.id) ? `${ark.name} set down at ${placeName(f.toSlot)}` : `${ark.name} tied up at ${placeName(f.toSlot)}`);
@@ -1292,6 +1368,8 @@ function moveArks(t) {
     if (rotor) rotor.rotation.y = t / (ark.state === "SAILING" ? 40 : 160);
     const tail = model.getObjectByName("tailRotor");
     if (tail) tail.rotation.z = t / 30;
+    const prop = model.getObjectByName("prop");
+    if (prop) prop.rotation.x = t / (ark.state === "SAILING" ? 25 : 90);
     if (RIDE.id === ark.id) {
       if (RIDE.last) {
         const d = model.position.clone().sub(RIDE.last);
@@ -1362,7 +1440,10 @@ async function writeBlock(x, y, z, name) {
     if (res.result === "DENIED") {
       setLocal(x, y, z, before);
       remeshAround(x, y, z);
-      if (state.district) {
+      if (state.bricks) {
+        state.lastRefusal = y > state.bricks.height ? `Bricks are built up to ${state.bricks.height} high`
+          : y <= 0 ? "The baseplate stays put" : "The obby, the spawn and the runway stay as they are";
+      } else if (state.district) {
         const p = plotAt(x, z);
         state.lastRefusal = !p ? "Streets and the plaza are for everyone; nobody builds there"
           : y > state.district.height ? `Plots are built up to ${state.district.height} high`
@@ -1479,7 +1560,7 @@ canvas.addEventListener("pointerup", e => {
   const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);
   const quick = performance.now() - down.t < 450;
   down = null;
-  if (moved > 8 || !quick || state.mode === "look") return; // a drag is a camera move
+  if (moved > 8 || !quick || state.mode === "look" || state.mode === "play") return; // a drag is a camera move
   const p = pick(e.clientX, e.clientY);
   if (!p) return;
   if (state.mode === "build") writeBlock(p.next.x, p.next.y, p.next.z, state.block);
@@ -1488,13 +1569,17 @@ canvas.addEventListener("pointerup", e => {
 canvas.addEventListener("contextmenu", e => e.preventDefault());
 
 function setMode(m) {
+  const was = state.mode;
   state.mode = m;
-  for (const [id, mode] of [["modeLook", "look"], ["modeBuild", "build"], ["modeBreak", "break"]]) {
+  for (const [id, mode] of [["modeLook", "look"], ["modeBuild", "build"], ["modeBreak", "break"], ["modePlay", "play"]]) {
     document.getElementById(id).classList.toggle("on", mode === m);
   }
   hover.visible = false;
   hover.material.color.setHex(m === "break" ? 0xff5a5f : 0xf5c14a);
+  if (m === "play" && was !== "play") startPlay();
+  if (m !== "play" && was === "play") stopPlay();
 }
+document.getElementById("modePlay").onclick = () => setMode(state.mode === "play" ? "look" : "play");
 document.getElementById("modeLook").onclick = () => setMode("look");
 document.getElementById("modeBuild").onclick = () => setMode("build");
 document.getElementById("modeBreak").onclick = () => setMode("break");
@@ -1522,13 +1607,234 @@ function selectBlock(name) {
   if (state.mode === "look") setMode("build");
 }
 window.addEventListener("keydown", e => {
-  if (e.target.tagName === "INPUT") return;
+  if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
+  if (state.mode === "play") { playKey(e, true); return; }
+  if (e.key === "p" || e.key === "P") setMode("play");
   if (e.key === "l" || e.key === "L") setMode("look");
   if (e.key === "b" || e.key === "B") setMode("build");
   if (e.key === "x" || e.key === "X") setMode("break");
   const n = Number(e.key);
   if (n >= 1 && n <= 9 && BUILDABLE[n - 1]) selectBlock(BUILDABLE[n - 1]);
 });
+
+window.addEventListener("keyup", e => { if (state.mode === "play") playKey(e, false); });
+
+// ---------------------------------------------------------------- obby (ADR-034)
+function showObby() {
+  const host = document.getElementById("islands");
+  host.textContent = "";
+  const o = state.bricks;
+  const checkpoints = o.platforms.filter(p => p.checkpoint).length;
+  const row = document.createElement("div");
+  row.className = "isle obby-row";
+  const info = document.createElement("div");
+  info.innerHTML = `<b>The obby</b><br>${o.platforms.length} jumps over lava · ${checkpoints} checkpoints · gold finish` +
+    `<br><span class="obby-best"></span>`;
+  row.appendChild(info);
+  row.appendChild(button("Play", "play-obby", () => setMode("play")));
+  host.appendChild(row);
+  const note = document.createElement("div");
+  note.className = "note-line";
+  note.textContent = `Build anywhere on the plate up to ${o.height} high; the obby, spawn and runway stay as they are.`;
+  host.appendChild(note);
+  renderBest();
+  status();
+}
+function renderBest() {
+  const el = document.querySelector(".obby-best");
+  if (el) el.textContent = AVATAR.best ? `your best: ${(AVATAR.best / 1000).toFixed(1)} s` : "";
+}
+
+// ---------------------------------------------------------------- play: a blocky avatar (ADR-034)
+// Walk and jump in any world: WASD or arrows and Space, or the stick and the jump button on a tablet.
+// Cubes are the ground; water, portals, rainbows and clouds are not. In a Bricks world the obby is live:
+// lava sends you back to your last checkpoint, and the gold finish stops the clock.
+const AVATAR = {
+  on: false, pos: new THREE.Vector3(), vel: new THREE.Vector3(), onGround: false, yaw: 0, model: null,
+  keys: new Set(), joy: { x: 0, y: 0 }, jump: false, respawn: null, reached: -1, finished: false,
+  deaths: 0, startedAt: 0, best: 0, last: null, acc: 0,
+};
+const AV_HALF = 0.32, AV_HEIGHT = 1.8, GRAVITY = 30, JUMP_SPEED = 9.6, RUN_SPEED = 6, STEP = 1 / 120;
+const WALK_THROUGH = new Set(["AIR", "WATER", "PORTAL", "CLOUD", ...RAINBOW]);
+function solidCube(x, y, z) { return !WALK_THROUGH.has(nameAt(Math.floor(x), Math.floor(y), Math.floor(z))); }
+function avatarModel() {
+  const g = new THREE.Group();
+  const skin = creatureMat(0xf5cd30), shirt = creatureMat(0x0d69ac), pants = creatureMat(0x4b974b);
+  const legs = [box(g, pants, 0.42, 0.85, 0.42, -0.22, 0.425, 0), box(g, pants, 0.42, 0.85, 0.42, 0.22, 0.425, 0)];
+  box(g, shirt, 0.86, 0.8, 0.44, 0, 1.25, 0);
+  const arms = [box(g, skin, 0.38, 0.8, 0.38, -0.63, 1.25, 0), box(g, skin, 0.38, 0.8, 0.38, 0.63, 1.25, 0)];
+  box(g, skin, 0.5, 0.5, 0.5, 0, 1.92, 0);
+  box(g, creatureMat(0x1b1b1b), 0.08, 0.08, 0.02, -0.1, 1.98, -0.26);
+  box(g, creatureMat(0x1b1b1b), 0.08, 0.08, 0.02, 0.1, 1.98, -0.26);
+  g.userData.legs = legs;
+  g.userData.arms = arms;
+  return g;
+}
+/** Where play starts: a Bricks world's spawn, a Parcels world's helipad, or the top of the first island. */
+function spawnPoint() {
+  if (state.bricks) return new THREE.Vector3(state.bricks.spawnX + 0.5, state.bricks.spawnY, state.bricks.spawnZ + 0.5);
+  if (state.district) return new THREE.Vector3(state.district.padX + 0.5, state.district.padY + 0.5, state.district.padZ + 4.5);
+  const isle = state.islands[0];
+  const x = isle ? isle.x : Math.round(controls.target.x), z = isle ? isle.z : Math.round(controls.target.z);
+  for (let y = 120; y > -64; y--) if (solidCube(x, y - 1, z)) return new THREE.Vector3(x + 0.5, y, z + 0.5);
+  return new THREE.Vector3(x + 0.5, 60, z + 0.5);
+}
+function startPlay() {
+  if (RIDE.id) toggleRide(RIDE.id);
+  flight++;
+  AVATAR.on = true;
+  AVATAR.respawn = spawnPoint();
+  AVATAR.reached = -1;
+  AVATAR.finished = false;
+  AVATAR.deaths = 0;
+  AVATAR.startedAt = performance.now();
+  if (!AVATAR.model) { AVATAR.model = avatarModel(); AVATAR.model.name = "avatar"; }
+  scene.add(AVATAR.model);
+  placeAvatar(AVATAR.respawn);
+  // A camera behind the avatar, looking the way the obby runs (−Z).
+  controls.target.copy(AVATAR.pos).add(new THREE.Vector3(0, 1.4, 0));
+  camera.position.copy(AVATAR.pos).add(new THREE.Vector3(0, 6, 11));
+  AVATAR.last = AVATAR.pos.clone();
+  document.body.classList.add("playing");
+  toast(state.bricks ? "Run the obby! WASD / arrows and Space, or the stick and Jump" : "WASD / arrows and Space, or the stick and Jump");
+}
+function stopPlay() {
+  AVATAR.on = false;
+  AVATAR.keys.clear();
+  AVATAR.joy.x = AVATAR.joy.y = 0;
+  AVATAR.jump = false;
+  if (AVATAR.model) scene.remove(AVATAR.model);
+  document.body.classList.remove("playing");
+}
+function placeAvatar(p) {
+  AVATAR.pos.copy(p);
+  AVATAR.vel.set(0, 0, 0);
+  AVATAR.onGround = false;
+}
+function playKey(e, down) {
+  const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+  if (["w", "a", "s", "d", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(k)) e.preventDefault();
+  if (k === " ") { AVATAR.jump = down; return; }
+  if (down && (k === "Escape" || k === "l")) { setMode("look"); return; }
+  if (down) AVATAR.keys.add(k); else AVATAR.keys.delete(k);
+}
+function overlaps(p) {
+  for (let x = Math.floor(p.x - AV_HALF); x <= Math.floor(p.x + AV_HALF - 1e-6); x++) {
+    for (let y = Math.floor(p.y); y <= Math.floor(p.y + AV_HEIGHT - 1e-6); y++) {
+      for (let z = Math.floor(p.z - AV_HALF); z <= Math.floor(p.z + AV_HALF - 1e-6); z++) {
+        if (solidCube(x, y, z)) return true;
+      }
+    }
+  }
+  return false;
+}
+function moveAxis(axis, d) {
+  if (!d) return false;
+  const p = AVATAR.pos;
+  p[axis] += d;
+  if (!overlaps(p)) return false;
+  // Back out to the face we hit. No auto-step: a cube up is a jump, as in the obbies this comes from.
+  if (axis === "y") p.y = d > 0 ? Math.floor(p.y + AV_HEIGHT) - AV_HEIGHT - 1e-4 : Math.floor(p.y) + 1;
+  else p[axis] = d > 0 ? Math.floor(p[axis] + AV_HALF) - AV_HALF - 1e-4 : Math.floor(p[axis] - AV_HALF) + 1 + AV_HALF + 1e-4;
+  return true;
+}
+function playStep(dt) {
+  const fwd = new THREE.Vector3().subVectors(controls.target, camera.position).setY(0);
+  if (fwd.lengthSq() < 1e-6) fwd.set(0, 0, -1);
+  fwd.normalize();
+  const right = new THREE.Vector3(-fwd.z, 0, fwd.x);
+  const k = AVATAR.keys;
+  let ix = (k.has("d") || k.has("ArrowRight") ? 1 : 0) - (k.has("a") || k.has("ArrowLeft") ? 1 : 0) + AVATAR.joy.x;
+  let iz = (k.has("w") || k.has("ArrowUp") ? 1 : 0) - (k.has("s") || k.has("ArrowDown") ? 1 : 0) + AVATAR.joy.y;
+  const len = Math.hypot(ix, iz);
+  if (len > 1) { ix /= len; iz /= len; }
+  const want = right.multiplyScalar(ix).add(fwd.multiplyScalar(iz));
+  AVATAR.vel.x = want.x * RUN_SPEED;
+  AVATAR.vel.z = want.z * RUN_SPEED;
+  if (want.lengthSq() > 0.01) AVATAR.yaw = Math.atan2(-want.x, -want.z);
+  if (AVATAR.jump && AVATAR.onGround) { AVATAR.vel.y = JUMP_SPEED; AVATAR.onGround = false; }
+  AVATAR.vel.y = Math.max(-40, AVATAR.vel.y - GRAVITY * dt);
+  moveAxis("x", AVATAR.vel.x * dt);
+  moveAxis("z", AVATAR.vel.z * dt);
+  const hitY = moveAxis("y", AVATAR.vel.y * dt);
+  if (hitY) { if (AVATAR.vel.y < 0) AVATAR.onGround = true; AVATAR.vel.y = 0; }
+  else if (AVATAR.vel.y < 0 || !overlapsBelow()) AVATAR.onGround = false;
+  underFoot();
+}
+function overlapsBelow() {
+  const p = AVATAR.pos.clone();
+  p.y -= 0.05;
+  return overlaps(p);
+}
+function underFoot() {
+  const p = AVATAR.pos;
+  const name = nameAt(Math.floor(p.x), Math.floor(p.y - 0.05), Math.floor(p.z));
+  if (name === "LAVA" || p.y < -40) { die(); return; }
+  if (!state.bricks || !AVATAR.onGround) return;
+  const fx = Math.floor(p.x), fz = Math.floor(p.z), fy = Math.floor(p.y - 0.05);
+  const on = q => fx >= q.minX && fx <= q.maxX && fz >= q.minZ && fz <= q.maxZ && fy === q.y;
+  const i = state.bricks.platforms.findIndex(on);
+  if (i > AVATAR.reached) {
+    AVATAR.reached = i;
+    const q = state.bricks.platforms[i];
+    if (q.checkpoint) {
+      AVATAR.respawn = new THREE.Vector3((q.minX + q.maxX + 1) / 2, q.y + 1, (q.minZ + q.maxZ + 1) / 2);
+      toast(`Checkpoint! ${i + 1} of ${state.bricks.platforms.length}`);
+    }
+  }
+  if (!AVATAR.finished && on(state.bricks.finish)) {
+    AVATAR.finished = true;
+    const ms = performance.now() - AVATAR.startedAt;
+    AVATAR.best = AVATAR.best ? Math.min(AVATAR.best, ms) : ms;
+    state.lastFinish = { ms, deaths: AVATAR.deaths };
+    toast(`Obby complete! ${(ms / 1000).toFixed(1)} s, ${plural(AVATAR.deaths, "fall")} in the lava`);
+    renderBest();
+  }
+}
+function die() {
+  AVATAR.deaths++;
+  state.lastDeath = { at: AVATAR.pos.toArray(), deaths: AVATAR.deaths };
+  placeAvatar(AVATAR.respawn);
+  toast(AVATAR.reached >= 0 && state.bricks ? "Ouch! Back to your checkpoint" : "Ouch! Back to the start");
+}
+function movePlay(t, dtMs) {
+  if (!AVATAR.on) return;
+  AVATAR.acc = Math.min(0.5, AVATAR.acc + dtMs / 1000);   // a long stall is not a teleport
+  while (AVATAR.acc >= STEP) { playStep(STEP); AVATAR.acc -= STEP; }
+  const m = AVATAR.model;
+  m.position.copy(AVATAR.pos);
+  m.rotation.y = AVATAR.yaw;
+  const moving = Math.hypot(AVATAR.vel.x, AVATAR.vel.z) > 0.5;
+  const swing = moving && AVATAR.onGround ? Math.sin(t / 90) * 0.7 : 0;
+  m.userData.legs[0].rotation.x = swing; m.userData.legs[1].rotation.x = -swing;
+  m.userData.arms[0].rotation.x = -swing; m.userData.arms[1].rotation.x = swing;
+  // The camera follows: whatever moved the avatar moves the view, and the player can still orbit.
+  const d = AVATAR.pos.clone().sub(AVATAR.last);
+  camera.position.add(d);
+  controls.target.add(d);
+  AVATAR.last.copy(AVATAR.pos);
+}
+state.avatar = AVATAR;
+function setupStick() {
+  const stick = document.getElementById("stick"), knob = document.getElementById("knob");
+  let id = null;
+  const moveTo = e => {
+    const r = stick.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width * 2 - 1, y = (e.clientY - r.top) / r.height * 2 - 1;
+    const l = Math.max(1, Math.hypot(x, y));
+    AVATAR.joy.x = x / l; AVATAR.joy.y = -y / l;
+    knob.style.transform = `translate(${AVATAR.joy.x * 34}px, ${-AVATAR.joy.y * 34}px)`;
+  };
+  stick.addEventListener("pointerdown", e => { id = e.pointerId; stick.setPointerCapture(id); moveTo(e); });
+  stick.addEventListener("pointermove", e => { if (e.pointerId === id) moveTo(e); });
+  const end = e => { if (e.pointerId !== id) return; id = null; AVATAR.joy.x = AVATAR.joy.y = 0; knob.style.transform = ""; };
+  stick.addEventListener("pointerup", end);
+  stick.addEventListener("pointercancel", end);
+  const jump = document.getElementById("jumpBtn");
+  jump.addEventListener("pointerdown", e => { e.preventDefault(); AVATAR.jump = true; });
+  for (const ev of ["pointerup", "pointercancel", "pointerleave"]) jump.addEventListener(ev, () => { AVATAR.jump = false; });
+}
+setupStick();
 
 // ---------------------------------------------------------------- HUD
 let toastTimer = 0;
@@ -1546,7 +1852,9 @@ function status() {
   const cubes = [...state.chunks.values()].reduce((a, d) => a + d.reduce((s, v) => s + (v ? 1 : 0), 0), 0);
   document.getElementById("statusText").textContent =
     `${state.live ? "live" : "offline"} · revision ${state.revision} · ${state.chunks.size} chunks · ` +
-    `${cubes.toLocaleString()} cubes · ` + (state.district
+    `${cubes.toLocaleString()} cubes · ` + (state.bricks
+      ? `${plural(state.bricks.platforms.length, "jump")} · ${plural(state.arks.length, "plane")}`
+      : state.district
       ? `${plural((state.plots || []).filter(p => p.owner).length, "plot")} claimed · ${plural(state.arks.length, "helicopter")}`
       : `${plural(state.islands.length, "island")} · ${plural(state.arks.length, "ark")}`);
 }
@@ -1576,7 +1884,12 @@ document.getElementById("loginGo").onclick = async () => {
 };
 
 // ---------------------------------------------------------------- go
+let lastFrame = 0;
 function frame(t) {
+  const now = t || 0;
+  const dtMs = lastFrame ? Math.min(250, now - lastFrame) : 16;
+  lastFrame = now;
+  movePlay(now, dtMs);
   controls.update();
   moveArks(t || 0);
   moveCreatures(t || 0);
@@ -1618,6 +1931,7 @@ state.project = (x, y, z) => {  // screen pixel of a world point, for a harness 
     else if (viaGate) { /* arriveThroughGate already looks at the gate */ }
     else if (state.islands.length) flyTo(state.islands[0]);
     else if (state.district) flyTo({ x: state.district.padX, y: 0, z: state.district.padZ + 10 });
+    else if (state.bricks) flyTo({ x: state.bricks.spawnX, y: state.bricks.spawnY, z: state.bricks.spawnZ - 20 });
     await arriving;
     status();
   } catch (e) {

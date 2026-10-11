@@ -616,6 +616,103 @@ if (RPC) {
   await page.close();
 }
 
+// --- Bricks (ADR-034): the Roblox look. A studded baseplate, an obby over lava, a plane on the runway, and a
+// blocky avatar you play as: walk, fall in the lava, reach a checkpoint, jump onto the gold finish.
+{
+  const page = await context.newPage();
+  const errors = [];
+  page.on("console", m => { if (m.type() === "error") errors.push(m.text()); });
+  page.on("pageerror", e => errors.push(String(e)));
+  page.on("response", r => { if (r.status() >= 400) errors.push(`${r.status()} ${r.url()}`); });
+  await page.goto(BASE + "/realm.html");
+  await page.waitForFunction(() => window.daedalusRealm && window.daedalusRealm.live, null, { timeout: 30000 });
+  await page.fill("#newWorldName", "Studs");
+  await page.fill("#newWorldSeed", "11");
+  await page.selectOption("#newWorldStyle", "BRICKS");
+  await Promise.all([page.waitForURL(/realm\.html\?world=studs/, { timeout: 30000 }), page.click("#newWorldGo")]);
+  await page.waitForFunction(() => { const s = window.daedalusRealm;
+    return s && s.live && s.bricks && s.arks.length === 1 && s.arkModels.size === 1; }, null, { timeout: 30000 });
+  const look = await page.evaluate(() => {
+    const s = window.daedalusRealm, b = s.bricks;
+    return { lane: document.getElementById("laneTitle").textContent, jumps: b.platforms.length,
+      studs: [...s.meshes.values()].some(g => g.children.some(m => m.material.map)),
+      spawn: s.nameAt(b.spawnX, b.spawnY - 1, b.spawnZ), plate: s.nameAt(80, 0, -100),
+      lava: s.nameAt(b.platforms[3].minX, b.lavaY, b.platforms[3].minZ),
+      plane: s.arks[0].id, prop: !!s.arkModels.get("plane-0").getObjectByName("prop"),
+      palette: [...document.querySelectorAll(".swatch")].map(x => x.title.split(" ")[0]).slice(0, 3) };
+  });
+  check("a Bricks world is born with a studded baseplate, a spawn, an obby over lava and a plane",
+    look.lane === "OBBY" && look.jumps === 18 && look.studs && look.spawn === "SPAWN" && look.plate === "BASEPLATE"
+      && look.lava === "LAVA" && look.plane === "plane-0" && look.prop && look.palette[0] === "BRICK_RED", JSON.stringify(look));
+  await page.waitForTimeout(1200);
+  await page.screenshot({ path: path.join(OUT, "realm_bricks.png") });
+
+  const built = await page.evaluate(async () => {
+    const s = window.daedalusRealm, out = {};
+    s.lastRefusal = null; await s.writeBlock(80, 1, -100, "BRICK_BLUE"); out.plate = s.lastRefusal;
+    s.lastRefusal = null; await s.writeBlock(20, 6, -60, "BRICK_BLUE"); out.obby = s.lastRefusal;
+    s.lastRefusal = null; await s.writeBlock(80, s.bricks.height + 1, -100, "BRICK_BLUE"); out.high = s.lastRefusal;
+    return out;
+  });
+  const placed = (await (await fetch(`${BASE}/api/v1/world/studs/block?x=80&y=1&z=-100`)).json()).type;
+  check("anyone builds on the open plate; the obby and the sky over the limit refuse with reasons",
+    placed === "BRICK_BLUE" && !built.plate && /obby/.test(built.obby || "") && /48 high/.test(built.high || ""),
+    JSON.stringify(Object.assign({ placed }, built)));
+
+  await page.bringToFront();   // a background tab gets no animation frames, so no physics
+  await page.click("#modePlay");
+  await page.waitForFunction(() => window.daedalusRealm.avatar.on && document.body.classList.contains("playing"), null, { timeout: 5000 });
+  await page.waitForTimeout(600);
+  const a0 = await page.evaluate(() => window.daedalusRealm.avatar.pos.toArray());
+  await page.keyboard.down("w");
+  await page.waitForTimeout(700);
+  await page.keyboard.up("w");
+  await page.waitForTimeout(300);
+  const a1 = await page.evaluate(() => ({ p: window.daedalusRealm.avatar.pos.toArray(), ground: window.daedalusRealm.avatar.onGround,
+    stick: getComputedStyle(document.getElementById("stick")).display }));
+  check("Play puts a blocky avatar on the spawn, and W walks it toward the obby", Math.abs(a0[0] - 20.5) < 0.6 && a0[1] === 2
+    && a1.p[2] < a0[2] - 1 && a1.ground && a1.stick === "block", JSON.stringify({ a0, a1 }));
+  await page.screenshot({ path: path.join(OUT, "realm_play.png") });
+
+  const fell = await page.evaluate(async () => {
+    const s = window.daedalusRealm, q = s.bricks.platforms[2];
+    s.avatar.pos.set(q.minX - 3 + 0.5, s.bricks.lavaY + 2, q.minZ + 0.5);
+    s.avatar.vel.set(0, 0, 0);
+    await new Promise(r => setTimeout(r, 1500));
+    return { death: s.lastDeath, at: s.avatar.pos.toArray() };
+  });
+  check("lava sends the avatar back to the spawn before any checkpoint", fell.death && fell.death.deaths === 1
+    && Math.abs(fell.at[2] - (-23.5)) < 0.6, JSON.stringify(fell));
+
+  const cp = await page.evaluate(async () => {
+    const s = window.daedalusRealm, q = s.bricks.platforms[17];
+    s.avatar.pos.set((q.minX + q.maxX + 1) / 2, q.y + 1.2, (q.minZ + q.maxZ + 1) / 2);
+    s.avatar.vel.set(0, 0, 0);
+    await new Promise(r => setTimeout(r, 800));
+    const out = { reached: s.avatar.reached, respawn: s.avatar.respawn.toArray(), y: q.y };
+    s.avatar.pos.z = q.minZ + 0.4;     // to the platform's far edge, facing the finish
+    return out;
+  });
+  check("standing on the last checkpoint makes it the place to come back to", cp.reached === 17 && cp.respawn[1] === cp.y + 1,
+    JSON.stringify(cp));
+  await page.keyboard.down("w");
+  await page.keyboard.down(" ");
+  await page.waitForTimeout(1300);
+  await page.keyboard.up(" ");
+  await page.keyboard.up("w");
+  const done = await page.waitForFunction(() => window.daedalusRealm.lastFinish, null, { timeout: 5000 }).then(() => true, () => false);
+  check("a running jump from the checkpoint lands on the gold finish and stops the clock", done,
+    JSON.stringify(await page.evaluate(() => ({ f: window.daedalusRealm.lastFinish, p: window.daedalusRealm.avatar.pos.toArray(),
+      toast: document.getElementById("toast").textContent }))));
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: path.join(OUT, "realm_obby_finish.png") });
+  await page.click("#modePlay");
+  check("Play again leaves play: the avatar goes and the stick hides", await page.evaluate(() =>
+    !window.daedalusRealm.avatar.on && getComputedStyle(document.getElementById("stick")).display === "none"));
+  check("no console errors in the Bricks world", errors.length === 0, errors.slice(0, 3).join(" | "));
+  await page.close();
+}
+
 // --- Reload: a fresh page rebuilds the same world from REST alone, and sends no ship anywhere.
 const voyagesBefore = (await (await fetch(BASE + "/api/v1/world/world-zero/arks")).json()).arks.map(a => `${a.id}:${a.departAt}`).join(",");
 const C = await open("C");

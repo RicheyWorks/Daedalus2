@@ -9,6 +9,7 @@ import com.daedalus.world.BlockType;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.World;
 import com.daedalus.world.WorldStyle;
+import com.daedalus.world.bricks.BricksOps;
 import com.daedalus.world.district.DistrictOps;
 import com.daedalus.world.export.BlockColors;
 import com.daedalus.world.export.Glb;
@@ -167,6 +168,18 @@ public class WorldPackageService {
                         List.of(b.maxX(), b.maxY(), b.maxZ()), p.show().name(), c == null ? "" : c.owner()));
             }
         }
+        WorldManifest.Obby obby = null;
+        if (w.style() == WorldStyle.BRICKS) {
+            BricksOps.Plan bricks = BricksOps.plan(seedOf(id));
+            List<WorldManifest.Step> steps = new ArrayList<>();
+            int n = 0;
+            for (BricksOps.Platform p : bricks.obby()) {
+                steps.add(step(n++, p, false));
+            }
+            steps.add(step(n, bricks.finish(), true));
+            BlockCoordinate spawn = BricksOps.spawn();
+            obby = new WorldManifest.Obby(xyz(spawn), BricksOps.TOP_Y + 1, steps);
+        }
         List<WorldManifest.Gate> gates = new ArrayList<>();
         for (WorldService.GateLink g : w.gates(id)) {
             gates.add(new WorldManifest.Gate(g.gate(), GateOps.slotOfGate(g.gate()), xyz(g.center()), xyz(g.berth()),
@@ -186,7 +199,7 @@ public class WorldPackageService {
                 new WorldManifest.World(id, style.name(), hub.title(id), seedOf(id), revision),
                 "1 cube = 1 metre", "glTF: +Y up, right-handed; these are the live API's coordinates",
                 new WorldManifest.Geometry("world.glb", 16, chunks, tris, List.of("daedalus_opaque", "daedalus_translucent")),
-                palette, islands, plots, gates, arks, new WorldManifest.Mount(mount.name(), mount.ready()),
+                palette, islands, plots, obby, gates, arks, new WorldManifest.Mount(mount.name(), mount.ready()),
                 List.of(new WorldManifest.Asset("ark", "assets/ark.glb",
                         "one per ark at its berth: deck origin, bow +X, scale 0.6, side-on 9 m off the berth on +Z")),
                 new WorldManifest.Live(base + "/api/v1/world/" + id, "/topic/world/" + id + "/{events,arks,ecology}"),
@@ -229,6 +242,11 @@ public class WorldPackageService {
         z.putNextEntry(e);
         z.write(bytes);
         z.closeEntry();
+    }
+
+    private static WorldManifest.Step step(int n, BricksOps.Platform p, boolean finish) {
+        return new WorldManifest.Step(n, List.of(p.minX(), p.y(), p.minZ()), List.of(p.maxX(), p.y(), p.maxZ()),
+                p.checkpoint(), finish);
     }
 
     private static List<Integer> xyz(BlockCoordinate c) {

@@ -51,7 +51,7 @@ public final class DistrictOps {
     /** Highest cube anything on a plot may reach; the gates' rainbows start at y = 55. */
     public static final int HEIGHT = 32;
     /** The helicopter's home slot, past the islands' 0..63 and the gates' 1000..1007. */
-    public static final int PAD_SLOT = 2000;
+    public static final int PAD_SLOT = com.daedalus.world.gate.Mount.HOME_SLOT;
     public static final int PLAZA_LO = 3;
     public static final int PLAZA_HI = 4;
     public static final int CLAIMABLE = PLOTS_PER_SIDE * PLOTS_PER_SIDE - 4;

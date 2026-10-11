@@ -320,10 +320,10 @@ class WorldRealmControllerTest {
     @Test
     void anUnknownBlockTypeNamesEveryKnownOne() throws Exception {
         mvc.perform(put("/api/v1/world/world-zero/block").contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"x\":0,\"y\":9,\"z\":0,\"type\":\"lava\"}"))
+                        .content("{\"x\":0,\"y\":9,\"z\":0,\"type\":\"plasma\"}"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail", equalTo(
-                        "Unknown block type 'lava'. Use one of " + BlockType.names() + ".")));
+                        "Unknown block type 'plasma'. Use one of " + BlockType.names() + ".")));
         mvc.perform(get("/api/v1/world/world-zero/islands")).andExpect(jsonPath("$.islands", hasSize(0)));
     }
 }

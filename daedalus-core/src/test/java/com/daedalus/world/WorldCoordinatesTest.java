@@ -67,7 +67,7 @@ class WorldCoordinatesTest {
     void blockTypesKeepTheirSavedOrdinalsAndAirIsNotSolid() {
         // Ordinals are the DAEW byte format: World Zero's five keep 0..4 forever, and island
         // terrain (ADR-018) is appended after them, then the sky gates' rainbow and doorway (ADR-031),
-        // then the parcels world's road, paving and helipad (ADR-033).
+        // then the parcels world's road, paving and helipad (ADR-033), then the bricks world's (ADR-034).
         // Reordering would rewrite every saved world.
         assertThat(BlockType.values()).containsExactly(
                 BlockType.AIR, BlockType.STONE, BlockType.DIRT, BlockType.WOOD, BlockType.GLASS,
@@ -75,10 +75,13 @@ class WorldCoordinatesTest {
                 BlockType.BLOSSOM, BlockType.GRAVEL, BlockType.CRYSTAL, BlockType.CLOUD,
                 BlockType.RAINBOW_RED, BlockType.RAINBOW_ORANGE, BlockType.RAINBOW_YELLOW, BlockType.RAINBOW_GREEN,
                 BlockType.RAINBOW_BLUE, BlockType.RAINBOW_VIOLET, BlockType.PORTAL,
-                BlockType.ROAD, BlockType.PAVING, BlockType.HELIPAD);
+                BlockType.ROAD, BlockType.PAVING, BlockType.HELIPAD,
+                BlockType.BASEPLATE, BlockType.BRICK_RED, BlockType.BRICK_BLUE, BlockType.BRICK_YELLOW,
+                BlockType.BRICK_GREEN, BlockType.BRICK_WHITE, BlockType.SPAWN, BlockType.LAVA);
         assertThat(BlockType.GLASS.ordinal()).isEqualTo(4);
         assertThat(BlockType.CLOUD.ordinal()).as("island terrain did not move").isEqualTo(13);
         assertThat(BlockType.PORTAL.ordinal()).as("sky gates did not move").isEqualTo(20);
+        assertThat(BlockType.HELIPAD.ordinal()).as("parcels did not move").isEqualTo(23);
         assertThat(BlockType.AIR.solid()).isFalse();
         assertThat(BlockType.STONE.solid()).isTrue();
     }

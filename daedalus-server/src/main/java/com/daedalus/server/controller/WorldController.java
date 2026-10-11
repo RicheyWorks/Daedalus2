@@ -41,6 +41,7 @@ import com.daedalus.api.dto.TrapMutationResponse;
 import com.daedalus.api.dto.VoyageRequest;
 import com.daedalus.api.dto.VoyageResponse;
 import com.daedalus.api.dto.WorldArksResponse;
+import com.daedalus.api.dto.ObbyResponse;
 import com.daedalus.api.dto.PlotRow;
 import com.daedalus.api.dto.WorldPlotsResponse;
 import com.daedalus.api.dto.WorldCapabilitiesResponse;
@@ -80,6 +81,7 @@ import com.daedalus.world.Trap;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.World;
+import com.daedalus.world.bricks.BricksOps;
 import com.daedalus.world.district.DistrictOps;
 import com.daedalus.world.ark.Ark;
 import com.daedalus.world.auto.DriveTrace;
@@ -755,6 +757,30 @@ public class WorldController {
         BlockCoordinate pad = DistrictOps.padBerth();
         return ResponseEntity.ok(new WorldPlotsResponse(id, DistrictOps.PLOT, DistrictOps.HEIGHT,
                 plaza.minX(), plaza.minZ(), plaza.maxX(), plaza.maxZ(), pad.x(), pad.y(), pad.z(), rows));
+    }
+
+    @GetMapping("/world/{id}/obby")
+    @Operation(summary = "A Bricks world's spawn, obby (platforms, checkpoints, finish, lava) and runway (ADR-034).")
+    public ResponseEntity<ObbyResponse> obby(@PathVariable String id) {
+        mounted(id);
+        if (world(id).style() != com.daedalus.world.WorldStyle.BRICKS) {
+            throw ResourceNotFoundException.world(id + "/obby");
+        }
+        long seed = hub.worlds().stream().filter(e -> e.id().equals(id)).findFirst()
+                .map(WorldHub.WorldEntry::seed).orElse(0L);
+        BricksOps.Plan plan = BricksOps.plan(seed);
+        List<ObbyResponse.Platform> rows = new ArrayList<>();
+        int n = 0;
+        for (BricksOps.Platform p : plan.obby()) {
+            rows.add(new ObbyResponse.Platform(n++, p.minX(), p.minZ(), p.maxX(), p.maxZ(), p.y(), p.type().name(),
+                    p.checkpoint()));
+        }
+        BricksOps.Platform f = plan.finish();
+        BlockCoordinate spawn = BricksOps.spawn();
+        BlockCoordinate hangar = BricksOps.hangarBerth();
+        return ResponseEntity.ok(new ObbyResponse(id, spawn.x(), spawn.y(), spawn.z(), BricksOps.TOP_Y + 1,
+                BricksOps.HEIGHT, hangar.x(), hangar.y(), hangar.z(), rows,
+                new ObbyResponse.Platform(n, f.minX(), f.minZ(), f.maxX(), f.maxZ(), f.y(), f.type().name(), false)));
     }
 
     @PostMapping("/world/{id}/islands")

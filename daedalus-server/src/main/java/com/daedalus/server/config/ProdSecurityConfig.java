@@ -193,6 +193,7 @@ public class ProdSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/chunk/blocks").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/plots").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/obby").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/arks").permitAll()
                         // The multiverse's index (ADR-030): which worlds exist. Mounting one needs a token.
                         .requestMatchers(HttpMethod.GET, "/api/v1/worlds").permitAll()

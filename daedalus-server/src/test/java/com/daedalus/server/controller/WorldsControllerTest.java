@@ -80,7 +80,7 @@ class WorldsControllerTest {
         assertThat(r.get("worlds").get(0).get("style").asText()).isEqualTo("SKY_ISLANDS");
         List<String> styles = new ArrayList<>();
         r.get("styles").forEach(s -> styles.add(s.get("style").asText() + ":" + s.get("ready").asBoolean()));
-        assertThat(styles).containsExactly("SKY_ISLANDS:true", "PARCELS:true", "BRICKS:false", "GALLERY:false",
+        assertThat(styles).containsExactly("SKY_ISLANDS:true", "PARCELS:true", "BRICKS:true", "GALLERY:false",
                 "LABYRINTH:false");
     }
 
@@ -139,7 +139,7 @@ class WorldsControllerTest {
         assertThat(create("No Caps", "SKY_ISLANDS", 2, "x").get("result").asText()).isEqualTo("BAD_ID");
         assertThat(create("ab", "SKY_ISLANDS", 2, "x").get("result").asText()).isEqualTo("BAD_ID");
         assertThat(create("-dash", "SKY_ISLANDS", 2, "x").get("result").asText()).isEqualTo("BAD_ID");
-        assertThat(create("bricks", "BRICKS", 2, "Studs").get("result").asText()).isEqualTo("STYLE_NOT_READY");
+        assertThat(create("gallery", "GALLERY", 2, "Plots").get("result").asText()).isEqualTo("STYLE_NOT_READY");
         assertThat(create("nowhere", "HYPERSPACE", 2, "x").get("result").asText()).isEqualTo("BAD_STYLE");
         assertThat(create("too-long-name", "SKY_ISLANDS", 2, "x".repeat(49)).get("result").asText()).isEqualTo("BAD_TITLE");
         for (int i = 0; i < WorldHub.MAX_WORLDS - 2; i++) {

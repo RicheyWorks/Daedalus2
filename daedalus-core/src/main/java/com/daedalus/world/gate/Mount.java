@@ -6,20 +6,26 @@ import com.daedalus.world.WorldStyle;
 
 /**
  * What carries you up to a sky gate (ADR-031). Gates float in the clouds, past the rainbow, where
- * nobody can walk: every world has its own way to fly there. The ark and the helicopter fly; the
- * others arrive with their worlds (ADR-034..036).
+ * nobody can walk: every world has its own way to fly there. The ark, the helicopter and the plane fly;
+ * the others arrive with their worlds (ADR-035, ADR-036).
  */
 public enum Mount {
     /** Sky Islands: the arks that already sail between islands (ADR-019/020). */
     ARK(true, "ark"),
     /** Parcels: the helicopter on the plaza's pad (ADR-033). */
     HELICOPTER(true, "helicopter"),
-    /** Bricks: a stud-built plane. */
-    PLANE(false, "plane"),
+    /** Bricks: the stud-built plane on the runway (ADR-034). */
+    PLANE(true, "plane"),
     /** Gallery City: a camera drone. */
     DRONE(false, "drone"),
     /** Labyrinth: a great sky-strider bird that knows the way over the walls. */
     SKY_STRIDER(false, "sky-strider");
+
+    /**
+     * The slot a world's own aircraft rests at when it is home: the helicopter's pad (ADR-033), the plane's
+     * hangar (ADR-034). Past the islands' 0..63 and the gates' 1000..1007.
+     */
+    public static final int HOME_SLOT = 2000;
 
     private final boolean ready;
     private final String noun;

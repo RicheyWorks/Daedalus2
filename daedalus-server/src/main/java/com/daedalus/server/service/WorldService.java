@@ -3,6 +3,8 @@
 package com.daedalus.server.service;
 
 import com.daedalus.engine.MazeGrid;
+import com.daedalus.plugin.events.ArkVoyageEvent;
+import com.daedalus.plugin.events.IslandLifeEvent;
 import com.daedalus.plugin.events.WorldBlockEvent;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockPlaceResult;
@@ -29,14 +31,19 @@ import com.daedalus.world.Trap;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.World;
 import com.daedalus.world.WorldId;
+import com.daedalus.world.WorldStore;
+import com.daedalus.world.WorldStyle;
 import com.daedalus.world.ark.Ark;
-import com.daedalus.world.ark.ArkOps;
 import com.daedalus.world.ark.ArkFleet;
+import com.daedalus.world.ark.ArkOps;
 import com.daedalus.world.ark.Voyage;
 import com.daedalus.world.ark.VoyageResult;
+import com.daedalus.world.auto.DriveTrace;
+import com.daedalus.world.auto.Observation;
+import com.daedalus.world.auto.WorldAddress;
+import com.daedalus.world.auto.WorldOps;
+import com.daedalus.world.bricks.BricksOps;
 import com.daedalus.world.district.DistrictOps;
-import com.daedalus.plugin.events.ArkVoyageEvent;
-import com.daedalus.plugin.events.IslandLifeEvent;
 import com.daedalus.world.ecology.Community;
 import com.daedalus.world.ecology.Diversity;
 import com.daedalus.world.ecology.EcologyLedger;
@@ -45,16 +52,12 @@ import com.daedalus.world.ecology.Habitat;
 import com.daedalus.world.ecology.Hold;
 import com.daedalus.world.ecology.SpeciesCanon;
 import com.daedalus.world.gate.GateOps;
+import com.daedalus.world.gate.Mount;
 import com.daedalus.world.island.IslandGenerator;
 import com.daedalus.world.island.IslandOps;
 import com.daedalus.world.island.IslandPlan;
 import com.daedalus.world.island.IslandRaiseResult;
 import com.daedalus.world.island.IslandTraits;
-import com.daedalus.world.WorldStore;
-import com.daedalus.world.auto.DriveTrace;
-import com.daedalus.world.auto.Observation;
-import com.daedalus.world.auto.WorldAddress;
-import com.daedalus.world.auto.WorldOps;
 import com.daedalus.world.living.LivingSlab;
 import com.daedalus.world.stamp.StampOps;
 import com.daedalus.world.stamp.StampRequest;
@@ -130,8 +133,16 @@ public class WorldService {
 
     /** Island lane: slot → (seed, radius). Persisted beside the DAEW file (ADR-018). */
     private final TreeMap<Integer, IslandEntry> islands = new TreeMap<>();
-    /** A Parcels world (ADR-033): plots instead of islands, a helicopter instead of arks. */
-    private volatile boolean district;
+    /**
+     * How this world is laid out (ADR-030): Sky Islands; a Parcels district of plots with a helicopter
+     * (ADR-033); or a Bricks baseplate with an obby and a plane (ADR-034). Set by the world hub on every
+     * mount, so the rules that come with it survive a restart.
+     */
+    private volatile WorldStyle style = WorldStyle.SKY_ISLANDS;
+
+    private boolean district() {
+        return style == WorldStyle.PARCELS;
+    }
 
     /** Traits by "seed/radius". A pure function's answers; regrowing an island costs ~50 ms. */
     private static final Map<String, IslandTraits> TRAITS = new ConcurrentHashMap<>();
@@ -281,10 +292,15 @@ public class WorldService {
 
     /**
      * In a Parcels world nobody builds on streets, the plaza, an unclaimed plot, or above the height
-     * limit (ADR-033): a cube may change only inside a claimed plot, whose parcel then decides who.
+     * limit (ADR-033): a cube may change only inside a claimed plot, whose parcel then decides who. A
+     * Bricks world is a sandbox except for its baseplate, obby, spawn and runway (ADR-034).
      */
     private boolean offPlot(World live, BlockCoordinate at) {
-        return district && live.parcelAt(at) == null;
+        return switch (style) {
+            case PARCELS -> live.parcelAt(at) == null;
+            case BRICKS -> BricksOps.protects(at);
+            default -> false;
+        };
     }
 
     /** Place outcome. {@code result} is never silent success. */
@@ -640,16 +656,21 @@ public class WorldService {
     }
 
     /**
-     * Make this a Parcels world (ADR-033): building happens only on claimed plots, below the height
-     * limit; the plots are what is claimed; the helicopter on the plaza's pad is the mount. Set by the
-     * world hub on every mount; the district's cubes themselves are saved like any others.
+     * Give this world its style's rules (set by the world hub on every mount). Parcels (ADR-033): build
+     * only on a claimed plot, below the height limit; plots are what is claimed; the helicopter on the
+     * plaza's pad is the mount. Bricks (ADR-034): a sandbox around a protected obby; the plane on the
+     * runway is the mount. The cubes themselves are saved like any others.
      */
-    public void useDistrict() {
-        district = true;
+    public void useStyle(WorldStyle style) {
+        this.style = style == null ? WorldStyle.SKY_ISLANDS : style;
+    }
+
+    public WorldStyle style() {
+        return style;
     }
 
     public boolean isDistrict() {
-        return district;
+        return district();
     }
 
     /** Outcome of laying a district out: LAID, ALREADY_LAID (something is in the way), NOT_A_DISTRICT. */
@@ -662,7 +683,7 @@ public class WorldService {
         if (live == null) {
             return null;
         }
-        if (!district) {
+        if (!district()) {
             return new DistrictWrite("NOT_A_DISTRICT", live.revision().value(), 0);
         }
         DistrictOps.Plan plan = DistrictOps.plan(seed);
@@ -679,6 +700,29 @@ public class WorldService {
         }
     }
 
+    /** Lay out the Bricks baseplate, spawn, runway and the obby grown from {@code seed}, all or nothing. */
+    public DistrictWrite raiseBricks(String id, long seed) {
+        World live = require(id);
+        if (live == null) {
+            return null;
+        }
+        if (style != WorldStyle.BRICKS) {
+            return new DistrictWrite("NOT_BRICKS", live.revision().value(), 0);
+        }
+        BricksOps.Plan plan = BricksOps.plan(seed);
+        synchronized (lock) {
+            if (!BricksOps.build(live, plan)) {
+                return new DistrictWrite("ALREADY_LAID", live.revision().value(), plan.obby().size());
+            }
+            persist();
+            BlockCoordinate spawn = BricksOps.spawn();
+            long revision = live.revision().value();
+            events.accept(new WorldBlockEvent(this, id, WorldBlockEvent.Kind.WORLD_REVISION_CHANGED,
+                    spawn.x(), spawn.y(), spawn.z(), "BRICKS", BlockType.AIR.name(), revision));
+            return new DistrictWrite("LAID", revision, plan.obby().size());
+        }
+    }
+
     /**
      * Raise a seeded island into the first free slot of the island lane. All or nothing: the
      * plan lands whole or the lane is full and nothing changes. One persist, one revision event
@@ -690,7 +734,7 @@ public class WorldService {
             return null;
         }
         IslandPlan plan = IslandGenerator.generate(seed, radius);
-        if (district) {
+        if (style != WorldStyle.SKY_ISLANDS) {
             return new IslandWrite("WRONG_STYLE", live.revision().value(), null, plan.traits()); // plots, not islands
         }
         synchronized (lock) {
@@ -729,21 +773,21 @@ public class WorldService {
 
     /** True when {@code slot} names something claimable here: an island, or a plot in a Parcels world. */
     private boolean claimable(int slot) {
-        return district ? DistrictOps.isPlot(slot) : islands.containsKey(slot);
+        return district() ? DistrictOps.isPlot(slot) : islands.containsKey(slot);
     }
 
     /** The box a claim on {@code slot} covers: the island's lane cell, or the plot (ADR-033). */
     private ParcelBounds claimBox(int slot) {
-        return district ? DistrictOps.plotBounds(slot) : IslandOps.claimBounds(slot);
+        return district() ? DistrictOps.plotBounds(slot) : IslandOps.claimBounds(slot);
     }
 
     private String noSuch() {
-        return district ? "NO_SUCH_PLOT" : "NO_SUCH_ISLAND";
+        return district() ? "NO_SUCH_PLOT" : "NO_SUCH_ISLAND";
     }
 
     /** Every claimable slot in order. Caller holds the lock. */
     private List<Integer> claimableSlots() {
-        if (!district) {
+        if (!district()) {
             return List.copyOf(islands.keySet());
         }
         List<Integer> out = new ArrayList<>();
@@ -840,7 +884,7 @@ public class WorldService {
             if (claimOf(live, slot) != null) {
                 return claimView(live, "ALREADY_CLAIMED", slot);
             }
-            if (live.claimParcel(claimBox(slot), owner.trim(), (district ? "Plot " : "Isle ") + slot) == null) {
+            if (live.claimParcel(claimBox(slot), owner.trim(), (district() ? "Plot " : "Isle ") + slot) == null) {
                 return claimView(live, "BLOCKED", slot);
             }
             persist();
@@ -909,7 +953,7 @@ public class WorldService {
 
     private void announceClaim(String id, World live, int slot) {
         ParcelBounds box = claimBox(slot);
-        BlockCoordinate o = district ? new BlockCoordinate(box.minX(), box.minY(), box.minZ()) : IslandOps.slot(slot);
+        BlockCoordinate o = district() ? new BlockCoordinate(box.minX(), box.minY(), box.minZ()) : IslandOps.slot(slot);
         events.accept(new WorldBlockEvent(this, id, WorldBlockEvent.Kind.WORLD_REVISION_CHANGED,
                 o.x(), o.y(), o.z(), "CLAIM", BlockType.AIR.name(), live.revision().value()));
     }
@@ -967,16 +1011,22 @@ public class WorldService {
     /** The helicopter of a Parcels world (ADR-033): one, at home on the plaza's helipad. */
     public static final String HELICOPTER = "heli-0";
 
+    /** The plane of a Bricks world (ADR-034): one, at home on the runway. */
+    public static final String PLANE = "plane-0";
+
     /** {@link #sail}'s {@code toSlot} for "go home": the vessel's own island, or the helipad. */
     public static final int HOME = -1;
 
     /** Every vessel's home slot: one ark per island, or the helicopter's pad. Caller holds the lock. */
     private List<Integer> homeSlots() {
-        return district ? List.of(DistrictOps.PAD_SLOT) : List.copyOf(islands.keySet());
+        return style == WorldStyle.SKY_ISLANDS ? List.copyOf(islands.keySet()) : List.of(Mount.HOME_SLOT);
     }
 
-    private static String vesselId(int home) {
-        return home == DistrictOps.PAD_SLOT ? HELICOPTER : Ark.idFor(home);
+    private String vesselId(int home) {
+        if (home != Mount.HOME_SLOT) {
+            return Ark.idFor(home);
+        }
+        return style == WorldStyle.BRICKS ? PLANE : HELICOPTER;
     }
 
     private ArkView view(int home) {
@@ -984,8 +1034,9 @@ public class WorldService {
         int at = fleet.slotOf(arkId, home);
         BlockCoordinate berth = berthOf(at);
         Ark placed;
-        if (home == DistrictOps.PAD_SLOT) {
-            placed = new Ark(arkId, "Helicopter", home, at, berth == null ? DistrictOps.padBerth() : berth);
+        if (home == Mount.HOME_SLOT) {
+            BlockCoordinate rest = berthOf(Mount.HOME_SLOT);
+            placed = new Ark(arkId, style == WorldStyle.BRICKS ? "Plane" : "Helicopter", home, at, berth == null ? rest : berth);
         } else {
             IslandEntry isle = islands.get(home);
             Ark launched = ArkOps.launch(home, isle.traits());
@@ -1086,8 +1137,12 @@ public class WorldService {
             GateLink g = gates.get(GateOps.gateOfSlot(slot));
             return g == null ? null : g.berth();
         }
-        if (slot == DistrictOps.PAD_SLOT) {
-            return district ? DistrictOps.padBerth() : null;
+        if (slot == Mount.HOME_SLOT) {
+            return switch (style) {
+                case PARCELS -> DistrictOps.padBerth();
+                case BRICKS -> BricksOps.hangarBerth();
+                default -> null;
+            };
         }
         IslandEntry isle = islands.get(slot);
         return isle == null ? null : ArkOps.berth(slot, isle.traits());

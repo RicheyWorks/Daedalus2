@@ -96,6 +96,7 @@ class GateOpsTest {
     void everyWorldStyleHasAMountThatFliesOnceItsWorldShips() {
         assertThat(Mount.of(WorldStyle.SKY_ISLANDS)).isEqualTo(Mount.ARK);
         assertThat(Mount.of(WorldStyle.PARCELS)).isEqualTo(Mount.HELICOPTER);
+        assertThat(Mount.of(WorldStyle.BRICKS)).isEqualTo(Mount.PLANE);
         assertThat(Mount.of(WorldStyle.LABYRINTH)).isEqualTo(Mount.SKY_STRIDER);
         for (WorldStyle s : WorldStyle.values()) {
             assertThat(Mount.of(s).ready()).as(s.name()).isEqualTo(s.ready());

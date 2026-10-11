@@ -15,7 +15,8 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record WorldManifest(String format, int version, String generator, World world, String units, String axes,
                             Geometry geometry, List<Swatch> palette, List<Island> islands, List<Plot> plots,
-                            List<Gate> gates, List<Ark> arks, Mount mount, List<Asset> assets, Live live, Chain chain) {
+                            Obby obby, List<Gate> gates, List<Ark> arks, Mount mount, List<Asset> assets, Live live,
+                            Chain chain) {
 
     /** Copy on construct: the caller's lists cannot change what this manifest says. */
     public WorldManifest {
@@ -59,6 +60,27 @@ public record WorldManifest(String format, int version, String generator, World 
     public record Plot(int n, List<Integer> min, List<Integer> max, String show, String owner) {
 
         public Plot {
+            min = List.copyOf(min);
+            max = List.copyOf(max);
+        }
+    }
+
+    /**
+     * A Bricks world's obby (ADR-034): where avatars spawn, the lava's top, and the platforms in order (the
+     * finish last), each as its footprint corners [x, y, z] with whether it is a checkpoint.
+     */
+    public record Obby(List<Integer> spawn, int lavaY, List<Step> steps) {
+
+        public Obby {
+            spawn = List.copyOf(spawn);
+            steps = List.copyOf(steps);
+        }
+    }
+
+    /** One platform of an obby. */
+    public record Step(int n, List<Integer> min, List<Integer> max, boolean checkpoint, boolean finish) {
+
+        public Step {
             min = List.copyOf(min);
             max = List.copyOf(max);
         }
