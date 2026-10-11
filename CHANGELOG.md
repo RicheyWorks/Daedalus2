@@ -10,6 +10,20 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Island ecology core (ADR-022).**
+  CSRBT's
+  MacArthur–Wilson
+  forms plus a seeded
+  daily stepper:
+  logistic growth in
+  shared guild
+  habitat, drift by
+  distance, area-
+  scaled rain and
+  catastrophe. Bigger
+  islands hold more
+  kinds (S ∝ A^0.57).
+
 - **Species canon (ADR-021).**
   221 kinds from
   ComputerPets, each

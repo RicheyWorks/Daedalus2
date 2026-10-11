@@ -182,4 +182,13 @@
         </Or>
         <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
     </Match>
+    <!--
+      Ecosystem.DayReport's compact constructor copies every list and wraps the map in
+      Collections.unmodifiableMap, so its accessors return frozen views; SpotBugs cannot
+      see through the TreeMap wrapper (same reasoning as the dto package above).
+    -->
+    <Match>
+        <Class name="com.daedalus.world.ecology.Ecosystem$DayReport"/>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
 </FindBugsFilter>
