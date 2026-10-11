@@ -54,6 +54,7 @@ import com.daedalus.engine.MazeGrid;
 import com.daedalus.plugin.runtime.PluginRegistry;
 import com.daedalus.server.ratelimit.PerKeyRateLimit;
 import com.daedalus.server.service.MazeGenerationService;
+import com.daedalus.server.service.WorldHub;
 import com.daedalus.server.service.WorldService;
 import com.daedalus.server.web.ResourceNotFoundException;
 import com.daedalus.world.BlockCoordinate;
@@ -93,6 +94,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -126,15 +128,29 @@ import java.util.UUID;
 @Validated
 public class WorldController {
 
-    private final WorldService worlds;
+    private final WorldHub hub;
     private final PluginRegistry plugins;
     private final MazeGenerationService mazes;
 
+    /** World Zero alone (tests, and code that never mounts another world). */
     public WorldController(WorldService worlds, PluginRegistry plugins,
             MazeGenerationService mazes) {
-        this.worlds = worlds;
+        this(WorldHub.of(worlds), plugins, mazes);
+    }
+
+    @Autowired
+    public WorldController(WorldHub hub, PluginRegistry plugins, MazeGenerationService mazes) {
+        this.hub = hub;
         this.plugins = plugins;
         this.mazes = mazes;
+    }
+
+    /**
+     * The world a route names (ADR-030). An unknown id resolves to World Zero's service, which answers
+     * null for any id but its own, so every route keeps its 404.
+     */
+    private WorldService world(String id) {
+        return hub.resolve(id);
     }
 
     @GetMapping("/world/{id}")
@@ -175,7 +191,7 @@ public class WorldController {
     @PerKeyRateLimit("mazeGenerate")
     public ResponseEntity<ParcelLeaseResponse> leaseParcel(@PathVariable String id) {
         mounted(id);
-        ParcelLeaseResult result = worlds.leaseParcel(id);
+        ParcelLeaseResult result = world(id).leaseParcel(id);
         World world = mounted(id);
         return ResponseEntity.ok(new ParcelLeaseResponse(
                 result.name(), WorldOps.lastLeaseId(world), world.revision().value(),
@@ -188,7 +204,7 @@ public class WorldController {
     @PerKeyRateLimit("mazeGenerate")
     public ResponseEntity<ParcelReleaseResponse> releaseParcel(@PathVariable String id) {
         mounted(id);
-        ParcelReleaseResult result = worlds.releaseParcel(id);
+        ParcelReleaseResult result = world(id).releaseParcel(id);
         World world = mounted(id);
         return ResponseEntity.ok(new ParcelReleaseResponse(
                 result.name(), WorldOps.lastLeaseId(world), world.revision().value(),
@@ -206,7 +222,7 @@ public class WorldController {
                 body.x() == null ? 0 : body.x(),
                 body.y() == null ? 0 : body.y(),
                 body.z() == null ? 0 : body.z());
-        ParcelGrantResult result = worlds.grantParcel(id, at, body.actorId(), body.verb());
+        ParcelGrantResult result = world(id).grantParcel(id, at, body.actorId(), body.verb());
         World world = mounted(id);
         return ResponseEntity.ok(new ParcelGrantResponse(
                 result.name(), WorldOps.aclLine(world), world.revision().value(),
@@ -225,7 +241,7 @@ public class WorldController {
                 body.x() == null ? 0 : body.x(),
                 body.y() == null ? 0 : body.y(),
                 body.z() == null ? 0 : body.z());
-        ParcelDenyResult result = worlds.denyParcel(id, at, body.actorId(), body.verb());
+        ParcelDenyResult result = world(id).denyParcel(id, at, body.actorId(), body.verb());
         World world = mounted(id);
         return ResponseEntity.ok(new ParcelDenyResponse(
                 result.name(), WorldOps.aclLine(world), world.revision().value(),
@@ -244,7 +260,7 @@ public class WorldController {
                 body.x() == null ? 0 : body.x(),
                 body.y() == null ? 0 : body.y(),
                 body.z() == null ? 0 : body.z());
-        ParcelRevokeResult result = worlds.revokeParcel(id, at, body.actorId(), body.verb());
+        ParcelRevokeResult result = world(id).revokeParcel(id, at, body.actorId(), body.verb());
         World world = mounted(id);
         return ResponseEntity.ok(new ParcelRevokeResponse(
                 result.name(), WorldOps.aclLine(world), world.revision().value(),
@@ -263,7 +279,7 @@ public class WorldController {
                 body.x() == null ? 0 : body.x(),
                 body.y() == null ? 0 : body.y(),
                 body.z() == null ? 0 : body.z());
-        ParcelForgiveResult result = worlds.forgiveParcel(id, at, body.actorId(), body.verb());
+        ParcelForgiveResult result = world(id).forgiveParcel(id, at, body.actorId(), body.verb());
         World world = mounted(id);
         return ResponseEntity.ok(new ParcelForgiveResponse(
                 result.name(), WorldOps.aclLine(world), world.revision().value(),
@@ -280,7 +296,7 @@ public class WorldController {
         mounted(id);
         BlockCoordinate at = new BlockCoordinate(body.x(), body.y(), body.z());
         UUID mazeId = mazeKey(body.mazeId());
-        StampResult result = worlds.stamp(id, at, mazeId == null ? null : mazeGrid(mazeId), mazeId,
+        StampResult result = world(id).stamp(id, at, mazeId == null ? null : mazeGrid(mazeId), mazeId,
                 Boolean.TRUE.equals(body.next()), body.actorId());
         String parcelId = result.parcelId() == null ? "" : result.parcelId().value();
         int minX = 0;
@@ -318,7 +334,7 @@ public class WorldController {
             @RequestParam @NotNull Integer y,
             @RequestParam @NotNull Integer z) {
         mounted(id);
-        Observation seen = worlds.observe(id, x, y, z);
+        Observation seen = world(id).observe(id, x, y, z);
         return ResponseEntity.ok(new WorldObserveResponse(
                 seen.worldId(), seen.revision(), seen.x(), seen.y(), seen.z(),
                 seen.blockType(), seen.doorState(), seen.place(), seen.lot(),
@@ -331,7 +347,7 @@ public class WorldController {
     public ResponseEntity<WorldTraceResponse> trace(@PathVariable String id) {
         World world = mounted(id);
         List<WorldTraceStepResponse> steps = new ArrayList<>();
-        for (DriveTrace.Step step : worlds.trace(id)) {
+        for (DriveTrace.Step step : world(id).trace(id)) {
             steps.add(new WorldTraceStepResponse(
                     step.capability(), step.result(), step.revisionAfter(), step.actor(),
                     step.at(), WorldOps.mazeOn(world, step.at()),
@@ -371,7 +387,7 @@ public class WorldController {
             @RequestParam @NotNull Integer y,
             @RequestParam @NotNull Integer z) {
         World world = mounted(id);
-        Chunk chunk = worlds.inspectChunk(id, x, y, z);
+        Chunk chunk = world(id).inspectChunk(id, x, y, z);
         ChunkCoordinate cc = new ChunkCoordinate(x, y, z);
         int plots = WorldOps.plotsInChunk(world, cc);
         String street = WorldOps.streetInChunk(world, cc);
@@ -411,7 +427,7 @@ public class WorldController {
             @PathVariable String id, @Valid @RequestBody PlaceBlockRequest body, Principal principal) {
         mounted(id);
         BlockType type = parseType(body.type());
-        WorldService.BlockWrite write = worlds.place(id, body.x(), body.y(), body.z(), type,
+        WorldService.BlockWrite write = world(id).place(id, body.x(), body.y(), body.z(), type,
                 actor(principal, body.actorId()));
         World world = mounted(id);
         BlockCoordinate at = new BlockCoordinate(body.x(), body.y(), body.z());
@@ -433,7 +449,7 @@ public class WorldController {
             @RequestParam @NotNull Integer z,
             @RequestParam(required = false) String actorId, Principal principal) {
         mounted(id);
-        WorldService.BlockWrite write = worlds.remove(id, x, y, z, actor(principal, actorId));
+        WorldService.BlockWrite write = world(id).remove(id, x, y, z, actor(principal, actorId));
         World world = mounted(id);
         BlockCoordinate at = new BlockCoordinate(x, y, z);
         return ResponseEntity.ok(new BlockMutationResponse(
@@ -448,7 +464,7 @@ public class WorldController {
     @Operation(summary = "Inspect the programmable door.")
     public ResponseEntity<DoorInspectResponse> inspectDoor(@PathVariable String id) {
         World world = mounted(id);
-        Door door = worlds.inspectDoor(id);
+        Door door = world(id).inspectDoor(id);
         if (door == null) {
             throw ResourceNotFoundException.world(id);
         }
@@ -468,8 +484,8 @@ public class WorldController {
     public ResponseEntity<DoorMutationResponse> openDoor(
             @PathVariable String id, @RequestParam(required = false) String actorId) {
         mounted(id);
-        DoorResult result = worlds.openDoor(id, actorId);
-        Door door = worlds.inspectDoor(id);
+        DoorResult result = world(id).openDoor(id, actorId);
+        Door door = world(id).inspectDoor(id);
         World world = mounted(id);
         return ResponseEntity.ok(new DoorMutationResponse(
                 door.id(), door.state().name(), result.name(), world.revision().value(),
@@ -484,8 +500,8 @@ public class WorldController {
     public ResponseEntity<DoorMutationResponse> closeDoor(
             @PathVariable String id, @RequestParam(required = false) String actorId) {
         mounted(id);
-        DoorResult result = worlds.closeDoor(id, actorId);
-        Door door = worlds.inspectDoor(id);
+        DoorResult result = world(id).closeDoor(id, actorId);
+        Door door = world(id).inspectDoor(id);
         World world = mounted(id);
         return ResponseEntity.ok(new DoorMutationResponse(
                 door.id(), door.state().name(), result.name(), world.revision().value(),
@@ -498,7 +514,7 @@ public class WorldController {
     @Operation(summary = "Inspect the programmable trap.")
     public ResponseEntity<TrapInspectResponse> inspectTrap(@PathVariable String id) {
         World world = mounted(id);
-        Trap trap = worlds.inspectTrap(id);
+        Trap trap = world(id).inspectTrap(id);
         if (trap == null) {
             throw ResourceNotFoundException.world(id);
         }
@@ -518,8 +534,8 @@ public class WorldController {
     public ResponseEntity<TrapMutationResponse> armTrap(
             @PathVariable String id, @RequestParam(required = false) String actorId) {
         mounted(id);
-        TrapResult result = worlds.armTrap(id, actorId);
-        Trap trap = worlds.inspectTrap(id);
+        TrapResult result = world(id).armTrap(id, actorId);
+        Trap trap = world(id).inspectTrap(id);
         World world = mounted(id);
         return ResponseEntity.ok(new TrapMutationResponse(
                 trap.id(), trap.state().name(), result.name(), world.revision().value(),
@@ -534,8 +550,8 @@ public class WorldController {
     public ResponseEntity<TrapMutationResponse> disarmTrap(
             @PathVariable String id, @RequestParam(required = false) String actorId) {
         mounted(id);
-        TrapResult result = worlds.disarmTrap(id, actorId);
-        Trap trap = worlds.inspectTrap(id);
+        TrapResult result = world(id).disarmTrap(id, actorId);
+        Trap trap = world(id).inspectTrap(id);
         World world = mounted(id);
         return ResponseEntity.ok(new TrapMutationResponse(
                 trap.id(), trap.state().name(), result.name(), world.revision().value(),
@@ -548,7 +564,7 @@ public class WorldController {
     @Operation(summary = "Inspect the programmable portal.")
     public ResponseEntity<PortalInspectResponse> inspectPortal(@PathVariable String id) {
         World world = mounted(id);
-        Portal portal = worlds.inspectPortal(id);
+        Portal portal = world(id).inspectPortal(id);
         if (portal == null) {
             throw ResourceNotFoundException.world(id);
         }
@@ -568,8 +584,8 @@ public class WorldController {
     public ResponseEntity<PortalMutationResponse> openPortal(
             @PathVariable String id, @RequestParam(required = false) String actorId) {
         mounted(id);
-        PortalResult result = worlds.openPortal(id, actorId);
-        Portal portal = worlds.inspectPortal(id);
+        PortalResult result = world(id).openPortal(id, actorId);
+        Portal portal = world(id).inspectPortal(id);
         World world = mounted(id);
         return ResponseEntity.ok(new PortalMutationResponse(
                 portal.id(), portal.state().name(), result.name(), world.revision().value(),
@@ -584,8 +600,8 @@ public class WorldController {
     public ResponseEntity<PortalMutationResponse> sealPortal(
             @PathVariable String id, @RequestParam(required = false) String actorId) {
         mounted(id);
-        PortalResult result = worlds.sealPortal(id, actorId);
-        Portal portal = worlds.inspectPortal(id);
+        PortalResult result = world(id).sealPortal(id, actorId);
+        Portal portal = world(id).inspectPortal(id);
         World world = mounted(id);
         return ResponseEntity.ok(new PortalMutationResponse(
                 portal.id(), portal.state().name(), result.name(), world.revision().value(),
@@ -598,7 +614,7 @@ public class WorldController {
     @Operation(summary = "Inspect the programmable NPC.")
     public ResponseEntity<NpcInspectResponse> inspectNpc(@PathVariable String id) {
         World world = mounted(id);
-        Npc npc = worlds.inspectNpc(id);
+        Npc npc = world(id).inspectNpc(id);
         if (npc == null) {
             throw ResourceNotFoundException.world(id);
         }
@@ -618,8 +634,8 @@ public class WorldController {
     public ResponseEntity<NpcMutationResponse> talkNpc(
             @PathVariable String id, @RequestParam(required = false) String actorId) {
         mounted(id);
-        NpcResult result = worlds.talkNpc(id, actorId);
-        Npc npc = worlds.inspectNpc(id);
+        NpcResult result = world(id).talkNpc(id, actorId);
+        Npc npc = world(id).inspectNpc(id);
         World world = mounted(id);
         return ResponseEntity.ok(new NpcMutationResponse(
                 npc.id(), npc.state().name(), result.name(), world.revision().value(),
@@ -634,8 +650,8 @@ public class WorldController {
     public ResponseEntity<NpcMutationResponse> hushNpc(
             @PathVariable String id, @RequestParam(required = false) String actorId) {
         mounted(id);
-        NpcResult result = worlds.hushNpc(id, actorId);
-        Npc npc = worlds.inspectNpc(id);
+        NpcResult result = world(id).hushNpc(id, actorId);
+        Npc npc = world(id).inspectNpc(id);
         World world = mounted(id);
         return ResponseEntity.ok(new NpcMutationResponse(
                 npc.id(), npc.state().name(), result.name(), world.revision().value(),
@@ -689,7 +705,7 @@ public class WorldController {
             @RequestParam @NotNull Integer y,
             @RequestParam @NotNull Integer z) {
         mounted(id);
-        Chunk chunk = worlds.inspectChunk(id, x, y, z);
+        Chunk chunk = world(id).inspectChunk(id, x, y, z);
         List<String> palette = new ArrayList<>();
         for (BlockType t : BlockType.values()) {
             palette.add(t.name());
@@ -706,8 +722,8 @@ public class WorldController {
     public ResponseEntity<WorldIslandsResponse> listIslands(@PathVariable String id) {
         mounted(id);
         List<IslandRow> rows = new ArrayList<>();
-        Map<Integer, WorldService.IslandClaim> claims = worlds.claims(id);
-        for (WorldService.IslandEntry e : worlds.islands(id)) {
+        Map<Integer, WorldService.IslandClaim> claims = world(id).claims(id);
+        for (WorldService.IslandEntry e : world(id).islands(id)) {
             rows.add(islandRow(e, e.traits(), claims.get(e.slot())));
         }
         return ResponseEntity.ok(new WorldIslandsResponse(id, rows));
@@ -720,9 +736,9 @@ public class WorldController {
             @PathVariable String id, @Valid @RequestBody RaiseIslandRequest body) {
         mounted(id);
         int radius = body.radius() == null ? IslandGenerator.DEFAULT_RADIUS : body.radius();
-        WorldService.IslandWrite write = worlds.raiseIsland(id, body.seed(), radius);
+        WorldService.IslandWrite write = world(id).raiseIsland(id, body.seed(), radius);
         IslandRow row = write.island() == null ? null
-                : islandRow(write.island(), write.traits(), worlds.claims(id).get(write.island().slot()));
+                : islandRow(write.island(), write.traits(), world(id).claims(id).get(write.island().slot()));
         return ResponseEntity.ok(new IslandRaiseResponse(write.result(), write.revision(), row));
     }
 
@@ -731,10 +747,10 @@ public class WorldController {
     public ResponseEntity<WorldArksResponse> listArks(@PathVariable String id) {
         mounted(id);
         List<ArkRow> rows = new ArrayList<>();
-        for (WorldService.ArkView view : worlds.arks(id)) {
+        for (WorldService.ArkView view : world(id).arks(id)) {
             rows.add(arkRow(view));
         }
-        return ResponseEntity.ok(new WorldArksResponse(id, worlds.now(), rows));
+        return ResponseEntity.ok(new WorldArksResponse(id, world(id).now(), rows));
     }
 
     @PostMapping("/world/{id}/arks/{arkId}/voyage")
@@ -743,11 +759,11 @@ public class WorldController {
     public ResponseEntity<VoyageResponse> sail(@PathVariable String id, @PathVariable String arkId,
                                                @Valid @RequestBody VoyageRequest body) {
         mounted(id);
-        WorldService.SailWrite write = worlds.sail(id, arkId, body.toSlot());
+        WorldService.SailWrite write = world(id).sail(id, arkId, body.toSlot());
         if (write.view() == null) {
             throw ResourceNotFoundException.ark(arkId);
         }
-        return ResponseEntity.ok(new VoyageResponse(write.result().name(), worlds.now(), arkRow(write.view())));
+        return ResponseEntity.ok(new VoyageResponse(write.result().name(), world(id).now(), arkRow(write.view())));
     }
 
     private static ArkRow arkRow(WorldService.ArkView view) {
@@ -779,7 +795,7 @@ public class WorldController {
     @Operation(summary = "One island's living community: habitat, diversity and every kind there.")
     public ResponseEntity<IslandEcologyResponse> islandEcology(@PathVariable String id, @PathVariable int slot) {
         mounted(id);
-        WorldService.IslandEcology life = worlds.ecology(id, slot);
+        WorldService.IslandEcology life = world(id).ecology(id, slot);
         if (life == null) {
             throw ResourceNotFoundException.island(slot);
         }
@@ -788,7 +804,7 @@ public class WorldController {
             habitat.put(g.name(), life.habitat().of(g));
         }
         Diversity d = life.diversity();
-        return ResponseEntity.ok(new IslandEcologyResponse(id, slot, life.day(), worlds.dayLength(),
+        return ResponseEntity.ok(new IslandEcologyResponse(id, slot, life.day(), world(id).dayLength(),
                 life.habitat().area(), habitat, d.richness(), d.total(), d.shannon(), d.evenness(),
                 d.simpson(), cargo(life.abundance())));
     }
@@ -819,7 +835,7 @@ public class WorldController {
     public ResponseEntity<IslandClaimResponse> claimIsland(@PathVariable String id, @PathVariable int slot,
             @Valid @RequestBody(required = false) IslandClaimRequest body, Principal principal) {
         mounted(id);
-        return ResponseEntity.ok(claimResponse(worlds.claimIsland(id, slot,
+        return ResponseEntity.ok(claimResponse(world(id).claimIsland(id, slot,
                 actor(principal, body == null ? null : body.actorId()))));
     }
 
@@ -829,7 +845,7 @@ public class WorldController {
     public ResponseEntity<IslandClaimResponse> abandonIsland(@PathVariable String id, @PathVariable int slot,
             @Valid @RequestBody(required = false) IslandClaimRequest body, Principal principal) {
         mounted(id);
-        return ResponseEntity.ok(claimResponse(worlds.abandonIsland(id, slot,
+        return ResponseEntity.ok(claimResponse(world(id).abandonIsland(id, slot,
                 actor(principal, body == null ? null : body.actorId()))));
     }
 
@@ -839,7 +855,7 @@ public class WorldController {
     public ResponseEntity<IslandClaimResponse> islandBuilder(@PathVariable String id, @PathVariable int slot,
             @Valid @RequestBody IslandClaimRequest body, Principal principal) {
         mounted(id);
-        return ResponseEntity.ok(claimResponse(worlds.setBuilder(id, slot, actor(principal, body.actorId()),
+        return ResponseEntity.ok(claimResponse(world(id).setBuilder(id, slot, actor(principal, body.actorId()),
                 body.builder(), body.allow() == null || body.allow())));
     }
 
@@ -868,7 +884,7 @@ public class WorldController {
         IslandTraits t = isle.traits();
         String base = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
         String arkName = com.daedalus.world.ark.ArkNames.of(isle.seed());
-        WorldService.IslandEcology life = worlds.ecology(id, tokenId);
+        WorldService.IslandEcology life = world(id).ecology(id, tokenId);
         List<TokenAttribute> attrs = new ArrayList<>();
         attrs.add(TokenAttribute.of("Seed", Long.toString(isle.seed())));
         attrs.add(TokenAttribute.number("Radius", isle.radius()));
@@ -890,7 +906,7 @@ public class WorldController {
     }
 
     private WorldService.IslandEntry island(String id, int slot) {
-        for (WorldService.IslandEntry e : worlds.islands(id)) {
+        for (WorldService.IslandEntry e : world(id).islands(id)) {
             if (e.slot() == slot) {
                 return e;
             }
@@ -903,7 +919,7 @@ public class WorldController {
     }
 
     private World mounted(String id) {
-        World world = worlds.inspect(id);
+        World world = world(id).inspect(id);
         if (world == null) {
             throw ResourceNotFoundException.world(id);
         }

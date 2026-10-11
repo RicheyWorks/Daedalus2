@@ -403,6 +403,39 @@ if (RPC) {
   await page.screenshot({ path: path.join(OUT, "realm_wallet.png") });
 }
 
+// --- Worlds (ADR-030): name a new world on page C's form, land in it, and visit back.
+{
+  const page = await context.newPage();
+  const errors = [];
+  page.on("console", m => { if (m.type() === "error") errors.push(m.text()); });
+  page.on("pageerror", e => errors.push(String(e)));
+  await page.goto(BASE + "/realm.html");
+  await page.waitForFunction(() => window.daedalusRealm && window.daedalusRealm.live, null, { timeout: 30000 });
+  await page.waitForSelector('.world-row[data-world="world-zero"] .here', { timeout: 10000 });
+  const zeroBefore = (await (await fetch(BASE + "/api/v1/world/world-zero/islands")).json()).islands.length;
+  await page.fill("#newWorldName", "Isle Two");
+  await page.fill("#newWorldSeed", "42");
+  await Promise.all([page.waitForURL(/realm\.html\?world=isle-two/, { timeout: 30000 }), page.click("#newWorldGo")]);
+  await page.waitForFunction(() => window.daedalusRealm && window.daedalusRealm.live && window.daedalusRealm.islands.length === 1, null, { timeout: 30000 });
+  const there = await page.evaluate(() => ({
+    title: document.getElementById("worldTitle").textContent,
+    seed: window.daedalusRealm.islands[0].seed,
+    here: document.querySelector('.world-row[data-world="isle-two"] .here') !== null,
+    arks: window.daedalusRealm.arks.length,
+  }));
+  check("a new world is named on the page, born with its own island, and the page moves into it",
+    there.title === "Isle Two" && there.seed === 42 && there.here && there.arks === 1, JSON.stringify(there));
+  const zeroAfter = (await (await fetch(BASE + "/api/v1/world/world-zero/islands")).json()).islands.length;
+  check("World Zero's lane is untouched by the new world", zeroAfter === zeroBefore, `${zeroBefore} → ${zeroAfter} islands`);
+  await page.waitForTimeout(1300);
+  await page.screenshot({ path: path.join(OUT, "realm_world_two.png") });
+  await Promise.all([page.waitForURL(/realm\.html\?world=world-zero$/, { timeout: 30000 }), page.click('.world-row[data-world="world-zero"] button.visit')]);
+  await page.waitForFunction(() => window.daedalusRealm && window.daedalusRealm.islands.length === 2, null, { timeout: 30000 });
+  check("Visit carries the page back to World Zero", (await page.evaluate(() => document.getElementById("worldTitle").textContent)) === "World Zero");
+  check("no console errors while crossing worlds", errors.length === 0, errors.slice(0, 3).join(" | "));
+  await page.close();
+}
+
 // --- Reload: a fresh page rebuilds the same world from REST alone.
 const C = await open("C");
 await C.page.waitForFunction(() => window.daedalusRealm.islands.length === 2, null, { timeout: 30000 });

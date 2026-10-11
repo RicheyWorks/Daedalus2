@@ -193,6 +193,8 @@ public class ProdSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/chunk/blocks").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/arks").permitAll()
+                        // The multiverse's index (ADR-030): which worlds exist. Mounting one needs a token.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/worlds").permitAll()
                         // An island's living community (ADR-023): read-only, steps the clock it reads.
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands/*/ecology").permitAll()
                         // Token metadata and its image (ADR-027): a marketplace fetches these unsigned.

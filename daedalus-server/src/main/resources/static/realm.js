@@ -8,7 +8,13 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-const WORLD = "world-zero";
+// Which world this page shows (ADR-030): ?world=<id>, World Zero by default.
+const WORLD = (() => {
+  try {
+    const w = new URLSearchParams(location.search).get("world");
+    return w && /^[a-z0-9][a-z0-9-]{1,30}[a-z0-9]$/.test(w) ? w : "world-zero";
+  } catch (e) { return "world-zero"; }
+})();
 const API = "/api/v1/world/" + WORLD;
 const SIZE = 16;
 const TOKEN_KEY = "daedalus.token"; // shared with the well, so a sign-in there carries here
@@ -389,6 +395,63 @@ function setupMe() {
     safeSet(NAME_KEY, state.me);
     loadIslands();
   });
+}
+
+// ---------------------------------------------------------------- worlds (ADR-030)
+// Every world this server mounts, the one you are in marked; "Visit" opens another in this page, and a
+// seed plus a name mounts a new sky-islands world.
+async function loadWorlds() {
+  const host = document.getElementById("worlds");
+  if (!host) return;
+  let res;
+  try { res = await api("/api/v1/worlds"); } catch (e) { return; }
+  state.worlds = res.worlds;
+  const here = res.worlds.find(w => w.id === WORLD);
+  if (here) {
+    document.getElementById("worldTitle").textContent = here.title;
+    document.title = `${here.title} · Daedalus Realm`;
+  }
+  host.textContent = "";
+  for (const w of res.worlds) {
+    const row = document.createElement("div");
+    row.className = "isle world-row";
+    row.dataset.world = w.id;
+    const info = document.createElement("div");
+    info.innerHTML = `<b></b><br><span></span>`;
+    info.querySelector("b").textContent = w.title;
+    info.querySelector("span").textContent = `${w.styleTitle} · ${w.islands} island${w.islands === 1 ? "" : "s"}`;
+    row.appendChild(info);
+    if (w.id === WORLD) {
+      const here = document.createElement("span");
+      here.className = "here";
+      here.textContent = "you are here";
+      row.appendChild(here);
+    } else {
+      row.appendChild(button("Visit", "visit", () => { location.href = `/realm.html?world=${encodeURIComponent(w.id)}`; }));
+    }
+    host.appendChild(row);
+  }
+  const soon = res.styles.filter(s => !s.ready).map(s => s.title);
+  const note = document.getElementById("worldsSoon");
+  if (note) note.textContent = soon.length ? `Coming: ${soon.join(", ")}` : "";
+}
+async function createWorld() {
+  const name = document.getElementById("newWorldName").value.trim();
+  const seedRaw = document.getElementById("newWorldSeed").value.trim();
+  const id = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 32);
+  const seed = seedRaw === "" ? Math.floor(Math.random() * 1e9) : Number(seedRaw);
+  if (!name || id.length < 3) { toast("Name the world (3+ letters)"); return; }
+  if (!Number.isInteger(seed)) { toast("Seed must be a whole number"); return; }
+  try {
+    const res = await api("/api/v1/worlds", { method: "POST", body: JSON.stringify({ id, style: "SKY_ISLANDS", seed, title: name }) });
+    const words = { CREATED: `${name} is born`, EXISTS: "A world with that name exists", BAD_ID: "Use letters and digits",
+      BAD_TITLE: "That name won't do", FULL: "This server holds all the worlds it can", STYLE_NOT_READY: "That style is coming" };
+    toast(words[res.result] || res.result);
+    if (res.result === "CREATED") location.href = `/realm.html?world=${encodeURIComponent(res.world.id)}`;
+    else loadWorlds();
+  } catch (e) {
+    handleError(e);
+  }
 }
 
 // ---------------------------------------------------------------- wallet (ADR-028)
@@ -1234,12 +1297,13 @@ function toast(text) {
   toastTimer = setTimeout(() => { t.style.display = "none"; }, 2600);
 }
 
+function plural(n, word) { return `${n} ${word}${n === 1 ? "" : "s"}`; }
 function status() {
   document.getElementById("dot").classList.toggle("on", state.live);
   const cubes = [...state.chunks.values()].reduce((a, d) => a + d.reduce((s, v) => s + (v ? 1 : 0), 0), 0);
   document.getElementById("statusText").textContent =
     `${state.live ? "live" : "offline"} · revision ${state.revision} · ${state.chunks.size} chunks · ` +
-    `${cubes.toLocaleString()} cubes · ${state.islands.length} islands · ${state.arks.length} arks`;
+    `${cubes.toLocaleString()} cubes · ${plural(state.islands.length, "island")} · ${plural(state.arks.length, "ark")}`;
 }
 
 function showLogin() { document.getElementById("login").style.display = "block"; }
@@ -1276,6 +1340,8 @@ function frame(t) {
 }
 buildPalette();
 setupMe();
+loadWorlds();
+document.getElementById("newWorldGo").onclick = createWorld;
 setupWallet();
 frame();
 window.daedalusRealm = state; // for the browser harness and curious operators

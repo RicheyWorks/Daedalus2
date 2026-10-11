@@ -10,6 +10,21 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Many worlds on one server (ADR-030).**
+  `GET/POST /api/v1/worlds`;
+  each world has its own
+  cubes, lane, arks,
+  ecology, claims and
+  files. The realm's
+  Worlds panel visits
+  and creates them
+  (`?world=<id>`).
+
+- **The metaverse charter (ADR-029).**
+  Many worlds and looks,
+  portals, mazes in every
+  world, all on chain.
+
 - **Wallet sign-in and island deeds on chain (ADR-028).**
   Sign in with Ethereum
   (EIP-4361) and get the

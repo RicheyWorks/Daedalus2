@@ -10,6 +10,7 @@ import com.daedalus.api.dto.WalletSignInRequest;
 import com.daedalus.server.config.WalletProperties;
 import com.daedalus.server.ratelimit.PerKeyRateLimit;
 import com.daedalus.server.security.JwtTokenService;
+import com.daedalus.server.service.WorldHub;
 import com.daedalus.server.service.WorldService;
 import com.daedalus.server.web.ResourceNotFoundException;
 import com.daedalus.wallet.DeedSigner;
@@ -68,16 +69,22 @@ public class WalletController {
 
     private final WalletProperties props;
     private final JwtTokenService tokens;
-    private final WorldService worlds;
+    private final WorldHub hub;
     private final WalletNonces nonces = new WalletNonces(MESSAGE_TTL, 10_000);
     private final SiweVerifier verifier;
     private final DeedSigner deedKey;
     private Supplier<Instant> clock = Clock.systemUTC()::instant;
 
+    /** World Zero alone (tests). */
     public WalletController(WalletProperties props, JwtTokenService tokens, WorldService worlds) {
+        this(props, tokens, WorldHub.of(worlds));
+    }
+
+    @org.springframework.beans.factory.annotation.Autowired
+    public WalletController(WalletProperties props, JwtTokenService tokens, WorldHub hub) {
         this.props = props;
         this.tokens = tokens;
-        this.worlds = worlds;
+        this.hub = hub;
         this.verifier = new SiweVerifier(props.domain(), props.chainId(), Duration.ofMinutes(1));
         this.deedKey = props.deedSignerKey().isEmpty() ? null : DeedSigner.fromHex(props.deedSignerKey());
         if (deedKey != null) {
@@ -140,6 +147,7 @@ public class WalletController {
         if (deedKey == null || EthereumAddress.normalize(props.deedContract()).isEmpty()) {
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).header("X-Wallet-Refused", "DEEDS_OFF").build();
         }
+        WorldService worlds = hub.resolve(id);
         if (worlds.inspect(id) == null) {
             throw ResourceNotFoundException.world(id);
         }

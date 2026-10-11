@@ -239,6 +239,8 @@ public consumers).
 | `GET` | `/api/v1/world/{id}/chunk?x=&y=&z=` | public | Inspect one 16³ chunk |
 | `GET` | `/api/v1/world/{id}/chunks` | public | List every non-empty chunk (coords, revision, occupied) for a renderer (ADR-018) |
 | `GET` | `/api/v1/world/{id}/chunk/blocks?x=&y=&z=` | public | One chunk's cubes as a base64 ordinal payload plus the palette, for meshing (ADR-018) |
+| `GET` | `/api/v1/worlds` | public | Every mounted world (id, style, seed, title, islands) and every world style with whether it is ready (ADR-030) |
+| `POST` | `/api/v1/worlds` | required | Mount a new world of a ready style, grown from a seed (`CreateWorldRequest`); exists, bad id, style-not-ready and full are named results (ADR-030) |
 | `GET` | `/api/v1/world/{id}/islands` | public | Raised islands: lane slot, origin, seed and traits (ADR-018), and who owns each and whom they let build (ADR-026) |
 | `GET` | `/api/v1/world/{id}/arks` | public | The arks: one per island, named from its seed, moored at a pier or sailing (with voyage times and the server clock), and what each carries in its hold (ADR-019/020/023) |
 | `GET` | `/api/v1/world/{id}/tokens/{tokenId}` | public | ERC-721 metadata for the island in lane slot `tokenId`: name, description, portrait, realm link and traits (seed, size, trees, crystals, waterfall, ark, kinds living); unknown slot 404 (ADR-027) |

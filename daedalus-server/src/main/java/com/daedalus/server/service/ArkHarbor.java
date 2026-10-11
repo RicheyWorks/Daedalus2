@@ -2,7 +2,6 @@
 
 package com.daedalus.server.service;
 
-import com.daedalus.world.WorldId;
 import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +25,7 @@ public class ArkHarbor {
 
     private final ScheduledExecutorService clock;
 
-    public ArkHarbor(WorldService worlds) {
+    public ArkHarbor(WorldHub hub) {
         this.clock = Executors.newSingleThreadScheduledExecutor(r -> {
             Thread t = new Thread(r, "ark-harbor");
             t.setDaemon(true);
@@ -34,8 +33,11 @@ public class ArkHarbor {
         });
         clock.scheduleWithFixedDelay(() -> {
             try {
-                worlds.settleArrivals(WorldId.ZERO.value());
-                worlds.tickEcology(WorldId.ZERO.value());
+                // Every mounted world keeps its own harbour and ecology (ADR-030).
+                for (WorldService world : hub.services()) {
+                    world.settleArrivals(world.id().value());
+                    world.tickEcology(world.id().value());
+                }
             } catch (RuntimeException e) {
                 LOG.warn("Ark harbour tick failed: {}", e.toString());
             }

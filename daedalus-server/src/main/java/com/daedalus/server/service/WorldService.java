@@ -79,13 +79,15 @@ import java.util.function.Consumer;
 import java.util.function.LongSupplier;
 
 /**
- * One persistent world ({@code world-zero}). File-backed. Does not touch
- * {@link MazeGenerationService} or the maze Caffeine cache.
+ * One persistent world. File-backed. Does not touch {@link MazeGenerationService} or the maze
+ * Caffeine cache. The Spring bean serves {@code world-zero}; {@link WorldHub} mounts more worlds,
+ * each its own instance with its own file and sidecars (ADR-030).
  */
 @Service
 public class WorldService {
 
     private final Path file;
+    private final WorldId id;
     private final World world;
     private final Consumer<WorldBlockEvent> events;
     /** Every other event this service publishes (ark voyages, ADR-020). */
@@ -136,10 +138,22 @@ public class WorldService {
     }
 
     public WorldService(Path file) {
+        this(file, WorldId.ZERO, event -> { });
+    }
+
+    @Autowired
+    public WorldService(@Value("${daedalus.world.file}") Path file,
+                        ApplicationEventPublisher publisher) {
+        this(file, WorldId.ZERO, publisher);
+    }
+
+    /** A world other than World Zero (ADR-030): its own id, its own file, the same event stream. */
+    public WorldService(Path file, WorldId id, ApplicationEventPublisher publisher) {
         this.file = file;
-        this.events = event -> { };
-        this.published = event -> { };
-        this.world = open(file);
+        this.id = id;
+        this.events = publisher::publishEvent;
+        this.published = publisher::publishEvent;
+        this.world = open(file, id);
         seedTrace(this.world);
         rebindSlabs();
         loadIslands();
@@ -147,18 +161,13 @@ public class WorldService {
         loadEcology();
     }
 
-    @Autowired
-    public WorldService(@Value("${daedalus.world.file}") Path file,
-                        ApplicationEventPublisher publisher) {
-        this.file = file;
-        this.events = publisher::publishEvent;
-        this.published = publisher::publishEvent;
-        this.world = open(file);
-        seedTrace(this.world);
-        rebindSlabs();
-        loadIslands();
-        loadFleet();
-        loadEcology();
+    public WorldId id() {
+        return id;
+    }
+
+    /** Each world's ecology replays from its own seed; World Zero keeps the one it always had. */
+    private long ecologySeed() {
+        return WorldId.ZERO.equals(id) ? ECOLOGY_SEED : ECOLOGY_SEED ^ (id.value().hashCode() * 0x9E3779B97F4A7C15L);
     }
 
     public Path file() {
@@ -953,7 +962,7 @@ public class WorldService {
             long due = Math.max(0, (t - ecoEpoch) / dayMs - eco.day());
             List<Ecosystem.DayReport> reports = new ArrayList<>();
             for (long d = 0; d < Math.min(due, MAX_CATCH_UP); d++) {
-                reports.add(eco.step(ECOLOGY_SEED));
+                reports.add(eco.step(ecologySeed()));
             }
             if (!reports.isEmpty()) {
                 persistEcology();
@@ -1140,7 +1149,7 @@ public class WorldService {
     }
 
     private World require(String id) {
-        if (id == null || !WorldId.ZERO.value().equals(id)) {
+        if (id == null || !this.id.value().equals(id)) {
             return null;
         }
         return world;
@@ -1193,20 +1202,20 @@ public class WorldService {
                 Files.setLastModifiedTime(file, FileTime.fromMillis(before + 1));
             }
         } catch (IOException e) {
-            throw new UncheckedIOException("Cannot persist " + WorldId.ZERO, e);
+            throw new UncheckedIOException("Cannot persist " + id.value(), e);
         }
     }
 
-    private static World open(Path file) {
+    private static World open(Path file, WorldId id) {
         try {
             if (Files.exists(file)) {
                 World loaded = WorldStore.load(file);
-                if (!WorldId.ZERO.equals(loaded.id())) {
-                    throw new IllegalStateException("World file is not world-zero: " + loaded.id());
+                if (!id.equals(loaded.id())) {
+                    throw new IllegalStateException("World file is not " + id.value() + ": " + loaded.id());
                 }
                 return loaded;
             }
-            World fresh = World.zero();
+            World fresh = WorldId.ZERO.equals(id) ? World.zero() : new World(id);
             WorldStore.save(fresh, file);
             return fresh;
         } catch (IOException e) {
