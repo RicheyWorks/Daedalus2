@@ -33,6 +33,7 @@ const state = {
   islands: [],
   arks: [],                  // from GET /arks (ADR-019)
   arkModels: new Map(),      // ark id → THREE.Group placed at its berth
+  clockOffset: 0,            // server epoch − local epoch, from /arks and ark frames (ADR-020)
   mode: "look",
   block: "GRASS",
   token: safeGet(TOKEN_KEY),
@@ -265,7 +266,7 @@ async function loadIslands(focusSlot) {
       (isle.waterfall ? " · waterfall" : "") + ` · ${isle.crystals} crystals`;
     const go = document.createElement("button");
     go.textContent = "Go";
-    go.onclick = () => flyTo(isle);
+    go.onclick = () => { if (RIDE.id) toggleRide(RIDE.id); flyTo(isle); };
     row.append(info, go);
     host.appendChild(row);
   }
@@ -318,8 +319,37 @@ function labelSprite(text) {
   return sprite;
 }
 
+const CRUISE = 16;           // cubes an ark climbs above the straight line between berths
+const RIDE = { id: null, last: null };
+
+function mooring(slot) {
+  const isle = state.islands.find(i => i.slot === slot);
+  if (!isle) return null;
+  return new THREE.Vector3(isle.dockX + 0.5, isle.dockY + 1, isle.dockZ + ARK_STANDOFF);
+}
+
+function serverNow() { return Date.now() + state.clockOffset; }
+
+/** Where an ark is and which way it faces, on server time (ADR-020). */
+function arkPose(ark, now) {
+  if (ark.state !== "SAILING") {
+    return { pos: mooring(ark.slot) || new THREE.Vector3(ark.x + 0.5, ark.y, ark.z + ARK_STANDOFF), yaw: 0, t: 1 };
+  }
+  const a = mooring(ark.fromSlot), b = mooring(ark.toSlot);
+  if (!a || !b) return { pos: new THREE.Vector3(ark.x, ark.y, ark.z), yaw: 0, t: 1 };
+  const t = Math.min(1, Math.max(0, (now - ark.departAt) / (ark.arriveAt - ark.departAt)));
+  const e = t * t * (3 - 2 * t);
+  const pos = a.clone().lerp(b, e);
+  pos.y += Math.sin(Math.PI * t) * CRUISE;
+  const heading = Math.atan2(-(b.z - a.z), b.x - a.x);
+  // Turn toward the destination while casting off, back to the berth heading while tying up.
+  const turn = Math.min(1, t * 6, (1 - t) * 6);
+  return { pos, yaw: heading * turn, t };
+}
+
 async function loadArks() {
   const res = await api(API + "/arks");
+  state.clockOffset = res.now - Date.now();
   state.arks = res.arks;
   const template = await loadArkModel();
   const seen = new Set();
@@ -330,6 +360,7 @@ async function loadArks() {
       model = new THREE.Group();
       const hull = template.clone(true);
       hull.scale.setScalar(ARK_SCALE);
+      hull.name = "hull";
       model.add(hull);
       const label = labelSprite(ark.name);
       label.position.set(0, 22, 0);
@@ -339,8 +370,6 @@ async function loadArks() {
       state.arkModels.set(ark.id, model);
     }
     model.userData.ark = ark;
-    model.userData.base = new THREE.Vector3(ark.x + 0.5, ark.y, ark.z + ARK_STANDOFF);
-    model.position.copy(model.userData.base);
   }
   for (const [id, model] of state.arkModels) {
     if (!seen.has(id)) { scene.remove(model); state.arkModels.delete(id); }
@@ -355,34 +384,122 @@ function renderArkList() {
   host.textContent = "";
   for (const ark of state.arks) {
     const row = document.createElement("div");
-    row.className = "isle";
+    row.className = "isle ark";
+    row.dataset.ark = ark.id;
     const info = document.createElement("div");
-    info.innerHTML = `<b>${ark.name}</b><br>moored at Isle ${ark.slot}`;
-    const go = document.createElement("button");
-    go.textContent = "Go";
-    go.onclick = () => flyTo({ x: ark.x, y: ark.y - 4, z: ark.z + ARK_STANDOFF });
-    row.append(info, go);
+    const where = ark.state === "SAILING" ? `sailing Isle ${ark.fromSlot} → Isle ${ark.toSlot}` : `moored at Isle ${ark.slot}`;
+    info.innerHTML = `<b>${ark.name}</b><br><span class="where">${where}</span>`;
+    const controls = document.createElement("div");
+    controls.style.cssText = "flex:0 0 auto;display:flex;gap:6px;align-items:center";
+    const pick = document.createElement("select");
+    pick.className = "dest";
+    pick.setAttribute("aria-label", "Destination for " + ark.name);
+    for (const isle of state.islands) {
+      if (isle.slot === ark.slot) continue;
+      const o = document.createElement("option");
+      o.value = isle.slot; o.textContent = "Isle " + isle.slot;
+      pick.appendChild(o);
+    }
+    const sail = document.createElement("button");
+    sail.className = "sail"; sail.textContent = "Sail";
+    sail.disabled = ark.state === "SAILING" || !pick.options.length;
+    sail.onclick = () => sailArk(ark.id, Number(pick.value));
+    const ride = document.createElement("button");
+    ride.className = "ride" + (RIDE.id === ark.id ? " on" : "");
+    ride.textContent = RIDE.id === ark.id ? "Stop" : "Ride";
+    ride.onclick = () => toggleRide(ark.id);
+    if (pick.options.length && ark.state !== "SAILING") controls.append(pick, sail);
+    controls.append(ride);
+    row.append(info, controls);
     host.appendChild(row);
   }
 }
 
-function bobArks(t) {
-  for (const model of state.arkModels.values()) {
-    const base = model.userData.base;
-    if (!base) continue;
-    const phase = model.name.length * 1.7 + (model.userData.ark ? model.userData.ark.homeSlot : 0);
-    model.position.y = base.y + Math.sin(t / 1400 + phase) * 0.35;
-    model.rotation.z = Math.sin(t / 1900 + phase) * 0.015;
+async function sailArk(arkId, toSlot) {
+  try {
+    const res = await api(`${API}/arks/${arkId}/voyage`, { method: "POST", body: JSON.stringify({ toSlot }) });
+    if (res.result === "SAILING") {
+      applyArk(res.ark, res.now);
+      toast(`${res.ark.name} cast off for Isle ${toSlot}`);
+      if (!RIDE.id) toggleRide(arkId);
+    } else {
+      toast({ ALREADY_THERE: "Already moored there", UNDERWAY: "Already under way", NO_SUCH_ISLAND: "No island in that slot" }[res.result] || res.result);
+    }
+  } catch (e) {
+    handleError(e);
   }
 }
 
+function applyArk(row, now) {
+  if (now) state.clockOffset = now - Date.now();
+  const i = state.arks.findIndex(a => a.id === row.id);
+  if (i >= 0) state.arks[i] = row; else state.arks.push(row);
+  const model = state.arkModels.get(row.id);
+  if (model) model.userData.ark = row;
+  renderArkList();
+}
+
+function toggleRide(arkId) {
+  flight++;                 // a fly-to still running would drag the camera off the ark
+  RIDE.id = RIDE.id === arkId ? null : arkId;
+  RIDE.last = null;
+  renderArkList();
+}
+
+function onArkFrame(f) {
+  state.clockOffset = f.now - Date.now();
+  const ark = state.arks.find(a => a.id === f.arkId);
+  if (!ark) { loadArks(); return; }
+  const isle = state.islands.find(i => i.slot === f.toSlot);
+  const row = Object.assign({}, ark, f.kind === "DEPARTED"
+    ? { state: "SAILING", slot: f.toSlot, fromSlot: f.fromSlot, toSlot: f.toSlot, departAt: f.departAt, arriveAt: f.arriveAt }
+    : { state: "MOORED", slot: f.toSlot, fromSlot: -1, toSlot: -1, departAt: 0, arriveAt: 0 });
+  if (isle) { row.x = isle.dockX; row.y = isle.dockY + 1; row.z = isle.dockZ; }
+  applyArk(row);
+  if (f.kind === "ARRIVED") toast(`${ark.name} tied up at Isle ${f.toSlot}`);
+}
+
+function moveArks(t) {
+  const now = serverNow();
+  for (const model of state.arkModels.values()) {
+    const ark = model.userData.ark;
+    if (!ark) continue;
+    const pose = arkPose(ark, now);
+    const phase = ark.homeSlot * 1.7;
+    const bob = ark.state === "SAILING" ? 0.15 : 0.35;
+    model.position.copy(pose.pos);
+    model.position.y += Math.sin(t / 1400 + phase) * bob;
+    const hull = model.getObjectByName("hull");
+    if (hull) hull.rotation.set(0, pose.yaw, Math.sin(t / 1900 + phase) * 0.015);
+    if (RIDE.id === ark.id) {
+      if (RIDE.last) {
+        const d = model.position.clone().sub(RIDE.last);
+        camera.position.add(d);
+        controls.target.add(d);
+      } else {
+        // Snap to a chase view once; afterwards only the ark's own motion moves the camera, so
+        // the rider can still orbit around it. (A fly-to here fought the follow and lost the ark.)
+        controls.target.copy(model.position);
+        camera.position.copy(model.position).add(new THREE.Vector3(-34, 18, 34));
+      }
+      RIDE.last = model.position.clone();
+    }
+  }
+}
+
+let flight = 0;            // bumped by every fly-to and ride, so a stale fly-to stops itself
 function flyTo(isle) {
+  // While riding, the ark owns the camera. A late fly-to (an island raise finishing after its
+  // STOMP reload already showed the island) used to land mid-ride and strand the camera.
+  if (RIDE.id) return;
+  const mine = ++flight;
   const t = new THREE.Vector3(isle.x, isle.y + 4, isle.z);
   const from = camera.position.clone();
   const to = new THREE.Vector3(isle.x + 46, isle.y + 38, isle.z + 46);
   const startT = controls.target.clone();
   const t0 = performance.now();
   function step(now) {
+    if (mine !== flight) return;
     const k = Math.min(1, (now - t0) / 900);
     const e = k * k * (3 - 2 * k);
     camera.position.lerpVectors(from, to, e);
@@ -452,6 +569,7 @@ function connectLive() {
     state.stomp = client;
     status();
     client.subscribe(`/topic/world/${WORLD}/events`, f => onFrame(JSON.parse(f.body)));
+    client.subscribe(`/topic/world/${WORLD}/arks`, f => onArkFrame(JSON.parse(f.body)));
   }, () => {
     state.live = false;
     status();
@@ -619,7 +737,7 @@ document.getElementById("loginGo").onclick = async () => {
 // ---------------------------------------------------------------- go
 function frame(t) {
   controls.update();
-  bobArks(t || 0);
+  moveArks(t || 0);
   renderer.render(scene, camera);
   requestAnimationFrame(frame);
 }
@@ -627,6 +745,11 @@ buildPalette();
 frame();
 window.daedalusRealm = state; // for the browser harness and curious operators
 state.pick = pick;           // the exact pick the pointer uses, so a harness can ask what a tap hits
+state.debugTarget = () => controls.target.clone();
+state.project = (x, y, z) => {  // screen pixel of a world point, for a harness to tap a cube
+  const v = new THREE.Vector3(x, y, z).project(camera), r = canvas.getBoundingClientRect();
+  return { x: r.left + (v.x + 1) / 2 * r.width, y: r.top + (1 - v.y) / 2 * r.height };
+};
 (async () => {
   try {
     await loadWorld();

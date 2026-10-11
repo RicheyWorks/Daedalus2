@@ -4,6 +4,7 @@ package com.daedalus.server.controller;
 
 import com.daedalus.engine.generators.GeneratorRegistry;
 import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
+import com.daedalus.plugin.events.ArkVoyageEvent;
 import com.daedalus.plugin.events.WorldBlockEvent;
 import com.daedalus.plugin.runtime.PluginRegistry;
 import com.daedalus.server.service.MazeGenerationService;
@@ -48,8 +49,11 @@ class WorldRealmControllerTest {
 
     private final ObjectMapper json = new ObjectMapper();
     private final List<WorldBlockEvent> events = new ArrayList<>();
+    private final List<ArkVoyageEvent> voyages = new ArrayList<>();
+    private final long[] clock = {1_000_000L};
     private Path file;
     private MockMvc mvc;
+    private WorldService worlds;
 
     @BeforeEach
     void setUp() {
@@ -58,7 +62,15 @@ class WorldRealmControllerTest {
     }
 
     private MockMvc boot() {
-        WorldService worlds = new WorldService(file, event -> events.add((WorldBlockEvent) event));
+        WorldService worlds = new WorldService(file, event -> {
+            if (event instanceof WorldBlockEvent b) {
+                events.add(b);
+            } else if (event instanceof ArkVoyageEvent v) {
+                voyages.add(v);
+            }
+        });
+        worlds.useClock(() -> clock[0]);
+        this.worlds = worlds;
         return MockMvcBuilders.standaloneSetup(new WorldController(worlds, new PluginRegistry(), mazes()))
                 .setControllerAdvice(new ApiExceptionHandler())
                 .build();
@@ -211,6 +223,87 @@ class WorldRealmControllerTest {
         }
     }
 
+    private void raise(String body) throws Exception {
+        mvc.perform(post("/api/v1/world/world-zero/islands").contentType(MediaType.APPLICATION_JSON)
+                .content(body)).andExpect(status().isOk());
+    }
+
+    private org.springframework.test.web.servlet.ResultActions sail(String arkId, int toSlot) throws Exception {
+        return mvc.perform(post("/api/v1/world/world-zero/arks/" + arkId + "/voyage")
+                .contentType(MediaType.APPLICATION_JSON).content("{\"toSlot\":" + toSlot + "}"));
+    }
+
+    @Test
+    void anArkSailsBetweenIslandsOnTheServerClock() throws Exception {
+        raise("{\"seed\":11}");
+        raise("{\"seed\":42}");
+        JsonNode isles = body(mvc.perform(get("/api/v1/world/world-zero/islands"))).get("islands");
+        JsonNode order = body(sail("ark-0", 1)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", equalTo("SAILING")))
+                .andExpect(jsonPath("$.ark.state", equalTo("SAILING")))
+                .andExpect(jsonPath("$.ark.fromSlot", equalTo(0)))
+                .andExpect(jsonPath("$.ark.toSlot", equalTo(1)))
+                .andExpect(jsonPath("$.ark.slot", equalTo(1))));
+        long departAt = order.get("ark").get("departAt").asLong();
+        long arriveAt = order.get("ark").get("arriveAt").asLong();
+        assertThat(departAt).isEqualTo(clock[0]);
+        assertThat(arriveAt).isGreaterThan(departAt + 4_000);
+        assertThat(voyages).hasSize(1);
+        assertThat(voyages.get(0).kind()).isEqualTo(ArkVoyageEvent.Kind.DEPARTED);
+        // The berth reported while sailing is the destination's pier tip.
+        assertThat(order.get("ark").get("x").asInt()).isEqualTo(isles.get(1).get("dockX").asInt());
+
+        // Mid-voyage: underway is a named refusal, the list still says SAILING.
+        clock[0] = (departAt + arriveAt) / 2;
+        sail("ark-0", 0).andExpect(jsonPath("$.result", equalTo("UNDERWAY")));
+        mvc.perform(get("/api/v1/world/world-zero/arks"))
+                .andExpect(jsonPath("$.now").value(clock[0]))
+                .andExpect(jsonPath("$.arks[0].state", equalTo("SAILING")));
+        assertThat(worlds.settleArrivals("world-zero")).isEmpty();
+
+        // Arrival: the harbour tick ties it up and announces it exactly once.
+        clock[0] = arriveAt;
+        assertThat(worlds.settleArrivals("world-zero")).hasSize(1);
+        assertThat(worlds.settleArrivals("world-zero")).isEmpty();
+        assertThat(voyages).hasSize(2);
+        assertThat(voyages.get(1).kind()).isEqualTo(ArkVoyageEvent.Kind.ARRIVED);
+        assertThat(voyages.get(1).toSlot()).isEqualTo(1);
+        mvc.perform(get("/api/v1/world/world-zero/arks"))
+                .andExpect(jsonPath("$.arks[0].state", equalTo("MOORED")))
+                .andExpect(jsonPath("$.arks[0].slot", equalTo(1)))
+                .andExpect(jsonPath("$.arks[0].homeSlot", equalTo(0)))
+                .andExpect(jsonPath("$.arks[1].slot", equalTo(1)));
+        sail("ark-0", 1).andExpect(jsonPath("$.result", equalTo("ALREADY_THERE")));
+    }
+
+    @Test
+    void aVoyageSurvivesARestartAndArrivesAfterIt() throws Exception {
+        raise("{\"seed\":11}");
+        raise("{\"seed\":42}");
+        long arriveAt = body(sail("ark-1", 0)).get("ark").get("arriveAt").asLong();
+        assertThat(Files.readString(tmp.resolve("world-zero.daew.arks"))).contains("ark-1 0 1 0");
+        MockMvc restarted = boot();
+        restarted.perform(get("/api/v1/world/world-zero/arks"))
+                .andExpect(jsonPath("$.arks[1].state", equalTo("SAILING")))
+                .andExpect(jsonPath("$.arks[1].arriveAt").value(arriveAt));
+        clock[0] = arriveAt + 1;
+        restarted.perform(get("/api/v1/world/world-zero/arks"))
+                .andExpect(jsonPath("$.arks[1].state", equalTo("MOORED")))
+                .andExpect(jsonPath("$.arks[1].slot", equalTo(0)));
+    }
+
+    @Test
+    void badVoyageOrdersAreNamedOrRefused() throws Exception {
+        raise("{\"seed\":11}");
+        sail("ark-0", 5).andExpect(status().isOk()).andExpect(jsonPath("$.result", equalTo("NO_SUCH_ISLAND")));
+        sail("ark-9", 0).andExpect(status().isNotFound());
+        sail("ark-0", 64).andExpect(status().isBadRequest());
+        mvc.perform(post("/api/v1/world/world-zero/arks/ark-0/voyage").contentType(MediaType.APPLICATION_JSON)
+                .content("{}")).andExpect(status().isBadRequest());
+        assertThat(voyages).isEmpty();
+    }
+
     @Test
     void unknownWorldsAre404OnEveryRealmRoute() throws Exception {
         mvc.perform(get("/api/v1/world/nope/chunks")).andExpect(status().isNotFound());
@@ -218,6 +311,8 @@ class WorldRealmControllerTest {
                 .andExpect(status().isNotFound());
         mvc.perform(get("/api/v1/world/nope/islands")).andExpect(status().isNotFound());
         mvc.perform(get("/api/v1/world/nope/arks")).andExpect(status().isNotFound());
+        mvc.perform(post("/api/v1/world/nope/arks/ark-0/voyage").contentType(MediaType.APPLICATION_JSON)
+                .content("{\"toSlot\":1}")).andExpect(status().isNotFound());
         mvc.perform(post("/api/v1/world/nope/islands").contentType(MediaType.APPLICATION_JSON)
                 .content("{\"seed\":1}")).andExpect(status().isNotFound());
     }

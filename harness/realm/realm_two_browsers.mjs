@@ -100,7 +100,10 @@ await A.page.screenshot({ path: path.join(OUT, "realm_built.png") });
 // --- A breaks it again; B sees it go.
 await A.page.click("#modeBreak");
 const removed = A.page.waitForResponse(r => r.url().includes("/block?") && r.request().method() === "DELETE");
-await A.page.mouse.click(center.x, center.y);
+// Aim at the centre of the cube's camera-facing faces, as a player would — not the screen centre,
+// where the crystal can sit edge-on to the ray.
+const aim = await A.page.evaluate(({ x, y, z }) => window.daedalusRealm.project(x + 0.5, y + 0.5, z + 0.5), put);
+await A.page.mouse.click(aim.x, aim.y);
 const del = await (await removed).json();
 check("tap in Break mode DELETEs the cube it hit", del.result === "REMOVED" && del.previous === "CRYSTAL",
   JSON.stringify({ x: del.x, y: del.y, z: del.z, previous: del.previous }));
@@ -118,10 +121,61 @@ await A.page.mouse.move(700, 450, { steps: 8 }); await A.page.mouse.up();
 await A.page.waitForTimeout(400);
 check("dragging in Break mode orbits and edits nothing", (await A.page.evaluate(() => window.daedalusRealm.revision)) === revBefore);
 
+// --- Voyages (ADR-020): a second island, then A sails ark-0 there; B watches it cross and tie up.
+await A.page.click("#modeLook");
+await A.page.fill("#seed", "42");
+await A.page.click("#raise");
+for (const p of [A, B]) {
+  await p.page.waitForFunction(() => window.daedalusRealm.islands.length === 2 && window.daedalusRealm.arkModels.size === 2,
+    null, { timeout: 30000 });
+}
+check("a second island launches a second ark on both pages", true);
+await A.page.selectOption('.ark[data-ark="ark-0"] select.dest', "1");
+const ordered = A.page.waitForResponse(r => r.url().endsWith("/arks/ark-0/voyage"));
+await A.page.click('.ark[data-ark="ark-0"] button.sail');
+const order = await (await ordered).json();
+check("Sail orders a voyage", order.result === "SAILING" && order.ark.toSlot === 1, `${order.result} ${order.ark.arriveAt - order.ark.departAt} ms`);
+const sailing = await B.page.waitForFunction(() => {
+  const a = window.daedalusRealm.arks.find(x => x.id === "ark-0");
+  return a && a.state === "SAILING";
+}, null, { timeout: 10000 }).then(() => true, () => false);
+check("B hears DEPARTED over STOMP", sailing);
+const xAt = () => B.page.evaluate(() => window.daedalusRealm.arkModels.get("ark-0").position.toArray());
+const p0 = await xAt();
+await B.page.waitForTimeout(2500);
+const p1 = await xAt();
+check("B's ark model moves toward the destination", p1[0] > p0[0] + 3, `x ${p0[0].toFixed(1)} → ${p1[0].toFixed(1)}`);
+// A background tab gets no animation frames; bring A forward so its camera can follow.
+await A.page.bringToFront();
+await A.page.waitForTimeout(800);
+check("A rides along (Ride shows Stop)", await A.page.evaluate(() => document.querySelector('.ark[data-ark="ark-0"] button.ride').textContent === "Stop"));
+const gap = await A.page.evaluate(() => {
+  const s = window.daedalusRealm, m = s.arkModels.get("ark-0");
+  return s.debugTarget().distanceTo(m.position);
+});
+check("the ride camera stays on the ark", gap < 3, `target ${gap.toFixed(2)} cubes from the ark`);
+await A.page.waitForTimeout(1500);
+await A.page.screenshot({ path: path.join(OUT, "realm_voyage.png") });
+const wait = order.ark.arriveAt - order.ark.departAt + 6000;
+const moored = await B.page.waitForFunction(() => {
+  const a = window.daedalusRealm.arks.find(x => x.id === "ark-0");
+  return a && a.state === "MOORED" && a.slot === 1;
+}, null, { timeout: wait }).then(() => true, () => false);
+check("B hears ARRIVED and moors the ark at Isle 1", moored);
+const end = await B.page.evaluate(() => {
+  const s = window.daedalusRealm, m = s.arkModels.get("ark-0"), isle = s.islands.find(i => i.slot === 1);
+  return { x: m.position.x, dockX: isle.dockX, z: m.position.z, dockZ: isle.dockZ };
+});
+check("the moored model sits off Isle 1's pier", Math.abs(end.x - (end.dockX + 0.5)) < 1 && Math.abs(end.z - (end.dockZ + 9)) < 1, JSON.stringify(end));
+const serverArk = (await (await fetch(BASE + "/api/v1/world/world-zero/arks")).json()).arks[0];
+check("the server agrees: ark-0 moored at slot 1", serverArk.state === "MOORED" && serverArk.slot === 1);
+
 // --- Reload: a fresh page rebuilds the same world from REST alone.
 const C = await open("C");
-await C.page.waitForFunction(() => window.daedalusRealm.islands.length === 1, null, { timeout: 30000 });
+await C.page.waitForFunction(() => window.daedalusRealm.islands.length === 2, null, { timeout: 30000 });
 check("a fresh page rebuilds the same world", (await cubes(C.page)) === (await serverCubes()));
+await C.page.waitForFunction(() => window.daedalusRealm.arks.length === 2, null, { timeout: 15000 });
+check("a fresh page knows where every ark is", await C.page.evaluate(() => window.daedalusRealm.arks.find(a => a.id === "ark-0").slot === 1));
 
 for (const p of [A, B, C]) check(`no console errors on page ${p.name}`, p.errors.length === 0, p.errors.slice(0, 3).join(" | "));
 await browser.close();

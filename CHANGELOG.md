@@ -10,6 +10,20 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Ark voyages (ADR-020).**
+  An ark sails on
+  two timestamps;
+  every client draws
+  it on server time.
+  `POST /arks/{id}/
+  voyage`. Arrivals
+  go out from the
+  harbour clock on
+  `/topic/world/{id}/
+  arks`. Ride follows
+  the ark. Voyages
+  survive restarts.
+
 - **Arks and docks (ADR-019).**
   Every island grows
   a plank pier on log

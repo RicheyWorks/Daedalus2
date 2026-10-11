@@ -89,6 +89,12 @@ public class ResourceNotFoundException extends RuntimeException {
     }
 
     /** A world id that is not this host's persistent volume. */
+    /** No ark with that id: islands launch {@code ark-<slot>}, one each (ADR-019). */
+    public static ResourceNotFoundException ark(Object id) {
+        return new ResourceNotFoundException("ark", String.valueOf(id),
+                "No ark " + id + " sails here. Each raised island launches ark-<slot>.");
+    }
+
     public static ResourceNotFoundException world(Object id) {
         return new ResourceNotFoundException("world", String.valueOf(id),
                 "No world " + id + " is mounted. This host serves world-zero.");

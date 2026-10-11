@@ -29,6 +29,10 @@ import com.daedalus.world.World;
 import com.daedalus.world.WorldId;
 import com.daedalus.world.ark.Ark;
 import com.daedalus.world.ark.ArkOps;
+import com.daedalus.world.ark.ArkFleet;
+import com.daedalus.world.ark.Voyage;
+import com.daedalus.world.ark.VoyageResult;
+import com.daedalus.plugin.events.ArkVoyageEvent;
 import com.daedalus.world.island.IslandGenerator;
 import com.daedalus.world.island.IslandOps;
 import com.daedalus.world.island.IslandPlan;
@@ -62,6 +66,7 @@ import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+import java.util.function.LongSupplier;
 
 /**
  * One persistent world ({@code world-zero}). File-backed. Does not touch
@@ -73,6 +78,11 @@ public class WorldService {
     private final Path file;
     private final World world;
     private final Consumer<WorldBlockEvent> events;
+    /** Every other event this service publishes (ark voyages, ADR-020). */
+    private final Consumer<Object> published;
+    /** Server clock for voyages; tests drive it. */
+    private LongSupplier clock = System::currentTimeMillis;
+    private ArkFleet fleet = new ArkFleet();
     private final DriveTrace log = new DriveTrace();
     private final Object lock = new Object();
     private final Map<UUID, SlabBind> slabs = new ConcurrentHashMap<>();
@@ -104,10 +114,12 @@ public class WorldService {
     public WorldService(Path file) {
         this.file = file;
         this.events = event -> { };
+        this.published = event -> { };
         this.world = open(file);
         seedTrace(this.world);
         rebindSlabs();
         loadIslands();
+        loadFleet();
     }
 
     @Autowired
@@ -115,10 +127,12 @@ public class WorldService {
                         ApplicationEventPublisher publisher) {
         this.file = file;
         this.events = publisher::publishEvent;
+        this.published = publisher::publishEvent;
         this.world = open(file);
         seedTrace(this.world);
         rebindSlabs();
         loadIslands();
+        loadFleet();
     }
 
     public Path file() {
@@ -559,17 +573,132 @@ public class WorldService {
         }
     }
 
-    /** One ark per raised island, moored at its pier (ADR-019), or null for an unknown world. */
-    public List<Ark> arks(String id) {
-        List<IslandEntry> lane = islands(id);
-        if (lane == null) {
+    /** Replace the voyage clock (tests). Production uses the wall clock. */
+    public void useClock(LongSupplier clock) {
+        this.clock = clock;
+    }
+
+    public long now() {
+        return clock.getAsLong();
+    }
+
+    /** An ark where it is now, with its voyage when underway (ADR-020). */
+    public record ArkView(Ark ark, Voyage voyage) {
+    }
+
+    /** Outcome of an order to sail; {@code view} is the ark after the order, null if no such ark. */
+    public record SailWrite(VoyageResult result, ArkView view) {
+    }
+
+    /**
+     * One ark per raised island (ADR-019), each where the fleet says it is: moored at a pier or
+     * sailing toward one (ADR-020). Settles any arrival that is due first. Null for an unknown world.
+     */
+    public List<ArkView> arks(String id) {
+        if (require(id) == null) {
             return null;
         }
-        List<Ark> out = new ArrayList<>();
-        for (IslandEntry e : lane) {
-            out.add(ArkOps.launch(e.slot(), e.traits()));
+        settleArrivals(id);
+        synchronized (lock) {
+            List<ArkView> out = new ArrayList<>();
+            for (IslandEntry home : islands.values()) {
+                out.add(view(home));
+            }
+            return out;
         }
-        return out;
+    }
+
+    private ArkView view(IslandEntry home) {
+        String arkId = Ark.idFor(home.slot());
+        int at = fleet.slotOf(arkId, home.slot());
+        IslandEntry where = islands.get(at);
+        Ark launched = ArkOps.launch(home.slot(), home.traits());
+        Ark placed = new Ark(arkId, launched.name(), home.slot(), at,
+                where == null ? launched.berth() : ArkOps.berth(at, where.traits()));
+        return new ArkView(placed, fleet.voyageOf(arkId));
+    }
+
+    /** Order an ark to the island in {@code toSlot}. Null result means the world is unknown. */
+    public SailWrite sail(String id, String arkId, int toSlot) {
+        if (require(id) == null) {
+            return null;
+        }
+        settleArrivals(id);
+        synchronized (lock) {
+            IslandEntry home = homeOf(arkId);
+            if (home == null) {
+                return new SailWrite(null, null);
+            }
+            ArkFleet.Outcome out = fleet.sail(arkId, home.slot(), toSlot, slot -> {
+                IslandEntry isle = islands.get(slot);
+                return isle == null ? null : ArkOps.berth(slot, isle.traits());
+            }, now());
+            if (out.result() == VoyageResult.SAILING) {
+                persistFleet();
+                Voyage v = out.voyage();
+                published.accept(new ArkVoyageEvent(this, id, ArkVoyageEvent.Kind.DEPARTED, arkId,
+                        v.fromSlot(), v.toSlot(), v.departAt(), v.arriveAt()));
+            }
+            return new SailWrite(out.result(), view(home));
+        }
+    }
+
+    /** Tie up every ark whose voyage is due. Called by the harbour clock and before every read. */
+    public List<Voyage> settleArrivals(String id) {
+        if (require(id) == null) {
+            return List.of();
+        }
+        synchronized (lock) {
+            List<Voyage> arrived = fleet.settle(now());
+            if (!arrived.isEmpty()) {
+                persistFleet();
+                for (Voyage v : arrived) {
+                    published.accept(new ArkVoyageEvent(this, id, ArkVoyageEvent.Kind.ARRIVED,
+                            v.arkId(), v.fromSlot(), v.toSlot(), v.departAt(), v.arriveAt()));
+                }
+            }
+            return arrived;
+        }
+    }
+
+    private IslandEntry homeOf(String arkId) {
+        for (IslandEntry e : islands.values()) {
+            if (Ark.idFor(e.slot()).equals(arkId)) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    Path fleetFile() {
+        return file.resolveSibling(file.getFileName() + ".arks");
+    }
+
+    private void loadFleet() {
+        Path f = fleetFile();
+        if (!Files.exists(f)) {
+            fleet = new ArkFleet();
+            return;
+        }
+        try {
+            fleet = ArkFleet.fromLines(Files.readAllLines(f, StandardCharsets.UTF_8));
+        } catch (IOException | RuntimeException e) {
+            throw new IllegalStateException("Cannot read ark fleet " + f, e);
+        }
+    }
+
+    private void persistFleet() {
+        Path f = fleetFile();
+        List<String> rows = new ArrayList<>();
+        rows.add("# Daedalus ark fleet (ADR-020): arkId slot [fromSlot toSlot departAt arriveAt]");
+        rows.addAll(fleet.toLines());
+        try {
+            Path tmp = f.resolveSibling(f.getFileName() + ".tmp");
+            Files.write(tmp, rows, StandardCharsets.UTF_8);
+            Files.move(tmp, f, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+        } catch (IOException e) {
+            throw new UncheckedIOException("Cannot persist ark fleet " + f, e);
+        }
     }
 
     Path islandsFile() {

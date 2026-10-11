@@ -68,6 +68,8 @@ import com.daedalus.world.island.IslandTraits;
 import com.daedalus.world.ark.Ark;
 import com.daedalus.api.dto.ArkRow;
 import com.daedalus.api.dto.WorldArksResponse;
+import com.daedalus.api.dto.VoyageRequest;
+import com.daedalus.api.dto.VoyageResponse;
 import com.daedalus.api.dto.ChunkBlocksResponse;
 import com.daedalus.api.dto.ChunkRow;
 import com.daedalus.api.dto.IslandRaiseResponse;
@@ -706,15 +708,39 @@ public class WorldController {
     }
 
     @GetMapping("/world/{id}/arks")
-    @Operation(summary = "List the arks: one per island, moored at its pier.")
+    @Operation(summary = "List the arks: moored at a pier or sailing between islands.")
     public ResponseEntity<WorldArksResponse> listArks(@PathVariable String id) {
         mounted(id);
         List<ArkRow> rows = new ArrayList<>();
-        for (Ark ark : worlds.arks(id)) {
-            BlockCoordinate b = ark.berth();
-            rows.add(new ArkRow(ark.id(), ark.name(), ark.homeSlot(), ark.slot(), b.x(), b.y(), b.z(), "MOORED"));
+        for (WorldService.ArkView view : worlds.arks(id)) {
+            rows.add(arkRow(view));
         }
-        return ResponseEntity.ok(new WorldArksResponse(id, rows));
+        return ResponseEntity.ok(new WorldArksResponse(id, worlds.now(), rows));
+    }
+
+    @PostMapping("/world/{id}/arks/{arkId}/voyage")
+    @Operation(summary = "Order an ark to sail to another island.")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<VoyageResponse> sail(@PathVariable String id, @PathVariable String arkId,
+                                               @Valid @RequestBody VoyageRequest body) {
+        mounted(id);
+        WorldService.SailWrite write = worlds.sail(id, arkId, body.toSlot());
+        if (write.view() == null) {
+            throw ResourceNotFoundException.ark(arkId);
+        }
+        return ResponseEntity.ok(new VoyageResponse(write.result().name(), worlds.now(), arkRow(write.view())));
+    }
+
+    private static ArkRow arkRow(WorldService.ArkView view) {
+        Ark ark = view.ark();
+        BlockCoordinate b = ark.berth();
+        if (view.voyage() == null) {
+            return new ArkRow(ark.id(), ark.name(), ark.homeSlot(), ark.slot(), b.x(), b.y(), b.z(),
+                    "MOORED", -1, -1, 0L, 0L);
+        }
+        return new ArkRow(ark.id(), ark.name(), ark.homeSlot(), ark.slot(), b.x(), b.y(), b.z(),
+                "SAILING", view.voyage().fromSlot(), view.voyage().toSlot(),
+                view.voyage().departAt(), view.voyage().arriveAt());
     }
 
     private static IslandRow islandRow(WorldService.IslandEntry e, IslandTraits t) {

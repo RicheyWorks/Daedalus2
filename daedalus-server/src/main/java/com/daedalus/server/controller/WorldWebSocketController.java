@@ -2,6 +2,9 @@
 
 package com.daedalus.server.controller;
 
+import com.daedalus.api.dto.ArkFrame;
+import com.daedalus.plugin.events.ArkVoyageEvent;
+
 import com.daedalus.api.dto.WorldEventFrame;
 import com.daedalus.plugin.events.WorldBlockEvent;
 import com.daedalus.server.service.WorldService;
@@ -39,5 +42,13 @@ public class WorldWebSocketController {
                         WorldOps.atOn(live, at), WorldOps.boxAt(live, at),
                         WorldOps.mazeAt(live, at), WorldOps.leaseAt(live, at),
                         WorldOps.aclAt(live, at)));
+    }
+
+    /** Ark voyages on their own topic (ADR-020); world event frames stay cube-shaped. */
+    @EventListener
+    public void onArkVoyage(ArkVoyageEvent e) {
+        stomp.convertAndSend("/topic/world/" + e.worldId() + "/arks",
+                new ArkFrame(e.worldId(), e.kind().name(), e.arkId(), e.fromSlot(), e.toSlot(),
+                        e.departAt(), e.arriveAt(), worlds == null ? System.currentTimeMillis() : worlds.now()));
     }
 }
