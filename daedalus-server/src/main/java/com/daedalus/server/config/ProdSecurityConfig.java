@@ -14,6 +14,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Production security posture. Active when {@code spring.profiles.active=prod}.
  *
@@ -24,7 +27,8 @@ import org.springframework.security.web.SecurityFilterChain;
  *
  * <p><b>Public (no token required)</b>:
  * <ul>
- *   <li>{@code GET /} and {@code GET /index.html} — the web UI. The README publishes it as
+ *   <li>{@code GET /}, {@code GET /index.html}, and every path in
+ *       {@link #STATIC_SCRIPTS} — the web UI. The README publishes it as
  *       "served at {@code /}" and it was 401 in prod: {@code anyRequest().authenticated()}
  *       covers static resources too, and {@code ProdAuthPostureTest} scans controller mappings,
  *       so no table this project keeps had a row for a file. See the note at the matcher.</li>
@@ -50,9 +54,10 @@ import org.springframework.security.web.SecurityFilterChain;
  *       {@code POST /api/v1/session/&#123;id&#125;/move}</li>
  *   <li>Plugin introspection: {@code GET /api/v1/plugins/**}</li>
  *   <li>Any {@code /actuator/**} path other than the three above</li>
- *   <li>{@code /ws/**} — WebSocket upgrade carries the bearer token via the {@code Authorization}
- *       header on the upgrade request. SockJS / STOMP clients can pass it via
- *       {@code connectHeaders}. Per-frame STOMP-level auth is left for a future iteration.</li>
+ *   <li>STOMP {@code CONNECT} — the bearer token rides the frame, not the HTTP upgrade.
+ *       Browsers cannot attach {@code Authorization} to a SockJS handshake, so authenticating
+ *       {@code /ws/**} made signed-in live frames impossible from the only client we ship.
+ *       The handshake is public; an unauthenticated {@code CONNECT} is still refused.</li>
  * </ul>
  *
  * <p><b>Denied</b>: {@code /v3/api-docs/**}, {@code /swagger-ui/**}, {@code /swagger-ui.html} —
@@ -63,6 +68,36 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @Profile("prod")
 public class ProdSecurityConfig {
+
+    /**
+     * Fail-closed inventory of static scripts the UI loads, in {@code index.html}
+     * order. A new {@code .js} under {@code static/} 401s in prod until it is
+     * listed here. Posture and smoke tests read this same list — they do not
+     * keep a second copy. {@code index.html} still names each {@code <script>}
+     * because HTML cannot import this constant; the serve test fails if a path
+     * is missing from the page.
+     */
+    /**
+     * Pages beside the maze well. {@code /realm.html} is the WebGL world client (ADR-018); the
+     * well at {@code /} stays the default and is untouched by it.
+     */
+    public static final List<String> STATIC_PAGES = List.of("/realm.html", "/realm.js", "/models/ark.glb");
+
+    public static final List<String> STATIC_SCRIPTS = List.of(
+            "/draw.js", "/api.js", "/share.js", "/fog.js", "/seat.js",
+            "/lab.js", "/caption.js", "/mint.js", "/campaign.js",
+            "/spectate.js", "/hunt.js", "/solve.js", "/theory.js",
+            "/living.js", "/ghost.js", "/tournament.js", "/live.js",
+            "/session.js", "/fogwalk.js", "/desk.js", "/stage.js", "/world.js", "/app.js");
+
+    private static String[] publicStaticGets() {
+        List<String> paths = new ArrayList<>();
+        paths.add("/");
+        paths.add("/index.html");
+        paths.addAll(STATIC_PAGES);
+        paths.addAll(STATIC_SCRIPTS);
+        return paths.toArray(String[]::new);
+    }
 
     private final JwtTokenService tokenService;
 
@@ -99,6 +134,9 @@ public class ProdSecurityConfig {
                         // ---- Auth ----
                         // Login is the only way to obtain a token; must be reachable without one.
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                        // Wallet sign-in (ADR-028): how a player gets a token, so it cannot need one.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/auth/wallet/config", "/api/v1/auth/wallet/nonce").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/wallet").permitAll()
 
                         // ---- The web UI ----
                         // The other half of the share-a-link surface, and the half that was
@@ -109,18 +147,19 @@ public class ProdSecurityConfig {
                         // any of the endpoints carefully permitted below. Measured on a prod-
                         // profile boot: /api/v1/session/{id} answered, "/" answered 401.
                         //
-                        // Enumerated rather than globbed, and the enumeration is complete: the
-                        // UI is one file. A second asset added later will 401 until somebody
+                        // Enumerated rather than globbed: markup and each script are listed
+                        // separately. A new asset added later will 401 until somebody
                         // lists it, which is the same fail-closed choice as the single-segment
                         // '*' matchers below — a static directory served by "/**" is exactly the
                         // kind of matcher that silently publishes whatever lands in it.
                         //
-                        // Nothing is given away by serving it. The page is markup and script
+                        // Nothing is given away by serving them. The page is markup and script
                         // with no embedded credentials, and every capability it offers is still
                         // governed by the rules in this method — a visitor without a token can
                         // browse public mazes and spectate, and generate/solve/session all
                         // answer 401 exactly as they did before.
-                        .requestMatchers(HttpMethod.GET, "/", "/index.html").permitAll()
+                        .requestMatchers(HttpMethod.GET, publicStaticGets())
+                                .permitAll()
 
                         // ---- Public read endpoints ----
                         .requestMatchers(HttpMethod.GET, "/api/v1/algorithms").permitAll()
@@ -137,6 +176,30 @@ public class ProdSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/session/*/tour").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/maze/*/ghost").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/agent/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/block").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/chunk").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/door").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/trap").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/portal").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/npc").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/parcels").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/capabilities").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/observe").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/trace").permitAll()
+                        // Island lane + realm renderer reads (ADR-018): what matter exists, the
+                        // cubes in one chunk, and which seeds grew which islands. Read-only.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/chunks").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/chunk/blocks").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/arks").permitAll()
+                        // An island's living community (ADR-023): read-only, steps the clock it reads.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands/*/ecology").permitAll()
+                        // Token metadata and its image (ADR-027): a marketplace fetches these unsigned.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/tokens/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands/*/portrait.png").permitAll()
+                        // The species canon (ADR-021): reference data, read-only.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/species").permitAll()
 
                         // ---- Protected API surface ----
                         // Write operations.
@@ -148,9 +211,15 @@ public class ProdSecurityConfig {
                         // Plugin introspection — operator-facing, not drive-by readable.
                         .requestMatchers("/api/v1/plugins/**").authenticated()
 
-                        // WebSocket upgrade — token rides the Authorization header on the
-                        // HTTP upgrade request. STOMP-level per-frame auth is a future step.
-                        .requestMatchers("/ws/**").authenticated()
+                        // SockJS handshake. Public on purpose. A browser cannot put
+                        // Authorization on the HTTP upgrade (the WebSocket constructor has no
+                        // header argument), so closing /ws/** made the signed-in UI's STOMP
+                        // CONNECT unreachable — the token was on the frame that never got to
+                        // be sent. CONNECT remains required in prod
+                        // (StompAuthChannelInterceptor); this matcher only lets the socket
+                        // open. SockJS also uses HTTP POST fallbacks under /ws/**, so the
+                        // matcher is not GET-only.
+                        .requestMatchers("/ws/**").permitAll()
 
                         // ---- Denied ----
                         // OpenAPI spec + Swagger UI are intentionally NOT advertised in prod.

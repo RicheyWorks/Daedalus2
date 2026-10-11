@@ -54,8 +54,12 @@ MUT = [
      "                throw new CapacityExceededException(maxConcurrent);\n"
      "            }"),
     (TS, "enable is no longer idempotent (a second tracker per maze)",
-     "            if (existing != null) {\n                return existing;\n            }",
-     "            if (false) {\n                return existing;\n            }"),
+     "            if (existing != null) {\n"
+     "                tracker = existing;\n"
+     "            }",
+     "            if (false) {\n"
+     "                tracker = existing;\n"
+     "            }"),
     (TS, "a second ticker is scheduled on re-enable",
      "            if (tracker.future == null) {",
      "            if (true) {"),

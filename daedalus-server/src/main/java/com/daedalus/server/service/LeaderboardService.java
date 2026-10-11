@@ -3,6 +3,9 @@
 package com.daedalus.server.service;
 
 import com.daedalus.model.LeaderboardEntry;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Leaderboard persistence.
@@ -40,6 +45,14 @@ public class LeaderboardService {
     private final boolean redisEnabled;
     private final int maxEntries;
     private final ConcurrentSkipListSet<LeaderboardEntry> memory = new ConcurrentSkipListSet<>();
+    /** Guards in-memory add-and-trim; ConcurrentSkipListSet does not make that compound atomic. */
+    private final Object memoryLock = new Object();
+    private final Counter writeFallback;
+    private final Counter readFallback;
+    private final AtomicBoolean lastWriteFellBack = new AtomicBoolean();
+    private final AtomicBoolean lastReadFellBack = new AtomicBoolean();
+    private final AtomicReference<String> lastWriteError = new AtomicReference<>();
+    private final AtomicReference<String> lastReadError = new AtomicReference<>();
 
     /** Default retention — see the three-arg constructor. */
     public LeaderboardService(RedisTemplate<String, Object> redis, boolean redisEnabled) {
@@ -53,13 +66,25 @@ public class LeaderboardService {
      *        deepest page anyone can request ({@code top(n)} caps n at 100) is pure growth.
      *        Trimmed from the worst end on every submit.
      */
+    public LeaderboardService(RedisTemplate<String, Object> redis, boolean redisEnabled,
+                              int maxEntries) {
+        this(redis, redisEnabled, maxEntries, new SimpleMeterRegistry());
+    }
+
     @Autowired
     public LeaderboardService(@Autowired(required = false) RedisTemplate<String, Object> redis,
                               @Value("${daedalus.redis.enabled:false}") boolean redisEnabled,
-                              @Value("${daedalus.leaderboard.max-entries:100}") int maxEntries) {
+                              @Value("${daedalus.leaderboard.max-entries:100}") int maxEntries,
+                              MeterRegistry meters) {
         this.maxEntries = Math.max(1, maxEntries);
         this.redis = redis;
         this.redisEnabled = redisEnabled && redis != null;
+        this.writeFallback = Counter.builder("daedalus.leaderboard.redis.write.fallback")
+                .description("Redis leaderboard writes that stayed in-memory")
+                .register(meters);
+        this.readFallback = Counter.builder("daedalus.leaderboard.redis.read.fallback")
+                .description("Redis leaderboard reads that used in-memory")
+                .register(meters);
         if (this.redisEnabled) {
             log.info("LeaderboardService: Redis backend active");
         } else {
@@ -67,12 +92,51 @@ public class LeaderboardService {
         }
     }
 
+    /** Whether Redis is the intended write path. False is a chosen memory board, not a fallback. */
+    public boolean redisConfigured() {
+        return redisEnabled;
+    }
+
+    /** True after a Redis write exception until a later write succeeds. */
+    public boolean lastWriteFellBack() {
+        return lastWriteFellBack.get();
+    }
+
+    /** Last Redis write exception, or null when the last write succeeded or never ran. */
+    public String lastWriteError() {
+        return lastWriteError.get();
+    }
+
+    /** True after a Redis read exception until a later read succeeds. */
+    public boolean lastReadFellBack() {
+        return lastReadFellBack.get();
+    }
+
+    /** Last Redis read exception, or null when the last read succeeded or never ran. */
+    public String lastReadError() {
+        return lastReadError.get();
+    }
+
+    private void markReadOk() {
+        lastReadFellBack.set(false);
+        lastReadError.set(null);
+    }
+
+    private void markReadFallback(Exception e) {
+        lastReadFellBack.set(true);
+        lastReadError.set(e.toString());
+        readFallback.increment();
+    }
+
     public void submit(LeaderboardEntry entry) {
-        memory.add(entry);
-        // Natural order is best-first, so pollLast() drops the worst. Approximate under
-        // concurrent submits, exact at rest — fine for a cap whose only job is boundedness.
-        while (memory.size() > maxEntries) {
-            memory.pollLast();
+        synchronized (memoryLock) {
+            memory.add(entry);
+            // Natural order is best-first, so pollLast() drops the worst. Size-then-poll
+            // without this lock lets two threads both see size == cap+1 and both evict,
+            // dropping a run that should have stayed.
+            while (memory.size() > maxEntries) {
+                memory.pollLast();
+            }
         }
         if (!redisEnabled) return;
         try {
@@ -84,7 +148,14 @@ public class LeaderboardService {
                 addAndTrim(zset, mazeKey, entry);
                 redis.expire(mazeKey, PER_MAZE_TTL);
             }
+            lastWriteFellBack.set(false);
+            lastWriteError.set(null);
         } catch (Exception e) {
+            // A finished run must stay 200. Two instances then score different boards
+            // until Redis writes again — surface that, do not 500 the submit.
+            lastWriteFellBack.set(true);
+            lastWriteError.set(e.toString());
+            writeFallback.increment();
             log.warn("Redis leaderboard write failed; staying in-memory: {}", e.toString());
         }
     }
@@ -129,9 +200,13 @@ public class LeaderboardService {
                 if (raw != null && !raw.isEmpty()) {
                     List<LeaderboardEntry> out = new ArrayList<>();
                     for (Object o : raw) if (o instanceof LeaderboardEntry e) out.add(e);
+                    markReadOk();
                     return out;
                 }
             } catch (Exception e) {
+                // The page must stay 200. Redis answered for writes or not — this
+                // instance is now scoring the memory board the other one is not.
+                markReadFallback(e);
                 log.warn("Redis per-maze leaderboard read failed; using in-memory: {}",
                         e.toString());
             }
@@ -170,9 +245,11 @@ public class LeaderboardService {
                 if (raw != null && !raw.isEmpty()) {
                     List<LeaderboardEntry> out = new ArrayList<>();
                     for (Object o : raw) if (o instanceof LeaderboardEntry e) out.add(e);
+                    markReadOk();
                     return out;
                 }
             } catch (Exception e) {
+                markReadFallback(e);
                 log.warn("Redis per-generator leaderboard read failed; using in-memory: {}",
                         e.toString());
             }
@@ -192,9 +269,13 @@ public class LeaderboardService {
                 if (raw != null) {
                     List<LeaderboardEntry> out = new ArrayList<>();
                     for (Object o : raw) if (o instanceof LeaderboardEntry e) out.add(e);
-                    if (!out.isEmpty()) return out;
+                    if (!out.isEmpty()) {
+                        markReadOk();
+                        return out;
+                    }
                 }
             } catch (Exception e) {
+                markReadFallback(e);
                 log.warn("Redis leaderboard read failed; using in-memory: {}", e.toString());
             }
         }

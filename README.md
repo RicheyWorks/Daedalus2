@@ -38,6 +38,11 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
 - **Pluggable** — third-party JARs can contribute generators, solvers, themes,
   and event listeners through a Spring-free SPI; loaders are tracked and
   closed cleanly on shutdown (no Windows file-locks, no metaspace bloat).
+  The host actually calls that shutdown: `PluginConfig` registers
+  `PluginManager` with `destroyMethod = "shutdownAll"`. Until 2026-08-26
+  the method existed and the runtime suite called it, but the server never
+  did — `stop()` did not run, contributed algorithms stayed in the catalogs,
+  and Windows kept plugin JARs locked after a graceful stop.
   A plugin can **add** an algorithm, never replace one: ids are claimed once
   and a collision fails that plugin rather than shadowing the incumbent. Until
   2026-07-31 `register` was a bare map `put`, so any JAR in the plugins
@@ -49,38 +54,50 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
   plugin stayed listed and callable. `unregister` refuses built-ins, because a
   removal path reachable from teardown must not be able to delete a shipped
   algorithm.
-- **Java 21**, **Spring Boot 4.1**, **JavaFX 21**.
-- **Live over the wire** — a session-scoped STOMP surface (maze state, solver
-  runs, player moves, plugin failures) with `CONNECT` authentication,
-  per-destination `SUBSCRIBE` authorization on owned sessions, and client
-  `SEND` refused outright: the surface is broadcast-only, and with a simple
-  broker on `/topic` anything less meant any connected client could publish a
-  forged move frame into any session's feed (found by sending one and watching
-  it arrive, 2026-07-31). A one-file vanilla-JS web UI served at `/` plays
-  mazes against it, with an opt-in multiplayer flag
-  (`daedalus.session.multiplayer`).
+- **Java 21**, **Spring Boot 4.1**, **JavaFX 21**, optional **LWJGL** first-person host.
+- **Live over the wire** — STOMP at `/ws` (maze state, solver runs, player
+  moves, plugin failures). `CONNECT` carries the JWT in prod; owned session
+  topics are per-destination `SUBSCRIBE`; client `SEND` is refused. The
+  surface is broadcast-only — with a simple broker on `/topic`, anything less
+  let any connected client forge a move frame into any session (found by
+  sending one, 2026-07-31).
+- **A WebGL realm at `/realm.html`** (ADR-018) — floating voxel islands grown from a seed on an island lane, meshed per 16³ chunk in three.js; Look / Build / Break by tap (tablet-friendly), with every cube edit going through the same `PUT`/`DELETE /world/{id}/block` and arriving live on other screens over the `/topic/world/{id}/events` STOMP topic. No build step. The maze well at `/` is unchanged.
+- **A vanilla web UI at `/`** — markup in `index.html`, paint in `draw.js`, HTTP in `api.js`, hash/walk helpers in `share.js`, fog memory in `fog.js`, seat/trail helpers in `seat.js`, the complexity-lab panel in `lab.js`, theory captions in `caption.js`, mint in `mint.js`, campaign in `campaign.js`, spectate / hash in `spectate.js`, hunt in `hunt.js`, solve / race / compare in `solve.js`, theory writes in `theory.js`, living refresh / traffic in `living.js`, ghost races in `ghost.js`, tournament ranks in `tournament.js`, STOMP in `live.js`, seats in `session.js`, fog walks in `fogwalk.js`, operator desk in `desk.js`, paint snapshot / input in `stage.js`, leftover-state wiring in `app.js`, no npm, the same REST + STOMP
+  an external integrator would use. Sign in attaches the JWT. Generate
+  accepts `braid`; the tournament and that control stay one number. Fog
+  paints only stood-on cells and re-polls the agent when the maze lives.
+  Walks (solver, player, ghost, tour) fill corridor tiles, not a polyline
+  through the posts. Permalinks keep their kind: campaign and daily stay
+  on the ladder and the shared board; Open session and a spectate pin
+  `#session=`; otherwise `#maze=` or `#generator=` (which also sets Generate).
+  A spectator hydrates every seat's
+  `walks` and paints a hunt from the session tour, not a minting GET.
+  Living ticks refresh the theory
+  overlays; a plugin failure refreshes the roster. Generate hotspots
+  follow the seed so the same count rebuilds. A joiner who finishes is
+  the name on the board. Opt-in multiplayer:
+  `daedalus.session.multiplayer`.
 - **Deterministic across restarts, not just across a cache hit.** Same seed,
   same answer, on a process that has never seen the request before.
-  `DeterminismGoldenTest` compares 23 endpoints — seeded generation, the seeded
-  campaign, every analytical route, the tournament, a complexity fit and all
-  nine solvers — against digests recorded by a *different JVM* and committed to
-  the repo, so every build is a cross-process comparison. In-process tests
-  cannot do this job: these endpoints sit behind caches keyed on their inputs,
-  so the second call returns the first call's object whether the computation is
-  deterministic or not.
+  `DeterminismGoldenTest` compares 23 endpoints — seeded generation, the
+  seeded campaign, the analytical routes, the tournament, a complexity fit,
+  and nine solvers (IDA\* is the tenth and answers 422 once it spends its
+  node budget, so it is not in the digest set) — against digests recorded
+  by a *different JVM* and committed to the repo. In-process tests cannot
+  do this job: these endpoints sit behind caches keyed on their inputs, so
+  the second call returns the first call's object whether the computation
+  is deterministic or not.
 - **Watch the algorithms think** — `?replay=true` on the solve endpoint ships
   the search's real recorded expansion order (observation via the `Graph`
   seam, never simulation); the web UI animates it and can race all ten
   solvers on one maze in a compare table with per-route previews.
-- **Verified** — `mvn clean verify` passes **623 tests** across the five
-  modules (core 322, server 258, plugin-runtime 26, plugin-api 7, desktop 10)
-  with zero Checkstyle violations, zero SpotBugs findings, and a per-module
-  JaCoCo coverage ratchet that fails the build in **both** directions — on a
-  regression below the floor, and on the floor going more than 3 points stale
-  as coverage rises (audited 2026-07-31: the server had drifted 12 points, so
-  the one-sided version was a floor rather than a ratchet).
-  [`CHANGELOG.md`](./CHANGELOG.md) records what changed and, where a decision
-  was measured rather than assumed, the numbers behind it;
+- **Verified** — `mvn clean verify` is the living number (six modules,
+  Checkstyle, SpotBugs, and a per-module JaCoCo ratchet that fails in
+  **both** directions: below the floor, or the floor more than 3 points
+  stale as coverage rises). An August 2026 snapshot was 734 reactor test
+  methods; do not treat that number as current.
+  [`CHANGELOG.md`](./CHANGELOG.md) records what changed and, where a
+  decision was measured rather than assumed, the numbers behind it;
   [`TESTING.md`](./TESTING.md) is the strategy those tests follow.
 
 ## Modules
@@ -89,18 +106,23 @@ Spring Boot server and JavaFX desktop are layered on top as optional hosts.
 daedalus/
 ├── daedalus-core/             pure-Java engine: generators, solvers, model
 ├── daedalus-plugin-api/       SPI types (Spring-free) for plugin authors
+├── daedalus-wallet/           Sign-In with Ethereum + island deed vouchers (optional; ADR-028)
 ├── daedalus-plugin-runtime/   PluginManager, PluginRegistry, JAR discovery
 ├── daedalus-server/           Spring Boot REST + WebSocket + Redis-optional
-└── daedalus-desktop/          JavaFX desktop host (optional)
+├── daedalus-desktop/          JavaFX desktop host (optional)
+├── daedalus-explore/          first-person host (optional; ADR-017)
+└── chain/                     RealmIslands ERC-721 + deploy pipeline (Hardhat; ADR-028)
 ```
 
 | Module | Depends on | What lives here |
 |---|---|---|
 | `daedalus-core` | SLF4J only | `MazeGrid`, `MazeGenerator`/`MazeSolver` interfaces, all 23 + 10 algorithms, `Point`/`MazeMetadata`/`MazeStats` model. No Spring, no Jackson, no JPA. |
 | `daedalus-plugin-api` | core | `MazePlugin`, `PluginManifest`, `PluginLifecycle`, `PluginContext`, lifecycle events (`MazeGeneratedEvent`, `MazeSolvedEvent`, `PlayerMovedEvent`, `PluginFailedEvent`). What plugin authors implement against. |
+| `daedalus-wallet` | web3j `crypto` only | `SiweMessage`/`SiweVerifier`/`WalletNonces` (EIP-4361 sign-in), `WalletSignature` and `EthereumAddress` (ported from ComputerPets), `DeedVoucher`/`DeedSigner` (EIP-712 mint vouchers for `chain/` RealmIslands). No RPC client; the server uses it only with `daedalus.wallet.enabled=true`. |
 | `daedalus-plugin-runtime` | core, plugin-api, Spring | `PluginManager` (discovery, lifecycle), `PluginRegistry`, JAR `URLClassLoader` isolation. Spring is allowed here so events can be published into a Spring `ApplicationContext`. |
-| `daedalus-server` | plugin-runtime, Spring Boot, Redis (optional) | Controllers (`MazeController`, `MazeWebSocketController`, `PluginController`), DTOs in `com.daedalus.api.dto`, services (`MazeGenerationService` with Resilience4j circuit breaker, `LeaderboardService` with optional Redis backing, `GameSessionService`). |
+| `daedalus-server` | plugin-runtime, Spring Boot, Redis (optional) | Controllers (`MazeController`, `SessionController`, `LeaderboardController`, `InsightController`, `AgentController`, `CampaignController`, `MazeWebSocketController`, `PluginController`), DTOs in `com.daedalus.api.dto`, services (`MazeGenerationService` with Resilience4j circuit breaker, `LeaderboardService` with optional Redis backing, `GameSessionService`). Web UI at `src/main/resources/static/index.html` plus enumerated scripts (`draw.js`, `api.js`, `share.js`, `fog.js`, `seat.js`, `lab.js`, `caption.js`, `mint.js`, `campaign.js`, `spectate.js`, `hunt.js`, `solve.js`, `theory.js`, `living.js`, `ghost.js`, `tournament.js`, `live.js`, `session.js`, `fogwalk.js`, `desk.js`, `stage.js`, `app.js`). |
 | `daedalus-desktop` | server, JavaFX | `DaedalusLauncher` (boots Spring + JavaFX), `DaedalusPrimaryStage`, `ThemeManager`. Loads `/ui/main.fxml`. |
+| `daedalus-explore` | core, plugin-api, LWJGL | First-person extrusion of `MazeGrid` (ADR-017). Mesh / walk / fog / input are headless; GLFW and OpenXR are launch-only (`DAEDALUS_EXPLORE=1`). |
 
 ## Build & run
 
@@ -133,6 +155,30 @@ To run the JavaFX desktop client (boots Spring first, then opens the UI):
 mvn -pl daedalus-desktop javafx:run
 ```
 
+To print a dungeon story JSON (no window), or walk it first-person:
+
+```bash
+mvn -pl daedalus-explore -am exec:java
+DAEDALUS_EXPLORE=1 mvn -pl daedalus-explore -am exec:java
+```
+
+The packaged product (window by default):
+
+```bash
+mvn -pl daedalus-explore -am package
+powershell -File daedalus-explore/run-explore.ps1
+powershell -File daedalus-explore/run-explore.ps1 --smoke
+```
+
+A start page at `/` lists the well, daily, campaign, living, theory,
+desktop, and first-person. From the repo root:
+
+```bash
+powershell -File run-daedalus.ps1 well
+powershell -File run-daedalus.ps1 desktop
+powershell -File run-daedalus.ps1 explore
+```
+
 Default server port is `8080` (override with `SERVER_PORT`). Default profile
 is `dev` (in-memory leaderboard, no Redis required); flip to `prod` when
 deploying:
@@ -150,11 +196,15 @@ public consumers).
 | Method | Path | Auth (prod) | Description |
 |---|---|---|---|
 | `POST` | `/api/v1/auth/login` | public | Exchange admin credentials for a JWT |
+| `GET` | `/api/v1/auth/wallet/config` | public | Wallet sign-in is on: the chain, the RealmIslands contract and the realm's voucher-signing address (ADR-028; only with `daedalus.wallet.enabled`) |
+| `GET` | `/api/v1/auth/wallet/nonce?address=` | public | The Sign-In with Ethereum message for that address to sign; single use, 10 minutes (ADR-028) |
+| `POST` | `/api/v1/auth/wallet` | public | A signed sign-in message → a JWT whose subject is the wallet address; refusals are 401 with a reason header (ADR-028) |
+| `POST` | `/api/v1/world/{id}/islands/{slot}/deed-voucher` | required | The island's owner (a signed-in wallet) gets a signed voucher to mint its deed on the RealmIslands contract (ADR-028) |
 | `GET` | `/api/v1/algorithms` | public | List every registered generator and solver |
-| `POST` | `/api/v1/maze/generate` | required | Generate a maze (`GenerateRequest` → `GenerateResponse`) |
+| `POST` | `/api/v1/maze/generate` | required | Generate a maze (`GenerateRequest` → `GenerateResponse`). Optional `braid` in `[0, 1]` opens that fraction of dead ends — the same pass the tournament already ran. The factor is echoed on the response and on `GET /maze/{id}` (omitted when zero) so a permalink can name it without guessing from a UI select |
 | `GET` | `/api/v1/maze/daily` | public | Today's shared challenge — same maze for everyone until midnight UTC (ADR-006) |
 | `GET` | `/api/v1/maze/{id}` | public | Fetch a previously-generated maze's metadata + tile grid |
-| `POST` | `/api/v1/maze/{id}/live?ticks=30` | required | Bring the maze to life: bounded erosion ticks mutate it in place (ADR-006) |
+| `POST` | `/api/v1/maze/{id}/live?ticks=30` | required | Bring the maze to life: bounded erosion ticks mutate it in place (ADR-006). Optional `seal=` in `[0, 1]` also closes extra passages without disconnecting anyone (ADR-008; default 0 = v1) |
 | `POST` | `/api/v1/maze/{id}/solve/{solverId}` | required | Run a solver against a stored maze. Answers **422** if the solver spends its node budget — IDA\* does this on dungeons from ~21×21 up, where the unguarded search took 16 s and worse (ADR-007 postscript) |
 | `POST` | `/api/v1/maze/{id}/session?player=...` | required | Open a play session (returns `SessionResponse`) |
 | `POST` | `/api/v1/session/{id}/move` | required | Move the player one step (`MoveRequest`). Rate-limited on the `sessionMove` budget — 1200/min, the same as the fog-of-war agent, because it is the same shape of traffic |
@@ -163,15 +213,15 @@ public consumers).
 | `POST` | `/api/v1/agent/{id}/step?direction=NORTH` | required | Take one blind step — validated against the maze's *live* grid |
 | `GET` | `/api/v1/agent/{id}` | public | Re-poll the agent's view without spending a step |
 | `POST` | `/api/v1/maze/{id}/traffic` | required | Track traffic: occupancy raises cell costs, which decay each pulse (ADR-006) |
-| `GET` | `/api/v1/maze/{id}/fingerprint` | required | Structural signature + which generator most likely made it (ADR-007) |
+| `GET` | `/api/v1/maze/{id}/fingerprint` | required | Structural signature + which generator most likely made it (ADR-007). First call trains off-thread and 503s until ready |
 | `GET` | `/api/v1/complexity?generator=&metric=` | required | Measure a generator's real growth curve and report its big-O with an R² (ADR-007) |
 | `GET` | `/api/v1/complexity/metrics` | required | Which metrics `/complexity` can be asked for |
-| `GET` | `/api/v1/maze/{id}/tour?count=` | required | Waypoints plus the provably optimal route collecting them all (ADR-007) |
-| `GET` | `/api/v1/session/{id}/tour` | public | Server-observed progress against that optimum |
-| `GET` | `/api/v1/campaign?seed=` | required | A deterministic, difficulty-graded ladder of stages; omit the seed for today's (ADR-006) |
-| `POST` | `/api/v1/maze/breed?a=&b=&seed=` | required | Crossbreed two equal-sized mazes into a connected child (ADR-006) |
-| `GET` | `/api/v1/session/{id}` | public | Read-only session snapshot — the spectator entry point (`#session=` permalink) |
-| `GET` | `/api/v1/maze/{id}/analysis` | required | Structural analysis: min-cut chokepoints, dead ends, route length (ADR-006) |
+| `GET` | `/api/v1/maze/{id}/tour?count=` | required | Waypoints plus the provably optimal route collecting them all, including the cell `path` Held-Karp already walked (ADR-007) |
+| `GET` | `/api/v1/session/{id}/tour` | public | Server-observed progress against that optimum. A read: 404 `tour` until someone has asked `GET /maze/{id}/tour`; does not freeze coins. Includes the coins and Held-Karp `path` so a spectator can paint without that minting GET |
+| `GET` | `/api/v1/campaign?seed=` | required | A deterministic, difficulty-graded ladder of stages; omit the seed for today's (ADR-006). The finale declares `hardening` so the client starts `/live?seal=` (ADR-008) |
+| `POST` | `/api/v1/maze/breed?a=&b=&seed=` | required | Crossbreed two equal-sized mazes into a connected child (ADR-006). Parent hotspots are unioned |
+| `GET` | `/api/v1/session/{id}` | public | Read-only session snapshot — the spectator entry point (`#session=` permalink). Includes the opening player's `trail` (ghost material) and every player's `walks` so joiners do not teleport |
+| `GET` | `/api/v1/maze/{id}/analysis` | required | Structural analysis: unit-capacity min-cut chokepoints, dead ends, route length (ADR-006). Real capacities live on `MazeFlow.minCut(..., PassageCapacity)` (ADR-009) — a maze has no bandwidth of its own |
 | `GET` | `/api/v1/maze/{id}/distance-field` | required | Every cell's walking distance from the goal (or start), for a heat map. Unreachable cells report -1; payload-capped (ADR-007) |
 | `GET` | `/api/v1/maze/{id}/heuristic-lens?heuristic=` | required | The three bands that explain A\*'s expansions — must expand, tie decides, never touched — plus a live admissibility check (ADR-007) |
 | `GET` | `/api/v1/tournament?generator=&size=&mazes=&braid=` | required | Rank every solver over a sample with Student-t intervals, report which pairs are statistically indistinguishable, and name the adversarial seed where the leader does worst (ADR-007) |
@@ -181,6 +231,47 @@ public consumers).
 | `GET` | `/api/v1/leaderboard?n=20&maze={id}&generator={id}` | public | Top-N leaderboard — `maze=` scopes to one maze's board (the daily's partition), `generator=` to one algorithm's; `maze` wins if both are given |
 | `GET` | `/api/v1/plugins` | required | Currently-loaded plugins (`PluginInfo`) |
 | `GET` | `/api/v1/plugins/describe` | required | Human-readable plugin tree |
+| `GET` | `/api/v1/world/{id}` | public | Inspect world-zero: revision and occupied chunk count. Other ids 404. |
+| `GET` | `/api/v1/world/{id}/capabilities` | public | Discover world ops. Not the drive script; plugin extras appear here. |
+| `GET` | `/api/v1/world/{id}/observe?x=&y=&z=` | public | Observe a cube and the door. Does not bump revision. |
+| `GET` | `/api/v1/world/{id}/trace` | public | Trace driven world ops since this process opened the file. |
+| `GET` | `/api/v1/world/{id}/block?x=&y=&z=` | public | Inspect one cube |
+| `GET` | `/api/v1/world/{id}/chunk?x=&y=&z=` | public | Inspect one 16³ chunk |
+| `GET` | `/api/v1/world/{id}/chunks` | public | List every non-empty chunk (coords, revision, occupied) for a renderer (ADR-018) |
+| `GET` | `/api/v1/world/{id}/chunk/blocks?x=&y=&z=` | public | One chunk's cubes as a base64 ordinal payload plus the palette, for meshing (ADR-018) |
+| `GET` | `/api/v1/world/{id}/islands` | public | Raised islands: lane slot, origin, seed and traits (ADR-018), and who owns each and whom they let build (ADR-026) |
+| `GET` | `/api/v1/world/{id}/arks` | public | The arks: one per island, named from its seed, moored at a pier or sailing (with voyage times and the server clock), and what each carries in its hold (ADR-019/020/023) |
+| `GET` | `/api/v1/world/{id}/tokens/{tokenId}` | public | ERC-721 metadata for the island in lane slot `tokenId`: name, description, portrait, realm link and traits (seed, size, trees, crystals, waterfall, ark, kinds living); unknown slot 404 (ADR-027) |
+| `GET` | `/api/v1/world/{id}/islands/{slot}/portrait.png` | public | The island's 512×512 isometric portrait, grown from its seed; cacheable for a day (ADR-027) |
+| `GET` | `/api/v1/world/{id}/islands/{slot}/ecology` | public | One island's living community: ecological day, habitat by guild, diversity indices and every kind there by count; unknown slot 404 (ADR-023) |
+| `POST` | `/api/v1/world/{id}/arks/{arkId}/voyage` | required | Order an ark to another island (`VoyageRequest`). Already-there, underway and no-such-island are named results; unknown ark 404 (ADR-020) |
+| `GET` | `/api/v1/species` | public | The species canon: 221 kinds from ComputerPets with guild, size, r/K strategy and whether they cross open sky alone (ADR-021) |
+| `POST` | `/api/v1/world/{id}/islands/{slot}/claim` | required | Claim an island: from then on only its owner and the builders they name change its cubes. Owner is the signed-in user; already-claimed, blocked and bad-owner are named results (ADR-026) |
+| `POST` | `/api/v1/world/{id}/islands/{slot}/abandon` | required | The owner gives an island back; its cubes stay and it is open again. Not-owner and not-claimed are named results (ADR-026) |
+| `POST` | `/api/v1/world/{id}/islands/{slot}/builders` | required | The owner lets someone build (`allow: true`) or stops them (`IslandClaimRequest`) (ADR-026) |
+| `POST` | `/api/v1/world/{id}/islands` | required | Raise a seeded floating island into the next free lane slot (`RaiseIslandRequest`). Lane-full is a named result (ADR-018) |
+| `PUT` | `/api/v1/world/{id}/block` | required | Place a cube (`PlaceBlockRequest`). AIR is remove. Survives restart. |
+| `DELETE` | `/api/v1/world/{id}/block?x=&y=&z=` | required | Remove a cube (set AIR). Optional actorId uses the parcel gate |
+| `GET` | `/api/v1/world/{id}/door` | public | Inspect the programmable door |
+| `POST` | `/api/v1/world/{id}/door/open` | required | Open the door. Already-open and deny are named results. Optional actorId uses the parcel gate |
+| `POST` | `/api/v1/world/{id}/door/close` | required | Close the door. Already-closed and deny are named results. Optional actorId uses the parcel gate |
+| `GET` | `/api/v1/world/{id}/trap` | public | Inspect the programmable trap |
+| `POST` | `/api/v1/world/{id}/trap/arm` | required | Arm the trap. Already-armed and deny are named results. Optional actorId uses the parcel gate |
+| `POST` | `/api/v1/world/{id}/trap/disarm` | required | Disarm the trap. Already-disarmed and deny are named results. Optional actorId uses the parcel gate |
+| `GET` | `/api/v1/world/{id}/portal` | public | Inspect the programmable portal |
+| `POST` | `/api/v1/world/{id}/portal/open` | required | Open the portal. Already-open and deny are named results. Optional actorId uses the parcel gate |
+| `POST` | `/api/v1/world/{id}/portal/seal` | required | Seal the portal. Already-sealed and deny are named results. Optional actorId uses the parcel gate |
+| `GET` | `/api/v1/world/{id}/parcels` | public | Inspect parcels, place names, and lease strings |
+| `POST` | `/api/v1/world/{id}/parcels/lease` | required | Lease the first parcel as tenant-zero. No parcel is a named result |
+| `POST` | `/api/v1/world/{id}/parcels/release` | required | Vacate the first leased parcel. Not-leased and no-parcel are named results |
+| `POST` | `/api/v1/world/{id}/parcels/grant` | required | Extra-grant a named verb on the slab (`block.place` default). Already-granted, no-parcel, and unknown-verb are named results |
+| `POST` | `/api/v1/world/{id}/parcels/deny` | required | Extra-deny a named verb on the slab (`block.place` default). Already-denied, no-parcel, and unknown-verb are named results |
+| `POST` | `/api/v1/world/{id}/parcels/revoke` | required | Drop an extra grant on the slab (`block.place` default). Not-granted, no-parcel, and unknown-verb are named results. Denials stay |
+| `POST` | `/api/v1/world/{id}/parcels/forgive` | required | Drop an extra denial on the slab (`block.place` default). Not-denied, no-parcel, and unknown-verb are named results. Grants stay |
+| `POST` | `/api/v1/world/{id}/stamp` | required | Stamp a maze slab. Optional `mazeId` from the lab cache. Overlap and deny are named results. Optional actorId uses the parcel gate |
+| `GET` | `/api/v1/world/{id}/npc` | public | Inspect the programmable NPC |
+| `POST` | `/api/v1/world/{id}/npc/talk` | required | Talk to the NPC. Already-speaking and deny are named results. Optional actorId uses the parcel gate |
+| `POST` | `/api/v1/world/{id}/npc/hush` | required | Hush the NPC. Already-idle and deny are named results. Optional actorId uses the parcel gate |
 
 In dev / test profiles every endpoint is open. The "Auth (prod)" column applies when
 `spring.profiles.active=prod` (see `ProdSecurityConfig`), and it is **executable**:
@@ -266,7 +357,9 @@ System.out.println(new BCryptPasswordEncoder().encode("your-password"));
 ```
 
 DTOs live in `com.daedalus.api.dto` and have Javadoc on every field. A
-TypeScript mirror of the DTOs is in [`Code/daedalus-api-dtos.ts`](./Code/daedalus-api-dtos.ts).
+hand-written TypeScript sketch of selected records lives in
+[`Code/daedalus-api-dtos.ts`](./Code/daedalus-api-dtos.ts). It is not a
+generated client. The live contract is the Java records and OpenAPI.
 
 ## WebSocket / STOMP topics
 
@@ -274,9 +367,9 @@ Real-time updates are pushed over STOMP. Connect at `/ws` and subscribe to:
 
 | Topic | When it fires | Frame type |
 |---|---|---|
-| `/topic/maze/{mazeId}/state` | Maze finishes generating | `GeneratedFrame` |
+| `/topic/maze/{mazeId}/state` | Maze generated, living tick, or traffic pulse | `GeneratedFrame`, `MutationFrame`, or `TrafficFrame` — branch on `generatorId` / `tick` / `congestedCells` |
 | `/topic/maze/{mazeId}/solver` | Solver finishes a run | `SolvedFrame` |
-| `/topic/session/{sessionId}/player` | Player moves | `MoveFrame` |
+| `/topic/session/{sessionId}/player` | Player moves | `MoveFrame` (owned sessions: owner + authenticated joiners only; ADR-012) |
 | `/topic/plugins/failures` | A plugin throws in any lifecycle phase | `PluginFailedFrame` |
 
 The `PluginFailedFrame` topic is intentional: operators can surface plugin
@@ -290,11 +383,14 @@ JAR into the plugin directory (`daedalus.plugins.directory`, defaults to
 `/var/daedalus/plugins` in prod). The runtime discovers it via
 `ServiceLoader`, isolates it in its own `URLClassLoader`, and drives it
 through `init` → `registerAlgorithms` → `start` on boot, `stop` on shutdown.
+Spring invokes `PluginManager.shutdownAll()` as the `PluginManager` bean's
+destroy method when the context closes — not only when a test calls it.
 
 Failures at any phase publish `PluginFailedEvent`, which the server
-re-emits to `/topic/plugins/failures`. The runtime closes every external
-classloader in `shutdownAll()`, so JARs aren't kept locked open and you
-can swap a plugin without restarting the server.
+re-emits to `/topic/plugins/failures`. Shutdown unregisters the plugin's
+algorithms (built-ins stay) and closes every external classloader, so JARs
+aren't kept locked open and you can swap a plugin without restarting the
+server. `PluginHostShutdownTest` pins the host wiring.
 
 See `daedalus-plugin-api/src/main/java/com/daedalus/plugin/AbstractPlugin.java`
 for the easiest starting point. The
@@ -306,15 +402,16 @@ live server in one command with `./examples/run-with-biome.sh`.
 
 ## Worked examples
 
-Four standalone modules, none of them reactor children — the parent pom lists
+Five standalone modules, none of them reactor children — the parent pom lists
 production modules only, so each is built and run on its own.
 
 | module | what it shows |
 |---|---|
 | [`examples/biome-plugin`](./examples/biome-plugin/) | Writing a plugin: two themed generators plus an event subscriber, loaded from a JAR. |
-| [`examples/loadbalancer-topology`](./examples/loadbalancer-topology/) | Daedalus as the topology and analysis engine behind a load balancer — generate a topology, measure its capacity with min-cut, place facilities with k-center, and route with cost in `g` rather than in the heuristic. |
+| [`examples/loadbalancer-topology`](./examples/loadbalancer-topology/) | Daedalus as the topology and analysis engine behind a load balancer — generate a topology, measure unit connectivity and capacitated bandwidth (ADR-009), place facilities with k-center, assign a batch of requests under replica capacity (ADR-010), and route with cost in `g` rather than in the heuristic. |
 | [`examples/dungeon-layout`](./examples/dungeon-layout/) | Daedalus as the spatial layer under a narrative game engine — BSP rooms, level depth, the hardest route, and treasure placement, emitted as named locations. |
 | [`examples/benchmark-harness`](./examples/benchmark-harness/) | Times every generator and solver and writes `docs/benchmarks/benchmark-<date>.csv`. Run it by hand on a machine whose numbers you trust; timings are machine-specific and are deliberately not asserted in CI. |
+| [`examples/openxr-plugin`](./examples/openxr-plugin/) | Optional `XrRuntime` for first-person explore (ADR-017). `present()` only when `DAEDALUS_OPENXR=1`. |
 
 ```bash
 mvn -f examples/loadbalancer-topology/pom.xml clean test
@@ -324,19 +421,21 @@ mvn -f examples/dungeon-layout/pom.xml exec:java
 ## Testing
 
 ```bash
-mvn clean verify              # all five modules
+mvn clean verify              # all six modules
 mvn -pl daedalus-server test  # one module
 ```
 
-Test inventory — **623 tests across 127 files, all green** (322 core, 7 plugin-api, 26
-plugin-runtime, 258 server, 10 desktop) as of 2026-07-31:
+The living count is `mvn clean verify`. A 2026-08-26 snapshot was **734**
+reactor test methods (313 core, 7 plugin-api, 26 plugin-runtime, 378 server,
+10 desktop), plus 24 in `examples/*`. Do not treat that number as current.
+Highlights:
 
 | Module | Highlights |
 |---|---|
 | `daedalus-core` | `PerfectMazePropertyTest` — every generator output is a spanning tree (perfect-maze contract) |
 | `daedalus-plugin-api` | `PluginManifestNullGuardTest` — manifest required-field guards |
 | `daedalus-plugin-runtime` | `PluginManagerLifecycleTest`, `PluginManagerJarDiscoveryTest` — boot/shutdown ordering, classloader cleanup, `PluginFailedEvent` publication |
-| `daedalus-server` | `GeneratorInvariantFuzzTest` — **every registered generator**, taken from the live registry rather than a list, held to the universal invariants across 11 shapes × 2 seeds (506 generations, zero violations); `MazeGenerationServiceFallbackTest` (Resilience4j circuit breaker), `RedisConfigConditionalTest` (on/off toggle), `SecurityConfigProfileTest` (profile-aware filter chain), `MazeControllerGeneratorIdTest`, `MazeWebSocketControllerPluginFailedTest` |
+| `daedalus-server` | `GeneratorInvariantFuzzTest` — **every registered generator**, taken from the live registry rather than a list, held to the universal invariants across 11 shapes × 2 seeds (506 generations, zero violations); `PluginHostShutdownTest` (host `destroyMethod` actually calls `shutdownAll`); `MazeGenerationServiceFallbackTest` (Resilience4j circuit breaker), `RedisConfigConditionalTest` (on/off toggle), `SecurityConfigProfileTest` (profile-aware filter chain), `MazeControllerGeneratorIdTest`, `MazeWebSocketControllerPluginFailedTest` |
 | `daedalus-desktop` | `DesktopWorkTest` — generation and solve run off the JavaFX thread as plain callables, so they are testable without a headless toolkit (measured: hunt-and-kill takes 1101 ms at 128×128, IDA\* 1783 ms, all of it frozen UI before this); `ThemeManagerTest`, `DaedalusLauncherTest` |
 
 ## Workspace layout
@@ -346,12 +445,12 @@ Beyond the five Maven modules:
 ```
 Audit/       Vision-style audit + integration ideas (Grok, May 6)
 Code/        Sample integrations: HilbertLoadBalancer.java, daedalus-api-dtos.ts
-docs/adr/    Architecture decision records (graph seam; CSRBT evaluation)
+docs/adr/    Architecture decision records (graph seam; living mazes; theory-as-product; measured declines)
 docs/        benchmarks/ (harness output), evaluations/ (standalone measurement code)
 examples/    Four worked examples — see "Worked examples" above
 PDFs/        Auto-generated reference docs (server, runtime, desktop, core, generators, overview)
 Vision/      Forward-looking direction docs
-_migration/  Historical artefacts from the multi-module split + earlier audits
+(The `_migration/` archive was removed from the working tree; git history still has it.)
 ```
 
 `AUDIT_RECOMMENDATIONS_2026-05-05.md` is the canonical audit-verification
@@ -360,6 +459,10 @@ working tree.
 
 ## Operational notes
 
+- **Sessions are not in Redis.** `GameSessionService` keeps live sessions in
+  a Caffeine cache (`daedalus.session.max-sessions` / `idle-ttl`). Redis,
+  when enabled, backs the leaderboard. A restart or a second instance
+  forgets every open session; `#session=` permalinks 404.
 - **Redis is optional — and disabling it no longer reports the app as
   unhealthy.** `daedalus.redis.enabled=false` (the dev default) uses an
   in-memory leaderboard; set it `true` for the Redis-backed implementation.
@@ -385,12 +488,14 @@ working tree.
   Set `daedalus.ratelimit.trust-forwarded-header=true` **only** behind a proxy
   that overwrites `X-Forwarded-For`; otherwise a client can spoof it and mint
   a fresh bucket per forged IP.
-- **WebSocket connections are authenticated in prod.** The STOMP `CONNECT`
-  frame must carry `Authorization: Bearer <token>`; the JWT subject becomes
-  the session principal. Outside `prod` a token is optional, but an *invalid*
-  token is rejected in every profile. Note this is authentication only —
-  destinations are not yet scoped per user, so any authenticated client can
-  subscribe to any topic (see BACKLOG.md).
+- **WebSocket connections are authenticated in prod.** The HTTP SockJS
+  handshake at `/ws/**` is public — browsers cannot attach `Authorization` to
+  the upgrade. The STOMP `CONNECT` frame must carry
+  `Authorization: Bearer <token>`; the JWT subject becomes the session
+  principal. Outside `prod` a token is optional, but an *invalid* token is
+  rejected in every profile. Owned session player topics are scoped to the
+  opening subject and anyone who joined with a token (ADR-012); unowned
+  sessions, unknown ids, and maze/plugin topics stay open.
 - **The generation service is wrapped in a Resilience4j circuit breaker.**
   When it trips, a cached binary-tree maze is returned and the response
   reports the actual generator id (not the requested one) so clients,
@@ -398,8 +503,9 @@ working tree.
 - **Security split by profile.** Dev / test / desktop use a permissive
   `SecurityConfig` (every endpoint open) — this matches the JavaFX client's
   needs and keeps `mvn test` simple. Prod uses `ProdSecurityConfig`: JWT
-  bearer-token auth on write endpoints, plugin introspection, and the
-  WebSocket; reads stay open; actuator-restricted endpoints require a token;
+  bearer-token auth on write endpoints, plugin introspection, and STOMP
+  `CONNECT`; the `/ws/**` handshake stays open so a browser can upgrade;
+  reads stay open; actuator-restricted endpoints require a token;
   Swagger UI is denied. See the auth-flow section above for the exact env-var
   contract.
 

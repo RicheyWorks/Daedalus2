@@ -183,6 +183,51 @@ class RegistryCollisionTest {
     }
 
     @Test
+    void aPluginAlgorithmCanBeUnregisteredAndABuiltInCannot() {
+        // Core had no happy-path unregister test. The runtime unload suite proves the
+        // host calls it; this pins the map itself so a later copy-paste of one registry
+        // cannot silently drop the built-in refusal or the successful remove.
+        var generators = generators();
+        var plugin = new MazeGenerator() {
+            @Override public String id() { return "plugin-gen"; }
+            @Override public String displayName() { return "Plugin"; }
+            @Override public AlgorithmDescriptor descriptor() {
+                return new AlgorithmDescriptor(id(), displayName(), "generator",
+                        "O(1)", "n/a", "plugin");
+            }
+            @Override public MazeGrid generate(int rows, int cols, long seed, MazeStats stats) {
+                return new MazeGrid(rows, cols);
+            }
+        };
+        generators.register(plugin);
+        assertThat(generators.unregister("plugin-gen")).isTrue();
+        assertThat(generators.find("plugin-gen")).isEmpty();
+        assertThat(generators.unregister("plugin-gen")).isFalse();
+        assertThatThrownBy(() -> generators.unregister("recursive-backtracker"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("built-in");
+
+        var solvers = new SolverRegistry(List.of(new AStarSolver(), new BfsSolver()));
+        var extra = new MazeSolver() {
+            @Override public String id() { return "plugin-solver"; }
+            @Override public String displayName() { return "Plugin"; }
+            @Override public AlgorithmDescriptor descriptor() {
+                return new AlgorithmDescriptor(id(), displayName(), "solver",
+                        "O(1)", "n/a", "plugin");
+            }
+            @Override public List<Point> solve(MazeGrid grid, Point start, Point goal,
+                                               MazeStats stats) {
+                return List.of();
+            }
+        };
+        solvers.register(extra);
+        assertThat(solvers.unregister("plugin-solver")).isTrue();
+        assertThatThrownBy(() -> solvers.unregister("astar"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("built-in");
+    }
+
+    @Test
     void theRefusalNamesBothSidesSoTheLogIsActionable() {
         // A plugin author reading "duplicate id" learns nothing. The message has to say which
         // class holds the id and which one was turned away, or the first thing they do is ask.

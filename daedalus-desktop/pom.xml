@@ -21,11 +21,11 @@
     </description>
 
     <properties>
-        <!-- Coverage ratchet exemption: near-zero UI coverage is the module's documented
-             posture (TESTING.md P3 — needs a deliberate policy, not necessarily more tests).
-             Visible 0.00, not a missing property. -->
-        <jacoco.check.minimum>0.09</jacoco.check.minimum>
-        <jacoco.check.ceiling>0.14</jacoco.check.ceiling>
+        <!-- Coverage ratchet: thin-shell policy (ADR-003, TESTING.md P3) — no TestFX.
+             DesktopWork, DesktopWalk, and DesktopPaint are tested; FXML is not.
+             Measured 0.30 after DesktopPaint; 0.28 / 0.31 is the 3-point pair. -->
+        <jacoco.check.minimum>0.28</jacoco.check.minimum>
+        <jacoco.check.ceiling>0.31</jacoco.check.ceiling>
     </properties>
 
     <dependencies>

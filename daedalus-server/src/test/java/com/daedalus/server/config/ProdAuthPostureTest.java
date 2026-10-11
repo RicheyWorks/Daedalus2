@@ -68,6 +68,8 @@ import static org.assertj.core.api.Assertions.assertThat;
                 + "$2a$10$7EqJtq98hPqEX7fNZaFWoOhi5B0h6C1JcqIcnLmVjKobXAB9Zwmqu",
         "daedalus.redis.enabled=false",
         "daedalus.plugins.scan-on-startup=false",
+        // Mount the wallet routes (off by default) so their posture is probed, not assumed (ADR-028).
+        "daedalus.wallet.enabled=true",
 })
 @ActiveProfiles("prod")
 class ProdAuthPostureTest {
@@ -90,6 +92,10 @@ class ProdAuthPostureTest {
     static {
         // --- deliberately public ---
         EXPECTED.put("POST /api/v1/auth/login", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/auth/wallet/config", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/auth/wallet/nonce", Posture.PUBLIC);
+        EXPECTED.put("POST /api/v1/auth/wallet", Posture.PUBLIC);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/islands/" + ID + "/deed-voucher", Posture.AUTHENTICATED);
         EXPECTED.put("GET /api/v1/algorithms", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/maze/" + ID, Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/maze/daily", Posture.PUBLIC);
@@ -100,6 +106,25 @@ class ProdAuthPostureTest {
         EXPECTED.put("GET /api/v1/session/" + ID + "/tour", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/maze/" + ID + "/ghost", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/agent/" + ID, Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID, Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/block", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/chunk", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/door", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/trap", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/portal", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/npc", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/parcels", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/capabilities", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/observe", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/trace", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/chunks", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/chunk/blocks", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/islands", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/arks", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/islands/" + ID + "/ecology", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/tokens/" + ID, Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/islands/" + ID + "/portrait.png", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/species", Posture.PUBLIC);
 
         // --- everything that costs work or touches state ---
         EXPECTED.put("POST /api/v1/maze/generate", Posture.AUTHENTICATED);
@@ -127,6 +152,28 @@ class ProdAuthPostureTest {
         // scanner below, and therefore the one endpoint in the API with no posture on record.
         EXPECTED.put("GET /api/v1/plugins", Posture.AUTHENTICATED);
         EXPECTED.put("GET /api/v1/plugins/describe", Posture.AUTHENTICATED);
+        EXPECTED.put("PUT /api/v1/world/" + ID + "/block", Posture.AUTHENTICATED);
+        EXPECTED.put("DELETE /api/v1/world/" + ID + "/block", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/door/open", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/door/close", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/trap/arm", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/trap/disarm", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/portal/open", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/portal/seal", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/npc/talk", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/npc/hush", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/parcels/lease", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/parcels/release", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/parcels/grant", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/parcels/deny", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/parcels/revoke", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/parcels/forgive", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/stamp", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/islands", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/arks/" + ID + "/voyage", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/islands/" + ID + "/claim", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/islands/" + ID + "/abandon", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/world/" + ID + "/islands/" + ID + "/builders", Posture.AUTHENTICATED);
     }
 
     @LocalServerPort

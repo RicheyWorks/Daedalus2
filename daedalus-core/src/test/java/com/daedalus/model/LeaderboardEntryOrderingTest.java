@@ -60,4 +60,14 @@ class LeaderboardEntryOrderingTest {
         assertThat(b.compareTo(a)).isPositive();
         assertThat(a.compareTo(a)).isZero();
     }
+
+    @Test
+    void twoRunsThatTiedOnScoreAreStillDistinct() {
+        LeaderboardEntry a = entry(1000, 10, 1000);
+        LeaderboardEntry b = entry(1000, 10, 1000);
+        assertThat(a.compareTo(b))
+                .as("a skip-list that stops at elapsedMs treats two sessions as one member")
+                .isNotZero();
+        assertThat(a.compareTo(b)).isEqualTo(-b.compareTo(a));
+    }
 }

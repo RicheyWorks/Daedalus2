@@ -160,6 +160,40 @@ class TrafficServiceTest {
                 .isInstanceOf(TrafficService.CapacityExceededException.class);
     }
 
+    @Test
+    void twoFirstEnablesCannotBothClaimTheLastSlot() throws Exception {
+        var other = gen.generate("recursive-backtracker", 8, 8, 7L).metadata().id();
+        service(Duration.ofSeconds(10), 1, 5);
+        var go = new java.util.concurrent.CountDownLatch(1);
+        var accepted = new java.util.concurrent.atomic.AtomicInteger();
+        var refused = new java.util.concurrent.atomic.AtomicInteger();
+        try (var pool = java.util.concurrent.Executors.newFixedThreadPool(2)) {
+            var first = pool.submit(() -> raceEnable(mazeId, go, accepted, refused));
+            var second = pool.submit(() -> raceEnable(other, go, accepted, refused));
+            go.countDown();
+            first.get(2, java.util.concurrent.TimeUnit.SECONDS);
+            second.get(2, java.util.concurrent.TimeUnit.SECONDS);
+        }
+        assertThat(accepted.get()).as("exactly one first enable owns the only slot").isEqualTo(1);
+        assertThat(refused.get()).isEqualTo(1);
+        assertThat(traffic.trackedCount()).isEqualTo(1);
+    }
+
+    private void raceEnable(UUID id, java.util.concurrent.CountDownLatch go,
+                            java.util.concurrent.atomic.AtomicInteger accepted,
+                            java.util.concurrent.atomic.AtomicInteger refused) {
+        try {
+            go.await();
+            traffic.enable(id);
+            accepted.incrementAndGet();
+        } catch (TrafficService.CapacityExceededException e) {
+            refused.incrementAndGet();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new AssertionError(e);
+        }
+    }
+
     /* ------------------------------------------------------------------ */
 
     private static void awaitUntil(BooleanSupplier condition, String what) {

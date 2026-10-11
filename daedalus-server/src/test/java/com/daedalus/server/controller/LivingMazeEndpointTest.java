@@ -51,6 +51,17 @@ class LivingMazeEndpointTest {
     }
 
     @Test
+    void sealFactorIsValidatedAtTheSurface() throws Exception {
+        UUID id = generate();
+        client().post().uri("/api/v1/maze/" + id + "/live?ticks=2&seal=-0.1")
+                .exchange().expectStatus().isBadRequest();
+        client().post().uri("/api/v1/maze/" + id + "/live?ticks=2&seal=1.1")
+                .exchange().expectStatus().isBadRequest();
+        client().post().uri("/api/v1/maze/" + id + "/live?ticks=2&seal=0.5&seed=3")
+                .exchange().expectStatus().isOk();
+    }
+
+    @Test
     void bringingAMazeToLifeStartsOneBoundedIdempotentRun() throws Exception {
         UUID id = generate();
 

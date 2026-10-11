@@ -7,7 +7,7 @@ import com.daedalus.model.Point;
 import java.util.List;
 
 /**
- * Response body for {@code POST /api/maze/{id}/solve/{solverId}}.
+ * Response body for {@code POST /api/v1/maze/{id}/solve/{solverId}}.
  *
  * @param solverId  id of the solver that produced the run
  * @param path      ordered sequence of grid points from start to goal (empty when {@code success=false})
@@ -23,6 +23,11 @@ import java.util.List;
 public record SolveResponse(String solverId, List<Point> path,
                              long visited, long explored, long elapsedMs, boolean success,
                              List<Point> expansions) {
+    public SolveResponse {
+        path = path == null ? null : List.copyOf(path);
+        expansions = expansions == null ? null : List.copyOf(expansions);
+    }
+
     /** Pre-replay shape — no expansion data, omitted from the JSON entirely. */
     public SolveResponse(String solverId, List<Point> path,
                          long visited, long explored, long elapsedMs, boolean success) {

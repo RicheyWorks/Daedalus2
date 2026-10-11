@@ -10,7 +10,7 @@ portfolio drops (now deleted). Anything those archives contained that was
 either already implemented in the current code or already documented
 elsewhere has been omitted on purpose.
 
-Last consolidated: 2026-05-07
+Last consolidated: 2026-08-17
 
 ---
 
@@ -88,15 +88,19 @@ Last consolidated: 2026-05-07
   The per-destination half: sessions opened by an authenticated request record
   the token's subject as **owner** (`GameSession.owner()`, null for anonymous
   opens), and `StompSubscriptionAuthorizationInterceptor` refuses `SUBSCRIBE`
-  to an owned session's `/topic/session/{id}/player` unless the connection's
-  principal is that owner. Deliberately open: unowned sessions (dev/desktop
+  to an owned session's `/topic/session/{id}/player` unless
+  `GameSession.maySubscribe` says yes — the owner, or a subject that joined
+  with a token (ADR-012, 2026-08-17). Joining used to put a piece on the board
+  and leave the feed owner-only. Deliberately open: unowned sessions (dev/desktop
   posture — no claim to enforce), unknown session ids (refusing would make the
   rule an existence oracle), and the shared `/topic/maze/**` +
   `/topic/plugins/**` surfaces, which carry no per-user data. Pinned by
+  `GameSessionTest` (the decision, in core),
   `StompSubscriptionAuthorizationInterceptorTest` (every branch) and
-  `WebSocketOwnershipSmokeTest` (interceptor installed; refusal reaches a real
-  client as a STOMP ERROR) — the latter replayed against a build without the
-  interceptor registered, per the house teeth rule.
+  `WebSocketOwnershipSmokeTest` (interceptor installed; owner and joiner
+  receive frames; refusal reaches a real client as a STOMP ERROR) — the latter
+  replayed against a build without the interceptor registered, per the house
+  teeth rule.
 
   Per-frame validation was deliberately *not* added: the principal is
   established once and carried on the session, so re-decoding the token on every
@@ -104,7 +108,59 @@ Last consolidated: 2026-05-07
   consequence is that a connection outlives its token's expiry — disconnecting
   on expiry is its own feature.
 
+  **2026-08-17:** the HTTP `/ws/**` upgrade is public in prod. Browsers cannot
+  attach `Authorization` to SockJS, so authenticating the handshake made the
+  signed-in UI's `CONNECT` unreachable. The frame is still the gate.
+
+## Living mazes v2
+
+- ~~**Wall closing / hardening.**~~ **Done 2026-08-17 (ADR-008).** ADR-006's re-fire
+  trigger (traffic or fog-of-war shipped → revisit closing with a connectivity proof)
+  fired. `Sealer` closes the complement of a spanning forest so a tick can harden many
+  walls without stranding anyone; `POST /live?seal=` is opt-in and the process default
+  stays 0. Campaign stages that only declare `living` stay v1; the finale now also
+  declares `hardening`, and the client folds that into one `/live?seal=` call.
+
+- ~~**Capacitated max-flow.**~~ **Done 2026-08-17 (ADR-009).** `MazeFlow` already had
+  Edmonds-Karp; every passage was capacity 1, so "capacity" in the topology example was
+  a recount of links. The unit reading stays the product default (chokepoint count).
+  Real capacities are opt-in per call. Hilbert's API descriptor was still claiming the
+  locality the July measurement disproved; that string is what `/algorithms` ships.
+
+- ~~**Bipartite matching.**~~ **Done 2026-08-17 (ADR-010).** The next ADR-001 appendix
+  item after capacitated flow. A* routes; matching assigns. First-fit strands the
+  request that can only use a seat someone else took — the test compares against
+  that greedy so a rewrite to it fails. No REST surface: a maze has no batch of
+  incoming requests.
+
+- ~~**Incremental SSSP.**~~ **Declined 2026-08-17 (ADR-011).** Measured: full
+  Dijkstra after a living tick is 50–200 µs at the sizes `/live` serves, 2 ms at
+  128², against a 2 s ticker. The textbook repair cannot pay for itself. Re-fire
+  conditions are in the ADR.
+
+- ~~**Bellman-Ford / Johnson.**~~ **Declined 2026-08-17 (ADR-013).** Appendix
+  item 4. Weights are costs in `[1, 1000]`; there is no negative edge.
+  Re-fire if a directed latency graph with signed hops appears.
+
+- ~~**Waypoint tour vs living mazes.**~~ **Done 2026-08-17 (ADR-014).** The
+  tour cache scored you against the tree the coins were first placed on.
+  Placement stays frozen; the optimum is Held-Karp on the live grid.
+
+- ~~**CLRS G4 Kruskal texture / D2 packed grid.**~~ **Declined 2026-08-17
+  (ADR-015, ADR-016).** Shuffle is already Kruskal; bias is already
+  weighted Prim's. A `long[]` `MazeGrid` cannot pay at API sizes. Cell
+  nibble + allocation-free `MazeGraph` shipped as the cheap leftovers.
+
 ## New surfaces
+
+- ~~**First-person explore (3D / gamepad / VR plugins).**~~ **Done 2026-08-27
+  (ADR-017).** New reactor module `daedalus-explore` extrudes `MazeGrid` via
+  `toTileGrid()`, walks with the same `openNeighbors` rule as the 2D well, and
+  merges keyboard, mouse, and Xbox pads into one intent. Headset support is
+  an `XrRuntime` JAR (`examples/openxr-plugin`), not a native on `mvn verify`.
+  Dungeon-AI markers and a story JSON export are the handshake for
+  ai-dungeon-master. GLFW / OpenXR windows stay launch-only
+  (`DAEDALUS_EXPLORE=1`).
 
 - ~~**Performance benchmark harness.**~~ **Done 2026-07-19** —
   `examples/benchmark-harness`, a standalone `main` timing all 22 generators and
@@ -169,9 +225,10 @@ Last consolidated: 2026-05-07
   `MoveFrame` gained an additive nullable `player` field so existing listeners
   and clients keep working. Any player reaching the goal completes the session
   exactly once. Pinned by `GameSessionMultiplayerTest` +
-  `MazeControllerJoinTest`; ownership note: joining does not grant STOMP
-  subscription rights on owned sessions — multiplayer+auth interplay is future
-  work if anyone needs it.
+  `MazeControllerJoinTest`. **STOMP follow-up 2026-08-17 (ADR-012):** joining
+  with a token now grants `SUBSCRIBE` on the owned player topic. Anonymous
+  join still gets a seat, not the feed. Cap 8. Spectator permalink stays
+  read-only until the page POSTs `/join`.
 - ~~**Web UI.**~~ **Done 2026-07-28** — one file of vanilla JS
   (`daedalus-server/src/main/resources/static/index.html`, served at `/` by
   Boot convention; `WebUiSmokeTest` pins that convention). Generate/solve/play
@@ -180,7 +237,47 @@ Last consolidated: 2026-05-07
   the opening player, WASD the joined one when the multiplayer flag is on.
   Deliberately framework-free — no build step, no npm; it exercises the public
   surfaces exactly as an external integrator would, so it doubles as living
-  documentation of the API.
+  documentation of the API. **2026-08-17:** Sign in attaches the JWT to REST
+  and STOMP (prod generate/play and ADR-012 join-with-token); Fog of war
+  walks the agent API and paints only stood-on cells. Show ASCII uses
+  `Accept: text/plain`; the plugin panel lists `GET /plugins`. The
+  leaderboard Algorithm select is `?generator=`, disabled when `maze=`
+  already owns the board. Solver routes, player trails, fog walks, and
+  the ghost all paint corridor tiles, not a polyline through the walls.
+  A `#session=` spectator hydrates every player's walk from `walks`
+  (the opener's `trail` is still ghost material) and keeps the session
+  hash so a refresh still spectates. Hunt waypoints paints the Held-Karp
+  `path` through the openings, not only the coins you are scored against.
+  Permalinks keep their kind (`#daily`, `#campaign=`, `#generator=`).
+  Open session and join-from-spectate pin `#session=` without stealing
+  the opener; arrows follow `state.seat`. `GET /session/{id}/tour` is a read
+  — a spectator cannot mint the coins — and carries the waypoints and
+  path so an unsigned prod client can paint the hunt. Pickups follow
+  the placed `?count=`, not only the default. Fog plus a living tick
+  re-polls the agent only; when the agent 404s the page refetches the
+  live grid. `GET /maze` during the walk would have painted rooms the
+  walk has not stood in.
+  Generate accepts `braid`; the tournament load-it link rebuilds the
+  sample that was raced, not the unbraided seed. A living tick
+  refreshes hardest-route, the heat map, sanctuaries, the lens, the
+  fingerprint, and ASCII the same way it already rescored the tour. A
+  plugin failure refreshes the roster; generate and tournament share
+  one braid factor. Generate and {@code GET /maze/{id}} echo that
+  factor so a permalink does not read the leftover select.
+  `#generator=` sets the Generate dropdown. Catalog blurbs are escaped.
+  Crossbreed keeps parent hotspots. CDN scripts have SRI. Prod rate
+  limits ignore `X-Forwarded-For` unless opted in. Generate hotspots
+  follow the seed. A joiner finish is credited to the joiner. ASCII
+  errors keep the ProblemDetail. A failed compare does not say Infinity.
+  An evicted maze says it aged out. Join 409 distinguishes finished
+  from full. Agent re-polls share the step budget. Living and traffic
+  `max-concurrent` holds under two first starts. First Identify trains
+  off the request thread and 503s until ready. A `#maze=` hash carries
+  the generate recipe so an evicted id rebuilds. The daily first
+  request no longer orphans a second maze. Fog locks overlays that
+  `draw()` would swallow. Join names finished, full, or gone — a 404
+  does not ask whether the multiplayer flag is on.
+
 - ~~**Coverage upload to a free service.**~~ **Done 2026-07-28** — `ci.yml`
   uploads every module's JaCoCo XML to Codecov via `codecov-action@v5`,
   guarded on the `CODECOV_TOKEN` Actions secret: without the secret the step

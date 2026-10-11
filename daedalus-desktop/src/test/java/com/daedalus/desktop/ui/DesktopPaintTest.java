@@ -1,0 +1,1634 @@
+// SPDX-License-Identifier: MIT
+
+package com.daedalus.desktop.ui;
+
+import com.daedalus.desktop.ui.themes.CosmicTheme;
+import com.daedalus.api.dto.Hotspot;
+import com.daedalus.model.GameSession;
+import com.daedalus.model.Point;
+import com.daedalus.model.TileType;
+import com.daedalus.theory.MazeFlow;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
+
+/**
+ * Canvas geometry without a JavaFX toolkit. {@code MainController#redraw}
+ * used to be the only copy of these rules, and nothing tested them.
+ */
+class DesktopPaintTest {
+
+    @Test
+    void aSquareCanvasUsesThinWallsAndAWideCanvasLetterboxes() {
+        DesktopPaint.Layout square = DesktopPaint.Layout.fit(5, 5, 100, 100);
+        assertThat(square)
+                .as("a 5×5 tile grid (2×2 cells) should fit the canvas")
+                .isNotNull();
+        assertThat(square.cellSize())
+                .as("passage size wins: 100 / (2·1.25 + 0.25) floors to 36")
+                .isEqualTo(36.0);
+        assertThat(square.wall())
+                .as("walls are a quarter of the passage, not the same square")
+                .isEqualTo(9.0);
+        assertThat(square.w(0)).isEqualTo(9.0);
+        assertThat(square.w(1)).isEqualTo(36.0);
+        assertThat(square.offX()[5]).isEqualTo(99.0);
+        assertThat(square.offsetX()).isZero();
+        assertThat(square.offsetY()).isZero();
+
+        DesktopPaint.Layout wide = DesktopPaint.Layout.fit(5, 5, 200, 100);
+        assertThat(wide.cellSize())
+                .as("the short axis owns cell size so the maze is not stretched")
+                .isEqualTo(36.0);
+        assertThat(wide.offsetX())
+                .as("leftover width is split as letterbox, not left-aligned")
+                .isEqualTo(50.0);
+        assertThat(wide.offsetY()).isZero();
+    }
+
+    @Test
+    void anEmptyCanvasOrEmptyGridIsNothingToPaint() {
+        assertThat(DesktopPaint.Layout.fit(5, 5, 0, 100)).isNull();
+        assertThat(DesktopPaint.Layout.fit(0, 5, 100, 100)).isNull();
+    }
+
+    @Test
+    void thePathPaintsTheEndsAndTheOpeningBetweenCells() throws Exception {
+        Point start = new Point(0, 0);
+        Point mid = new Point(0, 1);
+        Point goal = new Point(0, 2);
+        List<DesktopPaint.TileRect> tiles = DesktopPaint.pathOverlay(
+                List.of(start, mid, goal));
+
+        assertThat(tiles)
+                .as("start, goal, the middle cell, and both connectors paint")
+                .containsExactly(
+                        new DesktopPaint.TileRect(1, 1),
+                        new DesktopPaint.TileRect(1, 3),
+                        new DesktopPaint.TileRect(1, 2),
+                        new DesktopPaint.TileRect(1, 5),
+                        new DesktopPaint.TileRect(1, 4));
+        String ctrl = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/java/com/daedalus/desktop/ui/MainController.java"));
+        int ribbon = ctrl.indexOf(
+                "if (currentPath != null && !currentPath.isEmpty() && theme != null)");
+        int trail = ctrl.indexOf("if (!playerWalk.isEmpty() && theme != null)");
+        int ghost = ctrl.indexOf("paintWalkTrail(g, layout, ghostWalk");
+        int discs = ctrl.indexOf("start / goal discs");
+        assertThat(ribbon).isGreaterThan(0);
+        assertThat(trail).isGreaterThan(ribbon);
+        assertThat(ghost).isGreaterThan(trail);
+        assertThat(discs).isGreaterThan(ghost);
+    }
+
+    @Test
+    void aNonAdjacentStepDoesNotPaintAChordThroughAWall() {
+        Point a = new Point(0, 0);
+        Point b = new Point(2, 2);
+        assertThat(DesktopPaint.pathOverlay(List.of(a, b)))
+                .as("a teleport pair paints both cells and no connector")
+                .containsExactly(
+                        new DesktopPaint.TileRect(1, 1),
+                        new DesktopPaint.TileRect(5, 5));
+    }
+
+    @Test
+    void aSolvePathUnfoldsInsteadOfAppearingFinished() {
+        List<Point> path = List.of(
+                new Point(0, 0), new Point(0, 1), new Point(0, 2), new Point(0, 3));
+        assertThat(DesktopPaint.pathPrefix(path, 0)).isEmpty();
+        assertThat(DesktopPaint.pathPrefix(path, 0.5)).containsExactly(
+                new Point(0, 0), new Point(0, 1));
+        assertThat(DesktopPaint.pathPrefix(path, 1)).hasSize(4);
+        assertThat(DesktopPaint.pathRevealMs(10)).isEqualTo(700);
+        assertThat(DesktopPaint.pathRevealMs(300)).isEqualTo(4200);
+        assertThat(DesktopPaint.pathRevealMs(800)).isEqualTo(5000);
+        assertThat(DesktopPaint.searchRevealMs(0)).isZero();
+        assertThat(DesktopPaint.searchRevealMs(50)).isEqualTo(600);
+        assertThat(DesktopPaint.searchRevealMs(200)).isEqualTo(1200);
+        assertThat(DesktopPaint.searchRevealMs(800)).isEqualTo(2200);
+        assertThat(DesktopPaint.pathPrefix(null, 0.5)).isEmpty();
+        assertThat(DesktopPaint.walkHead(DesktopPaint.pathPrefix(path, 0.5)))
+                .isEqualTo(new Point(0, 1));
+        assertThat(DesktopPaint.walkHead(List.of())).isNull();
+        assertThat(DesktopPaint.PATH_ALPHA).isEqualTo(0.85);
+        assertThat(DesktopPaint.PATH).isEqualTo("#8fb8ff");
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.PATH, 1))
+                .as("solver ribbon falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.PATH);
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(3, 3, 30, 30);
+        DesktopPaint.Marker head = DesktopPaint.pathHeadMarker(layout, List.of(new Point(0, 0)));
+        DesktopPaint.Marker player = DesktopPaint.playerMarker(layout, new Point(0, 0));
+        assertThat(head).isNotNull();
+        assertThat(head.size())
+                .as("web head radius is 0.3·cell")
+                .isCloseTo(12.0, within(1e-9));
+        assertThat(DesktopPaint.raceHeadMarker(layout, List.of(new Point(0, 0))).size())
+                .isEqualTo(head.size());
+        assertThat(head.size()).isLessThan(player.size());
+    }
+
+    @Test
+    void aMazeFitsAboveTheOverlayLegend() {
+        DesktopPaint.Layout full = DesktopPaint.Layout.fit(5, 5, 100, 100);
+        DesktopPaint.Layout maze = DesktopPaint.Layout.fitMaze(5, 5, 100, 100);
+        assertThat(DesktopPaint.LEGEND_RESERVE).isEqualTo(40);
+        assertThat(DesktopPaint.legendScrimY(400, 36)).isEqualTo(364);
+        assertThat(DesktopPaint.legendScrimY(20, 36)).isEqualTo(0);
+        assertThat(DesktopPaint.EXPORT_RESERVE).isEqualTo(28);
+        assertThat(full).isNotNull();
+        assertThat(maze).isNotNull();
+        assertThat(maze.cellSize())
+                .as("the key and PNG keep their bands so passages are not under chrome")
+                .isLessThan(full.cellSize());
+        assertThat(maze.offsetY())
+                .as("the first row stays below the PNG")
+                .isGreaterThanOrEqualTo(DesktopPaint.EXPORT_RESERVE);
+        assertThat(maze.offsetY() + maze.offY()[maze.tileRows()])
+                .as("the painted maze stays in the band above the legend")
+                .isLessThanOrEqualTo(100 - DesktopPaint.LEGEND_RESERVE);
+    }
+
+    @Test
+    void theLegendNamesOnlyWhatIsOnTheBoard() {
+        assertThat(DesktopPaint.legendKeys(false, true, true)).isEmpty();
+        assertThat(DesktopPaint.legendKeys(true, false, false))
+                .containsExactly("floor", "wall", "start", "goal");
+        assertThat(DesktopPaint.legendKeys(true, true, true))
+                .containsExactly("floor", "wall", "start", "goal", "path", "player");
+        assertThat(DesktopPaint.legendKeys(true, false, false, true))
+                .containsExactly("floor", "wall", "start", "goal", "hotspot");
+        DesktopPaint.Fog fog = DesktopPaint.Fog.of(
+                List.of(new Point(0, 0)), new Point(0, 0), null);
+        assertThat(DesktopPaint.legendKeys(true, true, true, true, fog))
+                .as("fog swallows the solver path and hot spots; the goal stays hidden")
+                .containsExactly("floor", "wall", "start", "player", "fog");
+        DesktopPaint.Fog arrived = DesktopPaint.Fog.of(
+                List.of(new Point(0, 0)), new Point(0, 0), new Point(2, 2));
+        assertThat(DesktopPaint.legendKeys(true, false, true, false, arrived))
+                .containsExactly("floor", "wall", "start", "goal", "player", "fog");
+        assertThat(DesktopPaint.legendKeys(true, false, false, false, null, true))
+                .containsExactly("floor", "wall", "start", "goal", "choke");
+        assertThat(DesktopPaint.legendKeys(true, false, false, false, fog, true))
+                .as("fog swallows the cut key")
+                .containsExactly("floor", "wall", "start", "fog");
+        assertThat(DesktopPaint.legendKeys(true, false, false, false, null, false, true))
+                .containsExactly("floor", "wall", "start", "goal", "hardest");
+        assertThat(DesktopPaint.legendKeys(true, false, false, false, fog, false, true))
+                .as("fog swallows the hardest key")
+                .containsExactly("floor", "wall", "start", "fog");
+        assertThat(DesktopPaint.legendKeys(true, false, false, false, null, false, false, true))
+                .containsExactly("floor", "wall", "start", "goal", "sanctuary");
+        assertThat(DesktopPaint.legendKeys(true, false, false, false, fog, false, false, true))
+                .as("fog swallows the sanctuary key")
+                .containsExactly("floor", "wall", "start", "fog");
+        assertThat(DesktopPaint.legendKeys(true, false, false, false, null, false, false, false, true))
+                .containsExactly("floor", "wall", "start", "goal", "lens");
+        assertThat(DesktopPaint.legendKeys(true, false, false, false, fog, false, false, false, true))
+                .as("fog swallows the lens key")
+                .containsExactly("floor", "wall", "start", "fog");
+        assertThat(DesktopPaint.legendKeys(true, false, false, false, null, false, false, false, false, true))
+                .containsExactly("floor", "wall", "start", "goal", "path", "race");
+        assertThat(DesktopPaint.legendKeys(true, false, false, false, fog, false, false, false, false, true))
+                .as("fog swallows the arena")
+                .containsExactly("floor", "wall", "start", "fog");
+        assertThat(DesktopPaint.legendKeys(
+                true, false, false, false, null, false, false, false, false, false, true))
+                .containsExactly("floor", "wall", "start", "goal", "tour", "waypoint");
+        assertThat(DesktopPaint.legendKeys(
+                true, false, false, false, fog, false, false, false, false, false, true))
+                .as("fog swallows the coins")
+                .containsExactly("floor", "wall", "start", "fog");
+        assertThat(DesktopPaint.legendKeys(
+                true, false, false, false, null, false, false, false, false, false, false, true))
+                .containsExactly("floor", "wall", "start", "goal", "ghost");
+        assertThat(DesktopPaint.legendKeys(
+                true, false, false, false, fog, false, false, false, false, false, false, true))
+                .as("fog swallows the ghost")
+                .containsExactly("floor", "wall", "start", "fog");
+        assertThat(DesktopPaint.legendKeys(
+                true, false, false, false, null, false, false, false, false, false, false, false,
+                true))
+                .containsExactly("floor", "wall", "start", "goal", "path", "compare");
+        assertThat(DesktopPaint.legendKeys(
+                true, false, false, false, fog, false, false, false, false, false, false, false,
+                true))
+                .as("fog swallows the compared routes")
+                .containsExactly("floor", "wall", "start", "fog");
+        assertThat(DesktopPaint.legendKeys(
+                true, false, false, false, null, false, false, false, false, false, false, false,
+                false, true))
+                .containsExactly("floor", "wall", "start", "goal", "deadend");
+        assertThat(DesktopPaint.legendKeys(
+                true, false, false, false, fog, false, false, false, false, false, false, false,
+                false, true))
+                .as("fog swallows the cul-de-sacs")
+                .containsExactly("floor", "wall", "start", "fog");
+        assertThat(DesktopPaint.COMPARE_ALPHA).isEqualTo(0.22);
+        assertThat(DesktopPaint.COMPARE_OPENING_ALPHA).isEqualTo(0.34);
+        assertThat(DesktopPaint.COMPARE_OPENING_ALPHA)
+                .as("openings read louder than stacked cell wash")
+                .isGreaterThan(DesktopPaint.COMPARE_ALPHA);
+        assertThat(DesktopPaint.COMPARE_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
+        assertThat(DesktopPaint.comparePaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.COMPARE_ALPHA * 0.88);
+        assertThat(DesktopPaint.comparePaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.COMPARE_ALPHA * 1.12);
+        assertThat(DesktopPaint.compareOpeningPaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.COMPARE_OPENING_ALPHA * 0.85);
+        assertThat(DesktopPaint.compareOpeningPaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.COMPARE_OPENING_ALPHA * 1.15);
+        TileType[][] tiles = new TileType[5][5];
+        for (int r = 0; r < 5; r++) {
+            for (int c = 0; c < 5; c++) {
+                tiles[r][c] = (r % 2 == 0 || c % 2 == 0) ? TileType.WALL : TileType.PASSAGE;
+            }
+        }
+        tiles[1][2] = TileType.PASSAGE;
+        List<Point> lane = List.of(new Point(0, 0), new Point(0, 1));
+        assertThat(DesktopPaint.expansionOpenings(lane, tiles))
+                .contains(new DesktopPaint.TileRect(1, 2));
+        assertThat(DesktopPaint.COMPARE[0]).isEqualTo("#8fb8ff");
+        assertThat(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[0], 0))
+                .isEqualTo(DesktopPaint.COMPARE[0]);
+        assertThat(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[0], 1))
+                .as("compare ice falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.COMPARE[0]);
+        assertThat(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[0], 1))
+                .as("compare ice tip shares the wash rim")
+                .isNotEqualTo(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[0], 0));
+        assertThat(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[1], 0))
+                .isEqualTo(DesktopPaint.COMPARE[1]);
+        assertThat(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[1], 1))
+                .as("compare gold falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.COMPARE[1]);
+        assertThat(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[1], 1))
+                .as("compare tip shares the wash rim")
+                .isNotEqualTo(DesktopPaint.compareWashInk(DesktopPaint.COMPARE[1], 0));
+        assertThat(DesktopPaint.compareWashBase("#7997cc")).isEqualTo("#8fb8ff");
+        assertThat(DesktopPaint.compareWashInk("#7997cc", 0))
+                .as("compare ice center is the raw seat, not the rim swatch")
+                .isEqualTo("#8fb8ff");
+        assertThat(DesktopPaint.compareWashInk("#7997cc", 1)).isEqualTo("#7997cc");
+        assertThat(DesktopPaint.compareWashBase("#c49425")).isEqualTo("#f0b429");
+        assertThat(DesktopPaint.compareWashInk("#c49425", 1)).isEqualTo("#c49425");
+        assertThat(DesktopPaint.compareWashBase("#bc4041")).isEqualTo("#e5484d");
+        assertThat(DesktopPaint.compareWashInk("#bc4041", 1)).isEqualTo("#bc4041");
+        assertThat(DesktopPaint.compareWashBase("#758c44")).isEqualTo("#8aaa50");
+        assertThat(DesktopPaint.compareWashInk("#758c44", 1)).isEqualTo("#758c44");
+        assertThat(DesktopPaint.compareWashBase("#9f6544")).isEqualTo("#c07850");
+        assertThat(DesktopPaint.compareWashInk("#9f6544", 1)).isEqualTo("#9f6544");
+        assertThat(DesktopPaint.compareWashBase("#af9158")).isEqualTo("#d4b06a");
+        assertThat(DesktopPaint.compareWashInk("#af9158", 1)).isEqualTo("#af9158");
+        assertThat(DesktopPaint.COMPARE[3]).isEqualTo("#8aaa50");
+        assertThat(DesktopPaint.COMPARE[4]).isEqualTo("#c07850");
+        assertThat(DesktopPaint.COMPARE[5]).isEqualTo("#d4b06a");
+        assertThat(Integer.parseInt(DesktopPaint.COMPARE[3].substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.COMPARE[3].substring(5, 7), 16));
+        assertThat(Integer.parseInt(DesktopPaint.COMPARE[4].substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.COMPARE[4].substring(5, 7), 16));
+        assertThat(Integer.parseInt(DesktopPaint.COMPARE[5].substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.COMPARE[5].substring(5, 7), 16));
+        assertThat(DesktopPaint.COMPARE_HEAD_RADIUS)
+                .as("compare tips use the well path-head disc")
+                .isEqualTo(DesktopPaint.PATH_HEAD_RADIUS);
+        assertThat(DesktopPaint.COMPARE_HEAD_RADIUS).isNotEqualTo(0.28);
+        assertThat(DesktopPaint.walkHead(List.of(new Point(0, 0), new Point(1, 2))))
+                .isEqualTo(new Point(1, 2));
+    }
+
+    @Test
+    void aChokepointPaintsTheOpeningBetweenTheTwoCells() throws Exception {
+        MazeFlow.Passage east = new MazeFlow.Passage(new Point(0, 0), new Point(0, 1));
+        assertThat(DesktopPaint.chokeTile(east))
+                .isEqualTo(new DesktopPaint.TileRect(1, 2));
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 100, 100);
+        DesktopPaint.ChokeMark mark = DesktopPaint.chokeMark(layout, east);
+        assertThat(mark).isNotNull();
+        assertThat(mark.haloW()).isGreaterThan(mark.w());
+        assertThat(DesktopPaint.CHOKE).isEqualTo("#c07850");
+        assertThat(DesktopPaint.CHOKE_EDGE_DIM).isEqualTo(0.22);
+        assertThat(DesktopPaint.chokeInk(0)).isEqualTo(DesktopPaint.CHOKE);
+        assertThat(DesktopPaint.chokeInk(1))
+                .as("choke rim falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.CHOKE);
+        assertThat(Integer.parseInt(DesktopPaint.CHOKE.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.CHOKE.substring(5, 7), 16));
+        DesktopPaint.Ring halo = DesktopPaint.chokeHalo(layout, east);
+        DesktopPaint.Ring ring = DesktopPaint.chokeRing(layout, east);
+        assertThat(halo).isNotNull();
+        assertThat(ring).isNotNull();
+        assertThat(halo.radius()).isGreaterThan(ring.radius());
+        assertThat(DesktopPaint.CHOKE_CORE).isEqualTo(0.55);
+        assertThat(DesktopPaint.DEAD_END).isEqualTo("#c8a878");
+        assertThat(DesktopPaint.DEAD_END_EDGE_DIM).isEqualTo(0.22);
+        assertThat(DesktopPaint.deadEndInk(0)).isEqualTo(DesktopPaint.DEAD_END);
+        assertThat(DesktopPaint.deadEndInk(1))
+                .as("dead-end rim falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.DEAD_END);
+        assertThat(Integer.parseInt(DesktopPaint.DEAD_END.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.DEAD_END.substring(5, 7), 16));
+        DesktopPaint.Marker speck = DesktopPaint.deadEndMarker(layout, new Point(0, 0));
+        assertThat(speck.size())
+                .as("web dead-end core is 0.14·cell")
+                .isEqualTo(layout.cellSize() * DesktopPaint.DEAD_END_RADIUS * 2);
+        assertThat(DesktopPaint.deadEndHalo(layout, new Point(0, 0)).size())
+                .isGreaterThan(speck.size());
+        assertThat(DesktopPaint.DEAD_END_HALO).isGreaterThan(DesktopPaint.DEAD_END_RADIUS);
+        assertThat(DesktopPaint.CUTS_BREATH_MS).isEqualTo(DesktopPaint.EMPTY_BREATH_MS);
+        assertThat(DesktopPaint.chokeHalo(layout, east, 1).radius())
+                .isGreaterThan(DesktopPaint.chokeHalo(layout, east).radius());
+        assertThat(DesktopPaint.chokeHaloAlpha(1))
+                .isGreaterThan(DesktopPaint.chokeHaloAlpha(0));
+        assertThat(DesktopPaint.chokeRingAlpha(1))
+                .isGreaterThan(DesktopPaint.chokeRingAlpha(0));
+        assertThat(DesktopPaint.deadEndHalo(layout, new Point(0, 0), 1).size())
+                .isGreaterThan(DesktopPaint.deadEndHalo(layout, new Point(0, 0)).size());
+        assertThat(DesktopPaint.deadEndHaloAlpha(1))
+                .isGreaterThan(DesktopPaint.deadEndHaloAlpha(0));
+        assertThat(DesktopPaint.deadEndCoreAlpha(1))
+                .isGreaterThan(DesktopPaint.deadEndCoreAlpha(0));
+        assertThat(DesktopPaint.deadEndRimAlpha(1))
+                .isGreaterThan(DesktopPaint.deadEndRimAlpha(0));
+        assertThat(DesktopPaint.discStroke(5.6, DesktopPaint.DEAD_END_RADIUS, 0.06))
+                .as("dead-end rim is 0.06·cell, not 0.07 of the disc")
+                .isCloseTo(1.2, within(1e-9));
+        assertThat(DesktopPaint.chokeTile(null)).isNull();
+        assertThat(DesktopPaint.chokeHalo(layout, null)).isNull();
+        String ctrl = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/java/com/daedalus/desktop/ui/MainController.java"));
+        int specks = ctrl.indexOf("for (Point end : currentCuts.deadEnds())");
+        int rings = ctrl.indexOf("for (var passage : currentCuts.chokepoints())");
+        assertThat(specks).isGreaterThan(0);
+        assertThat(rings).isGreaterThan(specks);
+    }
+
+    @Test
+    void aSanctuaryPaintsAMossDiscAndTheLoneliestCellGetsACoralRing() {
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 100, 100);
+        DesktopPaint.Marker disc = DesktopPaint.sanctuaryMarker(layout, new Point(0, 0));
+        DesktopPaint.Ring lonely = DesktopPaint.worstServedRing(layout, new Point(0, 0));
+        assertThat(DesktopPaint.SANCTUARY).isEqualTo("#8aaa50");
+        assertThat(DesktopPaint.SANCTUARY_EDGE_DIM).isEqualTo(0.22);
+        assertThat(DesktopPaint.sanctuaryInk(0)).isEqualTo(DesktopPaint.SANCTUARY);
+        assertThat(DesktopPaint.sanctuaryInk(1))
+                .as("sanctuary rim falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.SANCTUARY);
+        assertThat(Integer.parseInt(DesktopPaint.SANCTUARY.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.SANCTUARY.substring(5, 7), 16));
+        assertThat(DesktopPaint.WORST_SERVED).isEqualTo("#e5484d");
+        assertThat(DesktopPaint.hotspotInk(1))
+                .as("worst-served ring shares the heat rim")
+                .isNotEqualTo(DesktopPaint.WORST_SERVED);
+        assertThat(disc.size())
+                .as("web sanctuary radius is 0.32·cell")
+                .isEqualTo(layout.cellSize() * 0.64);
+        assertThat(lonely.radius())
+                .as("web worst-served ring is 0.36·cell")
+                .isEqualTo(layout.cellSize() * 0.36);
+        assertThat(lonely.width()).isEqualTo(Math.max(1.5, layout.cellSize() * 0.16));
+        DesktopPaint.Layout crisp = DesktopPaint.Layout.fit(3, 3, 9, 9);
+        assertThat(DesktopPaint.ringStroke(6, 0.08)).isEqualTo(1.5);
+        assertThat(DesktopPaint.worstServedRing(crisp, new Point(0, 0), 0, 2).width())
+                .as("1.5 bitmap pixels is 0.75 CSS at scale 2, under the 0.16·cell stroke")
+                .isCloseTo(0.96, within(1e-9));
+        assertThat(DesktopPaint.SANCTUARY_BREATH_MS).isEqualTo(DesktopPaint.EMPTY_BREATH_MS);
+        assertThat(DesktopPaint.sanctuaryRing(layout, new Point(0, 0), 1).radius())
+                .isGreaterThan(DesktopPaint.sanctuaryRing(layout, new Point(0, 0)).radius());
+        assertThat(DesktopPaint.sanctuaryRingAlpha(1))
+                .isGreaterThan(DesktopPaint.sanctuaryRingAlpha(0));
+        assertThat(DesktopPaint.sanctuaryGlowAlpha(1))
+                .isGreaterThan(DesktopPaint.sanctuaryGlowAlpha(0));
+        assertThat(DesktopPaint.sanctuaryGlowPad(1))
+                .isGreaterThan(DesktopPaint.sanctuaryGlowPad(0));
+        assertThat(DesktopPaint.sanctuaryCoreRimAlpha(0)).isCloseTo(0.55, within(1e-9));
+        assertThat(DesktopPaint.sanctuaryCoreRimAlpha(1)).isCloseTo(0.75, within(1e-9));
+        assertThat(DesktopPaint.discStroke(12.8, DesktopPaint.SANCTUARY_RADIUS))
+                .as("sanctuary core rim is 0.07·cell")
+                .isCloseTo(1.4, within(1e-9));
+        assertThat(DesktopPaint.sanctuaryGlow(
+                DesktopPaint.Layout.fit(5, 5, 100, 100), new Point(0, 0), 1))
+                .isNotNull();
+        assertThat(DesktopPaint.worstServedRing(layout, new Point(0, 0), 1).radius())
+                .isGreaterThan(lonely.radius());
+        assertThat(DesktopPaint.worstServedRingAlpha(1))
+                .isGreaterThan(DesktopPaint.worstServedRingAlpha(0));
+        assertThat(DesktopPaint.worstServedRing(layout, null)).isNull();
+        assertThat(DesktopPaint.sanctuaryRing(layout, null)).isNull();
+    }
+
+    @Test
+    void aLensWashesMustTieAndNeverWithTheWebAlphas() {
+        assertThat(DesktopPaint.LENS_COLORS).containsExactly("#e5484d", "#f2c94c", "#8aaa50");
+        assertThat(DesktopPaint.lensColor(0)).isEqualTo("#e5484d");
+        assertThat(DesktopPaint.fieldInk(DesktopPaint.lensColor(0), 1))
+                .as("lens rim falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.lensColor(0));
+        assertThat(DesktopPaint.lensColor(1)).isEqualTo("#f2c94c");
+        assertThat(DesktopPaint.lensColor(2)).isEqualTo("#8aaa50");
+        assertThat(Integer.parseInt(DesktopPaint.LENS_COLORS[2].substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.LENS_COLORS[2].substring(5, 7), 16));
+        assertThat(DesktopPaint.fieldInk(DesktopPaint.LENS_COLORS[2], 1))
+                .as("lens openings share the cell rim")
+                .isNotEqualTo(DesktopPaint.LENS_COLORS[2]);
+        assertThat(DesktopPaint.lensColor(-1)).isNull();
+        assertThat(DesktopPaint.lensAlpha(0)).isEqualTo(0.42);
+        assertThat(DesktopPaint.lensAlpha(2)).isEqualTo(0.16);
+        int[][] bands = {{0, 1}, {2, -1}};
+        TileType[][] tiles = {
+                {TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL},
+                {TileType.WALL, TileType.PASSAGE, TileType.PASSAGE, TileType.PASSAGE, TileType.WALL},
+                {TileType.WALL, TileType.PASSAGE, TileType.WALL, TileType.WALL, TileType.WALL},
+                {TileType.WALL, TileType.PASSAGE, TileType.WALL, TileType.WALL, TileType.WALL},
+                {TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL},
+        };
+        assertThat(DesktopPaint.lensOpenings(bands, tiles))
+                .contains(new DesktopPaint.TileRect(1, 2));
+        assertThat(DesktopPaint.LENS_OPENING_ALPHA).isEqualTo(0.2);
+        assertThat(DesktopPaint.LENS_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
+        assertThat(DesktopPaint.lensPaintAlpha(0, 0.0)).isEqualTo(0.42 * 0.88);
+        assertThat(DesktopPaint.lensPaintAlpha(0, 1.0)).isEqualTo(0.42 * 1.12);
+        assertThat(DesktopPaint.lensPaintAlpha(2, 0.0)).isEqualTo(0.16 * 0.88);
+        assertThat(DesktopPaint.lensOpeningPaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.LENS_OPENING_ALPHA * 0.85);
+        assertThat(DesktopPaint.lensOpeningPaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.LENS_OPENING_ALPHA * 1.15);
+    }
+
+    @Test
+    void aRaceFrontIsTheLastFiveExpandedCells() throws Exception {
+        assertThat(DesktopPaint.RACE_A).isEqualTo("#8fb8ff");
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.RACE_A, 0))
+                .isEqualTo(DesktopPaint.RACE_A);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.RACE_A, 1))
+                .as("race-A wash falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.RACE_A);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.RACE_A, 1))
+                .as("race-A ribbon and tip fall off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.walkTrailInk(DesktopPaint.RACE_A, 0));
+        assertThat(DesktopPaint.RACE_B).isEqualTo("#f0b429");
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.RACE_B, 0))
+                .isEqualTo(DesktopPaint.RACE_B);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.RACE_B, 1))
+                .as("race-B wash falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.RACE_B);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.RACE_B, 1))
+                .as("race-B ribbon and tip fall off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.walkTrailInk(DesktopPaint.RACE_B, 0));
+        assertThat(DesktopPaint.raceWashBase(true)).isEqualTo("#8fb8ff");
+        assertThat(DesktopPaint.raceTileInk(true, 0))
+                .as("first lane center is path ice, not the rim swatch")
+                .isEqualTo("#8fb8ff");
+        assertThat(DesktopPaint.raceTileInk(true, 1)).isEqualTo("#7997cc");
+        assertThat(DesktopPaint.raceWashBase(false)).isEqualTo("#f0b429");
+        assertThat(DesktopPaint.raceTileInk(false, 0))
+                .as("second lane center is victory gold, not the rim swatch")
+                .isEqualTo("#f0b429");
+        assertThat(DesktopPaint.raceTileInk(false, 1)).isEqualTo("#c49425");
+        String ctrl = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/java/com/daedalus/desktop/ui/MainController.java"));
+        assertThat(ctrl).contains("DesktopPaint.raceTileInk(firstLane,");
+        assertThat(ctrl).contains("paintPathRibbon(g, layout, ribbon, laneColor, pathAlpha, wash)");
+        assertThat(DesktopPaint.RACE_WASH).isEqualTo(0.13);
+        assertThat(DesktopPaint.raceRate(1)).isEqualTo(150.0);
+        assertThat(DesktopPaint.raceRate(700)).isEqualTo(200.0);
+        List<Point> many = new java.util.ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            many.add(new Point(0, i));
+        }
+        assertThat(DesktopPaint.raceFront(many)).hasSize(5)
+                .startsWith(new Point(0, 3)).endsWith(new Point(0, 7));
+        assertThat(DesktopPaint.walkHead(DesktopPaint.raceFront(many)))
+                .as("search tip halo sits on the newest expanded cell")
+                .isEqualTo(new Point(0, 7));
+        assertThat(DesktopPaint.pathHeadHalo(
+                DesktopPaint.Layout.fit(5, 5, 100, 100), new Point(1, 1)))
+                .isNotNull();
+        assertThat(DesktopPaint.raceFront(List.of())).isEmpty();
+        assertThat(DesktopPaint.RACE_WASH).isEqualTo(0.13);
+        assertThat(DesktopPaint.RACE_OPENING_ALPHA).isEqualTo(0.20);
+        assertThat(DesktopPaint.RACE_OPENING_ALPHA)
+                .isGreaterThan(DesktopPaint.RACE_WASH);
+        assertThat(DesktopPaint.RACE_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
+        assertThat(DesktopPaint.raceFrontPaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.RACE_FRONT_ALPHA * 0.88);
+        assertThat(DesktopPaint.raceFrontPaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.RACE_FRONT_ALPHA * 1.12);
+        assertThat(DesktopPaint.raceWashPaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.RACE_WASH * 0.88);
+        assertThat(DesktopPaint.raceWashPaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.RACE_WASH * 1.12);
+        assertThat(DesktopPaint.raceOpeningPaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.RACE_OPENING_ALPHA * 0.85);
+        assertThat(DesktopPaint.raceOpeningPaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.RACE_OPENING_ALPHA * 1.15);
+    }
+
+    @Test
+    void aWaypointIsAGoldDiamondOnThePassage() {
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 100, 100);
+        DesktopPaint.Diamond coin = DesktopPaint.waypointDiamond(layout, new Point(0, 0));
+        assertThat(DesktopPaint.TOUR).isEqualTo("#d4b06a");
+        assertThat(Integer.parseInt(DesktopPaint.TOUR.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.TOUR.substring(5, 7), 16));
+        assertThat(DesktopPaint.WAYPOINT).isEqualTo("#f2c94c");
+        assertThat(DesktopPaint.WAYPOINT_GOT).isEqualTo("#8aaa50");
+        assertThat(DesktopPaint.waypointInk(false, 0)).isEqualTo(DesktopPaint.WAYPOINT);
+        assertThat(DesktopPaint.waypointInk(true, 0)).isEqualTo(DesktopPaint.WAYPOINT_GOT);
+        assertThat(DesktopPaint.waypointInk(false, 1))
+                .as("uncollected coin falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.WAYPOINT);
+        assertThat(DesktopPaint.waypointInk(true, 1))
+                .as("collected coin falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.WAYPOINT_GOT);
+        assertThat(Integer.parseInt(DesktopPaint.WAYPOINT_GOT.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.WAYPOINT_GOT.substring(5, 7), 16));
+        assertThat(coin.radius())
+                .as("web waypoint radius is 0.3·cell")
+                .isEqualTo(layout.cellSize() * 0.3);
+        assertThat(coin.stroke()).isEqualTo(Math.max(1.5, layout.cellSize() * 0.09));
+        assertThat(DesktopPaint.waypointDiamond(layout, null)).isNull();
+        assertThat(DesktopPaint.TOUR_ALPHA).isEqualTo(0.38);
+        DesktopPaint.Hunt frozen = DesktopPaint.Hunt.retarget(null, List.of(new Point(1, 1)));
+        assertThat(frozen.waypoints()).containsExactly(new Point(1, 1));
+        assertThat(frozen.path()).isEmpty();
+        assertThat(frozen.feasible()).isFalse();
+    }
+
+    @Test
+    void aGhostPrefixFollowsTheRecordingClock() {
+        assertThat(DesktopPaint.GHOST).isEqualTo("#e8e0d4");
+        assertThat(DesktopPaint.GHOST)
+                .as("recorded racer sits in the lamp, not leftover cool white")
+                .isNotEqualTo("#e6edf3");
+        assertThat(DesktopPaint.ghostInk(0)).isEqualTo(DesktopPaint.GHOST);
+        assertThat(DesktopPaint.ghostInk(1))
+                .as("ghost rim falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.GHOST);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.GHOST, 0))
+                .isEqualTo(DesktopPaint.GHOST);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.GHOST, 1))
+                .as("ghost trail shares the disc rim")
+                .isNotEqualTo(DesktopPaint.GHOST);
+        assertThat(DesktopPaint.GHOST_WALK_ALPHA).isEqualTo(0.28);
+        assertThat(DesktopPaint.WALK_TRAIL_ALPHA).isEqualTo(0.32);
+        assertThat(DesktopPaint.PLAYER).isEqualTo("#f5c14a");
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.PLAYER, 0))
+                .isEqualTo(DesktopPaint.PLAYER);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.PLAYER, 1))
+                .as("player trail falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.PLAYER);
+        assertThat(DesktopPaint.playerInk(0)).isEqualTo(DesktopPaint.PLAYER);
+        assertThat(DesktopPaint.playerInk(1))
+                .as("walker disc falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.PLAYER);
+        assertThat(DesktopPaint.walkTrailAlpha(0.32, 0, 4))
+                .isLessThan(DesktopPaint.walkTrailAlpha(0.32, 3, 4));
+        assertThat(DesktopPaint.walkTrailAlpha(0.32, 0, 1)).isEqualTo(0.32);
+        assertThat(DesktopPaint.pathRibbonAlpha(0.85, 0, 4))
+                .isLessThan(DesktopPaint.pathRibbonAlpha(0.85, 3, 4));
+        assertThat(DesktopPaint.pathRibbonAlpha(0.85, 0, 1)).isEqualTo(0.85);
+        assertThat(DesktopPaint.pathRibbonAlpha(0.85, 0, 4))
+                .isGreaterThan(DesktopPaint.walkTrailAlpha(0.85, 0, 4));
+        assertThat(DesktopPaint.GHOST_DISC_ALPHA).isEqualTo(0.55);
+        assertThat(DesktopPaint.GHOST_GLOW_ALPHA).isEqualTo(0.18);
+        assertThat(DesktopPaint.GHOST_RIM_ALPHA).isEqualTo(0.65);
+        assertThat(DesktopPaint.GHOST_RADIUS).isEqualTo(0.3);
+        assertThat(DesktopPaint.GHOST_BREATH_MS).isEqualTo(DesktopPaint.EMPTY_BREATH_MS);
+        assertThat(DesktopPaint.ghostGlowAlpha(1)).isGreaterThan(DesktopPaint.ghostGlowAlpha(0));
+        assertThat(DesktopPaint.ghostGlowPadFraction(1))
+                .isGreaterThan(DesktopPaint.ghostGlowPadFraction(0));
+        assertThat(DesktopPaint.ghostGlowPadFraction(0))
+                .isCloseTo(0.18 / DesktopPaint.GHOST_RADIUS, within(1e-9));
+        assertThat(DesktopPaint.ghostGlowPadFraction(1))
+                .isCloseTo(0.22 / DesktopPaint.GHOST_RADIUS, within(1e-9));
+        assertThat(DesktopPaint.ghostGlowPadFraction(0)).isNotEqualTo(0.32);
+        assertThat(DesktopPaint.ghostDiscAlpha(1)).isGreaterThan(DesktopPaint.ghostDiscAlpha(0));
+        assertThat(DesktopPaint.ghostRimAlpha(1)).isGreaterThan(DesktopPaint.ghostRimAlpha(0));
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 100, 100);
+        DesktopPaint.Marker ghost = DesktopPaint.ghostMarker(layout, new Point(0, 0));
+        assertThat(ghost.size())
+                .as("web ghost disc is 0.3·cell")
+                .isEqualTo(layout.cellSize() * 0.3 * 2);
+        assertThat(DesktopPaint.ghostMarker(layout, null)).isNull();
+        Point start = new Point(0, 0);
+        List<GameSession.TimedMove> steps = List.of(
+                new GameSession.TimedMove(new Point(0, 1), 40),
+                new GameSession.TimedMove(new Point(0, 2), 90));
+        assertThat(DesktopPaint.ghostPrefix(null, steps, 90)).isEmpty();
+        assertThat(DesktopPaint.ghostPrefix(start, steps, 0)).containsExactly(start);
+        assertThat(DesktopPaint.ghostPrefix(start, steps, 40))
+                .containsExactly(start, new Point(0, 1));
+        assertThat(DesktopPaint.ghostPrefix(start, steps, 90))
+                .containsExactly(start, new Point(0, 1), new Point(0, 2));
+        assertThat(DesktopPaint.ghostHead(DesktopPaint.ghostPrefix(start, steps, 40)))
+                .isEqualTo(new Point(0, 1));
+    }
+
+    @Test
+    void fogRevealsStoodOnCellsAndTheWallsThatTouchThem() throws Exception {
+        DesktopPaint.Fog fog = DesktopPaint.Fog.of(
+                List.of(new Point(0, 0)), new Point(0, 0), null);
+        assertThat(DesktopPaint.fogRevealsTile(fog, 1, 1))
+                .as("the cell underfoot is memory")
+                .isTrue();
+        assertThat(DesktopPaint.fogRevealsTile(fog, 1, 0))
+                .as("the west wall touches the stood-on cell")
+                .isTrue();
+        assertThat(DesktopPaint.fogRevealsTile(fog, 0, 1))
+                .as("the north wall touches the stood-on cell")
+                .isTrue();
+        assertThat(DesktopPaint.fogRevealsTile(fog, 5, 5))
+                .as("a far cell stays unseen void")
+                .isFalse();
+        assertThat(DesktopPaint.fogRevealsTile(null, 5, 5)).isTrue();
+        assertThat(DesktopPaint.fogLamp(fog, 1, 1))
+                .as("underfoot is the bright end of the lamp")
+                .isEqualTo(1.0);
+        assertThat(DesktopPaint.fogLamp(fog, 1, 5))
+                .as("two cells east: max(0.38, 1 - 0.24)")
+                .isCloseTo(0.76, within(1e-9));
+        assertThat(DesktopPaint.FOG_FRONTIER).isEqualTo(0.72);
+        assertThat(DesktopPaint.FOG_FRONTIER_BREATH_MS).isEqualTo(DesktopPaint.EMPTY_BREATH_MS);
+        assertThat(DesktopPaint.fogFrontier(null, 1, 1)).isEqualTo(1.0);
+        assertThat(DesktopPaint.fogFrontier(fog, 5, 5, 0.5))
+                .as("unseen tiles skip the rim multiplier")
+                .isEqualTo(1.0);
+        assertThat(DesktopPaint.fogFrontier(fog, 1, 2, 0.5))
+                .as("mid-breath edge matches the resting FOG_FRONTIER")
+                .isEqualTo(DesktopPaint.FOG_FRONTIER);
+        assertThat(DesktopPaint.fogFrontierDim(1))
+                .isGreaterThan(DesktopPaint.fogFrontierDim(0));
+        assertThat(DesktopPaint.fogFrontier(fog, 1, 2, 1))
+                .isGreaterThan(DesktopPaint.fogFrontier(fog, 1, 2, 0));
+        assertThat(DesktopPaint.mixHex(DesktopPaint.FOG_FLOOR_DIM,
+                DesktopPaint.FOG_FLOOR, 0)).isEqualTo(DesktopPaint.FOG_FLOOR_DIM);
+        assertThat(DesktopPaint.mixHex(DesktopPaint.FOG_FLOOR_DIM,
+                DesktopPaint.FOG_FLOOR, 1)).isEqualTo(DesktopPaint.FOG_FLOOR);
+        assertThat(DesktopPaint.FOG_FLOOR_WARM).isEqualTo("#5c4a32");
+        String underfoot = DesktopPaint.mixHex(DesktopPaint.FOG_FLOOR,
+                DesktopPaint.FOG_FLOOR_WARM, 0.28);
+        assertThat(underfoot).isNotEqualTo(DesktopPaint.FOG_FLOOR);
+        assertThat(DesktopPaint.FOG_WALL).isEqualTo("#120e0c");
+        assertThat(DesktopPaint.THEMELESS_WALL).isEqualTo(DesktopPaint.FOG_WALL);
+        assertThat(DesktopPaint.THEMELESS_FLOOR).isEqualTo(DesktopPaint.FOG_FLOOR);
+        assertThat(Integer.parseInt(DesktopPaint.FOG_WALL.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.FOG_WALL.substring(5, 7), 16));
+        assertThat(DesktopPaint.FOG_WALL_WARM).isEqualTo("#2a2218");
+        assertThat(DesktopPaint.EMPTY_MARK_WALL).isEqualTo(DesktopPaint.FOG_WALL_WARM);
+        assertThat(DesktopPaint.EMPTY_MARK_WALL).isNotEqualTo(DesktopPaint.WELL_VOID_CENTER);
+        assertThat(DesktopPaint.EMPTY_MARK_WALL)
+                .as("idle posts sit on the live void, not a matching wall slab")
+                .isNotEqualTo(DesktopPaint.wellVoidCenterInk(0));
+        assertThat(DesktopPaint.EMPTY_MARK_FLOOR).isEqualTo(DesktopPaint.mixHex(
+                DesktopPaint.FOG_FLOOR, DesktopPaint.FOG_FLOOR_WARM, 0.28));
+        assertThat(DesktopPaint.EMPTY_MARK_FLOOR).isNotEqualTo(DesktopPaint.FOG_FLOOR);
+        assertThat(DesktopPaint.LEGEND_FLOOR).isEqualTo(DesktopPaint.EMPTY_MARK_FLOOR);
+        assertThat(DesktopPaint.FOG_FLOOR).isEqualTo("#40403c");
+        assertThat(Integer.parseInt(DesktopPaint.FOG_FLOOR.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.FOG_FLOOR.substring(5, 7), 16));
+        assertThat(DesktopPaint.LEGEND_FLOOR).isEqualTo("#484339");
+        assertThat(Integer.parseInt(DesktopPaint.LEGEND_FLOOR.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.LEGEND_FLOOR.substring(5, 7), 16));
+        assertThat(DesktopPaint.LEGEND_WALL).isEqualTo(DesktopPaint.mixHex(
+                DesktopPaint.FOG_WALL, DesktopPaint.FOG_WALL_WARM, 0.28));
+        assertThat(DesktopPaint.LEGEND_WALL).isEqualTo("#19140f");
+        assertThat(DesktopPaint.LEGEND_WALL).isNotEqualTo(DesktopPaint.FOG_WALL);
+        assertThat(DesktopPaint.LEGEND_FLOOR_RIM).isEqualTo(DesktopPaint.FLOOR_DIM);
+        assertThat(DesktopPaint.LEGEND_FLOOR_RIM).isEqualTo("#2a2218");
+        assertThat(DesktopPaint.LEGEND_WALL_RIM).isEqualTo(DesktopPaint.mixHex(
+                DesktopPaint.LEGEND_WALL, DesktopPaint.FOG_UNSEEN, DesktopPaint.WALL_EDGE_DIM));
+        assertThat(DesktopPaint.LEGEND_WALL_RIM).isEqualTo("#15110d");
+        assertThat(DesktopPaint.LEGEND_WALL_RIM).isNotEqualTo(DesktopPaint.LEGEND_WALL);
+        assertThat(DesktopPaint.LEGEND_FOG).isEqualTo(DesktopPaint.WELL_VOID_EDGE);
+        assertThat(DesktopPaint.LEGEND_FOG).isEqualTo("#0c0908");
+        assertThat(DesktopPaint.LEGEND_FOG_CORE).isEqualTo(DesktopPaint.WELL_VOID_CENTER);
+        assertThat(DesktopPaint.LEGEND_FOG_CORE).isEqualTo("#16120e");
+        assertThat(DesktopPaint.LEGEND_FOG_CORE).isNotEqualTo(DesktopPaint.LEGEND_FOG);
+        assertThat(CosmicTheme.PASSAGE_INK).isEqualTo(DesktopPaint.LEGEND_FLOOR);
+        assertThat(CosmicTheme.WALL_INK).isEqualTo(DesktopPaint.LEGEND_WALL);
+        assertThat(DesktopPaint.fogWall(fog, 1, 0))
+                .as("a touching wall near the lamp is warmer than cold ink")
+                .isNotEqualTo(DesktopPaint.FOG_WALL);
+        assertThat(DesktopPaint.fogWall(fog, 1, 0, 1))
+                .as("fog rim posts fall off toward unseen")
+                .isNotEqualTo(DesktopPaint.fogWall(fog, 1, 0, 0));
+        assertThat(DesktopPaint.fogWallHiInk(1, 1))
+                .isNotEqualTo(DesktopPaint.fogWallHiInk(1, 0));
+        assertThat(DesktopPaint.fogFloor(fog, 1, 1, 1))
+                .as("fog rim halls fall off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.fogFloor(fog, 1, 1, 0));
+        assertThat(DesktopPaint.fogFloorHiInk(1, 1))
+                .isNotEqualTo(DesktopPaint.fogFloorHiInk(1, 0));
+        assertThat(DesktopPaint.FOG_UNSEEN).isEqualTo("#0c0908");
+        assertThat(DesktopPaint.FOG_UNSEEN).isEqualTo(DesktopPaint.WELL_VOID_EDGE);
+        assertThat(DesktopPaint.WELL_VOID_CENTER).isEqualTo("#16120e");
+        assertThat(DesktopPaint.WELL_VOID_EDGE).isEqualTo("#0c0908");
+        assertThat(DesktopPaint.WELL_VOID_CENTER_LIT).isEqualTo("#1a1510");
+        assertThat(DesktopPaint.CANVAS_INSET_R).isEqualTo(0x0c);
+        assertThat(DesktopPaint.CANVAS_INSET_G).isEqualTo(0x09);
+        assertThat(DesktopPaint.CANVAS_INSET_B).isEqualTo(0x08);
+        assertThat(DesktopPaint.CANVAS_INSET_A).isEqualTo(0.35);
+        assertThat(DesktopPaint.CANVAS_INSET_R).isNotEqualTo(0);
+        assertThat(Integer.parseInt(DesktopPaint.WELL_VOID_CENTER.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.WELL_VOID_CENTER.substring(5, 7), 16));
+        assertThat(DesktopPaint.wellVoidCenterInk(0)).isEqualTo(DesktopPaint.WELL_VOID_CENTER);
+        assertThat(DesktopPaint.wellVoidCenterInk(1)).isEqualTo(DesktopPaint.WELL_VOID_CENTER_LIT);
+        assertThat(DesktopPaint.STAGE_WASH_RX).isCloseTo(0.80 * 0.72, within(1e-9));
+        assertThat(DesktopPaint.STAGE_WASH_RY).isCloseTo(0.70 * 0.72, within(1e-9));
+        assertThat(DesktopPaint.stageWashRadiusX(100)).isCloseTo(57.6, within(1e-9));
+        assertThat(DesktopPaint.stageWashRadiusY(100)).isCloseTo(50.4, within(1e-9));
+        assertThat(DesktopPaint.stageWashScaleY(1000, 800)).isCloseTo(403.2 / 576.0, within(1e-9));
+        assertThat(DesktopPaint.stageWashScaleY(0, 800)).isEqualTo(1);
+        assertThat(DesktopPaint.STAGE_WASH_RY).isLessThan(0.72);
+        assertThat(DesktopPaint.STAGE_CORNER).isEqualTo(10);
+        assertThat(DesktopPaint.stageCornerArc()).isEqualTo(20);
+        assertThat(DesktopPaint.stageCornerArc()).isNotEqualTo(10);
+        assertThat(DesktopPaint.stageClipArc(20, 1)).isEqualTo(20);
+        assertThat(DesktopPaint.stageClipArc(20, 0.5)).isEqualTo(40);
+        assertThat(DesktopPaint.MAZE_WASH_RADIUS).isEqualTo(0.72);
+        assertThat(DesktopPaint.MAZE_WASH_CENTER_Y).isEqualTo(0.45);
+        assertThat(DesktopPaint.mazeWashRadius(100, 40)).isCloseTo(72, within(1e-9));
+        assertThat(DesktopPaint.mazeWashRadius(40, 100)).isCloseTo(72, within(1e-9));
+        assertThat(DesktopPaint.mazeWashRadius(100, 100)).isGreaterThan(
+                DesktopPaint.stageWashRadiusX(100));
+        assertThat(DesktopPaint.mazeWashCenterY(20, 80)).isCloseTo(56, within(1e-9));
+        assertThat(DesktopPaint.FLOOR_DIM).isEqualTo("#2a2218");
+        assertThat(DesktopPaint.FOG_FLOOR_DIM).isEqualTo(DesktopPaint.FOG_WALL_WARM);
+        assertThat(Integer.parseInt(DesktopPaint.FLOOR_DIM.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.FLOOR_DIM.substring(5, 7), 16));
+        assertThat(DesktopPaint.FLOOR_EDGE_DIM).isEqualTo(0.22);
+        assertThat(DesktopPaint.WALL_EDGE_DIM).isEqualTo(0.28);
+        assertThat(DesktopPaint.wallInk(0)).isEqualTo(DesktopPaint.mixHex(
+                DesktopPaint.FOG_WALL, DesktopPaint.FOG_WALL_WARM, 0.28));
+        assertThat(DesktopPaint.wallInk(0)).isNotEqualTo(DesktopPaint.FOG_WALL);
+        assertThat(DesktopPaint.wallInk(1)).isNotEqualTo(DesktopPaint.wallInk(0));
+        DesktopPaint.Layout edgeLayout = DesktopPaint.Layout.fit(5, 5, 100, 100);
+        assertThat(DesktopPaint.floorEdge(edgeLayout, 0, 0))
+                .isGreaterThan(DesktopPaint.floorEdge(edgeLayout, 2, 2));
+        String ctrl = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/java/com/daedalus/desktop/ui/MainController.java"));
+        int fogPaint = ctrl.indexOf("private void paintFogDungeon");
+        int afterFog = ctrl.indexOf("private static void showLegendKey");
+        assertThat(fogPaint).isGreaterThan(0);
+        assertThat(ctrl.substring(fogPaint, afterFog)).doesNotContain("paintVictory");
+        int discs = ctrl.indexOf("start / goal discs");
+        int win = ctrl.indexOf("paintVictory(g, layout, current.metadata().goal())");
+        assertThat(win).isGreaterThan(discs);
+        int scene = ctrl.indexOf("private DesktopPaint.Fog fogScene()");
+        int dungeon = ctrl.indexOf("private void paintFogDungeon");
+        String fogBody = ctrl.substring(scene, dungeon);
+        assertThat(fogBody).contains("current.metadata().goal()");
+        assertThat(fogBody).doesNotContain("reachedGoal");
+    }
+
+    @Test
+    void aClickHitsAPassageAndMissesAWall() {
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 100, 100);
+        double cell = layout.cellSize();
+        double wall = layout.wall();
+        double cx = layout.x(1) + cell / 2.0;
+        double cy = layout.y(1) + cell / 2.0;
+        assertThat(DesktopPaint.hitCell(layout, cx, cy)).isEqualTo(new Point(0, 0));
+        assertThat(DesktopPaint.hitCell(layout, wall / 2.0, cy))
+                .as("the west wall is not a cell")
+                .isNull();
+        DesktopPaint.Layout wide = DesktopPaint.Layout.fit(5, 5, 200, 100);
+        assertThat(DesktopPaint.hitCell(wide, 10, cy))
+                .as("the letterbox is not a cell")
+                .isNull();
+        assertThat(DesktopPaint.hitCell(wide, wide.offsetX() + cx, cy))
+                .isEqualTo(new Point(0, 0));
+        DesktopPaint.Backing hidpi = DesktopPaint.Backing.of(100, 100, 2, 2);
+        assertThat(DesktopPaint.hitCell(layout, hidpi, cx * 2, cy * 2))
+                .as("HiDPI local coords are bitmap pixels")
+                .isEqualTo(new Point(0, 0));
+        assertThat(DesktopPaint.hitCell(null, 10, 10)).isNull();
+    }
+
+    @Test
+    void aWidePassageGetsTheSameHighlightStripeAsTheWeb() {
+        DesktopPaint.Layout roomy = DesktopPaint.Layout.fit(3, 3, 30, 30);
+        DesktopPaint.Hairline stripe = DesktopPaint.floorHiStroke(roomy, 1, 1);
+        assertThat(roomy.cellSize()).isEqualTo(20.0);
+        assertThat(DesktopPaint.FLOOR_HI).isEqualTo("#765834");
+        assertThat(DesktopPaint.WALL_HI).isEqualTo("#4a3824");
+        assertThat(Integer.parseInt(DesktopPaint.WALL_HI.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.WALL_HI.substring(5, 7), 16));
+        DesktopPaint.Hairline wallStripe = DesktopPaint.wallHiStroke(roomy, 0, 1);
+        assertThat(wallStripe).isNotNull();
+        assertThat(wallStripe.h()).isEqualTo(1.0);
+        DesktopPaint.Hairline foot = DesktopPaint.wallFootStroke(roomy, 0, 1, 1, 1);
+        assertThat(foot).isNotNull();
+        assertThat(foot.h()).isEqualTo(1.0);
+        assertThat(foot.y()).isEqualTo(roomy.y(0) + roomy.h(0) - foot.h());
+        assertThat(foot.x()).isEqualTo(wallStripe.x());
+        assertThat(DesktopPaint.wallFootStroke(null, 0, 1, 1, 1)).isNull();
+        assertThat(DesktopPaint.wallFootInk("#120e0c", "#484339"))
+                .isEqualTo(DesktopPaint.mixHex("#120e0c", "#484339", 0.5));
+        assertThat(DesktopPaint.wallFootInk("#120e0c", DesktopPaint.FLOOR_DIM))
+                .isEqualTo(DesktopPaint.mixHex("#120e0c", DesktopPaint.FLOOR_DIM, 0.5));
+        assertThat(DesktopPaint.wallFootCornerInk("#120e0c", "#484339", null))
+                .isEqualTo(DesktopPaint.wallHiFeatherInk(
+                        DesktopPaint.wallFootInk("#120e0c", "#484339"), "#120e0c"));
+        assertThat(DesktopPaint.wallFootCornerInk("#120e0c", "#484339", "#5c4a32"))
+                .isEqualTo(DesktopPaint.mixHex(
+                        DesktopPaint.wallFootInk("#120e0c", "#484339"),
+                        DesktopPaint.wallFootInk("#120e0c", "#5c4a32"), 0.5));
+        assertThat(DesktopPaint.wallSideJoinInk("#120e0c", "#484339", "#4a3824"))
+                .isEqualTo(DesktopPaint.mixHex(
+                        DesktopPaint.wallFootInk("#120e0c", "#484339"),
+                        DesktopPaint.wallHiFeatherInk("#4a3824", "#120e0c"), 0.5));
+        assertThat(DesktopPaint.wallSideJoinInk("#120e0c", "#484339", null))
+                .isEqualTo(DesktopPaint.wallFootInk("#120e0c", "#484339"));
+        assertThat(DesktopPaint.wallSideHeelInk("#120e0c", "#484339", "#5c4a32"))
+                .isEqualTo(DesktopPaint.mixHex(
+                        DesktopPaint.wallFootInk("#120e0c", "#484339"),
+                        DesktopPaint.wallFootInk("#120e0c", "#5c4a32"), 0.5));
+        assertThat(DesktopPaint.wallSideHeelInk("#120e0c", "#484339", null))
+                .isEqualTo(DesktopPaint.wallFootInk("#120e0c", "#484339"));
+        DesktopPaint.Hairline side = DesktopPaint.wallSideStroke(roomy, 0, 1, 1, 1, false);
+        assertThat(side).isNotNull();
+        assertThat(side.x()).isEqualTo(roomy.x(1));
+        assertThat(side.y()).isEqualTo(roomy.y(0) + 3);
+        assertThat(side.h()).isEqualTo(roomy.h(0) - 4);
+        DesktopPaint.Hairline sideRight = DesktopPaint.wallSideStroke(roomy, 0, 1, 1, 1, true);
+        assertThat(sideRight.x()).isEqualTo(roomy.x(1) + roomy.w(1) - 1);
+        assertThat(DesktopPaint.wallSideStroke(null, 0, 1, 1, 1, false)).isNull();
+        DesktopPaint.Hairline skirt = DesktopPaint.floorSkirtStroke(roomy, 1, 1, 1, 1, 2);
+        assertThat(skirt).isNotNull();
+        assertThat(skirt.y()).isEqualTo(roomy.y(1) + roomy.h(1) - 1);
+        assertThat(skirt.h()).isEqualTo(1.0);
+        DesktopPaint.Hairline skirtWest = DesktopPaint.floorSkirtStroke(roomy, 1, 1, 1, 1, 3);
+        assertThat(skirtWest.x()).isEqualTo(roomy.x(1));
+        assertThat(skirtWest.w()).isEqualTo(1.0);
+        assertThat(DesktopPaint.floorSkirtStroke(null, 1, 1, 1, 1, 0)).isNull();
+        assertThat(DesktopPaint.floorSkirtInk("#484339", DesktopPaint.FOG_WALL))
+                .isEqualTo(DesktopPaint.mixHex("#484339", DesktopPaint.FOG_WALL, 0.5));
+        assertThat(DesktopPaint.floorSkirtInk("#484339", "#2a2218"))
+                .isEqualTo(DesktopPaint.mixHex("#484339", "#2a2218", 0.5));
+        DesktopPaint.Hairline skirtCorner = DesktopPaint.floorSkirtCorner(roomy, 1, 1, 1, 1, 0);
+        assertThat(skirtCorner.x()).isEqualTo(roomy.x(1));
+        assertThat(skirtCorner.y()).isEqualTo(roomy.y(1));
+        assertThat(skirtCorner.w()).isEqualTo(1.0);
+        assertThat(skirtCorner.h()).isEqualTo(1.0);
+        assertThat(DesktopPaint.floorSkirtCorner(null, 1, 1, 1, 1, 0)).isNull();
+        assertThat(DesktopPaint.floorSkirtCornerInk("#484339", "#120e0c", "#2a2218"))
+                .isEqualTo(DesktopPaint.mixHex(
+                        DesktopPaint.floorSkirtInk("#484339", "#120e0c"),
+                        DesktopPaint.floorSkirtInk("#484339", "#2a2218"), 0.5));
+        DesktopPaint.Hairline skirtJoin = DesktopPaint.floorSkirtJoin(roomy, 1, 1, 1, 1, false);
+        assertThat(skirtJoin).isNotNull();
+        assertThat(skirtJoin.x()).isEqualTo(roomy.x(1));
+        assertThat(skirtJoin.y()).isEqualTo(roomy.y(1) + 3);
+        assertThat(skirtJoin.h()).isEqualTo(1.0);
+        assertThat(DesktopPaint.floorSkirtJoin(null, 1, 1, 1, 1, false)).isNull();
+        assertThat(DesktopPaint.floorSkirtJoinInk("#484339", "#120e0c", "#765834"))
+                .isEqualTo(DesktopPaint.mixHex(
+                        DesktopPaint.floorSkirtInk("#484339", "#120e0c"),
+                        DesktopPaint.catchCornerInk("#765834", "#484339"), 0.5));
+        DesktopPaint.Hairline feather = DesktopPaint.wallHiFeather(wallStripe);
+        assertThat(feather.y()).isEqualTo(wallStripe.y() + wallStripe.h());
+        assertThat(feather.h()).isEqualTo(wallStripe.h());
+        assertThat(feather.w()).isEqualTo(wallStripe.w());
+        assertThat(DesktopPaint.wallHiFeather(null)).isNull();
+        DesktopPaint.Hairline lip = DesktopPaint.catchLip(wallStripe);
+        assertThat(lip.y()).isEqualTo(wallStripe.y() - wallStripe.h());
+        assertThat(lip.h()).isEqualTo(wallStripe.h());
+        assertThat(lip.w()).isEqualTo(wallStripe.w());
+        assertThat(DesktopPaint.catchLip(null)).isNull();
+        DesktopPaint.Hairline[] ends = DesktopPaint.catchEnds(wallStripe);
+        assertThat(ends).hasSize(2);
+        assertThat(ends[0].x()).isEqualTo(wallStripe.x() - wallStripe.h());
+        assertThat(ends[0].y()).isEqualTo(wallStripe.y());
+        assertThat(ends[0].w()).isEqualTo(wallStripe.h());
+        assertThat(ends[1].x()).isEqualTo(wallStripe.x() + wallStripe.w());
+        assertThat(DesktopPaint.catchEnds(null)).isEmpty();
+        assertThat(DesktopPaint.catchCornerInk("#ffffff", "#000000")).isEqualTo("#404040");
+        assertThat(DesktopPaint.wallHiFeatherInk("#4a3824", "#120e0c"))
+                .isEqualTo(DesktopPaint.mixHex("#4a3824", "#120e0c", 0.5));
+        assertThat(DesktopPaint.clearWallHiInk(0))
+                .isEqualTo(DesktopPaint.mixHex(DesktopPaint.WALL_HI,
+                        DesktopPaint.FOG_WALL_WARM, 0.28));
+        assertThat(DesktopPaint.clearWallHiInk(1))
+                .isNotEqualTo(DesktopPaint.clearWallHiInk(0));
+        assertThat(DesktopPaint.fogWallHiInk(0)).isEqualTo(DesktopPaint.WALL_HI);
+        assertThat(DesktopPaint.fogWallHiInk(1))
+                .isEqualTo(DesktopPaint.mixHex(DesktopPaint.WALL_HI,
+                        DesktopPaint.FOG_WALL_WARM, 0.28));
+        assertThat(DesktopPaint.wallHiStroke(DesktopPaint.Layout.fit(5, 5, 20, 20), 0, 1))
+                .as("web skips the wall shine when the cell is under 10px")
+                .isNull();
+        assertThat(Integer.parseInt(DesktopPaint.FLOOR_HI.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.FLOOR_HI.substring(5, 7), 16));
+        assertThat(DesktopPaint.floorHiInk(0)).isEqualTo(DesktopPaint.FLOOR_HI);
+        assertThat(DesktopPaint.floorHiInk(1))
+                .isNotEqualTo(DesktopPaint.FLOOR_HI);
+        assertThat(DesktopPaint.clearFloorInk(0)).isEqualTo(DesktopPaint.EMPTY_MARK_FLOOR);
+        assertThat(DesktopPaint.clearFloorInk(1))
+                .isNotEqualTo(DesktopPaint.clearFloorInk(0));
+        assertThat(DesktopPaint.clearFloorHiInk(0))
+                .isEqualTo(DesktopPaint.mixHex(DesktopPaint.FLOOR_HI,
+                        DesktopPaint.FOG_FLOOR_WARM, 0.28));
+        assertThat(DesktopPaint.clearFloorHiInk(1))
+                .isNotEqualTo(DesktopPaint.clearFloorHiInk(0));
+        assertThat(DesktopPaint.fogFloorHiInk(0)).isEqualTo(DesktopPaint.FLOOR_HI);
+        assertThat(DesktopPaint.fogFloorHiInk(1))
+                .isEqualTo(DesktopPaint.mixHex(DesktopPaint.FLOOR_HI,
+                        DesktopPaint.FOG_FLOOR_WARM, 0.28));
+        assertThat(DesktopPaint.fogFloorHiInk(1))
+                .isNotEqualTo(DesktopPaint.FLOOR_HI);
+        assertThat(stripe).isNotNull();
+        assertThat(stripe.w()).isEqualTo(18.0);
+        assertThat(stripe.h()).isEqualTo(1.0);
+        DesktopPaint.Hairline floorFeather = DesktopPaint.floorHiFeather(stripe);
+        assertThat(floorFeather.y()).isEqualTo(stripe.y() + stripe.h());
+        assertThat(floorFeather.h()).isEqualTo(stripe.h());
+        assertThat(floorFeather.w()).isEqualTo(stripe.w());
+        assertThat(DesktopPaint.devicePx(1)).isEqualTo(1.0);
+        assertThat(DesktopPaint.devicePx(2)).isEqualTo(0.5);
+        DesktopPaint.Hairline scaled = DesktopPaint.wallHiStroke(roomy, 0, 1, 2, 2);
+        assertThat(scaled.h()).isEqualTo(0.5);
+        assertThat(scaled.y()).isCloseTo(roomy.y(0) + 0.5, within(1e-9));
+        assertThat(DesktopPaint.floorHiStroke(roomy, 1, 1, 1, 2, 2).w()).isEqualTo(19.0);
+        assertThat(DesktopPaint.floorHi(roomy, 0, 1))
+                .as("a wall tile is not a corridor")
+                .isFalse();
+        DesktopPaint.Layout tight = DesktopPaint.Layout.fit(5, 5, 20, 20);
+        assertThat(tight.cellSize()).isLessThan(10);
+        assertThat(DesktopPaint.floorHiStroke(tight, 1, 1))
+                .as("web skips the highlight when the cell is under 10px")
+                .isNull();
+        DesktopPaint.Layout crisp = DesktopPaint.Layout.fit(3, 3, 9, 9);
+        assertThat(crisp.cellSize()).isEqualTo(6);
+        assertThat(DesktopPaint.floorHi(crisp, 1, 1)).isFalse();
+        assertThat(DesktopPaint.floorHi(crisp, 1, 1, 1, 2)).isTrue();
+        assertThat(DesktopPaint.wallHiStroke(crisp, 0, 1)).isNull();
+        assertThat(DesktopPaint.wallHiStroke(crisp, 0, 1, 2, 2)).isNotNull();
+        assertThat(DesktopPaint.floorHi(roomy, 1, 1, 0.6))
+                .as("fog lamp below 0.7 leaves the floor dim")
+                .isFalse();
+    }
+
+    @Test
+    void theDistanceFieldUsesTheWebRampAndSkipsRock() {
+        assertThat(DesktopPaint.DISTANCE_RAMP).containsExactly(
+                "#4a2210", "#6e3014", "#943c18", "#b85a20",
+                "#d47828", "#e09840", "#e8b868", "#f2d8a0");
+        assertThat(Integer.parseInt(DesktopPaint.DISTANCE_RAMP[0].substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.DISTANCE_RAMP[0].substring(5, 7), 16));
+        assertThat(Integer.parseInt(DesktopPaint.DISTANCE_RAMP[7].substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.DISTANCE_RAMP[7].substring(5, 7), 16));
+        assertThat(DesktopPaint.FIELD_EDGE_DIM).isEqualTo(0.22);
+        assertThat(DesktopPaint.fieldInk(DesktopPaint.DISTANCE_RAMP[0], 0))
+                .isEqualTo(DesktopPaint.DISTANCE_RAMP[0]);
+        assertThat(DesktopPaint.fieldInk(DesktopPaint.DISTANCE_RAMP[0], 1))
+                .as("field rim falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.DISTANCE_RAMP[0]);
+        DesktopPaint.FieldTone near = DesktopPaint.fieldCell(0, 10);
+        DesktopPaint.FieldTone far = DesktopPaint.fieldCell(10, 10);
+        assertThat(near.color()).isEqualTo("#4a2210");
+        assertThat(near.alpha()).isEqualTo(0.12);
+        assertThat(far.color()).isEqualTo("#f2d8a0");
+        assertThat(far.alpha()).isEqualTo(0.80);
+        assertThat(DesktopPaint.fieldCell(-1, 10)).isNull();
+        assertThat(DesktopPaint.fieldOpeningColor()).isEqualTo("#d47828");
+        assertThat(DesktopPaint.fieldInk(DesktopPaint.fieldOpeningColor(), 1))
+                .as("field openings share the cell rim")
+                .isNotEqualTo(DesktopPaint.fieldOpeningColor());
+        assertThat(DesktopPaint.FIELD_OPENING_ALPHA).isEqualTo(0.42);
+        assertThat(DesktopPaint.FIELD_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
+        assertThat(DesktopPaint.fieldPaintAlpha(0.80, 0.0)).isEqualTo(0.80 * 0.88);
+        assertThat(DesktopPaint.fieldPaintAlpha(0.80, 1.0)).isEqualTo(0.80 * 1.12);
+        assertThat(DesktopPaint.fieldOpeningPaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.FIELD_OPENING_ALPHA * 0.85);
+        assertThat(DesktopPaint.fieldOpeningPaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.FIELD_OPENING_ALPHA * 1.15);
+
+        TileType[][] tiles = new TileType[5][5];
+        for (int r = 0; r < 5; r++) {
+            for (int c = 0; c < 5; c++) {
+                tiles[r][c] = (r % 2 == 0 || c % 2 == 0) ? TileType.WALL : TileType.PASSAGE;
+            }
+        }
+        tiles[1][2] = TileType.PASSAGE;
+        int[][] dist = {{0, 1}, {1, -1}};
+        assertThat(DesktopPaint.fieldOpenings(dist, tiles))
+                .contains(new DesktopPaint.TileRect(1, 2));
+        assertThat(DesktopPaint.fieldOpenings(dist, tiles))
+                .as("a -1 neighbor is rock, not an opening")
+                .doesNotContain(new DesktopPaint.TileRect(2, 3));
+    }
+
+    @Test
+    void hotspotPlacementIsDeterministicAndPaintsAdjacentOpenings() {
+        List<Hotspot> a = DesktopPaint.placeSpots(15, 15, 4, 42, 25);
+        List<Hotspot> b = DesktopPaint.placeSpots(15, 15, 4, 42, 25);
+        List<Hotspot> c = DesktopPaint.placeSpots(15, 15, 4, 43, 25);
+        assertThat(a).hasSize(4).isEqualTo(b).isNotEqualTo(c);
+        assertThat(DesktopPaint.placeSpots(15, 15, 0, 42, 25)).isEmpty();
+
+        TileType[][] tiles = new TileType[5][5];
+        for (int r = 0; r < 5; r++) {
+            for (int col = 0; col < 5; col++) {
+                tiles[r][col] = (r % 2 == 0 || col % 2 == 0) ? TileType.WALL : TileType.PASSAGE;
+            }
+        }
+        tiles[1][2] = TileType.PASSAGE;
+        List<Hotspot> pair = List.of(new Hotspot(0, 0, 25), new Hotspot(0, 1, 25));
+        assertThat(DesktopPaint.hotspotOverlay(pair, tiles))
+                .contains(
+                        new DesktopPaint.TileRect(1, 1),
+                        new DesktopPaint.TileRect(1, 3),
+                        new DesktopPaint.TileRect(1, 2));
+        tiles[1][1] = TileType.WALL;
+        assertThat(DesktopPaint.hotspotOverlay(pair, tiles))
+                .as("a wall cell is not a hot-spot wash")
+                .doesNotContain(new DesktopPaint.TileRect(1, 1));
+
+        assertThat(DesktopPaint.hotspotCellAlpha(0)).isEqualTo(0.2);
+        assertThat(DesktopPaint.hotspotCellAlpha(25)).isEqualTo(0.325);
+        assertThat(DesktopPaint.hotspotCellAlpha(100)).isEqualTo(0.7);
+        assertThat(DesktopPaint.hotspotCellAlpha(200)).isEqualTo(0.7);
+        assertThat(DesktopPaint.HOTSPOT_OPENING_ALPHA).isEqualTo(0.35);
+        assertThat(DesktopPaint.HOTSPOT).isEqualTo("#e5484d");
+        assertThat(DesktopPaint.HOTSPOT_EDGE_DIM).isEqualTo(0.22);
+        assertThat(DesktopPaint.hotspotInk(1))
+                .as("heat glow shares the cell rim toward floor-dim")
+                .isNotEqualTo(DesktopPaint.hotspotInk(0));
+        assertThat(DesktopPaint.hotspotInk(0)).isEqualTo(DesktopPaint.HOTSPOT);
+        assertThat(DesktopPaint.hotspotInk(0.5))
+                .as("heat openings share the cell rim")
+                .isNotEqualTo(DesktopPaint.HOTSPOT);
+        assertThat(DesktopPaint.HOTSPOT_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
+        assertThat(DesktopPaint.hotspotCellPaintAlpha(25, 1))
+                .isGreaterThan(DesktopPaint.hotspotCellPaintAlpha(25, 0));
+        assertThat(DesktopPaint.hotspotOpeningPaintAlpha(1))
+                .isGreaterThan(DesktopPaint.hotspotOpeningPaintAlpha(0));
+        assertThat(DesktopPaint.hotspotPadAlpha(1))
+                .isGreaterThan(DesktopPaint.hotspotPadAlpha(0));
+        assertThat(DesktopPaint.hotspotPadRadius(1))
+                .isGreaterThan(DesktopPaint.hotspotPadRadius(0));
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 100, 100);
+        assertThat(DesktopPaint.hotspotRim(layout, new Point(0, 0)).radius())
+                .isEqualTo(layout.cellSize() * DesktopPaint.HOTSPOT_RIM_RADIUS);
+        DesktopPaint.Layout crisp = DesktopPaint.Layout.fit(3, 3, 9, 9);
+        assertThat(DesktopPaint.hotspotRim(crisp, new Point(0, 0)).width()).isEqualTo(1.0);
+        assertThat(DesktopPaint.hotspotRim(crisp, new Point(0, 0), 2).width())
+                .as("one bitmap pixel is half a CSS pixel at scale 2")
+                .isEqualTo(0.5);
+        DesktopPaint.HotWash wash = DesktopPaint.hotspotWash(
+                List.of(new Hotspot(0, 0, 10), new Hotspot(0, 1, 80)), tiles);
+        assertThat(wash.cells()).hasSize(1);
+        assertThat(wash.cells().get(0).cost()).isEqualTo(80);
+        assertThat(DesktopPaint.hotspotCellAlpha(10))
+                .isLessThan(DesktopPaint.hotspotCellAlpha(80));
+    }
+
+    @Test
+    void aWalkPaintsStoodOnCellsAndTheOpeningBetweenThem() {
+        Point a = new Point(0, 0);
+        Point b = new Point(0, 1);
+        assertThat(DesktopPaint.walkOverlay(List.of(a, b)))
+                .as("a walk keeps start underfoot; a solve ribbon would have skipped it")
+                .containsExactly(
+                        new DesktopPaint.TileRect(1, 1),
+                        new DesktopPaint.TileRect(1, 3),
+                        new DesktopPaint.TileRect(1, 2));
+        assertThat(DesktopPaint.walkOverlay(List.of())).isEmpty();
+        assertThat(DesktopPaint.walkOverlay(null)).isEmpty();
+    }
+
+    @Test
+    void aSearchWashPaintsExpandedCellsAndTheLastSixAsTheFront() {
+        Point a = new Point(0, 0);
+        Point b = new Point(0, 1);
+        List<Point> shown = List.of(a, b);
+        TileType[][] tiles = {
+                {TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL},
+                {TileType.WALL, TileType.PASSAGE, TileType.PASSAGE, TileType.PASSAGE, TileType.WALL},
+                {TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL},
+        };
+        assertThat(DesktopPaint.PATH).isEqualTo("#8fb8ff");
+        assertThat(DesktopPaint.expansionInk(0)).isEqualTo(DesktopPaint.PATH);
+        assertThat(DesktopPaint.expansionInk(1))
+                .as("search wash falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.PATH);
+        assertThat(DesktopPaint.expansionCells(shown))
+                .containsExactly(
+                        new DesktopPaint.TileRect(1, 1),
+                        new DesktopPaint.TileRect(1, 3));
+        assertThat(DesktopPaint.expansionOpenings(shown, tiles))
+                .containsExactly(new DesktopPaint.TileRect(1, 2));
+        List<Point> many = new java.util.ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            many.add(new Point(0, i));
+        }
+        assertThat(DesktopPaint.expansionFront(many)).hasSize(6)
+                .startsWith(new Point(0, 2)).endsWith(new Point(0, 7));
+        assertThat(DesktopPaint.EXPANSION_ALPHA).isEqualTo(0.16);
+        assertThat(DesktopPaint.EXPANSION_OPENING_ALPHA).isEqualTo(0.26);
+        assertThat(DesktopPaint.EXPANSION_OPENING_ALPHA)
+                .isGreaterThan(DesktopPaint.EXPANSION_ALPHA);
+        assertThat(DesktopPaint.EXPANSION_FRONT_ALPHA).isEqualTo(0.45);
+        assertThat(DesktopPaint.EXPANSION_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
+        assertThat(DesktopPaint.expansionFrontPaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.EXPANSION_FRONT_ALPHA * 0.88);
+        assertThat(DesktopPaint.expansionFrontPaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.EXPANSION_FRONT_ALPHA * 1.12);
+        assertThat(DesktopPaint.expansionWashPaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.EXPANSION_ALPHA * 0.88);
+        assertThat(DesktopPaint.expansionWashPaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.EXPANSION_ALPHA * 1.12);
+        assertThat(DesktopPaint.expansionOpeningPaintAlpha(0.0))
+                .isEqualTo(DesktopPaint.EXPANSION_OPENING_ALPHA * 0.85);
+        assertThat(DesktopPaint.expansionOpeningPaintAlpha(1.0))
+                .isEqualTo(DesktopPaint.EXPANSION_OPENING_ALPHA * 1.15);
+        assertThat(DesktopPaint.expansionCells(null)).isEmpty();
+        assertThat(DesktopPaint.expansionOpenings(List.of(), tiles)).isEmpty();
+    }
+
+    @Test
+    void aMissingPathIsNoOverlay() {
+        assertThat(DesktopPaint.pathOverlay(null)).isEmpty();
+        assertThat(DesktopPaint.pathOverlay(List.of())).isEmpty();
+    }
+
+    @Test
+    void thePlayerDiscIsInsetInsideThePassageTile() {
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(3, 3, 30, 30);
+        DesktopPaint.Marker mark = DesktopPaint.playerMarker(layout, new Point(0, 0));
+        assertThat(mark).isNotNull();
+        assertThat(layout.cellSize()).isEqualTo(20.0);
+        assertThat(mark.size())
+                .as("web player radius is 0.42·cell, so the disc is 0.84·cell")
+                .isEqualTo(16.8);
+        assertThat(DesktopPaint.PLAYER_RADIUS).isEqualTo(0.42);
+        assertThat(DesktopPaint.PLAYER_BREATH_MS).isEqualTo(DesktopPaint.EMPTY_BREATH_MS);
+        assertThat(DesktopPaint.playerGlowAlpha(1))
+                .isGreaterThan(DesktopPaint.playerGlowAlpha(0));
+        assertThat(DesktopPaint.playerGlowPadFraction(1))
+                .isGreaterThan(DesktopPaint.playerGlowPadFraction(0));
+        assertThat(DesktopPaint.playerGlowPadFraction(0))
+                .isCloseTo(0.22 / DesktopPaint.PLAYER_RADIUS, within(1e-9));
+        assertThat(DesktopPaint.playerGlowPadFraction(1))
+                .isCloseTo(0.26 / DesktopPaint.PLAYER_RADIUS, within(1e-9));
+        assertThat(DesktopPaint.playerGlowPadFraction(0)).isNotEqualTo(0.32);
+        assertThat(DesktopPaint.discStroke(16.8, DesktopPaint.PLAYER_RADIUS))
+                .as("0.07·cell, recovered from the disc diameter")
+                .isCloseTo(1.4, within(1e-9));
+        assertThat(DesktopPaint.discStroke(12.0, DesktopPaint.PATH_HEAD_RADIUS))
+                .isCloseTo(1.4, within(1e-9));
+        assertThat(DesktopPaint.discStroke(1.0, DesktopPaint.PLAYER_RADIUS)).isEqualTo(1.0);
+        assertThat(DesktopPaint.discStroke(1.0, DesktopPaint.PLAYER_RADIUS, 0.07, 2))
+                .isEqualTo(0.5);
+        assertThat(DesktopPaint.playerRimAlpha(1))
+                .isGreaterThan(DesktopPaint.playerRimAlpha(0));
+        assertThat(DesktopPaint.playerMarker(layout, null)).isNull();
+    }
+
+    @Test
+    void arrivingPaintsAGoldRingLargerThanTheGoalDisc() {
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(3, 3, 30, 30);
+        DesktopPaint.Ring ring = DesktopPaint.victoryRing(layout, new Point(0, 0));
+        DesktopPaint.Marker goal = DesktopPaint.endpointMarker(layout, new Point(0, 0));
+        assertThat(ring).isNotNull();
+        assertThat(DesktopPaint.VICTORY_GOLD).isEqualTo("#f0b429");
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.VICTORY_GOLD, 0))
+                .isEqualTo(DesktopPaint.VICTORY_GOLD);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.VICTORY_GOLD, 1))
+                .as("victory gold falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.VICTORY_GOLD);
+        assertThat(ring.radius())
+                .as("web strokes 0.7·cell around the goal")
+                .isEqualTo(layout.cellSize() * 0.7);
+        assertThat(ring.radius() * 2).isGreaterThan(goal.size());
+        assertThat(ring.width()).isEqualTo(Math.max(2.0, layout.wall()));
+        DesktopPaint.Layout thin = DesktopPaint.Layout.fit(3, 3, 6, 6);
+        assertThat(thin.wall()).isEqualTo(1.0);
+        assertThat(DesktopPaint.victoryRing(thin, new Point(0, 0)).width()).isEqualTo(2.0);
+        assertThat(DesktopPaint.victoryRing(thin, new Point(0, 0), 0, 2).width())
+                .as("two bitmap pixels is one CSS pixel at scale 2")
+                .isEqualTo(1.0);
+        DesktopPaint.Marker glow = DesktopPaint.victoryGlow(layout, new Point(0, 0));
+        assertThat(glow).isNotNull();
+        assertThat(glow.size())
+                .as("web victory soft pad is 0.85·cell radius")
+                .isEqualTo(layout.cellSize() * DesktopPaint.VICTORY_GLOW_RADIUS * 2.0);
+        assertThat(DesktopPaint.VICTORY_GLOW_ALPHA).isEqualTo(0.22);
+        assertThat(DesktopPaint.WAYPOINT_GLOW_PAD).isEqualTo(0.14);
+        assertThat(DesktopPaint.WAYPOINT_GLOW_ALPHA).isEqualTo(0.22);
+        assertThat(DesktopPaint.WAYPOINT_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
+        assertThat(DesktopPaint.waypointGlowAlpha(1))
+                .isGreaterThan(DesktopPaint.waypointGlowAlpha(0));
+        assertThat(DesktopPaint.waypointGlowPad(1))
+                .isGreaterThan(DesktopPaint.waypointGlowPad(0));
+        assertThat(DesktopPaint.waypointGotGlowAlpha(1))
+                .isGreaterThan(DesktopPaint.waypointGotGlowAlpha(0));
+        assertThat(DesktopPaint.waypointGotStrokeAlpha(1))
+                .isGreaterThan(DesktopPaint.waypointGotStrokeAlpha(0));
+        assertThat(DesktopPaint.VICTORY_BREATH_MS).isEqualTo(2800);
+        assertThat(DesktopPaint.victoryGlowAlpha(1))
+                .isGreaterThan(DesktopPaint.victoryGlowAlpha(0));
+        assertThat(DesktopPaint.victoryRingRadius(1))
+                .isGreaterThan(DesktopPaint.victoryRingRadius(0));
+        assertThat(DesktopPaint.victoryRing(layout, null)).isNull();
+        assertThat(DesktopPaint.victoryGlow(layout, null)).isNull();
+    }
+
+    @Test
+    void startAndGoalTilesPaintAsFloorSoTheDiscsCanSitOnTheCorridor() {
+        assertThat(DesktopPaint.floorRole(TileType.START)).isEqualTo(TileType.PASSAGE);
+        assertThat(DesktopPaint.floorRole(TileType.GOAL)).isEqualTo(TileType.PASSAGE);
+        assertThat(DesktopPaint.floorRole(TileType.WALL)).isEqualTo(TileType.WALL);
+        assertThat(DesktopPaint.floorRole(null)).isEqualTo(TileType.PASSAGE);
+        assertThat(DesktopPaint.FLOOR_END_WEIGHT).isEqualTo(0.42);
+        assertThat(DesktopPaint.START_INK).isEqualTo("#3ee08f");
+        assertThat(DesktopPaint.startInk(0)).isEqualTo(DesktopPaint.START_INK);
+        assertThat(DesktopPaint.startInk(1))
+                .as("start disc falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.START_INK);
+        assertThat(DesktopPaint.GOAL_INK).isEqualTo("#ff5a5f");
+        assertThat(DesktopPaint.goalInk(0)).isEqualTo(DesktopPaint.GOAL_INK);
+        assertThat(DesktopPaint.goalInk(1))
+                .as("goal disc falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.GOAL_INK);
+        String stone = DesktopPaint.clearFloorInk(0);
+        String gate = DesktopPaint.endFloorInk(stone, TileType.START);
+        String exit = DesktopPaint.endFloorInk(stone, TileType.GOAL);
+        assertThat(gate).as("start floor lifts toward well mint").isNotEqualTo(stone);
+        assertThat(exit).as("goal floor lifts toward well coral").isNotEqualTo(stone);
+        assertThat(DesktopPaint.endFloorInk(stone, TileType.PASSAGE)).isEqualTo(stone);
+        assertThat(DesktopPaint.endFloorInk(null, TileType.START)).isNull();
+    }
+
+    @Test
+    void theEndpointDiscIsSmallerThanThePlayerDisc() {
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(3, 3, 30, 30);
+        DesktopPaint.Marker end = DesktopPaint.endpointMarker(layout, new Point(0, 0));
+        DesktopPaint.Marker player = DesktopPaint.playerMarker(layout, new Point(0, 0));
+        assertThat(end).isNotNull();
+        assertThat(end.size())
+                .as("web radius is 0.34·cell, so the disc is 0.68·cell")
+                .isCloseTo(13.6, within(1e-9));
+        assertThat(end.size()).isLessThan(player.size());
+        assertThat(DesktopPaint.endpointMarker(layout, null)).isNull();
+        assertThat(DesktopPaint.disc(null, new Point(0, 0), 0.34)).isNull();
+    }
+
+    @Test
+    void aHiDpiCanvasHasADevicePixelBackingStore() throws Exception {
+        DesktopPaint.Backing store = DesktopPaint.Backing.of(800, 600, 2, 2);
+        assertThat(store).isNotNull();
+        assertThat(store.cssW()).isEqualTo(800);
+        assertThat(store.pixelW()).isEqualTo(1600);
+        assertThat(store.pixelH()).isEqualTo(1200);
+        assertThat(DesktopPaint.Backing.of(800, 600, 0, 2).scaleX()).isEqualTo(1);
+        assertThat(DesktopPaint.Backing.of(0, 600, 2, 2)).isNull();
+        assertThat(DesktopPaint.CANVAS_IMAGE_SMOOTHING).isFalse();
+        assertThat(DesktopPaint.SCENE_FILL).isEqualTo("#0c0908");
+        assertThat(DesktopPaint.pageWashRadiusX()).isEqualTo(1200);
+        assertThat(DesktopPaint.pageWashRadiusY()).isEqualTo(700);
+        assertThat(DesktopPaint.pageWashScaleY()).isCloseTo(700 / 1200.0, within(1e-9));
+        assertThat(DesktopPaint.PAGE_WASH_END).isEqualTo(0.55);
+        assertThat(DesktopPaint.pageWashCenterX(1280)).isEqualTo(640);
+        assertThat(DesktopPaint.pageWashCenterY(800)).isEqualTo(-80);
+        String stage = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/java/com/daedalus/desktop/DaedalusPrimaryStage.java"));
+        assertThat(stage).contains("pageWash(shell)");
+        assertThat(stage).contains("cap.setScaleY(DesktopPaint.pageWashScaleY())");
+        assertThat(stage).contains("new Stop(DesktopPaint.PAGE_WASH_END, Color.web(DesktopPaint.SCENE_FILL))");
+        assertThat(DesktopPaint.SCENE_FILL).isEqualTo(
+                com.daedalus.desktop.ui.themes.CosmicTheme.BACKGROUND_INK);
+        assertThat(DesktopPaint.SNAPSHOT_FILL).isEqualTo(DesktopPaint.SCENE_FILL);
+        assertThat(DesktopPaint.SNAPSHOT_FILL).isNotEqualTo("#ffffff");
+        assertThat(DesktopPaint.STAGE_ICON_ARGB).isEqualTo(0xFF0C0908);
+        assertThat(DesktopPaint.STAGE_ICON_LIP_ARGB).isEqualTo(0xFF996F31);
+        assertThat(DesktopPaint.STAGE_ICON_LIP_ARGB).isNotEqualTo(0xFFB88538);
+        assertThat(DesktopPaint.STAGE_ICON_WALL_ARGB).isEqualTo(0xFF2A2218);
+        assertThat(DesktopPaint.STAGE_ICON_FLOOR_ARGB).isEqualTo(0xFF484339);
+        assertThat(DesktopPaint.STAGE_ICON_START_ARGB).isEqualTo(0xFF3EE08F);
+        assertThat(DesktopPaint.STAGE_ICON_GOAL_ARGB).isEqualTo(0xFFFF5A5F);
+        int[] icon = DesktopPaint.stageIconPixels();
+        assertThat(icon).hasSize(DesktopPaint.STAGE_ICON_SIZE * DesktopPaint.STAGE_ICON_SIZE);
+        assertThat(icon[0]).isEqualTo(DesktopPaint.STAGE_ICON_LIP_ARGB);
+        int mid = DesktopPaint.STAGE_ICON_SIZE / 2;
+        assertThat(icon[mid * DesktopPaint.STAGE_ICON_SIZE + mid])
+                .as("idle maze floors sit at the icon center")
+                .isEqualTo(DesktopPaint.hexArgb(
+                        DesktopPaint.clearFloorInk(DesktopPaint.emptyMarkEdge(3, 5))));
+        assertThat(icon[11 * DesktopPaint.STAGE_ICON_SIZE + 23])
+                .as("idle icon rim slate falls off like the live well")
+                .isEqualTo(DesktopPaint.hexArgb(
+                        DesktopPaint.clearFloorInk(DesktopPaint.emptyMarkEdge(1, 9))))
+                .isNotEqualTo(icon[mid * DesktopPaint.STAGE_ICON_SIZE + mid]);
+        assertThat(icon[11 * DesktopPaint.STAGE_ICON_SIZE + 7])
+                .as("start mint falls off toward floor-dim")
+                .isEqualTo(DesktopPaint.hexArgb(
+                        DesktopPaint.startInk(DesktopPaint.emptyMarkEdge(1, 1))))
+                .isNotEqualTo(DesktopPaint.STAGE_ICON_START_ARGB);
+        assertThat(icon[19 * DesktopPaint.STAGE_ICON_SIZE + 23])
+                .as("exit coral falls off toward floor-dim")
+                .isEqualTo(DesktopPaint.hexArgb(
+                        DesktopPaint.goalInk(DesktopPaint.emptyMarkEdge(5, 9))))
+                .isNotEqualTo(DesktopPaint.STAGE_ICON_GOAL_ARGB);
+        assertThat(icon[9 * DesktopPaint.STAGE_ICON_SIZE + 5])
+                .as("idle icon rim posts fall off toward unseen")
+                .isEqualTo(DesktopPaint.hexArgb(DesktopPaint.emptyMarkWallInk(0, 0)))
+                .isNotEqualTo(icon[13 * DesktopPaint.STAGE_ICON_SIZE + 13]);
+        assertThat(icon[13 * DesktopPaint.STAGE_ICON_SIZE + 13])
+                .isEqualTo(DesktopPaint.hexArgb(DesktopPaint.emptyMarkWallInk(2, 4)));
+    }
+
+    @Test
+    void anEmptyCanvasHasCopyInsteadOfABlankVoid() {
+        assertThat(DesktopPaint.EMPTY_WORDMARK).isEqualTo("DAEDALUS");
+        assertThat(DesktopPaint.EMPTY_WORDMARK_INK).isEqualTo("#f2ead8");
+        assertThat(DesktopPaint.EMPTY_WORDMARK_INK).isNotEqualTo("#e8eef4");
+        assertThat(DesktopPaint.emptyWordmarkInk())
+                .as("idle parchment falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.EMPTY_WORDMARK_INK);
+        assertThat(DesktopPaint.EMPTY_WORDMARK_GLOW).isEqualTo("#3ee08f");
+        assertThat(DesktopPaint.emptyWordmarkMintInk())
+                .as("idle mint aura falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.EMPTY_WORDMARK_GLOW);
+        assertThat(DesktopPaint.EMPTY_WORDMARK_GOLD).isEqualTo("#f5c14a");
+        assertThat(DesktopPaint.emptyWordmarkGoldInk())
+                .as("idle gold aura falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.EMPTY_WORDMARK_GOLD);
+        assertThat(DesktopPaint.EMPTY_WORDMARK_GLOW_RADIUS).isEqualTo(28);
+        assertThat(DesktopPaint.EMPTY_WORDMARK_GOLD_RADIUS).isEqualTo(48);
+        assertThat(DesktopPaint.EMPTY_BREATH_MS).isEqualTo(4500);
+        double lo = DesktopPaint.emptyBreathWave(0L);
+        double hi = DesktopPaint.emptyBreathWave((long) (DesktopPaint.EMPTY_BREATH_MS * 500_000));
+        assertThat(DesktopPaint.emptyMintAlpha(1)).isGreaterThan(DesktopPaint.emptyMintAlpha(0));
+        assertThat(DesktopPaint.emptyGoldRadius(1)).isGreaterThan(DesktopPaint.emptyGoldRadius(0));
+        assertThat(DesktopPaint.emptyGlowMintAlpha(1))
+                .isGreaterThan(DesktopPaint.emptyGlowMintAlpha(0));
+        assertThat(DesktopPaint.emptyGlowGoldAlpha(1))
+                .isGreaterThan(DesktopPaint.emptyGlowGoldAlpha(0));
+        assertThat(DesktopPaint.emptyGlowOuter(200, 140)).isCloseTo(58.8, within(1e-9));
+        assertThat(DesktopPaint.emptyGlowMintEnd(168))
+                .as("mint holds out to the well's 12px core")
+                .isCloseTo(12.0 / 168, within(1e-9));
+        assertThat(DesktopPaint.emptyGlowGoldAt(168))
+                .isCloseTo((12 + 0.55 * (168 - 12)) / 168, within(1e-9));
+        assertThat(DesktopPaint.emptyGlowGoldAt(168)).isGreaterThan(0.55);
+        assertThat(DesktopPaint.emptyMarkFloorAlpha(1))
+                .isGreaterThan(DesktopPaint.emptyMarkFloorAlpha(0));
+        assertThat(DesktopPaint.emptyMarkFloorAlpha(0)).isEqualTo(0.36);
+        assertThat(DesktopPaint.emptyCaptionTitleAlpha(1))
+                .isGreaterThan(DesktopPaint.emptyCaptionTitleAlpha(0));
+        assertThat(DesktopPaint.emptyCaptionDetailAlpha(1))
+                .isGreaterThan(DesktopPaint.emptyCaptionDetailAlpha(0));
+        assertThat(DesktopPaint.emptyCaptionTitleAlpha(0)).isEqualTo(0.72);
+        assertThat(DesktopPaint.emptyCaptionDetailAlpha(0)).isEqualTo(0.55);
+        assertThat(DesktopPaint.EMPTY_CAPTION_TITLE).isEqualTo("#b88538");
+        assertThat(DesktopPaint.emptyCaptionTitleInk())
+                .as("idle gold line falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.EMPTY_CAPTION_TITLE);
+        assertThat(DesktopPaint.EMPTY_CAPTION_DETAIL).isEqualTo("#8c764e");
+        assertThat(DesktopPaint.emptyCaptionDetailInk())
+                .as("idle khaki lines fall off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.EMPTY_CAPTION_DETAIL);
+        assertThat(DesktopPaint.EMPTY_CAPTION_TITLE).isNotEqualTo("#7d8894");
+        assertThat(DesktopPaint.CANVAS_RIM).isEqualTo("#b88538");
+        assertThat(DesktopPaint.canvasRimInk())
+                .as("maze-well gold lip falls off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.CANVAS_RIM);
+        assertThat(DesktopPaint.canvasRimAlpha(1))
+                .isGreaterThan(DesktopPaint.canvasRimAlpha(0));
+        assertThat(DesktopPaint.canvasRimGlowRadius(1))
+                .isGreaterThan(DesktopPaint.canvasRimGlowRadius(0));
+        assertThat(DesktopPaint.canvasRimGlowAlpha(1))
+                .isGreaterThan(DesktopPaint.canvasRimGlowAlpha(0));
+        assertThat(DesktopPaint.legendFadeMidAlpha(1))
+                .isGreaterThan(DesktopPaint.legendFadeMidAlpha(0));
+        assertThat(DesktopPaint.legendFadeBotAlpha(1))
+                .isGreaterThan(DesktopPaint.legendFadeBotAlpha(0));
+        assertThat(DesktopPaint.LEGEND_INK).isEqualTo("#b09a72");
+        assertThat(DesktopPaint.LEGEND_INK).isNotEqualTo("#9aa3ad");
+        assertThat(DesktopPaint.EXPORT_INK).isEqualTo(DesktopPaint.LEGEND_INK);
+        assertThat(DesktopPaint.LEGEND_FADE_R).isEqualTo(16);
+        assertThat(DesktopPaint.LEGEND_FADE_G).isEqualTo(11);
+        assertThat(DesktopPaint.LEGEND_FADE_B).isEqualTo(8);
+        assertThat(DesktopPaint.LEGEND_FADE_R).isGreaterThan(DesktopPaint.LEGEND_FADE_B);
+        assertThat(DesktopPaint.shellRimAlpha(1))
+                .isEqualTo(DesktopPaint.canvasRimAlpha(1));
+        assertThat(DesktopPaint.brandMintAlpha(1))
+                .isGreaterThan(DesktopPaint.brandMintAlpha(0));
+        assertThat(DesktopPaint.brandMintRadius(1))
+                .isGreaterThan(DesktopPaint.brandMintRadius(0));
+        assertThat(DesktopPaint.brandMintAlpha(0)).isEqualTo(0.16);
+        assertThat(DesktopPaint.brandMintRadius(0)).isEqualTo(22.0);
+        assertThat(DesktopPaint.brandMintAlpha(1)).isEqualTo(0.32);
+        assertThat(DesktopPaint.brandMintRadius(1)).isEqualTo(36.0);
+        assertThat(DesktopPaint.brandGoldAlpha(0)).isEqualTo(0.08);
+        assertThat(DesktopPaint.brandGoldRadius(0)).isEqualTo(48.0);
+        assertThat(DesktopPaint.brandGoldAlpha(1)).isEqualTo(0.18);
+        assertThat(DesktopPaint.brandGoldRadius(1)).isEqualTo(72.0);
+        assertThat(DesktopPaint.exportsRimAlpha(0)).isEqualTo(0.36);
+        assertThat(DesktopPaint.exportsRimAlpha(1)).isEqualTo(0.55);
+        assertThat(DesktopPaint.boardRimAlpha(0)).isEqualTo(0.36);
+        assertThat(DesktopPaint.boardRimAlpha(1)).isEqualTo(0.55);
+        assertThat(DesktopPaint.infoRimAlpha(0)).isEqualTo(0.28);
+        assertThat(DesktopPaint.infoRimAlpha(1)).isCloseTo(0.48, within(1e-9));
+        assertThat(DesktopPaint.headerRimAlpha(0)).isEqualTo(0.38);
+        assertThat(DesktopPaint.headerRimAlpha(1)).isCloseTo(0.62, within(1e-9));
+        assertThat(DesktopPaint.statsRimAlpha(0)).isEqualTo(0.28);
+        assertThat(DesktopPaint.statsRimAlpha(1)).isCloseTo(0.48, within(1e-9));
+        assertThat(hi).isNotEqualTo(lo);
+        assertThat(DesktopPaint.EMPTY_TITLE).contains("Generate");
+        assertThat(DesktopPaint.EMPTY_DETAIL).contains("Solve");
+        assertThat(DesktopPaint.EMPTY_HINT).contains("arrow");
+    }
+
+    @Test
+    void theEmptyMarkIsTheSameMiniatureAsTheWebIdleTiles() throws Exception {
+        assertThat(DesktopPaint.EMPTY_MARK).hasSize(7);
+        assertThat(DesktopPaint.EMPTY_MARK[0]).hasSize(11);
+        assertThat(DesktopPaint.emptyMarkFloors()).hasSize(28);
+        assertThat(DesktopPaint.emptyMarkWalls()).isNotEmpty();
+        assertThat(DesktopPaint.emptyMarkWalls().size()
+                + DesktopPaint.emptyMarkFloors().size())
+                .isEqualTo(7 * 11);
+        assertThat(DesktopPaint.emptyMarkWallAlpha(1))
+                .isGreaterThan(DesktopPaint.emptyMarkWallAlpha(0));
+        assertThat(DesktopPaint.emptyMarkFloorAlpha(0))
+                .isGreaterThan(DesktopPaint.emptyMarkWallAlpha(0));
+        assertThat(DesktopPaint.emptyMarkFloors())
+                .contains(
+                        new DesktopPaint.TileRect(1, 1),
+                        new DesktopPaint.TileRect(5, 9));
+        assertThat(DesktopPaint.emptyMarkEdge(1, 9))
+                .as("a rim cell is farther from center than a mid hall")
+                .isGreaterThan(DesktopPaint.emptyMarkEdge(5, 3));
+        assertThat(DesktopPaint.emptyMarkFloorInk(1, 9))
+                .as("idle rim stone falls off like the live well")
+                .isNotEqualTo(DesktopPaint.emptyMarkFloorInk(5, 3));
+        String startBase = DesktopPaint.clearFloorInk(DesktopPaint.emptyMarkEdge(1, 1));
+        assertThat(DesktopPaint.emptyMarkFloorInk(1, 1))
+                .as("idle start floor lifts toward well mint")
+                .isEqualTo(DesktopPaint.endFloorInk(startBase, TileType.START));
+        String goalBase = DesktopPaint.clearFloorInk(DesktopPaint.emptyMarkEdge(5, 9));
+        assertThat(DesktopPaint.emptyMarkFloorInk(5, 9))
+                .as("idle goal floor lifts toward well coral")
+                .isEqualTo(DesktopPaint.endFloorInk(goalBase, TileType.GOAL));
+        String startHi = DesktopPaint.clearFloorHiInk(DesktopPaint.emptyMarkEdge(1, 1));
+        assertThat(DesktopPaint.emptyMarkTile(1, 1)).isEqualTo(TileType.START);
+        assertThat(DesktopPaint.emptyMarkTile(5, 9)).isEqualTo(TileType.GOAL);
+        assertThat(DesktopPaint.emptyMarkFloorHiInk(1, 1))
+                .as("idle start shine lifts toward well mint")
+                .isEqualTo(DesktopPaint.endFloorInk(startHi, TileType.START));
+        String goalHi = DesktopPaint.clearFloorHiInk(DesktopPaint.emptyMarkEdge(5, 9));
+        assertThat(DesktopPaint.emptyMarkFloorHiInk(5, 9))
+                .as("idle goal shine lifts toward well coral")
+                .isEqualTo(DesktopPaint.endFloorInk(goalHi, TileType.GOAL));
+        assertThat(DesktopPaint.emptyMarkFloorHiInk(1, 9))
+                .as("idle rim shine falls off like the live well")
+                .isNotEqualTo(DesktopPaint.emptyMarkFloorHiInk(5, 3));
+        DesktopPaint.Layout mark = DesktopPaint.emptyMarkLayout(400, 300);
+        assertThat(mark).isNotNull();
+        assertThat(mark.cellSize())
+                .as("budget is 200×140 so a large window does not inflate the mark")
+                .isEqualTo(30.0);
+        assertThat(DesktopPaint.emptyMarkHairlines(mark))
+                .as("idle corridors wear a 1 CSS px shine, draw.js forces dpr 1")
+                .isNotEmpty();
+        assertThat(DesktopPaint.emptyMarkHairlines(mark).get(0).h()).isEqualTo(1.0);
+        assertThat(DesktopPaint.emptyMarkWallHairlines(mark).get(0).h()).isEqualTo(1.0);
+        String ctrl = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/java/com/daedalus/desktop/ui/MainController.java"));
+        assertThat(ctrl).contains(
+                "DesktopPaint.wallHiStroke(\n                            mark, tile.tileRow(), tile.tileCol())");
+        assertThat(ctrl).contains("paintWallShine(g, DesktopPaint.wallHiStroke(");
+        assertThat(ctrl).contains("paintWallFoot(g, DesktopPaint.wallFootStroke(");
+        assertThat(ctrl).contains("DesktopPaint.wallFootCornerInk(wallInk, floorInk, leftFloor)");
+        assertThat(ctrl).contains("DesktopPaint.wallSideJoinInk(wallInk, floorInk, shineInk)");
+        assertThat(ctrl).contains("DesktopPaint.wallSideHeelInk(wallInk, floorInk, footInk)");
+        assertThat(ctrl).contains("paintWallSide(g, DesktopPaint.wallSideStroke(");
+        assertThat(ctrl).contains("paintFloorSkirts(g, layout, r, c, store.scaleX(), store.scaleY(),");
+        assertThat(ctrl).contains("DesktopPaint.wallInk(DesktopPaint.floorEdge(layout, r - 1, c))");
+        assertThat(ctrl).contains("DesktopPaint.floorSkirtCornerInk(floorInk, northWall, westWall)");
+        assertThat(ctrl).contains("DesktopPaint.floorSkirtJoinInk(floorInk, westWall, shineInk)");
+        assertThat(ctrl).contains("DesktopPaint.catchLip(shine)");
+        assertThat(ctrl).contains("DesktopPaint.catchEnds(shine)");
+        assertThat(ctrl).contains("DesktopPaint.catchCornerInk(shineInk, bodyInk)");
+        assertThat(ctrl).contains(
+                "DesktopPaint.floorHiStroke(\n                            mark, tile.tileRow(), tile.tileCol())");
+        assertThat(ctrl).contains("paintFloorShine(g, DesktopPaint.floorHiStroke(");
+        assertThat(ctrl).contains("layout, r, c, store.scaleX(), store.scaleY())");
+        assertThat(DesktopPaint.emptyMarkHairlines(null)).isEmpty();
+        assertThat(DesktopPaint.emptyMarkWallInk(0, 0))
+                .as("idle rim posts fall off toward unseen like live stone")
+                .isNotEqualTo(DesktopPaint.emptyMarkWallInk(3, 5));
+        assertThat(DesktopPaint.emptyMarkWallInk(0, 0))
+                .isEqualTo(DesktopPaint.wallInk(DesktopPaint.emptyMarkEdge(0, 0)));
+        assertThat(DesktopPaint.emptyMarkWallHiInk(0, 0))
+                .isEqualTo(DesktopPaint.clearWallHiInk(DesktopPaint.emptyMarkEdge(0, 0)));
+        assertThat(DesktopPaint.emptyMarkWallHairlines(mark))
+                .as("idle posts wear a 1 CSS px shine, draw.js forces dpr 1")
+                .isNotEmpty();
+        assertThat(DesktopPaint.emptyMarkWallHairlines(null)).isEmpty();
+        assertThat(DesktopPaint.EMPTY_MARK_BUDGET_W).isEqualTo(200.0);
+        assertThat(DesktopPaint.EMPTY_MARK_BUDGET_H).isEqualTo(140.0);
+        assertThat(DesktopPaint.EMPTY_MARK_LIFT).isEqualTo(48.0);
+        assertThat(mark.offsetX())
+                .as("centered on the canvas, not left-aligned in the budget")
+                .isEqualTo(101.0);
+        assertThat(mark.offsetY()).isEqualTo(41.0);
+        DesktopPaint.Layout half = DesktopPaint.emptyMarkLayout(199, 219);
+        assertThat(half.offsetX())
+                .as("draw.js rounds the idle mark, so a half pixel sits on 1")
+                .isEqualTo(1.0);
+        assertThat(half.offsetY()).isEqualTo(1.0);
+        assertThat(DesktopPaint.endpointMarker(mark, DesktopPaint.EMPTY_MARK_START)).isNotNull();
+        assertThat(DesktopPaint.endpointMarker(mark, DesktopPaint.EMPTY_MARK_GOAL)).isNotNull();
+        assertThat(DesktopPaint.endpointRing(mark, DesktopPaint.EMPTY_MARK_START, 1).radius())
+                .isGreaterThan(DesktopPaint.endpointRing(mark, DesktopPaint.EMPTY_MARK_START).radius());
+        assertThat(DesktopPaint.emptyMarkLayout(0, 300)).isNull();
+    }
+
+    @Test
+    void endpointsAndPathHeadsWearRingsLikeTheWeb() {
+        DesktopPaint.Layout layout = DesktopPaint.Layout.fit(5, 5, 200, 200);
+        assertThat(layout).isNotNull();
+        Point cell = new Point(1, 1);
+        DesktopPaint.Ring place = DesktopPaint.endpointRing(layout, cell);
+        DesktopPaint.Ring tip = DesktopPaint.pathHeadHalo(layout, cell);
+        assertThat(place).isNotNull();
+        assertThat(tip).isNotNull();
+        assertThat(place.radius()).isEqualTo(layout.cellSize() * 0.55);
+        assertThat(DesktopPaint.endpointRing(layout, cell, 1).radius())
+                .isGreaterThan(place.radius());
+        assertThat(DesktopPaint.endpointRingAlpha(1))
+                .isGreaterThan(DesktopPaint.endpointRingAlpha(0));
+        assertThat(DesktopPaint.endpointGlowAlpha(1))
+                .isGreaterThan(DesktopPaint.endpointGlowAlpha(0));
+        assertThat(DesktopPaint.endpointGlowPadFraction(1))
+                .isGreaterThan(DesktopPaint.endpointGlowPadFraction(0));
+        assertThat(DesktopPaint.endpointGlowPadFraction(0))
+                .isCloseTo(0.22 / DesktopPaint.ENDPOINT_RADIUS, within(1e-9));
+        assertThat(DesktopPaint.endpointGlowPadFraction(1))
+                .isCloseTo(0.26 / DesktopPaint.ENDPOINT_RADIUS, within(1e-9));
+        assertThat(DesktopPaint.endpointGlowPadFraction(0)).isNotEqualTo(0.32);
+        assertThat(DesktopPaint.endpointCoreRimAlpha(1))
+                .isGreaterThan(DesktopPaint.endpointCoreRimAlpha(0));
+        assertThat(DesktopPaint.ENDPOINT_BREATH_MS).isEqualTo(DesktopPaint.EMPTY_BREATH_MS);
+        assertThat(tip.radius()).isEqualTo(layout.cellSize() * 0.5);
+        assertThat(DesktopPaint.pathHeadHalo(layout, cell, 1).radius())
+                .isGreaterThan(tip.radius());
+        assertThat(DesktopPaint.pathHeadHaloAlpha(1))
+                .isGreaterThan(DesktopPaint.pathHeadHaloAlpha(0));
+        assertThat(DesktopPaint.pathHeadGlowAlpha(1))
+                .isGreaterThan(DesktopPaint.pathHeadGlowAlpha(0));
+        assertThat(DesktopPaint.pathHeadGlowPadFraction(1))
+                .isGreaterThan(DesktopPaint.pathHeadGlowPadFraction(0));
+        assertThat(DesktopPaint.pathHeadGlowPadFraction(0))
+                .isCloseTo(0.22 / DesktopPaint.PATH_HEAD_RADIUS, within(1e-9));
+        assertThat(DesktopPaint.pathHeadGlowPadFraction(1))
+                .isCloseTo(0.26 / DesktopPaint.PATH_HEAD_RADIUS, within(1e-9));
+        assertThat(DesktopPaint.pathHeadGlowPadFraction(0)).isNotEqualTo(0.32);
+        assertThat(DesktopPaint.pathHeadRimAlpha(1))
+                .isGreaterThan(DesktopPaint.pathHeadRimAlpha(0));
+        assertThat(DesktopPaint.PATH_HEAD_BREATH_MS).isEqualTo(DesktopPaint.VICTORY_BREATH_MS);
+        assertThat(DesktopPaint.HARDEST).isEqualTo("#f2c94c");
+        assertThat(DesktopPaint.HARDEST_ALPHA).isEqualTo(0.75);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.HARDEST, 0))
+                .isEqualTo(DesktopPaint.HARDEST);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.HARDEST, 1))
+                .as("hardest ribbon and tip fall off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.HARDEST);
+        assertThat(DesktopPaint.TOUR).isEqualTo("#d4b06a");
+        assertThat(Integer.parseInt(DesktopPaint.TOUR.substring(1, 3), 16))
+                .isGreaterThan(Integer.parseInt(DesktopPaint.TOUR.substring(5, 7), 16));
+        assertThat(DesktopPaint.TOUR_ALPHA).isEqualTo(0.38);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.TOUR, 0))
+                .isEqualTo(DesktopPaint.TOUR);
+        assertThat(DesktopPaint.walkTrailInk(DesktopPaint.TOUR, 1))
+                .as("tour ribbon and tip fall off toward floor-dim")
+                .isNotEqualTo(DesktopPaint.TOUR);
+        assertThat(DesktopPaint.walkHead(List.of(new Point(0, 0), cell))).isEqualTo(cell);
+        assertThat(DesktopPaint.endpointRing(null, cell)).isNull();
+        assertThat(DesktopPaint.pathHeadHalo(layout, null)).isNull();
+    }
+
+    @Test
+    void legendWashEndsAtTheFarthestCorner() throws Exception {
+        assertThat(DesktopPaint.legendWashRadius(10, 10))
+                .isCloseTo(Math.hypot(0.55, 0.60), within(1e-9));
+        assertThat(DesktopPaint.legendWashRadius(8, 8))
+                .isCloseTo(DesktopPaint.legendWashRadius(10, 10), within(1e-9));
+        assertThat(DesktopPaint.legendWashRadius(6, 10)).isGreaterThan(1.0);
+        String fxml = java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/resources/ui/main.fxml"));
+        assertThat(fxml).contains("radius=\"0.813941\"");
+        assertThat(fxml).contains("radius=\"1.141271\"");
+        assertThat(fxml).doesNotContain("radius=\"1.0\"");
+        assertThat(fxml.split("radius=\"0.813941\"", -1)).hasSize(19);
+        assertThat(fxml.split("radius=\"1.141271\"", -1)).hasSize(12);
+    }
+}

@@ -67,6 +67,17 @@ class ProdStaticSurfacePostureTest {
         // the other is a coin flip on which request shape a real visitor makes.
         EXPECTED.put("GET /", Posture.PUBLIC);
         EXPECTED.put("GET /index.html", Posture.PUBLIC);
+        for (String path : ProdSecurityConfig.STATIC_SCRIPTS) {
+            EXPECTED.put("GET " + path, Posture.PUBLIC);
+        }
+        // The realm page and its script (ADR-018): the WebGL world client beside the well.
+        for (String path : ProdSecurityConfig.STATIC_PAGES) {
+            EXPECTED.put("GET " + path, Posture.PUBLIC);
+        }
+
+        // SockJS info is the first request a browser makes. Closing /ws/** made that 401, so
+        // a signed-in CONNECT never happened — the token was on a frame the handshake blocked.
+        EXPECTED.put("GET /ws/info", Posture.PUBLIC);
 
         // The method is half the decision and the first version of this table left it out —
         // every row said GET, so dropping `HttpMethod.GET` from the matcher in
@@ -78,6 +89,9 @@ class ProdStaticSurfacePostureTest {
         EXPECTED.put("POST /index.html", Posture.REFUSED);
         EXPECTED.put("PUT /index.html", Posture.REFUSED);
         EXPECTED.put("DELETE /index.html", Posture.REFUSED);
+        for (String path : ProdSecurityConfig.STATIC_SCRIPTS) {
+            EXPECTED.put("POST " + path, Posture.REFUSED);
+        }
 
         // Nothing else is served, and the fail-closed default is the feature. A path that does
         // not exist must not be distinguishable from one that is merely protected.
@@ -140,12 +154,30 @@ class ProdStaticSurfacePostureTest {
 
         byte[] body = client.method(HttpMethod.GET).uri("/").exchange()
                 .returnResult(byte[].class).getResponseBody();
-
         assertThat(body).as("prod served nothing at /").isNotNull();
         String html = new String(body);
-        assertThat(html).contains("<html", "#session=");
-        assertThat(html.length())
-                .as("the page prod serves is %d bytes, which is not the UI", html.length())
+        StringBuilder js = new StringBuilder();
+        for (String path : ProdSecurityConfig.STATIC_SCRIPTS) {
+            byte[] bytes = client.method(HttpMethod.GET).uri(path).exchange()
+                    .returnResult(byte[].class).getResponseBody();
+            assertThat(bytes).as("prod served nothing at %s", path).isNotNull();
+            js.append(new String(bytes));
+            assertThat(html).as("index.html must name %s — HTML cannot import STATIC_SCRIPTS",
+                    path).contains(path);
+        }
+        String script = js.toString();
+        assertThat(html).contains("<html");
+        assertThat(script).contains("#session=", "DaedalusDraw", "DaedalusApi",
+                "DaedalusShare", "DaedalusFog", "DaedalusSeat", "DaedalusLab",
+                "DaedalusCaption", "DaedalusMint", "DaedalusCampaign",
+                "DaedalusSpectate",
+                "DaedalusHunt", "DaedalusSolve", "DaedalusTheory",
+                "DaedalusLiving", "DaedalusGhost", "DaedalusTournament",
+                "connectStomp", "async function play",
+                "async function startFog");
+        assertThat(html.length() + script.length())
+                .as("the page+script prod serves is %d bytes, which is not the UI",
+                        html.length() + script.length())
                 .isGreaterThan(10_000);
     }
 

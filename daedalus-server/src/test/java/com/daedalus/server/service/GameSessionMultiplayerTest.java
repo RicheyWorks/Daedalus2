@@ -5,11 +5,13 @@ package com.daedalus.server.service;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
 import com.daedalus.model.GameSession;
+import com.daedalus.model.LeaderboardEntry;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
 import com.daedalus.plugin.events.PlayerMovedEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -115,6 +117,9 @@ class GameSessionMultiplayerTest {
         assertThat(s.moveCount()).isEqualTo(2);
         assertThat(published).extracting(PlayerMovedEvent::player)
                 .containsExactly("Alice", "Bob");
+        assertThat(s.walks()).containsOnlyKeys("Alice", "Bob");
+        assertThat(s.trail()).extracting(GameSession.TimedMove::to).containsExactly(aliceTo);
+        assertThat(s.walks().get("Bob")).extracting(GameSession.TimedMove::to).containsExactly(bobTo);
     }
 
     @Test
@@ -139,17 +144,51 @@ class GameSessionMultiplayerTest {
 
         assertThat(svc.tryMove(s.id(), "Bob", grid, grid.goal())).isTrue();
         assertThat(s.completed()).isTrue();
-        verify(leaderboard, times(1)).submit(any());
+        assertThat(s.completedBy()).isEqualTo("Bob");
+        ArgumentCaptor<LeaderboardEntry> submitted = ArgumentCaptor.forClass(LeaderboardEntry.class);
+        verify(leaderboard, times(1)).submit(submitted.capture());
+        assertThat(submitted.getValue().playerName())
+                .as("a joiner finish must not be credited to the opener")
+                .isEqualTo("Bob");
+        assertThat(submitted.getValue().moveCount()).isEqualTo(1);
 
         // Completion freezes the whole session, opening player included.
         assertThat(svc.tryMove(s.id(), "Alice",
                 grid, grid.openNeighbors(grid.start()).get(0))).isFalse();
-        assertThat(svc.join(s.id(), "Carol", grid.start())).isNull();
+        assertThatThrownBy(() -> svc.join(s.id(), "Carol", grid.start()))
+                .isInstanceOf(GameSessionService.JoinRefusedException.class)
+                .extracting(ex -> ((GameSessionService.JoinRefusedException) ex).reason())
+                .isEqualTo(GameSessionService.JoinRefusedException.Reason.COMPLETED);
     }
 
     @Test
     void joiningAnUnknownSessionIsRefused() {
         GameSessionService svc = service(true);
         assertThat(svc.join(UUID.randomUUID(), "Bob", grid.start())).isNull();
+    }
+
+    @Test
+    void aFullSessionRefusesANewName() {
+        GameSessionService svc = service(true);
+        GameSession s = svc.open(UUID.randomUUID(), "Alice", grid.start());
+        for (int i = 1; i < GameSession.MAX_PLAYERS; i++) {
+            assertThat(svc.join(s.id(), "p" + i, grid.start())).isSameAs(s);
+        }
+        assertThatThrownBy(() -> svc.join(s.id(), "overflow", grid.start()))
+                .isInstanceOf(GameSessionService.JoinRefusedException.class)
+                .extracting(ex -> ((GameSessionService.JoinRefusedException) ex).reason())
+                .isEqualTo(GameSessionService.JoinRefusedException.Reason.FULL);
+        assertThat(s.players()).hasSize(GameSession.MAX_PLAYERS);
+        assertThat(svc.join(s.id(), "p1", grid.start())).isSameAs(s);
+    }
+
+    @Test
+    void anAuthenticatedJoinRecordsTheSubjectOnTheAllowlist() {
+        GameSessionService svc = service(true);
+        GameSession s = svc.open(UUID.randomUUID(), "recursive-backtracker",
+                "Alice", grid.start(), "alice");
+        assertThat(svc.join(s.id(), "Bob", grid.start(), "bob")).isSameAs(s);
+        assertThat(s.maySubscribe("bob")).isTrue();
+        assertThat(s.maySubscribe("mallory")).isFalse();
     }
 }
