@@ -11,8 +11,8 @@ package com.daedalus.world;
 public enum WorldStyle {
     /** Minecraft / The Sandbox: seeded floating islands and arks (ADR-018..028). */
     SKY_ISLANDS(true, "Sky Islands"),
-    /** Decentraland: a flat grid of square parcels with roads, smooth low-poly. */
-    PARCELS(false, "Parcels"),
+    /** Decentraland: a flat district of square plots with streets and a plaza (ADR-033). */
+    PARCELS(true, "Parcels"),
     /** Roblox: a baseplate of studded bricks, blocky avatars. */
     BRICKS(false, "Bricks"),
     /** Cryptovoxels: a street-grid city of plots with height limits. */

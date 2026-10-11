@@ -6,14 +6,14 @@ import com.daedalus.world.WorldStyle;
 
 /**
  * What carries you up to a sky gate (ADR-031). Gates float in the clouds, past the rainbow, where
- * nobody can walk: every world has its own way to fly there. Only the ark exists yet; the others
- * arrive with their worlds (ADR-032..035).
+ * nobody can walk: every world has its own way to fly there. The ark and the helicopter fly; the
+ * others arrive with their worlds (ADR-034..036).
  */
 public enum Mount {
     /** Sky Islands: the arks that already sail between islands (ADR-019/020). */
     ARK(true, "ark"),
-    /** Parcels: a helicopter from the parcel's pad. */
-    HELICOPTER(false, "helicopter"),
+    /** Parcels: the helicopter on the plaza's pad (ADR-033). */
+    HELICOPTER(true, "helicopter"),
     /** Bricks: a stud-built plane. */
     PLANE(false, "plane"),
     /** Gallery City: a camera drone. */

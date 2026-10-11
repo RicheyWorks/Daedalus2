@@ -34,6 +34,7 @@ import com.daedalus.world.ark.ArkOps;
 import com.daedalus.world.ark.ArkFleet;
 import com.daedalus.world.ark.Voyage;
 import com.daedalus.world.ark.VoyageResult;
+import com.daedalus.world.district.DistrictOps;
 import com.daedalus.plugin.events.ArkVoyageEvent;
 import com.daedalus.plugin.events.IslandLifeEvent;
 import com.daedalus.world.ecology.Community;
@@ -129,6 +130,8 @@ public class WorldService {
 
     /** Island lane: slot → (seed, radius). Persisted beside the DAEW file (ADR-018). */
     private final TreeMap<Integer, IslandEntry> islands = new TreeMap<>();
+    /** A Parcels world (ADR-033): plots instead of islands, a helicopter instead of arks. */
+    private volatile boolean district;
 
     /** Traits by "seed/radius". A pure function's answers; regrowing an island costs ~50 ms. */
     private static final Map<String, IslandTraits> TRAITS = new ConcurrentHashMap<>();
@@ -255,6 +258,11 @@ public class WorldService {
         World live = require(id);
         synchronized (lock) {
             BlockCoordinate at = new BlockCoordinate(x, y, z);
+            if (offPlot(live, at)) {
+                BlockType here = live.get(at);
+                account(live, "block.place", BlockPlaceResult.DENIED);
+                return new BlockWrite(here, here, live.revision().value(), "DENIED");
+            }
             Object driven = WorldOps.drive(live, "block.place", at, type, null, actorId);
             BlockType now = live.get(at);
             if (driven == BlockPlaceResult.DENIED) {
@@ -271,6 +279,14 @@ public class WorldService {
         }
     }
 
+    /**
+     * In a Parcels world nobody builds on streets, the plaza, an unclaimed plot, or above the height
+     * limit (ADR-033): a cube may change only inside a claimed plot, whose parcel then decides who.
+     */
+    private boolean offPlot(World live, BlockCoordinate at) {
+        return district && live.parcelAt(at) == null;
+    }
+
     /** Place outcome. {@code result} is never silent success. */
     public record BlockWrite(BlockType previous, BlockType now, long revision, String result) {
     }
@@ -283,6 +299,11 @@ public class WorldService {
         World live = require(id);
         synchronized (lock) {
             BlockCoordinate at = new BlockCoordinate(x, y, z);
+            if (offPlot(live, at)) {
+                BlockType here = live.get(at);
+                account(live, "block.remove", BlockPlaceResult.DENIED);
+                return new BlockWrite(here, here, live.revision().value(), "DENIED");
+            }
             Object driven = WorldOps.drive(live, "block.remove", at, null, null, actorId);
             BlockType now = live.get(at);
             if (driven == BlockPlaceResult.DENIED) {
@@ -619,6 +640,46 @@ public class WorldService {
     }
 
     /**
+     * Make this a Parcels world (ADR-033): building happens only on claimed plots, below the height
+     * limit; the plots are what is claimed; the helicopter on the plaza's pad is the mount. Set by the
+     * world hub on every mount; the district's cubes themselves are saved like any others.
+     */
+    public void useDistrict() {
+        district = true;
+    }
+
+    public boolean isDistrict() {
+        return district;
+    }
+
+    /** Outcome of laying a district out: LAID, ALREADY_LAID (something is in the way), NOT_A_DISTRICT. */
+    public record DistrictWrite(String result, long revision, int plots) {
+    }
+
+    /** Lay out the Parcels district grown from {@code seed}, all or nothing. Null for an unknown world. */
+    public DistrictWrite raiseDistrict(String id, long seed) {
+        World live = require(id);
+        if (live == null) {
+            return null;
+        }
+        if (!district) {
+            return new DistrictWrite("NOT_A_DISTRICT", live.revision().value(), 0);
+        }
+        DistrictOps.Plan plan = DistrictOps.plan(seed);
+        synchronized (lock) {
+            if (!DistrictOps.build(live, plan)) {
+                return new DistrictWrite("ALREADY_LAID", live.revision().value(), plan.plots().size());
+            }
+            persist();
+            BlockCoordinate pad = DistrictOps.padBerth();
+            long revision = live.revision().value();
+            events.accept(new WorldBlockEvent(this, id, WorldBlockEvent.Kind.WORLD_REVISION_CHANGED,
+                    pad.x(), pad.y(), pad.z(), "DISTRICT", BlockType.AIR.name(), revision));
+            return new DistrictWrite("LAID", revision, plan.plots().size());
+        }
+    }
+
+    /**
      * Raise a seeded island into the first free slot of the island lane. All or nothing: the
      * plan lands whole or the lane is full and nothing changes. One persist, one revision event
      * for the whole island — not sixteen thousand block frames.
@@ -629,6 +690,9 @@ public class WorldService {
             return null;
         }
         IslandPlan plan = IslandGenerator.generate(seed, radius);
+        if (district) {
+            return new IslandWrite("WRONG_STYLE", live.revision().value(), null, plan.traits()); // plots, not islands
+        }
         synchronized (lock) {
             int slot = IslandOps.firstFreeSlot(live, plan);
             if (slot < 0) {
@@ -663,9 +727,40 @@ public class WorldService {
         }
     }
 
-    /** The claim parcel over a slot, or null when the island is unclaimed. Caller holds the lock. */
+    /** True when {@code slot} names something claimable here: an island, or a plot in a Parcels world. */
+    private boolean claimable(int slot) {
+        return district ? DistrictOps.isPlot(slot) : islands.containsKey(slot);
+    }
+
+    /** The box a claim on {@code slot} covers: the island's lane cell, or the plot (ADR-033). */
+    private ParcelBounds claimBox(int slot) {
+        return district ? DistrictOps.plotBounds(slot) : IslandOps.claimBounds(slot);
+    }
+
+    private String noSuch() {
+        return district ? "NO_SUCH_PLOT" : "NO_SUCH_ISLAND";
+    }
+
+    /** Every claimable slot in order. Caller holds the lock. */
+    private List<Integer> claimableSlots() {
+        if (!district) {
+            return List.copyOf(islands.keySet());
+        }
+        List<Integer> out = new ArrayList<>();
+        for (int n = 0; n < DistrictOps.PLOTS_PER_SIDE * DistrictOps.PLOTS_PER_SIDE; n++) {
+            if (DistrictOps.isPlot(n)) {
+                out.add(n);
+            }
+        }
+        return out;
+    }
+
+    /** The claim parcel over a slot, or null when it is unclaimed. Caller holds the lock. */
     private Parcel claimOf(World live, int slot) {
-        ParcelBounds box = IslandOps.claimBounds(slot);
+        if (!claimable(slot)) {
+            return null;
+        }
+        ParcelBounds box = claimBox(slot);
         for (Parcel p : live.parcels()) {
             if (p.bounds().equals(box)) {
                 return p;
@@ -684,8 +779,8 @@ public class WorldService {
         if (at == null) {
             return false;
         }
-        for (IslandEntry e : islands.values()) {
-            if (IslandOps.claimBounds(e.slot()).contains(at) && claimOf(live, e.slot()) != null) {
+        for (int slot : claimableSlots()) {
+            if (claimBox(slot).contains(at) && claimOf(live, slot) != null) {
                 return true;
             }
         }
@@ -713,8 +808,8 @@ public class WorldService {
         }
         synchronized (lock) {
             Map<Integer, IslandClaim> out = new TreeMap<>();
-            for (IslandEntry e : islands.values()) {
-                out.put(e.slot(), claimView(live, "", e.slot()));
+            for (int slot : claimableSlots()) {
+                out.put(slot, claimView(live, "", slot));
             }
             return out;
         }
@@ -736,8 +831,8 @@ public class WorldService {
             return null;
         }
         synchronized (lock) {
-            if (!islands.containsKey(slot)) {
-                return claimView(live, "NO_SUCH_ISLAND", slot);
+            if (!claimable(slot)) {
+                return claimView(live, noSuch(), slot);
             }
             if (badActor(owner)) {
                 return claimView(live, "BAD_OWNER", slot);
@@ -745,7 +840,7 @@ public class WorldService {
             if (claimOf(live, slot) != null) {
                 return claimView(live, "ALREADY_CLAIMED", slot);
             }
-            if (live.claimParcel(IslandOps.claimBounds(slot), owner.trim(), "Isle " + slot) == null) {
+            if (live.claimParcel(claimBox(slot), owner.trim(), (district ? "Plot " : "Isle ") + slot) == null) {
                 return claimView(live, "BLOCKED", slot);
             }
             persist();
@@ -761,8 +856,8 @@ public class WorldService {
             return null;
         }
         synchronized (lock) {
-            if (!islands.containsKey(slot)) {
-                return claimView(live, "NO_SUCH_ISLAND", slot);
+            if (!claimable(slot)) {
+                return claimView(live, noSuch(), slot);
             }
             Parcel p = claimOf(live, slot);
             if (p == null) {
@@ -788,8 +883,8 @@ public class WorldService {
             return null;
         }
         synchronized (lock) {
-            if (!islands.containsKey(slot)) {
-                return claimView(live, "NO_SUCH_ISLAND", slot);
+            if (!claimable(slot)) {
+                return claimView(live, noSuch(), slot);
             }
             Parcel p = claimOf(live, slot);
             if (p == null) {
@@ -813,7 +908,8 @@ public class WorldService {
     }
 
     private void announceClaim(String id, World live, int slot) {
-        BlockCoordinate o = IslandOps.slot(slot);
+        ParcelBounds box = claimBox(slot);
+        BlockCoordinate o = district ? new BlockCoordinate(box.minX(), box.minY(), box.minZ()) : IslandOps.slot(slot);
         events.accept(new WorldBlockEvent(this, id, WorldBlockEvent.Kind.WORLD_REVISION_CHANGED,
                 o.x(), o.y(), o.z(), "CLAIM", BlockType.AIR.name(), live.revision().value()));
     }
@@ -861,35 +957,60 @@ public class WorldService {
         settleArrivals(id);
         synchronized (lock) {
             List<ArkView> out = new ArrayList<>();
-            for (IslandEntry home : islands.values()) {
+            for (int home : homeSlots()) {
                 out.add(view(home));
             }
             return out;
         }
     }
 
-    private ArkView view(IslandEntry home) {
-        String arkId = Ark.idFor(home.slot());
-        int at = fleet.slotOf(arkId, home.slot());
+    /** The helicopter of a Parcels world (ADR-033): one, at home on the plaza's helipad. */
+    public static final String HELICOPTER = "heli-0";
+
+    /** {@link #sail}'s {@code toSlot} for "go home": the vessel's own island, or the helipad. */
+    public static final int HOME = -1;
+
+    /** Every vessel's home slot: one ark per island, or the helicopter's pad. Caller holds the lock. */
+    private List<Integer> homeSlots() {
+        return district ? List.of(DistrictOps.PAD_SLOT) : List.copyOf(islands.keySet());
+    }
+
+    private static String vesselId(int home) {
+        return home == DistrictOps.PAD_SLOT ? HELICOPTER : Ark.idFor(home);
+    }
+
+    private ArkView view(int home) {
+        String arkId = vesselId(home);
+        int at = fleet.slotOf(arkId, home);
         BlockCoordinate berth = berthOf(at);
-        Ark launched = ArkOps.launch(home.slot(), home.traits());
-        Ark placed = new Ark(arkId, launched.name(), home.slot(), at, berth == null ? launched.berth() : berth);
+        Ark placed;
+        if (home == DistrictOps.PAD_SLOT) {
+            placed = new Ark(arkId, "Helicopter", home, at, berth == null ? DistrictOps.padBerth() : berth);
+        } else {
+            IslandEntry isle = islands.get(home);
+            Ark launched = ArkOps.launch(home, isle.traits());
+            placed = new Ark(arkId, launched.name(), home, at, berth == null ? launched.berth() : berth);
+        }
         Hold hold = holds.get(arkId);
         return new ArkView(placed, fleet.voyageOf(arkId), hold == null ? Map.of() : hold.cargo());
     }
 
-    /** Order an ark to the island in {@code toSlot}. Null result means the world is unknown. */
+    /**
+     * Order a vessel to {@code toSlot}: an island, a sky gate ({@link GateOps#GATE_BASE} + g), or
+     * {@link #HOME}. Null result means the world is unknown; a null view, no such vessel.
+     */
     public SailWrite sail(String id, String arkId, int toSlot) {
         if (require(id) == null) {
             return null;
         }
         settleArrivals(id);
         synchronized (lock) {
-            IslandEntry home = homeOf(arkId);
+            Integer home = homeOf(arkId);
             if (home == null) {
                 return new SailWrite(null, null);
             }
-            ArkFleet.Outcome out = fleet.sail(arkId, home.slot(), toSlot, this::berthOf, now());
+            int to = toSlot == HOME ? home : toSlot;
+            ArkFleet.Outcome out = fleet.sail(arkId, home, to, this::berthOf, now());
             if (out.result() == VoyageResult.SAILING) {
                 persistFleet();
                 Voyage v = out.voyage();
@@ -940,10 +1061,10 @@ public class WorldService {
         }
     }
 
-    private IslandEntry homeOf(String arkId) {
-        for (IslandEntry e : islands.values()) {
-            if (Ark.idFor(e.slot()).equals(arkId)) {
-                return e;
+    private Integer homeOf(String arkId) {
+        for (int home : homeSlots()) {
+            if (vesselId(home).equals(arkId)) {
+                return home;
             }
         }
         return null;
@@ -964,6 +1085,9 @@ public class WorldService {
         if (GateOps.isGateSlot(slot)) {
             GateLink g = gates.get(GateOps.gateOfSlot(slot));
             return g == null ? null : g.berth();
+        }
+        if (slot == DistrictOps.PAD_SLOT) {
+            return district ? DistrictOps.padBerth() : null;
         }
         IslandEntry isle = islands.get(slot);
         return isle == null ? null : ArkOps.berth(slot, isle.traits());

@@ -34,6 +34,7 @@ async function open(name) {
   const errors = [];
   page.on("console", m => { if (m.type() === "error") errors.push(m.text()); });
   page.on("pageerror", e => errors.push(String(e)));
+  page.on("response", r => { if (r.status() >= 400) errors.push(`${r.status()} ${r.request().method()} ${r.url()}`); });
   await page.goto(BASE + "/realm.html");
   await page.waitForFunction(() => window.daedalusRealm && window.daedalusRealm.live, null, { timeout: 30000 });
   return { name, page, errors };
@@ -167,6 +168,10 @@ const gap = await A.page.evaluate(() => {
 check("the ride camera stays on the ark", gap < 3, `target ${gap.toFixed(2)} cubes from the ark`);
 await A.page.waitForTimeout(1500);
 await A.page.screenshot({ path: path.join(OUT, "realm_voyage.png") });
+// Step off: a page still riding ark-0 would go through the gate with it when the Sky gates section sails it
+// there (as a rider should), and the two arrivals would race to hail Isle Two's one ark.
+await A.page.click('.ark[data-ark="ark-0"] button.ride');
+check("Stop ends the ride", await A.page.evaluate(() => document.querySelector('.ark[data-ark="ark-0"] button.ride').textContent === "Ride"));
 const wait = order.ark.arriveAt - order.ark.departAt + 6000;
 const moored = await B.page.waitForFunction(() => {
   const a = window.daedalusRealm.arks.find(x => x.id === "ark-0");
@@ -310,6 +315,7 @@ const D = await (async () => {
   const errors = [];
   page.on("console", m => { if (m.type() === "error") errors.push(m.text()); });
   page.on("pageerror", e => errors.push(String(e)));
+  page.on("response", r => { if (r.status() >= 400) errors.push(`${r.status()} ${r.url()}`); });
   await page.goto(meta.external_url);
   await page.waitForFunction(() => window.daedalusRealm && window.daedalusRealm.live, null, { timeout: 30000 });
   return { name: "D", page, errors };
@@ -467,7 +473,7 @@ if (RPC) {
   const crossed = await page.waitForURL(/realm\.html\?world=isle-two&arrive=0$/, { timeout: 90000 }).then(() => true, () => false);
   check("riding ark-0 to the gate carries you through to Isle Two", crossed, page.url());
   await page.waitForFunction(() => window.daedalusRealm && window.daedalusRealm.live && window.daedalusRealm.gates.length === 1, null, { timeout: 30000 });
-  const hailed = await page.waitForFunction(() => window.daedalusRealm.lastHail && window.daedalusRealm.lastHail.arkId === "ark-0", null, { timeout: 15000 })
+  const hailed = await page.waitForFunction(() => window.daedalusRealm.lastHail && window.daedalusRealm.lastHail.arkId === "ark-0", null, { timeout: 30000 })
     .then(() => true, () => false);
   check("on the far side, Isle Two's ark is hailed up to its gate", hailed, JSON.stringify(await page.evaluate(() => ({
     url: location.href, lastHail: window.daedalusRealm.lastHail, gates: window.daedalusRealm.gates.length,
@@ -529,7 +535,89 @@ if (RPC) {
   await page.close();
 }
 
-// --- Reload: a fresh page rebuilds the same world from REST alone.
+// --- Parcels (ADR-033): a Decentraland-style world. Claim a plot from the map, build on it (and only on it),
+// and fly the helicopter from the plaza's pad up through the rainbow to a gate.
+{
+  const page = await context.newPage();
+  const errors = [];
+  page.on("console", m => { if (m.type() === "error") errors.push(m.text()); });
+  page.on("pageerror", e => errors.push(String(e)));
+  await page.goto(BASE + "/realm.html");
+  await page.waitForFunction(() => window.daedalusRealm && window.daedalusRealm.live, null, { timeout: 30000 });
+  await page.fill("#newWorldName", "Plaza Town");
+  await page.fill("#newWorldSeed", "5");
+  await page.selectOption("#newWorldStyle", "PARCELS");
+  await Promise.all([page.waitForURL(/realm\.html\?world=plaza-town/, { timeout: 30000 }), page.click("#newWorldGo")]);
+  await page.waitForFunction(() => { const s = window.daedalusRealm;
+    return s && s.live && s.district && s.plots && s.plots.length === 60 && s.arks.length === 1 && s.arkModels.size === 1; },
+  null, { timeout: 30000 });
+  const look = await page.evaluate(() => {
+    const s = window.daedalusRealm, d = s.district;
+    return { cells: document.querySelectorAll(".plot-grid .plot").length, plaza: document.querySelectorAll(".plot-grid .plot.plaza").length,
+      lane: document.getElementById("laneTitle").textContent, raise: getComputedStyle(document.getElementById("raiseRow")).display,
+      heli: s.arks[0].id, name: s.arks[0].name, rotor: !!s.arkModels.get("heli-0").getObjectByName("rotor"),
+      pad: s.nameAt(d.padX - 5, 0, d.padZ - 5), road: s.nameAt(-25, 0, -60), islands: s.islands.length };
+  });
+  check("a Parcels world is born with its district: a plot map around the plaza, a helipad, a helicopter",
+    look.cells === 64 && look.plaza === 4 && look.lane === "PLOTS" && look.raise === "none" && look.heli === "heli-0"
+      && look.rotor && look.pad === "HELIPAD" && look.road === "ROAD" && look.islands === 0, JSON.stringify(look));
+  await page.waitForTimeout(1200);
+  await page.screenshot({ path: path.join(OUT, "realm_parcels.png") });
+
+  await page.fill("#me", "carol");
+  await page.dispatchEvent("#me", "change");
+  await page.click('.plot-grid .plot[data-plot="9"]');
+  await page.waitForSelector("#islands .owner button.claim", { timeout: 10000 });
+  await page.click("#islands .owner button.claim");
+  const claimed = await page.waitForFunction(() => {
+    const p = (window.daedalusRealm.plots || []).find(x => x.n === 9);
+    return p && p.owner === "carol" && document.querySelector('.plot-grid .plot[data-plot="9"]').classList.contains("yours");
+  }, null, { timeout: 10000 }).then(() => true, () => false);
+  check("tapping plot 9 on the map and Claim makes it carol's", claimed);
+
+  const tries = await page.evaluate(async () => {
+    const s = window.daedalusRealm, p = s.plots.find(x => x.n === 9), q = s.plots.find(x => x.n === 10);
+    const out = {};
+    s.lastRefusal = null; await s.writeBlock(p.minX + 3, 1, p.minZ + 3, "CRYSTAL"); out.inside = s.lastRefusal;
+    s.lastRefusal = null; await s.writeBlock(p.maxX + 2, 1, p.minZ + 3, "CRYSTAL"); out.street = s.lastRefusal;
+    s.lastRefusal = null; await s.writeBlock(p.minX + 3, s.district.height + 1, p.minZ + 3, "CRYSTAL"); out.high = s.lastRefusal;
+    s.lastRefusal = null; await s.writeBlock(q.minX + 3, 1, q.minZ + 3, "CRYSTAL"); out.open = s.lastRefusal;
+    out.at = [p.minX + 3, p.minZ + 3, p.maxX + 2];
+    return out;
+  });
+  const cube = async (x, y, z) => (await (await fetch(`${BASE}/api/v1/world/plaza-town/block?x=${x}&y=${y}&z=${z}`)).json()).type;
+  const built = await cube(tries.at[0], 1, tries.at[1]);
+  const street = await cube(tries.at[2], 1, tries.at[1]);
+  check("carol builds on her plot; a street, the sky over the limit and an unclaimed plot each refuse with a reason",
+    built === "CRYSTAL" && street === "AIR" && !tries.inside && /Streets/.test(tries.street || "") && /high/.test(tries.high || "")
+      && /Claim Plot 10/.test(tries.open || ""), JSON.stringify(Object.assign({ built, street }, tries)));
+
+  const opened = await (await fetch(BASE + "/api/v1/world/plaza-town/gates", { method: "POST",
+    headers: { "Content-Type": "application/json" }, body: JSON.stringify({ toWorld: "world-zero" }) })).json();
+  await page.waitForFunction(() => window.daedalusRealm.gates.length === 1
+    && document.querySelector('.ark[data-ark="heli-0"] select.dest option[value="1000"]'), null, { timeout: 20000 });
+  await page.selectOption('.ark[data-ark="heli-0"] select.dest', "1000");
+  const lifted = await page.evaluate(() => document.querySelector('.ark[data-ark="heli-0"] button.sail').textContent);
+  await page.click('.ark[data-ark="heli-0"] button.sail');
+  const up = await page.waitForFunction(() => { const a = window.daedalusRealm.arks[0], m = window.daedalusRealm.arkModels.get("heli-0");
+    return a.state === "SAILING" && m.position.y > 20; }, null, { timeout: 30000 }).then(() => true, () => false);
+  check("Fly lifts the helicopter off the pad toward the gate", opened.result === "OPENED" && lifted === "Fly" && up,
+    JSON.stringify({ opened, lifted }));
+  await page.waitForTimeout(800);
+  await page.screenshot({ path: path.join(OUT, "realm_helicopter.png") });
+  const crossed = await page.waitForURL(new RegExp(`realm\\.html\\?world=world-zero&arrive=${opened.toGate}$`), { timeout: 120000 })
+    .then(() => true, () => false);
+  check("riding the helicopter through the rainbow carries you to World Zero", crossed, page.url());
+  const met = await page.waitForFunction(g => window.daedalusRealm && window.daedalusRealm.lastHail && window.daedalusRealm.lastHail.gate === g,
+    opened.toGate, { timeout: 30000 }).then(() => true, () => false);
+  check("World Zero hails one of its arks up to the gate the helicopter came through", met,
+    JSON.stringify(await page.evaluate(() => window.daedalusRealm && window.daedalusRealm.lastHail)));
+  check("no console errors in the Parcels world", errors.length === 0, errors.slice(0, 3).join(" | "));
+  await page.close();
+}
+
+// --- Reload: a fresh page rebuilds the same world from REST alone, and sends no ship anywhere.
+const voyagesBefore = (await (await fetch(BASE + "/api/v1/world/world-zero/arks")).json()).arks.map(a => `${a.id}:${a.departAt}`).join(",");
 const C = await open("C");
 await C.page.waitForFunction(() => window.daedalusRealm.islands.length === 2, null, { timeout: 30000 });
 check("a fresh page rebuilds the same world", (await cubes(C.page)) === (await serverCubes()));
@@ -537,6 +625,13 @@ await C.page.waitForFunction(() => window.daedalusRealm.arks.length === 2, null,
 const serverArks = (await (await fetch(BASE + "/api/v1/world/world-zero/arks")).json()).arks.map(a => `${a.id}@${a.slot}`).join(",");
 const pageArks = await C.page.evaluate(() => window.daedalusRealm.arks.map(a => `${a.id}@${a.slot}`).join(","));
 check("a fresh page knows where every ark is", pageArks === serverArks, `${pageArks} / server ${serverArks}`);
+await C.page.waitForTimeout(2000);
+const voyagesAfter = (await (await fetch(BASE + "/api/v1/world/world-zero/arks")).json()).arks.map(a => `${a.id}:${a.departAt}`).join(",");
+// An ark already under way may tie up meanwhile (departAt back to 0); none may set out (a new departAt).
+const before = Object.fromEntries(voyagesBefore.split(",").map(v => v.split(":")));
+const setOut = voyagesAfter.split(",").map(v => v.split(":")).filter(([id, t]) => t !== "0" && t !== before[id]);
+check("opening a page hails no ark (only a page that came through a gate does)", setOut.length === 0,
+  `${voyagesBefore} → ${voyagesAfter}`);
 
 for (const p of [A, B, C, D, ...(W ? [W] : [])]) check(`no console errors on page ${p.name}`, p.errors.length === 0, p.errors.slice(0, 3).join(" | "));
 await browser.close();

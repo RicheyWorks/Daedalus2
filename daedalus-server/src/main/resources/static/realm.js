@@ -29,12 +29,14 @@ const COLORS = {
   // Sky gates (ADR-031): a rainbow's bands and the doorway in the clouds.
   RAINBOW_RED: 0xff4d4d, RAINBOW_ORANGE: 0xff9a3c, RAINBOW_YELLOW: 0xffe25a, RAINBOW_GREEN: 0x5ee07a,
   RAINBOW_BLUE: 0x4aa8ff, RAINBOW_VIOLET: 0xa66bff, PORTAL: 0xd7b8ff,
+  // Parcels worlds (ADR-033): asphalt, sidewalks and plazas, the helipad.
+  ROAD: 0x4a4d57, PAVING: 0xe4ddcf, HELIPAD: 0xf28c28,
 };
 const RAINBOW = ["RAINBOW_RED", "RAINBOW_ORANGE", "RAINBOW_YELLOW", "RAINBOW_GREEN", "RAINBOW_BLUE", "RAINBOW_VIOLET"];
 const SEE_THROUGH = new Set(["AIR", "GLASS", "WATER", "CLOUD", "PORTAL", ...RAINBOW]);
 const TRANSLUCENT = new Set(["GLASS", "WATER", "PORTAL", ...RAINBOW]);
 const BUILDABLE = ["GRASS", "DIRT", "STONE", "WOOD", "LOG", "LEAVES", "BLOSSOM", "SAND",
-  "GRAVEL", "GLASS", "WATER", "CRYSTAL", "CLOUD"];
+  "GRAVEL", "GLASS", "WATER", "CRYSTAL", "CLOUD", "PAVING"];
 
 const state = {
   palette: ["AIR"],          // ordinal → name, from the server
@@ -278,6 +280,7 @@ async function fetchWorld() {
 }
 
 async function loadIslands(focusSlot) {
+  if (state.district) return loadPlots(focusSlot);
   const res = await api(API + "/islands");
   state.islands = res.islands;
   const host = document.getElementById("islands");
@@ -331,13 +334,82 @@ async function loadIslands(focusSlot) {
 /** A wallet address is shown short (0x7099…79c8); a name as it is. */
 function shortName(name) { return /^0x[0-9a-f]{40}$/.test(name) ? `${name.slice(0, 6)}…${name.slice(-4)}` : name; }
 function mine(isle) { return !!state.me && isle.owner === state.me; }
+
+// ---------------------------------------------------------------- plots (ADR-033)
+// A Parcels world has no islands: an 8 × 8 map of plots around the plaza. Tap a plot to see who holds
+// it, claim it, let others build, or fly over. Nobody builds on an unclaimed plot, a street or the plaza.
+const PAD_SLOT = 2000;
+function plotNoun(slot) { return state.district ? `Plot ${slot}` : `Isle ${slot}`; }
+async function detectDistrict() {
+  // Ask the registry for this world's style first: a sky-islands world has no /plots to ask for.
+  state.district = null;
+  try {
+    const here = (await api("/api/v1/worlds")).worlds.find(w => w.id === WORLD);
+    if (here && here.style === "PARCELS") state.district = await api(API + "/plots");
+  } catch (e) {
+    state.district = null;
+  }
+  const parcels = !!state.district;
+  document.getElementById("laneTitle").textContent = parcels ? "PLOTS" : "ISLAND LANE";
+  document.getElementById("raiseRow").style.display = parcels ? "none" : "";
+  document.getElementById("arksTitle").textContent = parcels ? "HELICOPTER" : "ARKS";
+}
+async function loadPlots(focusSlot) {
+  const res = await api(API + "/plots");
+  state.district = res;
+  state.plots = res.plots;
+  const host = document.getElementById("islands");
+  host.textContent = "";
+  const grid = document.createElement("div");
+  grid.className = "plot-grid";
+  for (let n = 0; n < 64; n++) {
+    const p = res.plots.find(x => x.n === n);
+    const cell = document.createElement("button");
+    cell.dataset.plot = n;
+    if (!p) {
+      cell.className = "plot plaza";
+      cell.disabled = true;
+      cell.setAttribute("aria-label", "Plaza");
+    } else {
+      cell.className = "plot" + (p.owner ? (mine(p) ? " yours" : " owned") : "") + (state.plotSlot === n ? " on" : "");
+      cell.textContent = n;
+      cell.title = `Plot ${n} · ${p.show.toLowerCase()}` + (p.owner ? ` · ${shortName(p.owner)}` : " · open");
+      cell.onclick = () => { state.plotSlot = n; loadPlots(); flyTo(plotCenter(p)); };
+    }
+    grid.appendChild(cell);
+  }
+  host.appendChild(grid);
+  const claimed = res.plots.filter(p => p.owner).length;
+  const line = document.createElement("div");
+  line.className = "note-line";
+  line.textContent = `${claimed} of ${res.plots.length} plots claimed · build up to ${res.height} high`;
+  host.appendChild(line);
+  const picked = res.plots.find(p => p.n === state.plotSlot);
+  if (picked) {
+    const head = document.createElement("div");
+    head.className = "isle";
+    head.innerHTML = `<div><b>Plot ${picked.n}</b> · ${picked.show.toLowerCase()}</div>`;
+    host.appendChild(head);
+    host.appendChild(ownerRow(Object.assign({ slot: picked.n }, picked)));
+  }
+  status();
+  if (focusSlot !== undefined) {
+    const p = res.plots.find(x => x.n === focusSlot);
+    if (p) flyTo(plotCenter(p));
+  }
+}
+function plotCenter(p) { return { x: (p.minX + p.maxX + 1) / 2, y: 0, z: (p.minZ + p.maxZ + 1) / 2 }; }
+function plotAt(x, z) {
+  return (state.plots || []).find(p => x >= p.minX && x <= p.maxX && z >= p.minZ && z <= p.maxZ);
+}
+
 function ownerRow(isle) {
   const row = document.createElement("div");
   row.className = "owner";
   row.dataset.slot = isle.slot;
   const line = document.createElement("div");
   line.className = "owner-line";
-  if (!isle.owner) line.textContent = "open — anyone may build";
+  if (!isle.owner) line.textContent = state.district ? "open — claim it to build here" : "open — anyone may build";
   else line.textContent = mine(isle) ? "yours" + (isle.builders.length ? ` · builders: ${isle.builders.map(shortName).join(", ")}` : "")
     : `owned by ${shortName(isle.owner)}` + (isle.builders.includes(state.me) ? " · you may build" : "");
   row.appendChild(line);
@@ -354,7 +426,7 @@ function ownerRow(isle) {
     for (const b of isle.builders) {
       act.appendChild(button(`${b} ×`, "unlet", () => claimAct("builders", isle.slot, { builder: b, allow: false })));
     }
-    if (wallet.config && wallet.config.deeds && /^0x[0-9a-f]{40}$/.test(state.me)) {
+    if (!state.district && wallet.config && wallet.config.deeds && /^0x[0-9a-f]{40}$/.test(state.me)) {
       act.appendChild(button(wallet.minted.has(isle.slot) ? "Deed minted" : "Mint deed", "mint", () => mintDeed(isle)));
     }
     act.appendChild(button("Give up", "abandon", () => claimAct("abandon", isle.slot)));
@@ -370,12 +442,12 @@ function button(text, cls, onclick) {
   return b;
 }
 const CLAIM_WORDS = {
-  CLAIMED: s => `Isle ${s} is yours`, ABANDONED: s => `You gave up Isle ${s}`,
+  CLAIMED: s => `${plotNoun(s)} is yours`, ABANDONED: s => `You gave up ${plotNoun(s)}`,
   GRANTED: () => "They may build there now", REVOKED: () => "They can no longer build there",
-  ALREADY_CLAIMED: s => `Isle ${s} already has an owner`, BLOCKED: () => "Another parcel is in the way",
-  BAD_OWNER: () => "Pick a name first (letters, digits, . _ @ -)", NOT_OWNER: s => `Isle ${s} is not yours`,
-  NOT_CLAIMED: s => `Isle ${s} has no owner`, BAD_BUILDER: () => "That name cannot be a builder",
-  NO_SUCH_ISLAND: s => `No island in slot ${s}`,
+  ALREADY_CLAIMED: s => `${plotNoun(s)} already has an owner`, BLOCKED: () => "Another parcel is in the way",
+  BAD_OWNER: () => "Pick a name first (letters, digits, . _ @ -)", NOT_OWNER: s => `${plotNoun(s)} is not yours`,
+  NOT_CLAIMED: s => `${plotNoun(s)} has no owner`, BAD_BUILDER: () => "That name cannot be a builder",
+  NO_SUCH_ISLAND: s => `No island in slot ${s}`, NO_SUCH_PLOT: s => `There is no plot ${s}`,
 };
 async function claimAct(verb, slot, extra = {}) {
   if (!state.me && !state.token) { toast("Pick a name first"); document.getElementById("me").focus(); return; }
@@ -407,7 +479,7 @@ function setupMe() {
 
 // ---------------------------------------------------------------- worlds (ADR-030)
 // Every world this server mounts, the one you are in marked; "Visit" opens another in this page, and a
-// seed plus a name mounts a new sky-islands world.
+// seed, a name and a style mount a new world: sky islands, or a Parcels district (ADR-033).
 async function loadWorlds() {
   const host = document.getElementById("worlds");
   if (!host) return;
@@ -427,7 +499,8 @@ async function loadWorlds() {
     const info = document.createElement("div");
     info.innerHTML = `<b></b><br><span></span>`;
     info.querySelector("b").textContent = w.title;
-    info.querySelector("span").textContent = `${w.styleTitle} · ${w.islands} island${w.islands === 1 ? "" : "s"}`;
+    info.querySelector("span").textContent = w.style === "PARCELS" ? `${w.styleTitle} · 60 plots`
+      : `${w.styleTitle} · ${w.islands} island${w.islands === 1 ? "" : "s"}`;
     row.appendChild(info);
     if (w.id === WORLD) {
       const here = document.createElement("span");
@@ -448,6 +521,14 @@ async function loadWorlds() {
     }
     host.appendChild(row);
   }
+  const pickStyle = document.getElementById("newWorldStyle");
+  if (pickStyle && !pickStyle.options.length) {
+    for (const s of res.styles.filter(x => x.ready)) {
+      const o = document.createElement("option");
+      o.value = s.style; o.textContent = s.title;
+      pickStyle.appendChild(o);
+    }
+  }
   const soon = res.styles.filter(s => !s.ready).map(s => s.title);
   const note = document.getElementById("worldsSoon");
   if (note) note.textContent = soon.length ? `Coming: ${soon.join(", ")}` : "";
@@ -460,7 +541,7 @@ async function createWorld() {
   if (!name || id.length < 3) { toast("Name the world (3+ letters)"); return; }
   if (!Number.isInteger(seed)) { toast("Seed must be a whole number"); return; }
   try {
-    const res = await api("/api/v1/worlds", { method: "POST", body: JSON.stringify({ id, style: "SKY_ISLANDS", seed, title: name }) });
+    const res = await api("/api/v1/worlds", { method: "POST", body: JSON.stringify({ id, style: (document.getElementById("newWorldStyle") || {}).value || "SKY_ISLANDS", seed, title: name }) });
     const words = { CREATED: `${name} is born`, EXISTS: "A world with that name exists", BAD_ID: "Use letters and digits",
       BAD_TITLE: "That name won't do", FULL: "This server holds all the worlds it can", STYLE_NOT_READY: "That style is coming" };
     toast(words[res.result] || res.result);
@@ -477,6 +558,7 @@ async function createWorld() {
 // its own gate to meet you and carries you down to an island.
 const GATE_BASE = 1000;
 function placeName(slot) {
+  if (slot === PAD_SLOT) return "the helipad";
   if (slot >= GATE_BASE) {
     const g = state.gates.find(x => x.slot === slot);
     return g ? `the gate to ${g.toTitle}` : "a sky gate";
@@ -503,9 +585,11 @@ function crossGate(gate) {
 }
 /** Arrived through a gate (?arrive=N): look at this world's gate and hail an ark to meet you there. */
 async function arriveThroughGate() {
-  let g;
-  try { g = Number(new URLSearchParams(location.search).get("arrive")); } catch (e) { return; }
-  if (!Number.isInteger(g) || g < 0) return;
+  // Only a page that came through a gate hails anything. Number(null) is 0, so before this check every
+  // plain page load in a world with a gate sent an ark up to gate 0 (found by the ADR-033 harness).
+  const raw = new URLSearchParams(location.search).get("arrive");
+  if (raw === null || !/^\d+$/.test(raw)) return;
+  const g = Number(raw);
   const gate = state.gates.find(x => x.gate === g);
   if (!gate) return;
   flyTo({ x: gate.x, y: gate.y - 6, z: gate.z + 20 });
@@ -939,6 +1023,40 @@ const ARK_SCALE = 0.6;
 const ARK_STANDOFF = 9;      // pier tip → hull centreline: half beam plus wing, scaled
 let arkTemplate = null;
 let arkTemplateLoad = null;
+/**
+ * The Parcels world's helicopter (ADR-033), built from boxes like the creatures: an orange cabin with a
+ * glass nose, a tail boom, skids, and two rotors the frame loop spins. About 12 cubes nose to tail.
+ */
+function helicopterModel() {
+  const g = new THREE.Group();
+  const body = creatureMat(0xf28c28), white = creatureMat(0xf4f1ea), dark = creatureMat(0x2b2d33);
+  const glass = new THREE.MeshLambertMaterial({ color: 0x9fd4ec, transparent: true, opacity: 0.7 });
+  box(g, body, 5, 3.2, 3.4, 0, 2.4, 0);              // cabin
+  box(g, glass, 1.8, 2.4, 3.0, 3.1, 2.6, 0);         // nose
+  box(g, white, 5.2, 0.6, 3.5, 0, 1.0, 0);           // belly stripe
+  box(g, body, 6, 0.9, 0.9, -5.4, 3.2, 0);           // tail boom
+  box(g, body, 1.0, 2.2, 0.4, -8.2, 4.0, 0);         // fin
+  for (const side of [-1, 1]) {
+    box(g, dark, 6.5, 0.3, 0.3, 0.2, 0.15, side * 1.6);   // skids
+    box(g, dark, 0.3, 0.9, 0.3, -1.4, 0.6, side * 1.6);
+    box(g, dark, 0.3, 0.9, 0.3, 1.6, 0.6, side * 1.6);
+  }
+  box(g, dark, 0.5, 0.8, 0.5, 0, 4.3, 0);            // mast
+  const rotor = new THREE.Group();
+  rotor.name = "rotor";
+  rotor.position.set(0, 4.8, 0);
+  box(rotor, dark, 13, 0.15, 0.6, 0, 0, 0);
+  box(rotor, dark, 0.6, 0.15, 13, 0, 0, 0);
+  g.add(rotor);
+  const tail = new THREE.Group();
+  tail.name = "tailRotor";
+  tail.position.set(-8.3, 4.0, 0.4);
+  box(tail, dark, 2.6, 0.3, 0.12, 0, 0, 0);
+  box(tail, dark, 0.3, 2.6, 0.12, 0, 0, 0);
+  g.add(tail);
+  return g;
+}
+
 function loadArkModel() {
   if (!arkTemplateLoad) {
     arkTemplateLoad = new GLTFLoader().loadAsync("/models/ark.glb").then(g => {
@@ -980,9 +1098,13 @@ const RIDE = { id: null, last: null };
 // lowest id takes the berth, the next one a hull's length east, the next west, and so on.
 const BERTH_SPACING = 26;
 const BERTH_STEPS = [0, 1, -1, 2, -2, 3, -3];
+function isHeli(arkId) { return /^heli-/.test(arkId || ""); }
 function mooring(slot, arkId) {
+  if (slot === PAD_SLOT && state.district) {
+    return new THREE.Vector3(state.district.padX, state.district.padY, state.district.padZ);
+  }
   const gate = state.gates.find(g => g.slot === slot);
-  if (gate) return new THREE.Vector3(gate.berthX + 0.5, gate.berthY, gate.berthZ + ARK_STANDOFF);
+  if (gate) return new THREE.Vector3(gate.berthX + 0.5, gate.berthY, gate.berthZ + (isHeli(arkId) ? 0.5 : ARK_STANDOFF));
   const isle = state.islands.find(i => i.slot === slot);
   if (!isle) return null;
   const here = new Set(state.arks.filter(a => a.slot === slot).map(a => a.id));
@@ -1022,12 +1144,12 @@ async function loadArks() {
     let model = state.arkModels.get(ark.id);
     if (!model) {
       model = new THREE.Group();
-      const hull = template.clone(true);
-      hull.scale.setScalar(ARK_SCALE);
+      const hull = isHeli(ark.id) ? helicopterModel() : template.clone(true);
+      if (!isHeli(ark.id)) hull.scale.setScalar(ARK_SCALE);
       hull.name = "hull";
       model.add(hull);
       const label = labelSprite(ark.name);
-      label.position.set(0, 22, 0);
+      label.position.set(0, isHeli(ark.id) ? 12 : 22, 0);
       model.add(label);
       model.name = ark.id;
       scene.add(model);
@@ -1053,8 +1175,9 @@ function renderArkList() {
     const info = document.createElement("div");
     const where = ark.state === "SAILING" ? `sailing ${placeName(ark.fromSlot)} → ${placeName(ark.toSlot)}` : `moored at ${placeName(ark.slot)}`;
     const held = (ark.hold || []).length;
-    info.innerHTML = `<b>${ark.name}</b><br><span class="where">${where}</span><br>` +
-      `<span class="hold">${held ? `carrying ${held} kind${held === 1 ? "" : "s"}` : "hold empty"}</span>`;
+    const flies = isHeli(ark.id);
+    info.innerHTML = `<b>${ark.name}</b><br><span class="where">${flies ? where.replace("sailing", "flying").replace("moored at", "on") : where}</span>` +
+      (flies ? "" : `<br><span class="hold">${held ? `carrying ${held} kind${held === 1 ? "" : "s"}` : "hold empty"}</span>`);
     if (held) info.title = ark.hold.map(h => `${h.name} ×${Math.round(h.count)}`).join("\n");
     const controls = document.createElement("div");
     controls.style.cssText = "flex:0 0 auto;display:flex;gap:6px;align-items:center";
@@ -1067,6 +1190,11 @@ function renderArkList() {
       o.value = isle.slot; o.textContent = "Isle " + isle.slot;
       pick.appendChild(o);
     }
+    if (ark.homeSlot === PAD_SLOT && ark.slot !== PAD_SLOT) {
+      const o = document.createElement("option");
+      o.value = PAD_SLOT; o.textContent = "Helipad";
+      pick.appendChild(o);
+    }
     for (const g of state.gates) {
       if (g.slot === ark.slot) continue;
       const o = document.createElement("option");
@@ -1074,7 +1202,7 @@ function renderArkList() {
       pick.appendChild(o);
     }
     const sail = document.createElement("button");
-    sail.className = "sail"; sail.textContent = "Sail";
+    sail.className = "sail"; sail.textContent = flies ? "Fly" : "Sail";
     sail.disabled = ark.state === "SAILING" || !pick.options.length;
     sail.onclick = () => sailArk(ark.id, Number(pick.value));
     const ride = document.createElement("button");
@@ -1090,12 +1218,12 @@ function renderArkList() {
 
 async function sailArk(arkId, toSlot) {
   try {
-    const gate = toSlot >= GATE_BASE;
-    const body = gate ? { toGate: toSlot - GATE_BASE } : { toSlot };
+    const gate = toSlot >= GATE_BASE && toSlot < GATE_BASE + 8;
+    const body = toSlot === PAD_SLOT ? { toHome: true } : gate ? { toGate: toSlot - GATE_BASE } : { toSlot };
     const res = await api(`${API}/arks/${arkId}/voyage`, { method: "POST", body: JSON.stringify(body) });
     if (res.result === "SAILING") {
       applyArk(res.ark, res.now);
-      toast(`${res.ark.name} cast off for ${placeName(toSlot)}`);
+      toast(isHeli(arkId) ? `${res.ark.name} lifts off for ${placeName(toSlot)}` : `${res.ark.name} cast off for ${placeName(toSlot)}`);
       if (!RIDE.id) toggleRide(arkId);
     } else {
       toast({ ALREADY_THERE: "Already moored there", UNDERWAY: "Already under way", NO_SUCH_ISLAND: "No island in that slot" }[res.result] || res.result);
@@ -1132,9 +1260,10 @@ function onArkFrame(f) {
     : { state: "MOORED", slot: f.toSlot, fromSlot: -1, toSlot: -1, departAt: 0, arriveAt: 0 });
   if (isle) { row.x = isle.dockX; row.y = isle.dockY + 1; row.z = isle.dockZ; }
   if (gate) { row.x = gate.berthX; row.y = gate.berthY; row.z = gate.berthZ; }
+  if (f.toSlot === PAD_SLOT && state.district) { row.x = state.district.padX; row.y = state.district.padY; row.z = state.district.padZ; }
   applyArk(row);
   if (f.kind !== "ARRIVED") return;
-  toast(`${ark.name} tied up at ${placeName(f.toSlot)}`);
+  toast(isHeli(ark.id) ? `${ark.name} set down at ${placeName(f.toSlot)}` : `${ark.name} tied up at ${placeName(f.toSlot)}`);
   if (state.hail && state.hail.arkId === f.arkId && gate) {
     // The ark that came to meet you at this world's gate now carries you to an island.
     const ark2 = state.arks.find(a => a.id === f.arkId);
@@ -1153,11 +1282,16 @@ function moveArks(t) {
     if (!ark) continue;
     const pose = arkPose(ark, now);
     const phase = ark.homeSlot * 1.7;
-    const bob = ark.state === "SAILING" ? 0.15 : 0.35;
+    const flies = isHeli(ark.id);
+    const bob = flies ? (ark.state === "SAILING" ? 0.2 : 0) : ark.state === "SAILING" ? 0.15 : 0.35;
     model.position.copy(pose.pos);
     model.position.y += Math.sin(t / 1400 + phase) * bob;
     const hull = model.getObjectByName("hull");
-    if (hull) hull.rotation.set(0, pose.yaw, Math.sin(t / 1900 + phase) * 0.015);
+    if (hull) hull.rotation.set(0, pose.yaw, flies ? 0 : Math.sin(t / 1900 + phase) * 0.015);
+    const rotor = model.getObjectByName("rotor");
+    if (rotor) rotor.rotation.y = t / (ark.state === "SAILING" ? 40 : 160);
+    const tail = model.getObjectByName("tailRotor");
+    if (tail) tail.rotation.z = t / 30;
     if (RIDE.id === ark.id) {
       if (RIDE.last) {
         const d = model.position.clone().sub(RIDE.last);
@@ -1228,8 +1362,15 @@ async function writeBlock(x, y, z, name) {
     if (res.result === "DENIED") {
       setLocal(x, y, z, before);
       remeshAround(x, y, z);
-      const isle = islandAt(x, z);
-      state.lastRefusal = isle && isle.owner ? `Isle ${isle.slot} belongs to ${shortName(isle.owner)}` : "That plot is not yours to change";
+      if (state.district) {
+        const p = plotAt(x, z);
+        state.lastRefusal = !p ? "Streets and the plaza are for everyone; nobody builds there"
+          : y > state.district.height ? `Plots are built up to ${state.district.height} high`
+          : p.owner ? `Plot ${p.n} belongs to ${shortName(p.owner)}` : `Claim Plot ${p.n} to build on it`;
+      } else {
+        const isle = islandAt(x, z);
+        state.lastRefusal = isle && isle.owner ? `Isle ${isle.slot} belongs to ${shortName(isle.owner)}` : "That plot is not yours to change";
+      }
       toast(state.lastRefusal);
       return;
     }
@@ -1405,7 +1546,9 @@ function status() {
   const cubes = [...state.chunks.values()].reduce((a, d) => a + d.reduce((s, v) => s + (v ? 1 : 0), 0), 0);
   document.getElementById("statusText").textContent =
     `${state.live ? "live" : "offline"} · revision ${state.revision} · ${state.chunks.size} chunks · ` +
-    `${cubes.toLocaleString()} cubes · ${plural(state.islands.length, "island")} · ${plural(state.arks.length, "ark")}`;
+    `${cubes.toLocaleString()} cubes · ` + (state.district
+      ? `${plural((state.plots || []).filter(p => p.owner).length, "plot")} claimed · ${plural(state.arks.length, "helicopter")}`
+      : `${plural(state.islands.length, "island")} · ${plural(state.arks.length, "ark")}`);
 }
 
 function showLogin() { document.getElementById("login").style.display = "block"; }
@@ -1458,18 +1601,24 @@ state.project = (x, y, z) => {  // screen pixel of a world point, for a harness 
 };
 (async () => {
   try {
+    await detectDistrict();
     await loadWorld();
     await loadIslands();
     await loadGates();
     await loadArks();
+    // A traveller through a gate is met first: the creatures can finish loading while the ark comes up.
+    const arriving = arriveThroughGate();
     await loadSpecies();
     await refreshCreatures();
     // A deed's external_url is realm.html#isle=N (ADR-027): open on that island with its Life panel.
     const linked = /^#isle=(\d+)$/.exec(location.hash);
     const target = linked && state.islands.find(i => i.slot === Number(linked[1]));
+    const viaGate = /[?&]arrive=\d+(&|$)/.test(location.search);   // the gate view wins
     if (target) { flyTo(target); toggleLife(target.slot); }
+    else if (viaGate) { /* arriveThroughGate already looks at the gate */ }
     else if (state.islands.length) flyTo(state.islands[0]);
-    await arriveThroughGate();
+    else if (state.district) flyTo({ x: state.district.padX, y: 0, z: state.district.padZ + 10 });
+    await arriving;
     status();
   } catch (e) {
     handleError(e);

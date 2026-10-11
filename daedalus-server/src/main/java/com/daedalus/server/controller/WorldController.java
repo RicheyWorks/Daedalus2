@@ -41,6 +41,8 @@ import com.daedalus.api.dto.TrapMutationResponse;
 import com.daedalus.api.dto.VoyageRequest;
 import com.daedalus.api.dto.VoyageResponse;
 import com.daedalus.api.dto.WorldArksResponse;
+import com.daedalus.api.dto.PlotRow;
+import com.daedalus.api.dto.WorldPlotsResponse;
 import com.daedalus.api.dto.WorldCapabilitiesResponse;
 import com.daedalus.api.dto.WorldChunksResponse;
 import com.daedalus.api.dto.WorldInspectResponse;
@@ -76,7 +78,9 @@ import com.daedalus.world.Portal;
 import com.daedalus.world.PortalResult;
 import com.daedalus.world.Trap;
 import com.daedalus.world.TrapResult;
+import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.World;
+import com.daedalus.world.district.DistrictOps;
 import com.daedalus.world.ark.Ark;
 import com.daedalus.world.auto.DriveTrace;
 import com.daedalus.world.auto.Observation;
@@ -729,6 +733,30 @@ public class WorldController {
         return ResponseEntity.ok(new WorldIslandsResponse(id, rows));
     }
 
+    @GetMapping("/world/{id}/plots")
+    @Operation(summary = "A Parcels world's plots: where each is, what it opened with, who holds it (ADR-033).")
+    public ResponseEntity<WorldPlotsResponse> listPlots(@PathVariable String id) {
+        mounted(id);
+        WorldService w = world(id);
+        if (!w.isDistrict()) {
+            throw ResourceNotFoundException.world(id + "/plots");
+        }
+        long seed = hub.worlds().stream().filter(e -> e.id().equals(id)).findFirst()
+                .map(WorldHub.WorldEntry::seed).orElse(0L);
+        Map<Integer, WorldService.IslandClaim> claims = w.claims(id);
+        List<PlotRow> rows = new ArrayList<>();
+        for (DistrictOps.Plot p : DistrictOps.plan(seed).plots()) {
+            WorldService.IslandClaim c = claims.get(p.n());
+            ParcelBounds b = p.bounds();
+            rows.add(new PlotRow(p.n(), b.minX(), b.minZ(), b.maxX(), b.maxZ(), b.maxY(), p.show().name(),
+                    c == null ? "" : c.owner(), c == null ? List.of() : c.builders()));
+        }
+        ParcelBounds plaza = DistrictOps.plaza();
+        BlockCoordinate pad = DistrictOps.padBerth();
+        return ResponseEntity.ok(new WorldPlotsResponse(id, DistrictOps.PLOT, DistrictOps.HEIGHT,
+                plaza.minX(), plaza.minZ(), plaza.maxX(), plaza.maxZ(), pad.x(), pad.y(), pad.z(), rows));
+    }
+
     @PostMapping("/world/{id}/islands")
     @Operation(summary = "Raise a seeded floating island into the next free lane slot.")
     @PerKeyRateLimit("mazeGenerate")
@@ -759,7 +787,8 @@ public class WorldController {
     public ResponseEntity<VoyageResponse> sail(@PathVariable String id, @PathVariable String arkId,
                                                @Valid @RequestBody VoyageRequest body) {
         mounted(id);
-        int to = body.toGate() != null ? com.daedalus.world.gate.GateOps.GATE_BASE + body.toGate() : body.toSlot();
+        int to = Boolean.TRUE.equals(body.toHome()) ? WorldService.HOME
+                : body.toGate() != null ? com.daedalus.world.gate.GateOps.GATE_BASE + body.toGate() : body.toSlot();
         WorldService.SailWrite write = world(id).sail(id, arkId, to);
         if (write.view() == null) {
             throw ResourceNotFoundException.ark(arkId);

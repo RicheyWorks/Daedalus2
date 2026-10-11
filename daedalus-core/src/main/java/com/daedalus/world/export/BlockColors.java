@@ -36,6 +36,9 @@ public final class BlockColors {
         RGB.put(BlockType.RAINBOW_BLUE, 0x4aa8ff);
         RGB.put(BlockType.RAINBOW_VIOLET, 0xa66bff);
         RGB.put(BlockType.PORTAL, 0xd7b8ff);
+        RGB.put(BlockType.ROAD, 0x4a4d57);
+        RGB.put(BlockType.PAVING, 0xe4ddcf);
+        RGB.put(BlockType.HELIPAD, 0xf28c28);
     }
 
     private BlockColors() {

@@ -34,7 +34,11 @@ public enum BlockType {
     RAINBOW_GREEN,
     RAINBOW_BLUE,
     RAINBOW_VIOLET,
-    PORTAL;
+    PORTAL,
+    // Parcels worlds (ADR-033): asphalt, the light paving of sidewalks and plazas, a helipad's marking.
+    ROAD,
+    PAVING,
+    HELIPAD;
 
     public boolean solid() {
         return this != AIR;

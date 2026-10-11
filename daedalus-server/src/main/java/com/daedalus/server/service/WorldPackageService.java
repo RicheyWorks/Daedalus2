@@ -6,8 +6,10 @@ import com.daedalus.api.dto.WorldManifest;
 import com.daedalus.server.config.WalletProperties;
 import com.daedalus.world.BlockCoordinate;
 import com.daedalus.world.BlockType;
+import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.World;
 import com.daedalus.world.WorldStyle;
+import com.daedalus.world.district.DistrictOps;
 import com.daedalus.world.export.BlockColors;
 import com.daedalus.world.export.Glb;
 import com.daedalus.world.export.WorldMesher;
@@ -156,6 +158,15 @@ public class WorldPackageService {
             islands.add(new WorldManifest.Island(e.slot(), e.seed(), e.radius(), xyz(o),
                     List.of(o.x() + t.dockX(), o.y() + t.dockY(), o.z() + t.dockZ()), c == null ? "" : c.owner()));
         }
+        List<WorldManifest.Plot> plots = new ArrayList<>();
+        if (w.isDistrict()) {
+            for (DistrictOps.Plot p : DistrictOps.plan(seedOf(id)).plots()) {
+                ParcelBounds b = p.bounds();
+                WorldService.IslandClaim c = claims.get(p.n());
+                plots.add(new WorldManifest.Plot(p.n(), List.of(b.minX(), b.minY(), b.minZ()),
+                        List.of(b.maxX(), b.maxY(), b.maxZ()), p.show().name(), c == null ? "" : c.owner()));
+            }
+        }
         List<WorldManifest.Gate> gates = new ArrayList<>();
         for (WorldService.GateLink g : w.gates(id)) {
             gates.add(new WorldManifest.Gate(g.gate(), GateOps.slotOfGate(g.gate()), xyz(g.center()), xyz(g.berth()),
@@ -175,7 +186,7 @@ public class WorldPackageService {
                 new WorldManifest.World(id, style.name(), hub.title(id), seedOf(id), revision),
                 "1 cube = 1 metre", "glTF: +Y up, right-handed; these are the live API's coordinates",
                 new WorldManifest.Geometry("world.glb", 16, chunks, tris, List.of("daedalus_opaque", "daedalus_translucent")),
-                palette, islands, gates, arks, new WorldManifest.Mount(mount.name(), mount.ready()),
+                palette, islands, plots, gates, arks, new WorldManifest.Mount(mount.name(), mount.ready()),
                 List.of(new WorldManifest.Asset("ark", "assets/ark.glb",
                         "one per ark at its berth: deck origin, bow +X, scale 0.6, side-on 9 m off the berth on +Z")),
                 new WorldManifest.Live(base + "/api/v1/world/" + id, "/topic/world/" + id + "/{events,arks,ecology}"),

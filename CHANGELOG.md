@@ -10,6 +10,28 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Parcels worlds (ADR-033).**
+  A Decentraland-style
+  district: 60 plots of
+  16 around a plaza,
+  streets, a helipad.
+  Claim a plot to build
+  on it (up to y 32);
+  streets and plaza stay
+  open. A helicopter
+  flies from the pad to
+  the sky gates
+  (`toHome` voyages).
+
+### Fixed
+
+- **Plain page loads no
+  longer hail an ark to
+  gate 0** (ADR-031 bug,
+  found by ADR-033).
+
+### Added
+
 - **World Packages and Unreal Engine 5 (ADR-032).**
   `GET /api/v1/world/{id}/package`:
   manifest.json + world.glb

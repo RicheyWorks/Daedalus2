@@ -14,13 +14,14 @@ import java.util.List;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record WorldManifest(String format, int version, String generator, World world, String units, String axes,
-                            Geometry geometry, List<Swatch> palette, List<Island> islands, List<Gate> gates,
-                            List<Ark> arks, Mount mount, List<Asset> assets, Live live, Chain chain) {
+                            Geometry geometry, List<Swatch> palette, List<Island> islands, List<Plot> plots,
+                            List<Gate> gates, List<Ark> arks, Mount mount, List<Asset> assets, Live live, Chain chain) {
 
     /** Copy on construct: the caller's lists cannot change what this manifest says. */
     public WorldManifest {
         palette = palette == null ? List.of() : List.copyOf(palette);
         islands = islands == null ? List.of() : List.copyOf(islands);
+        plots = plots == null ? List.of() : List.copyOf(plots);
         gates = gates == null ? List.of() : List.copyOf(gates);
         arks = arks == null ? List.of() : List.copyOf(arks);
         assets = assets == null ? List.of() : List.copyOf(assets);
@@ -51,6 +52,15 @@ public record WorldManifest(String format, int version, String generator, World 
         public Island {
             origin = List.copyOf(origin);
             dock = List.copyOf(dock);
+        }
+    }
+
+    /** A Parcels world's plot (ADR-033): its footprint corners as [x, y, z], what it opened with, its owner. */
+    public record Plot(int n, List<Integer> min, List<Integer> max, String show, String owner) {
+
+        public Plot {
+            min = List.copyOf(min);
+            max = List.copyOf(max);
         }
     }
 

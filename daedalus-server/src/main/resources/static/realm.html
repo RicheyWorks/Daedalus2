@@ -63,7 +63,7 @@
   .isle { border-top: 1px solid var(--line); padding: 8px 0; display: flex; gap: 8px; align-items: center; }
   .isle div { flex: 1; font-size: 12px; color: var(--dim); }
   .isle b { color: var(--text); font-weight: 600; }
-  .isle select { min-height: 44px; font: inherit; color: var(--text); background: rgba(0,0,0,.35);
+  #newWorldStyle, .isle select { min-height: 44px; font: inherit; color: var(--text); background: rgba(0,0,0,.35);
     border: 1px solid var(--line); border-radius: 10px; padding: 0 6px; }
   button:disabled { opacity: .45; cursor: default; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -86,6 +86,13 @@
   .world-row .here { color: var(--accent); font-size: 12px; flex: 0 0 auto; }
   .note-line { color: var(--dim); font-size: 11px; font-style: italic; margin: -4px 0 6px; }
   .owner { padding: 0 0 8px; }
+  .plot-grid { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 3px; margin: 4px 0 6px; }
+  .plot-grid .plot { min-height: 34px; min-width: 0; width: 100%; padding: 0; font-size: 11px; border-radius: 4px;
+    background: #2f6b3a; color: #e9f5e6; }
+  .plot-grid .plot.owned { background: #6b5a2f; }
+  .plot-grid .plot.yours { background: var(--gold); color: #1b1b1b; }
+  .plot-grid .plot.on { outline: 2px solid #fff; }
+  .plot-grid .plot.plaza { background: #d8d2c4; opacity: .55; }
   .owner-line { font-size: 12px; color: var(--gold); margin-bottom: 4px; }
   .owner-act { display: flex; flex-wrap: wrap; gap: 6px; }
   #side .owner-act input { flex: 1 1 100%; min-width: 0; min-height: 44px; font: inherit; color: var(--text);
@@ -124,17 +131,20 @@
   <div class="row">
     <input id="newWorldName" placeholder="new world name" aria-label="New world name" maxlength="48">
     <input id="newWorldSeed" inputmode="numeric" placeholder="seed" aria-label="New world seed" style="flex:0 0 72px">
+  </div>
+  <div class="row">
+    <select id="newWorldStyle" aria-label="New world style" style="flex:1 1 auto;min-width:0"></select>
     <button id="newWorldGo">Create</button>
   </div>
   <div id="worldsSoon" class="note-line"></div>
-  <h2 style="margin-top:14px">ISLAND LANE</h2>
-  <div class="row">
+  <h2 style="margin-top:14px" id="laneTitle">ISLAND LANE</h2>
+  <div class="row" id="raiseRow">
     <input id="seed" inputmode="numeric" placeholder="seed" aria-label="Island seed">
     <button id="raise">Raise</button>
   </div>
   <div id="islands"></div>
   <div id="life" class="life"></div>
-  <h2 style="margin-top:14px">ARKS</h2>
+  <h2 style="margin-top:14px" id="arksTitle">ARKS</h2>
   <div id="arks"></div>
   <h2 style="margin-top:14px">BESTIARY</h2>
   <div id="bestiary"></div>

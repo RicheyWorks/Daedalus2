@@ -115,8 +115,10 @@ def plan(manifest, names):
     ]
     for a in manifest.get("assets", []):
         lines.append("  asset %s: %s -> %s/%s (%s)" % (a["name"], a["file"], dest, a["name"], a["use"]))
-    lines.append("  islands: %d, sky gates: %d, arks: %d, mount: %s" % (len(manifest.get("islands", [])),
-                 len(manifest.get("gates", [])), len(manifest.get("arks", [])), manifest["mount"]["kind"]))
+    plots = manifest.get("plots", [])
+    lines.append("  islands: %d, plots: %d (%d claimed), sky gates: %d, vessels: %d, mount: %s" % (
+        len(manifest.get("islands", [])), len(plots), sum(1 for p in plots if p.get("owner")),
+        len(manifest.get("gates", [])), len(manifest.get("arks", [])), manifest["mount"]["kind"]))
     for gate in manifest.get("gates", []):
         lines.append("    gate %d -> %s (%s) gate %d" % (gate["gate"], gate["toTitle"], gate["toWorld"], gate["toGate"]))
     live = manifest.get("live", {})
