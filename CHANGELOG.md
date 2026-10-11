@@ -10,6 +10,13 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Creatures on the islands (ADR-025).**
+  Every kind living on
+  an island is drawn
+  there, where its
+  guild lives, seeded
+  so every page agrees.
+
 - **Island life, live (ADR-024).**
   Ecology frames on
   `/topic/world/{id}/ecology`

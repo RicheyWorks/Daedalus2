@@ -38,6 +38,7 @@ const state = {
   richness: new Map(),       // island slot → kinds living there (ADR-024)
   day: 0,                    // the ecology's latest day
   lifeSlot: null,            // the island whose Life panel is open
+  creatures: new Map(),      // island slot → { sig, group, list } of creature models (ADR-025)
   mode: "look",
   block: "GRASS",
   token: safeGet(TOKEN_KEY),
@@ -286,7 +287,11 @@ async function loadIslands(focusSlot) {
   }
   renderRichness();
   Promise.all(state.islands.map(i => api(`${API}/islands/${i.slot}/ecology`)
-    .then(r => { state.richness.set(i.slot, r.richness); state.day = Math.max(state.day, r.day); })
+    .then(r => {
+      state.richness.set(i.slot, r.richness);
+      state.day = Math.max(state.day, r.day);
+      if (state.species.length) populate(i, r);
+    })
     .catch(() => {}))).then(renderRichness);
   status();
   if (focusSlot !== undefined) {
@@ -370,6 +375,192 @@ function onLifeFrame(f) {
     loadArks();
   }
   if (state.lifeSlot !== null && (f.kind === "DAY" || f.slot === state.lifeSlot)) loadLife();
+  if (f.kind === "DAY") {
+    if (f.day % 5 === 0) refreshCreatures();            // counts drift slowly; a redraw every few days
+  } else {
+    refreshCreatures([f.slot]);                          // a landing or a departure changes who is there now
+  }
+}
+
+// ---------------------------------------------------------------- creatures (ADR-025)
+// Every kind living on an island is drawn there: a few voxel bodies per kind (more for a bigger
+// population, never more than SHOW_MAX), placed where its guild lives — meadow kinds on open
+// ground, pond kinds on water, canopy kinds in the crowns, decomposers as caps on the soil,
+// starborn under the hanging crystals. Placement is seeded by island and kind, so every page
+// draws the same island the same way. Bodies are client art only; the server owns the counts.
+const SHOW_MAX = 5;
+const ISLAND_SHOW_CAP = 90;
+const SIZE_SCALE = { TINY: 0.42, SMALL: 0.62, MEDIUM: 0.9, LARGE: 1.4, SESSILE: 0.7 };
+function hash32(str) {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+function rng(seed) {                   // mulberry32: small, seeded, the same on every page
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function shownFor(count) { return Math.max(1, Math.min(SHOW_MAX, Math.ceil(Math.log2(count + 1)))); }
+
+const GROUND = new Set(["GRASS", "DIRT", "SAND", "GRAVEL", "STONE"]);
+const CROWN = new Set(["LEAVES", "BLOSSOM"]);
+const surfaces = new Map();            // slot → { revision, meadow, pond, canopy, soil, crystal }
+function surfaceOf(isle) {
+  const cached = surfaces.get(isle.slot);
+  if (cached && cached.revision === state.revision) return cached;
+  const out = { revision: state.revision, meadow: [], pond: [], canopy: [], soil: [], crystal: [] };
+  const r = isle.radius + 6, top = isle.y + isle.top + 1, bottom = isle.y + isle.bottom - 1;
+  for (let x = isle.x - r; x <= isle.x + r; x++) {
+    for (let z = isle.z - r; z <= isle.z + r; z++) {
+      let crown = null;
+      for (let y = top; y >= bottom; y--) {
+        const n = nameAt(x, y, z);
+        if (n === "AIR" || n === "CLOUD") continue;
+        if (CROWN.has(n)) { if (!crown) crown = [x, y + 1, z]; continue; }
+        if (n === "LOG") continue;
+        if (n === "WATER") out.pond.push([x, y + 1, z]);
+        else if (GROUND.has(n)) {
+          out.meadow.push([x, y + 1, z]);
+          if (n === "DIRT" || n === "GRASS") out.soil.push([x, y + 1, z]);
+        }
+        break;
+      }
+      if (crown) out.canopy.push(crown);
+      for (let y = bottom; y <= isle.y; y++) {
+        const n = nameAt(x, y, z);
+        if (n === "AIR") continue;
+        if (n === "CRYSTAL") out.crystal.push([x, y - 1, z]);
+        break;
+      }
+    }
+  }
+  surfaces.set(isle.slot, out);
+  return out;
+}
+
+const creatureGeo = new THREE.BoxGeometry(1, 1, 1);
+const creatureMats = new Map();
+function creatureMat(hex, glow) {
+  const k = hex + (glow ? "g" : "");
+  if (!creatureMats.has(k)) {
+    creatureMats.set(k, new THREE.MeshLambertMaterial({ color: hex, emissive: glow ? hex : 0x000000,
+      emissiveIntensity: glow ? 0.8 : 0 }));
+  }
+  return creatureMats.get(k);
+}
+function box(parent, mat, w, h, d, x, y, z) {
+  const m = new THREE.Mesh(creatureGeo, mat);
+  m.scale.set(w, h, d);
+  m.position.set(x, y, z);
+  parent.add(m);
+  return m;
+}
+/** A small voxel body for one kind: colours and proportions from its key, shape from its guild. */
+function creatureModel(sp) {
+  const h = hash32(sp.key), g = new THREE.Group();
+  const body = new THREE.Color().setHSL((h % 360) / 360, 0.45 + ((h >>> 9) % 30) / 100, 0.42 + ((h >>> 17) % 20) / 100);
+  const accent = new THREE.Color().setHSL(((h >>> 5) % 360) / 360, 0.6, 0.6);
+  const glow = sp.guild === "STARBORN";
+  const mb = creatureMat(body.getHex(), glow), ma = creatureMat(accent.getHex(), glow);
+  if (sp.size === "SESSILE" || sp.guild === "DECOMPOSER") {
+    box(g, creatureMat(0xe9dcc3, false), 0.22, 0.45, 0.22, 0, 0.22, 0);   // stem
+    box(g, mb, 0.7, 0.28, 0.7, 0, 0.55, 0);                              // cap
+    box(g, ma, 0.14, 0.08, 0.14, 0.18, 0.72, 0.1);                        // spot
+  } else if (sp.disperses || sp.guild === "STARBORN") {
+    box(g, mb, 0.7, 0.45, 0.45, 0, 0.5, 0);                               // body
+    box(g, ma, 0.3, 0.3, 0.3, 0.45, 0.62, 0);                             // head
+    const wl = box(g, ma, 0.4, 0.08, 0.7, -0.05, 0.62, 0.55);             // wings
+    const wr = box(g, ma, 0.4, 0.08, 0.7, -0.05, 0.62, -0.55);
+    g.userData.wings = [wl, wr];
+  } else if (sp.guild === "POND") {
+    box(g, mb, 0.9, 0.3, 0.5, 0, 0.15, 0);                                // flat swimmer
+    box(g, ma, 0.25, 0.25, 0.5, -0.55, 0.15, 0);                          // tail
+  } else {
+    box(g, mb, 0.9, 0.5, 0.5, 0, 0.55, 0);                                // body
+    box(g, ma, 0.4, 0.4, 0.4, 0.6, 0.8, 0);                               // head
+    for (const [lx, lz] of [[0.3, 0.17], [0.3, -0.17], [-0.3, 0.17], [-0.3, -0.17]]) {
+      box(g, mb, 0.14, 0.3, 0.14, lx, 0.15, lz);                          // legs
+    }
+  }
+  g.scale.setScalar(SIZE_SCALE[sp.size] || 0.6);
+  return g;
+}
+function spotsFor(sp, surf) {
+  if (sp.guild === "STARBORN") return surf.crystal.length ? surf.crystal : surf.meadow;
+  if (sp.guild === "POND") return surf.pond.length ? surf.pond : surf.meadow;
+  if (sp.guild === "CANOPY") return surf.canopy.length ? surf.canopy : surf.meadow;
+  if (sp.guild === "DECOMPOSER") return surf.soil.length ? surf.soil : surf.meadow;
+  return surf.meadow;
+}
+/** Redraw an island's creatures from its ecology answer, unless what is shown would not change. */
+function populate(isle, life) {
+  const plan = [];
+  let budget = ISLAND_SHOW_CAP;
+  for (const row of life.species) {
+    const sp = state.species.find(s => s.key === row.key);
+    if (!sp || budget <= 0) continue;
+    const n = Math.min(budget, shownFor(row.count));
+    budget -= n;
+    plan.push([sp, n]);
+  }
+  const sig = state.revision + "|" + plan.map(([sp, n]) => sp.key + ":" + n).join(",");
+  const had = state.creatures.get(isle.slot);
+  if (had && had.sig === sig) return;
+  if (had) scene.remove(had.group);
+  const surf = surfaceOf(isle);
+  const group = new THREE.Group();
+  group.name = "creatures-" + isle.slot;
+  const list = [];
+  for (const [sp, n] of plan) {
+    const spots = spotsFor(sp, surf);
+    if (!spots.length) continue;
+    const rand = rng(hash32(isle.seed + ":" + sp.key));
+    for (let i = 0; i < n; i++) {
+      const [x, y, z] = spots[Math.floor(rand() * spots.length)];
+      const m = creatureModel(sp);
+      const flies = sp.guild === "STARBORN" || (sp.disperses && sp.guild !== "DECOMPOSER" && sp.size !== "SESSILE");
+      const home = new THREE.Vector3(x + 0.5, y + (flies ? 1.5 + rand() * 2.5 : 0), z + 0.5);
+      if (sp.guild === "STARBORN") home.y -= 3;           // hanging under the crystal
+      m.position.copy(home);
+      m.rotation.y = rand() * Math.PI * 2;
+      m.userData = Object.assign(m.userData, { key: sp.key, home, flies, sessile: sp.size === "SESSILE" || sp.guild === "DECOMPOSER",
+        phase: rand() * Math.PI * 2, speed: 0.4 + rand() * 0.6, roam: flies ? 2.5 : 1.2, ground: [x, y, z] });
+      group.add(m);
+      list.push(m);
+    }
+  }
+  scene.add(group);
+  state.creatures.set(isle.slot, { sig, group, list });
+}
+function moveCreatures(t) {
+  const s = t / 1000;
+  for (const { list } of state.creatures.values()) {
+    for (const m of list) {
+      const u = m.userData;
+      if (u.sessile) continue;
+      const a = u.phase + s * u.speed * 0.5;
+      m.position.x = u.home.x + Math.cos(a) * u.roam * 0.5;
+      m.position.z = u.home.z + Math.sin(a * 0.8) * u.roam * 0.5;
+      m.rotation.y = -a + Math.PI / 2;
+      if (u.flies) {
+        m.position.y = u.home.y + Math.sin(s * 2 + u.phase) * 0.4;
+        if (u.wings) { const f = Math.sin(s * 14 + u.phase) * 0.5; u.wings[0].rotation.x = f; u.wings[1].rotation.x = -f; }
+      } else {
+        m.position.y = u.home.y + Math.abs(Math.sin(s * 3 + u.phase)) * 0.12;
+      }
+    }
+  }
+}
+async function refreshCreatures(slots) {
+  for (const isle of state.islands) {
+    if (slots && !slots.includes(isle.slot)) continue;
+    try { populate(isle, await api(`${API}/islands/${isle.slot}/ecology`)); } catch (e) { /* next frame retries */ }
+  }
 }
 
 // ---------------------------------------------------------------- bestiary (ADR-021)
@@ -878,6 +1069,7 @@ document.getElementById("loginGo").onclick = async () => {
 function frame(t) {
   controls.update();
   moveArks(t || 0);
+  moveCreatures(t || 0);
   renderer.render(scene, camera);
   requestAnimationFrame(frame);
 }
@@ -886,6 +1078,8 @@ frame();
 window.daedalusRealm = state; // for the browser harness and curious operators
 state.pick = pick;           // the exact pick the pointer uses, so a harness can ask what a tap hits
 state.debugTarget = () => controls.target.clone();
+state.refreshCreatures = refreshCreatures;
+state.nameAt = nameAt;
 state.project = (x, y, z) => {  // screen pixel of a world point, for a harness to tap a cube
   const v = new THREE.Vector3(x, y, z).project(camera), r = canvas.getBoundingClientRect();
   return { x: r.left + (v.x + 1) / 2 * r.width, y: r.top + (1 - v.y) / 2 * r.height };
@@ -896,6 +1090,7 @@ state.project = (x, y, z) => {  // screen pixel of a world point, for a harness 
     await loadIslands();
     await loadArks();
     await loadSpecies();
+    await refreshCreatures();
     if (state.islands.length) flyTo(state.islands[0]);
     status();
   } catch (e) {

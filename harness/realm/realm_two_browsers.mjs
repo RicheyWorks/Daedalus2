@@ -207,6 +207,40 @@ check("the open Life panel follows the day", panelDay, await B.page.evaluate(() 
   `panel day ${document.querySelector("#life .life-head")?.dataset.day}, state day ${window.daedalusRealm.day}`));
 await B.page.screenshot({ path: path.join(OUT, "realm_life.png") });
 
+// --- Creatures (ADR-025): every kind on Isle 1 is drawn there, where its guild lives, the same on every page.
+await Promise.all([A.page.evaluate(() => window.daedalusRealm.refreshCreatures([1])),
+  B.page.evaluate(() => window.daedalusRealm.refreshCreatures([1]))]);
+const drawn = p => p.evaluate(() => {
+  const s = window.daedalusRealm, c = s.creatures.get(1);
+  if (!c) return null;
+  return c.list.map(m => ({ key: m.userData.key, home: [m.userData.home.x, m.userData.home.y, m.userData.home.z],
+    ground: m.userData.ground, flies: m.userData.flies,
+    under: s.nameAt(m.userData.ground[0], m.userData.ground[1] - 1, m.userData.ground[2]),
+    at: s.nameAt(...m.userData.ground) }));
+});
+const dA = await drawn(A.page), dB = await drawn(B.page);
+const life1c = await (await fetch(BASE + "/api/v1/world/world-zero/islands/1/ecology")).json();
+const living = new Set(life1c.species.map(s => s.key));
+const kindsDrawn = new Set((dB || []).map(c => c.key));
+check("creatures are drawn on Isle 1", dB && dB.length > 0, `${dB ? dB.length : 0} bodies, ${kindsDrawn.size} kinds`);
+check("every drawn kind lives on Isle 1 on the server", [...kindsDrawn].filter(k => !living.has(k)).length <= 1,
+  [...kindsDrawn].filter(k => !living.has(k)).join(","));
+const grounded = (dB || []).filter(c => !c.flies && c.ground[1] > 30);
+check("walkers, swimmers and caps stand on a real surface", grounded.length > 0 &&
+  grounded.every(c => (c.at === "AIR" || c.at === "CLOUD") && c.under !== "AIR"),
+  grounded.filter(c => c.under === "AIR").slice(0, 2).map(c => c.key).join(","));
+const pondKinds = (dB || []).filter(c => B.canon[c.key]?.guild === "POND");
+check("pond kinds are on the water", pondKinds.every(c => c.under === "WATER"), `${pondKinds.length} pond bodies`);
+const nth = list => { const seen = {}; return (list || []).map(c => [c.key + "#" + (seen[c.key] = (seen[c.key] || 0) + 1), c.home.join(",")]); };
+const homesA = new Map(nth(dA));
+const shared = nth(dB).filter(([k]) => homesA.has(k));
+const moved = shared.filter(([k, h]) => homesA.get(k) !== h);
+check("A and B draw each body in the same place", shared.length > 0 && moved.length === 0,
+  `${shared.length} compared${moved.length ? ", differ: " + moved.slice(0, 2).map(m => m[0]).join(",") : ""}`);
+await B.page.evaluate(() => document.querySelectorAll("#islands button.go")[1].click());
+await B.page.waitForTimeout(1500);
+await B.page.screenshot({ path: path.join(OUT, "realm_creatures.png") });
+
 // --- Reload: a fresh page rebuilds the same world from REST alone.
 const C = await open("C");
 await C.page.waitForFunction(() => window.daedalusRealm.islands.length === 2, null, { timeout: 30000 });
