@@ -6,8 +6,8 @@ import com.daedalus.world.WorldStyle;
 
 /**
  * What carries you up to a sky gate (ADR-031). Gates float in the clouds, past the rainbow, where
- * nobody can walk: every world has its own way to fly there. The ark, the helicopter and the plane fly;
- * the others arrive with their worlds (ADR-035, ADR-036).
+ * nobody can walk: every world has its own way to fly there. The ark, the helicopter, the plane and the
+ * drone fly; the sky-strider arrives with the Labyrinth (ADR-036).
  */
 public enum Mount {
     /** Sky Islands: the arks that already sail between islands (ADR-019/020). */
@@ -16,8 +16,8 @@ public enum Mount {
     HELICOPTER(true, "helicopter"),
     /** Bricks: the stud-built plane on the runway (ADR-034). */
     PLANE(true, "plane"),
-    /** Gallery City: a camera drone. */
-    DRONE(false, "drone"),
+    /** Gallery City: the camera drone on the Origin's pad (ADR-035). */
+    DRONE(true, "drone"),
     /** Labyrinth: a great sky-strider bird that knows the way over the walls. */
     SKY_STRIDER(false, "sky-strider");
 

@@ -10,6 +10,26 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **The game (ADR-036).**
+  What Zelda II, A Link
+  to the Past, Dragon
+  Warrior/FF1, Pokemon,
+  Animal Crossing and
+  Adopt Me each bring;
+  the Shattering story;
+  the build order.
+
+- **Gallery City (ADR-035).**
+  Cryptovoxels look: 68
+  parcels on 12 named
+  streets, the Origin,
+  galleries of maze art
+  (a seed is a picture:
+  nine generators, the
+  solution as a rainbow).
+  Hang your own on your
+  walls; a drone.
+
 - **Bricks worlds and Play
   mode (ADR-034).** The
   Roblox look: a studded

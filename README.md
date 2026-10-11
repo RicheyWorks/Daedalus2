@@ -256,6 +256,11 @@ public consumers).
 | `POST` | `/api/v1/world/{id}/gates` | required | Open a pair of sky gates between this world and `toWorld`; same-world, no-such-world, already-linked and full are named results (ADR-031) |
 | `GET` | `/api/v1/world/{id}/islands` | public | Raised islands: lane slot, origin, seed and traits (ADR-018), and who owns each and whom they let build (ADR-026) |
 | `GET` | `/api/v1/world/{id}/plots` | public | A Parcels world's 60 plots: footprint, height limit, what each opened with, owner and builders; the plaza and the helipad (ADR-033). Plots are claimed through `/islands/{n}/claim` |
+| `GET` | `/api/v1/world/{id}/gallery` | public | A Gallery City's parcels (footprint, height, address, gallery or open, owner, builders), named streets, the Origin plaza and the drone pad (ADR-035). Parcels are claimed through `/islands/{n}/claim` |
+| `GET` | `/api/v1/world/{id}/art` | public | Every frame on a wall in a Gallery City: position, facing, size, seed, title, generator, who hung it, its parcel's address, and its image (ADR-035) |
+| `POST` | `/api/v1/world/{id}/art` | required | Hang maze art on a wall of a parcel you may build on (`HangArtRequest`). HUNG, NOT_YOURS, NO_WALL, OVERLAP, FULL are named results (ADR-035) |
+| `DELETE` | `/api/v1/world/{id}/art/{artId}` | required | Take a frame down: whoever hung it, or whoever holds its parcel now. The galleries' own art stays (ADR-035) |
+| `GET` | `/api/v1/art/maze/{seed}.png` | public | Maze art for a seed: one of nine generators, a palette, the maze and its rainbow solution; immutable (ADR-035) |
 | `GET` | `/api/v1/world/{id}/obby` | public | A Bricks world's spawn, obby (platforms in order, checkpoints, finish, lava level), build height and runway (ADR-034) |
 | `GET` | `/api/v1/world/{id}/arks` | public | The arks: one per island, named from its seed, moored at a pier or sailing (with voyage times and the server clock), and what each carries in its hold (ADR-019/020/023) |
 | `GET` | `/api/v1/world/{id}/tokens/{tokenId}` | public | ERC-721 metadata for the island in lane slot `tokenId`: name, description, portrait, realm link and traits (seed, size, trees, crystals, waterfall, ark, kinds living); unknown slot 404 (ADR-027) |

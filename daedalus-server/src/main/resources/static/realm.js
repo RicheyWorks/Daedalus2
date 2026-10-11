@@ -316,6 +316,10 @@ async function fetchWorld() {
 async function loadIslands(focusSlot) {
   if (state.district) return loadPlots(focusSlot);
   if (state.bricks) return showObby();
+  if (state.gallery) {
+    state.gallery = await api(API + "/gallery");     // owners change: read the parcels again
+    return showGallery(focusSlot);
+  }
   const res = await api(API + "/islands");
   state.islands = res.islands;
   const host = document.getElementById("islands");
@@ -384,13 +388,23 @@ async function detectDistrict() {
     state.style = here ? here.style : "SKY_ISLANDS";
     if (state.style === "PARCELS") state.district = await api(API + "/plots");
     if (state.style === "BRICKS") state.bricks = await api(API + "/obby");
+    if (state.style === "GALLERY") state.gallery = await api(API + "/gallery");
   } catch (e) {
     state.district = null;
   }
-  const parcels = !!state.district, bricks = !!state.bricks;
-  document.getElementById("laneTitle").textContent = parcels ? "PLOTS" : bricks ? "OBBY" : "ISLAND LANE";
-  document.getElementById("raiseRow").style.display = parcels || bricks ? "none" : "";
-  document.getElementById("arksTitle").textContent = parcels ? "HELICOPTER" : bricks ? "PLANE" : "ARKS";
+  const parcels = !!state.district, bricks = !!state.bricks, gallery = !!state.gallery;
+  document.getElementById("laneTitle").textContent = parcels ? "PLOTS" : bricks ? "OBBY" : gallery ? "PARCELS" : "ISLAND LANE";
+  document.getElementById("raiseRow").style.display = parcels || bricks || gallery ? "none" : "";
+  document.getElementById("arksTitle").textContent = parcels ? "HELICOPTER" : bricks ? "PLANE" : gallery ? "DRONE" : "ARKS";
+  if (gallery) {
+    streetLabels();
+    BUILDABLE.splice(0, BUILDABLE.length, "BRICK_WHITE", "GLASS", "PAVING", "WOOD", "STONE", "CRYSTAL", "BRICK_RED",
+      "BRICK_BLUE", "BRICK_YELLOW", "LEAVES", "WATER");
+    document.getElementById("palette").textContent = "";
+    buildPalette();
+    selectBlock("BRICK_WHITE");
+    setMode("look");
+  }
   if (bricks) {
     BUILDABLE.splice(0, BUILDABLE.length, "BRICK_RED", "BRICK_BLUE", "BRICK_YELLOW", "BRICK_GREEN", "BRICK_WHITE",
       "BASEPLATE", "GLASS", "WOOD", "CRYSTAL");
@@ -547,6 +561,7 @@ async function loadWorlds() {
     info.querySelector("b").textContent = w.title;
     info.querySelector("span").textContent = w.style === "PARCELS" ? `${w.styleTitle} · 60 plots`
       : w.style === "BRICKS" ? `${w.styleTitle} · obby and sandbox`
+      : w.style === "GALLERY" ? `${w.styleTitle} · parcels and galleries`
       : `${w.styleTitle} · ${w.islands} island${w.islands === 1 ? "" : "s"}`;
     row.appendChild(info);
     if (w.id === WORLD) {
@@ -605,7 +620,7 @@ async function createWorld() {
 // its own gate to meet you and carries you down to an island.
 const GATE_BASE = 1000;
 function placeName(slot) {
-  if (slot === PAD_SLOT) return state.bricks ? "the runway" : "the helipad";
+  if (slot === PAD_SLOT) return state.bricks ? "the runway" : state.gallery ? "the Origin pad" : "the helipad";
   if (slot >= GATE_BASE) {
     const g = state.gates.find(x => x.slot === slot);
     return g ? `the gate to ${g.toTitle}` : "a sky gate";
@@ -1170,10 +1185,13 @@ const RIDE = { id: null, last: null };
 // lowest id takes the berth, the next one a hull's length east, the next west, and so on.
 const BERTH_SPACING = 26;
 const BERTH_STEPS = [0, 1, -1, 2, -2, 3, -3];
-function isHeli(arkId) { return /^(heli|plane)-/.test(arkId || ""); }    // the world's own aircraft
+function isHeli(arkId) { return /^(heli|plane|drone)-/.test(arkId || ""); }    // the world's own aircraft
 function mooring(slot, arkId) {
   if (slot === PAD_SLOT && state.district) {
     return new THREE.Vector3(state.district.padX, state.district.padY, state.district.padZ);
+  }
+  if (slot === PAD_SLOT && state.gallery) {
+    return new THREE.Vector3(state.gallery.padX, state.gallery.padY, state.gallery.padZ);
   }
   if (slot === PAD_SLOT && state.bricks) {
     return new THREE.Vector3(state.bricks.hangarX + 0.5, state.bricks.hangarY, state.bricks.hangarZ + 0.5);
@@ -1219,7 +1237,8 @@ async function loadArks() {
     let model = state.arkModels.get(ark.id);
     if (!model) {
       model = new THREE.Group();
-      const hull = /^plane-/.test(ark.id) ? planeModel() : isHeli(ark.id) ? helicopterModel() : template.clone(true);
+      const hull = /^plane-/.test(ark.id) ? planeModel() : /^drone-/.test(ark.id) ? droneModel()
+        : isHeli(ark.id) ? helicopterModel() : template.clone(true);
       if (!isHeli(ark.id)) hull.scale.setScalar(ARK_SCALE);
       hull.name = "hull";
       model.add(hull);
@@ -1267,7 +1286,7 @@ function renderArkList() {
     }
     if (ark.homeSlot === PAD_SLOT && ark.slot !== PAD_SLOT) {
       const o = document.createElement("option");
-      o.value = PAD_SLOT; o.textContent = state.bricks ? "Runway" : "Helipad";
+      o.value = PAD_SLOT; o.textContent = state.bricks ? "Runway" : state.gallery ? "Origin" : "Helipad";
       pick.appendChild(o);
     }
     for (const g of state.gates) {
@@ -1337,6 +1356,7 @@ function onArkFrame(f) {
   if (gate) { row.x = gate.berthX; row.y = gate.berthY; row.z = gate.berthZ; }
   if (f.toSlot === PAD_SLOT && state.district) { row.x = state.district.padX; row.y = state.district.padY; row.z = state.district.padZ; }
   if (f.toSlot === PAD_SLOT && state.bricks) { row.x = state.bricks.hangarX; row.y = state.bricks.hangarY; row.z = state.bricks.hangarZ; }
+  if (f.toSlot === PAD_SLOT && state.gallery) { row.x = state.gallery.padX; row.y = state.gallery.padY; row.z = state.gallery.padZ; }
   applyArk(row);
   if (f.kind !== "ARRIVED") return;
   toast(isHeli(ark.id) ? `${ark.name} set down at ${placeName(f.toSlot)}` : `${ark.name} tied up at ${placeName(f.toSlot)}`);
@@ -1370,6 +1390,10 @@ function moveArks(t) {
     if (tail) tail.rotation.z = t / 30;
     const prop = model.getObjectByName("prop");
     if (prop) prop.rotation.x = t / (ark.state === "SAILING" ? 25 : 90);
+    for (let r = 0; r < 4; r++) {
+      const rotor4 = model.getObjectByName("rotor" + r);
+      if (rotor4) rotor4.rotation.y = (r % 2 ? -1 : 1) * t / (ark.state === "SAILING" ? 30 : 120);
+    }
     if (RIDE.id === ark.id) {
       if (RIDE.last) {
         const d = model.position.clone().sub(RIDE.last);
@@ -1501,6 +1525,8 @@ function onFrame(ev) {
     }
   } else if (ev.kind === "WORLD_REVISION_CHANGED" && ev.type === "CLAIM") {
     loadIslands();
+  } else if (ev.kind === "WORLD_REVISION_CHANGED" && ev.type === "ART") {
+    loadArt();
   } else if (ev.kind === "WORLD_REVISION_CHANGED" && ev.type === "GATE") {
     loadWorld().then(loadGates);
   } else if (ev.kind === "WORLD_REVISION_CHANGED" && ev.type === "ISLAND" && !reloadQueued) {
@@ -1560,7 +1586,12 @@ canvas.addEventListener("pointerup", e => {
   const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);
   const quick = performance.now() - down.t < 450;
   down = null;
-  if (moved > 8 || !quick || state.mode === "look" || state.mode === "play") return; // a drag is a camera move
+  if (moved > 8 || !quick || state.mode === "play") return; // a drag is a camera move
+  if (state.mode === "look") {
+    if (state.gallery) lookTap(e.clientX, e.clientY);
+    return;
+  }
+  if (state.mode === "hang") { hangTap(e.clientX, e.clientY); return; }
   const p = pick(e.clientX, e.clientY);
   if (!p) return;
   if (state.mode === "build") writeBlock(p.next.x, p.next.y, p.next.z, state.block);
@@ -1619,6 +1650,238 @@ window.addEventListener("keydown", e => {
 
 window.addEventListener("keyup", e => { if (state.mode === "play") playKey(e, false); });
 
+// ---------------------------------------------------------------- Gallery City (ADR-035)
+// Parcels on named streets around the Origin; galleries of maze art. Tap a frame to see it close up, tap
+// the ground to pick a parcel; on your own parcel, choose a seed and a size, press Hang art, tap a wall.
+function showGallery(focusSlot) {
+  const host = document.getElementById("islands");
+  host.textContent = "";
+  const g = state.gallery;
+  const claimed = g.parcels.filter(p => p.owner).length;
+  const head = document.createElement("div");
+  head.className = "note-line";
+  head.textContent = `${g.parcels.length} parcels on ${g.streets.length} streets · ${claimed} claimed · ` +
+    `${plural((state.art || []).length, "frame")} on the walls. Tap the ground to pick a parcel; tap a frame to look closer.`;
+  host.appendChild(head);
+  const mineList = g.parcels.filter(p => mine(p));
+  for (const p of mineList) host.appendChild(parcelRow(p, false));
+  const picked = g.parcels.find(p => p.n === state.parcelSlot);
+  if (picked && !mine(picked)) host.appendChild(parcelRow(picked, true));
+  const canHang = picked && (mine(picked) || picked.builders.includes(state.me));
+  if (canHang) host.appendChild(hangForm(picked));
+  status();
+  if (focusSlot !== undefined) {
+    const p = g.parcels.find(x => x.n === focusSlot);
+    if (p) flyTo(plotCenter(p));
+  }
+}
+function parcelRow(p, withOwner) {
+  const wrap = document.createElement("div");
+  const row = document.createElement("div");
+  row.className = "isle parcel-row" + (state.parcelSlot === p.n ? " on" : "");
+  row.dataset.parcel = p.n;
+  const info = document.createElement("div");
+  info.innerHTML = `<b></b><br><span></span>`;
+  info.querySelector("b").textContent = p.address;
+  info.querySelector("span").textContent = `${p.maxX - p.minX + 1}×${p.maxZ - p.minZ + 1} · up to ${p.height} high` +
+    (p.gallery ? " · gallery" : "");
+  row.append(info, button("Go", "go", () => { state.parcelSlot = p.n; flyTo(plotCenter(p)); showGallery(); }));
+  wrap.appendChild(row);
+  wrap.appendChild(ownerRow(Object.assign({ slot: p.n }, p)));
+  return wrap;
+}
+function hangForm(p) {
+  const box = document.createElement("div");
+  box.className = "hang-form";
+  box.innerHTML = `<div class="owner-line">Hang maze art on a wall of ${p.address}</div>`;
+  const row = document.createElement("div");
+  row.className = "owner-act";
+  const seed = document.createElement("input");
+  seed.id = "artSeed"; seed.inputMode = "numeric"; seed.placeholder = "seed"; seed.setAttribute("aria-label", "Art seed");
+  seed.value = state.artSeed || String(Math.floor(Math.random() * 1e6));
+  const size = document.createElement("select");
+  size.id = "artSize"; size.setAttribute("aria-label", "Frame size");
+  for (const s of ["2x2", "3x2", "3x3", "4x3", "5x4"]) {
+    const o = document.createElement("option"); o.value = s; o.textContent = s.replace("x", " × "); size.appendChild(o);
+  }
+  size.value = state.artSize || "3x2";
+  const title = document.createElement("input");
+  title.id = "artTitle"; title.placeholder = "title"; title.maxLength = 60; title.setAttribute("aria-label", "Art title");
+  title.value = state.artTitle || "";
+  const preview = document.createElement("img");
+  preview.className = "art-preview";
+  preview.alt = "Maze art preview";
+  const showPreview = () => { if (/^-?\d+$/.test(seed.value.trim())) preview.src = `/api/v1/art/maze/${seed.value.trim()}.png`; };
+  seed.addEventListener("input", showPreview);
+  // Keep what was typed: the panel is redrawn whenever art changes anywhere in the city.
+  seed.addEventListener("input", () => { state.artSeed = seed.value.trim(); });
+  size.addEventListener("change", () => { state.artSize = size.value; });
+  title.addEventListener("input", () => { state.artTitle = title.value; });
+  showPreview();
+  row.append(seed, size, title, preview, button(state.mode === "hang" ? "Tap a wall…" : "Hang art", "hang", () => {
+    if (!/^-?\d+$/.test(seed.value.trim())) { toast("The seed is a whole number"); return; }
+    state.artSeed = seed.value.trim(); state.artSize = size.value; state.artTitle = title.value.trim();
+    setMode("hang");
+    toast("Tap a wall of your parcel to hang it");
+    showGallery();
+  }));
+  box.appendChild(row);
+  return box;
+}
+async function hangTap(clientX, clientY) {
+  const p = pick(clientX, clientY);
+  if (!p) return;
+  const n = p.normal.map(Math.round);
+  const facing = n[2] === 1 ? "SOUTH" : n[2] === -1 ? "NORTH" : n[0] === 1 ? "EAST" : n[0] === -1 ? "WEST" : null;
+  if (!facing) { toast("Hang art on a wall, not a floor or a roof"); return; }
+  const [w, h] = (state.artSize || "3x2").split("x").map(Number);
+  const alongX = facing === "SOUTH" || facing === "NORTH";
+  const start = (alongX ? p.at.x : p.at.z) - Math.floor((w - 1) / 2);
+  const body = { x: alongX ? start : p.at.x, y: p.at.y, z: alongX ? p.at.z : start, facing, w, h,
+    seed: Number(state.artSeed), title: state.artTitle || undefined, actorId: state.me || undefined };
+  try {
+    const res = await api(API + "/art", { method: "POST", body: JSON.stringify(body) });
+    const words = { HUNG: "Hung", NOT_YOURS: "That wall is not yours to hang on", NO_WALL: "It needs a solid wall behind it and open air in front",
+      OVERLAP: "Another frame hangs there", FULL: "This parcel's walls are full", BAD_ACTOR: "Pick a name first" };
+    state.lastHang = res;
+    toast(res.result === "HUNG" ? `“${res.art.title}” hangs on ${res.art.address}` : (words[res.result] || res.result));
+    if (res.result === "HUNG") { setMode("look"); await loadArt(); showGallery(); }
+  } catch (e) {
+    handleError(e);
+  }
+}
+const artGroup = new THREE.Group();
+artGroup.name = "art";
+scene.add(artGroup);
+const artTextures = new Map();
+const frameMat = new THREE.MeshLambertMaterial({ color: 0x2b2118 });
+function artTexture(url) {
+  if (!artTextures.has(url)) {
+    const t = new THREE.TextureLoader().load(url);
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.magFilter = THREE.NearestFilter;
+    artTextures.set(url, t);
+  }
+  return artTextures.get(url);
+}
+/** A frame on its wall: the picture just off the face, a dark moulding round it. */
+function artModel(a) {
+  const g = new THREE.Group();
+  const pic = new THREE.Mesh(new THREE.PlaneGeometry(a.w - 0.24, a.h - 0.24),
+    new THREE.MeshBasicMaterial({ map: artTexture(a.image) }));
+  pic.userData.art = a;
+  g.add(pic);
+  for (const [w, h, x, y] of [[a.w, 0.14, 0, a.h / 2 - 0.07], [a.w, 0.14, 0, -a.h / 2 + 0.07],
+    [0.14, a.h, a.w / 2 - 0.07, 0], [0.14, a.h, -a.w / 2 + 0.07, 0]]) {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.08), frameMat);
+    m.position.set(x, y, 0);
+    m.userData.art = a;
+    g.add(m);
+  }
+  // The picture sits 3 cm off the wall's face, centred on the cubes it covers.
+  const cy = a.y + a.h / 2;
+  const at = {
+    SOUTH: [a.x + a.w / 2, cy, a.z + 1.03], NORTH: [a.x + a.w / 2, cy, a.z - 0.03],
+    EAST: [a.x + 1.03, cy, a.z + a.w / 2], WEST: [a.x - 0.03, cy, a.z + a.w / 2],
+  }[a.facing];
+  g.position.set(at[0], at[1], at[2]);
+  g.rotation.y = { SOUTH: 0, NORTH: Math.PI, EAST: Math.PI / 2, WEST: -Math.PI / 2 }[a.facing];
+  g.userData.art = a;
+  return g;
+}
+async function loadArt() {
+  if (!state.gallery) return;
+  const res = await api(API + "/art");
+  state.art = res.art;
+  const seen = new Set();
+  for (const a of res.art) {
+    seen.add(a.id);
+    const key2 = `${a.id}:${a.x},${a.y},${a.z},${a.facing},${a.w},${a.h},${a.seed}`;
+    const had = state.artModels.get(a.id);
+    if (had && had.userData.key === key2) continue;
+    if (had) artGroup.remove(had);
+    const m = artModel(a);
+    m.userData.key = key2;
+    artGroup.add(m);
+    state.artModels.set(a.id, m);
+  }
+  for (const [id, m] of state.artModels) {
+    if (!seen.has(id)) { artGroup.remove(m); state.artModels.delete(id); }
+  }
+  showGallery();
+}
+state.artModels = new Map();
+/** Look mode in a Gallery City: a frame opens the viewer; the ground picks the parcel under it. */
+function lookTap(clientX, clientY) {
+  const rect = canvas.getBoundingClientRect();
+  pointer.set(((clientX - rect.left) / rect.width) * 2 - 1, -((clientY - rect.top) / rect.height) * 2 + 1);
+  ray.setFromCamera(pointer, camera);
+  const hitArt = ray.intersectObjects(artGroup.children, true)[0];
+  const p = pick(clientX, clientY);
+  if (hitArt && (!p || hitArt.distance <= camera.position.distanceTo(new THREE.Vector3(...p.point)) + 0.2)) {
+    openViewer(hitArt.object.userData.art);
+    return;
+  }
+  if (!p) return;
+  const parcel = state.gallery.parcels.find(q => p.at.x >= q.minX && p.at.x <= q.maxX && p.at.z >= q.minZ && p.at.z <= q.maxZ);
+  if (parcel) { state.parcelSlot = parcel.n; showGallery(); toast(parcel.address + (parcel.owner ? ` · ${shortName(parcel.owner)}` : " · open")); }
+}
+function openViewer(a) {
+  const v = document.getElementById("viewer");
+  v.querySelector("img").src = a.image;
+  v.querySelector(".v-title").textContent = a.title;
+  v.querySelector(".v-meta").textContent = `${a.generator} · seed ${a.seed} · ${a.w} × ${a.h} · ${a.address}` +
+    (a.owner ? ` · hung by ${shortName(a.owner)}` : " · the gallery's own");
+  const down = v.querySelector(".v-down");
+  down.style.display = a.owner && state.me && a.owner === state.me ? "" : "none";
+  down.onclick = async () => {
+    try {
+      const res = await api(`${API}/art/${encodeURIComponent(a.id)}?actorId=${encodeURIComponent(state.me)}`, { method: "DELETE" });
+      toast(res.result === "TAKEN_DOWN" ? "Taken down" : res.result);
+      closeViewer();
+      await loadArt();
+    } catch (e) { handleError(e); }
+  };
+  v.style.display = "block";
+  state.viewing = a;
+}
+function closeViewer() { document.getElementById("viewer").style.display = "none"; state.viewing = null; }
+document.getElementById("viewerClose").onclick = closeViewer;
+function streetLabels() {
+  for (const s of state.gallery.streets) {
+    for (const f of [0.18, 0.5, 0.82]) {
+      const label = labelSprite(s.name);
+      label.material.depthTest = true;
+      label.scale.set(10, 1.9, 1);
+      label.position.set(s.x1 + (s.x2 - s.x1) * f + 0.5, 2.2, s.z1 + (s.z2 - s.z1) * f + 0.5);
+      label.name = "street";
+      scene.add(label);
+    }
+  }
+}
+/** Gallery City's drone (ADR-035): a camera quadcopter of boxes, four rotors that spin. */
+function droneModel() {
+  const g = new THREE.Group();
+  const body = creatureMat(0xf2f3f3), dark = creatureMat(0x2b2d33), lens = creatureMat(0x1fb5b0, true);
+  box(g, body, 2.4, 0.8, 2.4, 0, 1.6, 0);
+  box(g, dark, 0.8, 0.8, 0.8, 0.9, 1.0, 0);          // camera
+  box(g, lens, 0.12, 0.4, 0.4, 1.33, 1.0, 0);
+  for (let r = 0; r < 4; r++) {
+    const a = Math.PI / 4 + r * Math.PI / 2;
+    const x = Math.cos(a) * 2.2, z = Math.sin(a) * 2.2;
+    const arm = box(g, dark, 2.6, 0.25, 0.25, x / 2, 1.8, z / 2);
+    arm.rotation.y = -a;
+    box(g, dark, 0.3, 0.6, 0.3, x, 2.0, z);
+    const rotor = new THREE.Group();
+    rotor.name = "rotor" + r;
+    rotor.position.set(x, 2.35, z);
+    box(rotor, dark, 2.2, 0.06, 0.25, 0, 0, 0);
+    g.add(rotor);
+    box(g, dark, 0.2, 1.2, 0.2, x * 0.6, 0.6, z * 0.6);   // legs
+  }
+  return g;
+}
+
 // ---------------------------------------------------------------- obby (ADR-034)
 function showObby() {
   const host = document.getElementById("islands");
@@ -1674,6 +1937,7 @@ function avatarModel() {
 function spawnPoint() {
   if (state.bricks) return new THREE.Vector3(state.bricks.spawnX + 0.5, state.bricks.spawnY, state.bricks.spawnZ + 0.5);
   if (state.district) return new THREE.Vector3(state.district.padX + 0.5, state.district.padY + 0.5, state.district.padZ + 4.5);
+  if (state.gallery) return new THREE.Vector3(state.gallery.padX + 0.5, state.gallery.padY, state.gallery.padZ + 6.5);
   const isle = state.islands[0];
   const x = isle ? isle.x : Math.round(controls.target.x), z = isle ? isle.z : Math.round(controls.target.z);
   for (let y = 120; y > -64; y--) if (solidCube(x, y - 1, z)) return new THREE.Vector3(x + 0.5, y, z + 0.5);
@@ -1852,7 +2116,9 @@ function status() {
   const cubes = [...state.chunks.values()].reduce((a, d) => a + d.reduce((s, v) => s + (v ? 1 : 0), 0), 0);
   document.getElementById("statusText").textContent =
     `${state.live ? "live" : "offline"} · revision ${state.revision} · ${state.chunks.size} chunks · ` +
-    `${cubes.toLocaleString()} cubes · ` + (state.bricks
+    `${cubes.toLocaleString()} cubes · ` + (state.gallery
+      ? `${plural(state.gallery.parcels.filter(p => p.owner).length, "parcel")} claimed · ${plural((state.art || []).length, "frame")} · ${plural(state.arks.length, "drone")}`
+      : state.bricks
       ? `${plural(state.bricks.platforms.length, "jump")} · ${plural(state.arks.length, "plane")}`
       : state.district
       ? `${plural((state.plots || []).filter(p => p.owner).length, "plot")} claimed · ${plural(state.arks.length, "helicopter")}`
@@ -1908,7 +2174,22 @@ state.debugTarget = () => controls.target.clone();
 state.refreshCreatures = refreshCreatures;
 state.writeBlock = writeBlock;
 state.nameAt = nameAt;
+state.lookFrom = (tx, ty, tz, cx, cy, cz) => {   // put the camera at (cx, cy, cz) looking at (tx, ty, tz)
+  if (RIDE.id) toggleRide(RIDE.id);
+  flight++;
+  controls.target.set(tx, ty, tz);
+  camera.position.set(cx, cy, cz);  controls.update();
+  camera.updateMatrixWorld();   // a tap right after must see the new view, even before the next frame draws
+};
+state.lookAt = (x, y, z, from) => {   // stand in front of a point and face it (a harness, or a link to a frame)
+  if (RIDE.id) toggleRide(RIDE.id);
+  flight++;
+  controls.target.set(x, y, z);
+  camera.position.set(x + from[0] * 6, y + 0.4, z + from[2] * 6);  controls.update();
+  camera.updateMatrixWorld();   // a tap right after must see the new view, even before the next frame draws
+};
 state.project = (x, y, z) => {  // screen pixel of a world point, for a harness to tap a cube
+  camera.updateMatrixWorld();
   const v = new THREE.Vector3(x, y, z).project(camera), r = canvas.getBoundingClientRect();
   return { x: r.left + (v.x + 1) / 2 * r.width, y: r.top + (1 - v.y) / 2 * r.height };
 };
@@ -1919,6 +2200,7 @@ state.project = (x, y, z) => {  // screen pixel of a world point, for a harness 
     await loadIslands();
     await loadGates();
     await loadArks();
+    if (state.gallery) await loadArt();
     // A traveller through a gate is met first: the creatures can finish loading while the ark comes up.
     const arriving = arriveThroughGate();
     await loadSpecies();
@@ -1932,6 +2214,7 @@ state.project = (x, y, z) => {  // screen pixel of a world point, for a harness 
     else if (state.islands.length) flyTo(state.islands[0]);
     else if (state.district) flyTo({ x: state.district.padX, y: 0, z: state.district.padZ + 10 });
     else if (state.bricks) flyTo({ x: state.bricks.spawnX, y: state.bricks.spawnY, z: state.bricks.spawnZ - 20 });
+    else if (state.gallery) flyTo({ x: state.gallery.padX, y: 2, z: state.gallery.padZ + 6 });
     await arriving;
     status();
   } catch (e) {

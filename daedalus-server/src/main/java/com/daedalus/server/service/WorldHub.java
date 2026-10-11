@@ -87,7 +87,7 @@ public class WorldHub {
     /**
      * Mount a new world. A sky-islands world is born with one island grown from its seed, so it is
      * never an empty sky; a Parcels world with its district laid out (ADR-033); a Bricks world with
-     * its baseplate, spawn, runway and obby (ADR-034). Styles whose generator
+     * its baseplate, spawn, runway and obby (ADR-034); a Gallery City with its streets and galleries (ADR-035). Styles whose generator
      * has not shipped answer STYLE_NOT_READY (ADR-029).
      */
     public WorldWrite create(String id, WorldStyle style, long seed, String title) {
@@ -116,6 +116,8 @@ public class WorldHub {
                 world.raiseDistrict(id, seed);
             } else if (style == WorldStyle.BRICKS) {
                 world.raiseBricks(id, seed);
+            } else if (style == WorldStyle.GALLERY) {
+                world.raiseGallery(id, seed);
             }
             entries.put(id, entry);
             persist();
@@ -181,7 +183,7 @@ public class WorldHub {
         Path file = zero.file().resolveSibling(entry.id() + ".daew");
         WorldService world = new WorldService(file, new WorldId(entry.id()), publisher);
         world.useDayLength(zero.dayLength());
-        world.useStyle(entry.style());
+        world.useStyle(entry.style(), entry.seed());
         mounted.put(entry.id(), world);
         return world;
     }

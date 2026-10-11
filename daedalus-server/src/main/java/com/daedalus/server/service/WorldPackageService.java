@@ -12,6 +12,7 @@ import com.daedalus.world.WorldStyle;
 import com.daedalus.world.bricks.BricksOps;
 import com.daedalus.world.district.DistrictOps;
 import com.daedalus.world.export.BlockColors;
+import com.daedalus.world.gallery.GalleryOps;
 import com.daedalus.world.export.Glb;
 import com.daedalus.world.export.WorldMesher;
 import com.daedalus.world.gate.GateOps;
@@ -160,6 +161,20 @@ public class WorldPackageService {
                     List.of(o.x() + t.dockX(), o.y() + t.dockY(), o.z() + t.dockZ()), c == null ? "" : c.owner()));
         }
         List<WorldManifest.Plot> plots = new ArrayList<>();
+        List<WorldManifest.Art> art = new ArrayList<>();
+        if (w.style() == WorldStyle.GALLERY) {
+            for (GalleryOps.Parcel p : GalleryOps.plan(seedOf(id)).parcels()) {
+                ParcelBounds b = p.bounds();
+                WorldService.IslandClaim c = claims.get(p.n());
+                plots.add(new WorldManifest.Plot(p.n(), List.of(b.minX(), b.minY(), b.minZ()),
+                        List.of(b.maxX(), b.maxY(), b.maxZ()), p.gallery() ? "GALLERY" : "OPEN", c == null ? "" : c.owner()));
+            }
+            for (WorldService.Artwork a : w.artworks(id)) {
+                GalleryOps.Frame f = a.frame();
+                art.add(new WorldManifest.Art(a.id(), List.of(f.x(), f.y(), f.z()), f.facing().name(), f.w(), f.h(),
+                        f.seed(), a.title(), base + "/api/v1/art/maze/" + f.seed() + ".png"));
+            }
+        }
         if (w.isDistrict()) {
             for (DistrictOps.Plot p : DistrictOps.plan(seedOf(id)).plots()) {
                 ParcelBounds b = p.bounds();
@@ -199,7 +214,7 @@ public class WorldPackageService {
                 new WorldManifest.World(id, style.name(), hub.title(id), seedOf(id), revision),
                 "1 cube = 1 metre", "glTF: +Y up, right-handed; these are the live API's coordinates",
                 new WorldManifest.Geometry("world.glb", 16, chunks, tris, List.of("daedalus_opaque", "daedalus_translucent")),
-                palette, islands, plots, obby, gates, arks, new WorldManifest.Mount(mount.name(), mount.ready()),
+                palette, islands, plots, obby, art, gates, arks, new WorldManifest.Mount(mount.name(), mount.ready()),
                 List.of(new WorldManifest.Asset("ark", "assets/ark.glb",
                         "one per ark at its berth: deck origin, bow +X, scale 0.6, side-on 9 m off the berth on +Z")),
                 new WorldManifest.Live(base + "/api/v1/world/" + id, "/topic/world/" + id + "/{events,arks,ecology}"),

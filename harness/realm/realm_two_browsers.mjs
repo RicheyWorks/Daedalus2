@@ -713,6 +713,116 @@ if (RPC) {
   await page.close();
 }
 
+// --- Gallery City (ADR-035): the Cryptovoxels look. Streets with names, galleries of maze art; tap a frame
+// to see it close up; claim a parcel by tapping it, build a wall, and hang your own art on it.
+{
+  const page = await context.newPage();
+  const errors = [];
+  page.on("console", m => { if (m.type() === "error") errors.push(m.text()); });
+  page.on("pageerror", e => errors.push(String(e)));
+  page.on("response", r => { if (r.status() >= 400) errors.push(`${r.status()} ${r.url()}`); });
+  await page.goto(BASE + "/realm.html");
+  await page.waitForFunction(() => window.daedalusRealm && window.daedalusRealm.live, null, { timeout: 30000 });
+  await page.fill("#newWorldName", "Origin City");
+  await page.fill("#newWorldSeed", "3");
+  await page.selectOption("#newWorldStyle", "GALLERY");
+  await Promise.all([page.waitForURL(/realm\.html\?world=origin-city/, { timeout: 30000 }), page.click("#newWorldGo")]);
+  await page.bringToFront();
+  await page.waitForFunction(() => { const s = window.daedalusRealm;
+    return s && s.live && s.gallery && s.art && s.art.length > 0 && s.artModels.size === s.art.length && s.arkModels.size === 1; },
+  null, { timeout: 40000 });
+  await page.waitForFunction(() => [...window.daedalusRealm.artModels.values()].every(m => m.children[0].material.map.image
+    && m.children[0].material.map.image.width === 256), null, { timeout: 30000 }).catch(() => {});
+  const look = await page.evaluate(() => {
+    const s = window.daedalusRealm;
+    return { lane: document.getElementById("laneTitle").textContent, frames: s.art.length,
+      loaded: [...s.artModels.values()].filter(m => m.children[0].material.map.image && m.children[0].material.map.image.width === 256).length,
+      parcels: s.gallery.parcels.length, streets: s.gallery.streets.length, drone: s.arks[0].id,
+      rotors: !!s.arkModels.get("drone-0").getObjectByName("rotor3"), pad: s.nameAt(s.gallery.padX - 3, 0, s.gallery.padZ),
+      palette: document.querySelector(".swatch").title.split(" ")[0] };
+  });
+  const served = (await (await fetch(BASE + "/api/v1/world/origin-city/art")).json()).art.length;
+  check("a Gallery City is born with named streets, parcels, galleries of maze art on the walls, and a drone",
+    look.lane === "PARCELS" && look.frames > 20 && look.frames === served && look.loaded === look.frames && look.parcels === 68
+      && look.streets === 12 && look.drone === "drone-0" && look.rotors && look.pad === "HELIPAD" && look.palette === "BRICK_WHITE",
+    JSON.stringify(Object.assign({ served }, look)));
+  await page.waitForTimeout(1000);
+  await page.screenshot({ path: path.join(OUT, "realm_gallery.png") });
+
+  const first = await page.evaluate(() => {
+    const s = window.daedalusRealm, a = s.art[0], c = s.artModels.get(a.id).position;
+    const off = { SOUTH: [0, 0, 1], NORTH: [0, 0, -1], EAST: [1, 0, 0], WEST: [-1, 0, 0] }[a.facing];
+    s.lookAt(c.x, c.y, c.z, off);
+    return { a, c: [c.x, c.y, c.z] };
+  });
+  await page.bringToFront();
+  let viewed = false;
+  for (let tries = 0; tries < 3 && !viewed; tries++) {
+    await page.waitForTimeout(900);
+    const sp = await page.evaluate(c => window.daedalusRealm.project(c[0], c[1], c[2]), first.c);
+    await page.mouse.click(sp.x, sp.y);
+    viewed = await page.waitForFunction(() => window.daedalusRealm.viewing, null, { timeout: 3000 }).then(() => true, () => false);
+  }
+  const v = await page.evaluate(() => ({ title: document.querySelector("#viewer .v-title").textContent,
+    img: document.querySelector("#viewer img").getAttribute("src"), down: getComputedStyle(document.querySelector("#viewer .v-down")).display }));
+  check("tapping a frame opens it close up: title, generator, seed, and no Take down on the gallery's own",
+    viewed && v.title === first.a.title && v.img === first.a.image && v.down === "none", JSON.stringify(v));
+  await page.screenshot({ path: path.join(OUT, "realm_art_viewer.png") });
+  await page.click("#viewerClose");
+
+  await page.fill("#me", "dora");
+  await page.dispatchEvent("#me", "change");
+  const target = await page.evaluate(() => {
+    const s = window.daedalusRealm, p = s.gallery.parcels.find(q => !q.gallery && !q.owner);
+    const cx = (p.minX + p.maxX + 1) / 2, cz = (p.minZ + p.maxZ + 1) / 2;
+    return { n: p.n, cx, cz, minX: p.minX, minZ: p.minZ };
+  });
+  // A tap is a quick press that does not move; on a busy run a slow frame can make it read as a drag, so
+  // the harness taps again (as a person would) until the panel shows the parcel, up to three times.
+  await page.bringToFront();
+  for (let tries = 0; tries < 3; tries++) {
+    await page.evaluate(t => { const s = window.daedalusRealm; s.lookFrom(t.cx, 0.5, t.cz, t.cx, 22, t.cz + 14); }, target);
+    await page.waitForTimeout(800);
+    const gp = await page.evaluate(t => window.daedalusRealm.project(t.cx + 0.5, 1.0, t.cz + 0.5), target);
+    await page.mouse.click(gp.x, gp.y);
+    const ok = await page.waitForFunction(n => window.daedalusRealm.parcelSlot === n, target.n, { timeout: 3000 }).then(() => true, () => false);
+    if (ok) break;
+  }
+  await page.waitForSelector(`#islands .owner[data-slot="${target.n}"] button.claim`, { timeout: 5000 }).catch(() => {});
+  await page.click(`#islands .owner[data-slot="${target.n}"] button.claim`).catch(() => {});
+  const mine = await page.waitForFunction(n => { const p = window.daedalusRealm.gallery.parcels.find(q => q.n === n); return p && p.owner === "dora"; },
+    target.n, { timeout: 10000 }).then(() => true, () => false);
+  check("tapping the ground picks a parcel, and Claim makes it dora's", mine,
+    JSON.stringify({ picked: await page.evaluate(() => window.daedalusRealm.parcelSlot), want: target.n }));
+
+  await page.evaluate(async t => {
+    const s = window.daedalusRealm;
+    for (let x = t.minX + 2; x < t.minX + 6; x++) for (let y = 1; y <= 3; y++) await s.writeBlock(x, y, t.minZ + 2, "BRICK_WHITE");
+  }, target);
+  await page.waitForSelector("#artSeed", { timeout: 5000 });
+  await page.fill("#artSeed", "77");
+  await page.selectOption("#artSize", "3x2");
+  await page.fill("#artTitle", "Dora's Maze");
+  await page.click(".hang-form button.hang");
+  const wall = { x: target.minX + 3, y: 2, z: target.minZ + 2 };
+  await page.evaluate(w => window.daedalusRealm.lookAt(w.x + 0.5, w.y + 0.5, w.z + 1, [0, 0, 1]), wall);
+  await page.waitForTimeout(700);
+  const wp = await page.evaluate(w => window.daedalusRealm.project(w.x + 0.5, w.y + 0.5, w.z + 1.001), wall);
+  await page.mouse.click(wp.x, wp.y);
+  const hung = await page.waitForFunction(() => (window.daedalusRealm.art || []).some(a => a.owner === "dora"), null, { timeout: 10000 })
+    .then(() => true, () => false);
+  const mineArt = await page.evaluate(() => window.daedalusRealm.art.find(a => a.owner === "dora"));
+  const servedMine = (await (await fetch(BASE + "/api/v1/world/origin-city/art")).json()).art.find(a => a.owner === "dora");
+  check("Hang art, then a tap on dora's wall, hangs seed 77 there for everyone",
+    hung && mineArt && mineArt.seed === 77 && mineArt.title === "Dora's Maze" && mineArt.facing === "SOUTH" && servedMine
+      && servedMine.id === mineArt.id && mineArt.w === 3 && mineArt.h === 2,
+    JSON.stringify({ mineArt, lastHang: await page.evaluate(() => window.daedalusRealm.lastHang) }));
+  await page.waitForTimeout(800);
+  await page.screenshot({ path: path.join(OUT, "realm_hung_art.png") });
+  check("no console errors in Gallery City", errors.length === 0, errors.slice(0, 3).join(" | "));
+  await page.close();
+}
+
 // --- Reload: a fresh page rebuilds the same world from REST alone, and sends no ship anywhere.
 const voyagesBefore = (await (await fetch(BASE + "/api/v1/world/world-zero/arks")).json()).arks.map(a => `${a.id}:${a.departAt}`).join(",");
 const C = await open("C");

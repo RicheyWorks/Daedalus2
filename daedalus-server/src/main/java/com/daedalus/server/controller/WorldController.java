@@ -41,6 +41,11 @@ import com.daedalus.api.dto.TrapMutationResponse;
 import com.daedalus.api.dto.VoyageRequest;
 import com.daedalus.api.dto.VoyageResponse;
 import com.daedalus.api.dto.WorldArksResponse;
+import com.daedalus.api.dto.ArtListResponse;
+import com.daedalus.api.dto.ArtResponse;
+import com.daedalus.api.dto.ArtRow;
+import com.daedalus.api.dto.GalleryResponse;
+import com.daedalus.api.dto.HangArtRequest;
 import com.daedalus.api.dto.ObbyResponse;
 import com.daedalus.api.dto.PlotRow;
 import com.daedalus.api.dto.WorldPlotsResponse;
@@ -81,7 +86,9 @@ import com.daedalus.world.Trap;
 import com.daedalus.world.TrapResult;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.World;
+import com.daedalus.world.art.MazeArt;
 import com.daedalus.world.bricks.BricksOps;
+import com.daedalus.world.gallery.GalleryOps;
 import com.daedalus.world.district.DistrictOps;
 import com.daedalus.world.ark.Ark;
 import com.daedalus.world.auto.DriveTrace;
@@ -757,6 +764,93 @@ public class WorldController {
         BlockCoordinate pad = DistrictOps.padBerth();
         return ResponseEntity.ok(new WorldPlotsResponse(id, DistrictOps.PLOT, DistrictOps.HEIGHT,
                 plaza.minX(), plaza.minZ(), plaza.maxX(), plaza.maxZ(), pad.x(), pad.y(), pad.z(), rows));
+    }
+
+    @GetMapping("/world/{id}/gallery")
+    @Operation(summary = "A Gallery City's parcels, addresses, named streets, the Origin and the drone pad (ADR-035).")
+    public ResponseEntity<GalleryResponse> gallery(@PathVariable String id) {
+        mounted(id);
+        WorldService w = world(id);
+        if (w.style() != com.daedalus.world.WorldStyle.GALLERY) {
+            throw ResourceNotFoundException.world(id + "/gallery");
+        }
+        long seed = hub.worlds().stream().filter(e -> e.id().equals(id)).findFirst()
+                .map(WorldHub.WorldEntry::seed).orElse(0L);
+        Map<Integer, WorldService.IslandClaim> claims = w.claims(id);
+        List<GalleryResponse.Parcel> rows = new ArrayList<>();
+        for (GalleryOps.Parcel p : GalleryOps.plan(seed).parcels()) {
+            WorldService.IslandClaim c = claims.get(p.n());
+            ParcelBounds b = p.bounds();
+            rows.add(new GalleryResponse.Parcel(p.n(), b.minX(), b.minZ(), b.maxX(), b.maxZ(), b.maxY(), p.address(),
+                    p.gallery(), c == null ? "" : c.owner(), c == null ? List.of() : c.builders()));
+        }
+        List<GalleryResponse.Street> streets = new ArrayList<>();
+        for (GalleryOps.Street s : GalleryOps.streets()) {
+            streets.add(new GalleryResponse.Street(s.name(), s.x1(), s.z1(), s.x2(), s.z2()));
+        }
+        ParcelBounds plaza = GalleryOps.plaza();
+        BlockCoordinate pad = GalleryOps.padBerth();
+        return ResponseEntity.ok(new GalleryResponse(id, plaza.minX(), plaza.minZ(), plaza.maxX(), plaza.maxZ(),
+                pad.x(), pad.y(), pad.z(), rows, streets));
+    }
+
+    @GetMapping("/world/{id}/art")
+    @Operation(summary = "Every frame on a wall in a Gallery City: where, which maze art, who hung it (ADR-035).")
+    public ResponseEntity<ArtListResponse> art(@PathVariable String id) {
+        mounted(id);
+        List<ArtRow> rows = new ArrayList<>();
+        for (WorldService.Artwork a : world(id).artworks(id)) {
+            rows.add(artRow(a));
+        }
+        return ResponseEntity.ok(new ArtListResponse(id, rows));
+    }
+
+    @PostMapping("/world/{id}/art")
+    @Operation(summary = "Hang a frame of maze art on a wall of a parcel you may build on (ADR-035).")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<ArtResponse> hangArt(@PathVariable String id, @Valid @RequestBody HangArtRequest body,
+                                               Principal principal) {
+        mounted(id);
+        GalleryOps.Frame f = new GalleryOps.Frame(body.x(), body.y(), body.z(), GalleryOps.Facing.valueOf(body.facing()),
+                body.w(), body.h(), body.seed());
+        WorldService.ArtWrite write = world(id).hang(id, f, body.title(), actor(principal, body.actorId()));
+        return ResponseEntity.ok(new ArtResponse(write.result(), write.art() == null ? null : artRow(write.art())));
+    }
+
+    @DeleteMapping("/world/{id}/art/{artId}")
+    @Operation(summary = "Take a frame down: whoever hung it, or whoever holds its parcel now (ADR-035).")
+    @PerKeyRateLimit("mazeGenerate")
+    public ResponseEntity<ArtResponse> takeDownArt(@PathVariable String id, @PathVariable String artId,
+            @RequestParam(required = false) String actorId, Principal principal) {
+        mounted(id);
+        WorldService.ArtWrite write = world(id).takeDown(id, artId, actor(principal, actorId));
+        return ResponseEntity.ok(new ArtResponse(write.result(), write.art() == null ? null : artRow(write.art())));
+    }
+
+    /** Maze art by seed: a pure function, so one render serves forever. Bounded, like the portraits. */
+    private static final Map<Long, byte[]> ART = java.util.Collections.synchronizedMap(
+            new java.util.LinkedHashMap<>(64, 0.75f, true) {
+                @Override
+                protected boolean removeEldestEntry(Map.Entry<Long, byte[]> eldest) {
+                    return size() > 256;
+                }
+            });
+
+    @GetMapping(value = "/art/maze/{seed}.png", produces = MediaType.IMAGE_PNG_VALUE)
+    @Operation(summary = "Maze art for a seed (ADR-035): a generator, a palette, the maze and its rainbow solution.")
+    public ResponseEntity<byte[]> mazeArt(@PathVariable long seed) {
+        byte[] png = ART.computeIfAbsent(seed, s -> MazeArt.of(s).png());
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(java.time.Duration.ofDays(365)).cachePublic().immutable())
+                .eTag("\"maze-" + seed + "\"")
+                .contentType(MediaType.IMAGE_PNG)
+                .body(png.clone());
+    }
+
+    private static ArtRow artRow(WorldService.Artwork a) {
+        GalleryOps.Frame f = a.frame();
+        return new ArtRow(a.id(), f.x(), f.y(), f.z(), f.facing().name(), f.w(), f.h(), f.seed(), a.title(),
+                MazeArt.of(f.seed()).generator(), a.owner(), a.parcel(), "/api/v1/art/maze/" + f.seed() + ".png");
     }
 
     @GetMapping("/world/{id}/obby")

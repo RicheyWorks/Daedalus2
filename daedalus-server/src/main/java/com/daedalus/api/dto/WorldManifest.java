@@ -15,14 +15,15 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record WorldManifest(String format, int version, String generator, World world, String units, String axes,
                             Geometry geometry, List<Swatch> palette, List<Island> islands, List<Plot> plots,
-                            Obby obby, List<Gate> gates, List<Ark> arks, Mount mount, List<Asset> assets, Live live,
-                            Chain chain) {
+                            Obby obby, List<Art> art, List<Gate> gates, List<Ark> arks, Mount mount, List<Asset> assets,
+                            Live live, Chain chain) {
 
     /** Copy on construct: the caller's lists cannot change what this manifest says. */
     public WorldManifest {
         palette = palette == null ? List.of() : List.copyOf(palette);
         islands = islands == null ? List.of() : List.copyOf(islands);
         plots = plots == null ? List.of() : List.copyOf(plots);
+        art = art == null ? List.of() : List.copyOf(art);
         gates = gates == null ? List.of() : List.copyOf(gates);
         arks = arks == null ? List.of() : List.copyOf(arks);
         assets = assets == null ? List.of() : List.copyOf(assets);
@@ -74,6 +75,17 @@ public record WorldManifest(String format, int version, String generator, World 
         public Obby {
             spawn = List.copyOf(spawn);
             steps = List.copyOf(steps);
+        }
+    }
+
+    /**
+     * A frame in a Gallery City (ADR-035): the wall cube at its lowest corner as [x, y, z], the side it
+     * hangs on, its size, and the seed of the maze art it shows (served at {@code image}).
+     */
+    public record Art(String id, List<Integer> at, String facing, int w, int h, long seed, String title, String image) {
+
+        public Art {
+            at = List.copyOf(at);
         }
     }
 

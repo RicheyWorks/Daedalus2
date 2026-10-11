@@ -16,6 +16,7 @@ import com.daedalus.world.DoorResult;
 import com.daedalus.world.Npc;
 import com.daedalus.world.NpcResult;
 import com.daedalus.world.Parcel;
+import com.daedalus.world.ParcelAccess;
 import com.daedalus.world.ParcelAcl;
 import com.daedalus.world.ParcelBounds;
 import com.daedalus.world.ParcelDenyResult;
@@ -38,6 +39,7 @@ import com.daedalus.world.ark.ArkFleet;
 import com.daedalus.world.ark.ArkOps;
 import com.daedalus.world.ark.Voyage;
 import com.daedalus.world.ark.VoyageResult;
+import com.daedalus.world.art.MazeArt;
 import com.daedalus.world.auto.DriveTrace;
 import com.daedalus.world.auto.Observation;
 import com.daedalus.world.auto.WorldAddress;
@@ -51,6 +53,7 @@ import com.daedalus.world.ecology.Ecosystem;
 import com.daedalus.world.ecology.Habitat;
 import com.daedalus.world.ecology.Hold;
 import com.daedalus.world.ecology.SpeciesCanon;
+import com.daedalus.world.gallery.GalleryOps;
 import com.daedalus.world.gate.GateOps;
 import com.daedalus.world.gate.Mount;
 import com.daedalus.world.island.IslandGenerator;
@@ -140,8 +143,20 @@ public class WorldService {
      */
     private volatile WorldStyle style = WorldStyle.SKY_ISLANDS;
 
+    /** The seed the world was made from; a Gallery City reads its galleries' art from it (ADR-035). */
+    private volatile long styleSeed;
+    /** The art people hang in a Gallery City; null in other worlds. */
+    private ArtWall art;
+    /** The galleries' own frames, grown from the seed once. */
+    private List<GalleryOps.Frame> showFrames;
+
     private boolean district() {
         return style == WorldStyle.PARCELS;
+    }
+
+    /** Worlds whose land is parcels you claim before you build: Parcels (ADR-033) and Gallery City (ADR-035). */
+    private boolean parcelled() {
+        return style == WorldStyle.PARCELS || style == WorldStyle.GALLERY;
     }
 
     /** Traits by "seed/radius". A pure function's answers; regrowing an island costs ~50 ms. */
@@ -297,7 +312,7 @@ public class WorldService {
      */
     private boolean offPlot(World live, BlockCoordinate at) {
         return switch (style) {
-            case PARCELS -> live.parcelAt(at) == null;
+            case PARCELS, GALLERY -> live.parcelAt(at) == null;
             case BRICKS -> BricksOps.protects(at);
             default -> false;
         };
@@ -662,7 +677,17 @@ public class WorldService {
      * runway is the mount. The cubes themselves are saved like any others.
      */
     public void useStyle(WorldStyle style) {
-        this.style = style == null ? WorldStyle.SKY_ISLANDS : style;
+        useStyle(style, 0L);
+    }
+
+    /** As {@link #useStyle(WorldStyle)}, with the seed the world was made from (Gallery City's art). */
+    public void useStyle(WorldStyle style, long seed) {
+        synchronized (lock) {
+            this.style = style == null ? WorldStyle.SKY_ISLANDS : style;
+            this.styleSeed = seed;
+            this.showFrames = null;
+            this.art = this.style == WorldStyle.GALLERY ? new ArtWall(file.resolveSibling(file.getFileName() + ".art")) : null;
+        }
     }
 
     public WorldStyle style() {
@@ -723,6 +748,165 @@ public class WorldService {
         }
     }
 
+    /** Lay out Gallery City grown from {@code seed}: streets, parcels, the Origin and its galleries. */
+    public DistrictWrite raiseGallery(String id, long seed) {
+        World live = require(id);
+        if (live == null) {
+            return null;
+        }
+        if (style != WorldStyle.GALLERY) {
+            return new DistrictWrite("NOT_A_GALLERY", live.revision().value(), 0);
+        }
+        GalleryOps.Plan plan = GalleryOps.plan(seed);
+        synchronized (lock) {
+            if (!GalleryOps.build(live, plan)) {
+                return new DistrictWrite("ALREADY_LAID", live.revision().value(), plan.parcels().size());
+            }
+            persist();
+            BlockCoordinate pad = GalleryOps.padBerth();
+            long revision = live.revision().value();
+            events.accept(new WorldBlockEvent(this, id, WorldBlockEvent.Kind.WORLD_REVISION_CHANGED,
+                    pad.x(), pad.y(), pad.z(), "GALLERY", BlockType.AIR.name(), revision));
+            return new DistrictWrite("LAID", revision, plan.parcels().size());
+        }
+    }
+
+    /** A frame on a wall (ADR-035): the galleries' own ({@code owner} empty) or one someone hung. */
+    public record Artwork(String id, GalleryOps.Frame frame, String owner, String title, String parcel) {
+    }
+
+    /** Outcome of hanging or taking down art; {@code art} is the frame concerned, when there is one. */
+    public record ArtWrite(String result, Artwork art) {
+    }
+
+    private List<GalleryOps.Frame> showFrames() {
+        if (showFrames == null) {
+            showFrames = GalleryOps.plan(styleSeed).frames();
+        }
+        return showFrames;
+    }
+
+    private String addressAt(BlockCoordinate c) {
+        int n = GalleryOps.parcelAt(c.x(), c.z());
+        return n < 0 ? "" : GalleryOps.parcels().get(n).address();
+    }
+
+    /**
+     * Every frame on a wall in a Gallery City, the galleries' own first. A frame whose wall has gone, or
+     * whose front has been built over, is not shown. Empty in other worlds; null for an unknown world.
+     */
+    public List<Artwork> artworks(String id) {
+        World live = require(id);
+        if (live == null) {
+            return null;
+        }
+        synchronized (lock) {
+            List<Artwork> out = new ArrayList<>();
+            if (style != WorldStyle.GALLERY) {
+                return out;
+            }
+            List<GalleryOps.Frame> show = showFrames();
+            for (int i = 0; i < show.size(); i++) {
+                GalleryOps.Frame f = show.get(i);
+                if (GalleryOps.fits(live, f)) {
+                    out.add(new Artwork("show-" + i, f, "", MazeArt.of(f.seed()).title(), addressAt(f.wall().get(0))));
+                }
+            }
+            for (ArtWall.Hung h : art.all()) {
+                if (GalleryOps.fits(live, h.frame())) {
+                    out.add(new Artwork(h.id(), h.frame(), h.owner(), h.title(), addressAt(h.frame().wall().get(0))));
+                }
+            }
+            return out;
+        }
+    }
+
+    /**
+     * Hang a frame (ADR-035). Results: HUNG; NOT_A_GALLERY; BAD_ACTOR; NOT_YOURS (a wall cube is not in a
+     * parcel the actor may build on); NO_WALL (a cube behind is missing or see-through, a cube in front is
+     * not open, or the size is outside 1..6); OVERLAP (another frame covers that face); FULL (16 frames
+     * on the parcel already). Null for an unknown world.
+     */
+    public ArtWrite hang(String id, GalleryOps.Frame frame, String title, String actor) {
+        World live = require(id);
+        if (live == null) {
+            return null;
+        }
+        synchronized (lock) {
+            if (style != WorldStyle.GALLERY) {
+                return new ArtWrite("NOT_A_GALLERY", null);
+            }
+            if (badActor(actor)) {
+                return new ArtWrite("BAD_ACTOR", null);
+            }
+            if (frame.w() < 1 || frame.h() < 1 || frame.w() > GalleryOps.MAX_FRAME || frame.h() > GalleryOps.MAX_FRAME) {
+                return new ArtWrite("NO_WALL", null);
+            }
+            Parcel parcel = null;
+            for (BlockCoordinate c : frame.wall()) {
+                Parcel p = live.parcelAt(c);
+                if (p == null || (parcel != null && !p.id().equals(parcel.id()))
+                        || live.may(actor.trim(), ParcelVerb.BLOCK_PLACE, c) != ParcelAccess.ALLOWED) {
+                    return new ArtWrite("NOT_YOURS", null);
+                }
+                parcel = p;
+            }
+            if (!GalleryOps.fits(live, frame)) {
+                return new ArtWrite("NO_WALL", null);
+            }
+            for (Artwork a : artworks(id)) {
+                if (a.frame().overlaps(frame)) {
+                    return new ArtWrite("OVERLAP", a);
+                }
+            }
+            int onParcel = 0;
+            for (ArtWall.Hung h : art.all()) {
+                if (parcel.bounds().contains(h.frame().wall().get(0))) {
+                    onParcel++;
+                }
+            }
+            if (onParcel >= 16) {
+                return new ArtWrite("FULL", null);
+            }
+            ArtWall.Hung h = art.add(frame, actor.trim(), title);
+            announceArt(id, live, frame);
+            return new ArtWrite("HUNG", new Artwork(h.id(), frame, h.owner(), h.title(), addressAt(frame.wall().get(0))));
+        }
+    }
+
+    /** Take a frame down: who hung it may, and so may whoever now holds its parcel. TAKEN_DOWN, NO_SUCH_ART, NOT_YOURS. */
+    public ArtWrite takeDown(String id, String artId, String actor) {
+        World live = require(id);
+        if (live == null) {
+            return null;
+        }
+        synchronized (lock) {
+            if (style != WorldStyle.GALLERY) {
+                return new ArtWrite("NOT_A_GALLERY", null);
+            }
+            if (artId != null && artId.startsWith("show-")) {
+                return new ArtWrite("NOT_YOURS", null);  // the galleries' own art stays
+            }
+            ArtWall.Hung h = artId == null ? null : art.get(artId);
+            if (h == null) {
+                return new ArtWrite("NO_SUCH_ART", null);
+            }
+            Parcel p = live.parcelAt(h.frame().wall().get(0));
+            boolean holder = p != null && actor != null && p.ownerId().equals(actor.trim());
+            if (actor == null || !(h.owner().equals(actor.trim()) || holder)) {
+                return new ArtWrite("NOT_YOURS", null);
+            }
+            art.remove(artId);
+            announceArt(id, live, h.frame());
+            return new ArtWrite("TAKEN_DOWN", new Artwork(h.id(), h.frame(), h.owner(), h.title(), addressAt(h.frame().wall().get(0))));
+        }
+    }
+
+    private void announceArt(String id, World live, GalleryOps.Frame f) {
+        events.accept(new WorldBlockEvent(this, id, WorldBlockEvent.Kind.WORLD_REVISION_CHANGED,
+                f.x(), f.y(), f.z(), "ART", BlockType.AIR.name(), live.revision().value()));
+    }
+
     /**
      * Raise a seeded island into the first free slot of the island lane. All or nothing: the
      * plan lands whole or the lane is full and nothing changes. One persist, one revision event
@@ -773,20 +957,35 @@ public class WorldService {
 
     /** True when {@code slot} names something claimable here: an island, or a plot in a Parcels world. */
     private boolean claimable(int slot) {
-        return district() ? DistrictOps.isPlot(slot) : islands.containsKey(slot);
+        return switch (style) {
+            case PARCELS -> DistrictOps.isPlot(slot);
+            case GALLERY -> GalleryOps.parcelBounds(slot) != null;
+            default -> islands.containsKey(slot);
+        };
     }
 
     /** The box a claim on {@code slot} covers: the island's lane cell, or the plot (ADR-033). */
     private ParcelBounds claimBox(int slot) {
-        return district() ? DistrictOps.plotBounds(slot) : IslandOps.claimBounds(slot);
+        return switch (style) {
+            case PARCELS -> DistrictOps.plotBounds(slot);
+            case GALLERY -> GalleryOps.parcelBounds(slot);
+            default -> IslandOps.claimBounds(slot);
+        };
     }
 
     private String noSuch() {
-        return district() ? "NO_SUCH_PLOT" : "NO_SUCH_ISLAND";
+        return district() ? "NO_SUCH_PLOT" : style == WorldStyle.GALLERY ? "NO_SUCH_PARCEL" : "NO_SUCH_ISLAND";
     }
 
     /** Every claimable slot in order. Caller holds the lock. */
     private List<Integer> claimableSlots() {
+        if (style == WorldStyle.GALLERY) {
+            List<Integer> out = new ArrayList<>();
+            for (GalleryOps.Parcel p : GalleryOps.parcels()) {
+                out.add(p.n());
+            }
+            return out;
+        }
         if (!district()) {
             return List.copyOf(islands.keySet());
         }
@@ -884,7 +1083,7 @@ public class WorldService {
             if (claimOf(live, slot) != null) {
                 return claimView(live, "ALREADY_CLAIMED", slot);
             }
-            if (live.claimParcel(claimBox(slot), owner.trim(), (district() ? "Plot " : "Isle ") + slot) == null) {
+            if (live.claimParcel(claimBox(slot), owner.trim(), (district() ? "Plot " : style == WorldStyle.GALLERY ? "Parcel " : "Isle ") + slot) == null) {
                 return claimView(live, "BLOCKED", slot);
             }
             persist();
@@ -953,7 +1152,7 @@ public class WorldService {
 
     private void announceClaim(String id, World live, int slot) {
         ParcelBounds box = claimBox(slot);
-        BlockCoordinate o = district() ? new BlockCoordinate(box.minX(), box.minY(), box.minZ()) : IslandOps.slot(slot);
+        BlockCoordinate o = parcelled() ? new BlockCoordinate(box.minX(), box.minY(), box.minZ()) : IslandOps.slot(slot);
         events.accept(new WorldBlockEvent(this, id, WorldBlockEvent.Kind.WORLD_REVISION_CHANGED,
                 o.x(), o.y(), o.z(), "CLAIM", BlockType.AIR.name(), live.revision().value()));
     }
@@ -1014,6 +1213,9 @@ public class WorldService {
     /** The plane of a Bricks world (ADR-034): one, at home on the runway. */
     public static final String PLANE = "plane-0";
 
+    /** The drone of a Gallery City (ADR-035): one, at home on the Origin's pad. */
+    public static final String DRONE = "drone-0";
+
     /** {@link #sail}'s {@code toSlot} for "go home": the vessel's own island, or the helipad. */
     public static final int HOME = -1;
 
@@ -1026,7 +1228,11 @@ public class WorldService {
         if (home != Mount.HOME_SLOT) {
             return Ark.idFor(home);
         }
-        return style == WorldStyle.BRICKS ? PLANE : HELICOPTER;
+        return switch (style) {
+            case BRICKS -> PLANE;
+            case GALLERY -> DRONE;
+            default -> HELICOPTER;
+        };
     }
 
     private ArkView view(int home) {
@@ -1036,7 +1242,12 @@ public class WorldService {
         Ark placed;
         if (home == Mount.HOME_SLOT) {
             BlockCoordinate rest = berthOf(Mount.HOME_SLOT);
-            placed = new Ark(arkId, style == WorldStyle.BRICKS ? "Plane" : "Helicopter", home, at, berth == null ? rest : berth);
+            String name = switch (style) {
+                case BRICKS -> "Plane";
+                case GALLERY -> "Drone";
+                default -> "Helicopter";
+            };
+            placed = new Ark(arkId, name, home, at, berth == null ? rest : berth);
         } else {
             IslandEntry isle = islands.get(home);
             Ark launched = ArkOps.launch(home, isle.traits());
@@ -1141,6 +1352,7 @@ public class WorldService {
             return switch (style) {
                 case PARCELS -> DistrictOps.padBerth();
                 case BRICKS -> BricksOps.hangarBerth();
+                case GALLERY -> GalleryOps.padBerth();
                 default -> null;
             };
         }

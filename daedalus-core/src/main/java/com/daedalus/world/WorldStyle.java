@@ -15,8 +15,8 @@ public enum WorldStyle {
     PARCELS(true, "Parcels"),
     /** Roblox: a studded baseplate, a spawn, an obby over lava, blocky avatars (ADR-034). */
     BRICKS(true, "Bricks"),
-    /** Cryptovoxels: a street-grid city of plots with height limits. */
-    GALLERY(false, "Gallery City"),
+    /** Cryptovoxels: a street-grid city of parcels with height limits, and galleries of maze art (ADR-035). */
+    GALLERY(true, "Gallery City"),
     /** Daedalus itself: World One mazes at walking scale. */
     LABYRINTH(false, "Labyrinth");
 

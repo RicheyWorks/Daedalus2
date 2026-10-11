@@ -86,6 +86,17 @@
   .world-row .here { color: var(--accent); font-size: 12px; flex: 0 0 auto; }
   .note-line { color: var(--dim); font-size: 11px; font-style: italic; margin: -4px 0 6px; }
   .owner { padding: 0 0 8px; }
+  #viewer { display: none; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 14px; z-index: 8;
+    width: min(420px, calc(100vw - 32px)); text-align: center; }
+  #viewer img { width: 100%; image-rendering: pixelated; border: 8px solid #2b2118; border-radius: 4px; box-sizing: border-box; }
+  #viewer .v-title { color: var(--gold); font-weight: 700; margin-top: 8px; }
+  #viewer .v-meta { font-size: 12px; opacity: .85; margin: 4px 0 10px; }
+  #viewer .v-act { display: flex; gap: 8px; justify-content: center; }
+  .hang-form .owner-act select, .hang-form .owner-act input { min-height: 44px; }
+  #side .hang-form select { min-height: 44px; font: inherit; color: var(--text); background: rgba(0,0,0,.35);
+    border: 1px solid var(--line); border-radius: 10px; }
+  .art-preview { width: 64px; height: 64px; image-rendering: pixelated; border: 3px solid #2b2118; }
+  .parcel-row.on b { color: var(--gold); }
   #stick, #jumpBtn { display: none; position: fixed; bottom: max(18px, env(safe-area-inset-bottom)); z-index: 5; }
   #stick { left: 18px; width: 120px; height: 120px; border-radius: 50%; touch-action: none; }
   #knob { position: absolute; left: 38px; top: 38px; width: 44px; height: 44px; border-radius: 50%;
@@ -159,6 +170,12 @@
 </div>
 <div id="palette" class="panel" aria-label="Block palette"></div>
 <div id="stick" class="panel" aria-label="Move"><div id="knob"></div></div>
+<div id="viewer" class="panel" role="dialog" aria-label="Artwork">
+  <img alt="Maze art">
+  <div class="v-title"></div>
+  <div class="v-meta"></div>
+  <div class="v-act"><button class="v-down">Take down</button><button id="viewerClose">Close</button></div>
+</div>
 <button id="jumpBtn" class="panel" aria-label="Jump">Jump</button>
 <div id="toast" class="panel"></div>
 <div id="login" class="panel">

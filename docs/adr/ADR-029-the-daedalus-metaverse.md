@@ -105,13 +105,20 @@ the world's entities. Every engine loads that package and follows the same live 
 4. **ADR-033 The Parcels world** (Decentraland look): generator, renderer theme, claims and deeds per
    parcel.
 5. **ADR-034 The Bricks world** (Roblox look) and blocky avatars.
-6. **ADR-035 The Gallery world** (Cryptovoxels look): streets, plots, height limits.
-7. **ADR-036 Mazes in every world.** A maze parcel in each style, entered by portal; solved runs
-   recorded.
-8. **ADR-037 Presence.** See other players move, from SudokuPro's presence pieces.
-9. **ADR-038 VR.** WebXR in the realm; a portal into the OpenXR explore host.
-10. **ADR-039 The realm follows the chain.** Deed transfers move claims; a world registry contract.
-11. **ADR-040 Portals and items on chain.**
+6. **ADR-035 The Gallery world** (Cryptovoxels look): streets, plots, height limits, galleries of maze art.
+7. **ADR-036 The game** (amended 2026-10-11): what Zelda II, A Link to the Past, Dragon Warrior / FF1,
+   Pokémon, Animal Crossing and Adopt Me each bring, and the story of the Shattering. The rest is reordered
+   to build the game first:
+8. **ADR-037 Combat and EXP** (the Zelda II feel).
+9. **ADR-038 Companions** (Pokémon): befriend creatures that fight with you, level up and evolve.
+10. **ADR-039 Maze dungeons, bosses and races** (A Link to the Past): mazes in every world; the maze art
+    is the map.
+11. **ADR-040 The Shattered map and the story** (Dragon Warrior / FF1): Heartstones to heal the planet.
+12. **ADR-041 Home and pets** (Animal Crossing / Adopt Me).
+13. **ADR-042 Presence.** See other players move, from SudokuPro's presence pieces; shared races.
+14. **ADR-043 VR.** WebXR in the realm; a portal into the OpenXR explore host.
+15. **ADR-044 The realm follows the chain.** Deed transfers move claims; a world registry contract.
+16. **ADR-045 Items and creatures on chain.**
 
 Each slice ships the way the Realm's did: a gate-green build, a browser harness that drives the real
 pages, an ADR that says what it found, and a push to `main`.

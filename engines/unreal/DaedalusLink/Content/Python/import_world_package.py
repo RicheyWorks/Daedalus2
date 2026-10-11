@@ -124,6 +124,9 @@ def plan(manifest, names):
         steps = obby.get("steps", [])
         lines.append("  obby: %d platforms over lava, %d checkpoints, spawn at %s" % (
             len(steps) - 1, sum(1 for s in steps if s.get("checkpoint")), obby.get("spawn")))
+    art = manifest.get("art", [])
+    if art:
+        lines.append("  art: %d frames of maze art (images served by the live world)" % len(art))
     for gate in manifest.get("gates", []):
         lines.append("    gate %d -> %s (%s) gate %d" % (gate["gate"], gate["toTitle"], gate["toWorld"], gate["toGate"]))
     live = manifest.get("live", {})
