@@ -30,12 +30,34 @@ Both editors must be open, with their connectors running, on the same computer.
 
 From code: `from asset_pipeline import ship; report = ship.ship("Lamp", ["Lamp"])`.
 
+## Import a saved Blender handoff
+
+For a spec-1 `art/jobs/<Asset>.json` handoff, use the saved GLB without reopening Blender:
+
+```
+python -m asset_pipeline.ship_saved --job C:/Users/730ri/projects/bot-team/art/jobs/Prop_Shroom_Embercap.json --report embercap.json
+```
+
+The manifest must identify `art/glb/<Asset>.glb`, its SHA1, a passing selfcheck, and matching mesh facts.
+The importer checks the saved bytes, budgets and material slots before contacting Unreal, then retains
+those exact bytes in `art/import-cache/<SHA1>/<Asset>.glb` for Unreal's Reimport source. Keep that cache.
+It imports once into `/Game/Daedalus/Art/<Kind>/<Asset>`; `--dest` changes the parent folder and
+`--name` asserts the expected asset. Unreal must be open and outside Play. The current import must
+return its own mesh and material evidence, including material parents; an old destination asset
+cannot make an empty import pass. ADR-055's project material repair and Nanite gate are preserved.
+
+From code: `from asset_pipeline.ship_saved import ship_saved; report = ship_saved(job_path)`.
+The CLI exits 0 for a passing report, 1 for a rejected shipment, and 2 for invalid input or an editor
+failure. It does not update `QUEUE.md`, `feed.jsonl`, or the job manifest; queue integration remains
+with the watcher. A timeout does not prove the editor cancelled the import: inspect before retrying.
+
 ## Harness
 
 | Suite | What it proves |
 |---|---|
 | `harness/glb_test.py` | The `.glb` reader on hand-made files: indexed and non-indexed triangles, lines, instancing, and broken files refused (9 cases) |
 | `harness/judge_test.py` | One good shipment passes, and each kind of loss fails exactly the check it should (14 cases) |
+| `harness/ship_saved_test.py` | Saved manifest/file validation, retained snapshots, current-attempt evidence, Play refusal and ADR-055 material repair; offline fake editor, no live imports (37 cases, two real-link cases opt-in) |
 | `harness/e2e.py` | Real Blender (`bpy`) exports and the Unreal stand-in imports the real `.glb`. Five planted losses (a mesh, a triangle, a slot, the units, the materials) are each REJECTED by the right check, and the CLI exit codes are checked (17 cases) |
 | `harness/mutate.py --e2e` | Breaks the judge, the `.glb` reader and both editor scripts on purpose. Every break must turn a suite red. Results go to `ledgers/mutants.json` |
 | `harness/run_all.py` | Runs every suite and prints n/m |
