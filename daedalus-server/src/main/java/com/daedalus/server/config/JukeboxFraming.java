@@ -17,7 +17,7 @@ public final class JukeboxFraming {
 
     static final RequestMatcher TOKEN_HTML = req -> {
         String uri = req.getRequestURI();
-        return uri != null && uri.matches("/api/v1/jukebox/tokens/\\d+/html");
+        return uri != null && (uri.matches("/api/v1/jukebox/tokens/\\d+/html") || uri.equals("/api/v1/jukebox/live"));
     };
 
     private JukeboxFraming() {}

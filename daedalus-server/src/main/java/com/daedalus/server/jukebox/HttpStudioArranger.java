@@ -96,6 +96,14 @@ public final class HttpStudioArranger implements StudioArranger {
     }
 
     /** One relayed upstream body: {@code status} 200 with a body, or 304 (the caller's ETag still matches). */
+    /** r4 Keys tab: single-note render files under /audio/notes/. */
+    public static final Pattern NOTE_FILE = Pattern.compile("n[0-9a-f]{24}-[A-Za-z0-9.-]{1,40}\\.(mp3|flac)");
+    /** A voice name as /voices lists it (exact, case-sensitive). */
+    static final Pattern VOICE = Pattern.compile("[A-Za-z0-9 %&._()'-]{1,48}");
+    private static final int MAX_VOICES_BYTES = 512 * 1024;
+    private volatile String voicesJson;
+    private volatile long voicesAt;
+
     public record Upstream(int status, InputStream body, String etag, long length, String contentType, String cacheControl) {}
 
     public HttpStudioArranger(String base, LongSupplier clock) {
@@ -184,7 +192,7 @@ public final class HttpStudioArranger implements StudioArranger {
             ok();
             String job = body == null ? "" : firstText(body, "job", "jobId", "id");
             String header = res.headers().firstValue("Retry-After").orElse(body == null ? "" : body.path("retry_after").asText(""));
-            return new Arrangement(source, genre, studio, false, null, "rd-studio is rendering this one: playing the original",
+            return new Arrangement(source, genre, studio, false, null, "rd-studio is pressing your record",
                     Status.RENDERING, JOB_ID.matcher(job).matches() ? job : null, retryAfter(header));
         }
         if (code == 404) {                     // r4: only "unknown source"
@@ -343,7 +351,8 @@ public final class HttpStudioArranger implements StudioArranger {
 
     /** An rd-studio MP3 by its key (whole file; rd-studio has no Range support). Honors the studio's content-hash ETag. */
     public Optional<Upstream> audio(String key, String ifNoneMatch) {
-        if (key == null || !AUDIO_KEY.matcher(key).matches() || !breaker.allow()) return Optional.empty();
+        boolean note = key != null && key.startsWith("notes/") && NOTE_FILE.matcher(key.substring(6)).matches();
+        if (key == null || !(note || AUDIO_KEY.matcher(key).matches()) || !breaker.allow()) return Optional.empty();
         try {
             HttpRequest.Builder req = HttpRequest.newBuilder(URI.create(base + "/audio/" + key)).timeout(t.stream()).GET();
             if (ifNoneMatch != null && ETAG.matcher(ifNoneMatch.trim()).matches()) req.header("If-None-Match", ifNoneMatch.trim());
@@ -371,6 +380,74 @@ public final class HttpStudioArranger implements StudioArranger {
             Thread.currentThread().interrupt();
             return Optional.empty();
         }
+    }
+
+    // ---------------------------------------------------------------- r4 Keys tab (rd-voice/1)
+
+    /** GET /voices (the engine's voices with register and native ADSR), cached 5 minutes. Must be a JSON object. */
+    public Optional<String> voices() {
+        String hit = voicesJson;
+        if (hit != null && clock.getAsLong() - voicesAt < 300_000) return Optional.of(hit);
+        Optional<String> got = bytes("/voices", MAX_VOICES_BYTES).map(b -> new String(b, StandardCharsets.UTF_8)).filter(HttpStudioArranger::isJsonObject);
+        got.ifPresent(j -> { voicesJson = j; voicesAt = clock.getAsLong(); });
+        return got.isPresent() ? got : Optional.ofNullable(hit);
+    }
+
+    /**
+     * One single-note render (rd-voice/1 NOTE_SCHEMA): validated here first (unknown keys are refused by the studio too),
+     * then GET /note. The url comes back rewritten to our same-origin proxy.
+     */
+    public Optional<Map<String, Object>> note(Map<String, String> q) {
+        Map<String, String> clean = validateNote(q);
+        StringBuilder qs = new StringBuilder();
+        clean.forEach((k, v) -> qs.append(qs.isEmpty() ? "?" : "&").append(k).append('=').append(URLEncoder.encode(v, StandardCharsets.UTF_8)));
+        Optional<byte[]> b = bytes("/note" + qs, MAX_JSON_BYTES);
+        if (b.isEmpty()) return Optional.empty();
+        try {
+            JsonNode j = JSON.readTree(b.get());
+            String url = j.path("url").asText("");
+            String file = url.substring(url.lastIndexOf('/') + 1);
+            if (!NOTE_FILE.matcher(file).matches()) { fail("note: bad url"); return Optional.empty(); }
+            Map<String, Object> out = new LinkedHashMap<>();
+            out.put("url", "/api/v1/jukebox/studio/audio/notes/" + file);
+            out.put("etag", j.path("etag").asText(""));
+            out.put("note", JSON.convertValue(j.path("note"), Map.class));
+            return Optional.of(out);
+        } catch (IOException e) {
+            fail("note: garbage");
+            return Optional.empty();
+        }
+    }
+
+    private static final Map<String, double[]> NOTE_RANGES = Map.of(
+            "midi", new double[]{21, 108, 1}, "vel", new double[]{0.05, 1}, "dur", new double[]{0.05, 8},
+            "a", new double[]{0.001, 4}, "d", new double[]{0.001, 8}, "s", new double[]{0, 1}, "r", new double[]{0.005, 8},
+            "rr", new double[]{0, 15, 1});
+
+    /** rd-voice/1 note params: voice (required), midi (required, 21-108), vel, dur, a, d, s, r, rr, format. Else IllegalArgumentException. */
+    static Map<String, String> validateNote(Map<String, String> q) {
+        Map<String, String> out = new java.util.TreeMap<>();
+        for (Map.Entry<String, String> e : q.entrySet()) {
+            String k = e.getKey(), v = e.getValue() == null ? "" : e.getValue().trim();
+            if (k.equals("voice")) {
+                if (!VOICE.matcher(v).matches()) throw new IllegalArgumentException("voice must be a name from /voices");
+                out.put(k, v);
+            } else if (k.equals("format")) {
+                if (!v.equals("mp3") && !v.equals("flac")) throw new IllegalArgumentException("format must be mp3 or flac");
+                out.put(k, v);
+            } else if (NOTE_RANGES.containsKey(k)) {
+                double[] r = NOTE_RANGES.get(k);
+                if (!v.matches("-?\\d{1,4}(\\.\\d{1,4})?")) throw new IllegalArgumentException(k + " must be a number");
+                double d = Double.parseDouble(v);
+                if (r.length == 3 && d != Math.rint(d)) throw new IllegalArgumentException(k + " must be an integer");
+                if (d < r[0] || d > r[1]) throw new IllegalArgumentException(k + " out of range [" + r[0] + ", " + r[1] + "]");
+                out.put(k, v);
+            } else {
+                throw new IllegalArgumentException("unknown param " + k);
+            }
+        }
+        if (!out.containsKey("voice") || !out.containsKey("midi")) throw new IllegalArgumentException("voice and midi are required");
+        return out;
     }
 
     /**

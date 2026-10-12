@@ -127,7 +127,9 @@ public class JukeboxController {
     @PerKeyRateLimit("jukebox")
     @Operation(summary = "A revealed token's own on-chain HTML (its song and Turing coat), served sandboxed.")
     public ResponseEntity<byte[]> tokenHtml(@PathVariable long id) {
-        byte[] html = onChain(() -> jukebox.tokenHtml(checkId(id)), id);
+        // Raw on-chain audio is an explicit opt-in only (the panel frames this after a tap), and even then it plays at
+        // RAW_VOLUME through its own fixed limiter: rd-audio-shim runs before the token's script.
+        byte[] html = withQuietShim(onChain(() -> jukebox.tokenHtml(checkId(id)), id));
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("text/html;charset=UTF-8"))
                 // The token's script runs in an opaque origin: it can never read the realm's sign-in token.
@@ -136,6 +138,55 @@ public class JukeboxController {
                 .header("X-Frame-Options", "SAMEORIGIN")    // the jukebox panel frames it; nobody else
                 .cacheControl(CacheControl.maxAge(Duration.ofDays(30)).cachePublic().immutable())
                 .body(html);
+    }
+
+    static final double RAW_VOLUME = 0.35;
+    private static final byte[] SHIM = loadShim();
+
+    private static byte[] loadShim() {
+        try (InputStream in = JukeboxController.class.getResourceAsStream("/jukebox/rd-audio-shim.js")) {
+            String js = new String(java.util.Objects.requireNonNull(in, "rd-audio-shim.js").readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+            return ("<script>" + js.replace("</", "<\\/") + "\nrdAudioShim(window, " + RAW_VOLUME + ");</script>")
+                    .getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    /** The shim goes first: before the doctype's content runs any script (a leading script is harmless to the parser). */
+    static byte[] withQuietShim(byte[] html) {
+        byte[] out = new byte[SHIM.length + html.length];
+        System.arraycopy(SHIM, 0, out, 0, SHIM.length);
+        System.arraycopy(html, 0, out, SHIM.length, html.length);
+        return out;
+    }
+
+    private static final byte[] LIVE = loadLive();
+
+    private static byte[] loadLive() {
+        try (InputStream in = JukeboxController.class.getResourceAsStream("/jukebox/index_v6_live.html")) {
+            return java.util.Objects.requireNonNull(in, "index_v6_live.html").readAllBytes();
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    /**
+     * Prometheus's jukebox live copy of the frozen v6 engine (byte-for-byte index_v6.html plus a master stage: -12 dB after a
+     * limiter by default). The ONLY on-chain playback the panel offers, and only behind the "unprotected" opt-in button.
+     * It reads ?hash=&id= (and optional ?mg=, ?lim=) itself; served sandboxed like the token HTML.
+     */
+    @GetMapping("/live")
+    @PerKeyRateLimit("jukebox")
+    @Operation(summary = "The frozen v6 engine's jukebox live copy (-12 dB, limited): explicit opt-in on-chain playback, sandboxed.")
+    public ResponseEntity<byte[]> live() {
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("text/html;charset=UTF-8"))
+                .header("Content-Security-Policy", "sandbox allow-scripts")
+                .header("X-Content-Type-Options", "nosniff")
+                .header("X-Frame-Options", "SAMEORIGIN")
+                .cacheControl(CacheControl.maxAge(Duration.ofDays(1)).cachePublic())
+                .body(LIVE);
     }
 
     @GetMapping("/tokens/{id}/hash")
@@ -184,6 +235,35 @@ public class JukeboxController {
         }
         if (up.length() > 0) res.setContentLengthLong(up.length());
         pipe(up.body(), res, up.contentType(), Duration.ofMinutes(10), HttpStudioArranger.MAX_AUDIO_BYTES);
+    }
+
+    @GetMapping("/studio/audio/notes/{file}")
+    @PerKeyRateLimit("jukebox")
+    @Operation(summary = "An rd-studio single-note render (Keys tab), relayed from the private studio service.")
+    public void studioNoteAudio(@PathVariable String file, @RequestHeader(value = "If-None-Match", required = false) String inm,
+                                HttpServletResponse res) throws IOException {
+        studioAudio("notes/" + file, inm, res);
+    }
+
+    @GetMapping("/studio/voices")
+    @PerKeyRateLimit("jukebox")
+    @Operation(summary = "rd-studio's engine voices (rd-voice/1): name, register, native ADSR, for the Keys tab.")
+    public ResponseEntity<String> studioVoices() {
+        String json = jukebox.studioVoices().orElseThrow(() -> new ResourceNotFoundException("studio voices", "voices", "rd-studio is not connected"));
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).cacheControl(CacheControl.maxAge(Duration.ofMinutes(5)).cachePublic()).body(json);
+    }
+
+    @GetMapping("/studio/note")
+    @PerKeyRateLimit("jukebox")
+    @Operation(summary = "Render one note of an engine voice (rd-voice/1 note schema: voice, midi, vel, dur, a, d, s, r, rr, format).")
+    public ResponseEntity<?> studioNote(@RequestParam Map<String, String> q) {
+        try {
+            return jukebox.studioNote(q).<ResponseEntity<?>>map(n -> ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(n))
+                    .orElseGet(() -> ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).header("Retry-After", "10")
+                            .body(Map.of("error", "rd-studio didn't render that note")));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage(), "schema", "rd-voice/1"));
+        }
     }
 
     @GetMapping("/coat.png")

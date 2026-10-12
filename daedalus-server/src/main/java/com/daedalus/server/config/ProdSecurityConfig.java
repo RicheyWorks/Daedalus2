@@ -81,7 +81,7 @@ public class ProdSecurityConfig {
      * Pages beside the maze well. {@code /realm.html} is the WebGL world client (ADR-018); the
      * well at {@code /} stays the default and is untouched by it.
      */
-    public static final List<String> STATIC_PAGES = List.of("/realm.html", "/realm.js", "/jukebox.js", "/jukebox-audio.js", "/models/ark.glb");
+    public static final List<String> STATIC_PAGES = List.of("/realm.html", "/realm.js", "/jukebox.js", "/jukebox-audio.js", "/rd-press.js", "/models/ark.glb");
 
     public static final List<String> STATIC_SCRIPTS = List.of(
             "/draw.js", "/api.js", "/share.js", "/fog.js", "/seat.js",
@@ -219,7 +219,8 @@ public class ProdSecurityConfig {
                                 "/api/v1/jukebox/seeds/*", "/api/v1/jukebox/tokens/*/html", "/api/v1/jukebox/tokens/*/hash",
                                 "/api/v1/jukebox/arrangement", "/api/v1/jukebox/studio/audio/*", "/api/v1/jukebox/coat",
                                 "/api/v1/jukebox/coat.png", "/api/v1/jukebox/radio/stations",
-                                "/api/v1/jukebox/radio/stream/*").permitAll()
+                                "/api/v1/jukebox/radio/stream/*", "/api/v1/jukebox/studio/voices", "/api/v1/jukebox/studio/note",
+                                "/api/v1/jukebox/studio/audio/notes/*", "/api/v1/jukebox/live").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/jukebox/owned").authenticated()
                         // The species canon (ADR-021): reference data, read-only.
                         .requestMatchers(HttpMethod.GET, "/api/v1/species").permitAll()
