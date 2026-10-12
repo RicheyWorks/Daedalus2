@@ -31,8 +31,44 @@ def _editor_cmd():
     raise RuntimeError("UnrealEditor-Cmd not found under " + eng)
 
 
+MIN_FREE_GB = 4.0   # a headless editor takes 2-4 GB; the user's machine has shown memory pressure
+
+
+def free_memory_gb():
+    """Available physical memory, from Windows (GlobalMemoryStatusEx); None off Windows."""
+    if os.name != "nt":
+        return None
+    import ctypes
+
+    class MEMSTAT(ctypes.Structure):
+        _fields_ = [("dwLength", ctypes.c_ulong), ("dwMemoryLoad", ctypes.c_ulong),
+                    ("ullTotalPhys", ctypes.c_ulonglong), ("ullAvailPhys", ctypes.c_ulonglong),
+                    ("ullTotalPageFile", ctypes.c_ulonglong), ("ullAvailPageFile", ctypes.c_ulonglong),
+                    ("ullTotalVirtual", ctypes.c_ulonglong), ("ullAvailVirtual", ctypes.c_ulonglong),
+                    ("ullAvailExtendedVirtual", ctypes.c_ulonglong)]
+    m = MEMSTAT()
+    m.dwLength = ctypes.sizeof(MEMSTAT)
+    ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(m))
+    return m.ullAvailPhys / 1024.0 ** 3
+
+
+def _sandbox_running():
+    if os.name != "nt":
+        return False
+    r = subprocess.run(["tasklist", "/FI", "IMAGENAME eq UnrealEditor-Cmd.exe", "/NH"], capture_output=True, text=True,
+                       creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+    return "UnrealEditor-Cmd.exe" in r.stdout
+
+
 def sandbox_start(probe_source, tag="sweep", launch=True):
-    """Write the probe script and launch the headless editor on it. Returns at once."""
+    """Write the probe script and launch the headless editor on it. Returns at once.
+    Refuses when another sandbox is running or less than MIN_FREE_GB of RAM is free (no memory crashes)."""
+    free = free_memory_gb()
+    if free is not None and free < MIN_FREE_GB:
+        raise RuntimeError("only %.1f GB of RAM free; a sandbox needs %.0f GB. Close something (Blender, a browser) "
+                           "or run the probe in the open editor" % (free, MIN_FREE_GB))
+    if _sandbox_running():
+        raise RuntimeError("a sandbox editor is already running; wait for it (one at a time keeps memory safe)")
     root = os.path.join(tempfile.gettempdir(), "claude-unreal-sandbox")
     os.makedirs(root, exist_ok=True)
     out = os.path.join(root, "%s-%d" % (tag, int(time.time())))
