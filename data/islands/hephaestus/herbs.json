@@ -1,0 +1,354 @@
+{
+ "system": "Forge Temper",
+ "island": "Hephaestus",
+ "rule": "Every brew is tempered by quench path. Craft a tonic at the mortar (or hand-mix), then quench it: magma | spring | dual. Magma temper: strength x2, duration x0.5. Spring quench: duration x2, strength x0.5. Dual-quench (magma then spring, or spring then magma within 10s): dual effect \u2014 both the primary pair effect and the next-best matching pair land at base strength/duration. Quench uses Prop_ForgeQuenchTub_Basalt (magma side) or HotSpring_Clean / QuenchTrough_Forge cooled fill (spring side). Livestock grit (slag-grass) fertilises herb beds +10% growth.",
+ "quench_paths": {
+  "magma": {
+   "strength_mult": 2.0,
+   "duration_mult": 0.5,
+   "station": "Prop_ForgeQuenchTub_Basalt (hot)",
+   "note": "brief fierce temper"
+  },
+  "spring": {
+   "strength_mult": 0.5,
+   "duration_mult": 2.0,
+   "station": "HotSpring_Clean or cooled QuenchTrough_Forge",
+   "note": "long soft temper"
+  },
+  "dual": {
+   "strength_mult": 1.0,
+   "duration_mult": 1.0,
+   "dual_effect": true,
+   "station": "magma then spring (or reverse) within 10s",
+   "note": "both pair effects land"
+  }
+ },
+ "herbs": [
+  {
+   "id": "Emberleaf",
+   "art": "Item_Herb_Emberleaf",
+   "essences": [
+    "cool",
+    "iron"
+   ],
+   "potency": 3
+  },
+  {
+   "id": "Ashmint",
+   "art": "Item_Herb_Ashmint",
+   "essences": [
+    "heat",
+    "purify"
+   ],
+   "potency": 1
+  },
+  {
+   "id": "Cinderroot",
+   "art": "Item_Herb_Cinderroot",
+   "essences": [
+    "clarity",
+    "iron"
+   ],
+   "potency": 1
+  },
+  {
+   "id": "Sulfurbloom",
+   "art": "Item_Herb_Sulfurbloom",
+   "essences": [
+    "calm",
+    "heat"
+   ],
+   "potency": 1
+  },
+  {
+   "id": "Lavathistle",
+   "art": "Item_Herb_Lavathistle",
+   "essences": [
+    "calm",
+    "light"
+   ],
+   "potency": 1
+  },
+  {
+   "id": "Forgefern",
+   "art": "Item_Herb_Forgefern",
+   "essences": [
+    "calm",
+    "heat"
+   ],
+   "potency": 3
+  },
+  {
+   "id": "Smokesage",
+   "art": "Item_Herb_Smokesage",
+   "essences": [
+    "heat",
+    "light"
+   ],
+   "potency": 1
+  },
+  {
+   "id": "Glowcap",
+   "art": "Item_Herb_Glowcap",
+   "essences": [
+    "calm",
+    "iron"
+   ],
+   "potency": 1
+  },
+  {
+   "id": "Starpetal",
+   "art": "Item_Herb_Starpetal",
+   "essences": [
+    "heat",
+    "light"
+   ],
+   "potency": 1
+  },
+  {
+   "id": "Ironbark",
+   "art": "Item_Herb_Ironbark",
+   "essences": [
+    "clarity",
+    "heat"
+   ],
+   "potency": 1
+  },
+  {
+   "id": "Saltgrass",
+   "art": "Item_Herb_Saltgrass",
+   "essences": [
+    "calm",
+    "clarity"
+   ],
+   "potency": 1
+  },
+  {
+   "id": "Cometcress",
+   "art": "Item_Herb_Cometcress",
+   "essences": [
+    "clarity",
+    "cool"
+   ],
+   "potency": 2
+  },
+  {
+   "id": "Ventmoss",
+   "art": "Item_Herb_Ventmoss",
+   "essences": [
+    "heat",
+    "vigor"
+   ],
+   "potency": 1
+  },
+  {
+   "id": "Charlily",
+   "art": "Item_Herb_Charlily",
+   "essences": [
+    "heat",
+    "iron"
+   ],
+   "potency": 1
+  },
+  {
+   "id": "Blazeberry",
+   "art": "Item_Herb_Blazeberry",
+   "essences": [
+    "clarity",
+    "heat"
+   ],
+   "potency": 1
+  },
+  {
+   "id": "Coalclover",
+   "art": "Item_Herb_Coalclover",
+   "essences": [
+    "iron",
+    "purify"
+   ],
+   "potency": 3
+  },
+  {
+   "id": "Mistwort",
+   "art": "Item_Herb_Mistwort",
+   "essences": [
+    "calm",
+    "iron"
+   ],
+   "potency": 3
+  },
+  {
+   "id": "Dewbell",
+   "art": "Item_Herb_Dewbell",
+   "essences": [
+    "iron",
+    "vigor"
+   ],
+   "potency": 1
+  },
+  {
+   "id": "Thornwick",
+   "art": "Item_Herb_Thornwick",
+   "essences": [
+    "iron",
+    "vigor"
+   ],
+   "potency": 1
+  },
+  {
+   "id": "Sunspike",
+   "art": "Item_Herb_Sunspike",
+   "essences": [
+    "clarity",
+    "cool"
+   ],
+   "potency": 2
+  },
+  {
+   "id": "Frostfrond",
+   "art": "Item_Herb_Frostfrond",
+   "essences": [
+    "purify",
+    "vigor"
+   ],
+   "potency": 3
+  },
+  {
+   "id": "Moonmallow",
+   "art": "Item_Herb_Moonmallow",
+   "essences": [
+    "clarity",
+    "purify"
+   ],
+   "potency": 1
+  },
+  {
+   "id": "Ravenroot",
+   "art": "Item_Herb_Ravenroot",
+   "essences": [
+    "clarity",
+    "cool"
+   ],
+   "potency": 3
+  },
+  {
+   "id": "Bloodnettle",
+   "art": "Item_Herb_Bloodnettle",
+   "essences": [
+    "light",
+    "vigor"
+   ],
+   "potency": 2
+  },
+  {
+   "id": "Calmbloom",
+   "art": "Item_Herb_Calmbloom",
+   "essences": [
+    "calm",
+    "vigor"
+   ],
+   "potency": 3
+  },
+  {
+   "id": "Bitterweed",
+   "art": "Item_Herb_Bitterweed",
+   "essences": [
+    "heat",
+    "iron"
+   ],
+   "potency": 1
+  },
+  {
+   "id": "Honeyreed",
+   "art": "Item_Herb_Honeyreed",
+   "essences": [
+    "iron",
+    "vigor"
+   ],
+   "potency": 2
+  },
+  {
+   "id": "Quartzvine",
+   "art": "Item_Herb_Quartzvine",
+   "essences": [
+    "clarity",
+    "purify"
+   ],
+   "potency": 3
+  },
+  {
+   "id": "Pyreweed",
+   "art": "Item_Herb_Pyreweed",
+   "essences": [
+    "cool",
+    "light"
+   ],
+   "potency": 1
+  },
+  {
+   "id": "Shardsorrel",
+   "art": "Item_Herb_Shardsorrel",
+   "essences": [
+    "calm",
+    "clarity"
+   ],
+   "potency": 1
+  },
+  {
+   "id": "Vigorleaf",
+   "art": "Item_Herb_Vigorleaf",
+   "essences": [
+    "heat",
+    "iron"
+   ],
+   "potency": 2
+  },
+  {
+   "id": "Duskthyme",
+   "art": "Item_Herb_Duskthyme",
+   "essences": [
+    "purify",
+    "vigor"
+   ],
+   "potency": 2
+  },
+  {
+   "id": "Kilnpoppy",
+   "art": "Item_Herb_Kilnpoppy",
+   "essences": [
+    "heat",
+    "calm"
+   ],
+   "potency": 2
+  },
+  {
+   "id": "Boilbalm",
+   "art": "Item_Herb_Boilbalm",
+   "essences": [
+    "heat",
+    "purify"
+   ],
+   "potency": 2
+  },
+  {
+   "id": "Steamreed",
+   "art": "Item_Herb_Steamreed",
+   "essences": [
+    "cool",
+    "purify"
+   ],
+   "potency": 2
+  },
+  {
+   "id": "Hearthbasil",
+   "art": "Item_Herb_Hearthbasil",
+   "essences": [
+    "heat",
+    "vigor"
+   ],
+   "potency": 2
+  }
+ ],
+ "water": "Every tonic brew consumes 0.5 L. Spring water: normal. Magma-quenched tonics need a cooled trough drink after if the player is overheated. Herb plants need 1 L/day or pause growth.",
+ "effects_ref": "data/herbs/combos.json (shared essence-pair table; Forge Temper quench rule appended there)"
+}

@@ -1,0 +1,145 @@
+{
+ "system": "Hephaestus Quench Network",
+ "units": "litres; 1 in-game day = 24 h from Sky Director",
+ "island": "Hephaestus",
+ "ark_origin_cm": [
+  6000000,
+  2000000,
+  0
+ ],
+ "sources": [
+  {
+   "id": "HotSpring_Clean",
+   "mesh": "Prop_WaterWellhead_Clay (+ Prop_ForgeVentPlume_Basalt steam plume)",
+   "zone": "hot_springs",
+   "flow_per_hour": 80,
+   "quality": "clean",
+   "drinkable": true,
+   "rule": "Caldera-fed hot spring; always clean; primary drink source. Heat zone nearby doubles thirst drain so spring placement matters."
+  },
+  {
+   "id": "SteamVentCatch",
+   "mesh": "Prop_ForgeVentPlume_Basalt + Prop_WaterRainCatch_Copper",
+   "zone": "hot_springs",
+   "fill_per_hour": {
+    "Clear": 5,
+    "Overcast": 10,
+    "Fog": 15,
+    "Rain": 60,
+    "Storm": 120
+   },
+   "quality": "clean",
+   "drinkable": true,
+   "rule": "Condensed vent steam plus rain catch; tops up cistern when spring demand spikes after forge shift."
+  },
+  {
+   "id": "AshWell_Dirty",
+   "mesh": "Prop_WaterWellhead_Wood",
+   "zone": "ash_fields",
+   "yield": "unlimited dirty_water, 1 per 2s",
+   "quality": "dirty",
+   "drinkable": false,
+   "rule": "Ash-slope well; must boil/filter before drinking; livestock quench troughs accept it after Prop_WaterBoiler_Copper pass."
+  },
+  {
+   "id": "RainCatch_Ash",
+   "mesh": "Prop_WaterRainCatch_Clay",
+   "zone": "ash_fields",
+   "fill_per_hour": {
+    "Clear": 0,
+    "Overcast": 0,
+    "Fog": 10,
+    "Rain": 200,
+    "Storm": 450
+   },
+   "quality": "clean",
+   "drinkable": true,
+   "rule": "Ash-field rain catch; clean when settled 1 min."
+  },
+  {
+   "id": "SaltStill_Basalt",
+   "mesh": "Prop_WaterStill_Copper",
+   "zone": "basalt_coast",
+   "in": "salt_water",
+   "out": [
+    "water",
+    "salt"
+   ],
+   "time_s": 20,
+   "quality": "clean",
+   "drinkable": true,
+   "rule": "Basalt-coast solar/forge still; primary salt source for cooking + backup clean water on no-rain days."
+  },
+  {
+   "id": "QuenchTrough_Forge",
+   "mesh": "Prop_ForgeQuenchTub_Basalt (+ Prop_RanchTrough_Iron feed)",
+   "zone": "caldera_forge",
+   "capacity": 500,
+   "quality": "clean_or_dirty_by_fill",
+   "drinkable": true,
+   "rule": "Forge quench tub doubles as livestock drink after cool-down; tag drinkable when filled with spring/still water. Magma-side quench (Forge Temper magma path) is NOT drinkable until cooled and diluted."
+  },
+  {
+   "id": "RanchTrough_Ash",
+   "mesh": "Prop_RanchTrough_Wood / Prop_WaterTrough_Iron",
+   "zone": "ash_fields",
+   "capacity": 200,
+   "quality": "clean",
+   "drinkable": true,
+   "rule": "Ash ranch pens drink here; fed from HotSpring_Clean or quenched boiler water."
+  }
+ ],
+ "distribution": [
+  {
+   "id": "SpringToForge",
+   "mesh": "Prop_WaterPipe_Copper + Prop_WaterPipeElbow_Copper",
+   "from": "HotSpring_Clean",
+   "to": "QuenchTrough_Forge"
+  },
+  {
+   "id": "SpringToRanch",
+   "mesh": "Prop_WaterPipe_Iron",
+   "from": "HotSpring_Clean",
+   "to": "RanchTrough_Ash",
+   "fallback": "AshWell_Dirty boiled when spring < 10%"
+  },
+  {
+   "id": "VentToCistern",
+   "mesh": "Prop_WaterPipe_Clay",
+   "from": "SteamVentCatch",
+   "to": "Prop_WaterCistern_Clay"
+  },
+  {
+   "id": "StillToCoastJugs",
+   "mesh": "Prop_WaterJug_Copper",
+   "from": "SaltStill_Basalt",
+   "to": "player_canteen"
+  }
+ ],
+ "demand_per_day": {
+  "player": 3,
+  "emberhen": 0.5,
+  "ashgoat": 8,
+  "forgeox": 12,
+  "lavaboar": 6,
+  "cinderwool": 6,
+  "vent_bees": 1,
+  "herb_plant": 1,
+  "forge_quench": 20
+ },
+ "thirst": {
+  "player": "thirst 0..100, +4/h base, x2 in caldera heat zone; drink 1 L clean = -35; dirty = -20 + 30% sick; salt = +10 thirst. >80 halves stamina; 100 = 1 hp/10s",
+  "animals": "unwatered 1 day: no eggs/milk/wool/honey; 3 days: animal leaves (cozy rule never dies off-island)",
+  "herbs": "unwatered herbs pause growth; Steamreed and Boilbalm grow only if a vent or spring watered them that day"
+ },
+ "drinkable_tags": [
+  "HotSpring_Clean",
+  "SteamVentCatch",
+  "RainCatch_Ash",
+  "SaltStill_Basalt",
+  "QuenchTrough_Forge (cooled clean fill)",
+  "RanchTrough_Ash"
+ ],
+ "balance": "Hot spring alone (~1920 L/day) covers player + full ranch + herb beds. Rain/vent/still cover forge-shift quench spikes and drought. Island never dies of thirst; magma heat makes water the real currency.",
+ "items": "Prop_WaterCanteen_Copper (5 L), Prop_WaterBucket_Clay (3 L), Prop_WaterBarrel_Iron (40 L), Prop_WaterCistern_Clay (200 L)"
+}

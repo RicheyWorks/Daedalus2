@@ -1,0 +1,140 @@
+{
+ "island": "Hephaestus",
+ "pens_zone": "ash_fields",
+ "livestock": [
+  {
+   "id": "emberhen",
+   "mesh": "Mob_Emberhen (blockout: Prop_RanchCoop_Wood)",
+   "housing": "Prop_RanchCoop_Wood / Prop_RanchNestbox_Wood",
+   "eats": [
+    "grain",
+    "seeds",
+    "Emberleaf leaves"
+   ],
+   "gives": [
+    "egg every 10 min"
+   ],
+   "drinks": "0.5 L/day from RanchTrough_Ash",
+   "products": {
+    "egg": {
+     "every_min": 10
+    }
+   },
+   "meat": "drumstick"
+  },
+  {
+   "id": "ashgoat",
+   "mesh": "Mob_Ashgoat (blockout: Prop_RanchStall_Wood)",
+   "housing": "Prop_RanchStall_Wood",
+   "eats": [
+    "hay",
+    "herb_*",
+    "slag-grass"
+   ],
+   "gives": [
+    "milk every 20 min (Prop_RanchMilkpail_Iron)"
+   ],
+   "drinks": "8 L/day from RanchTrough_Ash",
+   "products": {
+    "milk": {
+     "every_min": 20,
+     "tool": "Prop_RanchMilkpail_Iron"
+    }
+   },
+   "meat": "ribs",
+   "note": "slag-grass grit fertilises herb beds"
+  },
+  {
+   "id": "forgeox",
+   "mesh": "Mob_Forgeox (blockout: Prop_RanchStall_Iron)",
+   "housing": "Prop_RanchStall_Iron",
+   "eats": [
+    "hay",
+    "grain"
+   ],
+   "gives": [
+    "milk every 25 min",
+    "work: pulls bellows forge_speed +15% nearby"
+   ],
+   "drinks": "12 L/day from QuenchTrough_Forge or RanchTrough_Ash",
+   "products": {
+    "milk": {
+     "every_min": 25
+    }
+   },
+   "work": "pulls Prop_ForgeBellows_Basalt",
+   "meat": "steak"
+  },
+  {
+   "id": "lavaboar",
+   "mesh": "Mob_Lavaboar (blockout: Prop_RanchStall_Basalt)",
+   "housing": "Prop_RanchStall_Basalt",
+   "eats": [
+    "scraps",
+    "mushroom",
+    "turnip"
+   ],
+   "gives": [
+    "truffle_mushroom every 30 min (30% chance)"
+   ],
+   "drinks": "6 L/day",
+   "products": {
+    "truffle_mushroom": {
+     "every_min": 30,
+     "chance": 0.3
+    }
+   },
+   "meat": "bacon"
+  },
+  {
+   "id": "cinderwool",
+   "mesh": "Mob_Cinderwool (blockout: Prop_RanchHutch_Wood)",
+   "housing": "Prop_RanchHutch_Wood",
+   "eats": [
+    "hay"
+   ],
+   "gives": [
+    "wool every 30 min (Prop_RanchShears_Iron)"
+   ],
+   "drinks": "6 L/day",
+   "products": {
+    "wool": {
+     "every_min": 30,
+     "tool": "Prop_RanchShears_Iron"
+    }
+   },
+   "meat": "steak"
+  },
+  {
+   "id": "vent_bees",
+   "mesh": "Mob_VentBees (blockout: Prop_RanchNestbox_Clay)",
+   "housing": "Prop_RanchNestbox_Clay near Prop_ForgeVentPlume_Basalt",
+   "eats": [
+    "flowering herbs within 15m (Honeyreed, Kilnpoppy, Steamreed)"
+   ],
+   "gives": [
+    "honey every 40 min"
+   ],
+   "drinks": "1 L/day (dew from SteamVentCatch)",
+   "products": {
+    "honey": {
+     "every_min": 40
+    }
+   },
+   "meat": null
+  }
+ ],
+ "feed": {
+  "hay": "Prop_RanchHaybale_Wood from ash-field mow",
+  "grain": "ash-field plots + Emberleaf seed",
+  "slag-grass": "grows on cooled lava rim; ashgoats prefer it; grit = herb fertiliser"
+ },
+ "survival_loop": [
+  "Water: hot spring clean primary; ash well dirty (boil); rain catch + steam vents; salt still on basalt coast; quench troughs double as livestock drink (water.json).",
+  "Ash fields grow herbs (Forge Temper beds) and hay; slag-grass on cooled rim fertilises beds.",
+  "Emberhens give eggs; ashgoats milk; forgeox milk + bellows work; lavaboar truffles; cinderwool wool; vent bees honey.",
+  "Player eats eggs, milk, bacon, steak, honey, herb tonics (Forge Temper quench path matters).",
+  "Unfed/unwatered animals stop producing after 1 day, leave after 3 (cozy rule: never die).",
+  "Thirst: player 3 L/day; caldera heat x2 drain \u2014 drink at HotSpring_Clean or cooled QuenchTrough_Forge."
+ ]
+}
