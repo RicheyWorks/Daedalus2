@@ -1,11 +1,11 @@
 {
  "entries": {
   "bridge": {
-   "at": 1791774293,
+   "at": 1791774585,
    "equivalent": 0,
    "equivalents": [],
    "inconclusive": 0,
-   "killed": 11,
+   "killed": 13,
    "mutants": 13,
    "rows": [
     {
@@ -44,9 +44,9 @@
      "verdict": "killed"
     },
     {
-     "detail": "contract stayed green: a typo must not look like success",
+     "detail": "contract: an unknown command is an error, code UNKNOWN, listing the known ones  {'id': 1, 'stat",
      "name": "an unknown command answers ok",
-     "verdict": "SURVIVED"
+     "verdict": "killed"
     },
     {
      "detail": "e2e: viewport_screenshot waits for the file over frames and returns a PNG  {",
@@ -69,12 +69,12 @@
      "verdict": "killed"
     },
     {
-     "detail": "walk stayed green: every command must be discoverable",
+     "detail": "walk: core command save is not listed",
      "name": "a command is dropped from list_commands",
-     "verdict": "SURVIVED"
+     "verdict": "killed"
     }
    ],
-   "survived": 2
+   "survived": 0
   }
  }
 }

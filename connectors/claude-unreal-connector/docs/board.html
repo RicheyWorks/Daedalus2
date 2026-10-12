@@ -31,7 +31,7 @@ table{border-collapse:collapse;width:100%;margin:8px 0 24px}td,th{border-bottom:
 <tr><td>test.remote_off</td><td>MUTATE</td><td class=warn>excluded</td><td><small>switches the stand-in&#x27;s Remote Execution off for the rest of the run</small></td></tr>
 <tr><td>viewport_screenshot</td><td>SENSITIVE_READ</td><td class=ok>driven</td><td><small>ok</small></td></tr>
 </table>
-<h2>Mutants (bridge): 11 killed, 2 survived, 0 inconclusive</h2><table><tr><th>mutant</th><th>verdict</th><th>detail</th></tr>
+<h2>Mutants (bridge): 13 killed, 0 survived, 0 inconclusive</h2><table><tr><th>mutant</th><th>verdict</th><th>detail</th></tr>
 <tr><td>nested ticks re-enter the pump</td><td class=ok>killed</td><td><small>e2e: viewport_screenshot waits for the file over frames and returns a PNG  ValueError: gen</small></td></tr>
 <tr><td>a waiting command is never stepped again</td><td class=ok>killed</td><td><small>e2e: </small></td></tr>
 <tr><td>the policy is ignored</td><td class=ok>killed</td><td><small>contract: a MUTATE command under a READ policy is REFUSED, and says why  {&#x27;id&#x27;: 1, &#x27;status&#x27;: &#x27;o</small></td></tr>
@@ -39,10 +39,10 @@ table{border-collapse:collapse;width:100%;margin:8px 0 24px}td,th{border-bottom:
 <tr><td>an error is reported as ok</td><td class=ok>killed</td><td><small>e2e: get_actor_info on a missing actor is an error that says so  {}</small></td></tr>
 <tr><td>Python runs attended</td><td class=ok>killed</td><td><small>e2e: the Remote Execution call asked for unattended mode  {</small></td></tr>
 <tr><td>DESTRUCTIVE without MUTATE is allowed</td><td class=ok>killed</td><td><small>contract: DESTRUCTIVE cannot be allowed without MUTATE  {&#x27;id&#x27;: 1, &#x27;status&#x27;: &#x27;ok&#x27;, &#x27;result&#x27;: {&#x27;p</small></td></tr>
-<tr><td>an unknown command answers ok</td><td class=bad>SURVIVED</td><td><small>contract stayed green: a typo must not look like success</small></td></tr>
+<tr><td>an unknown command answers ok</td><td class=ok>killed</td><td><small>contract: an unknown command is an error, code UNKNOWN, listing the known ones  {&#x27;id&#x27;: 1, &#x27;stat</small></td></tr>
 <tr><td>screenshots come back as text</td><td class=ok>killed</td><td><small>e2e: viewport_screenshot waits for the file over frames and returns a PNG  {</small></td></tr>
 <tr><td>the result of Claude&#x27;s code is dropped</td><td class=ok>killed</td><td><small>e2e: </small></td></tr>
 <tr><td>Remote Execution off is silent</td><td class=ok>killed</td><td><small>e2e: with Remote Execution off it still runs, directly, and says dialogs would block  {</small></td></tr>
 <tr><td>register forgets the declared risk</td><td class=ok>killed</td><td><small>contract: DESTRUCTIVE cannot be allowed without MUTATE  {&#x27;id&#x27;: 1, &#x27;status&#x27;: &#x27;error&#x27;, &#x27;code&#x27;: &#x27;R</small></td></tr>
-<tr><td>a command is dropped from list_commands</td><td class=bad>SURVIVED</td><td><small>walk stayed green: every command must be discoverable</small></td></tr>
+<tr><td>a command is dropped from list_commands</td><td class=ok>killed</td><td><small>walk: core command save is not listed</small></td></tr>
 </table>
