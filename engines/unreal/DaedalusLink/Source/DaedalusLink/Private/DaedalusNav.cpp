@@ -178,7 +178,8 @@ FString UDaedalusNav::TraceReport(const FVector& At, float RefZ)
 	FHitResult Hit;
 	const bool bObj = W->LineTraceSingleByObjectType(Hit, Mid + FVector(0.f, 0.f, 300.f), Mid - FVector(0.f, 0.f, StepDown + 20.f),
 		FCollisionObjectQueryParams(ECC_WorldStatic));
-	FString Out = FString::Printf(TEXT("world=%s obj_hit=%d z=%.0f n=%.2f actor=%s"), *W->GetName(), bObj ? 1 : 0,
+	FString Out = FString::Printf(TEXT("type=%d mid=(%.0f,%.0f,%.0f) "), (int32)W->WorldType, Mid.X, Mid.Y, Mid.Z);
+	Out += FString::Printf(TEXT("world=%s obj_hit=%d z=%.0f n=%.2f actor=%s"), *W->GetName(), bObj ? 1 : 0,
 		Hit.ImpactPoint.Z - RefZ, Hit.ImpactNormal.Z, Hit.GetActor() ? *Hit.GetActor()->GetName() : TEXT("-"));
 	FHitResult Vis;
 	const bool bVis = W->LineTraceSingleByChannel(Vis, Mid + FVector(0.f, 0.f, 300.f), Mid - FVector(0.f, 0.f, StepDown + 20.f), ECC_Visibility);

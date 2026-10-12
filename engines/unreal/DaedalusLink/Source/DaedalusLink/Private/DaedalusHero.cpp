@@ -912,7 +912,11 @@ TArray<FString> ADaedalusHero::NavProbe(FVector From, FVector To)
 FString ADaedalusHero::NavTrace(FVector At, float RefZ)
 {
 	UDaedalusNav* Nav = GetWorld() ? GetWorld()->GetSubsystem<UDaedalusNav>() : nullptr;
-	return Nav ? Nav->TraceReport(At, RefZ) : FString(TEXT("no nav"));
+	FHitResult Hit;
+	const bool bMine = GetWorld()->LineTraceSingleByObjectType(Hit, FVector(At.X, At.Y, RefZ + 300.f), FVector(At.X, At.Y, RefZ - 240.f),
+		FCollisionObjectQueryParams(ECC_WorldStatic));
+	const FString Mine = FString::Printf(TEXT("hero type=%d hit=%d z=%.0f || "), (int32)GetWorld()->WorldType, bMine ? 1 : 0, Hit.ImpactPoint.Z - RefZ);
+	return Mine + (Nav ? Nav->TraceReport(At, RefZ) : FString(TEXT("no nav")));
 }
 
 FString ADaedalusHero::NavStats() const
