@@ -71,6 +71,7 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 );
 
+        JukeboxFraming.apply(http);   // DENY framing everywhere but the jukebox's sandboxed token HTML
         return http.build();
     }
 }
