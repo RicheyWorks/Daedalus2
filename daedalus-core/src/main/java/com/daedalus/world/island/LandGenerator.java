@@ -420,8 +420,9 @@ public final class LandGenerator {
         /** Crystal clusters on deep cave walls. */
         void geodes(int count) {
             List<BlockCoordinate> walls = new ArrayList<>();
-            for (BlockCoordinate c : blocks.keySet()) {
-                if (c.y() < -18 && blocks.get(c) == BlockType.DEEPSTONE
+            for (Map.Entry<BlockCoordinate, BlockType> e : blocks.entrySet()) {
+                BlockCoordinate c = e.getKey();
+                if (c.y() < -18 && e.getValue() == BlockType.DEEPSTONE
                         && !blocks.containsKey(new BlockCoordinate(c.x(), c.y() + 1, c.z()))
                         && heights.containsKey(IslandGenerator.key(c.x(), c.z()))
                         && c.y() + 1 < heights.get(IslandGenerator.key(c.x(), c.z())) - 6) {
