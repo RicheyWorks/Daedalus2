@@ -56,6 +56,14 @@ class FakeBlender:
         return {"result": {"source": "collection", "objects": self.objects}}
 
 
+def _raises(fn):
+    try:
+        fn()
+    except wire.BridgeError:
+        return True
+    return False
+
+
 def report(ok=True, tris=1200, slots=2, failed=None):
     checks = [{"check": "triangles: Blender = file", "ok": failed != "tri", "detail": "x"}]
     return {"ok": ok, "checks": checks, "dest": "/Game/Daedalus/Art/Tool/Tool_Pickaxe",
@@ -385,6 +393,28 @@ check("restart: a SHIPPING row goes back to READY", back == ["Tool_Pickaxe"] and
 check("restart: other rows untouched", row(d, "Mob_BlightSlime")["status"] == "DOING (grok)" and row(d, "Item_Coal")["status"] == "TODO")
 check("restart: nothing to recover is a no-op", w.recover() == [])
 shutil.rmtree(d)
+
+# 14. a bridge whose script result is a bare bool (BLOCKED rows 2026-10-12: "'bool' object is not subscriptable")
+class BoolBlender(FakeBlender):
+    def call(self, addr, command, timeout=600, side="bridge", **p):
+        if "open_mainfile" not in p["code"] and "get_game_world" not in p["code"]:
+            return {"result": True}
+        return FakeBlender.call(self, addr, command, timeout, side, **p)
+
+
+d, w, fb = setup(blender=BoolBlender())
+w.tick()
+r = row(d, "Tool_Pickaxe")
+check("bool result: BLOCKED (not the asset's fault), names the side and the call",
+      r["status"].startswith("BLOCKED: pipeline error: Blender") and "picking the objects" in r["status"]
+      and "bool" in r["status"] and "subscriptable" not in r["status"], r["status"])
+ev = [e for e in feed(d) if e["event"] == "error"]
+check("bool result: the feed keeps the traceback (file and line)", ev and "Traceback" in ev[-1].get("trace", "")
+      and "artqueue.py" in ev[-1]["trace"], ev[-1:] if ev else feed(d))
+shutil.rmtree(d)
+check("wire.obj: dict passes, bool/None/str raise BridgeError",
+      wire.obj({"result": {"a": 1}}) == {"a": 1}
+      and all(_raises(lambda v=v: wire.obj({"result": v}, "Unreal", "x")) for v in (True, False, None, "s")))
 
 n = sum(results)
 print("%d/%d" % (n, len(results)))

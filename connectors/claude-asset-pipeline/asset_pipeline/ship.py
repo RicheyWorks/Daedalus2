@@ -114,8 +114,9 @@ def export(name, objects=None, folder=None, blender=wire.BLENDER, timeout=600):
     folder = folder or os.path.join(tempfile.gettempdir(), "daedalus-pipeline")
     path = os.path.abspath(os.path.join(folder, name + ".glb"))
     report = {"name": name, "path": path, "started": time.time()}
-    report["blender"] = wire.call(blender, "execute_code", timeout=timeout, side="Blender",
-                                  code=sides.script(sides.BLENDER_EXPORT, path=path, objects=objects or []))["result"]
+    report["blender"] = wire.obj(wire.call(blender, "execute_code", timeout=timeout, side="Blender",
+                                           code=sides.script(sides.BLENDER_EXPORT, path=path, objects=objects or [])),
+                                 "Blender", "the .glb export")
     report["file"] = glb.summarize(path)
     report["exported_s"] = round(time.time() - report["started"], 2)
     return report
@@ -127,7 +128,8 @@ def land(report, dest="/Game/Daedalus/Assets", save=True, unreal=wire.UNREAL, ti
     t = time.time()
     made = wire.call(unreal, "execute_python", timeout=timeout, side="Unreal", unattended=False,
                      bridge_timeout=timeout,
-                     code=sides.script(sides.UNREAL_IMPORT, path=report["path"], dest=report["dest"], save=save))["result"]
+                     code=sides.script(sides.UNREAL_IMPORT, path=report["path"], dest=report["dest"], save=save))
+    made = wire.obj(made, "Unreal", "the import")
     checks = judge(report["blender"], report["file"], made)
     report.update(ok=all(c["ok"] for c in checks), checks=checks, unreal=made, imported_s=round(time.time() - t, 2),
                   seconds=round(time.time() - report["started"], 2))
