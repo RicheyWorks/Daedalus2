@@ -78,7 +78,10 @@ class WorldCoordinatesTest {
                 BlockType.ROAD, BlockType.PAVING, BlockType.HELIPAD,
                 BlockType.BASEPLATE, BlockType.BRICK_RED, BlockType.BRICK_BLUE, BlockType.BRICK_YELLOW,
                 BlockType.BRICK_GREEN, BlockType.BRICK_WHITE, BlockType.SPAWN, BlockType.LAVA,
-                BlockType.LAMP, BlockType.NEON_PINK, BlockType.NEON_CYAN, BlockType.WINDOW_LIT);
+                BlockType.LAMP, BlockType.NEON_PINK, BlockType.NEON_CYAN, BlockType.WINDOW_LIT,
+                BlockType.DEEPSTONE, BlockType.HEARTSTONE, BlockType.COAL_ORE, BlockType.COPPER_ORE,
+                BlockType.IRON_ORE, BlockType.GOLD_ORE, BlockType.STARMETAL);
+        assertThat(BlockType.WINDOW_LIT.ordinal()).as("light did not move").isEqualTo(35);
         assertThat(BlockType.LAVA.ordinal()).as("bricks did not move").isEqualTo(31);
         assertThat(BlockType.WINDOW_LIT.emissive()).isTrue();
         assertThat(BlockType.STONE.emissive()).isFalse();

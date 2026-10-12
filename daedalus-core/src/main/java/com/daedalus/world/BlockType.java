@@ -53,12 +53,21 @@ public enum BlockType {
     LAMP,
     NEON_PINK,
     NEON_CYAN,
-    WINDOW_LIT;
+    WINDOW_LIT,
+    // Lands (ADR-050): the deep rock of a shattered world's pieces, the heartstone that holds each piece up in the
+    // bubble (it can't be mined), the ores you dig for by depth, and starmetal, what's left of the meteor.
+    DEEPSTONE,
+    HEARTSTONE,
+    COAL_ORE,
+    COPPER_ORE,
+    IRON_ORE,
+    GOLD_ORE,
+    STARMETAL;
 
     /** Gives off light: drawn unlit and bright, so a night scene glows. */
     public boolean emissive() {
         return this == LAMP || this == NEON_PINK || this == NEON_CYAN || this == WINDOW_LIT
-                || this == CRYSTAL || this == LAVA;
+                || this == CRYSTAL || this == LAVA || this == HEARTSTONE || this == STARMETAL;
     }
 
     public boolean solid() {

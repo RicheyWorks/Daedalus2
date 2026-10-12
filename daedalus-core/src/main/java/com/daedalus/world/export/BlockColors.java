@@ -51,6 +51,14 @@ public final class BlockColors {
         RGB.put(BlockType.NEON_PINK, 0xff4fc8);
         RGB.put(BlockType.NEON_CYAN, 0x4ff4ff);
         RGB.put(BlockType.WINDOW_LIT, 0xffe7b0);
+        // Lands (ADR-050).
+        RGB.put(BlockType.DEEPSTONE, 0x4a4f5c);
+        RGB.put(BlockType.HEARTSTONE, 0xff8a3d);
+        RGB.put(BlockType.COAL_ORE, 0x34343a);
+        RGB.put(BlockType.COPPER_ORE, 0xc8703a);
+        RGB.put(BlockType.IRON_ORE, 0xc9b49c);
+        RGB.put(BlockType.GOLD_ORE, 0xf2c230);
+        RGB.put(BlockType.STARMETAL, 0x7fe3ff);
     }
 
     private BlockColors() {

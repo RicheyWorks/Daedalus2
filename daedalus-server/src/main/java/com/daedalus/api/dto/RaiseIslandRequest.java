@@ -14,6 +14,6 @@ import jakarta.validation.constraints.NotNull;
 public record RaiseIslandRequest(
         @NotNull(message = "seed is required") Long seed,
         @Min(value = 8, message = "radius must be at least 8")
-        @Max(value = 28, message = "radius must be at most 28")
+        @Max(value = 46, message = "radius must be at most 46 (8..28 an island, 32..46 a land)")
         Integer radius) {
 }

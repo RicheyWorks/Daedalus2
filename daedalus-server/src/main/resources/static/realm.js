@@ -40,16 +40,20 @@ const COLORS = {
   BRICK_GREEN: 0x4b974b, BRICK_WHITE: 0xf2f3f3, SPAWN: 0x1fb5b0, LAVA: 0xff3b1f,
   // Light (ADR-038): a street lamp's head, neon trim, a lit window.
   LAMP: 0xffd9a0, NEON_PINK: 0xff4fc8, NEON_CYAN: 0x4ff4ff, WINDOW_LIT: 0xffe7b0,
+  // Lands (ADR-050): deep rock, the glowing heartstone core, ores by depth, the meteor's starmetal.
+  DEEPSTONE: 0x4a4f5c, HEARTSTONE: 0xff8a3d, COAL_ORE: 0x34343a, COPPER_ORE: 0xc8703a, IRON_ORE: 0xc9b49c,
+  GOLD_ORE: 0xf2c230, STARMETAL: 0x7fe3ff,
 };
 // Blocks that give off light: drawn unlit and brighter than white, so the bloom pass makes them glow.
-const GLOW = new Set(["LAMP", "NEON_PINK", "NEON_CYAN", "WINDOW_LIT", "CRYSTAL", "LAVA"]);
-const GLOW_GAIN = { LAMP: 3.2, NEON_PINK: 2.6, NEON_CYAN: 2.6, WINDOW_LIT: 2.4, CRYSTAL: 1.6, LAVA: 2.2 };
+const GLOW = new Set(["LAMP", "NEON_PINK", "NEON_CYAN", "WINDOW_LIT", "CRYSTAL", "LAVA", "HEARTSTONE", "STARMETAL"]);
+const GLOW_GAIN = { LAMP: 3.2, NEON_PINK: 2.6, NEON_CYAN: 2.6, WINDOW_LIT: 2.4, CRYSTAL: 1.6, LAVA: 2.2, HEARTSTONE: 2.0, STARMETAL: 2.2 };
 // Which texture-atlas tile each block wears (renderer only: the cubes and the export are unchanged).
 const TILE = {
   STONE: 0, GRAVEL: 10, DIRT: 6, SAND: 6, GRASS: 4, LEAVES: 5, BLOSSOM: 5, WOOD: 2, LOG: 9,
   PAVING: 3, ROAD: 10, HELIPAD: 3, BASEPLATE: 11, CLOUD: 11, GLASS: 11, WATER: 8, CRYSTAL: 11,
   BRICK_RED: 1, BRICK_BLUE: 1, BRICK_YELLOW: 1, BRICK_GREEN: 1, BRICK_WHITE: 1, SPAWN: 11, LAVA: 8,
   LAMP: 11, NEON_PINK: 11, NEON_CYAN: 11, WINDOW_LIT: 7, PORTAL: 11,
+  DEEPSTONE: 0, HEARTSTONE: 11, COAL_ORE: 10, COPPER_ORE: 10, IRON_ORE: 10, GOLD_ORE: 10, STARMETAL: 11,
 };
 // Studded tops: these cubes wear the bricks' studs on their upper face (ADR-034). Renderer only: the
 // cubes, the export and the C++ mesher are unchanged, so a World Package's triangles still match.

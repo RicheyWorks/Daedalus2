@@ -46,9 +46,14 @@ public final class IslandGenerator {
     }
 
     public static IslandPlan generate(long seed, int radius) {
+        // Radius 32..46 is a land (ADR-050): a big, deep piece of the shattered world with ores. Islands are 8..28.
+        if (radius >= LandGenerator.MIN_RADIUS && radius <= LandGenerator.MAX_RADIUS) {
+            return LandGenerator.generate(seed, radius);
+        }
         if (radius < MIN_RADIUS || radius > MAX_RADIUS) {
             throw new IllegalArgumentException(
-                    "Island radius must be " + MIN_RADIUS + ".." + MAX_RADIUS + ", was " + radius);
+                    "Island radius must be " + MIN_RADIUS + ".." + MAX_RADIUS + " (an island) or "
+                            + LandGenerator.MIN_RADIUS + ".." + LandGenerator.MAX_RADIUS + " (a land), was " + radius);
         }
         return new Build(seed, radius).run();
     }
