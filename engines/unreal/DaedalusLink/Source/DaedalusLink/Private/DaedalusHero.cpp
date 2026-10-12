@@ -285,17 +285,17 @@ void ADaedalusHero::MapProfile()
 	Actions.Add(TEXT("Swing"), SwingAction.Get());
 	Actions.Add(TEXT("Dash"), DashAction.Get());
 	Actions.Add(TEXT("Shield"), ShieldAction.Get());
-	for (const auto& Pair : (*Bindings)->Values)
+	for (const TPair<FString, UInputAction*>& Act : Actions)
 	{
-		UInputAction* const* A = Actions.Find(FString(Pair.Key));   // 5.8: JSON keys are not FString
+		// Look each action up by name, so this never depends on the JSON map's key type (it changed in UE 5.8).
 		const TArray<TSharedPtr<FJsonValue>>* Keys = nullptr;
-		if (!A || !Pair.Value->TryGetArray(Keys))
+		if (!(*Bindings)->TryGetArrayField(Act.Key, Keys) || !Keys)
 		{
 			continue;
 		}
 		for (const TSharedPtr<FJsonValue>& K : *Keys)
 		{
-			MapSpec(*A, K->AsString());
+			MapSpec(Act.Value, K->AsString());
 		}
 	}
 }
