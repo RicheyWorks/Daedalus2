@@ -14,6 +14,8 @@ public class DaedalusLink : ModuleRules
 			"CoreUObject",
 			"Engine",
 			"ProceduralMeshComponent",
+			"InputCore",
+			"EnhancedInput",
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[]
