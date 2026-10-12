@@ -98,7 +98,7 @@ def main():
         check("Blender built the test scene", names == ["Crate", "Lamp", "Stone"], names)
 
         r = S.ship("Props", dest="/Game/Test", folder=work, blender=B, unreal=U)
-        check("three objects ship, every check passes", r["ok"] and len(r["checks"]) == 9,
+        check("three objects ship, every check passes", r["ok"] and len(r["checks"]) == 10,
               [c for c in r["checks"] if not c["ok"]])
         crate = next(o for o in r["blender"]["objects"] if o["name"] == "Crate")
         check("the bevel modifier is applied before export (more than a cube's 12 triangles)",
@@ -133,7 +133,8 @@ def main():
                     "drop_tris": "triangles: file = Unreal, mesh by mesh",
                     "drop_slot": "material slots: file = Unreal, mesh by mesh",
                     "scale_m": "sizes: file (m) = Unreal (cm)",
-                    "no_materials": "Unreal made a material for each one used"}
+                    "no_materials": "Unreal made a material for each one used",
+                    "engine_parent": "every material is ready for Nanite (on the project's base, not the engine plugin's)"}
         for kind, broke in canaries.items():
             wire.call(U, "pipeline.fault", kind=kind)
             r = S.ship("Props", dest="/Game/Canary", folder=work, blender=B, unreal=U)

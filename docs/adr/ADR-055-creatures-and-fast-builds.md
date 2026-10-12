@@ -43,8 +43,37 @@ mountain goats, marmots, snow foxes and caribou on stone and snow. They're place
 
 - The first fast run compiled all 17 plugin files clean in 95 s (versus about six minutes for BuildPlugin, which
   builds the game target too). Its link failed because the editor was still open; see AUTOMATION-LESSONS.
-- Scenario `wild`: herds out, several species, every animal built from shipped parts, wandering, a shy one bolting,
-  and all four foe kinds wearing art.
+- **Fast build live:** after the fixes below, the whole job (save, close both editors, sync, incremental build,
+  reopen) ran from 13:14:25 to an editor at 13:14:47. The build step was 25 s; with nothing changed it is a link only.
+- **Scenario `wild`, live, 6/6:**
+  - 60 animals in 30 herds, 13 species (chicken, cow, crab, duck, goat, hare, horse, lizard, marmot, pig,
+    scorpion, sheep, squirrel);
+  - all 60 built from shipped parts;
+  - 55 of 60 wandered within four seconds;
+  - a goat bolted from the hero;
+  - all four foe kinds wear their art (4/4).
+- Two editor-closing bugs found and fixed on the way:
+  - WMI missed a running editor, so the job built against a locked DLL;
+  - `CloseMainWindow` closed a floating Content Browser instead of the editor, so a second editor opened beside the
+    first.
+
+  Editors are now found through WMI and `Get-Process` together, closed by their own " - Unreal Editor" window, and
+  asked to quit through the bridge as a last resort.
+
+## Found: the art library would render grey in a packaged game
+
+The live log warned for every Mob material: "missing usage flag Nanite! Default Material will be used in game."
+All 1588 material instances in the library are parented to the Interchange plugin's `MI_Default_Opaque_DS`. Its base
+`M_Default` has no Nanite usage flag, and engine content can't be saved, so the editor sets the flag on the fly but
+a packaged build draws them in the default material. This blocks deployment.
+
+- The project now owns `/Game/Daedalus/Materials/Gltf/M_Default` (with Nanite and instanced usage) and its
+  `MI_Default_Opaque_DS`.
+- **New imports** are moved onto it by the pipeline (`sides.UNREAL_IMPORT`). The judge rejects any material still on
+  the engine plugin's base, and a stand-in canary (`engine_parent`) proves it can say no (e2e 21/21).
+- **The 1588 already shipped** are moved by `daedalus_nanite_materials.run()`. It writes every old parent to
+  `Saved/Daedalus/nanite-materials.json` before changing anything, so `undo()` restores them. This runs once
+  Richmond OKs the bulk change.
 
 ## Held
 

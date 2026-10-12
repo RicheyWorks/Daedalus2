@@ -79,6 +79,11 @@ def judge(sent, witness, made):
     used = {m for x in by_node for m in x["materials"]}
     check("Unreal made a material for each one used", len(made["materials"]) >= len(used),
           "used %d, Unreal made %d" % (len(used), len(made["materials"])))
+    # ADR-055: a material left on the Interchange plugin's base has no Nanite usage, and a packaged game draws it
+    # with the default material.
+    engine = [m["name"] for m in made["materials"] if m.get("parent", "").startswith("/InterchangeAssets/")]
+    check("every material is ready for Nanite (on the project's base, not the engine plugin's)", not engine,
+          ", ".join(engine) or "all %d" % len(made["materials"]))
     return checks
 
 

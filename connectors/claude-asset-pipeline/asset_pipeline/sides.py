@@ -84,11 +84,40 @@ for path in paths:
                 materials.append({"path": mi.get_path_name(), "name": mi.get_name()})
     elif isinstance(asset, unreal.MaterialInterface) and all(x["path"] != path for x in materials):
         materials.append({"path": path, "name": asset.get_name()})
+# glTF imports parent every material instance to the Interchange plugin's M_Default, which lacks the Nanite usage
+# flag; that can't be saved into engine content, so a packaged game draws these meshes with the default material
+# (ADR-055). Point them at the project's own copy, which has the flag.
+OURS = "/Game/Daedalus/Materials/Gltf"
+EAL = unreal.EditorAssetLibrary
+reparented = 0
+def _ours(engine_mi):
+    path = OURS + "/" + engine_mi.get_name()
+    if not EAL.does_asset_exist(OURS + "/M_Default"):
+        EAL.duplicate_asset("/InterchangeAssets/gltf/M_Default", OURS + "/M_Default")
+        base = EAL.load_asset(OURS + "/M_Default")
+        base.set_editor_property("used_with_nanite", True)
+        base.set_editor_property("used_with_instanced_static_meshes", True)
+        unreal.MaterialEditingLibrary.recompile_material(base)
+        EAL.save_asset(OURS + "/M_Default", only_if_is_dirty=False)
+    if not EAL.does_asset_exist(path):
+        EAL.duplicate_asset(engine_mi.get_path_name().split(".")[0], path)
+        unreal.MaterialEditingLibrary.set_material_instance_parent(EAL.load_asset(path), EAL.load_asset(OURS + "/M_Default"))
+        EAL.save_asset(path, only_if_is_dirty=False)
+    return EAL.load_asset(path)
+for m in materials:
+    mi = EAL.load_asset(m["path"])
+    parent = mi.get_editor_property("parent") if isinstance(mi, unreal.MaterialInstanceConstant) else None
+    if parent is not None and parent.get_path_name().startswith("/InterchangeAssets/") \
+            and isinstance(parent, unreal.MaterialInstanceConstant):
+        unreal.MaterialEditingLibrary.set_material_instance_parent(mi, _ours(parent))
+        reparented += 1
+    after = mi.get_editor_property("parent") if isinstance(mi, unreal.MaterialInstanceConstant) else None
+    m["parent"] = after.get_path_name() if after is not None else ""
 # Save everything the import made, materials included: UE 5.8 leaves the material instances dirty, and a dirty asset
 # makes the editor ask "Save Content?" when it closes, which stalls every scripted rebuild until someone answers.
 if P.get("save", True):
     unreal.EditorAssetLibrary.save_directory(P["dest"], only_if_is_dirty=True, recursive=True)
-result = {"dest": P["dest"], "imported": paths, "meshes": meshes, "materials": materials}
+result = {"dest": P["dest"], "imported": paths, "meshes": meshes, "materials": materials, "reparented": reparented}
 '''
 
 
