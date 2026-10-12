@@ -167,6 +167,28 @@ in a sandboxed iframe outside the limiter, unless rd-studio has a `token:<id>` r
 
 **Load** (`tools/jukebox-load/load.py BASE secs panel arrange relay`).
 
+## Pressing your record (rd-studio r4 press, frozen engine)
+
+The engine is frozen, so the studio render is always preferred, for tokens and seeds alike.
+- Every song asks `/arrangement`. On a miss rd-studio answers 202 `pressing` (priority 0, about 40 s idle, longer while
+  the batch runs). The panel then shows **pressing your record**: the token's coat (or a palette from its hash) is stamped
+  into the label, a groove is cut from a waveform seeded by its hash, and the ETA comes from `eta_s` / Retry-After. It polls
+  on Retry-After, and on 200 the record spins at 33⅓ with the live waveform riding the groove, through the always-on
+  limiter. Shared code: `static/rd-press.js` (also used by the R/D/S web page).
+- If a variant (genre, studio, preset, vinyl, FLAC) fails QA or has no render, the default press (original, plain) is
+  tried next.
+- If the studio is down, QA fails, or it times out: seeds play their own file, and tokens play a **guest seed** at
+  jukebox level. The panel never falls back to on-chain HTML.
+- **On-chain playback is opt-in only:** a "Play original on-chain (unprotected)" button loads `/api/v1/jukebox/live?hash=&id=`,
+  which is rd-studio's jukebox live copy of the frozen v6 engine (byte-for-byte plus a master stage: -12 dB after a limiter),
+  sandboxed like the token HTML. The choice is remembered for the session only. `/tokens/{id}/html` is never framed by the
+  panel. If anything else frames it, `rd-audio-shim.js` (injected first) holds its audio at 0.35 behind a fixed limiter.
+- Reduced motion: no stamp animation, no spin, no live wobble. The groove still shows progress and is redrawn only on change.
+- **Keys tab (rd-voice/1):** `/api/v1/jukebox/studio/voices` (121 engine voices, cached 5 min) and `/studio/note`
+  (`voice, midi, vel, dur, a, d, s, r, rr, format`). Both are validated here and then by the studio. Note files are proxied
+  same-origin from `/studio/audio/notes/{file}`. A "Studio:" instrument renders each key through rd-studio with the panel
+  voice's envelope, and the synth covers a press until its note arrives.
+
 ## Limitations
 
 - Holder lookup is a full `ownerOf` sweep (see above), which is not viable at mainnet scale without an indexer.

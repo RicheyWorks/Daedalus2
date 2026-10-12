@@ -279,10 +279,14 @@ public consumers).
 | `GET` | `/api/v1/jukebox/seeds` | public | Guest mode: the seed songs anyone can play without a wallet |
 | `GET` | `/api/v1/jukebox/seeds/{file}` | public | One seed song's `.mp3` or `.webp` cover; only plain slug names inside the configured directory |
 | `GET` | `/api/v1/jukebox/owned` | required | The RDSong token ids the signed-in wallet holds now (read-only RPC, cached sweep) |
-| `GET` | `/api/v1/jukebox/tokens/{id}/html` | public | A revealed token's own on-chain HTML (its song and Turing coat), served with `CSP: sandbox allow-scripts` |
+| `GET` | `/api/v1/jukebox/tokens/{id}/html` | public | A revealed token's own on-chain HTML (its song and Turing coat), served with `CSP: sandbox allow-scripts`; framed only on an explicit opt-in, with its audio held at 0.35 behind a fixed limiter |
 | `GET` | `/api/v1/jukebox/tokens/{id}/hash` | public | A revealed token's 32-byte hash (`RDSong.tokenHash`), which keys its Turing coat |
 | `GET` | `/api/v1/jukebox/arrangement` | public | What to play for `source=seed:<name>\|token:<id>` in a `genre`, `studio` on/off: rd-studio's render when it has one (`available`, `url`), else the original |
 | `GET` | `/api/v1/jukebox/studio/audio/{key}` | public | An rd-studio render (MP3), relayed from the private studio service |
+| `GET` | `/api/v1/jukebox/live` | public | rd-studio's jukebox live copy of the frozen v6 engine (`?hash=&id=`; -12 dB after a limiter), sandboxed: the only on-chain playback, opt-in only |
+| `GET` | `/api/v1/jukebox/studio/audio/notes/{file}` | public | An rd-studio single-note render (Keys tab), relayed from the private studio service |
+| `GET` | `/api/v1/jukebox/studio/voices` | public | rd-studio's engine voices (`rd-voice/1`: name, register, native ADSR) for the Keys tab |
+| `GET` | `/api/v1/jukebox/studio/note` | public | Render one note of an engine voice (`voice`, `midi`, `vel`, `dur`, `a`, `d`, `s`, `r`, `rr`, `format`); 400 on anything else |
 | `GET` | `/api/v1/jukebox/coat.png` | public | A token's real Turing coat for `hash` (seamless PNG, `size` 256/512/1024), from rd-studio |
 | `GET` | `/api/v1/jukebox/coat` | public | The coat genome (traits, Gray-Scott genome, kind) for `hash` |
 | `GET` | `/api/v1/jukebox/radio/stations` | public | Radio Browser stations around `lat`/`lon` or a typed `place` (`country` fallback): local FM first, then other local, then the rest |

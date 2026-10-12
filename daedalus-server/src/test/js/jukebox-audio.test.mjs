@@ -152,7 +152,7 @@ test("brightness and pitch maps", () => {
 test("voice specs are clean, and the studio schema is honestly marked not ready", () => {
   const s = voiceSpec({ lead: { wave: "sine", attack: 99 }, bass: {} });
   assert.equal(s.voices.lead.attack, 2);
-  assert.equal(VOICE_SCHEMA_READY, false);
+  assert.equal(VOICE_SCHEMA_READY, true);
 });
 
 // ---- fuzz --------------------------------------------------------------------------------------------------
@@ -182,4 +182,21 @@ test("r4 render options: defaults, clamping, and surface noise off by default", 
     assert.ok(r.vinyl % 10 === 0 && r.vinyl >= 0 && r.vinyl <= 100);
     assert.ok(r.noise === "off" || (+r.noise >= -60 && +r.noise <= -30));
   }
+});
+
+test("rd-voice/1: studio note queries are clamped to the schema and never carry unknown keys", () => {
+  const q = SND.noteQuery("Celesta", { attack: 99, decay: -1, sustain: 2, release: 0 }, 300, { vel: 9, dur: 0 });
+  assert.deepEqual(Object.fromEntries(q), { voice: "Celesta", midi: "108", vel: "1", dur: "0.05", a: "2", d: "0.001", s: "1", r: "0.005", format: "mp3" });
+  assert.deepEqual([...SND.noteQuery("Saw Lead", SND.defaultVoice(), 60, { native: true }).keys()], ["voice", "midi", "vel", "dur", "format"]);
+  for (const bad of ["", "../x", "a".repeat(49), "<script>", null]) assert.throws(() => SND.noteQuery(bad, {}, 60));
+  for (let i = 0; i < 300; i++) {
+    const q2 = SND.noteQuery("Celesta", { attack: Math.random() * 1e3 - 500, decay: NaN, sustain: "x", release: Infinity }, Math.random() * 400 - 100);
+    const m = +q2.get("midi"); assert.ok(Number.isInteger(m) && m >= 21 && m <= 108);
+    for (const k of ["a", "d", "s", "r"]) { const [lo, hi] = SND.NOTE_SCHEMA[k]; assert.ok(+q2.get(k) >= lo && +q2.get(k) <= hi, k); }
+  }
+});
+
+test("a studio engine voice is a valid instrument; junk is not", () => {
+  assert.equal(SND.sanitizeVoice({ instrument: "studio:Saw Lead" }).instrument, "studio:Saw Lead");
+  assert.equal(SND.sanitizeVoice({ instrument: "studio:<img>" }).instrument, "synth");
 });
