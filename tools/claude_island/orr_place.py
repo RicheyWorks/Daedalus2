@@ -293,7 +293,7 @@ def run(seed=7):
             a.set_editor_property("who", who)
             a.set_editor_property("home", at(hx, hy, ground(hx, hy)))
             a.set_editor_property("work", at(wx, wy, ground(wx, wy)))
-            a.set_editor_property("plaza", at(0 + (hash(who) % 7) * 150 - 450, -5600 - (hash(who) % 5) * 120, ground(0, -5600)))
+            a.set_editor_property("plaza", at(0 + (sum(map(ord, who)) % 7) * 150 - 450, -5600 - (sum(map(ord, who)) % 5) * 120, ground(0, -5600)))
             a.set_editor_property("lines", line)
             placed += 1
 

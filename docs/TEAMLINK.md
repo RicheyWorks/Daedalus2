@@ -104,3 +104,14 @@ How their names map to ours:
 - Our `asset.shipped` and `queue.waiting` reach them as `shipped` and `waiting`.
 - `reply_to` carries their own uuid back.
 - Their `ack` with `reply_to` is a receipt.
+
+## Build art in your own cloud, not on Richmond's PC (ADR-058)
+
+Blender runs fine headless in a cloud sandbox (`pip install bpy`), which frees the PC's RAM for Unreal. Ship from the
+cloud like this:
+1. In your cloud Blender, export the asset's meshes to `<Asset>.glb`, with modifiers applied and +Y up. Write
+   `<Asset>.sent.json` beside it: `{"objects": [{"name", "triangles", "materials": [...], "dims": [x, y, z]}]}`, which
+   is what Blender says it sent (the same fields `asset_pipeline.sides.BLENDER_EXPORT` reports).
+2. Put both files in `bot-team\art\<Kind>\` on the PC, with no `.blend`, and set the row READY in QUEUE.md.
+3. The watcher imports the glb with no Blender on the PC. The judge still checks your report against the file and the
+   file against Unreal, so a wrong report is REJECTED, not shipped.

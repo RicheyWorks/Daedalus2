@@ -347,6 +347,8 @@ def _land(rep, dest, save, unreal):
     if rep["name"] == "Prop_C":
         raise OSError("bridge reset")
     rep["dest"] = dest + "/" + rep["name"]
+    rep.setdefault("checks", report()["checks"])   # a prebuilt report reaches land() with no checks yet
+    rep.setdefault("ok", True)
     return rep
 
 
@@ -386,6 +388,30 @@ w.first = ["_Orr_"]
 w.tick()
 check("--first: Orr rows ship first, in board order", [n for n, _, _ in seen["land"]][:2] == ["Prop_Orr_C", "Prop_Orr_D"]
       and [n for n, _, _ in seen["land"]][2:] == ["Prop_A", "Prop_B"], seen["land"])
+shutil.rmtree(d)
+
+# 12c. prebuilt: a .glb + .sent.json (built in a cloud Blender) ships with no Blender call on this PC
+import struct as _st   # noqa: E402
+d, w, fb = setup(blend=False, ship=_seq)
+calls = []
+fb_call = fb.call
+fb.call = lambda *a, **k: (calls.append(k.get("code", "")[:30]), fb_call(*a, **k))[1]
+wire.call = fb.call
+doc = {"asset": {"version": "2.0"}, "meshes": [{"name": "Pick", "primitives": [{"attributes": {"POSITION": 0}}]}],
+       "accessors": [{"count": 3, "type": "VEC3", "componentType": 5126, "min": [0, 0, 0], "max": [0.9, 0.1, 0.3]}],
+       "nodes": [{"name": "Pick", "mesh": 0}]}
+body = json.dumps(doc).encode()
+body += b" " * (-len(body) % 4)
+os.makedirs(os.path.join(d, "Tool"), exist_ok=True)
+with open(os.path.join(d, "Tool", "Tool_Pickaxe.glb"), "wb") as f:
+    f.write(_st.pack("<4sII", b"glTF", 2, 20 + len(body)) + _st.pack("<I4s", len(body), b"JSON") + body)
+with open(os.path.join(d, "Tool", "Tool_Pickaxe.sent.json"), "w") as f:
+    json.dump({"objects": [{"name": "Pick", "triangles": 1, "materials": [], "dims": [0.9, 0.3, 0.1]}]}, f)
+seen["land"].clear()
+got = w.ship_one("Tool_Pickaxe")
+check("prebuilt: ships from the glb and its sent.json", got == ("Tool_Pickaxe", "SHIPPED"), got)
+check("prebuilt: no Blender call at all", not [c for c in calls if "open_mainfile" in c or "collections.get" in c], calls)
+check("prebuilt: the report carries the file's own witness", seen["land"] and seen["land"][0][0] == "Tool_Pickaxe")
 shutil.rmtree(d)
 
 # 13. a restart re-queues rows the last watcher left SHIPPING (they were stuck there forever)
