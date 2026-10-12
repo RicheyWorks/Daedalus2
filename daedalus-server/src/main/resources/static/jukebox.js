@@ -18,6 +18,7 @@
 // their colours from the current world's own blocks (by world style), re-themed whenever the world changes.
 import * as THREE from "three";
 import * as SND from "./jukebox-audio.js";
+import * as PRESS from "./rd-press.js";
 
 const API = "/api/v1/jukebox";
 const PLACE_KEY = "daedalus.jukebox.place";   // a typed radio place, remembered on this device only
@@ -47,6 +48,7 @@ const J = {
 J.audio.crossOrigin = "anonymous";            // same-origin anyway; keeps the element routable through WebAudio
 J.audio.preload = "none";
 window.daedalusJukebox = J;   // for the browser harness
+J.play = it => play(it);
 
 const realm = () => window.daedalusRealm || {};
 function el(tag, attrs = {}, ...kids) {
@@ -316,6 +318,14 @@ const STYLE = `
   #jbTool .jb-eq { display: flex; justify-content: space-between; gap: 2px; height: 120px; margin: 6px 0 2px; }
   #jbTool .jb-eq label { display: flex; flex-direction: column; align-items: center; flex: 1; font-size: 9px; gap: 2px; }
   #jbTool .jb-eq input { writing-mode: vertical-lr; direction: rtl; width: 22px; height: 96px; min-height: 0; }
+  #jukebox .jb-press { display: grid; grid-template-columns: minmax(140px, 200px) 1fr; gap: 12px; align-items: center; margin-top: 8px; }
+  #jukebox .jb-press canvas { width: 100%; aspect-ratio: 1; border-radius: 50%; box-shadow: 0 6px 24px rgba(0,0,0,.45); }
+  #jukebox .jb-press-txt { display: flex; flex-direction: column; gap: 4px; }
+  #jukebox .jb-press-txt progress { width: 100%; height: 6px; accent-color: var(--jb-a, #e0b04a); }
+  #jukebox .jb-press-alt { grid-column: 1 / -1; display: flex; gap: 8px; flex-wrap: wrap; }
+  #jukebox .jb-btn { border: 1px solid var(--line); background: var(--jb-a, #e0b04a); color: #111; border-radius: 8px; padding: 6px 10px; cursor: pointer; font: inherit; }
+  #jukebox .jb-btn.ghost { background: transparent; color: var(--text); }
+  @media (prefers-reduced-motion: reduce) { #jukebox .jb-press canvas { box-shadow: none; } }
   #jbTool .jb-sub { margin: 10px 0 2px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted, #999); }
   #jbTool .jb-row { display: flex; align-items: center; gap: 8px; }
   #jbTool .jb-val { min-width: 52px; font-variant-numeric: tabular-nums; }
@@ -607,7 +617,9 @@ function renderKeys() {
   host.append(field("Voice", el("div", { class: "jb-seg" }, ...Object.keys(J.voices).map(k =>
     el("button", { class: J.voice === k ? "on" : "", "aria-pressed": J.voice === k, onclick: () => { J.voice = k; renderKeys(); } }, cap(k))))));
   const samples = J.seeds.filter(s => s.audio).slice(0, 40).map(s => [`sample:${s.name}`, `Sample: ${s.title}`]);
-  host.append(field("Instrument", select("jbInst", [["synth", "Synth"], ...samples], v.instrument, val => { set("instrument", val); loadSample(val); })));
+  const studioV = (J.studioVoices || []).map(x => [`studio:${x.name}`, `Studio: ${x.name}`]);
+  if (J.config?.studio && !J.studioVoices) loadStudioVoices();
+  host.append(field("Instrument", select("jbInst", [["synth", "Synth"], ...studioV, ...samples], v.instrument, val => { set("instrument", val); loadSample(val); })));
   host.append(field("Wave", select("jbWave", SND.WAVES.map(w => [w, cap(w)]), v.wave, val => set("wave", val))));
   for (const [k, label, min, max, step] of [["attack", "Attack", 0.001, 2, 0.001], ["decay", "Decay", 0.001, 3, 0.001],
     ["sustain", "Sustain", 0, 1, 0.01], ["release", "Release", 0.005, 4, 0.005], ["brightness", "Brightness", 0, 1, 0.01], ["blend", "Blend", 0, 1, 0.01]])
@@ -628,8 +640,9 @@ function renderKeys() {
     if (!black) wi++;
   }
   host.append(keys);
-  host.append(el("div", { class: "note-line" }, SND.VOICE_SCHEMA_READY ? "" :
-    "Plays live here. rd-studio can't render custom voices yet (waiting on Prometheus's voice schema)."));
+  host.append(el("div", { class: "note-line", id: "jbKeysNote" }, v.instrument.startsWith("studio:")
+    ? "Studio voice: rd-studio renders each note (rd-voice/1) with this envelope; the synth covers it until the note arrives."
+    : J.config?.studio ? "Pick a Studio voice to play rd-studio's own instruments." : ""));
   loadSample(v.instrument);
 }
 async function loadSample(inst) {
@@ -648,9 +661,58 @@ async function loadSample(inst) {
     J.samples.set(inst, slice);
   } catch (e) { J.samples.delete(inst); note("That sample didn't load: using the synth."); }
 }
+async function loadStudioVoices() {
+  J.studioVoices = [];
+  try {
+    const d = await getJson(`${API}/studio/voices`);
+    J.studioVoices = (d.voices || []).filter(x => typeof x.name === "string").slice(0, 200);
+    J.studioRegister = Object.fromEntries(J.studioVoices.map(x => [x.name, x.register || {}]));
+  } catch (e) { J.studioVoices = []; }
+  if (J.tab === "keys") renderKeys();
+}
+/** One studio note (cached per voice + pitch + envelope): fetch rd-studio's render once, decode, keep the buffer. */
+const studioNotes = new Map();
+function studioNote(c, v, n) {
+  const name = v.instrument.slice(7);
+  let q; try { q = SND.noteQuery(name, v, n); } catch (e) { return null; }
+  const k = q.toString();
+  if (!studioNotes.has(k)) {
+    studioNotes.set(k, (async () => {
+      const r = await getJson(`${API}/studio/note?${k}`);
+      const ac = new AbortController(), timer = setTimeout(() => ac.abort(), 8000);
+      const buf = await (await fetch(r.url, { signal: ac.signal })).arrayBuffer(); clearTimeout(timer);
+      return c.ctx.decodeAudioData(buf);
+    })().catch(() => { studioNotes.delete(k); return null; }));
+    if (studioNotes.size > 400) studioNotes.delete(studioNotes.keys().next().value);
+  }
+  return studioNotes.get(k);
+}
+function playBuffer(c, buf) {
+  const src = c.ctx.createBufferSource(); src.buffer = buf;
+  const off = c.connectSource(src); src.onended = () => off?.();
+  src.start();
+  return { stop() { /* the studio render carries its own release tail */ } };
+}
 function press(n) {
   const c = ensureSound(); if (!c || J.held.has(n) || J.unsafe) return;
   const v = J.voices[J.voice];
+  if (v.instrument.startsWith("studio:")) {
+    const pending = studioNote(c, v, n);
+    if (pending) {
+      const hold = { stopped: false, live: null, stop() { this.stopped = true; this.live?.stop(); } };
+      J.held.set(n, hold);
+      let fallback = null;
+      const t = setTimeout(() => { if (!hold.live && !hold.stopped) fallback = SND.noteOn(c, { ...v, instrument: "synth" }, n, null); }, 120);
+      pending.then(buf => {
+        clearTimeout(t);
+        if (!buf) { if (!fallback && !hold.stopped) hold.live = SND.noteOn(c, { ...v, instrument: "synth" }, n, null); return; }
+        if (fallback) { fallback.stop(); return; }                      // the synth already covered this press
+        if (!hold.stopped) hold.live = playBuffer(c, buf); else playBuffer(c, buf);
+      });
+      document.querySelector(`#jbKeys [data-note="${n}"]`)?.classList.add("down");
+      return;
+    }
+  }
   J.held.set(n, SND.noteOn(c, v, n, J.samples.get(v.instrument) || null));
   document.querySelector(`#jbKeys [data-note="${n}"]`)?.classList.add("down");
 }
@@ -688,7 +750,6 @@ async function play(it) {
   stop(true);
   ensureSound();                                   // a tap started this: the audio context may start now
   J.source = it; J.playing = true;
-  const stage = document.getElementById("jbStage");
   note("");
   if (it.kind === "radio") {
     growSkin("radio:" + it.id);
@@ -697,58 +758,149 @@ async function play(it) {
   }
   if (it.kind === "token") tokenSkin(it.id); else growSkin("seed:" + it.name);
   const key = it.kind === "token" ? "token:" + it.id : "seed:" + it.name;
-  const arr = await arrangement(key);
-  if (J.source !== it) return;
-  note(arr ? arr.note : "rd-studio didn't answer in time: playing the original");
-  if (arr && arr.url) playUrl(arr.url, () => retryRender(it, key));
-  else if (it.kind === "seed" && it.audio) playUrl(it.audio, () => note("That song didn't load."));
-  else if (it.kind === "token") stage.append(el("iframe", { src: `${API}/tokens/${it.id}/html`, sandbox: "allow-scripts", allow: "autoplay", title: `Token #${it.id}` }));
-  else if (!(arr && arr.status === "RENDERING")) { J.playing = false; note("No rd-studio render of this seed yet."); }
-  if (arr && arr.status === "RENDERING") pollRender(it, key, arr, 1);
   render();
+  pressRecord(it, key);
 }
-/** One arrangement ask, bounded by TIMEOUT_MS: null when the realm or studio is slow (the original plays). */
+/** One arrangement ask, bounded by TIMEOUT_MS: null when the realm or studio is slow. */
 async function arrangement(key) {
+  try { return await getJson(arrangementUrl(key)); }
+  catch (e) { return null; }
+}
+function arrangementUrl(key) {
   const r = J.render, q = new URLSearchParams({ source: key, genre: J.genre, studio: String(!!J.studio) });
   if (r.format !== "mp3") q.set("format", r.format);           // rd-studio r4 render options; defaults stay off the query
   if (r.preset !== "neutral") q.set("preset", r.preset);
   if (r.vinyl) q.set("vinyl", String(r.vinyl));
   if (r.vinyl && r.noise !== "off") q.set("noise", r.noise);
-  try { return await getJson(`${API}/arrangement?${q}`); }
-  catch (e) { return null; }
+  return `${API}/arrangement?${q}`;
+}
+
+// ---------------------------------------------------------------- pressing your record
+// The engine is frozen, so the studio render is always preferred: a miss answers 202 and rd-studio presses it at priority
+// (15-20 s). Meanwhile the token's coat is stamped into the label and the groove is cut from its waveform. The raw on-chain
+// HTML never plays by itself: it's an opt-in button, quieter, behind its own limiter (rd-audio-shim, server-side).
+async function labelFor(it) {
+  let seed = it.kind === "token" ? `token:${it.id}` : `seed:${it.name}`, src = it.cover || null;
+  if (it.kind === "token") {
+    try {
+      const { hash } = await getJson(`${API}/tokens/${it.id}/hash`); seed = hash;
+      if (J.config.studio) src = `${API}/coat.png?hash=${hash}&size=512`;
+    } catch (e) { /* palette from the id */ }
+  }
+  let img = null;
+  if (src) { img = new Image(); img.decoding = "async"; img.src = src; img.onerror = () => J.press?.set({ label: null }); }
+  return { seed, img };
+}
+async function pressRecord(it, key, plain) {
+  const stage = document.getElementById("jbStage"); stage.textContent = "";
+  const cv = el("canvas", { id: "jbPress", width: 360, height: 360, role: "img", "aria-label": `${it.title}: the record` });
+  const head = el("b", { id: "jbPressHead" }, "Pressing your record…"), eta = el("span", { id: "jbPressEta" }, "");
+  const bar = el("progress", { id: "jbPressBar", max: 100, value: 0 });
+  const alt = el("div", { class: "jb-press-alt" });
+  stage.append(el("div", { class: "jb-press", role: "status", "aria-live": "polite" }, cv, el("div", { class: "jb-press-txt" }, head, eta, bar), alt));
+  const { seed, img } = await labelFor(it);
+  if (J.source !== it) return;
+  J.press?.destroy();
+  J.press = PRESS.createPress(cv, { seed, label: img });
+  rawButton(it, alt);
+  const ac = new AbortController(); J.pressAbort = ac;
+  let started = null, etaMs = 40_000;           // Prometheus: ~40 s idle, longer while the batch runs
+  const tick = setInterval(() => {
+    if (J.source !== it || started == null) return;
+    const p = PRESS.pressProgress(performance.now() - started, etaMs);
+    J.press.set({ phase: "pressing", progress: p }); bar.value = Math.round(p * 100);
+    const left = Math.max(0, Math.round((etaMs - (performance.now() - started)) / 1000));
+    eta.textContent = left > 0 ? `about ${left} s` : "almost there…";
+  }, 250);
+  const url = plain ? `${API}/arrangement?${new URLSearchParams({ source: key, genre: "original", studio: "false" })}` : arrangementUrl(key);
+  const r = await PRESS.pollArrange(url, {
+    signal: ac.signal,
+    onPressing: (e) => { if (started != null && e.etaMs > 0) etaMs = Math.max(etaMs, performance.now() - started + e.etaMs);
+      if (started == null) { started = performance.now(); etaMs = e.etaMs > 0 ? Math.max(e.etaMs, 15_000) : etaMs; J.press.set({ phase: "pressing", progress: 0.02 }); } },
+    onBusy: () => { eta.textContent = "the studio is busy: waiting for a slot…"; },
+  });
+  clearInterval(tick);
+  if (J.source !== it || ac.signal.aborted || it.onchain) return;
+  if (r.kind === "ready") {
+    head.textContent = started == null ? "Your record" : "Pressed."; eta.textContent = r.data?.note || ""; bar.value = 100;
+    J.press.set({ phase: "playing", analyser: J.snd?.analyser || null });
+    document.getElementById("jbGuest")?.remove();                     // nothing to wait for any more
+    J.playing = true;
+    playUrl(r.url, () => retryRender(it, key));
+    return render();
+  }
+  // a genre / studio / option variant failed (QA) or has no render: the default press (original, plain) is still preferred
+  const variant = J.genre !== "original" || J.studio || J.render.format !== "mp3" || J.render.preset !== "neutral" || J.render.vinyl;
+  if (!plain && variant && (r.kind === "none" || r.kind === "failed")) return pressRecord(it, key, true);
+  // the studio couldn't press it: seeds have their own file (through the limiter); tokens stay visual + opt-in raw
+  J.press.set({ phase: "idle", progress: 0 }); bar.remove();
+  const why = { unknown: "rd-studio doesn't know this song.", failed: "the studio's quality check stopped it.", timeout: "the studio is taking too long.",
+    unreachable: "rd-studio isn't reachable right now.", none: "rd-studio has no render for this.", bad: "that render option isn't valid." }[r.kind] || "rd-studio didn't answer.";
+  if (it.kind === "seed" && it.audio) {
+    head.textContent = "Playing the seed file"; eta.textContent = why;
+    J.press.set({ phase: "playing", analyser: J.snd?.analyser || null });
+    playUrl(it.audio, () => note("That song didn't load."));
+  } else {
+    head.textContent = r.kind === "failed" ? "This record can't be pressed yet" : "Not pressed"; eta.textContent = why;
+    J.playing = false;
+    if (it.kind === "token" && rawOptedIn()) playOnChain(it);        // the listener chose on-chain this session
+    else if (!(await playGuestSeed(why))) J.playing = false;
+  }
+  render();
 }
 /**
- * rd-studio answered 202 (rendering): the original keeps playing, and we ask again after its Retry-After (bounded
- * attempts, backing off) until the render is READY, then switch to it, if the listener is still on the same song.
+ * On-chain playback is an explicit opt-in only ("unprotected"): it loads rd-studio's jukebox live copy of the frozen v6
+ * engine (-12 dB after a limiter), never tokenHTML. The choice is remembered for this session only.
  */
-function pollRender(it, key, arr, attempt) {
-  clearTimeout(J.poll);
-  if (attempt > POLL_MAX) return note("rd-studio is still rendering: staying on the original.");
-  const wait = Math.min(30_000, Math.max(500, arr.retryAfterMs || 2000) * (attempt > 5 ? 2 : 1));
-  note(`rd-studio is rendering ${J.genre}${J.studio ? " (studio)" : ""}: playing the original meanwhile…`);
-  const want = { genre: J.genre, studio: J.studio };
-  J.poll = setTimeout(async () => {
-    if (J.source !== it || J.genre !== want.genre || J.studio !== want.studio) return;
-    const next = await arrangement(key);
-    if (J.source !== it || J.genre !== want.genre || J.studio !== want.studio) return;
-    if (next && next.url) {
-      J.playing = true; note(next.note);
-      playUrl(next.url, () => retryRender(it, key));
-      return render();
-    }
-    if (next && next.status === "RENDERING") return pollRender(it, key, next, attempt + 1);
-    note(next ? next.note : "rd-studio stopped answering: staying on the original.");
-  }, wait);
+const RAW_KEY = "daedalus.jukebox.onchainOptIn";
+function rawOptedIn() { try { return sessionStorage.getItem(RAW_KEY) === "1"; } catch (e) { return false; } }
+async function playOnChain(it) {
+  it.onchain = true;
+  J.pressAbort?.abort(); stopPress("On-chain original (unprotected)");
+  J.audio.onerror = null; J.audio.pause(); J.audio.removeAttribute("src"); J.audio.load();
+  try { sessionStorage.setItem(RAW_KEY, "1"); } catch (e) { /* private mode */ }
+  let hash = "";
+  try { hash = (await getJson(`${API}/tokens/${it.id}/hash`)).hash; } catch (e) { return note("Couldn't read this token's hash from the chain."); }
+  if (J.source !== it) return;
+  const stage = document.getElementById("jbStage");
+  stage.querySelector("iframe")?.remove();
+  stage.append(el("iframe", { src: `${API}/live?hash=${encodeURIComponent(hash)}&id=${it.id}`, sandbox: "allow-scripts", allow: "autoplay",
+    title: `Token #${it.id}, on-chain original` }));
+  note("On-chain original: the frozen engine at -12 dB with its own limiter, outside this EQ. Tap the art to start it.");
+  J.playing = true; render();
+}
+/** While a record is pressed, or when it can't be: a guest seed plays at jukebox level, through the limiter. */
+async function playGuestSeed(head) {
+  const seed = J.seeds.find(s => s.audio) || J.seeds.find(s => s.studio);
+  if (!seed) return false;
+  let url = seed.audio;
+  if (!url) { const a = await arrangement("seed:" + seed.name); url = a && a.url; }
+  if (!url) return false;
+  if (head) { const h = document.getElementById("jbPressEta"); if (h) h.textContent = `${head} Guest seed: ${seed.title}.`; }
+  J.playing = true; J.press?.set({ analyser: J.snd?.analyser || null });
+  playUrl(url, () => note("The guest seed didn't load."));
+  return true;
+}
+function rawButton(it, host) {
+  host.textContent = "";
+  if (it.kind === "seed" && it.audio) {
+    host.append(el("button", { class: "jb-btn", id: "jbSeedNow", onclick: () => { J.pressAbort?.abort(); stopPress("Playing the seed file"); J.playing = true; playUrl(it.audio, () => note("That song didn't load.")); render(); } }, "Play the seed file now"));
+  }
+  if (it.kind !== "token") return;
+  host.append(el("button", { class: "jb-btn", id: "jbGuest", onclick: () => playGuestSeed("") }, "Play a guest seed while you wait"));
+  host.append(el("button", { class: "jb-btn ghost", id: "jbRaw", title: "The frozen engine itself, at -12 dB with a limiter, outside the jukebox's EQ",
+    onclick: () => playOnChain(it) }, "Play original on-chain (unprotected)"));
+}
+function stopPress(head) {
+  const h = document.getElementById("jbPressHead"); if (h) h.textContent = head;
+  document.getElementById("jbPressBar")?.remove(); const e = document.getElementById("jbPressEta"); if (e) e.textContent = "";
+  J.press?.set({ phase: "idle" });
 }
 /** A render's file vanished (evicted or a new engine): ask for the arrangement once more, then give up on it. */
 async function retryRender(it, key) {
   if (J.source !== it || it.retried) return note("That render didn't load: try again.");
   it.retried = true;
-  const arr = await arrangement(key);
-  if (J.source !== it) return;
-  if (arr && arr.url) { J.playing = true; playUrl(arr.url, () => note("That render didn't load: try again.")); render(); }
-  else if (arr && arr.status === "RENDERING") pollRender(it, key, arr, 1);
-  else note("That render didn't load: try again.");
+  pressRecord(it, key);
 }
 function playUrl(url, onDead) {
   J.audio.onerror = () => { if (J.playing) { J.playing = false; renderNow(); onDead(); } };
@@ -762,6 +914,7 @@ function next(after) {
 }
 function stop(quiet) {
   clearTimeout(J.poll);
+  J.pressAbort?.abort(); J.press?.destroy(); J.press = null;
   J.audio.onerror = null; J.audio.pause(); J.audio.removeAttribute("src"); J.audio.load();
   J.playing = false;
   const stage = document.getElementById("jbStage"); if (stage) stage.textContent = "";

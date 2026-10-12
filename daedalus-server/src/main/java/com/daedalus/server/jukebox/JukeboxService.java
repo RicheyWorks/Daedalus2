@@ -153,6 +153,16 @@ public class JukeboxService {
         return studio() ? ((HttpStudioArranger) arranger).audio(key, ifNoneMatch) : Optional.empty();
     }
 
+    public Optional<String> studioVoices() {
+        return studio() ? ((HttpStudioArranger) arranger).voices() : Optional.empty();
+    }
+
+    /** IllegalArgumentException on bad params (even with no studio, so callers learn the schema). */
+    public Optional<Map<String, Object>> studioNote(Map<String, String> q) {
+        if (!studio()) { HttpStudioArranger.validateNote(q); return Optional.empty(); }
+        return ((HttpStudioArranger) arranger).note(q);
+    }
+
     public Optional<byte[]> coatPng(String hash, int size) {
         return studio() ? ((HttpStudioArranger) arranger).coatPng(hash, size) : Optional.empty();
     }

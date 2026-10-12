@@ -186,7 +186,7 @@ export function defaultVoice() {
 /** Clamps a voice to safe ranges (times in seconds; brightness and blend 0..1). Unknown fields are dropped. */
 export function sanitizeVoice(v = {}) {
   const d = defaultVoice();
-  const inst = typeof v.instrument === "string" && /^(synth|sample:[a-z0-9][a-z0-9-]{0,80})$/.test(v.instrument) ? v.instrument : d.instrument;
+  const inst = typeof v.instrument === "string" && /^(synth|sample:[a-z0-9][a-z0-9-]{0,80}|studio:[A-Za-z0-9 %&._()'-]{1,48})$/.test(v.instrument) ? v.instrument : d.instrument;
   return {
     instrument: inst,
     wave: WAVES.includes(v.wave) ? v.wave : d.wave,
@@ -266,7 +266,7 @@ export function noteOn(chain, voice, note, sample = null, velocity = 0.8) {
  * server/CHANGES_FOR_FLEX.md) has not landed, so this is our proposal and {@code VOICE_SCHEMA_READY} stays false:
  * the panel shows the controls, plays them live, and says the studio can't render them yet.
  */
-export const VOICE_SCHEMA_READY = false;
+export const VOICE_SCHEMA_READY = true;     // rd-studio r4 shipped rd-voice/1 (GET /voices, /voices/schema, /note)
 export function voiceSpec(voices) {
   return { schema: "rd-jukebox.voice/0-proposed", voices: Object.fromEntries(Object.entries(voices).map(([k, v]) => [k, sanitizeVoice(v)])) };
 }
@@ -282,4 +282,32 @@ export function sanitizeRender(r) {
   const v = Number(o.vinyl), vinyl = Number.isFinite(v) ? Math.min(100, Math.max(0, Math.round(v / 10) * 10)) : 0;
   const n = Number(o.noise), noise = o.noise !== "off" && o.noise != null && Number.isFinite(n) ? String(Math.min(-30, Math.max(-60, Math.round(n)))) : "off";
   return { format, preset, vinyl, noise };
+}
+
+// ---------------------------------------------------------------- rd-voice/1 (rd-studio GET /note)
+/** rd-voice/1 note schema ranges (rd_studio/voices.py NOTE_SCHEMA). */
+export const NOTE_SCHEMA = Object.freeze({
+  midi: [21, 108], vel: [0.05, 1], dur: [0.05, 8], a: [0.001, 4], d: [0.001, 8], s: [0, 1], r: [0.005, 8], rr: [0, 15],
+});
+const clampTo = (v, [lo, hi], dflt) => { const n = Number(v); return Number.isFinite(n) ? Math.min(hi, Math.max(lo, n)) : dflt; };
+const r4 = (n) => String(Math.round(n * 10000) / 10000);
+/**
+ * Query params for one studio note: an engine voice (a name from /voices) played with this panel voice's envelope.
+ * Everything is clamped to the schema, so the studio never sees an out-of-range value; unknown keys are never sent.
+ */
+export function noteQuery(voiceName, voice, midi, { vel = 0.8, dur = 1, native = false, format = "mp3" } = {}) {
+  if (typeof voiceName !== "string" || !/^[A-Za-z0-9 %&._()'-]{1,48}$/.test(voiceName)) throw new Error("not a studio voice");
+  const v = sanitizeVoice(voice), q = new URLSearchParams();
+  q.set("voice", voiceName);
+  q.set("midi", String(Math.round(clampTo(midi, NOTE_SCHEMA.midi, 60))));
+  q.set("vel", r4(clampTo(vel, NOTE_SCHEMA.vel, 0.8)));
+  q.set("dur", r4(clampTo(dur, NOTE_SCHEMA.dur, 1)));
+  if (!native) {                         // omit a/d/s/r to hear the instrument natively
+    q.set("a", r4(clampTo(v.attack, NOTE_SCHEMA.a, 0.01)));
+    q.set("d", r4(clampTo(v.decay, NOTE_SCHEMA.d, 0.2)));
+    q.set("s", r4(clampTo(v.sustain, NOTE_SCHEMA.s, 0.7)));
+    q.set("r", r4(clampTo(v.release, NOTE_SCHEMA.r, 0.3)));
+  }
+  q.set("format", format === "flac" ? "flac" : "mp3");
+  return q;
 }
