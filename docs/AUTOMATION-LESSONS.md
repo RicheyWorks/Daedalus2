@@ -113,6 +113,16 @@ to it when something new breaks.
 - **A hidden component still collides.** Foes wear art now, but the crystal stays their root: `SetHiddenInGame(true)`
   removes the drawing and keeps every trace, hit and sight line exactly as tested before (ADR-055).
 
+- **Epic's Remote Execution is one channel for every bot, and replies can reach the wrong caller.** On 2026-10-12
+  an editor restart left a reply undelivered. The art watcher waited on it for 35 minutes, and its fresh copy hung
+  on its very first call. `ping` answered in 0.13 s; `execute_python` (unattended) never did; the same code with
+  `unattended=False` answered in 0.04 s. Automated imports raise no dialogs, so the watcher now always runs direct
+  and passes `bridge_timeout`. team-codex's correlation fix for the bridge is reviewed on branch
+  `codex/remote-correlation`.
+- **Overlap the two editors.** Blender exports the next asset while Unreal imports this one, and every board write
+  happens under one lock. Live rate went from about 15 to 93 assets a minute, with 0 errors (export 0.06 s,
+  import about 0.4 s).
+
 ## Habits that saved us
 
 - **Build a game its own framebuffer and capture that.** The viewport capture never worked in Play (play_capture).
