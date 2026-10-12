@@ -644,7 +644,7 @@ def scenario_orrery(p):
     yield from use("Orr_Keeper_Ostra")
     s1 = o.get_editor_property("step")
     yield from use("Orr_Play_Filter")
-    clean = o.get_editor_property("b_clean_water")
+    clean = o.get_editor_property("clean_water")
     yield from use("Orr_Chart_Lantern")
     s3 = o.get_editor_property("step")
     set_hour(18)                       # Duskmallow's hour
