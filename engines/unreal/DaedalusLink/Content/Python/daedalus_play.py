@@ -100,11 +100,11 @@ def play_capture(p=None):
     cam = unreal.GameplayStatics.get_player_camera_manager(w, 0)
     loc, rot = cam.get_camera_location(), cam.get_camera_rotation()
     rt = unreal.RenderingLibrary.create_render_target2d(w, width, height)
-    xf = unreal.Transform(loc, rot, unreal.Vector(1, 1, 1))
-    cap = unreal.GameplayStatics.begin_deferred_actor_spawn_from_class(w, unreal.SceneCapture2D, xf)
-    unreal.GameplayStatics.finish_spawning_actor(cap, xf)
+    # Python can't spawn actors into the Play world, but it can add a component to one: borrow the player's pawn.
+    host = unreal.GameplayStatics.get_player_pawn(w, 0)
+    comp = host.add_component_by_class(unreal.SceneCaptureComponent2D, False, unreal.Transform(), False)
     try:
-        comp = cap.get_component_by_class(unreal.SceneCaptureComponent2D)
+        comp.set_world_location_and_rotation(loc, rot, False, False)
         comp.set_editor_property("texture_target", rt)
         comp.set_editor_property("capture_source", unreal.SceneCaptureSource.SCS_FINAL_COLOR_LDR)
         comp.set_editor_property("fov_angle", cam.get_fov_angle())
@@ -122,7 +122,7 @@ def play_capture(p=None):
             yield
         return {"path": path, "bytes": os.path.getsize(path), "camera": [round(loc.x), round(loc.y), round(loc.z)]}
     finally:
-        cap.destroy_actor()
+        comp.destroy_component(comp)
 
 
 def snapshot(p=None):
