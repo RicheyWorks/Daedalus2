@@ -6,16 +6,30 @@ all, and so does the harness.
 
 ## Layout
 
+Default button layout (Settings → Controller → Button Layout changes the pad column):
+
 | Action | Keyboard / mouse | Xbox Elite 2, GameSir, Razer Wolverine/Kishi (XInput) | Generic USB (profile) |
 |---|---|---|---|
-| Move | WASD | left stick, d-pad | Axis1 / Axis2 |
-| Look | mouse (raw) | right stick (rate) | Axis3 / Axis4 |
+| Move | WASD | left stick | Axis1 / Axis2 |
+| Look (inverted if Invert Look is on) | mouse (raw) | right stick | Axis3 / Axis4 |
 | Jump | Space | A | Button2 |
-| Sword (down-thrust in the air) | left mouse, J | X, RT | Button1, Button8 |
-| Dash | Shift | B, RB | Button3, Button6 |
-| Shield | right mouse, K | LT, LB | Button5, Button7 |
+| Fire (blaster) / swing (sword) | left mouse | RT | Button8 |
+| Melee (down-thrust in the air) | Q, J | RB, R3 | Button1 |
+| Aim (zoom; shield with the sword) | right mouse, K | LT | Button5, Button7 |
+| Dash | Shift | B | Button3, Button6 |
+| Switch weapon | 1, 2, wheel | Y | Button4 |
+| Interact (get on / off a Ghost) | E | X | |
+| Sprint | Left Ctrl | L3 | |
+| Swap shoulder | C | LB, d-pad down | |
+| Camera view (first person → over the shoulder → classic) | V | d-pad up | |
 | Game Menu (pause, then Settings) | F1, F10 | Menu (three lines) | |
 | Field Menu (TacMap, hero, controls, social) | Tab, M | View (two boxes) | |
+
+**Button layouts** (Halo Infinite's set): Default, Bumper Jumper (jump on LB, melee on B), Bumper Ninja, Boxer,
+Green Thumb, Recon. **Thumbstick layouts:** Default, Southpaw, Legacy, Legacy Southpaw. Both apply at once.
+
+**Riding a Ghost (ADR-043):** left stick / WASD throttle and strafe, the bike steers where you look, RT / left mouse
+fires the twin guns, LB / LT / Shift boosts, X / E gets off.
 
 - **Elite Series 2 paddles and Razer's extra buttons:** these are mapped in Xbox Accessories or Razer Synapse to
   face buttons, so they work as whatever you assign them.
