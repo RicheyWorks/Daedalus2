@@ -27,6 +27,19 @@ To see what it would do without changing anything, add `-WhatIfOnly`. Other opti
 - `-EnginePath D:\UE_5.5`: use an engine the launcher does not know about (the script otherwise looks in
   the launcher's list, the registry and `<drive>:\Epic Games\UE_*`, and takes the newest)
 - `-NoServerStart`: don't start a local server
+- `-Verify`: check an earlier import again, without importing
+
+**The import checks its own work.** After importing, it opens the level again and compares it with the
+manifest. It checks:
+- the level
+- both materials
+- one mesh actor per chunk, each with a material on every slot
+- the ark
+- the live actor, pointing at the right server and world
+
+Each check prints PASS or FAIL. The results are also saved to `Saved/Daedalus/verify-<world>.json`, and
+the run fails on any FAIL. `core-test/verify_judge_test.py` shows the checker failing for each mistake it
+is meant to catch.
 
 What it downloads for you, when missing:
 - **A Daedalus server.** If `-Server` is on this PC and not answering, the script builds the server

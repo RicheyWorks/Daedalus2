@@ -22,7 +22,9 @@
                               missing); without it the editor
                               offers to compile the plugin itself on first open.
     7. Import (-Import)     - runs Content/Python/import_world_package.py headless: materials, the world's
-                              meshes, the ark, and a live "Daedalus World" actor in the default level.
+                              meshes, the ark, and a live "Daedalus World" actor in the default level. Then
+                              it verifies the result inside Unreal against the manifest and prints PASS/FAIL
+                              per check (-Verify alone re-checks an earlier import).
 
 .EXAMPLE
   .\setup-unreal.ps1 -Project C:\Unreal\DaedalusRealm\DaedalusRealm.uproject -InstallLauncher -Build -Import
@@ -40,6 +42,7 @@ param(
     [switch]$InstallLauncher,
     [switch]$Build,
     [switch]$Import,
+    [switch]$Verify,
     [switch]$SkipPackage,
     [switch]$NoServerStart,
     [switch]$WhatIfOnly
@@ -481,8 +484,8 @@ if ($Build) {
 }
 
 # --- 7. Import -----------------------------------------------------------------------------------------------
-if ($Import) {
-    Say "Import the World Package into the project"
+if ($Import -or $Verify) {
+    Say $(if ($Import) { "Import the World Package into the project, then verify it" } else { "Verify the imported world" })
     $editor = if ($engine) { Join-Path $engine.Path "Engine\Binaries\Win64\UnrealEditor-Cmd.exe" } else { "" }
     $py = Join-Path (Join-Path (Join-Path $PluginDest "Content") "Python") "import_world_package.py"
     if (-not $engine -or -not (Test-Path $editor -ErrorAction SilentlyContinue)) {
@@ -504,8 +507,20 @@ if ($Import) {
             $up | ConvertTo-Json -Depth 10 | Set-Content -Path $Project -Encoding UTF8
         }
         try {
-            & $editor $Project -run=pythonscript "-script=`"$py`" `"$PackageFile`"" -unattended -nopause
-            if ($LASTEXITCODE -ne 0) { Fail "the import exited $LASTEXITCODE; see $ProjectDir\Saved\Logs" }
+            $flags = if ($Import) { "" } else { " --verify" }
+            & $editor $Project -run=pythonscript "-script=`"$py`" `"$PackageFile`"$flags" -unattended -nopause
+            $code = $LASTEXITCODE
+            $report = Join-Path $PackageDir "verify-$World.json"
+            if (Test-Path $report) {
+                $v = Get-Content $report -Raw | ConvertFrom-Json
+                Write-Host ("    verified {0} r{1} in Unreal:" -f $v.world, $v.revision)
+                foreach ($c in $v.checks) {
+                    $color = if ($c.ok) { "Green" } else { "Red" }
+                    Write-Host ("      {0} {1} ({2})" -f $(if ($c.ok) { "PASS" } else { "FAIL" }), $c.name, $c.detail) -ForegroundColor $color
+                }
+            }
+            if ($code -eq 3) { Fail "the world in Unreal does not match the package (FAIL lines above)" }
+            elseif ($code -ne 0) { Fail "the import exited $code; see $ProjectDir\Saved\Logs" }
         } finally {
             if ($saved) { Set-Content -Path $Project -Value $saved -Encoding UTF8 -NoNewline }
         }

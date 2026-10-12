@@ -40,6 +40,8 @@ jobs:
           python3 -m py_compile ../DaedalusLink/Content/Python/import_world_package.py live_parity.py
           echo nope > bad.zip
           if python3 ../DaedalusLink/Content/Python/import_world_package.py bad.zip; then exit 1; fi
+      - name: the import verifier can say no
+        run: python3 verify_judge_test.py
 
   setup-plan:
     name: setup-unreal.ps1 plan (Windows)

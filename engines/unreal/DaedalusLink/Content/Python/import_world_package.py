@@ -21,6 +21,12 @@ What it does:
      materials and ark mesh set, ready to follow the live server (tick Load On Begin Play and hide the
      baked folder); with --live it skips the bake and the actor follows the server from the first frame.
 
+  6. verifies what it made: re-opens the level and checks it against the manifest (the level, both
+     materials, one mesh actor per chunk with materials on every slot, the ark, and the live actor
+     pointing at the right server and world). The checks go to the log and to
+     <Project>/Saved/Daedalus/verify-<world id>.json; any failed check makes the exit status 3.
+     --verify runs only this step, on what an earlier import left.
+
 Run with --dry-run (or outside Unreal) to only read, check and print the plan; exit status 1 if the package
 is not a valid Daedalus World Package. Standard library only.
 """
@@ -249,6 +255,90 @@ def import_into_unreal(zip_path, manifest, live_only=False):
                "added" if live_class else "skipped (enable the DaedalusLink plugin)"))
 
 
+# ---------------------------------------------------------------- verification
+
+def judge(manifest, facts, live_only=False):
+    """What the project should hold for this manifest, against what was observed (``facts``).
+
+    Pure: no Unreal calls, so it is tested outside the editor. ``facts`` keys: level (bool), materials
+    (names found), chunk_actors (int), unmaterialed (int: chunk actors with an empty slot), ark (bool),
+    plugin (bool: DaedalusLink's module is loaded), live (list of {server_url, world_id}).
+    Returns a list of {name, ok, detail}.
+    """
+    w = manifest["world"]
+    chunks = 0 if live_only else manifest.get("geometry", {}).get("chunks", 0)
+    want_ark = any(a.get("name") == "ark" for a in manifest.get("assets", []))
+    api = manifest.get("live", {}).get("api", "")
+    server = api[:api.index("/api/v1/")] if "/api/v1/" in api else ""
+    checks = []
+
+    def check(name, ok, detail):
+        checks.append({"name": name, "ok": bool(ok), "detail": detail})
+
+    check("level", facts.get("level"), LEVEL)
+    mats = set(facts.get("materials", []))
+    check("materials", {"M_DaedalusOpaque", "M_DaedalusTranslucent"} <= mats, "found %s" % sorted(mats))
+    check("chunk meshes", facts.get("chunk_actors") == chunks,
+          "%s placed, manifest has %d" % (facts.get("chunk_actors"), chunks))
+    check("materials on every chunk", facts.get("unmaterialed", 0) == 0,
+          "%d chunk actors with an empty slot" % facts.get("unmaterialed", 0))
+    if want_ark:
+        check("ark mesh", facts.get("ark"), CONTENT_ROOT + "/" + safe_name(w["id"]) + "/ark")
+    live = facts.get("live", [])
+    if facts.get("plugin") and server:
+        good = [a for a in live if a.get("server_url") == server and a.get("world_id") == w["id"]]
+        check("live actor", len(good) == 1, "%d following %s %s (of %d live actors)" % (len(good), server, w["id"], len(live)))
+    else:
+        check("live actor", True, "skipped: DaedalusLink is not compiled yet" if not facts.get("plugin") else "no live api")
+    return checks
+
+
+def observe(manifest):
+    """Re-open the level and look at what is really there."""
+    w = manifest["world"]
+    lib = unreal.EditorAssetLibrary
+    facts = {"level": lib.does_asset_exist(LEVEL)}
+    facts["materials"] = [n for n in ("M_DaedalusOpaque", "M_DaedalusTranslucent")
+                          if lib.does_asset_exist(CONTENT_ROOT + "/Materials/" + n)]
+    facts["ark"] = bool(lib.list_assets(CONTENT_ROOT + "/" + safe_name(w["id"]) + "/ark", recursive=True))
+    live_type = getattr(unreal, "DaedalusWorldActor", None)
+    facts["plugin"] = live_type is not None
+    facts["chunk_actors"], facts["unmaterialed"], facts["live"] = 0, 0, []
+    if facts["level"]:
+        unreal.get_editor_subsystem(unreal.LevelEditorSubsystem).load_level(LEVEL)
+        for a in unreal.get_editor_subsystem(unreal.EditorActorSubsystem).get_all_level_actors():
+            if str(a.get_folder_path()) != "Daedalus/" + w["id"]:
+                continue
+            if live_type is not None and isinstance(a, live_type):
+                facts["live"].append({"server_url": a.get_editor_property("server_url"),
+                                      "world_id": a.get_editor_property("world_id")})
+            elif isinstance(a, unreal.StaticMeshActor):
+                comp = a.get_component_by_class(unreal.StaticMeshComponent)
+                if not comp.get_editor_property("static_mesh"):
+                    facts["unmaterialed"] += 1
+                    continue
+                facts["chunk_actors"] += 1
+                if any(comp.get_material(i) is None for i in range(comp.get_num_materials())):
+                    facts["unmaterialed"] += 1
+    return facts
+
+
+def report(manifest, checks, saved_dir):
+    w = manifest["world"]
+    ok = all(c["ok"] for c in checks)
+    for c in checks:
+        line = "Daedalus verify: %s %s (%s)" % ("PASS" if c["ok"] else "FAIL", c["name"], c["detail"])
+        print(line)
+        if unreal is not None:
+            (unreal.log if c["ok"] else unreal.log_error)(line)
+    out = os.path.join(saved_dir, "Daedalus")
+    os.makedirs(out, exist_ok=True)
+    path = os.path.join(out, "verify-%s.json" % safe_name(w["id"]))
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump({"world": w["id"], "revision": w.get("revision"), "ok": ok, "checks": checks}, f, indent=2)
+    return ok
+
+
 def main(argv):
     args = [a for a in argv if not a.startswith("--")]
     dry = "--dry-run" in argv or unreal is None
@@ -274,8 +364,11 @@ def main(argv):
     if dry:
         print("dry run: nothing imported" + ("" if unreal else " (not inside Unreal)"))
         return 0
-    import_into_unreal(zip_path, manifest, live_only="--live" in argv)
-    return 0
+    live_only = "--live" in argv
+    if "--verify" not in argv:
+        import_into_unreal(zip_path, manifest, live_only=live_only)
+    checks = judge(manifest, observe(manifest), live_only=live_only)
+    return 0 if report(manifest, checks, unreal.Paths.project_saved_dir()) else 3
 
 
 if __name__ == "__main__":
