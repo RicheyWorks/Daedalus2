@@ -105,3 +105,12 @@ to it when something new breaks.
 - **One finding, one fix, one commit**, and the commit message says what broke and how it was found.
 - **Scenery folders aren't worlds.** Tools that scan `Daedalus/*` folders must check what's inside them: lamps
   and a light show once got mistaken for a world.
+- **Drive gameplay per frame, not per call.** Each `execute_python` call is a single frame. To hold a trigger or a
+  stick, register `unreal.register_slate_post_tick_callback`, act each tick, unregister when done, and read the
+  record (ShotsFired, Hits, Kills) in a later call.
+- **A background editor runs PIE at about 3 fps.** Count frames, not seconds, and judge movement by world deltas.
+- **Aim tests pick a target the shooter can see.** The Ghost "missed" 22 of 22 because the test aimed at a foe up
+  a cliff; tracing from the camera showed the rock. Filter targets by level and line of sight first.
+- **Islands have ledges.** "4 m ahead" can be a lower tier; spawn points must match the hero's feet height.
+- **Pawn swaps leave bodies wedged.** After getting off a vehicle, place the rider with `TeleportTo` (which checks
+  for overlaps) at a spot with ground under it, not `SetActorLocation`.
