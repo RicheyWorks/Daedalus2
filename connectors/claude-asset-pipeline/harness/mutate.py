@@ -4,7 +4,7 @@
     python3 harness/mutate.py [--e2e] [--list]
 
 Each mutant swaps one anchor (which must match exactly once) in a copy of the package, then runs
-judge_test (and e2e, with --e2e) against the copy. A mutant is killed when a suite fails. The results go to
+glb_test, judge_test and artqueue_test (and e2e, with --e2e) against the copy. A mutant is killed when a suite fails. The results go to
 ledgers/mutants.json. Prints n/m killed last; exits 1 if any mutant survived or was inconclusive.
 """
 import argparse
@@ -21,6 +21,7 @@ ROOT = os.path.dirname(HERE)
 SHIP = "asset_pipeline/ship.py"
 GLB = "asset_pipeline/glb.py"
 SIDES = "asset_pipeline/sides.py"
+ARTQ = "asset_pipeline/artqueue.py"
 
 MUTANTS = [
     ("triangle check always passes", SHIP, 'check("triangles: Blender = file", st == ft,',
@@ -43,11 +44,22 @@ MUTANTS = [
     ("export without modifiers", SIDES, "export_apply=True", "export_apply=False"),
     ("Unreal import not automated (dialog)", SIDES, 'task.set_editor_property("automated", True)',
      'task.set_editor_property("automated", False)'),
+    # the art queue's source pick (2026-10-12: the open scene's 36-tri stray overwrote a 445,294-tri island glb)
+    ("artqueue: saved glb ignored, re-exported", ARTQ, 'if saved and not (os.path.exists(blend)', 'if False and not (os.path.exists(blend)'),
+    ("artqueue: saved glb wins over a newer .blend", ARTQ, 'os.path.getmtime(blend) > os.path.getmtime(saved)', 'False'),
+    ("artqueue: open scene exported with no source", ARTQ, 'if not os.path.exists(blend) and objects.get("source") != "collection":',
+     'if False:'),
+    ("artqueue: overlapped ship re-exports saved glbs", ARTQ, 'if objects.get("source") == "glb":   # as it is', 'if False:   # as it is'),
+    ("artqueue: saved glb only lands its first node", ARTQ, 'for n in witness["nodes"]]', 'for n in witness["nodes"][:1]]'),
+    ("artqueue: saved glbs wait for Blender", ARTQ, 'up_b or not need_b', 'up_b'),
+    ("artqueue: duplicate rows update the oldest", ARTQ, 'for r in reversed(rows):', 'for r in rows:'),
+    ("artqueue: zero states dropped from counts", ARTQ, 'out = dict.fromkeys(STATES, 0)', 'out = {}'),
+    ("artqueue: BLOCKED not counted", ARTQ, '"REJECTED", "BLOCKED")', '"REJECTED")'),
 ]
 
 
 def run(copy, e2e, extra):
-    suites = [[sys.executable, os.path.join(copy, "harness", t)] for t in ("glb_test.py", "judge_test.py")]
+    suites = [[sys.executable, os.path.join(copy, "harness", t)] for t in ("glb_test.py", "judge_test.py", "artqueue_test.py")]
     if e2e:
         suites.append([sys.executable, os.path.join(copy, "harness", "e2e.py")] + extra)
     for cmd in suites:
