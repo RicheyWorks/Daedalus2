@@ -89,17 +89,14 @@ def at(x, y, z=0.0):
 
 def ensure_sublevel():
     world = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
-    for lvl in unreal.EditorLevelUtils.get_levels(world):
-        if SUB.split("/")[-1] in lvl.get_path_name():
-            unreal.EditorLevelUtils.make_level_current(lvl)
-            return lvl
-    if not unreal.EditorAssetLibrary.does_asset_exist(SUB):
-        streaming = unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingDynamic, SUB, False)
-    else:
-        streaming = unreal.EditorLevelUtils.add_level_to_world(world, SUB, unreal.LevelStreamingDynamic)
-    lvl = streaming.get_loaded_level()
-    unreal.EditorLevelUtils.make_level_current(lvl)
-    return lvl
+    name = SUB.split("/")[-1]
+    if not any(name in l.get_path_name() for l in unreal.EditorLevelUtils.get_levels(world)):
+        if not unreal.EditorAssetLibrary.does_asset_exist(SUB):
+            unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingDynamic, SUB, False)
+        else:
+            unreal.EditorLevelUtils.add_level_to_world(world, SUB, unreal.LevelStreamingDynamic)
+    LES.set_current_level_by_name(name)
+    return name
 
 
 def clear():
