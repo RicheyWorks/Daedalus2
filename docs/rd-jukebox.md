@@ -56,14 +56,75 @@ batched calls, which is too many for a public RPC. Before mainnet, use a Transfe
 → `{source, genre, studio, available, url, note}`. When `available` is true, the jukebox plays `url` (an audio file,
 e.g. MP3 or Opus) instead of the original.
 
-To connect rd-studio, implement `StudioArranger` (Java) against a service that meets this contract:
+`HttpStudioArranger` is the live implementation and is used when `DAEDALUS_JUKEBOX_STUDIO_URL` is set (for example
+`http://127.0.0.1:8787`). With the variable empty, the stub plays the original song. Contract:
 
 ```
-GET {studio-url}/arrange?source=token:123&genre=jazz&studio=true
-200 {"url": "https://…/token-123-jazz-studio.mp3"}     # pre-rendered / cached render
-404                                                     # not rendered yet: jukebox plays the original
+GET {studio-url}/arrange?source=seed:e00015&genre=jazz&studio=true
+200 {"url": "/audio/<key>.mp3", "engine": "...", "key": "<key>", "note": "..."}   # rendered: available=true
+404                                                                                 # not rendered: play the original
+GET {studio-url}/health            # lists the cached engine seeds (e00015, e00084, e00165 × 5 genres today)
+GET {studio-url}/audio/<key>.mp3   # key must match [a-z0-9_-]+__[a-z]+__(studio|plain)__[A-Za-z0-9.-]+
 ```
 
-The input is rd-studio's note stream for the seed or token (`events.py`), plus genre and studio flags. The output is a
-cacheable audio URL. Renders are deterministic per (source, genre, studio), so they can be pre-rendered offline (GPU path)
-and served statically.
+- The browser never talks to rd-studio directly. Audio is proxied at `/api/v1/jukebox/studio/audio/{key}` (whole
+  files only; range requests are not supported), so the studio can stay on localhost and no CSP change is needed.
+- `token:<id>` returns 404 for now, so tokens play their own on-chain HTML.
+- Hits are cached for 10 minutes and misses for 15 seconds.
+
+## Token coat (real genome)
+
+`GET /tokens/{id}/hash` reads the RDSong `tokenHash(uint256)` view (`0xa3864397`). It is gated on reveal. Then:
+
+- `/coat.png?hash=0x<64hex>&size=256|512|1024` is proxied from rd-studio's `/coat.png`. The client tiles it on the cabinet
+  with `RepeatWrapping`.
+- `/coat?hash=` returns the genome and traits, which set the material's roughness.
+
+Seed songs, and tokens without a studio, keep the deterministic client-side Gray-Scott coat.
+
+**Regex check:** `/tokenData\s*=\s*\{[^}]*?hash\s*:\s*["'](0x[0-9a-fA-F]{64})/` matches a real `tokenHTML(5)`
+response (`window.tokenData={hash:"0x19227c7c…6ff19198",tokenId:"5",edition:"6009"}`). It extracts exactly the value
+`tokenHash(5)` returns, and `RdSongReaderLiveTest` asserts this (`RD_JUKEBOX_LIVE=1`). The server uses the view
+because it is cheaper and does not depend on the HTML layout.
+
+## Radio (ported from ComputerPets)
+
+The radio tab is a port of ComputerPets' house radio (`desktop/renderer/house-music.js`: `parseAreaPlace`,
+`COUNTRY_CODES`, `parseStations`, `safeStream`, the scoring and merge; `desktop/main.cjs`: the Radio Browser fetch with
+mirror fallback). It lives in `jukebox/radio/` (`RadioArea`, `RadioStation`, `RadioRanking`, `RadioService`,
+`RadioBrowserDirectory`). Thanks to ComputerPets.
+
+Additions over the original:
+
+- Browser geolocation (opt-in "Near me" button) using Radio Browser's `geo_lat/geo_long/geo_distance` search.
+- A typed place is remembered in localStorage.
+- Strict local-FM-first ordering:
+  1. **Local FM**: local and FM, where FM means the name or tags contain "FM" or an 87.5–108.0 frequency.
+  2. **Other local**: AM, internet and unknown local stations.
+  3. **More stations**: everything else.
+
+  "Local" means within 120 km when coordinates are known. Otherwise the city (or state) must match the typed place and
+  the country must match. Within the local tiers, stations are sorted by distance, then by the ComputerPets score.
+- Graceful fallbacks:
+  - No location: popular stations, with a note.
+  - No local FM: a note is shown.
+  - No results: a message is shown.
+  - A dead stream is marked "off the air" and the next station plays.
+- Stream safety: https streams play directly. http streams go through `/radio/stream/{id}`, which only relays stations
+  the server itself listed (not arbitrary URLs) and only audio content types, with 64 concurrent relays and a 4-hour cap.
+  This avoids mixed-content blocks and an open proxy.
+
+## World-aware look
+
+The panel is a native realm `.panel` that uses the realm CSS variables (`--panel`, `--line`, `--text`, `--dim`,
+`--gold`, `--accent`). It sits under the `#top` card on the left, clear of the right-hand sidebar, and becomes a bottom
+sheet at 720px and below. Accent colours and the cabinet materials come from the current world's block palette
+(`realm.js` `COLORS`, exposed as `state.blockColors`). Sky Islands uses wood, log and blossom; Parcels uses road, paving
+and neon; Bricks uses brick colours; Gallery uses stone, paving and lamp. Anything else falls back to Sky Islands. The
+look is re-applied live when the world style changes.
+
+## Limitations
+
+- Holder lookup is a full `ownerOf` sweep (see above), which is not viable at mainnet scale without an indexer.
+- rd-studio renders only the three cached engine seeds. Tokens fall back to their on-chain player.
+- Radio Browser data quality varies: some local FM stations don't say "FM" anywhere and land in "Other local".
