@@ -4,6 +4,9 @@
 **Sublevel:** `/Game/OddsReaper/Maps/OddsReaperIsland` in DaedalusWorld · **Assets:** `/Game/OddsReaper/Art` (524 items: 500 + 24 water)
 **Size:** double the planned island, a 260 m felt-topped mesa (`Bld_OR_IslandCore_01`; layout spacing × 2), 4 km out at (4000 m, −4000 m)
 
+## NFT blurb (under 80 words, also `data/islands/oddsreaper/nft.json`)
+> Where the storm never breaks, the House still stands. OddsReaper Island is a felt-topped mesa ringed by dice-stone cliffs, its odds boards glowing cyan beneath endless lightning. Skulls mark the bets that died; money bags, the ones that paid. Brew Wager Herbs and parlay your luck, drink from the storm-fed cistern, tend Coinback goats and Dicebeak hens. Every sunrise is a roll of the dice. The Reaper always knows the odds.
+
 ## Lore
 When the asteroid struck, every ark captain had to gamble on which island to save. One island was saved by none
 of them, because it never needed saving: the House always survives. A storm has circled it ever since, and under
@@ -47,6 +50,11 @@ Coinback goats give milk and cheese, and shed a Reaper Coin on a 1-in-6 roll. Di
 on a d6, and a 6 is a golden egg. Ledger trees fruit at dawn, and rain doubles the crop. The herbs and animals feed
 each other and you, and coins are staked at the boards for seed. The island survives alone. The timing comes from
 the Sky Director API (`OnDawn`, `GetWetness`, `Weather`).
+
+## Editor turn runbook
+`python tools\islands\oddsreaper\oddsreaper_turn.py` (granted slot only). It builds the plugin, runs the sky
+director and island scripts, takes the hero shot, runs a 20 s Play check, then stops Play, saves, tidies and posts
+DONE and HANDOFF. It is capped at 18 minutes, and stop/save always run.
 
 ## Pipeline
 1. `tools/islands/oddsreaper/gen_oddsreaper_items.py`: headless Blender run that builds the 524 glbs and

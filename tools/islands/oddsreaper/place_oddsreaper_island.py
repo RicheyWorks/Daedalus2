@@ -72,21 +72,30 @@ def run():
         m = mesh(p["asset"])
         if m is None: missing.add(p["asset"]); continue
         loc = unreal.Vector(ox + p["x"] * 100, oy + p["y"] * 100, oz + p["z"] * 100)
-        a = actors.spawn_actor_from_object(m, loc, unreal.Rotator(0, 0, p["yaw"]))
+        a = actors.spawn_actor_from_object(m, loc, unreal.Rotator(roll=0, pitch=0, yaw=p["yaw"]))
         a.set_actor_scale3d(unreal.Vector(p["scale"], p["scale"], p["scale"]))
         a.set_folder_path(f"{FOLDER}/{p['zone']}"); a.set_actor_label(p["asset"]); placed += 1
     # signature mood: perpetual storm over the island via my Sky Director
     vol = actors.spawn_actor_from_class(unreal.DaedalusMoodVolume, unreal.Vector(ox, oy, oz + 3000))
     vol.set_actor_label("OddsReaper Storm Mood"); vol.set_folder_path(FOLDER)
     vol.set_actor_scale3d(unreal.Vector(1.4 * lay["scale"], 1.4 * lay["scale"], 1.5))
-    vol.set_editor_property("mood", lay["mood"]); vol.set_editor_property("b_set_weather", True)
+    vol.set_editor_property("mood", lay["mood"])
+    for prop in ("set_weather", "b_set_weather"):  # UE python strips the b prefix; accept either
+        try: vol.set_editor_property(prop, True); break
+        except Exception: pass
     vol.set_editor_property("weather", getattr(unreal.DaedalusWeather, lay["weather"].upper()))
-    cam = actors.spawn_actor_from_class(unreal.CineCameraActor, unreal.Vector(ox - 19000, oy - 32000, oz + 11000), unreal.Rotator(0, -16, 58))
+    import math
+    c, t = lay["hero_cam_m"], lay["hero_target_m"]
+    cl = unreal.Vector(ox + c[0] * 100, oy + c[1] * 100, oz + c[2] * 100)
+    dx, dy, dz = (t[0] - c[0]), (t[1] - c[1]), (t[2] - c[2])
+    rot = unreal.Rotator(roll=0, pitch=math.degrees(math.atan2(dz, math.hypot(dx, dy))), yaw=math.degrees(math.atan2(dy, dx)))
+    cam = actors.spawn_actor_from_class(unreal.CineCameraActor, cl, rot)
     cam.set_actor_label("OddsReaper Hero Cam"); cam.set_folder_path(FOLDER)
     les.save_current_level()
+    unreal.EditorAssetLibrary.save_directory(ART, only_if_is_dirty=True, recursive=True)
     ok = placed >= 450 and not missing
     log(f"placed={placed} missing={sorted(missing)[:10]} {'PASS' if ok else 'FAIL'}")
-    return ok
+    return {"ok": ok, "placed": placed, "missing": sorted(missing), "cam": [cl.x, cl.y, cl.z], "cam_rot": [rot.pitch, rot.yaw]}
 
 
 if __name__ == "__main__":

@@ -56,10 +56,13 @@ def sky_params():
                                                                unreal.MaterialParameterCollectionFactoryNew())
     have = {p.parameter_name for p in mpc.get_editor_property("scalar_parameters")}
     params = list(mpc.get_editor_property("scalar_parameters"))
-    for n in MPC_SCALARS:
-        if n not in have:
-            sp = unreal.CollectionScalarParameter(); sp.set_editor_property("parameter_name", n); params.append(sp)
-    mpc.set_editor_property("scalar_parameters", params)
+    try:
+        for n in MPC_SCALARS:
+            if n not in have:
+                sp = unreal.CollectionScalarParameter(); sp.set_editor_property("parameter_name", n); params.append(sp)
+        mpc.set_editor_property("scalar_parameters", params)
+    except Exception as e:  # struct may not be exposed to Python in this build; MPC still assigned, add params by hand
+        log(f"MPC params not set from Python: {e}")
     unreal.EditorAssetLibrary.save_loaded_asset(mpc)
     return mpc
 
@@ -73,7 +76,8 @@ def run():
         from import_world_package import ensure_sky
         added = ensure_sky(actors)
     except Exception as e:  # keep working if the importer moved
-        added, _ = [], log(f"ensure_sky unavailable: {e}")
+        added = []
+        log(f"ensure_sky unavailable: {e}")
     all_actors = actors.get_all_level_actors()
     if not any(isinstance(a, unreal.VolumetricCloud) for a in all_actors):
         c = actors.spawn_actor_from_class(unreal.VolumetricCloud, unreal.Vector(0, 0, 0))
@@ -112,7 +116,7 @@ def run():
 
     ok = all(director.get_editor_property(p) for p in ("sun", "sky_light", "height_fog", "clouds"))
     log(f"added={added} linked={found} mood={MOOD} hour={HOUR} weather={WEATHER} {'PASS' if ok else 'FAIL'}")
-    return ok
+    return {"ok": bool(ok), "added": added, "linked": found}
 
 
 if __name__ == "__main__":

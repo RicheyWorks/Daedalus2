@@ -196,6 +196,11 @@ FAMILIES = [("Item_OR_Chip", 50, f_chip), ("Item_OR_Die", 40, f_die), ("Item_OR_
             ("Prop_OR_Channel", 8, f_channel), ("Item_OR_Waterskin", 2, f_skin)]
 assert sum(n for _, n, _ in FAMILIES) == 524, sum(n for _, n, _ in FAMILIES)
 
+GLTF_KW = dict(export_format="GLB", use_selection=True, export_apply=True)
+try:  # Blender 4.2+: export the colour attribute even though materials don't read it
+    bpy.ops.export_scene.gltf.get_rna_type().properties["export_vertex_color"]; GLTF_KW["export_vertex_color"] = "ACTIVE"
+except Exception:
+    GLTF_KW["export_colors"] = True
 manifest = []
 for prefix, n, build in FAMILIES:
     for i in range(n):
@@ -203,6 +208,11 @@ for prefix, n, build in FAMILIES:
         name = f"{prefix}_{i:02d}"; r = random.Random(f"oddsreaper:{name}")
         clear(); desc = build(r, i)
         objs = [o for o in bpy.context.scene.objects if o.type == "MESH"]
+        for ob in objs:  # vertex colour = palette colour, so items read in Unreal even untextured
+            col = ob.data.materials[0].node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value
+            ca = ob.data.color_attributes.new("Col", "BYTE_COLOR", "CORNER")
+            for d in ca.data: d.color = col
+            ob.data.color_attributes.active_color = ca
         bpy.ops.object.select_all(action="DESELECT")
         for o in objs: o.select_set(True)
         bpy.context.view_layer.objects.active = objs[0]
@@ -211,7 +221,8 @@ for prefix, n, build in FAMILIES:
         o = bpy.context.active_object; o.name = name
         tris = sum(len(p.vertices) - 2 for p in o.data.polygons)
         dims = [round(d, 3) for d in o.dimensions]
-        bpy.ops.export_scene.gltf(filepath=os.path.join(OUT, name + ".glb"), export_format="GLB", use_selection=True, export_apply=True)
-        manifest.append({"name": name, "desc": desc, "tris": tris, "size_m": dims})
+        bpy.ops.export_scene.gltf(filepath=os.path.join(OUT, name + ".glb"), **GLTF_KW)
+        manifest.append({"name": name, "desc": desc, "tris": tris, "size_m": dims,
+                         "materials": sorted({m.name for m in o.data.materials if m})})
 json.dump({"island": "OddsReaper", "count": len(manifest), "items": manifest}, open(os.path.join(OUT, "manifest.json"), "w"), indent=1)
 print(f"ODDSREAPER_ITEMS {len(manifest)} -> {OUT}")
