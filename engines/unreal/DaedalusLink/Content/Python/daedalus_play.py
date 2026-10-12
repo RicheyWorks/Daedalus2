@@ -490,8 +490,7 @@ def scenario_fall(p):
             yield
         results.append((height, round(h.get_editor_property("fall_damage_taken") - taken0, 1),
                         round(h.get_editor_property("last_landing_speed"))))
-        h.set_editor_property("shield", h.get_editor_property("max_shield"))
-        h.set_editor_property("health", h.get_editor_property("max_health"))
+        h.set_armor_tier(h.get_editor_property("armor_tier"))   # refills the shield (Shield is read-only to Python)
     unreal.SystemLibrary.execute_console_command(world(), "daedalus.FoesHunt 1")
     return {"checks": [
         _check("a 2.5 m drop is free", results[0][1] == 0, str(results[0])),
