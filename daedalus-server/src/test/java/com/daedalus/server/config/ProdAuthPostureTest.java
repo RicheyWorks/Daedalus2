@@ -146,6 +146,13 @@ class ProdAuthPostureTest {
         EXPECTED.put("GET /api/v1/world/" + ID + "/islands/" + ID + "/ecology", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/tokens/" + ID, Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/islands/" + ID + "/portrait.png", Posture.PUBLIC);
+        // rd-jukebox: public reads, but a holder's own token list is the signed-in wallet's.
+        EXPECTED.put("GET /api/v1/jukebox/config", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/jukebox/seeds", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/jukebox/seeds/" + ID, Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/jukebox/tokens/" + ID + "/html", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/jukebox/arrangement", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/jukebox/owned", Posture.AUTHENTICATED);
         EXPECTED.put("GET /api/v1/species", Posture.PUBLIC);
 
         // --- everything that costs work or touches state ---

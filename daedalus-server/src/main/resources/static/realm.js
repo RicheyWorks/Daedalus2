@@ -2847,6 +2847,9 @@ document.getElementById("newWorldGo").onclick = createWorld;
 setupWallet();
 frame();
 window.daedalusRealm = state; // for the browser harness and curious operators
+state.scene = scene;         // rd-jukebox (jukebox.js) adds its prop here
+state.camera = camera;
+state.groundAt = groundAt;
 state.pick = pick;           // the exact pick the pointer uses, so a harness can ask what a tap hits
 state.debugTarget = () => controls.target.clone();
 state.refreshCreatures = refreshCreatures;
@@ -2876,6 +2879,7 @@ state.project = (x, y, z) => {  // screen pixel of a world point, for a harness 
     await detectDistrict();
     await loadWorld();
     await loadIslands();
+    window.dispatchEvent(new CustomEvent("realm:islands"));   // rd-jukebox places its prop
     await loadGates();
     await loadArks();
     if (state.gallery) await loadArt();
