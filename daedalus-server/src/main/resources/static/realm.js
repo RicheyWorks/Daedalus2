@@ -7,6 +7,10 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
 // Which world this page shows (ADR-030): ?world=<id>, World Zero by default.
 const WORLD = (() => {
@@ -34,6 +38,18 @@ const COLORS = {
   // Bricks worlds (ADR-034): the baseplate, bright bricks, the spawn pad and the obby's lava.
   BASEPLATE: 0xa3a2a5, BRICK_RED: 0xc4281c, BRICK_BLUE: 0x0d69ac, BRICK_YELLOW: 0xf5cd30,
   BRICK_GREEN: 0x4b974b, BRICK_WHITE: 0xf2f3f3, SPAWN: 0x1fb5b0, LAVA: 0xff3b1f,
+  // Light (ADR-038): a street lamp's head, neon trim, a lit window.
+  LAMP: 0xffd9a0, NEON_PINK: 0xff4fc8, NEON_CYAN: 0x4ff4ff, WINDOW_LIT: 0xffe7b0,
+};
+// Blocks that give off light: drawn unlit and brighter than white, so the bloom pass makes them glow.
+const GLOW = new Set(["LAMP", "NEON_PINK", "NEON_CYAN", "WINDOW_LIT", "CRYSTAL", "LAVA"]);
+const GLOW_GAIN = { LAMP: 3.2, NEON_PINK: 2.6, NEON_CYAN: 2.6, WINDOW_LIT: 2.4, CRYSTAL: 1.6, LAVA: 2.2 };
+// Which texture-atlas tile each block wears (renderer only: the cubes and the export are unchanged).
+const TILE = {
+  STONE: 0, GRAVEL: 10, DIRT: 6, SAND: 6, GRASS: 4, LEAVES: 5, BLOSSOM: 5, WOOD: 2, LOG: 9,
+  PAVING: 3, ROAD: 10, HELIPAD: 3, BASEPLATE: 11, CLOUD: 11, GLASS: 11, WATER: 8, CRYSTAL: 11,
+  BRICK_RED: 1, BRICK_BLUE: 1, BRICK_YELLOW: 1, BRICK_GREEN: 1, BRICK_WHITE: 1, SPAWN: 11, LAVA: 8,
+  LAMP: 11, NEON_PINK: 11, NEON_CYAN: 11, WINDOW_LIT: 7, PORTAL: 11,
 };
 // Studded tops: these cubes wear the bricks' studs on their upper face (ADR-034). Renderer only: the
 // cubes, the export and the C++ mesher are unchanged, so a World Package's triangles still match.
@@ -76,6 +92,8 @@ function safeSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) { /* pr
 const canvas = document.getElementById("view");
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;   // filmic: bright glow rolls off instead of clipping
+renderer.toneMappingExposure = 1.0;
 const scene = new THREE.Scene();
 scene.background = skyTexture();
 scene.fog = new THREE.Fog(0x9fb8d8, 140, 420);
@@ -85,14 +103,185 @@ const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 controls.target.set(0, 40, -96);
 controls.maxDistance = 600;
-scene.add(new THREE.HemisphereLight(0xe8f0ff, 0x6b5a44, 1.5));
-scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+const hemi = new THREE.HemisphereLight(0xe8f0ff, 0x6b5a44, 1.5);
+scene.add(hemi);
+const ambient = new THREE.AmbientLight(0xffffff, 0.55);
+scene.add(ambient);
 const sun = new THREE.DirectionalLight(0xfff0d8, 1.9);
 sun.position.set(90, 160, 120);
 scene.add(sun);
-const opaqueMat = new THREE.MeshLambertMaterial({ vertexColors: true });
+
+// ---------------------------------------------------------------- atmosphere (ADR-038)
+// Bloom picks out what glows (lamps, neon, lit windows: colours above 1.0); ACES tone mapping keeps the rest.
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.55, 0.45, 0.92);
+composer.addPass(bloom);
+composer.addPass(new OutputPass());
+
+// The sky by hour: [hour, top colour, horizon colour, sun colour, sun strength, ambient, fog colour, exposure, bloom]
+const SKY = [
+  [0, "#05060f", "#1b1530", 0x8aa0ff, 0.15, 0.22, 0x141428, 0.95, 1.05],
+  [5, "#1a1638", "#e7816a", 0xffb38a, 0.55, 0.42, 0x6a5878, 1.0, 0.8],
+  [7, "#2f5aa8", "#f6c39a", 0xffe1bf, 1.4, 0.6, 0xb8bfd8, 1.0, 0.5],
+  [12, "#1f3f86", "#9fbbe6", 0xfff0d8, 1.9, 0.75, 0x9fb8d8, 1.0, 0.45],
+  [17, "#2d3f8a", "#f3a77a", 0xffc89a, 1.3, 0.6, 0xc9a7a0, 1.0, 0.55],
+  [19, "#28205a", "#ff7a6a", 0xff9a7a, 0.6, 0.45, 0x5e4a6e, 1.0, 0.8],
+  [21, "#0b0b22", "#3a2a5a", 0x9aa8ff, 0.2, 0.26, 0x1c1a34, 0.95, 1.0],
+  [24, "#05060f", "#1b1530", 0x8aa0ff, 0.15, 0.22, 0x141428, 0.95, 1.05],
+];
+const ATMO = { hour: null, rain: false, glow: true, lastSky: null };
+state.atmo = ATMO;
+
+function currentHour() {
+  if (ATMO.hour != null) return ATMO.hour;
+  const d = new Date();
+  return state.clockHour ?? (d.getHours() + d.getMinutes() / 60);
+}
+
+function mixHex(a, b, t) { return new THREE.Color(a).lerp(new THREE.Color(b), t); }
+
+function applySky() {
+  const h = ((currentHour() % 24) + 24) % 24;
+  let i = 0;
+  while (i < SKY.length - 2 && SKY[i + 1][0] <= h) i++;
+  const A = SKY[i], B = SKY[i + 1], t = (h - A[0]) / (B[0] - A[0]);
+  const lerp = (x, y) => x + (y - x) * t;
+  const top = mixHex(A[1], B[1], t), horizon = mixHex(A[2], B[2], t);
+  const sig = top.getHexString() + horizon.getHexString();
+  if (sig !== ATMO.lastSky) {          // redraw the gradient only when it changed
+    ATMO.lastSky = sig;
+    const c = document.createElement("canvas");
+    c.width = 2; c.height = 256;
+    const g = c.getContext("2d");
+    const grad = g.createLinearGradient(0, 0, 0, 256);
+    grad.addColorStop(0, "#" + top.getHexString());
+    grad.addColorStop(1, "#" + horizon.getHexString());
+    g.fillStyle = grad;
+    g.fillRect(0, 0, 2, 256);
+    const tex = new THREE.CanvasTexture(c);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    if (scene.background && scene.background.dispose) scene.background.dispose();
+    scene.background = tex;
+  }
+  const angle = (h - 6) / 24 * Math.PI * 2;           // sunrise at 6, noon overhead
+  sun.position.set(Math.cos(angle) * 200, Math.max(30, Math.sin(angle) * 220), 120);
+  sun.color.copy(mixHex(A[3], B[3], t));
+  sun.intensity = lerp(A[4], B[4]) * (ATMO.rain ? 0.6 : 1);
+  ambient.intensity = lerp(A[5], B[5]);
+  hemi.intensity = lerp(A[5], B[5]) * 2.2;
+  const fog = mixHex(A[6], B[6], t);
+  scene.fog.color.copy(fog);
+  scene.fog.near = ATMO.rain ? 40 : 140;
+  scene.fog.far = ATMO.rain ? 260 : 420;
+  renderer.toneMappingExposure = lerp(A[7], B[7]);
+  bloom.strength = ATMO.glow ? lerp(A[8], B[8]) : 0;
+  ATMO.night = h < 6 || h >= 19.5;
+}
+
+// Street lamps light their surroundings: a small pool of point lights moved to the lamps nearest the camera.
+const LAMP_LIGHTS = [];
+for (let k = 0; k < 10; k++) {
+  const l = new THREE.PointLight(0xffc98a, 0, 18, 1.6);
+  scene.add(l);
+  LAMP_LIGHTS.push(l);
+}
+const lamps = new Map();   // chunk key -> [[x, y, z], ...] lamp blocks, kept by buildChunk
+function placeLampLights() {
+  const cam = camera.position, all = [];
+  for (const list of lamps.values()) for (const p of list) all.push(p);
+  all.sort((a, b) => (a[0] - cam.x) ** 2 + (a[1] - cam.y) ** 2 + (a[2] - cam.z) ** 2
+                   - ((b[0] - cam.x) ** 2 + (b[1] - cam.y) ** 2 + (b[2] - cam.z) ** 2));
+  const on = ATMO.night ? 6 : 0.6;
+  LAMP_LIGHTS.forEach((l, k) => {
+    const p = all[k];
+    l.intensity = p ? on : 0;
+    if (p) l.position.set(p[0] + 0.5, p[1] - 0.2, p[2] + 0.5);
+  });
+  state.lampLights = LAMP_LIGHTS.filter(l => l.intensity > 0).length;
+}
+
+// Rain: streaks that fall around the camera and wrap, one instanced draw.
+const RAIN_N = 2600;
+const rain = new THREE.InstancedMesh(new THREE.BoxGeometry(0.03, 0.9, 0.03),
+  new THREE.MeshBasicMaterial({ color: 0xaab8d8, transparent: true, opacity: 0.45, toneMapped: false }), RAIN_N);
+rain.frustumCulled = false;
+rain.visible = false;
+const rainDrops = Array.from({ length: RAIN_N }, () => [Math.random() * 80 - 40, Math.random() * 60, Math.random() * 80 - 40]);
+scene.add(rain);
+const rainM = new THREE.Matrix4();
+function moveRain(dt) {
+  rain.visible = ATMO.rain;
+  if (!ATMO.rain) return;
+  const c = camera.position;
+  for (let k = 0; k < RAIN_N; k++) {
+    const d = rainDrops[k];
+    d[1] -= dt * 0.045;
+    if (d[1] < -20) d[1] += 60;
+    rainM.makeTranslation(c.x + d[0], c.y + d[1], c.z + d[2]);
+    rain.setMatrixAt(k, rainM);
+  }
+  rain.instanceMatrix.needsUpdate = true;
+}
+const ATLAS = atlasTexture();
+const opaqueMat = new THREE.MeshLambertMaterial({ vertexColors: true, map: ATLAS });
 const glassMat = new THREE.MeshLambertMaterial({ vertexColors: true, transparent: true,
-  opacity: 0.62, depthWrite: false });
+  opacity: 0.62, depthWrite: false, map: ATLAS });
+// Glowing blocks: unlit, colours above 1.0, so the bloom pass picks them out at night and in daylight alike.
+const glowMat = new THREE.MeshBasicMaterial({ vertexColors: true, map: ATLAS, toneMapped: false });
+
+/** The block texture atlas: 4 x 4 tiles of 64 px, grey patterns that multiply each cube's colour. Drawn
+ *  once in a canvas, so the page loads no images: speckled stone, brick courses, planks, paving slabs,
+ *  grass, leaves, fine grain, a lit window grid, water ripples, bark, gravel and a smooth tile. */
+function atlasTexture() {
+  const T = 64, c = document.createElement("canvas");
+  c.width = c.height = T * 4;
+  const g = c.getContext("2d");
+  let seed = 7;
+  const rnd = () => ((seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
+  const tile = (i, draw) => { g.save(); g.translate((i % 4) * T, Math.floor(i / 4) * T); draw(); g.restore(); };
+  const base = (v) => { g.fillStyle = `rgb(${v},${v},${v})`; g.fillRect(0, 0, T, T); };
+  const speck = (n, lo, hi, size) => {
+    for (let k = 0; k < n; k++) {
+      const v = lo + rnd() * (hi - lo);
+      g.fillStyle = `rgb(${v},${v},${v})`;
+      g.fillRect(Math.floor(rnd() * T), Math.floor(rnd() * T), size, size);
+    }
+  };
+  tile(0, () => { base(222); speck(900, 180, 255, 2); speck(60, 150, 190, 4); });                     // stone
+  tile(1, () => { base(236); g.fillStyle = "rgb(150,150,150)";                                        // brick
+    for (let r = 0; r < 4; r++) { g.fillRect(0, r * 16, T, 2); const off = r % 2 ? 0 : 16;
+      for (let x = off; x < T; x += 32) g.fillRect(x, r * 16, 2, 16); } speck(200, 205, 250, 2); });
+  tile(2, () => { base(230); g.fillStyle = "rgb(170,170,170)";                                        // planks
+    for (let r = 0; r < 4; r++) g.fillRect(0, r * 16 + 15, T, 1); speck(300, 200, 245, 1);
+    for (let k = 0; k < 18; k++) { g.fillStyle = "rgba(120,120,120,0.35)"; g.fillRect(rnd() * T, rnd() * T, 10, 1); } });
+  tile(3, () => { base(240); g.fillStyle = "rgb(175,175,175)";                                        // paving
+    g.fillRect(0, 0, T, 2); g.fillRect(0, 32, T, 2); g.fillRect(0, 0, 2, T); g.fillRect(32, 0, 2, T); speck(250, 215, 255, 2); });
+  tile(4, () => { base(226); speck(700, 175, 255, 2); speck(120, 240, 255, 1); });                     // grass
+  tile(5, () => { base(205); speck(500, 150, 255, 3); speck(90, 110, 150, 2); });                      // leaves
+  tile(6, () => { base(232); speck(1400, 200, 255, 1); });                                             // fine grain
+  tile(7, () => { base(70); g.fillStyle = "rgb(255,255,255)";                                          // lit windows
+    for (let r = 0; r < 2; r++) for (let q = 0; q < 2; q++) if (rnd() > 0.15) g.fillRect(6 + q * 32, 6 + r * 32, 20, 20); });
+  tile(8, () => { base(225); g.strokeStyle = "rgba(255,255,255,0.6)";                                  // ripples
+    for (let k = 0; k < 6; k++) { g.beginPath(); g.ellipse(rnd() * T, rnd() * T, 8 + rnd() * 10, 3, 0, 0, 7); g.stroke(); } });
+  tile(9, () => { base(215); g.fillStyle = "rgba(110,110,110,0.5)";                                    // bark
+    for (let x = 2; x < T; x += 7) g.fillRect(x + rnd() * 2, 0, 2, T); speck(200, 190, 240, 2); });
+  tile(10, () => { base(210); speck(260, 140, 255, 4); });                                             // gravel
+  tile(11, () => { base(246); speck(80, 228, 255, 2); });                                              // smooth
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.magFilter = THREE.NearestFilter;            // crisp texels up close, like the voxels themselves
+  t.minFilter = THREE.LinearMipmapLinearFilter;
+  t.anisotropy = 4;
+  return t;
+}
+
+/** The atlas rectangle of a tile, inset half a texel so neighbouring tiles never bleed in. */
+function tileUV(i) {
+  const s = 1 / 4, inset = 0.5 / 256;
+  const u0 = (i % 4) * s + inset, v0 = 1 - (Math.floor(i / 4) + 1) * s + inset;
+  return [u0, v0, s - 2 * inset];
+}
 const studMat = new THREE.MeshLambertMaterial({ vertexColors: true, map: studTexture() });
 /** One stud on a cube's top, drawn once: a raised ring, lit from the top left, multiplied by the cube's colour. */
 function studTexture() {
@@ -140,6 +329,7 @@ function skyTexture() {
 function resize() {
   const w = window.innerWidth, h = window.innerHeight;
   renderer.setSize(w, h, false);
+  if (typeof composer !== "undefined") composer.setSize(w, h);
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
 }
@@ -182,6 +372,23 @@ function jitter(x, y, z) {
   return 0.94 + (((h ^ (h >>> 16)) >>> 0) % 1000) / 1000 * 0.12;
 }
 
+// Ambient occlusion per face corner: 3 = open, 0 = tucked into a corner.
+const AO_SHADE = [0.5, 0.66, 0.83, 1.0];
+function solidAt(x, y, z) { return !SEE_THROUGH.has(nameAt(x, y, z)); }
+function cornerAO(x, y, z, n, v) {
+  // the face's two in-plane axes, and which way this corner leans along each
+  const axes = n[0] !== 0 ? [1, 2] : n[1] !== 0 ? [0, 2] : [0, 1];
+  const o = [x + n[0], y + n[1], z + n[2]];
+  const d1 = [0, 0, 0], d2 = [0, 0, 0];
+  d1[axes[0]] = v[axes[0]] ? 1 : -1;
+  d2[axes[1]] = v[axes[1]] ? 1 : -1;
+  const s1 = solidAt(o[0] + d1[0], o[1] + d1[1], o[2] + d1[2]);
+  const s2 = solidAt(o[0] + d2[0], o[1] + d2[1], o[2] + d2[2]);
+  if (s1 && s2) return 0;
+  const c = solidAt(o[0] + d1[0] + d2[0], o[1] + d1[1] + d2[1], o[2] + d1[2] + d2[2]);
+  return 3 - (s1 + s2 + c);
+}
+
 function buildChunk(cx, cy, cz) {
   const k = key(cx, cy, cz);
   const old = state.meshes.get(k);
@@ -192,15 +399,18 @@ function buildChunk(cx, cy, cz) {
   }
   const data = state.chunks.get(k);
   if (!data) return;
-  const buf = { solid: { p: [], n: [], c: [], i: [] }, glass: { p: [], n: [], c: [], i: [] },
-    studs: { p: [], n: [], c: [], i: [], uv: [] } };
+  const buf = { solid: { p: [], n: [], c: [], i: [], uv: [] }, glass: { p: [], n: [], c: [], i: [], uv: [] },
+    studs: { p: [], n: [], c: [], i: [], uv: [] }, glow: { p: [], n: [], c: [], i: [], uv: [] } };
   const col = new THREE.Color();
   const ox = cx * SIZE, oy = cy * SIZE, oz = cz * SIZE;
+  const lampsHere = [];
   for (let lz = 0; lz < SIZE; lz++) for (let ly = 0; ly < SIZE; ly++) for (let lx = 0; lx < SIZE; lx++) {
     const name = state.palette[data[idx(lx, ly, lz)]] || "STONE";
     if (name === "AIR") continue;
     const x = ox + lx, y = oy + ly, z = oz + lz;
-    const own = TRANSLUCENT.has(name) ? buf.glass : buf.solid;
+    const glowing = GLOW.has(name);
+    if (name === "LAMP") lampsHere.push([x, y, z]);
+    const own = glowing ? buf.glow : TRANSLUCENT.has(name) ? buf.glass : buf.solid;
     const studded = STUDDED.has(name);
     for (const f of FACES) {
       const target = studded && f.n[1] === 1 ? buf.studs : own;
@@ -208,19 +418,34 @@ function buildChunk(cx, cy, cz) {
       // A face is hidden by an opaque neighbour, or by more of the same see-through stuff.
       if (!SEE_THROUGH.has(nb) || nb === name) continue;
       col.setHex(COLORS[name] ?? COLORS.STONE).convertSRGBToLinear();
-      const s = f.shade * jitter(x, y, z);
+      const s = glowing ? GLOW_GAIN[name] : f.shade * jitter(x, y, z);
       const base = target.p.length / 3;
+      const [u0, v0, us] = tileUV(TILE[name] ?? 0);
+      const ao = [];
       for (const v of f.c) {
+        // Ambient occlusion (0fps): how many of the three cubes touching this corner, on the face's open side,
+        // are solid. Glowing faces give light and stay unshaded.
+        const a = glowing ? 3 : cornerAO(x, y, z, f.n, v);
+        ao.push(a);
+        const k = s * AO_SHADE[a];
         target.p.push(x + v[0], y + v[1], z + v[2]);
         target.n.push(f.n[0], f.n[1], f.n[2]);
-        target.c.push(col.r * s, col.g * s, col.b * s);
-        if (target.uv) target.uv.push(v[0], v[2]);
+        target.c.push(col.r * k, col.g * k, col.b * k);
+        if (target === buf.studs) {
+          target.uv.push(v[0], v[2]);
+        } else {
+          // the face's own two axes, so every side of a cube shows the whole tile
+          const [p, q] = f.n[0] !== 0 ? [v[2], v[1]] : f.n[1] !== 0 ? [v[0], v[2]] : [v[0], v[1]];
+          target.uv.push(u0 + p * us, v0 + q * us);
+        }
       }
-      target.i.push(base, base + 1, base + 2, base, base + 2, base + 3);
+      // Split the quad along the brighter diagonal, so AO doesn't crease the wrong way.
+      if (ao[0] + ao[2] > ao[1] + ao[3]) target.i.push(base, base + 1, base + 2, base, base + 2, base + 3);
+      else target.i.push(base + 1, base + 2, base + 3, base + 1, base + 3, base);
     }
   }
   const group = new THREE.Group();
-  for (const [part, mat] of [[buf.solid, opaqueMat], [buf.studs, studMat], [buf.glass, glassMat]]) {
+  for (const [part, mat] of [[buf.solid, opaqueMat], [buf.studs, studMat], [buf.glow, glowMat], [buf.glass, glassMat]]) {
     if (!part.i.length) continue;
     const g = new THREE.BufferGeometry();
     g.setAttribute("position", new THREE.Float32BufferAttribute(part.p, 3));
@@ -236,6 +461,7 @@ function buildChunk(cx, cy, cz) {
   group.userData.chunk = k;
   scene.add(group);
   state.meshes.set(k, group);
+  if (lampsHere.length) lamps.set(k, lampsHere); else lamps.delete(k);
 }
 
 function remeshAround(x, y, z) {
@@ -1650,6 +1876,50 @@ window.addEventListener("keydown", e => {
 
 window.addEventListener("keyup", e => { if (state.mode === "play") playKey(e, false); });
 
+// ---------------------------------------------------------------- Sky and weather panel (ADR-038)
+// Time of day (or the live clock), rain and glow. Per-viewer, so the choice lives in this browser only.
+const atmoUI = {
+  panel: document.getElementById("atmo"), btn: document.getElementById("atmoBtn"),
+  live: document.getElementById("atmoLive"), time: document.getElementById("atmoTime"),
+  hour: document.getElementById("atmoHour"), rain: document.getElementById("atmoRain"),
+  glow: document.getElementById("atmoGlow"),
+};
+function hhmm(h) { const m = Math.round(h * 60) % 1440; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); }
+function syncAtmoUI() {
+  atmoUI.live.checked = ATMO.hour == null;
+  atmoUI.time.disabled = ATMO.hour == null;
+  atmoUI.time.value = currentHour();
+  atmoUI.hour.textContent = hhmm(currentHour());
+  atmoUI.rain.checked = ATMO.rain;
+  atmoUI.glow.checked = ATMO.glow;
+}
+function saveAtmo() {
+  try { localStorage.setItem("daedalus.atmo", JSON.stringify({ hour: ATMO.hour, rain: ATMO.rain, glow: ATMO.glow })); } catch (_) {}
+}
+try {
+  const saved = JSON.parse(localStorage.getItem("daedalus.atmo") || "null");
+  if (saved) { ATMO.hour = saved.hour ?? null; ATMO.rain = !!saved.rain; ATMO.glow = saved.glow !== false; }
+} catch (_) {}
+function toggleAtmo(open) {
+  const on = open ?? !atmoUI.panel.classList.contains("open");
+  atmoUI.panel.classList.toggle("open", on);
+  atmoUI.btn.classList.toggle("on", on);
+  atmoUI.btn.setAttribute("aria-expanded", String(on));
+  if (on) syncAtmoUI();
+}
+atmoUI.btn.addEventListener("click", () => toggleAtmo());
+atmoUI.live.addEventListener("change", () => { ATMO.hour = atmoUI.live.checked ? null : Number(atmoUI.time.value); syncAtmoUI(); saveAtmo(); });
+atmoUI.time.addEventListener("input", () => { ATMO.hour = Number(atmoUI.time.value); syncAtmoUI(); saveAtmo(); });
+atmoUI.rain.addEventListener("change", () => { ATMO.rain = atmoUI.rain.checked; saveAtmo(); });
+atmoUI.glow.addEventListener("change", () => { ATMO.glow = atmoUI.glow.checked; saveAtmo(); });
+window.addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT" || state.mode === "play") return;
+  if (e.key === "o" || e.key === "O") toggleAtmo();
+});
+setInterval(() => { if (atmoUI.panel.classList.contains("open") && ATMO.hour == null) syncAtmoUI(); }, 30000);
+state.atmoUI = { toggle: toggleAtmo, sync: syncAtmoUI };
+
+
 // ---------------------------------------------------------------- Gallery City (ADR-035)
 // Parcels on named streets around the Origin; galleries of maze art. Tap a frame to see it close up, tap
 // the ground to pick a parcel; on your own parcel, choose a seed and a size, press Hang art, tap a wall.
@@ -2551,6 +2821,7 @@ document.getElementById("loginGo").onclick = async () => {
 
 // ---------------------------------------------------------------- go
 let lastFrame = 0;
+let frameCount = 0;
 function frame(t) {
   const now = t || 0;
   const dtMs = lastFrame ? Math.min(250, now - lastFrame) : 16;
@@ -2559,7 +2830,10 @@ function frame(t) {
   controls.update();
   moveArks(t || 0);
   moveCreatures(t || 0);
-  renderer.render(scene, camera);
+  applySky();
+  moveRain(dtMs);
+  if ((frameCount++ % 30) === 0) placeLampLights();
+  composer.render();
   requestAnimationFrame(frame);
 }
 buildPalette();

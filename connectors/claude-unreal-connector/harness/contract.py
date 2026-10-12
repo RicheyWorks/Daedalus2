@@ -73,8 +73,12 @@ def run(port):
     check("an unknown job id is code UNKNOWN_JOB", r.get("code") == "UNKNOWN_JOB", r)
 
     # batch: in order, one transaction, policy per item, stop at the first error
+    t0 = len(c("test.transactions")["result"]["calls"])
     b = c("batch", {"commands": [{"type": "test.count"}, {"type": "test.countdown", "params": {"from": 2}},
                                  {"type": "test.count"}], "transaction": "contract"})
+    tx = c("test.transactions")["result"]["calls"][t0:]
+    check("a batch is one undo step: one transaction opened and closed around it",
+          tx == ["transaction begin contract", "transaction end"], tx)
     res = b["result"]["results"]
     check("batch runs its commands in order, waiting ones included",
           b["result"]["ok"] and [x["type"] for x in res] == ["test.count", "test.countdown", "test.count"]

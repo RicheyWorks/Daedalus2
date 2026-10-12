@@ -7,10 +7,10 @@ table{border-collapse:collapse;width:100%;margin:8px 0 24px}td,th{border-bottom:
 <h1>claude-unreal-connector harness</h1><p><small>Rendered by harness/board.py from ledgers/*.json.</small></p>
 <h2>Suites (standin): 3/3 ok</h2><table><tr><th>suite</th><th>mark</th><th>checks</th><th>floor</th></tr>
 <tr><td>e2e</td><td class=ok>ok</td><td>23/23</td><td>23</td></tr>
-<tr><td>contract</td><td class=ok>ok</td><td>23/23</td><td>14</td></tr>
-<tr><td>walk</td><td class=ok>ok</td><td>19/19</td><td>14</td></tr>
+<tr><td>contract</td><td class=ok>ok</td><td>24/24</td><td>14</td></tr>
+<tr><td>walk</td><td class=ok>ok</td><td>20/20</td><td>14</td></tr>
 </table>
-<h2>Walk (standin): 19 commands</h2><p>declined 0, driven 15, excluded 4, failed 0, refused 0, unschemable 0</p><table><tr><th>command</th><th>risk</th><th>bucket</th><th>detail</th></tr>
+<h2>Walk (standin): 20 commands</h2><p>declined 0, driven 16, excluded 4, failed 0, refused 0, unschemable 0</p><table><tr><th>command</th><th>risk</th><th>bucket</th><th>detail</th></tr>
 <tr><td>batch</td><td>MUTATE</td><td class=ok>driven</td><td><small>ok</small></td></tr>
 <tr><td>capture_view</td><td>SENSITIVE_READ</td><td class=ok>driven</td><td><small>ok</small></td></tr>
 <tr><td>execute_python</td><td>MUTATE</td><td class=ok>driven</td><td><small>ok</small></td></tr>
@@ -29,12 +29,14 @@ table{border-collapse:collapse;width:100%;margin:8px 0 24px}td,th{border-bottom:
 <tr><td>test.policy</td><td>READ</td><td class=warn>excluded</td><td><small>changes the bridge&#x27;s policy; harness.contract drives it on purpose</small></td></tr>
 <tr><td>test.remote_calls</td><td>MUTATE</td><td class=ok>driven</td><td><small>ok</small></td></tr>
 <tr><td>test.remote_off</td><td>MUTATE</td><td class=warn>excluded</td><td><small>switches the stand-in&#x27;s Remote Execution off for the rest of the run</small></td></tr>
+<tr><td>test.transactions</td><td>MUTATE</td><td class=ok>driven</td><td><small>ok</small></td></tr>
 <tr><td>viewport_screenshot</td><td>SENSITIVE_READ</td><td class=ok>driven</td><td><small>ok</small></td></tr>
 </table>
-<h2>Mutants (bridge): 13 killed, 0 survived, 0 inconclusive</h2><table><tr><th>mutant</th><th>verdict</th><th>detail</th></tr>
+<h2>Mutants (bridge): 18 killed, 0 survived, 0 inconclusive</h2><table><tr><th>mutant</th><th>verdict</th><th>detail</th></tr>
 <tr><td>nested ticks re-enter the pump</td><td class=ok>killed</td><td><small>e2e: viewport_screenshot waits for the file over frames and returns a PNG  ValueError: gen</small></td></tr>
 <tr><td>a waiting command is never stepped again</td><td class=ok>killed</td><td><small>e2e: </small></td></tr>
 <tr><td>the policy is ignored</td><td class=ok>killed</td><td><small>contract: a MUTATE command under a READ policy is REFUSED, and says why  {&#x27;id&#x27;: 1, &#x27;status&#x27;: &#x27;o</small></td></tr>
+<tr><td>batch skips the per-item policy</td><td class=ok>killed</td><td><small>contract: batch can&#x27;t smuggle a DESTRUCTIVE command past a MUTATE policy, and runs nothing  ({&#x27;</small></td></tr>
 <tr><td>request_id replay is off</td><td class=ok>killed</td><td><small>contract: a retried request_id gets the first answer back, marked replayed  ({&#x27;id&#x27;: 1, &#x27;status&#x27;</small></td></tr>
 <tr><td>an error is reported as ok</td><td class=ok>killed</td><td><small>e2e: get_actor_info on a missing actor is an error that says so  {}</small></td></tr>
 <tr><td>Python runs attended</td><td class=ok>killed</td><td><small>e2e: the Remote Execution call asked for unattended mode  {</small></td></tr>
@@ -44,5 +46,9 @@ table{border-collapse:collapse;width:100%;margin:8px 0 24px}td,th{border-bottom:
 <tr><td>the result of Claude&#x27;s code is dropped</td><td class=ok>killed</td><td><small>e2e: </small></td></tr>
 <tr><td>Remote Execution off is silent</td><td class=ok>killed</td><td><small>e2e: with Remote Execution off it still runs, directly, and says dialogs would block  {</small></td></tr>
 <tr><td>register forgets the declared risk</td><td class=ok>killed</td><td><small>contract: DESTRUCTIVE cannot be allowed without MUTATE  {&#x27;id&#x27;: 1, &#x27;status&#x27;: &#x27;error&#x27;, &#x27;code&#x27;: &#x27;R</small></td></tr>
+<tr><td>Remote Execution reads the unreal API off the game thread</td><td class=ok>killed</td><td><small>e2e: execute_python goes through Remote Execution, unattended (dialogs are canceled, not w</small></td></tr>
+<tr><td>batch skips the per-item policy check</td><td class=ok>killed</td><td><small>contract: batch can&#x27;t smuggle a DESTRUCTIVE command past a MUTATE policy, and runs nothing  ({&#x27;</small></td></tr>
+<tr><td>async answers only after the job finishes</td><td class=ok>killed</td><td><small>contract: async: true answers at once with a job id, state running  {&#x27;id&#x27;: 1, &#x27;status&#x27;: &#x27;ok&#x27;, &#x27;</small></td></tr>
+<tr><td>batch is not one undo step</td><td class=ok>killed</td><td><small>contract: a batch is one undo step: one transaction opened and closed around it  []</small></td></tr>
 <tr><td>a command is dropped from list_commands</td><td class=ok>killed</td><td><small>walk: core command save is not listed</small></td></tr>
 </table>

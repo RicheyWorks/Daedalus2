@@ -47,6 +47,10 @@ public final class BlockColors {
         RGB.put(BlockType.BRICK_WHITE, 0xf2f3f3);
         RGB.put(BlockType.SPAWN, 0x1fb5b0);
         RGB.put(BlockType.LAVA, 0xff3b1f);
+        RGB.put(BlockType.LAMP, 0xffd9a0);
+        RGB.put(BlockType.NEON_PINK, 0xff4fc8);
+        RGB.put(BlockType.NEON_CYAN, 0x4ff4ff);
+        RGB.put(BlockType.WINDOW_LIT, 0xffe7b0);
     }
 
     private BlockColors() {

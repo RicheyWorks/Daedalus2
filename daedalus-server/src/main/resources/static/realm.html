@@ -41,6 +41,14 @@
     background: var(--warn); margin-right: 6px; vertical-align: middle; }
   #status .dot.on { background: var(--accent); }
   #modes { top: 12px; right: 12px; padding: 6px; display: flex; gap: 6px; }
+  #atmo { top: 76px; right: 12px; width: min(280px, calc(100vw - 24px)); padding: 12px; z-index: 5; display: none; }
+  #atmo.open { display: block; }
+  #atmo h2 { margin: 0 0 8px; font-size: 13px; color: var(--gold); letter-spacing: .06em; }
+  #atmo label { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 8px 0;
+    color: var(--dim); font-size: 12px; }
+  #atmo input[type=range] { flex: 1 1 auto; accent-color: var(--gold); }
+  #atmo input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--gold); }
+  #atmoHour { min-width: 46px; text-align: right; color: var(--text); }
   button { font: inherit; color: var(--text); background: rgba(40, 32, 24, 0.9);
     border: 1px solid var(--line); border-radius: 10px; min-height: 44px; min-width: 44px;
     padding: 0 14px; cursor: pointer; touch-action: manipulation; }
@@ -153,6 +161,15 @@
   <button id="modeBuild" title="Build (B)">Build</button>
   <button id="modeBreak" title="Break (X)">Break</button>
   <button id="modePlay" title="Play (P)">Play</button>
+  <button id="atmoBtn" title="Sky and weather (O)" aria-label="Sky and weather" aria-expanded="false">Sky</button>
+</div>
+<div id="atmo" class="panel" aria-label="Sky and weather">
+  <h2>SKY &amp; WEATHER</h2>
+  <label>Live clock <input id="atmoLive" type="checkbox" checked></label>
+  <label>Time <input id="atmoTime" type="range" min="0" max="24" step="0.25" value="12" aria-label="Time of day">
+    <span id="atmoHour">12:00</span></label>
+  <label>Rain <input id="atmoRain" type="checkbox"></label>
+  <label>Glow <input id="atmoGlow" type="checkbox" checked></label>
 </div>
 <div id="side" class="panel">
   <div class="row">

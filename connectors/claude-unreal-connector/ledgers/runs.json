@@ -1,7 +1,7 @@
 {
  "entries": {
   "standin": {
-   "at": 1791774602,
+   "at": 1791775158,
    "of": 3,
    "ok": 3,
    "suites": [
@@ -25,39 +25,39 @@
     },
     {
      "floor": 14,
-     "got": 23,
+     "got": 24,
      "mark": "ok",
      "name": "contract",
      "rc": 0,
      "tail": [
-      "PASS an unknown job id is code UNKNOWN_JOB",
+      "PASS a batch is one undo step: one transaction opened and closed around it",
       "PASS batch runs its commands in order, waiting ones included",
       "PASS batch stops at the first error",
       "PASS under a READ policy the batch itself (MUTATE) is refused",
       "PASS batch can't smuggle a DESTRUCTIVE command past a MUTATE policy, and runs nothing",
       "PASS capture_view renders a PNG from the editor camera and removes its capture actor",
       "PASS an unknown command is an error, code UNKNOWN, listing the known ones",
-      "23/23"
+      "24/24"
      ],
-     "total": 23
+     "total": 24
     },
     {
      "floor": 14,
-     "got": 19,
+     "got": 20,
      "mark": "ok",
      "name": "walk",
      "rc": 0,
      "tail": [
-      "PASS test.count                   MUTATE         driven      ok",
       "PASS test.countdown               MUTATE         driven      ok",
       "PASS test.freeze                  MUTATE         excluded    stops the stand-in's ticks on purpose (the frozen-editor canary in tes",
       "PASS test.policy                  READ           excluded    changes the bridge's policy; harness.contract drives it on purpose",
       "PASS test.remote_calls            MUTATE         driven      ok",
       "PASS test.remote_off              MUTATE         excluded    switches the stand-in's Remote Execution off for the rest of the run",
+      "PASS test.transactions            MUTATE         driven      ok",
       "PASS viewport_screenshot          SENSITIVE_READ driven      ok",
-      "19/19"
+      "20/20"
      ],
-     "total": 19
+     "total": 20
     }
    ]
   }

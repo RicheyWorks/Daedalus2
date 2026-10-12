@@ -276,6 +276,8 @@ public final class GalleryOps {
             }
         }
         origin(out);
+        lamps(out);
+        skyline(out, seed);
         List<Parcel> parcels = new ArrayList<>();
         List<Frame> frames = new ArrayList<>();
         for (Parcel p : parcels()) {
@@ -307,6 +309,88 @@ public final class GalleryOps {
             across = dz - (SIDE - STREET);
         }
         return across == 0 || across == STREET - 1 ? BlockType.PAVING : BlockType.ROAD;
+    }
+
+    /** How far apart street lamps stand along a sidewalk. */
+    static final int LAMP_SPACING = 8;
+    /** A lamp post's height: the post, then the glowing head on top. */
+    static final int LAMP_HEIGHT = 5;
+
+    /**
+     * Street lamps (ADR-038): a dark post with a glowing head on the outer edge of every sidewalk, every
+     * {@link #LAMP_SPACING} cubes, never in a crossing. At night they light the streets; the realm hangs a real
+     * light in the ones nearest the camera.
+     */
+    private static void lamps(Map<BlockCoordinate, BlockType> out) {
+        for (int dx = 0; dx < SIDE; dx++) {
+            for (int dz = 0; dz < SIDE; dz++) {
+                int ax = Math.floorMod(dx, BLOCK + STREET);
+                int az = Math.floorMod(dz, BLOCK + STREET);
+                boolean streetX = ax < STREET;
+                boolean streetZ = az < STREET;
+                if (streetX == streetZ || dx >= SIDE - STREET || dz >= SIDE - STREET) {
+                    continue;   // inside a block, in a crossing, or the outer ring road
+                }
+                int across = streetX ? ax : az;
+                int along = streetX ? dz : dx;
+                if ((across == 0 || across == STREET - 1) && Math.floorMod(along, LAMP_SPACING) == LAMP_SPACING / 2) {
+                    int x = MIN_X + dx;
+                    int z = MIN_Z + dz;
+                    for (int y = 1; y < LAMP_HEIGHT; y++) {
+                        out.put(new BlockCoordinate(x, GROUND_Y + y, z), BlockType.ROAD);
+                    }
+                    out.put(new BlockCoordinate(x, GROUND_Y + LAMP_HEIGHT, z), BlockType.LAMP);
+                }
+            }
+        }
+    }
+
+    /** The skyline ring's distance outside the city, a tower's footprint, and the tallest tower. */
+    static final int SKYLINE_GAP = 6;
+    static final int TOWER = 8;
+    static final int TOWER_MAX = 46;
+
+    /**
+     * A skyline (ADR-038): towers standing just outside the city, so the streets have a backdrop like Voxels'
+     * Origin. They sit beyond the outer road, on no parcel, so nothing anyone can claim loses room. Walls of dark
+     * stone with a grid of windows, some lit; a neon crown on top, pink or cyan. The seed varies heights and lights.
+     */
+    private static void skyline(Map<BlockCoordinate, BlockType> out, long seed) {
+        SplittableRandom rng = new SplittableRandom(seed ^ 0x5eedL);
+        int lo = MIN_X - SKYLINE_GAP - TOWER;
+        int hi = MIN_X + SIDE + SKYLINE_GAP;
+        for (int t = lo; t <= hi; t += TOWER + 4) {
+            tower(out, t, MIN_Z - SKYLINE_GAP - TOWER, rng);        // north row
+            tower(out, t, MIN_Z + SIDE + SKYLINE_GAP, rng);         // south row
+        }
+        for (int t = MIN_Z; t < MIN_Z + SIDE; t += TOWER + 4) {
+            tower(out, MIN_X - SKYLINE_GAP - TOWER, t, rng);        // west row
+            tower(out, MIN_X + SIDE + SKYLINE_GAP, t, rng);         // east row
+        }
+    }
+
+    private static void tower(Map<BlockCoordinate, BlockType> out, int x0, int z0, SplittableRandom rng) {
+        if (rng.nextInt(100) < 25) {
+            return;   // gaps in the skyline
+        }
+        int h = 18 + rng.nextInt(TOWER_MAX - 18);
+        BlockType neon = rng.nextBoolean() ? BlockType.NEON_PINK : BlockType.NEON_CYAN;
+        int lit = 25 + rng.nextInt(45);   // percent of windows lit
+        for (int x = x0; x < x0 + TOWER; x++) {
+            for (int z = z0; z < z0 + TOWER; z++) {
+                boolean edge = x == x0 || x == x0 + TOWER - 1 || z == z0 || z == z0 + TOWER - 1;
+                boolean corner = (x == x0 || x == x0 + TOWER - 1) && (z == z0 || z == z0 + TOWER - 1);
+                for (int y = 1; y <= h; y++) {
+                    if (!edge) {
+                        continue;   // hollow: only the shell is drawn
+                    }
+                    boolean window = !corner && y % 3 != 0 && Math.floorMod(x + z, 2) == 0 && y < h - 1;
+                    BlockType b = window ? (rng.nextInt(100) < lit ? BlockType.WINDOW_LIT : BlockType.GLASS) : BlockType.ROAD;
+                    out.put(new BlockCoordinate(x, GROUND_Y + y, z), b);
+                }
+                out.put(new BlockCoordinate(x, GROUND_Y + h + 1, z), edge ? neon : BlockType.ROAD);
+            }
+        }
     }
 
     /** The Origin: a drone pad at the plaza's centre and a crystal spire beside it. */
@@ -350,7 +434,8 @@ public final class GalleryOps {
                         out.put(new BlockCoordinate(x, GROUND_Y + y, z), t);
                     }
                 }
-                out.put(new BlockCoordinate(x, GROUND_Y + h + 1, z), edge ? BlockType.BRICK_WHITE : BlockType.GLASS);
+                // the roof: glass inside, a rim of neon trim (ADR-038) so a gallery reads from down the street at night
+                out.put(new BlockCoordinate(x, GROUND_Y + h + 1, z), edge ? BlockType.NEON_CYAN : BlockType.GLASS);
             }
         }
         // A door in the middle of the front, two wide and three high.

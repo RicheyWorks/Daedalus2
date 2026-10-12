@@ -1,16 +1,16 @@
 {
  "entries": {
   "standin": {
-   "at": 1791774585,
+   "at": 1791775142,
    "buckets": {
     "declined": 0,
-    "driven": 15,
+    "driven": 16,
     "excluded": 4,
     "failed": 0,
     "refused": 0,
     "unschemable": 0
    },
-   "discovered": 19,
+   "discovered": 20,
    "max_risk": "DESTRUCTIVE",
    "rows": [
     {
@@ -119,6 +119,12 @@
      "bucket": "excluded",
      "command": "test.remote_off",
      "detail": "switches the stand-in's Remote Execution off for the rest of the run",
+     "risk": "MUTATE"
+    },
+    {
+     "bucket": "driven",
+     "command": "test.transactions",
+     "detail": "ok",
      "risk": "MUTATE"
     },
     {

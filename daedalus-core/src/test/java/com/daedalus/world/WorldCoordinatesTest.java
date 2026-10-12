@@ -77,7 +77,11 @@ class WorldCoordinatesTest {
                 BlockType.RAINBOW_BLUE, BlockType.RAINBOW_VIOLET, BlockType.PORTAL,
                 BlockType.ROAD, BlockType.PAVING, BlockType.HELIPAD,
                 BlockType.BASEPLATE, BlockType.BRICK_RED, BlockType.BRICK_BLUE, BlockType.BRICK_YELLOW,
-                BlockType.BRICK_GREEN, BlockType.BRICK_WHITE, BlockType.SPAWN, BlockType.LAVA);
+                BlockType.BRICK_GREEN, BlockType.BRICK_WHITE, BlockType.SPAWN, BlockType.LAVA,
+                BlockType.LAMP, BlockType.NEON_PINK, BlockType.NEON_CYAN, BlockType.WINDOW_LIT);
+        assertThat(BlockType.LAVA.ordinal()).as("bricks did not move").isEqualTo(31);
+        assertThat(BlockType.WINDOW_LIT.emissive()).isTrue();
+        assertThat(BlockType.STONE.emissive()).isFalse();
         assertThat(BlockType.GLASS.ordinal()).isEqualTo(4);
         assertThat(BlockType.CLOUD.ordinal()).as("island terrain did not move").isEqualTo(13);
         assertThat(BlockType.PORTAL.ordinal()).as("sky gates did not move").isEqualTo(20);

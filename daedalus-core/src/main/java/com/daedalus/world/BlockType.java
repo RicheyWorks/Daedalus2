@@ -47,7 +47,19 @@ public enum BlockType {
     BRICK_GREEN,
     BRICK_WHITE,
     SPAWN,
-    LAVA;
+    LAVA,
+    // Light (ADR-038): blocks that glow at night. A street lamp's head, neon trim in two colours, a lit window.
+    // Renderers draw them unlit and bright, so bloom makes them glow; the realm also hangs a light in each lamp.
+    LAMP,
+    NEON_PINK,
+    NEON_CYAN,
+    WINDOW_LIT;
+
+    /** Gives off light: drawn unlit and bright, so a night scene glows. */
+    public boolean emissive() {
+        return this == LAMP || this == NEON_PINK || this == NEON_CYAN || this == WINDOW_LIT
+                || this == CRYSTAL || this == LAVA;
+    }
 
     public boolean solid() {
         return this != AIR;
