@@ -1,0 +1,1006 @@
+{
+ "herbs": {
+  "Doleaf": 0,
+  "Sharpcress": 1,
+  "Rebell": 2,
+  "Flatfern": 3,
+  "Mimint": 4,
+  "Fasage": 5,
+  "Hushmoss": 6,
+  "Solthorn": 7,
+  "Gloryroot": 8,
+  "Lavine": 9,
+  "Dronebloom": 10,
+  "Tisquill": 11
+ },
+ "recipes": [
+  {
+   "herbs": [
+    "Doleaf",
+    "Rebell",
+    "Solthorn"
+   ],
+   "tonic": "Item_YTM_Tonic_Sus_T2",
+   "chord": "Solthorn Sus",
+   "effect": "stamina_boost",
+   "stat": "harvest",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    0,
+    2,
+    7
+   ]
+  },
+  {
+   "herbs": [
+    "Doleaf",
+    "Flatfern",
+    "Hushmoss"
+   ],
+   "tonic": "Item_YTM_Tonic_Dim_T2",
+   "chord": "Doleaf Dim",
+   "effect": "night_vision",
+   "stat": "health",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    0,
+    3,
+    6
+   ]
+  },
+  {
+   "herbs": [
+    "Doleaf",
+    "Flatfern",
+    "Solthorn"
+   ],
+   "tonic": "Item_YTM_Tonic_Minor_T2",
+   "chord": "Doleaf Minor",
+   "effect": "restore_hunger",
+   "stat": "health",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    0,
+    3,
+    7
+   ]
+  },
+  {
+   "herbs": [
+    "Doleaf",
+    "Flatfern",
+    "Gloryroot"
+   ],
+   "tonic": "Item_YTM_Tonic_Major_T2",
+   "chord": "Gloryroot Major",
+   "effect": "regen_health",
+   "stat": "craft",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    0,
+    3,
+    8
+   ]
+  },
+  {
+   "herbs": [
+    "Doleaf",
+    "Flatfern",
+    "Lavine"
+   ],
+   "tonic": "Item_YTM_Tonic_Dim_T2",
+   "chord": "Lavine Dim",
+   "effect": "night_vision",
+   "stat": "speed",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    0,
+    3,
+    9
+   ]
+  },
+  {
+   "herbs": [
+    "Doleaf",
+    "Mimint",
+    "Solthorn"
+   ],
+   "tonic": "Item_YTM_Tonic_Major_T2",
+   "chord": "Doleaf Major",
+   "effect": "regen_health",
+   "stat": "health",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    0,
+    4,
+    7
+   ]
+  },
+  {
+   "herbs": [
+    "Doleaf",
+    "Fasage",
+    "Solthorn"
+   ],
+   "tonic": "Item_YTM_Tonic_Sus_T2",
+   "chord": "Doleaf Sus",
+   "effect": "stamina_boost",
+   "stat": "health",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    0,
+    5,
+    7
+   ]
+  },
+  {
+   "herbs": [
+    "Doleaf",
+    "Fasage",
+    "Gloryroot"
+   ],
+   "tonic": "Item_YTM_Tonic_Minor_T2",
+   "chord": "Fasage Minor",
+   "effect": "restore_hunger",
+   "stat": "luck",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    0,
+    5,
+    8
+   ]
+  },
+  {
+   "herbs": [
+    "Doleaf",
+    "Fasage",
+    "Lavine"
+   ],
+   "tonic": "Item_YTM_Tonic_Major_T2",
+   "chord": "Fasage Major",
+   "effect": "regen_health",
+   "stat": "luck",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    0,
+    5,
+    9
+   ]
+  },
+  {
+   "herbs": [
+    "Doleaf",
+    "Hushmoss",
+    "Lavine"
+   ],
+   "tonic": "Item_YTM_Tonic_Dim_T2",
+   "chord": "Hushmoss Dim",
+   "effect": "night_vision",
+   "stat": "calm",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    0,
+    6,
+    9
+   ]
+  },
+  {
+   "herbs": [
+    "Doleaf",
+    "Gloryroot",
+    "Mimint"
+   ],
+   "tonic": "Item_YTM_Tonic_Aug_T2",
+   "chord": "Doleaf Aug",
+   "effect": "haste",
+   "stat": "health",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    0,
+    4,
+    8
+   ]
+  },
+  {
+   "herbs": [
+    "Doleaf",
+    "Lavine",
+    "Mimint"
+   ],
+   "tonic": "Item_YTM_Tonic_Minor_T2",
+   "chord": "Lavine Minor",
+   "effect": "restore_hunger",
+   "stat": "speed",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    0,
+    4,
+    9
+   ]
+  },
+  {
+   "herbs": [
+    "Doleaf",
+    "Dronebloom",
+    "Fasage"
+   ],
+   "tonic": "Item_YTM_Tonic_Sus_T2",
+   "chord": "Fasage Sus",
+   "effect": "stamina_boost",
+   "stat": "luck",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    0,
+    5,
+    10
+   ]
+  },
+  {
+   "herbs": [
+    "Rebell",
+    "Solthorn",
+    "Tisquill"
+   ],
+   "tonic": "Item_YTM_Tonic_Major_T2",
+   "chord": "Solthorn Major",
+   "effect": "regen_health",
+   "stat": "harvest",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    2,
+    7,
+    11
+   ]
+  },
+  {
+   "herbs": [
+    "Flatfern",
+    "Hushmoss",
+    "Lavine"
+   ],
+   "tonic": "Item_YTM_Tonic_Dim_T2",
+   "chord": "Flatfern Dim",
+   "effect": "night_vision",
+   "stat": "thirst",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    3,
+    6,
+    9
+   ]
+  },
+  {
+   "herbs": [
+    "Flatfern",
+    "Hushmoss",
+    "Tisquill"
+   ],
+   "tonic": "Item_YTM_Tonic_Major_T2",
+   "chord": "Tisquill Major",
+   "effect": "regen_health",
+   "stat": "pet_bond",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    3,
+    6,
+    11
+   ]
+  },
+  {
+   "herbs": [
+    "Flatfern",
+    "Solthorn",
+    "Tisquill"
+   ],
+   "tonic": "Item_YTM_Tonic_Aug_T2",
+   "chord": "Flatfern Aug",
+   "effect": "haste",
+   "stat": "thirst",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    3,
+    7,
+    11
+   ]
+  },
+  {
+   "herbs": [
+    "Flatfern",
+    "Gloryroot",
+    "Sharpcress"
+   ],
+   "tonic": "Item_YTM_Tonic_Sus_T2",
+   "chord": "Gloryroot Sus",
+   "effect": "stamina_boost",
+   "stat": "craft",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    1,
+    3,
+    8
+   ]
+  },
+  {
+   "herbs": [
+    "Flatfern",
+    "Gloryroot",
+    "Tisquill"
+   ],
+   "tonic": "Item_YTM_Tonic_Minor_T2",
+   "chord": "Gloryroot Minor",
+   "effect": "restore_hunger",
+   "stat": "craft",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    3,
+    8,
+    11
+   ]
+  },
+  {
+   "herbs": [
+    "Mimint",
+    "Sharpcress",
+    "Solthorn"
+   ],
+   "tonic": "Item_YTM_Tonic_Dim_T2",
+   "chord": "Sharpcress Dim",
+   "effect": "night_vision",
+   "stat": "hunger",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    1,
+    4,
+    7
+   ]
+  },
+  {
+   "herbs": [
+    "Mimint",
+    "Solthorn",
+    "Tisquill"
+   ],
+   "tonic": "Item_YTM_Tonic_Minor_T2",
+   "chord": "Mimint Minor",
+   "effect": "restore_hunger",
+   "stat": "warmth",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    4,
+    7,
+    11
+   ]
+  },
+  {
+   "herbs": [
+    "Fasage",
+    "Rebell",
+    "Tisquill"
+   ],
+   "tonic": "Item_YTM_Tonic_Dim_T2",
+   "chord": "Tisquill Dim",
+   "effect": "night_vision",
+   "stat": "pet_bond",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    2,
+    5,
+    11
+   ]
+  },
+  {
+   "herbs": [
+    "Fasage",
+    "Gloryroot",
+    "Sharpcress"
+   ],
+   "tonic": "Item_YTM_Tonic_Major_T2",
+   "chord": "Sharpcress Major",
+   "effect": "regen_health",
+   "stat": "hunger",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    1,
+    5,
+    8
+   ]
+  },
+  {
+   "herbs": [
+    "Fasage",
+    "Gloryroot",
+    "Rebell"
+   ],
+   "tonic": "Item_YTM_Tonic_Dim_T2",
+   "chord": "Rebell Dim",
+   "effect": "night_vision",
+   "stat": "stamina",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    2,
+    5,
+    8
+   ]
+  },
+  {
+   "herbs": [
+    "Fasage",
+    "Gloryroot",
+    "Tisquill"
+   ],
+   "tonic": "Item_YTM_Tonic_Dim_T2",
+   "chord": "Fasage Dim",
+   "effect": "night_vision",
+   "stat": "luck",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    5,
+    8,
+    11
+   ]
+  },
+  {
+   "herbs": [
+    "Fasage",
+    "Lavine",
+    "Sharpcress"
+   ],
+   "tonic": "Item_YTM_Tonic_Aug_T2",
+   "chord": "Sharpcress Aug",
+   "effect": "haste",
+   "stat": "hunger",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    1,
+    5,
+    9
+   ]
+  },
+  {
+   "herbs": [
+    "Fasage",
+    "Lavine",
+    "Rebell"
+   ],
+   "tonic": "Item_YTM_Tonic_Minor_T2",
+   "chord": "Rebell Minor",
+   "effect": "restore_hunger",
+   "stat": "stamina",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    2,
+    5,
+    9
+   ]
+  },
+  {
+   "herbs": [
+    "Hushmoss",
+    "Sharpcress",
+    "Tisquill"
+   ],
+   "tonic": "Item_YTM_Tonic_Sus_T2",
+   "chord": "Hushmoss Sus",
+   "effect": "stamina_boost",
+   "stat": "calm",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    1,
+    6,
+    11
+   ]
+  },
+  {
+   "herbs": [
+    "Hushmoss",
+    "Rebell",
+    "Tisquill"
+   ],
+   "tonic": "Item_YTM_Tonic_Minor_T2",
+   "chord": "Tisquill Minor",
+   "effect": "restore_hunger",
+   "stat": "pet_bond",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    2,
+    6,
+    11
+   ]
+  },
+  {
+   "herbs": [
+    "Hushmoss",
+    "Mimint",
+    "Tisquill"
+   ],
+   "tonic": "Item_YTM_Tonic_Sus_T2",
+   "chord": "Tisquill Sus",
+   "effect": "stamina_boost",
+   "stat": "pet_bond",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    4,
+    6,
+    11
+   ]
+  },
+  {
+   "herbs": [
+    "Hushmoss",
+    "Lavine",
+    "Sharpcress"
+   ],
+   "tonic": "Item_YTM_Tonic_Minor_T2",
+   "chord": "Hushmoss Minor",
+   "effect": "restore_hunger",
+   "stat": "calm",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    1,
+    6,
+    9
+   ]
+  },
+  {
+   "herbs": [
+    "Hushmoss",
+    "Lavine",
+    "Rebell"
+   ],
+   "tonic": "Item_YTM_Tonic_Major_T2",
+   "chord": "Rebell Major",
+   "effect": "regen_health",
+   "stat": "stamina",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    2,
+    6,
+    9
+   ]
+  },
+  {
+   "herbs": [
+    "Gloryroot",
+    "Rebell",
+    "Tisquill"
+   ],
+   "tonic": "Item_YTM_Tonic_Dim_T2",
+   "chord": "Gloryroot Dim",
+   "effect": "night_vision",
+   "stat": "craft",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    2,
+    8,
+    11
+   ]
+  },
+  {
+   "herbs": [
+    "Gloryroot",
+    "Mimint",
+    "Sharpcress"
+   ],
+   "tonic": "Item_YTM_Tonic_Minor_T2",
+   "chord": "Sharpcress Minor",
+   "effect": "restore_hunger",
+   "stat": "hunger",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    1,
+    4,
+    8
+   ]
+  },
+  {
+   "herbs": [
+    "Gloryroot",
+    "Mimint",
+    "Tisquill"
+   ],
+   "tonic": "Item_YTM_Tonic_Major_T2",
+   "chord": "Mimint Major",
+   "effect": "regen_health",
+   "stat": "warmth",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    4,
+    8,
+    11
+   ]
+  },
+  {
+   "herbs": [
+    "Gloryroot",
+    "Hushmoss",
+    "Sharpcress"
+   ],
+   "tonic": "Item_YTM_Tonic_Sus_T2",
+   "chord": "Sharpcress Sus",
+   "effect": "stamina_boost",
+   "stat": "hunger",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    1,
+    6,
+    8
+   ]
+  },
+  {
+   "herbs": [
+    "Lavine",
+    "Rebell",
+    "Solthorn"
+   ],
+   "tonic": "Item_YTM_Tonic_Sus_T2",
+   "chord": "Rebell Sus",
+   "effect": "stamina_boost",
+   "stat": "stamina",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    2,
+    7,
+    9
+   ]
+  },
+  {
+   "herbs": [
+    "Lavine",
+    "Mimint",
+    "Sharpcress"
+   ],
+   "tonic": "Item_YTM_Tonic_Major_T2",
+   "chord": "Lavine Major",
+   "effect": "regen_health",
+   "stat": "speed",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    1,
+    4,
+    9
+   ]
+  },
+  {
+   "herbs": [
+    "Lavine",
+    "Mimint",
+    "Rebell"
+   ],
+   "tonic": "Item_YTM_Tonic_Sus_T2",
+   "chord": "Lavine Sus",
+   "effect": "stamina_boost",
+   "stat": "speed",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    2,
+    4,
+    9
+   ]
+  },
+  {
+   "herbs": [
+    "Lavine",
+    "Mimint",
+    "Tisquill"
+   ],
+   "tonic": "Item_YTM_Tonic_Sus_T2",
+   "chord": "Mimint Sus",
+   "effect": "stamina_boost",
+   "stat": "warmth",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    4,
+    9,
+    11
+   ]
+  },
+  {
+   "herbs": [
+    "Dronebloom",
+    "Sharpcress",
+    "Solthorn"
+   ],
+   "tonic": "Item_YTM_Tonic_Dim_T2",
+   "chord": "Solthorn Dim",
+   "effect": "night_vision",
+   "stat": "harvest",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    1,
+    7,
+    10
+   ]
+  },
+  {
+   "herbs": [
+    "Dronebloom",
+    "Rebell",
+    "Solthorn"
+   ],
+   "tonic": "Item_YTM_Tonic_Minor_T2",
+   "chord": "Solthorn Minor",
+   "effect": "restore_hunger",
+   "stat": "harvest",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    2,
+    7,
+    10
+   ]
+  },
+  {
+   "herbs": [
+    "Dronebloom",
+    "Flatfern",
+    "Hushmoss"
+   ],
+   "tonic": "Item_YTM_Tonic_Minor_T2",
+   "chord": "Flatfern Minor",
+   "effect": "restore_hunger",
+   "stat": "thirst",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    3,
+    6,
+    10
+   ]
+  },
+  {
+   "herbs": [
+    "Dronebloom",
+    "Flatfern",
+    "Solthorn"
+   ],
+   "tonic": "Item_YTM_Tonic_Major_T2",
+   "chord": "Flatfern Major",
+   "effect": "regen_health",
+   "stat": "thirst",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    3,
+    7,
+    10
+   ]
+  },
+  {
+   "herbs": [
+    "Dronebloom",
+    "Flatfern",
+    "Gloryroot"
+   ],
+   "tonic": "Item_YTM_Tonic_Sus_T2",
+   "chord": "Flatfern Sus",
+   "effect": "stamina_boost",
+   "stat": "thirst",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    3,
+    8,
+    10
+   ]
+  },
+  {
+   "herbs": [
+    "Dronebloom",
+    "Mimint",
+    "Sharpcress"
+   ],
+   "tonic": "Item_YTM_Tonic_Dim_T2",
+   "chord": "Dronebloom Dim",
+   "effect": "night_vision",
+   "stat": "sight",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    1,
+    4,
+    10
+   ]
+  },
+  {
+   "herbs": [
+    "Dronebloom",
+    "Mimint",
+    "Solthorn"
+   ],
+   "tonic": "Item_YTM_Tonic_Dim_T2",
+   "chord": "Mimint Dim",
+   "effect": "night_vision",
+   "stat": "warmth",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    4,
+    7,
+    10
+   ]
+  },
+  {
+   "herbs": [
+    "Dronebloom",
+    "Fasage",
+    "Sharpcress"
+   ],
+   "tonic": "Item_YTM_Tonic_Minor_T2",
+   "chord": "Dronebloom Minor",
+   "effect": "restore_hunger",
+   "stat": "sight",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    1,
+    5,
+    10
+   ]
+  },
+  {
+   "herbs": [
+    "Dronebloom",
+    "Fasage",
+    "Rebell"
+   ],
+   "tonic": "Item_YTM_Tonic_Major_T2",
+   "chord": "Dronebloom Major",
+   "effect": "regen_health",
+   "stat": "sight",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    2,
+    5,
+    10
+   ]
+  },
+  {
+   "herbs": [
+    "Dronebloom",
+    "Fasage",
+    "Flatfern"
+   ],
+   "tonic": "Item_YTM_Tonic_Sus_T2",
+   "chord": "Dronebloom Sus",
+   "effect": "stamina_boost",
+   "stat": "sight",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    3,
+    5,
+    10
+   ]
+  },
+  {
+   "herbs": [
+    "Dronebloom",
+    "Hushmoss",
+    "Sharpcress"
+   ],
+   "tonic": "Item_YTM_Tonic_Major_T2",
+   "chord": "Hushmoss Major",
+   "effect": "regen_health",
+   "stat": "calm",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    1,
+    6,
+    10
+   ]
+  },
+  {
+   "herbs": [
+    "Dronebloom",
+    "Hushmoss",
+    "Rebell"
+   ],
+   "tonic": "Item_YTM_Tonic_Aug_T2",
+   "chord": "Rebell Aug",
+   "effect": "haste",
+   "stat": "stamina",
+   "tier": 2,
+   "magnitude": 30,
+   "duration_s": 120,
+   "notes": [
+    2,
+    6,
+    10
+   ]
+  }
+ ]
+}
