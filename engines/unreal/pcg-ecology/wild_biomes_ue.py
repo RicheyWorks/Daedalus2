@@ -5,8 +5,8 @@ Run: python ue_send.py wild_biomes_ue.py 600"""
 import sys, math, unreal
 D = r"C:\Users\730ri\projects\Daedalus2-pcg-ecology\engines\unreal\pcg-ecology"
 if D not in sys.path: sys.path.insert(0, D)
-import importlib, ecology_rules, island_flora, wild_biomes
-for m in (ecology_rules, island_flora, wild_biomes): importlib.reload(m)
+import importlib, ecology_rules, island_flora, wild_biomes, island_bounds
+for m in (ecology_rules, island_flora, wild_biomes, island_bounds): importlib.reload(m)
 SUB = "/Game/Pythagoras/Maps/WildBiomes_Pythagoras"
 ART = "/Game/Daedalus/Art/Prop/%s/%s/StaticMeshes/%s"
 MESH = {"Oak": ["Prop_Tree_Oak_Mature", "Prop_Tree_Oak_Young"], "Pine": ["Prop_Tree_Pine_Mature", "Prop_Tree_Pine_Young"],
@@ -44,16 +44,20 @@ for a in eas.get_all_level_actors():
 ps = next(a for a in eas.get_all_level_actors() if a.get_class().get_name() == "PlayerStart").get_actor_location()
 def ground(x, y):
     h = unreal.SystemLibrary.line_trace_single(ew, unreal.Vector(x, y, ps.z + 30000), unreal.Vector(x, y, ps.z - 60000),
-        unreal.TraceTypeQuery.TRACE_TYPE_QUERY1, False, [], unreal.DrawDebugTrace.NONE, True)
+        unreal.TraceTypeQuery.ECC_VISIBILITY, False, [], unreal.DrawDebugTrace.NONE, True)
     t = h.to_tuple(); return t[4].z if t[0] else None   # (blocking, ..., impact_point idx 4)
-W = wild_biomes.W * 100
+IB = island_bounds.bounds(ew, ps.x, ps.y, ps.z)
+span = min(IB["span_x"], IB["span_y"]) if IB else 6000.0
+W = max(3000.0, min(8000.0, span * 0.22))   # biome patch size follows the real island (cm)
+WM = W / 100.0
+log.append(f"island span {round(span/100)} m -> biome patch {round(WM)} m")
 def cover(cx, cy):
     hs = [ground(cx + (i / 4 - .5) * W, cy + (j / 4 - .5) * W) for i in range(5) for j in range(5)]
     return sum(h is not None for h in hs) / 25.0
 eco = [a.get_actor_location() for a in eas.get_all_level_actors() if a.actor_has_tag("PYTH_EcoPlant")]
 ex = (sum(v.x for v in eco) / len(eco), sum(v.y for v in eco) / len(eco)) if eco else (ps.x, ps.y)
 cands = []
-for r in (4500, 6500, 9000, 12000, 16000):
+for r in [span * f for f in (0.18, 0.28, 0.38, 0.5, 0.65, 0.85)] + [W * 2.5]:
     for k in range(16):
         a = 2 * math.pi * k / 16; cx, cy = ps.x + r * math.cos(a), ps.y + r * math.sin(a)
         if math.hypot(cx - ex[0], cy - ex[1]) < 3500: continue
@@ -66,13 +70,13 @@ for c, nr, cx, cy in cands:
 log.append(f"spots {len(spots)} of {len(cands)} candidates")
 # 3) place
 counts, floating = {}, 0
-bios = wild_biomes.all_biomes()
+bios = wild_biomes.all_biomes(WM)
 for (name, pts), (cx, cy) in zip(bios.items(), spots):
     n = 0
     for p in pts:
         ms = meshes.get(p["species"])
         if not ms: continue
-        x, y = cx + (p["x"] / wild_biomes.W - .5) * W, cy + (p["y"] / wild_biomes.W - .5) * W
+        x, y = cx + (p["x"] / WM - .5) * W, cy + (p["y"] / WM - .5) * W
         z = ground(x, y)
         if z is None: floating += 1; continue
         tgt = HEIGHT[p["species"]] * p["scale"]
@@ -94,5 +98,7 @@ dirty = [p.get_name() for p in unreal.EditorLoadingAndSavingUtils.get_dirty_map_
 if spots:
     cam = unreal.Vector(spots[0][0] - 6000, spots[0][1] - 6000, ground(*spots[0]) + 4500 if ground(*spots[0]) else ps.z + 4500)
     ues.set_level_viewport_camera_info(cam, unreal.Rotator(roll=0, pitch=-30, yaw=45))
-result = {"counts": counts, "spots": [(round(x), round(y)) for x, y in spots], "skipped_no_ground": floating,
+result = {"island_bounds_m": IB and {k: round(v / 100) for k, v in IB.items() if k != "area_m2"}, "patch_m": round(WM), "counts": counts, "spots": [(round(x), round(y)) for x, y in spots], "skipped_no_ground": floating,
           "missing_meshes": [k for k, v in meshes.items() if not v], "dirty_after_save": dirty, "log": log}
+
+

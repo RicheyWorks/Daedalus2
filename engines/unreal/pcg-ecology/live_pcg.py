@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT
+﻿# SPDX-License-Identifier: MIT
 """Live pass in the open editor (via the Claude Unreal bridge): build /Game/Pythagoras/PCGEcology/PCG_Ecology
 from ecology_rules and drop ONE PCGVolume (tag PYTH_Eco) ~25 m ahead of the player/camera in the editor level,
 snapped to ground with line traces, then Generate. Python can't add actors to a PIE world, so this lands in the
@@ -26,7 +26,10 @@ def _probe(x, y):
             unreal.TraceTypeQuery.ECC_VISIBILITY, False, [], unreal.DrawDebugTrace.NONE, True)
     return h.to_tuple()[4].z if h else None
 best = None
-for S in (1.0, 0.7, 0.5, 0.35):
+import island_bounds
+_IB = island_bounds.bounds(ew, L.x, L.y, L.z)
+_S0 = min(3.0, 0.8 * min(_IB["span_x"], _IB["span_y"]) / (eco.DOMAIN * 100)) if _IB else 1.0   # fit the real island, no hardcoded 35%
+for S in (_S0, _S0 * 0.8, _S0 * 0.6):
     D = eco.DOMAIN * 100 * S
     for r in (0.0, 0.25, 0.5, 0.8):
         for k in range(8 if r else 1):

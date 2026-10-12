@@ -11,13 +11,14 @@ BIOMES = [  # name, years, seed, target species weights
     ("WillowRiverbank", 90, 15, {"Willow": 6, "Sedge": 2})]
 CAP = {"Fern": 110, "Grass": 150, "Sedge": 110}
 def sp(p): return p["species"]
-def biome(name, years, seed, wts):
-    pts = er.generate(seed=seed, years=years)
+def biome(name, years, seed, wts, w=None):
+    w = w or W; dom = max(100.0, w / 0.7)   # bigger islands -> bigger model domain, same density per m2
+    pts = er.generate(seed=seed, years=years, domain=dom)
     pts = pts[0] if isinstance(pts, tuple) else pts
     best = None
-    for x0 in range(0, 71, 5):
-        for y0 in range(0, 71, 5):
-            win = [p for p in pts if x0 <= p["x"] < x0 + W and y0 <= p["y"] < y0 + W]
+    for x0 in range(0, int(dom - w) + 1, 5):
+        for y0 in range(0, int(dom - w) + 1, 5):
+            win = [p for p in pts if x0 <= p["x"] < x0 + w and y0 <= p["y"] < y0 + w]
             m = island_flora.mix(win); n = max(len(win), 1)
             s = sum(w * m.get(k, 0) for k, w in wts.items()) / n ** 0.5
             if best is None or s > best[0]: best = (s, x0, y0, win)
@@ -25,9 +26,10 @@ def biome(name, years, seed, wts):
     keep, cnt = [], {}
     for p in win:
         cnt[sp(p)] = cnt.get(sp(p), 0) + 1
-        if cnt[sp(p)] <= CAP.get(sp(p), 10**9):
+        if cnt[sp(p)] <= CAP.get(sp(p), 10**9) * (w / W) ** 2:
             keep.append(dict(p, x=p["x"] - x0, y=p["y"] - y0))
     return keep
-def all_biomes(): return {b[0]: biome(*b[1:]) and biome(*b) if False else biome(b[0], *b[1:]) for b in BIOMES}
+def all_biomes(w=None): return {b[0]: biome(b[0], *b[1:], w=w) for b in BIOMES}
 if __name__ == "__main__":
     for k, v in all_biomes().items(): print(k, len(v), island_flora.mix(v))
+
