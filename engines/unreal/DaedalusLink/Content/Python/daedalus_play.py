@@ -410,6 +410,84 @@ def scenario_armor(p):
     ]}
 
 
+def _live():
+    w = _all(unreal.DaedalusWorldActor)
+    return max(w, key=lambda a: a.chunk_count()) if w else None
+
+
+def scenario_dig(p):
+    """Dig and build (ADR-049): the pick mines the cube under the reticle into the bag, places it back, the world
+    changes, and the server takes the edits."""
+    h = hero()
+    live = _live()
+    if live is None or live.chunk_count() == 0:
+        return {"checks": [_check("a live World actor with chunks", False, "none in this level")]}
+    unreal.SystemLibrary.execute_console_command(world(), "daedalus.FoesHunt 0")
+    while h.get_editor_property("current_weapon") != 2:
+        h.switch_weapon()
+    # Look at the ground a couple of metres ahead.
+    loc = h.get_actor_location()
+    fwd = h.get_actor_forward_vector()
+    h.aim_at(unreal.Vector(loc.x + fwd.x * 200, loc.y + fwd.y * 200, loc.z - 110))
+    for _ in range(5):
+        yield
+    target = h.get_editor_property("target_type")
+    cube = h.get_editor_property("target_cube")
+    mined0 = h.get_editor_property("cubes_mined")
+    sent0 = live.get_editor_property("edits_sent")
+    hardness = unreal.DaedalusHero.hardness(target) if target else 0
+    ok_mine = h.mine_target()
+    yield
+    after = live.cube_at(live.cube_center(cube))
+    bag = dict(h.get_editor_property("bag"))
+    for _ in range(5):
+        yield
+    # Put it back: aim at the hole's floor and place.
+    placed = h.place_cube() if h.get_editor_property("selected_cube") else False
+    t = 0.0
+    while t < 2.0:
+        t += unreal.GameplayStatics.get_world_delta_seconds(world())
+        yield
+    sent = live.get_editor_property("edits_sent") - sent0
+    accepted = live.get_editor_property("edits_accepted")
+    unreal.SystemLibrary.execute_console_command(world(), "daedalus.FoesHunt 1")
+    return {"checks": [
+        _check("a cube under the reticle", bool(target) and target != "AIR", f"target={target} hardness={hardness}"),
+        _check("mined it", ok_mine and h.get_editor_property("cubes_mined") == mined0 + 1, f"now={after}"),
+        _check("the world lost it", after == "AIR", f"cube={cube} is {after}"),
+        _check("it went in the bag", bag.get(target, 0) >= 1, str(bag)),
+        _check("placed one back", placed, f"placed={h.get_editor_property('cubes_placed')}"),
+        _check("edits sent to the server", sent >= 2, f"sent={sent} accepted_total={accepted}"),
+    ], "server_accepted_total": accepted}
+
+
+def scenario_fall(p):
+    """Falls hurt past about five cubes; a short drop doesn't."""
+    h = hero()
+    _clear_foes()
+    unreal.SystemLibrary.execute_console_command(world(), "daedalus.FoesHunt 0")
+    for _ in range(30):
+        yield
+    start = h.get_actor_location()
+    results = []
+    for height in (250, 1500):
+        taken0 = h.get_editor_property("fall_damage_taken")
+        h.set_actor_location(unreal.Vector(start.x, start.y, start.z + height), False, True)
+        t = 0.0
+        while t < 3.0:
+            t += unreal.GameplayStatics.get_world_delta_seconds(world())
+            yield
+        results.append((height, round(h.get_editor_property("fall_damage_taken") - taken0, 1),
+                        round(h.get_editor_property("last_landing_speed"))))
+        h.set_editor_property("shield", h.get_editor_property("max_shield"))
+        h.set_editor_property("health", h.get_editor_property("max_health"))
+    unreal.SystemLibrary.execute_console_command(world(), "daedalus.FoesHunt 1")
+    return {"checks": [
+        _check("a 2.5 m drop is free", results[0][1] == 0, str(results[0])),
+        _check("a 15 m fall hurts", results[1][1] > 0, str(results[1])),
+    ]}
+
+
 SCENARIOS = {
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
@@ -418,6 +496,8 @@ SCENARIOS = {
     "shield": scenario_shield,
     "encounters": scenario_encounters,
     "armor": scenario_armor,
+    "dig": scenario_dig,
+    "fall": scenario_fall,
 }
 
 
