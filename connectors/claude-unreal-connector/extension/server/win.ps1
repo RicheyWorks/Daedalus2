@@ -19,7 +19,8 @@ param(
     [ValidateSet("", "close", "minimize", "restore", "maximize", "move")][string]$Action = "",
     [int]$W = 0,
     [int]$H = 0,
-    [int]$MaxImages = 6
+    [int]$MaxImages = 6,
+    [switch]$Diagnostics
 )
 $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName System.Drawing
@@ -32,6 +33,8 @@ public static class DaedalusWin {
     public delegate bool EnumProc(IntPtr h, IntPtr l);
     [DllImport("user32.dll")] public static extern bool EnumWindows(EnumProc cb, IntPtr l);
     [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr h);
+    [DllImport("user32.dll")] public static extern bool IsWindowEnabled(IntPtr h);
+    [DllImport("user32.dll")] public static extern IntPtr GetWindow(IntPtr h, uint command);
     [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr h, out uint pid);
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern int GetWindowText(IntPtr h, StringBuilder s, int n);
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern int GetClassName(IntPtr h, StringBuilder s, int n);
@@ -75,6 +78,16 @@ function Get-EditorPids {
     return , $set
 }
 
+# Read-only inventory includes the separate crash reporter. Input remains limited to the editor.
+function Get-HealthProcesses {
+    @(Get-Process UnrealEditor, CrashReportClient, CrashReportClientEditor -ErrorAction SilentlyContinue |
+        ForEach-Object {
+            $started = $null
+            try { $started = $_.StartTime.ToUniversalTime().ToString('o') } catch { }
+            [pscustomobject]@{ pid = $_.Id; name = $_.ProcessName; start_time = $started }
+        })
+}
+
 function Get-Png([IntPtr]$h, [int]$w, [int]$hgt) {
     if ($w -le 0 -or $hgt -le 0) { return $null }
     $bmp = New-Object System.Drawing.Bitmap $w, $hgt
@@ -109,23 +122,43 @@ function Send-Chord([string]$chord) {
 
 try {
     $pids = Get-EditorPids
-    if ($pids.Count -eq 0) { @{ ok = $true; windows = @(); note = "no UnrealEditor is running" } | ConvertTo-Json -Compress; exit 0 }
     if ($Op -eq "list") {
+        $processes = @(Get-HealthProcesses)
+        $healthPids = New-Object 'System.Collections.Generic.HashSet[uint32]'
+        foreach ($processInfo in $processes) { [void]$healthPids.Add([uint32]$processInfo.pid) }
         $out = @(); $n = 0
-        # Largest window first: that is the main editor; dialogs and popups follow.
-        $wins = foreach ($hw in [DaedalusWin]::Windows($pids)) {
+        $wins = foreach ($hw in [DaedalusWin]::Windows($healthPids)) {
+            $windowPid = [uint32]0; [void][DaedalusWin]::GetWindowThreadProcessId($hw, [ref]$windowPid)
             $r = New-Object DaedalusWin+RECT; [void][DaedalusWin]::GetWindowRect($hw, [ref]$r)
             # A minimised window's rect is tiny: rank it by its restored size so the editor still comes first.
             $area = ($r.Right - $r.Left) * ($r.Bottom - $r.Top)
             if ([DaedalusWin]::IsIconic($hw)) { $area = 1e9 }
-            [pscustomobject]@{ h = $hw; r = $r; area = $area }
+            [pscustomobject]@{ h = $hw; r = $r; area = $area; pid = $windowPid; owner = [long][DaedalusWin]::GetWindow($hw, 4) }
         }
         $wins = @($wins | Where-Object { $_.area -gt 400 } | Sort-Object area -Descending)
+        # A root window is not necessarily ready: Restore Packages can be the only/largest root.
+        # The caller classifies every title before considering this display hint.
+        $mainHandles = @{}
+        foreach ($candidate in $wins) {
+            if ($candidate.owner -eq 0 -and $pids.Contains([uint32]$candidate.pid) -and -not $mainHandles.ContainsKey($candidate.pid)) {
+                $mainHandles[$candidate.pid] = [long]$candidate.h
+            }
+        }
+        if ($Diagnostics) {
+            $wins = @($wins | Sort-Object @{ Expression = {
+                $title = [DaedalusWin]::Text($_.h)
+                if ($title -match 'Restore Packages|Crash|^Save |^Error|^Warning|Confirm') { 0 }
+                elseif ($_.owner -ne 0 -or -not [DaedalusWin]::IsWindowEnabled($_.h)) { 1 }
+                else { 2 }
+            } }, @{ Expression = 'area'; Descending = $true })
+        }
         for ($i = 0; $i -lt $wins.Count; $i++) {
             # Not $w / $h: PowerShell names ignore case, and the typed [int]$W / [int]$H parameters would swallow them.
             $win = $wins[$i]; $width = $win.r.Right - $win.r.Left; $height = $win.r.Bottom - $win.r.Top
             $entry = [ordered]@{ hwnd = [long]$win.h; title = [DaedalusWin]::Text($win.h); class = [DaedalusWin]::Cls($win.h);
-                                 main = ($i -eq 0); minimized = [DaedalusWin]::IsIconic($win.h);
+                                 pid = $win.pid; process = ($processes | Where-Object { $_.pid -eq $win.pid } | Select-Object -First 1).name;
+                                 owner = $win.owner; enabled = [DaedalusWin]::IsWindowEnabled($win.h);
+                                 main = ($mainHandles[$win.pid] -eq [long]$win.h); minimized = [DaedalusWin]::IsIconic($win.h);
                                  x = $win.r.Left; y = $win.r.Top; width = $width; height = $height }
             if ($n -lt $MaxImages -and -not [DaedalusWin]::IsIconic($win.h)) {
                 $img = Get-Png $win.h $width $height
@@ -133,7 +166,7 @@ try {
             }
             $out += [pscustomobject]$entry
         }
-        @{ ok = $true; foreground = [long][DaedalusWin]::GetForegroundWindow(); windows = $out } | ConvertTo-Json -Depth 4 -Compress
+        @{ ok = $true; processes = $processes; foreground = [long][DaedalusWin]::GetForegroundWindow(); windows = $out } | ConvertTo-Json -Depth 4 -Compress
     } else {
         $h = [IntPtr]$Hwnd
         $owned = [DaedalusWin]::Windows($pids) | Where-Object { $_ -eq $h }
@@ -158,6 +191,7 @@ try {
             exit 0
         }
         $front = [DaedalusWin]::Front($h)
+        if (-not $front) { throw "window $Hwnd did not gain focus; no click or keys sent" }
         if ($X -ge 0 -and $Y -ge 0) {
             $r = New-Object DaedalusWin+RECT; [void][DaedalusWin]::GetWindowRect($h, [ref]$r)
             [void][DaedalusWin]::SetCursorPos($r.Left + $X, $r.Top + $Y)

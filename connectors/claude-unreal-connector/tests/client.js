@@ -5,7 +5,7 @@
 const { spawn } = require('child_process');
 const path = require('path');
 const port = process.argv[2];
-const srv = spawn(process.execPath, [path.join(__dirname, '..', 'extension', 'server', 'index.js')], { env: Object.assign({}, process.env, { UNREAL_BRIDGE_PORT: port }) });
+const srv = spawn(process.execPath, [path.join(__dirname, '..', 'extension', 'server', 'index.js')], { env: Object.assign({}, process.env, { UNREAL_BRIDGE_PORT: port, UNREAL_BRIDGE_TARGET: 'standin' }) });
 let buf = '', next = 1; const waiting = {};
 srv.stdout.on('data', (d) => { buf += d; let i; while ((i = buf.indexOf('\n')) >= 0) { const m = JSON.parse(buf.slice(0, i)); buf = buf.slice(i + 1); if (waiting[m.id]) { waiting[m.id](m); delete waiting[m.id]; } } });
 const rpc = (method, params) => new Promise((res) => { const id = next++; waiting[id] = res; srv.stdin.write(JSON.stringify({ jsonrpc: '2.0', id, method, params }) + '\n'); });
