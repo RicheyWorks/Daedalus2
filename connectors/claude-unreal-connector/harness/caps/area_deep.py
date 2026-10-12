@@ -150,7 +150,7 @@ def geometry_scripting():
     opts = unreal.GeometryScriptPrimitiveOptions()
     unreal.GeometryScript_Primitives.append_box(dm, opts, unreal.Transform(), 100, 100, 100)
     unreal.GeometryScript_Primitives.append_sphere_lat_long(dm, opts, unreal.Transform(location=[80, 0, 0]), 60, 12, 12)
-    tris = unreal.GeometryScript_MeshQueries.get_num_triangle_ids(dm)
+    tris = unreal.GeometryScript_MeshQueries.get_num_triangle_i_ds(dm)   # UE's Python spells IDs as i_ds
     sm_opts = unreal.GeometryScriptCreateNewStaticMeshAssetOptions()
     sm, outcome = unreal.GeometryScript_AssetUtils.create_new_static_mesh_asset_from_mesh(dm, D + "/SM_Generated", sm_opts)
     sm_tris = sm.get_num_triangles(0) if sm else 0
@@ -163,6 +163,8 @@ def static_mesh_lod_collision():
     src = EAL.load_asset(CUBE)
     dup = EAL.duplicate_asset(CUBE, D + "/SM_CubeCopy")
     sub = unreal.get_editor_subsystem(unreal.StaticMeshEditorSubsystem)
+    if sub is None:
+        return {"ok": False, "needs_editor": True, "why": "editor subsystems don't exist in a commandlet; run in the open editor"}
     lods = sub.get_lod_count(dup)
     sub.remove_collisions(dup)
     sub.add_simple_collisions(dup, unreal.ScriptCollisionShapeType.BOX)
@@ -249,9 +251,12 @@ def gltf_export_reimport():
     return {"ok": size > 0 and any("StaticMesh" in p or "Cube" in p for p in got), "glb_bytes": size, "imported": got[:5]}
 
 
+ONLY = globals().get("ONLY")
 result = {"probes": {}}
 t_all = time.time()
 for fn in PROBES:
+    if ONLY and fn.__name__ not in ONLY:
+        continue
     if fn.__name__ in SKIP_EXTRA:
         result["probes"][fn.__name__] = {"ok": False, "crash": True}
         continue
@@ -264,5 +269,5 @@ for fn in PROBES:
     r["ms"] = int((time.time() - t0) * 1000)
     result["probes"][fn.__name__] = json.loads(json.dumps(r, default=repr))
 result["passed"] = sum(1 for r in result["probes"].values() if r.get("ok"))
-result["total"] = len(PROBES)
+result["total"] = len(result["probes"])
 result["secs"] = round(time.time() - t_all, 1)
