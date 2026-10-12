@@ -378,6 +378,16 @@ board_after = open(os.path.join(d, "QUEUE.md"), encoding="utf-8").read()
 check("overlapped: the board is still one table of four rows", len(artqueue.parse(board_after)[0]) == 4, board_after)
 shutil.rmtree(d)
 
+# 12b. --first: a team's own rows ship ahead of the rest, the board's order kept within each group
+seen["land"].clear()
+d, w, fb = setup(board=BOARD4.replace("Prop_C", "Prop_Orr_C").replace("Prop_D", "Prop_Orr_D"), blend=False, ship=_seq)
+fb.objects = ["Mesh"]
+w.first = ["_Orr_"]
+w.tick()
+check("--first: Orr rows ship first, in board order", [n for n, _, _ in seen["land"]][:2] == ["Prop_Orr_C", "Prop_Orr_D"]
+      and [n for n, _, _ in seen["land"]][2:] == ["Prop_A", "Prop_B"], seen["land"])
+shutil.rmtree(d)
+
 # 13. a restart re-queues rows the last watcher left SHIPPING (they were stuck there forever)
 d, w, fb = setup(board=BOARD.replace("| Tool_Pickaxe | tool | 0.9 m | READY |", "| Tool_Pickaxe | tool | 0.9 m | SHIPPING |"))
 back = w.recover()

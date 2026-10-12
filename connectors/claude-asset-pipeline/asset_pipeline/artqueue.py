@@ -196,6 +196,7 @@ class Watcher:
         self.waiting_since = None   # when the current wait began (clock seconds), for stall detection
         self.blocked_at = {}        # asset -> when it was last BLOCKED, to pace the retries
         self.link = link            # teamlink.Link("unreal-team"), or None: every event also goes out live
+        self.first = []             # name fragments shipped ahead of the rest (--first), e.g. a team's own slot
         self.lock = threading.RLock()   # the board and the feed, shared by the two halves of an overlapped ship
 
     # -- files
@@ -400,6 +401,8 @@ class Watcher:
                     missing = ["play"]
             if not missing:
                 assets = [r["asset"] for r in ready]
+                if self.first:   # stable: the board's order within each group
+                    assets.sort(key=lambda a: not any(f in a for f in self.first))
                 if len(assets) > 1 and hasattr(self.ship, "export") and hasattr(self.ship, "land"):
                     done.extend(self.ship_overlapped(assets))
                 else:
@@ -588,9 +591,11 @@ def main(argv=None):
     ap.add_argument("--every", type=float, default=10.0, help="seconds between passes")
     ap.add_argument("--once", action="store_true")
     ap.add_argument("--no-link", action="store_true", help="don't join the team link (ADR-053)")
+    ap.add_argument("--first", default="", help="comma-separated name fragments to ship first (e.g. _Orr_)")
     a = ap.parse_args(argv)
     link = None if a.no_link else teamlink.Link("unreal-team")
     w = Watcher(a.folder, link=link)
+    w.first = [f for f in a.first.split(",") if f]
     lock = os.path.join(a.folder, ".watcher.lock")
     if not a.once:
         if os.path.exists(lock) and time.time() - os.path.getmtime(lock) < 60:
