@@ -133,6 +133,13 @@ to it when something new breaks.
   "Open editors: " printed nothing, the editor was never closed, and the fast build hit a locked DLL. It worked with
   two editors open, which hid the bug. Always wrap the call: `@(Get-ProjectEditors)`.
 
+- **Stop the art watcher before rebuilding the editor.** While the editor closed, the watcher kept importing. That
+  dirtied packages and raised "Save Content", which held the editor open until the watcher was stopped. Order:
+  `art-queue.ps1 -Stop`, then `unreal-job.ps1 -Start -Fast`, then start the watcher again.
+- **Build from a clean worktree when bots commit locally.** Another bot's unpushed local commit (a C++ file that
+  didn't compile) sat in the PC's working copy, and `-Fast` mirrors the working copy into the plugin. Building from
+  `git worktree add --detach ..\D2-build origin/main` keeps unpushed work out of the shared build.
+
 ## Habits that saved us
 
 - **Build a game its own framebuffer and capture that.** The viewport capture never worked in Play (play_capture).
