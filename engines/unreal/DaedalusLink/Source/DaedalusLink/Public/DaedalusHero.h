@@ -15,6 +15,7 @@ class UInputAction;
 class UInputMappingContext;
 class UInputModifierDeadZone;
 class SDaedalusSettingsMenu;
+class SDaedalusFieldMenu;
 class SWidget;
 struct FInputActionValue;
 
@@ -68,6 +69,11 @@ public:
 	/** Open or close the settings menu (Menu button, Tab or F10). */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") void ToggleSettings();
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") bool IsSettingsOpen() const;
+	/** Open or close the field menu: TacMap, hero record, controls, social (View button, Tab or M). */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") void ToggleField();
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") bool IsFieldOpen() const;
+	/** For the harness: the field menu's tab and how many islands its map drew ("closed" when shut). */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString FieldInput(const FString& Command);
 	/** For the harness: drive the open menu like a controller ("settings", "back", "tab+", "tab-", "up", "down",
 	 *  "left", "right", "accept", "reset") and get its state back ("closed", "pause row 1", "settings tab 1 row 0"). */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString MenuInput(const FString& Command);
@@ -107,6 +113,11 @@ private:
 	UPROPERTY() TObjectPtr<UInputAction> LookStickAction;
 	UPROPERTY() TObjectPtr<UInputAction> ShieldAction;
 	UPROPERTY() TObjectPtr<UInputAction> MenuAction;
+	UPROPERTY() TObjectPtr<UInputAction> ViewAction;
+	TSharedPtr<SDaedalusFieldMenu> Field;
+	TSharedPtr<SWidget> FieldHost;
+	void ShowOverlay(const TSharedRef<SWidget>& Content, const TSharedRef<SWidget>& Focus, TSharedPtr<SWidget>& Host);
+	void HideOverlay(TSharedPtr<SWidget>& Host);
 	UPROPERTY() TArray<TObjectPtr<UInputModifierDeadZone>> LeftDeadzones;
 	UPROPERTY() TArray<TObjectPtr<UInputModifierDeadZone>> RightDeadzones;
 	TSharedPtr<SDaedalusSettingsMenu> Menu;

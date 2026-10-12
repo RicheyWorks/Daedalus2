@@ -67,12 +67,13 @@ FString FDaedalusSettings::Path()
 	return FPaths::Combine(FPaths::ProjectSavedDir(), TEXT("Config"), TEXT("DaedalusSettings.json"));
 }
 
-void FDaedalusSettings::Add(FName Id, const TCHAR* Tab, const TCHAR* Label, const TCHAR* Help, EDaedalusSettingKind Kind,
+void FDaedalusSettings::Add(FName Id, const TCHAR* Tab, const TCHAR* Section, const TCHAR* Label, const TCHAR* Help, EDaedalusSettingKind Kind,
                             float Default, float Min, float Max, float Step, const TCHAR* Unit, TArray<FString> Choices)
 {
 	FDaedalusSetting S;
 	S.Id = Id;
 	S.Tab = Tab;
+	S.Section = Section;
 	S.Label = Label;
 	S.Help = Help;
 	S.Kind = Kind;
@@ -89,27 +90,31 @@ void FDaedalusSettings::Add(FName Id, const TCHAR* Tab, const TCHAR* Label, cons
 FDaedalusSettings::FDaedalusSettings()
 {
 	using K = EDaedalusSettingKind;
-	Tabs = {TEXT("GENERAL"), TEXT("CONTROLLER"), TEXT("MOUSE & KEYBOARD"), TEXT("ACCESSIBILITY")};
+	// Tabs and sections follow Halo Infinite's settings (Controller, Keyboard/Mouse, Video, Gameplay, Accessibility).
+	Tabs = {TEXT("CONTROLLER"), TEXT("KEYBOARD/MOUSE"), TEXT("VIDEO"), TEXT("GAMEPLAY"), TEXT("ACCESSIBILITY")};
+	const TCHAR* Pad = TEXT("CONTROLLER");
+	const TCHAR* Kbm = TEXT("KEYBOARD/MOUSE");
 
-	Add("FieldOfView", TEXT("GENERAL"), TEXT("Field of View"), TEXT("How wide the camera sees. Wider shows more of the islands around you; narrower feels closer to the hero."), K::Slider, 80, 70, 110, 1, TEXT("°"));
-	Add("CameraDistance", TEXT("GENERAL"), TEXT("Camera Distance"), TEXT("How far behind the hero the camera sits."), K::Slider, 650, 300, 1200, 25);
-	Add("ShieldMode", TEXT("GENERAL"), TEXT("Shield"), TEXT("Hold: the shield is up while the button is held. Toggle: press once to raise it, again to lower it."), K::Choice, 0, 0, 1, 1, TEXT(""), {TEXT("HOLD"), TEXT("TOGGLE")});
+	Add("Vibration", Pad, TEXT("General"), TEXT("Vibration"), TEXT("Rumble on sword swings, down-thrust bounces, hard landings and respawns."), K::Toggle, 1);
+	Add("VibrationStrength", Pad, TEXT("General"), TEXT("Vibration Strength"), TEXT("How strong the rumble is."), K::Slider, 100, 0, 100, 5, TEXT("%"));
+	Add("InvertLookY", Pad, TEXT("Movement & Aiming"), TEXT("Invert Look (Vertical)"), TEXT("Push the right stick up to look down, like a flight stick."), K::Toggle, 0);
+	Add("InvertLookX", Pad, TEXT("Movement & Aiming"), TEXT("Invert Look (Horizontal)"), TEXT("Push the right stick right to turn left."), K::Toggle, 0);
+	Add("LookAccel", Pad, TEXT("Sensitivity & Acceleration"), TEXT("Look Acceleration"), TEXT("Holding the right stick all the way speeds the turn up over half a second. 0 turns it off."), K::Slider, 3, 0, 10, 1);
+	Add("LookSensH", Pad, TEXT("Sensitivity & Acceleration"), TEXT("Look Sensitivity (Horizontal)"), TEXT("How fast the right stick turns the camera left and right. 5 is the default turn rate."), K::Slider, 5, 1, 10, 0.5f);
+	Add("LookSensV", Pad, TEXT("Sensitivity & Acceleration"), TEXT("Look Sensitivity (Vertical)"), TEXT("How fast the right stick tilts the camera up and down."), K::Slider, 5, 1, 10, 0.5f);
+	Add("LeftDeadzone", Pad, TEXT("Move Thumbstick"), TEXT("Center Dead Zone"), TEXT("How far the left stick must move before the hero walks. Raise it if the hero drifts."), K::Slider, 15, 0, 40, 1, TEXT("%"));
+	Add("RightDeadzone", Pad, TEXT("Look Thumbstick"), TEXT("Center Dead Zone"), TEXT("How far the right stick must move before the camera turns. Raise it if the camera drifts."), K::Slider, 15, 0, 40, 1, TEXT("%"));
 
-	Add("InvertLookY", TEXT("CONTROLLER"), TEXT("Invert Look"), TEXT("Push the right stick up to look down, like a flight stick."), K::Toggle, 0);
-	Add("InvertLookX", TEXT("CONTROLLER"), TEXT("Invert Horizontal Look"), TEXT("Push the right stick right to turn left."), K::Toggle, 0);
-	Add("LookSensH", TEXT("CONTROLLER"), TEXT("Look Sensitivity (Horizontal)"), TEXT("How fast the right stick turns the camera left and right. 5 is the default turn rate."), K::Slider, 5, 1, 10, 0.5f);
-	Add("LookSensV", TEXT("CONTROLLER"), TEXT("Look Sensitivity (Vertical)"), TEXT("How fast the right stick tilts the camera up and down."), K::Slider, 5, 1, 10, 0.5f);
-	Add("LookAccel", TEXT("CONTROLLER"), TEXT("Look Acceleration"), TEXT("Holding the right stick all the way speeds the turn up over half a second. 0 turns it off."), K::Slider, 3, 0, 10, 1);
-	Add("LeftDeadzone", TEXT("CONTROLLER"), TEXT("Center Dead Zone (Move Stick)"), TEXT("How far the left stick must move before the hero walks. Raise it if the hero drifts."), K::Slider, 15, 0, 40, 1, TEXT("%"));
-	Add("RightDeadzone", TEXT("CONTROLLER"), TEXT("Center Dead Zone (Look Stick)"), TEXT("How far the right stick must move before the camera turns. Raise it if the camera drifts."), K::Slider, 15, 0, 40, 1, TEXT("%"));
-	Add("Vibration", TEXT("CONTROLLER"), TEXT("Vibration"), TEXT("Rumble on sword swings, down-thrust bounces, hard landings and respawns."), K::Toggle, 1);
-	Add("VibrationStrength", TEXT("CONTROLLER"), TEXT("Vibration Strength"), TEXT("How strong the rumble is."), K::Slider, 100, 0, 100, 5, TEXT("%"));
+	Add("InvertMouseY", Kbm, TEXT("Movement & Aiming"), TEXT("Invert Look (Vertical)"), TEXT("Move the mouse forward to look down."), K::Toggle, 0);
+	Add("MouseSensH", Kbm, TEXT("Sensitivity"), TEXT("Mouse Sensitivity (Horizontal)"), TEXT("Camera turn per mouse count, on a 1-10 scale. Look is raw and unsmoothed, so high-polling mice (Razer 8K) track exactly."), K::Slider, 5, 0.5f, 10, 0.1f);
+	Add("MouseSensV", Kbm, TEXT("Sensitivity"), TEXT("Mouse Sensitivity (Vertical)"), TEXT("The same for up and down."), K::Slider, 5, 0.5f, 10, 0.1f);
 
-	Add("MouseSensH", TEXT("MOUSE & KEYBOARD"), TEXT("Mouse Sensitivity (Horizontal)"), TEXT("Degrees the camera turns per mouse count, on a 1-10 scale. Look is raw and unsmoothed, so high-polling mice (Razer 8K) track exactly."), K::Slider, 5, 0.5f, 10, 0.1f);
-	Add("MouseSensV", TEXT("MOUSE & KEYBOARD"), TEXT("Mouse Sensitivity (Vertical)"), TEXT("The same for up and down."), K::Slider, 5, 0.5f, 10, 0.1f);
-	Add("InvertMouseY", TEXT("MOUSE & KEYBOARD"), TEXT("Invert Mouse Look"), TEXT("Move the mouse forward to look down."), K::Toggle, 0);
+	Add("FieldOfView", TEXT("VIDEO"), TEXT("Camera"), TEXT("Field of View"), TEXT("How wide the camera sees. Wider shows more of the islands; narrower feels closer to the hero."), K::Slider, 80, 70, 110, 1, TEXT("°"));
+	Add("CameraDistance", TEXT("VIDEO"), TEXT("Camera"), TEXT("Camera Distance"), TEXT("How far behind the hero the camera sits."), K::Slider, 650, 300, 1200, 25);
 
-	Add("CameraLag", TEXT("ACCESSIBILITY"), TEXT("Camera Smoothing"), TEXT("The camera trails the hero slightly. Turn it off for a camera locked to the hero."), K::Toggle, 1);
+	Add("ShieldMode", TEXT("GAMEPLAY"), TEXT("Combat"), TEXT("Shield"), TEXT("Hold: the shield is up while the button is held. Toggle: press once to raise it, again to lower it."), K::Choice, 0, 0, 1, 1, TEXT(""), {TEXT("HOLD"), TEXT("TOGGLE")});
+
+	Add("CameraLag", TEXT("ACCESSIBILITY"), TEXT("Camera"), TEXT("Camera Smoothing"), TEXT("The camera trails the hero slightly. Turn it off for a camera locked to the hero."), K::Toggle, 1);
 	Load();
 }
 

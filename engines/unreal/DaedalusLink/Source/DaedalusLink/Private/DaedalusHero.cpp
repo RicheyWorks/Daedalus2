@@ -16,6 +16,7 @@
 #include "Widgets/SWeakWidget.h"
 #include "DaedalusSettings.h"
 #include "SDaedalusSettingsMenu.h"
+#include "SDaedalusFieldMenu.h"
 #include "Engine/StaticMesh.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
@@ -161,6 +162,7 @@ void ADaedalusHero::BeginPlay()
 	DashAction = Make(TEXT("IA_Dash"), EInputActionValueType::Boolean);
 	ShieldAction = Make(TEXT("IA_Shield"), EInputActionValueType::Boolean);
 	MenuAction = Make(TEXT("IA_Menu"), EInputActionValueType::Boolean);
+	ViewAction = Make(TEXT("IA_View"), EInputActionValueType::Boolean);
 	Mapping = NewObject<UInputMappingContext>(this, TEXT("IMC_Hero"));
 
 	// Keyboard and mouse. The mouse is raw (no smoothing, no frame-rate scaling): every count a high-polling
@@ -176,9 +178,13 @@ void ADaedalusHero::BeginPlay()
 	MapSpec(DashAction, TEXT("LeftShift"));
 	MapSpec(ShieldAction, TEXT("RightMouseButton"));
 	MapSpec(ShieldAction, TEXT("K"));
-	MapSpec(MenuAction, TEXT("Tab"));
-	MapSpec(MenuAction, TEXT("F10"));
+	// Halo Infinite: Menu (three lines) is the game menu, F1 on a keyboard; View (two boxes) is the field menu.
 	MapSpec(MenuAction, TEXT("Gamepad_Special_Right"));
+	MapSpec(MenuAction, TEXT("F1"));
+	MapSpec(MenuAction, TEXT("F10"));
+	MapSpec(ViewAction, TEXT("Gamepad_Special_Left"));
+	MapSpec(ViewAction, TEXT("Tab"));
+	MapSpec(ViewAction, TEXT("M"));
 
 	// XInput pads: Xbox Elite Series 2 (paddles mirror face buttons), GameSir and Razer Wolverine/Kishi in
 	// XInput mode. Sticks get a radial deadzone; the right stick turns at a rate, not by its deflection per frame.
@@ -219,6 +225,7 @@ void ADaedalusHero::BeginPlay()
 			EI->BindAction(ShieldAction, ETriggerEvent::Started, this, &ADaedalusHero::ShieldOn);
 			EI->BindAction(ShieldAction, ETriggerEvent::Completed, this, &ADaedalusHero::ShieldOff);
 			EI->BindAction(MenuAction, ETriggerEvent::Started, this, &ADaedalusHero::ToggleSettings);
+			EI->BindAction(ViewAction, ETriggerEvent::Started, this, &ADaedalusHero::ToggleField);
 		}
 	}
 }
@@ -545,49 +552,100 @@ bool ADaedalusHero::IsSettingsOpen() const
 	return Menu.IsValid();
 }
 
-void ADaedalusHero::ToggleSettings()
+void ADaedalusHero::ShowOverlay(const TSharedRef<SWidget>& Content, const TSharedRef<SWidget>& Focus, TSharedPtr<SWidget>& Host)
 {
 	APlayerController* PC = Cast<APlayerController>(GetController());
-	UGameViewportClient* Viewport = GEngine ? GEngine->GameViewport : nullptr;
-	if (!PC || !Viewport)
+	if (!PC || !GEngine || !GEngine->GameViewport) return;
+	Host = SNew(SWeakWidget).PossiblyNullContent(Content);
+	GEngine->GameViewport->AddViewportWidgetContent(Host.ToSharedRef(), 100);
+	FInputModeUIOnly Mode;
+	Mode.SetWidgetToFocus(Focus);
+	Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	PC->SetInputMode(Mode);
+	PC->bShowMouseCursor = true;
+	FSlateApplication::Get().SetAllUserFocus(Focus, EFocusCause::SetDirectly);
+	UGameplayStatics::SetGamePaused(this, true);
+}
+
+void ADaedalusHero::HideOverlay(TSharedPtr<SWidget>& Host)
+{
+	if (Host.IsValid() && GEngine && GEngine->GameViewport)
 	{
-		return;
+		GEngine->GameViewport->RemoveViewportWidgetContent(Host.ToSharedRef());
 	}
-	if (Menu.IsValid())
+	Host.Reset();
+	if (APlayerController* PC = Cast<APlayerController>(GetController()))
 	{
-		Viewport->RemoveViewportWidgetContent(MenuHost.ToSharedRef());
-		Menu.Reset();
-		MenuHost.Reset();
-		FDaedalusSettings::Get().Save();
-		ApplySettings();
 		PC->SetInputMode(FInputModeGameOnly());
 		PC->bShowMouseCursor = false;
-		UGameplayStatics::SetGamePaused(this, false);
+	}
+	UGameplayStatics::SetGamePaused(this, false);
+}
+
+void ADaedalusHero::ToggleSettings()
+{
+	if (Menu.IsValid())
+	{
+		Menu.Reset();
+		HideOverlay(MenuHost);
+		FDaedalusSettings::Get().Save();
+		ApplySettings();
 		return;
+	}
+	if (Field.IsValid())
+	{
+		return;   // one menu at a time
 	}
 	Menu = SNew(SDaedalusSettingsMenu)
 		.OnClose(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::ToggleSettings))
 		.OnChanged(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::ApplySettings))
 		.OnRespawn(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::Respawn));
-	MenuHost = SNew(SWeakWidget).PossiblyNullContent(Menu.ToSharedRef());
-	Viewport->AddViewportWidgetContent(MenuHost.ToSharedRef(), 100);
-	FInputModeUIOnly Mode;
-	Mode.SetWidgetToFocus(Menu);
-	Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-	PC->SetInputMode(Mode);
-	PC->bShowMouseCursor = true;
-	FSlateApplication::Get().SetAllUserFocus(Menu.ToSharedRef(), EFocusCause::SetDirectly);
-	UGameplayStatics::SetGamePaused(this, true);
+	ShowOverlay(Menu.ToSharedRef(), Menu.ToSharedRef(), MenuHost);
+}
+
+void ADaedalusHero::ToggleField()
+{
+	if (Field.IsValid())
+	{
+		Field.Reset();
+		HideOverlay(FieldHost);
+		return;
+	}
+	if (Menu.IsValid())
+	{
+		return;
+	}
+	Field = SNew(SDaedalusFieldMenu)
+		.OnClose(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::ToggleField))
+		.Hero(this);
+	ShowOverlay(Field.ToSharedRef(), Field.ToSharedRef(), FieldHost);
+}
+
+bool ADaedalusHero::IsFieldOpen() const
+{
+	return Field.IsValid();
+}
+
+FString ADaedalusHero::FieldInput(const FString& Command)
+{
+	if (!Field.IsValid()) return TEXT("closed");
+	if (Command == TEXT("tab+")) Field->SelectTab(Field->GetTab() + 1);
+	else if (Command == TEXT("tab-")) Field->SelectTab(Field->GetTab() - 1);
+	return FString::Printf(TEXT("field tab %d islands %d"), Field->GetTab(), Field->MapIslands());
 }
 
 void ADaedalusHero::EndPlay(const EEndPlayReason::Type Reason)
 {
-	if (Menu.IsValid() && GEngine && GEngine->GameViewport)
+	for (TSharedPtr<SWidget>* Host : {&MenuHost, &FieldHost})
 	{
-		GEngine->GameViewport->RemoveViewportWidgetContent(MenuHost.ToSharedRef());
+		if (Host->IsValid() && GEngine && GEngine->GameViewport)
+		{
+			GEngine->GameViewport->RemoveViewportWidgetContent(Host->ToSharedRef());
+		}
+		Host->Reset();
 	}
 	Menu.Reset();
-	MenuHost.Reset();
+	Field.Reset();
 	Super::EndPlay(Reason);
 }
 

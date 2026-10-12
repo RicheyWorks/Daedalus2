@@ -55,7 +55,7 @@ private:
 	bool bInSettings = false;
 	int32 PauseRow = 0;
 	void PauseSelect();
-	int32 Tab = 1;   // opens on CONTROLLER, where look inversion lives
+	int32 Tab = 0;   // opens on CONTROLLER, as Halo Infinite does on a pad
 	int32 Row = 0;
 	TArray<int32> Rows;
 	TArray<TSharedPtr<SWidget>> RowWidgets;

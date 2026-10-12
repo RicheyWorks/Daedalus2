@@ -200,7 +200,7 @@ void SDaedalusSettingsMenu::Construct(const FArguments& InArgs)
 				SNew(STextBlock)
 				.Font(Font("Bold", 15)).ColorAndOpacity(Dim)
 				.Text(FText::FromString(TEXT("[A] Select      [B] Back      [LB] [RB] Tabs      [D-Pad] Navigate      [Y] Reset Tab"
-				                             "          Keyboard: Q E tabs, arrows, Enter, R reset, Backspace back, Tab closes")))
+				                             "          Keyboard: Q E tabs, arrows, Enter, R reset, Backspace back, F1 resumes")))
 			]
 		]
 		]
@@ -269,9 +269,18 @@ void SDaedalusSettingsMenu::RebuildRows()
 	Row = FMath::Clamp(Row, 0, FMath::Max(0, Rows.Num() - 1));
 	List->ClearChildren();
 	RowWidgets.Reset();
+	FString LastSection;
 	for (int32 r = 0; r < Rows.Num(); ++r)
 	{
 		const int32 Index = Rows[r];
+		if (At(Index).Section != LastSection)
+		{
+			LastSection = At(Index).Section;
+			List->AddSlot().AutoHeight().Padding(4.f, r == 0 ? 0.f : 18.f, 0.f, 8.f)
+			[
+				SNew(STextBlock).Text(FText::FromString(LastSection.ToUpper())).Font(Font("Bold", 14)).ColorAndOpacity(Dim)
+			];
+		}
 		const bool bSlider = At(Index).Kind == EDaedalusSettingKind::Slider;
 		auto Arrow = [this, r](const TCHAR* Glyph, int32 Dir)
 		{
@@ -438,7 +447,7 @@ FReply SDaedalusSettingsMenu::OnKeyDown(const FGeometry& Geometry, const FKeyEve
 {
 	const FKey K = Event.GetKey();
 	// Menu / Start / Tab / F10 always resume; B / Backspace step back one page.
-	if (K == EKeys::Tab || K == EKeys::F10 || K == EKeys::Gamepad_Special_Right) { OnClose.ExecuteIfBound(); return FReply::Handled(); }
+	if (K == EKeys::F1 || K == EKeys::F10 || K == EKeys::Gamepad_Special_Right) { OnClose.ExecuteIfBound(); return FReply::Handled(); }
 	if (K == EKeys::Gamepad_FaceButton_Right || K == EKeys::BackSpace) { Back(); return FReply::Handled(); }
 	if (!bInSettings)
 	{

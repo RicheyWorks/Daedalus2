@@ -14,6 +14,8 @@ all, and so does the harness.
 | Sword (down-thrust in the air) | left mouse, J | X, RT | Button1, Button8 |
 | Dash | Shift | B, RB | Button3, Button6 |
 | Shield | right mouse, K | LT, LB | Button5, Button7 |
+| Game Menu (pause, then Settings) | F1, F10 | Menu (three lines) | |
+| Field Menu (TacMap, hero, controls, social) | Tab, M | View (two boxes) | |
 
 - **Elite Series 2 paddles and Razer's extra buttons:** these are mapped in Xbox Accessories or Razer Synapse to
   face buttons, so they work as whatever you assign them.
@@ -79,3 +81,23 @@ Set these in the console, or in `Config/DefaultEngine.ini` under `[ConsoleVariab
 | `daedalus.InvertY` | 0 | 1 inverts vertical look |
 | `daedalus.Deadzone` | 0.15 | stick deadzone (read when the hero spawns) |
 | `daedalus.Rumble` | 1 | 0 turns rumble off |
+
+## Menus (Halo Infinite style, ADR-041)
+
+- **Menu** (the three-line button), or **F1** on a keyboard, pauses the game and opens the **Game Menu**:
+  Resume, Settings, Respawn.
+- **Settings** has a tab ribbon. Switch tabs with **LB / RB** (or **Q / E**). The tabs:
+  - **Controller:** General, Movement & Aiming, Sensitivity & Acceleration, Move Thumbstick, Look Thumbstick
+  - **Keyboard/Mouse**
+  - **Video**
+  - **Gameplay**
+  - **Accessibility**
+- Getting around Settings:
+  - Move between rows with **up/down**, adjust with **left/right**, and flip a toggle with **A**.
+  - **Y** resets the tab, and **B** goes back a page.
+  - Changes apply and save at once, to `Saved/Config/DaedalusSettings.json`.
+- **View** (the two-box button), or **Tab / M**, opens the **Field Menu**, Halo's Campaign Menu:
+  - **Map:** the TacMap of the islands, with you on it
+  - **Hero:** your record
+  - **Controls**
+  - **Social:** friends and party, which arrive with online play

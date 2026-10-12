@@ -17,6 +17,7 @@ struct DAEDALUSLINK_API FDaedalusSetting
 {
 	FName Id;
 	FString Tab;
+	FString Section;
 	FString Label;
 	FString Help;
 	EDaedalusSettingKind Kind = EDaedalusSettingKind::Toggle;
@@ -67,7 +68,7 @@ public:
 
 private:
 	FDaedalusSettings();
-	void Add(FName Id, const TCHAR* Tab, const TCHAR* Label, const TCHAR* Help, EDaedalusSettingKind Kind,
+	void Add(FName Id, const TCHAR* Tab, const TCHAR* Section, const TCHAR* Label, const TCHAR* Help, EDaedalusSettingKind Kind,
 	         float Default, float Min = 0.f, float Max = 1.f, float Step = 1.f, const TCHAR* Unit = TEXT(""),
 	         TArray<FString> Choices = {});
 };
