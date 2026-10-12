@@ -31,7 +31,8 @@ if ($Run) {
     $jar = Get-ChildItem (Join-Path $Repo "daedalus-server\target") -Filter "daedalus-server-*-exec.jar" | Sort-Object LastWriteTime -Descending | Select-Object -First 1   # newest: old versions linger in target
     $st = New-CimInstance -ClassName Win32_ProcessStartup -ClientOnly -Property @{ ShowWindow = [uint16]7 }
     Invoke-CimMethod Win32_Process -MethodName Create -Arguments @{
-        CommandLine = "`"$JavaHome\bin\java.exe`" -jar `"$($jar.FullName)`""; CurrentDirectory = "$Repo"; ProcessStartupInformation = $st } | Out-Null
+        CommandLine = "cmd.exe /c `"`"$JavaHome\bin\java.exe`" -jar `"$($jar.FullName)`" > `"$Jobs\server-out.log`" 2>&1`""
+        CurrentDirectory = "$Repo"; ProcessStartupInformation = $st } | Out-Null
     for ($i = 0; $i -lt 60 -and -not (Answering); $i++) { Start-Sleep -Seconds 2 }
     "$(Get-Date -Format s) " + $(if (Answering) { "UP on :8088" } else { "NOT answering on :8088" }) | Out-File $Log -Append -Encoding utf8
     exit
@@ -46,3 +47,5 @@ if ($Restart) {
 $s = @(Servers)
 "server: " + $(if ($s.Count) { "running pid $($s[0].ProcessId)" } else { "not running" }) + "; answering: " + (Answering)
 Get-Content $Log -Tail 4 -ErrorAction SilentlyContinue
+"--- server output (last lines) ---"
+Get-Content (Join-Path $Jobs "server-out.log") -Tail 8 -ErrorAction SilentlyContinue
