@@ -1,0 +1,65 @@
+{
+ "entries": {
+  "standin": {
+   "at": 1791773789,
+   "of": 3,
+   "ok": 3,
+   "suites": [
+    {
+     "floor": 23,
+     "got": 23,
+     "mark": "ok",
+     "name": "e2e",
+     "rc": 0,
+     "tail": [
+      "PASS list_commands shows built-ins and a project add-on with its params",
+      "PASS run_command runs the add-on across editor ticks",
+      "PASS an unknown command is an error that lists the known ones",
+      "PASS the window harness says plainly when it cannot run (not Windows)",
+      "PASS save saves the level and the changed packages",
+      "PASS output_log filters the editor log",
+      "PASS a frozen editor gives a clear timeout, not a hang",
+      "23/23"
+     ],
+     "total": 23
+    },
+    {
+     "floor": 14,
+     "got": 14,
+     "mark": "ok",
+     "name": "contract",
+     "rc": 0,
+     "tail": [
+      "PASS a READ command still runs",
+      "PASS DESTRUCTIVE cannot be allowed without MUTATE",
+      "PASS an unknown risk is rejected by name",
+      "PASS a retried request_id gets the first answer back, marked replayed",
+      "PASS ...and the command really ran once: a new request_id runs it again",
+      "PASS without a request_id every call runs",
+      "PASS an unknown command is code UNKNOWN and lists the known ones",
+      "14/14"
+     ],
+     "total": 14
+    },
+    {
+     "floor": 14,
+     "got": 16,
+     "mark": "ok",
+     "name": "walk",
+     "rc": 0,
+     "tail": [
+      "PASS test.count                   MUTATE         driven      ok",
+      "PASS test.countdown               MUTATE         driven      ok",
+      "PASS test.freeze                  MUTATE         excluded    stops the stand-in's ticks on purpose (the frozen-editor canary in tes",
+      "PASS test.policy                  READ           excluded    changes the bridge's policy; harness.contract drives it on purpose",
+      "PASS test.remote_calls            MUTATE         driven      ok",
+      "PASS test.remote_off              MUTATE         excluded    switches the stand-in's Remote Execution off for the rest of the run",
+      "PASS viewport_screenshot          SENSITIVE_READ driven      ok",
+      "16/16"
+     ],
+     "total": 16
+    }
+   ]
+  }
+ }
+}

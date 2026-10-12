@@ -1,0 +1,115 @@
+{
+ "entries": {
+  "standin": {
+   "at": 1791773772,
+   "buckets": {
+    "declined": 0,
+    "driven": 13,
+    "excluded": 3,
+    "failed": 0,
+    "refused": 0,
+    "unschemable": 0
+   },
+   "discovered": 16,
+   "max_risk": "DESTRUCTIVE",
+   "rows": [
+    {
+     "bucket": "driven",
+     "command": "execute_python",
+     "detail": "ok",
+     "risk": "MUTATE"
+    },
+    {
+     "bucket": "driven",
+     "command": "get_actor_info",
+     "detail": "ok",
+     "risk": "READ"
+    },
+    {
+     "bucket": "driven",
+     "command": "get_level_info",
+     "detail": "ok",
+     "risk": "READ"
+    },
+    {
+     "bucket": "driven",
+     "command": "list_commands",
+     "detail": "ok",
+     "risk": "READ"
+    },
+    {
+     "bucket": "driven",
+     "command": "output_log",
+     "detail": "ok",
+     "risk": "READ"
+    },
+    {
+     "bucket": "driven",
+     "command": "ping",
+     "detail": "ok",
+     "risk": "READ"
+    },
+    {
+     "bucket": "driven",
+     "command": "play",
+     "detail": "ok",
+     "risk": "MUTATE"
+    },
+    {
+     "bucket": "driven",
+     "command": "save",
+     "detail": "ok",
+     "risk": "DESTRUCTIVE"
+    },
+    {
+     "bucket": "driven",
+     "command": "stop",
+     "detail": "ok",
+     "risk": "MUTATE"
+    },
+    {
+     "bucket": "driven",
+     "command": "test.count",
+     "detail": "ok",
+     "risk": "MUTATE"
+    },
+    {
+     "bucket": "driven",
+     "command": "test.countdown",
+     "detail": "ok",
+     "risk": "MUTATE"
+    },
+    {
+     "bucket": "excluded",
+     "command": "test.freeze",
+     "detail": "stops the stand-in's ticks on purpose (the frozen-editor canary in tests/client.js)",
+     "risk": "MUTATE"
+    },
+    {
+     "bucket": "excluded",
+     "command": "test.policy",
+     "detail": "changes the bridge's policy; harness.contract drives it on purpose",
+     "risk": "READ"
+    },
+    {
+     "bucket": "driven",
+     "command": "test.remote_calls",
+     "detail": "ok",
+     "risk": "MUTATE"
+    },
+    {
+     "bucket": "excluded",
+     "command": "test.remote_off",
+     "detail": "switches the stand-in's Remote Execution off for the rest of the run",
+     "risk": "MUTATE"
+    },
+    {
+     "bucket": "driven",
+     "command": "viewport_screenshot",
+     "detail": "ok",
+     "risk": "SENSITIVE_READ"
+    }
+   ]
+  }
+ }
+}

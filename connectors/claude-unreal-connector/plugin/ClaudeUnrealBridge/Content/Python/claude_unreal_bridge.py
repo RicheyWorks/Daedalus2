@@ -312,8 +312,9 @@ def cmd_output_log(p):
 
 
 def cmd_list_commands(_p):
-    return {"commands": [{"name": n, "description": DESCRIPTIONS.get(n, ""), "params": PARAMS.get(n, {})}
-                         for n in sorted(COMMANDS)]}
+    return {"commands": [{"name": n, "description": DESCRIPTIONS.get(n, ""), "params": PARAMS.get(n, {}),
+                          "risk": RISK_OF.get(n, "MUTATE")} for n in sorted(COMMANDS)],
+            "policy": dict(POLICY), "risks": list(RISKS)}
 
 
 COMMANDS = {
@@ -349,20 +350,80 @@ PARAMS = {
 }
 
 
-def register(name, fn, description="", params=None):
-    """Add a command, e.g. register("daedalus.import_world", fn, "...", {"server": "str"}). Namespaced names
-    ("project.verb") keep add-ons from colliding with each other and with built-ins. Registering a name
-    again replaces it, so a project can reload its commands."""
+# ---------------------------------------------------------------- the gateway contract
+# Ported from the CSRBT and FlowersForever harness gateways. Every command declares a risk, least to most
+# consequential; a policy says which risks are allowed. DESTRUCTIVE cannot be allowed without MUTATE. A command
+# that does not declare a risk is held at MUTATE. The policy comes from CLAUDE_UNREAL_ALLOW (a comma list, e.g.
+# "READ,SENSITIVE_READ"); the default allows everything, because this bridge exists for full control.
+RISKS = ("READ", "SENSITIVE_READ", "MUTATE", "DESTRUCTIVE")
+RISK_OF = {
+    "ping": "READ", "list_commands": "READ", "get_level_info": "READ", "get_actor_info": "READ", "output_log": "READ",
+    "viewport_screenshot": "SENSITIVE_READ",
+    "execute_python": "MUTATE", "play": "MUTATE", "stop": "MUTATE",
+    "save": "DESTRUCTIVE",
+}
+
+
+def _policy_from_env():
+    raw = os.environ.get("CLAUDE_UNREAL_ALLOW", "").strip()
+    allowed = set(RISKS) if not raw else {r.strip().upper() for r in raw.split(",") if r.strip()}
+    pol = {r: (r in allowed) for r in RISKS}
+    if pol["DESTRUCTIVE"] and not pol["MUTATE"]:
+        pol["DESTRUCTIVE"] = False
+    return pol
+
+
+POLICY = _policy_from_env()
+
+
+def set_policy(allowed):
+    """Allow exactly these risks (an iterable of names). DESTRUCTIVE needs MUTATE."""
+    allowed = {a.upper() for a in allowed}
+    bad = allowed - set(RISKS)
+    if bad:
+        raise ValueError("unknown risk(s) %s; known: %s" % (sorted(bad), ", ".join(RISKS)))
+    if "DESTRUCTIVE" in allowed and "MUTATE" not in allowed:
+        raise ValueError("DESTRUCTIVE cannot be allowed without MUTATE")
+    POLICY.clear()
+    POLICY.update({r: (r in allowed) for r in RISKS})
+
+
+def register(name, fn, description="", params=None, risk="MUTATE"):
+    """Add a command, e.g. register("daedalus.import_world", fn, "...", {"server": "str"}, risk="MUTATE").
+    Namespaced names ("project.verb") keep add-ons from colliding with each other and with built-ins.
+    Registering a name again replaces it, so a project can reload its commands."""
     if not name or not callable(fn):
         raise ValueError("register needs a name and a callable")
+    if risk not in RISKS:
+        raise ValueError("risk must be one of %s" % ", ".join(RISKS))
     COMMANDS[name] = fn
     DESCRIPTIONS[name] = description
     PARAMS[name] = dict(params or {})
+    RISK_OF[name] = risk
+
+
+# request_id replay: a client that retries after a timeout sends the same request_id and gets the first answer
+# back (marked replayed), instead of running the command twice. Kept for the last REPLAY_KEEP requests.
+REPLAY_KEEP = 256
+_replies = {}
+_replay_order = []
+
+
+def _remember(rid, reply):
+    if rid is None:
+        return
+    _replies[rid] = reply
+    _replay_order.append(rid)
+    while len(_replay_order) > REPLAY_KEEP:
+        _replies.pop(_replay_order.pop(0), None)
 
 
 # ---------------------------------------------------------------- the game-thread pump
 
 def _finish(box, reply):
+    rid = box.get("request_id")
+    if rid is not None and reply.get("status") == "ok":
+        _remember(rid, dict(reply))
     box["reply"] = reply
     box["done"].set()
 
@@ -373,10 +434,24 @@ def _error(req, e):
 
 
 def _start(req, box):
+    params = req.get("params") or {}
+    rid = params.get("request_id")
+    if rid is not None and rid in _replies:
+        reply = dict(_replies[rid])
+        reply["id"], reply["replayed"] = req.get("id"), True
+        _finish(box, reply)
+        return
+    box["request_id"] = rid
     fn = COMMANDS.get(req.get("type"))
     if fn is None:
-        _finish(box, {"id": req.get("id"), "status": "error",
+        _finish(box, {"id": req.get("id"), "status": "error", "code": "UNKNOWN",
                       "message": "unknown command %r; known: %s" % (req.get("type"), ", ".join(sorted(COMMANDS)))})
+        return
+    risk = RISK_OF.get(req.get("type"), "MUTATE")
+    if not POLICY.get(risk, False):
+        _finish(box, {"id": req.get("id"), "status": "error", "code": "REFUSED", "risk": risk,
+                      "message": "%s is %s, which this bridge's policy does not allow (CLAUDE_UNREAL_ALLOW)"
+                                 % (req.get("type"), risk)})
         return
     try:
         out = fn(req.get("params") or {})

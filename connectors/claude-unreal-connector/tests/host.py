@@ -38,6 +38,17 @@ def _countdown(p):
 
 
 FROZEN = []
+COUNTER = [0]
+
+
+def _count(p):
+    COUNTER[0] += 1
+    return {"count": COUNTER[0]}
+
+
+bridge.register("test.count", _count, "Counts how many times it really ran (for request_id replay)", {})
+bridge.register("test.policy", lambda p: bridge.set_policy(p["allow"]) or {"policy": dict(bridge.POLICY)},
+                "Set the bridge's policy (the contract suite)", {"allow": "list (required)"}, risk="READ")
 bridge.register("test.freeze", lambda p: FROZEN.append(True) or {"frozen": True}, "Stop ticking, like a modal dialog")
 bridge.register("test.countdown", _countdown, "Counts down one number per editor tick", {"from": "int", "who": "str"})
 port = bridge.start(int(sys.argv[1]), register_tick=False)
