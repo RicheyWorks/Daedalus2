@@ -155,13 +155,29 @@ def to_unreal(xyz, units=100.0):
 
 # ---------------------------------------------------------------- inside the editor
 
+def _nanite_usage(mat, save=True):
+    """UE 5.8 imports the chunks as Nanite meshes. A material without the Nanite usage flag gets it only in
+    memory, and Map Check warns about it on every load. Set it, and save it, once."""
+    try:
+        if not mat.get_editor_property("used_with_nanite"):
+            mat.set_editor_property("used_with_nanite", True)
+            if save:
+                unreal.MaterialEditingLibrary.recompile_material(mat)
+                unreal.EditorAssetLibrary.save_loaded_asset(mat)
+    except Exception as e:  # an engine without the flag: nothing to set
+        unreal.log_warning("Daedalus: could not set Nanite usage on %s (%s)" % (mat.get_name(), e))
+
+
 def _material(name, translucent):
     tools = unreal.AssetToolsHelpers.get_asset_tools()
     path = CONTENT_ROOT + "/Materials"
     # Ask before loading: load_asset on a missing asset logs an error, and the commandlet counts it.
     if unreal.EditorAssetLibrary.does_asset_exist(path + "/" + name):
-        return unreal.EditorAssetLibrary.load_asset(path + "/" + name)
+        mat = unreal.EditorAssetLibrary.load_asset(path + "/" + name)
+        _nanite_usage(mat)
+        return mat
     mat = tools.create_asset(name, path, unreal.Material, unreal.MaterialFactoryNew())
+    _nanite_usage(mat, save=False)
     mel = unreal.MaterialEditingLibrary
     vc = mel.create_material_expression(mat, unreal.MaterialExpressionVertexColor, -400, 0)
     mel.connect_material_property(vc, "", unreal.MaterialProperty.MP_BASE_COLOR)
