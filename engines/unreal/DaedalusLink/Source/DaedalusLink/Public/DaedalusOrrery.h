@@ -37,6 +37,9 @@ public:
 	static bool IsDay(int32 Hour) { return Hour >= 6 && Hour < 18; }
 
 	static UDaedalusOrrery* Get(const UObject* WorldContext);
+	/** The same, for Blueprints and Python (the harness): unreal.DaedalusOrrery.get_orrery(world). */
+	UFUNCTION(BlueprintPure, Category = "Daedalus|Orrery", meta = (WorldContext = "WorldContext"))
+	static UDaedalusOrrery* GetOrrery(const UObject* WorldContext) { return Get(WorldContext); }
 
 	/** The sky hour, 0..24: the Sky Director's when there is one, else one island hour per SecondsPerHour. */
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Orrery") float Hour() const;
@@ -177,4 +180,37 @@ protected:
 
 private:
 	int32 Talks = 0;
+};
+
+/**
+ * An islander with a day (ADR-057): at each part of the sky clock they walk to their spot (home at night, their trade
+ * by day, the plaza at dusk) and say things that fit the hour and the hero's logbook step when talked to.
+ */
+UCLASS()
+class DAEDALUSLINK_API ADaedalusIslander : public ADaedalusUsable
+{
+	GENERATED_BODY()
+
+public:
+	ADaedalusIslander();
+	/** Art: Mob_Orr_<Who> (e.g. "Baker_Fen"); also the name shown. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Orrery") FString Who = TEXT("Baker_Fen");
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Orrery") FVector Home = FVector::ZeroVector;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Orrery") FVector Work = FVector::ZeroVector;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Orrery") FVector Plaza = FVector::ZeroVector;
+	/** Lines for morning, day, dusk and night, joined by '|'. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Orrery") FString Lines;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus|Orrery") FString Doing = TEXT("home");
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") TObjectPtr<UTextRenderComponent> Label;
+
+	virtual FString Prompt(const ADaedalusHero* Hero) const override;
+	virtual bool Use(ADaedalusHero* Hero) override;
+	virtual void Tick(float DeltaSeconds) override;
+
+protected:
+	virtual void BeginPlay() override;
+
+private:
+	FVector Target() const;
+	float Talking = 0.f;
 };

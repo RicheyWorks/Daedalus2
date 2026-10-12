@@ -10,6 +10,7 @@
 #include "Engine/StaticMesh.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
+#include "Kismet/GameplayStatics.h"
 
 // ------------------------------------------------------------------------------------------------ the herbs
 
@@ -453,5 +454,94 @@ bool ADaedalusKeeper::Use(ADaedalusHero* Hero)
 	O->Say(Lines[S]);
 	++Talks;
 	O->Advance(1);
+	return true;
+}
+
+// ------------------------------------------------------------------------------------------------ islanders
+
+ADaedalusIslander::ADaedalusIslander()
+{
+	PrimaryActorTick.bCanEverTick = true;
+	Body->SetCollisionProfileName(TEXT("Pawn"));
+	Label = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Label"));
+	Label->SetupAttachment(Body);
+	Label->SetHorizontalAlignment(EHTA_Center);
+	Label->SetWorldSize(22.f);
+	Label->SetTextRenderColor(FColor(235, 225, 200));
+	Label->SetRelativeLocation(FVector(0.f, 0.f, 215.f));
+}
+
+void ADaedalusIslander::BeginPlay()
+{
+	Super::BeginPlay();
+	SetArt(TEXT("Mob"), TEXT("Mob_Orr_") + Who, 1.f);
+	FString Shown = Who;
+	Shown.ReplaceInline(TEXT("_"), TEXT(" "));
+	Label->SetText(FText::FromString(Shown));
+	if (Home.IsZero()) Home = GetActorLocation();
+	if (Work.IsZero()) Work = Home;
+	if (Plaza.IsZero()) Plaza = Home;
+}
+
+FVector ADaedalusIslander::Target() const
+{
+	const UDaedalusOrrery* O = UDaedalusOrrery::Get(this);
+	const float H = O ? O->Hour() : 12.f;
+	if (H >= 22.f || H < 6.f) return Home;
+	if (H >= 18.f) return Plaza;
+	return Work;
+}
+
+void ADaedalusIslander::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	const float Dt = FMath::Min(DeltaSeconds, 0.1f);
+	Talking = FMath::Max(0.f, Talking - Dt);
+	const UDaedalusOrrery* O = UDaedalusOrrery::Get(this);
+	const float H = O ? O->Hour() : 12.f;
+	Doing = (H >= 22.f || H < 6.f) ? TEXT("home") : H >= 18.f ? TEXT("plaza") : TEXT("work");
+	// Face the hero while talking; otherwise walk to the hour's spot, following the ground.
+	if (Talking > 0.f)
+	{
+		if (const APawn* P = UGameplayStatics::GetPlayerPawn(this, 0))
+		{
+			const FVector To = P->GetActorLocation() - GetActorLocation();
+			SetActorRotation(FRotator(0.f, To.Rotation().Yaw - 90.f, 0.f));
+		}
+		return;
+	}
+	const FVector Goal = Target();
+	FVector To = Goal - GetActorLocation();
+	To.Z = 0.f;
+	if (To.Size() < 60.f) return;
+	const FVector Step = To.GetSafeNormal() * 130.f * Dt;
+	FVector Next = GetActorLocation() + Step;
+	FHitResult Hit;
+	FCollisionQueryParams Q(SCENE_QUERY_STAT(DaedalusIslander), false, this);
+	if (GetWorld()->LineTraceSingleByChannel(Hit, Next + FVector(0, 0, 300.f), Next - FVector(0, 0, 600.f), ECC_WorldStatic, Q))
+		Next.Z = FMath::FInterpTo(GetActorLocation().Z, Hit.ImpactPoint.Z, Dt, 10.f);
+	SetActorLocationAndRotation(Next, FRotator(0.f, To.Rotation().Yaw - 90.f, FMath::Sin(GetWorld()->GetTimeSeconds() * 9.f) * 2.f));
+}
+
+FString ADaedalusIslander::Prompt(const ADaedalusHero* Hero) const
+{
+	FString Shown = Who;
+	Shown.ReplaceInline(TEXT("_"), TEXT(" "));
+	return TEXT("Talk to ") + Shown;
+}
+
+bool ADaedalusIslander::Use(ADaedalusHero* Hero)
+{
+	UDaedalusOrrery* O = UDaedalusOrrery::Get(this);
+	if (!O) return false;
+	TArray<FString> Parts;
+	Lines.ParseIntoArray(Parts, TEXT("|"));
+	const float H = O->Hour();
+	const int32 Slot = (H >= 22.f || H < 6.f) ? 3 : H >= 18.f ? 2 : H >= 11.f ? 1 : 0;
+	FString Shown = Who;
+	Shown.ReplaceInline(TEXT("_"), TEXT(" "));
+	const FString Line = Parts.IsValidIndex(Slot) ? Parts[Slot] : (Parts.Num() ? Parts[0] : FString(TEXT("Fair skies.")));
+	O->Say(FString::Printf(TEXT("%s: \"%s\""), *Shown, *Line));
+	Talking = 4.f;
 	return true;
 }

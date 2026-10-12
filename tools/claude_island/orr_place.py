@@ -85,6 +85,34 @@ def at(x, y, z=0.0):
     return unreal.Vector(ORIGIN.x + x, ORIGIN.y + y, ORIGIN.z + z)
 
 
+# What the islanders say: morning | day | dusk | night. All original.
+ISLANDER_LINES = {
+    "Baker_Fen": "Starbread's in the oven. It rises best while Dawnthistle opens.|Comet eggs and orbit milk, that's the whole secret. "
+                 "Well, and the hour.|Come to the plaza later, I bring the heels of the loaves.|Shh. The dough is sleeping, and so should you.",
+    "Shepherd_Lio": "The lumewool flock glows brighter before rain. Watch them, not the sky.|Hay and herb stems. Never feed them "
+                    "Eclipsebell, they glow for a week.|Count the flock with me? Forty-one. Forty-one and a half, the lamb.|"
+                    "At night the flock is a little moon on the hillside.",
+    "Beekeeper_Mara": "The nebula bees only work a bloom in its hour. They read the clock better than I do.|Honey from a Noonspire "
+                      "hour tastes of brass and sunlight.|Bees home at dusk. The hive hums like a kettle.|Night bees? Only in stories. "
+                      "And in my dreams, lately.",
+    "LensGrinder_Tov": "Grit in the lens is a storm in the sky. Hand me that cloth.|The great telescope lost three lenses in the Long "
+                       "Storm. I've ground two.|Hold this up to the dusk. See the second ring? That's no reflection.|The stars are "
+                       "sharper after midnight, when the island stops breathing.",
+    "ChartMaker_Ilse": "Every chart is a promise between the sky and the soil.|The Keeper's charts drew each constellation over its "
+                       "two herbs. Find the herbs, you've found the chart.|Twelve charts, twelve pairs. The storm can't scatter "
+                       "what you remember.|Pick a bloom in its hour and it remembers you.",
+    "Ferryman_Bram": "Arks come in on the morning updraft. Mind the dock edge, it's a long fall.|I ferried a man to the Lens Forge "
+                     "isle once. He came back with eyes like brass.|Dusk crossings are calm. The fragments drift slower.|Sleep. "
+                     "The sky will still be broken in the morning.",
+    "Child_Pip": "I found a star chart once! It was a leaf. But it looked like a chart.|Keeper Ostra says the moon is closer every "
+                 "year. Is it coming to visit?|Race you to the well! Loser drinks the cloudy water.|I'm not tired. I'm watching for "
+                 "the eclipse brew glow.",
+    "Cartographer_Wen": "Our isle drifts nine paces east each year. I measure it with the well rope.|There are more isles in the Reach "
+                        "than on any chart: the Bloomfields, the Tidewells, the Lens Forge.|At dusk you can see the Vault isle's "
+                        "lamps, far to the south.|The map is never finished. That's what makes it a map.",
+}
+
+
 def ensure_sublevel():
     world = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
     name = SUB.split("/")[-1]
@@ -243,11 +271,31 @@ def run(seed=7):
     spots = {"Baker_Fen": (-1200, -6600), "Shepherd_Lio": (7200, -2400), "Beekeeper_Mara": (6000, 3600),
              "LensGrinder_Tov": (-3400, -1200), "ChartMaker_Ilse": (2400, 2400), "Ferryman_Bram": (2000, 12000),
              "Child_Pip": (300, -5200), "Cartographer_Wen": (-2400, 2600)}
-    for asset, kind, p in by.get("person", []):
-        key = asset.replace("Mob_Orr_", "")
-        if key in spots:
-            x, y = spots[key]
-            put(asset, kind, x, y, None, math.degrees(math.atan2(-y, -x)))
+    if not hasattr(unreal, "DaedalusIslander"):
+        for asset, kind, p in by.get("person", []):
+            key = asset.replace("Mob_Orr_", "")
+            if key in spots:
+                x, y = spots[key]
+                put(asset, kind, x, y, None, math.degrees(math.atan2(-y, -x)))
+    else:
+        homes = {"Baker_Fen": (-5600, -8200), "Shepherd_Lio": (8800, -1200), "Beekeeper_Mara": (7600, 5200),
+                 "LensGrinder_Tov": (-5200, -3800), "ChartMaker_Ilse": (3600, 7600), "Ferryman_Bram": (-1800, 9800),
+                 "Child_Pip": (2200, -8600), "Cartographer_Wen": (-8400, 2600)}
+        for who, line in ISLANDER_LINES.items():
+            if who not in spots:
+                continue
+            wx, wy = spots[who]
+            hx, hy = homes[who]
+            a = EAS.spawn_actor_from_class(unreal.DaedalusIslander, at(hx, hy, ground(hx, hy)), unreal.Rotator(0, 0, 0))
+            a.tags = [TAG]
+            a.set_folder_path("ClaudeIsland/Play")
+            a.set_actor_label("Orr_Islander_" + who)
+            a.set_editor_property("who", who)
+            a.set_editor_property("home", at(hx, hy, ground(hx, hy)))
+            a.set_editor_property("work", at(wx, wy, ground(wx, wy)))
+            a.set_editor_property("plaza", at(0 + (hash(who) % 7) * 150 - 450, -5600 - (hash(who) % 5) * 120, ground(0, -5600)))
+            a.set_editor_property("lines", line)
+            placed += 1
 
     # ---- the sky: moonlets, fragments, clouds and streaks above the island
     for i, (asset, kind, p) in enumerate(by["sky"]):
