@@ -6,6 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "DaedalusGhost.h"
+#include "DaedalusEncounters.h"
 #include "DaedalusNav.h"
 #include "DaedalusSettings.h"
 #include "DaedalusTarget.h"
@@ -211,6 +212,7 @@ void ADaedalusHero::BeginPlay()
 {
 	Super::BeginPlay();
 	LastGround = GetActorLocation();
+	LoadProgress();
 	TArray<UStaticMeshComponent*> Blocks;
 	GetComponents<UStaticMeshComponent>(Blocks);
 	for (UStaticMeshComponent* C : Blocks)
@@ -1032,9 +1034,13 @@ void ADaedalusHero::Tick(float DeltaSeconds)
 
 	// Vitals: the shield recharges after a quiet spell, then health.
 	SinceDamaged += DeltaSeconds;
-	if (SinceDamaged > ShieldDelay)
+	if (Shield > MaxShield)
 	{
-		Shield = FMath::Min(MaxShield, Shield + MaxShield * 0.5f * DeltaSeconds);
+		Shield = FMath::Max(MaxShield, Shield - 3.f * DeltaSeconds);   // overshield fades slowly
+	}
+	else if (SinceDamaged > ShieldDelay)
+	{
+		Shield = FMath::Min(MaxShield, Shield + ShieldRate * DeltaSeconds);
 		if (Shield >= MaxShield) Health = FMath::Min(MaxHealth, Health + MaxHealth * 0.25f * DeltaSeconds);
 	}
 
@@ -1104,6 +1110,92 @@ float ADaedalusHero::TakeDamage(float Damage, const FDamageEvent& Event, AContro
 	Rumble(Shield > 0.f ? 0.3f : 0.7f, 0.12f);
 	if (Health <= 0.f) Fall();
 	return Damage;
+}
+
+// ----------------------------------------------------------------------------------------------- armor (ADR-047)
+
+void ADaedalusHero::ApplyArmor()
+{
+	ArmorTier = FMath::Clamp(ArmorTier, 0, 3);
+	const float Was = MaxShield;
+	MaxShield = 100.f + 40.f * ArmorTier;
+	ShieldDelay = 4.f - 0.5f * ArmorTier;
+	ShieldRate = 50.f + 15.f * ArmorTier;
+	if (Shield >= Was) Shield = FMath::Max(Shield, MaxShield);   // a full shield stays full at the new size
+}
+
+FString ADaedalusHero::ArmorName() const
+{
+	static const TCHAR* Names[] = {TEXT("RECRUIT"), TEXT("SCOUT"), TEXT("VANGUARD"), TEXT("PARAGON")};
+	return Names[FMath::Clamp(ArmorTier, 0, 3)];
+}
+
+void ADaedalusHero::AddShieldCore()
+{
+	if (ArmorTier >= 3) { GiveOvershield(40.f); return; }   // maxed out: a core tops the shield past full instead
+	++ShieldCores;
+	if (ShieldCores >= 3)
+	{
+		ShieldCores = 0;
+		++ArmorTier;
+		ApplyArmor();
+		Shield = MaxShield;
+		Rumble(0.5f, 0.3f);
+	}
+	SaveProgress();
+}
+
+void ADaedalusHero::GiveOvershield(float Amount)
+{
+	Shield = FMath::Min(FMath::Max(Shield, MaxShield) + Amount, MaxShield * 2.f);
+	SinceDamaged = 100.f;
+}
+
+void ADaedalusHero::SetArmorTier(int32 Tier)
+{
+	ArmorTier = Tier;
+	ShieldCores = 0;
+	ApplyArmor();
+	Shield = MaxShield;
+	SaveProgress();
+}
+
+static FString ProgressPath()
+{
+	return FPaths::Combine(FPaths::ProjectSavedDir(), TEXT("Config"), TEXT("DaedalusHero.json"));
+}
+
+void ADaedalusHero::LoadProgress()
+{
+	FString Text;
+	TSharedPtr<FJsonObject> Root;
+	if (FFileHelper::LoadFileToString(Text, *ProgressPath())
+		&& FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) && Root.IsValid())
+	{
+		ArmorTier = Root->GetIntegerField(TEXT("armor_tier"));
+		ShieldCores = Root->GetIntegerField(TEXT("shield_cores"));
+		Exp = Root->GetIntegerField(TEXT("exp"));
+	}
+	ApplyArmor();
+	Shield = MaxShield;
+}
+
+void ADaedalusHero::SaveProgress() const
+{
+	const FString Text = FString::Printf(TEXT("{\n  \"armor_tier\": %d,\n  \"shield_cores\": %d,\n  \"exp\": %d\n}\n"), ArmorTier, ShieldCores, Exp);
+	FFileHelper::SaveStringToFile(Text, *ProgressPath());
+}
+
+FString ADaedalusHero::EncounterStats() const
+{
+	const UDaedalusEncounters* E = GetWorld() ? GetWorld()->GetSubsystem<UDaedalusEncounters>() : nullptr;
+	return E ? E->Stats() : FString(TEXT("no encounters (editor world?)"));
+}
+
+int32 ADaedalusHero::SpawnPack()
+{
+	UDaedalusEncounters* E = GetWorld() ? GetWorld()->GetSubsystem<UDaedalusEncounters>() : nullptr;
+	return E ? E->SpawnPack() : 0;
 }
 
 // Down: off any Ghost, back at the start (or the last ground) with full shield and health.
@@ -1278,6 +1370,7 @@ FString ADaedalusHero::MenuInput(const FString& Command)
 
 void ADaedalusHero::EndPlay(const EEndPlayReason::Type Reason)
 {
+	SaveProgress();
 	for (TSharedPtr<SWidget>* Host : {&MenuHost, &FieldHost, &HudHost})
 	{
 		if (Host->IsValid() && GEngine && GEngine->GameViewport)

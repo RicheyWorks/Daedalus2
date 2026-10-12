@@ -83,14 +83,15 @@ void SDaedalusHud::Construct(const FArguments& InArgs)
 					+ SOverlay::Slot()[SNew(SImage).Image(HudWhite()).ColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.15f))]
 					+ SOverlay::Slot().HAlign(HAlign_Center)
 					[
-						SNew(SBox).WidthOverride_Lambda([H]() { const ADaedalusHero* P = H.Get(); return FOptionalSize(P && P->MaxShield > 0.f ? 420.f * P->Shield / P->MaxShield : 0.f); })
+						SNew(SBox).WidthOverride_Lambda([H]() { const ADaedalusHero* P = H.Get(); return FOptionalSize(P && P->MaxShield > 0.f ? 420.f * FMath::Min(1.f, P->Shield / P->MaxShield) : 0.f); })
 						[
 							SNew(SImage).Image(HudWhite())
 							.ColorAndOpacity_Lambda([H]()
 							{
 								const ADaedalusHero* P = H.Get();
 								const bool bLow = P && P->Shield < P->MaxShield * 0.25f;
-								return FSlateColor(bLow ? Hot : Accent);
+								const bool bOver = P && P->Shield > P->MaxShield + 0.5f;   // overshield: gold
+								return FSlateColor(bOver ? FLinearColor(1.f, 0.78f, 0.2f, 1.f) : (bLow ? Hot : Accent));
 							})
 						]
 					]
@@ -170,6 +171,17 @@ void SDaedalusHud::Construct(const FArguments& InArgs)
 			[
 				SNew(STextBlock).Font(HudFont("Bold", 20)).ColorAndOpacity(Accent)
 				.Text_Lambda([H]() { const ADaedalusHero* P = H.Get(); return FText::FromString(P ? FString::Printf(TEXT("EXP %d"), P->Exp) : FString()); })
+			]
+			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 4.f, 0.f, 0.f)
+			[
+				SNew(STextBlock).Font(HudFont("Bold", 13)).ColorAndOpacity(Dim)
+				.Text_Lambda([H]()
+				{
+					const ADaedalusHero* P = H.Get();
+					if (!P) return FText::GetEmpty();
+					const FString Cores = P->ArmorTier >= 3 ? FString(TEXT("MAX")) : FString::Printf(TEXT("cores %d/3"), P->ShieldCores);
+					return FText::FromString(FString::Printf(TEXT("ARMOR %s  %s"), *P->ArmorName(), *Cores));
+				})
 			]
 		]
 	];

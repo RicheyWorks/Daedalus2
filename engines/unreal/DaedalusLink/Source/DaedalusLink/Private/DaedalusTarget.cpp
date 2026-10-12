@@ -4,6 +4,7 @@
 
 #include "Components/StaticMeshComponent.h"
 #include "DaedalusNav.h"
+#include "DaedalusPickup.h"
 #include "Engine/StaticMesh.h"
 #include "Engine/StaticMeshActor.h"
 #include "Engine/World.h"
@@ -377,6 +378,16 @@ float ADaedalusTarget::TakeDamage(float Damage, const FDamageEvent& Event, ACont
 	{
 		Dying = 0.f;
 		SetActorEnableCollision(false);
+		// Drops (ADR-047): knights always leave a shield core, shardbacks one time in four; anything, rarely, an overshield.
+		const float Roll = FMath::FRand();
+		if (Kind == TEXT("STONE_KNIGHT") || (Kind == TEXT("SHARDBACK") && Roll < 0.25f))
+		{
+			ADaedalusPickup::Drop(GetWorld(), GetActorLocation(), TEXT("CORE"));
+		}
+		else if (Roll > 0.95f)
+		{
+			ADaedalusPickup::Drop(GetWorld(), GetActorLocation(), TEXT("OVERSHIELD"));
+		}
 	}
 	return Damage;
 }

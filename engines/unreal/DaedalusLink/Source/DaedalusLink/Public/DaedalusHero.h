@@ -88,6 +88,21 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 Deaths = 0;
 	/** For the harness and for building: nothing hurts him. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") bool bInvulnerable = false;
+	/** Shield recharge per second once it starts. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") float ShieldRate = 50.f;
+
+	// Armor (ADR-047): 0 Recruit, 1 Scout, 2 Vanguard, 3 Paragon. Each tier: +40 shield, a quicker recharge.
+	// Three shield cores (dropped by knights and some shardbacks) raise a tier. Kept in Saved/Config/DaedalusHero.json.
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 ArmorTier = 0;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 ShieldCores = 0;
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") void AddShieldCore();
+	/** Halo's overshield: shield past full, fading slowly. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") void GiveOvershield(float Amount);
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") void SetArmorTier(int32 Tier);
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString ArmorName() const;
+	// Encounters (ADR-046), for the harness.
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString EncounterStats() const;
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") int32 SpawnPack();
 
 	// Weapons and views.
 	/** 0 = sword, 1 = blaster. */
@@ -154,6 +169,9 @@ private:
 	TWeakObjectPtr<class ADaedalusGhost> CalledGhost;
 	float SinceDamaged = 100.f;
 	void Fall();
+	void ApplyArmor();
+	void LoadProgress();
+	void SaveProgress() const;
 	UStaticMeshComponent* Block(USceneComponent* Parent, const FName Name, const FVector& Size, const FVector& At,
 	                            const FLinearColor& Color, bool bBody = true);
 	void Move(const FInputActionValue& V);
