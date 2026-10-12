@@ -27,9 +27,24 @@ function BuildToolsBusy {
         Where-Object { $_.CommandLine -match 'AutomationTool|UnrealBuildTool' }).Count -gt 0
 }
 
+# Play must not crawl when the editor isn't the window in front (it ran at ~3 fps). The per-user ini is rewritten by
+# the editor on exit, so the setting goes in the project's default config, which the editor never overwrites.
+function Set-FullSpeedDefault {
+    $cfg = Join-Path (Split-Path $Project) "Config\DefaultEditorPerProjectUserSettings.ini"
+    $section = "[/Script/UnrealEd.EditorPerformanceSettings]"
+    $key = "bThrottleCPUWhenNotForeground=False"
+    $text = if (Test-Path $cfg) { [IO.File]::ReadAllText($cfg) } else { "" }
+    if ($text -notmatch [regex]::Escape($key)) {
+        if ($text -match [regex]::Escape($section)) { $text = $text.Replace($section, "$section`r`n$key") }
+        else { $text = $text.TrimEnd() + "`r`n`r`n$section`r`n$key`r`n" }
+        [IO.File]::WriteAllText($cfg, $text)
+    }
+}
+
 if ($Run) {
     $log = Join-Path $Jobs "$Id.log"
     Set-Location $Repo
+    Set-FullSpeedDefault
     for ($attempt = 1; $attempt -le 2; $attempt++) {
         # Wait (up to 5 min) for any other Unreal build to finish instead of colliding with it.
         $until = (Get-Date).AddMinutes(5)
