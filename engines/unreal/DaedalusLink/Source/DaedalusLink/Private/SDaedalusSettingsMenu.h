@@ -10,7 +10,8 @@ class SVerticalBox;
 class SHorizontalBox;
 
 /**
- * The settings menu (ADR-041), laid out like Halo Infinite's: a tab ribbon across the top (LB / RB or Q / E),
+ * The pause menu and its settings (ADR-041), laid out like Halo Infinite's. Pausing shows only a short list
+ * (Resume, Settings, Respawn); choosing Settings opens the settings page: a tab ribbon across the top (LB / RB or Q / E),
  * a scrolling list of rows (up / down), each adjusted in place (left / right, A to flip), a panel on the right that
  * explains the selected row, and button hints along the bottom. Every change is applied and saved at once.
  * Works with a controller, the keyboard, and the mouse (click tabs, rows and arrows; wheel scrolls).
@@ -21,6 +22,7 @@ public:
 	SLATE_BEGIN_ARGS(SDaedalusSettingsMenu) {}
 		SLATE_EVENT(FSimpleDelegate, OnClose)
 		SLATE_EVENT(FSimpleDelegate, OnChanged)
+		SLATE_EVENT(FSimpleDelegate, OnRespawn)
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs);
@@ -31,6 +33,9 @@ public:
 
 	/** For the harness: which tab and row are selected. */
 	int32 GetTab() const { return Tab; }
+	bool InSettings() const { return bInSettings; }
+	void OpenSettings();
+	void Back();
 	int32 GetRow() const { return Row; }
 	void SelectTab(int32 NewTab);
 	void MoveRow(int32 Dir);
@@ -46,6 +51,10 @@ private:
 
 	FSimpleDelegate OnClose;
 	FSimpleDelegate OnChanged;
+	FSimpleDelegate OnRespawn;
+	bool bInSettings = false;
+	int32 PauseRow = 0;
+	void PauseSelect();
 	int32 Tab = 1;   // opens on CONTROLLER, where look inversion lives
 	int32 Row = 0;
 	TArray<int32> Rows;

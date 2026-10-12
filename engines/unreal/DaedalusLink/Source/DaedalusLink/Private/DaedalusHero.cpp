@@ -567,7 +567,8 @@ void ADaedalusHero::ToggleSettings()
 	}
 	Menu = SNew(SDaedalusSettingsMenu)
 		.OnClose(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::ToggleSettings))
-		.OnChanged(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::ApplySettings));
+		.OnChanged(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::ApplySettings))
+		.OnRespawn(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::Respawn));
 	MenuHost = SNew(SWeakWidget).PossiblyNullContent(Menu.ToSharedRef());
 	Viewport->AddViewportWidgetContent(MenuHost.ToSharedRef(), 100);
 	FInputModeUIOnly Mode;
@@ -588,4 +589,28 @@ void ADaedalusHero::EndPlay(const EEndPlayReason::Type Reason)
 	Menu.Reset();
 	MenuHost.Reset();
 	Super::EndPlay(Reason);
+}
+
+FString ADaedalusHero::MenuInput(const FString& Command)
+{
+	if (!Menu.IsValid())
+	{
+		return TEXT("closed");
+	}
+	if (Command == TEXT("settings")) Menu->OpenSettings();
+	else if (Command == TEXT("back")) Menu->Back();
+	else if (Command == TEXT("tab+")) Menu->SelectTab(Menu->GetTab() + 1);
+	else if (Command == TEXT("tab-")) Menu->SelectTab(Menu->GetTab() - 1);
+	else if (Command == TEXT("up")) Menu->MoveRow(-1);
+	else if (Command == TEXT("down")) Menu->MoveRow(+1);
+	else if (Command == TEXT("left")) Menu->Adjust(-1);
+	else if (Command == TEXT("right")) Menu->Adjust(+1);
+	else if (Command == TEXT("accept")) Menu->Accept();
+	else if (Command == TEXT("reset")) Menu->ResetTab();
+	if (!Menu.IsValid())
+	{
+		return TEXT("closed");
+	}
+	return Menu->InSettings() ? FString::Printf(TEXT("settings tab %d row %d"), Menu->GetTab(), Menu->GetRow())
+	                          : TEXT("pause");
 }

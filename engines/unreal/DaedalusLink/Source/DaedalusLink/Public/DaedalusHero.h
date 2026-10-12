@@ -68,6 +68,9 @@ public:
 	/** Open or close the settings menu (Menu button, Tab or F10). */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") void ToggleSettings();
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") bool IsSettingsOpen() const;
+	/** For the harness: drive the open menu like a controller ("settings", "back", "tab+", "tab-", "up", "down",
+	 *  "left", "right", "accept", "reset") and get its state back ("closed", "pause row 1", "settings tab 1 row 0"). */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString MenuInput(const FString& Command);
 	/** Apply the saved settings: camera, shield mode, deadzones (the look and rumble settings are read live). */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") void ApplySettings();
 	/** For the harness: set one setting by id ("InvertLookY", "LookSensH", ...), save it and apply it. */

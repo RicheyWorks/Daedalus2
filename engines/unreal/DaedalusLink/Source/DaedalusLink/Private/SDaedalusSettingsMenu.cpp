@@ -9,6 +9,7 @@
 #include "Widgets/Layout/SBorder.h"
 #include "Widgets/Layout/SBox.h"
 #include "Widgets/Layout/SScrollBox.h"
+#include "Widgets/Layout/SWidgetSwitcher.h"
 #include "Widgets/SBoxPanel.h"
 #include "Widgets/SOverlay.h"
 #include "Widgets/Text/STextBlock.h"
@@ -37,9 +38,70 @@ void SDaedalusSettingsMenu::Construct(const FArguments& InArgs)
 {
 	OnClose = InArgs._OnClose;
 	OnChanged = InArgs._OnChanged;
+	OnRespawn = InArgs._OnRespawn;
+
+	// The pause page: just the choices, like Halo Infinite's pause menu. Settings live one step in.
+	static const TCHAR* PauseItems[] = {TEXT("RESUME"), TEXT("SETTINGS"), TEXT("RESPAWN")};
+	TSharedRef<SVerticalBox> PauseList = SNew(SVerticalBox);
+	for (int32 i = 0; i < 3; ++i)
+	{
+		PauseList->AddSlot().AutoHeight().Padding(0.f, 0.f, 0.f, 8.f)
+		[
+			SNew(SBox).WidthOverride(460.f)
+			[
+				SNew(SBorder)
+				.BorderImage(White())
+				.BorderBackgroundColor_Lambda([this, i]() { return FSlateColor(i == PauseRow ? RowHot : RowIdle); })
+				.Padding(0.f)
+				.OnMouseButtonDown_Lambda([this, i](const FGeometry&, const FPointerEvent&) { PauseRow = i; PauseSelect(); return FReply::Handled(); })
+				[
+					SNew(SHorizontalBox)
+					+ SHorizontalBox::Slot().AutoWidth()
+					[
+						SNew(SBox).WidthOverride(4.f)
+						[
+							SNew(SImage).Image(White()).ColorAndOpacity_Lambda([this, i]() { return FSlateColor(i == PauseRow ? Accent : Clear); })
+						]
+					]
+					+ SHorizontalBox::Slot().FillWidth(1.f).Padding(22.f, 16.f)
+					[
+						SNew(STextBlock).Text(FText::FromString(PauseItems[i])).Font(Font("Bold", 22))
+						.ColorAndOpacity_Lambda([this, i]() { return FSlateColor(i == PauseRow ? Ink : Dim); })
+					]
+				]
+			]
+		];
+	}
 
 	ChildSlot
 	[
+		SNew(SWidgetSwitcher)
+		.WidgetIndex_Lambda([this]() { return bInSettings ? 1 : 0; })
+
+		+ SWidgetSwitcher::Slot()
+		[
+			SNew(SBorder)
+			.BorderImage(White())
+			.BorderBackgroundColor(FLinearColor(0.015f, 0.03f, 0.055f, 0.72f))
+			.Padding(FMargin(110.f, 90.f))
+			[
+				SNew(SVerticalBox)
+				+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 28.f)
+				[
+					SNew(STextBlock).Text(FText::FromString(TEXT("PAUSED"))).Font(Font("Bold", 34)).ColorAndOpacity(Ink)
+				]
+				+ SVerticalBox::Slot().AutoHeight()[PauseList]
+				+ SVerticalBox::Slot().FillHeight(1.f)
+				+ SVerticalBox::Slot().AutoHeight()
+				[
+					SNew(STextBlock).Font(Font("Bold", 15)).ColorAndOpacity(Dim)
+					.Text(FText::FromString(TEXT("[A] Select      [B] Resume")))
+				]
+			]
+		]
+
+		+ SWidgetSwitcher::Slot()
+		[
 		SNew(SBorder)
 		.BorderImage(White())
 		.BorderBackgroundColor(Glass)
@@ -138,8 +200,9 @@ void SDaedalusSettingsMenu::Construct(const FArguments& InArgs)
 				SNew(STextBlock)
 				.Font(Font("Bold", 15)).ColorAndOpacity(Dim)
 				.Text(FText::FromString(TEXT("[A] Select      [B] Back      [LB] [RB] Tabs      [D-Pad] Navigate      [Y] Reset Tab"
-				                             "          Keyboard: Q E tabs, arrows, Enter, R reset, Tab or Backspace to close")))
+				                             "          Keyboard: Q E tabs, arrows, Enter, R reset, Backspace back, Tab closes")))
 			]
+		]
 		]
 	];
 
@@ -342,19 +405,52 @@ void SDaedalusSettingsMenu::ResetTab()
 	}
 }
 
+void SDaedalusSettingsMenu::OpenSettings()
+{
+	bInSettings = true;
+	SelectTab(Tab);
+}
+
+void SDaedalusSettingsMenu::Back()
+{
+	if (bInSettings)
+	{
+		bInSettings = false;   // B in settings returns to the pause list, like Halo Infinite
+	}
+	else
+	{
+		OnClose.ExecuteIfBound();
+	}
+}
+
+void SDaedalusSettingsMenu::PauseSelect()
+{
+	switch (PauseRow)
+	{
+	case 0: OnClose.ExecuteIfBound(); break;
+	case 1: OpenSettings(); break;
+	case 2: OnRespawn.ExecuteIfBound(); OnClose.ExecuteIfBound(); break;
+	default: break;
+	}
+}
+
 FReply SDaedalusSettingsMenu::OnKeyDown(const FGeometry& Geometry, const FKeyEvent& Event)
 {
 	const FKey K = Event.GetKey();
+	// Menu / Start / Tab / F10 always resume; B / Backspace step back one page.
+	if (K == EKeys::Tab || K == EKeys::F10 || K == EKeys::Gamepad_Special_Right) { OnClose.ExecuteIfBound(); return FReply::Handled(); }
+	if (K == EKeys::Gamepad_FaceButton_Right || K == EKeys::BackSpace) { Back(); return FReply::Handled(); }
+	if (!bInSettings)
+	{
+		if (K == EKeys::Gamepad_FaceButton_Bottom || K == EKeys::Enter || K == EKeys::SpaceBar) { PauseSelect(); return FReply::Handled(); }
+		if (K == EKeys::W) { PauseRow = FMath::Max(0, PauseRow - 1); return FReply::Handled(); }
+		if (K == EKeys::S) { PauseRow = FMath::Min(2, PauseRow + 1); return FReply::Handled(); }
+		return FReply::Unhandled();
+	}
 	if (K == EKeys::Gamepad_LeftShoulder || K == EKeys::Q) { SelectTab(Tab - 1); return FReply::Handled(); }
 	if (K == EKeys::Gamepad_RightShoulder || K == EKeys::E) { SelectTab(Tab + 1); return FReply::Handled(); }
 	if (K == EKeys::Gamepad_FaceButton_Bottom || K == EKeys::Enter || K == EKeys::SpaceBar) { Accept(); return FReply::Handled(); }
 	if (K == EKeys::Gamepad_FaceButton_Top || K == EKeys::R) { ResetTab(); return FReply::Handled(); }
-	if (K == EKeys::Gamepad_FaceButton_Right || K == EKeys::BackSpace || K == EKeys::Tab || K == EKeys::F10
-		|| K == EKeys::Gamepad_Special_Right)
-	{
-		OnClose.ExecuteIfBound();
-		return FReply::Handled();
-	}
 	if (K == EKeys::W) { MoveRow(-1); return FReply::Handled(); }
 	if (K == EKeys::S) { MoveRow(+1); return FReply::Handled(); }
 	if (K == EKeys::A) { Adjust(-1); return FReply::Handled(); }
@@ -364,6 +460,12 @@ FReply SDaedalusSettingsMenu::OnKeyDown(const FGeometry& Geometry, const FKeyEve
 
 FNavigationReply SDaedalusSettingsMenu::OnNavigation(const FGeometry& Geometry, const FNavigationEvent& Event)
 {
+	if (!bInSettings)
+	{
+		if (Event.GetNavigationType() == EUINavigation::Up) { PauseRow = FMath::Max(0, PauseRow - 1); return FNavigationReply::Stop(); }
+		if (Event.GetNavigationType() == EUINavigation::Down) { PauseRow = FMath::Min(2, PauseRow + 1); return FNavigationReply::Stop(); }
+		return FNavigationReply::Stop();
+	}
 	switch (Event.GetNavigationType())
 	{
 	case EUINavigation::Up: MoveRow(-1); break;
