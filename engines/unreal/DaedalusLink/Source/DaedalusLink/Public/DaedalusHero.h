@@ -102,6 +102,29 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString ArmorName() const;
 	// Encounters (ADR-046), for the harness.
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString EncounterStats() const;
+
+	// Dig and build (ADR-049), the third tool: the PICK. Hold attack on a cube to mine it into the bag (harder
+	// cubes take longer); aim places the selected cube against the face you look at. R / D-pad left picks the cube.
+	// Survival rules: you place what you mined (daedalus.Creative 1: anything, endlessly).
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") TMap<FString, int32> Bag;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") FString SelectedCube;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") float MineProgress = 0.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 CubesMined = 0;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 CubesPlaced = 0;
+	/** The cube under the reticle (within reach), and its type. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") FIntVector TargetCube = FIntVector::ZeroValue;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") FString TargetType;
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") bool MineTarget();
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") bool PlaceCube();
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") void NextCube();
+	/** Seconds to mine a cube of this type (0: can't be mined). */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") static float Hardness(const FString& Type);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") float Reach = 550.f;
+
+	// Common sense (ADR-049): falls hurt, water slows a fall and you swim up with jump, the void kills.
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") bool bInWater = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") float FallDamageTaken = 0.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") float LastLandingSpeed = 0.f;
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") int32 SpawnPack();
 
 	// Weapons and views.
@@ -187,6 +210,8 @@ private:
 	void AimOn();
 	void AimOff();
 	void InteractPressed() { Interact(); }
+	void UpdateTarget(float Dt);
+	void MineHeld(float Dt);
 	void CallVehiclePressed();
 	void SprintOn();
 	void SprintOff();
@@ -218,6 +243,15 @@ private:
 	UPROPERTY() TObjectPtr<UInputAction> SprintAction;
 	UPROPERTY() TObjectPtr<UInputAction> ViewCycleAction;
 	UPROPERTY() TObjectPtr<UInputAction> CallVehicleAction;
+	UPROPERTY() TObjectPtr<UInputAction> NextCubeAction;
+	UPROPERTY() TObjectPtr<USceneComponent> Cursor;
+	UPROPERTY() TArray<TObjectPtr<UStaticMeshComponent>> PickBlocks;
+	bool bHasTarget = false;
+	FIntVector PlaceAt = FIntVector::ZeroValue;
+	FIntVector MiningCube = FIntVector(MAX_int32, 0, 0);
+	float SinceWater = 100.f;
+	float BaseGravity = 1.6f;
+	float BaseAirControl = 0.65f;
 	UPROPERTY() TObjectPtr<UInputAction> ShoulderAction;
 	UPROPERTY() TObjectPtr<UInputAction> MenuAction;
 	UPROPERTY() TObjectPtr<UInputAction> ViewAction;

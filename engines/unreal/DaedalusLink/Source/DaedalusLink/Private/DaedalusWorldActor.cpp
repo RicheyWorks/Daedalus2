@@ -7,6 +7,9 @@
 #include "Components/StaticMeshComponent.h"
 #include "Dom/JsonObject.h"
 #include "Engine/StaticMesh.h"
+#include "Engine/StaticMeshActor.h"
+#include "EngineUtils.h"
+#include "DaedalusNav.h"
 #include "Engine/World.h"
 #include "HttpModule.h"
 #include "Interfaces/IHttpRequest.h"
@@ -366,6 +369,24 @@ void ADaedalusWorldActor::FinishOne()
 	if (!bAnnounced)
 	{
 		bAnnounced = true;
+		// Play: the imported static chunks can't be dug, so the live, editable copy takes their place.
+		UWorld* W = GetWorld();
+		if (bReplaceImportedChunks && W && W->IsGameWorld() && ChunkMeshes.Num() > 0)
+		{
+			int32 Hidden = 0;
+			for (TActorIterator<AStaticMeshActor> It(W); It; ++It)
+			{
+				const UStaticMeshComponent* C = It->GetStaticMeshComponent();
+				const UStaticMesh* M = C ? C->GetStaticMesh() : nullptr;
+				if (M && M->GetName().StartsWith(TEXT("chunk_")))
+				{
+					It->SetActorHiddenInGame(true);
+					It->SetActorEnableCollision(false);
+					++Hidden;
+				}
+			}
+			UE_LOG(LogDaedalus, Log, TEXT("Live world in place of %d imported chunks"), Hidden);
+		}
 		UE_LOG(LogDaedalus, Log, TEXT("%s built: %d chunks, %d arks"), *WorldId, ChunkMeshes.Num(), ArkComponents.Num());
 		OnWorldLoaded.Broadcast(WorldId);
 	}
@@ -402,6 +423,7 @@ void ADaedalusWorldActor::BuildChunk(const daedalus::ChunkKey& Key)
 		Mesh = NewObject<UProceduralMeshComponent>(this, *FString::Printf(TEXT("chunk_%d_%d_%d"), K.X, K.Y, K.Z));
 		Mesh->SetupAttachment(RootComponent);
 		Mesh->bUseAsyncCooking = true;
+		Mesh->SetCollisionProfileName(TEXT("BlockAll"));   // WorldStatic: walked on, traced by foes and the nav
 		Mesh->RegisterComponent();
 		ChunkMeshes.Add(K, Mesh);
 	}
@@ -452,6 +474,91 @@ void ADaedalusWorldActor::BuildChunk(const daedalus::ChunkKey& Key)
 		UMaterialInterface* Mat = Section == 0 ? OpaqueMaterial.Get() : TranslucentMaterial.Get();
 		Mesh->SetMaterial(Section, Mat ? Mat : Fallback);
 	}
+}
+
+// ------------------------------------------------------------------------------------------- dig and build
+
+ADaedalusWorldActor* ADaedalusWorldActor::Find(const UObject* WorldContext)
+{
+	UWorld* W = WorldContext ? WorldContext->GetWorld() : nullptr;
+	if (!W) return nullptr;
+	ADaedalusWorldActor* Best = nullptr;
+	for (TActorIterator<ADaedalusWorldActor> It(W); It; ++It)
+	{
+		if (!Best || It->ChunkCount() > Best->ChunkCount()) Best = *It;
+	}
+	return Best;
+}
+
+FIntVector ADaedalusWorldActor::CubeCoord(FVector WorldPos) const
+{
+	// Unreal (x, y, z) = Daedalus (x, z, y) * UnitsPerCube, relative to this actor.
+	const FVector L = GetActorTransform().InverseTransformPosition(WorldPos) / UnitsPerCube;
+	return FIntVector(FMath::FloorToInt(L.X), FMath::FloorToInt(L.Z), FMath::FloorToInt(L.Y));
+}
+
+FVector ADaedalusWorldActor::CubeCenter(FIntVector Cube) const
+{
+	return GetActorTransform().TransformPosition(ToUnreal(FVector(Cube.X + 0.5, Cube.Y + 0.5, Cube.Z + 0.5)));
+}
+
+FString ADaedalusWorldActor::CubeAt(FVector WorldPos) const
+{
+	if (CubePalette.Types.empty()) return FString();
+	const FIntVector C = CubeCoord(WorldPos);
+	return UTF8_TO_TCHAR(CubePalette.Of(Store.Get(C.X, C.Y, C.Z)).Name.c_str());
+}
+
+TArray<FString> ADaedalusWorldActor::CubeTypes() const
+{
+	TArray<FString> Out;
+	for (const daedalus::CubeType& T : CubePalette.Types) Out.Add(UTF8_TO_TCHAR(T.Name.c_str()));
+	return Out;
+}
+
+FString ADaedalusWorldActor::SetCube(FIntVector Cube, const FString& Type)
+{
+	int32 Ordinal = -1;
+	const std::string Want = TCHAR_TO_UTF8(*Type.ToUpper());
+	for (size_t i = 0; i < CubePalette.Types.size(); ++i)
+	{
+		if (CubePalette.Types[i].Name == Want) { Ordinal = static_cast<int32>(i); break; }
+	}
+	if (Want == "AIR") Ordinal = 0;
+	if (Ordinal < 0) return FString();
+	const uint8_t Was = Store.Get(Cube.X, Cube.Y, Cube.Z);
+	Store.Set(Cube.X, Cube.Y, Cube.Z, static_cast<uint8_t>(Ordinal));
+	MarkDirty(daedalus::ChunkKey{daedalus::FloorDiv(Cube.X, daedalus::ChunkSize), daedalus::FloorDiv(Cube.Y, daedalus::ChunkSize),
+		daedalus::FloorDiv(Cube.Z, daedalus::ChunkSize)});
+	Rebuild();
+	if (UDaedalusNav* Nav = GetWorld() ? GetWorld()->GetSubsystem<UDaedalusNav>() : nullptr) Nav->ResetCache();
+
+	// To the server, so the edit lasts and others see it. The world's leases and permissions have the last word;
+	// a refused edit stays local until the next poll brings the server's chunk back.
+	TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Req = FHttpModule::Get().CreateRequest();
+	if (Ordinal == 0)
+	{
+		Req->SetURL(FString::Printf(TEXT("%s/api/v1/world/%s/block?x=%d&y=%d&z=%d"), *ServerUrl, *WorldId, Cube.X, Cube.Y, Cube.Z));
+		Req->SetVerb(TEXT("DELETE"));
+	}
+	else
+	{
+		Req->SetURL(FString::Printf(TEXT("%s/api/v1/world/%s/block"), *ServerUrl, *WorldId));
+		Req->SetVerb(TEXT("PUT"));
+		Req->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+		Req->SetContentAsString(FString::Printf(TEXT("{\"x\":%d,\"y\":%d,\"z\":%d,\"type\":\"%s\"}"), Cube.X, Cube.Y, Cube.Z, *Type.ToUpper()));
+	}
+	++EditsSent;
+	TWeakObjectPtr<ADaedalusWorldActor> Self(this);
+	Req->OnProcessRequestComplete().BindLambda([Self](FHttpRequestPtr, FHttpResponsePtr Resp, bool bOk)
+	{
+		if (!Self.IsValid()) return;
+		const int32 Code = Resp.IsValid() ? Resp->GetResponseCode() : 0;
+		if (bOk && EHttpResponseCodes::IsOk(Code)) ++Self->EditsAccepted;
+		else UE_LOG(LogDaedalus, Warning, TEXT("Block edit not saved on the server (%d)"), Code);
+	});
+	Req->ProcessRequest();
+	return UTF8_TO_TCHAR(CubePalette.Of(Was).Name.c_str());
 }
 
 FVector ADaedalusWorldActor::ArkBerth(const TSharedPtr<FJsonObject>& Ark) const

@@ -142,6 +142,26 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Daedalus")
 	FVector ToUnreal(const FVector& Daedalus) const;
 
+	// Digging and building (ADR-049). Positions are world space; one cube is UnitsPerCube across.
+
+	/** The cube type at a world point: "AIR", "STONE", "WATER", ... ("" outside the loaded world). */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString CubeAt(FVector WorldPos) const;
+	/** The cube's integer Daedalus coordinate for a world point. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") FIntVector CubeCoord(FVector WorldPos) const;
+	/** The world-space centre of a cube. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") FVector CubeCenter(FIntVector Cube) const;
+	/** Set one cube ("AIR" removes it), remesh at once, and send it to the server. Returns the type it replaced. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString SetCube(FIntVector Cube, const FString& Type);
+	/** Every cube type name in the palette, in order. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") TArray<FString> CubeTypes() const;
+	/** Edits sent to the server, and how many it accepted. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 EditsSent = 0;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 EditsAccepted = 0;
+	/** In a game, hide the imported static-mesh chunks (chunk_*) once this live world is built, so the editable copy is the one you walk on. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") bool bReplaceImportedChunks = true;
+	/** The live world in a level, if any. */
+	static ADaedalusWorldActor* Find(const UObject* WorldContext);
+
 	/** How many chunks are built right now. */
 	UFUNCTION(BlueprintPure, Category = "Daedalus")
 	int32 ChunkCount() const { return ChunkMeshes.Num(); }

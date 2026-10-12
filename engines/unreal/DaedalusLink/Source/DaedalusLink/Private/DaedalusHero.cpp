@@ -10,6 +10,7 @@
 #include "DaedalusNav.h"
 #include "DaedalusSettings.h"
 #include "DaedalusTarget.h"
+#include "DaedalusWorldActor.h"
 #include "EngineUtils.h"
 #include "Dom/JsonObject.h"
 #include "Engine/Engine.h"
@@ -188,6 +189,32 @@ ADaedalusHero::ADaedalusHero()
 	GunBlocks.Add(Block(SwordPivot, TEXT("GunGrip"), FVector(0.10f, 0.12f, 0.22f), FVector(14.f, 0.f, -90.f), FLinearColor(0.08f, 0.08f, 0.1f), false));
 	GunTip = Block(SwordPivot, TEXT("GunTip"), FVector(0.08f, 0.16f, 0.18f), FVector(72.f, 0.f, -75.f), FLinearColor(0.36f, 0.82f, 0.96f), false);
 	GunBlocks.Add(GunTip);
+	PickBlocks.Add(Block(SwordPivot, TEXT("PickHandle"), FVector(0.85f, 0.08f, 0.08f), FVector(45.f, 0.f, -75.f), FLinearColor(0.4f, 0.26f, 0.12f), false));
+	PickBlocks.Add(Block(SwordPivot, TEXT("PickHead"), FVector(0.10f, 0.12f, 0.62f), FVector(88.f, 0.f, -75.f), FLinearColor(0.55f, 0.58f, 0.62f), false));
+
+	// The cube cursor (ADR-049): twelve thin edges round the cube under the reticle, placed in world space.
+	Cursor = CreateDefaultSubobject<USceneComponent>(TEXT("Cursor"));
+	Cursor->SetupAttachment(RootComponent);
+	Cursor->SetUsingAbsoluteLocation(true);
+	Cursor->SetUsingAbsoluteRotation(true);
+	Cursor->SetUsingAbsoluteScale(true);
+	int32 Edge = 0;
+	for (int32 Axis = 0; Axis < 3; ++Axis)
+	{
+		for (const float A : {-50.f, 50.f})
+		{
+			for (const float B : {-50.f, 50.f})
+			{
+				FVector At, Size;
+				if (Axis == 0) { At = FVector(0.f, A, B); Size = FVector(1.03f, 0.03f, 0.03f); }
+				else if (Axis == 1) { At = FVector(A, 0.f, B); Size = FVector(0.03f, 1.03f, 0.03f); }
+				else { At = FVector(A, B, 0.f); Size = FVector(0.03f, 0.03f, 1.03f); }
+				UStaticMeshComponent* E = Block(Cursor, *FString::Printf(TEXT("CursorEdge%d"), Edge++), Size, At, FLinearColor(1.f, 1.f, 1.f), false);
+				E->SetCastShadow(false);
+			}
+		}
+	}
+	Cursor->SetVisibility(false, true);
 }
 
 UStaticMeshComponent* ADaedalusHero::Block(USceneComponent* Parent, const FName Name, const FVector& Size,
@@ -213,6 +240,8 @@ void ADaedalusHero::BeginPlay()
 	Super::BeginPlay();
 	LastGround = GetActorLocation();
 	LoadProgress();
+	BaseGravity = GetCharacterMovement()->GravityScale;
+	BaseAirControl = GetCharacterMovement()->AirControl;
 	TArray<UStaticMeshComponent*> Blocks;
 	GetComponents<UStaticMeshComponent>(Blocks);
 	for (UStaticMeshComponent* C : Blocks)
@@ -250,6 +279,7 @@ void ADaedalusHero::BeginPlay()
 	SprintAction = Make(TEXT("IA_Sprint"), B);
 	ViewCycleAction = Make(TEXT("IA_ViewCycle"), B);
 	CallVehicleAction = Make(TEXT("IA_CallVehicle"), B);
+	NextCubeAction = Make(TEXT("IA_NextCube"), B);
 	ShoulderAction = Make(TEXT("IA_Shoulder"), B);
 	MenuAction = Make(TEXT("IA_Menu"), B);
 	ViewAction = Make(TEXT("IA_View"), B);
@@ -289,6 +319,7 @@ void ADaedalusHero::BeginPlay()
 			EI->BindAction(ViewAction, ETriggerEvent::Started, this, &ADaedalusHero::ToggleField);
 			EI->BindAction(InteractAction, ETriggerEvent::Started, this, &ADaedalusHero::InteractPressed);
 			EI->BindAction(CallVehicleAction, ETriggerEvent::Started, this, &ADaedalusHero::CallVehiclePressed);
+			EI->BindAction(NextCubeAction, ETriggerEvent::Started, this, &ADaedalusHero::NextCube);
 		}
 		if (GEngine && GEngine->GameViewport)
 		{
@@ -366,6 +397,8 @@ void ADaedalusHero::RebuildBindings()
 	MapSpec(ViewCycleAction, TEXT("V"));
 	MapSpec(CallVehicleAction, TEXT("G"));
 	MapSpec(CallVehicleAction, TEXT("Gamepad_DPad_Right"));   // call a Ghost (ADR-043)
+	MapSpec(NextCubeAction, TEXT("R"));
+	MapSpec(NextCubeAction, TEXT("Gamepad_DPad_Left"));       // which cube to place (ADR-049)
 	MapSpec(ShoulderAction, TEXT("C"));
 	MapSpec(MenuAction, TEXT("F1"));
 	MapSpec(MenuAction, TEXT("F10"));
@@ -594,7 +627,7 @@ FString ADaedalusHero::ViewName() const
 
 bool ADaedalusHero::ShowsReticle() const
 {
-	return FDaedalusSettings::Get().V("Reticle") > 0.5f && (CameraView != 2 || CurrentWeapon == 1);
+	return FDaedalusSettings::Get().V("Reticle") > 0.5f && (CameraView != 2 || CurrentWeapon >= 1);
 }
 
 void ADaedalusHero::ApplyCameraView()
@@ -642,18 +675,19 @@ void ADaedalusHero::ApplyCameraView()
 
 FString ADaedalusHero::WeaponName() const
 {
-	return CurrentWeapon == 1 ? TEXT("BLASTER") : TEXT("SWORD");
+	return CurrentWeapon == 2 ? TEXT("PICK") : (CurrentWeapon == 1 ? TEXT("BLASTER") : TEXT("SWORD"));
 }
 
 void ADaedalusHero::ShowWeapon()
 {
 	for (UStaticMeshComponent* C : SwordBlocks) if (C) C->SetVisibility(CurrentWeapon == 0);
 	for (UStaticMeshComponent* C : GunBlocks) if (C) C->SetVisibility(CurrentWeapon == 1);
+	for (UStaticMeshComponent* C : PickBlocks) if (C) C->SetVisibility(CurrentWeapon == 2);
 }
 
 void ADaedalusHero::SwitchWeapon()
 {
-	CurrentWeapon = 1 - CurrentWeapon;
+	CurrentWeapon = (CurrentWeapon + 1) % 3;   // sword, blaster, pick
 	bAiming = false;
 	ShowWeapon();
 	Rumble(0.15f, 0.05f);
@@ -662,12 +696,14 @@ void ADaedalusHero::SwitchWeapon()
 void ADaedalusHero::AttackStart()
 {
 	if (CurrentWeapon == 0) Swing();
-	else Fire();
+	else if (CurrentWeapon == 1) Fire();
+	else MineProgress = 0.f;
 }
 
 void ADaedalusHero::AttackHeld()
 {
 	if (CurrentWeapon == 1) Fire();   // the blaster is automatic; Fire() keeps its own rate
+	else if (CurrentWeapon == 2) MineHeld(GetWorld() ? GetWorld()->GetDeltaSeconds() : 0.016f);
 }
 
 void ADaedalusHero::Melee()
@@ -790,6 +826,11 @@ void ADaedalusHero::Flash(const FVector& At, const FVector& Size, const FRotator
 
 void ADaedalusHero::AimOn()
 {
+	if (CurrentWeapon == 2)
+	{
+		PlaceCube();
+		return;
+	}
 	if (CurrentWeapon == 1)
 	{
 		bAiming = true;   // zoom
@@ -817,6 +858,14 @@ void ADaedalusHero::Dash()
 void ADaedalusHero::Landed(const FHitResult& Hit)
 {
 	Super::Landed(Hit);
+	// Falls hurt (about five cubes is free), unless water broke the fall or it's a down-thrust onto a foe.
+	LastLandingSpeed = -GetVelocity().Z;
+	if (!bThrusting && SinceWater > 0.3f && LastLandingSpeed > 1300.f)
+	{
+		const float Damage = (LastLandingSpeed - 1300.f) * 0.15f;
+		FallDamageTaken += Damage;
+		UGameplayStatics::ApplyDamage(this, Damage, nullptr, nullptr, nullptr);
+	}
 	if (bThrusting)
 	{
 		bThrusting = false;
@@ -927,6 +976,141 @@ FString ADaedalusHero::NavStats() const
 	return Nav ? Nav->Stats() : FString(TEXT("no nav"));
 }
 
+// ---------------------------------------------------------------------------------------- dig and build (ADR-049)
+
+static TAutoConsoleVariable<int32> CVarCreative(TEXT("daedalus.Creative"), 0,
+	TEXT("1: place any cube without mining it first (ADR-049)."));
+
+float ADaedalusHero::Hardness(const FString& Type)
+{
+	const FString T = Type.ToUpper();
+	if (T.IsEmpty() || T == TEXT("AIR") || T == TEXT("WATER") || T == TEXT("LAVA") || T == TEXT("PORTAL") || T == TEXT("BEDROCK") || T == TEXT("CLOUD"))
+	{
+		return 0.f;
+	}
+	if (T.Contains(TEXT("OBSIDIAN")) || T.Contains(TEXT("CRYSTAL"))) return 1.2f;
+	if (T.Contains(TEXT("STONE")) || T.Contains(TEXT("ROCK")) || T.Contains(TEXT("ORE")) || T.Contains(TEXT("BRICK")) || T.Contains(TEXT("METAL"))) return 0.75f;
+	if (T.Contains(TEXT("WOOD")) || T.Contains(TEXT("LOG")) || T.Contains(TEXT("PLANK"))) return 0.55f;
+	if (T.Contains(TEXT("LEAF")) || T.Contains(TEXT("LEAVES")) || T.Contains(TEXT("GLASS")) || T.Contains(TEXT("FLOWER"))) return 0.15f;
+	return 0.35f;   // dirt, grass, sand, snow...
+}
+
+void ADaedalusHero::UpdateTarget(float Dt)
+{
+	bHasTarget = false;
+	TargetType.Reset();
+	const ADaedalusWorldActor* Live = ADaedalusWorldActor::Find(this);
+	if (CurrentWeapon != 2 || !Live || !Camera)
+	{
+		Cursor->SetVisibility(false, true);
+		return;
+	}
+	const FVector Eye = Camera->GetComponentLocation();
+	const FVector Dir = Camera->GetForwardVector();
+	// In third person the camera sits behind the hero: measure reach from the hero's head, along the view.
+	const float Behind = FMath::Max(0.f, FVector::DotProduct(GetActorLocation() - Eye, Dir));
+	FHitResult Hit;
+	FCollisionQueryParams Q(SCENE_QUERY_STAT(DaedalusPick), false, this);
+	if (GetWorld()->LineTraceSingleByObjectType(Hit, Eye, Eye + Dir * (Behind + Reach), FCollisionObjectQueryParams(ECC_WorldStatic), Q)
+		&& Hit.GetActor() == Live)
+	{
+		TargetCube = Live->CubeCoord(Hit.ImpactPoint - Hit.ImpactNormal * 5.f);
+		PlaceAt = Live->CubeCoord(Hit.ImpactPoint + Hit.ImpactNormal * 5.f);
+		TargetType = Live->CubeAt(Live->CubeCenter(TargetCube));
+		bHasTarget = !TargetType.IsEmpty() && TargetType != TEXT("AIR");
+	}
+	Cursor->SetVisibility(bHasTarget, true);
+	if (bHasTarget)
+	{
+		Cursor->SetWorldLocationAndRotation(Live->CubeCenter(TargetCube), Live->GetActorRotation());
+	}
+	if (!bHasTarget || TargetCube != MiningCube) MineProgress = 0.f;
+}
+
+void ADaedalusHero::MineHeld(float Dt)
+{
+	if (!bHasTarget) return;
+	const float Need = Hardness(TargetType);
+	if (Need <= 0.f) return;
+	if (TargetCube != MiningCube)
+	{
+		MiningCube = TargetCube;
+		MineProgress = 0.f;
+	}
+	MineProgress += Dt / Need;
+	SwordPivot->AddLocalRotation(FRotator(-25.f * FMath::Sin(MineProgress * 18.f), 0.f, 0.f));
+	if (MineProgress >= 1.f) MineTarget();
+}
+
+bool ADaedalusHero::MineTarget()
+{
+	ADaedalusWorldActor* Live = ADaedalusWorldActor::Find(this);
+	if (!Live || !bHasTarget || Hardness(TargetType) <= 0.f) return false;
+	const FString Was = Live->SetCube(TargetCube, TEXT("AIR"));
+	if (Was.IsEmpty() || Was == TEXT("AIR")) return false;
+	Bag.FindOrAdd(Was) += 1;
+	if (SelectedCube.IsEmpty()) SelectedCube = Was;
+	++CubesMined;
+	MineProgress = 0.f;
+	MiningCube = FIntVector(MAX_int32, 0, 0);
+	Rumble(0.25f, 0.06f);
+	UpdateTarget(0.f);
+	return true;
+}
+
+bool ADaedalusHero::PlaceCube()
+{
+	ADaedalusWorldActor* Live = ADaedalusWorldActor::Find(this);
+	if (!Live || !bHasTarget || SelectedCube.IsEmpty()) return false;
+	const bool bCreative = CVarCreative.GetValueOnGameThread() != 0;
+	int32* Have = Bag.Find(SelectedCube);
+	if (!bCreative && (!Have || *Have <= 0)) return false;
+	const FVector Center = Live->CubeCenter(PlaceAt);
+	const FString There = Live->CubeAt(Center);
+	if (There != TEXT("AIR") && There != TEXT("WATER")) return false;
+	// Not inside yourself (a cube is 100 cm; the capsule is about 34 x 90).
+	const FVector Me = GetActorLocation();
+	if (FMath::Abs(Center.X - Me.X) < 84.f && FMath::Abs(Center.Y - Me.Y) < 84.f
+		&& FMath::Abs(Center.Z - Me.Z) < GetCapsuleComponent()->GetScaledCapsuleHalfHeight() + 50.f)
+	{
+		return false;
+	}
+	if (Live->SetCube(PlaceAt, SelectedCube).IsEmpty()) return false;
+	if (!bCreative && Have)
+	{
+		*Have -= 1;
+		if (*Have <= 0)
+		{
+			Bag.Remove(SelectedCube);
+			SelectedCube.Reset();
+			NextCube();
+		}
+	}
+	++CubesPlaced;
+	Rumble(0.15f, 0.04f);
+	return true;
+}
+
+void ADaedalusHero::NextCube()
+{
+	TArray<FString> Choices;
+	if (CVarCreative.GetValueOnGameThread() != 0)
+	{
+		if (const ADaedalusWorldActor* Live = ADaedalusWorldActor::Find(this))
+		{
+			for (const FString& T : Live->CubeTypes()) if (Hardness(T) > 0.f || T == TEXT("WATER")) Choices.Add(T);
+		}
+	}
+	else
+	{
+		Bag.GetKeys(Choices);
+		Choices.Sort();
+	}
+	if (Choices.Num() == 0) { SelectedCube.Reset(); return; }
+	const int32 At = Choices.IndexOfByKey(SelectedCube);
+	SelectedCube = Choices[(At + 1) % Choices.Num()];
+}
+
 bool ADaedalusHero::Interact()
 {
 	UWorld* W = GetWorld();
@@ -1029,8 +1213,40 @@ void ADaedalusHero::Tick(float DeltaSeconds)
 	}
 	else if (!LastGround.IsZero() && !GetAttachParentActor() && GetActorLocation().Z < LastGround.Z - FallLimit)
 	{
-		Respawn();
+		Fall();   // off the island into the void: that's a death, as in any game with a sky
 	}
+
+	// Water: a slow sink, jump swims up, and a waterfall carries you down gently.
+	if (const ADaedalusWorldActor* Live = ADaedalusWorldActor::Find(this))
+	{
+		const FVector At = GetActorLocation();
+		bInWater = Live->CubeAt(At) == TEXT("WATER") || Live->CubeAt(At - FVector(0.f, 0.f, 60.f)) == TEXT("WATER");
+	}
+	SinceWater = bInWater ? 0.f : SinceWater + DeltaSeconds;
+	if (bInWater)
+	{
+		Mv->GravityScale = 0.25f;
+		Mv->AirControl = 0.9f;
+		if (Mv->IsFalling())
+		{
+			FVector V = Mv->Velocity;
+			V.Z = bPressedJump ? FMath::Max(V.Z, 380.f) : FMath::Max(V.Z, -260.f);
+			V.X *= 0.97f;
+			V.Y *= 0.97f;
+			Mv->Velocity = V;
+		}
+		else if (bPressedJump)
+		{
+			LaunchCharacter(FVector(0.f, 0.f, 380.f), false, true);
+		}
+	}
+	else
+	{
+		Mv->GravityScale = BaseGravity;
+		Mv->AirControl = BaseAirControl;
+	}
+
+	UpdateTarget(DeltaSeconds);
 
 	// Vitals: the shield recharges after a quiet spell, then health.
 	SinceDamaged += DeltaSeconds;

@@ -184,6 +184,20 @@ void SDaedalusHud::Construct(const FArguments& InArgs)
 			]
 			+ SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Right).Padding(0.f, 6.f, 0.f, 0.f)
 			[
+				SNew(STextBlock).Font(HudFont("Bold", 15)).ColorAndOpacity(Ink).Justification(ETextJustify::Right)
+				.Visibility_Lambda([H]() { const ADaedalusHero* P = H.Get(); return P && P->CurrentWeapon == 2 ? EVisibility::HitTestInvisible : EVisibility::Collapsed; })
+				.Text_Lambda([H]()
+				{
+					const ADaedalusHero* P = H.Get();
+					if (!P) return FText::GetEmpty();
+					const int32* N = P->Bag.Find(P->SelectedCube);
+					const FString Sel = P->SelectedCube.IsEmpty() ? FString(TEXT("bag empty: mine something")) : FString::Printf(TEXT("%s x%d   (R / D-pad left)"), *P->SelectedCube, N ? *N : 0);
+					const FString Aim = P->TargetType.IsEmpty() ? FString() : FString::Printf(TEXT("%s  %d%%\n"), *P->TargetType, FMath::RoundToInt(P->MineProgress * 100.f));
+					return FText::FromString(Aim + Sel);
+				})
+			]
+			+ SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Right).Padding(0.f, 6.f, 0.f, 0.f)
+			[
 				SNew(STextBlock).Font(HudFont("Bold", 13)).ColorAndOpacity(Hot)
 				.Text(FText::FromString(TEXT("OVERHEATED")))
 				.Visibility_Lambda([H]() { const ADaedalusHero* P = H.Get(); return P && P->bOverheated ? EVisibility::HitTestInvisible : EVisibility::Collapsed; })
