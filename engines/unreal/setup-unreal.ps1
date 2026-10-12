@@ -88,6 +88,19 @@ function Get-ProjectEditors {
 if ($Open -and -not $WhatIfOnly) {
     $eds = Get-ProjectEditors
     if ($eds.Count -gt 0) {
+        # Save through the Claude Unreal Bridge first when it is listening, so closing raises no "Save Content"
+        # prompt for someone to click.
+        try {
+            $tcp = New-Object System.Net.Sockets.TcpClient
+            $tcp.Connect("127.0.0.1", 9877)
+            $st = $tcp.GetStream()
+            $msg = [Text.Encoding]::UTF8.GetBytes('{"id":1,"type":"save","params":{"bridge_timeout":60}}' + "`n")
+            $st.Write($msg, 0, $msg.Length)
+            $st.ReadTimeout = 60000
+            $reply = (New-Object System.IO.StreamReader($st)).ReadLine()
+            $tcp.Close()
+            if ($reply -match '"status": *"ok"') { Write-Host "Saved the open level through the Claude Unreal Bridge." }
+        } catch { }   # no bridge: Unreal asks about unsaved work itself
         Write-Host "Closing Unreal so the project can be updated (save anything it asks about)..." -ForegroundColor Cyan
         foreach ($e in $eds) { (Get-Process -Id $e.ProcessId -ErrorAction SilentlyContinue).CloseMainWindow() | Out-Null }
         for ($i = 0; $i -lt 120 -and (Get-ProjectEditors).Count -gt 0; $i++) { Start-Sleep -Seconds 1 }
