@@ -19,7 +19,7 @@ $Jobs = Join-Path $env:LOCALAPPDATA "Daedalus\jobs"
 New-Item -ItemType Directory -Force -Path $Jobs | Out-Null
 $Repo = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 
-function Latest { (Get-ChildItem $Jobs -Filter "*.log" | Sort-Object LastWriteTime -Descending | Select-Object -First 1).BaseName }
+function Latest { (Get-ChildItem $Jobs -Filter "build-*.log" | Sort-Object LastWriteTime -Descending | Select-Object -First 1).BaseName }
 
 function BuildToolsBusy {
     # Unreal's AutomationTool and UnrealBuildTool run as dotnet; only one may build at a time.

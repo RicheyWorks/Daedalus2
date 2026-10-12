@@ -124,6 +124,9 @@ to it when something new breaks.
 - **A report must not blame an old log.** `-Wait` printed AutomationTool's ErrorLog.txt ("conflicting instance")
   for two builds that had really failed on compile errors. The ErrorLog was from 8:53; the builds ran at 11:01.
   Compile errors now come first, and the ErrorLog is shown only when it was written during this job.
+- **Shared job folders need owned names.** Once the Blender team's harness also wrote jobs to
+  `%LOCALAPPDATA%\Daedalus\jobs`, `unreal-job -Wait` with no id reported their `bharness-job` as our build.
+  `Latest` now looks only at `build-*` logs.
 - **ASan and UBSan on every engine-free core.** The first run crashed with a heap overflow in the test's
   pathfinder: a target outside a smaller map. The sanitizer named the line; a plain build only said "segfault".
 
