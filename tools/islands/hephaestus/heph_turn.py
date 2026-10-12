@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Hephaestus's 3-minute editor turn (Grok 16:42-17:02 block, slot 16:58-17:01 hard stop). Run ONLY on a granted slot.
+"""Hephaestus's editor turn 17:43-17:53 PT (referee equal-turn order, after youtube-master; hard stop 17:52). Run ONLY on a granted slot.
     python heph_turn.py [--now]
 Waits for the previous slot's HANDOFF (youtube-master) on the team link, never starting before START or after LAST_START,
 then: ping bridge -> stop Play if running -> heph_island_ue.run() -> hero viewport + shot -> save -> post DONE + HANDOFF.
@@ -13,9 +13,11 @@ SHOTS = r"C:\Users\730ri\projects\bot-team\shots\hephaestus"
 OUTBOX = LINK + r"\outbox\hephaestus.jsonl"
 PREV = os.environ.get("HEPH_PREV", "youtube-master")
 TODAY = dt.date.today()
-START = dt.datetime.combine(TODAY, dt.time(16, 58))
-LAST_START = dt.datetime.combine(TODAY, dt.time(16, 59, 30))
-CAP = 150
+START = dt.datetime.combine(TODAY, dt.time(17, 43))
+FALLBACK = dt.datetime.combine(TODAY, dt.time(17, 44, 30))  # referee timetable: start even without HANDOFF if editor idle
+HARD_STOP = dt.datetime.combine(TODAY, dt.time(17, 52))
+LAST_START = dt.datetime.combine(TODAY, dt.time(17, 46))
+CAP = 150  # recomputed at start: never past HARD_STOP minus 60 s for stop+save
 LOG = []
 T0 = None
 
@@ -67,16 +69,19 @@ def left(): return CAP - (time.time() - T0)
 def main():
     global T0
     if "--now" not in sys.argv:
-        since = dt.datetime.combine(TODAY, dt.time(16, 50))
-        while dt.datetime.now() < LAST_START and not (dt.datetime.now() >= START and prev_handed_off(since)):
+        since = dt.datetime.combine(TODAY, dt.time(17, 30))
+        while dt.datetime.now() < LAST_START and not (dt.datetime.now() >= START and (prev_handed_off(since) or dt.datetime.now() >= FALLBACK)):
             time.sleep(5)
-        if not prev_handed_off(since):
+        if dt.datetime.now() >= LAST_START:
             say(f"no HANDOFF from {PREV} by {LAST_START:%H:%M:%S}; not starting")
             link(f"BLOCKED editor-slot grok (hephaestus): no HANDOFF from {PREV} by {LAST_START:%H:%M}; did not touch the editor. Need a new slot.")
             return None
+    global CAP
     T0 = time.time()
+    CAP = max(0, min(420, (HARD_STOP - dt.datetime.now()).total_seconds() - 60))
+    say(f"work cap {CAP:.0f}s, hard stop {HARD_STOP:%H:%M}")
     os.makedirs(SHOTS, exist_ok=True)
-    link("DOING editor-slot grok (hephaestus): turn started, placing Hephaestus Island in own sublevel")
+    link("TURN START hephaestus 17:43-17:53: DOING, placing Hephaestus Island in own sublevel")
     p = call("ping", timeout=15); say(f"editor: {p.get('level')} playing={p.get('playing')}")
     if p.get("playing"): call("stop")
     code = (f"import runpy,sys; sys.path.insert(0, r'{TOOL}'); "
@@ -112,6 +117,6 @@ if __name__ == "__main__":
             link(f"{'DONE' if ok else 'BLOCKED'} island:hephaestus editor turn {secs:.0f}s: {summary}; sublevel "
                  f"/Game/Hephaestus/Maps/HephaestusIsland at 6000000,2000000; shot in {SHOTS}" + ("" if ok else f" | {err[:200]}") +
                  " | Play stopped, saved")
-            link("HANDOFF editor-slot grok hephaestus -> next (Grok block 16:42-17:02 done)")
+            link("TURN DONE + HANDOFF hephaestus -> pythagoras (17:53 slot): editor saved, Play stopped")
             os.makedirs(SHOTS, exist_ok=True)
             open(os.path.join(SHOTS, "turn.log"), "w").write("\n".join(LOG))
