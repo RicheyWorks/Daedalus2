@@ -564,7 +564,7 @@ function Test-MsvcUsable([version]$v) {
 if ($Build) {
     Say "Build the plugin for the editor"
     $vc = Find-VcTools
-    $busy = if ($keep) { $null } else { Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.Path -like "*Microsoft Visual Studio\Installer*" } }
+    $busy = if ($keep) { $null } else { Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.Path -like "*Microsoft Visual Studio\Installer*" -and $_.MainWindowHandle -ne [IntPtr]::Zero -and $_.ProcessName -notmatch 'vswhere|BackgroundDownload|ServiceHub' } }
     if ($keep) {
         # built already; the toolchain is not needed
     } elseif ($busy -and -not $WhatIfOnly) {
