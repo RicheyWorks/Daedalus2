@@ -186,6 +186,9 @@ def _remote_node(want):
     return rx, node
 
 
+_remote_lock = threading.Lock()
+
+
 def _run_remote(code, box, want):
     """Background thread: send the wrapped code through Remote Execution, unattended, and keep the reply.
     Never touches the unreal module (game thread only)."""
@@ -195,7 +198,11 @@ def _run_remote(code, box, want):
             box["fallback"] = _remote["error"]
             return
         rx, _node = got
-        box["reply"] = rx.run_command(_wrap(code), unattended=True)
+        # One Remote Execution command connection is shared by every client thread, and Epic's client is not
+        # thread-safe: two concurrent run_command calls swapped replies (the art queue got another bot's `true`
+        # and failed with "'bool' object is not subscriptable"). Serialize them. (2026-10-12, Pythagoras)
+        with _remote_lock:
+            box["reply"] = rx.run_command(_wrap(code), unattended=True)
     except Exception as e:
         box["fallback"] = "Remote Execution failed: %s" % e
         _remote.update(rx=None, node=None)
