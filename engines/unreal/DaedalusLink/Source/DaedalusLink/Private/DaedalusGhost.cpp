@@ -253,6 +253,11 @@ void ADaedalusGhost::Dismount()
 	C->SetControlRotation(Look);
 }
 
+float ADaedalusGhost::TakeDamage(float Damage, const FDamageEvent& Event, AController* EventInstigator, AActor* DamageCauser)
+{
+	return Rider ? Rider->TakeDamage(Damage * 0.6f, Event, EventInstigator, DamageCauser) : 0.f;
+}
+
 void ADaedalusGhost::Move(const FInputActionValue& V)
 {
 	Stick = V.Get<FVector2D>();

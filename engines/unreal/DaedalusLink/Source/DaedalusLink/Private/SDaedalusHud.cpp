@@ -58,6 +58,62 @@ void SDaedalusHud::Construct(const FArguments& InArgs)
 		SNew(SOverlay)
 		.Visibility(EVisibility::HitTestInvisible)
 
+		// Hurt: the screen edge flushes red for a moment, deeper when the shield is down.
+		+ SOverlay::Slot()
+		[
+			SNew(SImage).Image(HudWhite())
+			.ColorAndOpacity_Lambda([H]()
+			{
+				const ADaedalusHero* P = H.Get();
+				const float T = P ? FMath::Clamp(1.f - P->SinceHurt() / 0.4f, 0.f, 1.f) : 0.f;
+				const float Deep = P && P->Shield <= 0.f ? 0.28f : 0.14f;
+				return FSlateColor(FLinearColor(0.9f, 0.05f, 0.03f, T * Deep));
+			})
+		]
+
+		// Top centre: the energy shield (Halo's bar) and health under it
+		+ SOverlay::Slot().HAlign(HAlign_Center).VAlign(VAlign_Top).Padding(0.f, 40.f, 0.f, 0.f)
+		[
+			SNew(SVerticalBox)
+			+ SVerticalBox::Slot().AutoHeight()
+			[
+				SNew(SBox).WidthOverride(420.f).HeightOverride(12.f)
+				[
+					SNew(SOverlay)
+					+ SOverlay::Slot()[SNew(SImage).Image(HudWhite()).ColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.15f))]
+					+ SOverlay::Slot().HAlign(HAlign_Center)
+					[
+						SNew(SBox).WidthOverride_Lambda([H]() { const ADaedalusHero* P = H.Get(); return FOptionalSize(P && P->MaxShield > 0.f ? 420.f * P->Shield / P->MaxShield : 0.f); })
+						[
+							SNew(SImage).Image(HudWhite())
+							.ColorAndOpacity_Lambda([H]()
+							{
+								const ADaedalusHero* P = H.Get();
+								const bool bLow = P && P->Shield < P->MaxShield * 0.25f;
+								return FSlateColor(bLow ? Hot : Accent);
+							})
+						]
+					]
+				]
+			]
+			+ SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center).Padding(0.f, 5.f, 0.f, 0.f)
+			[
+				SNew(SBox).WidthOverride(300.f).HeightOverride(5.f)
+				[
+					SNew(SOverlay)
+					+ SOverlay::Slot()[SNew(SImage).Image(HudWhite()).ColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.12f))]
+					+ SOverlay::Slot().HAlign(HAlign_Left)
+					[
+						SNew(SBox).WidthOverride_Lambda([H]() { const ADaedalusHero* P = H.Get(); return FOptionalSize(P && P->MaxHealth > 0.f ? 300.f * P->Health / P->MaxHealth : 0.f); })
+						[
+							SNew(SImage).Image(HudWhite())
+							.ColorAndOpacity_Lambda([H]() { const ADaedalusHero* P = H.Get(); return FSlateColor(P && P->Health < P->MaxHealth * 0.35f ? Hit : Ink); })
+						]
+					]
+				]
+			]
+		]
+
 		+ SOverlay::Slot().HAlign(HAlign_Center).VAlign(VAlign_Center)
 		[
 			SNew(SBox).WidthOverride(36.f).HeightOverride(36.f)

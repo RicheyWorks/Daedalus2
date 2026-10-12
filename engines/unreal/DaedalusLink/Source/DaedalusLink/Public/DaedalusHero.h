@@ -55,6 +55,7 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void SetupPlayerInputComponent(UInputComponent* Input) override;
 	virtual void Landed(const FHitResult& Hit) override;
+	virtual float TakeDamage(float Damage, const FDamageEvent& Event, AController* EventInstigator, AActor* DamageCauser) override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") TObjectPtr<USpringArmComponent> Boom;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") TObjectPtr<UCameraComponent> Camera;
@@ -75,6 +76,18 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 Exp = 0;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") FVector LastGround = FVector::ZeroVector;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") bool bShielding = false;
+
+	// Halo-style vitals (ADR-044): the energy shield takes hits first and recharges after ShieldDelay seconds
+	// untouched; health refills once the shield is full. At zero health he falls and comes back at the start.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") float MaxShield = 100.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") float MaxHealth = 100.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") float ShieldDelay = 4.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") float Shield = 100.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") float Health = 100.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") float DamageTaken = 0.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 Deaths = 0;
+	/** For the harness and for building: nothing hurts him. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") bool bInvulnerable = false;
 
 	// Weapons and views.
 	/** 0 = sword, 1 = blaster. */
@@ -121,6 +134,7 @@ public:
 
 	// For the HUD.
 	float HitMarkerTime() const { return SinceHit; }
+	float SinceHurt() const { return SinceDamaged; }
 	float Bloom() const { return Spread; }
 	bool ShowsReticle() const;
 	FString WeaponName() const;
@@ -133,6 +147,8 @@ protected:
 
 private:
 	TWeakObjectPtr<class ADaedalusGhost> CalledGhost;
+	float SinceDamaged = 100.f;
+	void Fall();
 	UStaticMeshComponent* Block(USceneComponent* Parent, const FName Name, const FVector& Size, const FVector& At,
 	                            const FLinearColor& Color, bool bBody = true);
 	void Move(const FInputActionValue& V);

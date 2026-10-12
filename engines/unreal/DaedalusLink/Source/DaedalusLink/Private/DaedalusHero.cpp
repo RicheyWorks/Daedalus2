@@ -851,7 +851,8 @@ int32 ADaedalusHero::SpawnFoes(int32 Count)
 		T->Kind = Rule.Kind;
 		T->Title = Rule.Title;
 		T->ExpValue = Rule.Exp;
-		T->Health = Rule.Life * 30.f;   // a sword blow takes one life; the blaster takes three shots per life
+		T->Health = Rule.Life * 30.f;
+		T->Power = Rule.Power;   // a sword blow takes one life; the blaster takes three shots per life
 		UGameplayStatics::FinishSpawningActor(T, FTransform(Spot));
 		++Placed;
 	}
@@ -963,6 +964,14 @@ void ADaedalusHero::Tick(float DeltaSeconds)
 		Respawn();
 	}
 
+	// Vitals: the shield recharges after a quiet spell, then health.
+	SinceDamaged += DeltaSeconds;
+	if (SinceDamaged > ShieldDelay)
+	{
+		Shield = FMath::Min(MaxShield, Shield + MaxShield * 0.5f * DeltaSeconds);
+		if (Shield >= MaxShield) Health = FMath::Min(MaxHealth, Health + MaxHealth * 0.25f * DeltaSeconds);
+	}
+
 	// Speed: walking, sprinting, or slowed behind the shield.
 	Mv->MaxWalkSpeed = bShielding ? 300.f : (bSprinting ? 950.f : 650.f);
 
@@ -1012,10 +1021,57 @@ void ADaedalusHero::Tick(float DeltaSeconds)
 	}
 }
 
+float ADaedalusHero::TakeDamage(float Damage, const FDamageEvent& Event, AController* EventInstigator, AActor* DamageCauser)
+{
+	if (bInvulnerable || Damage <= 0.f || Health <= 0.f) return 0.f;
+	// The sword's shield (aim with the sword) turns most of a blow from the front.
+	if (bShielding && CurrentWeapon == 0 && DamageCauser)
+	{
+		const FVector ToCauser = (DamageCauser->GetActorLocation() - GetActorLocation()).GetSafeNormal2D();
+		if (FVector::DotProduct(ToCauser, GetActorForwardVector()) > 0.3f) Damage *= 0.2f;
+	}
+	DamageTaken += Damage;
+	SinceDamaged = 0.f;
+	const float OnShield = FMath::Min(Shield, Damage);
+	Shield -= OnShield;
+	Health = FMath::Max(0.f, Health - (Damage - OnShield));
+	Rumble(Shield > 0.f ? 0.3f : 0.7f, 0.12f);
+	if (Health <= 0.f) Fall();
+	return Damage;
+}
+
+// Down: off any Ghost, back at the start (or the last ground) with full shield and health.
+void ADaedalusHero::Fall()
+{
+	++Deaths;
+	if (ADaedalusGhost* Bike = Cast<ADaedalusGhost>(GetAttachParentActor()))
+	{
+		Bike->Dismount();
+	}
+	FVector Start = LastGround;
+	if (AGameModeBase* GM = GetWorld() ? GetWorld()->GetAuthGameMode() : nullptr)
+	{
+		if (AActor* Spot = GM->FindPlayerStart(GetController()))
+		{
+			Start = Spot->GetActorLocation();
+		}
+	}
+	GetCharacterMovement()->StopMovementImmediately();
+	bThrusting = false;
+	SetActorLocation(Start + FVector(0.f, 0.f, 60.f), false, nullptr, ETeleportType::TeleportPhysics);
+	LastGround = Start;
+	Shield = MaxShield;
+	Health = MaxHealth;
+	SinceDamaged = 100.f;
+}
+
 void ADaedalusHero::Rumble(float Intensity, float Seconds) const
 {
 	if (!CVarRumble.GetValueOnGameThread()) return;
-	if (APlayerController* PC = Cast<APlayerController>(GetController()))
+	// On a Ghost the player's controller is the bike's, so find it through the world.
+	APlayerController* PC = Cast<APlayerController>(GetController());
+	if (!PC && GetWorld()) PC = GetWorld()->GetFirstPlayerController();
+	if (PC)
 	{
 		PC->PlayDynamicForceFeedback(Intensity * FMath::Clamp(CVarRumbleScale.GetValueOnGameThread(), 0.f, 1.f), Seconds,
 		                             true, true, true, true);
