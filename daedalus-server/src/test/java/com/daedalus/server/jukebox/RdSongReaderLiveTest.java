@@ -2,6 +2,8 @@
 
 package com.daedalus.server.jukebox;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
@@ -27,5 +29,9 @@ class RdSongReaderLiveTest {
         assertThat(held).contains(5L);
         byte[] html = r.tokenHtml(5);
         assertThat(RdSongReader.text(html)).startsWith("<!DOCTYPE html>");
+        // rd-coat's DAEDALUS.md regex for tokenData.hash, checked against the real HTML: same value as tokenHash(id).
+        Matcher m = Pattern.compile("tokenData\\s*=\\s*\\{[^}]*?hash\\s*:\\s*[\"'](0x[0-9a-fA-F]{64})").matcher(RdSongReader.text(html));
+        assertThat(m.find()).isTrue();
+        assertThat(m.group(1).toLowerCase()).isEqualTo(r.tokenHash(5));
     }
 }

@@ -6,6 +6,8 @@ import com.daedalus.server.config.JukeboxProperties;
 import com.daedalus.server.jukebox.JsonRpc;
 import com.daedalus.server.jukebox.JukeboxService;
 import com.daedalus.server.jukebox.StudioArranger;
+import com.daedalus.server.jukebox.radio.RadioService;
+import com.daedalus.server.jukebox.radio.RadioStation;
 import com.daedalus.server.web.ApiExceptionHandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,6 +37,7 @@ class JukeboxControllerTest {
     private final ObjectMapper json = new ObjectMapper();
     private MockMvc mvc;
     private boolean chainDown;
+    private boolean radioDown;
 
     /** Tokens 0..3: holder owns 1 and 3; 0..2 are revealed. */
     private final JsonRpc chain = (to, data) -> {
@@ -48,6 +51,7 @@ class JukeboxControllerTest {
             String w = String.format("%064x", sel.equals("0x18160ddd") ? 4 : sel.equals("0x5055fbc3") ? (id < 3 ? 1 : 0) : 0);
             out.add(switch (sel) {
                 case "0x18160ddd", "0x5055fbc3" -> "0x" + w;
+                case "0xa3864397" -> "0x" + "ab".repeat(32);
                 case "0x6352211e" -> "0x" + "0".repeat(24) + owners.get((int) id).substring(2);
                 case "0xb79bebaf" -> {
                     String hex = HexFormat.of().formatHex("<html>song</html>".getBytes());
@@ -70,8 +74,15 @@ class JukeboxControllerTest {
 
     private MockMvc boot(boolean enabled, String contract) {
         JukeboxProperties p = new JukeboxProperties(enabled, 46630, "", contract, seeds.toString(), 2, 0, 30, "");
+        RadioService radio = new RadioService(path -> {
+            if (radioDown) throw new IllegalStateException("down");
+            return List.of(
+                    new RadioStation("far", "Radio Eins", "https://eins/stream", "", "Berlin", "Berlin", "", "DE", 52.5, 13.4),
+                    new RadioStation("am", "KSUH 1450 AM", "http://ksuh/stream", "", "Washington", "Washington", "", "US", 47.31, -122.33),
+                    new RadioStation("fm", "KEXP 90.3 FM", "https://kexp/stream", "", "Washington", "Washington", "", "US", 47.62, -122.35));
+        }, () -> 0);
         return MockMvcBuilders.standaloneSetup(new JukeboxController(new JukeboxService(p, p.hasContract() ? chain : null,
-                StudioArranger.STUB))).setControllerAdvice(new ApiExceptionHandler()).build();
+                StudioArranger.STUB, radio))).setControllerAdvice(new ApiExceptionHandler()).build();
     }
 
     private JsonNode read(MockHttpServletResponse r) throws Exception {
@@ -142,6 +153,7 @@ class JukeboxControllerTest {
                 .param("studio", "true")).andReturn().getResponse());
         assertThat(a.get("available").asBoolean()).isFalse();
         assertThat(a.get("genre").asText()).isEqualTo("jazz");
+        assertThat(a.get("note").asText()).contains("original");
         assertThat(mvc.perform(get("/api/v1/jukebox/arrangement").param("source", "token:1").param("genre", "polka"))
                 .andReturn().getResponse().getStatus()).isEqualTo(400);
         assertThat(mvc.perform(get("/api/v1/jukebox/arrangement").param("source", "file:/etc/passwd"))
@@ -163,5 +175,54 @@ class JukeboxControllerTest {
         JsonNode r = read(mvc.perform(get("/api/v1/jukebox/owned").principal(() -> HOLDER)).andReturn().getResponse());
         assertThat(r.get("onChain").asBoolean()).isFalse();
         assertThat(r.get("tokens")).isEmpty();
+    }
+
+    @Test
+    void tokenHashIsReadFromTheChainOnlyAfterReveal() throws Exception {
+        JsonNode h = read(mvc.perform(get("/api/v1/jukebox/tokens/1/hash")).andReturn().getResponse());
+        assertThat(h.get("hash").asText()).isEqualTo("0x" + "ab".repeat(32));
+        assertThat(mvc.perform(get("/api/v1/jukebox/tokens/3/hash")).andReturn().getResponse().getStatus()).isEqualTo(404);
+        chainDown = true;
+        assertThat(mvc.perform(get("/api/v1/jukebox/tokens/2/hash")).andReturn().getResponse().getStatus()).isEqualTo(502);
+    }
+
+    @Test
+    void radioListsLocalFmFirstAndPlaysHttpsDirectHttpThroughTheRelay() throws Exception {
+        JsonNode r = read(mvc.perform(get("/api/v1/jukebox/radio/stations").param("lat", "47.6062").param("lon", "-122.3321"))
+                .andReturn().getResponse());
+        JsonNode st = r.get("stations");
+        assertThat(st.get(0).get("id").asText()).isEqualTo("fm");
+        assertThat(st.get(0).get("tier").asText()).isEqualTo("LOCAL_FM");
+        assertThat(st.get(0).get("band").asText()).isEqualTo("FM");
+        assertThat(st.get(0).get("play").asText()).isEqualTo("https://kexp/stream");
+        assertThat(st.get(1).get("tier").asText()).isEqualTo("LOCAL");
+        assertThat(st.get(1).get("play").asText()).isEqualTo("/api/v1/jukebox/radio/stream/am");
+        assertThat(st.get(2).get("tier").asText()).isEqualTo("ELSEWHERE");
+    }
+
+    @Test
+    void radioWithNoLocationStillAnswersAndSaysSo() throws Exception {
+        JsonNode r = read(mvc.perform(get("/api/v1/jukebox/radio/stations")).andReturn().getResponse());
+        assertThat(r.get("note").asText()).contains("No location");
+        assertThat(r.get("stations")).hasSize(3);
+        radioDown = true;
+        mvc = boot(true, RDSONG);
+        assertThat(mvc.perform(get("/api/v1/jukebox/radio/stations").param("place", "Nowhere"))
+                .andReturn().getResponse().getStatus()).isEqualTo(502);
+    }
+
+    @Test
+    void theRelayNeverFetchesAUrlItDidNotList() throws Exception {
+        for (String id : List.of("never-listed", "http:%2F%2Fevil", "fm")) {
+            assertThat(mvc.perform(get("/api/v1/jukebox/radio/stream/" + id)).andReturn().getResponse().getStatus())
+                    .as(id).isEqualTo(404);       // "fm" was not listed by this controller instance yet
+        }
+    }
+
+    @Test
+    void studioRelaysAnswer404WhenNoStudioIsConnected() throws Exception {
+        assertThat(mvc.perform(get("/api/v1/jukebox/studio/audio/e00015__jazz__studio__v1.mp3")).andReturn().getResponse().getStatus()).isEqualTo(404);
+        assertThat(mvc.perform(get("/api/v1/jukebox/coat.png").param("hash", "0x" + "ab".repeat(32))).andReturn().getResponse().getStatus()).isEqualTo(404);
+        assertThat(mvc.perform(get("/api/v1/jukebox/coat").param("hash", "0x" + "ab".repeat(32))).andReturn().getResponse().getStatus()).isEqualTo(404);
     }
 }
