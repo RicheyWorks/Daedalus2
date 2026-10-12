@@ -909,6 +909,12 @@ TArray<FString> ADaedalusHero::NavProbe(FVector From, FVector To)
 	return Out;
 }
 
+FString ADaedalusHero::NavTrace(FVector At, float RefZ)
+{
+	UDaedalusNav* Nav = GetWorld() ? GetWorld()->GetSubsystem<UDaedalusNav>() : nullptr;
+	return Nav ? Nav->TraceReport(At, RefZ) : FString(TEXT("no nav"));
+}
+
 FString ADaedalusHero::NavStats() const
 {
 	const UDaedalusNav* Nav = GetWorld() ? GetWorld()->GetSubsystem<UDaedalusNav>() : nullptr;

@@ -170,6 +170,23 @@ FString UDaedalusNav::Stats() const
 		Searches, Found, Expanded, Samples, Floors.Num(), LastExpanded, LastLength);
 }
 
+FString UDaedalusNav::TraceReport(const FVector& At, float RefZ)
+{
+	UWorld* W = GetWorld();
+	if (!W) return TEXT("no world");
+	const FVector Mid(At.X, At.Y, RefZ);
+	FHitResult Hit;
+	const bool bObj = W->LineTraceSingleByObjectType(Hit, Mid + FVector(0.f, 0.f, 300.f), Mid - FVector(0.f, 0.f, StepDown + 20.f),
+		FCollisionObjectQueryParams(ECC_WorldStatic));
+	FString Out = FString::Printf(TEXT("world=%s obj_hit=%d z=%.0f n=%.2f actor=%s"), *W->GetName(), bObj ? 1 : 0,
+		Hit.ImpactPoint.Z - RefZ, Hit.ImpactNormal.Z, Hit.GetActor() ? *Hit.GetActor()->GetName() : TEXT("-"));
+	FHitResult Vis;
+	const bool bVis = W->LineTraceSingleByChannel(Vis, Mid + FVector(0.f, 0.f, 300.f), Mid - FVector(0.f, 0.f, StepDown + 20.f), ECC_Visibility);
+	Out += FString::Printf(TEXT(" | vis_hit=%d z=%.0f n=%.2f actor=%s"), bVis ? 1 : 0, Vis.ImpactPoint.Z - RefZ, Vis.ImpactNormal.Z,
+		Vis.GetActor() ? *Vis.GetActor()->GetName() : TEXT("-"));
+	return Out;
+}
+
 void UDaedalusNav::ResetCache()
 {
 	Floors.Reset();

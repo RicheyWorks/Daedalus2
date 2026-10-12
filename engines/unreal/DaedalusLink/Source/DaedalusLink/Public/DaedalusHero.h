@@ -115,6 +115,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString NavStats() const;
 	/** For the harness: run one route search and report it, with the floors the finder reads around the start. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") TArray<FString> NavProbe(FVector From, FVector To);
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString NavTrace(FVector At, float RefZ);
 	/** Turn so the reticle is on a world point (the harness aims with it). */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") void AimAt(FVector Point);
 	/** Interact (X / E): get on the nearest Ghost within reach. Returns true if he mounted. */

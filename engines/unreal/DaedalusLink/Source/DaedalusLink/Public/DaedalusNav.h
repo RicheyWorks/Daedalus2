@@ -39,6 +39,8 @@ public:
 	// The record (the harness reads these with Stats()).
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString Stats() const;
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") void ResetCache();
+	/** For the harness: the floor trace for one point, uncached, with what it hit and in which world. */
+	FString TraceReport(const FVector& At, float RefZ);
 
 	int32 Searches = 0;
 	int32 Found = 0;
