@@ -228,10 +228,21 @@ if (-not (Test-Path (Join-Path $PluginSource "DaedalusLink.uplugin"))) {
 }
 
 # --- 5. World Package ----------------------------------------------------------------------------------------
+# Any HTTP answer means a server is listening; only a refused or timed-out connection means it isn't.
+$script:LastProbe = ""
 function Test-Server {
     try {
-        return (Invoke-WebRequest -Uri "$($Server.TrimEnd('/'))/api/v1/worlds" -UseBasicParsing -TimeoutSec 3).StatusCode -eq 200
-    } catch { return $false }
+        $r = Invoke-WebRequest -Uri "$($Server.TrimEnd('/'))/api/v1/worlds" -UseBasicParsing -TimeoutSec 10
+        $script:LastProbe = "HTTP $($r.StatusCode)"
+        return $true
+    } catch {
+        if ($_.Exception.Response) {
+            $script:LastProbe = "HTTP $([int]$_.Exception.Response.StatusCode)"
+            return $true
+        }
+        $script:LastProbe = $_.Exception.Message
+        return $false
+    }
 }
 
 function Find-Java {
@@ -310,9 +321,9 @@ function Start-LocalServer {
     Start-Process powershell -ArgumentList @("-NoExit", "-Command", $cmd) | Out-Null
     for ($i = 0; $i -lt 90; $i++) {
         Start-Sleep -Seconds 2
-        if (Test-Server) { Write-Host "    server is up"; return }
+        if (Test-Server) { Write-Host "    server is up ($script:LastProbe)"; return }
     }
-    Warn "the server did not answer within 3 minutes; check its window"
+    Warn "the server did not answer within 3 minutes ($script:LastProbe); check its window"
 }
 
 $PackageDir = Join-Path (Join-Path $ProjectDir "Saved") "Daedalus"
