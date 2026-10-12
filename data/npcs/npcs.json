@@ -1,0 +1,30 @@
+{
+ "schema": "daedalus.npcs/v0",
+ "board": 16,
+ "npcs": [
+  {
+   "id": "npc_ark_keeper",
+   "role": "quest giver, tutorial",
+   "home": "ark deck",
+   "behavior": "idle+talk"
+  },
+  {
+   "id": "npc_trader",
+   "role": "trade",
+   "home": "island dock",
+   "behavior": "idle+trade"
+  },
+  {
+   "id": "npc_crater_scholar",
+   "role": "lore, q_crater",
+   "home": "landmark_impact_site rim",
+   "behavior": "wander radius 20m"
+  },
+  {
+   "id": "npc_beast_tender",
+   "role": "pet care tips",
+   "home": "ark pen",
+   "behavior": "idle"
+  }
+ ]
+}
