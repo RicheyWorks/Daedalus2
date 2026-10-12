@@ -292,7 +292,9 @@ def main(argv=None):
         if name == "send":
             p.add_argument("--to", required=True)
             p.add_argument("--type", required=True)
-            p.add_argument("--body", default="{}", help="JSON")
+            p.add_argument("--body", default="{}", help="JSON (or use --asset / --text: no quoting trouble in PowerShell)")
+            p.add_argument("--asset", help="shorthand for --body {\"asset\": ...}")
+            p.add_argument("--text", nargs="+", help="shorthand for --body {\"text\": ...}; the rest of the line")
         if name in ("wait", "log"):
             p.add_argument("--after", type=int, default=0)
             p.add_argument("--timeout", type=float, default=25)
@@ -305,7 +307,12 @@ def main(argv=None):
         return 0
     link = Link(a.me, a.port)
     if a.cmd == "send":
-        out = {"id": link.send(a.to, a.type, json.loads(a.body))}
+        body = json.loads(a.body)
+        if a.asset:
+            body["asset"] = a.asset
+        if a.text:
+            body["text"] = " ".join(a.text)
+        out = {"id": link.send(a.to, a.type, body)}
     elif a.cmd == "wait":
         msgs, last = link.wait(a.after, a.timeout)
         out = {"messages": msgs, "last": last}

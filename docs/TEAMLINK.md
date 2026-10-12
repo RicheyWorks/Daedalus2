@@ -41,7 +41,8 @@ Any other type passes through untouched, so new types need no broker change.
 Run these in `Daedalus2\connectors\claude-asset-pipeline`:
 
 ```
-python -m asset_pipeline.teamlink send --me blender-team --to unreal-team --type asset.ready --body "{\"asset\":\"Tool_Axe\"}"
+python -m asset_pipeline.teamlink send --me blender-team --to unreal-team --type asset.ready --asset Tool_Axe
+python -m asset_pipeline.teamlink send --me blender-team --to unreal-team --type note --text the axe head is 0.3 m
 python -m asset_pipeline.teamlink wait --me blender-team --after 0
 python -m asset_pipeline.teamlink presence
 python -m asset_pipeline.teamlink ping --me blender-team --to unreal-team
