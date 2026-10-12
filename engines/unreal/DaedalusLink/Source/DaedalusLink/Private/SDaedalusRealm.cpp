@@ -3,6 +3,7 @@
 #include "SDaedalusRealm.h"
 
 #include "DaedalusLinkModule.h"
+#include "Containers/Ticker.h"
 #include "Engine/Texture2D.h"
 #include "RHITypes.h"
 #include "HAL/IConsoleManager.h"
@@ -54,10 +55,14 @@ void SDaedalusRealm::Construct(const FArguments& InArgs)
 		]
 	];
 	Refresh();
+	// The game runs on the core ticker, not in Slate's Tick: Slate stops ticking a widget when the window is
+	// minimized or hidden, and the realm (and the harness driving it) must keep going regardless.
+	CoreTickHandle = FTSTicker::GetCoreTicker().AddTicker(FTickerDelegate::CreateSP(this, &SDaedalusRealm::CoreTick));
 }
 
 SDaedalusRealm::~SDaedalusRealm()
 {
+	FTSTicker::GetCoreTicker().RemoveTicker(CoreTickHandle);
 	Brush.Reset();
 	Texture.Reset();
 }
@@ -134,17 +139,22 @@ void SDaedalusRealm::Jukebox()
 	Req->ProcessRequest();
 }
 
-void SDaedalusRealm::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
+bool SDaedalusRealm::CoreTick(float DeltaTime)
 {
-	SCompoundWidget::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
-	Core.Tick(FMath::Min(InDeltaTime, 0.1f));
-	Refresh();
+	Core.Tick(FMath::Min(DeltaTime, 0.1f));
 	Jukebox();
 	if (Core.WantsExit() && !bExitSent)
 	{
 		bExitSent = true;
 		OnExit.ExecuteIfBound();
 	}
+	return true;
+}
+
+void SDaedalusRealm::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
+{
+	SCompoundWidget::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
+	Refresh();   // drawing only; the game itself runs in CoreTick
 }
 
 bool SDaedalusRealm::MapKey(const FKey& Key, DR::Button& Out)

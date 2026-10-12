@@ -124,6 +124,11 @@ to it when something new breaks.
 - **A report must not blame an old log.** `-Wait` printed AutomationTool's ErrorLog.txt ("conflicting instance")
   for two builds that had really failed on compile errors. The ErrorLog was from 8:53; the builds ran at 11:01.
   Compile errors now come first, and the ErrorLog is shown only when it was written during this job.
+- **Game logic must not live in Slate's Tick.** The realm walked 12 steps in one run and 0 in the next. The
+  difference: the editor was minimized for the second run, and Slate stops ticking widgets in a minimized window.
+  The portal's exit (raised from Tick) never fired either. The core now runs on `FTSTicker`, which ticks no matter
+  what; Slate's Tick only copies pixels. The scenario also tries each direction until one walks, because a seed can
+  put water to the right of the spawn.
 - **Shared job folders need owned names.** Once the Blender team's harness also wrote jobs to
   `%LOCALAPPDATA%\Daedalus\jobs`, `unreal-job -Wait` with no id reported their `bharness-job` as our build.
   `Latest` now looks only at `build-*` logs.

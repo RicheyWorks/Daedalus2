@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Containers/Ticker.h"
 #include "Engine/Texture2D.h"
 #include "UObject/StrongObjectPtr.h"
 #include "Widgets/SCompoundWidget.h"
@@ -57,6 +58,8 @@ public:
 private:
 	static bool MapKey(const FKey& Key, daedalus::realm::Button& Out);
 	void Jukebox();
+	bool CoreTick(float DeltaTime);
+	FTSTicker::FDelegateHandle CoreTickHandle;
 
 	daedalus::realm::Realm Core;
 	FSimpleDelegate OnExit;

@@ -602,11 +602,15 @@ def scenario_realm(p):
     h.realm_input("a")
     h.realm_input("toughen")
     steps0 = int(_kv(h.realm_state()).get("steps", 0))
-    h.realm_input("hold:right")
-    yield from _frames(60)
-    h.realm_input("release:right")
-    yield from _frames(10)
-    walked = int(_kv(h.realm_state()).get("steps", 0)) - steps0
+    walked = 0
+    for way in ("right", "left", "down", "up"):   # the first way that isn't water or a wall
+        h.realm_input("hold:" + way)
+        yield from _frames(30)
+        h.realm_input("release:" + way)
+        yield from _frames(5)
+        walked = int(_kv(h.realm_state()).get("steps", 0)) - steps0
+        if walked >= 3:
+            break
     while _kv(h.realm_state()).get("mode") == "BATTLE":   # walking can meet monsters
         h.realm_input("autofight")
         h.realm_input("a")
