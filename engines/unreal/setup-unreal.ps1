@@ -271,6 +271,33 @@ function Set-IniValue([string]$file, [string]$section, [string]$key, [string]$va
     Set-Content -Path $file -Value $out -Encoding UTF8
 }
 
+# Processes that have a file under $dir loaded (a running editor keeps the plugin's DLL open).
+function Get-Lockers([string]$dir) {
+    $full = [System.IO.Path]::GetFullPath($dir)
+    return @(Get-Process -ErrorAction SilentlyContinue | Where-Object {
+        try { @($_.Modules | Where-Object { $_.FileName -and $_.FileName.StartsWith($full, [StringComparison]::OrdinalIgnoreCase) }).Count -gt 0 }
+        catch { $false }
+    })
+}
+
+# Removes the installed plugin. If Windows refuses because a program has it loaded, that program (an Unreal editor
+# or one of its helpers) is asked to close, then stopped if it won't, and the removal is tried again.
+function Remove-PluginCopy([string]$dir) {
+    try { Remove-Item -Recurse -Force $dir -ErrorAction Stop; return } catch { }
+    $lockers = Get-Lockers $dir
+    if ($lockers.Count -eq 0) {
+        $lockers = @(Get-Process UnrealEditor, UnrealEditor-Cmd, LiveCodingConsole, ShaderCompileWorker -ErrorAction SilentlyContinue)
+    }
+    foreach ($p in $lockers) {
+        Write-Host ("    {0} (pid {1}) has the plugin open; closing it" -f $p.ProcessName, $p.Id)
+        $p.CloseMainWindow() | Out-Null
+    }
+    for ($i = 0; $i -lt 30 -and @($lockers | Where-Object { -not $_.HasExited }).Count -gt 0; $i++) { Start-Sleep -Seconds 1 }
+    $lockers | Where-Object { -not $_.HasExited } | Stop-Process -Force -ErrorAction SilentlyContinue
+    Start-Sleep -Seconds 2
+    Remove-Item -Recurse -Force $dir -ErrorAction Stop
+}
+
 # --- 4. Plugin ---------------------------------------------------------------------------------------------
 Say "DaedalusLink plugin"
 $PluginDest = Join-Path (Join-Path $ProjectDir "Plugins") "DaedalusLink"
@@ -286,7 +313,7 @@ if (-not (Test-Path (Join-Path $PluginSource "DaedalusLink.uplugin"))) {
     if ($keep) {
         Write-Host "    the compiled plugin there matches these sources; keeping it"
     } else {
-        if (Test-Path $PluginDest) { Remove-Item -Recurse -Force $PluginDest }
+        if (Test-Path $PluginDest) { Remove-PluginCopy $PluginDest }
         New-Item -ItemType Directory -Force -Path (Split-Path $PluginDest -Parent) | Out-Null
         Copy-Item -Recurse -Force $PluginSource $PluginDest
     }
