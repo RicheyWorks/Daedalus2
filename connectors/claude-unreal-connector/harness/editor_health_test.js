@@ -3,6 +3,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const { getEventListeners } = require('node:events');
 const { classify, guardedCall, EditorHealthError } = require('../extension/server/editor-health.js');
 
 const PID = 4200;
@@ -608,4 +609,292 @@ test('health evidence is emitted for preflight and final verification', async ()
   });
   assert.ok(evidence.length >= 2);
   assert.ok(evidence.every(value => value && typeof value === 'object'));
+});
+
+function externalSecurityReason() {
+  // An external observer owns these fields. The guard must forward this object unchanged.
+  return Object.freeze(Object.assign(new Error('external security alert'), {
+    name: 'SecurityAlertError', code: 'SECURITY_ALERT',
+    dispatched: false, outcome_uncertain: false,
+  }));
+}
+
+async function expectPromptAbort(run, reason) {
+  let timer;
+  try {
+    await assert.rejects(Promise.race([run, new Promise((_, reject) => {
+      timer = setTimeout(() => reject(new Error('external abort did not settle promptly')), 750);
+    })]), error => {
+      assert.strictEqual(error, reason);
+      return true;
+    });
+  } finally { clearTimeout(timer); }
+}
+
+const eventLoopTurn = () => new Promise(resolve => setImmediate(resolve));
+
+test('a pre-aborted external signal prevents all probes, gates and calls', async () => {
+  const outer = new AbortController();
+  const reason = externalSecurityReason();
+  outer.abort(reason);
+  let probes = 0, gates = 0, calls = 0;
+  await expectPromptAbort(guardedCall({
+    signal: outer.signal,
+    probe: async () => { probes++; return healthy(); },
+    beforeDispatch: () => { gates++; },
+    call: async () => { calls++; }, timeoutMs: 5000,
+  }), reason);
+  assert.equal(probes, 0);
+  assert.equal(gates, 0);
+  assert.equal(calls, 0);
+  assert.equal(getEventListeners(outer.signal, 'abort').length, 0);
+});
+
+test('external cancellation aborts an active call and preserves observer error identity and metadata', async () => {
+  const outer = new AbortController();
+  const reason = externalSecurityReason();
+  const started = deferred();
+  let probes = 0, calls = 0, callSignal;
+  const run = guardedCall({
+    signal: outer.signal,
+    probe: async () => { probes++; return healthy(); },
+    call: ({ signal }) => { calls++; callSignal = signal; started.resolve(); return never(); },
+    timeoutMs: 5000, pollMs: 4000,
+  });
+  await started.promise;
+  outer.abort(reason);
+  await expectPromptAbort(run, reason);
+  assert.equal(callSignal.aborted, true);
+  assert.strictEqual(callSignal.reason, reason);
+  assert.equal(probes, 1);
+  assert.equal(calls, 1);
+  assert.equal(reason.dispatched, false);
+  assert.equal(reason.outcome_uncertain, false);
+  assert.equal(getEventListeners(outer.signal, 'abort').length, 0);
+});
+
+test('external cancellation interrupts an initial probe and a late result cannot dispatch', async () => {
+  const outer = new AbortController();
+  const reason = externalSecurityReason();
+  const started = deferred();
+  const probeResult = deferred();
+  let probes = 0, calls = 0, probeSignal;
+  const evidence = [];
+  const run = guardedCall({
+    signal: outer.signal,
+    probe: ({ signal }) => { probes++; probeSignal = signal; started.resolve(); return probeResult.promise; },
+    call: async () => { calls++; },
+    onEvidence: value => evidence.push(value), timeoutMs: 5000, probeTimeoutMs: 4000,
+  });
+  await started.promise;
+  outer.abort(reason);
+  await expectPromptAbort(run, reason);
+  assert.equal(probeSignal.aborted, true);
+  assert.strictEqual(probeSignal.reason, reason);
+  probeResult.resolve(healthy());
+  await eventLoopTurn();
+  assert.equal(probes, 1);
+  assert.equal(calls, 0);
+  assert.equal(evidence.length, 0);
+  assert.equal(getEventListeners(outer.signal, 'abort').length, 0);
+});
+
+test('external cancellation interrupts a monitor probe and the call without another health check', async () => {
+  const outer = new AbortController();
+  const reason = externalSecurityReason();
+  const monitorStarted = deferred();
+  const monitorResult = deferred();
+  let probes = 0, calls = 0, probeSignal, callSignal;
+  const evidence = [];
+  const run = guardedCall({
+    signal: outer.signal,
+    probe: ({ signal }) => {
+      if (++probes === 1) return healthy();
+      probeSignal = signal;
+      monitorStarted.resolve();
+      return monitorResult.promise;
+    },
+    call: ({ signal }) => { calls++; callSignal = signal; return never(); },
+    onEvidence: value => evidence.push(value), timeoutMs: 5000, pollMs: 5, probeTimeoutMs: 4000,
+  });
+  await monitorStarted.promise;
+  outer.abort(reason);
+  await expectPromptAbort(run, reason);
+  for (const signal of [probeSignal, callSignal]) {
+    assert.equal(signal.aborted, true);
+    assert.strictEqual(signal.reason, reason);
+  }
+  monitorResult.resolve(recovery());
+  await eventLoopTurn();
+  assert.equal(probes, 2);
+  assert.equal(calls, 1);
+  assert.equal(evidence.length, 1);
+  assert.equal(getEventListeners(outer.signal, 'abort').length, 0);
+});
+
+test('external cancellation during final verification rejects a completed call', async () => {
+  const outer = new AbortController();
+  const reason = externalSecurityReason();
+  const finalStarted = deferred();
+  const finalResult = deferred();
+  let probes = 0, calls = 0, probeSignal, callSignal;
+  const run = guardedCall({
+    signal: outer.signal,
+    probe: ({ signal }) => {
+      if (++probes === 1) return healthy();
+      probeSignal = signal;
+      finalStarted.resolve();
+      return finalResult.promise;
+    },
+    call: async ({ signal }) => { calls++; callSignal = signal; return 'completed response'; },
+    timeoutMs: 5000, pollMs: 4000, probeTimeoutMs: 4000,
+  });
+  await finalStarted.promise;
+  outer.abort(reason);
+  await expectPromptAbort(run, reason);
+  assert.equal(probeSignal.aborted, true);
+  assert.equal(callSignal.aborted, true);
+  assert.strictEqual(probeSignal.reason, reason);
+  assert.strictEqual(callSignal.reason, reason);
+  finalResult.resolve(healthy());
+  await eventLoopTurn();
+  assert.equal(probes, 2);
+  assert.equal(calls, 1);
+  assert.equal(getEventListeners(outer.signal, 'abort').length, 0);
+});
+
+test('external cancellation interrupts a dispatch gate and a late release cannot invoke the call', async () => {
+  const outer = new AbortController();
+  const reason = externalSecurityReason();
+  const gateStarted = deferred();
+  const gateResult = deferred();
+  let probes = 0, calls = 0, gateSignal;
+  const run = guardedCall({
+    signal: outer.signal,
+    probe: async () => { probes++; return healthy(); },
+    beforeDispatch: ({ signal }) => { gateSignal = signal; gateStarted.resolve(); return gateResult.promise; },
+    call: async () => { calls++; }, timeoutMs: 5000,
+  });
+  await gateStarted.promise;
+  outer.abort(reason);
+  await expectPromptAbort(run, reason);
+  assert.equal(gateSignal.aborted, true);
+  assert.strictEqual(gateSignal.reason, reason);
+  gateResult.resolve();
+  await eventLoopTurn();
+  assert.equal(probes, 1);
+  assert.equal(calls, 0);
+  assert.equal(getEventListeners(outer.signal, 'abort').length, 0);
+});
+
+test('a dispatch gate that aborts its external signal cannot fall through to invocation', async () => {
+  const outer = new AbortController();
+  const reason = externalSecurityReason();
+  let probes = 0, gates = 0, calls = 0;
+  await expectPromptAbort(guardedCall({
+    signal: outer.signal,
+    probe: async () => { probes++; return healthy(); },
+    beforeDispatch: () => { gates++; outer.abort(reason); },
+    call: async () => { calls++; }, timeoutMs: 5000,
+  }), reason);
+  assert.equal(probes, 1);
+  assert.equal(gates, 1);
+  assert.equal(calls, 0);
+  assert.equal(getEventListeners(outer.signal, 'abort').length, 0);
+});
+
+test('an initial probe that aborts externally cannot dispatch its otherwise healthy result', async () => {
+  const outer = new AbortController();
+  const reason = externalSecurityReason();
+  let probes = 0, calls = 0, probeSignal;
+  await expectPromptAbort(guardedCall({
+    signal: outer.signal,
+    probe: async ({ signal }) => { probes++; probeSignal = signal; outer.abort(reason); return healthy(); },
+    call: async () => { calls++; }, timeoutMs: 5000,
+  }), reason);
+  assert.equal(probeSignal.aborted, true);
+  assert.strictEqual(probeSignal.reason, reason);
+  assert.equal(probes, 1);
+  assert.equal(calls, 0);
+  assert.equal(getEventListeners(outer.signal, 'abort').length, 0);
+});
+
+test('external cancellation from initial evidence prevents dispatch and further probes', async () => {
+  const outer = new AbortController();
+  const reason = externalSecurityReason();
+  let probes = 0, calls = 0, evidence = 0;
+  await expectPromptAbort(guardedCall({
+    signal: outer.signal,
+    probe: async () => { probes++; return healthy(); },
+    onEvidence: () => { evidence++; outer.abort(reason); },
+    call: async () => { calls++; }, timeoutMs: 5000,
+  }), reason);
+  assert.equal(probes, 1);
+  assert.equal(evidence, 1);
+  assert.equal(calls, 0);
+  assert.equal(getEventListeners(outer.signal, 'abort').length, 0);
+});
+
+test('cancelling one guarded operation leaves an unrelated concurrent operation available', async () => {
+  const outer = new AbortController();
+  const reason = externalSecurityReason();
+  const firstStarted = deferred();
+  const secondStarted = deferred();
+  const secondResult = deferred();
+  let firstCalls = 0, secondCalls = 0, secondSignal;
+  const first = guardedCall({
+    signal: outer.signal, probe: async () => healthy(),
+    call: () => { firstCalls++; firstStarted.resolve(); return never(); },
+    timeoutMs: 5000, pollMs: 4000,
+  });
+  const second = guardedCall({
+    probe: async () => healthy(),
+    call: ({ signal }) => { secondCalls++; secondSignal = signal; secondStarted.resolve(); return secondResult.promise; },
+    timeoutMs: 5000, pollMs: 4000,
+  });
+  await Promise.all([firstStarted.promise, secondStarted.promise]);
+  outer.abort(reason);
+  await expectPromptAbort(first, reason);
+  assert.equal(secondSignal.aborted, false);
+  secondResult.resolve('independent response');
+  assert.equal(await second, 'independent response');
+  assert.equal(firstCalls, 1);
+  assert.equal(secondCalls, 1);
+  assert.equal(secondSignal.aborted, false);
+});
+
+test('a successful operation removes the external listener and cannot be cancelled afterward', async () => {
+  const outer = new AbortController();
+  let probes = 0, callSignal;
+  assert.equal(getEventListeners(outer.signal, 'abort').length, 0);
+  assert.equal(await guardedCall({
+    signal: outer.signal,
+    probe: async () => { probes++; return healthy(); },
+    call: async ({ signal }) => { callSignal = signal; return 'done'; }, timeoutMs: 5000,
+  }), 'done');
+  assert.equal(getEventListeners(outer.signal, 'abort').length, 0);
+  outer.abort(externalSecurityReason());
+  await eventLoopTurn();
+  assert.equal(callSignal.aborted, false);
+  assert.equal(probes, 2);
+});
+
+test('a health rejection removes the external listener without replacing its original abort reason', async () => {
+  const outer = new AbortController();
+  const fake = sequence(healthy(), recovery());
+  let callSignal, healthError;
+  await assert.rejects(guardedCall({
+    signal: outer.signal, probe: fake.probe,
+    call: ({ signal }) => { callSignal = signal; return never(); },
+    timeoutMs: 5000, pollMs: 5,
+  }), error => {
+    expectHealthError('recovery_required', true)(error);
+    healthError = error;
+    return true;
+  });
+  assert.equal(getEventListeners(outer.signal, 'abort').length, 0);
+  outer.abort(externalSecurityReason());
+  await eventLoopTurn();
+  assert.strictEqual(callSignal.reason, healthError);
+  assert.equal(fake.requests.length, 2);
 });

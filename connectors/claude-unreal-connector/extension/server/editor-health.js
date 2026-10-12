@@ -88,17 +88,25 @@ class EditorHealthError extends Error {
  * call must honor signal by closing its socket; aborting cannot undo work already dispatched.
  */
 async function guardedCall({ probe, call, timeoutMs, pollMs = 1000, probeTimeoutMs = 5000,
-  onEvidence, beforeDispatch, expectedPid, expectedStartTime } = {}) {
+  onEvidence, beforeDispatch, expectedPid, expectedStartTime, signal } = {}) {
   if (typeof probe !== 'function' || typeof call !== 'function' ||
       !Number.isFinite(timeoutMs) || timeoutMs <= 0 || !Number.isFinite(pollMs) || pollMs <= 0 ||
       !Number.isFinite(probeTimeoutMs) || probeTimeoutMs <= 0) {
     throw new TypeError('probe/call and positive finite time bounds are required');
   }
+  if (signal !== undefined && (typeof signal?.addEventListener !== 'function' ||
+      typeof signal.removeEventListener !== 'function' || typeof signal.aborted !== 'boolean')) {
+    throw new TypeError('signal must be an AbortSignal');
+  }
+  const reason = () => signal.reason instanceof Error ? signal.reason :
+    Object.assign(new Error('Editor operation aborted', { cause: signal.reason }), { name: 'AbortError' });
+  if (signal?.aborted) throw reason();
   const deadline = performance.now() + timeoutMs;
   const callController = new AbortController();
   let dispatched = false;
   let activeProbe;
   let fatal;
+  let externalError;
   let rejectDeadline;
   const expired = new Promise((_, reject) => { rejectDeadline = reject; });
   expired.catch(() => {});
@@ -108,6 +116,16 @@ async function guardedCall({ probe, call, timeoutMs, pollMs = 1000, probeTimeout
     activeProbe?.abort(fatal);
     return fatal;
   };
+  const abortExternal = () => {
+    // Keep the observer's original error/metadata; it owns the exact dispatch evidence.
+    if (!externalError) externalError = reason();
+    fatal = externalError;
+    callController.abort(externalError);
+    activeProbe?.abort(externalError);
+    rejectDeadline(externalError);
+  };
+  signal?.addEventListener('abort', abortExternal, { once: true });
+  if (signal?.aborted) abortExternal();
   const remaining = () => Math.max(0, deadline - performance.now());
   const overallTimer = setTimeout(() => rejectDeadline(fail('timeout', { reason: 'overall_deadline' })), timeoutMs);
   const emit = value => {
@@ -129,14 +147,20 @@ async function guardedCall({ probe, call, timeoutMs, pollMs = 1000, probeTimeout
     });
     try {
       const snapshot = await Promise.race([
-        Promise.resolve().then(() => probe({ signal: controller.signal, expectedPid, expectedStartTime })), bounded, expired
+        Promise.resolve().then(() => {
+          if (fatal) throw fatal;
+          return probe({ signal: controller.signal, expectedPid, expectedStartTime });
+        }), bounded, expired
       ]);
+      if (fatal) throw fatal;
       if (!remaining()) throw fail('timeout', { reason: 'overall_deadline' });
       const health = classify(snapshot, expectedPid, expectedStartTime);
       emit(health);
+      if (fatal) throw fatal;
       if (health.state !== 'available') throw fail(health.state, health.details);
       return health;
     } catch (error) {
+      if (externalError) throw externalError;
       if (error instanceof EditorHealthError) throw fail(error.state, error.details, error);
       throw fail('probe_failed', { reason: 'probe_rejected', error: String(error?.message || error) }, error);
     } finally {
@@ -159,14 +183,17 @@ async function guardedCall({ probe, call, timeoutMs, pollMs = 1000, probeTimeout
     if (beforeDispatch !== undefined) {
       if (typeof beforeDispatch !== 'function') throw new TypeError('beforeDispatch must be a function');
       try {
-        await Promise.race([Promise.resolve().then(() => beforeDispatch({
-          signal: callController.signal, remainingMs: remaining(), expectedPid, expectedStartTime
-        })), expired]);
+        await Promise.race([Promise.resolve().then(() => {
+          if (fatal) throw fatal;
+          return beforeDispatch({ signal: callController.signal, remainingMs: remaining(), expectedPid, expectedStartTime });
+        }), expired]);
       } catch (error) {
+        if (externalError) throw externalError;
         if (error instanceof EditorHealthError) throw fail(error.state, error.details, error);
         throw fail('dispatch_blocked', { error: String(error?.message || error) }, error);
       }
     }
+    if (fatal) throw fatal;
     if (!remaining()) throw fail('timeout', { reason: 'overall_deadline' });
     dispatched = true;
     // Attach rejection handling immediately, including synchronous transport failures.
@@ -177,6 +204,7 @@ async function guardedCall({ probe, call, timeoutMs, pollMs = 1000, probeTimeout
     } catch (error) { outcome = Promise.resolve({ error }); }
     for (;;) {
       const event = await tick(outcome);
+      if (fatal) throw fatal;
       if (event.tick) { await check(); continue; }
       if (Object.hasOwn(event, 'error')) {
         if (event.error instanceof EditorHealthError) {
@@ -192,6 +220,7 @@ async function guardedCall({ probe, call, timeoutMs, pollMs = 1000, probeTimeout
       return event.value;
     }
   } finally {
+    signal?.removeEventListener('abort', abortExternal);
     clearTimeout(overallTimer);
     activeProbe?.abort(fatal);
   }

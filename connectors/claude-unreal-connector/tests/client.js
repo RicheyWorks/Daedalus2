@@ -18,7 +18,10 @@ const check = (label, ok, detail) => { total++; if (ok) pass++; console.log((ok 
   const init = await rpc('initialize', { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 't', version: '0' } });
   check('initialize names the server and offers tools', init.result.serverInfo.name === 'unreal' && init.result.capabilities.tools);
   const list = (await rpc('tools/list', {})).result.tools.map((t) => t.name);
-  check('13 tools listed, none of them project-specific', list.length === 13 && list.includes('run_command') && list.includes('window_input') && !list.some((n) => /daedalus/.test(n)), list.join(','));
+  const expectedTools = ['unreal_status', 'get_level_info', 'get_actor_info', 'execute_python', 'viewport_screenshot',
+    'play', 'stop', 'save', 'list_commands', 'run_command', 'editor_windows', 'window_input', 'output_log', 'security_alert_status'];
+  check('the 14 defined tools are listed exactly, including the scoped security observer',
+    JSON.stringify([...list].sort()) === JSON.stringify(expectedTools.sort()) && new Set(list).size === 14, list.join(','));
 
   let r = await call('unreal_status');
   let j = JSON.parse(text(r));
@@ -74,6 +77,10 @@ const check = (label, ok, detail) => { total++; if (ok) pass++; console.log((ok 
   check('the explicit stand-in rejects native window inventory with a clear reason', r.isError === true && text(r).includes(standinWindowReason), text(r));
   r = await call('window_input', { hwnd: 1, keys: 'escape' });
   check('the explicit stand-in rejects native window input with a clear reason', r.isError === true && text(r).includes(standinWindowReason), text(r));
+  r = await call('security_alert_status', { command_id: 'offline-observer', command: 'fixture_build', artifact_path: 'C:\\fixture\\owned-test.exe' });
+  j = JSON.parse(text(r));
+  check('stand-in security observation explicitly reports unavailable instead of claiming alert absence',
+    !r.isError && j.state === 'unavailable' && j.reason === 'explicit_standin', text(r));
 
   r = await call('save');
   check('save saves the level and the changed packages', JSON.parse(text(r)).level_saved === true, text(r));

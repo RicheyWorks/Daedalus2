@@ -11,6 +11,9 @@ const path = require('node:path');
 const vm = require('node:vm');
 const health = require('../extension/server/editor-health');
 const hold = require('../extension/server/recovery-hold');
+const security = require('../extension/server/security-alert-observer');
+const securityHold = require('../extension/server/security-alert-hold');
+const securityLog = require('../extension/server/security-alert-log');
 
 const serverPath = path.resolve(__dirname, '../extension/server/index.js');
 const source = fs.readFileSync(serverPath, 'utf8');
@@ -91,7 +94,7 @@ function memoryFs() {
 function gateway(options = {}) {
   const disk = options.disk || memoryFs();
   const state = {
-    current: copy(options.inventory || inventory()), sockets: [], writes: [], probes: [],
+    current: copy(options.inventory || inventory()), sockets: [], writes: [], probes: [], securityProbes: [],
     inputAttempts: [], stdout: [], stderr: [], streams: [], uuids: 0, replies: 0,
   };
   const env = { UNREAL_BRIDGE_HOST: '127.0.0.1', UNREAL_BRIDGE_PORT: '9877',
@@ -135,6 +138,14 @@ function gateway(options = {}) {
   const fakeChildProcess = {
     execFile(command, args, execOptions, callback) {
       assert.equal(command, 'powershell.exe');
+      if (args.some(arg => String(arg).endsWith('security-alert-observer.ps1'))) {
+        assert.equal(args.includes('-ExecutionPolicy'), false);
+        assert.equal(execOptions.windowsHide, true);
+        state.securityProbes.push({ args: [...args], signal: execOptions.signal });
+        const snapshot = options.securitySnapshot || { available: false, reason: 'fixture_unavailable', windows: [] };
+        queueMicrotask(() => callback(null, JSON.stringify(snapshot), ''));
+        return {};
+      }
       const op = args[args.indexOf('-Op') + 1];
       if (op !== 'list') {
         state.inputAttempts.push({ command, args: [...args] });
@@ -161,6 +172,8 @@ function gateway(options = {}) {
     fs: disk.impl, os: { tmpdir: () => 'C:\\offline-gateway' },
     crypto: { randomUUID: () => 'evidence-' + (++state.uuids) },
     './editor-health': health, './recovery-hold': hold,
+    './security-alert-observer': security, './security-alert-hold': securityHold,
+    './security-alert-log': securityLog,
   };
   const context = { Buffer, AbortController, setTimeout, clearTimeout, queueMicrotask,
     process: fakeProcess, __dirname: path.dirname(serverPath), console,
@@ -462,6 +475,47 @@ test('Failure diagnostics preserve screenshot, inventory, and a bounded configur
   assert.equal(disk.descriptors.size, 0);
   assert.equal(g.state.probes.some(item => item.args.includes('-Diagnostics')), true);
   noDispatch(g);
+});
+
+const securityContextFixture = { command_id: 'fixture-build', artifact_path: 'C:\\project\\owned-test.exe', artifact_sha256: 'a'.repeat(64) };
+test('Explicit stand-in security observation is unavailable without native process inspection', async () => {
+  const g = gateway({ env: { UNREAL_BRIDGE_TARGET: 'standin', UNREAL_BRIDGE_PORT: '12345' } });
+  const result = await g.runTool('security_alert_status', securityContextFixture);
+  assert.equal(JSON.parse(result.content[0].text).reason, 'explicit_standin');
+  assert.equal(g.state.securityProbes.length, 0);
+  noDispatch(g); noUi(g);
+});
+test('Opt-in unavailable observer preserves bridge success and never forwards artifact metadata', async () => {
+  const g = gateway();
+  const result = await g.runTool('unreal_status', { security_context: securityContextFixture });
+  assert.equal(result.isError, undefined);
+  assert.equal(result._meta.security_observation.state, 'unavailable');
+  assert.deepEqual(g.state.writes[0].params, { bridge_timeout: g.state.writes[0].params.bridge_timeout });
+  assert.equal(g.state.securityProbes.length, 2);
+  noUi(g);
+});
+test('Matching Norton block prevents dispatch, survives disappearance, and leaves unrelated work available', async () => {
+  const g = gateway({ securitySnapshot: { available: true, windows: [{ pid: 303, processName: 'NortonUI', hwnd: 3003,
+    visible: true, title: 'Norton security alert', text: 'File blocked: C:\\project\\owned-test.exe', text_available: true }] } });
+  errorState(await g.runTool('unreal_status', { security_context: securityContextFixture }), 'security_alert_observed');
+  noDispatch(g); noUi(g);
+  const probes = g.state.securityProbes.length;
+  errorState(await g.runTool('unreal_status', { security_context: securityContextFixture }), 'security_alert_observed');
+  assert.equal(g.state.securityProbes.length, probes);
+  const independent = await g.runTool('unreal_status', {});
+  assert.equal(independent.isError, undefined);
+  assert.equal(g.state.writes.length, 1);
+  assert.equal(g.state.inputAttempts.length, 0);
+});
+test('Correlated informational sandbox notice records once and allows the authorized call', async () => {
+  const g = gateway({ securitySnapshot: { available: true, windows: [{ pid: 303, processName: 'NortonUI', hwnd: 3003,
+    visible: true, title: 'Norton', text: 'Analyzing in sandbox: C:\\project\\owned-test.exe', text_available: true }] } });
+  const result = await g.runTool('unreal_status', { security_context: securityContextFixture });
+  assert.equal(result.isError, undefined);
+  assert.equal(g.state.writes.length, 1);
+  assert.equal(result._meta.security_observation.state, 'security_alert_notice');
+  assert.equal([...g.disk.files.keys()].filter(file => /alert-evidence-/.test(file)).length, 1);
+  noUi(g);
 });
 
 (async () => {
