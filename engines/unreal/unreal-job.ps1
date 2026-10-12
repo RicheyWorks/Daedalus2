@@ -68,6 +68,8 @@ if ($Run) {
         "another build tool collided; retrying in 20 s (attempt $attempt)" | Out-File -FilePath $log -Append -Encoding utf8
         Start-Sleep -Seconds 20
     }
+    # Job end: close the floating Unreal panels it left (studio-screen-connector tidy.ps1, one pass, best effort).
+    $tidy = Join-Path $Repo "..\studio-screen-connector\tidy.ps1"; if (Test-Path $tidy) { try { & powershell.exe -NoProfile -WindowStyle Hidden -File $tidy -Once *>> $log } catch { } }
     "done $code" | Out-File -FilePath (Join-Path $Jobs "$Id.exit") -Encoding ascii
     exit
 }
