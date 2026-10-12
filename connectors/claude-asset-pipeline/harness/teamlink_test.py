@@ -133,6 +133,61 @@ dead = teamlink.Link("unreal-team", 1)
 check("a dead broker: calls return nothing and never raise", dead.send("x", "y") is None and dead.wait(0, 0.1) == ([], 0)
       and dead.up is False)
 
+# 2b. The Blender team's dialect (BUS-SCHEMA v1) on the same log.
+def v1(method, path, body=None):
+    req = urllib.request.Request("http://127.0.0.1:%d%s" % (port, path), method=method,
+                                 data=json.dumps(body).encode() if body is not None else None,
+                                 headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=5) as r:
+        return json.loads(r.read())
+
+
+check("v1: health", v1("GET", "/v1/health")["v"] == 1)
+env = {"v": 1, "id": "7f3c-uuid-1", "from": "blender", "to": "unreal", "type": "ready", "asset": "Tool_Shovel",
+       "at": "2026-10-12T12:00:00", "reply_to": None, "body": {"tris": 412}}
+r1 = v1("POST", "/v1/messages", env)
+r2 = v1("POST", "/v1/messages", env)
+check("v1: a replayed id is ok and not a duplicate", r1["seq"] == r2["seq"] and r1["id"] == "7f3c-uuid-1")
+mine = [m for m in box["broker"].log(0, 999) if m.get("uid") == "7f3c-uuid-1"]
+check("v1: 'ready' lands as asset.ready from blender-team with the asset in its body",
+      len(mine) == 1 and mine[0]["type"] == "asset.ready" and mine[0]["from"] == "blender-team"
+      and mine[0]["body"] == {"tris": 412, "asset": "Tool_Shovel"}, mine)
+pong = unreal.send("blender-team", "asset.shipped", {"asset": "Tool_Shovel", "result": "SHIPPED"}, reply_to=r1["seq"])
+unreal.send("*", "queue.waiting", {"why": "Play"})
+out = v1("GET", "/v1/messages?to=blender&since=7f3c-uuid-1")
+sh = next((e for e in out if e["seq"] == pong), None)
+check("v1: our messages come back in their envelope (short names, short types, their uuid in reply_to)",
+      sh and sh["type"] == "shipped" and sh["from"] == "unreal" and sh["to"] == "blender" and sh["asset"] == "Tool_Shovel"
+      and sh["reply_to"] == "7f3c-uuid-1", sh)
+check("v1: broadcasts reach them too, typed short", any(e["type"] == "waiting" and e["to"] == "blender" for e in out), out)
+check("v1: 'since' takes their uuid or our seq alike",
+      [e["seq"] for e in v1("GET", "/v1/messages?to=blender&since=%d" % r1["seq"])] == [e["seq"] for e in out])
+v1("POST", "/v1/messages", {"v": 1, "id": "ack-1", "from": "blender", "to": "unreal", "type": "ack", "reply_to": str(pong),
+                            "body": {}})
+check("v1: their ack is a receipt on our message", ("blender-team", pong) in box["broker"].acked)
+v1("POST", "/v1/messages", {"v": 1, "id": "st-1", "from": "blender", "to": "unreal", "type": "status",
+                            "body": {"state": "building", "progress": "3/40"}})
+check("v1: their status shows in presence", unreal.presence()["blender-team"]["status"] == "building 3/40",
+      unreal.presence())
+try:
+    v1("GET", "/v1/messages")
+    check("v1: polling without 'to' is a 400", False)
+except urllib.error.HTTPError as e:
+    check("v1: polling without 'to' is a 400", e.code == 400)
+bj = tempfile.mkdtemp(prefix="bus-")
+box2 = {}
+threading.Thread(target=teamlink.serve, kwargs={"folder": bj, "port": 0, "bus_json": os.path.join(bj, "art", "BUS.json"),
+                                                 "ready": lambda s, br: box2.update(server=s)}, daemon=True).start()
+for _ in range(50):
+    if "server" in box2 and os.path.exists(os.path.join(bj, "art", "BUS.json")):
+        break
+    time.sleep(0.05)
+info = json.load(open(os.path.join(bj, "art", "BUS.json"), encoding="utf-8"))
+check("BUS.json tells clients where the broker is", info["url"] == "http://127.0.0.1:%d" % box2["server"].server_address[1]
+      and info["v"] == 1, info)
+box2["server"].shutdown()
+shutil.rmtree(bj)
+
 # 3. The Unreal team's watcher on the link.
 BOARD = """# Art queue
 
@@ -185,7 +240,8 @@ mid = blender.send("unreal-team", "queue.status")
 w.on_message(box["broker"].log(mid - 1, 1)[0])
 st = next((m for m in box["broker"].log(mid, 99) if m["type"] == "queue.state"), None)
 check("watcher: queue.status answers with the board's counts", st and st["body"]["counts"].get("SHIPPED") == 2, st)
-check("watcher: every message it handled is acked", unreal.pending() == [], unreal.pending())
+check("watcher: every message it handled is acked", [m for m in unreal.pending() if not m.get("uid")] == [],
+      unreal.pending())
 box["server"].shutdown()
 shutil.rmtree(d)
 shutil.rmtree(art)

@@ -277,6 +277,47 @@ check("blender script: saved file is swapped for the asset", res["opened"] and o
 res, opened = run_open("C:/art/Tool/Tool_Pickaxe.blend", True, ["Cube"])
 check("blender script: already open (even unsaved) is used as is", not res["blocked"] and not opened)
 
+# 13. The Blender team's fenced row block: its rows are on the board, and our own new rows go above it.
+FENCED = BOARD + "<!-- blender-team rows: begin -->\n| 200 | Prop_Fern | prop | 0.6 m | READY | judged |\n<!-- blender-team rows: end -->\n"
+rows, _ = artqueue.parse(FENCED)
+check("fenced block: its rows are read as board rows", [r["asset"] for r in rows][-1] == "Prop_Fern" and len(rows) == 4)
+added = artqueue.add_row(FENCED, "Tool_Axe", "READY", "via link")
+lines = added.split("\n")
+check("fenced block: our new row goes above their block", lines.index("<!-- blender-team rows: begin -->")
+      > next(i for i, l in enumerate(lines) if "Tool_Axe" in l))
+check("fenced block: and is numbered past every row", "| 201 | Tool_Axe |" in added, added)
+
+# 14. A reset socket during the Play check is Unreal busy: wait, don't crash.
+def resetting(addr, command, timeout=600, side="bridge", **p):
+    if "get_game_world" in p["code"]:
+        raise ConnectionResetError(10054, "forcibly closed")
+    return FakeBlender().call(addr, command, timeout, side, **p)
+
+
+d, w, fb = setup()
+wire.call = resetting
+w.tick()
+check("socket reset: row left READY, no watcher error", row(d, "Tool_Pickaxe")["status"] == "READY"
+      and not any(e["event"] == "watcher-error" for e in feed(d)))
+check("socket reset: STATUS.md says Unreal busy", "Unreal busy" in open(os.path.join(d, "STATUS.md"), encoding="utf-8").read())
+shutil.rmtree(d)
+
+# 15. jobs\<Asset>.json gets the Unreal half; STATUS.md shows the Blender team's line.
+d, w, fb = setup()
+os.makedirs(os.path.join(d, "jobs"))
+with open(os.path.join(d, "jobs", "Tool_Pickaxe.json"), "w", encoding="utf-8") as f:
+    json.dump({"asset": "Tool_Pickaxe", "tris": 1200}, f)
+with open(os.path.join(d, "STATUS-blender.json"), "w", encoding="utf-8") as f:
+    json.dump({"state": "building", "group": "tools", "progress": "4/12"}, f)
+w.tick()
+job = json.load(open(os.path.join(d, "jobs", "Tool_Pickaxe.json"), encoding="utf-8"))
+check("jobs json: their half kept, ours added", job["tris"] == 1200 and job["unreal"]["result"] == "shipped"
+      and job["unreal"]["unreal_path"].endswith("Tool_Pickaxe"), job)
+st = open(os.path.join(d, "STATUS.md"), encoding="utf-8").read()
+check("STATUS.md: one line from STATUS-blender.json", "**Blender team:** building, tools 4/12" in st, st[:400])
+check("STATUS.md: always says what it waits on", "**Waiting on:** none" in st)
+shutil.rmtree(d)
+
 n = sum(results)
 print("%d/%d" % (n, len(results)))
 sys.exit(0 if n == len(results) else 1)

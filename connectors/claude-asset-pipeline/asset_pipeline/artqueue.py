@@ -64,6 +64,8 @@ def parse(text):
     rows = []
     for i, line in enumerate(lines):
         s = line.strip()
+        if s.startswith("<!--") and header is not None:
+            continue   # the Blender team's fenced row block (<!-- blender-team rows: begin/end -->) stays in the table
         if not s.startswith("|"):
             if header is not None and rows:
                 break
@@ -123,9 +125,19 @@ def add_row(text, asset, status, notes=""):
     if header["notes"] is not None:
         cells[header["notes"]] = notes
     lines = text.split("\n")
-    at = rows[-1]["line"] + 1 if rows else next(i for i, l in enumerate(lines) if l.strip().startswith("|")) + 2
+    fence = next((i for i, l in enumerate(lines) if l.strip().startswith(BLOCK_BEGIN)), None)
+    above = [r for r in rows if fence is None or r["line"] < fence]
+    if fence is not None and not above:
+        at = fence
+    else:
+        rows = above or rows
+        at = None
+    at = at if at is not None else rows[-1]["line"] + 1 if rows else next(i for i, l in enumerate(lines) if l.strip().startswith("|")) + 2
     lines.insert(at, "| " + " | ".join(cells) + " |")
     return "\n".join(lines)
+
+
+BLOCK_BEGIN = "<!-- blender-team rows: begin"
 
 
 def parse_header_cells(text):
@@ -214,10 +226,36 @@ class Watcher:
         line.update(detail)
         with open(self.feed, "a", encoding="utf-8") as f:
             f.write(json.dumps(line) + "\n")
+        if what in ("shipped", "rejected", "blocked", "error") and asset != "-":
+            self.job_result(asset, what, detail)
         if self.link is not None:   # the same event, live, to everyone on the link
             body = {"asset": asset}
             body.update({k: v for k, v in detail.items() if isinstance(v, (str, int, float, bool, list)) or v is None})
             self.link.send("*", ("asset." if asset != "-" else "queue.") + what, body)
+
+    def job_result(self, asset, what, detail):
+        """The Unreal half of jobs\\<Asset>.json (the Blender team writes the file; we add our numbers to it)."""
+        path = os.path.join(self.folder, "jobs", asset + ".json")
+        if not os.path.exists(path):
+            return
+        try:
+            with open(path, encoding="utf-8") as f:
+                job = json.load(f)
+            rep_path = os.path.join(self.reports, asset + ".json")
+            meshes = []
+            if os.path.exists(rep_path):
+                with open(rep_path, encoding="utf-8") as f:
+                    meshes = (json.load(f).get("unreal") or {}).get("meshes", [])
+            job["unreal"] = {"result": what, "at": datetime.datetime.fromtimestamp(self.clock()).isoformat(timespec="seconds"),
+                             "status": detail.get("result") or detail.get("why", ""), "unreal_path": detail.get("dest", ""),
+                             "unreal_tris": sum(m.get("triangles", 0) for m in meshes),
+                             "render_tris": sum(m.get("render_triangles", m.get("triangles", 0)) for m in meshes)}
+            tmp = path + ".tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
+                json.dump(job, f, indent=2)
+            os.replace(tmp, path)
+        except (OSError, ValueError):
+            pass   # their file, their format: never let it stop the queue
 
     # -- the live link (ADR-053)
 
@@ -283,6 +321,17 @@ class Watcher:
         out = ["# Art board status", "", "Updated %s by the queue watcher." % now, ""]
         out.append("| " + " | ".join("%s %d" % (k, v) for k, v in sorted(counts.items())) + " |")
         out.append("|" + "---|" * len(counts))
+        out.append("")
+        out.append("**Waiting on:** %s" % (self.waiting_on or "none"))
+        blender = os.path.join(self.folder, "STATUS-blender.json")
+        if os.path.exists(blender):
+            try:
+                with open(blender, encoding="utf-8") as f:
+                    b = json.load(f)
+                out += ["", "**Blender team:** %s%s%s" % (b.get("state", "?"), (", " + str(b["group"])) if b.get("group") else "",
+                                                          (" " + str(b["progress"])) if b.get("progress") else "")]
+            except (OSError, ValueError):
+                out += ["", "**Blender team:** (STATUS-blender.json unreadable)"]
         if self.waiting_on:
             mins = (self.clock() - self.waiting_since) / 60.0 if self.waiting_since else 0.0
             since = datetime.datetime.fromtimestamp(self.waiting_since).isoformat(timespec="seconds") if self.waiting_since else now
@@ -327,9 +376,16 @@ class Watcher:
             self.waiting_on = (", ".join(missing) + " to be open") if missing else ""
             # Unreal won't load or save assets during Play ("The Editor is currently in a play mode"); never stop
             # someone's Play session, wait for it to end.
-            if not missing and wire.call(self.unreal, "execute_python", side="Unreal", code=PLAYING)["result"]:
-                self.waiting_on = "Unreal to leave Play mode (assets can't be saved while playing)"
-                missing = ["play"]
+            if not missing:
+                try:
+                    playing = wire.call(self.unreal, "execute_python", side="Unreal", code=PLAYING)["result"]
+                except (OSError, wire.BridgeError) as e:   # a reset socket is Unreal busy, not a watcher failure
+                    self.waiting_on = "Unreal busy (%s); retrying" % type(e).__name__
+                    missing = ["busy"]
+                    playing = False
+                if playing:
+                    self.waiting_on = "Unreal to leave Play mode (assets can't be saved while playing)"
+                    missing = ["play"]
             if not missing:
                 for r in ready:
                     done.append(self.ship_one(r["asset"]))

@@ -56,3 +56,24 @@ From Python, use `asset_pipeline.teamlink.Link("blender-team")`. It has `.send`,
 `connectors\claude-asset-pipeline\teamlink.ps1` takes `-Start`, `-Status`, `-Ping` and `-Stop`. The Unreal team's
 watcher (`art-queue.ps1`) joins the link automatically. With the link down, the watcher falls back to its 10 s
 board pass, so nothing stops.
+
+## The Blender team's dialect (BUS-SCHEMA v1), on the same log
+
+Their client (blender-harness `bus.py`) finds the broker through `bot-team\art\BUS.json`, which the broker writes
+when it starts. It speaks an envelope:
+`{v: 1, id: uuid, from: "blender", to: "unreal", type, asset, at, reply_to, body}`.
+
+| Endpoint | What it does |
+|---|---|
+| `GET /v1/health` | `{ok, v: 1, last}` |
+| `POST /v1/messages` | Takes an envelope. A repeated `id` is ok and is not stored twice, so outbox replay is safe. |
+| `GET /v1/messages?to=blender&since=<their uuid or our seq>&wait=<s>` | Returns envelopes oldest first. Add `wait` to long-poll. |
+| `GET /v1/status` | Returns presence and the last id. |
+
+How their names map to ours:
+- `blender`/`unreal` ↔ `blender-team`/`unreal-team`.
+- `ready` → `asset.ready`.
+- `status` → `blender.status`, which also feeds presence.
+- Our `asset.shipped` and `queue.waiting` reach them as `shipped` and `waiting`.
+- `reply_to` carries their own uuid back.
+- Their `ack` with `reply_to` is a receipt.

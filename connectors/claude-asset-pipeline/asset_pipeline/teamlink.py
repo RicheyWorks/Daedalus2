@@ -93,14 +93,20 @@ class Broker:
             os.fsync(f.fileno())
         self.messages.append(m)
 
-    def send(self, frm, to, kind, body=None, reply_to=None):
+    def send(self, frm, to, kind, body=None, reply_to=None, uid=None):
         if not frm or not to or not kind:
             raise ValueError("from, to and type are required")
         with self.cond:
+            if uid is not None:
+                dup = next((m for m in self.messages if m.get("uid") == uid), None)
+                if dup is not None:
+                    return dup["id"]   # a replayed outbox: same message, no duplicate
             m = {"id": self.last + 1,
                  "ts": datetime.datetime.fromtimestamp(self.clock()).isoformat(timespec="seconds"),
                  "from": str(frm), "to": str(to), "type": str(kind), "body": body if body is not None else {},
                  "reply_to": reply_to}
+            if uid is not None:
+                m["uid"] = str(uid)
             self._append(m)
             self.seen[str(frm)] = (self.clock(), self.seen.get(str(frm), (0, ""))[1])
             self.cond.notify_all()
@@ -146,9 +152,63 @@ class Broker:
             return {n: {"age_s": round(now - t, 1), "alive": now - t < ALIVE_S, "status": s}
                     for n, (t, s) in sorted(self.seen.items())}
 
+    def seq_of(self, ref):
+        """A broker id from either a broker id or a client's uuid; 0 when unknown."""
+        if ref is None or ref == "":
+            return 0
+        if str(ref).isdigit():
+            return int(ref)
+        with self.cond:
+            return next((m["id"] for m in self.messages if m.get("uid") == str(ref)), 0)
+
     def log(self, after=0, limit=200):
         with self.cond:
             return [m for m in self.messages if m["id"] > after][:limit]
+
+
+# ----------------------------------------------------------------------- v1: the Blender team's envelope (BUS-SCHEMA)
+# Their client (blender-harness bus.py) speaks {v, id(uuid), from, to, type, asset, at, reply_to, body} on /v1/*.
+# The broker stores one log; these map names and types both ways so either side can use its own dialect.
+
+SHORT = {"blender-team": "blender", "unreal-team": "unreal"}
+LONG = {v: k for k, v in SHORT.items()}
+IN_TYPES = {"ready": "asset.ready", "status": "blender.status"}
+
+
+def v1_in(broker, env):
+    if not isinstance(env, dict):
+        raise ValueError("an envelope is a JSON object")
+    frm = LONG.get(env.get("from"), env.get("from"))
+    to = LONG.get(env.get("to"), env.get("to")) or "*"
+    kind = IN_TYPES.get(env.get("type"), env.get("type"))
+    body = dict(env.get("body") or {})
+    if env.get("asset"):
+        body.setdefault("asset", env["asset"])
+    reply = broker.seq_of(env.get("reply_to")) or None
+    if kind == "ack" and reply:
+        try:
+            broker.ack(frm, reply)
+        except KeyError:
+            pass
+        return reply
+    if kind == "blender.status":
+        broker.heartbeat(frm, "%s%s" % (body.get("state", ""), (" " + str(body["progress"])) if body.get("progress") else ""))
+    return broker.send(frm, to, kind, body, reply, uid=env.get("id"))
+
+
+def v1_out(broker, m, viewer):
+    t = m["type"]
+    for pre in ("asset.", "queue."):
+        if t.startswith(pre):
+            t = t[len(pre):]
+    reply = m.get("reply_to")
+    if reply:
+        ref = next((x for x in broker.messages if x["id"] == reply), None)
+        reply = (ref.get("uid") if ref else None) or str(reply)
+    body = m.get("body") or {}
+    return {"v": 1, "id": m.get("uid") or str(m["id"]), "seq": m["id"], "from": SHORT.get(m["from"], m["from"]),
+            "to": SHORT.get(m["to"], m["to"]) if m["to"] != "*" else SHORT.get(viewer, viewer),
+            "type": t, "asset": body.get("asset"), "at": m["ts"], "reply_to": reply, "body": body}
 
 
 def make_handler(broker):
@@ -180,6 +240,16 @@ def make_handler(broker):
         def do_GET(self):
             path, q = self._q()
             try:
+                if path == "/v1/health":
+                    return self._out(200, {"ok": True, "v": 1, "last": broker.last})
+                if path == "/v1/messages":
+                    me = LONG.get(q.get("to", ""), q.get("to", ""))
+                    if not me:
+                        raise KeyError("to")
+                    got, _ = broker.wait(me, broker.seq_of(q.get("since")), float(q.get("wait", 0)))
+                    return self._out(200, [v1_out(broker, m, me) for m in got])
+                if path == "/v1/status":
+                    return self._out(200, {"presence": broker.presence(), "last": broker.last})
                 if path == "/wait":
                     got, last = broker.wait(q["me"], int(q.get("after", 0)), float(q.get("timeout", 25)))
                     return self._out(200, {"messages": got, "last": last})
@@ -203,6 +273,9 @@ def make_handler(broker):
             path, _ = self._q()
             try:
                 b = self._body()
+                if path == "/v1/messages":
+                    seq = v1_in(broker, b)
+                    return self._out(200, {"ok": True, "id": b.get("id") or str(seq), "seq": seq})
                 if path == "/send":
                     return self._out(200, {"id": broker.send(b.get("from"), b.get("to"), b.get("type"), b.get("body"),
                                                              b.get("reply_to"))})
@@ -220,10 +293,19 @@ def make_handler(broker):
     return H
 
 
-def serve(folder=DEFAULT_DIR, port=PORT, ready=None):
+def serve(folder=DEFAULT_DIR, port=PORT, ready=None, bus_json=None):
     broker = Broker(folder)
     server = ThreadingHTTPServer(("127.0.0.1", port), make_handler(broker))
     server.daemon_threads = True
+    if bus_json:   # discovery for the Blender team's client (BUS-SCHEMA: art\BUS.json)
+        try:
+            os.makedirs(os.path.dirname(bus_json), exist_ok=True)
+            with open(bus_json, "w", encoding="utf-8") as f:
+                json.dump({"url": "http://127.0.0.1:%d" % server.server_address[1], "v": 1,
+                           "spec": "Daedalus2/docs/TEAMLINK.md", "log": broker.path,
+                           "since": datetime.datetime.now().isoformat(timespec="seconds")}, f, indent=1)
+        except OSError:
+            pass
     if ready:
         ready(server, broker)
     print("team link on 127.0.0.1:%d, log %s (last id %d)" % (server.server_address[1], broker.path, broker.last),
@@ -285,6 +367,8 @@ def main(argv=None):
     s = sub.add_parser("serve")
     s.add_argument("--folder", default=DEFAULT_DIR)
     s.add_argument("--port", type=int, default=PORT)
+    s.add_argument("--bus-json", default=os.path.join(os.path.dirname(DEFAULT_DIR), "art", "BUS.json"),
+                   help="where to write {url} for clients to find the broker ('' for none)")
     for name in ("send", "wait", "pending", "presence", "ping", "log"):
         p = sub.add_parser(name)
         p.add_argument("--me", default="unreal-team")
@@ -303,7 +387,7 @@ def main(argv=None):
             p.add_argument("--timeout", type=float, default=20)
     a = ap.parse_args(argv)
     if a.cmd == "serve":
-        serve(a.folder, a.port)
+        serve(a.folder, a.port, bus_json=a.bus_json or None)
         return 0
     link = Link(a.me, a.port)
     if a.cmd == "send":
