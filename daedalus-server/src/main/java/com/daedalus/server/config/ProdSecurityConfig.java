@@ -195,6 +195,7 @@ public class ProdSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/plots").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/obby").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/gallery").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/hero/rules").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/art").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/art/maze/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/arks").permitAll()

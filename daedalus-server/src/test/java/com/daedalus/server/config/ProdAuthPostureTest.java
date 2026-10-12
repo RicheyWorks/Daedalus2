@@ -123,6 +123,11 @@ class ProdAuthPostureTest {
         EXPECTED.put("GET /api/v1/world/" + ID + "/plots", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/obby", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/gallery", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/hero", Posture.AUTHENTICATED);
+        EXPECTED.put("GET /api/v1/hero/rules", Posture.PUBLIC);
+        EXPECTED.put("POST /api/v1/hero/defeat", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/hero/raise", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/hero/fall", Posture.AUTHENTICATED);
         EXPECTED.put("GET /api/v1/world/" + ID + "/art", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/art/maze/" + ID + ".png", Posture.PUBLIC);
         EXPECTED.put("POST /api/v1/world/" + ID + "/art", Posture.AUTHENTICATED);

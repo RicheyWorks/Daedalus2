@@ -1882,6 +1882,397 @@ function droneModel() {
   return g;
 }
 
+// ---------------------------------------------------------------- the fight (ADR-037)
+// Zelda II, in three dimensions. Standing, you thrust high and your shield covers high; crouching (C, or
+// hold Crouch) you thrust low, your shield covers low, and you cannot walk. Foes guard a height and strike
+// at one: a shardback's shell guards high, a dust wisp floats too high for a low thrust, a stone knight's
+// shield moves and it strikes wherever it is not guarding. A hit knocks you back and leaves you blinking
+// for a second. Every foe beaten is EXP on the server; when EXP covers a level, you choose which: Attack,
+// Magic or Life. A fall costs your unspent EXP. The rules come from the server (/hero/rules), so every
+// client plays the same game.
+const HERO = {
+  data: null, rules: null, hp: 6, mp: 8, stance: "HIGH", thrust: 0, recover: 0, hitThisThrust: false,
+  blink: 0, knock: new THREE.Vector3(), clank: 0, sword: null, shield: null,
+};
+const FOES = [];
+let foeId = 0, spawnTimer = 2, fightOn = false;
+state.hero = HERO;
+state.foes = FOES;
+state.spawning = true;
+const THRUST_TIME = 0.24, THRUST_ACTIVE = 0.14, THRUST_RECOVER = 0.36, REACH = 1.75;
+function heroName() {
+  if (!state.me) {
+    state.me = "guest-" + Math.random().toString(36).slice(2, 7);
+    safeSet(NAME_KEY, state.me);
+    const field = document.getElementById("me");
+    if (field) field.value = state.me;
+  }
+  return state.me;
+}
+async function loadHero() {
+  try {
+    if (!HERO.rules) HERO.rules = await api("/api/v1/hero/rules");
+    HERO.data = await api(`/api/v1/hero?actorId=${encodeURIComponent(heroName())}`);
+  } catch (e) { handleError(e); }
+  renderHud();
+}
+function rule(kind) { return HERO.rules && HERO.rules.foes.find(f => f.kind === kind); }
+async function startFight() {
+  fightOn = true;
+  await loadHero();
+  HERO.hp = HERO.data ? HERO.data.maxLife : 6;
+  HERO.mp = HERO.data ? HERO.data.maxMagic : 8;
+  HERO.stance = "HIGH";
+  if (!HERO.sword) armAvatar();
+  document.getElementById("heroHud").style.display = "block";
+  renderHud();
+}
+function stopFight() {
+  fightOn = false;
+  while (FOES.length) removeFoe(FOES[0]);
+  document.getElementById("heroHud").style.display = "none";
+  document.getElementById("levelUp").style.display = "none";
+}
+/** A sword in the right hand and a shield on the left arm of the blocky avatar. */
+function armAvatar() {
+  const m = AVATAR.model;
+  const steel = creatureMat(0xd9dde3), hilt = creatureMat(0x7a5232), wood = creatureMat(0x9a6b3f), rim = creatureMat(0xf5cd30);
+  const sword = new THREE.Group();
+  box(sword, hilt, 0.12, 0.12, 0.3, 0, 0, 0);
+  box(sword, steel, 0.08, 0.08, 1.0, 0, 0, -0.62);
+  sword.position.set(0.63, 1.05, -0.2);
+  sword.name = "sword";
+  m.add(sword);
+  const shield = new THREE.Group();
+  box(shield, wood, 0.12, 0.62, 0.5, 0, 0, 0);
+  box(shield, rim, 0.14, 0.16, 0.16, 0.0, 0.0, 0.0);
+  shield.position.set(-0.72, 1.3, -0.15);
+  shield.name = "shield";
+  m.add(shield);
+  HERO.sword = sword;
+  HERO.shield = shield;
+}
+function heroThrust() {
+  if (!fightOn || HERO.recover > 0) return;
+  HERO.thrust = THRUST_TIME;
+  HERO.recover = THRUST_RECOVER;
+  HERO.hitThisThrust = false;
+}
+function heroCrouch(down) { if (fightOn) HERO.stance = down ? "LOW" : "HIGH"; }
+function heroHeal() {
+  if (!fightOn || !HERO.data || !HERO.rules) return;
+  if (HERO.mp < HERO.rules.healCost) { toast("Not enough magic"); return; }
+  HERO.mp -= HERO.rules.healCost;
+  HERO.hp = Math.min(HERO.data.maxLife, HERO.hp + HERO.rules.healAmount);
+  toast("Heal!");
+  renderHud();
+}
+function groundAt(x, z, fromY) {
+  for (let y = Math.floor(fromY) + 3; y > fromY - 12; y--) {
+    if (solidCube(x, y - 1, z) && !solidCube(x, y, z) && !solidCube(x, y + 1, z)) return y;
+  }
+  return null;
+}
+/** Night by your own clock (Animal Crossing): eight in the evening to six in the morning. */
+function isNight() {
+  const h = state.clockHour ?? new Date().getHours();   // state.clockHour lets a test choose the hour
+  return h >= 20 || h < 6;
+}
+/** True on land you hold: your island, plot or parcel is home, and home is safe by day. */
+function onHome(x, z) {
+  if (!state.me) return false;
+  const holds = q => q && q.owner === state.me;
+  if (state.district) return holds(plotAt(x, z));
+  if (state.gallery) return holds(state.gallery.parcels.find(q => x >= q.minX && x <= q.maxX && z >= q.minZ && z <= q.maxZ));
+  return holds(islandAt(x, z));
+}
+/** Whether foes may come to (x, z): never at the safe places, and at home only after dark. */
+function encounterAllowed(x, z) {
+  if (safeAt(x, z)) return false;
+  if (onHome(x, z) && !isNight()) return false;
+  return true;
+}
+state.encounterAllowed = encounterAllowed;
+/** Where foes do not come: spawn pads, the plazas, the obby. */
+function safeAt(x, z) {
+  const inside = (b, pad = 0) => b && x >= b.minX - pad && x <= b.maxX + pad && z >= b.minZ - pad && z <= b.maxZ + pad;
+  if (state.bricks && x >= 2 && x <= 38) return true;
+  if (state.bricks && Math.abs(x - state.bricks.spawnX) < 8 && Math.abs(z - state.bricks.spawnZ) < 8) return true;
+  if (state.district && Math.abs(x - state.district.padX) < 20 && Math.abs(z - state.district.padZ) < 20) return true;
+  if (state.gallery && inside({ minX: state.gallery.plazaMinX, maxX: state.gallery.plazaMaxX, minZ: state.gallery.plazaMinZ, maxZ: state.gallery.plazaMaxZ })) return true;
+  return false;
+}
+function foeModel(kind) {
+  const g = new THREE.Group();
+  const eye = creatureMat(0xffffff), pupil = creatureMat(0x111111);
+  if (kind === "BLIGHT_SLIME") {
+    box(g, creatureMat(0x6b3fa0), 0.9, 0.7, 0.9, 0, 0.35, 0);
+    box(g, eye, 0.18, 0.18, 0.05, -0.2, 0.5, -0.46); box(g, eye, 0.18, 0.18, 0.05, 0.2, 0.5, -0.46);
+    box(g, pupil, 0.08, 0.08, 0.06, -0.2, 0.5, -0.48); box(g, pupil, 0.08, 0.08, 0.06, 0.2, 0.5, -0.48);
+  } else if (kind === "SHARDBACK") {
+    box(g, creatureMat(0x3a2f2a), 1.1, 0.6, 1.4, 0, 0.45, 0);
+    const shell = box(g, creatureMat(0xa070ff, true), 1.2, 0.6, 1.0, 0, 1.0, -0.1);   // the shell guards high
+    shell.name = "shell";
+    box(g, eye, 0.15, 0.15, 0.05, -0.25, 0.55, -0.72); box(g, eye, 0.15, 0.15, 0.05, 0.25, 0.55, -0.72);
+    for (const sx of [-0.6, 0.6]) for (const sz of [-0.4, 0.3]) box(g, creatureMat(0x2a2522), 0.15, 0.4, 0.15, sx, 0.15, sz);
+  } else if (kind === "DUST_WISP") {
+    box(g, new THREE.MeshLambertMaterial({ color: 0xc9c2b8, transparent: true, opacity: 0.75 }), 0.8, 0.8, 0.8, 0, 0, 0);
+    box(g, creatureMat(0xffd27a, true), 0.35, 0.35, 0.35, 0, 0, 0);
+    box(g, pupil, 0.1, 0.1, 0.05, -0.15, 0.1, -0.42); box(g, pupil, 0.1, 0.1, 0.05, 0.15, 0.1, -0.42);
+  } else {
+    const stone = creatureMat(0x7d7b84), dark = creatureMat(0x3d3b42);
+    box(g, stone, 0.5, 0.9, 0.5, -0.22, 0.45, 0); box(g, stone, 0.5, 0.9, 0.5, 0.22, 0.45, 0);
+    box(g, stone, 1.0, 0.9, 0.6, 0, 1.35, 0);
+    box(g, dark, 0.6, 0.55, 0.6, 0, 2.05, 0);
+    box(g, creatureMat(0xff3b1f, true), 0.4, 0.08, 0.05, 0, 2.1, -0.31);              // the visor's glow
+    const shield = new THREE.Group();
+    box(shield, dark, 0.15, 0.75, 0.8, 0, 0, 0);
+    shield.position.set(-0.62, 1.4, -0.3);
+    shield.name = "knightShield";
+    g.add(shield);
+    const blade = new THREE.Group();
+    box(blade, creatureMat(0xd9dde3), 0.1, 0.1, 1.3, 0, 0, -0.65);
+    blade.position.set(0.62, 1.4, -0.2);
+    blade.name = "knightSword";
+    g.add(blade);
+  }
+  return g;
+}
+function spawnFoe(kind, x, z) {
+  const r = rule(kind);
+  if (!r) return null;
+  const y = groundAt(x, z, AVATAR.pos.y);
+  if (y === null) return null;
+  const f = { id: ++foeId, kind, r, pos: new THREE.Vector3(x + 0.5, y, z + 0.5), hp: r.life, shield: "HIGH",
+    shieldTimer: 1.2, windup: 0, striking: null, cooldown: 1.0, blink: 0, knock: new THREE.Vector3(), model: foeModel(kind) };
+  if (kind === "DUST_WISP") f.pos.y += 1.4;
+  scene.add(f.model);
+  FOES.push(f);
+  return f;
+}
+state.spawnFoe = (kind, dx, dz) => {   // a foe dx, dz from the avatar (the harness, and future scripted fights)
+  const f = spawnFoe(kind, Math.floor(AVATAR.pos.x + dx), Math.floor(AVATAR.pos.z + dz));
+  return f ? f.id : null;
+};
+function removeFoe(f) {
+  scene.remove(f.model);
+  const i = FOES.indexOf(f);
+  if (i >= 0) FOES.splice(i, 1);
+}
+function pickKind() {
+  const beaten = HERO.data ? HERO.data.beaten : 0;
+  const r = Math.random() * 100;
+  if (beaten >= 4 && r < 12) return "STONE_KNIGHT";
+  if (r < 35) return "SHARDBACK";
+  if (r < 55) return "DUST_WISP";
+  return "BLIGHT_SLIME";
+}
+function facingVec() { return new THREE.Vector3(-Math.sin(AVATAR.yaw), 0, -Math.cos(AVATAR.yaw)); }
+function fightStep(dt) {
+  if (!fightOn) return;
+  HERO.thrust = Math.max(0, HERO.thrust - dt);
+  HERO.recover = Math.max(0, HERO.recover - dt);
+  HERO.blink = Math.max(0, HERO.blink - dt);
+  HERO.clank = Math.max(0, HERO.clank - dt);
+  // Wild foes come to you, a few at a time, away from the safe places.
+  if (state.spawning) {
+    spawnTimer -= dt;
+    if (spawnTimer <= 0) {
+      spawnTimer = 3 + Math.random() * 3;
+      if (FOES.length < 3) {
+        const a = Math.random() * Math.PI * 2, d = 9 + Math.random() * 5;
+        const x = Math.floor(AVATAR.pos.x + Math.cos(a) * d), z = Math.floor(AVATAR.pos.z + Math.sin(a) * d);
+        if (encounterAllowed(x, z) && encounterAllowed(Math.floor(AVATAR.pos.x), Math.floor(AVATAR.pos.z))) spawnFoe(pickKind(), x, z);
+      }
+    }
+  }
+  const fwd = facingVec();
+  const heroCenter = AVATAR.pos.clone().add(new THREE.Vector3(0, 0.9, 0));
+  for (const f of [...FOES]) {
+    const to = new THREE.Vector3().subVectors(AVATAR.pos, f.pos).setY(0);
+    const dist = to.length();
+    if (dist > 45) { removeFoe(f); continue; }
+    f.blink = Math.max(0, f.blink - dt);
+    f.cooldown = Math.max(0, f.cooldown - dt);
+    if (f.r.shifting) {
+      f.shieldTimer -= dt;
+      if (f.shieldTimer <= 0 && f.windup <= 0) { f.shield = f.shield === "HIGH" ? "LOW" : "HIGH"; f.shieldTimer = 0.9 + Math.random() * 0.8; }
+    }
+    // Close in, unless winding up a strike; knockback carries a foe back.
+    const step = new THREE.Vector3();
+    if (dist > 1.2 && f.windup <= 0) step.copy(to).normalize().multiplyScalar(f.r.speed * dt);
+    step.add(f.knock.clone().multiplyScalar(dt));
+    f.knock.multiplyScalar(Math.pow(0.01, dt));
+    const nx = f.pos.x + step.x, nz = f.pos.z + step.z;
+    if (f.kind === "DUST_WISP") {
+      f.pos.x = nx; f.pos.z = nz;
+      f.pos.y += ((AVATAR.pos.y + 1.45) - f.pos.y) * Math.min(1, dt * 2);
+    } else {
+      const gy = groundAt(Math.floor(nx), Math.floor(nz), f.pos.y);
+      if (gy !== null && Math.abs(gy - f.pos.y) <= 1.01) { f.pos.x = nx; f.pos.z = nz; f.pos.y = gy; }
+    }
+    // Strike: a wind-up you can see, then a blow at a height.
+    if (f.windup > 0) {
+      f.windup -= dt;
+      if (f.windup <= 0) {
+        const height = f.r.shifting ? (f.shield === "HIGH" ? "LOW" : "HIGH") : f.r.strike;
+        if (dist <= 1.95) heroStruck(f, height, to);
+        f.cooldown = f.r.shifting ? 1.0 : 1.3;
+      }
+    } else if (dist <= 1.5 && f.cooldown <= 0 && HERO.blink <= 0) {
+      f.windup = 0.45;
+    }
+  }
+  // The thrust: in its first frames, the blade finds the foe in front.
+  if (HERO.thrust > THRUST_TIME - THRUST_ACTIVE && !HERO.hitThisThrust) {
+    let best = null, bestD = 99;
+    for (const f of FOES) {
+      const to = new THREE.Vector3().subVectors(f.pos, AVATAR.pos).setY(0);
+      const d = to.length();
+      if (d > REACH + 0.5 || d < 0.01) continue;
+      if (to.normalize().dot(fwd) < 0.6) continue;
+      if (d < bestD) { best = f; bestD = d; }
+    }
+    if (best) {
+      HERO.hitThisThrust = true;
+      thrustAt(best);
+    }
+  }
+}
+function thrustAt(f) {
+  const at = HERO.stance;
+  let outcome;
+  if (f.r.reach && f.r.reach !== at) outcome = "OUT_OF_REACH";
+  else outcome = (f.r.shifting ? f.shield : f.r.guard) === at ? "GUARDED" : "HIT";
+  if (outcome === "HIT" && f.blink > 0) outcome = "BLINKING";      // still reeling from the last hit
+  state.thrusts = (state.thrusts || 0) + 1;
+  state.lastThrust = { foe: f.kind, at, outcome, shield: f.shield, n: state.thrusts };
+  if (outcome === "GUARDED") {
+    HERO.clank = 0.25;
+    HERO.knock.add(facingVec().multiplyScalar(-4));
+    return;
+  }
+  if (outcome !== "HIT") return;
+  f.hp -= HERO.data ? HERO.data.damage : 1;
+  f.blink = 0.25;
+  f.knock.copy(facingVec().multiplyScalar(8));
+  if (f.hp <= 0) beatFoe(f);
+}
+async function beatFoe(f) {
+  removeFoe(f);
+  state.lastBeat = { kind: f.kind, exp: f.r.exp };
+  if (Math.random() < 0.25) HERO.hp = Math.min(HERO.data ? HERO.data.maxLife : 6, HERO.hp + 2);
+  else if (Math.random() < 0.25) HERO.mp = Math.min(HERO.data ? HERO.data.maxMagic : 8, HERO.mp + 4);
+  try {
+    const res = await api("/api/v1/hero/defeat", { method: "POST", body: JSON.stringify({ foe: f.kind, actorId: heroName() }) });
+    HERO.data = res;
+    toast(res.result === "BEAT" ? `${f.r.title} beaten · +${f.r.exp} EXP` : "Too fast!");
+  } catch (e) { handleError(e); }
+  renderHud();
+}
+function heroStruck(f, height, awayFromFoe) {
+  const shieldUp = HERO.thrust <= 0;          // mid-thrust, the shield is out of place
+  if (shieldUp && HERO.stance === height) {
+    HERO.clank = 0.25;
+    state.lastBlock = { foe: f.kind, height };
+    HERO.knock.add(awayFromFoe.clone().normalize().multiplyScalar(3));
+    return;
+  }
+  if (HERO.blink > 0) return;
+  const life = HERO.data ? HERO.data.life : 1;
+  const hurt = Math.max(1, f.r.power - Math.floor((life - 1) / 2));
+  HERO.hp -= hurt;
+  HERO.blink = 1.0;
+  HERO.knock.add(awayFromFoe.clone().normalize().multiplyScalar(9));
+  AVATAR.vel.y = Math.max(AVATAR.vel.y, 5);
+  AVATAR.onGround = false;
+  state.lastHurt = { foe: f.kind, height, hurt, hp: HERO.hp };
+  renderHud();
+  if (HERO.hp <= 0) heroFalls();
+}
+async function heroFalls() {
+  while (FOES.length) removeFoe(FOES[0]);
+  try { HERO.data = await api("/api/v1/hero/fall", { method: "POST", body: JSON.stringify({ actorId: heroName() }) }); } catch (e) { handleError(e); }
+  HERO.hp = HERO.data ? HERO.data.maxLife : 6;
+  HERO.mp = HERO.data ? HERO.data.maxMagic : 8;
+  placeAvatar(AVATAR.respawn);
+  state.lastFall = { at: Date.now() };
+  toast("You fell. Your unspent EXP is lost; your levels stay.");
+  renderHud();
+}
+function drawFight(t) {
+  if (!fightOn || !AVATAR.model) return;
+  const m = AVATAR.model;
+  m.visible = HERO.blink <= 0 || Math.floor(t / 70) % 2 === 0;
+  m.scale.y = HERO.stance === "LOW" ? 0.72 : 1;
+  if (HERO.sword) {
+    const out = HERO.thrust > 0 ? Math.sin((1 - HERO.thrust / THRUST_TIME) * Math.PI) * 0.6 : 0;
+    HERO.sword.position.set(0.63, HERO.stance === "LOW" ? 0.75 : 1.15, -0.2 - out);
+    HERO.shield.position.y = HERO.stance === "LOW" ? 0.75 : 1.35;
+  }
+  for (const f of FOES) {
+    f.model.position.copy(f.pos);
+    if (f.kind === "BLIGHT_SLIME") f.model.position.y += Math.abs(Math.sin(t / 160 + f.id)) * 0.35;
+    if (f.kind === "DUST_WISP") f.model.position.y += Math.sin(t / 300 + f.id) * 0.15;
+    f.model.rotation.y = Math.atan2(-(AVATAR.pos.x - f.pos.x), -(AVATAR.pos.z - f.pos.z));
+    f.model.visible = f.blink <= 0 || Math.floor(t / 50) % 2 === 0;
+    const ks = f.model.getObjectByName("knightShield");
+    if (ks) ks.position.y = f.shield === "HIGH" ? 1.45 : 0.6;
+    const kb = f.model.getObjectByName("knightSword");
+    if (kb) kb.position.y = (f.shield === "HIGH" ? 0.65 : 1.45) + (f.windup > 0 ? 0.25 : 0);
+    f.model.scale.setScalar(f.windup > 0 ? 1.08 : 1);       // the wind-up you learn to read
+  }
+}
+function hearts(hp, max) {
+  let s = "";
+  for (let i = 0; i < max; i += 2) s += hp >= i + 2 ? "♥" : hp === i + 1 ? "❥" : "♡";
+  return s;
+}
+function renderHud() {
+  const hud = document.getElementById("heroHud");
+  if (!hud) return;
+  const d = HERO.data;
+  const max = d ? d.maxLife : 6, mmax = d ? d.maxMagic : 8;
+  hud.querySelector(".hearts").textContent = hearts(Math.max(0, HERO.hp), max);
+  hud.querySelector(".magic i").style.width = `${Math.round(100 * HERO.mp / mmax)}%`;
+  hud.querySelector(".levels").textContent = d ? `ATTACK ${d.attack} · MAGIC ${d.magic} · LIFE ${d.life}` : "";
+  const nexts = d ? [d.nextLife, d.nextMagic, d.nextAttack].filter(n => n > 0) : [];
+  hud.querySelector(".exp").textContent = d ? `EXP ${d.exp}` + (nexts.length ? ` / ${Math.min(...nexts)}` : "") : "";
+  const up = document.getElementById("levelUp");
+  if (d && d.canRaise.length) {
+    up.style.display = "block";
+    for (const b of up.querySelectorAll("button[data-stat]")) {
+      const stat = b.dataset.stat;
+      const cost = { ATTACK: d.nextAttack, MAGIC: d.nextMagic, LIFE: d.nextLife }[stat];
+      b.disabled = !d.canRaise.includes(stat);
+      b.textContent = `${stat[0]}${stat.slice(1).toLowerCase()} ${cost > 0 ? cost : "max"}`;
+    }
+  } else {
+    up.style.display = "none";
+  }
+}
+async function raiseStat(stat) {
+  try {
+    const res = await api("/api/v1/hero/raise", { method: "POST", body: JSON.stringify({ stat, actorId: heroName() }) });
+    HERO.data = res;
+    if (res.result === "RAISED") {
+      HERO.hp = res.maxLife;
+      HERO.mp = res.maxMagic;
+      toast(`LEVEL UP — ${stat[0]}${stat.slice(1).toLowerCase()} ${res[stat.toLowerCase()]}`);
+    }
+  } catch (e) { handleError(e); }
+  renderHud();
+}
+for (const b of document.querySelectorAll("#levelUp button[data-stat]")) b.onclick = () => raiseStat(b.dataset.stat);
+document.getElementById("levelLater").onclick = () => { document.getElementById("levelUp").style.display = "none"; };
+document.getElementById("swordBtn").addEventListener("pointerdown", e => { e.preventDefault(); heroThrust(); });
+const crouchBtn = document.getElementById("crouchBtn");
+crouchBtn.addEventListener("pointerdown", e => { e.preventDefault(); heroCrouch(true); });
+for (const ev of ["pointerup", "pointercancel", "pointerleave"]) crouchBtn.addEventListener(ev, () => heroCrouch(false));
+document.getElementById("healBtn").addEventListener("pointerdown", e => { e.preventDefault(); heroHeal(); });
+state.heroAct = { thrust: heroThrust, crouch: heroCrouch, heal: heroHeal, raise: raiseStat };
+state.clearFoes = () => { while (FOES.length) removeFoe(FOES[0]); };
+
 // ---------------------------------------------------------------- obby (ADR-034)
 function showObby() {
   const host = document.getElementById("islands");
@@ -1960,7 +2351,9 @@ function startPlay() {
   camera.position.copy(AVATAR.pos).add(new THREE.Vector3(0, 6, 11));
   AVATAR.last = AVATAR.pos.clone();
   document.body.classList.add("playing");
-  toast(state.bricks ? "Run the obby! WASD / arrows and Space, or the stick and Jump" : "WASD / arrows and Space, or the stick and Jump");
+  toast(state.bricks ? "Run the obby! WASD / arrows and Space, or the stick and Jump"
+    : "WASD / arrows, Space jumps, J thrusts, hold C to crouch, H heals");
+  startFight();
 }
 function stopPlay() {
   AVATAR.on = false;
@@ -1969,6 +2362,7 @@ function stopPlay() {
   AVATAR.jump = false;
   if (AVATAR.model) scene.remove(AVATAR.model);
   document.body.classList.remove("playing");
+  stopFight();
 }
 function placeAvatar(p) {
   AVATAR.pos.copy(p);
@@ -1979,6 +2373,9 @@ function playKey(e, down) {
   const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
   if (["w", "a", "s", "d", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(k)) e.preventDefault();
   if (k === " ") { AVATAR.jump = down; return; }
+  if (k === "j" || k === "k") { if (down && !e.repeat) heroThrust(); return; }
+  if (k === "c" || k === "Control") { heroCrouch(down); return; }
+  if (k === "h") { if (down && !e.repeat) heroHeal(); return; }
   if (down && (k === "Escape" || k === "l")) { setMode("look"); return; }
   if (down) AVATAR.keys.add(k); else AVATAR.keys.delete(k);
 }
@@ -2013,9 +2410,11 @@ function playStep(dt) {
   const len = Math.hypot(ix, iz);
   if (len > 1) { ix /= len; iz /= len; }
   const want = right.multiplyScalar(ix).add(fwd.multiplyScalar(iz));
-  AVATAR.vel.x = want.x * RUN_SPEED;
-  AVATAR.vel.z = want.z * RUN_SPEED;
-  if (want.lengthSq() > 0.01) AVATAR.yaw = Math.atan2(-want.x, -want.z);
+  const speed = HERO.stance === "LOW" ? 0 : RUN_SPEED;          // crouched, you hold your ground (Zelda II)
+  AVATAR.vel.x = want.x * speed + HERO.knock.x;
+  AVATAR.vel.z = want.z * speed + HERO.knock.z;
+  HERO.knock.multiplyScalar(Math.pow(0.004, dt));
+  if (want.lengthSq() > 0.01 && HERO.thrust <= 0) AVATAR.yaw = Math.atan2(-want.x, -want.z);
   if (AVATAR.jump && AVATAR.onGround) { AVATAR.vel.y = JUMP_SPEED; AVATAR.onGround = false; }
   AVATAR.vel.y = Math.max(-40, AVATAR.vel.y - GRAVITY * dt);
   moveAxis("x", AVATAR.vel.x * dt);
@@ -2064,7 +2463,8 @@ function die() {
 function movePlay(t, dtMs) {
   if (!AVATAR.on) return;
   AVATAR.acc = Math.min(0.5, AVATAR.acc + dtMs / 1000);   // a long stall is not a teleport
-  while (AVATAR.acc >= STEP) { playStep(STEP); AVATAR.acc -= STEP; }
+  while (AVATAR.acc >= STEP) { playStep(STEP); fightStep(STEP); AVATAR.acc -= STEP; }
+  drawFight(t);
   const m = AVATAR.model;
   m.position.copy(AVATAR.pos);
   m.rotation.y = AVATAR.yaw;

@@ -10,6 +10,28 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Combat and EXP (ADR-037).**
+  Zelda II in the realm:
+  thrust high or low,
+  crouch, shield,
+  knockback; four foes
+  (slime, shardback, dust
+  wisp, stone knight);
+  server-kept EXP; choose
+  Attack, Magic or Life;
+  no max level; home is
+  safe by day.
+
+- **`setup-unreal.ps1` fetches what it needs.**
+  It finds UE in the launcher's
+  list, the registry or
+  `<drive>:\Epic Games`; starts a
+  local server (with Java 21 and
+  Maven if missing); installs the
+  VS 2022 C++ tools for `-Build`;
+  and points an existing project
+  at the engine it found.
+
 - **The game (ADR-036).**
   What Zelda II, A Link
   to the Past, Dragon

@@ -8,14 +8,18 @@
   Every step checks before it acts and says what it found; run it again at any time.
     1. Epic Games Launcher  - found, or installed with winget (-InstallLauncher). You sign in to Epic and
                               accept the Unreal Engine EULA yourself; this script never does that for you.
-    2. Unreal Engine 5.4+   - found from the launcher's install list (or -EnginePath). Engines download
+    2. Unreal Engine 5.4+   - the newest found in the launcher's install list, the registry or <drive>:\Epic Games
+                              (or -EnginePath). Engines download
                               through the launcher (Library > +), so if none is installed the script opens
                               the launcher's Library page and stops.
     3. Project              - -Project names a .uproject; if it does not exist a blank one is made.
     4. Plugin               - DaedalusLink is copied into <Project>/Plugins and enabled in the .uproject.
-    5. World Package        - <Server>/api/v1/world/<World>/package is saved under <Project>/Saved/Daedalus.
+    5. World Package        - <Server>/api/v1/world/<World>/package is saved under <Project>/Saved/Daedalus. A
+                              localhost server that isn't running is started in its own window (Java 21 via
+                              winget and Maven from Apache if missing); -NoServerStart turns that off.
     6. Build (-Build)       - compiles the plugin with RunUAT BuildPlugin and installs the result (needs
-                              Visual Studio 2022 with "Game development with C++"); without it the editor
+                              Visual Studio 2022 with "Game development with C++", installed with winget if
+                              missing); without it the editor
                               offers to compile the plugin itself on first open.
     7. Import (-Import)     - runs Content/Python/import_world_package.py headless: materials, the world's
                               meshes, the ark, and a live "Daedalus World" actor in the default level.
@@ -37,6 +41,7 @@ param(
     [switch]$Build,
     [switch]$Import,
     [switch]$SkipPackage,
+    [switch]$NoServerStart,
     [switch]$WhatIfOnly
 )
 
@@ -97,23 +102,54 @@ if ($launcher) {
 # --- 2. Unreal Engine ------------------------------------------------------------------------------------
 function Find-Engine([string]$want) {
     if (-not $env:ProgramData) { return $null }   # not Windows
+    $found = @()
+    # a) the launcher's install list
     $dat = Join-Path $env:ProgramData "Epic\UnrealEngineLauncher\LauncherInstalled.dat"
-    if (-not (Test-Path $dat)) { return $null }
-    $best = $null
-    foreach ($i in (Get-Content $dat -Raw | ConvertFrom-Json).InstallationList) {
-        if ($i.AppName -match '^UE_(\d+\.\d+)$' -and (Test-Version $Matches[1] $want)) {
-            if (-not $best -or [version]$Matches[1] -gt [version]$best.Version) {
-                $best = [pscustomobject]@{ Version = $Matches[1]; Path = $i.InstallLocation }
+    if (Test-Path $dat) {
+        try {
+            foreach ($i in (Get-Content $dat -Raw | ConvertFrom-Json).InstallationList) {
+                $tag = "$($i.AppName) $($i.InstallLocation)"
+                if ($tag -match 'UE_(\d+\.\d+)') {
+                    $found += [pscustomobject]@{ Version = $Matches[1]; Path = $i.InstallLocation }
+                }
+            }
+        } catch { Warn "could not read $dat ($($_.Exception.Message))" }
+    }
+    # b) the registry the launcher writes for each engine
+    foreach ($root in @("HKLM:\SOFTWARE\EpicGames\Unreal Engine", "HKLM:\SOFTWARE\WOW6432Node\EpicGames\Unreal Engine")) {
+        if (Test-Path $root) {
+            foreach ($k in Get-ChildItem $root -ErrorAction SilentlyContinue) {
+                $dir = (Get-ItemProperty $k.PSPath -ErrorAction SilentlyContinue).InstalledDirectory
+                if ($dir -and $k.PSChildName -match '^(\d+\.\d+)') {
+                    $found += [pscustomobject]@{ Version = $Matches[1]; Path = $dir }
+                }
             }
         }
     }
-    return $best
+    # c) the usual folders, on every drive
+    $roots = @("${env:ProgramFiles}\Epic Games") + (Get-PSDrive -PSProvider FileSystem -ErrorAction SilentlyContinue |
+        ForEach-Object { Join-Path $_.Root "Epic Games"; Join-Path $_.Root "Program Files\Epic Games" })
+    foreach ($r in ($roots | Select-Object -Unique)) {
+        if ($r -and (Test-Path $r)) {
+            foreach ($d in Get-ChildItem $r -Directory -Filter "UE_*" -ErrorAction SilentlyContinue) {
+                if ($d.Name -match '^UE_(\d+\.\d+)') {
+                    $found += [pscustomobject]@{ Version = $Matches[1]; Path = $d.FullName }
+                }
+            }
+        }
+    }
+    $ok = $found | Where-Object {
+        (Test-Version $_.Version $want) -and
+        (Test-Path (Join-Path $_.Path "Engine\Binaries\Win64\UnrealEditor.exe"))
+    }
+    return $ok | Sort-Object { [version]$_.Version } -Descending | Select-Object -First 1
 }
 
 Say "Unreal Engine $EngineVersion or newer"
 $engine = $null
 if ($EnginePath) {
-    $engine = [pscustomobject]@{ Version = $EngineVersion; Path = $EnginePath }
+    $v = if ($EnginePath -match 'UE_(\d+\.\d+)') { $Matches[1] } else { $EngineVersion }
+    $engine = [pscustomobject]@{ Version = $v; Path = $EnginePath }
 } else {
     $engine = Find-Engine $EngineVersion
 }
@@ -121,7 +157,8 @@ if ($engine -and (Test-Path (Join-Path $engine.Path "Engine"))) {
     Write-Host ("    found UE {0} at {1}" -f $engine.Version, $engine.Path)
 } else {
     $engine = $null
-    Warn "no UE $EngineVersion+ found. Install it in the launcher: Unreal Engine > Library > Engine Versions > +"
+    Warn "no UE $EngineVersion+ found (looked in the launcher's list, the registry, and <drive>:\Epic Games\UE_*)."
+    Warn "If it is installing, wait for the launcher to finish. If it lives elsewhere, add -EnginePath 'D:\Where\UE_5.8'."
     if ($launcher -and -not $WhatIfOnly) {
         Start-Process "com.epicgames.launcher://ue/library"
     }
@@ -137,6 +174,14 @@ $Project = [System.IO.Path]::GetFullPath($Project)
 $association = if ($engine) { $engine.Version } else { $EngineVersion }
 if (Test-Path $Project) {
     Write-Host "    found"
+    if ($engine -and -not $WhatIfOnly) {
+        $up = Get-Content $Project -Raw | ConvertFrom-Json
+        if ($up.EngineAssociation -ne $engine.Version) {
+            $up.EngineAssociation = $engine.Version
+            $up | ConvertTo-Json -Depth 10 | Set-Content -Path $Project -Encoding UTF8
+            Write-Host "    now opens with UE $($engine.Version)"
+        }
+    }
 } elseif ($WhatIfOnly) {
     Write-Host "    would create a blank project for UE $association"
 } else {
@@ -183,6 +228,93 @@ if (-not (Test-Path (Join-Path $PluginSource "DaedalusLink.uplugin"))) {
 }
 
 # --- 5. World Package ----------------------------------------------------------------------------------------
+function Test-Server {
+    try {
+        return (Invoke-WebRequest -Uri "$($Server.TrimEnd('/'))/api/v1/worlds" -UseBasicParsing -TimeoutSec 3).StatusCode -eq 200
+    } catch { return $false }
+}
+
+function Find-Java {
+    $cands = @()
+    $onPath = Get-Command java -ErrorAction SilentlyContinue
+    if ($onPath) { $cands += $onPath.Source }
+    if ($env:JAVA_HOME) { $cands += (Join-Path $env:JAVA_HOME "bin\java.exe") }
+    foreach ($r in @("${env:ProgramFiles}\Microsoft", "${env:ProgramFiles}\Java", "${env:ProgramFiles}\Eclipse Adoptium")) {
+        if (Test-Path $r) { $cands += (Get-ChildItem $r -Directory -Filter "jdk*" | Sort-Object Name -Descending | ForEach-Object { Join-Path $_.FullName "bin\java.exe" }) }
+    }
+    foreach ($c in $cands) {
+        if (-not (Test-Path $c)) { continue }
+        $ErrorActionPreference = "Continue"   # java -version writes to stderr; PowerShell 5.1 would stop on it
+        $v = (& $c -version 2>&1 | Out-String)
+        $ErrorActionPreference = "Stop"
+        if ($v -match 'version "(\d+)' -and [int]$Matches[1] -ge 21) { return $c }
+    }
+    return $null
+}
+
+# Maven from PATH, or downloaded once from Apache into %LOCALAPPDATA%\Daedalus.
+function Find-Maven {
+    $m = Get-Command mvn -ErrorAction SilentlyContinue
+    if ($m) { return $m.Source }
+    $ver = "3.9.9"
+    $home2 = Join-Path $env:LOCALAPPDATA "Daedalus\apache-maven-$ver"
+    $cmd = Join-Path $home2 "bin\mvn.cmd"
+    if (Test-Path $cmd) { return $cmd }
+    $zip = Join-Path $env:TEMP "apache-maven-$ver-bin.zip"
+    $url = "https://archive.apache.org/dist/maven/maven-3/$ver/binaries/apache-maven-$ver-bin.zip"
+    Write-Host "    downloading Maven $ver from $url"
+    try {
+        Invoke-WebRequest -Uri $url -OutFile $zip -UseBasicParsing -TimeoutSec 300
+        Expand-Archive -Path $zip -DestinationPath (Join-Path $env:LOCALAPPDATA "Daedalus") -Force
+    } catch { Warn "could not download Maven: $($_.Exception.Message)"; return $null }
+    if (Test-Path $cmd) { return $cmd }
+    Warn "Maven unpacked but $cmd is missing"
+    return $null
+}
+
+# A server on this PC that isn't running is started here: built with Maven if needed, then run in its own window.
+function Start-LocalServer {
+    if ($NoServerStart -or (Test-Server)) { return }
+    $uri = [uri]$Server
+    if ($uri.Host -notin @("localhost", "127.0.0.1", "::1")) { return }
+    $repo = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
+    if (-not (Test-Path (Join-Path $repo "daedalus-server\pom.xml"))) { Warn "no daedalus-server next to this script; start the server yourself"; return }
+    $java = Find-Java
+    if (-not $java) {
+        Write-Host "    the server needs Java 21; installing Microsoft's OpenJDK 21 with winget (you accept its license there)"
+        winget install --id Microsoft.OpenJDK.21 --exact --source winget
+        $java = Find-Java
+        if (-not $java) { Warn "no Java 21 after winget; open a new PowerShell and run this again"; return }
+    }
+    $jar = Get-ChildItem (Join-Path $repo "daedalus-server\target") -Filter "daedalus-server-*-exec.jar" -ErrorAction SilentlyContinue |
+        Sort-Object LastWriteTime -Descending | Select-Object -First 1
+    $newest = Get-ChildItem (Join-Path $repo "daedalus-*\src\main") -Recurse -File -ErrorAction SilentlyContinue |
+        Sort-Object LastWriteTime -Descending | Select-Object -First 1
+    if (-not $jar -or ($newest -and $newest.LastWriteTime -gt $jar.LastWriteTime)) {
+        $mvn = Find-Maven
+        if (-not $mvn) { return }
+        Write-Host "    building the server (the first time downloads libraries and takes a few minutes)..."
+        $env:JAVA_HOME = Split-Path (Split-Path $java -Parent) -Parent
+        Push-Location $repo
+        $ErrorActionPreference = "Continue"
+        try {
+            & $mvn -B -q package -pl daedalus-server -am -DskipTests "-Dcheckstyle.skip" "-Dspotbugs.skip" "-Djacoco.skip"
+            if ($LASTEXITCODE -ne 0) { Warn "mvn package exited $LASTEXITCODE"; return }
+        } finally { Pop-Location; $ErrorActionPreference = "Stop" }
+        $jar = Get-ChildItem (Join-Path $repo "daedalus-server\target") -Filter "daedalus-server-*-exec.jar" |
+            Sort-Object LastWriteTime -Descending | Select-Object -First 1
+    }
+    $port = if ($uri.Port -gt 0) { $uri.Port } else { 80 }
+    Write-Host "    starting the Daedalus server on port $port in its own window (leave it open)"
+    $cmd = "`$env:SERVER_PORT='$port'; Set-Location '$repo'; & '$java' -jar '$($jar.FullName)'"
+    Start-Process powershell -ArgumentList @("-NoExit", "-Command", $cmd) | Out-Null
+    for ($i = 0; $i -lt 90; $i++) {
+        Start-Sleep -Seconds 2
+        if (Test-Server) { Write-Host "    server is up"; return }
+    }
+    Warn "the server did not answer within 3 minutes; check its window"
+}
+
 $PackageDir = Join-Path (Join-Path $ProjectDir "Saved") "Daedalus"
 $PackageFile = Join-Path $PackageDir "$World.daedalus.zip"
 if (-not $SkipPackage) {
@@ -191,6 +323,8 @@ if (-not $SkipPackage) {
     if ($WhatIfOnly) {
         Write-Host "    would save it to $PackageFile"
     } else {
+        Start-LocalServer
+
         New-Item -ItemType Directory -Force -Path $PackageDir | Out-Null
         try {
             Invoke-WebRequest -Uri $url -OutFile $PackageFile -UseBasicParsing -TimeoutSec 120
@@ -219,10 +353,29 @@ if (-not $SkipPackage) {
 }
 
 # --- 6. Build ------------------------------------------------------------------------------------------------
+function Find-VcTools {
+    $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+    if (-not (Test-Path $vswhere)) { return $null }
+    $p = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+    if ($p) { return ($p | Select-Object -First 1) }
+    return $null
+}
+
 if ($Build) {
     Say "Build the plugin for the editor"
+    $vc = Find-VcTools
+    if (-not $vc -and -not $WhatIfOnly) {
+        Write-Host "    no Visual Studio C++ tools; installing Visual Studio 2022 Community with 'Game development with C++'"
+        Write-Host "    (a large download; the installer window shows progress, and you accept its license there)"
+        winget install --id Microsoft.VisualStudio.2022.Community --exact --source winget --override `
+            "--add Microsoft.VisualStudio.Workload.NativeGame --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows11SDK.22621 --includeRecommended --passive --wait"
+        $vc = Find-VcTools
+    }
+    if ($vc) { Write-Host "    C++ tools: $vc" }
     if (-not $engine) {
         Fail "no engine to build with"
+    } elseif (-not $vc -and -not $WhatIfOnly) {
+        Fail "no Visual Studio C++ tools (the install above did not finish; run this again when it has)"
     } else {
         $bat = Join-Path $engine.Path "Engine\Build\BatchFiles\RunUAT.bat"
         $out = Join-Path (Join-Path $ProjectDir "Saved") "DaedalusLinkBuild"

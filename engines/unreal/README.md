@@ -24,7 +24,16 @@ To see what it would do without changing anything, add `-WhatIfOnly`. Other opti
 
 - `-Server http://host:8088`: which Daedalus server to download from
 - `-World <id>`: which world to download
-- `-EnginePath D:\UE_5.5`: use an engine the launcher does not know about
+- `-EnginePath D:\UE_5.5`: use an engine the launcher does not know about (the script otherwise looks in
+  the launcher's list, the registry and `<drive>:\Epic Games\UE_*`, and takes the newest)
+- `-NoServerStart`: don't start a local server
+
+What it downloads for you, when missing:
+- **A Daedalus server.** If `-Server` is on this PC and not answering, the script builds the server
+  and starts it in its own window. It installs Java 21 (`winget`, Microsoft OpenJDK) and Maven
+  (from Apache, into `%LOCALAPPDATA%\Daedalus`) if they are missing.
+- **The C++ tools** (`-Build`). Visual Studio 2022 Community with "Game development with C++", via
+  `winget`. This is a large download, and its installer shows its own license and progress.
 
 ## The Daedalus World actor
 
