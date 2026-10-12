@@ -118,6 +118,13 @@ def main():
         r = S.ship("Crate", objects=["Crate"], dest="/Game/Test", folder=work, blender=B, unreal=U)
         check("one named object ships alone", r["ok"] and len(r["unreal"]["meshes"]) == 1, r["checks"])
 
+        wire.call(U, "pipeline.fault", kind="nanite")
+        r = S.ship("Props", dest="/Game/Nanite", folder=work, blender=B, unreal=U)
+        nan = [m for m in r["unreal"]["meshes"] if m.get("nanite")]
+        check("Nanite's simplified fallback doesn't fail an intact import (the pickaxes, 440 vs 422)",
+              r["ok"] and nan and any(m["render_triangles"] < m["triangles"] for m in nan),
+              [c for c in r["checks"] if not c["ok"]] or r["unreal"]["meshes"])
+
         canaries = {"drop_mesh": "every file mesh became an Unreal static mesh",
                     "drop_tris": "triangles: file = Unreal, mesh by mesh",
                     "drop_slot": "material slots: file = Unreal, mesh by mesh",

@@ -64,8 +64,17 @@ for path in paths:
         box = asset.get_bounding_box()
         size = [box.max.x - box.min.x, box.max.y - box.min.y, box.max.z - box.min.z]
         slots = [str(m.get_editor_property("material_slot_name")) for m in asset.get_editor_property("static_materials")]
-        meshes.append({"path": path, "name": asset.get_name(), "triangles": asset.get_num_triangles(0),
-                       "materials": slots, "dims_cm": sorted(size, reverse=True)})
+        # Count the imported geometry (the source mesh description), not LOD0's render data: with Nanite on (UE 5.8's
+        # import default) LOD0 is the Nanite fallback, which simplifies (a 440-triangle pickaxe rendered as 422).
+        render = asset.get_num_triangles(0)
+        desc = asset.get_static_mesh_description(0)
+        source = desc.get_triangle_count() if desc is not None else render
+        try:
+            nanite = bool(asset.get_editor_property("nanite_settings").get_editor_property("enabled"))
+        except Exception:
+            nanite = False
+        meshes.append({"path": path, "name": asset.get_name(), "triangles": source, "render_triangles": render,
+                       "nanite": nanite, "materials": slots, "dims_cm": sorted(size, reverse=True)})
         # UE 5.8.3 reports only the meshes as imported: count the materials the meshes actually use (a folder
         # listing would also count a previous import's leftovers and hide a lost material).
         for m in asset.get_editor_property("static_materials"):

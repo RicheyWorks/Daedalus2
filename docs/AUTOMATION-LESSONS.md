@@ -124,6 +124,13 @@ to it when something new breaks.
 - **A report must not blame an old log.** `-Wait` printed AutomationTool's ErrorLog.txt ("conflicting instance")
   for two builds that had really failed on compile errors. The ErrorLog was from 8:53; the builds ran at 11:01.
   Compile errors now come first, and the ErrorLog is shown only when it was written during this job.
+- **Count what was imported, not what is rendered.** All four pickaxes were REJECTED with "file 440, Unreal 422".
+  The .glb had no degenerate or duplicate triangles. In Unreal, `nanite_settings.enabled` was true (UE 5.8's import
+  default), the source mesh description held all 440 triangles, and `get_num_triangles(0)` returned 422: that is
+  the Nanite fallback, simplified. The judge was faulting good assets. It now counts the mesh description and
+  records `render_triangles` and `nanite` beside it. The stand-in has a `nanite` fault that must pass, and a mutant
+  that goes back to counting LOD0 fails it. How it was found: measure both ends (the file, then Unreal's source vs
+  LOD0) before blaming either team.
 - **Game logic must not live in Slate's Tick.** The realm walked 12 steps in one run and 0 in the next. The
   difference: the editor was minimized for the second run, and Slate stops ticking widgets in a minimized window.
   The portal's exit (raised from Tick) never fired either. The core now runs on `FTSTicker`, which ticks no matter

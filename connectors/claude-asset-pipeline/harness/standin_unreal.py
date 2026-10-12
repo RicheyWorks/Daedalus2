@@ -11,6 +11,7 @@ The add-on command pipeline.fault makes the next import lose something, so the h
 judge says no:
   "drop_mesh"     one mesh never arrives
   "drop_tris"     a mesh comes in with fewer triangles
+  "nanite"        Nanite on: LOD0 (the fallback) has fewer triangles than the source, which is intact (must pass)
   "drop_slot"     a mesh comes in with one material slot fewer
   "scale_m"       sizes stay in metres (a units bug)
   "no_materials"  no material assets are made
@@ -54,15 +55,27 @@ class Box:
         self.max = U.V(*size)
 
 
+class MeshDescription:
+    def __init__(self, tris): self._tris = tris
+    def get_triangle_count(self): return self._tris
+
+
+class NaniteSettings(_Obj):
+    def __init__(self, enabled): self.enabled = enabled
+
+
 class StaticMesh(_Obj):
-    def __init__(self, name, tris, slots, size_cm):
+    def __init__(self, name, tris, slots, size_cm, render_tris=None, nanite=False):
         self._name, self._tris, self._size = name, tris, size_cm
+        self._render = tris if render_tris is None else render_tris
+        self.nanite_settings = NaniteSettings(nanite)
         self.static_materials = [StaticMaterial(s) for s in slots]
 
     def use(self, materials):
         for sm in self.static_materials:
             sm.material_interface = materials.get(sm.material_slot_name)
-    def get_num_triangles(self, lod): return self._tris if lod == 0 else 0
+    def get_num_triangles(self, lod): return self._render if lod == 0 else 0
+    def get_static_mesh_description(self, lod): return MeshDescription(self._tris) if lod == 0 else None
     def get_bounding_box(self): return Box(self._size)
 
 
@@ -98,7 +111,9 @@ class _AssetTools:
                 k = 1.0 if fault == "scale_m" else 100.0
                 size = [d * k for d in n["dims"]]
                 path = "%s/%s/StaticMeshes/%s" % (t.destination_path, os.path.splitext(os.path.basename(t.filename))[0], n["name"])
-                mesh = StaticMesh(n["name"], tris, slots, size)
+                # As seen live (UE 5.8.3): Nanite on by default; LOD0 is the fallback, a few % fewer triangles.
+                nanite = fault == "nanite"
+                mesh = StaticMesh(n["name"], tris, slots, size, render_tris=tris - tris // 20 if nanite else None, nanite=nanite)
                 mesh.use(mats)
                 ASSETS[path] = mesh
                 t.imported_object_paths.append(path)
