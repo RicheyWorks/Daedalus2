@@ -52,6 +52,7 @@ $ErrorActionPreference = "Stop"
 $PluginSource = Join-Path $PSScriptRoot "DaedalusLink"
 $script:Steps = 0
 $script:Failed = 0
+$keep = $false
 
 function Say([string]$what, [string]$detail) {
     $script:Steps++
@@ -206,6 +207,18 @@ if (Test-Path $Project) {
     Write-Host "    created a blank project for UE $association"
 }
 
+# One hash over every file under a folder (relative names and contents), to tell whether two copies match.
+function Get-TreeHash([string]$dir) {
+    if (-not (Test-Path $dir)) { return "" }
+    $root = (Resolve-Path $dir).Path
+    $lines = Get-ChildItem $root -Recurse -File | Sort-Object FullName | ForEach-Object {
+        $_.FullName.Substring($root.Length).Replace('\', '/') + " " + (Get-FileHash $_.FullName -Algorithm SHA256).Hash
+    }
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes(($lines -join "`n"))
+    $sha = [System.Security.Cryptography.SHA256]::Create()
+    try { return [BitConverter]::ToString($sha.ComputeHash($bytes)) } finally { $sha.Dispose() }
+}
+
 # --- 4. Plugin ---------------------------------------------------------------------------------------------
 Say "DaedalusLink plugin"
 $PluginDest = Join-Path (Join-Path $ProjectDir "Plugins") "DaedalusLink"
@@ -214,9 +227,17 @@ if (-not (Test-Path (Join-Path $PluginSource "DaedalusLink.uplugin"))) {
 } elseif ($WhatIfOnly) {
     Write-Host "    would copy $PluginSource -> $PluginDest and enable it"
 } else {
-    if (Test-Path $PluginDest) { Remove-Item -Recurse -Force $PluginDest }
-    New-Item -ItemType Directory -Force -Path (Split-Path $PluginDest -Parent) | Out-Null
-    Copy-Item -Recurse -Force $PluginSource $PluginDest
+    # A compiled plugin whose sources match this repo's is kept: copying over it would throw the build away.
+    $keep = (Test-Path (Join-Path $PluginDest "Binaries\Win64\UnrealEditor-DaedalusLink.dll")) -and
+        ((Get-TreeHash (Join-Path $PluginSource "Source")) -eq (Get-TreeHash (Join-Path $PluginDest "Source"))) -and
+        ((Get-TreeHash (Join-Path $PluginSource "Content")) -eq (Get-TreeHash (Join-Path $PluginDest "Content")))
+    if ($keep) {
+        Write-Host "    the compiled plugin there matches these sources; keeping it"
+    } else {
+        if (Test-Path $PluginDest) { Remove-Item -Recurse -Force $PluginDest }
+        New-Item -ItemType Directory -Force -Path (Split-Path $PluginDest -Parent) | Out-Null
+        Copy-Item -Recurse -Force $PluginSource $PluginDest
+    }
     $up = Get-Content $Project -Raw | ConvertFrom-Json
     $plugins = @()
     if ($up.PSObject.Properties.Name -contains "Plugins" -and $up.Plugins) { $plugins = @($up.Plugins) }
@@ -227,7 +248,7 @@ if (-not (Test-Path (Join-Path $PluginSource "DaedalusLink.uplugin"))) {
     }
     $up | Add-Member -NotePropertyName Plugins -NotePropertyValue $plugins -Force
     $up | ConvertTo-Json -Depth 10 | Set-Content -Path $Project -Encoding UTF8
-    Write-Host ("    copied to {0}; enabled {1}" -f $PluginDest, ($needed -join ", "))
+    Write-Host ("    {0} {1}; enabled {2}" -f $(if ($keep) { "in" } else { "copied to" }), $PluginDest, ($needed -join ", "))
 }
 
 # --- 5. World Package ----------------------------------------------------------------------------------------
@@ -437,8 +458,10 @@ function Test-MsvcUsable([version]$v) {
 if ($Build) {
     Say "Build the plugin for the editor"
     $vc = Find-VcTools
-    $busy = Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.Path -like "*Microsoft Visual Studio\Installer*" }
-    if ($busy -and -not $WhatIfOnly) {
+    $busy = if ($keep) { $null } else { Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.Path -like "*Microsoft Visual Studio\Installer*" } }
+    if ($keep) {
+        # built already; the toolchain is not needed
+    } elseif ($busy -and -not $WhatIfOnly) {
         Fail "the Visual Studio Installer window is open: if it is installing, let it finish; then close it and run this again"
         $vc = $null
         $script:VcReported = $true
@@ -463,7 +486,7 @@ if ($Build) {
             "--add Microsoft.VisualStudio.Workload.NativeGame --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows11SDK.22621 --includeRecommended --passive --wait"
         $vc = Find-VcTools
     }
-    if ($vc -and -not $WhatIfOnly) {
+    if ($vc -and -not $WhatIfOnly -and -not $keep) {
         $msvc = Get-MsvcVersions $vc
         if (-not ($msvc | Where-Object { Test-MsvcUsable $_ })) {
             Write-Host ("    MSVC {0} is too old for UE {1}; updating Visual Studio to its latest (MSVC 14.44+)." -f (($msvc | Select-Object -First 1)), $engine.Version)
@@ -484,7 +507,9 @@ if ($Build) {
         }
         if ($vc) { Write-Host ("    C++ tools: {0} (MSVC {1})" -f $vc, ($msvc | Where-Object { Test-MsvcUsable $_ } | Select-Object -First 1)) }
     }
-    if (-not $engine) {
+    if ($keep) {
+        Write-Host "    already built from these sources; nothing to do"
+    } elseif (-not $engine) {
         Fail "no engine to build with"
     } elseif (-not $vc -and $script:VcReported) {
         # already said why above
