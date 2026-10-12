@@ -54,3 +54,23 @@ DaedalusWorld, lays a 1024 m basalt blockout disc at ARK_ORIGIN 6000000,2000000,
 (hot-spring water as an engine plane), adds a forge-glow light and hero camera, takes a hero shot, stops Play, saves
 only its own sublevel, and posts DONE plus HANDOFF. Editor work is capped at 150 s. Safe to rerun: it clears only
 actors in its own `Hephaestus` outliner folder.
+
+## Hero meshes (procedural, no Blender)
+
+The 7 landmark glbs used to be 3-box placeholders (about 3.8 KB, 36 tris, all the same silhouette), so the island
+would have read as a field of identical blocks. `tools/islands/hephaestus/heph_hero_glb.py` now builds real
+low-poly versions with numpy and trimesh, in the art queue's glb format (one node, one mesh, one primitive per
+material, Y-up, metres, base at y=0, emissive factors on ember/magma/crystal so Lumen picks up the glow):
+
+| Asset | Tris | Size (m) | Shape |
+|---|---|---|---|
+| Prop_HephaestusForge_Great | 696 | 9.7 x 8.4 x 12.6 | octagonal basalt firebox, 8 buttresses, glowing hearth ring and firemouths, iron hood on 4 legs, chimney with ember lip |
+| Prop_HephaestusAnvil_Great | 104 | 3.2 x 1.1 x 1.4 | stone block, foot, waist, face (top 1.22 m), horn, heel, hot billet |
+| Tool_HephaestusHammer | 120 | 0.5 x 0.2 x 1.5 | wood haft, bronze collar, iron head with hot face |
+| Item_Shard_Asteroid | 860 | 1.8 x 1.9 x 2.0 | pitted meteor rock with nickel nodules and crystal spikes |
+| Item_Shard_Planet | 152 | 1.8 x 2.1 x 2.0 | wedge of the shattered world: glowing core, mantle, crust, crystals |
+| Prop_ArkRivetCrate | 316 | 1.1 x 1.1 x 1.1 | wooden crate, iron bands, rivet heads |
+| Prop_LavaLantern | 228 | 0.7 x 0.7 x 2.4 | basalt foot, iron post, caged magma core, cap |
+
+Run `python heph_hero_glb.py <bot-team>\art\glb` (needs numpy + trimesh). The turn's import step picks them up
+because none of the 7 has been shipped to `/Game/Daedalus/Art` yet.
