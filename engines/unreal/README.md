@@ -28,6 +28,7 @@ To see what it would do without changing anything, add `-WhatIfOnly`. Other opti
   the launcher's list, the registry and `<drive>:\Epic Games\UE_*`, and takes the newest)
 - `-NoServerStart`: don't start a local server
 - `-Verify`: check an earlier import again, without importing
+- `-Connector`: install the **Claude Unreal connector** (see below)
 - `-Open`: everything in one line. If Unreal has the project open, it closes it (Unreal asks to save anything unsaved), runs the steps, and then opens the project again
 
 **The import checks its own work.** After importing, it opens the level again and compares it with the
@@ -80,3 +81,34 @@ cd engines/unreal/core-test && g++ -std=c++17 -O2 -Wall -Wextra -Werror -I../Dae
 - `python3 live_parity.py http://localhost:8088 world-zero > live.mesh.txt && ./mesh_core_test live.mesh.txt`
   reads a running server the way the actor does, and checks the result against the server's own
   `world.glb`.
+
+## Claude operates the editor: the Unreal connector
+
+This works the same way as the Claude Blender connector, in two parts:
+
+- **The bridge, inside Unreal.** `DaedalusLink/Content/Python/claude_unreal_bridge.py` starts with the editor
+  (from the plugin's `init_unreal.py`) and listens on `127.0.0.1:9877`. Every command runs on the editor's game
+  thread. A command that has to wait for the editor (a screenshot being written, Play starting) waits across
+  frames without freezing the editor. Set `DAEDALUS_BRIDGE=off` to keep it from starting.
+- **The Claude desktop extension.** `claude-extension/` is a dependency-free MCP server that forwards Claude's
+  tool calls to the bridge. `setup-unreal.ps1 -Connector` packs it into an `.mcpb` and opens it in Claude;
+  click **Install**.
+
+| Tool | What it does |
+|---|---|
+| `unreal_status` | The engine version, project, open level, actor count, and whether Play is running |
+| `get_level_info` / `get_actor_info` | Actors, filtered by Outliner folder; one actor's transform, bounds, components, meshes and materials |
+| `execute_python` | Any Python on the game thread with `unreal` loaded, so the whole editor API is available. Returns stdout and `result` |
+| `viewport_screenshot` | The active viewport, as an image |
+| `play` / `stop` | Play In Editor (or Simulate), waiting until it has started or ended |
+| `save` | The level and every changed asset |
+| `import_daedalus_world` | Downloads a world from its Daedalus server, imports it, verifies it, and frames it |
+| `frame_daedalus_world` | Points the viewport at a Daedalus world |
+| `output_log` | The editor log, optionally filtered |
+
+`claude-extension/tests` runs the bridge against a stand-in `unreal` module and drives the extension over
+stdio as Claude does (15/15, in CI). That proves the plumbing, the frame-by-frame waits, and that a frozen
+editor gives a clear timeout. The real editor calls are proven only in Unreal.
+
+**Security.** `execute_python` runs whatever it is sent, with your permissions. Only 127.0.0.1 is served, so
+other machines can't reach it, but any program on your computer can while the editor is open.

@@ -1,0 +1,45 @@
+{
+  "manifest_version": "0.3",
+  "name": "unreal-connector",
+  "display_name": "Unreal Engine",
+  "version": "1.0.0",
+  "description": "Lets Claude operate your open Unreal Editor: inspect the level, run Python, screenshot the viewport, play, save, and import Daedalus worlds.",
+  "long_description": "Pairs with the Claude Unreal Bridge, which the DaedalusLink plugin starts inside the Unreal Editor on 127.0.0.1. This extension forwards Claude's tool calls to it. Nothing leaves your computer except what Claude reads back through the tools.",
+  "author": { "name": "Richmond" },
+  "license": "MIT",
+  "server": {
+    "type": "node",
+    "entry_point": "server/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/server/index.js"],
+      "env": { "UNREAL_BRIDGE_PORT": "${user_config.port}" }
+    }
+  },
+  "tools": [
+    { "name": "unreal_status", "description": "Check the Unreal Editor is open and the bridge is listening" },
+    { "name": "get_level_info", "description": "List the actors in the open level" },
+    { "name": "get_actor_info", "description": "Details for one actor" },
+    { "name": "execute_python", "description": "Run Python in the Unreal Editor" },
+    { "name": "viewport_screenshot", "description": "Capture the editor viewport" },
+    { "name": "play", "description": "Start Play In Editor" },
+    { "name": "stop", "description": "Stop Play In Editor" },
+    { "name": "save", "description": "Save the level and changed assets" },
+    { "name": "import_daedalus_world", "description": "Import a Daedalus world from its server, verify it, and frame it" },
+    { "name": "frame_daedalus_world", "description": "Point the viewport at a Daedalus world" },
+    { "name": "output_log", "description": "Read the editor log" }
+  ],
+  "user_config": {
+    "port": {
+      "type": "number",
+      "title": "Unreal bridge port",
+      "description": "The port the Claude Unreal Bridge listens on inside the editor (DAEDALUS_BRIDGE_PORT)",
+      "default": 9877,
+      "min": 1024,
+      "max": 65535,
+      "required": false
+    }
+  },
+  "compatibility": { "platforms": ["win32", "darwin", "linux"], "runtimes": { "node": ">=18.0.0" } },
+  "keywords": ["unreal", "unreal engine", "3d", "game", "daedalus"]
+}

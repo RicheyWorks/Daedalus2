@@ -42,6 +42,11 @@ jobs:
           if python3 ../DaedalusLink/Content/Python/import_world_package.py bad.zip; then exit 1; fi
       - name: the import verifier can say no
         run: python3 verify_judge_test.py
+      - name: the Claude Unreal connector, end to end against a stand-in editor
+        run: |
+          python3 -m py_compile ../DaedalusLink/Content/Python/claude_unreal_bridge.py
+          (python3 ../claude-extension/tests/host.py 9911 30 8 &) ; sleep 2
+          node ../claude-extension/tests/client.js 9911
 
   setup-plan:
     name: setup-unreal.ps1 plan (Windows)

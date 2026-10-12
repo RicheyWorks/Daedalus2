@@ -22,6 +22,20 @@ under the `_migration/` portfolios.
   no max level; home is
   safe by day.
 
+- **Claude operates Unreal.**
+  The DaedalusLink plugin starts
+  a bridge in the editor
+  (127.0.0.1:9877); the
+  `claude-extension` MCP server
+  gives Claude 11 tools: status,
+  level/actor info, Python,
+  screenshots, play/stop, save,
+  import/frame a Daedalus world,
+  the log. `-Connector` installs
+  it. The import also places a
+  view, and the editor opens on
+  the world.
+
 - **Portability, written down (ADR-036).**
   `daedalus-core` imports only
   the JDK; `PortabilityTest`
