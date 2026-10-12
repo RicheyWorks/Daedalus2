@@ -86,6 +86,27 @@ What remains of the current ten slices follows the game, in the order that makes
 After those: ADR-042 Presence (other players, shared races), ADR-043 VR, ADR-044 the realm follows the
 chain, ADR-045 items and creatures on chain.
 
+## Portability: how the game is built
+
+RicheyWorks: "Don't forget our design philosophy of portability. That's how this project came together,
+and that's how it will push forward. It's how the overall ecosystem of the portfolio grows."
+
+Daedalus began as mazes that could be ported, and it grew into a 3D realm, Blender and Unreal because each
+piece was carried rather than rewritten. The game follows the same rule:
+
+- **The rules live in `daedalus-core`, in plain Java with only the JDK.** That covers combat, EXP,
+  companions, dungeons and the story's state. The same core runs in the server, the desktop app and the
+  plugin runtime, and can be lifted into any other project in the portfolio. `PortabilityTest` fails the
+  build if core ever imports a framework.
+- **The server publishes the rules as data.** For example, `/api/v1/hero/rules` serves the foes, the level
+  costs and the damage. Any client can play by the published rules: the realm, Unreal, Blender, VR or
+  another project.
+- **Engines are renderers, not owners.** The realm (three.js), Unreal (DaedalusLink, the C++ core with
+  parity tests) and Blender all read the same World Package and the same rules. A rule that only one engine
+  knows is a bug.
+- **Formats are open:** glTF, PNG, JSON, zip, and later on-chain records. None of them belongs to one
+  engine.
+
 ## Feel targets (how we'll know)
 
 - **A fight feels like Zelda II.** You can lose a fight by thrusting into a guard and win it by reading

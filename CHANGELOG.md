@@ -22,6 +22,11 @@ under the `_migration/` portfolios.
   no max level; home is
   safe by day.
 
+- **Portability, written down (ADR-036).**
+  `daedalus-core` imports only
+  the JDK; `PortabilityTest`
+  keeps it that way.
+
 - **`setup-unreal.ps1` fetches what it needs.**
   It finds UE in the launcher's
   list, the registry or
