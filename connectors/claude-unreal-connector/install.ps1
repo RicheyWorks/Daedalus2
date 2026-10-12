@@ -90,8 +90,11 @@ if (-not $NoExtension) {
     Add-Type -AssemblyName System.IO.Compression, System.IO.Compression.FileSystem
     $archive = [System.IO.Compression.ZipFile]::Open($mcpb, [System.IO.Compression.ZipArchiveMode]::Create)
     try {
-        foreach ($entry in @("manifest.json", "server/index.js", "server/win.ps1")) {
-            [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($archive, (Join-Path (Join-Path $root "extension") $entry), $entry) | Out-Null
+        # Every file under extension\ (a fixed list once left a new server file out, and the extension crashed).
+        $ext = Join-Path $root "extension"
+        foreach ($file in Get-ChildItem $ext -Recurse -File) {
+            $entry = $file.FullName.Substring($ext.Length + 1).Replace("\", "/")
+            [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($archive, $file.FullName, $entry) | Out-Null
         }
     } finally { $archive.Dispose() }
     Start-Process $mcpb
