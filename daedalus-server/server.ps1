@@ -28,7 +28,7 @@ if ($Run) {
     "$(Get-Date -Format s) building" | Out-File $Log -Append -Encoding utf8
     & $Maven -q -pl daedalus-server -am package -DskipTests *>> $Log
     "$(Get-Date -Format s) build exit $LASTEXITCODE; starting" | Out-File $Log -Append -Encoding utf8
-    $jar = Get-ChildItem (Join-Path $Repo "daedalus-server\target") -Filter "daedalus-server-*-exec.jar" | Select-Object -First 1
+    $jar = Get-ChildItem (Join-Path $Repo "daedalus-server\target") -Filter "daedalus-server-*-exec.jar" | Sort-Object LastWriteTime -Descending | Select-Object -First 1   # newest: old versions linger in target
     $st = New-CimInstance -ClassName Win32_ProcessStartup -ClientOnly -Property @{ ShowWindow = [uint16]7 }
     Invoke-CimMethod Win32_Process -MethodName Create -Arguments @{
         CommandLine = "`"$JavaHome\bin\java.exe`" -jar `"$($jar.FullName)`""; CurrentDirectory = "$Repo"; ProcessStartupInformation = $st } | Out-Null
