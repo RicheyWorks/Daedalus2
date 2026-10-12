@@ -61,8 +61,42 @@ public final class RdSongReader {
         return word(r, 0).longValueExact();
     }
 
+    private volatile TransferIndexer indexer;
+    private int scanFallbackMax = Integer.MAX_VALUE;
+
+    /** Holders come from {@code indexer} once it is ready; until then (or if it fails) the sweep runs only up to {@code scanFallbackMax}. */
+    public RdSongReader withIndexer(TransferIndexer indexer, int scanFallbackMax) {
+        this.indexer = indexer;
+        this.scanFallbackMax = scanFallbackMax;
+        if (indexer != null) indexer.syncAsync();
+        return this;
+    }
+
+    /** Thrown when the Transfer index is still building and the supply is too large to sweep instead. */
+    public static final class IndexWarmingException extends IllegalStateException {
+        public IndexWarmingException() { super("the holder index is still building"); }
+    }
+
+    /** Where holder look-ups come from right now: "index", "scan" (small supply / warming), for status views. */
+    public String holderSource() {
+        TransferIndexer ix = indexer;
+        return ix != null && ix.ready() ? "index" : "scan";
+    }
+
+    public TransferIndexer indexer() { return indexer; }
+
     /** The token ids {@code address} holds now (ascending). */
     public List<Long> tokensOf(String address) {
+        TransferIndexer ix = indexer;
+        if (ix != null) {
+            if (ix.ready()) return ix.tokensOf(address);
+            ix.syncAsync();
+            if (totalSupply() > scanFallbackMax) throw new IndexWarmingException();
+        }
+        return scan(address);
+    }
+
+    private List<Long> scan(String address) {
         String who = address.toLowerCase();
         List<String> owners = owners().owners();
         List<Long> out = new ArrayList<>();
