@@ -34,6 +34,11 @@ resilience4j:
         limit-refresh-period: 1s
         timeout-duration: 0
         register-health-indicator: false
+      jukeboxRelay:
+        limit-for-period: 100000
+        limit-refresh-period: 1s
+        timeout-duration: 0
+        register-health-indicator: false
       presence:
         limit-for-period: 100000
         limit-refresh-period: 1s

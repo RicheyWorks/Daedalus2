@@ -46,7 +46,12 @@ resilience4j:
   ratelimiter:
     instances:
       jukebox:
-        limit-for-period: ${DAEDALUS_RL_JUKEBOX_PER_MIN:120}
+        limit-for-period: ${DAEDALUS_RL_JUKEBOX_PER_MIN:240}
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: true
+      jukeboxRelay:
+        limit-for-period: ${DAEDALUS_RL_JUKEBOX_RELAY_PER_MIN:20}
         limit-refresh-period: 1m
         timeout-duration: 0
         register-health-indicator: true
