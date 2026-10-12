@@ -707,7 +707,7 @@ if ($Build) {
             } elseif ($lines -match 'LNK1104|being used by another process') {
                 $fastDone = $true
                 Fail "the plugin DLL is locked: Unreal is still open with this project; close it and run this again"
-            } elseif ($lines -match 'error C\d+|: error ') {
+            } elseif ($lines -match 'error C\d+|: error |\): Error: ') {   # compiler or UnrealHeaderTool
                 $fastDone = $true
                 Fail "the fast build found compile errors (above)"
             } else {

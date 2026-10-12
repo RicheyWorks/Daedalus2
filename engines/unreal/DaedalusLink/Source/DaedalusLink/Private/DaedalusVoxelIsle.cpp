@@ -27,7 +27,7 @@ ADaedalusVoxelIsle::ADaedalusVoxelIsle()
 		H->SetStaticMesh(Cube.Object);
 		H->SetCollisionProfileName(TEXT("BlockAll"));
 		H->SetCullDistances(0, 80000);
-		Layers.Add(H);
+		IsleLayers.Add(H);
 	}
 	PondWater = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PondWater"));
 	PondWater->SetupAttachment(RootComponent);
@@ -92,7 +92,7 @@ int32 ADaedalusVoxelIsle::ColumnBottom(int32 X, int32 Y) const
 
 UHierarchicalInstancedStaticMeshComponent* ADaedalusVoxelIsle::Layer(int32 Index, const FLinearColor& Color, bool bGlow)
 {
-	UHierarchicalInstancedStaticMeshComponent* H = Layers[Index];
+	UHierarchicalInstancedStaticMeshComponent* H = IsleLayers[Index];
 	if (UMaterialInterface* Base = LoadObject<UMaterialInterface>(nullptr, TEXT("/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial")))
 	{
 		UMaterialInstanceDynamic* M = UMaterialInstanceDynamic::Create(Base, this);

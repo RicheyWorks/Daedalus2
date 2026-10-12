@@ -15,7 +15,7 @@ class UStaticMeshComponent;
  *
  * - **Top:** terraced hills rise to a summit at the centre. The rim is noisy, so it never reads as a circle.
  * - **Underneath:** a hanging rock tapers to a glowing heartstone tip.
- * - **Layers:** grass on top (sand near the rim and the pond), dirt below, then stone.
+ * - **IsleLayers:** grass on top (sand near the rim and the pond), dirt below, then stone.
  * - **Water:** an optional pond is carved out and filled with water, and a waterfall pours off the rim.
  *
  * Only cubes that can be seen are made, so a 240 m isle costs about 100k instances, held in one HISM per material.
@@ -66,7 +66,7 @@ private:
 	float Noise(float X, float Y, int32 Salt) const;
 	UHierarchicalInstancedStaticMeshComponent* Layer(int32 Index, const FLinearColor& Color, bool bGlow);
 
-	UPROPERTY() TArray<TObjectPtr<UHierarchicalInstancedStaticMeshComponent>> Layers;
+	UPROPERTY() TArray<TObjectPtr<UHierarchicalInstancedStaticMeshComponent>> IsleLayers;
 	UPROPERTY() TObjectPtr<UStaticMeshComponent> PondWater;
 	UPROPERTY() TObjectPtr<UStaticMeshComponent> Falls;
 	FString LastStats;

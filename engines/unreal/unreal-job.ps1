@@ -87,10 +87,10 @@ if ($Wait) {
     $log = Join-Path $Jobs "$Id.log"; $exit = Join-Path $Jobs "$Id.exit"
     $until = (Get-Date).AddSeconds($Seconds)
     while ((Get-Date) -lt $until -and -not (Test-Path $exit)) {
-        if ((Test-Path $log) -and (Select-String -Path $log -Pattern 'error C\d+|: error ' -Quiet)) { break }
+        if ((Test-Path $log) -and (Select-String -Path $log -Pattern 'error C\d+|: error |\): Error: ' -Quiet)) { break }
         Start-Sleep -Seconds 3
     }
-    $errors = if (Test-Path $log) { Select-String -Path $log -Pattern 'error C\d+|: error ' | Select-Object -First 15 | ForEach-Object { $_.Line } } else { @() }
+    $errors = if (Test-Path $log) { Select-String -Path $log -Pattern 'error C\d+|: error |\): Error: ' | Select-Object -First 15 | ForEach-Object { $_.Line } } else { @() }
     $norton = Join-Path $env:TEMP "daedalus-norton.log"
     $alerts = if (Test-Path $norton) { Get-Content $norton | Where-Object { $_ -ge (Get-Date).AddMinutes(-30).ToString("s") } } else { @() }
     # Compiler errors first: they are the real cause. AutomationTool's ErrorLog.txt is only written when it dies
