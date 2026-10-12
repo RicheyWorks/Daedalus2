@@ -228,25 +228,24 @@ def scenario_ghost(p):
     _clear_foes()
     for b in ghosts():
         b.destroy_actor()
+    unreal.SystemLibrary.execute_console_command(world(), "daedalus.FoesHunt 0")
+    h.spawn_foes(3)                       # on foot, so they stand on the hero's level
     bike = h.spawn_vehicle()
     yield
     mounted = h.interact()
     on_bike = pc.get_controlled_pawn() == bike
     start = bike.get_actor_location()
-    for i in range(45):
-        bike.drive(0.7, 0.0, i > 20)
+    for i in range(20):
+        bike.drive(0.5, 0.0, False)
         yield
     bike.drive(0.0, 0.0, False)
     moved = (bike.get_actor_location() - start).length()
-    unreal.SystemLibrary.execute_console_command(world(), "daedalus.FoesHunt 0")
-    h.spawn_foes(3)
     kills0 = h.get_editor_property("kills")
-    for _ in range(600):
-        here = bike.get_actor_location()
-        level = [f for f in foes() if abs(f.get_actor_location().z - here.z) < 300]
-        if not level:
+    for _ in range(900):
+        if not foes():
             break
-        target = min(level, key=lambda f: (f.get_actor_location() - here).length())
+        here = bike.get_actor_location()
+        target = min(foes(), key=lambda f: (f.get_actor_location() - here).length())
         cam = bike.get_editor_property("camera").get_world_location()
         pc.set_control_rotation(unreal.MathLibrary.find_look_at_rotation(cam, target.get_actor_location()))
         bike.fire_guns()

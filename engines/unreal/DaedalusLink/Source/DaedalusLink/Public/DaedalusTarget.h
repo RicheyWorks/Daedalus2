@@ -92,6 +92,6 @@ private:
 	TArray<FVector> Route;
 	FVector RouteGoal = FVector::ZeroVector;
 	int32 RouteStep = 0;
-	float RouteAge = 0.f;
+	float RouteAge = 100.f;   // search on the first hunting frame
 	bool bRouted = false;
 };

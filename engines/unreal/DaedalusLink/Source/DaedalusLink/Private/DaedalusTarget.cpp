@@ -326,7 +326,10 @@ void ADaedalusTarget::Tick(float DeltaSeconds)
 				{
 					const FVector Feet(Home.X, Home.Y, Home.Z - HoverOffset());
 					const FVector Goal = Who->GetActorLocation() - FVector(0.f, 0.f, 90.f);
-					if (RouteAge > 0.6f || Route.Num() == 0 || FVector::Dist2D(Goal, RouteGoal) > 250.f)
+					// Re-plan when the route is stale or the player has moved; after a failed search wait longer, so a
+					// foe with no way across doesn't run A* every frame (it did: 1,752 searches in a minute).
+					const float Every = bRouted ? 0.6f : 1.5f;
+					if (RouteAge > Every || (bRouted && FVector::Dist2D(Goal, RouteGoal) > 250.f))
 					{
 						RouteAge = 0.f;
 						RouteGoal = Goal;
