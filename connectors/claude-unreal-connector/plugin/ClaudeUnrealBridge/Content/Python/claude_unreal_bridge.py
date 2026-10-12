@@ -191,22 +191,35 @@ _remote_lock = threading.Lock()
 
 def _run_remote(code, box, want):
     """Background thread: send the wrapped code through Remote Execution, unattended, and keep the reply.
-    Never touches the unreal module (game thread only)."""
+    Never touches the unreal module (game thread only).
+
+    One Remote Execution command connection is shared by every client thread and Epic's client is not
+    thread-safe: concurrent run_command calls swapped replies (the art queue got another bot's `true` and failed
+    with "'bool' object is not subscriptable"). So calls are serialized, but the wait is bounded: a run_command
+    that never returned once held a plain lock and wedged every later call. On a 30 s wait the call runs
+    in-process instead, and any failure drops the connection so the next call reconnects. (2026-10-12)"""
+    got_lock = _remote_lock.acquire(timeout=30)
     try:
+        if not got_lock:
+            box["fallback"] = "Remote Execution busy for more than 30 s"
+            return
         got = _remote_node(want)
         if got is None:
             box["fallback"] = _remote["error"]
             return
         rx, _node = got
-        # One Remote Execution command connection is shared by every client thread, and Epic's client is not
-        # thread-safe: two concurrent run_command calls swapped replies (the art queue got another bot's `true`
-        # and failed with "'bool' object is not subscriptable"). Serialize them. (2026-10-12, Pythagoras)
-        with _remote_lock:
-            box["reply"] = rx.run_command(_wrap(code), unattended=True)
+        box["reply"] = rx.run_command(_wrap(code), unattended=True)
     except Exception as e:
         box["fallback"] = "Remote Execution failed: %s" % e
+        try:
+            if _remote["rx"] is not None:
+                _remote["rx"].stop()
+        except Exception:
+            pass
         _remote.update(rx=None, node=None)
     finally:
+        if got_lock:
+            _remote_lock.release()
         box["done"] = True
 
 
