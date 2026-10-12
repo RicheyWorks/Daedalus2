@@ -80,7 +80,7 @@ def graph():
         e.set_editor_property("weight", 1)
         sel.set_editor_property("mesh_entries", [e]); sset.set_editor_property("mesh_selector_parameters", sel)
         g.add_edge(cnode, "Out", snode, "In")
-        g.add_edge(snode, "Out", out_node, "In")
+        g.add_edge(snode, "Out", out_node, "Out")  # the output node's input pin is labelled "Out"
         made[sp["name"]] = len(arr)
     at.save_loaded_asset(g)
     return made

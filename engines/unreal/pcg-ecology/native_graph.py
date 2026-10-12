@@ -76,7 +76,7 @@ for sp in eco.SPECIES:
     d.set_editor_property("static_mesh", unreal.load_asset(SH[sp["shape"]])); e.set_editor_property("descriptor", d)
     sel.set_editor_property("mesh_entries", [e])
     chain(sn, nn, slope, d1, m_f, d2, s_f, pn, mn)
-    g.add_edge(mn, "Out", out, "In")
+    g.add_edge(mn, "Out", out, "Out")  # output node input pin is "Out"
     made[sp["name"]] = w
 unreal.EditorAssetLibrary.save_loaded_asset(g)
 result = {"graph": ROOT + "/" + NAME, "years": YEARS, "nodes": len(g.get_editor_property("nodes")), "windows": made, "warnings": log[:40]}
