@@ -13,7 +13,7 @@ from asset_pipeline import artqueue
 folder = pathlib.Path(sys.argv[1]); art = folder.parent
 manifest = validate(folder)
 source = json.loads((folder/'blend-source-validation.json').read_text())
-if source['passed'] != 20: raise ValueError('source verification incomplete')
+if source['passed'] != manifest['archetypes']: raise ValueError('source verification incomplete')
 queue = art/'QUEUE.md'; before = queue.read_bytes(); text = before.decode('utf8')
 existing, _ = artqueue.parse(text); names={r['asset'] for r in existing}
 if any(a['asset'] in names for a in manifest['assets']):
@@ -27,14 +27,14 @@ for a in manifest['assets']:
         else:
             with src.open('rb') as inp, dest.open('xb') as out: shutil.copyfileobj(inp,out)
     text = artqueue.add_row(text,a['asset'],'READY',
-         f"Sol Island / Sol Reach; {a['archetype']} variant {a['variant']}/25; {a['triangles']} tris; {a['materials']} slots; validated Blender/file only")
+         f"Sol Island / Sol Reach; {a['archetype']} variant {a['variant']}/{manifest['variants_each']}; {a['triangles']} tris; {a['materials']} slots; validated Blender/file only")
 if queue.read_bytes()!=before: raise RuntimeError('Queue changed concurrently; files staged, rows not written. Wait and retry.')
 temporary=art/'QUEUE.sol-staging.tmp'
 temporary.write_text(text,encoding='utf8',newline='')
 if queue.read_bytes()!=before: raise RuntimeError('Queue changed before replace; no overwrite')
 temporary.replace(queue)
 after=queue.read_bytes()
-receipt={'assets':500,'status':'READY_NOT_IMPORTED','queue_before_sha256':hashlib.sha256(before).hexdigest(),
+receipt={'assets':manifest['count'],'status':'READY_NOT_IMPORTED','queue_before_sha256':hashlib.sha256(before).hexdigest(),
          'queue_after_sha256':hashlib.sha256(after).hexdigest(),'folder':str(folder)}
 (folder/'queue-receipt.json').write_text(json.dumps(receipt,indent=2))
 print(json.dumps(receipt))
