@@ -422,7 +422,12 @@ function Test-MsvcUsable([version]$v) {
 if ($Build) {
     Say "Build the plugin for the editor"
     $vc = Find-VcTools
-    if (-not $vc -and -not $WhatIfOnly) {
+    $busy = Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.Path -like "*Microsoft Visual Studio\Installer*" }
+    if ($busy -and -not $WhatIfOnly) {
+        Fail "the Visual Studio Installer is still running; let it finish, then run this again"
+        $vc = $null
+        $script:VcReported = $true
+    } elseif (-not $vc -and -not $WhatIfOnly) {
         Write-Host "    no Visual Studio C++ tools; installing Visual Studio 2022 Community with 'Game development with C++'"
         Write-Host "    (a large download; the installer window shows progress, and you accept its license there)"
         winget install --id Microsoft.VisualStudio.2022.Community --exact --source winget --override `

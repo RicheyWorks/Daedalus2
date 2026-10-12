@@ -152,9 +152,9 @@ def to_unreal(xyz, units=100.0):
 def _material(name, translucent):
     tools = unreal.AssetToolsHelpers.get_asset_tools()
     path = CONTENT_ROOT + "/Materials"
-    existing = unreal.EditorAssetLibrary.load_asset(path + "/" + name)
-    if existing:
-        return existing
+    # Ask before loading: load_asset on a missing asset logs an error, and the commandlet counts it.
+    if unreal.EditorAssetLibrary.does_asset_exist(path + "/" + name):
+        return unreal.EditorAssetLibrary.load_asset(path + "/" + name)
     mat = tools.create_asset(name, path, unreal.Material, unreal.MaterialFactoryNew())
     mel = unreal.MaterialEditingLibrary
     vc = mel.create_material_expression(mat, unreal.MaterialExpressionVertexColor, -400, 0)
@@ -193,7 +193,11 @@ def import_into_unreal(zip_path, manifest, live_only=False):
     opaque = _material("M_DaedalusOpaque", False)
     translucent = _material("M_DaedalusTranslucent", True)
 
-    world_assets = [] if live_only else _import(os.path.join(work, "world.glb"), dest + "/world")
+    # An empty world (no islands raised yet) has a world.glb with no meshes; Interchange calls that an error.
+    has_geometry = manifest.get("geometry", {}).get("chunks", 0) > 0
+    world_assets = _import(os.path.join(work, "world.glb"), dest + "/world") if has_geometry and not live_only else []
+    if not has_geometry:
+        unreal.log_warning("Daedalus: %s has no blocks yet; raise islands in the realm and import again" % w["title"])
     ark_mesh = None
     for a in manifest.get("assets", []):
         imported = _import(os.path.join(work, a["file"]), dest + "/" + safe_name(a["name"]))
@@ -224,7 +228,9 @@ def import_into_unreal(zip_path, manifest, live_only=False):
             comp.set_material(i, translucent if "translucent" in slot else opaque)
         placed += 1
 
-    live_class = unreal.load_class(None, "/Script/DaedalusLink.DaedalusWorldActor")
+    # Only when the plugin's module is loaded (load_class on a missing class logs an error).
+    live_type = getattr(unreal, "DaedalusWorldActor", None)
+    live_class = live_type.static_class() if live_type else None
     if live_class and manifest.get("live", {}).get("api"):
         live = actors.spawn_actor_from_class(live_class, unreal.Vector(0, 0, 0))
         live.set_actor_label("Daedalus World (live) - " + w["title"])
