@@ -129,5 +129,35 @@
     "40 lamps placed by line trace onto islands",
     "spawn every placeable actor class",
     "create 161 asset types"
-  ]
+  ],
+  "deep_probes": {
+    "passed": 17,
+    "total": 17,
+    "where": "15 in the supervised sandbox, 2 in the open editor (editor subsystems / first-try API fixes)",
+    "probes": [
+      "material_graph",
+      "material_instance_params",
+      "material_translucent_two_sided",
+      "blueprint_with_components",
+      "blueprint_variable",
+      "struct_enum_datatable",
+      "sequencer_keys",
+      "pcg_graph_nodes",
+      "geometry_scripting",
+      "static_mesh_lod_collision",
+      "paper2d_tilemap",
+      "enhanced_input",
+      "physics_material",
+      "niagara_system_asset",
+      "widget_and_metasound",
+      "asset_ops",
+      "gltf_export_reimport"
+    ],
+    "api_findings": [
+      "UE Python spells 'IDs' as 'i_ds' (GeometryScript_MeshQueries.get_num_triangle_i_ds) and 'LODs' as 'lo_ds' in some names",
+      "create_new_static_mesh_asset_from_mesh lives in GeometryScript_NewAssetUtils, not GeometryScript_AssetUtils",
+      "editor subsystems (StaticMeshEditorSubsystem...) are None in a commandlet: those probes run in the open editor",
+      "DataTableFactory needs .struct set; BlueprintFactory needs .parent_class; without them create_asset returns None or makes an abstract asset"
+    ]
+  }
 }

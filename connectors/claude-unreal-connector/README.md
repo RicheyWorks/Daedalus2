@@ -77,6 +77,49 @@ node tests/client.js 9911          # prints n/m last; exits 1 on any failure
 The stand-in proves the plumbing. The real editor calls are proven in Unreal. The connector was developed
 against UE 5.8.3 on Windows 11.
 
+## Capability walk (`harness/caps/`)
+
+This answers one question: what can an agent actually do in this editor? Each sweep and probe makes something
+real, reads it back, and cleans up. The results go to `ledgers/capabilities.json`.
+
+Live on UE 5.8.3:
+- **Actor sweep:** every actor class. 266 of 332 spawn; 34 are abstract; 32 game-framework classes are excluded.
+- **Factory sweep:** every asset factory. 161 make assets. 25 need a setting the UI normally asks for, and 78
+  need a source file. 2 crash the engine (`LightWeightInstanceFactory`, `SlateWidgetStyleAssetFactory`).
+- **Deep probes:** 17 of 17 pass. They cover:
+  - material graphs and instance parameters
+  - Blueprints with components and variables
+  - structs, enums and DataTables
+  - Sequencer keys and camera cuts
+  - PCG graphs
+  - Geometry Scripting to a static mesh
+  - LODs and collision
+  - Paper2D tilemaps
+  - Enhanced Input
+  - physics materials
+  - Niagara, UMG and MetaSound assets
+  - asset operations
+  - glTF export and reimport
+
+Anything that might crash runs in **the sandbox** (`sandbox.py`): a headless `UnrealEditor-Cmd` that the open
+editor launches, under a supervisor. If it crashes, the supervisor reruns it and skips the item that crashed it,
+which its progress file names. The user's editor is never at risk. The open editor can pull the harness straight
+from GitHub:
+
+```python
+import urllib.request
+RAW = "https://raw.githubusercontent.com/RicheyWorks/Daedalus2/main/connectors/claude-unreal-connector/harness/caps/"
+ns = {}
+exec(urllib.request.urlopen(RAW + "sandbox.py").read().decode(), ns)
+result = ns["sandbox_supervise"](urllib.request.urlopen(RAW + "area_deep.py").read().decode(), "deep")
+# later: result = ns["sandbox_poll"](out)
+```
+
+API traps found live:
+- UE's Python spells `IDs` as `i_ds`.
+- Asset creation from Geometry Scripting is in `GeometryScript_NewAssetUtils`.
+- Editor subsystems are `None` in a commandlet.
+
 ## Security
 
 `execute_python` runs whatever it is sent, with your user's permissions. The bridge serves only
