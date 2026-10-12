@@ -15,6 +15,11 @@ sys.path.insert(0, os.path.join(HERE, "..", "plugin", "ClaudeUnrealBridge", "Con
 import claude_unreal_bridge as bridge
 
 fake_unreal.LOGDIR = tempfile.mkdtemp()
+import remote_execution as fake_rex     # the stand-in, from this tests folder
+fake_rex.PROJECT_ROOT = fake_unreal.LOGDIR
+bridge.register("test.remote_off", lambda p: setattr(fake_rex, "ENABLED", False) or bridge._remote.update(rx=None, node=None) or {"off": True},
+                "Act as an editor with Remote Execution switched off")
+bridge.register("test.remote_calls", lambda p: {"calls": [list(c) for c in fake_rex.CALLS]}, "What Remote Execution was asked")
 with open(os.path.join(fake_unreal.LOGDIR, "DaedalusRealm.log"), "w") as f:
     f.write("LogInit: Display: start\nLogPython: Error: something broke\nLogPython: Display: Daedalus ok\n")
 

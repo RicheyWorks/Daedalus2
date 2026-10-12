@@ -134,49 +134,115 @@ def cmd_get_actor_info(p):
             "bounds": {"origin": _vec(origin), "extent": _vec(extent)}, "components": comps}
 
 
-@contextlib.contextmanager
-def _unattended():
-    """While Claude's code runs, editor message boxes answer themselves instead of waiting for a click. A modal
-    dialog would block the game thread, and with it the bridge (found on Richmond's PC: setting
-    force_no_precomputed_lighting raised one, and every later call timed out until he clicked OK)."""
-    flag = getattr(unreal, "set_running_unattended_script", None) or getattr(
-        getattr(unreal, "PythonScriptLibrary", None), "set_running_unattended_script", None)
-    if flag is None:
-        # Older engines: the "unattended" console variable keeps FMessageDialog from blocking.
-        world = None
-        try:
-            unreal.SystemLibrary.execute_console_command(_world(), "r.Editor.Unattended 1")
-            world = _world()   # only once the switch is on is there anything to switch back
-        except Exception:
-            world = None
-        try:
-            yield
-        finally:
-            if world is not None:
-                try:
-                    unreal.SystemLibrary.execute_console_command(world, "r.Editor.Unattended 0")
-                except Exception:
-                    pass
-        return
-    flag(True)
+# ---------------------------------------------------------------- execute_python, unattended
+
+RESULT_MARK = "__CLAUDE_UNREAL_RESULT__"
+_remote = {"rx": None, "node": None, "error": None}
+
+
+def _wrap(code):
+    """Claude's code, wrapped so its `result` variable comes back as one marked line of output."""
+    return ("import json as _cj, unreal\n"
+            "result = None\n"
+            "exec(compile(%r, '<claude>', 'exec'))\n"
+            "try:\n    _cr = _cj.dumps(result)\nexcept TypeError:\n    _cr = _cj.dumps(repr(result))\n"
+            "print(%r + _cr)\n") % (code, RESULT_MARK)
+
+
+def _remote_node():
+    """Unreal's own Python Remote Execution, connected to this editor. Commands it runs carry the "unattended"
+    flag, so the editor cancels a modal dialog instead of waiting on it (a modal on the game thread would freeze
+    the bridge). Needs Project Settings > Python > Enable Remote Execution (bRemoteExecution, which install.ps1
+    sets). Returns (RemoteExecution, node id), or None when it is off. Runs off the game thread."""
+    if _remote["rx"] is not None:
+        return _remote["rx"], _remote["node"]
     try:
-        yield
+        import remote_execution as rex   # Epic's client, shipped in PythonScriptPlugin/Content/Python
+    except ImportError as e:
+        _remote["error"] = "remote_execution.py not found (%s)" % e
+        return None
+    rx = rex.RemoteExecution()
+    rx.start()
+    want = os.path.normcase(os.path.abspath(unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir())))
+    deadline = time.time() + 3.0
+    node = None
+    while time.time() < deadline and node is None:
+        nodes = list(rx.remote_nodes)
+        for n in nodes:
+            root = os.path.normcase(os.path.abspath(n.get("project_root", "") or ""))
+            if root.rstrip("\\/") == want.rstrip("\\/"):
+                node = n.get("node_id")
+                break
+        if node is None and len(nodes) == 1 and time.time() > deadline - 1.5:
+            node = nodes[0].get("node_id")   # one editor answered: this one, even if it names its project differently
+        time.sleep(0.1)
+    if node is None:
+        rx.stop()
+        _remote["error"] = "Remote Execution is off (Project Settings > Python > Enable Remote Execution)"
+        return None
+    rx.open_command_connection(node)
+    _remote.update(rx=rx, node=node, error=None)
+    return rx, node
+
+
+def _run_remote(code, box):
+    """Background thread: send the wrapped code through Remote Execution, unattended, and keep the reply."""
+    try:
+        got = _remote_node()
+        if got is None:
+            box["fallback"] = _remote["error"]
+            return
+        rx, _node = got
+        box["reply"] = rx.run_command(_wrap(code), unattended=True)
+    except Exception as e:
+        box["fallback"] = "Remote Execution failed: %s" % e
+        _remote.update(rx=None, node=None)
     finally:
-        flag(False)
+        box["done"] = True
 
 
-def cmd_execute_python(p):
-    code = p["code"]
+def _exec_here(code):
     scope = {"unreal": unreal, "__name__": "__claude__", "result": None}
     buf = io.StringIO()
-    with contextlib.redirect_stdout(buf), _unattended():
+    with contextlib.redirect_stdout(buf):
         exec(compile(code, "<claude>", "exec"), scope)
     result = scope.get("result")
     try:
         json.dumps(result)
     except TypeError:
         result = repr(result)
-    return {"stdout": buf.getvalue()[-20000:], "result": result}
+    return {"stdout": buf.getvalue()[-20000:], "result": result, "unattended": False}
+
+
+def cmd_execute_python(p):
+    """Run Claude's code. By default it goes through Remote Execution in unattended mode (dialogs are canceled,
+    not waited on), while this command yields editor ticks so the editor is free to run it. Without Remote
+    Execution, or with unattended=false, it runs here directly."""
+    code = p["code"]
+    if not p.get("unattended", True):
+        return _exec_here(code)
+    box = {"done": False, "reply": None, "fallback": None}
+    threading.Thread(target=_run_remote, args=(code, box), name="claude-unreal-remote", daemon=True).start()
+    deadline = time.time() + float(p.get("timeout", 600))
+    while not box["done"]:
+        if time.time() > deadline:
+            raise TimeoutError("the editor did not run the code within the timeout")
+        yield
+    if box["fallback"]:
+        out = _exec_here(code)
+        out["note"] = box["fallback"] + "; ran directly, so a modal dialog would block the editor"
+        return out
+    reply = box["reply"] or {}
+    lines, result = [], None
+    for entry in reply.get("output", []) or []:
+        text = entry.get("output", "") if isinstance(entry, dict) else str(entry)
+        if text.startswith(RESULT_MARK):
+            result = json.loads(text[len(RESULT_MARK):])
+        else:
+            lines.append(text)
+    if not reply.get("success", False):
+        raise RuntimeError((reply.get("result") or "the code raised an error") + "\n" + "\n".join(lines)[-6000:])
+    return {"stdout": "\n".join(lines)[-20000:], "result": result, "unattended": True}
 
 
 def cmd_viewport_screenshot(p):

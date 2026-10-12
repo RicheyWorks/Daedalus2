@@ -37,8 +37,17 @@ const check = (label, ok, detail) => { total++; if (ok) pass++; console.log((ok 
   r = await call('execute_python', { code: 'print("hello from", unreal.SystemLibrary.get_engine_version())\nresult = {"n": len(unreal.get_editor_subsystem(unreal.EditorActorSubsystem).get_all_level_actors())}' });
   j = JSON.parse(text(r));
   check('execute_python returns stdout and `result`', j.stdout.includes('hello from 5.8.3-fake') && j.result.n === 3, text(r));
+  check('execute_python goes through Remote Execution, unattended (dialogs are canceled, not waited on)', j.unattended === true, text(r));
+  r = await call('run_command', { command: 'test.remote_calls' });
+  check('the Remote Execution call asked for unattended mode', JSON.parse(text(r)).calls.some((c) => c[0] === 'run' && c[1] === true), text(r));
   r = await call('execute_python', { code: 'raise ValueError("boom")' });
-  check('execute_python errors come back with the traceback', r.isError && /ValueError: boom/.test(text(r)) && /Traceback/.test(text(r)), text(r));
+  check('execute_python errors come back with the message', r.isError && /ValueError: boom/.test(text(r)), text(r));
+  r = await call('run_command', { command: 'test.remote_off' });
+  r = await call('execute_python', { code: 'result = 7' });
+  j = JSON.parse(text(r));
+  check('with Remote Execution off it still runs, directly, and says dialogs would block', j.result === 7 && j.unattended === false && /Remote Execution is off/.test(j.note || ''), text(r));
+  r = await call('execute_python', { code: 'raise ValueError("boom")' });
+  check('direct errors come back with the traceback', r.isError && /ValueError: boom/.test(text(r)) && /Traceback/.test(text(r)), text(r));
 
   r = await call('viewport_screenshot', { width: 640, height: 360 });
   const img = r.content.find((c) => c.type === 'image');

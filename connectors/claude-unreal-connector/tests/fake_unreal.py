@@ -139,6 +139,8 @@ class Paths:
     def project_saved_dir(): return LOGDIR
     @staticmethod
     def convert_relative_path_to_full(p): return os.path.abspath(p)
+    @staticmethod
+    def project_dir(): return LOGDIR
 
 
 class EditorLoadingAndSavingUtils:

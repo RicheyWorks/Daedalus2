@@ -59,7 +59,28 @@ foreach ($name in @("ClaudeUnrealBridge", "PythonScriptPlugin", "EditorScripting
 }
 $up | Add-Member -NotePropertyName Plugins -NotePropertyValue $plugins -Force
 $up | ConvertTo-Json -Depth 10 | Set-Content -Path $Project -Encoding UTF8
-Write-Host "Plugin installed at $dest and enabled in $leaf" -ForegroundColor Green
+# Unreal's Python Remote Execution lets the bridge run Claude's code "unattended": the editor cancels a modal
+# dialog instead of waiting on it (which would freeze the game thread and the bridge). It is read at startup.
+$ini = Join-Path (Join-Path (Split-Path $Project -Parent) "Config") "DefaultEngine.ini"
+New-Item -ItemType Directory -Force -Path (Split-Path $ini -Parent) | Out-Null
+$section = "[/Script/PythonScriptPlugin.PythonScriptPluginSettings]"
+$lines = if (Test-Path $ini) { @(Get-Content $ini) } else { @() }
+$out = New-Object System.Collections.Generic.List[string]
+$in = $false; $done = $false
+foreach ($l in $lines) {
+    if ($l -match '^\s*\[') {
+        if ($in -and -not $done) { $out.Add("bRemoteExecution=True"); $done = $true }
+        $in = ($l.Trim() -eq $section)
+    } elseif ($in -and $l -match '^\s*bRemoteExecution\s*=') {
+        if (-not $done) { $out.Add("bRemoteExecution=True"); $done = $true }
+        continue
+    }
+    $out.Add($l)
+}
+if ($in -and -not $done) { $out.Add("bRemoteExecution=True"); $done = $true }
+if (-not $done) { $out.Add(""); $out.Add($section); $out.Add("bRemoteExecution=True") }
+Set-Content -Path $ini -Value $out -Encoding UTF8
+Write-Host "Plugin installed at $dest and enabled in $leaf; Python Remote Execution on (unattended commands)" -ForegroundColor Green
 
 # 2. The Claude extension. An .mcpb is a zip with manifest.json at its root; entries are named with '/'
 #    (Compress-Archive in Windows PowerShell 5.1 writes backslashes).
