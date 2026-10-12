@@ -425,7 +425,7 @@ ADaedalusKeeper::ADaedalusKeeper()
 void ADaedalusKeeper::BeginPlay()
 {
 	Super::BeginPlay();
-	if (!SetArt(TEXT("Mob"), TEXT("Mob_Realm_Party_Sage_Body"), 1.f)) SetArt(TEXT("Bld"), TEXT("Bld_Orr_Watch_Post"), 0.3f);
+	if (!SetArt(TEXT("Mob"), TEXT("Mob_Orr_Keeper_Ostra"), 1.15f)) SetArt(TEXT("Mob"), TEXT("Mob_Realm_Party_Sage_Body"), 1.f);
 	Glow->SetIntensity(800.f);
 }
 

@@ -226,6 +226,16 @@ def run(seed=7):
         put(asset, kind, -2500 + i * 1000, 12400, None, 0)
     spawn(cube, at(0, 12400, -40), 0, (70, 14, 0.8), soil, "Orr_Dock_Deck")
 
+    # ---- the islanders, each at their trade (Keeper Ostra is the playable NPC, placed by place_play)
+    spots = {"Baker_Fen": (-1200, -6600), "Shepherd_Lio": (7200, -2400), "Beekeeper_Mara": (6000, 3600),
+             "LensGrinder_Tov": (-3400, -1200), "ChartMaker_Ilse": (2400, 2400), "Ferryman_Bram": (2000, 12000),
+             "Child_Pip": (300, -5200), "Cartographer_Wen": (-2400, 2600)}
+    for asset, kind, p in by.get("person", []):
+        key = asset.replace("Mob_Orr_", "")
+        if key in spots:
+            x, y = spots[key]
+            put(asset, kind, x, y, None, math.degrees(math.atan2(-y, -x)))
+
     # ---- the sky: moonlets, fragments, clouds and streaks above the island
     for i, (asset, kind, p) in enumerate(by["sky"]):
         a = 2 * math.pi * i / len(by["sky"])

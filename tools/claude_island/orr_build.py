@@ -87,6 +87,9 @@ INTERIOR = ["Chart_Desk", "Astrolabe_Table", "Globe_Fragments", "Bookshelf_Stars
             "Star_Rug", "Telescope_Mount", "Gear_Workbench", "Wool_Loom", "Honey_Press", "Cheese_Press",
             "Butter_Churn"]
 CROPS = ["Sunfruit", "Moonmelon", "Driftberry", "Starbarley", "Cometcorn", "Dewroot"]
+PEOPLE = [("Keeper_Ostra", "robe"), ("Baker_Fen", "apron"), ("Shepherd_Lio", "cloak"), ("Beekeeper_Mara", "veil"),
+          ("LensGrinder_Tov", "apron"), ("ChartMaker_Ilse", "robe"), ("Ferryman_Bram", "cloak"), ("Child_Pip", "tunic"),
+          ("Cartographer_Wen", "robe")]
 ITEMS_EXTRA = (["Constellation_Chart_%s" % c for c in CONSTELLATIONS]
                + ["Keeper_Key_%s" % c for c in ("Dome", "Vault", "Cistern", "Gate")])
 
@@ -132,6 +135,8 @@ def catalogue():
             out.append(("Prop_Orr_Crop_%s_%s" % (c, s), "Prop", "crop", {"stage": s}))
     for i in ITEMS_EXTRA:
         out.append(("Item_Orr_%s" % i, "Item", "goods", {}))
+    for n, garb in PEOPLE:
+        out.append(("Mob_Orr_%s" % n, "Mob", "person", {"garb": garb}))
     return out
 
 
@@ -369,6 +374,42 @@ def build(asset, kind, family, p):
                 part.box((0, D / 2 + 0.5, H * 0.8), (0.4, 0.1, 5.0), 1, rot=(0, 1.5708 * i + 0.4, 0))
         if "Crane" in asset:
             part.box((0, D, H + 2), (0.4, D * 2, 0.4), 1)
+        part.finish(coll)
+    elif family == "person":
+        # Islanders: a robed or aproned figure about 1.7 m, with a head, hair or hood, arms and a trade prop.
+        child = "Child" in asset
+        s = 0.62 if child else rng.uniform(0.95, 1.08)
+        garb = hue(rng)
+        part = Part(asset, [mat(asset + "_garb", garb), mat("skin", (0.86, 0.66, 0.5) if rng.random() < 0.5 else (0.55, 0.38, 0.27)),
+                            mat("brass", PAL["brass"], 0.4)])
+        long = p["garb"] in ("robe", "cloak")
+        part.cyl((0, 0, 0.55 * s), 0.24 * s if long else 0.17 * s, 1.1 * s, 0, 10, r2=0.17 * s)
+        part.cyl((0, 0, 1.2 * s), 0.17 * s, 0.32 * s, 0, 10, r2=0.13 * s)
+        part.ball((0, 0, 1.52 * s), 0.13 * s, 1, 2)
+        if p["garb"] in ("cloak", "veil", "robe"):
+            part.ball((0, -0.02 * s, 1.56 * s), 0.145 * s, 0, 1, (1, 1, 1.05))   # hood
+        for x in (-1, 1):
+            part.strut((x * 0.17 * s, 0, 1.3 * s), (x * 0.24 * s, 0.12 * s, 0.85 * s), 0.05 * s, 0, 6)
+            part.ball((x * 0.24 * s, 0.12 * s, 0.82 * s), 0.05 * s, 1, 0)
+        if not long:
+            for x in (-1, 1):
+                part.cyl((x * 0.08 * s, 0, 0.25 * s), 0.06 * s, 0.5 * s, 0, 6)
+        prop_ = asset.split("_")[2]
+        if "Keeper" in prop_ or "ChartMaker" in prop_ or "Cartographer" in prop_:
+            part.cyl((0.3 * s, 0.1 * s, 0.9 * s), 0.025, 1.8 * s, 2, 6)                # staff
+            part.ring((0.3 * s, 0.1 * s, 1.85 * s), 0.12 * s, 0.015, 2, 12, rot=(0.5, 0, 0))
+            part.ball((0.3 * s, 0.1 * s, 1.85 * s), 0.04 * s, 2, 1)
+        elif "Beekeeper" in prop_:
+            part.box((0, 0, 1.68 * s), (0.36 * s, 0.36 * s, 0.03), 0)                    # veil brim
+        elif "Ferryman" in prop_:
+            part.strut((0.3 * s, 0.2 * s, 0.1), (0.3 * s, 0.1 * s, 2.0 * s), 0.025, 2, 6)  # pole
+        elif "Baker" in prop_:
+            part.cyl((0, 0, 1.75 * s), 0.12 * s, 0.18 * s, 0, 8, r2=0.15 * s)              # hat
+        elif "Shepherd" in prop_:
+            part.strut((0.3 * s, 0.1 * s, 0.0), (0.3 * s, 0.1 * s, 1.6 * s), 0.025, 2, 6)
+            part.ring((0.3 * s, 0.1 * s + 0.08, 1.62 * s), 0.08, 0.02, 2, 10, rot=(0, 1.57, 0))  # crook
+        elif "LensGrinder" in prop_:
+            part.ring((0, 0.13 * s, 1.55 * s), 0.05 * s, 0.01, 2, 10, rot=(1.57, 0, 0))          # loupe
         part.finish(coll)
     elif family in ("water", "astro", "decor", "interior", "tool", "weapon", "vehicle", "sky", "goods", "crop"):
         prop(asset, family, p, rng, k, coll)
