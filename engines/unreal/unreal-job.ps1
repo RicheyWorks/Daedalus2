@@ -54,9 +54,15 @@ if ($Run) {
             Start-Sleep -Seconds 10
         }
         $mark = if (Test-Path $log) { (Get-Content $log).Count } else { 0 }
-        & { git pull --ff-only; & (Join-Path $PSScriptRoot "setup-unreal.ps1") -Project $Project -Build -Open -Fast:$Fast } *>&1 |
-            Out-File -FilePath $log -Append -Encoding utf8
-        $code = $LASTEXITCODE
+        try {
+            & { git pull --ff-only; & (Join-Path $PSScriptRoot "setup-unreal.ps1") -Project $Project -Build -Open -Fast:$Fast } *>&1 |
+                Out-File -FilePath $log -Append -Encoding utf8
+            $code = $LASTEXITCODE
+        } catch {
+            # A terminating error (a locked file, say) used to end the job with no .exit file, so -Wait said RUNNING forever.
+            "JOB STOPPED: $($_.Exception.Message)" | Out-File -FilePath $log -Append -Encoding utf8
+            $code = 1
+        }
         $fresh = Get-Content $log | Select-Object -Skip $mark
         if (-not ($fresh -match 'conflicting instance of AutomationTool')) { break }
         "another build tool collided; retrying in 20 s (attempt $attempt)" | Out-File -FilePath $log -Append -Encoding utf8
