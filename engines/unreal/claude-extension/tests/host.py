@@ -17,6 +17,7 @@ fake_unreal.LOGDIR = tempfile.mkdtemp()
 with open(os.path.join(fake_unreal.LOGDIR, "DaedalusRealm.log"), "w") as f:
     f.write("LogInit: Display: start\nLogPython: Error: something broke\nLogPython: Display: Daedalus ok\n")
 
+fake_unreal.NESTED_TICK = lambda: bridge.pump(1 / 60)
 port = bridge.start(int(sys.argv[1]), register_tick=False)
 print("bridge on", port, flush=True)
 end = time.time() + float(sys.argv[2])

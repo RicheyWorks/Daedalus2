@@ -107,12 +107,17 @@ def _png(w, h):
 
 
 _SHOTS = {}
+NESTED_TICK = None   # host.py points this at the bridge's pump
 
 
 class AutomationLibrary:
     @staticmethod
     def take_high_res_screenshot(w, h, path):
         CALLS.append("screenshot %dx%d" % (w, h)); _SHOTS[path] = 2   # written two frames later
+        # The real editor ticks Slate inside this call, which re-enters the bridge's pump while the
+        # screenshot command's generator is running (found on Richmond's PC: "generator already executing").
+        if NESTED_TICK is not None:
+            NESTED_TICK()
 
 
 class SystemLibrary:

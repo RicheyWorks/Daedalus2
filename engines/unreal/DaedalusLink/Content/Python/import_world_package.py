@@ -273,6 +273,11 @@ def import_into_unreal(zip_path, manifest, live_only=False):
     for old in actors.get_all_level_actors():
         if str(old.get_folder_path()) == "Daedalus/" + w["id"]:
             actors.destroy_actor(old)  # re-importing a world replaces it rather than stacking a copy
+    # Lumen lights the world in real time; without this the editor asks to bake lightmaps for every static chunk
+    # ("LIGHTING NEEDS TO BE REBUILT"). Set here, headless, it raises no dialog.
+    world = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
+    if world is not None:
+        world.get_world_settings().set_editor_property("force_no_precomputed_lighting", True)
     sky = ensure_sky(actors)
     if sky:
         unreal.log("Daedalus: lit the level (%s)" % ", ".join(sky))

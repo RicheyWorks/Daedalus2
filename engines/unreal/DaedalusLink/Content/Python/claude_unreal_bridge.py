@@ -293,16 +293,30 @@ def _step(gen, req, box):
         _finish(box, _error(req, e))
 
 
+_pumping = []   # non-empty while pump() runs
+
+
 def pump(_delta=0.0, max_jobs=8):
-    """One editor tick: advance running commands one step, then start up to max_jobs queued ones."""
-    for gen, req, box in list(_running):
-        _step(gen, req, box)
-    for _ in range(max_jobs):
-        try:
-            req, box = _jobs.get_nowait()
-        except queue.Empty:
-            break
-        _start(req, box)
+    """One editor tick: advance running commands one step, then start up to max_jobs queued ones.
+
+    Some editor calls tick Slate themselves (take_high_res_screenshot does), which calls pump() again while a
+    command is mid-step. That nested tick does nothing: the outer pump is still running, so the generator
+    cannot be stepped again ("generator already executing") and no new command may start inside another.
+    """
+    if _pumping:
+        return
+    _pumping.append(True)
+    try:
+        for gen, req, box in list(_running):
+            _step(gen, req, box)
+        for _ in range(max_jobs):
+            try:
+                req, box = _jobs.get_nowait()
+            except queue.Empty:
+                break
+            _start(req, box)
+    finally:
+        _pumping.clear()
 
 
 # ---------------------------------------------------------------- the socket side (never touches unreal)
