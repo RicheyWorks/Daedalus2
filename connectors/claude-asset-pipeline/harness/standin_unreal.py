@@ -40,11 +40,12 @@ class _Obj:
 
 
 class MaterialInterface(_Obj):
-    def __init__(self, name): self._name = name
+    def __init__(self, name, path=""): self._name, self._path = name, path
+    def get_path_name(self): return self._path
 
 
 class StaticMaterial(_Obj):
-    def __init__(self, slot): self.material_slot_name = slot
+    def __init__(self, slot, material=None): self.material_slot_name, self.material_interface = slot, material
 
 
 class Box:
@@ -57,6 +58,10 @@ class StaticMesh(_Obj):
     def __init__(self, name, tris, slots, size_cm):
         self._name, self._tris, self._size = name, tris, size_cm
         self.static_materials = [StaticMaterial(s) for s in slots]
+
+    def use(self, materials):
+        for sm in self.static_materials:
+            sm.material_interface = materials.get(sm.material_slot_name)
     def get_num_triangles(self, lod): return self._tris if lod == 0 else 0
     def get_bounding_box(self): return Box(self._size)
 
@@ -78,6 +83,13 @@ class _AssetTools:
             fault, FAULT["next"] = FAULT["next"], None
             # As seen live (UE 5.8.3): one static mesh per node, named after the node, scale baked in.
             nodes = s["nodes"][:-1] if fault == "drop_mesh" else s["nodes"]
+            base = "%s/%s" % (t.destination_path, os.path.splitext(os.path.basename(t.filename))[0])
+            # As seen live (UE 5.8.3): materials are created beside the meshes but not reported as imported; the
+            # meshes' slots point at them. no_materials: the slots keep the engine default.
+            mats = {} if fault == "no_materials" else {
+                name: MaterialInterface(name, "%s/Materials/%s.%s" % (base, name, name)) for name in s["materials"]}
+            for mi in mats.values():
+                ASSETS[mi.get_path_name()] = mi
             for i, n in enumerate(nodes):
                 m = s["meshes"][n["mesh"]]
                 tris = m["triangles"] - (1 if fault == "drop_tris" and i == 0 else 0)
@@ -86,13 +98,10 @@ class _AssetTools:
                 k = 1.0 if fault == "scale_m" else 100.0
                 size = [d * k for d in n["dims"]]
                 path = "%s/%s/StaticMeshes/%s" % (t.destination_path, os.path.splitext(os.path.basename(t.filename))[0], n["name"])
-                ASSETS[path] = StaticMesh(n["name"], tris, slots, size)
+                mesh = StaticMesh(n["name"], tris, slots, size)
+                mesh.use(mats)
+                ASSETS[path] = mesh
                 t.imported_object_paths.append(path)
-            if fault != "no_materials":
-                for name in s["materials"]:
-                    path = "%s/%s/Materials/%s" % (t.destination_path, os.path.splitext(os.path.basename(t.filename))[0], name)
-                    ASSETS[path] = MaterialInterface(name)
-                    t.imported_object_paths.append(path)
             U.CALLS.append("import %s -> %s" % (os.path.basename(t.filename), t.destination_path))
 
 

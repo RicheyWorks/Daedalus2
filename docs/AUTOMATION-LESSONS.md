@@ -141,3 +141,7 @@ to it when something new breaks.
 - **No asset imports while Unreal is in Play.** The pipeline's import "completed", but `load_asset` and saving
   failed with "The Editor is currently in a play mode" and the judge saw 0 meshes. The art queue watcher now waits
   for Play to end (and says so in STATUS.md) instead of stopping anyone's session.
+- **UE 5.8.3's Interchange reports only the meshes as imported.** Materials are created beside them but missing
+  from `imported_object_paths`, so the judge saw "Unreal made 0 materials". Listing the destination folder
+  instead was wrong: the e2e canary caught it counting a previous import's leftovers. The import script now counts
+  the materials the meshes' slots actually reference, and the stand-in models what live Unreal does.

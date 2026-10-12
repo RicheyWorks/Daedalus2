@@ -66,7 +66,14 @@ for path in paths:
         slots = [str(m.get_editor_property("material_slot_name")) for m in asset.get_editor_property("static_materials")]
         meshes.append({"path": path, "name": asset.get_name(), "triangles": asset.get_num_triangles(0),
                        "materials": slots, "dims_cm": sorted(size, reverse=True)})
-    elif isinstance(asset, unreal.MaterialInterface):
+        # UE 5.8.3 reports only the meshes as imported: count the materials the meshes actually use (a folder
+        # listing would also count a previous import's leftovers and hide a lost material).
+        for m in asset.get_editor_property("static_materials"):
+            mi = m.get_editor_property("material_interface")
+            if mi is not None and not mi.get_path_name().startswith("/Engine/") \
+                    and all(x["path"] != mi.get_path_name() for x in materials):
+                materials.append({"path": mi.get_path_name(), "name": mi.get_name()})
+    elif isinstance(asset, unreal.MaterialInterface) and all(x["path"] != path for x in materials):
         materials.append({"path": path, "name": asset.get_name()})
 result = {"dest": P["dest"], "imported": paths, "meshes": meshes, "materials": materials}
 '''
