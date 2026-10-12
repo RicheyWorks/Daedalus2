@@ -28,6 +28,7 @@ To see what it would do without changing anything, add `-WhatIfOnly`. Other opti
   the launcher's list, the registry and `<drive>:\Epic Games\UE_*`, and takes the newest)
 - `-NoServerStart`: don't start a local server
 - `-Verify`: check an earlier import again, without importing
+- `-Open`: everything in one line. If Unreal has the project open, it closes it (Unreal asks to save anything unsaved), runs the steps, and then opens the project again
 
 **The import checks its own work.** After importing, it opens the level again and compares it with the
 manifest. It checks:

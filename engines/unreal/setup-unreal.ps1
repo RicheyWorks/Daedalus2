@@ -26,6 +26,8 @@
                               it verifies the result inside Unreal against the manifest and prints PASS/FAIL
                               per check (-Verify alone re-checks an earlier import).
 
+-Open closes this project in Unreal if it is open, does the steps, then opens it again: one line for everything.
+
 .EXAMPLE
   .\setup-unreal.ps1 -Project C:\Unreal\DaedalusRealm\DaedalusRealm.uproject -InstallLauncher -Build -Import
 
@@ -43,6 +45,7 @@ param(
     [switch]$Build,
     [switch]$Import,
     [switch]$Verify,
+    [switch]$Open,
     [switch]$SkipPackage,
     [switch]$NoServerStart,
     [switch]$WhatIfOnly
@@ -69,6 +72,27 @@ function Fail([string]$text) {
 
 function Test-Version([string]$have, [string]$want) {
     try { return [version]($have -replace '[^0-9.]', '') -ge [version]$want } catch { return $false }
+}
+
+# With -Open the script owns the editor: it asks an open copy of this project to close (Unreal offers to save
+# anything unsaved), does the work, and opens it again at the end.
+function Get-ProjectEditors {
+    if (-not (Get-Command Get-CimInstance -ErrorAction SilentlyContinue)) { return @() }   # not Windows
+    $leaf = Split-Path $Project -Leaf
+    return @(Get-CimInstance Win32_Process -Filter "Name = 'UnrealEditor.exe'" -ErrorAction SilentlyContinue |
+        Where-Object { $_.CommandLine -and $_.CommandLine -like "*$leaf*" })
+}
+if ($Open -and -not $WhatIfOnly) {
+    $eds = Get-ProjectEditors
+    if ($eds.Count -gt 0) {
+        Write-Host "Closing Unreal so the project can be updated (save anything it asks about)..." -ForegroundColor Cyan
+        foreach ($e in $eds) { (Get-Process -Id $e.ProcessId -ErrorAction SilentlyContinue).CloseMainWindow() | Out-Null }
+        for ($i = 0; $i -lt 120 -and (Get-ProjectEditors).Count -gt 0; $i++) { Start-Sleep -Seconds 1 }
+        if ((Get-ProjectEditors).Count -gt 0) {
+            Write-Host "Unreal is still open (waiting on a save prompt?). Close it, then run this again." -ForegroundColor Red
+            exit 1
+        }
+    }
 }
 
 # --- 1. Epic Games Launcher ---------------------------------------------------------------------------
@@ -543,8 +567,7 @@ if ($Import -or $Verify) {
         Fail "UnrealEditor-Cmd.exe not found"
     } elseif (-not $WhatIfOnly -and -not (Test-Path $PackageFile)) {
         Fail "no World Package to import (step 5)"
-    } elseif (-not $WhatIfOnly -and (Get-CimInstance Win32_Process -Filter "Name = 'UnrealEditor.exe'" -ErrorAction SilentlyContinue |
-            Where-Object { $_.CommandLine -and $_.CommandLine -like "*$(Split-Path $Project -Leaf)*" })) {
+    } elseif (-not $WhatIfOnly -and (Get-ProjectEditors).Count -gt 0) {
         # The open editor holds the level file, so the import could not save it (Windows error 32).
         Fail "Unreal has this project open; close it (File > Exit), then run this again"
     } elseif ($WhatIfOnly) {
@@ -586,6 +609,15 @@ if ($Import -or $Verify) {
 }
 
 Write-Host ""
+if ($Open -and -not $WhatIfOnly) {
+    $exe = if ($engine) { Join-Path $engine.Path "Engine\Binaries\Win64\UnrealEditor.exe" } else { "" }
+    if ($exe -and (Test-Path $exe)) {
+        Write-Host "Opening $Project in Unreal $($engine.Version)..." -ForegroundColor Cyan
+        Start-Process -FilePath $exe -ArgumentList "`"$Project`""
+    } else {
+        Fail "can't open Unreal: no UnrealEditor.exe found"
+    }
+}
 if ($script:Failed -gt 0) {
     Write-Host ("{0} of {1} steps need you (see X above)." -f $script:Failed, $script:Steps) -ForegroundColor Red
     exit 1
