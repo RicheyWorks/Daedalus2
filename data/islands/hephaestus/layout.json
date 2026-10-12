@@ -100,7 +100,7 @@
    "zone": "caldera_forge"
   },
   {
-   "asset": "Prop_ForgeForgeAltar_Obsidian",
+   "asset": "Prop_ForgeForgeAltar_Basalt",
    "x": 0,
    "y": 28,
    "z": 0,
@@ -172,7 +172,7 @@
    "zone": "meteor_scar"
   },
   {
-   "asset": "Prop_ForgeObsidianSpire_Obsidian",
+   "asset": "Prop_ForgeObsidianSpire_Basalt",
    "x": 240,
    "y": 180,
    "z": 0,
@@ -505,7 +505,7 @@
    "zone": "ash_fields"
   },
   {
-   "asset": "Prop_RanchNestbox_Clay",
+   "asset": "Prop_RanchNestbox_Wood",
    "x": -240,
    "y": 50,
    "z": 0,

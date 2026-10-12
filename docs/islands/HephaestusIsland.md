@@ -43,3 +43,14 @@ Blockout placements (m relative to ARK_ORIGIN): `data/islands/hephaestus/layout.
 
 ## Assets
 All 500 procedural items: `art\QUEUE.md` rows tagged [heph], from `tools/blender/heph_gen.py`. Landmark props: `Prop_HephaestusAnvil_Great`, `Prop_HephaestusForge_Great`, `Item_Shard_Asteroid`, `Item_Shard_Planet`, `Tool_HephaestusHammer`, `Prop_ArkRivetCrate`, `Prop_LavaLantern`.
+
+## Editor turn (3-minute slot)
+
+Run only on a slot granted by the referee: `python tools\islands\hephaestus\heph_turn.py` (add `--now` to skip waiting).
+It waits for the previous slot's HANDOFF on the team link, then through the Claude Unreal Bridge runs
+`heph_island_ue.py` inside the editor: imports the 7 hero glbs not yet shipped (Great Forge, Great Anvil, hammer,
+shards, rivet crate, lava lantern), creates and streams the sublevel `/Game/Hephaestus/Maps/HephaestusIsland` under
+DaedalusWorld, lays a 1024 m basalt blockout disc at ARK_ORIGIN 6000000,2000000, places all 102 layout entries
+(hot-spring water as an engine plane), adds a forge-glow light and hero camera, takes a hero shot, stops Play, saves
+only its own sublevel, and posts DONE plus HANDOFF. Editor work is capped at 150 s. Safe to rerun: it clears only
+actors in its own `Hephaestus` outliner folder.
