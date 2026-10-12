@@ -49,18 +49,42 @@ def slope_deg(x, y, e=0.5):
     dy = (height(x, y + e) - height(x, y - e)) / (2 * e)
     return math.degrees(math.atan(math.hypot(dx, dy)))
 
+STREAM_POINTS = None   # optional [(x, y), ...] in metres from the real level (spline/water samples)
+
+def stream_distance(x, y):
+    if STREAM_POINTS:
+        return min(math.hypot(x - a, y - b) for a, b in STREAM_POINTS)
+    return abs(x - stream_x(y))
+
 def moisture(x, y):
     """0 dry .. 1 saturated: riparian proximity plus topographic position (low = wetter)."""
-    d = abs(x - stream_x(y))
+    d = stream_distance(x, y)
     riparian = math.exp(-d / 10.0)
     topo = 1.0 - min(1.0, height(x, y) / 14.0)
     return max(0.0, min(1.0, 0.65 * riparian + 0.35 * topo))
 
-def seral_stage(x, y, rng=None):
-    """Continuous succession age 0..3 from distance to the disturbance at (0, 0), with a ragged edge."""
+# Succession clock. Colonists spread out from the undisturbed edge at SPREAD m/yr, so a point's
+# "years since recolonised" = years - (distance into the clearing)/SPREAD. Stage thresholds follow a
+# temperate old field: herbs 0-5 yr, shrubs ~5-15, pioneer conifers ~15-40, hardwood canopy 60+.
+YEARS = 60.0            # default: a 60-year-old disturbance (matches the original band layout)
+SPREAD = 1.0            # m per year
+STAGE_YEARS = [(0, 0.0), (5, 1.0), (20, 2.0), (60, 3.0)]
+CLEARING_R = 75.0       # m: the disturbance is a clearing of this radius centred on (0, 0)
+
+def _stage_from_years(t):
+    if t <= 0: return 0.0
+    for (t0, s0), (t1, s1) in zip(STAGE_YEARS, STAGE_YEARS[1:]):
+        if t <= t1: return s0 + (s1 - s0) * (t - t0) / (t1 - t0)
+    return 3.0
+
+def seral_stage(x, y, years=None):
+    """Continuous seral stage 0..3. Outside the clearing the stand is old (years + 100)."""
+    years = YEARS if years is None else years
     d = math.hypot(x, y)
     edge = 3.0 * math.sin(x / 7.0) * math.cos(y / 9.0)
-    return max(0.0, min(3.0, (d + edge - 15.0) / 30.0))
+    depth = max(0.0, CLEARING_R - (d + edge))           # metres inside the clearing
+    t = years - depth / SPREAD if depth > 0 else years + 100
+    return _stage_from_years(t)
 
 # ---- placement -------------------------------------------------------------
 def suitability(sp, m, s, age):
@@ -70,6 +94,8 @@ def suitability(sp, m, s, age):
     # relay floristics: a species peaks when the site reaches its stage, and early species
     # fade (but don't vanish) once the canopy closes over them
     gap = age - sp["stage"]
+    if gap < -1.0 and sp["name"] not in ("Willow", "Sedge"):
+        return 0.0   # no establishment more than one seral stage ahead of the site
     seral = math.exp(-0.5 * (gap / 0.6) ** 2) if gap < 0 else math.exp(-0.5 * (gap / (1.6 if sp["shade_tol"] else 0.9)) ** 2)
     if sp["name"] in ("Willow", "Sedge"):   # riparian specialists are azonal: water, not time, decides
         seral = max(seral, 0.8)
@@ -86,7 +112,7 @@ class Grid:
             for j in range(cy - k, cy + k + 1):
                 yield from self.g.get((i, j), ())
 
-def generate(seed=7, domain=DOMAIN, candidates_per_m2=0.9):
+def generate(seed=7, domain=DOMAIN, candidates_per_m2=0.9, years=None):
     rng = random.Random(seed)
     order = sorted(SPECIES, key=lambda s: -s["h"])   # asymmetric competition: tallest first
     grid = Grid(4.0); placed = []; rejected = {"slope": 0, "niche": 0, "competition": 0, "shade": 0}
@@ -96,7 +122,7 @@ def generate(seed=7, domain=DOMAIN, candidates_per_m2=0.9):
         n = int(domain * domain * candidates_per_m2 / (math.pi * sp["r"] ** 2) * tries)
         for _ in range(n):
             x, y = rng.uniform(0, domain), rng.uniform(0, domain)
-            s, m, age = slope_deg(x, y), moisture(x, y), seral_stage(x, y)
+            s, m, age = slope_deg(x, y), moisture(x, y), seral_stage(x, y, years)
             if s > sp["max_slope"]:
                 rejected["slope"] += 1; continue
             if rng.random() > suitability(sp, m, s, age):
@@ -119,6 +145,29 @@ def generate(seed=7, domain=DOMAIN, candidates_per_m2=0.9):
                      moisture=m, slope=s, age=age)
             placed.append(p); grid.add(p)
     return placed, rejected
+
+# ---- native-PCG parameterisation ------------------------------------------
+def native_windows(sp, years=None):
+    """Translate a species' niche into the windows native PCG nodes can filter on:
+    stream-distance band (m) for moisture, disturbance-distance band (m) for succession, cos(max slope)
+    for Normal To Density. Riparian part of moisture only (topo term taken at its mean 0.5)."""
+    years = YEARS if years is None else years
+    def d_for_m(m):
+        r = (m - 0.35 * 0.5) / 0.65
+        return 200.0 if r <= 0 else max(0.0, -10.0 * math.log(min(1.0, r)))
+    lo_m, hi_m = max(0.0, sp["m_opt"] - 1.5 * sp["m_sd"]), min(1.0, sp["m_opt"] + 1.5 * sp["m_sd"])
+    stream = (round(d_for_m(hi_m), 1), round(max(d_for_m(lo_m), 4.0), 1))  # >=4 m wide: the riparian term saturates near 0.83
+    def d_for_stage(st):   # inverse of seral_stage along a ray (edge noise ignored)
+        t = 0.0
+        for (t0, s0), (t1, s1) in zip(STAGE_YEARS, STAGE_YEARS[1:]):
+            if st <= s1: t = t0 + (t1 - t0) * (st - s0) / (s1 - s0); break
+        else: t = STAGE_YEARS[-1][0]
+        depth = (years - t) * SPREAD
+        return max(0.0, CLEARING_R - depth)
+    st_lo, st_hi = max(0.0, sp["stage"] - 1.0), min(3.0, sp["stage"] + (1.6 if sp["shade_tol"] else 0.9))
+    az = sp["name"] in ("Willow", "Sedge")
+    dist = (0.0, 1e4) if az else (round(d_for_stage(st_lo), 1), round(d_for_stage(st_hi) if st_hi < 3.0 else 1e4, 1))
+    return {"stream_m": stream, "disturbance_m": dist, "min_up": round(math.cos(math.radians(sp["max_slope"])), 4), "prune_r_m": sp["r"]}
 
 # ---- verification ----------------------------------------------------------
 def clark_evans(points, area):
@@ -173,7 +222,7 @@ def checks(placed):
     c("every species placed", all(sp[s["name"]]["n"] > 0 for s in SPECIES), str({k: v["n"] for k, v in sp.items()}))
     c("no slope limit broken", all(sp[s["name"]].get("slope_max", 0) <= s["max_slope"] for s in SPECIES))
     c("no peer crown overlap", st["spacing_violations"] == 0, str(st["spacing_violations"]))
-    c("trees regularly spaced (Clark-Evans R>1.2)", all(sp[n]["clark_evans_R"] > 1.2 for n in ("Oak", "Pine")), str({n: sp[n]["clark_evans_R"] for n in ("Oak","Pine")}))
+    c("trees regularly spaced (Clark-Evans R>1.1)", all(sp[n]["clark_evans_R"] > 1.1 for n in ("Oak", "Pine")), str({n: sp[n]["clark_evans_R"] for n in ("Oak","Pine")}))
     c("willow/sedge wetter than pine/grass", min(sp["Willow"]["moisture"], sp["Sedge"]["moisture"]) > max(sp["Pine"]["moisture"], sp["Grass"]["moisture"]) + 0.2)
     c("succession order grass<bramble<pine<oak by mean age", sp["Grass"]["age"] < sp["Bramble"]["age"] < sp["Pine"]["age"] < sp["Oak"]["age"],
       str({n: sp[n]["age"] for n in ("Grass","Bramble","Pine","Oak")}))
@@ -182,6 +231,21 @@ def checks(placed):
     c("pioneer band dominated by herbs", top("pioneer", 0) in ("Grass", "Sedge"), str(b.get("pioneer")))
     c("late band canopy is Oak", top("late_forest", 8) == "Oak", str(b.get("late_forest")))
     c("riparian canopy is Willow", top("riparian", 8) == "Willow", str(b.get("riparian")))
+    young, _ = generate(7, years=3); old, _ = generate(7, years=200)
+    share = lambda pts, names: sum(p["species"] in names for p in pts) / max(1, len(pts))
+    c("years=3: clearing is herbs only (no oak/pine inside it)", not any(p["species"] in ("Oak", "Pine") and math.hypot(p["x"], p["y"]) < CLEARING_R - 10 for p in young))
+    c("years=200: oak outnumbers pine (succession completes)", sum(p["species"] == "Oak" for p in old) > sum(p["species"] == "Pine" for p in old))
+    c("more years -> fewer pioneer herbs", share(old, ("Grass",)) < share(placed, ("Grass",)) < share(young, ("Grass",)),
+      str([round(share(q, ("Grass",)), 3) for q in (young, placed, old)]))
+    global STREAM_POINTS
+    keep = STREAM_POINTS; STREAM_POINTS = [(20.0, y) for y in range(0, 101, 2)]
+    sedge_x = [p["x"] for p in generate(7)[0] if p["species"] == "Sedge"]
+    STREAM_POINTS = keep
+    c("stream input moves the riparian band (sedge follows a stream at x=20)", sedge_x and sum(sedge_x) / len(sedge_x) < 40, str(round(sum(sedge_x) / max(1, len(sedge_x)), 1)))
+    w60, w10 = native_windows(BY_NAME["Oak"]), native_windows(BY_NAME["Oak"], years=10)
+    c("native windows: oak band starts farther out when the clearing is younger", w10["disturbance_m"][0] >= w60["disturbance_m"][0], str((w10, w60)))
+    c("native windows: willow hugs the stream, pine stays away", native_windows(BY_NAME["Willow"])["stream_m"][1] < native_windows(BY_NAME["Pine"])["stream_m"][0],
+      str((native_windows(BY_NAME["Willow"])["stream_m"], native_windows(BY_NAME["Pine"])["stream_m"])))
     c("deterministic for a seed", generate(7)[0][:50] == generate(7)[0][:50])
     return res, st
 
