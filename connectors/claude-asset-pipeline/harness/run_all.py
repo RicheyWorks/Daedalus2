@@ -5,7 +5,7 @@ import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SUITES = [("glb", ["glb_test.py"]), ("judge", ["judge_test.py"]), ("artqueue", ["artqueue_test.py"]), ("e2e", ["e2e.py"] + sys.argv[1:])]
+SUITES = [("glb", ["glb_test.py"]), ("judge", ["judge_test.py"]), ("artqueue", ["artqueue_test.py"]), ("link", ["teamlink_test.py"]), ("e2e", ["e2e.py"] + sys.argv[1:])]
 
 green = 0
 for name, args in SUITES:

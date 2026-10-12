@@ -43,6 +43,7 @@ import time
 import traceback
 
 from . import ship as pipeline
+from . import teamlink
 from . import wire
 
 DEFAULT_DIR = os.path.join(os.path.expanduser("~"), "projects", "bot-team", "art")
@@ -105,6 +106,38 @@ def set_row(text, asset, status, notes=None):
     raise KeyError(asset)
 
 
+def add_row(text, asset, status, notes=""):
+    """The board with a new row for `asset` after the table's last row (numbered one past the highest #)."""
+    rows, header = parse(text)
+    if header is None:
+        raise ValueError("QUEUE.md has no table with Asset and Status columns")
+    nums = [int(r["cells"][0]) for r in rows if r["cells"] and r["cells"][0].isdigit()]
+    cells = [""] * header["width"]
+    if header["asset"] != 0:
+        cells[0] = str(max(nums or [0]) + 1)
+    cells[header["asset"]] = asset
+    low = [c.lower() for c in parse_header_cells(text)]
+    if "kind" in low:
+        cells[low.index("kind")] = (kind_of(asset) or "").lower()
+    cells[header["status"]] = status
+    if header["notes"] is not None:
+        cells[header["notes"]] = notes
+    lines = text.split("\n")
+    at = rows[-1]["line"] + 1 if rows else next(i for i, l in enumerate(lines) if l.strip().startswith("|")) + 2
+    lines.insert(at, "| " + " | ".join(cells) + " |")
+    return "\n".join(lines)
+
+
+def parse_header_cells(text):
+    for line in text.split("\n"):
+        s = line.strip()
+        if s.startswith("|"):
+            cells = [c.strip() for c in s.strip("|").split("|")]
+            if "asset" in [c.lower() for c in cells]:
+                return cells
+    return []
+
+
 def kind_of(asset):
     k = asset.split("_", 1)[0]
     return k if k in KINDS else None
@@ -134,7 +167,8 @@ def unreal_side_failure(report):
 
 
 class Watcher:
-    def __init__(self, folder=DEFAULT_DIR, blender=wire.BLENDER, unreal=wire.UNREAL, ship=None, clock=time.time):
+    def __init__(self, folder=DEFAULT_DIR, blender=wire.BLENDER, unreal=wire.UNREAL, ship=None, clock=time.time,
+                 link=None):
         self.folder = folder
         self.blender = blender
         self.unreal = unreal
@@ -147,6 +181,7 @@ class Watcher:
         self.waiting_on = ""
         self.waiting_since = None   # when the current wait began (clock seconds), for stall detection
         self.blocked_at = {}        # asset -> when it was last BLOCKED, to pace the retries
+        self.link = link            # teamlink.Link("unreal-team"), or None: every event also goes out live
 
     # -- files
 
@@ -179,6 +214,61 @@ class Watcher:
         line.update(detail)
         with open(self.feed, "a", encoding="utf-8") as f:
             f.write(json.dumps(line) + "\n")
+        if self.link is not None:   # the same event, live, to everyone on the link
+            body = {"asset": asset}
+            body.update({k: v for k, v in detail.items() if isinstance(v, (str, int, float, bool, list)) or v is None})
+            self.link.send("*", ("asset." if asset != "-" else "queue.") + what, body)
+
+    # -- the live link (ADR-053)
+
+    def on_message(self, m):
+        """Act on one link message; returns True when the board should be looked at right now."""
+        kind, body = m.get("type", ""), m.get("body") or {}
+        if kind == "ack":
+            return False
+        self.link.ack(m["id"])
+        if kind == "ping":
+            self.link.send(m["from"], "pong", {"waiting_on": self.waiting_on}, reply_to=m["id"])
+            return False
+        if kind == "asset.ready":
+            asset = str(body.get("asset", ""))
+            rows, header = parse(self.read())
+            row = next((r for r in rows if r["asset"] == asset), None)
+            if not asset or header is None:
+                self.link.send(m["from"], "note", {"text": "asset.ready needs {asset}; QUEUE.md must have its table"},
+                               reply_to=m["id"])
+                return False
+            if row is None:   # built assets enter the board by themselves
+                self.write_board(add_row, asset, "READY", "added by the link (%s)" % m["from"])
+                self.event(asset, "added", by=m["from"])
+            elif state(row["status"]) not in ("SHIPPING",):
+                self.blocked_at.pop(asset, None)
+                self.update(asset, "READY", "ready via the link (%s)" % m["from"])
+            return True
+        if kind == "queue.status":
+            self.link.send(m["from"], "queue.state", {"waiting_on": self.waiting_on, "counts": self.counts()},
+                           reply_to=m["id"])
+        return False
+
+    def write_board(self, change, *args):
+        for _ in range(5):
+            before = self.read()
+            after = change(before, *args)
+            if self.read() != before:
+                continue
+            tmp = self.queue + ".tmp"
+            with open(tmp, "w", encoding="utf-8", newline="") as f:
+                f.write(after)
+            os.replace(tmp, self.queue)
+            return True
+        return False
+
+    def counts(self):
+        rows, _ = parse(self.read())
+        out = {}
+        for r in rows:
+            out[state(r["status"]) or "?"] = out.get(state(r["status"]) or "?", 0) + 1
+        return out
 
     def summary(self):
         rows, _ = parse(self.read())
@@ -355,14 +445,22 @@ def main(argv=None):
     ap.add_argument("--folder", default=DEFAULT_DIR)
     ap.add_argument("--every", type=float, default=10.0, help="seconds between passes")
     ap.add_argument("--once", action="store_true")
+    ap.add_argument("--no-link", action="store_true", help="don't join the team link (ADR-053)")
     a = ap.parse_args(argv)
-    w = Watcher(a.folder)
+    link = None if a.no_link else teamlink.Link("unreal-team")
+    w = Watcher(a.folder, link=link)
     lock = os.path.join(a.folder, ".watcher.lock")
     if not a.once:
         if os.path.exists(lock) and time.time() - os.path.getmtime(lock) < 60:
             print("another watcher is running (%s is fresh)" % lock)
             return 3
-    print("watching %s every %.0fs" % (w.queue, a.every))
+    print("watching %s every %.0fs%s" % (w.queue, a.every, "" if link is None else ", live on the team link"))
+    after = 0
+    if link is not None and link.health():
+        # Catch up first: anything sent to us while we were down and never acknowledged.
+        for m in link.pending():
+            w.on_message(m)
+        after = (link.health() or {}).get("last", 0)
     while True:
         try:
             with open(lock, "w") as f:
@@ -373,7 +471,27 @@ def main(argv=None):
             w.event("-", "watcher-error", why=traceback.format_exc()[-400:])
         if a.once:
             return 0
-        time.sleep(a.every)
+        if link is None:
+            time.sleep(a.every)
+            continue
+        # Wait on the link instead of sleeping: a message wakes the watcher at once (asset.ready ships now).
+        link.heartbeat("waiting on: " + w.waiting_on if w.waiting_on else "ok")
+        if not link.health():
+            time.sleep(a.every)   # no broker: fall back to the 10 s board pass
+            continue
+        deadline = time.time() + a.every
+        while time.time() < deadline:
+            msgs, after = link.wait(after, max(0.5, deadline - time.time()))
+            if not link.up:
+                break
+            wake = False
+            for m in msgs:
+                try:
+                    wake = w.on_message(m) or wake
+                except Exception:
+                    w.event("-", "link-error", why=traceback.format_exc()[-300:])
+            if wake:
+                break
 
 
 if __name__ == "__main__":
