@@ -82,3 +82,9 @@ Apiary (6 hives, honey jar, comb, wax, smoker, suit, extractor: honey is the sec
 
 ## v3 additions (860 items)
 Livestock tack (bell, collar, feeder, bed, name tag for all 8 species), food storage (8 kinds x 3), herb pests (aphid, mite, slug, mildew, rot, locust) each with a remedy tonic, weather and dew/fog water catchers, 12 F-family signposts, more kit. All 860 queued READY in art\QUEUE.md (#4936-5795). Unreal placement uses shipped /Game/Daedalus/Art meshes first, imports only what is missing.
+
+## v4 additions (974 items, +114 original, no duplicates)
+- Story (25): six Planet Shards (Heartstone, Crustplate, Mantlechip, Orbitglass, Skyscar, Ringdust) from the shattered world; eight Herder's Journal pages; statues of the First Herder, Well Keeper, Stack Sage and the Shardfall; Impact Crater, Fallen Orbit Ring, Core Vent, Sky Anchor, Star Map, Quest Board, Shard Spring. Quest line: collect the six shards to read the Star Map, which points to the next fragment island.
+- Six-F Stacking gaps (36): one Catalyst per family (lets a stack go one tier past 6 for 30 s), one Overcharge Cure per family (clears the crash debuff when a stack tops out), Stack Charms (hold a stack 2x longer), Recipe Tablets that teach a family's fuse pairs, Herb Pouches, and Wild Patches where seeds are found.
+- Food loop gaps (32): Manure -> Compost -> Fertilizer -> Mulch (feeds crops back, closing the loop); farm tools (Shears, Milk Pail, Egg Basket, Brush, Hoof Pick, Halter, Crook, Spindle); a Nest and Feed Sack for each of the eight livestock; Spinner, Loom, Salt Cure and Hatchery workshops.
+- Water chain gaps (21): pipe kit (straight, elbow, tee, valve, spigot, junction), Purify Tablet, Purity Test Kit, gutter, downspout, rain barrel, settling tank, UV lantern, charcoal brick, sand sack, ladle; water grades Murky -> Brackish -> Clean -> Blessed (only Clean or better is drinkable; Murky causes Gut Sickness, cured by its Flora tonic).
