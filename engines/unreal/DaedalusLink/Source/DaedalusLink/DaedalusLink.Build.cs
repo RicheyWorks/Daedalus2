@@ -22,6 +22,7 @@ public class DaedalusLink : ModuleRules
 		{
 			"HTTP",
 			"ImageCore",
+			"RHI",
 			"Json",
 			"Slate",
 			"SlateCore",

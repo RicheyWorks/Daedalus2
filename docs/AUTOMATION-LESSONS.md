@@ -95,8 +95,32 @@ to it when something new breaks.
 27. MSVC 14.40-14.43 is banned by UE 5.8, so 14.44 or newer is needed. Setup skips the build when a Visual Studio
     Installer window is open.
 28. Load engine assets in a constructor with `ConstructorHelpers::FObjectFinder`, not `LoadObject`.
+29. A `.cpp` that logs with `UE_LOG(LogDaedalus, ...)` must include `DaedalusLinkModule.h` itself. The header
+    that declares the category is not pulled in by the others (C2065).
+30. `FImageView` in 5.8 takes `(FColor*, W, H, EGammaSpace)`. The raw-pointer form needs a slice count as well, so
+    the 5-argument call is C2661. Write PNGs with `FImageUtils::SaveImageByExtension(Path, FImageView)`.
+31. Engine-free game cores go behind `THIRD_PARTY_INCLUDES_START/END`, and every name in them needs a check against
+    Windows macros: `near`, `far`, `small`, `IN`, `OUT`, `ERROR`, `DrawText`. `grep -w` for these before the first
+    build.
 
 ## Habits that saved us
+
+- **Build a game its own framebuffer and capture that.** The viewport capture never worked in Play (play_capture).
+  The 8-bit realm renders into a 256x240 array, so `RealmCapture` writes the PNG straight from it. A
+  command-line test writes the same PNGs with no editor at all (`realm_core_test`, 13 frames).
+- **Generate in Java, play in C++, prove in both.** The realm is rolled once in Java, and a walk proves it can be
+  finished (200/200 seeds). The C++ test then plays the shipped spec with buttons only, and checks every storeroom
+  chest against what Java rolled. A Java test fails if the shipped spec (`Content/Realm/realm-7.drr`) drifts from
+  the generator.
+- **Argument order is unspecified.** `Check(label, WalkTo(...), G.Describe())` printed the state from *before* the
+  walk, and three "failures" were the test reading stale state. Take the reading in its own statement, after the
+  action.
+- **A walk that ends through a door is a success.** Helpers that walk to a link tile land on another map. Check
+  where the party ended up, not whether the helper reached the target's (x, y).
+- **Don't tear a widget down inside its own Tick.** The realm asks to close from its Tick. `ExitRealm` runs on the
+  next core tick (`FTSTicker`), so the widget isn't freed while it's still on the stack.
+- **ASan and UBSan on every engine-free core.** The first run crashed with a heap overflow in the test's
+  pathfinder: a target outside a smaller map. The sanitizer named the line; a plain build only said "segfault".
 
 - **A verifier must be able to say no.** Every check has a canary or a mutant that makes it fail, and a check
   nobody has seen fail proves nothing.
