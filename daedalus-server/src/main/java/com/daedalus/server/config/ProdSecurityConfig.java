@@ -81,7 +81,7 @@ public class ProdSecurityConfig {
      * Pages beside the maze well. {@code /realm.html} is the WebGL world client (ADR-018); the
      * well at {@code /} stays the default and is untouched by it.
      */
-    public static final List<String> STATIC_PAGES = List.of("/realm.html", "/realm.js", "/jukebox.js", "/models/ark.glb");
+    public static final List<String> STATIC_PAGES = List.of("/realm.html", "/realm.js", "/jukebox.js", "/jukebox-audio.js", "/models/ark.glb");
 
     public static final List<String> STATIC_SCRIPTS = List.of(
             "/draw.js", "/api.js", "/share.js", "/fog.js", "/seat.js",
