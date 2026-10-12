@@ -275,6 +275,12 @@ public consumers).
 | `GET` | `/api/v1/world/{id}/presence` | public | Who is walking around in this world now: each player's position, heading, animation and look, dropped after the stale time (ADR-039). Unknown world 404 |
 | `POST` | `/api/v1/world/{id}/presence` | required | Say where you are, a few times a second (header `X-Daedalus-Tab` tells two tabs of one account apart); everyone subscribed to `/topic/world/{id}/presence` gets MOVE frames (ADR-039) |
 | `POST` | `/api/v1/world/{id}/presence/leave` | required | Leave now instead of fading out; subscribers get a LEAVE frame (ADR-039) |
+| `GET` | `/api/v1/jukebox/config` | public | The rd-jukebox: on or off, the chain and RDSong contract it reads (Robinhood Chain 46630 testnet by default), the genres |
+| `GET` | `/api/v1/jukebox/seeds` | public | Guest mode: the seed songs anyone can play without a wallet |
+| `GET` | `/api/v1/jukebox/seeds/{file}` | public | One seed song's `.mp3` or `.webp` cover; only plain slug names inside the configured directory |
+| `GET` | `/api/v1/jukebox/owned` | required | The RDSong token ids the signed-in wallet holds now (read-only RPC, cached sweep) |
+| `GET` | `/api/v1/jukebox/tokens/{id}/html` | public | A revealed token's own on-chain HTML (its song and Turing coat), served with `CSP: sandbox allow-scripts` |
+| `GET` | `/api/v1/jukebox/arrangement` | public | What to play for `source=seed:<name>\|token:<id>` in a `genre`, `studio` on/off: the rd-studio seam, stubbed until rd-studio has a service |
 | `GET` | `/api/v1/species` | public | The species canon: 221 kinds from ComputerPets with guild, size, r/K strategy and whether they cross open sky alone (ADR-021) |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/claim` | required | Claim an island: from then on only its owner and the builders they name change its cubes. Owner is the signed-in user; already-claimed, blocked and bad-owner are named results (ADR-026) |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/abandon` | required | The owner gives an island back; its cubes stay and it is open again. Not-owner and not-claimed are named results (ADR-026) |

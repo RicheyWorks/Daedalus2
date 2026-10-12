@@ -81,7 +81,7 @@ public class ProdSecurityConfig {
      * Pages beside the maze well. {@code /realm.html} is the WebGL world client (ADR-018); the
      * well at {@code /} stays the default and is untouched by it.
      */
-    public static final List<String> STATIC_PAGES = List.of("/realm.html", "/realm.js", "/models/ark.glb");
+    public static final List<String> STATIC_PAGES = List.of("/realm.html", "/realm.js", "/jukebox.js", "/models/ark.glb");
 
     public static final List<String> STATIC_SCRIPTS = List.of(
             "/draw.js", "/api.js", "/share.js", "/fog.js", "/seat.js",
@@ -213,6 +213,12 @@ public class ProdSecurityConfig {
                         // Token metadata and its image (ADR-027): a marketplace fetches these unsigned.
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/tokens/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands/*/portrait.png").permitAll()
+                        // The rd-jukebox: its settings, guest seed songs, public on-chain token HTML and
+                        // the arrangement seam are public reads; a holder's own token list needs the sign-in.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/jukebox/config", "/api/v1/jukebox/seeds",
+                                "/api/v1/jukebox/seeds/*", "/api/v1/jukebox/tokens/*/html",
+                                "/api/v1/jukebox/arrangement").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/jukebox/owned").authenticated()
                         // The species canon (ADR-021): reference data, read-only.
                         .requestMatchers(HttpMethod.GET, "/api/v1/species").permitAll()
 
@@ -250,6 +256,7 @@ public class ProdSecurityConfig {
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
 
+        JukeboxFraming.apply(http);   // DENY framing everywhere but the jukebox's sandboxed token HTML
         return http.build();
     }
 }
