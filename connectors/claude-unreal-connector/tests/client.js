@@ -69,8 +69,11 @@ const check = (label, ok, detail) => { total++; if (ok) pass++; console.log((ok 
   check('run_command runs the add-on across editor ticks', JSON.stringify(j.counted) === '[4,3,2,1]' && j.by === 'grok', text(r));
   r = await call('run_command', { command: 'nope.missing' });
   check('an unknown command is an error that lists the known ones', r.isError && /test\.countdown/.test(text(r)), text(r));
+  const standinWindowReason = 'Native windows are unavailable for the explicit stand-in target.';
   r = await call('editor_windows');
-  check('the window harness says plainly when it cannot run (not Windows)', process.platform === 'win32' || (r.isError && /Windows only/.test(text(r))), text(r));
+  check('the explicit stand-in rejects native window inventory with a clear reason', r.isError === true && text(r).includes(standinWindowReason), text(r));
+  r = await call('window_input', { hwnd: 1, keys: 'escape' });
+  check('the explicit stand-in rejects native window input with a clear reason', r.isError === true && text(r).includes(standinWindowReason), text(r));
 
   r = await call('save');
   check('save saves the level and the changed packages', JSON.parse(text(r)).level_saved === true, text(r));
