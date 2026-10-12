@@ -95,10 +95,12 @@ FDaedalusSettings::FDaedalusSettings()
 	const TCHAR* Pad = TEXT("CONTROLLER");
 	const TCHAR* Kbm = TEXT("KEYBOARD/MOUSE");
 
-	Add("Vibration", Pad, TEXT("General"), TEXT("Vibration"), TEXT("Rumble on sword swings, down-thrust bounces, hard landings and respawns."), K::Toggle, 1);
-	Add("VibrationStrength", Pad, TEXT("General"), TEXT("Vibration Strength"), TEXT("How strong the rumble is."), K::Slider, 100, 0, 100, 5, TEXT("%"));
 	Add("InvertLookY", Pad, TEXT("Movement & Aiming"), TEXT("Invert Look (Vertical)"), TEXT("Push the right stick up to look down, like a flight stick."), K::Toggle, 0);
 	Add("InvertLookX", Pad, TEXT("Movement & Aiming"), TEXT("Invert Look (Horizontal)"), TEXT("Push the right stick right to turn left."), K::Toggle, 0);
+	Add("ButtonLayout", Pad, TEXT("Layouts"), TEXT("Button Layout"), TEXT("Which buttons do what. Bumper Jumper puts jump on LB so your thumb never leaves the look stick; Boxer puts melee on the left trigger; Recon puts melee on Y. The Field Menu's Controls tab shows the result."), K::Choice, 0, 0, 5, 1, TEXT(""), {TEXT("DEFAULT"), TEXT("BUMPER JUMPER"), TEXT("BUMPER NINJA"), TEXT("BOXER"), TEXT("GREEN THUMB"), TEXT("RECON")});
+	Add("ThumbstickLayout", Pad, TEXT("Layouts"), TEXT("Thumbstick Layout"), TEXT("Southpaw swaps the sticks. Legacy moves forward and back and turns on the left stick, strafes and looks up and down on the right."), K::Choice, 0, 0, 3, 1, TEXT(""), {TEXT("DEFAULT"), TEXT("SOUTHPAW"), TEXT("LEGACY"), TEXT("LEGACY SOUTHPAW")});
+	Add("Vibration", Pad, TEXT("General"), TEXT("Vibration"), TEXT("Rumble on sword swings, down-thrust bounces, hard landings and respawns."), K::Toggle, 1);
+	Add("VibrationStrength", Pad, TEXT("General"), TEXT("Vibration Strength"), TEXT("How strong the rumble is."), K::Slider, 100, 0, 100, 5, TEXT("%"));
 	Add("LookAccel", Pad, TEXT("Sensitivity & Acceleration"), TEXT("Look Acceleration"), TEXT("Holding the right stick all the way speeds the turn up over half a second. 0 turns it off."), K::Slider, 3, 0, 10, 1);
 	Add("LookSensH", Pad, TEXT("Sensitivity & Acceleration"), TEXT("Look Sensitivity (Horizontal)"), TEXT("How fast the right stick turns the camera left and right. 5 is the default turn rate."), K::Slider, 5, 1, 10, 0.5f);
 	Add("LookSensV", Pad, TEXT("Sensitivity & Acceleration"), TEXT("Look Sensitivity (Vertical)"), TEXT("How fast the right stick tilts the camera up and down."), K::Slider, 5, 1, 10, 0.5f);
@@ -109,6 +111,9 @@ FDaedalusSettings::FDaedalusSettings()
 	Add("MouseSensH", Kbm, TEXT("Sensitivity"), TEXT("Mouse Sensitivity (Horizontal)"), TEXT("Camera turn per mouse count, on a 1-10 scale. Look is raw and unsmoothed, so high-polling mice (Razer 8K) track exactly."), K::Slider, 5, 0.5f, 10, 0.1f);
 	Add("MouseSensV", Kbm, TEXT("Sensitivity"), TEXT("Mouse Sensitivity (Vertical)"), TEXT("The same for up and down."), K::Slider, 5, 0.5f, 10, 0.1f);
 
+	Add("CameraView", TEXT("VIDEO"), TEXT("Camera"), TEXT("Camera View"), TEXT("First Person sees through the hero's eyes with a centred reticle, like Halo Infinite. Over the Shoulder sits behind one shoulder, like Gears of War. Classic follows from behind. R3, D-pad up or V switches in play."), K::Choice, 1, 0, 2, 1, TEXT(""), {TEXT("FIRST PERSON"), TEXT("OVER THE SHOULDER"), TEXT("CLASSIC")});
+	Add("Shoulder", TEXT("VIDEO"), TEXT("Camera"), TEXT("Shoulder"), TEXT("Which shoulder the camera sits behind in Over the Shoulder. LB, D-pad down or C swaps it in play."), K::Choice, 0, 0, 1, 1, TEXT(""), {TEXT("RIGHT"), TEXT("LEFT")});
+	Add("Reticle", TEXT("VIDEO"), TEXT("Camera"), TEXT("Reticle"), TEXT("The centred aiming reticle in First Person and Over the Shoulder, and with the blaster in any view."), K::Toggle, 1);
 	Add("FieldOfView", TEXT("VIDEO"), TEXT("Camera"), TEXT("Field of View"), TEXT("How wide the camera sees. Wider shows more of the islands; narrower feels closer to the hero."), K::Slider, 80, 70, 110, 1, TEXT("°"));
 	Add("CameraDistance", TEXT("VIDEO"), TEXT("Camera"), TEXT("Camera Distance"), TEXT("How far behind the hero the camera sits."), K::Slider, 650, 300, 1200, 25);
 

@@ -221,6 +221,11 @@ TSharedRef<SWidget> SDaedalusFieldMenu::BuildHero()
 			+ SVerticalBox::Slot().AutoHeight()[Stat(TEXT("Sword swings"), [](const ADaedalusHero& H) { return FString::FromInt(H.Swings); })]
 			+ SVerticalBox::Slot().AutoHeight()[Stat(TEXT("Down-thrust bounces"), [](const ADaedalusHero& H) { return FString::FromInt(H.Bounces); })]
 			+ SVerticalBox::Slot().AutoHeight()[Stat(TEXT("Falls caught (respawns)"), [](const ADaedalusHero& H) { return FString::FromInt(H.Respawns); })]
+			+ SVerticalBox::Slot().AutoHeight()[Stat(TEXT("EXP"), [](const ADaedalusHero& H) { return FString::FromInt(H.Exp); })]
+			+ SVerticalBox::Slot().AutoHeight()[Stat(TEXT("Foes beaten"), [](const ADaedalusHero& H) { return FString::FromInt(H.Kills); })]
+			+ SVerticalBox::Slot().AutoHeight()[Stat(TEXT("Blaster shots / hits"), [](const ADaedalusHero& H) { return FString::Printf(TEXT("%d / %d"), H.ShotsFired, H.Hits); })]
+			+ SVerticalBox::Slot().AutoHeight()[Stat(TEXT("Weapon"), [](const ADaedalusHero& H) { return H.WeaponName(); })]
+			+ SVerticalBox::Slot().AutoHeight()[Stat(TEXT("View"), [](const ADaedalusHero& H) { return H.ViewName(); })]
 			+ SVerticalBox::Slot().AutoHeight()[Stat(TEXT("Shield"), [](const ADaedalusHero& H) { return FString(H.bShielding ? TEXT("UP") : TEXT("DOWN")); })]
 			+ SVerticalBox::Slot().AutoHeight()[Stat(TEXT("Last ground"), [](const ADaedalusHero& H)
 			{
@@ -234,13 +239,17 @@ TSharedRef<SWidget> SDaedalusFieldMenu::BuildControls()
 	return SNew(SBorder).BorderImage(FieldWhite()).BorderBackgroundColor(Panel).Padding(FMargin(28.f, 22.f))
 		[
 			SNew(SVerticalBox)
-			+ SVerticalBox::Slot().AutoHeight()[Line(TEXT("ACTION"), TEXT("CONTROLLER  /  KEYBOARD & MOUSE"), true)]
+			+ SVerticalBox::Slot().AutoHeight()[Line(TEXT("ACTION"), TEXT("CONTROLLER (DEFAULT LAYOUT)  /  KEYBOARD & MOUSE"), true)]
 			+ SVerticalBox::Slot().AutoHeight()[Line(TEXT("Move"), TEXT("Left stick, D-pad  /  WASD"))]
 			+ SVerticalBox::Slot().AutoHeight()[Line(TEXT("Look"), TEXT("Right stick  /  Mouse"))]
 			+ SVerticalBox::Slot().AutoHeight()[Line(TEXT("Jump"), TEXT("A  /  Space"))]
-			+ SVerticalBox::Slot().AutoHeight()[Line(TEXT("Sword (down-thrust in the air)"), TEXT("X, RT  /  Left mouse, J"))]
-			+ SVerticalBox::Slot().AutoHeight()[Line(TEXT("Dash"), TEXT("B, RB  /  Shift"))]
-			+ SVerticalBox::Slot().AutoHeight()[Line(TEXT("Shield"), TEXT("LT, LB  /  Right mouse, K"))]
+			+ SVerticalBox::Slot().AutoHeight()[Line(TEXT("Attack (sword / blaster)"), TEXT("RT  /  Left mouse"))]
+			+ SVerticalBox::Slot().AutoHeight()[Line(TEXT("Melee (sword; down-thrust in air)"), TEXT("RB, R3  /  Q, J"))]
+			+ SVerticalBox::Slot().AutoHeight()[Line(TEXT("Aim: shield / zoom"), TEXT("LT  /  Right mouse, K"))]
+			+ SVerticalBox::Slot().AutoHeight()[Line(TEXT("Switch weapon"), TEXT("Y  /  1, 2, wheel"))]
+			+ SVerticalBox::Slot().AutoHeight()[Line(TEXT("Dash"), TEXT("B  /  Shift"))]
+			+ SVerticalBox::Slot().AutoHeight()[Line(TEXT("Sprint"), TEXT("L3  /  Ctrl"))]
+			+ SVerticalBox::Slot().AutoHeight()[Line(TEXT("Camera view / shoulder"), TEXT("D-pad up / LB, D-pad down  /  V / C"))]
 			+ SVerticalBox::Slot().AutoHeight()[Line(TEXT("Game Menu (pause, settings)"), TEXT("Menu  /  F1"))]
 			+ SVerticalBox::Slot().AutoHeight()[Line(TEXT("Field Menu (map, hero)"), TEXT("View  /  Tab, M"))]
 		];
