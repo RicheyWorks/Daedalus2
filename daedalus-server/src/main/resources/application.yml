@@ -207,6 +207,12 @@ daedalus:
     max-scan: ${DAEDALUS_JUKEBOX_MAX_SCAN:60000}
     cache-seconds: ${DAEDALUS_JUKEBOX_CACHE_SECONDS:30}
     studio-url: ${DAEDALUS_JUKEBOX_STUDIO_URL:}
+    indexer: ${DAEDALUS_JUKEBOX_INDEXER:true}
+    deploy-block: ${DAEDALUS_JUKEBOX_DEPLOY_BLOCK:0}
+    confirmations: ${DAEDALUS_JUKEBOX_CONFIRMATIONS:20}
+    log-chunk: ${DAEDALUS_JUKEBOX_LOG_CHUNK:5000000}
+    index-file: ${DAEDALUS_JUKEBOX_INDEX_FILE:}
+    scan-fallback-max: ${DAEDALUS_JUKEBOX_SCAN_FALLBACK_MAX:2000}
   # ----- Per-key rate limiting -----
   # The Resilience4j instances below are treated as *templates*: PerKeyRateLimitInterceptor
   # clones each into an independent bucket per caller (authenticated subject, else client IP),
@@ -229,7 +235,12 @@ resilience4j:
   ratelimiter:
     instances:
       jukebox:
-        limit-for-period: 120         # holder lookups + token HTML; the reader caches, this bounds a scraper
+        limit-for-period: 240         # holder lookups, token HTML/hash, arrangements (incl. 202 polls), coats; all cached
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
+      jukeboxRelay:
+        limit-for-period: 20          # radio relay connections per caller (each is a long-lived stream; also capped per listener)
         limit-refresh-period: 1m
         timeout-duration: 0
         register-health-indicator: false

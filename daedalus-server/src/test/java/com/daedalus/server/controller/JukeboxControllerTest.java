@@ -38,6 +38,7 @@ class JukeboxControllerTest {
     private MockMvc mvc;
     private boolean chainDown;
     private boolean radioDown;
+    private StudioArranger arranger = StudioArranger.STUB;
 
     /** Tokens 0..3: holder owns 1 and 3; 0..2 are revealed. */
     private final JsonRpc chain = (to, data) -> {
@@ -79,10 +80,11 @@ class JukeboxControllerTest {
             return List.of(
                     new RadioStation("far", "Radio Eins", "https://eins/stream", "", "Berlin", "Berlin", "", "DE", 52.5, 13.4),
                     new RadioStation("am", "KSUH 1450 AM", "http://ksuh/stream", "", "Washington", "Washington", "", "US", 47.31, -122.33),
-                    new RadioStation("fm", "KEXP 90.3 FM", "https://kexp/stream", "", "Washington", "Washington", "", "US", 47.62, -122.35));
+                    new RadioStation("fm", "KEXP 90.3 FM", "https://kexp/stream", "", "Washington", "Washington", "", "US", 47.62, -122.35),
+                    new RadioStation("ssrf", "Sneaky FM 99.9", "http://169.254.169.254/latest", "", "Nowhere", "", "", "ZZ", null, null));
         }, () -> 0);
         return MockMvcBuilders.standaloneSetup(new JukeboxController(new JukeboxService(p, p.hasContract() ? chain : null,
-                StudioArranger.STUB, radio))).setControllerAdvice(new ApiExceptionHandler()).build();
+                arranger, radio))).setControllerAdvice(new ApiExceptionHandler()).build();
     }
 
     private JsonNode read(MockHttpServletResponse r) throws Exception {
@@ -194,7 +196,7 @@ class JukeboxControllerTest {
         assertThat(st.get(0).get("id").asText()).isEqualTo("fm");
         assertThat(st.get(0).get("tier").asText()).isEqualTo("LOCAL_FM");
         assertThat(st.get(0).get("band").asText()).isEqualTo("FM");
-        assertThat(st.get(0).get("play").asText()).isEqualTo("https://kexp/stream");
+        assertThat(st.get(0).get("play").asText()).isEqualTo("/api/v1/jukebox/radio/stream/fm");   // same-origin: WebAudio can route it
         assertThat(st.get(1).get("tier").asText()).isEqualTo("LOCAL");
         assertThat(st.get(1).get("play").asText()).isEqualTo("/api/v1/jukebox/radio/stream/am");
         assertThat(st.get(2).get("tier").asText()).isEqualTo("ELSEWHERE");
@@ -204,7 +206,7 @@ class JukeboxControllerTest {
     void radioWithNoLocationStillAnswersAndSaysSo() throws Exception {
         JsonNode r = read(mvc.perform(get("/api/v1/jukebox/radio/stations")).andReturn().getResponse());
         assertThat(r.get("note").asText()).contains("No location");
-        assertThat(r.get("stations")).hasSize(3);
+        assertThat(r.get("stations")).hasSize(4);
         radioDown = true;
         mvc = boot(true, RDSONG);
         assertThat(mvc.perform(get("/api/v1/jukebox/radio/stations").param("place", "Nowhere"))
@@ -224,5 +226,110 @@ class JukeboxControllerTest {
         assertThat(mvc.perform(get("/api/v1/jukebox/studio/audio/e00015__jazz__studio__v1.mp3")).andReturn().getResponse().getStatus()).isEqualTo(404);
         assertThat(mvc.perform(get("/api/v1/jukebox/coat.png").param("hash", "0x" + "ab".repeat(32))).andReturn().getResponse().getStatus()).isEqualTo(404);
         assertThat(mvc.perform(get("/api/v1/jukebox/coat").param("hash", "0x" + "ab".repeat(32))).andReturn().getResponse().getStatus()).isEqualTo(404);
+    }
+
+    @Test
+    void aListedStationThatPointsAtPrivateSpaceIsStillNeverFetched() throws Exception {
+        mvc.perform(get("/api/v1/jukebox/radio/stations")).andReturn();               // lists "ssrf" (cloud metadata URL)
+        MockHttpServletResponse r = mvc.perform(get("/api/v1/jukebox/radio/stream/ssrf")).andReturn().getResponse();
+        assertThat(r.getStatus()).isEqualTo(502);
+        assertThat(r.getContentAsString()).doesNotContain("169.254");
+    }
+
+    @Test
+    void radioInputsAreValidated() throws Exception {
+        String[][] bad = {{"lat", "91", "lon", "0"}, {"lat", "0", "lon", "-181"}, {"lat", "NaN", "lon", "0"}, {"lat", "10"},
+                {"place", "<script>alert(1)</script>"}, {"place", "x".repeat(101)}, {"country", "USA"}, {"country", "1"}};
+        for (String[] q : bad) {
+            var req = get("/api/v1/jukebox/radio/stations");
+            for (int i = 0; i < q.length; i += 2) req = req.param(q[i], q[i + 1]);
+            assertThat(mvc.perform(req).andReturn().getResponse().getStatus()).as(String.join("=", q)).isEqualTo(400);
+        }
+        assertThat(mvc.perform(get("/api/v1/jukebox/radio/stations").param("place", "São Paulo, BR")).andReturn().getResponse().getStatus())
+                .isEqualTo(200);
+    }
+
+    @Test
+    void aRenderingArrangementCarriesItsJobAndRetryAfter() throws Exception {
+        arranger = (source, genre, studio) -> new StudioArranger.Arrangement(source, genre, studio, false, null, "rendering",
+                StudioArranger.Status.RENDERING, "job-7", 2500L);
+        mvc = boot(true, RDSONG);
+        MockHttpServletResponse r = mvc.perform(get("/api/v1/jukebox/arrangement").param("source", "seed:e00084").param("genre", "rock"))
+                .andReturn().getResponse();
+        assertThat(r.getHeader("Retry-After")).isEqualTo("3");
+        assertThat(r.getHeader("Cache-Control")).contains("no-store");
+        JsonNode a = read(r);
+        assertThat(a.get("status").asText()).isEqualTo("RENDERING");
+        assertThat(a.get("jobId").asText()).isEqualTo("job-7");
+        assertThat(a.get("retryAfterMs").asLong()).isEqualTo(2500);
+    }
+
+    @Test
+    void configReportsStudioHealthAndWhereHoldersComeFrom() throws Exception {
+        JsonNode c = read(mvc.perform(get("/api/v1/jukebox/config")).andReturn().getResponse());
+        assertThat(c.get("studioHealth").get("state").asText()).isEqualTo("OFF");
+        assertThat(c.get("holders").get("source").asText()).isEqualTo("scan");
+    }
+
+    /** Random junk into every jukebox endpoint: answers are 2xx/3xx/4xx or a deliberate 502/503, never a 500. */
+    @Test
+    void fuzzedInputsNeverCrashAnEndpoint() throws Exception {
+        java.util.Random rnd = new java.util.Random(4663);
+        String alphabet = "abcAZ09:/._-%~!@#$^&*()[]{}<>|\\\"' \t\u00e9\u4e2d\u0000+=?,;";
+        String[] paths = {"/api/v1/jukebox/arrangement?source=%s&genre=%s&studio=%s", "/api/v1/jukebox/tokens/%s/html",
+                "/api/v1/jukebox/tokens/%s/hash", "/api/v1/jukebox/coat.png?hash=%s&size=%s", "/api/v1/jukebox/coat?hash=%s",
+                "/api/v1/jukebox/radio/stations?place=%s&country=%s&lat=%s&lon=%s", "/api/v1/jukebox/radio/stream/%s",
+                "/api/v1/jukebox/studio/audio/%s", "/api/v1/jukebox/seeds/%s"};
+        int runs = 0;
+        for (int i = 0; i < 1500; i++) {
+            String tpl = paths[i % paths.length];
+            Object[] args = new Object[4];
+            for (int a = 0; a < 4; a++) {
+                StringBuilder b = new StringBuilder();
+                int n = rnd.nextInt(rnd.nextInt(10) == 0 ? 300 : 24);
+                for (int k = 0; k < n; k++) b.append(alphabet.charAt(rnd.nextInt(alphabet.length())));
+                if (rnd.nextInt(6) == 0) b.setLength(0);
+                if (rnd.nextInt(8) == 0) b.append(rnd.nextInt(3) == 0 ? "-1" : String.valueOf(rnd.nextLong()));
+                args[a] = java.net.URLEncoder.encode(b.toString(), java.nio.charset.StandardCharsets.UTF_8);
+            }
+            String url = String.format(tpl, args);
+            int status;
+            try {
+                status = mvc.perform(get(java.net.URI.create(url))).andReturn().getResponse().getStatus();
+            } catch (IllegalArgumentException e) {
+                continue;     // MockMvc itself refused the URI; a real container would 400 it
+            }
+            runs++;
+            assertThat(status).as(url).isNotEqualTo(500).isLessThan(600);
+            assertThat(status == 502 || status == 503 || status < 500).as(url).isTrue();
+        }
+        assertThat(runs).isGreaterThan(1200);
+    }
+
+    @Test
+    void r4RenderParamsAreValidatedAndPassedToTheStudio() throws Exception {
+        List<StudioArranger.Render> seen = new ArrayList<>();
+        arranger = new StudioArranger() {
+            @Override public Arrangement arrange(String source, String genre, boolean studio) {
+                return arrange(source, genre, studio, Render.DEFAULT);
+            }
+            @Override public Arrangement arrange(String source, String genre, boolean studio, Render render) {
+                seen.add(render);
+                return new Arrangement(source, genre, studio, false, null, "stub");
+            }
+        };
+        mvc = boot(true, RDSONG);
+        MockHttpServletResponse ok = mvc.perform(get("/api/v1/jukebox/arrangement").param("source", "token:1").param("genre", "jazz")
+                .param("format", "flac").param("preset", "crossfeed").param("vinyl", "40").param("noise", "-50")).andReturn().getResponse();
+        assertThat(ok.getStatus()).isEqualTo(200);
+        assertThat(seen).containsExactly(new StudioArranger.Render("flac", "crossfeed", 40, "-50"));
+        mvc.perform(get("/api/v1/jukebox/arrangement").param("source", "token:1")).andReturn();
+        assertThat(seen.get(1)).isEqualTo(StudioArranger.Render.DEFAULT);                 // surface noise is off by default
+        for (String[] bad : new String[][]{{"format", "wav"}, {"preset", "loudness"}, {"vinyl", "150"}, {"vinyl", "x"},
+                {"noise", "-10"}, {"noise", "on"}}) {
+            assertThat(mvc.perform(get("/api/v1/jukebox/arrangement").param("source", "token:1").param(bad[0], bad[1]))
+                    .andReturn().getResponse().getStatus()).as(bad[0] + "=" + bad[1]).isEqualTo(400);
+        }
+        assertThat(seen).hasSize(2);
     }
 }

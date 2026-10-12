@@ -7,13 +7,23 @@
 //  Tokens — a signed-in wallet's RDSong tokens (Robinhood Chain, read-only), each playing its own on-chain HTML
 //           in a sandboxed frame (opaque origin: it can't read the sign-in token).
 //  Radio  — Radio Browser stations around you, local FM first (ported from ComputerPets; see docs/rd-jukebox.md).
+//  Sound  — the player chain (jukebox-audio.js): gain, 10-band EQ + presets, tone filter, output and input devices,
+//           with an always-on ear-safety limiter at the end and a live waveform + spectrum.
+//  Keys   — a keyboard: per voice an instrument (synth or a real seed-song sample), wave, ADSR, brightness, blend.
+//
+// Everything the browser plays comes from this origin (seeds, rd-studio renders, the radio relay), so it can run
+// through WebAudio without CORS taint. Requests time out (the panel never hangs) and the studio's health is shown.
 //
 // Look: the panel is a realm .panel (same CSS variables, buttons, spacing); the 3D prop and the panel's accents take
 // their colours from the current world's own blocks (by world style), re-themed whenever the world changes.
 import * as THREE from "three";
+import * as SND from "./jukebox-audio.js";
 
 const API = "/api/v1/jukebox";
 const PLACE_KEY = "daedalus.jukebox.place";   // a typed radio place, remembered on this device only
+const SOUND_KEY = "daedalus.jukebox.sound";   // EQ / level / filter / voices, remembered on this device only
+const TIMEOUT_MS = 4000;                      // no jukebox request may hold the panel longer than this
+const POLL_MAX = 20;                          // 202 "rendering" polls per song before giving up quietly
 
 /** Each world style dresses the jukebox in its own blocks (names resolve through the realm's block colours). */
 const WORLD_LOOKS = {
@@ -27,10 +37,15 @@ const FALLBACK_HEX = 0x888888;
 
 const J = {
   config: null, seeds: [], tokens: [], me: null, tab: "songs", source: null, playing: false,
-  genre: "original", studio: false, radio: { list: [], note: "", loading: false, dead: new Set() },
+  genre: "original", studio: false, studioHealth: { state: "OFF" }, render: SND.sanitizeRender(null), radio: { list: [], note: "", loading: false, dead: new Set() },
   group: null, mats: null, skin: null, coat: null, light: null, look: null, style: null, where: null,
   audio: new Audio(),
+  snd: null, mediaSrc: null, lineIn: null, studio: { state: "OFF" }, poll: null,
+  voices: { lead: SND.defaultVoice(), bass: { ...SND.defaultVoice(), wave: "triangle", brightness: 0.35 }, pad: { ...SND.defaultVoice(), wave: "sine", attack: 0.4, release: 1.2, blend: 0.6 } },
+  voice: "lead", held: new Map(), samples: new Map(), sinks: [], inputs: [],
 };
+J.audio.crossOrigin = "anonymous";            // same-origin anyway; keeps the element routable through WebAudio
+J.audio.preload = "none";
 window.daedalusJukebox = J;   // for the browser harness
 
 const realm = () => window.daedalusRealm || {};
@@ -44,10 +59,14 @@ function el(tag, attrs = {}, ...kids) {
   e.append(...kids.filter(k => k != null));
   return e;
 }
-async function getJson(path, { auth = false } = {}) {
+async function getJson(path, { auth = false, timeout = TIMEOUT_MS } = {}) {
   const headers = { Accept: "application/json" };
   if (auth && realm().token) headers.Authorization = "Bearer " + realm().token;
-  const res = await fetch(path, { headers });
+  const ac = new AbortController(), timer = setTimeout(() => ac.abort(), timeout);
+  let res;
+  try { res = await fetch(path, { headers, signal: ac.signal }); }
+  catch (e) { throw Object.assign(new Error(e.name === "AbortError" ? "timed out" : "offline"), { status: 0 }); }
+  finally { clearTimeout(timer); }
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
     throw Object.assign(new Error(body.error || body.detail || "HTTP " + res.status), { status: res.status });
@@ -225,6 +244,8 @@ function buildProp() {
 
 let frameNo = 0;
 function animate(t) {
+  safetyCheck();
+  drawViz();
   if (J.group) {
     const beat = J.playing ? 0.5 + 0.5 * Math.sin(t / 180) : 0.2;
     [J.mats.tubeA, J.mats.tubeB].forEach((m, i) => { m.emissiveIntensity = 0.6 + (J.playing ? 1.2 * Math.abs(Math.sin(t / 240 + i)) : 0.2); });
@@ -275,6 +296,36 @@ const STYLE = `
   #jukebox input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--gold); }
   #jukebox .note-line { margin: 6px 0 0; min-height: 14px; }
   #jukebox iframe { width: 100%; height: 160px; border: 1px solid var(--line); border-radius: 10px; background: #000; margin-top: 8px; flex: 0 0 auto; }
+  #jukebox .jb-status { font-size: 10px; letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--line);
+    border-radius: 999px; padding: 2px 8px; color: var(--dim); white-space: nowrap; }
+  #jukebox .jb-status::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 5px;
+    background: var(--dim); vertical-align: 1px; }
+  #jukebox .jb-status.UP::before { background: #5ad17a; } #jukebox .jb-status.DEGRADED::before { background: var(--warn, #e0a33a); }
+  #jukebox .jb-status.DOWN::before { background: #e05050; }
+  #jukebox .jb-tabs { flex-wrap: wrap; } #jukebox .jb-tabs button { min-width: 56px; }
+  #jbViz { display: block; width: 100%; height: 44px; margin-bottom: 8px; border-radius: 8px; background: rgba(0,0,0,.3);
+    border: 1px solid var(--line); }
+  #jbTool { overflow-y: auto; flex: 1 1 auto; min-height: 60px; display: none; font-size: 12px; color: var(--dim); }
+  #jukebox.tool #jbTool { display: block; } #jukebox.tool #jbList, #jukebox.tool #jbControls { display: none !important; }
+  #jbTool .jb-field { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+  #jbTool .jb-field > span { flex: 0 0 74px; }
+  #jbTool .jb-field select, #jbTool .jb-field input[type=range] { flex: 1; min-width: 0; }
+  #jbTool input[type=range] { accent-color: var(--jb-a, var(--gold)); min-height: 28px; }
+  #jbTool .jb-seg { display: flex; gap: 4px; flex: 1; } #jbTool .jb-seg button { flex: 1; min-height: 36px; padding: 0 4px; }
+  #jbTool .jb-seg button.on { border-color: var(--jb-a, var(--gold)); box-shadow: inset 0 -3px 0 var(--jb-b, var(--accent)); color: var(--text); }
+  #jbTool .jb-eq { display: flex; justify-content: space-between; gap: 2px; height: 120px; margin: 6px 0 2px; }
+  #jbTool .jb-eq label { display: flex; flex-direction: column; align-items: center; flex: 1; font-size: 9px; gap: 2px; }
+  #jbTool .jb-eq input { writing-mode: vertical-lr; direction: rtl; width: 22px; height: 96px; min-height: 0; }
+  #jbTool .jb-sub { margin: 10px 0 2px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted, #999); }
+  #jbTool .jb-row { display: flex; align-items: center; gap: 8px; }
+  #jbTool .jb-val { min-width: 52px; font-variant-numeric: tabular-nums; }
+  #jbTool .jb-safe { color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; margin: 8px 0;
+    background: rgba(0,0,0,.25); }
+  #jbTool .jb-keys { position: relative; height: 92px; margin: 10px 0 4px; user-select: none; touch-action: none; }
+  #jbTool .jb-keys button { position: absolute; top: 0; bottom: 0; padding: 0; min-height: 0; border-radius: 0 0 6px 6px;
+    background: #f2f2ee; border: 1px solid var(--line); color: #555; font-size: 9px; display: flex; align-items: flex-end; justify-content: center; }
+  #jbTool .jb-keys button.black { background: #1b1b1f; color: #aaa; bottom: 38%; z-index: 1; }
+  #jbTool .jb-keys button.down { background: var(--jb-a, var(--gold)); color: #111; }
   #jukeboxBtn { position: fixed; left: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 6; }
   body.playing #jukeboxBtn, body.playing #jukebox { display: none; }
   @media (max-width: 720px) {
@@ -290,13 +341,17 @@ function panel() {
   document.head.append(el("style", {}, STYLE));
   const tab = (id, label) => el("button", { "data-tab": id, onclick: () => showTab(id) }, label);
   p = el("div", { id: "jukebox", class: "panel", role: "dialog", "aria-label": "Jukebox" },
-    el("div", { class: "jb-head" }, el("h2", {}, "JUKEBOX"), el("button", { id: "jbClose", title: "Close", "aria-label": "Close", onclick: () => openPanel(false) }, "×")),
-    el("div", { class: "jb-tabs", role: "tablist" }, tab("songs", "Songs"), tab("tokens", "My tokens"), tab("radio", "Radio")),
+    el("div", { class: "jb-head" }, el("h2", {}, "JUKEBOX"),
+      el("span", { class: "jb-status", id: "jbStatus", title: "rd-studio" }, "studio off"), el("button", { id: "jbClose", title: "Close", "aria-label": "Close", onclick: () => openPanel(false) }, "×")),
+    el("div", { class: "jb-tabs", role: "tablist" }, tab("songs", "Songs"), tab("tokens", "Tokens"), tab("radio", "Radio"),
+      tab("sound", "Sound"), tab("keys", "Keys")),
     el("div", { class: "jb-now", id: "jbNow" }, el("div", { class: "eq" }, el("i"), el("i"), el("i")),
       el("div", {}, el("b", { id: "jbNowTitle" }, "Nothing playing"), el("span", { id: "jbNowSub" }, "Pick a song")),
       el("button", { id: "jbPlay", "aria-label": "Play or stop", onclick: () => (J.playing ? stop() : play(J.source || firstItem())) }, "▶")),
+    el("canvas", { id: "jbViz", width: 640, height: 88, "aria-label": "Waveform and spectrum" }),
     el("div", { id: "jbTop" }),
     el("div", { class: "jb-list", id: "jbList" }),
+    el("div", { id: "jbTool" }),
     el("div", { class: "jb-controls", id: "jbControls" },
       el("select", { id: "jbGenre", "aria-label": "Genre", onchange: e => { J.genre = e.target.value; if (J.playing) play(J.source); } }),
       el("label", { class: "jb-check" }, el("input", { type: "checkbox", id: "jbStudio", onchange: e => { J.studio = e.target.checked; if (J.playing) play(J.source); } }), "Studio quality")),
@@ -328,8 +383,18 @@ function items() {
 const firstItem = () => items().find(i => !(i.kind === "radio" && J.radio.dead.has(i.id))) || null;
 const same = (a, b) => a && b && a.kind === b.kind && (a.id ?? a.name) === (b.id ?? b.name);
 
+const TOOLS = new Set(["sound", "keys"]);
 function render() {
-  panel();
+  panel().classList.toggle("tool", TOOLS.has(J.tab));
+  renderStatus();
+  if (TOOLS.has(J.tab)) {
+    for (const b of document.querySelectorAll("#jukebox .jb-tabs button")) {
+      b.classList.toggle("on", b.dataset.tab === J.tab); b.setAttribute("aria-selected", b.dataset.tab === J.tab);
+    }
+    document.getElementById("jbTop").textContent = "";
+    renderNow();
+    return J.tab === "sound" ? renderSound() : renderKeys();
+  }
   for (const b of document.querySelectorAll("#jukebox .jb-tabs button")) {
     b.classList.toggle("on", b.dataset.tab === J.tab);
     b.setAttribute("aria-selected", b.dataset.tab === J.tab);
@@ -381,10 +446,247 @@ function renderNow() {
   panel().classList.toggle("playing", J.playing);
 }
 
+// ---------------------------------------------------------------- sound engine (jukebox-audio.js)
+// Built on the first gesture (browsers only start audio after one). Every source joins the chain's input, so the
+// limiter is between it and the speakers; if checkChain() ever fails, the context is suspended (silence, not loud).
+function ensureSound() {
+  if (J.snd) { if (J.snd.ctx.state === "suspended" && !J.unsafe) J.snd.ctx.resume(); return J.snd; }
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return null;
+  const ctx = SND.trackGraph(new AC({ latencyHint: "playback" }));
+  J.snd = SND.createChain(ctx);
+  J.mediaSrc = ctx.createMediaElementSource(J.audio);   // from here the element is only heard through the chain
+  J.snd.connectSource(J.mediaSrc);
+  loadSound();
+  return J.snd;
+}
+function safetyCheck() {
+  if (!J.snd) return;
+  J.snd.guard();
+  if (!J.snd.checkChain()) {
+    J.unsafe = true; J.snd.ctx.suspend();
+    note("Sound stopped: the safety limiter is missing from the chain. Reload the page.");
+  }
+}
+function saveSound() {
+  if (!J.snd) return;
+  const st = J.snd.state;
+  localStorage.setItem(SOUND_KEY, JSON.stringify({ level: st.level, preset: st.preset, bands: st.bands, filter: st.filter, voices: J.voices, render: J.render }));
+}
+function loadSound() {
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(SOUND_KEY) || "{}") || {}; } catch (e) { saved = {}; }
+  const c = J.snd;
+  c.setLevel(saved.level);
+  if (saved.preset === "custom" && Array.isArray(saved.bands)) saved.bands.slice(0, 10).forEach((db, i) => c.setBand(i, db));
+  else c.setPreset(saved.preset);
+  c.setFilter(saved.filter);
+  J.render = SND.sanitizeRender(saved.render);
+  if (saved.voices && typeof saved.voices === "object") for (const k of Object.keys(J.voices)) J.voices[k] = SND.sanitizeVoice(saved.voices[k]);
+}
+
+async function listDevices() {
+  if (!navigator.mediaDevices?.enumerateDevices) return;
+  const all = await navigator.mediaDevices.enumerateDevices().catch(() => []);
+  J.sinks = all.filter(d => d.kind === "audiooutput");
+  J.inputs = all.filter(d => d.kind === "audioinput");
+}
+async function setOutput(id) {
+  const ctx = J.snd?.ctx;
+  if (!ctx || typeof ctx.setSinkId !== "function") return note("This browser can't switch outputs: using the system default.");
+  try { await ctx.setSinkId(id === "default" ? "" : id); note("Output switched."); }
+  catch (e) { note("That output isn't available."); }
+}
+async function setInput(id) {
+  if (J.lineIn) { J.lineIn.off(); J.lineIn.stream.getTracks().forEach(t => t.stop()); J.lineIn = null; }
+  if (id === "player") return note("");
+  const c = ensureSound();
+  if (!c || !navigator.mediaDevices?.getUserMedia) return note("No line-in on this browser.");
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: id === "any" ? undefined : { exact: id },
+      echoCancellation: true, noiseSuppression: false, autoGainControl: false } });
+    const src = c.ctx.createMediaStreamSource(stream);
+    J.lineIn = { stream, off: c.connectSource(src) };
+    note("Line in is live through the EQ and limiter. Use headphones to avoid feedback.");
+    listDevices().then(() => J.tab === "sound" && renderSound());
+  } catch (e) { note("Microphone permission was not given."); }
+}
+
+/** The waveform (line) over the spectrum (bars), in the world's accent colours. */
+let vizBuf = null, vizFreq = null;
+function drawViz() {
+  const cv = document.getElementById("jbViz");
+  if (!cv || !panel().classList.contains("open")) return;
+  const g = cv.getContext("2d"), w = cv.width, h = cv.height;
+  g.clearRect(0, 0, w, h);
+  const cs = getComputedStyle(document.documentElement);
+  const a = cs.getPropertyValue("--jb-a").trim() || "#e0b04a", b = cs.getPropertyValue("--jb-b").trim() || "#5ac8e0";
+  const an = J.snd?.analyser;
+  if (!an) { g.fillStyle = b; g.globalAlpha = .35; g.fillRect(0, h / 2, w, 1); g.globalAlpha = 1; return; }
+  vizFreq ||= new Uint8Array(an.frequencyBinCount); vizBuf ||= new Uint8Array(an.fftSize);
+  an.getByteFrequencyData(vizFreq); an.getByteTimeDomainData(vizBuf);
+  const bars = 48, bw = w / bars;
+  g.fillStyle = b; g.globalAlpha = .55;
+  for (let i = 0; i < bars; i++) {                       // log-spaced bins: bass is not one bar wide
+    const bin = Math.min(vizFreq.length - 1, Math.floor(Math.pow(vizFreq.length, i / bars)));
+    const v = vizFreq[bin] / 255;
+    g.fillRect(i * bw + 1, h - v * h, bw - 2, v * h);
+  }
+  g.globalAlpha = 1; g.strokeStyle = a; g.lineWidth = 2; g.beginPath();
+  for (let i = 0; i < vizBuf.length; i += 4) {
+    const x = i / vizBuf.length * w, y = vizBuf[i] / 255 * h;
+    i ? g.lineTo(x, y) : g.moveTo(x, y);
+  }
+  g.stroke();
+}
+
+function field(label, control) { return el("label", { class: "jb-field" }, el("span", {}, label), control); }
+function select(id, options, value, onchange) {
+  const s = el("select", { id, onchange: e => onchange(e.target.value) });
+  for (const [v, t] of options) s.append(el("option", { value: v }, t));
+  s.value = value; return s;
+}
+function slider(id, min, max, step, value, oninput) {
+  return el("input", { type: "range", id, min, max, step, value, oninput: e => oninput(+e.target.value) });
+}
+const cap = s => s[0].toUpperCase() + s.slice(1);
+
+function renderSound() {
+  const host = document.getElementById("jbTool"); host.textContent = "";
+  const c = ensureSound();
+  if (!c) { host.append(el("div", { class: "note-line" }, "This browser has no WebAudio.")); return; }
+  const st = c.state;
+  const seg = el("div", { class: "jb-seg", role: "radiogroup", "aria-label": "Gain" },
+    ...Object.keys(SND.GAIN_LEVELS).map(l => el("button", { class: st.level === l ? "on" : "", "aria-pressed": st.level === l,
+      onclick: () => { c.setLevel(l); saveSound(); renderSound(); } }, cap(l))));
+  host.append(field("Gain", seg));
+  host.append(field("EQ", select("jbPreset", [...Object.keys(SND.PRESETS).map(p => [p, cap(p)]), ...(st.preset === "custom" ? [["custom", "Custom"]] : [])],
+    st.preset, v => { c.setPreset(v); saveSound(); renderSound(); })));
+  const eq = el("div", { class: "jb-eq" });
+  SND.EQ_BANDS.forEach((f, i) => eq.append(el("label", { title: `${f} Hz` },
+    slider(`jbBand${i}`, -SND.EQ_RANGE_DB, SND.EQ_RANGE_DB, 0.5, st.bands[i], v => { c.setBand(i, v); saveSound(); document.getElementById("jbPreset").value = "custom"; }),
+    f >= 1000 ? `${f / 1000}k` : String(f))));
+  host.append(eq);
+  host.append(field("Tone", select("jbFilter", Object.keys(SND.FILTERS).map(f => [f, cap(f)]), st.filter, v => { c.setFilter(v); saveSound(); })));
+  const canSink = typeof c.ctx.setSinkId === "function";
+  host.append(field("Output", select("jbOut", [["default", canSink ? "System default" : "System default (fixed in this browser)"],
+    ...J.sinks.filter(d => d.deviceId && d.deviceId !== "default").map((d, i) => [d.deviceId, d.label || `Output ${i + 1}`])], "default", setOutput)));
+  host.lastChild.querySelector("select").disabled = !canSink;
+  host.append(field("Input", select("jbIn", [["player", "Jukebox player"], ["any", "Line in / mic"],
+    ...J.inputs.filter(d => d.deviceId && d.deviceId !== "default").map((d, i) => [d.deviceId, d.label || `Input ${i + 1}`])],
+    J.lineIn ? "any" : "player", setInput)));
+  // rd-studio r4 render options: applied by the studio to the rendered file (and cached per option set)
+  const r = J.render, setR = (k, v) => { J.render = SND.sanitizeRender({ ...J.render, [k]: v }); saveSound(); if (J.source && J.source.kind !== "radio") play(J.source); };
+  host.append(el("div", { class: "jb-sub" }, "Studio render"));
+  host.append(field("Headphones", select("jbPhones", SND.HEADPHONE_PRESETS.map(p => [p, cap(p)]), r.preset, v => setR("preset", v))));
+  const vin = slider("jbVinyl", 0, 100, 10, r.vinyl, v => { vinOut.textContent = v ? `${v}` : "off"; });
+  const vinOut = el("span", { class: "jb-val" }, r.vinyl ? `${r.vinyl}` : "off");
+  vin.onchange = e => { setR("vinyl", +e.target.value); renderSound(); };
+  host.append(field("Vinyl", el("div", { class: "jb-row" }, vin, vinOut)));
+  const noiseOn = el("input", { type: "checkbox", id: "jbNoise", checked: r.noise !== "off", disabled: !r.vinyl,
+    onchange: e => { setR("noise", e.target.checked ? "-48" : "off"); renderSound(); } });
+  const noiseLvl = slider("jbNoiseDb", -60, -30, 1, r.noise === "off" ? -48 : +r.noise, () => {});
+  noiseLvl.disabled = r.noise === "off" || !r.vinyl;
+  noiseLvl.onchange = e => setR("noise", String(e.target.value));
+  host.append(field("Surface noise", el("div", { class: "jb-row" }, noiseOn, noiseLvl, el("span", { class: "jb-val" }, r.noise === "off" ? "off" : `${r.noise} dB`))));
+  host.append(field("Hi-Res", el("label", { class: "jb-row" }, el("input", { type: "checkbox", id: "jbFlac", checked: r.format === "flac",
+    onchange: e => setR("format", e.target.checked ? "flac" : "mp3") }), el("span", {}, "24-bit FLAC"))));
+  host.append(el("div", { class: "jb-safe", id: "jbSafe" },
+    "Ear-safety limiter: always on. Everything you hear passes a -10 dB, 20:1 limiter with a fixed ceiling."));
+  if (J.source?.kind === "token" && !J.audio.src.includes("/studio/audio/")) host.append(el("div", { class: "note-line" },
+    "This token's player runs its own audio in a sandbox, so this EQ can't reach it until rd-studio renders it."));
+}
+
+const KEY_ROW = "awsedftgyhujkolp;'";        // a computer keyboard row, C4 upwards (white + black keys)
+function renderKeys() {
+  const host = document.getElementById("jbTool"); host.textContent = "";
+  const c = ensureSound();
+  if (!c) { host.append(el("div", { class: "note-line" }, "This browser has no WebAudio.")); return; }
+  const v = J.voices[J.voice];
+  const set = (k, val) => { J.voices[J.voice] = SND.sanitizeVoice({ ...J.voices[J.voice], [k]: val }); saveSound(); };
+  host.append(field("Voice", el("div", { class: "jb-seg" }, ...Object.keys(J.voices).map(k =>
+    el("button", { class: J.voice === k ? "on" : "", "aria-pressed": J.voice === k, onclick: () => { J.voice = k; renderKeys(); } }, cap(k))))));
+  const samples = J.seeds.filter(s => s.audio).slice(0, 40).map(s => [`sample:${s.name}`, `Sample: ${s.title}`]);
+  host.append(field("Instrument", select("jbInst", [["synth", "Synth"], ...samples], v.instrument, val => { set("instrument", val); loadSample(val); })));
+  host.append(field("Wave", select("jbWave", SND.WAVES.map(w => [w, cap(w)]), v.wave, val => set("wave", val))));
+  for (const [k, label, min, max, step] of [["attack", "Attack", 0.001, 2, 0.001], ["decay", "Decay", 0.001, 3, 0.001],
+    ["sustain", "Sustain", 0, 1, 0.01], ["release", "Release", 0.005, 4, 0.005], ["brightness", "Brightness", 0, 1, 0.01], ["blend", "Blend", 0, 1, 0.01]])
+    host.append(field(label, slider(`jb_${k}`, min, max, step, v[k], val => set(k, val))));
+  // two octaves from C4 (C3 for the bass voice)
+  const keys = el("div", { class: "jb-keys", id: "jbKeys" });
+  const whites = [0, 2, 4, 5, 7, 9, 11], base = J.voice === "bass" ? 48 : 60;
+  let wi = 0;
+  for (let n = 0; n < 24; n++) {
+    const black = !whites.includes(n % 12), ww = 100 / 14;
+    const left = black ? (wi * ww - ww * 0.3) : wi * ww;
+    const label = KEY_ROW[n] && n < KEY_ROW.length ? KEY_ROW[n].toUpperCase() : "";
+    const k = el("button", { class: black ? "black" : "", "data-note": base + n, "aria-label": `note ${base + n}`,
+      style: `left:${left}%;width:${black ? ww * 0.6 : ww}%` }, label);
+    k.onpointerdown = e => { e.preventDefault(); k.setPointerCapture(e.pointerId); press(base + n); };
+    k.onpointerup = k.onpointercancel = () => release(base + n);
+    keys.append(k);
+    if (!black) wi++;
+  }
+  host.append(keys);
+  host.append(el("div", { class: "note-line" }, SND.VOICE_SCHEMA_READY ? "" :
+    "Plays live here. rd-studio can't render custom voices yet (waiting on Prometheus's voice schema)."));
+  loadSample(v.instrument);
+}
+async function loadSample(inst) {
+  if (!inst.startsWith("sample:") || J.samples.has(inst) || !J.snd) return;
+  const seed = J.seeds.find(s => `sample:${s.name}` === inst);
+  if (!seed?.audio) return;
+  J.samples.set(inst, null);                            // in flight
+  try {
+    const ac = new AbortController(), timer = setTimeout(() => ac.abort(), 8000);
+    const buf = await (await fetch(seed.audio, { signal: ac.signal })).arrayBuffer();
+    clearTimeout(timer);
+    const full = await J.snd.ctx.decodeAudioData(buf);
+    const len = Math.min(full.length, Math.floor(full.sampleRate * 2));   // a 2 s slice is the instrument
+    const slice = J.snd.ctx.createBuffer(full.numberOfChannels, len, full.sampleRate);
+    for (let ch = 0; ch < full.numberOfChannels; ch++) slice.copyToChannel(full.getChannelData(ch).subarray(0, len), ch);
+    J.samples.set(inst, slice);
+  } catch (e) { J.samples.delete(inst); note("That sample didn't load: using the synth."); }
+}
+function press(n) {
+  const c = ensureSound(); if (!c || J.held.has(n) || J.unsafe) return;
+  const v = J.voices[J.voice];
+  J.held.set(n, SND.noteOn(c, v, n, J.samples.get(v.instrument) || null));
+  document.querySelector(`#jbKeys [data-note="${n}"]`)?.classList.add("down");
+}
+function release(n) {
+  J.held.get(n)?.stop(); J.held.delete(n);
+  document.querySelector(`#jbKeys [data-note="${n}"]`)?.classList.remove("down");
+}
+addEventListener("keydown", e => {
+  if (J.tab !== "keys" || e.repeat || e.metaKey || e.ctrlKey || /INPUT|SELECT|TEXTAREA/.test(document.activeElement?.tagName || "")) return;
+  const i = KEY_ROW.indexOf(e.key.toLowerCase()); if (i < 0 || !panel().classList.contains("open")) return;
+  e.preventDefault(); press((J.voice === "bass" ? 48 : 60) + i);
+});
+addEventListener("keyup", e => { const i = KEY_ROW.indexOf(e.key.toLowerCase()); if (i >= 0) release((J.voice === "bass" ? 48 : 60) + i); });
+
+// ---------------------------------------------------------------- studio status
+function renderStatus() {
+  const chip = document.getElementById("jbStatus"); if (!chip) return;
+  const st = J.config?.studio ? (J.studioHealth.state || "UP") : "OFF";
+  chip.className = "jb-status " + st;
+  chip.textContent = { UP: "studio up", DEGRADED: "studio slow", DOWN: "studio down", OFF: "studio off" }[st] || "studio";
+  const h = J.studioHealth;
+  chip.title = h.lastError ? `rd-studio: ${h.lastError}` : `rd-studio${h.engine ? " " + h.engine : ""}${h.p95Ms != null ? `, p95 ${h.p95Ms} ms` : ""}`;
+}
+async function refreshStatus() {
+  try {
+    const c = await getJson(`${API}/config`);
+    J.config = { ...J.config, ...c }; J.studioHealth = c.studioHealth || { state: "OFF" };
+  } catch (e) { J.studioHealth = { state: "DOWN", lastError: "the realm didn't answer" }; }
+  renderStatus();
+}
+
 // ---------------------------------------------------------------- playing
 async function play(it) {
   if (!it) return;
   stop(true);
+  ensureSound();                                   // a tap started this: the audio context may start now
   J.source = it; J.playing = true;
   const stage = document.getElementById("jbStage");
   note("");
@@ -395,16 +697,58 @@ async function play(it) {
   }
   if (it.kind === "token") tokenSkin(it.id); else growSkin("seed:" + it.name);
   const key = it.kind === "token" ? "token:" + it.id : "seed:" + it.name;
-  let arr = null;
-  try { arr = await getJson(`${API}/arrangement?source=${encodeURIComponent(key)}&genre=${J.genre}&studio=${J.studio}`); }
-  catch (e) { /* arrangement seam down: play the original */ }
+  const arr = await arrangement(key);
   if (J.source !== it) return;
-  note(arr ? arr.note : "");
-  if (arr && arr.url) playUrl(arr.url, () => note("That render didn't load: try again."));
+  note(arr ? arr.note : "rd-studio didn't answer in time: playing the original");
+  if (arr && arr.url) playUrl(arr.url, () => retryRender(it, key));
   else if (it.kind === "seed" && it.audio) playUrl(it.audio, () => note("That song didn't load."));
   else if (it.kind === "token") stage.append(el("iframe", { src: `${API}/tokens/${it.id}/html`, sandbox: "allow-scripts", allow: "autoplay", title: `Token #${it.id}` }));
-  else { J.playing = false; note("No rd-studio render of this seed yet."); }
+  else if (!(arr && arr.status === "RENDERING")) { J.playing = false; note("No rd-studio render of this seed yet."); }
+  if (arr && arr.status === "RENDERING") pollRender(it, key, arr, 1);
   render();
+}
+/** One arrangement ask, bounded by TIMEOUT_MS: null when the realm or studio is slow (the original plays). */
+async function arrangement(key) {
+  const r = J.render, q = new URLSearchParams({ source: key, genre: J.genre, studio: String(!!J.studio) });
+  if (r.format !== "mp3") q.set("format", r.format);           // rd-studio r4 render options; defaults stay off the query
+  if (r.preset !== "neutral") q.set("preset", r.preset);
+  if (r.vinyl) q.set("vinyl", String(r.vinyl));
+  if (r.vinyl && r.noise !== "off") q.set("noise", r.noise);
+  try { return await getJson(`${API}/arrangement?${q}`); }
+  catch (e) { return null; }
+}
+/**
+ * rd-studio answered 202 (rendering): the original keeps playing, and we ask again after its Retry-After (bounded
+ * attempts, backing off) until the render is READY, then switch to it, if the listener is still on the same song.
+ */
+function pollRender(it, key, arr, attempt) {
+  clearTimeout(J.poll);
+  if (attempt > POLL_MAX) return note("rd-studio is still rendering: staying on the original.");
+  const wait = Math.min(30_000, Math.max(500, arr.retryAfterMs || 2000) * (attempt > 5 ? 2 : 1));
+  note(`rd-studio is rendering ${J.genre}${J.studio ? " (studio)" : ""}: playing the original meanwhile…`);
+  const want = { genre: J.genre, studio: J.studio };
+  J.poll = setTimeout(async () => {
+    if (J.source !== it || J.genre !== want.genre || J.studio !== want.studio) return;
+    const next = await arrangement(key);
+    if (J.source !== it || J.genre !== want.genre || J.studio !== want.studio) return;
+    if (next && next.url) {
+      J.playing = true; note(next.note);
+      playUrl(next.url, () => retryRender(it, key));
+      return render();
+    }
+    if (next && next.status === "RENDERING") return pollRender(it, key, next, attempt + 1);
+    note(next ? next.note : "rd-studio stopped answering: staying on the original.");
+  }, wait);
+}
+/** A render's file vanished (evicted or a new engine): ask for the arrangement once more, then give up on it. */
+async function retryRender(it, key) {
+  if (J.source !== it || it.retried) return note("That render didn't load: try again.");
+  it.retried = true;
+  const arr = await arrangement(key);
+  if (J.source !== it) return;
+  if (arr && arr.url) { J.playing = true; playUrl(arr.url, () => note("That render didn't load: try again.")); render(); }
+  else if (arr && arr.status === "RENDERING") pollRender(it, key, arr, 1);
+  else note("That render didn't load: try again.");
 }
 function playUrl(url, onDead) {
   J.audio.onerror = () => { if (J.playing) { J.playing = false; renderNow(); onDead(); } };
@@ -417,6 +761,7 @@ function next(after) {
   if (nxt) play(nxt); else render();
 }
 function stop(quiet) {
+  clearTimeout(J.poll);
   J.audio.onerror = null; J.audio.pause(); J.audio.removeAttribute("src"); J.audio.load();
   J.playing = false;
   const stage = document.getElementById("jbStage"); if (stage) stage.textContent = "";
@@ -480,8 +825,12 @@ function fitUnderHeader() {
 async function boot() {
   try { J.config = await getJson(`${API}/config`); } catch (e) { return; }
   if (!J.config.enabled) return;                 // the jukebox is off on this server
+  J.studioHealth = J.config.studioHealth || { state: "OFF" };
   try { J.seeds = (await getJson(`${API}/seeds`)).seeds; } catch (e) { J.seeds = []; }
   render();
+  setInterval(refreshStatus, 30_000);
+  listDevices();
+  navigator.mediaDevices?.addEventListener?.("devicechange", () => listDevices().then(() => J.tab === "sound" && renderSound()));
   requestAnimationFrame(animate);
   window.addEventListener("realm:islands", watchWorld);
   window.addEventListener("resize", fitUnderHeader);
