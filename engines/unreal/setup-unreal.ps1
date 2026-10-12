@@ -820,7 +820,10 @@ if ($Open -and -not $WhatIfOnly) {
     $exe = if ($engine) { Join-Path $engine.Path "Engine\Binaries\Win64\UnrealEditor.exe" } else { "" }
     if ($exe -and (Test-Path $exe)) {
         Write-Host "Opening $Project in Unreal $($engine.Version)..." -ForegroundColor Cyan
-        Start-Process -FilePath $exe -ArgumentList "`"$Project`""
+        # multi-editor.ps1 -Join leaves the Multi-User session arguments here (ADR-059).
+        $extraFile = Join-Path (Join-Path (Split-Path $Project) "Saved\Daedalus") "editor-args.txt"
+        $extra = if (Test-Path $extraFile) { (Get-Content $extraFile -Raw).Trim() } else { "" }
+        Start-Process -FilePath $exe -ArgumentList ("`"$Project`" " + $extra).Trim()
         # Answer the startup dialogs (rebuild modules, restore packages) so nobody has to click them.
         $watch = Join-Path $PSScriptRoot "dialog-watch.ps1"
         if (Test-Path $watch) {
