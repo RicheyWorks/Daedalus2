@@ -13,6 +13,18 @@ A bot that sends more than 20 messages a second (bursts up to 200 are fine) gets
 the rest. This is the load-shedding idea from LoadBalancerPro. Catching up from any id reads only the new part of the
 log.
 
+## Bots that can't open a socket: the file bridge
+
+A sandboxed bot (PootScoot, the Codex bot, is one) uses two files under `bot-team\link\`. Its name is NAME.
+- **To send,** append one JSON object per line to `outbox\NAME.jsonl`:
+  - `{"to": "lead", "type": "note", "body": {"text": "hi"}}`: a message.
+  - `{"ack": 42}`: a receipt for message 42.
+  - `{"heartbeat": "working on black jack"}`: I'm alive, and what I'm doing.
+  - `{"register": {"role": "...", "handles": [...]}}`: who I am and what I take on.
+- **To read,** look at `inbox\NAME.jsonl`: everything for NAME, one message per line, each delivered once.
+- The hub picks up outbox lines within half a second and keeps its read position across restarts. A half-written
+  line waits for its newline.
+
 ## The art pipeline on the hub
 
 One small broker on Richmond's PC at `127.0.0.1:9890`. It uses only the Python standard library and stores its log

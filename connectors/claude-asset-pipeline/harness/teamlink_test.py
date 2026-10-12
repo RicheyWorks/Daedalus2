@@ -113,6 +113,41 @@ check("a long log: catching up from near the end doesn't rescan it (200 reads of
 check("reads past the end are empty, reads from 0 are whole", b._since(b.last + 5) == [] and len(b._since(0)) == b.last)
 shutil.rmtree(d)
 
+# 1c. The file bridge: a bot that can't open a socket talks through outbox/inbox files.
+d = tempfile.mkdtemp(prefix="files-")
+b = teamlink.Broker(d)
+fb = teamlink.FileBridge(b, d)
+with open(os.path.join(d, "outbox", "pootscoot.jsonl"), "w", encoding="utf-8") as f:
+    f.write(json.dumps({"register": {"role": "Codex", "handles": ["code"]}}) + "\n")
+    f.write(json.dumps({"heartbeat": "black jack"}) + "\n")
+    f.write(json.dumps({"to": "lead", "type": "note", "body": {"text": "hello from files"}}) + "\n")
+    f.write('{"to": "lead", "type": "note", "body": {"text": "half wri')   # no newline yet
+fb.pump()
+got, _ = b.wait("lead", 0, 0)
+check("files: a whole outbox line becomes a hub message from that bot",
+      [(m["from"], m["body"].get("text")) for m in got if m["type"] == "note"] == [("pootscoot", "hello from files")], got)
+check("files: a half-written line waits for its newline", len([m for m in got if m["type"] == "note"]) == 1)
+check("files: register and heartbeat work", b.directory()["pootscoot"]["role"] == "Codex"
+      and b.presence()["pootscoot"]["status"] == "black jack")
+mid = b.send("lead", "pootscoot", "note", {"text": "welcome"})
+b.send("lead", "*", "note", {"text": "to all"})
+fb.pump()
+inbox = [json.loads(l) for l in open(os.path.join(d, "inbox", "pootscoot.jsonl"), encoding="utf-8")]
+check("files: messages for the bot land in its inbox, once", [m["body"]["text"] for m in inbox] == ["welcome", "to all"], inbox)
+fb.pump()
+check("files: nothing is delivered twice", len(open(os.path.join(d, "inbox", "pootscoot.jsonl"), encoding="utf-8").readlines()) == 2)
+with open(os.path.join(d, "outbox", "pootscoot.jsonl"), "a", encoding="utf-8") as f:
+    f.write('te"}}\n' + json.dumps({"ack": mid}) + "\nnot json\n")
+fb2 = teamlink.FileBridge(b, d)   # a restart: positions come back from disk
+fb2.pump()
+got, _ = b.wait("lead", 0, 0)
+check("files: the finished line arrives after a restart, without repeating the first",
+      [m["body"].get("text") for m in got if m["type"] == "note" and m["from"] == "pootscoot"] == ["hello from files", "half write"], got)
+check("files: an ack line is a receipt", ("pootscoot", mid) in b.acked)
+err = [m for m in b.wait("pootscoot", 0, 0)[0] if m["type"] == "error"]
+check("files: a bad line gets an error message back, the bridge keeps going", err and err[0]["body"]["line"] == "not json", err)
+shutil.rmtree(d)
+
 # 2. Over HTTP, the way both teams use it.
 d = tempfile.mkdtemp(prefix="link-")
 box = {}

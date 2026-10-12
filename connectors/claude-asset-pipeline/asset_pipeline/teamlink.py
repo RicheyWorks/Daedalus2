@@ -388,8 +388,101 @@ def make_handler(broker):
     return H
 
 
-def serve(folder=DEFAULT_DIR, port=PORT, ready=None, bus_json=None):
+class FileBridge:
+    """For bots that can read and write files but may not open a socket (a sandboxed coding agent, say).
+
+    A bot named NAME appends one JSON object per line to   <folder>\\outbox\\NAME.jsonl :
+        {"to": "lead", "type": "note", "body": {"text": "hi"}, "topic": "plan"}      a message
+        {"ack": 42}                                                                  a receipt
+        {"heartbeat": "working on black jack"}                                       I'm alive
+        {"register": {"role": "...", "handles": [...], "about": "..."}}             who I am
+    and reads what's for it, one message per line, from     <folder>\\inbox\\NAME.jsonl .
+    Having an outbox file is what makes a bot a file bot. Nothing is lost across restarts: read and delivered
+    positions are kept in <folder>\\outbox\\.positions.json.
+    """
+
+    def __init__(self, broker, folder):
+        self.broker = broker
+        self.outbox = os.path.join(folder, "outbox")
+        self.inbox = os.path.join(folder, "inbox")
+        os.makedirs(self.outbox, exist_ok=True)
+        os.makedirs(self.inbox, exist_ok=True)
+        self.state_path = os.path.join(self.outbox, ".positions.json")
+        try:
+            with open(self.state_path, encoding="utf-8") as f:
+                self.state = json.load(f)
+        except (OSError, ValueError):
+            self.state = {"read": {}, "delivered": {}}
+
+    def _save(self):
+        tmp = self.state_path + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(self.state, f)
+        os.replace(tmp, self.state_path)
+
+    def bots(self):
+        return sorted(n[:-6] for n in os.listdir(self.outbox) if n.endswith(".jsonl"))
+
+    def pump(self):
+        """Read new outbox lines into the hub and deliver new hub messages to inboxes. Returns lines handled."""
+        handled = 0
+        for name in self.bots():
+            path = os.path.join(self.outbox, name + ".jsonl")
+            pos = self.state["read"].get(name, 0)
+            if os.path.getsize(path) < pos:
+                pos = 0   # the bot started its outbox over
+            with open(path, "rb") as f:
+                f.seek(pos)
+                data = f.read()
+            done = data.rfind(b"\n") + 1   # only whole lines; a half-written one waits for its newline
+            for raw in data[:done].decode("utf-8", "replace").splitlines():
+                raw = raw.strip()
+                if not raw:
+                    continue
+                handled += 1
+                try:
+                    m = json.loads(raw)
+                    if "ack" in m:
+                        self.broker.ack(name, int(m["ack"]))
+                    elif "heartbeat" in m:
+                        self.broker.heartbeat(name, str(m["heartbeat"]))
+                    elif "register" in m:
+                        r = m["register"] or {}
+                        self.broker.register(name, r.get("role", ""), r.get("handles"), r.get("about", ""))
+                    else:
+                        self.broker.send(name, m.get("to", "*"), m.get("type", "note"), m.get("body"),
+                                         m.get("reply_to"), uid=m.get("id"), topic=m.get("topic"))
+                except (ValueError, KeyError, TypeError) as e:
+                    self.broker.send("hub", name, "error", {"line": raw[:200], "why": str(e)[:200]})
+            self.state["read"][name] = pos + done
+            if done:   # writing to its outbox counts as being alive
+                self.broker.heartbeat(name, self.broker.seen.get(name, (0, ""))[1])
+            after = self.state["delivered"].get(name, 0)
+            with self.broker.cond:
+                out = self.broker._for(name, after)
+            if out:
+                with open(os.path.join(self.inbox, name + ".jsonl"), "a", encoding="utf-8") as f:
+                    for m in out:
+                        f.write(json.dumps(m, ensure_ascii=False) + "\n")
+                self.state["delivered"][name] = out[-1]["id"]
+                handled += len(out)
+        if handled:
+            self._save()
+        return handled
+
+    def run(self, every=0.5):
+        while True:
+            try:
+                self.pump()
+            except OSError:
+                pass
+            time.sleep(every)
+
+
+def serve(folder=DEFAULT_DIR, port=PORT, ready=None, bus_json=None, files=True):
     broker = Broker(folder)
+    if files:   # sandboxed bots talk through files; the bridge runs beside the HTTP server
+        threading.Thread(target=FileBridge(broker, folder).run, daemon=True).start()
     server = ThreadingHTTPServer(("127.0.0.1", port), make_handler(broker))
     server.daemon_threads = True
     if bus_json:   # discovery for the Blender team's client (BUS-SCHEMA: art\BUS.json)
