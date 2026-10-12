@@ -253,26 +253,20 @@ void ADaedalusStarbloom::BeginPlay()
 	SetArt(TEXT("Prop"), FString::Printf(TEXT("Prop_Orr_Herb_%s_Bud"), *Species), 2.5f);
 }
 
-float ADaedalusStarbloom::AbsoluteHour() const
-{
-	const UDaedalusOrrery* O = UDaedalusOrrery::Get(this);
-	const UWorld* W = GetWorld();
-	if (!O || !W) return 0.f;
-	return O->StartHour + W->GetTimeSeconds() / FMath::Max(O->SecondsPerHour, 1.f);
-}
-
 bool ADaedalusStarbloom::IsBlooming() const
 {
 	const UDaedalusOrrery* O = UDaedalusOrrery::Get(this);
 	const UDaedalusOrrery::FHerb* H = UDaedalusOrrery::Herb(Species);
 	if (!O || !H) return false;
-	const bool bHour = FMath::FloorToInt(O->Hour()) == H->Hour;
-	return bHour && AbsoluteHour() - LastHarvestHour > 12.f;
+	return !bPicked && FMath::FloorToInt(O->Hour()) == H->Hour;
 }
 
 void ADaedalusStarbloom::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+	const UDaedalusOrrery* O = UDaedalusOrrery::Get(this);
+	const UDaedalusOrrery::FHerb* Hb = UDaedalusOrrery::Herb(Species);
+	if (bPicked && O && Hb && FMath::FloorToInt(O->Hour()) != Hb->Hour) bPicked = false;   // its hour passed: regrown
 	const bool bBloom = IsBlooming();
 	if (bBloom != bShownBloom)
 	{
@@ -302,7 +296,7 @@ bool ADaedalusStarbloom::Use(ADaedalusHero* Hero)
 	}
 	O->Satchel.Add(Species);
 	++O->Harvests;
-	LastHarvestHour = AbsoluteHour();
+	bPicked = true;
 	O->Say(FString::Printf(TEXT("You pick the %s while it shines. (%s, a %s bloom)"), *Species, H->Constellation,
 		UDaedalusOrrery::IsDay(H->Hour) ? TEXT("day") : TEXT("night")));
 	O->Advance(4);

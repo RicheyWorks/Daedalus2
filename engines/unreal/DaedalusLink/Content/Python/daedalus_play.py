@@ -603,6 +603,80 @@ def scenario_wild(p):
     ], "species": species}
 
 
+def scenario_orrery(p):
+    """The Orrery Reach (ADR-057): the hero plays the Keeper's Logbook. Talk to the Keeper, fix the filter, pick up the
+    Lantern chart, wait for a starbloom's hour and harvest it, steep a tea, then harvest the Lantern pair and steep
+    the Lantern Brew. Each step is checked on the logbook."""
+    h = hero()
+    o = unreal.DaedalusOrrery.get(world()) if hasattr(unreal, "DaedalusOrrery") else None
+    if h is None or o is None:
+        return {"error": "start Play with the Orrery build"}
+    unreal.SystemLibrary.execute_console_command(world(), "daedalus.FoesHunt 0")
+    sky = _all(unreal.DaedalusSkyDirector) if hasattr(unreal, "DaedalusSkyDirector") else []
+    log = []
+
+    def go(label):
+        acts = [a for a in _all(unreal.DaedalusUsable) if a.get_actor_label() == label]
+        if not acts:
+            return False
+        at = acts[0].get_actor_location()
+        h.set_actor_location(unreal.Vector(at.x - 150.0, at.y, at.z + 100.0), False, True)
+        return True
+
+    def use(label):
+        ok = go(label)
+        yield
+        yield
+        r = h.interact() if ok else False
+        log.append((label, ok, o.state()))
+        yield
+
+    def hour_of(name):
+        return {x.split(":")[0]: int(x.split(":")[1]) for x in p.get("hours", "").split(",") if ":" in x}.get(name)
+
+    def set_hour(hh):
+        if sky:
+            sky[0].set_time_of_day(hh + 0.1)
+        else:
+            t = unreal.GameplayStatics.get_time_seconds(world())
+            o.set_editor_property("start_hour", (hh + 0.1 - t / o.get_editor_property("seconds_per_hour")) % 24.0)
+
+    yield from use("Orr_Keeper_Ostra")
+    s1 = o.get_editor_property("step")
+    yield from use("Orr_Play_Filter")
+    clean = o.get_editor_property("b_clean_water")
+    yield from use("Orr_Chart_Lantern")
+    s3 = o.get_editor_property("step")
+    set_hour(18)                       # Duskmallow's hour
+    for _ in range(4):
+        yield
+    yield from use("Orr_Bloom_Duskmallow")
+    s4 = o.get_editor_property("step")
+    yield from use("Orr_Play_Kettle")
+    s5 = o.get_editor_property("step")
+    # the Lantern pair: Duskmallow regrows tomorrow, so pick Sunsprig at 8:00 and a fresh Duskmallow the next dusk
+    set_hour(8)
+    for _ in range(4):
+        yield
+    yield from use("Orr_Bloom_Sunsprig")
+    set_hour(18)                       # a new dusk: Duskmallow has regrown since its hour passed
+    for _ in range(4):
+        yield
+    yield from use("Orr_Bloom_Duskmallow")
+    satchel = list(o.get_editor_property("satchel"))
+    yield from use("Orr_Play_Kettle")
+    brews = list(o.get_editor_property("brews"))
+    unreal.SystemLibrary.execute_console_command(world(), "daedalus.FoesHunt 1")
+    return {"checks": [
+        _check("the Keeper starts the logbook", s1 == 1, log[0] if log else ""),
+        _check("the filter makes the water drinkable", clean and o.get_editor_property("step") >= 2, o.state()),
+        _check("the Lantern chart is found", s3 == 3, o.state()),
+        _check("a starbloom is harvested in its hour", s4 == 4, o.state()),
+        _check("the first tea is steeped", s5 == 5 and any(b.endswith("Tea") for b in brews), brews),
+        _check("the Lantern pair makes the Lantern Brew", "Lantern Brew" in brews, "%s / satchel %s" % (brews, satchel)),
+    ], "log": [str(x) for x in log], "state": o.state()}
+
+
 def _kv(line):
     """A realm state line ('mode=FIELD map=TOWN1 x=3 ...') as a dict; msg= is the rest of the line."""
     out = {}
@@ -739,6 +813,7 @@ SCENARIOS = {
     "realm": scenario_realm,
     "dress": scenario_dress,
     "wild": scenario_wild,
+    "orrery": scenario_orrery,
 }
 
 

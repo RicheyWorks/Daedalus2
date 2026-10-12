@@ -109,8 +109,7 @@ protected:
 
 private:
 	bool bShownBloom = false;
-	float LastHarvestHour = -100.f;   // in absolute island hours, so a bloom regrows the next day
-	float AbsoluteHour() const;
+	bool bPicked = false;   // picked in this bloom hour; it regrows once its hour has passed
 };
 
 /** The steeping kettle: clean water and herbs from the satchel make teas, brews and eclipse brews. */
