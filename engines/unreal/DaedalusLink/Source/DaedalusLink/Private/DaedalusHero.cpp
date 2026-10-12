@@ -287,7 +287,7 @@ void ADaedalusHero::MapProfile()
 	Actions.Add(TEXT("Shield"), ShieldAction.Get());
 	for (const auto& Pair : (*Bindings)->Values)
 	{
-		UInputAction* const* A = Actions.Find(Pair.Key);
+		UInputAction* const* A = Actions.Find(FString(Pair.Key));   // 5.8: JSON keys are not FString
 		const TArray<TSharedPtr<FJsonValue>>* Keys = nullptr;
 		if (!A || !Pair.Value->TryGetArray(Keys))
 		{
