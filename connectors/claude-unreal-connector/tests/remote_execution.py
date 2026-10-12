@@ -63,4 +63,4 @@ def _run(command):
         except Exception as e:
             ok, err = False, "%s: %s" % (type(e).__name__, e)
     out = [{"type": "Info", "output": line} for line in buf.getvalue().splitlines()]
-    return {"success": ok, "result": err or "None", "output": out}
+    return {"success": ok, "command": command, "result": err or "None", "output": out}
