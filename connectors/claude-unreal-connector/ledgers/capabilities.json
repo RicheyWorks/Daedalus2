@@ -163,7 +163,7 @@
   "live_probes": {
     "passed": 9,
     "total": 9,
-    "where": "open editor (needs renderer/viewport), everything restored, 13 actors cleaned",
+    "where": "open editor; everything restored; 13 actors cleaned",
     "probes": [
       "render_target_capture",
       "text_render_sign",
@@ -178,24 +178,16 @@
   },
   "play_in_editor": {
     "ok": true,
-    "game_world": "DaedalusWorld",
     "actors_in_game": 207,
     "pawn": "DefaultPawn",
     "controller": "PlayerController",
     "ran_seconds": 7.14,
-    "gap": "no game character yet: Play uses DefaultPawn (the ADR-036 hero Blueprint is the next build)"
+    "gap": "no game character yet"
   },
   "memory": {
     "ram_total_gb": 31.7,
     "ram_free_gb_during_walk": 3.7,
-    "biggest": [
-      "UnrealEditor 3.6",
-      "ChatGPT 4.0",
-      "Edge 3.1",
-      "claude 2.3",
-      "Chrome 1.1"
-    ],
-    "guard": "sandbox refuses below 4 GB free and never runs two at once"
+    "guard": "sandbox refuses below 4 GB free; one at a time"
   },
   "score": {
     "proven_live": 29,
