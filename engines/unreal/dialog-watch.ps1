@@ -5,6 +5,7 @@
 # answers on 127.0.0.1:9877 and stays quiet for a while. Each known dialog gets the answer a person would give:
 #   "Missing <Project> Modules ... rebuild them now?"   Yes (Enter: the default button)
 #   "Restore Packages"                                  skip restoring (Escape)
+#   "Error" ("<Project> could not be compiled")         OK (Enter), logged as a build failure to look at
 # Unknown dialogs are logged, not answered. What worked live (UE 5.8.3, Windows 11): bring the dialog to the front
 # and press the real Enter key. Posted WM_COMMAND and UI Automation did not reach these dialogs.
 param(
@@ -48,7 +49,8 @@ public static class DlgWatch {
 
 $Rules = @(
     @{ Match = '^Missing .* Modules$'; Key = 0x0D; Say = 'rebuild: Yes' },
-    @{ Match = '^Restore Packages'; Key = 0x1B; Say = 'restore packages: skip' }
+    @{ Match = '^Restore Packages'; Key = 0x1B; Say = 'restore packages: skip' },
+    @{ Match = '^Error$'; Key = 0x0D; Say = 'error box: OK (if it says could not be compiled, the build failed: read the setup log)' }
 )
 function Note($m) { "$(Get-Date -Format s) $m" | Out-File -FilePath $Log -Append -Encoding utf8 }
 
