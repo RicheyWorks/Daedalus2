@@ -123,6 +123,50 @@ sheet at 720px and below. Accent colours and the cabinet materials come from the
 and neon; Bricks uses brick colours; Gallery uses stone, paving and lamp. Anything else falls back to Sky Islands. The
 look is re-applied live when the world style changes.
 
+## Hardening (rd-studio r4, indexer, relay guard, sound engine)
+
+**rd-studio r4 contract** (`CHANGES_FOR_FLEX.md`). `HttpStudioArranger` talks to it:
+- `/arrange` 200 → READY (`key` has no extension; the extension comes from `url`; the key must match
+  `(e\d{5}|t\d{5})__[a-z]+__(studio|plain)__[a-z]+-v\d{1,3}-n(off|\d{2})__[A-Za-z0-9.-]+\.(mp3|flac)`).
+  202 → RENDERING with `jobId` + `retryAfterMs`; the client plays the original and polls (bounded, backing off).
+  404 = unknown source (final), 422 = failed QA (final, never retried), 400 = bad params, 503 = busy: the breaker
+  opens for the Retry-After and, once half-open, `/ready` is probed before any `/arrange`.
+- Only `seed:e\d{5}` and `token:0..49999` (no leading zeros) are sent; file seeds play their original without a call.
+- Timeouts: connect 800 ms, request 1.5 s, audio stream 20 s. Retries only for refused connections and 502/504
+  (2 retries, 60 ms jittered 0.5x–1.5x). Breaker: 3 failures → open 20 s. Requests coalesce; results cache
+  (hit/unknown 10 min, failed QA 1 h, rendering = its Retry-After, down 5 s).
+- `/health` + `/metrics` (`rd_studio_latency_ms{q="0.95"}`, `rd_studio_queue_depth`) feed `/config.studioHealth`
+  (UP/DEGRADED/DOWN, engine, p95Ms, queue, lastError) and the panel's status chip.
+- Render options on `/api/v1/jukebox/arrangement`: `format=mp3|flac` (24-bit FLAC), `preset=neutral|harman|crossfeed|warm|bass`,
+  `vinyl=0..100` (snapped to 10s), `noise=off|-60..-30` (surface noise off by default). Anything else → 400.
+- Audio proxy forwards If-None-Match, passes ETag/304 and the studio's immutable Cache-Control, sets audio/flac or
+  audio/mpeg, and refuses or cuts anything over 32 MiB.
+- `coat.png`: validated PNG (signature + IHDR size), ≤ 8 MB, cached by coat engine + hash + size; served with a sha256 ETag,
+  304 on If-None-Match, `max-age=31536000, immutable`.
+
+**Holder lookup at scale.** `TransferIndexer` follows `Transfer` logs from the deploy block (`DAEDALUS_JUKEBOX_DEPLOY_BLOCK`,
+else binary search, else 0 on a non-archive node), `DAEDALUS_JUKEBOX_CONFIRMATIONS` (20) behind head, in chunks
+(`DAEDALUS_JUKEBOX_LOG_CHUNK`, 5M; halves on range errors). It's reorg-safe: the last indexed block hash is re-checked
+and a mismatch rebuilds. It's persisted atomically to `DAEDALUS_JUKEBOX_INDEX_FILE` and resumes. Until it's warm,
+supply ≤ `DAEDALUS_JUKEBOX_SCAN_FALLBACK_MAX` (2000) uses the old scan, and larger supply answers 503 + Retry-After 30.
+`DAEDALUS_JUKEBOX_RPC_URL` takes a comma list: failover, jittered backoff, Retry-After and JSON-RPC rate-limit errors honoured.
+
+**Radio relay.** `RelayGuard` allows only http(s), ports 80/443/≥1024, no userinfo, no local names, and every resolved
+address must be public (loopback, link-local/metadata, RFC1918, CGNAT, documentation, benchmarking, multicast, ULA and the v6
+wrappers of these are refused). Redirects are followed by hand (≤ 3), each hop re-checked. Only audio/* or application/ogg
+is relayed. Caps: 64 relays, 3 per listener, 4 h, 640 MiB, 20 s idle, 5 s connect; rate limit `jukeboxRelay` 20/min.
+`DAEDALUS_JUKEBOX_RELAY_FAKE_IP_CIDRS` (default empty) is for sandboxes whose DNS answers every host with a fake IP
+(e.g. 198.18.0.0/15): DNS names resolving there are allowed, and IP literals in that range are still refused.
+
+**Sound engine** (`static/jukebox-audio.js`). Every source → 10-band EQ → tone filter → gain (low/med/high) →
+**ear-safety limiter** (-10 dB, 20:1, 1 ms, fixed, frozen) → 0.89 ceiling → analyser → output. The chain is checked
+every frame. Tampering is restored, and a bypass suspends audio. Output device via `setSinkId` where supported. Line-in via
+`getUserMedia`. Keys tab: 2-octave keyboard, per-voice instrument (seed sample or synth), ADSR, brightness, wave, blend.
+The voice schema for rd-studio isn't in r4, so `VOICE_SCHEMA_READY = false` (keys play live only). Token HTML still plays
+in a sandboxed iframe outside the limiter, unless rd-studio has a `token:<id>` render (token 1 does).
+
+**Load** (`tools/jukebox-load/load.py BASE secs panel arrange relay`).
+
 ## Limitations
 
 - Holder lookup is a full `ownerOf` sweep (see above), which is not viable at mainnet scale without an indexer.
