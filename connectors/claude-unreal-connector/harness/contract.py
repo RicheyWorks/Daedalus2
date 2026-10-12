@@ -54,9 +54,50 @@ def run(port):
           d["result"]["count"] == a["result"]["count"] + 1, (a, d))
     e = c("test.count")
     check("without a request_id every call runs", e["result"]["count"] == d["result"]["count"] + 1, e)
+    # async jobs: answered at once with a job id; job_result fetches the answer later
+    j = c("test.countdown", {"from": 30, "async": True})
+    jid = (j.get("result") or {}).get("job_id")
+    check("async: true answers at once with a job id, state running", jid and j["result"]["state"] == "running", j)
+    first = c("job_result", {"job_id": jid})
+    check("job_result says running while the job still runs", first["result"]["state"] == "running", first)
+    import time as _t
+    deadline = _t.time() + 20
+    while _t.time() < deadline:
+        last = c("job_result", {"job_id": jid})
+        if last["result"]["state"] == "done":
+            break
+        _t.sleep(0.05)
+    check("job_result then returns the job's full reply",
+          last["result"]["state"] == "done" and last["result"]["reply"]["result"]["counted"][0] == 30, last)
+    r = c("job_result", {"job_id": "job-nope"})
+    check("an unknown job id is code UNKNOWN_JOB", r.get("code") == "UNKNOWN_JOB", r)
+
+    # batch: in order, one transaction, policy per item, stop at the first error
+    b = c("batch", {"commands": [{"type": "test.count"}, {"type": "test.countdown", "params": {"from": 2}},
+                                 {"type": "test.count"}], "transaction": "contract"})
+    res = b["result"]["results"]
+    check("batch runs its commands in order, waiting ones included",
+          b["result"]["ok"] and [x["type"] for x in res] == ["test.count", "test.countdown", "test.count"]
+          and res[2]["result"]["count"] == res[0]["result"]["count"] + 1, b)
+    b = c("batch", {"commands": [{"type": "get_actor_info", "params": {"name": "nobody"}}, {"type": "test.count"}]})
+    check("batch stops at the first error", b["result"]["ok"] is False and len(b["result"]["results"]) == 1, b)
+    c("test.policy", {"allow": ["READ"]})
+    b = c("batch", {"commands": [{"type": "ping"}]})
+    check("under a READ policy the batch itself (MUTATE) is refused", b.get("code") == "REFUSED", b)
+    c("test.policy", {"allow": ["READ", "SENSITIVE_READ", "MUTATE"]})
+    n0 = c("test.count")["result"]["count"]
+    b = c("batch", {"commands": [{"type": "test.count"}, {"type": "save"}]})
+    n1 = c("test.count")["result"]["count"]
+    check("batch can't smuggle a DESTRUCTIVE command past a MUTATE policy, and runs nothing",
+          b.get("status") == "error" and "save" in b.get("message", "") and n1 == n0 + 1, (b, n0, n1))
+    c("test.policy", {"allow": ["READ", "SENSITIVE_READ", "MUTATE", "DESTRUCTIVE"]})
+    r = c("capture_view", {"width": 256, "height": 128})
+    check("capture_view renders a PNG from the editor camera and removes its capture actor",
+          r.get("status") == "ok" and r["result"]["width"] == 256 and r["result"]["bytes"] > 0, r)
+
     r = c("no.such")
-    check("an unknown command is code UNKNOWN and lists the known ones",
-          r.get("code") == "UNKNOWN" and "test.count" in r.get("message", ""), r)
+    check("an unknown command is an error, code UNKNOWN, listing the known ones",
+          r.get("status") == "error" and r.get("code") == "UNKNOWN" and "test.count" in r.get("message", ""), r)
 
 
 def main():

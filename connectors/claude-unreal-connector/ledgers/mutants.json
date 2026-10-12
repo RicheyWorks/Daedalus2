@@ -1,0 +1,80 @@
+{
+ "entries": {
+  "bridge": {
+   "at": 1791774293,
+   "equivalent": 0,
+   "equivalents": [],
+   "inconclusive": 0,
+   "killed": 11,
+   "mutants": 13,
+   "rows": [
+    {
+     "detail": "e2e: viewport_screenshot waits for the file over frames and returns a PNG  ValueError: gen",
+     "name": "nested ticks re-enter the pump",
+     "verdict": "killed"
+    },
+    {
+     "detail": "e2e: ",
+     "name": "a waiting command is never stepped again",
+     "verdict": "killed"
+    },
+    {
+     "detail": "contract: a MUTATE command under a READ policy is REFUSED, and says why  {'id': 1, 'status': 'o",
+     "name": "the policy is ignored",
+     "verdict": "killed"
+    },
+    {
+     "detail": "contract: a retried request_id gets the first answer back, marked replayed  ({'id': 1, 'status'",
+     "name": "request_id replay is off",
+     "verdict": "killed"
+    },
+    {
+     "detail": "e2e: get_actor_info on a missing actor is an error that says so  {}",
+     "name": "an error is reported as ok",
+     "verdict": "killed"
+    },
+    {
+     "detail": "e2e: the Remote Execution call asked for unattended mode  {",
+     "name": "Python runs attended",
+     "verdict": "killed"
+    },
+    {
+     "detail": "contract: DESTRUCTIVE cannot be allowed without MUTATE  {'id': 1, 'status': 'ok', 'result': {'p",
+     "name": "DESTRUCTIVE without MUTATE is allowed",
+     "verdict": "killed"
+    },
+    {
+     "detail": "contract stayed green: a typo must not look like success",
+     "name": "an unknown command answers ok",
+     "verdict": "SURVIVED"
+    },
+    {
+     "detail": "e2e: viewport_screenshot waits for the file over frames and returns a PNG  {",
+     "name": "screenshots come back as text",
+     "verdict": "killed"
+    },
+    {
+     "detail": "e2e: ",
+     "name": "the result of Claude's code is dropped",
+     "verdict": "killed"
+    },
+    {
+     "detail": "e2e: with Remote Execution off it still runs, directly, and says dialogs would block  {",
+     "name": "Remote Execution off is silent",
+     "verdict": "killed"
+    },
+    {
+     "detail": "contract: DESTRUCTIVE cannot be allowed without MUTATE  {'id': 1, 'status': 'error', 'code': 'R",
+     "name": "register forgets the declared risk",
+     "verdict": "killed"
+    },
+    {
+     "detail": "walk stayed green: every command must be discoverable",
+     "name": "a command is dropped from list_commands",
+     "verdict": "SURVIVED"
+    }
+   ],
+   "survived": 2
+  }
+ }
+}

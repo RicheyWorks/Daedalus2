@@ -4,7 +4,18 @@ connector's plumbing (MCP -> socket -> game-thread pump -> reply) is tested with
 the bridge asked the "editor" to do. It is not Unreal: the real calls are proven only in the editor."""
 import os
 import struct
+import threading
 import zlib
+
+# Unreal's rule: its API may only be touched on the game thread. The stand-in enforces it, so a bridge that
+# reads the API from a background thread fails here the way it fails in the editor (found live on UE 5.8.3:
+# "Paths: Attempted to access Unreal API from outside the main game thread").
+GAME_THREAD = [None]   # host.py sets this to the thread that pumps the bridge
+
+
+def _game_thread_only(what):
+    if GAME_THREAD[0] is not None and threading.get_ident() != GAME_THREAD[0]:
+        raise RuntimeError("%s: Attempted to access Unreal API from outside the main game thread." % what)
 
 
 class V:
@@ -59,13 +70,62 @@ class _World:
     def get_path_name(self): return "/Game/Daedalus/DaedalusWorld.DaedalusWorld"
 
 
+class SceneCaptureComponent2D(ActorComponent):
+    def __init__(self, name):
+        super().__init__(name)
+        self.props = {}
+    def set_editor_property(self, k, v): self.props[k] = v
+    def capture_scene(self): CALLS.append("capture_scene")
+
+
+class SceneCaptureSource:
+    SCS_FINAL_COLOR_LDR = "SCS_FINAL_COLOR_LDR"
+
+
+class SceneCapture2D(Actor):
+    pass
+
+
+class _CaptureActor(Actor):
+    def __init__(self):
+        super().__init__("SceneCapture2D", "SceneCapture2D", "", (0, 0, 0))
+        self.comp = SceneCaptureComponent2D("CaptureComponent2D")
+    def get_component_by_class(self, cls): return self.comp
+
+
 class EditorActorSubsystem:
     def get_all_level_actors(self): return list(LEVEL)
     def get_selected_level_actors(self): return LEVEL[:1]
+    def spawn_actor_from_class(self, cls, loc, rot=None):
+        a = _CaptureActor() if cls is SceneCapture2D else Actor(cls.__name__, cls.__name__, "", (loc.x, loc.y, loc.z))
+        LEVEL.append(a); CALLS.append("spawn " + cls.__name__)
+        return a
+    def destroy_actor(self, a):
+        if a in LEVEL:
+            LEVEL.remove(a)
+        CALLS.append("destroy " + a.get_actor_label())
+        return True
+
+
+class ScopedEditorTransaction:
+    """One undo step; the stand-in records that it opened and closed."""
+    def __init__(self, description): self.description = description
+    def __enter__(self): CALLS.append("transaction begin " + self.description); return self
+    def __exit__(self, *exc): CALLS.append("transaction end"); return False
+
+
+class RenderingLibrary:
+    @staticmethod
+    def create_render_target2d(world, w, h): return {"w": w, "h": h}
+    @staticmethod
+    def export_render_target(world, rt, out_dir, name):
+        with open(os.path.join(out_dir, name + ".png"), "wb") as f:
+            f.write(_png(rt["w"] // 64 or 1, rt["h"] // 64 or 1))
 
 
 class UnrealEditorSubsystem:
     def get_editor_world(self): return _World()
+    def get_level_viewport_camera_info(self): return V(-500, -500, 800), R(-30, 45, 0)
 
 
 class LevelEditorSubsystem:
@@ -81,6 +141,7 @@ _SUBS = {}
 
 
 def get_editor_subsystem(cls):
+    _game_thread_only(cls.__name__)
     return _SUBS.setdefault(cls, cls())
 
 
@@ -132,7 +193,7 @@ LOGDIR = None
 
 class Paths:
     @staticmethod
-    def get_project_file_path(): return "C:/Unreal/DaedalusRealm/DaedalusRealm.uproject"
+    def get_project_file_path(): _game_thread_only("Paths"); return "C:/Unreal/DaedalusRealm/DaedalusRealm.uproject"
     @staticmethod
     def project_log_dir(): return LOGDIR
     @staticmethod
@@ -140,7 +201,7 @@ class Paths:
     @staticmethod
     def convert_relative_path_to_full(p): return os.path.abspath(p)
     @staticmethod
-    def project_dir(): return LOGDIR
+    def project_dir(): _game_thread_only("Paths"); return LOGDIR
 
 
 class EditorLoadingAndSavingUtils:

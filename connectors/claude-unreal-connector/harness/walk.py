@@ -28,7 +28,13 @@ EXCLUDE = {
     "test.freeze": "stops the stand-in's ticks on purpose (the frozen-editor canary in tests/client.js)",
     "test.remote_off": "switches the stand-in's Remote Execution off for the rest of the run",
     "test.policy": "changes the bridge's policy; harness.contract drives it on purpose",
+    "job_result": "needs a job id from an async call; harness.contract drives it",
 }
+
+# Every bridge must list these. A bridge that silently drops one fails the walk, which otherwise only drives
+# what is listed and could not notice a command vanishing.
+CORE = ("ping", "list_commands", "get_level_info", "get_actor_info", "execute_python", "viewport_screenshot",
+        "play", "stop", "save", "output_log", "capture_view", "batch", "job_result")
 
 # How to form a value for a declared param, by name first, then by type. A target can add pools with --pool.
 POOLS = {
@@ -36,6 +42,8 @@ POOLS = {
     "name": "@first_actor",     # resolved from get_level_info
     "limit": 5, "lines": 20, "width": 320, "height": 180, "from": 2,
     "filter": "Display", "folder": "", "who": "walker", "simulate": False,
+    "commands": [{"type": "ping"}, {"type": "get_level_info", "params": {"limit": 1}}], "transaction": "walk",
+    "keep_going": False,
 }
 BY_TYPE = {"int": 1, "bool": False, "str": ""}
 
@@ -95,6 +103,11 @@ def walk(port, host="127.0.0.1", max_risk="DESTRUCTIVE", target="standin"):
         print(("PASS " if bucket != "failed" else "FAIL ") + "%-28s %-14s %-11s %s" % (name, risk, bucket, detail[:70]))
     discovered = len(commands)
     accounted = sum(buckets.values())
+    listed = {c["name"] for c in commands}
+    missing = [n for n in CORE if n not in listed]
+    for n in missing:
+        print("FAIL core command %s is not listed" % n)
+    buckets["failed"] += len(missing)
     if accounted != discovered:
         print("FAIL UNACCOUNTED: discovered %d, accounted %d" % (discovered, accounted))
     for r in rows:

@@ -1,7 +1,7 @@
 {
  "entries": {
   "standin": {
-   "at": 1791773789,
+   "at": 1791774542,
    "of": 3,
    "ok": 3,
    "suites": [
@@ -25,25 +25,25 @@
     },
     {
      "floor": 14,
-     "got": 14,
+     "got": 23,
      "mark": "ok",
      "name": "contract",
      "rc": 0,
      "tail": [
-      "PASS a READ command still runs",
-      "PASS DESTRUCTIVE cannot be allowed without MUTATE",
-      "PASS an unknown risk is rejected by name",
-      "PASS a retried request_id gets the first answer back, marked replayed",
-      "PASS ...and the command really ran once: a new request_id runs it again",
-      "PASS without a request_id every call runs",
-      "PASS an unknown command is code UNKNOWN and lists the known ones",
-      "14/14"
+      "PASS an unknown job id is code UNKNOWN_JOB",
+      "PASS batch runs its commands in order, waiting ones included",
+      "PASS batch stops at the first error",
+      "PASS under a READ policy the batch itself (MUTATE) is refused",
+      "PASS batch can't smuggle a DESTRUCTIVE command past a MUTATE policy, and runs nothing",
+      "PASS capture_view renders a PNG from the editor camera and removes its capture actor",
+      "PASS an unknown command is an error, code UNKNOWN, listing the known ones",
+      "23/23"
      ],
-     "total": 14
+     "total": 23
     },
     {
      "floor": 14,
-     "got": 16,
+     "got": 19,
      "mark": "ok",
      "name": "walk",
      "rc": 0,
@@ -55,9 +55,9 @@
       "PASS test.remote_calls            MUTATE         driven      ok",
       "PASS test.remote_off              MUTATE         excluded    switches the stand-in's Remote Execution off for the rest of the run",
       "PASS viewport_screenshot          SENSITIVE_READ driven      ok",
-      "16/16"
+      "19/19"
      ],
-     "total": 16
+     "total": 19
     }
    ]
   }

@@ -1,18 +1,30 @@
 {
  "entries": {
   "standin": {
-   "at": 1791773772,
+   "at": 1791774526,
    "buckets": {
     "declined": 0,
-    "driven": 13,
-    "excluded": 3,
+    "driven": 15,
+    "excluded": 4,
     "failed": 0,
     "refused": 0,
     "unschemable": 0
    },
-   "discovered": 16,
+   "discovered": 19,
    "max_risk": "DESTRUCTIVE",
    "rows": [
+    {
+     "bucket": "driven",
+     "command": "batch",
+     "detail": "ok",
+     "risk": "MUTATE"
+    },
+    {
+     "bucket": "driven",
+     "command": "capture_view",
+     "detail": "ok",
+     "risk": "SENSITIVE_READ"
+    },
     {
      "bucket": "driven",
      "command": "execute_python",
@@ -29,6 +41,12 @@
      "bucket": "driven",
      "command": "get_level_info",
      "detail": "ok",
+     "risk": "READ"
+    },
+    {
+     "bucket": "excluded",
+     "command": "job_result",
+     "detail": "needs a job id from an async call; harness.contract drives it",
      "risk": "READ"
     },
     {

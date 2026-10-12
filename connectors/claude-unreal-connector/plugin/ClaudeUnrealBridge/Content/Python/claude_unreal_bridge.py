@@ -149,7 +149,7 @@ def _wrap(code):
             "print(%r + _cr)\n") % (code, RESULT_MARK)
 
 
-def _remote_node():
+def _remote_node(want):
     """Unreal's own Python Remote Execution, connected to this editor. Commands it runs carry the "unattended"
     flag, so the editor cancels a modal dialog instead of waiting on it (a modal on the game thread would freeze
     the bridge). Needs Project Settings > Python > Enable Remote Execution (bRemoteExecution, which install.ps1
@@ -163,7 +163,8 @@ def _remote_node():
         return None
     rx = rex.RemoteExecution()
     rx.start()
-    want = os.path.normcase(os.path.abspath(unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir())))
+    # `want` (this project's folder) is read on the game thread by the caller: this runs on a background thread,
+    # where touching the unreal API raises "Attempted to access Unreal API from outside the main game thread".
     deadline = time.time() + 3.0
     node = None
     while time.time() < deadline and node is None:
@@ -185,10 +186,11 @@ def _remote_node():
     return rx, node
 
 
-def _run_remote(code, box):
-    """Background thread: send the wrapped code through Remote Execution, unattended, and keep the reply."""
+def _run_remote(code, box, want):
+    """Background thread: send the wrapped code through Remote Execution, unattended, and keep the reply.
+    Never touches the unreal module (game thread only)."""
     try:
-        got = _remote_node()
+        got = _remote_node(want)
         if got is None:
             box["fallback"] = _remote["error"]
             return
@@ -222,7 +224,8 @@ def cmd_execute_python(p):
     if not p.get("unattended", True):
         return _exec_here(code)
     box = {"done": False, "reply": None, "fallback": None}
-    threading.Thread(target=_run_remote, args=(code, box), name="claude-unreal-remote", daemon=True).start()
+    want = os.path.normcase(os.path.abspath(unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir())))
+    threading.Thread(target=_run_remote, args=(code, box, want), name="claude-unreal-remote", daemon=True).start()
     deadline = time.time() + float(p.get("timeout", 600))
     while not box["done"]:
         if time.time() > deadline:
@@ -311,6 +314,70 @@ def cmd_output_log(p):
     return {"file": logs[0], "lines": text[-lines:]}
 
 
+def cmd_capture_view(p):
+    """A picture of what the editor camera sees, rendered by a SceneCapture2D into a render target and exported
+    as PNG: no editor UI, and no dependence on the viewport's size or focus. The capture actor is removed after."""
+    width, height = int(p.get("width", 1280)), int(p.get("height", 720))
+    world = _world()
+    loc, rot = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_level_viewport_camera_info()
+    rt = unreal.RenderingLibrary.create_render_target2d(world, width, height)
+    actors = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    cap = actors.spawn_actor_from_class(unreal.SceneCapture2D, loc, rot)
+    try:
+        comp = cap.get_component_by_class(unreal.SceneCaptureComponent2D)
+        comp.set_editor_property("texture_target", rt)
+        comp.set_editor_property("capture_source", unreal.SceneCaptureSource.SCS_FINAL_COLOR_LDR)
+        comp.capture_scene()
+        yield   # let the render thread finish the capture before reading it back
+        out_dir = tempfile.gettempdir()
+        name = "claude_unreal_capture_%d" % int(time.time() * 1000)
+        unreal.RenderingLibrary.export_render_target(world, rt, out_dir, name)
+        path = os.path.join(out_dir, name + ".png")
+        deadline = time.time() + 20
+        while not (os.path.exists(path) and os.path.getsize(path) > 0):
+            if time.time() > deadline:
+                raise TimeoutError("the render target was not written")
+            yield
+        b64, n = _png_b64(path)
+        return {"image_png_base64": b64, "path": path, "bytes": n, "width": width, "height": height}
+    finally:
+        actors.destroy_actor(cap)
+
+
+def cmd_batch(p):
+    """Run several commands in order as one editor transaction (one undo). Each item is {"type", "params"} and
+    passes the same policy as a single call; the batch stops at the first error unless keep_going is true."""
+    items = p.get("commands") or []
+    if not isinstance(items, list) or not items:
+        raise ValueError("batch needs commands: [{type, params}, ...]")
+    for it in items:
+        name = it.get("type")
+        if name not in COMMANDS or name in ("batch",):
+            raise ValueError("batch can't run %r" % name)
+        risk = RISK_OF.get(name, "MUTATE")
+        if not POLICY.get(risk, False):
+            raise PermissionError("%s in the batch is %s, which the policy does not allow" % (name, risk))
+    results = []
+    with unreal.ScopedEditorTransaction(p.get("transaction", "Claude batch")):
+        for it in items:
+            try:
+                out = COMMANDS[it["type"]](it.get("params") or {})
+                if isinstance(out, types.GeneratorType):
+                    while True:
+                        try:
+                            next(out)
+                        except StopIteration as stop:
+                            out = stop.value
+                            break
+                        yield
+                results.append({"type": it["type"], "status": "ok", "result": out})
+            except Exception as e:
+                results.append({"type": it["type"], "status": "error", "message": "%s: %s" % (type(e).__name__, e)})
+                if not p.get("keep_going"):
+                    break
+    return {"results": results, "ok": all(r["status"] == "ok" for r in results) and len(results) == len(items)}
+
+
 def cmd_list_commands(_p):
     return {"commands": [{"name": n, "description": DESCRIPTIONS.get(n, ""), "params": PARAMS.get(n, {}),
                           "risk": RISK_OF.get(n, "MUTATE")} for n in sorted(COMMANDS)],
@@ -328,6 +395,9 @@ COMMANDS = {
     "stop": cmd_stop,
     "save": cmd_save,
     "output_log": cmd_output_log,
+    "capture_view": cmd_capture_view,
+    "batch": cmd_batch,
+    "job_result": lambda p: _job_result({}, p).get("result"),   # answered on the socket thread; listed here
 }
 
 
@@ -342,11 +412,17 @@ DESCRIPTIONS = {
     "stop": "Stop Play In Editor and wait until it ends",
     "save": "Save the current level and every changed asset",
     "output_log": "The last lines of the editor log; params lines, filter",
+    "capture_view": "A PNG of what the editor camera sees, rendered by a scene capture (no editor UI); params width, height",
+    "batch": "Several commands in order as one undo step; params commands [{type, params}], transaction, keep_going",
+    "job_result": "The answer to a command sent with async: true; params job_id. status running or done",
 }
 PARAMS = {
     "get_level_info": {"limit": "int", "folder": "str"}, "get_actor_info": {"name": "str (required)"},
     "execute_python": {"code": "str (required)"}, "viewport_screenshot": {"width": "int", "height": "int"},
     "play": {"simulate": "bool"}, "output_log": {"lines": "int", "filter": "str"},
+    "capture_view": {"width": "int", "height": "int"},
+    "batch": {"commands": "list (required)", "transaction": "str", "keep_going": "bool"},
+    "job_result": {"job_id": "str (required)"},
 }
 
 
@@ -361,6 +437,7 @@ RISK_OF = {
     "viewport_screenshot": "SENSITIVE_READ",
     "execute_python": "MUTATE", "play": "MUTATE", "stop": "MUTATE",
     "save": "DESTRUCTIVE",
+    "capture_view": "SENSITIVE_READ", "batch": "MUTATE", "job_result": "READ",
 }
 
 
@@ -518,12 +595,43 @@ def _client(conn):
         except ValueError as e:
             conn.sendall((json.dumps({"id": None, "status": "error", "message": "bad JSON: %s" % e}) + "\n").encode())
             return
+        params = req.get("params") or {}
+        if req.get("type") == "job_result":
+            conn.sendall((json.dumps(_job_result(req, params)) + "\n").encode("utf-8"))
+            return
         box = {"done": threading.Event(), "reply": None}
+        if params.get("async"):
+            # Answer now with a job id; the command runs on the game thread as usual and job_result fetches it.
+            # A long import then never meets a client timeout, so a client never resends it.
+            jid = "job-%d-%d" % (int(time.time() * 1000), len(_job_boxes))
+            _job_boxes[jid] = (box, time.time())
+            _jobs.put((req, box))
+            conn.sendall((json.dumps({"id": req.get("id"), "status": "ok", "result": {"job_id": jid, "state": "running"}})
+                          + "\n").encode("utf-8"))
+            return
         _jobs.put((req, box))
         if not box["done"].wait(timeout=float((req.get("params") or {}).get("bridge_timeout", 1800))):
             box["reply"] = {"id": req.get("id"), "status": "error",
                             "message": "the editor did not run the command in time (is a modal dialog open?)"}
         conn.sendall((json.dumps(box["reply"]) + "\n").encode("utf-8"))
+
+
+_job_boxes = {}
+JOB_KEEP_S = 3600
+
+
+def _job_result(req, params):
+    """Socket-thread side of async jobs: no unreal calls, so it answers even while the game thread is busy."""
+    now = time.time()
+    for k in [k for k, (_b, t) in _job_boxes.items() if now - t > JOB_KEEP_S]:
+        _job_boxes.pop(k, None)
+    jid = params.get("job_id")
+    if jid not in _job_boxes:
+        return {"id": req.get("id"), "status": "error", "code": "UNKNOWN_JOB", "message": "no job %r (or it expired)" % jid}
+    box, _t = _job_boxes[jid]
+    if not box["done"].is_set():
+        return {"id": req.get("id"), "status": "ok", "result": {"job_id": jid, "state": "running"}}
+    return {"id": req.get("id"), "status": "ok", "result": {"job_id": jid, "state": "done", "reply": box["reply"]}}
 
 
 def _accept(sock):

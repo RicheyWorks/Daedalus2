@@ -52,11 +52,14 @@ bridge.register("test.policy", lambda p: bridge.set_policy(p["allow"]) or {"poli
 bridge.register("test.freeze", lambda p: FROZEN.append(True) or {"frozen": True}, "Stop ticking, like a modal dialog")
 bridge.register("test.countdown", _countdown, "Counts down one number per editor tick", {"from": "int", "who": "str"})
 port = bridge.start(int(sys.argv[1]), register_tick=False)
+import threading
+fake_unreal.GAME_THREAD[0] = threading.get_ident()   # this loop is the game thread; everything else is not
 print("bridge on", port, flush=True)
 end = time.time() + float(sys.argv[2])
 while time.time() < end:
     if not FROZEN:
         fake_unreal.tick()
+        fake_rex.run_queued()
         bridge.pump(1 / 60)
     time.sleep(1 / 60)
 bridge.stop()
