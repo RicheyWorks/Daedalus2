@@ -34,14 +34,14 @@ Sky Context(const ADaedalusSkyDirector* Director) {
     }
     return {Director->GetHour(),Director->GetWetness(),W};
 }
-const TCHAR* FailureName(Error E) {
+const TCHAR* FailureName(daedalus::sol::Error E) {
     switch(E) {
-        case Error::None: return TEXT("");
-        case Error::InvalidState: return TEXT("Invalid journal state");
-        case Error::InvalidRecipe: return TEXT("The ring is not closed or its centre has no effect");
-        case Error::MissingHerbs: return TEXT("Not enough herbs");
-        case Error::MissingWater: return TEXT("Clean water required");
-        case Error::MissingFood: return TEXT("Egg and milk required");
+        case daedalus::sol::Error::None: return TEXT("");
+        case daedalus::sol::Error::InvalidState: return TEXT("Invalid journal state");
+        case daedalus::sol::Error::InvalidRecipe: return TEXT("The ring is not closed or its centre has no effect");
+        case daedalus::sol::Error::MissingHerbs: return TEXT("Not enough herbs");
+        case daedalus::sol::Error::MissingWater: return TEXT("Clean water required");
+        case daedalus::sol::Error::MissingFood: return TEXT("Egg and milk required");
         default: return TEXT("Dirty well water required");
     }
 }
