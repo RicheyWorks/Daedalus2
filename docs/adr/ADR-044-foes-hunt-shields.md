@@ -45,9 +45,28 @@ it (red when low), and a red flush at the screen edge when hit.
 **Armor tiers** (held, with avatars and wardrobe): better armor raises `MaxShield` (and later the recharge
 delay and rate). The numbers are hero properties already.
 
-## Proven live
+## Proven live (UE 5.8.3, `daedalus.play_scenario`, ADR-045)
 
-Pending the route fix below.
+- **foes_hunt 6/6** over 901 frames:
+  - Routes: the Slime found 11 A* routes and the Knight 10.
+  - Closing in: the Slime came 304 cm closer and the Knight 214 cm.
+  - Attacks by kind (landed/attacked): Slime 30/30, Shardback 21/22, Wisp 23/26, Knight 18/18.
+- **shield 4/4:**
+  - 30 damage took only the shield (70/100).
+  - 90 more emptied it, and 20 reached health (0/80).
+  - It recharged to 100/100 after the delay.
+  - A 500 hit made him fall and come back whole.
+
+Found on the way, each one fixed and re-proven:
+- **Foes over the void.** SpawnFoes put foes 9 m ahead, which was past the island's edge. It now looks for ground
+  at the hero's level.
+- **Shardback re-charging.** It charged again every frame after a miss: 34 charges, 0 hits. A miss now leaves it
+  winded for 1.8 s.
+- **Traces through the ground.** C++ traces with no params ran on complex collision, which the islands don't have,
+  so every floor read as a void. The A* never left its start and no foe took a step. Found by running the same
+  trace from Python (hit) and from C++ (miss). All world traces now use simple collision.
+- **A* every frame.** A foe with no route re-searched every frame: 1,752 searches in a minute. Failed routes now
+  wait 1.5 s.
 
 ## Held
 
