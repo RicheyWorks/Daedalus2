@@ -31,11 +31,11 @@ void UDaedalusThirstComponent::TickComponent(float Dt, ELevelTick TickType, FAct
 	}
 }
 
-float UDaedalusThirstComponent::Drink(const FString& Quality)
+float UDaedalusThirstComponent::Drink(const FString& Quality, float Restore)
 {
-	if (Quality == TEXT("clean")) { Thirst += 30.f; bSick = false; }
-	else if (Quality == TEXT("raw")) { Thirst += 20.f; if (FMath::FRand() < 0.25f) bSick = true; }
-	else if (Quality == TEXT("salt")) { Thirst -= 10.f; }
+	if (Quality == TEXT("clean")) { Thirst += Restore >= 0.f ? Restore : 35.f; bSick = false; }
+	else if (Quality == TEXT("raw")) { Thirst += Restore >= 0.f ? Restore : 20.f; if (FMath::FRand() < 0.25f) bSick = true; }
+	else if (Quality == TEXT("salt")) { Thirst += Restore >= 0.f ? -Restore : -10.f; }
 	Thirst = FMath::Clamp(Thirst, 0.f, ThirstMax);
 	OnThirstChanged.Broadcast(Thirst, Health);
 	UE_LOG(LogTemp, Log, TEXT("Daedalus thirst: drank %s -> %.0f"), *Quality, Thirst);
@@ -55,7 +55,7 @@ bool ADaedalusWaterSource::Drink(AActor* Drinker)
 {
 	UDaedalusThirstComponent* T = UDaedalusThirstComponent::For(Drinker);
 	if (!T || Cooldown > 0.f) return false;
-	T->Drink(bTreats ? FString(TEXT("clean")) : Quality);
+	T->Drink(bTreats ? FString(TEXT("clean")) : Quality, RestoreAmount);
 	Cooldown = 2.f;
 	return true;
 }
@@ -123,7 +123,7 @@ FDaedalusBrewResult ADaedalusBrewBench::BrewStatic(const TArray<FString>& Herbs,
 	return R;
 }
 
-FDaedalusBrewResult ADaedalusBrewBench::Brew(const TArray<FString>& Herbs, const TArray<int32>& Stages)
+FDaedalusBrewResult ADaedalusBrewBench::Brew_Implementation(const TArray<FString>& Herbs, const TArray<int32>& Stages)
 {
 	FDaedalusBrewResult R = BrewStatic(Herbs, Stages);
 	OnMelodyBrewed.Broadcast(R.Melody, R.Tonic, R.Notes);

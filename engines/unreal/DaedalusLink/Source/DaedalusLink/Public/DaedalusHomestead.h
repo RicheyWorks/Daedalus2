@@ -27,16 +27,16 @@ public:
 	UDaedalusThirstComponent();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Thirst") float Thirst = 100.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Thirst") float Thirst = 80.f;  // Daedalus2/data/survival/stats.json start
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Thirst") float ThirstMax = 100.f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Thirst") float DrainPerMinute = 2.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Thirst") float DrainPerMinute = 4.8f;  // stats.json 0.08 per s
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Thirst") float Health = 100.f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Thirst") float HealthDrainPerSecondWhenDry = 1.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Thirst") float HealthDrainPerSecondWhenDry = 1.5f;  // stats.json at_zero
 	UPROPERTY(BlueprintReadOnly, Category = "Daedalus|Thirst") bool bSick = false;
 	UPROPERTY(BlueprintAssignable, Category = "Daedalus|Thirst") FDaedalusThirstChanged OnThirstChanged;
 
-	/** Quality: "clean" +30, "raw" +20 with 25% sickness, "salt" -10. Returns the new thirst. */
-	UFUNCTION(BlueprintCallable, Category = "Daedalus|Thirst") float Drink(const FString& Quality);
+	/** Quality: "clean" (+Restore, default 35 = stats.json water), "raw" (+20, 25% sickness), "salt" (-10). Restore < 0 = use the default. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Thirst") float Drink(const FString& Quality, float Restore = -1.f);
 	/** Find (or add) the component on an actor. */
 	static UDaedalusThirstComponent* For(AActor* Actor);
 private:
@@ -54,6 +54,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Water") FString Quality = TEXT("clean");
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Water") bool bTreats = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Water") float Reach = 250.f;
+	/** Thirst restored per sip; -1 = the shared default (clean 35, raw 20, salt -10). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Water") float RestoreAmount = -1.f;
 	/** Auto-sip when the player stands in reach and is thirsty (MVP stand-in for the Interact key). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Water") bool bAutoSip = true;
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Water") bool Drink(AActor* Drinker);
@@ -82,7 +84,8 @@ class DAEDALUSLINK_API ADaedalusBrewBench : public AActor
 public:
 	ADaedalusBrewBench();
 	/** Herbs by name (Doleaf..Tisquill) IN THE ORDER ADDED, with stages 1-4. Same rules as herbcombo.py. */
-	UFUNCTION(BlueprintCallable, Category = "Daedalus|Brew") FDaedalusBrewResult Brew(const TArray<FString>& Herbs, const TArray<int32>& Stages);
+	/** BlueprintNativeEvent: other islands override it (Blueprint or C++) with their own recipe rules; default = Melody Brewing. */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Daedalus|Brew") FDaedalusBrewResult Brew(const TArray<FString>& Herbs, const TArray<int32>& Stages);
 	static FDaedalusBrewResult BrewStatic(const TArray<FString>& Herbs, const TArray<int32>& Stages);
 	UPROPERTY(BlueprintAssignable, Category = "Daedalus|Brew") FDaedalusMelodyBrewed OnMelodyBrewed;
 };
