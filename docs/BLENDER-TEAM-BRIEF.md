@@ -91,6 +91,16 @@ Everything goes through one folder on Richmond's PC, which every bot and person 
    the triangle count) or `REJECTED: <the failed check>` into the row.
 4. Rejected: fix what the check names, then set the row to `READY` again.
 
+A watcher runs on Richmond's PC around the clock (`art-queue.ps1 -Start`). It picks up `READY` rows by itself
+within about 10 seconds, so nobody has to tell Claude. Live state:
+- `STATUS.md`: counts by status, what it's waiting on (for example "Blender to be open"), what needs a fix, what's
+  next.
+- `feed.jsonl`: every event with a timestamp. The lead bot reads this to plan the day.
+- `reports\<Asset>.json`: the full pipeline report for each attempt.
+
+It never throws away work: if Blender has unsaved changes in another file, the row shows
+`WAITING: Blender has unsaved work…` until you save.
+
 Questions go in `NOTES\<Asset>.md`; Claude answers there. Richmond can relay anything urgent in chat.
 
 ## Need ideas or a reference?
