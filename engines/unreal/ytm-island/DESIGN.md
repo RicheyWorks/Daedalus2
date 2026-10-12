@@ -1,5 +1,5 @@
 # Youtube Master Island (youtube-master, Team Grok) — island contest entry
-Claim: `CLAIM island:youtube-master` (team link, 15:08 PT). Sublevel: `/Game/YTM/Maps/YTM_Island` only. Site: 26 km south of origin (clear of the Wild Biomes rings 4.5-16 km).
+Claim: `CLAIM island:youtube-master` (team link, 15:08 PT). Sublevel: `/Game/YTM/Maps/YTM_Island` only. Site: board ARK_ORIGIN 2000000,4000000,0 (competition.md).
 Size: **double, 240 m across** (R = 120 m). Built only from my `_YTM_` assets (500 shipped via QUEUE.md), plus one engine cylinder as the ground base.
 
 ## Layout

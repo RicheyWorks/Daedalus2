@@ -7,7 +7,7 @@ rock/cliff rim. Tags every actor YTM_Island. Idempotent (deletes its tagged acto
 import math, random, unreal
 SUB = "/Game/YTM/Maps/YTM_Island"; ART = "/Game/Daedalus/Art"; TAG = "YTM_Island"
 R = 12000.0  # radius cm (240 m diameter = double size)
-OFFSET = unreal.Vector(0, -2600000, 0)  # 26 km south of origin: clear of Wild Biomes rings 4.5-16 km
+OFFSET = unreal.Vector(2000000, 4000000, 0)  # board ARK_ORIGIN for youtube-master (competition.md)
 rnd = random.Random(2820)
 eas = unreal.EditorAssetLibrary; act = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
