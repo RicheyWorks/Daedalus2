@@ -140,15 +140,18 @@ def _unattended():
         # Older engines: the "unattended" console variable keeps FMessageDialog from blocking.
         world = None
         try:
-            world = _world()
-            unreal.SystemLibrary.execute_console_command(world, "r.Editor.Unattended 1")
+            unreal.SystemLibrary.execute_console_command(_world(), "r.Editor.Unattended 1")
+            world = _world()   # only once the switch is on is there anything to switch back
         except Exception:
-            pass
+            world = None
         try:
             yield
         finally:
             if world is not None:
-                unreal.SystemLibrary.execute_console_command(world, "r.Editor.Unattended 0")
+                try:
+                    unreal.SystemLibrary.execute_console_command(world, "r.Editor.Unattended 0")
+                except Exception:
+                    pass
         return
     flag(True)
     try:

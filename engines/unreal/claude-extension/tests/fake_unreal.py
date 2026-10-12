@@ -123,6 +123,8 @@ class AutomationLibrary:
 class SystemLibrary:
     @staticmethod
     def get_engine_version(): return "5.8.3-fake"
+    @staticmethod
+    def execute_console_command(world, cmd): CALLS.append("console " + cmd)
 
 
 LOGDIR = None
