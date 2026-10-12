@@ -97,6 +97,7 @@ UStaticMeshComponent* ADaedalusHero::Block(USceneComponent* Parent, const FName 
 void ADaedalusHero::BeginPlay()
 {
 	Super::BeginPlay();
+	LastGround = GetActorLocation();
 	// Colours: one dynamic material per block, tinted from the colour tag set in the constructor.
 	TArray<UStaticMeshComponent*> Blocks;
 	GetComponents<UStaticMeshComponent>(Blocks);
@@ -222,9 +223,27 @@ void ADaedalusHero::Landed(const FHitResult& Hit)
 	}
 }
 
+void ADaedalusHero::Respawn()
+{
+	GetCharacterMovement()->StopMovementImmediately();
+	bThrusting = false;
+	SetActorLocation(LastGround + FVector(0.f, 0.f, 60.f), false, nullptr, ETeleportType::TeleportPhysics);
+	++Respawns;
+}
+
 void ADaedalusHero::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+	// Islands float in the sky: remember the last ground, and fall back onto it instead of falling forever.
+	const UCharacterMovementComponent* Mv = GetCharacterMovement();
+	if (Mv->IsMovingOnGround())
+	{
+		LastGround = GetActorLocation();
+	}
+	else if (!LastGround.IsZero() && GetActorLocation().Z < LastGround.Z - FallLimit)
+	{
+		Respawn();
+	}
 	// Walk cycle: legs and the free arm swing with speed.
 	const float Speed = GetVelocity().Size2D();
 	WalkPhase += DeltaSeconds * FMath::Clamp(Speed / 60.f, 0.f, 14.f);

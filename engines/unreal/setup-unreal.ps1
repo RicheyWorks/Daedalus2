@@ -729,6 +729,12 @@ if ($Open -and -not $WhatIfOnly) {
     if ($exe -and (Test-Path $exe)) {
         Write-Host "Opening $Project in Unreal $($engine.Version)..." -ForegroundColor Cyan
         Start-Process -FilePath $exe -ArgumentList "`"$Project`""
+        # Answer the startup dialogs (rebuild modules, restore packages) so nobody has to click them.
+        $watch = Join-Path $PSScriptRoot "dialog-watch.ps1"
+        if (Test-Path $watch) {
+            Start-Process -FilePath "powershell.exe" -WindowStyle Hidden -ArgumentList @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "`"$watch`"")
+            Write-Host "    the dialog watcher answers startup prompts (log: $env:TEMP\daedalus-dialog-watch.log)"
+        }
     } else {
         Fail "can't open Unreal: no UnrealEditor.exe found"
     }

@@ -46,6 +46,15 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 Swings = 0;
 	/** Down-thrusts that bounced (the harness reads it). */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 Bounces = 0;
+	/** Falls off an island that put the hero back on the last ground he stood on (the harness reads it). */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 Respawns = 0;
+	/** How far below the last ground counts as fallen off, in cm. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") float FallLimit = 2500.f;
+	/** The last spot the hero stood on solid ground. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") FVector LastGround = FVector::ZeroVector;
+
+	/** Put the hero back on the last ground he stood on. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") void Respawn();
 
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") void Swing();
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") void Dash();
