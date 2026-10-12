@@ -231,8 +231,50 @@ def run(seed=7):
         a = 2 * math.pi * i / len(by["sky"])
         put(asset, kind, math.cos(a) * 16000, math.sin(a) * 16000, 9000 + (i % 3) * 3000)
 
+    play = place_play(rng)
+
     unreal.EditorLevelLibrary.save_current_level()
-    return {"placed": placed, "of": len(cat), "sublevel": SUB, "origin": [ORIGIN.x, ORIGIN.y, ORIGIN.z]}
+    return {"play": play, "placed": placed, "of": len(cat), "sublevel": SUB, "origin": [ORIGIN.x, ORIGIN.y, ORIGIN.z]}
+
+
+def place_play(rng):
+    """The game (ADR-057): the Keeper at the dock, the clogged filter on the aqueduct, a kettle in the plaza, one
+    living starbloom per species beside its bed, and the twelve star charts scattered over the rim (the Lantern chart
+    in the herb rings). Needs the DaedalusLink build that has the Orrery classes."""
+    if not hasattr(unreal, "DaedalusStarbloom"):
+        return "Orrery classes not built yet"
+    out = {"starblooms": 0, "charts": 0}
+
+    def actor(cls, x, y, z, yaw=0.0, label=None, **props):
+        a = EAS.spawn_actor_from_class(cls, at(x, y, z), unreal.Rotator(0.0, 0.0, yaw))
+        a.tags = [TAG]
+        a.set_folder_path("ClaudeIsland/Play")
+        if label:
+            a.set_actor_label(label)
+        for k, v in props.items():
+            a.set_editor_property(k, v)
+        return a
+
+    actor(unreal.DaedalusKeeper, 0, 11600, 0, -90.0, "Orr_Keeper_Ostra")
+    actor(unreal.DaedalusWaterFilter, -1200 - 16 * 330, 2300, 0, 90.0, "Orr_Play_Filter")
+    actor(unreal.DaedalusKettle, 0, -5600, 0, 0.0, "Orr_Play_Kettle")
+    actor(unreal.DaedalusKettle, 2200, 1200, 900, 0.0, "Orr_Play_Kettle_Summit")
+    herbs = [h for h in orr_build.HERBS]
+    for i, name in enumerate(herbs):
+        a = 2 * math.pi * i / 24
+        actor(unreal.DaedalusStarbloom, math.cos(a) * 5600, math.sin(a) * 5600, 0, math.degrees(a), "Orr_Bloom_" + name,
+              species=name)
+        out["starblooms"] += 1
+    for i, c in enumerate(orr_build.CONSTELLATIONS):
+        if c == "Lantern":
+            x, y = math.cos(0.4) * 6600, math.sin(0.4) * 6600
+        else:
+            a = 2 * math.pi * i / 12 + rng.uniform(-0.2, 0.2)
+            r = rng.uniform(10200, 11500)
+            x, y = math.cos(a) * r, math.sin(a) * r
+        actor(unreal.DaedalusStarChart, x, y, 60, 0.0, "Orr_Chart_" + c, constellation=c)
+        out["charts"] += 1
+    return out
 
 
 def shoot(path):
