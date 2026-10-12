@@ -15,6 +15,10 @@ judge says no:
   "drop_slot"     a mesh comes in with one material slot fewer
   "scale_m"       sizes stay in metres (a units bug)
   "no_materials"  no material assets are made
+  "engine_parent" the materials stay on the Interchange plugin's base (no Nanite usage; packaged games draw them grey)
+
+As seen live (UE 5.8.3): every glTF material instance is parented to
+/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS, whose base M_Default lacks the Nanite usage flag.
 """
 import os
 import runpy
@@ -31,6 +35,11 @@ sys.modules["unreal"] = U
 from asset_pipeline import glb   # noqa: E402
 
 ASSETS = {}
+
+
+def _full(path):
+    """'/Game/X/Name' as Unreal names the object: '/Game/X/Name.Name'."""
+    return path if "." in path.rsplit("/", 1)[-1] else "%s.%s" % (path, path.rsplit("/", 1)[-1])
 FAULT = {"next": None}
 SAVED = []   # directories the import script saved (it must, or the editor asks "Save Content?" on close)
 
@@ -44,6 +53,35 @@ class _Obj:
 class MaterialInterface(_Obj):
     def __init__(self, name, path=""): self._name, self._path = name, path
     def get_path_name(self): return self._path
+
+
+class MaterialInstanceConstant(MaterialInterface):
+    def __init__(self, name, path="", parent=None):
+        super().__init__(name, path)
+        self.parent = parent
+
+
+class Material(MaterialInterface):
+    def __init__(self, name, path=""):
+        super().__init__(name, path)
+        self.used_with_nanite = False
+        self.used_with_instanced_static_meshes = False
+
+
+ENGINE_BASE = Material("M_Default", "/InterchangeAssets/gltf/M_Default.M_Default")
+ENGINE_MI = MaterialInstanceConstant("MI_Default_Opaque_DS",
+                                     "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS", ENGINE_BASE)
+
+
+class MaterialEditingLibrary:
+    @staticmethod
+    def set_material_instance_parent(mi, parent):
+        U._game_thread_only("set_material_instance_parent")
+        if FAULT.get("sticky") != "engine_parent":
+            mi.parent = parent
+
+    @staticmethod
+    def recompile_material(m): return None
 
 
 class StaticMaterial(_Obj):
@@ -95,13 +133,14 @@ class _AssetTools:
                 raise RuntimeError("a non-automated import would open the import dialog")
             s = glb.summarize(t.filename)
             fault, FAULT["next"] = FAULT["next"], None
+            FAULT["sticky"] = fault
             # As seen live (UE 5.8.3): one static mesh per node, named after the node, scale baked in.
             nodes = s["nodes"][:-1] if fault == "drop_mesh" else s["nodes"]
             base = "%s/%s" % (t.destination_path, os.path.splitext(os.path.basename(t.filename))[0])
             # As seen live (UE 5.8.3): materials are created beside the meshes but not reported as imported; the
             # meshes' slots point at them. no_materials: the slots keep the engine default.
             mats = {} if fault == "no_materials" else {
-                name: MaterialInterface(name, "%s/Materials/%s.%s" % (base, name, name)) for name in s["materials"]}
+                name: MaterialInstanceConstant(name, "%s/Materials/%s.%s" % (base, name, name), ENGINE_MI) for name in s["materials"]}
             for mi in mats.values():
                 ASSETS[mi.get_path_name()] = mi
             for i, n in enumerate(nodes):
@@ -130,7 +169,28 @@ class EditorAssetLibrary:
     @staticmethod
     def load_asset(path):
         U._game_thread_only("load_asset")
-        return ASSETS.get(path)
+        return ASSETS.get(path) or ASSETS.get(_full(path))
+
+    @staticmethod
+    def does_asset_exist(path):
+        return path in ASSETS or _full(path) in ASSETS
+
+    @staticmethod
+    def duplicate_asset(src, dst):
+        U._game_thread_only("duplicate_asset")
+        orig = EditorAssetLibrary.load_asset(src)
+        if orig is None:
+            return None
+        name = dst.rsplit("/", 1)[-1]
+        copy = MaterialInstanceConstant(name, _full(dst), orig.parent) if isinstance(orig, MaterialInstanceConstant) \
+            else Material(name, _full(dst))
+        ASSETS[_full(dst)] = copy
+        return copy
+
+    @staticmethod
+    def save_asset(path, only_if_is_dirty=True):
+        SAVED.append(path)
+        return True
 
     @staticmethod
     def list_assets(dest, recursive=True):
@@ -143,8 +203,11 @@ class EditorAssetLibrary:
         return True
 
 
-for _n in ("MaterialInterface", "StaticMesh", "AssetImportTask", "AssetToolsHelpers", "EditorAssetLibrary"):
+for _n in ("MaterialInterface", "MaterialInstanceConstant", "Material", "MaterialEditingLibrary", "StaticMesh",
+           "AssetImportTask", "AssetToolsHelpers", "EditorAssetLibrary"):
     setattr(U, _n, globals()[_n])
+for _a in (ENGINE_BASE, ENGINE_MI):
+    ASSETS[_a.get_path_name()] = _a
 
 import claude_unreal_bridge as bridge  # noqa: E402
 bridge.register("pipeline.saved", lambda p: {"saved": list(SAVED)}, "directories saved", {})

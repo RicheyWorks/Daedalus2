@@ -46,6 +46,21 @@ mountain goats, marmots, snow foxes and caribou on stone and snow. They're place
 - Scenario `wild`: herds out, several species, every animal built from shipped parts, wandering, a shy one bolting,
   and all four foe kinds wearing art.
 
+## Found: the art library would render grey in a packaged game
+
+The live log warned for every Mob material: "missing usage flag Nanite! Default Material will be used in game."
+All 1588 material instances in the library are parented to the Interchange plugin's `MI_Default_Opaque_DS`. Its base
+`M_Default` has no Nanite usage flag, and engine content can't be saved, so the editor sets the flag on the fly but
+a packaged build draws them in the default material. This blocks deployment.
+
+- The project now owns `/Game/Daedalus/Materials/Gltf/M_Default` (with Nanite and instanced usage) and its
+  `MI_Default_Opaque_DS`.
+- **New imports** are moved onto it by the pipeline (`sides.UNREAL_IMPORT`). The judge rejects any material still on
+  the engine plugin's base, and a stand-in canary (`engine_parent`) proves it can say no (e2e 21/21).
+- **The 1588 already shipped** are moved by `daedalus_nanite_materials.run()`. It writes every old parent to
+  `Saved/Daedalus/nanite-materials.json` before changing anything, so `undo()` restores them. This runs once
+  Richmond OKs the bulk change.
+
 ## Held
 
 - **Legs that walk.** Parts pivot at the model origin, so a leg can't swing about its hip yet. That waits on the
