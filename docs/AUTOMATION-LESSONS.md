@@ -145,3 +145,7 @@ to it when something new breaks.
   from `imported_object_paths`, so the judge saw "Unreal made 0 materials". Listing the destination folder
   instead was wrong: the e2e canary caught it counting a previous import's leftovers. The import script now counts
   the materials the meshes' slots actually reference, and the stand-in models what live Unreal does.
+- **An import made during Play poisons its folder until the editor restarts.** It leaves unsaved, transient
+  materials in memory at those paths; later imports to the same folder silently fall back to the engine's grid
+  material. A fresh folder imported cleanly. The cause can't recur now (the watcher waits for Play to end), and a
+  probe import into a scratch folder is the quick way to tell "poisoned path" from "broken file".
