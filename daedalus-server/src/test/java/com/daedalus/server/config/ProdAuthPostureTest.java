@@ -158,6 +158,10 @@ class ProdAuthPostureTest {
         EXPECTED.put("GET /api/v1/jukebox/coat.png", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/jukebox/radio/stations", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/jukebox/radio/stream/" + ID, Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/jukebox/live", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/jukebox/studio/voices", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/jukebox/studio/note", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/jukebox/studio/audio/notes/" + ID, Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/jukebox/owned", Posture.AUTHENTICATED);
         EXPECTED.put("GET /api/v1/species", Posture.PUBLIC);
 
@@ -223,8 +227,9 @@ class ProdAuthPostureTest {
         EXPECTED.forEach((signature, posture) -> {
             String[] parts = signature.split(" ", 2);
             HttpMethod method = HttpMethod.valueOf(parts[0]);
+            // byte[]: some public endpoints answer 200 with a body of any type (e.g. the sandboxed live engine HTML)
             int status = client.method(method).uri(parts[1]).exchange()
-                    .returnResult(Void.class).getStatus().value();
+                    .returnResult(byte[].class).getStatus().value();
             boolean refused = status == 401 || status == 403;
 
             if (posture == Posture.AUTHENTICATED && !refused) {

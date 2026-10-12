@@ -126,7 +126,7 @@ class JukeboxControllerTest {
     void tokenHtmlIsServedSandboxedAndOnlyAfterReveal() throws Exception {
         MockHttpServletResponse r = mvc.perform(get("/api/v1/jukebox/tokens/1/html")).andReturn().getResponse();
         assertThat(r.getStatus()).isEqualTo(200);
-        assertThat(r.getContentAsString()).isEqualTo("<html>song</html>");
+        assertThat(r.getContentAsString()).endsWith("<html>song</html>");   // after the quiet-audio shim
         assertThat(r.getHeader("Content-Security-Policy")).isEqualTo("sandbox allow-scripts");
         assertThat(r.getHeader("X-Frame-Options")).isEqualTo("SAMEORIGIN");
         MockHttpServletResponse unrevealed = mvc.perform(get("/api/v1/jukebox/tokens/3/html")).andReturn().getResponse();
@@ -331,5 +331,40 @@ class JukeboxControllerTest {
                     .andReturn().getResponse().getStatus()).as(bad[0] + "=" + bad[1]).isEqualTo(400);
         }
         assertThat(seen).hasSize(2);
+    }
+
+    @Test
+    void rawOnChainHtmlCarriesTheQuietShimBeforeTheTokensOwnScript() throws Exception {
+        MockHttpServletResponse r = mvc.perform(get("/api/v1/jukebox/tokens/1/html")).andReturn().getResponse();
+        String html = r.getContentAsString();
+        assertThat(html).startsWith("<script>").contains("rdAudioShim(window, 0.35);</script>").endsWith("<html>song</html>");
+        assertThat(html.indexOf("rdAudioShim(window")).isLessThan(html.indexOf("<html>song"));
+        assertThat(html.substring(0, html.indexOf("rdAudioShim(window, 0.35)"))).doesNotContain("</script>");
+        assertThat(r.getHeader("Content-Security-Policy")).isEqualTo("sandbox allow-scripts");
+    }
+
+    @Test
+    void studioKeysEndpointsValidateAndAnswerWithoutAStudio() throws Exception {
+        assertThat(mvc.perform(get("/api/v1/jukebox/studio/voices")).andReturn().getResponse().getStatus()).isEqualTo(404);
+        assertThat(mvc.perform(get("/api/v1/jukebox/studio/note").param("voice", "Celesta").param("midi", "60"))
+                .andReturn().getResponse().getStatus()).isEqualTo(503);
+        for (String[] bad : new String[][]{{"voice", "Celesta"}, {"midi", "60"}, {"voice", "Celesta", "midi", "200"},
+                {"voice", "Celesta", "midi", "60", "x", "1"}}) {
+            var req = get("/api/v1/jukebox/studio/note");
+            for (int i = 0; i < bad.length; i += 2) req = req.param(bad[i], bad[i + 1]);
+            assertThat(mvc.perform(req).andReturn().getResponse().getStatus()).as(String.join(",", bad)).isEqualTo(400);
+        }
+        assertThat(mvc.perform(get("/api/v1/jukebox/studio/audio/notes/n0123456789abcdef01234567-v.mp3"))
+                .andReturn().getResponse().getStatus()).isEqualTo(404);
+    }
+
+    @Test
+    void theOptInOnChainPlayerIsPrometheusLiveCopyServedSandboxed() throws Exception {
+        MockHttpServletResponse r = mvc.perform(get("/api/v1/jukebox/live").param("hash", "0x" + "ab".repeat(32)).param("id", "1"))
+                .andReturn().getResponse();
+        assertThat(r.getStatus()).isEqualTo(200);
+        assertThat(r.getHeader("Content-Security-Policy")).isEqualTo("sandbox allow-scripts");
+        assertThat(r.getHeader("X-Frame-Options")).isEqualTo("SAMEORIGIN");
+        assertThat(r.getContentAsString()).contains("Reaction / Diffusion / Song").contains("mg");
     }
 }

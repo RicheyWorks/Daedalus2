@@ -106,6 +106,16 @@ class HttpStudioArrangerTest {
             } else if (q.equals("/health")) {
                 status = 200;
                 body = "{\"ok\":true,\"engine\":\"v6r4-s680199b4\",\"coat_engine\":\"cc8445587\",\"queue\":1,\"workers\":2,\"draining\":false}".getBytes();
+            } else if (q.equals("/voices")) {
+                status = 200;
+                body = "{\"schema_version\":\"rd-voice/1\",\"count\":1,\"voices\":[{\"name\":\"Celesta\",\"adsr\":{\"a\":0.002}}]}".getBytes();
+            } else if (q.startsWith("/note?")) {
+                lastArrange = q;
+                status = 200;
+                body = ("{\"url\":\"http://127.0.0.1:8797/audio/notes/n0123456789abcdef01234567-v6r4-s60798b99.mp3\","
+                        + "\"etag\":\"\\\"e\\\"\",\"note\":{\"voice\":\"Celesta\",\"midi\":60}}").getBytes();
+            } else if (q.equals("/audio/notes/n0123456789abcdef01234567-v6r4-s60798b99.mp3")) {
+                status = 200; type = "audio/mpeg"; body = "ID3note".getBytes();
             } else if (q.equals("/ready")) {
                 readyHits.incrementAndGet();
                 status = readyStatus;
@@ -453,5 +463,42 @@ class HttpStudioArrangerTest {
         assertThat(h.get("engine")).isEqualTo("v6r4-s680199b4");
         assertThat(h.get("p95Ms")).isEqualTo(23.5);
         assertThat(h.get("queue")).isEqualTo(3);
+    }
+
+    // ------------------------------------------------------------------ r4 Keys tab (rd-voice/1)
+
+    @Test
+    void keysVoicesAreRelayedAndCached() {
+        assertThat(studio.voices()).get().asString().contains("rd-voice/1").contains("Celesta");
+        assertThat(studio.voices()).isPresent();
+    }
+
+    @Test
+    void keysNoteIsValidatedSentAndItsFileProxiedSameOrigin() throws Exception {
+        java.util.Map<String, String> q = new java.util.LinkedHashMap<>();
+        q.put("voice", "Celesta"); q.put("midi", "60"); q.put("a", "0.01"); q.put("format", "mp3");
+        java.util.Map<String, Object> n = studio.note(q).orElseThrow();
+        assertThat(n.get("url")).isEqualTo("/api/v1/jukebox/studio/audio/notes/n0123456789abcdef01234567-v6r4-s60798b99.mp3");
+        assertThat(lastArrange).contains("voice=Celesta").contains("midi=60").contains("a=0.01");
+        HttpStudioArranger.Upstream up = studio.audio("notes/n0123456789abcdef01234567-v6r4-s60798b99.mp3", null).orElseThrow();
+        assertThat(new String(up.body().readAllBytes())).isEqualTo("ID3note");
+        assertThat(studio.audio("notes/../../etc/passwd", null)).isEmpty();
+        assertThat(studio.audio("notes/n0123.mp3", null)).isEmpty();
+    }
+
+    @Test
+    void keysNoteParamsOutsideTheSchemaAreRefusedBeforeTheStudio() {
+        String[][] bad = {{"midi", "60"}, {"voice", "Celesta"}, {"voice", "Celesta", "midi", "20"}, {"voice", "Celesta", "midi", "60.5"},
+                {"voice", "Celesta", "midi", "60", "vel", "2"}, {"voice", "Celesta", "midi", "60", "a", "9"}, {"voice", "<x>", "midi", "60"},
+                {"voice", "Celesta", "midi", "60", "format", "wav"}, {"voice", "Celesta", "midi", "60", "gain", "9"},
+                {"voice", "Celesta", "midi", "1e3"}, {"voice", "Celesta", "midi", "60", "rr", "16"}};
+        int before = arranges.get();
+        for (String[] b : bad) {
+            java.util.Map<String, String> q = new java.util.LinkedHashMap<>();
+            for (int i = 0; i < b.length; i += 2) q.put(b[i], b[i + 1]);
+            org.assertj.core.api.Assertions.assertThatThrownBy(() -> HttpStudioArranger.validateNote(q)).as(String.join(",", b))
+                    .isInstanceOf(IllegalArgumentException.class);
+        }
+        assertThat(arranges.get()).isEqualTo(before);
     }
 }
