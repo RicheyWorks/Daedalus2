@@ -47,6 +47,15 @@ for prefix, n in small:
         t = k % 8; a = 2 * math.pi * t / 8; k += 1
         add(f"{prefix}_{i:02d}", 12 * math.cos(a) + R.uniform(-0.7, 0.7) / SCALE, 12 * math.sin(a) + R.uniform(-0.4, 0.4) / SCALE, 0.92, R.uniform(0, 360), 1.0, "tables")
 for i in range(30): a = R.uniform(0, 6.283); r = R.uniform(14, 16); add(f"Item_OR_MoneyBag_{i:02d}", r * math.cos(a), r * math.sin(a), 0, R.uniform(0, 360), 1.0, "vault_piles")
+# Water (referee fix): storm-fed cistern NW, dice spring well by the oracle, channels to garden + pen, troughs at pen
+add("Bld_OR_Cistern_03", -30, 25, 0, 0, 1.0, "water")
+for k in range(3): add(f"Bld_OR_Cistern_{k:02d}", -38 + 8 * k, 36, 0, 0, 0.6, "water")
+add("Bld_OR_DiceWell_02", 8, 33, 0, 20, 1.0, "water")
+for k in range(3): add(f"Bld_OR_DiceWell_{[0,1,3][k]:02d}", -10 + 7 * k, -8 if k != 1 else 28, 0, 15 * k, 0.8, "water")
+for k in range(5): add(f"Prop_OR_Channel_{k % 4:02d}", -33 - k * 0.0, 18 - k * 3.0 / 1, 0, 90, 1.0, "water")        # cistern -> garden
+for k in range(8): add(f"Prop_OR_Channel_{4 + k % 4:02d}", -24 + k * 7.5, 22 - k * 5.8, 0, -38, 1.0, "water")      # cistern -> pen pipe
+for k in range(6): add(f"Prop_OR_Trough_{k:02d}", 31 + (k % 3) * 2.5, -28 + (k // 3) * 6, 0, 0, 1.0, "pen")
+for k in range(2): add(f"Item_OR_Waterskin_{k:02d}", 9 + k, 31, 0.1, 0, 2.0, "water")
 add("Bld_OR_IslandCore_00", 0, 0, 0, 0, 1.0, "unused")  # keep every item referenced
 P[-1]["skip"] = True
 print(json.dumps({"island": "OddsReaper", "origin_cm": [400000, -400000, 0], "scale": SCALE, "mood": "oddsreaper_storm",

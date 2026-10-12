@@ -1,7 +1,7 @@
 # OddsReaper Island ☠️💰
 
 **Bot:** OddsReaper (Team Grok), Quantitative Betting Strategist · **Contest:** island contest (Richey, 2026-10-12 3:02 PM PT)
-**Sublevel:** `/Game/OddsReaper/Maps/OddsReaperIsland` in DaedalusWorld · **Assets:** `/Game/OddsReaper/Art` (500 items)
+**Sublevel:** `/Game/OddsReaper/Maps/OddsReaperIsland` in DaedalusWorld · **Assets:** `/Game/OddsReaper/Art` (524 items: 500 + 24 water)
 **Size:** double the planned island, a 260 m felt-topped mesa (`Bld_OR_IslandCore_01`; layout spacing × 2), 4 km out at (4000 m, −4000 m)
 
 ## Lore
@@ -34,6 +34,14 @@ p = pA × pB, and the payout scales by 1/p, so the odds are fair and there is no
 +0.1 to p. Parlayvine doubles a payout, Stormbloom re-rolls once, and Oddsthistle shows you the roll before you
 commit. 8 herbs make 64 tonics. No other bot's system uses probability as the core mechanic.
 
+## Water: Reaper Waterworks (`water.json`)
+A **storm-fed cistern** in the NW (skull spout, 8 gold rain funnels, 20,000 L) fills from Sky Director rain: 400 L/h
+in Rain and 800 L/h in Storm, multiplied by (1 + wetness), so wetness can double the yield. A **dice-carved spring
+well** by the oracle always flows (25 L/h, and a 6 on the dawn d6 triples it for the day). Stone channels carry
+cistern water to the herb garden, and a copper pipe feeds **6 troughs** at the pen. The spring takes over if the
+cistern drops below 5%. Thirst: the player needs 3 L a day, a goat 8 L, a hen 0.5 L, a herb plant 1 L and a brew 0.5 L.
+The spring alone keeps everything alive (600 L a day against about 70 L of demand); the storms make the island rich.
+
 ## Livestock and survival loop (`livestock.json`)
 Coinback goats give milk and cheese, and shed a Reaper Coin on a 1-in-6 roll. Dicebeak hens lay one egg per dawn
 on a d6, and a 6 is a golden egg. Ledger trees fruit at dawn, and rain doubles the crop. The herbs and animals feed
@@ -41,7 +49,7 @@ each other and you, and coins are staked at the boards for seed. The island surv
 the Sky Director API (`OnDawn`, `GetWetness`, `Weather`).
 
 ## Pipeline
-1. `tools/islands/oddsreaper/gen_oddsreaper_items.py`: headless Blender run that builds the 500 glbs and
+1. `tools/islands/oddsreaper/gen_oddsreaper_items.py`: headless Blender run that builds the 524 glbs and
    `manifest.json` in about 10 s (`bot-team/art/oddsreaper/glb`)
 2. `tools/islands/oddsreaper/make_layout.py`: writes `layout.json`
 3. `tools/islands/oddsreaper/place_oddsreaper_island.py`: on an editor turn, imports, places, adds the storm
@@ -50,5 +58,5 @@ the Sky Director API (`OnDawn`, `GetWetness`, `Weather`).
    the editor turn
 
 ## Status
-500/500 items are generated and the layout, data, doc and placement script are written. Import, placement, the
+524 items are generated (500 + 24 water) and the layout, data, doc and placement script are written. Import, placement, the
 Unreal hero shot and the Play check wait on a granted editor turn.

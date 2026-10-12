@@ -4429,6 +4429,267 @@
    "zone": "vault_piles"
   },
   {
+   "asset": "Bld_OR_Cistern_03",
+   "x": -60.0,
+   "y": 50.0,
+   "z": 0,
+   "yaw": 0,
+   "scale": 1.0,
+   "zone": "water"
+  },
+  {
+   "asset": "Bld_OR_Cistern_00",
+   "x": -76.0,
+   "y": 72.0,
+   "z": 0,
+   "yaw": 0,
+   "scale": 0.6,
+   "zone": "water"
+  },
+  {
+   "asset": "Bld_OR_Cistern_01",
+   "x": -60.0,
+   "y": 72.0,
+   "z": 0,
+   "yaw": 0,
+   "scale": 0.6,
+   "zone": "water"
+  },
+  {
+   "asset": "Bld_OR_Cistern_02",
+   "x": -44.0,
+   "y": 72.0,
+   "z": 0,
+   "yaw": 0,
+   "scale": 0.6,
+   "zone": "water"
+  },
+  {
+   "asset": "Bld_OR_DiceWell_02",
+   "x": 16.0,
+   "y": 66.0,
+   "z": 0,
+   "yaw": 20,
+   "scale": 1.0,
+   "zone": "water"
+  },
+  {
+   "asset": "Bld_OR_DiceWell_00",
+   "x": -20.0,
+   "y": -16.0,
+   "z": 0,
+   "yaw": 0,
+   "scale": 0.8,
+   "zone": "water"
+  },
+  {
+   "asset": "Bld_OR_DiceWell_01",
+   "x": -6.0,
+   "y": 56.0,
+   "z": 0,
+   "yaw": 15,
+   "scale": 0.8,
+   "zone": "water"
+  },
+  {
+   "asset": "Bld_OR_DiceWell_03",
+   "x": 8.0,
+   "y": -16.0,
+   "z": 0,
+   "yaw": 30,
+   "scale": 0.8,
+   "zone": "water"
+  },
+  {
+   "asset": "Prop_OR_Channel_00",
+   "x": -66.0,
+   "y": 36.0,
+   "z": 0,
+   "yaw": 90,
+   "scale": 1.0,
+   "zone": "water"
+  },
+  {
+   "asset": "Prop_OR_Channel_01",
+   "x": -66.0,
+   "y": 30.0,
+   "z": 0,
+   "yaw": 90,
+   "scale": 1.0,
+   "zone": "water"
+  },
+  {
+   "asset": "Prop_OR_Channel_02",
+   "x": -66.0,
+   "y": 24.0,
+   "z": 0,
+   "yaw": 90,
+   "scale": 1.0,
+   "zone": "water"
+  },
+  {
+   "asset": "Prop_OR_Channel_03",
+   "x": -66.0,
+   "y": 18.0,
+   "z": 0,
+   "yaw": 90,
+   "scale": 1.0,
+   "zone": "water"
+  },
+  {
+   "asset": "Prop_OR_Channel_00",
+   "x": -66.0,
+   "y": 12.0,
+   "z": 0,
+   "yaw": 90,
+   "scale": 1.0,
+   "zone": "water"
+  },
+  {
+   "asset": "Prop_OR_Channel_04",
+   "x": -48.0,
+   "y": 44.0,
+   "z": 0,
+   "yaw": -38,
+   "scale": 1.0,
+   "zone": "water"
+  },
+  {
+   "asset": "Prop_OR_Channel_05",
+   "x": -33.0,
+   "y": 32.4,
+   "z": 0,
+   "yaw": -38,
+   "scale": 1.0,
+   "zone": "water"
+  },
+  {
+   "asset": "Prop_OR_Channel_06",
+   "x": -18.0,
+   "y": 20.8,
+   "z": 0,
+   "yaw": -38,
+   "scale": 1.0,
+   "zone": "water"
+  },
+  {
+   "asset": "Prop_OR_Channel_07",
+   "x": -3.0,
+   "y": 9.2,
+   "z": 0,
+   "yaw": -38,
+   "scale": 1.0,
+   "zone": "water"
+  },
+  {
+   "asset": "Prop_OR_Channel_04",
+   "x": 12.0,
+   "y": -2.4,
+   "z": 0,
+   "yaw": -38,
+   "scale": 1.0,
+   "zone": "water"
+  },
+  {
+   "asset": "Prop_OR_Channel_05",
+   "x": 27.0,
+   "y": -14.0,
+   "z": 0,
+   "yaw": -38,
+   "scale": 1.0,
+   "zone": "water"
+  },
+  {
+   "asset": "Prop_OR_Channel_06",
+   "x": 42.0,
+   "y": -25.6,
+   "z": 0,
+   "yaw": -38,
+   "scale": 1.0,
+   "zone": "water"
+  },
+  {
+   "asset": "Prop_OR_Channel_07",
+   "x": 57.0,
+   "y": -37.2,
+   "z": 0,
+   "yaw": -38,
+   "scale": 1.0,
+   "zone": "water"
+  },
+  {
+   "asset": "Prop_OR_Trough_00",
+   "x": 62.0,
+   "y": -56.0,
+   "z": 0,
+   "yaw": 0,
+   "scale": 1.0,
+   "zone": "pen"
+  },
+  {
+   "asset": "Prop_OR_Trough_01",
+   "x": 67.0,
+   "y": -56.0,
+   "z": 0,
+   "yaw": 0,
+   "scale": 1.0,
+   "zone": "pen"
+  },
+  {
+   "asset": "Prop_OR_Trough_02",
+   "x": 72.0,
+   "y": -56.0,
+   "z": 0,
+   "yaw": 0,
+   "scale": 1.0,
+   "zone": "pen"
+  },
+  {
+   "asset": "Prop_OR_Trough_03",
+   "x": 62.0,
+   "y": -44.0,
+   "z": 0,
+   "yaw": 0,
+   "scale": 1.0,
+   "zone": "pen"
+  },
+  {
+   "asset": "Prop_OR_Trough_04",
+   "x": 67.0,
+   "y": -44.0,
+   "z": 0,
+   "yaw": 0,
+   "scale": 1.0,
+   "zone": "pen"
+  },
+  {
+   "asset": "Prop_OR_Trough_05",
+   "x": 72.0,
+   "y": -44.0,
+   "z": 0,
+   "yaw": 0,
+   "scale": 1.0,
+   "zone": "pen"
+  },
+  {
+   "asset": "Item_OR_Waterskin_00",
+   "x": 18.0,
+   "y": 62.0,
+   "z": 0.1,
+   "yaw": 0,
+   "scale": 2.0,
+   "zone": "water"
+  },
+  {
+   "asset": "Item_OR_Waterskin_01",
+   "x": 20.0,
+   "y": 62.0,
+   "z": 0.1,
+   "yaw": 0,
+   "scale": 2.0,
+   "zone": "water"
+  },
+  {
    "asset": "Bld_OR_IslandCore_00",
    "x": 0.0,
    "y": 0.0,

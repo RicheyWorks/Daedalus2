@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 """OddsReaper Island, editor turn script (safe to run again). Run inside the editor on a granted turn only.
-1. imports the 500 OddsReaper glbs into /Game/OddsReaper/Art (skips assets that already exist)
+1. imports the 524 OddsReaper glbs into /Game/OddsReaper/Art (skips assets that already exist)
 2. creates/opens the sublevel /Game/OddsReaper/Maps/OddsReaperIsland under DaedalusWorld and makes it current
 3. places layout.json, a storm Mood Volume over the island, and a hero camera
 4. saves ONLY the sublevel. Prints PASS/FAIL.
