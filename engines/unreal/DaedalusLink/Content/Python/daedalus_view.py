@@ -58,11 +58,15 @@ def world_bounds(world_id):
 
 
 def daedalus_worlds():
-    """The world ids that have a folder in the open level."""
+    """The world ids in the open level: Daedalus/<id> folders that hold chunk meshes.
+
+    Other Daedalus/ folders (Atmosphere, Lamps, Show, Sky...) are scenery, not worlds; counting them made the
+    hero look for islands in "Atmosphere" (seen live).
+    """
     ids = set()
     for a in unreal.get_editor_subsystem(unreal.EditorActorSubsystem).get_all_level_actors():
         path = str(a.get_folder_path())
-        if path.startswith(FOLDER) and len(path) > len(FOLDER):
+        if path.startswith(FOLDER) and len(path) > len(FOLDER) and a.get_actor_label().startswith("chunk_"):
             ids.add(path[len(FOLDER):].split("/")[0])
     return sorted(ids)
 
