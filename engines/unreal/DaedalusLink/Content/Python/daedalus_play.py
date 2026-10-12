@@ -442,8 +442,14 @@ def scenario_dig(p):
     bag = dict(h.get_editor_property("bag"))
     for _ in range(5):
         yield
-    # Put it back: aim at the hole's floor and place.
+    # Put it back: aim at the hole's floor (the top face of the cube under it) and place.
+    c = live.cube_center(cube)
+    h.aim_at(unreal.Vector(c.x, c.y, c.z - 45))
+    for _ in range(5):
+        yield
     placed = h.place_cube() if h.get_editor_property("selected_cube") else False
+    yield
+    back = live.cube_at(live.cube_center(cube))
     t = 0.0
     while t < 2.0:
         t += unreal.GameplayStatics.get_world_delta_seconds(world())
@@ -456,7 +462,7 @@ def scenario_dig(p):
         _check("mined it", ok_mine and h.get_editor_property("cubes_mined") == mined0 + 1, f"now={after}"),
         _check("the world lost it", after == "AIR", f"cube={cube} is {after}"),
         _check("it went in the bag", bag.get(target, 0) >= 1, str(bag)),
-        _check("placed one back", placed, f"placed={h.get_editor_property('cubes_placed')}"),
+        _check("placed one back", placed and back == target, f"placed={h.get_editor_property('cubes_placed')} hole now {back}"),
         _check("edits sent to the server", sent >= 2, f"sent={sent} accepted_total={accepted}"),
     ], "server_accepted_total": accepted}
 
