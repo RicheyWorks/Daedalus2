@@ -1,0 +1,135 @@
+{
+ "schema": "daedalus.quest/v0",
+ "adventure": "the_climax_seed",
+ "owner": "pythagoras",
+ "chapters": [
+  {
+   "id": "ash_field",
+   "title": "Ash Field",
+   "text": "Clear the impact scar; grow pioneer herbs.",
+   "goals": [
+    {
+     "type": "stage_tiles",
+     "stage": 0,
+     "n": 20
+    },
+    {
+     "type": "brew",
+     "tea": "ladder",
+     "min_rungs": 1
+    }
+   ],
+   "reward": [
+    "Item_Seed_PYT_MeadowPouch_V1"
+   ],
+   "sign": "ADV_Chapter1_Sign"
+  },
+  {
+   "id": "meadow_keepers",
+   "title": "Meadow Keepers",
+   "text": "Bring sheep by Ark and graze a meadow; install bees.",
+   "goals": [
+    {
+     "type": "graze_tiles",
+     "n": 16
+    },
+    {
+     "type": "actor",
+     "tag": "PYT_Livestock",
+     "n": 5
+    },
+    {
+     "type": "place",
+     "asset": "Prop_Live_PYT_Beehive",
+     "n": 2
+    }
+   ],
+   "reward": [
+    "Item_Food_PYT_HoneyJar_V1"
+   ],
+   "sign": "ADV_Chapter2_Sign"
+  },
+  {
+   "id": "bramble_wall",
+   "title": "Bramble Wall",
+   "text": "Rest the land; open the scrub with goats or fire.",
+   "goals": [
+    {
+     "type": "stage_tiles",
+     "stage": 2,
+     "n": 12
+    },
+    {
+     "type": "choice",
+     "options": [
+      "goats",
+      "burn"
+     ]
+    }
+   ],
+   "reward": [
+    "Tool_PYT_FireweedTorch_V1"
+   ],
+   "sign": "ADV_Chapter3_Sign"
+  },
+  {
+   "id": "pine_shield",
+   "title": "Pine Shield",
+   "text": "Pines nurse young oaks; save saplings from the windthrow storm.",
+   "goals": [
+    {
+     "type": "survive_event",
+     "event": "windthrow"
+    },
+    {
+     "type": "species",
+     "name": "Oak",
+     "min": 5
+    }
+   ],
+   "reward": [
+    "Item_Seed_PYT_ForestPouch_V1"
+   ],
+   "sign": "ADV_Chapter4_Sign"
+  },
+  {
+   "id": "riverbank",
+   "title": "Riverbank",
+   "text": "Dig the stream; willows hold the bank; frogs return; water turns drinkable.",
+   "goals": [
+    {
+     "type": "dig_tiles",
+     "n": 6
+    },
+    {
+     "type": "actor",
+     "tag": "Water_Drinkable",
+     "n": 3
+    }
+   ],
+   "reward": [
+    "Item_Seed_PYT_RiparianPouch_V1"
+   ],
+   "sign": "ADV_Chapter5_Sign"
+  },
+  {
+   "id": "climax",
+   "title": "Climax",
+   "text": "Hold a 0-1-2-3 mosaic and brew Climax Tea at the old stump.",
+   "goals": [
+    {
+     "type": "climax_mosaic"
+    },
+    {
+     "type": "brew",
+     "tea": "climax",
+     "at": "ADV_OldStump"
+    }
+   ],
+   "reward": [
+    "Prop_Tree_PYT_GreatOak"
+   ],
+   "sign": "ADV_Chapter6_Sign"
+  }
+ ]
+}
