@@ -46,20 +46,18 @@ def mesh_path(asset, kind):
 
 
 def _color_mi(name, rgb):
-    """A project-owned colour material on the Nanite-ready base (ADR-055)."""
+    """A project-owned colour material: the engine's basic shape material (it has a Color parameter) tinted. The
+    island's ground pieces are engine basic shapes, not Nanite meshes, so this base needs no Nanite usage."""
     path = "/Game/Claude/Materials/" + name
-    if unreal.EditorAssetLibrary.does_asset_exist(path):
-        return unreal.load_asset(path)
-    parent = unreal.load_asset("/Game/Daedalus/Materials/Gltf/MI_Default_Opaque_DS")
-    tools = unreal.AssetToolsHelpers.get_asset_tools()
-    mi = tools.create_asset(name, "/Game/Claude/Materials", unreal.MaterialInstanceConstant,
-                            unreal.MaterialInstanceConstantFactoryNew())
-    unreal.MaterialEditingLibrary.set_material_instance_parent(mi, parent)
-    for p in unreal.MaterialEditingLibrary.get_vector_parameter_names(parent):
-        if "color" in str(p).lower() or "base" in str(p).lower():
-            unreal.MaterialEditingLibrary.set_material_instance_vector_parameter_value(
-                mi, p, unreal.LinearColor(rgb[0], rgb[1], rgb[2], 1.0))
-            break
+    mi = unreal.load_asset(path) if unreal.EditorAssetLibrary.does_asset_exist(path) else None
+    if mi is None:
+        tools = unreal.AssetToolsHelpers.get_asset_tools()
+        mi = tools.create_asset(name, "/Game/Claude/Materials", unreal.MaterialInstanceConstant,
+                                unreal.MaterialInstanceConstantFactoryNew())
+    unreal.MaterialEditingLibrary.set_material_instance_parent(
+        mi, unreal.load_asset("/Engine/BasicShapes/BasicShapeMaterial"))
+    unreal.MaterialEditingLibrary.set_material_instance_vector_parameter_value(
+        mi, "Color", unreal.LinearColor(rgb[0], rgb[1], rgb[2], 1.0))
     unreal.EditorAssetLibrary.save_asset(path, only_if_is_dirty=False)
     return mi
 
@@ -116,18 +114,34 @@ def run(seed=7):
     soil = _color_mi("MI_Orr_Soil", (0.35, 0.24, 0.15))
     cyl, cone, cube = "/Engine/BasicShapes/Cylinder", "/Engine/BasicShapes/Cone", "/Engine/BasicShapes/Cube"
 
-    # ---- the land: deck, hanging rock, summit terraces, paths, a pond
-    spawn(cyl, at(0, 0, -1000), 0, (R_DECK / 50, R_DECK / 50, 20), grass, "Orr_Deck")
-    spawn(cone, at(0, 0, -6500), 0, (R_DECK / 50 * 0.95, R_DECK / 50 * 0.95, 90), rock, "Orr_Underrock").set_actor_rotation(
-        unreal.Rotator(180.0, 0.0, 0.0), False)
-    for i, (r, h) in enumerate([(5200, 600), (3200, 1200), (1800, 1800)]):
-        spawn(cyl, at(0, 0, h / 2 - 300), 0, (r / 50, r / 50, h / 100), grass if i < 2 else rock, "Orr_Terrace_%d" % i)
+    # ---- the land: a seeded voxel isle (ADR-058) when the build has it, else the basic-shape terraces
+    isle = None
+    if hasattr(unreal, "DaedalusVoxelIsle"):
+        isle = EAS.spawn_actor_from_class(unreal.DaedalusVoxelIsle, ORIGIN, unreal.Rotator(0.0, 0.0, 0.0))
+        isle.tags = [TAG]
+        isle.set_actor_label("Orr_Isle")
+        isle.set_folder_path("ClaudeIsland")
+        for k, v in (("seed", seed), ("radius", 140), ("summit_height", 16), ("depth", 70),
+                     ("pond_at", unreal.IntPoint(-70, 45)), ("pond_radius", 14)):
+            isle.set_editor_property(k, v)
+        isle.build()
+    else:
+        spawn(cyl, at(0, 0, -1000), 0, (R_DECK / 50, R_DECK / 50, 20), grass, "Orr_Deck")
+        spawn(cone, at(0, 0, -6500), 0, (R_DECK / 50 * 0.95, R_DECK / 50 * 0.95, 90), rock, "Orr_Underrock").set_actor_rotation(
+            unreal.Rotator(180.0, 0.0, 0.0), False)
+        for i, (r, h) in enumerate([(5200, 600), (3200, 1200), (1800, 1800)]):
+            spawn(cyl, at(0, 0, h / 2 - 300), 0, (r / 50, r / 50, h / 100), grass if i < 2 else rock, "Orr_Terrace_%d" % i)
+        spawn(cyl, at(-7000, 4500, 3), 0, (24, 24, 0.06), water_m, "Orr_Pond", collide=False)
     top = 1500.0
     for k in range(8):
         a = k * math.pi / 4
-        spawn(cube, at(math.cos(a) * 8000, math.sin(a) * 8000, 2), math.degrees(a), (110, 3, 0.05), path_m, "Orr_Spoke_%d" % k,
-              collide=False)
-    spawn(cyl, at(-7000, 4500, 3), 0, (24, 24, 0.06), water_m, "Orr_Pond", collide=False)
+        for j in range(22):   # stepping-stone paths that follow the ground
+            r = 1800 + j * 450
+            x, y = math.cos(a) * r, math.sin(a) * r
+            if isle is not None and not isle.is_land(ORIGIN.x + x, ORIGIN.y + y):
+                continue
+            z = (isle.top_z(ORIGIN.x + x, ORIGIN.y + y) - ORIGIN.z) if isle is not None else 2
+            spawn(cube, at(x, y, z + 1), math.degrees(a), (3.6, 1.4, 0.06), path_m, collide=False)
 
     cat = orr_build.catalogue()
     by = {}
@@ -136,6 +150,8 @@ def run(seed=7):
     placed = 0
 
     def ground(x, y):
+        if isle is not None:
+            return isle.top_z(ORIGIN.x + x, ORIGIN.y + y) - ORIGIN.z
         r = math.hypot(x, y)
         return 1500.0 if r < 1800 else 900.0 if r < 3200 else 300.0 if r < 5200 else 0.0
 
@@ -238,13 +254,13 @@ def run(seed=7):
         a = 2 * math.pi * i / len(by["sky"])
         put(asset, kind, math.cos(a) * 16000, math.sin(a) * 16000, 9000 + (i % 3) * 3000)
 
-    play = place_play(rng)
+    play = place_play(rng, ground)
 
     unreal.EditorLevelLibrary.save_current_level()
     return {"play": play, "placed": placed, "of": len(cat), "sublevel": SUB, "origin": [ORIGIN.x, ORIGIN.y, ORIGIN.z]}
 
 
-def place_play(rng):
+def place_play(rng, ground=lambda x, y: 0.0):
     """The game (ADR-057): the Keeper at the dock, the clogged filter on the aqueduct, a kettle in the plaza, one
     living starbloom per species beside its bed, and the twelve star charts scattered over the rim (the Lantern chart
     in the herb rings). Needs the DaedalusLink build that has the Orrery classes."""
@@ -253,7 +269,7 @@ def place_play(rng):
     out = {"starblooms": 0, "charts": 0}
 
     def actor(cls, x, y, z, yaw=0.0, label=None, **props):
-        a = EAS.spawn_actor_from_class(cls, at(x, y, z), unreal.Rotator(0.0, 0.0, yaw))
+        a = EAS.spawn_actor_from_class(cls, at(x, y, ground(x, y) + z), unreal.Rotator(0.0, 0.0, yaw))
         a.tags = [TAG]
         a.set_folder_path("ClaudeIsland/Play")
         if label:
@@ -262,10 +278,10 @@ def place_play(rng):
             a.set_editor_property(k, v)
         return a
 
-    actor(unreal.DaedalusKeeper, 0, 11600, 0, -90.0, "Orr_Keeper_Ostra")
+    actor(unreal.DaedalusKeeper, 0, 10500, 0, -90.0, "Orr_Keeper_Ostra")
     actor(unreal.DaedalusWaterFilter, -1200 - 16 * 330, 2300, 0, 90.0, "Orr_Play_Filter")
     actor(unreal.DaedalusKettle, 0, -5600, 0, 0.0, "Orr_Play_Kettle")
-    actor(unreal.DaedalusKettle, 2200, 1200, 900, 0.0, "Orr_Play_Kettle_Summit")
+    actor(unreal.DaedalusKettle, 2200, 1200, 0, 0.0, "Orr_Play_Kettle_Summit")
     herbs = [h for h in orr_build.HERBS]
     for i, name in enumerate(herbs):
         a = 2 * math.pi * i / 24
