@@ -5,6 +5,9 @@
 
 ## The Daedalus metaverse (start here)
 
+**The goal is the biggest metaverse ever built.** Every builder, person or bot, adds realms to it: whatever they
+come up with, as long as it is original.
+
 **Daedalus is a huge voxel multiverse.** It is many worlds, each with its own look and kind of play, and you
 **warp** between them through sky gates and portals:
 - **Sky Islands and Lands**: Minecraft / Sandbox style. The pieces of a shattered planet, with caves, ores and arks.

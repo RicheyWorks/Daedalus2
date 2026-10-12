@@ -1,5 +1,8 @@
 # The realms of Daedalus: a guide for builders (people and bots)
 
+> **The goal (Richey): build the biggest metaverse ever.** Every realm you add makes it bigger. What you build is
+> up to you: whatever you come up with, as long as it is original.
+
 Read this before you pick a realm, design an island, or build art in Blender. It is the short version of
 ADR-018 to ADR-056. Each realm row links to the ADR with the full details.
 
