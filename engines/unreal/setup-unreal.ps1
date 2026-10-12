@@ -410,13 +410,16 @@ function Find-VcTools {
     return $null
 }
 
-# Any Visual Studio install, with or without the C++ tools.
+# Any Visual Studio install, with or without the C++ tools, including one an interrupted update left
+# incomplete (vswhere hides those unless asked with -all).
 function Find-AnyVs {
     $vswhere = Join-Path $VsInstallerDir "vswhere.exe"
     if (-not (Test-Path $vswhere)) { return $null }
-    $p = & $vswhere -latest -products * -property installationPath
-    if ($p) { return ($p | Select-Object -First 1) }
-    return $null
+    $json = & $vswhere -all -products * -format json | Out-String
+    $all = @($json | ConvertFrom-Json)
+    if ($all.Count -eq 0) { return $null }
+    $i = $all | Sort-Object { [version]$_.installationVersion } -Descending | Select-Object -First 1
+    return [pscustomobject]@{ Path = $i.installationPath; Complete = [bool]$i.isComplete; Version = $i.installationVersion }
 }
 
 # The MSVC toolsets installed under a Visual Studio, newest first.
@@ -442,9 +445,14 @@ if ($Build) {
     } elseif (-not $vc -and -not $WhatIfOnly -and (Find-AnyVs)) {
         # Visual Studio is there but without the C++ tools (or an update left them out): add them to it.
         $any = Find-AnyVs
-        Write-Host "    Visual Studio at $any has no C++ tools; adding 'Game development with C++' to it"
+        $setup = Join-Path $VsInstallerDir "setup.exe"
         Write-Host "    Windows will ask to let the Visual Studio Installer make changes: choose Yes."
-        Start-Process -FilePath (Join-Path $VsInstallerDir "setup.exe") -Verb RunAs -Wait -ArgumentList @("modify", "--installPath", "`"$any`"",
+        if (-not $any.Complete) {
+            Write-Host "    Visual Studio $($any.Version) at $($any.Path) is half-installed (an update stopped part way); finishing it"
+            Start-Process -FilePath $setup -Verb RunAs -Wait -ArgumentList @("resume", "--installPath", "`"$($any.Path)`"", "--passive", "--norestart")
+        }
+        Write-Host "    adding 'Game development with C++' to Visual Studio at $($any.Path)"
+        Start-Process -FilePath $setup -Verb RunAs -Wait -ArgumentList @("modify", "--installPath", "`"$($any.Path)`"",
             "--passive", "--norestart", "--add", "Microsoft.VisualStudio.Workload.NativeGame", "--add", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
             "--add", "Microsoft.VisualStudio.Component.Windows11SDK.22621", "--includeRecommended")
         $vc = Find-VcTools

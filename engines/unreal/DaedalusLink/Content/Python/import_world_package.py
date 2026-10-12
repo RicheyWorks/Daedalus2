@@ -333,7 +333,8 @@ def report(manifest, checks, saved_dir):
             (unreal.log if c["ok"] else unreal.log_error)(line)
     out = os.path.join(saved_dir, "Daedalus")
     os.makedirs(out, exist_ok=True)
-    path = os.path.join(out, "verify-%s.json" % safe_name(w["id"]))
+    # Named by the world id exactly as setup-unreal.ps1 asks for it (not safe_name: "world-zero", not "world_zero").
+    path = os.path.join(out, "verify-%s.json" % w["id"])
     with open(path, "w", encoding="utf-8") as f:
         json.dump({"world": w["id"], "revision": w.get("revision"), "ok": ok, "checks": checks}, f, indent=2)
     return ok

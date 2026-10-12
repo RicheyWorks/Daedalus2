@@ -54,5 +54,18 @@ expect("--live: no chunks expected", dict(GOOD, chunk_actors=0), [], live_only=T
 expect("an empty world: zero chunks is right", dict(GOOD, chunk_actors=0), [],
        manifest=dict(MANIFEST, geometry={"chunks": 0}))
 
+# The report lands where setup-unreal.ps1 reads it: <Saved>/Daedalus/verify-<world id>.json, id unchanged.
+import json
+import tempfile
+total += 1
+with tempfile.TemporaryDirectory() as saved:
+    ok = iwp.report(MANIFEST, iwp.judge(MANIFEST, GOOD), saved)
+    where = os.path.join(saved, "Daedalus", "verify-world-zero.json")
+    if ok and os.path.isfile(where) and json.load(open(where))["ok"] is True:
+        passed += 1
+        print("PASS the report is written as verify-world-zero.json, the name setup-unreal.ps1 reads")
+    else:
+        print("FAIL the report is not at", where, os.listdir(os.path.join(saved, "Daedalus")))
+
 print("%d/%d" % (passed, total))
 sys.exit(0 if passed == total else 1)
