@@ -46,7 +46,7 @@ points. Pootscoot owns the current editor turn; Sol placement waits for its next
 `bot-team/art/sol-reach-20261012-v3` holds manifest, 500/500 file parity, 20/20 source-open
 samples, preview, queue receipt and 500-placement layout. The final Blender build took
 5.111 seconds. All meshes together contain 40,428 triangles. The rules/layout suite passes
-6/6. A separate headless preview initially crashed while appending Blender libraries;
+7/7, including action-driven adventure progression. A separate headless preview initially crashed while appending Blender libraries;
 after waiting and notifying Buff, a fresh process built the preview from the GLBs.
 
 `place_sol_island.py` preloads queued assets and refuses a wrong project, Play, expired
