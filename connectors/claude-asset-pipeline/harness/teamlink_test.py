@@ -21,7 +21,7 @@ results = []
 
 def check(name, ok, detail=""):
     results.append(bool(ok))
-    print("%s  %s %s" % ("ok  " if ok else "FAIL", name, "" if ok else detail))
+    print("%s  %s %s" % ("ok  " if ok else "FAIL", name, "" if ok else str(detail)[:300]))
 
 
 # 1. The broker alone.
@@ -80,6 +80,39 @@ for bad in ((None, "x", "t"), ("a", "", "t"), ("a", "b", "")):
         check("send refuses a message missing from/to/type %s" % (bad,), True)
 shutil.rmtree(d)
 
+# 1b. For every bot: topics, the directory, flood control, and a long log read without scanning it all.
+d = tempfile.mkdtemp(prefix="hub-")
+b = teamlink.Broker(d)
+b.send("lead", "*", "note", {"text": "plan of the day"}, topic="plan")
+b.send("blender-team", "*", "asset.shipped", {"asset": "X"}, topic="art")
+b.send("lead", "youtube-master", "note", {"text": "direct"})
+got, _ = b.wait("youtube-master", 0, 0, topics=["plan"])
+check("topics: a subscriber gets its topics' broadcasts and anything sent to it, nothing else",
+      [m["body"].get("text") for m in got] == ["plan of the day", "direct"], got)
+check("topics: no topics given means every broadcast", len(b.wait("youtube-master", 0, 0)[0]) == 3)
+b.register("lead", "Lead Bot (Bufffff)", ["plan", "note"], "plans the day")
+b.register("art-master-flex", "art direction", ["art"])
+b.heartbeat("lead", "planning")
+dirs = b.directory()
+check("directory: registered bots with their roles, alive or not",
+      dirs["lead"]["role"] == "Lead Bot (Bufffff)" and dirs["lead"]["alive"] and dirs["art-master-flex"]["handles"] == ["art"]
+      and "youtube-master" in dirs, dirs)
+check("directory: registrations survive a restart", teamlink.Broker(d).directory()["lead"]["handles"] == ["plan", "note"])
+t = 1000.0
+ok = sum(b.allow("noisy", t) for _ in range(int(teamlink.RATE_BURST) + 50))
+check("flood control: a burst passes, the rest is refused", ok == int(teamlink.RATE_BURST), ok)
+check("flood control: it refills with time", b.allow("noisy", t + 1.0))
+check("flood control: other bots are not affected", b.allow("lead", t))
+for k in range(2000):
+    b.send("lead", "*", "tick", {"k": k})
+t0 = time.monotonic()
+for _ in range(200):
+    b.wait("x", b.last - 1, 0)
+check("a long log: catching up from near the end doesn't rescan it (200 reads of a 2000-message log < 0.5 s)",
+      time.monotonic() - t0 < 0.5, "%.2f s" % (time.monotonic() - t0))
+check("reads past the end are empty, reads from 0 are whole", b._since(b.last + 5) == [] and len(b._since(0)) == b.last)
+shutil.rmtree(d)
+
 # 2. Over HTTP, the way both teams use it.
 d = tempfile.mkdtemp(prefix="link-")
 box = {}
@@ -129,6 +162,21 @@ try:
 except urllib.error.HTTPError as e:
     check("HTTP: a bad message is a 400, not a crash", e.code == 400 and "required" in json.loads(e.read())["error"])
 check("HTTP: the broker is still up after it", unreal.health() is not None)
+html = urllib.request.urlopen("http://127.0.0.1:%d/" % port, timeout=5).read().decode()
+check("HTTP: the dashboard page is served", "<title>Bot hub</title>" in html and "/bots" in html)
+blender.register("Blender Boss", ["asset.ready"])
+check("HTTP: register and /bots", blender.bots()["blender-team"]["role"] == "Blender Boss")
+flood = teamlink.Link("flooder", port)
+codes = []
+for _ in range(int(teamlink.RATE_BURST) + 150):
+    try:
+        urllib.request.urlopen(urllib.request.Request("http://127.0.0.1:%d/send" % port, method="POST",
+                               data=b'{"from":"flooder","to":"*","type":"x"}'), timeout=5)
+        codes.append(200)
+    except urllib.error.HTTPError as e:
+        codes.append(e.code)
+check("HTTP: a flooding bot gets 429s, not the hub's attention", 429 in codes and codes[0] == 200, codes[-6:])
+check("HTTP: the hub still answers everyone else", unreal.health() is not None)
 dead = teamlink.Link("unreal-team", 1)
 check("a dead broker: calls return nothing and never raise", dead.send("x", "y") is None and dead.wait(0, 0.1) == ([], 0)
       and dead.up is False)
@@ -240,7 +288,7 @@ mid = blender.send("unreal-team", "queue.status")
 w.on_message(box["broker"].log(mid - 1, 1)[0])
 st = next((m for m in box["broker"].log(mid, 99) if m["type"] == "queue.state"), None)
 check("watcher: queue.status answers with the board's counts", st and st["body"]["counts"].get("SHIPPED") == 2, st)
-check("watcher: every message it handled is acked", [m for m in unreal.pending() if not m.get("uid")] == [],
+check("watcher: every message it handled is acked", [m for m in unreal.pending() if m["to"] == "unreal-team" and not m.get("uid")] == [],
       unreal.pending())
 box["server"].shutdown()
 shutil.rmtree(d)

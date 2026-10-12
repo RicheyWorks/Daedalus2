@@ -44,7 +44,7 @@ if ($Ping) {
     exit
 }
 $h = Get "/health"
-"team link: " + $(if ($h) { "up (last id $($h.last), since $($h.since))" } else { "down" })
+"bot hub: " + $(if ($h) { "up (last id $($h.last), since $($h.since)); dashboard http://127.0.0.1:9890/" } else { "down" })
 if ($h) {
     "presence:"
     (Get "/presence").PSObject.Properties | ForEach-Object { "  {0,-14} alive={1} age={2}s {3}" -f $_.Name, $_.Value.alive, $_.Value.age_s, $_.Value.status }

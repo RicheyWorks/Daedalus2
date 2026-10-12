@@ -513,6 +513,8 @@ def main(argv=None):
     print("watching %s every %.0fs%s" % (w.queue, a.every, "" if link is None else ", live on the team link"))
     after = 0
     if link is not None and link.health():
+        link.register("Unreal team (Claude): ships Blender art into Unreal", ["asset.ready", "ping", "queue.status"],
+                      "send asset.ready {asset}; results come back as asset.* broadcasts")
         # Catch up first: anything sent to us while we were down and never acknowledged.
         for m in link.pending():
             w.on_message(m)

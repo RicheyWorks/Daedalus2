@@ -53,6 +53,8 @@ DEFAULT_DIR = os.path.join(os.path.expanduser("~"), "projects", "bot-team", "lin
 ALIVE_S = 30
 MAX_WAIT_S = 55
 MAX_BODY = 256 * 1024
+RATE_PER_S = 20.0      # per sender, sustained (borrowed from LoadBalancerPro's load shedding: one noisy bot can't
+RATE_BURST = 200.0     # starve the rest); a burst of this many is fine
 
 
 class Broker:
@@ -67,6 +69,8 @@ class Broker:
         self.messages = []
         self.acked = set()      # (me, id)
         self.seen = {}          # name -> (time, status)
+        self.bots = {}          # name -> {role, handles, about, registered}
+        self.buckets = {}       # name -> [tokens, last time]
         self.since = clock()
         if os.path.exists(self.path):
             with open(self.path, encoding="utf-8") as f:
@@ -79,6 +83,8 @@ class Broker:
                     except ValueError:
                         continue   # a torn last line from a crash: skip it, never stop
                     self.messages.append(m)
+                    if m.get("type") == "bot.register":
+                        self.bots[m["from"]] = dict(m.get("body") or {}, registered=m["ts"])
                     if m.get("type") == "ack":
                         self.acked.add((m.get("from"), (m.get("body") or {}).get("id")))
 
@@ -93,7 +99,33 @@ class Broker:
             os.fsync(f.fileno())
         self.messages.append(m)
 
-    def send(self, frm, to, kind, body=None, reply_to=None, uid=None):
+    def allow(self, frm, now=None):
+        """Token bucket per sender: False when a bot is flooding the hub (the HTTP layer answers 429)."""
+        now = time.monotonic() if now is None else now
+        with self.cond:
+            tokens, last = self.buckets.get(frm, (RATE_BURST, now))
+            tokens = min(RATE_BURST, tokens + (now - last) * RATE_PER_S)
+            ok = tokens >= 1.0
+            self.buckets[frm] = (tokens - 1.0 if ok else tokens, now)
+            return ok
+
+    def register(self, me, role="", handles=None, about=""):
+        """A bot says who it is and which message types it handles; kept in the log, so it survives restarts."""
+        body = {"role": str(role), "handles": [str(h) for h in (handles or [])], "about": str(about)}
+        mid = self.send(me, "*", "bot.register", body, topic="hub")
+        with self.cond:
+            self.bots[me] = dict(body, registered=self.messages[-1]["ts"] if self.messages else "")
+        return mid
+
+    def directory(self):
+        """Every bot the hub knows: what it registered and whether it's alive."""
+        pres = self.presence()
+        with self.cond:
+            names = sorted(set(self.bots) | set(pres))
+            return {n: dict(self.bots.get(n, {}), **pres.get(n, {"alive": False, "age_s": None, "status": ""}))
+                    for n in names}
+
+    def send(self, frm, to, kind, body=None, reply_to=None, uid=None, topic=None):
         if not frm or not to or not kind:
             raise ValueError("from, to and type are required")
         with self.cond:
@@ -107,21 +139,32 @@ class Broker:
                  "reply_to": reply_to}
             if uid is not None:
                 m["uid"] = str(uid)
+            if topic:
+                m["topic"] = str(topic)
             self._append(m)
             self.seen[str(frm)] = (self.clock(), self.seen.get(str(frm), (0, ""))[1])
             self.cond.notify_all()
             return m["id"]
 
-    def _for(self, me, after):
-        return [m for m in self.messages if m["id"] > after and m["from"] != me and m["to"] in (me, "*")]
+    def _since(self, after):
+        """Messages after id `after`, without scanning the whole log (ids are 1, 2, 3... in order)."""
+        after = max(0, int(after))
+        if after < len(self.messages) and (after == 0 or self.messages[after - 1]["id"] == after):
+            return self.messages[after:]
+        return [m for m in self.messages if m["id"] > after]
 
-    def wait(self, me, after, timeout):
-        """Messages for `me` after `after`; blocks up to `timeout` s until there is one."""
+    def _for(self, me, after, topics=None):
+        return [m for m in self._since(after) if m["from"] != me and
+                (m["to"] == me or (m["to"] == "*" and (not topics or m.get("topic") in topics)))]
+
+    def wait(self, me, after, timeout, topics=None):
+        """Messages for `me` after `after`; blocks up to `timeout` s until there is one. With `topics`, broadcasts
+        are filtered to those topics (messages addressed to `me` always come through)."""
         deadline = time.monotonic() + max(0.0, min(float(timeout), MAX_WAIT_S))
         with self.cond:
             self.seen[me] = (self.clock(), self.seen.get(me, (0, ""))[1])   # waiting counts as alive
             while True:
-                got = self._for(me, after)
+                got = self._for(me, after, topics)
                 left = deadline - time.monotonic()
                 if got or left <= 0:
                     return got, self.last
@@ -211,6 +254,41 @@ def v1_out(broker, m, viewer):
             "type": t, "asset": body.get("asset"), "at": m["ts"], "reply_to": reply, "body": body}
 
 
+DASHBOARD = """<!doctype html><html><head><meta charset="utf-8"><title>Bot hub</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+body{margin:0;font:14px/1.4 system-ui,Segoe UI,sans-serif;background:#0f1216;color:#e8edf2}
+header{padding:14px 18px;border-bottom:1px solid #232a33;display:flex;gap:16px;align-items:baseline}
+h1{font-size:18px;margin:0}small{color:#8a97a6}
+main{display:grid;grid-template-columns:300px 1fr;gap:0;height:calc(100vh - 52px)}
+#bots{border-right:1px solid #232a33;overflow:auto;padding:10px}
+.bot{padding:8px 10px;border-radius:8px;margin-bottom:6px;background:#161b22}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;background:#555}
+.on{background:#3fb950}.name{font-weight:600}.st{color:#8a97a6;font-size:12px}
+#log{overflow:auto;padding:10px;font-family:ui-monospace,Consolas,monospace;font-size:12.5px}
+.m{padding:3px 6px;border-bottom:1px solid #1b2129;white-space:pre-wrap;word-break:break-word}
+.t{color:#79c0ff}.ack{opacity:.45}.ship{color:#3fb950}.rej{color:#f85149}.blk{color:#d29922}
+@media(max-width:700px){main{grid-template-columns:1fr;height:auto}#bots{border-right:0}}
+</style></head><body>
+<header><h1>Bot hub</h1><small id="sum">connecting…</small></header>
+<main><section id="bots"></section><section id="log"></section></main>
+<script>
+let after=0;const log=document.getElementById('log');
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+async function bots(){try{const r=await (await fetch('/bots')).json();let on=0;
+document.getElementById('bots').innerHTML=Object.entries(r).map(([n,b])=>{if(b.alive)on++;
+return `<div class="bot"><span class="dot ${b.alive?'on':''}"></span><span class="name">${esc(n)}</span>
+${b.role?' · '+esc(b.role):''}<div class="st">${esc(b.status||'')}${b.age_s!=null?' · '+b.age_s+' s ago':''}</div></div>`}).join('');
+document.getElementById('sum').textContent=on+' bots online · '+Object.keys(r).length+' known';}catch(e){}}
+async function poll(){try{const r=await (await fetch('/log?after='+after+'&limit=300')).json();
+for(const m of r.messages){after=m.id;const c=m.type==='ack'?'ack':/shipped/.test(m.type)?'ship':/rejected/.test(m.type)?'rej':/blocked|waiting/.test(m.type)?'blk':'';
+const d=document.createElement('div');d.className='m '+c;
+d.innerHTML=`#${m.id} ${esc(m.ts.slice(11))} <b>${esc(m.from)}</b> → ${esc(m.to)} <span class="t">${esc(m.type)}</span> ${esc(JSON.stringify(m.body))}`;
+log.prepend(d);}while(log.children.length>500)log.lastChild.remove();}catch(e){}}
+bots();poll();setInterval(bots,3000);setInterval(poll,1000);
+</script></body></html>"""
+
+
 def make_handler(broker):
     class H(BaseHTTPRequestHandler):
         def log_message(self, *a):
@@ -250,8 +328,19 @@ def make_handler(broker):
                     return self._out(200, [v1_out(broker, m, me) for m in got])
                 if path == "/v1/status":
                     return self._out(200, {"presence": broker.presence(), "last": broker.last})
+                if path in ("/", "/dashboard"):
+                    data = DASHBOARD.encode("utf-8")
+                    self.send_response(200)
+                    self.send_header("Content-Type", "text/html; charset=utf-8")
+                    self.send_header("Content-Length", str(len(data)))
+                    self.end_headers()
+                    self.wfile.write(data)
+                    return None
+                if path == "/bots":
+                    return self._out(200, broker.directory())
                 if path == "/wait":
-                    got, last = broker.wait(q["me"], int(q.get("after", 0)), float(q.get("timeout", 25)))
+                    topics = [t for t in q.get("topics", "").split(",") if t] or None
+                    got, last = broker.wait(q["me"], int(q.get("after", 0)), float(q.get("timeout", 25)), topics)
                     return self._out(200, {"messages": got, "last": last})
                 if path == "/pending":
                     return self._out(200, {"messages": broker.pending(q["me"])})
@@ -277,8 +366,14 @@ def make_handler(broker):
                     seq = v1_in(broker, b)
                     return self._out(200, {"ok": True, "id": b.get("id") or str(seq), "seq": seq})
                 if path == "/send":
+                    if b.get("from") and not broker.allow(str(b["from"])):
+                        return self._out(429, {"error": "slow down: more than %d messages a second from %s"
+                                                        % (RATE_PER_S, b["from"])})
                     return self._out(200, {"id": broker.send(b.get("from"), b.get("to"), b.get("type"), b.get("body"),
-                                                             b.get("reply_to"))})
+                                                             b.get("reply_to"), topic=b.get("topic"))})
+                if path == "/register":
+                    return self._out(200, {"id": broker.register(b["me"], b.get("role", ""), b.get("handles"),
+                                                                 b.get("about", ""))})
                 if path == "/ack":
                     return self._out(200, {"ok": True, "new": broker.ack(b["me"], int(b["id"]))})
                 if path == "/heartbeat":
@@ -333,13 +428,22 @@ class Link:
             self.up = False
             return None
 
-    def send(self, to, kind, body=None, reply_to=None):
+    def send(self, to, kind, body=None, reply_to=None, topic=None):
         r = self._call("POST", "/send", {"from": self.me, "to": to, "type": kind, "body": body or {},
-                                         "reply_to": reply_to})
+                                         "reply_to": reply_to, "topic": topic})
         return r and r.get("id")
 
-    def wait(self, after, timeout=25.0):
-        r = self._call("GET", "/wait?me=%s&after=%d&timeout=%s" % (self.me, after, timeout), timeout=timeout + 5)
+    def register(self, role="", handles=None, about=""):
+        r = self._call("POST", "/register", {"me": self.me, "role": role, "handles": handles or [], "about": about})
+        return r and r.get("id")
+
+    def bots(self):
+        return self._call("GET", "/bots") or {}
+
+    def wait(self, after, timeout=25.0, topics=None):
+        r = self._call("GET", "/wait?me=%s&after=%d&timeout=%s%s" % (self.me, after, timeout,
+                                                                      "&topics=" + ",".join(topics) if topics else ""),
+                       timeout=timeout + 5)
         return (r["messages"], r["last"]) if r else ([], after)
 
     def ack(self, mid):

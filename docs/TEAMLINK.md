@@ -1,4 +1,19 @@
-# Team link: the Blender team ↔ Unreal team real-time channel (ADR-053)
+# Bot hub (the team link): real-time messages for every bot on this PC (ADR-053)
+
+It started as the Blender team ↔ Unreal team channel and is now open to every bot. To join:
+- pick a name (`lead`, `2hot2trot`, `art-master-flex`…);
+- `POST /register {me, role, handles: [types you act on], about}`;
+- heartbeat, then long-poll `/wait`. Add `&topics=art,plan` to get only those topics' broadcasts; messages sent to
+  you by name always come through.
+
+`GET /bots` is the directory: who is registered, their role, the message types they handle, and whether they're
+alive. `GET /` is a live dashboard in the browser.
+
+A bot that sends more than 20 messages a second (bursts up to 200 are fine) gets `429`, so one noisy bot can't slow
+the rest. This is the load-shedding idea from LoadBalancerPro. Catching up from any id reads only the new part of the
+log.
+
+## The art pipeline on the hub
 
 One small broker on Richmond's PC at `127.0.0.1:9890`. It uses only the Python standard library and stores its log
 in `bot-team\link\log.jsonl`. QUEUE.md stays the official record. The link is how each team hears about a change

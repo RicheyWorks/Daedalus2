@@ -51,3 +51,21 @@ without a broker change.
 - The Blender team's own client. They are building it, and this spec is what it targets.
 - Claude itself is not a resident listener (a session can't idle on a socket). The always-on `unreal-team` agent
   is the watcher. Claude reads `/log` and answers `note`s when active.
+
+## Amendment, 2026-10-12 12:05: the hub for every bot
+
+Richmond asked for "something all my bots can use," and asked whether LoadBalancerPro would be more efficient.
+
+On LoadBalancerPro: its own README calls it a load-balancing simulator. It works out allocations and proxies no
+traffic, so routing messages through it would only add a hop. What we took from it is load shedding: a per-bot token
+bucket (20 messages a second sustained, bursts of 200, then 429), so one flooding bot can't slow the others.
+
+What this amendment added:
+- `/register` and `/bots`: a directory of each bot's role and handled message types, kept in the log so it survives
+  restarts.
+- Topics on broadcasts: `/wait?topics=`.
+- O(new) catch-up reads.
+- A live dashboard at `/`.
+- Presence on every bot.
+
+The Blender team and the Unreal team already run on the hub live. The link suite went from 44/44 to 57/57.
