@@ -443,9 +443,13 @@ def scenario_dig(p):
     bag = dict(h.get_editor_property("bag"))
     for _ in range(5):
         yield
-    # Put it back: aim at the hole's floor (the top face of the cube under it) and place.
+    # Put it back: aim at the hole's far wall. From eye height the ray to the hole's floor hits the near rim
+    # first (it put the cube on the rim); the far wall's face points back at us, so its neighbour is the hole.
     c = live.cube_center(cube)
-    h.aim_at(unreal.Vector(c.x, c.y, c.z - 45))
+    me = h.get_actor_location()
+    away = unreal.Vector(c.x - me.x, c.y - me.y, 0)
+    n = max((away.x ** 2 + away.y ** 2) ** 0.5, 1.0)
+    h.aim_at(unreal.Vector(c.x + away.x / n * 49, c.y + away.y / n * 49, c.z))
     for _ in range(5):
         yield
     placed = h.place_cube() if h.get_editor_property("selected_cube") else False
