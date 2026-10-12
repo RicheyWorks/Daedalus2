@@ -57,7 +57,7 @@ def hero_setup(p):
     eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
     world = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
     settings = world.get_world_settings()
-    settings.set_editor_property("default_game_mode", gm)
+    settings.set_editor_property("default_game_mode", gm.static_class())
     wid = p.get("world") or (view.daedalus_worlds() or ["world-zero"])[0]
     chunks = [a for a in eas.get_all_level_actors()
               if str(a.get_folder_path()) == view.FOLDER + wid and isinstance(a, unreal.StaticMeshActor)]
@@ -85,7 +85,7 @@ def hero_setup(p):
                                        unreal.Rotator(0, 0, 45))
     start.set_actor_label(HERO_START)
     start.set_folder_path(view.FOLDER + wid)
-    return {"game_mode": gm.get_name(), "start": [round(spot.x), round(spot.y), round(spot.z + 120)], "world": wid}
+    return {"game_mode": gm.__name__, "start": [round(spot.x), round(spot.y), round(spot.z + 120)], "world": wid}
 
 
 def _register(bridge):
