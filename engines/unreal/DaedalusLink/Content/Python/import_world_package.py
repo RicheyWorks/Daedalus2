@@ -258,6 +258,11 @@ def import_into_unreal(zip_path, manifest, live_only=False):
         placed += 1
 
     # Only when the plugin's module is loaded (load_class on a missing class logs an error).
+    # A PlayerStart looking at the islands, so Play (and the editor, via init_unreal.py) opens on the world.
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import daedalus_view
+    daedalus_view.place_player_start(w["id"])
+
     live_type = getattr(unreal, "DaedalusWorldActor", None)
     live_class = live_type.static_class() if live_type else None
     if live_class and manifest.get("live", {}).get("api"):
@@ -305,6 +310,8 @@ def judge(manifest, facts, live_only=False):
           "%s placed, manifest has %d" % (facts.get("chunk_actors"), chunks))
     check("materials on every chunk", facts.get("unmaterialed", 0) == 0,
           "%d chunk actors with an empty slot" % facts.get("unmaterialed", 0))
+    if chunks > 0:
+        check("view", facts.get("view"), "a PlayerStart looking at the world, so Play and the editor open on it")
     if want_ark:
         check("ark mesh", facts.get("ark"), CONTENT_ROOT + "/" + safe_name(w["id"]) + "/ark")
     live = facts.get("live", [])
@@ -326,13 +333,15 @@ def observe(manifest):
     facts["ark"] = bool(lib.list_assets(CONTENT_ROOT + "/" + safe_name(w["id"]) + "/ark", recursive=True))
     live_type = getattr(unreal, "DaedalusWorldActor", None)
     facts["plugin"] = live_type is not None
-    facts["chunk_actors"], facts["unmaterialed"], facts["live"] = 0, 0, []
+    facts["chunk_actors"], facts["unmaterialed"], facts["live"], facts["view"] = 0, 0, [], False
     if facts["level"]:
         unreal.get_editor_subsystem(unreal.LevelEditorSubsystem).load_level(LEVEL)
         for a in unreal.get_editor_subsystem(unreal.EditorActorSubsystem).get_all_level_actors():
             if str(a.get_folder_path()) != "Daedalus/" + w["id"]:
                 continue
-            if live_type is not None and isinstance(a, live_type):
+            if isinstance(a, unreal.PlayerStart):
+                facts["view"] = a.get_actor_label() == "Daedalus View"
+            elif live_type is not None and isinstance(a, live_type):
                 facts["live"].append({"server_url": a.get_editor_property("server_url"),
                                       "world_id": a.get_editor_property("world_id")})
             elif isinstance(a, unreal.StaticMeshActor):
