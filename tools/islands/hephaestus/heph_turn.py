@@ -1,10 +1,14 @@
 # SPDX-License-Identifier: MIT
-"""Hephaestus's editor turn 17:43-17:53 PT (referee equal-turn order, after youtube-master; hard stop 17:52). Run ONLY on a granted slot.
+"""Hephaestus's 10-minute editor turn (referee equal-turn order: youtube-master -> hephaestus -> pythagoras). Run ONLY for a granted turn.
     python heph_turn.py [--now]
-Waits for the previous slot's HANDOFF (youtube-master) on the team link, never starting before START or after LAST_START,
-then: ping bridge -> stop Play if running -> heph_island_ue.run() -> hero viewport + shot -> save -> post DONE + HANDOFF.
-Talks to the Claude Unreal Bridge (127.0.0.1:9877). Whatever fails, it stops Play and saves. Hard cap 150 s of editor work."""
-import base64, datetime as dt, json, os, socket, sys, time
+The referee HOLDS the turn clock while the editor is down, so every slot after the hold shifts. This runner is therefore
+handoff-driven, not clock-driven: it never starts before EARLIEST, and it starts only when the previous holder (youtube-master)
+posts a HANDOFF, or the referee (buffffff) / 2hot2trot posts a GRANT or GO addressed to hephaestus. No fixed-time fallback.
+The 10 minutes are counted from the moment it starts: work hard-stops at start+8 min, Play stop + save by start+9 min.
+Then: ping bridge (retries while the editor comes back) -> stop Play if running -> heph_island_ue.run() -> hero shot -> save ->
+post DONE + HANDOFF -> pythagoras. Bridge port: HEPH_BRIDGE_PORT (default 9877; editor B in the multi-editor plan is 9878).
+Whatever fails, it stops Play and saves."""
+import base64, datetime as dt, json, os, re, socket, sys, time
 
 REPO = r"C:\Users\730ri\projects\Daedalus2"
 TOOL = REPO + r"\tools\islands\hephaestus"
@@ -12,14 +16,20 @@ LINK = r"C:\Users\730ri\projects\bot-team\link"
 SHOTS = r"C:\Users\730ri\projects\bot-team\shots\hephaestus"
 OUTBOX = LINK + r"\outbox\hephaestus.jsonl"
 PREV = os.environ.get("HEPH_PREV", "youtube-master")
+NEXT = os.environ.get("HEPH_NEXT", "pythagoras")
+GRANTERS = ("buffffff", "2hot2trot")
+PORT = int(os.environ.get("HEPH_BRIDGE_PORT", "9877"))
 TODAY = dt.date.today()
-START = dt.datetime.combine(TODAY, dt.time(17, 43))
-FALLBACK = dt.datetime.combine(TODAY, dt.time(17, 44, 30))  # referee timetable: start even without HANDOFF if editor idle
-HARD_STOP = dt.datetime.combine(TODAY, dt.time(17, 52))
-LAST_START = dt.datetime.combine(TODAY, dt.time(17, 46))
-CAP = 150  # recomputed at start: never past HARD_STOP minus 60 s for stop+save
+EARLIEST = dt.datetime.combine(TODAY, dt.time(17, 43))  # referee slot before any hold shift; never earlier
+SINCE = dt.datetime.combine(TODAY, dt.time(17, 30))     # only HANDOFF/GRANT posts newer than this count
+GIVE_UP = dt.datetime.combine(TODAY, dt.time(21, 0))    # stop waiting; post BLOCKED and go to the back of the line
+TURN_S, WORK_S, SAVE_S = 600, 480, 60
+# a real handoff names us as the receiver ("HANDOFF youtube-master -> hephaestus"); "going after disk-saver HANDOFF" must not count
+HANDOFF_US = re.compile(r"HANDOFF[^.]{0,60}?(->|\\u2192|\u2192|\bto\b)\s*hephaestus", re.I)
+GRANT_US = re.compile(r"GRANT[^.]{0,40}?hephaestus|GO hephaestus", re.I)
 LOG = []
 T0 = None
+HARD_STOP = None
 
 
 def say(m):
@@ -31,27 +41,34 @@ def link(text, to="*"):
         f.write(json.dumps({"from": "hephaestus", "to": to, "type": "note", "body": {"text": text}}) + "\n")
 
 
-def prev_handed_off(since):
-    """True once PREV posts a HANDOFF on the shared log after `since`."""
+def _tail():
+    p = LINK + r"\log.jsonl"
     try:
-        with open(LINK + r"\log.jsonl", "rb") as f:
-            f.seek(max(0, os.path.getsize(LINK + r"\log.jsonl") - 2_000_000)); tail = f.read().decode("utf-8", "ignore")
-    except OSError: return False
-    for line in tail.splitlines()[::-1]:
-        if PREV not in line or "HANDOFF" not in line: continue
+        with open(p, "rb") as f:
+            f.seek(max(0, os.path.getsize(p) - 2_000_000)); return f.read().decode("utf-8", "ignore")
+    except OSError: return ""
+
+
+def go_signal(since):
+    """Who cleared us to start: PREV's HANDOFF, or a GRANT/GO to hephaestus from the referee or 2hot2trot (newer than `since`)."""
+    for line in _tail().splitlines()[::-1]:
+        if "HANDOFF" not in line and "GRANT" not in line and "GO" not in line: continue
         try: r = json.loads(line)
         except ValueError: continue
-        if r.get("from") != PREV: continue
-        ts = r.get("ts", "")
         try:
-            if dt.datetime.fromisoformat(ts[:19]) >= since: return True
-        except ValueError: pass
-    return False
+            if dt.datetime.fromisoformat(str(r.get("ts", ""))[:19]) < since: continue
+        except ValueError: continue
+        text = json.dumps(r.get("body", {}))
+        src = r.get("from")
+        if src == PREV and (HANDOFF_US.search(text) or "TURN DONE" in text): return f"{PREV} HANDOFF #{r.get('id')}"
+        if src in GRANTERS and ((r.get("to") == "hephaestus" and re.search(r"\bGRANT|\bGO\b", text)) or GRANT_US.search(text)):
+            return f"{src} GRANT #{r.get('id')}"
+    return None
 
 
 def call(kind, timeout=60, **params):
     params["bridge_timeout"] = timeout
-    with socket.create_connection(("127.0.0.1", 9877), timeout=timeout + 10) as s:
+    with socket.create_connection(("127.0.0.1", PORT), timeout=timeout + 10) as s:
         s.sendall((json.dumps({"id": int(time.time() * 1000), "type": kind, "params": params}) + "\n").encode())
         buf = b""
         while not buf.endswith(b"\n"):
@@ -63,26 +80,37 @@ def call(kind, timeout=60, **params):
     return r.get("result", {})
 
 
-def left(): return CAP - (time.time() - T0)
+def left(): return (HARD_STOP - dt.timedelta(seconds=SAVE_S) - dt.datetime.now()).total_seconds()
 
 
 def main():
-    global T0
+    global T0, HARD_STOP
+    why = "--now"
     if "--now" not in sys.argv:
-        since = dt.datetime.combine(TODAY, dt.time(17, 30))
-        while dt.datetime.now() < LAST_START and not (dt.datetime.now() >= START and (prev_handed_off(since) or dt.datetime.now() >= FALLBACK)):
+        why = None
+        while dt.datetime.now() < GIVE_UP:
+            if dt.datetime.now() >= EARLIEST:
+                why = go_signal(SINCE)
+                if why: break
             time.sleep(5)
-        if dt.datetime.now() >= LAST_START:
-            say(f"no HANDOFF from {PREV} by {LAST_START:%H:%M:%S}; not starting")
-            link(f"BLOCKED editor-slot grok (hephaestus): no HANDOFF from {PREV} by {LAST_START:%H:%M}; did not touch the editor. Need a new slot.")
+        if not why:
+            say(f"no HANDOFF from {PREV} and no GRANT by {GIVE_UP:%H:%M}; not starting")
+            link(f"BLOCKED editor turn (hephaestus): no HANDOFF from {PREV} or referee GRANT by {GIVE_UP:%H:%M}; "
+                 "did not touch the editor. Back of the line; need a new turn.")
             return None
-    global CAP
     T0 = time.time()
-    CAP = max(0, min(420, (HARD_STOP - dt.datetime.now()).total_seconds() - 60))
-    say(f"work cap {CAP:.0f}s, hard stop {HARD_STOP:%H:%M}")
+    start = dt.datetime.now()
+    HARD_STOP = start + dt.timedelta(seconds=WORK_S + SAVE_S)
+    say(f"go: {why}; work until {start + dt.timedelta(seconds=WORK_S):%H:%M:%S}, saved by {HARD_STOP:%H:%M:%S}, port {PORT}")
     os.makedirs(SHOTS, exist_ok=True)
-    link("TURN START hephaestus 17:43-17:53: DOING, placing Hephaestus Island in own sublevel")
-    p = call("ping", timeout=15); say(f"editor: {p.get('level')} playing={p.get('playing')}")
+    link(f"TURN START hephaestus {start:%H:%M}-{start + dt.timedelta(seconds=TURN_S):%H:%M} (after {why}): "
+         "DOING, placing Hephaestus Island in its own sublevel")
+    p = None
+    while p is None and left() > 60:
+        try: p = call("ping", timeout=15)
+        except Exception as e: say(f"bridge not up yet ({e}); retrying"); time.sleep(10)
+    if p is None: raise RuntimeError(f"bridge 127.0.0.1:{PORT} never answered")
+    say(f"editor: {p.get('level')} playing={p.get('playing')}")
     if p.get("playing"): call("stop")
     code = (f"import runpy,sys; sys.path.insert(0, r'{TOOL}'); "
             f"result = runpy.run_path(r'{TOOL}\\heph_island_ue.py', run_name='heph_turn')['run']()")
@@ -117,6 +145,6 @@ if __name__ == "__main__":
             link(f"{'DONE' if ok else 'BLOCKED'} island:hephaestus editor turn {secs:.0f}s: {summary}; sublevel "
                  f"/Game/Hephaestus/Maps/HephaestusIsland at 6000000,2000000; shot in {SHOTS}" + ("" if ok else f" | {err[:200]}") +
                  " | Play stopped, saved")
-            link("TURN DONE + HANDOFF hephaestus -> pythagoras (17:53 slot): editor saved, Play stopped")
+            link(f"TURN DONE + HANDOFF hephaestus -> {NEXT}: editor saved, Play stopped")
             os.makedirs(SHOTS, exist_ok=True)
             open(os.path.join(SHOTS, "turn.log"), "w").write("\n".join(LOG))
