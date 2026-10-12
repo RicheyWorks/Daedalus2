@@ -44,10 +44,18 @@ From code: `from asset_pipeline import ship; report = ship.ship("Lamp", ["Lamp"]
 `e2e.py` finds the two connector repos as siblings of this folder, or you can pass `--blender-connector`
 and `--unreal-connector`.
 
+## Proven live
+
+On UE 5.8.3 (Windows 11), the same three props went through a real Interchange import: **SHIPPED, 9/9 checks**
+(`ledgers/live-ue58.json`). That run showed that Interchange makes one static mesh per object and bakes each
+object's scale into it (the 2× crate is 200 cm). The reader, the judge and the stand-in now model that.
+
+![The shipped props in the Daedalus level in Unreal](docs/images/unreal-live.png)
+
 ## Not verified here
 
-The stand-in imports the way Interchange is documented to: one StaticMesh per glTF mesh, and a bare mesh
-gets the default material slot. On a real UE 5.8 editor, run the CLI once and read the report. If
+The stand-in imports the way Interchange did live: one StaticMesh per object with its scale baked in, and a
+bare mesh given the default material slot. Rotated objects are not size-checked exactly (only quarter turns). On a real UE 5.8 editor, run the CLI once and read the report. If
 Interchange merges meshes or drops degenerate triangles, the judge will say REJECTED, and the report
 shows where.
 

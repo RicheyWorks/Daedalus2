@@ -59,23 +59,24 @@ def judge(sent, witness, made):
     check("sizes: Blender = file", all(_dims_match(a, b) for a, b in zip(sd, fd)) and len(sd) == len(fd),
           "Blender %s, file %s" % (sd, fd))
 
-    # file -> Unreal: one static mesh for each glTF mesh, same triangles, slots and size (m -> cm)
+    # file -> Unreal: Interchange makes one static mesh per node (named after it), with the node's scale baked
+    # in, so Unreal is compared node by node: same triangles, slots and scaled size (m -> cm).
     um = made["meshes"]
-    check("every file mesh became an Unreal static mesh", len(um) == len(meshes) and len(um) > 0,
-          "file %d meshes, Unreal %d" % (len(meshes), len(um)))
-    want = Counter(m["triangles"] for m in meshes)
+    check("every file mesh became an Unreal static mesh", len(um) == len(nodes) and len(um) > 0,
+          "file %d mesh nodes, Unreal %d static meshes" % (len(nodes), len(um)))
+    want = Counter(m["triangles"] for m in by_node)
     got = Counter(m["triangles"] for m in um)
     check("triangles: file = Unreal, mesh by mesh", want == got,
           "file %s, Unreal %s" % (sorted(want.elements()), sorted(got.elements())))
     # a mesh with no material still gets one slot in Unreal (the default material)
-    fslots = sorted(max(1, len(m["materials"])) for m in meshes)
+    fslots = sorted(max(1, len(m["materials"])) for m in by_node)
     uslots = sorted(len(m["materials"]) for m in um)
     check("material slots: file = Unreal, mesh by mesh", fslots == uslots, "file %s, Unreal %s" % (fslots, uslots))
-    fdims = sorted(tuple(m["dims"]) for m in meshes)
+    fdims = sorted(tuple(n["dims"]) for n in nodes)
     udims = sorted(tuple(m["dims_cm"]) for m in um)
     sized = len(fdims) == len(udims) and all(_dims_match(a, b, CM_PER_M) for a, b in zip(fdims, udims))
     check("sizes: file (m) = Unreal (cm)", sized, "file %s m, Unreal %s cm" % (fdims, udims))
-    used = {m for x in meshes for m in x["materials"]}
+    used = {m for x in by_node for m in x["materials"]}
     check("Unreal made a material for each one used", len(made["materials"]) >= len(used),
           "used %d, Unreal made %d" % (len(used), len(made["materials"])))
     return checks

@@ -15,9 +15,9 @@ SENT = {"objects": [{"name": "Lamp", "triangles": 60, "materials": ["Brass", "Gl
 FILE = {"materials": ["Brass", "Glow"],
         "meshes": [{"name": "Cylinder", "triangles": 60, "materials": ["Brass", "Glow"], "dims": [3.0, 0.4, 0.4]},
                    {"name": "Icosphere", "triangles": 320, "materials": [], "dims": [1.0, 0.95, 0.95]}],
-        "nodes": [{"name": "Lamp", "mesh": 0}, {"name": "Stone", "mesh": 1}]}
-MADE = {"meshes": [{"name": "SM_Cylinder", "triangles": 60, "materials": ["Brass", "Glow"], "dims_cm": [300.0, 40.0, 40.0]},
-                   {"name": "SM_Icosphere", "triangles": 320, "materials": ["None"], "dims_cm": [100.0, 95.0, 95.0]}],
+        "nodes": [{"name": "Lamp", "mesh": 0, "dims": [3.0, 0.4, 0.4]}, {"name": "Stone", "mesh": 1, "dims": [1.0, 0.95, 0.95]}]}
+MADE = {"meshes": [{"name": "Lamp", "triangles": 60, "materials": ["Brass", "Glow"], "dims_cm": [300.0, 40.0, 40.0]},
+                   {"name": "Stone", "triangles": 320, "materials": ["-1"], "dims_cm": [100.0, 95.0, 95.0]}],
         "materials": [{"name": "MI_Brass"}, {"name": "MI_Glow"}]}
 
 results = []
@@ -66,6 +66,15 @@ case("Unreal kept metres", ["sizes: file (m) = Unreal (cm)"],
      made=bent(MADE, lambda d: [m.update(dims_cm=[x / 100 for x in m["dims_cm"]]) for m in d["meshes"]]))
 case("Unreal made no materials", ["Unreal made a material for each one used"],
      made=bent(MADE, lambda d: d.update(materials=[])))
+case("a node scaled 2x: Unreal's baked 2x size matches the node, not the mesh", [],
+     file=bent(FILE, lambda d: d["nodes"][0].update(dims=[6.0, 0.4, 0.4])),
+     made=bent(MADE, lambda d: d["meshes"][0].update(dims_cm=[600.0, 40.0, 40.0])))
+case("the scale lost on import is caught", ["sizes: file (m) = Unreal (cm)"],
+     file=bent(FILE, lambda d: d["nodes"][0].update(dims=[6.0, 0.4, 0.4])))
+case("one mesh placed twice is two Unreal meshes", [],
+     sent=bent(SENT, lambda d: d["objects"].append(dict(d["objects"][0], name="Lamp2"))),
+     file=bent(FILE, lambda d: d["nodes"].append({"name": "Lamp2", "mesh": 0, "dims": [3.0, 0.4, 0.4]})),
+     made=bent(MADE, lambda d: d["meshes"].append(dict(d["meshes"][0], name="Lamp2"))))
 case("nothing shipped at all fails, it doesn't pass vacuously",
      ["every Blender object reached the file", "every file mesh became an Unreal static mesh"],
      sent={"objects": []}, file={"materials": [], "meshes": [], "nodes": []}, made={"meshes": [], "materials": []})

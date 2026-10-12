@@ -3,8 +3,9 @@
 
     python3 harness/standin_unreal.py <unreal-connector-dir> <port> <seconds>
 
-Import reads the real .glb the way Interchange does: one StaticMesh for each glTF mesh, with triangles,
-material slots and bounds in centimetres, and one material asset for each material. Import must run on
+Import reads the real .glb the way Interchange did live on UE 5.8.3: one StaticMesh per mesh node, named after
+the node, with the node's scale baked into its bounds (centimetres), a bare mesh given the default slot,
+and one material asset per material, under <dest>/<file>/StaticMeshes and /Materials. Import must run on
 the game thread, as in the editor.
 The add-on command pipeline.fault makes the next import lose something, so the harness can prove the
 judge says no:
@@ -75,20 +76,22 @@ class _AssetTools:
                 raise RuntimeError("a non-automated import would open the import dialog")
             s = glb.summarize(t.filename)
             fault, FAULT["next"] = FAULT["next"], None
-            meshes = s["meshes"][:-1] if fault == "drop_mesh" else s["meshes"]
-            for i, m in enumerate(meshes):
+            # As seen live (UE 5.8.3): one static mesh per node, named after the node, scale baked in.
+            nodes = s["nodes"][:-1] if fault == "drop_mesh" else s["nodes"]
+            for i, n in enumerate(nodes):
+                m = s["meshes"][n["mesh"]]
                 tris = m["triangles"] - (1 if fault == "drop_tris" and i == 0 else 0)
-                slots = m["materials"] or ["None"]          # Unreal gives a bare mesh the default material slot
+                slots = m["materials"] or ["-1"]            # Unreal gives a bare mesh the default material slot
                 slots = slots[:-1] if fault == "drop_slot" and i == 0 else slots
                 k = 1.0 if fault == "scale_m" else 100.0
-                size = [d * k for d in m["dims"]]
-                path = "%s/SM_%s" % (t.destination_path, m["name"])
-                ASSETS[path] = StaticMesh("SM_" + m["name"], tris, slots, size)
+                size = [d * k for d in n["dims"]]
+                path = "%s/%s/StaticMeshes/%s" % (t.destination_path, os.path.splitext(os.path.basename(t.filename))[0], n["name"])
+                ASSETS[path] = StaticMesh(n["name"], tris, slots, size)
                 t.imported_object_paths.append(path)
             if fault != "no_materials":
                 for name in s["materials"]:
-                    path = "%s/MI_%s" % (t.destination_path, name)
-                    ASSETS[path] = MaterialInterface("MI_" + name)
+                    path = "%s/%s/Materials/%s" % (t.destination_path, os.path.splitext(os.path.basename(t.filename))[0], name)
+                    ASSETS[path] = MaterialInterface(name)
                     t.imported_object_paths.append(path)
             U.CALLS.append("import %s -> %s" % (os.path.basename(t.filename), t.destination_path))
 

@@ -45,7 +45,7 @@ DOC = {
         {"name": "Bare", "primitives": [{"attributes": {"POSITION": 2}}]},
         {"name": "Wire", "primitives": [{"attributes": {"POSITION": 3}, "mode": 1}]},
     ],
-    "nodes": [{"name": "A", "mesh": 0}, {"name": "B", "mesh": 0}, {"name": "C", "mesh": 1}, {"name": "Empty"}],
+    "nodes": [{"name": "A", "mesh": 0}, {"name": "B", "mesh": 0, "scale": [1, 2, -3]}, {"name": "C", "mesh": 1}, {"name": "Empty"}],
 }
 s = glb.summarize(write(DOC))
 m = {x["name"]: x for x in s["meshes"]}
@@ -56,6 +56,9 @@ check("lines are not triangles", m["Wire"]["triangles"] == 0, m["Wire"])
 check("materials in use, per mesh, in order", m["Indexed"]["materials"] == ["Brass", "Glow"] and m["Bare"]["materials"] == [])
 check("dims: union of primitive bounds, sorted largest first", m["Indexed"]["dims"] == [3.0, 2.0, 1.0], m["Indexed"]["dims"])
 check("nodes: only the ones holding a mesh, instancing kept", [n["mesh"] for n in s["nodes"]] == [0, 0, 1], s["nodes"])
+
+check("a node's scale sizes it (sign ignored), the mesh keeps its own size",
+      s["nodes"][1]["dims"] == [6.0, 3.0, 2.0] and s["nodes"][0]["dims"] == [3.0, 2.0, 1.0], s["nodes"])
 
 for name, path in [("bad magic", write(DOC, magic=b"nope")), ("glTF 1", write(DOC, version=1))]:
     try:

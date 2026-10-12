@@ -39,7 +39,7 @@ def _prim_tris(doc, prim):
 
 
 def summarize(path):
-    """{meshes: [{name, triangles, materials, dims}], nodes: [{name, mesh}], materials: [names]}.
+    """{meshes: [{name, triangles, materials, dims}], nodes: [{name, mesh, dims}], materials: [names]}.
 
     dims is the mesh's own (local) size, sorted largest first, so a Y-up/Z-up swap does not change it.
     """
@@ -56,9 +56,18 @@ def summarize(path):
             if "min" in pos and "max" in pos:
                 lo = pos["min"] if lo is None else [min(a, b) for a, b in zip(lo, pos["min"])]
                 hi = pos["max"] if hi is None else [max(a, b) for a, b in zip(hi, pos["max"])]
-        dims = sorted((h - l for l, h in zip(lo, hi)), reverse=True) if lo else [0.0, 0.0, 0.0]
+        extent = [h - l for l, h in zip(lo, hi)] if lo else [0.0, 0.0, 0.0]
         meshes.append({"name": mesh.get("name", "mesh_%d" % i), "triangles": tris, "materials": used,
-                       "dims": [round(d, 5) for d in dims]})
-    nodes = [{"name": n.get("name", "node_%d" % i), "mesh": n["mesh"]}
-             for i, n in enumerate(doc.get("nodes", [])) if "mesh" in n]
+                       "extent": extent, "dims": [round(d, 5) for d in sorted(extent, reverse=True)]})
+    # Unreal's Interchange makes one static mesh per node and bakes the node's scale into it (seen live,
+    # UE 5.8.3), so each node also carries its scaled size. Rotation is not applied: sorting the sizes
+    # covers quarter turns, and a free rotation would need the vertices, which this reader doesn't load.
+    nodes = []
+    for i, n in enumerate(doc.get("nodes", [])):
+        if "mesh" not in n:
+            continue
+        scale = n.get("scale", [1.0, 1.0, 1.0])
+        sized = sorted((abs(k) * e for k, e in zip(scale, meshes[n["mesh"]]["extent"])), reverse=True)
+        nodes.append({"name": n.get("name", "node_%d" % i), "mesh": n["mesh"],
+                      "dims": [round(d, 5) for d in sized]})
     return {"meshes": meshes, "nodes": nodes, "materials": mats}

@@ -107,8 +107,11 @@ def main():
               abs(crate["dims"][0] - 1.0) < 0.05, crate["dims"])
         lamp = next(m for m in r["file"]["meshes"] if m["name"].startswith("Cylinder") or "Lamp" in m["name"])
         check("a two-material object is one mesh with two slots", sorted(lamp["materials"]) == ["Brass", "Glow"], lamp)
-        stone = [m for m in r["unreal"]["meshes"] if len(m["materials"]) == 1 and m["materials"][0] == "None"]
+        stone = [m for m in r["unreal"]["meshes"] if len(m["materials"]) == 1 and m["materials"][0] == "-1"]
         check("a bare mesh gets Unreal's default slot and still passes", len(stone) == 1, r["unreal"]["meshes"])
+        ucrate = next(m for m in r["unreal"]["meshes"] if m["name"] == "Crate")
+        check("Unreal bakes the crate's 2x scale: 200 cm long, as seen live on UE 5.8.3",
+              abs(ucrate["dims_cm"][0] - 200) < 2, ucrate)
         check("Unreal sizes are centimetres", any(m["dims_cm"][0] > 250 for m in r["unreal"]["meshes"]),
               r["unreal"]["meshes"])
 
