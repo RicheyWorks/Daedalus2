@@ -10,7 +10,7 @@ PASS/FAIL checks. Every scenario says what it proves, so a failure names the mec
     daedalus.play_snapshot                         -> hero, foes, Ghosts, routes, fps right now
     daedalus.full_speed                            -> stop the editor throttling Play when it isn't in front
 
-Scenarios: shoot, views_layouts, ghost, foes_hunt, shield. Add one by writing a generator below: it yields once
+Scenarios: shoot, views_layouts, ghost, foes_hunt, shield, encounters, armor. Add one by writing a generator below: it yields once
 per frame and returns its checks.
 """
 
@@ -321,12 +321,103 @@ def scenario_shield(p):
     ]}
 
 
+def scenario_encounters(p):
+    """Encounters (ADR-046): packs land on flat ground 25-60 m out, on the ground, and the director keeps adding them."""
+    h = hero()
+    _clear_foes()
+    h.set_editor_property("invulnerable", True)
+    unreal.SystemLibrary.execute_console_command(world(), "daedalus.FoesHunt 0")
+    unreal.SystemLibrary.execute_console_command(world(), "daedalus.Encounters 1")
+    made = [h.spawn_pack() for _ in range(3)]
+    yield
+    placed = foes()
+    dists = [round(dist(f, h)) for f in placed]
+    grounded = 0
+    for f in placed:
+        loc = f.get_actor_location()
+        hit = unreal.SystemLibrary.line_trace_single_for_objects(world(), loc, loc - unreal.Vector(0, 0, 600),
+            [unreal.ObjectTypeQuery.ECC_WORLD_STATIC], False, [f], unreal.DrawDebugTrace.NONE, True)
+        t = hit.to_tuple() if hit else None
+        if t and t[0] and loc.z - t[5].z < 400:
+            grounded += 1
+    before = len(foes())
+    t = 0.0
+    while t < 12.0:
+        t += unreal.GameplayStatics.get_world_delta_seconds(world())
+        yield
+    after = len(foes())
+    stats = h.encounter_stats()
+    _clear_foes()
+    h.set_editor_property("invulnerable", False)
+    unreal.SystemLibrary.execute_console_command(world(), "daedalus.FoesHunt 1")
+    return {"checks": [
+        _check("three packs placed", all(n >= 2 for n in made), f"sizes={made}"),
+        _check("packs 20-65 m away", all(2000 <= d <= 6500 for d in dists), f"dists={dists}"),
+        _check("every foe on the ground", grounded == len(placed), f"{grounded}/{len(placed)}"),
+        _check("director adds packs on its own", after > before, f"before={before} after={after}"),
+    ], "stats": stats}
+
+
+def scenario_armor(p):
+    """Armor (ADR-047): three cores raise a tier, a knight drops a core you can walk over, overshield goes past full and fades."""
+    import json, os
+    h = hero()
+    _clear_foes()
+    unreal.SystemLibrary.execute_console_command(world(), "daedalus.FoesHunt 0")
+    h.set_armor_tier(0)
+    base = h.get_editor_property("max_shield")
+    for _ in range(3):
+        h.add_shield_core()
+    tier1 = h.get_editor_property("armor_tier")
+    max1 = h.get_editor_property("max_shield")
+    yield
+    # A knight's core, picked up by walking onto it.
+    h.spawn_foes(4)
+    knight = [f for f in foes() if f.get_editor_property("kind") == "STONE_KNIGHT"]
+    cores0 = h.get_editor_property("shield_cores")
+    if knight:
+        unreal.GameplayStatics.apply_damage(knight[0], 9999.0, None, h, None)
+    for _ in range(10):
+        yield
+    picks = _all(unreal.DaedalusPickup)
+    dropped = len(picks)
+    if picks:
+        loc = picks[0].get_actor_location()
+        h.set_actor_location(unreal.Vector(loc.x, loc.y, loc.z + 40), False, True)
+    for _ in range(10):
+        yield
+    cores1 = h.get_editor_property("shield_cores")
+    # Overshield.
+    h.give_overshield(100.0)
+    over = h.get_editor_property("shield")
+    t = 0.0
+    while t < 3.0:
+        t += unreal.GameplayStatics.get_world_delta_seconds(world())
+        yield
+    faded = h.get_editor_property("shield")
+    saved = os.path.join(unreal.Paths.project_saved_dir(), "Config", "DaedalusHero.json")
+    on_disk = json.load(open(saved)) if os.path.exists(saved) else {}
+    _clear_foes()
+    h.set_armor_tier(0)
+    unreal.SystemLibrary.execute_console_command(world(), "daedalus.FoesHunt 1")
+    return {"checks": [
+        _check("three cores raise a tier", tier1 == 1 and max1 == base + 40, f"tier={tier1} max={max1} base={base}"),
+        _check("a knight drops a core", dropped >= 1, f"pickups={dropped}"),
+        _check("walking onto it collects it", cores1 == cores0 + 1, f"cores {cores0}->{cores1}"),
+        _check("overshield goes past full", over > max1, f"shield={round(over)} max={max1}"),
+        _check("overshield fades", max1 <= faded < over, f"{round(over)}->{round(faded)}"),
+        _check("progress saved to disk", on_disk.get("armor_tier") == 1, str(on_disk)),
+    ]}
+
+
 SCENARIOS = {
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
     "ghost": scenario_ghost,
     "foes_hunt": scenario_foes_hunt,
     "shield": scenario_shield,
+    "encounters": scenario_encounters,
+    "armor": scenario_armor,
 }
 
 
