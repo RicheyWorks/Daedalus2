@@ -4,7 +4,9 @@
 
 #include "DaedalusHero.h"
 #include "DaedalusTarget.h"
+#include "Engine/StaticMeshActor.h"
 #include "Engine/World.h"
+#include "EngineUtils.h"
 #include "GameFramework/Pawn.h"
 #include "HAL/IConsoleManager.h"
 #include "Kismet/GameplayStatics.h"
@@ -75,16 +77,39 @@ void UDaedalusEncounters::Tick(float DeltaTime)
 bool UDaedalusEncounters::FindGround(const APawn* Player, FVector& Out)
 {
 	UWorld* W = GetWorld();
+	if (!bIslandsKnown)
+	{
+		bIslandsKnown = true;
+		for (TActorIterator<AStaticMeshActor> It(W); It; ++It)
+		{
+			FVector Origin, Extent;
+			It->GetActorBounds(false, Origin, Extent);
+			if (Extent.X >= 200.f && Extent.Y >= 200.f) Islands.Add(*It);
+		}
+	}
 	const FVector P = Player->GetActorLocation();
+	TArray<AActor*> Near;
+	for (const TWeakObjectPtr<AActor>& A : Islands)
+	{
+		if (!A.IsValid()) continue;
+		const float D = FVector::Dist2D(A->GetActorLocation(), P);
+		if (D > 1200.f && D < 7500.f) Near.Add(A.Get());
+	}
+	if (Near.Num() == 0) return false;
+
 	const FCollisionObjectQueryParams Statics(ECC_WorldStatic);
 	for (int32 Attempt = 0; Attempt < 16; ++Attempt)
 	{
 		++Tries;
-		const float Yaw = Rng.FRandRange(0.f, 360.f);
-		const float Dist = Rng.FRandRange(2500.f, 6000.f);
-		const FVector Probe = P + FRotator(0.f, Yaw, 0.f).Vector() * Dist;
+		AActor* Isle = Near[Rng.RandRange(0, Near.Num() - 1)];
+		FVector Origin, Extent;
+		Isle->GetActorBounds(false, Origin, Extent);
+		const FVector Probe(Origin.X + Rng.FRandRange(-Extent.X + 100.f, Extent.X - 100.f),
+		                    Origin.Y + Rng.FRandRange(-Extent.Y + 100.f, Extent.Y - 100.f), Origin.Z);
+		const float Dist = FVector::Dist2D(Probe, P);
 		FHitResult Hit;
-		if (!W->LineTraceSingleByObjectType(Hit, Probe + FVector(0.f, 0.f, 2500.f), Probe - FVector(0.f, 0.f, 4000.f), Statics, Simple(Player))
+		if (Dist < 1200.f
+			|| !W->LineTraceSingleByObjectType(Hit, Probe + FVector(0.f, 0.f, Extent.Z + 300.f), Probe - FVector(0.f, 0.f, Extent.Z + 100.f), Statics, Simple(Player))
 			|| Hit.ImpactNormal.Z < 0.85f)
 		{
 			++Rejected;
@@ -95,7 +120,7 @@ bool UDaedalusEncounters::FindGround(const APawn* Player, FVector& Out)
 		bool bFlat = true;
 		for (int32 k = 0; k < 4 && bFlat; ++k)
 		{
-			const FVector Side = Ground + FRotator(0.f, 90.f * k, 0.f).Vector() * 220.f;
+			const FVector Side = Ground + FRotator(0.f, 90.f * k, 0.f).Vector() * 160.f;
 			FHitResult S;
 			bFlat = W->LineTraceSingleByObjectType(S, Side + FVector(0.f, 0.f, 200.f), Side - FVector(0.f, 0.f, 200.f), Statics, Simple(Player))
 				&& FMath::Abs(S.ImpactPoint.Z - Ground.Z) < 80.f;
@@ -108,7 +133,7 @@ bool UDaedalusEncounters::FindGround(const APawn* Player, FVector& Out)
 		// Out of sight, unless far: foes shouldn't pop in where the player is looking.
 		FHitResult Sight;
 		const bool bHidden = W->LineTraceSingleByObjectType(Sight, P + FVector(0.f, 0.f, 60.f), Ground + FVector(0.f, 0.f, 120.f), Statics, Simple(Player));
-		if (!bHidden && Dist < 4500.f)
+		if (!bHidden && Dist < 3000.f)
 		{
 			++Rejected;
 			continue;

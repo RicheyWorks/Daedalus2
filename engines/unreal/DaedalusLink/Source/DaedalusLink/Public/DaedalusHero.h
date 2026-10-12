@@ -155,6 +155,9 @@ public:
 	// For the HUD.
 	float HitMarkerTime() const { return SinceHit; }
 	float SinceHurt() const { return SinceDamaged; }
+	/** Where the last blow came from, in degrees from straight ahead on screen (+ right); for the HUD's arc. */
+	float HitDirection() const;
+	bool HasHitDirection() const { return bHitFromSomewhere; }
 	float Bloom() const { return Spread; }
 	bool ShowsReticle() const;
 	FString WeaponName() const;
@@ -168,6 +171,8 @@ protected:
 private:
 	TWeakObjectPtr<class ADaedalusGhost> CalledGhost;
 	float SinceDamaged = 100.f;
+	FVector HitFrom = FVector::ZeroVector;
+	bool bHitFromSomewhere = false;
 	void Fall();
 	void ApplyArmor();
 	void LoadProgress();

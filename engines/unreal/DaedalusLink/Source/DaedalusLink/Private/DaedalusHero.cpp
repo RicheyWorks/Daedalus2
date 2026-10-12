@@ -1104,12 +1104,24 @@ float ADaedalusHero::TakeDamage(float Damage, const FDamageEvent& Event, AContro
 	}
 	DamageTaken += Damage;
 	SinceDamaged = 0.f;
+	bHitFromSomewhere = DamageCauser != nullptr;
+	if (DamageCauser) HitFrom = DamageCauser->GetActorLocation();
 	const float OnShield = FMath::Min(Shield, Damage);
 	Shield -= OnShield;
 	Health = FMath::Max(0.f, Health - (Damage - OnShield));
 	Rumble(Shield > 0.f ? 0.3f : 0.7f, 0.12f);
 	if (Health <= 0.f) Fall();
 	return Damage;
+}
+
+float ADaedalusHero::HitDirection() const
+{
+	// Relative to the camera's heading: on a Ghost the player's controller is the bike's.
+	const AController* C = GetController();
+	if (!C && GetWorld()) C = GetWorld()->GetFirstPlayerController();
+	const float CamYaw = C ? C->GetControlRotation().Yaw : GetActorRotation().Yaw;
+	const FVector To = HitFrom - GetActorLocation();
+	return FMath::FindDeltaAngleDegrees(CamYaw, To.Rotation().Yaw);
 }
 
 // ----------------------------------------------------------------------------------------------- armor (ADR-047)

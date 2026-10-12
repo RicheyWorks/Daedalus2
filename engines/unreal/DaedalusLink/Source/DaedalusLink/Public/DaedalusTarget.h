@@ -36,6 +36,11 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") TObjectPtr<UStaticMeshComponent> Crystal;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") float Health = 60.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") float MaxHealth = 60.f;
+	/** The health bar over its head (ADR-048): shown for a few seconds after each hit. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") TObjectPtr<UStaticMeshComponent> BarBack;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") TObjectPtr<UStaticMeshComponent> BarFill;
+	bool IsBarShown() const { return SinceHurt < 4.f && Health > 0.f; }
 	/** Which ADR-037 foe this is (BLIGHT_SLIME, SHARDBACK, DUST_WISP, STONE_KNIGHT), its name and what it pays. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") FString Kind = TEXT("BLIGHT_SLIME");
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") FString Title = TEXT("Blight slime");
@@ -89,6 +94,8 @@ private:
 	float WindupTime = 0.5f;
 	float ChargeLeft = 0.f;
 	float SightCheck = 0.f;
+	float SinceHurt = 100.f;
+	void TickBar();
 	TArray<FVector> Route;
 	FVector RouteGoal = FVector::ZeroVector;
 	int32 RouteStep = 0;

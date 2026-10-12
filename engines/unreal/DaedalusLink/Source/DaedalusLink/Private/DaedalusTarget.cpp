@@ -8,6 +8,7 @@
 #include "Engine/StaticMesh.h"
 #include "Engine/StaticMeshActor.h"
 #include "Engine/World.h"
+#include "Camera/PlayerCameraManager.h"
 #include "GameFramework/Pawn.h"
 #include "HAL/IConsoleManager.h"
 #include "Kismet/GameplayStatics.h"
@@ -41,6 +42,40 @@ ADaedalusTarget::ADaedalusTarget()
 	Crystal->SetCollisionProfileName(TEXT("BlockAllDynamic"));
 	Crystal->SetMobility(EComponentMobility::Movable);
 	Tags.Add(TEXT("DaedalusTarget"));
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Box(TEXT("/Engine/BasicShapes/Cube.Cube"));
+	for (TObjectPtr<UStaticMeshComponent>* Bar : {&BarBack, &BarFill})
+	{
+		*Bar = CreateDefaultSubobject<UStaticMeshComponent>(Bar == &BarBack ? TEXT("BarBack") : TEXT("BarFill"));
+		(*Bar)->SetupAttachment(Crystal);
+		(*Bar)->SetStaticMesh(Box.Object);
+		(*Bar)->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		(*Bar)->SetCastShadow(false);
+		(*Bar)->SetUsingAbsoluteLocation(true);
+		(*Bar)->SetUsingAbsoluteRotation(true);
+		(*Bar)->SetUsingAbsoluteScale(true);
+		(*Bar)->SetHiddenInGame(true);
+	}
+}
+
+// A bar over the head that faces the camera: dark back, red fill from the left.
+void ADaedalusTarget::TickBar()
+{
+	const bool bShow = IsBarShown();
+	BarBack->SetHiddenInGame(!bShow);
+	BarFill->SetHiddenInGame(!bShow);
+	if (!bShow) return;
+	const APlayerCameraManager* Cam = UGameplayStatics::GetPlayerCameraManager(this, 0);
+	const float Yaw = Cam ? Cam->GetCameraRotation().Yaw : 0.f;
+	const FRotator Face(0.f, Yaw + 90.f, 0.f);
+	const FVector Across = Face.Vector();
+	const float Top = Crystal->Bounds.BoxExtent.Z;
+	const FVector Mid = GetActorLocation() + FVector(0.f, 0.f, Top + 45.f);
+	const float Frac = FMath::Clamp(Health / FMath::Max(MaxHealth, 1.f), 0.f, 1.f);
+	BarBack->SetWorldLocationAndRotation(Mid, Face);
+	BarBack->SetWorldScale3D(FVector(1.2f, 0.05f, 0.12f));
+	BarFill->SetWorldLocationAndRotation(Mid - Across * (120.f * (1.f - Frac) * 0.5f) - Face.RotateVector(FVector(0.f, 3.f, 0.f)), Face);
+	BarFill->SetWorldScale3D(FVector(FMath::Max(1.2f * Frac, 0.01f), 0.06f, 0.10f));
 }
 
 float ADaedalusTarget::HoverOffset() const
@@ -63,6 +98,16 @@ void ADaedalusTarget::BeginPlay()
 	else if (Kind == TEXT("STONE_KNIGHT")) { Tint = FLinearColor(0.25f, 0.25f, 0.3f); SetActorScale3D(FVector(1.2f, 1.2f, 2.0f)); }
 	BaseTint = Tint;
 	StartScale = GetActorScale3D();
+	MaxHealth = Health;
+	if (UMaterialInterface* Base = FoeMaterial())
+	{
+		UMaterialInstanceDynamic* Back = UMaterialInstanceDynamic::Create(Base, this);
+		Back->SetVectorParameterValue(TEXT("Color"), FLinearColor(0.05f, 0.05f, 0.06f));
+		BarBack->SetMaterial(0, Back);
+		UMaterialInstanceDynamic* Fill = UMaterialInstanceDynamic::Create(Base, this);
+		Fill->SetVectorParameterValue(TEXT("Color"), FLinearColor(1.f, 0.15f, 0.1f) * 2.f);
+		BarFill->SetMaterial(0, Fill);
+	}
 	if (FoeMaterial())
 	{
 		Mat = UMaterialInstanceDynamic::Create(FoeMaterial(), this);
@@ -359,6 +404,8 @@ void ADaedalusTarget::Tick(float DeltaSeconds)
 	}
 
 	SetActorLocation(Home + FVector(0.f, 0.f, Bob));
+	SinceHurt += Dt;
+	TickBar();
 	if (Mat)
 	{
 		Flash = FMath::Max(0.f, Flash - Dt * 6.f);
@@ -373,6 +420,7 @@ float ADaedalusTarget::TakeDamage(float Damage, const FDamageEvent& Event, ACont
 	Health -= Damage;
 	StartScale = GetActorScale3D();
 	Flash = 1.f;
+	SinceHurt = 0.f;
 	SightCheck = 0.f;   // being shot wakes it
 	if (Health <= 0.f)
 	{

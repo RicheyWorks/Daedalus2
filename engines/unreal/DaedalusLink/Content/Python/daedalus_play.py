@@ -352,8 +352,8 @@ def scenario_encounters(p):
     unreal.SystemLibrary.execute_console_command(world(), "daedalus.FoesHunt 1")
     return {"checks": [
         _check("three packs placed", all(n >= 2 for n in made), f"sizes={made}"),
-        _check("packs 20-65 m away", all(2000 <= d <= 6500 for d in dists), f"dists={dists}"),
-        _check("every foe on the ground", grounded == len(placed), f"{grounded}/{len(placed)}"),
+        _check("packs 10-80 m away", len(dists) > 0 and all(1000 <= d <= 8000 for d in dists), f"dists={dists}"),
+        _check("every foe on the ground", len(placed) > 0 and grounded == len(placed), f"{grounded}/{len(placed)}"),
         _check("director adds packs on its own", after > before, f"before={before} after={after}"),
     ], "stats": stats}
 

@@ -71,6 +71,38 @@ void SDaedalusHud::Construct(const FArguments& InArgs)
 			})
 		]
 
+		// Where the hit came from (Halo's red arc): a bar on a ring round the reticle, turned toward the attacker.
+		+ SOverlay::Slot().HAlign(HAlign_Center).VAlign(VAlign_Center)
+		[
+			SNew(SBox).WidthOverride(340.f).HeightOverride(340.f)
+			.RenderTransformPivot(FVector2D(0.5f, 0.5f))
+			.RenderTransform_Lambda([H]()
+			{
+				const ADaedalusHero* P = H.Get();
+				return TOptional<FSlateRenderTransform>(FSlateRenderTransform(FQuat2D(FMath::DegreesToRadians(P ? P->HitDirection() : 0.f))));
+			})
+			.Visibility_Lambda([H]()
+			{
+				const ADaedalusHero* P = H.Get();
+				return P && P->HasHitDirection() && P->SinceHurt() < 1.2f ? EVisibility::HitTestInvisible : EVisibility::Collapsed;
+			})
+			[
+				SNew(SBox).HAlign(HAlign_Center).VAlign(VAlign_Top)
+				[
+					SNew(SBox).WidthOverride(110.f).HeightOverride(10.f)
+					[
+						SNew(SImage).Image(HudWhite())
+						.ColorAndOpacity_Lambda([H]()
+						{
+							const ADaedalusHero* P = H.Get();
+							const float A = P ? FMath::Clamp(1.f - P->SinceHurt() / 1.2f, 0.f, 1.f) : 0.f;
+							return FSlateColor(FLinearColor(1.f, 0.15f, 0.1f, 0.9f * A));
+						})
+					]
+				]
+			]
+		]
+
 		// Top centre: the energy shield (Halo's bar) and health under it
 		+ SOverlay::Slot().HAlign(HAlign_Center).VAlign(VAlign_Top).Padding(0.f, 40.f, 0.f, 0.f)
 		[
