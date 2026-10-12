@@ -2850,6 +2850,7 @@ window.daedalusRealm = state; // for the browser harness and curious operators
 state.scene = scene;         // rd-jukebox (jukebox.js) adds its prop here
 state.camera = camera;
 state.groundAt = groundAt;
+state.blockColors = COLORS;  // block colours by name: the jukebox themes itself from the world's own blocks
 state.pick = pick;           // the exact pick the pointer uses, so a harness can ask what a tap hits
 state.debugTarget = () => controls.target.clone();
 state.refreshCreatures = refreshCreatures;

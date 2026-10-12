@@ -152,6 +152,12 @@ class ProdAuthPostureTest {
         EXPECTED.put("GET /api/v1/jukebox/seeds/" + ID, Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/jukebox/tokens/" + ID + "/html", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/jukebox/arrangement", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/jukebox/tokens/" + ID + "/hash", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/jukebox/studio/audio/" + ID, Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/jukebox/coat", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/jukebox/coat.png", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/jukebox/radio/stations", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/jukebox/radio/stream/" + ID, Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/jukebox/owned", Posture.AUTHENTICATED);
         EXPECTED.put("GET /api/v1/species", Posture.PUBLIC);
 
