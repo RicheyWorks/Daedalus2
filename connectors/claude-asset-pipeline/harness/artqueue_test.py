@@ -32,12 +32,17 @@ def check(name, ok, detail=""):
     print("%s  %s %s" % ("ok  " if ok else "FAIL", name, detail))
 
 
+PLAYING = {"on": False}
+
+
 class FakeBlender:
     def __init__(self, dirty=False, current="", objects=("Pick_Handle", "Pick_Head")):
         self.dirty, self.current, self.objects, self.opened = dirty, current, list(objects), []
 
     def call(self, addr, command, timeout=600, side="bridge", **p):
         code = p["code"]
+        if "get_game_world" in code:
+            return {"result": PLAYING["on"]}
         if "open_mainfile" in code:
             path = json.loads(code.split("path = ", 1)[1].split("\n", 1)[0])
             if os.path.normcase(self.current) == os.path.normcase(path):
@@ -93,6 +98,17 @@ d, w, fb = setup(up=(False, True))
 w.tick()
 check("bridges down: row left READY", row(d, "Tool_Pickaxe")["status"] == "READY")
 check("bridges down: STATUS.md names Blender", "Blender" in open(os.path.join(d, "STATUS.md"), encoding="utf-8").read())
+shutil.rmtree(d)
+
+# 2b. Unreal in Play: wait, don't touch
+d, w, fb = setup()
+PLAYING["on"] = True
+w.tick()
+check("unreal playing: row left READY", row(d, "Tool_Pickaxe")["status"] == "READY")
+check("unreal playing: STATUS.md says Play", "Play mode" in open(os.path.join(d, "STATUS.md"), encoding="utf-8").read())
+PLAYING["on"] = False
+w.tick()
+check("unreal playing: ships after Play ends", row(d, "Tool_Pickaxe")["status"].startswith("SHIPPED"))
 shutil.rmtree(d)
 
 # 3. the happy path

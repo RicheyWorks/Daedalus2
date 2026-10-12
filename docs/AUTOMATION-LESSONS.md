@@ -138,3 +138,6 @@ to it when something new breaks.
   it (`unreal.IntVector(t.x, t.y, t.z)`) before the world changes.
 - **Aim tests at what's there after the change.** Once a cube is mined, a ray aimed at it goes through the hole
   and past reach; aim at the hole's floor to place back.
+- **No asset imports while Unreal is in Play.** The pipeline's import "completed", but `load_asset` and saving
+  failed with "The Editor is currently in a play mode" and the judge saw 0 meshes. The art queue watcher now waits
+  for Play to end (and says so in STATUS.md) instead of stopping anyone's session.

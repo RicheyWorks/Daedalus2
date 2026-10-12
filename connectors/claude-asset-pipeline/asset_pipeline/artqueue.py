@@ -200,6 +200,11 @@ class Watcher:
             up_b, up_u = wire.reachable(self.blender), wire.reachable(self.unreal)
             missing = [n for n, up in (("Blender (connector on 9876)", up_b), ("Unreal (bridge on 9877)", up_u)) if not up]
             self.waiting_on = (", ".join(missing) + " to be open") if missing else ""
+            # Unreal won't load or save assets during Play ("The Editor is currently in a play mode"); never stop
+            # someone's Play session, wait for it to end.
+            if not missing and wire.call(self.unreal, "execute_python", side="Unreal", code=PLAYING)["result"]:
+                self.waiting_on = "Unreal to leave Play mode (assets can't be saved while playing)"
+                missing = ["play"]
             if not missing:
                 for r in ready:
                     done.append(self.ship_one(r["asset"]))
@@ -258,6 +263,8 @@ class Watcher:
         self.event(asset, "rejected", why=failed["check"], detail=failed["detail"])
         return (asset, "REJECTED")
 
+
+PLAYING = "import unreal\nresult = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_game_world() is not None\n"
 
 # What runs inside Blender (through the connector's execute_code).
 
