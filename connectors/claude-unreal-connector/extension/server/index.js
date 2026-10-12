@@ -49,12 +49,15 @@ const TOOLS = [
     description: 'List every open Unreal Editor window, including dialogs and popups, each with a picture. This works OUTSIDE the editor, so use it whenever another tool times out: a modal dialog (a message box, a save prompt, "build lighting", a crash reporter) has frozen the editor and its bridge. The largest window is the editor itself (main: true). Then answer the dialog with window_input. Windows only.',
     inputSchema: { type: 'object', properties: { max_images: { type: 'integer', minimum: 0, maximum: 12, description: 'Pictures for at most this many windows (default 6)' } }, additionalProperties: false } },
   { name: 'window_input', local: 'input', timeout: 30000,
-    description: 'Answer an Unreal dialog, or drive any editor window, from outside the editor: brings the window (hwnd from editor_windows) to the front, optionally clicks at (x, y) in that window\'s own pixels as seen in its editor_windows picture (divide by image_scale if the picture was scaled), then presses keys. Keys: enter, escape, tab, space, left, right, up, down, y, n, alt+f4, separated by spaces (e.g. "tab enter"). Reports whether the window closed. Windows only.',
+    description: 'Answer an Unreal dialog, or drive any editor window, from outside the editor: brings the window (hwnd from editor_windows) to the front, optionally clicks at (x, y) in that window\'s own pixels as seen in its editor_windows picture (divide by image_scale if the picture was scaled), then presses keys. Keys: enter, escape, tab, space, left, right, up, down, y, n, alt+f4, separated by spaces (e.g. "tab enter"). Or pass action to close, minimize, restore, maximize or move a window without guessing where its buttons are. Reports whether the window closed. Windows only.',
     inputSchema: { type: 'object', properties: {
       hwnd: { type: 'integer', description: 'Window handle from editor_windows' },
       keys: { type: 'string', description: 'Keys to press, e.g. "enter" for a default OK, "escape" to cancel' },
       x: { type: 'integer', minimum: 0, description: 'Click x inside the window (window pixels)' },
-      y: { type: 'integer', minimum: 0, description: 'Click y inside the window (window pixels)' } }, required: ['hwnd'], additionalProperties: false } },
+      y: { type: 'integer', minimum: 0, description: 'Click y inside the window (window pixels); with action move, the screen y' },
+      action: { type: 'string', enum: ['close', 'minimize', 'restore', 'maximize', 'move'], description: 'Instead of clicking: close the window (like its X), minimize/restore/maximize it, or move it to screen (x, y)' },
+      width: { type: 'integer', minimum: 100, description: 'With action move: new width' },
+      height: { type: 'integer', minimum: 100, description: 'With action move: new height' } }, required: ['hwnd'], additionalProperties: false } },
   { name: 'output_log', command: 'output_log', timeout: 30000,
     description: 'The last lines of the editor log, optionally filtered (e.g. "Error", "Daedalus", "LogPython").',
     inputSchema: { type: 'object', properties: {
@@ -102,6 +105,9 @@ function runWindows(op, args, timeoutMs) {
       a.push('-Hwnd', String(args.hwnd));
       if (args.keys) a.push('-Keys', String(args.keys));
       if (args.x !== undefined && args.y !== undefined) a.push('-X', String(args.x), '-Y', String(args.y));
+      if (args.action) a.push('-Action', String(args.action));
+      if (args.width) a.push('-W', String(args.width));
+      if (args.height) a.push('-H', String(args.height));
     }
     execFile('powershell.exe', a, { timeout: timeoutMs, maxBuffer: 64 * 1024 * 1024, windowsHide: true }, (err, stdout, stderr) => {
       const line = String(stdout || '').trim().split(/\r?\n/).pop();

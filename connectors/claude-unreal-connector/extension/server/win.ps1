@@ -6,6 +6,9 @@
 #   -Op input -Hwnd N -Keys "enter"       bring window N to the front and press keys (enter, escape, tab, space,
 #                                         left, right, up, down, alt+f4, or several separated by spaces)
 #   -Op input -Hwnd N -X 120 -Y 80        click at (X, Y) inside window N, in the window's own pixels (as in its PNG)
+#   -Op input -Hwnd N -Action close       ask window N to close (WM_CLOSE: the same as clicking its X)
+#   -Op input -Hwnd N -Action minimize|restore|maximize
+#   -Op input -Hwnd N -Action move -X 100 -Y 100 [-W 1200 -H 800]   move (and size) window N on screen
 # Output: one JSON object on stdout.
 param(
     [ValidateSet("list", "input")][string]$Op = "list",
@@ -13,6 +16,9 @@ param(
     [string]$Keys = "",
     [int]$X = -1,
     [int]$Y = -1,
+    [ValidateSet("", "close", "minimize", "restore", "maximize", "move")][string]$Action = "",
+    [int]$W = 0,
+    [int]$H = 0,
     [int]$MaxImages = 6
 )
 $ErrorActionPreference = "Stop"
@@ -38,6 +44,8 @@ public static class DaedalusWin {
     [DllImport("user32.dll")] public static extern bool SetCursorPos(int x, int y);
     [DllImport("user32.dll")] public static extern void mouse_event(uint f, uint dx, uint dy, uint d, UIntPtr e);
     [DllImport("user32.dll")] public static extern void keybd_event(byte vk, byte scan, uint f, UIntPtr e);
+    [DllImport("user32.dll")] public static extern bool PostMessage(IntPtr h, uint msg, IntPtr w, IntPtr l);
+    [DllImport("user32.dll")] public static extern bool SetWindowPos(IntPtr h, IntPtr after, int x, int y, int cx, int cy, uint f);
     [StructLayout(LayoutKind.Sequential)] public struct RECT { public int Left, Top, Right, Bottom; }
     public static List<IntPtr> Windows(HashSet<uint> pids) {
         var list = new List<IntPtr>();
@@ -125,8 +133,26 @@ try {
         $h = [IntPtr]$Hwnd
         $owned = [DaedalusWin]::Windows($pids) | Where-Object { $_ -eq $h }
         if (-not $owned) { throw "window $Hwnd is not an open Unreal Editor window (call editor_windows again)" }
-        $front = [DaedalusWin]::Front($h)
         $did = @()
+        if ($Action) {
+            switch ($Action) {
+                "close"    { [void][DaedalusWin]::PostMessage($h, 0x0010, [IntPtr]::Zero, [IntPtr]::Zero) }   # WM_CLOSE
+                "minimize" { [void][DaedalusWin]::ShowWindow($h, 6) }
+                "restore"  { [void][DaedalusWin]::ShowWindow($h, 9) }
+                "maximize" { [void][DaedalusWin]::ShowWindow($h, 3) }
+                "move"     {
+                    $r = New-Object DaedalusWin+RECT; [void][DaedalusWin]::GetWindowRect($h, [ref]$r)
+                    $cw = if ($W -gt 0) { $W } else { $r.Right - $r.Left }; $ch = if ($H -gt 0) { $H } else { $r.Bottom - $r.Top }
+                    [void][DaedalusWin]::SetWindowPos($h, [IntPtr]::Zero, $X, $Y, $cw, $ch, 0x0014)   # NOZORDER|NOACTIVATE
+                }
+            }
+            $did += $Action
+            Start-Sleep -Milliseconds 400
+            $still = [bool]([DaedalusWin]::Windows($pids) | Where-Object { $_ -eq $h })
+            @{ ok = $true; hwnd = $Hwnd; did = $did; window_still_open = $still } | ConvertTo-Json -Compress
+            exit 0
+        }
+        $front = [DaedalusWin]::Front($h)
         if ($X -ge 0 -and $Y -ge 0) {
             $r = New-Object DaedalusWin+RECT; [void][DaedalusWin]::GetWindowRect($h, [ref]$r)
             [void][DaedalusWin]::SetCursorPos($r.Left + $X, $r.Top + $Y)
