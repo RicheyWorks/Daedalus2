@@ -498,6 +498,10 @@ class Watcher:
                     stop.set()
                 continue
             results.append(self.finish(a, kind, rep))
+            if len(results) % 10 == 0:   # a long run keeps the board live instead of showing the last pass's wait
+                self.track_wait()
+                with self.lock:
+                    self.summary()
         t.join(timeout=5)
         return results
 
