@@ -703,6 +703,21 @@ if ($Connector) {
     }
 }
 
+# A Start-menu shortcut to this project's editor. It opens the project in one click, and lets Claude's computer
+# use find "Unreal Editor" by name (it can only reach apps in the Start menu) to answer a dialog when needed.
+if ($engine -and -not $WhatIfOnly -and $env:APPDATA -and (Test-Path $Project)) {
+    try {
+        $lnk = Join-Path $env:APPDATA ("Microsoft\Windows\Start Menu\Programs\Unreal Editor ({0}).lnk" -f [IO.Path]::GetFileNameWithoutExtension($Project))
+        $exe = Join-Path $engine.Path "Engine\Binaries\Win64\UnrealEditor.exe"
+        $sc = (New-Object -ComObject WScript.Shell).CreateShortcut($lnk)
+        $sc.TargetPath = $exe
+        $sc.Arguments = "`"$Project`""
+        $sc.WorkingDirectory = Split-Path $exe -Parent
+        $sc.IconLocation = "$exe,0"
+        $sc.Save()
+    } catch { Warn "could not make the Start menu shortcut: $($_.Exception.Message)" }
+}
+
 Write-Host ""
 if ($Open -and -not $WhatIfOnly) {
     $exe = if ($engine) { Join-Path $engine.Path "Engine\Binaries\Win64\UnrealEditor.exe" } else { "" }

@@ -129,11 +129,39 @@ def cmd_get_actor_info(p):
             "bounds": {"origin": _vec(origin), "extent": _vec(extent)}, "components": comps}
 
 
+@contextlib.contextmanager
+def _unattended():
+    """While Claude's code runs, editor message boxes answer themselves instead of waiting for a click. A modal
+    dialog would block the game thread, and with it the bridge (found on Richmond's PC: setting
+    force_no_precomputed_lighting raised one, and every later call timed out until he clicked OK)."""
+    flag = getattr(unreal, "set_running_unattended_script", None) or getattr(
+        getattr(unreal, "PythonScriptLibrary", None), "set_running_unattended_script", None)
+    if flag is None:
+        # Older engines: the "unattended" console variable keeps FMessageDialog from blocking.
+        world = None
+        try:
+            world = _world()
+            unreal.SystemLibrary.execute_console_command(world, "r.Editor.Unattended 1")
+        except Exception:
+            pass
+        try:
+            yield
+        finally:
+            if world is not None:
+                unreal.SystemLibrary.execute_console_command(world, "r.Editor.Unattended 0")
+        return
+    flag(True)
+    try:
+        yield
+    finally:
+        flag(False)
+
+
 def cmd_execute_python(p):
     code = p["code"]
     scope = {"unreal": unreal, "__name__": "__claude__", "result": None}
     buf = io.StringIO()
-    with contextlib.redirect_stdout(buf):
+    with contextlib.redirect_stdout(buf), _unattended():
         exec(compile(code, "<claude>", "exec"), scope)
     result = scope.get("result")
     try:
