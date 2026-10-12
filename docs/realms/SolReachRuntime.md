@@ -4,16 +4,19 @@ The portable core is `DaedalusSolReachCore.h`. Its 32/32 native tests compile un
 C++17 with `/W4 /WX` and check all 216 ordered herb combinations, atomic refusal,
 overflow, progression, keeper memory, schedules and clock/weather discovery.
 
-**Execution hold:** Richmond reported Norton alerts on the Sol Reach core test via
-Pootscoot. Native test launches, build retries and Sol adapter deployment are paused
-pending the actual detection/path review. The 32/32 result is the previous completed
-run, not a fresh security clearance. Existing source, logs, candidate metadata and
-SHA256 are preserved in the task's `security-evidence` folder. No exclusions,
-quarantine restores, executable renaming or other bypasses were attempted.
+Richmond explicitly authorized resuming all tests after resolving the Norton notices.
+A fresh ordinary MSVC build/run passed 32/32 checks; the Python suite passed 8/8.
+Security protections remain unchanged. Existing evidence remains preserved.
+
+**Editor target hold:** Pootscoot owns editor/pipeline separation. Sol has no shared
+editor calls in flight and remains offline until its exact isolated project and
+endpoint are assigned. Source/configuration/test preparation can continue.
 
 `UDaedalusSolReachJournal` is the thin Unreal component. **It has not yet passed UHT,
 an Unreal build or a live Play test.** No code has been copied into the running editor's
-plugin. The team has been asked to include it in the existing shared compile window.
+plugin by Sol. Claude held the previous source copy after a platform `Error` name
+collision. PR #26 fixes the parameter and enum cases with `daedalus::sol::Error`;
+the authorized build owner must review and adopt that revision before recompiling.
 
 ## Runtime wiring, in an approved build/turn
 
@@ -52,7 +55,12 @@ plugin. The team has been asked to include it in the existing shared compile win
 - Save/reload the journal, retaining recipes, quest progress and keeper memory.
 - End the granted editor slice with own level/assets saved, Play stopped and panels tidy.
 
-The read-only world census confirms 500 SOL READY rows and zero imported SOL assets.
+The latest actual Unreal readback verifies **505/505 exact StaticMesh paths**, with
+zero missing or ambiguous assets, after 14 owned import calls taking 200.624697
+seconds in total. A scoped final save persisted 89 owned material fixups, leaving
+zero dirty packages and Play stopped. Sol handed the editor back at 16:27 PT.
+The queue was not edited; READY status alone is not evidence that these meshes
+are missing. Inspect existing destinations before any import or retry.
 The 25 abandoned Dewroot prototypes found by that census were moved outside the art
 tree, preserved under the task's retired-prototypes folder, and excluded from delivery.
 
@@ -64,7 +72,7 @@ independent file-parity checks, 5/5 source-open checks and an inspected Blender 
 The total queued Sol delivery is now **505 assets**. `place_sol_island.build` accepts an
 optional adventure manifest; its bounded layout puts the keeper/mural by the spawn
 spring and the discovery markers within Sol's island. These are art and placement
-plans; the keeper mesh is not yet a navigating NPC, and the clue is not yet a rendered
+plans; Sol has not created the island level. The keeper mesh is not yet a navigating NPC, and the clue is not yet a rendered
 shadow puzzle. Both require the event/AI bindings above and visible acceptance.
 
 Source manifests: `bot-team/art/sol-reach-20261012-v3/manifest.json` and
