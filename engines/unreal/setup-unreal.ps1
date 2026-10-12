@@ -124,7 +124,7 @@ public delegate bool EnumProc(System.IntPtr h, System.IntPtr l);
     return $hits.Count
 }
 if ($Open -and -not $WhatIfOnly) {
-    $eds = Get-ProjectEditors
+    $eds = @(Get-ProjectEditors)
     Write-Host ("Open editors of this project: {0}" -f $eds.Count)
     if ($eds.Count -gt 0) {
         # Save through the Claude Unreal Bridge first when it is listening, so closing raises no "Save Content"
@@ -144,9 +144,9 @@ if ($Open -and -not $WhatIfOnly) {
         foreach ($e in $eds) {
             if ((Close-EditorWindows ([int]$e.ProcessId)) -eq 0) { (Get-Process -Id $e.ProcessId -ErrorAction SilentlyContinue).CloseMainWindow() | Out-Null }
         }
-        for ($i = 0; $i -lt 30 -and (Get-ProjectEditors).Count -gt 0; $i++) { Start-Sleep -Seconds 1 }
+        for ($i = 0; $i -lt 30 -and @(Get-ProjectEditors).Count -gt 0; $i++) { Start-Sleep -Seconds 1 }
         # A job started through WMI can't always reach the editor's window; ask the editor itself to quit (it saved above).
-        for ($n = 0; $n -lt 3 -and (Get-ProjectEditors).Count -gt 0; $n++) {
+        for ($n = 0; $n -lt 3 -and @(Get-ProjectEditors).Count -gt 0; $n++) {
             try {
                 $tcp = New-Object System.Net.Sockets.TcpClient
                 $tcp.Connect("127.0.0.1", 9877)
@@ -156,10 +156,10 @@ if ($Open -and -not $WhatIfOnly) {
                 $tcp.Close()
                 Write-Host "    asked the editor to quit through the Claude Unreal Bridge"
             } catch { }
-            for ($i = 0; $i -lt 30 -and (Get-ProjectEditors).Count -gt 0; $i++) { Start-Sleep -Seconds 1 }
+            for ($i = 0; $i -lt 30 -and @(Get-ProjectEditors).Count -gt 0; $i++) { Start-Sleep -Seconds 1 }
         }
-        for ($i = 0; $i -lt 60 -and (Get-ProjectEditors).Count -gt 0; $i++) { Start-Sleep -Seconds 1 }
-        if ((Get-ProjectEditors).Count -gt 0) {
+        for ($i = 0; $i -lt 60 -and @(Get-ProjectEditors).Count -gt 0; $i++) { Start-Sleep -Seconds 1 }
+        if (@(Get-ProjectEditors).Count -gt 0) {
             Write-Host "Unreal is still open (waiting on a save prompt?). Close it, then run this again." -ForegroundColor Red
             exit 1
         }
@@ -741,7 +741,7 @@ if ($Import -or $Verify) {
         Fail "UnrealEditor-Cmd.exe not found"
     } elseif (-not $WhatIfOnly -and -not (Test-Path $PackageFile)) {
         Fail "no World Package to import (step 5)"
-    } elseif (-not $WhatIfOnly -and (Get-ProjectEditors).Count -gt 0) {
+    } elseif (-not $WhatIfOnly -and @(Get-ProjectEditors).Count -gt 0) {
         # The open editor holds the level file, so the import could not save it (Windows error 32).
         Fail "Unreal has this project open; close it (File > Exit), then run this again"
     } elseif ($WhatIfOnly) {

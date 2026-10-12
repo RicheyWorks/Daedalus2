@@ -128,6 +128,11 @@ to it when something new breaks.
   "fixed" was rejected again. Rebase onto origin, push, and check that the PC's HEAD contains the commit before
   testing live.
 
+- **PowerShell unrolls a one-item array on `return`.** `Get-ProjectEditors` returned `@(...)`, but with exactly one
+  editor open the caller got a bare CimInstance, whose `.Count` is empty in Windows PowerShell 5.1. So
+  "Open editors: " printed nothing, the editor was never closed, and the fast build hit a locked DLL. It worked with
+  two editors open, which hid the bug. Always wrap the call: `@(Get-ProjectEditors)`.
+
 ## Habits that saved us
 
 - **Build a game its own framebuffer and capture that.** The viewport capture never worked in Play (play_capture).
