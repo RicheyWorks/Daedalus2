@@ -1,0 +1,89 @@
+{
+ "schema": "daedalus.herbcombo/v0",
+ "mechanic": "succession_tea",
+ "herbs": [
+  {
+   "id": "fireweed",
+   "stage": 0,
+   "stat": "regen"
+  },
+  {
+   "id": "yarrow",
+   "stage": 0,
+   "stat": "heal"
+  },
+  {
+   "id": "plantain",
+   "stage": 0,
+   "stat": "cure_poison"
+  },
+  {
+   "id": "selfheal",
+   "stage": 1,
+   "stat": "heal_over_time"
+  },
+  {
+   "id": "meadowsweet",
+   "stage": 1,
+   "stat": "stamina"
+  },
+  {
+   "id": "comfrey",
+   "stage": 1,
+   "stat": "defense"
+  },
+  {
+   "id": "nettle",
+   "stage": 2,
+   "stat": "strength"
+  },
+  {
+   "id": "mullein",
+   "stage": 2,
+   "stat": "stamina_max"
+  },
+  {
+   "id": "valerian",
+   "stage": 2,
+   "stat": "calm"
+  },
+  {
+   "id": "woodsorrel",
+   "stage": 3,
+   "stat": "hunger"
+  },
+  {
+   "id": "ramsons",
+   "stage": 3,
+   "stat": "immunity"
+  },
+  {
+   "id": "wintergreen",
+   "stage": 3,
+   "stat": "cold_resist"
+  }
+ ],
+ "rules": {
+  "ladder": "consecutive stages: strength x1 per rung; 0-1-2-3 = climax (+15% all, 600 s)",
+  "gap": "skipped stage: 0.5 strength, 2x duration",
+  "reset": "stage>0 then 0: clear debuffs + speed burst",
+  "site_bonus": {
+   "YoungMeadow": [
+    0,
+    1
+   ],
+   "BrambleScrub": [
+    2
+   ],
+   "PineStand": [
+    2
+   ],
+   "OldGrowthOak": [
+    3
+   ],
+   "WillowRiverbank": [
+    1
+   ]
+  }
+ }
+}
