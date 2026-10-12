@@ -543,6 +543,10 @@ if ($Import -or $Verify) {
         Fail "UnrealEditor-Cmd.exe not found"
     } elseif (-not $WhatIfOnly -and -not (Test-Path $PackageFile)) {
         Fail "no World Package to import (step 5)"
+    } elseif (-not $WhatIfOnly -and (Get-CimInstance Win32_Process -Filter "Name = 'UnrealEditor.exe'" -ErrorAction SilentlyContinue |
+            Where-Object { $_.CommandLine -and $_.CommandLine -like "*$(Split-Path $Project -Leaf)*" })) {
+        # The open editor holds the level file, so the import could not save it (Windows error 32).
+        Fail "Unreal has this project open; close it (File > Exit), then run this again"
     } elseif ($WhatIfOnly) {
         Write-Host "    would run: $editor `"$Project`" -run=pythonscript -script=`"$py $PackageFile`""
     } else {
