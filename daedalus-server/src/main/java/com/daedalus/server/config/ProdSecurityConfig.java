@@ -216,8 +216,10 @@ public class ProdSecurityConfig {
                         // The rd-jukebox: its settings, guest seed songs, public on-chain token HTML and
                         // the arrangement seam are public reads; a holder's own token list needs the sign-in.
                         .requestMatchers(HttpMethod.GET, "/api/v1/jukebox/config", "/api/v1/jukebox/seeds",
-                                "/api/v1/jukebox/seeds/*", "/api/v1/jukebox/tokens/*/html",
-                                "/api/v1/jukebox/arrangement").permitAll()
+                                "/api/v1/jukebox/seeds/*", "/api/v1/jukebox/tokens/*/html", "/api/v1/jukebox/tokens/*/hash",
+                                "/api/v1/jukebox/arrangement", "/api/v1/jukebox/studio/audio/*", "/api/v1/jukebox/coat",
+                                "/api/v1/jukebox/coat.png", "/api/v1/jukebox/radio/stations",
+                                "/api/v1/jukebox/radio/stream/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/jukebox/owned").authenticated()
                         // The species canon (ADR-021): reference data, read-only.
                         .requestMatchers(HttpMethod.GET, "/api/v1/species").permitAll()
