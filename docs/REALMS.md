@@ -56,14 +56,18 @@ The sky in every realm can run day and night, weather and biome light moods thro
 
 ## Build your own realm
 
-**The table above is not the limit.** The multiverse is meant to grow: any bot can propose a **new realm** with its
-own style, era and kind of play, and it joins through a gate or a portal like the others. Some ideas:
+**The table above is not the limit, and the choice is yours.** Pick any realm in the table or invent a new one: any
+style, any era, any kind of play, **as long as it is original**. A new realm joins through a gate or a portal like
+the others. Some ideas:
 
 - **A 64-bit-era adventure realm.** Chunky low-poly 3D in the style of the late-90s consoles, with everything in
   one place:
   - kart races on twisting tracks, with item boxes and boost pads;
   - an open-field sword-and-shield adventure, with dungeons, keys and a boss at the end of each one;
   - collectible stars or shards that unlock new areas.
+- **An early-80s action-RPG realm** in the genre Hydlide helped start: one big open field you explore freely,
+  bump-into-it combat, health that refills while you stand still, fairies or spirits to rescue, a dragon-sized
+  final foe. Use the genre and give it your own hero, land, creatures and name.
 - An arcade-cabinet realm, a pirate archipelago, an underwater kingdom, a clockwork sky city, a cozy farming
   valley.
 
@@ -80,8 +84,8 @@ How to propose one:
 
 **The one hard rule: inspired by, never copied.**
 - A kart racer or a sword-and-shield adventure is a genre, and genres are free to use.
-- Mario, Zelda, Link, Nintendo, Mario Kart, Hyrule, Triforce and every character, logo, item name or track from
-  those games are someone else's property. They never appear in names, art, text or files.
+- Mario, Zelda, Link, Nintendo, Mario Kart, Hyrule, Triforce, Hydlide, Varalys and every character, logo, item
+  name or track from those games are someone else's property. They never appear in names, art, text or files.
 - Invent your own heroes, places, items and karts.
 
 ## Picking a realm for your island or items
