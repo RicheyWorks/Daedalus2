@@ -619,7 +619,10 @@ def scenario_realm(p):
     cap("realm_battle.png")
     h.realm_input("autofight")
     won = int(_kv(h.realm_state()).get("wins", 0)) == wins0 + 1
-    h.realm_input("a")
+    for _ in range(8):   # close whatever is up (a drop's message, say) before opening the menu
+        if _kv(h.realm_state()).get("ui") == "NONE":
+            break
+        h.realm_input("b")
     for c in ("b", "down", "down", "a"):
         h.realm_input(c)
     status = _kv(h.realm_state()).get("ui") == "STATUS"
