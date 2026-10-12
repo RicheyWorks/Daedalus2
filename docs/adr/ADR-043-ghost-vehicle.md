@@ -26,6 +26,20 @@ model: a fast one-seat hover bike that steers where you look and fires twin guns
 - **Harness hooks:** `Mount`, `Dismount`, `Drive(forward, right, boost)`, `FireGuns`, and the record
   (ShotsFired, Hits, Heat, Velocity, bGrounded, Rider).
 
+## Proven live (UE 5.8.3, Play in Editor, driven by the harness)
+
+- `SpawnVehicle()` put the Ghost 3 m from the hero, 114 cm over his feet (its hover height); `Interact()` mounted
+  it and the player's controller took the bike.
+- `Drive` moved it (467 cm in 15 frames of a background editor at ~3 fps); off a ledge it dropped to the tier
+  below and hovered there.
+- Firing at the nearest foe on its level: 144 bolts, 2 kills, 7 EXP credited to the rider (Blight Slime 2 +
+  Shardback 5).
+- `Dismount()` gave the hero back, 2.4 m from the bike, walking; mounting again worked.
+
+Found on the way: the first SpawnVehicle put the bike on a lower tier (the start spot is on a ledge), and the first
+Dismount wedged the hero against the hull, stuck falling. Both fixed (ground at the hero's level; `TeleportTo` a
+clear spot) and re-proven.
+
 ## Held
 
 More seats (a Warthog-style buggy with a gunner), vehicle health and hijacking, and sound.
