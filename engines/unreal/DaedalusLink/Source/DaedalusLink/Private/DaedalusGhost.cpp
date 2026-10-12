@@ -224,10 +224,29 @@ void ADaedalusGhost::Dismount()
 	if (!Hero || !C) return;
 	Rider = nullptr;
 	Hero->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-	const FVector Side = GetActorLocation() + GetActorRightVector() * -180.f + FVector(0.f, 0.f, 80.f);
-	Hero->SetActorLocation(Side, false, nullptr, ETeleportType::TeleportPhysics);
+	// Step off to the left, else the right, behind or ahead: a spot clear of the hull with ground under it.
 	Hero->SetActorHiddenInGame(false);
 	Hero->SetActorEnableCollision(true);
+	const FVector Base = GetActorLocation();
+	const FVector Dirs[] = {-GetActorRightVector(), GetActorRightVector(), -GetActorForwardVector(), GetActorForwardVector()};
+	FCollisionQueryParams Q(SCENE_QUERY_STAT(GhostDismount), false, this);
+	Q.AddIgnoredActor(Hero);
+	bool bPlaced = false;
+	for (const FVector& D : Dirs)
+	{
+		const FVector Spot = Base + D * 240.f + FVector(0.f, 0.f, 60.f);
+		FHitResult Ground;
+		if (GetWorld()->LineTraceSingleByChannel(Ground, Spot, Spot - FVector(0.f, 0.f, 600.f), ECC_Visibility, Q)
+			&& Hero->TeleportTo(Spot, Hero->GetActorRotation(), false, false))
+		{
+			bPlaced = true;
+			break;
+		}
+	}
+	if (!bPlaced)
+	{
+		Hero->TeleportTo(Base + FVector(0.f, 0.f, 220.f), Hero->GetActorRotation(), false, true);   // over the bike, last resort
+	}
 	Hero->GetCharacterMovement()->SetMovementMode(MOVE_Falling);
 	const FRotator Look = C->GetControlRotation();
 	C->Possess(Hero);

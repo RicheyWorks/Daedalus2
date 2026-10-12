@@ -878,13 +878,24 @@ ADaedalusGhost* ADaedalusHero::SpawnVehicle()
 	UWorld* W = GetWorld();
 	if (!W) return nullptr;
 	const float Yaw = Controller ? Controller->GetControlRotation().Yaw : GetActorRotation().Yaw;
-	const FVector Fwd = FRotator(0.f, Yaw, 0.f).Vector();
-	FVector Spot = GetActorLocation() + Fwd * 400.f;
-	FHitResult Hit;
+	// Ground at the hero's own level, ahead first, then to the sides and behind (islands have ledges).
+	const float Feet = GetActorLocation().Z - GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
 	FCollisionQueryParams Q(SCENE_QUERY_STAT(DaedalusVehicleSpot), false, this);
-	if (W->LineTraceSingleByChannel(Hit, Spot + FVector(0.f, 0.f, 400.f), Spot - FVector(0.f, 0.f, 2000.f), ECC_Visibility, Q))
+	FVector Spot = GetActorLocation() + FRotator(0.f, Yaw + 90.f, 0.f).Vector() * 250.f;
+	bool bFound = false;
+	for (const float Turn : {0.f, 90.f, -90.f, 45.f, -45.f, 180.f})
 	{
-		Spot = Hit.ImpactPoint + FVector(0.f, 0.f, 120.f);
+		for (const float Dist : {300.f, 220.f})
+		{
+			const FVector Try = GetActorLocation() + FRotator(0.f, Yaw + Turn, 0.f).Vector() * Dist;
+			FHitResult Hit;
+			if (!bFound && W->LineTraceSingleByChannel(Hit, Try + FVector(0.f, 0.f, 300.f), Try - FVector(0.f, 0.f, 1500.f), ECC_Visibility, Q)
+				&& FMath::Abs(Hit.ImpactPoint.Z - Feet) < 120.f)
+			{
+				Spot = Hit.ImpactPoint + FVector(0.f, 0.f, 120.f);
+				bFound = true;
+			}
+		}
 	}
 	FActorSpawnParameters P;
 	P.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
