@@ -5,8 +5,10 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "DaedalusGhost.h"
 #include "DaedalusSettings.h"
 #include "DaedalusTarget.h"
+#include "EngineUtils.h"
 #include "Dom/JsonObject.h"
 #include "Engine/Engine.h"
 #include "Engine/GameViewportClient.h"
@@ -281,6 +283,7 @@ void ADaedalusHero::BeginPlay()
 			EI->BindAction(ShoulderAction, ETriggerEvent::Started, this, &ADaedalusHero::SwapShoulder);
 			EI->BindAction(MenuAction, ETriggerEvent::Started, this, &ADaedalusHero::ToggleSettings);
 			EI->BindAction(ViewAction, ETriggerEvent::Started, this, &ADaedalusHero::ToggleField);
+			EI->BindAction(InteractAction, ETriggerEvent::Started, this, &ADaedalusHero::InteractPressed);
 		}
 		if (GEngine && GEngine->GameViewport)
 		{
@@ -851,6 +854,43 @@ int32 ADaedalusHero::SpawnFoes(int32 Count)
 	return Placed;
 }
 
+bool ADaedalusHero::Interact()
+{
+	UWorld* W = GetWorld();
+	if (!W || IsSettingsOpen() || IsFieldOpen()) return false;
+	ADaedalusGhost* Best = nullptr;
+	float BestD = InteractReach * InteractReach;
+	for (TActorIterator<ADaedalusGhost> It(W); It; ++It)
+	{
+		if (It->Rider) continue;
+		const float D = FVector::DistSquared(It->GetActorLocation(), GetActorLocation());
+		if (D <= BestD)
+		{
+			BestD = D;
+			Best = *It;
+		}
+	}
+	return Best && Best->Mount(this);
+}
+
+ADaedalusGhost* ADaedalusHero::SpawnVehicle()
+{
+	UWorld* W = GetWorld();
+	if (!W) return nullptr;
+	const float Yaw = Controller ? Controller->GetControlRotation().Yaw : GetActorRotation().Yaw;
+	const FVector Fwd = FRotator(0.f, Yaw, 0.f).Vector();
+	FVector Spot = GetActorLocation() + Fwd * 400.f;
+	FHitResult Hit;
+	FCollisionQueryParams Q(SCENE_QUERY_STAT(DaedalusVehicleSpot), false, this);
+	if (W->LineTraceSingleByChannel(Hit, Spot + FVector(0.f, 0.f, 400.f), Spot - FVector(0.f, 0.f, 2000.f), ECC_Visibility, Q))
+	{
+		Spot = Hit.ImpactPoint + FVector(0.f, 0.f, 120.f);
+	}
+	FActorSpawnParameters P;
+	P.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	return W->SpawnActor<ADaedalusGhost>(ADaedalusGhost::StaticClass(), Spot, FRotator(0.f, Yaw, 0.f), P);
+}
+
 void ADaedalusHero::FetchFoeRules()
 {
 	const FString Url = CVarServer.GetValueOnGameThread() + TEXT("/api/v1/hero/rules");
@@ -894,7 +934,7 @@ void ADaedalusHero::Tick(float DeltaSeconds)
 	{
 		LastGround = GetActorLocation();
 	}
-	else if (!LastGround.IsZero() && GetActorLocation().Z < LastGround.Z - FallLimit)
+	else if (!LastGround.IsZero() && !GetAttachParentActor() && GetActorLocation().Z < LastGround.Z - FallLimit)
 	{
 		Respawn();
 	}

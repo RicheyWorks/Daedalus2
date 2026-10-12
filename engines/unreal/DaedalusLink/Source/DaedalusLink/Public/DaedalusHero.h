@@ -100,6 +100,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") int32 SpawnFoes(int32 Count);
 	/** Turn so the reticle is on a world point (the harness aims with it). */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") void AimAt(FVector Point);
+	/** Interact (X / E): get on the nearest Ghost within reach. Returns true if he mounted. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") bool Interact();
+	/** Put a Ghost (ADR-043) on the ground a few steps ahead. Returns it. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") class ADaedalusGhost* SpawnVehicle();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") float InteractReach = 350.f;
 
 	// Menus (ADR-041).
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") void ToggleSettings();
@@ -136,6 +141,7 @@ private:
 	void AttackHeld();
 	void AimOn();
 	void AimOff();
+	void InteractPressed() { Interact(); }
 	void SprintOn();
 	void SprintOff();
 	void Rumble(float Intensity, float Seconds) const;
