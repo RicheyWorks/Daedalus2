@@ -6,6 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "DaedalusGhost.h"
+#include "DaedalusNav.h"
 #include "DaedalusSettings.h"
 #include "DaedalusTarget.h"
 #include "EngineUtils.h"
@@ -838,12 +839,39 @@ int32 ADaedalusHero::SpawnFoes(int32 Count)
 	UWorld* W = GetWorld();
 	if (!W) return 0;
 	const TArray<FDaedalusFoeRule>& R = Rules();
-	const FVector Fwd = Controller ? FRotator(0.f, Controller->GetControlRotation().Yaw, 0.f).Vector() : GetActorForwardVector();
+	const float Yaw = Controller ? Controller->GetControlRotation().Yaw : GetActorRotation().Yaw;
+	const float Feet = GetActorLocation().Z - GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+	FCollisionQueryParams Q(SCENE_QUERY_STAT(DaedalusFoeSpot), false, this);
+	FCollisionObjectQueryParams Objects(ECC_WorldStatic);
+
+	// Ground for a foe: on the hero's own level if there is any, fanning out from straight ahead; never over the void.
+	auto FindSpot = [&](int32 i, FVector& Out) -> bool
+	{
+		for (const bool bSameLevel : {true, false})
+		{
+			for (const float Dist : {900.f, 700.f, 1100.f, 500.f})
+			{
+				for (int32 k = 0; k < 12; ++k)
+				{
+					const float Turn = (i - (Count - 1) * 0.5f) * 14.f + ((k % 2) ? 1.f : -1.f) * 25.f * ((k + 1) / 2);
+					const FVector Try = GetActorLocation() + FRotator(0.f, Yaw + Turn, 0.f).Vector() * (Dist + 120.f * (i % 3));
+					FHitResult Hit;
+					if (!W->LineTraceSingleByObjectType(Hit, Try + FVector(0.f, 0.f, 400.f), Try - FVector(0.f, 0.f, 1500.f), Objects, Q)) continue;
+					if (Hit.ImpactNormal.Z < 0.7f) continue;
+					if (bSameLevel && FMath::Abs(Hit.ImpactPoint.Z - Feet) > 150.f) continue;
+					Out = Hit.ImpactPoint + FVector(0.f, 0.f, 60.f);
+					return true;
+				}
+			}
+		}
+		return false;
+	};
+
 	int32 Placed = 0;
 	for (int32 i = 0; i < Count; ++i)
 	{
-		const FVector Dir = Fwd.RotateAngleAxis((i - (Count - 1) * 0.5f) * 14.f, FVector::UpVector);
-		const FVector Spot = GetActorLocation() + Dir * (900.f + 120.f * (i % 3)) + FVector(0.f, 0.f, 60.f);
+		FVector Spot;
+		if (!FindSpot(i, Spot)) continue;
 		ADaedalusTarget* T = W->SpawnActorDeferred<ADaedalusTarget>(ADaedalusTarget::StaticClass(), FTransform(Spot), this,
 			nullptr, ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn);
 		if (!T) continue;
@@ -851,12 +879,18 @@ int32 ADaedalusHero::SpawnFoes(int32 Count)
 		T->Kind = Rule.Kind;
 		T->Title = Rule.Title;
 		T->ExpValue = Rule.Exp;
-		T->Health = Rule.Life * 30.f;
-		T->Power = Rule.Power;   // a sword blow takes one life; the blaster takes three shots per life
+		T->Health = Rule.Life * 30.f;   // a sword blow takes one life; the blaster takes three shots per life
+		T->Power = Rule.Power;
 		UGameplayStatics::FinishSpawningActor(T, FTransform(Spot));
 		++Placed;
 	}
 	return Placed;
+}
+
+FString ADaedalusHero::NavStats() const
+{
+	const UDaedalusNav* Nav = GetWorld() ? GetWorld()->GetSubsystem<UDaedalusNav>() : nullptr;
+	return Nav ? Nav->Stats() : FString(TEXT("no nav"));
 }
 
 bool ADaedalusHero::Interact()

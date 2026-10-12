@@ -111,6 +111,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") void Respawn();
 	/** Put N foes (ADR-037's four kinds, in turn) in front of the hero. Returns how many were placed. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") int32 SpawnFoes(int32 Count);
+	/** The foes' route finder's record (searches, routes found, cells expanded, floor samples). */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString NavStats() const;
 	/** Turn so the reticle is on a world point (the harness aims with it). */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") void AimAt(FVector Point);
 	/** Interact (X / E): get on the nearest Ghost within reach. Returns true if he mounted. */
