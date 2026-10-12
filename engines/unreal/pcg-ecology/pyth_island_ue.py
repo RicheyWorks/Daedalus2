@@ -25,7 +25,7 @@ def dest(n): k, g = n.split("_")[0], n.split("_PYT_")[1].split("_")[0]; return "
 tasks = []
 for f in sorted(glob.glob(os.path.join(GLB, "*.glb"))):
     n = os.path.splitext(os.path.basename(f))[0]
-    if eal.does_asset_exist(dest(n) + "/" + n): continue
+    if eal.does_asset_exist(dest(n) + "/" + n) or eal.list_assets(dest(n) + "/" + n, True, False): continue   # glTF import nests assets in <dest>/<name>/StaticMeshes
     t = unreal.AssetImportTask(); t.filename = f; t.destination_path = dest(n); t.destination_name = n
     t.automated = True; t.save = True; t.replace_existing = True; tasks.append(t)
 for i in range(0, len(tasks), 50): unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks(tasks[i:i + 50])
@@ -142,4 +142,5 @@ dirty = [p.get_name() for p in ELS.get_dirty_map_packages()] + [p.get_name() for
 ues.set_level_viewport_camera_info(ORIGIN + unreal.Vector(-9000, -9000, 7000), unreal.Rotator(roll=0, pitch=-32, yaw=45))
 result = {"imported": len(tasks), "actors": N["n"], "biomes": counts, "animals": animals, "pre_dirty": pre_dirty,
           "persistent_saved": persist_saved, "dirty_after": dirty, "missing_mesh": [k for k, v in _mc.items() if v is None][:15]}
+
 
