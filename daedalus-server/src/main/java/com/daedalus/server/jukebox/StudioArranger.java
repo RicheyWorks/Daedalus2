@@ -5,10 +5,9 @@ package com.daedalus.server.jukebox;
 import java.util.List;
 
 /**
- * The seam for Prometheus's rd-studio (genre re-arrangement + studio-quality render). rd-studio is an
- * offline Python renderer today with no HTTP API, so the realm ships {@link #STUB}: it always answers
- * "not available" and the jukebox plays the original. See docs/rd-jukebox.md for the contract a real
- * service must meet.
+ * The seam to Prometheus's rd-studio (genre re-arrangement + studio-quality render). {@link HttpStudioArranger}
+ * talks to the live service; {@link #STUB} (no {@code studio-url}) always answers "not available" so the jukebox
+ * plays the original.
  */
 public interface StudioArranger {
 
@@ -17,11 +16,13 @@ public interface StudioArranger {
     /** What to play for {@code source} ("seed:&lt;name&gt;" or "token:&lt;id&gt;") in {@code genre}. */
     Arrangement arrange(String source, String genre, boolean studio);
 
+    /** Engine seeds the studio can render (guest songs with genre support). */
+    default List<String> seeds() { return List.of(); }
+
     /** {@code url} is null when unavailable: the client keeps the original. */
     record Arrangement(String source, String genre, boolean studio, boolean available, String url, String note) {}
 
-    StudioArranger STUB = (source, genre, studio) -> new Arrangement(source, genre, studio,
-            "original".equals(genre) && !studio, null,
+    StudioArranger STUB = (source, genre, studio) -> new Arrangement(source, genre, studio, false, null,
             "original".equals(genre) && !studio ? "the original song"
-                    : "rd-studio arrangements are not connected yet: playing the original");
+                    : "rd-studio is not connected: playing the original");
 }

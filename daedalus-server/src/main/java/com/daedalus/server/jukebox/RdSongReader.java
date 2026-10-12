@@ -24,6 +24,7 @@ public final class RdSongReader {
     static final String OWNER_OF = "0x6352211e";
     static final String IS_REVEALED = "0x5055fbc3";
     static final String TOKEN_HTML = "0xb79bebaf";
+    static final String TOKEN_HASH = "0xa3864397";
     static final int HTML_CACHE = 64;
 
     private final JsonRpc rpc;
@@ -36,6 +37,10 @@ public final class RdSongReader {
     private volatile Snapshot snapshot;
     private final Map<Long, byte[]> html = Collections.synchronizedMap(new LinkedHashMap<>(16, 0.75f, true) {
         @Override protected boolean removeEldestEntry(Map.Entry<Long, byte[]> e) { return size() > HTML_CACHE; }
+    });
+
+    private final Map<Long, String> hashes = Collections.synchronizedMap(new LinkedHashMap<>(16, 0.75f, true) {
+        @Override protected boolean removeEldestEntry(Map.Entry<Long, String> e) { return size() > 4096; }
     });
 
     /** Who owned what at one moment: owners.get(id) is the lowercase owner address, or null. */
@@ -79,6 +84,17 @@ public final class RdSongReader {
         byte[] bytes = decodeBytes(r.get(1));
         html.put(id, bytes);     // revealed + engine pinned per token: immutable from here on
         return bytes;
+    }
+
+    /** The token's 32-byte hash (keys its Turing coat), or null before reveal. Immutable once revealed: cached. */
+    public String tokenHash(long id) {
+        String cached = hashes.get(id);
+        if (cached != null) return cached;
+        List<String> r = rpc.ethCallBatch(contract, List.of(IS_REVEALED + uint(id), TOKEN_HASH + uint(id)));
+        if (r.get(0) == null || word(r.get(0), 0).signum() == 0 || r.get(1) == null) return null;
+        String hash = "0x" + strip(r.get(1)).substring(0, 64).toLowerCase();
+        hashes.put(id, hash);
+        return hash;
     }
 
     synchronized Snapshot owners() {
