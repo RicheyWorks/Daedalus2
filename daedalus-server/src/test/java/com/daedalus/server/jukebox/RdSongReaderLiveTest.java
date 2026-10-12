@@ -34,4 +34,24 @@ class RdSongReaderLiveTest {
         assertThat(m.find()).isTrue();
         assertThat(m.group(1).toLowerCase()).isEqualTo(r.tokenHash(5));
     }
+
+    /** The Transfer-log index, built from the deploy block (found by binary search), agrees with the ownerOf sweep. */
+    @Test
+    void theTransferIndexMatchesTheScan() {
+        HttpJsonRpc rpc = new HttpJsonRpc("https://rpc.testnet.chain.robinhood.com");
+        RdSongReader scan = new RdSongReader(rpc, RDSONG, 50, 60_000, 30_000, System::currentTimeMillis);
+        TransferIndexer ix = new TransferIndexer(rpc, RDSONG, 46630, Long.getLong("rd.deployBlock", 0), 20, 5_000_000, null,
+                5_000, System::currentTimeMillis);
+        long t0 = System.nanoTime();
+        ix.sync();
+        long ixMs = (System.nanoTime() - t0) / 1_000_000;
+        t0 = System.nanoTime();
+        List<String> owners = scan.owners().owners();
+        long scanMs = (System.nanoTime() - t0) / 1_000_000;
+        java.util.Set<String> holders = new java.util.TreeSet<>(owners);
+        holders.remove("");
+        for (String h : holders) assertThat(ix.tokensOf(h)).as(h).isEqualTo(scan.tokensOf(h));
+        System.out.printf("index: %d tokens to block %d in %d ms; scan of %d tokens: %d ms; %d holders agree%n",
+                ix.size(), ix.indexedBlock(), ixMs, owners.size(), scanMs, holders.size());
+    }
 }
