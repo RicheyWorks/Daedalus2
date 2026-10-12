@@ -187,6 +187,20 @@ class Part:
         self.bm.faces.ensure_lookup_table()
         self._tag(self.bm.faces[before:], mi)
 
+    def strut(self, a, b, r, mi=0, seg=6):
+        """A rod from point a to point b."""
+        from mathutils import Vector
+        va, vb = Vector(a), Vector(b)
+        d = vb - va
+        before = len(self.bm.faces)
+        res = bmesh.ops.create_cone(self.bm, cap_ends=True, cap_tris=False, segments=seg, radius1=r, radius2=r,
+                                    depth=d.length)
+        q = Vector((0, 0, 1)).rotation_difference(d.normalized())
+        bmesh.ops.rotate(self.bm, verts=res["verts"], cent=(0, 0, 0), matrix=q.to_matrix())
+        bmesh.ops.translate(self.bm, vec=(va + vb) / 2, verts=res["verts"])
+        self.bm.faces.ensure_lookup_table()
+        self._tag(self.bm.faces[before:], mi)
+
     def ball(self, loc, r, mi=0, sub=1, scale=(1, 1, 1)):
         before = len(self.bm.faces)
         res = bmesh.ops.create_icosphere(self.bm, subdivisions=sub, radius=r)
@@ -443,12 +457,19 @@ def prop(asset, family, p, rng, k, coll):
                 part.ball((math.cos(a) * R, math.sin(a) * R, 0.75), 0.025 + rng.random() * 0.03, 1, 1)
         elif "Telescope" in n:
             L = rng.uniform(1.0, 2.2) * (2 if "Giant" in n else (0.4 if "Pocket" in n else 1))
+            top = 1.15
             for i in range(3):
-                a = i * 2.094
-                part.cyl((math.cos(a) * 0.3, math.sin(a) * 0.3, 0.55), 0.03, 1.2, 2, 5, rot=(math.sin(a) * 0.25, -math.cos(a) * 0.25, 0))
-            part.cyl((0, 0, 1.2 + L * 0.3), 0.08 * k, L, 0, 10, r2=0.05, rot=(0.9, 0, 0))
+                a = i * 2.094 + 0.5
+                part.strut((math.cos(a) * 0.45, math.sin(a) * 0.45, 0), (0, 0, top), 0.025, 2)
+            part.ball((0, 0, top), 0.07, 0, 1)
+            tilt = 0.75
+            part.strut((0, -math.cos(tilt) * L * 0.35, top + 0.05 - math.sin(tilt) * L * 0.35),
+                       (0, math.cos(tilt) * L * 0.65, top + 0.05 + math.sin(tilt) * L * 0.65), 0.08 * k, 0, 10)
+            part.ring((0, math.cos(tilt) * L * 0.62, top + 0.05 + math.sin(tilt) * L * 0.62), 0.1 * k, 0.02, 1, 12,
+                      rot=(1.5708 - tilt, 0, 0))
             if "Twin" in n:
-                part.cyl((0.2, 0, 1.2 + L * 0.3), 0.06, L, 0, 8, rot=(0.9, 0, 0))
+                part.strut((0.2, -math.cos(tilt) * L * 0.3, top + 0.05 - math.sin(tilt) * L * 0.3),
+                           (0.2, math.cos(tilt) * L * 0.6, top + 0.05 + math.sin(tilt) * L * 0.6), 0.06, 0, 8)
         elif "StarChart" in n:
             part.cyl((0, 0, 0.6), 0.05, 1.2, 0, 6)
             part.box((0, 0, 1.25), (0.8, 0.05, 0.6), 2, rot=(-0.4, 0, 0))

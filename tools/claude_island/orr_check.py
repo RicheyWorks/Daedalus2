@@ -55,14 +55,14 @@ for i, name in enumerate(pick):
     size = max(max(o.dimensions) for o in c.objects)
     for o in c.objects:
         o.scale = [1.6 / max(size, 0.01)] * 3
-        o.location = ((i % cols) * 2.2, -(i // cols) * 2.2, 0)
+        o.location = ((i % cols) * 3.0, (i // cols) * 4.0, 0)
 rows = (len(pick) + cols - 1) // cols
 cam = bpy.data.objects.new("cam", bpy.data.cameras.new("cam"))
 scene.collection.objects.link(cam)
 cam.data.type = "ORTHO"
-cam.data.ortho_scale = max(cols, rows) * 2.4
-cam.location = ((cols - 1) * 1.1, -(rows - 1) * 1.1 - 9, 9)
-cam.rotation_euler = (0.85, 0, 0)
+cam.data.ortho_scale = cols * 3.0 + 1
+cam.location = ((cols - 1) * 1.5, (rows - 1) * 2.0 - 12, 9)
+cam.rotation_euler = (1.0, 0, 0)
 scene.camera = cam
 sun = bpy.data.objects.new("sun", bpy.data.lights.new("sun", "SUN"))
 sun.data.energy = 4
@@ -73,7 +73,7 @@ world.use_nodes = True
 world.node_tree.nodes["Background"].inputs[0].default_value = (0.12, 0.13, 0.2, 1)
 scene.world = world
 scene.render.engine = "BLENDER_EEVEE_NEXT"
-scene.render.resolution_x, scene.render.resolution_y = 1500, 250 * rows + 200
+scene.render.resolution_x, scene.render.resolution_y = 1500, 330 * rows + 100
 scene.render.filepath = sheet
 bpy.ops.render.render(write_still=True)
 print("SHEET", sheet)
