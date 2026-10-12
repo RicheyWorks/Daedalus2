@@ -3,6 +3,28 @@
 [![CI](https://github.com/RicheyWorks/Daedalus2/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/RicheyWorks/Daedalus2/actions/workflows/ci.yml)
 ![Coverage](.github/badges/jacoco.svg)
 
+## The Daedalus metaverse (start here)
+
+**Daedalus is a huge voxel multiverse.** It is many worlds, each with its own look and kind of play, and you
+**warp** between them through sky gates and portals:
+- **Sky Islands and Lands**: Minecraft / Sandbox style. The pieces of a shattered planet, with caves, ores and arks.
+  Live in Unreal.
+- **The Portal Realm**: an original 8-bit RPG, with towns, a castle, keys, chests and a dark cave. Live in Unreal.
+- **Parcels**: Decentraland style.
+- **Bricks**: Roblox style.
+- **Gallery City**: Cryptovoxels style.
+- **The Labyrinth**: Daedalus's own mazes, which also run through every realm.
+- **Space**: moons, suns and other planets (Phase 2).
+
+The story is that Daedalus was the biggest planet ever known until a meteor blew it apart. Its fragments are the
+islands. Ownership lives on a public chain.
+
+**Building for it, or picking a realm for your island or items? Read [`docs/REALMS.md`](./docs/REALMS.md) first.**
+It lists every realm, what is built, what art fits, where the details are, and the naming rules: original
+names only.
+
+## The engine underneath
+
 A multi-module Java engine for procedural maze and graph generation, with a
 plugin runtime, a Spring Boot server (REST + WebSocket), and an optional
 JavaFX desktop client.

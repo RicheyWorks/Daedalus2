@@ -1,0 +1,82 @@
+# The realms of Daedalus: a guide for builders (people and bots)
+
+Read this before you pick a realm, design an island, or build art in Blender. It is the short version of
+ADR-018 to ADR-056. Each realm row links to the ADR with the full details.
+
+## What Daedalus is
+
+**Daedalus is a multiverse, not one map.** It is a huge metaverse made of many worlds, and each world has its own
+look, rules and kind of play. You **warp** between them through gates and portals. Leaving one realm can drop you
+into a completely different style of game:
+- a Minecraft-like sky island;
+- a Decentraland-like city of plots;
+- a Roblox-like brick world;
+- a voxel art city;
+- a stone labyrinth;
+- an 8-bit RPG.
+
+Mazes run through all of them, because Daedalus started as a maze engine. Ownership (land, deeds, items) lives
+on a public chain, so what you own travels with you. ADR-029 is the charter.
+
+**The story (canon from Richey).**
+- Daedalus was once ONE planet, the biggest ever known. A meteor blew it apart.
+- Its pieces now float in a bubble like a fishbowl globe: the islands and the deep **lands** (ADR-050), with
+  people living on them.
+- Arks carry animals and people between the pieces (ADR-019, ADR-020).
+- Phase 2, later: moons, suns, other planets, meteors and Earth, all visitable. Build so the world is ready for
+  space: fragments in orbit, debris fields, a sky that hints at moons and stars.
+
+**How you travel.**
+- **Sky gates** (ADR-031) sit in the clouds past a rainbow, out of reach on foot. You need something that flies:
+  an airship from the islands, a helicopter from Parcels, a plane from Bricks, a drone from Gallery City, or a
+  bird or flying creature.
+- A gate always comes paired with a gate in another world.
+- **PORTAL cubes** (ADR-052) are doorways inside a world. Stepping through one turns the game into the 8-bit
+  realm, and your character and team turn 8-bit with it. Each portal's seed makes its own realm.
+
+## The realms
+
+Status key:
+- **LIVE** means it is playable in the Unreal build today.
+- **SERVER** means the Java server generates it, but it isn't in Unreal yet.
+- **NAMED** means it is designed in an ADR and not built yet. A NAMED realm is an open field for original work.
+
+| Realm | Feels like | Status | What's in it | Art that fits | ADR |
+|---|---|---|---|---|---|
+| **The Shattered Planet: Sky Islands and Lands** | Minecraft / The Sandbox | LIVE | Seeded floating islands and deep lands, up to 92 cubes across and 46 deep. Caves, ore by depth (coal, copper, iron, gold, starmetal), a glowing heartstone core, lakes, waterfalls, docks and arks. Ecology, creatures, foes, digging and building. A town and wildlife are placed by the world dresser. | Voxel-friendly flora, herbs, ores, crops, livestock, dock and ark parts, cottages, shops, tools, weapons | 018–028, 049, 050, 054, 055 |
+| **The Portal Realm** (the 8-bit RPG) | the classic 8-bit console RPGs | LIVE | Through a portal, the world turns 8-bit. It has an island field, two towns (inn, item shop, smithy, storeroom), a castle with a queen, treasury and vault, and a three-floor dark cave. Keys and locks (bronze, silver, star), chests and mimics, ambushes, a party of hero, sage and scout, spells, and the shard tyrant boss. Its music comes from the jukebox. | 8-bit-style sprites and props, monsters: Blight Slime, Bog Slime, Lucky Drip, Dust Wisp, Ember Wisp, Shardback, Glassback, Puffcap, Shadecap, Gloomwing, Stare Orb, Gnashbox, Moss Knight, Stone Knight, Shard Tyrant. Items: herbs, tonics, torches, wings, keys, Copper Sword, Ember Blade, Star Blade, Chain/Shard/Meteor Mail. `Mob_Realm_*` art already shipped. | 052 |
+| **Parcels** | Decentraland | SERVER | A district of 60 claimable 16×16 plots, streets, sidewalks and a plaza with a helipad. Owners build scenes on their plots, and a helicopter flies to the cloud gate. | Street furniture, storefronts, plaza art, low-poly soft-lit buildings, the helicopter | 033 |
+| **Bricks** | Roblox | SERVER | A studded baseplate, bright bricks, a spawn pad, a runway with a plane, and an obby over lava with checkpoints and a gold trophy finish. You play as a blocky avatar. | Plastic-stud props, obby pieces, blocky avatars and hats, the plane | 034 |
+| **Gallery City** | Cryptovoxels (Voxels) | SERVER | A 5×5-block city with named streets (Ash Lane, Pixel Street, Origin Way, Gallery Row…), 68 addressed parcels, height limits, the Origin plaza with a crystal spire and drone pad, and galleries of maze art. | Small-voxel pastel architecture, frames, sculptures, the drone | 035 |
+| **The Labyrinth** | Daedalus itself | NAMED | World One's mazes at walking scale: 23 generators and 10 solvers, with stone walls and torchlight. Mazes also appear in every other realm. | Stone, torches, gates, traps, maze guardians | 029 |
+| **Space (Phase 2)** | — | NAMED | Moons, suns, other planets, meteors and Earth. | Orbital debris, meteors, sky hints for now | canon above |
+
+The sky in every realm can run day and night, weather and biome light moods through the Sky Director (ADR-056).
+
+## Picking a realm for your island or items
+
+1. **Research first.** Read this file, `docs/STORY.md` when it exists, the ADR rows above, and
+   `bot-team\art\QUEUE.md`. That last one is everything already built, so nobody duplicates it.
+2. **Post your claim on the team link:** `REALM: <name from the table>`, plus a one-line idea.
+3. **Make it original.** Use the same genre if you like, but never the same plant, sword or creature as anyone
+   else. A NAMED realm or an empty corner of a SERVER realm is the best place to stand out.
+4. **Use original names, always.** We take genres and feels, never anyone's IP.
+   - The 8-bit RPG is **the Portal Realm**. Never call it "Dragon Warrior" or "Dragon Quest" (those belong to
+     Square Enix).
+   - The same goes for Minecraft, Roblox, Decentraland and Voxels: we copy the look, never the names, logos or
+     characters.
+5. **Asset names follow the art queue:** `Kind_Name`, where Kind is Tool, Item, Mob, Veh, Bld, Prop, Sky or Wpn.
+   Realm-specific creatures use `Mob_Realm_<Name>`. A `.blend` goes in `bot-team\art\<Kind>\`, and the row goes
+   to READY in QUEUE.md.
+
+## Where things are
+
+| You want | Look at |
+|---|---|
+| The whole charter | `docs/adr/ADR-029-the-daedalus-metaverse.md` |
+| Many worlds on one server, and the five styles | `docs/adr/ADR-030-many-worlds.md` |
+| Gates and mounts | `docs/adr/ADR-031-sky-gates.md` |
+| Lands, ores and richness | `docs/adr/ADR-050-lands.md` |
+| The 8-bit Portal Realm | `docs/adr/ADR-052-portal-realm.md`, server `GET /api/v1/retro/{seed}` |
+| Shipping art into Unreal | `docs/adr/ADR-051-art-queue.md`, `docs/TEAMLINK.md` |
+| Island docs other bots wrote | `docs/islands/` |
