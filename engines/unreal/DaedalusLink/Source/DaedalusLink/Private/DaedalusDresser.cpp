@@ -6,7 +6,9 @@
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "AssetRegistry/IAssetRegistry.h"
 #include "Components/HierarchicalInstancedStaticMeshComponent.h"
+#include "DaedalusCritter.h"
 #include "DaedalusLinkModule.h"
+#include "DaedalusMob.h"
 #include "DaedalusWorldActor.h"
 #include "Engine/StaticMesh.h"
 #include "Engine/World.h"
@@ -115,6 +117,9 @@ void ADaedalusDresser::Undress()
 	for (auto& P : Pools)
 		if (P.Value) P.Value->DestroyComponent();
 	Pools.Empty();
+	for (const TWeakObjectPtr<AActor>& C : Critters)
+		if (C.IsValid()) C->Destroy();
+	Critters.Reset();
 	bDressed = false;
 	Town = FVector::ZeroVector;
 }
@@ -192,6 +197,20 @@ FString ADaedalusDresser::Dress()
 	int32 Placed = 0, Trees = 0, Plants = 0, TownPieces = 0;
 	TSet<FIntPoint> TreeAt;
 
+	// ---- the wildlife (ADR-055): which shipped animals live on which ground.
+	auto Shipped = [](std::initializer_list<const TCHAR*> Names)
+	{
+		TArray<FString> Out;
+		for (const TCHAR* N : Names) if (DaedalusMob::Parts(N).Num() > 0) Out.Add(N);
+		return Out;
+	};
+	const TArray<FString> Meadow = Shipped({TEXT("Mob_Sheep"), TEXT("Mob_Cow"), TEXT("Mob_Pig"), TEXT("Mob_Chicken"), TEXT("Mob_Deer"),
+		TEXT("Mob_Rabbit"), TEXT("Mob_Fox"), TEXT("Mob_Goat"), TEXT("Mob_Horse"), TEXT("Mob_Hare"), TEXT("Mob_Squirrel"), TEXT("Mob_Duck")});
+	const TArray<FString> Dunes = Shipped({TEXT("Mob_Lizard"), TEXT("Mob_Jerboa"), TEXT("Mob_Scorpion"), TEXT("Mob_Crab")});
+	const TArray<FString> Heights = Shipped({TEXT("Mob_MountainGoat"), TEXT("Mob_Marmot"), TEXT("Mob_SnowFox"), TEXT("Mob_Caribou")});
+	struct FHerd { FString Species; FVector At; int32 Count; int32 Salt; };
+	TArray<FHerd> Herds;
+
 	// ---- the plants.
 	for (const auto& KV : Store.All())
 	{
@@ -207,6 +226,16 @@ FString ADaedalusDresser::Dress()
 					if (G == EGround::None) continue;
 					if (bHaveTown && FMath::Abs(X - TX) <= 9 && FMath::Abs(Z - TZ) <= 9) continue;   // keep the town clear
 					const double R = Roll(X, Y, Z, Seed, 1);
+					if (R > 0.9 && R < 0.9 + 0.003 * Density)
+					{
+						const TArray<FString>& Kinds = G == EGround::Grass ? Meadow : G == EGround::Sand ? Dunes : Heights;
+						if (Kinds.Num() > 0)
+						{
+							const int32 Which = FMath::Min(Kinds.Num() - 1, static_cast<int32>(Roll(X, Y, Z, Seed, 9) * Kinds.Num()));
+							Herds.Add({Kinds[Which], Top(X, Y, Z), 1 + static_cast<int32>(Roll(X, Y, Z, Seed, 10) * 4.0), static_cast<int32>((static_cast<uint32>(X) * 73856093u) ^ (static_cast<uint32>(Z) * 19349663u))});
+						}
+						continue;
+					}
 					const double D = Density;
 					const TCHAR* Cat = nullptr;
 					if (R < 0.025 * D) Cat = TEXT("Tree");
@@ -274,8 +303,28 @@ FString ADaedalusDresser::Dress()
 		}
 	}
 
+	// ---- the herds, nearest the start first (so the cap keeps the ones the player will meet).
+	{
+		const FVector From = bHaveTown ? Town : FVector::ZeroVector;
+		Herds.Sort([&](const FHerd& A, const FHerd& B) { return FVector::DistSquared(A.At, From) < FVector::DistSquared(B.At, From); });
+		for (const FHerd& H : Herds)
+			for (int32 i = 0; i < H.Count && Critters.Num() < MaxCritters; ++i)
+			{
+				const FVector Off = FRotator(0.f, i * 137.5f, 0.f).Vector() * (i == 0 ? 0.f : 120.f + 40.f * i);
+				const FTransform T(FRotator::ZeroRotator, H.At + Off + FVector(0, 0, 50.f));
+				if (ADaedalusCritter* C = GetWorld()->SpawnActorDeferred<ADaedalusCritter>(ADaedalusCritter::StaticClass(), T, this,
+					nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn))
+				{
+					C->Species = H.Species;
+					C->Seed = H.Salt + i * 7919 + Seed;
+					C->FinishSpawning(T);
+					Critters.Add(C);
+				}
+			}
+	}
+
 	bDressed = true;
-	LastStats = FString::Printf(TEXT("placed=%d meshes=%d trees=%d plants=%d town=%d library=%d town_at=%d,%d,%d"),
-		Placed, Pools.Num(), Trees, Plants, TownPieces, Found.Num(), TX, TY, TZ);
+	LastStats = FString::Printf(TEXT("placed=%d meshes=%d trees=%d plants=%d town=%d library=%d critters=%d herds=%d town_at=%d,%d,%d"),
+		Placed, Pools.Num(), Trees, Plants, TownPieces, Found.Num(), Critters.Num(), Herds.Num(), TX, TY, TZ);
 	return LastStats;
 }

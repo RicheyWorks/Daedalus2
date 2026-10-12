@@ -59,6 +59,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") bool bSeesPlayer = false;
 	/** Ground routes found by the A* port (UDaedalusNav). */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 Routes = 0;
+	/** ADR-055: parts of the Blender team's Mob_ art worn by this foe (0: the art isn't shipped, the crystal shows). */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 ArtParts = 0;
+	/** The Mob_ asset each kind wears. */
+	static FString ArtFor(const FString& Kind);
 
 protected:
 	virtual void BeginPlay() override;
@@ -78,6 +82,15 @@ private:
 	void FireBolt(const APawn* Who);
 	void TickBolts(APawn* Who, float Dt);
 	float HoverOffset() const;
+	void DressArt();
+	void TickArt(float Glow);
+	/** World height of the top of the foe (art or crystal) above its actor location. */
+	float TopAbove() const;
+
+	UPROPERTY() TObjectPtr<USceneComponent> Look;
+	UPROPERTY() TObjectPtr<UStaticMeshComponent> Gem;
+	float ArtScale = 1.f;
+	float ArtHeight = 0.f;
 
 	UPROPERTY() TObjectPtr<UMaterialInstanceDynamic> Mat;
 	UPROPERTY() TObjectPtr<UStaticMesh> BoltMesh;

@@ -559,6 +559,50 @@ def scenario_dress(p):
     ], "stats": stats, "town": str(dresser.town_center()) if dresser else None}
 
 
+def scenario_wild(p):
+    """Creatures (ADR-055): the dresser's herds are the Blender team's animals, assembled from their parts; they
+    wander without walking off ledges and the shy ones bolt from the hero. Foes wear their Mob_ art too, keeping their
+    (hidden) collision so the blaster still hits them."""
+    critters = []
+    for _ in range(900):
+        critters = _all(unreal.DaedalusCritter)
+        if len(critters) >= 5:
+            break
+        yield
+    species = sorted({c.get_editor_property("species") for c in critters})
+    built = [c for c in critters if c.get_editor_property("parts") > 0]
+    for _ in _frames(240):   # four seconds of grazing and wandering
+        yield
+    walked = [c for c in critters if c.get_editor_property("walked") > 1.0]
+    h = hero()
+    shy = [c for c in critters if c.is_shy()]
+    fled = False
+    if h and shy:
+        target = shy[0]
+        at = target.get_actor_location()
+        h.set_actor_location(unreal.Vector(at.x - 250.0, at.y, at.z + 120.0), False, True)
+        for _ in _frames(90):
+            yield
+        fled = target.get_editor_property("flees") > 0
+    _clear_foes()
+    if h:
+        h.spawn_foes(4)
+    for _ in _frames(10):
+        yield
+    fs = foes()
+    dressed = [f for f in fs if f.get_editor_property("art_parts") > 0]
+    kinds = sorted({f.get_editor_property("kind") for f in dressed})
+    return {"checks": [
+        _check("herds are out", len(critters) >= 10, "%d critters" % len(critters)),
+        _check("of several species", len(species) >= 3, ", ".join(species)),
+        _check("every animal is built from shipped parts", len(critters) > 0 and len(built) == len(critters),
+               "%d/%d" % (len(built), len(critters))),
+        _check("they wander", len(walked) >= max(1, len(critters) // 4), "%d walked" % len(walked)),
+        _check("a shy one bolts from the hero", fled, shy[0].get_editor_property("species") if shy else "none shy"),
+        _check("foes wear their Mob_ art", len(fs) > 0 and len(dressed) == len(fs), "%d/%d %s" % (len(dressed), len(fs), kinds)),
+    ], "species": species}
+
+
 def _kv(line):
     """A realm state line ('mode=FIELD map=TOWN1 x=3 ...') as a dict; msg= is the rest of the line."""
     out = {}
@@ -694,6 +738,7 @@ SCENARIOS = {
     "fall": scenario_fall,
     "realm": scenario_realm,
     "dress": scenario_dress,
+    "wild": scenario_wild,
 }
 
 

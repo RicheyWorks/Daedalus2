@@ -2,6 +2,7 @@
 # Long Unreal jobs (build, open) for Claude, in one call each, and quiet with antivirus (ADR-045).
 #
 #   .\unreal-job.ps1 -Start            pull, build the DaedalusLink plugin into the project, reopen the editor
+#   .\unreal-job.ps1 -Start -Fast      the same, but only recompile what changed (editor target; ~1 min, ADR-055)
 #   .\unreal-job.ps1 -Wait  [-Id x]    wait up to 50 s; prints RUNNING / BUILD OK / BUILD FAILED + the errors
 #   .\unreal-job.ps1 -Run   -Id x      (internal) the job body
 #
@@ -10,7 +11,7 @@
 # runs from the repo (not %TEMP%), in a visible minimized window (not hidden), with no -ExecutionPolicy flag
 # (this machine's policy already allows local scripts). Logs: %LOCALAPPDATA%\Daedalus\jobs.
 param(
-    [switch]$Start, [switch]$Wait, [switch]$Run,
+    [switch]$Start, [switch]$Wait, [switch]$Run, [switch]$Fast,
     [string]$Id = "",
     [string]$Project = "C:\Unreal\DaedalusRealm\DaedalusRealm.uproject",
     [int]$Seconds = 50
@@ -53,7 +54,7 @@ if ($Run) {
             Start-Sleep -Seconds 10
         }
         $mark = if (Test-Path $log) { (Get-Content $log).Count } else { 0 }
-        & { git pull --ff-only; & (Join-Path $PSScriptRoot "setup-unreal.ps1") -Project $Project -Build -Open } *>&1 |
+        & { git pull --ff-only; & (Join-Path $PSScriptRoot "setup-unreal.ps1") -Project $Project -Build -Open -Fast:$Fast } *>&1 |
             Out-File -FilePath $log -Append -Encoding utf8
         $code = $LASTEXITCODE
         $fresh = Get-Content $log | Select-Object -Skip $mark
@@ -68,7 +69,7 @@ if ($Run) {
 if ($Start) {
     $Id = "build-" + (Get-Date -Format "MMdd-HHmmss")
     $startup = New-CimInstance -ClassName Win32_ProcessStartup -ClientOnly -Property @{ ShowWindow = [uint16]7 }   # minimized, no focus
-    $cmd = "powershell.exe -NoProfile -File `"$PSCommandPath`" -Run -Id $Id -Project `"$Project`""
+    $cmd = "powershell.exe -NoProfile -File `"$PSCommandPath`" -Run -Id $Id -Project `"$Project`"" + $(if ($Fast) { " -Fast" } else { "" })
     $r = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{
         CommandLine = $cmd; CurrentDirectory = "$Repo"; ProcessStartupInformation = $startup }
     "started $Id pid=$($r.ProcessId)"

@@ -3,6 +3,7 @@
 #include "DaedalusTarget.h"
 
 #include "Components/StaticMeshComponent.h"
+#include "DaedalusMob.h"
 #include "DaedalusNav.h"
 #include "DaedalusPickup.h"
 #include "Engine/StaticMesh.h"
@@ -69,7 +70,7 @@ void ADaedalusTarget::TickBar()
 	const float Yaw = Cam ? Cam->GetCameraRotation().Yaw : 0.f;
 	const FRotator Face(0.f, Yaw + 90.f, 0.f);
 	const FVector Across = Face.Vector();
-	const float Top = Crystal->Bounds.BoxExtent.Z;
+	const float Top = TopAbove();
 	const FVector Mid = GetActorLocation() + FVector(0.f, 0.f, Top + 45.f);
 	const float Frac = FMath::Clamp(Health / FMath::Max(MaxHealth, 1.f), 0.f, 1.f);
 	BarBack->SetWorldLocationAndRotation(Mid, Face);
@@ -83,7 +84,69 @@ float ADaedalusTarget::HoverOffset() const
 	if (Kind == TEXT("DUST_WISP")) return 260.f;
 	if (Kind == TEXT("STONE_KNIGHT")) return 100.f;
 	if (Kind == TEXT("SHARDBACK")) return 65.f;
-	return 30.f;
+	return 45.f;
+}
+
+FString ADaedalusTarget::ArtFor(const FString& InKind)
+{
+	if (InKind == TEXT("SHARDBACK")) return TEXT("Mob_Shardback");
+	if (InKind == TEXT("DUST_WISP")) return TEXT("Mob_DustWisp");
+	if (InKind == TEXT("STONE_KNIGHT")) return TEXT("Mob_StoneKnight");
+	return TEXT("Mob_BlightSlime");
+}
+
+// ADR-055: wear the shipped creature. The crystal stays as the (hidden) collision shape, so every hit, trace and
+// sight line works as before; a small inverted crystal over the head keeps the kind's colour and the orange
+// telegraph, so attacks still read at a glance.
+void ADaedalusTarget::DressArt()
+{
+	Look = NewObject<USceneComponent>(this, TEXT("Look"));
+	Look->SetMobility(EComponentMobility::Movable);
+	Look->SetupAttachment(Crystal);
+	Look->SetUsingAbsoluteLocation(true);
+	Look->SetUsingAbsoluteScale(true);
+	Look->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));   // the art faces +Y; actors face +X
+	Look->RegisterComponent();
+	AddInstanceComponent(Look);
+	ArtParts = DaedalusMob::Build(this, Look, ArtFor(Kind), nullptr, &ArtHeight);
+	if (ArtParts == 0)
+	{
+		Look->DestroyComponent();
+		Look = nullptr;
+		return;
+	}
+	ArtScale = Kind == TEXT("BLIGHT_SLIME") ? 1.7f : Kind == TEXT("SHARDBACK") ? 1.35f : Kind == TEXT("DUST_WISP") ? 1.6f : 1.f;
+	Look->SetWorldScale3D(FVector(ArtScale));
+	Crystal->SetHiddenInGame(true);   // collision stays; only the drawing goes
+
+	Gem = NewObject<UStaticMeshComponent>(this, TEXT("Gem"));
+	Gem->SetStaticMesh(Crystal->GetStaticMesh());
+	Gem->SetMobility(EComponentMobility::Movable);
+	Gem->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Gem->SetCastShadow(false);
+	Gem->SetupAttachment(Look);
+	Gem->SetRelativeLocationAndRotation(FVector(0.f, 0.f, ArtHeight + 30.f / ArtScale), FRotator(180.f, 0.f, 0.f));
+	Gem->SetRelativeScale3D(FVector(0.22f, 0.22f, 0.3f) / ArtScale);
+	Gem->RegisterComponent();
+	AddInstanceComponent(Gem);
+}
+
+float ADaedalusTarget::TopAbove() const
+{
+	if (!Look) return Crystal->Bounds.BoxExtent.Z;
+	return Look->GetComponentLocation().Z + ArtHeight * ArtScale + 50.f - GetActorLocation().Z;
+}
+
+// Keep the art on the ground under the (hovering) collision shape; the wisp floats, centred on it.
+void ADaedalusTarget::TickArt(float Glow)
+{
+	if (!Look) return;
+	const float Drop = Kind == TEXT("DUST_WISP") ? ArtHeight * ArtScale * 0.5f : HoverOffset();
+	Look->SetWorldLocation(GetActorLocation() - FVector(0.f, 0.f, Drop));
+	float S = ArtScale * (1.f + Flash * 0.12f + Glow * 0.08f);   // a flinch when hit, a swell as it winds up
+	if (Dying >= 0.f) S = ArtScale * FMath::Max(0.05f, 1.f - Dying * 4.5f);
+	Look->SetWorldScale3D(FVector(S));
+	if (Gem) Gem->AddLocalRotation(FRotator(0.f, 90.f * GetWorld()->GetDeltaSeconds(), 0.f));
 }
 
 void ADaedalusTarget::BeginPlay()
@@ -92,7 +155,7 @@ void ADaedalusTarget::BeginPlay()
 	Home = GetActorLocation();
 	// Each kind its own look: the slime green and low, the shardback stony, the wisp pale and high, the knight dark.
 	FLinearColor Tint(0.85f, 0.2f, 0.9f);
-	if (Kind == TEXT("BLIGHT_SLIME")) { Tint = FLinearColor(0.35f, 0.85f, 0.25f); SetActorScale3D(FVector(1.1f, 1.1f, 0.6f)); }
+	if (Kind == TEXT("BLIGHT_SLIME")) { Tint = FLinearColor(0.35f, 0.85f, 0.25f); SetActorScale3D(FVector(1.1f, 1.1f, 0.9f)); }
 	else if (Kind == TEXT("SHARDBACK")) { Tint = FLinearColor(0.45f, 0.55f, 0.75f); SetActorScale3D(FVector(1.3f)); }
 	else if (Kind == TEXT("DUST_WISP")) { Tint = FLinearColor(0.85f, 0.95f, 1.f); SetActorScale3D(FVector(0.7f)); }
 	else if (Kind == TEXT("STONE_KNIGHT")) { Tint = FLinearColor(0.25f, 0.25f, 0.3f); SetActorScale3D(FVector(1.2f, 1.2f, 2.0f)); }
@@ -114,6 +177,8 @@ void ADaedalusTarget::BeginPlay()
 		Mat->SetVectorParameterValue(TEXT("Color"), BaseTint);
 		Crystal->SetMaterial(0, Mat);
 	}
+	DressArt();
+	if (Gem && Mat) Gem->SetMaterial(0, Mat);
 	// Settle onto the ground under where it was placed.
 	FHitResult Hit;
 	FCollisionObjectQueryParams Objects(ECC_WorldStatic);
@@ -239,7 +304,8 @@ void ADaedalusTarget::Tick(float DeltaSeconds)
 		// Shatter: swell and vanish over a fifth of a second.
 		State = TEXT("DYING");
 		Dying += Dt;
-		SetActorScale3D(StartScale * (1.f + Dying * 6.f));
+		if (Look) TickArt(0.f);   // the creature shrinks away
+		else SetActorScale3D(StartScale * (1.f + Dying * 6.f));
 		if (Dying > 0.2f) Destroy();
 		return;
 	}
@@ -275,7 +341,8 @@ void ADaedalusTarget::Tick(float DeltaSeconds)
 		State = TEXT("IDLE");
 		Windup = -1.f;
 		ChargeLeft = 0.f;
-		AddActorLocalRotation(FRotator(0.f, 60.f * Dt, 0.f));
+		if (Look) SetActorRotation(FRotator(0.f, GetActorRotation().Yaw + FMath::Sin(Age * 0.6f) * 25.f * Dt, 0.f));   // looks about
+		else AddActorLocalRotation(FRotator(0.f, 60.f * Dt, 0.f));
 	}
 	else
 	{
@@ -404,6 +471,7 @@ void ADaedalusTarget::Tick(float DeltaSeconds)
 	}
 
 	SetActorLocation(Home + FVector(0.f, 0.f, Bob));
+	TickArt(Glow);
 	SinceHurt += Dt;
 	TickBar();
 	if (Mat)

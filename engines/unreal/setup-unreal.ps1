@@ -43,6 +43,7 @@ param(
     [string]$EnginePath = "",
     [switch]$InstallLauncher,
     [switch]$Build,
+    [switch]$Fast,        # with -Build: sync sources over the compiled plugin and build only what changed (ADR-055)
     [switch]$Import,
     [switch]$Verify,
     [switch]$Open,
@@ -325,6 +326,18 @@ if (-not (Test-Path (Join-Path $PluginSource "DaedalusLink.uplugin"))) {
         ((Get-TreeHash (Join-Path $PluginSource "Content")) -eq (Get-TreeHash (Join-Path $PluginDest "Content")))
     if ($keep) {
         Write-Host "    the compiled plugin there matches these sources; keeping it"
+    } elseif ($Fast -and (Test-Path (Join-Path $PluginDest "Binaries\Win64\UnrealEditor-DaedalusLink.dll"))) {
+        # Keep Binaries and Intermediate so the compiler only redoes the files that changed.
+        foreach ($sub in @("Source", "Content", "Resources")) {
+            if (Test-Path (Join-Path $PluginSource $sub)) {
+                robocopy (Join-Path $PluginSource $sub) (Join-Path $PluginDest $sub) /MIR /NJH /NJS /NP /NFL /NDL | Out-Null
+                if ($LASTEXITCODE -ge 8) { Fail "robocopy $sub exited $LASTEXITCODE" }
+            }
+        }
+        Copy-Item -Force (Join-Path $PluginSource "DaedalusLink.uplugin") $PluginDest
+        $global:LASTEXITCODE = 0
+        $script:FastSync = $true
+        Write-Host "    synced sources over the compiled plugin (fast build)"
     } else {
         if (Test-Path $PluginDest) { Remove-PluginCopy $PluginDest }
         New-Item -ItemType Directory -Force -Path (Split-Path $PluginDest -Parent) | Out-Null
@@ -624,7 +637,27 @@ if ($Build) {
     } else {
         $bat = Join-Path $engine.Path "Engine\Build\BatchFiles\RunUAT.bat"
         $out = Join-Path (Join-Path $ProjectDir "Saved") "DaedalusLinkBuild"
-        if ($WhatIfOnly) {
+        $fastDone = $false
+        if ($script:FastSync -and -not $WhatIfOnly) {
+            # The editor target only, incrementally, straight into the plugin's Binaries (about a minute, not six).
+            $ubt = Join-Path $engine.Path "Engine\Build\BatchFiles\Build.bat"
+            $was = $ErrorActionPreference; $ErrorActionPreference = "Continue"   # stderr lines must not stop the script
+            $lines = & $ubt UnrealEditor Win64 Development "-Project=$Project" -WaitMutex -NoHotReloadFromIDE 2>&1 | ForEach-Object { "$_" }
+            $ErrorActionPreference = $was
+            $lines | ForEach-Object { Write-Host $_ }
+            if ($LASTEXITCODE -eq 0) {
+                $fastDone = $true
+                Write-Host "    BUILD SUCCESSFUL (fast: editor target, changed files only)"
+            } elseif ($lines -match 'error C\d+|: error ') {
+                $fastDone = $true
+                Fail "the fast build found compile errors (above)"
+            } else {
+                Write-Host "    the fast build could not run here (exit $LASTEXITCODE); doing the full BuildPlugin instead"
+            }
+        }
+        if ($fastDone) {
+            # built (or failed with compile errors) by the fast path
+        } elseif ($WhatIfOnly) {
             Write-Host "    would run: $bat BuildPlugin -Plugin=$(Join-Path $PluginDest "DaedalusLink.uplugin") -Package=$out -Rocket"
         } else {
             & $bat BuildPlugin "-Plugin=$(Join-Path $PluginDest "DaedalusLink.uplugin")" "-Package=$out" -Rocket

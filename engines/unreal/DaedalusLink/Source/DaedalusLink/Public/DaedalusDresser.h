@@ -33,6 +33,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus", meta = (ClampMin = "0")) float Density = 1.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") bool bTown = true;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") bool bDressOnLoad = true;
+	/** ADR-055: wildlife herds from the Mob_ library (0 turns them off). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus", meta = (ClampMin = "0")) int32 MaxCritters = 60;
 
 	/** Place everything again from the current cubes and art library. Returns a one-line summary. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString Dress();
@@ -50,6 +52,7 @@ private:
 	UHierarchicalInstancedStaticMeshComponent* Pool(UStaticMesh* Mesh, bool bCollide);
 
 	UPROPERTY() TMap<TObjectPtr<UStaticMesh>, TObjectPtr<UHierarchicalInstancedStaticMeshComponent>> Pools;
+	TArray<TWeakObjectPtr<AActor>> Critters;
 	FString LastStats;
 	FVector Town = FVector::ZeroVector;
 	FTimerHandle Retry;
