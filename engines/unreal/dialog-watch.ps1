@@ -6,7 +6,8 @@
 #   "Missing <Project> Modules ... rebuild them now?"   Yes (Enter: the default button)
 #   "Restore Packages"                                  skip restoring (Escape)
 #   "Error" ("<Project> could not be compiled")         OK (Enter), logged as a build failure to look at
-# Unknown dialogs are logged, not answered. What worked live (UE 5.8.3, Windows 11): bring the dialog to the front
+# Unknown dialogs are logged, not answered. Norton windows are never answered either: they are noted in
+# %TEMP%\daedalus-norton.log (title and time) so Claude can tell you one is waiting and what it is about. What worked live (UE 5.8.3, Windows 11): bring the dialog to the front
 # and press the real Enter key. Posted WM_COMMAND and UI Automation did not reach these dialogs.
 param(
     [int]$Minutes = 12,
@@ -75,6 +76,18 @@ while ((Get-Date) -lt $end) {
             } elseif (-not $seen.ContainsKey($w.Value) -and $w.Value -notmatch 'Unreal Editor|^Unreal Engine$') {
                 $seen[$w.Value] = $true
                 Note "left alone: '$($w.Value)'"
+            }
+        }
+    }
+    # Norton: report, never click. Security prompts are yours to answer.
+    $npids = New-Object 'System.Collections.Generic.HashSet[uint32]'
+    foreach ($p in Get-Process NortonUI, NortonSvc -ErrorAction SilentlyContinue) { [void]$npids.Add([uint32]$p.Id) }
+    if ($npids.Count -gt 0) {
+        foreach ($w in [DlgWatch]::Titled($npids)) {
+            if (-not $seen.ContainsKey("norton:" + $w.Value)) {
+                $seen["norton:" + $w.Value] = $true
+                Note "NORTON window (left for you): '$($w.Value)'"
+                "$(Get-Date -Format s) $($w.Value)" | Out-File -FilePath (Join-Path $env:TEMP "daedalus-norton.log") -Append -Encoding utf8
             }
         }
     }

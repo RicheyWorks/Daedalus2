@@ -99,6 +99,11 @@ def _register(bridge):
                      "live": "bool (only the live actor)"})
     bridge.register("daedalus.frame_world", frame_world,
                     "Point the editor viewport at a Daedalus world in the open level", {"world": "str"})
+    try:
+        import daedalus_play
+        daedalus_play.register(bridge)
+    except Exception as e:  # the play harness is optional; never block the other commands
+        unreal.log_warning("Daedalus: play harness not loaded: %r" % (e,))
 
 
 _state = {"handle": None, "ticks": 0}
