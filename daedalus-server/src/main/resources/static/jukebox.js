@@ -829,6 +829,7 @@ async function boot() {
   try { J.seeds = (await getJson(`${API}/seeds`)).seeds; } catch (e) { J.seeds = []; }
   render();
   setInterval(refreshStatus, 30_000);
+  setInterval(safetyCheck, 200);              // the limiter guard must not depend on frames (rAF stalls in background tabs)
   listDevices();
   navigator.mediaDevices?.addEventListener?.("devicechange", () => listDevices().then(() => J.tab === "sound" && renderSound()));
   requestAnimationFrame(animate);
