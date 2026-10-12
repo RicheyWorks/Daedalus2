@@ -117,6 +117,6 @@ if not comp.get_editor_property("generated"):
             a = eas.spawn_actor_from_object(unreal.load_asset(SH[sp["shape"]]), tr.translation, tr.rotation.rotator())
             a.set_actor_scale3d(tr.scale3d); a.tags = ["PYTH_EcoPlant"]
             a.set_actor_label("Eco_%s_%d" % (sp["name"], fallback)); a.set_folder_path("Pythagoras/PCGEcology")
-            smc = a.static_mesh_component; smc.set_material(0, mis[sp["name"]]); smc.set_collision_enabled(unreal.CollisionEnabled.NO_COLLISION)
+            smc = a.static_mesh_component; smc.set_material(0, mis[sp["name"]]); smc.set_collision_profile_name("NoCollision")  # persists through save/reload (set_collision_enabled did not)
             fallback += 1
 result["fallback_actors"] = fallback

@@ -18,6 +18,7 @@ HERE = r"C:\Users\730ri\projects\Daedalus2-pcg-ecology\engines\unreal\pcg-ecolog
 sys.path.insert(0, HERE)
 import ecology_rules as eco; importlib.reload(eco)
 YEARS = float(globals().get("PYTH_YEARS", eco.YEARS))
+S = float(globals().get("PYTH_SCALE", 1.0))   # patch scale (0.35 on the DaedalusWorld island): distances and sizes shrink with it
 ROOT, NAME = "/Game/Pythagoras/PCGEcology", "PCG_EcologyNative"
 SH = {"Sphere": "/Engine/BasicShapes/Sphere.Sphere", "Cone": "/Engine/BasicShapes/Cone.Cone", "Cylinder": "/Engine/BasicShapes/Cylinder.Cylinder"}
 log = []
@@ -46,12 +47,17 @@ def dfilter(lo, hi):
     setp(s, "lower_bound", float(lo)); setp(s, "upper_bound", float(hi)); return n
 def distance_to(tag, max_m):
     n, s = node(unreal.PCGDistanceSettings)
-    setp(s, "set_density", True); setp(s, "maximum_distance", float(max_m * 100))
+    setp(s, "set_density", True); setp(s, "maximum_distance", float(max_m * 100 * S))
     # target: actors with the tag, fed via Get Actor Data
     an, a = node(unreal.PCGDataFromActorSettings)
     sel = a.get_editor_property("actor_selector")
     setp(sel, "actor_selection", unreal.PCGActorSelection.BY_TAG); setp(sel, "actor_selection_tag", tag)
     setp(sel, "actor_filter", unreal.PCGActorFilter.ALL_WORLD_ACTORS)
+    # markers are TargetPoints (no geometry): read each as one point, and take ALL tagged actors, not just the first
+    setp(sel, "select_multiple", True)
+    a.set_editor_property("actor_selector", sel)
+    try: setp(a, "mode", unreal.PCGGetDataFromActorMode.GET_SINGLE_POINT)
+    except Exception as e: log.append("mode: %s" % e)
     if not g.add_edge(an, "Out", n, "Target"): log.append("actor->distance failed: %s %s" % (pins(an, True), pins(n, False)))
     return n
 made = {}
@@ -60,7 +66,7 @@ for sp in eco.SPECIES:
     # No landscape in DaedalusWorld (voxel islands): grid over the volume, then project onto a World Ray Hit
     # surface (rays cast straight down hit the chunk meshes' collision), which also gives real normals for slope.
     gn, gs = node(unreal.PCGCreatePointsGridSettings)
-    sp_cm = max(60.0, sp["r"] * 100 * 1.2)
+    sp_cm = max(25.0, sp["r"] * 100 * 1.2 * S)
     setp(gs, "cell_size", unreal.Vector(sp_cm, sp_cm, 100.0))
     setp(gs, "grid_extents", unreal.Vector(float(globals().get("PYTH_EXTENT_CM", 2000)), float(globals().get("PYTH_EXTENT_CM", 2000)), 50.0))
     try: setp(gs, "coordinate_space", unreal.PCGCoordinateSpace.LOCAL_COMPONENT)
@@ -77,13 +83,19 @@ for sp in eco.SPECIES:
     dmax = 150.0
     d2 = distance_to("PYTH_Disturbance", dmax)
     s_f = dfilter(min(1, w["disturbance_m"][0] / dmax), min(1, w["disturbance_m"][1] / dmax))
+    tn, ts = node(unreal.PCGTransformPointsSettings)   # size the 1 m stand-in shapes: crown diameter x height, sat on the ground
+    d_, h_ = 2 * sp["r"] * S, sp["h"] * S
+    setp(ts, "scale_min", unreal.Vector(d_ * 0.75, d_ * 0.75, h_ * 0.75)); setp(ts, "scale_max", unreal.Vector(d_ * 1.25, d_ * 1.25, h_ * 1.25))
+    setp(ts, "uniform_scale", False); setp(ts, "rotation_max", unreal.Rotator(roll=0, pitch=0, yaw=360))
+    setp(ts, "offset_min", unreal.Vector(0, 0, h_ * 50)); setp(ts, "offset_max", unreal.Vector(0, 0, h_ * 50))
+    setp(ts, "absolute_rotation", True)
     pn, ps = node(unreal.PCGSelfPruningSettings)
     mn, ms = node(unreal.PCGStaticMeshSpawnerSettings)
     sel = ms.get_editor_property("mesh_selector_parameters")
     e = unreal.PCGMeshSelectorWeightedEntry(); d = e.get_editor_property("descriptor")
     d.set_editor_property("static_mesh", unreal.load_asset(SH[sp["shape"]])); e.set_editor_property("descriptor", d)
     sel.set_editor_property("mesh_entries", [e])
-    chain(sn, nn, slope, d1, m_f, d2, s_f, pn, mn)
+    chain(sn, nn, slope, d1, m_f, d2, s_f, tn, pn, mn)
     g.add_edge(mn, "Out", out, "Out")  # output node input pin is "Out"
     made[sp["name"]] = w
 unreal.EditorAssetLibrary.save_loaded_asset(g)
