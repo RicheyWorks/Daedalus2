@@ -21,6 +21,7 @@ public class DaedalusLink : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[]
 		{
 			"HTTP",
+			"ImageCore",
 			"Json",
 			"Slate",
 			"SlateCore",

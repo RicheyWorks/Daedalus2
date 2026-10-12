@@ -215,6 +215,9 @@ public class ProdSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands/*/portrait.png").permitAll()
                         // The species canon (ADR-021): reference data, read-only.
                         .requestMatchers(HttpMethod.GET, "/api/v1/species").permitAll()
+                        // The realm behind a portal (ADR-052): generated from a seed, read-only, deterministic.
+                        // Single-segment matchers: the spec and its finishability check, nothing below.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/retro/*", "/api/v1/retro/*/check").permitAll()
 
                         // ---- Protected API surface ----
                         // Write operations.

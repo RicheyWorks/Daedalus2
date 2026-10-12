@@ -39,6 +39,8 @@
 #include "Misc/Paths.h"
 #include "SDaedalusFieldMenu.h"
 #include "SDaedalusHud.h"
+#include "SDaedalusRealm.h"
+#include "Containers/Ticker.h"
 #include "SDaedalusSettingsMenu.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
@@ -1127,7 +1129,181 @@ bool ADaedalusHero::Interact()
 			Best = *It;
 		}
 	}
-	return Best && Best->Mount(this);
+	if (Best) return Best->Mount(this);
+	// No Ghost in reach: a portal underfoot leads to the 8-bit realm, one realm per portal.
+	FIntVector P;
+	if (PortalNear(P))
+	{
+		const uint64 H = (static_cast<uint64>(static_cast<uint32>(P.X)) * 73856093ull) ^ (static_cast<uint64>(static_cast<uint32>(P.Y)) * 19349663ull)
+			^ (static_cast<uint64>(static_cast<uint32>(P.Z)) * 83492791ull);
+		EnterRealm(static_cast<int64>(H % 1000000ull));
+		return true;
+	}
+	return false;
+}
+
+bool ADaedalusHero::PortalNear(FIntVector& Out) const
+{
+	const ADaedalusWorldActor* Live = ADaedalusWorldActor::Find(this);
+	if (!Live) return false;
+	const FVector Feet = GetActorLocation() - FVector(0.f, 0.f, GetCapsuleComponent()->GetScaledCapsuleHalfHeight() - 10.f);
+	const FIntVector C = Live->CubeCoord(Feet);
+	for (int32 Dz = 0; Dz >= -1; --Dz)   // standing in it, or on it
+		for (int32 Dy = -1; Dy <= 1; ++Dy)
+			for (int32 Dx = -1; Dx <= 1; ++Dx)
+			{
+				const FIntVector Q = C + FIntVector(Dx, Dy, Dz);
+				if (Live->CubeAt(Live->CubeCenter(Q)) == TEXT("PORTAL")) { Out = Q; return true; }
+			}
+	return false;
+}
+
+FString ADaedalusHero::RealmSavePath()
+{
+	return FPaths::Combine(FPaths::ProjectSavedDir(), TEXT("Config"), TEXT("DaedalusRealm.sav"));
+}
+
+void ADaedalusHero::EnterRealm(int64 Seed)
+{
+	if (RealmView.IsValid() || Menu.IsValid() || Field.IsValid()) return;
+	RealmView = SNew(SDaedalusRealm).OnExit(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::RealmWantsOut));
+	ShowOverlay(RealmView.ToSharedRef(), RealmView.ToSharedRef(), RealmHost);
+	RealmSource = TEXT("loading");
+	const FString Url = FString::Printf(TEXT("%s/api/v1/retro/%lld"), *CVarServer.GetValueOnGameThread(), Seed);
+	UE_LOG(LogDaedalus, Log, TEXT("Through the portal: realm %lld from %s"), Seed, *Url);
+	TWeakObjectPtr<ADaedalusHero> Self(this);
+	TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Req = FHttpModule::Get().CreateRequest();
+	Req->SetURL(Url);
+	Req->SetVerb(TEXT("GET"));
+	Req->SetTimeout(4.f);
+	Req->OnProcessRequestComplete().BindLambda([Self](FHttpRequestPtr, FHttpResponsePtr Resp, bool bOk)
+	{
+		if (!Self.IsValid()) return;
+		const bool Good = bOk && Resp.IsValid() && Resp->GetResponseCode() == 200 && Resp->GetContentAsString().StartsWith(TEXT("DRR 1"));
+		Self->RealmReady(Good ? Resp->GetContentAsString() : FString(), Good ? TEXT("server") : TEXT("shipped"));
+	});
+	Req->ProcessRequest();
+}
+
+void ADaedalusHero::RealmReady(const FString& Spec, const FString& Source)
+{
+	if (!RealmView.IsValid()) return;
+	FString Text = Spec;
+	if (Text.IsEmpty())
+	{
+		const FString Shipped = FPaths::Combine(FPaths::ProjectPluginsDir(), TEXT("DaedalusLink"), TEXT("Content"), TEXT("Realm"), TEXT("realm-7.drr"));
+		if (!FFileHelper::LoadFileToString(Text, *Shipped)) UE_LOG(LogDaedalus, Warning, TEXT("No server and no shipped realm at %s"), *Shipped);
+	}
+	FString Error;
+	if (!RealmView->LoadSpec(Text, Error))
+	{
+		UE_LOG(LogDaedalus, Warning, TEXT("The realm spec was refused: %s"), *Error);
+		RealmSource = TEXT("refused: ") + Error;
+		return;
+	}
+	FString Save;
+	if (FFileHelper::LoadFileToString(Save, *RealmSavePath())) RealmView->RestoreSave(Save);
+	RealmSource = Source;
+	UE_LOG(LogDaedalus, Log, TEXT("Realm loaded (%s)"), *Source);
+}
+
+void ADaedalusHero::RealmWantsOut()
+{
+	// The widget asks from inside its own Tick: close it on the next tick, not under its feet.
+	TWeakObjectPtr<ADaedalusHero> Self(this);
+	FTSTicker::GetCoreTicker().AddTicker(FTickerDelegate::CreateLambda([Self](float)
+	{
+		if (Self.IsValid()) Self->ExitRealm();
+		return false;
+	}));
+}
+
+void ADaedalusHero::ExitRealm()
+{
+	if (!RealmView.IsValid()) return;
+	const FString Save = RealmView->SaveText();
+	if (!Save.IsEmpty()) FFileHelper::SaveStringToFile(Save, *RealmSavePath());
+	HideOverlay(RealmHost);
+	RealmView.Reset();
+}
+
+bool ADaedalusHero::IsRealmOpen() const
+{
+	return RealmView.IsValid();
+}
+
+FString ADaedalusHero::RealmState() const
+{
+	if (!RealmView.IsValid()) return TEXT("closed");
+	return FString::Printf(TEXT("source=%s %s"), *RealmSource, UTF8_TO_TCHAR(RealmView->Game().Describe().c_str()));
+}
+
+bool ADaedalusHero::RealmCapture(const FString& Path)
+{
+	return RealmView.IsValid() && RealmView->CapturePng(Path, 3);
+}
+
+FString ADaedalusHero::RealmInput(const FString& Command)
+{
+	using namespace daedalus::realm;
+	if (!RealmView.IsValid()) return TEXT("closed");
+	Realm& G = RealmView->Game();
+	TArray<FString> Parts;
+	Command.ParseIntoArray(Parts, TEXT(":"), false);
+	const FString Verb = Parts.Num() ? Parts[0].ToLower() : FString();
+	auto ButtonOf = [](const FString& Name, Button& Out)
+	{
+		const FString N = Name.ToLower();
+		if (N == TEXT("up")) Out = Button::Up;
+		else if (N == TEXT("down")) Out = Button::Down;
+		else if (N == TEXT("left")) Out = Button::Left;
+		else if (N == TEXT("right")) Out = Button::Right;
+		else if (N == TEXT("a")) Out = Button::A;
+		else if (N == TEXT("b")) Out = Button::B;
+		else if (N == TEXT("start")) Out = Button::Start;
+		else return false;
+		return true;
+	};
+	auto Run = [&G](double Seconds) { for (double T = 0.0; T < Seconds; T += 0.05) G.Tick(0.05); };
+	Button B;
+	if (ButtonOf(Verb, B)) { G.Press(B); G.Release(B); Run(0.3); }
+	else if (Verb == TEXT("hold") && Parts.Num() > 1 && ButtonOf(Parts[1], B)) G.Press(B);
+	else if (Verb == TEXT("release") && Parts.Num() > 1 && ButtonOf(Parts[1], B)) G.Release(B);
+	else if (Verb == TEXT("tick") && Parts.Num() > 1) Run(FCString::Atod(*Parts[1]));
+	else if (Verb == TEXT("place") && Parts.Num() > 3)
+		G.Place(TCHAR_TO_UTF8(*Parts[1]), FCString::Atoi(*Parts[2]), FCString::Atoi(*Parts[3]), Parts.Num() > 4 ? FCString::Atoi(*Parts[4]) : 0);
+	else if (Verb == TEXT("give") && Parts.Num() > 1) G.Give(std::string(TCHAR_TO_UTF8(*Parts[1])), Parts.Num() > 2 ? FCString::Atoi(*Parts[2]) : 1);
+	else if (Verb == TEXT("gold") && Parts.Num() > 1) G.SetGold(FCString::Atoi(*Parts[1]));
+	else if (Verb == TEXT("battle") && Parts.Num() > 1)
+	{
+		TArray<FString> Ids;
+		Parts[1].ParseIntoArray(Ids, TEXT("+"));
+		std::vector<std::string> V;
+		for (const FString& Id : Ids) V.push_back(TCHAR_TO_UTF8(*Id));
+		G.ForceBattle(V);
+	}
+	else if (Verb == TEXT("autofight"))
+	{
+		for (int32 i = 0; i < 4000 && G.CurrentMode() == Mode::Battle; ++i)
+		{
+			const std::string Ui = G.TopBox();
+			if (Ui == "COMMAND" || Ui == "TARGET" || Ui == "INTRO" || Ui == "ENDING") { G.Press(Button::A); G.Release(Button::A); G.Tick(0.05); }
+			else if (Ui == "PLAY") G.Tick(0.5);
+			else { G.Press(Button::B); G.Release(Button::B); G.Tick(0.05); }
+		}
+	}
+	else if (Verb == TEXT("toughen"))
+		for (Member& P : G.MembersMut()) { P.Lvl = 30; P.MaxHp = P.Hp = 400; P.MaxMp = P.Mp = 200; P.Atk = 160; P.Def = 120; P.Agi = 80; }
+	else if (Verb == TEXT("portal"))
+	{
+		const Spot& Sp = G.World().Spawn;
+		G.Place(G.World().Maps[static_cast<size_t>(Sp.Map)].Id, Sp.X, Sp.Y, 1);
+	}
+	else if (Verb == TEXT("save")) return RealmView->SaveText();
+	else if (Verb == TEXT("spec")) return RealmSource;
+	else return TEXT("unknown realm command: ") + Command;
+	RealmView->Refresh();
+	return RealmState();
 }
 
 // One called Ghost at a time: calling again brings the parked one back instead of adding another.
@@ -1538,7 +1714,7 @@ void ADaedalusHero::ToggleSettings()
 		ApplySettings();
 		return;
 	}
-	if (Field.IsValid()) return;
+	if (Field.IsValid() || RealmView.IsValid()) return;
 	Menu = SNew(SDaedalusSettingsMenu)
 		.OnClose(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::ToggleSettings))
 		.OnChanged(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::ApplySettings))
@@ -1559,7 +1735,7 @@ void ADaedalusHero::ToggleField()
 		HideOverlay(FieldHost);
 		return;
 	}
-	if (Menu.IsValid()) return;
+	if (Menu.IsValid() || RealmView.IsValid()) return;
 	Field = SNew(SDaedalusFieldMenu)
 		.OnClose(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::ToggleField))
 		.Hero(this);
@@ -1599,7 +1775,12 @@ FString ADaedalusHero::MenuInput(const FString& Command)
 void ADaedalusHero::EndPlay(const EEndPlayReason::Type Reason)
 {
 	SaveProgress();
-	for (TSharedPtr<SWidget>* Host : {&MenuHost, &FieldHost, &HudHost})
+	if (RealmView.IsValid())
+	{
+		const FString Save = RealmView->SaveText();
+		if (!Save.IsEmpty()) FFileHelper::SaveStringToFile(Save, *RealmSavePath());
+	}
+	for (TSharedPtr<SWidget>* Host : {&MenuHost, &FieldHost, &HudHost, &RealmHost})
 	{
 		if (Host->IsValid() && GEngine && GEngine->GameViewport)
 		{
@@ -1610,6 +1791,7 @@ void ADaedalusHero::EndPlay(const EEndPlayReason::Type Reason)
 	Menu.Reset();
 	Field.Reset();
 	Hud.Reset();
+	RealmView.Reset();
 	Super::EndPlay(Reason);
 }
 

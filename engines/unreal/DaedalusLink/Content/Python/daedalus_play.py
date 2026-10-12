@@ -15,6 +15,7 @@ per frame and returns its checks.
 """
 
 import math
+import os
 
 import unreal
 
@@ -536,6 +537,119 @@ def scenario_fall(p):
     ]}
 
 
+def _kv(line):
+    """A realm state line ('mode=FIELD map=TOWN1 x=3 ...') as a dict; msg= is the rest of the line."""
+    out = {}
+    head, _, msg = line.partition(" msg=")
+    for tok in head.split():
+        k, _, v = tok.partition("=")
+        out[k] = v
+    out["msg"] = msg
+    return out
+
+
+def realm(p=None):
+    """Drive the 8-bit realm from the bridge: {cmd} is any RealmInput command; returns its state."""
+    h = hero()
+    if h is None:
+        return {"error": "start Play first"}
+    cmd = (p or {}).get("cmd", "")
+    if cmd == "enter":
+        h.enter_realm(int((p or {}).get("seed", 7)))
+        return {"state": h.realm_state()}
+    if cmd == "exit":
+        h.exit_realm()
+        return {"state": h.realm_state()}
+    state = h.realm_input(cmd) if cmd else h.realm_state()
+    return {"state": state, "fields": _kv(state) if "map=" in state else {}}
+
+
+def realm_capture(p=None):
+    h = hero()
+    out_dir = os.path.join(unreal.Paths.project_saved_dir(), "Realm")
+    os.makedirs(out_dir, exist_ok=True)
+    path = os.path.join(out_dir, (p or {}).get("name", "realm.png"))
+    return {"ok": bool(h and h.realm_capture(path)), "path": path}
+
+
+def scenario_realm(p):
+    """The 8-bit realm (ADR-052): through a portal the world turns 8-bit; the Java engines' realm loads (from the
+    server, or the shipped one), the party walks while a direction is held, a fight is won, the status menu opens,
+    the screen is captured from the framebuffer, and the portal sends the party home with its progress saved."""
+    h = hero()
+    seed = int(p.get("seed", 7))
+    if h.is_realm_open():
+        h.exit_realm()
+        yield from _frames(5)
+    h.enter_realm(seed)
+    st = ""
+    for _ in range(400):
+        st = h.realm_state()
+        if "map=" in st or "refused" in st:
+            break
+        yield
+    out_dir = os.path.join(unreal.Paths.project_saved_dir(), "Realm")
+    os.makedirs(out_dir, exist_ok=True)
+    shots = []
+
+    def cap(name):
+        path = os.path.join(out_dir, name)
+        if h.realm_capture(path):
+            shots.append(path)
+
+    first = _kv(st) if "map=" in st else {}
+    cap("realm_arrival.png")
+    h.realm_input("a")
+    h.realm_input("toughen")
+    steps0 = int(_kv(h.realm_state()).get("steps", 0))
+    h.realm_input("hold:right")
+    yield from _frames(60)
+    h.realm_input("release:right")
+    yield from _frames(10)
+    walked = int(_kv(h.realm_state()).get("steps", 0)) - steps0
+    while _kv(h.realm_state()).get("mode") == "BATTLE":   # walking can meet monsters
+        h.realm_input("autofight")
+        h.realm_input("a")
+        yield
+    h.realm_input("a")
+    wins0 = int(_kv(h.realm_state()).get("wins", 0))
+    h.realm_input("battle:BLIGHT_SLIME+PUFFCAP")
+    yield from _frames(5)
+    in_battle = _kv(h.realm_state()).get("mode") == "BATTLE"
+    cap("realm_battle.png")
+    h.realm_input("autofight")
+    won = int(_kv(h.realm_state()).get("wins", 0)) == wins0 + 1
+    h.realm_input("a")
+    for c in ("b", "down", "down", "a"):
+        h.realm_input(c)
+    status = _kv(h.realm_state()).get("ui") == "STATUS"
+    cap("realm_status.png")
+    h.realm_input("a")
+    h.realm_input("b")
+    h.realm_input("portal")
+    h.realm_input("up")
+    said = _kv(h.realm_state()).get("msg", "")
+    h.realm_input("a")
+    for _ in range(60):
+        if not h.is_realm_open():
+            break
+        yield
+    save_path = os.path.join(unreal.Paths.project_saved_dir(), "Config", "DaedalusRealm.sav")
+    saved = os.path.exists(save_path) and open(save_path).read().startswith("DRS 1")
+    return {"checks": [
+        _check("the realm loaded", first.get("map") == "FIELD", st[:160]),
+        _check("from the server or the shipped spec", "source=server" in st or "source=shipped" in st, st[:40]),
+        _check("holding a direction walks", walked >= 3, f"steps={walked}"),
+        _check("a forced fight starts", in_battle),
+        _check("and is won", won),
+        _check("the status menu opens", status),
+        _check("the framebuffer captures", len(shots) == 3, str(shots)),
+        _check("the portal says goodbye", "PORTAL" in said, said),
+        _check("and closes the realm", not h.is_realm_open()),
+        _check("the party is saved", saved, save_path),
+    ], "shots": shots}
+
+
 SCENARIOS = {
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
@@ -546,6 +660,7 @@ SCENARIOS = {
     "armor": scenario_armor,
     "dig": scenario_dig,
     "fall": scenario_fall,
+    "realm": scenario_realm,
 }
 
 
@@ -558,4 +673,11 @@ def register(bridge):
     bridge.register("daedalus.play_capture", play_capture,
                     "A PNG of what the player sees in Play (the camera, not the editor viewport); returns its path",
                     {"width": "int", "height": "int", "dir": "str", "name": "str"})
+    bridge.register("daedalus.realm", realm,
+                    "Drive the 8-bit realm (ADR-052): cmd=enter (seed) | exit | up/down/left/right/a/b/start | hold:<b> | "
+                    "release:<b> | tick:<s> | place:<MAP>:<x>:<y>:<f> | give:<ITEM>:<n> | gold:<n> | battle:<ID>+<ID> | "
+                    "autofight | toughen | portal | save | spec; empty cmd returns the state",
+                    {"cmd": "str", "seed": "int"})
+    bridge.register("daedalus.realm_capture", realm_capture,
+                    "The realm's screen as a PNG (3x, from its framebuffer) in Saved/Realm; returns the path", {"name": "str"})
     bridge.register("daedalus.full_speed", full_speed, "Stop the editor slowing Play when it is not the window in front", {})
