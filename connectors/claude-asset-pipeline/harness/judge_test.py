@@ -79,5 +79,19 @@ case("nothing shipped at all fails, it doesn't pass vacuously",
      ["every Blender object reached the file", "every file mesh became an Unreal static mesh"],
      sent={"objects": []}, file={"materials": [], "meshes": [], "nodes": []}, made={"meshes": [], "materials": []})
 
+# Mob_Realm_Party_Hero, live 2026-10-12: two parts 0.48 m long; Unreal's float noise (48.0 vs 48.0000076 cm)
+# reordered the sorted lists, and the zip compared the wrong pairs. A good asset must pass.
+HERO = [[0.37, 0.345, 0.32], [0.48, 0.4, 0.11], [0.48, 0.46, 0.28], [0.51, 0.22, 0.18]]
+HERO_CM = [[37.00000762939453, 34.5, 31.999999046325684], [48.0, 46.0, 28.0], [48.00000762939453, 40.00000190734863, 11.0],
+           [51.0, 22.0, 17.999998092651367]]
+hero_file = {"materials": [], "meshes": [{"name": "m%d" % i, "triangles": 12, "materials": [], "dims": d} for i, d in enumerate(HERO)],
+             "nodes": [{"name": "n%d" % i, "mesh": i, "dims": d} for i, d in enumerate(HERO)]}
+hero_sent = {"objects": [{"name": "n%d" % i, "triangles": 12, "materials": [], "dims": d} for i, d in enumerate(HERO)]}
+hero_made = {"meshes": [{"name": "n%d" % i, "triangles": 12, "materials": ["-1"], "dims_cm": d} for i, d in enumerate(HERO_CM)],
+             "materials": []}
+case("near-tie sizes reordered by float noise still match (Party_Hero)", [], sent=hero_sent, file=hero_file, made=hero_made)
+case("...but a real size change among near-ties still fails", ["sizes: file (m) = Unreal (cm)"], sent=hero_sent, file=hero_file,
+     made=bent(hero_made, lambda d: d["meshes"][2].update(dims_cm=[48.0, 30.0, 11.0])))
+
 print("%d/%d" % (sum(results), len(results)))
 sys.exit(0 if all(results) else 1)

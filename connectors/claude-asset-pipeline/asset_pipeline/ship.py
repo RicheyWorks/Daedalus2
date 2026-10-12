@@ -34,6 +34,21 @@ def _dims_match(x, y, scale=1.0):
     return len(x) == len(y) and all(_close(a * scale, b) for a, b in zip(x, y))
 
 
+def _same_sizes(xs, ys, scale=1.0):
+    """Every size in xs pairs with its own size in ys, within tolerance. Sorting the lists and zipping them is not
+    enough: float noise reorders near-ties (Mob_Realm_Party_Hero, 2026-10-12: two meshes 0.48 m long; Unreal said
+    48.0 and 48.0000076 cm, so its sort swapped them, and a good asset was REJECTED for its sizes)."""
+    if len(xs) != len(ys):
+        return False
+    free = list(ys)
+    for a in sorted(xs, reverse=True):
+        hit = next((i for i, b in enumerate(free) if _dims_match(a, b, scale)), None)
+        if hit is None:
+            return False
+        free.pop(hit)
+    return True
+
+
 def judge(sent, witness, made):
     """[{check, ok, detail}] comparing Blender's report, the .glb summary and Unreal's report."""
     checks = []
@@ -56,7 +71,7 @@ def judge(sent, witness, made):
     check("materials: Blender = file", sm == fm, "Blender %s, file %s" % (sm, fm))
     sd = sorted(tuple(o["dims"]) for o in sent["objects"])
     fd = sorted(tuple(x["dims"]) for x in by_node)
-    check("sizes: Blender = file", all(_dims_match(a, b) for a, b in zip(sd, fd)) and len(sd) == len(fd),
+    check("sizes: Blender = file", _same_sizes(sd, fd),
           "Blender %s, file %s" % (sd, fd))
 
     # file -> Unreal: Interchange makes one static mesh per node (named after it), with the node's scale baked
@@ -74,7 +89,7 @@ def judge(sent, witness, made):
     check("material slots: file = Unreal, mesh by mesh", fslots == uslots, "file %s, Unreal %s" % (fslots, uslots))
     fdims = sorted(tuple(n["dims"]) for n in nodes)
     udims = sorted(tuple(m["dims_cm"]) for m in um)
-    sized = len(fdims) == len(udims) and all(_dims_match(a, b, CM_PER_M) for a, b in zip(fdims, udims))
+    sized = _same_sizes(fdims, udims, CM_PER_M)
     check("sizes: file (m) = Unreal (cm)", sized, "file %s m, Unreal %s cm" % (fdims, udims))
     used = {m for x in by_node for m in x["materials"]}
     check("Unreal made a material for each one used", len(made["materials"]) >= len(used),
