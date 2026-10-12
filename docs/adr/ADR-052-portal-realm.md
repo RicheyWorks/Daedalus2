@@ -157,6 +157,18 @@ The jukebox:
   - sound events;
   - all 15 monsters drawn differently.
 - It writes 13 PNGs along the way.
+- **Live in Unreal 5.8.3**, scenario `realm`, **10/10**. Realm 4242 came from the Java server; on the earlier run the
+  server was down and the shipped spec loaded instead. The run checks:
+  - holding a direction walks (16 steps);
+  - a forced fight is won;
+  - STATUS opens;
+  - three framebuffer PNGs are written;
+  - the portal says goodbye and closes the realm;
+  - the party is saved.
+- Three live findings, fixed and written down in AUTOMATION-LESSONS:
+  - the game must run on `FTSTicker`, because a minimized editor stops Slate's Tick;
+  - a scenario must never press A blind;
+  - `-Wait` was blaming a stale AutomationTool log.
 
 ## Held
 
