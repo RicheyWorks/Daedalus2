@@ -247,6 +247,7 @@ void ADaedalusTarget::Tick(float DeltaSeconds)
 				State = TEXT("CHARGE");
 				ChargeLeft -= Dt;
 				if (!StepToward(ChargeDir, 1500.f, Dt)) ChargeLeft = 0.f;   // stops dead at a ledge or a wall
+				if (ChargeLeft <= 0.f) Cooldown = FMath::Max(Cooldown, 1.8f);   // a miss leaves it winded
 				if (Dist < 170.f)
 				{
 					Strike(Who, Power * 10.f);

@@ -887,6 +887,28 @@ int32 ADaedalusHero::SpawnFoes(int32 Count)
 	return Placed;
 }
 
+TArray<FString> ADaedalusHero::NavProbe(FVector From, FVector To)
+{
+	TArray<FString> Out;
+	UDaedalusNav* Nav = GetWorld() ? GetWorld()->GetSubsystem<UDaedalusNav>() : nullptr;
+	if (!Nav) return Out;
+	TArray<FVector> Path;
+	const bool bOk = Nav->FindPath(From, To, Path);
+	Out.Add(FString::Printf(TEXT("found=%d length=%d expanded=%d"), bOk ? 1 : 0, Path.Num(), Nav->LastExpanded));
+	const int32 SX = FMath::FloorToInt(From.X / UDaedalusNav::Cell), SY = FMath::FloorToInt(From.Y / UDaedalusNav::Cell);
+	for (int32 DY = -2; DY <= 2; ++DY)
+	{
+		FString Row;
+		for (int32 DX = -2; DX <= 2; ++DX)
+		{
+			float Z;
+			Row += Nav->FloorAt(SX + DX, SY + DY, From.Z + 40.f, Z) ? FString::Printf(TEXT("%6.0f "), Z - From.Z) : FString(TEXT("  ---- "));
+		}
+		Out.Add(Row);
+	}
+	return Out;
+}
+
 FString ADaedalusHero::NavStats() const
 {
 	const UDaedalusNav* Nav = GetWorld() ? GetWorld()->GetSubsystem<UDaedalusNav>() : nullptr;
