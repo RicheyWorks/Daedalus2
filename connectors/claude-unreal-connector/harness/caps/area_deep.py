@@ -152,7 +152,7 @@ def geometry_scripting():
     unreal.GeometryScript_Primitives.append_sphere_lat_long(dm, opts, unreal.Transform(location=[80, 0, 0]), 60, 12, 12)
     tris = unreal.GeometryScript_MeshQueries.get_num_triangle_i_ds(dm)   # UE's Python spells IDs as i_ds
     sm_opts = unreal.GeometryScriptCreateNewStaticMeshAssetOptions()
-    sm, outcome = unreal.GeometryScript_AssetUtils.create_new_static_mesh_asset_from_mesh(dm, D + "/SM_Generated", sm_opts)
+    sm, outcome = unreal.GeometryScript_NewAssetUtils.create_new_static_mesh_asset_from_mesh(dm, D + "/SM_Generated", sm_opts)
     sm_tris = sm.get_num_triangles(0) if sm else 0
     return {"ok": tris > 12 and sm is not None and sm_tris == tris, "dynamic_tris": tris, "asset_tris": sm_tris,
             "outcome": str(outcome)}
