@@ -121,6 +121,12 @@ def ensure_sublevel():
             unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingDynamic, SUB, False)
         else:
             unreal.EditorLevelUtils.add_level_to_world(world, SUB, unreal.LevelStreamingDynamic)
+    # A dynamic streaming level doesn't load in Play unless told to: the island and its game would be missing.
+    s = unreal.GameplayStatics.get_streaming_level(world, name)
+    if s is not None and not s.get_editor_property("initially_loaded"):
+        s.set_editor_property("initially_loaded", True)
+        s.set_editor_property("initially_visible", True)
+        world.modify()
     LES.set_current_level_by_name(name)
     return name
 
@@ -304,7 +310,7 @@ def run(seed=7):
 
     play = place_play(rng, ground)
 
-    unreal.EditorLevelLibrary.save_current_level()
+    LES.save_all_dirty_levels()
     return {"play": play, "placed": placed, "of": len(cat), "sublevel": SUB, "origin": [ORIGIN.x, ORIGIN.y, ORIGIN.z]}
 
 

@@ -140,6 +140,11 @@ to it when something new breaks.
   didn't compile) sat in the PC's working copy, and `-Fast` mirrors the working copy into the plugin. Building from
   `git worktree add --detach ..\D2-build origin/main` keeps unpushed work out of the shared build.
 
+- **A dynamic streaming sublevel is not loaded in Play.** `create_new_streaming_level(LevelStreamingDynamic, ...)`
+  shows the sublevel in the editor but leaves `initially_loaded` and `initially_visible` false. In PIE the island and
+  every game actor on it were simply absent, and the orrery scenario found nothing to use (0/6). Set both true and
+  save the persistent level.
+
 ## Habits that saved us
 
 - **Build a game its own framebuffer and capture that.** The viewport capture never worked in Play (play_capture).
