@@ -11,12 +11,12 @@
  * Homestead gameplay prototypes (youtube-master island, Team Grok). Data: bot-team art NOTES youtube-master food_water.json.
  * - UDaedalusThirstComponent: thirst drains; at 0 it drains health. Drinking is mandatory.
  * - ADaedalusWaterSource: a placed water prop (tag Drinkable or RawWater). Walk within Reach and press Interact (or call Drink).
- * - ADaedalusBrewBench: Chord Brewing. 2-4 note-herbs -> a chord -> a tonic (ported from herbcombo.py).
+ * - ADaedalusBrewBench: Melody Brewing. 3-5 note-herbs IN ORDER -> a tune (contour/steps/cadence) -> a tonic (port of herbcombo.py).
  * - ADaedalusLivestock: fed + watered animals grow Calf->Adult->Elder and produce on a timer.
  */
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDaedalusThirstChanged, float, Thirst, float, Health);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDaedalusChordBrewed, const FString&, Chord, const FString&, Tonic, const TArray<int32>&, Notes);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDaedalusMelodyBrewed, const FString&, Melody, const FString&, Tonic, const TArray<int32>&, Notes);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDaedalusProduced, const FString&, Species, const FString&, Product);
 
 UCLASS(ClassGroup = (Daedalus), meta = (BlueprintSpawnableComponent))
@@ -65,14 +65,14 @@ USTRUCT(BlueprintType)
 struct FDaedalusBrewResult
 {
 	GENERATED_BODY()
-	UPROPERTY(BlueprintReadOnly) FString Chord;
-	UPROPERTY(BlueprintReadOnly) FString Tonic;
-	UPROPERTY(BlueprintReadOnly) FString Effect;
-	UPROPERTY(BlueprintReadOnly) FString Stat;
-	UPROPERTY(BlueprintReadOnly) int32 Tier = 0;
-	UPROPERTY(BlueprintReadOnly) float Magnitude = 0.f;
-	UPROPERTY(BlueprintReadOnly) float DurationS = 0.f;
-	UPROPERTY(BlueprintReadOnly) TArray<int32> Notes;
+	UPROPERTY(BlueprintReadOnly, Category = "Daedalus|Brew") FString Melody;
+	UPROPERTY(BlueprintReadOnly, Category = "Daedalus|Brew") FString Tonic;
+	UPROPERTY(BlueprintReadOnly, Category = "Daedalus|Brew") FString Effect;
+	UPROPERTY(BlueprintReadOnly, Category = "Daedalus|Brew") bool bPurifiesWater = false;
+	UPROPERTY(BlueprintReadOnly, Category = "Daedalus|Brew") int32 Tier = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Daedalus|Brew") float Magnitude = 0.f;
+	UPROPERTY(BlueprintReadOnly, Category = "Daedalus|Brew") float DurationS = 0.f;
+	UPROPERTY(BlueprintReadOnly, Category = "Daedalus|Brew") TArray<int32> Notes;
 };
 
 UCLASS()
@@ -81,10 +81,10 @@ class DAEDALUSLINK_API ADaedalusBrewBench : public AActor
 	GENERATED_BODY()
 public:
 	ADaedalusBrewBench();
-	/** Herbs by name (Doleaf..Tisquill) with stages 1-4. Same rules as herbcombo.py. */
+	/** Herbs by name (Doleaf..Tisquill) IN THE ORDER ADDED, with stages 1-4. Same rules as herbcombo.py. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Brew") FDaedalusBrewResult Brew(const TArray<FString>& Herbs, const TArray<int32>& Stages);
 	static FDaedalusBrewResult BrewStatic(const TArray<FString>& Herbs, const TArray<int32>& Stages);
-	UPROPERTY(BlueprintAssignable, Category = "Daedalus|Brew") FDaedalusChordBrewed OnChordBrewed;
+	UPROPERTY(BlueprintAssignable, Category = "Daedalus|Brew") FDaedalusMelodyBrewed OnMelodyBrewed;
 };
 
 UCLASS()

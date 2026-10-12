@@ -21,7 +21,7 @@ STYLE = {
     "WillowRiverbank": (4500, 600, 110, 35),
 }
 eas = unreal.EditorAssetLibrary
-ell = unreal.EditorActorSubsystem and unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+ell = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 
 def actors():
     return ell.get_all_level_actors()
@@ -61,10 +61,10 @@ def make_sequence(name, frames):
 def add_camera(seq, centre, style, start, frames):
     radius, height, sweep, focal = style
     cam = seq.add_spawnable_from_class(unreal.CineCameraActor)
-    cuts = seq.find_master_tracks_by_type(unreal.MovieSceneCameraCutTrack) or [seq.add_master_track(unreal.MovieSceneCameraCutTrack)]
+    cuts = seq.find_tracks_by_type(unreal.MovieSceneCameraCutTrack) or [seq.add_track(unreal.MovieSceneCameraCutTrack)]
     cs = cuts[0].add_section()
     cs.set_range(start, start + frames)
-    cs.set_camera_binding_id(cam.get_binding_id())
+    cs.set_camera_binding_id(seq.get_binding_id(cam))
     tr = cam.add_track(unreal.MovieScene3DTransformTrack)
     sec = tr.add_section(); sec.set_range(start, start + frames)
     ch = sec.get_all_channels()  # x,y,z, roll,pitch,yaw, sx,sy,sz

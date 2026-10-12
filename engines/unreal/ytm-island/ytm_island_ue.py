@@ -7,11 +7,11 @@ rock/cliff rim. Tags every actor YTM_Island. Idempotent (deletes its tagged acto
 import math, random, unreal
 SUB = "/Game/YTM/Maps/YTM_Island"; ART = "/Game/Daedalus/Art"; TAG = "YTM_Island"
 R = 12000.0  # radius cm (240 m diameter = double size)
-OFFSET = unreal.Vector(2000000, 4000000, 0)  # board ARK_ORIGIN for youtube-master (competition.md)
+OFFSET = unreal.Vector(0, -2600000, 0)  # 26 km south of origin: clear of Wild Biomes rings 4.5-16 km
 rnd = random.Random(2820)
 eas = unreal.EditorAssetLibrary; act = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
-world = unreal.EditorLevelLibrary.get_editor_world()
+world = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
 if not eas.does_asset_exist(SUB):
     unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingAlwaysLoaded, SUB, False)
 ls = unreal.GameplayStatics.get_streaming_level(world, SUB.split("/")[-1])
@@ -73,7 +73,7 @@ for i,l in enumerate(LIV):
 # KITCHEN: north (+y) 50 m
 for i,s in enumerate(["Stove","Mill","Churn","Press","Smokehouse","Loom","Smelter"]): put(f"Prop_YTM_Station_{s}", -1800+i*600, 5000, yaw=180)
 # RIM: rock/cliff kit around the edge
-kit = [a for a in (unreal.EditorAssetLibrary.list_assets(ART+"/Prop", True, False)) if "_YTM_Cliff_" in a or "_YTM_Rock_" in a or "_YTM_Boulder_" in a]
+kit = [a for a in eas.list_assets(ART+"/Prop", True, False) if "_YTM_Cliff_" in a or "_YTM_Rock_" in a or "_YTM_Boulder_" in a]
 names = sorted({p.split("/")[-1].split(".")[0] for p in kit})
 for k in range(120):
     if not names: break
@@ -92,7 +92,7 @@ for a in [x for x in act.get_all_level_actors() if x.actor_has_tag(TAG)]:
         w=act.spawn_actor_from_class(unreal.DaedalusWaterSource, loc, unreal.Rotator(0,0,0))
         lab=a.get_actor_label()
         w.set_editor_property("quality","clean" if "Drinkable" in tags else "raw")
-        w.set_editor_property("b_treats", "Filter" in lab or "Boiler" in lab)
+        w.set_editor_property("treats", "Filter" in lab or "Boiler" in lab)
         w.tags=[TAG,"YTM_WaterLogic"]; hooks+=1
     if "YTM_Livestock" in tags and hasattr(unreal,"DaedalusLivestock"):
         sp=tags[2]; age=tags[3]; prod,every=LIVDATA[sp]
@@ -107,5 +107,5 @@ unreal.log(f"YTM_Island: gameplay hooks {hooks} (0 = DaedalusLink homestead clas
 sp=ps.get_actor_location()
 ok=[x for x in act.get_all_level_actors() if x.actor_has_tag("Drinkable") and (x.get_actor_location()-sp).length()<=4000]
 unreal.log(("YTM_Island WATER OK: " if ok else "YTM_Island WATER FAIL: ")+str(len(ok))+" drinkable sources within 40 m of spawn")
-unreal.EditorLevelLibrary.save_current_level()
+les.save_current_level()
 unreal.log(f"YTM_Island: placed {placed['ok']} actors, missing {len(placed['missing'])}: {sorted(placed['missing'])[:20]}")

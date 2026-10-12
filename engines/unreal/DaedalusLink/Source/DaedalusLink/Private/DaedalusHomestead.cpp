@@ -71,24 +71,14 @@ void ADaedalusWaterSource::Tick(float Dt)
 	if (T && T->Thirst < T->ThirstMax - 10.f) Drink(P);
 }
 
-// ---------------- Chord Brewing ----------------
+// ---------------- Melody Brewing ----------------
 namespace
 {
 	const TCHAR* GHerbs[12] = { TEXT("Doleaf"), TEXT("Sharpcress"), TEXT("Rebell"), TEXT("Flatfern"), TEXT("Mimint"), TEXT("Fasage"),
 		TEXT("Hushmoss"), TEXT("Solthorn"), TEXT("Gloryroot"), TEXT("Lavine"), TEXT("Dronebloom"), TEXT("Tisquill") };
-	const TCHAR* GStats[12] = { TEXT("health"), TEXT("hunger"), TEXT("stamina"), TEXT("thirst"), TEXT("warmth"), TEXT("luck"),
-		TEXT("calm"), TEXT("harvest"), TEXT("craft"), TEXT("speed"), TEXT("sight"), TEXT("pet_bond") };
-	struct FChord { TArray<int32> Iv; const TCHAR* Name; const TCHAR* Tonic; const TCHAR* Effect; };
-	const TArray<FChord>& Chords()
-	{
-		static TArray<FChord> C = {
-			{ {0,4,7}, TEXT("Major"), TEXT("Major"), TEXT("regen_health") }, { {0,3,7}, TEXT("Minor"), TEXT("Minor"), TEXT("restore_hunger") },
-			{ {0,5,7}, TEXT("Sus"), TEXT("Sus"), TEXT("stamina_boost") },   { {0,3,6}, TEXT("Dim"), TEXT("Dim"), TEXT("night_vision") },
-			{ {0,4,8}, TEXT("Aug"), TEXT("Aug"), TEXT("haste") },           { {0,4,7,10}, TEXT("Seventh"), TEXT("Seventh"), TEXT("purify_water") },
-			{ {0,7}, TEXT("Power"), TEXT("Sus"), TEXT("strength") },        { {0,4,7,11}, TEXT("Major"), TEXT("Major"), TEXT("regen_health") } };
-		return C;
-	}
 	int32 NoteOf(const FString& H) { for (int32 i = 0; i < 12; ++i) if (H.Equals(GHerbs[i], ESearchCase::IgnoreCase)) return i; return -1; }
+	int32 Step(int32 A, int32 B) { const int32 D = ((B - A) % 12 + 12) % 12; return D > 6 ? D - 12 : D; }
+	FDaedalusBrewResult Noise() { FDaedalusBrewResult R; R.Melody = TEXT("Noise"); R.Tonic = TEXT("Item_YTM_Tonic_Dim_T1"); R.Effect = TEXT("poison_mild"); R.Tier = 1; return R; }
 }
 
 ADaedalusBrewBench::ADaedalusBrewBench()
@@ -99,41 +89,45 @@ ADaedalusBrewBench::ADaedalusBrewBench()
 
 FDaedalusBrewResult ADaedalusBrewBench::BrewStatic(const TArray<FString>& Herbs, const TArray<int32>& Stages)
 {
-	FDaedalusBrewResult R;
-	if (Herbs.Num() < 2 || Herbs.Num() > 4) { R.Chord = TEXT("Invalid"); return R; }
-	TSet<int32> Set; float StageSum = 0.f;
+	if (Herbs.Num() < 3 || Herbs.Num() > 5) return Noise();
+	TArray<int32> Notes; float StageSum = 0.f;
 	for (int32 i = 0; i < Herbs.Num(); ++i)
 	{
 		const int32 N = NoteOf(Herbs[i]);
-		if (N < 0) { R.Chord = TEXT("Invalid"); return R; }
-		Set.Add(N); StageSum += Stages.IsValidIndex(i) ? Stages[i] : 1;
+		if (N < 0) return Noise();
+		Notes.Add(N); StageSum += Stages.IsValidIndex(i) ? Stages[i] : 1;
 	}
-	TArray<int32> Pcs = Set.Array(); Pcs.Sort(); R.Notes = Pcs;
-	R.Tier = FMath::Clamp(FMath::RoundToInt(StageSum / Herbs.Num()), 1, 4);
-	for (int32 Root : Pcs)
+	TArray<int32> Steps; bool bAllSteps = true, bLeap = false;
+	for (int32 i = 1; i < Notes.Num(); ++i)
 	{
-		TArray<int32> Iv; for (int32 P : Pcs) Iv.Add((P - Root + 12) % 12); Iv.Sort();
-		for (const FChord& C : Chords())
-		{
-			if (Iv == C.Iv)
-			{
-				R.Chord = FString(GHerbs[Root]) + TEXT(" ") + C.Name;
-				R.Tonic = FString::Printf(TEXT("Item_YTM_Tonic_%s_T%d"), C.Tonic, R.Tier);
-				R.Effect = C.Effect; R.Stat = GStats[Root];
-				R.Magnitude = 5.f * R.Tier * Pcs.Num(); R.DurationS = 60.f * R.Tier;
-				return R;
-			}
-		}
+		const int32 S = Step(Notes[i - 1], Notes[i]);
+		if (S == 0) { FDaedalusBrewResult R = Noise(); R.Notes = Notes; return R; }
+		Steps.Add(S); bAllSteps &= FMath::Abs(S) <= 2; bLeap |= FMath::Abs(S) >= 5;
 	}
-	R.Chord = TEXT("Noise"); R.Tonic = TEXT("Item_YTM_Tonic_Dim_T1"); R.Effect = TEXT("poison_mild"); R.Tier = 1;
+	int32 Turns = 0;
+	for (int32 i = 1; i < Steps.Num(); ++i) if ((Steps[i] > 0) != (Steps[i - 1] > 0)) ++Turns;
+	const bool bUp = Steps[0] > 0;
+	FString Contour, Quality, Effect;
+	if (Turns == 0) { Contour = bUp ? TEXT("Rise") : TEXT("Fall"); Quality = bUp ? TEXT("Aug") : TEXT("Dim"); Effect = bUp ? TEXT("haste") : TEXT("cure_sickness"); }
+	else if (Turns == 1) { Contour = bUp ? TEXT("Arch") : TEXT("Valley"); Quality = bUp ? TEXT("Major") : TEXT("Minor"); Effect = bUp ? TEXT("regen_health") : TEXT("restore_hunger"); }
+	else { Contour = TEXT("Dance"); Quality = TEXT("Sus"); Effect = TEXT("stamina_boost"); }
+	FDaedalusBrewResult R;
+	R.Notes = Notes;
+	R.Tier = FMath::Clamp(FMath::RoundToInt(StageSum / Herbs.Num()), 1, 4);
+	R.bPurifiesWater = Notes.Last() == Notes[0];
+	R.Melody = R.bPurifiesWater ? Contour + TEXT(" Cadence") : Contour;
+	R.Tonic = FString::Printf(TEXT("Item_YTM_Tonic_%s_T%d"), R.bPurifiesWater ? TEXT("Seventh") : *Quality, R.Tier);
+	R.Effect = Effect;
+	R.Magnitude = 5.f * R.Tier * Notes.Num() * (bLeap ? 2.f : 1.f);
+	R.DurationS = 60.f * R.Tier * (bAllSteps ? 2.f : 1.f);
 	return R;
 }
 
 FDaedalusBrewResult ADaedalusBrewBench::Brew(const TArray<FString>& Herbs, const TArray<int32>& Stages)
 {
 	FDaedalusBrewResult R = BrewStatic(Herbs, Stages);
-	OnChordBrewed.Broadcast(R.Chord, R.Tonic, R.Notes);
-	UE_LOG(LogTemp, Log, TEXT("Daedalus brew: %s -> %s (%s)"), *R.Chord, *R.Tonic, *R.Effect);
+	OnMelodyBrewed.Broadcast(R.Melody, R.Tonic, R.Notes);
+	UE_LOG(LogTemp, Log, TEXT("Daedalus brew: %s -> %s (%s%s)"), *R.Melody, *R.Tonic, *R.Effect, R.bPurifiesWater ? TEXT(", purifies water") : TEXT(""));
 	return R;
 }
 

@@ -1,5 +1,5 @@
 # Youtube Master Island (youtube-master, Team Grok) — island contest entry
-Claim: `CLAIM island:youtube-master` (team link, 15:08 PT). Sublevel: `/Game/YTM/Maps/YTM_Island` only. Site: board ARK_ORIGIN 2000000,4000000,0 (competition.md).
+Claim: `CLAIM island:youtube-master` (team link, 15:08 PT). Sublevel: `/Game/YTM/Maps/YTM_Island` only. Site: 26 km south of origin (clear of the Wild Biomes rings 4.5-16 km).
 Size: **double, 240 m across** (R = 120 m). Built only from my `_YTM_` assets (500 shipped via QUEUE.md), plus one engine cylinder as the ground base.
 
 ## Layout
@@ -12,23 +12,24 @@ Size: **double, 240 m across** (R = 120 m). Built only from my `_YTM_` assets (5
 | Kitchen | north 50 m | Stove, Mill, Churn, Press, Smokehouse, Loom, Smelter |
 | Rim | 105-118 m | 120 cliffs/rocks + 80 scattered rocks |
 
-## Original mechanic: Chord Brewing (herbs)
-- There are 12 herbs, one for each pitch class: Doleaf C, Sharpcress C#, Rebell D, Flatfern Eb, Mimint E, Fasage F, Hushmoss F#, Solthorn G, Gloryroot Ab, Lavine A, Dronebloom Bb, Tisquill B.
-- You brew 2 to 4 herbs at the Brewbench, and the set of notes is read as a chord:
+## Original mechanic: Melody Brewing (herbs)
+Prometheus's Harmonic Herbs reads herbs as a chord. To keep the two distinct, mine reads them as a tune:
+- **What counts:** the order you drop 3 to 5 note-herbs into the kettle. The herbs use the same pitch classes as Prometheus, so the islands teach harmony and melody side by side.
+- **Contour sets the effect:**
 
-| Chord | Effect |
+| Contour | Effect |
 |---|---|
-| Major | regen health |
-| Minor | restore hunger |
-| Sus or Power | stamina |
-| Dim | night vision |
-| Aug | haste |
-| Seventh | **purify water** |
-| Dissonant (no chord) | Noise: mild poison |
+| Rise | haste |
+| Fall | cures sickness |
+| Arch | regenerates health |
+| Valley | restores hunger |
+| Dance (zig-zag) | stamina |
 
-- The root herb picks the stat, and the average growth stage sets the tier (T1 to T4).
-- The bench plays the chord, so players learn harmony by ear. It ties into the "jukebox from the gods" engine through a prometheus audio hook.
-- Engine: `herbcombo.py` (pure Python, tests pass). `herb_combos.json` lists 52 valid 3-herb recipes.
+- **Steps and leaps:** if every step is 2 semitones or less, the effect lasts twice as long; any leap of 5 or more doubles its strength.
+- **Cadence:** ending on the note you started with also purifies water, which ties into the mandatory water loop.
+- **Noise:** a repeated note or fewer than 3 herbs gives a mild poison.
+- **The same herbs can give different tonics** depending on their order.
+- **Code:** `herbcombo.py` (tests pass; `herb_combos.json` has 901 recipes) and `ADaedalusBrewBench` in C++. The bench plays the tune through the audio hook `OnMelodyBrewed(notes)`.
 
 ## Livestock and food loop (`food_water.json`)
 - 8 species, each with a feed crop and a product: Mooncalf gives milk, ReefSheep wool, BubbleHen eggs, Kelpig bacon, DriftGoat cheese, StormDuck feathers, Hornox hide, Glowllama glow fleece.

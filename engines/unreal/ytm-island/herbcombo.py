@@ -1,44 +1,47 @@
-"""Herb-combo mechanic: 'Chord Brewing' (youtube-master original).
-Each of 12 note-herbs is a pitch class. Brew 2-4 herbs at a Brewbench; the set of pitch classes
-is read as a chord. Chord quality -> tonic effect; root herb -> which stat; herb growth stage
-(S1-S4) -> tier. Dissonant sets (no recognised chord) brew 'Noise' (mild poison), so players
-learn harmony by ear: the bench plays the chord (prometheus audio hook: OnChordBrewed(notes)).
-Pure Python, no Unreal import, so codex/unreal-team can port or call it."""
-import json, sys
+"""Herb mechanic: MELODY BREWING (youtube-master). Distinct from prometheus Harmonic Herbs.
+Prometheus reads herbs as a CHORD (which notes sound together). Melody Brewing reads the ORDER you
+drop herbs into the kettle as a TUNE: the contour and the size of the steps decide the tonic.
+Pitch classes follow the shared canon (one pitch class per herb), so the two islands teach the same
+ear: Prometheus = harmony, Youtube Master = melody.
+Rules (3-5 herbs, order matters; interval = shortest signed step -6..+6 between successive notes):
+- contour: all up = Rise (haste), all down = Fall (cure sickness), up then down = Arch (regen health),
+  down then up = Valley (restore hunger), zig-zag = Dance (stamina)
+- all steps <=2 semitones (stepwise) -> duration x2; any leap >=5 -> magnitude x2
+- CADENCE: last herb is the same note as the first -> the tonic also PURIFIES WATER (links to the mandatory water loop)
+- the same note twice in a row, or fewer than 3 herbs -> Noise (mild poison)
+Tier = average growth stage (S1-S4). The bench plays the tune (prometheus audio hook OnMelodyBrewed(notes))."""
+import json, sys, itertools
 HERBS = {"Doleaf":0,"Sharpcress":1,"Rebell":2,"Flatfern":3,"Mimint":4,"Fasage":5,"Hushmoss":6,
          "Solthorn":7,"Gloryroot":8,"Lavine":9,"Dronebloom":10,"Tisquill":11}
-QUALITY = {  # interval set from root -> (chord, effect)
- (0,4,7):("Major","regen_health"), (0,3,7):("Minor","restore_hunger"), (0,5,7):("Sus","stamina_boost"),
- (0,3,6):("Dim","night_vision"), (0,4,8):("Aug","haste"), (0,4,7,10):("Seventh","purify_water"),
- (0,7):("Power","strength"), (0,4,7,11):("Major","regen_health")}
-STAT = ["health","hunger","stamina","thirst","warmth","luck","calm","harvest","craft","speed","sight","pet_bond"]
+CONTOUR = {"Rise":("Aug","haste"),"Fall":("Dim","cure_sickness"),"Arch":("Major","regen_health"),
+           "Valley":("Minor","restore_hunger"),"Dance":("Sus","stamina_boost")}
+def step(a,b): d=(b-a)%12; return d-12 if d>6 else d
 def brew(items):
-    """items: list of (herb, stage 1-4). Returns dict result."""
-    pcs = sorted({HERBS[h] for h,_ in items})
-    if len(items) < 2 or len(items) > 4: return {"tonic":None,"why":"use 2-4 herbs"}
-    tier = max(1, min(4, round(sum(s for _,s in items)/len(items))))
-    for root in pcs:
-        iv = tuple(sorted((p-root) % 12 for p in pcs))
-        if iv in QUALITY:
-            q, eff = QUALITY[iv]
-            name = [k for k,v in HERBS.items() if v==root][0]
-            return {"tonic":f"Item_YTM_Tonic_{q}_T{tier}" if q!="Power" else f"Item_YTM_Tonic_Sus_T{tier}",
-                    "chord":f"{name} {q}","effect":eff,"stat":STAT[root],"tier":tier,
-                    "magnitude":5*tier*(len(pcs)),"duration_s":60*tier,"notes":pcs}
-    return {"tonic":"Item_YTM_Tonic_Dim_T1","chord":"Noise","effect":"poison_mild","tier":1,"notes":pcs}
+    """items: ordered list of (herb, stage 1-4)."""
+    if not 3 <= len(items) <= 5: return {"tonic":"Item_YTM_Tonic_Dim_T1","melody":"Noise","effect":"poison_mild","tier":1,"why":"use 3-5 herbs"}
+    notes=[HERBS[h] for h,_ in items]; steps=[step(a,b) for a,b in zip(notes,notes[1:])]
+    tier=max(1,min(4,round(sum(s for _,s in items)/len(items))))
+    if 0 in steps: return {"tonic":"Item_YTM_Tonic_Dim_T1","melody":"Noise","effect":"poison_mild","tier":1,"notes":notes}
+    signs=[1 if s>0 else -1 for s in steps]; turns=sum(1 for a,b in zip(signs,signs[1:]) if a!=b)
+    if turns==0: c="Rise" if signs[0]>0 else "Fall"
+    elif turns==1: c="Arch" if signs[0]>0 else "Valley"
+    else: c="Dance"
+    cadence = notes[-1]==notes[0]
+    q,eff=CONTOUR[c]
+    mag=5*tier*len(notes)*(2 if any(abs(s)>=5 for s in steps) else 1)
+    dur=60*tier*(2 if all(abs(s)<=2 for s in steps) else 1)
+    return {"tonic":f"Item_YTM_Tonic_{'Seventh' if cadence else q}_T{tier}","melody":c+(" Cadence" if cadence else ""),
+            "effect":eff,"purifies_water":cadence,"tier":tier,"magnitude":mag,"duration_s":dur,"notes":notes,"steps":steps}
 def table():
     out=[]; names=list(HERBS)
-    for a in names:
-        for b in names:
-            for c in names:
-                if len({a,b,c})==3 and a<b<c:
-                    r=brew([(a,2),(b,2),(c,2)])
-                    if r.get("chord")!="Noise": out.append({"herbs":[a,b,c],**r})
+    for combo in itertools.permutations(names,3):
+        r=brew([(h,2) for h in combo])
+        if r["melody"]!="Noise" and (r["melody"] in("Rise","Fall") or len(out)<400): out.append({"herbs":list(combo),**r})
     return out
 if __name__=="__main__":
-    assert brew([("Doleaf",4),("Mimint",4),("Solthorn",4)])["chord"]=="Doleaf Major"
-    assert brew([("Lavine",1),("Doleaf",1),("Mimint",1)])["chord"]=="Lavine Minor"
-    assert brew([("Doleaf",2),("Sharpcress",2)])["chord"]=="Noise"
-    assert brew([("Doleaf",3),("Mimint",3),("Solthorn",3),("Dronebloom",3)])["effect"]=="purify_water"
+    assert brew([("Doleaf",2),("Rebell",2),("Mimint",2)])["melody"]=="Rise"
+    assert brew([("Mimint",2),("Rebell",2),("Doleaf",2)])["melody"]=="Fall"   # same herbs, other order -> other tonic
+    assert brew([("Doleaf",3),("Mimint",3),("Doleaf",3)])["purifies_water"] is True
+    assert brew([("Doleaf",1),("Doleaf",1),("Mimint",1)])["melody"]=="Noise"
     t=table(); json.dump({"herbs":HERBS,"recipes":t},open(sys.argv[1] if len(sys.argv)>1 else "herb_combos.json","w"),indent=1)
     print("tests ok, recipes", len(t))
