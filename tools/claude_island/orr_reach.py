@@ -22,10 +22,10 @@ import orr_place as P
 
 ISLES = [
     # name, offset from Claude Island (cm), z offset, radius (cubes), summit, depth, seed, grass, stone, pond
-    ("Bloomfields", (-3200, -24000), -1800, 70, 6, 40, 31, (0.36, 0.62, 0.24), (0.42, 0.36, 0.30), (20, -15, 10)),
-    ("Tidewells", (22000, 16000), 1200, 60, 8, 50, 47, (0.24, 0.52, 0.32), (0.30, 0.34, 0.40), (0, 0, 22)),
-    ("LensForge", (-22000, 14000), 4200, 38, 14, 45, 53, (0.40, 0.42, 0.30), (0.42, 0.40, 0.46), (0, 0, 0)),
-    ("Vault", (6000, -52000), 2600, 46, 20, 60, 61, (0.22, 0.30, 0.42), (0.20, 0.20, 0.28), (0, 0, 0)),
+    ("Bloomfields", (-3200, -24000), -1800, 70, 6, 40, 31, (0.44, 0.78, 0.30), (0.56, 0.48, 0.40), (20, -15, 10)),
+    ("Tidewells", (22000, 16000), 1200, 60, 8, 50, 47, (0.30, 0.66, 0.42), (0.42, 0.46, 0.54), (0, 0, 22)),
+    ("LensForge", (-22000, 14000), 4200, 38, 14, 45, 53, (0.52, 0.56, 0.38), (0.56, 0.54, 0.60), (0, 0, 0)),
+    ("Vault", (6000, -52000), 2600, 46, 20, 60, 61, (0.30, 0.40, 0.58), (0.30, 0.30, 0.40), (0, 0, 0)),
 ]
 
 DRESS = {
@@ -97,5 +97,31 @@ def run():
                     act.set_folder_path("ClaudeIsland/Reach/" + name)
                     placed += 1
         out[name] = {"isle": isle.stats(), "dressed": placed}
+    # Sky bridges from Claude Island to three of them; the Vault stays out of reach on foot (the logbook's end).
+    if hasattr(unreal, "DaedalusSkyBridge"):
+        home = [a for a in P.EAS.get_all_level_actors() if a.get_actor_label() == "Orr_Isle"]
+        isles = {a.get_actor_label(): a for a in P.EAS.get_all_level_actors() if a.get_actor_label().startswith("Orr_Isle_")}
+        if home:
+            h = home[0]
+            for name in ("Bloomfields", "Tidewells", "LensForge"):
+                t = isles.get("Orr_Isle_" + name)
+                if t is None:
+                    continue
+                a, b = h.get_actor_location(), t.get_actor_location()
+                d = unreal.Vector(b.x - a.x, b.y - a.y, 0.0)
+                L = math.hypot(d.x, d.y)
+                ux, uy = d.x / L, d.y / L
+                ra = h.get_editor_property("radius") * 100 * 0.8
+                rb = t.get_editor_property("radius") * 100 * 0.8
+                sx, sy = a.x + ux * ra, a.y + uy * ra
+                ex, ey = b.x - ux * rb, b.y - uy * rb
+                start = unreal.Vector(sx, sy, h.top_z(sx, sy) + 20)
+                end = unreal.Vector(ex, ey, t.top_z(ex, ey) + 20)
+                br = P.EAS.spawn_actor_from_class(unreal.DaedalusSkyBridge, start, unreal.Rotator(0.0, 0.0, 0.0))
+                br.tags = ["OrreryReach", P.TAG]
+                br.set_actor_label("Orr_Bridge_" + name)
+                br.set_folder_path("ClaudeIsland/Reach")
+                br.set_editor_property("end", end)
+                out["bridge_" + name] = br.build()
     P.LES.save_all_dirty_levels()
     return out
