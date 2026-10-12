@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT
+﻿# SPDX-License-Identifier: MIT
 """Build /Game/Pythagoras/PCGEcology/PCG_EcologyNative: the ecology as NATIVE PCG nodes, no precomputed points.
 
 Per species (windows from ecology_rules.native_windows(sp, years)):
@@ -34,7 +34,7 @@ out = g.get_output_node(); inp = g.get_input_node()
 def node(cls):
     n, s = g.add_node_of_type(cls); return n, s
 def pins(n, out):
-    try: return [p.get_editor_property("label") for p in n.get_editor_property("output_pins" if out else "input_pins")]
+    try: return [str(p.get_editor_property("properties").get_editor_property("label")) for p in n.get_editor_property("output_pins" if out else "input_pins")]
     except Exception: return []
 def chain(*ns):
     for a, b in zip(ns, ns[1:]):
@@ -57,10 +57,18 @@ def distance_to(tag, max_m):
 made = {}
 for sp in eco.SPECIES:
     w = eco.native_windows(sp, YEARS)
-    sn, ss = node(unreal.PCGSurfaceSamplerSettings)
-    setp(ss, "points_per_squared_meter", float(min(2.0, 0.6 / (3.1416 * sp["r"] ** 2) * 4)))
-    setp(ss, "point_extents", unreal.Vector(sp["r"] * 50, sp["r"] * 50, 50))
-    if not g.add_edge(inp, "Landscape", sn, "Surface"): log.append("landscape->sampler failed: in %s, sampler %s" % (pins(inp, True), pins(sn, False)))
+    # No landscape in DaedalusWorld (voxel islands): grid over the volume, then project onto a World Ray Hit
+    # surface (rays cast straight down hit the chunk meshes' collision), which also gives real normals for slope.
+    gn, gs = node(unreal.PCGCreatePointsGridSettings)
+    sp_cm = max(60.0, sp["r"] * 100 * 1.2)
+    setp(gs, "cell_size", unreal.Vector(sp_cm, sp_cm, 100.0))
+    setp(gs, "grid_extents", unreal.Vector(float(globals().get("PYTH_EXTENT_CM", 2000)), float(globals().get("PYTH_EXTENT_CM", 2000)), 50.0))
+    try: setp(gs, "coordinate_space", unreal.PCGCoordinateSpace.LOCAL_COMPONENT)
+    except Exception: pass
+    rn, rs = node(unreal.PCGWorldRayHitSettings)
+    sn, ss = node(unreal.PCGProjectionSettings)
+    g.add_edge(gn, "Out", sn, "In")
+    if not g.add_edge(rn, "Out", sn, "Projection Target"): log.append("rayhit->projection failed: %s" % pins(sn, False))
     nn, ns = node(unreal.PCGNormalToDensitySettings)
     slope = dfilter(w["min_up"], 1.0)
     smax = max(w["stream_m"][1], 1.0)
