@@ -119,3 +119,17 @@ to it when something new breaks.
   the ground. Every ground step looked like a drop and the foes stood still. Python's traces default to simple and
   hit, which is how it was found: the same trace, run from both sides, disagreed. Always pass
   `FCollisionQueryParams(..., false, this)`.
+- **One Unreal build at a time.** A build started while another AutomationTool was alive failed in 0 s with
+  "A conflicting instance of AutomationTool is already running", and setup still reopened the editor on the old
+  plugin. `unreal-job.ps1` now waits for any running AutomationTool / UnrealBuildTool and retries once on that
+  error; `-Wait` prints the AutomationTool error log when the plugin step fails, so the cause is on screen.
+- **Split long PowerShell calls.** A single call that started a build, slept 48 s and then waited was refused
+  more than once; the same steps as separate short calls (`-Start`, then `-Wait`) went through. Keep each call
+  one action.
+- **Play tests are scenarios, not hand-rolled loops.** `daedalus.play_scenario` / `play_status` run a mechanic
+  frame by frame and return PASS/FAIL with numbers; a scenario that "passes" on nothing is a bug (the encounters
+  check passed with zero foes until `len(...) > 0` was added).
+- **Sample where the world is.** The sky between islands is empty: random points on a ring found ground 5 times
+  in 200. Place things by sampling the island meshes' bounds, not open space.
+- **A failed search must back off.** A foe with no route re-ran A* every frame (1,752 searches a minute);
+  failures now wait 1.5 s. Watch the harness's counters (`nav_stats`) for runaway work.
