@@ -123,6 +123,11 @@ to it when something new breaks.
   happens under one lock. Live rate went from about 15 to 93 assets a minute, with 0 errors (export 0.06 s,
   import about 0.4 s).
 
+- **Never silence `git push`.** Other bots push to main from the same PC now. One of them landed between two of my
+  commits, my push was refused, and `2>/dev/null` hid it. The PC kept running the old judge, and the asset I had
+  "fixed" was rejected again. Rebase onto origin, push, and check that the PC's HEAD contains the commit before
+  testing live.
+
 ## Habits that saved us
 
 - **Build a game its own framebuffer and capture that.** The viewport capture never worked in Play (play_capture).

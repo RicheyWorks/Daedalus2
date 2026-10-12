@@ -1,0 +1,12 @@
+{"system": "Wager Herbs", "rule": "Every brew is a bet. A tonic has a base effect that always lands and a JACKPOT effect that lands with probability p. Combining two herbs multiplies their odds (parlay): p = pA * pB, but the jackpot payout scales by 1/p (fair odds, no house edge). Brewing in a storm (Sky Director weather Storm) adds +0.1 to p: the Reaper favors the bold. Stormbloom may re-roll a failed jackpot once.",
+ "herbs": [
+  {"id": "Luckroot",    "p": 0.50, "base": "heal 10",          "jackpot": "heal 40 + regen 10s"},
+  {"id": "Hedgeleaf",   "p": 0.90, "base": "shield 10",        "jackpot": "shield 20", "note": "the safe bet; lowers parlay variance"},
+  {"id": "Bluffmoss",   "p": 0.40, "base": "stealth 5s",       "jackpot": "invisible 15s"},
+  {"id": "Longshot",    "p": 0.10, "base": "speed +5% 10s",    "jackpot": "speed +60% 30s"},
+  {"id": "Parlayvine",  "p": 1.00, "base": "none",             "jackpot": "doubles the other herb's payout", "note": "catalyst"},
+  {"id": "Stormbloom",  "p": 0.33, "base": "lightning resist", "jackpot": "chain lightning strike", "note": "one free re-roll"},
+  {"id": "Vigweed",     "p": 0.75, "base": "stamina 20",       "jackpot": "no stamina cost 20s"},
+  {"id": "Oddsthistle", "p": 0.25, "base": "reveal odds",      "jackpot": "see the next drop/craft outcome before committing"}
+ ],
+ "tonics": "8x8 = 64 combos (Item_OR_Tonic_00..63; index = 8*a + b)"}

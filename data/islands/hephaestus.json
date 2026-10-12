@@ -1,0 +1,103 @@
+{
+ "schema": "daedalus.island/v0",
+ "id": "island_hephaestus",
+ "owner": "hephaestus",
+ "theme": "forge / volcanic",
+ "size_mult": 2.0,
+ "footprint_m": [
+  1024,
+  1024
+ ],
+ "story": "A shard of the asteroid hit this island's mountain and woke it. The first ark crews built the Great Forge on the lava, and every ark hull since was riveted here.",
+ "zones": [
+  {
+   "id": "caldera_forge",
+   "desc": "Great Forge inside the dormant caldera, anvils on the lava rim",
+   "art": [
+    "Prop_ForgeForge_*",
+    "Prop_ForgeAnvil_*",
+    "Prop_ForgeBellows_*",
+    "Prop_ForgeQuenchTub_*",
+    "Prop_ForgeChimney_*",
+    "Prop_ForgeForgeAltar_*"
+   ]
+  },
+  {
+   "id": "meteor_scar",
+   "desc": "Asteroid shard embedded in the mountain flank, starmetal + emberite ore",
+   "art": [
+    "Prop_Asteroid_Core",
+    "Prop_ForgeObsidianSpire_*",
+    "Item_Ore_Emberite",
+    "Item_Ore_Starmetal"
+   ]
+  },
+  {
+   "id": "ark_drydock",
+   "desc": "Half-built ark on stilts, where players repair and upgrade arks",
+   "art": [
+    "Veh_Ark",
+    "Prop_ArkWreck_Hull"
+   ]
+  },
+  {
+   "id": "ash_fields",
+   "desc": "Fertile ash slopes: herbs, emberhens, ashgoats",
+   "art": [
+    "Item_Herb_*",
+    "Prop_Ranch*"
+   ]
+  },
+  {
+   "id": "hot_springs",
+   "desc": "Clean springs + steam vents; drinkable water source",
+   "art": [
+    "Prop_ForgeVentPlume_*",
+    "Prop_WaterWellhead_Clay",
+    "Prop_WaterRainCatch_*"
+   ]
+  },
+  {
+   "id": "basalt_coast",
+   "desc": "Black-sand shore, salt still, lava tubes",
+   "art": [
+    "Prop_WaterStill_*",
+    "Prop_ForgeLavaRock_*",
+    "Prop_ForgeMagmaPool_*"
+   ]
+  }
+ ],
+ "resources": {
+  "ore": [
+   "Emberite",
+   "Obsidian",
+   "Sulfur",
+   "Basalt",
+   "Iron",
+   "Starmetal"
+  ],
+  "herbs": [
+   "Emberleaf",
+   "Cinderroot",
+   "Lavathistle",
+   "Forgefern",
+   "Kilnpoppy",
+   "Pyreweed"
+  ],
+  "animals": [
+   "emberhen",
+   "ashgoat",
+   "forgeox",
+   "vent_bees"
+  ]
+ },
+ "hazards": [
+  "lava (damage 10/s; fire_resist herb combo negates)",
+  "heat zone at caldera (thirst drain x2)"
+ ],
+ "quests": [
+  "q_crater",
+  "q_ark"
+ ],
+ "jukebox": "forge-anvil rhythm stem (ask prometheus)"
+}

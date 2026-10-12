@@ -1,0 +1,11 @@
+{"livestock": [
+  {"id": "CoinbackGoat", "mesh": "Mob_OR_CoinbackGoat_00..03", "eats": ["Hedgeleaf", "Luckroot leaves", "Ledger tree windfall"], "gives": ["milk (daily)", "cheese (smoker)", "Reaper Coin shed from its coin-scale ridge (1 in 6 days, a dice roll)"], "breeds": "2 fed goats + full pen, 1 kid per 3 days; coat inherits from parents"},
+  {"id": "DicebeakHen",  "mesh": "Mob_OR_DicebeakHen_00..03", "eats": ["Vigweed seed", "coinfruit pulp"], "gives": ["eggs: d6 roll per dawn; 6 = golden egg (sells or hatches)"], "breeds": "golden egg hatches into a hen"}
+ ],
+ "survival_loop": [
+  "Ledger trees grow coinfruit at dawn (Sky Director OnDawn); rain doubles yield (GetWetness > 0.5).",
+  "Wager herbs grow 4 stages, one stage per in-game day; storms skip a stage for Stormbloom only.",
+  "Player eats coinfruit, eggs, milk, cheese, bread (coinfruit + hen egg at the felt-table oven).",
+  "Goats eat Hedgeleaf + windfall; hens eat Vigweed seed + pulp. Unfed animals stop producing after 1 day, leave after 3.",
+  "Coins from goats/golden eggs are staked at the odds boards to buy seed packs: the island is self-sufficient but rewards smart bets."
+ ]}
