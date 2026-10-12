@@ -599,7 +599,10 @@ def scenario_realm(p):
 
     first = _kv(st) if "map=" in st else {}
     cap("realm_arrival.png")
-    h.realm_input("a")
+    for _ in range(8):   # close the welcome (a restored save has none: a blind A would open the menu instead)
+        if _kv(h.realm_state()).get("ui") == "NONE":
+            break
+        h.realm_input("b")
     h.realm_input("toughen")
     steps0 = int(_kv(h.realm_state()).get("steps", 0))
     walked = 0

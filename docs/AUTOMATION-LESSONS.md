@@ -129,6 +129,9 @@ to it when something new breaks.
   The portal's exit (raised from Tick) never fired either. The core now runs on `FTSTicker`, which ticks no matter
   what; Slate's Tick only copies pixels. The scenario also tries each direction until one walks, because a seed can
   put water to the right of the spawn.
+- **Never press blind; read the screen state first.** The second live run walked 0 steps. Restoring a save closes
+  the welcome message, so the scenario's "A to dismiss" opened the field menu, and the menu then swallowed every
+  direction. Scenarios now close boxes until `ui=NONE` before they act.
 - **Shared job folders need owned names.** Once the Blender team's harness also wrote jobs to
   `%LOCALAPPDATA%\Daedalus\jobs`, `unreal-job -Wait` with no id reported their `bharness-job` as our build.
   `Latest` now looks only at `build-*` logs.
