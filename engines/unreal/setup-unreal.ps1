@@ -95,6 +95,7 @@ function Get-ProjectEditors {
 }
 if ($Open -and -not $WhatIfOnly) {
     $eds = Get-ProjectEditors
+    Write-Host ("Open editors of this project: {0}" -f $eds.Count)
     if ($eds.Count -gt 0) {
         # Save through the Claude Unreal Bridge first when it is listening, so closing raises no "Save Content"
         # prompt for someone to click.
@@ -111,7 +112,21 @@ if ($Open -and -not $WhatIfOnly) {
         } catch { }   # no bridge: Unreal asks about unsaved work itself
         Write-Host "Closing Unreal so the project can be updated (save anything it asks about)..." -ForegroundColor Cyan
         foreach ($e in $eds) { (Get-Process -Id $e.ProcessId -ErrorAction SilentlyContinue).CloseMainWindow() | Out-Null }
-        for ($i = 0; $i -lt 120 -and (Get-ProjectEditors).Count -gt 0; $i++) { Start-Sleep -Seconds 1 }
+        for ($i = 0; $i -lt 30 -and (Get-ProjectEditors).Count -gt 0; $i++) { Start-Sleep -Seconds 1 }
+        # A job started through WMI can't always reach the editor's window; ask the editor itself to quit (it saved above).
+        for ($n = 0; $n -lt 3 -and (Get-ProjectEditors).Count -gt 0; $n++) {
+            try {
+                $tcp = New-Object System.Net.Sockets.TcpClient
+                $tcp.Connect("127.0.0.1", 9877)
+                $msg = [Text.Encoding]::UTF8.GetBytes('{"id":2,"type":"execute_python","params":{"code":"import unreal\nunreal.SystemLibrary.quit_editor()"}}' + "`n")
+                $tcp.GetStream().Write($msg, 0, $msg.Length)
+                Start-Sleep -Seconds 2
+                $tcp.Close()
+                Write-Host "    asked the editor to quit through the Claude Unreal Bridge"
+            } catch { }
+            for ($i = 0; $i -lt 30 -and (Get-ProjectEditors).Count -gt 0; $i++) { Start-Sleep -Seconds 1 }
+        }
+        for ($i = 0; $i -lt 60 -and (Get-ProjectEditors).Count -gt 0; $i++) { Start-Sleep -Seconds 1 }
         if ((Get-ProjectEditors).Count -gt 0) {
             Write-Host "Unreal is still open (waiting on a save prompt?). Close it, then run this again." -ForegroundColor Red
             exit 1
@@ -328,7 +343,9 @@ if (-not (Test-Path (Join-Path $PluginSource "DaedalusLink.uplugin"))) {
     Write-Host "    would copy $PluginSource -> $PluginDest and enable it"
 } else {
     # A compiled plugin whose sources match this repo's is kept: copying over it would throw the build away.
-    $keep = (Test-Path (Join-Path $PluginDest "Binaries\Win64\UnrealEditor-DaedalusLink.dll")) -and
+    # With -Fast the build tool decides what is stale (it is incremental and quick when nothing is), so never "keep":
+    # matching sources don't prove the DLL was linked from them (a link can fail after the sync).
+    $keep = (-not $Fast) -and (Test-Path (Join-Path $PluginDest "Binaries\Win64\UnrealEditor-DaedalusLink.dll")) -and
         ((Get-TreeHash (Join-Path $PluginSource "Source")) -eq (Get-TreeHash (Join-Path $PluginDest "Source"))) -and
         ((Get-TreeHash (Join-Path $PluginSource "Content")) -eq (Get-TreeHash (Join-Path $PluginDest "Content")))
     if ($keep) {
