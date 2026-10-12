@@ -105,6 +105,14 @@ to it when something new breaks.
     Windows macros: `near`, `far`, `small`, `IN`, `OUT`, `ERROR`, `DrawText`. `grep -w` for these before the first
     build.
 
+- **A fast build is only fast if the editor is closed.** `Build.bat UnrealEditor Win64 Development -Project=…`
+  compiled the whole plugin in ~95 s, then the link failed with LNK1104: the open editor holds
+  `UnrealEditor-DaedalusLink.dll`. The job's close step had found no editor (WMI came back empty from a WMI-started
+  job). Now a locked DLL is reported as "Unreal is still open", not retried as a six-minute BuildPlugin that hits the
+  same lock, and editor detection falls back to `Get-Process`.
+- **A hidden component still collides.** Foes wear art now, but the crystal stays their root: `SetHiddenInGame(true)`
+  removes the drawing and keeps every trace, hit and sight line exactly as tested before (ADR-055).
+
 ## Habits that saved us
 
 - **Build a game its own framebuffer and capture that.** The viewport capture never worked in Play (play_capture).

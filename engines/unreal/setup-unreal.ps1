@@ -83,8 +83,15 @@ function Get-ProjectEditors {
     $leaf = Split-Path $Project -Leaf
     # This project's editor, and an editor started without a project (the launcher's project browser, which may
     # then open this one): either can hold the project's files. Commandlets (-run=) are the script's own.
-    return @(Get-CimInstance Win32_Process -Filter "Name = 'UnrealEditor.exe'" -ErrorAction SilentlyContinue |
+    $found = @(Get-CimInstance Win32_Process -Filter "Name = 'UnrealEditor.exe'" -ErrorAction SilentlyContinue |
         Where-Object { $_.CommandLine -notlike "*-run=*" -and ($_.CommandLine -like "*$leaf*" -or $_.CommandLine -notlike "*.uproject*") })
+    # WMI can come back empty from a job started through WMI while the editor is open (seen 2026-10-12: the job
+    # never closed the editor and the link step found the DLL locked). Any editor window counts then.
+    if ($found.Count -eq 0) {
+        $found = @(Get-Process UnrealEditor -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero } |
+            ForEach-Object { [pscustomobject]@{ ProcessId = $_.Id; CommandLine = "" } })
+    }
+    return $found
 }
 if ($Open -and -not $WhatIfOnly) {
     $eds = Get-ProjectEditors
@@ -648,6 +655,9 @@ if ($Build) {
             if ($LASTEXITCODE -eq 0) {
                 $fastDone = $true
                 Write-Host "    BUILD SUCCESSFUL (fast: editor target, changed files only)"
+            } elseif ($lines -match 'LNK1104|being used by another process') {
+                $fastDone = $true
+                Fail "the plugin DLL is locked: Unreal is still open with this project; close it and run this again"
             } elseif ($lines -match 'error C\d+|: error ') {
                 $fastDone = $true
                 Fail "the fast build found compile errors (above)"
