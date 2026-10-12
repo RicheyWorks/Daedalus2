@@ -100,15 +100,22 @@ check("bridges down: row left READY", row(d, "Tool_Pickaxe")["status"] == "READY
 check("bridges down: STATUS.md names Blender", "Blender" in open(os.path.join(d, "STATUS.md"), encoding="utf-8").read())
 shutil.rmtree(d)
 
-# 2b. Unreal in Play: wait, don't touch
+# 2b. Unreal in Play: wait, don't touch; the wait is timed for stall detection
 d, w, fb = setup()
+clock = {"t": 1760000000}
+w.clock = lambda: clock["t"]
 PLAYING["on"] = True
 w.tick()
+clock["t"] += 12 * 60
+w.tick()
+check("wait: STATUS.md says how long", "12 min" in open(os.path.join(d, "STATUS.md"), encoding="utf-8").read())
 check("unreal playing: row left READY", row(d, "Tool_Pickaxe")["status"] == "READY")
 check("unreal playing: STATUS.md says Play", "Play mode" in open(os.path.join(d, "STATUS.md"), encoding="utf-8").read())
 PLAYING["on"] = False
 w.tick()
 check("unreal playing: ships after Play ends", row(d, "Tool_Pickaxe")["status"].startswith("SHIPPED"))
+ev = [e for e in feed(d) if e["asset"] == "-"]
+check("wait: feed has waiting then resumed with seconds", [e["event"] for e in ev] == ["waiting", "resumed"] and ev[1]["waited_s"] == 720, str(ev))
 shutil.rmtree(d)
 
 # 3. the happy path

@@ -121,6 +121,7 @@ class Watcher:
         self.status_md = os.path.join(folder, "STATUS.md")
         self.reports = os.path.join(folder, "reports")
         self.waiting_on = ""
+        self.waiting_since = None   # when the current wait began (clock seconds), for stall detection
 
     # -- files
 
@@ -168,7 +169,9 @@ class Watcher:
         out.append("| " + " | ".join("%s %d" % (k, v) for k, v in sorted(counts.items())) + " |")
         out.append("|" + "---|" * len(counts))
         if self.waiting_on:
-            out += ["", "**Waiting on:** " + self.waiting_on]
+            mins = (self.clock() - self.waiting_since) / 60.0 if self.waiting_since else 0.0
+            since = datetime.datetime.fromtimestamp(self.waiting_since).isoformat(timespec="seconds") if self.waiting_since else now
+            out += ["", "**Waiting on:** %s (since %s, %.0f min)" % (self.waiting_on, since, mins)]
         todo = [r["asset"] for r in rows if state(r["status"]) == "TODO"]
         rejected = ["%s (%s)" % (r["asset"], r["status"]) for r in rows if state(r["status"]) == "REJECTED"]
         if rejected:
@@ -192,6 +195,7 @@ class Watcher:
         rows, header = parse(self.read())
         if header is None:
             self.waiting_on = "QUEUE.md has no table with Asset and Status columns"
+            self.track_wait()
             self.summary()
             return []
         ready = [r for r in rows if state(r["status"]) in ("READY", "WAITING")]
@@ -210,8 +214,18 @@ class Watcher:
                     done.append(self.ship_one(r["asset"]))
         else:
             self.waiting_on = ""
+        self.track_wait()
         self.summary()
         return done
+
+    def track_wait(self):
+        """A wait's start and end go to the feed, with how long it lasted, so a digest can flag stalls."""
+        if self.waiting_on and self.waiting_since is None:
+            self.waiting_since = self.clock()
+            self.event("-", "waiting", why=self.waiting_on)
+        elif not self.waiting_on and self.waiting_since is not None:
+            self.event("-", "resumed", waited_s=round(self.clock() - self.waiting_since))
+            self.waiting_since = None
 
     def ship_one(self, asset):
         kind = kind_of(asset)
