@@ -2718,6 +2718,918 @@
   "faces": 14
  },
  {
+  "asset": "Prop_BUF_Apiary_Hive_V1",
+  "kind": "prop",
+  "group": "apiary",
+  "faces": 18
+ },
+ {
+  "asset": "Prop_BUF_Apiary_Hive_V2",
+  "kind": "prop",
+  "group": "apiary",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Apiary_Hive_V3",
+  "kind": "prop",
+  "group": "apiary",
+  "faces": 12
+ },
+ {
+  "asset": "Prop_BUF_Apiary_Hive_V4",
+  "kind": "prop",
+  "group": "apiary",
+  "faces": 18
+ },
+ {
+  "asset": "Prop_BUF_Apiary_Hive_V5",
+  "kind": "prop",
+  "group": "apiary",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Apiary_Hive_V6",
+  "kind": "prop",
+  "group": "apiary",
+  "faces": 12
+ },
+ {
+  "asset": "Item_BUF_Apiary_HoneyJar",
+  "kind": "item",
+  "group": "apiary",
+  "faces": 24
+ },
+ {
+  "asset": "Item_BUF_Apiary_HoneyComb",
+  "kind": "item",
+  "group": "apiary",
+  "faces": 24
+ },
+ {
+  "asset": "Item_BUF_Apiary_Beeswax",
+  "kind": "item",
+  "group": "apiary",
+  "faces": 24
+ },
+ {
+  "asset": "Item_BUF_Apiary_Smoker",
+  "kind": "item",
+  "group": "apiary",
+  "faces": 24
+ },
+ {
+  "asset": "Item_BUF_Apiary_BeeSuit",
+  "kind": "item",
+  "group": "apiary",
+  "faces": 24
+ },
+ {
+  "asset": "Item_BUF_Apiary_Extractor",
+  "kind": "item",
+  "group": "apiary",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Fire_V1",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 72
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Fire_V2",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 92
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Fire_V3",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 112
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Fire_V4",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 132
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Frost_V1",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 72
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Frost_V2",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 92
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Frost_V3",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 112
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Frost_V4",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 132
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Flora_V1",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 72
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Flora_V2",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 92
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Flora_V3",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 112
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Flora_V4",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 132
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Flux_V1",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 72
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Flux_V2",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 92
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Flux_V3",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 112
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Flux_V4",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 132
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Fog_V1",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 72
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Fog_V2",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 92
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Fog_V3",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 112
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Fog_V4",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 132
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Fang_V1",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 72
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Fang_V2",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 92
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Fang_V3",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 112
+ },
+ {
+  "asset": "Prop_BUF_HerbPlot_Fang_V4",
+  "kind": "prop",
+  "group": "herb",
+  "faces": 132
+ },
+ {
+  "asset": "Prop_BUF_Fence_V1",
+  "kind": "prop",
+  "group": "farm",
+  "faces": 28
+ },
+ {
+  "asset": "Prop_BUF_Fence_V2",
+  "kind": "prop",
+  "group": "farm",
+  "faces": 28
+ },
+ {
+  "asset": "Prop_BUF_Fence_V3",
+  "kind": "prop",
+  "group": "farm",
+  "faces": 28
+ },
+ {
+  "asset": "Prop_BUF_Fence_V4",
+  "kind": "prop",
+  "group": "farm",
+  "faces": 28
+ },
+ {
+  "asset": "Prop_BUF_Fence_V5",
+  "kind": "prop",
+  "group": "farm",
+  "faces": 28
+ },
+ {
+  "asset": "Prop_BUF_Fence_V6",
+  "kind": "prop",
+  "group": "farm",
+  "faces": 28
+ },
+ {
+  "asset": "Prop_BUF_Fence_V7",
+  "kind": "prop",
+  "group": "farm",
+  "faces": 28
+ },
+ {
+  "asset": "Prop_BUF_Fence_V8",
+  "kind": "prop",
+  "group": "farm",
+  "faces": 28
+ },
+ {
+  "asset": "Prop_BUF_Fence_V9",
+  "kind": "prop",
+  "group": "farm",
+  "faces": 28
+ },
+ {
+  "asset": "Prop_BUF_Fence_V10",
+  "kind": "prop",
+  "group": "farm",
+  "faces": 28
+ },
+ {
+  "asset": "Prop_BUF_Fence_V11",
+  "kind": "prop",
+  "group": "farm",
+  "faces": 28
+ },
+ {
+  "asset": "Prop_BUF_Fence_V12",
+  "kind": "prop",
+  "group": "farm",
+  "faces": 28
+ },
+ {
+  "asset": "Prop_BUF_Gate_V1",
+  "kind": "prop",
+  "group": "farm",
+  "faces": 28
+ },
+ {
+  "asset": "Prop_BUF_Gate_V2",
+  "kind": "prop",
+  "group": "farm",
+  "faces": 28
+ },
+ {
+  "asset": "Prop_BUF_Gate_V3",
+  "kind": "prop",
+  "group": "farm",
+  "faces": 28
+ },
+ {
+  "asset": "Prop_BUF_Gate_V4",
+  "kind": "prop",
+  "group": "farm",
+  "faces": 28
+ },
+ {
+  "asset": "Prop_BUF_Path_V1",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 36
+ },
+ {
+  "asset": "Prop_BUF_Path_V2",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 45
+ },
+ {
+  "asset": "Prop_BUF_Path_V3",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 54
+ },
+ {
+  "asset": "Prop_BUF_Path_V4",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 27
+ },
+ {
+  "asset": "Prop_BUF_Path_V5",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 36
+ },
+ {
+  "asset": "Prop_BUF_Path_V6",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 45
+ },
+ {
+  "asset": "Prop_BUF_Path_V7",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 54
+ },
+ {
+  "asset": "Prop_BUF_Path_V8",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 27
+ },
+ {
+  "asset": "Prop_BUF_Path_V9",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 36
+ },
+ {
+  "asset": "Prop_BUF_Path_V10",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 45
+ },
+ {
+  "asset": "Prop_BUF_Path_V11",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 54
+ },
+ {
+  "asset": "Prop_BUF_Path_V12",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 27
+ },
+ {
+  "asset": "Prop_BUF_Path_V13",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 36
+ },
+ {
+  "asset": "Prop_BUF_Path_V14",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 45
+ },
+ {
+  "asset": "Prop_BUF_Path_V15",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 54
+ },
+ {
+  "asset": "Prop_BUF_Path_V16",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 27
+ },
+ {
+  "asset": "Prop_BUF_Path_V17",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 36
+ },
+ {
+  "asset": "Prop_BUF_Path_V18",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 45
+ },
+ {
+  "asset": "Prop_BUF_Path_V19",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 54
+ },
+ {
+  "asset": "Prop_BUF_Path_V20",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 27
+ },
+ {
+  "asset": "Prop_BUF_Decor_Lamp_V1",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Lamp_V2",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Lamp_V3",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Lamp_V4",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Lamp_V5",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Lamp_V6",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Sign_V1",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Sign_V2",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Sign_V3",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Sign_V4",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Sign_V5",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Sign_V6",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Bench_V1",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Bench_V2",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Bench_V3",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Bench_V4",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Bench_V5",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Bench_V6",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Barrel_V1",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Barrel_V2",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Barrel_V3",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Barrel_V4",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Barrel_V5",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Barrel_V6",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Crate_V1",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Crate_V2",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Crate_V3",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Crate_V4",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Crate_V5",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Crate_V6",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Cart_V1",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Cart_V2",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Cart_V3",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Cart_V4",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Cart_V5",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Cart_V6",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Wheelbarrow_V1",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Wheelbarrow_V2",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Wheelbarrow_V3",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Wheelbarrow_V4",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Wheelbarrow_V5",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Wheelbarrow_V6",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Scarecrow_V1",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Scarecrow_V2",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Scarecrow_V3",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Scarecrow_V4",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Scarecrow_V5",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Decor_Scarecrow_V6",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Dock_V1",
+  "kind": "prop",
+  "group": "water",
+  "faces": 38
+ },
+ {
+  "asset": "Prop_BUF_Dock_V2",
+  "kind": "prop",
+  "group": "water",
+  "faces": 38
+ },
+ {
+  "asset": "Prop_BUF_Dock_V3",
+  "kind": "prop",
+  "group": "water",
+  "faces": 38
+ },
+ {
+  "asset": "Prop_BUF_Dock_V4",
+  "kind": "prop",
+  "group": "water",
+  "faces": 38
+ },
+ {
+  "asset": "Veh_BUF_Raft_V1",
+  "kind": "vehicle",
+  "group": "water",
+  "faces": 50
+ },
+ {
+  "asset": "Veh_BUF_Raft_V2",
+  "kind": "vehicle",
+  "group": "water",
+  "faces": 50
+ },
+ {
+  "asset": "Veh_BUF_Raft_V3",
+  "kind": "vehicle",
+  "group": "water",
+  "faces": 50
+ },
+ {
+  "asset": "Veh_BUF_Raft_V4",
+  "kind": "vehicle",
+  "group": "water",
+  "faces": 50
+ },
+ {
+  "asset": "Prop_BUF_Shrine_Fire_V1",
+  "kind": "prop",
+  "group": "nft",
+  "faces": 13
+ },
+ {
+  "asset": "Prop_BUF_Shrine_Fire_V2",
+  "kind": "prop",
+  "group": "nft",
+  "faces": 13
+ },
+ {
+  "asset": "Prop_BUF_Shrine_Frost_V1",
+  "kind": "prop",
+  "group": "nft",
+  "faces": 13
+ },
+ {
+  "asset": "Prop_BUF_Shrine_Frost_V2",
+  "kind": "prop",
+  "group": "nft",
+  "faces": 13
+ },
+ {
+  "asset": "Prop_BUF_Shrine_Flora_V1",
+  "kind": "prop",
+  "group": "nft",
+  "faces": 13
+ },
+ {
+  "asset": "Prop_BUF_Shrine_Flora_V2",
+  "kind": "prop",
+  "group": "nft",
+  "faces": 13
+ },
+ {
+  "asset": "Prop_BUF_Shrine_Flux_V1",
+  "kind": "prop",
+  "group": "nft",
+  "faces": 13
+ },
+ {
+  "asset": "Prop_BUF_Shrine_Flux_V2",
+  "kind": "prop",
+  "group": "nft",
+  "faces": 13
+ },
+ {
+  "asset": "Prop_BUF_Shrine_Fog_V1",
+  "kind": "prop",
+  "group": "nft",
+  "faces": 13
+ },
+ {
+  "asset": "Prop_BUF_Shrine_Fog_V2",
+  "kind": "prop",
+  "group": "nft",
+  "faces": 13
+ },
+ {
+  "asset": "Prop_BUF_Shrine_Fang_V1",
+  "kind": "prop",
+  "group": "nft",
+  "faces": 13
+ },
+ {
+  "asset": "Prop_BUF_Shrine_Fang_V2",
+  "kind": "prop",
+  "group": "nft",
+  "faces": 13
+ },
+ {
+  "asset": "Prop_BUF_FlowerPatch_V1",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 160
+ },
+ {
+  "asset": "Prop_BUF_FlowerPatch_V2",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 160
+ },
+ {
+  "asset": "Prop_BUF_FlowerPatch_V3",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 160
+ },
+ {
+  "asset": "Prop_BUF_FlowerPatch_V4",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 160
+ },
+ {
+  "asset": "Prop_BUF_FlowerPatch_V5",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 160
+ },
+ {
+  "asset": "Prop_BUF_FlowerPatch_V6",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 160
+ },
+ {
+  "asset": "Prop_BUF_FlowerPatch_V7",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 160
+ },
+ {
+  "asset": "Prop_BUF_FlowerPatch_V8",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 160
+ },
+ {
+  "asset": "Prop_BUF_FlowerPatch_V9",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 160
+ },
+ {
+  "asset": "Prop_BUF_FlowerPatch_V10",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 160
+ },
+ {
+  "asset": "Prop_BUF_FlowerPatch_V11",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 160
+ },
+ {
+  "asset": "Prop_BUF_FlowerPatch_V12",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 160
+ },
+ {
   "asset": "Prop_BUF_Cliff_K001",
   "kind": "prop",
   "group": "kit",
@@ -3355,6 +4267,54 @@
  },
  {
   "asset": "Prop_BUF_Tree_K107",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 30
+ },
+ {
+  "asset": "Prop_BUF_Bush_K108",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 60
+ },
+ {
+  "asset": "Prop_BUF_Log_K109",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 10
+ },
+ {
+  "asset": "Prop_BUF_PathStone_K110",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 9
+ },
+ {
+  "asset": "Prop_BUF_Pine_K111",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 37
+ },
+ {
+  "asset": "Prop_BUF_Rock_K112",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 12
+ },
+ {
+  "asset": "Prop_BUF_Cliff_K113",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 12
+ },
+ {
+  "asset": "Prop_BUF_Boulder_K114",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 30
+ },
+ {
+  "asset": "Prop_BUF_Tree_K115",
   "kind": "prop",
   "group": "kit",
   "faces": 30

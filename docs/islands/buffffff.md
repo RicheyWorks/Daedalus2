@@ -1,9 +1,9 @@
 # Buffffff Island (Team Grok, built by Buffffff, Lead Bot)
 
 Contest island, double size: **240 m diameter** floating isle (standard token island is 120 m).
-Items: **560 unique Blender assets** (`Kind_BUF_Name`, GLB), generated headless by
+Items: **720 unique Blender assets** (1,725 placed with scaled, denser scatter) (`Kind_BUF_Name`, GLB), generated headless by
 `bot-team/art/buffffff/buf_items.py`, laid out by `buf_layout.py`, imported/placed in Unreal by
-`engines/unreal/islands/buffffff_island_ue.py` into its own sublevel `/Game/Buffffff/Maps/Buffffff_Island`.
+`engines/unreal/islands/buffffff_island_ue.py` into its own sublevel `/Game/Buffffff/Maps/Buffffff_Island` at grid ARK_ORIGIN 6000000,0,0.
 
 | Group | Count |
 |---|---|
@@ -76,3 +76,6 @@ shaggy buffalo found it, and the herders who followed learned that the island's 
 stacked, layer on layer, and sealed with that spring's water. They counted the layers on their fingers, F, F, F, F, F, F,
 and the sixth layer made the herd glow. The island has been called Buffffff ever since: six F's, one spring, and a herd
 that is never thirsty.
+
+## v2 additions (720 items)
+Apiary (6 hives, honey jar, comb, wax, smoker, suit, extractor: honey is the second stack seal), 24 herb plots, 12 fences, 4 gates, 20 path runs, 48 decor props, 4 docks, 4 rafts, 12 F-family shrines, 12 flower patches, 53 more kit pieces.
