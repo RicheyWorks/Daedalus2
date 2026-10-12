@@ -4,7 +4,7 @@
 
 #include "DaedalusLinkModule.h"
 #include "Engine/Texture2D.h"
-#include "RHI.h"
+#include "RHITypes.h"
 #include "HAL/IConsoleManager.h"
 #include "HttpModule.h"
 #include "ImageCore.h"

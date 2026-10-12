@@ -98,7 +98,9 @@ to it when something new breaks.
 29. A `.cpp` that logs with `UE_LOG(LogDaedalus, ...)` must include `DaedalusLinkModule.h` itself. The header
     that declares the category is not pulled in by the others (C2065).
 30. `FImageView` in 5.8 takes `(FColor*, W, H, EGammaSpace)`. The raw-pointer form needs a slice count as well, so
-    the 5-argument call is C2661. Write PNGs with `FImageUtils::SaveImageByExtension(Path, FImageView)`.
+    the 5-argument call is C2661. Write PNGs with `FImageUtils::SaveImageByExtension(Path, FImageView)`. `FUpdateTextureRegion2D` lives in
+    `RHITypes.h`, not `RHI.h`, and needs the RHI module. Find a 5.8 type with `Select-String '^struct FName'` over
+    the engine's `Source\Runtime\*\Public`, not from memory.
 31. Engine-free game cores go behind `THIRD_PARTY_INCLUDES_START/END`, and every name in them needs a check against
     Windows macros: `near`, `far`, `small`, `IN`, `OUT`, `ERROR`, `DrawText`. `grep -w` for these before the first
     build.
