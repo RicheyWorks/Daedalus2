@@ -133,3 +133,8 @@ to it when something new breaks.
   in 200. Place things by sampling the island meshes' bounds, not open space.
 - **A failed search must back off.** A foe with no route re-ran A* every frame (1,752 searches a minute);
   failures now wait 1.5 s. Watch the harness's counters (`nav_stats`) for runaway work.
+- **Copy structs you read from Unreal Python.** `get_editor_property("target_cube")` returned a view that kept
+  following the hero's target; after mining it pointed at the next cube and the check read the wrong one. Copy
+  it (`unreal.IntVector(t.x, t.y, t.z)`) before the world changes.
+- **Aim tests at what's there after the change.** Once a cube is mined, a ray aimed at it goes through the hole
+  and past reach; aim at the hole's floor to place back.

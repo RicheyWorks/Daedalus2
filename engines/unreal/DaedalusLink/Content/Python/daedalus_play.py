@@ -432,7 +432,8 @@ def scenario_dig(p):
     for _ in range(5):
         yield
     target = h.get_editor_property("target_type")
-    cube = h.get_editor_property("target_cube")
+    t = h.get_editor_property("target_cube")
+    cube = unreal.IntVector(t.x, t.y, t.z)   # a copy: get_editor_property hands back a live view of the struct
     mined0 = h.get_editor_property("cubes_mined")
     sent0 = live.get_editor_property("edits_sent")
     hardness = unreal.DaedalusHero.hardness(target) if target else 0
