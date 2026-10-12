@@ -439,7 +439,7 @@ if ($Build) {
     $vc = Find-VcTools
     $busy = Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.Path -like "*Microsoft Visual Studio\Installer*" }
     if ($busy -and -not $WhatIfOnly) {
-        Fail "the Visual Studio Installer is still running; let it finish, then run this again"
+        Fail "the Visual Studio Installer window is open: if it is installing, let it finish; then close it and run this again"
         $vc = $null
         $script:VcReported = $true
     } elseif (-not $vc -and -not $WhatIfOnly -and (Find-AnyVs)) {
