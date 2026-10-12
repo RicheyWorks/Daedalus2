@@ -2,9 +2,9 @@
   "manifest_version": "0.3",
   "name": "unreal-connector",
   "display_name": "Unreal Engine",
-  "version": "1.0.0",
-  "description": "Lets Claude operate your open Unreal Editor: inspect the level, run Python, screenshot the viewport, play, save, and import Daedalus worlds.",
-  "long_description": "Pairs with the Claude Unreal Bridge, which the DaedalusLink plugin starts inside the Unreal Editor on 127.0.0.1. This extension forwards Claude's tool calls to it. Nothing leaves your computer except what Claude reads back through the tools.",
+  "version": "1.1.0",
+  "description": "Lets Claude operate your open Unreal Editor: inspect the level, run Python, screenshot the viewport, play, save, and answer dialogs.",
+  "long_description": "Pairs with the Claude Unreal Bridge plugin, which listens inside the Unreal Editor on 127.0.0.1. This extension forwards Claude's tool calls to it. Nothing leaves your computer except what Claude reads back through the tools.",
   "author": { "name": "Richmond" },
   "license": "MIT",
   "server": {
@@ -25,15 +25,17 @@
     { "name": "play", "description": "Start Play In Editor" },
     { "name": "stop", "description": "Stop Play In Editor" },
     { "name": "save", "description": "Save the level and changed assets" },
-    { "name": "import_daedalus_world", "description": "Import a Daedalus world from its server, verify it, and frame it" },
-    { "name": "frame_daedalus_world", "description": "Point the viewport at a Daedalus world" },
+    { "name": "list_commands", "description": "Every bridge command, including project add-ons" },
+    { "name": "run_command", "description": "Run any bridge command by name" },
+    { "name": "editor_windows", "description": "See every Unreal window, dialogs included, even when the editor is frozen" },
+    { "name": "window_input", "description": "Answer a dialog: click or press keys in an Unreal window" },
     { "name": "output_log", "description": "Read the editor log" }
   ],
   "user_config": {
     "port": {
       "type": "number",
       "title": "Unreal bridge port",
-      "description": "The port the Claude Unreal Bridge listens on inside the editor (DAEDALUS_BRIDGE_PORT)",
+      "description": "The port the Claude Unreal Bridge listens on inside the editor (CLAUDE_UNREAL_PORT)",
       "default": 9877,
       "min": 1024,
       "max": 65535,
@@ -41,5 +43,5 @@
     }
   },
   "compatibility": { "platforms": ["win32", "darwin", "linux"], "runtimes": { "node": ">=18.0.0" } },
-  "keywords": ["unreal", "unreal engine", "3d", "game", "daedalus"]
+  "keywords": ["unreal", "unreal engine", "3d", "game", "automation", "mcp"]
 }

@@ -46,7 +46,7 @@ param(
     [switch]$Import,
     [switch]$Verify,
     [switch]$Open,
-    [switch]$Connector,
+    [switch]$Connector,   # also open the Claude extension installer (once)
     [switch]$SkipPackage,
     [switch]$NoServerStart,
     [switch]$WhatIfOnly
@@ -677,30 +677,22 @@ if ($Import -or $Verify) {
     }
 }
 
-# --- Claude Unreal connector (-Connector): the desktop extension that lets Claude operate the editor ----------
-if ($Connector) {
-    Say "Claude Unreal connector"
-    $ext = Join-Path $PSScriptRoot "claude-extension"
-    $mcpb = Join-Path (Join-Path $ProjectDir "Saved") "unreal-connector.mcpb"
-    if (-not (Test-Path (Join-Path $ext "manifest.json"))) {
-        Fail "claude-extension not found next to this script"
-    } elseif ($WhatIfOnly) {
-        Write-Host "    would pack $ext into $mcpb and open it in Claude"
-    } else {
-        # An .mcpb is a zip of the extension (manifest.json at its root); the tests stay out of it. Entries are
-        # written by name with '/' (Compress-Archive in Windows PowerShell 5.1 writes 'server\index.js').
-        New-Item -ItemType Directory -Force -Path (Split-Path $mcpb -Parent) | Out-Null
-        if (Test-Path $mcpb) { Remove-Item $mcpb }
-        Add-Type -AssemblyName System.IO.Compression, System.IO.Compression.FileSystem
-        $archive = [System.IO.Compression.ZipFile]::Open($mcpb, [System.IO.Compression.ZipArchiveMode]::Create)
-        try {
-            foreach ($entry in @("manifest.json", "server/index.js")) {
-                [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($archive, (Join-Path $ext $entry), $entry) | Out-Null
-            }
-        } finally { $archive.Dispose() }
-        Write-Host "    packed $mcpb; opening it in Claude: click Install (if Windows asks which app, pick Claude)"
-        Start-Process $mcpb
-    }
+# --- The Claude Unreal connector (connectors/claude-unreal-connector) -----------------------------------------
+# Its bridge plugin goes into the project every run (Python only: nothing to build), through the connector's own
+# installer, so Claude can operate the editor. -Connector also opens its Claude extension installer, which is
+# needed once.
+$ConnectorInstall = Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) "connectors\claude-unreal-connector\install.ps1"
+Say "Claude Unreal connector"
+if (-not (Test-Path $ConnectorInstall)) {
+    Warn "connectors\claude-unreal-connector not found next to this repo; Claude won't be able to operate the editor"
+} elseif ($WhatIfOnly) {
+    Write-Host "    would install the Claude Unreal Bridge plugin$(if ($Connector) { ' and open the Claude extension installer' })"
+} elseif (-not (Test-Path $Project)) {
+    Warn "no project yet"
+} else {
+    try {
+        if ($Connector) { & $ConnectorInstall -Project $Project } else { & $ConnectorInstall -Project $Project -NoExtension }
+    } catch { Fail "the connector did not install: $($_.Exception.Message)" }
 }
 
 # A Start-menu shortcut to this project's editor. It opens the project in one click, and lets Claude's computer

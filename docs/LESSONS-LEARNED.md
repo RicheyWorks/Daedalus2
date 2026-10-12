@@ -104,3 +104,27 @@ What made the line reliable:
   local server, chained into the same line.
 - **Ask for the end of the output, after `cls`.** Long pastes held old scrollback, and once a fix was
   read from an earlier run instead of the latest one.
+
+### Use the browser when the shell can't reach (2026-10-11)
+
+> "Use Chrome if you need." "Keep that in lessons learned: use Chrome when needed." (RicheyWorks)
+
+Some steps can't be done from the cloud shell: creating a public GitHub repository, or a site that needs his
+sign-in. Don't stop there. Do the step in his browser (Claude in Chrome, or the built-in browser), which has
+his own sign-ins, and tell him what was done. The browser is also how to reach a page the shell's network
+allowlist blocks.
+
+### Make a tool modular before it is shared (2026-10-11)
+
+> "Make this design modular. I want to share this with Grok bots etc., so we will put it on GitHub and
+> update it as we go." (RicheyWorks)
+
+The Unreal connector began inside DaedalusLink, with Daedalus commands inside the bridge. To share it, it
+was split:
+- **A generic core.** `connectors/claude-unreal-connector` holds the bridge plugin, the MCP extension, an
+  installer and tests, and knows nothing of Daedalus.
+- **A public extension point.** `register(name, fn, description, params)` adds commands, and
+  `list_commands` / `run_command` reach them.
+- **A protocol doc and a stdlib client,** so agents without MCP (Grok bots) can use the same bridge.
+
+Daedalus is now just one user of the connector. A test checks that the two sides stay apart.

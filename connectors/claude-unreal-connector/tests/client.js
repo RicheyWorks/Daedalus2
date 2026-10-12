@@ -5,7 +5,7 @@
 const { spawn } = require('child_process');
 const path = require('path');
 const port = process.argv[2];
-const srv = spawn(process.execPath, [path.join(__dirname, '..', 'server', 'index.js')], { env: Object.assign({}, process.env, { UNREAL_BRIDGE_PORT: port }) });
+const srv = spawn(process.execPath, [path.join(__dirname, '..', 'extension', 'server', 'index.js')], { env: Object.assign({}, process.env, { UNREAL_BRIDGE_PORT: port }) });
 let buf = '', next = 1; const waiting = {};
 srv.stdout.on('data', (d) => { buf += d; let i; while ((i = buf.indexOf('\n')) >= 0) { const m = JSON.parse(buf.slice(0, i)); buf = buf.slice(i + 1); if (waiting[m.id]) { waiting[m.id](m); delete waiting[m.id]; } } });
 const rpc = (method, params) => new Promise((res) => { const id = next++; waiting[id] = res; srv.stdin.write(JSON.stringify({ jsonrpc: '2.0', id, method, params }) + '\n'); });
@@ -18,7 +18,7 @@ const check = (label, ok, detail) => { total++; if (ok) pass++; console.log((ok 
   const init = await rpc('initialize', { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 't', version: '0' } });
   check('initialize names the server and offers tools', init.result.serverInfo.name === 'unreal' && init.result.capabilities.tools);
   const list = (await rpc('tools/list', {})).result.tools.map((t) => t.name);
-  check('11 tools listed, every one with a schema', list.length === 11 && list.includes('import_daedalus_world'), list.join(','));
+  check('13 tools listed, none of them project-specific', list.length === 13 && list.includes('run_command') && list.includes('window_input') && !list.some((n) => /daedalus/.test(n)), list.join(','));
 
   let r = await call('unreal_status');
   let j = JSON.parse(text(r));
@@ -51,6 +51,18 @@ const check = (label, ok, detail) => { total++; if (ok) pass++; console.log((ok 
   r = await call('stop');
   check('stop ends it', JSON.parse(text(r)).playing === false, text(r));
 
+  r = await call('list_commands');
+  j = JSON.parse(text(r));
+  const addon = j.commands.find((c) => c.name === 'test.countdown');
+  check('list_commands shows built-ins and a project add-on with its params', addon && addon.params.from === 'int' && j.commands.some((c) => c.name === 'execute_python'), text(r));
+  r = await call('run_command', { command: 'test.countdown', params: { from: 4, who: 'grok' } });
+  j = JSON.parse(text(r));
+  check('run_command runs the add-on across editor ticks', JSON.stringify(j.counted) === '[4,3,2,1]' && j.by === 'grok', text(r));
+  r = await call('run_command', { command: 'nope.missing' });
+  check('an unknown command is an error that lists the known ones', r.isError && /test\.countdown/.test(text(r)), text(r));
+  r = await call('editor_windows');
+  check('the window harness says plainly when it cannot run (not Windows)', process.platform === 'win32' || (r.isError && /Windows only/.test(text(r))), text(r));
+
   r = await call('save');
   check('save saves the level and the changed packages', JSON.parse(text(r)).level_saved === true, text(r));
 
@@ -59,7 +71,7 @@ const check = (label, ok, detail) => { total++; if (ok) pass++; console.log((ok 
   check('output_log filters the editor log', j.lines.length === 1 && j.lines[0].includes('something broke'), text(r));
 
   // Canary: once the "editor" stops ticking (a modal dialog), a call must time out with a reason, not hang.
-  await new Promise((res) => setTimeout(res, 6500));
+  await call('run_command', { command: 'test.freeze' });
   r = await call('unreal_status');
   check('a frozen editor gives a clear timeout, not a hang', r.isError && /did not answer|in time/.test(text(r)), text(r));
 

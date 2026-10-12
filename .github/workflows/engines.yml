@@ -37,16 +37,19 @@ jobs:
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public mesh_core_test.cpp -o mesh_core_test && ./mesh_core_test isle8.mesh.txt
       - name: import script compiles and refuses a non-package
         run: |
-          python3 -m py_compile ../DaedalusLink/Content/Python/import_world_package.py ../DaedalusLink/Content/Python/daedalus_view.py ../DaedalusLink/Content/Python/init_unreal.py live_parity.py
+          python3 -m py_compile ../DaedalusLink/Content/Python/import_world_package.py ../DaedalusLink/Content/Python/daedalus_view.py ../DaedalusLink/Content/Python/init_unreal.py ../DaedalusLink/Content/Python/daedalus_bridge_commands.py live_parity.py
           echo nope > bad.zip
           if python3 ../DaedalusLink/Content/Python/import_world_package.py bad.zip; then exit 1; fi
       - name: the import verifier can say no
         run: python3 verify_judge_test.py
       - name: the Claude Unreal connector, end to end against a stand-in editor
         run: |
-          python3 -m py_compile ../DaedalusLink/Content/Python/claude_unreal_bridge.py
-          (python3 ../claude-extension/tests/host.py 9911 30 8 &) ; sleep 2
-          node ../claude-extension/tests/client.js 9911
+          C=../../../connectors/claude-unreal-connector
+          python3 -m py_compile $C/plugin/ClaudeUnrealBridge/Content/Python/*.py $C/clients/python/unreal_client.py
+          (python3 $C/tests/host.py 9911 60 &) ; sleep 2
+          node $C/tests/client.js 9911
+      - name: DaedalusLink adds its commands through the connector's register()
+        run: python3 bridge_commands_test.py
 
   setup-plan:
     name: setup-unreal.ps1 plan (Windows)

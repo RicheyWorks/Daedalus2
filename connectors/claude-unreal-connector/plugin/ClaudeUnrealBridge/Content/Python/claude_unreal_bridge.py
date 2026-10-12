@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: MIT
-"""Claude Unreal Bridge: lets Claude operate the open Unreal Editor (ADR-032), the way the Claude Blender
-connector operates Blender.
+"""Claude Unreal Bridge: lets Claude, or any agent, operate the open Unreal Editor.
+Part of claude-unreal-connector (MIT). It works the same way as the Claude Blender connector.
 
-A small server inside the editor listens on 127.0.0.1 (default port 9877, env DAEDALUS_BRIDGE_PORT). Each
+A small server inside the editor listens on 127.0.0.1 (default port 9877, env CLAUDE_UNREAL_PORT). Each
 connection sends one JSON line {"id", "type", "params"} and gets one JSON line back
 {"id", "status": "ok"|"error", "result" | "message", "traceback"}.
 
@@ -10,11 +10,16 @@ Every command runs on the editor's game thread: socket threads only queue jobs, 
 runs them. A command may be a generator. It then runs one step per editor tick, so it can wait for something
 the editor does over several frames (a screenshot being written, Play starting) without freezing the editor.
 
-Commands: ping, get_level_info, get_actor_info, execute_python, viewport_screenshot, play, stop, save,
-import_world, frame_world, output_log. Anything else goes through execute_python with the full `unreal` API.
+Built-in commands: ping, list_commands, get_level_info, get_actor_info, execute_python, viewport_screenshot,
+play, stop, save, output_log. Anything else goes through execute_python, with the full `unreal` API.
+
+Projects add their own commands with register(name, fn, description, params). DaedalusLink, for example,
+registers daedalus.import_world. Agents find them with list_commands and call them by name. A command
+function takes the params dict and returns a JSON-serializable value, or it is a generator that yields once
+per editor tick until it returns.
 
 Only 127.0.0.1 is served, so other machines can't reach it. Any program on this computer can while it runs.
-Set DAEDALUS_BRIDGE=off to keep it from starting.
+Set CLAUDE_UNREAL_BRIDGE=off to keep it from starting.
 """
 
 import base64
@@ -224,35 +229,6 @@ def cmd_save(_p):
     return {"level_saved": bool(saved_level), "dirty_packages_saved": bool(saved_all)}
 
 
-def _daedalus_modules():
-    here = os.path.dirname(os.path.abspath(__file__))
-    if here not in sys.path:
-        sys.path.insert(0, here)
-    import import_world_package
-    import daedalus_view
-    return import_world_package, daedalus_view
-
-
-def cmd_import_world(p):
-    """Download the world's package from the Daedalus server, import it, place the view, verify, and frame it."""
-    iwp, view = _daedalus_modules()
-    server = p.get("server", "http://localhost:8088")
-    world = p.get("world", "world-zero")
-    zip_path = iwp.fetch(server, world, tempfile.mkdtemp(prefix="daedalus_"))
-    manifest, _, _names = iwp.read_package(zip_path)
-    iwp.import_into_unreal(zip_path, manifest, live_only=bool(p.get("live")))
-    checks = iwp.judge(manifest, iwp.observe(manifest), live_only=bool(p.get("live")))
-    iwp.report(manifest, checks, unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_saved_dir()))
-    view.frame_editor(world)
-    return {"world": manifest["world"], "geometry": manifest.get("geometry"), "ok": all(c["ok"] for c in checks),
-            "checks": checks}
-
-
-def cmd_frame_world(p):
-    _, view = _daedalus_modules()
-    return {"framed": bool(view.frame_editor(p.get("world")))}
-
-
 def cmd_output_log(p):
     """The last lines of the editor's log file, optionally only those containing `filter`."""
     lines = int(p.get("lines", 200))
@@ -269,8 +245,14 @@ def cmd_output_log(p):
     return {"file": logs[0], "lines": text[-lines:]}
 
 
+def cmd_list_commands(_p):
+    return {"commands": [{"name": n, "description": DESCRIPTIONS.get(n, ""), "params": PARAMS.get(n, {})}
+                         for n in sorted(COMMANDS)]}
+
+
 COMMANDS = {
     "ping": cmd_ping,
+    "list_commands": cmd_list_commands,
     "get_level_info": cmd_get_level_info,
     "get_actor_info": cmd_get_actor_info,
     "execute_python": cmd_execute_python,
@@ -278,10 +260,38 @@ COMMANDS = {
     "play": cmd_play,
     "stop": cmd_stop,
     "save": cmd_save,
-    "import_world": cmd_import_world,
-    "frame_world": cmd_frame_world,
     "output_log": cmd_output_log,
 }
+
+
+DESCRIPTIONS = {
+    "ping": "Engine version, project, open level, actor count, whether Play is running",
+    "list_commands": "Every command this bridge answers, with its description and parameters",
+    "get_level_info": "Actors in the open level (label, class, Outliner folder, location); params limit, folder",
+    "get_actor_info": "One actor by label or name: transform, bounds, components, meshes, materials",
+    "execute_python": "Run Python on the game thread with `unreal` imported; returns stdout and `result`",
+    "viewport_screenshot": "A PNG of the active level viewport (base64); params width, height",
+    "play": "Start Play In Editor (or Simulate) and wait until it runs; param simulate",
+    "stop": "Stop Play In Editor and wait until it ends",
+    "save": "Save the current level and every changed asset",
+    "output_log": "The last lines of the editor log; params lines, filter",
+}
+PARAMS = {
+    "get_level_info": {"limit": "int", "folder": "str"}, "get_actor_info": {"name": "str (required)"},
+    "execute_python": {"code": "str (required)"}, "viewport_screenshot": {"width": "int", "height": "int"},
+    "play": {"simulate": "bool"}, "output_log": {"lines": "int", "filter": "str"},
+}
+
+
+def register(name, fn, description="", params=None):
+    """Add a command, e.g. register("daedalus.import_world", fn, "...", {"server": "str"}). Namespaced names
+    ("project.verb") keep add-ons from colliding with each other and with built-ins. Registering a name
+    again replaces it, so a project can reload its commands."""
+    if not name or not callable(fn):
+        raise ValueError("register needs a name and a callable")
+    COMMANDS[name] = fn
+    DESCRIPTIONS[name] = description
+    PARAMS[name] = dict(params or {})
 
 
 # ---------------------------------------------------------------- the game-thread pump
@@ -388,7 +398,7 @@ def start(port=None, register_tick=True):
     """Listen on 127.0.0.1:port and pump commands on the editor's ticks. Returns the port."""
     if _server["sock"] is not None:
         return _server["port"]
-    port = int(port or os.environ.get("DAEDALUS_BRIDGE_PORT") or DEFAULT_PORT)
+    port = int(port or os.environ.get("CLAUDE_UNREAL_PORT") or os.environ.get("DAEDALUS_BRIDGE_PORT") or DEFAULT_PORT)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.bind(("127.0.0.1", port))

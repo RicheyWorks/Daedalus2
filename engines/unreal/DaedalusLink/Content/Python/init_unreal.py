@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: MIT
 """Runs when the editor starts (Unreal runs every plugin's Content/Python/init_unreal.py).
 
-1. Starts the Claude Unreal Bridge (claude_unreal_bridge.py) on 127.0.0.1:9877, so Claude can operate this editor
-   (set DAEDALUS_BRIDGE=off to keep it from starting).
+1. Adds the Daedalus commands (daedalus.import_world, daedalus.frame_world) to the Claude Unreal Bridge, the
+   separate claude-unreal-connector plugin that lets Claude operate this editor.
 2. Once a level holding a Daedalus world has opened, points the viewport at the world once, so the islands are
    the first thing on screen instead of empty sky.
 Headless runs (commandlets) have no viewport and skip both.
@@ -47,9 +47,10 @@ if daedalus_view is not None and not _headless():
         unreal.log("Daedalus: viewport framing off (%s)" % e)
 
 
-if not _headless() and os.environ.get("DAEDALUS_BRIDGE", "on").lower() != "off":
+
+if not _headless():
     try:
-        import claude_unreal_bridge
-        claude_unreal_bridge.start()
-    except Exception as e:  # a port in use (a second editor) must not stop the editor opening
-        unreal.log_warning("Claude Unreal Bridge did not start: %s" % e)
+        import daedalus_bridge_commands
+        daedalus_bridge_commands.install()
+    except Exception as e:
+        unreal.log_warning("Daedalus: could not add its commands to the Claude Unreal Bridge (%s)" % e)

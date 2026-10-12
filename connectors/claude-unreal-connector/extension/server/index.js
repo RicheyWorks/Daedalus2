@@ -1,13 +1,16 @@
 #!/usr/bin/env node
-// Unreal connector for Claude: a dependency-free MCP server (stdio, JSON-RPC 2.0) that forwards tool calls to the
-// Claude Unreal Bridge running inside the Unreal Editor (DaedalusLink's claude_unreal_bridge.py).
+// claude-unreal-connector: a dependency-free MCP server (stdio, JSON-RPC 2.0) that forwards tool calls to the
+// Claude Unreal Bridge plugin running inside the Unreal Editor, plus a window harness (win.ps1) that answers
+// dialogs from outside the editor. MIT. See PROTOCOL.md to drive the bridge without MCP.
 'use strict';
 const net = require('net');
+const path = require('path');
+const { execFile } = require('child_process');
 const readline = require('readline');
 
 const HOST = process.env.UNREAL_BRIDGE_HOST || '127.0.0.1';
 const PORT = parseInt(process.env.UNREAL_BRIDGE_PORT || '9877', 10) || 9877;
-const SERVER_INFO = { name: 'unreal', version: '1.0.0' };
+const SERVER_INFO = { name: 'unreal', version: '1.1.0' };
 const SUPPORTED = ['2025-06-18', '2025-03-26', '2024-11-05'];
 const none = { type: 'object', properties: {}, additionalProperties: false };
 
@@ -35,15 +38,23 @@ const TOOLS = [
     inputSchema: { type: 'object', properties: { simulate: { type: 'boolean', description: 'Simulate instead of possessing a player' } }, additionalProperties: false } },
   { name: 'stop', command: 'stop', timeout: 60000, inputSchema: none, description: 'Stop Play In Editor and wait until it has ended.' },
   { name: 'save', command: 'save', timeout: 300000, inputSchema: none, description: 'Save the current level and every changed asset.' },
-  { name: 'import_daedalus_world', command: 'import_world', timeout: 1800000,
-    description: 'Download a Daedalus World Package from its server, import it into the open project (chunk meshes, materials, ark, live actor, a view PlayerStart), verify the result against the manifest, and frame the viewport on it. Returns every PASS/FAIL check.',
+  { name: 'list_commands', command: 'list_commands', timeout: 15000, inputSchema: none,
+    description: 'Every command the bridge answers, including ones a project added (for example daedalus.import_world), with descriptions and parameters. Call run_command to use an add-on command.' },
+  { name: 'run_command', timeout: 1800000,
+    description: 'Run any bridge command by name with its params, usually a project add-on found with list_commands (e.g. {"command": "daedalus.import_world", "params": {"server": "http://localhost:8088"}}).',
     inputSchema: { type: 'object', properties: {
-      server: { type: 'string', description: 'Daedalus server (default http://localhost:8088)' },
-      world: { type: 'string', description: 'World id (default world-zero)' },
-      live: { type: 'boolean', description: 'Only the live actor, no baked chunks' } }, additionalProperties: false } },
-  { name: 'frame_daedalus_world', command: 'frame_world', timeout: 30000,
-    description: 'Point the editor viewport at a Daedalus world in the open level (the first one if no id).',
-    inputSchema: { type: 'object', properties: { world: { type: 'string' } }, additionalProperties: false } },
+      command: { type: 'string', description: 'Command name from list_commands' },
+      params: { type: 'object', description: 'Its parameters' } }, required: ['command'], additionalProperties: false } },
+  { name: 'editor_windows', local: 'list', timeout: 60000,
+    description: 'List every open Unreal Editor window, including dialogs and popups, each with a picture. This works OUTSIDE the editor, so use it whenever another tool times out: a modal dialog (a message box, a save prompt, "build lighting", a crash reporter) has frozen the editor and its bridge. The largest window is the editor itself (main: true). Then answer the dialog with window_input. Windows only.',
+    inputSchema: { type: 'object', properties: { max_images: { type: 'integer', minimum: 0, maximum: 12, description: 'Pictures for at most this many windows (default 6)' } }, additionalProperties: false } },
+  { name: 'window_input', local: 'input', timeout: 30000,
+    description: 'Answer an Unreal dialog, or drive any editor window, from outside the editor: brings the window (hwnd from editor_windows) to the front, optionally clicks at (x, y) in that window\'s own pixels as seen in its editor_windows picture (divide by image_scale if the picture was scaled), then presses keys. Keys: enter, escape, tab, space, left, right, up, down, y, n, alt+f4, separated by spaces (e.g. "tab enter"). Reports whether the window closed. Windows only.',
+    inputSchema: { type: 'object', properties: {
+      hwnd: { type: 'integer', description: 'Window handle from editor_windows' },
+      keys: { type: 'string', description: 'Keys to press, e.g. "enter" for a default OK, "escape" to cancel' },
+      x: { type: 'integer', minimum: 0, description: 'Click x inside the window (window pixels)' },
+      y: { type: 'integer', minimum: 0, description: 'Click y inside the window (window pixels)' } }, required: ['hwnd'], additionalProperties: false } },
   { name: 'output_log', command: 'output_log', timeout: 30000,
     description: 'The last lines of the editor log, optionally filtered (e.g. "Error", "Daedalus", "LogPython").',
     inputSchema: { type: 'object', properties: {
@@ -63,7 +74,7 @@ function callUnreal(type, params, timeoutMs) {
       sock.destroy();
       err ? reject(err) : resolve(val);
     };
-    const timer = setTimeout(() => finish(new Error(`Unreal did not answer within ${Math.round(timeoutMs / 1000)}s. It may be compiling shaders, loading, or showing a dialog.`)), timeoutMs);
+    const timer = setTimeout(() => finish(new Error(`Unreal did not answer within ${Math.round(timeoutMs / 1000)}s. It may be compiling shaders or loading, or a dialog is waiting: call editor_windows to see it and window_input to answer it.`)), timeoutMs);
     sock.on('connect', () => sock.write(JSON.stringify({ id: 1, type, params: Object.assign({ bridge_timeout: timeoutMs / 1000 }, params || {}) }) + '\n'));
     sock.on('data', (d) => {
       chunks.push(d);
@@ -74,18 +85,56 @@ function callUnreal(type, params, timeoutMs) {
     });
     sock.on('error', (e) => {
       if (e.code === 'ECONNREFUSED' || e.code === 'ETIMEDOUT' || e.code === 'EHOSTUNREACH') {
-        finish(new Error(`Could not reach the Unreal Editor on ${HOST}:${PORT}. Open the project (the DaedalusLink plugin starts the Claude Unreal Bridge with the editor): setup-unreal.ps1 -Open does it in one line.`));
+        finish(new Error(`Could not reach the Unreal Editor on ${HOST}:${PORT}. Open the project in the Unreal Editor with the Claude Unreal Bridge plugin enabled (install.ps1 sets that up).`));
       } else finish(e);
     });
     sock.on('close', () => finish(new Error('Unreal closed the connection before answering.')));
   });
 }
 
+// The window harness: win.ps1 run by Windows PowerShell, outside the editor.
+function runWindows(op, args, timeoutMs) {
+  return new Promise((resolve) => {
+    if (process.platform !== 'win32') return resolve({ ok: false, message: 'editor_windows and window_input work on Windows only' });
+    const a = ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', path.join(__dirname, 'win.ps1'), '-Op', op];
+    if (op === 'list' && args.max_images !== undefined) a.push('-MaxImages', String(args.max_images));
+    if (op === 'input') {
+      a.push('-Hwnd', String(args.hwnd));
+      if (args.keys) a.push('-Keys', String(args.keys));
+      if (args.x !== undefined && args.y !== undefined) a.push('-X', String(args.x), '-Y', String(args.y));
+    }
+    execFile('powershell.exe', a, { timeout: timeoutMs, maxBuffer: 64 * 1024 * 1024, windowsHide: true }, (err, stdout, stderr) => {
+      const line = String(stdout || '').trim().split(/\r?\n/).pop();
+      try { resolve(JSON.parse(line)); } catch (e) {
+        resolve({ ok: false, message: 'window harness failed: ' + ((err && err.message) || '') + ' ' + String(stderr || '').slice(0, 2000) });
+      }
+    });
+  });
+}
+
+async function runLocal(tool, args) {
+  const r = await runWindows(tool.local, args || {}, tool.timeout);
+  if (!r || r.ok === false) return { isError: true, content: [{ type: 'text', text: (r && r.message) || 'window harness failed' }] };
+  const content = [];
+  for (const w of r.windows || []) {
+    if (w.png) {
+      content.push({ type: 'text', text: `window ${w.hwnd} "${w.title}"${w.main ? ' (main editor)' : ''} ${w.width}x${w.height}, image_scale ${w.image_scale}` });
+      content.push({ type: 'image', data: w.png, mimeType: 'image/png' });
+      delete w.png;
+    }
+  }
+  content.push({ type: 'text', text: JSON.stringify(r, null, 2) });
+  return { content };
+}
+
 async function runTool(name, args) {
   const tool = TOOLS.find((t) => t.name === name);
   if (!tool) return { isError: true, content: [{ type: 'text', text: `Unknown tool: ${name}` }] };
+  if (tool.local) return runLocal(tool, args);
+  const command = tool.command || (args && args.command);
+  const params = tool.command ? (args || {}) : ((args && args.params) || {});
   let reply;
-  try { reply = await callUnreal(tool.command, args || {}, tool.timeout); } catch (e) {
+  try { reply = await callUnreal(command, params, tool.timeout); } catch (e) {
     return { isError: true, content: [{ type: 'text', text: e.message }] };
   }
   if (!reply || reply.status !== 'ok') {
@@ -113,7 +162,7 @@ async function handle(msg) {
           protocolVersion: SUPPORTED.includes(asked) ? asked : SUPPORTED[0],
           capabilities: { tools: {} },
           serverInfo: SERVER_INFO,
-          instructions: 'Operates the user\'s open Unreal Editor. Call unreal_status first; inspect with get_level_info / get_actor_info; do anything with execute_python (the full unreal API); check work with viewport_screenshot; play/stop for Play In Editor; save to keep changes. import_daedalus_world brings a Daedalus world in from its server and verifies it.',
+          instructions: 'Operates the user\'s open Unreal Editor. If a call times out, a dialog is probably waiting: editor_windows shows it, window_input answers it. Call unreal_status first; inspect with get_level_info / get_actor_info; do anything with execute_python (the full unreal API); check work with viewport_screenshot; play/stop for Play In Editor; save to keep changes. list_commands shows project add-ons; run_command calls them.',
         } });
       }
       case 'ping': return send({ jsonrpc: '2.0', id, result: {} });
