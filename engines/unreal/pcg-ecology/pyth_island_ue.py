@@ -52,7 +52,7 @@ if lvl is None:
     if eal.does_asset_exist(SUB): unreal.EditorLevelUtils.add_level_to_world(w, SUB, unreal.LevelStreamingAlwaysLoaded)
     else: unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingAlwaysLoaded, SUB, False)
     w = ues.get_editor_world(); lvl = [l for l in unreal.EditorLevelUtils.get_levels(w) if SUB.split("/")[-1] in l.get_path_name()][0]
-unreal.EditorLevelUtils.make_level_current(lvl)
+les.set_current_level_by_name(SUB.split("/")[-1])
 for a in eas.get_all_level_actors():
     if a.actor_has_tag(TAG): eas.destroy_actor(a)
 N = {"n": 0}
@@ -135,10 +135,11 @@ for i, k in enumerate(["Birch", "Alder", "Hazel", "Elder", "Gorse"]):
         nm = ("Prop_Tree_PYT_%s_V%02d" if k in ("Birch", "Alder") else "Prop_Shrub_PYT_%s_V%02d") % (k, 1 + j2)
         a = (i * 6 + j2) / 30 * 2 * math.pi; nocol(put(nm, (HALF - 1300) * math.cos(a), (HALF - 1300) * math.sin(a), 0, R.uniform(0, 360), folder="Edge"))
 # 4 save
-unreal.EditorLevelUtils.make_level_current(lvl); les.save_current_level()
+les.set_current_level_by_name(SUB.split("/")[-1]); les.save_current_level()
 persist_saved = False
 if not pre_dirty: persist_saved = ELS.save_dirty_packages(True, False)
 dirty = [p.get_name() for p in ELS.get_dirty_map_packages()] + [p.get_name() for p in ELS.get_dirty_content_packages()]
 ues.set_level_viewport_camera_info(ORIGIN + unreal.Vector(-9000, -9000, 7000), unreal.Rotator(roll=0, pitch=-32, yaw=45))
 result = {"imported": len(tasks), "actors": N["n"], "biomes": counts, "animals": animals, "pre_dirty": pre_dirty,
           "persistent_saved": persist_saved, "dirty_after": dirty, "missing_mesh": [k for k, v in _mc.items() if v is None][:15]}
+

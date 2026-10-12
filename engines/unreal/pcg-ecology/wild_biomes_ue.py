@@ -37,7 +37,7 @@ if lvl is None:
     ew = ues.get_editor_world()
     lvl = next(s for s in unreal.EditorLevelUtils.get_levels(ew) if SUB.split("/")[-1] in s.get_path_name())
     log.append("sublevel added")
-unreal.EditorLevelUtils.make_level_current(lvl)
+les.set_current_level_by_name(SUB.split("/")[-1])
 # clear our previous run (only our tagged actors inside our sublevel)
 for a in eas.get_all_level_actors():
     if a.actor_has_tag("PYTH_WildBiome"): eas.destroy_actor(a)
@@ -96,7 +96,7 @@ for (name, pts), (cx, cy) in zip(bios.items(), spots):
     lab.text_render.set_text(name); lab.text_render.set_world_size(250); lab.set_actor_label("WB_Label_" + name)
     lab.set_folder_path("Pythagoras/WildBiomes"); lab.tags = ["PYTH_WildBiome"]
 # 4) save only our sublevel
-unreal.EditorLevelUtils.make_level_current(lvl); les.save_current_level()
+les.set_current_level_by_name(SUB.split("/")[-1]); les.save_current_level()
 persist_saved = False
 if not _pre:   # persistent map was clean before us: its only change is our sublevel entry -> save it
     persist_saved = unreal.EditorLoadingAndSavingUtils.save_dirty_packages(True, False)   # maps only; only ours are dirty
@@ -107,6 +107,7 @@ if spots:
     ues.set_level_viewport_camera_info(cam, unreal.Rotator(roll=0, pitch=-30, yaw=45))
 result = {"island_bounds_m": IB and {k: round(v / 100) for k, v in IB.items() if k != "area_m2"}, "patch_m": round(WM), "counts": counts, "spots": [(round(x), round(y)) for x, y in spots], "skipped_no_ground": floating,
           "missing_meshes": [k for k, v in meshes.items() if not v], "dirty_before": _pre, "persistent_saved": persist_saved, "dirty_after_save": dirty, "log": log}
+
 
 
 
