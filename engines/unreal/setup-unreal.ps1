@@ -79,8 +79,10 @@ function Test-Version([string]$have, [string]$want) {
 function Get-ProjectEditors {
     if (-not (Get-Command Get-CimInstance -ErrorAction SilentlyContinue)) { return @() }   # not Windows
     $leaf = Split-Path $Project -Leaf
+    # This project's editor, and an editor started without a project (the launcher's project browser, which may
+    # then open this one): either can hold the project's files. Commandlets (-run=) are the script's own.
     return @(Get-CimInstance Win32_Process -Filter "Name = 'UnrealEditor.exe'" -ErrorAction SilentlyContinue |
-        Where-Object { $_.CommandLine -and $_.CommandLine -like "*$leaf*" })
+        Where-Object { $_.CommandLine -notlike "*-run=*" -and ($_.CommandLine -like "*$leaf*" -or $_.CommandLine -notlike "*.uproject*") })
 }
 if ($Open -and -not $WhatIfOnly) {
     $eds = Get-ProjectEditors
@@ -92,6 +94,7 @@ if ($Open -and -not $WhatIfOnly) {
             Write-Host "Unreal is still open (waiting on a save prompt?). Close it, then run this again." -ForegroundColor Red
             exit 1
         }
+        Start-Sleep -Seconds 3   # let Windows release the files the editor had open
     }
 }
 

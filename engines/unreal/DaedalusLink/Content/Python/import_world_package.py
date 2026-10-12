@@ -226,9 +226,16 @@ def import_into_unreal(zip_path, manifest, live_only=False):
         if not isinstance(asset, unreal.StaticMesh):
             continue
         # Chunk geometry is in world coordinates already: every chunk mesh sits at the origin.
-        actor = actors.spawn_actor_from_object(asset, unreal.Vector(0, 0, 0))
-        actor.set_folder_path("Daedalus/" + w["id"])
+        # A plain StaticMeshActor with the mesh set: spawn_actor_from_object goes through actor factories and
+        # can return None (it did on Richmond's PC for one chunk), which would stop the whole import.
+        actor = actors.spawn_actor_from_class(unreal.StaticMeshActor, unreal.Vector(0, 0, 0))
+        if actor is None:
+            unreal.log_error("Daedalus: could not place %s" % asset.get_path_name())
+            continue
         comp = actor.get_component_by_class(unreal.StaticMeshComponent)
+        comp.set_static_mesh(asset)
+        actor.set_actor_label(asset.get_name())
+        actor.set_folder_path("Daedalus/" + w["id"])
         for i in range(comp.get_num_materials()):
             slot = str(comp.get_material_slot_names()[i]) if i < len(comp.get_material_slot_names()) else ""
             comp.set_material(i, translucent if "translucent" in slot else opaque)
