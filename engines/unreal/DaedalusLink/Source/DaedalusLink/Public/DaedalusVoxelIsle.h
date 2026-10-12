@@ -66,7 +66,9 @@ private:
 	float Noise(float X, float Y, int32 Salt) const;
 	UHierarchicalInstancedStaticMeshComponent* Layer(int32 Index, const FLinearColor& Color, bool bGlow);
 
-	UPROPERTY() TArray<TObjectPtr<UHierarchicalInstancedStaticMeshComponent>> IsleLayers;
+	// Transient: built by the constructor every load. A saved array from an older build (fewer layers) would
+	// otherwise replace it and index past its end (it crashed the editor on 2026-10-12).
+	UPROPERTY(Transient) TArray<TObjectPtr<UHierarchicalInstancedStaticMeshComponent>> IsleLayers;
 	UPROPERTY() TObjectPtr<UStaticMeshComponent> PondWater;
 	UPROPERTY() TObjectPtr<UStaticMeshComponent> Falls;
 	FString LastStats;

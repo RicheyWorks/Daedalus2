@@ -104,6 +104,17 @@ UHierarchicalInstancedStaticMeshComponent* ADaedalusVoxelIsle::Layer(int32 Index
 
 FString ADaedalusVoxelIsle::Build()
 {
+	if (IsleLayers.Num() < Count)
+	{
+		// Recover the layers from the components themselves (they are default subobjects, named after their layer).
+		IsleLayers.Reset();
+		TArray<UHierarchicalInstancedStaticMeshComponent*> Found;
+		GetComponents(Found);
+		for (int32 i = 0; i < Count; ++i)
+			for (UHierarchicalInstancedStaticMeshComponent* H : Found)
+				if (H->GetFName() == FName(LayerNames[i])) IsleLayers.Add(H);
+		if (IsleLayers.Num() < Count) return LastStats = TEXT("layers missing; re-place the isle");
+	}
 	const FLinearColor Colors[] = {GrassColor, SandColor, DirtColor, StoneColor, HeartColor,
 		FLinearColor(GrassColor.R * 1.25f + 0.04f, GrassColor.G * 1.18f, GrassColor.B * 0.8f)};
 	TArray<TArray<FTransform>> Out;
