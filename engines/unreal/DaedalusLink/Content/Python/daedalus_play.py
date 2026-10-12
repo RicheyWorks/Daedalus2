@@ -59,11 +59,32 @@ def fps():
 
 
 def full_speed(p=None):
-    """The editor drops Play to ~3 fps when another window is in front; turn that off for tests."""
-    s = unreal.get_default_object(unreal.EditorPerformanceSettings)
-    before = s.get_editor_property("throttle_cpu_when_not_foreground")
-    s.set_editor_property("throttle_cpu_when_not_foreground", False)
-    return {"throttle_was": bool(before), "throttle_now": False}
+    """The editor drops Play to ~3 fps when another window is in front. The setting isn't exposed to Python, so:
+    set it now with the console's `set` on the class default, and write it to the per-project editor ini so it
+    holds from the next start too."""
+    import os
+    out = {}
+    try:
+        unreal.SystemLibrary.execute_console_command(None, "set EditorPerformanceSettings bThrottleCPUWhenNotForeground False")
+        out["console"] = "sent"
+    except Exception as e:
+        out["console"] = repr(e)
+    ini = os.path.join(unreal.Paths.project_saved_dir(), "Config", "WindowsEditor", "EditorPerProjectUserSettings.ini")
+    section, key = "[/Script/UnrealEd.EditorPerformanceSettings]", "bThrottleCPUWhenNotForeground=False"
+    try:
+        text = open(ini, encoding="utf-8").read() if os.path.exists(ini) else ""
+        if key not in text:
+            if section in text:
+                text = text.replace(section, section + "\n" + key, 1)
+            else:
+                text += "\n" + section + "\n" + key + "\n"
+            os.makedirs(os.path.dirname(ini), exist_ok=True)
+            open(ini, "w", encoding="utf-8").write(text)
+        out["ini"] = ini
+    except Exception as e:
+        out["ini"] = repr(e)
+    out["fps"] = fps()
+    return out
 
 
 def snapshot(p=None):
