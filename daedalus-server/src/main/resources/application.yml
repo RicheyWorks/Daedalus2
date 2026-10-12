@@ -194,6 +194,19 @@ daedalus:
     deed-contract: ${DAEDALUS_WALLET_DEED_CONTRACT:}
     deed-signer-key: ${DAEDALUS_WALLET_DEED_SIGNER_KEY:}
     voucher-minutes: ${DAEDALUS_WALLET_VOUCHER_MINUTES:30}
+  # ----- Reaction / Diffusion / Song jukebox (rd-jukebox) -----
+  # Read-only RPC reads of RDSong on Robinhood Chain (46630 testnet; 4663 mainnet once deployed).
+  # Off unless DAEDALUS_JUKEBOX_ENABLED=true. seed-songs-dir holds guest seed songs (name.mp3 + name.webp).
+  jukebox:
+    enabled: ${DAEDALUS_JUKEBOX_ENABLED:false}
+    chain-id: ${DAEDALUS_JUKEBOX_CHAIN_ID:46630}
+    rpc-url: ${DAEDALUS_JUKEBOX_RPC_URL:https://rpc.testnet.chain.robinhood.com}
+    contract: ${DAEDALUS_JUKEBOX_CONTRACT:0x286562588c32692e49befd2f7ec628a6cbef7162}
+    seed-songs-dir: ${DAEDALUS_JUKEBOX_SEED_SONGS_DIR:}
+    scan-batch: ${DAEDALUS_JUKEBOX_SCAN_BATCH:50}
+    max-scan: ${DAEDALUS_JUKEBOX_MAX_SCAN:60000}
+    cache-seconds: ${DAEDALUS_JUKEBOX_CACHE_SECONDS:30}
+    studio-url: ${DAEDALUS_JUKEBOX_STUDIO_URL:}
   # ----- Per-key rate limiting -----
   # The Resilience4j instances below are treated as *templates*: PerKeyRateLimitInterceptor
   # clones each into an independent bucket per caller (authenticated subject, else client IP),
@@ -215,6 +228,11 @@ daedalus:
 resilience4j:
   ratelimiter:
     instances:
+      jukebox:
+        limit-for-period: 120         # holder lookups + token HTML; the reader caches, this bounds a scraper
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
       presence:
         limit-for-period: 600         # a client reports where it is a few times a second (ADR-039)
         limit-refresh-period: 1m
