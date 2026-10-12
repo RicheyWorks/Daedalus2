@@ -1,0 +1,80 @@
+{
+  "when": "2026-10-11T20:35:33",
+  "e2e": true,
+  "killed": 12,
+  "total": 12,
+  "mutants": [
+    {
+      "mutant": "triangle check always passes",
+      "state": "killed",
+      "by": "judge_test.py",
+      "why": "FAIL  export lost triangles  want ['triangles: Blender = file'], got []"
+    },
+    {
+      "mutant": "Unreal triangle check always passes",
+      "state": "killed",
+      "by": "judge_test.py",
+      "why": "FAIL  Unreal lost a mesh  want ['every file mesh became an Unreal static mesh', 'triangles: file = Unreal, mesh by mesh', 'material slots: file = Unreal, mesh by mesh', 'sizes: file (m) = Unreal (cm)'], got ['every file mesh became an Unreal static mesh', 'material slots: file = Unreal, mesh by mesh', 'sizes: file (m) = Unreal (cm)']"
+    },
+    {
+      "mutant": "an empty shipment passes",
+      "state": "killed",
+      "by": "judge_test.py",
+      "why": "FAIL  nothing shipped at all fails, it doesn't pass vacuously  want ['every Blender object reached the file', 'every file mesh became an Unreal static mesh'], got ['every file mesh became an Unreal static mesh']"
+    },
+    {
+      "mutant": "units: centimetres not converted",
+      "state": "killed",
+      "by": "judge_test.py",
+      "why": "FAIL  a good shipment passes every check  want [], got ['sizes: file (m) = Unreal (cm)']"
+    },
+    {
+      "mutant": "size tolerance far too loose",
+      "state": "killed",
+      "by": "judge_test.py",
+      "why": "FAIL  export changed a size  want ['sizes: Blender = file'], got []"
+    },
+    {
+      "mutant": "slots: bare-mesh default slot ignored",
+      "state": "killed",
+      "by": "judge_test.py",
+      "why": "FAIL  a good shipment passes every check  want [], got ['material slots: file = Unreal, mesh by mesh']"
+    },
+    {
+      "mutant": "materials check skipped",
+      "state": "killed",
+      "by": "judge_test.py",
+      "why": "FAIL  export lost a material  want ['materials: Blender = file'], got []"
+    },
+    {
+      "mutant": "material assets never counted",
+      "state": "killed",
+      "by": "judge_test.py",
+      "why": "FAIL  Unreal made no materials  want ['Unreal made a material for each one used'], got []"
+    },
+    {
+      "mutant": "glb: non-indexed prims count vertices as triangles",
+      "state": "killed",
+      "by": "glb_test.py",
+      "why": "FAIL  indexed primitive: indices / 3, plus a non-indexed one: positions / 3  {'name': 'Indexed', 'triangles': 21, 'materials': ['Brass', 'Glow'], 'dims': [3, 2, 1.0]}"
+    },
+    {
+      "mutant": "glb: indexed prims miscounted",
+      "state": "killed",
+      "by": "glb_test.py",
+      "why": "FAIL  indexed primitive: indices / 3, plus a non-indexed one: positions / 3  {'name': 'Indexed', 'triangles': 21, 'materials': ['Brass', 'Glow'], 'dims': [3, 2, 1.0]}"
+    },
+    {
+      "mutant": "export without modifiers",
+      "state": "killed",
+      "by": "e2e.py",
+      "why": "FAIL  three objects ship, every check passes  [{'check': 'triangles: Blender = file', 'ok': False, 'detail': 'Blender 248, file 152'}]"
+    },
+    {
+      "mutant": "Unreal import not automated (dialog)",
+      "state": "killed",
+      "by": "e2e.py",
+      "why": "pe/asset_pipeline/wire.py\", line 38, in call\n    raise BridgeError(side, reply)\nasset_pipeline.wire.BridgeError: Unreal: RuntimeError: RuntimeError: a non-automated import would open the import dialog"
+    }
+  ]
+}

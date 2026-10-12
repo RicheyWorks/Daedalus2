@@ -128,3 +128,9 @@ was split:
 - **A protocol doc and a stdlib client,** so agents without MCP (Grok bots) can use the same bridge.
 
 Daedalus is now just one user of the connector. A test checks that the two sides stay apart.
+
+## Every README has screenshots
+
+A README with no pictures leaves a bot or a person guessing what the thing does. Every module's README shows it
+working: a render, a run, a board. The screenshots are made by a script from real runs (for example
+`connectors/claude-asset-pipeline/harness/shots.py`), so they get regenerated with the code and never go stale.

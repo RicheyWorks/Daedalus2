@@ -1,0 +1,128 @@
+# SPDX-License-Identifier: MIT
+"""Ship Blender objects into Unreal and prove nothing was lost on the way.
+
+    python -m asset_pipeline.ship --name Lamp --objects Lamp,Post --dest /Game/Daedalus/Props
+
+1. Blender exports the objects to one .glb (modifiers applied) and reports what it sent: triangles,
+   materials and size for each object.
+2. The .glb is read here, with no 3D library. It is the witness between the two editors.
+3. Unreal imports the .glb (Interchange) and reports what it made: static meshes with triangles,
+   material slots and bounds, and the materials.
+4. judge() compares Blender with the file, and the file with Unreal. Every check can fail. The report is
+   written as JSON, and the exit code is 1 if any check failed.
+
+Both editors must run on the same computer, because Unreal reads the file Blender wrote.
+"""
+import argparse
+import json
+import os
+import sys
+import tempfile
+import time
+from collections import Counter
+
+from . import glb, sides, wire
+
+CM_PER_M = 100.0
+
+
+def _close(a, b, rel=0.01, absolute=0.01):
+    return abs(a - b) <= max(absolute, rel * max(abs(a), abs(b)))
+
+
+def _dims_match(x, y, scale=1.0):
+    return len(x) == len(y) and all(_close(a * scale, b) for a, b in zip(x, y))
+
+
+def judge(sent, witness, made):
+    """[{check, ok, detail}] comparing Blender's report, the .glb summary and Unreal's report."""
+    checks = []
+
+    def check(name, ok, detail):
+        checks.append({"check": name, "ok": bool(ok), "detail": detail})
+
+    nodes = witness["nodes"]
+    meshes = witness["meshes"]
+    by_node = [meshes[n["mesh"]] for n in nodes]
+
+    # Blender -> file: one node for each exported object, and the same triangles, materials and size
+    check("every Blender object reached the file", len(sent["objects"]) == len(nodes) and len(nodes) > 0,
+          "%d objects, %d mesh nodes" % (len(sent["objects"]), len(nodes)))
+    st = sum(o["triangles"] for o in sent["objects"])
+    ft = sum(m["triangles"] for m in by_node)
+    check("triangles: Blender = file", st == ft, "Blender %d, file %d" % (st, ft))
+    sm = sorted({m for o in sent["objects"] for m in o["materials"]})
+    fm = sorted({m for x in by_node for m in x["materials"]})
+    check("materials: Blender = file", sm == fm, "Blender %s, file %s" % (sm, fm))
+    sd = sorted(tuple(o["dims"]) for o in sent["objects"])
+    fd = sorted(tuple(x["dims"]) for x in by_node)
+    check("sizes: Blender = file", all(_dims_match(a, b) for a, b in zip(sd, fd)) and len(sd) == len(fd),
+          "Blender %s, file %s" % (sd, fd))
+
+    # file -> Unreal: one static mesh for each glTF mesh, same triangles, slots and size (m -> cm)
+    um = made["meshes"]
+    check("every file mesh became an Unreal static mesh", len(um) == len(meshes) and len(um) > 0,
+          "file %d meshes, Unreal %d" % (len(meshes), len(um)))
+    want = Counter(m["triangles"] for m in meshes)
+    got = Counter(m["triangles"] for m in um)
+    check("triangles: file = Unreal, mesh by mesh", want == got,
+          "file %s, Unreal %s" % (sorted(want.elements()), sorted(got.elements())))
+    # a mesh with no material still gets one slot in Unreal (the default material)
+    fslots = sorted(max(1, len(m["materials"])) for m in meshes)
+    uslots = sorted(len(m["materials"]) for m in um)
+    check("material slots: file = Unreal, mesh by mesh", fslots == uslots, "file %s, Unreal %s" % (fslots, uslots))
+    fdims = sorted(tuple(m["dims"]) for m in meshes)
+    udims = sorted(tuple(m["dims_cm"]) for m in um)
+    sized = len(fdims) == len(udims) and all(_dims_match(a, b, CM_PER_M) for a, b in zip(fdims, udims))
+    check("sizes: file (m) = Unreal (cm)", sized, "file %s m, Unreal %s cm" % (fdims, udims))
+    used = {m for x in meshes for m in x["materials"]}
+    check("Unreal made a material for each one used", len(made["materials"]) >= len(used),
+          "used %d, Unreal made %d" % (len(used), len(made["materials"])))
+    return checks
+
+
+def ship(name, objects=None, dest="/Game/Daedalus/Assets", folder=None, save=True,
+         blender=wire.BLENDER, unreal=wire.UNREAL, timeout=600):
+    """Run the pipeline once and return its report (ok, checks, and what each side said)."""
+    folder = folder or os.path.join(tempfile.gettempdir(), "daedalus-pipeline")
+    path = os.path.abspath(os.path.join(folder, name + ".glb"))
+    report = {"name": name, "path": path, "dest": dest + "/" + name, "started": time.time()}
+    sent = wire.call(blender, "execute_code", timeout=timeout, side="Blender",
+                     code=sides.script(sides.BLENDER_EXPORT, path=path, objects=objects or []))["result"]
+    witness = glb.summarize(path)
+    made = wire.call(unreal, "execute_python", timeout=timeout, side="Unreal",
+                     code=sides.script(sides.UNREAL_IMPORT, path=path, dest=report["dest"], save=save))["result"]
+    checks = judge(sent, witness, made)
+    report.update(ok=all(c["ok"] for c in checks), checks=checks, blender=sent, file=witness, unreal=made,
+                  seconds=round(time.time() - report["started"], 2))
+    return report
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    ap.add_argument("--name", required=True, help="asset name: the .glb file and the Unreal folder")
+    ap.add_argument("--objects", default="", help="comma-separated Blender object names (default: visible meshes)")
+    ap.add_argument("--dest", default="/Game/Daedalus/Assets")
+    ap.add_argument("--folder", help="where the .glb is written (default: <temp>/daedalus-pipeline)")
+    ap.add_argument("--report", help="write the JSON report here")
+    ap.add_argument("--no-save", action="store_true", help="don't save the imported assets")
+    ap.add_argument("--blender-port", type=int, default=wire.BLENDER[1])
+    ap.add_argument("--unreal-port", type=int, default=wire.UNREAL[1])
+    a = ap.parse_args(argv)
+    try:
+        r = ship(a.name, [o for o in a.objects.split(",") if o], a.dest, a.folder, not a.no_save,
+                 (wire.BLENDER[0], a.blender_port), (wire.UNREAL[0], a.unreal_port))
+    except (wire.BridgeError, OSError, ValueError) as e:
+        print("FAIL  %s" % e)
+        return 2
+    for c in r["checks"]:
+        print("%-4s  %-46s %s" % ("ok" if c["ok"] else "FAIL", c["check"], c["detail"]))
+    print("%s  %s -> %s in %.1fs" % ("SHIPPED" if r["ok"] else "REJECTED", r["path"], r["dest"], r["seconds"]))
+    if a.report:
+        with open(a.report, "w") as f:
+            json.dump(r, f, indent=2)
+    return 0 if r["ok"] else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
