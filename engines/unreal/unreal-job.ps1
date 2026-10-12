@@ -86,11 +86,17 @@ if ($Wait) {
     $errors = if (Test-Path $log) { Select-String -Path $log -Pattern 'error C\d+|: error ' | Select-Object -First 15 | ForEach-Object { $_.Line } } else { @() }
     $norton = Join-Path $env:TEMP "daedalus-norton.log"
     $alerts = if (Test-Path $norton) { Get-Content $norton | Where-Object { $_ -ge (Get-Date).AddMinutes(-30).ToString("s") } } else { @() }
-    if ((Test-Path $log) -and (Select-String -Path $log -Pattern 'X BuildPlugin exited' -Quiet) -and -not (Select-String -Path $log -Pattern 'BUILD SUCCESSFUL' -Quiet) -and (Test-Path $exit)) {
-        "BUILD FAILED $Id (the plugin build step failed; the AutomationTool error log says why):"
-        Get-Content (Join-Path $env:LOCALAPPDATA "UnrealEngine\Programs\AutomationTool\Saved\Logs\ErrorLog.txt") -Tail 6 -ErrorAction SilentlyContinue
+    # Compiler errors first: they are the real cause. AutomationTool's ErrorLog.txt is only written when it dies
+    # before logging, so an old one is stale; show it only if it was written during this job.
+    if ($errors) { "BUILD FAILED $Id"; $errors }
+    elseif ((Test-Path $log) -and (Select-String -Path $log -Pattern 'X BuildPlugin exited' -Quiet) -and -not (Select-String -Path $log -Pattern 'BUILD SUCCESSFUL' -Quiet) -and (Test-Path $exit)) {
+        $uat = Join-Path $env:LOCALAPPDATA "UnrealEngine\Programs\AutomationTool\Saved\Logs\ErrorLog.txt"
+        if ((Test-Path $uat) -and (Get-Item $uat).LastWriteTime -ge (Get-Item $log).CreationTime) {
+            "BUILD FAILED $Id (AutomationTool stopped before building):"
+            Get-Content $uat -Tail 6
+        }
+        else { "BUILD FAILED $Id (the plugin build step failed):"; Get-Content $log | Select-String -Pattern 'Result:|ERROR|failed' | Select-Object -Last 8 | ForEach-Object { $_.Line } }
     }
-    elseif ($errors) { "BUILD FAILED $Id"; $errors }
     elseif (Test-Path $exit) {
         $ok = Select-String -Path $log -Pattern 'BUILD SUCCESSFUL' -Quiet
         if ($ok) { "BUILD OK $Id" } else { "JOB ENDED $Id"; Get-Content $log -Tail 8 }

@@ -119,6 +119,9 @@ to it when something new breaks.
   where the party ended up, not whether the helper reached the target's (x, y).
 - **Don't tear a widget down inside its own Tick.** The realm asks to close from its Tick. `ExitRealm` runs on the
   next core tick (`FTSTicker`), so the widget isn't freed while it's still on the stack.
+- **A report must not blame an old log.** `-Wait` printed AutomationTool's ErrorLog.txt ("conflicting instance")
+  for two builds that had really failed on compile errors. The ErrorLog was from 8:53; the builds ran at 11:01.
+  Compile errors now come first, and the ErrorLog is shown only when it was written during this job.
 - **ASan and UBSan on every engine-free core.** The first run crashed with a heap overflow in the test's
   pathfinder: a target outside a smaller map. The sanitizer named the line; a plain build only said "segfault".
 
