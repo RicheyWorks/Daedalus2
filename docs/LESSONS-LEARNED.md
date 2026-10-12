@@ -65,3 +65,42 @@ Every one of these passed in the Linux sandbox and failed on Windows:
 
 **The lesson.** A setup script must look, report what it found, and recover on the real target. Run it
 there early, and read its full output.
+
+## Working through PowerShell
+
+### Drive everything from one PowerShell line (2026-10-11)
+
+> "Save to memory to just get everything going via PowerShell." (RicheyWorks)
+
+Opening Unreal by hand, then importing while it was open, failed again and again. One line now does the
+whole job, and it is the line to give whenever something needs to run:
+
+```
+cd C:\Users\730ri\projects\Daedalus2 ; git pull --ff-only ; .\engines\unreal\setup-unreal.ps1 -Project C:\Unreal\DaedalusRealm\DaedalusRealm.uproject -Build -Import -Open
+```
+
+What made the line reliable:
+- **Always start with `git pull --ff-only`.** One handed-over line left it out, so the old script ran,
+  and the fix it carried (Shader Model 6) never arrived.
+- **The script owns the apps it touches.** `-Open` closes the editor, does the work, and reopens it.
+  Asking a person to close and open windows between steps is where the runs went wrong.
+- **One writer per file.** On Windows an open file can't be replaced (error 32). Two Unreal editors were
+  open, so one held the assets while the other saved. Before importing, close every editor that could hold
+  the project.
+- **When a window won't close, force it.** It is usually waiting on a save prompt nobody can see.
+  `Get-Process UnrealEditor | Stop-Process -Force`, then wait about 3 s for Windows to release the files.
+  The import rebuilds the level, so nothing of value is lost.
+- **Never interrupt an installer.** Rerunning setup while the Visual Studio Installer was busy left Visual
+  Studio half-installed. Even an idle installer window blocks the next run. Let it finish, close it, then
+  run again. `vswhere -all` shows a half-installed copy, which plain `vswhere` hides.
+- **Elevate on purpose.** The VS installer refuses `--passive` without admin (exit 5007). `Start-Process
+  -Verb RunAs` asks Windows once, visibly.
+- **Windows PowerShell 5.1 is not PowerShell 7.**
+  - A wildcard in the middle of a `-Recurse` path matches nothing in 5.1.
+  - A native tool writing to stderr, such as `java -version`, throws under `$ErrorActionPreference =
+    "Stop"`. Lower it around such calls.
+  - Parse-check every edit (`[Parser]::ParseFile`) before pushing.
+- **Use the API instead of clicking.** Raising islands is one `Invoke-RestMethod` per seed against the
+  local server, chained into the same line.
+- **Ask for the end of the output, after `cls`.** Long pastes held old scrollback, and once a fix was
+  read from an earlier run instead of the latest one.
