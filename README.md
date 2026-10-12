@@ -272,11 +272,14 @@ public consumers).
 | `GET` | `/api/v1/world/{id}/islands/{slot}/portrait.png` | public | The island's 512×512 isometric portrait, grown from its seed; cacheable for a day (ADR-027) |
 | `GET` | `/api/v1/world/{id}/islands/{slot}/ecology` | public | One island's living community: ecological day, habitat by guild, diversity indices and every kind there by count; unknown slot 404 (ADR-023) |
 | `POST` | `/api/v1/world/{id}/arks/{arkId}/voyage` | required | Order an ark (or a Parcels world's helicopter, `heli-0`) to another island, to a sky gate, or home (`VoyageRequest`: `toSlot`, `toGate` (ADR-031) or `toHome` (ADR-033)). Already-there, underway and no-such-island are named results; unknown ark 404 (ADR-020) |
+| `GET` | `/api/v1/world/{id}/presence` | public | Who is walking around in this world now: each player's position, heading, animation and look, dropped after the stale time (ADR-039). Unknown world 404 |
+| `POST` | `/api/v1/world/{id}/presence` | required | Say where you are, a few times a second (header `X-Daedalus-Tab` tells two tabs of one account apart); everyone subscribed to `/topic/world/{id}/presence` gets MOVE frames (ADR-039) |
+| `POST` | `/api/v1/world/{id}/presence/leave` | required | Leave now instead of fading out; subscribers get a LEAVE frame (ADR-039) |
 | `GET` | `/api/v1/species` | public | The species canon: 221 kinds from ComputerPets with guild, size, r/K strategy and whether they cross open sky alone (ADR-021) |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/claim` | required | Claim an island: from then on only its owner and the builders they name change its cubes. Owner is the signed-in user; already-claimed, blocked and bad-owner are named results (ADR-026) |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/abandon` | required | The owner gives an island back; its cubes stay and it is open again. Not-owner and not-claimed are named results (ADR-026) |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/builders` | required | The owner lets someone build (`allow: true`) or stops them (`IslandClaimRequest`) (ADR-026) |
-| `POST` | `/api/v1/world/{id}/islands` | required | Raise a seeded floating island into the next free lane slot (`RaiseIslandRequest`). Lane-full is a named result (ADR-018) |
+| `POST` | `/api/v1/world/{id}/islands` | required | Raise a seeded floating island into the next free lane slot (`RaiseIslandRequest`: `seed`, `radius` 8..28 for an island, 32..46 for a land: a big, deep piece with strata, caves and ores, ADR-050). Lane-full is a named result (ADR-018) |
 | `PUT` | `/api/v1/world/{id}/block` | required | Place a cube (`PlaceBlockRequest`). AIR is remove. Survives restart. |
 | `DELETE` | `/api/v1/world/{id}/block?x=&y=&z=` | required | Remove a cube (set AIR). Optional actorId uses the parcel gate |
 | `GET` | `/api/v1/world/{id}/door` | public | Inspect the programmable door |

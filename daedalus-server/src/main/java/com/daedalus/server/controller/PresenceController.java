@@ -5,6 +5,7 @@ package com.daedalus.server.controller;
 import com.daedalus.server.ratelimit.PerKeyRateLimit;
 import com.daedalus.server.service.PresenceService;
 import com.daedalus.server.service.WorldHub;
+import com.daedalus.server.web.ResourceNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -44,7 +45,7 @@ public class PresenceController {
     @Operation(summary = "Everyone walking around in this world now.")
     public ResponseEntity<Map<String, Object>> who(@PathVariable String id) {
         if (hub.get(id) == null) {
-            return ResponseEntity.notFound().build();
+            throw ResourceNotFoundException.world(id);   // the JSON error contract, not an empty 404
         }
         List<PresenceService.Player> players = presence.who(id);
         return ResponseEntity.ok(Map.of("worldId", id, "players", players, "staleMs", PresenceService.STALE_MS));
@@ -57,7 +58,7 @@ public class PresenceController {
                                                       @RequestHeader(value = TAB_HEADER, required = false) String tab,
                                                       Principal principal) {
         if (hub.get(id) == null) {
-            return ResponseEntity.notFound().build();
+            throw ResourceNotFoundException.world(id);   // the JSON error contract, not an empty 404
         }
         String pid = PresenceService.playerId(principal == null ? null : principal.getName(), tab);
         PresenceService.Result r = presence.report(id, pid, body);

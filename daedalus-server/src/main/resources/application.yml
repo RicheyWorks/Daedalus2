@@ -215,6 +215,11 @@ daedalus:
 resilience4j:
   ratelimiter:
     instances:
+      presence:
+        limit-for-period: 600         # a client reports where it is a few times a second (ADR-039)
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
       mazeGenerate:
         limit-for-period: 30          # 30 generations
         limit-refresh-period: 1m      # per minute

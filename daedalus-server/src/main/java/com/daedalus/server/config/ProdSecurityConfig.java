@@ -199,6 +199,8 @@ public class ProdSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/art").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/art/maze/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/arks").permitAll()
+                        // Presence (ADR-039): who is walking around is public; saying where you are needs a token.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/presence").permitAll()
                         // The multiverse's index (ADR-030): which worlds exist. Mounting one needs a token.
                         .requestMatchers(HttpMethod.GET, "/api/v1/worlds").permitAll()
                         // Sky gates (ADR-031): where they are and where they lead. Opening one needs a token.
