@@ -435,20 +435,25 @@ if ($Build) {
             Write-Host ("    MSVC {0} is too old for UE {1}; updating Visual Studio to its latest (MSVC 14.44+)." -f (($msvc | Select-Object -First 1)), $engine.Version)
             Write-Host "    The Visual Studio Installer window shows progress; close Visual Studio first if it is open."
             $setup = Join-Path $VsInstallerDir "setup.exe"
-            Start-Process -FilePath $setup -Wait -ArgumentList @("update", "--installPath", "`"$vc`"", "--passive", "--norestart")
-            Start-Process -FilePath $setup -Wait -ArgumentList @("modify", "--installPath", "`"$vc`"", "--passive", "--norestart",
+            # --passive needs an elevated installer (exit 5007 otherwise): Windows asks you to allow it.
+            Write-Host "    Windows will ask to let the Visual Studio Installer make changes: choose Yes."
+            Start-Process -FilePath $setup -Verb RunAs -Wait -ArgumentList @("update", "--installPath", "`"$vc`"", "--passive", "--norestart")
+            Start-Process -FilePath $setup -Verb RunAs -Wait -ArgumentList @("modify", "--installPath", "`"$vc`"", "--passive", "--norestart",
                 "--add", "Microsoft.VisualStudio.Workload.NativeGame", "--add", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
                 "--add", "Microsoft.VisualStudio.Component.Windows11SDK.22621", "--includeRecommended")
             $msvc = Get-MsvcVersions $vc
             if (-not ($msvc | Where-Object { Test-MsvcUsable $_ })) {
                 Fail ("MSVC is still {0}; open the Visual Studio Installer, Update, then run this again" -f ($msvc | Select-Object -First 1))
                 $vc = $null
+                $script:VcReported = $true
             }
         }
         if ($vc) { Write-Host ("    C++ tools: {0} (MSVC {1})" -f $vc, ($msvc | Where-Object { Test-MsvcUsable $_ } | Select-Object -First 1)) }
     }
     if (-not $engine) {
         Fail "no engine to build with"
+    } elseif (-not $vc -and $script:VcReported) {
+        # already said why above
     } elseif (-not $vc -and -not $WhatIfOnly) {
         Fail "no Visual Studio C++ tools (the install above did not finish; run this again when it has)"
     } else {
@@ -482,8 +487,23 @@ if ($Import) {
     } elseif ($WhatIfOnly) {
         Write-Host "    would run: $editor `"$Project`" -run=pythonscript -script=`"$py $PackageFile`""
     } else {
-        & $editor $Project -run=pythonscript "-script=`"$py`" `"$PackageFile`"" -unattended -nopause
-        if ($LASTEXITCODE -ne 0) { Fail "the import exited $LASTEXITCODE; see $ProjectDir\Saved\Logs" }
+        # Until the plugin is compiled the editor refuses to open a project that enables it. The import is
+        # pure Python, so it runs with DaedalusLink switched off for the moment and switched back on after.
+        $built = Test-Path (Join-Path $PluginDest "Binaries\Win64\UnrealEditor-DaedalusLink.dll")
+        $saved = $null
+        if (-not $built) {
+            Write-Host "    the plugin isn't compiled yet: importing meshes now; the live actor comes once it builds"
+            $saved = Get-Content $Project -Raw
+            $up = $saved | ConvertFrom-Json
+            foreach ($pl in @($up.Plugins)) { if ($pl.Name -eq "DaedalusLink") { $pl.Enabled = $false } }
+            $up | ConvertTo-Json -Depth 10 | Set-Content -Path $Project -Encoding UTF8
+        }
+        try {
+            & $editor $Project -run=pythonscript "-script=`"$py`" `"$PackageFile`"" -unattended -nopause
+            if ($LASTEXITCODE -ne 0) { Fail "the import exited $LASTEXITCODE; see $ProjectDir\Saved\Logs" }
+        } finally {
+            if ($saved) { Set-Content -Path $Project -Value $saved -Encoding UTF8 -NoNewline }
+        }
     }
 }
 
