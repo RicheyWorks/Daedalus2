@@ -162,6 +162,10 @@ public:
 	/** The live world in a level, if any. */
 	static ADaedalusWorldActor* Find(const UObject* WorldContext);
 
+	/** The cubes themselves, for C++ readers (the dresser, ADR-054). Daedalus y is up. */
+	const daedalus::ChunkStore& CubeStore() const { return Store; }
+	const daedalus::Palette& CubePaletteRef() const { return CubePalette; }
+
 	/** How many chunks are built right now. */
 	UFUNCTION(BlueprintPure, Category = "Daedalus")
 	int32 ChunkCount() const { return ChunkMeshes.Num(); }

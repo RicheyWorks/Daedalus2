@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "DaedalusGhost.h"
+#include "DaedalusDresser.h"
 #include "DaedalusEncounters.h"
 #include "DaedalusNav.h"
 #include "DaedalusSettings.h"
@@ -241,6 +242,13 @@ UStaticMeshComponent* ADaedalusHero::Block(USceneComponent* Parent, const FName 
 void ADaedalusHero::BeginPlay()
 {
 	Super::BeginPlay();
+	// The world dresser (ADR-054) puts the shipped art library on the live cubes; one per level.
+	if (UWorld* World = GetWorld())
+	{
+		bool bHaveDresser = false;
+		for (TActorIterator<ADaedalusDresser> It(World); It; ++It) bHaveDresser = true;
+		if (!bHaveDresser) World->SpawnActor<ADaedalusDresser>();
+	}
 	LastGround = GetActorLocation();
 	LoadProgress();
 	BaseGravity = GetCharacterMovement()->GravityScale;

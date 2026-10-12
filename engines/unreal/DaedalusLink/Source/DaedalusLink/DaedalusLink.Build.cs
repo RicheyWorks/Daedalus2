@@ -20,6 +20,7 @@ public class DaedalusLink : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[]
 		{
+			"AssetRegistry",
 			"HTTP",
 			"ImageCore",
 			"RHI",
