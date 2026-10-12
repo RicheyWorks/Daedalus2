@@ -709,7 +709,7 @@ bool ADaedalusHero::Fire()
 	const FVector Dir = FMath::VRandCone(Camera->GetForwardVector(), Cone);
 	const FVector To = From + Dir * 30000.f;
 	FHitResult Hit;
-	FCollisionQueryParams Q(TEXT("DaedalusBlaster"), true, this);
+	FCollisionQueryParams Q(TEXT("DaedalusBlaster"), false, this);
 	const bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, From, To, ECC_Visibility, Q);
 	const FVector End = bHit ? FVector(Hit.ImpactPoint) : To;
 
@@ -914,7 +914,7 @@ FString ADaedalusHero::NavTrace(FVector At, float RefZ)
 	UDaedalusNav* Nav = GetWorld() ? GetWorld()->GetSubsystem<UDaedalusNav>() : nullptr;
 	FHitResult Hit;
 	const bool bMine = GetWorld()->LineTraceSingleByObjectType(Hit, FVector(At.X, At.Y, RefZ + 300.f), FVector(At.X, At.Y, RefZ - 240.f),
-		FCollisionObjectQueryParams(ECC_WorldStatic));
+		FCollisionObjectQueryParams(ECC_WorldStatic), FCollisionQueryParams(SCENE_QUERY_STAT(DaedalusNavTrace), false, this));
 	const FString Mine = FString::Printf(TEXT("hero type=%d hit=%d z=%.0f || "), (int32)GetWorld()->WorldType, bMine ? 1 : 0, Hit.ImpactPoint.Z - RefZ);
 	return Mine + (Nav ? Nav->TraceReport(At, RefZ) : FString(TEXT("no nav")));
 }

@@ -44,8 +44,10 @@ bool UDaedalusNav::FloorAt(int32 CX, int32 CY, float RefZ, float& OutZ)
 		const FVector Mid((CX + 0.5f) * Cell, (CY + 0.5f) * Cell, RefZ);
 		FHitResult Hit;
 		FCollisionObjectQueryParams Objects(ECC_WorldStatic);
+		// Simple collision: the island meshes have no complex collision, and a trace with no params is complex.
+		const FCollisionQueryParams Simple(SCENE_QUERY_STAT(DaedalusNavFloor), false);
 		// From well above: a hit higher than a step is a wall (a block, a cliff face), not a floor.
-		if (W->LineTraceSingleByObjectType(Hit, Mid + FVector(0.f, 0.f, 300.f), Mid - FVector(0.f, 0.f, StepDown + 20.f), Objects)
+		if (W->LineTraceSingleByObjectType(Hit, Mid + FVector(0.f, 0.f, 300.f), Mid - FVector(0.f, 0.f, StepDown + 20.f), Objects, Simple)
 			&& Hit.ImpactNormal.Z > 0.6f)
 		{
 			Z = Hit.ImpactPoint.Z;
@@ -177,12 +179,12 @@ FString UDaedalusNav::TraceReport(const FVector& At, float RefZ)
 	const FVector Mid(At.X, At.Y, RefZ);
 	FHitResult Hit;
 	const bool bObj = W->LineTraceSingleByObjectType(Hit, Mid + FVector(0.f, 0.f, 300.f), Mid - FVector(0.f, 0.f, StepDown + 20.f),
-		FCollisionObjectQueryParams(ECC_WorldStatic));
+		FCollisionObjectQueryParams(ECC_WorldStatic), FCollisionQueryParams(SCENE_QUERY_STAT(DaedalusNavReport), false));
 	FString Out = FString::Printf(TEXT("type=%d mid=(%.0f,%.0f,%.0f) "), (int32)W->WorldType, Mid.X, Mid.Y, Mid.Z);
 	Out += FString::Printf(TEXT("world=%s obj_hit=%d z=%.0f n=%.2f actor=%s"), *W->GetName(), bObj ? 1 : 0,
 		Hit.ImpactPoint.Z - RefZ, Hit.ImpactNormal.Z, Hit.GetActor() ? *Hit.GetActor()->GetName() : TEXT("-"));
 	FHitResult Vis;
-	const bool bVis = W->LineTraceSingleByChannel(Vis, Mid + FVector(0.f, 0.f, 300.f), Mid - FVector(0.f, 0.f, StepDown + 20.f), ECC_Visibility);
+	const bool bVis = W->LineTraceSingleByChannel(Vis, Mid + FVector(0.f, 0.f, 300.f), Mid - FVector(0.f, 0.f, StepDown + 20.f), ECC_Visibility, FCollisionQueryParams(SCENE_QUERY_STAT(DaedalusNavReport), false));
 	Out += FString::Printf(TEXT(" | vis_hit=%d z=%.0f n=%.2f actor=%s"), bVis ? 1 : 0, Vis.ImpactPoint.Z - RefZ, Vis.ImpactNormal.Z,
 		Vis.GetActor() ? *Vis.GetActor()->GetName() : TEXT("-"));
 	return Out;

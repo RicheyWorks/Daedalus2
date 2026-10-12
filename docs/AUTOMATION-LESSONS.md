@@ -114,3 +114,8 @@ to it when something new breaks.
 - **Islands have ledges.** "4 m ahead" can be a lower tier; spawn points must match the hero's feet height.
 - **Pawn swaps leave bodies wedged.** After getting off a vehicle, place the rider with `TeleportTo` (which checks
   for overlaps) at a spot with ground under it, not `SetActorLocation`.
+- **C++ traces with no query params trace complex collision.** `FCollisionQueryParams::DefaultQueryParam` has
+  `bTraceComplex = true`, and the island meshes only have simple collision, so those traces went straight through
+  the ground. Every ground step looked like a drop and the foes stood still. Python's traces default to simple and
+  hit, which is how it was found: the same trace, run from both sides, disagreed. Always pass
+  `FCollisionQueryParams(..., false, this)`.

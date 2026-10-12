@@ -306,7 +306,7 @@ void ADaedalusGhost::Shot(const FVector& Muzzle)
 	const FVector Eye = Camera->GetComponentLocation();
 	const FVector EyeEnd = Eye + Camera->GetForwardVector() * 30000.f;
 	FHitResult Aim;
-	FCollisionQueryParams Q(TEXT("GhostAim"), true, this);
+	FCollisionQueryParams Q(TEXT("GhostAim"), false, this);
 	if (Rider) Q.AddIgnoredActor(Rider);
 	const FVector Target = GetWorld()->LineTraceSingleByChannel(Aim, Eye, EyeEnd, ECC_Visibility, Q) ? FVector(Aim.ImpactPoint) : EyeEnd;
 	const FVector Dir = FMath::VRandCone((Target - Muzzle).GetSafeNormal(), FMath::DegreesToRadians(0.6f));

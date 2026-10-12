@@ -71,7 +71,7 @@ void ADaedalusTarget::BeginPlay()
 	// Settle onto the ground under where it was placed.
 	FHitResult Hit;
 	FCollisionObjectQueryParams Objects(ECC_WorldStatic);
-	if (GetWorld()->LineTraceSingleByObjectType(Hit, Home + FVector(0.f, 0.f, 100.f), Home - FVector(0.f, 0.f, 1500.f), Objects))
+	if (GetWorld()->LineTraceSingleByObjectType(Hit, Home + FVector(0.f, 0.f, 100.f), Home - FVector(0.f, 0.f, 1500.f), Objects, FCollisionQueryParams(SCENE_QUERY_STAT(DaedalusFoeSettle), false, this)))
 	{
 		Home.Z = Hit.ImpactPoint.Z + HoverOffset();
 	}
@@ -102,7 +102,7 @@ bool ADaedalusTarget::StepToward(const FVector& Dir, float Speed, float Dt)
 	FHitResult Hit;
 	FCollisionObjectQueryParams Objects(ECC_WorldStatic);
 	const float Floor = Home.Z - HoverOffset();
-	if (!GetWorld()->LineTraceSingleByObjectType(Hit, FVector(Next.X, Next.Y, Floor + 300.f), FVector(Next.X, Next.Y, Floor - 300.f), Objects))
+	if (!GetWorld()->LineTraceSingleByObjectType(Hit, FVector(Next.X, Next.Y, Floor + 300.f), FVector(Next.X, Next.Y, Floor - 300.f), Objects, FCollisionQueryParams(SCENE_QUERY_STAT(DaedalusFoeStep), false, this)))
 	{
 		return false;   // a drop
 	}
