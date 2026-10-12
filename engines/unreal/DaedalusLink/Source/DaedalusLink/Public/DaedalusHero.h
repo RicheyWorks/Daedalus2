@@ -132,6 +132,7 @@ protected:
 	virtual void EndPlay(const EEndPlayReason::Type Reason) override;
 
 private:
+	TWeakObjectPtr<class ADaedalusGhost> CalledGhost;
 	UStaticMeshComponent* Block(USceneComponent* Parent, const FName Name, const FVector& Size, const FVector& At,
 	                            const FLinearColor& Color, bool bBody = true);
 	void Move(const FInputActionValue& V);
@@ -142,6 +143,7 @@ private:
 	void AimOn();
 	void AimOff();
 	void InteractPressed() { Interact(); }
+	void CallVehiclePressed();
 	void SprintOn();
 	void SprintOff();
 	void Rumble(float Intensity, float Seconds) const;
@@ -171,6 +173,7 @@ private:
 	UPROPERTY() TObjectPtr<UInputAction> InteractAction;
 	UPROPERTY() TObjectPtr<UInputAction> SprintAction;
 	UPROPERTY() TObjectPtr<UInputAction> ViewCycleAction;
+	UPROPERTY() TObjectPtr<UInputAction> CallVehicleAction;
 	UPROPERTY() TObjectPtr<UInputAction> ShoulderAction;
 	UPROPERTY() TObjectPtr<UInputAction> MenuAction;
 	UPROPERTY() TObjectPtr<UInputAction> ViewAction;

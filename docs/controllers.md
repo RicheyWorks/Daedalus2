@@ -19,6 +19,7 @@ Default button layout (Settings → Controller → Button Layout changes the pad
 | Dash | Shift | B | Button3, Button6 |
 | Switch weapon | 1, 2, wheel | Y | Button4 |
 | Interact (get on / off a Ghost) | E | X | |
+| Call a Ghost | G | d-pad right | |
 | Sprint | Left Ctrl | L3 | |
 | Swap shoulder | C | LB, d-pad down | |
 | Camera view (first person → over the shoulder → classic) | V | d-pad up | |

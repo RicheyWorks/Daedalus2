@@ -246,6 +246,7 @@ void ADaedalusHero::BeginPlay()
 	InteractAction = Make(TEXT("IA_Interact"), B);
 	SprintAction = Make(TEXT("IA_Sprint"), B);
 	ViewCycleAction = Make(TEXT("IA_ViewCycle"), B);
+	CallVehicleAction = Make(TEXT("IA_CallVehicle"), B);
 	ShoulderAction = Make(TEXT("IA_Shoulder"), B);
 	MenuAction = Make(TEXT("IA_Menu"), B);
 	ViewAction = Make(TEXT("IA_View"), B);
@@ -284,6 +285,7 @@ void ADaedalusHero::BeginPlay()
 			EI->BindAction(MenuAction, ETriggerEvent::Started, this, &ADaedalusHero::ToggleSettings);
 			EI->BindAction(ViewAction, ETriggerEvent::Started, this, &ADaedalusHero::ToggleField);
 			EI->BindAction(InteractAction, ETriggerEvent::Started, this, &ADaedalusHero::InteractPressed);
+			EI->BindAction(CallVehicleAction, ETriggerEvent::Started, this, &ADaedalusHero::CallVehiclePressed);
 		}
 		if (GEngine && GEngine->GameViewport)
 		{
@@ -359,6 +361,8 @@ void ADaedalusHero::RebuildBindings()
 	MapSpec(InteractAction, TEXT("E"));
 	MapSpec(SprintAction, TEXT("LeftControl"));
 	MapSpec(ViewCycleAction, TEXT("V"));
+	MapSpec(CallVehicleAction, TEXT("G"));
+	MapSpec(CallVehicleAction, TEXT("Gamepad_DPad_Right"));   // call a Ghost (ADR-043)
 	MapSpec(ShoulderAction, TEXT("C"));
 	MapSpec(MenuAction, TEXT("F1"));
 	MapSpec(MenuAction, TEXT("F10"));
@@ -871,6 +875,15 @@ bool ADaedalusHero::Interact()
 		}
 	}
 	return Best && Best->Mount(this);
+}
+
+// One called Ghost at a time: calling again brings the parked one back instead of adding another.
+void ADaedalusHero::CallVehiclePressed()
+{
+	if (IsSettingsOpen() || IsFieldOpen()) return;
+	if (CalledGhost.IsValid() && CalledGhost->Rider) return;
+	if (CalledGhost.IsValid()) CalledGhost->Destroy();
+	CalledGhost = SpawnVehicle();
 }
 
 ADaedalusGhost* ADaedalusHero::SpawnVehicle()
