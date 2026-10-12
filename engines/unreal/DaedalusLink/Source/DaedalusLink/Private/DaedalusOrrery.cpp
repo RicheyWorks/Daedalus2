@@ -251,7 +251,7 @@ ADaedalusStarbloom::ADaedalusStarbloom()
 void ADaedalusStarbloom::BeginPlay()
 {
 	Super::BeginPlay();
-	SetArt(TEXT("Prop"), FString::Printf(TEXT("Prop_Orr_Herb_%s_Bud"), *Species), 2.5f);
+	SetArt(TEXT("Prop"), FString::Printf(TEXT("Prop_Orr_Herb_%s_Bud"), *Species), 4.f);
 }
 
 bool ADaedalusStarbloom::IsBlooming() const
@@ -272,7 +272,7 @@ void ADaedalusStarbloom::Tick(float DeltaSeconds)
 	if (bBloom != bShownBloom)
 	{
 		bShownBloom = bBloom;
-		SetArt(TEXT("Prop"), FString::Printf(TEXT("Prop_Orr_Herb_%s_%s"), *Species, bBloom ? TEXT("Bloom") : TEXT("Bud")), 2.5f);
+		SetArt(TEXT("Prop"), FString::Printf(TEXT("Prop_Orr_Herb_%s_%s"), *Species, bBloom ? TEXT("Bloom") : TEXT("Bud")), 4.f);
 		Glow->SetIntensity(bBloom ? 4000.f : 0.f);
 	}
 	if (bBloom) Glow->SetIntensity(3000.f + 1500.f * FMath::Sin(GetWorld()->GetTimeSeconds() * 3.f));

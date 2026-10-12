@@ -41,7 +41,7 @@ public:
 	/** Pond centre, in cubes from the isle's centre; radius 0 = no pond. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Isle") FIntPoint PondAt = FIntPoint(-70, 45);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Isle") int32 PondRadius = 14;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Isle") FLinearColor GrassColor = FLinearColor(0.20f, 0.46f, 0.20f);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Isle") FLinearColor GrassColor = FLinearColor(0.26f, 0.56f, 0.22f);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Isle") FLinearColor SandColor = FLinearColor(0.78f, 0.70f, 0.48f);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Isle") FLinearColor DirtColor = FLinearColor(0.36f, 0.24f, 0.15f);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Isle") FLinearColor StoneColor = FLinearColor(0.34f, 0.32f, 0.38f);

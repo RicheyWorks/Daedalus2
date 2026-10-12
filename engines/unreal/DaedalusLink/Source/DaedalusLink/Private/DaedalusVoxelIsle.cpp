@@ -10,8 +10,8 @@
 
 namespace
 {
-	enum ELayer : int32 { Grass, Sand, Dirt, Stone, Heart, Count };
-	const TCHAR* LayerNames[] = {TEXT("Grass"), TEXT("Sand"), TEXT("Dirt"), TEXT("Stone"), TEXT("Heart")};
+	enum ELayer : int32 { Grass, Sand, Dirt, Stone, Heart, Meadow, Count };
+	const TCHAR* LayerNames[] = {TEXT("Grass"), TEXT("Sand"), TEXT("Dirt"), TEXT("Stone"), TEXT("Heart"), TEXT("Meadow")};
 }
 
 ADaedalusVoxelIsle::ADaedalusVoxelIsle()
@@ -104,7 +104,8 @@ UHierarchicalInstancedStaticMeshComponent* ADaedalusVoxelIsle::Layer(int32 Index
 
 FString ADaedalusVoxelIsle::Build()
 {
-	const FLinearColor Colors[] = {GrassColor, SandColor, DirtColor, StoneColor, HeartColor};
+	const FLinearColor Colors[] = {GrassColor, SandColor, DirtColor, StoneColor, HeartColor,
+		FLinearColor(GrassColor.R * 1.25f + 0.04f, GrassColor.G * 1.18f, GrassColor.B * 0.8f)};
 	TArray<TArray<FTransform>> Out;
 	Out.SetNum(Count);
 	const float C = CubeSize;
@@ -125,7 +126,6 @@ FString ADaedalusVoxelIsle::Build()
 		}
 	auto Top = [&](int32 X, int32 Y) { return (X < -N || X > N || Y < -N || Y > N) ? INT32_MIN : Tops[(Y + N) * W + (X + N)]; };
 	auto Bot = [&](int32 X, int32 Y) { return (X < -N || X > N || Y < -N || Y > N) ? 0 : Bottoms[(Y + N) * W + (X + N)]; };
-	const float Rim = Radius * 0.8f;
 	for (int32 Y = -N; Y <= N; ++Y)
 		for (int32 X = -N; X <= N; ++X)
 		{
@@ -133,7 +133,10 @@ FString ADaedalusVoxelIsle::Build()
 			if (T == INT32_MIN) continue;
 			++Columns;
 			const int32 B = Bot(X, Y);
-			const bool bShore = FVector2D(X, Y).Size() > Rim || InPond(X, Y) || (PondRadius > 0 && FVector2D(X - PondAt.X, Y - PondAt.Y).Size() < PondRadius + 3);
+			// Sand only on a narrow beach: within two cubes of the rim, and round the pond.
+			bool bShore = InPond(X, Y) || (PondRadius > 0 && FVector2D(X - PondAt.X, Y - PondAt.Y).Size() < PondRadius + 2.5f);
+			for (int32 k = 0; k < 4 && !bShore; ++k)
+				bShore = Top(X + (k == 0 ? 2 : k == 1 ? -2 : 0), Y + (k == 2 ? 2 : k == 3 ? -2 : 0)) == INT32_MIN;
 			for (int32 Z = B; Z <= T; ++Z)
 			{
 				// Only cubes with an open face: the top, the bottom, and sides beside a shorter or missing column.
@@ -146,7 +149,7 @@ FString ADaedalusVoxelIsle::Build()
 				}
 				if (!bOpen) continue;
 				int32 L = Stone;
-				if (Z == T) L = bShore ? Sand : Grass;
+				if (Z == T) L = bShore ? Sand : (Noise(X * 0.09f, Y * 0.09f, 7) > 0.55f ? Meadow : Grass);
 				else if (Z >= T - 2) L = Dirt;
 				if (Z <= B + 1 && FVector2D(X, Y).Size() < 4.f) L = Heart;   // the glowing tip that holds the isle up
 				Out[L].Add(FTransform(FRotator::ZeroRotator, FVector((X + 0.5f) * C, (Y + 0.5f) * C, (Z + 0.5f) * C), Scale));

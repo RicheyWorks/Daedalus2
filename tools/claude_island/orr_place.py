@@ -216,7 +216,7 @@ def run(seed=7):
             asset, kind, p = herbs[i * 4 + s]
             r = 6000 + s * 140
             for dup in range(1):
-                put(asset, kind, math.cos(a) * r, math.sin(a) * r, None, math.degrees(a), 2.0)
+                put(asset, kind, math.cos(a) * r, math.sin(a) * r, None, math.degrees(a), 3.5)
         spawn(cube, at(math.cos(a) * 6200, math.sin(a) * 6200, 1), math.degrees(a), (7, 2.2, 0.06), soil, collide=False)
 
     # ---- buildings round the outer ring, facing the summit
@@ -302,6 +302,39 @@ def run(seed=7):
             a.set_editor_property("plaza", at(0 + (sum(map(ord, who)) % 7) * 150 - 450, -5600 - (sum(map(ord, who)) % 5) * 120, ground(0, -5600)))
             a.set_editor_property("lines", line)
             placed += 1
+
+    # ---- night: a warm light at every lantern, so the paths glow after dusk
+    lights = 0
+    for a in EAS.get_all_level_actors():
+        if TAG in [str(t) for t in a.tags] and "Lantern" in a.get_actor_label():
+            p_ = a.get_actor_location()
+            L = EAS.spawn_actor_from_class(unreal.PointLight, unreal.Vector(p_.x, p_.y, p_.z + 160), unreal.Rotator(0, 0, 0))
+            L.tags = [TAG]
+            L.set_folder_path("ClaudeIsland/Lights")
+            c = L.get_component_by_class(unreal.PointLightComponent)
+            c.set_intensity(2500.0)
+            c.set_light_color(unreal.LinearColor(1.0, 0.72, 0.38, 1.0))
+            c.set_attenuation_radius(900.0)
+            c.set_cast_shadows(False)
+            lights += 1
+
+    # ---- the pens come alive: the island's own livestock wander their paddocks (ADR-055 critters)
+    if hasattr(unreal, "DaedalusCritter"):
+        herd = [("Mob_Orr_Lumewool", 6, (7400, -2200)), ("Mob_Orr_CometHen", 6, (6600, -3300)),
+                ("Mob_Orr_OrbitGoat", 4, (8200, -3200)), ("Mob_Orr_NebulaBee", 5, (7600, 5200)),
+                ("Mob_Orr_Lumewool_Young", 3, (7600, -2600)), ("Mob_Orr_StarMoth", 4, (-3000, 3000)),
+                ("Mob_Orr_DewNewt", 3, (-7000, 3000)), ("Mob_Orr_GearFox", 2, (-4000, -9000))]
+        n = 0
+        for species, count, (cx, cy) in herd:
+            for k in range(count):
+                x, y = cx + rng.uniform(-500, 500), cy + rng.uniform(-500, 500)
+                c = EAS.spawn_actor_from_class(unreal.DaedalusCritter, at(x, y, ground(x, y) + 50), unreal.Rotator(0, 0, 0))
+                c.tags = [TAG]
+                c.set_folder_path("ClaudeIsland/Life")
+                c.set_editor_property("species", species)
+                c.set_editor_property("seed", 1000 + n)
+                c.set_editor_property("range", 700.0)
+                n += 1
 
     # ---- the sky: moonlets, fragments, clouds and streaks above the island
     for i, (asset, kind, p) in enumerate(by["sky"]):
