@@ -1,0 +1,133 @@
+{
+  "engine": "5.8.3-58210709+++UE5+Release-5.8",
+  "when": "2026-10-11",
+  "machine": "Windows 11 (Richmond's PC)",
+  "surface": {
+    "python_classes": 11132,
+    "editor_subsystems": 18,
+    "engine_subsystems": 14,
+    "world_subsystems": 12,
+    "function_libraries": 200,
+    "library_functions": 8370,
+    "actor_classes": 332,
+    "component_classes": 337,
+    "asset_factories": 266,
+    "plugins_enabled": 246,
+    "plugins_available": 852
+  },
+  "sweeps": {
+    "actors": {
+      "total": 332,
+      "spawned_and_cleaned": 266,
+      "abstract_refused": 34,
+      "excluded": 32,
+      "secs": 7.6,
+      "where": "user's editor (safe: spawn + destroy)",
+      "abstract": [
+        "BaseTransformGizmo",
+        "BlutilityActor",
+        "ChaosVDDataContainerBaseActor",
+        "ConcertClientDesktopPresenceActor",
+        "ConcertClientPresenceActor",
+        "ConcertClientVRPresenceActor",
+        "Controller",
+        "EditorAutomationActor",
+        "EditorUtilityActor",
+        "EditorUtilityCamera",
+        "EmitterCameraLensEffectBase",
+        "FunctionalAITestBase",
+        "ISMPartitionActor",
+        "Light",
+        "LightWeightInstanceManager",
+        "LightWeightInstanceStaticMeshManager",
+        "NavigationData",
+        "NavigationGraph",
+        "NavigationGraphNode",
+        "NavigationObjectBase",
+        "NiagaraLensEffectBase",
+        "NiagaraPreviewBase",
+        "PartitionActor",
+        "PhasedAutomationActorBase",
+        "PlacedEditorUtilityBase",
+        "PlaneReflectionCapture",
+        "ReflectionCapture",
+        "RigidBodyBase",
+        "SceneCapture",
+        "ScreenshotFunctionalTestBase",
+        "TriggerBase",
+        "Volume",
+        "WaterBody",
+        "WorldPartitionVolume"
+      ]
+    },
+    "factories": {
+      "total": 266,
+      "created": 161,
+      "failed_need_setting": 25,
+      "excluded_need_source_file": 78,
+      "crashed_engine": 2,
+      "where": "sandbox: headless UnrealEditor-Cmd under a crash supervisor",
+      "crashed": {
+        "LightWeightInstanceFactory": "deprecated in 5.8; create_asset crashes the engine",
+        "SlateWidgetStyleAssetFactory": "create_asset crashes the engine"
+      },
+      "need_setting": {
+        "skeleton": [
+          "AimOffsetBlendSpaceFactory1D",
+          "AimOffsetBlendSpaceFactoryNew",
+          "AnimCompositeFactory",
+          "AnimMontageFactory",
+          "AnimSequenceFactory",
+          "BlendSpaceFactory1D",
+          "BlendSpaceFactoryNew",
+          "PoseAssetFactory",
+          "PhysicsAssetFactory (skeletal mesh)"
+        ],
+        "row_struct": [
+          "DataTableFactory",
+          "CompositeDataTableFactory",
+          "MirrorDataTableFactory"
+        ],
+        "class_or_type": [
+          "CurveFactory",
+          "EditorUtilityBlueprintFactory (parent class)",
+          "InterchangePipelineBaseFactory",
+          "InterchangePythonPipelineAssetFactory",
+          "SoundSourceEffectFactory",
+          "SoundSubmixEffectFactory",
+          "StateTreeFactory (schema)",
+          "TransformProviderDataFactory",
+          "AudioSynesthesiaNRTFactory",
+          "AudioSynesthesiaNRTSettingsFactory",
+          "AudioSynesthesiaSettingsFactory"
+        ],
+        "abstract_factory": [
+          "MetaSoundBaseFactory",
+          "NiagaraScriptFactoryNew"
+        ]
+      }
+    }
+  },
+  "crashes_in_users_editor": [
+    {
+      "what": "factory sweep, all factories in the open editor",
+      "cause": "a modal (Choose Dataflow Setup) then an assertion in SavePackage on an abstract DataAsset",
+      "fix": "exclude prompting/class-needing factories"
+    },
+    {
+      "what": "factory sweep batches 1-5 in the open editor",
+      "cause": "SavePackage assertion (LightWeightInstance / SlateWidgetStyle factories)",
+      "fix": "risky sweeps run only in the sandbox"
+    }
+  ],
+  "proven_live": [
+    "unattended Remote Execution (unattended: true)",
+    "dialog answered from outside (No Dataflow)",
+    "asset pipeline import SHIPPED 9/9",
+    "materials (constant, roughness, metallic, emissive) created and assigned",
+    "post process, fog, sun, sky light",
+    "40 lamps placed by line trace onto islands",
+    "spawn every placeable actor class",
+    "create 161 asset types"
+  ]
+}

@@ -31,7 +31,7 @@ def _editor_cmd():
     raise RuntimeError("UnrealEditor-Cmd not found under " + eng)
 
 
-def sandbox_start(probe_source, tag="sweep"):
+def sandbox_start(probe_source, tag="sweep", launch=True):
     """Write the probe script and launch the headless editor on it. Returns at once."""
     root = os.path.join(tempfile.gettempdir(), "claude-unreal-sandbox")
     os.makedirs(root, exist_ok=True)
@@ -40,6 +40,8 @@ def sandbox_start(probe_source, tag="sweep"):
     wrapper = (
         "import json, traceback\n"
         "OUT = %r\n"
+        "import os as _os\n"
+        "SKIP_EXTRA = set(open(OUT + '.skip').read().split()) if _os.path.exists(OUT + '.skip') else set()\n"
         "def progress(line):\n"
         "    with open(OUT + '.progress', 'a', encoding='utf-8') as f:\n"
         "        f.write(line + '\\n'); f.flush()\n"
@@ -53,12 +55,52 @@ def sandbox_start(probe_source, tag="sweep"):
     ) % (out, "\n".join("    " + ln for ln in probe_source.splitlines()))
     with open(script, "w", encoding="utf-8") as f:
         f.write(wrapper)
+    if not launch:
+        return {"pid": None, "out": out}
     project = unreal.Paths.convert_relative_path_to_full(unreal.Paths.get_project_file_path())
     log = open(out + ".log", "w", encoding="utf-8")
     args = [_editor_cmd(), project, "-run=pythonscript", "-script=" + script, "-unattended", "-nullrhi",
             "-nosplash", "-nopause", "-nosound", "-stdout", "-FullStdOutLogOutput"]
     flags = getattr(subprocess, "CREATE_NO_WINDOW", 0)
     p = subprocess.Popen(args, stdout=log, stderr=subprocess.STDOUT, creationflags=flags)
+    return {"pid": p.pid, "out": out}
+
+
+SUPERVISOR = r'''
+import os, subprocess, sys
+base, cmd, project = sys.argv[1], sys.argv[2], sys.argv[3]
+for attempt in range(int(sys.argv[4]) if len(sys.argv) > 4 else 25):
+    if os.path.exists(base + ".progress"):
+        os.replace(base + ".progress", base + ".progress.%d" % attempt)
+    with open(base + ".log", "w", encoding="utf-8") as log:
+        subprocess.run([cmd, project, "-run=pythonscript", "-script=" + base + ".py", "-unattended", "-nullrhi",
+                        "-nosplash", "-nopause", "-nosound", "-stdout"], stdout=log, stderr=subprocess.STDOUT,
+                       creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+    if os.path.exists(base + ".json"):
+        break
+    prog = open(base + ".progress").read().splitlines() if os.path.exists(base + ".progress") else []
+    if not prog:
+        open(base + ".supervisor", "a").write("attempt %d crashed before any item; giving up\n" % attempt)
+        break
+    with open(base + ".skip", "a") as f:
+        f.write(prog[-1] + "\n")
+    open(base + ".supervisor", "a").write("attempt %d crashed on %s\n" % (attempt, prog[-1]))
+open(base + ".supervisor", "a").write("done\n")
+'''
+
+
+def sandbox_supervise(probe_source, tag="sweep", attempts=25):
+    """Like sandbox_start, but a supervisor process reruns the sandbox after each crash, skipping the item that
+    crashed it (the probe must skip names in SKIP_EXTRA and call progress(name) before each item). The crashed
+    items are the findings: <out>.supervisor lists them, <out>.json holds the rest."""
+    started = sandbox_start(probe_source, tag, launch=False)
+    out = started["out"]
+    with open(out + "_supervisor.py", "w", encoding="utf-8") as f:
+        f.write(SUPERVISOR)
+    project = unreal.Paths.convert_relative_path_to_full(unreal.Paths.get_project_file_path())
+    flags = getattr(subprocess, "CREATE_NO_WINDOW", 0) | getattr(subprocess, "DETACHED_PROCESS", 0)
+    p = subprocess.Popen([unreal.get_interpreter_executable_path(), out + "_supervisor.py", out, _editor_cmd(),
+                          project, str(attempts)], creationflags=flags)
     return {"pid": p.pid, "out": out}
 
 
