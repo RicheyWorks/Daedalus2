@@ -83,15 +83,45 @@ function Get-ProjectEditors {
     $leaf = Split-Path $Project -Leaf
     # This project's editor, and an editor started without a project (the launcher's project browser, which may
     # then open this one): either can hold the project's files. Commandlets (-run=) are the script's own.
-    $found = @(Get-CimInstance Win32_Process -Filter "Name = 'UnrealEditor.exe'" -ErrorAction SilentlyContinue |
-        Where-Object { $_.CommandLine -notlike "*-run=*" -and ($_.CommandLine -like "*$leaf*" -or $_.CommandLine -notlike "*.uproject*") })
-    # WMI can come back empty from a job started through WMI while the editor is open (seen 2026-10-12: the job
-    # never closed the editor and the link step found the DLL locked). Any editor window counts then.
-    if ($found.Count -eq 0) {
-        $found = @(Get-Process UnrealEditor -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero } |
-            ForEach-Object { [pscustomobject]@{ ProcessId = $_.Id; CommandLine = "" } })
+    $cim = @(Get-CimInstance Win32_Process -Filter "Name = 'UnrealEditor.exe'" -ErrorAction SilentlyContinue)
+    $found = @($cim | Where-Object { $_.CommandLine -notlike "*-run=*" -and ($_.CommandLine -like "*$leaf*" -or $_.CommandLine -notlike "*.uproject*") })
+    # WMI can miss a process (seen 2026-10-12 from a WMI-started job: the editor stayed open and its DLL stayed
+    # locked). Any UnrealEditor.exe that WMI didn't describe counts as this project's.
+    $seen = @($cim | ForEach-Object { [int]$_.ProcessId })
+    foreach ($p in @(Get-Process UnrealEditor -ErrorAction SilentlyContinue)) {
+        if ($seen -notcontains $p.Id) { $found += [pscustomobject]@{ ProcessId = $p.Id; CommandLine = "" } }
     }
     return $found
+}
+
+# Close an editor by its own main window. Process.CloseMainWindow picks whichever top-level window Windows lists
+# first, which can be a floating Content Browser: that closes, the editor stays (seen 2026-10-12).
+function Close-EditorWindows([int]$processId) {
+    if (-not ("DaedalusSetup.Win" -as [type])) {
+        Add-Type -Namespace DaedalusSetup -Name Win -MemberDefinition @'
+public delegate bool EnumProc(System.IntPtr h, System.IntPtr l);
+[System.Runtime.InteropServices.DllImport("user32.dll")] public static extern bool EnumWindows(EnumProc f, System.IntPtr l);
+[System.Runtime.InteropServices.DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(System.IntPtr h, out uint pid);
+[System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode)] public static extern int GetWindowText(System.IntPtr h, System.Text.StringBuilder s, int n);
+[System.Runtime.InteropServices.DllImport("user32.dll")] public static extern bool IsWindowVisible(System.IntPtr h);
+[System.Runtime.InteropServices.DllImport("user32.dll")] public static extern bool PostMessage(System.IntPtr h, uint m, System.IntPtr w, System.IntPtr l);
+'@
+    }
+    $hits = New-Object System.Collections.Generic.List[System.IntPtr]
+    $cb = [DaedalusSetup.Win+EnumProc]{
+        param($h, $l)
+        [uint32]$owner = 0
+        [void][DaedalusSetup.Win]::GetWindowThreadProcessId($h, [ref]$owner)
+        if ($owner -eq $processId -and [DaedalusSetup.Win]::IsWindowVisible($h)) {
+            $sb = New-Object System.Text.StringBuilder 256
+            [void][DaedalusSetup.Win]::GetWindowText($h, $sb, 256)
+            if ($sb.ToString() -like "* - Unreal Editor") { $hits.Add($h) }
+        }
+        $true
+    }
+    [void][DaedalusSetup.Win]::EnumWindows($cb, [IntPtr]::Zero)
+    foreach ($h in $hits) { [void][DaedalusSetup.Win]::PostMessage($h, 0x0010, [IntPtr]::Zero, [IntPtr]::Zero) }   # WM_CLOSE
+    return $hits.Count
 }
 if ($Open -and -not $WhatIfOnly) {
     $eds = Get-ProjectEditors
@@ -111,7 +141,9 @@ if ($Open -and -not $WhatIfOnly) {
             if ($reply -match '"status": *"ok"') { Write-Host "Saved the open level through the Claude Unreal Bridge." }
         } catch { }   # no bridge: Unreal asks about unsaved work itself
         Write-Host "Closing Unreal so the project can be updated (save anything it asks about)..." -ForegroundColor Cyan
-        foreach ($e in $eds) { (Get-Process -Id $e.ProcessId -ErrorAction SilentlyContinue).CloseMainWindow() | Out-Null }
+        foreach ($e in $eds) {
+            if ((Close-EditorWindows ([int]$e.ProcessId)) -eq 0) { (Get-Process -Id $e.ProcessId -ErrorAction SilentlyContinue).CloseMainWindow() | Out-Null }
+        }
         for ($i = 0; $i -lt 30 -and (Get-ProjectEditors).Count -gt 0; $i++) { Start-Sleep -Seconds 1 }
         # A job started through WMI can't always reach the editor's window; ask the editor itself to quit (it saved above).
         for ($n = 0; $n -lt 3 -and (Get-ProjectEditors).Count -gt 0; $n++) {
