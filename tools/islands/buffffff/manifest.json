@@ -3630,6 +3630,630 @@
   "faces": 160
  },
  {
+  "asset": "Prop_BUF_Tack_Buffalo_Bell",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Buffalo_Collar",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Buffalo_Feeder",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Buffalo_Bed",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Buffalo_NameTag",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Fluffhen_Bell",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Fluffhen_Collar",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Fluffhen_Feeder",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Fluffhen_Bed",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Fluffhen_NameTag",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Puffgoat_Bell",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Puffgoat_Collar",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Puffgoat_Feeder",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Puffgoat_Bed",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Puffgoat_NameTag",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Muffpig_Bell",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Muffpig_Collar",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Muffpig_Feeder",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Muffpig_Bed",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Muffpig_NameTag",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Tuffox_Bell",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Tuffox_Collar",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Tuffox_Feeder",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Tuffox_Bed",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Tuffox_NameTag",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Snuffduck_Bell",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Snuffduck_Collar",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Snuffduck_Feeder",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Snuffduck_Bed",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Snuffduck_NameTag",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Gruffsheep_Bell",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Gruffsheep_Collar",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Gruffsheep_Feeder",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Gruffsheep_Bed",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Gruffsheep_NameTag",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Ruffrabbit_Bell",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Ruffrabbit_Collar",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Ruffrabbit_Feeder",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Ruffrabbit_Bed",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Tack_Ruffrabbit_NameTag",
+  "kind": "prop",
+  "group": "livestock",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Store_Jar_V1",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Jar_V2",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Jar_V3",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Crock_V1",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Crock_V2",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Crock_V3",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Sack_V1",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Sack_V2",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Sack_V3",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Basket_V1",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Basket_V2",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Basket_V3",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Shelf_V1",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Shelf_V2",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Shelf_V3",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Cellar_V1",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Cellar_V2",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Cellar_V3",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Smokerack_V1",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Smokerack_V2",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Smokerack_V3",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Saltbox_V1",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Saltbox_V2",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Store_Saltbox_V3",
+  "kind": "prop",
+  "group": "food",
+  "faces": 24
+ },
+ {
+  "asset": "Mob_BUF_Pest_Aphid",
+  "kind": "mob",
+  "group": "herb",
+  "faces": 40
+ },
+ {
+  "asset": "Item_BUF_Remedy_Aphid",
+  "kind": "item",
+  "group": "herb",
+  "faces": 20
+ },
+ {
+  "asset": "Mob_BUF_Pest_Mite",
+  "kind": "mob",
+  "group": "herb",
+  "faces": 40
+ },
+ {
+  "asset": "Item_BUF_Remedy_Mite",
+  "kind": "item",
+  "group": "herb",
+  "faces": 20
+ },
+ {
+  "asset": "Mob_BUF_Pest_Slug",
+  "kind": "mob",
+  "group": "herb",
+  "faces": 40
+ },
+ {
+  "asset": "Item_BUF_Remedy_Slug",
+  "kind": "item",
+  "group": "herb",
+  "faces": 20
+ },
+ {
+  "asset": "Mob_BUF_Pest_Mildew",
+  "kind": "mob",
+  "group": "herb",
+  "faces": 40
+ },
+ {
+  "asset": "Item_BUF_Remedy_Mildew",
+  "kind": "item",
+  "group": "herb",
+  "faces": 20
+ },
+ {
+  "asset": "Mob_BUF_Pest_Rot",
+  "kind": "mob",
+  "group": "herb",
+  "faces": 40
+ },
+ {
+  "asset": "Item_BUF_Remedy_Rot",
+  "kind": "item",
+  "group": "herb",
+  "faces": 20
+ },
+ {
+  "asset": "Mob_BUF_Pest_Locust",
+  "kind": "mob",
+  "group": "herb",
+  "faces": 40
+ },
+ {
+  "asset": "Item_BUF_Remedy_Locust",
+  "kind": "item",
+  "group": "herb",
+  "faces": 20
+ },
+ {
+  "asset": "Prop_BUF_Weather_RainGauge_V1",
+  "kind": "prop",
+  "group": "water",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Weather_RainGauge_V2",
+  "kind": "prop",
+  "group": "water",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Weather_WindVane_V1",
+  "kind": "prop",
+  "group": "water",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Weather_WindVane_V2",
+  "kind": "prop",
+  "group": "water",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Weather_SunDial_V1",
+  "kind": "prop",
+  "group": "water",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Weather_SunDial_V2",
+  "kind": "prop",
+  "group": "water",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Weather_LightningRod_V1",
+  "kind": "prop",
+  "group": "water",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Weather_LightningRod_V2",
+  "kind": "prop",
+  "group": "water",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Weather_FogNet_V1",
+  "kind": "prop",
+  "group": "water",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Weather_FogNet_V2",
+  "kind": "prop",
+  "group": "water",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Weather_DewCollector_V1",
+  "kind": "prop",
+  "group": "water",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Weather_DewCollector_V2",
+  "kind": "prop",
+  "group": "water",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Weather_StormShelter_V1",
+  "kind": "prop",
+  "group": "water",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Weather_StormShelter_V2",
+  "kind": "prop",
+  "group": "water",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Weather_Weathercock_V1",
+  "kind": "prop",
+  "group": "water",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Weather_Weathercock_V2",
+  "kind": "prop",
+  "group": "water",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Signpost_V1",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 20
+ },
+ {
+  "asset": "Prop_BUF_Signpost_V2",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Signpost_V3",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Signpost_V4",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 20
+ },
+ {
+  "asset": "Prop_BUF_Signpost_V5",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Signpost_V6",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Signpost_V7",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 20
+ },
+ {
+  "asset": "Prop_BUF_Signpost_V8",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Signpost_V9",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 14
+ },
+ {
+  "asset": "Prop_BUF_Signpost_V10",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 20
+ },
+ {
+  "asset": "Prop_BUF_Signpost_V11",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 26
+ },
+ {
+  "asset": "Prop_BUF_Signpost_V12",
+  "kind": "prop",
+  "group": "decor",
+  "faces": 14
+ },
+ {
   "asset": "Prop_BUF_Cliff_K001",
   "kind": "prop",
   "group": "kit",
@@ -4318,5 +4942,221 @@
   "kind": "prop",
   "group": "kit",
   "faces": 30
+ },
+ {
+  "asset": "Prop_BUF_Bush_K116",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 40
+ },
+ {
+  "asset": "Prop_BUF_Log_K117",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 10
+ },
+ {
+  "asset": "Prop_BUF_PathStone_K118",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 9
+ },
+ {
+  "asset": "Prop_BUF_Pine_K119",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 37
+ },
+ {
+  "asset": "Prop_BUF_Rock_K120",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 30
+ },
+ {
+  "asset": "Prop_BUF_Cliff_K121",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 30
+ },
+ {
+  "asset": "Prop_BUF_Boulder_K122",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Tree_K123",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 30
+ },
+ {
+  "asset": "Prop_BUF_Bush_K124",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 60
+ },
+ {
+  "asset": "Prop_BUF_Log_K125",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 10
+ },
+ {
+  "asset": "Prop_BUF_PathStone_K126",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 9
+ },
+ {
+  "asset": "Prop_BUF_Pine_K127",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 37
+ },
+ {
+  "asset": "Prop_BUF_Rock_K128",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 12
+ },
+ {
+  "asset": "Prop_BUF_Cliff_K129",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 12
+ },
+ {
+  "asset": "Prop_BUF_Boulder_K130",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 30
+ },
+ {
+  "asset": "Prop_BUF_Tree_K131",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 30
+ },
+ {
+  "asset": "Prop_BUF_Bush_K132",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 80
+ },
+ {
+  "asset": "Prop_BUF_Log_K133",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 10
+ },
+ {
+  "asset": "Prop_BUF_PathStone_K134",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 9
+ },
+ {
+  "asset": "Prop_BUF_Pine_K135",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 37
+ },
+ {
+  "asset": "Prop_BUF_Rock_K136",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 12
+ },
+ {
+  "asset": "Prop_BUF_Cliff_K137",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 12
+ },
+ {
+  "asset": "Prop_BUF_Boulder_K138",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 30
+ },
+ {
+  "asset": "Prop_BUF_Tree_K139",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 30
+ },
+ {
+  "asset": "Prop_BUF_Bush_K140",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 60
+ },
+ {
+  "asset": "Prop_BUF_Log_K141",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 10
+ },
+ {
+  "asset": "Prop_BUF_PathStone_K142",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 9
+ },
+ {
+  "asset": "Prop_BUF_Pine_K143",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 37
+ },
+ {
+  "asset": "Prop_BUF_Rock_K144",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 30
+ },
+ {
+  "asset": "Prop_BUF_Cliff_K145",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Boulder_K146",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 24
+ },
+ {
+  "asset": "Prop_BUF_Tree_K147",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 30
+ },
+ {
+  "asset": "Prop_BUF_Bush_K148",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 60
+ },
+ {
+  "asset": "Prop_BUF_Log_K149",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 10
+ },
+ {
+  "asset": "Prop_BUF_PathStone_K150",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 9
+ },
+ {
+  "asset": "Prop_BUF_Pine_K151",
+  "kind": "prop",
+  "group": "kit",
+  "faces": 37
  }
 ]

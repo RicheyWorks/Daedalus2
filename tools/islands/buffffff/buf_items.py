@@ -2,7 +2,7 @@
 # Metres, origin bottom centre, flat colour slots, one collection per asset, Kind_BUF_Name. Writes GLBs + manifest.
 import bpy, os, json, math, random
 ROOT = r"C:\Users\730ri\projects\bot-team\art\buffffff"
-OUT = os.path.join(ROOT, "glb"); os.makedirs(OUT, exist_ok=True)
+OUT = os.path.join(ROOT, "glb"); ART = r"C:\Users\730ri\projects\bot-team\art"; SAVE_BLEND = True; os.makedirs(OUT, exist_ok=True)
 random.seed(666666)
 def hexc(h): h=h.lstrip('#'); return tuple(int(h[i:i+2],16)/255 for i in (0,2,4))+(1,)
 MATS={}
@@ -41,6 +41,9 @@ def asset(name,kind,build,group):
     bpy.ops.export_scene.gltf(filepath=p,use_selection=True,export_format='GLB',export_apply=True)
     tris=sum(len(o.data.polygons) for o in col.objects)
     made.append({"asset":name,"kind":kind,"group":group,"faces":tris})
+    if SAVE_BLEND:
+        kd=os.path.join(ART,name.split("_")[0]); os.makedirs(kd,exist_ok=True)
+        bpy.ops.wm.save_as_mainfile(filepath=os.path.join(kd,name+".blend"),copy=True)
 WOOD=mat("Wood","#8A5A32"); STONE=mat("Stone","#8C8C94"); DARK=mat("Dark","#2A2A2A"); SOIL=mat("Soil","#5A3B22")
 WATER=mat("Water","#3A9BD5"); CLEAN=mat("CleanWater","#8FE3FF"); STEM=mat("Stem","#3E7A2E"); GOLD=mat("BuffGold","#F2B630")
 GLASS=mat("Glass","#CFEFFF"); CLAY=mat("Clay","#B8643C"); ROOF=mat("Roof","#5B2A86")
@@ -164,9 +167,22 @@ for v in range(1,5): asset(f"Veh_BUF_Raft_V{v}","vehicle",lambda col,v=v:[cyl(co
 for f in FAM:
     for v in (1,2): asset(f"Prop_BUF_Shrine_{f}_V{v}","prop",lambda col,f=f,v=v:(box(col,1.2,1.2,0.6,0,0,0,STONE),cone(col,0.5,1.0+0.5*v,0,0,0.6,mat("Herb_"+f+"1",FAM[f][0]),6)),"nft")
 for v in range(1,13): asset(f"Prop_BUF_FlowerPatch_V{v}","prop",lambda col,v=v:[ball(col,0.1,random.Random(v*9+k).uniform(-0.6,0.6),random.Random(v*7+k).uniform(-0.6,0.6),0,mat("Fl"+str((v+k)%6),list(FAM.values())[(v+k)%6][0])) for k in range(8)],"kit")
+# ---- v3 additions: livestock tack, storage, pests/remedies, weather, signage = 120
+for sp,_,_ in LIV:
+    for t,c in (("Bell","#C9A040"),("Collar","#7A3AB6"),("Feeder","#8A5A32"),("Bed","#D8C070"),("NameTag","#F2B630")):
+        asset(f"Prop_BUF_Tack_{sp}_{t}","prop",lambda col,c=c,t=t:(box(col,0.4,0.3,0.15 if t!="Feeder" else 0.4,0,0,0,mat("T_"+t,c)),ball(col,0.06,0,0,0.2,GOLD)),"livestock")
+for st in ("Jar","Crock","Sack","Basket","Shelf","Cellar","Smokerack","Saltbox"):
+    for v in (1,2,3): asset(f"Prop_BUF_Store_{st}_V{v}","prop",lambda col,v=v:(cyl(col,0.2+0.1*v,0.3+0.15*v,0,0,0,CLAY if v!=2 else WOOD,10),cyl(col,0.15+0.1*v,0.04,0,0,0.3+0.15*v,DARK,10)),"food")
+for p,c in (("Aphid","#7CCB4A"),("Mite","#C8505A"),("Slug","#8A7A5A"),("Mildew","#E8E8E8"),("Rot","#5A3B22"),("Locust","#B8A040")):
+    asset(f"Mob_BUF_Pest_{p}","mob",lambda col,c=c:(ball(col,0.05,0,0,0,mat("Pest_"+c,c),0.6),ball(col,0.03,0,-0.05,0.03,DARK)),"herb")
+    asset(f"Item_BUF_Remedy_{p}","item",lambda col,c=c:(cyl(col,0.06,0.14,0,0,0,GLASS,8),cyl(col,0.05,0.08,0,0,0.01,mat("Rem_"+c,c),8)),"herb")
+for w in ("RainGauge","WindVane","SunDial","Lightning Rod","FogNet","DewCollector","StormShelter","Weathercock"):
+    w=w.replace(" ","")
+    for v in (1,2): asset(f"Prop_BUF_Weather_{w}_V{v}","prop",lambda col,v=v:(cyl(col,0.05,1.5+v,0,0,0,DARK,6),box(col,0.6,0.1,0.4,0,0,1.5+v,GOLD)),"water")
+for v in range(1,13): asset(f"Prop_BUF_Signpost_V{v}","prop",lambda col,v=v:(cyl(col,0.06,1.8,0,0,0,WOOD,6),[box(col,0.8,0.05,0.2,0.3*(1 if k%2 else -1),0,1.2+0.25*k,mat("Ban_"+fl[(v+k)%6],FAM[fl[(v+k)%6]][0])) for k in range(1+v%3)]),"decor")
 # ---- ISLAND KIT: rocks/cliffs/trees/bushes/logs/paths to reach 560+
 n=0; ROCKC=["#8C8C94","#6E6A64","#A89F8C","#5A6470","#7A8A70"]
-while len(made)<720:
+while len(made)<860:
     n+=1; kind=["Rock","Cliff","Boulder","Tree","Bush","Log","PathStone","Pine"][n%8]
     def b(col,seed=n,kind=kind):
         r=random.Random(seed*7)

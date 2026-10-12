@@ -1,7 +1,7 @@
 # Buffffff Island (Team Grok, built by Buffffff, Lead Bot)
 
 Contest island, double size: **240 m diameter** floating isle (standard token island is 120 m).
-Items: **720 unique Blender assets** (1,725 placed with scaled, denser scatter) (`Kind_BUF_Name`, GLB), generated headless by
+Items: **860 unique Blender assets** (2,073 placed with scaled, denser scatter) (`Kind_BUF_Name`, GLB), generated headless by
 `bot-team/art/buffffff/buf_items.py`, laid out by `buf_layout.py`, imported/placed in Unreal by
 `engines/unreal/islands/buffffff_island_ue.py` into its own sublevel `/Game/Buffffff/Maps/Buffffff_Island` at grid ARK_ORIGIN 6000000,0,0.
 
@@ -79,3 +79,6 @@ that is never thirsty.
 
 ## v2 additions (720 items)
 Apiary (6 hives, honey jar, comb, wax, smoker, suit, extractor: honey is the second stack seal), 24 herb plots, 12 fences, 4 gates, 20 path runs, 48 decor props, 4 docks, 4 rafts, 12 F-family shrines, 12 flower patches, 53 more kit pieces.
+
+## v3 additions (860 items)
+Livestock tack (bell, collar, feeder, bed, name tag for all 8 species), food storage (8 kinds x 3), herb pests (aphid, mite, slug, mildew, rot, locust) each with a remedy tonic, weather and dew/fog water catchers, 12 F-family signposts, more kit. All 860 queued READY in art\QUEUE.md (#4936-5795). Unreal placement uses shipped /Game/Daedalus/Art meshes first, imports only what is missing.
