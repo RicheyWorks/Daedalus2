@@ -5,16 +5,19 @@ package com.daedalus.server.jukebox;
 import com.daedalus.server.config.JukeboxProperties;
 import com.daedalus.server.jukebox.radio.RadioArea;
 import com.daedalus.server.jukebox.radio.RadioBrowserDirectory;
+import com.daedalus.server.jukebox.radio.RadioRelay;
+import com.daedalus.server.jukebox.radio.RelayGuard;
 import com.daedalus.server.jukebox.radio.RadioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -33,6 +36,7 @@ public class JukeboxService {
     private final RdSongReader reader;
     private final StudioArranger arranger;
     private final RadioService radio;
+    private final RadioRelay relay;
 
     @Autowired
     public JukeboxService(JukeboxProperties props) {
@@ -42,11 +46,45 @@ public class JukeboxService {
     }
 
     public JukeboxService(JukeboxProperties props, JsonRpc rpc, StudioArranger arranger, RadioService radio) {
+        this(props, rpc, arranger, radio, new RadioRelay(new RelayGuard(java.net.InetAddress::getAllByName,
+                System.getenv().getOrDefault("DAEDALUS_JUKEBOX_RELAY_FAKE_IP_CIDRS", "")), RadioRelay.Limits.DEFAULT));
+    }
+
+    public JukeboxService(JukeboxProperties props, JsonRpc rpc, StudioArranger arranger, RadioService radio, RadioRelay relay) {
         this.props = props;
         this.reader = rpc == null ? null : new RdSongReader(rpc, props.contract(), props.scanBatch(), props.maxScan(),
                 props.cacheSeconds() * 1000L, System::currentTimeMillis);
+        if (reader != null && props.enabled() && props.indexer()) {
+            Path file = props.indexFile().isEmpty()
+                    ? Path.of(System.getProperty("java.io.tmpdir"), "daedalus-jukebox-index-" + props.chainId() + "-" + props.contract() + ".json")
+                    : Path.of(props.indexFile());
+            reader.withIndexer(new TransferIndexer(rpc, props.contract(), props.chainId(), props.deployBlock(), props.confirmations(),
+                    props.logChunk(), file, 5_000, System::currentTimeMillis), props.scanFallbackMax());
+        }
         this.arranger = arranger;
         this.radio = radio;
+        this.relay = relay;
+    }
+
+    public RadioRelay relay() { return relay; }
+
+    /** Studio health for the UI (state UP / DEGRADED / DOWN / OFF, breaker, engine, last latency and error). */
+    public Map<String, Object> studioHealth() {
+        return props.enabled() ? arranger.health() : Map.of("state", "OFF");
+    }
+
+    /** Where holder look-ups come from ("index" or "scan") and how far the index has got. */
+    public Map<String, Object> holders() {
+        Map<String, Object> m = new LinkedHashMap<>();
+        if (!onChain()) { m.put("source", "off"); return m; }
+        m.put("source", reader.holderSource());
+        TransferIndexer ix = reader.indexer();
+        if (ix != null) {
+            m.put("indexedBlock", ix.indexedBlock());
+            m.put("indexedTokens", ix.size());
+            if (!ix.lastError().isEmpty()) m.put("indexError", ix.lastError());
+        }
+        return m;
     }
 
     public JukeboxProperties props() { return props; }
@@ -100,18 +138,22 @@ public class JukeboxService {
     }
 
     public StudioArranger.Arrangement arrange(String source, String genre, boolean studio) {
+        return arrange(source, genre, studio, StudioArranger.Render.DEFAULT);
+    }
+
+    public StudioArranger.Arrangement arrange(String source, String genre, boolean studio, StudioArranger.Render render) {
         String g = genre == null ? "original" : genre.toLowerCase();
         if (!StudioArranger.GENRES.contains(g)) throw new IllegalArgumentException("unknown genre: " + genre);
         if (source == null || !source.matches("seed:[a-z0-9][a-z0-9_-]{0,80}|token:\\d{1,9}"))
             throw new IllegalArgumentException("source must be seed:<name> or token:<id>");
-        return arranger.arrange(source, g, studio);
+        return arranger.arrange(source, g, studio, render);
     }
 
-    public Optional<InputStream> studioAudio(String key) {
-        return studio() ? ((HttpStudioArranger) arranger).audio(key) : Optional.empty();
+    public Optional<HttpStudioArranger.Upstream> studioAudio(String key, String ifNoneMatch) {
+        return studio() ? ((HttpStudioArranger) arranger).audio(key, ifNoneMatch) : Optional.empty();
     }
 
-    public Optional<InputStream> coatPng(String hash, int size) {
+    public Optional<byte[]> coatPng(String hash, int size) {
         return studio() ? ((HttpStudioArranger) arranger).coatPng(hash, size) : Optional.empty();
     }
 
