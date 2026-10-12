@@ -14,6 +14,18 @@ _IMPORT_WORDS = ("Import", "Reimport", "FbxFactory", "SoundFactory", "TextureFac
                  "MetaHumanPackage", "WithAssetWizard")
 
 
+# Factories that prompt (a modal picker) or that need a class chosen first. Without the class they make an
+# abstract asset, and saving that asserts and crashes the editor (seen live, UE 5.8.3: DataAssetFactory).
+_PROMPTS_OR_NEEDS_CLASS = ("DataAssetFactory", "DataflowAssetFactory", "Dataflow", "BlueprintFactory",
+                           "AnimBlueprintFactory", "ControlRigBlueprintFactory", "PhysicsAssetFactory",
+                           "CustomizableObjectFactory", "DataTableFactory", "CompositeDataTableFactory",
+                           "CurveTableFactory", "CompositeCurveTableFactory", "MirrorDataTableFactory",
+                           "AnimMontageFactory", "AnimCompositeFactory", "AnimSequenceFactory", "BlendSpace",
+                           "AimOffset", "PoseAssetFactory", "IKRetargetFactory", "IKRigDefinitionFactory",
+                           "MaterialFunctionInstanceFactory", "NiagaraEmitterFactoryNew", "NiagaraSystemFactoryNew")
+BATCH = 25
+
+
 def _factories():
     out = []
     for n in dir(unreal):
@@ -28,9 +40,17 @@ def _factories():
 
 
 @probe("sweep.factories")
-def _sweep():
+def _sweep(batch=None):
+    """batch=k runs only factories k*BATCH .. (k+1)*BATCH-1, so one bad factory costs one batch, not the walk."""
     rows, ok, fail, excluded = {}, 0, 0, 0
-    for i, (name, cls) in enumerate(_factories()):
+    allf = _factories()
+    span = range(len(allf)) if batch is None else range(batch * BATCH, min(len(allf), (batch + 1) * BATCH))
+    for i in span:
+        name, cls = allf[i]
+        if any(w in name for w in _PROMPTS_OR_NEEDS_CLASS):
+            rows[name] = {"state": "EXCLUDED", "why": "prompts for a choice or needs a class first; the area probes make these with the class set"}
+            excluded += 1
+            continue
         if any(w in name for w in _IMPORT_WORDS):
             rows[name] = {"state": "EXCLUDED", "why": "imports from a file; covered by the import probes"}
             excluded += 1

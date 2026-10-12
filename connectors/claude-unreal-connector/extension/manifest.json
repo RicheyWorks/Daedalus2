@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "unreal-connector",
   "display_name": "Unreal Engine",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Lets Claude operate your open Unreal Editor: inspect the level, run Python, screenshot the viewport, play, save, and answer dialogs.",
   "long_description": "Pairs with the Claude Unreal Bridge plugin, which listens inside the Unreal Editor on 127.0.0.1. This extension forwards Claude's tool calls to it. Nothing leaves your computer except what Claude reads back through the tools.",
   "author": { "name": "Richmond" },

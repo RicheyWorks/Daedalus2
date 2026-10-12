@@ -134,3 +134,15 @@ Daedalus is now just one user of the connector. A test checks that the two sides
 A README with no pictures leaves a bot or a person guessing what the thing does. Every module's README shows it
 working: a render, a run, a board. The screenshots are made by a script from real runs (for example
 `connectors/claude-asset-pipeline/harness/shots.py`), so they get regenerated with the code and never go stale.
+
+## A sweep over everything finds the sharp edges, so it must survive them
+
+The first factory sweep over all 266 asset factories crashed the live editor (UE 5.8.3). One factory opened a
+modal picker. Another (DataAssetFactory with no class set) made an abstract asset, and saving it asserted.
+What changed:
+- factories that prompt or need a class are excluded, with that reason
+- the sweep runs in batches, so a crash costs one batch
+- the level is saved first
+- the extension watches for dialogs during every call and cancels them
+
+A harness that only looks when asked misses the dialog that froze the editor. Watching has to be automatic.

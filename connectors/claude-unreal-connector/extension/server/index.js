@@ -112,6 +112,33 @@ function runWindows(op, args, timeoutMs) {
   });
 }
 
+// Dialog watcher. A modal dialog freezes the editor's game thread, and the bridge with it, so while a bridge
+// call is waiting this polls the editor's windows from outside (win.ps1) and cancels any modal it finds with
+// Escape. That is what unattended mode does inside the editor: dialogs are canceled, never waited on. Tool and
+// panel windows are left alone, and untitled windows are notifications, not modals. Every answer is reported
+// in the tool's reply. CLAUDE_UNREAL_AUTODIALOG=off turns the watcher off.
+const LEAVE_OPEN = /^(Message Log|Output Log|Content Browser|Content Drawer|Details|Outliner|World Settings|Project Settings|Editor Preferences|Plugins|Sequencer|Niagara|Material|Blueprint|Static Mesh|Landscape|Modeling|Session Frontend|Widget Reflector)\b/i;
+function startDialogWatcher(answered) {
+  if (process.platform !== 'win32' || String(process.env.CLAUDE_UNREAL_AUTODIALOG || '').toLowerCase() === 'off') return () => {};
+  let stopped = false, busy = false;
+  const tick = async () => {
+    if (stopped || busy) return;
+    busy = true;
+    try {
+      const r = await runWindows('list', { max_images: 0 }, 15000);
+      for (const w of (r && r.windows) || []) {
+        if (stopped || w.main || !w.title || LEAVE_OPEN.test(w.title)) continue;
+        const done = await runWindows('input', { hwnd: w.hwnd, keys: 'escape' }, 15000);
+        answered.push({ title: w.title, did: 'escape', closed: !!(done && done.ok && !done.window_still_open) });
+      }
+    } catch (e) { /* the watcher must never break the call it guards */ }
+    busy = false;
+  };
+  const first = setTimeout(() => { tick(); }, 2500);   // most calls finish before any dialog could matter
+  const every = setInterval(tick, 2000);
+  return () => { stopped = true; clearTimeout(first); clearInterval(every); };
+}
+
 async function runLocal(tool, args) {
   const r = await runWindows(tool.local, args || {}, tool.timeout);
   if (!r || r.ok === false) return { isError: true, content: [{ type: 'text', text: (r && r.message) || 'window harness failed' }] };
@@ -134,19 +161,24 @@ async function runTool(name, args) {
   const command = tool.command || (args && args.command);
   const params = tool.command ? (args || {}) : ((args && args.params) || {});
   let reply;
+  const answered = [];
+  const stopWatch = startDialogWatcher(answered);
+  const note = () => answered.length ? [{ type: 'text', text: 'Dialogs the watcher canceled during this call: ' + JSON.stringify(answered) }] : [];
   try { reply = await callUnreal(command, params, tool.timeout); } catch (e) {
-    return { isError: true, content: [{ type: 'text', text: e.message }] };
+    stopWatch();
+    return { isError: true, content: [{ type: 'text', text: e.message }, ...note()] };
   }
+  stopWatch();
   if (!reply || reply.status !== 'ok') {
     const tb = reply && reply.traceback ? '\n\n' + reply.traceback : '';
-    return { isError: true, content: [{ type: 'text', text: ((reply && reply.message) || 'Unreal reported an error') + tb }] };
+    return { isError: true, content: [{ type: 'text', text: ((reply && reply.message) || 'Unreal reported an error') + tb }, ...note()] };
   }
   const result = reply.result || {};
   if (typeof result.image_png_base64 === 'string') {
     const { image_png_base64, ...meta } = result;
-    return { content: [{ type: 'image', data: image_png_base64, mimeType: 'image/png' }, { type: 'text', text: JSON.stringify(meta, null, 2) }] };
+    return { content: [{ type: 'image', data: image_png_base64, mimeType: 'image/png' }, { type: 'text', text: JSON.stringify(meta, null, 2) }, ...note()] };
   }
-  return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+  return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }, ...note()] };
 }
 
 function send(msg) { process.stdout.write(JSON.stringify(msg) + '\n'); }
