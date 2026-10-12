@@ -159,5 +159,49 @@
       "editor subsystems (StaticMeshEditorSubsystem...) are None in a commandlet: those probes run in the open editor",
       "DataTableFactory needs .struct set; BlueprintFactory needs .parent_class; without them create_asset returns None or makes an abstract asset"
     ]
+  },
+  "live_probes": {
+    "passed": 9,
+    "total": 9,
+    "where": "open editor (needs renderer/viewport), everything restored, 13 actors cleaned",
+    "probes": [
+      "render_target_capture",
+      "text_render_sign",
+      "niagara_actor",
+      "lights_readback",
+      "cvar_set_restore",
+      "viewport_camera_restore",
+      "selection_restore",
+      "undo_move",
+      "attach_duplicate_tags"
+    ]
+  },
+  "play_in_editor": {
+    "ok": true,
+    "game_world": "DaedalusWorld",
+    "actors_in_game": 207,
+    "pawn": "DefaultPawn",
+    "controller": "PlayerController",
+    "ran_seconds": 7.14,
+    "gap": "no game character yet: Play uses DefaultPawn (the ADR-036 hero Blueprint is the next build)"
+  },
+  "memory": {
+    "ram_total_gb": 31.7,
+    "ram_free_gb_during_walk": 3.7,
+    "biggest": [
+      "UnrealEditor 3.6",
+      "ChatGPT 4.0",
+      "Edge 3.1",
+      "claude 2.3",
+      "Chrome 1.1"
+    ],
+    "guard": "sandbox refuses below 4 GB free and never runs two at once"
+  },
+  "score": {
+    "proven_live": 29,
+    "sweeps": {
+      "actors": "266/332",
+      "factories": "161/266 (+25 need a setting, all covered by deep probes' pattern)"
+    }
   }
 }
