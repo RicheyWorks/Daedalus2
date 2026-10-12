@@ -37,9 +37,9 @@ public static class DaedalusWin {
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern int GetClassName(IntPtr h, StringBuilder s, int n);
     [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr h, out RECT r);
     [DllImport("user32.dll")] public static extern bool PrintWindow(IntPtr h, IntPtr hdc, uint flags);
+    [DllImport("user32.dll")] public static extern bool IsIconic(IntPtr h);
     [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr h);
     [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr h, int cmd);
-    [DllImport("user32.dll")] public static extern bool IsIconic(IntPtr h);
     [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
     [DllImport("user32.dll")] public static extern bool SetCursorPos(int x, int y);
     [DllImport("user32.dll")] public static extern void mouse_event(uint f, uint dx, uint dy, uint d, UIntPtr e);
@@ -113,17 +113,22 @@ try {
     if ($Op -eq "list") {
         $out = @(); $n = 0
         # Largest window first: that is the main editor; dialogs and popups follow.
-        $wins = foreach ($h in [DaedalusWin]::Windows($pids)) {
-            $r = New-Object DaedalusWin+RECT; [void][DaedalusWin]::GetWindowRect($h, [ref]$r)
-            [pscustomobject]@{ h = $h; r = $r; area = ($r.Right - $r.Left) * ($r.Bottom - $r.Top) }
+        $wins = foreach ($hw in [DaedalusWin]::Windows($pids)) {
+            $r = New-Object DaedalusWin+RECT; [void][DaedalusWin]::GetWindowRect($hw, [ref]$r)
+            # A minimised window's rect is tiny: rank it by its restored size so the editor still comes first.
+            $area = ($r.Right - $r.Left) * ($r.Bottom - $r.Top)
+            if ([DaedalusWin]::IsIconic($hw)) { $area = 1e9 }
+            [pscustomobject]@{ h = $hw; r = $r; area = $area }
         }
         $wins = @($wins | Where-Object { $_.area -gt 400 } | Sort-Object area -Descending)
         for ($i = 0; $i -lt $wins.Count; $i++) {
-            $w = $wins[$i]; $width = $w.r.Right - $w.r.Left; $height = $w.r.Bottom - $w.r.Top
-            $entry = [ordered]@{ hwnd = [long]$w.h; title = [DaedalusWin]::Text($w.h); class = [DaedalusWin]::Cls($w.h);
-                                 main = ($i -eq 0); x = $w.r.Left; y = $w.r.Top; width = $width; height = $height }
-            if ($n -lt $MaxImages) {
-                $img = Get-Png $w.h $width $height
+            # Not $w / $h: PowerShell names ignore case, and the typed [int]$W / [int]$H parameters would swallow them.
+            $win = $wins[$i]; $width = $win.r.Right - $win.r.Left; $height = $win.r.Bottom - $win.r.Top
+            $entry = [ordered]@{ hwnd = [long]$win.h; title = [DaedalusWin]::Text($win.h); class = [DaedalusWin]::Cls($win.h);
+                                 main = ($i -eq 0); minimized = [DaedalusWin]::IsIconic($win.h);
+                                 x = $win.r.Left; y = $win.r.Top; width = $width; height = $height }
+            if ($n -lt $MaxImages -and -not [DaedalusWin]::IsIconic($win.h)) {
+                $img = Get-Png $win.h $width $height
                 if ($img) { $entry.png = $img.png; $entry.image_scale = $img.scale; $n++ }
             }
             $out += [pscustomobject]$entry

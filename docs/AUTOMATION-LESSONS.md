@@ -149,3 +149,12 @@ to it when something new breaks.
   materials in memory at those paths; later imports to the same folder silently fall back to the engine's grid
   material. A fresh folder imported cleanly. The cause can't recur now (the watcher waits for Play to end), and a
   probe import into a scratch folder is the quick way to tell "poisoned path" from "broken file".
+- **A minimised editor doesn't render.** The job launcher starts minimised and the editor inherited it: viewport
+  screenshots timed out, HighResShot wrote nothing, and Play ran at ~3 fps all morning. Restoring the window
+  (SW_SHOWNOACTIVATE, so it doesn't steal focus) fixed the screenshot at once. `unreal-job.ps1 -Wait` now
+  restores it after every build.
+- **PowerShell variable names ignore case.** Adding typed `[int]$W` / `[int]$H` parameters to `win.ps1` made the
+  list loop's `$w = $wins[$i]` fail ("cannot convert … to Int32"), silently breaking `editor_windows` since
+  v1.3.0. Don't reuse a parameter's name in any case.
+- **Python can't spawn into the Play world or add components there** (`begin_deferred_actor_spawn_from_class`
+  and `add_component_by_class` aren't exposed). A play-camera capture needs C++ or the restored viewport.

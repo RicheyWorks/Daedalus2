@@ -84,6 +84,15 @@ if ($Wait) {
             try { $c = New-Object Net.Sockets.TcpClient('127.0.0.1', 9877); $c.Close(); $up = $true } catch { Start-Sleep 2 }
         }
         "editor bridge: " + $(if ($up) { "up" } else { "not yet" })
+        # The job runs minimised, and the editor it opens inherits that: a minimised editor doesn't render, so
+        # screenshots time out and Play crawls (~3 fps). Restore it without taking focus.
+        Add-Type -Namespace DaedalusJob -Name Win -MemberDefinition '[DllImport("user32.dll")] public static extern bool IsIconic(IntPtr h); [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr h, int c);' -ErrorAction SilentlyContinue
+        foreach ($e in Get-Process UnrealEditor -ErrorAction SilentlyContinue) {
+            if ($e.MainWindowHandle -ne 0 -and [DaedalusJob.Win]::IsIconic($e.MainWindowHandle)) {
+                [void][DaedalusJob.Win]::ShowWindow($e.MainWindowHandle, 4)   # SW_SHOWNOACTIVATE
+                "editor window restored (it was minimised; a minimised editor doesn't render)"
+            }
+        }
     }
     else { "RUNNING $Id ($([int]((Get-Item $log -ErrorAction SilentlyContinue).Length / 1KB)) KB of log)" }
     if ($alerts) { "NORTON is asking you something:"; $alerts }
