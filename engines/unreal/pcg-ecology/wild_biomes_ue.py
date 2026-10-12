@@ -15,6 +15,7 @@ MESH = {"Oak": ["Prop_Tree_Oak_Mature", "Prop_Tree_Oak_Young"], "Pine": ["Prop_T
         "Bramble": ["Prop_Berry_Blackberry"]}
 HEIGHT = {"Oak": 1400, "Pine": 1600, "Willow": 1000, "Bramble": 150, "Sedge": 60, "Grass": 70, "Fern": 80}  # cm
 log = []
+_pre = [p.get_name() for p in unreal.EditorLoadingAndSavingUtils.get_dirty_map_packages()] + [p.get_name() for p in unreal.EditorLoadingAndSavingUtils.get_dirty_content_packages()]   # others' unsaved work before we touch anything
 def load(n):
     m = unreal.load_asset(ART % (n, n, n))
     if not m:
@@ -87,18 +88,26 @@ for (name, pts), (cx, cy) in zip(bios.items(), spots):
         u = tgt / dz; act.set_actor_scale3d(unreal.Vector(u, u, u))
         act.set_actor_label(f"WB_{name}_{p['species']}_{n}"); act.set_folder_path(f"Pythagoras/WildBiomes/{name}")
         act.tags = ["PYTH_WildBiome", "PYTH_WB_" + name]; n += 1
+    hb = eas.spawn_actor_from_class(unreal.TriggerBox, unreal.Vector(cx, cy, (ground(cx, cy) or ps.z) + 300), unreal.Rotator())
+    hb.set_actor_scale3d(unreal.Vector(W / 64, W / 64, 10)); hb.set_actor_label("WB_Habitat_" + name); hb.set_folder_path("Pythagoras/WildBiomes")
+    hb.tags = ["PYTH_WildBiome", "DAEDALUS_Habitat", "Habitat_" + name]
     counts[name] = n
     lab = eas.spawn_actor_from_class(unreal.TextRenderActor, unreal.Vector(cx, cy, (ground(cx, cy) or ps.z) + 1800), unreal.Rotator())
     lab.text_render.set_text(name); lab.text_render.set_world_size(250); lab.set_actor_label("WB_Label_" + name)
     lab.set_folder_path("Pythagoras/WildBiomes"); lab.tags = ["PYTH_WildBiome"]
 # 4) save only our sublevel
 unreal.EditorLevelUtils.make_level_current(lvl); les.save_current_level()
+persist_saved = False
+if not _pre:   # persistent map was clean before us: its only change is our sublevel entry -> save it
+    persist_saved = unreal.EditorLoadingAndSavingUtils.save_dirty_packages(True, False)   # maps only; only ours are dirty
 dirty = [p.get_name() for p in unreal.EditorLoadingAndSavingUtils.get_dirty_map_packages()] + \
         [p.get_name() for p in unreal.EditorLoadingAndSavingUtils.get_dirty_content_packages()]
 if spots:
     cam = unreal.Vector(spots[0][0] - 6000, spots[0][1] - 6000, ground(*spots[0]) + 4500 if ground(*spots[0]) else ps.z + 4500)
     ues.set_level_viewport_camera_info(cam, unreal.Rotator(roll=0, pitch=-30, yaw=45))
 result = {"island_bounds_m": IB and {k: round(v / 100) for k, v in IB.items() if k != "area_m2"}, "patch_m": round(WM), "counts": counts, "spots": [(round(x), round(y)) for x, y in spots], "skipped_no_ground": floating,
-          "missing_meshes": [k for k, v in meshes.items() if not v], "dirty_after_save": dirty, "log": log}
+          "missing_meshes": [k for k, v in meshes.items() if not v], "dirty_before": _pre, "persistent_saved": persist_saved, "dirty_after_save": dirty, "log": log}
+
+
 
 
