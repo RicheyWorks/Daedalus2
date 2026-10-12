@@ -12,6 +12,9 @@ The Blender team and Claude share one folder (default C:\\Users\\730ri\\projects
     reports\\<Asset>.json   the pipeline's full report for each attempt
 
 Status flow: TODO → DOING (who) → READY → SHIPPING → SHIPPED (tris, size) | REJECTED: <check> → … → READY.
+REJECTED means the asset is wrong and the Blender team must fix it. BLOCKED: <why> means Unreal failed on its own
+side (the bridge dropped, or the import made nothing while Blender and the file were fine); the asset is fine, and
+the watcher retries it by itself every BLOCKED_RETRY_S seconds, so nobody needs to touch the row.
 
 Every few seconds the watcher reads QUEUE.md. For each READY row it:
   1. needs both bridges up (Blender 127.0.0.1:9876, Unreal 127.0.0.1:9877); if not, it says so in STATUS.md and
@@ -82,7 +85,7 @@ def parse(text):
 
 
 def state(status):
-    """The status word: TODO, DOING, READY, SHIPPING, SHIPPED, REJECTED, WAITING (upper case), or ''."""
+    """The status word: TODO, DOING, READY, SHIPPING, SHIPPED, REJECTED, WAITING, BLOCKED (upper case), or ''."""
     m = re.match(r"\s*([A-Za-z]+)", status or "")
     return m.group(1).upper() if m else ""
 
@@ -109,6 +112,27 @@ def kind_of(asset):
 
 # ----------------------------------------------------------------------------------------------- the watcher
 
+BLOCKED_RETRY_S = 60
+
+# The judge's checks of the Blender side and the .glb file. When these all pass and Unreal still made no mesh,
+# the fault is Unreal's (busy, in Play, a broken import), not the asset's.
+BLENDER_SIDE = ("every Blender object reached the file", "triangles: Blender = file", "materials: Blender = file",
+                "sizes: Blender = file")
+
+
+def unreal_side_failure(report):
+    """Why Unreal failed on its own side, or '' when the failure (if any) is the asset's."""
+    checks = {c["check"]: c["ok"] for c in report.get("checks", [])}
+    if not all(checks.get(n, False) for n in BLENDER_SIDE):
+        return ""
+    made = report.get("unreal") or {}
+    if made.get("error"):
+        return "Unreal import error: %s" % str(made["error"])[:100]
+    if not made.get("meshes"):
+        return "Unreal imported nothing (Blender and the file were fine)"
+    return ""
+
+
 class Watcher:
     def __init__(self, folder=DEFAULT_DIR, blender=wire.BLENDER, unreal=wire.UNREAL, ship=None, clock=time.time):
         self.folder = folder
@@ -122,6 +146,7 @@ class Watcher:
         self.reports = os.path.join(folder, "reports")
         self.waiting_on = ""
         self.waiting_since = None   # when the current wait began (clock seconds), for stall detection
+        self.blocked_at = {}        # asset -> when it was last BLOCKED, to pace the retries
 
     # -- files
 
@@ -176,6 +201,10 @@ class Watcher:
         rejected = ["%s (%s)" % (r["asset"], r["status"]) for r in rows if state(r["status"]) == "REJECTED"]
         if rejected:
             out += ["", "**Needs a fix (Blender team):** " + "; ".join(rejected)]
+        blocked = ["%s (%s)" % (r["asset"], r["status"][len("BLOCKED:"):].strip()) for r in rows
+                   if state(r["status"]) == "BLOCKED"]
+        if blocked:
+            out += ["", "**Blocked on Unreal, not the asset (retrying on its own):** " + "; ".join(blocked)]
         if todo:
             out += ["", "**Up next (TODO):** " + ", ".join(todo[:8]) + (" …" if len(todo) > 8 else "")]
         out += ["", "## Last events", ""]
@@ -198,7 +227,9 @@ class Watcher:
             self.track_wait()
             self.summary()
             return []
-        ready = [r for r in rows if state(r["status"]) in ("READY", "WAITING")]
+        now = self.clock()
+        ready = [r for r in rows if state(r["status"]) in ("READY", "WAITING")
+                 or (state(r["status"]) == "BLOCKED" and now - self.blocked_at.get(r["asset"], 0) >= BLOCKED_RETRY_S)]
         done = []
         if ready:
             up_b, up_u = wire.reachable(self.blender), wire.reachable(self.unreal)
@@ -251,10 +282,8 @@ class Watcher:
         try:
             report = self.ship(asset, objects["objects"], "/Game/Daedalus/Art/" + kind,
                                os.path.join(self.folder, "glb"), True, self.blender, self.unreal)
-        except Exception as e:   # a bridge error is the asset's result, not the watcher's death
-            self.update(asset, "READY", "pipeline error, will retry: %s" % str(e)[:120])
-            self.event(asset, "error", why=str(e)[:300])
-            return (asset, "ERROR")
+        except Exception as e:   # a bridge error is Unreal's (or Blender's) problem, not the asset's
+            return self.block(asset, "pipeline error: %s" % str(e)[:120], "error")
         checks = list(report["checks"])
         tris = sum(o["triangles"] for o in report["blender"]["objects"])
         checks.append({"check": "triangle budget (%s %d)" % (kind, BUDGET[kind]), "ok": tris <= BUDGET[kind],
@@ -272,10 +301,20 @@ class Watcher:
             self.update(asset, result, "in Unreal: %s" % report["dest"])
             self.event(asset, "shipped", result=result, dest=report["dest"])
             return (asset, "SHIPPED")
+        why = unreal_side_failure(report)
+        if why:
+            return self.block(asset, why, "blocked")
         failed = next(c for c in checks if not c["ok"])
         self.update(asset, "REJECTED: %s (%s)" % (failed["check"], failed["detail"]))
         self.event(asset, "rejected", why=failed["check"], detail=failed["detail"])
         return (asset, "REJECTED")
+
+
+    def block(self, asset, why, event):
+        self.blocked_at[asset] = self.clock()
+        self.update(asset, "BLOCKED: %s" % why, "not the asset's fault; retrying every %d s" % BLOCKED_RETRY_S)
+        self.event(asset, event, why=why)
+        return (asset, "BLOCKED")
 
 
 PLAYING = "import unreal\nresult = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_game_world() is not None\n"

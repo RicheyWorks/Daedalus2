@@ -53,3 +53,16 @@ One shared folder on Richmond's PC, `projects\bot-team\art\`, and a watcher that
 - Asset placement in the game: swapping the foes' cones for `Mob_*` meshes and the pick for `Tool_Pickaxe`.
 - A NOTES auto-answer.
 - The lead bot's daily digest from `feed.jsonl`.
+
+## Amendment, 2026-10-12: BLOCKED is not REJECTED
+
+The Blender team (blender-harness) found that a READY row was marked REJECTED because Unreal failed on its own
+side: an import ran while a game test was going and made nothing. REJECTED tells a team to fix the asset, so that
+was the wrong word. The watcher now writes `BLOCKED: <why>` when the failure is Unreal's:
+- the bridge raised an error;
+- or every Blender→file check passed and Unreal reported an import error or made no mesh.
+
+BLOCKED rows are retried by themselves every 60 s (`BLOCKED_RETRY_S`), and STATUS.md lists them as "blocked on
+Unreal". A failure on Blender's side stays REJECTED.
+
+The tests went from 31/31 to 38/38. A mutant that drops the classification fails 3 of them.

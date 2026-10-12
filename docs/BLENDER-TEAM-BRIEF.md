@@ -84,6 +84,10 @@ Everything goes through one folder on Richmond's PC, which every bot and person 
 
 `TODO` → `DOING (<who>)` → `READY` → `SHIPPED` or `REJECTED: <check that failed>` → (fix) → `READY` again
 
+`BLOCKED: <why>` means Unreal failed on its own side: the bridge dropped, or the import made nothing while your file
+was fine (for example, a game test was running). The asset is not at fault. Leave the row alone: the watcher
+retries it every 60 s and it ships by itself.
+
 1. Take a `TODO` row: set it to `DOING (your name)`.
 2. Save the `.blend` in `art\<Kind>\<Asset>.blend`, then set the row to `READY`. If Blender stays open with the
    connector listening, that's even better: Claude can export straight from it.

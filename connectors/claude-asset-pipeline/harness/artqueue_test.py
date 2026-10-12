@@ -179,8 +179,55 @@ def boom(*a, **k):
 d, w, fb = setup(ship=boom)
 w.tick()
 r = row(d, "Tool_Pickaxe")
-check("bridge error: back to READY with a note", r["status"] == "READY" and "will retry" in r["notes"], str(r))
+check("bridge error: BLOCKED, not REJECTED, with a retry note", r["status"].startswith("BLOCKED: pipeline error")
+      and "retrying" in r["notes"], str(r))
 check("bridge error: feed says error", feed(d)[-1]["event"] == "error")
+check("bridge error: STATUS.md says blocked on Unreal", "Blocked on Unreal" in open(os.path.join(d, "STATUS.md"), encoding="utf-8").read())
+shutil.rmtree(d)
+
+
+# 10b. Unreal imports nothing while Blender and the file were fine (today's import during a game test): BLOCKED,
+#      retried by itself after BLOCKED_RETRY_S, and it ships once Unreal behaves.
+def unreal_made_nothing(*a, **k):
+    rep = report(ok=False)
+    rep["checks"] = [{"check": n, "ok": True, "detail": ""} for n in artqueue.BLENDER_SIDE] + [
+        {"check": "every file mesh became an Unreal static mesh", "ok": False, "detail": "file 2, Unreal 0"}]
+    rep["unreal"] = {"meshes": [], "materials": []}
+    return rep
+
+
+outcome = {"fn": unreal_made_nothing}
+d, w, fb = setup(ship=lambda *a, **k: outcome["fn"](*a, **k))
+clock = {"t": 1760000000}
+w.clock = lambda: clock["t"]
+w.tick()
+check("unreal made nothing: BLOCKED, not REJECTED", row(d, "Tool_Pickaxe")["status"].startswith("BLOCKED: Unreal imported nothing"),
+      row(d, "Tool_Pickaxe")["status"])
+outcome["fn"] = lambda *a, **k: report()
+clock["t"] += 10
+w.tick()
+check("blocked: not retried before the pause", row(d, "Tool_Pickaxe")["status"].startswith("BLOCKED"))
+clock["t"] += artqueue.BLOCKED_RETRY_S
+w.tick()
+check("blocked: retried by itself and shipped", row(d, "Tool_Pickaxe")["status"].startswith("SHIPPED"), row(d, "Tool_Pickaxe")["status"])
+shutil.rmtree(d)
+
+# 10c. Blender's side wrong and Unreal empty: the asset's fault, still REJECTED.
+def blender_wrong(*a, **k):
+    rep = unreal_made_nothing()
+    rep["checks"][1]["ok"] = False
+    rep["checks"][1]["detail"] = "Blender 10, file 8"
+    return rep
+
+
+d, w, fb = setup(ship=blender_wrong)
+w.tick()
+check("blender side wrong: REJECTED names the check", row(d, "Tool_Pickaxe")["status"].startswith("REJECTED: triangles: Blender = file"),
+      row(d, "Tool_Pickaxe")["status"])
+check("unreal_side_failure says '' for a healthy report", artqueue.unreal_side_failure(report()) == "")
+check("an import error message is blocked with its words",
+      "boom" in artqueue.unreal_side_failure({"checks": [{"check": n, "ok": True} for n in artqueue.BLENDER_SIDE],
+                                              "unreal": {"error": "boom", "meshes": [1]}}))
 shutil.rmtree(d)
 
 # 11. someone edits the board mid-write: their edit survives
