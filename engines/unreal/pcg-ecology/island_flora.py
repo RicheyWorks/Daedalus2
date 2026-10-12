@@ -13,16 +13,17 @@ def profile(token_id):
     off = r.uniform(-25, 25)
     cx, cy = 50 + off * math.cos(a + math.pi / 2), 50 + off * math.sin(a + math.pi / 2)
     stream = [(cx + t * math.cos(a) + 4 * math.sin(t / 9), cy + t * math.sin(a)) for t in range(-70, 71, 5)]
-    return {"token": token_id, "seed": h % 2**31, "years": years, "stream": stream}
+    gaps = [(r.uniform(10, 90), r.uniform(10, 90), r.uniform(6, 14), round(r.uniform(1, 12), 1)) for _ in range(r.randint(0, 2))]
+    return {"token": token_id, "seed": h % 2**31, "years": years, "stream": stream, "gaps": gaps}
 
 def generate(token_id, **kw):
     p = profile(token_id)
-    old = er.STREAM_POINTS
-    er.STREAM_POINTS = p["stream"]
+    old, oldg = er.STREAM_POINTS, list(er.DISTURBANCES)
+    er.STREAM_POINTS = p["stream"]; er.DISTURBANCES[:] = p["gaps"]
     try:
         out = er.generate(seed=p["seed"], years=p["years"], **kw)
     finally:
-        er.STREAM_POINTS = old
+        er.STREAM_POINTS = old; er.DISTURBANCES[:] = oldg
     return p, out
 
 def mix(placed):
@@ -45,3 +46,4 @@ if __name__ == "__main__":
         print(f"token {t}: years={p['years']} n={len(placed)} {m}")
     ok &= mixes[0] != mixes[1] != mixes[2]
     print("PASS" if ok else "FAIL")
+

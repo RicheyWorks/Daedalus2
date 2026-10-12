@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT
+﻿# SPDX-License-Identifier: MIT
 """Rule-based plant ecology for PCG placement (Pythagoras, pcg-ecology).
 
 Pure Python (stdlib only), so it runs in Unreal's embedded Python, in CI and on any bot box.
@@ -70,6 +70,7 @@ YEARS = 60.0            # default: a 60-year-old disturbance (matches the origin
 SPREAD = 1.0            # m per year
 STAGE_YEARS = [(0, 0.0), (5, 1.0), (20, 2.0), (60, 3.0)]
 CLEARING_R = 75.0       # m: the disturbance is a clearing of this radius centred on (0, 0)
+DISTURBANCES = []      # [(x, y, radius_m, years_since)]: windthrow / fire gaps inside older stands
 
 def _stage_from_years(t):
     if t <= 0: return 0.0
@@ -84,6 +85,8 @@ def seral_stage(x, y, years=None):
     edge = 3.0 * math.sin(x / 7.0) * math.cos(y / 9.0)
     depth = max(0.0, CLEARING_R - (d + edge))           # metres inside the clearing
     t = years - depth / SPREAD if depth > 0 else years + 100
+    for gx, gy, gr, gage in DISTURBANCES:   # later gaps (windthrow/fire) reset succession locally
+        if math.hypot(x - gx, y - gy) < gr: t = min(t, gage)
     return _stage_from_years(t)
 
 # ---- placement -------------------------------------------------------------
@@ -246,6 +249,10 @@ def checks(placed):
     c("native windows: oak band starts farther out when the clearing is younger", w10["disturbance_m"][0] >= w60["disturbance_m"][0], str((w10, w60)))
     c("native windows: willow hugs the stream, pine stays away", native_windows(BY_NAME["Willow"])["stream_m"][1] < native_windows(BY_NAME["Pine"])["stream_m"][0],
       str((native_windows(BY_NAME["Willow"])["stream_m"], native_windows(BY_NAME["Pine"])["stream_m"])))
+    DISTURBANCES.append((80.0, 80.0, 12.0, 3.0))
+    gap = [p for p in generate(7)[0] if math.hypot(p["x"] - 80, p["y"] - 80) < 10] if isinstance(generate(7), tuple) else [p for p in generate(7) if math.hypot(p["x"] - 80, p["y"] - 80) < 10]
+    DISTURBANCES.clear()
+    c("disturbance gap holds only pioneers (no oak/pine)", gap and not any(p["species"] in ("Oak", "Pine") for p in gap))
     c("deterministic for a seed", generate(7)[0][:50] == generate(7)[0][:50])
     return res, st
 
@@ -256,3 +263,4 @@ if __name__ == "__main__":
     for label, ok, d in res: print(("PASS " if ok else "FAIL ") + label + ("  " + d if d and not ok else ""))
     print(json.dumps({"rejected": rej, **st}, indent=1))
     n = sum(ok for _, ok, _ in res); print(f"{n}/{len(res)}"); sys.exit(0 if n == len(res) else 1)
+
