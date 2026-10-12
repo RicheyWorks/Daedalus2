@@ -87,6 +87,44 @@ def full_speed(p=None):
     return out
 
 
+def play_capture(p=None):
+    """A PNG of what the player sees in Play (the editor's screenshot and capture_view use the editor camera, and the
+    viewport screenshot times out during Play). A SceneCapture2D is placed at the player camera, rendered to a target,
+    exported, and removed. Returns the file's path (read it with any file tool)."""
+    import os, tempfile, time as _t
+    p = p or {}
+    w = world()
+    if w is None:
+        raise RuntimeError("start Play first")
+    width, height = int(p.get("width", 1280)), int(p.get("height", 720))
+    cam = unreal.GameplayStatics.get_player_camera_manager(w, 0)
+    loc, rot = cam.get_camera_location(), cam.get_camera_rotation()
+    rt = unreal.RenderingLibrary.create_render_target2d(w, width, height)
+    xf = unreal.Transform(loc, rot, unreal.Vector(1, 1, 1))
+    cap = unreal.GameplayStatics.begin_deferred_actor_spawn_from_class(w, unreal.SceneCapture2D, xf)
+    unreal.GameplayStatics.finish_spawning_actor(cap, xf)
+    try:
+        comp = cap.get_component_by_class(unreal.SceneCaptureComponent2D)
+        comp.set_editor_property("texture_target", rt)
+        comp.set_editor_property("capture_source", unreal.SceneCaptureSource.SCS_FINAL_COLOR_LDR)
+        comp.set_editor_property("fov_angle", cam.get_fov_angle())
+        comp.capture_scene()
+        yield
+        out_dir = p.get("dir") or os.path.join(tempfile.gettempdir(), "daedalus-captures")
+        os.makedirs(out_dir, exist_ok=True)
+        name = p.get("name") or "play_%d" % int(_t.time() * 1000)
+        unreal.RenderingLibrary.export_render_target(w, rt, out_dir, name)
+        path = os.path.join(out_dir, name + ".png")
+        deadline = _t.time() + 20
+        while not (os.path.exists(path) and os.path.getsize(path) > 0):
+            if _t.time() > deadline:
+                raise TimeoutError("the capture was not written")
+            yield
+        return {"path": path, "bytes": os.path.getsize(path), "camera": [round(loc.x), round(loc.y), round(loc.z)]}
+    finally:
+        cap.destroy_actor()
+
+
 def snapshot(p=None):
     h = hero()
     out = {"playing": world() is not None, "fps": fps()}
@@ -517,4 +555,7 @@ def register(bridge):
                     "Scenarios: " + ", ".join(sorted(SCENARIOS)), {"name": "str", "frames": "int (foes_hunt)"})
     bridge.register("daedalus.play_status", play_status, "The running or finished scenario: frames, checks, record", {})
     bridge.register("daedalus.play_snapshot", snapshot, "Hero, foes, Ghosts, foe routes and fps right now", {})
+    bridge.register("daedalus.play_capture", play_capture,
+                    "A PNG of what the player sees in Play (the camera, not the editor viewport); returns its path",
+                    {"width": "int", "height": "int", "dir": "str", "name": "str"})
     bridge.register("daedalus.full_speed", full_speed, "Stop the editor slowing Play when it is not the window in front", {})
