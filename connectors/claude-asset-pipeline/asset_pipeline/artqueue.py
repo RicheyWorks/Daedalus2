@@ -441,6 +441,21 @@ class Watcher:
             self.event(asset, "rejected", why="bad name")
             return (asset, "REJECTED")
         blend = os.path.join(self.folder, kind, asset + ".blend")
+        # Built elsewhere (a cloud Blender): <Kind>\<Asset>.glb with <Asset>.sent.json, Blender's report of what it
+        # sent. No Blender on this PC is needed; the judge still checks report = file = Unreal.
+        glb_path = os.path.join(self.folder, kind, asset + ".glb")
+        sent_path = os.path.join(self.folder, kind, asset + ".sent.json")
+        if not os.path.exists(blend) and os.path.exists(glb_path) and os.path.exists(sent_path):
+            with open(sent_path, encoding="utf-8") as f:
+                sent = json.load(f)
+            names = [o["name"] for o in sent.get("objects", [])]
+            if not names:
+                self.update(asset, "REJECTED: %s.sent.json lists no objects" % asset)
+                self.event(asset, "rejected", why="empty sent.json")
+                return (asset, "REJECTED")
+            self.update(asset, "SHIPPING")
+            self.event(asset, "shipping", objects=names, source="prebuilt glb")
+            return (asset, kind, {"objects": names, "source": "prebuilt", "glb": glb_path, "sent": sent})
         # Open the file, never at the cost of someone's unsaved work.
         if os.path.exists(blend):
             opened = wire.call(self.blender, "execute_code", side="Blender", code=OPEN_BLEND % json.dumps(blend))["result"]
@@ -463,8 +478,13 @@ class Watcher:
             return got
         _, kind, objects = got
         try:
-            report = self.ship(asset, objects["objects"], "/Game/Daedalus/Art/" + kind,
-                               os.path.join(self.folder, "glb"), True, self.blender, self.unreal)
+            if objects.get("source") == "prebuilt":
+                report = pipeline.land(pipeline.prebuilt(asset, objects["glb"], objects["sent"]), "/Game/Daedalus/Art/" + kind,
+                                       True, self.unreal) if not hasattr(self.ship, "land") else \
+                    self.ship.land(pipeline.prebuilt(asset, objects["glb"], objects["sent"]), "/Game/Daedalus/Art/" + kind, True, self.unreal)
+            else:
+                report = self.ship(asset, objects["objects"], "/Game/Daedalus/Art/" + kind,
+                                   os.path.join(self.folder, "glb"), True, self.blender, self.unreal)
         except Exception as e:   # a bridge error is Unreal's (or Blender's) problem, not the asset's
             return self.block(asset, "pipeline error: %s" % str(e)[:120], "error")
         return self.finish(asset, kind, report)
@@ -487,7 +507,10 @@ class Watcher:
                         results.append(got)
                         continue
                     _, kind, objects = got
-                    rep = self.ship.export(a, objects["objects"], os.path.join(self.folder, "glb"), self.blender)
+                    if objects.get("source") == "prebuilt":
+                        rep = pipeline.prebuilt(a, objects["glb"], objects["sent"])
+                    else:
+                        rep = self.ship.export(a, objects["objects"], os.path.join(self.folder, "glb"), self.blender)
                     handoff.put((a, kind, rep, None))
                 except Exception as e:
                     handoff.put((a, None, None, e))

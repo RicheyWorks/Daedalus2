@@ -608,7 +608,7 @@ def scenario_orrery(p):
     Lantern chart, wait for a starbloom's hour and harvest it, steep a tea, then harvest the Lantern pair and steep
     the Lantern Brew. Each step is checked on the logbook."""
     h = hero()
-    o = unreal.DaedalusOrrery.get(world()) if hasattr(unreal, "DaedalusOrrery") else None
+    o = unreal.SubsystemBlueprintLibrary.get_world_subsystem(world(), unreal.DaedalusOrrery) if hasattr(unreal, "DaedalusOrrery") else None
     if h is None or o is None:
         return {"error": "start Play with the Orrery build"}
     unreal.SystemLibrary.execute_console_command(world(), "daedalus.FoesHunt 0")

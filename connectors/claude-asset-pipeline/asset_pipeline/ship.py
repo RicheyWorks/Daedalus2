@@ -121,6 +121,14 @@ def export(name, objects=None, folder=None, blender=wire.BLENDER, timeout=600):
     return report
 
 
+def prebuilt(name, glb_path, sent):
+    """The Blender half done elsewhere (a cloud Blender, ADR-058): a .glb and Blender's own report of what it sent
+    (the same fields BLENDER_EXPORT reports), checked against the file's witness exactly as a live export is."""
+    report = {"name": name, "path": os.path.abspath(glb_path), "started": time.time(), "blender": sent,
+              "file": glb.summarize(glb_path), "exported_s": 0.0, "prebuilt": True}
+    return report
+
+
 def land(report, dest="/Game/Daedalus/Assets", save=True, unreal=wire.UNREAL, timeout=UNREAL_TIMEOUT):
     """The Unreal half: import the exported file, then judge all three sides."""
     report["dest"] = dest + "/" + report["name"]
@@ -140,7 +148,7 @@ def ship(name, objects=None, dest="/Game/Daedalus/Assets", folder=None, save=Tru
     return land(export(name, objects, folder, blender, timeout), dest, save, unreal, min(timeout, UNREAL_TIMEOUT))
 
 
-ship.export, ship.land = export, land   # the watcher overlaps the halves: Blender exports the next asset while Unreal imports this one
+ship.export, ship.land, ship.prebuilt = export, land, prebuilt   # the watcher overlaps the halves: Blender exports the next asset while Unreal imports this one
 
 
 def main(argv=None):
