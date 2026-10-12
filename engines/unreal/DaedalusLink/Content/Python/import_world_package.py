@@ -368,7 +368,9 @@ def main(argv):
     if "--verify" not in argv:
         import_into_unreal(zip_path, manifest, live_only=live_only)
     checks = judge(manifest, observe(manifest), live_only=live_only)
-    return 0 if report(manifest, checks, unreal.Paths.project_saved_dir()) else 3
+    # project_saved_dir() is relative to the engine's binaries, not to this process's working directory.
+    saved = unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_saved_dir())
+    return 0 if report(manifest, checks, saved) else 3
 
 
 if __name__ == "__main__":

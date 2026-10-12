@@ -410,6 +410,15 @@ function Find-VcTools {
     return $null
 }
 
+# Any Visual Studio install, with or without the C++ tools.
+function Find-AnyVs {
+    $vswhere = Join-Path $VsInstallerDir "vswhere.exe"
+    if (-not (Test-Path $vswhere)) { return $null }
+    $p = & $vswhere -latest -products * -property installationPath
+    if ($p) { return ($p | Select-Object -First 1) }
+    return $null
+}
+
 # The MSVC toolsets installed under a Visual Studio, newest first.
 function Get-MsvcVersions([string]$vs) {
     $dir = Join-Path $vs "VC\Tools\MSVC"
@@ -430,6 +439,15 @@ if ($Build) {
         Fail "the Visual Studio Installer is still running; let it finish, then run this again"
         $vc = $null
         $script:VcReported = $true
+    } elseif (-not $vc -and -not $WhatIfOnly -and (Find-AnyVs)) {
+        # Visual Studio is there but without the C++ tools (or an update left them out): add them to it.
+        $any = Find-AnyVs
+        Write-Host "    Visual Studio at $any has no C++ tools; adding 'Game development with C++' to it"
+        Write-Host "    Windows will ask to let the Visual Studio Installer make changes: choose Yes."
+        Start-Process -FilePath (Join-Path $VsInstallerDir "setup.exe") -Verb RunAs -Wait -ArgumentList @("modify", "--installPath", "`"$any`"",
+            "--passive", "--norestart", "--add", "Microsoft.VisualStudio.Workload.NativeGame", "--add", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
+            "--add", "Microsoft.VisualStudio.Component.Windows11SDK.22621", "--includeRecommended")
+        $vc = Find-VcTools
     } elseif (-not $vc -and -not $WhatIfOnly) {
         Write-Host "    no Visual Studio C++ tools; installing Visual Studio 2022 Community with 'Game development with C++'"
         Write-Host "    (a large download; the installer window shows progress, and you accept its license there)"
@@ -508,10 +526,13 @@ if ($Import -or $Verify) {
         }
         try {
             $flags = if ($Import) { "" } else { " --verify" }
+            $report = Join-Path $PackageDir "verify-$World.json"
+            if (Test-Path $report) { Remove-Item $report }   # only this run's report counts
             & $editor $Project -run=pythonscript "-script=`"$py`" `"$PackageFile`"$flags" -unattended -nopause
             $code = $LASTEXITCODE
-            $report = Join-Path $PackageDir "verify-$World.json"
-            if (Test-Path $report) {
+            if (-not (Test-Path $report) -and $code -eq 0) {
+                Fail "Unreal finished without writing $report, so nothing was verified"
+            } elseif (Test-Path $report) {
                 $v = Get-Content $report -Raw | ConvertFrom-Json
                 Write-Host ("    verified {0} r{1} in Unreal:" -f $v.world, $v.revision)
                 foreach ($c in $v.checks) {
