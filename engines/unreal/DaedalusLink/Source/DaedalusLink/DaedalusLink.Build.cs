@@ -22,6 +22,8 @@ public class DaedalusLink : ModuleRules
 		{
 			"HTTP",
 			"Json",
+			"Slate",
+			"SlateCore",
 		});
 	}
 }

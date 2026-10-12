@@ -9,6 +9,13 @@
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
 #include "Engine/World.h"
+#include "Engine/Engine.h"
+#include "Engine/GameViewportClient.h"
+#include "Framework/Application/SlateApplication.h"
+#include "Kismet/GameplayStatics.h"
+#include "Widgets/SWeakWidget.h"
+#include "DaedalusSettings.h"
+#include "SDaedalusSettingsMenu.h"
 #include "Engine/StaticMesh.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
@@ -30,10 +37,17 @@ static TAutoConsoleVariable<float> CVarMouseSensitivity(TEXT("daedalus.MouseSens
 	TEXT("Degrees of camera turn per mouse count (raw, no smoothing)."));
 static TAutoConsoleVariable<float> CVarStickLookRate(TEXT("daedalus.StickLookRate"), 200.f,
 	TEXT("Degrees per second at full right-stick deflection."));
-static TAutoConsoleVariable<int32> CVarInvertY(TEXT("daedalus.InvertY"), 0, TEXT("1 inverts vertical look."));
+static TAutoConsoleVariable<int32> CVarInvertY(TEXT("daedalus.InvertY"), 0, TEXT("1 inverts vertical stick look."));
 static TAutoConsoleVariable<float> CVarDeadzone(TEXT("daedalus.Deadzone"), 0.15f,
 	TEXT("Stick deadzone (0-0.9), read when the hero spawns."));
 static TAutoConsoleVariable<int32> CVarRumble(TEXT("daedalus.Rumble"), 1, TEXT("0 turns controller rumble off."));
+static TAutoConsoleVariable<float> CVarRumbleScale(TEXT("daedalus.RumbleScale"), 1.f, TEXT("Rumble strength, 0-1."));
+static TAutoConsoleVariable<int32> CVarInvertX(TEXT("daedalus.InvertX"), 0, TEXT("1 inverts horizontal stick look."));
+static TAutoConsoleVariable<float> CVarStickSensX(TEXT("daedalus.StickSensX"), 5.f, TEXT("Right-stick horizontal sensitivity, 1-10 (5 = StickLookRate)."));
+static TAutoConsoleVariable<float> CVarStickSensY(TEXT("daedalus.StickSensY"), 5.f, TEXT("Right-stick vertical sensitivity, 1-10."));
+static TAutoConsoleVariable<float> CVarLookAccel(TEXT("daedalus.LookAccel"), 3.f, TEXT("Look acceleration at full stick, 0-10."));
+static TAutoConsoleVariable<float> CVarMouseSensitivityY(TEXT("daedalus.MouseSensitivityY"), 0.30f, TEXT("Degrees per vertical mouse count."));
+static TAutoConsoleVariable<int32> CVarInvertMouseY(TEXT("daedalus.InvertMouseY"), 0, TEXT("1 inverts vertical mouse look."));
 
 namespace
 {
@@ -146,6 +160,7 @@ void ADaedalusHero::BeginPlay()
 	SwingAction = Make(TEXT("IA_Swing"), EInputActionValueType::Boolean);
 	DashAction = Make(TEXT("IA_Dash"), EInputActionValueType::Boolean);
 	ShieldAction = Make(TEXT("IA_Shield"), EInputActionValueType::Boolean);
+	MenuAction = Make(TEXT("IA_Menu"), EInputActionValueType::Boolean);
 	Mapping = NewObject<UInputMappingContext>(this, TEXT("IMC_Hero"));
 
 	// Keyboard and mouse. The mouse is raw (no smoothing, no frame-rate scaling): every count a high-polling
@@ -161,15 +176,18 @@ void ADaedalusHero::BeginPlay()
 	MapSpec(DashAction, TEXT("LeftShift"));
 	MapSpec(ShieldAction, TEXT("RightMouseButton"));
 	MapSpec(ShieldAction, TEXT("K"));
+	MapSpec(MenuAction, TEXT("Tab"));
+	MapSpec(MenuAction, TEXT("F10"));
+	MapSpec(MenuAction, TEXT("Gamepad_Special_Right"));
 
 	// XInput pads: Xbox Elite Series 2 (paddles mirror face buttons), GameSir and Razer Wolverine/Kishi in
 	// XInput mode. Sticks get a radial deadzone; the right stick turns at a rate, not by its deflection per frame.
-	MapSpec(MoveAction, TEXT("Gamepad_Left2D:dz"));
+	MapSpec(MoveAction, TEXT("Gamepad_Left2D:dzL"));
 	MapSpec(MoveAction, TEXT("Gamepad_DPad_Up:y"));
 	MapSpec(MoveAction, TEXT("Gamepad_DPad_Down:y-"));
 	MapSpec(MoveAction, TEXT("Gamepad_DPad_Right"));
 	MapSpec(MoveAction, TEXT("Gamepad_DPad_Left:-"));
-	MapSpec(LookStickAction, TEXT("Gamepad_Right2D:dz"));
+	MapSpec(LookStickAction, TEXT("Gamepad_Right2D:dzR"));
 	MapSpec(JumpAction, TEXT("Gamepad_FaceButton_Bottom"));
 	MapSpec(SwingAction, TEXT("Gamepad_FaceButton_Left"));
 	MapSpec(SwingAction, TEXT("Gamepad_RightTriggerAxis"));
@@ -180,6 +198,8 @@ void ADaedalusHero::BeginPlay()
 
 	// Everything else (Switch Pro, N64 USB pads and adapters, arcade sticks) comes from the profile file.
 	MapProfile();
+	FDaedalusSettings::Get().Load();
+	ApplySettings();
 
 	if (APlayerController* PC = Cast<APlayerController>(GetController()))
 	{
@@ -198,6 +218,7 @@ void ADaedalusHero::BeginPlay()
 			EI->BindAction(DashAction, ETriggerEvent::Started, this, &ADaedalusHero::Dash);
 			EI->BindAction(ShieldAction, ETriggerEvent::Started, this, &ADaedalusHero::ShieldOn);
 			EI->BindAction(ShieldAction, ETriggerEvent::Completed, this, &ADaedalusHero::ShieldOff);
+			EI->BindAction(MenuAction, ETriggerEvent::Started, this, &ADaedalusHero::ToggleSettings);
 		}
 	}
 }
@@ -221,6 +242,8 @@ void ADaedalusHero::MapSpec(UInputAction* A, const FString& Spec)
 		Dz->LowerThreshold = FMath::Clamp(CVarDeadzone.GetValueOnGameThread(), 0.f, 0.9f);
 		Dz->Type = Flags.Contains(TEXT("dz1")) ? EDeadZoneType::Axial : EDeadZoneType::Radial;
 		Map.Modifiers.Add(Dz);
+		if (Flags.Contains(TEXT("dzL"))) LeftDeadzones.Add(Dz);
+		if (Flags.Contains(TEXT("dzR"))) RightDeadzones.Add(Dz);
 	}
 	if (Flags.Contains(TEXT("y")))
 	{
@@ -336,31 +359,46 @@ void ADaedalusHero::Move(const FInputActionValue& V)
 
 void ADaedalusHero::LookMouse(const FInputActionValue& V)
 {
-	// Raw counts times a sensitivity: no smoothing and no frame-time scaling.
-	const FVector2D In = V.Get<FVector2D>() * CVarMouseSensitivity.GetValueOnGameThread();
-	const float Invert = CVarInvertY.GetValueOnGameThread() ? -1.f : 1.f;
-	AddControllerYawInput(In.X);
-	AddControllerPitchInput(-In.Y * Invert);
+	// Raw counts times a sensitivity per axis: no smoothing and no frame-time scaling.
+	const FVector2D In = V.Get<FVector2D>();
+	const float Invert = CVarInvertMouseY.GetValueOnGameThread() ? -1.f : 1.f;
+	AddControllerYawInput(In.X * CVarMouseSensitivity.GetValueOnGameThread());
+	AddControllerPitchInput(-In.Y * CVarMouseSensitivityY.GetValueOnGameThread() * Invert);
 }
 
 void ADaedalusHero::LookStick(const FInputActionValue& V)
 {
-	// A stick is a rate: full deflection turns StickLookRate degrees a second, whatever the frame rate.
+	// A stick is a rate: full deflection turns StickLookRate x (sensitivity / 5) degrees a second, whatever the
+	// frame rate. Held all the way out, look acceleration ramps that up over half a second.
 	const float Dt = GetWorld() ? GetWorld()->GetDeltaSeconds() : 0.016f;
-	const FVector2D In = V.Get<FVector2D>() * CVarStickLookRate.GetValueOnGameThread() * Dt;
-	const float Invert = CVarInvertY.GetValueOnGameThread() ? -1.f : 1.f;
-	AddControllerYawInput(In.X);
-	AddControllerPitchInput(-In.Y * Invert);
+	const FVector2D In = V.Get<FVector2D>();
+	LookHeld = In.Size() > 0.92f ? FMath::Min(LookHeld + Dt, 0.5f) : 0.f;
+	const float Accel = 1.f + CVarLookAccel.GetValueOnGameThread() * 0.08f * (LookHeld / 0.5f);
+	const float Rate = CVarStickLookRate.GetValueOnGameThread() * Dt * Accel;
+	const float InvX = CVarInvertX.GetValueOnGameThread() ? -1.f : 1.f;
+	const float InvY = CVarInvertY.GetValueOnGameThread() ? -1.f : 1.f;
+	AddControllerYawInput(In.X * Rate * (CVarStickSensX.GetValueOnGameThread() / 5.f) * InvX);
+	AddControllerPitchInput(-In.Y * Rate * (CVarStickSensY.GetValueOnGameThread() / 5.f) * InvY);
 }
 
 void ADaedalusHero::ShieldOn()
 {
+	if (bShieldToggle && bShielding)
+	{
+		bShielding = false;
+		GetCharacterMovement()->MaxWalkSpeed = 650.f;
+		return;
+	}
 	bShielding = true;
 	GetCharacterMovement()->MaxWalkSpeed = 300.f;
 }
 
 void ADaedalusHero::ShieldOff()
 {
+	if (bShieldToggle)
+	{
+		return;   // toggle mode: the next press lowers it
+	}
 	bShielding = false;
 	GetCharacterMovement()->MaxWalkSpeed = 650.f;
 }
@@ -373,7 +411,8 @@ void ADaedalusHero::Rumble(float Intensity, float Seconds) const
 	}
 	if (APlayerController* PC = Cast<APlayerController>(GetController()))
 	{
-		PC->PlayDynamicForceFeedback(Intensity, Seconds, true, true, true, true);
+		PC->PlayDynamicForceFeedback(Intensity * FMath::Clamp(CVarRumbleScale.GetValueOnGameThread(), 0.f, 1.f), Seconds,
+		                             true, true, true, true);
 	}
 }
 
@@ -465,4 +504,88 @@ void ADaedalusHero::Tick(float DeltaSeconds)
 ADaedalusGameMode::ADaedalusGameMode()
 {
 	DefaultPawnClass = ADaedalusHero::StaticClass();
+}
+
+void ADaedalusHero::ApplySettings()
+{
+	const FDaedalusSettings& S = FDaedalusSettings::Get();
+	S.PushCVars();
+	Camera->SetFieldOfView(S.V("FieldOfView"));
+	Boom->TargetArmLength = S.V("CameraDistance");
+	Boom->bEnableCameraLag = S.V("CameraLag") > 0.5f;
+	bShieldToggle = FMath::RoundToInt(S.V("ShieldMode")) == 1;
+	for (UInputModifierDeadZone* Dz : LeftDeadzones)
+	{
+		if (Dz) Dz->LowerThreshold = S.V("LeftDeadzone") / 100.f;
+	}
+	for (UInputModifierDeadZone* Dz : RightDeadzones)
+	{
+		if (Dz) Dz->LowerThreshold = S.V("RightDeadzone") / 100.f;
+	}
+}
+
+bool ADaedalusHero::SetSetting(FName Id, float Value)
+{
+	if (!FDaedalusSettings::Get().Set(Id, Value))
+	{
+		return false;
+	}
+	FDaedalusSettings::Get().Save();
+	ApplySettings();
+	return true;
+}
+
+float ADaedalusHero::GetSetting(FName Id) const
+{
+	return FDaedalusSettings::Get().V(Id);
+}
+
+bool ADaedalusHero::IsSettingsOpen() const
+{
+	return Menu.IsValid();
+}
+
+void ADaedalusHero::ToggleSettings()
+{
+	APlayerController* PC = Cast<APlayerController>(GetController());
+	UGameViewportClient* Viewport = GEngine ? GEngine->GameViewport : nullptr;
+	if (!PC || !Viewport)
+	{
+		return;
+	}
+	if (Menu.IsValid())
+	{
+		Viewport->RemoveViewportWidgetContent(MenuHost.ToSharedRef());
+		Menu.Reset();
+		MenuHost.Reset();
+		FDaedalusSettings::Get().Save();
+		ApplySettings();
+		PC->SetInputMode(FInputModeGameOnly());
+		PC->bShowMouseCursor = false;
+		UGameplayStatics::SetGamePaused(this, false);
+		return;
+	}
+	Menu = SNew(SDaedalusSettingsMenu)
+		.OnClose(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::ToggleSettings))
+		.OnChanged(FSimpleDelegate::CreateUObject(this, &ADaedalusHero::ApplySettings));
+	MenuHost = SNew(SWeakWidget).PossiblyNullContent(Menu.ToSharedRef());
+	Viewport->AddViewportWidgetContent(MenuHost.ToSharedRef(), 100);
+	FInputModeUIOnly Mode;
+	Mode.SetWidgetToFocus(Menu);
+	Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	PC->SetInputMode(Mode);
+	PC->bShowMouseCursor = true;
+	FSlateApplication::Get().SetAllUserFocus(Menu.ToSharedRef(), EFocusCause::SetDirectly);
+	UGameplayStatics::SetGamePaused(this, true);
+}
+
+void ADaedalusHero::EndPlay(const EEndPlayReason::Type Reason)
+{
+	if (Menu.IsValid() && GEngine && GEngine->GameViewport)
+	{
+		GEngine->GameViewport->RemoveViewportWidgetContent(MenuHost.ToSharedRef());
+	}
+	Menu.Reset();
+	MenuHost.Reset();
+	Super::EndPlay(Reason);
 }

@@ -1,0 +1,218 @@
+// SPDX-License-Identifier: MIT
+
+#include "DaedalusSettings.h"
+
+#include "Dom/JsonObject.h"
+#include "HAL/IConsoleManager.h"
+#include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
+#include "Serialization/JsonReader.h"
+#include "Serialization/JsonSerializer.h"
+#include "Serialization/JsonWriter.h"
+
+FString FDaedalusSetting::Format() const
+{
+	switch (Kind)
+	{
+	case EDaedalusSettingKind::Toggle:
+		return Value > 0.5f ? TEXT("ON") : TEXT("OFF");
+	case EDaedalusSettingKind::Choice:
+		return Choices.IsValidIndex(FMath::RoundToInt(Value)) ? Choices[FMath::RoundToInt(Value)] : TEXT("?");
+	default:
+		break;
+	}
+	const bool bWhole = FMath::IsNearlyEqual(Step, FMath::RoundToFloat(Step)) && Step >= 1.f;
+	return (bWhole ? FString::Printf(TEXT("%d"), FMath::RoundToInt(Value)) : FString::Printf(TEXT("%.1f"), Value)) + Unit;
+}
+
+float FDaedalusSetting::Fraction() const
+{
+	return Max > Min ? FMath::Clamp((Value - Min) / (Max - Min), 0.f, 1.f) : 0.f;
+}
+
+bool FDaedalusSetting::Nudge(int32 Dir)
+{
+	const float Before = Value;
+	switch (Kind)
+	{
+	case EDaedalusSettingKind::Toggle:
+		Value = Value > 0.5f ? 0.f : 1.f;
+		break;
+	case EDaedalusSettingKind::Choice:
+		if (Choices.Num() > 0)
+		{
+			Value = static_cast<float>((FMath::RoundToInt(Value) + Dir + Choices.Num()) % Choices.Num());
+		}
+		break;
+	default:
+		Value = FMath::Clamp(FMath::GridSnap(Value + Dir * Step, Step), Min, Max);
+		break;
+	}
+	return !FMath::IsNearlyEqual(Before, Value);
+}
+
+bool FDaedalusSetting::Activate()
+{
+	return Kind == EDaedalusSettingKind::Slider ? false : Nudge(+1);
+}
+
+FDaedalusSettings& FDaedalusSettings::Get()
+{
+	static FDaedalusSettings Instance;
+	return Instance;
+}
+
+FString FDaedalusSettings::Path()
+{
+	return FPaths::Combine(FPaths::ProjectSavedDir(), TEXT("Config"), TEXT("DaedalusSettings.json"));
+}
+
+void FDaedalusSettings::Add(FName Id, const TCHAR* Tab, const TCHAR* Label, const TCHAR* Help, EDaedalusSettingKind Kind,
+                            float Default, float Min, float Max, float Step, const TCHAR* Unit, TArray<FString> Choices)
+{
+	FDaedalusSetting S;
+	S.Id = Id;
+	S.Tab = Tab;
+	S.Label = Label;
+	S.Help = Help;
+	S.Kind = Kind;
+	S.Default = Default;
+	S.Value = Default;
+	S.Min = Min;
+	S.Max = Max;
+	S.Step = Step;
+	S.Unit = Unit;
+	S.Choices = MoveTemp(Choices);
+	All.Add(MoveTemp(S));
+}
+
+FDaedalusSettings::FDaedalusSettings()
+{
+	using K = EDaedalusSettingKind;
+	Tabs = {TEXT("GENERAL"), TEXT("CONTROLLER"), TEXT("MOUSE & KEYBOARD"), TEXT("ACCESSIBILITY")};
+
+	Add("FieldOfView", TEXT("GENERAL"), TEXT("Field of View"), TEXT("How wide the camera sees. Wider shows more of the islands around you; narrower feels closer to the hero."), K::Slider, 80, 70, 110, 1, TEXT("°"));
+	Add("CameraDistance", TEXT("GENERAL"), TEXT("Camera Distance"), TEXT("How far behind the hero the camera sits."), K::Slider, 650, 300, 1200, 25);
+	Add("ShieldMode", TEXT("GENERAL"), TEXT("Shield"), TEXT("Hold: the shield is up while the button is held. Toggle: press once to raise it, again to lower it."), K::Choice, 0, 0, 1, 1, TEXT(""), {TEXT("HOLD"), TEXT("TOGGLE")});
+
+	Add("InvertLookY", TEXT("CONTROLLER"), TEXT("Invert Look"), TEXT("Push the right stick up to look down, like a flight stick."), K::Toggle, 0);
+	Add("InvertLookX", TEXT("CONTROLLER"), TEXT("Invert Horizontal Look"), TEXT("Push the right stick right to turn left."), K::Toggle, 0);
+	Add("LookSensH", TEXT("CONTROLLER"), TEXT("Look Sensitivity (Horizontal)"), TEXT("How fast the right stick turns the camera left and right. 5 is the default turn rate."), K::Slider, 5, 1, 10, 0.5f);
+	Add("LookSensV", TEXT("CONTROLLER"), TEXT("Look Sensitivity (Vertical)"), TEXT("How fast the right stick tilts the camera up and down."), K::Slider, 5, 1, 10, 0.5f);
+	Add("LookAccel", TEXT("CONTROLLER"), TEXT("Look Acceleration"), TEXT("Holding the right stick all the way speeds the turn up over half a second. 0 turns it off."), K::Slider, 3, 0, 10, 1);
+	Add("LeftDeadzone", TEXT("CONTROLLER"), TEXT("Center Dead Zone (Move Stick)"), TEXT("How far the left stick must move before the hero walks. Raise it if the hero drifts."), K::Slider, 15, 0, 40, 1, TEXT("%"));
+	Add("RightDeadzone", TEXT("CONTROLLER"), TEXT("Center Dead Zone (Look Stick)"), TEXT("How far the right stick must move before the camera turns. Raise it if the camera drifts."), K::Slider, 15, 0, 40, 1, TEXT("%"));
+	Add("Vibration", TEXT("CONTROLLER"), TEXT("Vibration"), TEXT("Rumble on sword swings, down-thrust bounces, hard landings and respawns."), K::Toggle, 1);
+	Add("VibrationStrength", TEXT("CONTROLLER"), TEXT("Vibration Strength"), TEXT("How strong the rumble is."), K::Slider, 100, 0, 100, 5, TEXT("%"));
+
+	Add("MouseSensH", TEXT("MOUSE & KEYBOARD"), TEXT("Mouse Sensitivity (Horizontal)"), TEXT("Degrees the camera turns per mouse count, on a 1-10 scale. Look is raw and unsmoothed, so high-polling mice (Razer 8K) track exactly."), K::Slider, 5, 0.5f, 10, 0.1f);
+	Add("MouseSensV", TEXT("MOUSE & KEYBOARD"), TEXT("Mouse Sensitivity (Vertical)"), TEXT("The same for up and down."), K::Slider, 5, 0.5f, 10, 0.1f);
+	Add("InvertMouseY", TEXT("MOUSE & KEYBOARD"), TEXT("Invert Mouse Look"), TEXT("Move the mouse forward to look down."), K::Toggle, 0);
+
+	Add("CameraLag", TEXT("ACCESSIBILITY"), TEXT("Camera Smoothing"), TEXT("The camera trails the hero slightly. Turn it off for a camera locked to the hero."), K::Toggle, 1);
+	Load();
+}
+
+FDaedalusSetting* FDaedalusSettings::Find(FName Id)
+{
+	return All.FindByPredicate([Id](const FDaedalusSetting& S) { return S.Id == Id; });
+}
+
+float FDaedalusSettings::V(FName Id) const
+{
+	const FDaedalusSetting* S = All.FindByPredicate([Id](const FDaedalusSetting& X) { return X.Id == Id; });
+	return S ? S->Value : 0.f;
+}
+
+bool FDaedalusSettings::Set(FName Id, float Value)
+{
+	FDaedalusSetting* S = Find(Id);
+	if (!S)
+	{
+		return false;
+	}
+	S->Value = S->Kind == EDaedalusSettingKind::Slider ? FMath::Clamp(Value, S->Min, S->Max) : Value;
+	PushCVars();
+	return true;
+}
+
+TArray<int32> FDaedalusSettings::RowsOn(const FString& Tab) const
+{
+	TArray<int32> Out;
+	for (int32 i = 0; i < All.Num(); ++i)
+	{
+		if (All[i].Tab == Tab)
+		{
+			Out.Add(i);
+		}
+	}
+	return Out;
+}
+
+void FDaedalusSettings::ResetTab(const FString& Tab)
+{
+	for (FDaedalusSetting& S : All)
+	{
+		if (S.Tab == Tab)
+		{
+			S.Value = S.Default;
+		}
+	}
+	PushCVars();
+}
+
+void FDaedalusSettings::Load()
+{
+	FString Text;
+	if (FFileHelper::LoadFileToString(Text, *Path()))
+	{
+		TSharedPtr<FJsonObject> Root;
+		const TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Text);
+		if (FJsonSerializer::Deserialize(Reader, Root) && Root.IsValid())
+		{
+			for (FDaedalusSetting& S : All)
+			{
+				double N = 0.0;
+				if (Root->TryGetNumberField(S.Id.ToString(), N))
+				{
+					S.Value = S.Kind == EDaedalusSettingKind::Slider ? FMath::Clamp(static_cast<float>(N), S.Min, S.Max) : static_cast<float>(N);
+				}
+			}
+		}
+	}
+	PushCVars();
+}
+
+void FDaedalusSettings::Save() const
+{
+	const TSharedRef<FJsonObject> Root = MakeShared<FJsonObject>();
+	for (const FDaedalusSetting& S : All)
+	{
+		Root->SetNumberField(S.Id.ToString(), S.Value);
+	}
+	FString Text;
+	const TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&Text);
+	FJsonSerializer::Serialize(Root, Writer);
+	FFileHelper::SaveStringToFile(Text, *Path());
+}
+
+void FDaedalusSettings::PushCVars() const
+{
+	auto SetF = [](const TCHAR* Name, float Value)
+	{
+		if (IConsoleVariable* C = IConsoleManager::Get().FindConsoleVariable(Name))
+		{
+			C->Set(Value, ECVF_SetByCode);
+		}
+	};
+	SetF(TEXT("daedalus.InvertY"), V("InvertLookY"));
+	SetF(TEXT("daedalus.InvertX"), V("InvertLookX"));
+	SetF(TEXT("daedalus.StickSensX"), V("LookSensH"));
+	SetF(TEXT("daedalus.StickSensY"), V("LookSensV"));
+	SetF(TEXT("daedalus.LookAccel"), V("LookAccel"));
+	SetF(TEXT("daedalus.Rumble"), V("Vibration"));
+	SetF(TEXT("daedalus.RumbleScale"), V("VibrationStrength") / 100.f);
+	SetF(TEXT("daedalus.MouseSensitivity"), V("MouseSensH") * 0.06f);
+	SetF(TEXT("daedalus.MouseSensitivityY"), V("MouseSensV") * 0.06f);
+	SetF(TEXT("daedalus.InvertMouseY"), V("InvertMouseY"));
+}

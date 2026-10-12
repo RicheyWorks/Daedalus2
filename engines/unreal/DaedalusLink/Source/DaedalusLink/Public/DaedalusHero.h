@@ -13,6 +13,9 @@ class UStaticMesh;
 class UStaticMeshComponent;
 class UInputAction;
 class UInputMappingContext;
+class UInputModifierDeadZone;
+class SDaedalusSettingsMenu;
+class SWidget;
 struct FInputActionValue;
 
 /**
@@ -62,6 +65,15 @@ public:
 	/** True while the shield is up (blocks later; slows the walk now). */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") bool bShielding = false;
 
+	/** Open or close the settings menu (Menu button, Tab or F10). */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") void ToggleSettings();
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") bool IsSettingsOpen() const;
+	/** Apply the saved settings: camera, shield mode, deadzones (the look and rumble settings are read live). */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") void ApplySettings();
+	/** For the harness: set one setting by id ("InvertLookY", "LookSensH", ...), save it and apply it. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") bool SetSetting(FName Id, float Value);
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") float GetSetting(FName Id) const;
+
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") void Swing();
 	/** Every binding as "Action <- Key [modifiers]", for the harness and the controller docs. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") TArray<FString> DescribeBindings() const;
@@ -71,6 +83,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type Reason) override;
 
 private:
 	UStaticMeshComponent* Block(USceneComponent* Parent, const FName Name, const FVector& Size, const FVector& At,
@@ -90,6 +103,13 @@ private:
 	UPROPERTY() TObjectPtr<UInputAction> LookMouseAction;
 	UPROPERTY() TObjectPtr<UInputAction> LookStickAction;
 	UPROPERTY() TObjectPtr<UInputAction> ShieldAction;
+	UPROPERTY() TObjectPtr<UInputAction> MenuAction;
+	UPROPERTY() TArray<TObjectPtr<UInputModifierDeadZone>> LeftDeadzones;
+	UPROPERTY() TArray<TObjectPtr<UInputModifierDeadZone>> RightDeadzones;
+	TSharedPtr<SDaedalusSettingsMenu> Menu;
+	TSharedPtr<SWidget> MenuHost;
+	bool bShieldToggle = false;
+	float LookHeld = 0.f;
 	UPROPERTY() TObjectPtr<UInputAction> JumpAction;
 	UPROPERTY() TObjectPtr<UInputAction> SwingAction;
 	UPROPERTY() TObjectPtr<UInputAction> DashAction;
