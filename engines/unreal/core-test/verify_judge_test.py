@@ -22,6 +22,7 @@ MANIFEST = {
 }
 GOOD = {"level": True, "materials": ["M_DaedalusOpaque", "M_DaedalusTranslucent"], "chunk_actors": 3,
         "unmaterialed": 0, "ark": True, "plugin": True, "view": True,
+        "sky": ["DirectionalLight", "SkyAtmosphere", "SkyLight", "ExponentialHeightFog"],
         "live": [{"server_url": "http://localhost:8088", "world_id": "world-zero"}]}
 
 passed = total = 0
@@ -41,6 +42,8 @@ def expect(label, facts, failing, live_only=False, manifest=MANIFEST):
 
 expect("a complete import passes every check", GOOD, [])
 expect("no level", dict(GOOD, level=False), ["level"])
+expect("no sun (a new level renders every mesh black)", dict(GOOD, sky=["SkyAtmosphere", "SkyLight"]), ["lit"])
+expect("no sky light", dict(GOOD, sky=["DirectionalLight"]), ["lit"])
 expect("a material missing", dict(GOOD, materials=["M_DaedalusOpaque"]), ["materials"])
 expect("a chunk missing", dict(GOOD, chunk_actors=2), ["chunk meshes"])
 expect("a chunk too many (stacked re-import)", dict(GOOD, chunk_actors=6), ["chunk meshes"])

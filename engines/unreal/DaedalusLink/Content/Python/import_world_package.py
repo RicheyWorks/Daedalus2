@@ -195,6 +195,42 @@ def _material(name, translucent):
     return mat
 
 
+SKY_FOLDER = "Daedalus/Sky"
+# The light a Daedalus level needs, as (class name, label, rotation pitch/yaw). A new level has none of these,
+# and without them every mesh renders black. Each is added only if the level has no actor of that class.
+SKY = [
+    ("DirectionalLight", "Daedalus Sun", (-40.0, -60.0)),
+    ("SkyAtmosphere", "Daedalus Sky", (0.0, 0.0)),
+    ("SkyLight", "Daedalus Sky Light", (0.0, 0.0)),
+    ("ExponentialHeightFog", "Daedalus Haze", (0.0, 0.0)),
+]
+
+
+def ensure_sky(actors):
+    """Add a sun, sky atmosphere, sky light and haze when the level lacks them. Returns the labels added."""
+    have = {a.get_class().get_name() for a in actors.get_all_level_actors()}
+    added = []
+    for cls_name, label, (pitch, yaw) in SKY:
+        if cls_name in have:
+            continue
+        cls = getattr(unreal, cls_name)
+        a = actors.spawn_actor_from_class(cls, unreal.Vector(0, 0, 0), unreal.Rotator(0, pitch, yaw))
+        if a is None:
+            continue
+        a.set_actor_label(label)
+        a.set_folder_path(SKY_FOLDER)
+        if cls_name == "DirectionalLight":
+            light = a.get_component_by_class(unreal.DirectionalLightComponent)
+            light.set_editor_property("atmosphere_sun_light", True)   # the sky atmosphere takes its sun from it
+            light.set_editor_property("intensity", 10.0)
+        elif cls_name == "SkyLight":
+            sky = a.get_component_by_class(unreal.SkyLightComponent)
+            sky.set_editor_property("real_time_capture", True)
+            sky.set_mobility(unreal.ComponentMobility.MOVABLE)
+        added.append(label)
+    return added
+
+
 def _import(file_path, dest):
     task = unreal.AssetImportTask()
     task.set_editor_property("filename", file_path)
@@ -237,6 +273,9 @@ def import_into_unreal(zip_path, manifest, live_only=False):
     for old in actors.get_all_level_actors():
         if str(old.get_folder_path()) == "Daedalus/" + w["id"]:
             actors.destroy_actor(old)  # re-importing a world replaces it rather than stacking a copy
+    sky = ensure_sky(actors)
+    if sky:
+        unreal.log("Daedalus: lit the level (%s)" % ", ".join(sky))
     placed = 0
     for asset in world_assets:
         if not isinstance(asset, unreal.StaticMesh):
@@ -304,6 +343,9 @@ def judge(manifest, facts, live_only=False):
         checks.append({"name": name, "ok": bool(ok), "detail": detail})
 
     check("level", facts.get("level"), LEVEL)
+    lit = set(facts.get("sky", []))
+    check("lit", {"DirectionalLight", "SkyLight"} <= lit,
+          "sun and sky light in the level (found %s); without them every mesh is black" % sorted(lit))
     mats = set(facts.get("materials", []))
     check("materials", {"M_DaedalusOpaque", "M_DaedalusTranslucent"} <= mats, "found %s" % sorted(mats))
     check("chunk meshes", facts.get("chunk_actors") == chunks,
@@ -333,10 +375,13 @@ def observe(manifest):
     facts["ark"] = bool(lib.list_assets(CONTENT_ROOT + "/" + safe_name(w["id"]) + "/ark", recursive=True))
     live_type = getattr(unreal, "DaedalusWorldActor", None)
     facts["plugin"] = live_type is not None
-    facts["chunk_actors"], facts["unmaterialed"], facts["live"], facts["view"] = 0, 0, [], False
+    facts["chunk_actors"], facts["unmaterialed"], facts["live"], facts["view"], facts["sky"] = 0, 0, [], False, []
     if facts["level"]:
         unreal.get_editor_subsystem(unreal.LevelEditorSubsystem).load_level(LEVEL)
         for a in unreal.get_editor_subsystem(unreal.EditorActorSubsystem).get_all_level_actors():
+            cls_name = a.get_class().get_name()
+            if cls_name in ("DirectionalLight", "SkyLight", "SkyAtmosphere", "ExponentialHeightFog"):
+                facts["sky"].append(cls_name)
             if str(a.get_folder_path()) != "Daedalus/" + w["id"]:
                 continue
             if isinstance(a, unreal.PlayerStart):
