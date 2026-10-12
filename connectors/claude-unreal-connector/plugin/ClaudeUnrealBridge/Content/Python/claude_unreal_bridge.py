@@ -35,6 +35,7 @@ import threading
 import time
 import traceback
 import types
+import uuid
 
 try:
     import unreal
@@ -138,18 +139,19 @@ def cmd_get_actor_info(p):
 
 RESULT_MARK = "__CLAUDE_UNREAL_RESULT__"
 _remote = {"rx": None, "node": None, "error": None}
+_remote_lock = threading.Lock()  # Epic's shared command connection has no per-call routing.
 
 
-def _wrap(code):
+def _wrap(code, marker=RESULT_MARK):
     """Claude's code, wrapped so its `result` variable comes back as one marked line of output."""
     return ("import json as _cj, unreal\n"
             "result = None\n"
             "exec(compile(%r, '<claude>', 'exec'))\n"
             "try:\n    _cr = _cj.dumps(result)\nexcept TypeError:\n    _cr = _cj.dumps(repr(result))\n"
-            "print(%r + _cr)\n") % (code, RESULT_MARK)
+            "print(%r + _cr)\n") % (code, marker)
 
 
-def _remote_node(want):
+def _remote_node(want, request_deadline=None):
     """Unreal's own Python Remote Execution, connected to this editor. Commands it runs carry the "unattended"
     flag, so the editor cancels a modal dialog instead of waiting on it (a modal on the game thread would freeze
     the bridge). Needs Project Settings > Python > Enable Remote Execution (bRemoteExecution, which install.ps1
@@ -162,26 +164,39 @@ def _remote_node(want):
         _remote["error"] = "remote_execution.py not found (%s)" % e
         return None
     rx = rex.RemoteExecution()
-    rx.start()
+    try:
+        rx.start()
+    except Exception:
+        try:
+            rx.stop()
+        except Exception:
+            pass
+        raise
     # `want` (this project's folder) is read on the game thread by the caller: this runs on a background thread,
     # where touching the unreal API raises "Attempted to access Unreal API from outside the main game thread".
-    deadline = time.time() + 3.0
+    started = time.monotonic()
+    deadline = min(started + 3.0, request_deadline) if request_deadline is not None else started + 3.0
     node = None
-    while time.time() < deadline and node is None:
+    while time.monotonic() < deadline and node is None:
         nodes = list(rx.remote_nodes)
         for n in nodes:
             root = os.path.normcase(os.path.abspath(n.get("project_root", "") or ""))
             if root.rstrip("\\/") == want.rstrip("\\/"):
                 node = n.get("node_id")
                 break
-        if node is None and len(nodes) == 1 and time.time() > deadline - 1.5:
+        if node is None and len(nodes) == 1 and time.monotonic() > started + 1.5:
             node = nodes[0].get("node_id")   # one editor answered: this one, even if it names its project differently
-        time.sleep(0.1)
+        if node is None:
+            time.sleep(min(0.1, max(0.0, deadline - time.monotonic())))
     if node is None:
         rx.stop()
         _remote["error"] = "Remote Execution is off (Project Settings > Python > Enable Remote Execution)"
         return None
-    rx.open_command_connection(node)
+    try:
+        rx.open_command_connection(node)
+    except Exception:
+        rx.stop()
+        raise
     _remote.update(rx=rx, node=node, error=None)
     return rx, node
 
@@ -189,17 +204,38 @@ def _remote_node(want):
 def _run_remote(code, box, want):
     """Background thread: send the wrapped code through Remote Execution, unattended, and keep the reply.
     Never touches the unreal module (game thread only)."""
+    acquired = False
+    rx = None
     try:
-        got = _remote_node(want)
+        remaining = max(0.0, box["deadline"] - time.monotonic())
+        acquired = _remote_lock.acquire(timeout=remaining)
+        if not acquired:
+            raise TimeoutError("Remote Execution expired waiting for the command connection; code was not sent")
+        got = _remote_node(want, box["deadline"])
+        if time.monotonic() >= box["deadline"]:
+            raise TimeoutError("Remote Execution expired before dispatch; code was not sent")
         if got is None:
             box["fallback"] = _remote["error"]
             return
         rx, _node = got
-        box["reply"] = rx.run_command(_wrap(code), unattended=True)
+        wrapped = _wrap(code, box["marker"])
+        reply = rx.run_command(wrapped, unattended=True)
+        if not isinstance(reply, dict) or reply.get("command") != wrapped:
+            raise RuntimeError("Remote Execution reply does not match this command; code may have executed")
+        box["reply"] = reply
     except Exception as e:
-        box["fallback"] = "Remote Execution failed: %s" % e
-        _remote.update(rx=None, node=None)
+        # An uncertain send/receive must never re-execute code locally: it may
+        # already have imported, saved or changed assets remotely.
+        box["error"] = "Remote Execution failed: %s; code was not retried" % e
+        if acquired and rx is not None:
+            try:
+                rx.stop()
+            except Exception:
+                pass
+            _remote.update(rx=None, node=None)
     finally:
+        if acquired:
+            _remote_lock.release()
         box["done"] = True
 
 
@@ -223,28 +259,36 @@ def cmd_execute_python(p):
     code = p["code"]
     if not p.get("unattended", True):
         return _exec_here(code)
-    box = {"done": False, "reply": None, "fallback": None}
+    deadline = time.monotonic() + float(p.get("timeout", 600))
+    box = {"done": False, "reply": None, "fallback": None, "error": None,
+           "marker": RESULT_MARK + uuid.uuid4().hex + ":", "deadline": deadline}
     want = os.path.normcase(os.path.abspath(unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir())))
     threading.Thread(target=_run_remote, args=(code, box, want), name="claude-unreal-remote", daemon=True).start()
-    deadline = time.time() + float(p.get("timeout", 600))
     while not box["done"]:
-        if time.time() > deadline:
-            raise TimeoutError("the editor did not run the code within the timeout")
+        if time.monotonic() > deadline:
+            raise TimeoutError("Remote Execution did not finish within the timeout; dispatched code may still run")
         yield
+    if box["error"]:
+        raise RuntimeError(box["error"])
     if box["fallback"]:
+        if time.monotonic() >= deadline:
+            raise TimeoutError("direct fallback expired before execution; code was not sent")
         out = _exec_here(code)
         out["note"] = box["fallback"] + "; ran directly, so a modal dialog would block the editor"
         return out
     reply = box["reply"] or {}
-    lines, result = [], None
+    lines, result, matched = [], None, 0
     for entry in reply.get("output", []) or []:
         text = entry.get("output", "") if isinstance(entry, dict) else str(entry)
-        if text.startswith(RESULT_MARK):
-            result = json.loads(text[len(RESULT_MARK):])
+        if text.startswith(box["marker"]):
+            matched += 1
+            result = json.loads(text[len(box["marker"]):])
         else:
             lines.append(text)
     if not reply.get("success", False):
         raise RuntimeError((reply.get("result") or "the code raised an error") + "\n" + "\n".join(lines)[-6000:])
+    if matched != 1:
+        raise RuntimeError("Remote Execution result correlation failed: expected one matching marker; code was not retried")
     return {"stdout": "\n".join(lines)[-20000:], "result": result, "unattended": True}
 
 
@@ -484,6 +528,7 @@ def register(name, fn, description="", params=None, risk="MUTATE"):
 REPLAY_KEEP = 256
 _replies = {}
 _replay_order = []
+_inflight = {}  # game-thread only: request_id -> (original box, waiting retry boxes)
 
 
 def _remember(rid, reply):
@@ -499,10 +544,18 @@ def _remember(rid, reply):
 
 def _finish(box, reply):
     rid = box.get("request_id")
+    pending = _inflight.get(rid) if rid is not None else None
+    followers = []
+    if pending is not None and pending[0] is box:
+        _, followers = _inflight.pop(rid)
     if rid is not None and reply.get("status") == "ok":
         _remember(rid, dict(reply))
     box["reply"] = reply
     box["done"].set()
+    for request_id, follower in followers:
+        repeated = dict(reply)
+        repeated["id"], repeated["replayed"] = request_id, True
+        _finish(follower, repeated)
 
 
 def _error(req, e):
@@ -511,12 +564,20 @@ def _error(req, e):
 
 
 def _start(req, box):
+    deadline = box.get("deadline")
+    if deadline is not None and time.monotonic() >= deadline:
+        _finish(box, {"id": req.get("id"), "status": "error", "code": "EXPIRED",
+                      "message": "the command expired before execution; no editor work started"})
+        return
     params = req.get("params") or {}
     rid = params.get("request_id")
     if rid is not None and rid in _replies:
         reply = dict(_replies[rid])
         reply["id"], reply["replayed"] = req.get("id"), True
         _finish(box, reply)
+        return
+    if rid is not None and rid in _inflight:
+        _inflight[rid][1].append((req.get("id"), box))
         return
     box["request_id"] = rid
     fn = COMMANDS.get(req.get("type"))
@@ -531,6 +592,8 @@ def _start(req, box):
                                  % (req.get("type"), risk)})
         return
     try:
+        if rid is not None:
+            _inflight[rid] = (box, [])
         out = fn(req.get("params") or {})
         if isinstance(out, types.GeneratorType):
             _running.append((out, req, box))
@@ -609,11 +672,17 @@ def _client(conn):
             conn.sendall((json.dumps({"id": req.get("id"), "status": "ok", "result": {"job_id": jid, "state": "running"}})
                           + "\n").encode("utf-8"))
             return
+        wait_timeout = float(params.get("bridge_timeout", 1800))
+        box["deadline"] = time.monotonic() + wait_timeout
         _jobs.put((req, box))
-        if not box["done"].wait(timeout=float((req.get("params") or {}).get("bridge_timeout", 1800))):
-            box["reply"] = {"id": req.get("id"), "status": "error",
-                            "message": "the editor did not run the command in time (is a modal dialog open?)"}
-        conn.sendall((json.dumps(box["reply"]) + "\n").encode("utf-8"))
+        if box["done"].wait(timeout=wait_timeout):
+            reply = box["reply"]
+        else:
+            # Don't overwrite the original box: running commands and their retries
+            # must still receive their actual result when the game thread finishes.
+            reply = {"id": req.get("id"), "status": "error", "code": "TIMEOUT",
+                     "message": "the editor did not finish the command in time; it may still be running"}
+        conn.sendall((json.dumps(reply) + "\n").encode("utf-8"))
 
 
 _job_boxes = {}
