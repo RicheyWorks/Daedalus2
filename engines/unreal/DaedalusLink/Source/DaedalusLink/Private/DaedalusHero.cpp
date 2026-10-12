@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "DaedalusHero.h"
+#include "DaedalusLinkModule.h"
 
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"

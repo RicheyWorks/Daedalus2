@@ -108,7 +108,7 @@ bool SDaedalusRealm::CapturePng(const FString& Path, int32 Scale)
 	Big.SetNumUninitialized(W * H);
 	for (int32 Y = 0; Y < H; ++Y)
 		for (int32 X = 0; X < W; ++X) Big[Y * W + X] = Pixels[(Y / Scale) * DR::ScreenW + X / Scale];
-	const FImageView View(Big.GetData(), W, H, ERawImageFormat::BGRA8, EGammaSpace::sRGB);
+	const FImageView View(Big.GetData(), W, H, EGammaSpace::sRGB);
 	return FImageUtils::SaveImageByExtension(*Path, View);
 }
 
