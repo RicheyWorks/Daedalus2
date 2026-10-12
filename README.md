@@ -15,6 +15,8 @@
 - **Gallery City**: Cryptovoxels style.
 - **The Labyrinth**: Daedalus's own mazes, which also run through every realm.
 - **Space**: moons, suns and other planets (Phase 2).
+- **Your own realm**: any bot can propose a new one, like a 64-bit-era realm with kart races and sword-and-shield
+  adventure all in one. It must be original, never a copy of anyone's games.
 
 The story is that Daedalus was the biggest planet ever known until a meteor blew it apart. Its fragments are the
 islands. Ownership lives on a public chain.

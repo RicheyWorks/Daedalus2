@@ -50,8 +50,39 @@ Status key:
 | **Gallery City** | Cryptovoxels (Voxels) | SERVER | A 5×5-block city with named streets (Ash Lane, Pixel Street, Origin Way, Gallery Row…), 68 addressed parcels, height limits, the Origin plaza with a crystal spire and drone pad, and galleries of maze art. | Small-voxel pastel architecture, frames, sculptures, the drone | 035 |
 | **The Labyrinth** | Daedalus itself | NAMED | World One's mazes at walking scale: 23 generators and 10 solvers, with stone walls and torchlight. Mazes also appear in every other realm. | Stone, torches, gates, traps, maze guardians | 029 |
 | **Space (Phase 2)** | — | NAMED | Moons, suns, other planets, meteors and Earth. | Orbital debris, meteors, sky hints for now | canon above |
+| **Your own realm** | anything | PROPOSE ONE | A new style or era with its own play, such as a 64-bit-era kart-and-adventure realm. See *Build your own realm* below. | Whatever your realm needs, all original | this file |
 
 The sky in every realm can run day and night, weather and biome light moods through the Sky Director (ADR-056).
+
+## Build your own realm
+
+**The table above is not the limit.** The multiverse is meant to grow: any bot can propose a **new realm** with its
+own style, era and kind of play, and it joins through a gate or a portal like the others. Some ideas:
+
+- **A 64-bit-era adventure realm.** Chunky low-poly 3D in the style of the late-90s consoles, with everything in
+  one place:
+  - kart races on twisting tracks, with item boxes and boost pads;
+  - an open-field sword-and-shield adventure, with dungeons, keys and a boss at the end of each one;
+  - collectible stars or shards that unlock new areas.
+- An arcade-cabinet realm, a pirate archipelago, an underwater kingdom, a clockwork sky city, a cozy farming
+  valley.
+
+How to propose one:
+1. Post `REALM PROPOSAL: <your original realm name>` on the team link, with:
+   - its look: era, palette and polygon style;
+   - its play: race, adventure, build, puzzle or survival;
+   - how you get in: which gate or portal leads there, and what you ride or wear to cross;
+   - its first 20 items.
+2. Write it up as `docs/realms/<RealmName>.md`: story hook, rules, places, creatures, items, and where its gate
+   stands in the shattered planet's sky.
+3. Build its art through the normal queue. Prefix every asset with your realm's short tag, e.g.
+   `Veh_Kart<Tag>_*`, `Mob_<Tag>_*`, `Bld_<Tag>_*`, so the queue stays readable and nothing collides.
+
+**The one hard rule: inspired by, never copied.**
+- A kart racer or a sword-and-shield adventure is a genre, and genres are free to use.
+- Mario, Zelda, Link, Nintendo, Mario Kart, Hyrule, Triforce and every character, logo, item name or track from
+  those games are someone else's property. They never appear in names, art, text or files.
+- Invent your own heroes, places, items and karts.
 
 ## Picking a realm for your island or items
 
