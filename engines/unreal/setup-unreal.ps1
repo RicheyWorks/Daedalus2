@@ -243,6 +243,30 @@ function Get-TreeHash([string]$dir) {
     try { return [BitConverter]::ToString($sha.ComputeHash($bytes)) } finally { $sha.Dispose() }
 }
 
+# Sets key=value under [section] in an .ini, adding the section or key if missing; other lines stay as they are.
+# A key listed with a leading '+' (an Unreal array entry) is added once, never duplicated.
+function Set-IniValue([string]$file, [string]$section, [string]$key, [string]$value) {
+    $lines = if (Test-Path $file) { @(Get-Content $file) } else { @() }
+    $out = New-Object System.Collections.Generic.List[string]
+    $inSection = $false; $done = $false; $seen = $false
+    foreach ($l in $lines) {
+        if ($l -match '^\s*\[(.+)\]\s*$') {
+            if ($inSection -and -not $done) { $out.Add("$key=$value"); $done = $true }
+            $inSection = ($Matches[1] -eq $section); if ($inSection) { $seen = $true }
+            $out.Add($l); continue
+        }
+        if ($inSection -and $key.StartsWith("+") -and $l.Trim() -eq "$key=$value") { $done = $true }
+        elseif ($inSection -and -not $key.StartsWith("+") -and $l -match ("^\s*" + [regex]::Escape($key) + "\s*=")) {
+            if (-not $done) { $out.Add("$key=$value"); $done = $true }
+            continue
+        }
+        $out.Add($l)
+    }
+    if ($inSection -and -not $done) { $out.Add("$key=$value"); $done = $true }
+    if (-not $seen) { $out.Add(""); $out.Add("[$section]"); $out.Add("$key=$value") }
+    Set-Content -Path $file -Value $out -Encoding UTF8
+}
+
 # --- 4. Plugin ---------------------------------------------------------------------------------------------
 Say "DaedalusLink plugin"
 $PluginDest = Join-Path (Join-Path $ProjectDir "Plugins") "DaedalusLink"
@@ -273,6 +297,20 @@ if (-not (Test-Path (Join-Path $PluginSource "DaedalusLink.uplugin"))) {
     $up | Add-Member -NotePropertyName Plugins -NotePropertyValue $plugins -Force
     $up | ConvertTo-Json -Depth 10 | Set-Content -Path $Project -Encoding UTF8
     Write-Host ("    {0} {1}; enabled {2}" -f $(if ($keep) { "in" } else { "copied to" }), $PluginDest, ($needed -join ", "))
+}
+
+# --- Project settings the world needs: DirectX 12 with Shader Model 6 (Nanite, which UE 5.8 uses for imported
+# meshes, refuses to draw without it), and the Daedalus level as the startup map.
+if (-not $WhatIfOnly -and (Test-Path $Project)) {
+    $ini = Join-Path (Join-Path $ProjectDir "Config") "DefaultEngine.ini"
+    New-Item -ItemType Directory -Force -Path (Split-Path $ini -Parent) | Out-Null
+    $win = "/Script/WindowsTargetPlatform.WindowsTargetSettings"
+    Set-IniValue $ini $win "DefaultGraphicsRHI" "DefaultGraphicsRHI_DX12"
+    Set-IniValue $ini $win "-D3D12TargetedShaderFormats" "PCD3D_SM5"
+    Set-IniValue $ini $win "+D3D12TargetedShaderFormats" "PCD3D_SM6"
+    Set-IniValue $ini "/Script/EngineSettings.GameMapsSettings" "EditorStartupMap" "/Game/Daedalus/DaedalusWorld.DaedalusWorld"
+    Set-IniValue $ini "/Script/EngineSettings.GameMapsSettings" "GameDefaultMap" "/Game/Daedalus/DaedalusWorld.DaedalusWorld"
+    Write-Host "    project settings: DirectX 12 with Shader Model 6 (for Nanite), Daedalus level at startup"
 }
 
 # --- 5. World Package ----------------------------------------------------------------------------------------
