@@ -420,6 +420,16 @@ class Watcher:
             self.event("-", "resumed", waited_s=round(self.clock() - self.waiting_since))
             self.waiting_since = None
 
+    def recover(self):
+        """At start: a SHIPPING row belongs to a watcher that stopped mid-ship (no one else ships), so put it back
+        to READY and it ships again. Returns the rows recovered."""
+        rows, header = parse(self.read())
+        back = [r["asset"] for r in rows if header is not None and state(r["status"]) == "SHIPPING"]
+        for a in back:
+            self.update(a, "READY", "re-queued: the last watcher stopped while shipping it")
+            self.event(a, "requeued", why="watcher restarted mid-ship")
+        return back
+
     def prepare(self, asset):
         """Blender's first steps for one asset: (asset, kind, objects), or a finished (asset, status) result."""
         kind = kind_of(asset)
@@ -587,6 +597,8 @@ def main(argv=None):
             print("another watcher is running (%s is fresh)" % lock)
             return 3
     print("watching %s every %.0fs%s" % (w.queue, a.every, "" if link is None else ", live on the team link"))
+    for asset in w.recover():
+        print("re-queued %s (was SHIPPING when the last watcher stopped)" % asset, flush=True)
     after = 0
     if link is not None and link.health():
         link.register("Unreal team (Claude): ships Blender art into Unreal", ["asset.ready", "ping", "queue.status"],
