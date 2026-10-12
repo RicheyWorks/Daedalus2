@@ -6,7 +6,8 @@
 #
 # The job outlives the calling shell (WMI), runs from the repo (not AppData/%TEMP%, where scripts got stopped),
 # and uses full paths for Java and Maven (a WMI-started process doesn't get the user's PATH). The world lives in
-# %USERPROFILE%\.daedalus\ (daedalus.world.file), so a restart never touches it.
+# %USERPROFILE%\.daedalus\ (daedalus.world.file), so a restart never touches it. Port 8088 is passed as an argument:
+# a WMI-started process inherits no environment variables (setup-unreal.ps1 uses SERVER_PORT in a window).
 param([switch]$Restart, [switch]$Status, [switch]$Run,
       [string]$JavaHome = "C:\Program Files\Eclipse Adoptium\jdk-22.0.2.9-hotspot",
       [string]$Maven = "C:\Maven\apache-maven-3.9.9\bin\mvn.cmd")
@@ -31,7 +32,7 @@ if ($Run) {
     $jar = Get-ChildItem (Join-Path $Repo "daedalus-server\target") -Filter "daedalus-server-*-exec.jar" | Sort-Object LastWriteTime -Descending | Select-Object -First 1   # newest: old versions linger in target
     $st = New-CimInstance -ClassName Win32_ProcessStartup -ClientOnly -Property @{ ShowWindow = [uint16]7 }
     Invoke-CimMethod Win32_Process -MethodName Create -Arguments @{
-        CommandLine = "cmd.exe /c `"`"$JavaHome\bin\java.exe`" -jar `"$($jar.FullName)`" > `"$Jobs\server-out.log`" 2>&1`""
+        CommandLine = "cmd.exe /c `"`"$JavaHome\bin\java.exe`" -jar `"$($jar.FullName)`" --server.port=8088 > `"$Jobs\server-out.log`" 2>&1`""
         CurrentDirectory = "$Repo"; ProcessStartupInformation = $st } | Out-Null
     for ($i = 0; $i -lt 60 -and -not (Answering); $i++) { Start-Sleep -Seconds 2 }
     "$(Get-Date -Format s) " + $(if (Answering) { "UP on :8088" } else { "NOT answering on :8088" }) | Out-File $Log -Append -Encoding utf8
