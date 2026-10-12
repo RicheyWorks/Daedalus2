@@ -7,7 +7,7 @@
    "build": {
     "hardwood": 10,
     "rope": 2,
-    "stone": 20
+    "pitch": 4
    },
    "yield": "unlimited dirty_water, 1 per 2s",
    "quality": "dirty"
@@ -88,3 +88,4 @@
  },
  "survival_link": "thirst stat in data/survival/stats.json (drain 0.08/s, damage at 0); consumables there map 'water' -> +35 thirst"
 }
+

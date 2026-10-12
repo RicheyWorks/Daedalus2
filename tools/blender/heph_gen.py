@@ -29,7 +29,8 @@ def plan():
     pr=["Anvil","Forge","Crucible","Brazier","Bellows","QuenchTub","Chimney","Grindstone","Workbench","ToolRack","IngotStack","Kiln","LavaRock","VentPlume","ObsidianSpire","MagmaPool","EmberBrazier","ForgeAltar"]
     for m in ["Stone","Iron","Basalt","Obsidian"]:
         for t in pr: L.append(("Prop",f"Prop_Forge{t}_{m}","struct",m,1.6))
-    return L[:500]
+    X=[("Prop","Prop_HephaestusAnvil_Great","struct","Obsidian",2.0),("Prop","Prop_HephaestusForge_Great","struct","Basalt",2.4),("Item","Item_Shard_Asteroid","chunk","Emberite",0.4),("Item","Item_Shard_Planet","chunk","Basalt",0.4),("Tool","Tool_HephaestusHammer","tool","Starmetal",1.0),("Prop","Prop_ArkRivetCrate","box","Iron",0.8),("Prop","Prop_LavaLantern","small","Magma",0.6)]
+    return L[:500]+X
 def cube(bm,cx,cy,z0,sx,sy,sz,mi):
     r=bmesh.ops.create_cube(bm,size=1)
     for v in r["verts"]: v.co.x=v.co.x*sx+cx; v.co.y=v.co.y*sy+cy; v.co.z=(v.co.z+0.5)*sz+z0
