@@ -11,7 +11,7 @@ Re-runnable: deletes its own tagged actors (GROK_ArkDock) first.
 Run: python ue_send.py ark_dock_ue.py 600   [ARK_ECON=<dir with recipes.json>]"""
 import json, math, os, unreal
 
-SUB = "/Game/Grok/Maps/ArkDock_2hot2trot"
+SUB = globals().get("ARK_SUB") or "/Game/Grok/Maps/ArkDock_2hot2trot"
 TAG = "GROK_ArkDock"
 FOLDER = "Grok/ArkDock"
 ART = "/Game/Daedalus/Art/%s/%s/%s/StaticMeshes/%s"
@@ -53,7 +53,7 @@ if lvl is None:
     ew = ues.get_editor_world(); lvl = find_lvl(ew); log.append("sublevel added")
 unreal.EditorLevelUtils.make_level_current(lvl)
 for a in eas.get_all_level_actors():
-    if a.actor_has_tag(TAG): eas.destroy_actor(a)
+    if a.actor_has_tag(TAG) and not a.actor_has_tag("GROK_ArkIsle"): eas.destroy_actor(a)
 
 # ---- 2) find the island edge (away from the Wild Biomes so we don't build on them) ----
 ps = next(a for a in eas.get_all_level_actors() if a.get_class().get_name() == "PlayerStart").get_actor_location()
@@ -61,23 +61,27 @@ def ground(x, y):
     h = unreal.SystemLibrary.line_trace_single(ew, unreal.Vector(x, y, ps.z + 30000), unreal.Vector(x, y, ps.z - 60000),
         unreal.TraceTypeQuery.ECC_VISIBILITY, False, [], unreal.DrawDebugTrace.NONE, True)
     t = h.to_tuple(); return t[4].z if t[0] else None
-busy = [a.get_actor_location() for a in eas.get_all_level_actors()
-        if a.actor_has_tag("PYTH_WildBiome") or a.actor_has_tag("PYTH_EcoPlant")]
-best = None
-for k in range(24):
-    ang = 2 * math.pi * k / 24; dx, dy = math.cos(ang), math.sin(ang)
-    r, last = 0.0, None
-    while r < 300000:
-        if ground(ps.x + dx * r, ps.y + dy * r) is None:
-            if r > 0: break
-        else: last = r
-        r += 500.0
-    if last is None or last < 4000: continue
-    ex, ey = ps.x + dx * last, ps.y + dy * last
-    crowd = sum(1 for v in busy if math.hypot(v.x - ex, v.y - ey) < 6000)
-    score = -crowd * 100 + last / 1000.0   # prefer empty shore, then farther out
-    if best is None or score > best[0]: best = (score, ang, last, crowd)
-_, ANG, EDGE, crowd = best
+_at = globals().get("ARK_DOCK_AT")   # (x, y, z, yaw_deg, edge_cm): set by ark_isle_ue.py to dock on our own island
+if _at:
+    ps = unreal.Vector(_at[0], _at[1], _at[2]); ANG = math.radians(_at[3]); EDGE = _at[4]; crowd = 0
+else:
+    busy = [a.get_actor_location() for a in eas.get_all_level_actors()
+            if a.actor_has_tag("PYTH_WildBiome") or a.actor_has_tag("PYTH_EcoPlant")]
+    best = None
+    for k in range(24):
+        ang = 2 * math.pi * k / 24; dx, dy = math.cos(ang), math.sin(ang)
+        r, last = 0.0, None
+        while r < 300000:
+            if ground(ps.x + dx * r, ps.y + dy * r) is None:
+                if r > 0: break
+            else: last = r
+            r += 500.0
+        if last is None or last < 4000: continue
+        ex, ey = ps.x + dx * last, ps.y + dy * last
+        crowd = sum(1 for v in busy if math.hypot(v.x - ex, v.y - ey) < 6000)
+        score = -crowd * 100 + last / 1000.0   # prefer empty shore, then farther out
+        if best is None or score > best[0]: best = (score, ang, last, crowd)
+    _, ANG, EDGE, crowd = best
 DX, DY = math.cos(ANG), math.sin(ANG); PX, PY = -DY, DX     # outward + perpendicular
 YAW = math.degrees(ANG)
 def at(f, s=0.0):   # f = metres outward from the edge (negative = inland), s = metres sideways
@@ -173,9 +177,9 @@ lab.text_render.set_horizontal_alignment(unreal.HorizTextAligment.EHTA_CENTER)
 lab.set_actor_label("ArkDock_Label"); lab.set_folder_path(FOLDER); lab.tags = [TAG]
 
 # ---- 7) save only our sublevel (+ persistent map only if it was clean before us) ----
-unreal.EditorLevelUtils.make_level_current(lvl); saved = les.save_current_level()
+unreal.EditorLevelUtils.make_level_current(lvl); saved = les.save_current_level() if not globals().get("ARK_NO_SAVE") else "deferred"
 persist_saved = False
-if not _pre: persist_saved = L.save_dirty_packages(True, False)
+if not _pre and not globals().get("ARK_NO_SAVE"): persist_saved = L.save_dirty_packages(True, False)
 dirty = [p.get_name() for p in L.get_dirty_map_packages()] + [p.get_name() for p in L.get_dirty_content_packages()]
 cx, cy = at(-45, -25)
 ues.set_level_viewport_camera_info(unreal.Vector(cx, cy, GZ + 2200), unreal.Rotator(roll=0, pitch=-22, yaw=YAW + 30))
