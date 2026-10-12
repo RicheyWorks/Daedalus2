@@ -18,7 +18,7 @@ for a in samples:
     obj.data.calc_loop_triangles()
     if len(obj.data.loop_triangles)!=a['triangles']: raise RuntimeError('Source triangle mismatch')
     checks.append(a['asset'])
-(folder/'blend-source-validation.json').write_text(json.dumps({'passed':len(checks),'total':20,
+(folder/'blend-source-validation.json').write_text(json.dumps({'passed':len(checks),'total':len(samples),
     'scope':'One actual scene-linked watcher source per archetype','assets':checks},indent=2))
 bpy.ops.wm.read_factory_settings(use_empty=True)
 for i,a in enumerate(samples):
@@ -39,6 +39,6 @@ cam.data.type='ORTHO'; cam.data.ortho_scale=27; scene.camera=cam
 scene.render.resolution_x=1200; scene.render.resolution_y=900; scene.render.resolution_percentage=100
 scene.render.image_settings.file_format='PNG'; scene.render.filepath=str(folder/'art-preview.png')
 bpy.ops.render.render(write_still=True)
-(folder/'blend-source-validation.json').write_text(json.dumps({'passed':len(checks),'total':20,
+(folder/'blend-source-validation.json').write_text(json.dumps({'passed':len(checks),'total':len(samples),
     'scope':'One actual scene-linked watcher source per archetype','assets':checks},indent=2))
 print('SOL_SOURCE_VALIDATED',len(checks),flush=True)

@@ -67,4 +67,13 @@ class Rules(unittest.TestCase):
         f.tick(600); f.cook()
         self.assertEqual(Farm.restore(f.save()).adventure_stage(),'portal_ready')
 
+    def test_adventure_kit_is_exact_and_inside_island(self):
+        from place_sol_island import adventure_layout
+        import math
+        assets=[{'asset':name,'kind':'Prop','archetype':name} for name in
+                ['ShadowGuideStone','BrokenRingMural','HiddenCisternStair','Keeper','KeeperHearth']]
+        rows=adventure_layout(assets)
+        self.assertTrue(all(math.hypot(r['position_cm'][0]-2000000,r['position_cm'][1])<12000 for r in rows))
+        with self.assertRaises(ValueError): adventure_layout(assets[:-1])
+
 if __name__ == '__main__': unittest.main()

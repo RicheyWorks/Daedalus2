@@ -15,6 +15,7 @@ OUT.mkdir(parents=True, exist_ok=True)
 if (OUT / 'manifest.json').exists():
     raise RuntimeError('Existing completed build: use a fresh output directory')
 START = time.perf_counter()
+ADVENTURE_KIT = '--adventure-kit' in sys.argv
 ARCHETYPES = ['SpringBowl', 'FilterTower', 'Cistern', 'Trough', 'RainCatcher', 'Wellhead',
               'Dawnleaf', 'Rillprism', 'Cinderbud', 'Stillmoss', 'Stridefern', 'Clearbell',
               'RingMortar', 'Hen', 'Goat', 'GrainBundle', 'EggBasket', 'MilkJug',
@@ -49,7 +50,34 @@ def basin(width, depth, height, water=True):
 def shape(archetype, variant):
     s = .85 + (variant % 5)*.075
     h = .8 + (variant // 5)*.1
-    if archetype in ('SpringBowl','Trough','RainCatcher','CustardBowl','RingMortar'):
+    if archetype=='ShadowGuideStone':
+        box(0,0,.08,1.4,1.4,.16,0)
+        box(0,0,.9,.25,.25,1.8,3)
+        for i in range(3): box(0,-.28-i*.24,.17,.08,.18,.06,1)
+    elif archetype=='BrokenRingMural':
+        box(0,0,.9,2,.16,1.8,0)
+        for x,c in ((-.6,3),(0,1),(.6,3)): box(x,-.12,1,.3,.08,.3,c)
+        for x in (-.35,.35): box(x,-.12,1,.12,.08,.06,3)
+        box(0,-.12,.55,1.6,.08,.055,1)
+    elif archetype=='HiddenCisternStair':
+        for i in range(5): box(0,i*.4,(i+1)*.12,1.5,.42,(i+1)*.24,0)
+        box(.8,.8,.6,.12,2,.12,3)
+    elif archetype=='Keeper':
+        for x in (-.15,.15):
+            box(x,0,.3,.18,.22,.6,0)
+            box(x,-.08,.08,.2,.38,.16,0)
+        box(0,0,.95,.52,.32,.7,3)
+        for x in (-.38,.38): box(x,0,.95,.16,.2,.6,3)
+        box(0,0,1.5,.36,.32,.4,5)
+        box(0,0,1.73,.62,.52,.07,0)
+        box(0,0,1.85,.38,.34,.2,0)
+        for x in (-.08,.08): box(x,-.168,1.52,.035,.025,.035,0)
+        box(0,-.18,1.4,.05,.1,.06,5)
+    elif archetype=='KeeperHearth':
+        basin(1.5,1.1,.45,False)
+        for x in (-.4,0,.4): box(x,0,.22,.12,.65,.12,4)
+        box(0,0,.5,.5,.5,.2,3)
+    elif archetype in ('SpringBowl','Trough','RainCatcher','CustardBowl','RingMortar'):
         w,d,z = {'SpringBowl':(2,2,.5),'Trough':(2,.8,.55),
                  'RainCatcher':(1.8,1.8,1),'CustardBowl':(.35,.35,.18),
                  'RingMortar':(.6,.6,.4)}[archetype]
@@ -101,11 +129,13 @@ def shape(archetype, variant):
     else: raise ValueError(archetype)
 
 rows = []
-for archetype in ARCHETYPES:
-    for variant in range(25):
+BUILD_TYPES = ['ShadowGuideStone','BrokenRingMural','HiddenCisternStair','Keeper','KeeperHearth'] if ADVENTURE_KIT else ARCHETYPES
+VARIANTS = 1 if ADVENTURE_KIT else 25
+for archetype in BUILD_TYPES:
+    for variant in range(VARIANTS):
         VERTICES.clear(); FACES.clear(); COLORS.clear()
         shape(archetype, variant)
-        kind = 'Mob' if archetype in ('Hen','Goat') else 'Item' if archetype in ('EggBasket','MilkJug','CustardBowl','GrainBundle') else 'Prop'
+        kind = 'Mob' if archetype in ('Hen','Goat','Keeper') else 'Item' if archetype in ('EggBasket','MilkJug','CustardBowl','GrainBundle') else 'Prop'
         name = f'{kind}_SOL_{archetype}_{variant+1:02}'
         mesh = bpy.data.meshes.new(name); mesh.from_pydata(VERTICES,[],FACES); mesh.update()
         colors = sorted(set(COLORS))
@@ -132,7 +162,8 @@ for archetype in ARCHETYPES:
         bpy.data.objects.remove(obj,do_unlink=True); bpy.data.collections.remove(collection)
         bpy.data.meshes.remove(mesh)
     print('SOL_FINISHED', archetype, len(rows), flush=True)
-report = {'schema':'daedalus.sol.art/v1','count':len(rows),'archetypes':20,'variants_each':25,
+report = {'schema':'daedalus.sol.adventure-art/v1' if ADVENTURE_KIT else 'daedalus.sol.art/v1',
+          'count':len(rows),'archetypes':len(BUILD_TYPES),'variants_each':VARIANTS,
           'build_seconds':time.perf_counter()-START,'origin_cm':[2000000,0,0],
           'diameter_m':240,'unreal_count':0,'assets':rows}
 (OUT/'manifest.json').write_text(json.dumps(report,indent=2),encoding='utf8')
