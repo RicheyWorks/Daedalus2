@@ -537,6 +537,28 @@ def scenario_fall(p):
     ]}
 
 
+def scenario_dress(p):
+    """The world dresser (ADR-054): once the live cubes are in, the shipped art library grows on them and a town
+    stands near the start. Checks counts, then puts the camera over the town for a look."""
+    dresser = None
+    for _ in range(900):   # the live world streams in, then the dresser waits for it to settle
+        ds = _all(unreal.DaedalusDresser)
+        dresser = ds[0] if ds else None
+        if dresser and dresser.stats().startswith("placed="):
+            break
+        yield
+    stats = dresser.stats() if dresser else "no dresser"
+    kv = dict(t.split("=", 1) for t in stats.split() if "=" in t)
+    n = lambda k: int(kv.get(k, "0").split(",")[0])
+    return {"checks": [
+        _check("a dresser is in the world", dresser is not None),
+        _check("it dressed the live world", n("placed") >= 300, stats),
+        _check("trees grow, spaced", n("trees") >= 20, stats),
+        _check("plants of many kinds", n("meshes") >= 20, stats),
+        _check("a town stands near the start", n("town") >= 10, stats),
+    ], "stats": stats, "town": str(dresser.town_center()) if dresser else None}
+
+
 def _kv(line):
     """A realm state line ('mode=FIELD map=TOWN1 x=3 ...') as a dict; msg= is the rest of the line."""
     out = {}
@@ -671,6 +693,7 @@ SCENARIOS = {
     "dig": scenario_dig,
     "fall": scenario_fall,
     "realm": scenario_realm,
+    "dress": scenario_dress,
 }
 
 
