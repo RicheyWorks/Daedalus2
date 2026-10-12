@@ -230,16 +230,20 @@ if (-not (Test-Path (Join-Path $PluginSource "DaedalusLink.uplugin"))) {
 # --- 5. World Package ----------------------------------------------------------------------------------------
 # Any HTTP answer means a server is listening; only a refused or timed-out connection means it isn't.
 $script:LastProbe = ""
+$script:ProbeCode = 0
 function Test-Server {
     try {
-        $r = Invoke-WebRequest -Uri "$($Server.TrimEnd('/'))/api/v1/worlds" -UseBasicParsing -TimeoutSec 10
+        $r = Invoke-WebRequest -Uri "$($Server.TrimEnd('/'))/api/v1/world/$World/package/manifest" -UseBasicParsing -TimeoutSec 30
+        $script:ProbeCode = [int]$r.StatusCode
         $script:LastProbe = "HTTP $($r.StatusCode)"
         return $true
     } catch {
         if ($_.Exception.Response) {
-            $script:LastProbe = "HTTP $([int]$_.Exception.Response.StatusCode)"
+            $script:ProbeCode = [int]$_.Exception.Response.StatusCode
+            $script:LastProbe = "HTTP $script:ProbeCode"
             return $true
         }
+        $script:ProbeCode = 0
         $script:LastProbe = $_.Exception.Message
         return $false
     }
@@ -284,10 +288,37 @@ function Find-Maven {
 }
 
 # A server on this PC that isn't running is started here: built with Maven if needed, then run in its own window.
+# The Daedalus server already listening on this PC's port, if it is one this repo built (an older build
+# without World Packages answers 404 and is replaced).
+function Stop-OldLocalServer([int]$port) {
+    $owners = @(Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess -Unique)
+    foreach ($o in $owners) {
+        $proc = Get-CimInstance Win32_Process -Filter "ProcessId = $o" -ErrorAction SilentlyContinue
+        if ($proc -and $proc.CommandLine -match 'daedalus-server-.*\.jar') {
+            Write-Host "    stopping an older Daedalus server on port $port (pid $o) to start the current one"
+            Stop-Process -Id $o -Force
+            Start-Sleep -Seconds 2
+            return $true
+        }
+    }
+    return $false
+}
+
 function Start-LocalServer {
-    if ($NoServerStart -or (Test-Server)) { return }
+    if ($NoServerStart) { return }
     $uri = [uri]$Server
-    if ($uri.Host -notin @("localhost", "127.0.0.1", "::1")) { return }
+    $local = $uri.Host -in @("localhost", "127.0.0.1", "::1")
+    $port = if ($uri.Port -gt 0) { $uri.Port } else { 80 }
+    if (Test-Server) {
+        if ($script:ProbeCode -eq 200 -or -not $local) { return }
+        if ($script:ProbeCode -eq 404 -and (Stop-OldLocalServer $port)) {
+            # fall through: build if needed, then start the current server
+        } else {
+            Warn "something else answers on port $port ($script:LastProbe); close it, or pass -Server with another port"
+            return
+        }
+    }
+    if (-not $local) { return }
     $repo = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
     if (-not (Test-Path (Join-Path $repo "daedalus-server\pom.xml"))) { Warn "no daedalus-server next to this script; start the server yourself"; return }
     $java = Find-Java
@@ -299,8 +330,12 @@ function Start-LocalServer {
     }
     $jar = Get-ChildItem (Join-Path $repo "daedalus-server\target") -Filter "daedalus-server-*-exec.jar" -ErrorAction SilentlyContinue |
         Sort-Object LastWriteTime -Descending | Select-Object -First 1
-    $newest = Get-ChildItem (Join-Path $repo "daedalus-*\src\main") -Recurse -File -ErrorAction SilentlyContinue |
-        Sort-Object LastWriteTime -Descending | Select-Object -First 1
+    # Each module's sources, walked one module at a time (a wildcard in the middle of a -Recurse path
+    # matches nothing in Windows PowerShell 5.1, which made an old jar look current).
+    $newest = Get-ChildItem $repo -Directory -Filter "daedalus-*" | ForEach-Object {
+        $src = Join-Path $_.FullName "src\main"
+        if (Test-Path $src) { Get-ChildItem $src -Recurse -File -ErrorAction SilentlyContinue }
+    } | Sort-Object LastWriteTime -Descending | Select-Object -First 1
     if (-not $jar -or ($newest -and $newest.LastWriteTime -gt $jar.LastWriteTime)) {
         $mvn = Find-Maven
         if (-not $mvn) { return }
@@ -315,13 +350,12 @@ function Start-LocalServer {
         $jar = Get-ChildItem (Join-Path $repo "daedalus-server\target") -Filter "daedalus-server-*-exec.jar" |
             Sort-Object LastWriteTime -Descending | Select-Object -First 1
     }
-    $port = if ($uri.Port -gt 0) { $uri.Port } else { 80 }
     Write-Host "    starting the Daedalus server on port $port in its own window (leave it open)"
     $cmd = "`$env:SERVER_PORT='$port'; Set-Location '$repo'; & '$java' -jar '$($jar.FullName)'"
     Start-Process powershell -ArgumentList @("-NoExit", "-Command", $cmd) | Out-Null
     for ($i = 0; $i -lt 90; $i++) {
         Start-Sleep -Seconds 2
-        if (Test-Server) { Write-Host "    server is up ($script:LastProbe)"; return }
+        if ((Test-Server) -and $script:ProbeCode -eq 200) { Write-Host "    server is up"; return }
     }
     Warn "the server did not answer within 3 minutes ($script:LastProbe); check its window"
 }
@@ -355,7 +389,7 @@ if (-not $SkipPackage) {
             $code = 0
             if ($_.Exception.Response) { $code = [int]$_.Exception.Response.StatusCode }
             if ($code -eq 404) {
-                Fail "the server at $Server has no world '$World' (GET /api/v1/worlds lists them)"
+                Fail "the server at $Server has no world '$World', or is an older build without World Packages (GET /api/v1/worlds lists worlds)"
             } else {
                 Fail "could not get the package: $($_.Exception.Message) Is the Daedalus server running at $Server?"
             }
@@ -364,12 +398,25 @@ if (-not $SkipPackage) {
 }
 
 # --- 6. Build ------------------------------------------------------------------------------------------------
+$VsInstallerDir = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer"
 function Find-VcTools {
-    $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+    $vswhere = Join-Path $VsInstallerDir "vswhere.exe"
     if (-not (Test-Path $vswhere)) { return $null }
     $p = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
     if ($p) { return ($p | Select-Object -First 1) }
     return $null
+}
+
+# The MSVC toolsets installed under a Visual Studio, newest first.
+function Get-MsvcVersions([string]$vs) {
+    $dir = Join-Path $vs "VC\Tools\MSVC"
+    if (-not (Test-Path $dir)) { return @() }
+    return @(Get-ChildItem $dir -Directory | ForEach-Object { try { [version]$_.Name } catch { } } | Sort-Object -Descending)
+}
+
+# Unreal 5.5+ wants MSVC 14.38 or newer and refuses 14.40-14.43 (compiler bugs).
+function Test-MsvcUsable([version]$v) {
+    return $v -ge [version]"14.38" -and -not ($v -ge [version]"14.40" -and $v -lt [version]"14.44")
 }
 
 if ($Build) {
@@ -382,7 +429,24 @@ if ($Build) {
             "--add Microsoft.VisualStudio.Workload.NativeGame --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows11SDK.22621 --includeRecommended --passive --wait"
         $vc = Find-VcTools
     }
-    if ($vc) { Write-Host "    C++ tools: $vc" }
+    if ($vc -and -not $WhatIfOnly) {
+        $msvc = Get-MsvcVersions $vc
+        if (-not ($msvc | Where-Object { Test-MsvcUsable $_ })) {
+            Write-Host ("    MSVC {0} is too old for UE {1}; updating Visual Studio to its latest (MSVC 14.44+)." -f (($msvc | Select-Object -First 1)), $engine.Version)
+            Write-Host "    The Visual Studio Installer window shows progress; close Visual Studio first if it is open."
+            $setup = Join-Path $VsInstallerDir "setup.exe"
+            Start-Process -FilePath $setup -Wait -ArgumentList @("update", "--installPath", "`"$vc`"", "--passive", "--norestart")
+            Start-Process -FilePath $setup -Wait -ArgumentList @("modify", "--installPath", "`"$vc`"", "--passive", "--norestart",
+                "--add", "Microsoft.VisualStudio.Workload.NativeGame", "--add", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
+                "--add", "Microsoft.VisualStudio.Component.Windows11SDK.22621", "--includeRecommended")
+            $msvc = Get-MsvcVersions $vc
+            if (-not ($msvc | Where-Object { Test-MsvcUsable $_ })) {
+                Fail ("MSVC is still {0}; open the Visual Studio Installer, Update, then run this again" -f ($msvc | Select-Object -First 1))
+                $vc = $null
+            }
+        }
+        if ($vc) { Write-Host ("    C++ tools: {0} (MSVC {1})" -f $vc, ($msvc | Where-Object { Test-MsvcUsable $_ } | Select-Object -First 1)) }
+    }
     if (-not $engine) {
         Fail "no engine to build with"
     } elseif (-not $vc -and -not $WhatIfOnly) {
@@ -413,6 +477,8 @@ if ($Import) {
     $py = Join-Path (Join-Path (Join-Path $PluginDest "Content") "Python") "import_world_package.py"
     if (-not $engine -or -not (Test-Path $editor -ErrorAction SilentlyContinue)) {
         Fail "UnrealEditor-Cmd.exe not found"
+    } elseif (-not $WhatIfOnly -and -not (Test-Path $PackageFile)) {
+        Fail "no World Package to import (step 5)"
     } elseif ($WhatIfOnly) {
         Write-Host "    would run: $editor `"$Project`" -run=pythonscript -script=`"$py $PackageFile`""
     } else {

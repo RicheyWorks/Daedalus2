@@ -258,7 +258,10 @@ def main(argv):
             zip_path = args[0]
         manifest, _, names = read_package(zip_path)
     except (PackageError, OSError, ValueError, KeyError) as e:
-        print("NOT a Daedalus World Package: %s" % e)
+        msg = "NOT a Daedalus World Package: %s" % e
+        print(msg)
+        if unreal is not None:
+            unreal.log_error("Daedalus: " + msg)   # the commandlet log shows this; print() alone is lost there
         return 1
     for line in plan(manifest, names):
         print(line)

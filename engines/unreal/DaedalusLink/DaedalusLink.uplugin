@@ -9,7 +9,6 @@
 	"CreatedByURL": "https://github.com/RicheyWorks/Daedalus2",
 	"DocsURL": "https://github.com/RicheyWorks/Daedalus2/blob/main/engines/unreal/README.md",
 	"SupportURL": "https://github.com/RicheyWorks/Daedalus2/issues",
-	"EngineVersion": "5.4.0",
 	"CanContainContent": true,
 	"IsBetaVersion": true,
 	"Installed": false,
