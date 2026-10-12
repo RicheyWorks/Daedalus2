@@ -10,8 +10,9 @@ from asset_pipeline import glb
 def validate(folder):
     manifest = json.loads((folder/'manifest.json').read_text())
     assets = manifest['assets']
-    if len(assets) != 500 or len({a['asset'] for a in assets}) != 500:
-        raise ValueError('need 500 distinct asset identifiers')
+    expected={'daedalus.sol.art/v1':500,'daedalus.sol.adventure-art/v1':5}.get(manifest['schema'])
+    if expected is None or len(assets)!=expected or len({a['asset'] for a in assets})!=expected:
+        raise ValueError('incorrect or duplicate asset identifiers for schema')
     witnesses = []
     for asset in assets:
         path = pathlib.Path(asset['glb'])
@@ -28,7 +29,7 @@ def validate(folder):
         if not pathlib.Path(asset['blend']).is_file(): raise ValueError('missing .blend')
         witnesses.append({'asset':asset['asset'],'triangles':mesh['triangles'],
                           'sha256':hashlib.sha256(path.read_bytes()).hexdigest()})
-    result = {'passed':len(witnesses),'total':500,'triangles':sum(w['triangles'] for w in witnesses),
+    result = {'passed':len(witnesses),'total':expected,'triangles':sum(w['triangles'] for w in witnesses),
               'stage':'Blender/file parity only; Unreal not imported','witnesses':witnesses}
     (folder/'validation.json').write_text(json.dumps(result,indent=2))
     print(json.dumps({k:v for k,v in result.items() if k!='witnesses'}))

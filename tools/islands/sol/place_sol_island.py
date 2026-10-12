@@ -23,7 +23,17 @@ def layout(assets):
                      'position_cm':[2000000+x*100,y*100,1000]})
     return rows
 
-def build(manifest_path, grant):
+def adventure_layout(assets):
+    positions={'ShadowGuideStone':[1999400,-1600,1000],
+               'BrokenRingMural':[1994000,-8600,1000],
+               'HiddenCisternStair':[1999800,-1600,1000],
+               'Keeper':[1993400,-8300,1000], 'KeeperHearth':[1997400,-3900,1000]}
+    if len(assets)!=5 or {a['archetype'] for a in assets}!=set(positions):
+        raise ValueError('Need the exact five-piece adventure kit')
+    return [{**{k:a[k] for k in ('asset','kind','archetype')},
+             'position_cm':positions[a['archetype']]} for a in assets]
+
+def build(manifest_path, grant, adventure_manifest_path=None):
     import unreal
     now=datetime.datetime.now(datetime.timezone.utc)
     start=datetime.datetime.fromisoformat(grant['start_utc']); end=datetime.datetime.fromisoformat(grant['end_utc'])
@@ -42,7 +52,11 @@ def build(manifest_path, grant):
     if any(a.actor_has_tag(TAG) for a in actors.get_all_level_actors()):
         raise RuntimeError('Owned actors already exist: inspect before resume')
     assets=json.loads(pathlib.Path(manifest_path).read_text())['assets']
-    plan=layout(assets); loaded=[]
+    plan=layout(assets)
+    if adventure_manifest_path:
+        kit=json.loads(pathlib.Path(adventure_manifest_path).read_text())['assets']
+        plan.extend(adventure_layout(kit))
+    loaded=[]
     for row in plan:
         base=f"/Game/Daedalus/Art/{row['kind']}/{row['asset']}"
         candidates=unreal.EditorAssetLibrary.list_assets(base,recursive=True)
@@ -81,8 +95,8 @@ def build(manifest_path, grant):
         finally:
             levels.set_current_level_by_name(previous.get_outer().get_name())
     observed=[a for a in actors.get_all_level_actors() if a.actor_has_tag(TAG)]
-    if not saved or len(observed)!=501: raise RuntimeError('Owned save/count verification failed')
-    return {'saved':saved,'placed_assets':500,'support_ground':1,'sublevel':SUBLEVEL,
+    if not saved or len(observed)!=len(plan)+1: raise RuntimeError('Owned save/count verification failed')
+    return {'saved':saved,'placed_assets':len(plan),'support_ground':1,'sublevel':SUBLEVEL,
             'play_started':False,'gameplay_integrated':False,
             'parent_streaming_reference_needs_owner_save':True}
 
