@@ -38,7 +38,9 @@ import datetime
 import json
 import os
 import re
+import queue as _queue
 import sys
+import threading
 import time
 import traceback
 
@@ -194,6 +196,7 @@ class Watcher:
         self.waiting_since = None   # when the current wait began (clock seconds), for stall detection
         self.blocked_at = {}        # asset -> when it was last BLOCKED, to pace the retries
         self.link = link            # teamlink.Link("unreal-team"), or None: every event also goes out live
+        self.lock = threading.RLock()   # the board and the feed, shared by the two halves of an overlapped ship
 
     # -- files
 
@@ -208,6 +211,10 @@ class Watcher:
 
     def update(self, asset, status, notes=None):
         """Rewrite one row, only if the file didn't change between our read and our write."""
+        with self.lock:
+            return self._update(asset, status, notes)
+
+    def _update(self, asset, status, notes):
         for _ in range(5):
             before = self.read()
             after = set_row(before, asset, status, notes)
@@ -221,6 +228,10 @@ class Watcher:
         return False
 
     def event(self, asset, what, **detail):
+        with self.lock:
+            self._event(asset, what, detail)
+
+    def _event(self, asset, what, detail):
         line = {"at": datetime.datetime.fromtimestamp(self.clock()).isoformat(timespec="seconds"),
                 "asset": asset, "event": what}
         line.update(detail)
@@ -378,7 +389,8 @@ class Watcher:
             # someone's Play session, wait for it to end.
             if not missing:
                 try:
-                    playing = wire.call(self.unreal, "execute_python", side="Unreal", code=PLAYING)["result"]
+                    playing = wire.call(self.unreal, "execute_python", timeout=30, side="Unreal", unattended=False,
+                                        bridge_timeout=30, code=PLAYING)["result"]
                 except (OSError, wire.BridgeError) as e:   # a reset socket is Unreal busy, not a watcher failure
                     self.waiting_on = "Unreal busy (%s); retrying" % type(e).__name__
                     missing = ["busy"]
@@ -387,8 +399,12 @@ class Watcher:
                     self.waiting_on = "Unreal to leave Play mode (assets can't be saved while playing)"
                     missing = ["play"]
             if not missing:
-                for r in ready:
-                    done.append(self.ship_one(r["asset"]))
+                assets = [r["asset"] for r in ready]
+                if len(assets) > 1 and hasattr(self.ship, "export") and hasattr(self.ship, "land"):
+                    done.extend(self.ship_overlapped(assets))
+                else:
+                    for a in assets:
+                        done.append(self.ship_one(a))
         else:
             self.waiting_on = ""
         self.track_wait()
@@ -404,7 +420,8 @@ class Watcher:
             self.event("-", "resumed", waited_s=round(self.clock() - self.waiting_since))
             self.waiting_since = None
 
-    def ship_one(self, asset):
+    def prepare(self, asset):
+        """Blender's first steps for one asset: (asset, kind, objects), or a finished (asset, status) result."""
         kind = kind_of(asset)
         if not kind:
             self.update(asset, "REJECTED: name must start with one of " + "/".join(KINDS) + "_")
@@ -425,11 +442,66 @@ class Watcher:
             return (asset, "REJECTED")
         self.update(asset, "SHIPPING")
         self.event(asset, "shipping", objects=objects["objects"], source=objects["source"])
+        return (asset, kind, objects)
+
+    def ship_one(self, asset):
+        got = self.prepare(asset)
+        if len(got) == 2:
+            return got
+        _, kind, objects = got
         try:
             report = self.ship(asset, objects["objects"], "/Game/Daedalus/Art/" + kind,
                                os.path.join(self.folder, "glb"), True, self.blender, self.unreal)
         except Exception as e:   # a bridge error is Unreal's (or Blender's) problem, not the asset's
             return self.block(asset, "pipeline error: %s" % str(e)[:120], "error")
+        return self.finish(asset, kind, report)
+
+    def ship_overlapped(self, assets):
+        """Ship many at once with the two editors working side by side: a Blender thread opens and exports each
+        asset while this thread imports the previous one into Unreal. The board, feed and link are written under
+        one lock, so the two never interleave a row."""
+        results = []
+        handoff = _queue.Queue(maxsize=2)   # Blender stays at most two exports ahead
+        stop = threading.Event()
+
+        def blender_side():
+            for a in assets:
+                if stop.is_set():
+                    break
+                try:
+                    got = self.prepare(a)
+                    if len(got) == 2:
+                        results.append(got)
+                        continue
+                    _, kind, objects = got
+                    rep = self.ship.export(a, objects["objects"], os.path.join(self.folder, "glb"), self.blender)
+                    handoff.put((a, kind, rep, None))
+                except Exception as e:
+                    handoff.put((a, None, None, e))
+            handoff.put(None)
+
+        t = threading.Thread(target=blender_side, name="artqueue-blender", daemon=True)
+        t.start()
+        while True:
+            item = handoff.get()
+            if item is None:
+                break
+            a, kind, rep, err = item
+            if err is not None:
+                results.append(self.block(a, "pipeline error: %s" % str(err)[:120], "error"))
+                continue
+            try:
+                rep = self.ship.land(rep, "/Game/Daedalus/Art/" + kind, True, self.unreal)
+            except Exception as e:
+                results.append(self.block(a, "pipeline error: %s" % str(e)[:120], "error"))
+                if isinstance(e, OSError):   # Unreal went away: let the Blender side stop early
+                    stop.set()
+                continue
+            results.append(self.finish(a, kind, rep))
+        t.join(timeout=5)
+        return results
+
+    def finish(self, asset, kind, report):
         checks = list(report["checks"])
         tris = sum(o["triangles"] for o in report["blender"]["objects"])
         checks.append({"check": "triangle budget (%s %d)" % (kind, BUDGET[kind]), "ok": tris <= BUDGET[kind],
@@ -445,7 +517,8 @@ class Watcher:
         if report["ok"]:
             result = "SHIPPED (%d tris, %.2f m)" % (tris, max(dims or [0]))
             self.update(asset, result, "in Unreal: %s" % report["dest"])
-            self.event(asset, "shipped", result=result, dest=report["dest"])
+            self.event(asset, "shipped", result=result, dest=report["dest"],
+                       exported_s=report.get("exported_s"), imported_s=report.get("imported_s"))
             return (asset, "SHIPPED")
         why = unreal_side_failure(report)
         if why:
@@ -454,7 +527,6 @@ class Watcher:
         self.update(asset, "REJECTED: %s (%s)" % (failed["check"], failed["detail"]))
         self.event(asset, "rejected", why=failed["check"], detail=failed["detail"])
         return (asset, "REJECTED")
-
 
     def block(self, asset, why, event):
         self.blocked_at[asset] = self.clock()

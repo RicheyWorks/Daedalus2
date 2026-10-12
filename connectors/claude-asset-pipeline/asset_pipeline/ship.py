@@ -87,21 +87,45 @@ def judge(sent, witness, made):
     return checks
 
 
+# Unreal calls run directly on the editor's game thread (the bridge's unattended=False), never through Unreal's
+# Remote Execution: that one channel is shared by every bot on the PC, and on 2026-10-12 a reply meant for one caller
+# went to another and the watcher hung on it for 35 minutes. Import tasks are automated, so no modal dialog is
+# raised. bridge_timeout makes the bridge give up instead of holding the call for its 30-minute default.
+UNREAL_TIMEOUT = 300
+
+
+def export(name, objects=None, folder=None, blender=wire.BLENDER, timeout=600):
+    """The Blender half: the .glb, what Blender says it sent, and the file's own witness."""
+    folder = folder or os.path.join(tempfile.gettempdir(), "daedalus-pipeline")
+    path = os.path.abspath(os.path.join(folder, name + ".glb"))
+    report = {"name": name, "path": path, "started": time.time()}
+    report["blender"] = wire.call(blender, "execute_code", timeout=timeout, side="Blender",
+                                  code=sides.script(sides.BLENDER_EXPORT, path=path, objects=objects or []))["result"]
+    report["file"] = glb.summarize(path)
+    report["exported_s"] = round(time.time() - report["started"], 2)
+    return report
+
+
+def land(report, dest="/Game/Daedalus/Assets", save=True, unreal=wire.UNREAL, timeout=UNREAL_TIMEOUT):
+    """The Unreal half: import the exported file, then judge all three sides."""
+    report["dest"] = dest + "/" + report["name"]
+    t = time.time()
+    made = wire.call(unreal, "execute_python", timeout=timeout, side="Unreal", unattended=False,
+                     bridge_timeout=timeout,
+                     code=sides.script(sides.UNREAL_IMPORT, path=report["path"], dest=report["dest"], save=save))["result"]
+    checks = judge(report["blender"], report["file"], made)
+    report.update(ok=all(c["ok"] for c in checks), checks=checks, unreal=made, imported_s=round(time.time() - t, 2),
+                  seconds=round(time.time() - report["started"], 2))
+    return report
+
+
 def ship(name, objects=None, dest="/Game/Daedalus/Assets", folder=None, save=True,
          blender=wire.BLENDER, unreal=wire.UNREAL, timeout=600):
     """Run the pipeline once and return its report (ok, checks, and what each side said)."""
-    folder = folder or os.path.join(tempfile.gettempdir(), "daedalus-pipeline")
-    path = os.path.abspath(os.path.join(folder, name + ".glb"))
-    report = {"name": name, "path": path, "dest": dest + "/" + name, "started": time.time()}
-    sent = wire.call(blender, "execute_code", timeout=timeout, side="Blender",
-                     code=sides.script(sides.BLENDER_EXPORT, path=path, objects=objects or []))["result"]
-    witness = glb.summarize(path)
-    made = wire.call(unreal, "execute_python", timeout=timeout, side="Unreal",
-                     code=sides.script(sides.UNREAL_IMPORT, path=path, dest=report["dest"], save=save))["result"]
-    checks = judge(sent, witness, made)
-    report.update(ok=all(c["ok"] for c in checks), checks=checks, blender=sent, file=witness, unreal=made,
-                  seconds=round(time.time() - report["started"], 2))
-    return report
+    return land(export(name, objects, folder, blender, timeout), dest, save, unreal, min(timeout, UNREAL_TIMEOUT))
+
+
+ship.export, ship.land = export, land   # the watcher overlaps the halves: Blender exports the next asset while Unreal imports this one
 
 
 def main(argv=None):

@@ -42,6 +42,7 @@ class FakeBlender:
     def call(self, addr, command, timeout=600, side="bridge", **p):
         code = p["code"]
         if "get_game_world" in code:
+            PLAYING["params"] = dict(p)
             return {"result": PLAYING["on"]}
         if "open_mainfile" in code:
             path = json.loads(code.split("path = ", 1)[1].split("\n", 1)[0])
@@ -316,6 +317,65 @@ check("jobs json: their half kept, ours added", job["tris"] == 1200 and job["unr
 st = open(os.path.join(d, "STATUS.md"), encoding="utf-8").read()
 check("STATUS.md: one line from STATUS-blender.json", "**Blender team:** building, tools 4/12" in st, st[:400])
 check("STATUS.md: always says what it waits on", "**Waiting on:** none" in st)
+shutil.rmtree(d)
+
+# 12. Overlapped shipping (ADR-055): Blender exports the next asset while Unreal imports this one; one bad import
+#     blocks only itself; the Play check goes straight to the game thread with a bounded wait.
+import threading as _th   # noqa: E402
+import time as _time      # noqa: E402
+BOARD4 = """| # | Asset | Kind | Size | Status | Notes |
+|---|---|---|---|---|---|
+| 1 | Prop_A | prop | 1 m | READY | |
+| 2 | Prop_B | prop | 1 m | READY | |
+| 3 | Prop_C | prop | 1 m | READY | |
+| 4 | Prop_D | prop | 1 m | READY | |
+"""
+seen = {"export": [], "land": []}
+
+
+def _export(name, objects, folder, blender):
+    seen["export"].append((name, _th.current_thread().name, _time.time()))
+    _time.sleep(0.25)
+    r = report()
+    r.update(name=name)
+    return r
+
+
+def _land(rep, dest, save, unreal):
+    seen["land"].append((rep["name"], _th.current_thread().name, _time.time()))
+    _time.sleep(0.25)
+    if rep["name"] == "Prop_C":
+        raise OSError("bridge reset")
+    rep["dest"] = dest + "/" + rep["name"]
+    return rep
+
+
+def _seq(*a, **k):
+    raise AssertionError("the overlapped path should be used")
+
+
+_seq.export, _seq.land = _export, _land
+d, w, fb = setup(board=BOARD4, blend=False, ship=_seq)
+fb.objects = ["Mesh"]
+t0 = _time.time()
+out = w.tick()
+took = _time.time() - t0
+got = dict(out)
+check("overlapped: all four handled", sorted(got) == ["Prop_A", "Prop_B", "Prop_C", "Prop_D"], out)
+check("overlapped: the three good ones ship, the bad import is BLOCKED (Unreal's fault, retried)",
+      [got[a] for a in ("Prop_A", "Prop_B", "Prop_D")] == ["SHIPPED"] * 3 and got["Prop_C"] == "BLOCKED", got)
+check("overlapped: exports run on the Blender thread, imports on this one",
+      {t for _, t, _ in seen["export"]} == {"artqueue-blender"} and "artqueue-blender" not in {t for _, t, _ in seen["land"]},
+      seen)
+check("overlapped: imports keep the board's order", [n for n, _, _ in seen["land"]] == ["Prop_A", "Prop_B", "Prop_C", "Prop_D"])
+check("overlapped: faster than one at a time (8 x 0.25 s in sequence)", took < 1.6, "%.2f s" % took)
+check("overlapped: an export overlaps an import", any(e[2] < l[2] + 0.25 and e[2] > l[2]
+      for e in seen["export"] for l in seen["land"]), seen)
+check("the Play check runs on the game thread with a bounded wait (no Remote Execution channel)",
+      PLAYING.get("params", {}).get("unattended") is False and PLAYING["params"].get("bridge_timeout") == 30,
+      PLAYING.get("params"))
+board_after = open(os.path.join(d, "QUEUE.md"), encoding="utf-8").read()
+check("overlapped: the board is still one table of four rows", len(artqueue.parse(board_after)[0]) == 4, board_after)
 shutil.rmtree(d)
 
 n = sum(results)
