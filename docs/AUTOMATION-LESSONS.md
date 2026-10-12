@@ -131,6 +131,10 @@ to it when something new breaks.
   records `render_triangles` and `nanite` beside it. The stand-in has a `nanite` fault that must pass, and a mutant
   that goes back to counting LOD0 fails it. How it was found: measure both ends (the file, then Unreal's source vs
   LOD0) before blaming either team.
+- **An import must save everything it made.** A rebuild stalled at "[4] DaedalusLink plugin" because closing the
+  editor raised "Save Content?" for 9 material instances the art queue had imported. UE 5.8 saves the meshes but
+  leaves the materials dirty. The import script now ends with `EditorAssetLibrary.save_directory(dest,
+  only_if_is_dirty=True)`. The stand-in records the save, and a mutant that drops it fails e2e.
 - **Game logic must not live in Slate's Tick.** The realm walked 12 steps in one run and 0 in the next. The
   difference: the editor was minimized for the second run, and Slate stops ticking widgets in a minimized window.
   The portal's exit (raised from Tick) never fired either. The core now runs on `FTSTicker`, which ticks no matter

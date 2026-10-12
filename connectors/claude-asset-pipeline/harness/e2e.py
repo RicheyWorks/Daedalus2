@@ -115,6 +115,10 @@ def main():
         check("Unreal sizes are centimetres", any(m["dims_cm"][0] > 250 for m in r["unreal"]["meshes"]),
               r["unreal"]["meshes"])
 
+        r_saved = wire.call(U, "pipeline.saved")
+        saved = (r_saved.get("result") or r_saved).get("saved", r_saved)
+        check("the import saves what it made (no 'Save Content?' left for the editor to ask on close)",
+              "/Game/Test/Props" in saved, saved)
         r = S.ship("Crate", objects=["Crate"], dest="/Game/Test", folder=work, blender=B, unreal=U)
         check("one named object ships alone", r["ok"] and len(r["unreal"]["meshes"]) == 1, r["checks"])
 

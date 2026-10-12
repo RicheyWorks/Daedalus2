@@ -84,6 +84,10 @@ for path in paths:
                 materials.append({"path": mi.get_path_name(), "name": mi.get_name()})
     elif isinstance(asset, unreal.MaterialInterface) and all(x["path"] != path for x in materials):
         materials.append({"path": path, "name": asset.get_name()})
+# Save everything the import made, materials included: UE 5.8 leaves the material instances dirty, and a dirty asset
+# makes the editor ask "Save Content?" when it closes, which stalls every scripted rebuild until someone answers.
+if P.get("save", True):
+    unreal.EditorAssetLibrary.save_directory(P["dest"], only_if_is_dirty=True, recursive=True)
 result = {"dest": P["dest"], "imported": paths, "meshes": meshes, "materials": materials}
 '''
 

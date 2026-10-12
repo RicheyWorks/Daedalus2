@@ -32,6 +32,7 @@ from asset_pipeline import glb   # noqa: E402
 
 ASSETS = {}
 FAULT = {"next": None}
+SAVED = []   # directories the import script saved (it must, or the editor asks "Save Content?" on close)
 
 
 class _Obj:
@@ -135,11 +136,18 @@ class EditorAssetLibrary:
     def list_assets(dest, recursive=True):
         return [p for p in ASSETS if p.startswith(dest + "/")]
 
+    @staticmethod
+    def save_directory(dest, only_if_is_dirty=True, recursive=True):
+        U._game_thread_only("save_directory")
+        SAVED.append(dest)
+        return True
+
 
 for _n in ("MaterialInterface", "StaticMesh", "AssetImportTask", "AssetToolsHelpers", "EditorAssetLibrary"):
     setattr(U, _n, globals()[_n])
 
 import claude_unreal_bridge as bridge  # noqa: E402
+bridge.register("pipeline.saved", lambda p: {"saved": list(SAVED)}, "directories saved", {})
 bridge.register("pipeline.fault", lambda p: FAULT.update(next=p.get("kind")) or {"next": FAULT["next"]},
                 "Make the next import lose something (harness only)", {"kind": "str"})
 bridge.register("pipeline.assets", lambda p: {"assets": sorted(ASSETS)}, "Every asset imported so far")
