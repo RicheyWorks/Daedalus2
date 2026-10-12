@@ -36,9 +36,47 @@ for a in eas.get_all_level_actors():
     elif lb == "PYT_Island_Ground": a.static_mesh_component.set_material(0, grass); n["ground"] += 1
     elif lb.startswith("PYT_Island_Rock"): a.static_mesh_component.set_material(0, rock); n["rock"] += 1
     elif lb.startswith("HerbBed_") or lb == "PYT_FoodTable": a.static_mesh_component.set_material(0, soil); n["beds"] += 1
+# --- batch 2: import new glbs (skip existing) + Climax Seed adventure set
+import os, glob, random
+GLB = r"C:\Users\730ri\projects\bot-team\art\glb\pythagoras"
+def dest(n): k, g = n.split("_")[0], n.split("_PYT_")[1].split("_")[0]; return "/Game/Pythagoras/Art/%s/%s" % (k, g)
+tasks = []
+for f in sorted(glob.glob(os.path.join(GLB, "*.glb"))):
+    nm = os.path.splitext(os.path.basename(f))[0]
+    if eal.does_asset_exist(dest(nm) + "/" + nm) or eal.list_assets(dest(nm) + "/" + nm, True, False): continue
+    t = unreal.AssetImportTask(); t.filename = f; t.destination_path = dest(nm); t.destination_name = nm; t.automated = True; t.save = True; t.replace_existing = True; tasks.append(t)
+if tasks: AT.import_asset_tasks(tasks)
+def mesh(nm):
+    for p in eal.list_assets(dest(nm), True, False):
+        a = unreal.load_asset(p)
+        if isinstance(a, unreal.StaticMesh) and a.get_name().startswith(nm): return a
+les.set_current_level_by_name(SUB)
+for a in eas.get_all_level_actors():
+    if a.actor_has_tag("PYT_Adventure"): eas.destroy_actor(a)
+R = random.Random(7); adv = 0
+def put(nm, x, y, z=0, yaw=0, s=1.0, label=None):
+    global adv
+    m = mesh(nm)
+    if not m: return None
+    a = eas.spawn_actor_from_object(m, ORIGIN + unreal.Vector(x, y, z), unreal.Rotator(roll=0, pitch=0, yaw=yaw)); a.set_actor_scale3d(unreal.Vector(s, s, s))
+    a.tags = [TAG, "PYT_Adventure"]; a.set_folder_path("Pythagoras/Island/Adventure"); a.set_actor_label(label or "ADV_%s_%d" % (nm, adv)); adv += 1
+    a.static_mesh_component.set_collision_profile_name("NoCollision"); return a
+put("Prop_Dress_PYT_OldStump_V4", 4600, -4600, label="ADV_OldStump")                      # Climax Seed altar
+put("Item_Quest_PYT_ClimaxSeed_V2", 4600, -4600, 85, label="ADV_ClimaxSeed")
+put("Prop_Tree_PYT_GreatOak_V3", 4200, -3700, label="ADV_GreatOak_Future", s=0.9)
+for i, (x, y) in enumerate([(-3200, -1800), (-1800, -3200), (1800, -3200), (3200, 1800), (0, 1600), (4200, -4200)]):
+    put("Prop_Sign_PYT_Chapter_V%d" % (1 + i % 5), x, y, yaw=R.uniform(0, 360), label="ADV_Chapter%d_Sign" % (i + 1))
+for i in range(4): put("Prop_Dress_PYT_AshScar_V%d" % (i + 1), -3600 + i * 350, -4200 + R.uniform(-200, 200), yaw=R.uniform(0, 360))
+for i in range(3): put("Prop_Dress_PYT_WindthrowLog_V%d" % (i + 1), -3000 + i * 500, 2600, yaw=R.uniform(0, 360))
+for i in range(4): put("Prop_Live_PYT_Deer_V%d" % (i + 1), -3400 + R.uniform(-900, 900), 3400 + R.uniform(-900, 900), yaw=R.uniform(0, 360))
+for i in range(5): put("Prop_Live_PYT_Frog_V%d" % (i + 1), 1500 + R.uniform(-500, 500), R.uniform(-400, 400), yaw=R.uniform(0, 360))
+for i in range(3): put("Tool_PYT_FireweedTorch_V%d" % (i + 1), -1700 + i * 60, -900, 80, yaw=90)
+for i, k in enumerate(["Pioneer", "Meadow", "Scrub", "Forest", "Riparian"]): put("Item_Seed_PYT_%sPouch_V1" % k, -1400 + i * 60, -900, 80)
+n["adventure"] = adv; n["imported_new"] = len(tasks)
 les.save_current_level()
 E = unreal.EditorLoadingAndSavingUtils
 mine = [p for p in E.get_dirty_content_packages() if p.get_name().startswith("/Game/Pythagoras/")]
 if mine: E.save_packages(mine, True)
 unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).set_level_viewport_camera_info(CAM, unreal.Rotator(roll=0, pitch=-32, yaw=45))
 result = n
+
