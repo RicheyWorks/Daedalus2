@@ -58,6 +58,14 @@ check("saves and posts DONE + HANDOFF", "save" in f.calls and f.links[0].startsw
 check("the build waits for BUILD OK from the clean worktree", any("D2-build" in x and "-Start" in x for x in f.runs)
       and any("checkout -q --detach origin/main" in x for x in f.runs), f.runs)
 
+f = Fake()
+r = turn(f).go(light=True)
+names = [s["step"] for s in r["steps"]]
+check("a light turn never builds, plays or relaunches", "build" not in names and not any(n.startswith("scenario") for n in names)
+      and not any("unreal-job" in x for x in f.runs) and "play" not in f.calls and "save" in f.calls, (names, f.calls))
+check("a light turn audits RAM and writes islands.json/.dsb", "ram audit (registry tags, nothing loaded)" in names
+      and "islands.json + islands.dsb" in names and f.links[0].startswith("TURN DONE"), names)
+
 f = Fake(fail_run="preflight.py")
 r = turn(f).go()
 check("a failed preflight stops before the editor is touched", r["stopped"].startswith("preflight") and f.calls == [], f.calls)
