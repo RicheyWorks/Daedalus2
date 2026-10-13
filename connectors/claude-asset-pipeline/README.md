@@ -60,3 +60,14 @@ Interchange merges meshes or drops degenerate triangles, the judge will say REJE
 shows where.
 
 MIT
+
+## Combat asset handoff (combat-slice/v1)
+
+Checks a combat slice's art before it reaches Unreal: weapon sockets (`SOCKET_<Name>` nodes), enemy skeleton (joint count and required joints) and LOD0..LODn, environment collision (`UCX_`/`UBX_`/`USP_`/`UCP_`), and optional triangle budgets. Passing assets are imported through `ship.land` with `--import`; failing assets are never imported. Writes `report.json` and `REPORT.md`.
+
+```n python -m asset_pipeline.combat_handoff --spec specs/combat-slice-1.json --folder <art dir> --out <dir> [--import]
+ python harness/combat_handoff_test.py   # offline, no editor
+```
+
+New slice: write a new spec. New kind of asset: add a check function to `ROLES`.
+
