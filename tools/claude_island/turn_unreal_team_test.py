@@ -106,5 +106,30 @@ for label, reply, start in [
     f = BuildReply([reply], start)
     r = turn(f).go()
     check(label + " stops before editor calls", r["stopped"] == "build failed" and not f.calls, f.calls)
+class ScenarioReply(Fake):
+    def __init__(self, reply):
+        super().__init__()
+        self.reply = reply
+
+    def call(self, kind, timeout=600, **p):
+        if kind == "daedalus.play_status":
+            self.calls.append(kind)
+            if isinstance(self.reply, Exception):
+                raise self.reply
+            return self.reply
+        return super().call(kind, timeout, **p)
+
+for label, reply in [
+        ("failed checks", {"running": False, "result": {"passed": 0, "total": 1}}),
+        ("missing result", {}),
+        ("timeout", {"running": True}),
+        ("bridge exception", ConnectionError("test disconnect")),
+        ("reported error", {"error": "failed", "result": {"passed": 1, "total": 1}}),
+        ("inconsistent checks", {"result": {"passed": 1, "total": 1, "checks": [{"pass": False}]}})]:
+    f = ScenarioReply(reply)
+    runner = turn(f)
+    result = runner.step("scenario test", lambda: runner.scenario("test", limit=3))
+    check(label + " fails and attempts stop", not result["ok"] and f.calls[-1] == "stop", result)
+
 print("%d/%d" % (ok, total))
 sys.exit(0 if ok == total else 1)
