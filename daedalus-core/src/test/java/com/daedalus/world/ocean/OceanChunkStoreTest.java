@@ -22,10 +22,13 @@ class OceanChunkStoreTest {
         }
         try(var store=new OceanChunkStore(root,9)) {
             assertThat(store.loadOrGenerate(at).get(2,3,4)).isEqualTo(BlockType.GLASS);
-            store.save(at,new Chunk());
+            Chunk cleared=store.loadOrGenerate(at);
+            for(int x=0;x<16;x++)for(int y=0;y<16;y++)for(int z=0;z<16;z++)cleared.set(x,y,z,BlockType.AIR);
+            store.save(at,cleared);
         }
         try(var store=new OceanChunkStore(root,9)) {
             assertThat(store.loadOrGenerate(at).isEmpty()).isTrue();
+            assertThat(store.loadOrGenerate(at).revision()).isGreaterThan(4096);
             assertThat(Files.exists(root.resolve("-1_-1_0.daew"))).isTrue();
         }
     }
@@ -84,6 +87,17 @@ class OceanChunkStoreTest {
         try(var store=new OceanChunkStore(tmp.resolve("sea"),1)) {
             assertThatThrownBy(()->store.loadOrGenerate(new ChunkCoordinate(Integer.MAX_VALUE,0,0))).isInstanceOf(IllegalArgumentException.class);
             assertThatThrownBy(()->store.save(new ChunkCoordinate(0,Integer.MIN_VALUE,0),new Chunk())).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test void revisionRollbackAndConflictingReplacementCannotEraseSavedEdits() throws Exception {
+        try(var store=new OceanChunkStore(tmp.resolve("sea"),1)) {
+            Chunk original=store.loadOrGenerate(at);
+            Chunk edited=original.copy();edited.set(0,0,0,BlockType.GLASS);store.save(at,edited);
+            assertThatThrownBy(()->store.save(at,original)).isInstanceOf(IOException.class).hasMessageContaining("revision");
+            Chunk conflicting=original.copy();conflicting.set(0,0,0,BlockType.WOOD);
+            assertThatThrownBy(()->store.save(at,conflicting)).isInstanceOf(IOException.class).hasMessageContaining("conflicted");
+            assertThat(store.loadOrGenerate(at).get(0,0,0)).isEqualTo(BlockType.GLASS);
         }
     }
 }

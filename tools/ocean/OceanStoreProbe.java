@@ -41,11 +41,14 @@ class OceanStoreProbe {
             switch(args[0]) {
                 case "write" -> {
                     Chunk chunk=store.loadOrGenerate(edited);chunk.set(1,2,3,BlockType.GLASS);store.save(edited,chunk);
-                    store.loadOrGenerate(emptied);store.save(emptied,new Chunk());
+                    Chunk clear=store.loadOrGenerate(emptied);
+                    for(int x=0;x<16;x++)for(int y=0;y<16;y++)for(int z=0;z<16;z++)clear.set(x,y,z,BlockType.AIR);
+                    store.save(emptied,clear);
                     System.out.println("OCEAN_PROCESS_WRITE_PASS");
                 }
                 case "read" -> {
-                    if(store.loadOrGenerate(edited).get(1,2,3)!=BlockType.GLASS||!store.loadOrGenerate(emptied).isEmpty()) {
+                    if(store.loadOrGenerate(edited).get(1,2,3)!=BlockType.GLASS||!store.loadOrGenerate(emptied).isEmpty()
+                            ||store.loadOrGenerate(emptied).revision()<=4096) {
                         throw new IllegalStateException("Persisted edit/empty chunk lost");
                     }
                     System.out.println("OCEAN_PROCESS_RESTART_PASS");
