@@ -214,6 +214,56 @@
     "ember": "1 of 3 living systems",
     "bright": "2 of 3 living systems",
     "tempered": "all 3 living systems + dual-quench in pack"
+   },
+   "score_0_100": {
+    "weights": {
+     "water_running": 30,
+     "pens_producing": 30,
+     "herb_beds_watered": 30,
+     "dual_quench_in_pack": 10
+    },
+    "max": 100,
+    "method": "integer sum of weights for signals that are true (0..100)",
+    "headless_max_without_dual": 90,
+    "note": "dual_quench_in_pack is quest-gated (q_forge_temper step 1); headless max is 90 until a dual-quenched tonic is in pack",
+    "validator": "tools/islands/hephaestus/heph_forge_glow.py"
+   },
+   "glow_from_score": [
+    {
+     "min": 0,
+     "max": 0,
+     "level": "cold"
+    },
+    {
+     "min": 1,
+     "max": 39,
+     "level": "ember"
+    },
+    {
+     "min": 40,
+     "max": 69,
+     "level": "bright"
+    },
+    {
+     "min": 70,
+     "max": 99,
+     "level": "near-tempered"
+    },
+    {
+     "min": 100,
+     "max": 100,
+     "level": "tempered"
+    }
+   ],
+   "tempered_win": {
+    "rule": "score == 100 sustained for tuning.sustain_ingame_min (data rule; no engine write)",
+    "requires": "water_running + pens_producing + herb_beds_watered + dual_quench_in_pack all true"
+   },
+   "tuning": {
+    "sustain_ingame_min": 60,
+    "drop_rule": "any signal false -> score drops immediately; tempered_win timer resets",
+    "glow_lerp_per_s": 0.1,
+    "mpc_param": "MPC_Heph_ForgeSky.TemperGlow = score / 100 (materials_mpc.json)"
    }
   }
  }

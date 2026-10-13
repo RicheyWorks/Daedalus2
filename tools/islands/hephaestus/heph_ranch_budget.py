@@ -1,7 +1,8 @@
 ﻿"""Headless ranch production budget check for Hephaestus Island.
 
 Reads layout.json heads + livestock.json product rates + water.json claim_check.
-Writes/refreshes livestock.json production_budget and prints a one-line summary.
+Writes/refreshes livestock.json production_budget (incl. Great Forge Glow 0-100 score)
+and prints a one-line summary.
 No Unreal / editor required.
 """
 from __future__ import annotations
@@ -15,6 +16,32 @@ LIVE = HEPH / "livestock.json"
 LAYOUT = HEPH / "layout.json"
 WATER = HEPH / "water.json"
 MIN_DAY = 24 * 60
+
+# Great Forge Glow 0-100 score (shared with heph_forge_glow.py)
+SCORE_WEIGHTS = {
+    "water_running": 30,
+    "pens_producing": 30,
+    "herb_beds_watered": 30,
+    "dual_quench_in_pack": 10,
+}
+GLOW_BANDS = [
+    {"min": 0, "max": 0, "level": "cold"},
+    {"min": 1, "max": 39, "level": "ember"},
+    {"min": 40, "max": 69, "level": "bright"},
+    {"min": 70, "max": 99, "level": "near-tempered"},
+    {"min": 100, "max": 100, "level": "tempered"},
+]
+
+
+def glow_score(signals: dict[str, bool]) -> int:
+    return sum(w for k, w in SCORE_WEIGHTS.items() if signals.get(k))
+
+
+def glow_level(score: int) -> str:
+    for b in GLOW_BANDS:
+        if b["min"] <= score <= b["max"]:
+            return b["level"]
+    raise ValueError(f"score out of range: {score}")
 
 
 def main() -> int:
@@ -80,6 +107,25 @@ def main() -> int:
             "bright": "2 of 3 living systems",
             "tempered": "all 3 living systems + dual-quench in pack",
         },
+        "score_0_100": {
+            "weights": dict(SCORE_WEIGHTS),
+            "max": sum(SCORE_WEIGHTS.values()),
+            "method": "integer sum of weights for signals that are true (0..100)",
+            "headless_max_without_dual": sum(SCORE_WEIGHTS.values()) - SCORE_WEIGHTS["dual_quench_in_pack"],
+            "note": "dual_quench_in_pack is quest-gated (q_forge_temper step 1); headless max is 90 until a dual-quenched tonic is in pack",
+            "validator": "tools/islands/hephaestus/heph_forge_glow.py",
+        },
+        "glow_from_score": GLOW_BANDS,
+        "tempered_win": {
+            "rule": "score == 100 sustained for tuning.sustain_ingame_min (data rule; no engine write)",
+            "requires": "water_running + pens_producing + herb_beds_watered + dual_quench_in_pack all true",
+        },
+        "tuning": {
+            "sustain_ingame_min": 60,
+            "drop_rule": "any signal false -> score drops immediately; tempered_win timer resets",
+            "glow_lerp_per_s": 0.1,
+            "mpc_param": "MPC_Heph_ForgeSky.TemperGlow = score / 100 (materials_mpc.json)",
+        },
     }
 
     live["production_budget"] = {
@@ -110,11 +156,20 @@ def main() -> int:
 
     assert sum(heads.values()) == 16, heads
     assert claim is True, "water claim_check must stay true"
+    # Great Forge Glow score math
+    assert sum(SCORE_WEIGHTS.values()) == 100
+    base = {"water_running": True, "pens_producing": True, "herb_beds_watered": True}
+    assert glow_score({}) == 0 and glow_level(0) == "cold"
+    assert glow_score({"water_running": True}) == 30 and glow_level(30) == "ember"
+    assert glow_score({"water_running": True, "pens_producing": True}) == 60 and glow_level(60) == "bright"
+    assert glow_score(base) == 90 and glow_level(90) == "near-tempered"
+    assert glow_score({**base, "dual_quench_in_pack": True}) == 100 and glow_level(100) == "tempered"
     print(
         f"OK ranch budget: heads={sum(heads.values())} "
         f"egg={products_day.get('egg')} milk={products_day.get('milk')} "
         f"truffle={products_day.get('truffle_mushroom')} wool={products_day.get('wool')} "
-        f"honey={products_day.get('honey')} bellows=+{bellows_bonus} water_claim={claim}"
+        f"honey={products_day.get('honey')} bellows=+{bellows_bonus} water_claim={claim} "
+        f"glow_score_math=OK(0/30/60/90/100)"
     )
     return 0
 

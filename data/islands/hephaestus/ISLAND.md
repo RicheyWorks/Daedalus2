@@ -172,3 +172,42 @@ Ranch production budget + Great Forge glow win meter (no Unreal / editor turn). 
 
 Failure: unwatered/unfed 1 day → products stop; 3 days → animal leaves (cozy). Detail: livestock.json → production_budget.
 
+## Off-editor polish (2026-10-12 ~21:47 PT)
+
+Forge-atmosphere material contract + numeric Great Forge Glow score (no Unreal / editor turn; buffffff holds the editor). Nothing here has been applied in Unreal yet: `materials_mpc.json` is a data contract for the next Hephaestus editor turn (`"applied": false`).
+
+**MPC_Heph_ForgeSky** (`materials_mpc.json`; source: Daedalus Sky Director + caldera heat zone + glow score; mirrors OddsReaper `MPC_OR_SkyWeather`):
+
+| Param | Range / default | Drives |
+|-------|-----------------|--------|
+| HeatShimmer | 0–1 / 0.4 (1.0 in caldera) | heat distortion, thirst UI cue, basalt hot edge |
+| AshFall | 0–1 / 0.25 (storm 0.8) | ash particles, ash-field film, haze |
+| MagmaPulse | 0–1 / 0.5 (6 s sine) | Great Forge core emissive, magma pool, braziers |
+| QuenchSteam | 0–1 / 0 (1.0 on dip, 4 s half-life) | steam at `Prop_ForgeQuenchTub_Basalt`, quench surface |
+| NightForge | 0–1 / 0 (dusk 18→21 h) | anvil/forge rim light, spring underglow |
+| TemperGlow | 0–1 / 0 (= score/100; 0.9 headless now) | Great Forge tempered look (ForgeTint lerp) |
+
+Bindings: `MI_HotSpring` (**exists**, on `WaterPlane_HotSpring`; its BasicShapeMaterial parent only takes Color, so the apply turn needs a parent with emissive/opacity/roughness). `MI_Heph_ForgeIron`, `MI_Heph_Basalt`, `MI_Heph_QuenchWater`, `MI_Heph_AshSoil`, `MI_Heph_HerbLeaf` are **planned** MIDs.
+
+**Great Forge Glow score 0–100** (`livestock.json` → `production_budget.win_meter.score_0_100`):
+
+| Signal | Points | Today (data) |
+|--------|--------|--------------|
+| water_running (water.json claim_check.both_true) | +30 | true |
+| pens_producing (16 head from layout) | +30 | true |
+| herb_beds_watered (12 beds) | +30 | true |
+| dual_quench_in_pack (q_forge_temper step 1) | +10 | quest-gated |
+
+| Score | Glow |
+|-------|------|
+| 0 | cold |
+| 1–39 | ember |
+| 40–69 | bright |
+| 70–99 | near-tempered |
+| 100 | tempered |
+
+Tempered win (data rule, no engine write): score == 100 held for 60 in-game minutes (`tuning.sustain_ingame_min`). Any signal dropping lowers the score at once and resets the timer. Glow lerps at 0.1/s into `TemperGlow`. The existing `glow_levels` and `signals` stay as they were.
+
+Validators (headless):
+- `tools/islands/hephaestus/heph_forge_glow.py`: read-only. Checks signals, score math, band coverage 0–100, the 36/36 herbs with `temper_ev`, and the MPC params and bindings. Result: **PASS**, score 90 (near-tempered) now, 100 (tempered) with dual-quench simulated.
+- `tools/islands/hephaestus/heph_ranch_budget.py`: now also writes the score block and asserts 0/30/60/90/100 → cold/ember/bright/near-tempered/tempered.
