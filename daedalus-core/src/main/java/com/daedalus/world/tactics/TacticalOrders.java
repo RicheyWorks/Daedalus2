@@ -306,6 +306,61 @@ public final class TacticalOrders {
         return out.toString();
     }
 
+    /** One unit of a DTR 1 roster: the host's trusted bootstrap for a squad (ADR-060, Astra's Frame needs it). */
+    public record RosterUnit(String unit, String kind, double health, double maxHealth, Vec at, boolean seesPlayer) {
+    }
+
+    /** A DTR 1 roster: the Unreal world's session, the squad, the tick and its units. */
+    public record Roster(String session, String squad, long tick, List<RosterUnit> units) {
+        public Roster {
+            units = List.copyOf(units);
+        }
+    }
+
+    /**
+     * Reads a DTR 1 roster, written by {@code UDaedalusTactics::TakeRoster} (C++ {@code WriteRoster}):
+     * <pre>
+     * DTR 1
+     * session &lt;id&gt; squad &lt;id&gt; tick &lt;n&gt;
+     * unit &lt;id&gt; &lt;KIND&gt; &lt;health&gt; &lt;maxHealth&gt; &lt;x&gt; &lt;y&gt; &lt;z&gt; &lt;sees 0|1&gt;
+     * </pre>
+     * Throws {@link IllegalArgumentException} naming the line on anything else.
+     */
+    public static Roster parseRoster(String text) {
+        String[] lines = text.split("\n", -1);
+        if (lines.length < 2 || !lines[0].equals("DTR 1")) {
+            throw new IllegalArgumentException("line 1: expected 'DTR 1'");
+        }
+        List<String> h = words(lines[1]);
+        if (h.size() != 6 || !h.get(0).equals("session") || !h.get(2).equals("squad") || !h.get(4).equals("tick")
+                || !token(h.get(1)) || !token(h.get(3))) {
+            throw new IllegalArgumentException("line 2: expected 'session <id> squad <id> tick <n>'");
+        }
+        double tick = number(h.get(5));
+        if (Double.isNaN(tick) || tick < 0 || tick != Math.floor(tick)) {
+            throw new IllegalArgumentException("line 2: bad tick");
+        }
+        List<RosterUnit> units = new ArrayList<>();
+        for (int i = 2; i < lines.length; i++) {
+            if (lines[i].isEmpty()) {
+                continue;
+            }
+            List<String> t = words(lines[i]);
+            double[] v = new double[5];
+            boolean ok = t.size() == 9 && t.get(0).equals("unit") && token(t.get(1)) && token(t.get(2))
+                    && (t.get(8).equals("0") || t.get(8).equals("1"));
+            for (int k = 0; ok && k < 5; k++) {
+                v[k] = number(t.get(3 + k));
+                ok = !Double.isNaN(v[k]);
+            }
+            if (!ok || v[0] < 0 || v[1] < 0 || units.size() >= MAX_ORDERS) {
+                throw new IllegalArgumentException("line " + (i + 1) + ": bad unit line");
+            }
+            units.add(new RosterUnit(t.get(1), t.get(2), v[0], v[1], new Vec(v[2], v[3], v[4]), t.get(8).equals("1")));
+        }
+        return new Roster(h.get(1), h.get(3), (long) tick, units);
+    }
+
     /** Lower-case name, for logs. */
     public static String label(Verb v) {
         return v.name().toLowerCase(Locale.ROOT);

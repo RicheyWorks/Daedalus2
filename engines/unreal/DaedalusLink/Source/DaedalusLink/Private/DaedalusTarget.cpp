@@ -520,7 +520,10 @@ float ADaedalusTarget::TakeDamage(float Damage, const FDamageEvent& Event, ACont
 	Health -= Damage;
 	if (!Squad.IsEmpty())
 		if (UDaedalusTactics* Tac = GetWorld()->GetSubsystem<UDaedalusTactics>())
+		{
 			Tac->Note(Health <= 0.f ? TEXT("DOWN") : TEXT("HIT"), TacticalId(), GetActorLocation(), Health <= 0.f ? 0.f : Damage);
+			if (Health <= 0.f) Tac->NoteDown(Squad, TacticalId(), Kind, MaxHealth, GetActorLocation());
+		}
 	StartScale = GetActorScale3D();
 	Flash = 1.f;
 	SinceHurt = 0.f;

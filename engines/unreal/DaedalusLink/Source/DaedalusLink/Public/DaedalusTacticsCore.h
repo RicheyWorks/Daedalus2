@@ -233,6 +233,43 @@ inline std::string WriteEvents(long long Tick, const std::vector<Event>& E)
 	return Out;
 }
 
+// ------------------------------------------------------------------------------------------------ roster (DTR 1)
+
+/** One unit as the host knows it: the trusted bootstrap Java needs (DTE 1 events alone can't build a Frame). */
+struct RosterUnit
+{
+	std::string Unit, Kind;
+	double Health = 0, MaxHealth = 0;
+	Vec At;
+	bool SeesPlayer = false;
+};
+
+/**
+ * DTR 1 (Daedalus Tactical Roster), written by the host on request:
+ *     DTR 1
+ *     session <id> squad <id> tick <n>
+ *     unit <id> <KIND> <health> <maxHealth> <x> <y> <z> <sees 0|1>
+ * The session changes whenever the Unreal world starts (a new Play or game), so Java knows to start a new encounter.
+ */
+inline std::string WriteRoster(const std::string& Session, const std::string& Squad, long long Tick, const std::vector<RosterUnit>& Units)
+{
+	std::string Out = "DTR 1\nsession " + Session + " squad " + Squad + " tick " + std::to_string(Tick) + "\n";
+	for (const RosterUnit& U : Units)
+		Out += "unit " + U.Unit + " " + U.Kind + " " + Num(U.Health) + " " + Num(U.MaxHealth) + " " + Num(U.At.X) + " " + Num(U.At.Y) + " "
+			+ Num(U.At.Z) + " " + (U.SeesPlayer ? "1" : "0") + "\n";
+	return Out;
+}
+
+// ------------------------------------------------------------------------------------------------ fencing
+
+/** What a squad's latest outside (Java) spec tick allows: newer applies, the same tick is a repeat, older is stale. */
+enum class Fence { Apply, Repeat, Stale };
+inline Fence Check(long long LastTick, bool HaveLast, long long Tick)
+{
+	if (!HaveLast || Tick > LastTick) return Fence::Apply;
+	return Tick == LastTick ? Fence::Repeat : Fence::Stale;
+}
+
 // ------------------------------------------------------------------------------------------------ geometry
 
 /** Where to stand to flank: a point Radius from the player, 90 degrees round from the squad's side of them. */
@@ -301,6 +338,9 @@ inline Spec Decide(const std::string& Squad, long long Tick, std::vector<Unit> U
 		const double DA = D2(A), DB = D2(B);
 		return DA != DB ? DA < DB : A.Name < B.Name;
 	});
+	// A spec carries at most MaxOrders orders (the parser refuses more, whole). A bigger squad orders its nearest
+	// MaxOrders units; the rest fight alone this tick. Split big packs into several squads to order them all.
+	if (Units.size() > MaxOrders) Units.resize(MaxOrders);
 	Vec Mid;
 	for (const Unit& U : Units) { Mid.X += U.At.X; Mid.Y += U.At.Y; Mid.Z += U.At.Z; }
 	Mid.X /= Units.size(); Mid.Y /= Units.size(); Mid.Z /= Units.size();
