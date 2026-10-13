@@ -88,6 +88,13 @@ a lot of different chances at rares legendaries and ultra rares".
 - Rolls must be provably fair and fixed at mint. Use on-chain verifiable randomness (VRF, or commit-reveal), so
   nobody, including us, can steer who gets the neon mummy. The roll is recorded on the token and never re-rolled by
   an upgrade.
+- **Shiny** (Richmond, 09:32): "shiny is also a very rare case any creature can have or avatar and it increases
+  everything including max level increase".
+  - Shiny is an independent, very rare roll on top of the rarity tier, so a common bat or an ultra-rare neon mummy can
+    both be shiny.
+  - A shiny raises every stat and its maximum level. The boost values are game balance, owned by Astra.
+  - It is rolled at mint with the same fair randomness, stored on the token, and shown in game with a distinct
+    sparkle.
 - Risk to check before any paid mint: paid random rewards are regulated like loot boxes or gambling in some places.
   Richmond, the blockchain team and a lawyer decide this before mainnet. Testnet until then.
 
