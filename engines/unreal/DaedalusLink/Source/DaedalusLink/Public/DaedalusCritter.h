@@ -56,6 +56,10 @@ private:
 	FRandomStream Rng;
 	float Left = 0.f;
 	float Age = 0.f;
+	/** Seconds into Play when the critter grounds itself again: the live world (and streamed islands) can arrive
+	 * after BeginPlay, leaving a herd settled on older, lower geometry and walled in by every step (2026-10-13). */
+	float NextSettle = 1.5f;
+	int32 Settles = 0;
 	float Gait = 0.f;
 	float Size = 100.f;
 	float Check = 0.f;

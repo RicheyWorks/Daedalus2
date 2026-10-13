@@ -62,15 +62,19 @@ inline ParseResult Parse(const std::string& Text)
 {
 	ParseResult R;
 	auto Fail = [&](size_t N, const std::string& Why) { R.Ok = false; R.Out = Manifest(); R.Error = "line " + std::to_string(N) + ": " + Why; return R; };
-	std::vector<std::string> Lines; std::string Cur;
-	for (char C : Text) { if (C == '\n') { Lines.push_back(Cur); Cur.clear(); } else Cur += C; }
-	Lines.push_back(Cur);
 	bool Header = false; std::set<std::string> Seen;
-	for (size_t N = 1; N <= Lines.size(); ++N)
+	size_t Start = 0, N = 0;
+	while (Start <= Text.size())
 	{
-		std::string L = Lines[N - 1];
-		if (!L.empty() && L.back() == '\r') L.pop_back();
-		if (L.size() > MaxLine) return Fail(N, "line too long");
+		++N;
+		const size_t Newline = Text.find('\n', Start);
+		const size_t End = Newline == std::string::npos ? Text.size() : Newline;
+		size_t Length = End - Start;
+		if (Length && Text[End - 1] == '\r') --Length;
+		if (Length > MaxLine) return Fail(N, "line too long");
+		const std::string L = Text.substr(Start, Length);
+		// The input already exists; copy at most one bounded line, never the entire manifest.
+		Start = Newline == std::string::npos ? Text.size() + 1 : Newline + 1;
 		std::vector<std::string> T = Split(L);
 		if (T.empty() || T[0][0] == '#') continue;
 		if (!Header)

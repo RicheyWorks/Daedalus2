@@ -583,7 +583,7 @@ def scenario_wild(p):
         yield
     species = sorted({c.get_editor_property("species") for c in critters})
     built = [c for c in critters if c.get_editor_property("parts") > 0]
-    for _ in _seconds(4.0):   # four seconds of grazing and wandering
+    for _ in _seconds(8.0):   # grazing, the 1.5 s and 4 s re-grounding, then wandering (critters graze up to 4 s first)
         yield
     walked = [c for c in critters if c.get_editor_property("walked") > 1.0]
     h = hero()
