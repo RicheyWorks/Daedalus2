@@ -48,3 +48,9 @@ Grazing is an ecology lever: grazed meadow stays stage 0-1 (no succession), ungr
 - pyth_fix_ue: 84 chapter glbs imported, 34 PYT_Chapter props placed, 7/709 actors trace-snapped (worst 35.4 cm), grass M_PYT_IslandGrass_v3, broken M_PYT_IslandGrass deleted.
 - pyth_verify_ue: 796 actors; water chain W1-W8 OK (19 drinkable); livestock 5 sheep/2 goats/1 cow/6 hens/4 bees + full food loop (8 foods); 12 herbs, stages OK; biomes YoungMeadow 176, BrambleScrub 70, PineStand 57, OldGrowthOak 53, WillowRiverbank 148. Ground fit: 29 still >5 cm off (worst 85 cm), to fix next.
 - Camera anchors for youtube-master: PYT_Label_<biome>, PYT_Habitat_<biome> (tag Habitat_<biome>).
+
+## Round 3-4 editor turns (2026-10-12 22:51 and 23:46 PT)
+- Round 3: 48 ch.7 Seed Rain models, ground fit fixed (0 floating/0 sunk, worst 2 cm; table props and bees excluded by mesh name), 808 actors.
+- Round 4: 42 ch.8 Fire Keeper models, 58 chapter props, 8 hidden quest TriggerBoxes (PYT_QuestTrigger_<id>), 828 actors; quest hook live in Unreal.
+- Staged for round 5: ch.9 Keystone Beaver (2nd dam, lodge, reed beds, frogs; 9th trigger), read-only lighting audit, live-position quest progress (expected 9/9 with the demo save).
+- Totals: 781 Blender glbs in bot-team/art/glb/pythagoras; pytest 23/23 + script suites ALL PASS.
