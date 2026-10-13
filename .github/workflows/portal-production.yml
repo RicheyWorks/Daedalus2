@@ -13,6 +13,9 @@ on:
       - 'engines/unreal/**/DaedalusOceanTravelTest.cpp'
       - 'engines/unreal/**/DaedalusOceanDock*'
       - 'engines/unreal/**/DaedalusOceanInteractor.*'
+      - 'engines/unreal/**/DaedalusOceanHostClient.*'
+      - 'engines/unreal/**/DaedalusOceanClientTest.cpp'
+      - 'tools/unreal/ocean-http-probe/**'
       - 'engines/unreal/core-test/*quest_core_test.cpp'
       - 'engines/unreal/core-test/*terrain_core_test.cpp'
       - 'engines/unreal/core-test/ocean_travel_core_test.cpp'
@@ -87,6 +90,7 @@ jobs:
           python3 -m py_compile tools/blender/parcels_environment.py tools/blender/validate_parcels_package.py
           python3 -m py_compile tools/blender/brick_cast.py tools/blender/brick_creatures.py
           python3 -m py_compile tools/blender/brick_environment.py tools/blender/validate_brick_package.py
+          python3 -m py_compile tools/unreal/ocean-http-probe/run.py
   windows:
     runs-on: windows-latest
     steps:
