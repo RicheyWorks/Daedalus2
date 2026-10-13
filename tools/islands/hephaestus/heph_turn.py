@@ -320,6 +320,9 @@ def main():
 
 
 if __name__ == "__main__":
+    _bad = [x for x in sys.argv[1:] if x != "--now"]
+    if _bad:  # never run a turn on an unknown flag (round-3: "--help" ran a real out-of-turn turn)
+        print(__doc__); print(f"refusing: unknown args {_bad}; only --now is accepted; nothing done"); sys.exit(2)
     ok, err, isle = True, "", None
     try:
         isle = main()
