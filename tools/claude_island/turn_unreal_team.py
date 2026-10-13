@@ -3,6 +3,8 @@
 
     python tools/claude_island/turn_unreal_team.py            # on Richey's PC, after posting CLAIM
     python tools/claude_island/turn_unreal_team.py --dry-run  # print the plan only
+    python tools/claude_island/turn_unreal_team.py --light    # a short slot in the RUNNING editor: no build, no
+                                                              # relaunch; RAM + audit + islands.json/.dsb + save
 
 Steps (each one is timed and reported; a step that fails is recorded and the turn moves on unless it was the build):
   1. RAM before: free RAM and the editor's private bytes.
@@ -50,6 +52,17 @@ if p not in sys.path: sys.path.insert(0, p)
 import daedalus_ram_audit
 importlib.reload(daedalus_ram_audit)
 result = daedalus_ram_audit.run()
+'''
+
+ISLANDS = r'''
+import sys, importlib
+p = r"%s"
+if p not in sys.path: sys.path.insert(0, p)
+import daedalus_dsb, daedalus_islands
+for m in (daedalus_dsb, daedalus_islands): importlib.reload(m)
+r = daedalus_islands.write()
+result = {"path": r["path"], "dsb": r.get("dsb"), "rows": [{k: v for k, v in x.items() if k != "package"} for x in r["rows"]][:20],
+          "notes": r["notes"][:20]}
 '''
 
 APPLY_DTO = r'''
@@ -131,10 +144,30 @@ class Turn:
         return {"passed": res.get("passed"), "total": res.get("total"), "error": status.get("error"),
                 "failed": [c["check"] for c in res.get("checks", []) if not c.get("pass")]}
 
-    def go(self, dry=False):
+    def light(self):
+        """A short turn that needs no C++ build, so the running editor is never closed: measure RAM, audit what holds
+        it (registry tags only), write islands.json + islands.dsb, save, hand off."""
+        before = self.step("ram", self.ram)
+        pre = self.step("preflight", lambda: self.run([sys.executable, os.path.join(REPO, "tools", "unreal_preflight", "preflight.py")]))
+        if not pre["ok"]:
+            return self.finish("preflight failed; the editor was not touched")
+        self.step("bridge up", lambda: self.call("ping", timeout=60))
+        py = os.path.join(REPO, "engines", "unreal", "DaedalusLink", "Content", "Python").replace("\\", "\\\\")
+        self.step("ram audit (registry tags, nothing loaded)", lambda: self.call(
+            "execute_python", code=AUDIT % py, unattended=False, bridge_timeout=300))
+        self.step("islands.json + islands.dsb", lambda: self.call("execute_python", code=ISLANDS % py, unattended=False,
+                                                                   bridge_timeout=120))
+        self.step("save", lambda: self.call("save"))
+        return self.finish(None, before.get("result"), before.get("result"))
+
+    def go(self, dry=False, light=False):
         plan = ["ram", "preflight", "build", "place", "ram", "ram audit", "scenarios: " + ", ".join(SCENARIOS), "three-npc", "save", "post"]
+        if light:
+            plan = ["ram", "preflight", "ram audit", "islands.json + islands.dsb", "save", "post"]
         if dry:
             return {"plan": plan}
+        if light:
+            return self.light()
         before = self.step("ram before", self.ram)
         pre = self.step("preflight", lambda: self.run([sys.executable, os.path.join(REPO, "tools", "unreal_preflight", "preflight.py")]))
         if not pre["ok"]:
@@ -172,6 +205,7 @@ class Turn:
 def main(argv):
     from asset_pipeline import wire
     dry = "--dry-run" in argv
+    light = "--light" in argv
 
     def call(kind, timeout=600, **params):
         return wire.call(wire.UNREAL, kind, timeout=timeout, side="Unreal", **params)
@@ -186,7 +220,7 @@ def main(argv):
         subprocess.run([sys.executable, "-m", "asset_pipeline.teamlink", "send", "--me", "unreal-team", "--to", "*",
                         "--type", "note", "--text", text], cwd=os.path.join(REPO, "connectors", "claude-asset-pipeline"))
 
-    report = Turn(call, run, ram, link).go(dry)
+    report = Turn(call, run, ram, link).go(dry, light)
     if not dry:
         os.makedirs(os.path.dirname(REPORT), exist_ok=True)
         with open(REPORT, "w", encoding="utf-8") as f:
