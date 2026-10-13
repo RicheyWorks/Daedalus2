@@ -84,6 +84,17 @@ int main(int Argc, char** Argv)
                 std::printf("FAIL decode chunk %d %d %d\n", K.X, K.Y, K.Z);
             }
         }
+        else if (Kind == "runs")
+        {
+            ChunkKey K;
+            std::string B64;
+            L >> K.X >> K.Y >> K.Z >> B64;
+            ChunkStore::Cubes C{};
+            const ChunkStore::Cubes* Dense = Store.Find(K);
+            ++Total;
+            if (DecodeRuns(B64, C) && Dense && C == *Dense) ++Pass;
+            else std::printf("FAIL runs chunk %d %d %d\n", K.X, K.Y, K.Z);
+        }
         else if (Kind == "triangles")
         {
             L >> WantTriangles;
@@ -134,6 +145,13 @@ int main(int Argc, char** Argv)
         if (Tris == WantTriangles) ++Pass;
         else std::printf("FAIL triangles %lld, the server's world.glb has %lld\n", Tris, WantTriangles);
         Faces = Tris / 2;
+    }
+    // Runs must refuse what isn't exactly 4,096 cubes.
+    {
+        ChunkStore::Cubes C{};
+        ++Total;
+        if (!DecodeRuns("AQAB", C) && !DecodeRuns("", C) && !DecodeRuns("AQAQAQ==", C) && !DecodeRuns("AAAQ!", C)) ++Pass;
+        else std::printf("FAIL bad runs were accepted\n");
     }
     // Canary: the grader must be able to say no. Turning stone see-through must change the faces.
     ++Total;

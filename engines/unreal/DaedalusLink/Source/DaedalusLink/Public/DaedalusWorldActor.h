@@ -87,6 +87,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus")
 	bool bCollision = true;
 
+	/** Merge each chunk's faces into rectangles (MeshChunkGreedy, ADR-064): far fewer vertices in RAM and on the GPU.
+	 * Off draws one quad per cube face with the realm's per-cube grain. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Look")
+	bool bGreedyMesh = true;
+
 	/** Reverse every triangle, for a project whose materials cull the other side. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Advanced")
 	bool bFlipWinding = false;
@@ -191,6 +196,8 @@ private:
 	void Poll();
 	void ReadChunks(const TSharedPtr<FJsonObject>& Json);
 	void ReadChunk(const TSharedPtr<FJsonObject>& Json);
+	/** The first load: every chunk in one run-length response (GET /chunks/blocks). False if the server lacks it. */
+	bool ReadAllBlocks(const TSharedPtr<FJsonObject>& Json);
 	void ReadArks(const TSharedPtr<FJsonObject>& Json);
 	void FinishOne();
 	void Rebuild();
@@ -215,6 +222,7 @@ private:
 	uint32 Generation = 0;     // bumped on every load: replies for an older load are dropped
 	int32 InFlight = 0;
 	bool bPolling = false;
+	bool bNoBatch = false;   // an older server without /chunks/blocks: fetch chunk by chunk
 	bool bAnnounced = false;
 	int64 ServerClockAt = 0;   // the server's now, in ms, at ...
 	double LocalClockAt = 0.0; // ... this local time, in seconds

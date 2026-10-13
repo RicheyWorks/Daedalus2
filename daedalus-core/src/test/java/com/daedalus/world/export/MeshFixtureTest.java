@@ -64,6 +64,9 @@ class MeshFixtureTest {
             if (c != null && !c.isEmpty()) {
                 out.add("chunk " + cc.x() + " " + cc.y() + " " + cc.z() + " "
                         + Base64.getEncoder().encodeToString(c.ordinals()));
+                // the batch endpoint's run-length form of the same cubes: DaedalusMeshCore.h DecodeRuns must agree
+                out.add("runs " + cc.x() + " " + cc.y() + " " + cc.z() + " "
+                        + Base64.getEncoder().encodeToString(c.runs()));
             }
         }
         for (WorldMesher.ChunkMesh m : WorldMesher.mesh(w)) {

@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <cstdint>
@@ -311,6 +312,49 @@ inline bool DecodeChunk(const std::string& B64, ChunkStore::Cubes& Out)
         }
     }
     return N == Out.size();
+}
+
+/** Base64 to bytes (standard alphabet, '=' padding); false on a bad character or more than MaxBytes. */
+inline bool DecodeBase64(const std::string& B64, std::vector<uint8_t>& Out, size_t MaxBytes = 3 * ChunkVolume)
+{
+    Out.clear();
+    uint32_t Acc = 0;
+    int Bits = 0;
+    for (char C : B64)
+    {
+        if (C == '=') break;
+        int V = (C >= 'A' && C <= 'Z') ? C - 'A' : (C >= 'a' && C <= 'z') ? C - 'a' + 26
+            : (C >= '0' && C <= '9') ? C - '0' + 52 : C == '+' ? 62 : C == '/' ? 63 : -1;
+        if (V < 0) return false;
+        Acc = (Acc << 6) | static_cast<uint32_t>(V);
+        Bits += 6;
+        if (Bits >= 8)
+        {
+            Bits -= 8;
+            if (Out.size() >= MaxBytes) return false;
+            Out.push_back(static_cast<uint8_t>((Acc >> Bits) & 0xFF));
+        }
+    }
+    return true;
+}
+
+/**
+ * A chunk from the batch endpoint's run-length form (GET /world/{id}/chunks/blocks, Java Chunk.runs()):
+ * (ordinal, length low byte, length high byte) triples in index order, exactly 4,096 cubes. False otherwise.
+ */
+inline bool DecodeRuns(const std::string& B64, ChunkStore::Cubes& Out)
+{
+    std::vector<uint8_t> R;
+    if (!DecodeBase64(B64, R) || R.empty() || R.size() % 3 != 0) return false;
+    size_t At = 0;
+    for (size_t K = 0; K < R.size(); K += 3)
+    {
+        const size_t N = static_cast<size_t>(R[K + 1]) | (static_cast<size_t>(R[K + 2]) << 8);
+        if (N == 0 || At + N > Out.size()) return false;
+        std::fill(Out.begin() + static_cast<std::ptrdiff_t>(At), Out.begin() + static_cast<std::ptrdiff_t>(At + N), R[K]);
+        At += N;
+    }
+    return At == Out.size();
 }
 
 } // namespace daedalus

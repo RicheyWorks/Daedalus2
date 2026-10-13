@@ -152,3 +152,7 @@ This was first filed as ADR-062, which blender-team had already taken for the BB
   mesh; WorldPackageControllerTest 6/6), and `setup-unreal.ps1 -Mesh greedy` (default) / `import_world_package.fetch`
   ask for it, so an imported Gallery City is 51k quads instead of 183k faces in the editor. `-Mesh faces` keeps the
   old look with per-cube grain; live_parity still checks the per-face mesh against C++.
+- **The live Unreal world actor too:** ADaedalusWorldActor loads a world with one `/chunks/blocks` request
+  (`DecodeRuns`, C++; isle8.mesh.txt `runs` lines from Java's `Chunk.runs()` must decode to the same cubes,
+  mesh_core_test 110/110) and then polls per chunk by revision as before; an older server falls back. `bGreedyMesh`
+  (default on) builds its procedural meshes with `MeshChunkGreedy`.
