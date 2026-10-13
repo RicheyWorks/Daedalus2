@@ -104,3 +104,7 @@ nft.json hero_image now points at bot-team/shots/oddsreaper/hero_unreal_play.png
 | ThunderSprint | Longshot+Vigweed | 1.00 | 1.44 | 1.588 |
 | OddsWhisper | Oddsthistle+Hedgeleaf | 1.00 | 1.267 | 1.33 |
 
+
+## Round-3 storm polish: stream + MPC + settle order (Oct 12, 2026, 22:42 PT)
+
+oddsreaper_turn.py PIE storm path now (1) forces OddsReaperIsland streaming levels loaded+visible before MoodVolume search (sublevel streaming diagnosis — unloaded island meant volumes=0), (2) pushes materials_mpc.json storm scalars onto MPC_OR_SkyWeather when the asset exists (Wetness 1 / StormPulse 1 / WindStrength 0.95 / NightMask 0.25), (3) forces storm at Play start then settles 20s under storm before the hero shot (round-2 waited 20s in Clear then flipped late). Off-editor mood.json mirrors the oddsreaper_storm CSV row; headless test_mood_row.py + test_storm_pin.py cover it. No Unreal touched.

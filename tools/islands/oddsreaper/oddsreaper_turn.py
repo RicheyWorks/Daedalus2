@@ -231,28 +231,64 @@ def take_hero_shot(cam=None, target=None, name="hero_unreal_editor.png"):
 
 STORM_CODE = r"""import unreal
 w = unreal.EditorLevelLibrary.get_game_world()
+# Sublevel streaming: MoodVolume lives on OddsReaperIsland. If that streaming level is unloaded in PIE,
+# volumes=[] and only the director fallback runs (sky ok, but volume-driven wetness/hold never fires).
+streamed = []
+if w:
+    for sl in list(getattr(w, "get_streaming_levels", lambda: [])() or []):
+        pkg = ""
+        for prop in ("world_asset_package_f_name", "package_name"):
+            try:
+                pkg = str(sl.get_editor_property(prop)); break
+            except Exception:
+                pass
+        if "OddsReaper" not in pkg:
+            continue
+        for prop, val in (("should_be_loaded", True), ("should_be_visible", True)):
+            try: sl.set_editor_property(prop, val)
+            except Exception: pass
+        for meth in ("set_should_be_loaded", "set_should_be_visible"):
+            try: getattr(sl, meth)(True)
+            except Exception: pass
+        streamed.append(pkg)
 d = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusSkyDirector)] if w else []
-v = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusMoodVolume) if 'OddsReaper' in a.get_actor_label()] if w else []
-def st(x): return {'hour': round(x.get_hour(), 2), 'weather': str(x.get_editor_property('weather')), 'mood': str(x.get_editor_property('mood'))}
+v = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusMoodVolume) if "OddsReaper" in a.get_actor_label()] if w else []
+def st(x): return {"hour": round(x.get_hour(), 2), "weather": str(x.get_editor_property("weather")), "mood": str(x.get_editor_property("mood"))}
 def setp(o, name, val):
-    for p in (name, 'b_' + name):
+    for p in (name, "b_" + name):
         try: o.set_editor_property(p, val); return True
         except Exception: pass
     return False
 before = st(d[0]) if d else None
 via = None
 pinned = {}
-if v and hasattr(v[0], 'apply_now'):
+if v and hasattr(v[0], "apply_now"):
     # PIE copy only (Stop discards it). The volume's 0.5 s view Tick reads the PLAYER camera, which sits on the
     # main island 4 km away, so it would call Restore() right after apply_now and blend back to Clear daylight
     # before the SceneCapture hero shot. Pin it: no view trigger, no restore on exit.
-    pinned = {'trigger_on_view_off': setp(v[0], 'trigger_on_view', False), 'restore_on_exit_off': setp(v[0], 'restore_on_exit', False)}
-    v[0].apply_now(True); via = 'volume.apply_now'
+    pinned = {"trigger_on_view_off": setp(v[0], "trigger_on_view", False), "restore_on_exit_off": setp(v[0], "restore_on_exit", False)}
+    v[0].apply_now(True); via = "volume.apply_now"
 elif d:
-    setp(d[0], 'clock_running', False); d[0].set_editor_property('auto_weather_hours', 0.0)
-    d[0].set_time_of_day(18.75); d[0].set_mood('oddsreaper_storm', True); d[0].set_weather(unreal.DaedalusWeather.STORM, True); via = 'director'
-result = {'directors': len(d), 'volumes': len(v), 'via': via, 'pinned': pinned, 'before': before, 'after': st(d[0]) if d else None}"""
-
+    setp(d[0], "clock_running", False); d[0].set_editor_property("auto_weather_hours", 0.0)
+    d[0].set_time_of_day(18.75); d[0].set_mood("oddsreaper_storm", True); d[0].set_weather(unreal.DaedalusWeather.STORM, True); via = "director"
+# materials_mpc.json storm contract so felt/cliff/cistern MIDs match the sky look during the Play hero shot.
+mpc_set = {}
+try:
+    mpc = None
+    for path in ("/Game/OddsReaper/MPC_OR_SkyWeather", "/Game/OddsReaper/Art/MPC_OR_SkyWeather", "/Game/Daedalus/MPC_OR_SkyWeather"):
+        if unreal.EditorAssetLibrary.does_asset_exist(path):
+            mpc = unreal.EditorAssetLibrary.load_asset(path); break
+    if mpc and w:
+        for name, val in (("WindStrength", 0.95), ("Wetness", 1.0), ("StormPulse", 1.0), ("NightMask", 0.25)):
+            try:
+                unreal.MaterialLibrary.set_scalar_parameter_value(w, mpc, name, float(val)); mpc_set[name] = val
+            except Exception as e:
+                mpc_set[name] = "err:" + str(e)[:48]
+    else:
+        mpc_set = {"skipped": "mpc asset missing (data contract only until editor turn)"}
+except Exception as e:
+    mpc_set = {"error": str(e)[:80]}
+result = {"directors": len(d), "volumes": len(v), "via": via, "pinned": pinned, "streamed": streamed, "mpc": mpc_set, "before": before, "after": st(d[0]) if d else None}"""
 # Read-back after a few game ticks: proves the storm held (not restored by a volume Tick) before the shot.
 STORM_CHECK_CODE = r"""import unreal
 w = unreal.EditorLevelLibrary.get_game_world()
@@ -278,7 +314,7 @@ def force_storm_in_pie():
         time.sleep(1.5)  # let the PIE world tick (volume Tick is 0.5 s) before trusting the look
         chk = py(STORM_CHECK_CODE, 20)
         if not storm_held(chk) and isinstance(r, dict) and r.get("directors"):
-            py(STORM_CODE.replace("if v and hasattr(v[0], 'apply_now'):", "if False:"), 30)  # director path, clock held
+            py(STORM_CODE.replace('if v and hasattr(v[0], "apply_now"):', "if False:"), 30)  # director path, clock held
             time.sleep(1.0)
             chk = py(STORM_CHECK_CODE, 20)
             if isinstance(r, dict): r["reforced"] = "director"
@@ -366,8 +402,11 @@ def main():
     # 20s Play check only if time remains (save window needs ~2 min)
     if left() > 120:
         try:
-            call("play", timeout=60); say("Play start (20s check)"); time.sleep(20)
+            # Force storm at Play start, then settle 20s under storm before the hero shot (round-2 shot sat in
+            # Clear daylight for 20s and only flipped at the end — MPC wetness/StormPulse never had time to read).
+            call("play", timeout=60); say("Play start (storm then 20s settle)")
             say(f"storm in PIE: {force_storm_in_pie()}")
+            time.sleep(20)
             try:
                 take_hero_shot(cam_w, target_w, "hero_unreal_play.png")
             except Exception as e:
