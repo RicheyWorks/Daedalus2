@@ -113,6 +113,10 @@ public final class SquadDirector {
         }
         List<Unit> units = new ArrayList<>(input);
         units.sort(Comparator.<Unit>comparingDouble(u -> d2(u, player)).thenComparing(Unit::name));
+        if (units.size() > TacticalOrders.MAX_ORDERS) {
+            // A spec carries at most MAX_ORDERS orders; a bigger squad orders its nearest, as the C++ does.
+            units = new ArrayList<>(units.subList(0, TacticalOrders.MAX_ORDERS));
+        }
         double mx = 0;
         double my = 0;
         double mz = 0;

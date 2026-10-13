@@ -95,6 +95,21 @@ int main(int argc, char** argv)
 	std::vector<Unit> Zero = {{"z", {-500, 0, 0}, 0, 0, true}};
 	Check("zero max health is not a division by zero", Find(Decide("s", 1, Zero, P), "z")->Do == Verb::Retreat);
 
+	// --- integration requirements from Astra (team-codex): size cap, roster bootstrap, stale fencing
+	{
+		std::vector<Unit> Big;
+		for (int i = 0; i < 300; ++i) Big.push_back({"b" + std::to_string(i), {-500.0 - i, 0, 0}, 60, 60, true});
+		Spec SB = Decide("big", 1, Big, P);
+		Check("a 300-unit squad orders its nearest 256 (MaxOrders)", SB.Orders.size() == MaxOrders && Find(SB, "b0") && !Find(SB, "b299"));
+		Check("so its spec is never refused for size", Parse(Write(SB)).Ok);
+		const std::string Ro = WriteRoster("a1b2c3", "pack-1", 9, {{"pack-1-1", "BLIGHT_SLIME", 42.5, 60, {1, 2, 3}, true}, {"pack-1-2", "STONE_KNIGHT", 0, 120, {4, 5, 6}, false}});
+		Check("the roster writes as DTR 1", Ro == "DTR 1\nsession a1b2c3 squad pack-1 tick 9\nunit pack-1-1 BLIGHT_SLIME 42.5 60.0 1.0 2.0 3.0 1\nunit pack-1-2 STONE_KNIGHT 0.0 120.0 4.0 5.0 6.0 0\n");
+		Check("first outside spec applies", Check(0, false, 5) == Fence::Apply);
+		Check("a newer tick applies", Check(5, true, 6) == Fence::Apply);
+		Check("the same tick is a repeat", Check(5, true, 5) == Fence::Repeat);
+		Check("an older tick is stale", Check(5, true, 4) == Fence::Stale);
+	}
+
 	// --- bounded: latency by squad size (the director runs about once a second, not per frame)
 	std::mt19937 Rng(7);
 	std::uniform_real_distribution<double> U(-2500, 2500);
@@ -108,7 +123,7 @@ int main(int argc, char** argv)
 		const double Ms = std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - T0).count();
 		std::printf("  decide %5d units: %.3f ms, %zu orders\n", N, Ms, M.Orders.size());
 		if (N == 300) Worst = Ms;
-		if (M.Orders.size() != static_cast<size_t>(N)) Worst = 1e9;
+		if (M.Orders.size() != std::min<size_t>(static_cast<size_t>(N), MaxOrders)) Worst = 1e9;   // capped at MaxOrders
 	}
 	Check("300 units decide in well under one 60 fps frame (16.7 ms)", Worst < 16.7);
 
@@ -143,6 +158,7 @@ int main(int argc, char** argv)
 			for (char C : T) E += C == '\n' ? std::string("\\n") : C == '\r' ? std::string("\\r") : std::string(1, C);
 			std::fprintf(F, "bad\t%s\t%s\n", E.c_str(), Parse(B.Text).Error.c_str());
 		}
+		std::fprintf(F, "roster\t%s\n", [&] { std::string E; for (char C : WriteRoster("a1b2c3", "pack-1", 9, {{"pack-1-1", "BLIGHT_SLIME", 42.5, 60, {1, 2, 3}, true}, {"pack-1-2", "STONE_KNIGHT", 0, 120, {-4.25, 5, 6}, false}})) E += C == '\n' ? std::string("\\n") : std::string(1, C); return E; }().c_str());
 		std::fprintf(F, "good\t%s\n", [&] { std::string E; for (char C : Good) E += C == '\n' ? std::string("\\n") : C == '\r' ? std::string("\\r") : std::string(1, C); return E; }().c_str());
 		std::fclose(F);
 		std::printf("wrote %s\n", argv[2]);

@@ -4,6 +4,8 @@
 
 #include "DaedalusTacticsCore.h"
 #include "DaedalusTarget.h"
+#include "DaedalusHero.h"
+#include "Misc/Guid.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
 #include "GameFramework/Pawn.h"
@@ -23,6 +25,12 @@ namespace
 bool UDaedalusTactics::DoesSupportWorldType(const EWorldType::Type WorldType) const
 {
 	return WorldType == EWorldType::Game || WorldType == EWorldType::PIE;
+}
+
+void UDaedalusTactics::Initialize(FSubsystemCollectionBase& Collection)
+{
+	Super::Initialize(Collection);
+	Session = FGuid::NewGuid().ToString(EGuidFormats::Digits).Left(12).ToLower();   // a token: [0-9a-f]{12}
 }
 
 UDaedalusTactics* UDaedalusTactics::GetTactics(const UObject* WorldContext)
@@ -66,6 +74,21 @@ FString UDaedalusTactics::Apply(const FString& Spec, bool bLocal)
 		return TEXT("refused: ") + LastError;
 	}
 	const FString Squad = UTF8_TO_TCHAR(R.Out.Squad.c_str());
+	if (!bLocal)
+	{
+		// Stale fencing (Astra's integration requirement): Java's ticks only move forward for a squad. A repeat is
+		// ignored; an older spec is refused whole.
+		const int64* Last = LastExternalTick.Find(Squad);
+		const daedalus::tactics::Fence F = daedalus::tactics::Check(Last ? *Last : 0, Last != nullptr, R.Out.Tick);
+		if (F == daedalus::tactics::Fence::Repeat) return FString::Printf(TEXT("repeat: tick %lld"), R.Out.Tick);
+		if (F == daedalus::tactics::Fence::Stale)
+		{
+			++Refused;
+			LastError = FString::Printf(TEXT("stale tick %lld <= %lld for %s"), R.Out.Tick, *Last, *Squad);
+			return TEXT("refused: ") + LastError;
+		}
+		LastExternalTick.Add(Squad, R.Out.Tick);
+	}
 	TArray<ADaedalusTarget*> M = Members(Squad);
 	int32 Done = 0, Unknown = 0;
 	for (const daedalus::tactics::Order& O : R.Out.Orders)
@@ -135,7 +158,8 @@ void UDaedalusTactics::Tick(float DeltaTime)
 	const UWorld* W = GetWorld();
 	const APawn* Player = UGameplayStatics::GetPlayerPawn(this, 0);
 	if (!W || !Player) return;
-	Note(TEXT("PLAYER"), TEXT("player"), Player->GetActorLocation(), 0.f);
+	const ADaedalusHero* Hero = Cast<ADaedalusHero>(Player);
+	Note(TEXT("PLAYER"), TEXT("player"), Player->GetActorLocation(), Hero ? Hero->Health : -1.f);   // -1 = health unknown
 	TSet<FString> Seen;
 	for (TActorIterator<ADaedalusTarget> It(W); It; ++It)
 	{
@@ -153,8 +177,37 @@ void UDaedalusTactics::Tick(float DeltaTime)
 	}
 }
 
+void UDaedalusTactics::NoteDown(const FString& Squad, const FString& Unit, const FString& Kind, float MaxHealth, const FVector& At)
+{
+	if (Squad.IsEmpty()) return;
+	TArray<FDowned>& D = Downed.FindOrAdd(Squad);
+	if (D.Num() < static_cast<int32>(daedalus::tactics::MaxOrders) && !D.ContainsByPredicate([&](const FDowned& X) { return X.Unit == Unit; }))
+		D.Add({Unit, Kind, MaxHealth, At});
+}
+
+FString UDaedalusTactics::TakeRoster(const FString& Squad)
+{
+	std::vector<daedalus::tactics::RosterUnit> Units;
+	TArray<ADaedalusTarget*> M = Members(Squad);
+	// std::vector, not TArray: RosterUnit holds std::string, which TArray's bitwise relocation must not move.
+	for (const ADaedalusTarget* T : M)
+		Units.push_back({TCHAR_TO_UTF8(*T->TacticalId()), TCHAR_TO_UTF8(*T->Kind), FMath::Clamp(T->Health, 0.f, T->MaxHealth), T->MaxHealth,
+			V(T->GetActorLocation()), T->bSeesPlayer});
+	// The fallen stay on the roster at health 0: casualties are what raise the director's caution.
+	if (const TArray<FDowned>* D = Downed.Find(Squad))
+		for (const FDowned& X : *D)
+		{
+			const std::string Id = TCHAR_TO_UTF8(*X.Unit);
+			if (std::none_of(Units.begin(), Units.end(), [&](const daedalus::tactics::RosterUnit& U) { return U.Unit == Id; }))
+				Units.push_back({Id, TCHAR_TO_UTF8(*X.Kind), 0.0, X.MaxHealth, V(X.At), false});
+		}
+	std::sort(Units.begin(), Units.end(), [](const daedalus::tactics::RosterUnit& A, const daedalus::tactics::RosterUnit& B) { return A.Unit < B.Unit; });
+	if (Units.size() > daedalus::tactics::MaxOrders) Units.resize(daedalus::tactics::MaxOrders);
+	return UTF8_TO_TCHAR(daedalus::tactics::WriteRoster(TCHAR_TO_UTF8(*Session), TCHAR_TO_UTF8(*Squad), TickNo, Units).c_str());
+}
+
 FString UDaedalusTactics::Stats() const
 {
-	return FString::Printf(TEXT("squads=%s decided=%d applied=%d refused=%d outbox=%d dropped=%d last_error=%s"), *Squads(), Decided,
+	return FString::Printf(TEXT("session=%s squads=%s decided=%d applied=%d refused=%d outbox=%d dropped=%d last_error=%s"), *Session, *Squads(), Decided,
 		Applied, Refused, Outbox.Num(), Dropped, *LastError);
 }
