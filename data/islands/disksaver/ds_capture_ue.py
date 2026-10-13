@@ -18,12 +18,12 @@ try: c.set_editor_property("atmosphere_sun_light", False)   # don't drive the wo
 except Exception: pass
 fill = tmp(unreal.PointLight, O + unreal.Vector(0, 0, 6000), nm="Fill")
 fc = fill.point_light_component
-fc.set_editor_property("intensity", 2.0e7); fc.set_editor_property("attenuation_radius", 20000.0); fc.set_editor_property("cast_shadows", False)
+fc.set_editor_property("intensity", 5.0e5); fc.set_editor_property("attenuation_radius", 20000.0); fc.set_editor_property("cast_shadows", False)
 ppv = tmp(unreal.PostProcessVolume, O, nm="PPV")
 ppv.set_editor_property("unbound", False); ppv.set_actor_scale3d(unreal.Vector(200, 200, 100))   # bounded to our cell only
 s = ppv.settings
-for k, v in (("auto_exposure_method", unreal.AutoExposureMethod.AEM_HISTOGRAM), ("auto_exposure_min_brightness", 3.0),
-             ("auto_exposure_max_brightness", 3.0), ("auto_exposure_bias", 0.5)):   # fixed EV100 ~3 for a 10-lux sun
+for k, v in (("auto_exposure_method", unreal.AutoExposureMethod.AEM_HISTOGRAM), ("auto_exposure_min_brightness", 9.0),
+             ("auto_exposure_max_brightness", 9.0), ("auto_exposure_bias", 0.5)):   # fixed EV100 ~3 for a 10-lux sun
     try: s.set_editor_property("override_" + k, True); s.set_editor_property(k, v)
     except Exception as e: out.setdefault("notes", []).append(k + ": " + str(e)[:60])
 ppv.set_editor_property("settings", s)
