@@ -1095,6 +1095,62 @@ def scenario_dialogue(p):
     ]}
 
 
+def scenario_cast(p):
+    """A realm NPC with a script (DCS 1): Curator Vell spawned in Play, talked to through the dialogue box; the
+    quest branch sets a flag, a second talk starts from it, and the Echo Choir (another talker) hears the
+    realm-wide flag. State lines prove it."""
+    h = hero()
+    h.inventory_input("realm:gallery-city")
+    at = h.get_actor_location()
+    fwd = h.get_actor_forward_vector()
+    spawn = unreal.DaedalusFilm.spawn_in_play
+    vell = spawn(h, unreal.DaedalusTalker, at + fwd * 220 + unreal.Vector(0, 0, 100), unreal.Rotator(0, 0, 0))
+    vell.set_editor_property("who", "Curator Vell")
+    choir = spawn(h, unreal.DaedalusTalker, at + fwd * 220 + unreal.Vector(0, 300, 100), unreal.Rotator(0, 0, 0))
+    choir.set_editor_property("who", "Echo Choir")
+    yield from _frames(2)
+    bound = vell.rebind() and choir.rebind()
+    yield from _frames(2)
+
+    def through(talker, picks):
+        """Talk, closing plain lines with B+A and answering asks with the given picks, until the box is down."""
+        lines = []
+        used = talker.use(h)
+        for _ in range(12):
+            st = h.dialogue_input("state")
+            if st.startswith("closed"):
+                break
+            lines.append(st)
+            if "choosing" not in st:
+                h.dialogue_input("b")      # skip the typewriter
+                st = h.dialogue_input("state")
+            if "choosing" in st:
+                want = picks.pop(0) if picks else 0
+                cur = int(_kv(st).get("choosing", "0/1").split("/")[0])
+                for _ in range((want - cur) % 4):
+                    h.dialogue_input("down")
+            h.dialogue_input("a")
+        return used, lines
+
+    used1, first = through(vell, [1])        # "Not now"
+    s1 = vell.state()
+    used2, second = through(vell, [0])       # "Of course"
+    s2 = vell.state()
+    used3, third = through(vell, [1])        # waiting -> "I have it"
+    s3 = vell.state()
+    used4, choir_lines = through(choir, [])
+    s4 = choir.state()
+    h.inventory_input("realm:")
+    return {"checks": [
+        _check("both talkers bound their scripts", bound and "bound=1" in s1 and "bound=1" in s4, s1 + " | " + s4),
+        _check("the first talk runs welcome, Heartstone, the ask", used1 and len(first) >= 3 and "who=Curator Vell" in first[0], " / ".join(first)[:300]),
+        _check("'Not now' sets nothing", "flags= " in s1 + " " and "talks=1" in s1, s1),
+        _check("'Of course' sets the quest flag", "heartstone" in s2 and "talks=2" in s2, s2),
+        _check("the third talk starts at 'waiting' and 'I have it' finishes the quest", "heartstone_done" in s3 and any("Any word" in l or "page=" in l for l in third), s3),
+        _check("the Choir hears the realm-wide flag and sings", "heartstone_done" in s4 and used4, s4),
+    ]}
+
+
 SCENARIOS = {
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
@@ -1114,6 +1170,7 @@ SCENARIOS = {
     "shiny": scenario_shiny,
     "inventory": scenario_inventory,
     "dialogue": scenario_dialogue,
+    "cast": scenario_cast,
 }
 
 
