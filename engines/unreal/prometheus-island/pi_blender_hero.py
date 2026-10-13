@@ -29,7 +29,7 @@ PAL={"herb":(0.18,0.40,0.12),"water":(0.10,0.35,0.55),"stock":(0.45,0.30,0.16),"
 MAT={k:mat("M_"+k,v,0.3 if k=="music" else 0.8,0.6 if k=="music" else 0) for k,v in PAL.items()}
 WATER=mat("M_Water",(0.05,0.30,0.45),0.05); WATER.node_tree.nodes["Principled BSDF"].inputs["Transmission Weight"].default_value=0.6
 GROUND=mat("M_Ground",(0.06,0.11,0.035),0.95)
-HERBC=[mat("M_HerbPC%02d"%i,tuple(0.15+0.5*x for x in (0.5+0.5*math.cos(i*0.5236),0.6,0.5+0.5*math.sin(i*0.5236))),0.6) for i in range(12)]
+import colorsys; HERBC=[mat("M_HerbPC%02d"%i,colorsys.hsv_to_rgb(((i*7)%12)/12.0,0.85,0.55),0.5,0,0.4) for i in range(12)]
 coatpng=sorted(glob.glob(COATS+"T_Coat_*.png")); CM=[mat("M_Coat%d"%k,(1,1,1),0.7,tex=p) for k,p in enumerate(coatpng)]
 # terrain from heightmap (same grid UE used)
 import bmesh
