@@ -131,3 +131,11 @@ Failure states (nothing is lost, the island just slips):
 3. `ds_finish_ue.py`: re-runs material and gameplay hooks for any actor a guard skipped (idempotent), saves both maps and writes `diskSaver_island_v4.png`. Output: `finish_run.out`; `turn4.done` marks the end.
 Safety: our sublevel and /Game/DiskSaver only, overwrite-reimport, no deletes, never starts or stops Play.
 4. `turn5.ps1` (island-only capture): save first, then `ds_capture_ue.py` spawns DS_TEMP_Sun (a directional light that does not drive the atmosphere, so the world's time of day is untouched), DS_TEMP_Fill (a point light), DS_TEMP_PPV (an exposure volume bounded to our cell) and DS_TEMP_Capture (a SceneCapture2D fallback). It writes `diskSaver_island_v5.png` and `diskSaver_island_v5_capture.png`. After 8 s, `ds_capture_cleanup_ue.py` removes only the actors tagged DS_TempCapture and labelled DS_TEMP_*. Nothing is saved after the capture.
+
+## Keeper's notes (lore pickups, one per Keeper's Memory tea)
+1. *"The planet didn't explode. It ran out of room. We stored too much and saved too little."*
+2. *"Rule one of the archive farm: anything you can't make again, you compress and keep."*
+3. *"The hens lay to the cistern's rhythm. When the water runs low, so do the eggs. Watch the water first."*
+4. *"Boil what you doubt. Filter what you fear. Drink only from the spring and the well without thinking."*
+5. *"The compressor hums when everything balances. I haven't heard it since the Shattering."*
+6. *"If you are reading this, the shard held. Save it, and it will save you."* (unlocks when Balance first reaches 100)
