@@ -19,7 +19,14 @@ the watcher retries it by itself every BLOCKED_RETRY_S seconds, so nobody needs 
 Every few seconds the watcher reads QUEUE.md. For each READY row it:
   1. needs both bridges up (Blender 127.0.0.1:9876, Unreal 127.0.0.1:9877); if not, it says so in STATUS.md and
      leaves the row alone;
-  2. opens <Kind>\\<Asset>.blend in Blender, unless Blender already has unsaved work in another file, which it
+  2. picks the asset's source, in this order (a mesh never comes from a source that doesn't name the asset):
+     a. a .blend saved after the .glb: Blender exports it again (the .blend is newer work);
+     b. glb\\<Asset>.glb already on disk: imported as it is, every node and mesh, never re-exported or
+        overwritten, and Blender is not touched;
+     c. <Kind>\\<Asset>.blend; d. a collection named <Asset> in the open Blender scene;
+     e. none of these: REJECTED: no source. (The old fallback, every visible mesh of whatever scene Blender had
+        open, overwrote Prop_Island_Flagship_BlenderBoss.glb, 445,294 tris, with a 36-tri stray: 2026-10-12.)
+  2b. opens <Kind>\\<Asset>.blend in Blender, unless Blender already has unsaved work in another file, which it
      never throws away: the row waits (WAITING: Blender has unsaved work) until that's saved;
   3. exports the meshes in the collection named after the asset (or every visible mesh if there's no such
      collection) and imports them into Unreal under /Game/Daedalus/Art/<Kind>/<Asset>, through the pipeline's
@@ -38,10 +45,13 @@ import datetime
 import json
 import os
 import re
+import queue as _queue
 import sys
+import threading
 import time
 import traceback
 
+from . import glb
 from . import ship as pipeline
 from . import teamlink
 from . import wire
@@ -87,6 +97,25 @@ def parse(text):
     return rows, header
 
 
+STATES = ("TODO", "DOING", "READY", "WAITING", "SHIPPING", "SHIPPED", "REJECTED", "BLOCKED")
+
+
+def full_tally(rows):
+    """tally() with every known state present, 0 included, so READY 0 and BLOCKED 0 are still columns."""
+    out = dict.fromkeys(STATES, 0)
+    out.update(tally(rows))
+    return out
+
+
+def tally(rows):
+    """{STATE: n} over the board's rows; the one count STATUS.md, counts() and queue.state all use."""
+    out = {}
+    for r in rows:
+        k = state(r["status"]) or "?"
+        out[k] = out.get(k, 0) + 1
+    return out
+
+
 def state(status):
     """The status word: TODO, DOING, READY, SHIPPING, SHIPPED, REJECTED, WAITING, BLOCKED (upper case), or ''."""
     m = re.match(r"\s*([A-Za-z]+)", status or "")
@@ -94,10 +123,11 @@ def state(status):
 
 
 def set_row(text, asset, status, notes=None):
-    """The board with one row's Status (and Notes) replaced; everything else byte for byte."""
+    """The board with one row's Status (and Notes) replaced; everything else byte for byte. When an asset has
+    more than one row (a rebuild re-queued under the same name), the newest (last) row is the live one."""
     rows, header = parse(text)
     lines = text.split("\n")
-    for r in rows:
+    for r in reversed(rows):
         if r["asset"] == asset:
             cells = list(r["cells"])
             cells[header["status"]] = status.replace("|", "/")
@@ -194,6 +224,8 @@ class Watcher:
         self.waiting_since = None   # when the current wait began (clock seconds), for stall detection
         self.blocked_at = {}        # asset -> when it was last BLOCKED, to pace the retries
         self.link = link            # teamlink.Link("unreal-team"), or None: every event also goes out live
+        self.first = []             # name fragments shipped ahead of the rest (--first), e.g. a team's own slot
+        self.lock = threading.RLock()   # the board and the feed, shared by the two halves of an overlapped ship
 
     # -- files
 
@@ -208,6 +240,10 @@ class Watcher:
 
     def update(self, asset, status, notes=None):
         """Rewrite one row, only if the file didn't change between our read and our write."""
+        with self.lock:
+            return self._update(asset, status, notes)
+
+    def _update(self, asset, status, notes):
         for _ in range(5):
             before = self.read()
             after = set_row(before, asset, status, notes)
@@ -221,6 +257,10 @@ class Watcher:
         return False
 
     def event(self, asset, what, **detail):
+        with self.lock:
+            self._event(asset, what, detail)
+
+    def _event(self, asset, what, detail):
         line = {"at": datetime.datetime.fromtimestamp(self.clock()).isoformat(timespec="seconds"),
                 "asset": asset, "event": what}
         line.update(detail)
@@ -228,6 +268,10 @@ class Watcher:
             f.write(json.dumps(line) + "\n")
         if what in ("shipped", "rejected", "blocked", "error") and asset != "-":
             self.job_result(asset, what, detail)
+            try:   # a row changed: STATUS.md follows now, not ten assets (or a whole pass) later
+                self.summary()
+            except (OSError, ValueError):
+                pass
         if self.link is not None:   # the same event, live, to everyone on the link
             body = {"asset": asset}
             body.update({k: v for k, v in detail.items() if isinstance(v, (str, int, float, bool, list)) or v is None})
@@ -302,17 +346,11 @@ class Watcher:
         return False
 
     def counts(self):
-        rows, _ = parse(self.read())
-        out = {}
-        for r in rows:
-            out[state(r["status"]) or "?"] = out.get(state(r["status"]) or "?", 0) + 1
-        return out
+        return full_tally(parse(self.read())[0])
 
     def summary(self):
         rows, _ = parse(self.read())
-        counts = {}
-        for r in rows:
-            counts[state(r["status"]) or "?"] = counts.get(state(r["status"]) or "?", 0) + 1
+        counts = full_tally(rows)   # the same tally as counts() and queue.state, from the same read of QUEUE.md
         recent = []
         if os.path.exists(self.feed):
             with open(self.feed, encoding="utf-8") as f:
@@ -321,6 +359,9 @@ class Watcher:
         out = ["# Art board status", "", "Updated %s by the queue watcher." % now, ""]
         out.append("| " + " | ".join("%s %d" % (k, v) for k, v in sorted(counts.items())) + " |")
         out.append("|" + "---|" * len(counts))
+        out.append("")
+        out.append("QUEUE.md rows: %d (counted from QUEUE.md as it was at %s; refreshed after every asset)"
+                   % (sum(counts.values()), now))
         out.append("")
         out.append("**Waiting on:** %s" % (self.waiting_on or "none"))
         blender = os.path.join(self.folder, "STATUS-blender.json")
@@ -354,8 +395,10 @@ class Watcher:
                                                  e.get("why", e.get("result", ""))))
             except ValueError:
                 pass
-        with open(self.status_md, "w", encoding="utf-8") as f:
+        tmp = self.status_md + ".tmp"   # readers never see a half-written STATUS.md
+        with open(tmp, "w", encoding="utf-8") as f:
             f.write("\n".join(out) + "\n")
+        os.replace(tmp, self.status_md)
 
     # -- one pass
 
@@ -372,13 +415,16 @@ class Watcher:
         done = []
         if ready:
             up_b, up_u = wire.reachable(self.blender), wire.reachable(self.unreal)
-            missing = [n for n, up in (("Blender (connector on 9876)", up_b), ("Unreal (bridge on 9877)", up_u)) if not up]
+            need_b = any(not self.saved_glb(r["asset"]) for r in ready)   # saved glbs import without Blender
+            missing = [n for n, up in (("Blender (connector on 9876)", up_b or not need_b), ("Unreal (bridge on 9877)", up_u))
+                       if not up]
             self.waiting_on = (", ".join(missing) + " to be open") if missing else ""
             # Unreal won't load or save assets during Play ("The Editor is currently in a play mode"); never stop
             # someone's Play session, wait for it to end.
             if not missing:
                 try:
-                    playing = wire.call(self.unreal, "execute_python", side="Unreal", code=PLAYING)["result"]
+                    playing = wire.call(self.unreal, "execute_python", timeout=30, side="Unreal", unattended=False,
+                                        bridge_timeout=30, code=PLAYING)["result"]
                 except (OSError, wire.BridgeError) as e:   # a reset socket is Unreal busy, not a watcher failure
                     self.waiting_on = "Unreal busy (%s); retrying" % type(e).__name__
                     missing = ["busy"]
@@ -387,8 +433,14 @@ class Watcher:
                     self.waiting_on = "Unreal to leave Play mode (assets can't be saved while playing)"
                     missing = ["play"]
             if not missing:
-                for r in ready:
-                    done.append(self.ship_one(r["asset"]))
+                assets = list(dict.fromkeys(r["asset"] for r in ready))   # one ship per asset name
+                if self.first:   # stable: the board's order within each group
+                    assets.sort(key=lambda a: not any(f in a for f in self.first))
+                if len(assets) > 1 and hasattr(self.ship, "export") and hasattr(self.ship, "land"):
+                    done.extend(self.ship_overlapped(assets))
+                else:
+                    for a in assets:
+                        done.append(self.ship_one(a))
         else:
             self.waiting_on = ""
         self.track_wait()
@@ -404,32 +456,181 @@ class Watcher:
             self.event("-", "resumed", waited_s=round(self.clock() - self.waiting_since))
             self.waiting_since = None
 
-    def ship_one(self, asset):
+    def recover(self):
+        """At start: a SHIPPING row belongs to a watcher that stopped mid-ship (no one else ships), so put it back
+        to READY and it ships again. Returns the rows recovered."""
+        rows, header = parse(self.read())
+        back = [r["asset"] for r in rows if header is not None and state(r["status"]) == "SHIPPING"]
+        for a in back:
+            self.update(a, "READY", "re-queued: the last watcher stopped while shipping it")
+            self.event(a, "requeued", why="watcher restarted mid-ship")
+        return back
+
+    def prepare(self, asset):
+        """Blender's first steps for one asset: (asset, kind, objects), or a finished (asset, status) result."""
         kind = kind_of(asset)
         if not kind:
             self.update(asset, "REJECTED: name must start with one of " + "/".join(KINDS) + "_")
             self.event(asset, "rejected", why="bad name")
             return (asset, "REJECTED")
         blend = os.path.join(self.folder, kind, asset + ".blend")
+        # Built elsewhere (a cloud Blender): <Kind>\<Asset>.glb with <Asset>.sent.json, Blender's report of what it
+        # sent. No Blender on this PC is needed; the judge still checks report = file = Unreal.
+        glb_path = os.path.join(self.folder, kind, asset + ".glb")
+        sent_path = os.path.join(self.folder, kind, asset + ".sent.json")
+        # A glb at least as new as the .blend wins, so a cloud rebuild replaces older PC art without deleting it.
+        fresh = os.path.exists(glb_path) and os.path.exists(sent_path) and (
+            not os.path.exists(blend) or os.path.getmtime(glb_path) >= os.path.getmtime(blend))
+        if fresh:
+            with open(sent_path, encoding="utf-8") as f:
+                sent = json.load(f)
+            names = [o["name"] for o in sent.get("objects", [])]
+            if not names:
+                self.update(asset, "REJECTED: %s.sent.json lists no objects" % asset)
+                self.event(asset, "rejected", why="empty sent.json")
+                return (asset, "REJECTED")
+            self.update(asset, "SHIPPING")
+            self.event(asset, "shipping", objects=names, source="prebuilt glb")
+            return (asset, kind, {"objects": names, "source": "prebuilt", "glb": glb_path, "sent": sent})
+        saved = self.saved_glb(asset)
+        if saved and not (os.path.exists(blend) and os.path.getmtime(blend) > os.path.getmtime(saved)):
+            # A ready-made .glb: import it as it is. Blender is not asked for anything, and the file is never
+            # rewritten (re-exporting the open scene over it is how the flagship lost 445,294 tris).
+            self.update(asset, "SHIPPING")
+            self.event(asset, "shipping", source="glb", path=saved)
+            return (asset, kind, {"source": "glb", "path": saved, "objects": []})
         # Open the file, never at the cost of someone's unsaved work.
         if os.path.exists(blend):
-            opened = wire.call(self.blender, "execute_code", side="Blender", code=OPEN_BLEND % json.dumps(blend))["result"]
+            opened = wire.call(self.blender, "execute_code", side="Blender", code=OPEN_BLEND % json.dumps(blend))
+            opened = wire.obj(opened, "Blender", "opening the .blend")
             if opened.get("blocked"):
                 self.update(asset, "WAITING: Blender has unsaved work in %s; save it and I'll continue" % opened.get("current", "another file"))
                 self.event(asset, "waiting", why="unsaved work in Blender")
                 return (asset, "WAITING")
-        objects = wire.call(self.blender, "execute_code", side="Blender", code=PICK_OBJECTS % json.dumps(asset))["result"]
+        objects = wire.call(self.blender, "execute_code", side="Blender", code=PICK_OBJECTS % json.dumps(asset))
+        objects = wire.obj(objects, "Blender", "picking the objects")
+        if not os.path.exists(blend) and objects.get("source") != "collection":
+            # No .blend and no collection named after the asset: the open scene is somebody else's work.
+            self.update(asset, "REJECTED: no source (save glb\\%s.glb or %s\\%s.blend, or make a collection named %s)"
+                        % (asset, kind, asset, asset))
+            self.event(asset, "rejected", why="no source matching the asset")
+            return (asset, "REJECTED")
         if not objects["objects"]:
             self.update(asset, "REJECTED: no meshes (make a collection named %s, or save %s\\%s.blend)" % (asset, kind, asset))
             self.event(asset, "rejected", why="no meshes")
             return (asset, "REJECTED")
         self.update(asset, "SHIPPING")
         self.event(asset, "shipping", objects=objects["objects"], source=objects["source"])
+        return (asset, kind, objects)
+
+    def saved_glb(self, asset):
+        """glb\\<asset>.glb when it is on disk and is a real GLB, else None."""
+        path = os.path.join(self.folder, "glb", asset + ".glb")
         try:
-            report = self.ship(asset, objects["objects"], "/Game/Daedalus/Art/" + kind,
-                               os.path.join(self.folder, "glb"), True, self.blender, self.unreal)
+            with open(path, "rb") as f:
+                return path if f.read(4) == b"glTF" else None
+        except OSError:
+            return None
+
+    def saved_report(self, asset, path):
+        """A pipeline report for a .glb shipped as it is: the file is both the sent side and the witness."""
+        started = time.time()
+        witness = glb.summarize(path)
+        objects = [{"name": n["name"], "triangles": witness["meshes"][n["mesh"]]["triangles"],
+                    "materials": witness["meshes"][n["mesh"]]["materials"],
+                    "dims": witness["meshes"][n["mesh"]]["dims"]} for n in witness["nodes"]]
+        return {"name": asset, "path": os.path.abspath(path), "started": started, "source": "glb",
+                "blender": {"objects": objects, "source": "saved glb (as is)"}, "file": witness, "exported_s": 0.0}
+
+    def land(self, report, dest):
+        land = getattr(self.ship, "land", None) or pipeline.land
+        return land(report, dest, True, self.unreal)
+
+    def ship_one(self, asset):
+        try:
+            got = self.prepare(asset)
+        except Exception as e:   # Blender answered oddly (or went away): the asset is not at fault
+            return self.block(asset, "pipeline error: %s" % str(e)[:120], "error", trace=_trace(e))
+        if len(got) == 2:
+            return got
+        _, kind, objects = got
+        if objects.get("source") == "glb":
+            try:
+                report = self.land(self.saved_report(asset, objects["path"]), "/Game/Daedalus/Art/" + kind)
+            except ValueError as e:   # the file itself is bad: the Blender team's to fix
+                self.update(asset, "REJECTED: unreadable glb (%s)" % str(e)[:120])
+                self.event(asset, "rejected", why="unreadable glb")
+                return (asset, "REJECTED")
+            except Exception as e:
+                return self.block(asset, "pipeline error: %s" % str(e)[:120], "error")
+            return self.finish(asset, kind, report)
+        try:
+            if objects.get("source") == "prebuilt":
+                report = pipeline.land(pipeline.prebuilt(asset, objects["glb"], objects["sent"]), "/Game/Daedalus/Art/" + kind,
+                                       True, self.unreal) if not hasattr(self.ship, "land") else \
+                    self.ship.land(pipeline.prebuilt(asset, objects["glb"], objects["sent"]), "/Game/Daedalus/Art/" + kind, True, self.unreal)
+            else:
+                report = self.ship(asset, objects["objects"], "/Game/Daedalus/Art/" + kind,
+                                   os.path.join(self.folder, "glb"), True, self.blender, self.unreal)
         except Exception as e:   # a bridge error is Unreal's (or Blender's) problem, not the asset's
-            return self.block(asset, "pipeline error: %s" % str(e)[:120], "error")
+            return self.block(asset, "pipeline error: %s" % str(e)[:120], "error", trace=_trace(e))
+        return self.finish(asset, kind, report)
+
+    def ship_overlapped(self, assets):
+        """Ship many at once with the two editors working side by side: a Blender thread opens and exports each
+        asset while this thread imports the previous one into Unreal. The board, feed and link are written under
+        one lock, so the two never interleave a row."""
+        results = []
+        handoff = _queue.Queue(maxsize=2)   # Blender stays at most two exports ahead
+        stop = threading.Event()
+
+        def blender_side():
+            for a in assets:
+                if stop.is_set():
+                    break
+                try:
+                    got = self.prepare(a)
+                    if len(got) == 2:
+                        results.append(got)
+                        continue
+                    _, kind, objects = got
+                    if objects.get("source") == "prebuilt":
+                        rep = pipeline.prebuilt(a, objects["glb"], objects["sent"])
+                    elif objects.get("source") == "glb":   # as it is: no export, the file is not touched
+                        rep = self.saved_report(a, objects["path"])
+                    else:
+                        rep = self.ship.export(a, objects["objects"], os.path.join(self.folder, "glb"), self.blender)
+                    handoff.put((a, kind, rep, None))
+                except Exception as e:
+                    handoff.put((a, None, None, e))
+            handoff.put(None)
+
+        t = threading.Thread(target=blender_side, name="artqueue-blender", daemon=True)
+        t.start()
+        while True:
+            item = handoff.get()
+            if item is None:
+                break
+            a, kind, rep, err = item
+            if err is not None:
+                results.append(self.block(a, "pipeline error: %s" % str(err)[:120], "error", trace=_trace(err)))
+                continue
+            try:
+                rep = self.ship.land(rep, "/Game/Daedalus/Art/" + kind, True, self.unreal)
+            except Exception as e:
+                results.append(self.block(a, "pipeline error: %s" % str(e)[:120], "error", trace=_trace(e)))
+                if isinstance(e, OSError):   # Unreal went away: let the Blender side stop early
+                    stop.set()
+                continue
+            results.append(self.finish(a, kind, rep))
+            if len(results) % 10 == 0:   # a long run keeps the board live instead of showing the last pass's wait
+                self.track_wait()
+                with self.lock:
+                    self.summary()
+        t.join(timeout=5)
+        return results
+
+    def finish(self, asset, kind, report):
         checks = list(report["checks"])
         tris = sum(o["triangles"] for o in report["blender"]["objects"])
         checks.append({"check": "triangle budget (%s %d)" % (kind, BUDGET[kind]), "ok": tris <= BUDGET[kind],
@@ -445,7 +646,8 @@ class Watcher:
         if report["ok"]:
             result = "SHIPPED (%d tris, %.2f m)" % (tris, max(dims or [0]))
             self.update(asset, result, "in Unreal: %s" % report["dest"])
-            self.event(asset, "shipped", result=result, dest=report["dest"])
+            self.event(asset, "shipped", result=result, dest=report["dest"],
+                       exported_s=report.get("exported_s"), imported_s=report.get("imported_s"))
             return (asset, "SHIPPED")
         why = unreal_side_failure(report)
         if why:
@@ -455,12 +657,19 @@ class Watcher:
         self.event(asset, "rejected", why=failed["check"], detail=failed["detail"])
         return (asset, "REJECTED")
 
-
-    def block(self, asset, why, event):
+    def block(self, asset, why, event, trace=None):
         self.blocked_at[asset] = self.clock()
         self.update(asset, "BLOCKED: %s" % why, "not the asset's fault; retrying every %d s" % BLOCKED_RETRY_S)
-        self.event(asset, event, why=why)
+        if trace:   # the feed keeps where it broke, so a one-line BLOCKED cell can be traced
+            self.event(asset, event, why=why, trace=trace)
+        else:
+            self.event(asset, event, why=why)
         return (asset, "BLOCKED")
+
+
+def _trace(e, keep=1500):
+    """The tail of an exception's traceback (file:line of each frame), kept short for feed.jsonl."""
+    return "".join(traceback.format_exception(type(e), e, e.__traceback__))[-keep:]
 
 
 PLAYING = "import unreal\nresult = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_game_world() is not None\n"
@@ -502,15 +711,19 @@ def main(argv=None):
     ap.add_argument("--every", type=float, default=10.0, help="seconds between passes")
     ap.add_argument("--once", action="store_true")
     ap.add_argument("--no-link", action="store_true", help="don't join the team link (ADR-053)")
+    ap.add_argument("--first", default="", help="comma-separated name fragments to ship first (e.g. _Orr_)")
     a = ap.parse_args(argv)
     link = None if a.no_link else teamlink.Link("unreal-team")
     w = Watcher(a.folder, link=link)
+    w.first = [f for f in a.first.split(",") if f]
     lock = os.path.join(a.folder, ".watcher.lock")
     if not a.once:
         if os.path.exists(lock) and time.time() - os.path.getmtime(lock) < 60:
             print("another watcher is running (%s is fresh)" % lock)
             return 3
     print("watching %s every %.0fs%s" % (w.queue, a.every, "" if link is None else ", live on the team link"))
+    for asset in w.recover():
+        print("re-queued %s (was SHIPPING when the last watcher stopped)" % asset, flush=True)
     after = 0
     if link is not None and link.health():
         link.register("Unreal team (Claude): ships Blender art into Unreal", ["asset.ready", "ping", "queue.status"],

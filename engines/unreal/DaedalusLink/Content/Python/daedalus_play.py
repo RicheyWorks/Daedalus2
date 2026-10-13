@@ -603,6 +603,80 @@ def scenario_wild(p):
     ], "species": species}
 
 
+def scenario_orrery(p):
+    """The Orrery Reach (ADR-057): the hero plays the Keeper's Logbook. Talk to the Keeper, fix the filter, pick up the
+    Lantern chart, wait for a starbloom's hour and harvest it, steep a tea, then harvest the Lantern pair and steep
+    the Lantern Brew. Each step is checked on the logbook."""
+    h = hero()
+    o = unreal.DaedalusOrrery.get_orrery(world()) if hasattr(unreal, "DaedalusOrrery") else None
+    if h is None or o is None:
+        return {"error": "start Play with the Orrery build"}
+    unreal.SystemLibrary.execute_console_command(world(), "daedalus.FoesHunt 0")
+    sky = _all(unreal.DaedalusSkyDirector) if hasattr(unreal, "DaedalusSkyDirector") else []
+    log = []
+
+    def go(label):
+        acts = [a for a in _all(unreal.DaedalusUsable) if a.get_actor_label() == label]
+        if not acts:
+            return False
+        at = acts[0].get_actor_location()
+        h.set_actor_location(unreal.Vector(at.x - 150.0, at.y, at.z + 100.0), False, True)
+        return True
+
+    def use(label):
+        ok = go(label)
+        yield
+        yield
+        r = h.interact() if ok else False
+        log.append((label, ok, o.state()))
+        yield
+
+    def hour_of(name):
+        return {x.split(":")[0]: int(x.split(":")[1]) for x in p.get("hours", "").split(",") if ":" in x}.get(name)
+
+    def set_hour(hh):
+        if sky:
+            sky[0].set_time_of_day(hh + 0.1)
+        else:
+            t = unreal.GameplayStatics.get_time_seconds(world())
+            o.set_editor_property("start_hour", (hh + 0.1 - t / o.get_editor_property("seconds_per_hour")) % 24.0)
+
+    yield from use("Orr_Keeper_Ostra")
+    s1 = o.get_editor_property("step")
+    yield from use("Orr_Play_Filter")
+    clean = o.get_editor_property("clean_water")
+    yield from use("Orr_Chart_Lantern")
+    s3 = o.get_editor_property("step")
+    set_hour(18)                       # Duskmallow's hour
+    for _ in range(4):
+        yield
+    yield from use("Orr_Bloom_Duskmallow")
+    s4 = o.get_editor_property("step")
+    yield from use("Orr_Play_Kettle")
+    s5 = o.get_editor_property("step")
+    # the Lantern pair: Duskmallow regrows tomorrow, so pick Sunsprig at 8:00 and a fresh Duskmallow the next dusk
+    set_hour(8)
+    for _ in range(4):
+        yield
+    yield from use("Orr_Bloom_Sunsprig")
+    set_hour(18)                       # a new dusk: Duskmallow has regrown since its hour passed
+    for _ in range(4):
+        yield
+    yield from use("Orr_Bloom_Duskmallow")
+    satchel = list(o.get_editor_property("satchel"))
+    yield from use("Orr_Play_Kettle")
+    brews = list(o.get_editor_property("brews"))
+    unreal.SystemLibrary.execute_console_command(world(), "daedalus.FoesHunt 1")
+    return {"checks": [
+        _check("the Keeper starts the logbook", s1 == 1, log[0] if log else ""),
+        _check("the filter makes the water drinkable", clean and o.get_editor_property("step") >= 2, o.state()),
+        _check("the Lantern chart is found", s3 == 3, o.state()),
+        _check("a starbloom is harvested in its hour", s4 == 4, o.state()),
+        _check("the first tea is steeped", s5 == 5 and any(b.endswith("Tea") for b in brews), brews),
+        _check("the Lantern pair makes the Lantern Brew", "Lantern Brew" in brews, "%s / satchel %s" % (brews, satchel)),
+    ], "log": [str(x) for x in log], "state": o.state()}
+
+
 def _kv(line):
     """A realm state line ('mode=FIELD map=TOWN1 x=3 ...') as a dict; msg= is the rest of the line."""
     out = {}
@@ -726,6 +800,74 @@ def scenario_realm(p):
     ], "shots": shots}
 
 
+def scenario_tactics(p):
+    """Squad tactics (ADR-060): three foes as one squad. The local director makes one attack and two flank; a Java
+    (outside) RETREAT spec takes over and holds; a bad spec changes nothing; hits come back as DTE 1 events."""
+    h = hero()
+    _clear_foes()
+    h.set_editor_property("invulnerable", True)
+    unreal.SystemLibrary.execute_console_command(world(), "daedalus.FoesHunt 1")
+    unreal.SystemLibrary.execute_console_command(world(), "daedalus.Tactics 0")   # the scenario drives the ticks
+    placed = h.spawn_foes(3)
+    squad = foes()
+    for i, f in enumerate(sorted(squad, key=lambda f: f.get_name())):
+        f.set_editor_property("squad", "test-squad")
+        f.set_editor_property("unit_id", "t%d" % (i + 1))
+    tac = unreal.DaedalusTactics.get_tactics(world())
+    spec = tac.decide_now("test-squad")
+    verbs = sorted(l.split()[2] for l in spec.splitlines() if l.startswith("order "))
+    orders0 = {f.get_editor_property("unit_id"): f.get_editor_property("order_verb") for f in foes()}
+    flankers = [f for f in foes() if f.get_editor_property("order_verb") == "FLANK"]
+    before = {f.get_name(): (f.get_actor_location() - f.get_editor_property("order_point")).length() for f in flankers}
+    states = set()
+    for _ in range(90):
+        states.update(f.get_editor_property("state") for f in foes())
+        yield
+    after = {f.get_name(): (f.get_actor_location() - f.get_editor_property("order_point")).length() for f in flankers}
+    closed = [round(before[k] - after.get(k, before[k])) for k in before]
+
+    # Java takes over: t1 retreats 1500 cm straight away from the hero
+    t1 = [f for f in foes() if f.get_editor_property("unit_id") == "t1"]
+    out, held, moved = "", False, 0
+    if t1:
+        a, hl = t1[0].get_actor_location(), h.get_actor_location()
+        d = unreal.Vector(a.x - hl.x, a.y - hl.y, 0.0)
+        n = max(d.length(), 1.0)
+        goal = unreal.Vector(a.x + d.x / n * 1500, a.y + d.y / n * 1500, a.z)
+        d0 = dist(t1[0], h)
+        out = tac.apply_orders("DTO 1\nsquad test-squad tick 99\norder t1 RETREAT - %.1f %.1f %.1f | scenario: Java says fall back\n"
+                               % (goal.x, goal.y, goal.z))
+        unreal.SystemLibrary.execute_console_command(world(), "daedalus.Tactics 1")   # the local director may run, but Java holds it
+        for _ in range(60):
+            yield
+        held = t1[0].get_editor_property("order_verb") == "RETREAT" if foes() else False
+        moved = round(dist(t1[0], h) - d0) if foes() else 0
+    bad = tac.apply_orders("DTO 1\nsquad test-squad tick 1\norder t2 JUMP - 0 0 0\n")
+    # a hit comes back as an event
+    tac.take_events()
+    target = sorted(foes(), key=lambda f: dist(f, h))
+    if target:
+        if h.get_editor_property("current_weapon") != 1:
+            h.switch_weapon()
+        for _ in range(30):
+            h.aim_at(target[0].get_actor_location())
+            h.fire()
+            yield
+    events = tac.take_events()
+    h.set_editor_property("invulnerable", False)
+    return {"checks": [
+        _check("three foes placed as one squad", placed == 3 and len(squad) == 3, f"placed={placed}"),
+        _check("the director: one attacks, two flank", verbs == ["ATTACK", "FLANK", "FLANK"], str(verbs)),
+        _check("the foes took those orders", sorted(v for v in orders0.values() if v) == ["ATTACK", "FLANK", "FLANK"], str(orders0)),
+        _check("the flankers move to their flank points", len(closed) == 2 and all(c > 50 for c in closed), str(closed)),
+        _check("a Java spec applies", out.startswith("applied=1"), out),
+        _check("Java's order holds against the local director", held, f"held={held}"),
+        _check("the retreating foe got further away", moved > 150, f"moved={moved}"),
+        _check("a bad spec is refused whole", bad.startswith("refused: line 3"), bad),
+        _check("hits come back as DTE 1 events", events.startswith("DTE 1") and ("event HIT" in events or "event DOWN" in events), events[:200]),
+    ], "states": sorted(states), "stats": tac.stats(), "spec": spec}
+
+
 SCENARIOS = {
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
@@ -739,6 +881,8 @@ SCENARIOS = {
     "realm": scenario_realm,
     "dress": scenario_dress,
     "wild": scenario_wild,
+    "orrery": scenario_orrery,
+    "tactics": scenario_tactics,
 }
 
 

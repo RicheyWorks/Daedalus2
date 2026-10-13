@@ -75,6 +75,20 @@ a packaged build draws them in the default material. This blocks deployment.
   `Saved/Daedalus/nanite-materials.json` before changing anything, so `undo()` restores them. This runs once
   Richmond OKs the bulk change.
 
+## Found: the Blender → Unreal bottleneck
+
+The board showed 187 READY rows with zero throughput. There were three causes:
+1. I had left the editor in Play.
+2. The watcher hung for 35 minutes on a Remote Execution reply that never came; see AUTOMATION-LESSONS.
+3. It shipped one asset at a time, Blender then Unreal.
+
+What changed:
+- **Direct calls.** The watcher's Unreal calls now run direct on the game thread, with bounded waits.
+- **The halves overlap.** `ship.export` (Blender) runs on its own thread, while `ship.land` (Unreal import and the
+  judge) runs on the watcher's.
+- **Proven.** artqueue 54/54, including a timed overlap test and one bad import that blocks only itself.
+- **Live:** 93 assets shipped in one minute with 0 errors. It was about 15 a minute.
+
 ## Held
 
 - **Legs that walk.** Parts pivot at the model origin, so a leg can't swing about its hip yet. That waits on the

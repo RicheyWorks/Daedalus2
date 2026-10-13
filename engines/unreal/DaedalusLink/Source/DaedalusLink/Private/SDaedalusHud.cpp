@@ -3,6 +3,7 @@
 #include "SDaedalusHud.h"
 
 #include "DaedalusHero.h"
+#include "DaedalusOrrery.h"
 #include "Styling/CoreStyle.h"
 #include "Widgets/Images/SImage.h"
 #include "Widgets/Layout/SBox.h"
@@ -201,6 +202,39 @@ void SDaedalusHud::Construct(const FArguments& InArgs)
 				SNew(STextBlock).Font(HudFont("Bold", 13)).ColorAndOpacity(Hot)
 				.Text(FText::FromString(TEXT("OVERHEATED")))
 				.Visibility_Lambda([H]() { const ADaedalusHero* P = H.Get(); return P && P->bOverheated ? EVisibility::HitTestInvisible : EVisibility::Collapsed; })
+			]
+		]
+
+		// Top centre (ADR-057): on Claude Island, the sky clock and the logbook objective, what's in reach, the last
+		// thing that happened, and the satchel.
+		+ SOverlay::Slot().HAlign(HAlign_Center).VAlign(VAlign_Top).Padding(0.f, 40.f, 0.f, 0.f)
+		[
+			SNew(SVerticalBox)
+			.Visibility_Lambda([H]() { const ADaedalusHero* P = H.Get(); return P && ADaedalusUsable::Nearest(P, 25000.f) ? EVisibility::HitTestInvisible : EVisibility::Collapsed; })
+			+ SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center)
+			[
+				SNew(STextBlock).Font(HudFont("Bold", 16)).ColorAndOpacity(FLinearColor(1.f, 0.85f, 0.45f, 1.f))
+				.Text_Lambda([H]() { const UDaedalusOrrery* O = UDaedalusOrrery::Get(H.Get()); return FText::FromString(O ? O->QuestLine() : FString()); })
+			]
+			+ SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center).Padding(0.f, 6.f, 0.f, 0.f)
+			[
+				SNew(STextBlock).Font(HudFont("Regular", 15)).ColorAndOpacity(Ink).WrapTextAt(900.f).Justification(ETextJustify::Center)
+				.Text_Lambda([H]() { const UDaedalusOrrery* O = UDaedalusOrrery::Get(H.Get()); return FText::FromString(O ? O->MessageLine() : FString()); })
+			]
+			+ SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center).Padding(0.f, 6.f, 0.f, 0.f)
+			[
+				SNew(STextBlock).Font(HudFont("Bold", 15)).ColorAndOpacity(Accent)
+				.Text_Lambda([H]()
+				{
+					const ADaedalusHero* P = H.Get();
+					const ADaedalusUsable* U = P ? ADaedalusUsable::Nearest(P, P->InteractReach) : nullptr;
+					return FText::FromString(U ? FString::Printf(TEXT("[E] %s"), *U->Prompt(P)) : FString());
+				})
+			]
+			+ SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Center).Padding(0.f, 4.f, 0.f, 0.f)
+			[
+				SNew(STextBlock).Font(HudFont("Regular", 13)).ColorAndOpacity(Dim)
+				.Text_Lambda([H]() { const UDaedalusOrrery* O = UDaedalusOrrery::Get(H.Get()); return FText::FromString(O ? O->SatchelLine() : FString()); })
 			]
 		]
 

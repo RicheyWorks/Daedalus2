@@ -190,6 +190,8 @@ int32 UDaedalusEncounters::SpawnPack()
 		}
 		if (ADaedalusTarget* T = SpawnFoe(At, Kind))
 		{
+			T->Squad = FString::Printf(TEXT("pack-%d"), Packs + 1);   // ADR-060: a pack fights as one squad
+			T->UnitId = FString::Printf(TEXT("pack-%d-%d"), Packs + 1, i + 1);
 			Pack.Add(T);
 			++Spawned;
 		}

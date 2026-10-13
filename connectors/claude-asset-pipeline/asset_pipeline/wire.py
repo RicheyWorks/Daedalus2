@@ -39,6 +39,17 @@ def call(addr, command, timeout=600, side="bridge", **params):
     return reply.get("result")
 
 
+def obj(result, side="bridge", what="the code"):
+    """The `result` a script left, which must be a JSON object. A bridge that answers with anything else (a bare
+    true/false, null, a string) used to crash later as "'bool' object is not subscriptable" with no clue which side
+    or call it was; this names both and shows what came back."""
+    inner = result.get("result") if isinstance(result, dict) else result
+    if not isinstance(inner, dict):
+        raise BridgeError(side, {"message": "%s returned %s %s, expected a JSON object (is the editor in Play, or did the "
+                                 "script stop before setting result?)" % (what, type(inner).__name__, repr(inner)[:80])})
+    return inner
+
+
 def reachable(addr, timeout=2.0):
     try:
         with socket.create_connection(addr, timeout=timeout):

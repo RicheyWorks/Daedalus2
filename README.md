@@ -3,6 +3,33 @@
 [![CI](https://github.com/RicheyWorks/Daedalus2/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/RicheyWorks/Daedalus2/actions/workflows/ci.yml)
 ![Coverage](.github/badges/jacoco.svg)
 
+## The Daedalus metaverse (start here)
+
+**The goal is the biggest metaverse ever built.** Every builder, person or bot, adds realms to it: whatever they
+come up with, as long as it is original.
+
+**Daedalus is a huge voxel multiverse.** It is many worlds, each with its own look and kind of play, and you
+**warp** between them through sky gates and portals:
+- **Sky Islands and Lands**: Minecraft / Sandbox style. The pieces of a shattered planet, with caves, ores and arks.
+  Live in Unreal.
+- **The Portal Realm**: an original 8-bit RPG, with towns, a castle, keys, chests and a dark cave. Live in Unreal.
+- **Parcels**: Decentraland style.
+- **Bricks**: Roblox style.
+- **Gallery City**: Cryptovoxels style.
+- **The Labyrinth**: Daedalus's own mazes, which also run through every realm.
+- **Space**: moons, suns and other planets (Phase 2).
+- **Your own realm**: any bot can propose a new one, like a 64-bit-era realm with kart races and sword-and-shield
+  adventure all in one. It must be original, never a copy of anyone's games.
+
+The story is that Daedalus was the biggest planet ever known until a meteor blew it apart. Its fragments are the
+islands. Ownership lives on a public chain.
+
+**Building for it, or picking a realm for your island or items? Read [`docs/REALMS.md`](./docs/REALMS.md) first.**
+It lists every realm, what is built, what art fits, where the details are, and the naming rules: original
+names only.
+
+## The engine underneath
+
 A multi-module Java engine for procedural maze and graph generation, with a
 plugin runtime, a Spring Boot server (REST + WebSocket), and an optional
 JavaFX desktop client.
@@ -278,6 +305,7 @@ public consumers).
 | `GET` | `/api/v1/species` | public | The species canon: 221 kinds from ComputerPets with guild, size, r/K strategy and whether they cross open sky alone (ADR-021) |
 | `GET` | `/api/v1/retro/{seed}` | public | The 8-bit realm behind a portal, generated whole from a seed (field, towns, castle, three cave floors, every chest, lock and monster table) as the plain-text DRR 1 spec the C++ core plays (ADR-052) |
 | `GET` | `/api/v1/retro/{seed}/check` | public | Walks that realm like a party would and reports whether every chest, lock, guardian and townsperson can be reached (ADR-052) |
+| `GET` | `/api/v1/reach/orrery` | public | The Orrery Reach's five voxel isles (settings, offsets, column heights) from the Java port of the Unreal isle core, for `/reach.html` (ADR-058) |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/claim` | required | Claim an island: from then on only its owner and the builders they name change its cubes. Owner is the signed-in user; already-claimed, blocked and bad-owner are named results (ADR-026) |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/abandon` | required | The owner gives an island back; its cubes stay and it is open again. Not-owner and not-claimed are named results (ADR-026) |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/builders` | required | The owner lets someone build (`allow: true`) or stops them (`IslandClaimRequest`) (ADR-026) |

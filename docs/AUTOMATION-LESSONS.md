@@ -113,6 +113,38 @@ to it when something new breaks.
 - **A hidden component still collides.** Foes wear art now, but the crystal stays their root: `SetHiddenInGame(true)`
   removes the drawing and keeps every trace, hit and sight line exactly as tested before (ADR-055).
 
+- **Epic's Remote Execution is one channel for every bot, and replies can reach the wrong caller.** On 2026-10-12
+  an editor restart left a reply undelivered. The art watcher waited on it for 35 minutes, and its fresh copy hung
+  on its very first call. `ping` answered in 0.13 s; `execute_python` (unattended) never did; the same code with
+  `unattended=False` answered in 0.04 s. Automated imports raise no dialogs, so the watcher now always runs direct
+  and passes `bridge_timeout`. team-codex's correlation fix for the bridge is reviewed on branch
+  `codex/remote-correlation`.
+- **Overlap the two editors.** Blender exports the next asset while Unreal imports this one, and every board write
+  happens under one lock. Live rate went from about 15 to 93 assets a minute, with 0 errors (export 0.06 s,
+  import about 0.4 s).
+
+- **Never silence `git push`.** Other bots push to main from the same PC now. One of them landed between two of my
+  commits, my push was refused, and `2>/dev/null` hid it. The PC kept running the old judge, and the asset I had
+  "fixed" was rejected again. Rebase onto origin, push, and check that the PC's HEAD contains the commit before
+  testing live.
+
+- **PowerShell unrolls a one-item array on `return`.** `Get-ProjectEditors` returned `@(...)`, but with exactly one
+  editor open the caller got a bare CimInstance, whose `.Count` is empty in Windows PowerShell 5.1. So
+  "Open editors: " printed nothing, the editor was never closed, and the fast build hit a locked DLL. It worked with
+  two editors open, which hid the bug. Always wrap the call: `@(Get-ProjectEditors)`.
+
+- **Stop the art watcher before rebuilding the editor.** While the editor closed, the watcher kept importing. That
+  dirtied packages and raised "Save Content", which held the editor open until the watcher was stopped. Order:
+  `art-queue.ps1 -Stop`, then `unreal-job.ps1 -Start -Fast`, then start the watcher again.
+- **Build from a clean worktree when bots commit locally.** Another bot's unpushed local commit (a C++ file that
+  didn't compile) sat in the PC's working copy, and `-Fast` mirrors the working copy into the plugin. Building from
+  `git worktree add --detach ..\D2-build origin/main` keeps unpushed work out of the shared build.
+
+- **A dynamic streaming sublevel is not loaded in Play.** `create_new_streaming_level(LevelStreamingDynamic, ...)`
+  shows the sublevel in the editor but leaves `initially_loaded` and `initially_visible` false. In PIE the island and
+  every game actor on it were simply absent, and the orrery scenario found nothing to use (0/6). Set both true and
+  save the persistent level.
+
 ## Habits that saved us
 
 - **Build a game its own framebuffer and capture that.** The viewport capture never worked in Play (play_capture).
@@ -217,3 +249,9 @@ to it when something new breaks.
   v1.3.0. Don't reuse a parameter's name in any case.
 - **Python can't spawn into the Play world or add components there** (`begin_deferred_actor_spawn_from_class`
   and `add_component_by_class` aren't exposed). A play-camera capture needs C++ or the restored viewport.
+- **Check the C++ before you close the editor.** Every bad build cost a whole rotation slot: closing the editor,
+  failing the compile, reopening. `tools/unreal_preflight/preflight.py` now runs first in `unreal-job.ps1 -Run`.
+  It catches what bit us on 2026-10-12: an `AActor` member name reused (`Layers`), a `UPROPERTY` with no
+  `Category`, a bare `Error` type, a component array filled by the constructor but not `Transient`, and Python
+  `b_` names or `.get(` on a class. If it fails, the editor stays open and the job exits with code 2.
+  Fixtures plus `preflight_test.py` prove each rule can say no.

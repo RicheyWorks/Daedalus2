@@ -1,0 +1,118 @@
+{
+ "system": "Hephaestus Material Parameter Collection",
+ "mpc": "MPC_Heph_ForgeSky",
+ "source": "Daedalus Sky Director (GetWind, GetWetness, GetHour / night mask) + caldera heat zone + Great Forge Glow score (livestock.json production_budget.win_meter.score_0_100)",
+ "note": "Data contract only. To be applied on a future Hephaestus editor turn into the forge, basalt, ash, herb and hot-spring MIDs. No Unreal write from this file alone. Status per binding: 'exists' = asset already created by heph_island_ue.py; 'planned' = MID to create on the apply turn.",
+ "applied": false,
+ "params": {
+  "HeatShimmer": {
+   "type": "scalar",
+   "range": [0.0, 1.0],
+   "default": 0.4,
+   "caldera": 1.0,
+   "rule": "1.0 inside caldera_forge heat zone, falls off linearly to 0.2 at 120 m; x(1-0.5*Wetness) when raining",
+   "drives": ["air refraction / heat distortion over caldera", "thirst UI cue strength (caldera x2 drain)", "basalt hot-edge tint"]
+  },
+  "AshFall": {
+   "type": "scalar",
+   "range": [0.0, 1.0],
+   "default": 0.25,
+   "storm": 0.8,
+   "rule": "0.25 + 0.55*WindStrength in ash_fields; rain settles ash: x(1-0.7*Wetness)",
+   "drives": ["ash particle density", "ash-field film on soil + leaves", "distance haze"]
+  },
+  "MagmaPulse": {
+   "type": "scalar",
+   "range": [0.0, 1.0],
+   "default": 0.5,
+   "rule": "0.5 + 0.5*sin(2*pi*t/6s); amplitude scaled by (0.3+0.7*TemperGlow) so a cold forge barely breathes",
+   "drives": ["Great Forge living-core emissive pulse", "magma pool emissive", "ember brazier flicker"]
+  },
+  "QuenchSteam": {
+   "type": "scalar",
+   "range": [0.0, 1.0],
+   "default": 0.0,
+   "quench": 1.0,
+   "rule": "set 1.0 on a quench dip at Prop_ForgeQuenchTub_Basalt, exponential decay half-life 4s",
+   "drives": ["steam plume at Prop_ForgeQuenchTub_Basalt", "quench water surface boil + opacity", "vent plume boost"]
+  },
+  "NightForge": {
+   "type": "scalar",
+   "range": [0.0, 1.0],
+   "default": 0.0,
+   "rule": "smoothstep dusk: 0 at hour 18, 1 at hour 21; reverse at dawn 5->7 (same mask as OddsReaper NightMask)",
+   "drives": ["anvil + forge rim light", "hot-spring underglow", "ember emissive boost at night"]
+  },
+  "TemperGlow": {
+   "type": "scalar",
+   "range": [0.0, 1.0],
+   "default": 0.0,
+   "headless_now": 0.9,
+   "rule": "Great Forge Glow score_0_100 / 100 (livestock.json production_budget.win_meter); 1.0 only when score == 100 (tempered)",
+   "drives": ["Great Forge tempered look (iron colour shift dull->cherry->straw)", "MagmaPulse amplitude", "anvil emissive seam"]
+  },
+  "ForgeTint": {
+   "type": "vector",
+   "default": [1.0, 0.42, 0.12, 1.0],
+   "tempered": [1.0, 0.78, 0.36, 1.0],
+   "note": "RGBA; lerp default->tempered by TemperGlow"
+  }
+ },
+ "tuning_defaults": {
+  "heat_falloff_m": 120,
+  "magma_pulse_period_s": 6.0,
+  "quench_steam_half_life_s": 4.0,
+  "temper_glow_lerp_per_s": 0.1,
+  "ash_wind_gain": 0.55
+ },
+ "bindings": [
+  {
+   "mid": "MI_HotSpring",
+   "status": "exists",
+   "asset": "/Game/Hephaestus/Materials/MI_HotSpring (heph_island_ue.hotspring_material; parent /Engine/BasicShapes/BasicShapeMaterial, only Color today)",
+   "applies_to": "WaterPlane_HotSpring (x2)",
+   "NightForge": "underglow emissive x (0.1+0.6*NightForge)",
+   "QuenchSteam": "surface opacity -0.2*QuenchSteam (boil)",
+   "HeatShimmer": "Roughness 0.15 + 0.1*HeatShimmer",
+   "apply_note": "needs a parent with Emissive/Opacity/Roughness params on the apply turn; BasicShapeMaterial cannot take these"
+  },
+  {
+   "mid": "MI_Heph_ForgeIron",
+   "status": "planned",
+   "applies_to": "Prop_HephaestusForge_Great, Prop_HephaestusAnvil_Great",
+   "MagmaPulse": "emissive core x MagmaPulse",
+   "TemperGlow": "emissive colour = ForgeTint lerp; Metallic 0.9, Roughness 0.55 - 0.25*TemperGlow",
+   "NightForge": "rim light x (0.3+0.7*NightForge)"
+  },
+  {
+   "mid": "MI_Heph_Basalt",
+   "status": "planned",
+   "applies_to": "Prop_Forge*_Basalt (anvil, bellows, quench tub, chimney, altar, brazier, magma pool, vent plume)",
+   "HeatShimmer": "hot-edge emissive tint x HeatShimmer",
+   "MagmaPulse": "magma pool / brazier emissive only",
+   "AshFall": "BaseColor ash layer lerp 0.3*AshFall"
+  },
+  {
+   "mid": "MI_Heph_QuenchWater",
+   "status": "planned",
+   "applies_to": "Prop_ForgeQuenchTub_Basalt water surface",
+   "QuenchSteam": "opacity + steam flipbook strength",
+   "HeatShimmer": "refraction x HeatShimmer"
+  },
+  {
+   "mid": "MI_Heph_AshSoil",
+   "status": "planned",
+   "applies_to": "ash_fields ground + ranch pens",
+   "AshFall": "ash film BaseColor lerp + Roughness 0.8 + 0.15*AshFall",
+   "TemperGlow": "n/a (static)"
+  },
+  {
+   "mid": "MI_Heph_HerbLeaf",
+   "status": "planned",
+   "applies_to": "Item_Herb_* (12 beds)",
+   "AshFall": "leaf dust film 0.4*AshFall",
+   "HeatShimmer": "wilt hue only for Steamreed/Boilbalm when unwatered",
+   "NightForge": "n/a"
+  }
+ ]
+}

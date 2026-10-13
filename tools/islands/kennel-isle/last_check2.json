@@ -1,0 +1,41 @@
+{
+ "herb_actors": 36,
+ "herb_tagged": 12,
+ "brew_trough": [
+  "W9_Trough_3",
+  "Brew_W9_Trough_3"
+ ],
+ "bowl_hay": [
+  "Prop_Live_AMF_HayBale_V1",
+  "Prop_Live_AMF_HayBale_V2",
+  "Prop_Live_AMF_HayBale_V3",
+  "Prop_Live_AMF_HayBale_V4",
+  "Prop_Pet_AMF_Bowl_V1",
+  "Prop_Pet_AMF_Bowl_V2",
+  "Prop_Pet_AMF_Bowl_V3",
+  "Prop_Pet_AMF_Bowl_V4"
+ ],
+ "pup_meshes": [
+  "Mob_CorsoPup",
+  "Mob_CorsoPup_Accent",
+  "Mob_CorsoPup_Coat",
+  "Mob_CorsoPup_Dark",
+  "Mob_Starfall_Hopper_K3_Body",
+  "Mob_Starfall_Hopper_K3_WingL",
+  "Mob_Starfall_Hopper_K3_WingR",
+  "Mob_CorsoPup_Accent",
+  "Mob_CorsoPup_Coat",
+  "Mob_CorsoPup_Dark"
+ ],
+ "kennel_meshes": [
+  "Mob_Starfall_Hopper_K3_Body",
+  "Mob_Starfall_Hopper_K3_WingL",
+  "Mob_Starfall_Hopper_K3_WingR",
+  "Prop_Kennel_Roof",
+  "Prop_Kennel_Sign",
+  "Prop_Kennel_Wood",
+  "Prop_Kennel_Roof",
+  "Prop_Kennel_Sign",
+  "Prop_Kennel_Wood"
+ ]
+}

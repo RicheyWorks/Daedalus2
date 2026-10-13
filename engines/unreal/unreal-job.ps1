@@ -42,10 +42,63 @@ function Set-FullSpeedDefault {
     }
 }
 
+# Crash recovery with no popups (2hot2trot, 2026-10-12). UE 5.8 has no auto-restore setting: PackageAutoSaver.cpp only
+# knows -AutoDeclinePackageRecovery and -unattended, and both throw the restore list away. So before the editor opens,
+# copy each autosave in Saved\Autosaves\PackageRestoreData.json (UTF-16) over its package, back up what it overwrites,
+# and rename the json so the Slate "Restore Packages" window never appears (it has no controls automation can press).
+# A crash reporter left behind by a crash is closed without sending. Same logic as studio-screen-connector/crashguard.ps1.
+function Restore-CrashAutosaves {
+    if (Get-Process UnrealEditor -ErrorAction SilentlyContinue) { return }
+    Get-Process CrashReportClient, CrashReportClientEditor -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+    $proj = Split-Path $Project; $auto = Join-Path $proj "Saved\Autosaves"; $json = Join-Path $auto "PackageRestoreData.json"
+    if (-not (Test-Path $json)) { return }
+    $b = [IO.File]::ReadAllBytes($json)
+    $text = if ($b.Length -ge 2 -and ($b[1] -eq 0 -or ($b[0] -eq 0xFF -and $b[1] -eq 0xFE))) { [Text.Encoding]::Unicode.GetString($b) } else { [Text.Encoding]::UTF8.GetString($b) }
+    $data = $text.TrimStart([char]0xFEFF) | ConvertFrom-Json
+    if ($data.RestoreEnabled -ne $true) { return }
+    $stamp = Get-Date -Format "yyyyMMdd-HHmmss"; $bk = Join-Path $Jobs "autosave-restore-$stamp"; $done = @()
+    New-Item -ItemType Directory -Force -Path $bk | Out-Null; Copy-Item $json $bk
+    foreach ($k in @($data.Packages)) {
+        $src = Join-Path $auto ($k.AutoSavePath -replace '/', '\')
+        if (-not (Test-Path $src) -or $k.PackagePathName -notmatch '^/Game/') { "autosave missing for $($k.PackagePathName)"; continue }
+        $rel = ($k.PackagePathName -replace '^/Game/', '' -replace '/', '\') + [IO.Path]::GetExtension($src)
+        $dst = Join-Path $proj "Content\$rel"
+        if (Test-Path $dst) { $to = Join-Path $bk "Content\$rel"; New-Item -ItemType Directory -Force -Path (Split-Path $to) | Out-Null; Copy-Item $dst $to -Force }
+        New-Item -ItemType Directory -Force -Path (Split-Path $dst) | Out-Null; Copy-Item $src $dst -Force; $done += $k.PackagePathName
+    }
+    Rename-Item $json "PackageRestoreData.restored-$stamp.json"
+    "restored $($done.Count) autosaved package(s) before opening the editor (backup $bk): $($done -join ', ')"
+}
+
+# Unattended crash uploads off, in the project's default config (never rewritten by the editor).
+function Set-NoUnattendedCrashUpload {
+    $cfg = Join-Path (Split-Path $Project) "Config\DefaultEditorSettings.ini"
+    $section = "[/Script/UnrealEd.CrashReportsPrivacySettings]"; $key = "bSendUnattendedBugReports=False"
+    $text = if (Test-Path $cfg) { [IO.File]::ReadAllText($cfg) } else { "" }
+    if ($text -match [regex]::Escape($key)) { return }
+    $text = [regex]::Replace($text, "(?m)^bSendUnattendedBugReports=.*\r?\n?", "")
+    if ($text -match [regex]::Escape($section)) { $text = $text.Replace($section, "$section`r`n$key") }
+    else { $text = $text.TrimEnd() + "`r`n`r`n$section`r`n$key`r`n" }
+    [IO.File]::WriteAllText($cfg, $text)
+}
 if ($Run) {
     $log = Join-Path $Jobs "$Id.log"
     Set-Location $Repo
     Set-FullSpeedDefault
+    # Preflight (tools/unreal_preflight): catch the mistakes that cost a whole build slot (a shadowed actor member, a
+    # missing Category, a bare Error, a saved component array) BEFORE the editor is closed. Fails = no build, editor stays up.
+    git pull --ff-only *>&1 | Out-File -FilePath $log -Append -Encoding utf8
+    $py = (Get-Command python -ErrorAction SilentlyContinue)
+    if ($py) {
+        & python (Join-Path $Repo "tools\unreal_preflight\preflight.py") *>&1 | Out-File -FilePath $log -Append -Encoding utf8
+        if ($LASTEXITCODE -ne 0) {
+            "PREFLIGHT FAILED: fix the lines above; the editor was left open" | Out-File -FilePath $log -Append -Encoding utf8
+            "done 2" | Out-File -FilePath (Join-Path $Jobs "$Id.exit") -Encoding ascii
+            exit
+        }
+    }
+    Set-NoUnattendedCrashUpload
+    Restore-CrashAutosaves *>&1 | Out-File -FilePath $log -Append -Encoding utf8
     for ($attempt = 1; $attempt -le 2; $attempt++) {
         # Wait (up to 5 min) for any other Unreal build to finish instead of colliding with it.
         $until = (Get-Date).AddMinutes(5)
@@ -68,6 +121,8 @@ if ($Run) {
         "another build tool collided; retrying in 20 s (attempt $attempt)" | Out-File -FilePath $log -Append -Encoding utf8
         Start-Sleep -Seconds 20
     }
+    # Job end: close the floating Unreal panels it left (studio-screen-connector tidy.ps1, one pass, best effort).
+    $tidy = Join-Path $Repo "..\studio-screen-connector\tidy.ps1"; if (Test-Path $tidy) { try { & powershell.exe -NoProfile -WindowStyle Hidden -File $tidy -Once *>> $log } catch { } }
     "done $code" | Out-File -FilePath (Join-Path $Jobs "$Id.exit") -Encoding ascii
     exit
 }
@@ -87,10 +142,10 @@ if ($Wait) {
     $log = Join-Path $Jobs "$Id.log"; $exit = Join-Path $Jobs "$Id.exit"
     $until = (Get-Date).AddSeconds($Seconds)
     while ((Get-Date) -lt $until -and -not (Test-Path $exit)) {
-        if ((Test-Path $log) -and (Select-String -Path $log -Pattern 'error C\d+|: error ' -Quiet)) { break }
+        if ((Test-Path $log) -and (Select-String -Path $log -Pattern 'error C\d+|: error |\): Error: ' -Quiet)) { break }
         Start-Sleep -Seconds 3
     }
-    $errors = if (Test-Path $log) { Select-String -Path $log -Pattern 'error C\d+|: error ' | Select-Object -First 15 | ForEach-Object { $_.Line } } else { @() }
+    $errors = if (Test-Path $log) { Select-String -Path $log -Pattern 'error C\d+|: error |\): Error: ' | Select-Object -First 15 | ForEach-Object { $_.Line } } else { @() }
     $norton = Join-Path $env:TEMP "daedalus-norton.log"
     $alerts = if (Test-Path $norton) { Get-Content $norton | Where-Object { $_ -ge (Get-Date).AddMinutes(-30).ToString("s") } } else { @() }
     # Compiler errors first: they are the real cause. AutomationTool's ErrorLog.txt is only written when it dies
