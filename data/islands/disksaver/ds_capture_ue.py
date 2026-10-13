@@ -41,5 +41,8 @@ try:
     d, f = os.path.split(SHOT)
     unreal.RenderingLibrary.export_render_target(w, rt, d, f.replace(".png", "_capture.png"))
     out["capture"] = os.path.join(d, f.replace(".png", "_capture.png"))
+    cc.set_editor_property("capture_source", unreal.SceneCaptureSource.SCS_BASE_COLOR)   # lighting-independent colours
+    cc.capture_scene(); unreal.RenderingLibrary.export_render_target(w, rt, d, f.replace(".png", "_basecolor.png"))
+    out["basecolor"] = os.path.join(d, f.replace(".png", "_basecolor.png"))
 except Exception as e: out["capture_err"] = str(e)[:120]
 result = out
