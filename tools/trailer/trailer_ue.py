@@ -32,12 +32,14 @@ with open(os.path.join(ROOT, "latest.txt"), "w") as _f:
     _f.write(OUT)
 
 PLAN = trailer_plan.frames()
-STATE = {"i": 0, "total": len(PLAN), "errors": [], "handle": None, "done": False, "squad": False}
+STARTS = trailer_plan.shot_starts()
+SHOT = {name: (kind, params) for name, _, kind, params, _ in trailer_plan.SHOTS}
+STATE = {"i": 0, "total": len(PLAN), "errors": [], "handle": None, "done": False, "squad": False, "follow": {}}
 
 
 def _status():
     with open(os.path.join(OUT, "status.json"), "w") as f:
-        json.dump({k: v for k, v in STATE.items() if k != "handle"}, f)
+        json.dump({k: v for k, v in STATE.items() if k not in ("handle", "follow")}, f)
 
 
 def _world():
@@ -77,6 +79,41 @@ def _squad():
         STATE["errors"].append("squad: " + str(e)[:120])
 
 
+def _star(near):
+    """The herd animal with the most neighbours within 15 m, nearest the fallback centre: a shot full of animals."""
+    taken = [a for a in STATE["follow"].values() if a]
+    crit = [c for c in unreal.GameplayStatics.get_all_actors_of_class(_world(), unreal.DaedalusCritter)
+            if all(c.get_actor_location().distance_to(t.get_actor_location()) > 3000.0 for t in taken)]
+    if not crit:
+        return None
+    locs = [c.get_actor_location() for c in crit]
+    def score(k):
+        a = locs[k]
+        n = sum(1 for b in locs if (a.x - b.x) ** 2 + (a.y - b.y) ** 2 < 1500.0 ** 2)
+        d = ((a.x - near[0]) ** 2 + (a.y - near[1]) ** 2) ** 0.5
+        return (n, -d)
+    return crit[max(range(len(crit)), key=score)]
+
+
+def _follow(name, i):
+    """Eye and rotation orbiting the shot's live animal (the fallback centre when none)."""
+    kind, p = SHOT[name]
+    st = STATE["follow"]
+    if name not in st:
+        a = _star(p["c"])
+        st[name] = a
+        if a:
+            STATE.setdefault("stars", {})[name] = a.get_name()
+    a = st[name]
+    q = dict(p)
+    if a:
+        l = a.get_actor_location()
+        q["c"], q["lz"] = (l.x, l.y, l.z), l.z + 60.0
+    first, n, _ = STARTS[name]
+    eye, tgt = trailer_plan.camera("orbit", q, (i - first) / max(1, n - 1))
+    return eye, trailer_plan.rotation(eye, tgt)
+
+
 def _tick(dt):
     try:
         if STATE["done"]:
@@ -90,6 +127,8 @@ def _tick(dt):
             _finish()
             return
         _, name, eye, (pitch, yaw), _cap = PLAN[i]
+        if SHOT[name][0] == "follow":
+            eye, (pitch, yaw) = _follow(name, i)
         if name == "squad" and not STATE["squad"]:
             STATE["squad"] = True
             _squad()

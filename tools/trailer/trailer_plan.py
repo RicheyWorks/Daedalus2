@@ -11,9 +11,10 @@ FPS = 30
 SHOTS = [
     ("sky", 6.0, "orbit", {"c": (20000, -9000, 5000), "r": 32000, "h": 16000, "a0": 200, "a1": 250, "lz": 4800},
      "ONE SHATTERED PLANET"),
-    ("herd_cows", 5.0, "dolly", {"e0": (-1500, -11500, 6200), "e1": (500, -10800, 5800), "t0": (1179, -9108, 5400),
-                                 "t1": (1300, -9000, 5400)}, "LIVING HERDS"),
-    ("herd_ranch", 5.0, "orbit", {"c": (37500, -8000, 4900), "r": 4200, "h": 1400, "a0": 120, "a1": 170, "lz": 4900},
+    # "follow": an orbit around a live herd animal, picked when the shot starts (trailer_ue.py); c is the fallback.
+    ("herd_cows", 5.0, "follow", {"c": (1179, -9108, 5400), "r": 900, "h": 320, "a0": 200, "a1": 250, "lz": 5400},
+     "LIVING HERDS"),
+    ("herd_ranch", 5.0, "follow", {"c": (37500, -8000, 4900), "r": 1300, "h": 450, "a0": 120, "a1": 170, "lz": 4900},
      "EVERY CREATURE WANDERS ITS OWN WAY"),
     ("orrery_reach", 6.0, "orbit", {"c": (402000, 0, 5800), "r": 14000, "h": 6000, "a0": 300, "a1": 360, "lz": 5600},
      "THE ORRERY REACH"),
@@ -38,7 +39,7 @@ def lerp(a, b, t):
 def camera(kind, p, t):
     """(eye, target) at shot progress t in 0..1, eased."""
     s = smooth(t)
-    if kind == "orbit":
+    if kind in ("orbit", "follow"):
         a = math.radians(p["a0"] + (p["a1"] - p["a0"]) * s)
         cx, cy, cz = p["c"]
         eye = (cx + p["r"] * math.cos(a), cy + p["r"] * math.sin(a), cz + p["h"])
