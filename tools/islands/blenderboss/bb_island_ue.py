@@ -17,7 +17,8 @@ FOLDER = "BlenderBoss"
 IMPORT_BUDGET_S = float(os.environ.get("BB_IMPORT_S", "200"))
 _MODEF = os.path.join(os.environ.get("LOCALAPPDATA", ""), "Daedalus", "jobs", "bb_mode.txt")   # code runs inside the editor process,
 _MODE = os.environ.get("BB_MODE") or (open(_MODEF).read().strip() if os.path.exists(_MODEF) else "")   # so the sender's env never reaches it
-BASEONLY = _MODE == "base"   # re-import + re-place ONLY the island base (terrain colour fix)
+BASEONLY = _MODE == "base"
+SHOTONLY = _MODE == "shot"   # lit-check: hero-cam screenshot only; no import, no placement, no save   # re-import + re-place ONLY the island base (terrain colour fix)
 MAKEUP = _MODE == "makeup" or BASEONLY   # keep existing placements; re-place base + place only assets with no actor yet
 BASE_MIN_CM = 10000.0   # the island is 240 m across; a base mesh smaller than 100 m means the wrong asset was found
 SHOT = os.environ.get("BB_SHOT", r"C:\Users\730ri\projects\bot-team\shots\blenderboss\ue_island.png")
@@ -101,6 +102,22 @@ def run():
     lay = json.load(open(LAYOUT))
     ox, oy, oz = lay["origin_cm"]; base = lay["base_asset"]
     names = sorted({p["asset"] for p in lay["placements"]})
+    if SHOTONLY:
+        actors = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+        cams = [a for a in actors.get_all_level_actors() if a.get_actor_label() == "BlenderBoss Hero Cam"]
+        base_n = sum(1 for a in actors.get_all_level_actors() if a.get_actor_label() == "BlenderBoss Island Base")
+        tmp = None
+        if not cams:
+            c, t = lay["hero_cam_m"], lay["hero_target_m"]; cl = unreal.Vector(ox + c[0] * 100, oy - c[1] * 100, oz + c[2] * 100)
+            dx, dy, dz = t[0] - c[0], -(t[1] - c[1]), t[2] - c[2]
+            rot = unreal.Rotator(roll=0, pitch=math.degrees(math.atan2(dz, math.hypot(dx, dy))), yaw=math.degrees(math.atan2(dy, dx)))
+            tmp = actors.spawn_actor_from_class(unreal.CineCameraActor, cl, rot); cams = [tmp]
+        shot = os.environ.get("BB_SHOT2", SHOT.replace(".png", "_lit.png"))
+        try: os.remove(shot)
+        except Exception: pass
+        os.makedirs(os.path.dirname(shot), exist_ok=True)
+        unreal.AutomationLibrary.take_high_res_screenshot(1600, 900, shot, camera=cams[0])
+        return {"ok": True, "mode": "shot", "base_actors": base_n, "cam": "existing" if tmp is None else "temporary", "shot": shot}
     imported = import_missing([base] + ([] if BASEONLY else names), force=(base,))   # base always re-imported (water chain lives there)
     les = open_sublevel()
     actors = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
