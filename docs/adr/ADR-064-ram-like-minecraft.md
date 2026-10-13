@@ -121,3 +121,7 @@ This was first filed as ADR-062, which blender-team had already taken for the BB
   2 KiB. Writes widen, `copy()`/load narrow. `occupied()` is O(1) now (it scanned 4,096 bytes on every remove).
   Reads stay lock-free (final fields in the store). Cost: get ~3 ns instead of ~2. ChunkPaletteTest 6/6 checks
   40 random edit runs against a dense model.
+- **Realm mesher (web, rule 6's cost):** `realm-mesh.js` copies a chunk plus a 2-cube border into one flat array
+  before meshing, so faces and AO corners are array reads instead of ~70 string-keyed Map lookups per cube; colours
+  convert once per kind. Same bytes as the old mesher on 60 random chunks (`node tools/realm_mesh_check.mjs`), 2.4x
+  faster; World Zero (53 chunks) renders the same in headless Chromium.

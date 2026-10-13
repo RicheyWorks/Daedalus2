@@ -11,6 +11,7 @@ import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+import { meshChunk } from "/realm-mesh.js";
 
 // Which world this page shows (ADR-030): ?world=<id>, World Zero by default.
 const WORLD = (() => {
@@ -378,20 +379,21 @@ function jitter(x, y, z) {
 
 // Ambient occlusion per face corner: 3 = open, 0 = tucked into a corner.
 const AO_SHADE = [0.5, 0.66, 0.83, 1.0];
-function solidAt(x, y, z) { return !SEE_THROUGH.has(nameAt(x, y, z)); }
-function cornerAO(x, y, z, n, v) {
-  // the face's two in-plane axes, and which way this corner leans along each
-  const axes = n[0] !== 0 ? [1, 2] : n[1] !== 0 ? [0, 2] : [0, 1];
-  const o = [x + n[0], y + n[1], z + n[2]];
-  const d1 = [0, 0, 0], d2 = [0, 0, 0];
-  d1[axes[0]] = v[axes[0]] ? 1 : -1;
-  d2[axes[1]] = v[axes[1]] ? 1 : -1;
-  const s1 = solidAt(o[0] + d1[0], o[1] + d1[1], o[2] + d1[2]);
-  const s2 = solidAt(o[0] + d2[0], o[1] + d2[1], o[2] + d2[2]);
-  if (s1 && s2) return 0;
-  const c = solidAt(o[0] + d1[0] + d2[0], o[1] + d1[1] + d2[1], o[2] + d1[2] + d2[2]);
-  return 3 - (s1 + s2 + c);
+
+// One linear-space colour per block name, converted once (the old mesher converted per face).
+const linearRGB = new Map();
+function linearOf(name) {
+  let rgb = linearRGB.get(name);
+  if (!rgb) {
+    const c = new THREE.Color().setHex(COLORS[name] ?? COLORS.STONE).convertSRGBToLinear();
+    rgb = [c.r, c.g, c.b];
+    linearRGB.set(name, rgb);
+  }
+  return rgb;
 }
+const MESH_CFG = { faces: FACES, seeThrough: SEE_THROUGH, translucent: TRANSLUCENT, glow: GLOW, studded: STUDDED,
+  glowGain: GLOW_GAIN, tileUV: (name) => tileUV(TILE[name] ?? 0), linear: linearOf, jitter, aoShade: AO_SHADE };
+const chunkAt = (cx, cy, cz) => state.chunks.get(key(cx, cy, cz));
 
 function buildChunk(cx, cy, cz) {
   const k = key(cx, cy, cz);
@@ -401,53 +403,10 @@ function buildChunk(cx, cy, cz) {
     old.children.forEach(m => m.geometry.dispose());
     state.meshes.delete(k);
   }
-  const data = state.chunks.get(k);
-  if (!data) return;
-  const buf = { solid: { p: [], n: [], c: [], i: [], uv: [] }, glass: { p: [], n: [], c: [], i: [], uv: [] },
-    studs: { p: [], n: [], c: [], i: [], uv: [] }, glow: { p: [], n: [], c: [], i: [], uv: [] } };
-  const col = new THREE.Color();
-  const ox = cx * SIZE, oy = cy * SIZE, oz = cz * SIZE;
-  const lampsHere = [];
-  for (let lz = 0; lz < SIZE; lz++) for (let ly = 0; ly < SIZE; ly++) for (let lx = 0; lx < SIZE; lx++) {
-    const name = state.palette[data[idx(lx, ly, lz)]] || "STONE";
-    if (name === "AIR") continue;
-    const x = ox + lx, y = oy + ly, z = oz + lz;
-    const glowing = GLOW.has(name);
-    if (name === "LAMP") lampsHere.push([x, y, z]);
-    const own = glowing ? buf.glow : TRANSLUCENT.has(name) ? buf.glass : buf.solid;
-    const studded = STUDDED.has(name);
-    for (const f of FACES) {
-      const target = studded && f.n[1] === 1 ? buf.studs : own;
-      const nb = nameAt(x + f.n[0], y + f.n[1], z + f.n[2]);
-      // A face is hidden by an opaque neighbour, or by more of the same see-through stuff.
-      if (!SEE_THROUGH.has(nb) || nb === name) continue;
-      col.setHex(COLORS[name] ?? COLORS.STONE).convertSRGBToLinear();
-      const s = glowing ? GLOW_GAIN[name] : f.shade * jitter(x, y, z);
-      const base = target.p.length / 3;
-      const [u0, v0, us] = tileUV(TILE[name] ?? 0);
-      const ao = [];
-      for (const v of f.c) {
-        // Ambient occlusion (0fps): how many of the three cubes touching this corner, on the face's open side,
-        // are solid. Glowing faces give light and stay unshaded.
-        const a = glowing ? 3 : cornerAO(x, y, z, f.n, v);
-        ao.push(a);
-        const k = s * AO_SHADE[a];
-        target.p.push(x + v[0], y + v[1], z + v[2]);
-        target.n.push(f.n[0], f.n[1], f.n[2]);
-        target.c.push(col.r * k, col.g * k, col.b * k);
-        if (target === buf.studs) {
-          target.uv.push(v[0], v[2]);
-        } else {
-          // the face's own two axes, so every side of a cube shows the whole tile
-          const [p, q] = f.n[0] !== 0 ? [v[2], v[1]] : f.n[1] !== 0 ? [v[0], v[2]] : [v[0], v[1]];
-          target.uv.push(u0 + p * us, v0 + q * us);
-        }
-      }
-      // Split the quad along the brighter diagonal, so AO doesn't crease the wrong way.
-      if (ao[0] + ao[2] > ao[1] + ao[3]) target.i.push(base, base + 1, base + 2, base, base + 2, base + 3);
-      else target.i.push(base + 1, base + 2, base + 3, base + 1, base + 3, base);
-    }
-  }
+  // realm-mesh.js: the chunk and a 2-cube border in one flat array, then array reads only (ADR-064)
+  const buf = meshChunk(cx, cy, cz, chunkAt, state.palette, MESH_CFG);
+  if (!buf) return;
+  const lampsHere = buf.lamps;
   const group = new THREE.Group();
   for (const [part, mat] of [[buf.solid, opaqueMat], [buf.studs, studMat], [buf.glow, glowMat], [buf.glass, glassMat]]) {
     if (!part.i.length) continue;
