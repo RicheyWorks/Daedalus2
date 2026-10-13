@@ -158,6 +158,7 @@ inline void PartyStrip(Frame& F, const std::vector<MemberT>& Party, int Hot, con
         uint32_t C = Hp <= 0 ? Pal::Red : P.Asleep > 0 ? St.Dim : P.Poisoned ? Pal::Lime : St.Text;
         if (i == Hot) C = St.Hot;
         MemberCard(F, X, 4, P.Name, Hp, P.Mp, P.Lvl, C);
+        if (P.Shiny) Sparkle(F, X + CardW - 6, 8, i * 5 + static_cast<int>(Hp) / 7);
         X += CardW + Gap;
     }
 }

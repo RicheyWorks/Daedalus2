@@ -8,7 +8,8 @@ framebuffer (DaedalusRealmCore.h), so art arrives as pixel sprites in a text pac
    in one PNG (frame width = height), alpha < 128 = transparent. Pixel-art sized: monsters 48-64 px, people 16-24 px.
 2. Name the files by id:
    - monsters: `BLIGHT_SLIME.png` (2 frames: idle, bob); tiers `BLIGHT_SLIME.2.png`, `BLIGHT_SLIME.3.png`
-   - party members: `MEMBER.HERO.png`, `MEMBER.SAGE.png`, `MEMBER.SCOUT.png` (8 frames: down0 down1 up0 up1 left0 left1 right0 right1)
+   - party members: `MEMBER.HERO.png`, `MEMBER.SAGE.png`, `MEMBER.SCOUT.png`, `MEMBER.DRAKE.png` (8 frames: down0 down1 up0 up1 left0 left1 right0 right1).
+     DRAKE is the dragon that hatches from the land's DRAGON EGG (ADR-065) and walks fourth in the train; a small green drake, 16-24 px.
    - NPC roles: `NPC.TALK.png`, `NPC.NEWS.png`, `NPC.INN.png`, `NPC.SHOP.png`, `NPC.QUEEN.png` (8 frames)
 3. `python tools/realm/sprites.py pack <dir> engines/unreal/DaedalusLink/Content/Realm/realm-7.dsp`
    quantizes to one palette of up to 62 colours and writes the pack; `check` parses it back.

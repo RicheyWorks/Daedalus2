@@ -43,11 +43,11 @@ enum class Mode { Field, Battle };
 enum Spell { SpHeal, SpZap, SpCure, SpBlaze, SpCount };
 inline const char* SpellName(int S) { static const char* N[SpCount] = {"HEAL", "ZAP", "CURE", "BLAZE"}; return N[S]; }
 inline int SpellCost(int S) { static const int C[SpCount] = {4, 3, 2, 8}; return C[S]; }
-/** The level each class learns each spell at (99: never). Classes: 0 hero, 1 sage, 2 scout. */
+/** The level each class learns each spell at (99: never). Classes: 0 hero, 1 sage, 2 scout, 3 drake (hatched). */
 inline int LearnsAt(int Class, int S)
 {
-    static const int L[3][SpCount] = {{1, 4, 99, 99}, {1, 1, 3, 6}, {99, 99, 5, 99}};
-    return L[std::min(std::max(Class, 0), 2)][S];
+    static const int L[4][SpCount] = {{1, 4, 99, 99}, {1, 1, 3, 6}, {99, 99, 5, 99}, {99, 99, 99, 1}};
+    return L[std::min(std::max(Class, 0), 3)][S];
 }
 
 struct Member
@@ -59,6 +59,8 @@ struct Member
     int Weapon = -1, Armor = -1;
     bool Poisoned = false;
     int Asleep = 0;
+    /** A shiny member (ADR-065 rule 9): rolled when the egg hatches; every stat x1.5 and the card sparkles. */
+    bool Shiny = false;
     bool Alive() const { return Hp > 0; }
     bool Knows(int S) const { return Lvl >= LearnsAt(Class, S); }
 };
@@ -194,6 +196,36 @@ public:
             if (!Names[i].empty()) Party[i].Name = Upper(Names[i].substr(0, 6));
     }
     std::string Save() const;
+
+    // ---------------------------------------------------------------------------- the dragon egg (ADR-065)
+    // A land's mint comes with an egg. In the realm it is a bag item: carry it EggNeed steps and it hatches
+    // into a DRAKE, a fourth member who knows BLAZE from the start. The egg stirs at a third and two thirds.
+    static constexpr int EggNeed = 240, MaxParty = 4;
+    int EggWarmth = 0;
+    int Warmth() const { return EggWarmth; }
+    bool HasDrake() const { for (const Member& P : Party) if (P.Class == 3) return true; return false; }
+
+    void WarmEgg()
+    {
+        const int Egg = W.ItemIndex("DRAGON_EGG");
+        if (Egg < 0 || Count(Egg) == 0 || Party.size() >= static_cast<size_t>(MaxParty)) return;
+        ++EggWarmth;
+        if (EggWarmth == EggNeed / 3) { Say("THE EGG STIRS IN THE BAG."); Sfx.push_back("EGG"); }
+        else if (EggWarmth == EggNeed * 2 / 3) { Say("THE EGG IS WARM. SOMETHING TAPS INSIDE."); Sfx.push_back("EGG"); }
+        else if (EggWarmth >= EggNeed) Hatch(Egg);
+    }
+
+    void Hatch(int Egg)
+    {
+        Take(Egg);
+        Member D = MakeMember("DRAKE", {Pal::Lime, 0x2C8C18, 0x603008, 0, Pal::Red}, 3, 26, 8, 9, 5, 7);
+        D.Shiny = R.Chance(256);
+        if (D.Shiny) { D.Hp = D.MaxHp = D.MaxHp * 3 / 2; D.Mp = D.MaxMp = D.MaxMp * 3 / 2; D.Atk = D.Atk * 3 / 2; D.Def = D.Def * 3 / 2; D.Agi = D.Agi * 3 / 2; }
+        Party.push_back(D);
+        EggWarmth = 0;
+        Sfx.push_back("HATCH");
+        Say(D.Shiny ? "THE EGG CRACKS! A SHINY DRAKE HATCHES AND GLITTERS AT YOUR SIDE." : "THE EGG CRACKS! A DRAKE HATCHES AND JOINS YOU.");
+    }
     bool Restore(const std::string& Text);
 
     // ---- for tests and the harness
@@ -378,6 +410,7 @@ private:
         ++StepCount;
         ++WalkFrame;
         Arrive(T);
+        WarmEgg();
     }
 
     void Bumped() { Bump = 0.15; Sfx.push_back("BUMP"); }
@@ -826,6 +859,12 @@ private:
         if (D.Kind == ItemKind::Weapon || D.Kind == ItemKind::Armor) { OpenMembers(PEquipItem, I); return; }
         if (D.Kind == ItemKind::Key) { Say("FACE A LOCKED DOOR AND PRESS A."); return; }
         if (D.Kind == ItemKind::Treasure) { Say("IT GLITTERS. A SHOP WOULD PAY WELL FOR IT."); return; }
+        if (D.Kind == ItemKind::Egg)
+        {
+            if (Party.size() >= static_cast<size_t>(MaxParty)) { Say("IT IS WARM, BUT THE PARTY IS FULL."); return; }
+            Say(EggWarmth * 3 >= EggNeed * 2 ? "IT ROCKS IN YOUR HANDS. NOT LONG NOW." : EggWarmth * 3 >= EggNeed ? "IT IS WARM. KEEP WALKING." : "A DRAGON EGG. CARRY IT AND IT WILL HATCH.");
+            return;
+        }
         if (D.Id == "TORCH")
         {
             if (!Map().Dark) { Say("IT IS BRIGHT ENOUGH HERE."); return; }
@@ -1294,6 +1333,7 @@ private:
         {
         case 0: Hp = R.Range(4, 7); Mp = 2; Atk = R.Range(2, 3); Def = R.Range(1, 2); Agi = 1; break;
         case 1: Hp = R.Range(2, 4); Mp = R.Range(3, 5); Atk = 1; Def = 1; Agi = R.Range(1, 2); break;
+        case 3: Hp = R.Range(5, 8); Mp = R.Range(2, 4); Atk = R.Range(2, 4); Def = R.Range(1, 2); Agi = R.Range(1, 2); break;
         default: Hp = R.Range(3, 6); Mp = P.Lvl >= 5 ? 2 : 0; Atk = R.Range(2, 3); Def = 1; Agi = R.Range(2, 3); break;
         }
         P.MaxHp += Hp; P.Hp += Hp; P.MaxMp += Mp; P.Mp += Mp; P.Atk += Atk; P.Def += Def; P.Agi += Agi;
@@ -1788,7 +1828,7 @@ inline std::string Realm::Describe() const
     std::ostringstream S;
     S << "mode=" << (ModeNow == Mode::Battle ? "BATTLE" : "FIELD") << " map=" << MapId() << " x=" << PX << " y=" << PY
       << " facing=" << Facing << " tile=" << TileChars()[static_cast<int>(TileHere(PX, PY))] << " ui=" << TopBox()
-      << " gold=" << GoldHeld << " steps=" << StepCount << " battles=" << BattleCount << " wins=" << WinCount
+      << " party=" << Party.size() << " egg=" << EggWarmth << " gold=" << GoldHeld << " steps=" << StepCount << " battles=" << BattleCount << " wins=" << WinCount
       << " chests=" << ChestsOpened() << "/" << W.Chests.size() << " doors=" << DoorsOpened() << "/" << W.Doors.size()
       << " bosses=" << BossesBeaten() << "/" << W.Bosses.size() << " light=" << LightRadius() << " cue=" << Cue
       << " cue_changes=" << CueCount << " exit=" << (ExitRequested ? 1 : 0) << " talks=" << Talks << " party=";
@@ -1818,6 +1858,8 @@ inline std::string Realm::Save() const
     S << "DRS 1\nseed " << W.Seed << "\ngold " << GoldHeld << "\nplace " << MapId() << " " << PX << " " << PY << " " << Facing << "\n";
     S << "respawn " << W.Maps[static_cast<size_t>(RespawnMap)].Id << " " << RespawnX << " " << RespawnY << "\n";
     S << "counts " << StepCount << " " << BattleCount << " " << WinCount << "\n";
+    S << "egg " << EggWarmth << "\n";
+    for (const Member& P : Party) if (P.Class == 3) S << "drake " << (P.Shiny ? 1 : 0) << "\n";
     for (const Member& P : Party)
         S << "member " << P.Lvl << " " << P.Hp << " " << P.MaxHp << " " << P.Mp << " " << P.MaxMp << " " << P.Atk << " " << P.Def
           << " " << P.Agi << " " << P.Exp << " " << (P.Weapon >= 0 ? Item(P.Weapon).Id : "-") << " " << (P.Armor >= 0 ? Item(P.Armor).Id : "-")
@@ -1853,6 +1895,14 @@ inline bool Realm::Restore(const std::string& Text)
         F >> K;
         if (K == "seed") { uint64_t Sd = 0; F >> Sd; Same = Sd == W.Seed; }
         else if (K == "gold") F >> GoldHeld;
+        else if (K == "egg") F >> EggWarmth;
+        else if (K == "drake" && !HasDrake() && Party.size() < static_cast<size_t>(MaxParty))
+        {
+            int Sh = 0; F >> Sh;
+            Member D = MakeMember("DRAKE", {Pal::Lime, 0x2C8C18, 0x603008, 0, Pal::Red}, 3, 26, 8, 9, 5, 7);
+            D.Shiny = Sh != 0;
+            Party.push_back(D);   // its numbers follow on its member line
+        }
         else if (K == "member" && Mi < Party.size())
         {
             Member& P = Party[Mi++];

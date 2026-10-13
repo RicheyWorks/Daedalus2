@@ -706,6 +706,67 @@ int main(int Argc, char** Argv)
             Elsewhere.Members()[0].Lvl == G.Members()[0].Lvl && Elsewhere.ChestsOpened() == 0 && Elsewhere.MapId() == "FIELD", Elsewhere.Describe());
     }
 
+    // ---- the dragon egg (ADR-065): carry it and it hatches into a fourth member, a DRAKE who knows BLAZE
+    {
+        Realm Eg;
+        std::string E;
+        Eg.Load(Text, E);
+        Dismiss(Eg);
+        Toughen(Eg);
+        Eg.Place("FIELD", S.Spawn.X, S.Spawn.Y + 2, 0);
+        Check("a dragon egg is in the realm's item list", S.ItemIndex("DRAGON_EGG") >= 0
+            && S.Items[static_cast<size_t>(S.ItemIndex("DRAGON_EGG"))].Kind == ItemKind::Egg);
+        Eg.Give("DRAGON_EGG");
+        Tap(Eg, Button::B); Tap(Eg, Button::Down); Tap(Eg, Button::Right); Tap(Eg, Button::A);   // ITEM
+        bool Told = false;
+        if (Eg.TopBox() == "ITEMS")
+        {
+            // the bag: herbs first, the egg last; walk the cursor down until the egg answers
+            for (int k = 0; k < 8 && !Told; ++k)
+            {
+                Tap(Eg, Button::A);
+                if (Eg.TopBox() == "MESSAGE") Told = Eg.LastMessage().find("CARRY IT") != std::string::npos;
+                while (Eg.TopBox() != "ITEMS" && Eg.TopBox() != "NONE") Tap(Eg, Button::B);
+                if (Eg.TopBox() == "NONE") break;
+                Tap(Eg, Button::Down);
+            }
+            while (Eg.TopBox() != "NONE") Tap(Eg, Button::B);
+        }
+        Check("using the egg says to carry it", Told, Eg.LastMessage());
+        int Stirs = 0, Walked = 0;
+        for (int k = 0; k < 4000 && !Eg.HasDrake(); ++k)
+        {
+            Tap(Eg, (k % 2) ? Button::Left : Button::Right);   // pace on the spot: a step each way
+            Settle(Eg);
+            ++Walked;
+            if (Eg.CurrentMode() == Mode::Battle) { AutoFight(Eg); }
+            if (Eg.TopBox() == "MESSAGE") { if (Eg.LastMessage().find("STIRS") != std::string::npos || Eg.LastMessage().find("TAPS") != std::string::npos) ++Stirs; Dismiss(Eg); }
+        }
+        Check("the egg stirs twice on the way", Stirs == 2, std::to_string(Stirs) + " egg=" + std::to_string(Eg.Warmth()));
+        Check("and hatches a DRAKE after a walk", Eg.HasDrake() && Eg.Members().size() == 4 && Eg.Members()[3].Name == "DRAKE" && Eg.Count("DRAGON_EGG") == 0,
+              Eg.Describe() + " walked=" + std::to_string(Walked));
+        Check("the drake knows BLAZE from the shell", Eg.Members()[3].Knows(SpBlaze) && !Eg.Members()[3].Knows(SpHeal));
+        bool Hatched = false;
+        for (const std::string& X : Eg.TakeSfx()) Hatched |= X == "HATCH";
+        Check("the hatch rings for the jukebox", Hatched);
+        Dismiss(Eg);
+        for (int k = 0; k < 30; ++k) Eg.Tick(0.05);   // stand still: the party strip shows after a second
+        Png(Eg.Render(), Out + "/realm_16_drake.png");
+        {
+            const Frame& Fr = Eg.Render();
+            int Cards = 0;
+            for (int y = 4; y < 10; ++y) for (int x = 0; x < 256; ++x) Cards += Fr.Get(x, y) == Ui::Current().Ink;
+            Check("four cards fit the strip", Cards > 400, std::to_string(Cards));
+        }
+        const std::string Saved = Eg.Save();
+        Realm Back;
+        Back.Load(Text, E);
+        Back.Restore(Saved);
+        Check("the drake survives a save and restore", Back.HasDrake() && Back.Members().size() == 4 && Back.Members()[3].Lvl == Eg.Members()[3].Lvl, Back.Describe());
+        Eg.ForceBattle({"BLIGHT_SLIME", "BLIGHT_SLIME"});
+        Check("it fights in the fourth slot", AutoFight(Eg) && Eg.Members()[3].Alive());
+    }
+
     // ---- home through the portal
     G.Place("FIELD", S.Spawn.X, S.Spawn.Y, 1);
     Tap(G, Button::Up);

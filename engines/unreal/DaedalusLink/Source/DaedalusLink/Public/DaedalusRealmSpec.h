@@ -19,7 +19,7 @@ namespace daedalus
 namespace realm
 {
 
-enum class ItemKind { Use, Key, Weapon, Armor, Treasure };
+enum class ItemKind { Use, Key, Weapon, Armor, Treasure, Egg };   // Egg: a DRAGON EGG that hatches after a walk (ADR-065)
 
 struct ItemDef
 {
@@ -173,7 +173,7 @@ struct Spec
                 ItemDef D;
                 D.Id = F[1];
                 D.Kind = F[2] == "KEY" ? ItemKind::Key : F[2] == "WEAPON" ? ItemKind::Weapon : F[2] == "ARMOR" ? ItemKind::Armor
-                    : F[2] == "TREASURE" ? ItemKind::Treasure : ItemKind::Use;
+                    : F[2] == "TREASURE" ? ItemKind::Treasure : F[2] == "EGG" ? ItemKind::Egg : ItemKind::Use;
                 D.Price = Num(F[3]); D.Power = Num(F[4]); D.Name = Rest(L, 5);
                 Items.push_back(D);
             }
