@@ -12,6 +12,9 @@ public final class Chunk {
     public static final int SIZE = 16;
     public static final int VOLUME = SIZE * SIZE * SIZE;
 
+    /** BlockType.values() clones its array on every call; get() is the hottest read in the engine, so keep one. */
+    private static final BlockType[] TYPES = BlockType.values();
+
     private final byte[] blocks;
     private long revision;
 
@@ -25,7 +28,7 @@ public final class Chunk {
     }
 
     public BlockType get(int localX, int localY, int localZ) {
-        return BlockType.values()[Byte.toUnsignedInt(blocks[index(localX, localY, localZ)])];
+        return TYPES[Byte.toUnsignedInt(blocks[index(localX, localY, localZ)])];
     }
 
     public BlockType set(int localX, int localY, int localZ, BlockType type) {
@@ -33,7 +36,7 @@ public final class Chunk {
             throw new IllegalArgumentException("BlockType is required");
         }
         int i = index(localX, localY, localZ);
-        BlockType previous = BlockType.values()[Byte.toUnsignedInt(blocks[i])];
+        BlockType previous = TYPES[Byte.toUnsignedInt(blocks[i])];
         blocks[i] = (byte) type.ordinal();
         revision++;
         return previous;
@@ -81,7 +84,7 @@ public final class Chunk {
         if (payload == null || payload.length != VOLUME) {
             throw new IllegalArgumentException("Chunk payload must be " + VOLUME + " bytes");
         }
-        int kinds = BlockType.values().length;
+        int kinds = TYPES.length;
         for (byte b : payload) {
             int ordinal = Byte.toUnsignedInt(b);
             if (ordinal >= kinds) {
