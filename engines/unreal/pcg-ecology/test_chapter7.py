@@ -11,8 +11,8 @@ def goals_met(ch, flags):
             sp = flags.get("islet_species", ())
             if len(sp) < g["n"] or (g.get("need_oak") and "Oak" not in sp): return False
     return True
-def test_seed_rain_is_last_chapter():
-    assert Q["chapters"][-1]["id"] == "seed_rain" and len(Q["chapters"]) == 7
+def test_seed_rain_is_chapter7():
+    assert Q["chapters"][6]["id"] == "seed_rain" and Q["chapters"][7]["id"] == "fire_keeper"
 def test_wind_alone_fails_without_oak():
     sp = colonise(["Grass", "Fern", "Pine", "Willow", "Oak"], [], 2.0, random.Random(4), wind_aligned=True)
     f = {"Prop_Live_PYT_JayFeeder": 2, "Prop_Veh_PYT_ArkRaft": 1, "islet_species": sp}
@@ -23,3 +23,4 @@ def test_ark_and_jays_complete_it():
         sp = colonise(["Grass", "Fern", "Pine", "Willow", "Oak"], [], 2.0, random.Random(i), ark=["Willow", "Pine"], jays=2, wind_aligned=True)
         wins += goals_met(CH["seed_rain"], {"Prop_Live_PYT_JayFeeder": 2, "Prop_Veh_PYT_ArkRaft": 1, "islet_species": sp})
     assert wins >= 30   # 75% expected: jays win once per two tries
+

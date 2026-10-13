@@ -46,3 +46,6 @@ Ending hook: Great Oak acorns can be carried by Ark to other players' islands â€
 
 ## Chapter 7 - Seed Rain (epilogue)
 The Great Oak drops one Climax Seed, but acorns only travel ~0.6 km and the bare islet is 2 km out. `colonise()` (succession_depth.py) settles the islet: wind seed rain as usual, every Ark Raft cargo species arrives for sure, and each Jay Feeder gives a 50% chance per crossing that jays cache acorns there (real jays move acorns km-scale). Goal: 2 Jay Feeders + 1 Ark Raft placed and 4+ islet species including Oak. 48 new props in pyth_items4.py (ClimaxSeed, JayFeeder, AcornCache, ArkRaft, IsletBeacon, SeedPod, ColonistCairn, SeedSorter); 714 glbs total. Tests: succession_depth 11/11.
+
+## Chapter 8 - Fire Keeper
+Intermediate-disturbance hypothesis as a lever: tiles burn with rate p per year (fire_keeper.py). No fire -> all oak (H=0); yearly fire -> all grass; H peaks near p=0.02-0.04 (1.31 at 0.02 vs 0.38 at 0.32). Goal: place the Fire Altar and set a burn rate whose mosaic H >= 1.2. 42 props (pyth_items5.py; 756 glbs). UE hook: hidden TriggerBox per chapter (PYT_QuestTrigger_<id>, tags PYT_Quest + Quest_<id>) and read-only pyth_quest_ue.py that derives quest flags from placed actors.

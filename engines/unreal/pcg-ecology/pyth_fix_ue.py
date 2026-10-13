@@ -92,6 +92,20 @@ for i in range(3): put("Prop_Food_PYT_AcornCache_V%d" % (1 + i), -3500 + i * 500
 put("Prop_Quest_PYT_ClimaxSeed_V1", -3200, 3200); put("Prop_Quest_PYT_SeedPod_V1", -2900, 3350); put("Prop_Quest_PYT_SeedPod_V2", -3450, 3000)
 put("Prop_Veh_PYT_ArkRaft_V1", 5300, -1500, 90); put("Prop_Dress_PYT_IsletBeacon_V1", 5500, -400); put("Prop_Craft_PYT_SeedSorter_V1", 4600, -1500, 90)
 put("Prop_Dress_PYT_ColonistCairn_V1", 5400, 600)
+# chapter 8 "Fire Keeper": altar + lookout on the meadow edge, firebreak, burn scars, rate dial
+put("Prop_Quest_PYT_FireAltar_V1", -1800, -4200); put("Prop_Dress_PYT_FireLookout_V1", -4600, -4600, 30); put("Prop_Dress_PYT_RateDial_V1", -1200, -4300)
+for i in range(4): put("Prop_Dress_PYT_FirebreakStones_V%d" % (1 + i), -4500 + i * 450, -2200, 0)
+for i in range(3): put("Prop_Ground_PYT_BurnScar_V%d" % (1 + i), -3600 + i * 1100, -4000 + R.uniform(-300, 300), R.uniform(0, 360))
+put("Tool_PYT_FireBeater_V1", -1500, -3900, 20); put("Prop_Craft_PYT_AshBucket_V1", -2100, -3950)
+# prototype quest hook: one hidden TriggerBox per chapter (tags PYT_Quest + Quest_<id>) that gameplay/Blueprint can bind to
+for a in eas.get_all_level_actors():
+    if a.actor_has_tag("PYT_Quest"): eas.destroy_actor(a)
+QPOS = {"ash_field": (-3200, -3200), "meadow_keepers": (-1700, -900), "bramble_wall": (3200, -3200), "pine_shield": (3200, 3200),
+        "riverbank": (0, 0), "climax": (-3200, 3200), "seed_rain": (5300, -1500), "fire_keeper": (-1800, -4200)}
+for qid, (x, y) in QPOS.items():
+    tb = eas.spawn_actor_from_class(unreal.TriggerBox, ORIGIN + unreal.Vector(x, y, gz(x, y) + 150), unreal.Rotator())
+    tb.set_actor_scale3d(unreal.Vector(4, 4, 3)); tb.tags = [TAG, "PYT_Quest", "Quest_" + qid]
+    tb.set_actor_label("PYT_QuestTrigger_" + qid); tb.set_folder_path("Pythagoras/Island/Quest"); placed += 1
 les.save_current_level()
 E = unreal.EditorLoadingAndSavingUtils
 mine = [p for p in E.get_dirty_content_packages() if p.get_name().startswith("/Game/Pythagoras/")]

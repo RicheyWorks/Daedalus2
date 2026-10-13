@@ -157,6 +157,26 @@
     "Prop_Dress_PYT_ColonistCairn"
    ],
    "sign": "ADV_Chapter7_Sign"
+  },
+  {
+   "id": "fire_keeper",
+   "title": "Fire Keeper",
+   "text": "The islet is green, but the home island is turning into one dark oak wood and the meadow herbs are going. Light the Fire Altar and choose how often the land burns: never and the oaks take everything, every year and nothing grows past grass. Find the middle.",
+   "goals": [
+    {
+     "type": "place",
+     "asset": "Prop_Quest_PYT_FireAltar",
+     "n": 1
+    },
+    {
+     "type": "fire_rate",
+     "min_h": 1.2
+    }
+   ],
+   "reward": [
+    "Prop_Dress_PYT_FireLookout"
+   ],
+   "sign": "ADV_Chapter8_Sign"
   }
  ]
 }

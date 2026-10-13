@@ -1,4 +1,4 @@
-﻿"""SUCCESSION depth: island biogeography species pool, seed rain between linked islands, windthrow storms,
+"""SUCCESSION depth: island biogeography species pool, seed rain between linked islands, windthrow storms,
 nurse-pine facilitation for oak, and Climax Seed quest progress. Builds on succession_sim.Island."""
 import math, json, random
 import succession_sim as ss
@@ -54,6 +54,8 @@ def quest_progress(island, flags):
             elif t == "survive_event": ok &= g["event"] in flags.get("survived", ())
             elif t == "species": ok &= flags.get("oaks", 0) >= g["min"]
             elif t == "colonised": ok &= len(flags.get("islet_species", ())) >= g["n"] and (not g.get("need_oak") or "Oak" in flags.get("islet_species", ()))
+            elif t == "fire_rate":
+                import fire_keeper; ok &= fire_keeper.fire_regime(flags.get("burn_rate", 0.0), seed=flags.get("seed", 0)) >= g["min_h"]
             elif t == "choice": ok &= flags.get("bramble_choice") in g["options"]
         done.append((ch["id"], ok))
         if not ok: break   # chapters unlock in order
