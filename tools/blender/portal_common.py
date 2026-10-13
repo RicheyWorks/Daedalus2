@@ -34,6 +34,8 @@ def animate_humanoid(rig):
     for p in rig.pose.bones:p.rotation_euler=(0,0,0);p.location=(0,0,0)
 
 def export_character(mesh,rig,role,rig_name,extra=None):
+    unknown={group.name for group in mesh.vertex_groups}-set(rig.data.bones.keys())
+    if unknown:raise ValueError('Vertex weights reference missing rig bones: '+str(unknown))
     bpy.ops.object.select_all(action='DESELECT');mesh.select_set(True);rig.select_set(True)
     for tr in rig.animation_data.nla_tracks:tr.mute=False
     path=OUT/(mesh.name+'.glb');bpy.ops.export_scene.gltf(filepath=str(path),export_format='GLB',use_selection=True,export_animations=True,export_animation_mode='NLA_TRACKS')

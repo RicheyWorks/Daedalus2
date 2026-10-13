@@ -1,0 +1,168 @@
+{
+  "assets": [
+    {
+      "id": "Mob_Gallery_Sketcher",
+      "role": "Hero brush and palette",
+      "file": "Mob_Gallery_Sketcher.glb",
+      "triangles": 1040,
+      "bones": 14,
+      "rig": "GalleryHumanoidV1",
+      "radius_cm": 200,
+      "sha256": "1792bb1f054ecaf3a277be125184bdfe01b1c6fa7a265ab886691ff480cb065b",
+      "role_count": 1,
+      "role_status": "proposal; native binding pending"
+    },
+    {
+      "id": "Mob_Gallery_CuratorVell",
+      "role": "Gallery quest presentation",
+      "file": "Mob_Gallery_CuratorVell.glb",
+      "triangles": 1408,
+      "bones": 14,
+      "rig": "GalleryHumanoidV1",
+      "radius_cm": 197,
+      "sha256": "26655f7f6a3722d583b65d90fb37485a7ff3176621ecdf6f8a5b53f4f5b9666a",
+      "role_count": 1,
+      "role_status": "proposal; native binding pending"
+    },
+    {
+      "id": "Mob_Gallery_FrameHangerTwins",
+      "role": "Frame pulley crew role",
+      "file": "Mob_Gallery_FrameHangerTwins.glb",
+      "triangles": 1120,
+      "bones": 14,
+      "rig": "GalleryHumanoidV1",
+      "radius_cm": 198,
+      "sha256": "9c4baea7ba6e8ca2a327da95a4181f9b4d42ce28a77787859e93fab8ade539ac",
+      "role_count": 1,
+      "role_status": "proposal; native binding pending"
+    },
+    {
+      "id": "Mob_Gallery_VarnishMonk",
+      "role": "Painting protection supplies proposal",
+      "file": "Mob_Gallery_VarnishMonk.glb",
+      "triangles": 920,
+      "bones": 14,
+      "rig": "GalleryHumanoidV1",
+      "radius_cm": 214,
+      "sha256": "8ca2428428c93e844720df47a5db03ce91ac7a238e9a68d2b03cc757a75d5048",
+      "role_count": 1,
+      "role_status": "proposal; native binding pending"
+    },
+    {
+      "id": "Mob_Gallery_RestorerAma",
+      "role": "Mural restoration guidance",
+      "file": "Mob_Gallery_RestorerAma.glb",
+      "triangles": 928,
+      "bones": 14,
+      "rig": "GalleryHumanoidV1",
+      "radius_cm": 200,
+      "sha256": "887f80d5e0e4a8f2ac2d36e04f4ac840a2f9ce2ad190ee980d2fe21a9a44be65",
+      "role_count": 1,
+      "role_status": "proposal; native binding pending"
+    },
+    {
+      "id": "Mob_Gallery_PigmentMiner",
+      "role": "Pigment crafting guidance",
+      "file": "Mob_Gallery_PigmentMiner.glb",
+      "triangles": 928,
+      "bones": 14,
+      "rig": "GalleryHumanoidV1",
+      "radius_cm": 201,
+      "sha256": "86707e4fcfa9b49a19de3693f7c69dff01670bf234503bf19ae7f2ae51404837",
+      "role_count": 1,
+      "role_status": "proposal; native binding pending"
+    },
+    {
+      "id": "Mob_Gallery_GalleryGuard",
+      "role": "Gallery access guidance",
+      "file": "Mob_Gallery_GalleryGuard.glb",
+      "triangles": 972,
+      "bones": 14,
+      "rig": "GalleryHumanoidV1",
+      "radius_cm": 209,
+      "sha256": "0f28168765ec816655adec39dc767c2e32be18477bc3b71857743c406cfb5c26",
+      "role_count": 1,
+      "role_status": "proposal; native binding pending"
+    },
+    {
+      "id": "Mob_Gallery_StreetMuralist",
+      "role": "Painted travel hints proposal",
+      "file": "Mob_Gallery_StreetMuralist.glb",
+      "triangles": 1040,
+      "bones": 14,
+      "rig": "GalleryHumanoidV1",
+      "radius_cm": 200,
+      "sha256": "7786ec54dec04a5af1128e03f4c9126a09c32ad9bdcf12a15819694e7021b019",
+      "role_count": 1,
+      "role_status": "proposal; native binding pending"
+    },
+    {
+      "id": "Mob_Gallery_LightTailor",
+      "role": "Realm cosmetic presentation",
+      "file": "Mob_Gallery_LightTailor.glb",
+      "triangles": 1120,
+      "bones": 14,
+      "rig": "GalleryHumanoidV1",
+      "radius_cm": 200,
+      "sha256": "e1c319bf62eba64e0991e3f1c7439db85ec1ed98e2af1798bab38a25a659bdaa",
+      "role_count": 1,
+      "role_status": "proposal; native binding pending"
+    },
+    {
+      "id": "Mob_Gallery_DroneMechanicPell",
+      "role": "Drone upgrade presentation",
+      "file": "Mob_Gallery_DroneMechanicPell.glb",
+      "triangles": 1216,
+      "bones": 14,
+      "rig": "GalleryHumanoidV1",
+      "radius_cm": 200,
+      "sha256": "fb6316ec0fc8d5b62ae5cb1f0247df22116c704e0467951ccfceb001ee0fa029",
+      "role_count": 1,
+      "role_status": "proposal; native binding pending"
+    },
+    {
+      "id": "Mob_Gallery_CriticBloom",
+      "role": "Build review quest proposal",
+      "file": "Mob_Gallery_CriticBloom.glb",
+      "triangles": 936,
+      "bones": 14,
+      "rig": "GalleryHumanoidV1",
+      "radius_cm": 204,
+      "sha256": "95b8056c8639e451e66b06914b509fcc5e05851f61d31a2000e5a3549246c2d8",
+      "role_count": 1,
+      "role_status": "proposal; native binding pending"
+    },
+    {
+      "id": "Mob_Gallery_LostSelfPortrait",
+      "role": "Missing frame quest proposal",
+      "file": "Mob_Gallery_LostSelfPortrait.glb",
+      "triangles": 1068,
+      "bones": 14,
+      "rig": "GalleryHumanoidV1",
+      "radius_cm": 197,
+      "sha256": "183555ebd7a6c71f12365b020ebb37f5d34c794d915319d17ce4780a137d1b28",
+      "role_count": 1,
+      "role_status": "proposal; native binding pending"
+    },
+    {
+      "id": "Mob_Gallery_EchoChoir",
+      "role": "Touring jukebox district cue proposal",
+      "file": "Mob_Gallery_EchoChoir.glb",
+      "triangles": 1000,
+      "bones": 14,
+      "rig": "GalleryHumanoidV1",
+      "radius_cm": 197,
+      "sha256": "0af6afef337936078e5776445ac3650b922912e62857ce3b3399d75b6196e9aa",
+      "role_count": 1,
+      "role_status": "proposal; native binding pending"
+    }
+  ],
+  "clips": [
+    "Idle",
+    "Walk",
+    "Attack",
+    "Hurt"
+  ],
+  "status": "art prototype; native integration pending",
+  "realm": "Gallery City"
+}
