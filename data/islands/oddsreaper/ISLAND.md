@@ -24,3 +24,10 @@ Stormbloom's storm row applies the x1.2 to the single-roll p (0.33 to 0.396) bef
 the cap, which keeps the safe bet safe instead of free. Parlays multiply the boosted p values, so a storm parlay
 of two herbs earns about 1.44x: the Reaper rewards the bold who brew in the lightning, but no single herb breaks
 the table.
+
+## Round-2 owed: Unreal hero shot
+
+Round 1 placed the island 591/591 and saved, but bridge `viewport_screenshot` timed out (same bug as
+hephaestus). `oddsreaper_turn.py` now retries three sizes, then falls back to Unreal `HighResShot` /
+`Shot` under `Saved/Screenshots`, and only runs the 20 s Play check when enough time remains. Round-2
+HANDOFF goes to art-master-flex. Do not launch Unreal until the referee grants the editor slot.
