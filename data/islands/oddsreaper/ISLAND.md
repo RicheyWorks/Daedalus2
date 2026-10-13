@@ -65,3 +65,8 @@ oddsreaper_turn.py now matches hephaestus: before TURN START it pings bridge 987
 editor is GPU-dead (refused or hung), it posts one HOLD, does not start the 18-min clock, re-pings every 30 s,
 and needs two good pings in a row before claiming; else BLOCKED at 23:00. Each check writes
 bot-team/shots/oddsreaper/bridge_status.json. Apply on next grant (not while clock-held).
+
+## Round-2 Unreal verification (Oct 12, 2026, 21:16-21:17 PT)
+
+Referee granted slot 6 after pythagoras missed CLAIM. Restored OddsReaperIsland autosave verified at 591/591 meshes (593 actors with the storm volume and hero cam); sublevel and DaedalusWorld saved. Editor was found in Play at turn start and stopped first. 20 s Play check passed with one live DaedalusSkyDirector (hour 9.4). Hero shot: `bot-team/shots/oddsreaper/hero_unreal_play.png` (1920x1080, Play viewport). The editor SceneCapture2D export (`hero_unreal_editor.png`) rendered all black, so the owed hero shot is the Play capture. Play stopped, saved, HANDOFF to art-master-flex.
+
