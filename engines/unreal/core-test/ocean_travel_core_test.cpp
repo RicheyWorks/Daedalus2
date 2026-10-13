@@ -19,5 +19,35 @@ int main()
     CHECK(!Land("Portal Realm",home,Vessel::Boat).Allowed);
     CHECK(!Land("Ocean Realm",{"bad","Gallery City","surface",false},Vessel::Boat).Allowed);
     CHECK(!Land("Ocean Realm",{"bad","Portal Realm","",false},Vessel::Boat).Allowed);
+    // Network/Blueprint integer casts must not become a submarine by default.
+    for (int value : {-1,2,3,255,65535})
+    {
+        const auto invalid=static_cast<Vessel>(value);
+        const auto boarding=Board("Portal Realm",home,reef,invalid);
+        const auto landing=Land("Ocean Realm",gallery,invalid);
+        CHECK(!boarding.Allowed && boarding.DestinationRealm.empty() && boarding.ArrivalAnchor.empty());
+        CHECK(!landing.Allowed && landing.DestinationRealm.empty() && landing.ArrivalAnchor.empty());
+    }
+    for (const auto& invalid : {std::string(),std::string("bad\nanchor"),
+                                std::string("bad\0anchor",10),std::string(129,'a')})
+    {
+        for (int field=0;field<3;++field)
+        {
+            Dock badHome=home,badSea=sea,badGallery=gallery;
+            auto change=[&](Dock& dock) {
+                if (field==0) dock.Id=invalid;
+                else if (field==1) dock.Realm=invalid;
+                else dock.ArrivalAnchor=invalid;
+            };
+            change(badHome);change(badSea);change(badGallery);
+            CHECK(!Board("Portal Realm",badHome,sea,Vessel::Submarine).Allowed);
+            CHECK(!Board("Portal Realm",home,badSea,Vessel::Submarine).Allowed);
+            CHECK(!Land("Ocean Realm",badGallery,Vessel::Submarine).Allowed);
+        }
+    }
+    const Dock longAnchor{"boundary","Ocean Realm",std::string(128,'a'),false};
+    CHECK(Board("Portal Realm",home,longAnchor,Vessel::Boat).ArrivalAnchor==longAnchor.ArrivalAnchor);
+    CHECK(Board("Gallery City",gallery,reef,Vessel::Submarine).Allowed);
+    CHECK(!Board("Gallery City",gallery,sea,Vessel::Boat).Allowed);
     std::cout << "OCEAN_TRAVEL_PASS " << checks << " checks\n";
 }

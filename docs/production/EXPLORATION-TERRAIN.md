@@ -61,3 +61,14 @@ current plugin and live placement remain unverified. Log retained at
 Documents/Codex/2026-10-13/terrain-ue-compile/verified-build.log. Supported
 NoHotReloadFromIDE/NoLiveCoding settings kept hot reload out of this scratch
 build. Unreal turn released in hub message 28738.
+
+Dock-input hardening, October 13: route resolution now rejects vehicle enum
+values other than Boat or Submarine instead of treating unknown values as
+submarines. All dock IDs, realms and arrival anchors must be nonempty, at most
+128 bytes, and contain no ASCII control characters. This includes the departure
+anchor. Valid boats retain surface routes, valid submarines retain underwater
+dock connections, and ordinary shores still return only to Portal Realm.
+MSVC C++17 /W4 /WX passed 59 route checks, including invalid vehicle values,
+each malformed dock field and the accepted anchor-length boundary. This proves
+the portable resolver; server-owned dock lookup, vehicle possession and live
+Unreal transitions remain required before travel is usable by players.
