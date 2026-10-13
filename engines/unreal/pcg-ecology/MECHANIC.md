@@ -36,3 +36,10 @@ Ending hook: Great Oak acorns can be carried by Ark to other players' islands â€
 - Rules + per-token islands + disturbance gaps + biome recipes: done (`ecology_rules.py`, `island_flora.py`, `wild_biomes.py`, tests green).
 - Herb combo data: `herb_combo.json`. Island with all five biomes, water chain, livestock: Island_Pythagoras (in Unreal).
 - Next: `succession_sim.py` (tile seral clocks + levers, deterministic, tested), then UE hook to swap biome meshes as clocks advance.
+
+## Depth (succession_depth.py, tested)
+- **Island biogeography:** species pool grows with island area and shrinks with distance to other islands; pioneers always arrive on the wind.
+- **Seed rain:** linked islands send wind seeds (pine, fireweed, grass) easily; acorns barely travel, so oaks need the Ark or jays. That makes Ark trips matter.
+- **Windthrow storms:** old forest tiles fall (8% per storm) and become fresh gaps, so a climax island naturally re-opens into a mosaic.
+- **Nurse facilitation:** oak seedlings only establish next to a stage-2+ tile (nurse pine/scrub), so you have to grow pine before oak, as in real secondary succession.
+- **Quest progress:** `quest_progress(island, flags)` checks the Climax Seed chapters in order against the sim plus UE world facts.
