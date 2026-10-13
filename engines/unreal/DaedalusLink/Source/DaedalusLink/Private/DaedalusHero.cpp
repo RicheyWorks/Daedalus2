@@ -1228,8 +1228,14 @@ void ADaedalusHero::RealmReady(const FString& Spec, const FString& Source)
 		FString Pack, PackErr;
 		if (FFileHelper::LoadFileToString(Pack, *PackPath))
 		{
-			if (RealmView->LoadSprites(Pack, PackErr)) UE_LOG(LogDaedalus, Log, TEXT("Realm sprites: %d from %s"), RealmView->SpriteCount(), *PackPath);
-			else UE_LOG(LogDaedalus, Warning, TEXT("Realm sprite pack refused: %s"), *PackErr);
+			if (RealmView->LoadSprites(Pack, PackErr))
+			{
+				UE_LOG(LogDaedalus, Log, TEXT("Realm sprites: %d from %s"), RealmView->SpriteCount(), *PackPath);
+			}
+			else
+			{
+				UE_LOG(LogDaedalus, Warning, TEXT("Realm sprite pack refused: %s"), *PackErr);
+			}
 		}
 	}
 	FString Save;
