@@ -11,7 +11,18 @@ eal = unreal.EditorAssetLibrary; eas = unreal.get_editor_subsystem(unreal.Editor
 ues = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem)
 out = {"reimported": 0, "swapped": 0, "materials": 0, "hooks": {}, "missing": [], "notes": []}
 def hook(k): out["hooks"][k] = out["hooks"].get(k, 0) + 1
-def late(): return time.time() - T0 > LIMIT
+import ctypes
+class _MS(ctypes.Structure):
+    _fields_=[("l",ctypes.c_ulong),("m",ctypes.c_ulong),("t",ctypes.c_ulonglong),("a",ctypes.c_ulonglong),("x1",ctypes.c_ulonglong),("x2",ctypes.c_ulonglong),("x3",ctypes.c_ulonglong),("x4",ctypes.c_ulonglong),("x5",ctypes.c_ulonglong)]
+def free_gb():
+    try:
+        s=_MS(); s.l=ctypes.sizeof(_MS); ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(s)); return s.a/2**30
+    except Exception: return 99.0
+def late():
+    if free_gb() < 1.0:
+        if "LOW RAM: stopped early" not in out["notes"]: out["notes"].append("LOW RAM: stopped early")
+        return True
+    return time.time() - T0 > LIMIT
 try:
     if unreal.get_editor_subsystem(unreal.LevelEditorSubsystem).is_in_play_in_editor():
         raise SystemExit("PIE running: refusing (not stopping someone else's Play)")
@@ -37,7 +48,7 @@ def first_mesh(folder):
 names = {}
 for a in mine:
     c = smc(a)
-    if c and c.static_mesh and "_DS_" in c.static_mesh.get_name():
+    if c and c.static_mesh and "_DS_" in c.static_mesh.get_name() and ("Tree" in c.static_mesh.get_name() or not c.static_mesh.get_path_name().startswith("/Game/DiskSaver/")):
         names.setdefault(c.static_mesh.get_name(), []).append(a)
 tasks = []
 for n in names:
@@ -45,10 +56,11 @@ for n in names:
     if not os.path.exists(f): out["missing"].append(n); continue
     t = unreal.AssetImportTask(); t.filename = f; t.destination_path = "/Game/DiskSaver/Art/%s/%s" % (n.split("_")[0], n)
     t.destination_name = n; t.automated = True; t.save = True; t.replace_existing = True; tasks.append(t)
-for i in range(0, len(tasks), 25):
+for i in range(0, len(tasks), 10):
     if late(): out["notes"].append("reimport cut by time"); break
-    unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks(tasks[i:i+25]); out["reimported"] += len(tasks[i:i+25])
+    unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks(tasks[i:i+10]); out["reimported"] += len(tasks[i:i+10])
 for n, acts in names.items():
+    if late(): break
     m = first_mesh("/Game/DiskSaver/Art/%s/%s" % (n.split("_")[0], n))
     if m is None: continue
     for a in acts:
