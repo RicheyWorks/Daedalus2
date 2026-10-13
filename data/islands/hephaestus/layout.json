@@ -24,7 +24,8 @@
   "ark_drydock",
   "ash_fields",
   "hot_springs",
-  "basalt_coast"
+  "basalt_coast",
+  "livestock_pens"
  ],
  "placements": [
   {
@@ -944,6 +945,175 @@
    "yaw": 0,
    "scale": 1.0,
    "zone": "water_chain"
+  },
+  {
+   "asset": "Mob_Chicken",
+   "x": -130,
+   "y": 150,
+   "z": 0,
+   "yaw": 0,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "emberhen"
+  },
+  {
+   "asset": "Mob_Chicken",
+   "x": -124,
+   "y": 150,
+   "z": 0,
+   "yaw": 73,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "emberhen"
+  },
+  {
+   "asset": "Mob_Chicken",
+   "x": -118,
+   "y": 150,
+   "z": 0,
+   "yaw": 146,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "emberhen"
+  },
+  {
+   "asset": "Mob_Goat",
+   "x": -130,
+   "y": 158,
+   "z": 0,
+   "yaw": 47,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "ashgoat"
+  },
+  {
+   "asset": "Mob_Goat",
+   "x": -124,
+   "y": 158,
+   "z": 0,
+   "yaw": 120,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "ashgoat"
+  },
+  {
+   "asset": "Mob_Goat",
+   "x": -118,
+   "y": 158,
+   "z": 0,
+   "yaw": 193,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "ashgoat"
+  },
+  {
+   "asset": "Mob_Cow",
+   "x": -130,
+   "y": 166,
+   "z": 0,
+   "yaw": 94,
+   "scale": 1.1,
+   "zone": "livestock_pens",
+   "animal": "forgeox"
+  },
+  {
+   "asset": "Mob_Cow",
+   "x": -124,
+   "y": 166,
+   "z": 0,
+   "yaw": 167,
+   "scale": 1.1,
+   "zone": "livestock_pens",
+   "animal": "forgeox"
+  },
+  {
+   "asset": "Mob_Boar_Wild",
+   "x": -130,
+   "y": 174,
+   "z": 0,
+   "yaw": 141,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "lavaboar"
+  },
+  {
+   "asset": "Mob_Boar_Wild",
+   "x": -124,
+   "y": 174,
+   "z": 0,
+   "yaw": 214,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "lavaboar"
+  },
+  {
+   "asset": "Mob_Boar_Wild",
+   "x": -118,
+   "y": 174,
+   "z": 0,
+   "yaw": 287,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "lavaboar"
+  },
+  {
+   "asset": "Mob_Sheep",
+   "x": -130,
+   "y": 182,
+   "z": 0,
+   "yaw": 188,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "cinderwool"
+  },
+  {
+   "asset": "Mob_Sheep",
+   "x": -124,
+   "y": 182,
+   "z": 0,
+   "yaw": 261,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "cinderwool"
+  },
+  {
+   "asset": "Mob_Sheep",
+   "x": -118,
+   "y": 182,
+   "z": 0,
+   "yaw": 334,
+   "scale": 1.0,
+   "zone": "livestock_pens",
+   "animal": "cinderwool"
+  },
+  {
+   "asset": "Mob_Bee",
+   "x": -130,
+   "y": 190,
+   "z": 0,
+   "yaw": 235,
+   "scale": 1.5,
+   "zone": "livestock_pens",
+   "animal": "vent_bees"
+  },
+  {
+   "asset": "Mob_Bee",
+   "x": -124,
+   "y": 190,
+   "z": 0,
+   "yaw": 308,
+   "scale": 1.5,
+   "zone": "livestock_pens",
+   "animal": "vent_bees"
+  },
+  {
+   "asset": "Prop_WaterTrough_Iron",
+   "x": -138,
+   "y": 170,
+   "z": 0,
+   "yaw": 90,
+   "scale": 1.2,
+   "zone": "livestock_pens"
   }
  ]
 }
