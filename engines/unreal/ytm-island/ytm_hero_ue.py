@@ -14,7 +14,8 @@ NEWREC = ["AndeanPanPipes","AppalachianHighLonesome","ArabicMaqam","ArabicTakht"
 # 12 seed-song records stand in an arc behind the shrine (r 260 cm, facing it); rack beside the jukebox
 for i, r in enumerate(NEWREC):
     t = math.radians(30 + i * 120 / 11); props.append(("Item", f"Item_YTM_Record_{r}", (-800 + 260*math.cos(t), 1200 + 260*math.sin(t), math.degrees(t) + 90)))
-props.append(("Prop", "Prop_YTM_RecordRack", (-1450, 900, 120)))tasks=[]
+props.append(("Prop", "Prop_YTM_RecordRack", (-1450, 900, 120)))
+tasks=[]
 for kind,name,_ in props:
     t=unreal.AssetImportTask(); t.filename=f"{GLB}\\{name}.glb"; t.destination_path=f"{ART}/{kind}/{name}"
     t.automated=True; t.replace_existing=True; t.save=True; tasks.append(t)
