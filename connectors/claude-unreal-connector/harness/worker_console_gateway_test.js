@@ -44,6 +44,7 @@ function gateway(platform = 'win32') {
   assert.strictEqual(g.requests.length, 1);
   assert.strictEqual(g.requests[0].args[g.requests[0].args.indexOf('-Op') + 1], 'workers');
   assert(!g.requests[0].args.includes('-Hwnd'), 'worker tool does not accept arbitrary window actions');
+  assert(!g.requests[0].args.includes('-ExecutionPolicy'), 'window capability obeys the existing execution policy');
 
   await vm.runInContext("runTool('editor_windows', {max_images: 0})", g.context);
   assert.strictEqual(g.requests[1].args[g.requests[1].args.indexOf('-Op') + 1], 'list');

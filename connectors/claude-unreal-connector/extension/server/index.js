@@ -101,7 +101,7 @@ function callUnreal(type, params, timeoutMs) {
 function runWindows(op, args, timeoutMs) {
   return new Promise((resolve) => {
     if (process.platform !== 'win32') return resolve({ ok: false, message: 'window tools work on Windows only' });
-    const a = ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', path.join(__dirname, 'win.ps1'), '-Op', op];
+    const a = ['-NoProfile', '-File', path.join(__dirname, 'win.ps1'), '-Op', op];
     if (op === 'list' && args.max_images !== undefined) a.push('-MaxImages', String(args.max_images));
     if (op === 'input') {
       a.push('-Hwnd', String(args.hwnd));
