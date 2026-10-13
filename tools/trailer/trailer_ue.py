@@ -79,11 +79,15 @@ def _squad():
         STATE["errors"].append("squad: " + str(e)[:120])
 
 
+def _d2(a, b):
+    return (a.x - b.x) ** 2 + (a.y - b.y) ** 2
+
+
 def _star(near):
     """The herd animal with the most neighbours within 15 m, nearest the fallback centre: a shot full of animals."""
     taken = [a for a in STATE["follow"].values() if a]
     crit = [c for c in unreal.GameplayStatics.get_all_actors_of_class(_world(), unreal.DaedalusCritter)
-            if all(c.get_actor_location().distance_to(t.get_actor_location()) > 3000.0 for t in taken)]
+            if all(_d2(c.get_actor_location(), t.get_actor_location()) > 3000.0 ** 2 for t in taken)]
     if not crit:
         return None
     locs = [c.get_actor_location() for c in crit]
