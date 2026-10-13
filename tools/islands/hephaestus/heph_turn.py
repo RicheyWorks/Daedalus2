@@ -125,23 +125,77 @@ def main():
         cam, rot = isle["cam"], isle["cam_rot"]
         call("execute_python", timeout=15, code="import unreal; unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem)."
              f"set_level_viewport_camera_info(unreal.Vector({cam[0]},{cam[1]},{cam[2]}), unreal.Rotator(roll=0,pitch={rot[0]},yaw={rot[1]}))")
-        # Round-1 timed out on viewport_screenshot (modal/busy). Retry with settle + 1280 fallback.
-        path = os.path.join(SHOTS, "hero_unreal_editor.png")
+        # Round-1 timed out on viewport_screenshot (modal/busy). Retry + HighResShot fallback.
+        shot_path = os.path.join(SHOTS, "hero_unreal_editor.png")
         shot_ok = False
         for attempt, (w, h, settle, to) in enumerate(((1920, 1080, 5, 45), (1920, 1080, 8, 60), (1280, 720, 5, 45)), 1):
             if left() < 15: break
             try:
                 time.sleep(settle)
                 r = call("viewport_screenshot", timeout=to, width=w, height=h)
-                with open(path, "wb") as f: f.write(base64.b64decode(r["image_png_base64"]))
-                say(f"shot {path} ({w}x{h} attempt {attempt})")
+                with open(shot_path, "wb") as f: f.write(base64.b64decode(r["image_png_base64"]))
+                say(f"shot {shot_path} ({w}x{h} attempt {attempt})")
                 shot_ok = True
                 break
             except Exception as e:
                 say(f"viewport_screenshot attempt {attempt} failed: {e}")
+        if not shot_ok and left() > 20:
+            try:
+                hr = os.path.join(SHOTS, "hero_highres")
+                os.makedirs(hr, exist_ok=True)
+                code = (
+                    "import unreal\n"
+                    "unreal.SystemLibrary.execute_console_command(None, 'HighResShot 1920x1080')\n"
+                    "unreal.SystemLibrary.execute_console_command(None, 'Shot')\n"
+                    "result = {'ok': True}"
+                )
+                time.sleep(3)
+                call("execute_python", timeout=30, code=code)
+                time.sleep(4)
+                saved = r"C:\Unreal\DaedalusRealm\Saved\Screenshots"
+                cands = []
+                for root, _, files in os.walk(saved):
+                    for fn in files:
+                        if fn.lower().endswith(".png"):
+                            cands.append(os.path.join(root, fn))
+                if cands:
+                    import shutil
+                    newest = max(cands, key=os.path.getmtime)
+                    shutil.copy2(newest, shot_path)
+                    say(f"shot fallback HighResShot/Shot -> {shot_path} from {newest}")
+                    shot_ok = True
+                else:
+                    say("HighResShot fallback: no png under Saved/Screenshots yet")
+            except Exception as e:
+                say(f"HighResShot fallback failed: {e}")
         if not shot_ok:
-            say("viewport_screenshot FAILED after retries; hero shot still owed")
-            link("NEED island:hephaestus: viewport_screenshot still failing after retries; hero shot owed on next granted turn (unreal-team bridge 9877)")
+            say("viewport_screenshot FAILED after retries + HighResShot; hero shot still owed")
+            link("NEED island:hephaestus: viewport_screenshot still failing after retries+HighResShot; hero shot owed (unreal-team bridge 9877)")
+        # Referee wants a 20s Play check (oddsreaper pattern). Only if time remains.
+        if left() > 35:
+            try:
+                call("play", timeout=60)
+                say("Play start (20s check)")
+                time.sleep(20)
+                play_shot = os.path.join(SHOTS, "hero_unreal_play.png")
+                try:
+                    r = call("viewport_screenshot", timeout=45, width=1280, height=720)
+                    with open(play_shot, "wb") as f: f.write(base64.b64decode(r["image_png_base64"]))
+                    say(f"play shot {play_shot}")
+                except Exception as e:
+                    say(f"play shot skipped: {e}")
+                call("stop", timeout=30)
+                say("Play stop after 20s check")
+                link("DONE island:hephaestus: 20s Play check completed (Play stopped)")
+            except Exception as e:
+                say(f"Play check failed: {e}")
+                link(f"NEED island:hephaestus: 20s Play check failed: {str(e)[:160]}")
+                try:
+                    call("stop", timeout=20)
+                except Exception:
+                    pass
+        else:
+            say(f"skip Play check; only {left():.0f}s left before save window")
     return isle
 
 

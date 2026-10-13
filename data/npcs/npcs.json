@@ -1,52 +1,55 @@
 {
- "schema": "daedalus.npcs/v0",
- "board": 16,
- "npcs": [
-  {
-   "id": "npc_ark_keeper",
-   "role": "quest giver, tutorial",
-   "home": "ark deck",
-   "behavior": "idle+talk"
-  },
-  {
-   "id": "npc_trader",
-   "role": "trade",
-   "home": "island dock",
-   "behavior": "idle+trade"
-  },
-  {
-   "id": "npc_crater_scholar",
-   "role": "lore, q_crater",
-   "home": "landmark_impact_site rim",
-   "behavior": "wander radius 20m"
-  },
-  {
-   "id": "npc_beast_tender",
-   "role": "pet care tips",
-   "home": "ark pen",
-   "behavior": "idle"
-  },
-  {
-   "id": "npc_forge_smith",
-   "role": "Forge Temper teacher, q_forge_temper",
-   "home": "caldera_forge at Prop_HephaestusAnvil_Great",
-   "island": "island_hephaestus",
-   "behavior": "idle+talk",
-   "lines": [
-    "Heat, quench, rivet. That is how every ark leaves this mountain.",
-    "Bring emberite. The quench remembers the strike that woke this core."
-   ]
-  },
-  {
-   "id": "npc_drydock_riveter",
-   "role": "ark hull repair, accepts tempered rivets",
-   "home": "ark_drydock at Prop_ForgeWorkbench_Iron",
-   "island": "island_hephaestus",
-   "behavior": "idle+craft",
-   "lines": [
-    "Hull wants tempered rivets, not soft iron.",
-    "Forgeox on the bellows buys you time. Don't waste it."
-   ]
-  }
- ]
+    "schema": "daedalus.npcs/v0",
+    "board": 16,
+    "npcs": [
+        {
+            "id": "npc_ark_keeper",
+            "role": "quest giver, tutorial",
+            "home": "ark deck",
+            "behavior": "idle+talk"
+        },
+        {
+            "id": "npc_trader",
+            "role": "trade",
+            "home": "island dock",
+            "behavior": "idle+trade"
+        },
+        {
+            "id": "npc_crater_scholar",
+            "role": "lore, q_crater",
+            "home": "landmark_impact_site rim",
+            "behavior": "wander radius 20m"
+        },
+        {
+            "id": "npc_beast_tender",
+            "role": "pet care tips",
+            "home": "ark pen",
+            "behavior": "idle"
+        },
+        {
+            "id": "npc_forge_smith",
+            "role": "Forge Temper teacher, q_forge_temper",
+            "home": "caldera_forge at Prop_HephaestusAnvil_Great",
+            "island": "island_hephaestus",
+            "behavior": "idle+talk",
+            "lines": [
+                "Heat, quench, rivet. That is how every ark leaves this mountain.",
+                "Bring emberite. The quench remembers the strike that woke this core.",
+                "Dual-quench within ten heartbeats: magma then spring. Temper both, or the hull dies in the void.",
+                "Water the pens before you brew. A dry trough means a cold forge."
+            ]
+        },
+        {
+            "id": "npc_drydock_riveter",
+            "role": "ark hull repair, accepts tempered rivets",
+            "home": "ark_drydock at Prop_ForgeWorkbench_Iron",
+            "island": "island_hephaestus",
+            "behavior": "idle+craft",
+            "lines": [
+                "Hull wants tempered rivets, not soft iron.",
+                "Forgeox on the bellows buys you time. Don't waste it.",
+                "Stamp your plate on the wreck before you leave. Arks remember who tempered them."
+            ]
+        }
+    ]
 }

@@ -1,163 +1,176 @@
 {
- "schema": "daedalus.quests/v0",
- "board": 18,
- "quests": [
-  {
-   "id": "q_wake",
-   "title": "After the Impact",
-   "steps": [
-    {
-     "type": "reach",
-     "target": "marker_spawn_overlook"
-    },
-    {
-     "type": "talk",
-     "npc": "npc_ark_keeper"
-    }
-   ],
-   "reward": {
-    "water": 3
-   }
-  },
-  {
-   "id": "q_first_tools",
-   "title": "Hands of a Survivor",
-   "steps": [
-    {
-     "type": "collect",
-     "item": "hardwood",
-     "count": 10
-    },
-    {
-     "type": "collect",
-     "item": "fiber",
-     "count": 10
-    }
-   ],
-   "reward": {
-    "rope": 2
-   }
-  },
-  {
-   "id": "q_ore",
-   "title": "Starfall Metal",
-   "steps": [
-    {
-     "type": "harvest",
-     "node": "Prop_OreNode_*",
-     "count": 5
-    },
-    {
-     "type": "collect",
-     "item": "copper_ore",
-     "count": 8
-    }
-   ],
-   "reward": {
-    "bronze_pick": 1
-   }
-  },
-  {
-   "id": "q_crater",
-   "title": "Where It Fell",
-   "steps": [
-    {
-     "type": "reach",
-     "target": "landmark_impact_site"
-    },
-    {
-     "type": "inspect",
-     "target": "impact_core"
-    }
-   ],
-   "reward": {
-    "lift_crystal": 1
-   }
-  },
-  {
-   "id": "q_pet",
-   "title": "Stripes and Spots",
-   "steps": [
-    {
-     "type": "tame",
-     "count": 1
-    },
-    {
-     "type": "feed_pet",
-     "count": 3
-    }
-   ],
-   "reward": {
-    "pet_harness": 1
-   }
-  },
-  {
-   "id": "q_ark",
-   "title": "Lift the Ark",
-   "steps": [
-    {
-     "type": "collect",
-     "item": "ark_hull_plank",
-     "count": 20
-    },
-    {
-     "type": "collect",
-     "item": "ark_lift_housing",
-     "count": 1
-    }
-   ],
-   "reward": {
-    "steel_pick": 1
-   }
-  },
-  {
-   "id": "q_landmark",
-   "title": "The Grok Monument",
-   "steps": [
-    {
-     "type": "reach",
-     "target": "landmark_team_grok"
-    }
-   ],
-   "reward": {
-    "platinum": 2
-   }
-  },
-  {
-   "id": "q_forge_temper",
-   "title": "Temper the Hull",
-   "island": "island_hephaestus",
-   "steps": [
-    {
-     "type": "talk",
-     "npc": "npc_forge_smith"
-    },
-    {
-     "type": "harvest",
-     "node": "Item_Ore_Emberite",
-     "count": 5
-    },
-    {
-     "type": "brew_quench",
-     "path": "dual",
-     "note": "Forge Temper: magma then spring (or reverse) within 10s on a mortar tonic"
-    },
-    {
-     "type": "interact",
-     "target": "Prop_ForgeQuenchTub_Basalt",
-     "note": "quench heated rivets \u2014 Forge Temper"
-    },
-    {
-     "type": "deliver",
-     "item": "ark_rivet_tempered",
-     "count": 10,
-     "npc": "npc_drydock_riveter"
-    }
-   ],
-   "reward": {
-    "fire_resist_tonic": 2,
-    "starmetal_ingot": 1
-   }
-  }
- ]
+    "schema": "daedalus.quests/v0",
+    "board": 18,
+    "quests": [
+        {
+            "id": "q_wake",
+            "title": "After the Impact",
+            "steps": [
+                {
+                    "type": "reach",
+                    "target": "marker_spawn_overlook"
+                },
+                {
+                    "type": "talk",
+                    "npc": "npc_ark_keeper"
+                }
+            ],
+            "reward": {
+                "water": 3
+            }
+        },
+        {
+            "id": "q_first_tools",
+            "title": "Hands of a Survivor",
+            "steps": [
+                {
+                    "type": "collect",
+                    "item": "hardwood",
+                    "count": 10
+                },
+                {
+                    "type": "collect",
+                    "item": "fiber",
+                    "count": 10
+                }
+            ],
+            "reward": {
+                "rope": 2
+            }
+        },
+        {
+            "id": "q_ore",
+            "title": "Starfall Metal",
+            "steps": [
+                {
+                    "type": "harvest",
+                    "node": "Prop_OreNode_*",
+                    "count": 5
+                },
+                {
+                    "type": "collect",
+                    "item": "copper_ore",
+                    "count": 8
+                }
+            ],
+            "reward": {
+                "bronze_pick": 1
+            }
+        },
+        {
+            "id": "q_crater",
+            "title": "Where It Fell",
+            "steps": [
+                {
+                    "type": "reach",
+                    "target": "landmark_impact_site"
+                },
+                {
+                    "type": "inspect",
+                    "target": "impact_core"
+                }
+            ],
+            "reward": {
+                "lift_crystal": 1
+            }
+        },
+        {
+            "id": "q_pet",
+            "title": "Stripes and Spots",
+            "steps": [
+                {
+                    "type": "tame",
+                    "count": 1
+                },
+                {
+                    "type": "feed_pet",
+                    "count": 3
+                }
+            ],
+            "reward": {
+                "pet_harness": 1
+            }
+        },
+        {
+            "id": "q_ark",
+            "title": "Lift the Ark",
+            "steps": [
+                {
+                    "type": "collect",
+                    "item": "ark_hull_plank",
+                    "count": 20
+                },
+                {
+                    "type": "collect",
+                    "item": "ark_lift_housing",
+                    "count": 1
+                }
+            ],
+            "reward": {
+                "steel_pick": 1
+            }
+        },
+        {
+            "id": "q_landmark",
+            "title": "The Grok Monument",
+            "steps": [
+                {
+                    "type": "reach",
+                    "target": "landmark_team_grok"
+                }
+            ],
+            "reward": {
+                "platinum": 2
+            }
+        },
+        {
+            "id": "q_forge_temper",
+            "title": "Temper the Hull",
+            "island": "island_hephaestus",
+            "steps": [
+                {
+                    "type": "talk",
+                    "npc": "npc_forge_smith"
+                },
+                {
+                    "type": "harvest",
+                    "node": "Item_Ore_Emberite",
+                    "count": 5
+                },
+                {
+                    "type": "fill",
+                    "target": "RanchTrough_Ash",
+                    "note": "pipe HotSpring_Clean to the pens through one forge shift"
+                },
+                {
+                    "type": "brew_quench",
+                    "path": "dual",
+                    "note": "Forge Temper: magma then spring (or reverse) within 10s on a mortar tonic"
+                },
+                {
+                    "type": "interact",
+                    "target": "Prop_ForgeQuenchTub_Basalt",
+                    "note": "quench heated rivets \u2014 Forge Temper"
+                },
+                {
+                    "type": "deliver",
+                    "item": "ark_rivet_tempered",
+                    "count": 10,
+                    "npc": "npc_drydock_riveter"
+                },
+                {
+                    "type": "stamp",
+                    "target": "Prop_ArkWreck_Hull",
+                    "item": "ark_plate_stamped",
+                    "note": "leave one ark plate stamped with your mark at the drydock"
+                }
+            ],
+            "reward": {
+                "fire_resist_tonic": 2,
+                "starmetal_ingot": 1,
+                "forge_temper_badge": 1
+            },
+            "win": "dual-quench tonic + pens watered through a forge shift + stamped ark plate"
+        }
+    ]
 }
