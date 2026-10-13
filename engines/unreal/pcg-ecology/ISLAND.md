@@ -43,3 +43,8 @@ Data: `herb_combo.json`.
 | Hens x6 | scrub edge coops | seeds, insects | eggs | egg basket, herb bread |
 | Bees x5 hives | wildflower meadow | flowers (pollinate herbs +yield) | honey, wax | honey jar, tea sweetener |
 Grazing is an ecology lever: grazed meadow stays stage 0-1 (no succession), ungrazed meadow scrubs over in-game days.
+
+## Round 2 editor turn (2026-10-12 22:01-22:03 PT)
+- pyth_fix_ue: 84 chapter glbs imported, 34 PYT_Chapter props placed, 7/709 actors trace-snapped (worst 35.4 cm), grass M_PYT_IslandGrass_v3, broken M_PYT_IslandGrass deleted.
+- pyth_verify_ue: 796 actors; water chain W1-W8 OK (19 drinkable); livestock 5 sheep/2 goats/1 cow/6 hens/4 bees + full food loop (8 foods); 12 herbs, stages OK; biomes YoungMeadow 176, BrambleScrub 70, PineStand 57, OldGrowthOak 53, WillowRiverbank 148. Ground fit: 29 still >5 cm off (worst 85 cm), to fix next.
+- Camera anchors for youtube-master: PYT_Label_<biome>, PYT_Habitat_<biome> (tag Habitat_<biome>).
