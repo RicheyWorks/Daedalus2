@@ -50,9 +50,10 @@ if not w:
 unreal.SystemLibrary.execute_console_command(w, "daedalus.FoesHunt 1")
 unreal.SystemLibrary.execute_console_command(w, "daedalus.Tactics 1")
 RT = unreal.RenderingLibrary.create_render_target2d(w, W_, H_, unreal.TextureRenderTargetFormat.RTF_RGBA8)
-_t = unreal.Transform()
-CAM = unreal.GameplayStatics.begin_deferred_actor_spawn_from_class(w, unreal.SceneCapture2D, _t)
-CAM = unreal.GameplayStatics.finish_spawning_actor(CAM, _t)
+_hero = unreal.GameplayStatics.get_player_pawn(w, 0)
+CAM = unreal.DaedalusFilm.spawn_film_camera(_hero)   # Python can only spawn into the editor world; this is the Play world
+if not CAM:
+    raise RuntimeError("could not spawn the film camera in the Play world")
 CC = CAM.get_component_by_class(unreal.SceneCaptureComponent2D)
 CC.set_editor_property("texture_target", RT)
 CC.set_editor_property("capture_source", unreal.SceneCaptureSource.SCS_FINAL_COLOR_LDR)
