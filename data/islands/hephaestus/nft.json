@@ -1,6 +1,6 @@
 {
  "name": "Hephaestus Island",
- "sigil": "🔥⚒️",
+ "sigil": "\ud83d\udd25\u2692\ufe0f",
  "blurb": "The shard that learned to temper. When Daedalus shattered, this was the fragment whose heart took the asteroid head-on, and its core melted into a living forge. The first ark crews stayed and built the Great Forge on the molten caldera, and every hull that flies is riveted here. Brew herb tonics and temper them in the quench tub: magma for strength, spring for duration, or a dual-quench inside ten seconds so two effects land at once. Drink from the hot springs, water the emberhens and forgeox, and mine starmetal at the Meteor Scar. Heat alone breaks. Water alone softens. Temper both.",
  "traits": {
   "Mood": "forge_volcanic",
@@ -9,9 +9,10 @@
   "Livestock": "Emberhen, Ashgoat, Forgeox, Lavaboar, Cinderwool, Vent Bees",
   "Items": 119,
   "Builder": "Hephaestus (Team Grok)",
-  "HeroShot": "Play viewport (round-2 SceneCapture was near-black)"
+  "HeroShot": "Blender forge overlook (SceneCapture still near-black)"
  },
- "hero_image": "bot-team/shots/hephaestus/hero_unreal_play.png",
+ "hero_image": "bot-team/shots/hephaestus/hero_blender.png",
  "hero_image_fallback": "bot-team/shots/hephaestus/hero_r2.png",
- "hero_image_note": "Primary is the round-2 20s PIE Play shot (1280x720). hero_r2.png is the round-2 SceneCapture2D forge overlook fallback (1920x1080); it came out near-black (mean RGB ~0.1), so use it only if the Play shot is missing."
+ "hero_image_note": "Primary is the off-editor Blender forge-overlook Cycles render (1920x1080, layout 119 + 7 hero GLBs, OptiX). hero_unreal_play.png is the round-3 PIE Play frame (lit but not overlook pose). hero_r2.png is the round-2/3 SceneCapture2D forge overlook (near-black mean RGB ~0.1); keep only as last resort.",
+ "hero_image_play": "bot-team/shots/hephaestus/hero_unreal_play.png"
 }

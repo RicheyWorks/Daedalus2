@@ -1,10 +1,11 @@
 # SPDX-License-Identifier: MIT
-"""Headless: Hephaestus nft.json card is complete and points at the real Play hero shot.
+"""Headless: Hephaestus nft.json card is complete and points at the Blender forge-overlook hero.
 
 Read-only. Checks required fields, trait keys, Items == layout.json placement count (119),
-hero_image -> hero_unreal_play.png (primary) with hero_r2.png kept only as fallback.
-On BLACKBEARD (C:/Users/730ri/projects present) it also checks the PNGs exist and the
-primary is a real PNG. Prints PASS/FAIL; exits 1 on any failure.
+hero_image -> hero_blender.png (primary), hero_image_play -> hero_unreal_play.png,
+hero_image_fallback -> hero_r2.png (near-black SceneCapture, last resort).
+On BLACKBEARD it checks PNGs exist, are real PNGs, and primary mean RGB is lit (not near-black).
+Prints PASS/FAIL; exits 1 on any failure.
 """
 import json, sys
 from pathlib import Path
@@ -13,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[3]
 ISLAND = ROOT / "data" / "islands" / "hephaestus"
 NFT = ISLAND / "nft.json"
 LAYOUT = ISLAND / "layout.json"
+BLENDER = "bot-team/shots/hephaestus/hero_blender.png"
 PLAY = "bot-team/shots/hephaestus/hero_unreal_play.png"
 FALLBACK = "bot-team/shots/hephaestus/hero_r2.png"
 PROJECTS = Path(r"C:\Users\730ri\projects")
@@ -20,6 +22,21 @@ REQUIRED = ("name", "sigil", "blurb", "traits", "hero_image")
 TRAIT_KEYS = ("Mood", "Water", "Herbs", "Livestock", "Items", "Builder")
 EXPECTED_ITEMS = 119
 PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
+MIN_MEAN_LUM = 20.0
+
+
+def mean_lum(path: Path) -> float:
+    from PIL import Image
+    im = Image.open(path).convert("RGB")
+    px = im.load()
+    w, h = im.size
+    step = max(1, (w * h) // 200_000)
+    n = r = g = b = 0
+    for y in range(0, h, step):
+        for x in range(0, w, step):
+            pr, pg, pb = px[x, y]
+            r += pr; g += pg; b += pb; n += 1
+    return (0.2126 * r + 0.7152 * g + 0.0722 * b) / n
 
 
 def main() -> int:
@@ -41,7 +58,7 @@ def main() -> int:
     placements = None
     try:
         placements = len(json.loads(LAYOUT.read_text(encoding="utf-8")).get("placements") or [])
-    except Exception as e:  # layout unreadable: fall back to the fixed count
+    except Exception as e:
         notes.append(f"layout.json unreadable ({e}); using fixed {EXPECTED_ITEMS}")
     if items != EXPECTED_ITEMS:
         errs.append(f"Items expected {EXPECTED_ITEMS}, got {items}")
@@ -49,16 +66,19 @@ def main() -> int:
         errs.append(f"Items {items} != layout placements {placements}")
 
     hero = str(doc.get("hero_image") or "").replace("\\", "/")
-    if hero != PLAY:
-        errs.append(f"hero_image must be {PLAY}, got {hero!r}")
+    if hero != BLENDER:
+        errs.append(f"hero_image must be {BLENDER}, got {hero!r}")
     if "hero_r2.png" in hero:
-        errs.append("hero_image must not use the near-black round-2 SceneCapture as primary")
+        errs.append("hero_image must not use the near-black SceneCapture as primary")
+    play = str(doc.get("hero_image_play") or "").replace("\\", "/")
+    if play != PLAY:
+        errs.append(f"hero_image_play must be {PLAY}, got {play!r}")
     fb = str(doc.get("hero_image_fallback") or "").replace("\\", "/")
     if fb != FALLBACK:
         errs.append(f"hero_image_fallback must be {FALLBACK}, got {fb!r}")
 
     if PROJECTS.is_dir():
-        for rel in (PLAY, FALLBACK):
+        for rel in (BLENDER, PLAY, FALLBACK):
             f = PROJECTS / Path(rel)
             if not f.is_file():
                 errs.append(f"missing on disk: {f}")
@@ -66,6 +86,15 @@ def main() -> int:
                 errs.append(f"not a PNG: {f}")
             else:
                 notes.append(f"on disk: {f.name} {f.stat().st_size} bytes")
+        primary = PROJECTS / Path(BLENDER)
+        if primary.is_file():
+            try:
+                lum = mean_lum(primary)
+                notes.append(f"primary mean lum {lum:.2f}")
+                if lum < MIN_MEAN_LUM:
+                    errs.append(f"primary hero near-black (lum {lum:.2f} < {MIN_MEAN_LUM})")
+            except Exception as e:
+                errs.append(f"primary RGB check failed: {e}")
     else:
         notes.append("not on BLACKBEARD; skipped PNG existence check")
 
@@ -76,7 +105,7 @@ def main() -> int:
         for e in errs:
             print(" -", e)
         return 1
-    print(f"test_heph_nft_card: ALL PASS (Items {items} == placements {placements}; hero {PLAY})")
+    print(f"test_heph_nft_card: ALL PASS (Items {items} == placements {placements}; hero {BLENDER})")
     return 0
 
 

@@ -266,3 +266,19 @@ After youtube-master HANDOFF #24366 (22:47:37). CLAIMed 22:48; `heph_turn.py --n
 Sublevel `/Game/Hephaestus/Maps/HephaestusIsland` at 6000000,2000000. NFT card already prefers the Play shot (`c924e60a`); SceneCapture overlook still owed when a lit forge-overlook capture works.
 
 Also tightened `heph_turn.py` HANDOFF matcher: accept `HANDOFF hephaestus` (em-dash / direct address, as youtube-master posts) in addition to `HANDOFF … -> hephaestus`, so a waiting runner can start without `--now`.
+
+## Off-editor polish (2026-10-12 ~23:05 PT)
+
+Blender forge-overlook hero (no Unreal / editor turn; art-master-flex holds the editor after oddsreaper HANDOFF).
+
+Why: round-2/3 SceneCapture2D `hero_r2.png` is still near-black (mean RGB ~0.1). The PIE Play shot is lit but not the forge overlook pose. Off-editor Cycles render on RTX 4090 OptiX fills the overlook gap the same way Prometheus did for their island.
+
+| Field | Value |
+|-------|-------|
+| `hero_image` | `bot-team/shots/hephaestus/hero_blender.png` (primary; 1920x1080, mean RGB ~85/69/56, lum ~72) |
+| `hero_image_play` | `bot-team/shots/hephaestus/hero_unreal_play.png` (round-3 PIE Play, lit) |
+| `hero_image_fallback` | `bot-team/shots/hephaestus/hero_r2.png` (SceneCapture overlook; near-black; last resort) |
+| `traits.HeroShot` | Blender forge overlook (SceneCapture still near-black) |
+| Renderer | `heph_blender_hero.py` — layout 119 proxies + 7 hero GLBs from `hero_1625`, camera `hero_cam_m`, Cycles OptiX 96 spp, ~7 s |
+
+Validator: `test_heph_nft_card.py` now requires Blender primary, Play secondary, r2 fallback, and primary mean luminance >= 20. SceneCapture overlook in Unreal is still owed on a later editor turn when a lit capture works; until then the mint card uses the Blender overlook.
