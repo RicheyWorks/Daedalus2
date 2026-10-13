@@ -20,6 +20,10 @@ on:
       - 'engines/unreal/**/DaedalusInventoryCore.h'
       - 'engines/unreal/core-test/inventory_catalog_dump.cpp'
       - 'tools/inventory/**'
+      - 'engines/unreal/**/DaedalusBattlePresentation.*'
+      - 'engines/unreal/**/DaedalusBattleStageCore.h'
+      - 'tools/blender/portal_hero*.py'
+      - 'tools/blender/portal_common.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -60,6 +64,7 @@ jobs:
         run: |
           python3 -m unittest discover -s tools/blender -p test_portal_population.py
           python3 -m unittest discover -s tools/blender -p test_production_queue.py
+          python3 -m py_compile tools/blender/portal_hero_polish.py tools/blender/portal_hero_lods.py tools/blender/portal_common.py
   windows:
     runs-on: windows-latest
     steps:
