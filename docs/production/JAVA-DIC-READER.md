@@ -15,3 +15,16 @@ Use existing Content/Inventory/*.dic files as the runtime source, rather than a
 second Java item catalog. Resource packaging and realm key mapping must be
 connected before runtime adoption. Extensible action names match the native
 format; the host must still validate permissions and apply effects atomically.
+
+Runtime integration now embeds the canonical five DIC files in daedalus-core's
+jar using Maven resources (no content filtering or separate Java catalog).
+InventoryCatalogService validates all five realm identities on startup and serves
+read-only definitions at GET /api/v1/inventory/{realm}/catalog. Unknown realms
+return 404. Existing production default-authenticated security applies; this adds
+no permit-all rule. No player bags, ownership or item effects are returned.
+
+Tests load all canonical files, verify distinct realm content, reject path-like
+realm lookup, and exercise HTTP JSON/status serialization using standalone MVC.
+Full deployed-server auth/packaging smoke tests and C++ differential parsing
+remain pending. Ocean and Portal catalogs are not fabricated from art rosters;
+they still need authoritative item definitions and native catalog support.

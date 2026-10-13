@@ -14,6 +14,9 @@ on:
       - 'engines/unreal/core-test/ocean_travel_core_test.cpp'
       - '.github/workflows/portal-production.yml'
       - 'daedalus-core/src/**/inventory/**'
+      - 'daedalus-core/pom.xml'
+      - 'daedalus-server/src/**/InventoryCatalog*'
+      - 'engines/unreal/DaedalusLink/Content/Inventory/*.dic'
   workflow_dispatch:
 permissions:
   contents: read
@@ -28,7 +31,7 @@ jobs:
           java-version: '21'
           cache: maven
       - name: Shared inventory format reader
-        run: mvn -B -pl daedalus-core -Dtest=InventoryCatalogTest test
+        run: mvn -B -pl daedalus-server -am -Dtest=InventoryCatalogTest,InventoryCatalogServiceTest -Dsurefire.failIfNoSpecifiedTests=false test
   native:
     runs-on: ubuntu-latest
     strategy:
