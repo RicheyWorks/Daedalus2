@@ -209,6 +209,16 @@ int main(int Argc, char** Argv)
     Check("it starts in the field by the portal", G.MapId() == "FIELD" && G.X() == S.Spawn.X && G.Y() == S.Spawn.Y
         && S.Maps[0].At(S.Portal.X, S.Portal.Y) == Tile::Portal);
     Check("a welcome message waits", G.TopBox() == "MESSAGE");
+    {   // the typewriter: nothing yet, some after a quarter second, the whole page after a press of A
+        const Frame F0 = G.Render();
+        G.Tick(0.25);
+        const Frame F1 = G.Render();
+        Png(F1, Out + "/realm_11_typing.png");
+        int Lit0 = 0, Lit1 = 0;
+        for (int y = 168; y < 184; ++y) for (int x = 20; x < 240; ++x) { Lit0 += F0.Get(x, y) == 0xFCFCFC; Lit1 += F1.Get(x, y) == 0xFCFCFC; }
+        Check("the dialogue types itself out", Lit0 == 0 && Lit1 > 0, std::to_string(Lit0) + " " + std::to_string(Lit1));
+        Check("the window wears the realm's rule", F1.Get(8 + 2, 160) == Ui::Current().Ink && F1.Get(8 + 4, 160 + 3) == Ui::Current().InkDark);
+    }
     Png(G.Render(), Out + "/realm_01_arrival.png");
     Dismiss(G);
     Check("the starting kit: a club, clothes, two herbs, 60 gold", G.Count("HERB") == 2 && G.Gold() == 60
@@ -221,6 +231,15 @@ int main(int Argc, char** Argv)
         Check("a spec without its magic is refused", !Bad.Parse("hello\n", E) && !E.empty());
         std::string Broken = Text;
         Broken.replace(Broken.find("row ~"), 5, "row ");
+        {
+            Realm Tint;
+            std::string E2;
+            Check("a 'ui' line recolours the windows", Tint.Load("DRR 1\nseed 1\nui 60A0F8\n" + Text.substr(Text.find("item")), E2)
+                && Ui::Current().Ink == 0x60A0F8u, E2);
+            Realm Plain;
+            Plain.Load(Text, E2);
+            Check("and a realm without one gets the default rule", Ui::Current().Ink == 0xF8A070u);
+        }
         Check("a short map row is refused", !Bad.Parse(Broken, E) && E.find("wrong size") != std::string::npos, E);
         std::string NoShop = Text;
         NoShop.replace(NoShop.find("shop KEYS"), 9, "shop XEYS");
@@ -230,13 +249,22 @@ int main(int Argc, char** Argv)
     // ---- the menu, the bag, status
     Tap(G, Button::B);
     Check("B opens the command menu", G.TopBox() == "MENU");
-    Tap(G, Button::Down); Tap(G, Button::Down); Tap(G, Button::A);
+    Png(G.Render(), Out + "/realm_12_command.png");
+    Tap(G, Button::A);   // TALK, facing nobody
+    Check("TALK with no one there says so", G.LastMessage() == "THERE IS NO ONE THERE.", G.LastMessage());
+    Dismiss(G);
+    Tap(G, Button::B); Tap(G, Button::Down); Tap(G, Button::Down); Tap(G, Button::A);   // SEARCH
+    Check("SEARCH on open ground finds nothing", G.LastMessage().find("NOTHING") != std::string::npos, G.LastMessage());
+    Dismiss(G);
+    Tap(G, Button::B);
+    // The menu is a 2-column grid: TALK SPELL / STATUS ITEM / SEARCH EQUIP. Down moves a row, Right a column.
+    Tap(G, Button::Down); Tap(G, Button::A);
     Check("STATUS shows the party", G.TopBox() == "STATUS");
     Png(G.Render(), Out + "/realm_02_status.png");
     Tap(G, Button::A); Tap(G, Button::B);
     Check("menus close", G.TopBox() == "NONE");
     G.MembersMut()[1].Hp = 5;
-    Tap(G, Button::B); Tap(G, Button::A);   // ITEM
+    Tap(G, Button::B); Tap(G, Button::Down); Tap(G, Button::Right); Tap(G, Button::A);   // ITEM
     Check("ITEM lists the bag", G.TopBox() == "ITEMS");
     Tap(G, Button::A);                       // HERB
     Check("a herb asks who", G.TopBox() == "MEMBERS");
@@ -372,7 +400,7 @@ int main(int Argc, char** Argv)
     Check("the cave is dark: you see one tile", G.Light() == 1 && G.MusicCue() == "CAVE", G.Describe());
     Dismiss(G);
     Png(G.Render(), Out + "/realm_06_cave_dark.png");
-    Tap(G, Button::B); Tap(G, Button::A);
+    Tap(G, Button::B); Tap(G, Button::Down); Tap(G, Button::Right); Tap(G, Button::A);   // ITEM
     {   // find the torch in the item list
         for (int k = 0; k < 12 && G.TopBox() == "ITEMS"; ++k)
         {
@@ -408,7 +436,7 @@ int main(int Argc, char** Argv)
     }
     Check("bumping the guardian starts a speech", G.TopBox() == "MESSAGE" && G.LastMessage().find(S.Monsters[static_cast<size_t>(Bo.Monster)].Name) != std::string::npos, G.LastMessage());
     Png(G.Render(), Out + "/realm_08_guardian.png");
-    Tap(G, Button::A);
+    Dismiss(G);
     Check("then a fight with boss music", G.CurrentMode() == Mode::Battle && G.MusicCue() == "BOSS", G.Describe());
     Tap(G, Button::A);   // intro
     for (int k = 0; k < 4; ++k) Tap(G, Button::Down);   // RUN
@@ -429,6 +457,8 @@ int main(int Argc, char** Argv)
     // ---- the vault: the legends
     G.Place("CASTLE", 12, 3, 3);
     Tap(G, Button::Right);
+    if (G.CurrentMode() == Mode::Battle) { AutoFight(G); Dismiss(G); G.Place("CASTLE", 12, 3, 3); Tap(G, Button::Right); }   // a wandering foe
+    Dismiss(G);
     Check("the star key opens the vault", G.Count("STAR_KEY") == 0 && G.DoorsOpened() == 2, G.Describe());
     Dismiss(G);
     Check("walk into the vault", WalkTo(G, 15, 2));
@@ -436,7 +466,7 @@ int main(int Argc, char** Argv)
     Tap(G, Button::A);
     Check("the vault holds the STAR BLADE", G.Count("STAR_BLADE") == 1, G.Describe());
     Dismiss(G);
-    Tap(G, Button::B); Tap(G, Button::Down); Tap(G, Button::Down); Tap(G, Button::Down); Tap(G, Button::A);   // EQUIP
+    Tap(G, Button::B); Tap(G, Button::Right); Tap(G, Button::Down); Tap(G, Button::Down); Tap(G, Button::A);   // EQUIP
     Check("EQUIP asks who", G.TopBox() == "MEMBERS");
     Tap(G, Button::A);
     Check("EQUIP lists the gear", G.TopBox() == "EQUIP", G.TopBox());
@@ -473,7 +503,7 @@ int main(int Argc, char** Argv)
         M.Place("TOWN1", X + 1, Y, 2);
         Tap(M, Button::A);
         Check("the chest bites", M.LastMessage().find("BITES") != std::string::npos, M.LastMessage());
-        Tap(M, Button::A);
+        Dismiss(M);   // A finishes the typewriter, A again closes the page
         Check("and the mimic fights", M.CurrentMode() == Mode::Battle && M.Foes().size() == 1 && M.World().Monsters[static_cast<size_t>(M.Foes()[0].Kind)].Id == "GNASHBOX", M.Describe());
         Png(M.Render(), Out + "/realm_10_mimic.png");
         Check("beat it and the chest is done", AutoFight(M) && M.ChestsOpened() == 1, M.Describe());
@@ -602,7 +632,7 @@ int main(int Argc, char** Argv)
     Tap(G, Button::Up);
     Settle(G);
     Check("stepping on the portal says goodbye", G.TopBox() == "MESSAGE" && !G.WantsExit(), G.Describe());
-    Tap(G, Button::A);
+    Dismiss(G);
     Check("and asks to go home", G.WantsExit());
     const std::vector<std::string> Sfx = G.TakeSfx();
     Check("sound events were raised for the jukebox", Sfx.size() > 20 && G.TakeSfx().empty(), std::to_string(Sfx.size()));

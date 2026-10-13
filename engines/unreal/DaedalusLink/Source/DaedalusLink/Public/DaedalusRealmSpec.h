@@ -86,6 +86,8 @@ struct Spec
 {
     uint64_t Seed = 0;
     std::string Name;
+    /** The window rule colour, 0xRRGGBB (optional "ui" line; 0 = the kit's default). Each realm wears its own. */
+    uint32_t UiInk = 0;
     std::vector<ItemDef> Items;
     std::vector<MonsterDef> Monsters;
     std::vector<MapDef> Maps;
@@ -164,6 +166,7 @@ struct Spec
             };
             if (K == "seed") { if (!Need(2)) return false; Seed = std::strtoull(F[1].c_str(), nullptr, 10); }
             else if (K == "name") Name = Rest(L, 1);
+            else if (K == "ui") { if (!Need(2)) return false; UiInk = static_cast<uint32_t>(std::strtoul(F[1].c_str(), nullptr, 16)) & 0xFFFFFFu; }
             else if (K == "item")
             {
                 if (!Need(6)) return false;

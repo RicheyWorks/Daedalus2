@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include "DaedalusRealmLook.h"
 #include "DaedalusRealmSpec.h"
 
 #include <cstdio>
@@ -92,6 +93,11 @@ public:
         Spec S;
         if (!S.Parse(SpecText, Error)) return false;
         W = std::move(S);
+        {
+            Ui::Style& St = Ui::Current();
+            St = Ui::Style();
+            if (W.UiInk) { St.Ink = W.UiInk; St.InkDark = Shade(W.UiInk, 2, 3); }
+        }
         R = Rng(W.Seed ^ 0x51EDull);
         Opened.assign(W.Chests.size(), false);
         DoorOpen.assign(W.Doors.size(), false);
@@ -508,8 +514,10 @@ private:
         std::vector<int> Ids;            // what each row stands for
         int Cursor = 0, Page = 0;
         int Purpose = PNone, Arg = -1, Arg2 = -1;
+        double Shown = 0.0;              // typewriter: characters of this page revealed so far (Message boxes)
         std::function<void()> OnClose;
     };
+    static constexpr double TypeSpeed = 60.0;   // characters per second
     std::vector<Box> Boxes;
 
     void Say(const std::string& Text, std::function<void()> Then = nullptr)
@@ -543,7 +551,35 @@ private:
         while (!Boxes.empty() && Boxes.back().Kind != BoxKind::Message) Boxes.pop_back();
     }
 
-    void OpenCommand() { Push(BoxKind::Command, {"ITEM", "SPELL", "STATUS", "EQUIP"}, {0, 1, 2, 3}); }
+    void OpenCommand() { Push(BoxKind::Command, {"TALK", "SPELL", "STATUS", "ITEM", "SEARCH", "EQUIP"}, {4, 1, 2, 0, 5, 3}); }
+
+    /** TALK from the menu: whoever is ahead, else nobody. */
+    void TalkAhead()
+    {
+        static const int DXs[4] = {0, 0, -1, 1}, DYs[4] = {1, -1, 0, 0};
+        const int NX = PX + DXs[Facing], NY = PY + DYs[Facing];
+        int N = NpcAt(NX, NY);
+        if (N < 0 && TileHere(NX, NY) == Tile::Counter) N = NpcAt(NX + DXs[Facing], NY + DYs[Facing]);
+        CloseAllMenus();
+        if (N >= 0) Talk(N);
+        else Say("THERE IS NO ONE THERE.");
+    }
+
+    /** SEARCH from the menu: what is underfoot or ahead. */
+    void SearchHere()
+    {
+        static const int DXs[4] = {0, 0, -1, 1}, DYs[4] = {1, -1, 0, 0};
+        const int NX = PX + DXs[Facing], NY = PY + DYs[Facing];
+        CloseAllMenus();
+        const Tile Here = TileHere(PX, PY), Ahead = TileHere(NX, NY);
+        if (Here == Tile::StairsDown) { Say("THERE ARE STAIRS GOING DOWN."); return; }
+        if (Here == Tile::StairsUp) { Say("THERE ARE STAIRS GOING UP."); return; }
+        if (Here == Tile::Portal) { Say("THE PORTAL HUMS UNDERFOOT."); return; }
+        if (Ahead == Tile::Chest) { OpenChest(NX, NY); return; }
+        if (Ahead == Tile::Locked) { TryUnlock(NX, NY); return; }
+        if (Ahead == Tile::ChestOpen) { Say("THE CHEST IS EMPTY."); return; }
+        Say(std::string(Party[0].Name) + " SEARCHED THE GROUND.\nNOTHING HERE.");
+    }
 
     void OpenItems(int Purpose)
     {
@@ -657,7 +693,8 @@ private:
         Box& B = Boxes.back();
         if (B.Kind == BoxKind::Message)
         {
-            if ((B.Page + 1) * 4 < static_cast<int>(B.Rows.size())) { ++B.Page; return; }
+            if (B.Shown < Ui::PageChars(B.Rows, B.Page)) { B.Shown = 1e9; return; }   // show the rest of the page
+            if ((B.Page + 1) * 4 < static_cast<int>(B.Rows.size())) { ++B.Page; B.Shown = 0.0; return; }
             Close();
             return;
         }
@@ -671,6 +708,8 @@ private:
             if (Id == 0) OpenItems(0);
             else if (Id == 1) OpenMembers(PCaster);
             else if (Id == 2) Push(BoxKind::Status, {}, {});
+            else if (Id == 4) TalkAhead();
+            else if (Id == 5) SearchHere();
             else OpenMembers(PEquipWho);
             break;
         case BoxKind::Items:
@@ -1357,8 +1396,11 @@ inline void Realm::Press(Button B)
             if (B == Button::A || B == Button::B) BoxChoose();
             return;
         }
-        if (B == Button::Up && N > 0) Top.Cursor = (Top.Cursor + N - 1) % N;
-        else if (B == Button::Down && N > 0) Top.Cursor = (Top.Cursor + 1) % N;
+        const int Cols = Top.Kind == BoxKind::Command ? 2 : 1;
+        if (B == Button::Up && N > 0) Top.Cursor = (Top.Cursor + N - Cols) % N;
+        else if (B == Button::Down && N > 0) Top.Cursor = (Top.Cursor + Cols) % N;
+        else if (Cols > 1 && B == Button::Left && N > 0) Top.Cursor = Top.Cursor % Cols == 0 ? std::min(N - 1, Top.Cursor + Cols - 1) : Top.Cursor - 1;
+        else if (Cols > 1 && B == Button::Right && N > 0) Top.Cursor = Top.Cursor % Cols == Cols - 1 || Top.Cursor + 1 >= N ? Top.Cursor - Top.Cursor % Cols : Top.Cursor + 1;
         else if (B == Button::A) BoxChoose();
         else if (B == Button::B) Boxes.pop_back();
         return;
@@ -1407,6 +1449,8 @@ inline void Realm::WanderNpcs(double Dt)
 
 inline void Realm::Tick(double Dt)
 {
+    for (Box& B : Boxes)
+        if (B.Kind == BoxKind::Message && B.Shown < Ui::PageChars(B.Rows, B.Page)) B.Shown += Dt * TypeSpeed;
     if (!Loaded) return;
     Clock += Dt;
     if (Bump > 0.0) Bump -= Dt;
@@ -1457,7 +1501,12 @@ inline void Realm::RenderField(Frame& F, int Anim)
             const Tile T = TileHere(MX, MY);
             int Tier = 1;
             if (T == Tile::Locked) { const int D = DoorAt(MX, MY); if (D >= 0) Tier = W.Doors[static_cast<size_t>(D)].Tier; }
-            DrawTile(F, SX, SY, T, static_cast<uint64_t>(MX * 131 + MY * 7919) ^ W.Seed, Anim, Tier);
+            const uint64_t Salt = static_cast<uint64_t>(MX * 131 + MY * 7919) ^ W.Seed;
+            if (T == Tile::Tree) DrawForest(F, SX, SY, Salt);
+            else if (T == Tile::Grass) DrawMeadow(F, SX, SY, Salt);
+            else if (T == Tile::Cobble) DrawFlagstones(F, SX, SY);
+            else if (T == Tile::Stone) DrawBlockWall(F, SX, SY);
+            else DrawTile(F, SX, SY, T, Salt, Anim, Tier);
         }
     auto Visible = [&](int X, int Y) { return std::abs(X - PX) <= Light && std::abs(Y - PY) <= Light; };
     for (size_t i = 0; i < W.Npcs.size(); ++i)
@@ -1488,13 +1537,7 @@ inline void Realm::RenderField(Frame& F, int Anim)
     DrawPerson(F, ScreenW / 2 - 8 + Shake, ScreenH / 2 - 8, Party[0].L, Facing, (Anim / 2) % 2 + WalkFrame);
     if (Flash > 0.0)   // hurt: the screen blinks red at the edges
         for (int k = 0; k < 3; ++k) { F.Rect(0, k, ScreenW, 1, Pal::Red); F.Rect(0, ScreenH - 1 - k, ScreenW, 1, Pal::Red); F.Rect(k, 0, 1, ScreenH, Pal::Red); F.Rect(ScreenW - 1 - k, 0, 1, ScreenH, Pal::Red); }
-    if (Boxes.empty() && Idle > 1.0)
-    {
-        F.Window(8, 8, 84, 44);
-        char B[64];
-        std::snprintf(B, sizeof(B), "%s\nH%3d M%3d\nG%5d", Party[0].Name.c_str(), Party[0].Hp, Party[0].Mp, GoldHeld);
-        Text(F, 16, 14, B, Party[0].Poisoned ? Pal::Lime : Pal::White);
-    }
+    if (Boxes.empty() && Idle > 1.0) Ui::PartyStrip(F, Party, -1);
 }
 
 inline void Realm::ListBox(Frame& F, int X, int Y, int WW, const Box& B, int Anim, int MaxRows)
@@ -1502,12 +1545,13 @@ inline void Realm::ListBox(Frame& F, int X, int Y, int WW, const Box& B, int Ani
     const int N = static_cast<int>(B.Rows.size());
     const int Shown = std::min(N, MaxRows);
     const int First = std::max(0, std::min(B.Cursor - Shown + 1, N - Shown));
-    F.Window(X, Y, WW, Shown * 12 + 18);
-    for (int k = 0; k < Shown; ++k) Text(F, X + 18, Y + 10 + k * 12, B.Rows[static_cast<size_t>(First + k)]);
-    if (&B == &Boxes.back() && (Anim / 3) % 2 == 0) Text(F, X + 9, Y + 10 + (B.Cursor - First) * 12, ">");
-    else if (&B != &Boxes.back()) Text(F, X + 9, Y + 10 + (B.Cursor - First) * 12, ">", Pal::Grey);
-    if (First > 0) Text(F, X + WW - 14, Y + 6, "+");
-    if (First + Shown < N) Text(F, X + WW - 14, Y + Shown * 12 + 6, "+");
+    const char* Title = B.Kind == BoxKind::Items ? "ITEM" : B.Kind == BoxKind::Spells ? "SPELL" : B.Kind == BoxKind::Equip ? "EQUIP"
+        : B.Kind == BoxKind::ShopBuy ? "BUY" : B.Kind == BoxKind::ShopSell ? "SELL" : B.Kind == BoxKind::Members ? "WHO" : "";
+    Ui::Window(F, X, Y, WW, Shown * 12 + 20, Title);
+    std::vector<std::string> Rows(B.Rows.begin() + First, B.Rows.begin() + First + Shown);
+    Ui::Grid(F, X + 4, Y + 9, Rows, 1, 0, B.Cursor - First, &B == &Boxes.back(), Anim);
+    if (First > 0) Ui::TextB(F, X + WW - 16, Y + 2, "+", Ui::Current().Ink);
+    if (First + Shown < N) Ui::TextB(F, X + WW - 16, Y + Shown * 12 + 10, "+", Ui::Current().Ink);
 }
 
 inline void Realm::RenderBoxes(Frame& F, int Anim)
@@ -1516,8 +1560,8 @@ inline void Realm::RenderBoxes(Frame& F, int Anim)
     for (const Box& B : Boxes) Shop |= B.Kind == BoxKind::ShopTop || B.Kind == BoxKind::ShopBuy || B.Kind == BoxKind::ShopSell || B.Kind == BoxKind::YesNo;
     if (Shop)
     {
-        F.Window(8, 8, 96, 30);
-        Text(F, 18, 16, "GOLD " + std::to_string(GoldHeld));
+        Ui::Window(F, 8, 8, 104, 32, "GOLD");
+        Ui::TextB(F, 20, 16, std::to_string(GoldHeld));
     }
     for (const Box& B : Boxes)
     {
@@ -1525,35 +1569,35 @@ inline void Realm::RenderBoxes(Frame& F, int Anim)
         {
         case BoxKind::Message:
         {
-            F.Window(8, 152, 240, 80);
-            for (int k = 0; k < 4; ++k)
-            {
-                const size_t L = static_cast<size_t>(B.Page * 4 + k);
-                if (L < B.Rows.size()) Text(F, 18, 162 + k * 14, B.Rows[L]);
-            }
-            if (&B == &Boxes.back() && (Anim / 3) % 2 && ((B.Page + 1) * 4 < static_cast<int>(B.Rows.size()) || B.OnClose)) Text(F, 230, 220, ">", Pal::Gold);
+            const bool More = &B == &Boxes.back() && ((B.Page + 1) * 4 < static_cast<int>(B.Rows.size()) || B.OnClose);
+            const int Chars = B.Shown >= Ui::PageChars(B.Rows, B.Page) ? 1000000 : static_cast<int>(B.Shown);
+            Ui::Dialogue(F, B.Rows, B.Page, Chars, More, Anim);
             break;
         }
-        case BoxKind::Command: case BoxKind::ShopTop: ListBox(F, 160, 8, 88, B, Anim, 4); break;
+        case BoxKind::Command:
+            Ui::Window(F, 56, 8, 152, 48, "COMMAND");
+            Ui::Grid(F, 60, 18, B.Rows, 2, 9, B.Cursor, &B == &Boxes.back(), Anim);
+            break;
+        case BoxKind::ShopTop: ListBox(F, 160, 8, 88, B, Anim, 4); break;
         case BoxKind::Members: ListBox(F, 112, 72, 80, B, Anim, 3); break;
         case BoxKind::YesNo: ListBox(F, 176, 104, 64, B, Anim, 2); break;
         case BoxKind::Items: case BoxKind::Equip: case BoxKind::ShopBuy: case BoxKind::ShopSell: ListBox(F, 40, 40, 192, B, Anim, 8); break;
         case BoxKind::Spells: ListBox(F, 72, 56, 112, B, Anim, 4); break;
         case BoxKind::Status:
         {
-            F.Window(8, 8, 240, 168);
+            Ui::Window(F, 8, 8, 240, 168, "STATUS");
             int Y = 18;
             for (const Member& P : Party)
             {
                 char Row[96];
                 std::snprintf(Row, sizeof(Row), "%-6s LV%2d %s\n H%3d/%-3d M%3d/%-3d\n A%3d D%3d G%3d E%d", P.Name.c_str(), P.Lvl,
                     P.Poisoned ? "POISON" : P.Alive() ? "" : "FALLEN", P.Hp, P.MaxHp, P.Mp, P.MaxMp, AtkOf(P), DefOf(P), P.Agi, P.Exp);
-                Text(F, 18, Y, Row, P.Alive() ? Pal::White : Pal::Red);
+                Ui::TextB(F, 18, Y, Row, P.Alive() ? Ui::Current().Text : Pal::Red);
                 Y += 40;
             }
             char G[64];
             std::snprintf(G, sizeof(G), "GOLD %d   STEPS %d", GoldHeld, StepCount);
-            Text(F, 18, Y + 2, G, Pal::Gold);
+            Ui::TextB(F, 18, Y + 2, G, Ui::Current().Hot);
             break;
         }
         }
@@ -1563,17 +1607,9 @@ inline void Realm::RenderBoxes(Frame& F, int Anim)
 inline void Realm::RenderBattle(Frame& F, int Anim)
 {
     F.Clear(Pal::Black);
-    for (size_t i = 0; i < Party.size(); ++i)
     {
-        const int X = 8 + static_cast<int>(i) * 82;
-        F.Window(X, 6, 78, 48);
-        char B[64];
-        const Member& P = Party[i];
-        const int Hp = i < MemShown.size() ? MemShown[i] : P.Hp;
-        std::snprintf(B, sizeof(B), "%s\nH%3d\nM%3d L%d", P.Name.c_str(), Hp, P.Mp, P.Lvl);
-        uint32_t C = Hp <= 0 ? Pal::Red : P.Asleep > 0 ? Pal::LightGrey : P.Poisoned ? Pal::Lime : Pal::White;
-        if (static_cast<int>(i) == Actor && (Ph == Phase::Command || Ph == Phase::Target || !Boxes.empty())) C = Pal::Gold;
-        Text(F, X + 9, 13, B, C);
+        const int Hot = (Ph == Phase::Command || Ph == Phase::Target || !Boxes.empty()) ? Actor : -1;
+        Ui::PartyStrip(F, Party, Hot, &MemShown);
     }
     // The scene: a slice of where the fight is.
     if (Map().Dark)
@@ -1604,16 +1640,20 @@ inline void Realm::RenderBattle(Frame& F, int Anim)
         if (Ph == Phase::Target && TargetI == i && (Anim / 2) % 2) Text(F, X + 28, 140, "*", Pal::Gold);
     }
     // Commands (left) and the log (right).
-    F.Window(8, 152, 72, 80);
+    Ui::Window(F, 8, 152, 76, 80, "FIGHT");
     static const char* Cmds[5] = {"FIGHT", "SPELL", "ITEM", "DEFEND", "RUN"};
-    for (int k = 0; k < 5; ++k) Text(F, 24, 161 + k * 13, Cmds[k], Ph == Phase::Command || Ph == Phase::Target ? Pal::White : Pal::Grey);
-    if (Ph == Phase::Command && Boxes.empty() && (Anim / 3) % 2 == 0) Text(F, 14, 161 + Menu * 13, ">");
-    F.Window(84, 152, 164, 80);
+    {
+        std::vector<std::string> Rows(Cmds, Cmds + 5);
+        const bool Active = Ph == Phase::Command || Ph == Phase::Target;
+        std::vector<bool> On(5, Active);
+        Ui::Grid(F, 12, 163, Rows, 1, 0, Ph == Phase::Command && Boxes.empty() ? Menu : -1, true, Anim, &On);
+    }
+    Ui::Window(F, 84, 152, 164, 80);
     std::vector<std::string> Wrapped;
     for (const std::string& L : Log) for (const std::string& W2 : Wrap(L, 18)) Wrapped.push_back(W2);
     const size_t From = Wrapped.size() > 6 ? Wrapped.size() - 6 : 0;
-    for (size_t k = From; k < Wrapped.size(); ++k) Text(F, 94, 160 + static_cast<int>(k - From) * 11, Wrapped[k]);
-    if ((Ph == Phase::Ending || Ph == Phase::Intro) && Queue.empty() && (Anim / 3) % 2) Text(F, 232, 222, ">", Pal::Gold);
+    for (size_t k = From; k < Wrapped.size(); ++k) Ui::TextB(F, 94, 161 + static_cast<int>(k - From) * 12, Wrapped[k]);
+    if ((Ph == Phase::Ending || Ph == Phase::Intro) && Queue.empty() && (Anim / 4) % 2) Ui::PageArrow(F, 162, 224);
 }
 
 inline const Frame& Realm::Render()
