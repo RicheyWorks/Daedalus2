@@ -70,6 +70,8 @@ import static org.assertj.core.api.Assertions.assertThat;
         "daedalus.plugins.scan-on-startup=false",
         // Mount the wallet routes (off by default) so their posture is probed, not assumed (ADR-028).
         "daedalus.wallet.enabled=true",
+        "daedalus.shards.enabled=true",
+        "daedalus.shards.routes=world-zero,0,99,https://world-zero.example",
 })
 @ActiveProfiles("prod")
 class ProdAuthPostureTest {
@@ -90,6 +92,7 @@ class ProdAuthPostureTest {
     private static final Map<String, Posture> EXPECTED = new LinkedHashMap<>();
 
     static {
+        EXPECTED.put("GET /api/v1/realms/" + ID + "/districts/" + ID + "/route", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/audio/design", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/kennel/brew", Posture.AUTHENTICATED);
         // --- deliberately public ---

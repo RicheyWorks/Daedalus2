@@ -20,7 +20,7 @@ public record RealmEstate(String realm, List<PlacedLand> lands) {
             throw new IllegalArgumentException("realm and lands are required");
         if (lands.size() < 4 || lands.size() > 100 || lands.stream().anyMatch(java.util.Objects::isNull))
             throw new IllegalArgumentException("estate requires 4..100 placed lands");
-        lands = lands.stream().sorted(Comparator.comparingInt(PlacedLand::number)).toList();
+        lands = List.copyOf(lands.stream().sorted(Comparator.comparingInt(PlacedLand::number)).toList());
         var numbers = new HashSet<Integer>();
         var cells = new HashSet<RealmLandGrid.Cell>();
         int minX=50, minZ=50, maxX=-49, maxZ=-49;
@@ -37,6 +37,7 @@ public record RealmEstate(String realm, List<PlacedLand> lands) {
             throw new IllegalArgumentException("estate must fill one square without holes");
     }
 
+    @Override public List<PlacedLand> lands() { return List.copyOf(lands); }
     public List<Integer> landNumbers() { return lands.stream().map(PlacedLand::number).toList(); }
     public int district() { return lands.getFirst().cell().district(); }
     public int side() { return (int)Math.sqrt(lands.size()); }
