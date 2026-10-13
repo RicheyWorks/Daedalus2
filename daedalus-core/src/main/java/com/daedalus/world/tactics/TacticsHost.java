@@ -28,7 +28,8 @@ import java.util.Objects;
  *   <li><b>Bounded:</b> at most {@link #MAX_SQUADS} (session, squad) entries, oldest dropped first; the parsers
  *       already cap a roster at 256 units and a batch at 512 events.</li>
  * </ul>
- * Thread-safe: one lock, held only for the map work and the decision (microseconds at 256 units).
+ * Thread-safe: one lock covers map work and the decision. A custom brain may perform durable storage;
+ * its latency serializes requests to this host and must be measured off Unreal's game thread.
  */
 public final class TacticsHost {
 
