@@ -62,3 +62,16 @@ With every island loaded, every island's art is in RAM. That makes rule 2 the le
   Unload). The safe scripted way to do that in UE 5.8 Python is still to be found in an editor slot.
   `FocusSet()` already says which islands to keep.
 - **Rule 5:** an island proxy or HLOD mesh for far distances.
+
+## Addendum, 2026-10-13 04:4x: rule 3 in the browser
+
+`/reach.html` now draws each isle as merged surface quads, via `reach-core.js` `mesh()`, a port of the C++ `Mesh()`.
+Before, it drew one instanced cube per visible block.
+- **Parity:** `core-test` writes `voxel_mesh_parity.txt`, and `tools/reach_parity.mjs` matches all 7 isles, quad
+  for quad (FNV hash).
+- **Triangles:** 195,246 cubes × 12 = 2.34M became 98,992 quads × 2 = 198k, 12× fewer, and the page looks the
+  same.
+- **Speed:** with headless Chromium on SwiftShader, the same view ran at 0.29 fps before and 4.42 fps after, 15×
+  faster. Ready time went from 2.0 s to 2.6 s, because meshing happens once on load.
+- **JS heap:** about the same (27 to 30 MB), since cube instances and quads cost similar bytes. The win is GPU work
+  per frame. This is the same change ADR-058 made for Unreal, which still waits on an editor build.

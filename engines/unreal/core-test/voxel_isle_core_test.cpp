@@ -136,6 +136,21 @@ int main(int argc, char** argv)
 		}
 		std::fclose(F);
 		std::printf("wrote %s\n", Out);
+		// the merged surface mesh (Mesh()), for the browser's port: quads per isle and an FNV-1a hash over every quad
+		const std::string MeshOut = std::string(Out).substr(0, std::string(Out).rfind('/') + 1) + "voxel_mesh_parity.txt";
+		FILE* M = std::fopen(MeshOut.c_str(), "w");
+		std::fprintf(M, "# voxel_isle_core_test.cpp: seed radius summit depth pondX pondY pondR | quads fnv (Layer Normal Plane U0 U1 V0 V1)\n");
+		for (const Params& S : Set)
+		{
+			const std::vector<Quad> Q = Mesh(S);
+			uint64_t H = 14695981039346656037ull;
+			for (const Quad& q : Q)
+				for (int v : {q.Layer, q.Normal, q.Plane, q.U0, q.U1, q.V0, q.V1}) { H ^= static_cast<uint32_t>(v); H *= 1099511628211ull; }
+			std::fprintf(M, "%d %d %d %d %d %d %d | %zu %llu\n", S.Seed, S.Radius, S.SummitHeight, S.Depth, S.PondX, S.PondY, S.PondRadius,
+				Q.size(), static_cast<unsigned long long>(H));
+		}
+		std::fclose(M);
+		std::printf("wrote %s\n", MeshOut.c_str());
 	}
 	std::printf("%d/%d\n", Passed, Total);
 	return Passed == Total ? 0 : 1;
