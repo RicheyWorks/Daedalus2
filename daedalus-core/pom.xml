@@ -46,4 +46,15 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <build>
+        <resources>
+            <resource><directory>src/main/resources</directory></resource>
+            <resource>
+                <directory>${project.basedir}/../engines/unreal/DaedalusLink/Content/Inventory</directory>
+                <targetPath>inventory</targetPath>
+                <includes><include>*.dic</include></includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+    </build>
 </project>

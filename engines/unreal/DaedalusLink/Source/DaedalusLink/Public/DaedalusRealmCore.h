@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include "DaedalusBattleStageCore.h"
 #include "DaedalusRealmLook.h"
 #include "DaedalusRealmSpec.h"
 #include "DaedalusRealmSprites.h"
@@ -143,6 +144,8 @@ public:
         Opened.assign(W.Chests.size(), false);
         DoorOpen.assign(W.Doors.size(), false);
         BossDown.assign(W.Bosses.size(), false);
+        DeedTaken.assign(W.Lands.size(), false);
+        LandHere = -1;
         Tiles.clear();
         for (const MapDef& M : W.Maps) Tiles.push_back(M.T);
         NpcPos.clear();
@@ -203,6 +206,46 @@ public:
     static constexpr int EggNeed = 240, MaxParty = 4;
     int EggWarmth = 0;
     int Warmth() const { return EggWarmth; }
+
+    // ---- lands (ADR-065): plots of the overworld with deeds. Standing on one shows whose it is; the owner's first
+    // visit hands over the deed's DRAGON EGG. The hero's name on a deed is the party's first member's.
+    std::vector<bool> DeedTaken;   // per land: its egg has been handed over
+    int LandHere = -1;             // the land under the party, -1 for none
+    int LandAt(int M, int X, int Y) const
+    {
+        for (size_t i = 0; i < W.Lands.size(); ++i) if (W.Lands[i].Contains(M, X, Y)) return static_cast<int>(i);
+        return -1;
+    }
+    int LandIndex(int Number) const
+    {
+        for (size_t i = 0; i < W.Lands.size(); ++i) if (W.Lands[i].Number == Number) return static_cast<int>(i);
+        return -1;
+    }
+    /** The deed's name, as the realm compares it: upper case, the party leader's name. */
+    bool Owns(const LandDef& L) const { return !L.Owner.empty() && !Party.empty() && Upper(L.Owner) == Upper(Party[0].Name); }
+    int DeedsTaken() const { int N = 0; for (bool B : DeedTaken) N += B; return N; }
+    /** The server's deed table changed (a mint, a tug): the realm follows it. */
+    void SetOwner(int Number, const std::string& Owner) { const int I = LandIndex(Number); if (I >= 0) W.Lands[static_cast<size_t>(I)].Owner = Owner; }
+
+    void CrossLands()
+    {
+        const int Now = LandAt(Cur, PX, PY);
+        if (Now == LandHere) return;
+        LandHere = Now;
+        if (Now < 0) return;
+        LandDef& L = W.Lands[static_cast<size_t>(Now)];
+        const std::string Who = L.Owner.empty() ? "FOR SALE" : Owns(L) ? "YOURS" : Upper(L.Owner) + "'S";
+        Sfx.push_back("LAND");
+        if (Owns(L) && !DeedTaken[static_cast<size_t>(Now)] && W.ItemIndex("DRAGON_EGG") >= 0)
+        {
+            DeedTaken[static_cast<size_t>(Now)] = true;
+            Give(W.ItemIndex("DRAGON_EGG"), 1);
+            Sfx.push_back("DEED");
+            Say("LAND " + std::to_string(L.Number) + ". YOURS. THE DEED'S DRAGON EGG IS IN THE BAG.");
+            return;
+        }
+        Say("LAND " + std::to_string(L.Number) + ". " + Who + ".");
+    }
     bool HasDrake() const { for (const Member& P : Party) if (P.Class == 3) return true; return false; }
 
     void WarmEgg()
@@ -249,6 +292,9 @@ public:
     void ForceShinyNext(bool On) { ForceShiny = On; }
     int ShiniesSeen() const { return ShinySeen; }
     int PopCount() const { return static_cast<int>(Pops.size()); }
+    /** The battle stage director (hub 28710): cues for a 3D stage, lifted from the battle lines as they play. */
+    std::vector<stage::Cue> TakeStage() { return Stage.Take(); }
+    size_t StagePending() const { return Stage.Pending(); }
     int Count(int Item) const { for (const auto& E : Bag) if (E.first == Item) return E.second; return 0; }
     int Count(const std::string& Id) const { return Count(W.ItemIndex(Id)); }
     int ChestsOpened() const { int N = 0; for (bool O : Opened) N += O; return N; }
@@ -375,6 +421,7 @@ private:
         if (!Map().Dark) Torch = false;
         else if (!WasDark) Torch = false;   // a new trip underground needs a new torch
         SetCue(Map().Music);
+        LandHere = LandAt(Cur, PX, PY);   // arriving onto a land by stairs or wings is not a crossing
         if (Countdown <= 0) ResetCountdown();
     }
 
@@ -411,6 +458,7 @@ private:
         ++WalkFrame;
         Arrive(T);
         WarmEgg();
+        if (Boxes.empty()) CrossLands();
     }
 
     void Bumped() { Bump = 0.15; Sfx.push_back("BUMP"); }
@@ -949,6 +997,7 @@ private:
     struct Pop { int Foe = -1, Mem = -1, Amount = 0; double Life = 0.0; };
     std::vector<Pop> Pops;
     bool ForceShiny = false;   // the harness: every foe of the next battle is shiny
+    stage::Director Stage;
     int ShinySeen = 0;
 
     enum class Phase { Intro, Command, Target, Play, Ending };
@@ -996,6 +1045,11 @@ private:
         SetCue(NoRun ? "BOSS" : "BATTLE");
         Sfx.push_back("AMBUSH");
         std::string Names = Mon(Enemies[0].Kind).Name;
+        {
+            std::vector<bool> Sh;
+            for (const Foe& F : Enemies) Sh.push_back(F.Shiny);
+            Stage.Begin(static_cast<int>(Party.size()), static_cast<int>(Enemies.size()), Sh);
+        }
         for (const Foe& F : Enemies) if (F.Shiny) { Log.push_back("A SHINY " + Mon(F.Kind).Name + " GLITTERS!"); Sfx.push_back("SHINY"); }
         if (Enemies.size() > 1) Log.push_back("MONSTERS APPEAR!");
         else
@@ -1347,6 +1401,17 @@ private:
         if (Queue.empty()) return;
         Line L = Queue.front();
         Queue.pop_front();
+        {
+            stage::LineFacts F;
+            F.Text = L.Text; F.Sound = L.Sound;
+            F.Foe = L.Foe; F.FoeGone = L.Gone;
+            if (L.Foe >= 0 && L.Foe < static_cast<int>(FoeShown.size())) { F.FoeHpBefore = FoeShown[static_cast<size_t>(L.Foe)]; F.FoeHpAfter = L.FoeHp; }
+            F.Mem = L.Mem;
+            if (L.Mem >= 0 && L.Mem < static_cast<int>(MemShown.size())) { F.MemHpBefore = MemShown[static_cast<size_t>(L.Mem)]; F.MemHpAfter = L.MemHp; }
+            for (const Member& P : Party) F.MemberNames.push_back(P.Name);
+            for (const Foe& E : Enemies) F.FoeNames.push_back(Mon(E.Kind).Name);
+            Stage.OnLine(F);
+        }
         Log.push_back(L.Text);
         if (Log.size() > 40) Log.erase(Log.begin());
         LastSaid = L.Text;
@@ -1828,7 +1893,7 @@ inline std::string Realm::Describe() const
     std::ostringstream S;
     S << "mode=" << (ModeNow == Mode::Battle ? "BATTLE" : "FIELD") << " map=" << MapId() << " x=" << PX << " y=" << PY
       << " facing=" << Facing << " tile=" << TileChars()[static_cast<int>(TileHere(PX, PY))] << " ui=" << TopBox()
-      << " party=" << Party.size() << " egg=" << EggWarmth << " gold=" << GoldHeld << " steps=" << StepCount << " battles=" << BattleCount << " wins=" << WinCount
+      << " party=" << Party.size() << " egg=" << EggWarmth << " land=" << (LandHere >= 0 ? W.Lands[static_cast<size_t>(LandHere)].Number : -1) << " deeds=" << DeedsTaken() << "/" << W.Lands.size() << " gold=" << GoldHeld << " steps=" << StepCount << " battles=" << BattleCount << " wins=" << WinCount
       << " chests=" << ChestsOpened() << "/" << W.Chests.size() << " doors=" << DoorsOpened() << "/" << W.Doors.size()
       << " bosses=" << BossesBeaten() << "/" << W.Bosses.size() << " light=" << LightRadius() << " cue=" << Cue
       << " cue_changes=" << CueCount << " exit=" << (ExitRequested ? 1 : 0) << " talks=" << Talks << " party=";
@@ -1873,6 +1938,7 @@ inline std::string Realm::Save() const
     Flags("chests", Opened);
     Flags("doors", DoorOpen);
     Flags("bosses", BossDown);
+    Flags("deeds", DeedTaken);
     S << "\n";
     return S.str();
 }
@@ -1939,7 +2005,7 @@ inline bool Realm::Restore(const std::string& Text)
             RespawnMap = std::max(0, W.MapIndex(M));
         }
         else if (Same && K == "counts") F >> StepCount >> BattleCount >> WinCount;
-        else if (Same && (K == "chests" || K == "doors" || K == "bosses"))
+        else if (Same && (K == "chests" || K == "doors" || K == "bosses" || K == "deeds"))
         {
             size_t I;
             while (F >> I)
@@ -1957,6 +2023,7 @@ inline bool Realm::Restore(const std::string& Text)
                     SetTile(D.At.Map, D.At.X, D.At.Y, Tile::Door);
                 }
                 if (K == "bosses" && I < BossDown.size()) BossDown[I] = true;
+                if (K == "deeds" && I < DeedTaken.size()) DeedTaken[I] = true;
             }
         }
     }

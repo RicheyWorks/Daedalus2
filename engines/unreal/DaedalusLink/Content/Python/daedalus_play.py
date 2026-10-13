@@ -1055,22 +1055,29 @@ def scenario_inventory(p):
 def scenario_dialogue(p):
     """Dialogue boxes in the 3D realms (Richey 2026-10-13, Animal Crossing style): an NPC line opens the box in the
     realm's theme, types itself with blips, pages, offers choices; A/B/up/down drive it; the outcome reaches the
-    hero. Proven by state lines (Slate isn't in a scene capture)."""
+    hero. Proven by state lines (Slate isn't in a scene capture). Play's frame rate sets the typewriter's pace, so
+    every step reads the state and acts on it rather than counting frames."""
     h = hero()
     h.inventory_input("realm:gallery-city")
     h.speak("Curator Vell", "Welcome to the Gallery, painter. The Heartstone went missing last night and the Echo Choir has gone quiet. Would you look into it for me?", ["Of course", "Not now"])
     yield from _frames(2)
     opened = h.dialogue_input("state")
-    yield from _frames(20)   # the typewriter runs on Slate's tick, paused game or not
+    yield from _frames(6)
     typed = h.dialogue_input("state")
-    a1 = h.dialogue_input("a")      # finish the page
-    a2 = h.dialogue_input("a")      # next page
-    skip = h.dialogue_input("b")    # to the end: the choices
+    turned = ""
+    for _ in range(4):   # A finishes the page, A turns it; however far the typewriter got
+        turned = h.dialogue_input("a")
+        if "page=2/2" in turned:
+            break
+    skipped = h.dialogue_input("state")
+    if "choosing" not in skipped:
+        skipped = h.dialogue_input("b")   # B skips to the end of the text: the choices
+    was = _kv(skipped).get("choosing", "0/2").split("/")[0]
     down = h.dialogue_input("down")
-    pick = h.dialogue_input("a")    # "Not now"
+    want = str((int(was) + 1) % 2)
+    pick = h.dialogue_input("a")
     yield from _frames(2)
     after = h.dialogue_input("state")
-    # a second line with no choices, then the Keeper's own line through the same box
     h.speak("Street Muralist", "Psst. The wall by the vat has a secret.", [])
     yield from _frames(2)
     h.dialogue_input("b")
@@ -1079,12 +1086,69 @@ def scenario_dialogue(p):
     h.inventory_input("realm:")
     return {"checks": [
         _check("the line opens the box in the realm's era", "open=1 era=MODERN who=Curator Vell page=1/2" in opened, opened),
-        _check("it types itself with blips", _kv(typed).get("shown", "0/1").split("/")[0] != "0" and int(_kv(typed).get("blips", "0")) > 5, typed),
-        _check("A finishes the page, A turns it", "page=1/2" in a1 and "page=2/2" in a2, a1 + " | " + a2),
-        _check("B skips to the choices", "choosing=0/2" in skip, skip),
-        _check("down moves the choice and A picks it for the hero", "choosing=1/2" in down and "last=choice:1:Curator Vell" in pick, down + " | " + pick),
+        _check("it types itself with blips", int(_kv(typed).get("blips", "0")) > 5, typed),
+        _check("A finishes the page and turns it", "page=2/2" in turned, turned),
+        _check("the end of the text is the choices", "choosing=" in skipped, skipped),
+        _check("down moves the choice and A picks it for the hero", ("choosing=%s/2" % want) in down and ("last=choice:%s:Curator Vell" % want) in pick, down + " | " + pick),
         _check("the box is down afterwards", after.startswith("closed") and not h.is_dialogue_open(), after),
         _check("a line without choices closes on A", "last=closed:Street Muralist" in closed and not h.is_dialogue_open(), closed),
+    ]}
+
+
+def scenario_cast(p):
+    """A realm NPC with a script (DCS 1): Curator Vell spawned in Play, talked to through the dialogue box; the
+    quest branch sets a flag, a second talk starts from it, and the Echo Choir (another talker) hears the
+    realm-wide flag. State lines prove it."""
+    h = hero()
+    h.inventory_input("realm:gallery-city")
+    at = h.get_actor_location()
+    fwd = h.get_actor_forward_vector()
+    spawn = unreal.DaedalusFilm.spawn_in_play
+    vell = spawn(h, unreal.DaedalusTalker, at + fwd * 220 + unreal.Vector(0, 0, 100), unreal.Rotator(0, 0, 0))
+    vell.set_editor_property("who", "Curator Vell")
+    choir = spawn(h, unreal.DaedalusTalker, at + fwd * 220 + unreal.Vector(0, 300, 100), unreal.Rotator(0, 0, 0))
+    choir.set_editor_property("who", "Echo Choir")
+    yield from _frames(2)
+    bound = vell.rebind() and choir.rebind()
+    yield from _frames(2)
+
+    def through(talker, picks):
+        """Talk, closing plain lines with B+A and answering asks with the given picks, until the box is down."""
+        lines = []
+        used = talker.use(h)
+        for _ in range(12):
+            st = h.dialogue_input("state")
+            if st.startswith("closed"):
+                break
+            lines.append(st)
+            if "choosing" not in st:
+                h.dialogue_input("b")      # skip the typewriter
+                st = h.dialogue_input("state")
+            if "choosing" in st:
+                want = picks.pop(0) if picks else 0
+                cur = int(_kv(st).get("choosing", "0/1").split("/")[0])
+                for _ in range((want - cur) % 4):
+                    h.dialogue_input("down")
+            h.dialogue_input("a")
+        return used, lines
+
+    used1, first = through(vell, [1])        # "Not now"
+    s1 = vell.state()
+    used2, second = through(vell, [0])       # "Of course"
+    s2 = vell.state()
+    used3, third = through(vell, [1])        # waiting -> "I have it"
+    s3 = vell.state()
+    used4, choir_lines = through(choir, [])
+    s4 = choir.state()
+    h.inventory_input("realm:")
+    return {"checks": [
+        _check("both talkers bound their scripts", bound and "bound=1" in s1 and "bound=1" in s4, s1 + " | " + s4),
+        _check("the first talk runs welcome, Heartstone, the ask", used1 and len(first) >= 3 and "who=Curator Vell" in first[0], " / ".join(first)[:300]),
+        _check("'Not now' sets nothing", "flags= " in s1 + " " and "talks=1" in s1, s1),
+        _check("'Of course' sets the quest flag", "heartstone" in s2 and "talks=2" in s2, s2),
+        _check("the third talk starts at 'waiting' and 'I have it' finishes the quest", "heartstone_done" in s3 and any("Any word" in l or "page=" in l for l in third), s3),
+        _check("the Choir hears the realm-wide flag and sings", "heartstone_done" in s4 and used4, s4),
+        _check("the Curator's Frame Plate landed in the satchel", "given=FRAME_PLATE" in s3 and dict(h.get_editor_property("satchel")).get("FRAME_PLATE", 0) >= 1, s3),
     ]}
 
 
@@ -1107,6 +1171,7 @@ SCENARIOS = {
     "shiny": scenario_shiny,
     "inventory": scenario_inventory,
     "dialogue": scenario_dialogue,
+    "cast": scenario_cast,
 }
 
 

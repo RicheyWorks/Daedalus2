@@ -17,7 +17,13 @@ import java.util.Optional;
  */
 public record RetroRealm(long seed, String name, List<RetroMap> maps, List<Zone> zones, List<Link> links,
                          List<Chest> chests, List<Door> doors, List<Npc> npcs, List<Shop> shops, List<Boss> bosses,
-                         Place spawn, Place portal, List<String> news) {
+                         Place spawn, Place portal, List<String> news, List<Land> lands) {
+
+    public RetroRealm(long seed, String name, List<RetroMap> maps, List<Zone> zones, List<Link> links,
+                      List<Chest> chests, List<Door> doors, List<Npc> npcs, List<Shop> shops, List<Boss> bosses,
+                      Place spawn, Place portal, List<String> news) {
+        this(seed, name, maps, zones, links, chests, doors, npcs, shops, bosses, spawn, portal, news, List.of());
+    }
 
     public RetroRealm {
         maps = List.copyOf(maps);
@@ -29,11 +35,36 @@ public record RetroRealm(long seed, String name, List<RetroMap> maps, List<Zone>
         shops = List.copyOf(shops);
         bosses = List.copyOf(bosses);
         news = List.copyOf(news);
+        lands = List.copyOf(lands);
+        java.util.Set<Integer> numbers = new java.util.HashSet<>();
+        for (Land land : lands) {
+            if (!numbers.add(land.number())) throw new IllegalArgumentException("duplicate land number");
+            RetroMap map = maps.stream().filter(m -> m.id().equals(land.map())).findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("land names unknown map"));
+            if ((long) land.x() + land.width() > map.width() || (long) land.y() + land.height() > map.height()) {
+                throw new IllegalArgumentException("land outside map");
+            }
+        }
         Objects.requireNonNull(spawn);
         Objects.requireNonNull(portal);
     }
 
     /** A tile of one map. */
+    public record Land(int number, String map, int x, int y, int width, int height, String owner) {
+        public Land {
+            if (number < 0 || number >= 10000 || x < 0 || y < 0 || width <= 0 || height <= 0
+                    || !map.matches("[A-Za-z0-9_-]{1,48}")
+                    || (!owner.isEmpty() && !owner.matches("[A-Za-z0-9_-]{1,48}"))) {
+                throw new IllegalArgumentException("invalid land record");
+            }
+        }
+    }
+
+    public RetroRealm withLands(List<Land> configured) {
+        return new RetroRealm(seed, name, maps, zones, links, chests, doors, npcs, shops, bosses,
+                spawn, portal, news, configured);
+    }
+
     public record Place(String map, int x, int y) {
         public Place step(int dx, int dy) {
             return new Place(map, x + dx, y + dy);
