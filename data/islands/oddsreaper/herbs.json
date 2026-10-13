@@ -1,57 +1,65 @@
 {
  "system": "Wager Herbs",
- "rule": "Every brew is a bet. A tonic has a base effect that always lands and a JACKPOT effect that lands with probability p. Combining two herbs multiplies their odds (parlay): p = pA * pB, but the jackpot payout scales by 1/p (fair odds, no house edge). Brewing in a storm (Sky Director weather Storm) multiplies p by 1.2 (cap 0.95; Parlayvine fixed at 0.5) while the payout stays at 1/p_base, so every herb gets the same +20% EV edge in a storm: the Reaper favors the bold, evenly. Stormbloom may re-roll a failed jackpot once; its payout is 1/p_eff with p_eff = 1-(1-p)^2, so the re-roll stays fair.",
+ "rule": "Every brew is a bet. A tonic has a base effect that always lands and a JACKPOT effect that lands with probability p. Combining two herbs multiplies their odds (parlay): p = pA * pB, but the jackpot payout scales by 1/p (fair odds, no house edge). Brewing in a storm (Sky Director weather Storm) multiplies p by 1.2 (cap 0.95; Parlayvine fixed at 0.5) while the payout stays at 1/p_base, so a storm brew pays +20% EV: the Reaper favors the bold. Exceptions are listed per herb as storm_ev: Hedgeleaf hits the 0.95 cap (1.056), Stormbloom's re-roll dilutes the boost (1.153), Parlayvine stays fair (1.0). r2 audit: the old 'same +20% for every herb' claim was false. Stormbloom may re-roll a failed jackpot once; its payout is 1/p_eff with p_eff = 1-(1-p)^2, so the re-roll stays fair.",
  "herbs": [
   {
    "id": "Luckroot",
    "p": 0.5,
    "base": "heal 10",
-   "jackpot": "heal 40 + regen 10s"
+   "jackpot": "heal 40 + regen 10s",
+   "storm_ev": 1.2
   },
   {
    "id": "Hedgeleaf",
    "p": 0.9,
    "base": "shield 10",
    "jackpot": "shield 20",
-   "note": "the safe bet; lowers parlay variance"
+   "note": "the safe bet; lowers parlay variance",
+   "storm_ev": 1.056
   },
   {
    "id": "Bluffmoss",
    "p": 0.4,
    "base": "stealth 5s",
-   "jackpot": "invisible 15s"
+   "jackpot": "invisible 15s",
+   "storm_ev": 1.2
   },
   {
    "id": "Longshot",
    "p": 0.1,
    "base": "speed +5% 10s",
-   "jackpot": "speed +60% 30s"
+   "jackpot": "speed +60% 30s",
+   "storm_ev": 1.2
   },
   {
    "id": "Parlayvine",
    "p": 0.5,
    "base": "none",
    "jackpot": "parlay leg: halves the other herb's jackpot odds and doubles its payout (fair, EV 1.0)",
-   "note": "variance catalyst; no storm boost on this leg. Was p 1.0 + double payout = free 2x EV, fixed r2"
+   "note": "variance catalyst; no storm boost on this leg. Was p 1.0 + double payout = free 2x EV, fixed r2",
+   "storm_ev": 1.0
   },
   {
    "id": "Stormbloom",
    "p": 0.33,
    "base": "lightning resist",
    "jackpot": "chain lightning strike",
-   "note": "one free re-roll"
+   "note": "one free re-roll",
+   "storm_ev": 1.153
   },
   {
    "id": "Vigweed",
    "p": 0.75,
    "base": "stamina 20",
-   "jackpot": "no stamina cost 20s"
+   "jackpot": "no stamina cost 20s",
+   "storm_ev": 1.2
   },
   {
    "id": "Oddsthistle",
    "p": 0.25,
    "base": "reveal odds",
-   "jackpot": "see the next drop/craft outcome before committing"
+   "jackpot": "see the next drop/craft outcome before committing",
+   "storm_ev": 1.2
   }
  ],
  "tonics": "8x8 = 64 combos (Item_OR_Tonic_00..63; index = 8*a + b)",
