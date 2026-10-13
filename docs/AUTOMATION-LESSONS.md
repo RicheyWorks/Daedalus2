@@ -328,3 +328,24 @@ chunks. The hide-the-import step waited for `ChunkMeshes.Num() > 0` at announce 
 produced yet, so it was skipped: bare LOG trunks from the old import poked through the live island (the "rough"
 look), and the old collision walled animals in. Hide the import in BeginPlay, unconditionally, and again on announce.
 When the world looks wrong, trace what the camera is hitting (actor + component name) before tuning anything.
+
+## UE_LOG is a block, not a statement (2026-10-13)
+`if (x) UE_LOG(...); else UE_LOG(...);` fails with C2181 (the macro expands to a braced block, so the `;` ends the
+if). Brace both branches. The headless core tests never see this because they never include Unreal headers; it
+surfaced only in build-1013-110240 and cost pootscoot a blocker (28707).
+
+## Hot-copy Content/Python from D2-build, never from the PC's Daedalus2 checkout (2026-10-13)
+The PC's `projects\Daedalus2` is Richey's working copy and lags main; copying `daedalus_play.py` from it put an old
+scenario table into the editor ("unknown scenario"). Sync `D2-build` to origin/main first and copy from there.
+Reloading needs a script file: PowerShell `-c "..."` mangles nested quotes into a SyntaxError inside the bridge.
+
+## A Slate panel is proven by state lines, a frame-counted typewriter is not (2026-10-13)
+Slate overlays never appear in a SceneCapture, so the inventory and dialogue scenarios prove themselves through
+`*Input("state")` lines. The first dialogue scenario counted frames and assumed a slow typewriter; Play typed a
+whole page in 20 frames and "A finishes the page" had already turned it. Read the state and act on it; never count
+frames against a clock you don't own.
+
+## Per-tab cursor memory looks like a test bug (2026-10-13)
+inventory_core_test failed "the worn spray is marked" because SelectTab(0) kept the cursor it had parked on row 6:
+the behaviour the spec asked for. When a test fails right after a feature that remembers state, suspect the test's
+assumption before the model.

@@ -782,7 +782,7 @@ def scenario_realm(p):
         if _kv(h.realm_state()).get("ui") == "NONE":
             break
         h.realm_input("b")
-    for c in ("b", "down", "down", "a"):
+    for c in ("b", "down", "a"):   # COMMAND is a 2x3 grid: TALK SPELL / STATUS ITEM / SEARCH EQUIP
         h.realm_input(c)
     status = _kv(h.realm_state()).get("ui") == "STATUS"
     cap("realm_status.png")
@@ -791,10 +791,11 @@ def scenario_realm(p):
     h.realm_input("portal")
     h.realm_input("up")
     said = _kv(h.realm_state()).get("msg", "")
-    h.realm_input("a")
-    for _ in range(60):
+    for _ in range(60):   # A finishes the typewriter, A again turns the page or closes
         if not h.is_realm_open():
             break
+        if _kv(h.realm_state()).get("ui") == "MESSAGE":
+            h.realm_input("a")
         yield
     save_path = os.path.join(unreal.Paths.project_saved_dir(), "Config", "DaedalusRealm.sav")
     saved = os.path.exists(save_path) and open(save_path).read().startswith("DRS 1")
@@ -986,6 +987,171 @@ def scenario_shiny(p):
     ]}
 
 
+def scenario_inventory(p):
+    """The tabbed inventory (hub 28570/28573/28574): the same controls in two realms with different catalogs and
+    themes. Opened over Play, driven by the harness commands the keys map to; the state lines prove the tabs,
+    the per-tab cursor, the actions, and that browsing changed no count. Slate panels don't show in a scene
+    capture, so this is proven by state, like the menus."""
+    h = hero()
+    checks = []
+    runs = {}
+    for realm, stock, worn in (
+        ("gallery-city", {"PAINT_SPRAY": 1, "WIDE_BRUSH": 1, "PIGMENT_RED": 12, "PAINTER_COAT": 1, "HEARTSTONE": 1}, ("HAND", "PAINT_SPRAY")),
+        ("bricks", {"STUD_HAMMER": 1, "BRICK_RED": 240, "BRICK_BLUE": 31, "PLAN_BRIDGE": 1}, ("HAND", "STUD_HAMMER")),
+    ):
+        h.inventory_input("realm:" + realm)
+        for item, n in stock.items():
+            h.inventory_input("give:%s:%d" % (item, n))
+        h.inventory_input("wear:%s:%s" % worn)
+        before = dict(h.get_editor_property("satchel"))
+        h.toggle_inventory()
+        yield from _frames(2)
+        lines = {"open": h.inventory_input("state")}
+        lines["rb"] = h.inventory_input("tab+")
+        lines["right"] = h.inventory_input("right")
+        lines["rb2"] = h.inventory_input("tab+")
+        lines["lb"] = h.inventory_input("tab-")
+        lines["lb0"] = h.inventory_input("tab-")
+        lines["act"] = h.inventory_input("accept")
+        lines["pick"] = h.inventory_input("accept")
+        yield from _frames(2)
+        lines["after"] = h.inventory_input("state")
+        closed = h.inventory_input("back").startswith("closed") and not h.is_inventory_open()
+        after = dict(h.get_editor_property("satchel"))
+        runs[realm] = {"lines": lines, "closed": closed, "same_counts": before == after}
+    g, b = runs["gallery-city"], runs["bricks"]
+    gl, bl = g["lines"], b["lines"]
+
+    def kv(line):
+        return _kv(line)
+
+    checks += [
+        _check("gallery opens on ALL in its theme", "tab=ALL(1/6)" in gl["open"] and "theme=gallery" in gl["open"], gl["open"]),
+        _check("bricks opens on ALL in its theme", "tab=ALL(1/6)" in bl["open"] and "theme=bricks" in bl["open"], bl["open"]),
+        _check("RB reaches each realm's own second tab", "tab=SPRAYS" in gl["rb"] and "tab=BRICKS" in bl["rb"], gl["rb"] + " | " + bl["rb"]),
+        _check("the tab remembers its cursor after LB", kv(gl["lb"]).get("cursor") == "1" and kv(bl["lb"]).get("cursor") == "1", gl["lb"] + " | " + bl["lb"]),
+        _check("ALL kept its own cursor", kv(gl["lb0"]).get("cursor") == "0" and kv(bl["lb0"]).get("cursor") == "0"),
+        _check("A opens the actions, A picks one, and the host ran it", "actions=" in gl["act"] and "last=UNEQUIP PAINT_SPRAY" in gl["pick"]
+               and "actions=" in bl["act"] and "last=UNEQUIP STUD_HAMMER" in bl["pick"], gl["pick"] + " | " + bl["pick"]),
+        _check("after the host acts the item shows unworn and the place is kept", " worn" not in gl["after"].split(" last=")[0] and "cursor=0" in gl["after"], gl["after"]),
+        _check("browsing changed no count", g["same_counts"] and b["same_counts"]),
+        _check("B closes the panel in both realms", g["closed"] and b["closed"]),
+    ]
+    # World Zero: the hero's own tools, armour and cubes, nothing to stock.
+    h.inventory_input("realm:world-zero")
+    h.toggle_inventory()
+    yield from _frames(2)
+    zero = h.inventory_input("state")
+    h.inventory_input("tab+")
+    tools = h.inventory_input("state")
+    h.inventory_input("back")
+    h.inventory_input("realm:")
+    checks += [
+        _check("world zero lists the tools the hero carries", "realm=WORLD-ZERO" in zero and "tab=TOOLS" in tools and "item=SWORD x1 worn" in tools, tools),
+    ]
+    return {"checks": checks}
+
+
+def scenario_dialogue(p):
+    """Dialogue boxes in the 3D realms (Richey 2026-10-13, Animal Crossing style): an NPC line opens the box in the
+    realm's theme, types itself with blips, pages, offers choices; A/B/up/down drive it; the outcome reaches the
+    hero. Proven by state lines (Slate isn't in a scene capture). Play's frame rate sets the typewriter's pace, so
+    every step reads the state and acts on it rather than counting frames."""
+    h = hero()
+    h.inventory_input("realm:gallery-city")
+    h.speak("Curator Vell", "Welcome to the Gallery, painter. The Heartstone went missing last night and the Echo Choir has gone quiet. Would you look into it for me?", ["Of course", "Not now"])
+    yield from _frames(2)
+    opened = h.dialogue_input("state")
+    yield from _frames(6)
+    typed = h.dialogue_input("state")
+    turned = ""
+    for _ in range(4):   # A finishes the page, A turns it; however far the typewriter got
+        turned = h.dialogue_input("a")
+        if "page=2/2" in turned:
+            break
+    skipped = h.dialogue_input("state")
+    if "choosing" not in skipped:
+        skipped = h.dialogue_input("b")   # B skips to the end of the text: the choices
+    was = _kv(skipped).get("choosing", "0/2").split("/")[0]
+    down = h.dialogue_input("down")
+    want = str((int(was) + 1) % 2)
+    pick = h.dialogue_input("a")
+    yield from _frames(2)
+    after = h.dialogue_input("state")
+    h.speak("Street Muralist", "Psst. The wall by the vat has a secret.", [])
+    yield from _frames(2)
+    h.dialogue_input("b")
+    closed = h.dialogue_input("a")
+    yield from _frames(2)
+    h.inventory_input("realm:")
+    return {"checks": [
+        _check("the line opens the box in the realm's era", "open=1 era=MODERN who=Curator Vell page=1/2" in opened, opened),
+        _check("it types itself with blips", int(_kv(typed).get("blips", "0")) > 5, typed),
+        _check("A finishes the page and turns it", "page=2/2" in turned, turned),
+        _check("the end of the text is the choices", "choosing=" in skipped, skipped),
+        _check("down moves the choice and A picks it for the hero", ("choosing=%s/2" % want) in down and ("last=choice:%s:Curator Vell" % want) in pick, down + " | " + pick),
+        _check("the box is down afterwards", after.startswith("closed") and not h.is_dialogue_open(), after),
+        _check("a line without choices closes on A", "last=closed:Street Muralist" in closed and not h.is_dialogue_open(), closed),
+    ]}
+
+
+def scenario_cast(p):
+    """A realm NPC with a script (DCS 1): Curator Vell spawned in Play, talked to through the dialogue box; the
+    quest branch sets a flag, a second talk starts from it, and the Echo Choir (another talker) hears the
+    realm-wide flag. State lines prove it."""
+    h = hero()
+    h.inventory_input("realm:gallery-city")
+    at = h.get_actor_location()
+    fwd = h.get_actor_forward_vector()
+    spawn = unreal.DaedalusFilm.spawn_in_play
+    vell = spawn(h, unreal.DaedalusTalker, at + fwd * 220 + unreal.Vector(0, 0, 100), unreal.Rotator(0, 0, 0))
+    vell.set_editor_property("who", "Curator Vell")
+    choir = spawn(h, unreal.DaedalusTalker, at + fwd * 220 + unreal.Vector(0, 300, 100), unreal.Rotator(0, 0, 0))
+    choir.set_editor_property("who", "Echo Choir")
+    yield from _frames(2)
+    bound = vell.rebind() and choir.rebind()
+    yield from _frames(2)
+
+    def through(talker, picks):
+        """Talk, closing plain lines with B+A and answering asks with the given picks, until the box is down."""
+        lines = []
+        used = talker.use(h)
+        for _ in range(12):
+            st = h.dialogue_input("state")
+            if st.startswith("closed"):
+                break
+            lines.append(st)
+            if "choosing" not in st:
+                h.dialogue_input("b")      # skip the typewriter
+                st = h.dialogue_input("state")
+            if "choosing" in st:
+                want = picks.pop(0) if picks else 0
+                cur = int(_kv(st).get("choosing", "0/1").split("/")[0])
+                for _ in range((want - cur) % 4):
+                    h.dialogue_input("down")
+            h.dialogue_input("a")
+        return used, lines
+
+    used1, first = through(vell, [1])        # "Not now"
+    s1 = vell.state()
+    used2, second = through(vell, [0])       # "Of course"
+    s2 = vell.state()
+    used3, third = through(vell, [1])        # waiting -> "I have it"
+    s3 = vell.state()
+    used4, choir_lines = through(choir, [])
+    s4 = choir.state()
+    h.inventory_input("realm:")
+    return {"checks": [
+        _check("both talkers bound their scripts", bound and "bound=1" in s1 and "bound=1" in s4, s1 + " | " + s4),
+        _check("the first talk runs welcome, Heartstone, the ask", used1 and len(first) >= 3 and "who=Curator Vell" in first[0], " / ".join(first)[:300]),
+        _check("'Not now' sets nothing", "flags= " in s1 + " " and "talks=1" in s1, s1),
+        _check("'Of course' sets the quest flag", "heartstone" in s2 and "talks=2" in s2, s2),
+        _check("the third talk starts at 'waiting' and 'I have it' finishes the quest", "heartstone_done" in s3 and any("Any word" in l or "page=" in l for l in third), s3),
+        _check("the Choir hears the realm-wide flag and sings", "heartstone_done" in s4 and used4, s4),
+        _check("the Curator's Frame Plate landed in the satchel", "given=FRAME_PLATE" in s3 and dict(h.get_editor_property("satchel")).get("FRAME_PLATE", 0) >= 1, s3),
+    ]}
+
+
 SCENARIOS = {
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
@@ -1003,6 +1169,9 @@ SCENARIOS = {
     "tactics": scenario_tactics,
     "tactics_remote": scenario_tactics_remote,
     "shiny": scenario_shiny,
+    "inventory": scenario_inventory,
+    "dialogue": scenario_dialogue,
+    "cast": scenario_cast,
 }
 
 

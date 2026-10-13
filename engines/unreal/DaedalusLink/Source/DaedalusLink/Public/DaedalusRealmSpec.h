@@ -19,7 +19,7 @@ namespace daedalus
 namespace realm
 {
 
-enum class ItemKind { Use, Key, Weapon, Armor, Treasure };
+enum class ItemKind { Use, Key, Weapon, Armor, Treasure, Egg };   // Egg: a DRAGON EGG that hatches after a walk (ADR-065)
 
 struct ItemDef
 {
@@ -68,6 +68,9 @@ struct LinkDef { Spot From, To; };
 enum class LootKind { Gold, Item, Mimic };
 struct ChestDef { Spot At; LootKind Kind = LootKind::Gold; int Gold = 0, Item = -1, Mimic = -1; };
 struct DoorDef { Spot At; int Tier = 1; };
+/** A land for sale (ADR-065): a plot of overworld tiles with its deed number, and the name on the deed ("-" = unsold).
+ *  The deed brings a DRAGON EGG (rule 7): the realm hands it over once, when the owner first stands on the land. */
+struct LandDef { int Number = 0; Spot At; int W = 4, H = 4; std::string Owner; bool Contains(int M, int X, int Y) const { return M == At.Map && X >= At.X && X < At.X + W && Y >= At.Y && Y < At.Y + H; } };
 enum class Role { Talk, News, Inn, Shop, Queen };
 struct NpcDef
 {
@@ -86,6 +89,8 @@ struct Spec
 {
     uint64_t Seed = 0;
     std::string Name;
+    /** The window rule colour, 0xRRGGBB (optional "ui" line; 0 = the kit's default). Each realm wears its own. */
+    uint32_t UiInk = 0;
     std::vector<ItemDef> Items;
     std::vector<MonsterDef> Monsters;
     std::vector<MapDef> Maps;
@@ -93,6 +98,7 @@ struct Spec
     std::vector<LinkDef> Links;
     std::vector<ChestDef> Chests;
     std::vector<DoorDef> Doors;
+    std::vector<LandDef> Lands;
     std::vector<NpcDef> Npcs;
     std::vector<ShopDef> Shops;
     std::vector<BossDef> Bosses;
@@ -149,7 +155,7 @@ struct Spec
         auto Num = [](const std::string& S) { return std::atoi(S.c_str()); };
         auto Hex = [](const std::string& S) { return static_cast<uint32_t>(std::strtoul(S.c_str(), nullptr, 16)); };
         // Places name their map; the names are resolved to indices once every map is read.
-        std::vector<std::string> LinkFrom, LinkTo, ChestMap, DoorMap, NpcMap, BossMap;
+        std::vector<std::string> LinkFrom, LinkTo, ChestMap, DoorMap, NpcMap, BossMap, LandMap;
         std::string SpawnMap, PortalMap;
 
         for (size_t i = 1; i < Lines.size(); ++i)
@@ -164,13 +170,14 @@ struct Spec
             };
             if (K == "seed") { if (!Need(2)) return false; Seed = std::strtoull(F[1].c_str(), nullptr, 10); }
             else if (K == "name") Name = Rest(L, 1);
+            else if (K == "ui") { if (!Need(2)) return false; UiInk = static_cast<uint32_t>(std::strtoul(F[1].c_str(), nullptr, 16)) & 0xFFFFFFu; }
             else if (K == "item")
             {
                 if (!Need(6)) return false;
                 ItemDef D;
                 D.Id = F[1];
                 D.Kind = F[2] == "KEY" ? ItemKind::Key : F[2] == "WEAPON" ? ItemKind::Weapon : F[2] == "ARMOR" ? ItemKind::Armor
-                    : F[2] == "TREASURE" ? ItemKind::Treasure : ItemKind::Use;
+                    : F[2] == "TREASURE" ? ItemKind::Treasure : F[2] == "EGG" ? ItemKind::Egg : ItemKind::Use;
                 D.Price = Num(F[3]); D.Power = Num(F[4]); D.Name = Rest(L, 5);
                 Items.push_back(D);
             }
@@ -264,6 +271,20 @@ struct Spec
                 else { C.Kind = F[4] == "MIMIC" ? LootKind::Mimic : LootKind::Item; ChestRefs.push_back({static_cast<int>(Chests.size()), F[5]}); }
                 Chests.push_back(C);
             }
+            else if (K == "land")
+            {
+                // land <number> <map> <x> <y> <w> <h> <owner|->
+                if (!Need(8)) return false;
+                LandDef D;
+                D.Number = Num(F[1]);
+                if (D.Number < 0 || D.Number > 9999) { Error = "line " + std::to_string(i + 1) + ": land number out of 0..9999"; return false; }
+                for (const LandDef& O : Lands) if (O.Number == D.Number) { Error = "line " + std::to_string(i + 1) + ": land " + F[1] + " twice"; return false; }
+                D.At.X = Num(F[3]); D.At.Y = Num(F[4]); D.W = Num(F[5]); D.H = Num(F[6]);
+                if (D.W < 1 || D.H < 1 || D.W > 64 || D.H > 64) { Error = "line " + std::to_string(i + 1) + ": bad land size"; return false; }
+                D.Owner = F[7] == "-" ? "" : F[7];
+                LandMap.push_back(F[2]);
+                Lands.push_back(D);
+            }
             else if (K == "door")
             {
                 if (!Need(5)) return false;
@@ -313,6 +334,12 @@ struct Spec
         for (size_t k = 0; k < Links.size(); ++k) if (!MapOf(LinkFrom[k], Links[k].From.Map) || !MapOf(LinkTo[k], Links[k].To.Map)) return false;
         for (size_t k = 0; k < Chests.size(); ++k) if (!MapOf(ChestMap[k], Chests[k].At.Map)) return false;
         for (size_t k = 0; k < Doors.size(); ++k) if (!MapOf(DoorMap[k], Doors[k].At.Map)) return false;
+        for (size_t k = 0; k < Lands.size(); ++k)
+        {
+            if (!MapOf(LandMap[k], Lands[k].At.Map)) return false;
+            const MapDef& M = Maps[static_cast<size_t>(Lands[k].At.Map)];
+            if (Lands[k].At.X + Lands[k].W > M.W || Lands[k].At.Y + Lands[k].H > M.H) { Error = "land " + std::to_string(Lands[k].Number) + " runs off " + M.Id; return false; }
+        }
         for (size_t k = 0; k < Npcs.size(); ++k) if (!MapOf(NpcMap[k], Npcs[k].At.Map)) return false;
         for (size_t k = 0; k < Bosses.size(); ++k) if (!MapOf(BossMap[k], Bosses[k].At.Map)) return false;
         if (!MapOf(SpawnMap, Spawn.Map) || !MapOf(PortalMap, Portal.Map)) return false;

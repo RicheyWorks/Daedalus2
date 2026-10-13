@@ -249,7 +249,7 @@ FString ADaedalusDresser::Dress()
 					// 10 carry something, most of it grass and flowers; trees stay sparse and spaced. Density scales the lot.
 					const double D = Density;
 					const TCHAR* Cat = nullptr;
-					if (R < 0.025 * D) Cat = TEXT("Tree");
+					if (R < 0.012 * D) Cat = TEXT("Tree");   // 1.2%: a 36 m island carried 160 trunks and read as a field of poles
 					else if (R < 0.055 * D) Cat = TEXT("Shrub");
 					else if (R < 0.135 * D) Cat = TEXT("Flower");
 					else if (R < 0.585 * D) Cat = TEXT("Grass");
@@ -260,8 +260,8 @@ FString ADaedalusDresser::Dress()
 					if (bTree)
 					{
 						bool bCrowded = false;
-						for (int32 Z2 = -3; Z2 <= 3 && !bCrowded; ++Z2)
-							for (int32 X2 = -3; X2 <= 3 && !bCrowded; ++X2) bCrowded = TreeAt.Contains(FIntPoint(X + X2, Z + Z2));
+						for (int32 Z2 = -4; Z2 <= 4 && !bCrowded; ++Z2)
+							for (int32 X2 = -4; X2 <= 4 && !bCrowded; ++X2) bCrowded = TreeAt.Contains(FIntPoint(X + X2, Z + Z2));
 						if (bCrowded) continue;
 					}
 					const TArray<FAssetData>* Pool0 = ByCat.Find(Cat);

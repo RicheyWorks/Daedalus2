@@ -302,13 +302,21 @@ inline void DrawTile(Frame& F, int X, int Y, Tile T, uint64_t Salt, int Anim, in
         break;
     case Tile::Sand: Dots(Pal::Sand, Pal::SandDot, 11); break;
     case Tile::Swamp:
-        Dots(Pal::Bog, Pal::BogDark, 5);
+    {
+        // marsh: a still dark pool with a lighter rim, reeds along two edges, a bubble that comes and goes
+        F.Rect(X, Y, 16, 16, Pal::Bog);
+        const int PX2 = X + 4 + static_cast<int>(Mix(Salt) % 4), PY2 = Y + 6 + static_cast<int>(Mix(Salt * 3) % 4);
+        F.Ellipse(PX2 + 3, PY2 + 2, 6, 3, Pal::BogDark);
+        F.Ellipse(PX2 + 3, PY2 + 2, 4, 2, 0x203818);
         for (int k = 0; k < 3; ++k)
         {
-            const int BX = X + 3 + static_cast<int>(Mix(Salt + static_cast<uint64_t>(k)) % 10), BY = Y + 3 + k * 4;
-            if ((Anim / 4 + k) % 3) F.Set(BX, BY, Pal::Lime);
+            const int RX = X + 1 + k * 5 + static_cast<int>(Mix(Salt + static_cast<uint64_t>(k) * 7) % 3);
+            F.Rect(RX, Y + 1, 1, 4, Pal::HillDark); F.Set(RX, Y + 1, Pal::Lime);
+            F.Rect(RX + 2, Y + 11, 1, 4, Pal::HillDark); F.Set(RX + 2, Y + 11, Pal::Lime);
         }
+        if ((Anim / 6 + static_cast<int>(Salt % 7)) % 4 == 0) F.Set(PX2 + 2, PY2 + 1, Pal::LightGrey);
         break;
+    }
     case Tile::Hill:
         Dots(Pal::Grass, Pal::GrassDot, 13);
         F.Ellipse(X + 8, Y + 11, 7, 5, Pal::Hill);

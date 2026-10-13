@@ -1,0 +1,194 @@
+DCS 1
+cast LABYRINTH
+# Labyrinth (REALM-CASTS.md): the maze rebuilds each night; thread, chalk and lanterns against it.
+
+who Thread Spinner Ari
+voice 6 1.0
+step start
+if thread -> again
+say Every path here forgets you by morning. Thread doesn't. Tie it at the gate and walk.
+ask Take a spool? | Yes=take | I know the way=no
+step take
+set thread
+give THREAD_SPOOL 1
+say Tie it tight. The Wallwright can move a wall; he can't move a knot.
+end
+step no
+say Everyone knows the way until the walls move.
+end
+step again
+say Spool holding? Good. Knots are the only thing the maze respects.
+end
+
+who Wallwright
+voice 1 0.8
+step start
+if bribed -> told
+say I rebuild the maze each night. Don't take it personally. The maze does.
+ask Could tonight's walls stay? | For a lamp of oil=bribe | No, do your work=no
+step bribe
+set bribed
+say ...One night. The east run stays. Tell no one, especially the Riddler.
+end
+step no
+say Then walk fast. Dusk's coming and so am I.
+end
+step told
+say The east run stayed, didn't it. Don't thank me. Thank the oil.
+end
+
+who Lantern Keeper
+voice 4 0.9
+step start
+say Light's the only map that never lies. Oil's a flask a night.
+ask Buy? | A lantern=lantern | Oil=oil | No=no
+step lantern
+say One lantern. It's heavier than it looks and lighter than the dark.
+end
+step oil
+say Three flasks. Don't spill near the hedges; they drink it.
+end
+step no
+say Then mind the dead ends. They're darker.
+end
+
+who Lost Cartographer
+voice 9 1.1
+step start
+say Maps! Partial maps, mostly true. False maps, entirely false, very collectible.
+ask Which? | A partial map=partial | A false map=false | Which is which?=which
+step partial
+give MAP_PARTIAL 1
+say Half the maze, and the half I remember. Mostly.
+end
+step false
+say Beautifully drawn. Not one true wall. The Collector pays well for them.
+end
+step which
+say If I knew that, I wouldn't be lost. I'd be a cartographer.
+end
+
+who Echo Hermit
+voice 0 0.7
+step start
+say (From the dead end, a voice answers only what you say.) ...say... say...
+ask Ask the echo? | Where is the exit?=exit | Who are you?=who | Nothing=no
+step exit
+say ...exit... exit... (The echo comes from the left. It always comes from the left.)
+end
+step who
+say ...you... you... (The echo laughs, or you do.)
+end
+step no
+say ...nothing... nothing...
+end
+
+who Gate Riddler
+voice 3 0.95
+step start
+if riddle_done -> open
+say A door, a riddle, a toll. I have the first two. You have the third, or you don't.
+say What walks the maze at dusk and leaves no thread?
+ask Your answer? | The Wallwright=right | A shadow=wrong | A Hornback=wrong
+step right
+set riddle_done
+give RIDDLE_ANSWER 1
+say The Wallwright. Yes. He leaves walls instead. The door is yours.
+end
+step wrong
+say No. The door stays. Think on it; the maze will give you time.
+end
+step open
+say The door remembers you. Through.
+end
+
+who Strider Tamer Oona
+voice 7 1.05
+step start
+if strider -> again
+say The sky-striders nest on the hedge tops. One's taken to you. I can see it from here.
+ask Bond with the strider? | Yes=bond | Not yet=no
+step bond
+set strider
+give STRIDER_SADDLE 1
+say Hold still. There. She'll carry you over any wall the Wallwright builds. He hates that.
+end
+step no
+say She'll wait on the hedge. Striders are patient. Tamers aren't.
+end
+step again
+say She's circling. Call her from any hedge top.
+end
+
+who Statue Gardener
+voice 5 0.9
+step start
+say The hedges grow back by morning. The statues don't. I tend both; one of them thanks me.
+ask Help with the hedges? | I'll clip=clip | I'll leave them=no
+step clip
+set clipped
+say Clip the east run low; the Wallwright uses it. Don't tell him I said.
+end
+step no
+say Then don't lean on the statues. They lean back.
+end
+
+who Herd Warden Tobi
+voice 2 0.85
+step start
+say Hornbacks. Big, slow, and they hate the chalk. Mark a wall near the herd and they'll put you through it.
+ask Advice for the herd? | How do I pass them?=pass | Can I ride one?=ride
+step pass
+say Walk. Don't run. Don't chalk. Hum, if you can hum low.
+end
+step ride
+say No. Next question.
+end
+
+who Trapsmith
+voice 10 1.0
+step start
+say I set them. I unset them. Same price either way, which tells you something about the maze.
+ask Service? | Disarm the next trap=disarm | Sell me a trap=sell | No=no
+step disarm
+say Done. The next one. Not the one after; that's extra.
+end
+step sell
+say A tripwire and a bell. It's a kind bell. Mostly.
+end
+step no
+say Watch your step. That's free.
+end
+
+who Twin Doors
+voice 8 0.95
+step start
+say LEFT: I always tell the truth. RIGHT: I always lie. LEFT: One of us leads out. RIGHT: It's me.
+ask Which door? | Left=left | Right=right | Ask one question first=question
+step left
+say (The left door opens on a wall. The right door laughs.)
+end
+step right
+say (The right door opens. The left door says: told you.)
+end
+step question
+say RIGHT: Ask me what the other would say. LEFT: ...that's the trick. It's always the trick.
+end
+
+who The Architect's Apprentice
+voice 11 0.8
+step start
+if riddle_done -> tell
+say You've walked far for someone with no thread. The Architect would have liked you. He liked anyone who kept walking.
+ask Ask about the Architect? | Why did the planet shatter?=locked | Who was he?=who
+step who
+say The one who drew the maze, the city, the fields, all of it. One mural. Then the Grey Wash.
+end
+step locked
+say Not yet. Answer the Riddler's door first. Some things you have to walk through.
+end
+step tell
+set story
+say The planet didn't shatter. He cut it. Ten thousand pieces a realm, so it could never be lost all at once again.
+say Every deed is a piece. Every land you hold is a piece he trusted someone to keep. Keep walking.
+end
