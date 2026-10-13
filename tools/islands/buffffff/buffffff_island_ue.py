@@ -4,7 +4,7 @@ Imports the 560 BUF GLBs to /Game/Buffffff/Art (skips ones already imported), th
 into sublevel /Game/Buffffff/Maps/Buffffff_Island at OFFSET. Idempotent (removes its tagged actors first). No Play."""
 import json, os, unreal
 ROOT = r"C:\Users\730ri\projects\bot-team\art\buffffff"; DEST = "/Game/Buffffff/Art"; SUB = "/Game/Buffffff/Maps/Buffffff_Island"
-TAG = "BUF_Island"; OFFSET = unreal.Vector(6000000, 0, 0)  # official grid ARK_ORIGIN (competition.md)
+TAG = "BUF_Island"; OFFSET = unreal.Vector(290000, 148500, 0)  # compact cluster (Richey 23:14): 1 km east of 2hot2trot Ark Dock, no overlap
 HALF = int(globals().get("BUF_HALF", 0))  # 1 or 2: import half of the layout; 0 = all; 3 = place+shot only
 eas = unreal.EditorAssetLibrary; act = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 lay = json.load(open(os.path.join(ROOT, "layout.json")))
@@ -84,6 +84,7 @@ if not _stop:
     tagc = lambda t: sum(1 for x in act.get_all_level_actors() if x.actor_has_tag(t))
     print("BUF counts total", tagc(TAG), "livestock", tagc("Livestock"), "drinkable", tagc("Drinkable"), "herbbed", tagc("HerbBed"), "world", world.get_path_name())
     print("BUF placed", ok, "missing", len(miss), miss[:10])
+
 
 
 
