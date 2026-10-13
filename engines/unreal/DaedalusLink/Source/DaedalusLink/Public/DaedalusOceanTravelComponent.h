@@ -35,6 +35,7 @@ struct FDaedalusOceanDock
     UPROPERTY(EditAnywhere, BlueprintReadWrite) bool bUnderwater = false;
     // Authoritative world-space boarding position, in Unreal centimetres.
     UPROPERTY(EditAnywhere, BlueprintReadWrite) FVector BoardingLocation = FVector::ZeroVector;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FVector ExitLocation = FVector::ZeroVector;
     UPROPERTY(EditAnywhere, BlueprintReadWrite) double BoardingRadiusCm = 500.0;
 };
 
@@ -57,6 +58,8 @@ public:
     UFUNCTION(BlueprintCallable, Category="Daedalus|Ocean")
     bool BoardAtDock(AController* Player, ADaedalusOceanVessel* Vessel, const FString& DockId);
     UFUNCTION(BlueprintCallable, Category="Daedalus|Ocean")
+    bool DisembarkAtDock(AController* Player, ADaedalusOceanVessel* Vessel, const FString& DockId);
+    UFUNCTION(BlueprintCallable, Category="Daedalus|Ocean")
     bool ConfigureHost(const TArray<FString>& RegisteredRealms,
                        const TArray<FDaedalusOceanDock>& Docks,
                        const TArray<FDaedalusOceanConnection>& Connections);
@@ -67,5 +70,6 @@ public:
 private:
     DaedalusOceanTravel::DockRegistry Registry;
     UPROPERTY() TArray<FDaedalusOceanDock> ActiveDocks;
+    TMap<TWeakObjectPtr<AController>, TWeakObjectPtr<APawn>> BoardingAvatars;
     bool IsHost() const;
 };

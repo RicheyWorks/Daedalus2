@@ -66,6 +66,15 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
     TestTrue(TEXT("Nearby player boards vessel"),Component->BoardAtDock(Player,Vessel,Home.Id));
     TestTrue(TEXT("Boarded vessel can resolve route"),Resolve(Player));
     TestFalse(TEXT("Another controller cannot take occupied vessel"),Component->BoardAtDock(Stranger,Vessel,Home.Id));
+    TestFalse(TEXT("Unknown exit dock refused"),Component->DisembarkAtDock(Player,Vessel,TEXT("invented")));
+    TestTrue(TEXT("Rejected exit retains vessel"),Player->GetPawn()==Vessel);
+    Vessel->SetActorLocation(FVector(501,0,0));
+    TestFalse(TEXT("Remote vessel cannot disembark"),Component->DisembarkAtDock(Player,Vessel,Home.Id));
+    Vessel->SetActorLocation(FVector::ZeroVector);
+    TestTrue(TEXT("Dock restores original avatar"),Component->DisembarkAtDock(Player,Vessel,Home.Id));
+    TestTrue(TEXT("Original avatar controlled"),Player->GetPawn()==Avatar);
+    TestFalse(TEXT("Repeated disembark refused"),Component->DisembarkAtDock(Player,Vessel,Home.Id));
+    TestTrue(TEXT("New boarding cycle allowed"),Component->BoardAtDock(Player,Vessel,Home.Id));
     World->DestroyWorld(false);
     return true;
 }

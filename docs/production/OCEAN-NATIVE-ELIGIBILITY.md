@@ -34,6 +34,18 @@ session; this component does not own the avatar's realm state. Preserve the old
 avatar in the player session before boarding for later disembarkation. This method
 adds possession, not vehicle propulsion or a completed cross-realm transition.
 
+DisembarkAtDock restores the avatar recorded by successful boarding; callers
+cannot substitute a different pawn. Both vessel and saved avatar must remain
+valid authority actors in this world, the player must still possess the vessel,
+and the avatar must be unoccupied. The vessel must be near a dock in its current
+realm. ConfigureHost validates the dock's finite exit position within its boarding
+radius. A collision-aware teleport must succeed before avatar possession changes.
+Unknown docks, remote vessels and repeated exits refuse. A successful exit clears
+the boarding record and allows a new boarding cycle. Records are weak references;
+the host retains the avatar and owns disconnect/destruction/recovery handling.
+This is same-world disembarkation. Cross-realm shore return still requires the
+realm loader and persistent player session, rather than a local teleport.
+
 ## Verification
 
 The actor/component, reflection code and automation test compiled and linked in
