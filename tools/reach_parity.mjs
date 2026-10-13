@@ -64,6 +64,30 @@ for (const r of meshRows) {
   console.log(`${good ? "ok  " : "FAIL"} mesh${lod > 1 ? " lod" + lod : ""} seed ${seed} radius ${radius}: ${q.length} quads${good ? "" : ` (want ${want})`}`);
   meshOk += good;
 }
-const total = lines.length + 1 + meshRows.length, passed = ok + (orrGood ? 1 : 0) + meshOk;
+// The squad director (tactics-core.js) against the C++ Decide()+Write(): 40 seeded squads, byte for byte.
+const tac = await import(join(root, "daedalus-server/src/main/resources/static/tactics-core.js"));
+const tl = readFileSync(join(root, "engines/unreal/core-test/tactics_parity.txt"), "utf8").split("\n");
+let tacCases = 0, tacOk = 0;
+for (let i = 0; i < tl.length; i++) {
+  if (!tl[i].startsWith("case ")) continue;
+  const c = tl[i].split(" ");
+  const id = Number(c[1]);
+  const player = { x: Number(c[3]), y: Number(c[4]), z: Number(c[5]) };
+  const units = [];
+  let j = i + 1;
+  for (; tl[j].startsWith("unit "); j++) {
+    const u = tl[j].split(" ");
+    units.push({ name: u[1], at: { x: Number(u[2]), y: Number(u[3]), z: Number(u[4]) }, health: Number(u[5]), maxHealth: Number(u[6]), seesPlayer: u[7] === "1" });
+  }
+  let want = "";
+  for (j = j + 1; tl[j] !== "end"; j++) want += tl[j] + "\n";
+  const got = tac.write(tac.decide("sq-" + id, id, units, player));
+  tacCases++;
+  if (got === want) tacOk++; else console.log(`FAIL tactics case ${id}\n  want ${JSON.stringify(want)}\n  got  ${JSON.stringify(got)}`);
+}
+const numOk = tac.num(0.25) === "0.2" && tac.num(0.35) === "0.3" && tac.num(-0.04) === "-0.0" && tac.num(-0.0) === "-0.0" && tac.num(-0.25) === "-0.2" && tac.num(0.75) === "0.8";
+const tacGood = tacCases === 40 && tacOk === 40 && numOk;
+console.log(`${tacGood ? "ok  " : "FAIL"} tactics director ${tacOk}/${tacCases} squads byte for byte; printf rounding ${numOk ? "ok" : "WRONG"}`);
+const total = lines.length + 1 + meshRows.length + 1, passed = ok + (orrGood ? 1 : 0) + meshOk + (tacGood ? 1 : 0);
 console.log(`${passed}/${total}`);
 process.exit(passed === total ? 0 : 1);
