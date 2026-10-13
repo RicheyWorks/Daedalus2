@@ -45,7 +45,23 @@ void AOceanProbeController::Tick(float Dt)
             IdentityLogged=true;
         }
         Elapsed+=Dt;
-        if (FParse::Param(FCommandLine::Get(),TEXT("ProbeKeyboard")))
+        if (FParse::Param(FCommandLine::Get(),TEXT("ProbeGamepad")))
+        {
+            auto Axis=[this](FKey Value,float Amount) {
+                InputKey(FInputKeyEventArgs(nullptr,INPUTDEVICEID_NONE,Value,IE_Axis,Amount,false,FPlatformTime::Cycles64()));
+            };
+            if (Elapsed<3)
+            {
+                Axis(EKeys::Gamepad_LeftY,1);if (Dive) Axis(EKeys::Gamepad_RightTriggerAxis,1);
+                if (!KeysPressed) {KeysPressed=true;UE_LOG(LogTemp,Display,TEXT("OCEAN_ANALOG_INPUT_STARTED"));}
+            }
+            else if (!KeysReleased)
+            {
+                Axis(EKeys::Gamepad_LeftY,0);if (Dive) Axis(EKeys::Gamepad_RightTriggerAxis,0);
+                KeysReleased=true;UE_LOG(LogTemp,Display,TEXT("OCEAN_ANALOG_INPUT_NEUTRAL"));
+            }
+        }
+        else if (FParse::Param(FCommandLine::Get(),TEXT("ProbeKeyboard")))
         {
             auto Key=[this](FKey Value,EInputEvent Event) {
                 InputKey(FInputKeyEventArgs(nullptr,INPUTDEVICEID_NONE,Value,Event,1.f,false,FPlatformTime::Cycles64()));

@@ -134,6 +134,12 @@ stopped input, and foreign-client refusal/identity replication remained valid.
 Proof is ocean-keyboard-network-proof.json. This is engine key-event dispatch,
 not OS keyboard automation, rendered gameplay or physical gamepad acceptance.
 
+Analog-event network probes also passed left-stick Y propulsion and right-trigger
+dive, followed by neutral input, for both modes. They still require client identity
+replication and verify foreign RPC refusal. See ocean-gamepad-network-proof.json.
+Steering/surface axis combinations, mapping cleanup during real realm handoff,
+physical controller hardware and rendered controls remain separate acceptance work.
+
 ## Verification
 
 The actor/component, reflection code and automation test compiled and linked in

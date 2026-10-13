@@ -53,3 +53,10 @@ scratch host's DefaultInput.ini; it is also required by the existing hero.
 Latest key-event proof is docs/production/ocean-keyboard-network-proof.json,
 logs Documents/Codex/2026-10-13/ocean-network-key-input-1. Physical device and
 rendered UI tests remain separate.
+
+With --gamepad, the controller injects continuous left-stick Y axis events and
+right-trigger axis events for submarine dive, then neutral values. This path also
+avoids direct helm setters and passed both modes over actual transport while
+foreign-client attempts continued. Proof is ocean-gamepad-network-proof.json;
+logs Documents/Codex/2026-10-13/ocean-network-gamepad-1. These are engine analog
+events, not physical hardware input. --keyboard and --gamepad are mutually exclusive.
