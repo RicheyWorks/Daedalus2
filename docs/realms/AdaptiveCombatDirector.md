@@ -56,8 +56,8 @@ faction/encounter owner, not a shared concurrent mutable singleton.
 DTM 1 encodes a <=512-byte checkpoint with version and SHA-256 corruption detection. It is
 not an authenticity signature. File-reload tests and the demo prove continuation; the host
 must commit bytes through its durable single-writer persistence mechanism before externally
-publishing a decision. No production persistence service, HTTP ingestion endpoint, or
-automatic merge into the Living World sidecar is installed in this slice.
+publishing a decision. The opt-in host wiring below provides a separate file-backed DTM
+store and uses Claude's HTTP endpoint. It never merges checkpoints into the Living World sidecar.
 
 ## Unreal integration handoff
 
@@ -205,13 +205,69 @@ Wrong-faction, corrupt, conflicting and stale checkpoints/observations fail clos
 
 The storage implementation must provide atomic durable save and one writer per key. This
 adapter serializes its own calls but is not a distributed lock. It stores no unbounded map
-itself. The production store, retention policy, faction authorization and controller wiring
-remain host integration requirements; no automatic in-memory substitute is installed and
-the baseline HTTP endpoint is not silently switched to adaptive mode. Persistent storage
-may dominate latency and must remain off Unreal's game thread.
+itself. The server supplies the opt-in file store and controller wiring described below;
+the baseline endpoint remains the default. Persistent storage may dominate latency and
+must remain off Unreal's game thread.
 
 Host regressions also cover rejected stale/repeated requests poisoning the shared player
 position. Player observations now advance by event tick only after a successful decision;
 an older event from another squad cannot rewind the session's remembered player. Brain
 failure leaves the host's player state and receipt unpublished. Existing same-tick requests
 still return the cached spec, preserving the transport's first-observation-wins behavior.
+
+## File-backed single-encounter deployment
+
+`TacticsConfiguration` defaults to the baseline host. To opt into adaptive behavior, set:
+
+```properties
+daedalus.tactics.adaptive.enabled=true
+daedalus.tactics.adaptive.directory=/absolute/path/to/tactical-checkpoints
+daedalus.tactics.adaptive.squad=pack-1
+daedalus.tactics.adaptive.faction=raiders
+daedalus.tactics.adaptive.objective-x=0
+daedalus.tactics.adaptive.objective-y=0
+daedalus.tactics.adaptive.objective-z=0
+```
+
+Use an appropriate absolute Windows path on Windows. Objective coordinates are Unreal cm;
+set them to the encounter's intended spawn/guard point before play. This is one configured
+squad/faction, with threatened=false and weapon=UNKNOWN; other squad requests to the adaptive
+brain are refused. Request data never selects the faction or objective. Keep the endpoint's
+existing production ops authentication; these settings do not enable anonymous control.
+The JSON/wire contract and the no-argument controller constructor remain compatible.
+
+`FileTacticalCheckpoints` follows the existing simulation repository's exclusive-writer,
+forced-temp-file, atomic-replacement pattern. A second writer, missing explicit directory,
+invalid startup coordinates, corrupt/oversized checkpoint or failed write fails closed.
+Files use a SHA-256 name derived from session/squad/faction; DTM identity is checked on load
+and save. Reads are bounded to 513 bytes. At 4,096 checkpoint files, new keys are refused;
+existing keys can still be updated. Archive retired sessions offline with the writer stopped;
+there is no automatic deletion or eviction of faction history. A new Unreal session gets a
+separate key; this implementation does not automatically migrate learned posture across sessions.
+
+Tests reopen the real disk store and Spring context and replay an identical HTTP request;
+the response is identical after restart. They also exercise writer exclusion, corrupt files,
+capacity, closed stores, failed configuration cleanup and preserving the last valid checkpoint
+after rejected writes. Forced writes and atomic moves protect process-level replacement;
+power-loss durability depends on filesystem directory-metadata semantics and is not claimed.
+
+Ownership confirmed by Claude in hub 28439 and Astra in 28441: Astra owns Java host/controller,
+adapter and persistence; Claude owns native HTTP/fencing, tactics_remote and in-game proof.
+No Unreal Editor work or live configuration change is performed by these server changes.
+
+### Durable latency evidence
+
+`tools/benchmarks/TacticalStoreProbe.java` measures 20 warmups and 100 forced save + atomic
+replace + load/validation operations against a fresh system-temp directory, verifying bytes
+after every write. Run with Java 21's source launcher and core/server target/classes on the
+classpath. It deletes only its own temporary files. Raw output is
+`../benchmarks/adaptive-profile-after/durable-store.csv`.
+
+On this Windows 11 / Java 21.0.4 shared machine: p50 5.21 ms, p95 7.35 ms, p99 8.22 ms.
+This is local temporary-disk latency with concurrent verification running, not a network,
+production-volume, Unreal-frame or capacity benchmark. It includes reload validation;
+it is not directly additive to earlier independently measured percentiles. Durable IO is
+materially larger than the initial decision cost. Keep this path asynchronous from Unreal;
+before expanding beyond this single configured encounter, measure serialized host queue
+age and storage throughput. Do not claim many-squad capacity or bypass persistence to meet
+a frame budget. C++ owns immediate combat and the local fallback during backend delay.

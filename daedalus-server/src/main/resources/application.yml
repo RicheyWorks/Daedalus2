@@ -36,6 +36,15 @@ management:
 
 # Daedalus-specific config. Bind these with @ConfigurationProperties("daedalus") in the server module.
 daedalus:
+  tactics:
+    adaptive:
+      enabled: false # Opt-in single-encounter host; native Unreal fallback remains available.
+      directory: "" # Required explicit checkpoint directory when enabled; exclusive writer, 4096-file cap.
+      squad: pack-1 # Only this trusted encounter is accepted by the adaptive brain.
+      faction: raiders
+      objective-x: 0 # Fixed trusted objective in Unreal centimetres; set before enabling.
+      objective-y: 0
+      objective-z: 0
   # Optional single-settlement simulation; see docs/realms/LivingWorldSimulation.md.
   simulation:
     enabled: ${DAEDALUS_SIMULATION_ENABLED:false}

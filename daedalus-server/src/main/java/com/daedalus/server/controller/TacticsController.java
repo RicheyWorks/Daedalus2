@@ -29,7 +29,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Tactics", description = "Squad orders for Unreal: DTR 1 + DTE 1 in, DTO 1 out (ADR-060).")
 public class TacticsController {
 
-    private final TacticsHost host = new TacticsHost();
+    private final TacticsHost host;
+
+    public TacticsController() { this(new TacticsHost()); }
+
+    @org.springframework.beans.factory.annotation.Autowired
+    public TacticsController(TacticsHost host) { this.host = java.util.Objects.requireNonNull(host); }
 
     @PostMapping("/decide")
     @Operation(summary = "One squad's roster and events in, its DTO 1 orders out (fenced by session and tick).")
