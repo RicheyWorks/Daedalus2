@@ -46,6 +46,8 @@ def finish_scene(records,columns,spacing,filename,clips):
     rows=math.ceil(len(records)/columns);cx=(columns-1)*spacing/2;cy=(rows-1)*spacing/2
     bpy.ops.mesh.primitive_plane_add(size=250);bpy.context.object.data.materials.append(ink)
     bpy.ops.object.camera_add(location=(cx+12,cy-18,22));c=bpy.context.object;c.rotation_euler=(Vector((cx,cy,.8))-c.location).to_track_quat('-Z','Y').to_euler();c.data.type='ORTHO';c.data.ortho_scale=max(columns*spacing,rows*spacing)*1.5+3;bpy.context.scene.camera=c
+    if len(records)==1:
+        c.location=(3,-6,3.2);c.rotation_euler=(Vector((0,0,1.0))-c.location).to_track_quat('-Z','Y').to_euler();c.data.ortho_scale=2.8
     for loc in [(cx-3,cy-8,15),(cx+8,cy+8,16)]:
         bpy.ops.object.light_add(type='AREA',location=loc);l=bpy.context.object;l.data.energy=5500;l.data.size=12;l.rotation_euler=(Vector((cx,cy,0))-l.location).to_track_quat('-Z','Y').to_euler()
     s=bpy.context.scene;s.render.engine='CYCLES';s.cycles.device='CPU';s.cycles.samples=24;s.render.threads_mode='FIXED';s.render.threads=4;s.render.fps=24;s.render.resolution_x=1900;s.render.resolution_y=1500;s.render.resolution_percentage=100;s.world.color=(.18,.18,.18);s.render.filepath=str(OUT/'contact-sheet.png')

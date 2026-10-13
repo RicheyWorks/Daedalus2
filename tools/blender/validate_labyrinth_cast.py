@@ -62,7 +62,7 @@ def validate(root):
             assert varies,'animation has no motion'
         assert any(line.startswith(f"asset {record['id']} lod0 {tris} lod1 - ") for line in bba)
         rows.append({'asset':record['id'],'triangles':tris,'export_vertices':vertices,'joints':len(joints),'clips':manifest.get('clips',['Idle','Walk'])})
-    assert len(rows)==len(manifest['assets']) and len(rows)>=3
+    assert len(rows)==len(manifest['assets']) and len(rows)>=1
     (root/'validation.json').write_text(json.dumps({'passed':rows,'unreal_import_proven':False},indent=2))
     print(json.dumps(rows,indent=2))
 
