@@ -36,8 +36,8 @@ for n in ("bpy", "bmesh"):
     sys.modules.setdefault(n, types.ModuleType(n))
 p = r"%s"
 if p not in sys.path: sys.path.insert(0, p)
-import orr_build, orr_place, orr_reach, daedalus_islands
-for m in (orr_build, orr_place, orr_reach, daedalus_islands): importlib.reload(m)
+import orr_build, orr_place, orr_reach, daedalus_dsb, daedalus_islands
+for m in (orr_build, orr_place, orr_reach, daedalus_dsb, daedalus_islands): importlib.reload(m)
 result = {"place": str(orr_place.run())[:300], "reach": {k: v for k, v in orr_reach.run().items()},
           "islands": daedalus_islands.write()}
 '''
