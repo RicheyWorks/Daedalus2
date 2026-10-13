@@ -13,3 +13,10 @@ for a in acts:
 p="C:/Users/730ri/projects/_wt-prom-island/data/islands/prometheus/ue_transforms.json"
 json.dump({"origin_cm":[C.x,C.y,C.z],"units":"cm, UE left-handed, relative to PI_Terrain","actors":out},open(p,"w"),indent=1)
 print("R4",json.dumps({"exported":len(out),"path":p,"pie":bool(ue.get_game_world())}))
+# 2nd step: retry hidden SceneCapture hero now that world lighting is fixed (Sky Director Clear). No saves.
+W=ue.get_editor_world(); OUT="C:/Users/730ri/projects/bot-team/art/prometheus_island/shots"
+cam=C+unreal.Vector(-26000,-20000,16000); tgt=C+unreal.Vector(0,0,1500)
+rt=unreal.RenderingLibrary.create_render_target2d(W,1920,1080,unreal.TextureRenderTargetFormat.RTF_RGBA8)
+c=es.spawn_actor_from_class(unreal.SceneCapture2D,cam,unreal.MathLibrary.find_look_at_rotation(cam,tgt)); sc=c.capture_component2d
+sc.set_editor_property("texture_target",rt); sc.set_editor_property("capture_source",unreal.SceneCaptureSource.SCS_FINAL_COLOR_LDR); sc.set_editor_property("fov_angle",55.0)
+sc.capture_scene(); unreal.RenderingLibrary.export_render_target(W,rt,OUT,"PI_hero_ue_r4.png"); es.destroy_actor(c); print("R4SHOT ok")
