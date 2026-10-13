@@ -102,32 +102,70 @@ export function build(p, emit) {
 export function mesh(p) {
   const n = p.radius + 2, w = 2 * n + 1;
   const tops = new Int32Array(w * w), bots = new Int32Array(w * w), sh = new Uint8Array(w * w);
-  const idx = (x, y) => (y + n) * w + (x + n);
   for (let y = -n; y <= n; ++y) {
     for (let x = -n; x <= n; ++x) {
-      const i = idx(x, y);
+      const i = (y + n) * w + (x + n);
       tops[i] = columnTop(p, x, y);
       bots[i] = tops[i] === OFF ? 0 : columnBottom(p, x, y);
+      if (tops[i] !== OFF) sh[i] = shore(p, x, y) ? 1 : 0;
     }
   }
+  const layerAt = (x, y, z) => { const i = (y + n) * w + (x + n); return layerOf(p, x, y, z, tops[i], bots[i], sh[i] !== 0); };
+  return meshGrid(n, tops, bots, layerAt, 1);
+}
+
+function shore(p, x, y) {
+  return inPond(p, x, y) || (p.pondRadius > 0 && dist(x - p.pondX, y - p.pondY) < p.pondRadius + 2.5)
+    || columnTop(p, x + 2, y) === OFF || columnTop(p, x - 2, y) === OFF || columnTop(p, x, y + 2) === OFF
+    || columnTop(p, x, y - 2) === OFF;
+}
+
+function layerOf(p, x, y, z, t, b, isShore) {
+  let l = STONE;
+  if (z === t) l = isShore ? SAND : (noise(p, x * 0.09, y * 0.09, 7) > 0.55 ? MEADOW : GRASS);
+  else if (z >= t - 2) l = DIRT;
+  if (z <= b + 1 && dist(x, y) < 4.0) l = HEART;
+  return l;
+}
+
+const floorDiv = (a, b) => Math.floor(a / b);
+
+/** A far-away version (rule 5): step x step columns per coarse cell; a port of MeshLod() (parity-tested). */
+export function meshLod(p, step) {
+  if (step <= 1) return mesh(p);
+  const fine = p.radius + 2;
+  const n = floorDiv(fine, step) + 1, w = 2 * n + 1;
+  const tops = new Int32Array(w * w).fill(OFF), bots = new Int32Array(w * w);
+  const repX = new Int32Array(w * w), repY = new Int32Array(w * w), repShore = new Uint8Array(w * w);
+  for (let cy = -n; cy <= n; ++cy) {
+    for (let cx = -n; cx <= n; ++cx) {
+      let land = 0, hi = OFF, lo = 0, bx = 0, by = 0;
+      for (let y = cy * step; y < (cy + 1) * step; ++y) {
+        for (let x = cx * step; x < (cx + 1) * step; ++x) {
+          if (x < -fine || x > fine || y < -fine || y > fine) continue;
+          const t = columnTop(p, x, y);
+          if (t === OFF) continue;
+          const b = columnBottom(p, x, y);
+          if (land === 0 || t > hi) { hi = t; bx = x; by = y; }
+          lo = land === 0 ? b : Math.min(b, lo);
+          ++land;
+        }
+      }
+      if (land * 4 < step * step) continue;
+      const i = (cy + n) * w + (cx + n);
+      tops[i] = hi; bots[i] = lo; repX[i] = bx; repY[i] = by; repShore[i] = shore(p, bx, by) ? 1 : 0;
+    }
+  }
+  const layerAt = (cx, cy, z) => { const i = (cy + n) * w + (cx + n); return layerOf(p, repX[i], repY[i], z, tops[i], bots[i], repShore[i] !== 0); };
+  return meshGrid(n, tops, bots, layerAt, step);
+}
+
+/** The greedy mesher over a column grid [-n, n]^2; across-coordinates are multiplied by scale. */
+function meshGrid(n, tops, bots, layerAt, scale) {
+  const w = 2 * n + 1;
+  const idx = (x, y) => (y + n) * w + (x + n);
   const top = (x, y) => (x < -n || x > n || y < -n || y > n) ? OFF : tops[idx(x, y)];
   const bot = (x, y) => (x < -n || x > n || y < -n || y > n) ? 0 : bots[idx(x, y)];
-  for (let y = -n; y <= n; ++y) {
-    for (let x = -n; x <= n; ++x) {
-      if (top(x, y) === OFF) continue;
-      sh[idx(x, y)] = (inPond(p, x, y) || (p.pondRadius > 0 && dist(x - p.pondX, y - p.pondY) < p.pondRadius + 2.5)
-        || columnTop(p, x + 2, y) === OFF || columnTop(p, x - 2, y) === OFF || columnTop(p, x, y + 2) === OFF
-        || columnTop(p, x, y - 2) === OFF) ? 1 : 0;
-    }
-  }
-  const layerAt = (x, y, z) => {
-    const t = top(x, y), b = bot(x, y);
-    let l = STONE;
-    if (z === t) l = sh[idx(x, y)] ? SAND : (noise(p, x * 0.09, y * 0.09, 7) > 0.55 ? MEADOW : GRASS);
-    else if (z >= t - 2) l = DIRT;
-    if (z <= b + 1 && dist(x, y) < 4.0) l = HEART;
-    return l;
-  };
   const out = [];
   // tops (4) and bottoms (5): greedy rectangles over (height, layer)
   for (let face = 4; face <= 5; ++face) {
@@ -157,7 +195,7 @@ export function mesh(p) {
           if (grow) ++y1;
         }
         for (let ay = y; ay <= y1; ++ay) for (let ax = x; ax <= x1; ++ax) done[idx(ax, ay)] = 1;
-        out.push([l, face, face === 4 ? h + 1 : h, x, x1 + 1, y, y1 + 1]);
+        out.push([l, face, face === 4 ? h + 1 : h, x * scale, (x1 + 1) * scale, y * scale, (y1 + 1) * scale]);
       }
     }
   }
@@ -200,7 +238,7 @@ export function mesh(p) {
           }
           for (let az = z; az <= z1; ++az) for (let a = k; a <= k1; ++a) f[az * w + a] = -1;
           const plane = (d === 0 || d === 2) ? line + 1 : line;
-          out.push([l, d, plane, k - n, k1 + 1 - n, z + zMin, z1 + 1 + zMin]);
+          out.push([l, d, plane * scale, (k - n) * scale, (k1 + 1 - n) * scale, z + zMin, z1 + 1 + zMin]);
         }
       }
     }

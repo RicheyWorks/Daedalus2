@@ -75,3 +75,17 @@ Before, it drew one instanced cube per visible block.
   faster. Ready time went from 2.0 s to 2.6 s, because meshing happens once on load.
 - **JS heap:** about the same (27 to 30 MB), since cube instances and quads cost similar bytes. The win is GPU work
   per frame. This is the same change ADR-058 made for Unreal, which still waits on an editor build.
+
+## Addendum, 2026-10-13 05:0x: rule 5, far isles are cheap
+
+`MeshLod(P, Step)` in the C++ core turns Step x Step columns into one coarse cell. A cell is land when a quarter of
+its columns are; its top is the highest top in the cell and its bottom the lowest bottom. The same greedy mesher
+then runs over the coarse grid (`MeshGrid`).
+- **Claude Island:** 53,579 quads in full, 9,929 at step 4, 3,406 at step 8.
+- **Tests:** the outline stays within one cell, and the summit and the deepest rock are kept. `core-test` passes
+  25/25, and the full mesh is byte-identical to before.
+- **JS port:** `meshLod()` matches C++ for all 14 LOD rows; `reach_parity.mjs` passes 29/29.
+- **Web:** `/reach.html` uses `THREE.LOD` per isle: full under 700 m, step 4 under 1.6 km, step 8 beyond. At an
+  overview distance the picture is unchanged, and SwiftShader frames went from 5.52 to 6.01 fps, rising to 4.80 →
+  6.68 fps with most isles far away.
+- **Held:** the same swap for `ADaedalusVoxelIsle` in Unreal, by distance, waits for an editor build.
