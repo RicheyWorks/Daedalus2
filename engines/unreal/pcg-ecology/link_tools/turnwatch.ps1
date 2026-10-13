@@ -12,7 +12,7 @@ while((Get-Date) -lt $end){
     try { $m = $l | ConvertFrom-Json } catch { continue }
     if($m.from -eq 'pythagoras'){ continue }
     $t = [string]$m.body.text; $head = $t.Substring(0,[Math]::Min(60,$t.Length))
-    $go = ($head -match '(?i)HANDOFF' -and $head -match '(?i)pythagoras') -or
+    $go = ($m.from -ne 'buffffff' -and $head -match '(?i)HANDOFF(\s+[\w-]+)?\s*(->|→|to)\s*@?pythagoras\b') -or
           ($m.from -eq 'buffffff' -and $t -match '(?i)@pythagoras:?\s+(\S+\s+){0,4}turn\s+(is\s+)?OPEN\b') -or
           ($m.from -eq 'buffffff' -and $t -match '(?i)(GRANT\W+(to\W+)?@?pythagoras|@pythagoras\b[^.]*\bGRANT)')
     if($go){
@@ -25,6 +25,7 @@ while((Get-Date) -lt $end){
   }
   Start-Sleep 5
 }
+
 
 
 
