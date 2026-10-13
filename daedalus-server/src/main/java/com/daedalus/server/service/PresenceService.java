@@ -6,9 +6,11 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,6 +55,7 @@ public final class PresenceService {
     /** One player's latest state, as the topic shows it. */
     public record Player(String id, String name, double x, double y, double z, double yaw, Anim anim,
                          Map<String, String> look, long at) {
+        public Player { look = look == null ? Map.of() : Map.copyOf(look); }
     }
 
     /** What the topic carries. */
@@ -61,6 +64,8 @@ public final class PresenceService {
 
     /** What a client reports. */
     public record Report(String name, Double x, Double y, Double z, Double yaw, String anim, Map<String, String> look) {
+        // Preserve invalid/null entries until report() can return its normal refusal result.
+        public Report { look = look == null ? null : Collections.unmodifiableMap(new LinkedHashMap<>(look)); }
     }
 
     /** Why a report was turned away, or null when it was accepted. */
@@ -96,7 +101,7 @@ public final class PresenceService {
         if (r == null || r.x() == null || r.y() == null || r.z() == null) {
             return new Result(null, "x, y and z are required");
         }
-        for (Double v : new Double[] {r.x(), r.y(), r.z(), r.yaw() == null ? 0.0 : r.yaw()}) {
+        for (double v : new double[] {r.x(), r.y(), r.z(), r.yaw() == null ? 0.0 : r.yaw()}) {
             if (!Double.isFinite(v)) {
                 return new Result(null, "coordinates must be finite numbers");
             }
@@ -106,21 +111,21 @@ public final class PresenceService {
         }
         Anim anim;
         try {
-            anim = r.anim() == null ? Anim.IDLE : Anim.valueOf(r.anim().trim().toUpperCase());
+            anim = r.anim() == null ? Anim.IDLE : Anim.valueOf(r.anim().trim().toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException e) {
             return new Result(null, "unknown anim " + r.anim());
         }
         Map<String, String> look = new TreeMap<>();
         if (r.look() != null) {
             for (Map.Entry<String, String> e : r.look().entrySet()) {
-                Pattern p = LOOK.get(e.getKey());
+                Pattern p = e.getKey() == null ? null : LOOK.get(e.getKey());
                 if (p == null) {
                     return new Result(null, "unknown look key " + e.getKey());
                 }
                 if (e.getValue() == null || !p.matcher(e.getValue()).matches()) {
                     return new Result(null, "bad value for look." + e.getKey());
                 }
-                look.put(e.getKey(), e.getValue().toLowerCase());
+                look.put(e.getKey(), e.getValue().toLowerCase(Locale.ROOT));
             }
         }
         Map<String, Player> here = worlds.computeIfAbsent(worldId, k -> new LinkedHashMap<>());
