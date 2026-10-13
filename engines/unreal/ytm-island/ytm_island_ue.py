@@ -17,17 +17,19 @@ if not eas.does_asset_exist(SUB):
 ls = unreal.GameplayStatics.get_streaming_level(world, SUB.split("/")[-1])
 if not ls:
     ls = unreal.EditorLevelUtils.add_level_to_world(world, SUB, unreal.LevelStreamingAlwaysLoaded)
-unreal.EditorLevelUtils.make_level_current(ls.get_loaded_level())
+unreal.EditorLevelUtils.make_level_current(ls)
 for a in act.get_all_level_actors():
     if a.actor_has_tag(TAG): act.destroy_actor(a)
 placed = {"ok":0,"missing":set()}
+_mc={}
 def mesh(name):
-    kind = name.split("_")[0]
-    p = f"{ART}/{kind}/{name}/{name}"
-    if not eas.does_asset_exist(p):
-        p2 = f"{ART}/{kind}/{name}"
-        p = p2 if eas.does_asset_exist(p2) else None
-    return eas.load_asset(p) if p else None
+    if name in _mc: return _mc[name]
+    kind = name.split("_")[0]; m=None
+    for p in eas.list_assets(f"{ART}/{kind}/{name}", True, False):
+        if "/Materials/" in p: continue
+        o = eas.load_asset(p.split(".")[0])
+        if isinstance(o, unreal.StaticMesh): m=o; break
+    _mc[name]=m; return m
 def put(name, x, y, z=0, yaw=None, s=1.0):
     m = mesh(name)
     if not m: placed["missing"].add(name); return None
