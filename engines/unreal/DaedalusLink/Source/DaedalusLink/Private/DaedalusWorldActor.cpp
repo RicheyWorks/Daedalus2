@@ -81,7 +81,9 @@ int32 ADaedalusWorldActor::HideImportedChunks()
 	{
 		const UStaticMeshComponent* C = It->GetStaticMeshComponent();
 		const UStaticMesh* M = C ? C->GetStaticMesh() : nullptr;
-		if (M && M->GetName().StartsWith(TEXT("chunk_")))
+		// Only the package import's own meshes (/Game/Daedalus/<world>/...): another team's mesh that happens to be
+		// called chunk_* is theirs (pootscoot's review, 28680).
+		if (M && M->GetName().StartsWith(TEXT("chunk_")) && M->GetPathName().StartsWith(TEXT("/Game/Daedalus/")))
 		{
 			It->SetActorHiddenInGame(true);
 			It->SetActorEnableCollision(false);
