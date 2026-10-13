@@ -46,3 +46,15 @@ Prometheus's Harmonic Herbs reads herbs as a chord. To keep the two distinct, mi
 ## Files (bot-team\art\NOTES\youtube-master)
 `ytm_items.py` (Blender batch, 500), `batch1.json`, `ytm_island_ue.py` (island placement), `ytm_flythrough_ue.py` (Wild Biomes cameras), `herbcombo.py` and `herb_combos.json`, `food_water.json`, `SHOTLIST.md`.
 The Blueprint and C++ gameplay hooks (thirst component, brew interaction, pen tick) go to unreal-team; the data stays JSON for codex.
+
+## found tunes (v2, seed-song records)
+Each of the 16 seed-song records on the island carries a 4-5 note motif. Play a record at the jukebox
+(Prop_YTM_Jukebox) to learn its tune; brewing exactly that herb ORDER at the bench makes a named tonic
+(Item_YTM_Tonic_Found_*) with a unique bonus on top of the normal contour effect. 12 tunes so far, data in
+engines/unreal/ytm-island/found_tunes.csv (DataTable-ready). Harmonic Herbs (prometheus) is order-free chords,
+so this stays an order-only, song-tied hook. Balance (brew_data.py): 3-herb tunes split Rise/Arch/Valley/Fall
+~17-25% each; 5-herb tunes skew Dance 35% / Noise 29% / Fall 3%, so cure-sickness is an early 3-herb recipe.
+
+## hero props
+12 lowercase signposts (face spawn, >=6 m apart), record shrine + jukebox + record rack by spawn,
+16 seed-song records (4 by the shrine, 12 in a 3.2 m arc behind it). Placed by ytm_hero_ue.py (tag YTM_Hero).
