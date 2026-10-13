@@ -140,6 +140,30 @@ replication and verify foreign RPC refusal. See ocean-gamepad-network-proof.json
 Steering/surface axis combinations, mapping cleanup during real realm handoff,
 physical controller hardware and rendered controls remain separate acceptance work.
 
+## Full plugin integration build
+
+The complete tracked DaedalusLink plugin at source head 9b3c5343 compiled and
+linked in a fresh isolated UE 5.8 host: 123 byte-verified input files, all 41 build
+actions, 173.61 seconds, no source overlays or test-only network fixture inserted.
+This includes Hero, Orrery, world streaming, dialogue, inventory and the ocean
+classes together. The plugin's actual module then loaded and passed
+Daedalus.Ocean.HostEligibility with zero test errors/warnings. Exact input/DLL/log
+hashes and the fresh automation report are ocean-full-plugin-build-proof.json and
+ocean-full-plugin-automation-proof.json.
+
+Reproduce the clean host with tools/unreal/full_plugin_host.py. It refuses an
+existing destination, uncommitted plugin edits and untracked plugin files, then
+copies every tracked plugin file and verifies its bytes. Build using the documented
+UnrealEditor target and NoHotReloadFromIDE/NoLiveCoding options. The live team
+editor, source checkout and level are not altered by this process.
+
+An inherited DaedalusSkyDirector.cpp deprecation warning recommends replacing
+SetReflectionSampleCountScale with SetReflectionViewSampleCountScale; it was
+broadcast to the owning team. The build also reports the existing RawInput plugin
+deprecation. Neither warning is a compile failure or a verified upgrade fix.
+Successful full compilation/loading is still not live scene, shipped package,
+rendered game or end-to-end realm travel acceptance.
+
 ## Verification
 
 The actor/component, reflection code and automation test compiled and linked in
