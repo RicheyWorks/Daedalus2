@@ -404,11 +404,11 @@ public:
         void StartDive(double Px,double Py) {
             const double A=std::atan2(Py-Y,Px-X);State=EnemyState::Dive;DiveDx=std::cos(A)*Data(Kind).DiveSpeed;DiveDy=std::sin(A)*Data(Kind).DiveSpeed;DiveTimer=0;
         }
-        void Update(double Px,double Py,int Wave,Difficulty D,double DiveRoll,bool EscortLocked=false) {
+        void Update(double Px,double Py,int CurrentWave,Difficulty D,double DiveRoll,bool EscortLocked=false) {
             if(State==EnemyState::Descend) {
                 Y+=Speed;SwayTimer+=0.05;X=Clamp(X+std::sin(SwayTimer)*Sway,20,780);if(Y>640) Alive=false;
                 if(Kind!=EnemyKind::Cruiser && Y>60 && !EscortLocked) {
-                    double Chance=(0.004+Wave*0.0003)*Config(D).DiveChance;if(Kind==EnemyKind::Butterfly) Chance*=0.6;
+                    double Chance=(0.004+CurrentWave*0.0003)*Config(D).DiveChance;if(Kind==EnemyKind::Butterfly) Chance*=0.6;
                     if(DiveRoll<Chance) StartDive(Px,Py);
                 }
             } else {

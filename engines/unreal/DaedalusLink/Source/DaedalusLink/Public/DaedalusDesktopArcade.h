@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "DaedalusOrrery.h"
 #include "Engine/EngineBaseTypes.h"
+#include "GenericPlatform/ICursor.h"
 #include "InputCoreTypes.h"
 
 THIRD_PARTY_INCLUDES_START

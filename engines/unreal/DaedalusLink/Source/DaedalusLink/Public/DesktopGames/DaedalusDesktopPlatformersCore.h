@@ -210,7 +210,12 @@ class ContraGame final : public Game {
         if(Player.Lives<=0) { Player.Lives=0; Over=true; }
     }
     bool HasBoss() const {
-        for(const auto& E:Enemies) if(E.Kind==2 && E.Health>0) return true; return false;
+        for(const auto& E:Enemies) {
+            if(E.Kind==2 && E.Health>0) {
+                return true;
+            }
+        }
+        return false;
     }
 public:
     static constexpr std::size_t MaxBullets=96,MaxEnemies=6,MaxParticles=160;
@@ -286,12 +291,12 @@ public:
             } else ++BI;
         }
         if(Over) return;
-        for(std::size_t PI=0;PI<Powerups.size();) {
-            auto& P=Powerups[PI]; P.Bob=std::fmod(P.Bob+.15,6.283185307179586);
+        for(std::size_t PickupIndex=0;PickupIndex<Powerups.size();) {
+            auto& P=Powerups[PickupIndex]; P.Bob=std::fmod(P.Bob+.15,6.283185307179586);
             if(platformers::PixelRect(P.X,P.Y,24,24).Overlaps(Player.GetRect())) {
                 if(P.Rapid) Player.FireRate=4; else { Player.Spread=true; Player.SpreadTimer=900; }
-                Explode(P.X,P.Y,{255,215,0,255}); Powerups.erase(Powerups.begin()+PI);
-            } else ++PI;
+                Explode(P.X,P.Y,{255,215,0,255}); Powerups.erase(Powerups.begin()+PickupIndex);
+            } else ++PickupIndex;
         }
         Progress=std::max(Progress,(Player.X-100)/10);
         if(Enemies.size()<5 && Rng.Unit()<.03+Progress/800) {

@@ -133,7 +133,7 @@ public:
         bool Alive=true, Frightened=false;
         int FrightenedTimer=0;
         Rect GetRect() const { return maze::PixelRect(X-8,Y-8,16,16); }
-        void UpdateWithChoices(const Player& Hero,double TurnSample,double ChaseSample,
+        void UpdateWithChoices(const Player& TargetPlayer,double TurnSample,double ChaseSample,
                 const std::array<maze::Direction,4>& Dirs,bool RepairDoor=true) {
             if(!Alive) return;
             if(Frightened && --FrightenedTimer<=0) Frightened=false;
@@ -141,18 +141,18 @@ public:
                 for(const auto D:Dirs) if(!Collides(X+D.X*2,Y+D.Y*2,RepairDoor)) { Dir=D; break; }
             }
             if(!Frightened && ChaseSample<0.6) {
-                const double Dx=Hero.X-X, Dy=Hero.Y-Y;
+                const double Dx=TargetPlayer.X-X, Dy=TargetPlayer.Y-Y;
                 const maze::Direction D=std::abs(Dx)>std::abs(Dy) ? maze::Direction{Dx>0 ? 1 : -1,0} : maze::Direction{0,Dy>0 ? 1 : -1};
                 if(!Collides(X+D.X*2,Y+D.Y*2,RepairDoor)) Dir=D;
             }
             if(!Collides(X+Dir.X*2,Y+Dir.Y*2,RepairDoor)) { X+=Dir.X*2; Y+=Dir.Y*2; }
         }
-        void Update(const Player& Hero,Random& Rng) {
+        void Update(const Player& TargetPlayer,Random& RandomStream) {
             if(!Alive) return;
-            const double TurnSample=Rng.Unit(), ChaseSample=Rng.Unit();
+            const double TurnSample=RandomStream.Unit(), ChaseSample=RandomStream.Unit();
             std::array<maze::Direction,4> Dirs{{{1,0},{-1,0},{0,1},{0,-1}}};
-            for(int I=3;I>0;--I) std::swap(Dirs[static_cast<std::size_t>(I)],Dirs[static_cast<std::size_t>(Rng.Int(0,I))]);
-            UpdateWithChoices(Hero,TurnSample,ChaseSample,Dirs);
+            for(int I=3;I>0;--I) std::swap(Dirs[static_cast<std::size_t>(I)],Dirs[static_cast<std::size_t>(RandomStream.Int(0,I))]);
+            UpdateWithChoices(TargetPlayer,TurnSample,ChaseSample,Dirs);
         }
     };
     struct Pellet { double X=0, Y=0; bool Power=false, Alive=true; };
@@ -282,15 +282,15 @@ public:
         int Health=1, ShootTimer=60, HitFlash=0;
         bool Alive=true;
         Rect GetRect() const { return maze::PixelRect(X-10,Y-10,20,20); }
-        bool Update(const Player& Hero,Random& Rng) {
+        bool Update(const Player& TargetPlayer,Random& RandomStream) {
             if(!Alive) return false;
             if(HitFlash>0) --HitFlash;
             if(Kind==EnemyKind::Octorok) {
-                if(Rng.Unit()<0.03) { X+=Rng.Int(-1,1)*0.9*8; Y+=Rng.Int(-1,1)*0.9*8; }
-                if(--ShootTimer<=0) { ShootTimer=Rng.Int(80,140); return true; }
+                if(RandomStream.Unit()<0.03) { X+=RandomStream.Int(-1,1)*0.9*8; Y+=RandomStream.Int(-1,1)*0.9*8; }
+                if(--ShootTimer<=0) { ShootTimer=RandomStream.Int(80,140); return true; }
             } else {
-                const double Dx=Hero.X-X, Dy=Hero.Y-Y;
-                const double Dist=Distance(Hero.X,Hero.Y,X,Y);
+                const double Dx=TargetPlayer.X-X, Dy=TargetPlayer.Y-Y;
+                const double Dist=Distance(TargetPlayer.X,TargetPlayer.Y,X,Y);
                 if(Kind==EnemyKind::Moblin || Dist<120) {
                     const double Speed=Kind==EnemyKind::Moblin ? 1.2 : 2.2;
                     const double Denom=Dist==0 ? 1 : Dist;
