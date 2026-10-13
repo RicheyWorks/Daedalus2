@@ -23,14 +23,17 @@ configuration. Tick steps cap at 0.1 seconds and refuse invalid tuning. Defaults
 are 600 cm/s cruise, 300 cm/s² acceleration, 60 degrees/s yaw and 250 cm/s dive.
 Client prediction and multiplayer latency behavior remain acceptance work.
 
-Motion automation invokes the server handler directly in the synthetic world;
-it verifies translation, boat height, submarine depth and stale input stopping
-away from the depth boundary. It does not prove remote RPC delivery. The first
-motion run using the RPC wrapper did not move the synthetic pawn and failed;
-that report was rejected. Root mesh mobility is now explicitly Movable. Real
-client/server helm transport remains a required acceptance gate, not inferred
-from direct handler success. Input expiry counts full tick time even when the
-motion integration step is capped, so a long frame does not extend input leases.
+Motion automation now invokes the actual RPC wrapper in an initialized standalone
+game world. It verifies translation, boat height, submarine depth and stale input
+stopping away from the depth boundary. The first wrapper run failed because the
+synthetic world had not initialized its actors: AActor::ProcessEvent in the installed
+UE 5.8 source gates dispatch on AreActorsInitialized. The test now calls
+InitializeActorsForPlay and asserts that state before dispatch. The corrected
+wrapper run passed; direct-handler testing was an intermediate diagnostic only.
+Root mesh mobility is explicitly Movable. Real client/server network transport
+remains a required acceptance gate; standalone RPC dispatch is not remote delivery.
+Input expiry counts full tick time even when the motion integration step is capped,
+so a long frame does not extend input leases.
 
 ResolveForPlayer checks the component owner, controller and vessel authority,
 same-world identity, actual possession in both directions, finite vessel position,

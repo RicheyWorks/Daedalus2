@@ -12,6 +12,8 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
 {
     UWorld* World = UWorld::CreateWorld(EWorldType::Game, false);
     if (!TestNotNull(TEXT("Test world"), World)) return false;
+    World->InitializeActorsForPlay(FURL());
+    TestTrue(TEXT("World actors initialized for RPC dispatch"),World->AreActorsInitialized());
     AActor* Host = World->SpawnActor<AActor>();
     auto* Component = NewObject<UDaedalusOceanTravelComponent>(Host);
     Host->AddInstanceComponent(Component);
@@ -77,17 +79,17 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
     TestTrue(TEXT("New boarding cycle allowed"),Component->BoardAtDock(Player,Vessel,Home.Id));
     Vessel->SetActorLocation(FVector::ZeroVector);
     Vessel->VesselType=EDaedalusOceanVessel::Boat;
-    Vessel->SetHelmInput_Implementation(1,0,-1); Vessel->Tick(.1f);
+    Vessel->SetHelmInput(1,0,-1); Vessel->Tick(.1f);
     TestTrue(TEXT("Boat helm moves forward"),Vessel->GetActorLocation().X>0);
     TestEqual(TEXT("Boat stays at sea level"),Vessel->GetActorLocation().Z,0.0);
     Vessel->VesselType=EDaedalusOceanVessel::Submarine;
-    Vessel->SetHelmInput_Implementation(0,0,-1); Vessel->Tick(.1f);
+    Vessel->SetHelmInput(0,0,-1); Vessel->Tick(.1f);
     TestTrue(TEXT("Submarine dives"),Vessel->GetActorLocation().Z<0);
     Vessel->SetActorLocation(FVector(0,0,-19999));
-    Vessel->SetHelmInput_Implementation(0,0,-1); Vessel->Tick(.1f);
+    Vessel->SetHelmInput(0,0,-1); Vessel->Tick(.1f);
     TestTrue(TEXT("Depth limit enforced"),Vessel->GetActorLocation().Z>=-20000);
     Vessel->SetActorLocation(FVector(0,0,-100));
-    Vessel->SetHelmInput_Implementation(0,0,-1);
+    Vessel->SetHelmInput(0,0,-1);
     for (int i=0;i<10;++i) Vessel->Tick(.1f);
     const double StoppedDepth=Vessel->GetActorLocation().Z;
     Vessel->Tick(.1f);
