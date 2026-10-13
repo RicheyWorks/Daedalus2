@@ -52,3 +52,6 @@ Intermediate-disturbance hypothesis as a lever: tiles burn with rate p per year 
 
 ## Chapter 9 - Keystone Beaver
 Beaver dams flood stream cells into wetland (keystone_beaver.py). One dam adds a habitat (H 1.35 -> 1.51); two dams placed downstream of the oaks reach H 1.56 with all 30 old-growth cells; dams by the oaks drown them (30 -> 18), three dams over-flood. Goal: 2 dams, H >= 1.55, old growth >= 30. The UE quest hook reads live dam positions as sim cells. 30 props (pyth_items6.py). Tests: test_keystone_beaver 5/5, full 9-chapter playthrough in test_quest_hook.
+
+### Interplay: wetlands are firebreaks
+fire_regime(p, wet=...) never burns beaver-wetland cells and counts them as a habitat. At p=0.08 the mosaic H rises from 1.00 to 1.47 with the two ch.9 dams, so a player who finishes ch.9 can run a hotter burn in ch.8 safely.
