@@ -11,9 +11,9 @@ props = [("Prop",f"Prop_YTM_Sign_{k}",v) for k,v in SIGNS.items()]
 props += [("Prop","Prop_YTM_RecordShrine",(-800,1200,135)),("Prop","Prop_YTM_Jukebox",(-1100,700,120))]
 props += [("Item",f"Item_YTM_Record_{r}",(-800+60*(i-1.5),1000,85)) for i,r in enumerate(["AmericanOldTime","Alpine","CelticPipes","Gamelan"])]
 NEWREC = ["AndeanPanPipes","AppalachianHighLonesome","ArabicMaqam","ArabicTakht","ArmenianDuduk","AustralianBushBand","BalineseKecak","BalkanBrass","BaroqueCounterpoint","BulgarianWomensChoir","CairoOrchestra","CarpathianTrembita"]
-# 12 seed-song records stand in an arc behind the shrine (r 260 cm, facing it); rack beside the jukebox
+# 12 seed-song records stand in an arc behind the shrine (r 320 cm, 180 deg, ~91 cm apart); rack beside the jukebox
 for i, r in enumerate(NEWREC):
-    t = math.radians(30 + i * 120 / 11); props.append(("Item", f"Item_YTM_Record_{r}", (-800 + 260*math.cos(t), 1200 + 260*math.sin(t), math.degrees(t) + 90)))
+    t = math.radians(i * 180 / 11); props.append(("Item", f"Item_YTM_Record_{r}", (-800 + 320*math.cos(t), 1200 + 320*math.sin(t), math.degrees(t) + 90)))
 props.append(("Prop", "Prop_YTM_RecordRack", (-1450, 900, 120)))
 tasks=[]
 for kind,name,_ in props:

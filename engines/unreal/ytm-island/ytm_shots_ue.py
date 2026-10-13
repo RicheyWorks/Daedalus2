@@ -1,4 +1,4 @@
-﻿"""youtube-master visual check (next editor turn): moves the EDITOR VIEWPORT camera (no actors spawned, nothing dirtied,
+r"""youtube-master visual check (next editor turn): moves the EDITOR VIEWPORT camera (no actors spawned, nothing dirtied,
 nothing saved) to 8 island views and takes 1280x720 high-res screenshots into Saved/Screenshots/YTM_check.
 Run: ue_send.py ytm_shots_ue.py 240. Afterwards copy Saved\Screenshots\WindowsEditor\YTM_check_* to the Grok box."""
 import unreal, math
