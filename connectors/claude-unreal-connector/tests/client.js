@@ -18,7 +18,7 @@ const check = (label, ok, detail) => { total++; if (ok) pass++; console.log((ok 
   const init = await rpc('initialize', { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 't', version: '0' } });
   check('initialize names the server and offers tools', init.result.serverInfo.name === 'unreal' && init.result.capabilities.tools);
   const list = (await rpc('tools/list', {})).result.tools.map((t) => t.name);
-  check('13 tools listed, none of them project-specific', list.length === 13 && list.includes('run_command') && list.includes('window_input') && !list.some((n) => /daedalus/.test(n)), list.join(','));
+  check('window worker policy and all existing tools listed', list.length === 14 && list.includes('background_worker_windows') && list.includes('run_command') && list.includes('window_input') && !list.some((n) => /daedalus/.test(n)), list.join(','));
 
   let r = await call('unreal_status');
   let j = JSON.parse(text(r));

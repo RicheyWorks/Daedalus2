@@ -28,6 +28,7 @@
     { "name": "list_commands", "description": "Every bridge command, including project add-ons" },
     { "name": "run_command", "description": "Run any bridge command by name" },
     { "name": "editor_windows", "description": "See every Unreal window, dialogs included, even when the editor is frozen" },
+    { "name": "background_worker_windows", "description": "Detect and minimize verified Daedalus background worker consoles, preserving jobs and logs" },
     { "name": "window_input", "description": "Answer a dialog: click or press keys in an Unreal window" },
     { "name": "output_log", "description": "Read the editor log" }
   ],
