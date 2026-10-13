@@ -140,14 +140,45 @@ public final class TacticalOrders {
         return new ParseResult(false, "line " + line + ": " + why, null);
     }
 
+    private static boolean space(char c) {
+        return c == ' ' || c == '\t' || c == '\u000B' || c == '\f' || c == '\r' || c == '\n';
+    }
+
+    /** Whitespace-separated words, as C++'s {@code istream >> word} sees them. One pass, no regex. */
     private static List<String> words(String body) {
-        List<String> out = new ArrayList<>();
-        for (String w : body.split("[ \\t\\x0B\\f\\r\\n]+")) {
-            if (!w.isEmpty()) {
-                out.add(w);
+        List<String> out = new ArrayList<>(8);
+        int n = body.length();
+        int i = 0;
+        while (i < n) {
+            while (i < n && space(body.charAt(i))) {
+                i++;
             }
+            if (i >= n) {
+                break;
+            }
+            int b = i;
+            while (i < n && !space(body.charAt(i))) {
+                i++;
+            }
+            out.add(body.substring(b, i));
         }
         return out;
+    }
+
+    /** Longer than MAX_LINE in UTF-8 bytes, as C++ counts it, without encoding short lines. */
+    static boolean tooLong(String line) {
+        if (line.length() > MAX_LINE) {
+            return true;   // every char is at least one byte
+        }
+        return line.length() * 3 > MAX_LINE && line.getBytes(StandardCharsets.UTF_8).length > MAX_LINE;
+    }
+
+    private static String stripLeadingSpaces(String s) {
+        int i = 0;
+        while (i < s.length() && s.charAt(i) == ' ') {
+            i++;
+        }
+        return s.substring(i);
     }
 
     public static ParseResult parse(String text) {
@@ -161,6 +192,7 @@ public final class TacticalOrders {
         String squad = null;
         long tick = 0;
         List<Order> orders = new ArrayList<>();
+        java.util.Set<String> seen = new java.util.HashSet<>();
         int n = 0;
         for (int li = 0; li < count; li++) {
             ++n;
@@ -168,7 +200,7 @@ public final class TacticalOrders {
             if (line.endsWith("\r")) {
                 line = line.substring(0, line.length() - 1);
             }
-            if (line.getBytes(StandardCharsets.UTF_8).length > MAX_LINE) {   // bytes, as in C++
+            if (tooLong(line)) {   // bytes, as in C++
                 return fail(n, "line too long");
             }
             if (line.isEmpty() || line.charAt(0) == '#') {
@@ -179,7 +211,7 @@ public final class TacticalOrders {
             int bar = line.indexOf('|');
             if (bar >= 0) {
                 body = line.substring(0, bar);
-                why = line.substring(bar + 1).replaceFirst("^ +", "");
+                why = stripLeadingSpaces(line.substring(bar + 1));
             }
             List<String> t = words(body);
             if (t.isEmpty()) {
@@ -252,10 +284,8 @@ public final class TacticalOrders {
                     return fail(n, "bad point");
                 }
                 String unit = t.get(1);
-                for (Order prev : orders) {
-                    if (prev.unit().equals(unit)) {
-                        return fail(n, "two orders for " + unit);
-                    }
+                if (!seen.add(unit)) {   // a hash set: the list scan made a full spec O(n^2)
+                    return fail(n, "two orders for " + unit);
                 }
                 orders.add(new Order(unit, verb, side, new Vec(x, y, z), why));
                 continue;
@@ -273,6 +303,35 @@ public final class TacticalOrders {
 
     /** C's printf("%.1f"): the exact binary value rounded half-even, keeping the sign of a negative that rounds to 0. */
     static String num(double v) {
+        StringBuilder b = new StringBuilder(16);
+        appendNum(b, v);
+        return b.toString();
+    }
+
+    /**
+     * {@link #num} appended in place. Fast path: below 1e9 the product {@code v * 10} is off by under 1e-6, so unless it
+     * sits that close to a .5 tie its rounding is already the exact value's; only near-ties (rare) go through BigDecimal.
+     * {@code TacticsNumTest} compares both on a million values, ties included.
+     */
+    static void appendNum(StringBuilder out, double v) {
+        double a = Math.abs(v);
+        if (a < 1e9) {
+            double t = a * 10;
+            double frac = t - Math.floor(t);
+            if (Math.abs(frac - 0.5) > 1e-6) {
+                long r = (long) Math.floor(t + 0.5);
+                boolean negative = v < 0 || (v == 0 && 1.0 / v < 0);
+                if (negative) {
+                    out.append('-');
+                }
+                out.append(r / 10).append('.').append((char) ('0' + (int) (r % 10)));
+                return;
+            }
+        }
+        out.append(slowNum(v));
+    }
+
+    static String slowNum(double v) {
         String s = new BigDecimal(v).setScale(1, RoundingMode.HALF_EVEN).toPlainString();
         boolean negative = v < 0 || (v == 0 && 1.0 / v < 0);
         if (negative && !s.startsWith("-")) {

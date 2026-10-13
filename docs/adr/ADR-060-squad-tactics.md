@@ -140,3 +140,8 @@ and reads numbers with `std::from_chars`; writers append into one reserved strin
 The bytes are unchanged: tactics_parity.txt regenerates identically, and a new check compares `to_chars` with
 printf `%.1f` on a million values including exact ties. Proposed budget: Java decides and writes off the game thread;
 the game thread spends under 0.2 ms per full spec, and a real squad (3-12 units) is a few microseconds.
+
+Java side of the same codec (steady state, 6,000 runs, 256-order spec): parse 920 -> 114 us, write 340 -> 59 us.
+No regex (`words` is one pass; `replaceFirst` gone), UTF-8 length only for lines that could pass 512 bytes, a hash
+set for duplicate units, and a `%.1f` fast path that falls back to BigDecimal only within 1e-6 of a tie or past 1e9.
+TacticsNumTest compares the fast path with the exact one on a million values; TacticsParityTest 10/10 unchanged.
