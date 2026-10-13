@@ -103,7 +103,7 @@ void ADaedalusTalker::Continue(ADaedalusHero* Hero, int32 Choice)
 void ADaedalusTalker::Deliver(ADaedalusHero* Hero, const daedalus::cast::Beat& B)
 {
 	Progress = UTF8_TO_TCHAR(Talk.Save().c_str());
-	for (const std::string& F : Talk.Flags()) SharedFlags(GetWorld(), Cast).Add(UTF8_TO_TCHAR(F.c_str()));
+	for (const std::string& F : Talk.Flags()) if (F.rfind("gave_", 0) != 0) SharedFlags(GetWorld(), Cast).Add(UTF8_TO_TCHAR(F.c_str()));   // a gift paid is this talker's alone
 	// Gifts go into the realm's satchel (the inventory's catalog names them); the script pays each once.
 	for (const auto& G : B.Gifts)
 	{
