@@ -16,7 +16,7 @@ bool FDaedalusOceanDockTest::RunTest(const FString& Parameters)
     auto* Player=World->SpawnActor<APlayerController>();
     auto* Hero=World->SpawnActor<ADaedalusHero>(FVector(0,-300,0),FRotator::ZeroRotator);
     auto* Vessel=World->SpawnActor<ADaedalusOceanVessel>();
-    auto* Dock=World->SpawnActor<ADaedalusOceanDock>(FVector(0,-150,0),FRotator::ZeroRotator);
+    auto* Dock=World->SpawnActor<ADaedalusOceanDockControl>(FVector(0,-150,0),FRotator::ZeroRotator);
     AActor* Host=World->SpawnActor<AActor>();
     auto* Travel=NewObject<UDaedalusOceanTravelComponent>(Host);
     Host->AddInstanceComponent(Travel);Travel->RegisterComponent();

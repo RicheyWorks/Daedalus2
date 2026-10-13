@@ -6,11 +6,11 @@ class ADaedalusOceanVessel;
 
 /** Dock control point recognized by Hero's existing usable-object interaction. */
 UCLASS()
-class DAEDALUSLINK_API ADaedalusOceanDock : public ADaedalusUsable
+class DAEDALUSLINK_API ADaedalusOceanDockControl : public ADaedalusUsable
 {
     GENERATED_BODY()
 public:
-    ADaedalusOceanDock();
+    ADaedalusOceanDockControl();
     virtual FString Prompt(const ADaedalusHero* Hero) const override;
     virtual bool Use(ADaedalusHero* Hero) override;
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean") FString DockId;

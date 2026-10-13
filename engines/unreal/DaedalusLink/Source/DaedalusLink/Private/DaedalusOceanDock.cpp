@@ -3,17 +3,17 @@
 #include "DaedalusOceanTravelComponent.h"
 #include "GameFramework/Controller.h"
 
-ADaedalusOceanDock::ADaedalusOceanDock()
+ADaedalusOceanDockControl::ADaedalusOceanDockControl()
 {
     bReplicates=true;
 }
-FString ADaedalusOceanDock::Prompt(const ADaedalusHero* Hero) const
+FString ADaedalusOceanDockControl::Prompt(const ADaedalusHero* Hero) const
 {
     if (!IsValid(Vessel) || !IsValid(TravelHost) || DockId.IsEmpty()) return TEXT("Dock unavailable");
     if (Vessel->GetController()) return TEXT("Vessel occupied");
     return Vessel->VesselType==EDaedalusOceanVessel::Submarine ? TEXT("Board submarine") : TEXT("Board boat");
 }
-bool ADaedalusOceanDock::Use(ADaedalusHero* Hero)
+bool ADaedalusOceanDockControl::Use(ADaedalusHero* Hero)
 {
     if (!HasAuthority() || !IsValid(Hero) || !Hero->HasAuthority()
         || Hero->GetWorld()!=GetWorld() || !IsValid(Vessel) || !IsValid(TravelHost)

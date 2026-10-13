@@ -1,6 +1,6 @@
 # Ocean dock usable-object adapter
 
-ADaedalusOceanDock derives from the existing ADaedalusUsable interface. Hero's
+ADaedalusOceanDockControl derives from the existing ADaedalusUsable interface. Hero's
 existing nearest-usable Interact path recognizes it without changes to Hero or
 Orrery. Assign DockId, a vessel and a TravelHost actor containing a configured
 UDaedalusOceanTravelComponent. Assign approved dock art through the inherited Body
