@@ -10,6 +10,34 @@ exec(compile(open(g["__file__"],encoding="utf-8").read(),g["__file__"],"exec"),g
 OUT=_a[0] if _a else "PI_hero_v2.png"; SAMP=int(_a[1]) if len(_a)>1 else 256; PCT=int(_a[2]) if len(_a)>2 else 100
 sc=bpy.context.scene; N,S,P,HM=g["N"],g["S"],g["P"],g["HM"]
 def nodes(m): return m.node_tree.nodes, m.node_tree.links
+# ---- 0) PIB_PARITY=1: re-place island items from the real UE transforms (ue_transforms.json)
+if os.environ.get("PIB_PARITY"):
+    import json as _j
+    U=_j.load(open(g["D"]+"ue_transforms.json"))["actors"]; byname={m["name"]:m for m in g["man"]}
+    for o in g["PUTS"]:
+        try: bpy.data.objects.remove(o)
+        except ReferenceError: pass
+    def pmat(m):
+        c=m["cat"]
+        if c=="water": return g["WATER"] if m.get("kind") in ("SpringBasin","StreamSeg","Trough","StillPart") else g["MAT"]["rock"]
+        if c=="herb": return g["HERBC"][m["pc"]]
+        return g["MAT"].get(c)
+    np_=0
+    for a in U:
+        mp=a.get("mesh","")
+        if "/Prometheus/Items/" not in mp: continue
+        m=byname.get(mp.split(".")[-1])
+        if not m: continue
+        o0=g["src"](m)
+        if o0 is None: continue
+        o=o0.copy(); sc.collection.objects.link(o); o.hide_render=False; o.hide_viewport=False
+        x,y,z=a["loc"]; o.location=(x/100.0,-y/100.0,z/100.0); o.rotation_euler=(o0.rotation_euler[0],o0.rotation_euler[1],math.radians(-a["rot"][2]))
+        o.scale=tuple(v*s for v,s in zip(o0.scale,a["scale"])); mt=pmat(m)
+        if mt:
+            o.data=o0.data.copy(); o.data.materials.clear(); o.data.materials.append(mt)
+            for ms in o.material_slots: ms.link="OBJECT"; ms.material=mt
+        np_+=1
+    print("PIB2 parity placed",np_,"of",len(U))
 # ---- 1) terrain: 3x bilinear grid + subdivision, soft shoreline (no cliff skirts)
 def hraw(lx,ly):
     j=min(N-1.001,max(0,(lx/S+0.5)*(N-1))); i=min(N-1.001,max(0,(ly/S+0.5)*(N-1))); i0,j0=int(i),int(j); fi,fj=i-i0,j-j0

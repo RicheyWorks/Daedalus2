@@ -56,7 +56,7 @@ def src(m):
         for o in new: o.select_set(True)
         bpy.context.view_layer.objects.active=new[0]; bpy.ops.object.join()
     o=new[0]; o.parent=None; o.hide_render=True; o.hide_viewport=True; SRC[m["name"]]=o; return o
-n=0
+n=0; PUTS=[]
 def put(m,loc,yaw=0,mt=None,s=1.0):
     global n
     if loc is None: return
@@ -67,7 +67,7 @@ def put(m,loc,yaw=0,mt=None,s=1.0):
     if mt:
         o.data=o0.data.copy(); o.data.materials.clear(); o.data.materials.append(mt)
         for ms in o.material_slots: ms.link="OBJECT"; ms.material=mt
-    n+=1; return o
+    n+=1; PUTS.append(o); return o
 by={}
 for m in man: by.setdefault(m["cat"],[]).append(m)
 rnd=random.Random(15)
