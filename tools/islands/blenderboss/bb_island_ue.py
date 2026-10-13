@@ -6,7 +6,7 @@
 3. places data/islands/blenderboss/layout.json (1003+ placements) at ORIGIN, plus a hero camera
 4. saves ONLY its own sublevel. Prints PASS/FAIL and returns a dict. Panels are closed after by bb_turn.ps1 (tidy.ps1).
 Env: BB_GLB (glb folder), BB_LAYOUT (layout.json)."""
-import json, math, os
+import json, math, os, time
 import unreal
 
 GLB = os.environ.get("BB_GLB", r"C:\Users\730ri\projects\bot-team\art\glb")
@@ -14,6 +14,8 @@ LAYOUT = os.environ.get("BB_LAYOUT", r"C:\Users\730ri\projects\Daedalus2\data\is
 ART = "/Game/Daedalus/Art"
 SUB, PERSIST, SUBNAME = "/Game/BlenderBoss/Maps/BlenderBossIsland", "/Game/Daedalus/DaedalusWorld", "BlenderBossIsland"
 FOLDER = "BlenderBoss"
+IMPORT_BUDGET_S = float(os.environ.get("BB_IMPORT_S", "200"))
+SHOT = os.environ.get("BB_SHOT", r"C:\Users\730ri\projects\bot-team\shots\blenderboss\ue_island.png")
 eal = unreal.EditorAssetLibrary
 
 
@@ -23,7 +25,13 @@ def log(m): unreal.log("[blenderboss-island] " + m)
 def kind_of(name): return name.split("_", 1)[0] if name.split("_", 1)[0] in ("Prop", "Item", "Tool", "Bld", "Mob", "Veh", "Wpn") else "Prop"
 
 
+_MC = {}
 def mesh(name):
+    if name in _MC: return _MC[name]
+    _MC[name] = _mesh(name); return _MC[name]
+
+
+def _mesh(name):
     base = f"{ART}/{kind_of(name)}/{name}"
     for p in (f"{base}/{name}/StaticMeshes/{name}", f"{base}/{name}", f"{base}/StaticMeshes/{name}"):
         if eal.does_asset_exist(p):
@@ -46,9 +54,13 @@ def import_missing(names, force=()):
                      ("replace_existing", True), ("save", True)):
             t.set_editor_property(k, v)
         tasks.append(t)
-    if tasks: unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks(tasks)
-    log(f"imported {len(tasks)}")
-    return len(tasks)
+    t0, done = time.time(), 0
+    for i in range(0, len(tasks), 20):                 # chunks; stop importing when the time box is used up
+        if time.time() - t0 > IMPORT_BUDGET_S: break
+        unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks(tasks[i:i+20]); done += len(tasks[i:i+20])
+    for t in tasks[:done]: _MC.pop(os.path.splitext(os.path.basename(t.get_editor_property("filename")))[0], None)
+    log(f"imported {done}/{len(tasks)} in {time.time()-t0:.0f}s")
+    return done
 
 
 def open_sublevel():
@@ -71,6 +83,10 @@ def spawn(actors, m, loc, yaw, s, folder, label):
 
 
 def run():
+    les0 = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
+    try:
+        if les0.is_in_play_in_editor(): les0.editor_request_end_play(); log("ended Play")
+    except Exception as e: log(f"play check: {e}")
     lay = json.load(open(LAYOUT))
     ox, oy, oz = lay["origin_cm"]; base = lay["base_asset"]
     names = sorted({p["asset"] for p in lay["placements"]})
@@ -94,9 +110,16 @@ def run():
     rot = unreal.Rotator(roll=0, pitch=math.degrees(math.atan2(dz, math.hypot(dx, dy))), yaw=math.degrees(math.atan2(dy, dx)))
     cam = actors.spawn_actor_from_class(unreal.CineCameraActor, cl, rot); cam.set_actor_label("BlenderBoss Hero Cam"); cam.set_folder_path(FOLDER)
     les.save_current_level()
+    try: unreal.EditorLevelLibrary.save_all_dirty_levels()      # DaedalusWorld (streaming ref) + our sublevel
+    except Exception as e: log(f"save_all_dirty_levels: {e}")
+    shot = None
+    try:
+        os.makedirs(os.path.dirname(SHOT), exist_ok=True)
+        unreal.AutomationLibrary.take_high_res_screenshot(1600, 900, SHOT, camera=cam); shot = SHOT
+    except Exception as e: log(f"screenshot: {e}")
     want = len(lay["placements"]); ok = bool(bm) and placed >= int(0.9 * want)
     log(f"base={'ok' if bm else 'MISSING'} placed={placed}/{want} imported={imported} missing={len(missing)} {'PASS' if ok else 'FAIL'}")
-    return {"ok": ok, "base": bool(bm), "placed": placed, "want": want, "imported": imported, "missing": sorted(missing)[:50]}
+    return {"ok": ok, "base": bool(bm), "placed": placed, "want": want, "imported": imported, "missing_n": len(missing), "missing": sorted(missing)[:20], "shot": shot}
 
 
 RESULT = run()
