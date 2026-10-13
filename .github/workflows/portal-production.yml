@@ -64,6 +64,10 @@ jobs:
           for core in portal_quest exploration_terrain ocean_travel; do
             "${{ matrix.compiler }}" -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -fno-omit-frame-pointer "engines/unreal/core-test/${core}_core_test.cpp" -o "$RUNNER_TEMP/$core"
             "$RUNNER_TEMP/$core"
+            if [ "$core" = portal_quest ]; then
+              "$RUNNER_TEMP/$core" --write "$RUNNER_TEMP/quest.dqp"
+              "$RUNNER_TEMP/$core" --read "$RUNNER_TEMP/quest.dqp"
+            fi
           done
       - name: Population and honest queue status
         run: |
@@ -83,4 +87,10 @@ jobs:
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
             & "$env:RUNNER_TEMP/$core.exe"
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            if ($core -eq 'portal_quest') {
+              & "$env:RUNNER_TEMP/$core.exe" --write "$env:RUNNER_TEMP/quest.dqp"
+              if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+              & "$env:RUNNER_TEMP/$core.exe" --read "$env:RUNNER_TEMP/quest.dqp"
+              if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            }
           }
