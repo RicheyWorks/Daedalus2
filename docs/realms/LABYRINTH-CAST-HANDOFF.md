@@ -46,3 +46,8 @@ Next batches should add the remaining humanoid jobs before quadrupeds, insects, 
 ## Lessons
 
 Check exported skins and clips before claiming a reusable rig. Validate animation endpoints as orientations, not raw quaternion signs. Match BBA accounting to the actual mesh type; static LOD tooling is not skeletal LOD support. Keep batch counts and in-game proof explicit during handoff.
+
+
+## Expanded delivery
+
+The current build now contains all32castroles and20props. See [LABYRINTH-BUILDOUT.md](LABYRINTH-BUILDOUT.md) for the reconciled52asset package, worksheet, mechanics core and story chapter. The original batch1 evidence above remains historical; expanded outputs use the labyrinth-full directory.
