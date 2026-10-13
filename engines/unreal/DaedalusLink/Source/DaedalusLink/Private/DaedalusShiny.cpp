@@ -17,10 +17,13 @@ namespace
 		return M;
 	}
 
+	/** The unlit emissive glow import_world_package.py makes (parameters Color, Intensity); the engine's lit basic
+	 * material when a project hasn't imported yet, so a shiny still shows its sparks. */
 	UMaterialInterface* SparkMaterial()
 	{
-		static UMaterialInterface* M = LoadObject<UMaterialInterface>(nullptr, TEXT("/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial"));
-		return M;
+		static UMaterialInterface* M = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Daedalus/Art/Materials/M_DaedalusGlow.M_DaedalusGlow"));
+		static UMaterialInterface* Fallback = LoadObject<UMaterialInterface>(nullptr, TEXT("/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial"));
+		return M ? M : Fallback;
 	}
 }
 
@@ -42,7 +45,7 @@ namespace DaedalusShiny
 		L->SetupAttachment(Under);
 		L->SetRelativeLocation(FVector(0.f, 0.f, State.Size * 0.6f));
 		L->SetIntensityUnits(ELightUnits::Candelas);
-		L->SetIntensity(12.f);                       // the lighting fix of 2026-10-13: nothing over 100 cd
+		L->SetIntensity(40.f);                       // the lighting fix of 2026-10-13: nothing over 100 cd
 		L->SetAttenuationRadius(State.Size * 3.f);
 		L->SetSourceRadius(State.Size * 0.25f);
 		L->SetCastShadows(false);
@@ -58,12 +61,13 @@ namespace DaedalusShiny
 			S->SetStaticMesh(SparkMesh());
 			S->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 			S->SetCastShadow(false);
-			const float Px = FMath::Clamp(State.Size * 0.035f, 2.f, 9.f);   // sphere mesh is 100 cm
+			const float Px = FMath::Clamp(State.Size * 0.06f, 4.f, 16.f);   // sphere mesh is 100 cm
 			S->SetRelativeScale3D(FVector(Px / 100.f));
 			if (Base)
 			{
 				UMaterialInstanceDynamic* M = UMaterialInstanceDynamic::Create(Base, Owner);
-				M->SetVectorParameterValue(TEXT("Color"), Hue(static_cast<float>(i) / Sparks) * 6.f);   // over 1: it glows under bloom
+				M->SetVectorParameterValue(TEXT("Color"), Hue(static_cast<float>(i) / Sparks));
+				M->SetScalarParameterValue(TEXT("Intensity"), 10.f);
 				S->SetMaterial(0, M);
 			}
 			S->RegisterComponent();
@@ -80,7 +84,7 @@ namespace DaedalusShiny
 		if (UPointLightComponent* L = State.Light.Get())
 		{
 			L->SetLightColor(Hue(Cycle));
-			L->SetIntensity(9.f + 5.f * FMath::Sin(T * 2.4f));
+			L->SetIntensity(30.f + 15.f * FMath::Sin(T * 2.4f));
 		}
 		const float R = State.Size * 0.7f;
 		for (int32 i = 0; i < State.Sparks.Num(); ++i)
@@ -93,7 +97,8 @@ namespace DaedalusShiny
 			S->SetRelativeLocation(FVector(FMath::Cos(A) * R, FMath::Sin(A) * R, State.Size * (0.55f + 0.3f * Bob)));
 			if (UMaterialInstanceDynamic* M = Cast<UMaterialInstanceDynamic>(S->GetMaterial(0)))
 			{
-				M->SetVectorParameterValue(TEXT("Color"), Hue(Cycle + static_cast<float>(i) / State.Sparks.Num()) * (5.f + 3.f * Bob));
+				M->SetVectorParameterValue(TEXT("Color"), Hue(Cycle + static_cast<float>(i) / State.Sparks.Num()));
+				M->SetScalarParameterValue(TEXT("Intensity"), 8.f + 6.f * Bob);
 			}
 		}
 	}

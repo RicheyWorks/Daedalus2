@@ -196,6 +196,33 @@ def _material(name, translucent):
     return mat
 
 
+def glow_material():
+    """M_DaedalusGlow: unlit emissive, parameters Color and Intensity. Shiny sparks (DaedalusShiny), rainbow dust and
+    anything else that must read as light use it. Made once, kept beside the world materials."""
+    tools = unreal.AssetToolsHelpers.get_asset_tools()
+    path = CONTENT_ROOT + "/Materials"
+    name = "M_DaedalusGlow"
+    if unreal.EditorAssetLibrary.does_asset_exist(path + "/" + name):
+        return unreal.EditorAssetLibrary.load_asset(path + "/" + name)
+    mat = tools.create_asset(name, path, unreal.Material, unreal.MaterialFactoryNew())
+    mat.set_editor_property("shading_model", unreal.MaterialShadingModel.MSM_UNLIT)
+    mat.set_editor_property("two_sided", True)
+    mel = unreal.MaterialEditingLibrary
+    col = mel.create_material_expression(mat, unreal.MaterialExpressionVectorParameter, -500, 0)
+    col.set_editor_property("parameter_name", "Color")
+    col.set_editor_property("default_value", unreal.LinearColor(1, 0.8, 0.2, 1))
+    inten = mel.create_material_expression(mat, unreal.MaterialExpressionScalarParameter, -500, 200)
+    inten.set_editor_property("parameter_name", "Intensity")
+    inten.set_editor_property("default_value", 8.0)
+    mul = mel.create_material_expression(mat, unreal.MaterialExpressionMultiply, -250, 60)
+    mel.connect_material_expressions(col, "", mul, "A")
+    mel.connect_material_expressions(inten, "", mul, "B")
+    mel.connect_material_property(mul, "", unreal.MaterialProperty.MP_EMISSIVE_COLOR)
+    mel.recompile_material(mat)
+    unreal.EditorAssetLibrary.save_loaded_asset(mat)
+    return mat
+
+
 SKY_FOLDER = "Daedalus/Sky"
 # The light a Daedalus level needs, as (class name, label, rotation pitch/yaw). A new level has none of these,
 # and without them every mesh renders black. Each is added only if the level has no actor of that class.
@@ -251,6 +278,7 @@ def import_into_unreal(zip_path, manifest, live_only=False):
         z.extractall(work)
     opaque = _material("M_DaedalusOpaque", False)
     translucent = _material("M_DaedalusTranslucent", True)
+    glow_material()
 
     # An empty world (no islands raised yet) has a world.glb with no meshes; Interchange calls that an error.
     has_geometry = manifest.get("geometry", {}).get("chunks", 0) > 0
