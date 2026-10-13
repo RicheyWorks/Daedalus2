@@ -19,5 +19,5 @@ assert "LevelStreamingAlwaysLoaded" in open(os.path.join(H, "place_oddsreaper_is
 r4 = open(os.path.join(H, "r4_pie.py"), encoding="utf-8").read()
 assert "take_hero_shot(CAM, TGT" in r4 and "restore_world_sky.py" in r4, "r4 must aim at the island and restore world sky first"
 rw = open(os.path.join(H, "restore_world_sky.py"), encoding="utf-8").read()
-assert "save_map(world, MAP)" in rw and "umap_written" in rw and "DirectionalLight" not in rw.split('"""', 2)[2], "explicit verified save, no new sun"
+assert "save_map(world, MAP)" in rw and "umap_written" in rw and "spawn_actor" not in rw.lower() and "new_sun" in rw, "explicit verified save, no second sun"
 print("hero framing + streaming + world sky: PASS")

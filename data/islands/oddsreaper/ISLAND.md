@@ -132,3 +132,12 @@ Storm MoodVolume path is fixed off-editor (flush_level_streaming + mood=oddsreap
 ## Round-4 off-editor: full mood CSV sync gate (Oct 12, 2026, 23:40 PT)
 
 mood.json now mirrors every column of the wild_biomes_moods.csv oddsreaper_storm row (added FogHeightFalloff 0.4 + FogStartDistance 0). test_mood_row.py parses SunColor/SkyColor/FogColor and asserts all scalars + mpc_storm + pie_hour 18.75 — the data-table half of the daylight-hero diagnosis. No Unreal touched.
+
+## OR_NEXT (00:49 PT Oct 13, off-editor)
+
+`restore_world_sky.py` is hardened: `_save_verified` (mtime + one retry), post-save director re-read (`after_save`),
+sun/sky floors (MIN_SUN 1.0 / MIN_SKY 0.5), DirectionalLight count guard (no second sun), writes
+`bot-team/shots/oddsreaper/restore_world_sky.json`. Headless `test_restore_world_sky.py`. Buffffff is running the
+live sky restore on their round-4 turn; OddsReaper next editor turn still owes: framed PIE SceneCapture storm hero
+on-island (r4 was off-island) after world is Clear on disk, then Play-stop + save OddsReaperIsland (do not leave
+director at storm on the persistent map).
