@@ -34,6 +34,31 @@ LOG = []
 
 MIN_BUILD_GB = float(os.environ.get("OR_MIN_BUILD_GB", "2.0"))  # -Fast build reopens the editor (big RAM spike)
 MIN_PLAY_GB = float(os.environ.get("OR_MIN_PLAY_GB", "1.5"))    # PIE duplicates the world; referee: ~1 GB free, batch small
+# Island-only temp capture lights (disk-saver/hephaestus lit-capture pattern, storm-cool tint).
+# SceneCapture blacks out when the world is dark; warm daylight fills would wash oddsreaper_storm to Clear.
+# Spawn tagged OR_TEMP_* for the shot only, destroy before any save. OR_TEMP_LIGHTS=0 disables.
+TEMP_LIGHT_TAG = "OR_TempCapture"
+TEMP_LIGHT_PREFIX = "OR_TEMP_"
+TEMP_FILL_INTENSITY = 2.5e5   # half of heph/disk-saver 5e5 — keep stormish luma
+TEMP_SUN_INTENSITY = 4.0
+TEMP_EV100 = 10.0
+TEMP_LIGHT_RGB = (180, 200, 255)  # cool storm fill (not warm daylight 255,244,225)
+
+
+def temp_lights_plan(env=None):
+    """Pure decision: should scene_capture_hero spawn island-only temp lights? Returns (use, reason)."""
+    env = os.environ if env is None else env
+    if env.get("OR_TEMP_LIGHTS", "1") == "0":
+        return False, "disabled (OR_TEMP_LIGHTS=0)"
+    return True, "spawn island-only OR_TEMP storm-cool sun/fill/PPV (no atmosphere sun; destroy before save)"
+
+
+def is_temp_light_actor(label, tags=None):
+    """True for actors this module spawned for a one-shot hero capture (label or tag)."""
+    label = str(label or "")
+    tags = [str(t) for t in (tags or [])]
+    return label.startswith(TEMP_LIGHT_PREFIX) or TEMP_LIGHT_TAG in tags
+
 
 
 def free_ram_gb():
@@ -161,8 +186,9 @@ def preflight():
 
 
 def scene_capture_hero(cam, target, name="hero_unreal_editor.png"):
-    """Warm SceneCapture2D (hephaestus/prometheus pattern). Bypasses flaky viewport_screenshot."""
-    code = f'''
+    """Storm-cool SceneCapture2D with optional island-only OR_TEMP lights (never saved)."""
+    use_tmp, tmp_why = temp_lights_plan()
+    code = f"""
 import unreal, os, time
 SHOTS = r"{SHOTS}"
 out_name = r"{name}"
@@ -170,14 +196,87 @@ out_path = os.path.join(SHOTS, out_name)
 os.makedirs(SHOTS, exist_ok=True)
 cam_loc = unreal.Vector({cam[0]}, {cam[1]}, {cam[2]})
 target_loc = unreal.Vector({target[0]}, {target[1]}, {target[2]})
+USE_TMP = {use_tmp!r}
+TMP_WHY = {tmp_why!r}
+TMP_TAG = {TEMP_LIGHT_TAG!r}
+TMP_PREFIX = {TEMP_LIGHT_PREFIX!r}
+FILL_I = {TEMP_FILL_INTENSITY}
+SUN_I = {TEMP_SUN_INTENSITY}
+EV100 = {TEMP_EV100}
+RGB = {TEMP_LIGHT_RGB!r}
 ue_sub = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem)
 gw = unreal.EditorLevelLibrary.get_game_world()
 world = gw or ue_sub.get_editor_world()
 actors = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
-for a in actors.get_all_level_actors():
-    if str(a.get_actor_label()).startswith("OddsReaper Hero Capture"):
-        try: actors.destroy_actor(a)
+temp_info = {{"used": False, "reason": TMP_WHY, "spawned": [], "removed": []}}
+
+def _is_tmp(lab, tags):
+    return lab.startswith(TMP_PREFIX) or TMP_TAG in tags
+
+def _cleanup_temps():
+    removed = []
+    for a in list(actors.get_all_level_actors()):
+        lab = str(a.get_actor_label())
+        tags = [str(t) for t in (getattr(a, "tags", None) or [])]
+        if _is_tmp(lab, tags) or lab.startswith("OddsReaper Hero Capture"):
+            try:
+                actors.destroy_actor(a); removed.append(lab)
+            except Exception:
+                pass
+    temp_info["removed"] = removed
+    return removed
+
+_cleanup_temps()  # clear leftover OR_TEMP / prior capture from a partial run
+origin_v = unreal.Vector((cam_loc.x + target_loc.x) * 0.5, (cam_loc.y + target_loc.y) * 0.5, 0.0)
+
+def _spawn_temp(cls, loc, rot, nm):
+    if gw:
+        xf = unreal.Transform(loc, rot, unreal.Vector(1, 1, 1))
+        a = unreal.GameplayStatics.begin_deferred_actor_spawn_from_class(gw, cls, xf)
+        a = unreal.GameplayStatics.finish_spawning_actor(a, xf)
+    else:
+        a = actors.spawn_actor_from_class(cls, loc, rot)
+        a.set_folder_path("OddsReaper/TempCapture")
+    a.tags = [TMP_TAG]
+    a.set_actor_label(TMP_PREFIX + nm)
+    temp_info["spawned"].append(a.get_actor_label())
+    return a
+
+if USE_TMP:
+    try:
+        sun = _spawn_temp(unreal.DirectionalLight, origin_v + unreal.Vector(0, 0, 3000),
+                          unreal.Rotator(0, -40, 35), "Sun")
+        sc_sun = sun.light_component
+        sc_sun.set_editor_property("intensity", SUN_I)
+        sc_sun.set_editor_property("light_color", unreal.Color(RGB[0], RGB[1], RGB[2], 255))
+        try: sc_sun.set_editor_property("atmosphere_sun_light", False)
         except Exception: pass
+        fill = _spawn_temp(unreal.PointLight, origin_v + unreal.Vector(0, 0, 6000),
+                           unreal.Rotator(0, 0, 0), "Fill")
+        fc = fill.point_light_component
+        fc.set_editor_property("intensity", FILL_I)
+        fc.set_editor_property("light_color", unreal.Color(RGB[0], RGB[1], RGB[2], 255))
+        fc.set_editor_property("attenuation_radius", 20000.0)
+        fc.set_editor_property("cast_shadows", False)
+        ppv = _spawn_temp(unreal.PostProcessVolume, origin_v, unreal.Rotator(0, 0, 0), "PPV")
+        ppv.set_editor_property("unbound", False)
+        ppv.set_actor_scale3d(unreal.Vector(200, 200, 100))
+        s = ppv.settings
+        for k, v in (("auto_exposure_method", unreal.AutoExposureMethod.AEM_HISTOGRAM),
+                     ("auto_exposure_min_brightness", EV100),
+                     ("auto_exposure_max_brightness", EV100),
+                     ("auto_exposure_bias", 0.25)):
+            try:
+                s.set_editor_property("override_" + k, True)
+                s.set_editor_property(k, v)
+            except Exception as e:
+                temp_info.setdefault("notes", []).append(f"{{k}}: {{str(e)[:60]}}")
+        ppv.set_editor_property("settings", s)
+        temp_info["used"] = True
+    except Exception as e:
+        temp_info["error"] = str(e)[:160]
+        _cleanup_temps()
+
 rt = unreal.RenderingLibrary.create_render_target2d(world, 1920, 1080, unreal.TextureRenderTargetFormat.RTF_RGBA8)
 look = unreal.MathLibrary.find_look_at_rotation(cam_loc, target_loc)
 if gw:  # spawn INTO the PIE world (EditorActorSubsystem only spawns in the editor world)
@@ -192,9 +291,9 @@ sc.set_editor_property("texture_target", rt)
 sc.set_editor_property("capture_source", unreal.SceneCaptureSource.SCS_FINAL_COLOR_LDR)
 sc.set_editor_property("fov_angle", 55.0)
 pp = sc.get_editor_property("post_process_settings")
-for k, v in (("override_auto_exposure_bias", True), ("auto_exposure_bias", 1.0),
-             ("override_white_temp", True), ("white_temp", 5200.0),
-             ("override_bloom_intensity", True), ("bloom_intensity", 0.4)):
+for k, v in (("override_auto_exposure_bias", True), ("auto_exposure_bias", 0.5),
+             ("override_white_temp", True), ("white_temp", 6500.0),
+             ("override_bloom_intensity", True), ("bloom_intensity", 0.35)):
     try: pp.set_editor_property(k, v)
     except Exception: pass
 sc.set_editor_property("post_process_settings", pp)
@@ -203,14 +302,16 @@ sc.capture_scene()
 unreal.RenderingLibrary.export_render_target(world, rt, SHOTS, out_name)
 try: (cap.destroy_actor() if gw else actors.destroy_actor(cap))
 except Exception: pass
+_cleanup_temps()  # ALWAYS strip OR_TEMP_* before any later save
 time.sleep(0.5)
 ok = os.path.isfile(out_path) and os.path.getsize(out_path) > 1000
-result = {{"ok": ok, "path": out_path, "size": os.path.getsize(out_path) if ok else 0}}
-'''
+result = {{"ok": ok, "path": out_path, "size": os.path.getsize(out_path) if ok else 0, "temp_lights": temp_info}}
+"""
     try:
         r = py(code, timeout=90)
         if isinstance(r, dict) and r.get("ok"):
-            say(f"shot SceneCapture2D -> {r.get('path')} ({r.get('size')} B)")
+            tl = r.get("temp_lights") or {}
+            say(f"shot SceneCapture2D -> {r.get('path')} ({r.get('size')} B; temp_lights used={tl.get('used')})")
             return True
         say(f"SceneCapture2D returned: {r}")
     except Exception as e:

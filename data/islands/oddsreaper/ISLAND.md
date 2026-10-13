@@ -153,3 +153,11 @@ No Unreal touched.
 ## RAM gate (01:08 PT Oct 13, off-editor)
 
 oddsreaper_turn.py now checks host free RAM (GlobalMemoryStatusEx) before the heavy steps: the -Fast build is skipped below OR_MIN_BUILD_GB (default 2.0) and the 20 s PIE storm check below OR_MIN_PLAY_GB (default 1.5); save + editor SceneCapture hero still run. Unreadable RAM fails open. Headless: tools/islands/oddsreaper/test_ram_gate.py. Reason: round-5 editor ran at 0.86-1.07 GB free.
+
+## Storm-cool OR_TEMP lights (01:20 PT Oct 13, off-editor)
+
+scene_capture_hero now optionally spawns island-only OR_TEMP_* DirectionalLight + PointLight + bounded PPV
+(disk-saver/hephaestus lit-capture pattern) with a cool storm tint RGB(180,200,255), fill 2.5e5, EV100 10 —
+half the warm daylight fill so we do not wash oddsreaper_storm to Clear. atmosphere_sun_light=False so the
+world sky/time is untouched. ALWAYS destroyed before any save. OR_TEMP_LIGHTS=0 disables. Headless:
+tools/islands/oddsreaper/test_temp_lights.py. Apply on next editor grant (with framed PIE SceneCapture).
