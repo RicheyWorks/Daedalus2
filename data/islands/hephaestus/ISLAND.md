@@ -340,3 +340,8 @@ No editor grant (art-master-flex on deck after oddsreaper). Unreal untouched.
 | Landmarks test | requires hi + LOD1 glb for all 7 QUEUE assets |
 | Data | layout.landmarks + nft.json note round-4 import + Clear sky + LOD1 swap |
 
+
+### Sky gate before the hero (2026-10-13 00:22 PT)
+
+OddsReaper found that DaedalusWorld.umap on disk still holds the storm Sky Director (sun 0 lux, skylight 0.017), because the 23:54 restore was never saved to the persistent map. `hero_capture` now probes world light first; if it reads dark, it runs `tools/islands/oddsreaper/restore_world_sky.py` once (Clear, 9.4 h, explicit save_map, no new sun), re-probes, and records the result as `sky_restore` in `hero_capture.json`. `HEPH_RESTORE_SKY=0` turns this off. Covered by `test_heph_sky_gate.py`.
+

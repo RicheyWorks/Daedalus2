@@ -206,6 +206,35 @@ def lit_owed(chosen, lum, gate=None):
     return chosen is None or chosen == "base_color" or lum is None or lum < gate
 
 
+# Sky gate (00:22 2026-10-13): oddsreaper #26626 found DaedalusWorld.umap on disk still holds the storm Sky Director
+# (sun 0 lux, skylight 0.017); their 23:54 restore was in-memory only. So on my own granted turn, if the probe reads the
+# world as dark, run oddsreaper's tools/islands/oddsreaper/restore_world_sky.py (young_meadow/Clear/9.4, explicit
+# save_map + umap mtime check, NO new sun; its author cleared anyone holding a turn to run it), then re-probe before the
+# exposure ladder. HEPH_RESTORE_SKY=0 disables it; at most one attempt per turn; result goes in hero_capture.json.
+RESTORE_SKY_SCRIPT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "oddsreaper", "restore_world_sky.py")
+
+
+def sky_restore_plan(wl, env=None, attempted=False, script_exists=True):
+    """Pure decision: should this turn run the shared sky restore before the hero capture? Returns (run, reason)."""
+    env = os.environ if env is None else env
+    if not wl or not wl.get("dark"): return False, "world lit"
+    if env.get("HEPH_RESTORE_SKY", "1") == "0": return False, "disabled (HEPH_RESTORE_SKY=0)"
+    if attempted: return False, "already attempted this turn"
+    if not script_exists: return False, "restore_world_sky.py missing"
+    return True, "world dark: run oddsreaper restore_world_sky (no new sun)"
+
+
+def restore_sky():
+    """Run oddsreaper's restore_world_sky.run() inside the editor. Returns its result dict (ok/saved/umap_written)."""
+    import importlib.util
+    try:
+        spec = importlib.util.spec_from_file_location("oddsreaper_restore_world_sky", RESTORE_SKY_SCRIPT)
+        mod = importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
+        return mod.run()
+    except Exception as e:
+        return {"ok": False, "error": str(e)[:160]}
+
+
 def probe_world_light():
     suns, skies = [], []
     try:
@@ -247,6 +276,15 @@ def hero_capture(cam_loc, target_loc, fov=55.0):
         grid = sample_grid(1920, 1080)
         wl = probe_world_light()
         log(f"world light: sun {wl['sun_lux']} lux, sky {wl['sky']}, dark={wl['dark']}")
+        sky_fix = None
+        go, why = sky_restore_plan(wl, script_exists=os.path.isfile(RESTORE_SKY_SCRIPT))
+        if go:
+            sky_fix = restore_sky()
+            log(f"sky restore: {sky_fix}")
+            wl = dict(probe_world_light(), before=wl)
+            log(f"world light after restore: sun {wl['sun_lux']} lux, sky {wl['sky']}, dark={wl['dark']}")
+        else:
+            log(f"sky restore skipped: {why}")
 
         def shoot(rung):
             label, src, ev100, bias = rung
@@ -287,7 +325,8 @@ def hero_capture(cam_loc, target_loc, fov=55.0):
             with open(os.path.join(SHOTS, "hero_capture.json"), "w", encoding="utf-8") as f:
                 chosen, blum = (best[0][0], best[1]) if best else (None, None)
                 json.dump({"tried": tried, "chosen": chosen, "lum": round(blum, 1) if best else None,
-                           "gate": MIN_CAPTURE_LUM, "world_light": wl, "lit_owed": lit_owed(chosen, blum)}, f, indent=1)
+                           "gate": MIN_CAPTURE_LUM, "world_light": wl, "sky_restore": sky_fix,
+                           "lit_owed": lit_owed(chosen, blum)}, f, indent=1)
         except Exception as e: log(f"hero_capture.json: {e}")
         try: actors.destroy_actor(cap)
         except Exception: pass
