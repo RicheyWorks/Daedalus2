@@ -220,14 +220,29 @@ EXPOSURE_LADDER = (
     ("base_color", "SCS_BASE_COLOR", None, 0.0),
 )
 MIN_CAPTURE_LUM = 20.0  # same gate test_heph_nft_card uses for the card's primary hero
+# Washout gate (01:33 2026-10-13): round-5 SceneCapture cleared luma 174 but the forge was a speck on a pale
+# 1024 m blockout disc — the luma>=20 gate only catches dark frames. A washed hero has a bright mean AND a nearly
+# all-pale center (the disc fills the view). Dark frames stay lit_owed; this flag is framing debt for the next turn.
+WASHOUT_PALE_LUM = 160.0
+WASHOUT_CENTER_PALE_FRAC = 0.85  # 3x3 center of the 9x9 probe
+WASHOUT_MIN_MEAN = 80.0  # below this, lit_owed handles it
+
+
+def pixel_rgb(c):
+    """(r, g, b) 0-255 from a UE LinearColor-like object or a 3-tuple."""
+    return (c.r, c.g, c.b) if hasattr(c, "r") else c[:3]
+
+
+def luma601(r, g, b):
+    return 0.299 * r + 0.587 * g + 0.114 * b
 
 
 def mean_lum(colors):
     """Mean Rec.601 luma (0-255) of sampled pixels; each is an (r, g, b) 0-255 tuple or an object with .r/.g/.b."""
     tot, n = 0.0, 0
     for c in colors:
-        r, g, b = (c.r, c.g, c.b) if hasattr(c, "r") else c[:3]
-        tot += 0.299 * r + 0.587 * g + 0.114 * b; n += 1
+        r, g, b = pixel_rgb(c)
+        tot += luma601(r, g, b); n += 1
     return tot / n if n else 0.0
 
 
@@ -236,6 +251,48 @@ def sample_grid(w, h, n=9):
     xs = [int(w * (0.05 + 0.9 * i / (n - 1))) for i in range(n)]
     ys = [int(h * (0.05 + 0.9 * j / (n - 1))) for j in range(n)]
     return [(x, y) for y in ys for x in xs]
+
+
+def probe_lumas(colors):
+    """Rec.601 luma list from the same color objects mean_lum accepts (row-major n x n)."""
+    out = []
+    for c in colors:
+        r, g, b = pixel_rgb(c)
+        out.append(luma601(r, g, b))
+    return out
+
+
+def washout_stats(lumas, n=9):
+    """Stats for the n x n brightness probe. center_* uses the middle 3x3 when n>=3."""
+    if not lumas:
+        return {"mean": 0.0, "std": 0.0, "span": 0.0, "pale_frac": 0.0,
+                "center_mean": 0.0, "center_pale_frac": 0.0, "n": 0, "n_side": n}
+    mean = sum(lumas) / len(lumas)
+    var = sum((x - mean) ** 2 for x in lumas) / len(lumas)
+    pale = sum(1 for x in lumas if x >= WASHOUT_PALE_LUM) / len(lumas)
+    center = []
+    if n >= 3 and len(lumas) == n * n:
+        lo, hi = n // 2 - 1, n // 2 + 1  # inclusive 3-wide band around the middle
+        for j in range(n):
+            for i in range(n):
+                if lo <= i <= hi and lo <= j <= hi:
+                    center.append(lumas[j * n + i])
+    else:
+        center = list(lumas)
+    cmean = sum(center) / len(center) if center else 0.0
+    cpale = sum(1 for x in center if x >= WASHOUT_PALE_LUM) / len(center) if center else 0.0
+    return {"mean": round(mean, 1), "std": round(var ** 0.5, 1), "span": round(max(lumas) - min(lumas), 1),
+            "pale_frac": round(pale, 3), "center_mean": round(cmean, 1),
+            "center_pale_frac": round(cpale, 3), "n": len(lumas), "n_side": n}
+
+
+def washout_owed(stats, min_mean=None, center_pale=None):
+    """Bright + nearly all-pale center => washed blockout disc, not a usable forge overlook."""
+    if not stats or not stats.get("n"):
+        return False
+    min_mean = WASHOUT_MIN_MEAN if min_mean is None else min_mean
+    center_pale = WASHOUT_CENTER_PALE_FRAC if center_pale is None else center_pale
+    return stats["mean"] >= min_mean and stats.get("center_pale_frac", 0.0) >= center_pale
 
 
 # World-light probe (round 4, 23:45): every island's shot went near-black after the 22:59 editor restart because the
@@ -456,16 +513,21 @@ def hero_capture(cam_loc, target_loc, fov=55.0, origin=None):
             sc.set_editor_property("post_process_settings", pp)
             sc.set_editor_property("post_process_blend_weight", 1.0)
             sc.capture_scene()
-            return mean_lum(unreal.RenderingLibrary.read_render_target_pixel(world, rt, x, y) for x, y in grid)
+            colors = [unreal.RenderingLibrary.read_render_target_pixel(world, rt, x, y) for x, y in grid]
+            stats = washout_stats(probe_lumas(colors), n=9)
+            return stats
 
-        tried, best = [], None
+        tried, best = [], None  # best = (rung, stats)
         for rung in EXPOSURE_LADDER:
-            try: lum = shoot(rung)
+            try: stats = shoot(rung)
             except Exception as e:
                 log(f"hero capture rung {rung[0]}: {e}"); continue
-            tried.append({"rung": rung[0], "lum": round(lum, 1)})
-            log(f"hero capture rung {rung[0]}: mean luma {lum:.1f}")
-            if best is None or lum > best[1]: best = (rung, lum)
+            lum = stats["mean"]
+            tried.append({"rung": rung[0], "lum": lum, "std": stats["std"],
+                          "center_pale_frac": stats["center_pale_frac"],
+                          "washout": washout_owed(stats)})
+            log(f"hero capture rung {rung[0]}: mean luma {lum:.1f} center_pale {stats['center_pale_frac']:.2f}")
+            if best is None or lum > best[1]["mean"]: best = (rung, stats)
             if lum >= MIN_CAPTURE_LUM: break
         if best and tried[-1]["rung"] != best[0][0]:  # none passed: re-shoot the brightest rung before export
             try: shoot(best[0])
@@ -473,10 +535,17 @@ def hero_capture(cam_loc, target_loc, fov=55.0, origin=None):
         unreal.RenderingLibrary.export_render_target(world, rt, SHOTS, HERO_PNG)
         try:
             with open(os.path.join(SHOTS, "hero_capture.json"), "w", encoding="utf-8") as f:
-                chosen, blum = (best[0][0], best[1]) if best else (None, None)
-                json.dump({"tried": tried, "chosen": chosen, "lum": round(blum, 1) if best else None,
-                           "gate": MIN_CAPTURE_LUM, "world_light": wl, "sky_restore": sky_fix,
-                           "temp_lights": temp_info, "lit_owed": lit_owed(chosen, blum)}, f, indent=1)
+                chosen = best[0][0] if best else None
+                blum = best[1]["mean"] if best else None
+                wstats = best[1] if best else None
+                washed = washout_owed(wstats) if wstats else False
+                json.dump({"tried": tried, "chosen": chosen, "lum": blum,
+                           "gate": MIN_CAPTURE_LUM, "washout_gate": {
+                               "pale_lum": WASHOUT_PALE_LUM, "center_pale_frac": WASHOUT_CENTER_PALE_FRAC,
+                               "min_mean": WASHOUT_MIN_MEAN},
+                           "probe": wstats, "world_light": wl, "sky_restore": sky_fix,
+                           "temp_lights": temp_info, "lit_owed": lit_owed(chosen, blum),
+                           "washout_owed": washed}, f, indent=1)
         except Exception as e: log(f"hero_capture.json: {e}")
         try: actors.destroy_actor(cap)
         except Exception: pass
@@ -485,13 +554,18 @@ def hero_capture(cam_loc, target_loc, fov=55.0, origin=None):
         log(f"temp lights removed: {temp_info.get('removed')}")
         # brief settle + existence check
         time.sleep(0.5)
-        if best and lit_owed(best[0][0], best[1]):
+        if best and lit_owed(best[0][0], best[1]["mean"]):
             link_note(f"NEED island:hephaestus lit hero owed: export fell back to {best[0][0]} (lit rungs {tried[:-1]}); "
                       f"world light sun {wl['sun_lux']} lux / sky {wl['sky']}; temp_lights used={temp_info.get('used')} -> "
                       + ("world-level dark (DaedalusWorld sun/sky); temp island lights were used (not saved)"
                          if wl["dark"] else "world is lit, so re-aim hero cam / exposure next turn"))
-        if os.path.isfile(out_path) and os.path.getsize(out_path) > 1000 and best and best[1] >= MIN_CAPTURE_LUM:
-            log(f"hero SceneCapture -> {out_path} ({os.path.getsize(out_path)} B, {best[0][0]} luma {best[1]:.1f})")
+        elif best and washout_owed(best[1]):
+            link_note(f"NEED island:hephaestus washout hero owed: {best[0][0]} luma {best[1]['mean']} but center_pale "
+                      f"{best[1]['center_pale_frac']:.2f} >= {WASHOUT_CENTER_PALE_FRAC} (pale disc fills the view; "
+                      f"fit hero cam / basalt ground — see hero_pose fit). lit_owed false; framing debt remains.")
+        if os.path.isfile(out_path) and os.path.getsize(out_path) > 1000 and best and best[1]["mean"] >= MIN_CAPTURE_LUM:
+            log(f"hero SceneCapture -> {out_path} ({os.path.getsize(out_path)} B, {best[0][0]} luma {best[1]['mean']:.1f} "
+                f"washout={washout_owed(best[1])})")
             return out_path
         log(f"hero SceneCapture too dark or missing ({tried}); trying HighResShot")
     except Exception as e:
@@ -622,7 +696,9 @@ def run():
     try: cap = json.load(open(os.path.join(SHOTS, "hero_capture.json"), encoding="utf-8"))
     except Exception: cap = {}
     write_result({"stage": "done", "ok": ok, "placed": placed, "want": want, "living": living, "saved": saved, "shot": shot,
-                  "hero_rung": cap.get("chosen"), "lit_owed": cap.get("lit_owed", True), "world_light": cap.get("world_light")})
+                  "hero_rung": cap.get("chosen"), "lit_owed": cap.get("lit_owed", True),
+                  "washout_owed": cap.get("washout_owed", False), "world_light": cap.get("world_light"),
+                  "hero_probe": cap.get("probe")})
     return {"ok": ok, "placed": placed, "want": want, "imported": imported, "missing": sorted(missing), "living": living,
             "saved": saved, "cam": [cl.x, cl.y, cl.z], "cam_rot": [rot.pitch, rot.yaw],
             "shot": shot, "hero_target": [tl.x, tl.y, tl.z]}

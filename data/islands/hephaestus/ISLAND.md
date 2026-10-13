@@ -390,3 +390,13 @@ Round-5 SceneCapture is lit (auto+1, luma 174.3, lit_owed false; archived as `bo
 - `basalt_material()`: `MI_BasaltGround` (BasicShapeMaterial, Color 0.045/0.038/0.035) on the blockout ground disc, same pattern as `MI_HotSpring`.
 - `test_heph_hero_frame.py` (headless): fit closer than fixed, direction kept, all 12 core props inside the 55 deg cone, env/thin fallbacks, run() wiring. ALL PASS; the other 8 `test_heph_*` still pass.
 - `nft.json`: Blender overlook stays primary; `hero_image_unreal_lit` points at the round-5 archive. Promote the Unreal capture once a refit shot lands on the next granted turn.
+
+## Off-editor polish (2026-10-13 ~01:33 PT)
+
+No editor grant (art-master-flex holds round-5; blender-team on deck). Unreal untouched.
+
+Round-5 tip still owed: the `luma >= 20` gate misses washed-out frames. The archived `hero_unreal_lit_r5.png` is lit (mean luma 174.3, `lit_owed` false) but its 9x9 probe center is 100% pale (luma >= 160) — the white 1024 m blockout disc fills the view and the caldera is a speck.
+
+- `heph_island_ue.py`: `washout_stats` / `washout_owed` on the SceneCapture probe (bright mean + center pale frac >= 0.85). `hero_capture.json` now carries `probe`, `washout_owed`, and the washout gate constants; a NEED note posts when washout fires without `lit_owed`. `island_result.json` copies `washout_owed` + `hero_probe`. Framing fix from 043942f3 (fit cam ~78 m + `MI_BasaltGround`) still runs on the next granted turn; this gate is how we know the debt is cleared.
+- Validator: `test_heph_washout.py` (synthetic grids + archived r5/Blender PNGs).
+
