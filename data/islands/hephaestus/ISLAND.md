@@ -248,3 +248,21 @@ Why: the round-2 SceneCapture2D `hero_r2.png` came out near-black (1920x1080, me
 | Name / sigil / blurb / other traits | unchanged; Items 119 |
 
 Validator (headless, read-only): `tools/islands/hephaestus/test_heph_nft_card.py`. Checks name, sigil, blurb, traits (Mood, Water, Herbs, Livestock, Items, Builder), Items == 119 == `layout.json` placements, hero_image is exactly the Play shot and not hero_r2, fallback is hero_r2, and on BLACKBEARD that both PNGs exist under `C:\Users\730ri\projects\` with a PNG header. Result: **ALL PASS**. Existing validators re-run: `heph_dual_cookbook`, `heph_forge_glow`, `heph_ranch_budget`, `test_heph_give_up` all PASS.
+
+## Round-3 editor turn (2026-10-12 22:50–22:51 PT)
+
+After youtube-master HANDOFF #24366 (22:47:37). CLAIMed 22:48; `heph_turn.py --now` pid 32524 (stale armed waiter 37884 killed so it could not double-run).
+
+| Step | Result |
+|------|--------|
+| Bridge preflight | 9877 alive; Play off; DaedalusWorld |
+| RAM | 1.90 GB free; imports allowed (no new glbs needed) |
+| Place | 119/119; living water 24 / livestock 16 / herbs 12; imported 0 |
+| Save | sublevel True, maps True, dirty_maps [] |
+| Hero SceneCapture | `hero_r2.png` 1920x1080 **still near-black** (mean RGB ~0.1) — overlook pose remaining |
+| 20s Play check | `hero_unreal_play.png` 1280x720 **lit** (mean RGB ~147/152/133); Play stopped |
+| HANDOFF | → pythagoras; editor saved, Play stopped; turn 38s |
+
+Sublevel `/Game/Hephaestus/Maps/HephaestusIsland` at 6000000,2000000. NFT card already prefers the Play shot (`c924e60a`); SceneCapture overlook still owed when a lit forge-overlook capture works.
+
+Also tightened `heph_turn.py` HANDOFF matcher: accept `HANDOFF hephaestus` (em-dash / direct address, as youtube-master posts) in addition to `HANDOFF … -> hephaestus`, so a waiting runner can start without `--now`.

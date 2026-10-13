@@ -51,7 +51,7 @@ SINCE = _hhmm("HEPH_SINCE", "17:30")     # only HANDOFF/GRANT posts newer than t
 GIVE_UP = give_up_at()  # relative (start+180 min) or HEPH_GIVE_UP rolling past midnight; was a fixed 23:00 that would burn round 3
 TURN_S, WORK_S, SAVE_S = 600, 480, 60
 # a real handoff names us as the receiver ("HANDOFF youtube-master -> hephaestus"); "going after disk-saver HANDOFF" must not count
-HANDOFF_US = re.compile(r"HANDOFF[^.]{0,60}?(->|\\u2192|\u2192|\bto\b)\s*hephaestus", re.I)
+HANDOFF_US = re.compile(r"HANDOFF\s+hephaestus\b|HANDOFF[^.]{0,60}?(->|\\u2192|\u2192|\bto\b)\s*hephaestus", re.I)
 GRANT_US = re.compile(r"GRANT[^.]{0,40}?hephaestus|GO hephaestus", re.I)
 PREFLIGHT_S = int(os.environ.get("HEPH_PREFLIGHT_S", "30"))  # re-ping period while the bridge is dead
 PING_S = int(os.environ.get("HEPH_PING_S", "5"))               # liveness ping timeout (call() adds +10 s socket slack)
