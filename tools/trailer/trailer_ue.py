@@ -25,7 +25,8 @@ W_, H_ = 1280, 720
 import time  # noqa: E402
 
 ROOT = os.path.join(unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_saved_dir()), "Daedalus", "trailer")
-OUT = os.path.join(ROOT, time.strftime("run-%m%d-%H%M%S"))   # a new folder per take: nothing is ever deleted
+# A new folder per take (nothing is ever deleted); TRAILER_RESUME = a take folder continues it after Play was stopped.
+OUT = globals().get("TRAILER_RESUME") or os.path.join(ROOT, time.strftime("run-%m%d-%H%M%S"))
 FRAMES = os.path.join(OUT, "frames")
 os.makedirs(FRAMES, exist_ok=True)
 with open(os.path.join(ROOT, "latest.txt"), "w") as _f:
@@ -34,7 +35,11 @@ with open(os.path.join(ROOT, "latest.txt"), "w") as _f:
 PLAN = trailer_plan.frames()
 STARTS = trailer_plan.shot_starts()
 SHOT = {name: (kind, params) for name, _, kind, params, _ in trailer_plan.SHOTS}
-STATE = {"i": 0, "total": len(PLAN), "errors": [], "handle": None, "done": False, "squad": False, "follow": {}}
+_FIRST = 0
+if globals().get("TRAILER_RESUME"):
+    while os.path.exists(os.path.join(FRAMES, "f_%05d.png" % _FIRST)):
+        _FIRST += 1
+STATE = {"i": _FIRST, "total": len(PLAN), "errors": [], "handle": None, "done": False, "squad": False, "follow": {}}
 
 
 def _status():
