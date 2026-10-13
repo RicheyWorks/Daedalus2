@@ -26,6 +26,7 @@ class TacticsConfigurationTest {
     private static final String EVENTS = "DTE 1\ntick 1\nevent PLAYER player 1000 0 0 100\n";
     private ApplicationContextRunner enabled() {
         return runner.withPropertyValues("daedalus.tactics.adaptive.enabled=true",
+                "daedalus.tactics.host.subject=engine", "daedalus.tactics.host.squad=pack-1",
                 "daedalus.tactics.adaptive.directory=" + temp);
     }
 
@@ -44,7 +45,10 @@ class TacticsConfigurationTest {
                 var mvc = MockMvcBuilders.standaloneSetup(c.getBean(TacticsController.class)).build();
                 var body = new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(
                         java.util.Map.of("roster", roster("pack-1"), "events", EVENTS));
-                String response = mvc.perform(post("/api/v1/tactics/decide").contentType(MediaType.APPLICATION_JSON)
+                String response = mvc.perform(post("/api/v1/tactics/decide")
+                        .principal(org.springframework.security.authentication.UsernamePasswordAuthenticationToken.authenticated(
+                                "engine", "unused-test-credential", java.util.List.of()))
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(body)).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
                 if (first.get() == null) first.set(response); else assertThat(response).isEqualTo(first.get());
                 assertThatThrownBy(() -> c.getBean(TacticsHost.class).decide(roster("unconfigured"), EVENTS))

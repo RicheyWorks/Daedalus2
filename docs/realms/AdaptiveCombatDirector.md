@@ -220,6 +220,8 @@ still return the cached spec, preserving the transport's first-observation-wins 
 `TacticsConfiguration` defaults to the baseline host. To opt into adaptive behavior, set:
 
 ```properties
+daedalus.tactics.host.subject=engine-operator
+daedalus.tactics.host.squad=pack-1
 daedalus.tactics.adaptive.enabled=true
 daedalus.tactics.adaptive.directory=/absolute/path/to/tactical-checkpoints
 daedalus.tactics.adaptive.squad=pack-1
@@ -229,11 +231,13 @@ daedalus.tactics.adaptive.objective-y=0
 daedalus.tactics.adaptive.objective-z=0
 ```
 
-Use an appropriate absolute Windows path on Windows. Objective coordinates are Unreal cm;
+Replace engine-operator with the actual authenticated JWT subject of the trusted engine host;
+it must match the identity issued by the existing login flow. Both host keys default blank
+and deny requests. Use an appropriate absolute Windows path on Windows. Objective coordinates are Unreal cm;
 set them to the encounter's intended spawn/guard point before play. This is one configured
 squad/faction, with threatened=false and weapon=UNKNOWN; other squad requests to the adaptive
 brain are refused. Request data never selects the faction or objective. Keep the endpoint's
-existing production ops authentication; these settings do not enable anonymous control.
+existing production JWT authentication; these settings do not enable anonymous control.
 The JSON/wire contract and the no-argument controller constructor remain compatible.
 
 `FileTacticalCheckpoints` follows the existing simulation repository's exclusive-writer,
@@ -271,3 +275,34 @@ materially larger than the initial decision cost. Keep this path asynchronous fr
 before expanding beyond this single configured encounter, measure serialized host queue
 age and storage throughput. Do not claim many-squad capacity or bypass persistence to meet
 a frame budget. C++ owns immediate combat and the local fallback during backend delay.
+
+## Trusted engine authorization boundary
+
+The tactics controller is an engine-control endpoint, not a calculator shared by arbitrary
+authenticated players. It requires an authenticated Spring security principal whose name
+exactly matches `daedalus.tactics.host.subject`, and a DTR squad exactly matching
+`daedalus.tactics.host.squad`, before calling the stateful host. Both settings default blank
+and deny all requests, for both baseline and adaptive strategies. Anonymous/unauthenticated
+principals and plain caller-supplied names/headers cannot bypass this check. The no-argument
+controller remains constructible but is unconfigured and denies requests.
+
+This is an explicit single-host/single-squad authorization model. That trusted subject may
+start new encounter sessions for its squad. Session ids select its own receipts and are not
+secrets or grants; this is not a multi-tenant session ACL system. Separate engine identities
+need separate configured instances and state directories until a multi-host ownership registry
+is designed. In adaptive mode the host and adaptive squad settings must match.
+
+Use the production JWT security chain for remote/local authenticated integration. Missing or
+invalid bearer tokens receive HTTP 401 from that chain. An authenticated but wrong subject,
+wrong squad or unconfigured boundary receives HTTP 403. Non-production's permissive security
+chain does not authenticate bearer tokens, and there is deliberately no anonymous dev bypass.
+Claude's native `daedalus.TacticsToken` already sends the Authorization bearer header; tokens
+must not be written to test reports or team broadcasts. The success JSON contract remains
+`result/spec/why/squads`; native code must handle authorization failure by HTTP status and keep
+its fallback, rather than interpreting an error response as an order.
+
+Regression evidence includes a booted prod server and real signed JWT requests: anonymous 401,
+valid wrong-subject 403, allowed-host wrong-squad 403, configured-host 200, cached retry, and
+proof that a rejected caller cannot prime PLAYER state or read an existing receipt. Controller
+tests also exercise unconfigured, anonymous, unauthenticated and forged plain-principal paths.
+The change addresses Pootscoot's hub finding 28446; Claude approved the boundary in 28479.

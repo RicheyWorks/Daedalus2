@@ -37,6 +37,9 @@ management:
 # Daedalus-specific config. Bind these with @ConfigurationProperties("daedalus") in the server module.
 daedalus:
   tactics:
+    host:
+      subject: "" # Explicit authenticated JWT subject of the trusted Unreal host; blank denies all requests.
+      squad: "" # Only this squad may be controlled by that host; sessions are correlation keys, not credentials.
     adaptive:
       enabled: false # Opt-in single-encounter host; native Unreal fallback remains available.
       directory: "" # Required explicit checkpoint directory when enabled; exclusive writer, 4096-file cap.
