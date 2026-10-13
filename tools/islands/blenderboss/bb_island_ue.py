@@ -99,5 +99,5 @@ def run():
     return {"ok": ok, "base": bool(bm), "placed": placed, "want": want, "imported": imported, "missing": sorted(missing)[:50]}
 
 
-if __name__ == "__main__":
-    run()
+RESULT = run()
+print(json.dumps(RESULT))
