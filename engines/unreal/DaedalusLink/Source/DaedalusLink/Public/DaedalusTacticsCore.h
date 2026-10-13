@@ -90,9 +90,29 @@ inline bool Token(const std::string& S)
 	return true;
 }
 
+/** Plain decimals only, the same grammar in every language: [+-]? (digits [. digits?] | . digits) ([eE] [+-]? digits)?
+ * (strtod alone would also take hex, "inf" and "nan"; Java's parser takes a "d" suffix). */
+inline bool Decimal(const std::string& S)
+{
+	std::size_t i = 0, n = S.size();
+	auto Digits = [&]() { const std::size_t b = i; while (i < n && std::isdigit(static_cast<unsigned char>(S[i]))) ++i; return i - b; };
+	if (i < n && (S[i] == '+' || S[i] == '-')) ++i;
+	const std::size_t Whole = Digits();
+	std::size_t Frac = 0;
+	if (i < n && S[i] == '.') { ++i; Frac = Digits(); }
+	if (Whole == 0 && Frac == 0) return false;
+	if (i < n && (S[i] == 'e' || S[i] == 'E'))
+	{
+		++i;
+		if (i < n && (S[i] == '+' || S[i] == '-')) ++i;
+		if (Digits() == 0) return false;
+	}
+	return i == n;
+}
+
 inline bool Number(const std::string& S, double& Out)
 {
-	if (S.empty()) return false;
+	if (S.empty() || !Decimal(S)) return false;
 	char* End = nullptr;
 	Out = std::strtod(S.c_str(), &End);
 	return End && *End == '\0' && std::isfinite(Out) && std::fabs(Out) <= MaxCoord;
