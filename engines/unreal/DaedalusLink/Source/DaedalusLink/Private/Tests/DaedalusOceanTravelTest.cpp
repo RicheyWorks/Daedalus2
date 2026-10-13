@@ -80,7 +80,7 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
     TestFalse(TEXT("Different possessed vessel cannot restore passenger"),Component->DisembarkAtDock(Player,OtherVessel,Home.Id));
     TestTrue(TEXT("Wrong-vessel exit retains current possession"),Player->GetPawn()==OtherVessel);
     TestTrue(TEXT("Wrong-vessel exit preserves saved avatar state"),Avatar->IsHidden() && !Avatar->GetActorEnableCollision());
-    Player->Possess(Vessel);OtherVessel->Destroy();
+    Player->Possess(Vessel);OtherVessel->SetActorLocation(FVector(0,1000,0));
     TestFalse(TEXT("Another controller cannot take occupied vessel"),Component->BoardAtDock(Stranger,Vessel,Home.Id));
     TestFalse(TEXT("Unknown exit dock refused"),Component->DisembarkAtDock(Player,Vessel,TEXT("invented")));
     TestTrue(TEXT("Rejected exit retains vessel"),Player->GetPawn()==Vessel);
