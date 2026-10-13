@@ -77,3 +77,7 @@ Focused Maven controller tests cover realm isolation, district boundaries, route
 This is a validated domain value, not a transfer or escrow transaction. Before persisting a bundle, the service must recheck current ownership and occupancy atomically against the placement revision. The blockchain team must decide whether an estate is a wrapper/escrow token or an off-chain grouping; constituent IDs cannot be simultaneously sold as freely transferable lands and a conflicting estate claim. Unbundling must return the same constituent IDs. No new sale, mint or ownership endpoint is implemented here.
 
 Focused Maven estate tests pass for every supported side length, defensive immutability, canonical ID ordering, moved-land placement and invalid shapes/IDs. Claude and the blockchain team receive this as the agreed bundle boundary.
+
+### Automated cross-language protection
+
+The `Realm land grid parity` workflow now runs `run_land_grid_checks.py` on MSVC, GCC and Clang (Linux sanitizers enabled), compiling Java21 independently of Maven. Every cell is compared under both spacing policies. The runner also corrupts a native district row and requires the Java verifier to reject it, so a broken comparison cannot silently produce a green run. Temporary build outputs never modify source or shared world files.
