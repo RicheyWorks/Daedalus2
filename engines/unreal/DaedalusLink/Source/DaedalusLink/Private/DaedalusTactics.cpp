@@ -177,13 +177,32 @@ void UDaedalusTactics::Tick(float DeltaTime)
 	}
 }
 
+void UDaedalusTactics::NoteDown(const FString& Squad, const FString& Unit, const FString& Kind, float MaxHealth, const FVector& At)
+{
+	if (Squad.IsEmpty()) return;
+	TArray<FDowned>& D = Downed.FindOrAdd(Squad);
+	if (D.Num() < static_cast<int32>(daedalus::tactics::MaxOrders) && !D.ContainsByPredicate([&](const FDowned& X) { return X.Unit == Unit; }))
+		D.Add({Unit, Kind, MaxHealth, At});
+}
+
 FString UDaedalusTactics::TakeRoster(const FString& Squad)
 {
 	std::vector<daedalus::tactics::RosterUnit> Units;
 	TArray<ADaedalusTarget*> M = Members(Squad);
-	M.Sort([](const ADaedalusTarget& A, const ADaedalusTarget& B) { return A.TacticalId() < B.TacticalId(); });
+	// std::vector, not TArray: RosterUnit holds std::string, which TArray's bitwise relocation must not move.
 	for (const ADaedalusTarget* T : M)
-		Units.push_back({TCHAR_TO_UTF8(*T->TacticalId()), TCHAR_TO_UTF8(*T->Kind), T->Health, T->MaxHealth, V(T->GetActorLocation()), T->bSeesPlayer});
+		Units.push_back({TCHAR_TO_UTF8(*T->TacticalId()), TCHAR_TO_UTF8(*T->Kind), FMath::Clamp(T->Health, 0.f, T->MaxHealth), T->MaxHealth,
+			V(T->GetActorLocation()), T->bSeesPlayer});
+	// The fallen stay on the roster at health 0: casualties are what raise the director's caution.
+	if (const TArray<FDowned>* D = Downed.Find(Squad))
+		for (const FDowned& X : *D)
+		{
+			const std::string Id = TCHAR_TO_UTF8(*X.Unit);
+			if (std::none_of(Units.begin(), Units.end(), [&](const daedalus::tactics::RosterUnit& U) { return U.Unit == Id; }))
+				Units.push_back({Id, TCHAR_TO_UTF8(*X.Kind), 0.0, X.MaxHealth, V(X.At), false});
+		}
+	std::sort(Units.begin(), Units.end(), [](const daedalus::tactics::RosterUnit& A, const daedalus::tactics::RosterUnit& B) { return A.Unit < B.Unit; });
+	if (Units.size() > daedalus::tactics::MaxOrders) Units.resize(daedalus::tactics::MaxOrders);
 	return UTF8_TO_TCHAR(daedalus::tactics::WriteRoster(TCHAR_TO_UTF8(*Session), TCHAR_TO_UTF8(*Squad), TickNo, Units).c_str());
 }
 

@@ -50,6 +50,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Tactics") FString Squads() const;
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Tactics") FString Stats() const;
 
+	/** A squad member went down: kept for the rest of the session and listed in its roster with health 0, so the
+	 * Java director can count casualties (its Frame takes dead units as health 0). */
+	void NoteDown(const FString& Squad, const FString& Unit, const FString& Kind, float MaxHealth, const FVector& At);
 	/** A foe reports an event (TakeDamage calls this). */
 	void Note(const FString& Kind, const FString& Unit, const FVector& At, float Value);
 
@@ -65,7 +68,9 @@ private:
 	struct FNote { FString Kind, Unit; FVector At; float Value; };
 	TArray<FNote> Outbox;
 	TMap<FString, double> ExternalUntil;
-	TMap<FString, int64> LastExternalTick;   // per squad: an outside spec older than this is refused (stale fencing)
+	TMap<FString, int64> LastExternalTick;
+	struct FDowned { FString Unit, Kind; float MaxHealth = 0.f; FVector At = FVector::ZeroVector; };
+	TMap<FString, TArray<FDowned>> Downed;   // per squad, this session   // per squad: an outside spec older than this is refused (stale fencing)
 	FString Session;
 	float Next = 1.f;
 	int64 TickNo = 0;

@@ -119,3 +119,8 @@ Unreal side. All five are closed:
 
 Tests: C++ 34/34 under ASan/UBSan, Java `TacticsParityTest` 8/8, and `daedalus-core` verify is green. The Unreal
 side compiles in the first editor slot after the break; unreal-team owns that build, the binding and the playtest.
+
+6. **Casualties reach Java** (found reviewing PR32): `AdaptiveDirector` counts casualty pressure as roster units at
+   health 0, but the roster only listed living foes, so pressure could never rise. Fallen squad members now stay on
+   the roster for the session at health 0 (`NoteDown`), capped at 256. The `tactics` scenario also checks the
+   roster, the session, repeat ticks and stale refusal.
