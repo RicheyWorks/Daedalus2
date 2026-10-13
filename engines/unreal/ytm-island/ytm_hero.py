@@ -65,13 +65,13 @@ for key,label in SIGNS:
 # record-label shrine: plinth, tilted black record with cream label + dragon line, two lanterns
 def shrine(col):
     box(col,2.4,1.4,0.5,0,0,0,STONE); box(col,2.0,1.1,0.3,0,0,0.5,STONE)
-    bpy.ops.mesh.primitive_cylinder_add(vertices=32,radius=0.9,depth=0.05,location=(0,0,1.75),rotation=(1.4,0,0)); r=bpy.context.active_object; r.data.materials.append(BLACK)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=20,radius=0.9,depth=0.05,location=(0,0,1.75),rotation=(1.4,0,0)); r=bpy.context.active_object; r.data.materials.append(BLACK)
     for c in r.users_collection: c.objects.unlink(r)
     col.objects.link(r)
-    bpy.ops.mesh.primitive_cylinder_add(vertices=24,radius=0.32,depth=0.06,location=(0,-0.01,1.75),rotation=(1.4,0,0)); l=bpy.context.active_object; l.data.materials.append(CREAM)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=0.32,depth=0.06,location=(0,-0.01,1.75),rotation=(1.4,0,0)); l=bpy.context.active_object; l.data.materials.append(CREAM)
     for c in l.users_collection: c.objects.unlink(l)
     col.objects.link(l)
-    text(col,"richeyworks",0.07,0,-0.06,1.82,BLACK,rx=1.4,depth=0.005); text(col,"a dragon that sleeps in the sea",0.035,0,-0.06,1.68,BLACK,rx=1.4,depth=0.005)
+    text(col,"richeyworks",0.07,0,-0.06,1.82,BLACK,rx=1.4,depth=0.0); text(col,"a dragon that sleeps in the sea",0.035,0,-0.06,1.68,BLACK,rx=1.4,depth=0.0)
     for x in (-1.0,1.0): box(col,0.12,0.12,1.3,x,0,0.8,STONE); box(col,0.25,0.25,0.25,x,0,2.1,CREAM)
     box(col,1.8,0.1,0.1,0,0.15,0.8,STONE)
 asset("Prop_YTM_RecordShrine","prop","~2.4 m",shrine)
