@@ -79,7 +79,7 @@ def open_sublevel():
     les.load_level(PERSIST)
     world = unreal.EditorLevelLibrary.get_editor_world()
     if not eal.does_asset_exist(SUB):
-        unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingDynamic, SUB, move_selected_actors_into_new_level=False)
+        unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingAlwaysLoaded, SUB, move_selected_actors_into_new_level=False)
     elif not _streamed(world):
         # only add when not already streamed: re-adding an existing sublevel opened a modal "Add Level" dialog (22:2x make-up)
         try: unreal.EditorLevelUtils.add_level_to_world(world, SUB, unreal.LevelStreamingAlwaysLoaded)
@@ -106,6 +106,15 @@ def run():
         actors = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
         world = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
         base_n = sum(1 for a in actors.get_all_level_actors() if a.get_actor_label() == "BlenderBoss Island Base")
+        stream = "not found"   # LevelStreamingDynamic never loads in PIE (oddsreaper 26627): make ours AlwaysLoaded
+        try:
+            for ls in world.get_streaming_levels():
+                if str(ls.get_world_asset_package_name()) == SUB:
+                    stream = ls.get_class().get_name()
+                    if "AlwaysLoaded" not in stream:
+                        unreal.EditorLevelUtils.set_streaming_class_for_level(ls, unreal.LevelStreamingAlwaysLoaded)
+                        unreal.EditorLevelLibrary.save_all_dirty_levels(); stream += " -> LevelStreamingAlwaysLoaded (saved)"
+        except Exception as e: stream = "streaming fix failed: %r" % e
         c, t = lay["hero_cam_m"], lay["hero_target_m"]
         cl = unreal.Vector(ox + c[0] * 100, oy - c[1] * 100, oz + c[2] * 100); tl = unreal.Vector(ox + t[0] * 100, oy - t[1] * 100, oz + t[2] * 100)
         rt = unreal.RenderingLibrary.create_render_target2d(world, 1600, 900, unreal.TextureRenderTargetFormat.RTF_RGBA8)
@@ -123,7 +132,7 @@ def run():
         lit = shoot("SCS_FINAL_COLOR_LDR", "ue_island_lit.png"); albedo = shoot("SCS_BASE_COLOR", "ue_island_basecolor.png")
         try: actors.destroy_actor(cap)
         except Exception: pass
-        return {"ok": True, "mode": "shot", "base_actors": base_n, "lit_lum": lit[0], "lit_green_pct": lit[1], "albedo_lum": albedo[0], "albedo_green_pct": albedo[1],
+        return {"ok": True, "mode": "shot", "base_actors": base_n, "streaming": stream, "lit_lum": lit[0], "lit_green_pct": lit[1], "albedo_lum": albedo[0], "albedo_green_pct": albedo[1],
                 "shot": os.path.join(os.path.dirname(SHOT), "ue_island_lit.png")}
     imported = import_missing([base] + ([] if BASEONLY else names), force=(base,))   # base always re-imported (water chain lives there)
     les = open_sublevel()
