@@ -38,7 +38,12 @@ jobs:
         shell: pwsh
         run: |
           $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-          $audioCompiler = & $vswhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -find 'VC\Tools\MSVC\**\bin\Hostx64\x64\cl.exe' | Select-Object -First 1
-          if (-not $audioCompiler) { throw 'MSVC compiler not found' }
+          $audioVs = & $vswhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if (-not $audioVs) { throw 'Visual Studio compiler installation not found' }
+          # vcvars64 initializes the default toolset. Select its matching compiler,
+          # rather than the first installed version (which may be much older).
+          $audioToolset = (Get-Content -LiteralPath "$audioVs\VC\Auxiliary\Build\Microsoft.VCToolsVersion.default.txt" -Raw).Trim()
+          $audioCompiler = "$audioVs\VC\Tools\MSVC\$audioToolset\bin\Hostx64\x64\cl.exe"
+          if (-not (Test-Path -LiteralPath $audioCompiler)) { throw 'MSVC compiler not found' }
           python engines/unreal/core-test/audio/run_audio_core.py --compiler $audioCompiler --verify-java
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
