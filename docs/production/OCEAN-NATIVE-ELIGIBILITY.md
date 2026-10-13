@@ -30,10 +30,19 @@ synthetic world had not initialized its actors: AActor::ProcessEvent in the inst
 UE 5.8 source gates dispatch on AreActorsInitialized. The test now calls
 InitializeActorsForPlay and asserts that state before dispatch. The corrected
 wrapper run passed; direct-handler testing was an intermediate diagnostic only.
-Root mesh mobility is explicitly Movable. Real client/server network transport
-remains a required acceptance gate; standalone RPC dispatch is not remote delivery.
+Root mesh mobility is explicitly Movable. Standalone RPC dispatch is not remote
+delivery; the subsequent two-process localhost probe below verifies that separately.
 Input expiry counts full tick time even when the motion integration step is capped,
 so a long frame does not extend input leases.
+
+Two-process network verification subsequently passed for boat and submarine.
+A remote test controller sent owner RPC commands for three seconds; the server
+generated no helm input and observed forward motion, submarine descent and then
+two seconds without movement after input expiry. Both clients completed the actual
+IpNetDriver handshake. The runner stopped its owned server/client processes and
+retained logs and hashes. See ocean-network-proof.json and the reproducible
+tools/unreal/ocean-network-probe fixture. Non-owner rejection, WAN conditions,
+production session permissions and player-facing controls remain separate gates.
 
 ResolveForPlayer checks the component owner, controller and vessel authority,
 same-world identity, actual possession in both directions, finite vessel position,
