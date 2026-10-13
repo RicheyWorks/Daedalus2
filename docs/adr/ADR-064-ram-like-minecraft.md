@@ -129,3 +129,8 @@ This was first filed as ADR-062, which blender-team had already taken for the BB
   sends every non-empty chunk as base64 (ordinal, len lo, len hi) triples (`Chunk.runs()` / `Chunk.ofRuns`). World
   Zero: 53 chunks in 1 request and 35 KB, against 54 requests and ~320 KB (23 KB of runs vs 217 KB dense). realm.js
   uses it and falls back to per-chunk on an older server. The per-chunk endpoint stays for other clients.
+- **Saved worlds as runs (DAEW version 14):** chunks are written as `Chunk.runs()` triples instead of 4,096 dense
+  bytes. World Zero's file: 218 KB -> 25 KB (53 chunks); a 120-chunk test world: 494 KB -> 48 KB. Version 13 and
+  older files still load (and re-save as 14, byte-identical to a fresh save); broken runs refuse the file. An older
+  server cannot read a version-14 file, so roll servers forward, not back. In RAM the same worlds hold 114 KB and
+  258 KB of chunk storage instead of 221 KB and 500 KB (the palette above).

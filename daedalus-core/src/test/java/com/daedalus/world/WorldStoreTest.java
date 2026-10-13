@@ -186,4 +186,89 @@ class WorldStoreTest {
         assertThatThrownBy(() -> WorldStore.save(World.zero(), null))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    /** A world with real terrain: a 40x40 slab, a hill, and a few glass and wood cubes. */
+    private static World terrain() {
+        World w = World.zero();
+        for (int x = -20; x < 20; x++) {
+            for (int z = -20; z < 20; z++) {
+                int h = 3 + Math.max(0, 6 - (Math.abs(x) + Math.abs(z)) / 3);
+                for (int y = 0; y < h; y++) {
+                    w.place(new BlockCoordinate(x, y, z), y == h - 1 ? BlockType.GRASS : y < 2 ? BlockType.STONE : BlockType.DIRT);
+                }
+            }
+        }
+        w.place(new BlockCoordinate(5, 12, 5), BlockType.GLASS);
+        w.place(new BlockCoordinate(-7, 9, 3), BlockType.WOOD);
+        return w;
+    }
+
+    /** The same snapshot in the version-13 layout: dense 4,096-byte chunks. Everything after the chunks is unchanged. */
+    private static byte[] asVersion13(byte[] v14) throws IOException {
+        java.io.DataInputStream in = new java.io.DataInputStream(new java.io.ByteArrayInputStream(v14));
+        java.io.ByteArrayOutputStream bytes = new java.io.ByteArrayOutputStream();
+        java.io.DataOutputStream out = new java.io.DataOutputStream(bytes);
+        out.write(in.readNBytes(4));
+        assertThat(in.readUnsignedByte()).isEqualTo(14);
+        out.writeByte(13);
+        out.writeUTF(in.readUTF());
+        out.writeLong(in.readLong());
+        int count = in.readInt();
+        out.writeInt(count);
+        for (int i = 0; i < count; i++) {
+            out.writeInt(in.readInt());
+            out.writeInt(in.readInt());
+            out.writeInt(in.readInt());
+            out.writeLong(in.readLong());
+            int runs = in.readUnsignedShort();
+            out.write(Chunk.ofRuns(in.readNBytes(runs * 3)));
+        }
+        out.write(in.readAllBytes());
+        return bytes.toByteArray();
+    }
+
+    @Test
+    void chunksAreStoredAsRunsAndTheFileShrinks() throws Exception {
+        World live = terrain();
+        Path file = tmp.resolve("terrain.daew");
+        WorldStore.save(live, file);
+        byte[] v14 = Files.readAllBytes(file);
+        byte[] v13 = asVersion13(v14);
+        assertThat(v14.length * 5L).as("runs vs dense: %d vs %d bytes", v14.length, v13.length).isLessThan(v13.length);
+        World reloaded = WorldStore.load(file);
+        assertThat(reloaded.chunkCount()).isEqualTo(live.chunkCount());
+        for (ChunkCoordinate cc : live.chunkKeys()) {
+            assertThat(reloaded.chunk(cc).ordinals()).isEqualTo(live.chunk(cc).ordinals());
+            assertThat(reloaded.chunk(cc).revision()).isEqualTo(live.chunk(cc).revision());
+        }
+    }
+
+    @Test
+    void aVersion13FileStillLoadsAndSavesForwardIdentically() throws Exception {
+        World live = terrain();
+        Path file = tmp.resolve("new.daew");
+        WorldStore.save(live, file);
+        Path old = tmp.resolve("old.daew");
+        Files.write(old, asVersion13(Files.readAllBytes(file)));
+        World fromOld = WorldStore.load(old);
+        Path again = tmp.resolve("again.daew");
+        WorldStore.save(fromOld, again);
+        assertThat(Files.readAllBytes(again)).isEqualTo(Files.readAllBytes(file));
+    }
+
+    @Test
+    void brokenRunsAreRefusedNotHalfLoaded() throws Exception {
+        World live = World.zero();
+        live.place(new BlockCoordinate(1, 1, 1), BlockType.STONE);
+        Path file = tmp.resolve("one.daew");
+        WorldStore.save(live, file);
+        byte[] b = Files.readAllBytes(file);
+        // header: magic 4 + version 1 + UTF (2 + 10 "world-zero") + revision 8 + count 4; chunk: xyz 12 + rev 8, then runs
+        int runCountAt = 4 + 1 + 2 + "world-zero".length() + 8 + 4 + 12 + 8;
+        int runs = ((b[runCountAt] & 0xff) << 8) | (b[runCountAt + 1] & 0xff);
+        assertThat(runs).isEqualTo(3);
+        b[runCountAt + 2 + 1] = 0;   // first run's length low byte -> the runs no longer cover 4,096 cubes
+        Files.write(file, b);
+        assertThatThrownBy(() -> WorldStore.load(file)).isInstanceOf(IOException.class).hasMessageContaining("Bad chunk runs");
+    }
 }

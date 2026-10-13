@@ -23,7 +23,7 @@ import java.util.Map;
 public final class WorldStore {
 
     static final byte[] MAGIC = "DAEW".getBytes(StandardCharsets.US_ASCII);
-    static final int VERSION = 13;
+    static final int VERSION = 14;
     static final int VERSION_CHUNKS_ONLY = 1;
     static final int VERSION_WITH_DOOR = 2;
     static final int VERSION_WITH_PARCELS = 3;
@@ -37,6 +37,8 @@ public final class WorldStore {
     static final int VERSION_WITH_DRIVE = 11;
     static final int VERSION_WITH_DRIVE_ACTOR = 12;
     static final int VERSION_WITH_DRIVE_AT = 13;
+    /** Chunks as run-length triples (Chunk.runs), not 4,096 dense bytes: ADR-064. */
+    static final int VERSION_WITH_RUNS = 14;
 
     private WorldStore() {
     }
@@ -87,7 +89,9 @@ public final class WorldStore {
             out.writeInt(c.y());
             out.writeInt(c.z());
             out.writeLong(chunk.revision());
-            out.write(chunk.payload());
+            byte[] runs = chunk.runs();
+            out.writeShort(runs.length / 3);   // at most 4,096 runs
+            out.write(runs);
         }
         Door door = snapshot.door();
         out.writeBoolean(door != null);
@@ -170,7 +174,7 @@ public final class WorldStore {
             throw new IOException("Not a Daedalus world snapshot");
         }
         int version = in.readUnsignedByte();
-        if (version != VERSION && version != VERSION_WITH_DRIVE_ACTOR
+        if (version != VERSION && version != VERSION_WITH_DRIVE_AT && version != VERSION_WITH_DRIVE_ACTOR
                 && version != VERSION_WITH_DRIVE
                 && version != VERSION_WITH_ACL
                 && version != VERSION_WITH_MAZE_REF
@@ -193,9 +197,26 @@ public final class WorldStore {
         for (int i = 0; i < count; i++) {
             ChunkCoordinate coord = new ChunkCoordinate(in.readInt(), in.readInt(), in.readInt());
             long chunkRevision = in.readLong();
-            byte[] payload = in.readNBytes(Chunk.VOLUME);
-            if (payload.length != Chunk.VOLUME) {
-                throw new IOException("Truncated chunk payload at " + coord);
+            byte[] payload;
+            if (version >= VERSION_WITH_RUNS) {
+                int runCount = in.readUnsignedShort();
+                if (runCount < 1 || runCount > Chunk.VOLUME) {
+                    throw new IOException("Bad run count " + runCount + " at " + coord);
+                }
+                byte[] runs = in.readNBytes(runCount * 3);
+                if (runs.length != runCount * 3) {
+                    throw new IOException("Truncated chunk runs at " + coord);
+                }
+                try {
+                    payload = Chunk.ofRuns(runs);
+                } catch (IllegalArgumentException e) {
+                    throw new IOException("Bad chunk runs at " + coord + ": " + e.getMessage(), e);
+                }
+            } else {
+                payload = in.readNBytes(Chunk.VOLUME);
+                if (payload.length != Chunk.VOLUME) {
+                    throw new IOException("Truncated chunk payload at " + coord);
+                }
             }
             chunks.put(coord, Chunk.ofPayload(payload, chunkRevision));
         }
