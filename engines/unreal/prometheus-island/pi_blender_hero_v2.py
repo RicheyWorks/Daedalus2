@@ -19,6 +19,7 @@ if os.environ.get("PIB_PARITY"):
         except ReferenceError: pass
     def pmat(m):
         c=m["cat"]
+        if m.get("kind")=="Lantern": return g["LAMP"]
         if c=="water": return g["WATER"] if m.get("kind") in ("SpringBasin","StreamSeg","Trough","StillPart") else g["MAT"]["rock"]
         if c=="herb": return g["HERBC"][m["pc"]]
         return g["MAT"].get(c)
@@ -126,5 +127,15 @@ d=(tgt+mathutils.Vector((0,0,-4)))-cam.location; cam.rotation_euler=d.to_track_q
 cam.data.dof.use_dof=True; cam.data.dof.focus_distance=d.length; cam.data.dof.aperture_fstop=8
 sc.view_settings.view_transform="Filmic"; sc.view_settings.look="Medium High Contrast"; sc.view_settings.exposure=float(os.environ.get("PIB2_EXP","-0.6"))
 sc.cycles.samples=SAMP; sc.render.resolution_percentage=PCT; sc.render.filepath=os.path.abspath(OUT)
+if os.environ.get("PIB3"):
+    # v3: tame horizon glow (sun low + behind camera, thin air), frame heart -> stream -> cistern
+    sky.sun_intensity=0.06; sky.air_density=1.2; sky.dust_density=1.0; w.node_tree.nodes["Background"].inputs[1].default_value=0.18
+    sp=[mathutils.Vector(p) for p in (L(*g["path"](t)) for t in (0.35,0.45,0.55)) if p]; cv=L(g["cx_"],g["cy_"])
+    foc=[hv]+sp+([mathutils.Vector(cv)] if cv else []); tgt=sum(foc,mathutils.Vector())/len(foc)
+    dirv=(tgt-hv); dirv.z=0; dirv.normalize(); side=mathutils.Vector((-dirv.y,dirv.x,0))
+    cam.location=hv-dirv*float(os.environ.get("PIB3_BACK","30"))+side*float(os.environ.get("PIB3_SIDE","-22"))+mathutils.Vector((0,0,float(os.environ.get("PIB3_UP","16"))))
+    d=(tgt+mathutils.Vector((0,0,-3)))-cam.location; cam.rotation_euler=d.to_track_quat("-Z","Y").to_euler(); cam.data.dof.focus_distance=(hv-cam.location).length; cam.data.lens=26
+    ang=math.atan2(d.y,d.x); sky.sun_rotation=ang+math.pi*0.75
+    for o in [o for o in sc.objects if o.type=="LIGHT" and o.data.type=="SUN"]: o.rotation_euler=(math.radians(84),0,ang+math.pi*0.75+math.pi/2)
 print("PIB2 tgt",tuple(round(v,1) for v in tgt),"cam",tuple(round(v,1) for v in cam.location))
 bpy.ops.render.render(write_still=True); print("PIB2 wrote",sc.render.filepath)
