@@ -11,6 +11,7 @@ on:
       - 'engines/unreal/**/DaedalusOceanTravelCore.h'
       - 'engines/unreal/**/DaedalusOceanTravelComponent.*'
       - 'engines/unreal/**/DaedalusOceanTravelTest.cpp'
+      - 'engines/unreal/**/DaedalusOceanDock*'
       - 'engines/unreal/core-test/*quest_core_test.cpp'
       - 'engines/unreal/core-test/*terrain_core_test.cpp'
       - 'engines/unreal/core-test/ocean_travel_core_test.cpp'
