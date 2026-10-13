@@ -32,7 +32,12 @@ for a in act.get_all_level_actors():
 def spawn(cls, loc, rot=unreal.Rotator(0, 0, 0), label=""):
     a = act.spawn_actor_from_class(cls, loc, rot); a.set_actor_label(label); a.tags = ["YTM_Island", TAG]; return a
 added = []
-if not found["DirectionalLight"]:
+# pythagoras #26445: darkness is world-wide since the 22:59 editor restart -> persistent-level owner should fix it.
+# Default is DIAG ONLY when no sun exists; set ADD_SUN = True only if the team agrees the island may carry its own.
+ADD_SUN = False
+if not found["DirectionalLight"] and not ADD_SUN:
+    print("YTM_LIGHT no DirectionalLight in loaded world -> world-level issue, NOT adding an island sun (see #26445)")
+if not found["DirectionalLight"] and ADD_SUN:
     sun = spawn(unreal.DirectionalLight, O + unreal.Vector(0, 0, 3000), unreal.Rotator(roll=0, pitch=-40, yaw=135), "YTM_Sun")
     c = sun.get_component_by_class(unreal.DirectionalLightComponent); c.set_mobility(unreal.ComponentMobility.MOVABLE)
     c.set_editor_property("intensity", 8.0); c.set_editor_property("atmosphere_sun_light", True); added.append("sun")
@@ -40,7 +45,7 @@ if not found["DirectionalLight"]:
     if not found["ExponentialHeightFog"]:
         f = spawn(unreal.ExponentialHeightFog, O + unreal.Vector(0, 0, 200), label="YTM_HeightFog")
         f.get_component_by_class(unreal.ExponentialHeightFogComponent).set_editor_property("fog_density", 0.01); added.append("fog")
-if not found["SkyLight"]:
+if not found["SkyLight"] and (found["DirectionalLight"] or ADD_SUN):
     s = spawn(unreal.SkyLight, O + unreal.Vector(0, 0, 2000), label="YTM_SkyLight")
     sc = s.get_component_by_class(unreal.SkyLightComponent); sc.set_mobility(unreal.ComponentMobility.MOVABLE)
     sc.set_editor_property("real_time_capture", True); added.append("skylight")
