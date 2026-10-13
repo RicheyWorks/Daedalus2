@@ -141,5 +141,50 @@
   "RanchTrough_Ash"
  ],
  "balance": "Hot spring alone (~1920 L/day) covers player + full ranch + herb beds. Rain/vent/still cover forge-shift quench spikes and drought. Island never dies of thirst; magma heat makes water the real currency.",
- "items": "Prop_WaterCanteen_Copper (5 L), Prop_WaterBucket_Clay (3 L), Prop_WaterBarrel_Iron (40 L), Prop_WaterCistern_Clay (200 L)"
+ "items": "Prop_WaterCanteen_Copper (5 L), Prop_WaterBucket_Clay (3 L), Prop_WaterBarrel_Iron (40 L), Prop_WaterCistern_Clay (200 L)",
+ "budget": {
+  "heads": {
+   "emberhen": 3,
+   "ashgoat": 3,
+   "forgeox": 2,
+   "lavaboar": 3,
+   "cinderwool": 3,
+   "vent_bees": 2,
+   "herb_beds": 12
+  },
+  "demand_L_day": {
+   "player_base": 3,
+   "caldera_player": 6,
+   "animals": {
+    "emberhen": 1.5,
+    "ashgoat": 24,
+    "forgeox": 24,
+    "lavaboar": 18,
+    "cinderwool": 18,
+    "vent_bees": 2
+   },
+   "animals_total": 87.5,
+   "herb_beds": 12,
+   "forge_quench": 20,
+   "total_base": 102.5,
+   "total_caldera_stress": 105.5,
+   "total_base_plus_forge": 122.5,
+   "total_caldera_plus_forge": 125.5
+  },
+  "supply_L_day": {
+   "HotSpring_Clean": 1920,
+   "method": "flow_per_hour 80 x 24 = 1920"
+  },
+  "margin": {
+   "L_day": 1814.5,
+   "basis": "supply - total_caldera_stress (caldera_player + full ranch + herb beds; excludes forge_quench spike)"
+  },
+  "claim_check": {
+   "statement": "hot spring alone covers player + full ranch + herb beds",
+   "excluding_forge_quench": true,
+   "including_forge_quench": true,
+   "both_true": true
+  },
+  "notes": "forge_quench (20 L) is a forge-shift spike, not continuous daily demand; rain/vent/still cover quench spikes per balance claim."
+ }
 }

@@ -131,9 +131,22 @@ Editor turn after youtube-master HANDOFF #23780 (36s wall). Bridge preflight liv
 | Living | water **24** / livestock **16** / herbs **12** |
 | Sublevel | /Game/Hephaestus/Maps/HephaestusIsland at ARK_ORIGIN 6000000,2000000 |
 | Saves | sublevel=True, DaedalusWorld+maps=True, dirty=[] |
-| Hero shot | ot-team\shots\hephaestus\hero_r2.png (SceneCapture2D warm, 1920x1080, forge overlook) |
+| Hero shot | `bot-team\shots\hephaestus\hero_r2.png` (SceneCapture2D warm, 1920x1080, forge overlook) |
 | Play check | 20s PIE OK; hero_unreal_play.png; Play stopped |
 | HANDOFF | hephaestus → **pythagoras** at 21:03 PT |
 
-Kit: Daedalus2 main `28e1cbf4` (bridge liveness preflight). Contest still active.
+Kit: Daedalus2 main `fa19daf9` (round-2 documentation commit). Contest still active.
+
+## Off-editor polish (2026-10-12 ~21:24 PT)
+
+Water budget audit + Forge Temper `temper_ev` (no Unreal / editor turn).
+
+| Check | Result |
+|-------|--------|
+| Layout heads | emberhen 3, ashgoat 3, forgeox 2, lavaboar 3, cinderwool 3, vent_bees 2, herb_beds 12 (from `layout.json` Mob_/Item_Herb_*) |
+| Demand (caldera stress) | **105.5 L/day** (player 6 + animals 87.5 + herbs 12; forge_quench 20 is shift-spike) |
+| Supply | HotSpring_Clean **1920 L/day** (80 L/h × 24) |
+| Margin | **1814.5 L/day** vs caldera-stress demand |
+| claim_check | hot spring covers player + full ranch + herb beds for base **and** caldera, with or without forge_quench — **true** |
+| temper_ev | all 36 herbs: magma P×2 / dur×0.5; spring P×0.5 / dur×2; dual P×1 + dual_effect; best_for_strength=magma, best_for_duration=spring |
 

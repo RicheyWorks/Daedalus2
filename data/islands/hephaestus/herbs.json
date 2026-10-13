@@ -31,7 +31,24 @@
     "cool",
     "iron"
    ],
-   "potency": 3
+   "potency": 3,
+   "temper_ev": {
+    "magma": {
+     "strength": 6.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 1.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 3.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Ashmint",
@@ -40,7 +57,24 @@
     "heat",
     "purify"
    ],
-   "potency": 1
+   "potency": 1,
+   "temper_ev": {
+    "magma": {
+     "strength": 2.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 0.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 1.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Cinderroot",
@@ -49,7 +83,24 @@
     "clarity",
     "iron"
    ],
-   "potency": 1
+   "potency": 1,
+   "temper_ev": {
+    "magma": {
+     "strength": 2.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 0.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 1.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Sulfurbloom",
@@ -58,7 +109,24 @@
     "calm",
     "heat"
    ],
-   "potency": 1
+   "potency": 1,
+   "temper_ev": {
+    "magma": {
+     "strength": 2.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 0.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 1.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Lavathistle",
@@ -67,7 +135,24 @@
     "calm",
     "light"
    ],
-   "potency": 1
+   "potency": 1,
+   "temper_ev": {
+    "magma": {
+     "strength": 2.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 0.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 1.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Forgefern",
@@ -76,7 +161,24 @@
     "calm",
     "heat"
    ],
-   "potency": 3
+   "potency": 3,
+   "temper_ev": {
+    "magma": {
+     "strength": 6.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 1.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 3.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Smokesage",
@@ -85,7 +187,24 @@
     "heat",
     "light"
    ],
-   "potency": 1
+   "potency": 1,
+   "temper_ev": {
+    "magma": {
+     "strength": 2.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 0.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 1.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Glowcap",
@@ -94,7 +213,24 @@
     "calm",
     "iron"
    ],
-   "potency": 1
+   "potency": 1,
+   "temper_ev": {
+    "magma": {
+     "strength": 2.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 0.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 1.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Starpetal",
@@ -103,7 +239,24 @@
     "heat",
     "light"
    ],
-   "potency": 1
+   "potency": 1,
+   "temper_ev": {
+    "magma": {
+     "strength": 2.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 0.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 1.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Ironbark",
@@ -112,7 +265,24 @@
     "clarity",
     "heat"
    ],
-   "potency": 1
+   "potency": 1,
+   "temper_ev": {
+    "magma": {
+     "strength": 2.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 0.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 1.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Saltgrass",
@@ -121,7 +291,24 @@
     "calm",
     "clarity"
    ],
-   "potency": 1
+   "potency": 1,
+   "temper_ev": {
+    "magma": {
+     "strength": 2.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 0.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 1.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Cometcress",
@@ -130,7 +317,24 @@
     "clarity",
     "cool"
    ],
-   "potency": 2
+   "potency": 2,
+   "temper_ev": {
+    "magma": {
+     "strength": 4.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 1.0,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 2.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Ventmoss",
@@ -139,7 +343,24 @@
     "heat",
     "vigor"
    ],
-   "potency": 1
+   "potency": 1,
+   "temper_ev": {
+    "magma": {
+     "strength": 2.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 0.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 1.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Charlily",
@@ -148,7 +369,24 @@
     "heat",
     "iron"
    ],
-   "potency": 1
+   "potency": 1,
+   "temper_ev": {
+    "magma": {
+     "strength": 2.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 0.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 1.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Blazeberry",
@@ -157,7 +395,24 @@
     "clarity",
     "heat"
    ],
-   "potency": 1
+   "potency": 1,
+   "temper_ev": {
+    "magma": {
+     "strength": 2.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 0.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 1.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Coalclover",
@@ -166,7 +421,24 @@
     "iron",
     "purify"
    ],
-   "potency": 3
+   "potency": 3,
+   "temper_ev": {
+    "magma": {
+     "strength": 6.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 1.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 3.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Mistwort",
@@ -175,7 +447,24 @@
     "calm",
     "iron"
    ],
-   "potency": 3
+   "potency": 3,
+   "temper_ev": {
+    "magma": {
+     "strength": 6.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 1.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 3.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Dewbell",
@@ -184,7 +473,24 @@
     "iron",
     "vigor"
    ],
-   "potency": 1
+   "potency": 1,
+   "temper_ev": {
+    "magma": {
+     "strength": 2.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 0.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 1.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Thornwick",
@@ -193,7 +499,24 @@
     "iron",
     "vigor"
    ],
-   "potency": 1
+   "potency": 1,
+   "temper_ev": {
+    "magma": {
+     "strength": 2.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 0.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 1.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Sunspike",
@@ -202,7 +525,24 @@
     "clarity",
     "cool"
    ],
-   "potency": 2
+   "potency": 2,
+   "temper_ev": {
+    "magma": {
+     "strength": 4.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 1.0,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 2.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Frostfrond",
@@ -211,7 +551,24 @@
     "purify",
     "vigor"
    ],
-   "potency": 3
+   "potency": 3,
+   "temper_ev": {
+    "magma": {
+     "strength": 6.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 1.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 3.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Moonmallow",
@@ -220,7 +577,24 @@
     "clarity",
     "purify"
    ],
-   "potency": 1
+   "potency": 1,
+   "temper_ev": {
+    "magma": {
+     "strength": 2.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 0.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 1.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Ravenroot",
@@ -229,7 +603,24 @@
     "clarity",
     "cool"
    ],
-   "potency": 3
+   "potency": 3,
+   "temper_ev": {
+    "magma": {
+     "strength": 6.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 1.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 3.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Bloodnettle",
@@ -238,7 +629,24 @@
     "light",
     "vigor"
    ],
-   "potency": 2
+   "potency": 2,
+   "temper_ev": {
+    "magma": {
+     "strength": 4.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 1.0,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 2.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Calmbloom",
@@ -247,7 +655,24 @@
     "calm",
     "vigor"
    ],
-   "potency": 3
+   "potency": 3,
+   "temper_ev": {
+    "magma": {
+     "strength": 6.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 1.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 3.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Bitterweed",
@@ -256,7 +681,24 @@
     "heat",
     "iron"
    ],
-   "potency": 1
+   "potency": 1,
+   "temper_ev": {
+    "magma": {
+     "strength": 2.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 0.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 1.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Honeyreed",
@@ -265,7 +707,24 @@
     "iron",
     "vigor"
    ],
-   "potency": 2
+   "potency": 2,
+   "temper_ev": {
+    "magma": {
+     "strength": 4.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 1.0,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 2.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Quartzvine",
@@ -274,7 +733,24 @@
     "clarity",
     "purify"
    ],
-   "potency": 3
+   "potency": 3,
+   "temper_ev": {
+    "magma": {
+     "strength": 6.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 1.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 3.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Pyreweed",
@@ -283,7 +759,24 @@
     "cool",
     "light"
    ],
-   "potency": 1
+   "potency": 1,
+   "temper_ev": {
+    "magma": {
+     "strength": 2.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 0.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 1.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Shardsorrel",
@@ -292,7 +785,24 @@
     "calm",
     "clarity"
    ],
-   "potency": 1
+   "potency": 1,
+   "temper_ev": {
+    "magma": {
+     "strength": 2.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 0.5,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 1.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Vigorleaf",
@@ -301,7 +811,24 @@
     "heat",
     "iron"
    ],
-   "potency": 2
+   "potency": 2,
+   "temper_ev": {
+    "magma": {
+     "strength": 4.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 1.0,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 2.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Duskthyme",
@@ -310,7 +837,24 @@
     "purify",
     "vigor"
    ],
-   "potency": 2
+   "potency": 2,
+   "temper_ev": {
+    "magma": {
+     "strength": 4.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 1.0,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 2.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Kilnpoppy",
@@ -319,7 +863,24 @@
     "heat",
     "calm"
    ],
-   "potency": 2
+   "potency": 2,
+   "temper_ev": {
+    "magma": {
+     "strength": 4.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 1.0,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 2.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Boilbalm",
@@ -328,7 +889,24 @@
     "heat",
     "purify"
    ],
-   "potency": 2
+   "potency": 2,
+   "temper_ev": {
+    "magma": {
+     "strength": 4.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 1.0,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 2.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Steamreed",
@@ -337,7 +915,24 @@
     "cool",
     "purify"
    ],
-   "potency": 2
+   "potency": 2,
+   "temper_ev": {
+    "magma": {
+     "strength": 4.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 1.0,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 2.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   },
   {
    "id": "Hearthbasil",
@@ -346,9 +941,27 @@
     "heat",
     "vigor"
    ],
-   "potency": 2
+   "potency": 2,
+   "temper_ev": {
+    "magma": {
+     "strength": 4.0,
+     "duration_mult": 0.5
+    },
+    "spring": {
+     "strength": 1.0,
+     "duration_mult": 2.0
+    },
+    "dual": {
+     "strength": 2.0,
+     "duration_mult": 1.0,
+     "dual_effect": true
+    },
+    "best_for_strength": "magma",
+    "best_for_duration": "spring"
+   }
   }
  ],
  "water": "Every tonic brew consumes 0.5 L. Spring water: normal. Magma-quenched tonics need a cooled trough drink after if the player is overheated. Herb plants need 1 L/day or pause growth.",
- "effects_ref": "data/herbs/combos.json (shared essence-pair table; Forge Temper quench rule appended there)"
+ "effects_ref": "data/herbs/combos.json (shared essence-pair table; Forge Temper quench rule appended there)",
+ "temper_ev_note": "Quench applies after brew: tonic effect strength scales by herb potency P times quench path (magma x2/x0.5, spring x0.5/x2, dual base + dual_effect)."
 }
