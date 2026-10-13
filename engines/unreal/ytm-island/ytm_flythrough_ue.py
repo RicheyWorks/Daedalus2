@@ -27,6 +27,15 @@ ell = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 def actors():
     return ell.get_all_level_actors()
 
+PYT_SUB = "Island_Pythagoras"
+PYT_CENTRE = unreal.Vector(-60000, 60000, 2500)
+def pyt_loaded():
+    """READ-ONLY: report whether pythagoras's sublevel is streamed in. We never add, remove, modify or save it
+    (adding a level would dirty DaedalusWorld); if it is not loaded we orbit PYT_CENTRE instead."""
+    w = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
+    for s_ in unreal.EditorLevelUtils.get_levels(w):
+        if PYT_SUB in s_.get_path_name(): return True
+    return False
 def _key(n): return n.lower().replace("_","").replace(" ","")
 def biome_centres():
     """Real centres first: pythagoras WB_Label_<name>, then centroid of Habitat_<name>/PYTH_WB_<name> actors
@@ -34,10 +43,14 @@ def biome_centres():
     want = {_key(b): b for b in BIOMES}; found = {}; pts = {}
     for a in actors():
         lab = a.get_actor_label(); tags = [str(t) for t in a.tags]
-        if lab.startswith("WB_Label_") and _key(lab[9:]) in want:
-            found[want[_key(lab[9:])]] = a.get_actor_location()
+        for pre in ("PYT_Label_", "WB_Label_"):
+            if lab.startswith(pre) and _key(lab[len(pre):]) in want:
+                found[want[_key(lab[len(pre):])]] = a.get_actor_location()
+        for pre in ("PYT_Habitat_", "WB_Habitat_"):
+            if lab.startswith(pre) and _key(lab[len(pre):]) in want:
+                pts.setdefault(want[_key(lab[len(pre):])], []).append(a.get_actor_location())
         for t in tags:
-            for pre in ("Habitat_", "PYTH_WB_"):
+            for pre in ("PYT_Habitat_", "Habitat_", "PYTH_WB_"):
                 if t.startswith(pre) and _key(t[len(pre):]) in want:
                     pts.setdefault(want[_key(t[len(pre):])], []).append(a.get_actor_location())
     for b, ps_ in pts.items():
@@ -45,14 +58,13 @@ def biome_centres():
             found[b] = unreal.Vector(sum(p.x for p in ps_)/len(ps_), sum(p.y for p in ps_)/len(ps_), sum(p.z for p in ps_)/len(ps_))
     unreal.log("YTM: real biome centres for %s" % sorted(found))
     if len(found) < len(BIOMES):
-        ps = next((a for a in actors() if isinstance(a, unreal.PlayerStart)), None)
-        o = ps.get_actor_location() if ps else unreal.Vector(0, 0, 0)
+        # Wild Biomes lives in Island_Pythagoras around PYT_CENTRE; without markers, orbit that centre (5 points, 40 m apart)
+        o = PYT_CENTRE
         for i, b in enumerate(BIOMES):
             if b not in found:
-                r = 450000 + i * (1600000 - 450000) / max(1, len(BIOMES) - 1)
                 t = 2 * math.pi * i / len(BIOMES)
-                found[b] = unreal.Vector(o.x + r * math.cos(t), o.y + r * math.sin(t), o.z)
-                unreal.log_warning("YTM: no centre for %s, using fallback ring" % b)
+                found[b] = unreal.Vector(o.x + 4000 * math.cos(t), o.y + 4000 * math.sin(t), o.z)
+                unreal.log_warning("YTM: no marker for %s, orbiting Island_Pythagoras centre" % b)
     # Youtube Master Island hero shot (spawn marker placed by ytm_island_ue.py)
     sp = next((a for a in actors() if a.actor_has_tag("YTM_Spawn")), None)
     if sp: found["YTMIsland"] = sp.get_actor_location()
@@ -95,6 +107,8 @@ def add_camera(seq, centre, style, start, frames):
     return cam
 
 def run():
+    unreal.log("YTM: Island_Pythagoras loaded=%s (read-only)" % pyt_loaded())
+    pre_dirty = {p.get_name() for p in unreal.EditorLoadingAndSavingUtils.get_dirty_map_packages()}
     if not eas.does_directory_exist(ROOT):
         eas.make_directory(ROOT)
     centres = biome_centres()
@@ -107,6 +121,8 @@ def run():
         add_camera(master, centres[b], STYLE[b], i * frames, frames)
         eas.save_loaded_asset(s)
     eas.save_loaded_asset(master)
+    now_dirty = {p.get_name() for p in unreal.EditorLoadingAndSavingUtils.get_dirty_map_packages()}
+    unreal.log("YTM: maps dirtied by this run (should be none): %s" % sorted(now_dirty - pre_dirty))
     unreal.log("YTM: flythroughs written to %s (%d shots, %ds each)" % (ROOT, len(shots), SHOT_SECONDS))
 
 run()
