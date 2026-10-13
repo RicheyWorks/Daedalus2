@@ -961,9 +961,9 @@ def scenario_shiny(p):
     def lights(a):
         return a.get_components_by_class(unreal.PointLightComponent)
 
-    s0 = [c.get_relative_location() for c in sparks(shiny)]
+    s0 = [c.get_editor_property("relative_location") for c in sparks(shiny)]
     yield from _seconds(1.0)
-    s1 = [c.get_relative_location() for c in sparks(shiny)]
+    s1 = [c.get_editor_property("relative_location") for c in sparks(shiny)]
     moved = s0 and all((a - b).length() > 5 for a, b in zip(s0, s1))
     cap = os.path.join(unreal.Paths.project_saved_dir(), "Daedalus", "shiny.png")
     return {"checks": [
