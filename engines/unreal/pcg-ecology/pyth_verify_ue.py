@@ -2,6 +2,7 @@
 """island:pythagoras verifier (read-only): ground fit, drinkable-water chain, livestock + food loop, herb combo, biomes.
 python ue_send.py pyth_verify_ue.py 300"""
 import unreal
+import sys; sys.path.insert(0, r"C:\Users\730ri\projects\Daedalus2-pcg-ecology\engines\unreal\pcg-ecology")
 TAG = "PYT_Island"
 eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 ew = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()

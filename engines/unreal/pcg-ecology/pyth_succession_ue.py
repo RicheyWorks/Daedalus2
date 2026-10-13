@@ -1,6 +1,7 @@
 ﻿# SPDX-License-Identifier: MIT
 """Read-only: per-biome species counts, Shannon H and seral stage on the live island (editor turn, no saves)."""
 import unreal, importlib, succession_metrics as SM; importlib.reload(SM)
+import sys; sys.path.insert(0, r"C:\Users\730ri\projects\Daedalus2-pcg-ecology\engines\unreal\pcg-ecology")
 eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 out = {}
 for a in eas.get_all_level_actors():

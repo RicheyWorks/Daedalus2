@@ -2,6 +2,7 @@
 """island:pythagoras round-2 fixes (editor turn): per-actor downward-trace ground snapping, brighter grass,
 delete broken v1 materials (ours only). Saves our sublevel + /Game/Pythagoras packages only."""
 import unreal
+import sys; sys.path.insert(0, r"C:\Users\730ri\projects\Daedalus2-pcg-ecology\engines\unreal\pcg-ecology")
 SUB = "Island_Pythagoras"; TAG = "PYT_Island"; ORIGIN = unreal.Vector(-60000, 60000, 2500)
 eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem); les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
 ew = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
