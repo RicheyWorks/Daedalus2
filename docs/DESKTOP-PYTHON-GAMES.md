@@ -100,6 +100,13 @@ bottom-center origin, -Y front, blocky/beveled forms and bounded material/triang
 
 The inventory and actual source hashes are recorded; native tests, source oracle cases,
 Unreal UHT/object/reflection compile, plugin link/load and live gameplay are separate stages.
+All six strict local MSVC suites passed. The five source fixture families contain 1,507 reviewed
+source cases (11 Pong, 239 maze, 299 sports, 323 platformers, 635 shooters), with controlled
+providers rather than whole original Python loops. Six cosmetic Star particle-count fields are
+excluded from parity. Deterministic native replay uses its own RNG, not Python's random stream.
+Isolated Unreal 5.8.3 UHT, actor/widget object compilation and actual generated reflection object
+compilation passed; `desktop-games-unreal-compile.json` records the compiled source revision,
+manifest and object hashes. This is not plugin linking/loading or editor/live play evidence.
 Do not label all games complete merely because catalog entries exist. The backlog tracks
 source-pinned, native-tested, runtime-wrapped, compiled and Claude live-accepted independently.
 

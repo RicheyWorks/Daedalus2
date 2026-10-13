@@ -12,7 +12,7 @@
       "modifiedUtc": "2026-05-01T04:32:22Z",
       "sha256": "f098754ca1d5171f34560eb1f444d1b2cfd42b90a81478c737e182d2e2957d23",
       "framework": "Python / Pygame; Pygame CE declared by many headers",
-      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated Unreal compilation and live acceptance pending"
+      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated UHT, actor/widget and generated reflection compiled; plugin link/load and live acceptance pending"
     },
     {
       "id": "dungeon",
@@ -21,7 +21,7 @@
       "modifiedUtc": "2026-04-25T09:00:45Z",
       "sha256": "cbf19aa131cfe9815f36ef4812638cf0992141666d4eb3a0fce0b92e662e99a4",
       "framework": "Python / Pygame; Pygame CE declared by many headers",
-      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated Unreal compilation and live acceptance pending"
+      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated UHT, actor/widget and generated reflection compiled; plugin link/load and live acceptance pending"
     },
     {
       "id": "asteroids",
@@ -30,7 +30,7 @@
       "modifiedUtc": "2026-05-02T08:17:04Z",
       "sha256": "8a46338b4d93d9447df7feab40dff21b99bfa0ce7614698681b8a5c91f0fc20b",
       "framework": "Python / Pygame; Pygame CE declared by many headers",
-      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated Unreal compilation and live acceptance pending"
+      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated UHT, actor/widget and generated reflection compiled; plugin link/load and live acceptance pending"
     },
     {
       "id": "football",
@@ -39,7 +39,7 @@
       "modifiedUtc": "2026-05-02T08:11:27Z",
       "sha256": "7b013f8151aa1c815ba0947c2d5d39cf559467106cde60aacca29df936ca3ebe",
       "framework": "Python / Pygame; Pygame CE declared by many headers",
-      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated Unreal compilation and live acceptance pending"
+      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated UHT, actor/widget and generated reflection compiled; plugin link/load and live acceptance pending"
     },
     {
       "id": "pacman",
@@ -48,7 +48,7 @@
       "modifiedUtc": "2026-05-01T02:27:10Z",
       "sha256": "6cad8d138888c7a18d80e0e034546a49e57618610ac3e5dcce9886a7358ad8ed",
       "framework": "Python / Pygame; Pygame CE declared by many headers",
-      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated Unreal compilation and live acceptance pending"
+      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated UHT, actor/widget and generated reflection compiled; plugin link/load and live acceptance pending"
     },
     {
       "id": "sega_shooter",
@@ -57,7 +57,7 @@
       "modifiedUtc": "2026-05-01T02:59:48Z",
       "sha256": "5108b3065fa91332570445adaccbb8c5bb77e437bc0bd8e37213737e931ad0db",
       "framework": "Python / Pygame; Pygame CE declared by many headers",
-      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated Unreal compilation and live acceptance pending"
+      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated UHT, actor/widget and generated reflection compiled; plugin link/load and live acceptance pending"
     },
     {
       "id": "shadow_ninja",
@@ -66,7 +66,7 @@
       "modifiedUtc": "2026-05-02T08:22:10Z",
       "sha256": "83dd921b95043a2723b61513d84471adbfaede29dd18744367835fbc3aa03e36",
       "framework": "Python / Pygame; Pygame CE declared by many headers",
-      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated Unreal compilation and live acceptance pending"
+      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated UHT, actor/widget and generated reflection compiled; plugin link/load and live acceptance pending"
     },
     {
       "id": "star_shooter",
@@ -75,7 +75,7 @@
       "modifiedUtc": "2026-04-29T02:30:08Z",
       "sha256": "05ac3a0fabddab94adb3d3a7b2c6eb9f7e1543390a48805db247a3ffd40d8281",
       "framework": "Python / Pygame; Pygame CE declared by many headers",
-      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated Unreal compilation and live acceptance pending"
+      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated UHT, actor/widget and generated reflection compiled; plugin link/load and live acceptance pending"
     },
     {
       "id": "dodge_ball",
@@ -84,7 +84,7 @@
       "modifiedUtc": "2026-05-02T08:24:56Z",
       "sha256": "359b4bc045b00186e9d3ee915863de214453b22df8b81a881402ee6b49d21cb6",
       "framework": "Python / Pygame; Pygame CE declared by many headers",
-      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated Unreal compilation and live acceptance pending"
+      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated UHT, actor/widget and generated reflection compiled; plugin link/load and live acceptance pending"
     },
     {
       "id": "contra",
@@ -93,7 +93,7 @@
       "modifiedUtc": "2026-05-01T02:14:59Z",
       "sha256": "2e845d67754fc81feeea881b7c6d3068a60042c3371e9f8fdeae5a8616d09107",
       "framework": "Python / Pygame; Pygame CE declared by many headers",
-      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated Unreal compilation and live acceptance pending"
+      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated UHT, actor/widget and generated reflection compiled; plugin link/load and live acceptance pending"
     },
     {
       "id": "zelda",
@@ -102,7 +102,7 @@
       "modifiedUtc": "2026-05-01T02:22:14Z",
       "sha256": "713f6de7c27a92d65fdedd77a6c15a7e80a964d098d5ba209dbf32e648cc9bdd",
       "framework": "Python / Pygame; Pygame CE declared by many headers",
-      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated Unreal compilation and live acceptance pending"
+      "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated UHT, actor/widget and generated reflection compiled; plugin link/load and live acceptance pending"
     }
   ],
   "requestedGameCount": 13

@@ -25,7 +25,8 @@ void Fixtures(const char* Path) {
     while(std::getline(File,Line)) {
         if(Line.empty() || Line[0]=='#') continue;
         std::istringstream Stream(Line);std::string Tag;Stream>>Tag;
-        std::vector<double> V;double N;while(Stream>>N) V.push_back(N);
+        std::vector<double> V;double N;
+        while(Stream>>N) { V.push_back(N); }
         const std::string Label=Tag+" case "+std::to_string(++SourceCases);
         if(Tag=="F_MOVE") {
             Check(V.size()==15,Label+" columns");
@@ -105,7 +106,8 @@ void FootballLifecycle() {
     for(double Boundary:{220.0,380.0}) { G.Data.Football={751,Boundary,0,0};G.Step({});Check(G.Data.HumanScore==1,"Football goal y strict boundary"); }
     G.Data.Seconds=1.0/60.0;G.Data.HumanScore=2;G.Step({});
     Check(G.GetStatus().Over && G.GetStatus().Won,"Football timer win");
-    for(int N=0;N<60;++N) G.Step({});Check(G.Data.HumanScore==2,"Football result frozen");
+    for(int N=0;N<60;++N) { G.Step({}); }
+    Check(G.Data.HumanScore==2,"Football result frozen");
     G.Step(Start);Check(!G.GetStatus().Over && G.Data.HumanScore==0 && G.Data.CpuScore==0,"Football restart cleared scores");
     G.Data.Seconds=0.001;G.Step({});Check(G.Data.Mode==FootballGame::Phase::Draw,"Football timer draw");
     G.Step(Start);G.Data.CpuScore=1;G.Data.Seconds=0.001;G.Step({});Check(G.Data.Mode==FootballGame::Phase::Lost,"Football timer loss");
@@ -130,7 +132,8 @@ void DodgeLifecycle() {
     Check(G.Data.DodgeBall.Owner==1 && G.Data.Players[1].HasBall,"Dodge front player starts possessing");
     Near(G.Data.DodgeBall.X,200,"Dodge attachment x");Near(G.Data.DodgeBall.Y,295,"Dodge attachment y");
     Input Move;Move.Right=true;const auto Before=G.Data.Players;
-    G.Step(Move);for(int N=0;N<3;++N) Near(G.Data.Players[N].X,Before[N].X+Before[N].Speed,"Dodge simultaneous trio input");
+    G.Step(Move);
+    for(int N=0;N<3;++N) { Near(G.Data.Players[N].X,Before[N].X+Before[N].Speed,"Dodge simultaneous trio input"); }
     G.Reset(730);StartDodge(G);
     G.Data.Players[0].Health=1;G.Data.Players[1].Health=G.Data.Players[2].Health=0;
     G.Data.DodgeBall={199,200,1,0,-1,true,false,White};G.Data.Players[1].HasBall=false;
@@ -174,8 +177,10 @@ std::string Snapshot(const DodgeBallGame& G) {
     S<<static_cast<int>(G.Data.Mode)<<' '<<G.Data.Round<<' '<<G.Data.HumanScore<<' '<<G.Data.CpuScore<<' '
      <<G.Data.SelectedCountry<<' '<<G.Data.OpponentCountry<<' '<<G.Data.Particles.size()<<' ';
     const auto& B=G.Data.DodgeBall;S<<B.X<<' '<<B.Y<<' '<<B.Vx<<' '<<B.Vy<<' '<<B.Owner<<' '<<B.InAir<<' '<<B.PowerBall<<' ';
-    for(const auto& P:G.Data.Players) S<<P.X<<' '<<P.Y<<' '<<P.Health<<' '<<P.Charge<<' '<<P.ThrowCooldown<<' '<<P.JumpVelocity<<' '<<P.JumpCooldown<<' '<<P.OnGround<<' '<<P.HasBall<<' ';
-    for(const auto& P:G.Data.Particles) S<<P.X<<' '<<P.Y<<' '<<P.Size<<' '<<P.Life<<' ';
+    for(const auto& P:G.Data.Players) {
+        S<<P.X<<' '<<P.Y<<' '<<P.Health<<' '<<P.Charge<<' '<<P.ThrowCooldown<<' '<<P.JumpVelocity<<' '<<P.JumpCooldown<<' '<<P.OnGround<<' '<<P.HasBall<<' ';
+    }
+    for(const auto& P:G.Data.Particles) { S<<P.X<<' '<<P.Y<<' '<<P.Size<<' '<<P.Life<<' '; }
     return S.str();
 }
 void ReplayAndBounds() {
@@ -189,15 +194,17 @@ void ReplayAndBounds() {
         A.Step(I);B.Step(I);F.Step(I);
         Check(Snapshot(A)==Snapshot(B),"Dodge deterministic replay "+std::to_string(Tick));
         Check(A.Data.Particles.size()<=DodgeBallGame::MaxParticles,"Dodge particles bounded");
-        if(A.Data.Mode==DodgeBallGame::Phase::Playing) for(const auto& P:A.Data.Players) {
-            Check(std::isfinite(P.X) && std::isfinite(P.Y),"Dodge finite coordinates");
-            Check(P.X>=(P.Cpu ? 440 : 60) && P.X<=(P.Cpu ? 740 : 360) && P.Y>=80 && P.Y<=510,"Dodge court restrictions");
-            Check(P.Health>=0 && P.Health<=3 && P.Charge>=0 && P.Charge<=60,"Dodge HP/charge bounds");
+        if(A.Data.Mode==DodgeBallGame::Phase::Playing) {
+            for(const auto& P:A.Data.Players) {
+                Check(std::isfinite(P.X) && std::isfinite(P.Y),"Dodge finite coordinates");
+                Check(P.X>=(P.Cpu ? 440 : 60) && P.X<=(P.Cpu ? 740 : 360) && P.Y>=80 && P.Y<=510,"Dodge court restrictions");
+                Check(P.Health>=0 && P.Health<=3 && P.Charge>=0 && P.Charge<=60,"Dodge HP/charge bounds");
+            }
         }
         Check(F.Data.Human.X>=40 && F.Data.Human.X<=760 && F.Data.Human.Y>=40 && F.Data.Human.Y<=560,"Football field restriction");
         if(Tick%100==0) {
             Frame Out;A.Render(Out);Check(Out.Commands.size()<Frame::MaxCommands,"Dodge render bounded");
-            for(const auto& Cmd:Out.Commands) Check(std::isfinite(Cmd.A.X) && std::isfinite(Cmd.A.Y),"Dodge finite render");
+            for(const auto& Cmd:Out.Commands) { Check(std::isfinite(Cmd.A.X) && std::isfinite(Cmd.A.Y),"Dodge finite render"); }
             F.Render(Out);Check(Out.Commands.size()<Frame::MaxCommands,"Football render bounded");
         }
     }
