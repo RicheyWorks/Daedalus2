@@ -39,7 +39,11 @@ jobs:
           java-version: '21'
           cache: maven
       - name: Shared inventory format reader
-        run: mvn -B -pl daedalus-server -am -Dtest=InventoryCatalogTest,InventoryCatalogServiceTest,RetroRealmTest,RetroLandTest,ProdAuthPostureTest -Dsurefire.failIfNoSpecifiedTests=false test
+        run: mvn -B -pl daedalus-server -am -Dtest=InventoryCatalogTest,InventoryCatalogServiceTest,RetroRealmTest,RetroLandTest,ProdAuthPostureTest,ErrorContractTest -Dsurefire.failIfNoSpecifiedTests=false test
+      - name: Packaged production server catalog smoke
+        run: |
+          mvn -B -pl daedalus-server -am -DskipTests package
+          python3 tools/inventory/packaged_server_smoke.py --java "$(command -v java)" --jar daedalus-server/target/daedalus-server-1.2.0-SNAPSHOT-exec.jar --output "$RUNNER_TEMP/catalog-smoke"
       - name: Actual C++ and Java catalog parity
         run: |
           g++ -std=c++17 -O2 -Wall -Wextra -Werror engines/unreal/core-test/inventory_catalog_dump.cpp -o "$RUNNER_TEMP/inventory_dump"

@@ -9,6 +9,10 @@
   malformed refusals, then package the canonical resource rather than duplicate it.
 * A new endpoint must enter the production posture audit and README table.
   Exercise refusal and authorized success against a booted production profile.
+* Reuse the existing error handler. An empty 404 violates the API problem-detail
+  contract even when status-only tests pass; run the generated-request audit.
+* Test the executable classifier jar, not the thin dependency jar, and verify
+  embedded resource bytes before booting an isolated packaged server.
 * Export validation, visual acceptance, native linking and Play are different
   evidence stages. Preserve existing spreadsheet acceptance cells while appending
   assets; LODs and visual variants must not inflate distinct gameplay roles.

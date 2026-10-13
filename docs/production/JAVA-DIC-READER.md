@@ -43,3 +43,16 @@ definitions with a test JWT, expose no player quantity/count fields and return
 404 for an authenticated unknown realm. Four posture tests pass alongside the
 catalog/realm integration tests. Public deployment, packaged-server smoke and
 authoritative item transactions remain pending.
+
+Packaged-server smoke now compares all five catalog bytes inside the executable
+jar's nested core jar to the canonical source, then boots the executable classifier
+(-exec.jar) on loopback with an ephemeral test signing key in an isolated output
+folder. It checks anonymous refusal, authorized definitions and unknown-realm
+JSON problem details. The child process is stopped after the test. No live server,
+provider, deployment, real account or wallet is used. Proof JSON includes jar and
+catalog hashes. Source-classpath tests alone cannot establish packaging correctness.
+
+CI also exposed an empty 404 outside the shared error contract. The catalog now
+throws the existing ResourceNotFoundException so ApiExceptionHandler emits the
+same problem-detail shape as the rest of the API; the generated-request audit is
+included in the focused suite. Public deployment and item transactions remain open.

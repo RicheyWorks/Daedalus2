@@ -3,6 +3,7 @@ package com.daedalus.server.service;
 import com.daedalus.server.controller.InventoryCatalogController;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -10,7 +11,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 class InventoryCatalogServiceTest {
     @Test void servesSharedCatalogOverHttpAndRejectsUnknownRealm() throws Exception {
-        var mvc = MockMvcBuilders.standaloneSetup(new InventoryCatalogController(new InventoryCatalogService())).build();
+        var mvc = MockMvcBuilders.standaloneSetup(new InventoryCatalogController(new InventoryCatalogService()))
+                .setControllerAdvice(new com.daedalus.server.web.ApiExceptionHandler()).build();
         mvc.perform(get("/api/v1/inventory/gallery-city/catalog"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.realm").value("GALLERY-CITY"))
@@ -29,7 +31,8 @@ class InventoryCatalogServiceTest {
         assertThat(service.find("gallery-city").items()).isNotEqualTo(service.find("bricks").items());
         assertThat(service.find("../bricks")).isNull();
         var controller = new InventoryCatalogController(service);
-        assertThat(controller.catalog("missing").getStatusCode().value()).isEqualTo(404);
+        assertThatThrownBy(() -> controller.catalog("missing"))
+                .isInstanceOf(com.daedalus.server.web.ResourceNotFoundException.class);
         assertThat(controller.catalog("gallery-city").getStatusCode().value()).isEqualTo(200);
     }
 }
