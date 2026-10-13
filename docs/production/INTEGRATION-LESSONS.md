@@ -33,3 +33,9 @@
 - Save seed and generator version separately in realm metadata; the current voxel save does not record procedural generator provenance. Persist mined-to-empty area markers before adding live regeneration.
 - Locale-dependent floating-point formatting can invalidate JSON. The exporter uses Locale.ROOT and was repeated under German locale; save and GLB bytes matched the original export.
 - A generated sector is one terrain asset reference and zero character roles. Keep its Unreal status pending until actual import and Play proof exist.
+
+### Ocean chunk persistence
+- Read actual fallback behavior before reusing an atomic-save claim. Shared WorldStore can copy over targets after rename failures; Ocean writes to private staging first and requires an atomic final publish.
+- A fully cleared chunk needs an explicit saved empty record. Treating no blocks as no record regenerates mined terrain on restart.
+- An in-process overlapping-lock test is insufficient to prove OS writer exclusion. The separate-JVM probe verifies edits, empty records, competing writer refusal and reopen after release.
+- Workbook recalculation may normalize a blank cached formula value from null to an empty string. Preserve formula text exactly and compare those two blank representations equivalently; do not relax comparisons of numbers or statuses.
