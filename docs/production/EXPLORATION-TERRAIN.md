@@ -41,3 +41,10 @@ Gallery City keys; Ocean Realm is a proposed new internal key, pending registrat
 Host-authoritative dock lookup, permissions, vehicle possession, save/restore,
 streaming handover and arrival collision checks still need native integration.
 Pure route resolution does not teleport players or establish cross-server authority.
+
+ADaedalusExplorationTerrain now supplies an additive native actor source using
+the existing ProceduralMeshComponent dependency, patch-local centimetres,
+generated normals/tangents, assignable material and static terrain collision.
+Its UHT/module compile and live placement are not yet verified. Invalid dimensions
+return an empty core patch; invalid sample coordinates return NaN rather than
+throwing, for Unreal builds that disable C++ exceptions.

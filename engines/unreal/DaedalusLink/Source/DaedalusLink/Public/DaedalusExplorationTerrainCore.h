@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <stdexcept>
 #include <vector>
+#include <limits>
 
 // Metres, world coordinates. Pure geometry; native collision/streaming is separate.
 namespace DaedalusExplorationTerrain
@@ -13,7 +14,7 @@ struct Patch { std::vector<Vertex> Vertices; std::vector<std::uint32_t> Indices;
 inline double Height(Realm realm, double x, double y)
 {
     if (!std::isfinite(x) || !std::isfinite(y))
-        throw std::invalid_argument("Non-finite terrain coordinate");
+        return std::numeric_limits<double>::quiet_NaN();
     const double hills = 3.0 * std::sin(x / 140.0) * std::cos(y / 180.0)
                        + 0.6 * std::sin((x + y) / 37.0);
     if (realm == Realm::Ocean)
@@ -28,7 +29,7 @@ inline Patch Build(Realm realm, double originX, double originY,
 {
     if (cells == 0 || cells > 256 || !std::isfinite(spacing) || spacing <= 0.0
         || !std::isfinite(originX) || !std::isfinite(originY))
-        throw std::invalid_argument("Invalid terrain patch dimensions");
+        return {};
     Patch result;
     const unsigned stride = cells + 1;
     result.Vertices.reserve(static_cast<std::size_t>(stride) * stride);

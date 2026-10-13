@@ -31,12 +31,7 @@ int main()
         CHECK(Height(Realm::Prairie,x,0)==0);
         CHECK(Height(Realm::Ocean,x,0)<-20);
     }
-    bool rejected=false;
-    try { Build(Realm::Ocean,0,0,257,4); } catch (const std::invalid_argument&) { rejected=true; }
-    CHECK(rejected);
-    rejected=false;
-    try { Height(Realm::Prairie,std::numeric_limits<double>::infinity(),0); }
-    catch (const std::invalid_argument&) { rejected=true; }
-    CHECK(rejected);
+    CHECK(Build(Realm::Ocean,0,0,257,4).Vertices.empty());
+    CHECK(std::isnan(Height(Realm::Prairie,std::numeric_limits<double>::infinity(),0)));
     std::cout << "EXPLORATION_TERRAIN_PASS " << checks << " checks\n";
 }
