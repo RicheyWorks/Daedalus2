@@ -211,6 +211,19 @@ def hero_capture(cam_loc, target_loc, fov=55.0):
     return None
 
 
+RESULT = r"C:\Users\730ri\projects\bot-team\shots\hephaestus\island_result.json"
+
+
+def write_result(d):
+    """Turn outcome on disk, so a bridge timeout on execute_python doesn't lose it (heph_turn / referee can read it)."""
+    import datetime
+    d = dict(d, ts=datetime.datetime.now().isoformat(timespec="seconds"))
+    try:
+        os.makedirs(os.path.dirname(RESULT), exist_ok=True)
+        with open(RESULT, "w", encoding="utf-8") as f: json.dump(d, f, indent=1, default=str)
+    except Exception as e: log(f"result file: {e}")
+
+
 def run():
     lay = json.load(open(LAYOUT))
     ox, oy, oz = lay["origin_cm"]
@@ -257,6 +270,16 @@ def run():
     rot = unreal.Rotator(roll=0, pitch=math.degrees(math.atan2(dz, math.hypot(dx, dy))), yaw=math.degrees(math.atan2(dy, dx)))
     cam = actors.spawn_actor_from_class(unreal.CineCameraActor, cl, rot)
     cam.set_actor_label("Hephaestus Hero Cam"); cam.set_folder_path(FOLDER)
+    # Save BEFORE the hero capture: if the bridge times out mid-capture (blender-team's 20:31 make-up scored 0 that way),
+    # the island is already saved to Content and the result is on disk for heph_turn to read.
+    saved = save_world()
+    want = sum(1 for p in lay["placements"] if not p.get("skip"))
+    alive = all(living.values())
+    ok = placed >= int(0.9 * want) and alive
+    link_note(f"{'DONE' if alive else 'BLOCKED'} island:hephaestus living check in Unreal: water {living['water']}, "
+              f"livestock {living['livestock']}, herbs {living['herbs']} placed; {placed}/{want} placements; "
+              f"saved sublevel={saved['sublevel']} DaedalusWorld+maps={saved['maps']} dirty maps left={saved['dirty_maps']}")
+    write_result({"stage": "saved", "ok": ok, "placed": placed, "want": want, "living": living, "saved": saved})
     # Warm SceneCapture hero PNG (bridge viewport_screenshot often times out on 9877).
     tl = unreal.Vector(ox + t[0] * 100, oy + t[1] * 100, oz + t[2] * 100)
     shot = hero_capture(cl, tl, fov=float(lay.get("hero_fov", 55)))
@@ -264,14 +287,9 @@ def run():
         link_note(f"DONE island:hephaestus hero shot: {shot} (SceneCapture2D warm capture exposure+1 / 5200K)")
     else:
         link_note("NEED island:hephaestus: hero SceneCapture + HighResShot both failed; hero_r2.png still owed")
-    saved = save_world()
-    want = sum(1 for p in lay["placements"] if not p.get("skip"))
-    alive = all(living.values())
-    ok = placed >= int(0.9 * want) and alive
+    if shot: saved = save_world()  # capture actor is transient; re-save only clears anything it dirtied
     log(f"placed={placed}/{want} imported={imported} missing={sorted(missing)} living={living} shot={shot} {'PASS' if ok else 'FAIL'}")
-    link_note(f"{'DONE' if alive else 'BLOCKED'} island:hephaestus living check in Unreal: water {living['water']}, "
-              f"livestock {living['livestock']}, herbs {living['herbs']} placed; {placed}/{want} placements; "
-              f"saved sublevel={saved['sublevel']} DaedalusWorld+maps={saved['maps']} dirty maps left={saved['dirty_maps']}")
+    write_result({"stage": "done", "ok": ok, "placed": placed, "want": want, "living": living, "saved": saved, "shot": shot})
     return {"ok": ok, "placed": placed, "want": want, "imported": imported, "missing": sorted(missing), "living": living,
             "saved": saved, "cam": [cl.x, cl.y, cl.z], "cam_rot": [rot.pitch, rot.yaw],
             "shot": shot, "hero_target": [tl.x, tl.y, tl.z]}
