@@ -17,6 +17,8 @@ private:
     float AttackClock=0;
     bool AttackLogged=false;
     bool IdentityLogged=false;
+    bool KeysPressed=false;
+    bool KeysReleased=false;
 };
 
 UCLASS()

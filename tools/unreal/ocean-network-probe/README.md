@@ -44,3 +44,12 @@ The updated three-process runs passed both modes; latest proof is
 docs/production/ocean-replication-proof.json, logs in
 Documents/Codex/2026-10-13/ocean-network-identity-1. Earlier proof files retain
 their original tested source hashes and results.
+
+With --keyboard, the owner controller injects W press/release (plus Left Control
+for submarine dive) via Unreal's InputKey event API. This branch never sets helm
+axes directly. Both modes passed the full Enhanced Input-to-local-sender-to-RPC
+path with foreign attempts continuing. Configure EnhancedPlayerInput in the
+scratch host's DefaultInput.ini; it is also required by the existing hero.
+Latest key-event proof is docs/production/ocean-keyboard-network-proof.json,
+logs Documents/Codex/2026-10-13/ocean-network-key-input-1. Physical device and
+rendered UI tests remain separate.

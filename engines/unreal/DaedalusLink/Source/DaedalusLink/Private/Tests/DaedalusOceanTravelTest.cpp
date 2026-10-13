@@ -4,6 +4,7 @@
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
 #include "Components/BoxComponent.h"
+#include "Camera/CameraTypes.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusOceanEligibilityTest,
     "Daedalus.Ocean.HostEligibility",
@@ -112,6 +113,10 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
     for (int i=0;i<30;++i) {Vessel->SetHelmInput(1,0,0);Vessel->Tick(.1f);}
     TestTrue(TEXT("Hull advances toward barrier"),Vessel->GetActorLocation().X>10);
     TestTrue(TEXT("Hull sweep stops before barrier"),Vessel->GetActorLocation().X<=191);
+    FMinimalViewInfo View;
+    Vessel->CalcCamera(.016f,View);
+    TestTrue(TEXT("Chase camera provides a view behind hull"),View.Location.X<Vessel->GetActorLocation().X-100);
+    TestTrue(TEXT("Chase camera provides an elevated view"),View.Location.Z>Vessel->GetActorLocation().Z+100);
     World->DestroyWorld(false);
     return true;
 }

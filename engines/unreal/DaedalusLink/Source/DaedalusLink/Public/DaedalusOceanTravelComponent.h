@@ -2,11 +2,18 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "GameFramework/Pawn.h"
+#include "InputCoreTypes.h"
 #include "DaedalusOceanTravelCore.h"
 #include "DaedalusOceanTravelComponent.generated.h"
 
 class UStaticMeshComponent;
 class UBoxComponent;
+class USpringArmComponent;
+class UCameraComponent;
+class UInputMappingContext;
+class UInputAction;
+class APlayerController;
+struct FInputActionValue;
 
 UENUM(BlueprintType, meta=(ScriptName="OceanVesselKind"))
 enum class EDaedalusOceanVessel : uint8 { Boat, Submarine };
@@ -20,6 +27,13 @@ public:
     ADaedalusOceanVessel();
     virtual void Tick(float DeltaSeconds) override;
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+    virtual UInputComponent* CreatePlayerInputComponent() override;
+    virtual void SetupPlayerInputComponent(UInputComponent* Input) override;
+    virtual void UnPossessed() override;
+    virtual void OnRep_Controller() override;
+    virtual void EndPlay(const EEndPlayReason::Type Reason) override;
+    UFUNCTION(BlueprintCallable, Category="Daedalus|Ocean")
+    bool SetLocalHelmInput(float Forward, float Turn, float Dive);
     UFUNCTION(Server, Unreliable, BlueprintCallable, Category="Daedalus|Ocean")
     void SetHelmInput(float Forward, float Turn, float Dive);
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean") float CruiseSpeedCm = 600;
@@ -29,6 +43,14 @@ public:
     TObjectPtr<UStaticMeshComponent> VesselMesh;
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean")
     TObjectPtr<UBoxComponent> HullCollision;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean") TObjectPtr<USpringArmComponent> CameraBoom;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean") TObjectPtr<UCameraComponent> ChaseCamera;
+    UPROPERTY(EditAnywhere, Category="Daedalus|Ocean|Controls") FKey ForwardKey = EKeys::W;
+    UPROPERTY(EditAnywhere, Category="Daedalus|Ocean|Controls") FKey ReverseKey = EKeys::S;
+    UPROPERTY(EditAnywhere, Category="Daedalus|Ocean|Controls") FKey LeftKey = EKeys::A;
+    UPROPERTY(EditAnywhere, Category="Daedalus|Ocean|Controls") FKey RightKey = EKeys::D;
+    UPROPERTY(EditAnywhere, Category="Daedalus|Ocean|Controls") FKey SurfaceKey = EKeys::SpaceBar;
+    UPROPERTY(EditAnywhere, Category="Daedalus|Ocean|Controls") FKey DiveKey = EKeys::LeftControl;
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean")
     EDaedalusOceanVessel VesselType = EDaedalusOceanVessel::Boat;
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean")
@@ -37,6 +59,19 @@ private:
     FVector Helm = FVector::ZeroVector;
     float InputAge = 1;
     float ForwardSpeed = 0;
+    FVector LocalHelm = FVector::ZeroVector;
+    float LocalAge = 1;
+    float SendAge = 0;
+    bool bLocalSender = false;
+    UPROPERTY() TObjectPtr<UInputMappingContext> HelmMapping;
+    UPROPERTY() TObjectPtr<UInputAction> ForwardAction;
+    UPROPERTY() TObjectPtr<UInputAction> TurnAction;
+    UPROPERTY() TObjectPtr<UInputAction> DiveAction;
+    TWeakObjectPtr<APlayerController> MappingController;
+    void RemoveHelmMapping();
+    void InputForward(const FInputActionValue& Value);
+    void InputTurn(const FInputActionValue& Value);
+    void InputDive(const FInputActionValue& Value);
 };
 
 USTRUCT(BlueprintType)

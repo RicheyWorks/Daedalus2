@@ -7,7 +7,7 @@ import socket
 import subprocess
 import time
 
-def run(engine, project, output, dive, non_owner=False):
+def run(engine, project, output, dive, non_owner=False, keyboard=False):
     mode='submarine' if dive else 'boat'
     output.mkdir(parents=True,exist_ok=True)
     server_log=output/(mode+'-server.log');client_log=output/(mode+'-client.log')
@@ -18,6 +18,7 @@ def run(engine, project, output, dive, non_owner=False):
     common=['-NullRHI','-unattended','-nop4','-nosplash','-nosound','-NoSteam']
     if dive: common.append('-ProbeDive')
     if non_owner: common.append('-ProbeNonOwner')
+    if keyboard: common.append('-ProbeKeyboard')
     flags=subprocess.CREATE_NO_WINDOW if hasattr(subprocess,'CREATE_NO_WINDOW') else 0
     children=[];started=time.monotonic()
     try:
@@ -45,6 +46,8 @@ def run(engine, project, output, dive, non_owner=False):
                 client_text=client_log.read_text(errors='replace')
                 assert 'Welcomed by server' in client_text,'Missing actual connection evidence'
                 assert 'OCEAN_REPLICATED_IDENTITY' in client_text,'Missing replicated configuration evidence'
+                if keyboard:
+                    assert 'OCEAN_KEY_INPUT_PRESSED' in client_text and 'OCEAN_KEY_INPUT_RELEASED' in client_text
                 if non_owner:
                     attack_text=attacker_log.read_text(errors='replace')
                     assert 'Welcomed by server' in attack_text
@@ -70,11 +73,12 @@ def run(engine, project, output, dive, non_owner=False):
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('engine',type=Path)
     parser.add_argument('project',type=Path);parser.add_argument('output',type=Path)
-    parser.add_argument('--non-owner',action='store_true');args=parser.parse_args()
-    results=[run(args.engine,args.project,args.output,dive,args.non_owner) for dive in [False,True]]
+    parser.add_argument('--non-owner',action='store_true');parser.add_argument('--keyboard',action='store_true');args=parser.parse_args()
+    results=[run(args.engine,args.project,args.output,dive,args.non_owner,args.keyboard) for dive in [False,True]]
     for row in results:
         row['server_log_sha256']=hashlib.sha256((args.output/(row['mode']+'-server.log')).read_bytes()).hexdigest()
         row['client_log_sha256']=hashlib.sha256((args.output/(row['mode']+'-client.log')).read_bytes()).hexdigest()
+        row['keyboard_dispatch_verified']=args.keyboard
         if args.non_owner:
             row['non_owner_refused']=True
             row['foreign_client_log_sha256']=hashlib.sha256((args.output/(row['mode']+'-foreign-client.log')).read_bytes()).hexdigest()

@@ -107,6 +107,33 @@ nonblocking; the vessel remains possessed. Native automation verified this cycle
 and moved the hull against a WorldStatic box barrier: it advanced, then stopped
 before hull penetration. These checks are not rendered art/nav acceptance.
 
+## Camera and player controls
+
+A spring-arm chase camera supplies a view behind and above the hull. Its default
+arm is 650 cm with an 18-degree downward pitch and collision probe. Native camera
+view checks passed; rendered composition, underwater visibility and camera clipping
+still need visual acceptance with the assigned vessel art.
+
+The vessel creates an Enhanced Input component and a temporary priority-100
+mapping context. Editable keyboard defaults are W/S forward/reverse, A/D steer,
+Space surface and Left Control dive. Left stick controls forward/steer; left/right
+trigger axes surface/dive. Context removal runs on unpossession, controller
+replication change and EndPlay, leaving the hero's context intact. The project
+must use EnhancedPlayerInput, as the existing hero already expects.
+
+SetLocalHelmInput supports local UI/joystick adapters and refuses non-local or
+nonfinite input. Local input callbacks feed the same sender, capped at 20 Hz;
+stale local commands clear after 0.5 seconds. The server still validates/clamps
+its own input and performs all movement. Local input state is cleared when control
+leaves the vessel. Boat dive input has no effect on its fixed sea-level target.
+
+Fresh three-process tests injected press/release key events through the actual
+player controller, not direct helm calls. Boat W and submarine W+Control drove
+Enhanced Input actions, the local sender, owner RPC and server motion; release
+stopped input, and foreign-client refusal/identity replication remained valid.
+Proof is ocean-keyboard-network-proof.json. This is engine key-event dispatch,
+not OS keyboard automation, rendered gameplay or physical gamepad acceptance.
+
 ## Verification
 
 The actor/component, reflection code and automation test compiled and linked in

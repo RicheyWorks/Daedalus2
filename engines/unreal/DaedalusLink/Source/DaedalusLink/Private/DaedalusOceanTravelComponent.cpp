@@ -4,6 +4,15 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "Camera/CameraComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/PlayerController.h"
+#include "Engine/LocalPlayer.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "InputMappingContext.h"
+#include "InputAction.h"
+#include "InputModifiers.h"
 
 namespace
 {
@@ -32,7 +41,73 @@ ADaedalusOceanVessel::ADaedalusOceanVessel()
     bReplicates = true;
     SetReplicateMovement(true);
     PrimaryActorTick.bCanEverTick = true;
+    CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+    CameraBoom->SetupAttachment(HullCollision);
+    CameraBoom->SetRelativeLocation(FVector(0,0,100));
+    CameraBoom->SetRelativeRotation(FRotator(-18,0,0));
+    CameraBoom->TargetArmLength=650;
+    CameraBoom->ProbeSize=15;
+    ChaseCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("ChaseCamera"));
+    ChaseCamera->SetupAttachment(CameraBoom,USpringArmComponent::SocketName);
 }
+
+UInputComponent* ADaedalusOceanVessel::CreatePlayerInputComponent()
+{
+    return NewObject<UEnhancedInputComponent>(this,TEXT("HelmInput"));
+}
+void ADaedalusOceanVessel::SetupPlayerInputComponent(UInputComponent* Input)
+{
+    Super::SetupPlayerInputComponent(Input);
+    RemoveHelmMapping();
+    auto* Player=Cast<APlayerController>(GetController());
+    auto* Enhanced=Cast<UEnhancedInputComponent>(Input);
+    if (!Player || !Player->GetLocalPlayer() || !Enhanced) return;
+    auto* Subsystem=ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(Player->GetLocalPlayer());
+    if (!Subsystem) return;
+    HelmMapping=NewObject<UInputMappingContext>(this);
+    auto Make=[this]() {auto* Action=NewObject<UInputAction>(this);Action->ValueType=EInputActionValueType::Axis1D;return Action;};
+    ForwardAction=Make();TurnAction=Make();DiveAction=Make();
+    auto Map=[this](UInputAction* Action,FKey Key,bool Negative=false) {
+        auto& Binding=HelmMapping->MapKey(Action,Key);
+        if (Negative) Binding.Modifiers.Add(NewObject<UInputModifierNegate>(HelmMapping));
+    };
+    Map(ForwardAction,ForwardKey);Map(ForwardAction,ReverseKey,true);Map(ForwardAction,EKeys::Gamepad_LeftY);
+    Map(TurnAction,RightKey);Map(TurnAction,LeftKey,true);Map(TurnAction,EKeys::Gamepad_LeftX);
+    Map(DiveAction,SurfaceKey);Map(DiveAction,DiveKey,true);
+    Map(DiveAction,EKeys::Gamepad_LeftTriggerAxis);Map(DiveAction,EKeys::Gamepad_RightTriggerAxis,true);
+    for (auto Event : {ETriggerEvent::Triggered,ETriggerEvent::Completed,ETriggerEvent::Canceled})
+    {
+        Enhanced->BindAction(ForwardAction,Event,this,&ADaedalusOceanVessel::InputForward);
+        Enhanced->BindAction(TurnAction,Event,this,&ADaedalusOceanVessel::InputTurn);
+        Enhanced->BindAction(DiveAction,Event,this,&ADaedalusOceanVessel::InputDive);
+    }
+    Subsystem->AddMappingContext(HelmMapping,100);
+    MappingController=Player;
+    bLocalSender=true;
+}
+void ADaedalusOceanVessel::RemoveHelmMapping()
+{
+    if (auto* Player=MappingController.Get();Player && Player->GetLocalPlayer() && HelmMapping)
+        if (auto* Subsystem=ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(Player->GetLocalPlayer()))
+            Subsystem->RemoveMappingContext(HelmMapping);
+    MappingController.Reset();LocalHelm=FVector::ZeroVector;LocalAge=1;SendAge=0;bLocalSender=false;
+}
+void ADaedalusOceanVessel::UnPossessed() {RemoveHelmMapping();Super::UnPossessed();}
+void ADaedalusOceanVessel::OnRep_Controller()
+{
+    if (MappingController.Get()!=GetController()) RemoveHelmMapping();
+    Super::OnRep_Controller();
+}
+void ADaedalusOceanVessel::EndPlay(const EEndPlayReason::Type Reason) {RemoveHelmMapping();Super::EndPlay(Reason);}
+bool ADaedalusOceanVessel::SetLocalHelmInput(float Forward,float Turn,float Dive)
+{
+    if (!IsLocallyControlled() || !FMath::IsFinite(Forward) || !FMath::IsFinite(Turn) || !FMath::IsFinite(Dive)) return false;
+    LocalHelm=FVector(FMath::Clamp(Forward,-1.f,1.f),FMath::Clamp(Turn,-1.f,1.f),FMath::Clamp(Dive,-1.f,1.f));
+    LocalAge=0;bLocalSender=true;return true;
+}
+void ADaedalusOceanVessel::InputForward(const FInputActionValue& Value) {SetLocalHelmInput(Value.Get<float>(),LocalHelm.Y,LocalHelm.Z);}
+void ADaedalusOceanVessel::InputTurn(const FInputActionValue& Value) {SetLocalHelmInput(LocalHelm.X,Value.Get<float>(),LocalHelm.Z);}
+void ADaedalusOceanVessel::InputDive(const FInputActionValue& Value) {SetLocalHelmInput(LocalHelm.X,LocalHelm.Y,Value.Get<float>());}
 
 void ADaedalusOceanVessel::SetHelmInput_Implementation(float Forward, float Turn, float Dive)
 {
@@ -56,6 +131,12 @@ void ADaedalusOceanVessel::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 void ADaedalusOceanVessel::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+    if (FMath::IsFinite(DeltaSeconds) && DeltaSeconds>0 && IsLocallyControlled() && bLocalSender)
+    {
+        LocalAge+=DeltaSeconds;SendAge+=DeltaSeconds;
+        if (LocalAge>.5f) LocalHelm=FVector::ZeroVector;
+        if (SendAge>=.05f) {SetHelmInput(LocalHelm.X,LocalHelm.Y,LocalHelm.Z);SendAge=0;}
+    }
     if (!HasAuthority() || !FMath::IsFinite(DeltaSeconds) || DeltaSeconds <= 0) return;
     const float Dt = FMath::Min(DeltaSeconds,0.1f);
     InputAge += DeltaSeconds;

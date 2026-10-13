@@ -5,6 +5,7 @@
 #include "Misc/CommandLine.h"
 #include "Misc/Parse.h"
 #include "EngineUtils.h"
+#include "InputKeyEventArgs.h"
 
 AOceanProbeController::AOceanProbeController() { PrimaryActorTick.bCanEverTick=true; }
 void AOceanProbeController::Tick(float Dt)
@@ -44,8 +45,24 @@ void AOceanProbeController::Tick(float Dt)
             IdentityLogged=true;
         }
         Elapsed+=Dt;
-        if (Elapsed<3)
-            Vessel->SetHelmInput(1,0,FParse::Param(FCommandLine::Get(),TEXT("ProbeDive")) ? -1 : 0);
+        if (FParse::Param(FCommandLine::Get(),TEXT("ProbeKeyboard")))
+        {
+            auto Key=[this](FKey Value,EInputEvent Event) {
+                InputKey(FInputKeyEventArgs(nullptr,INPUTDEVICEID_NONE,Value,Event,1.f,false,FPlatformTime::Cycles64()));
+            };
+            if (!KeysPressed)
+            {
+                Key(EKeys::W,IE_Pressed);if (Dive) Key(EKeys::LeftControl,IE_Pressed);
+                KeysPressed=true;UE_LOG(LogTemp,Display,TEXT("OCEAN_KEY_INPUT_PRESSED"));
+            }
+            if (Elapsed>=3 && !KeysReleased)
+            {
+                Key(EKeys::W,IE_Released);if (Dive) Key(EKeys::LeftControl,IE_Released);
+                KeysReleased=true;UE_LOG(LogTemp,Display,TEXT("OCEAN_KEY_INPUT_RELEASED"));
+            }
+        }
+        else if (Elapsed<3)
+            Vessel->SetLocalHelmInput(1,0,FParse::Param(FCommandLine::Get(),TEXT("ProbeDive")) ? -1 : 0);
     }
 }
 AOceanProbeGameMode::AOceanProbeGameMode()
