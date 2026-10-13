@@ -13,7 +13,7 @@ import sys
 
 import unreal
 
-HERE = r"C:\Users\730ri\projects\Daedalus2\tools\trailer"
+HERE = globals().get("TRAILER_DIR", r"C:\Users\730ri\projects\Daedalus2\tools\trailer")   # set TRAILER_DIR to run from another checkout
 if HERE not in sys.path:
     sys.path.insert(0, HERE)
 import importlib  # noqa: E402
