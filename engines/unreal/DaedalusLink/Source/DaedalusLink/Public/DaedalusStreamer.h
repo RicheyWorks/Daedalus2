@@ -38,7 +38,7 @@ public:
 	static UDaedalusStreamer* GetStreamer(const UObject* WorldContext);
 
 private:
-	struct FIsle { FString Package; FVector Centre; double Radius = 0; bool bAlways = false; };
+	struct FIsle { FString Package; FVector Centre; double Radius = 0; bool bAlways = false; double RamKiB = 0; };
 	TArray<FIsle> Isles;
 	float Next = 0.f;
 	int32 Loads = 0, Unloads = 0;

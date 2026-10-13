@@ -58,6 +58,35 @@ int main()
 	Check("a NaN position does nothing", Plan(One, std::numeric_limits<double>::quiet_NaN(), 0, 0, Settings()).empty());
 	Check("inside the island the distance is 0", EdgeDistance({"a", 0, 0, 0, 1000, false, false}, 10, 10, 10) == 0);
 	Check("focus keeps mine and the always-loaded", FocusSet(W, "/Game/Claude/ClaudeIsland_Sub") == std::vector<std::string>{"/Game/Claude/ClaudeIsland_Sub", "/Game/Daedalus/Hub"});
+	// RAM budget (ADR-063's rule): skip what doesn't fit, never half-load; a smaller farther island may still fit
+	{
+		std::vector<Island> R = {
+			{"hub", 0, 0, 0, 1000, false, true, 900},
+			{"near_big", 10000, 0, 0, 1000, false, false, 500},
+			{"mid_small", 20000, 0, 0, 1000, false, false, 80},
+			{"far_mid", 30000, 0, 0, 1000, false, false, 150},
+		};
+		Settings B;
+		B.MaxLoadsPerTick = 10;
+		B.RamBudgetKiB = 1200;
+		std::vector<Step> Q = Plan(R, 0, 0, 0, B);
+		std::vector<std::string> Names;
+		for (const Step& s : Q) Names.push_back(s.Name);
+		Check("budget: Always first even over budget, big skipped, small farther fits", Names == std::vector<std::string>{"hub", "mid_small", "far_mid"} || (std::printf("  got %zu\n", Names.size()), false));
+		B.RamBudgetKiB = 1000;
+		Q = Plan(R, 0, 0, 0, B);
+		Check("budget: 1000 KiB takes the hub and the 80 only", Q.size() == 2 && Q[1].Name == "mid_small");
+		for (Island& I : R) I.Loaded = I.Name == "hub" || I.Name == "near_big";
+		B.RamBudgetKiB = 1500;
+		Q = Plan(R, 0, 0, 0, B);
+		Check("budget: resident islands count first (900+500 leaves 100: the 80 fits, the 150 not)", Q.size() == 1 && Q[0].Name == "mid_small");
+		Q = Plan(R, 300000 + 30000, 0, 0, B);
+		bool BigOut = false;
+		for (const Step& s : Q) BigOut = BigOut || (s.Name == "near_big" && s.Do == Act::Unload);
+		Check("budget: unloads free RAM in the same tick", BigOut);
+		B.RamBudgetKiB = 0;
+		Check("budget 0 means no budget", Plan(R, 0, 0, 0, B).size() == 2);
+	}
 	// determinism + cost
 	std::vector<Island> Many;
 	for (int i = 0; i < 10000; ++i) Many.push_back({"i" + std::to_string(i), (i % 100) * 50000.0, (i / 100) * 50000.0, 0, 20000, (i % 7) == 0, false});

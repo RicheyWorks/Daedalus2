@@ -111,3 +111,8 @@ This was first filed as ADR-062, which blender-team had already taken for the BB
 - **ADR-064 (this):** the Minecraft rules themselves, and the voxel side: packed blocks, merged greedy meshes per
   isle, voxel LOD, distance streaming (`DaedalusStreamCore`). `DaedalusStreamer` plans by distance today; the next
   step is to gate its loads through DSB 1's `Pick` so distance and the RAM budget agree (one rule, not two).
+- **Done (same day):** `DaedalusStreamCore::Plan` takes `Settings.RamBudgetKiB` and each island's `RamKiB` (DSB 1's
+  `ram`), and applies ADR-063's rule: what stays resident counts first, then loads nearest first while they fit; one
+  that doesn't fit is skipped, never half-loaded, and a smaller farther one may still fit. Always islands load
+  regardless. `daedalus.StreamRamBudgetMiB` (0 = off) turns it on in game; `islands.json` rows may carry `ram_kib`.
+  stream_core_test 20/20; 10,000 islands still plan in ~1.4 ms (hash sets, not a scan per step).
