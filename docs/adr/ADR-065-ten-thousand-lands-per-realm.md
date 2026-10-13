@@ -25,9 +25,9 @@ deed (ADR-027/028) points at it.
 - Cell 0 is at the realm's hub (World Zero: the spawn lane).
 - Numbers wind outward in a square spiral, so low numbers are close to spawn and the gates. They are scarce, the
   way a city's centre is.
-- Cell pitch is 128 m: a full land (92 m across, ADR-050) plus 36 m of open sky. Neighbours are right next to each
-  other.
-- The grid is 12.8 km square. One formula, `cell(n) -> (x, y)`, shared by Java and C++ like the mesher and parsers,
+- Cell pitch is 256 m (rule 8): a land plus sky, with room for lands to grow after mint. At launch a 92 m land
+  (ADR-050) has open sky around it, and neighbours are still a short flight apart.
+- The grid is 25.6 km square. One formula, `cell(n) -> (x, y)`, shared by Java and C++ like the mesher and parsers,
   gives every land's place.
 
 **3. Bigger holdings are estates.** An estate takes a 2x2, 3x3 or 4x4 block of cells and is sold as one deed with
@@ -42,7 +42,7 @@ is accepted. Estates are placed so they never split a district (rule 5).
 - Swaps need both owners to agree.
 
 **5. Only nearby lands exist in memory.**
-- Lands are grouped into districts of 10x10 cells (1.28 km), 100 per realm.
+- Lands are grouped into districts of 10x10 cells (2.56 km), 100 per realm.
 - The streamer (ADR-063, budget DSB 1) loads districts within its load radius and unloads them past the unload
   radius.
 - A land is a seed plus its edits. It is generated on load by `LandGenerator` and stored as v14 palette runs
@@ -64,6 +64,20 @@ The grid math and deed shape are shared. What a land looks like, and what comes 
 - "Holding certain lands gives more rewards" is recorded as a goal. The reward and income design belongs to Astra
   and blockchain-ruffff, and Richmond will brainstorm it.
 - Testnet only. Mainnet, real money, prices and sales need Richmond's explicit yes (standing rule).
+
+**8. Room to grow is reserved before mint.** Richmond (09:20): "after they mint i can keep upgrading the realms and
+their lands and the game play ... i want to make the lands larger but we got to keep in mind blockchain constraints".
+- The chain holds only a land's number, owner and a metadata pointer. Size, terrain, edits and items live in our
+  world store. Bigger lands therefore cost nothing on chain.
+- The one thing that cannot change after mint is where a land sits relative to its neighbours. Buyers pay for
+  position (low spiral numbers sit near the hub). If lands grow past the cell pitch, neighbours collide, and moving
+  everyone breaks that promise.
+- So mint at a 256 m pitch (grid 25.6 km), not 128 m. Lands launch at today's 92 m and can later grow up to about
+  240 m across (about 7x the area) in place, with no one moving. Depth can grow as well. Streaming by district
+  keeps RAM flat whatever the pitch.
+- What is promised at mint is fixed: number, position rank, size tier, richness roll (ADR-050) and the included
+  items. Everything else, such as the look, the gameplay and new features, is an upgrade that only adds. Metadata is
+  served versioned from our server (or IPFS with a version index), so upgrades show in wallets without re-minting.
 
 ## Consequences
 
