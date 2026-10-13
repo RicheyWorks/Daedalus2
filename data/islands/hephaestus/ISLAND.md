@@ -116,7 +116,7 @@ Forge overlook — high three-quarter view of the Great Forge with drydock and h
 | FOV | 55° |
 | Stable PNG | `C:\Users\730ri\projects\bot-team\shots\hephaestus\hero_r2.png` |
 
-Capture path (in `heph_island_ue.hero_capture`, loaded at turn start via runpy): warm SceneCapture2D (exposure bias +1, white temp 5200 K, bloom 0.4) → if that fails, set viewport to this pose, settle 2s, HighResShot 1920x1080 + Shot, copy newest Saved/Screenshots PNG to `hero_r2.png`. `heph_turn` prefers that file over bridge `viewport_screenshot` (which timed out on round-1).
+Capture path (in `heph_island_ue.hero_capture`, loaded at turn start via runpy): SceneCapture2D exposure ladder (auto +1 → manual EV100 8 → manual EV100 5 → unlit base color; white temp 5200 K, bloom 0.4), each rung probed on a 9x9 pixel grid and kept at the first mean luma ≥ 20 (same gate as the NFT card; round-3 auto capture measured ~0.1), rungs logged to `bot-team\shots\hephaestus\hero_capture.json` → if that fails, set viewport to this pose, settle 2s, HighResShot 1920x1080 + Shot, copy newest Saved/Screenshots PNG to `hero_r2.png`. `heph_turn` prefers that file over bridge `viewport_screenshot` (which timed out on round-1).
 
 ## Win condition
 Water running, pens producing, herb beds watered, and at least one dual-quenched tonic in the player's pack. The Great Forge glow brightens when all three living systems are up — the shard is tempered.
@@ -282,3 +282,7 @@ Why: round-2/3 SceneCapture2D `hero_r2.png` is still near-black (mean RGB ~0.1).
 | Renderer | `heph_blender_hero.py` — layout 119 proxies + 7 hero GLBs from `hero_1625`, camera `hero_cam_m`, Cycles OptiX 96 spp, ~7 s |
 
 Validator: `test_heph_nft_card.py` now requires Blender primary, Play secondary, r2 fallback, and primary mean luminance >= 20. SceneCapture overlook in Unreal is still owed on a later editor turn when a lit capture works; until then the mint card uses the Blender overlook.
+
+## 23:20 PT heartbeat (off-editor): SceneCapture exposure ladder
+
+Round-3 `hero_r2.png` was mean RGB ~0.1 (a SceneCapture has no eye-adaptation history, so auto exposure starts black at dusk). `heph_island_ue.hero_capture` now walks `EXPOSURE_LADDER` (auto +1, manual EV100 8, manual EV100 5, unlit base color), probes each capture with `read_render_target_pixel` on a 9x9 grid, exports the first rung at mean luma ≥ 20 (or the brightest), and only falls to HighResShot if all are dark. Headless check: `test_heph_capture_ladder.py` ALL PASS; `test_heph_nft_card.py` still ALL PASS. Runs on the next granted editor turn; not touching Unreal now.

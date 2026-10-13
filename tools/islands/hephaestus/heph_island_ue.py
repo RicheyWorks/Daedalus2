@@ -137,10 +137,39 @@ def save_world():
 
 
 
+# Exposure ladder for the SceneCapture hero (round-3 r2 PNG came out mean RGB ~0.1: a SceneCapture has no
+# eye-adaptation history, so auto exposure starts dark at dusk). Each rung is (label, capture source, manual EV100
+# or None for auto + bias). Manual exposure needs no adaptation; BASE_COLOR is the unlit last resort (never black).
+EXPOSURE_LADDER = (
+    ("auto+1", "SCS_FINAL_COLOR_LDR", None, 1.0),
+    ("manual_ev8", "SCS_FINAL_COLOR_LDR", 8.0, 0.0),
+    ("manual_ev5", "SCS_FINAL_COLOR_LDR", 5.0, 0.0),
+    ("base_color", "SCS_BASE_COLOR", None, 0.0),
+)
+MIN_CAPTURE_LUM = 20.0  # same gate test_heph_nft_card uses for the card's primary hero
+
+
+def mean_lum(colors):
+    """Mean Rec.601 luma (0-255) of sampled pixels; each is an (r, g, b) 0-255 tuple or an object with .r/.g/.b."""
+    tot, n = 0.0, 0
+    for c in colors:
+        r, g, b = (c.r, c.g, c.b) if hasattr(c, "r") else c[:3]
+        tot += 0.299 * r + 0.587 * g + 0.114 * b; n += 1
+    return tot / n if n else 0.0
+
+
+def sample_grid(w, h, n=9):
+    """n x n pixel coords inset 5% from the edges (cheap brightness probe, no PIL inside the editor)."""
+    xs = [int(w * (0.05 + 0.9 * i / (n - 1))) for i in range(n)]
+    ys = [int(h * (0.05 + 0.9 * j / (n - 1))) for j in range(n)]
+    return [(x, y) for y in ys for x in xs]
+
+
 def hero_capture(cam_loc, target_loc, fov=55.0):
-    """Warm SceneCapture2D hero shot (Prometheus pattern: exposure +1, 5200 K).
-    Bypasses viewport_screenshot (bridge 9877 often times out). Writes SHOTS/hero_r2.png.
-    Returns absolute path or None."""
+    """SceneCapture2D hero shot with an exposure ladder and a brightness gate.
+    Bypasses viewport_screenshot (bridge 9877 often times out). Tries each EXPOSURE_LADDER rung, probes a 9x9 pixel
+    grid of the render target, and exports the first rung whose mean luma >= MIN_CAPTURE_LUM to SHOTS/hero_r2.png
+    (the brightest rung if none pass). Writes the rung + luma to SHOTS/hero_capture.json. Returns path or None."""
     import time
     os.makedirs(SHOTS, exist_ok=True)
     out_path = os.path.join(SHOTS, HERO_PNG)
@@ -160,26 +189,57 @@ def hero_capture(cam_loc, target_loc, fov=55.0):
         cap.set_actor_label("Hephaestus Hero Capture"); cap.set_folder_path(FOLDER)
         sc = cap.capture_component2d
         sc.set_editor_property("texture_target", rt)
-        sc.set_editor_property("capture_source", unreal.SceneCaptureSource.SCS_FINAL_COLOR_LDR)
         sc.set_editor_property("fov_angle", float(fov))
-        pp = sc.get_editor_property("post_process_settings")
-        for k, v in (("override_auto_exposure_bias", True), ("auto_exposure_bias", 1.0),
-                     ("override_white_temp", True), ("white_temp", 5200.0),
-                     ("override_bloom_intensity", True), ("bloom_intensity", 0.4)):
-            try: pp.set_editor_property(k, v)
-            except Exception: pass
-        sc.set_editor_property("post_process_settings", pp)
-        sc.set_editor_property("post_process_blend_weight", 1.0)
-        sc.capture_scene()
+        grid = sample_grid(1920, 1080)
+
+        def shoot(rung):
+            label, src, ev100, bias = rung
+            sc.set_editor_property("capture_source", getattr(unreal.SceneCaptureSource, src))
+            pp = sc.get_editor_property("post_process_settings")
+            sets = [("override_white_temp", True), ("white_temp", 5200.0),
+                    ("override_bloom_intensity", True), ("bloom_intensity", 0.4),
+                    ("override_auto_exposure_bias", True), ("auto_exposure_bias", float(bias)),
+                    ("override_auto_exposure_method", ev100 is not None)]
+            if ev100 is not None:
+                sets += [("auto_exposure_method", unreal.AutoExposureMethod.AEM_MANUAL),
+                         ("override_auto_exposure_apply_physical_camera_exposure", True),
+                         ("auto_exposure_apply_physical_camera_exposure", False),
+                         ("override_auto_exposure_min_brightness", True), ("auto_exposure_min_brightness", float(ev100)),
+                         ("override_auto_exposure_max_brightness", True), ("auto_exposure_max_brightness", float(ev100))]
+            for k, v in sets:
+                try: pp.set_editor_property(k, v)
+                except Exception: pass
+            sc.set_editor_property("post_process_settings", pp)
+            sc.set_editor_property("post_process_blend_weight", 1.0)
+            sc.capture_scene()
+            return mean_lum(unreal.RenderingLibrary.read_render_target_pixel(world, rt, x, y) for x, y in grid)
+
+        tried, best = [], None
+        for rung in EXPOSURE_LADDER:
+            try: lum = shoot(rung)
+            except Exception as e:
+                log(f"hero capture rung {rung[0]}: {e}"); continue
+            tried.append({"rung": rung[0], "lum": round(lum, 1)})
+            log(f"hero capture rung {rung[0]}: mean luma {lum:.1f}")
+            if best is None or lum > best[1]: best = (rung, lum)
+            if lum >= MIN_CAPTURE_LUM: break
+        if best and tried[-1]["rung"] != best[0][0]:  # none passed: re-shoot the brightest rung before export
+            try: shoot(best[0])
+            except Exception as e: log(f"hero capture re-shoot: {e}")
         unreal.RenderingLibrary.export_render_target(world, rt, SHOTS, HERO_PNG)
+        try:
+            with open(os.path.join(SHOTS, "hero_capture.json"), "w", encoding="utf-8") as f:
+                json.dump({"tried": tried, "chosen": best[0][0] if best else None,
+                           "lum": round(best[1], 1) if best else None, "gate": MIN_CAPTURE_LUM}, f, indent=1)
+        except Exception as e: log(f"hero_capture.json: {e}")
         try: actors.destroy_actor(cap)
         except Exception: pass
         # brief settle + existence check
         time.sleep(0.5)
-        if os.path.isfile(out_path) and os.path.getsize(out_path) > 1000:
-            log(f"hero SceneCapture -> {out_path} ({os.path.getsize(out_path)} B)")
+        if os.path.isfile(out_path) and os.path.getsize(out_path) > 1000 and best and best[1] >= MIN_CAPTURE_LUM:
+            log(f"hero SceneCapture -> {out_path} ({os.path.getsize(out_path)} B, {best[0][0]} luma {best[1]:.1f})")
             return out_path
-        log(f"hero SceneCapture wrote missing/tiny file: {out_path}")
+        log(f"hero SceneCapture too dark or missing ({tried}); trying HighResShot")
     except Exception as e:
         log(f"hero SceneCapture failed: {e}")
     # HighResShot fallback from the same hero pose (documented in ISLAND.md)
@@ -284,7 +344,7 @@ def run():
     tl = unreal.Vector(ox + t[0] * 100, oy + t[1] * 100, oz + t[2] * 100)
     shot = hero_capture(cl, tl, fov=float(lay.get("hero_fov", 55)))
     if shot:
-        link_note(f"DONE island:hephaestus hero shot: {shot} (SceneCapture2D warm capture exposure+1 / 5200K)")
+        link_note(f"DONE island:hephaestus hero shot: {shot} (SceneCapture2D exposure ladder, see hero_capture.json)")
     else:
         link_note("NEED island:hephaestus: hero SceneCapture + HighResShot both failed; hero_r2.png still owed")
     if shot: saved = save_world()  # capture actor is transient; re-save only clears anything it dirtied
