@@ -141,4 +141,131 @@ inline int Build(const Params& P, F&& Emit)
 	return Columns;
 }
 
+/** One face rectangle of the isle's surface, in cube units. Normal: 0 +X, 1 -X, 2 +Y, 3 -Y, 4 +Z (top), 5 -Z (bottom).
+ * The quad lies in the plane of its normal axis at Plane. It covers U0..U1 and V0..V1 on the other two axes, which are
+ * (Y, Z) for X normals, (X, Z) for Y normals and (X, Y) for Z normals. */
+struct Quad
+{
+	int Layer, Normal, Plane, U0, U1, V0, V1;
+};
+
+/**
+ * The isle's visible surface as merged quads, exactly the faces the cube build shows and no others. Instead of a
+ * cube instance per visible cube (Claude Island: 117k), it is a few tens of thousands of quads in one mesh per layer,
+ * with one collision body.
+ * - Tops and bottoms: rectangles of equal height and layer, merged greedily on the column grid.
+ * - Sides: the faces of a column not covered by its neighbour's [bottom, top], in runs of one layer, merged along
+ *   the wall with the next column when they line up.
+ */
+inline std::vector<Quad> Mesh(const Params& P)
+{
+	const int N = P.Radius + 2, W = 2 * N + 1;
+	std::vector<int> Tops(static_cast<size_t>(W) * W), Bots(static_cast<size_t>(W) * W);
+	std::vector<char> Sh(static_cast<size_t>(W) * W, 0);
+	for (int Y = -N; Y <= N; ++Y)
+		for (int X = -N; X <= N; ++X)
+		{
+			const int I = (Y + N) * W + (X + N);
+			Tops[I] = ColumnTop(P, X, Y);
+			Bots[I] = Tops[I] == Off ? 0 : ColumnBottom(P, X, Y);
+		}
+	auto Idx = [&](int X, int Y) { return (Y + N) * W + (X + N); };
+	auto Top = [&](int X, int Y) { return (X < -N || X > N || Y < -N || Y > N) ? Off : Tops[Idx(X, Y)]; };
+	auto Bot = [&](int X, int Y) { return (X < -N || X > N || Y < -N || Y > N) ? 0 : Bots[Idx(X, Y)]; };
+	for (int Y = -N; Y <= N; ++Y)
+		for (int X = -N; X <= N; ++X)
+			if (Top(X, Y) != Off) Sh[Idx(X, Y)] = Shore(P, X, Y) ? 1 : 0;
+	auto LayerAt = [&](int X, int Y, int Z) { return LayerOf(P, X, Y, Z, Top(X, Y), Bot(X, Y), Sh[Idx(X, Y)] != 0); };
+
+	std::vector<Quad> Out;
+	// --- tops (Normal 4) and bottoms (Normal 5): greedy rectangles over (height, layer)
+	for (int Face = 4; Face <= 5; ++Face)
+	{
+		std::vector<char> Done(static_cast<size_t>(W) * W, 0);
+		auto Key = [&](int X, int Y, int& H, int& L) {
+			const int T = Top(X, Y);
+			if (T == Off) return false;
+			H = Face == 4 ? T : Bot(X, Y);
+			L = LayerAt(X, Y, H);
+			return true;
+		};
+		for (int Y = -N; Y <= N; ++Y)
+			for (int X = -N; X <= N; ++X)
+			{
+				int H, L;
+				if (Done[Idx(X, Y)] || !Key(X, Y, H, L)) continue;
+				auto Same = [&](int AX, int AY) {
+					int H2, L2;
+					return AX <= N && AY <= N && !Done[Idx(AX, AY)] && Key(AX, AY, H2, L2) && H2 == H && L2 == L;
+				};
+				int X1 = X;
+				while (Same(X1 + 1, Y)) ++X1;
+				int Y1 = Y;
+				for (bool Grow = true; Grow;)
+				{
+					for (int AX = X; AX <= X1 && Grow; ++AX) Grow = Same(AX, Y1 + 1);
+					if (Grow) ++Y1;
+				}
+				for (int AY = Y; AY <= Y1; ++AY)
+					for (int AX = X; AX <= X1; ++AX) Done[Idx(AX, AY)] = 1;
+				Out.push_back({L, Face, Face == 4 ? H + 1 : H, X, X1 + 1, Y, Y1 + 1});
+			}
+	}
+	// --- sides: per wall line, per z, merge runs along the wall; each cell is one exposed face (X, Y, Z, layer)
+	const int DX[] = {1, -1, 0, 0}, DY[] = {0, 0, 1, -1};
+	for (int D = 0; D < 4; ++D)
+	{
+		const bool AlongY = D < 2;   // an X-facing wall runs along Y
+		for (int Line = -N; Line <= N; ++Line)
+		{
+			// Exposed faces on this wall line as (z, layer) per position along it; build a small z-range map.
+			struct Cell { int B, T; };
+			std::vector<Cell> Span(static_cast<size_t>(W));
+			int ZMin = 0, ZMax = -1;
+			for (int K = -N; K <= N; ++K)
+			{
+				const int X = AlongY ? Line : K, Y = AlongY ? K : Line;
+				Span[K + N] = {1, 0};
+				if (Top(X, Y) == Off) continue;
+				Span[K + N] = {Bot(X, Y), Top(X, Y)};
+				if (ZMax < ZMin) { ZMin = Bot(X, Y); ZMax = Top(X, Y); }
+				ZMin = ZMin < Bot(X, Y) ? ZMin : Bot(X, Y);
+				ZMax = ZMax > Top(X, Y) ? ZMax : Top(X, Y);
+			}
+			if (ZMax < ZMin) continue;
+			const int H = ZMax - ZMin + 1;
+			std::vector<int> Face(static_cast<size_t>(W) * H, -1);   // layer of the exposed face, or -1
+			for (int K = -N; K <= N; ++K)
+			{
+				const int X = AlongY ? Line : K, Y = AlongY ? K : Line;
+				const Cell C = Span[K + N];
+				if (C.B > C.T) continue;
+				const int NT = Top(X + DX[D], Y + DY[D]), NB = Bot(X + DX[D], Y + DY[D]);
+				for (int Z = C.B; Z <= C.T; ++Z)
+					if (NT == Off || Z > NT || Z < NB) Face[(Z - ZMin) * W + (K + N)] = LayerAt(X, Y, Z);
+			}
+			// greedy rectangles on (along, z)
+			for (int Z = 0; Z < H; ++Z)
+				for (int K = 0; K < W; ++K)
+				{
+					const int L = Face[Z * W + K];
+					if (L < 0) continue;
+					int K1 = K;
+					while (K1 + 1 < W && Face[Z * W + K1 + 1] == L) ++K1;
+					int Z1 = Z;
+					for (bool Grow = true; Grow;)
+					{
+						for (int A = K; A <= K1 && Grow; ++A) Grow = Z1 + 1 < H && Face[(Z1 + 1) * W + A] == L;
+						if (Grow) ++Z1;
+					}
+					for (int AZ = Z; AZ <= Z1; ++AZ)
+						for (int A = K; A <= K1; ++A) Face[AZ * W + A] = -1;
+					const int Plane = (D == 0 || D == 2) ? Line + 1 : Line;   // a +X face sits on the cube's far side
+					Out.push_back({L, D, Plane, K - N, K1 + 1 - N, Z + ZMin, Z1 + 1 + ZMin});
+				}
+		}
+	}
+	return Out;
+}
+
 }}  // namespace daedalus::isle
