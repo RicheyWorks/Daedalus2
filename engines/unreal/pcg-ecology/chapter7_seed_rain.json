@@ -1,0 +1,14 @@
+﻿{
+ "chapter": "seed_rain",
+ "sign": {"actor": "ADV_Chapter7_Sign", "text": "SEED RAIN. An acorn falls 600 m at most. The islet is 2 km out. Who carries an oak across the sea?"},
+ "dialogue": [
+  {"who": "Old Forester", "at": "Prop_Quest_PYT_ClimaxSeed", "line": "The Great Oak gave one seed. Plant it here and you only copy what we have. Carry it."},
+  {"who": "Old Forester", "at": "Prop_Live_PYT_JayFeeder", "line": "Jays bury thousands of acorns and forget half. Feed them and they fly far."},
+  {"who": "Ferry Keeper", "at": "Prop_Veh_PYT_ArkRaft", "line": "Load what the wind will not bring: willow cuttings, pine cones. The acorns ride with the jays."},
+  {"who": "Ferry Keeper", "at": "Prop_Dress_PYT_IsletBeacon", "line": "Light the beacon when four kinds of green stand on the islet, and one of them an oak."},
+  {"who": "Old Forester", "at": "Prop_Dress_PYT_ColonistCairn", "line": "Bare rock, pioneers, scrub, pine, oak. It starts again. That is succession."}
+ ],
+ "islet": {"offset_cm": [200000, 0, 0], "radius_m": 18, "start_stage": 0, "start_species": [],
+          "note": "Islet is data only for now (2 km east of Island_Pythagoras); colonise() decides arrivals. Placed in Unreal only if the referee allows a second sublevel."},
+ "fail_hint": "Wind alone brought grass and pine but no oak. Try the jays."
+}

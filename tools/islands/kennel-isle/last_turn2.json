@@ -1,0 +1,147 @@
+{
+ "err": [],
+ "mat_total": 85,
+ "dirty_amf": [],
+ "mat_saved": 85,
+ "mat_bad": [],
+ "pup_before": {
+  "n_meshes": 7,
+  "first": "Mob_CorsoPup",
+  "size_cm": [
+   71,
+   99,
+   47
+  ],
+  "verts": 384
+ },
+ "imported": {
+  "6296": {
+   "n_meshes": 2,
+   "first": "Prop_PetWaterBowl_V2",
+   "size_cm": [
+    28,
+    28,
+    10
+   ],
+   "verts": 192
+  },
+  "6297": {
+   "n_meshes": 2,
+   "first": "Prop_PetWaterBowl_V3",
+   "size_cm": [
+    40,
+    40,
+    12
+   ],
+   "verts": 288
+  },
+  "6298": {
+   "n_meshes": 2,
+   "first": "Prop_PetWaterBowl_V4",
+   "size_cm": [
+    54,
+    51,
+    26
+   ],
+   "verts": 480
+  },
+  "6299": {
+   "n_meshes": 2,
+   "first": "Prop_HayBale_V2",
+   "size_cm": [
+    100,
+    51,
+    46
+   ],
+   "verts": 288
+  },
+  "6300": {
+   "n_meshes": 2,
+   "first": "Prop_HayBale_V3",
+   "size_cm": [
+    120,
+    61,
+    67
+   ],
+   "verts": 384
+  },
+  "6301": {
+   "n_meshes": 2,
+   "first": "Prop_HayBale_V4",
+   "size_cm": [
+    140,
+    143,
+    127
+   ],
+   "verts": 480
+  },
+  "1372": {
+   "n_meshes": 10,
+   "first": "Mob_CorsoPup",
+   "size_cm": [
+    71,
+    99,
+    47
+   ],
+   "verts": 384
+  },
+  "1376": {
+   "n_meshes": 9,
+   "first": "Mob_Starfall_Hopper_K3_Body",
+   "size_cm": [
+    17,
+    25,
+    13
+   ],
+   "verts": 566
+  },
+  "1377": {
+   "n_meshes": 9,
+   "first": "Mob_Starfall_Hopper_K3_Body",
+   "size_cm": [
+    17,
+    25,
+    13
+   ],
+   "verts": 566
+  },
+  "1378": {
+   "n_meshes": 9,
+   "first": "Mob_Starfall_Hopper_K3_Body",
+   "size_cm": [
+    17,
+    25,
+    13
+   ],
+   "verts": 566
+  },
+  "1379": {
+   "n_meshes": 7,
+   "first": "Mob_Starfall_Hopper_K3_Body",
+   "size_cm": [
+    17,
+    25,
+    13
+   ],
+   "verts": 566
+  }
+ },
+ "pup_after": {
+  "n_meshes": 10,
+  "first": "Mob_CorsoPup",
+  "size_cm": [
+   71,
+   99,
+   47
+  ],
+  "verts": 384
+ },
+ "placed": [
+  "Prop_Pet_AMF_Bowl_V2",
+  "Prop_Live_AMF_HayBale_V2",
+  "Prop_Pet_AMF_Bowl_V3",
+  "Prop_Live_AMF_HayBale_V3",
+  "Prop_Pet_AMF_Bowl_V4",
+  "Prop_Live_AMF_HayBale_V4"
+ ]
+}

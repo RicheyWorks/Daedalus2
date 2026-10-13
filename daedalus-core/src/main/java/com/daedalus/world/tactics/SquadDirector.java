@@ -37,6 +37,21 @@ public final class SquadDirector {
         public static final Settings DEFAULT = new Settings(0.3, 900, 1500, 300, 2600);
     }
 
+    /**
+     * Where the cover is (ADR-060 + pythagoras's ADR-061). Given a spot and the threat, returns the best cover cell near
+     * the spot as {x, y, score}, with the score being cover plus concealment from the threat. It avoids fire.
+     * {@code BattlefieldEcology::bestCover} has exactly this shape, so it can be passed as a method reference.
+     */
+    @FunctionalInterface
+    public interface CoverField {
+        double[] bestCover(double ux, double uy, double thx, double thy, double radiusCm);
+    }
+
+    /** How orders use cover: search radius for each kind of order, and the least score worth moving for. */
+    public record CoverRules(double flankSearch, double retreatSearch, double defendSearch, double minScore) {
+        public static final CoverRules DEFAULT = new CoverRules(300, 600, 400, 0.4);
+    }
+
     private SquadDirector() {
     }
 
@@ -83,11 +98,25 @@ public final class SquadDirector {
     }
 
     public static Spec decide(String squad, long tick, List<Unit> input, Vec player, Settings s) {
+        return decide(squad, tick, input, player, s, null, CoverRules.DEFAULT);
+    }
+
+    /**
+     * As the baseline, but FLANK, RETREAT and DEFEND points move into the best cover nearby, when it scores at least
+     * {@code rules.minScore()} against the player. Each such order's why says so, with the score. ATTACK keeps the
+     * player's own spot. With no cover field this is exactly the baseline, the same spec as the C++.
+     */
+    public static Spec decide(String squad, long tick, List<Unit> input, Vec player, Settings s, CoverField cover,
+                              CoverRules rules) {
         if (input.isEmpty()) {
             return new Spec(squad, tick, List.of());
         }
         List<Unit> units = new ArrayList<>(input);
         units.sort(Comparator.<Unit>comparingDouble(u -> d2(u, player)).thenComparing(Unit::name));
+        if (units.size() > TacticalOrders.MAX_ORDERS) {
+            // A spec carries at most MAX_ORDERS orders; a bigger squad orders its nearest, as the C++ does.
+            units = new ArrayList<>(units.subList(0, TacticalOrders.MAX_ORDERS));
+        }
         double mx = 0;
         double my = 0;
         double mz = 0;
@@ -131,6 +160,15 @@ public final class SquadDirector {
                     verb = Verb.DEFEND;
                     at = mid;
                     why = "hold the squad's centre";
+                }
+            }
+            if (cover != null && (verb == Verb.FLANK || verb == Verb.RETREAT || verb == Verb.DEFEND)) {
+                double search = verb == Verb.FLANK ? rules.flankSearch() : verb == Verb.RETREAT ? rules.retreatSearch()
+                        : rules.defendSearch();
+                double[] c = cover.bestCover(at.x(), at.y(), player.x(), player.y(), search);
+                if (c != null && c.length >= 3 && Double.isFinite(c[0]) && Double.isFinite(c[1]) && c[2] >= rules.minScore()) {
+                    at = new Vec(c[0], c[1], at.z());
+                    why = why + ", into cover (" + String.format(java.util.Locale.ROOT, "%.2f", c[2]) + ")";
                 }
             }
             out.add(new Order(u.name(), verb, side, at, why));

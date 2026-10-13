@@ -1,0 +1,183 @@
+﻿{
+    "turn_save":  {
+                      "world":  "DaedalusWorld",
+                      "island_loaded":  true,
+                      "saved_maps":  [
+
+                                     ],
+                      "ok":  true,
+                      "still_dirty_maps":  [
+
+                                           ]
+                  },
+    "fix":  {
+                "imported_new":  42,
+                "chapter_props":  66,
+                "checked":  753,
+                "snapped":  0,
+                "worst_before_cm":  2.0,
+                "deleted":  [
+
+                            ],
+                "others_dirty":  [
+
+                                 ]
+            },
+    "verify":  {
+                   "quest_triggers":  [
+                                          "ash_field",
+                                          "bramble_wall",
+                                          "climax",
+                                          "fire_keeper",
+                                          "meadow_keepers",
+                                          "pine_shield",
+                                          "riverbank",
+                                          "seed_rain"
+                                      ],
+                   "chapter_props":  58,
+                   "actors":  828,
+                   "ground_fit":  {
+                                      "checked":  764,
+                                      "floating":  0,
+                                      "sunk":  0,
+                                      "off_island":  0,
+                                      "worst_cm":  2.0,
+                                      "examples":  [
+
+                                                   ]
+                                  },
+                   "water_chain_ok":  true,
+                   "water":  {
+                                 "W1_spring":  true,
+                                 "W2_stream\u003e=6":  true,
+                                 "W3_pond":  true,
+                                 "W4_filter":  true,
+                                 "W5_well":  true,
+                                 "W6_cistern":  true,
+                                 "W7_rain\u003e=2":  true,
+                                 "W8_troughs\u003e=1":  true
+                             },
+                   "drinkable_sources":  19,
+                   "livestock":  {
+                                     "Mob_Sheep_Body":  5,
+                                     "Mob_Goat_Body":  2,
+                                     "Mob_Chicken_Body":  6,
+                                     "Mob_Cow_Body":  1,
+                                     "Mob_Bee_Body":  4
+                                 },
+                   "livestock_ok":  true,
+                   "food_loop":  {
+                                     "feed_present":  true,
+                                     "shelter":  true,
+                                     "coops":  true,
+                                     "hives":  true,
+                                     "troughs_for_pen":  true
+                                 },
+                   "foods":  [
+                                 "BerryBasket",
+                                 "Cheese",
+                                 "EggBasket",
+                                 "HerbBread",
+                                 "HoneyJar",
+                                 "MilkPail",
+                                 "NutSack",
+                                 "Wool"
+                             ],
+                   "herb_species":  12,
+                   "herb_stages_ok":  true,
+                   "biomes":  {
+                                  "YoungMeadow":  176,
+                                  "BrambleScrub":  70,
+                                  "PineStand":  57,
+                                  "OldGrowthOak":  53,
+                                  "WillowRiverbank":  148
+                              }
+               },
+    "succession":  {
+                       "YoungMeadow":  {
+                                           "species":  {
+                                                           "Bramble":  26,
+                                                           "Grass":  150
+                                                       },
+                                           "shannon":  0.419,
+                                           "stage":  0.15
+                                       },
+                       "BrambleScrub":  {
+                                            "species":  {
+                                                            "Oak":  2,
+                                                            "Pine":  17,
+                                                            "Bramble":  16,
+                                                            "Grass":  35
+                                                        },
+                                            "shannon":  1.129,
+                                            "stage":  0.8
+                                        },
+                       "PineStand":  {
+                                         "species":  {
+                                                         "Oak":  3,
+                                                         "Pine":  19,
+                                                         "Bramble":  13,
+                                                         "Fern":  3,
+                                                         "Grass":  19
+                                                     },
+                                         "shannon":  1.379,
+                                         "stage":  1.11
+                                     },
+                       "OldGrowthOak":  {
+                                            "species":  {
+                                                            "Oak":  11,
+                                                            "Pine":  3,
+                                                            "Bramble":  4,
+                                                            "Fern":  35
+                                                        },
+                                            "shannon":  0.958,
+                                            "stage":  1.47
+                                        },
+                       "WillowRiverbank":  {
+                                               "species":  {
+                                                               "Oak":  7,
+                                                               "Willow":  4,
+                                                               "Bramble":  2,
+                                                               "Fern":  110,
+                                                               "Sedge":  25
+                                                           },
+                                               "shannon":  0.821,
+                                               "stage":  0.95
+                                           }
+                   },
+    "quest":  {
+                  "progress":  [
+                                   [
+                                       "ash_field",
+                                       true
+                                   ],
+                                   [
+                                       "meadow_keepers",
+                                       false
+                                   ]
+                               ],
+                  "triggers":  [
+                                   "PYT_QuestTrigger_ash_field",
+                                   "PYT_QuestTrigger_bramble_wall",
+                                   "PYT_QuestTrigger_climax",
+                                   "PYT_QuestTrigger_fire_keeper",
+                                   "PYT_QuestTrigger_meadow_keepers",
+                                   "PYT_QuestTrigger_pine_shield",
+                                   "PYT_QuestTrigger_riverbank",
+                                   "PYT_QuestTrigger_seed_rain"
+                               ],
+                  "placed_ch7":  {
+                                     "Prop_Live_PYT_JayFeeder":  2,
+                                     "Prop_Veh_PYT_ArkRaft":  1
+                                 },
+                  "placed_ch8":  1
+              },
+    "screenshot":  "C:\\Users\\730ri\\pyth_island_turn.png",
+    "save_mine":  {
+                      "saved_mine":  2,
+                      "ok":  true,
+                      "still_dirty":  [
+
+                                      ]
+                  }
+}

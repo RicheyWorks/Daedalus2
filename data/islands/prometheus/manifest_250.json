@@ -1,0 +1,866 @@
+[
+{
+"i": 250,
+"name": "Stock_Shelter_V00",
+"cat": "stock",
+"tris": 24,
+"kind": "Shelter"
+},
+{
+"i": 251,
+"name": "Stock_Shelter_V01",
+"cat": "stock",
+"tris": 24,
+"kind": "Shelter"
+},
+{
+"i": 252,
+"name": "Stock_Shelter_V02",
+"cat": "stock",
+"tris": 24,
+"kind": "Shelter"
+},
+{
+"i": 253,
+"name": "Stock_Shelter_V03",
+"cat": "stock",
+"tris": 24,
+"kind": "Shelter"
+},
+{
+"i": 254,
+"name": "Stock_Shelter_V04",
+"cat": "stock",
+"tris": 24,
+"kind": "Shelter"
+},
+{
+"i": 255,
+"name": "Stock_Shelter_V05",
+"cat": "stock",
+"tris": 24,
+"kind": "Shelter"
+},
+{
+"i": 256,
+"name": "Stock_Shelter_V06",
+"cat": "stock",
+"tris": 24,
+"kind": "Shelter"
+},
+{
+"i": 257,
+"name": "Stock_Shelter_V07",
+"cat": "stock",
+"tris": 24,
+"kind": "Shelter"
+},
+{
+"i": 258,
+"name": "Stock_SaltLick_V00",
+"cat": "stock",
+"tris": 12,
+"kind": "SaltLick"
+},
+{
+"i": 259,
+"name": "Stock_SaltLick_V01",
+"cat": "stock",
+"tris": 12,
+"kind": "SaltLick"
+},
+{
+"i": 260,
+"name": "Stock_SaltLick_V02",
+"cat": "stock",
+"tris": 12,
+"kind": "SaltLick"
+},
+{
+"i": 261,
+"name": "Stock_SaltLick_V03",
+"cat": "stock",
+"tris": 12,
+"kind": "SaltLick"
+},
+{
+"i": 262,
+"name": "Stock_Nestbox_V00",
+"cat": "stock",
+"tris": 12,
+"kind": "Nestbox"
+},
+{
+"i": 263,
+"name": "Stock_Nestbox_V01",
+"cat": "stock",
+"tris": 12,
+"kind": "Nestbox"
+},
+{
+"i": 264,
+"name": "Stock_Nestbox_V02",
+"cat": "stock",
+"tris": 12,
+"kind": "Nestbox"
+},
+{
+"i": 265,
+"name": "Stock_Nestbox_V03",
+"cat": "stock",
+"tris": 12,
+"kind": "Nestbox"
+},
+{
+"i": 266,
+"name": "Stock_Nestbox_V04",
+"cat": "stock",
+"tris": 12,
+"kind": "Nestbox"
+},
+{
+"i": 267,
+"name": "Stock_Nestbox_V05",
+"cat": "stock",
+"tris": 12,
+"kind": "Nestbox"
+},
+{
+"i": 268,
+"name": "Crop_Barley_Sprout",
+"cat": "crop",
+"tris": 40,
+"stage": "Sprout"
+},
+{
+"i": 269,
+"name": "Crop_Barley_Grown",
+"cat": "crop",
+"tris": 40,
+"stage": "Grown"
+},
+{
+"i": 270,
+"name": "Crop_Barley_Ripe",
+"cat": "crop",
+"tris": 40,
+"stage": "Ripe"
+},
+{
+"i": 271,
+"name": "Crop_Oat_Sprout",
+"cat": "crop",
+"tris": 40,
+"stage": "Sprout"
+},
+{
+"i": 272,
+"name": "Crop_Oat_Grown",
+"cat": "crop",
+"tris": 40,
+"stage": "Grown"
+},
+{
+"i": 273,
+"name": "Crop_Oat_Ripe",
+"cat": "crop",
+"tris": 40,
+"stage": "Ripe"
+},
+{
+"i": 274,
+"name": "Crop_Flax_Sprout",
+"cat": "crop",
+"tris": 40,
+"stage": "Sprout"
+},
+{
+"i": 275,
+"name": "Crop_Flax_Grown",
+"cat": "crop",
+"tris": 40,
+"stage": "Grown"
+},
+{
+"i": 276,
+"name": "Crop_Flax_Ripe",
+"cat": "crop",
+"tris": 40,
+"stage": "Ripe"
+},
+{
+"i": 277,
+"name": "Crop_Pea_Sprout",
+"cat": "crop",
+"tris": 40,
+"stage": "Sprout"
+},
+{
+"i": 278,
+"name": "Crop_Pea_Grown",
+"cat": "crop",
+"tris": 40,
+"stage": "Grown"
+},
+{
+"i": 279,
+"name": "Crop_Pea_Ripe",
+"cat": "crop",
+"tris": 40,
+"stage": "Ripe"
+},
+{
+"i": 280,
+"name": "Crop_Turnip_Sprout",
+"cat": "crop",
+"tris": 40,
+"stage": "Sprout"
+},
+{
+"i": 281,
+"name": "Crop_Turnip_Grown",
+"cat": "crop",
+"tris": 40,
+"stage": "Grown"
+},
+{
+"i": 282,
+"name": "Crop_Turnip_Ripe",
+"cat": "crop",
+"tris": 40,
+"stage": "Ripe"
+},
+{
+"i": 283,
+"name": "Crop_Kale_Sprout",
+"cat": "crop",
+"tris": 40,
+"stage": "Sprout"
+},
+{
+"i": 284,
+"name": "Crop_Kale_Grown",
+"cat": "crop",
+"tris": 40,
+"stage": "Grown"
+},
+{
+"i": 285,
+"name": "Crop_Kale_Ripe",
+"cat": "crop",
+"tris": 40,
+"stage": "Ripe"
+},
+{
+"i": 286,
+"name": "Crop_Squash_Sprout",
+"cat": "crop",
+"tris": 40,
+"stage": "Sprout"
+},
+{
+"i": 287,
+"name": "Crop_Squash_Grown",
+"cat": "crop",
+"tris": 40,
+"stage": "Grown"
+},
+{
+"i": 288,
+"name": "Crop_Squash_Ripe",
+"cat": "crop",
+"tris": 40,
+"stage": "Ripe"
+},
+{
+"i": 289,
+"name": "Crop_Bean_Sprout",
+"cat": "crop",
+"tris": 40,
+"stage": "Sprout"
+},
+{
+"i": 290,
+"name": "Crop_Bean_Grown",
+"cat": "crop",
+"tris": 40,
+"stage": "Grown"
+},
+{
+"i": 291,
+"name": "Crop_Bean_Ripe",
+"cat": "crop",
+"tris": 40,
+"stage": "Ripe"
+},
+{
+"i": 292,
+"name": "Crop_Clover_Sprout",
+"cat": "crop",
+"tris": 40,
+"stage": "Sprout"
+},
+{
+"i": 293,
+"name": "Crop_Clover_Grown",
+"cat": "crop",
+"tris": 40,
+"stage": "Grown"
+},
+{
+"i": 294,
+"name": "Crop_Clover_Ripe",
+"cat": "crop",
+"tris": 40,
+"stage": "Ripe"
+},
+{
+"i": 295,
+"name": "Crop_Lucerne_Sprout",
+"cat": "crop",
+"tris": 40,
+"stage": "Sprout"
+},
+{
+"i": 296,
+"name": "Crop_Lucerne_Grown",
+"cat": "crop",
+"tris": 40,
+"stage": "Grown"
+},
+{
+"i": 297,
+"name": "Crop_Lucerne_Ripe",
+"cat": "crop",
+"tris": 40,
+"stage": "Ripe"
+},
+{
+"i": 298,
+"name": "Crop_Millet_Sprout",
+"cat": "crop",
+"tris": 40,
+"stage": "Sprout"
+},
+{
+"i": 299,
+"name": "Crop_Millet_Grown",
+"cat": "crop",
+"tris": 40,
+"stage": "Grown"
+},
+{
+"i": 300,
+"name": "Crop_Millet_Ripe",
+"cat": "crop",
+"tris": 40,
+"stage": "Ripe"
+},
+{
+"i": 301,
+"name": "Crop_Buckwheat_Sprout",
+"cat": "crop",
+"tris": 40,
+"stage": "Sprout"
+},
+{
+"i": 302,
+"name": "Crop_Buckwheat_Grown",
+"cat": "crop",
+"tris": 40,
+"stage": "Grown"
+},
+{
+"i": 303,
+"name": "Crop_Buckwheat_Ripe",
+"cat": "crop",
+"tris": 40,
+"stage": "Ripe"
+},
+{
+"i": 304,
+"name": "ToneStone_C_V00",
+"cat": "tone",
+"tris": 1176,
+"pc": 0
+},
+{
+"i": 305,
+"name": "ToneStone_Cs_V01",
+"cat": "tone",
+"tris": 1176,
+"pc": 1
+},
+{
+"i": 306,
+"name": "ToneStone_D_V02",
+"cat": "tone",
+"tris": 1176,
+"pc": 2
+},
+{
+"i": 307,
+"name": "ToneStone_Ds_V03",
+"cat": "tone",
+"tris": 1176,
+"pc": 3
+},
+{
+"i": 308,
+"name": "ToneStone_E_V04",
+"cat": "tone",
+"tris": 1176,
+"pc": 4
+},
+{
+"i": 309,
+"name": "ToneStone_F_V05",
+"cat": "tone",
+"tris": 1176,
+"pc": 5
+},
+{
+"i": 310,
+"name": "ToneStone_Fs_V06",
+"cat": "tone",
+"tris": 1176,
+"pc": 6
+},
+{
+"i": 311,
+"name": "ToneStone_G_V07",
+"cat": "tone",
+"tris": 1176,
+"pc": 7
+},
+{
+"i": 312,
+"name": "ToneStone_Gs_V08",
+"cat": "tone",
+"tris": 1176,
+"pc": 8
+},
+{
+"i": 313,
+"name": "ToneStone_A_V09",
+"cat": "tone",
+"tris": 1176,
+"pc": 9
+},
+{
+"i": 314,
+"name": "ToneStone_As_V10",
+"cat": "tone",
+"tris": 1176,
+"pc": 10
+},
+{
+"i": 315,
+"name": "ToneStone_B_V11",
+"cat": "tone",
+"tris": 1176,
+"pc": 11
+},
+{
+"i": 316,
+"name": "ToneStone_C_V12",
+"cat": "tone",
+"tris": 1176,
+"pc": 0
+},
+{
+"i": 317,
+"name": "ToneStone_Cs_V13",
+"cat": "tone",
+"tris": 1176,
+"pc": 1
+},
+{
+"i": 318,
+"name": "ToneStone_D_V14",
+"cat": "tone",
+"tris": 1176,
+"pc": 2
+},
+{
+"i": 319,
+"name": "ToneStone_Ds_V15",
+"cat": "tone",
+"tris": 1176,
+"pc": 3
+},
+{
+"i": 320,
+"name": "ToneStone_E_V16",
+"cat": "tone",
+"tris": 1176,
+"pc": 4
+},
+{
+"i": 321,
+"name": "ToneStone_F_V17",
+"cat": "tone",
+"tris": 1176,
+"pc": 5
+},
+{
+"i": 322,
+"name": "ToneStone_Fs_V18",
+"cat": "tone",
+"tris": 1176,
+"pc": 6
+},
+{
+"i": 323,
+"name": "ToneStone_G_V19",
+"cat": "tone",
+"tris": 1176,
+"pc": 7
+},
+{
+"i": 324,
+"name": "ToneStone_Gs_V20",
+"cat": "tone",
+"tris": 1176,
+"pc": 8
+},
+{
+"i": 325,
+"name": "ToneStone_A_V21",
+"cat": "tone",
+"tris": 1176,
+"pc": 9
+},
+{
+"i": 326,
+"name": "ToneStone_As_V22",
+"cat": "tone",
+"tris": 1176,
+"pc": 10
+},
+{
+"i": 327,
+"name": "ToneStone_B_V23",
+"cat": "tone",
+"tris": 1176,
+"pc": 11
+},
+{
+"i": 328,
+"name": "ToneStone_C_V24",
+"cat": "tone",
+"tris": 1176,
+"pc": 0
+},
+{
+"i": 329,
+"name": "ToneStone_Cs_V25",
+"cat": "tone",
+"tris": 1176,
+"pc": 1
+},
+{
+"i": 330,
+"name": "ToneStone_D_V26",
+"cat": "tone",
+"tris": 1176,
+"pc": 2
+},
+{
+"i": 331,
+"name": "ToneStone_Ds_V27",
+"cat": "tone",
+"tris": 1176,
+"pc": 3
+},
+{
+"i": 332,
+"name": "ToneStone_E_V28",
+"cat": "tone",
+"tris": 1176,
+"pc": 4
+},
+{
+"i": 333,
+"name": "ToneStone_F_V29",
+"cat": "tone",
+"tris": 1176,
+"pc": 5
+},
+{
+"i": 334,
+"name": "ToneStone_Fs_V30",
+"cat": "tone",
+"tris": 1176,
+"pc": 6
+},
+{
+"i": 335,
+"name": "ToneStone_G_V31",
+"cat": "tone",
+"tris": 1176,
+"pc": 7
+},
+{
+"i": 336,
+"name": "ToneStone_Gs_V32",
+"cat": "tone",
+"tris": 1176,
+"pc": 8
+},
+{
+"i": 337,
+"name": "ToneStone_A_V33",
+"cat": "tone",
+"tris": 1176,
+"pc": 9
+},
+{
+"i": 338,
+"name": "ToneStone_As_V34",
+"cat": "tone",
+"tris": 1176,
+"pc": 10
+},
+{
+"i": 339,
+"name": "ToneStone_B_V35",
+"cat": "tone",
+"tris": 1176,
+"pc": 11
+},
+{
+"i": 340,
+"name": "ToneStone_C_V36",
+"cat": "tone",
+"tris": 1176,
+"pc": 0
+},
+{
+"i": 341,
+"name": "ToneStone_Cs_V37",
+"cat": "tone",
+"tris": 1176,
+"pc": 1
+},
+{
+"i": 342,
+"name": "ToneStone_D_V38",
+"cat": "tone",
+"tris": 1176,
+"pc": 2
+},
+{
+"i": 343,
+"name": "ToneStone_Ds_V39",
+"cat": "tone",
+"tris": 1176,
+"pc": 3
+},
+{
+"i": 344,
+"name": "ToneStone_E_V40",
+"cat": "tone",
+"tris": 1176,
+"pc": 4
+},
+{
+"i": 345,
+"name": "ToneStone_F_V41",
+"cat": "tone",
+"tris": 1176,
+"pc": 5
+},
+{
+"i": 346,
+"name": "ToneStone_Fs_V42",
+"cat": "tone",
+"tris": 1176,
+"pc": 6
+},
+{
+"i": 347,
+"name": "ToneStone_G_V43",
+"cat": "tone",
+"tris": 1176,
+"pc": 7
+},
+{
+"i": 348,
+"name": "ToneStone_Gs_V44",
+"cat": "tone",
+"tris": 1176,
+"pc": 8
+},
+{
+"i": 349,
+"name": "ToneStone_A_V45",
+"cat": "tone",
+"tris": 1176,
+"pc": 9
+},
+{
+"i": 350,
+"name": "ToneStone_As_V46",
+"cat": "tone",
+"tris": 1176,
+"pc": 10
+},
+{
+"i": 351,
+"name": "ToneStone_B_V47",
+"cat": "tone",
+"tris": 1176,
+"pc": 11
+},
+{
+"i": 352,
+"name": "ToneStone_C_V48",
+"cat": "tone",
+"tris": 1176,
+"pc": 0
+},
+{
+"i": 353,
+"name": "ToneStone_Cs_V49",
+"cat": "tone",
+"tris": 1176,
+"pc": 1
+},
+{
+"i": 354,
+"name": "ToneStone_D_V50",
+"cat": "tone",
+"tris": 1176,
+"pc": 2
+},
+{
+"i": 355,
+"name": "ToneStone_Ds_V51",
+"cat": "tone",
+"tris": 1176,
+"pc": 3
+},
+{
+"i": 356,
+"name": "ToneStone_E_V52",
+"cat": "tone",
+"tris": 1176,
+"pc": 4
+},
+{
+"i": 357,
+"name": "ToneStone_F_V53",
+"cat": "tone",
+"tris": 1176,
+"pc": 5
+},
+{
+"i": 358,
+"name": "ToneStone_Fs_V54",
+"cat": "tone",
+"tris": 1176,
+"pc": 6
+},
+{
+"i": 359,
+"name": "ToneStone_G_V55",
+"cat": "tone",
+"tris": 1176,
+"pc": 7
+},
+{
+"i": 360,
+"name": "ToneStone_Gs_V56",
+"cat": "tone",
+"tris": 1176,
+"pc": 8
+},
+{
+"i": 361,
+"name": "ToneStone_A_V57",
+"cat": "tone",
+"tris": 1176,
+"pc": 9
+},
+{
+"i": 362,
+"name": "ToneStone_As_V58",
+"cat": "tone",
+"tris": 1176,
+"pc": 10
+},
+{
+"i": 363,
+"name": "ToneStone_B_V59",
+"cat": "tone",
+"tris": 1176,
+"pc": 11
+},
+{
+"i": 364,
+"name": "Rock_Basalt_V00",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 365,
+"name": "Rock_Basalt_V01",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 366,
+"name": "Rock_Basalt_V02",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 367,
+"name": "Rock_Basalt_V03",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 368,
+"name": "Rock_Basalt_V04",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 369,
+"name": "Rock_Basalt_V05",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 370,
+"name": "Rock_Basalt_V06",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 371,
+"name": "Rock_Basalt_V07",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 372,
+"name": "Rock_Basalt_V08",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 373,
+"name": "Rock_Basalt_V09",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 374,
+"name": "Rock_Basalt_V10",
+"cat": "rock",
+"tris": 80
+}
+]

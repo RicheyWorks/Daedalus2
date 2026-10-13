@@ -76,3 +76,51 @@ fought before this ADR.
 
 - The editor build and the `tactics` scenario run in unreal-team's next rotation slot.
 - A transport other than the bridge waits for a team-codex request.
+
+## Addendum, 2026-10-13 02:30: orders that use cover (Java)
+
+`SquadDirector.decide(..., CoverField, CoverRules)` moves the FLANK, RETREAT and DEFEND points into the best cover
+nearby:
+- each kind of order searches its own radius: 3 m to flank, 6 m to retreat, 4 m to defend;
+- cover is used only when it scores at least 0.4 against the player, and the why says so, for example
+  "cut off escape, left, into cover (0.80)";
+- ATTACK still goes for the player.
+
+`CoverField` has the same shape as pythagoras's `BattlefieldEcology::bestCover` (ADR-061, branch
+`pythagoras/battlefield-ecology`), so the reactive battlefield plugs straight in once it is merged. Unreal needs no
+change, because the cover-aware points simply arrive in DTO 1.
+
+With no field, the output is exactly the baseline, so C++ parity still holds. `CoverAwareDirectorTest` passes 6/6,
+and the min-score mutant is caught. The full `daedalus-core` verify is green: 576 tests, plus checkstyle and the
+other gates.
+
+## Addendum, 2026-10-13 05:2x: Astra's integration requirements, answered
+
+Astra (team-codex) wired the Java Adaptive Combat Director onto DTO 1 unchanged (PR32) and listed five gaps on the
+Unreal side. All five are closed:
+1. **PLAYER health:** the PLAYER event now carries the hero's health. It used to carry 0, which read as a dead
+   player. -1 means unknown.
+2. **Stale-order fencing:** `ApplyOrders` keeps the last outside tick for each squad. A newer tick applies, the same
+   tick returns `repeat: tick N` and is ignored, and an older tick is `refused: stale tick N <= M`. Fencing runs
+   after parsing, so a bad spec still reports its line.
+3. **Trusted roster bootstrap:** `TakeRoster(squad)` returns **DTR 1** with the session, squad, tick, and each
+   unit's id, kind, health, max health, position and whether it sees the player:
+   ```
+   DTR 1
+   session <id> squad <id> tick <n>
+   unit <id> <KIND> <health> <maxHealth> <x> <y> <z> <sees 0|1>
+   ```
+   Java reads it with `TacticalOrders.parseRoster`, and the parity file carries a C++-written roster. DTE 1 is
+   unchanged.
+4. **Session:** `UDaedalusTactics` makes a new 12-hex-digit session id each time the world starts, exposed by
+   `SessionId()`, in every roster and in `Stats()`.
+5. **Size cap:** a squad bigger than 256 orders its nearest 256 in both C++ and Java, so a local spec can never be
+   refused for size. Split big packs into squads.
+
+Tests: C++ 34/34 under ASan/UBSan, Java `TacticsParityTest` 8/8, and `daedalus-core` verify is green. The Unreal
+side compiles in the first editor slot after the break; unreal-team owns that build, the binding and the playtest.
+
+6. **Casualties reach Java** (found reviewing PR32): `AdaptiveDirector` counts casualty pressure as roster units at
+   health 0, but the roster only listed living foes, so pressure could never rise. Fallen squad members now stay on
+   the roster for the session at health 0 (`NoteDown`), capped at 256. The `tactics` scenario also checks the
+   roster, the session, repeat ticks and stale refusal.

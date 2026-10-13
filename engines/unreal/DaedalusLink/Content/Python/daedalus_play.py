@@ -854,6 +854,7 @@ def scenario_tactics(p):
             h.fire()
             yield
     events = tac.take_events()
+    roster = tac.take_roster("test-squad")
     h.set_editor_property("invulnerable", False)
     return {"checks": [
         _check("three foes placed as one squad", placed == 3 and len(squad) == 3, f"placed={placed}"),
@@ -864,6 +865,12 @@ def scenario_tactics(p):
         _check("Java's order holds against the local director", held, f"held={held}"),
         _check("the retreating foe got further away", moved > 150, f"moved={moved}"),
         _check("a bad spec is refused whole", bad.startswith("refused: line 3"), bad),
+        _check("the roster is DTR 1 with this world's session", roster.startswith("DTR 1\nsession " + tac.session_id() + " squad test-squad"),
+               roster[:160]),
+        _check("a fallen foe stays on the roster at health 0", ("event DOWN" not in events) or (" 0.0 " in roster), roster[:300]),
+        _check("a repeated Java tick is ignored, an older one refused",
+               tac.apply_orders("DTO 1\nsquad test-squad tick 99\n").startswith("repeat")
+               and tac.apply_orders("DTO 1\nsquad test-squad tick 98\n").startswith("refused: stale")),
         _check("hits come back as DTE 1 events", events.startswith("DTE 1") and ("event HIT" in events or "event DOWN" in events), events[:200]),
     ], "states": sorted(states), "stats": tac.stats(), "spec": spec}
 

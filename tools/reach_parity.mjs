@@ -48,6 +48,46 @@ for (const r of rows) {
 }
 const orrGood = herbs === 24 && brews === 576 && herbsOk === herbs && brewsOk === brews && orr.HERBS.length === 24;
 console.log(`${orrGood ? "ok  " : "FAIL"} orrery herbs ${herbsOk}/${herbs}, brews ${brewsOk}/${brews}`);
-const total = lines.length + 1, passed = ok + (orrGood ? 1 : 0);
+// The merged surface mesh (mesh()) against the C++ Mesh(): quad count and hash, per isle.
+const meshRows = readFileSync(join(root, "engines/unreal/core-test/voxel_mesh_parity.txt"), "utf8").split("\n").filter((l) => l && !l.startsWith("#"));
+let meshOk = 0;
+for (const r of meshRows) {
+  const [a, want] = r.split("|").map((x) => x.trim());
+  const lod = a.startsWith("lod") ? Number(a.split(" ")[0].slice(3)) : 1;
+  const [seed, radius, summitHeight, depth, pondX, pondY, pondRadius] = (lod > 1 ? a.split(" ").slice(1) : a.split(" ")).map(Number);
+  const prm = { seed, radius, summitHeight, depth, pondX, pondY, pondRadius };
+  const q = lod > 1 ? core.meshLod(prm, lod) : core.mesh(prm);
+  let h = 14695981039346656037n;
+  for (const quad of q) for (const v of quad) { h ^= BigInt(v >>> 0); h = (h * 1099511628211n) & MASK; }
+  const got = `${q.length} ${h}`;
+  const good = got === want;
+  console.log(`${good ? "ok  " : "FAIL"} mesh${lod > 1 ? " lod" + lod : ""} seed ${seed} radius ${radius}: ${q.length} quads${good ? "" : ` (want ${want})`}`);
+  meshOk += good;
+}
+// The squad director (tactics-core.js) against the C++ Decide()+Write(): 40 seeded squads, byte for byte.
+const tac = await import(join(root, "daedalus-server/src/main/resources/static/tactics-core.js"));
+const tl = readFileSync(join(root, "engines/unreal/core-test/tactics_parity.txt"), "utf8").split("\n");
+let tacCases = 0, tacOk = 0;
+for (let i = 0; i < tl.length; i++) {
+  if (!tl[i].startsWith("case ")) continue;
+  const c = tl[i].split(" ");
+  const id = Number(c[1]);
+  const player = { x: Number(c[3]), y: Number(c[4]), z: Number(c[5]) };
+  const units = [];
+  let j = i + 1;
+  for (; tl[j].startsWith("unit "); j++) {
+    const u = tl[j].split(" ");
+    units.push({ name: u[1], at: { x: Number(u[2]), y: Number(u[3]), z: Number(u[4]) }, health: Number(u[5]), maxHealth: Number(u[6]), seesPlayer: u[7] === "1" });
+  }
+  let want = "";
+  for (j = j + 1; tl[j] !== "end"; j++) want += tl[j] + "\n";
+  const got = tac.write(tac.decide("sq-" + id, id, units, player));
+  tacCases++;
+  if (got === want) tacOk++; else console.log(`FAIL tactics case ${id}\n  want ${JSON.stringify(want)}\n  got  ${JSON.stringify(got)}`);
+}
+const numOk = tac.num(0.25) === "0.2" && tac.num(0.35) === "0.3" && tac.num(-0.04) === "-0.0" && tac.num(-0.0) === "-0.0" && tac.num(-0.25) === "-0.2" && tac.num(0.75) === "0.8";
+const tacGood = tacCases === 40 && tacOk === 40 && numOk;
+console.log(`${tacGood ? "ok  " : "FAIL"} tactics director ${tacOk}/${tacCases} squads byte for byte; printf rounding ${numOk ? "ok" : "WRONG"}`);
+const total = lines.length + 1 + meshRows.length + 1, passed = ok + (orrGood ? 1 : 0) + meshOk + (tacGood ? 1 : 0);
 console.log(`${passed}/${total}`);
 process.exit(passed === total ? 0 : 1);

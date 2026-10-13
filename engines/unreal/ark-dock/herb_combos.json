@@ -1,0 +1,21 @@
+{
+ "schema": "daedalus.economy/v0",
+ "island": "2hot2trot",
+ "mechanic": "Ark Mortar herb combos: put any 3 herbs in the mortar; an exact 3-herb set makes the full product, any 2 herbs from a set make its _lite version at half strength. Order does not matter. Unknown sets make herb_mash (compost).",
+ "stations": [{"id": "ark_mortar", "tier": 1}],
+ "items": [
+  {"id": "ark_tonic", "kind": "consumable", "effect": {"heal": 40}},
+  {"id": "storm_salve", "kind": "consumable", "effect": {"cold_resist_s": 300, "heal": 10}},
+  {"id": "seafarer_tea", "kind": "consumable", "effect": {"thirst": 35, "stamina": 20}},
+  {"id": "moon_draught", "kind": "consumable", "effect": {"night_vision_s": 240}},
+  {"id": "herd_lick", "kind": "feed", "effect": {"livestock_happiness": 25, "breed_chance": 0.1}},
+  {"id": "herb_mash", "kind": "material"}
+ ],
+ "recipes": [
+  {"id": "ark_tonic", "station": "ark_mortar", "seconds": 8, "in": [{"item": "mint", "n": 1}, {"item": "chamomile", "n": 1}, {"item": "ginger", "n": 1}], "out": [{"item": "ark_tonic", "n": 1}]},
+  {"id": "storm_salve", "station": "ark_mortar", "seconds": 8, "in": [{"item": "aloe", "n": 1}, {"item": "lavender", "n": 1}, {"item": "sage", "n": 1}], "out": [{"item": "storm_salve", "n": 1}]},
+  {"id": "seafarer_tea", "station": "ark_mortar", "seconds": 8, "in": [{"item": "lemongrass", "n": 1}, {"item": "mint", "n": 1}, {"item": "basil", "n": 1}], "out": [{"item": "seafarer_tea", "n": 1}]},
+  {"id": "moon_draught", "station": "ark_mortar", "seconds": 8, "in": [{"item": "moonpetal", "n": 1}, {"item": "angelica", "n": 1}, {"item": "nettle", "n": 1}], "out": [{"item": "moon_draught", "n": 1}]},
+  {"id": "herd_lick", "station": "ark_mortar", "seconds": 8, "in": [{"item": "clover", "n": 1}, {"item": "dandelion", "n": 1}, {"item": "rosemary", "n": 1}], "out": [{"item": "herd_lick", "n": 1}]}
+ ]
+}

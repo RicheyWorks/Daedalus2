@@ -402,7 +402,7 @@ if (-not (Test-Path (Join-Path $PluginSource "DaedalusLink.uplugin"))) {
     $up = Get-Content $Project -Raw | ConvertFrom-Json
     $plugins = @()
     if ($up.PSObject.Properties.Name -contains "Plugins" -and $up.Plugins) { $plugins = @($up.Plugins) }
-    $needed = @("DaedalusLink", "ProceduralMeshComponent", "PythonScriptPlugin", "EditorScriptingUtilities")
+    $needed = @("DaedalusLink", "ProceduralMeshComponent", "PythonScriptPlugin", "EditorScriptingUtilities", "PCG")   # PCG: procedural ecology (engines/unreal/pcg-ecology)
     foreach ($name in $needed) {
         $hit = $plugins | Where-Object { $_.Name -eq $name }
         if ($hit) { $hit.Enabled = $true } else { $plugins += [pscustomobject]@{ Name = $name; Enabled = $true } }

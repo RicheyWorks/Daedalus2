@@ -75,8 +75,40 @@ resize();
 // Unreal is X/Y across and Z up, in cm; here one cube is one unit with Y up: (x, y, z)ue -> (x, z, y).
 const toScene = (x, y, z) => new THREE.Vector3(x, z, y);
 
-const cube = new THREE.BoxGeometry(1, 1, 1);
 const centres = {};
+
+const LOD_NEAR = 700, LOD_FAR = 1600;   // scene units (1 = one cube = 1 m) from the camera to the isle's centre
+
+/** Merged quads ([layer, normal, plane, u0, u1, v0, v1]) as one mesh per layer, offset to the isle's place. */
+function quadMeshes(quads, [ox, oy, oz], mats) {
+  const per = mats.map(() => ({ pos: [], nrm: [], idx: [] }));
+  const NRM = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]];
+  const corner = (q, u, v) => q[1] <= 1 ? [q[2], u, v] : q[1] <= 3 ? [u, q[2], v] : [u, v, q[2]];
+  for (const q of quads) {
+    const b = per[q[0]];
+    const pts = [corner(q, q[3], q[5]), corner(q, q[4], q[5]), corner(q, q[4], q[6]), corner(q, q[3], q[6])]
+      .map(([x, y, z]) => toScene(ox + x, oy + y, oz + z));
+    const n = NRM[q[1]];
+    const ns = toScene(n[0], n[1], n[2]);
+    const base = b.pos.length / 3;
+    for (const v of pts) { b.pos.push(v.x, v.y, v.z); b.nrm.push(ns.x, ns.y, ns.z); }
+    // three.js front faces wind counter-clockwise seen from the normal; the axis swap flips handedness, so check.
+    const e1 = pts[1].clone().sub(pts[0]), e2 = pts[2].clone().sub(pts[0]);
+    if (e1.cross(e2).dot(ns) > 0) b.idx.push(base, base + 1, base + 2, base, base + 2, base + 3);
+    else b.idx.push(base, base + 2, base + 1, base, base + 3, base + 2);
+  }
+  const g = new THREE.Group();
+  per.forEach((b, l) => {
+    if (!b.idx.length) return;
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.Float32BufferAttribute(b.pos, 3));
+    geo.setAttribute("normal", new THREE.Float32BufferAttribute(b.nrm, 3));
+    geo.setIndex(b.pos.length / 3 > 65535 ? new THREE.Uint32BufferAttribute(b.idx, 1) : new THREE.Uint16BufferAttribute(b.idx, 1));
+    geo.computeBoundingSphere();
+    g.add(new THREE.Mesh(geo, mats[l]));
+  });
+  return g;
+}
 
 function isleMeshes(isle) {
   const p = { seed: isle.seed, radius: isle.radius, summitHeight: isle.summitHeight, depth: isle.depth,
@@ -85,24 +117,24 @@ function isleMeshes(isle) {
   const look = LOOK[isle.name] || LOOK["Claude Island"];
   const g = look.grass;
   const colours = [g, SAND, DIRT, look.stone, HEART, [g[0] * 1.25 + 0.04, g[1] * 1.18, g[2] * 0.8]];
-  const lists = colours.map(() => []);
-  const cubes = { n: 0 };
-  core.build(p, (x, y, z, l) => { lists[l].push(x, y, z); cubes.n++; });
-  const group = new THREE.Group();
-  const m4 = new THREE.Matrix4();
-  lists.forEach((list, l) => {
-    if (!list.length) return;
-    const c = new THREE.Color().setRGB(...colours[l], THREE.SRGBColorSpace);
-    const mat = l === core.HEART
-      ? new THREE.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: 2.5, roughness: 0.4 })
-      : new THREE.MeshStandardMaterial({ color: c, roughness: 0.9 });
-    const mesh = new THREE.InstancedMesh(cube, mat, list.length / 3);
-    for (let i = 0; i < list.length; i += 3) {
-      m4.makeTranslation(toScene(ox + list[i] + 0.5, oy + list[i + 1] + 0.5, oz + list[i + 2] + 0.5));
-      mesh.setMatrixAt(i / 3, m4);
-    }
-    group.add(mesh);
+  // One merged surface mesh per layer (ADR-064, Minecraft's rule 3): only the visible faces, merged greedily by the
+  // same core as Unreal (mesh() = DaedalusVoxelIsleCore Mesh(), parity-tested), instead of an instanced cube per block.
+  // Far away (rule 5, like Distant Horizons) the coarse meshLod() versions stand in: 4x4 then 8x8 columns per cell.
+  const mats = colours.map((col, l) => {
+    const c = new THREE.Color().setRGB(...col, THREE.SRGBColorSpace);
+    return l === core.HEART
+      ? new THREE.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: 2.5, roughness: 0.4, flatShading: true })
+      : new THREE.MeshStandardMaterial({ color: c, roughness: 0.9, flatShading: true });
   });
+  const quads = core.mesh(p);
+  const lod = new THREE.LOD();
+  lod.addLevel(quadMeshes(quads, [0, 0, 0], mats), 0);
+  lod.addLevel(quadMeshes(core.meshLod(p, 4), [0, 0, 0], mats), LOD_NEAR);
+  lod.addLevel(quadMeshes(core.meshLod(p, 8), [0, 0, 0], mats), LOD_FAR);
+  lod.position.copy(toScene(ox, oy, oz));   // LOD picks its level by the camera's distance to this point
+  const group = new THREE.Group();
+  group.add(lod);
+  const cubes = { n: quads.length };
   if (p.pondRadius > 0) {
     const water = new THREE.Mesh(new THREE.CircleGeometry(p.pondRadius * 1.05, 48),
       new THREE.MeshStandardMaterial({ color: WATER, roughness: 0.15, metalness: 0.1, transparent: true, opacity: 0.85 }));
@@ -266,7 +298,7 @@ async function main() {
   const verdict = bad === 0
     ? `<b class="ok">matches the server's ${checked} sampled columns</b>`
     : `<b class="warn">${bad} of ${checked} sampled columns differ from the server</b>`;
-  statusEl.innerHTML = `${reach.isles.length} isles, ${total.toLocaleString()} cubes, ${reach.bridges.length} sky bridges. ${verdict}.`;
+  statusEl.innerHTML = `${reach.isles.length} isles, ${total.toLocaleString()} merged faces, ${reach.bridges.length} sky bridges. ${verdict}.`;
   flyTo(reach.isles[0].name);
 }
 
@@ -282,6 +314,10 @@ playBtn.addEventListener("click", () => {
 applySky(Number(hourInput.value));
 
 let last = performance.now();
+window.__reachInfo = () => renderer.info;   // for the headless check: triangles and geometries drawn
+// Headless checks: put the camera somewhere, and switch the far LODs off to measure what they save.
+window.__reachView = (x, y, z) => { camera.position.set(x, y, z); controls.target.set(0, 0, 0); controls.update(); };
+window.__reachLods = (on) => scene.traverse((o) => { if (o.isLOD) o.autoUpdate = on; if (o.isLOD && !on) o.levels.forEach((l, i) => { l.object.visible = i === 0; }); });
 renderer.setAnimationLoop((now) => {
   const dt = (now - last) / 1000;
   last = now;

@@ -255,3 +255,7 @@ to it when something new breaks.
   `Category`, a bare `Error` type, a component array filled by the constructor but not `Transient`, and Python
   `b_` names or `.get(` on a class. If it fails, the editor stays open and the job exits with code 2.
   Fixtures plus `preflight_test.py` prove each rule can say no.
+- **Never put std::string (or any type that isn't bitwise-movable) in a TArray.** TArray relocates its elements with
+  memcpy. MSVC's std::string keeps a pointer into its own small buffer, so a moved copy points at freed memory. Plain-C++
+  core types that hold std::string (RosterUnit, Order, Unit) live in std::vector inside the Unreal code
+  (UDaedalusTactics::TakeRoster).
