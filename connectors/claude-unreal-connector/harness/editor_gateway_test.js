@@ -17,9 +17,12 @@ const securityLog = require('../extension/server/security-alert-log');
 
 const serverPath = path.resolve(__dirname, '../extension/server/index.js');
 const source = fs.readFileSync(serverPath, 'utf8');
-const HOLD_FILE = 'C:\\offline-gateway\\recovery-hold.json';
-const EVIDENCE_DIR = 'C:\\offline-gateway\\evidence';
-const LOG_FILE = 'C:\\offline-gateway\\Unreal.log';
+// The Windows inventory is simulated, but these paths are consumed by real
+// platform path validation. Keep the virtual filesystem rooted on the host OS.
+const FIXTURE_ROOT = path.resolve(__dirname, '__offline-gateway__');
+const HOLD_FILE = path.join(FIXTURE_ROOT, 'recovery-hold.json');
+const EVIDENCE_DIR = path.join(FIXTURE_ROOT, 'evidence');
+const LOG_FILE = path.join(FIXTURE_ROOT, 'Unreal.log');
 const copy = value => JSON.parse(JSON.stringify(value));
 
 function inventory() {
@@ -169,7 +172,7 @@ function gateway(options = {}) {
   const allowed = {
     net: fakeNet, path, child_process: fakeChildProcess,
     readline: { createInterface() { const stream = new EventEmitter(); state.streams.push(stream); return stream; } },
-    fs: disk.impl, os: { tmpdir: () => 'C:\\offline-gateway' },
+    fs: disk.impl, os: { tmpdir: () => FIXTURE_ROOT },
     crypto: { randomUUID: () => 'evidence-' + (++state.uuids) },
     './editor-health': health, './recovery-hold': hold,
     './security-alert-observer': security, './security-alert-hold': securityHold,
