@@ -2,6 +2,7 @@
 // The squad-tactics contract (DTO 1) and the local director, checked without Unreal. Build:
 //   g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public tactics_core_test.cpp
 #include "DaedalusTacticsCore.h"
+#include <algorithm>
 #include <chrono>
 #include <cstdio>
 #include <random>
@@ -126,6 +127,61 @@ int main(int argc, char** argv)
 		if (M.Orders.size() != std::min<size_t>(static_cast<size_t>(N), MaxOrders)) Worst = 1e9;   // capped at MaxOrders
 	}
 	Check("300 units decide in well under one 60 fps frame (16.7 ms)", Worst < 16.7);
+
+	// --- the frame budget for Astra's Java director (ADR-060 "end-to-end budget"): what the game thread pays per spec.
+	// Median of 200 runs each, so a noisy machine doesn't decide it. Run without sanitizers for real numbers:
+	//   g++ -std=c++17 -O2 -DNDEBUG -I../DaedalusLink/Source/DaedalusLink/Public tactics_core_test.cpp
+	{
+		std::vector<Unit> Full;
+		for (int i = 0; i < static_cast<int>(MaxOrders); ++i) Full.push_back({"u" + std::to_string(i), {U(Rng), U(Rng), 0}, 60, 60, true});
+		const std::string Text = Write(Decide("full", 7, Full, P));
+		std::vector<RosterUnit> Roster;
+		for (int i = 0; i < static_cast<int>(MaxOrders); ++i)
+			Roster.push_back({"u" + std::to_string(i), "SLIME", 40.0 + i % 20, 60, {U(Rng), U(Rng), 0}, i % 3 == 0});
+		auto Median = [](auto&& Fn) {
+			std::vector<double> T;
+			for (int r = 0; r < 200; ++r)
+			{
+				const auto T0 = std::chrono::steady_clock::now();
+				Fn();
+				T.push_back(std::chrono::duration<double, std::micro>(std::chrono::steady_clock::now() - T0).count());
+			}
+			std::sort(T.begin(), T.end());
+			return T[T.size() / 2];
+		};
+		size_t Sink = 0;
+		const double ParseUs = Median([&] { Sink += Parse(Text).Out.Orders.size(); });
+		const double WriteUs = Median([&] { Sink += Write(Parse(Text).Out).size(); }) - ParseUs;
+		const double RosterUs = Median([&] { Sink += WriteRoster("0123456789ab", "full", 7, Roster).size(); });
+		const double DecideUs = Median([&] { Sink += Decide("full", 7, Full, P).Orders.size(); });
+		std::printf("  budget, 256 orders (%zu bytes): parse %.1f us, write %.1f us, roster %.1f us, decide %.1f us (sink %zu)\n",
+			Text.size(), ParseUs, WriteUs < 0 ? 0 : WriteUs, RosterUs, DecideUs, Sink);
+		Check("a full 256-order spec parses in under 1 ms on the game thread", ParseUs < 1000);
+		Check("a full 256-unit roster writes in under 1 ms", RosterUs < 1000);
+	}
+
+	// --- to_chars must give printf's bytes, or the C++/Java/JS parity breaks: a million values, ties included
+	{
+		std::mt19937_64 G(64);
+		std::uniform_real_distribution<double> Wide(-2e6, 2e6);
+		int Bad = 0;
+		for (int i = 0; i < 1000000 && Bad < 5; ++i)
+		{
+			const double V = i % 4 == 0 ? std::round(Wide(G) * 4) / 4 : i % 4 == 1 ? std::round(Wide(G) * 20) / 20 : Wide(G);
+			char B[64];
+			std::snprintf(B, sizeof B, "%.1f", V);
+			if (Num(V) != B) { std::printf("  %.17g: %s vs %s\n", V, Num(V).c_str(), B); ++Bad; }
+		}
+		for (double V : {0.0, -0.0, 0.05, 0.15, 0.25, -0.25, 2.5e-7, 1e15 + 0.25, 1e300})
+		{
+			char B[400];
+			std::snprintf(B, sizeof B, "%.1f", V);
+			if (Num(V) != B) ++Bad;
+		}
+		Check("Num (to_chars) == printf %.1f on 1,000,009 values", Bad == 0);
+		double X = 0;
+		Check("Number takes '+1.5' and refuses 'inf', '0x10', '1.5d'", Number("+1.5", X) && X == 1.5 && !Number("inf", X) && !Number("0x10", X) && !Number("1.5d", X));
+	}
 
 	// --- the parity file for the Java port (VoxelIsle-style): 40 seeded squads, their decided specs, plus round-trips
 	if (argc > 2 && std::string(argv[1]) == "--write")

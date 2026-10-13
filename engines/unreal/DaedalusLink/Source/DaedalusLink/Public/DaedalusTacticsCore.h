@@ -19,11 +19,13 @@
 
 #include <algorithm>
 #include <cctype>
+#include <charconv>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <sstream>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 namespace daedalus { namespace tactics {
@@ -113,41 +115,65 @@ inline bool Decimal(const std::string& S)
 inline bool Number(const std::string& S, double& Out)
 {
 	if (S.empty() || !Decimal(S)) return false;
-	char* End = nullptr;
-	Out = std::strtod(S.c_str(), &End);
-	return End && *End == '\0' && std::isfinite(Out) && std::fabs(Out) <= MaxCoord;
+	// from_chars: correctly rounded like strtod, no locale, no allocation. It doesn't take a leading '+'.
+	const char* B = S.data() + (S[0] == '+' ? 1 : 0);
+	const std::from_chars_result R = std::from_chars(B, S.data() + S.size(), Out);
+	return R.ec == std::errc() && R.ptr == S.data() + S.size() && std::isfinite(Out) && std::fabs(Out) <= MaxCoord;
 }
 
-/** Reads a DTO 1 spec. All or nothing: any bad line refuses the whole spec, so a squad never gets half an order. */
+/**
+ * Reads a DTO 1 spec. All or nothing: any bad line refuses the whole spec, so a squad never gets half an order.
+ * Runs on the game thread, so it walks the text once with indices: no stringstreams, tokens as views into the line,
+ * and a hash set for duplicate units (a full 256-order spec was 263 us with streams; see tactics_core_test).
+ */
 inline ParseResult Parse(const std::string& Text)
 {
 	ParseResult R;
-	std::istringstream In(Text);
-	std::string Line;
 	int N = 0;
 	bool Head = false, SquadSeen = false;
+	std::unordered_set<std::string> Units;
 	auto Fail = [&](const std::string& Why) { R.Ok = false; R.Error = "line " + std::to_string(N) + ": " + Why; R.Out = Spec(); return R; };
-	while (std::getline(In, Line))
+	auto Space = [](char C) { return C == ' ' || C == '\t' || C == '\n' || C == '\v' || C == '\f' || C == '\r'; };
+	constexpr int MaxTokens = 8;   // more than any line takes; a 9th only has to make the count wrong
+	std::string T[MaxTokens];
+	const std::size_t Size = Text.size();
+	std::size_t Pos = 0;
+	while (Pos < Size)
 	{
+		std::size_t End = Text.find('\n', Pos);
+		if (End == std::string::npos) End = Size;
+		std::size_t LineEnd = End;
+		const std::size_t LineStart = Pos;
+		Pos = End + 1;
 		++N;
-		if (!Line.empty() && Line.back() == '\r') Line.pop_back();
-		if (Line.size() > MaxLine) return Fail("line too long");
-		if (Line.empty() || Line[0] == '#') continue;
-		std::string Body = Line, Why;
-		const std::size_t Bar = Line.find('|');
-		if (Bar != std::string::npos)
+		if (LineEnd > LineStart && Text[LineEnd - 1] == '\r') --LineEnd;
+		if (LineEnd - LineStart > MaxLine) return Fail("line too long");
+		if (LineEnd == LineStart || Text[LineStart] == '#') continue;
+		std::size_t BodyEnd = LineEnd;
+		std::string Why;
+		for (std::size_t i = LineStart; i < LineEnd; ++i)
+			if (Text[i] == '|')
+			{
+				BodyEnd = i;
+				std::size_t W = i + 1;
+				while (W < LineEnd && Text[W] == ' ') ++W;
+				Why.assign(Text, W, LineEnd - W);
+				break;
+			}
+		int Count = 0;
+		for (std::size_t i = LineStart; i < BodyEnd;)
 		{
-			Body = Line.substr(0, Bar);
-			Why = Line.substr(Bar + 1);
-			while (!Why.empty() && Why.front() == ' ') Why.erase(Why.begin());
+			while (i < BodyEnd && Space(Text[i])) ++i;
+			if (i >= BodyEnd) break;
+			const std::size_t B = i;
+			while (i < BodyEnd && !Space(Text[i])) ++i;
+			if (Count < MaxTokens) T[Count].assign(Text, B, i - B);
+			++Count;
 		}
-		std::istringstream W(Body);
-		std::vector<std::string> T;
-		for (std::string X; W >> X;) T.push_back(X);
-		if (T.empty()) return Fail("a line with only a reason");
+		if (Count == 0) return Fail("a line with only a reason");
 		if (!Head)
 		{
-			if (T.size() != 2 || T[0] != "DTO") return Fail("expected 'DTO 1'");
+			if (Count != 2 || T[0] != "DTO") return Fail("expected 'DTO 1'");
 			if (T[1] != std::to_string(Version)) return Fail("unsupported version " + T[1]);
 			Head = true;
 			continue;
@@ -155,7 +181,7 @@ inline ParseResult Parse(const std::string& Text)
 		if (T[0] == "squad")
 		{
 			if (SquadSeen) return Fail("second squad line");
-			if (T.size() != 4 || T[2] != "tick" || !Token(T[1])) return Fail("expected 'squad <id> tick <n>'");
+			if (Count != 4 || T[2] != "tick" || !Token(T[1])) return Fail("expected 'squad <id> tick <n>'");
 			double Tk;
 			if (!Number(T[3], Tk) || Tk < 0 || Tk != std::floor(Tk)) return Fail("bad tick");
 			R.Out.Squad = T[1];
@@ -166,7 +192,7 @@ inline ParseResult Parse(const std::string& Text)
 		if (T[0] == "order")
 		{
 			if (!SquadSeen) return Fail("order before the squad line");
-			if (T.size() != 7) return Fail("expected 'order <unit> <VERB> <SIDE> <x> <y> <z>'");
+			if (Count != 7) return Fail("expected 'order <unit> <VERB> <SIDE> <x> <y> <z>'");
 			if (R.Out.Orders.size() >= MaxOrders) return Fail("more than " + std::to_string(MaxOrders) + " orders");
 			Order O;
 			if (!Token(T[1])) return Fail("bad unit id");
@@ -175,10 +201,10 @@ inline ParseResult Parse(const std::string& Text)
 			if (!ParseSide(T[3], O.Way)) return Fail("unknown side " + T[3]);
 			if (O.Do == Verb::Flank && O.Way == Side::None) return Fail("FLANK needs LEFT or RIGHT");
 			if (!Number(T[4], O.At.X) || !Number(T[5], O.At.Y) || !Number(T[6], O.At.Z)) return Fail("bad point");
-			for (const Order& Prev : R.Out.Orders)
-				if (Prev.Unit == O.Unit) return Fail("two orders for " + O.Unit);
-			O.Why = Why;
-			R.Out.Orders.push_back(O);
+			if (!Units.insert(O.Unit).second) return Fail("two orders for " + O.Unit);
+			O.Why = std::move(Why);
+			if (R.Out.Orders.empty()) R.Out.Orders.reserve(64);
+			R.Out.Orders.push_back(std::move(O));
 			continue;
 		}
 		return Fail("unknown line '" + T[0] + "'");
@@ -189,24 +215,55 @@ inline ParseResult Parse(const std::string& Text)
 	return R;
 }
 
+/** printf %.1f, appended in place (the exact bytes Java and JS match). std::to_chars is specified to give printf's
+ * bytes and is several times faster; tactics_core_test checks the two agree on a million values. */
+inline void AppendNum(std::string& Out, double V)
+{
+	char B[352];   // %.1f of the largest double is 309 digits + sign + ".0"
+	const std::to_chars_result R = std::to_chars(B, B + sizeof B, V, std::chars_format::fixed, 1);
+	if (R.ec == std::errc()) { Out.append(B, R.ptr); return; }
+	const int L = std::snprintf(B, sizeof B, "%.1f", V);
+	Out.append(B, L > 0 ? static_cast<std::size_t>(L) : 0);
+}
+
 inline std::string Num(double V)
 {
-	char B[32];
-	std::snprintf(B, sizeof B, "%.1f", V);
-	return B;
+	std::string S;
+	AppendNum(S, V);
+	return S;
 }
 
 inline std::string Write(const Spec& S)
 {
-	std::string Out = "DTO 1\nsquad " + S.Squad + " tick " + std::to_string(S.Tick) + "\n";
+	std::string Out;
+	Out.reserve(32 + S.Orders.size() * 72);
+	Out += "DTO 1\nsquad ";
+	Out += S.Squad;
+	Out += " tick ";
+	Out += std::to_string(S.Tick);
+	Out += '\n';
 	for (const Order& O : S.Orders)
 	{
-		Out += "order " + O.Unit + " " + VerbName(O.Do) + " " + SideName(O.Way) + " " + Num(O.At.X) + " " + Num(O.At.Y) + " "
-			+ Num(O.At.Z);
-		std::string Why = O.Why;
-		std::replace(Why.begin(), Why.end(), '\n', ' ');
-		if (!Why.empty()) Out += " | " + Why;
-		Out += "\n";
+		Out += "order ";
+		Out += O.Unit;
+		Out += ' ';
+		Out += VerbName(O.Do);
+		Out += ' ';
+		Out += SideName(O.Way);
+		Out += ' ';
+		AppendNum(Out, O.At.X);
+		Out += ' ';
+		AppendNum(Out, O.At.Y);
+		Out += ' ';
+		AppendNum(Out, O.At.Z);
+		if (!O.Why.empty())
+		{
+			Out += " | ";
+			const std::size_t From = Out.size();
+			Out += O.Why;
+			std::replace(Out.begin() + static_cast<std::ptrdiff_t>(From), Out.end(), '\n', ' ');
+		}
+		Out += '\n';
 	}
 	return Out;
 }
@@ -226,10 +283,24 @@ struct Event
 inline std::string WriteEvents(long long Tick, const std::vector<Event>& E)
 {
 	static const char* K[] = {"SEEN", "HIT", "DOWN", "PLAYER"};
-	std::string Out = "DTE 1\ntick " + std::to_string(Tick) + "\n";
+	std::string Out;
+	Out.reserve(24 + E.size() * 56);
+	Out += "DTE 1\ntick ";
+	Out += std::to_string(Tick);
+	Out += '\n';
 	for (const Event& Ev : E)
-		Out += std::string("event ") + K[static_cast<int>(Ev.Kind)] + " " + Ev.Unit + " " + Num(Ev.At.X) + " " + Num(Ev.At.Y) + " "
-			+ Num(Ev.At.Z) + " " + Num(Ev.Value) + "\n";
+	{
+		Out += "event ";
+		Out += K[static_cast<int>(Ev.Kind)];
+		Out += ' ';
+		Out += Ev.Unit;
+		for (double V : {Ev.At.X, Ev.At.Y, Ev.At.Z, Ev.Value})
+		{
+			Out += ' ';
+			AppendNum(Out, V);
+		}
+		Out += '\n';
+	}
 	return Out;
 }
 
@@ -253,10 +324,28 @@ struct RosterUnit
  */
 inline std::string WriteRoster(const std::string& Session, const std::string& Squad, long long Tick, const std::vector<RosterUnit>& Units)
 {
-	std::string Out = "DTR 1\nsession " + Session + " squad " + Squad + " tick " + std::to_string(Tick) + "\n";
+	std::string Out;
+	Out.reserve(64 + Units.size() * 64);
+	Out += "DTR 1\nsession ";
+	Out += Session;
+	Out += " squad ";
+	Out += Squad;
+	Out += " tick ";
+	Out += std::to_string(Tick);
+	Out += '\n';
 	for (const RosterUnit& U : Units)
-		Out += "unit " + U.Unit + " " + U.Kind + " " + Num(U.Health) + " " + Num(U.MaxHealth) + " " + Num(U.At.X) + " " + Num(U.At.Y) + " "
-			+ Num(U.At.Z) + " " + (U.SeesPlayer ? "1" : "0") + "\n";
+	{
+		Out += "unit ";
+		Out += U.Unit;
+		Out += ' ';
+		Out += U.Kind;
+		for (double V : {U.Health, U.MaxHealth, U.At.X, U.At.Y, U.At.Z})
+		{
+			Out += ' ';
+			AppendNum(Out, V);
+		}
+		Out += U.SeesPlayer ? " 1\n" : " 0\n";
+	}
 	return Out;
 }
 

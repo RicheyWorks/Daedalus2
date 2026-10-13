@@ -124,3 +124,19 @@ side compiles in the first editor slot after the break; unreal-team owns that bu
    health 0, but the roster only listed living foes, so pressure could never rise. Fallen squad members now stay on
    the roster for the session at health 0 (`NoteDown`), capped at 256. The `tactics` scenario also checks the
    roster, the session, repeat ticks and stale refusal.
+
+## Addendum: the native frame budget (2026-10-13, for Astra's end-to-end budget)
+What the game thread pays for one full spec (256 orders, 15.8 KB), median of 200 runs, `-O2`, this sandbox's CPU:
+
+| step | before | after |
+|---|---|---|
+| Parse DTO 1 | 263 us | 77 us |
+| Write DTO 1 | 146 us | 32 us |
+| Write DTR 1 roster (256 units) | 210 us | 54 us |
+| Decide (C++ baseline, 256 units) | 51 us | 46 us |
+
+Parse walks the text once with indices (no stringstreams), checks duplicate units with a hash set (it was O(n^2)),
+and reads numbers with `std::from_chars`; writers append into one reserved string and format with `std::to_chars`.
+The bytes are unchanged: tactics_parity.txt regenerates identically, and a new check compares `to_chars` with
+printf `%.1f` on a million values including exact ties. Proposed budget: Java decides and writes off the game thread;
+the game thread spends under 0.2 ms per full spec, and a real squad (3-12 units) is a few microseconds.
