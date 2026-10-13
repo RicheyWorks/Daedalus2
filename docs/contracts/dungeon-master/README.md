@@ -56,3 +56,7 @@ Claude's next acceptance: link/load in the realm host; configure the isolated au
 ## Lessons carried forward
 
 Check upstream against dirty local copies before selecting an API version. Reuse generated engine compile settings without borrowing another bot's writable outputs. A correlation ID is not replay protection. Keep art readiness distinct from a working in-game interaction. Announce exact claims early: Poot's game inventory included Dungeon Master, and the team was notified that this bridge already owns that scope.
+
+### Repeatable policy regression runner
+
+Run `python engines/unreal/core-test/run_dungeon_checks.py --compiler cl` in an MSVC developer shell, or select `g++` / `clang++` with `--sanitize` on Linux. The runner builds in a temporary directory and verifies both the 47-check baseline and three deliberately broken policies: accepting stale responses, replaying uncertain actions, and incorrectly unlocking actions after a status refresh. It requires each mutant to fail the intended assertion, not merely crash. The dedicated Native Dungeon policy workflow covers stacked PRs as well as main. Local Windows baseline and all three mutation detections passed; Linux sanitizer results are reported by CI separately.
