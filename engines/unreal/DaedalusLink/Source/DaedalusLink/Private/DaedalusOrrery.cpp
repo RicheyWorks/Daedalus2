@@ -2,6 +2,8 @@
 
 #include "DaedalusOrrery.h"
 
+#include "DaedalusOrreryCore.h"
+
 #include "Components/PointLightComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/TextRenderComponent.h"
@@ -16,21 +18,18 @@
 
 const TArray<UDaedalusOrrery::FHerb>& UDaedalusOrrery::Herbs()
 {
-	// 24 herbs, one per sky hour; each constellation has one day bloom (6:00..17:59) and one night bloom.
-	static const TArray<FHerb> H = {
-		{TEXT("Dawnthistle"), 6, TEXT("Keeper")}, {TEXT("Midnightmint"), 0, TEXT("Keeper")},
-		{TEXT("Sunsprig"), 8, TEXT("Lantern")}, {TEXT("Duskmallow"), 18, TEXT("Lantern")},
-		{TEXT("Orbitfern"), 9, TEXT("Ark")}, {TEXT("Moonvetch"), 21, TEXT("Ark")},
-		{TEXT("Eclipsebell"), 13, TEXT("Shard")}, {TEXT("Meteorsage"), 1, TEXT("Shard")},
-		{TEXT("Equinoxbalm"), 10, TEXT("Wanderer")}, {TEXT("Cometcress"), 3, TEXT("Wanderer")},
-		{TEXT("Heartstonebloom"), 7, TEXT("Hearth")}, {TEXT("Starsedge"), 22, TEXT("Hearth")},
-		{TEXT("Zenithclover"), 11, TEXT("Spindle")}, {TEXT("Nebulawort"), 23, TEXT("Spindle")},
-		{TEXT("Noonspire"), 12, TEXT("Crown")}, {TEXT("Polarisroot"), 2, TEXT("Crown")},
-		{TEXT("Driftfennel"), 16, TEXT("Tide")}, {TEXT("Nadirmoss"), 4, TEXT("Tide")},
-		{TEXT("Quasarthyme"), 14, TEXT("Forge")}, {TEXT("Twilightsorrel"), 19, TEXT("Forge")},
-		{TEXT("Solsticerue"), 15, TEXT("Kite")}, {TEXT("Auroraleaf"), 5, TEXT("Kite")},
-		{TEXT("Lunarlily"), 17, TEXT("Loom")}, {TEXT("Galaxygrass"), 20, TEXT("Loom")},
-	};
+	// The table lives in DaedalusOrreryCore.h (tested in core-test); this keeps TCHAR copies alive for Unreal.
+	static TArray<FString> Names, Stars;
+	static TArray<FHerb> H;
+	if (H.Num() == 0)
+	{
+		for (const daedalus::orrery::Herb& C : daedalus::orrery::Herbs())
+		{
+			Names.Add(UTF8_TO_TCHAR(C.Name));
+			Stars.Add(UTF8_TO_TCHAR(C.Constellation));
+		}
+		for (int32 i = 0; i < Names.Num(); ++i) H.Add({*Names[i], daedalus::orrery::Herbs()[i].Hour, *Stars[i]});
+	}
 	return H;
 }
 
@@ -43,8 +42,9 @@ const UDaedalusOrrery::FHerb* UDaedalusOrrery::Herb(const FString& Name)
 
 const TArray<FString>& UDaedalusOrrery::Constellations()
 {
-	static const TArray<FString> C = {TEXT("Keeper"), TEXT("Lantern"), TEXT("Ark"), TEXT("Shard"), TEXT("Wanderer"),
-		TEXT("Hearth"), TEXT("Spindle"), TEXT("Crown"), TEXT("Tide"), TEXT("Forge"), TEXT("Kite"), TEXT("Loom")};
+	static TArray<FString> C;
+	if (C.Num() == 0)
+		for (const char* N : daedalus::orrery::Constellations()) C.Add(UTF8_TO_TCHAR(N));
 	return C;
 }
 
@@ -64,17 +64,7 @@ float UDaedalusOrrery::Hour() const
 
 FString UDaedalusOrrery::BrewOf(const FString& A, const FString& B)
 {
-	const FHerb* X = Herb(A);
-	const FHerb* Y = Herb(B);
-	if (!X || !Y || A == B) return FString();
-	if (FCString::Strcmp(X->Constellation, Y->Constellation) == 0) return FString(X->Constellation) + TEXT(" Brew");
-	if (IsDay(X->Hour) != IsDay(Y->Hour))
-	{
-		static const TCHAR* Eclipses[] = {TEXT("Umbra"), TEXT("Penumbra"), TEXT("Corona"), TEXT("Diamondring"),
-			TEXT("Baileybeads"), TEXT("Totality"), TEXT("Annular"), TEXT("Hybrid")};
-		return FString(TEXT("Eclipse Brew: ")) + Eclipses[(X->Hour + Y->Hour) % 8];
-	}
-	return FString();
+	return UTF8_TO_TCHAR(daedalus::orrery::BrewOf(TCHAR_TO_UTF8(*A), TCHAR_TO_UTF8(*B)).c_str());
 }
 
 FString UDaedalusOrrery::Steep(ADaedalusHero* Hero)
@@ -147,12 +137,12 @@ void UDaedalusOrrery::Say(const FString& Line)
 
 void UDaedalusOrrery::Advance(int32 ToStep)
 {
-	// Steps only move forward, and only from the step right before (so the logbook reads in order). Step 7 needs
-	// all twelve charts home.
-	if (ToStep != Step + 1) return;
-	if (ToStep == 7 && Charts.Num() < Constellations().Num()) return;
-	Step = ToStep;
-	if (Step == 6 && Charts.Num() >= Constellations().Num()) Step = 7;
+	// The rules (forward one step at a time; step 7 needs all twelve charts) are DaedalusOrreryCore.h's Logbook.
+	daedalus::orrery::Logbook Book;
+	Book.Step = Step;
+	for (const FString& C : Charts) Book.Charts.push_back(TCHAR_TO_UTF8(*C));
+	Book.Advance(ToStep);
+	Step = Book.Step;
 }
 
 FString UDaedalusOrrery::MessageLine() const
@@ -163,22 +153,11 @@ FString UDaedalusOrrery::MessageLine() const
 
 FString UDaedalusOrrery::QuestLine() const
 {
-	static const TCHAR* Steps[] = {
-		TEXT("Meet the Keeper at the ark dock"),
-		TEXT("Fix the clogged sand filter on the aqueduct"),
-		TEXT("Find the Lantern star chart in the herb rings"),
-		TEXT("Harvest a starbloom in its own hour"),
-		TEXT("Steep your first tea at a kettle"),
-		TEXT("Steep a constellation brew (two blooms of one constellation)"),
-		TEXT("Recover all twelve star charts around the rim"),
-		TEXT("Steep an eclipse brew (a day bloom and a night bloom)"),
-		TEXT("Point the great telescope at the new moon"),
-	};
 	const int32 S = FMath::Clamp(Step, 0, 8);
 	const int32 H = FMath::FloorToInt(Hour());
 	const int32 M = FMath::FloorToInt(FMath::Frac(Hour()) * 60.f);
 	FString Extra = S == 6 ? FString::Printf(TEXT(" (%d/12)"), Charts.Num()) : FString();
-	return FString::Printf(TEXT("%02d:%02d   LOGBOOK: %s%s"), H, M, Steps[S], *Extra);
+	return FString::Printf(TEXT("%02d:%02d   LOGBOOK: %s%s"), H, M, UTF8_TO_TCHAR(daedalus::orrery::StepText(S)), *Extra);
 }
 
 FString UDaedalusOrrery::SatchelLine() const

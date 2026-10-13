@@ -34,7 +34,7 @@ public:
 	static const TArray<FHerb>& Herbs();
 	static const FHerb* Herb(const FString& Name);
 	static const TArray<FString>& Constellations();
-	static bool IsDay(int32 Hour) { return Hour >= 6 && Hour < 18; }
+	static bool IsDay(int32 Hour) { return Hour >= 6 && Hour < 18; }   // same as daedalus::orrery::IsDay
 
 	static UDaedalusOrrery* Get(const UObject* WorldContext);
 	/** The same, for Blueprints and Python (the harness): unreal.DaedalusOrrery.get_orrery(world). */
