@@ -281,3 +281,33 @@ Anything that snaps to the ground at BeginPlay re-snaps after streaming/world lo
 ## UE 5.8 Python differs (2026-10-13)
 `World.get_streaming_levels()` is not exposed in 5.8.3; use `get_editor_property("streaming_levels")`. Check unreal.*
 calls against the live bridge before relying on them.
+
+## Island size is set by Java, not by the level (2026-10-13)
+Richey: "the island is so small". The start island is world-zero SKY_ISLANDS slot 0, raised at radius 18 (36 m; the
+hero crosses it in 5.5 s). Caps: IslandGenerator 8..28 (default 18), LandGenerator 32..46, slot spacing 96 cubes
+(claim box 47), so nothing can pass radius 46 without moving slots. Critters were leashed to 12 m (Orr pens 7 m),
+MaxCritters 60. Fixed in Unreal (e6e34f71: leash 40 m, 120 animals, encounter distance to island edge); the Java side
+(bigger default radius, wider slot spacing + migration) is proposed to Astra. Measure play space before tuning
+props: radius, leash, population, spacing.
+
+## A placement script's value beats the class default (2026-10-13)
+Raising DaedalusCritter::Range did nothing for the 33 Orr animals: orr_place.py had set range=700 on each actor, and a
+saved per-actor value overrides the default. When changing a default, grep the placement scripts and fix the saved
+actors too.
+
+## Unreal frames ffmpeg can't read (2026-10-13)
+export_render_target PNGs made ffmpeg 7.1 fail ("chunk too big", "Invalid PNG signature") while Pillow read them.
+make_trailer.ps1 re-saves frames as JPEG first (normalize_frames.py).
+
+## PowerShell eats "$name:" in strings (2026-10-13)
+"fontsize=$size:fontcolor" is a scoped-variable reference ($size:fontcolor), so ffmpeg got "fontsize==white". Write
+${size} inside interpolated strings whenever a colon follows.
+
+## Film moving subjects live (2026-10-13)
+Herd shots aimed at coordinates read once; animals wandered off and take 1 filmed tree trunks (40-60% black frames).
+Shots of things that move pick their subject when the shot starts and track it ("follow" in trailer_plan.py).
+Check takes numerically (mean, % black, % clipped per sampled frame) before watching them.
+
+## Motion blur off for a fast mouse (2026-10-13)
+Default camera motion blur (0.5) smeared the screen on fast turns. r.DefaultFeature.MotionBlur=False in
+DefaultEngine.ini (setup-unreal.ps1 writes it) and the PostFX volume overrides amount 0.

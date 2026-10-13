@@ -324,6 +324,7 @@ def run(seed=7):
                 ("Mob_Orr_OrbitGoat", 4, (8200, -3200)), ("Mob_Orr_NebulaBee", 5, (7600, 5200)),
                 ("Mob_Orr_Lumewool_Young", 3, (7600, -2600)), ("Mob_Orr_StarMoth", 4, (-3000, 3000)),
                 ("Mob_Orr_DewNewt", 3, (-7000, 3000)), ("Mob_Orr_GearFox", 2, (-4000, -9000))]
+        WILD = {"Mob_Orr_StarMoth", "Mob_Orr_DewNewt", "Mob_Orr_GearFox"}
         n = 0
         for species, count, (cx, cy) in herd:
             for k in range(count):
@@ -333,7 +334,8 @@ def run(seed=7):
                 c.set_folder_path("ClaudeIsland/Life")
                 c.set_editor_property("species", species)
                 c.set_editor_property("seed", 1000 + n)
-                c.set_editor_property("range", 700.0)
+                # room to roam (Richey 2026-10-13: "the island is so small"): paddock stock 25 m, wild ones 50 m.
+                c.set_editor_property("range", 5000.0 if species in WILD else 2500.0)
                 n += 1
 
     # ---- the sky: moonlets, fragments, clouds and streaks above the island
