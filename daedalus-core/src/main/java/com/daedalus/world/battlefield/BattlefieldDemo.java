@@ -12,7 +12,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import javax.imageio.ImageIO;
+import java.util.zip.CRC32;
+import java.util.zip.DeflaterOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 
 /**
  * A runnable encounter (ADR-061): a squad in a meadow takes fire from the east and picks cover in the wood; a blast
@@ -125,7 +128,49 @@ public final class BattlefieldDemo {
             }
         }
         g.dispose();
-        ImageIO.write(img, "png", out.toFile());
+        Files.write(out, encodePng(img));
+    }
+
+    /** Minimal RGB PNG encoder (the core stays JDK-only, no javax). */
+    static byte[] encodePng(BufferedImage img) throws IOException {
+        int w = img.getWidth();
+        int h = img.getHeight();
+        ByteArrayOutputStream raw = new ByteArrayOutputStream();
+        try (DeflaterOutputStream z = new DeflaterOutputStream(raw)) {
+            byte[] line = new byte[1 + w * 3];
+            for (int y = 0; y < h; y++) {
+                for (int x = 0; x < w; x++) {
+                    int rgb = img.getRGB(x, y);
+                    line[1 + x * 3] = (byte) (rgb >> 16);
+                    line[2 + x * 3] = (byte) (rgb >> 8);
+                    line[3 + x * 3] = (byte) rgb;
+                }
+                z.write(line);
+            }
+        }
+        ByteArrayOutputStream png = new ByteArrayOutputStream();
+        DataOutputStream d = new DataOutputStream(png);
+        d.write(new byte[] {(byte) 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A});
+        ByteArrayOutputStream ihdr = new ByteArrayOutputStream();
+        DataOutputStream hd = new DataOutputStream(ihdr);
+        hd.writeInt(w);
+        hd.writeInt(h);
+        hd.write(new byte[] {8, 2, 0, 0, 0});
+        chunk(d, "IHDR", ihdr.toByteArray());
+        chunk(d, "IDAT", raw.toByteArray());
+        chunk(d, "IEND", new byte[0]);
+        return png.toByteArray();
+    }
+
+    private static void chunk(DataOutputStream d, String type, byte[] data) throws IOException {
+        byte[] t = type.getBytes(java.nio.charset.StandardCharsets.US_ASCII);
+        d.writeInt(data.length);
+        d.write(t);
+        d.write(data);
+        CRC32 crc = new CRC32();
+        crc.update(t);
+        crc.update(data);
+        d.writeInt((int) crc.getValue());
     }
 
     private static Color colour(char c) {
