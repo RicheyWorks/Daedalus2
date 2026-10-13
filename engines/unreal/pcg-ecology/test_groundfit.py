@@ -5,3 +5,6 @@ def test_table_props_by_mesh_not_label():
     assert excluded("PYT_Item_PYT_HoneyJar_V1_412", "Item_PYT_HoneyJar_V1") and not excluded("PYT_Item_x", "Prop_Tree_PYT_Oak_V01")
 def test_classify():
     assert [classify(d) for d in (None, 85, -12, 4)] == ["off_island", "floating", "sunk", "ok"]
+
+def test_sim_overlay_excluded():
+    assert excluded("PYT_SimTile_03_04", "Plane")

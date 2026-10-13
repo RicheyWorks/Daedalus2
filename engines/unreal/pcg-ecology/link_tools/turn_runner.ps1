@@ -17,10 +17,16 @@ $res.hero = Ue 'pyth_hero_ue.py' 60; Start-Sleep 3
 $w = 'C:\Users\730ri\projects\D2-build\connectors\claude-unreal-connector\extension\server\win.ps1'
 $r = & $w -Op list 2>&1 | Out-String; $m = [regex]::Match($r, '[A-Za-z0-9+/]{5000,}={0,2}')
 if ($m.Success) { [IO.File]::WriteAllBytes('C:\Users\730ri\pyth_island_turn.png', [Convert]::FromBase64String($m.Value)); $res.screenshot = 'C:\Users\730ri\pyth_island_turn.png' }
+# playable dial demo: overlay at dial 0.1, screenshot, then clear before saving
+python -c "import json;json.dump({'dial':0.1},open('pyth_dial.json','w'))"; $res.dial = Ue 'pyth_dial_ue.py' 120; Start-Sleep 3
+$r = & $w -Op list 2>&1 | Out-String; $m = [regex]::Match($r, '[A-Za-z0-9+/]{5000,}={0,2}')
+if ($m.Success) { [IO.File]::WriteAllBytes('C:\Users\730ri\pyth_dial_demo.png', [Convert]::FromBase64String($m.Value)); $res.dial_shot = 'C:\Users\730ri\pyth_dial_demo.png' }
+python -c "import json;json.dump({'dial':-1},open('pyth_dial.json','w'))"; $res.dial_clear = Ue 'pyth_dial_ue.py' 60
 $res.save_mine = Ue 'save_mine.py' 120
 $res | ConvertTo-Json -Depth 6 | Set-Content turn_result.json -Encoding utf8; $res.next = & powershell -NoProfile -ExecutionPolicy Bypass -File 'C:\Users\730ri\projects\bot-team\art\NOTES\pythagoras\next_bot.ps1'
 $res | ConvertTo-Json -Depth 6 | Set-Content turn_result.json -Encoding utf8
 'RUNNER_DONE'
+
 
 
 

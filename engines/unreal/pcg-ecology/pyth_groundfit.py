@@ -2,7 +2,7 @@
 """Shared ground-fit rules for island:pythagoras (used by pyth_fix_ue + pyth_verify_ue, testable outside Unreal).
 Intentionally elevated actors are excluded: structure/helper labels, flying bees, and table-top Item_/Tool_ props
 (decided by MESH name, since actor labels are PYT_<mesh>_<n>). Tolerance is 10 cm either way; no ground hit = off_island."""
-SKIP_LABELS = ("PYT_Island_", "PYT_Habitat_", "PYT_Label_", "HerbBed_", "PYT_FoodTable")
+SKIP_LABELS = ("PYT_Island_", "PYT_Habitat_", "PYT_Label_", "HerbBed_", "PYT_FoodTable", "PYT_SimTile_", "PYT_SimReadout")
 ELEVATED_MESH = ("Mob_Bee", "Item_", "Tool_")
 TOL_CM = 10.0
 
@@ -15,3 +15,4 @@ def classify(dz, tol=TOL_CM):
     if dz > tol: return "floating"
     if dz < -tol: return "sunk"
     return "ok"
+
