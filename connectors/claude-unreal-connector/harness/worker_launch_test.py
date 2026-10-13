@@ -200,7 +200,8 @@ CommandLine = 'fixture nonempty'; Arguments = @({ps_quote(self.python)}, {ps_quo
         self.assertEqual(result["result"], {"status": "launcher_requested", "launcher_pid": 777})
         self.assertEqual(result["creates"], 1)
         self.assertEqual(result["startup"], {"ShowWindow": 7})
-        self.assertEqual(result["command"], f'"{self.python}" "{LAUNCHER}"')
+        # The runner's TEMP can use an 8.3 alias (RUNNER~1); compare canonical filesystem paths.
+        self.assertEqual(result["command"], f'"{self.python.resolve()}" "{LAUNCHER.resolve()}"')
 
     def test_denied_process_inspection_aborts_launch(self):
         result = self.run_fixture("function New-DaedalusWorkerConsoleProvider { param([switch]$InspectOnly) @{ GetProcesses = { throw 'fixture process access denied' } } }")
