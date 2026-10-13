@@ -79,6 +79,18 @@ their lands and the game play ... i want to make the lands larger but we got to 
   items. Everything else, such as the look, the gameplay and new features, is an upgrade that only adds. Metadata is
   served versioned from our server (or IPFS with a version index), so upgrades show in wallets without re-minting.
 
+**9. A mint is a bundle with random rolls (Richmond, 09:30).** "the nft always comes with a bundle of lands and
+avatars and creatures at random like say one person may get a super rare bat a neon mummy ... minting is a chance at
+a lot of different chances at rares legendaries and ultra rares".
+- Every mint gives a bundle: one or more lands (rule 3 estates are bundles of land numbers), plus avatars and
+  creatures rolled from the realm's roster (REALM-CASTS).
+- Each roll uses a rarity ladder: common, rare, legendary, ultra rare. The odds are published.
+- Rolls must be provably fair and fixed at mint. Use on-chain verifiable randomness (VRF, or commit-reveal), so
+  nobody, including us, can steer who gets the neon mummy. The roll is recorded on the token and never re-rolled by
+  an upgrade.
+- Risk to check before any paid mint: paid random rewards are regulated like loot boxes or gambling in some places.
+  Richmond, the blockchain team and a lawyer decide this before mainnet. Testnet until then.
+
 ## Consequences
 
 - `IslandOps` slots (64, 96 m) stay as World Zero's starter lane. Grid lands are a new addressing scheme alongside
