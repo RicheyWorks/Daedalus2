@@ -161,6 +161,11 @@ void ADaedalusTarget::BeginPlay()
 	else if (Kind == TEXT("SHARDBACK")) { Tint = FLinearColor(0.45f, 0.55f, 0.75f); SetActorScale3D(FVector(1.3f)); }
 	else if (Kind == TEXT("DUST_WISP")) { Tint = FLinearColor(0.85f, 0.95f, 1.f); SetActorScale3D(FVector(0.7f)); }
 	else if (Kind == TEXT("STONE_KNIGHT")) { Tint = FLinearColor(0.25f, 0.25f, 0.3f); SetActorScale3D(FVector(1.2f, 1.2f, 2.0f)); }
+	if (bShiny)
+	{
+		SetActorScale3D(GetActorScale3D() * DaedalusShiny::ScaleBoost);
+		Health *= DaedalusShiny::StatBoost;
+	}
 	BaseTint = Tint;
 	StartScale = GetActorScale3D();
 	MaxHealth = Health;
@@ -181,6 +186,7 @@ void ADaedalusTarget::BeginPlay()
 	}
 	DressArt();
 	if (Gem && Mat) Gem->SetMaterial(0, Mat);
+	if (bShiny) DaedalusShiny::Attach(this, Look ? Look.Get() : Crystal.Get(), FMath::Max(ArtHeight * ArtScale, 120.f), Shiny);
 	// Settle onto the ground under where it was placed.
 	FHitResult Hit;
 	FCollisionObjectQueryParams Objects(ECC_WorldStatic);
@@ -298,6 +304,7 @@ void ADaedalusTarget::TickBolts(APawn* Who, float Dt)
 
 void ADaedalusTarget::Tick(float DeltaSeconds)
 {
+	if (bShiny) DaedalusShiny::Tick(Shiny, DeltaSeconds);
 	Super::Tick(DeltaSeconds);
 	const float Dt = FMath::Min(DeltaSeconds, 0.1f);
 	Age += Dt;

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "DaedalusShiny.h"
 #include "DaedalusTarget.generated.h"
 
 class UStaticMesh;
@@ -49,6 +50,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") int32 Power = 1;
 	/** False keeps this one idle whatever daedalus.FoesHunt says. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") bool bHunts = true;
+	/** Shiny (ADR-065): the mint's very rare roll. More health, taller, and lit by a rainbow glow with orbiting sparks. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") bool bShiny = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") float AggroRange = 2600.f;
 
 	// The record (the harness reads these).
@@ -129,4 +132,5 @@ private:
 	int32 RouteStep = 0;
 	float RouteAge = 100.f;   // search on the first hunting frame
 	bool bRouted = false;
+	DaedalusShiny::FState Shiny;
 };

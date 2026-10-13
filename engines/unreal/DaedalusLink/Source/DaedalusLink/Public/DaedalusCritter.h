@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "DaedalusShiny.h"
 #include "DaedalusCritter.generated.h"
 
 class UStaticMeshComponent;
@@ -27,6 +28,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") int32 Seed = 1;
 	/** How far from home it strays (cm). 40 m so a herd roams its island; the step trace already stops it at ledges. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") float Range = 4000.f;
+	/** Shiny (ADR-065): the mint's very rare roll. Taller, faster, and lit by a rainbow glow with orbiting sparks. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") bool bShiny = false;
 
 	// The record (the harness reads these).
 	/** GRAZE, WALK, FLEE. */
@@ -63,4 +66,5 @@ private:
 	float Gait = 0.f;
 	float Size = 100.f;
 	float Check = 0.f;
+	DaedalusShiny::FState Shiny;
 };

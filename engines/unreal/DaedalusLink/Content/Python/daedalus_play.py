@@ -930,6 +930,50 @@ def scenario_tactics_remote(p):
     ], "stats": stats, "frames": frames}
 
 
+def scenario_shiny(p):
+    """Shiny (ADR-065 rule 9): a shiny critter and a shiny foe stand next to the hero. Both must carry the glow (a
+    point light) and the orbiting sparks, be taller than their plain twins, the foe must have more health, and the
+    sparks must actually move. Spawned in the Play world only; nothing is saved."""
+    h = hero()
+    w = world()
+    at = h.get_actor_location()
+    fwd = h.get_actor_forward_vector()
+    plain = w.spawn_actor(unreal.DaedalusCritter, at + fwd * 300 + unreal.Vector(0, -150, 100), unreal.Rotator(0, 0, 0))
+    shiny = w.spawn_actor(unreal.DaedalusCritter, at + fwd * 300 + unreal.Vector(0, 150, 100), unreal.Rotator(0, 0, 0))
+    for c in (plain, shiny):
+        c.set_editor_property("species", "Mob_Sheep")
+    shiny.set_editor_property("shiny", True)
+    plain.rebuild()
+    shiny.rebuild()
+    foe_plain = w.spawn_actor(unreal.DaedalusTarget, at + fwd * 600 + unreal.Vector(0, -200, 100), unreal.Rotator(0, 0, 0))
+    foe_shiny = w.spawn_actor(unreal.DaedalusTarget, at + fwd * 600 + unreal.Vector(0, 200, 100), unreal.Rotator(0, 0, 0))
+    foe_shiny.set_editor_property("shiny", True)
+    for f in (foe_plain, foe_shiny):
+        f.set_editor_property("hunts", False)
+    yield from _frames(3)
+
+    def sparks(a):
+        return [c for c in a.get_components_by_class(unreal.StaticMeshComponent) if "ShinySpark" in c.get_name()]
+
+    def lights(a):
+        return a.get_components_by_class(unreal.PointLightComponent)
+
+    s0 = [c.get_relative_location() for c in sparks(shiny)]
+    yield from _seconds(1.0)
+    s1 = [c.get_relative_location() for c in sparks(shiny)]
+    moved = s0 and all((a - b).length() > 5 for a, b in zip(s0, s1))
+    cap = os.path.join(unreal.Paths.project_saved_dir(), "Daedalus", "shiny.png")
+    return {"checks": [
+        _check("the shiny critter glows", len(lights(shiny)) == 1 and len(lights(plain)) == 0),
+        _check("and wears orbiting sparks", len(sparks(shiny)) == 7 and len(sparks(plain)) == 0),
+        _check("the sparks move", bool(moved)),
+        _check("it stands taller", shiny.get_actor_scale3d().z > plain.get_actor_scale3d().z * 1.1),
+        _check("the shiny foe glows too", len(lights(foe_shiny)) == 1 and len(lights(foe_plain)) == 0),
+        _check("with more health", foe_shiny.get_editor_property("max_health") > foe_plain.get_editor_property("max_health") * 1.4,
+               "%s vs %s" % (foe_shiny.get_editor_property("max_health"), foe_plain.get_editor_property("max_health"))),
+    ]}
+
+
 SCENARIOS = {
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
@@ -946,6 +990,7 @@ SCENARIOS = {
     "orrery": scenario_orrery,
     "tactics": scenario_tactics,
     "tactics_remote": scenario_tactics_remote,
+    "shiny": scenario_shiny,
 }
 
 

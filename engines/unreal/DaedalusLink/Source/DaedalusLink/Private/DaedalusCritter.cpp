@@ -38,6 +38,13 @@ int32 ADaedalusCritter::Rebuild()
 	Parts = DaedalusMob::Build(this, Look, Species, &Made, &Height);
 	for (UStaticMeshComponent* C : Made) Meshes.Add(C);
 	Size = FMath::Max(Height * GetActorScale3D().Z, 20.f);
+	if (bShiny)
+	{
+		SetActorScale3D(FVector(DaedalusShiny::ScaleBoost));
+		Size *= DaedalusShiny::ScaleBoost;
+		DaedalusShiny::Attach(this, Look, Size, Shiny);
+	}
+	else DaedalusShiny::Detach(Shiny);
 	return Parts;
 }
 
@@ -89,6 +96,7 @@ bool ADaedalusCritter::Step(const FVector& Dir, float Speed, float Dt)
 
 void ADaedalusCritter::Tick(float DeltaSeconds)
 {
+	if (bShiny) DaedalusShiny::Tick(Shiny, DeltaSeconds);
 	Super::Tick(DeltaSeconds);
 	const float Dt = FMath::Min(DeltaSeconds, 0.1f);
 	Age += Dt;
@@ -149,6 +157,7 @@ void ADaedalusCritter::Tick(float DeltaSeconds)
 	float Speed = 0.f;
 	if (State == TEXT("WALK")) Speed = 50.f + Size * 0.6f;
 	else if (State == TEXT("FLEE")) Speed = 220.f + Size * 2.f;
+	if (bShiny) Speed *= DaedalusShiny::StatBoost;
 	if (Speed > 0.f && !Step(Heading, Speed, Dt))
 	{
 		++Ledges;
