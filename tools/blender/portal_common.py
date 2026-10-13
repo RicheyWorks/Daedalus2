@@ -46,7 +46,7 @@ def export_character(mesh,rig,role,rig_name,extra=None):
 
 def finish_scene(records,columns,spacing,filename,clips):
     rows=math.ceil(len(records)/columns);cx=(columns-1)*spacing/2;cy=(rows-1)*spacing/2
-    bpy.ops.mesh.primitive_plane_add(size=250);bpy.context.object.data.materials.append(ink)
+    bpy.ops.mesh.primitive_plane_add(size=250,location=(0,0,-.001));bpy.context.object.data.materials.append(ink)
     bpy.ops.object.camera_add(location=(cx+12,cy-18,22));c=bpy.context.object;c.rotation_euler=(Vector((cx,cy,.8))-c.location).to_track_quat('-Z','Y').to_euler();c.data.type='ORTHO';c.data.ortho_scale=max(columns*spacing,rows*spacing)*1.5+3;bpy.context.scene.camera=c
     if len(records)==1:
         c.location=(3,-6,3.2);c.rotation_euler=(Vector((0,0,1.0))-c.location).to_track_quat('-Z','Y').to_euler();c.data.ortho_scale=2.8
