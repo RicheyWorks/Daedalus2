@@ -1,4 +1,4 @@
-# Hephaestus Island data (disk-saver index)
+﻿# Hephaestus Island data (disk-saver index)
 
 Forge-and-hot-spring island. Data here, scripts in `tools/islands/hephaestus/`. Full design: `ISLAND.md`.
 
@@ -23,6 +23,6 @@ Forge-and-hot-spring island. Data here, scripts in `tools/islands/hephaestus/`. 
 | heph_preflight.py | Writes preflight.json (needs_import, lod1_ready) |
 | heph_hero_glb.py / heph_blender_hero.py | Procedural hero glbs / off-editor Blender hero |
 | heph_dual_cookbook.py, heph_forge_glow.py, heph_livestock.py, heph_ranch_budget.py | Data builders |
-| test_heph_*.py | Headless tests (no Unreal): force_lod1, landmarks, sky_gate, handoff, give_up, capture_ladder, nft_card |
+| test_heph_*.py | Headless tests (no Unreal): force_lod1, landmarks, sky_gate, handoff, give_up, capture_ladder, nft_card, temp_lights |
 
-Next editor turn: heph_turn sets `HEPH_FORCE_LOD1=1` automatically when preflight lists lod1_ready and needs_import is empty (`HEPH_FORCE_LOD1=0` disables), so the 7 landmarks swap to LOD1. The forge-overlook hero is shot lit: the sky gate runs oddsreaper `restore_world_sky` once if DaedalusWorld reads storm-dark.
+Next editor turn: heph_turn sets `HEPH_FORCE_LOD1=1` automatically when preflight lists lod1_ready and needs_import is empty (`HEPH_FORCE_LOD1=0` disables), so the 7 landmarks swap to LOD1. The forge-overlook hero is shot lit: the sky gate runs oddsreaper `restore_world_sky` once if DaedalusWorld reads storm-dark, then island-only `HEPH_TEMP_*` sun/fill/PPV lights (disk-saver v5 tuning: fill 5e5, EV100 9; `atmosphere_sun_light=False`; destroyed before any save; `HEPH_TEMP_LIGHTS=0` disables).

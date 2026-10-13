@@ -235,7 +235,36 @@ def restore_sky():
         return {"ok": False, "error": str(e)[:160]}
 
 
+# Temp island-only lights (disk-saver round-5 lit-capture pattern, 2026-10-13): when DaedalusWorld sky is
+# storm-dark or SceneCapture has no eye-adaptation history, spawn a tagged HEPH_TEMP DirectionalLight
+# (atmosphere_sun_light=False so it does NOT drive the world sky / time of day), a PointLight fill, and a
+# bounded PostProcessVolume next to the island origin. Destroy every HEPH_TEMP_* before returning so the
+# post-capture save_world cannot bake them into Content. HEPH_TEMP_LIGHTS=0 disables. Tuned values match
+# disk-saver's good v5 shot (fill 5e5, EV100 9; commit 4f45d840).
+TEMP_LIGHT_TAG = "HEPH_TempCapture"
+TEMP_LIGHT_PREFIX = "HEPH_TEMP_"
+TEMP_FILL_INTENSITY = 5.0e5
+TEMP_SUN_INTENSITY = 8.0
+TEMP_EV100 = 9.0
+
+
+def temp_lights_plan(env=None):
+    """Pure decision: should hero_capture spawn island-only temp lights? Returns (use, reason)."""
+    env = os.environ if env is None else env
+    if env.get("HEPH_TEMP_LIGHTS", "1") == "0":
+        return False, "disabled (HEPH_TEMP_LIGHTS=0)"
+    return True, "spawn island-only HEPH_TEMP sun/fill/PPV (no atmosphere sun; destroy before save)"
+
+
+def is_temp_light_actor(label, tags=None):
+    """True for actors this module spawned for a one-shot hero capture (label or tag)."""
+    label = str(label or "")
+    tags = [str(t) for t in (tags or [])]
+    return label.startswith(TEMP_LIGHT_PREFIX) or TEMP_LIGHT_TAG in tags
+
+
 def probe_world_light():
+
     suns, skies = [], []
     try:
         for a in unreal.get_editor_subsystem(unreal.EditorActorSubsystem).get_all_level_actors():
@@ -248,7 +277,7 @@ def probe_world_light():
     return world_light_verdict(suns, skies)
 
 
-def hero_capture(cam_loc, target_loc, fov=55.0):
+def hero_capture(cam_loc, target_loc, fov=55.0, origin=None):
     """SceneCapture2D hero shot with an exposure ladder and a brightness gate.
     Bypasses viewport_screenshot (bridge 9877 often times out). Tries each EXPOSURE_LADDER rung, probes a 9x9 pixel
     grid of the render target, and exports the first rung whose mean luma >= MIN_CAPTURE_LUM to SHOTS/hero_r2.png
@@ -260,9 +289,11 @@ def hero_capture(cam_loc, target_loc, fov=55.0):
         ue_sub = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem)
         world = ue_sub.get_editor_world()
         actors = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
-        # clear prior capture actors from a partial run
+        # clear prior capture / leftover temp-light actors from a partial run (never leave HEPH_TEMP in Content)
         for a in actors.get_all_level_actors():
-            if str(a.get_actor_label()).startswith("Hephaestus Hero Capture"):
+            lab = str(a.get_actor_label())
+            tags = [str(t) for t in (getattr(a, "tags", None) or [])]
+            if lab.startswith("Hephaestus Hero Capture") or is_temp_light_actor(lab, tags):
                 try: actors.destroy_actor(a)
                 except Exception: pass
         rt = unreal.RenderingLibrary.create_render_target2d(
@@ -285,6 +316,71 @@ def hero_capture(cam_loc, target_loc, fov=55.0):
             log(f"world light after restore: sun {wl['sun_lux']} lux, sky {wl['sky']}, dark={wl['dark']}")
         else:
             log(f"sky restore skipped: {why}")
+
+        # Island-only temp lights (disk-saver pattern): lit hero even if world sky stays dark. Never saved.
+        origin_v = origin if origin is not None else unreal.Vector(
+            (cam_loc.x + target_loc.x) * 0.5, (cam_loc.y + target_loc.y) * 0.5, 0.0)
+        use_tmp, tmp_why = temp_lights_plan()
+        temp_info = {"used": False, "reason": tmp_why, "spawned": [], "removed": []}
+
+        def _spawn_temp(cls, loc, rot, nm):
+            a = actors.spawn_actor_from_class(cls, loc, rot)
+            a.tags = [TEMP_LIGHT_TAG]
+            a.set_actor_label(TEMP_LIGHT_PREFIX + nm)
+            a.set_folder_path(f"{FOLDER}/TempCapture")
+            temp_info["spawned"].append(a.get_actor_label())
+            return a
+
+        def _cleanup_temps():
+            removed = []
+            for a in list(actors.get_all_level_actors()):
+                lab = str(a.get_actor_label())
+                tags = [str(t) for t in (getattr(a, "tags", None) or [])]
+                if is_temp_light_actor(lab, tags):
+                    try:
+                        actors.destroy_actor(a); removed.append(lab)
+                    except Exception as e:
+                        log(f"temp light cleanup {lab}: {e}")
+            temp_info["removed"] = removed
+            return removed
+
+        if use_tmp:
+            try:
+                sun = _spawn_temp(unreal.DirectionalLight, origin_v + unreal.Vector(0, 0, 3000),
+                                  unreal.Rotator(0, -40, 35), "Sun")
+                sc_sun = sun.light_component
+                sc_sun.set_editor_property("intensity", TEMP_SUN_INTENSITY)
+                sc_sun.set_editor_property("light_color", unreal.Color(255, 244, 225, 255))
+                try: sc_sun.set_editor_property("atmosphere_sun_light", False)
+                except Exception: pass
+                fill = _spawn_temp(unreal.PointLight, origin_v + unreal.Vector(0, 0, 6000),
+                                   unreal.Rotator(0, 0, 0), "Fill")
+                fc = fill.point_light_component
+                fc.set_editor_property("intensity", TEMP_FILL_INTENSITY)
+                fc.set_editor_property("attenuation_radius", 20000.0)
+                fc.set_editor_property("cast_shadows", False)
+                ppv = _spawn_temp(unreal.PostProcessVolume, origin_v, unreal.Rotator(0, 0, 0), "PPV")
+                ppv.set_editor_property("unbound", False)
+                ppv.set_actor_scale3d(unreal.Vector(200, 200, 100))
+                s = ppv.settings
+                for k, v in (("auto_exposure_method", unreal.AutoExposureMethod.AEM_HISTOGRAM),
+                             ("auto_exposure_min_brightness", TEMP_EV100),
+                             ("auto_exposure_max_brightness", TEMP_EV100),
+                             ("auto_exposure_bias", 0.5)):
+                    try:
+                        s.set_editor_property("override_" + k, True)
+                        s.set_editor_property(k, v)
+                    except Exception as e:
+                        temp_info.setdefault("notes", []).append(f"{k}: {str(e)[:60]}")
+                ppv.set_editor_property("settings", s)
+                temp_info["used"] = True
+                log(f"temp lights spawned: {temp_info['spawned']} (fill={TEMP_FILL_INTENSITY}, EV100={TEMP_EV100})")
+            except Exception as e:
+                temp_info["error"] = str(e)[:160]
+                log(f"temp lights spawn failed: {e}")
+                _cleanup_temps()
+        else:
+            log(f"temp lights skipped: {tmp_why}")
 
         def shoot(rung):
             label, src, ev100, bias = rung
@@ -326,16 +422,19 @@ def hero_capture(cam_loc, target_loc, fov=55.0):
                 chosen, blum = (best[0][0], best[1]) if best else (None, None)
                 json.dump({"tried": tried, "chosen": chosen, "lum": round(blum, 1) if best else None,
                            "gate": MIN_CAPTURE_LUM, "world_light": wl, "sky_restore": sky_fix,
-                           "lit_owed": lit_owed(chosen, blum)}, f, indent=1)
+                           "temp_lights": temp_info, "lit_owed": lit_owed(chosen, blum)}, f, indent=1)
         except Exception as e: log(f"hero_capture.json: {e}")
         try: actors.destroy_actor(cap)
         except Exception: pass
+        # ALWAYS strip HEPH_TEMP_* before any later save_world (run() re-saves after a successful shot).
+        _cleanup_temps()
+        log(f"temp lights removed: {temp_info.get('removed')}")
         # brief settle + existence check
         time.sleep(0.5)
         if best and lit_owed(best[0][0], best[1]):
             link_note(f"NEED island:hephaestus lit hero owed: export fell back to {best[0][0]} (lit rungs {tried[:-1]}); "
-                      f"world light sun {wl['sun_lux']} lux / sky {wl['sky']} -> "
-                      + ("world-level dark (DaedalusWorld sun/sky), not an island fault; no sun added"
+                      f"world light sun {wl['sun_lux']} lux / sky {wl['sky']}; temp_lights used={temp_info.get('used')} -> "
+                      + ("world-level dark (DaedalusWorld sun/sky); temp island lights were used (not saved)"
                          if wl["dark"] else "world is lit, so re-aim hero cam / exposure next turn"))
         if os.path.isfile(out_path) and os.path.getsize(out_path) > 1000 and best and best[1] >= MIN_CAPTURE_LUM:
             log(f"hero SceneCapture -> {out_path} ({os.path.getsize(out_path)} B, {best[0][0]} luma {best[1]:.1f})")
@@ -343,6 +442,16 @@ def hero_capture(cam_loc, target_loc, fov=55.0):
         log(f"hero SceneCapture too dark or missing ({tried}); trying HighResShot")
     except Exception as e:
         log(f"hero SceneCapture failed: {e}")
+        try:
+            eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+            for a in list(eas.get_all_level_actors()):
+                lab = str(a.get_actor_label())
+                tags = [str(t) for t in (getattr(a, "tags", None) or [])]
+                if is_temp_light_actor(lab, tags) or lab.startswith("Hephaestus Hero Capture"):
+                    try: eas.destroy_actor(a)
+                    except Exception: pass
+        except Exception as ce:
+            log(f"temp light emergency cleanup: {ce}")
     # HighResShot fallback from the same hero pose (documented in ISLAND.md)
     try:
         unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).set_level_viewport_camera_info(
@@ -443,7 +552,7 @@ def run():
     write_result({"stage": "saved", "ok": ok, "placed": placed, "want": want, "living": living, "saved": saved})
     # Warm SceneCapture hero PNG (bridge viewport_screenshot often times out on 9877).
     tl = unreal.Vector(ox + t[0] * 100, oy + t[1] * 100, oz + t[2] * 100)
-    shot = hero_capture(cl, tl, fov=float(lay.get("hero_fov", 55)))
+    shot = hero_capture(cl, tl, fov=float(lay.get("hero_fov", 55)), origin=unreal.Vector(ox, oy, oz))
     if shot:
         link_note(f"DONE island:hephaestus hero shot: {shot} (SceneCapture2D exposure ladder, see hero_capture.json)")
     else:
