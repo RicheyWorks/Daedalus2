@@ -15,8 +15,10 @@ ART = "/Game/Daedalus/Art"
 SUB, PERSIST, SUBNAME = "/Game/BlenderBoss/Maps/BlenderBossIsland", "/Game/Daedalus/DaedalusWorld", "BlenderBossIsland"
 FOLDER = "BlenderBoss"
 IMPORT_BUDGET_S = float(os.environ.get("BB_IMPORT_S", "200"))
-BASEONLY = os.environ.get("BB_MODE", "") == "base"   # re-import + re-place ONLY the island base (terrain colour fix)
-MAKEUP = os.environ.get("BB_MODE", "") == "makeup" or BASEONLY   # keep existing placements; re-place base + place only assets with no actor yet
+_MODEF = os.path.join(os.environ.get("LOCALAPPDATA", ""), "Daedalus", "jobs", "bb_mode.txt")   # code runs inside the editor process,
+_MODE = os.environ.get("BB_MODE") or (open(_MODEF).read().strip() if os.path.exists(_MODEF) else "")   # so the sender's env never reaches it
+BASEONLY = _MODE == "base"   # re-import + re-place ONLY the island base (terrain colour fix)
+MAKEUP = _MODE == "makeup" or BASEONLY   # keep existing placements; re-place base + place only assets with no actor yet
 BASE_MIN_CM = 10000.0   # the island is 240 m across; a base mesh smaller than 100 m means the wrong asset was found
 SHOT = os.environ.get("BB_SHOT", r"C:\Users\730ri\projects\bot-team\shots\blenderboss\ue_island.png")
 eal = unreal.EditorAssetLibrary
