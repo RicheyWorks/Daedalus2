@@ -91,11 +91,26 @@ def run():
         out["after_apply"] = _snap(x)
 
     # Our sublevel was LevelStreamingDynamic (never loads in PIE) -> volumes=0, off-island Play shots.
+    # Note: set_streaming_class_for_level is missing on some UE/Python builds (buffffff 00:48); soft-fail.
     try:
         sl = unreal.GameplayStatics.get_streaming_level(world, "OddsReaperIsland")
-        if sl and not isinstance(sl, unreal.LevelStreamingAlwaysLoaded):
-            unreal.EditorLevelUtils.set_streaming_class_for_level(sl, unreal.LevelStreamingAlwaysLoaded)
-        out["stream"] = "always_loaded"
+        if not sl:
+            out["stream"] = "missing"
+        elif isinstance(sl, unreal.LevelStreamingAlwaysLoaded):
+            out["stream"] = "already_always_loaded"
+        else:
+            setter = getattr(unreal.EditorLevelUtils, "set_streaming_class_for_level", None)
+            if setter:
+                setter(sl, unreal.LevelStreamingAlwaysLoaded)
+                out["stream"] = "always_loaded"
+            else:
+                # Fallback: try to load it now so PIE/editor at least has the actors; class change owed later.
+                try:
+                    sl.set_should_be_loaded(True)
+                    sl.set_should_be_visible(True)
+                except Exception:
+                    pass
+                out["stream"] = "no_set_streaming_class_api"
     except Exception as e:
         out["stream"] = f"err: {e}"[:120]
 
@@ -135,5 +150,7 @@ def run():
     return out
 
 
-if __name__ == "__main__":
+# Bridge py_exec often leaves __name__ as "<string>" (not "__main__"), so a bare __main__ guard
+# silently no-ops. Call run() yourself, or exec with __name__ in this set.
+if __name__ in ("__main__", "<string>"):
     print(run())

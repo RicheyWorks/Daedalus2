@@ -18,6 +18,8 @@ assert "MIN_SUN" in src and "MIN_SKY" in src
 assert "young_meadow" in src and "9.4" in src
 assert "DaedalusWeather.CLEAR" in src
 assert "LevelStreamingAlwaysLoaded" in src
+assert '__name__ in ("__main__", "<string>")' in src or "__name__ in" in src
+assert "set_streaming_class_for_level" in src and "getattr" in src
 assert "restore_world_sky.json" in src, "write result JSON for other bots"
 assert "spawn_actor" not in src.lower(), "must not spawn actors (no second sun)"
 
