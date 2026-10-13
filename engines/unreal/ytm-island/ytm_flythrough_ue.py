@@ -20,7 +20,15 @@ STYLE = {
     "OldGrowthOak":    (4000, 1800, 100, 21),
     "WillowRiverbank": (4500, 600, 110, 35),
     "YTMIsland":       (14000, 4000, 160, 24),
+    "YTM_Spring":      (900, 250, 70, 35),
+    "YTM_Shrine":      (700, 220, 80, 35),
+    "YTM_Garden":      (2200, 700, 100, 28),
+    "YTM_Farm":        (2400, 800, 100, 28),
+    "YTM_Dock":        (2500, 900, 90, 24),
 }
+# island detail shots, offsets (cm) from the YTM_Spawn marker (layout from ytm_island_ue.py / ytm_hero_ue.py)
+YTM_DETAIL = {"YTM_Spring": (1500, 0, 100), "YTM_Shrine": (-800, 1200, 150), "YTM_Garden": (4900, 200, 100),
+              "YTM_Farm": (-4900, 0, 100), "YTM_Dock": (0, -11000, 100)}
 eas = unreal.EditorAssetLibrary
 ell = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 
@@ -67,7 +75,10 @@ def biome_centres():
                 unreal.log_warning("YTM: no marker for %s, orbiting Island_Pythagoras centre" % b)
     # Youtube Master Island hero shot (spawn marker placed by ytm_island_ue.py)
     sp = next((a for a in actors() if a.actor_has_tag("YTM_Spawn")), None)
-    if sp: found["YTMIsland"] = sp.get_actor_location()
+    if sp:
+        o = sp.get_actor_location(); found["YTMIsland"] = o
+        for k, (dx, dy, dz) in YTM_DETAIL.items():
+            found[k] = unreal.Vector(o.x + dx, o.y + dy, o.z + dz)
     return found
 
 def look_rot(src, dst):
@@ -113,10 +124,11 @@ def run():
         eas.make_directory(ROOT)
     centres = biome_centres()
     frames = FPS * SHOT_SECONDS
-    shots = BIOMES + (["YTMIsland"] if "YTMIsland" in centres else [])
+    island = [k for k in ["YTMIsland"] + list(YTM_DETAIL) if k in centres]
+    shots = island[:1] + island[1:3] + BIOMES + island[3:]  # matches recording-isle shots.real.txt order roughly
     master = make_sequence("WB_Flythrough_Master", frames * len(shots))
     for i, b in enumerate(shots):
-        s = make_sequence("WB_Flythrough_" + b, frames)
+        s = make_sequence(b if b.startswith("YTM_") else "WB_Flythrough_" + b, frames)
         add_camera(s, centres[b], STYLE[b], 0, frames)
         add_camera(master, centres[b], STYLE[b], i * frames, frames)
         eas.save_loaded_asset(s)
