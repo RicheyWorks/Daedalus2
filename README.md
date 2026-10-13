@@ -276,11 +276,13 @@ public consumers).
 | `GET` | `/api/v1/world/{id}/chunk?x=&y=&z=` | public | Inspect one 16³ chunk |
 | `GET` | `/api/v1/world/{id}/chunks` | public | List every non-empty chunk (coords, revision, occupied) for a renderer (ADR-018) |
 | `GET` | `/api/v1/world/{id}/chunk/blocks?x=&y=&z=` | public | One chunk's cubes as a base64 ordinal payload plus the palette, for meshing (ADR-018) |
+| `GET` | `/api/v1/world/{id}/chunks/blocks` | public | Every non-empty chunk's cubes in one response, run-length encoded: base64 (ordinal, len lo, len hi) triples per chunk (ADR-064) |
 | `GET` | `/api/v1/worlds` | public | Every mounted world (id, style, seed, title, islands) and every world style with whether it is ready (ADR-030) |
 | `POST` | `/api/v1/worlds` | required | Mount a new world of a ready style, grown from a seed (`CreateWorldRequest`); exists, bad id, style-not-ready and full are named results (ADR-030) |
+| `GET` | `/api/v1/worlds/ram` | required | RAM held by each world's cubes: chunks by storage form (one kind / 4-bit / 8-bit), bytes vs dense, and the JVM heap (ADR-064) |
 | `GET` | `/api/v1/world/{id}/package` | public | The world as a Daedalus World Package (zip): `manifest.json`, `world.glb` (glTF 2.0, a node per chunk), `assets/ark.glb`. Load it in Blender, Unreal, Godot or three.js (ADR-032) |
 | `GET` | `/api/v1/world/{id}/package/manifest` | public | The package manifest alone: islands, sky gates, arks, palette, mount, live API, deed contract (ADR-032) |
-| `GET` | `/api/v1/world/{id}/package/world.glb` | public | The package geometry alone, glTF 2.0 binary (ADR-032) |
+| `GET` | `/api/v1/world/{id}/package/world.glb` | public | The package geometry alone, glTF 2.0 binary (ADR-032). `?mesh=greedy` on all three: merged faces, 3.6x-80x fewer triangles, no per-cube grain (ADR-064) |
 | `GET` | `/api/v1/world/{id}/gates` | public | The world's sky gates: in the clouds past the rainbow, where each leads, its cloud berth, and the mount that flies there (ADR-031) |
 | `POST` | `/api/v1/world/{id}/gates` | required | Open a pair of sky gates between this world and `toWorld`; same-world, no-such-world, already-linked and full are named results (ADR-031) |
 | `GET` | `/api/v1/world/{id}/islands` | public | Raised islands: lane slot, origin, seed and traits (ADR-018), and who owns each and whom they let build (ADR-026) |
@@ -308,6 +310,7 @@ public consumers).
 | `GET` | `/api/v1/retro/{seed}` | public | The 8-bit realm behind a portal, generated whole from a seed (field, towns, castle, three cave floors, every chest, lock and monster table) as the plain-text DRR 1 spec the C++ core plays (ADR-052) |
 | `GET` | `/api/v1/retro/{seed}/check` | public | Walks that realm like a party would and reports whether every chest, lock, guardian and townsperson can be reached (ADR-052) |
 | `GET` | `/api/v1/reach/orrery` | public | The Orrery Reach's five voxel isles (settings, offsets, column heights) from the Java port of the Unreal isle core, for `/reach.html` (ADR-058) |
+| `POST` | `/api/v1/tactics/decide` | required | Unreal's squad round trip: `{roster: DTR 1, events: DTE 1}` in, `{result: APPLY/REPEAT/STALE, spec: DTO 1}` out, fenced per session and squad (ADR-060) |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/claim` | required | Claim an island: from then on only its owner and the builders they name change its cubes. Owner is the signed-in user; already-claimed, blocked and bad-owner are named results (ADR-026) |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/abandon` | required | The owner gives an island back; its cubes stay and it is open again. Not-owner and not-claimed are named results (ADR-026) |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/builders` | required | The owner lets someone build (`allow: true`) or stops them (`IslandClaimRequest`) (ADR-026) |

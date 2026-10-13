@@ -124,3 +124,42 @@ side compiles in the first editor slot after the break; unreal-team owns that bu
    health 0, but the roster only listed living foes, so pressure could never rise. Fallen squad members now stay on
    the roster for the session at health 0 (`NoteDown`), capped at 256. The `tactics` scenario also checks the
    roster, the session, repeat ticks and stale refusal.
+
+## Addendum: the native frame budget (2026-10-13, for Astra's end-to-end budget)
+What the game thread pays for one full spec (256 orders, 15.8 KB), median of 200 runs, `-O2`, this sandbox's CPU:
+
+| step | before | after |
+|---|---|---|
+| Parse DTO 1 | 263 us | 77 us |
+| Write DTO 1 | 146 us | 32 us |
+| Write DTR 1 roster (256 units) | 210 us | 54 us |
+| Decide (C++ baseline, 256 units) | 51 us | 46 us |
+
+Parse walks the text once with indices (no stringstreams), checks duplicate units with a hash set (it was O(n^2)),
+and reads numbers with `std::from_chars`; writers append into one reserved string and format with `std::to_chars`.
+The bytes are unchanged: tactics_parity.txt regenerates identically, and a new check compares `to_chars` with
+printf `%.1f` on a million values including exact ties. Proposed budget: Java decides and writes off the game thread;
+the game thread spends under 0.2 ms per full spec, and a real squad (3-12 units) is a few microseconds.
+
+Java side of the same codec (steady state, 6,000 runs, 256-order spec): parse 920 -> 114 us, write 340 -> 59 us.
+No regex (`words` is one pass; `replaceFirst` gone), UTF-8 length only for lines that could pass 512 bytes, a hash
+set for duplicate units, and a `%.1f` fast path that falls back to BigDecimal only within 1e-6 of a tie or past 1e9.
+TacticsNumTest compares the fast path with the exact one on a million values; TacticsParityTest 10/10 unchanged.
+
+## Addendum: the transport, Java side (2026-10-13)
+PR32's handoff left "an asynchronous adapter" to the native owner. Java side: `POST /api/v1/tactics/decide` with
+`{roster: DTR 1, events: DTE 1}` returns `{result, spec, why}`. `TacticsHost` (daedalus-core) fences per (session,
+squad) like the native side: a newer tick is decided, the same tick returns the same spec (retries are harmless),
+an older tick is STALE with no spec. The player is the latest PLAYER event for the session; until there is one,
+every unit HOLDs and the brain is not asked. The brain is `SquadDirector` by default and swaps through
+`TacticsHost.Brain` (Astra's AdaptiveDirector plugs in there). Bounded to 4,096 squads; authenticated in prod; rate
+limit `tacticsDecide` 1,200/min per caller. TacticsHostTest 6/6, TacticsControllerTest, posture 3/3. Unreal side:
+an async HTTP poster in UDaedalusTactics (next).
+
+Unreal side (same day, compiles in the first post-break slot): `daedalus.TacticsRemote 1` makes UDaedalusTactics POST
+each live squad's `TakeRoster` (plus the drained `TakeEvents`, once per second) to `daedalus.Server` +
+`/api/v1/tactics/decide`, with a 2 s timeout and at most one request per squad in flight; `daedalus.TacticsToken`
+carries the bearer token in prod. The HTTP completion runs on the game thread and hands APPLY/REPEAT specs to
+`ApplyOrders`, which fences ticks again, so a late answer for an old tick is refused. Stats adds
+`remote=answered/asked failed inflight`. Play scenario `tactics_remote` proves it (needs the server running) and is
+in the turn script.

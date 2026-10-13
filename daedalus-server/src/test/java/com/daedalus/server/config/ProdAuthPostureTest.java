@@ -119,6 +119,7 @@ class ProdAuthPostureTest {
         EXPECTED.put("GET /api/v1/world/" + ID + "/trace", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/chunks", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/chunk/blocks", Posture.PUBLIC);
+        EXPECTED.put("GET /api/v1/world/" + ID + "/chunks/blocks", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/islands", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/plots", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/obby", Posture.PUBLIC);
@@ -138,6 +139,8 @@ class ProdAuthPostureTest {
         EXPECTED.put("GET /api/v1/world/" + ID + "/arks", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/worlds", Posture.PUBLIC);
         EXPECTED.put("POST /api/v1/worlds", Posture.AUTHENTICATED);
+        // Operator view of RAM per world (ADR-064): not drive-by readable.
+        EXPECTED.put("GET /api/v1/worlds/ram", Posture.AUTHENTICATED);
         EXPECTED.put("GET /api/v1/world/" + ID + "/gates", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/package", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/world/" + ID + "/package/manifest", Posture.PUBLIC);
@@ -154,6 +157,8 @@ class ProdAuthPostureTest {
 
         // --- everything that costs work or touches state ---
         EXPECTED.put("POST /api/v1/maze/generate", Posture.AUTHENTICATED);
+        // Squad orders for Unreal (ADR-060): only the trusted game host drives NPCs.
+        EXPECTED.put("POST /api/v1/tactics/decide", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/maze/breed", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/maze/" + ID + "/live", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/maze/" + ID + "/traffic", Posture.AUTHENTICATED);

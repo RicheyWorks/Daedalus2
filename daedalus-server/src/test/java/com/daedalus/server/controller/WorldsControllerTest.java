@@ -85,6 +85,22 @@ class WorldsControllerTest {
     }
 
     @Test
+    void ramIsReportedPerWorldAndPalettesBeatDenseChunks() throws Exception {
+        create("gal", "gallery", 5, "Gal");
+        JsonNode r = body(mvc.perform(get("/api/v1/worlds/ram")));
+        assertThat(r.get("worlds")).hasSize(2);
+        JsonNode gal = r.get("worlds").get(1);
+        assertThat(gal.get("id").asText()).isEqualTo("gal");
+        int chunks = gal.get("chunks").asInt();
+        assertThat(chunks).isGreaterThan(50);
+        assertThat(gal.get("uniform").asInt() + gal.get("nibble").asInt() + gal.get("dense").asInt()).isEqualTo(chunks);
+        assertThat(gal.get("bytes").asLong()).isPositive().isLessThan(gal.get("denseBytes").asLong());
+        assertThat(r.get("chunkBytes").asLong()).isEqualTo(
+                r.get("worlds").get(0).get("bytes").asLong() + gal.get("bytes").asLong());
+        assertThat(r.get("heapMax").asLong()).isGreaterThan(r.get("heapUsed").asLong()).isPositive();
+    }
+
+    @Test
     void aNewWorldIsBornWithAnIslandAndKeepsToItself() throws Exception {
         JsonNode c = create("isle-two", "sky_islands", 42, "Isle Two");
         assertThat(c.get("result").asText()).isEqualTo("CREATED");

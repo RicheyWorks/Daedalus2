@@ -50,13 +50,21 @@ f = Fake()
 r = turn(f).go()
 names = [s["step"] for s in r["steps"]]
 check("all steps run in order", names[:5] == ["ram before", "preflight", "build", "bridge up", "place isles + islands.json"], names)
-check("three scenarios, each played, polled until done and stopped",
-      [n for n in names if n.startswith("scenario")] == ["scenario tactics", "scenario wild", "scenario orrery"]
-      and f.calls.count("daedalus.play_scenario") == 3 and f.calls.count("stop") >= 3, f.calls)
+check("every scenario played, polled until done and stopped",
+      [n for n in names if n.startswith("scenario")] == ["scenario " + s for s in T.SCENARIOS]
+      and f.calls.count("daedalus.play_scenario") == len(T.SCENARIOS) and f.calls.count("stop") >= len(T.SCENARIOS), f.calls)
 check("scenario results carry passed/total", [s for s in r["steps"] if s["step"] == "scenario tactics"][0]["result"]["passed"] == 9)
 check("saves and posts DONE + HANDOFF", "save" in f.calls and f.links[0].startswith("TURN DONE") and f.links[1].startswith("HANDOFF"), f.links)
 check("the build waits for BUILD OK from the clean worktree", any("D2-build" in x and "-Start" in x for x in f.runs)
       and any("checkout -q --detach origin/main" in x for x in f.runs), f.runs)
+
+f = Fake()
+r = turn(f).go(light=True)
+names = [s["step"] for s in r["steps"]]
+check("a light turn never builds, plays or relaunches", "build" not in names and not any(n.startswith("scenario") for n in names)
+      and not any("unreal-job" in x for x in f.runs) and "play" not in f.calls and "save" in f.calls, (names, f.calls))
+check("a light turn audits RAM and writes islands.json/.dsb", "ram audit (registry tags, nothing loaded)" in names
+      and "islands.json + islands.dsb" in names and f.links[0].startswith("TURN DONE"), names)
 
 f = Fake(fail_run="preflight.py")
 r = turn(f).go()

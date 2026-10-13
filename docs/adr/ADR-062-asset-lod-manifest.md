@@ -13,3 +13,12 @@ The Blender pipeline ships 5,457 catalog glbs, 3,447 with a `_LOD1` sibling at a
 
 ## In-game proof (pending)
 The Blender team island in DaedalusWorld swaps catalog props to their `_LOD1` at the manifest switch distance, captured in game. This needs an unreal-team window.
+
+## Addendum (unreal-team, 2026-10-13): how Unreal applies it
+`DaedalusLink/Content/Python/daedalus_lod.py` puts each `_LOD1` glb into its static mesh as LOD 1 and sets LOD 1's
+screen size to what the mesh covers at the manifest's switch distance (Unreal's ComputeBoundsScreenSize, 90 degree
+FOV, 16:9: 1.778 r / d, so the default 20 radii is 0.089). The GPU then switches by itself; no per-frame code. `plan()`
+is a dry run; `apply()` touches only meshes under the folder it is given whose names are manifest ids, and only
+LOD 1. Its BBA parser is a port of DaedalusAssetLodCore.h: test_daedalus_lod.py replays asset_lod_parity.txt
+(40 manifests, 240 selections, 20 refusals) 9/9. Running `apply` on blender-team's folder waits for their OK and an
+editor turn.

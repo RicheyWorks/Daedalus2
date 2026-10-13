@@ -83,7 +83,7 @@ public class ProdSecurityConfig {
      */
     public static final List<String> STATIC_PAGES = List.of("/realm.html", "/realm.js", "/models/ark.glb",
             "/reach.html", "/reach.js", "/reach-core.js", "/orrery-core.js",
-            "/tactics.html", "/tactics.js", "/tactics-core.js");
+            "/tactics.html", "/tactics.js", "/tactics-core.js", "/realm-mesh.js");
 
     public static final List<String> STATIC_SCRIPTS = List.of(
             "/draw.js", "/api.js", "/share.js", "/fog.js", "/seat.js",
@@ -193,6 +193,7 @@ public class ProdSecurityConfig {
                         // cubes in one chunk, and which seeds grew which islands. Read-only.
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/chunks").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/chunk/blocks").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/chunks/blocks").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/plots").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/obby").permitAll()

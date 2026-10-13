@@ -2,14 +2,18 @@
 
 package com.daedalus.world;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -23,7 +27,7 @@ import java.util.Map;
 public final class WorldStore {
 
     static final byte[] MAGIC = "DAEW".getBytes(StandardCharsets.US_ASCII);
-    static final int VERSION = 13;
+    static final int VERSION = 14;
     static final int VERSION_CHUNKS_ONLY = 1;
     static final int VERSION_WITH_DOOR = 2;
     static final int VERSION_WITH_PARCELS = 3;
@@ -37,6 +41,8 @@ public final class WorldStore {
     static final int VERSION_WITH_DRIVE = 11;
     static final int VERSION_WITH_DRIVE_ACTOR = 12;
     static final int VERSION_WITH_DRIVE_AT = 13;
+    /** Chunks as run-length triples (Chunk.runs), not 4,096 dense bytes: ADR-064. */
+    static final int VERSION_WITH_RUNS = 14;
 
     private WorldStore() {
     }
@@ -46,15 +52,63 @@ public final class WorldStore {
         save(world.snapshot(), file);
     }
 
+    /**
+     * Writes the snapshot to a temporary file beside {@code file}, then moves it over {@code file} in one step, so a
+     * crash or a full disk mid-write leaves the previous world intact instead of a truncated one. Buffered: the
+     * format is many small fields, and an unbuffered stream made each one a system call.
+     */
     public static void save(WorldSnapshot snapshot, Path file) throws IOException {
         requirePath(file);
-        Path parent = file.getParent();
-        if (parent != null) {
-            Files.createDirectories(parent);
+        Path parent = file.toAbsolutePath().getParent();
+        Path name = file.getFileName();
+        if (parent == null || name == null) {
+            throw new IOException("A world file needs a directory and a name: " + file);
         }
-        try (OutputStream raw = Files.newOutputStream(file);
-             DataOutputStream out = new DataOutputStream(raw)) {
-            write(snapshot, out);
+        Files.createDirectories(parent);
+        Path tmp = Files.createTempFile(parent, name + ".", ".tmp");
+        try {
+            try (OutputStream raw = Files.newOutputStream(tmp);
+                 DataOutputStream out = new DataOutputStream(new BufferedOutputStream(raw, 1 << 16))) {
+                write(snapshot, out);
+            }
+            replace(tmp, file);
+        } finally {
+            Files.deleteIfExists(tmp);
+        }
+    }
+
+    /**
+     * Moves {@code tmp} over {@code file}. On Windows a scanner (antivirus, indexer) can hold the target for a moment,
+     * so a refused move is retried briefly; if it still fails, the bytes are copied over the file the old,
+     * non-atomic way, which is never worse than before this method existed.
+     */
+    private static void replace(Path tmp, Path file) throws IOException {
+        java.nio.file.FileSystemException last = null;
+        for (int attempt = 0; attempt < 5; attempt++) {
+            try {
+                try {
+                    Files.move(tmp, file, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+                } catch (AtomicMoveNotSupportedException e) {
+                    Files.move(tmp, file, StandardCopyOption.REPLACE_EXISTING);
+                }
+                return;
+            } catch (java.nio.file.FileSystemException e) {
+                last = e;
+                try {
+                    Thread.sleep(20L << attempt);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        }
+        try {
+            Files.copy(tmp, file, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            if (last != null) {
+                e.addSuppressed(last);
+            }
+            throw e;
         }
     }
 
@@ -65,7 +119,7 @@ public final class WorldStore {
     public static WorldSnapshot loadSnapshot(Path file) throws IOException {
         requirePath(file);
         try (InputStream raw = Files.newInputStream(file);
-             DataInputStream in = new DataInputStream(raw)) {
+             DataInputStream in = new DataInputStream(new BufferedInputStream(raw, 1 << 16))) {
             return read(in);
         }
     }
@@ -87,7 +141,9 @@ public final class WorldStore {
             out.writeInt(c.y());
             out.writeInt(c.z());
             out.writeLong(chunk.revision());
-            out.write(chunk.payload());
+            byte[] runs = chunk.runsView();   // cached per chunk until it changes: saves redo only dirty chunks
+            out.writeShort(runs.length / 3);   // at most 4,096 runs
+            out.write(runs);
         }
         Door door = snapshot.door();
         out.writeBoolean(door != null);
@@ -170,7 +226,7 @@ public final class WorldStore {
             throw new IOException("Not a Daedalus world snapshot");
         }
         int version = in.readUnsignedByte();
-        if (version != VERSION && version != VERSION_WITH_DRIVE_ACTOR
+        if (version != VERSION && version != VERSION_WITH_DRIVE_AT && version != VERSION_WITH_DRIVE_ACTOR
                 && version != VERSION_WITH_DRIVE
                 && version != VERSION_WITH_ACL
                 && version != VERSION_WITH_MAZE_REF
@@ -193,9 +249,26 @@ public final class WorldStore {
         for (int i = 0; i < count; i++) {
             ChunkCoordinate coord = new ChunkCoordinate(in.readInt(), in.readInt(), in.readInt());
             long chunkRevision = in.readLong();
-            byte[] payload = in.readNBytes(Chunk.VOLUME);
-            if (payload.length != Chunk.VOLUME) {
-                throw new IOException("Truncated chunk payload at " + coord);
+            byte[] payload;
+            if (version >= VERSION_WITH_RUNS) {
+                int runCount = in.readUnsignedShort();
+                if (runCount < 1 || runCount > Chunk.VOLUME) {
+                    throw new IOException("Bad run count " + runCount + " at " + coord);
+                }
+                byte[] runs = in.readNBytes(runCount * 3);
+                if (runs.length != runCount * 3) {
+                    throw new IOException("Truncated chunk runs at " + coord);
+                }
+                try {
+                    payload = Chunk.ofRuns(runs);
+                } catch (IllegalArgumentException e) {
+                    throw new IOException("Bad chunk runs at " + coord + ": " + e.getMessage(), e);
+                }
+            } else {
+                payload = in.readNBytes(Chunk.VOLUME);
+                if (payload.length != Chunk.VOLUME) {
+                    throw new IOException("Truncated chunk payload at " + coord);
+                }
             }
             chunks.put(coord, Chunk.ofPayload(payload, chunkRevision));
         }

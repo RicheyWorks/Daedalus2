@@ -33,6 +33,8 @@ public final class Chunk {
         final byte[] palette;
         final byte[] data;
         int kinds;
+        /** Chunk.runs() of this store, until an in-place write; volatile so a saver thread sees it whole. */
+        volatile byte[] runs;
 
         Store(int bits, byte[] palette, byte[] data, int kinds) {
             this.bits = bits;
@@ -60,6 +62,8 @@ public final class Chunk {
 
     /** Final fields in Store make a widened store safely visible to lock-free readers without volatile. */
     private Store store;
+    /** True when another Chunk may hold the same store (a copy): the next write clones it first. */
+    private boolean shared;
     private int occupied;
     private long revision;
 
@@ -71,6 +75,10 @@ public final class Chunk {
         this.store = store;
         this.occupied = occupied;
         this.revision = revision;
+    }
+
+    private static Store cloneStore(Store s) {
+        return new Store(s.bits, s.palette.clone(), s.data == null ? null : s.data.clone(), s.kinds);
     }
 
     private static Store uniform(int ordinal) {
@@ -93,6 +101,13 @@ public final class Chunk {
         if (before == after) {
             return TYPES[before];
         }
+        if (shared) {
+            // copy on write: a snapshot still reads the old store, so this chunk takes its own before changing it
+            s = cloneStore(s);
+            store = s;
+            shared = false;
+        }
+        s.runs = null;
         write(s, i, after);
         if (before == 0) {
             occupied++;
@@ -216,8 +231,19 @@ public final class Chunk {
         return 24 + store.bytes();
     }
 
-    /** A copy in the narrowest storage form. */
+    /**
+     * A copy that shares this chunk's storage until either one is written (copy on write), so a world snapshot costs
+     * one small object per chunk instead of 4 KiB. Saving a snapshot reuses each unchanged chunk's cached runs.
+     */
     public Chunk copy() {
+        shared = true;
+        Chunk c = new Chunk(store, occupied, revision);
+        c.shared = true;
+        return c;
+    }
+
+    /** A copy in the narrowest storage form (writes widen and never narrow; this undoes that). */
+    public Chunk compacted() {
         return compact(dense(store), revision);
     }
 
@@ -235,6 +261,75 @@ public final class Chunk {
      */
     byte[] payload() {
         return dense(store);
+    }
+
+    /**
+     * Run-length form for the wire: triples of (ordinal, run length low byte, high byte) in index order
+     * ({@code x + 16 * (y + 16 * z)}), runs 1..4096. A uniform chunk is 3 bytes; a terrain chunk a few hundred,
+     * against 4,096 dense. {@link #ofRuns} reads it back.
+     */
+    public byte[] runs() {
+        Store s = store;
+        byte[] cached = s.runs;
+        if (cached == null) {
+            cached = encodeRuns(s);
+            s.runs = cached;
+        }
+        return cached.clone();
+    }
+
+    /** {@link #runs()} without the defensive copy, for WorldStore; callers must not change the array. */
+    byte[] runsView() {
+        Store s = store;
+        byte[] cached = s.runs;
+        if (cached == null) {
+            cached = encodeRuns(s);
+            s.runs = cached;
+        }
+        return cached;
+    }
+
+    private static byte[] encodeRuns(Store s) {
+        if (s.bits == 0) {
+            return new byte[] {s.palette[0], (byte) (VOLUME & 0xff), (byte) (VOLUME >>> 8)};
+        }
+        java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream(256);
+        int run = 0;
+        int cur = s.ordinal(0);
+        for (int i = 0; i <= VOLUME; i++) {
+            int o = i < VOLUME ? s.ordinal(i) : -1;
+            if (o == cur) {
+                run++;
+                continue;
+            }
+            out.write(cur);
+            out.write(run & 0xff);
+            out.write(run >>> 8);
+            cur = o;
+            run = 1;
+        }
+        return out.toByteArray();
+    }
+
+    /** Dense ordinals from {@link #runs()} output; refuses runs that don't cover exactly 4,096 cubes. */
+    public static byte[] ofRuns(byte[] runs) {
+        if (runs == null || runs.length % 3 != 0) {
+            throw new IllegalArgumentException("runs must be whole (ordinal, lo, hi) triples");
+        }
+        byte[] dense = new byte[VOLUME];
+        int at = 0;
+        for (int k = 0; k < runs.length; k += 3) {
+            int n = (runs[k + 1] & 0xff) | (runs[k + 2] & 0xff) << 8;
+            if (n == 0 || at + n > VOLUME) {
+                throw new IllegalArgumentException("run " + (k / 3) + " has length " + n + " at cube " + at);
+            }
+            Arrays.fill(dense, at, at + n, runs[k]);
+            at += n;
+        }
+        if (at != VOLUME) {
+            throw new IllegalArgumentException("runs cover " + at + " cubes, not " + VOLUME);
+        }
+        return dense;
     }
 
     static Chunk ofPayload(byte[] payload, long revision) {

@@ -9,6 +9,7 @@ import com.daedalus.api.dto.OpenGateRequest;
 import com.daedalus.api.dto.OpenGateResponse;
 import com.daedalus.api.dto.WorldGatesResponse;
 import com.daedalus.api.dto.WorldRow;
+import com.daedalus.api.dto.WorldsRamResponse;
 import com.daedalus.api.dto.WorldsResponse;
 import com.daedalus.server.ratelimit.PerKeyRateLimit;
 import com.daedalus.server.service.WorldHub;
@@ -57,6 +58,27 @@ public class WorldsController {
             styles.add(new WorldsResponse.StyleRow(s.name(), s.title(), s.ready()));
         }
         return new WorldsResponse(rows, styles);
+    }
+
+    @GetMapping("/worlds/ram")
+    @Operation(summary = "RAM held by each world's cubes: chunks by storage form, bytes, and the JVM heap (ADR-064).")
+    public WorldsRamResponse ram() {
+        List<WorldsRamResponse.Row> rows = new ArrayList<>();
+        long bytes = 0;
+        long dense = 0;
+        for (WorldHub.WorldEntry e : hub.worlds()) {
+            WorldService w = hub.get(e.id());
+            com.daedalus.world.World.Storage st = w == null ? null : w.storage(e.id());
+            if (st == null) {
+                continue;
+            }
+            rows.add(new WorldsRamResponse.Row(e.id(), st.chunks(), st.bytes(), st.denseBytes(), st.uniform(), st.nibble(),
+                    st.dense()));
+            bytes += st.bytes();
+            dense += st.denseBytes();
+        }
+        Runtime rt = Runtime.getRuntime();
+        return new WorldsRamResponse(rows, bytes, dense, rt.totalMemory() - rt.freeMemory(), rt.maxMemory());
     }
 
     @PostMapping("/worlds")

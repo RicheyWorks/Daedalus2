@@ -11,9 +11,22 @@
 #include "GameFramework/Pawn.h"
 #include "HAL/IConsoleManager.h"
 #include "Kismet/GameplayStatics.h"
+#include "Dom/JsonObject.h"
+#include "HttpModule.h"
+#include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
+#include "Interfaces/IHttpRequest.h"
+#include "Interfaces/IHttpResponse.h"
+#include "Serialization/JsonReader.h"
+#include "Serialization/JsonSerializer.h"
+#include "Serialization/JsonWriter.h"
 
 static TAutoConsoleVariable<int32> CVarTactics(TEXT("daedalus.Tactics"), 1,
 	TEXT("1 = the local squad director gives packs orders once a second (ADR-060); 0 = off (foes fight alone)."));
+static TAutoConsoleVariable<int32> CVarTacticsRemote(TEXT("daedalus.TacticsRemote"), 0,
+	TEXT("1 = also ask the Java director (daedalus.Server /api/v1/tactics/decide) once a second per squad, without waiting."));
+static TAutoConsoleVariable<FString> CVarTacticsToken(TEXT("daedalus.TacticsToken"), TEXT(""),
+	TEXT("Bearer token for the Java director (the game host's sign-in). Empty: read Saved/Daedalus/tactics.token."));
 
 namespace
 {
@@ -167,6 +180,19 @@ void UDaedalusTactics::Tick(float DeltaTime)
 		Seen.Add(It->Squad);
 		if (It->bSeesPlayer) Note(TEXT("SEEN"), It->TacticalId(), It->GetActorLocation(), 1.f);
 	}
+	if (CVarTacticsRemote.GetValueOnGameThread() != 0 && Seen.Num() > 0)
+	{
+		// The events go with the first request; Java keeps the player per session, so every squad gets them.
+		FString Events = TakeEvents();
+		TArray<FString> Order = Seen.Array();
+		Order.Sort();
+		for (const FString& Squad : Order)
+		{
+			if (InFlight.Contains(Squad)) continue;
+			AskRemote(Squad, Events);
+			Events.Reset();
+		}
+	}
 	if (CVarTactics.GetValueOnGameThread() == 0) return;
 	const double Now = W->GetTimeSeconds();
 	for (const FString& Squad : Seen)
@@ -175,6 +201,70 @@ void UDaedalusTactics::Tick(float DeltaTime)
 		if (Until && *Until > Now) continue;   // Java has this squad
 		DecideNow(Squad);
 	}
+}
+
+void UDaedalusTactics::AskRemote(const FString& Squad, const FString& Events)
+{
+	IConsoleVariable* Server = IConsoleManager::Get().FindConsoleVariable(TEXT("daedalus.Server"));
+	const FString Base = Server ? Server->GetString() : TEXT("http://localhost:8088");
+	TSharedRef<FJsonObject> Body = MakeShared<FJsonObject>();
+	Body->SetStringField(TEXT("roster"), TakeRoster(Squad));
+	Body->SetStringField(TEXT("events"), Events);
+	FString Json;
+	FJsonSerializer::Serialize(Body, TJsonWriterFactory<>::Create(&Json));
+	TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Req = FHttpModule::Get().CreateRequest();
+	Req->SetURL(Base + TEXT("/api/v1/tactics/decide"));
+	Req->SetVerb(TEXT("POST"));
+	Req->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+	FString Token = CVarTacticsToken.GetValueOnGameThread();
+	if (Token.IsEmpty())
+	{
+		// Written by whoever signs the game host in (never by a bot); read once and again after a refusal.
+		if (CachedToken.IsEmpty())
+		{
+			FString Text;
+			if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectSavedDir(), TEXT("Daedalus"), TEXT("tactics.token"))))
+				CachedToken = Text.TrimStartAndEnd();
+		}
+		Token = CachedToken;
+	}
+	if (!Token.IsEmpty()) Req->SetHeader(TEXT("Authorization"), TEXT("Bearer ") + Token);   // never logged
+	Req->SetContentAsString(Json);
+	Req->SetTimeout(2.f);   // past this the local director has already decided twice
+	TWeakObjectPtr<UDaedalusTactics> Self(this);
+	Req->OnProcessRequestComplete().BindLambda([Self, Squad](FHttpRequestPtr, FHttpResponsePtr Resp, bool bOk)
+	{
+		// HTTP completions run on the game thread, so ApplyOrders is safe here.
+		if (!Self.IsValid()) return;
+		Self->RemoteAnswer(Squad, bOk && Resp.IsValid() ? Resp->GetResponseCode() : 0, bOk && Resp.IsValid() ? Resp->GetContentAsString() : FString());
+	});
+	InFlight.Add(Squad);
+	++Asked;
+	if (!Req->ProcessRequest())
+	{
+		InFlight.Remove(Squad);
+		++RemoteFailed;
+	}
+}
+
+void UDaedalusTactics::RemoteAnswer(const FString& Squad, int32 Code, const FString& Body)
+{
+	InFlight.Remove(Squad);
+	TSharedPtr<FJsonObject> O;
+	if (Code == 401 || Code == 403) CachedToken.Reset();   // the token file may have been renewed; read it again
+	if (Code != 200 || !FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Body), O) || !O.IsValid())
+	{
+		++RemoteFailed;
+		LastError = Code == 401 ? TEXT("director 401: no or expired token (daedalus.TacticsToken or Saved/Daedalus/tactics.token)")
+			: Code == 403 ? TEXT("director 403: this host is not the configured tactics subject/squad")
+			: FString::Printf(TEXT("director %d"), Code);
+		return;
+	}
+	++Answered;
+	const FString Result = O->GetStringField(TEXT("result"));
+	const FString Spec = O->GetStringField(TEXT("spec"));
+	if ((Result == TEXT("APPLY") || Result == TEXT("REPEAT")) && !Spec.IsEmpty())
+		ApplyOrders(Spec);   // fenced again natively: a late answer for an old tick is refused there
 }
 
 void UDaedalusTactics::NoteDown(const FString& Squad, const FString& Unit, const FString& Kind, float MaxHealth, const FVector& At)
@@ -208,6 +298,6 @@ FString UDaedalusTactics::TakeRoster(const FString& Squad)
 
 FString UDaedalusTactics::Stats() const
 {
-	return FString::Printf(TEXT("session=%s squads=%s decided=%d applied=%d refused=%d outbox=%d dropped=%d last_error=%s"), *Session, *Squads(), Decided,
-		Applied, Refused, Outbox.Num(), Dropped, *LastError);
+	return FString::Printf(TEXT("session=%s squads=%s decided=%d applied=%d refused=%d outbox=%d dropped=%d remote=%d/%d failed=%d inflight=%d last_error=%s"),
+		*Session, *Squads(), Decided, Applied, Refused, Outbox.Num(), Dropped, Answered, Asked, RemoteFailed, InFlight.Num(), *LastError);
 }

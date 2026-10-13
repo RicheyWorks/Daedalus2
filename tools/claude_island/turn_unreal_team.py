@@ -3,6 +3,8 @@
 
     python tools/claude_island/turn_unreal_team.py            # on Richey's PC, after posting CLAIM
     python tools/claude_island/turn_unreal_team.py --dry-run  # print the plan only
+    python tools/claude_island/turn_unreal_team.py --light    # a short slot in the RUNNING editor: no build, no
+                                                              # relaunch; RAM + audit + islands.json/.dsb + save
 
 Steps (each one is timed and reported; a step that fails is recorded and the turn moves on unless it was the build):
   1. RAM before: free RAM and the editor's private bytes.
@@ -10,7 +12,8 @@ Steps (each one is timed and reported; a step that fails is recorded and the tur
   3. Fast build from the clean worktree (..\\D2-build at origin/main) through unreal-job.ps1, then wait for the bridge.
      This compiles the merged-mesh isles, LODs, the island streamer, tactics (DTO/DTE/DTR) and the casualty roster.
   4. Re-place Claude Island and the Reach (merged meshes now) and write Saved/Daedalus/islands.json.
-  5. RAM after: the same numbers, so ADR-064 gets its first real measurement.
+  5. RAM after: the same numbers, so ADR-064 gets its first real measurement. Then the RAM audit: texture and mesh
+     sizes per owner folder from asset-registry tags (daedalus_ram_audit, read-only, loads nothing).
   6. Play scenarios: tactics, wild, orrery. Each is started and polled for up to 90 s.
   7. Astra's three-npc.dto (PR32) applied to a live squad through ApplyOrders, when the file is present.
   8. Stop Play, save only unreal-team's levels, write turn-report.json, post DONE + HANDOFF on the team link.
@@ -27,7 +30,7 @@ REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(REPO, "connectors", "claude-asset-pipeline"))
 
 REPORT = os.path.join(os.environ.get("LOCALAPPDATA", HERE), "Daedalus", "jobs", "turn-report.json")
-SCENARIOS = ["tactics", "wild", "orrery"]
+SCENARIOS = ["tactics", "tactics_remote", "wild", "orrery"]
 THREE_NPC = os.path.join(REPO, "docs", "benchmarks", "adaptive-initial", "three-npc.dto")
 
 PLACE = r'''
@@ -36,10 +39,30 @@ for n in ("bpy", "bmesh"):
     sys.modules.setdefault(n, types.ModuleType(n))
 p = r"%s"
 if p not in sys.path: sys.path.insert(0, p)
-import orr_build, orr_place, orr_reach, daedalus_islands
-for m in (orr_build, orr_place, orr_reach, daedalus_islands): importlib.reload(m)
+import orr_build, orr_place, orr_reach, daedalus_dsb, daedalus_islands
+for m in (orr_build, orr_place, orr_reach, daedalus_dsb, daedalus_islands): importlib.reload(m)
 result = {"place": str(orr_place.run())[:300], "reach": {k: v for k, v in orr_reach.run().items()},
           "islands": daedalus_islands.write()}
+'''
+
+AUDIT = r'''
+import sys, importlib
+p = r"%s"
+if p not in sys.path: sys.path.insert(0, p)
+import daedalus_ram_audit
+importlib.reload(daedalus_ram_audit)
+result = daedalus_ram_audit.run()
+'''
+
+ISLANDS = r'''
+import sys, importlib
+p = r"%s"
+if p not in sys.path: sys.path.insert(0, p)
+import daedalus_dsb, daedalus_islands
+for m in (daedalus_dsb, daedalus_islands): importlib.reload(m)
+r = daedalus_islands.write()
+result = {"path": r["path"], "dsb": r.get("dsb"), "rows": [{k: v for k, v in x.items() if k != "package"} for x in r["rows"]][:20],
+          "notes": r["notes"][:20]}
 '''
 
 APPLY_DTO = r'''
@@ -121,10 +144,30 @@ class Turn:
         return {"passed": res.get("passed"), "total": res.get("total"), "error": status.get("error"),
                 "failed": [c["check"] for c in res.get("checks", []) if not c.get("pass")]}
 
-    def go(self, dry=False):
-        plan = ["ram", "preflight", "build", "place", "ram", "scenarios: " + ", ".join(SCENARIOS), "three-npc", "save", "post"]
+    def light(self):
+        """A short turn that needs no C++ build, so the running editor is never closed: measure RAM, audit what holds
+        it (registry tags only), write islands.json + islands.dsb, save, hand off."""
+        before = self.step("ram", self.ram)
+        pre = self.step("preflight", lambda: self.run([sys.executable, os.path.join(REPO, "tools", "unreal_preflight", "preflight.py")]))
+        if not pre["ok"]:
+            return self.finish("preflight failed; the editor was not touched")
+        self.step("bridge up", lambda: self.call("ping", timeout=60))
+        py = os.path.join(REPO, "engines", "unreal", "DaedalusLink", "Content", "Python").replace("\\", "\\\\")
+        self.step("ram audit (registry tags, nothing loaded)", lambda: self.call(
+            "execute_python", code=AUDIT % py, unattended=False, bridge_timeout=300))
+        self.step("islands.json + islands.dsb", lambda: self.call("execute_python", code=ISLANDS % py, unattended=False,
+                                                                   bridge_timeout=120))
+        self.step("save", lambda: self.call("save"))
+        return self.finish(None, before.get("result"), before.get("result"))
+
+    def go(self, dry=False, light=False):
+        plan = ["ram", "preflight", "build", "place", "ram", "ram audit", "scenarios: " + ", ".join(SCENARIOS), "three-npc", "save", "post"]
+        if light:
+            plan = ["ram", "preflight", "ram audit", "islands.json + islands.dsb", "save", "post"]
         if dry:
             return {"plan": plan}
+        if light:
+            return self.light()
         before = self.step("ram before", self.ram)
         pre = self.step("preflight", lambda: self.run([sys.executable, os.path.join(REPO, "tools", "unreal_preflight", "preflight.py")]))
         if not pre["ok"]:
@@ -136,6 +179,9 @@ class Turn:
         self.step("place isles + islands.json", lambda: self.call("execute_python", code=PLACE % HERE.replace("\\", "\\\\"),
                                                                   unattended=False, bridge_timeout=300))
         after = self.step("ram after", self.ram)
+        self.step("ram audit (registry tags, nothing loaded)", lambda: self.call(
+            "execute_python", code=AUDIT % os.path.join(REPO, "engines", "unreal", "DaedalusLink", "Content", "Python").replace("\\", "\\\\"),
+            unattended=False, bridge_timeout=300))
         for s in SCENARIOS:
             self.step("scenario " + s, lambda s=s: self.scenario(s))
         if os.path.exists(THREE_NPC):
@@ -159,6 +205,7 @@ class Turn:
 def main(argv):
     from asset_pipeline import wire
     dry = "--dry-run" in argv
+    light = "--light" in argv
 
     def call(kind, timeout=600, **params):
         return wire.call(wire.UNREAL, kind, timeout=timeout, side="Unreal", **params)
@@ -173,7 +220,7 @@ def main(argv):
         subprocess.run([sys.executable, "-m", "asset_pipeline.teamlink", "send", "--me", "unreal-team", "--to", "*",
                         "--type", "note", "--text", text], cwd=os.path.join(REPO, "connectors", "claude-asset-pipeline"))
 
-    report = Turn(call, run, ram, link).go(dry)
+    report = Turn(call, run, ram, link).go(dry, light)
     if not dry:
         os.makedirs(os.path.dirname(REPORT), exist_ok=True)
         with open(REPORT, "w", encoding="utf-8") as f:

@@ -2,6 +2,7 @@
 // The squad-tactics contract (DTO 1) and the local director, checked without Unreal. Build:
 //   g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public tactics_core_test.cpp
 #include "DaedalusTacticsCore.h"
+#include <algorithm>
 #include <chrono>
 #include <cstdio>
 #include <random>
@@ -127,6 +128,90 @@ int main(int argc, char** argv)
 	}
 	Check("300 units decide in well under one 60 fps frame (16.7 ms)", Worst < 16.7);
 
+	// --- the frame budget for Astra's Java director (ADR-060 "end-to-end budget"): what the game thread pays per spec.
+	// Median of 200 runs each, so a noisy machine doesn't decide it. Run without sanitizers for real numbers:
+	//   g++ -std=c++17 -O2 -DNDEBUG -I../DaedalusLink/Source/DaedalusLink/Public tactics_core_test.cpp
+	{
+		std::vector<Unit> Full;
+		for (int i = 0; i < static_cast<int>(MaxOrders); ++i) Full.push_back({"u" + std::to_string(i), {U(Rng), U(Rng), 0}, 60, 60, true});
+		const std::string Text = Write(Decide("full", 7, Full, P));
+		std::vector<RosterUnit> Roster;
+		for (int i = 0; i < static_cast<int>(MaxOrders); ++i)
+			Roster.push_back({"u" + std::to_string(i), "SLIME", 40.0 + i % 20, 60, {U(Rng), U(Rng), 0}, i % 3 == 0});
+		auto Median = [](auto&& Fn) {
+			std::vector<double> T;
+			for (int r = 0; r < 200; ++r)
+			{
+				const auto T0 = std::chrono::steady_clock::now();
+				Fn();
+				T.push_back(std::chrono::duration<double, std::micro>(std::chrono::steady_clock::now() - T0).count());
+			}
+			std::sort(T.begin(), T.end());
+			return T[T.size() / 2];
+		};
+		size_t Sink = 0;
+		const double ParseUs = Median([&] { Sink += Parse(Text).Out.Orders.size(); });
+		const double WriteUs = Median([&] { Sink += Write(Parse(Text).Out).size(); }) - ParseUs;
+		const double RosterUs = Median([&] { Sink += WriteRoster("0123456789ab", "full", 7, Roster).size(); });
+		const double DecideUs = Median([&] { Sink += Decide("full", 7, Full, P).Orders.size(); });
+		std::printf("  budget, 256 orders (%zu bytes): parse %.1f us, write %.1f us, roster %.1f us, decide %.1f us (sink %zu)\n",
+			Text.size(), ParseUs, WriteUs < 0 ? 0 : WriteUs, RosterUs, DecideUs, Sink);
+		Check("a full 256-order spec parses in under 1 ms on the game thread", ParseUs < 1000);
+		Check("a full 256-unit roster writes in under 1 ms", RosterUs < 1000);
+	}
+
+	// --- to_chars must give printf's bytes, or the C++/Java/JS parity breaks: a million values, ties included
+	{
+		std::mt19937_64 G(64);
+		std::uniform_real_distribution<double> Wide(-2e6, 2e6);
+		int Bad = 0;
+		for (int i = 0; i < 1000000 && Bad < 5; ++i)
+		{
+			const double V = i % 4 == 0 ? std::round(Wide(G) * 4) / 4 : i % 4 == 1 ? std::round(Wide(G) * 20) / 20 : Wide(G);
+			char B[64];
+			std::snprintf(B, sizeof B, "%.1f", V);
+			if (Num(V) != B) { std::printf("  %.17g: %s vs %s\n", V, Num(V).c_str(), B); ++Bad; }
+		}
+		for (double V : {0.0, -0.0, 0.05, 0.15, 0.25, -0.25, 2.5e-7, 1e15 + 0.25, 1e300})
+		{
+			char B[400];
+			std::snprintf(B, sizeof B, "%.1f", V);
+			if (Num(V) != B) ++Bad;
+		}
+		Check("Num (to_chars) == printf %.1f on 1,000,009 values", Bad == 0);
+		double X = 0;
+		Check("Number takes '+1.5' and refuses 'inf', '0x10', '1.5d'", Number("+1.5", X) && X == 1.5 && !Number("inf", X) && !Number("0x10", X) && !Number("1.5d", X));
+	}
+
+	// --- garbage in from the network (the spec now arrives over HTTP): 200,000 random byte strings, biased toward the
+	// grammar's own pieces. Under ASan/UBSan nothing may crash, and anything accepted must write back and re-read to
+	// itself (all or nothing, never half a spec).
+	{
+		std::mt19937_64 G(2026);
+		const std::vector<std::string> Bits = {"DTO 1\n", "squad s tick 3\n", "order ", "a ", "ATTACK ", "FLANK ", "LEFT ",
+			"- ", "1.5 ", "-0 ", "1e8 ", "1e9 ", "nan ", "| why", "\n", "\r\n", " ", "\t", "#", "\0", "\xff", "|", "squad ",
+			"tick ", "99999999999999999999", "0x1 "};
+		int Accepted = 0, Broken = 0;
+		for (int K = 0; K < 200000; ++K)
+		{
+			std::string T;
+			const int Parts = 1 + static_cast<int>(G() % 24);
+			for (int P2 = 0; P2 < Parts; ++P2)
+			{
+				if (G() % 4 == 0) T += static_cast<char>(G() % 256);
+				else T += Bits[static_cast<size_t>(G() % Bits.size())];
+			}
+			const ParseResult R = Parse(T);
+			if (!R.Ok) { if (R.Error.empty() || !R.Out.Orders.empty()) ++Broken; continue; }
+			++Accepted;
+			const std::string W = Write(R.Out);
+			const ParseResult Again = Parse(W);
+			if (!Again.Ok || Write(Again.Out) != W) ++Broken;
+		}
+		std::printf("  garbage: 200000 inputs, %d accepted, %d broken\n", Accepted, Broken);
+		Check("random bytes never crash the parser, and what it accepts round-trips", Broken == 0);
+	}
+
 	// --- the parity file for the Java port (VoxelIsle-style): 40 seeded squads, their decided specs, plus round-trips
 	if (argc > 2 && std::string(argv[1]) == "--write")
 	{
@@ -161,6 +246,46 @@ int main(int argc, char** argv)
 		std::fprintf(F, "events\t%s\n", [&] { std::string E; for (char C : WriteEvents(41, {{EventKind::Seen, "pack-1-1", {1.25, -2, 3}, 1}, {EventKind::Hit, "pack-1-2", {0, 0, 0}, 12.5}, {EventKind::Down, "pack-1-2", {7, 8, 9}, 0}, {EventKind::Player, "player", {-100.5, 20, 0}, 87.5}})) E += C == '\n' ? std::string("\\n") : std::string(1, C); return E; }().c_str());
 		std::fprintf(F, "roster\t%s\n", [&] { std::string E; for (char C : WriteRoster("a1b2c3", "pack-1", 9, {{"pack-1-1", "BLIGHT_SLIME", 42.5, 60, {1, 2, 3}, true}, {"pack-1-2", "STONE_KNIGHT", 0, 120, {-4.25, 5, 6}, false}})) E += C == '\n' ? std::string("\\n") : std::string(1, C); return E; }().c_str());
 		std::fprintf(F, "good\t%s\n", [&] { std::string E; for (char C : Good) E += C == '\n' ? std::string("\\n") : C == '\r' ? std::string("\\r") : std::string(1, C); return E; }().c_str());
+		// fuzz: 600 mutated specs (ASCII only, so Java reads the same bytes). Each line: hex of the text, then either
+		// "ok" and hex of Write(parsed) or "err" and the message. Java must agree on every one (TacticsFuzzParityTest).
+		{
+			auto Hex = [](const std::string& T) { static const char* D = "0123456789abcdef"; std::string H; for (unsigned char C : T) { H += D[C >> 4]; H += D[C & 15]; } return H; };
+			std::mt19937 Fz(4242);
+			auto Pick = [&](int N) { return static_cast<int>(Fz() % static_cast<unsigned>(N)); };
+			const std::vector<std::string> Nums = {"1e5", "+3", ".5", "5.", "-0", "1e", "0x1", "inf", "nan", "1.5d", "1e400",
+				"123456789012", "-1e8", "100000000.5", "00012", "1_0", "--1", "1e+2", "1E-2", "", "+", "."};
+			const std::string Alphabet = " \t\v\f\r\n|#.-+eE0123456789aZ_LEFTRIGHT";
+			const std::string Base = Write(Decide("fz", 3, {{"a", {100, 0, 0}, 60, 60, true}, {"b", {300, 50, 0}, 10, 60, true},
+				{"c", {-200, 80, 0}, 60, 60, false}, {"d", {0, -400, 0}, 60, 60, true}}, P)) + "# trailer\n";
+			int Oks = 0;
+			for (int K = 0; K < 600; ++K)
+			{
+				std::string T = Base;
+				const int Ops = 1 + Pick(4);
+				for (int O = 0; O < Ops && !T.empty(); ++O)
+				{
+					const size_t At = static_cast<size_t>(Pick(static_cast<int>(T.size())));
+					switch (Pick(7))
+					{
+					case 0: T.erase(At, 1); break;
+					case 1: T.insert(At, 1, Alphabet[static_cast<size_t>(Pick(static_cast<int>(Alphabet.size())))]); break;
+					case 2: { const size_t B = T.rfind('\n', At), E = T.find('\n', At); const std::string L = T.substr(B == std::string::npos ? 0 : B + 1, E == std::string::npos ? std::string::npos : E - (B == std::string::npos ? 0 : B + 1)); T.insert(E == std::string::npos ? T.size() : E + 1, L + "\n"); break; }
+					case 3: { // replace one number-looking token
+						size_t B = At; while (B < T.size() && !(std::isdigit(static_cast<unsigned char>(T[B])) || T[B] == '-')) ++B;
+						size_t E = B; while (E < T.size() && T[E] != ' ' && T[E] != '\n') ++E;
+						if (B < T.size()) T.replace(B, E - B, Nums[static_cast<size_t>(Pick(static_cast<int>(Nums.size())))]);
+						break; }
+					case 4: T.insert(At, std::string(static_cast<size_t>(1 + Pick(3)), " \t\v\f"[Pick(4)])); break;
+					case 5: T.insert(At, std::string(static_cast<size_t>(500 + Pick(40)), 'x')); break;
+					default: T.insert(At, " | why"); break;
+					}
+				}
+				const ParseResult R = Parse(T);
+				Oks += R.Ok;
+				std::fprintf(F, "fuzz\t%s\t%s\t%s\n", Hex(T).c_str(), R.Ok ? "ok" : "err", R.Ok ? Hex(Write(R.Out)).c_str() : R.Error.c_str());
+			}
+			std::printf("  fuzz: 600 mutated specs, %d still parse\n", Oks);
+		}
 		std::fclose(F);
 		std::printf("wrote %s\n", argv[2]);
 	}

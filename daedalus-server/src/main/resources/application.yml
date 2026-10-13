@@ -215,6 +215,11 @@ daedalus:
 resilience4j:
   ratelimiter:
     instances:
+      tacticsDecide:
+        limit-for-period: 1200        # Unreal asks ~1/s per squad (ADR-060); 20/s per game host covers 20 squads
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
       presence:
         limit-for-period: 600         # a client reports where it is a few times a second (ADR-039)
         limit-refresh-period: 1m

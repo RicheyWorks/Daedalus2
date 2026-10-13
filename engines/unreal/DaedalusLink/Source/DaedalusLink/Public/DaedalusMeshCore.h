@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <cstdint>
@@ -188,6 +189,100 @@ inline void MeshChunk(const ChunkStore& Store, const Palette& Pal, const ChunkKe
     }
 }
 
+/**
+ * MeshChunk's faces merged into rectangles: per face direction and slice, runs of one cube type become one quad
+ * (ADR-064 rule 3, one greedy mesh per chunk). No per-cube grain (that is what made every face unique), so far fewer
+ * vertices. Same order, positions, colours and winding as Java's WorldMesher.meshGreedy, to the last bit.
+ */
+inline void MeshChunkGreedy(const ChunkStore& Store, const Palette& Pal, const ChunkKey& At, Part& Opaque, Part& Translucent)
+{
+    static const int N[6][3] = {{1, 0, 0}, {-1, 0, 0}, {0, 1, 0}, {0, -1, 0}, {0, 0, 1}, {0, 0, -1}};
+    static const double Shade[6] = {0.86, 0.86, 1.0, 0.62, 0.94, 0.78};
+    static const int Corner[6][4][3] = {
+        {{1, 0, 0}, {1, 1, 0}, {1, 1, 1}, {1, 0, 1}},
+        {{0, 0, 1}, {0, 1, 1}, {0, 1, 0}, {0, 0, 0}},
+        {{0, 1, 1}, {1, 1, 1}, {1, 1, 0}, {0, 1, 0}},
+        {{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}},
+        {{1, 0, 1}, {1, 1, 1}, {0, 1, 1}, {0, 0, 1}},
+        {{0, 0, 0}, {0, 1, 0}, {1, 1, 0}, {1, 0, 0}},
+    };
+    const ChunkStore::Cubes* Cubes = Store.Find(At);
+    if (!Cubes) return;
+    const int S = ChunkSize;
+    const int Origin[3] = {At.X * S, At.Y * S, At.Z * S};
+    int Mask[ChunkSize * ChunkSize];
+    for (int F = 0; F < 6; ++F)
+    {
+        const int* Nf = N[F];
+        const int D = Nf[0] != 0 ? 0 : Nf[1] != 0 ? 1 : 2;
+        const int U = D == 0 ? 1 : 0;
+        const int V = D == 2 ? 1 : 2;
+        for (int K = 0; K < S; ++K)
+        {
+            for (int VV = 0; VV < S; ++VV)
+                for (int UU = 0; UU < S; ++UU)
+                {
+                    int L[3];
+                    L[D] = K;
+                    L[U] = UU;
+                    L[V] = VV;
+                    const uint8_t T = (*Cubes)[L[0] + S * (L[1] + S * L[2])];
+                    int M = 0;
+                    if (T != 0)
+                    {
+                        const int Ax = L[0] + Nf[0], Ay = L[1] + Nf[1], Az = L[2] + Nf[2];
+                        const uint8_t Nb = (Ax >= 0 && Ax < S && Ay >= 0 && Ay < S && Az >= 0 && Az < S)
+                            ? (*Cubes)[Ax + S * (Ay + S * Az)]
+                            : Store.Get(Origin[0] + Ax, Origin[1] + Ay, Origin[2] + Az);
+                        if (Pal.Of(Nb).bSeeThrough && Nb != T) M = T;
+                    }
+                    Mask[UU + S * VV] = M;
+                }
+            for (int VV = 0; VV < S; ++VV)
+            {
+                for (int UU = 0; UU < S;)
+                {
+                    const int T = Mask[UU + S * VV];
+                    if (T == 0) { ++UU; continue; }
+                    int W = 1;
+                    while (UU + W < S && Mask[UU + W + S * VV] == T) ++W;
+                    int H = 1;
+                    for (bool Grow = true; Grow && VV + H < S;)
+                    {
+                        for (int I = 0; I < W; ++I)
+                            if (Mask[UU + I + S * (VV + H)] != T) { Grow = false; break; }
+                        if (Grow) ++H;
+                    }
+                    for (int J = 0; J < H; ++J)
+                        for (int I = 0; I < W; ++I) Mask[UU + I + S * (VV + J)] = 0;
+                    const CubeType& Type = Pal.Of(static_cast<uint8_t>(T));
+                    Part& P = Type.bTranslucent ? Translucent : Opaque;
+                    const float LinF[3] = {static_cast<float>(SrgbToLinear((Type.Rgb >> 16) & 255)),
+                        static_cast<float>(SrgbToLinear((Type.Rgb >> 8) & 255)), static_cast<float>(SrgbToLinear(Type.Rgb & 255))};
+                    const double Sh = Shade[F];
+                    int O[3], Ext[3];
+                    O[D] = Origin[D] + K;
+                    O[U] = Origin[U] + UU;
+                    O[V] = Origin[V] + VV;
+                    Ext[D] = 1;
+                    Ext[U] = W;
+                    Ext[V] = H;
+                    const uint32_t Base = static_cast<uint32_t>(P.VertexCount());
+                    for (int C = 0; C < 4; ++C)
+                    {
+                        P.Positions.insert(P.Positions.end(), {static_cast<float>(O[0] + Corner[F][C][0] * Ext[0]),
+                            static_cast<float>(O[1] + Corner[F][C][1] * Ext[1]), static_cast<float>(O[2] + Corner[F][C][2] * Ext[2])});
+                        P.Normals.insert(P.Normals.end(), {static_cast<float>(Nf[0]), static_cast<float>(Nf[1]), static_cast<float>(Nf[2])});
+                        P.Colors.insert(P.Colors.end(), {Clamp01(LinF[0] * Sh), Clamp01(LinF[1] * Sh), Clamp01(LinF[2] * Sh)});
+                    }
+                    P.Indices.insert(P.Indices.end(), {Base, Base + 1, Base + 2, Base, Base + 2, Base + 3});
+                    UU += W;
+                }
+            }
+        }
+    }
+}
+
 /** Standard base64 (as /chunk/blocks sends it). Returns false on a malformed or wrong-sized payload. */
 inline bool DecodeChunk(const std::string& B64, ChunkStore::Cubes& Out)
 {
@@ -217,6 +312,49 @@ inline bool DecodeChunk(const std::string& B64, ChunkStore::Cubes& Out)
         }
     }
     return N == Out.size();
+}
+
+/** Base64 to bytes (standard alphabet, '=' padding); false on a bad character or more than MaxBytes. */
+inline bool DecodeBase64(const std::string& B64, std::vector<uint8_t>& Out, size_t MaxBytes = 3 * ChunkVolume)
+{
+    Out.clear();
+    uint32_t Acc = 0;
+    int Bits = 0;
+    for (char C : B64)
+    {
+        if (C == '=') break;
+        int V = (C >= 'A' && C <= 'Z') ? C - 'A' : (C >= 'a' && C <= 'z') ? C - 'a' + 26
+            : (C >= '0' && C <= '9') ? C - '0' + 52 : C == '+' ? 62 : C == '/' ? 63 : -1;
+        if (V < 0) return false;
+        Acc = (Acc << 6) | static_cast<uint32_t>(V);
+        Bits += 6;
+        if (Bits >= 8)
+        {
+            Bits -= 8;
+            if (Out.size() >= MaxBytes) return false;
+            Out.push_back(static_cast<uint8_t>((Acc >> Bits) & 0xFF));
+        }
+    }
+    return true;
+}
+
+/**
+ * A chunk from the batch endpoint's run-length form (GET /world/{id}/chunks/blocks, Java Chunk.runs()):
+ * (ordinal, length low byte, length high byte) triples in index order, exactly 4,096 cubes. False otherwise.
+ */
+inline bool DecodeRuns(const std::string& B64, ChunkStore::Cubes& Out)
+{
+    std::vector<uint8_t> R;
+    if (!DecodeBase64(B64, R) || R.empty() || R.size() % 3 != 0) return false;
+    size_t At = 0;
+    for (size_t K = 0; K < R.size(); K += 3)
+    {
+        const size_t N = static_cast<size_t>(R[K + 1]) | (static_cast<size_t>(R[K + 2]) << 8);
+        if (N == 0 || At + N > Out.size()) return false;
+        std::fill(Out.begin() + static_cast<std::ptrdiff_t>(At), Out.begin() + static_cast<std::ptrdiff_t>(At + N), R[K]);
+        At += N;
+    }
+    return At == Out.size();
 }
 
 } // namespace daedalus

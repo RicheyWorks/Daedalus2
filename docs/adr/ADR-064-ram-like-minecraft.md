@@ -3,6 +3,23 @@
 **Status:** accepted, 2026-10-13. **Author:** unreal-team (Claude). **Asked by:** Richey. "Figure out how Minecraft
 deals with RAM with all its blocks. Wherever a different language optimizes better, we use it."
 
+## Results so far (2026-10-13, all measured; Unreal parts compile in the next editor slot)
+
+| What | Before | After |
+|---|---|---|
+| Chunk in RAM (Java) | 4,112 B each | empty/solid ~60 B, terrain ~2.1 KB (World Zero 221 KB -> 114 KB) |
+| Saved world (DAEW) | World Zero 218 KB | 25 KB (v14 runs) |
+| Edit + save, 200-chunk world | 6.0 ms | ~1.1 ms (copy-on-write, cached runs, buffered atomic save) |
+| Realm world load (web) | 54 requests, ~320 KB | 1 request, 35 KB |
+| Realm chunk meshing (web) | 1x | 2.4x faster, same bytes |
+| World Package glb, Gallery City | 30.4 MB, 183k faces | 8.7 MB, 51k quads (`?mesh=greedy`, Unreal default) |
+| World Package glb, Bricks | 5.8 MB | 179 KB |
+| Island generation (IslandPlan) | 64 B per cube | 10 B per cube |
+| `Chunk.get` | 22 ns | ~3 ns |
+| Islands in Unreal | all loaded always | view distance + RAM budget (DSB 1), 10k plan in 1.4 ms |
+| Claude Island in Unreal | 117,627 instances | 53,579 merged quads, far isles LOD |
+| Measuring | by hand | `GET /api/v1/worlds/ram`, `turn_unreal_team.py` RAM before/after + registry RAM audit |
+
 ## How Minecraft does it
 
 1. **A block is a number, not an object.** Each 16x16x16 section is a small palette plus packed indices: 4 to 8
@@ -121,3 +138,38 @@ This was first filed as ADR-062, which blender-team had already taken for the BB
   2 KiB. Writes widen, `copy()`/load narrow. `occupied()` is O(1) now (it scanned 4,096 bytes on every remove).
   Reads stay lock-free (final fields in the store). Cost: get ~3 ns instead of ~2. ChunkPaletteTest 6/6 checks
   40 random edit runs against a dense model.
+- **Realm mesher (web, rule 6's cost):** `realm-mesh.js` copies a chunk plus a 2-cube border into one flat array
+  before meshing, so faces and AO corners are array reads instead of ~70 string-keyed Map lookups per cube; colours
+  convert once per kind. Same bytes as the old mesher on 60 random chunks (`node tools/realm_mesh_check.mjs`), 2.4x
+  faster; World Zero (53 chunks) renders the same in headless Chromium.
+- **One request per world, run-length encoded (the wire side of rule 1):** `GET /api/v1/world/{id}/chunks/blocks`
+  sends every non-empty chunk as base64 (ordinal, len lo, len hi) triples (`Chunk.runs()` / `Chunk.ofRuns`). World
+  Zero: 53 chunks in 1 request and 35 KB, against 54 requests and ~320 KB (23 KB of runs vs 217 KB dense). realm.js
+  uses it and falls back to per-chunk on an older server. The per-chunk endpoint stays for other clients.
+- **Saved worlds as runs (DAEW version 14):** chunks are written as `Chunk.runs()` triples instead of 4,096 dense
+  bytes. World Zero's file: 218 KB -> 25 KB (53 chunks); a 120-chunk test world: 494 KB -> 48 KB. Version 13 and
+  older files still load (and re-save as 14, byte-identical to a fresh save); broken runs refuse the file. An older
+  server cannot read a version-14 file, so roll servers forward, not back. In RAM the same worlds hold 114 KB and
+  258 KB of chunk storage instead of 221 KB and 500 KB (the palette above).
+- **Saves redo only dirty chunks (rule 6 for persistence):** every block edit snapshots and saves the world. A
+  snapshot copied every chunk (4 KiB each) and the save re-encoded every chunk. Now `Chunk.copy()` shares storage
+  copy-on-write, and each store caches its runs until written. A 200-chunk world: edit + save 6.0 -> 1.6 ms (the
+  rest is the file write); the cost per edit no longer grows with the number of untouched chunks' cubes.
+- **Saves are atomic and buffered:** `WorldStore.save` writes a temp file beside the world and moves it over in one
+  step (retrying briefly when Windows holds the file, then falling back to a plain copy), so a crash or full disk
+  mid-save leaves the last good world, not a truncated one. A buffered stream cut edit + save to ~1.1 ms on the
+  200-chunk world. WorldStoreTest checks a save that dies half way leaves the old bytes and no temp files.
+- **Greedy World Package meshes (rule 3 for exported worlds):** `WorldMesher.meshGreedy` and C++
+  `MeshChunkGreedy` merge each chunk's visible faces into rectangles per direction and cube type (no per-cube grain,
+  which is what made every face unique). Java and C++ match byte for byte (isle8.mesh.txt `greedy` lines, mesh_core_test
+  91/91), and MeshFixtureTest checks the quads cover exactly the same unit faces, none twice. Measured: Gallery City
+  183k faces -> 51k quads, glb 30.4 MB -> 8.7 MB; Parcels 58k -> 4.9k (9.7 -> 1.0 MB); Bricks 35k -> 436
+  (5.8 MB -> 179 KB); World Zero 2.1x.
+- **Unreal imports greedy by default:** the package endpoints take `?mesh=greedy` (cached apart from the per-face
+  mesh; WorldPackageControllerTest 6/6), and `setup-unreal.ps1 -Mesh greedy` (default) / `import_world_package.fetch`
+  ask for it, so an imported Gallery City is 51k quads instead of 183k faces in the editor. `-Mesh faces` keeps the
+  old look with per-cube grain; live_parity still checks the per-face mesh against C++.
+- **The live Unreal world actor too:** ADaedalusWorldActor loads a world with one `/chunks/blocks` request
+  (`DecodeRuns`, C++; isle8.mesh.txt `runs` lines from Java's `Chunk.runs()` must decode to the same cubes,
+  mesh_core_test 110/110) and then polls per chunk by revision as before; an older server falls back. `bGreedyMesh`
+  (default on) builds its procedural meshes with `MeshChunkGreedy`.
