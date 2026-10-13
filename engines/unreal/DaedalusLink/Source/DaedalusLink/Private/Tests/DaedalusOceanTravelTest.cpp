@@ -75,6 +75,23 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
     TestTrue(TEXT("Original avatar controlled"),Player->GetPawn()==Avatar);
     TestFalse(TEXT("Repeated disembark refused"),Component->DisembarkAtDock(Player,Vessel,Home.Id));
     TestTrue(TEXT("New boarding cycle allowed"),Component->BoardAtDock(Player,Vessel,Home.Id));
+    Vessel->SetActorLocation(FVector::ZeroVector);
+    Vessel->VesselType=EDaedalusOceanVessel::Boat;
+    Vessel->SetHelmInput_Implementation(1,0,-1); Vessel->Tick(.1f);
+    TestTrue(TEXT("Boat helm moves forward"),Vessel->GetActorLocation().X>0);
+    TestEqual(TEXT("Boat stays at sea level"),Vessel->GetActorLocation().Z,0.0);
+    Vessel->VesselType=EDaedalusOceanVessel::Submarine;
+    Vessel->SetHelmInput_Implementation(0,0,-1); Vessel->Tick(.1f);
+    TestTrue(TEXT("Submarine dives"),Vessel->GetActorLocation().Z<0);
+    Vessel->SetActorLocation(FVector(0,0,-19999));
+    Vessel->SetHelmInput_Implementation(0,0,-1); Vessel->Tick(.1f);
+    TestTrue(TEXT("Depth limit enforced"),Vessel->GetActorLocation().Z>=-20000);
+    Vessel->SetActorLocation(FVector(0,0,-100));
+    Vessel->SetHelmInput_Implementation(0,0,-1);
+    for (int i=0;i<10;++i) Vessel->Tick(.1f);
+    const double StoppedDepth=Vessel->GetActorLocation().Z;
+    Vessel->Tick(.1f);
+    TestEqual(TEXT("Expired dive command stops away from depth boundary"),Vessel->GetActorLocation().Z,StoppedDepth);
     World->DestroyWorld(false);
     return true;
 }

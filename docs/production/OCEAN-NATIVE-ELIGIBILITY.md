@@ -8,8 +8,29 @@ data and boarding positions. This API is not a client RPC.
 
 ADaedalusOceanVessel provides a static mesh root, replicated movement and server
 travel identity for possessed boat/submarine pawns. Assign the appropriate model
-and movement component in the realm integration. The pawn adds no buoyancy,
-propulsion, passenger handling or submarine controls by itself.
+and collision in the realm integration. A server-authoritative kinematic helm now
+accelerates forward/reverse motion, steers yaw and lets submarines dive/surface.
+Boats target the configured sea level; submarines clamp to configured maximum
+depth. Movement uses swept actor offsets. This is an initial arcade controller,
+not hydrodynamic buoyancy, wave following or passenger handling.
+
+SetHelmInput is an unreliable server RPC on the possessed vessel. Unreal's actor
+ownership controls which remote connection can invoke it. Inputs must be finite
+and clamp to [-1,1]; unpossessed vessels cannot accept them. Commands expire after
+0.5 seconds without refresh; forward speed decelerates and steering/dive stop.
+The host must provide matching input mappings, collision and sea-level/depth
+configuration. Tick steps cap at 0.1 seconds and refuse invalid tuning. Defaults
+are 600 cm/s cruise, 300 cm/s² acceleration, 60 degrees/s yaw and 250 cm/s dive.
+Client prediction and multiplayer latency behavior remain acceptance work.
+
+Motion automation invokes the server handler directly in the synthetic world;
+it verifies translation, boat height, submarine depth and stale input stopping
+away from the depth boundary. It does not prove remote RPC delivery. The first
+motion run using the RPC wrapper did not move the synthetic pawn and failed;
+that report was rejected. Root mesh mobility is now explicitly Movable. Real
+client/server helm transport remains a required acceptance gate, not inferred
+from direct handler success. Input expiry counts full tick time even when the
+motion integration step is capped, so a long frame does not extend input leases.
 
 ResolveForPlayer checks the component owner, controller and vessel authority,
 same-world identity, actual possession in both directions, finite vessel position,

@@ -17,12 +17,22 @@ class DAEDALUSLINK_API ADaedalusOceanVessel : public APawn
     GENERATED_BODY()
 public:
     ADaedalusOceanVessel();
+    virtual void Tick(float DeltaSeconds) override;
+    UFUNCTION(Server, Unreliable, BlueprintCallable, Category="Daedalus|Ocean")
+    void SetHelmInput(float Forward, float Turn, float Dive);
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean") float CruiseSpeedCm = 600;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean") float SeaLevelCm = 0;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean") float MaxDepthCm = 20000;
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean")
     TObjectPtr<UStaticMeshComponent> VesselMesh;
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean")
     EDaedalusOceanVessel VesselType = EDaedalusOceanVessel::Boat;
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean")
     FString CurrentRealm;
+private:
+    FVector Helm = FVector::ZeroVector;
+    float InputAge = 1;
+    float ForwardSpeed = 0;
 };
 
 USTRUCT(BlueprintType)

@@ -20,9 +20,46 @@ bool Finite(const FVector& Position)
 ADaedalusOceanVessel::ADaedalusOceanVessel()
 {
     VesselMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VesselMesh"));
+    VesselMesh->SetMobility(EComponentMobility::Movable);
     SetRootComponent(VesselMesh);
     bReplicates = true;
     SetReplicateMovement(true);
+    PrimaryActorTick.bCanEverTick = true;
+}
+
+void ADaedalusOceanVessel::SetHelmInput_Implementation(float Forward, float Turn, float Dive)
+{
+    if (!HasAuthority() || !IsValid(GetController()) || !FMath::IsFinite(Forward)
+        || !FMath::IsFinite(Turn) || !FMath::IsFinite(Dive)) return;
+    Helm = FVector(FMath::Clamp(Forward,-1.0f,1.0f),FMath::Clamp(Turn,-1.0f,1.0f),
+                   FMath::Clamp(Dive,-1.0f,1.0f));
+    InputAge = 0;
+}
+
+void ADaedalusOceanVessel::Tick(float DeltaSeconds)
+{
+    Super::Tick(DeltaSeconds);
+    if (!HasAuthority() || !FMath::IsFinite(DeltaSeconds) || DeltaSeconds <= 0) return;
+    const float Dt = FMath::Min(DeltaSeconds,0.1f);
+    InputAge += DeltaSeconds;
+    if (!IsValid(GetController()) || InputAge > 0.5f) Helm = FVector::ZeroVector;
+    if (!FMath::IsFinite(CruiseSpeedCm) || CruiseSpeedCm <= 0 || CruiseSpeedCm > 5000
+        || !FMath::IsFinite(SeaLevelCm) || !FMath::IsFinite(MaxDepthCm)
+        || MaxDepthCm <= 0 || MaxDepthCm > 100000
+        || (VesselType != EDaedalusOceanVessel::Boat && VesselType != EDaedalusOceanVessel::Submarine))
+    {
+        Helm = FVector::ZeroVector; ForwardSpeed = 0; return;
+    }
+    ForwardSpeed = FMath::FInterpConstantTo(ForwardSpeed,static_cast<float>(Helm.X)*CruiseSpeedCm,Dt,300);
+    FRotator Rotation = GetActorRotation();
+    Rotation.Pitch = 0; Rotation.Roll = 0; Rotation.Yaw += Helm.Y * 60 * Dt;
+    SetActorRotation(Rotation);
+    FVector Delta = GetActorForwardVector() * ForwardSpeed * Dt;
+    const double TargetZ = VesselType == EDaedalusOceanVessel::Boat ? SeaLevelCm
+        : FMath::Clamp(GetActorLocation().Z + Helm.Z * 250 * Dt,
+                       static_cast<double>(SeaLevelCm-MaxDepthCm),static_cast<double>(SeaLevelCm));
+    Delta.Z = TargetZ-GetActorLocation().Z;
+    AddActorWorldOffset(Delta,true);
 }
 
 bool UDaedalusOceanTravelComponent::IsHost() const
