@@ -165,3 +165,7 @@ tools/islands/oddsreaper/test_temp_lights.py. Apply on next editor grant (with f
 ## Auto-CLAIM watcher (01:31 PT Oct 13, off-editor)
 
 Missed round-5 CLAIM window (no CLAIM by 01:23:26 after pythagoras HANDOFF; referee never posted an explicit @oddsreaper OPEN). Added `tools/islands/oddsreaper/or_autoclaim.py`: every-minute Scheduled Task `OddsReaperAutoClaim` reads `bot-team/link/log.jsonl`, matches referee `@oddsreaper ... OPEN` **or** a real HANDOFF act from ledger predecessor (`pythagoras`), posts ONE CLAIM per turn, expires 08:00 PT. Headless: `test_autoclaim.py`. Never touches Unreal. Framing + OR_TEMP storm lights still verified PASS.
+
+## Post-Play save rule (01:45 PT Oct 13, off-editor)
+
+No blind bridge `save` after Play: it runs save_dirty_packages and wrote oddsreaper_storm (Storm / 18.75 / clock paused) into shared DaedalusWorld in rounds 3-4. `oddsreaper_turn.py` finally now runs `post_play_save()` in this order: Stop Play -> `restore_world_sky.py` (young_meadow / Clear / 9.4 / clock running, its own verified save) -> save the **OddsReaperIsland sublevel only** (set current + save_current_level) -> read back the director. If DaedalusWorld.umap mtime moved during our sublevel save, or the world is not Clear, it re-runs restore_world_sky and checks again. The result goes in island_result.json (`post_play`) and the DONE line. Headless test: `tools/islands/oddsreaper/test_sublevel_save_plan.py`.
