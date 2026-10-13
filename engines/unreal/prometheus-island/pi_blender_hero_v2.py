@@ -137,5 +137,12 @@ if os.environ.get("PIB3"):
     d=(tgt+mathutils.Vector((0,0,-3)))-cam.location; cam.rotation_euler=d.to_track_quat("-Z","Y").to_euler(); cam.data.dof.focus_distance=(hv-cam.location).length; cam.data.lens=26
     ang=math.atan2(d.y,d.x); sky.sun_rotation=ang+math.pi*0.75
     for o in [o for o in sc.objects if o.type=="LIGHT" and o.data.type=="SUN"]: o.rotation_euler=(math.radians(84),0,ang+math.pi*0.75+math.pi/2)
+if os.environ.get("PIB4"):
+    # v4: lift the gorge floor + water: soft warm area fills along the stream, faint teal glow in the water
+    for t in (0.15,0.3,0.45,0.6,0.75,0.9):
+        p=L(*g["path"](t),-15)
+        if p: bpy.ops.object.light_add(type="AREA",location=(p[0],p[1],p[2]+9)); a=bpy.context.object.data; a.energy=9000; a.size=18; a.color=(1,0.72,0.45)
+    nd,lk=nodes(g["WATER"]); b=nd["Principled BSDF"]; b.inputs["Emission Color"].default_value=(0.03,0.22,0.24,1); b.inputs["Emission Strength"].default_value=0.45
+    b.inputs["Transmission Weight"].default_value=0.4
 print("PIB2 tgt",tuple(round(v,1) for v in tgt),"cam",tuple(round(v,1) for v in cam.location))
 bpy.ops.render.render(write_still=True); print("PIB2 wrote",sc.render.filepath)
