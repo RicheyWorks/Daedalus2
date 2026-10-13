@@ -36,6 +36,15 @@ management:
 
 # Daedalus-specific config. Bind these with @ConfigurationProperties("daedalus") in the server module.
 daedalus:
+  # Optional single-settlement simulation; see docs/realms/LivingWorldSimulation.md.
+  simulation:
+    enabled: ${DAEDALUS_SIMULATION_ENABLED:false}
+    # Required when enabled: exclusive sidecar path and authenticated principal name.
+    file: ${DAEDALUS_SIMULATION_FILE}
+    steward: ${DAEDALUS_SIMULATION_STEWARD}
+    world-id: ${DAEDALUS_SIMULATION_WORLD_ID:world-zero}
+    tick-ms: ${DAEDALUS_SIMULATION_TICK_MS:1000}
+    poll-ms: ${DAEDALUS_SIMULATION_POLL_MS:1000}
   plugins:
     directory: ${DAEDALUS_PLUGIN_DIR:${user.home}/.daedalus/plugins}
     scan-on-startup: true

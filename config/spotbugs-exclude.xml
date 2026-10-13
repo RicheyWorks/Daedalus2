@@ -4,6 +4,13 @@
   justifying each, rather than lowering the global threshold.
 -->
 <FindBugsFilter>
+    <!-- The host publishes into Spring's shared metrics registry; a defensive copy
+         would disconnect the simulation counters from the application's registry. -->
+    <Match>
+        <Class name="com.daedalus.server.service.simulation.LivingWorldService"/>
+        <Field name="metrics"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
     <!-- SimulationTimeline is final and immutable: all fields are final, state records
          own immutable collections, entries use List.copyOf, and append returns a new
          timeline. SpotBugs does not infer this value's immutability. These
