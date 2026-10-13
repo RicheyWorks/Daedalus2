@@ -1115,5 +1115,26 @@
    "scale": 1.2,
    "zone": "livestock_pens"
   }
+ ],
+ "hero_cam_m": [
+  140,
+  -160,
+  90
+ ],
+ "hero_target_m": [
+  0,
+  0,
+  5
+ ],
+ "hero_fov": 55,
+ "hero_cam_cm": [
+  6014000,
+  1984000,
+  9000
+ ],
+ "hero_target_cm": [
+  6000000,
+  2000000,
+  500
  ]
 }

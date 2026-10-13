@@ -148,20 +148,27 @@ def main():
         cam, rot = isle["cam"], isle["cam_rot"]
         call("execute_python", timeout=15, code="import unreal; unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem)."
              f"set_level_viewport_camera_info(unreal.Vector({cam[0]},{cam[1]},{cam[2]}), unreal.Rotator(roll=0,pitch={rot[0]},yaw={rot[1]}))")
-        # Round-1 timed out on viewport_screenshot (modal/busy). Retry + HighResShot fallback.
-        shot_path = os.path.join(SHOTS, "hero_unreal_editor.png")
+        # Round-1 timed out on viewport_screenshot (modal/busy). Prefer SceneCapture from heph_island_ue (loads at turn start),
+        # then retry viewport + HighResShot. Stable path: hero_r2.png.
+        shot_path = os.path.join(SHOTS, "hero_r2.png")
         shot_ok = False
-        for attempt, (w, h, settle, to) in enumerate(((1920, 1080, 5, 45), (1920, 1080, 8, 60), (1280, 720, 5, 45)), 1):
-            if left() < 15: break
-            try:
-                time.sleep(settle)
-                r = call("viewport_screenshot", timeout=to, width=w, height=h)
-                with open(shot_path, "wb") as f: f.write(base64.b64decode(r["image_png_base64"]))
-                say(f"shot {shot_path} ({w}x{h} attempt {attempt})")
-                shot_ok = True
-                break
-            except Exception as e:
-                say(f"viewport_screenshot attempt {attempt} failed: {e}")
+        # heph_island_ue.run() already tried warm SceneCapture; reuse if present
+        if isle.get("shot") and os.path.isfile(isle["shot"]) and os.path.getsize(isle["shot"]) > 1000:
+            shot_path = isle["shot"]; shot_ok = True; say(f"shot from island SceneCapture: {shot_path}")
+        elif os.path.isfile(shot_path) and os.path.getsize(shot_path) > 1000:
+            shot_ok = True; say(f"shot already on disk: {shot_path}")
+        if not shot_ok:
+            for attempt, (w, h, settle, to) in enumerate(((1920, 1080, 5, 45), (1920, 1080, 8, 60), (1280, 720, 5, 45)), 1):
+                if left() < 15: break
+                try:
+                    time.sleep(settle)
+                    r = call("viewport_screenshot", timeout=to, width=w, height=h)
+                    with open(shot_path, "wb") as f: f.write(base64.b64decode(r["image_png_base64"]))
+                    say(f"shot {shot_path} ({w}x{h} attempt {attempt})")
+                    shot_ok = True
+                    break
+                except Exception as e:
+                    say(f"viewport_screenshot attempt {attempt} failed: {e}")
         if not shot_ok and left() > 20:
             try:
                 hr = os.path.join(SHOTS, "hero_highres")
@@ -191,9 +198,31 @@ def main():
                     say("HighResShot fallback: no png under Saved/Screenshots yet")
             except Exception as e:
                 say(f"HighResShot fallback failed: {e}")
+        if not shot_ok and left() > 25:
+            # Last resort: warm SceneCapture via heph_island_ue.hero_capture (file loaded from disk now)
+            try:
+                tgt = isle.get("hero_target") or [cam[0] - 14000, cam[1] + 16000, 500]
+                code = (
+                    "import runpy,sys\n"
+                    f"sys.path.insert(0, r'{TOOL}')\n"
+                    f"m = runpy.run_path(r'{TOOL}\\heph_island_ue.py', run_name='heph_shot')\n"
+                    "import unreal\n"
+                    f"cam = unreal.Vector({cam[0]},{cam[1]},{cam[2]})\n"
+                    f"tgt = unreal.Vector({tgt[0]},{tgt[1]},{tgt[2]})\n"
+                    "result = m['hero_capture'](cam, tgt)"
+                )
+                r = call("execute_python", timeout=int(min(90, max(30, left() - 10))), code=code).get("result")
+                if r and os.path.isfile(str(r)) and os.path.getsize(str(r)) > 1000:
+                    shot_path = str(r); shot_ok = True; say(f"shot SceneCapture re-arm path: {shot_path}")
+                else:
+                    say(f"SceneCapture re-call returned: {r}")
+            except Exception as e:
+                say(f"SceneCapture re-call failed: {e}")
         if not shot_ok:
-            say("viewport_screenshot FAILED after retries + HighResShot; hero shot still owed")
-            link("NEED island:hephaestus: viewport_screenshot still failing after retries+HighResShot; hero shot owed (unreal-team bridge 9877)")
+            say("viewport_screenshot FAILED after retries + HighResShot + SceneCapture; hero shot still owed")
+            link("NEED island:hephaestus: viewport_screenshot still failing after retries+HighResShot+SceneCapture; hero shot owed (unreal-team bridge 9877)")
+        else:
+            link(f"DONE island:hephaestus hero shot ready: {shot_path}")
         # Referee wants a 20s Play check (oddsreaper pattern). Only if time remains.
         if left() > 35:
             try:

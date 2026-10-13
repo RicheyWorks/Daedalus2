@@ -101,5 +101,22 @@ Reward: forge-tempered tonic recipe unlocked + drydock blueprint fragment.
 - Hero meshes: `heph_hero_glb.py` (procedural low-poly, no Blender RAM hit).
 - Round-1 result (2026-10-12 ~18:43 PT): 119/119 placed, living check PASS, sublevel + DaedalusWorld saved; viewport_screenshot timed out (owed on round-2).
 
+
+## Hero camera (round-2 shot)
+
+Forge overlook — high three-quarter view of the Great Forge with drydock and hot springs behind.
+
+| Field | Value |
+|-------|-------|
+| Origin (cm) | `6000000, 2000000, 0` |
+| Cam relative (m) | `140, -160, 90` |
+| Target relative (m) | `0, 0, 5` (Great Forge) |
+| Cam world (cm) | `6014000, 1984000, 9000` |
+| Target world (cm) | `6000000, 2000000, 500` |
+| FOV | 55° |
+| Stable PNG | `C:\Users\730ri\projects\bot-team\shots\hephaestus\hero_r2.png` |
+
+Capture path (in `heph_island_ue.hero_capture`, loaded at turn start via runpy): warm SceneCapture2D (exposure bias +1, white temp 5200 K, bloom 0.4) → if that fails, set viewport to this pose, settle 2s, HighResShot 1920x1080 + Shot, copy newest Saved/Screenshots PNG to `hero_r2.png`. `heph_turn` prefers that file over bridge `viewport_screenshot` (which timed out on round-1).
+
 ## Win condition
 Water running, pens producing, herb beds watered, and at least one dual-quenched tonic in the player's pack. The Great Forge glow brightens when all three living systems are up — the shard is tempered.

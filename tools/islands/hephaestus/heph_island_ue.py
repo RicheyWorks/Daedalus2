@@ -22,6 +22,8 @@ KIND = {"Prop": "Prop", "Item": "Item", "Tool": "Tool", "Bld": "Bld", "Mob": "Mo
 ENGINE = {"WaterPlane_HotSpring": ("/Engine/BasicShapes/Plane", 10.0)}  # asset -> (engine mesh, extra scale)
 eal = unreal.EditorAssetLibrary
 OUTBOX = r"C:\Users\730ri\projects\bot-team\link\outbox\hephaestus.jsonl"
+SHOTS = r"C:\Users\730ri\projects\bot-team\shots\hephaestus"
+HERO_PNG = "hero_r2.png"  # stable path for referee / round-2 living note
 HOTSPRING_MI = "/Game/Hephaestus/Materials/MI_HotSpring"
 
 
@@ -134,6 +136,81 @@ def save_world():
     return res
 
 
+
+def hero_capture(cam_loc, target_loc, fov=55.0):
+    """Warm SceneCapture2D hero shot (Prometheus pattern: exposure +1, 5200 K).
+    Bypasses viewport_screenshot (bridge 9877 often times out). Writes SHOTS/hero_r2.png.
+    Returns absolute path or None."""
+    import time
+    os.makedirs(SHOTS, exist_ok=True)
+    out_path = os.path.join(SHOTS, HERO_PNG)
+    try:
+        ue_sub = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem)
+        world = ue_sub.get_editor_world()
+        actors = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+        # clear prior capture actors from a partial run
+        for a in actors.get_all_level_actors():
+            if str(a.get_actor_label()).startswith("Hephaestus Hero Capture"):
+                try: actors.destroy_actor(a)
+                except Exception: pass
+        rt = unreal.RenderingLibrary.create_render_target2d(
+            world, 1920, 1080, unreal.TextureRenderTargetFormat.RTF_RGBA8)
+        look = unreal.MathLibrary.find_look_at_rotation(cam_loc, target_loc)
+        cap = actors.spawn_actor_from_class(unreal.SceneCapture2D, cam_loc, look)
+        cap.set_actor_label("Hephaestus Hero Capture"); cap.set_folder_path(FOLDER)
+        sc = cap.capture_component2d
+        sc.set_editor_property("texture_target", rt)
+        sc.set_editor_property("capture_source", unreal.SceneCaptureSource.SCS_FINAL_COLOR_LDR)
+        sc.set_editor_property("fov_angle", float(fov))
+        pp = sc.get_editor_property("post_process_settings")
+        for k, v in (("override_auto_exposure_bias", True), ("auto_exposure_bias", 1.0),
+                     ("override_white_temp", True), ("white_temp", 5200.0),
+                     ("override_bloom_intensity", True), ("bloom_intensity", 0.4)):
+            try: pp.set_editor_property(k, v)
+            except Exception: pass
+        sc.set_editor_property("post_process_settings", pp)
+        sc.set_editor_property("post_process_blend_weight", 1.0)
+        sc.capture_scene()
+        unreal.RenderingLibrary.export_render_target(world, rt, SHOTS, HERO_PNG)
+        try: actors.destroy_actor(cap)
+        except Exception: pass
+        # brief settle + existence check
+        time.sleep(0.5)
+        if os.path.isfile(out_path) and os.path.getsize(out_path) > 1000:
+            log(f"hero SceneCapture -> {out_path} ({os.path.getsize(out_path)} B)")
+            return out_path
+        log(f"hero SceneCapture wrote missing/tiny file: {out_path}")
+    except Exception as e:
+        log(f"hero SceneCapture failed: {e}")
+    # HighResShot fallback from the same hero pose (documented in ISLAND.md)
+    try:
+        unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).set_level_viewport_camera_info(
+            cam_loc, unreal.Rotator(roll=0, pitch=math.degrees(math.atan2(
+                target_loc.z - cam_loc.z,
+                math.hypot(target_loc.x - cam_loc.x, target_loc.y - cam_loc.y))),
+                yaw=math.degrees(math.atan2(target_loc.y - cam_loc.y, target_loc.x - cam_loc.x))))
+        time.sleep(2.0)  # longer settle than round-1
+        unreal.SystemLibrary.execute_console_command(None, "HighResShot 1920x1080")
+        unreal.SystemLibrary.execute_console_command(None, "Shot")
+        time.sleep(4.0)
+        saved = r"C:\Unreal\DaedalusRealm\Saved\Screenshots"
+        cands = []
+        for root, _, files in os.walk(saved):
+            for fn in files:
+                if fn.lower().endswith(".png"):
+                    cands.append(os.path.join(root, fn))
+        if cands:
+            import shutil
+            newest = max(cands, key=os.path.getmtime)
+            shutil.copy2(newest, out_path)
+            log(f"hero HighResShot fallback -> {out_path} from {newest}")
+            return out_path
+        log("hero HighResShot fallback: no png under Saved/Screenshots")
+    except Exception as e:
+        log(f"hero HighResShot fallback failed: {e}")
+    return None
+
+
 def run():
     lay = json.load(open(LAYOUT))
     ox, oy, oz = lay["origin_cm"]
@@ -180,16 +257,24 @@ def run():
     rot = unreal.Rotator(roll=0, pitch=math.degrees(math.atan2(dz, math.hypot(dx, dy))), yaw=math.degrees(math.atan2(dy, dx)))
     cam = actors.spawn_actor_from_class(unreal.CineCameraActor, cl, rot)
     cam.set_actor_label("Hephaestus Hero Cam"); cam.set_folder_path(FOLDER)
+    # Warm SceneCapture hero PNG (bridge viewport_screenshot often times out on 9877).
+    tl = unreal.Vector(ox + t[0] * 100, oy + t[1] * 100, oz + t[2] * 100)
+    shot = hero_capture(cl, tl, fov=float(lay.get("hero_fov", 55)))
+    if shot:
+        link_note(f"DONE island:hephaestus hero shot: {shot} (SceneCapture2D warm capture exposure+1 / 5200K)")
+    else:
+        link_note("NEED island:hephaestus: hero SceneCapture + HighResShot both failed; hero_r2.png still owed")
     saved = save_world()
     want = sum(1 for p in lay["placements"] if not p.get("skip"))
     alive = all(living.values())
     ok = placed >= int(0.9 * want) and alive
-    log(f"placed={placed}/{want} imported={imported} missing={sorted(missing)} living={living} {'PASS' if ok else 'FAIL'}")
+    log(f"placed={placed}/{want} imported={imported} missing={sorted(missing)} living={living} shot={shot} {'PASS' if ok else 'FAIL'}")
     link_note(f"{'DONE' if alive else 'BLOCKED'} island:hephaestus living check in Unreal: water {living['water']}, "
               f"livestock {living['livestock']}, herbs {living['herbs']} placed; {placed}/{want} placements; "
               f"saved sublevel={saved['sublevel']} DaedalusWorld+maps={saved['maps']} dirty maps left={saved['dirty_maps']}")
     return {"ok": ok, "placed": placed, "want": want, "imported": imported, "missing": sorted(missing), "living": living,
-            "saved": saved, "cam": [cl.x, cl.y, cl.z], "cam_rot": [rot.pitch, rot.yaw]}
+            "saved": saved, "cam": [cl.x, cl.y, cl.z], "cam_rot": [rot.pitch, rot.yaw],
+            "shot": shot, "hero_target": [tl.x, tl.y, tl.z]}
 
 
 if __name__ == "__main__":
