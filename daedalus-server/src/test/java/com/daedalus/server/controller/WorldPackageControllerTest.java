@@ -4,6 +4,7 @@ package com.daedalus.server.controller;
 
 import com.daedalus.server.config.WalletProperties;
 import com.daedalus.server.service.WorldHub;
+import com.daedalus.api.dto.WorldManifest;
 import com.daedalus.server.service.WorldPackageService;
 import com.daedalus.server.service.WorldService;
 import com.daedalus.server.web.ApiExceptionHandler;
@@ -147,6 +148,35 @@ class WorldPackageControllerTest {
         byte[] plain = mvc.perform(get("/api/v1/world/world-zero/package/world.glb")).andReturn().getResponse().getContentAsByteArray();
         assertThat(g.getResponse().getContentAsByteArray().length).isLessThan(plain.length);
         mvc.perform(get("/api/v1/world/world-zero/package/world.glb").param("mesh", "cubes")).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void eachWorldStyleDescribesItsOwnLayoutInTheManifest() throws Exception {
+        hub.create("parcels-a", WorldStyle.PARCELS, 7, "Parcels A");
+        hub.create("bricks-a", WorldStyle.BRICKS, 7, "Bricks A");
+        hub.create("gallery-a", WorldStyle.GALLERY, 7, "Gallery A");
+        WorldManifest parcels = packages.build("parcels-a", "http://x").manifest();
+        assertThat(parcels.plots()).isNotEmpty().allMatch(pl -> pl.min().size() == 3 && pl.max().size() == 3
+                && pl.min().get(0) <= pl.max().get(0) && pl.owner().isEmpty());
+        assertThat(parcels.obby()).isNull();
+        WorldManifest bricks = packages.build("bricks-a", "http://x").manifest();
+        assertThat(bricks.obby()).isNotNull();
+        assertThat(bricks.obby().steps()).isNotEmpty();
+        assertThat(bricks.obby().steps().get(bricks.obby().steps().size() - 1).finish()).isTrue();
+        assertThat(bricks.obby().steps().stream().filter(WorldManifest.Step::finish)).hasSize(1);
+        assertThat(bricks.plots()).isEmpty();
+        WorldManifest gallery = packages.build("gallery-a", "http://x").manifest();
+        assertThat(gallery.plots()).isNotEmpty().anyMatch(pl -> pl.show().equals("GALLERY"))
+                .anyMatch(pl -> pl.show().equals("OPEN"));
+        assertThat(gallery.art()).as("a gallery opens with its shows hung").isNotEmpty()
+                .allMatch(a -> a.image().equals("http://x/api/v1/art/maze/" + a.seed() + ".png") && a.at().size() == 3
+                        && a.w() >= 1 && a.h() >= 1);
+        // the built package is a value: same world, same revision, equal; a copy cannot change the cache
+        WorldPackageService.Built a = packages.build("bricks-a", "http://x");
+        WorldPackageService.Built b = packages.build("bricks-a", "http://x");
+        assertThat(a).isEqualTo(b).hasSameHashCodeAs(b);
+        assertThat(a.toString()).contains("revision=" + a.revision());
+        assertThat(a).isNotEqualTo(packages.build("parcels-a", "http://x"));
     }
 
     @Test
