@@ -1,12 +1,12 @@
-﻿"""youtube-master: import 18 READY hero props (QUEUE 6302-6319) + place on YTM_Island. Idempotent (tag YTM_Hero). Saves YTM_Island sublevel only."""
+"""youtube-master: import 18 READY hero props (QUEUE 6302-6319) + place on YTM_Island. Idempotent (tag YTM_Hero). Saves YTM_Island sublevel only."""
 import unreal
 GLB = r"C:\Users\730ri\projects\bot-team\art\glb"; ART = "/Game/Daedalus/Art"; SUB = "/Game/YTM/Maps/YTM_Island"
 OFFSET = unreal.Vector(0, -2600000, 0); TAG = "YTM_Hero"
 eas = unreal.EditorAssetLibrary; act = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 world = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
-SIGNS = {"TheSpring":(1500,400,200),"Drink":(1200,-500,160),"HerbGarden":(4800,300,270),"Melody":(5200,-700,250),"Seeds":(4600,1100,290),
- "TheFarm":(-4800,300,90),"Pens":(-5200,-700,110),"Kitchen":(300,4000,180),"RecordingIsle":(0,-900,0),"Richeyworks":(-600,-700,20),
- "ArkDock":(0,-11000,0),"Jukebox":(-900,600,300)}
+SIGNS = {"TheSpring":(1500,400,-75),"Drink":(1200,-500,-113),"HerbGarden":(4800,300,-86),"Melody":(5200,-700,-98),"Seeds":(4600,1100,-77),
+ "TheFarm":(-4800,300,86),"Pens":(-5200,-700,98),"Kitchen":(300,4000,-4),"RecordingIsle":(0,-900,180),"Richeyworks":(-600,-700,139),
+ "ArkDock":(0,-11000,180),"Jukebox":(-876,588,56)}  # offline layout: text face (-Y) aimed at spawn, min spacing 632 cm, clear of spring/shrine/jukebox
 props = [("Prop",f"Prop_YTM_Sign_{k}",v) for k,v in SIGNS.items()]
 props += [("Prop","Prop_YTM_RecordShrine",(-800,1200,135)),("Prop","Prop_YTM_Jukebox",(-1100,700,120))]
 props += [("Item",f"Item_YTM_Record_{r}",(-800+60*(i-1.5),1000,85)) for i,r in enumerate(["AmericanOldTime","Alpine","CelticPipes","Gamelan"])]
