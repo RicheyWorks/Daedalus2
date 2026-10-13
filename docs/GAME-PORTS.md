@@ -1,8 +1,10 @@
 # Source games into Daedalus: inventory and first port
 
 This is a bounded source inventory, not a claim that every repository or game has been ported.
-The first runtime pilot is **Minesweeper Retro: 8 by 8, 10 mines**. A second, engine-free
-rules slice covers the actual Python ComputerPets care/ribbon game. Originals are preserved.
+The verified Python target is **ComputerPets care/ribbon**, scoped to one pet, Rui. Its
+engine-free rules port is the priority Python deliverable. The current additive Unreal
+integration pilot is **Minesweeper Retro: 8 by 8, 10 mines**, explicitly a Java source game.
+Originals are preserved. No further Java/TypeScript game port is authorized by this inventory.
 
 ## What the source actually contains
 
@@ -125,7 +127,9 @@ ASan/UBSan and MSVC fixture replay. None of this is UHT/UBT or live gameplay evi
 The board supports mouse/keyboard play and gamepad entry/exit; full gamepad tile navigation
 is not implemented. The local overlay is standalone-only, with no multiplayer replication.
 
-Suggested remaining order: complete this board's live acceptance; bind Rui care/ribbon and
-one verified character; then Blackjack one table/cast, Sudoku, Siege; repair Satellite before
-porting it. HackAttack is an optional terminal attraction. Follow Astra's existing RPG bridge
-instead of reimplementing that service. None of those follow-ons is claimed fully ported here.
+Priority recommendation: bind Rui care/ribbon and one source-faithful character as the actual
+Python pilot. Claude can validate the already-scoped Minesweeper board separately. Return
+this inventory before selecting further Java/TypeScript ports. If selected later, Blackjack
+one table/cast, Sudoku and Siege are the next candidates; repair Satellite before porting it.
+HackAttack is an optional terminal attraction. Follow Astra's existing RPG bridge instead of
+reimplementing that service. None of those follow-ons is claimed fully ported here.
