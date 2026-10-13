@@ -84,7 +84,9 @@ std::vector<double> ExecuteFixture(const std::string& Label, const std::vector<d
         Need(V, 12, Label); AsteroidsGame::Ship S;
         S.X=V[0]; S.Y=V[1]; S.Angle=V[2]; S.Vx=V[3]; S.Vy=V[4]; S.Cooldown=static_cast<int>(V[5]);
         const Input I=DecodeInput(V[6], V[7], V[8]);
-        for (int N=0; N<static_cast<int>(V[11]); ++N) S.Update(I, static_cast<int>(V[9]), static_cast<int>(V[10]));
+        for (int N=0; N<static_cast<int>(V[11]); ++N) {
+            S.Update(I, static_cast<int>(V[9]), static_cast<int>(V[10]));
+        }
         return {S.X,S.Y,S.Angle,S.Vx,S.Vy,Number(S.Cooldown),Number(S.Thrust)};
     }
     if (Label == "AST_SHOT") {
@@ -97,20 +99,20 @@ std::vector<double> ExecuteFixture(const std::string& Label, const std::vector<d
     }
     if (Label == "AST_BULLET") {
         Need(V, 5, Label); auto B=AsteroidsGame::Bullet::At(V[0],V[1],V[2]); B.Life=static_cast<int>(V[3]);
-        for (int N=0; N<static_cast<int>(V[4]); ++N) B.Update();
+        for (int N=0; N<static_cast<int>(V[4]); ++N) { B.Update(); }
         return {B.X,B.Y,B.Vx,B.Vy,Number(B.Life)};
     }
     if (Label == "AST_ROCK") {
         Need(V, 8, Label); AsteroidsGame::Rock R;
         R.X=V[0];R.Y=V[1];R.Size=static_cast<int>(V[2]);R.Vx=V[3];R.Vy=V[4];R.Angle=V[5];R.Rotation=V[6];
-        for (int N=0; N<static_cast<int>(V[7]); ++N) R.Update();
+        for (int N=0; N<static_cast<int>(V[7]); ++N) { R.Update(); }
         return {R.X,R.Y,R.Angle,R.Radius(),Number(R.SplitCount())};
     }
     if (Label == "SEGA_PLAYER") {
         Need(V, 9, Label); SegaShooterGame::Player P;
         P.X=V[0];P.Y=V[1];P.Speed=V[2];P.Cooldown=static_cast<int>(V[3]);P.Invincible=static_cast<int>(V[4]);
         const Input I=DecodeInput(V[5],V[6],V[7]);
-        for (int N=0; N<static_cast<int>(V[8]); ++N) P.Update(I);
+        for (int N=0; N<static_cast<int>(V[8]); ++N) { P.Update(I); }
         return {P.X,P.Y,P.Speed,Number(P.Cooldown),Number(P.Invincible)};
     }
     if (Label == "SEGA_SHOT") {
@@ -122,7 +124,7 @@ std::vector<double> ExecuteFixture(const std::string& Label, const std::vector<d
     if (Label == "SEGA_ENEMY") {
         Need(V, 7, Label); SegaShooterGame::Enemy E; SegaShooterGame::Player P;
         E.Chaser=V[0]!=0;E.Health=E.Chaser?4:2;E.X=V[1];E.Y=V[2];E.Speed=V[3];E.ShootTimer=static_cast<int>(V[4]);P.Y=V[5];
-        for (int N=0; N<static_cast<int>(V[6]); ++N) E.Update(P);
+        for (int N=0; N<static_cast<int>(V[6]); ++N) { E.Update(P); }
         return {E.X,E.Y,Number(E.Health),Number(E.ShootTimer)};
     }
     if (Label == "SEGA_POWER") {
@@ -130,26 +132,26 @@ std::vector<double> ExecuteFixture(const std::string& Label, const std::vector<d
         U.Kind=static_cast<SegaShooterGame::PowerKind>(static_cast<int>(V[0]));
         P.Power=static_cast<int>(V[1]);P.Speed=V[2];P.Lives=static_cast<int>(V[3]);U.X=V[4];U.Y=V[5];
         SegaShooterGame::ApplyPower(P,U.Kind);
-        for (int N=0; N<static_cast<int>(V[6]); ++N) U.Update();
+        for (int N=0; N<static_cast<int>(V[6]); ++N) { U.Update(); }
         return {Number(P.Power),P.Speed,Number(P.Lives),U.X,U.Y};
     }
     if (Label == "SEGA_BULLET") {
         Need(V, 5, Label); SegaShooterGame::Bullet B{V[0],V[1],V[2],V[3],true};
-        for (int N=0; N<static_cast<int>(V[4]); ++N) B.Update();
+        for (int N=0; N<static_cast<int>(V[4]); ++N) { B.Update(); }
         return {B.X,B.Y};
     }
     if (Label == "STAR_PLAYER") {
         Need(V, 9, Label); StarGame::Player P;
         P.X=V[0];P.Y=V[1];P.Cooldown=static_cast<int>(V[2]);P.Invincible=static_cast<int>(V[3]);P.SpeedBoost=V[4]!=0;
         const Input I=DecodeInput(V[5],V[6],V[7]);
-        for (int N=0; N<static_cast<int>(V[8]); ++N) P.Update(I);
+        for (int N=0; N<static_cast<int>(V[8]); ++N) { P.Update(I); }
         return {P.X,P.Y,Number(P.Cooldown),Number(P.Invincible)};
     }
     if (Label == "STAR_SHOT") {
         Need(V, 4, Label); StarGame::Player P;
         P.X=V[0];P.Y=V[1];P.Triple=V[2]!=0;P.Cooldown=static_cast<int>(V[3]);
         const auto Shots=P.Shoot();
-        for (const auto& B:Shots) Check(B.PlayerOwned && !B.BossOwned && !B.Big, "star player bullet ownership");
+        for (const auto& B:Shots) { Check(B.PlayerOwned && !B.BossOwned && !B.Big, "star player bullet ownership"); }
         return ShotResult(Shots,P.Cooldown,3,[](const StarGame::Bullet& B){return Vec{B.Dx,B.Dy};});
     }
     if (Label == "STAR_HIT") {
@@ -175,14 +177,14 @@ std::vector<double> ExecuteFixture(const std::string& Label, const std::vector<d
         Need(V, 4, Label); const auto Kind=static_cast<StarGame::EnemyKind>(static_cast<int>(V[0]));
         auto E=StarGame::Enemy::Create(Kind,1,StarGame::Difficulty::Hard,V[1],V[2],2,0,0,static_cast<int>(V[3]));
         const auto Shots=E.Shoot(E.ShootLow+(E.ShootHigh-E.ShootLow)/2);
-        for (const auto& B:Shots) Check(!B.PlayerOwned && !B.BossOwned, "star enemy bullet ownership");
+        for (const auto& B:Shots) { Check(!B.PlayerOwned && !B.BossOwned, "star enemy bullet ownership"); }
         return ShotResult(Shots,E.ShootTimer,3,[](const StarGame::Bullet& B){return Vec{B.Dx,B.Dy};});
     }
     if (Label == "STAR_DIVE") {
         Need(V, 6, Label); const auto Kind=static_cast<StarGame::EnemyKind>(static_cast<int>(V[0]));
         auto E=StarGame::Enemy::Create(Kind,1,StarGame::Difficulty::Hard,V[1],V[2],2,0,0,100);
         E.StartDive(V[3],V[4]);
-        for (int N=0;N<static_cast<int>(V[5]);++N) E.Update(V[3],V[4],1,StarGame::Difficulty::Hard,1);
+        for (int N=0;N<static_cast<int>(V[5]);++N) { E.Update(V[3],V[4],1,StarGame::Difficulty::Hard,1); }
         return {E.X,E.Y,E.DiveDx,E.DiveDy,Number(E.DiveTimer),Number(E.State==StarGame::EnemyState::Dive),Number(E.Alive)};
     }
     if (Label == "STAR_BOSS") {
@@ -198,7 +200,7 @@ std::vector<double> ExecuteFixture(const std::string& Label, const std::vector<d
         B.FirePattern=static_cast<StarGame::Pattern>(static_cast<int>(V[1]));
         B.State=static_cast<StarGame::BossState>(static_cast<int>(V[2]));B.ShootTimer=static_cast<int>(V[3]);B.X=V[4];B.Y=V[5];
         const auto Shots=B.Shoot(V[6],V[7]);
-        for (const auto& Shot:Shots) Check(Shot.BossOwned && !Shot.PlayerOwned && Shot.Big, "boss bullet ownership");
+        for (const auto& Shot:Shots) { Check(Shot.BossOwned && !Shot.PlayerOwned && Shot.Big, "boss bullet ownership"); }
         return ShotResult(Shots,B.ShootTimer,8,[](const StarGame::Bullet& Shot){return Vec{Shot.Dx,Shot.Dy};});
     }
     if (Label == "STAR_BOSS_MOVE") {
@@ -206,7 +208,7 @@ std::vector<double> ExecuteFixture(const std::string& Label, const std::vector<d
         B.State=static_cast<StarGame::BossState>(static_cast<int>(V[1]));B.X=V[2];B.Y=V[3];B.Direction=static_cast<int>(V[4]);
         B.MoveTimer=static_cast<int>(V[5]);B.ShootTimer=static_cast<int>(V[7]);B.Hp=static_cast<int>(V[8]);B.ChargeDx=0;B.ChargeDy=6;
         int Summoned=0;
-        for (int N=0;N<static_cast<int>(V[11]);++N) Summoned+=B.Update(V[9],V[10],360);
+        for (int N=0;N<static_cast<int>(V[11]);++N) { Summoned+=B.Update(V[9],V[10],360); }
         return {B.X,B.Y,Number(B.Direction),Number(B.MoveTimer),Number(B.ChargeTimer),Number(B.ShootTimer),
             Number(static_cast<int>(B.State)),B.Speed,Number(B.ShootRate),Number(B.Phase66),Number(B.Phase33),Number(Summoned)};
     }
@@ -214,12 +216,12 @@ std::vector<double> ExecuteFixture(const std::string& Label, const std::vector<d
         Need(V, 7, Label);StarGame::Player P;StarGame::Powerup U;
         U.Kind=static_cast<StarGame::PowerKind>(static_cast<int>(V[0]));P.Triple=V[1]!=0;P.Shield=V[2]!=0;P.SpeedBoost=V[3]!=0;
         U.X=V[4];U.Y=V[5];U.Apply(P);
-        for (int N=0;N<static_cast<int>(V[6]);++N) U.Update();
+        for (int N=0;N<static_cast<int>(V[6]);++N) { U.Update(); }
         return {Number(P.Triple),Number(P.Shield),Number(P.SpeedBoost),U.X,U.Y,Number(U.Alive),U.Bob};
     }
     if (Label == "STAR_BULLET") {
         Need(V, 6, Label);StarGame::Bullet B;B.X=V[0];B.Y=V[1];B.Dx=V[2];B.Dy=V[3];B.Big=V[4]!=0;
-        for (int N=0;N<static_cast<int>(V[5]);++N) B.Update();
+        for (int N=0;N<static_cast<int>(V[5]);++N) { B.Update(); }
         const Rect R=B.Bounds();return {B.X,B.Y,Number(B.Alive),R.X,R.Y,R.W,R.H};
     }
     throw std::runtime_error("unknown fixture label: " + Label);
@@ -242,7 +244,9 @@ void SourceFixtures(const char* Filename) {
         ++LineCount;if (!Line.empty() && Line.back()=='\r') Line.pop_back();
         if (Line.empty()) continue;
         if (Line[0]=='#') {
-            for (std::size_t N=0;N<Pins.size();++N) if (Line==Pins[N]) SeenPins[N]=true;
+            for (std::size_t N=0;N<Pins.size();++N) {
+                if (Line==Pins[N]) { SeenPins[N]=true; }
+            }
             continue;
         }
         try {
@@ -257,7 +261,7 @@ void SourceFixtures(const char* Filename) {
     }
     Check(CaseCount==635,"all 635 executed-source cases consumed");
     Check(Counts==ExpectedCounts,"fixture category counts unchanged");
-    for (bool Seen:SeenPins) Check(Seen,"source SHA256 provenance present");
+    for (bool Seen:SeenPins) { Check(Seen,"source SHA256 provenance present"); }
     std::cout << "Source fixtures: " << CaseCount << " (six cosmetic particle-count fields excluded)\n";
 }
 
@@ -314,7 +318,7 @@ template<class G> void Replay(const char* Name,std::size_t Limit,int Ticks) {
     Check(SameFrame(Before,After),std::string(Name)+" render does not mutate state");
     Check(SameFrame(Before,FreshFrame),std::string(Name)+" reset reproduces a fresh world");
     Input Bad;Bad.AxisX=std::numeric_limits<double>::quiet_NaN();Bad.AxisY=std::numeric_limits<double>::infinity();Bad.Fire=true;
-    for (int N=0;N<120;++N) A.Step(Bad);
+    for (int N=0;N<120;++N) { A.Step(Bad); }
     A.Render(After);Check(FiniteFrame(After),std::string(Name)+" nonfinite axes sanitized");
     std::cout << Name << " replay: " << Ticks << " frames, " << Restarts << " restarts, peak " << Peak << '/' << Limit << " entities\n";
 }
@@ -322,16 +326,18 @@ template<class G> void Replay(const char* Name,std::size_t Limit,int Ticks) {
 void StarLifecycle() {
     StarGame G;G.SetDifficulty(StarGame::Difficulty::Easy);G.Reset(42);
     Check(G.GetPlayer().Lives==5 && G.GetSpawnRate()==135,"difficulty applies to reset");
-    for (int N=0;N<120;++N) G.Step(ReplayInput(N));
+    for (int N=0;N<120;++N) { G.Step(ReplayInput(N)); }
     G.SetPaused(true);Frame Paused,After;G.Render(Paused);const auto Snapshot=G.CaptureRun();const auto Entities=G.EntityCount();
     Input Held;Held.Right=true;Held.Fire=true;Held.AxisX=0.5;
-    for (int N=0;N<200;++N) G.Step(Held);
+    for (int N=0;N<200;++N) { G.Step(Held); }
     G.Render(After);Check(SameFrame(Paused,After) && SameSnapshot(Snapshot,G.CaptureRun()) && Entities==G.EntityCount(),"pause freezes world and background");
     Input Confirm;Confirm.FirePressed=true;G.Step(Confirm);Check(!G.IsPaused(),"pause Resume selection resumes");
     G.SetPaused(true);Input Down;Down.Down=true;G.Step(Down);G.Step(Confirm);
     Check(G.IsPaused() && G.WantsQuit() && G.HasSaveRequest(),"pause Save and Quit raises host request");
     Check(SameSnapshot(Snapshot,G.GetSaveRequest()),"save request captures lightweight source fields");
-    G.Render(Paused);for (int N=0;N<200;++N) G.Step(ReplayInput(N));G.Render(After);
+    G.Render(Paused);
+    for (int N=0;N<200;++N) { G.Step(ReplayInput(N)); }
+    G.Render(After);
     Check(SameFrame(Paused,After),"quit request freezes further gameplay");
     G.ClearSaveRequest();Check(!G.HasSaveRequest() && G.WantsQuit(),"save acknowledgement clears only save request");
     G.Reset(42);Check(!G.IsPaused() && !G.WantsQuit() && !G.HasSaveRequest(),"reset clears host lifecycle requests");
@@ -481,7 +487,7 @@ void SegaPlayableWin() {
                 Won=true;WinningSeed=Seed;WinningFrames=Tick+1;FinalScore=StatusValue.Score;
                 Check(!StatusValue.Over && !G.HasBoss() && StatusValue.Score>=2000,"whole-game Sega boss victory and score");
                 Frame WinFrame,After;G.Render(WinFrame);
-                for (int N=0;N<240;++N) G.Step(I);
+                for (int N=0;N<240;++N) { G.Step(I); }
                 G.Render(After);Check(SameFrame(WinFrame,After) && G.GetStatus().Score==FinalScore,"Sega boss reward and win run once");
                 break;
             }

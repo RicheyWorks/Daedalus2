@@ -36,7 +36,10 @@ namespace {
 int Checks=0,Fixtures=0;
 std::string Context;
 void Check(bool Pass,const std::string& What) {
-    ++Checks; if(!Pass) throw std::runtime_error(Context+": "+What);
+    ++Checks;
+    if(!Pass) {
+        throw std::runtime_error(Context+": "+What);
+    }
 }
 void Near(double Actual,double Expected,const std::string& Field) {
     ++Checks;
@@ -48,7 +51,13 @@ void Near(double Actual,double Expected,const std::string& Field) {
 struct Row {
     std::istringstream S;
     explicit Row(const std::string& Line):S(Line){}
-    double D() { double X=0; if(!(S>>X)) throw std::runtime_error(Context+": malformed fixture"); return X; }
+    double D() {
+        double X=0;
+        if(!(S>>X)) {
+            throw std::runtime_error(Context+": malformed fixture");
+        }
+        return X;
+    }
     int I() { return static_cast<int>(D()); }
     bool B() { return I()!=0; }
 };
@@ -84,43 +93,98 @@ void RunFixture(const std::string& Line) {
     if(Tag=="CSTEP") {
         auto P=ReadContra(R);const int Frames=R.I(),Preset=R.I();const double Camera=R.D();const int K=R.I();Input I;
         I.Left=(K&1)!=0;I.Right=(K&2)!=0;I.Down=(K&4)!=0;I.Jump=(K&8)!=0;I.AxisX=R.D();I.AxisY=R.D();I.Down=R.B()||I.Down;I.Jump=R.B()||I.Jump;
-        std::vector<Rect> Plats;if(Preset==1) Plats.assign(ContraPlatforms().begin(),ContraPlatforms().end());else if(Preset==2) Plats={{100,400,100,20}};
-        for(int F=0;F<Frames;++F) P.Update(I,Plats,Camera);Compare(P,R);
+        std::vector<Rect> Plats;
+        if(Preset==1) {
+            Plats.assign(ContraPlatforms().begin(),ContraPlatforms().end());
+        } else if(Preset==2) {
+            Plats={{100,400,100,20}};
+        }
+        for(int F=0;F<Frames;++F) {
+            P.Update(I,Plats,Camera);
+        }
+        Compare(P,R);
     } else if(Tag=="CSHOT") {
         auto P=ReadContra(R);std::vector<ContraBullet> B;P.Shoot(B);Near(P.Cooldown,R.D(),"cooldown");const int Count=R.I();Near(static_cast<double>(B.size()),Count,"count");
-        for(int J=0;J<3;++J) { if(J<Count) Compare(B[static_cast<std::size_t>(J)],R);else for(int K=0;K<5;++K) Near(0,R.D(),"empty slot"); }
+        for(int J=0;J<3;++J) {
+            if(J<Count) {
+                Compare(B[static_cast<std::size_t>(J)],R);
+            } else {
+                for(int K=0;K<5;++K) {
+                    Near(0,R.D(),"empty slot");
+                }
+            }
+        }
     } else if(Tag=="CBULLET") {
-        auto B=ReadBullet(R);const int Frames=R.I();for(int F=0;F<Frames;++F) B.Update();Compare(B,R);
+        auto B=ReadBullet(R);const int Frames=R.I();
+        for(int F=0;F<Frames;++F) {
+            B.Update();
+        }
+        Compare(B,R);
     } else if(Tag=="CENEMY") {
         auto E=ReadContraEnemy(R);const int Frames=R.I();ContraPlayer P;P.X=R.D();const double RandomValue=R.D();const int RandomInt=R.I();std::vector<ContraBullet> B;
-        for(int F=0;F<Frames;++F) E.Update(P,B,RandomValue<.02,RandomInt);Compare(E,R);const int Count=R.I();Near(static_cast<double>(B.size()),Count,"count");
-        if(Count>0) Compare(B[0],R);else for(int K=0;K<5;++K) Near(0,R.D(),"empty slot");
+        for(int F=0;F<Frames;++F) {
+            E.Update(P,B,RandomValue<.02,RandomInt);
+        }
+        Compare(E,R);const int Count=R.I();Near(static_cast<double>(B.size()),Count,"count");
+        if(Count>0) {
+            Compare(B[0],R);
+        } else {
+            for(int K=0;K<5;++K) {
+                Near(0,R.D(),"empty slot");
+            }
+        }
     } else if(Tag=="NSTEP") {
         auto P=ReadNinja(R);const int Frames=R.I(),Preset=R.I(),K=R.I();Input I;I.Left=(K&1)!=0;I.Right=(K&2)!=0;I.Up=(K&4)!=0;I.Down=(K&8)!=0;I.Jump=(K&16)!=0;
         I.AxisX=R.D();I.AxisY=R.D();const double HatX=R.D(),HatY=R.D();I.Jump=R.B()||I.Jump;std::vector<Rect> Plats;
-        if(Preset==1) Plats.assign(NinjaPlatforms().begin(),NinjaPlatforms().end());else if(Preset==2) Plats={{100,300,200,12}};
+        if(Preset==1) {
+            Plats.assign(NinjaPlatforms().begin(),NinjaPlatforms().end());
+        } else if(Preset==2) {
+            Plats={{100,300,200,12}};
+        }
         if(Preset==1) {
             // Exercise the actual Game adapter for canonical-platform cases;
             // a pure-player test alone would miss a dropped D-pad binding.
             ShadowNinjaGame G;G.Reset(10);TestAccess::PlayerOf(G)=P;
             I.PadLeft=HatX<0;I.PadRight=HatX>0;I.PadDown=HatY<0;I.PadUp=HatY>0;
-            for(int F=0;F<Frames;++F) G.Step(I);
+            for(int F=0;F<Frames;++F) {
+                G.Step(I);
+            }
             Compare(G.GetPlayer(),R);
         } else {
-            for(int F=0;F<Frames;++F) P.Update(I,Plats,HatX,HatY);
+            for(int F=0;F<Frames;++F) {
+                P.Update(I,Plats,HatX,HatY);
+            }
             Compare(P,R);
         }
     } else if(Tag=="NATTACK") {
         auto P=ReadNinja(R);const bool Star=R.B();NinjaAttack A;const bool Created=P.TryAttack(Star,A);Near(P.AttackCooldown,R.D(),"cooldown");Near(Created,R.D(),"created");
-        if(Created) Compare(A,R);else for(int K=0;K<6;++K) Near(0,R.D(),"empty attack");
+        if(Created) {
+            Compare(A,R);
+        } else {
+            for(int K=0;K<6;++K) {
+                Near(0,R.D(),"empty attack");
+            }
+        }
     } else if(Tag=="NSPIN") {
         auto P=ReadNinja(R);const bool Active=P.Spin();Near(P.Spinning,R.D(),"spinning");Near(P.SpinCooldown,R.D(),"cooldown");Near(Active,R.D(),"active");
     } else if(Tag=="NPROJECTILE") {
-        auto A=ReadAttack(R);const int Frames=R.I();for(int F=0;F<Frames;++F) A.Update();Compare(A,R);
+        auto A=ReadAttack(R);const int Frames=R.I();
+        for(int F=0;F<Frames;++F) {
+            A.Update();
+        }
+        Compare(A,R);
     } else if(Tag=="NENEMY") {
-        auto E=ReadNinjaEnemy(R);const int Frames=R.I();const double RandomValue=R.D();for(int F=0;F<Frames;++F) E.Update(RandomValue<.02);Compare(E,R);
+        auto E=ReadNinjaEnemy(R);const int Frames=R.I();const double RandomValue=R.D();
+        for(int F=0;F<Frames;++F) {
+            E.Update(RandomValue<.02);
+        }
+        Compare(E,R);
     } else if(Tag=="NBOSS") {
-        auto B=ReadBoss(R);NinjaPlayer P;P.X=R.D();P.Y=R.D();P.Health=R.I();P.Invincible=R.I();const int Frames=R.I();for(int F=0;F<Frames;++F) B.Update(P);Compare(B,R);
+        auto B=ReadBoss(R);NinjaPlayer P;P.X=R.D();P.Y=R.D();P.Health=R.I();P.Invincible=R.I();const int Frames=R.I();
+        for(int F=0;F<Frames;++F) {
+            B.Update(P);
+        }
+        Compare(B,R);
         Near(P.X,R.D(),"player x");Near(P.Y,R.D(),"player y");Near(P.Health,R.D(),"player health");Near(P.Invincible,R.D(),"player invincible");
     } else if(Tag=="CREWARD") {
         ContraGame G;G.Reset(10);ContraEnemy E;E.Kind=R.I();E.Health=R.I();E.X=200;E.Y=470;E.VX=0;E.ShootTimer=80;
@@ -140,7 +204,9 @@ void RunFixture(const std::string& Line) {
     } else if(Tag=="CPICKUP") {
         ContraGame G;G.Reset(10);const bool Rapid=R.B();TestAccess::ContraPickup(G,Rapid);G.Step({});
         Near(G.GetPlayer().Spread,R.D(),"spread");Near(G.GetPlayer().SpreadTimer,R.D(),"timer");Near(G.GetPlayer().FireRate,R.D(),"rate");
-    } else throw std::runtime_error("Unknown fixture: "+Tag);
+    } else {
+        throw std::runtime_error("Unknown fixture: "+Tag);
+    }
     std::string Extra;Check(!(R.S>>Extra),"no trailing fixture fields");
 }
 void Integration() {
@@ -154,10 +220,22 @@ void Integration() {
     E.Health=1;TestAccess::ContraEncounter(C,E,{188,480,12,0,60});C.Step({});Check(C.GetStatus().Score==500,"boss kill pays 500");
     C.Reset(10);TestAccess::ContraPickup(C,false);C.Step({});Check(C.GetPlayer().Spread && C.GetPlayer().SpreadTimer==900,"spread pickup lasts 900 steps");
     TestAccess::ContraPickup(C,true);C.Step({});Check(C.GetPlayer().FireRate==4,"rapid pickup halves cooldown");
-    C.Reset(10);for(int Key:{0,0,1,1,2,3,2,3,4,5}) C.SubmitCheatKey(Key);Check(C.GetPlayer().Lives==8 && C.GetPlayer().SpreadTimer==600,"source in-play cheat grants five lives and spread");
-    C.Reset(10);for(int Key:{0,0,1,1,2,3,2,3,4,5}) C.SubmitCheatKey(Key,true);Check(C.GetPlayer().Lives==30 && !C.GetPlayer().Spread,"optional source title cheat grants 30 lives");
+    C.Reset(10);
+    for(int Key:{0,0,1,1,2,3,2,3,4,5}) {
+        C.SubmitCheatKey(Key);
+    }
+    Check(C.GetPlayer().Lives==8 && C.GetPlayer().SpreadTimer==600,"source in-play cheat grants five lives and spread");
+    C.Reset(10);
+    for(int Key:{0,0,1,1,2,3,2,3,4,5}) {
+        C.SubmitCheatKey(Key,true);
+    }
+    Check(C.GetPlayer().Lives==30 && !C.GetPlayer().Spread,"optional source title cheat grants 30 lives");
     C.Reset(10);auto& CP=TestAccess::PlayerOf(C);CP.X=2801;CP.Invincible=900;C.Step({});Check(C.GetStatus().Won && C.GetStatus().Over,"source distance victory preserved");
-    const double StoppedX=C.GetPlayer().X;I.Right=true;for(int K=0;K<60;++K) C.Step(I);Near(C.GetPlayer().X,StoppedX,"won game stops");
+    const double StoppedX=C.GetPlayer().X;I.Right=true;
+    for(int K=0;K<60;++K) {
+        C.Step(I);
+    }
+    Near(C.GetPlayer().X,StoppedX,"won game stops");
     C.Reset(10);CP.Lives=1;CP.Invincible=0;E={CP.X,CP.Y,0,1,100,0};TestAccess::ContraEncounter(C,E,{0,0,0,0,0});C.Step({});Check(C.GetStatus().Over && !C.GetStatus().Won,"death terminates session");
     C.Reset(10);Check(!C.GetStatus().Over && C.GetStatus().Score==0 && C.GetPlayer().Lives==3,"restart clears terminal state");
 
@@ -199,11 +277,17 @@ void Integration() {
             Check(C.GetPlayer().X==C2.GetPlayer().X && C.GetStatus().Score==C2.GetStatus().Score && C.EnemyCount()==C2.EnemyCount(),"CONTRA deterministic replay");
             Check(N.GetPlayer().X==N2.GetPlayer().X && N.GetStatus().Score==N2.GetStatus().Score && N.EnemyCount()==N2.EnemyCount(),"Ninja deterministic replay");
             C.Render(F);Check(F.Commands.size()<Frame::MaxCommands,"CONTRA bounded render");
-            for(const auto& D:F.Commands) Check(std::isfinite(D.A.X)&&std::isfinite(D.A.Y)&&std::isfinite(D.B.X)&&std::isfinite(D.B.Y),"CONTRA finite geometry");
+            for(const auto& D:F.Commands) {
+                Check(std::isfinite(D.A.X)&&std::isfinite(D.A.Y)&&std::isfinite(D.B.X)&&std::isfinite(D.B.Y),"CONTRA finite geometry");
+            }
             N.Render(F);Check(F.Commands.size()<Frame::MaxCommands,"Ninja bounded render");
-            for(const auto& D:F.Commands) Check(std::isfinite(D.A.X)&&std::isfinite(D.A.Y)&&std::isfinite(D.B.X)&&std::isfinite(D.B.Y),"Ninja finite geometry");
+            for(const auto& D:F.Commands) {
+                Check(std::isfinite(D.A.X)&&std::isfinite(D.A.Y)&&std::isfinite(D.B.X)&&std::isfinite(D.B.Y),"Ninja finite geometry");
+            }
         }
-        if(K%300==299) { const auto Seed=static_cast<std::uint32_t>(K);C.Reset(Seed);C2.Reset(Seed);N.Reset(Seed);N2.Reset(Seed); }
+        if(K%300==299) {
+            const auto Seed=static_cast<std::uint32_t>(K);C.Reset(Seed);C2.Reset(Seed);N.Reset(Seed);N2.Reset(Seed);
+        }
     }
     I={};I.AxisX=std::numeric_limits<double>::quiet_NaN();I.AxisY=std::numeric_limits<double>::infinity();C.Reset(1);N.Reset(1);C.Step(I);N.Step(I);
     Check(std::isfinite(C.GetPlayer().X) && std::isfinite(N.GetPlayer().X),"malformed axes sanitized");
@@ -212,8 +296,15 @@ void Integration() {
 int main(int Argc,char** Argv) {
     try {
         const char* Path=Argc>1?Argv[1]:"platformers_parity.txt";std::ifstream File(Path);
-        if(!File) throw std::runtime_error(std::string("Cannot open source fixtures: ")+Path);
-        std::string Line;while(std::getline(File,Line)) if(!Line.empty() && Line[0]!='#') RunFixture(Line);
+        if(!File) {
+            throw std::runtime_error(std::string("Cannot open source fixtures: ")+Path);
+        }
+        std::string Line;
+        while(std::getline(File,Line)) {
+            if(!Line.empty() && Line[0]!='#') {
+                RunFixture(Line);
+            }
+        }
         Check(Fixtures>20,"meaningful source fixture coverage");Integration();
         std::cout<<"Platformers: "<<Checks<<" checks passed; "<<Fixtures<<" executed-source fixtures; 20000 deterministic lifecycle steps per game\n";return 0;
     } catch(const std::exception& E) { std::cerr<<"FAIL "<<E.what()<<"\n";return 1; }
