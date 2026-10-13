@@ -1933,6 +1933,7 @@ FString ADaedalusHero::InventoryInput(const FString& Command)
 	if (Key == TEXT("state")) return Inventory.IsValid() ? Inventory->Describe() + TEXT(" last=") + InventoryLog : TEXT("closed last=") + InventoryLog;
 	if (!Inventory.IsValid()) return TEXT("closed");
 	const FString Out = Inventory->Input(Command);
+	if (Out == TEXT("closed") || !Inventory.IsValid()) return TEXT("closed");
 	return Out + (InventoryLog.IsEmpty() ? TEXT("") : TEXT(" last=") + InventoryLog);
 }
 

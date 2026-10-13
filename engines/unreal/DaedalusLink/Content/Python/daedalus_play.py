@@ -1016,7 +1016,7 @@ def scenario_inventory(p):
         lines["pick"] = h.inventory_input("accept")
         yield from _frames(2)
         lines["after"] = h.inventory_input("state")
-        closed = h.inventory_input("back") == "closed" and not h.is_inventory_open()
+        closed = h.inventory_input("back").startswith("closed") and not h.is_inventory_open()
         after = dict(h.get_editor_property("satchel"))
         runs[realm] = {"lines": lines, "closed": closed, "same_counts": before == after}
     g, b = runs["gallery-city"], runs["bricks"]
