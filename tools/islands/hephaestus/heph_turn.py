@@ -25,14 +25,30 @@ GRANTERS = ("buffffff", "2hot2trot")
 PORT = int(os.environ.get("HEPH_BRIDGE_PORT", "9877"))
 TODAY = dt.date.today()
 def _hhmm(name, default):
-    h, m = os.environ.get(name, default).split(":")
+    """HH:MM today, or a full ISO stamp (YYYY-MM-DDTHH:MM) so a re-arm after midnight can point at yesterday's posts."""
+    v = os.environ.get(name, default)
+    if "T" in v or "-" in v: return dt.datetime.fromisoformat(v[:16])
+    h, m = v.split(":")
     return dt.datetime.combine(TODAY, dt.time(int(h), int(m)))
+
+
+def give_up_at(start=None, env=None):
+    """When to stop waiting. HEPH_GIVE_UP=HH:MM (an already-passed time rolls to tomorrow, so a round-3 turn armed at 23:10 is
+    not killed by a stale 23:00), else start + HEPH_GIVE_UP_MIN minutes (default 180). Replaces the old fixed 23:00 give-up."""
+    env = os.environ if env is None else env
+    start = start or dt.datetime.now()
+    v = env.get("HEPH_GIVE_UP")
+    if v:
+        h, m = v.split(":")
+        t = dt.datetime.combine(start.date(), dt.time(int(h), int(m)))
+        return t if t > start else t + dt.timedelta(days=1)
+    return start + dt.timedelta(minutes=int(env.get("HEPH_GIVE_UP_MIN", "180")))
 
 
 # round-2 re-arm: HEPH_SINCE=19:40 so round-1's 18:43 youtube-master HANDOFF can't re-trigger a turn
 EARLIEST = _hhmm("HEPH_EARLIEST", os.environ.get("HEPH_SINCE", "17:43"))  # never start earlier than this
 SINCE = _hhmm("HEPH_SINCE", "17:30")     # only HANDOFF/GRANT posts newer than this count
-GIVE_UP = dt.datetime.combine(TODAY, dt.time(23, 0))  # round-2 can land after 21:00; stop waiting then post BLOCKED
+GIVE_UP = give_up_at()  # relative (start+180 min) or HEPH_GIVE_UP rolling past midnight; was a fixed 23:00 that would burn round 3
 TURN_S, WORK_S, SAVE_S = 600, 480, 60
 # a real handoff names us as the receiver ("HANDOFF youtube-master -> hephaestus"); "going after disk-saver HANDOFF" must not count
 HANDOFF_US = re.compile(r"HANDOFF[^.]{0,60}?(->|\\u2192|\u2192|\bto\b)\s*hephaestus", re.I)
