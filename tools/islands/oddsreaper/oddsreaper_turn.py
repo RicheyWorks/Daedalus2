@@ -140,7 +140,8 @@ os.makedirs(SHOTS, exist_ok=True)
 cam_loc = unreal.Vector({cam[0]}, {cam[1]}, {cam[2]})
 target_loc = unreal.Vector({target[0]}, {target[1]}, {target[2]})
 ue_sub = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem)
-world = ue_sub.get_editor_world()
+gw = unreal.EditorLevelLibrary.get_game_world()
+world = gw or ue_sub.get_editor_world()
 actors = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 for a in actors.get_all_level_actors():
     if str(a.get_actor_label()).startswith("OddsReaper Hero Capture"):
@@ -148,8 +149,13 @@ for a in actors.get_all_level_actors():
         except Exception: pass
 rt = unreal.RenderingLibrary.create_render_target2d(world, 1920, 1080, unreal.TextureRenderTargetFormat.RTF_RGBA8)
 look = unreal.MathLibrary.find_look_at_rotation(cam_loc, target_loc)
-cap = actors.spawn_actor_from_class(unreal.SceneCapture2D, cam_loc, look)
-cap.set_actor_label("OddsReaper Hero Capture"); cap.set_folder_path("OddsReaper")
+if gw:  # spawn INTO the PIE world (EditorActorSubsystem only spawns in the editor world)
+    xf = unreal.Transform(cam_loc, look, unreal.Vector(1, 1, 1))
+    cap = unreal.GameplayStatics.begin_deferred_actor_spawn_from_class(gw, unreal.SceneCapture2D, xf)
+    cap = unreal.GameplayStatics.finish_spawning_actor(cap, xf)
+else:
+    cap = actors.spawn_actor_from_class(unreal.SceneCapture2D, cam_loc, look)
+    cap.set_actor_label("OddsReaper Hero Capture"); cap.set_folder_path("OddsReaper")
 sc = cap.capture_component2d
 sc.set_editor_property("texture_target", rt)
 sc.set_editor_property("capture_source", unreal.SceneCaptureSource.SCS_FINAL_COLOR_LDR)
@@ -164,7 +170,7 @@ sc.set_editor_property("post_process_settings", pp)
 sc.set_editor_property("post_process_blend_weight", 1.0)
 sc.capture_scene()
 unreal.RenderingLibrary.export_render_target(world, rt, SHOTS, out_name)
-try: actors.destroy_actor(cap)
+try: (cap.destroy_actor() if gw else actors.destroy_actor(cap))
 except Exception: pass
 time.sleep(0.5)
 ok = os.path.isfile(out_path) and os.path.getsize(out_path) > 1000
@@ -236,6 +242,11 @@ w = unreal.EditorLevelLibrary.get_game_world()
 # volumes=[] and only the director fallback runs (sky ok, but volume-driven wetness/hold never fires).
 streamed = []
 if w:
+    try:
+        _sl = unreal.GameplayStatics.get_streaming_level(w, "OddsReaperIsland")
+        if _sl:
+            _sl.set_should_be_loaded(True); _sl.set_should_be_visible(True); streamed.append("OddsReaperIsland")
+    except Exception: pass
     for sl in list(getattr(w, "get_streaming_levels", lambda: [])() or []):
         pkg = ""
         for prop in ("world_asset_package_f_name", "package_name"):

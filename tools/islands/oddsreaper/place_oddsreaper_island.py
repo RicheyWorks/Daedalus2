@@ -50,7 +50,7 @@ def open_sublevel():
     les.load_level(PERSIST)
     world = unreal.EditorLevelLibrary.get_editor_world()
     if not eal.does_asset_exist(SUB):
-        unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingDynamic, SUB, move_selected_actors_into_new_level=False)
+        unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingAlwaysLoaded, SUB, move_selected_actors_into_new_level=False)
     else:  # already made: make sure it's streamed into DaedalusWorld (harmless error if it already is)
         try: unreal.EditorLevelUtils.add_level_to_world(world, SUB, unreal.LevelStreamingAlwaysLoaded)
         except Exception as e: log(f"add_level_to_world: {e}")
