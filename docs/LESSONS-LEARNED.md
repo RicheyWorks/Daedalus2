@@ -147,6 +147,22 @@ What changed:
 
 A harness that only looks when asked misses the dialog that froze the editor. Watching has to be automatic.
 
+## Pin asynchronous integration work to its exact job (2026-10-13)
+
+The Unreal turn report marked build-1013-073247 successful after 2.8 seconds, while that
+job's build log recorded 56.91 seconds. The runner started a job and called `-Wait` without
+`-Id`; before the new log appeared, the wait helper could choose an older successful job.
+Scenarios then reached the old editor before the ongoing rebuild/restart completed. The
+report showed a missing Python module, connection reset, then refused connections and a
+failed save. This evidence supports a build-wait race; it does not prove a GPU crash.
+
+The runner now extracts the started job ID, passes it on every wait, verifies the response
+belongs to that job, and stops before editor calls for missing/mismatched IDs or failed jobs.
+Offline regression covers a still-running job before its log exists and an older success.
+Always correlate start, completion and evidence by ID; a successful earlier C++ build is
+not proof that the current Java/C++/Python integration is ready. Live scenarios must be rerun
+by the editor owner after the actual build and bridge readiness checks finish.
+
 ## Measure contention before moving work between Java and C++ (2026-10-13)
 
 The adaptive tactics benchmark initially timed decisions and disk writes separately. That
@@ -184,3 +200,4 @@ and real JWT requests prove 401/403/200. Carry all source semantics across the l
 boundary (mode, grants, breeding chance and already-scaled modifiers), not just the fields
 needed by the first demo. A deterministic calculator is not an inventory transaction;
 state clearly which side validates ownership, consumes ingredients and applies effects once.
+

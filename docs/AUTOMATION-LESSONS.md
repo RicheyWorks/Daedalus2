@@ -259,3 +259,25 @@ to it when something new breaks.
   memcpy. MSVC's std::string keeps a pointer into its own small buffer, so a moved copy points at freed memory. Plain-C++
   core types that hold std::string (RosterUnit, Order, Unit) live in std::vector inside the Unreal code
   (UDaedalusTactics::TakeRoster).
+
+## Poll the job you started, not the latest log (2026-10-13)
+`unreal-job.ps1 -Wait` without `-Id` reads the newest log; right after `-Start` that is the previous build, so a turn
+saw BUILD OK in 2.8 s while the real build ran 57 s, and its scenarios hit a closing editor. Pass the id from
+`started build-...` (turn script b6ae596c, hardened in PR38).
+
+## Bounds-only volumes must not collide (2026-10-13)
+Two PCG volumes with QUERY_ONLY WorldStatic collision covered the spawn area; every ground trace (foes, critters, nav)
+hit their top 300 cm above the ground, so walkers counted as blocked. PCG/audio/post-process volumes: NoCollision.
+Debug "won't move" by tracing down at the feet and printing what is hit.
+
+## Wait on game time, not frames (2026-10-13)
+Scenario waits counted frames assuming 60 fps; -d3d11 Play ran much faster, so movement checks failed. Use
+`daedalus_play._seconds()`.
+
+## Re-ground after streaming (2026-10-13)
+Critters settled once in BeginPlay, before the live world arrived 250 cm higher, and every step looked like a wall.
+Anything that snaps to the ground at BeginPlay re-snaps after streaming/world load (critters: 1.5, 4, 8 s).
+
+## UE 5.8 Python differs (2026-10-13)
+`World.get_streaming_levels()` is not exposed in 5.8.3; use `get_editor_property("streaming_levels")`. Check unreal.*
+calls against the live bridge before relying on them.
