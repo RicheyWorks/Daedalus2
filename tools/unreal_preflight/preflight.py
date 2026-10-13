@@ -34,7 +34,7 @@ ARRAY_RE = re.compile(r"UPROPERTY\((?P<spec>[^)]*)\)\s*TArray<\s*TObjectPtr<\s*(
 ERROR_RE = re.compile(r"(?<![:\w])Error(?:\s+\w+\s*[,)=;]|::)")
 PYBOOL_RE = re.compile(r"""[gs]et_editor_property\(\s*["']b_\w+""")
 PYSTATIC_RE = re.compile(r"\bunreal\.Daedalus\w+\.(get)\(")
-STRUCT_RE = re.compile(r"\b(?:struct|class)\s+(\w+)\s*(?::[^{;]*)?\{(.*?)\n\s*\};", re.S)
+STRUCT_RE = re.compile(r"\b(?:struct|class)\s+(\w+)\s*(?::[^{;]*)?\{([^{}]*)\}\s*;")   # plain data structs (no nested braces)
 TARRAY_RE = re.compile(r"\bTArray<\s*(?P<type>(?:\w+::)*\w+)\s*(?:<[^>]*>)?\s*>")
 
 
@@ -43,7 +43,7 @@ def std_holders(texts):
     bodies = [(m.group(1), m.group(2)) for t in texts for m in STRUCT_RE.finditer(t)]
     names = set()
     for name, body in bodies:
-        if re.search(r"^\s*(?:const\s+)?std::(?:string|vector|map|unordered_map|set|function|array|deque|list)\b", body, re.M):
+        if re.search(r"(?:^|[{;])\s*(?:const\s+)?std::(?:string|vector|map|unordered_map|set|function|array|deque|list)\b", body, re.M):
             names.add(name)
     # transitively: a struct with a member of a holder type is a holder too (FRow { RosterUnit U; })
     grew = True
@@ -53,7 +53,7 @@ def std_holders(texts):
             if name in names:
                 continue
             for h in list(names):
-                if re.search(r"^\s*(?:const\s+)?(?:\w+::)*%s\s+\w+\s*[;={]" % re.escape(h), body, re.M):
+                if re.search(r"(?:^|[{;])\s*(?:const\s+)?(?:\w+::)*%s\s+\w+\s*[;={]" % re.escape(h), body, re.M):
                     names.add(name)
                     grew = True
                     break

@@ -22,3 +22,4 @@ struct FWrap
 	core::Row R;   // holds std::string through Row
 };
 void G() { TArray<FWrap> Rows; }
+void H() { struct FOneLine { FString Species; FVector At; int32 Count; }; TArray<FOneLine> Fine2; }
