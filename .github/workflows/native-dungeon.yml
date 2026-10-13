@@ -1,0 +1,40 @@
+name: Native Dungeon policy
+on:
+  pull_request:
+    paths:
+      - 'engines/unreal/**/DaedalusDungeon*'
+      - 'engines/unreal/core-test/dungeon_core_test.cpp'
+      - 'engines/unreal/core-test/run_dungeon_checks.py'
+      - '.github/workflows/native-dungeon.yml'
+  push:
+    branches: [main, codex/dungeon-master-bridge]
+    paths:
+      - 'engines/unreal/**/DaedalusDungeon*'
+      - 'engines/unreal/core-test/dungeon_core_test.cpp'
+      - 'engines/unreal/core-test/run_dungeon_checks.py'
+      - '.github/workflows/native-dungeon.yml'
+permissions:
+  contents: read
+concurrency:
+  group: dungeon-policy-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        compiler: [g++, clang++]
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 engines/unreal/core-test/run_dungeon_checks.py --compiler ${{ matrix.compiler }} --sanitize
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: MSVC baseline and mutation checks
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do call "%%i\VC\Auxiliary\Build\vcvars64.bat"
+          python engines/unreal/core-test/run_dungeon_checks.py --compiler cl
