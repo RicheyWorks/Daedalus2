@@ -90,6 +90,7 @@ class ProdAuthPostureTest {
     private static final Map<String, Posture> EXPECTED = new LinkedHashMap<>();
 
     static {
+        EXPECTED.put("POST /api/v1/kennel/brew", Posture.AUTHENTICATED);
         // --- deliberately public ---
         EXPECTED.put("POST /api/v1/auth/login", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/auth/wallet/config", Posture.PUBLIC);

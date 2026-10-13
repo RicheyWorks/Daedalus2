@@ -187,3 +187,17 @@ Next measurement: use the real request cadence and storage volume, include HTTP/
 and measure queue growth and fallback behavior. Any concurrency change must retain per-session
 tick fencing, checkpoint-before-reply and the exclusive writer contract. Coordinate ownership
 with the native team before changing either side; a green Java suite is not visible gameplay proof.
+## Add server contracts through the existing integration gates (2026-10-13)
+
+The Kennel TONIC 1 endpoint reuses TonicBook/TonicBrewer and packages the canonical recipe
+file instead of duplicating recipe math or relying on the server working directory.
+The initial focused tests passed, but full verification caught missing endpoint entries in
+the production-auth table and the named rate-limit registry. Both were added, along with
+the README API row. Next endpoint: check those registries before running the full suite.
+
+Keep native fixtures executable: committed TONIC responses are compared against HTTP output,
+and real JWT requests prove 401/403/200. Carry all source semantics across the language
+boundary (mode, grants, breeding chance and already-scaled modifiers), not just the fields
+needed by the first demo. A deterministic calculator is not an inventory transaction;
+state clearly which side validates ownership, consumes ingredients and applies effects once.
+

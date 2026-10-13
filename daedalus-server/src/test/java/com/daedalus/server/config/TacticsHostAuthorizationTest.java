@@ -20,13 +20,29 @@ import static org.assertj.core.api.Assertions.assertThat;
         "daedalus.security.jwt.secret=tactics-test-secret-at-least-32-bytes!!",
         "daedalus.security.admin.password-bcrypt=$2a$10$7EqJtq98hPqEX7fNZaFWoOhi5B0h6C1JcqIcnLmVjKobXAB9Zwmqu",
         "daedalus.redis.enabled=false", "daedalus.plugins.scan-on-startup=false",
-        "daedalus.tactics.host.subject=trusted-engine", "daedalus.tactics.host.squad=auth-pack"
+        "daedalus.tactics.host.subject=trusted-engine", "daedalus.tactics.host.squad=auth-pack",
+        "daedalus.kennel.host-subject=trusted-engine"
 })
 @ActiveProfiles("prod")
 class TacticsHostAuthorizationTest {
     @LocalServerPort int port;
     @Autowired JwtTokenService tokens;
     private final ObjectMapper json = new ObjectMapper();
+
+    @Test void kennelUsesRealJwtBoundaryAndPlainTextContract() throws Exception {
+        try (var client = HttpClient.newHttpClient()) {
+            for (String subject : java.util.List.of("anonymous", "other-user", "trusted-engine")) {
+                var request = HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/api/v1/kennel/brew"))
+                        .header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString(
+                                "{\"herbs\":[\"Barkbalm\"],\"coat\":\"None\",\"drinker\":\"cane_corso\",\"stage\":1,\"charm\":false,\"seed\":0}"));
+                if (!subject.equals("anonymous")) request.header("Authorization", "Bearer " + tokens.issue(subject).token());
+                var response = client.send(request.build(), HttpResponse.BodyHandlers.ofString());
+                assertThat(response.statusCode()).isEqualTo(subject.equals("anonymous") ? 401 : subject.equals("other-user") ? 403 : 200);
+                if (response.statusCode() == 200) assertThat(response.body())
+                        .isEqualTo("TONIC 1\nbrew tonic_barkbalm 1.0 120 0 overTime 0.0\nmod hearts add 1.0\nend\n");
+            }
+        }
+    }
 
     private HttpResponse<String> post(String token, String squad, String events) throws Exception {
         String roster = "DTR 1\nsession auth-session squad " + squad + " tick 1\nunit a SLIME 100 100 0 0 0 1\n";
