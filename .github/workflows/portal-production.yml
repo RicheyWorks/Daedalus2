@@ -26,6 +26,7 @@ on:
       - 'tools/blender/portal_common.py'
       - 'tools/blender/gallery_*.py'
       - 'tools/blender/parcels_*.py'
+      - 'tools/blender/brick_*.py'
       - 'tools/blender/realm_humanoid.py'
       - 'tools/blender/realm_creature.py'
       - 'tools/blender/cast_binding_map.py'
@@ -80,6 +81,7 @@ jobs:
           python3 -m py_compile tools/blender/parcels_cast.py tools/blender/realm_humanoid.py tools/blender/cast_binding_map.py
           python3 -m py_compile tools/blender/parcels_creatures.py tools/blender/realm_creature.py
           python3 -m py_compile tools/blender/parcels_environment.py tools/blender/validate_parcels_package.py
+          python3 -m py_compile tools/blender/brick_cast.py
   windows:
     runs-on: windows-latest
     steps:
