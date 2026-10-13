@@ -138,9 +138,10 @@ Publication failure never rolls back committed state. Metrics are
 
 ## Unreal integration handoff
 
-No Unreal project, assets, scenes, or DaedalusLink source changed in this PR. The HTTP and
-STOMP contract is tested with the server's existing Spring MVC/JSON stack; this is not a
-claim that the new endpoint has already run in Unreal.
+No Unreal project, assets, scenes, or DaedalusLink source changed in this PR. The HTTP
+contract is tested over a real loopback server with production JWT security, including a
+complete application stop/restart; STOMP publication is checked through the existing
+Spring MVC/JSON adapter. This is not a claim that the new endpoint has already run in Unreal.
 
 The integration agent should add an optional consumer using the existing authenticated
 HTTP/STOMP connection. Bind `npcId` to the existing keeper actor; show its task/reason,
@@ -217,60 +218,45 @@ region and synchronously persists outside the pure kernel before publication.
 
 ## Verification and review status
 
-JDK 21.0.4 validation: full server reactor `mvn -B -ntp -pl daedalus-server -am test`
-passed 570 core, 20 Plugin API, 8 wallet, 33 plugin-runtime and 697 server tests.
-A subsequent full core run, including one added malformed-snapshot test, passed 571.
-That is 1,329 passing tests across the latest module runs, including 23 new simulation
-tests. Final focused validation after path/polling hardening passed all 32 simulation
-and API/configuration/security-coverage tests. Existing `WorldStoreTest`, world-package API, deterministic generation and
-configuration/auth/rate-limit coverage tests remain green.
+Validated on 2026-10-13 with JDK 21.0.4 after rebasing onto main `5fbaa5e6`, including
+the shared voxel-island core. Full server reactor `mvn -B -ntp -pl daedalus-server -am verify`
+passes: 575 core, 23 Plugin API, 8 wallet, 33 plugin-runtime and 751 server tests, plus
+every module's coverage, Checkstyle and SpotBugs gates. A subsequent focused real-HTTP
+restart test also passes, bringing the latest tested total to 1,391. Existing world-store,
+world-package API, deterministic generation, authentication and rate-limit checks remain green.
 
 New tests cover deterministic replay through checkpoint compaction, corruption and
 checksummed malformed payloads, dry-spell recovery, finite transfer/quest/NPC memory,
 invalid/unauthorized input, duplicate and concurrent retries, receipt exhaustion,
 exclusive writers, persistence/publication failures, lost acknowledgments, unavailable
 storage, bounded catch-up and clock reversal, Spring opt-in/restart wiring, HTTP/STOMP
-JSON contracts, and abrupt child-JVM termination followed by restart.
+JSON contracts, and abrupt child-JVM termination followed by restart. The full-application
+HTTP test boots production authentication with isolated test credentials and storage,
+rejects unauthenticated/wrong-steward requests, commits a delivery, stops the application,
+boots it again, then checks the exact state hash, memory, water totals and original receipt
+on retry. Both servers bind ephemeral loopback ports and close at the end of the test.
 
-Initial 2026-10-12 verification: Checkstyle is clean. Core coverage and SpotBugs pass; two narrowly scoped immutable
-timeline-field exclusions explain SpotBugs' representation warnings without suppressing
-other classes or lowering severity. Full `verify` initially stopped in unchanged
-`daedalus-plugin-api`: instruction coverage 0.76 versus its required 0.96. The initial
-implementation did not change that module or its gate. Running the server checks independently also
-finds three SpotBugs warnings in unchanged `PresenceService` (lines 54, 63 and 99), and
-server instruction coverage 0.83 versus its 0.93 floor. Existing server classes account
-for 27,084 covered / 5,554 missed instructions (83%); the new simulation adapter/config/
-controller account for 785 covered / 33 missed (96%). The new simulation classes have
-no remaining SpotBugs findings. Registry sharing has one narrowly scoped field exclusion.
-No coverage threshold or unrelated source was changed to bypass these failures.
-The PR must not be described as all-CI-green.
-Unreal runtime acceptance remains an explicit integration handoff, not a backend test claim.
+Review blockers were repaired without reducing thresholds:
 
-Checks beyond unit tests:
+- Plugin API: three tests pin ark voyage and ecology payloads, immutable collections,
+  deterministic richness ordering and absent optional collections. Coverage is 98.74%
+  (626 covered / 8 missed), above the unchanged 96% floor and below the 99% ceiling.
+- Server: compatibility tests cover 23 historical world DTO families and JSON round trips,
+  including safe defaults for omitted newer fields. Presence tests cover validation,
+  capacity, expiry, immutable snapshots, opaque identity and locale independence.
+  Coverage is 93.52% (31,521 covered / 2,184 missed), above the unchanged 93% floor.
+- Presence snapshots now own their maps. Invalid report entries still reach the normal
+  refusal path; animation parsing uses `Locale.ROOT`. The three representation/boxing
+  findings are fixed in code. SpotBugs reports no server findings.
+
+The simulation's two immutable timeline-field exclusions and one shared metrics-field
+exclusion remain narrowly scoped and explained in the existing filter. No broad exclusions
+or coverage gate reductions were introduced. Unreal runtime acceptance remains an explicit
+integration handoff, not a backend test claim. No merge or deployment is part of this work.
+
+Reproduce the full checks and stronger restart test:
 
 ```text
 mvn -B -ntp -pl daedalus-server -am verify
-mvn -B -ntp -pl daedalus-server -am -DskipTests package spotbugs:check
-mvn -B -ntp -pl daedalus-server jacoco:report jacoco:check@check
+mvn -B -ntp -pl daedalus-server -am test -Dtest=LivingWorldHttpRestartTest -Dsurefire.failIfNoSpecifiedTests=false
 ```
-
-The initial first run stopped at the Plugin API gate after core verification passed. The second reaches
-the server and reports only the three existing PresenceService findings. The third
-checks the server's configured coverage rule independently. Keep those blockers visible
-during review; do not merge or deploy this optional service as part of this handoff.
-
-### 2026-10-13: Plugin API gate repaired
-
-Added three module-local contracts for the existing ark-voyage and island-life events.
-They preserve departure/arrival route and schedule fields, prove that ecology collections
-cannot be mutated by the producer or another plugin, preserve deterministic richness
-ordering, and verify safe empty collections when optional payloads are absent. Existing
-server integration tests exercise these events, but do not count toward this module's
-coverage gate. No production API or threshold changed.
-
-`mvn -B -ntp -pl daedalus-plugin-api -am verify` passes on Java 21: 571 core tests and
-23 Plugin API tests, both modules' coverage gates, Checkstyle and SpotBugs. Plugin API
-instruction coverage is now 98.74% (626 covered / 8 missed), above the unchanged 96%
-floor and below its 99% ceiling. The earlier
-Plugin API coverage failure is resolved; the server findings above remain separate review
-work rather than being hidden by that first failing gate.
