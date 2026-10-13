@@ -3,6 +3,23 @@
 **Status:** accepted, 2026-10-13. **Author:** unreal-team (Claude). **Asked by:** Richey. "Figure out how Minecraft
 deals with RAM with all its blocks. Wherever a different language optimizes better, we use it."
 
+## Results so far (2026-10-13, all measured; Unreal parts compile in the next editor slot)
+
+| What | Before | After |
+|---|---|---|
+| Chunk in RAM (Java) | 4,112 B each | empty/solid ~60 B, terrain ~2.1 KB (World Zero 221 KB -> 114 KB) |
+| Saved world (DAEW) | World Zero 218 KB | 25 KB (v14 runs) |
+| Edit + save, 200-chunk world | 6.0 ms | ~1.1 ms (copy-on-write, cached runs, buffered atomic save) |
+| Realm world load (web) | 54 requests, ~320 KB | 1 request, 35 KB |
+| Realm chunk meshing (web) | 1x | 2.4x faster, same bytes |
+| World Package glb, Gallery City | 30.4 MB, 183k faces | 8.7 MB, 51k quads (`?mesh=greedy`, Unreal default) |
+| World Package glb, Bricks | 5.8 MB | 179 KB |
+| Island generation (IslandPlan) | 64 B per cube | 10 B per cube |
+| `Chunk.get` | 22 ns | ~3 ns |
+| Islands in Unreal | all loaded always | view distance + RAM budget (DSB 1), 10k plan in 1.4 ms |
+| Claude Island in Unreal | 117,627 instances | 53,579 merged quads, far isles LOD |
+| Measuring | by hand | `GET /api/v1/worlds/ram`, `turn_unreal_team.py` RAM before/after + registry RAM audit |
+
 ## How Minecraft does it
 
 1. **A block is a number, not an object.** Each 16x16x16 section is a small palette plus packed indices: 4 to 8
