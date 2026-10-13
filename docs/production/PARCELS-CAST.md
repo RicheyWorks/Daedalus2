@@ -32,3 +32,15 @@ Gallery now extracts the exact existing rig function without executing the Porta
 table initializer. A refactor experiment changed normal/index export bytes, so
 the verified Gallery delivery was restored from its owned archive; published
 Gallery hashes/worksheet data remain unchanged. No equivalence claim is made.
+
+The environment package adds 23 original static modules and one unchanged
+AMF trough reference. Roads, fields, fences, farm/mail/market stations, helipad,
+boat dock and underwater arrival airlock use single joined meshes. Existing
+tools/islands/kennel-isle/glb/Prop_Water_AMF_Trough_V12.glb is copied byte-for-byte
+with original ID/SHA and source provenance. Its original owner stays in MASTER;
+the additive catalog omits this existing ID. Tonic behavior is not inherited.
+
+Complete first kit: 56 asset references, 55 authored exports plus one reuse,
+47,838 triangles and 32 role models. Skin/static/package validation passes.
+Full Codex worksheet now has 283 unique references including this explicit reuse.
+Native collision, interaction, navigation, transport and Play remain pending.
