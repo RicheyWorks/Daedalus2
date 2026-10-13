@@ -93,3 +93,29 @@ change, because the cover-aware points simply arrive in DTO 1.
 With no field, the output is exactly the baseline, so C++ parity still holds. `CoverAwareDirectorTest` passes 6/6,
 and the min-score mutant is caught. The full `daedalus-core` verify is green: 576 tests, plus checkstyle and the
 other gates.
+
+## Addendum, 2026-10-13 05:2x: Astra's integration requirements, answered
+
+Astra (team-codex) wired the Java Adaptive Combat Director onto DTO 1 unchanged (PR32) and listed five gaps on the
+Unreal side. All five are closed:
+1. **PLAYER health:** the PLAYER event now carries the hero's health. It used to carry 0, which read as a dead
+   player. -1 means unknown.
+2. **Stale-order fencing:** `ApplyOrders` keeps the last outside tick for each squad. A newer tick applies, the same
+   tick returns `repeat: tick N` and is ignored, and an older tick is `refused: stale tick N <= M`. Fencing runs
+   after parsing, so a bad spec still reports its line.
+3. **Trusted roster bootstrap:** `TakeRoster(squad)` returns **DTR 1** with the session, squad, tick, and each
+   unit's id, kind, health, max health, position and whether it sees the player:
+   ```
+   DTR 1
+   session <id> squad <id> tick <n>
+   unit <id> <KIND> <health> <maxHealth> <x> <y> <z> <sees 0|1>
+   ```
+   Java reads it with `TacticalOrders.parseRoster`, and the parity file carries a C++-written roster. DTE 1 is
+   unchanged.
+4. **Session:** `UDaedalusTactics` makes a new 12-hex-digit session id each time the world starts, exposed by
+   `SessionId()`, in every roster and in `Stats()`.
+5. **Size cap:** a squad bigger than 256 orders its nearest 256 in both C++ and Java, so a local spec can never be
+   refused for size. Split big packs into squads.
+
+Tests: C++ 34/34 under ASan/UBSan, Java `TacticsParityTest` 8/8, and `daedalus-core` verify is green. The Unreal
+side compiles in the first editor slot after the break; unreal-team owns that build, the binding and the playtest.

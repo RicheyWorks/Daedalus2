@@ -498,4 +498,5 @@ bad	DTO 1\nsquad s tick 1\norder a HOLD - 0x10 0 0\n	line 3: bad point
 bad	DTO 1\nsquad s tick 1\norder a HOLD - 1.5d 0 0\n	line 3: bad point
 bad	DTO 1\nsquad s tick 1\norder a HOLD - inf 0 0\n	line 3: bad point
 bad	DTO 1\nsquad s tick 1\norder a HOLD - 1e 0 0\n	line 3: bad point
+roster	DTR 1\nsession a1b2c3 squad pack-1 tick 9\nunit pack-1-1 BLIGHT_SLIME 42.5 60.0 1.0 2.0 3.0 1\nunit pack-1-2 STONE_KNIGHT 0.0 120.0 -4.2 5.0 6.0 0\n
 good	DTO 1\nsquad orr-1 tick 42\norder foe-a FLANK LEFT 100 200 30 | player keeps to the ridge\norder foe-b RETREAT - -50.5 0 0\r\n# a comment\n\norder foe-c HOLD - 0 0 0\n
