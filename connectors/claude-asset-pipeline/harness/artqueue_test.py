@@ -172,18 +172,25 @@ check("no meshes: REJECTED says how to fix", "no meshes" in row(d, "Tool_Pickaxe
 shutil.rmtree(d)
 
 
-# 10. a bridge error mid-ship: back to READY with a note; the watcher lives
+# 10. A bridge reply error after dispatch is ambiguous: preserve SHIPPING and never retry it automatically.
+bridge_effects = []
 def boom(*a, **k):
+    bridge_effects.append(a)
     raise wire.BridgeError("Unreal", {"message": "import failed"})
 
 
 d, w, fb = setup(ship=boom)
 w.tick()
 r = row(d, "Tool_Pickaxe")
-check("bridge error: BLOCKED, not REJECTED, with a retry note", r["status"].startswith("BLOCKED: pipeline error")
-      and "retrying" in r["notes"], str(r))
-check("bridge error: feed says error", feed(d)[-1]["event"] == "error")
-check("bridge error: STATUS.md says blocked on Unreal", "Blocked on Unreal" in open(os.path.join(d, "STATUS.md"), encoding="utf-8").read())
+check("bridge error after dispatch: SHIPPING is held with an import-started marker",
+      r["status"] == "SHIPPING" and "[queue-stage:import-started]" in r["notes"], str(r))
+w.clock = lambda: 1760000000 + 10 * artqueue.BLOCKED_RETRY_S
+w.tick()
+check("bridge error: error evidence retained and time passing never replays its effect",
+      any(e["event"] == "error" for e in feed(d)) and len(bridge_effects) == 1
+      and row(d, "Tool_Pickaxe")["status"] == "SHIPPING")
+check("bridge error: STATUS.md explicitly calls for reconciliation",
+      "reconcil" in open(os.path.join(d, "STATUS.md"), encoding="utf-8").read().lower())
 shutil.rmtree(d)
 
 
@@ -319,8 +326,8 @@ check("STATUS.md: one line from STATUS-blender.json", "**Blender team:** buildin
 check("STATUS.md: always says what it waits on", "**Waiting on:** none" in st)
 shutil.rmtree(d)
 
-# 12. Overlapped shipping (ADR-055): Blender exports the next asset while Unreal imports this one; one bad import
-#     blocks only itself; the Play check goes straight to the game thread with a bounded wait.
+# 12. Overlapped shipping (ADR-055): Blender exports the next asset while Unreal imports this one. A lost
+#     import transport stops further imports and retains uncertain claims; no automatic replay follows.
 import threading as _th   # noqa: E402
 import time as _time      # noqa: E402
 BOARD4 = """| # | Asset | Kind | Size | Status | Notes |
@@ -363,21 +370,33 @@ t0 = _time.time()
 out = w.tick()
 took = _time.time() - t0
 got = dict(out)
-check("overlapped: all four handled", sorted(got) == ["Prop_A", "Prop_B", "Prop_C", "Prop_D"], out)
-check("overlapped: the three good ones ship, the bad import is BLOCKED (Unreal's fault, retried)",
-      [got[a] for a in ("Prop_A", "Prop_B", "Prop_D")] == ["SHIPPED"] * 3 and got["Prop_C"] == "BLOCKED", got)
+check("overlapped: stops at the uncertain import and leaves later work undispatched",
+      sorted(got) == ["Prop_A", "Prop_B", "Prop_C"] and got.get("Prop_D") is None, out)
+check("overlapped: two good imports ship; lost transport stays uncertain without retry",
+      [got.get(a) for a in ("Prop_A", "Prop_B")] == ["SHIPPED"] * 2
+      and got.get("Prop_C") == "UNCERTAIN_IMPORT" and got.get("Prop_D") is None, got)
 check("overlapped: exports run on the Blender thread, imports on this one",
       {t for _, t, _ in seen["export"]} == {"artqueue-blender"} and "artqueue-blender" not in {t for _, t, _ in seen["land"]},
       seen)
-check("overlapped: imports keep the board's order", [n for n, _, _ in seen["land"]] == ["Prop_A", "Prop_B", "Prop_C", "Prop_D"])
-check("overlapped: faster than one at a time (8 x 0.25 s in sequence)", took < 1.6, "%.2f s" % took)
+check("overlapped: imports keep order and no next import starts after the transport error",
+      [n for n, _, _ in seen["land"]] == ["Prop_A", "Prop_B", "Prop_C"])
+check("overlapped: stop is bounded and uncertain/not-imported rows are held",
+      took < 1.6 and row(d, "Prop_C")["status"] == "SHIPPING"
+      and artqueue.state(row(d, "Prop_D")["status"]) in ("READY", "SHIPPING")
+      and "[queue-stage:import-started]" not in row(d, "Prop_D")["notes"], "%.2f s" % took)
 check("overlapped: an export overlaps an import", any(e[2] < l[2] + 0.25 and e[2] > l[2]
       for e in seen["export"] for l in seen["land"]), seen)
 check("the Play check runs on the game thread with a bounded wait (no Remote Execution channel)",
       PLAYING.get("params", {}).get("unattended") is False and PLAYING["params"].get("bridge_timeout") == 30,
       PLAYING.get("params"))
 board_after = open(os.path.join(d, "QUEUE.md"), encoding="utf-8").read()
-check("overlapped: the board is still one table of four rows", len(artqueue.parse(board_after)[0]) == 4, board_after)
+before_retry = [n for n, _, _ in seen["land"]]
+w.clock = lambda: 1760000000 + 2 * artqueue.BLOCKED_RETRY_S
+w.tick()
+check("overlapped: four rows retained and time passing never replays the uncertain import",
+      len(artqueue.parse(board_after)[0]) == 4 and row(d, "Prop_C")["status"] == "SHIPPING"
+      and [n for n, _, _ in seen["land"]].count("Prop_C") == before_retry.count("Prop_C") == 1,
+      board_after)
 shutil.rmtree(d)
 
 # 12b. --first: a team's own rows ship ahead of the rest, the board's order kept within each group
@@ -414,12 +433,19 @@ check("prebuilt: no Blender call at all", not [c for c in calls if "open_mainfil
 check("prebuilt: the report carries the file's own witness", seen["land"] and seen["land"][0][0] == "Tool_Pickaxe")
 shutil.rmtree(d)
 
-# 13. a restart re-queues rows the last watcher left SHIPPING (they were stuck there forever)
-d, w, fb = setup(board=BOARD.replace("| Tool_Pickaxe | tool | 0.9 m | READY |", "| Tool_Pickaxe | tool | 0.9 m | SHIPPING |"))
+# 13. Unknown SHIPPING has no correlated publication witness: preserve it for owner reconciliation.
+recovery_dispatches = []
+d, w, fb = setup(board=BOARD.replace("| Tool_Pickaxe | tool | 0.9 m | READY |", "| Tool_Pickaxe | tool | 0.9 m | SHIPPING |"),
+                 ship=lambda *a, **k: (recovery_dispatches.append(a), report())[1])
 back = w.recover()
-check("restart: a SHIPPING row goes back to READY", back == ["Tool_Pickaxe"] and row(d, "Tool_Pickaxe")["status"] == "READY", back)
+check("restart: unknown SHIPPING is held, never blanket-reset to READY",
+      back == [] and row(d, "Tool_Pickaxe")["status"] == "SHIPPING", back)
 check("restart: other rows untouched", row(d, "Mob_BlightSlime")["status"] == "DOING (grok)" and row(d, "Item_Coal")["status"] == "TODO")
-check("restart: nothing to recover is a no-op", w.recover() == [])
+again = w.recover()
+w.tick()
+check("restart: repeated recovery and a tick never replay the held import",
+      again == [] and not recovery_dispatches and row(d, "Tool_Pickaxe")["status"] == "SHIPPING"
+      and not any(e["event"] == "requeued" for e in feed(d)))
 shutil.rmtree(d)
 
 n = sum(results)
