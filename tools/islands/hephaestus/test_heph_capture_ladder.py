@@ -3,7 +3,8 @@
 
 Stubs the `unreal` module, imports heph_island_ue, and checks: the ladder starts with auto+1 and ends with the
 unlit base_color rung; manual rungs carry an EV100; mean_lum matches Rec.601 on tuples and .r/.g/.b objects;
-sample_grid is 9x9 and inside the frame; the gate matches the NFT card gate (20). Prints PASS/FAIL; exits 1 on failure.
+sample_grid is 9x9 and inside the frame; the gate matches the NFT card gate (20); the
+world-light verdict and lit-hero-owed flag behave on the round-3 dark world and the restored Clear world. Prints PASS/FAIL; exits 1 on failure.
 """
 import sys, types
 from pathlib import Path
@@ -31,5 +32,13 @@ check(h.mean_lum([]) == 0.0, "mean_lum empty = 0")
 g = h.sample_grid(1920, 1080)
 check(len(g) == 81 and all(0 <= x < 1920 and 0 <= y < 1080 for x, y in g), "sample_grid 9x9 inside 1920x1080")
 check(h.MIN_CAPTURE_LUM == 20.0, "capture gate = NFT card gate (20)")
+wv = h.world_light_verdict([0.0], [0.017])
+check(wv["dark"] and wv["sun_lux"] == 0.0, "round-3 storm save (sun 0 lux, sky 0.017) reads as world-dark")
+check(not h.world_light_verdict([10.0], [1.1])["dark"], "restored Clear world (sun 10 lux, sky 1.1) reads as lit")
+check(h.world_light_verdict([], [])["dark"], "no sun and no sky light = dark")
+check(not h.world_light_verdict([0.0], [1.1])["dark"], "sky light alone still counts as lit")
+check(h.lit_owed("base_color", 201.4), "base_color fallback (round-4 23:45 hero) leaves a lit hero owed")
+check(not h.lit_owed("manual_ev8", 42.0), "lit rung over the gate clears the debt")
+check(h.lit_owed("auto+1", 0.1) and h.lit_owed(None, None), "dark lit rung or no capture = owed")
 print("ALL PASS" if not fails else f"FAIL ({len(fails)})")
 sys.exit(1 if fails else 0)

@@ -308,3 +308,8 @@ blender-team posted READY for QUEUE **1360–1366** (judged + turntables). Wired
 - GLBs present under `bot-team/art/glb` (preflight should list them `glb_only` until imported).
 - Validators: `test_heph_landmarks.py`, `test_heph_nft_card.py` (EXPECTED_ITEMS=126).
 - Not touching Unreal. SceneCapture overlook + landmark import still owed on the next editor grant.
+
+## Lit hero debt (round 4)
+
+The round-4 hero (23:45 PT) was exported from the unlit base_color rung because the persistent DaedalusWorld sky was saved dark (sun 0 lux, sky light 0.017; restored by oddsreaper at 23:54). heph_island_ue.py now probes the world's DirectionalLight and SkyLight read-only before the exposure ladder, records them in hero_capture.json as world_light, and sets lit_owed (also in island_result.json) whenever the export is base_color or under the luma gate of 20. When that happens it posts a NEED note that says whether the cause is world-level dark or the hero camera. It never adds or edits a world sun. Next Hephaestus editor turn: re-shoot a lit hero; lit_owed false clears the debt.
+

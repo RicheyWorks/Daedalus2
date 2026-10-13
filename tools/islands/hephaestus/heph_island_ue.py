@@ -165,6 +165,41 @@ def sample_grid(w, h, n=9):
     return [(x, y) for y in ys for x in xs]
 
 
+# World-light probe (round 4, 23:45): every island's shot went near-black after the 22:59 editor restart because the
+# persistent DaedalusWorld Sky Director was saved at sun 0 lux / skylight 0.017 (oddsreaper #26482). That is world-level,
+# not island-level, so the hero now records the world light it saw and flags a lit re-shoot as owed instead of
+# passing an unlit base_color frame off as the hero. Read-only: never spawns or edits a world sun (referee rule).
+SUN_DARK_LUX = 1.0
+SKY_DARK = 0.1
+
+
+def world_light_verdict(suns, skies):
+    """Pure check on DirectionalLight intensities (lux) and SkyLight intensities found in the loaded world."""
+    sun = max((float(x) for x in (suns or []) if x is not None), default=None)
+    sky = max((float(x) for x in (skies or []) if x is not None), default=None)
+    dark = (sun is None or sun < SUN_DARK_LUX) and (sky is None or sky < SKY_DARK)
+    return {"sun_lux": sun, "sky": sky, "suns": len(suns or []), "dark": dark}
+
+
+def lit_owed(chosen, lum, gate=None):
+    """A lit hero is still owed when the export fell back to unlit base color or never cleared the gate."""
+    gate = MIN_CAPTURE_LUM if gate is None else gate
+    return chosen is None or chosen == "base_color" or lum is None or lum < gate
+
+
+def probe_world_light():
+    suns, skies = [], []
+    try:
+        for a in unreal.get_editor_subsystem(unreal.EditorActorSubsystem).get_all_level_actors():
+            for cls, comp, out in ((getattr(unreal, "DirectionalLight", None), "DirectionalLightComponent", suns),
+                                   (getattr(unreal, "SkyLight", None), "SkyLightComponent", skies)):
+                if cls is not None and isinstance(a, cls):
+                    c = a.get_component_by_class(getattr(unreal, comp))
+                    if c is not None: out.append(float(c.get_editor_property("intensity")))
+    except Exception as e: log(f"world light probe: {e}")
+    return world_light_verdict(suns, skies)
+
+
 def hero_capture(cam_loc, target_loc, fov=55.0):
     """SceneCapture2D hero shot with an exposure ladder and a brightness gate.
     Bypasses viewport_screenshot (bridge 9877 often times out). Tries each EXPOSURE_LADDER rung, probes a 9x9 pixel
@@ -191,6 +226,8 @@ def hero_capture(cam_loc, target_loc, fov=55.0):
         sc.set_editor_property("texture_target", rt)
         sc.set_editor_property("fov_angle", float(fov))
         grid = sample_grid(1920, 1080)
+        wl = probe_world_light()
+        log(f"world light: sun {wl['sun_lux']} lux, sky {wl['sky']}, dark={wl['dark']}")
 
         def shoot(rung):
             label, src, ev100, bias = rung
@@ -229,13 +266,19 @@ def hero_capture(cam_loc, target_loc, fov=55.0):
         unreal.RenderingLibrary.export_render_target(world, rt, SHOTS, HERO_PNG)
         try:
             with open(os.path.join(SHOTS, "hero_capture.json"), "w", encoding="utf-8") as f:
-                json.dump({"tried": tried, "chosen": best[0][0] if best else None,
-                           "lum": round(best[1], 1) if best else None, "gate": MIN_CAPTURE_LUM}, f, indent=1)
+                chosen, blum = (best[0][0], best[1]) if best else (None, None)
+                json.dump({"tried": tried, "chosen": chosen, "lum": round(blum, 1) if best else None,
+                           "gate": MIN_CAPTURE_LUM, "world_light": wl, "lit_owed": lit_owed(chosen, blum)}, f, indent=1)
         except Exception as e: log(f"hero_capture.json: {e}")
         try: actors.destroy_actor(cap)
         except Exception: pass
         # brief settle + existence check
         time.sleep(0.5)
+        if best and lit_owed(best[0][0], best[1]):
+            link_note(f"NEED island:hephaestus lit hero owed: export fell back to {best[0][0]} (lit rungs {tried[:-1]}); "
+                      f"world light sun {wl['sun_lux']} lux / sky {wl['sky']} -> "
+                      + ("world-level dark (DaedalusWorld sun/sky), not an island fault; no sun added"
+                         if wl["dark"] else "world is lit, so re-aim hero cam / exposure next turn"))
         if os.path.isfile(out_path) and os.path.getsize(out_path) > 1000 and best and best[1] >= MIN_CAPTURE_LUM:
             log(f"hero SceneCapture -> {out_path} ({os.path.getsize(out_path)} B, {best[0][0]} luma {best[1]:.1f})")
             return out_path
@@ -349,7 +392,10 @@ def run():
         link_note("NEED island:hephaestus: hero SceneCapture + HighResShot both failed; hero_r2.png still owed")
     if shot: saved = save_world()  # capture actor is transient; re-save only clears anything it dirtied
     log(f"placed={placed}/{want} imported={imported} missing={sorted(missing)} living={living} shot={shot} {'PASS' if ok else 'FAIL'}")
-    write_result({"stage": "done", "ok": ok, "placed": placed, "want": want, "living": living, "saved": saved, "shot": shot})
+    try: cap = json.load(open(os.path.join(SHOTS, "hero_capture.json"), encoding="utf-8"))
+    except Exception: cap = {}
+    write_result({"stage": "done", "ok": ok, "placed": placed, "want": want, "living": living, "saved": saved, "shot": shot,
+                  "hero_rung": cap.get("chosen"), "lit_owed": cap.get("lit_owed", True), "world_light": cap.get("world_light")})
     return {"ok": ok, "placed": placed, "want": want, "imported": imported, "missing": sorted(missing), "living": living,
             "saved": saved, "cam": [cl.x, cl.y, cl.z], "cam_rot": [rot.pitch, rot.yaw],
             "shot": shot, "hero_target": [tl.x, tl.y, tl.z]}
