@@ -35,6 +35,29 @@ public final class BattlefieldDemo {
 
     /** One captured moment of the encounter. */
     public record Frame(String title, char[][] map, double[] cover) {
+        /** Defensive copies: frames are immutable snapshots. */
+        public Frame {
+            map = deep(map);
+            cover = cover == null ? null : cover.clone();
+        }
+
+        @Override
+        public char[][] map() {
+            return deep(map);
+        }
+
+        @Override
+        public double[] cover() {
+            return cover == null ? null : cover.clone();
+        }
+
+        private static char[][] deep(char[][] m) {
+            char[][] c = new char[m.length][];
+            for (int j = 0; j < m.length; j++) {
+                c[j] = m[j].clone();
+            }
+            return c;
+        }
     }
 
     private BattlefieldDemo() {
@@ -195,9 +218,10 @@ public final class BattlefieldDemo {
             System.out.print(text(f));
         }
         if (args.length > 0) {
-            Path out = Path.of(args[0]);
-            if (out.getParent() != null) {
-                Files.createDirectories(out.getParent());
+            Path out = Path.of(args[0]).toAbsolutePath();
+            Path dir = out.getParent();
+            if (dir != null) {
+                Files.createDirectories(dir);
             }
             png(frames, out);
             System.out.println("wrote " + out);
