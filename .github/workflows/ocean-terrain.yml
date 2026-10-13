@@ -24,7 +24,9 @@ jobs:
           cache: maven
       - name: Core regressions and existing save-format compatibility
         shell: bash
-        run: mvn -B -ntp -pl daedalus-core -am test
+        run: |
+          python tools/ocean/generate_palette.py --check
+          mvn -B -ntp -pl daedalus-core -am test
       - name: Export and compare independent seeded sectors across locales
         shell: bash
         run: |
