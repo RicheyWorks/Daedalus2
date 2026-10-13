@@ -240,6 +240,23 @@ int main(int Argc, char** Argv)
             Plain.Load(Text, E2);
             Check("and a realm without one gets the default rule", Ui::Current().Ink == 0xF8A070u);
         }
+        {   // Sol's art plugs in: a 2-frame sprite for the first monster replaces its drawn shape in battle
+            Realm Art;
+            std::string E3;
+            Art.Load(Text, E3);
+            Dismiss(Art);
+            Toughen(Art);
+            const std::string Mid = Art.World().Monsters[0].Id;
+            std::string Pack = "DSP 1\npalette 1 FF00FF\nsprite " + Mid + " 8 8 2\n";
+            for (int k = 0; k < 16; ++k) Pack += "00000000\n";
+            Check("a sprite pack loads into the realm", Art.LoadSprites(Pack, E3) && Art.SpriteCount() == 1, E3);
+            Art.ForceBattle({Mid});
+            Settle(Art);
+            const Frame B = Art.Render();
+            int Magenta = 0;
+            for (int y = 0; y < ScreenH; ++y) for (int x = 0; x < ScreenW; ++x) Magenta += B.Get(x, y) == 0xFF00FFu;
+            Check("the sprite is what the battle draws", Magenta >= 60, std::to_string(Magenta));
+        }
         Check("a short map row is refused", !Bad.Parse(Broken, E) && E.find("wrong size") != std::string::npos, E);
         std::string NoShop = Text;
         NoShop.replace(NoShop.find("shop KEYS"), 9, "shop XEYS");

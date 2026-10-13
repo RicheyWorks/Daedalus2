@@ -67,6 +67,20 @@ SDaedalusRealm::~SDaedalusRealm()
 	Texture.Reset();
 }
 
+bool SDaedalusRealm::LoadSprites(const FString& Pack, FString& Error)
+{
+	std::string Err;
+	const bool Ok = Core.LoadSprites(TCHAR_TO_UTF8(*Pack), Err);
+	Error = UTF8_TO_TCHAR(Err.c_str());
+	Refresh();
+	return Ok;
+}
+
+int32 SDaedalusRealm::SpriteCount() const
+{
+	return Core.SpriteCount();
+}
+
 bool SDaedalusRealm::LoadSpec(const FString& Spec, FString& Error)
 {
 	std::string Err;

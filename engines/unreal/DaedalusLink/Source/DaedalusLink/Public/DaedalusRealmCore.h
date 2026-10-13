@@ -24,6 +24,7 @@
 
 #include "DaedalusRealmLook.h"
 #include "DaedalusRealmSpec.h"
+#include "DaedalusRealmSprites.h"
 
 #include <cstdio>
 #include <deque>
@@ -88,6 +89,42 @@ public:
     }
 
     /** Load a realm spec (the Java engines' "DRR 1" text). Puts the party at the spawn. */
+    /** Sol's pixel art (DSP 1). Empty = the procedural shapes. Keyed by monster id, "MEMBER:<name>", "NPC:<role>". */
+    SpritePack Art;
+
+    bool LoadSprites(const std::string& PackText, std::string& Error) { return Art.Parse(PackText, Error); }
+    int SpriteCount() const { return static_cast<int>(Art.Sprites.size()); }
+
+    static const char* RoleKey(Role R)
+    {
+        switch (R) { case Role::News: return "NPC:NEWS"; case Role::Inn: return "NPC:INN"; case Role::Shop: return "NPC:SHOP";
+                     case Role::Queen: return "NPC:QUEEN"; default: return "NPC:TALK"; }
+    }
+
+    /** A person: the pack's 8-frame sprite when it has one (down/up/left/right x 2 steps), else the drawn figure.
+     * Sprites are drawn with their feet on the tile's bottom edge, centred, so a taller sprite stands up out of it. */
+    void Person(Frame& F, int X, int Y, const std::string& Key, const Look& L, int Facing, int Step) const
+    {
+        if (const Sprite* S = Art.Find(Key))
+        {
+            const int Fr = (Facing == 0 ? 0 : Facing == 1 ? 2 : Facing == 2 ? 4 : 6) + (Step % 2);
+            SpritePack::Draw(F, X + (TileSize - S->W) / 2, Y + TileSize - S->H, *S, S->Frames >= 8 ? Fr : Step % S->Frames);
+            return;
+        }
+        DrawPerson(F, X, Y, L, Facing, Step);
+    }
+
+    /** A monster in battle: the pack's sprite (rarity tier ":2"/":3" first, then the base id), else the drawn shape. */
+    void Monster(Frame& F, int X, int Y, const MonsterDef& M, int Anim, bool Hurt) const
+    {
+        const Sprite* S = nullptr;
+        if (M.Rarity == "RARE") S = Art.Find(M.Id + ":2");
+        else if (M.Rarity == "LEGENDARY" || M.Rarity == "ULTRA") S = Art.Find(M.Id + ":3");
+        if (!S) S = Art.Find(M.Id);
+        if (S) { SpritePack::Draw(F, X + (64 - S->W) / 2, Y + 64 - S->H, *S, (Anim / 8) % std::max(1, S->Frames), Hurt); return; }
+        DrawMonster(F, X, Y, M.Shape, M.Body, M.Accent, Anim, Hurt);
+    }
+
     bool Load(const std::string& SpecText, std::string& Error)
     {
         Spec S;
@@ -1515,7 +1552,7 @@ inline void Realm::RenderField(Frame& F, int Anim)
         int Face = 0;
         if (std::abs(NpcPos[i].first - PX) + std::abs(NpcPos[i].second - PY) <= 2)   // they look at you when you're near
             Face = PX < NpcPos[i].first ? 2 : PX > NpcPos[i].first ? 3 : PY < NpcPos[i].second ? 1 : 0;
-        DrawPerson(F, NpcPos[i].first * TileSize - CamX, NpcPos[i].second * TileSize - CamY, W.Npcs[i].L, Face, Anim / 4);
+        Person(F, NpcPos[i].first * TileSize - CamX, NpcPos[i].second * TileSize - CamY, RoleKey(W.Npcs[i].R), W.Npcs[i].L, Face, Anim / 4);
     }
     for (size_t i = 0; i < W.Bosses.size(); ++i)
     {
@@ -1523,7 +1560,7 @@ inline void Realm::RenderField(Frame& F, int Anim)
         if (BossDown[i] || B.At.Map != Cur || !Visible(B.At.X, B.At.Y)) continue;
         Frame Big(64, 64);
         const MonsterDef& Mo = Mon(B.Monster);
-        DrawMonster(Big, 0, 0, Mo.Shape, Mo.Body, Mo.Accent, Anim, false);
+        Monster(Big, 0, 0, Mo, Anim, false);
         F.BlitSmall(Big, B.At.X * TileSize - CamX, B.At.Y * TileSize - CamY, 4, Pal::Black);
     }
     for (size_t i = Party.size(); i-- > 1;)
@@ -1531,10 +1568,10 @@ inline void Realm::RenderField(Frame& F, int Anim)
         if (i - 1 >= Trail.size() || !Party[i].Alive()) continue;
         const auto& T = Trail[i - 1];
         if (!Visible(T.first, T.second)) continue;
-        DrawPerson(F, T.first * TileSize - CamX, T.second * TileSize - CamY, Party[i].L, Facing, WalkFrame + static_cast<int>(i));
+        Person(F, T.first * TileSize - CamX, T.second * TileSize - CamY, "MEMBER:" + Party[i].Name, Party[i].L, Facing, WalkFrame + static_cast<int>(i));
     }
     const int Shake = Bump > 0.0 ? ((Anim % 2) ? 1 : -1) : 0;
-    DrawPerson(F, ScreenW / 2 - 8 + Shake, ScreenH / 2 - 8, Party[0].L, Facing, (Anim / 2) % 2 + WalkFrame);
+    Person(F, ScreenW / 2 - 8 + Shake, ScreenH / 2 - 8, "MEMBER:" + Party[0].Name, Party[0].L, Facing, (Anim / 2) % 2 + WalkFrame);
     if (Flash > 0.0)   // hurt: the screen blinks red at the edges
         for (int k = 0; k < 3; ++k) { F.Rect(0, k, ScreenW, 1, Pal::Red); F.Rect(0, ScreenH - 1 - k, ScreenW, 1, Pal::Red); F.Rect(k, 0, 1, ScreenH, Pal::Red); F.Rect(ScreenW - 1 - k, 0, 1, ScreenH, Pal::Red); }
     if (Boxes.empty() && Idle > 1.0) Ui::PartyStrip(F, Party, -1);
@@ -1623,7 +1660,7 @@ inline void Realm::RenderBattle(Frame& F, int Anim)
         const int X = 128 - Shown * 29 + Slot * 58 - 3;
         ++Slot;
         const MonsterDef& M = Mon(Enemies[static_cast<size_t>(i)].Kind);
-        DrawMonster(F, X, 74, M.Shape, M.Body, M.Accent, Anim + i * 5, FoeFlash[static_cast<size_t>(i)] > 0 && (FoeFlash[static_cast<size_t>(i)] % 2));
+        Monster(F, X, 74, M, Anim + i * 5, FoeFlash[static_cast<size_t>(i)] > 0 && (FoeFlash[static_cast<size_t>(i)] % 2));
         if (Ph == Phase::Target && TargetI == i && (Anim / 2) % 2) Text(F, X + 28, 140, "*", Pal::Gold);
     }
     // Commands (left) and the log (right).

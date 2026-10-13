@@ -36,6 +36,9 @@ public:
 
 	/** Hand the realm its spec (the Java engines' DRR 1 text). False with a reason if the core refuses it. */
 	bool LoadSpec(const FString& Spec, FString& Error);
+	/** Sol's pixel art (DSP 1): monsters, party members and NPCs drawn from the pack instead of the procedural shapes. */
+	bool LoadSprites(const FString& Pack, FString& Error);
+	int32 SpriteCount() const;
 	/** Bring back a saved party (DRS 1); harmless when empty. */
 	void RestoreSave(const FString& Save);
 	FString SaveText() const;

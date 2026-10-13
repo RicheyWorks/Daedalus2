@@ -1217,6 +1217,16 @@ void ADaedalusHero::RealmReady(const FString& Spec, const FString& Source)
 		RealmSource = TEXT("refused: ") + Error;
 		return;
 	}
+	// The sprite pack (DSP 1) beside the shipped spec: Sol's art for the portal realm. Absent = the drawn shapes.
+	{
+		const FString PackPath = FPaths::Combine(FPaths::ProjectPluginsDir(), TEXT("DaedalusLink"), TEXT("Content"), TEXT("Realm"), TEXT("realm-7.dsp"));
+		FString Pack, PackErr;
+		if (FFileHelper::LoadFileToString(Pack, *PackPath))
+		{
+			if (RealmView->LoadSprites(Pack, PackErr)) UE_LOG(LogDaedalus, Log, TEXT("Realm sprites: %d from %s"), RealmView->SpriteCount(), *PackPath);
+			else UE_LOG(LogDaedalus, Warning, TEXT("Realm sprite pack refused: %s"), *PackErr);
+		}
+	}
 	FString Save;
 	if (FFileHelper::LoadFileToString(Save, *RealmSavePath())) RealmView->RestoreSave(Save);
 	RealmSource = Source;
@@ -1251,7 +1261,7 @@ bool ADaedalusHero::IsRealmOpen() const
 FString ADaedalusHero::RealmState() const
 {
 	if (!RealmView.IsValid()) return TEXT("closed");
-	return FString::Printf(TEXT("source=%s %s"), *RealmSource, UTF8_TO_TCHAR(RealmView->Game().Describe().c_str()));
+	return FString::Printf(TEXT("source=%s sprites=%d %s"), *RealmSource, RealmView->SpriteCount(), UTF8_TO_TCHAR(RealmView->Game().Describe().c_str()));
 }
 
 bool ADaedalusHero::RealmCapture(const FString& Path)
