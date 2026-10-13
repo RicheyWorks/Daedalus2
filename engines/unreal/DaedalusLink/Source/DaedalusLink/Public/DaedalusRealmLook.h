@@ -243,5 +243,51 @@ inline void DrawBlockWall(Frame& F, int X, int Y)
     }
 }
 
+/**
+ * The battle backdrop: a framed picture of where the fight is. 0 = open field (sky bands, far hills, a sun), 1 = a
+ * town street (walls, flagstones), 2 = a cave (rock, stalactites, a torch glow). The frame is the realm's window rule.
+ */
+inline void DrawBattleScene(Frame& F, int Kind, int Anim)
+{
+    const int X = 36, Y = 48, W = 184, H = 100;
+    Ui::Window(F, X - 4, Y - 4, W + 8, H + 8);
+    const int IX = X, IY = Y, IW = W, IH = H;
+    if (Kind == 2)
+    {
+        F.Rect(IX, IY, IW, IH, Pal::CaveWall);
+        for (int k = 0; k < 7; ++k) F.Tri(IX + 12 + k * 27, IY, 7, -(12 + (k % 3) * 5), Pal::CaveWallHi);
+        for (int k = 0; k < 7; ++k) F.Tri(IX + 12 + k * 27, IY, 5, -(8 + (k % 3) * 4), Pal::CaveWall);
+        F.Rect(IX, IY + IH - 28, IW, 28, Pal::CaveFloor);
+        for (int i = 0; i < IW; i += 5) if ((i / 5) % 3 == 0) F.Set(IX + i, IY + IH - 20 + (i / 7) % 6, Pal::CaveDot);
+        // a torch glow breathes on the wall
+        const int R = 22 + (Anim / 6) % 2;
+        F.Ellipse(IX + 30, IY + 40, R, R / 2, 0x5C4030);
+        F.Ellipse(IX + 30, IY + 40, R / 2, R / 4, 0x8C6040);
+        return;
+    }
+    // sky in three bands, lighter toward the horizon
+    F.Rect(IX, IY, IW, IH, 0x3878F8);
+    F.Rect(IX, IY + 26, IW, 20, 0x58A0F8);
+    F.Rect(IX, IY + 46, IW, 14, 0x90C8F8);
+    F.Ellipse(IX + 150, IY + 16, 8, 8, Pal::Gold);
+    for (int k = 0; k < 3; ++k) { const int CX = IX + 24 + k * 60 + (Anim / 20) % 4; F.Ellipse(CX, IY + 20, 12, 4, Pal::White); F.Ellipse(CX + 8, IY + 18, 8, 4, Pal::White); }
+    if (Kind == 1)
+    {
+        F.Rect(IX, IY + 36, IW, 36, Pal::LightGrey);     // a town wall across the back
+        for (int j = 0; j < 36; j += 9) { F.Rect(IX, IY + 36 + j, IW, 1, Pal::Black); for (int i = (j / 9) % 2 * 9; i < IW; i += 18) F.Rect(IX + i, IY + 36 + j, 1, 9, Pal::Black); }
+        F.Rect(IX, IY + 72, IW, 28, Pal::StoneLo);
+        for (int j = 0; j < 28; j += 7) F.Rect(IX, IY + 72 + j, IW, 1, Pal::CobbleDark);
+        for (int i = 0; i < IW; i += 14) F.Rect(IX + i, IY + 72, 1, 28, Pal::CobbleDark);
+        return;
+    }
+    // far mountains, near hills, the field
+    for (int k = 0; k < 5; ++k) F.Tri(IX + 20 + k * 40, IY + 62, 22, 26 + (k % 2) * 8, Pal::Rock);
+    for (int k = 0; k < 5; ++k) F.Tri(IX + 20 + k * 40, IY + 62 - 26 - (k % 2) * 8 + 10, 5, 10, Pal::Snow);
+    for (int k = 0; k < 4; ++k) F.Ellipse(IX + 30 + k * 45, IY + 66, 30, 10, Pal::HillDark);
+    for (int k = 0; k < 4; ++k) F.Ellipse(IX + 30 + k * 45, IY + 68, 22, 6, Pal::Hill);
+    F.Rect(IX, IY + 70, IW, 30, Pal::Grass);
+    for (int i = 0; i < IW; i += 6) if ((i / 6) % 2 == 0) { F.Set(IX + i, IY + 78 + (i / 3) % 9, Pal::GrassDot); F.Set(IX + i + 1, IY + 79 + (i / 3) % 9, Pal::GrassDot); }
+}
+
 } // namespace realm
 } // namespace daedalus

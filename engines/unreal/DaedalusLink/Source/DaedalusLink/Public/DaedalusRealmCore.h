@@ -1611,21 +1611,8 @@ inline void Realm::RenderBattle(Frame& F, int Anim)
         const int Hot = (Ph == Phase::Command || Ph == Phase::Target || !Boxes.empty()) ? Actor : -1;
         Ui::PartyStrip(F, Party, Hot, &MemShown);
     }
-    // The scene: a slice of where the fight is.
-    if (Map().Dark)
-    {
-        F.Rect(40, 60, 176, 84, Pal::CaveWall);
-        for (int k = 0; k < 6; ++k) F.Tri(52 + k * 30, 60, 8, -10 - (k % 3) * 4, Pal::CaveWallHi);
-        F.Rect(40, 118, 176, 26, Pal::CaveFloor);
-    }
-    else
-    {
-        F.Rect(40, 60, 176, 84, Pal::Water);
-        F.Rect(40, 60, 176, 40, 0x58A8F8);
-        F.Ellipse(80, 72, 10, 4, Pal::White); F.Ellipse(170, 68, 12, 4, Pal::White);
-        F.Rect(40, 112, 176, 32, Map().Id == "FIELD" ? Pal::Grass : Pal::Cobble);
-        F.Tri(70, 112, 20, 26, Pal::Hill); F.Tri(180, 112, 22, 30, Pal::Rock); F.Tri(180, 90, 6, 8, Pal::Snow);
-    }
+    // The scene: a framed picture of where the fight is.
+    DrawBattleScene(F, Map().Dark ? 2 : Map().Id == "FIELD" ? 0 : 1, Anim);
     const int N = static_cast<int>(Enemies.size());
     int Shown = 0;
     for (int i = 0; i < N; ++i) Shown += (FoeShown[static_cast<size_t>(i)] > 0 && !FoeGoneShown[static_cast<size_t>(i)]);
