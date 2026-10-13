@@ -1,6 +1,10 @@
 # Validates Daedalus2 data JSON and item-id references.
 $root = Split-Path $PSScriptRoot -Parent
-$items = (Get-Content "$root\data\economy\items.json" -Raw | ConvertFrom-Json).items.id
+$econ = "$root\data\economy\items.json"
+$items = @()
+if (Test-Path $econ) { $items += (Get-Content $econ -Raw | ConvertFrom-Json).items | % { $_.id } }
+else { Write-Host "WARN data/economy/items.json not in this checkout (untracked upstream); item cross-check limited to island item files" }
+Get-ChildItem "$root\data\islands" -Recurse -Filter items.json -EA 0 | % { $items += (Get-Content $_.FullName -Raw | ConvertFrom-Json).items | % { $_.id } }
 $bad = 0
 Get-ChildItem "$root\data" -Recurse -Filter *.json | ForEach-Object {
   try { $null = Get-Content $_.FullName -Raw | ConvertFrom-Json } catch { Write-Host "BAD JSON $($_.FullName)"; $bad++ }
@@ -28,5 +32,6 @@ $animals = (Get-Content "$root\data\livestock\animals.json" -Raw | ConvertFrom-J
 $animals | ? { -not $_.feed -or -not $_.housing } | % { Write-Host "ANIMAL MISSING feed/housing $($_.id)"; $script:bad++ }
 
 if ($bad) { exit 1 } else { Write-Host "data OK" }
+
 
 
