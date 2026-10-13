@@ -200,4 +200,13 @@ and real JWT requests prove 401/403/200. Carry all source semantics across the l
 boundary (mode, grants, breeding chance and already-scaled modifiers), not just the fields
 needed by the first demo. A deterministic calculator is not an inventory transaction;
 state clearly which side validates ownership, consumes ingredients and applies effects once.
+## Reuse the touring jukebox when adding audio contracts (2026-10-13)
+
+AUD 1 carries the existing ADR-052 music cue rather than inventing a second music service.
+The existing JukeboxClient/JukeboxTransport handles touring content; native daedalus.Jukebox
+handles cue changes. Ambience and creature calls reuse BiomeAmbience and PCS 1 unchanged.
+Keep design/calculation independent of remote music fetches, retain the prior valid mix on
+failure, and do not restart an unchanged track at every refresh. Parameter fixtures prove
+cross-language inputs, not audible playback; native playback needs its own live verification.
+
 
