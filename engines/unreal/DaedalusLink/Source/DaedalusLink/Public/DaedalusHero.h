@@ -18,6 +18,7 @@ class UMaterialInterface;
 class SDaedalusSettingsMenu;
 class SDaedalusFieldMenu;
 class SDaedalusInventory;
+class SDaedalusDialogue;
 class SDaedalusHud;
 class SWidget;
 struct FInputActionValue;
@@ -186,6 +187,18 @@ public:
 	/** Which catalog this world uses: InventoryRealm when set, else from the map's name, else world-zero. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString InventoryCatalogName() const;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") FString InventoryRealm;
+
+	// Dialogue (Richey, 2026-10-13): every realm has dialogue boxes. The 3D realms speak through SDaedalusDialogue in
+	// the realm's theme (Animal Crossing's bubble, name tag, babble); the 8-bit realm keeps its FF1 window.
+	/** An NPC speaks: opens the box (or queues behind the line showing). Choices end the line on a pick. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") void Speak(const FString& Speaker, const FString& Text, const TArray<FString>& Choices);
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") bool IsDialogueOpen() const;
+	/** For the harness: a b up down tick:<s> state. Returns the model's line plus last=<outcome>. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus") FString DialogueInput(const FString& Command);
+	/** The last outcome: "closed:<speaker>" or "choice:<n>:<speaker>" (quests read it). */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") FString LastDialogue;
+	DECLARE_MULTICAST_DELEGATE_TwoParams(FOnDialogueChoice, const FString& /*Speaker*/, int32 /*Choice: -1 closed*/);
+	FOnDialogueChoice OnDialogueChoice;
 	/** A realm's own loot (item id -> count) and what is worn (slot -> item id). World Zero's bag is the cubes + tools. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") TMap<FString, int32> Satchel;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") TMap<FString, FString> Worn;
@@ -305,6 +318,11 @@ private:
 	TSharedPtr<SWidget> FieldHost;
 	TSharedPtr<SDaedalusInventory> Inventory;
 	TSharedPtr<SWidget> InventoryHost;
+	TSharedPtr<SDaedalusDialogue> Dialogue;
+	TSharedPtr<SWidget> DialogueHost;
+	TArray<FString> DialogueSfx;
+	void DialogueOutcome(const struct FDaedalusDialogueOutcome& Outcome);
+	void DialogueSound(const FString& Event);
 	TSharedPtr<struct FDaedalusCatalogHolder> InventoryCatalog;
 	void InventoryBag(TMap<FString, int32>& OutBag, TMap<FString, FString>& OutWorn) const;
 	void InventoryIntent(const struct FDaedalusInventoryIntent& Intent);
