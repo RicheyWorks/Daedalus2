@@ -17,7 +17,8 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
+    # Validate the focused Java-cabinet stack before its approved parent merges.
+    branches: [ main, codex/realm-production-queue ]
 
 # Cancel in-flight runs on the same ref when a new push lands — saves CI
 # minutes on rapid pushes / rebases.

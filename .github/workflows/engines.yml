@@ -11,7 +11,8 @@ on:
     branches: [ main ]
     paths: [ "engines/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
   pull_request:
-    branches: [ main ]
+    # Match the approved Java-cabinet dependency stack as well as main.
+    branches: [ main, codex/realm-production-queue ]
     paths: [ "engines/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
 
 concurrency:
