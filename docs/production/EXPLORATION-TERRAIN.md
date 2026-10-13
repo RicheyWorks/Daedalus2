@@ -53,3 +53,11 @@ Patch normals now sample world-coordinate derivatives, and UVs use world
 coordinates, so neighboring patches share shading and texture phase. Patch
 dimension overflow refuses generation. MSVC /W4 /WX passes 78,383 checks after
 these changes; source-level tests do not establish rendered Unreal appearance.
+
+Native build, October 13: isolated UE 5.8 scratch host compiled this actor and
+generated reflection module, then linked UnrealEditor-DaedalusLink.dll in 47.18
+seconds. Only this actor/core and a validation module were included; the full
+current plugin and live placement remain unverified. Log retained at
+Documents/Codex/2026-10-13/terrain-ue-compile/verified-build.log. Supported
+NoHotReloadFromIDE/NoLiveCoding settings kept hot reload out of this scratch
+build. Unreal turn released in hub message 28738.

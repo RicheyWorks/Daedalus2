@@ -13,10 +13,22 @@ on:
       - 'engines/unreal/core-test/*terrain_core_test.cpp'
       - 'engines/unreal/core-test/ocean_travel_core_test.cpp'
       - '.github/workflows/portal-production.yml'
+      - 'daedalus-core/src/**/inventory/**'
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
+  java-catalog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Shared inventory format reader
+        run: mvn -B -pl daedalus-core -Dtest=InventoryCatalogTest test
   native:
     runs-on: ubuntu-latest
     strategy:
