@@ -28,7 +28,7 @@ if lvl is None:
     if EA.does_asset_exist(SUB): unreal.EditorLevelUtils.add_level_to_world(ew, SUB, unreal.LevelStreamingAlwaysLoaded)
     else: unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingAlwaysLoaded, SUB, False)
     ew = ues.get_editor_world(); lvl = find_lvl(ew); log.append("sublevel added")
-unreal.EditorLevelUtils.make_level_current(lvl)
+les.set_current_level_by_name(SUB.split("/")[-1])
 for a in eas.get_all_level_actors():
     if a.actor_has_tag(TAG) or a.actor_has_tag("GROK_ArkDock"): eas.destroy_actor(a)
 # tinted materials (our folder only)
@@ -105,7 +105,7 @@ g["__file__"] = os.path.join(D, "ark_dock_ue.py")
 exec(open(g["__file__"], encoding="utf-8").read(), g)
 dock = g.get("result")
 # save only our sublevel + our materials
-unreal.EditorLevelUtils.make_level_current(lvl); saved = les.save_current_level()
+les.set_current_level_by_name(SUB.split("/")[-1]); saved = les.save_current_level()
 for p in [p.get_name() for p in L.get_dirty_content_packages()]:
     if p.startswith("/Game/Grok/"): EA.save_asset(p, False)
 persist_saved = L.save_dirty_packages(True, False) if not _pre else False
