@@ -11,6 +11,7 @@ it posts one HOLD note, does NOT start the 18-min clock or place anything, re-pi
 and needs two good pings in a row, until alive or give-up (default turn start + 60 min, OR_GIVE_UP_MIN; OR_GIVE_UP=HH:MM rolls past midnight). Each check writes
 bot-team/shots/oddsreaper/bridge_status.json {ok, ts, detail}. Build (-Fast) only runs after the bridge is alive
 (or after a successful preflight recovery); never burn the turn on a dead editor."""
+from pathlib import Path
 import base64, datetime as dt, json, os, shutil, socket, subprocess, sys, time
 
 T0 = time.time(); CAP = 18 * 60
@@ -304,6 +305,49 @@ def storm_held(state):
     return "STORM" in str(state.get("weather", "")).upper() and str(state.get("mood", "")) == "oddsreaper_storm"
 
 
+def daylightish_rgb(mean_r, mean_b, lum):
+    """Gate: warm + bright = daylight (round-2 Play hero bug class)."""
+    return float(lum) > 95 and float(mean_r) > float(mean_b) + 5
+
+
+def hero_storm_rgb(path):
+    """Mean RGB / luminance of a Play hero PNG. Round-2 play shot was daylightish (lum~145, R>B).
+    Storm look should be cooler/darker. Pure/headless; returns None if file missing or unreadable."""
+    try:
+        from PIL import Image
+    except ImportError:
+        return None
+    p = Path(path) if not isinstance(path, Path) else path
+    if not p.is_file():
+        return None
+    try:
+        im = Image.open(p).convert("RGB")
+        w, h = im.size
+        px = list(im.getdata())[::16]
+        if not px:
+            return None
+        r = sum(c[0] for c in px) / len(px)
+        g = sum(c[1] for c in px) / len(px)
+        b = sum(c[2] for c in px) / len(px)
+        lum = 0.2126 * r + 0.7152 * g + 0.0722 * b
+        sky = im.crop((0, 0, w, max(1, h // 4)))
+        spx = list(sky.getdata())[::8]
+        sr = sum(c[0] for c in spx) / len(spx)
+        sg = sum(c[1] for c in spx) / len(spx)
+        sb = sum(c[2] for c in spx) / len(spx)
+        daylightish = daylightish_rgb(r, b, lum)
+        stormish = (not daylightish) and ((b >= r - 2 and lum < 110) or (sb >= sr and lum < 100) or lum < 70)
+        return {
+            "path": str(p), "w": w, "h": h,
+            "mean": {"R": round(r, 1), "G": round(g, 1), "B": round(b, 1)},
+            "lum": round(lum, 1),
+            "sky": {"R": round(sr, 1), "G": round(sg, 1), "B": round(sb, 1)},
+            "daylightish": daylightish, "stormish": stormish,
+        }
+    except Exception as e:
+        return {"error": str(e)[:120]}
+
+
 def force_storm_in_pie():
     """Round-2 Play shot showed daylight: the Mood Volume fired only on player-pawn overlap and the PIE pawn spawns
     on another island. The rebuilt volume triggers on the view, but take_hero_shot uses a SceneCapture (not the player
@@ -407,10 +451,43 @@ def main():
             call("play", timeout=60); say("Play start (storm then 20s settle)")
             say(f"storm in PIE: {force_storm_in_pie()}")
             time.sleep(20)
+            # Re-pin after settle: MoodVolume / director can slip back to Clear during the 20s wait
+            # (round-2 daylight hero class). Re-check, re-force if needed, then shoot.
             try:
-                take_hero_shot(cam_w, target_w, "hero_unreal_play.png")
+                chk = py(STORM_CHECK_CODE, 20)
+                if not storm_held(chk):
+                    say(f"storm slipped after settle ({chk}); re-forcing before play shot")
+                    say(f"storm re-force: {force_storm_in_pie()}")
+                    time.sleep(2)
+                else:
+                    say(f"storm still held after settle: {chk}")
+            except Exception as e:
+                say(f"post-settle storm check failed: {e}; re-forcing once")
+                try:
+                    say(f"storm re-force: {force_storm_in_pie()}")
+                except Exception:
+                    pass
+                time.sleep(2)
+            play_name = "hero_unreal_play.png"
+            try:
+                take_hero_shot(cam_w, target_w, play_name)
             except Exception as e:
                 say(f"play shot skipped: {e}")
+            # RGB daylight gate: if the PNG still looks like warm daylight, one storm+reshoot pass.
+            play_path = os.path.join(SHOTS, play_name)
+            rgb = hero_storm_rgb(play_path)
+            if isinstance(rgb, dict) and rgb.get("daylightish"):
+                say(f"play hero still daylightish {rgb}; re-force + 5s + reshoot once")
+                try:
+                    say(f"storm re-force (rgb gate): {force_storm_in_pie()}")
+                    time.sleep(5)
+                    take_hero_shot(cam_w, target_w, play_name)
+                    rgb2 = hero_storm_rgb(play_path)
+                    say(f"play hero after rgb-gate reshoot: {rgb2}")
+                except Exception as e:
+                    say(f"rgb-gate reshoot failed: {e}")
+            elif isinstance(rgb, dict):
+                say(f"play hero rgb gate ok: {rgb}")
             call("stop", timeout=30); say("Play stop after 20s check")
         except Exception as e:
             say(f"Play check failed: {e}")

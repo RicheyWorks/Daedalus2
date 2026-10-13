@@ -1,7 +1,8 @@
-# SPDX-License-Identifier: MIT
+﻿# SPDX-License-Identifier: MIT
 """Headless check (no Unreal): the PIE storm snippet pins the Mood Volume before apply_now, so its view Tick
 (player camera on the main island) cannot Restore() daylight before the hero shot. Also checks OddsReaper
-sublevel streaming + materials_mpc storm MPC push before the volume search. Run: python test_storm_pin.py"""
+sublevel streaming + materials_mpc storm MPC push before the volume search, and post-settle re-pin + RGB gate.
+Run: python test_storm_pin.py"""
 import ast, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import oddsreaper_turn as t
@@ -29,4 +30,8 @@ src = open(t.__file__, encoding="utf-8").read()
 assert "Play start (storm then 20s settle)" in src, "Play must force storm before the 20s settle"
 play_i = src.index("Play start (storm then 20s settle)")
 assert src.index("force_storm_in_pie()", play_i) < src.index("time.sleep(20)", play_i)
+# post-settle re-pin before shot (storm can slip during the 20s wait)
+assert "storm slipped after settle" in src
+assert src.index("time.sleep(20)", play_i) < src.index("storm slipped after settle", play_i)
+assert "hero_storm_rgb" in src and "daylightish" in src
 print("test_storm_pin: ALL PASS")

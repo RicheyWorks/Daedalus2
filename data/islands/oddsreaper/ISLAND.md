@@ -108,3 +108,7 @@ nft.json hero_image now points at bot-team/shots/oddsreaper/hero_unreal_play.png
 ## Round-3 storm polish: stream + MPC + settle order (Oct 12, 2026, 22:42 PT)
 
 oddsreaper_turn.py PIE storm path now (1) forces OddsReaperIsland streaming levels loaded+visible before MoodVolume search (sublevel streaming diagnosis — unloaded island meant volumes=0), (2) pushes materials_mpc.json storm scalars onto MPC_OR_SkyWeather when the asset exists (Wetness 1 / StormPulse 1 / WindStrength 0.95 / NightMask 0.25), (3) forces storm at Play start then settles 20s under storm before the hero shot (round-2 waited 20s in Clear then flipped late). Off-editor mood.json mirrors the oddsreaper_storm CSV row; headless test_mood_row.py + test_storm_pin.py cover it. No Unreal touched.
+
+## Round-3 storm polish: post-settle re-pin + RGB daylight gate (Oct 12, 2026, 22:51 PT)
+
+Diagnosed on-disk hero_unreal_play.png as still daylightish (mean RGB ~142/148/130, lum ~145, R>B) — the round-2 Play frame before storm fixes land in-editor. oddsreaper_turn.py now (1) re-checks storm_held after the 20s settle and re-forces if slipped, (2) runs hero_storm_rgb on the Play PNG and if daylightish does one storm+5s+reshoot pass. Headless: test_hero_storm_rgb.py + updated test_storm_pin.py. No Unreal touched; storm Play reshoot still owed on next editor grant.
