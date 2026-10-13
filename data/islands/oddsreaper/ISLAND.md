@@ -121,3 +121,10 @@ CLAIM after pythagoras HANDOFF. Bridge died once mid-Play (washed lum~220 false 
 
 The 23:01 turn held storm only via the director path (volumes=0). Off-editor diagnosis: the PIE streaming flip (should_be_loaded/visible) only lands on a later streaming update, so the same-tick volume search saw nothing; PIE copies may also miss the editor actor label. STORM_CODE now calls GameplayStatics.flush_level_streaming before the search and falls back to matching any DaedalusMoodVolume whose mood row is oddsreaper_storm; result logs volumes_all / vmatch / flushed. test_storm_pin.py extended, ALL PASS. No Unreal touched.
 
+## OR_NEXT (next editor grant)
+
+Storm MoodVolume path is fixed off-editor (flush_level_streaming + mood=oddsreaper_storm fallback; commit ef0d9c69). On the next OddsReaper editor turn:
+
+1. Verify Play hero still gates green: ot-team/shots/oddsreaper/hero_unreal_play.png must stay stormish (round-3c was mean RGB ~76/65/47 lum~66). If daylightish_rgb / lum>140, re-force storm in PIE, settle, re-shot.
+2. Confirm MoodVolume path now finds volumes after flush (log volumes_all / vmatch / flushed); director fallback is fine but volume pin is preferred.
+3. Do not force storm at BeginPlay on the shared DaedalusWorld. HANDOFF via OR_NEXT when done.
