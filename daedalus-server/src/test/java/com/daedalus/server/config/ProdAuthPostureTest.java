@@ -155,6 +155,8 @@ class ProdAuthPostureTest {
 
         // --- everything that costs work or touches state ---
         EXPECTED.put("POST /api/v1/maze/generate", Posture.AUTHENTICATED);
+        // Squad orders for Unreal (ADR-060): only the trusted game host drives NPCs.
+        EXPECTED.put("POST /api/v1/tactics/decide", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/maze/breed", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/maze/" + ID + "/live", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/maze/" + ID + "/traffic", Posture.AUTHENTICATED);
