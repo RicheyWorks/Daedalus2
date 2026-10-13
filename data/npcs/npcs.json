@@ -25,6 +25,28 @@
    "role": "pet care tips",
    "home": "ark pen",
    "behavior": "idle"
+  },
+  {
+   "id": "npc_forge_smith",
+   "role": "Forge Temper teacher, q_forge_temper",
+   "home": "caldera_forge at Prop_HephaestusAnvil_Great",
+   "island": "island_hephaestus",
+   "behavior": "idle+talk",
+   "lines": [
+    "Heat, quench, rivet. That is how every ark leaves this mountain.",
+    "Bring emberite. The quench remembers the strike that woke this core."
+   ]
+  },
+  {
+   "id": "npc_drydock_riveter",
+   "role": "ark hull repair, accepts tempered rivets",
+   "home": "ark_drydock at Prop_ForgeWorkbench_Iron",
+   "island": "island_hephaestus",
+   "behavior": "idle+craft",
+   "lines": [
+    "Hull wants tempered rivets, not soft iron.",
+    "Forgeox on the bellows buys you time. Don't waste it."
+   ]
   }
  ]
 }
