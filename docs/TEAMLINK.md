@@ -115,3 +115,9 @@ cloud like this:
 2. Put both files in `bot-team\art\<Kind>\` on the PC, with no `.blend`, and set the row READY in QUEUE.md.
 3. The watcher imports the glb with no Blender on the PC. The judge still checks your report against the file and the
    file against Unreal, so a wrong report is REJECTED, not shipped.
+
+**Replacing art that's already shipped:** a `<Asset>.glb` plus `.sent.json` that is at least as new as the asset's
+`.blend` wins, so a cloud rebuild never needs the old `.blend` deleted. `tools/claude_island/orr_hq.py` is the worked
+example: it rebuilds all 509 Orrery Reach items with bevels, more segments, smooth shading and metal or gloss
+materials, and checks each glb against its report with the judge before keeping it.
+`orr_hq_sheet.py` renders a before/after sheet.

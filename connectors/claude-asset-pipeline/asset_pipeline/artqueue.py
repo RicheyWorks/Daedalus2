@@ -445,7 +445,10 @@ class Watcher:
         # sent. No Blender on this PC is needed; the judge still checks report = file = Unreal.
         glb_path = os.path.join(self.folder, kind, asset + ".glb")
         sent_path = os.path.join(self.folder, kind, asset + ".sent.json")
-        if not os.path.exists(blend) and os.path.exists(glb_path) and os.path.exists(sent_path):
+        # A glb at least as new as the .blend wins, so a cloud rebuild replaces older PC art without deleting it.
+        fresh = os.path.exists(glb_path) and os.path.exists(sent_path) and (
+            not os.path.exists(blend) or os.path.getmtime(glb_path) >= os.path.getmtime(blend))
+        if fresh:
             with open(sent_path, encoding="utf-8") as f:
                 sent = json.load(f)
             names = [o["name"] for o in sent.get("objects", [])]

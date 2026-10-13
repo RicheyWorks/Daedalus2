@@ -414,6 +414,27 @@ check("prebuilt: no Blender call at all", not [c for c in calls if "open_mainfil
 check("prebuilt: the report carries the file's own witness", seen["land"] and seen["land"][0][0] == "Tool_Pickaxe")
 shutil.rmtree(d)
 
+# 12d. a newer cloud glb replaces an older .blend (no delete needed); an older glb leaves the .blend in charge
+for newer, want_glb in ((True, True), (False, False)):
+    d, w, fb = setup(blend=True, ship=_seq)
+    calls = []
+    fb_call = fb.call
+    fb.call = lambda *a, **k: (calls.append(k.get("code", "")[:30]), fb_call(*a, **k))[1]
+    wire.call = fb.call
+    fb.objects = ["Mesh"]
+    with open(os.path.join(d, "Tool", "Tool_Pickaxe.glb"), "wb") as f:
+        f.write(_st.pack("<4sII", b"glTF", 2, 20 + len(body)) + _st.pack("<I4s", len(body), b"JSON") + body)
+    with open(os.path.join(d, "Tool", "Tool_Pickaxe.sent.json"), "w") as f:
+        json.dump({"objects": [{"name": "Pick", "triangles": 1, "materials": [], "dims": [0.9, 0.3, 0.1]}]}, f)
+    old, new = _time.time() - 100, _time.time()
+    os.utime(os.path.join(d, "Tool", "Tool_Pickaxe.blend"), (new, new) if not newer else (old, old))
+    os.utime(os.path.join(d, "Tool", "Tool_Pickaxe.glb"), (new, new) if newer else (old, old))
+    w.ship_one("Tool_Pickaxe")
+    used_blender = bool(calls)   # any Blender call means the .blend path ran
+    check("newer glb than .blend -> %s" % ("ships the glb" if want_glb else "the .blend stays in charge"),
+          used_blender != want_glb, calls)
+    shutil.rmtree(d)
+
 # 13. a restart re-queues rows the last watcher left SHIPPING (they were stuck there forever)
 d, w, fb = setup(board=BOARD.replace("| Tool_Pickaxe | tool | 0.9 m | READY |", "| Tool_Pickaxe | tool | 0.9 m | SHIPPING |"))
 back = w.recover()
