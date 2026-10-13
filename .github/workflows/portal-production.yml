@@ -82,6 +82,7 @@ jobs:
           python3 -m py_compile tools/blender/parcels_creatures.py tools/blender/realm_creature.py
           python3 -m py_compile tools/blender/parcels_environment.py tools/blender/validate_parcels_package.py
           python3 -m py_compile tools/blender/brick_cast.py tools/blender/brick_creatures.py
+          python3 -m py_compile tools/blender/brick_environment.py tools/blender/validate_brick_package.py
   windows:
     runs-on: windows-latest
     steps:
