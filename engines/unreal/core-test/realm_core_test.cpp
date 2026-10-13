@@ -102,6 +102,7 @@ static bool AutoFight(Realm& G, int Guard = 4000)
 /** Close whatever message is up. */
 static void Dismiss(Realm& G)
 {
+    if (G.TopBox() == "TITLE") Tap(G, Button::A);
     for (int i = 0; i < 20 && G.TopBox() == "MESSAGE"; ++i) Tap(G, Button::A);
 }
 
@@ -208,6 +209,25 @@ int main(int Argc, char** Argv)
     Check("the realm has its maps", S.Maps.size() == 7 && S.MapIndex("CAVE3") >= 0, std::to_string(S.Maps.size()));
     Check("it starts in the field by the portal", G.MapId() == "FIELD" && G.X() == S.Spawn.X && G.Y() == S.Spawn.Y
         && S.Maps[0].At(S.Portal.X, S.Portal.Y) == Tile::Portal);
+    // ---- the title card: the realm's name on black, A or 2.5 s clears it, and the world waits underneath
+    Check("the portal opens on a title card", G.TopBox() == "TITLE" && G.TitleLeft() > 2.0, G.TopBox());
+    {
+        G.Tick(1.0);
+        const Frame& T = G.Render();
+        int Lit = 0;
+        for (int y = 96; y < 112; ++y) for (int x = 0; x < 256; ++x) Lit += T.Get(x, y) == Ui::Current().Ink;
+        Check("it spells the realm's name in the realm's ink", Lit > 100 && T.Get(2, 2) == Pal::Black, std::to_string(Lit));
+        Png(T, Out + "/realm_14_title.png");
+        Tap(G, Button::Up);
+        Check("the card ignores the pad", G.TopBox() == "TITLE" && G.Steps() == 0);
+        G.Press(Button::A); G.Release(Button::A);   // no tick: the welcome must not have started typing yet
+        Check("A clears the card to the welcome", G.TopBox() == "MESSAGE" && G.TitleLeft() <= 0.0, G.TopBox());
+        Realm Late;
+        std::string E;
+        Late.Load(Text, E);
+        for (int k = 0; k < 30; ++k) Late.Tick(0.1);
+        Check("or it clears itself after a moment", Late.TopBox() == "MESSAGE", Late.TopBox());
+    }
     Check("a welcome message waits", G.TopBox() == "MESSAGE");
     {   // the typewriter: nothing yet, some after a quarter second, the whole page after a press of A
         const Frame F0 = G.Render();
@@ -545,6 +565,7 @@ int main(int Argc, char** Argv)
             if (!Walkable(T) || T == Tile::Portal || T == Tile::Town || T == Tile::Castle || T == Tile::Cave) continue;
             Tap(F, B); Settle(F);
             ++Steps;
+            if (F.TopBox() == "MESSAGE") Dismiss(F);   // a land's banner (ADR-065)
             if (F.CurrentMode() == Mode::Battle)
             {
                 for (const Foe& Fo : F.Foes()) Seen.insert(F.World().Monsters[static_cast<size_t>(Fo.Kind)].Id);
@@ -577,12 +598,54 @@ int main(int Argc, char** Argv)
         L.ForceBattle({"BLIGHT_SLIME", "BLIGHT_SLIME"});
         AutoFight(L);
         Check("two fights take a fresh hero to level 2", L.Members()[0].Lvl >= 2 && L.Members()[0].Exp >= 7, L.Describe());
+        // ---- a shiny foe (ADR-065 rule 9): announced, tougher, pays double, and a damage number pops when it is hit
+        {
+            Realm Sh;
+            std::string E4;
+            Sh.Load(Text, E4);
+            Dismiss(Sh);
+            Sh.MembersMut()[0].Atk = 60;
+            const int ExpBefore = Sh.Members()[0].Exp, GoldBefore = Sh.Gold();
+            Sh.ForceShinyNext(true);
+            Sh.ForceBattle({"BLIGHT_SLIME"});
+            Sh.ForceShinyNext(false);
+            const auto& Mon = Sh.World().Monsters[static_cast<size_t>(Sh.Foes()[0].Kind)];
+            Check("the shiny glitters when it appears", Sh.Foes()[0].Shiny && Sh.ShiniesSeen() == 1 && Sh.Foes()[0].MaxHp == Mon.Hp * 3 / 2, Sh.Describe());
+            bool Heard = false;
+            for (const std::string& S : Sh.TakeSfx()) Heard |= S == "SHINY";
+            Check("and its chime is raised for the jukebox", Heard);
+            int Popped = 0;
+            for (int k = 0; k < 200 && Popped == 0 && Sh.CurrentMode() == Mode::Battle; ++k)
+            {
+                const std::string U = Sh.TopBox();
+                if (U == "COMMAND" || U == "TARGET" || U == "INTRO") Tap(Sh, Button::A);   // everyone FIGHTs the slime
+                else Sh.Tick(0.05);
+                Popped = Sh.PopCount();
+            }
+            Check("a damage number pops where the hit lands", Popped > 0, std::to_string(Popped));
+            Png(Sh.Render(), Out + "/realm_13_shiny.png");
+            for (int k = 0; k < 40; ++k) Sh.Tick(0.05);
+            Check("and it fades away", Sh.PopCount() == 0, std::to_string(Sh.PopCount()));
+            AutoFight(Sh);
+            Check("a shiny pays double exp and gold", Sh.Members()[0].Exp - ExpBefore == Mon.Exp * 2 && Sh.Gold() - GoldBefore == Mon.Gold * 2, Sh.Describe());
+        }
         // SAGE casts ZAP at a slime: FIGHT for the hero, SPELL ZAP for the sage, DEFEND for the scout.
         L.ForceBattle({"PUFFCAP"});
         Tap(L, Button::A);              // intro
         Tap(L, Button::Down); Tap(L, Button::Down); Tap(L, Button::Down); Tap(L, Button::A);   // hero DEFENDS
         Tap(L, Button::Down); Tap(L, Button::A);   // sage: SPELL
         Check("the sage's spell list", L.TopBox() == "SPELLS", L.TopBox());
+        {
+            // The window says the sage's MP, and a spell they can't pay for is drawn dim.
+            const int MpWas = L.Members()[1].Mp;
+            L.MembersMut()[1].Mp = 2;   // ZAP costs 3, CURE 2
+            const Frame& Sp = L.Render();
+            int Dim = 0, Lit = 0;
+            for (int y = 0; y < 240; ++y) for (int x = 0; x < 256; ++x) { Dim += Sp.Get(x, y) == Ui::Current().Dim; Lit += Sp.Get(x, y) == Ui::Current().Text; }
+            Check("a spell the caster can't afford is dimmed", Dim > 40 && Lit > 40, std::to_string(Dim) + " " + std::to_string(Lit));
+            Png(Sp, Out + "/realm_15_spells_mp.png");
+            L.MembersMut()[1].Mp = MpWas;
+        }
         Png(L.Render(), Out + "/realm_12_spells.png");
         const int MpBefore = L.Members()[1].Mp;
         Tap(L, Button::Down); Tap(L, Button::A);   // ZAP (single foe: no target step)
@@ -642,6 +705,146 @@ int main(int Argc, char** Argv)
         Elsewhere.Restore(Saved);
         Check("in another realm the team keeps its levels but the chests are fresh",
             Elsewhere.Members()[0].Lvl == G.Members()[0].Lvl && Elsewhere.ChestsOpened() == 0 && Elsewhere.MapId() == "FIELD", Elsewhere.Describe());
+    }
+
+    // ---- the dragon egg (ADR-065): carry it and it hatches into a fourth member, a DRAKE who knows BLAZE
+    {
+        Realm Eg;
+        std::string E;
+        Eg.Load(Text, E);
+        Dismiss(Eg);
+        Toughen(Eg);
+        Eg.Place("FIELD", S.Spawn.X, S.Spawn.Y + 2, 0);
+        Check("a dragon egg is in the realm's item list", S.ItemIndex("DRAGON_EGG") >= 0
+            && S.Items[static_cast<size_t>(S.ItemIndex("DRAGON_EGG"))].Kind == ItemKind::Egg);
+        Eg.Give("DRAGON_EGG");
+        Tap(Eg, Button::B); Tap(Eg, Button::Down); Tap(Eg, Button::Right); Tap(Eg, Button::A);   // ITEM
+        bool Told = false;
+        if (Eg.TopBox() == "ITEMS")
+        {
+            // the bag: herbs first, the egg last; walk the cursor down until the egg answers
+            for (int k = 0; k < 8 && !Told; ++k)
+            {
+                Tap(Eg, Button::A);
+                if (Eg.TopBox() == "MESSAGE") Told = Eg.LastMessage().find("CARRY IT") != std::string::npos;
+                while (Eg.TopBox() != "ITEMS" && Eg.TopBox() != "NONE") Tap(Eg, Button::B);
+                if (Eg.TopBox() == "NONE") break;
+                Tap(Eg, Button::Down);
+            }
+            while (Eg.TopBox() != "NONE") Tap(Eg, Button::B);
+        }
+        Check("using the egg says to carry it", Told, Eg.LastMessage());
+        int Stirs = 0, Walked = 0;
+        for (int k = 0; k < 4000 && !Eg.HasDrake(); ++k)
+        {
+            Tap(Eg, (k % 2) ? Button::Left : Button::Right);   // pace on the spot: a step each way
+            Settle(Eg);
+            ++Walked;
+            if (Eg.CurrentMode() == Mode::Battle) { AutoFight(Eg); }
+            if (Eg.TopBox() == "MESSAGE") { if (Eg.LastMessage().find("STIRS") != std::string::npos || Eg.LastMessage().find("TAPS") != std::string::npos) ++Stirs; Dismiss(Eg); }
+        }
+        Check("the egg stirs twice on the way", Stirs == 2, std::to_string(Stirs) + " egg=" + std::to_string(Eg.Warmth()));
+        Check("and hatches a DRAKE after a walk", Eg.HasDrake() && Eg.Members().size() == 4 && Eg.Members()[3].Name == "DRAKE" && Eg.Count("DRAGON_EGG") == 0,
+              Eg.Describe() + " walked=" + std::to_string(Walked));
+        Check("the drake knows BLAZE from the shell", Eg.Members()[3].Knows(SpBlaze) && !Eg.Members()[3].Knows(SpHeal));
+        bool Hatched = false;
+        for (const std::string& X : Eg.TakeSfx()) Hatched |= X == "HATCH";
+        Check("the hatch rings for the jukebox", Hatched);
+        Dismiss(Eg);
+        for (int k = 0; k < 30; ++k) Eg.Tick(0.05);   // stand still: the party strip shows after a second
+        Png(Eg.Render(), Out + "/realm_16_drake.png");
+        {
+            const Frame& Fr = Eg.Render();
+            int Cards = 0;
+            for (int y = 4; y < 10; ++y) for (int x = 0; x < 256; ++x) Cards += Fr.Get(x, y) == Ui::Current().Ink;
+            Check("four cards fit the strip", Cards > 400, std::to_string(Cards));
+        }
+        const std::string Saved = Eg.Save();
+        Realm Back;
+        Back.Load(Text, E);
+        Back.Restore(Saved);
+        Check("the drake survives a save and restore", Back.HasDrake() && Back.Members().size() == 4 && Back.Members()[3].Lvl == Eg.Members()[3].Lvl, Back.Describe());
+        Eg.ForceBattle({"BLIGHT_SLIME", "BLIGHT_SLIME"});
+        Check("it fights in the fourth slot", AutoFight(Eg) && Eg.Members()[3].Alive());
+    }
+
+    // ---- the battle stage director (hub 28710): a fight's lines become cues a 3D stage can play
+    {
+        Realm St;
+        std::string E;
+        St.Load(Text, E);
+        Dismiss(St);
+        St.MembersMut()[0].Atk = 60;
+        St.ForceShinyNext(true);
+        St.ForceBattle({"BLIGHT_SLIME", "PUFFCAP"});
+        St.ForceShinyNext(false);
+        std::vector<daedalus::stage::Cue> Cues;
+        for (int k = 0; k < 4000 && St.CurrentMode() == Mode::Battle; ++k)
+        {
+            const std::string U = St.TopBox();
+            if (U == "COMMAND" || U == "TARGET" || U == "INTRO" || U == "ENDING") Tap(St, Button::A);
+            else St.Tick(0.5);
+            for (const daedalus::stage::Cue& C : St.TakeStage()) Cues.push_back(C);
+        }
+        auto N = [&](daedalus::stage::Kind K) { int n = 0; for (const auto& C : Cues) n += C.K == K; return n; };
+        using daedalus::stage::Kind;
+        Check("the stage opens on two foes with a wide shot", !Cues.empty() && Cues[0].K == Kind::Enter && Cues[0].Amount == 2 && Cues[1].K == Kind::Camera && Cues[1].Text == "wide");
+        Check("both shiny foes glitter on entry", N(Kind::Shiny) == 2);
+        Check("swings step in, land as flinches with numbers", N(Kind::StepIn) >= 2 && N(Kind::Swing) >= 2 && N(Kind::Flinch) >= 2 && N(Kind::Pop) >= 2, std::to_string(N(Kind::Swing)) + " " + std::to_string(N(Kind::Flinch)));
+        Check("every swing is by someone and the camera follows the swinger", [&] {
+            for (size_t i = 0; i < Cues.size(); ++i) if (Cues[i].K == Kind::Swing && Cues[i].Actor < 0) return false;
+            int Follow = 0;
+            for (const auto& C : Cues) Follow += C.K == Kind::Camera && (C.Text.rfind("member:", 0) == 0 || C.Text.rfind("foe:", 0) == 0);
+            return Follow >= 2; }());
+        Check("the foes fall and the party wins", N(Kind::Fall) == 2 && N(Kind::Victory) == 1 && N(Kind::Defeat) == 0 && St.Wins() == 1, St.Describe());
+        Check("cues carry their beat and are taken once", Cues.back().Dur > 0.0 && St.TakeStage().empty());
+        bool Ordered = true;
+        for (const auto& C : Cues) Ordered &= C.At >= 0.0 && C.At <= 1.0;
+        Check("every cue sits inside its line's beat", Ordered);
+        std::cout << "  stage: ";
+        for (size_t i = 0; i < Cues.size() && i < 12; ++i) std::cout << Cues[i].Describe() << (i + 1 < Cues.size() ? " | " : "");
+        std::cout << "\n";
+    }
+
+    // ---- lands (ADR-065): plots with deeds; the owner's first visit brings the deed's dragon egg
+    {
+        Realm La;
+        std::string E;
+        La.Load(Text, E);
+        Dismiss(La);
+        Check("the realm lists its lands", S.Lands.size() == 3 && S.Lands[1].Number == 1 && S.Lands[1].Owner == "HERO" && S.Lands[0].Owner.empty());
+        {
+            Spec Bad;
+            std::string E2;
+            Check("a land off its map is refused", !Bad.Parse(Text + "land 9 FIELD 62 62 4 4 -\n", E2) && E2.find("runs off") != std::string::npos, E2);
+            Check("a land numbered twice is refused", !Bad.Parse(Text + "land 1 FIELD 2 2 2 2 -\n", E2) && E2.find("twice") != std::string::npos, E2);
+            Check("a land past 9999 is refused", !Bad.Parse(Text + "land 10000 FIELD 2 2 2 2 -\n", E2), E2);
+        }
+        Check("the spawn is on no land", La.Describe().find("land=-1") != std::string::npos, La.Describe());
+        const int EggsBefore = La.Count("DRAGON_EGG");
+        Tap(La, Button::Left); Settle(La);   // 29,32: land 1, the hero's own
+        Check("stepping onto your land hands over the deed's egg", La.TopBox() == "MESSAGE" && La.LastMessage().find("LAND 1. YOURS") != std::string::npos
+            && La.Count("DRAGON_EGG") == EggsBefore + 1 && La.DeedsTaken() == 1, La.Describe() + " " + La.LastMessage());
+        Dismiss(La);
+        Tap(La, Button::Right); Settle(La); Dismiss(La);
+        Tap(La, Button::Left); Settle(La);
+        Check("the second visit only names it", La.LastMessage() == "LAND 1. YOURS." && La.Count("DRAGON_EGG") == EggsBefore + 1, La.LastMessage());
+        Dismiss(La);
+        for (int k = 0; k < 4; ++k) { Tap(La, Button::Left); Settle(La); Dismiss(La); }   // 25,32: land 0, for sale
+        Check("an unsold land says so", La.LastMessage() == "LAND 0. FOR SALE." && La.Describe().find("land=0") != std::string::npos, La.LastMessage());
+        La.Place("FIELD", 26, 37, 0); Tap(La, Button::Left); Settle(La);   // from the hill east of land 2 onto it
+        Check("another's land names them", La.LastMessage() == "LAND 2. OSTRA'S.", La.LastMessage());
+        Dismiss(La);
+        La.SetOwner(0, "HERO");
+        La.Place("FIELD", 30, 32, 0);
+        for (int k = 0; k < 6; ++k) { Tap(La, Button::Left); Settle(La); Dismiss(La); }
+        Check("a deed the server just minted brings its egg too", La.Count("DRAGON_EGG") == EggsBefore + 2 && La.DeedsTaken() == 2, La.Describe());
+        const std::string Saved = La.Save();
+        Realm Back;
+        Back.Load(Text, E);
+        Back.Restore(Saved);
+        Check("deeds taken survive a save", Saved.find("deeds 0 1") != std::string::npos && Back.DeedsTaken() == 2, Saved.substr(Saved.find("deeds"), 12));
+        Check("describe counts the deeds", La.Describe().find("deeds=2/3") != std::string::npos, La.Describe());
     }
 
     // ---- home through the portal

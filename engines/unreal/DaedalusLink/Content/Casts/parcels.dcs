@@ -1,0 +1,197 @@
+DCS 1
+cast PARCELS
+# The Parcels (REALM-CASTS.md): fenced fields, a delivery board for quests, deeds on the chain.
+
+who Postmaster Grue
+voice 2 0.9
+step start
+if route_done -> thanks
+if route -> waiting
+say Courier! The board's full and the Milk Cart Twins are two plots behind.
+say There's a letter for Beekeeper Hollis, out past the sunflowers. Stamp it when it's in her hands.
+ask Take the route? | I'll take it=accept | Not today=later
+step accept
+set route
+give LETTER_GRUE 1
+say Good. The stamp hammer's on your belt. Don't let the parcel shield get sticky.
+end
+step later
+say The board doesn't empty itself. Come back when your boots are on.
+end
+step waiting
+ask Delivered to Hollis yet? | Not yet=hint | Stamped and done=done
+step hint
+say Follow the fence posts north. Her hives hum; you'll hear them before you see them.
+end
+step done
+set route_done
+say That's a route done. Your name's on the board now. Next one pays in honey.
+end
+step thanks
+say Best courier on the board. Grue says so, and Grue runs the board.
+end
+
+who Plot Surveyor Ilka
+voice 6 1.0
+step start
+say Every parcel here is on the chain, number and all. Ten thousand of them, spiralling out from the hub.
+ask Looking to claim one? | Show me the cheap ones=cheap | Show me the big ones=big | Just looking=no
+step cheap
+say Out on the far rings they're a song. Long walk to the board, though.
+end
+step big
+say Estates: two by two, three by three, four by four. They never cross a district line. Rosa flies you over them.
+end
+step no
+say Looking's free. The deeds aren't, and they don't come back once they're minted.
+end
+
+who Fence Smith
+voice 1 0.85
+step start
+say Posts, latches, locks. A plot without a fence is a plot with everyone's goats in it.
+ask What do you need? | Fence posts=posts | A gate latch=latch | Nothing today=no
+step posts
+say Twelve posts a side. Set them on your deed line; they won't set anywhere else.
+end
+step latch
+say One latch per gate, and it only opens for the name on the deed. Or the goats, if you leave it swinging.
+end
+step no
+say Mind the goats.
+end
+
+who Seed Broker Ott
+voice 9 1.1
+step start
+say Stock changes with the weather. Rain lilies when it rains. Sunflowers when it doesn't.
+ask Buying? | Wheat=wheat | Sunflower=sun | What's rare today?=rare
+step wheat
+say Wheat's always in. A week of sun and the Scarecrow hums to it.
+end
+step sun
+say Hollis pays honey for a field of these. Plant them where the bees can find them.
+end
+step rare
+say Rain lily, if it's raining. Is it raining? Look up. That's my whole trick.
+end
+
+who Scarecrow Elder
+voice 0 0.7
+step start
+say ...The fields had songs once. Slow ones. The wheat liked them.
+ask Would you sing one? | Please=sing | Another time=no
+step sing
+set field_song
+say (The scarecrow sings, slow and low. Somewhere a field of wheat leans toward the sound.)
+end
+step no
+say The fields will wait. They are good at it.
+end
+
+who Helipad Chief Rosa
+voice 7 1.05
+step start
+if skid -> fitted
+say The chopper's fuelled. Skids need work; you'll bounce off a fence post the way they are.
+ask Fit the new skids? | Do it=fit | Fly as is=no
+step fit
+set skid
+give HELI_SKID 1
+say Done. Land on a post if you like. Don't land on the Crow.
+end
+step no
+say Your bounce. Not mine.
+end
+step fitted
+say Skids are holding. She's a good bird.
+end
+
+who Milk Cart Twins
+voice 10 1.15
+step start
+say We're late. We're always late. Walk with us to the next plot and nothing will steal the milk.
+ask Escort them? | Lead on=yes | Can't right now=no
+step yes
+set escort
+say Stay close. The crows are bold here.
+end
+step no
+say We'll go slow. We always go slow.
+end
+
+who Lost-Letter Ghost
+voice 11 0.8
+step start
+say I carried a letter for a painter in the city of frames. I never got there. Would you?
+ask Take the lost letter? | I'll deliver it=take | I can't cross realms=no
+step take
+set lost_letter
+give LOST_LETTER 1
+say Thank you. It's for someone called Vell. Tell them the Parcels remember.
+end
+step no
+say Then it waits with me. We're both good at that now.
+end
+
+who Beekeeper Hollis
+voice 5 1.0
+step start
+if route -> letter
+say The hives are humming. A field of sunflowers would make them sing.
+end
+step letter
+if route_done -> thanks
+set route_done
+give HONEY_JAR 2
+say A letter? From Grue! Stamp it, courier; that's a route done. Here, honey for the road.
+end
+step thanks
+say The honey's holding. Come back when the sunflowers are up.
+end
+
+who Auction Crow
+voice 3 0.9
+step start
+say CAW. Everything sells. Seeds, deeds, honey, silence. What's yours?
+ask Sell? | Seeds=seeds | Nothing, just the market talk=talk
+step seeds
+say Seeds are down. CAW. Everything is down until it's up.
+end
+step talk
+say The Feud pair are both trying to sell the same fence. CAW. I'll take it twice.
+end
+
+who Weather Vane Keeper
+voice 4 0.95
+step start
+say Storm by dusk. Wheat up a fifth, lilies in the broker's stall tomorrow. Write it down.
+ask Will it hold? | Trust it=yes | Vanes lie=no
+step yes
+say Vanes don't lie. Keepers do, sometimes. Not today.
+end
+step no
+say Then get wet. The vane won't mind.
+end
+
+who Neighbour Feud Pair
+voice 8 1.1
+step start
+if side -> again
+say THAT post is on MY line. - It is NOT. - Courier, you have the deed table. Whose is it?
+ask Pick a side? | The left farmer=left | The right farmer=right | The deed decides=deed
+step left
+set side
+say HA. - ...fine. The goats can have it.
+end
+step right
+set side
+say ...fine. - HA. The goats can have it.
+end
+step deed
+set side
+say The deed. - The deed. - (They both look at the table. Neither likes it. The goats have it.)
+end
+step again
+say The goats have it. Everyone agrees. Nobody is happy.
+end

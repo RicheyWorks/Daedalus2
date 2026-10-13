@@ -160,8 +160,11 @@ class RetroRealmTest {
         java.nio.file.Path shipped = java.nio.file.Path.of("..", "engines", "unreal", "DaedalusLink", "Content", "Realm",
                 "realm-7.drr");
         org.junit.jupiter.api.Assumptions.assumeTrue(java.nio.file.Files.exists(shipped), "not in a full checkout");
-        assertEquals(RetroCodec.write(RetroRealmGenerator.generate(7)),
-                java.nio.file.Files.readString(shipped).replace("\r\n", "\n"),
+        String offline = java.nio.file.Files.readString(shipped).replace("\r\n", "\n");
+        // Offline fixture carries explicit demo deeds, not live ownership.
+        // Every map, item, chest, encounter and configured land must still match exactly.
+        var configuredLands = RetroCodec.read(offline).lands();
+        assertEquals(RetroCodec.write(RetroRealmGenerator.generate(7).withLands(configuredLands)), offline,
                 "Content/Realm/realm-7.drr is stale: regenerate it from RetroRealmGenerator.generate(7)");
     }
 

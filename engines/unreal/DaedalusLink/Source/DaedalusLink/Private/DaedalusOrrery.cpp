@@ -431,6 +431,12 @@ bool ADaedalusKeeper::Use(ADaedalusHero* Hero)
 	};
 	const int32 S = FMath::Clamp(O->Step, 0, 8);
 	O->Say(Lines[S]);
+	if (Hero)
+	{
+		// The dialogue box (2026-10-13): "Keeper Ostra: \"...\"" becomes a name tag and the words inside the quotes.
+		FString Who, What;
+		if (FString(Lines[S]).Split(TEXT(": "), &Who, &What)) { What.RemoveFromStart(TEXT("\"")); What.RemoveFromEnd(TEXT("\"")); Hero->Speak(Who, What, {}); }
+	}
 	++Talks;
 	O->Advance(1);
 	return true;

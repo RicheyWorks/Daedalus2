@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include "DaedalusBattleStageCore.h"
 #include "DaedalusRealmLook.h"
 #include "DaedalusRealmSpec.h"
 #include "DaedalusRealmSprites.h"
@@ -43,11 +44,11 @@ enum class Mode { Field, Battle };
 enum Spell { SpHeal, SpZap, SpCure, SpBlaze, SpCount };
 inline const char* SpellName(int S) { static const char* N[SpCount] = {"HEAL", "ZAP", "CURE", "BLAZE"}; return N[S]; }
 inline int SpellCost(int S) { static const int C[SpCount] = {4, 3, 2, 8}; return C[S]; }
-/** The level each class learns each spell at (99: never). Classes: 0 hero, 1 sage, 2 scout. */
+/** The level each class learns each spell at (99: never). Classes: 0 hero, 1 sage, 2 scout, 3 drake (hatched). */
 inline int LearnsAt(int Class, int S)
 {
-    static const int L[3][SpCount] = {{1, 4, 99, 99}, {1, 1, 3, 6}, {99, 99, 5, 99}};
-    return L[std::min(std::max(Class, 0), 2)][S];
+    static const int L[4][SpCount] = {{1, 4, 99, 99}, {1, 1, 3, 6}, {99, 99, 5, 99}, {99, 99, 99, 1}};
+    return L[std::min(std::max(Class, 0), 3)][S];
 }
 
 struct Member
@@ -59,6 +60,8 @@ struct Member
     int Weapon = -1, Armor = -1;
     bool Poisoned = false;
     int Asleep = 0;
+    /** A shiny member (ADR-065 rule 9): rolled when the egg hatches; every stat x1.5 and the card sparkles. */
+    bool Shiny = false;
     bool Alive() const { return Hp > 0; }
     bool Knows(int S) const { return Lvl >= LearnsAt(Class, S); }
 };
@@ -71,6 +74,8 @@ struct Foe
     int Kind = 0;
     int Hp = 1, MaxHp = 1;
     bool Fled = false;
+    /** Shiny (ADR-065): 1 in 256 of any kind. Every stat x1.5, double the exp and gold, a sparkle in battle. */
+    bool Shiny = false;
     bool Down() const { return Hp <= 0 || Fled; }
 };
 
@@ -139,6 +144,8 @@ public:
         Opened.assign(W.Chests.size(), false);
         DoorOpen.assign(W.Doors.size(), false);
         BossDown.assign(W.Bosses.size(), false);
+        DeedTaken.assign(W.Lands.size(), false);
+        LandHere = -1;
         Tiles.clear();
         for (const MapDef& M : W.Maps) Tiles.push_back(M.T);
         NpcPos.clear();
@@ -164,6 +171,7 @@ public:
         Enter(W.Spawn.Map, W.Spawn.X, W.Spawn.Y);
         Facing = 0;
         ExitRequested = false;
+        TitleT = TitleHold;
         Say("A PORTAL HUMS. THE WORLD TURNS TO PIXELS.");
     }
 
@@ -191,6 +199,76 @@ public:
             if (!Names[i].empty()) Party[i].Name = Upper(Names[i].substr(0, 6));
     }
     std::string Save() const;
+
+    // ---------------------------------------------------------------------------- the dragon egg (ADR-065)
+    // A land's mint comes with an egg. In the realm it is a bag item: carry it EggNeed steps and it hatches
+    // into a DRAKE, a fourth member who knows BLAZE from the start. The egg stirs at a third and two thirds.
+    static constexpr int EggNeed = 240, MaxParty = 4;
+    int EggWarmth = 0;
+    int Warmth() const { return EggWarmth; }
+
+    // ---- lands (ADR-065): plots of the overworld with deeds. Standing on one shows whose it is; the owner's first
+    // visit hands over the deed's DRAGON EGG. The hero's name on a deed is the party's first member's.
+    std::vector<bool> DeedTaken;   // per land: its egg has been handed over
+    int LandHere = -1;             // the land under the party, -1 for none
+    int LandAt(int M, int X, int Y) const
+    {
+        for (size_t i = 0; i < W.Lands.size(); ++i) if (W.Lands[i].Contains(M, X, Y)) return static_cast<int>(i);
+        return -1;
+    }
+    int LandIndex(int Number) const
+    {
+        for (size_t i = 0; i < W.Lands.size(); ++i) if (W.Lands[i].Number == Number) return static_cast<int>(i);
+        return -1;
+    }
+    /** The deed's name, as the realm compares it: upper case, the party leader's name. */
+    bool Owns(const LandDef& L) const { return !L.Owner.empty() && !Party.empty() && Upper(L.Owner) == Upper(Party[0].Name); }
+    int DeedsTaken() const { int N = 0; for (bool B : DeedTaken) N += B; return N; }
+    /** The server's deed table changed (a mint, a tug): the realm follows it. */
+    void SetOwner(int Number, const std::string& Owner) { const int I = LandIndex(Number); if (I >= 0) W.Lands[static_cast<size_t>(I)].Owner = Owner; }
+
+    void CrossLands()
+    {
+        const int Now = LandAt(Cur, PX, PY);
+        if (Now == LandHere) return;
+        LandHere = Now;
+        if (Now < 0) return;
+        LandDef& L = W.Lands[static_cast<size_t>(Now)];
+        const std::string Who = L.Owner.empty() ? "FOR SALE" : Owns(L) ? "YOURS" : Upper(L.Owner) + "'S";
+        Sfx.push_back("LAND");
+        if (Owns(L) && !DeedTaken[static_cast<size_t>(Now)] && W.ItemIndex("DRAGON_EGG") >= 0)
+        {
+            DeedTaken[static_cast<size_t>(Now)] = true;
+            Give(W.ItemIndex("DRAGON_EGG"), 1);
+            Sfx.push_back("DEED");
+            Say("LAND " + std::to_string(L.Number) + ". YOURS. THE DEED'S DRAGON EGG IS IN THE BAG.");
+            return;
+        }
+        Say("LAND " + std::to_string(L.Number) + ". " + Who + ".");
+    }
+    bool HasDrake() const { for (const Member& P : Party) if (P.Class == 3) return true; return false; }
+
+    void WarmEgg()
+    {
+        const int Egg = W.ItemIndex("DRAGON_EGG");
+        if (Egg < 0 || Count(Egg) == 0 || Party.size() >= static_cast<size_t>(MaxParty)) return;
+        ++EggWarmth;
+        if (EggWarmth == EggNeed / 3) { Say("THE EGG STIRS IN THE BAG."); Sfx.push_back("EGG"); }
+        else if (EggWarmth == EggNeed * 2 / 3) { Say("THE EGG IS WARM. SOMETHING TAPS INSIDE."); Sfx.push_back("EGG"); }
+        else if (EggWarmth >= EggNeed) Hatch(Egg);
+    }
+
+    void Hatch(int Egg)
+    {
+        Take(Egg);
+        Member D = MakeMember("DRAKE", {Pal::Lime, 0x2C8C18, 0x603008, 0, Pal::Red}, 3, 26, 8, 9, 5, 7);
+        D.Shiny = R.Chance(256);
+        if (D.Shiny) { D.Hp = D.MaxHp = D.MaxHp * 3 / 2; D.Mp = D.MaxMp = D.MaxMp * 3 / 2; D.Atk = D.Atk * 3 / 2; D.Def = D.Def * 3 / 2; D.Agi = D.Agi * 3 / 2; }
+        Party.push_back(D);
+        EggWarmth = 0;
+        Sfx.push_back("HATCH");
+        Say(D.Shiny ? "THE EGG CRACKS! A SHINY DRAKE HATCHES AND GLITTERS AT YOUR SIDE." : "THE EGG CRACKS! A DRAKE HATCHES AND JOINS YOU.");
+    }
     bool Restore(const std::string& Text);
 
     // ---- for tests and the harness
@@ -209,6 +287,14 @@ public:
     std::vector<Member>& MembersMut() { return Party; }
     const std::vector<Foe>& Foes() const { return Enemies; }
     std::string LastMessage() const { return LastSaid; }
+    double TitleLeft() const { return TitleT; }
+    /** The harness: make every foe of the next battle shiny; how many shinies have shown; the live damage numbers. */
+    void ForceShinyNext(bool On) { ForceShiny = On; }
+    int ShiniesSeen() const { return ShinySeen; }
+    int PopCount() const { return static_cast<int>(Pops.size()); }
+    /** The battle stage director (hub 28710): cues for a 3D stage, lifted from the battle lines as they play. */
+    std::vector<stage::Cue> TakeStage() { return Stage.Take(); }
+    size_t StagePending() const { return Stage.Pending(); }
     int Count(int Item) const { for (const auto& E : Bag) if (E.first == Item) return E.second; return 0; }
     int Count(const std::string& Id) const { return Count(W.ItemIndex(Id)); }
     int ChestsOpened() const { int N = 0; for (bool O : Opened) N += O; return N; }
@@ -335,6 +421,7 @@ private:
         if (!Map().Dark) Torch = false;
         else if (!WasDark) Torch = false;   // a new trip underground needs a new torch
         SetCue(Map().Music);
+        LandHere = LandAt(Cur, PX, PY);   // arriving onto a land by stairs or wings is not a crossing
         if (Countdown <= 0) ResetCountdown();
     }
 
@@ -370,6 +457,8 @@ private:
         ++StepCount;
         ++WalkFrame;
         Arrive(T);
+        WarmEgg();
+        if (Boxes.empty()) CrossLands();
     }
 
     void Bumped() { Bump = 0.15; Sfx.push_back("BUMP"); }
@@ -440,23 +529,25 @@ private:
         OpenCommand();
     }
 
+    static std::string Quote(const std::string& L) { return L.empty() ? L : "'" + L + "'"; }
+
     void Talk(int N)
     {
         const NpcDef& D = W.Npcs[static_cast<size_t>(N)];
-        // Townsfolk turn to face you.
+        // What a person says is in quotes, a paragraph a line, the way the genre marks speech from narration.
         std::string S;
-        for (const std::string& L : D.Lines) S += L + "\n";
+        for (const std::string& L : D.Lines) S += Quote(L) + "\n";
         switch (D.R)
         {
         case Role::News:
-            S += "NEWS OF THE DAY:\n";
-            for (const std::string& L : W.News) S += "* " + L + "\n";
+            S += Quote("NEWS OF THE DAY:") + "\n";
+            for (const std::string& L : W.News) S += Quote("* " + L) + "\n";
             Say(S);
             break;
         case Role::Inn:
         {
             const int Price = D.Price;
-            Say(S + "A NIGHT IS " + std::to_string(Price) + " GOLD. WILL YOU STAY?", [this, Price]() { AskInn(Price); });
+            Say(S + Quote("A NIGHT IS " + std::to_string(Price) + " GOLD. WILL YOU STAY?"), [this, Price]() { AskInn(Price); });
             break;
         }
         case Role::Shop:
@@ -470,8 +561,8 @@ private:
             for (Member& P : Party) { P.Hp = P.MaxHp; P.Mp = P.MaxMp; P.Poisoned = false; P.Asleep = 0; }
             RespawnMap = Cur; RespawnX = D.At.X; RespawnY = D.At.Y + 1;
             const Member& H = Party[0];
-            Say(S + "MAY THE STARS GUARD YOU. I WILL REMEMBER YOU HERE.\n" + H.Name + " NEEDS "
-                + std::to_string(std::max(0, ExpToNext(H.Lvl) - H.Exp)) + " EXP TO REACH LEVEL " + std::to_string(H.Lvl + 1) + ".");
+            Say(S + Quote("MAY THE STARS GUARD YOU. I WILL REMEMBER YOU HERE.") + "\n" + Quote(H.Name + " NEEDS "
+                + std::to_string(std::max(0, ExpToNext(H.Lvl) - H.Exp)) + " EXP TO REACH LEVEL " + std::to_string(H.Lvl + 1) + "."));
             Sfx.push_back("BLESS");
             break;
         }
@@ -816,6 +907,12 @@ private:
         if (D.Kind == ItemKind::Weapon || D.Kind == ItemKind::Armor) { OpenMembers(PEquipItem, I); return; }
         if (D.Kind == ItemKind::Key) { Say("FACE A LOCKED DOOR AND PRESS A."); return; }
         if (D.Kind == ItemKind::Treasure) { Say("IT GLITTERS. A SHOP WOULD PAY WELL FOR IT."); return; }
+        if (D.Kind == ItemKind::Egg)
+        {
+            if (Party.size() >= static_cast<size_t>(MaxParty)) { Say("IT IS WARM, BUT THE PARTY IS FULL."); return; }
+            Say(EggWarmth * 3 >= EggNeed * 2 ? "IT ROCKS IN YOUR HANDS. NOT LONG NOW." : EggWarmth * 3 >= EggNeed ? "IT IS WARM. KEEP WALKING." : "A DRAGON EGG. CARRY IT AND IT WILL HATCH.");
+            return;
+        }
         if (D.Id == "TORCH")
         {
             if (!Map().Dark) { Say("IT IS BRIGHT ENOUGH HERE."); return; }
@@ -896,6 +993,12 @@ private:
         std::string Sound;
     };
     struct Act { int Who = 0; int What = 0; int Target = -1; int Arg = -1; };   // What: 0 fight 1 spell 2 item 3 defend 4 run
+    /** A number that pops where a hit landed and rises away: foe slot or member card, amount, life left. */
+    struct Pop { int Foe = -1, Mem = -1, Amount = 0; double Life = 0.0; };
+    std::vector<Pop> Pops;
+    bool ForceShiny = false;   // the harness: every foe of the next battle is shiny
+    stage::Director Stage;
+    int ShinySeen = 0;
 
     enum class Phase { Intro, Command, Target, Play, Ending };
     Phase Ph = Phase::Intro;
@@ -910,6 +1013,7 @@ private:
     bool NoRun = false, Won = false, Lost = false, Fled = false;
     double PlayT = 0.0;
     std::vector<int> FoeFlash;
+    mutable std::vector<int> FoeSlotX;   // where each foe was drawn this frame (for the damage numbers)
 
     void StartBattle(const std::vector<int>& Kinds, bool Boss, int BossIndex, int ChestIndex)
     {
@@ -920,11 +1024,15 @@ private:
             Foe F;
             F.Kind = Kinds[i];
             F.Hp = F.MaxHp = M.Hp + R.Range(0, M.Hp / 8);
+            F.Shiny = ForceShiny || R.Chance(256);
+            if (F.Shiny) { F.Hp = F.MaxHp = F.MaxHp * 3 / 2; ++ShinySeen; }
             Enemies.push_back(F);
         }
         FoeShown.clear(); FoeGoneShown.clear();
         for (const Foe& F : Enemies) { FoeShown.push_back(F.Hp); FoeGoneShown.push_back(false); }
         FoeFlash.assign(Enemies.size(), 0);
+        FoeSlotX.assign(Enemies.size(), 0);
+        Pops.clear();
         MemShown.clear();
         for (const Member& P : Party) MemShown.push_back(P.Hp);
         ModeNow = Mode::Battle;
@@ -937,6 +1045,12 @@ private:
         SetCue(NoRun ? "BOSS" : "BATTLE");
         Sfx.push_back("AMBUSH");
         std::string Names = Mon(Enemies[0].Kind).Name;
+        {
+            std::vector<bool> Sh;
+            for (const Foe& F : Enemies) Sh.push_back(F.Shiny);
+            Stage.Begin(static_cast<int>(Party.size()), static_cast<int>(Enemies.size()), Sh);
+        }
+        for (const Foe& F : Enemies) if (F.Shiny) { Log.push_back("A SHINY " + Mon(F.Kind).Name + " GLITTERS!"); Sfx.push_back("SHINY"); }
         if (Enemies.size() > 1) Log.push_back("MONSTERS APPEAR!");
         else
         {
@@ -1196,7 +1310,7 @@ private:
             F.Kind = E.Kind;
             F.Hp = F.MaxHp = M.Hp;
             Enemies.push_back(F);
-            FoeShown.push_back(0); FoeGoneShown.push_back(false); FoeFlash.push_back(0);
+            FoeShown.push_back(0); FoeGoneShown.push_back(false); FoeFlash.push_back(0); FoeSlotX.push_back(0);
             EmitFoe(M.Name + " CALLS FOR HELP! ANOTHER APPEARS.", static_cast<int>(Enemies.size()) - 1, "CALL");
             return;
         }
@@ -1218,7 +1332,7 @@ private:
             if (!P.Alive()) Emit(P.Name + " FALLS!", "FALL");
             return;
         }
-        int D = Damage(M.Atk, DefOf(P));
+        int D = Damage(E.Shiny ? M.Atk * 3 / 2 : M.Atk, DefOf(P));
         if (Defending[static_cast<size_t>(Who)]) D = D / 2;
         P.Hp = std::max(0, P.Hp - D);
         Emit(M.Name + " ATTACKS!", "SWING");
@@ -1242,8 +1356,8 @@ private:
             {
                 if (F.Fled) continue;
                 const MonsterDef& M = Mon(F.Kind);
-                Exp += M.Exp; GoldWon += M.Gold;
-                if (M.Drop >= 0 && R.Chance(M.DropOneIn)) Drops.push_back(M.Drop);
+                Exp += F.Shiny ? M.Exp * 2 : M.Exp; GoldWon += F.Shiny ? M.Gold * 2 : M.Gold;
+                if (M.Drop >= 0 && R.Chance(F.Shiny ? std::max(1, M.DropOneIn / 2) : M.DropOneIn)) Drops.push_back(M.Drop);
             }
             if (Exp == 0 && GoldWon == 0) { Emit("THE MONSTERS ARE GONE."); return; }
             GoldHeld += GoldWon;
@@ -1273,6 +1387,7 @@ private:
         {
         case 0: Hp = R.Range(4, 7); Mp = 2; Atk = R.Range(2, 3); Def = R.Range(1, 2); Agi = 1; break;
         case 1: Hp = R.Range(2, 4); Mp = R.Range(3, 5); Atk = 1; Def = 1; Agi = R.Range(1, 2); break;
+        case 3: Hp = R.Range(5, 8); Mp = R.Range(2, 4); Atk = R.Range(2, 4); Def = R.Range(1, 2); Agi = R.Range(1, 2); break;
         default: Hp = R.Range(3, 6); Mp = P.Lvl >= 5 ? 2 : 0; Atk = R.Range(2, 3); Def = 1; Agi = R.Range(2, 3); break;
         }
         P.MaxHp += Hp; P.Hp += Hp; P.MaxMp += Mp; P.Mp += Mp; P.Atk += Atk; P.Def += Def; P.Agi += Agi;
@@ -1286,16 +1401,35 @@ private:
         if (Queue.empty()) return;
         Line L = Queue.front();
         Queue.pop_front();
+        {
+            stage::LineFacts F;
+            F.Text = L.Text; F.Sound = L.Sound;
+            F.Foe = L.Foe; F.FoeGone = L.Gone;
+            if (L.Foe >= 0 && L.Foe < static_cast<int>(FoeShown.size())) { F.FoeHpBefore = FoeShown[static_cast<size_t>(L.Foe)]; F.FoeHpAfter = L.FoeHp; }
+            F.Mem = L.Mem;
+            if (L.Mem >= 0 && L.Mem < static_cast<int>(MemShown.size())) { F.MemHpBefore = MemShown[static_cast<size_t>(L.Mem)]; F.MemHpAfter = L.MemHp; }
+            for (const Member& P : Party) F.MemberNames.push_back(P.Name);
+            for (const Foe& E : Enemies) F.FoeNames.push_back(Mon(E.Kind).Name);
+            Stage.OnLine(F);
+        }
         Log.push_back(L.Text);
         if (Log.size() > 40) Log.erase(Log.begin());
         LastSaid = L.Text;
         if (L.Foe >= 0 && L.Foe < static_cast<int>(FoeShown.size()))
         {
-            if (L.FoeHp < FoeShown[static_cast<size_t>(L.Foe)]) FoeFlash[static_cast<size_t>(L.Foe)] = 6;
+            if (L.FoeHp < FoeShown[static_cast<size_t>(L.Foe)])
+            {
+                FoeFlash[static_cast<size_t>(L.Foe)] = 6;
+                Pops.push_back({L.Foe, -1, FoeShown[static_cast<size_t>(L.Foe)] - L.FoeHp, 0.9});
+            }
             FoeShown[static_cast<size_t>(L.Foe)] = L.FoeHp;
             FoeGoneShown[static_cast<size_t>(L.Foe)] = L.Gone;
         }
-        if (L.Mem >= 0) { if (L.MemHp < MemShown[static_cast<size_t>(L.Mem)]) Flash = 0.12; MemShown[static_cast<size_t>(L.Mem)] = L.MemHp; }
+        if (L.Mem >= 0)
+        {
+            if (L.MemHp < MemShown[static_cast<size_t>(L.Mem)]) { Flash = 0.12; Pops.push_back({-1, L.Mem, MemShown[static_cast<size_t>(L.Mem)] - L.MemHp, 0.9}); }
+            MemShown[static_cast<size_t>(L.Mem)] = L.MemHp;
+        }
         if (!L.Sound.empty()) Sfx.push_back(L.Sound);
         PlayT = 0.0;
     }
@@ -1367,6 +1501,9 @@ private:
     bool Torch = false, ExitRequested = false;
     bool Held[4] = {false, false, false, false};
     double MoveT = 1.0, Bump = 0.0, Clock = 0.0, Idle = 0.0, Flash = 0.0;
+    /** The title card: the realm's name on black when the portal drops you in; A, B or 2.5 s clears it. */
+    double TitleT = 0.0;
+    static constexpr double TitleHold = 2.5;
     Frame Screen;
 
     void WanderNpcs(double Dt);
@@ -1374,6 +1511,7 @@ private:
     void RenderBattle(Frame& F, int Anim);
     void RenderBoxes(Frame& F, int Anim);
     void ListBox(Frame& F, int X, int Y, int WW, const Box& B, int Anim, int MaxRows);
+    void RenderTitle(Frame& F, int Anim);
 };
 
 // --------------------------------------------------------------------------------------------- input and time
@@ -1381,6 +1519,11 @@ private:
 inline void Realm::Press(Button B)
 {
     if (!Loaded) return;
+    if (TitleT > 0.0)
+    {
+        if (B == Button::A || B == Button::B || B == Button::Start) TitleT = 0.0;
+        return;
+    }
     if (ModeNow == Mode::Battle && Boxes.empty())
     {
         switch (Ph)
@@ -1486,6 +1629,7 @@ inline void Realm::WanderNpcs(double Dt)
 
 inline void Realm::Tick(double Dt)
 {
+    if (TitleT > 0.0) { Clock += Dt; TitleT -= Dt; return; }   // the card holds the world, the welcome types after it
     for (Box& B : Boxes)
         if (B.Kind == BoxKind::Message && B.Shown < Ui::PageChars(B.Rows, B.Page)) B.Shown += Dt * TypeSpeed;
     if (!Loaded) return;
@@ -1494,6 +1638,8 @@ inline void Realm::Tick(double Dt)
     if (Flash > 0.0) Flash -= Dt;
     if (MoveT < 1.0) MoveT = std::min(1.0, MoveT + Dt / 0.2);
     for (int& F : FoeFlash) if (F > 0) --F;
+    for (Pop& P : Pops) P.Life -= Dt;
+    Pops.erase(std::remove_if(Pops.begin(), Pops.end(), [](const Pop& P) { return P.Life <= 0.0; }), Pops.end());
     if (ModeNow == Mode::Battle)
     {
         if (Ph == Phase::Play || (Ph == Phase::Ending && !Queue.empty()))
@@ -1582,13 +1728,39 @@ inline void Realm::ListBox(Frame& F, int X, int Y, int WW, const Box& B, int Ani
     const int N = static_cast<int>(B.Rows.size());
     const int Shown = std::min(N, MaxRows);
     const int First = std::max(0, std::min(B.Cursor - Shown + 1, N - Shown));
-    const char* Title = B.Kind == BoxKind::Items ? "ITEM" : B.Kind == BoxKind::Spells ? "SPELL" : B.Kind == BoxKind::Equip ? "EQUIP"
+    std::string Title = B.Kind == BoxKind::Items ? "ITEM" : B.Kind == BoxKind::Spells ? "SPELL" : B.Kind == BoxKind::Equip ? "EQUIP"
         : B.Kind == BoxKind::ShopBuy ? "BUY" : B.Kind == BoxKind::ShopSell ? "SELL" : B.Kind == BoxKind::Members ? "WHO" : "";
+    std::vector<bool> Can;
+    if (B.Kind == BoxKind::Spells && B.Arg >= 0 && B.Arg < static_cast<int>(Party.size()))
+    {
+        // A spell the caster can't pay for is dimmed, and the window says how much MP they hold.
+        const Member& C = Party[static_cast<size_t>(B.Arg)];
+        for (int i = First; i < First + Shown; ++i) Can.push_back(C.Mp >= SpellCost(B.Ids[static_cast<size_t>(i)]));
+        Title += " MP" + std::to_string(C.Mp);
+    }
     Ui::Window(F, X, Y, WW, Shown * 12 + 20, Title);
     std::vector<std::string> Rows(B.Rows.begin() + First, B.Rows.begin() + First + Shown);
-    Ui::Grid(F, X + 4, Y + 9, Rows, 1, 0, B.Cursor - First, &B == &Boxes.back(), Anim);
+    Ui::Grid(F, X + 4, Y + 9, Rows, 1, 0, B.Cursor - First, &B == &Boxes.back(), Anim, Can.empty() ? nullptr : &Can);
     if (First > 0) Ui::TextB(F, X + WW - 16, Y + 2, "+", Ui::Current().Ink);
     if (First + Shown < N) Ui::TextB(F, X + WW - 16, Y + Shown * 12 + 10, "+", Ui::Current().Ink);
+}
+
+/** The realm's name on black, the way a cartridge opens: the name in the realm's ink, a rule under it, a hint that
+ * blinks once the fade is done. The first 0.4 s fade the name in so the portal's flash reads as the cut. */
+inline void Realm::RenderTitle(Frame& F, int Anim)
+{
+    F.Clear(Pal::Black);
+    const Ui::Style& St = Ui::Current();
+    const double Age = TitleHold - TitleT;
+    const uint32_t Ink = Age < 0.4 ? Shade(St.Ink, static_cast<int>(Age * 10) + 1, 4) : St.Ink;
+    const std::string Name = W.Name.empty() ? "A PORTAL REALM" : W.Name;
+    const int NX = 128 - static_cast<int>(Name.size()) * 4;
+    Ui::TextB(F, NX, 100, Name, Ink);
+    Ui::TextB(F, NX, 100, Name, Ink);   // twice: the bold pass of the kit doubles the stroke on the second draw
+    for (int x = NX - 8; x < NX + static_cast<int>(Name.size()) * 8 + 8; ++x) { F.Set(x, 112, Ink); F.Set(x, 113, St.InkDark); }
+    Ui::TextB(F, 128 - 7 * 4, 120, "A REALM", St.Dim);
+    for (int i = 0; i < 5; ++i) Ui::Sparkle(F, 40 + i * 44, 60 + ((i * 7) % 3) * 6, Anim + i * 5);
+    if (Age > 0.8 && (Anim / 6) % 2 == 0) Ui::TextB(F, 128 - 7 * 4, 180, "PRESS A", St.Text);
 }
 
 inline void Realm::RenderBoxes(Frame& F, int Anim)
@@ -1617,7 +1789,7 @@ inline void Realm::RenderBoxes(Frame& F, int Anim)
             break;
         case BoxKind::ShopTop: ListBox(F, 160, 8, 88, B, Anim, 4); break;
         case BoxKind::Members: ListBox(F, 112, 72, 80, B, Anim, 3); break;
-        case BoxKind::YesNo: ListBox(F, 176, 104, 64, B, Anim, 2); break;
+        case BoxKind::YesNo: ListBox(F, 184, 124, 64, B, Anim, 2); break;
         case BoxKind::Items: case BoxKind::Equip: case BoxKind::ShopBuy: case BoxKind::ShopSell: ListBox(F, 40, 40, 192, B, Anim, 8); break;
         case BoxKind::Spells: ListBox(F, 72, 56, 112, B, Anim, 4); break;
         case BoxKind::Status:
@@ -1661,7 +1833,22 @@ inline void Realm::RenderBattle(Frame& F, int Anim)
         ++Slot;
         const MonsterDef& M = Mon(Enemies[static_cast<size_t>(i)].Kind);
         Monster(F, X, 74, M, Anim + i * 5, FoeFlash[static_cast<size_t>(i)] > 0 && (FoeFlash[static_cast<size_t>(i)] % 2));
-        if (Ph == Phase::Target && TargetI == i && (Anim / 2) % 2) Text(F, X + 28, 140, "*", Pal::Gold);
+        if (Enemies[static_cast<size_t>(i)].Shiny) Ui::Sparkle(F, X + 32, 106, Anim + i * 3);
+        if (Ph == Phase::Target && TargetI == i && (Anim / 2) % 2) Ui::Cursor(F, X + 28, 140, Ui::Current().Hot);
+        FoeSlotX[static_cast<size_t>(i)] = X;
+    }
+    for (const Pop& P : Pops)
+    {
+        const int Rise = static_cast<int>((0.9 - P.Life) * 30.0);
+        const std::string T = std::to_string(P.Amount);
+        if (P.Foe >= 0 && P.Foe < static_cast<int>(FoeSlotX.size()))
+            Ui::TextB(F, FoeSlotX[static_cast<size_t>(P.Foe)] + 32 - static_cast<int>(T.size()) * 4, 96 - Rise, T, P.Life > 0.3 ? Pal::White : Ui::Current().Dim);
+        else if (P.Mem >= 0)
+        {
+            const int N = static_cast<int>(Party.size());
+            const int CardX = (ScreenW - (N * 56 + (N - 1) * 4)) / 2 + P.Mem * 60;
+            Ui::TextB(F, CardX + 16, 40 - Rise / 3, T, Pal::Red);
+        }
     }
     // Commands (left) and the log (right).
     Ui::Window(F, 8, 152, 76, 80, "FIGHT");
@@ -1685,6 +1872,7 @@ inline const Frame& Realm::Render()
     Frame& F = Screen;
     const int Anim = static_cast<int>(Clock * 8);
     if (!Loaded) { F.Clear(Pal::Black); Text(F, 60, 116, "NO REALM LOADED"); return F; }
+    if (TitleT > 0.0) { RenderTitle(F, Anim); return F; }
     if (ModeNow == Mode::Battle) RenderBattle(F, Anim);
     else RenderField(F, Anim);
     RenderBoxes(F, Anim);
@@ -1693,6 +1881,7 @@ inline const Frame& Realm::Render()
 
 inline std::string Realm::TopBox() const
 {
+    if (TitleT > 0.0) return "TITLE";
     if (Boxes.empty()) return ModeNow == Mode::Battle ? (Ph == Phase::Command ? "COMMAND" : Ph == Phase::Target ? "TARGET" : Ph == Phase::Play ? "PLAY" : Ph == Phase::Ending ? "ENDING" : "INTRO") : "NONE";
     static const char* Names[] = {"MESSAGE", "MENU", "ITEMS", "MEMBERS", "SPELLS", "STATUS", "EQUIP", "SHOP", "BUY", "SELL", "YESNO"};
     return Names[static_cast<int>(Boxes.back().Kind)];
@@ -1704,7 +1893,7 @@ inline std::string Realm::Describe() const
     std::ostringstream S;
     S << "mode=" << (ModeNow == Mode::Battle ? "BATTLE" : "FIELD") << " map=" << MapId() << " x=" << PX << " y=" << PY
       << " facing=" << Facing << " tile=" << TileChars()[static_cast<int>(TileHere(PX, PY))] << " ui=" << TopBox()
-      << " gold=" << GoldHeld << " steps=" << StepCount << " battles=" << BattleCount << " wins=" << WinCount
+      << " party=" << Party.size() << " egg=" << EggWarmth << " land=" << (LandHere >= 0 ? W.Lands[static_cast<size_t>(LandHere)].Number : -1) << " deeds=" << DeedsTaken() << "/" << W.Lands.size() << " gold=" << GoldHeld << " steps=" << StepCount << " battles=" << BattleCount << " wins=" << WinCount
       << " chests=" << ChestsOpened() << "/" << W.Chests.size() << " doors=" << DoorsOpened() << "/" << W.Doors.size()
       << " bosses=" << BossesBeaten() << "/" << W.Bosses.size() << " light=" << LightRadius() << " cue=" << Cue
       << " cue_changes=" << CueCount << " exit=" << (ExitRequested ? 1 : 0) << " talks=" << Talks << " party=";
@@ -1734,6 +1923,8 @@ inline std::string Realm::Save() const
     S << "DRS 1\nseed " << W.Seed << "\ngold " << GoldHeld << "\nplace " << MapId() << " " << PX << " " << PY << " " << Facing << "\n";
     S << "respawn " << W.Maps[static_cast<size_t>(RespawnMap)].Id << " " << RespawnX << " " << RespawnY << "\n";
     S << "counts " << StepCount << " " << BattleCount << " " << WinCount << "\n";
+    S << "egg " << EggWarmth << "\n";
+    for (const Member& P : Party) if (P.Class == 3) S << "drake " << (P.Shiny ? 1 : 0) << "\n";
     for (const Member& P : Party)
         S << "member " << P.Lvl << " " << P.Hp << " " << P.MaxHp << " " << P.Mp << " " << P.MaxMp << " " << P.Atk << " " << P.Def
           << " " << P.Agi << " " << P.Exp << " " << (P.Weapon >= 0 ? Item(P.Weapon).Id : "-") << " " << (P.Armor >= 0 ? Item(P.Armor).Id : "-")
@@ -1747,6 +1938,7 @@ inline std::string Realm::Save() const
     Flags("chests", Opened);
     Flags("doors", DoorOpen);
     Flags("bosses", BossDown);
+    Flags("deeds", DeedTaken);
     S << "\n";
     return S.str();
 }
@@ -1769,6 +1961,14 @@ inline bool Realm::Restore(const std::string& Text)
         F >> K;
         if (K == "seed") { uint64_t Sd = 0; F >> Sd; Same = Sd == W.Seed; }
         else if (K == "gold") F >> GoldHeld;
+        else if (K == "egg") F >> EggWarmth;
+        else if (K == "drake" && !HasDrake() && Party.size() < static_cast<size_t>(MaxParty))
+        {
+            int Sh = 0; F >> Sh;
+            Member D = MakeMember("DRAKE", {Pal::Lime, 0x2C8C18, 0x603008, 0, Pal::Red}, 3, 26, 8, 9, 5, 7);
+            D.Shiny = Sh != 0;
+            Party.push_back(D);   // its numbers follow on its member line
+        }
         else if (K == "member" && Mi < Party.size())
         {
             Member& P = Party[Mi++];
@@ -1805,7 +2005,7 @@ inline bool Realm::Restore(const std::string& Text)
             RespawnMap = std::max(0, W.MapIndex(M));
         }
         else if (Same && K == "counts") F >> StepCount >> BattleCount >> WinCount;
-        else if (Same && (K == "chests" || K == "doors" || K == "bosses"))
+        else if (Same && (K == "chests" || K == "doors" || K == "bosses" || K == "deeds"))
         {
             size_t I;
             while (F >> I)
@@ -1823,6 +2023,7 @@ inline bool Realm::Restore(const std::string& Text)
                     SetTile(D.At.Map, D.At.X, D.At.Y, Tile::Door);
                 }
                 if (K == "bosses" && I < BossDown.size()) BossDown[I] = true;
+                if (K == "deeds" && I < DeedTaken.size()) DeedTaken[I] = true;
             }
         }
     }

@@ -372,7 +372,10 @@ public final class RetroRealmGenerator {
         doors.add(new Door(new Place(id, 13, 3), 3));
         chest(m, 2, 2, RetroLoot.roll(2, rng));
         chest(m, 4, 2, RetroLoot.roll(2, rng));
-        chest(m, 2, 4, RetroLoot.rollHonest(2, rng));
+        // Preserve the existing random stream; this chest now holds the egg
+        // already shipped in the native realm (ADR-065), not a random reward.
+        RetroLoot.rollHonest(2, rng);
+        chest(m, 2, 4, Loot.item(RetroItem.DRAGON_EGG));
         chest(m, 16, 2, Loot.item(RetroItem.STAR_BLADE));
         chest(m, 16, 4, Loot.item(RetroItem.METEOR_MAIL));
         maps.add(m);
