@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 namespace DaedalusOceanTravel
 {
@@ -58,4 +59,93 @@ inline Route Land(const std::string& currentRealm, const Dock& destination,
     if (!destination.Underwater && destination.Realm != "Portal Realm") return {};
     return {true, destination.Realm, destination.ArrivalAnchor};
 }
+
+struct DockConnection
+{
+    std::string DepartureId;
+    std::string DestinationId;
+    bool Boats = false;
+    bool Submarines = false;
+};
+
+// Configure from trusted host data, never from an individual travel request.
+// Connections are directed: a return trip must be configured separately.
+class DockRegistry
+{
+    std::vector<Dock> Docks;
+    std::vector<DockConnection> Connections;
+    static const Dock* Find(const std::vector<Dock>& docks, const std::string& id)
+    {
+        for (const auto& dock : docks) if (dock.Id == id) return &dock;
+        return nullptr;
+    }
+    static Route ResolvePair(const Dock& from, const Dock& to, Vessel vessel)
+    {
+        if (from.Realm == "Ocean Realm")
+        {
+            if (vessel == Vessel::Boat && from.Underwater) return {};
+            return Land(from.Realm, to, vessel);
+        }
+        return Board(from.Realm, from, to, vessel);
+    }
+public:
+    bool Configure(const std::vector<std::string>& registeredRealms,
+                   const std::vector<Dock>& docks,
+                   const std::vector<DockConnection>& connections)
+    {
+        if (registeredRealms.empty() || registeredRealms.size() > 32
+            || docks.empty() || docks.size() > 1024 || connections.size() > 4096)
+            return false;
+        for (std::size_t i=0;i<registeredRealms.size();++i)
+        {
+            if (!ValidIdentifier(registeredRealms[i])) return false;
+            for (std::size_t j=0;j<i;++j)
+                if (registeredRealms[i] == registeredRealms[j]) return false;
+        }
+        for (std::size_t i=0;i<docks.size();++i)
+        {
+            if (!ValidDock(docks[i])) return false;
+            bool registered=false;
+            for (const auto& realm : registeredRealms)
+                registered |= realm == docks[i].Realm;
+            if (!registered) return false;
+            for (std::size_t j=0;j<i;++j)
+                if (docks[i].Id == docks[j].Id) return false;
+        }
+        for (std::size_t i=0;i<connections.size();++i)
+        {
+            const auto& connection=connections[i];
+            if (!connection.Boats && !connection.Submarines) return false;
+            const Dock* from=Find(docks,connection.DepartureId);
+            const Dock* to=Find(docks,connection.DestinationId);
+            if (!from || !to || from == to) return false;
+            if (connection.Boats && !ResolvePair(*from,*to,Vessel::Boat).Allowed) return false;
+            if (connection.Submarines && !ResolvePair(*from,*to,Vessel::Submarine).Allowed) return false;
+            for (std::size_t j=0;j<i;++j)
+                if (connections[j].DepartureId == connection.DepartureId
+                    && connections[j].DestinationId == connection.DestinationId) return false;
+        }
+        // Validation finishes before replacing the active configuration.
+        auto nextDocks=docks;
+        auto nextConnections=connections;
+        Docks.swap(nextDocks);
+        Connections.swap(nextConnections);
+        return true;
+    }
+    Route Resolve(const std::string& currentRealm, const std::string& departureId,
+                  const std::string& destinationId, Vessel vessel) const
+    {
+        if (!ValidVessel(vessel) || !ValidIdentifier(currentRealm)
+            || !ValidIdentifier(departureId) || !ValidIdentifier(destinationId)) return {};
+        const Dock* from=Find(Docks,departureId);
+        const Dock* to=Find(Docks,destinationId);
+        if (!from || !to || from->Realm != currentRealm) return {};
+        for (const auto& connection : Connections)
+            if (connection.DepartureId == departureId && connection.DestinationId == destinationId
+                && ((vessel == Vessel::Boat && connection.Boats)
+                    || (vessel == Vessel::Submarine && connection.Submarines)))
+                return ResolvePair(*from,*to,vessel);
+        return {};
+    }
+};
 }

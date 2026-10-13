@@ -72,3 +72,21 @@ MSVC C++17 /W4 /WX passed 59 route checks, including invalid vehicle values,
 each malformed dock field and the accepted anchor-length boundary. This proves
 the portable resolver; server-owned dock lookup, vehicle possession and live
 Unreal transitions remain required before travel is usable by players.
+
+The portable DockRegistry now stores configured docks and directed connections.
+Resolve takes current realm, departure ID, destination ID and vessel; it does
+not accept a caller-supplied destination realm or arrival anchor. Configure
+validates registered realm keys, dock identity, both endpoints, supported vessel
+flags and route compatibility before replacing the active configuration. Missing
+endpoints, duplicate docks/connections, self-routes and surface connections to
+other worlds are refused. Reverse travel requires a separate connection.
+
+Failed validation leaves existing routes intact; an accepted empty connection
+list explicitly disables travel. Configuration is bounded to 32 realm keys,
+1,024 docks and 4,096 connections. Call Configure and Resolve on the owning
+game/host thread; this class adds no concurrent reload synchronization. MSVC
+C++17 /W4 /WX passed 83 checks including registry resolution and failed reload
+preservation. Hosts must supply their actual realm catalog and trusted dock
+configuration. Player proximity, vessel possession, travel permission, save
+state and native scene transition remain integration requirements; the registry
+alone establishes none of them.
