@@ -10,7 +10,7 @@ TYPES=REPO/'daedalus-core/src/main/java/com/daedalus/world/BlockType.java'
 OUTPUT=REPO/'engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusOceanPalette.inl'
 
 def generate():
-    colors=COLORS.read_text();types=TYPES.read_text()
+    colors=COLORS.read_text(encoding='utf-8');types=TYPES.read_text(encoding='utf-8')
     names=re.findall(r'^\s*([A-Z][A-Z0-9_]*)(?:,|;)',types,re.M)
     rgb=dict(re.findall(r'RGB\.put\(BlockType\.([A-Z0-9_]+), (0x[0-9a-f]+)\);',colors))
     # Refuse silent rule drift: these expressions are the current Java semantics.
@@ -34,8 +34,8 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('--check',action='store_true');args=parser.parse_args()
     expected=generate()
     if args.check:
-        if OUTPUT.read_text()!=expected:raise SystemExit('Native Ocean palette drift')
+        if OUTPUT.read_text(encoding='utf-8')!=expected:raise SystemExit('Native Ocean palette drift')
         print('OCEAN_PALETTE_PARITY_PASS')
     else:
-        OUTPUT.write_text(expected)
+        OUTPUT.write_text(expected,encoding='utf-8',newline='\n')
         print('Generated native palette from Java canon')
