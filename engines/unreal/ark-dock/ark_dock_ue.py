@@ -51,7 +51,7 @@ if lvl is None:
     else:
         unreal.EditorLevelUtils.create_new_streaming_level(unreal.LevelStreamingAlwaysLoaded, SUB, False)
     ew = ues.get_editor_world(); lvl = find_lvl(ew); log.append("sublevel added")
-unreal.EditorLevelUtils.make_level_current(lvl)
+les.set_current_level_by_name(lvl.get_outer().get_name())
 for a in eas.get_all_level_actors():
     if a.actor_has_tag(TAG) and not a.actor_has_tag("GROK_ArkIsle"): eas.destroy_actor(a)
 
@@ -177,7 +177,7 @@ lab.text_render.set_horizontal_alignment(unreal.HorizTextAligment.EHTA_CENTER)
 lab.set_actor_label("ArkDock_Label"); lab.set_folder_path(FOLDER); lab.tags = [TAG]
 
 # ---- 7) save only our sublevel (+ persistent map only if it was clean before us) ----
-unreal.EditorLevelUtils.make_level_current(lvl); saved = les.save_current_level() if not globals().get("ARK_NO_SAVE") else "deferred"
+les.set_current_level_by_name(lvl.get_outer().get_name()); saved = les.save_current_level() if not globals().get("ARK_NO_SAVE") else "deferred"
 persist_saved = False
 if not _pre and not globals().get("ARK_NO_SAVE"): persist_saved = L.save_dirty_packages(True, False)
 dirty = [p.get_name() for p in L.get_dirty_map_packages()] + [p.get_name() for p in L.get_dirty_content_packages()]
