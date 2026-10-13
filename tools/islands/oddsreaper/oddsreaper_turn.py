@@ -222,6 +222,31 @@ def take_hero_shot(cam=None, target=None, name="hero_unreal_editor.png"):
     return shot_ok
 
 
+STORM_CODE = r"""import unreal
+w = unreal.EditorLevelLibrary.get_game_world()
+d = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusSkyDirector)] if w else []
+v = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusMoodVolume) if 'OddsReaper' in a.get_actor_label()] if w else []
+def st(x): return {'hour': round(x.get_hour(), 2), 'weather': str(x.get_editor_property('weather')), 'mood': str(x.get_editor_property('mood'))}
+before = st(d[0]) if d else None
+via = None
+if v and hasattr(v[0], 'apply_now'):
+    v[0].apply_now(True); via = 'volume.apply_now'
+elif d:
+    d[0].set_time_of_day(18.75); d[0].set_mood('oddsreaper_storm', True); d[0].set_weather(unreal.DaedalusWeather.STORM, True); via = 'director'
+result = {'directors': len(d), 'volumes': len(v), 'via': via, 'before': before, 'after': st(d[0]) if d else None}"""
+
+
+def force_storm_in_pie():
+    """Round-2 Play shot showed daylight: the Mood Volume fired only on player-pawn overlap and the PIE pawn spawns
+    on another island. The rebuilt volume triggers on the view, but take_hero_shot uses a SceneCapture (not the player
+    view), so force the OddsReaper look in the PIE world only, right before the Play shot. Stop discards PIE, so the
+    saved DaedalusWorld director stays Clear for every other island. Falls back to the director if the old class is live."""
+    try:
+        return py(STORM_CODE, 30)
+    except Exception as e:
+        return {"error": str(e)[:200]}
+
+
 def run_file(path, timeout):
     return py(f"import runpy,sys; sys.path.insert(0, r'{os.path.dirname(path)}'); "
               f"result = runpy.run_path(r'{path}', run_name='oddsreaper_turn')['run']()", timeout)
@@ -300,8 +325,7 @@ def main():
     if left() > 120:
         try:
             call("play", timeout=60); say("Play start (20s check)"); time.sleep(20)
-            py("import unreal\nw=unreal.EditorLevelLibrary.get_game_world()\nd=[a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusSkyDirector)] if w else []\n"
-               "result={'directors':len(d),'hour':d[0].get_hour() if d else None,'weather':str(d[0].get_editor_property('weather')) if d else None}", 30)
+            say(f"storm in PIE: {force_storm_in_pie()}")
             try:
                 take_hero_shot(cam_w, target_w, "hero_unreal_play.png")
             except Exception as e:

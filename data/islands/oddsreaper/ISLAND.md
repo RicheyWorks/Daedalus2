@@ -70,3 +70,8 @@ bot-team/shots/oddsreaper/bridge_status.json. Apply on next grant (not while clo
 
 Referee granted slot 6 after pythagoras missed CLAIM. Restored OddsReaperIsland autosave verified at 591/591 meshes (593 actors with the storm volume and hero cam); sublevel and DaedalusWorld saved. Editor was found in Play at turn start and stopped first. 20 s Play check passed with one live DaedalusSkyDirector (hour 9.4). Hero shot: `bot-team/shots/oddsreaper/hero_unreal_play.png` (1920x1080, Play viewport). The editor SceneCapture2D export (`hero_unreal_editor.png`) rendered all black, so the owed hero shot is the Play capture. Play stopped, saved, HANDOFF to art-master-flex.
 
+
+## Round-3 storm fix follow-up (Oct 12, 2026, 22:00 PT)
+
+The storm volume is no longer forced at BeginPlay. DaedalusWorld is shared, so a forced volume would put every island's Play session in storm at dusk with the clock held, and Restore() never runs for a forced volume. Players get the storm through the view trigger; the editor turn forces it only in the PIE world (`force_storm_in_pie` in `oddsreaper_turn.py`, volume `apply_now` or a director fallback) right before the Play hero shot, and Stop discards it.
+

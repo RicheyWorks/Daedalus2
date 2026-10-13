@@ -82,9 +82,11 @@ def run():
     vol.set_actor_location(unreal.Vector(ox, oy, oz + 3000), False, False)
     vol.set_actor_scale3d(unreal.Vector(4.0, 4.0, 3.0))
     vol.set_editor_property("mood", lay["mood"])
-    # Storm must show in Play even though the pawn spawns on another island: trigger on the view, force at BeginPlay,
+    # Storm must show in Play even though the pawn spawns on another island: trigger on the view (not forced at BeginPlay),
     # hold the clock at dusk (18.75 h reads as storm, not daylight) while the island is the subject.
-    for name, val in (("trigger_on_view", True), ("force_on_begin_play", True), ("hold_while_inside", True), ("set_hour", 18.75)):
+    # NOT force_on_begin_play: DaedalusWorld is shared, a forced volume would put every island's Play in storm/dusk
+    # and Restore() skips forced volumes. The view trigger covers players; the turn script forces it in PIE only.
+    for name, val in (("trigger_on_view", True), ("force_on_begin_play", False), ("hold_while_inside", True), ("set_hour", 18.75)):
         for prop in (name, "b_" + name):
             try: vol.set_editor_property(prop, val); break
             except Exception: pass
