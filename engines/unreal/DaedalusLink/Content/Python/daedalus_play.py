@@ -202,6 +202,18 @@ def _frames(n):
         yield
 
 
+def _seconds(s, max_frames=20000):
+    """Wait s seconds of GAME time (not frames). Under -d3d11 Play ran far faster than the 60 fps the frame counts
+    assumed, so 90 frames was well under a second and foes 'did not move' (2026-10-13 compile turn)."""
+    w = world()
+    t0 = unreal.GameplayStatics.get_time_seconds(w) if w else 0.0
+    for _ in range(max_frames):
+        yield
+        w = world()
+        if not w or unreal.GameplayStatics.get_time_seconds(w) - t0 >= s:
+            return
+
+
 def _clear_foes():
     for f in _all(unreal.DaedalusTarget):
         f.destroy_actor()
@@ -571,7 +583,7 @@ def scenario_wild(p):
         yield
     species = sorted({c.get_editor_property("species") for c in critters})
     built = [c for c in critters if c.get_editor_property("parts") > 0]
-    for _ in _frames(240):   # four seconds of grazing and wandering
+    for _ in _seconds(4.0):   # four seconds of grazing and wandering
         yield
     walked = [c for c in critters if c.get_editor_property("walked") > 1.0]
     h = hero()
@@ -581,7 +593,7 @@ def scenario_wild(p):
         target = shy[0]
         at = target.get_actor_location()
         h.set_actor_location(unreal.Vector(at.x - 250.0, at.y, at.z + 120.0), False, True)
-        for _ in _frames(90):
+        for _ in _seconds(1.5):
             yield
         fled = target.get_editor_property("flees") > 0
     _clear_foes()
@@ -820,7 +832,7 @@ def scenario_tactics(p):
     flankers = [f for f in foes() if f.get_editor_property("order_verb") == "FLANK"]
     before = {f.get_name(): (f.get_actor_location() - f.get_editor_property("order_point")).length() for f in flankers}
     states = set()
-    for _ in range(90):
+    for _ in _seconds(1.5):
         states.update(f.get_editor_property("state") for f in foes())
         yield
     after = {f.get_name(): (f.get_actor_location() - f.get_editor_property("order_point")).length() for f in flankers}
@@ -838,7 +850,7 @@ def scenario_tactics(p):
         out = tac.apply_orders("DTO 1\nsquad test-squad tick 99\norder t1 RETREAT - %.1f %.1f %.1f | scenario: Java says fall back\n"
                                % (goal.x, goal.y, goal.z))
         unreal.SystemLibrary.execute_console_command(world(), "daedalus.Tactics 1")   # the local director may run, but Java holds it
-        for _ in range(60):
+        for _ in _seconds(1.0):
             yield
         held = t1[0].get_editor_property("order_verb") == "RETREAT" if foes() else False
         moved = round(dist(t1[0], h) - d0) if foes() else 0
@@ -849,7 +861,7 @@ def scenario_tactics(p):
     if target:
         if h.get_editor_property("current_weapon") != 1:
             h.switch_weapon()
-        for _ in range(30):
+        for _ in _seconds(0.5):
             h.aim_at(target[0].get_actor_location())
             h.fire()
             yield
@@ -898,7 +910,7 @@ def scenario_tactics_remote(p):
         f.set_editor_property("unit_id", "r%d" % (i + 1))
     tac = unreal.DaedalusTactics.get_tactics(w)
     frames = 0
-    for _ in range(300):   # about 5 s: four or five round trips at one a second
+    for _ in _seconds(5.0):   # four or five round trips at one a second
         frames += 1
         yield
     stats = tac.stats()
