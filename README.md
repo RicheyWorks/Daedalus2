@@ -281,7 +281,7 @@ public consumers).
 | `POST` | `/api/v1/worlds` | required | Mount a new world of a ready style, grown from a seed (`CreateWorldRequest`); exists, bad id, style-not-ready and full are named results (ADR-030) |
 | `GET` | `/api/v1/world/{id}/package` | public | The world as a Daedalus World Package (zip): `manifest.json`, `world.glb` (glTF 2.0, a node per chunk), `assets/ark.glb`. Load it in Blender, Unreal, Godot or three.js (ADR-032) |
 | `GET` | `/api/v1/world/{id}/package/manifest` | public | The package manifest alone: islands, sky gates, arks, palette, mount, live API, deed contract (ADR-032) |
-| `GET` | `/api/v1/world/{id}/package/world.glb` | public | The package geometry alone, glTF 2.0 binary (ADR-032) |
+| `GET` | `/api/v1/world/{id}/package/world.glb` | public | The package geometry alone, glTF 2.0 binary (ADR-032). `?mesh=greedy` on all three: merged faces, 3.6x-80x fewer triangles, no per-cube grain (ADR-064) |
 | `GET` | `/api/v1/world/{id}/gates` | public | The world's sky gates: in the clouds past the rainbow, where each leads, its cloud berth, and the mount that flies there (ADR-031) |
 | `POST` | `/api/v1/world/{id}/gates` | required | Open a pair of sky gates between this world and `toWorld`; same-world, no-such-world, already-linked and full are named results (ADR-031) |
 | `GET` | `/api/v1/world/{id}/islands` | public | Raised islands: lane slot, origin, seed and traits (ADR-018), and who owns each and whom they let build (ADR-026) |

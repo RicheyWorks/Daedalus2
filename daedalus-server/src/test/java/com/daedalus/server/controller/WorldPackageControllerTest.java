@@ -132,6 +132,24 @@ class WorldPackageControllerTest {
     }
 
     @Test
+    void aGreedyMeshIsSmallerCachedApartAndAskedForByName() throws Exception {
+        hub.get("world-zero").raiseIsland("world-zero", 11, com.daedalus.world.island.IslandGenerator.DEFAULT_RADIUS);
+        JsonNode faces = json.readTree(mvc.perform(get("/api/v1/world/world-zero/package/manifest"))
+                .andReturn().getResponse().getContentAsString());
+        JsonNode greedy = json.readTree(mvc.perform(get("/api/v1/world/world-zero/package/manifest").param("mesh", "greedy"))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
+        long a = faces.get("geometry").get("triangles").asLong();
+        long b = greedy.get("geometry").get("triangles").asLong();
+        assertThat(b).isPositive().isLessThan(a / 2);
+        MvcResult g = mvc.perform(get("/api/v1/world/world-zero/package/world.glb").param("mesh", "greedy"))
+                .andExpect(status().isOk()).andReturn();
+        assertThat(g.getResponse().getHeader("ETag")).endsWith("-greedy\"");
+        byte[] plain = mvc.perform(get("/api/v1/world/world-zero/package/world.glb")).andReturn().getResponse().getContentAsByteArray();
+        assertThat(g.getResponse().getContentAsByteArray().length).isLessThan(plain.length);
+        mvc.perform(get("/api/v1/world/world-zero/package/world.glb").param("mesh", "cubes")).andExpect(status().isBadRequest());
+    }
+
+    @Test
     void anUnknownWorldIsNotFound() throws Exception {
         mvc.perform(get("/api/v1/world/nowhere/package")).andExpect(status().isNotFound());
         mvc.perform(get("/api/v1/world/nowhere/package/manifest")).andExpect(status().isNotFound());

@@ -54,9 +54,10 @@ class PackageError(Exception):
     """The file is not a Daedalus World Package this importer understands."""
 
 
-def fetch(server, world, into):
-    """Download a world's package from a running Daedalus server; returns the zip's path."""
-    url = server.rstrip("/") + "/api/v1/world/" + world + "/package"
+def fetch(server, world, into, mesh="greedy"):
+    """Download a world's package from a running Daedalus server; returns the zip's path. mesh="greedy" (the default)
+    asks for merged faces, 3.6x to 80x fewer triangles in the editor (ADR-064); mesh="faces" for the per-cube mesh."""
+    url = server.rstrip("/") + "/api/v1/world/" + world + "/package" + ("?mesh=greedy" if mesh == "greedy" else "")
     path = os.path.join(into, world + ".daedalus.zip")
     with urllib.request.urlopen(url, timeout=60) as r, open(path, "wb") as out:
         out.write(r.read())

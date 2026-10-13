@@ -258,15 +258,31 @@ void ADaedalusWorldActor::Poll()
 	}
 	bPolling = true;
 	InFlight = 2;
-	GetJson(FString::Printf(TEXT("/api/v1/world/%s/chunks"), *WorldId),
-		[this](const TSharedPtr<FJsonObject>& Json)
-		{
-			if (Json.IsValid())
+	if (ChunkRevisions.Num() == 0 && !bNoBatch)
+	{
+		// First load: the whole world in one run-length response instead of a request per chunk (ADR-064).
+		GetJson(FString::Printf(TEXT("/api/v1/world/%s/chunks/blocks"), *WorldId),
+			[this](const TSharedPtr<FJsonObject>& Json)
 			{
-				ReadChunks(Json);
-			}
-			FinishOne();
-		});
+				if (!Json.IsValid() || !ReadAllBlocks(Json))
+				{
+					bNoBatch = true;   // the next poll lists chunks and fetches them one by one
+				}
+				FinishOne();
+			});
+	}
+	else
+	{
+		GetJson(FString::Printf(TEXT("/api/v1/world/%s/chunks"), *WorldId),
+			[this](const TSharedPtr<FJsonObject>& Json)
+			{
+				if (Json.IsValid())
+				{
+					ReadChunks(Json);
+				}
+				FinishOne();
+			});
+	}
 	GetJson(FString::Printf(TEXT("/api/v1/world/%s/arks"), *WorldId),
 		[this](const TSharedPtr<FJsonObject>& Json)
 		{
@@ -322,6 +338,34 @@ void ADaedalusWorldActor::ReadChunks(const TSharedPtr<FJsonObject>& Json)
 		Store.Drop(KeyOf(K));
 		MarkDirty(KeyOf(K));
 	}
+}
+
+bool ADaedalusWorldActor::ReadAllBlocks(const TSharedPtr<FJsonObject>& Json)
+{
+	const TArray<TSharedPtr<FJsonValue>>* Rows = nullptr;
+	if (!Json->TryGetArrayField(TEXT("chunks"), Rows) || !Rows)
+	{
+		return false;
+	}
+	int32 Bad = 0;
+	for (const TSharedPtr<FJsonValue>& V : *Rows)
+	{
+		const TSharedPtr<FJsonObject> Row = V.IsValid() ? V->AsObject() : nullptr;
+		if (!Row.IsValid()) { ++Bad; continue; }
+		const daedalus::ChunkKey K{Row->GetIntegerField(TEXT("x")), Row->GetIntegerField(TEXT("y")), Row->GetIntegerField(TEXT("z"))};
+		daedalus::ChunkStore::Cubes Cubes{};
+		if (!daedalus::DecodeRuns(TCHAR_TO_UTF8(*Row->GetStringField(TEXT("runs"))), Cubes)) { ++Bad; continue; }
+		Store.Put(K, Cubes);
+		ChunkRevisions.Add(KeyOf(K), static_cast<int64>(Row->GetNumberField(TEXT("revision"))));
+		MarkDirty(K);
+	}
+	if (Bad > 0)
+	{
+		UE_LOG(LogDaedalus, Warning, TEXT("%d chunks had bad run-length payloads; they come again chunk by chunk"), Bad);
+		bNoBatch = true;
+	}
+	UE_LOG(LogDaedalus, Log, TEXT("%s: %d chunks in one request"), *WorldId, Rows->Num() - Bad);
+	return true;
 }
 
 void ADaedalusWorldActor::ReadChunk(const TSharedPtr<FJsonObject>& Json)
@@ -406,7 +450,8 @@ void ADaedalusWorldActor::BuildChunk(const daedalus::ChunkKey& Key)
 	const FIntVector K = KeyOf(Key);
 	daedalus::Part Opaque;
 	daedalus::Part Translucent;
-	daedalus::MeshChunk(Store, CubePalette, Key, Opaque, Translucent);
+	if (bGreedyMesh) daedalus::MeshChunkGreedy(Store, CubePalette, Key, Opaque, Translucent);
+	else daedalus::MeshChunk(Store, CubePalette, Key, Opaque, Translucent);
 	TObjectPtr<UProceduralMeshComponent>* Existing = ChunkMeshes.Find(K);
 	if (Opaque.IsEmpty() && Translucent.IsEmpty())
 	{
