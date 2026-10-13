@@ -31,6 +31,6 @@ public class DaedalusLink : ModuleRules
 		});
 
 		// A bounded direct-loopback client must disable HTTP redirects before sending credentials.
-		AddEngineThirdPartyPrivateStaticDependencies(Target, "libcurl");
+		AddEngineThirdPartyPrivateStaticDependencies(Target, "libcurl", "nghttp2", "OpenSSL", "zlib");
 	}
 }
