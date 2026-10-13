@@ -27,15 +27,24 @@ lip = [bm.verts.new((v.co.x*1.01, v.co.y*1.01, -3.0)) for v in rings[-1]]
 for j in range(SEG): bm.faces.new((rings[-1][j], lip[j], lip[(j+1) % SEG], rings[-1][(j+1) % SEG]))
 me = bpy.data.meshes.new(NAME+"_Terrain"); bm.normal_update(); bm.to_mesh(me); bm.free()
 ter = bpy.data.objects.new(NAME+"_Terrain", me); root.objects.link(ter); BASE.append(ter)
-col = me.color_attributes.new("Col", "BYTE_COLOR", "CORNER")
+# flat material slots (Unreal's glTF import ignores vertex colours -> terrain showed white): 0 grass 1 rock 2 sand 3 dirt 4 water
+def tmat(n, c, a=1.0):
+    m = bpy.data.materials.new(n); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
+    p.inputs["Base Color"].default_value = c; p.inputs["Roughness"].default_value = 0.9 if a == 1.0 else 0.1
+    if a < 1.0: p.inputs["Alpha"].default_value = a; m.blend_method = "BLEND"
+    me.materials.append(m)
+tmat("M_BB_Grass", (0.20, 0.50, 0.12, 1)); tmat("M_BB_TerrainRock", (0.45, 0.42, 0.38, 1)); tmat("M_BB_Sand", (0.80, 0.72, 0.50, 1))
+tmat("M_BB_Dirt", (0.36, 0.26, 0.17, 1)); tmat("M_BB_ShoreWater", (0.10, 0.62, 0.85, 1))
 for poly in me.polygons:
-    z = sum(me.vertices[k].co.z for k in poly.vertices)/len(poly.vertices)
-    c = (0.80,0.72,0.50,1) if z < 1.5 else (0.20,0.50,0.12,1) if z < 13 else (0.45,0.42,0.38,1)
-    if z < -0.5: c = (0.30,0.24,0.20,1)
-    for li in poly.loop_indices: col.data[li].color = c
-m = bpy.data.materials.new("M_BB_Terrain"); m.use_nodes = True
-vc = m.node_tree.nodes.new("ShaderNodeVertexColor"); vc.layer_name = "Col"
-m.node_tree.links.new(vc.outputs[0], m.node_tree.nodes["Principled BSDF"].inputs[0]); me.materials.append(m)
+    vs = [me.vertices[k].co for k in poly.vertices]; z = sum(v.z for v in vs)/len(vs); cx = sum(v.x for v in vs)/len(vs); cy = sum(v.y for v in vs)/len(vs)
+    d = math.hypot(cx, cy) / R; steep = poly.normal.z < 0.80 if poly.area > 0 else False
+    if z < -0.5: k = 3                                          # rim lip / underside edge
+    elif d > 0.93 and z < 0.5: k = 4                            # wet shoreline ring
+    elif z < 1.5: k = 2                                         # beach
+    elif z >= 13 or steep: k = 1                                # hilltop / cliffs
+    elif math.hypot(cx + 35, cy - 30) < 26 or math.hypot(cx, cy) < 14: k = 3   # quarry floor + plaza dirt
+    else: k = 0
+    poly.material_index = k
 for p in me.polygons: p.use_smooth = True
 # underside: inverted cone
 bpy.ops.mesh.primitive_cone_add(vertices=48, radius1=R*1.0, depth=80, location=(0, 0, -42.5)); cone = bpy.context.object

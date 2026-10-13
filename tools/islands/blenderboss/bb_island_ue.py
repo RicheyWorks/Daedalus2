@@ -15,7 +15,8 @@ ART = "/Game/Daedalus/Art"
 SUB, PERSIST, SUBNAME = "/Game/BlenderBoss/Maps/BlenderBossIsland", "/Game/Daedalus/DaedalusWorld", "BlenderBossIsland"
 FOLDER = "BlenderBoss"
 IMPORT_BUDGET_S = float(os.environ.get("BB_IMPORT_S", "200"))
-MAKEUP = os.environ.get("BB_MODE", "") == "makeup"   # keep existing placements; re-place base + place only assets with no actor yet
+BASEONLY = os.environ.get("BB_MODE", "") == "base"   # re-import + re-place ONLY the island base (terrain colour fix)
+MAKEUP = os.environ.get("BB_MODE", "") == "makeup" or BASEONLY   # keep existing placements; re-place base + place only assets with no actor yet
 BASE_MIN_CM = 10000.0   # the island is 240 m across; a base mesh smaller than 100 m means the wrong asset was found
 SHOT = os.environ.get("BB_SHOT", r"C:\Users\730ri\projects\bot-team\shots\blenderboss\ue_island.png")
 eal = unreal.EditorAssetLibrary
@@ -98,7 +99,7 @@ def run():
     lay = json.load(open(LAYOUT))
     ox, oy, oz = lay["origin_cm"]; base = lay["base_asset"]
     names = sorted({p["asset"] for p in lay["placements"]})
-    imported = import_missing([base] + names, force=(base,))   # base always re-imported (water chain lives there)
+    imported = import_missing([base] + ([] if BASEONLY else names), force=(base,))   # base always re-imported (water chain lives there)
     les = open_sublevel()
     actors = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
     present = set()
@@ -114,7 +115,7 @@ def run():
         if base_cm < BASE_MIN_CM: log(f"base mesh only {base_cm:.0f} cm across: wrong asset, not placing"); bm = None
     if bm: spawn(actors, bm, unreal.Vector(ox, oy, oz), 0, 1.0, f"{FOLDER}/base", "BlenderBoss Island Base")
     placed, missing = 0, set()
-    for p in lay["placements"]:
+    for p in ([] if BASEONLY else lay["placements"]):
         if MAKEUP and p["asset"] in present: continue
         m = mesh(p["asset"])
         if m is None: missing.add(p["asset"]); continue
@@ -135,7 +136,7 @@ def run():
         unreal.AutomationLibrary.take_high_res_screenshot(1600, 900, SHOT, camera=cam); shot = SHOT
     except Exception as e: log(f"screenshot: {e}")
     want = len(lay["placements"]); kept = sum(1 for p in lay["placements"] if p["asset"] in present); total = placed + kept
-    ok = bool(bm) and total >= int(0.9 * want)
+    ok = bool(bm) and (BASEONLY or total >= int(0.9 * want))
     log(f"base={'ok' if bm else 'MISSING'} placed={placed}/{want} imported={imported} missing={len(missing)} {'PASS' if ok else 'FAIL'}")
     return {"ok": ok, "base": bool(bm), "placed": total, "new": placed, "kept": kept, "base_cm": round(base_cm), "want": want, "imported": imported, "missing_n": len(missing), "missing": sorted(missing)[:20], "shot": shot}
 
