@@ -123,29 +123,41 @@ class Turn:
         self.run(["git", "-C", os.path.join(REPO, "..", "D2-build"), "fetch", "-q", "origin"])
         self.run(["git", "-C", os.path.join(REPO, "..", "D2-build"), "checkout", "-q", "--detach", "origin/main"])
         started = self.run(["powershell", "-NoProfile", "-File", job, "-Start", "-Fast"])
-        m = re.search(r"(build-\d{4}-\d{6})", started or "")
-        jid = ["-Id", m.group(1)] if m else []   # wait on THIS job: an older log's BUILD OK once let a turn run on early
-        self.sleep(5)
+        match = re.search(r"(?m)^started (build-\d{4}-\d{6}) pid=\d+\s*$", started)
+        if not match:
+            raise RuntimeError("Build start did not return a job id; refusing to wait for an unrelated build")
+        job_id = match.group(1)
         for _ in range(tries):
-            out = self.run(["powershell", "-NoProfile", "-File", job, "-Wait"] + jid)
-            if "BUILD FAILED" in out:
+            out = self.run(["powershell", "-NoProfile", "-File", job, "-Wait", "-Id", job_id])
+            status = re.search(r"(?m)^(BUILD OK|BUILD FAILED|JOB ENDED|RUNNING) (build-\d{4}-\d{6})(?:\s|$)", out)
+            if not status or status.group(2) != job_id:
+                raise RuntimeError("Build wait returned no matching status for " + job_id)
+            if status.group(1) in ("BUILD FAILED", "JOB ENDED"):
                 raise RuntimeError(out[-600:])
-            if "BUILD OK" in out:
-                return {"started": started.strip()[-80:], "result": "BUILD OK"}
+            if status.group(1) == "BUILD OK":
+                return {"started": started.strip()[-80:], "job_id": job_id, "result": "BUILD OK"}
         raise RuntimeError("build still running after %d waits" % tries)
 
     def scenario(self, name, limit=90):
         self.call("play", timeout=120)
-        self.call("daedalus.play_scenario", name=name)
-        t0 = self.now()
-        status = {}
-        while self.now() - t0 < limit:
-            status = self.call("daedalus.play_status") or {}
-            if not status.get("running"):
-                break
-            self.sleep(2)
-        self.call("stop")
+        try:
+            self.call("daedalus.play_scenario", name=name)
+            t0 = self.now()
+            status = {}
+            while self.now() - t0 < limit:
+                status = self.call("daedalus.play_status") or {}
+                if not status.get("running"):
+                    break
+                self.sleep(2)
+            if status.get("running"):
+                raise RuntimeError("Scenario timed out: " + name)
+        finally:
+            self.call("stop")
         res = (status or {}).get("result") or {}
+        if (status.get("error") or not isinstance(res.get("total"), int) or res["total"] <= 0
+                or res.get("passed") != res["total"]
+                or any(not c.get("pass") for c in res.get("checks", []))):
+            raise RuntimeError("Scenario failed or returned no complete results: " + name + " " + str(status)[:400])
         return {"passed": res.get("passed"), "total": res.get("total"), "error": status.get("error"),
                 "failed": [c["check"] for c in res.get("checks", []) if not c.get("pass")]}
 
@@ -219,7 +231,7 @@ class Turn:
         text = ("TURN DONE unreal-team: %d/%d steps ok%s. RAM before %s, after %s. Report: turn-report.json"
                 % (ok, len(self.steps), "" if not stop_reason else " (stopped: %s)" % stop_reason, before, after))
         self.link(text)
-        self.link("HANDOFF -> next in the referee's order from unreal-team. Editor is free, Play stopped.")
+        self.link("HANDOFF -> referee from unreal-team. Turn ended; check step results and verify editor/Play state before assigning the next turn.")
         return report
 
 
