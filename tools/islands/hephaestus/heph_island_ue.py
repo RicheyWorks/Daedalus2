@@ -25,6 +25,8 @@ OUTBOX = r"C:\Users\730ri\projects\bot-team\link\outbox\hephaestus.jsonl"
 SHOTS = r"C:\Users\730ri\projects\bot-team\shots\hephaestus"
 HERO_PNG = "hero_r2.png"  # stable path for referee / round-2 living note
 HOTSPRING_MI = "/Game/Hephaestus/Materials/MI_HotSpring"
+BASALT_MI = "/Game/Hephaestus/Materials/MI_BasaltGround"
+BASALT_COLOR = (0.045, 0.038, 0.035)  # dark basalt: the white 1024 m blockout disc washed out the round-5 hero
 
 
 def log(m): unreal.log("[hephaestus-island] " + m)
@@ -82,6 +84,58 @@ def hotspring_material():
         return mi
     except Exception as e:
         log(f"hotspring material: {e}"); return None
+
+
+# Hero framing (round-5 lesson): the fixed hero_cam_m (140,-160,90) m sits ~230 m from the forge, so the lit round-5
+# capture (luma 174) was a pale 1024 m disc with the caldera props as specks. Fit the camera to the hero zone instead:
+# keep the layout's view direction, trim outliers, and back off just far enough that the core cluster fills the frame.
+HERO_FRAME_ZONES = ("caldera_forge",)
+HERO_FRAME_TRIM = 0.75   # radius quantile (drops a few far props so the core reads)
+HERO_FRAME_MARGIN_M = 6.0
+HERO_FRAME_FILL = 0.7    # cluster radius / half-frame at the target
+HERO_FRAME_MIN_M = 30.0
+
+
+def hero_pose_from_layout(lay, env=None):
+    """Pure: (cam_m, target_m, fov, info). Fits the hero cam to HERO_FRAME_ZONES placements along the layout's view
+    direction. HEPH_HERO_FIT=0, fewer than 3 points, or bad data -> the layout's fixed hero_cam_m / hero_target_m."""
+    env = os.environ if env is None else env
+    c0 = list(lay.get("hero_cam_m", [140, -160, 90])); t0 = list(lay.get("hero_target_m", [0, 0, 5]))
+    fov = float(lay.get("hero_fov", 55))
+    fixed = (c0, t0, fov, {"fit": False})
+    if str(env.get("HEPH_HERO_FIT", "1")) == "0":
+        fixed[3]["reason"] = "HEPH_HERO_FIT=0"; return fixed
+    pts = [(float(p["x"]), float(p["y"]), float(p.get("z", 0))) for p in lay.get("placements") or []
+           if p.get("zone") in HERO_FRAME_ZONES and not p.get("skip")]
+    if len(pts) < 3:
+        fixed[3]["reason"] = f"only {len(pts)} hero-zone points"; return fixed
+    cx = sum(p[0] for p in pts) / len(pts); cy = sum(p[1] for p in pts) / len(pts)
+    ds = sorted(math.hypot(p[0] - cx, p[1] - cy) for p in pts)
+    r = ds[min(len(ds) - 1, int(HERO_FRAME_TRIM * (len(ds) - 1) + 0.5))] + HERO_FRAME_MARGIN_M
+    v = [c0[i] - t0[i] for i in range(3)]; n = math.sqrt(sum(x * x for x in v))
+    if n < 1e-6:
+        fixed[3]["reason"] = "hero_cam_m == hero_target_m"; return fixed
+    d = max(HERO_FRAME_MIN_M, r / (HERO_FRAME_FILL * math.tan(math.radians(fov) / 2)))
+    tz = t0[2]
+    tgt = [round(cx, 2), round(cy, 2), tz]
+    cam = [round(tgt[i] + v[i] / n * d, 2) for i in range(3)]
+    return cam, tgt, fov, {"fit": True, "zones": list(HERO_FRAME_ZONES), "points": len(pts), "radius_m": round(r, 1),
+                           "dist_m": round(d, 1), "fixed_dist_m": round(n, 1)}
+
+
+def basalt_material():
+    """Dark basalt instance of the engine basic-shape material for the blockout ground disc (was default white)."""
+    try:
+        if eal.does_asset_exist(BASALT_MI): return unreal.load_asset(BASALT_MI)
+        parent = unreal.load_asset("/Engine/BasicShapes/BasicShapeMaterial")
+        mi = unreal.AssetToolsHelpers.get_asset_tools().create_asset(
+            "MI_BasaltGround", "/Game/Hephaestus/Materials", unreal.MaterialInstanceConstant, unreal.MaterialInstanceConstantFactoryNew())
+        unreal.MaterialEditingLibrary.set_material_instance_parent(mi, parent)
+        unreal.MaterialEditingLibrary.set_material_instance_vector_parameter_value(mi, "Color", unreal.LinearColor(*BASALT_COLOR, 1.0))
+        eal.save_asset(BASALT_MI)
+        return mi
+    except Exception as e:
+        log(f"basalt material: {e}"); return None
 
 
 def link_note(text):
@@ -506,6 +560,10 @@ def run():
     fx, fy = lay.get("footprint_m", [1024, 1024])
     g = actors.spawn_actor_from_object(unreal.load_asset("/Engine/BasicShapes/Cylinder"), unreal.Vector(ox, oy, oz - 1000))
     g.set_actor_scale3d(unreal.Vector(fx, fy, 20)); g.set_actor_label("Hephaestus Ground (blockout)"); g.set_folder_path(f"{FOLDER}/ground")
+    basalt = basalt_material()
+    if basalt is not None:
+        try: g.static_mesh_component.set_material(0, basalt)
+        except Exception as e: log(f"ground mat: {e}")
     placed, missing = 0, set()
     living = {"water": 0, "livestock": 0, "herbs": 0}
     spring_mi = hotspring_material()
@@ -534,7 +592,8 @@ def run():
         lc.set_light_color(unreal.LinearColor(1.0, 0.42, 0.12, 1.0)); lc.set_intensity(50000.0); lc.set_attenuation_radius(6000.0)
     except Exception as e: log(f"light: {e}")
     # hero camera: high three-quarter view of caldera forge with drydock and springs behind
-    c, t = lay.get("hero_cam_m", [140, -160, 90]), lay.get("hero_target_m", [0, 0, 5])
+    c, t, hero_fov, hero_fit = hero_pose_from_layout(lay)
+    log(f"hero pose: cam {c} m target {t} m fov {hero_fov} {hero_fit}")
     cl = unreal.Vector(ox + c[0] * 100, oy + c[1] * 100, oz + c[2] * 100)
     dx, dy, dz = t[0] - c[0], t[1] - c[1], t[2] - c[2]
     rot = unreal.Rotator(roll=0, pitch=math.degrees(math.atan2(dz, math.hypot(dx, dy))), yaw=math.degrees(math.atan2(dy, dx)))
@@ -549,10 +608,11 @@ def run():
     link_note(f"{'DONE' if alive else 'BLOCKED'} island:hephaestus living check in Unreal: water {living['water']}, "
               f"livestock {living['livestock']}, herbs {living['herbs']} placed; {placed}/{want} placements; "
               f"saved sublevel={saved['sublevel']} DaedalusWorld+maps={saved['maps']} dirty maps left={saved['dirty_maps']}")
-    write_result({"stage": "saved", "ok": ok, "placed": placed, "want": want, "living": living, "saved": saved})
+    write_result({"stage": "saved", "ok": ok, "placed": placed, "want": want, "living": living, "saved": saved,
+                  "hero_pose": {"cam_m": c, "target_m": t, "fov": hero_fov, **hero_fit}})
     # Warm SceneCapture hero PNG (bridge viewport_screenshot often times out on 9877).
     tl = unreal.Vector(ox + t[0] * 100, oy + t[1] * 100, oz + t[2] * 100)
-    shot = hero_capture(cl, tl, fov=float(lay.get("hero_fov", 55)), origin=unreal.Vector(ox, oy, oz))
+    shot = hero_capture(cl, tl, fov=hero_fov, origin=unreal.Vector(ox, oy, oz))
     if shot:
         link_note(f"DONE island:hephaestus hero shot: {shot} (SceneCapture2D exposure ladder, see hero_capture.json)")
     else:
