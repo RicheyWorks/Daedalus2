@@ -1,0 +1,39 @@
+DIC 1
+# World Zero: the hub island. The hero's three tools, the armour tiers, cubes mined with the PICK (ADR-049).
+realm WORLD-ZERO
+theme zero
+tab ALL
+tab TOOLS
+tab ARMOR
+tab CUBES
+tab KEYS
+slot HAND
+slot BODY
+item SWORD TOOLS HAND EQUIP,INSPECT Sword
+detail SWORD The first tool. Swings, and the down-thrust bounce.
+item BLASTER TOOLS HAND EQUIP,INSPECT Blaster
+detail BLASTER The second tool. Bolts that knock critters back.
+item PICK TOOLS HAND EQUIP,INSPECT Pick
+detail PICK The third tool. Hold on a cube to mine it; aim to place one.
+item RECRUIT ARMOR BODY EQUIP,INSPECT Recruit Plate
+detail RECRUIT Tier 0. What you woke up in.
+item SCOUT ARMOR BODY EQUIP,INSPECT Scout Plate
+detail SCOUT Tier 1. A shield core folded into the chest.
+item VANGUARD ARMOR BODY EQUIP,INSPECT Vanguard Plate
+detail VANGUARD Tier 2. Two cores. The shoulders glow.
+item PARAGON ARMOR BODY EQUIP,INSPECT Paragon Plate
+detail PARAGON Tier 3. Three cores. Nothing more to add.
+item GRASS CUBES - PLACE,DROP,SPLIT Grass Cube
+detail GRASS Mined from the meadow. Places as turf.
+item DIRT CUBES - PLACE,DROP,SPLIT Dirt Cube
+detail DIRT Under the grass. Quick to mine.
+item STONE CUBES - PLACE,DROP,SPLIT Stone Cube
+detail STONE Slow to mine. Holds a wall up.
+item WOOD CUBES - PLACE,DROP,SPLIT Wood Cube
+detail WOOD From the trunks. Burns, floats.
+item ORE CUBES - PLACE,DROP,SPLIT Ore Cube
+detail ORE Glints in the dark. The smiths of other realms want it.
+item SAND CUBES - PLACE,DROP,SPLIT Sand Cube
+detail SAND Falls when nothing holds it.
+item GATE_KEY KEYS - INSPECT Gate Key
+detail GATE_KEY Opens one of the three rainbow gates off World Zero.

@@ -1,0 +1,39 @@
+DIC 1
+# Gallery City: the Painter. Spray and brush, light armour dyed by the Light Tailor, pigment ore, mural pieces.
+realm GALLERY-CITY
+theme gallery
+tab ALL
+tab SPRAYS
+tab PIGMENT
+tab WEAR
+tab PIECES
+tab QUEST
+slot HAND
+slot COAT
+slot DRONE
+item PAINT_SPRAY SPRAYS HAND EQUIP,INSPECT Paint Spray
+detail PAINT_SPRAY Tags the wall you aim at. Refills at any pigment vat.
+item WIDE_BRUSH SPRAYS HAND EQUIP,INSPECT Wide Brush
+detail WIDE_BRUSH Paints a whole panel in one stroke. Slow to carry.
+item VARNISH_GUN SPRAYS HAND EQUIP,INSPECT Varnish Gun
+detail VARNISH_GUN The Varnish Monk's tool. Seals a mural so it never fades.
+item PIGMENT_RED PIGMENT - USE,DROP,SPLIT Red Pigment
+detail PIGMENT_RED Ore from under the city, ground fine. Loads a spray.
+item PIGMENT_BLUE PIGMENT - USE,DROP,SPLIT Blue Pigment
+detail PIGMENT_BLUE Rarer than red. The Critic pays for blue skies.
+item PIGMENT_GOLD PIGMENT - USE,DROP,SPLIT Gold Pigment
+detail PIGMENT_GOLD Found only where the light hits at noon.
+item SHINE_POTION PIGMENT - USE,DROP Shine Potion
+detail SHINE_POTION The Varnish Monk's brew. Your coat glows for a while.
+item PAINTER_COAT WEAR COAT EQUIP,INSPECT Painter's Coat
+detail PAINTER_COAT Pockets for every colour. Dyed by the Light Tailor.
+item FRAME_PLATE WEAR COAT EQUIP,INSPECT Frame Plate
+detail FRAME_PLATE A gilt frame worn as armour. The Guard salutes it.
+item DRONE_ROTOR WEAR DRONE EQUIP,INSPECT Drone Rotor
+detail DRONE_ROTOR Pell's upgrade. The drone climbs higher.
+item MURAL_PIECE PIECES - INSPECT,DROP Mural Piece
+detail MURAL_PIECE A shard of the Shattering. Restorer Ama fits them back.
+item SELF_PORTRAIT_FRAME QUEST - INSPECT Empty Frame
+detail SELF_PORTRAIT_FRAME The Lost Self-Portrait's frame. He is looking for it.
+item HEARTSTONE QUEST - INSPECT Heartstone
+detail HEARTSTONE Curator Vell's quest. It hums near the Echo Choir.

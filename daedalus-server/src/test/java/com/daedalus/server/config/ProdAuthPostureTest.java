@@ -92,6 +92,7 @@ class ProdAuthPostureTest {
     static {
         EXPECTED.put("POST /api/v1/audio/design", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/kennel/brew", Posture.AUTHENTICATED);
+        EXPECTED.put("GET /api/v1/inventory/" + ID + "/catalog", Posture.AUTHENTICATED);
         // --- deliberately public ---
         EXPECTED.put("POST /api/v1/auth/login", Posture.PUBLIC);
         EXPECTED.put("GET /api/v1/auth/wallet/config", Posture.PUBLIC);
@@ -213,6 +214,23 @@ class ProdAuthPostureTest {
 
     @LocalServerPort
     private int port;
+
+    @org.springframework.beans.factory.annotation.Autowired
+    private com.daedalus.server.security.JwtTokenService tokens;
+
+    @Test
+    void authenticatedInventoryCatalogReturnsRealmDefinitionsAndNoPlayerBag() {
+        RestTestClient client = RestTestClient.bindToServer().baseUrl("http://localhost:" + port).build();
+        String token = tokens.issue("catalog-test-user").token();
+        var result = client.get().uri("/api/v1/inventory/gallery-city/catalog")
+                .header("Authorization", "Bearer " + token).exchange().returnResult(String.class);
+        assertThat(result.getStatus().value()).isEqualTo(200);
+        assertThat(result.getResponseBody()).contains("GALLERY-CITY", "PAINT_SPRAY")
+                .doesNotContain("\"quantity\":", "\"count\":");
+        assertThat(client.get().uri("/api/v1/inventory/missing/catalog")
+                .header("Authorization", "Bearer " + token).exchange().returnResult(Void.class).getStatus().value())
+                .isEqualTo(404);
+    }
 
     @Test
     void everyEndpointHasTheAuthPostureItIsSupposedTo() {
