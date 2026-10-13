@@ -43,7 +43,8 @@ for a in acts:
         if str(t).startswith("PYT_Biome_"): biomes[str(t)[10:]] = biomes.get(str(t)[10:], 0) + 1
 loop = {"feed_present": has("PYT_Prop_Live_PYT_HayRack") or any("HayRack" in k for k in lab), "shelter": any("SheepShelter" in k for k in lab),
         "coops": any("HenCoop" in k for k in lab), "hives": any("Beehive" in k for k in lab), "troughs_for_pen": water["W8_troughs>=1"]}
-result = {"actors": len(acts), "ground_fit": {"checked": checked, "floating": flo, "sunk": sunk, "off_island": offi, "worst_cm": round(worst, 1), "examples": bad},
+result = {"quest_triggers": sorted(a.get_actor_label()[17:] for a in acts if a.actor_has_tag("PYT_Quest")), "chapter_props": sum(1 for a in acts if a.actor_has_tag("PYT_Chapter")), "actors": len(acts), "ground_fit": {"checked": checked, "floating": flo, "sunk": sunk, "off_island": offi, "worst_cm": round(worst, 1), "examples": bad},
           "water_chain_ok": all(water.values()), "water": water, "drinkable_sources": drink,
           "livestock": live, "livestock_ok": sum(live.values()) >= 10 and all(loop.values()), "food_loop": loop, "foods": food,
           "herb_species": len(herbs), "herb_stages_ok": len(herbs) == 12, "biomes": biomes}
+
