@@ -7,12 +7,59 @@ const net = require('net');
 const path = require('path');
 const { execFile } = require('child_process');
 const readline = require('readline');
+const fs = require('fs');
+const os = require('os');
+const { randomUUID } = require('crypto');
+const { classify, guardedCall, EditorHealthError } = require('./editor-health');
+const { createRecoveryHold } = require('./recovery-hold');
+const { createSecurityAlertObserver, SecurityAlertError, contextMetadata } = require('./security-alert-observer');
+const { createSecurityAlertHold } = require('./security-alert-hold');
+const { createNortonLogReader } = require('./security-alert-log');
 
 const HOST = process.env.UNREAL_BRIDGE_HOST || '127.0.0.1';
 const PORT = parseInt(process.env.UNREAL_BRIDGE_PORT || '9877', 10) || 9877;
 const SERVER_INFO = { name: 'unreal', version: '1.1.0' };
 const SUPPORTED = ['2025-06-18', '2025-03-26', '2024-11-05'];
 const none = { type: 'object', properties: {}, additionalProperties: false };
+const recoveryHold = createRecoveryHold({
+  file: process.env.UNREAL_RECOVERY_HOLD_FILE || path.join(os.tmpdir(), 'claude-unreal-recovery-hold.json'), fsImpl: fs,
+});
+function checkRecoveryHold() {
+  const hold = recoveryHold.check();
+  if (hold) throw new EditorHealthError('recovery_required', { reason: 'recovery_hold', hold });
+}
+function recordRecovery(health, snapshot) {
+  recoveryHold.record({ pid: health.pid,
+    session: health.start_time || snapshot?.processes?.find(p => p.pid === health.pid)?.start_time,
+    windowtitle: health.details?.windows?.[0]?.title,
+  });
+}
+const requiresHold = state => ['recovery_required', 'crashed', 'crash_reporter_present'].includes(state);
+const securityFolder = path.join(os.tmpdir(), 'claude-unreal-security-alerts');
+const securityHoldFolder = path.join(securityFolder, 'artifact-holds');
+const securityHold = createSecurityAlertHold({ directory: securityHoldFolder, fsImpl: fs });
+const securityLog = createNortonLogReader({ fsImpl: fs });
+const securityObserver = createSecurityAlertObserver({
+  inspect: inspectSecurityAlert, pollMs: 250, probeTimeoutMs: 2000,
+  onPause: ({ evidence }) => {
+    fs.mkdirSync(securityHoldFolder, { recursive: true, mode: 0o700 });
+    const recorded = securityHold.record(evidence.context, evidence);
+    return recorded?.diagnostics ? { unavailable: true, reason: 'artifact_pause_storage_unavailable' } : {};
+  },
+  onEvidence: ({ evidence }) => {
+    // Keep only already filtered, command-correlated notices/blocks. Never archive full desktop inventory.
+    if (!['security_alert_notice', 'security_alert_observed'].includes(evidence.state)) return;
+    const bytes = Buffer.from(JSON.stringify(evidence));
+    if (bytes.length > 16384) return { unavailable: true, reason: 'evidence_size_limit' };
+    fs.mkdirSync(securityFolder, { recursive: true, mode: 0o700 });
+    fs.writeFileSync(path.join(securityFolder, `alert-${randomUUID()}.json`), bytes, { flag: 'wx', mode: 0o600 });
+  },
+});
+const securitySchema = { type: 'object', properties: {
+  command_id: { type: 'string', pattern: '^[A-Za-z0-9_.:-]{1,128}$' },
+  artifact_path: { type: 'string', maxLength: 1024, description: 'Explicit absolute path of the current authorized build artifact; no source or command arguments.' },
+  artifact_sha256: { type: 'string', pattern: '^[a-fA-F0-9]{64}$', description: 'Caller-provided artifact SHA256, recorded as unverified caller metadata.' },
+}, required: ['artifact_path'], additionalProperties: false };
 
 const TOOLS = [
   { name: 'unreal_status', command: 'ping', timeout: 10000, inputSchema: none,
@@ -46,7 +93,7 @@ const TOOLS = [
       command: { type: 'string', description: 'Command name from list_commands' },
       params: { type: 'object', description: 'Its parameters' } }, required: ['command'], additionalProperties: false } },
   { name: 'editor_windows', local: 'list', timeout: 60000,
-    description: 'List every open Unreal Editor window, including dialogs and popups, each with a picture. This works OUTSIDE the editor, so use it whenever another tool times out: a modal dialog (a message box, a save prompt, "build lighting", a crash reporter) has frozen the editor and its bridge. The largest window is the editor itself (main: true). Then answer the dialog with window_input. Windows only.',
+    description: 'Read-only inventory of Unreal Editor and CrashReportClient processes/windows, with pictures. Includes ownership and enabled state; main is a display hint, not readiness proof. Restore Packages requires preserving/comparing autosaves and owner recovery; unidentified dialogs require review. This tool never answers dialogs. Windows only.',
     inputSchema: { type: 'object', properties: { max_images: { type: 'integer', minimum: 0, maximum: 12, description: 'Pictures for at most this many windows (default 6)' } }, additionalProperties: false } },
   { name: 'window_input', local: 'input', timeout: 30000,
     description: 'Answer an Unreal dialog, or drive any editor window, from outside the editor: brings the window (hwnd from editor_windows) to the front, optionally clicks at (x, y) in that window\'s own pixels as seen in its editor_windows picture (divide by image_scale if the picture was scaled), then presses keys. Keys: enter, escape, tab, space, left, right, up, down, y, n, alt+f4, separated by spaces (e.g. "tab enter"). Or pass action to close, minimize, restore, maximize or move a window without guessing where its buttons are. Reports whether the window closed. Windows only.',
@@ -63,9 +110,63 @@ const TOOLS = [
     inputSchema: { type: 'object', properties: {
       lines: { type: 'integer', minimum: 1, maximum: 5000, description: 'How many lines (default 200)' },
       filter: { type: 'string', description: 'Only lines containing this text (case-insensitive)' } }, additionalProperties: false } },
+  { name: 'security_alert_status', local: 'security', timeout: 12000,
+    description: 'Bounded read-only Norton alert observation for an explicitly identified current harness build artifact. Records only matching accessible alert text locally; sandbox notices continue, confirmed matching blocks pause this artifact. Unavailable inspection is reported, never bypassed. No screenshots, clicks, settings changes or background service.',
+    inputSchema: { type: 'object', properties: {
+      ...securitySchema.properties,
+      command: { type: 'string', pattern: '^[A-Za-z0-9_.:-]{1,128}$', description: 'Metadata name of the current authorized command, without arguments.' },
+      observe_ms: { type: 'integer', minimum: 0, maximum: 10000, description: 'Bounded observation window, default one snapshot.' },
+    }, required: ['artifact_path'], additionalProperties: false } },
 ];
+// Opt-in correlation accompanies this authorized call only; it is never forwarded to the editor.
+for (const tool of TOOLS) if (!tool.local) tool.inputSchema = { ...tool.inputSchema,
+  properties: { ...tool.inputSchema.properties, security_context: securitySchema } };
 
-function callUnreal(type, params, timeoutMs) {
+function securityContext(args, command) {
+  const supplied = args || {};
+  if (supplied.artifact_sha256 !== undefined && !/^[a-fA-F0-9]{64}$/.test(supplied.artifact_sha256)) {
+    throw new TypeError('Artifact SHA256 must be 64 hexadecimal characters');
+  }
+  const result = contextMetadata({ command_id: supplied.command_id || randomUUID(),
+    command, artifact_path: supplied.artifact_path, artifact_sha256: supplied.artifact_sha256 });
+  if (!result.artifact) throw new TypeError('An explicit absolute build artifact path is required');
+  // Validate canonical Windows path/hash/identifiers without reading or executing the artifact.
+  securityHold.check(result);
+  return result;
+}
+function checkSecurityHold(context) {
+  const held = securityHold.check(context);
+  if (held) throw new SecurityAlertError(held);
+}
+function securityFailure(error) {
+  return { isError: true, content: [{ type: 'text', text: JSON.stringify({
+    state: error.state, code: error.code, dispatched: !!error.dispatched,
+    outcome_uncertain: !!error.outcome_uncertain, retry_safe: false, details: error.details,
+    next: 'Inspect the matching build result with its owner. Keep protection unchanged; do not retry a denied artifact or alter it to bypass a block. Independent work can continue.',
+  }) }] };
+}
+async function inspectSecurityAlert({ signal, context, sinceUtc }) {
+  if (process.platform !== 'win32' || STANDIN) return Promise.resolve({ available: false,
+    reason: STANDIN ? 'explicit_standin' : 'unsupported_platform', windows: [] });
+  const windowSnapshot = await new Promise(resolve => {
+    // No ExecutionPolicy override, elevation, desktop capture, injection or Norton input.
+    const args = ['-NoProfile', '-File', path.join(__dirname, 'security-alert-observer.ps1'),
+      '-ArtifactPath', context.artifact.path];
+    execFile('powershell.exe', args, { timeout: 1800, signal, windowsHide: true, maxBuffer: 65536 }, (error, stdout) => {
+      if (error) return resolve({ available: false, reason: 'inspection_unavailable', windows: [] });
+      try { resolve(JSON.parse(String(stdout || '').trim().split(/\r?\n/).pop())); }
+      catch (_) { resolve({ available: false, reason: 'inspection_unavailable', windows: [] }); }
+    });
+  });
+  if (signal?.aborted) return { available: false, reason: 'inspection_aborted', windows: [] };
+  // Fixed, bounded log fallback stays within this authorized command's artifact/time scope.
+  // Never read arbitrary history databases, locked UI logs or unrelated filenames.
+  const history = securityLog.inspect({ context, sinceUtc, signal });
+  return { ...windowSnapshot, history_source: history.history_source, history: history.history,
+    history_available: history.available, history_reason: history.reason };
+}
+
+function callUnreal(type, params, timeoutMs, signal, expectedPid, expectedStartTime) {
   return new Promise((resolve, reject) => {
     const sock = net.createConnection({ host: HOST, port: PORT });
     const chunks = [];
@@ -74,11 +175,31 @@ function callUnreal(type, params, timeoutMs) {
       if (settled) return;
       settled = true;
       clearTimeout(timer);
+      if (signal) signal.removeEventListener('abort', abort);
       sock.destroy();
       err ? reject(err) : resolve(val);
     };
+    const abort = () => finish(signal.reason instanceof Error ? signal.reason : new Error('Editor health stopped the call; started work may still finish.'));
     const timer = setTimeout(() => finish(new Error(`Unreal did not answer within ${Math.round(timeoutMs / 1000)}s. It may be compiling shaders or loading, or a dialog is waiting: call editor_windows to see it and window_input to answer it.`)), timeoutMs);
-    sock.on('connect', () => sock.write(JSON.stringify({ id: 1, type, params: Object.assign({ bridge_timeout: timeoutMs / 1000 }, params || {}) }) + '\n'));
+    if (signal) {
+      signal.addEventListener('abort', abort, { once: true });
+      if (signal.aborted) { abort(); return; }
+    }
+    sock.on('connect', async () => {
+      try {
+        if (process.platform === 'win32' && LOCAL_TARGET && !STANDIN) {
+          checkRecoveryHold();
+          const snapshot = await runWindows('list', { max_images: 0 }, Math.min(5000, timeoutMs), signal);
+          if (signal && signal.aborted) { abort(); return; }
+          const health = classify(snapshot, expectedPid, expectedStartTime);
+          if (requiresHold(health.state)) recordRecovery(health, snapshot);
+          if (health.state !== 'available') throw new EditorHealthError(health.state, health.details);
+          checkRecoveryHold();
+        }
+        if (settled) return;
+        sock.write(JSON.stringify({ id: 1, type, params: Object.assign({ bridge_timeout: timeoutMs / 1000 }, params || {}) }) + '\n');
+      } catch (e) { finish(e); }
+    });
     sock.on('data', (d) => {
       chunks.push(d);
       if (d.includes(10)) {
@@ -96,11 +217,12 @@ function callUnreal(type, params, timeoutMs) {
 }
 
 // The window harness: win.ps1 run by Windows PowerShell, outside the editor.
-function runWindows(op, args, timeoutMs) {
+function runWindows(op, args, timeoutMs, signal) {
   return new Promise((resolve) => {
     if (process.platform !== 'win32') return resolve({ ok: false, message: 'editor_windows and window_input work on Windows only' });
     const a = ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', path.join(__dirname, 'win.ps1'), '-Op', op];
     if (op === 'list' && args.max_images !== undefined) a.push('-MaxImages', String(args.max_images));
+    if (op === 'list' && args.diagnostics) a.push('-Diagnostics');
     if (op === 'input') {
       a.push('-Hwnd', String(args.hwnd));
       if (args.keys) a.push('-Keys', String(args.keys));
@@ -109,7 +231,7 @@ function runWindows(op, args, timeoutMs) {
       if (args.width) a.push('-W', String(args.width));
       if (args.height) a.push('-H', String(args.height));
     }
-    execFile('powershell.exe', a, { timeout: timeoutMs, maxBuffer: 64 * 1024 * 1024, windowsHide: true }, (err, stdout, stderr) => {
+    execFile('powershell.exe', a, { timeout: timeoutMs, signal, maxBuffer: 64 * 1024 * 1024, windowsHide: true }, (err, stdout, stderr) => {
       const line = String(stdout || '').trim().split(/\r?\n/).pop();
       try { resolve(JSON.parse(line)); } catch (e) {
         resolve({ ok: false, message: 'window harness failed: ' + ((err && err.message) || '') + ' ' + String(stderr || '').slice(0, 2000) });
@@ -118,34 +240,113 @@ function runWindows(op, args, timeoutMs) {
   });
 }
 
-// Dialog watcher. A modal dialog freezes the editor's game thread, and the bridge with it, so while a bridge
-// call is waiting this polls the editor's windows from outside (win.ps1) and cancels any modal it finds with
-// Escape. That is what unattended mode does inside the editor: dialogs are canceled, never waited on. Tool and
-// panel windows are left alone, and untitled windows are notifications, not modals. Every answer is reported
-// in the tool's reply. CLAUDE_UNREAL_AUTODIALOG=off turns the watcher off.
-const LEAVE_OPEN = /^(Message Log|Output Log|Content Browser|Content Drawer|Details|Outliner|World Settings|Project Settings|Editor Preferences|Plugins|Sequencer|Niagara|Material|Blueprint|Static Mesh|Landscape|Modeling|Session Frontend|Widget Reflector)\b/i;
-function startDialogWatcher(answered) {
-  if (process.platform !== 'win32' || String(process.env.CLAUDE_UNREAL_AUTODIALOG || '').toLowerCase() === 'off') return () => {};
-  let stopped = false, busy = false;
-  const tick = async () => {
-    if (stopped || busy) return;
-    busy = true;
+// Observe outside the game thread. No Escape, WM_CLOSE, recovery, or automatic retry.
+const LOCAL_TARGET = /^(127\.0\.0\.1|localhost|::1)$/i.test(HOST);
+const STANDIN = process.env.UNREAL_BRIDGE_TARGET === 'standin' && LOCAL_TARGET && PORT !== 9877;
+async function failureEvidence(error) {
+  let evidenceFolder;
+  const content = [{ type: 'text', text: JSON.stringify({
+    state: error.state || 'call_failed', code: error.code, message: error.message,
+    dispatched: !!error.dispatched, outcome_uncertain: !!error.outcome_uncertain,
+    retry_safe: false, details: error.details,
+    next: error.state === 'recovery_required'
+      ? 'Preserve autosaves and compare authoritative package versions with the asset owner. Resolve recovery and obtain a saved editor slot before a new operation.'
+      : 'Inspect diagnostics with the editor owner. Reconcile any dispatched operation before a new attempt; this harness does not restart or answer dialogs.'
+  }, null, 2) }];
+  if (process.platform === 'win32' && LOCAL_TARGET && !STANDIN) {
+    const snapshot = await runWindows('list', { max_images: 2, diagnostics: true }, 3000);
+    const currentHealth = classify(snapshot);
+    if (requiresHold(currentHealth.state)) recordRecovery(currentHealth, snapshot);
+    const record = { observed_at: new Date().toISOString(), state: error.state, code: error.code,
+      dispatched: !!error.dispatched, outcome_uncertain: !!error.outcome_uncertain,
+      details: error.details, current_health: currentHealth, snapshot };
+    let folder;
     try {
-      const r = await runWindows('list', { max_images: 0 }, 15000);
-      for (const w of (r && r.windows) || []) {
-        if (stopped || w.main || !w.title || LEAVE_OPEN.test(w.title)) continue;
-        const done = await runWindows('input', { hwnd: w.hwnd, keys: 'escape' }, 15000);
-        answered.push({ title: w.title, did: 'escape', closed: !!(done && done.ok && !done.window_still_open) });
+      folder = path.join(process.env.UNREAL_DIAGNOSTICS_DIR || path.join(os.tmpdir(), 'claude-unreal-evidence'), randomUUID());
+      fs.mkdirSync(folder, { recursive: true });
+      evidenceFolder = folder;
+    } catch (e) { content.push({ type: 'text', text: 'Evidence directory unavailable: ' + e.message }); }
+    for (const window of snapshot.windows || []) {
+      if (window.png) {
+        if (folder) {
+          try {
+            const bytes = Buffer.from(window.png, 'base64');
+            if (bytes.length <= 8 * 1024 * 1024) fs.writeFileSync(path.join(folder, `window-${window.hwnd}.png`), bytes);
+          } catch (e) { content.push({ type: 'text', text: 'Screenshot archive unavailable: ' + e.message }); }
+        }
+        content.push({ type: 'text', text: `Diagnostic window ${window.hwnd}: ${window.title}` });
+        // Crash-report images can contain account identifiers: preserve locally, never forward automatically.
+        if (!/CrashReportClient|Crash Reporter/i.test(`${window.process} ${window.title}`)) {
+          content.push({ type: 'image', data: window.png, mimeType: 'image/png' });
+        }
+        delete window.png;
       }
-    } catch (e) { /* the watcher must never break the call it guards */ }
-    busy = false;
-  };
-  const first = setTimeout(() => { tick(); }, 2500);   // most calls finish before any dialog could matter
-  const every = setInterval(tick, 2000);
-  return () => { stopped = true; clearTimeout(first); clearInterval(every); };
+    }
+    if (folder) {
+      try {
+        fs.writeFileSync(path.join(folder, 'health.json'), JSON.stringify(record, null, 2));
+        content.push({ type: 'text', text: 'Diagnostics preserved: ' + folder });
+      } catch (e) { content.push({ type: 'text', text: 'Health archive unavailable: ' + e.message }); }
+    }
+    content.push({ type: 'text', text: JSON.stringify({ diagnostic_snapshot: snapshot }) });
+  }
+  // Optional, explicitly configured project log; read only its final 16 KiB.
+  if (process.env.UNREAL_PROJECT_LOG) {
+    let fd;
+    try {
+      fd = fs.openSync(process.env.UNREAL_PROJECT_LOG, 'r');
+      const size = fs.fstatSync(fd).size, bytes = Math.min(size, 16384), buffer = Buffer.alloc(bytes);
+      fs.readSync(fd, buffer, 0, bytes, Math.max(0, size - bytes));
+      if (evidenceFolder) fs.writeFileSync(path.join(evidenceFolder, 'project-log.txt'), buffer);
+      const tail = buffer.toString('utf8').replace(/((?:Epic)?AccountId|LoginId|MachineId)(\s*[:=]\s*)[^\s<>]+/gi, '$1$2[redacted]');
+      content.push({ type: 'text', text: JSON.stringify({ project_log: process.env.UNREAL_PROJECT_LOG, tail }) });
+    } catch (e) { content.push({ type: 'text', text: 'Project log unavailable: ' + e.message }); }
+    finally { if (fd !== undefined) fs.closeSync(fd); }
+  }
+  return content;
 }
 
 async function runLocal(tool, args) {
+  if (tool.local === 'security') {
+    const context = securityContext(args, args?.command || 'security_alert_status');
+    try {
+      checkSecurityHold(context);
+      if (process.platform !== 'win32' || STANDIN) return { content: [{ type: 'text', text: JSON.stringify({
+        state: 'unavailable', reason: STANDIN ? 'explicit_standin' : 'unsupported_platform', context,
+      }) }] };
+      const observeMs = args?.observe_ms ?? 0;
+      if (!Number.isInteger(observeMs) || observeMs < 0 || observeMs > 10000) throw new TypeError('observe_ms must be 0..10000');
+      if (!observeMs) await securityObserver.check({ context, timeoutMs: 2000 });
+      else await securityObserver.run({ context, timeoutMs: tool.timeout,
+        call: ({ signal }) => new Promise((resolve, reject) => {
+          const timer = setTimeout(finish, observeMs);
+          const abort = () => { clearTimeout(timer); signal.removeEventListener('abort', abort); reject(signal.reason); };
+          function finish() { signal.removeEventListener('abort', abort); resolve(); }
+          signal.addEventListener('abort', abort, { once: true });
+          if (signal.aborted) abort();
+        }) });
+      return { content: [{ type: 'text', text: JSON.stringify({ observation: securityObserver.status(context),
+        scope: 'read_only_observation', external_command_state: 'not_controlled_by_status_tool' }) }] };
+    } catch (error) {
+      if (error instanceof SecurityAlertError) return securityFailure(error);
+      return { isError: true, content: [{ type: 'text', text: JSON.stringify({
+        state: 'unavailable', reason: 'bounded_observation_unavailable', retry_safe: false,
+      }) }] };
+    }
+  }
+  if (STANDIN) return { isError: true, content: [{ type: 'text', text: 'Native windows are unavailable for the explicit stand-in target.' }] };
+  if (tool.local === 'input') {
+    try {
+      checkRecoveryHold();
+      const snapshot = await runWindows('list', { max_images: 0 }, 5000);
+      const selectedPid = process.env.UNREAL_EDITOR_PID ? Number(process.env.UNREAL_EDITOR_PID) : undefined;
+      const health = classify(snapshot, selectedPid);
+      if (requiresHold(health.state)) recordRecovery(health, snapshot);
+      if (health.state !== 'available') throw new EditorHealthError(health.state, health.details);
+      checkRecoveryHold();
+    }
+    catch (e) { return { isError: true, content: await failureEvidence(e) }; }
+  }
   const r = await runWindows(tool.local, args || {}, tool.timeout);
   if (!r || r.ok === false) return { isError: true, content: [{ type: 'text', text: (r && r.message) || 'window harness failed' }] };
   const content = [];
@@ -164,27 +365,53 @@ async function runTool(name, args) {
   const tool = TOOLS.find((t) => t.name === name);
   if (!tool) return { isError: true, content: [{ type: 'text', text: `Unknown tool: ${name}` }] };
   if (tool.local) return runLocal(tool, args);
+  const alertContext = args?.security_context ? securityContext(args.security_context, tool.name) : undefined;
+  args = { ...(args || {}) };
+  delete args.security_context;
   const command = tool.command || (args && args.command);
   const params = tool.command ? (args || {}) : ((args && args.params) || {});
   let reply;
-  const answered = [];
-  const stopWatch = startDialogWatcher(answered);
-  const note = () => answered.length ? [{ type: 'text', text: 'Dialogs the watcher canceled during this call: ' + JSON.stringify(answered) }] : [];
-  try { reply = await callUnreal(command, params, tool.timeout); } catch (e) {
-    stopWatch();
-    return { isError: true, content: [{ type: 'text', text: e.message }, ...note()] };
+  const healthChecked = process.platform === 'win32' && LOCAL_TARGET && !STANDIN;
+  const note = () => [];
+  try {
+    const execute = async ({ signal: observationSignal, remainingMs = tool.timeout } = {}) => {
+    if (healthChecked) {
+      const selectedPid = process.env.UNREAL_EDITOR_PID ? Number(process.env.UNREAL_EDITOR_PID) : undefined;
+      if (selectedPid !== undefined && (!Number.isInteger(selectedPid) || selectedPid <= 0)) throw new EditorHealthError('probe_failed', { reason: 'UNREAL_EDITOR_PID must be a positive integer' });
+      checkRecoveryHold();
+      return guardedCall({
+        timeoutMs: remainingMs, expectedPid: selectedPid, signal: observationSignal,
+        beforeDispatch: checkRecoveryHold,
+        onEvidence: (health) => {
+          if (requiresHold(health.state)) recordRecovery(health);
+        },
+        probe: ({ signal }) => runWindows('list', { max_images: 0 }, 5000, signal),
+        call: ({ signal, remainingMs, expectedPid, expectedStartTime }) => callUnreal(command, params, remainingMs, signal, expectedPid, expectedStartTime),
+      });
+    } else return callUnreal(command, params, remainingMs, observationSignal);
+    };
+    if (alertContext) {
+      checkSecurityHold(alertContext);
+      reply = await securityObserver.run({ context: alertContext, timeoutMs: tool.timeout, call: execute });
+    } else reply = await execute();
+  } catch (e) {
+    if (e instanceof SecurityAlertError) return securityFailure(e);
+    if (requiresHold(e.state)) recordRecovery(e);
+    return { isError: true, content: await failureEvidence(e) };
   }
-  stopWatch();
   if (!reply || reply.status !== 'ok') {
     const tb = reply && reply.traceback ? '\n\n' + reply.traceback : '';
     return { isError: true, content: [{ type: 'text', text: ((reply && reply.message) || 'Unreal reported an error') + tb }, ...note()] };
   }
-  const result = reply.result || {};
-  if (typeof result.image_png_base64 === 'string') {
+  const result = reply.result === undefined ? {} : reply.result;
+  const healthMeta = { ...(!healthChecked ? { editor_health: { verified: false,
+    reason: STANDIN ? 'explicit_standin' : 'unsupported_target' } } : {}),
+    ...(alertContext ? { security_observation: securityObserver.status(alertContext) } : {}) };
+  if (result && typeof result.image_png_base64 === 'string') {
     const { image_png_base64, ...meta } = result;
-    return { content: [{ type: 'image', data: image_png_base64, mimeType: 'image/png' }, { type: 'text', text: JSON.stringify(meta, null, 2) }, ...note()] };
+    return { content: [{ type: 'image', data: image_png_base64, mimeType: 'image/png' }, { type: 'text', text: JSON.stringify(meta, null, 2) }, ...note()], _meta: healthMeta };
   }
-  return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }, ...note()] };
+  return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }, ...note()], _meta: healthMeta };
 }
 
 function send(msg) { process.stdout.write(JSON.stringify(msg) + '\n'); }
@@ -200,7 +427,7 @@ async function handle(msg) {
           protocolVersion: SUPPORTED.includes(asked) ? asked : SUPPORTED[0],
           capabilities: { tools: {} },
           serverInfo: SERVER_INFO,
-          instructions: 'Operates the user\'s open Unreal Editor. If a call times out, a dialog is probably waiting: editor_windows shows it, window_input answers it. Call unreal_status first; inspect with get_level_info / get_actor_info; do anything with execute_python (the full unreal API); check work with viewport_screenshot; play/stop for Play In Editor; save to keep changes. list_commands shows project add-ons; run_command calls them.',
+          instructions: 'Operates the user\'s open Unreal Editor. Local Windows calls check process/modal health before dispatch and while waiting. Restore Packages blocks work pending owner recovery; unknown dialogs and crashes stop with diagnostics. No automatic clicks, restart, or retry. Started work can still finish after the transport stops: reconcile it before another attempt. Call unreal_status first; editor_windows provides read-only diagnostics. Opt-in security_context correlates a current authorized build artifact with bounded Norton window/log observation; security_alert_status is a read-only peek. Informational sandbox notices continue, confirmed artifact blocks pause only that artifact, and unavailable inspection never means verified absence. No security settings or background monitoring are changed. Obtain the editor owner\'s saved exclusive slot before mutations.',
         } });
       }
       case 'ping': return send({ jsonrpc: '2.0', id, result: {} });

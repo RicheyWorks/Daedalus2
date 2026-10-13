@@ -1,11 +1,11 @@
 # SPDX-License-Identifier: MIT
-# Answers the Unreal Editor's startup dialogs so nobody has to click them.
+# Observes Unreal startup blockers without choosing recovery, rebuild, or dismissal actions.
 #
 # Runs beside the editor (setup-unreal.ps1 -Open starts it) for up to -Minutes, or until the Claude Unreal Bridge
-# answers on 127.0.0.1:9877 and stays quiet for a while. Each known dialog gets the answer a person would give:
-#   "Missing <Project> Modules ... rebuild them now?"   Yes (Enter: the default button)
-#   "Restore Packages"                                  skip restoring (Escape)
-#   "Error" ("<Project> could not be compiled")         OK (Enter), logged as a build failure to look at
+# answers on 127.0.0.1:9877 and stays quiet for a while. Known blockers are logged and exit with code 2:
+#   "Missing <Project> Modules"                        module_rebuild_required
+#   "Restore Packages"                                  recovery_required (preserve/compare autosaves)
+#   "Error"                                              modal_blocked (inspect its contents)
 # Unknown dialogs are logged, not answered. Norton windows are never answered either: they are noted in
 # %TEMP%\daedalus-norton.log (title and time) so Claude can tell you one is waiting and what it is about. What worked live (UE 5.8.3, Windows 11): bring the dialog to the front
 # and press the real Enter key. Posted WM_COMMAND and UI Automation did not reach these dialogs.
@@ -21,10 +21,6 @@ public static class DlgWatch {
     [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr h);
     [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr h, out uint pid);
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern int GetWindowText(IntPtr h, StringBuilder s, int n);
-    [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr h);
-    [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
-    [DllImport("user32.dll")] public static extern bool IsWindow(IntPtr h);
-    [DllImport("user32.dll")] public static extern void keybd_event(byte vk, byte scan, uint f, UIntPtr e);
     public static List<KeyValuePair<IntPtr, string>> Titled(HashSet<uint> pids) {
         var list = new List<KeyValuePair<IntPtr, string>>();
         EnumWindows((h, l) => {
@@ -37,26 +33,21 @@ public static class DlgWatch {
         }, IntPtr.Zero);
         return list;
     }
-    public static bool Press(IntPtr h, byte vk) {
-        keybd_event(0x12, 0, 0, UIntPtr.Zero); keybd_event(0x12, 0, 2, UIntPtr.Zero);   // Alt tap: lets us take focus
-        SetForegroundWindow(h);
-        System.Threading.Thread.Sleep(250);
-        if (GetForegroundWindow() != h) return false;
-        keybd_event(vk, 0, 0, UIntPtr.Zero); keybd_event(vk, 0, 2, UIntPtr.Zero);
-        return true;
-    }
 }
 "@
 
 $Rules = @(
-    @{ Match = '^Missing .* Modules$'; Key = 0x0D; Say = 'rebuild: Yes' },
-    @{ Match = '^Restore Packages'; Key = 0x1B; Say = 'restore packages: skip' },
-    @{ Match = '^Error$'; Key = 0x0D; Say = 'error box: OK (if it says could not be compiled, the build failed: read the setup log)' }
+    @{ Match = '^Restore Packages'; State = 'recovery_required' },
+    @{ Match = '^Missing .* Modules$'; State = 'module_rebuild_required' },
+    @{ Match = '^Error$'; State = 'modal_blocked' }
 )
 function Note($m) { "$(Get-Date -Format s) $m" | Out-File -FilePath $Log -Append -Encoding utf8 }
 
 function BridgeUp {
-    try { $c = New-Object Net.Sockets.TcpClient; $c.Connect("127.0.0.1", 9877); $c.Close(); return $true } catch { return $false }
+    $client = New-Object Net.Sockets.TcpClient
+    try { return ($client.ConnectAsync("127.0.0.1", 9877).Wait(250) -and $client.Connected) }
+    catch { return $false }
+    finally { $client.Dispose() }
 }
 
 Note "watching for $Minutes min"
@@ -70,9 +61,8 @@ while ((Get-Date) -lt $end) {
         foreach ($w in [DlgWatch]::Titled($pids)) {
             $rule = $Rules | Where-Object { $w.Value -match $_.Match } | Select-Object -First 1
             if ($rule) {
-                $ok = [DlgWatch]::Press($w.Key, [byte]$rule.Key)
-                Start-Sleep -Milliseconds 800
-                Note ("'{0}' -> {1} (pressed={2}, closed={3})" -f $w.Value, $rule.Say, $ok, -not [DlgWatch]::IsWindow($w.Key))
+                Note ("BLOCKED state={0} hwnd={1} title='{2}' action=none; owner review required" -f $rule.State, [long]$w.Key, $w.Value)
+                exit 2
             } elseif (-not $seen.ContainsKey($w.Value) -and $w.Value -notmatch 'Unreal Editor|^Unreal Engine$') {
                 $seen[$w.Value] = $true
                 Note "left alone: '$($w.Value)'"
@@ -92,8 +82,8 @@ while ((Get-Date) -lt $end) {
         }
     }
     if (BridgeUp) {
-        if (-not $upSince) { $upSince = Get-Date; Note "bridge is up" }
-        elseif (((Get-Date) - $upSince).TotalSeconds -gt 60) { Note "editor ready; done"; break }
+        if (-not $upSince) { $upSince = Get-Date; Note "bridge listener observed; editor readiness unverified" }
+        elseif (((Get-Date) - $upSince).TotalSeconds -gt 60) { Note "listener remained up; inspect health before dispatch"; break }
     }
     Start-Sleep -Milliseconds 700
 }
