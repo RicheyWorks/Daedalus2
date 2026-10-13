@@ -54,7 +54,7 @@ def sky_params():
     mpc = unreal.load_asset(path) if unreal.EditorAssetLibrary.does_asset_exist(path) else \
         unreal.AssetToolsHelpers.get_asset_tools().create_asset(MPC_NAME, TABLE_DIR, unreal.MaterialParameterCollection,
                                                                unreal.MaterialParameterCollectionFactoryNew())
-    have = {p.parameter_name for p in mpc.get_editor_property("scalar_parameters")}
+    have = {str(p.get_editor_property("parameter_name")) for p in mpc.get_editor_property("scalar_parameters")}
     params = list(mpc.get_editor_property("scalar_parameters"))
     try:
         for n in MPC_SCALARS:
