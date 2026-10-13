@@ -961,15 +961,18 @@ def scenario_shiny(p):
     def lights(a):
         return a.get_components_by_class(unreal.PointLightComponent)
 
-    s0 = [c.get_editor_property("relative_location") for c in sparks(shiny)]
+    def where(a):   # plain tuples: a Vector from get_editor_property can be a live view of the component's value
+        return [(v.x, v.y, v.z) for v in (c.get_editor_property("relative_location") for c in sparks(a))]
+
+    s0 = where(shiny)
     t0 = unreal.GameplayStatics.get_time_seconds(w)
     for _ in range(600):   # until a second of game time has passed (Play may run fast or slow)
         if unreal.GameplayStatics.get_time_seconds(w) - t0 >= 1.0:
             break
         yield
     t1 = unreal.GameplayStatics.get_time_seconds(w)
-    s1 = [c.get_editor_property("relative_location") for c in sparks(shiny)]
-    dists = [(a - b).length() for a, b in zip(s0, s1)]
+    s1 = where(shiny)
+    dists = [math.sqrt(sum((p - q) ** 2 for p, q in zip(a, b))) for a, b in zip(s0, s1)]
     moved = bool(dists) and min(dists) > 5
     cap = os.path.join(unreal.Paths.project_saved_dir(), "Daedalus", "shiny.png")
     return {"checks": [
