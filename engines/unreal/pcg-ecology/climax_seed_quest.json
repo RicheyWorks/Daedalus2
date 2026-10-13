@@ -177,6 +177,27 @@
     "Prop_Dress_PYT_FireLookout"
    ],
    "sign": "ADV_Chapter8_Sign"
+  },
+  {
+   "id": "keystone_beaver",
+   "title": "Keystone Beaver",
+   "text": "Beavers are back on the stream. A dam floods the cells around it into wetland: a new habitat for reeds, frogs and herbs. Too many dams, or one beside the old oaks, and the great trees drown. Place exactly the right dams.",
+   "goals": [
+    {
+     "type": "place",
+     "asset": "Prop_Water_PYT_BeaverDam",
+     "n": 2
+    },
+    {
+     "type": "beaver_dams",
+     "min_h": 1.55,
+     "min_old": 30
+    }
+   ],
+   "reward": [
+    "Prop_Live_PYT_BeaverLodge"
+   ],
+   "sign": "ADV_Chapter9_Sign"
   }
  ]
 }

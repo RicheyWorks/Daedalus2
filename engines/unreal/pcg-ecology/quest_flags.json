@@ -15,5 +15,15 @@
   "Oak"
  ],
  "burn_rate": 0.03,
- "burn_cells": []
+ "burn_cells": [],
+ "dam_cells": [
+  [
+   7,
+   6
+  ],
+  [
+   10,
+   6
+  ]
+ ]
 }

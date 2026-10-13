@@ -16,7 +16,10 @@ def xy(a): L = a.get_actor_location(); return (L.x - ORIGIN[0], L.y - ORIGIN[1])
 live = [xy(a) for a in acts if a.actor_has_tag("PYT_Livestock") and "Bee" not in a.get_actor_label()]
 water = [xy(a) for a in acts if a.actor_has_tag("Water_Drinkable")]
 flags["oaks"] = flags.get("Prop_Tree_PYT_Oak", 0) + flags.get("Prop_Tree_PYT_GreatOak", 0)
+dams = [quest_hook.cell(*xy(a)) for a in acts if a.static_mesh_component.static_mesh and a.static_mesh_component.static_mesh.get_name().startswith("Prop_Water_PYT_BeaverDam")]
+if dams: flags["dam_cells"] = dams   # live dams override the save
 I = quest_hook.build_island(live, water, save)
 triggers = sorted(a.get_actor_label() for a in eas.get_all_level_actors() if a.actor_has_tag("PYT_Quest"))
 result = {"progress": SD.quest_progress(I, flags), "grazed_cells": len(I.grazed), "dug_cells": len(I.water), "stages": I.stages(),
-          "oaks": flags["oaks"], "hives": flags.get("Prop_Live_PYT_Beehive", 0), "triggers": len(triggers)}
+          "oaks": flags["oaks"], "hives": flags.get("Prop_Live_PYT_Beehive", 0), "triggers": len(triggers), "dam_cells": flags.get("dam_cells")}
+

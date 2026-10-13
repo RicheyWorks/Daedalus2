@@ -56,6 +56,8 @@ def quest_progress(island, flags):
             elif t == "colonised": ok &= len(flags.get("islet_species", ())) >= g["n"] and (not g.get("need_oak") or "Oak" in flags.get("islet_species", ()))
             elif t == "fire_rate":
                 import fire_keeper; ok &= fire_keeper.fire_regime(flags.get("burn_rate", 0.0), seed=flags.get("seed", 0)) >= g["min_h"]
+            elif t == "beaver_dams":
+                import keystone_beaver as KB; o = KB.outcome([tuple(d) for d in flags.get("dam_cells", ())]); ok &= o["H"] >= g["min_h"] and o["old_growth"] >= g["min_old"]
             elif t == "choice": ok &= flags.get("bramble_choice") in g["options"]
         done.append((ch["id"], ok))
         if not ok: break   # chapters unlock in order

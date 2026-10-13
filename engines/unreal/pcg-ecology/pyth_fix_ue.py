@@ -97,11 +97,17 @@ put("Prop_Quest_PYT_FireAltar_V1", -1800, -4200); put("Prop_Dress_PYT_FireLookou
 for i in range(4): put("Prop_Dress_PYT_FirebreakStones_V%d" % (1 + i), -4500 + i * 450, -2200, 0)
 for i in range(3): put("Prop_Ground_PYT_BurnScar_V%d" % (1 + i), -3600 + i * 1100, -4000 + R.uniform(-300, 300), R.uniform(0, 360))
 put("Tool_PYT_FireBeater_V1", -1500, -3900, 20); put("Prop_Craft_PYT_AshBucket_V1", -2100, -3950)
+# chapter 9 "Keystone Beaver": second dam downstream (sim cells (7,6) + (10,6) = the passing layout), lodge, reed beds, flood markers, frogs
+put("Prop_Water_PYT_BeaverDam_V2", 4500, 500, 90); put("Prop_Live_PYT_BeaverLodge_V1", 3900, 900, 30)
+for i in range(3): put("Prop_Ground_PYT_ReedBed_V%d" % (1 + i), 1400 + i * 1500, 900, R.uniform(0, 360))
+for i in range(2): put("Prop_Dress_PYT_FloodMarker_V%d" % (1 + i), 1100 + i * 3400, -400)
+for i in range(4): put("Prop_Live_PYT_Frog_V%d" % (1 + i), 1600 + i * 900, 1200 + R.uniform(-150, 150), R.uniform(0, 360))
+put("Prop_Food_PYT_WillowBark_V1", 3700, 1300)
 # prototype quest hook: one hidden TriggerBox per chapter (tags PYT_Quest + Quest_<id>) that gameplay/Blueprint can bind to
 for a in eas.get_all_level_actors():
     if a.actor_has_tag("PYT_Quest"): eas.destroy_actor(a)
 QPOS = {"ash_field": (-3200, -3200), "meadow_keepers": (-1700, -900), "bramble_wall": (3200, -3200), "pine_shield": (3200, 3200),
-        "riverbank": (0, 0), "climax": (-3200, 3200), "seed_rain": (5300, -1500), "fire_keeper": (-1800, -4200)}
+        "riverbank": (0, 0), "climax": (-3200, 3200), "seed_rain": (5300, -1500), "fire_keeper": (-1800, -4200), "keystone_beaver": (3900, 900)}
 for qid, (x, y) in QPOS.items():
     tb = eas.spawn_actor_from_class(unreal.TriggerBox, ORIGIN + unreal.Vector(x, y, gz(x, y) + 150), unreal.Rotator())
     tb.set_actor_scale3d(unreal.Vector(4, 4, 3)); tb.tags = [TAG, "PYT_Quest", "Quest_" + qid]

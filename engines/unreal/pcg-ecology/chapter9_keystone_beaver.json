@@ -1,0 +1,28 @@
+{
+ "chapter": "keystone_beaver",
+ "sign": {
+  "actor": "ADV_Chapter9_Sign",
+  "text": "KEYSTONE BEAVER. One dam makes a marsh. Three make a lake. Choose."
+ },
+ "dialogue": [
+  {
+   "who": "Old Forester",
+   "at": "Prop_Live_PYT_BeaverLodge",
+   "line": "Beavers are engineers. They will build where you let them."
+  },
+  {
+   "who": "Old Forester",
+   "at": "Prop_Water_PYT_BeaverDam",
+   "line": "Keep the water off the oak roots. Two hundred years of trees, one wet spring."
+  },
+  {
+   "who": "Reed Cutter",
+   "at": "Prop_Ground_PYT_ReedBed",
+   "line": "Wetland is its own world: reeds, sedge, frogs. The island needs it too."
+  }
+ ],
+ "fail_hint": {
+  "drowned": "The old oaks are standing in water. Move the dam downstream.",
+  "too_simple": "Still only dry land. Let the beavers build."
+ }
+}

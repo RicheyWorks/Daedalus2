@@ -49,3 +49,6 @@ The Great Oak drops one Climax Seed, but acorns only travel ~0.6 km and the bare
 
 ## Chapter 8 - Fire Keeper
 Intermediate-disturbance hypothesis as a lever: tiles burn with rate p per year (fire_keeper.py). No fire -> all oak (H=0); yearly fire -> all grass; H peaks near p=0.02-0.04 (1.31 at 0.02 vs 0.38 at 0.32). Goal: place the Fire Altar and set a burn rate whose mosaic H >= 1.2. 42 props (pyth_items5.py; 756 glbs). UE hook: hidden TriggerBox per chapter (PYT_QuestTrigger_<id>, tags PYT_Quest + Quest_<id>) and read-only pyth_quest_ue.py that derives quest flags from placed actors.
+
+## Chapter 9 - Keystone Beaver
+Beaver dams flood stream cells into wetland (keystone_beaver.py). One dam adds a habitat (H 1.35 -> 1.51); two dams placed downstream of the oaks reach H 1.56 with all 30 old-growth cells; dams by the oaks drown them (30 -> 18), three dams over-flood. Goal: 2 dams, H >= 1.55, old growth >= 30. The UE quest hook reads live dam positions as sim cells. 30 props (pyth_items6.py). Tests: test_keystone_beaver 5/5, full 9-chapter playthrough in test_quest_hook.

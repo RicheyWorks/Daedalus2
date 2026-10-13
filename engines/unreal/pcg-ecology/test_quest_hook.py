@@ -13,7 +13,8 @@ def test_live_island_unlocks_past_chapter2():
     I = build_island(sheep, water)
     f = {"teas": ["ladder", "climax"], "PYT_Livestock": 18, "Prop_Live_PYT_Beehive": 4, "bramble_choice": "goats", "survived": ["windthrow"],
          "oaks": 21, "Water_Drinkable": 19, "Prop_Live_PYT_JayFeeder": 2, "Prop_Veh_PYT_ArkRaft": 1, "islet_species": ["Grass", "Pine", "Willow", "Oak"],
-         "Prop_Quest_PYT_FireAltar": 1, "burn_rate": 0.03}
+         "Prop_Quest_PYT_FireAltar": 1, "burn_rate": 0.03, "Prop_Water_PYT_BeaverDam": 2, "dam_cells": [[7, 6], [10, 6]]}
     done = SD.quest_progress(I, f)
     assert len(I.grazed) >= 16 and len(I.water) >= 6
-    assert [c for c, ok in done if ok] == ["ash_field", "meadow_keepers", "bramble_wall", "pine_shield", "riverbank", "climax", "seed_rain", "fire_keeper"]
+    assert [c for c, ok in done if ok] == ["ash_field", "meadow_keepers", "bramble_wall", "pine_shield", "riverbank", "climax", "seed_rain", "fire_keeper", "keystone_beaver"]
+
