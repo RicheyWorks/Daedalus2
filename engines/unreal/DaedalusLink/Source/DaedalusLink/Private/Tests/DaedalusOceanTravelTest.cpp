@@ -3,6 +3,7 @@
 #include "Misc/AutomationTest.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
+#include "Components/BoxComponent.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusOceanEligibilityTest,
     "Daedalus.Ocean.HostEligibility",
@@ -26,6 +27,7 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
     FDaedalusOceanDock Home;
     Home.Id=TEXT("home"); Home.Realm=TEXT("Portal Realm"); Home.ArrivalAnchor=TEXT("home_pier");
     Home.BoardingRadiusCm=500;
+    Home.ExitLocation=FVector(0,300,0);
     auto Sea=Home; Sea.Id=TEXT("sea"); Sea.Realm=TEXT("Ocean Realm"); Sea.ArrivalAnchor=TEXT("sea_pier");
     FDaedalusOceanConnection Connection;
     Connection.DepartureId=Home.Id; Connection.DestinationId=Sea.Id;
@@ -58,7 +60,8 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
     TestTrue(TEXT("Failed reload preserves route"),Resolve(Player));
     Player->UnPossess();
     TestFalse(TEXT("Unpossessed vessel refused"),Resolve(Player));
-    auto* Avatar = World->SpawnActor<ADaedalusOceanVessel>();
+    auto* Avatar = World->SpawnActor<ADaedalusOceanVessel>(FVector(0,300,0),FRotator::ZeroRotator);
+    if (!TestNotNull(TEXT("Avatar spawn"),Avatar)) {World->DestroyWorld(false);return false;}
     Player->Possess(Avatar);
     Avatar->SetActorLocation(FVector(501,0,0));
     TestFalse(TEXT("Remote avatar cannot board"),Component->BoardAtDock(Player,Vessel,Home.Id));
@@ -66,6 +69,7 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
     Avatar->SetActorLocation(FVector::ZeroVector);
     TestFalse(TEXT("Unknown dock cannot board"),Component->BoardAtDock(Player,Vessel,TEXT("invented")));
     TestTrue(TEXT("Nearby player boards vessel"),Component->BoardAtDock(Player,Vessel,Home.Id));
+    TestTrue(TEXT("Boarded avatar hidden and nonblocking"),Avatar->IsHidden() && !Avatar->GetActorEnableCollision());
     TestTrue(TEXT("Boarded vessel can resolve route"),Resolve(Player));
     TestFalse(TEXT("Another controller cannot take occupied vessel"),Component->BoardAtDock(Stranger,Vessel,Home.Id));
     TestFalse(TEXT("Unknown exit dock refused"),Component->DisembarkAtDock(Player,Vessel,TEXT("invented")));
@@ -75,6 +79,7 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
     Vessel->SetActorLocation(FVector::ZeroVector);
     TestTrue(TEXT("Dock restores original avatar"),Component->DisembarkAtDock(Player,Vessel,Home.Id));
     TestTrue(TEXT("Original avatar controlled"),Player->GetPawn()==Avatar);
+    TestTrue(TEXT("Avatar visibility and collision restored"),!Avatar->IsHidden() && Avatar->GetActorEnableCollision());
     TestFalse(TEXT("Repeated disembark refused"),Component->DisembarkAtDock(Player,Vessel,Home.Id));
     TestTrue(TEXT("New boarding cycle allowed"),Component->BoardAtDock(Player,Vessel,Home.Id));
     Vessel->SetActorLocation(FVector::ZeroVector);
@@ -94,6 +99,19 @@ bool FDaedalusOceanEligibilityTest::RunTest(const FString& Parameters)
     const double StoppedDepth=Vessel->GetActorLocation().Z;
     Vessel->Tick(.1f);
     TestEqual(TEXT("Expired dive command stops away from depth boundary"),Vessel->GetActorLocation().Z,StoppedDepth);
+    AActor* Wall=World->SpawnActor<AActor>();
+    auto* Barrier=NewObject<UBoxComponent>(Wall);
+    Wall->AddInstanceComponent(Barrier);Wall->SetRootComponent(Barrier);
+    Barrier->SetBoxExtent(FVector(30,500,500));
+    Barrier->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    Barrier->SetCollisionObjectType(ECC_WorldStatic);
+    Barrier->SetCollisionResponseToAllChannels(ECR_Block);
+    Barrier->SetWorldLocation(FVector(400,0,0));Barrier->RegisterComponent();
+    Vessel->VesselType=EDaedalusOceanVessel::Boat;
+    Vessel->SetActorLocation(FVector::ZeroVector);Vessel->SetActorRotation(FRotator::ZeroRotator);
+    for (int i=0;i<30;++i) {Vessel->SetHelmInput(1,0,0);Vessel->Tick(.1f);}
+    TestTrue(TEXT("Hull advances toward barrier"),Vessel->GetActorLocation().X>10);
+    TestTrue(TEXT("Hull sweep stops before barrier"),Vessel->GetActorLocation().X<=191);
     World->DestroyWorld(false);
     return true;
 }

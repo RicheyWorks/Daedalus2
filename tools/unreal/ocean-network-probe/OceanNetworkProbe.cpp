@@ -59,6 +59,14 @@ void AOceanProbeGameMode::BeginPlay()
     Super::BeginPlay();
     GetWorld()->SpawnActor<APlayerStart>();
 }
+APawn* AOceanProbeGameMode::SpawnDefaultPawnAtTransform_Implementation(AController* Player, const FTransform& Transform)
+{
+    FActorSpawnParameters Spawn;
+    Spawn.Owner=Player;
+    Spawn.SpawnCollisionHandlingOverride=ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+    // Separate collision-enabled hulls; no spawn adjustment along the measured X axis.
+    return GetWorld()->SpawnActor<ADaedalusOceanVessel>(FVector(0,GetNumPlayers()*1200,25),FRotator::ZeroRotator,Spawn);
+}
 void AOceanProbeGameMode::Tick(float Dt)
 {
     Super::Tick(Dt); Elapsed+=Dt;

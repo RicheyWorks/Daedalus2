@@ -27,6 +27,7 @@ public:
     AOceanProbeGameMode();
     virtual void BeginPlay() override;
     virtual void Tick(float Dt) override;
+    virtual APawn* SpawnDefaultPawnAtTransform_Implementation(AController* Player, const FTransform& Transform) override;
 private:
     float Elapsed=0;
     float StillTime=0;

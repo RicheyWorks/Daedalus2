@@ -2,6 +2,7 @@
 #include "Engine/World.h"
 #include "GameFramework/Controller.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/BoxComponent.h"
 #include "Net/UnrealNetwork.h"
 
 namespace
@@ -22,7 +23,12 @@ ADaedalusOceanVessel::ADaedalusOceanVessel()
 {
     VesselMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VesselMesh"));
     VesselMesh->SetMobility(EComponentMobility::Movable);
-    SetRootComponent(VesselMesh);
+    HullCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("HullCollision"));
+    HullCollision->SetBoxExtent(FVector(180,80,70));
+    HullCollision->SetCollisionProfileName(TEXT("Pawn"));
+    SetRootComponent(HullCollision);
+    VesselMesh->SetupAttachment(HullCollision);
+    VesselMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     bReplicates = true;
     SetReplicateMovement(true);
     PrimaryActorTick.bCanEverTick = true;
@@ -151,7 +157,7 @@ bool UDaedalusOceanTravelComponent::BoardAtDock(AController* Player,
     if (!IsValid(Avatar) || Avatar == Vessel || Avatar->GetWorld() != GetWorld()
         || !Avatar->HasAuthority() || Avatar->GetController() != Player) return false;
     // Do not replace a live boarding session with another avatar or vessel.
-    if (const auto* Prior = BoardingAvatars.Find(Player); Prior && Prior->IsValid()) return false;
+    if (const auto* Prior = BoardingAvatars.Find(Player); Prior && Prior->Avatar.IsValid()) return false;
     if (Vessel->VesselType != EDaedalusOceanVessel::Boat
         && Vessel->VesselType != EDaedalusOceanVessel::Submarine) return false;
     const auto* Dock = ActiveDocks.FindByPredicate([&](const FDaedalusOceanDock& Candidate) {
@@ -167,7 +173,9 @@ bool UDaedalusOceanTravelComponent::BoardAtDock(AController* Player,
     }
     Player->Possess(Vessel);
     if (Player->GetPawn() != Vessel || Vessel->GetController() != Player) return false;
-    BoardingAvatars.Add(Player, Avatar);
+    BoardingAvatars.Add(Player, {Avatar, Avatar->GetActorEnableCollision(), Avatar->IsHidden()});
+    Avatar->SetActorEnableCollision(false);
+    Avatar->SetActorHiddenInGame(true);
     return true;
 }
 
@@ -179,7 +187,7 @@ bool UDaedalusOceanTravelComponent::DisembarkAtDock(AController* Player,
         || Vessel->GetWorld() != GetWorld() || Player->GetPawn() != Vessel
         || Vessel->GetController() != Player) return false;
     const auto* Original = BoardingAvatars.Find(Player);
-    APawn* Avatar = Original ? Original->Get() : nullptr;
+    APawn* Avatar = Original ? Original->Avatar.Get() : nullptr;
     if (!IsValid(Avatar) || Avatar == Vessel || !Avatar->HasAuthority()
         || Avatar->GetWorld() != GetWorld() || Avatar->GetController()) return false;
     const auto* Dock = ActiveDocks.FindByPredicate([&](const FDaedalusOceanDock& Candidate) {
@@ -190,9 +198,19 @@ bool UDaedalusOceanTravelComponent::DisembarkAtDock(AController* Player,
         || FVector::DistSquared(Position, Dock->BoardingLocation)
             > Dock->BoardingRadiusCm * Dock->BoardingRadiusCm) return false;
     // Collision-aware teleport refuses an obstructed exit before possession changes.
-    if (!Avatar->TeleportTo(Dock->ExitLocation, Avatar->GetActorRotation(), false, false)) return false;
+    Avatar->SetActorEnableCollision(Original->bCollision);
+    if (!Avatar->TeleportTo(Dock->ExitLocation, Avatar->GetActorRotation(), false, false))
+    {
+        Avatar->SetActorEnableCollision(false);
+        return false;
+    }
     Player->Possess(Avatar);
-    if (Player->GetPawn() != Avatar || Avatar->GetController() != Player) return false;
+    if (Player->GetPawn() != Avatar || Avatar->GetController() != Player)
+    {
+        Avatar->SetActorEnableCollision(false);
+        return false;
+    }
+    Avatar->SetActorHiddenInGame(Original->bHidden);
     BoardingAvatars.Remove(Player);
     return true;
 }

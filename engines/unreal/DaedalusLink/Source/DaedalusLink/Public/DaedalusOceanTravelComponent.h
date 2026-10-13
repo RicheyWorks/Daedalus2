@@ -6,6 +6,7 @@
 #include "DaedalusOceanTravelComponent.generated.h"
 
 class UStaticMeshComponent;
+class UBoxComponent;
 
 UENUM(BlueprintType, meta=(ScriptName="OceanVesselKind"))
 enum class EDaedalusOceanVessel : uint8 { Boat, Submarine };
@@ -26,6 +27,8 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean") float MaxDepthCm = 20000;
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean")
     TObjectPtr<UStaticMeshComponent> VesselMesh;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Daedalus|Ocean")
+    TObjectPtr<UBoxComponent> HullCollision;
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean")
     EDaedalusOceanVessel VesselType = EDaedalusOceanVessel::Boat;
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category="Daedalus|Ocean")
@@ -81,6 +84,12 @@ public:
 private:
     DaedalusOceanTravel::DockRegistry Registry;
     UPROPERTY() TArray<FDaedalusOceanDock> ActiveDocks;
-    TMap<TWeakObjectPtr<AController>, TWeakObjectPtr<APawn>> BoardingAvatars;
+    struct BoardingState
+    {
+        TWeakObjectPtr<APawn> Avatar;
+        bool bCollision = true;
+        bool bHidden = false;
+    };
+    TMap<TWeakObjectPtr<AController>, BoardingState> BoardingAvatars;
     bool IsHost() const;
 };

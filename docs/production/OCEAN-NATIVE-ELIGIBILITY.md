@@ -6,7 +6,7 @@ definitions on the authority host. Boarding positions are world-space centimetre
 radius must be finite and in (0, 10,000]. Invalid reloads preserve both prior route
 data and boarding positions. This API is not a client RPC.
 
-ADaedalusOceanVessel provides a static mesh root, replicated movement and server
+ADaedalusOceanVessel provides a box hull root with a static mesh child, replicated movement and server
 travel identity for possessed boat/submarine pawns. Assign the appropriate model
 and collision in the realm integration. A server-authoritative kinematic helm now
 accelerates forward/reverse motion, steers yaw and lets submarines dive/surface.
@@ -91,6 +91,21 @@ the boarding record and allows a new boarding cycle. Records are weak references
 the host retains the avatar and owns disconnect/destruction/recovery handling.
 This is same-world disembarkation. Cross-realm shore return still requires the
 realm loader and persistent player session, rather than a local teleport.
+
+## Hull and boarded-avatar collision
+
+Movement now sweeps a query/physics-enabled Pawn-profile box root rather than
+depending on collision baked into an assigned visual mesh. Default half extents
+are (180,80,70) cm; fit them to the realm's vessel model in its Blueprint. The mesh
+child has collision disabled to avoid duplicate body queries. This is a simple
+kinematic hull, not boat damage or rigid-body water simulation.
+
+Successful boarding records the avatar's prior collision and hidden state, then
+disables collision and hides it while the vessel is controlled. Successful exit
+restores those states. A refused collision-aware exit keeps the stored avatar
+nonblocking; the vessel remains possessed. Native automation verified this cycle
+and moved the hull against a WorldStatic box barrier: it advanced, then stopped
+before hull penetration. These checks are not rendered art/nav acceptance.
 
 ## Verification
 
