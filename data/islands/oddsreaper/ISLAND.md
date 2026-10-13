@@ -161,3 +161,7 @@ scene_capture_hero now optionally spawns island-only OR_TEMP_* DirectionalLight 
 half the warm daylight fill so we do not wash oddsreaper_storm to Clear. atmosphere_sun_light=False so the
 world sky/time is untouched. ALWAYS destroyed before any save. OR_TEMP_LIGHTS=0 disables. Headless:
 tools/islands/oddsreaper/test_temp_lights.py. Apply on next editor grant (with framed PIE SceneCapture).
+
+## Auto-CLAIM watcher (01:31 PT Oct 13, off-editor)
+
+Missed round-5 CLAIM window (no CLAIM by 01:23:26 after pythagoras HANDOFF; referee never posted an explicit @oddsreaper OPEN). Added `tools/islands/oddsreaper/or_autoclaim.py`: every-minute Scheduled Task `OddsReaperAutoClaim` reads `bot-team/link/log.jsonl`, matches referee `@oddsreaper ... OPEN` **or** a real HANDOFF act from ledger predecessor (`pythagoras`), posts ONE CLAIM per turn, expires 08:00 PT. Headless: `test_autoclaim.py`. Never touches Unreal. Framing + OR_TEMP storm lights still verified PASS.
