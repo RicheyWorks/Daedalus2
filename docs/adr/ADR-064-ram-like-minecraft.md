@@ -116,3 +116,8 @@ This was first filed as ADR-062, which blender-team had already taken for the BB
   that doesn't fit is skipped, never half-loaded, and a smaller farther one may still fit. Always islands load
   regardless. `daedalus.StreamRamBudgetMiB` (0 = off) turns it on in game; `islands.json` rows may carry `ram_kib`.
   stream_core_test 20/20; 10,000 islands still plan in ~1.4 ms (hash sets, not a scan per step).
+- **Chunk palette (rule 1, like a Minecraft chunk section):** `Chunk` stores a palette plus 0, 4 or 8 bits per cube.
+  Empty or solid chunks hold no per-cube array (~60 B instead of 4 KiB); terrain chunks with 16 or fewer kinds hold
+  2 KiB. Writes widen, `copy()`/load narrow. `occupied()` is O(1) now (it scanned 4,096 bytes on every remove).
+  Reads stay lock-free (final fields in the store). Cost: get ~3 ns instead of ~2. ChunkPaletteTest 6/6 checks
+  40 random edit runs against a dense model.
