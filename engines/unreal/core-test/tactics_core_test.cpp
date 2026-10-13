@@ -16,7 +16,7 @@ static const Order* Find(const Spec& S, const std::string& U)
 }
 static double Dist(const Vec& A, const Vec& B) { return std::sqrt((A.X - B.X) * (A.X - B.X) + (A.Y - B.Y) * (A.Y - B.Y)); }
 
-int main()
+int main(int argc, char** argv)
 {
 	// --- the format
 	const std::string Good = "DTO 1\nsquad orr-1 tick 42\norder foe-a FLANK LEFT 100 200 30 | player keeps to the ridge\n"
@@ -39,6 +39,8 @@ int main()
 		{"DTO 1\nsquad b@d tick 1\n", "bad squad id"}, {"DTO 1\nsquad s tick 1\nsquad t tick 2\n", "second squad"},
 		{"DTO 1\n", "no squad"}, {"DTO 1\nsquad s tick 1\n| only a reason\n", "only a reason"},
 		{"DTO 1\nsquad s tick 1\nfire everything\n", "unknown line"},
+		{"DTO 1\nsquad s tick 1\norder a HOLD - 0x10 0 0\n", "hex number"}, {"DTO 1\nsquad s tick 1\norder a HOLD - 1.5d 0 0\n", "Java suffix"},
+		{"DTO 1\nsquad s tick 1\norder a HOLD - inf 0 0\n", "inf"}, {"DTO 1\nsquad s tick 1\norder a HOLD - 1e 0 0\n", "bare exponent"},
 	};
 	int Refused = 0;
 	for (const Bad& B : Bads)
@@ -47,7 +49,7 @@ int main()
 		if (!X.Ok && !X.Error.empty() && X.Out.Orders.empty()) ++Refused;
 		else std::printf("  not refused: %s\n", B.Why);
 	}
-	Check("17 bad specs are each refused whole, with a reason", Refused == 17);
+	Check("21 bad specs are each refused whole, with a reason", Refused == 21);
 	std::string Big = "DTO 1\nsquad s tick 1\n";
 	for (int i = 0; i <= static_cast<int>(MaxOrders); ++i) Big += "order u" + std::to_string(i) + " HOLD - 0 0 0\n";
 	Check("more than MaxOrders is refused (bounded work)", !Parse(Big).Ok);
@@ -110,6 +112,41 @@ int main()
 	}
 	Check("300 units decide in well under one 60 fps frame (16.7 ms)", Worst < 16.7);
 
+	// --- the parity file for the Java port (VoxelIsle-style): 40 seeded squads, their decided specs, plus round-trips
+	if (argc > 2 && std::string(argv[1]) == "--write")
+	{
+		FILE* F = std::fopen(argv[2], "w");
+		std::fprintf(F, "# tactics_core_test.cpp --write: per case, the inputs then Write(Decide(...)) between 'spec' and 'end'\n");
+		std::mt19937 G(2026);
+		for (int Case = 0; Case < 40; ++Case)
+		{
+			std::uniform_real_distribution<double> Pos(-3000, 3000), Hgt(-400, 700), Hp(0, 60);
+			const int N = 1 + static_cast<int>(G() % 7);
+			const Vec Pl{std::round(Pos(G)) / 4, std::round(Pos(G)) / 4, std::round(Hgt(G)) / 2};   // quarter-cm points: exact ties
+			std::vector<Unit> Us;
+			for (int i = 0; i < N; ++i)
+				Us.push_back({"u" + std::to_string((Case * 7 + i * 3) % 10), {std::round(Pos(G)) / 4, std::round(Pos(G)) / 4, std::round(Hgt(G) / 4)},
+					std::round(Hp(G)), 60, (G() & 1) != 0});
+			// unique names
+			for (int i = 0; i < N; ++i) Us[i].Name += "-" + std::to_string(i);
+			if (Case % 5 == 0)
+				for (Unit& U : Us) U.At.X += 6000;   // out of range: everyone HOLDs
+			std::fprintf(F, "case %d player %.17g %.17g %.17g\n", Case, Pl.X, Pl.Y, Pl.Z);
+			for (const Unit& U : Us)
+				std::fprintf(F, "unit %s %.17g %.17g %.17g %.17g %.17g %d\n", U.Name.c_str(), U.At.X, U.At.Y, U.At.Z, U.Health, U.MaxHealth, U.SeesPlayer ? 1 : 0);
+			std::fprintf(F, "spec\n%send\n", Write(Decide("sq-" + std::to_string(Case), Case, Us, Pl)).c_str());
+		}
+		// every refusal, with its exact message (the Java port must refuse the same specs the same way)
+		for (const Bad& B : Bads)
+		{
+			std::string T = B.Text, E;
+			for (char C : T) E += C == '\n' ? std::string("\\n") : C == '\r' ? std::string("\\r") : std::string(1, C);
+			std::fprintf(F, "bad\t%s\t%s\n", E.c_str(), Parse(B.Text).Error.c_str());
+		}
+		std::fprintf(F, "good\t%s\n", [&] { std::string E; for (char C : Good) E += C == '\n' ? std::string("\\n") : C == '\r' ? std::string("\\r") : std::string(1, C); return E; }().c_str());
+		std::fclose(F);
+		std::printf("wrote %s\n", argv[2]);
+	}
 	std::printf("%d/%d\n", Passed, Total);
 	return Passed == Total ? 0 : 1;
 }
