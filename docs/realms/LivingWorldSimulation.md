@@ -232,11 +232,11 @@ exclusive writers, persistence/publication failures, lost acknowledgments, unava
 storage, bounded catch-up and clock reversal, Spring opt-in/restart wiring, HTTP/STOMP
 JSON contracts, and abrupt child-JVM termination followed by restart.
 
-Checkstyle is clean. Core coverage and SpotBugs pass; two narrowly scoped immutable
+Initial 2026-10-12 verification: Checkstyle is clean. Core coverage and SpotBugs pass; two narrowly scoped immutable
 timeline-field exclusions explain SpotBugs' representation warnings without suppressing
-other classes or lowering severity. Full `verify` is blocked in unchanged
-`daedalus-plugin-api`: instruction coverage 0.76 versus its required 0.96. This branch
-does not change that module or its gate. Running the server checks independently also
+other classes or lowering severity. Full `verify` initially stopped in unchanged
+`daedalus-plugin-api`: instruction coverage 0.76 versus its required 0.96. The initial
+implementation did not change that module or its gate. Running the server checks independently also
 finds three SpotBugs warnings in unchanged `PresenceService` (lines 54, 63 and 99), and
 server instruction coverage 0.83 versus its 0.93 floor. Existing server classes account
 for 27,084 covered / 5,554 missed instructions (83%); the new simulation adapter/config/
@@ -254,7 +254,23 @@ mvn -B -ntp -pl daedalus-server -am -DskipTests package spotbugs:check
 mvn -B -ntp -pl daedalus-server jacoco:report jacoco:check@check
 ```
 
-The first stops at the Plugin API gate after core verification passes. The second reaches
+The initial first run stopped at the Plugin API gate after core verification passed. The second reaches
 the server and reports only the three existing PresenceService findings. The third
 checks the server's configured coverage rule independently. Keep those blockers visible
 during review; do not merge or deploy this optional service as part of this handoff.
+
+### 2026-10-13: Plugin API gate repaired
+
+Added three module-local contracts for the existing ark-voyage and island-life events.
+They preserve departure/arrival route and schedule fields, prove that ecology collections
+cannot be mutated by the producer or another plugin, preserve deterministic richness
+ordering, and verify safe empty collections when optional payloads are absent. Existing
+server integration tests exercise these events, but do not count toward this module's
+coverage gate. No production API or threshold changed.
+
+`mvn -B -ntp -pl daedalus-plugin-api -am verify` passes on Java 21: 571 core tests and
+23 Plugin API tests, both modules' coverage gates, Checkstyle and SpotBugs. Plugin API
+instruction coverage is now 98.74% (626 covered / 8 missed), above the unchanged 96%
+floor and below its 99% ceiling. The earlier
+Plugin API coverage failure is resolved; the server findings above remain separate review
+work rather than being hidden by that first failing gate.
