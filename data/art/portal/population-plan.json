@@ -12,10 +12,16 @@
       "individual": 1,
       "existing_rules_key": "BLIGHT_SLIME",
       "design_status": "existing rules",
-      "art_status": "Planned",
+      "art_status": "Export validated",
       "unreal_status": "Pending",
       "variant_seed": "enemy/BLIGHT_SLIME/1",
-      "role_count": 1
+      "role_count": 1,
+      "art_candidate": {
+        "file": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\portal-slime-polish\\Mob_Portal_BLIGHT_SLIME_Polish_01.glb",
+        "sha256": "5976d65cc6ad0bffe08a5cdb64a41adfa0e0cd3232ce72216b2c99705381c972",
+        "triangles": 5908,
+        "acceptance": "Native import and visual acceptance pending"
+      }
     },
     {
       "id": "Portal_enemy_BLIGHT_SLIME_02",
@@ -24,10 +30,16 @@
       "individual": 2,
       "existing_rules_key": "BLIGHT_SLIME",
       "design_status": "existing rules",
-      "art_status": "Planned",
+      "art_status": "Export validated",
       "unreal_status": "Pending",
       "variant_seed": "enemy/BLIGHT_SLIME/2",
-      "role_count": 1
+      "role_count": 1,
+      "art_candidate": {
+        "file": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\portal-slime-polish\\Mob_Portal_BLIGHT_SLIME_Polish_02.glb",
+        "sha256": "78b7e9b3950acaded07cc7a2225286b2e14e710471f3fda7764d7fb73c054fe2",
+        "triangles": 5928,
+        "acceptance": "Native import and visual acceptance pending"
+      }
     },
     {
       "id": "Portal_enemy_BLIGHT_SLIME_03",
@@ -36,10 +48,16 @@
       "individual": 3,
       "existing_rules_key": "BLIGHT_SLIME",
       "design_status": "existing rules",
-      "art_status": "Planned",
+      "art_status": "Export validated",
       "unreal_status": "Pending",
       "variant_seed": "enemy/BLIGHT_SLIME/3",
-      "role_count": 1
+      "role_count": 1,
+      "art_candidate": {
+        "file": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\portal-slime-polish\\Mob_Portal_BLIGHT_SLIME_Polish_03.glb",
+        "sha256": "8a15302a21e37852f071095ff31100f518cec5a718b3d0da786748a538fe9801",
+        "triangles": 5948,
+        "acceptance": "Native import and visual acceptance pending"
+      }
     },
     {
       "id": "Portal_enemy_BLIGHT_SLIME_04",
@@ -48,10 +66,16 @@
       "individual": 4,
       "existing_rules_key": "BLIGHT_SLIME",
       "design_status": "existing rules",
-      "art_status": "Planned",
+      "art_status": "Export validated",
       "unreal_status": "Pending",
       "variant_seed": "enemy/BLIGHT_SLIME/4",
-      "role_count": 1
+      "role_count": 1,
+      "art_candidate": {
+        "file": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\portal-slime-polish\\Mob_Portal_BLIGHT_SLIME_Polish_04.glb",
+        "sha256": "dd3bd1f681454a5e05570345391290bc698ce06d063ab2c1556d3eeabcf807c0",
+        "triangles": 5968,
+        "acceptance": "Native import and visual acceptance pending"
+      }
     },
     {
       "id": "Portal_enemy_BLIGHT_SLIME_05",
@@ -60,10 +84,16 @@
       "individual": 5,
       "existing_rules_key": "BLIGHT_SLIME",
       "design_status": "existing rules",
-      "art_status": "Planned",
+      "art_status": "Export validated",
       "unreal_status": "Pending",
       "variant_seed": "enemy/BLIGHT_SLIME/5",
-      "role_count": 1
+      "role_count": 1,
+      "art_candidate": {
+        "file": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\portal-slime-polish\\Mob_Portal_BLIGHT_SLIME_Polish_05.glb",
+        "sha256": "5824ddc6eb3d9088107be33b76221e18d7021e38872bf7223bf80cd4ee4e83b1",
+        "triangles": 5988,
+        "acceptance": "Native import and visual acceptance pending"
+      }
     },
     {
       "id": "Portal_enemy_BLIGHT_SLIME_06",
@@ -72,10 +102,16 @@
       "individual": 6,
       "existing_rules_key": "BLIGHT_SLIME",
       "design_status": "existing rules",
-      "art_status": "Planned",
+      "art_status": "Export validated",
       "unreal_status": "Pending",
       "variant_seed": "enemy/BLIGHT_SLIME/6",
-      "role_count": 1
+      "role_count": 1,
+      "art_candidate": {
+        "file": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\portal-slime-polish\\Mob_Portal_BLIGHT_SLIME_Polish_06.glb",
+        "sha256": "a21bd14270587f96afb59193bd3deae46d14431f841b8d17b3cdabdaa2fd94ce",
+        "triangles": 5908,
+        "acceptance": "Native import and visual acceptance pending"
+      }
     },
     {
       "id": "Portal_enemy_BLIGHT_SLIME_07",
@@ -84,10 +120,16 @@
       "individual": 7,
       "existing_rules_key": "BLIGHT_SLIME",
       "design_status": "existing rules",
-      "art_status": "Planned",
+      "art_status": "Export validated",
       "unreal_status": "Pending",
       "variant_seed": "enemy/BLIGHT_SLIME/7",
-      "role_count": 1
+      "role_count": 1,
+      "art_candidate": {
+        "file": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\portal-slime-polish\\Mob_Portal_BLIGHT_SLIME_Polish_07.glb",
+        "sha256": "dcc07fe1ca260fd7274f767c873cb84dbc7d07e09ab2ee011f2cb2b4476c214c",
+        "triangles": 5928,
+        "acceptance": "Native import and visual acceptance pending"
+      }
     },
     {
       "id": "Portal_enemy_BLIGHT_SLIME_08",
@@ -96,10 +138,16 @@
       "individual": 8,
       "existing_rules_key": "BLIGHT_SLIME",
       "design_status": "existing rules",
-      "art_status": "Planned",
+      "art_status": "Export validated",
       "unreal_status": "Pending",
       "variant_seed": "enemy/BLIGHT_SLIME/8",
-      "role_count": 1
+      "role_count": 1,
+      "art_candidate": {
+        "file": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\portal-slime-polish\\Mob_Portal_BLIGHT_SLIME_Polish_08.glb",
+        "sha256": "5528a9f3cf8706f6adbaa9b2c6d29f09887eb3c2209e08923e5b89fabe11da2a",
+        "triangles": 5948,
+        "acceptance": "Native import and visual acceptance pending"
+      }
     },
     {
       "id": "Portal_enemy_BLIGHT_SLIME_09",
@@ -108,10 +156,16 @@
       "individual": 9,
       "existing_rules_key": "BLIGHT_SLIME",
       "design_status": "existing rules",
-      "art_status": "Planned",
+      "art_status": "Export validated",
       "unreal_status": "Pending",
       "variant_seed": "enemy/BLIGHT_SLIME/9",
-      "role_count": 1
+      "role_count": 1,
+      "art_candidate": {
+        "file": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\portal-slime-polish\\Mob_Portal_BLIGHT_SLIME_Polish_09.glb",
+        "sha256": "03ed035dfdf5ec0ad1273b7127ed05864dc177fd691c560fdf0e522b0d1204b5",
+        "triangles": 5968,
+        "acceptance": "Native import and visual acceptance pending"
+      }
     },
     {
       "id": "Portal_enemy_BLIGHT_SLIME_10",
@@ -120,10 +174,16 @@
       "individual": 10,
       "existing_rules_key": "BLIGHT_SLIME",
       "design_status": "existing rules",
-      "art_status": "Planned",
+      "art_status": "Export validated",
       "unreal_status": "Pending",
       "variant_seed": "enemy/BLIGHT_SLIME/10",
-      "role_count": 1
+      "role_count": 1,
+      "art_candidate": {
+        "file": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\portal-slime-polish\\Mob_Portal_BLIGHT_SLIME_Polish_10.glb",
+        "sha256": "0646f6c8ad458b2ec9079cb31a683c0d660cc3eca1933d1fd078086047e22ac5",
+        "triangles": 5988,
+        "acceptance": "Native import and visual acceptance pending"
+      }
     },
     {
       "id": "Portal_enemy_BOG_SLIME_01",
