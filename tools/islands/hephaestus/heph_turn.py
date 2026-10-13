@@ -53,6 +53,8 @@ TURN_S, WORK_S, SAVE_S = 600, 480, 60
 # a real handoff names us as the receiver ("HANDOFF youtube-master -> hephaestus"); "going after disk-saver HANDOFF" must not count
 HANDOFF_US = re.compile(r"HANDOFF\s+hephaestus\b|HANDOFF[^.]{0,60}?(->|\\u2192|\u2192|\bto\b)\s*hephaestus", re.I)
 GRANT_US = re.compile(r"GRANT[^.]{0,40}?hephaestus|GO hephaestus", re.I)
+# referee skip of the previous holder = our turn (e.g. "youtube-master forfeits", "skip youtube-master")
+SKIP_PREV = re.compile(r"skip\w*\s+" + re.escape(PREV) + r"|" + re.escape(PREV) + r"[^.]{0,60}?\b(forfeit\w*|skipped|skips)\b", re.I)
 PREFLIGHT_S = int(os.environ.get("HEPH_PREFLIGHT_S", "30"))  # re-ping period while the bridge is dead
 PING_S = int(os.environ.get("HEPH_PING_S", "5"))               # liveness ping timeout (call() adds +10 s socket slack)
 LOG = []
@@ -80,7 +82,7 @@ def _tail():
 def go_signal(since):
     """Who cleared us to start: PREV's HANDOFF, or a GRANT/GO to hephaestus from the referee or 2hot2trot (newer than `since`)."""
     for line in _tail().splitlines()[::-1]:
-        if "HANDOFF" not in line and "GRANT" not in line and "GO" not in line: continue
+        if "HANDOFF" not in line and "GRANT" not in line and "GO" not in line and not SKIP_PREV.search(line): continue
         try: r = json.loads(line)
         except ValueError: continue
         try:
@@ -91,6 +93,7 @@ def go_signal(since):
         if src == PREV and (HANDOFF_US.search(text) or "TURN DONE" in text): return f"{PREV} HANDOFF #{r.get('id')}"
         if src in GRANTERS and ((r.get("to") == "hephaestus" and re.search(r"\bGRANT|\bGO\b", text)) or GRANT_US.search(text)):
             return f"{src} GRANT #{r.get('id')}"
+        if src in GRANTERS and SKIP_PREV.search(text): return f"{src} SKIP {PREV} #{r.get('id')}"
     return None
 
 
