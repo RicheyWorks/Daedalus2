@@ -71,5 +71,6 @@
     "No Java services, runtime packaging, multiplayer or in-world acceptance",
     "Unreal JSON callbacks and HTTP/WebSocket handlers were not executed by portable tests"
   ],
-  "initialSnapshotResult": "Two UE5.8 compiler diagnostics fixed before the verified fresh v2 snapshot; initial failed snapshot preserved"
+  "initialSnapshotResult": "Two UE5.8 compiler diagnostics fixed before the verified fresh v2 snapshot; initial failed snapshot preserved",
+  "compiledSourceCommit": "858e10e5753d0b838ab2a2b731d0af51efb85693"
 }
