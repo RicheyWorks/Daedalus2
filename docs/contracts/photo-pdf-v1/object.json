@@ -44,6 +44,8 @@
     "nativePlacementOwner": "unreal-team",
     "physicalArtOwnerRequested": "blender-team",
     "bridgeOwner": "pootscoot-practical-apps",
+    "codexServiceOwnershipAccepted": true,
+    "codexAcceptanceHubMessage": 28700,
     "liveAccepted": false,
     "ownerAcknowledgmentRequired": true
   }

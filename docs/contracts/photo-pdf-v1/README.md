@@ -35,6 +35,8 @@ Default limits: eight images/job, eight MiB/image, 24 MiB/batch, 4096 pixels per
 
 Claude (`unreal-team`) owns object placement, pairing UI and live acceptance. Blender (`blender-team`) owns original physical object art only after explicit claim acceptance. Codex (`pootscoot-practical-apps`) owns the app's reusable service/bridge and this additive adapter. Scoped claims are hub messages 28694–28696; they are requests, not acknowledgments. The realm concept was already announced in 28689; do not make another duplicate realm announcement.
 
+Codex/Astra (`team-codex`) explicitly accepted the PhotosToPDFPC conversion/job bridge and separate fax transport ownership in hub message **28700**, confirming no overlap with its realm art generators or Dungeon integration. Claude's exact-head live handoff and Blender's physical machine art acceptance remain pending.
+
 Proposed physical art: an original compact tabletop scanner/PDF-printer with distinguishable input tray, output tray and status lamp, bottom-center origin, no real brand/logo. Use the existing art judge and its current triangle/material/dimension rules. Art should suggest local digital PDF export; do not make a real paper printer or fax-delivery animation appear successful without the corresponding capability. Final asset name and realm location require the owners' agreement. This code adds no art/queue row or claimed import.
 
 ## Required acceptance evidence
